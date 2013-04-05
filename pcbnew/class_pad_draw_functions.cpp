@@ -100,16 +100,6 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
      * ECO, edge and Draw layers and not considered
      */
 
-    // Mask layers for Back side of board
-    #define BACK_SIDE_LAYERS \
-    (LAYER_BACK | ADHESIVE_LAYER_BACK | SOLDERPASTE_LAYER_BACK \
-     | SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK)
-
-    // Mask layers for Front side of board
-    #define FRONT_SIDE_LAYERS \
-    (LAYER_FRONT | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT \
-     | SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT)
-
     BOARD* brd = GetBoard();
     bool   frontVisible = brd->IsElementVisible( PCB_VISIBLE( PAD_FR_VISIBLE ) );
     bool   backVisible  = brd->IsElementVisible( PCB_VISIBLE( PAD_BK_VISIBLE ) );
@@ -120,13 +110,13 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     /* If pad are only on front side (no layer on back side)
      * and if hide front side pads is enabled, do not draw
      */
-    if( !frontVisible && ( (m_layerMask & BACK_SIDE_LAYERS) == 0 ) )
+    if( !frontVisible && ( (m_layerMask & BACK_LAYERS) == 0 ) )
         return;
 
     /* If pad are only on back side (no layer on front side)
      * and if hide back side pads is enabled, do not draw
      */
-    if( !backVisible && ( (m_layerMask & FRONT_SIDE_LAYERS) == 0 ) )
+    if( !backVisible && ( (m_layerMask & FRONT_LAYERS) == 0 ) )
         return;
 
 
@@ -152,86 +142,29 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     if( color == BLACK ) // Not on a visible copper layer (i.e. still nothing to show)
     {
         // If the pad is on only one tech layer, use the layer color else use DARKGRAY
-        int mask_non_copper_layers = m_layerMask & ~ALL_CU_LAYERS;
+        LAYER_MSK mask_non_copper_layers = m_layerMask & ~ALL_CU_LAYERS;
 #ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
         mask_non_copper_layers &= brd->GetVisibleLayers();
 #endif
-        switch( mask_non_copper_layers )
+        LAYER_NUM pad_layer = ExtractLayer( mask_non_copper_layers );
+        switch( pad_layer )
         {
-        case 0:
+        case UNDEFINED_LAYER:   // More than one layer
+            color = DARKGRAY;
             break;
 
-        case ADHESIVE_LAYER_BACK:
-            color = brd->GetLayerColor( ADHESIVE_N_BACK );
-            break;
-
-        case ADHESIVE_LAYER_FRONT:
-            color = brd->GetLayerColor( ADHESIVE_N_FRONT );
-            break;
-
-        case SOLDERPASTE_LAYER_BACK:
-            color = brd->GetLayerColor( SOLDERPASTE_N_BACK );
-#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
-            showActualMaskSize = SOLDERPASTE_N_BACK;
-#endif
-            break;
-
-        case SOLDERPASTE_LAYER_FRONT:
-            color = brd->GetLayerColor( SOLDERPASTE_N_FRONT );
-#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
-            showActualMaskSize = SOLDERPASTE_N_FRONT;
-#endif
-            break;
-
-        case SILKSCREEN_LAYER_BACK:
-            color = brd->GetLayerColor( SILKSCREEN_N_BACK );
-            break;
-
-        case SILKSCREEN_LAYER_FRONT:
-            color = brd->GetLayerColor( SILKSCREEN_N_FRONT );
-            break;
-
-        case SOLDERMASK_LAYER_BACK:
-            color = brd->GetLayerColor( SOLDERMASK_N_BACK );
-#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
-            showActualMaskSize = SOLDERMASK_N_BACK;
-#endif
-            break;
-
-        case SOLDERMASK_LAYER_FRONT:
-            color = brd->GetLayerColor( SOLDERMASK_N_FRONT );
-#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
-            showActualMaskSize = SOLDERMASK_N_FRONT;
-#endif
-            break;
-
-        case DRAW_LAYER:
-            color = brd->GetLayerColor( DRAW_N );
-            break;
-
-        case COMMENT_LAYER:
-            color = brd->GetLayerColor( COMMENT_N );
-            break;
-
-        case ECO1_LAYER:
-            color = brd->GetLayerColor( ECO1_N );
-            break;
-
-        case ECO2_LAYER:
-            color = brd->GetLayerColor( ECO2_N );
-            break;
-
-        case EDGE_LAYER:
-            color = brd->GetLayerColor( EDGE_N );
+        case UNSELECTED_LAYER:  // Shouldn't really happen...
             break;
 
         default:
-            color = DARKGRAY;
-            break;
+            color = brd->GetLayerColor( pad_layer );
+#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
+            showActualMaskSize = pad_layer;
+#endif
         }
     }
 
-    // if PAD_SMD pad and high contrast mode
+    // if SMD or connector pad and high contrast mode
     if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
         ( GetAttribute() == PAD_SMD || GetAttribute() == PAD_CONN ) &&
         DisplayOpt.ContrastModeDisplay )
@@ -286,6 +219,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
             break;
 
         default:
+            // Another layer which has no margin to handle
             break;
         }
     }

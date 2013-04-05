@@ -656,14 +656,6 @@ public:
      */
     EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const;
 
-    /**
-     * Function ReturnFlippedLayerNumber
-     * @return the layer number after flipping an item
-     * some (not all) layers: external copper, Mask, Paste, and solder
-     * are swapped between front and back sides
-     */
-    static LAYER_NUM ReturnFlippedLayerNumber( LAYER_NUM oldlayer );
-
     /** Functions to get some items count */
     int GetNumSegmTrack() const;
 

@@ -169,7 +169,7 @@ void TEXTE_PCB::Flip(const wxPoint& aCentre )
     {
         m_Mirror = not m_Mirror;      /* inverse mirror */
     }
-    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer() ) );
 }
 
 

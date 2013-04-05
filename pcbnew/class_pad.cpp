@@ -168,7 +168,7 @@ void D_PAD::Flip( int aTranslationY )
     SetOrientation( -GetOrientation() );
 
     // flip pads layers
-    SetLayerMask( ChangeSideMaskLayer( m_layerMask ) );
+    SetLayerMask( FlipLayerMask( m_layerMask ) );
 
     // m_boundingRadius = -1;  the shape has not been changed
 }
@@ -542,76 +542,31 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 
     if( (m_layerMask & ALL_CU_LAYERS) == 0 )     // pad is not on any copper layers
     {
-        switch( m_layerMask & ~ALL_CU_LAYERS )
+        LAYER_NUM pad_layer = ExtractLayer( m_layerMask & ~ALL_CU_LAYERS ); 
+        switch( pad_layer )
         {
-        case ADHESIVE_LAYER_BACK:
-            layerInfo = board->GetLayerName( ADHESIVE_N_BACK );
+        case UNSELECTED_LAYER:
+            layerInfo = _( "No layers" );
             break;
 
-        case ADHESIVE_LAYER_FRONT:
-            layerInfo = board->GetLayerName( ADHESIVE_N_FRONT );
-            break;
-
-        case SOLDERPASTE_LAYER_BACK:
-            layerInfo = board->GetLayerName( SOLDERPASTE_N_BACK );
-            break;
-
-        case SOLDERPASTE_LAYER_FRONT:
-            layerInfo = board->GetLayerName( SOLDERPASTE_N_FRONT );
-            break;
-
-        case SILKSCREEN_LAYER_BACK:
-            layerInfo = board->GetLayerName( SILKSCREEN_N_BACK );
-            break;
-
-        case SILKSCREEN_LAYER_FRONT:
-            layerInfo = board->GetLayerName( SILKSCREEN_N_FRONT );
-            break;
-
-        case SOLDERMASK_LAYER_BACK:
-            layerInfo = board->GetLayerName( SOLDERMASK_N_BACK );
-            break;
-
-        case SOLDERMASK_LAYER_FRONT:
-            layerInfo = board->GetLayerName( SOLDERMASK_N_FRONT );
-            break;
-
-        case DRAW_LAYER:
-            layerInfo = board->GetLayerName( DRAW_N );
-            break;
-
-        case COMMENT_LAYER:
-            layerInfo = board->GetLayerName( COMMENT_N );
-            break;
-
-        case ECO1_LAYER:
-            layerInfo = board->GetLayerName( ECO1_N );
-            break;
-
-        case ECO2_LAYER:
-            layerInfo = board->GetLayerName( ECO2_N );
-            break;
-
-        case EDGE_LAYER:
-            layerInfo = board->GetLayerName( EDGE_N );
+        case UNDEFINED_LAYER:
+            layerInfo = _( "Non-copper" );
             break;
 
         default:
-            layerInfo = _( "Non-copper" );
+            layerInfo = board->GetLayerName( pad_layer );
             break;
         }
     }
     else
     {
-#define INTERIOR_COPPER     (ALL_CU_LAYERS & ~(LAYER_BACK | LAYER_FRONT))
-
         static const wxChar* andInternal = _( " & int" );
 
         if( (m_layerMask & (LAYER_BACK | LAYER_FRONT)) == LAYER_BACK )
         {
             layerInfo = board->GetLayerName( LAYER_N_BACK );
 
-            if( m_layerMask & INTERIOR_COPPER )
+            if( m_layerMask & INTERNAL_LAYERS )
                 layerInfo += andInternal;
         }
 
@@ -620,7 +575,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
             layerInfo = board->GetLayerName( LAYER_N_BACK ) + wxT(", ") +
                         board->GetLayerName( LAYER_N_FRONT );
 
-            if( m_layerMask & INTERIOR_COPPER )
+            if( m_layerMask & INTERNAL_LAYERS )
                 layerInfo += andInternal;
         }
 
@@ -628,10 +583,10 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
         {
             layerInfo = board->GetLayerName( LAYER_N_FRONT );
 
-            if( m_layerMask & INTERIOR_COPPER )
+            if( m_layerMask & INTERNAL_LAYERS )
                 layerInfo += andInternal;
         }
-        else // necessarily true: if( m_layerMask & INTERIOR_COPPER )
+        else // necessarily true: if( m_layerMask & INTERNAL_LAYERS )
         {
             layerInfo = _( "internal" );
         }

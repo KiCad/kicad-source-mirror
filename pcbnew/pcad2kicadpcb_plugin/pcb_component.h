@@ -77,8 +77,6 @@ public:
 protected:
     PCB_CALLBACKS*  m_callbacks;
     BOARD*          m_board;
-
-    LAYER_NUM       FlipLayers( LAYER_NUM aLayer );
 };
 
 WX_DEFINE_ARRAY( PCB_COMPONENT*, PCB_COMPONENTS_ARRAY );

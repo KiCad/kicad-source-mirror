@@ -124,6 +124,12 @@ typedef unsigned LAYER_MSK;
 #define ALL_CU_LAYERS           0x0000FFFF
 #define INTERNAL_LAYERS         0x00007FFE
 #define EXTERNAL_LAYERS         0x00008001
+#define BACK_LAYERS            (LAYER_BACK | ADHESIVE_LAYER_BACK | \
+                                SOLDERPASTE_LAYER_BACK | SILKSCREEN_LAYER_BACK | \
+                                SOLDERMASK_LAYER_BACK)
+#define FRONT_LAYERS           (LAYER_FRONT | ADHESIVE_LAYER_FRONT | \
+                                SOLDERPASTE_LAYER_FRONT | SILKSCREEN_LAYER_FRONT | \
+                                SOLDERMASK_LAYER_FRONT)
 #define NO_LAYERS               0x00000000
 
 /** return a one bit layer mask from a layer number
@@ -271,5 +277,24 @@ inline bool IsBackLayer( LAYER_NUM aLayer )
              aLayer == SOLDERPASTE_N_BACK );
 }
 
+/**
+ * Function ReturnFlippedLayerNumber
+ * @return the layer number after flipping an item
+ * some (not all) layers: external copper, Mask, Paste, and solder
+ * are swapped between front and back sides
+ */
+LAYER_NUM FlipLayer( LAYER_NUM oldlayer );
+
+/**
+ * Calculate the mask layer when flipping a footprint
+ * BACK and FRONT copper layers, mask, paste, solder layers are swapped
+ */
+LAYER_MSK FlipLayerMask( LAYER_MSK aMask );
+
+/**
+ * Extract the set layer from a mask. Returns UNDEFINED_LAYER if more
+ * than one is set or UNSELECTED_LAYER if none is 
+ */
+LAYER_NUM ExtractLayer( LAYER_MSK aMask );
 
 #endif // _LAYERS_ID_AND_VISIBILITY_H_

@@ -72,3 +72,115 @@ int    g_PadCMPColor        = RED;
  */
 DLIST<TRACK> g_CurrentTrackList;
 
+LAYER_NUM FlipLayer( LAYER_NUM oldlayer )
+{
+    switch( oldlayer )
+    {
+    case LAYER_N_BACK:
+        return LAYER_N_FRONT;
+
+    case LAYER_N_FRONT:
+        return LAYER_N_BACK;
+
+    case SILKSCREEN_N_BACK:
+        return SILKSCREEN_N_FRONT;
+
+    case SILKSCREEN_N_FRONT:
+        return SILKSCREEN_N_BACK;
+
+    case ADHESIVE_N_BACK:
+        return ADHESIVE_N_FRONT;
+
+    case ADHESIVE_N_FRONT:
+        return ADHESIVE_N_BACK;
+
+    case SOLDERMASK_N_BACK:
+        return SOLDERMASK_N_FRONT;
+
+    case SOLDERMASK_N_FRONT:
+        return SOLDERMASK_N_BACK;
+
+    case SOLDERPASTE_N_BACK:
+        return SOLDERPASTE_N_FRONT;
+
+    case SOLDERPASTE_N_FRONT:
+        return SOLDERPASTE_N_BACK;
+
+    // No change for the other layers
+    default:
+        return oldlayer;
+    }
+}
+
+
+LAYER_MSK FlipLayerMask( LAYER_MSK aMask )
+{
+    LAYER_MSK newMask;
+
+    newMask = aMask & ~(LAYER_BACK | LAYER_FRONT |
+                        SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT |
+                        ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT |
+                        SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
+                        SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT |
+                        ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT);
+
+    if( aMask & LAYER_BACK )
+        newMask |= LAYER_FRONT;
+
+    if( aMask & LAYER_FRONT )
+        newMask |= LAYER_BACK;
+
+    if( aMask & SILKSCREEN_LAYER_BACK )
+        newMask |= SILKSCREEN_LAYER_FRONT;
+
+    if( aMask & SILKSCREEN_LAYER_FRONT )
+        newMask |= SILKSCREEN_LAYER_BACK;
+
+    if( aMask & ADHESIVE_LAYER_BACK )
+        newMask |= ADHESIVE_LAYER_FRONT;
+
+    if( aMask & ADHESIVE_LAYER_FRONT )
+        newMask |= ADHESIVE_LAYER_BACK;
+
+    if( aMask & SOLDERMASK_LAYER_BACK )
+        newMask |= SOLDERMASK_LAYER_FRONT;
+
+    if( aMask & SOLDERMASK_LAYER_FRONT )
+        newMask |= SOLDERMASK_LAYER_BACK;
+
+    if( aMask & SOLDERPASTE_LAYER_BACK )
+        newMask |= SOLDERPASTE_LAYER_FRONT;
+
+    if( aMask & SOLDERPASTE_LAYER_FRONT )
+        newMask |= SOLDERPASTE_LAYER_BACK;
+
+    if( aMask & ADHESIVE_LAYER_BACK )
+        newMask |= ADHESIVE_LAYER_FRONT;
+
+    if( aMask & ADHESIVE_LAYER_FRONT )
+        newMask |= ADHESIVE_LAYER_BACK;
+
+    return newMask;
+}
+
+LAYER_NUM ExtractLayer( LAYER_MSK aMask )
+{
+    if( aMask == NO_LAYERS )
+        return UNSELECTED_LAYER;
+
+    LAYER_NUM candidate = UNDEFINED_LAYER;
+
+    // Scan all the layers and take note of the first set; if other are
+    // then found return UNDEFINED_LAYER
+    for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
+    {
+        if( aMask & GetLayerMask( i ) )
+        {
+            if( candidate == UNDEFINED_LAYER )
+                candidate = i;
+            else 
+                return UNDEFINED_LAYER;
+        }
+    }
+    return candidate;
+}

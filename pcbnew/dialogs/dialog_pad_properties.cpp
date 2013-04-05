@@ -294,7 +294,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_dummyPad->SetDelta( sz );
 
         // flip pad's layers
-        m_dummyPad->SetLayerMask( ChangeSideMaskLayer( m_dummyPad->GetLayerMask() ) );
+        m_dummyPad->SetLayerMask( FlipLayerMask( m_dummyPad->GetLayerMask() ) );
     }
 
     m_staticTextWarningPadFlipped->Show(m_isFlipped);
@@ -799,7 +799,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         }
 
         if( m_isFlipped )
-            m_currentPad->SetLayerMask( ChangeSideMaskLayer( m_currentPad->GetLayerMask() ) );
+            m_currentPad->SetLayerMask( FlipLayerMask( m_currentPad->GetLayerMask() ) );
 
         m_currentPad->SetPadName( m_padMaster.GetPadName() );
 

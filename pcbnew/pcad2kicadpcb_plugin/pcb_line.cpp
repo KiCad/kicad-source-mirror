@@ -110,7 +110,7 @@ void PCB_LINE::Flip()
     PCB_COMPONENT::Flip();
 
     m_toX = -m_toX;
-    m_KiCadLayer = FlipLayers( m_KiCadLayer );
+    m_KiCadLayer = FlipLayer( m_KiCadLayer );
 }
 
 

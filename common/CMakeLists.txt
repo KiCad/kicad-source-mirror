@@ -106,7 +106,6 @@ set(PCB_COMMON_SRCS
     ../pcbnew/class_marker_pcb.cpp
     ../pcbnew/class_mire.cpp
     ../pcbnew/class_module.cpp
-    ../pcbnew/class_module_transform_functions.cpp
     ../pcbnew/class_pad.cpp
     ../pcbnew/class_pad_draw_functions.cpp
     ../pcbnew/class_pcb_text.cpp

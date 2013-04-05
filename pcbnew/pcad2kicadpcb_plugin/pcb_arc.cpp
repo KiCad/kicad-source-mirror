@@ -144,7 +144,7 @@ void PCB_ARC::Flip()
     m_startX = -m_startX;
     m_angle = -m_angle;
 
-    m_KiCadLayer = FlipLayers( m_KiCadLayer );
+    m_KiCadLayer = FlipLayer( m_KiCadLayer );
 }
 
 
