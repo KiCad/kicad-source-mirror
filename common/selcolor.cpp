@@ -139,15 +139,15 @@ void WinEDA_SelColorFrame::Init_Dialog( int aOldColor )
 
     for( ii = 0; ii < NBCOLORS; ++ii )
     {
-        // Provide a separate column for every eight buttons (and their
+        // Provide a separate column for every six buttons (and their
         // associated text strings), so provide a FlexGrid Sizer with
         // eight rows and two columns.
-        if( ii % 8 == 0 )
+        if( ii % 6 == 0 )
         {
-            FlexColumnBoxSizer = new wxFlexGridSizer( 8, 2, 0, 0 );
+            FlexColumnBoxSizer = new wxFlexGridSizer( 6, 2, 0, 0 );
 
             // Specify that all of the rows can be expanded.
-            for( int ii = 0; ii < 8; ii++ )
+            for( int ii = 0; ii < 6; ii++ )
             {
                 FlexColumnBoxSizer->AddGrowableRow( ii );
             }
