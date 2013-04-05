@@ -37,6 +37,7 @@ enum PlotFormat {
  * 2) only use native postscript fonts
  * 3) use the internal vector font and add 'phantom' text to aid
  *    searching
+ * 4) keep the default for the plot driver
  *
  * This is recognized by the DXF driver too, where NATIVE emits
  * TEXT entities instead of stroking the text
@@ -44,7 +45,8 @@ enum PlotFormat {
 enum PlotTextMode {
     PLOTTEXTMODE_STROKE,
     PLOTTEXTMODE_NATIVE,
-    PLOTTEXTMODE_PHANTOM
+    PLOTTEXTMODE_PHANTOM,
+    PLOTTEXTMODE_DEFAULT
 };
 
 
@@ -439,7 +441,8 @@ public:
      */
     virtual void SetTextMode( PlotTextMode mode )
     {
-        m_textMode = mode;
+        if( mode != PLOTTEXTMODE_DEFAULT )
+            m_textMode = mode;
     }
 
     virtual void SetDefaultLineWidth( int width );
@@ -514,6 +517,9 @@ class PS_PLOTTER : public PSLIKE_PLOTTER
 public:
     PS_PLOTTER()
     {
+        // The phantom plot in postscript is an hack and reportedly
+        // crashes Adobe's own postscript interpreter!
+        m_textMode = PLOTTEXTMODE_STROKE;
     }
 
     static wxString GetDefaultFileExtension()
@@ -838,7 +844,8 @@ public:
      */
     virtual void SetTextMode( PlotTextMode mode )
     {
-        textAsLines = ( mode != PLOTTEXTMODE_NATIVE );
+        if( mode != PLOTTEXTMODE_DEFAULT )
+            textAsLines = ( mode != PLOTTEXTMODE_NATIVE );
     }
 
     virtual bool StartPlot();
