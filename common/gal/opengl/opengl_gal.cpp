@@ -819,10 +819,6 @@ void OPENGL_GAL::DrawRectangle( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
 
     selectShader( -1 );
 
-    glPushMatrix();
-
-    glTranslated( 0, 0, layerDepth );
-
     // Stroke the outline
     if( isStrokeEnabled )
     {
@@ -841,14 +837,12 @@ void OPENGL_GAL::DrawRectangle( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
     {
         glColor4d( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
         glBegin( GL_QUADS );
-        glVertex2d( aStartPoint.x, aStartPoint.y );
-        glVertex2d( diagonalPointA.x, diagonalPointA.y );
-        glVertex2d( aEndPoint.x, aEndPoint.y );
-        glVertex2d( diagonalPointB.x, diagonalPointB.y );
+        glVertex3d( aStartPoint.x, aStartPoint.y, layerDepth );
+        glVertex3d( diagonalPointA.x, diagonalPointA.y, layerDepth );
+        glVertex3d( aEndPoint.x, aEndPoint.y, layerDepth );
+        glVertex3d( diagonalPointB.x, diagonalPointB.y, layerDepth );
         glEnd();
     }
-
-    glPopMatrix();
 
     // Restore the stroke color
     glColor4d( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
