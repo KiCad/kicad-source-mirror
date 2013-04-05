@@ -65,8 +65,8 @@ std::ostream& operator<<( std::ostream& stream, const VECTOR2<T>& vector );
  * Class VECTOR2
  * defines a general 2D-vector/point.
  *
- * This class uses templates to be universal. Several operators are provided to help easy implementing
- * of linear algebra equations.
+ * This class uses templates to be universal. Several operators are provided to help
+ * easy implementing of linear algebra equations.
  *
  */
 template <class T = int>
@@ -120,14 +120,14 @@ public:
      * It is used to calculate the length of the vector.
      * @return Scalar, the euclidean norm
      */
-    T                   EuclideanNorm() const;
+    T EuclideanNorm() const;
 
     /**
      * Function Perpendicular
      * computes the perpendicular vector
      * @return Perpendicular vector
      */
-    VECTOR2<T>             Perpendicular() const;
+    VECTOR2<T> Perpendicular() const;
 
     /**
      * Function LineProjection
@@ -135,7 +135,7 @@ public:
      * going through aA and aB points.
      * @return Projected point
      */
-    VECTOR2<T>             LineProjection( const VECTOR2<T>& aA, const VECTOR2<T>& aB ) const;
+    VECTOR2<T> LineProjection( const VECTOR2<T>& aA, const VECTOR2<T>& aB ) const;
 
     /**
      * Function LineSide
@@ -143,7 +143,7 @@ public:
      * and a start aStart we are.
      * @return: < 0: left, 0 : on the line, > 0 : right
      */
-    int                 LineSide( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd ) const;
+    int LineSide( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd ) const;
 
     /**
      * Function LineDistance
@@ -153,14 +153,15 @@ public:
      * the side of the line at which we are (negative = left)
      * @return the distance
      */
-    T                   LineDistance( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd, bool aDetermineSide = false ) const;
+    T LineDistance( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd,
+                    bool aDetermineSide = false ) const;
 
     /**
      * Function ClosestSegmentPoint
      * returns the closest point on a line segment defined by aStart and aEnd.
      * @return: our point
      */
-    VECTOR2<T>             ClosestSegmentPoint( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd ) const;
+    VECTOR2<T> ClosestSegmentPoint( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd ) const;
 
     /**
      * Function Resize
@@ -168,14 +169,14 @@ public:
      * @param aNewLength: length of the rescaled vector
      * @return rescaled vector
      */
-    VECTOR2<T>             Resize( T aNewLength ) const;
+    VECTOR2<T> Resize( T aNewLength ) const;
 
     /**
      * Function Angle
      * computes the angle of the vector
      * @return vector angle, in radians
      */
-    double              Angle() const;
+    double Angle() const;
 
     /**
      * Function Rotate
@@ -183,70 +184,70 @@ public:
      * @param aAngle rotation angle in radians
      * @return rotated vector
      */
-    VECTOR2<T>             Rotate( double aAngle ) const;
+    VECTOR2<T> Rotate( double aAngle ) const;
 
     /**
      * Function Format
      * returns the vector formatted as a string
      * @return the formatted string
      */
-    const std::string   Format() const;
+    const std::string Format() const;
 
     /**
      * Function Cross()
      * computes cross product of self with aVector
      */
-    extended_type       Cross( const VECTOR2<T>& aVector ) const;
+    extended_type Cross( const VECTOR2<T>& aVector ) const;
 
     /**
      * Function Dot()
      * computes dot product of self with aVector
      */
-    extended_type       Dot( const VECTOR2<T>& aVector ) const;
+    extended_type Dot( const VECTOR2<T>& aVector ) const;
 
 
     // Operators
 
     /// Assignment operator
-    VECTOR2<T>&            operator=( const VECTOR2<T>& aVector );
+    VECTOR2<T>& operator=( const VECTOR2<T>& aVector );
 
     /// Vector addition operator
-    VECTOR2<T>             operator+( const VECTOR2<T>& aVector ) const;
+    VECTOR2<T> operator+( const VECTOR2<T>& aVector ) const;
 
     /// Compound assignment operator
-    VECTOR2<T>&            operator+=( const VECTOR2<T>& aVector );
+    VECTOR2<T>& operator+=( const VECTOR2<T>& aVector );
 
     /// Vector subtraction operator
-    VECTOR2<T>             operator-( const VECTOR2<T>& aVector ) const;
+    VECTOR2<T> operator-( const VECTOR2<T>& aVector ) const;
 
     /// Compound assignment operator
-    VECTOR2<T>&            operator-=( const VECTOR2<T>& aVector );
+    VECTOR2<T>& operator-=( const VECTOR2<T>& aVector );
 
     /// Negate Vector operator
-    VECTOR2<T>             operator-();
+    VECTOR2<T> operator-();
 
     /// Scalar product operator
-    extended_type       operator*( const VECTOR2<T>& aVector ) const;
+    extended_type operator*( const VECTOR2<T>& aVector ) const;
 
     /// Multiplication with a factor
-    VECTOR2<T>             operator*( const T& aFactor ) const;
+    VECTOR2<T> operator*( const T& aFactor ) const;
 
     /// Division with a factor
-    VECTOR2<T>             operator/( const T& aFactor ) const;
+    VECTOR2<T> operator/( const T& aFactor ) const;
     
     /// Equality operator
-    const bool          operator==( const VECTOR2<T>& aVector ) const;
+    const bool operator==( const VECTOR2<T>& aVector ) const;
 
     /// Not equality operator
-    const bool          operator!=( const VECTOR2<T>& aVector ) const;
+    const bool operator!=( const VECTOR2<T>& aVector ) const;
 
     /// Smaller than operator
-    bool                operator<( const VECTOR2<T>& aVector ) const;
-    bool                operator<=( const VECTOR2<T>& aVector ) const;
+    bool operator<( const VECTOR2<T>& aVector ) const;
+    bool operator<=( const VECTOR2<T>& aVector ) const;
 
     /// Greater than operator
-    bool                operator>( const VECTOR2<T>& aVector ) const;
-    bool                operator>=( const VECTOR2<T>& aVector ) const;
+    bool operator>( const VECTOR2<T>& aVector ) const;
+    bool operator>=( const VECTOR2<T>& aVector ) const;
 
     friend std::ostream & operator<< <T> ( std::ostream & stream, const VECTOR2<T> &vector );
 };
@@ -353,13 +354,13 @@ int VECTOR2<T>::LineSide( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd ) con
 template <class T>
 VECTOR2<T> VECTOR2<T>::LineProjection( const VECTOR2<T>& aA, const VECTOR2<T>& aB ) const
 {
-    const VECTOR2<T>   d = aB - aA;
-    extended_type   det     = (extended_type) d.x * d.x + d.y * (extended_type) d.y;
-    extended_type   dxdy    = (extended_type) d.x * d.y;
-    extended_type   qx      =
+    const VECTOR2<T> d = aB - aA;
+    extended_type    det     = (extended_type) d.x * d.x + d.y * (extended_type) d.y;
+    extended_type    dxdy    = (extended_type) d.x * d.y;
+    extended_type    qx      =
         ( (extended_type) aA.x * d.y * d.y + (extended_type) d.x * d.x * x - dxdy *
           (aA.y - y) ) / det;
-    extended_type   qy =
+    extended_type    qy =
         ( (extended_type) aA.y * d.x * d.x + (extended_type) d.y * d.y * y - dxdy *
           (aA.x - x) ) / det;
 
@@ -368,21 +369,23 @@ VECTOR2<T> VECTOR2<T>::LineProjection( const VECTOR2<T>& aA, const VECTOR2<T>& a
 
 
 template <class T>
-T VECTOR2<T>::LineDistance( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd, bool aDetermineSide ) const
+T VECTOR2<T>::LineDistance( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd,
+                            bool aDetermineSide ) const
 {
     extended_type   a   = aStart.y - aEnd.y;
     extended_type   b   = aEnd.x - aStart.x;
     extended_type   c   = -a * aStart.x - b * aStart.y;
 
     T dist = ( a * x + b * y + c ) / sqrt( a * a + b * b );
-    return aDetermineSide ? dist : abs(dist);
+    return aDetermineSide ? dist : abs( dist );
 }
 
 
 template <class T>
-VECTOR2<T> VECTOR2<T>::ClosestSegmentPoint( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd ) const
+VECTOR2<T> VECTOR2<T>::ClosestSegmentPoint( const VECTOR2<T>&   aStart,
+                                            const VECTOR2<T>&   aEnd ) const
 {
-    VECTOR2<T>         d = (aEnd - aStart);
+    VECTOR2<T>      d = (aEnd - aStart);
     extended_type   l_squared = (extended_type) d.x * d.x + (extended_type) d.y * d.y;
 
 
@@ -410,7 +413,7 @@ VECTOR2<T> VECTOR2<T>::ClosestSegmentPoint( const VECTOR2<T>& aStart, const VECT
     /*VECTOR2<T> proj = aStart + VECTOR2<T> ( ( t * (extended_type) d.x / l_squared ),
                                               ( t * ( extended_type) d.y / l_squared ) );*/
 
-    VECTOR2<T> proj = aStart + VECTOR2<T> ( (T)xp, (T) yp );
+    VECTOR2<T> proj = aStart + VECTOR2<T> ( (T) xp, (T) yp );
 
     return proj;
 }
@@ -423,7 +426,7 @@ VECTOR2<T> VECTOR2<T>::Rotate( double aAngle ) const
     double  ca  = cos( aAngle );
 
     return VECTOR2<T> ( T( (double) x * ca - (double) y * sa ),
-                     T( (double) x * sa + (double) y * ca ) );
+                        T( (double) x * sa + (double) y * ca ) );
 }
 
 
@@ -507,7 +510,7 @@ VECTOR2<T> operator*( const T& aFactor, const VECTOR2<T>& aVector )
 template <class T>
 typename VECTOR2<T>::extended_type VECTOR2<T>::Cross( const VECTOR2<T>& aVector ) const
 {
-    return (extended_type) x * (extended_type) aVector.y - 
+    return (extended_type) x * (extended_type) aVector.y -
            (extended_type) y * (extended_type) aVector.x;
 }
 
@@ -515,7 +518,7 @@ typename VECTOR2<T>::extended_type VECTOR2<T>::Cross( const VECTOR2<T>& aVector 
 template <class T>
 typename VECTOR2<T>::extended_type VECTOR2<T>::Dot( const VECTOR2<T>& aVector ) const
 {
-    return (extended_type) x * (extended_type) aVector.x + 
+    return (extended_type) x * (extended_type) aVector.x +
            (extended_type) y * (extended_type) aVector.y;
 }
 
@@ -612,13 +615,14 @@ std::ostream& operator<<( std::ostream& aStream, const VECTOR2<T>& aVector )
     return aStream;
 }
 
+
 /* Default specializations */
-typedef VECTOR2<double>   VECTOR2D;
-typedef VECTOR2<int>      VECTOR2I;
+typedef VECTOR2<double> VECTOR2D;
+typedef VECTOR2<int>    VECTOR2I;
 
 /* Compatibility typedefs */
 // FIXME should be removed to avoid multiple typedefs for the same type
-typedef VECTOR2<double>   DPOINT;
-typedef DPOINT            DSIZE;
+typedef VECTOR2<double> DPOINT;
+typedef DPOINT          DSIZE;
 
 #endif    // VECTOR2D_H_
