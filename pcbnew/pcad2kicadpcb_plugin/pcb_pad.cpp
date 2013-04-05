@@ -180,7 +180,7 @@ void PCB_PAD::Flip()
         m_rotation = -m_rotation;
 
     for( i = 0; i < (int)m_shapes.GetCount(); i++ )
-        m_shapes[i]->m_KiCadLayer = FlipLayers( m_shapes[i]->m_KiCadLayer );
+        m_shapes[i]->m_KiCadLayer = FlipLayer( m_shapes[i]->m_KiCadLayer );
 }
 
 

@@ -826,7 +826,7 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 {
     Mirror( aCentre );
-    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer() ) );
 }
 
 

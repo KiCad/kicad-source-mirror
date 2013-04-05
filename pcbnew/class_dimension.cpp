@@ -176,7 +176,7 @@ void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 void DIMENSION::Flip( const wxPoint& aCentre )
 {
     Mirror( aCentre );
-    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer() ) );
 }
 
 

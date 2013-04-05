@@ -238,7 +238,7 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
 
     switch( event.GetId() )
     {
-        case ID_LAYER_FAB: // Select layers usually neede d to build a board
+        case ID_LAYER_FAB: // Select layers usually needed to build a board
             for( i = 0; i < m_layerList.size(); i++ )
             {
                 LAYER_MSK layermask = GetLayerMask( m_layerList[ i ] );

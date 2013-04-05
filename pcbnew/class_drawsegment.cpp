@@ -111,7 +111,7 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre )
         NEGATE( m_Angle );
     }
 
-    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer() ) );
 }
 
 const wxPoint DRAWSEGMENT::GetArcEnd() const

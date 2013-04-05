@@ -43,7 +43,7 @@ PCB_COMPONENT::PCB_COMPONENT( PCB_CALLBACKS*    aCallbacks,
     m_tag       = 0;
     m_objType   = wxT( '?' );
     m_PCadLayer     = 0;
-    m_KiCadLayer    = NO_LAYER;
+    m_KiCadLayer    = LAYER_N_FRONT; // It *has* to be somewhere...
     m_timestamp     = 0;
     m_positionX     = 0;
     m_positionY     = 0;
@@ -75,41 +75,6 @@ void PCB_COMPONENT::SetPosOffset( int aX_offs, int aY_offs )
 void PCB_COMPONENT::Flip()
 {
     m_positionX = -m_positionX;
-}
-
-LAYER_NUM PCB_COMPONENT::FlipLayers( LAYER_NUM aLayer )
-{
-    LAYER_NUM result = aLayer;    // dafault is no swap
-
-    // routed layers
-    if( aLayer == LAYER_N_BACK )
-        result = LAYER_N_FRONT;
-
-    if( aLayer == LAYER_N_FRONT )
-        result = LAYER_N_BACK;
-
-    // Silk
-    if( aLayer == SILKSCREEN_N_FRONT )
-        result = SILKSCREEN_N_BACK;
-
-    if( aLayer == SILKSCREEN_N_BACK )
-        result = SILKSCREEN_N_FRONT;
-
-    // Paste
-    if( aLayer == SOLDERPASTE_N_FRONT )
-        result = SOLDERPASTE_N_BACK;
-
-    if( aLayer == SOLDERPASTE_N_BACK )
-        result = SOLDERPASTE_N_FRONT;
-
-    // Mask
-    if( aLayer == SOLDERMASK_N_FRONT )
-        result = SOLDERMASK_N_BACK;
-
-    if( aLayer == SOLDERMASK_N_BACK )
-        result = SOLDERMASK_N_FRONT;
-
-    return result;
 }
 
 } // namespace PCAD2KICAD

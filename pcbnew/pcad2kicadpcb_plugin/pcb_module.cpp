@@ -606,7 +606,7 @@ void PCB_MODULE::Flip()
     if( m_mirror == 1 )
     {
         // Flipped
-        m_KiCadLayer    = FlipLayers( m_KiCadLayer );
+        m_KiCadLayer    = FlipLayer( m_KiCadLayer );
         m_rotation      = -m_rotation;
         m_name.textPositionX = -m_name.textPositionX;
         m_name.mirror = m_mirror;

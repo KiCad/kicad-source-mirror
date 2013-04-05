@@ -758,7 +758,7 @@ void MODULE::Flip( const wxPoint& aCentre )
     SetPosition( finalPos );
 
     // Flip layer
-    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer() ) );
 
     // Reverse mirror orientation.
     NEGATE( m_Orient );
@@ -777,7 +777,7 @@ void MODULE::Flip( const wxPoint& aCentre )
     text->m_Mirror = false;
     NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );
     text->SetLayer( GetLayer() );
-    text->SetLayer( BOARD::ReturnFlippedLayerNumber( text->GetLayer() ) );
+    text->SetLayer( FlipLayer( text->GetLayer() ) );
 
     if( GetLayer() == LAYER_N_BACK )
         text->SetLayer( SILKSCREEN_N_BACK );
@@ -785,8 +785,7 @@ void MODULE::Flip( const wxPoint& aCentre )
     if( GetLayer() == LAYER_N_FRONT )
         text->SetLayer( SILKSCREEN_N_FRONT );
 
-    if( (GetLayer() == SILKSCREEN_N_BACK)
-       || (GetLayer() == ADHESIVE_N_BACK) || (GetLayer() == LAYER_N_BACK) )
+    if( IsBackLayer( GetLayer() ) )
         text->m_Mirror = true;
 
     // Mirror value.
@@ -798,7 +797,7 @@ void MODULE::Flip( const wxPoint& aCentre )
     text->m_Mirror = false;
     NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );
     text->SetLayer( GetLayer() );
-    text->SetLayer( BOARD::ReturnFlippedLayerNumber( text->GetLayer() ) );
+    text->SetLayer( FlipLayer( text->GetLayer() ) );
 
     if( GetLayer() == LAYER_N_BACK )
         text->SetLayer( SILKSCREEN_N_BACK );
@@ -806,8 +805,7 @@ void MODULE::Flip( const wxPoint& aCentre )
     if( GetLayer() == LAYER_N_FRONT )
         text->SetLayer( SILKSCREEN_N_FRONT );
 
-    if( (GetLayer() == SILKSCREEN_N_BACK)
-       || (GetLayer() == ADHESIVE_N_BACK) || (GetLayer() == LAYER_N_BACK) )
+    if( IsBackLayer( GetLayer() ) )
         text->m_Mirror = true;
 
     // Reverse mirror module graphics and texts.
@@ -839,7 +837,7 @@ void MODULE::Flip( const wxPoint& aCentre )
                     em->SetAngle( -em->GetAngle() );
                 }
 
-                em->SetLayer( BOARD::ReturnFlippedLayerNumber( em->GetLayer() ) );
+                em->SetLayer( FlipLayer( em->GetLayer() ) );
             }
             break;
 
@@ -854,7 +852,7 @@ void MODULE::Flip( const wxPoint& aCentre )
             NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );
 
             text->SetLayer( GetLayer() );
-            text->SetLayer( BOARD::ReturnFlippedLayerNumber( text->GetLayer() ) );
+            text->SetLayer( FlipLayer( text->GetLayer() ) );
 
             if( GetLayer() == LAYER_N_BACK )
                 text->SetLayer( SILKSCREEN_N_BACK );
@@ -862,12 +860,8 @@ void MODULE::Flip( const wxPoint& aCentre )
             if( GetLayer() == LAYER_N_FRONT )
                 text->SetLayer( SILKSCREEN_N_FRONT );
 
-            if(  GetLayer() == SILKSCREEN_N_BACK
-                 || GetLayer() == ADHESIVE_N_BACK
-                 || GetLayer() == LAYER_N_BACK )
-            {
+            if( IsBackLayer( GetLayer() ) )
                 text->m_Mirror = true;
-            }
 
             break;
 
