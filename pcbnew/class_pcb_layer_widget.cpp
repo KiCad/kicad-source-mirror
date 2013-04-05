@@ -78,6 +78,7 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwn
     LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
     myframe( aParent )
 {
+    m_alwaysShowActiveCopperLayer = false;
     ReFillRender();
 
     // Update default tabs labels for GerbView
@@ -90,7 +91,7 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwn
 
     // since Popupmenu() calls this->ProcessEvent() we must call this->Connect()
     // and not m_LayerScrolledWindow->Connect()
-    Connect( ID_SHOW_ALL_COPPERS, ID_SHOW_NO_COPPERS_BUT_ACTIVE, wxEVT_COMMAND_MENU_SELECTED,
+    Connect( ID_SHOW_ALL_COPPERS, ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE, wxEVT_COMMAND_MENU_SELECTED,
         wxCommandEventHandler( PCB_LAYER_WIDGET::onPopupSelection ), NULL, this );
 
     // install the right click handler into each control at end of ReFill()
@@ -120,9 +121,14 @@ void PCB_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
 
     // menu text is capitalized:
     // http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_COPPERS, _( "Show All Copper Layers" ) ) );
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS_BUT_ACTIVE,  _( "Hide All Copper Layers But Active" ) ) );
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS,  _( "Hide All Copper Layers" ) ) );
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_COPPERS,
+                                 _( "Show All Copper Layers" ) ) );
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS_BUT_ACTIVE,
+                                 _( "Hide All Copper Layers But Active" ) ) );
+    menu.Append( new wxMenuItem( &menu, ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE,
+                                 _( "Always Hide All Copper Layers But Active" ) ) );
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS,
+                                 _( "Hide All Copper Layers" ) ) );
 
     PopupMenu( &menu );
 
@@ -135,20 +141,22 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     int     rowCount;
     int     menuId = event.GetId();
     bool    visible;
+    bool    force_active_layer_visible;
 
     switch( menuId )
     {
     case ID_SHOW_ALL_COPPERS:
-        visible = true;
-        goto L_change_coppers;
-
+    case ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE:
     case ID_SHOW_NO_COPPERS_BUT_ACTIVE:
     case ID_SHOW_NO_COPPERS:
-        visible = false;
-    L_change_coppers:
+        visible = menuId == ID_SHOW_ALL_COPPERS;
+        m_alwaysShowActiveCopperLayer = ( menuId == ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE );
+        force_active_layer_visible = ( menuId == ID_SHOW_NO_COPPERS_BUT_ACTIVE ||
+                                       menuId == ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE );
+        // Search the last copper layer row index:
         int lastCu = -1;
         rowCount = GetLayerRowCount();
-        for( int row=rowCount-1;  row>=0;  --row )
+        for( int row = rowCount-1; row>=0; --row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
             LAYER_NUM layer = getDecodedId( cb->GetId() );
@@ -159,6 +167,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             }
         }
 
+        // Enbale/disable the copper layers visibility:
         for( int row=0;  row<rowCount;  ++row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
@@ -167,14 +176,12 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             if( IsValidCopperLayerIndex( layer ) )
             {
                 bool loc_visible = visible;
-                if( (menuId == ID_SHOW_NO_COPPERS_BUT_ACTIVE ) &&
-                    (layer == myframe->getActiveLayer() ) )
+                if( force_active_layer_visible && (layer == myframe->getActiveLayer() ) )
                     loc_visible = true;
 
                 cb->SetValue( loc_visible );
 
                 bool isLastCopperLayer = (row==lastCu);
-
                 OnLayerVisible( layer, loc_visible, isLastCopperLayer );
 
                 if( isLastCopperLayer )
@@ -338,11 +345,26 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
     // false from this function.
     myframe->setActiveLayer( aLayer, false );
 
-    if(DisplayOpt.ContrastModeDisplay)
+    if( m_alwaysShowActiveCopperLayer )
+        OnLayerSelected();
+    else if(DisplayOpt.ContrastModeDisplay)
         myframe->GetCanvas()->Refresh();
 
     return true;
 }
+
+void PCB_LAYER_WIDGET::OnLayerSelected()
+{
+    if( !m_alwaysShowActiveCopperLayer )
+        return;
+
+    // postprocess after an active layer selection
+    // ensure active layer visible
+    wxCommandEvent event;
+    event.SetId( ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE );
+    onPopupSelection( event );
+}
+
 
 
 void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal )
@@ -371,29 +393,7 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, EDA_COLOR_T aColor )
 void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 {
     BOARD*  brd = myframe->GetBoard();
-
-    /* @todo:
-
-        move:
-
-        GRID_VISIBLE,   ? maybe not this one
-        into m_VisibleElements and get rid of globals.
-   */
-
-    switch( aId )
-    {
-        // see todo above, don't really want anything except IsElementVisible() here.
-
-    case GRID_VISIBLE:
-        // @todo, make read/write accessors for grid control so the write accessor can fire updates to
-        // grid state listeners.  I think the grid state should be kept in the BOARD.
-        brd->SetElementVisibility( aId, isEnabled );    // set visibilty flag also in list, and myframe->m_Draw_Grid
-        break;
-
-    default:
-        brd->SetElementVisibility( aId, isEnabled );
-    }
-
+    brd->SetElementVisibility( aId, isEnabled );
     myframe->GetCanvas()->Refresh();
 }
 

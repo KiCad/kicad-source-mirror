@@ -89,17 +89,24 @@ public:
     void OnRenderEnable( int aId, bool isEnabled );
     //-----</implement LAYER_WIDGET abstract callback functions>----------
 
+    void OnLayerSelected();     // postprocess after an active layer selection
+                                // ensure active layer visible if
+                                // m_alwaysShowActiveCopperLayer is true;
+
 
 protected:
 
     static const LAYER_WIDGET::ROW  s_render_rows[];
+    bool m_alwaysShowActiveCopperLayer;         // If true: Only shows the current active layer
+                                                // even if it is changed
 
     PCB_EDIT_FRAME*    myframe;
 
     // popup menu ids.
-#define ID_SHOW_ALL_COPPERS             wxID_HIGHEST
-#define ID_SHOW_NO_COPPERS              (wxID_HIGHEST+1)
-#define ID_SHOW_NO_COPPERS_BUT_ACTIVE   (wxID_HIGHEST+2)
+#define ID_SHOW_ALL_COPPERS                     wxID_HIGHEST
+#define ID_SHOW_NO_COPPERS                      (wxID_HIGHEST+1)
+#define ID_SHOW_NO_COPPERS_BUT_ACTIVE           (wxID_HIGHEST+2)
+#define ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE    (wxID_HIGHEST+3)
 
     /**
      * Function OnRightDownLayers

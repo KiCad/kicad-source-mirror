@@ -20,9 +20,9 @@
 #if defined(PCBNEW) || defined(CVPCB) || defined(GERBVIEW)
  #if defined( USE_PCBNEW_NANOMETRES )
   #if defined(GERBVIEW)
-   #define IU_PER_MM        1e5     // Gerbview uses 10 micrometer.
+   #define IU_PER_MM        1e5     // Gerbview IU is 10 nanometers.
   #else
-   #define IU_PER_MM        1e6     // Pcbnew uses nanometers.
+   #define IU_PER_MM        1e6     // Pcbnew IU is 1 nanometer.
   #endif
   #define IU_PER_MILS       (IU_PER_MM * 0.0254)
   #define IU_PER_DECIMILS   (IU_PER_MM * 0.00254)

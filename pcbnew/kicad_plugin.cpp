@@ -1758,7 +1758,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProp
 
             if( tmp.GetExt() != KiCadFootprintFileExtension )
             {
-                THROW_IO_ERROR( wxString::Format( _( "unexpected file '%s' has found in library path '%s'" ),
+                THROW_IO_ERROR( wxString::Format( _( "unexpected file '%s' was found in library path '%s'" ),
                                                   files[i].GetData(), aLibraryPath.GetData() ) );
             }
         }

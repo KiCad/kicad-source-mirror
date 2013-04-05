@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 20131 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -289,7 +289,7 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
 
         if( !wxFileName::FileExists( fn ) )
         {
-            msg = type + _( " file <" ) + fn + _( "> was not found." );
+            msg.Printf( wxT( "file <%s> was not found." ), GetChars( fn ) );
             wxMessageBox( msg );
             fileHistory->RemoveFileFromHistory( i );
             fn = wxEmptyString;

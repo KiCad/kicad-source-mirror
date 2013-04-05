@@ -105,16 +105,16 @@ void EDA_3D_FRAME::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_MOVE3D_LEFT, wxEmptyString, KiBitmap( left_xpm ),
-                         _( "Move left <-" ) );
+                         _( "Move left" ) );
 
     m_HToolBar->AddTool( ID_MOVE3D_RIGHT, wxEmptyString, KiBitmap( right_xpm ),
-                         _( "Move right ->" ) );
+                         _( "Move right" ) );
 
     m_HToolBar->AddTool( ID_MOVE3D_UP, wxEmptyString, KiBitmap( up_xpm ),
-                         _( "Move up ^" ) );
+                         _( "Move up" ) );
 
     m_HToolBar->AddTool( ID_MOVE3D_DOWN, wxEmptyString, KiBitmap( down_xpm ),
-                         _( "Move down v" ) );
+                         _( "Move down" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_ORTHO, wxEmptyString, KiBitmap( ortho_xpm ),
