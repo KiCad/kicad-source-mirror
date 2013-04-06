@@ -62,6 +62,10 @@
  * <p> void OnLayerVisible( int aLayer, bool isVisible );
  * <p> void OnRenderColorChange( int id, int aColor );
  * <p> void OnRenderEnable( int id, bool isEnabled );
+ *
+ * Please note that even if designed toward layers, it is used to
+ * contain other stuff, too (the second page in pcbnew contains render
+ * items, for example)
  */
 class LAYER_WIDGET : public wxPanel
 {
@@ -133,9 +137,11 @@ protected:
 
     /**
      * Function getDecodedId
-     * decodes \a aControlId to original un-encoded value.
+     * decodes \a aControlId to original un-encoded value. This of
+     * course holds iff encodedId was called with a LAYER_NUM (this box
+     * is used for other things than layers, too)
      */
-    static int getDecodedId( int aControlId );
+    static LAYER_NUM getDecodedId( int aControlId );
 
     /**
      * Function makeColorButton
@@ -242,8 +248,6 @@ public:
      * ensure that ROW::id is unique for all existing rows on Windows.
      */
     void AppendLayerRow( const ROW& aRow );
-
-#define MAX_LAYER_ROWS          64  ///< cannot append more than this number of rows
 
     /**
      * Function AppendLayerRows

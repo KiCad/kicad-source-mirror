@@ -1084,8 +1084,8 @@ bool Is3DLayerEnabled( LAYER_NUM aLayer )
             break;
 
         default:
-    // the layer was not a layer with a flag, so show it
-        return true;
+            // the layer was not a layer with a flag, so show it
+            return true;
     }
 
     // if the layer has a flag, return the flag
