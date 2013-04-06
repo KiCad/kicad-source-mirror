@@ -218,9 +218,9 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
     {
         SCH_FIELD field( pos, i, this, TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
 
-        if( i==REFERENCE )
+        if( i == REFERENCE )
             field.SetLayer( LAYER_REFERENCEPART );
-        else if( i==VALUE )
+        else if( i == VALUE )
             field.SetLayer( LAYER_VALUEPART );
 
         // else keep LAYER_FIELDS from SCH_FIELD constructor

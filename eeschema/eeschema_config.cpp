@@ -53,7 +53,7 @@
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 
-static EDA_COLOR_T s_layerColor[MAX_LAYERS];
+static EDA_COLOR_T s_layerColor[NB_SCH_LAYERS];
 
 // The width to draw busses that do not have a specific width
 static int s_defaultBusThickness;
@@ -65,7 +65,7 @@ int GetDefaultBusThickness()
 
 void SetDefaultBusThickness( int aThickness)
 {
-    if( aThickness >=1 )
+    if( aThickness >= 1 )
         s_defaultBusThickness = aThickness;
     else
         s_defaultBusThickness = 1;
@@ -90,7 +90,7 @@ void SetDefaultLineThickness( int aThickness)
         s_drawDefaultLineThickness = 1;
 }
 
-EDA_COLOR_T GetLayerColor( int aLayer )
+EDA_COLOR_T GetLayerColor( LayerNumber aLayer )
 {
     return s_layerColor[aLayer];
 }
@@ -478,9 +478,6 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGLabelEx" ),
                                                         &s_layerColor[LAYER_GLOBLABEL],
                                                         RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinFunEx" ),
-                                                        &s_layerColor[LAYER_PINFUN],
-                                                        MAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinNumEx" ),
                                                         &s_layerColor[LAYER_PINNUM],
                                                         RED ) );
