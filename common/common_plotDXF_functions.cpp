@@ -203,7 +203,7 @@ bool DXF_PLOTTER::StartPlot()
         { "YELLOW4",    2 }
     };
 
-    for( EDA_COLOR_T i = BLACK; i < NBCOLORS; ++i )
+    for( EDA_COLOR_T i = BLACK; i < NBCOLORS; i = NextColor(i) )
     {
         fprintf( outputFile,
                  "  0\n"

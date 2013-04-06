@@ -1,6 +1,6 @@
-/*
+/**
  * @file confirm.cpp
- * utilities to display some error, warning and info short messges
+ * @brief utilities to display some error, warning and info short messges
  */
 
 #include <fctsys.h>
