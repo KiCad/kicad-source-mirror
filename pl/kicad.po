@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-05 19:18+0100\n"
-"PO-Revision-Date: 2013-04-05 19:22+0100\n"
+"POT-Creation-Date: 2013-04-06 16:11+0100\n"
+"PO-Revision-Date: 2013-04-06 16:13+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1471,7 +1471,7 @@ msgid "Delete item"
 msgstr "Usuń element"
 
 #: eeschema/libedit_onrightclick.cpp:68 eeschema/onrightclick.cpp:158
-#: eeschema/onrightclick.cpp:191 eeschema/dialogs/dialog_color_config.cpp:224
+#: eeschema/onrightclick.cpp:191 eeschema/dialogs/dialog_color_config.cpp:225
 #: eeschema/dialogs/dialog_netlist_base.cpp:49
 #: eeschema/dialogs/dialog_netlist_base.cpp:130 pcbnew/mirepcb.cpp:100
 #: pcbnew/modedit_onclick.cpp:206 pcbnew/modedit_onclick.cpp:244
@@ -1814,7 +1814,7 @@ msgid "Bezier point %d Y position not defined"
 msgstr "Pozycja punktu Y krzywej Beziera %d nie jest ustalona"
 
 #: eeschema/lib_circle.cpp:54 pcbnew/class_board_item.cpp:45
-#: pcbnew/class_drawsegment.cpp:335 pcbnew/class_pad.cpp:794
+#: pcbnew/class_drawsegment.cpp:335 pcbnew/class_pad.cpp:749
 #: gerbview/class_gerber_draw_item.cpp:189
 msgid "Circle"
 msgstr "Okrąg"
@@ -3663,7 +3663,7 @@ msgid "Edit pins per part or body style (Use carefully!)"
 msgstr "Edytuj piny element po elemencie lub wg stylu (Używaj ostrożnie!)"
 
 #: eeschema/tool_lib.cpp:228 eeschema/tool_sch.cpp:281
-#: gerbview/toolbars_gerber.cpp:149
+#: gerbview/toolbars_gerber.cpp:150
 msgid "Turn grid off"
 msgstr "Wyłącz siatkę"
 
@@ -3680,7 +3680,7 @@ msgid "Units in millimeters"
 msgstr "Jednostki w milimetrach"
 
 #: eeschema/tool_lib.cpp:239 eeschema/tool_sch.cpp:293 pcbnew/tool_pcb.cpp:343
-#: cvpcb/class_DisplayFootprintsFrame.cpp:204 gerbview/toolbars_gerber.cpp:165
+#: cvpcb/class_DisplayFootprintsFrame.cpp:204 gerbview/toolbars_gerber.cpp:166
 msgid "Change cursor shape"
 msgstr "Zmień kształt kursora"
 
@@ -4144,7 +4144,7 @@ msgstr "Błąd ERC"
 
 #: eeschema/dialogs/dialog_color_config.cpp:56
 #: pcbnew/class_pcb_layer_widget.cpp:68
-#: gerbview/class_gerbview_layer_widget.cpp:105
+#: gerbview/class_gerbview_layer_widget.cpp:108
 msgid "Grid"
 msgstr "Siatka"
 
@@ -4158,19 +4158,19 @@ msgstr "Główne"
 msgid "Miscellaneous"
 msgstr "&Różne"
 
-#: eeschema/dialogs/dialog_color_config.cpp:200
+#: eeschema/dialogs/dialog_color_config.cpp:201
 msgid "White"
 msgstr "Biały"
 
-#: eeschema/dialogs/dialog_color_config.cpp:201
+#: eeschema/dialogs/dialog_color_config.cpp:202
 msgid "Black"
 msgstr "Czarny"
 
-#: eeschema/dialogs/dialog_color_config.cpp:202
+#: eeschema/dialogs/dialog_color_config.cpp:203
 msgid "Background Color"
 msgstr "Kolor Tła"
 
-#: eeschema/dialogs/dialog_color_config.cpp:221
+#: eeschema/dialogs/dialog_color_config.cpp:222
 #: eeschema/dialogs/dialog_netlist_base.cpp:126 pcbnew/mirepcb.cpp:97
 #: pcbnew/muonde.cpp:806 pcbnew/sel_layer.cpp:161 pcbnew/sel_layer.cpp:314
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:378
@@ -4185,11 +4185,11 @@ msgstr "Kolor Tła"
 msgid "OK"
 msgstr "OK"
 
-#: eeschema/dialogs/dialog_color_config.cpp:228
+#: eeschema/dialogs/dialog_color_config.cpp:229
 msgid "Apply"
 msgstr "Zastosuj"
 
-#: eeschema/dialogs/dialog_color_config.cpp:313
+#: eeschema/dialogs/dialog_color_config.cpp:314
 msgid ""
 "Warning:\n"
 "Some items have the same color as the background\n"
@@ -4954,7 +4954,7 @@ msgstr "Rozmiar:"
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:45
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:56
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:44
-#: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:65 common/common.cpp:220
+#: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:65 common/common.cpp:226
 msgid "units"
 msgstr "jednostki"
 
@@ -5408,7 +5408,7 @@ msgstr "Szerokość:"
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:44
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:52
-#: common/common.cpp:189 common/common.cpp:239 common/drawframe.cpp:450
+#: common/common.cpp:195 common/common.cpp:245 common/drawframe.cpp:450
 #: common/dialogs/dialog_page_settings.cpp:410
 #: pcb_calculator/UnitSelector.cpp:14
 msgid "mm"
@@ -6192,7 +6192,7 @@ msgstr "Połączone"
 msgid "Unconnected"
 msgstr "Niepołączone"
 
-#: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:800
+#: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:755
 msgid "Rect"
 msgstr "Prostokąt"
 
@@ -6228,11 +6228,11 @@ msgid "Segment"
 msgstr "Segment"
 
 #: pcbnew/class_drawsegment.cpp:359 pcbnew/class_module.cpp:461
-#: pcbnew/class_pad.cpp:640 pcbnew/class_pcb_layer_widget.cpp:198
+#: pcbnew/class_pad.cpp:595 pcbnew/class_pcb_layer_widget.cpp:200
 #: pcbnew/class_pcb_text.cpp:131 pcbnew/class_text_mod.cpp:406
 #: pcbnew/class_track.cpp:1127 pcbnew/class_zone.cpp:716
 #: pcbnew/layer_widget.cpp:533 pcbnew/sel_layer.cpp:146
-#: gerbview/class_gerbview_layer_widget.cpp:84
+#: gerbview/class_gerbview_layer_widget.cpp:87
 #: gerbview/dialogs/dialog_print_using_printer.cpp:145
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:141
 msgid "Layer"
@@ -6422,7 +6422,7 @@ msgstr "Ścieżka dla Lista sieci"
 msgid "Stat"
 msgstr "Status"
 
-#: pcbnew/class_module.cpp:486 pcbnew/class_pad.cpp:674
+#: pcbnew/class_module.cpp:486 pcbnew/class_pad.cpp:629
 #: pcbnew/class_text_mod.cpp:416
 msgid "Orient"
 msgstr "Orientacja"
@@ -6481,82 +6481,86 @@ msgstr "Oznaczenie pola lutowniczego"
 msgid "Net"
 msgstr "Sieć"
 
-#: pcbnew/class_pad.cpp:600
+#: pcbnew/class_pad.cpp:549
+msgid "No layers"
+msgstr "Brak warstw"
+
+#: pcbnew/class_pad.cpp:553
 msgid "Non-copper"
 msgstr "Poza warstwami ścieżek"
 
-#: pcbnew/class_pad.cpp:608
+#: pcbnew/class_pad.cpp:563
 msgid " & int"
 msgstr " & int"
 
-#: pcbnew/class_pad.cpp:636
+#: pcbnew/class_pad.cpp:591
 msgid "internal"
 msgstr "wewnętrzne"
 
-#: pcbnew/class_pad.cpp:645 pcbnew/class_text_mod.cpp:422
+#: pcbnew/class_pad.cpp:600 pcbnew/class_text_mod.cpp:422
 msgid "H Size"
 msgstr "Rozmiar poziomy"
 
-#: pcbnew/class_pad.cpp:648 pcbnew/class_text_mod.cpp:425
+#: pcbnew/class_pad.cpp:603 pcbnew/class_text_mod.cpp:425
 msgid "V Size"
 msgstr "Rozmiar pionowy"
 
-#: pcbnew/class_pad.cpp:654 pcbnew/class_track.cpp:1142
+#: pcbnew/class_pad.cpp:609 pcbnew/class_track.cpp:1142
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:278
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid "Drill"
 msgstr "Wiercenie"
 
-#: pcbnew/class_pad.cpp:662
+#: pcbnew/class_pad.cpp:617
 msgid "Drill X / Y"
 msgstr "Wiercenie X / Y"
 
-#: pcbnew/class_pad.cpp:677
+#: pcbnew/class_pad.cpp:632
 msgid "X Pos"
 msgstr "Pozycja X"
 
-#: pcbnew/class_pad.cpp:680
+#: pcbnew/class_pad.cpp:635
 msgid "Y pos"
 msgstr "Pozycja Y"
 
-#: pcbnew/class_pad.cpp:685
+#: pcbnew/class_pad.cpp:640
 msgid "Length in package"
 msgstr "Długość wewnątrz obudowy"
 
-#: pcbnew/class_pad.cpp:797 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
+#: pcbnew/class_pad.cpp:752 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Oval"
 msgstr "Owal"
 
-#: pcbnew/class_pad.cpp:803
+#: pcbnew/class_pad.cpp:758
 msgid "Trap"
 msgstr "Trap"
 
-#: pcbnew/class_pad.cpp:816
+#: pcbnew/class_pad.cpp:771
 msgid "Std"
 msgstr "Standardowy"
 
-#: pcbnew/class_pad.cpp:819
+#: pcbnew/class_pad.cpp:774
 msgid "Smd"
 msgstr "SMD"
 
-#: pcbnew/class_pad.cpp:822
+#: pcbnew/class_pad.cpp:777
 msgid "Conn"
 msgstr "Łącze"
 
-#: pcbnew/class_pad.cpp:825
+#: pcbnew/class_pad.cpp:780
 msgid "Not Plated"
 msgstr "Bez pokrycia cyną"
 
-#: pcbnew/class_pad.cpp:841
+#: pcbnew/class_pad.cpp:796
 msgid "all copper layers"
 msgstr "wszystkie warstwy ścieżek"
 
-#: pcbnew/class_pad.cpp:847
+#: pcbnew/class_pad.cpp:802
 msgid "???"
 msgstr "???"
 
-#: pcbnew/class_pad.cpp:849
+#: pcbnew/class_pad.cpp:804
 #, c-format
 msgid "Pad [%s] (%s) of %s"
 msgstr "Pad [%s] (%s) z %s"
@@ -6639,7 +6643,7 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Pokaż punkty bazowe footprintów i opisów w postaci krzyżyka"
 
 #: pcbnew/class_pcb_layer_widget.cpp:68
-#: gerbview/class_gerbview_layer_widget.cpp:105
+#: gerbview/class_gerbview_layer_widget.cpp:108
 msgid "Show the (x,y) grid dots"
 msgstr "Pokaż punkty siatki (x,y)"
 
@@ -6684,84 +6688,84 @@ msgstr "Oznaczenia"
 msgid "Show footprint's references"
 msgstr "Pokaż oznaczenia footprintów"
 
-#: pcbnew/class_pcb_layer_widget.cpp:125
+#: pcbnew/class_pcb_layer_widget.cpp:126
 msgid "Show All Copper Layers"
 msgstr "Pokaż wszystkie warstwy miedzi"
 
-#: pcbnew/class_pcb_layer_widget.cpp:127
+#: pcbnew/class_pcb_layer_widget.cpp:128
 msgid "Hide All Copper Layers But Active"
 msgstr "Ukryj wszystkie warstwy miedzi oprócz aktywnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:129
+#: pcbnew/class_pcb_layer_widget.cpp:130
 msgid "Always Hide All Copper Layers But Active"
 msgstr "Zawsze ukrywaj wszystkie warstwy miedzi oprócz aktywnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:131
+#: pcbnew/class_pcb_layer_widget.cpp:132
 msgid "Hide All Copper Layers"
 msgstr "Ukryj wszystkie warstwy miedzi"
 
-#: pcbnew/class_pcb_layer_widget.cpp:199 pcbnew/layer_widget.cpp:553
-#: gerbview/class_gerbview_layer_widget.cpp:85
+#: pcbnew/class_pcb_layer_widget.cpp:201 pcbnew/layer_widget.cpp:553
+#: gerbview/class_gerbview_layer_widget.cpp:88
 msgid "Render"
 msgstr "Pokaż"
 
-#: pcbnew/class_pcb_layer_widget.cpp:276
+#: pcbnew/class_pcb_layer_widget.cpp:278
 msgid "Front copper layer"
 msgstr "Górna strona ścieżek"
 
-#: pcbnew/class_pcb_layer_widget.cpp:284
+#: pcbnew/class_pcb_layer_widget.cpp:286
 msgid "An innner copper layer"
 msgstr "Wewnętrzna strona ścieżek"
 
-#: pcbnew/class_pcb_layer_widget.cpp:292
+#: pcbnew/class_pcb_layer_widget.cpp:294
 msgid "Back copper layer"
 msgstr "Dolna strona ścieżek"
 
-#: pcbnew/class_pcb_layer_widget.cpp:300
+#: pcbnew/class_pcb_layer_widget.cpp:302
 msgid "Adhesive on board's front"
 msgstr "Warstwa kleju na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:301
+#: pcbnew/class_pcb_layer_widget.cpp:303
 msgid "Adhesive on board's back"
 msgstr "Warstwa kleju na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:302
+#: pcbnew/class_pcb_layer_widget.cpp:304
 msgid "Solder paste on board's front"
 msgstr "Pasty lutowniczej na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:303
+#: pcbnew/class_pcb_layer_widget.cpp:305
 msgid "Solder paste on board's back"
 msgstr "Pasty lutowniczej na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:304
+#: pcbnew/class_pcb_layer_widget.cpp:306
 msgid "Silkscreen on board's front"
 msgstr "Warstwa opisowa na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:305
+#: pcbnew/class_pcb_layer_widget.cpp:307
 msgid "Silkscreen on board's back"
 msgstr "Warstwa opisowa na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:306
+#: pcbnew/class_pcb_layer_widget.cpp:308
 msgid "Solder mask on board's front"
 msgstr "Maska lutownicza na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:307
+#: pcbnew/class_pcb_layer_widget.cpp:309
 msgid "Solder mask on board's back"
 msgstr "Maska lutowniczna na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:308
+#: pcbnew/class_pcb_layer_widget.cpp:310
 msgid "Explanatory drawings"
 msgstr "Rysunkowa dodatkowa"
 
-#: pcbnew/class_pcb_layer_widget.cpp:309
+#: pcbnew/class_pcb_layer_widget.cpp:311
 msgid "Explanatory comments"
 msgstr "Komentarzy"
 
-#: pcbnew/class_pcb_layer_widget.cpp:310 pcbnew/class_pcb_layer_widget.cpp:311
+#: pcbnew/class_pcb_layer_widget.cpp:312 pcbnew/class_pcb_layer_widget.cpp:313
 msgid "User defined meaning"
 msgstr "Znaczenie zdefiniowane przez użytkownika"
 
-#: pcbnew/class_pcb_layer_widget.cpp:312
+#: pcbnew/class_pcb_layer_widget.cpp:314
 msgid "Board's perimeter definition"
 msgstr "Rysunkowa z obrzeżem płytki"
 
@@ -9439,7 +9443,7 @@ msgid "Delete Pad (module %s %s) "
 msgstr "Usuń pole lutownicze (footprint %s %s) "
 
 #: pcbnew/pcbframe.cpp:371 pcbnew/pcbframe.cpp:734
-#: gerbview/events_called_functions.cpp:317 gerbview/gerbview_frame.cpp:139
+#: gerbview/events_called_functions.cpp:320 gerbview/gerbview_frame.cpp:139
 msgid "Visibles"
 msgstr "Widoczność"
 
@@ -9488,13 +9492,13 @@ msgstr ""
 "Jest to normalne w przypadku nowych projektów."
 
 #: pcbnew/pcbnew_config.cpp:75 pcbnew/dialogs/dialog_general_options.cpp:236
-#: gerbview/events_called_functions.cpp:381 gerbview/menubar.cpp:158
+#: gerbview/events_called_functions.cpp:384 gerbview/menubar.cpp:158
 #: gerbview/menubar.cpp:160 gerbview/options.cpp:64
 msgid "Hide &Layers Manager"
 msgstr "Ukryj menadżera warstw"
 
 #: pcbnew/pcbnew_config.cpp:75 pcbnew/dialogs/dialog_general_options.cpp:236
-#: gerbview/events_called_functions.cpp:381 gerbview/menubar.cpp:160
+#: gerbview/events_called_functions.cpp:384 gerbview/menubar.cpp:160
 #: gerbview/options.cpp:64
 msgid "Show &Layers Manager"
 msgstr "Pokaż menadżera warstw"
@@ -14672,7 +14676,7 @@ msgid "Do not center and warp cusor on zoom"
 msgstr "Nie centruj i nie przesuwaj kursora przy powiększaniu"
 
 #: gerbview/class_gbr_layer_box_selector.cpp:80
-#: gerbview/class_gerbview_layer_widget.cpp:204
+#: gerbview/class_gerbview_layer_widget.cpp:230
 #: gerbview/select_layers_to_pcb.cpp:184
 #, c-format
 msgid "Layer %d"
@@ -14730,31 +14734,35 @@ msgstr "Ciemniej"
 msgid "AB axis"
 msgstr "oś AB"
 
-#: gerbview/class_gerbview_layer_widget.cpp:106
+#: gerbview/class_gerbview_layer_widget.cpp:109
 msgid "DCodes"
 msgstr "DCodes"
 
-#: gerbview/class_gerbview_layer_widget.cpp:106
+#: gerbview/class_gerbview_layer_widget.cpp:109
 msgid "Show DCodes identification"
 msgstr "Pokaż identyfikatory DCodes"
 
-#: gerbview/class_gerbview_layer_widget.cpp:107
+#: gerbview/class_gerbview_layer_widget.cpp:110
 msgid "Neg. Obj."
 msgstr "Obiekty negatywowe"
 
-#: gerbview/class_gerbview_layer_widget.cpp:108
+#: gerbview/class_gerbview_layer_widget.cpp:111
 msgid "Show negative objects in this color"
 msgstr "Pokaż obiekty negatywowe w tym kolorze"
 
-#: gerbview/class_gerbview_layer_widget.cpp:148
+#: gerbview/class_gerbview_layer_widget.cpp:151
 msgid "Show All Layers"
 msgstr "Pokaż wszystkie warstwy"
 
-#: gerbview/class_gerbview_layer_widget.cpp:151
+#: gerbview/class_gerbview_layer_widget.cpp:154
 msgid "Hide All Layers But Active"
 msgstr "Ukryj wszystkie warstwy oprócz aktywnej"
 
-#: gerbview/class_gerbview_layer_widget.cpp:154
+#: gerbview/class_gerbview_layer_widget.cpp:157
+msgid "Always Hide All Layers But Active"
+msgstr "Zawsze ukrywaj wszystkie warstwy miedzi oprócz aktywnej"
+
+#: gerbview/class_gerbview_layer_widget.cpp:160
 msgid "Hide All Layers"
 msgstr "Ukryj wszystkie warstwy"
 
@@ -14762,11 +14770,11 @@ msgstr "Ukryj wszystkie warstwy"
 msgid "File "
 msgstr "Plik"
 
-#: gerbview/events_called_functions.cpp:264
+#: gerbview/events_called_functions.cpp:267
 msgid "No editor defined. Please select one"
 msgstr "Edytor nie został zdefiniowany. Proszę wybrać"
 
-#: gerbview/events_called_functions.cpp:270
+#: gerbview/events_called_functions.cpp:273
 #, c-format
 msgid "No file loaded on the active layer %d"
 msgstr "Nie załadowano pliku na aktywną warstwę %d"
@@ -15094,47 +15102,47 @@ msgstr "Pokaż/ukryj ramkę referenycją oraz wybierz rozmiar papieru do druku"
 msgid "Print layers"
 msgstr "Drukuj warstwy"
 
-#: gerbview/toolbars_gerber.cpp:99
+#: gerbview/toolbars_gerber.cpp:100
 msgid "No tool"
 msgstr "Brak narzędzia"
 
-#: gerbview/toolbars_gerber.cpp:103
+#: gerbview/toolbars_gerber.cpp:104
 msgid "Tool "
 msgstr "Narzędzie "
 
-#: gerbview/toolbars_gerber.cpp:153
+#: gerbview/toolbars_gerber.cpp:154
 msgid "Turn polar coordinate on"
 msgstr "Włącz współrzędne polarne"
 
-#: gerbview/toolbars_gerber.cpp:157
+#: gerbview/toolbars_gerber.cpp:158
 msgid "Set units to inches"
 msgstr "Jednostki w calach"
 
-#: gerbview/toolbars_gerber.cpp:161
+#: gerbview/toolbars_gerber.cpp:162
 msgid "Set units to millimeters"
 msgstr "Jednostki w milimetrach"
 
-#: gerbview/toolbars_gerber.cpp:170
+#: gerbview/toolbars_gerber.cpp:171
 msgid "Show spots in sketch mode"
 msgstr "Pokaż zarys punktów"
 
-#: gerbview/toolbars_gerber.cpp:174
+#: gerbview/toolbars_gerber.cpp:175
 msgid "Show lines in sketch mode"
 msgstr "Pokaż zarys linii"
 
-#: gerbview/toolbars_gerber.cpp:178
+#: gerbview/toolbars_gerber.cpp:179
 msgid "Show polygons in sketch mode"
 msgstr "Pokaż zarysy wypełnień"
 
-#: gerbview/toolbars_gerber.cpp:183
+#: gerbview/toolbars_gerber.cpp:184
 msgid "Show negatives objects in ghost color"
 msgstr "Pokaż obiekty negatywowe jako duszki"
 
-#: gerbview/toolbars_gerber.cpp:188
+#: gerbview/toolbars_gerber.cpp:189
 msgid "Show dcode number"
 msgstr "Pokaż numer kodu wiercenia"
 
-#: gerbview/toolbars_gerber.cpp:194
+#: gerbview/toolbars_gerber.cpp:195
 msgid ""
 "Show layers in raw mode (could have problems with negative items when more "
 "than one gerber file is shown)"
@@ -15142,7 +15150,7 @@ msgstr ""
 "Pokaż warstwy w trybie RAW (Mogą być problemy z wyświetlaniem w negatywie "
 "gdy pokazywany jest więcej niż jeden plik Gerber)"
 
-#: gerbview/toolbars_gerber.cpp:199
+#: gerbview/toolbars_gerber.cpp:200
 msgid ""
 "Show layers in stacked mode (show negative items without artifacts, "
 "sometimes slow)"
@@ -15150,7 +15158,7 @@ msgstr ""
 "Pokaż warstwy w trybie nakładkowym (pokazuje elementy w negatywie bez "
 "artefaktów, czasami wolno)"
 
-#: gerbview/toolbars_gerber.cpp:204
+#: gerbview/toolbars_gerber.cpp:205
 msgid ""
 "Show layers in transparency mode (show negative items without artifacts, "
 "sometimes slow)"
@@ -15158,15 +15166,15 @@ msgstr ""
 "Pokaż warstwy w trybie przeźroczystym (pokazuje elementy w negatywie bez "
 "artefaktów, czasami wolno)"
 
-#: gerbview/toolbars_gerber.cpp:213 pcbnew/help_common_strings.h:24
+#: gerbview/toolbars_gerber.cpp:214 pcbnew/help_common_strings.h:24
 msgid "Show/hide the layers manager toolbar"
 msgstr "Pokaż/Ukryj pasek menadżera warstw"
 
-#: gerbview/toolbars_gerber.cpp:285
+#: gerbview/toolbars_gerber.cpp:286
 msgid "Hide layers manager"
 msgstr "Ukryj menadżera warstw"
 
-#: gerbview/toolbars_gerber.cpp:287
+#: gerbview/toolbars_gerber.cpp:288
 msgid "Show layers manager"
 msgstr "Pokaż menadżera warstw"
 
@@ -15652,19 +15660,19 @@ msgstr "Odbij blok"
 msgid "Marker Info"
 msgstr "Znacznik"
 
-#: common/common.cpp:185
+#: common/common.cpp:191
 msgid "\""
 msgstr "\""
 
-#: common/common.cpp:212 common/dialogs/dialog_page_settings.cpp:410
+#: common/common.cpp:218 common/dialogs/dialog_page_settings.cpp:410
 msgid "inches"
 msgstr "cale"
 
-#: common/common.cpp:216
+#: common/common.cpp:222
 msgid "millimeters"
 msgstr "Milimetry"
 
-#: common/common.cpp:235
+#: common/common.cpp:241
 msgid "in"
 msgstr "w"
 
