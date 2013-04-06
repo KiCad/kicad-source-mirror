@@ -124,7 +124,7 @@ static void Draw3D_VerticalPolygonalCylinder( const std::vector<CPolyPt>& aPolys
 
 void SetGLColor( EDA_COLOR_T color )
 {
-    double          red, green, blue;
+    double              red, green, blue;
     const StructColors &colordata = g_ColorRefs[ColorGetBase( color )];
 
     red     = colordata.m_Red / 255.0;

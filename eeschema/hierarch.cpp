@@ -101,7 +101,7 @@ class HIERARCHY_NAVIG_DLG : public wxDialog
 {
 public:
     SCH_EDIT_FRAME* m_Parent;
-    HIERARCHY_TREE*    m_Tree;
+    HIERARCHY_TREE* m_Tree;
     int             m_nbsheets;
     wxDC*           m_DC;
 

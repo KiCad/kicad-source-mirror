@@ -965,10 +965,10 @@ bool SCH_SCREEN::BreakSegmentsOnJunctions()
         {
             SCH_BUS_ENTRY_BASE* busEntry = dynamic_cast<SCH_BUS_ENTRY_BASE*>( item );
             if( busEntry )
-        {
-            if( BreakSegment( busEntry->GetPosition() )
-                || BreakSegment( busEntry->m_End() ) )
-                brokenSegments = true;
+            {
+                if( BreakSegment( busEntry->GetPosition() )
+                 || BreakSegment( busEntry->m_End() ) )
+                    brokenSegments = true;
             }
         }
     }

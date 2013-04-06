@@ -68,7 +68,7 @@ END_EVENT_TABLE()
 LAYER_NUM PCB_BASE_FRAME::SelectLayer( LAYER_NUM  default_layer,
                                        LAYER_NUM  min_layer,
                                        LAYER_NUM  max_layer,
-                                 bool null_layer )
+                                       bool null_layer )
 {
     SELECT_LAYER_DIALOG* frame = new SELECT_LAYER_DIALOG( this,
                                                             default_layer,

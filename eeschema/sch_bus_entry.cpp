@@ -62,7 +62,7 @@ SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, char shape ) :
 SCH_BUS_BUS_ENTRY::SCH_BUS_BUS_ENTRY( const wxPoint& pos, char shape ) :
     SCH_BUS_ENTRY_BASE( SCH_BUS_BUS_ENTRY_T, pos, shape )
 {
-        m_Layer = LAYER_BUS;
+    m_Layer = LAYER_BUS;
 }
 
 EDA_ITEM* SCH_BUS_WIRE_ENTRY::Clone() const
@@ -255,7 +255,7 @@ void SCH_BUS_ENTRY_BASE::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 
 wxString SCH_BUS_WIRE_ENTRY::GetSelectMenuText() const
 {
-        return wxString( _( "Bus to Wire Entry" ) );
+    return wxString( _( "Bus to Wire Entry" ) );
 }
 
 
