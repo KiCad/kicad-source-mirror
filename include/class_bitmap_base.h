@@ -31,7 +31,7 @@
 #define _BITMAP_BASE_H_
 
 
-#include <sch_item_struct.h>
+#include <plot_common.h>
 
 /**
  * This class handle bitmap images in KiCad.

@@ -67,7 +67,7 @@ static ButtonIndex buttonGroups[] = {
 };
 
 
-static EDA_COLOR_T currentColors[ MAX_LAYER ];
+static EDA_COLOR_T currentColors[ NB_SCH_LAYERS ];
 
 
 IMPLEMENT_DYNAMIC_CLASS( DIALOG_COLOR_CONFIG, wxDialog )
@@ -167,7 +167,8 @@ void DIALOG_COLOR_CONFIG::CreateControls()
             wxBitmap   bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
 
             iconDC.SelectObject( bitmap );
-            EDA_COLOR_T color = currentColors[ buttons->m_Layer ] = GetLayerColor( buttons->m_Layer );
+            EDA_COLOR_T color = GetLayerColor( LayerNumber( buttons->m_Layer ) );
+            currentColors[ buttons->m_Layer ] = color;
             iconDC.SetPen( *wxBLACK_PEN );
             wxBrush brush;
             ColorSetBrush( &brush, color );
@@ -286,7 +287,7 @@ bool DIALOG_COLOR_CONFIG::UpdateColorsSettings()
 
     bool warning = false;
 
-    for( LAYER_NUM ii = FIRST_LAYER; ii < MAX_LAYERS; ++ii )
+    for( LayerNumber ii = LAYER_WIRE; ii < NB_SCH_LAYERS; ++ii )
     {
         SetLayerColor( currentColors[ ii ], ii );
 

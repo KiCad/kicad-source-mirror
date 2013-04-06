@@ -32,6 +32,7 @@
 
 #include <vector>
 #include <class_base_screen.h>
+#include <eeschema/general.h>
 
 using namespace std;
 
@@ -117,7 +118,7 @@ public:
 class SCH_ITEM : public EDA_ITEM
 {
 protected:
-    int            m_Layer;
+    LayerNumber    m_Layer;
     EDA_ITEMS      m_connections;   ///< List of items connected to this item.
 
 public:
@@ -147,14 +148,14 @@ public:
      * Function GetLayer
      * returns the layer this item is on.
      */
-    int GetLayer() const { return m_Layer; }
+    LayerNumber GetLayer() const { return m_Layer; }
 
     /**
      * Function SetLayer
      * sets the layer this item is on.
      * @param aLayer The layer number.
      */
-    void SetLayer( int aLayer )  { m_Layer = aLayer; }
+    void SetLayer( LayerNumber aLayer )  { m_Layer = aLayer; }
 
     /**
      * Function GetPenSize virtual pure

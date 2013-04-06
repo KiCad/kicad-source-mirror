@@ -18,8 +18,8 @@ class TRANSFORM;
 
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
 
-#define TXTMARGE 10                 // Offset in mils for placement of labels and pin numbers.
-#define DEFAULT_TEXT_SIZE   50  /* Default size for field texts */
+#define TXTMARGE 10             // Offset in mils for placement of labels and pin numbers
+#define DEFAULT_TEXT_SIZE   50  // Default size for field texts
 
 #define GR_DEFAULT_DRAWMODE GR_COPY
 
@@ -33,7 +33,6 @@ typedef enum {
     LAYER_LOCLABEL,
     LAYER_GLOBLABEL,
     LAYER_HIERLABEL,
-    LAYER_PINFUN,
     LAYER_PINNUM,
     LAYER_PINNAM,
     LAYER_REFERENCEPART,
@@ -52,11 +51,14 @@ typedef enum {
     LAYER_ERC_ERR,
     LAYER_DEVICE_BACKGROUND,
     LAYER_GRID,
-    LAYER_ITEM_SELECTED,
-    LAYER_INVISIBLE_ITEM,
-
-    MAX_LAYER                   // end of list
+    NB_SCH_LAYERS
 } LayerNumber;
+
+inline LayerNumber operator++( LayerNumber& a )
+{
+    a = LayerNumber( int( a ) + 1 );
+    return a;
+}
 
 
 /* Rotation, mirror of graphic items in components bodies are handled by a
@@ -66,8 +68,6 @@ typedef enum {
  * the Y coordinate and keeps the X coordiate
  */
 extern TRANSFORM DefaultTransform;
-
-#define MAX_LAYERS (int) MAX_LAYER
 
 extern wxSize   g_RepeatStep;
 extern int      g_RepeatDeltaLabel;
@@ -90,7 +90,7 @@ void SetDefaultLineThickness( int aThickness);
 int GetDefaultBusThickness();
 void SetDefaultBusThickness( int aThickness );
 
-EDA_COLOR_T GetLayerColor( int aLayer );
+EDA_COLOR_T GetLayerColor( LayerNumber aLayer );
 
 // Color to draw selected items
 EDA_COLOR_T GetItemSelectedColor();

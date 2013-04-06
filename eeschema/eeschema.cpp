@@ -118,7 +118,7 @@ bool EDA_APP::OnInit()
 
     // Give a default colour for all layers
     // (actual color will beinitialized by config)
-    for( int ii = 0; ii < MAX_LAYERS; ii++ )
+    for( int ii = 0; ii < NB_SCH_LAYERS; ii++ )
         SetLayerColor( DARKGRAY, ii );
 
     // read current setup and reopen last directory if no filename to open in
