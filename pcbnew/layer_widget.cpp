@@ -174,7 +174,7 @@ int LAYER_WIDGET::encodeId( int aColumn, int aId )
 }
 
 
-int LAYER_WIDGET::getDecodedId( int aControlId )
+LAYER_NUM LAYER_WIDGET::getDecodedId( int aControlId )
 {
     int id = aControlId / LYR_COLUMN_COUNT;    // rounding is OK.
     return id;
@@ -319,7 +319,7 @@ void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
         wxBitmap bm = makeBitmap( newColor );
         eventSource->SetBitmapLabel( bm );
 
-        int id = getDecodedId( eventSource->GetId() );
+        LAYER_NUM id = getDecodedId( eventSource->GetId() );
 
         // tell the client code.
         OnRenderColorChange( id, newColor );
@@ -331,7 +331,7 @@ void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
 void LAYER_WIDGET::OnRenderCheckBox( wxCommandEvent& event )
 {
     wxCheckBox* eventSource = (wxCheckBox*) event.GetEventObject();
-    int id = getDecodedId( eventSource->GetId() );
+    LAYER_NUM id = getDecodedId( eventSource->GetId() );
     OnRenderEnable( id, eventSource->IsChecked() );
     passOnFocus();
 }
@@ -398,7 +398,7 @@ int LAYER_WIDGET::findRenderRow( int aId ) const
 
 void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
 {
-    wxASSERT( aRow >= 0 && aRow < MAX_LAYER_ROWS );
+    wxASSERT( aRow >= 0 );
 
     int         col;
     int         index = aRow * LYR_COLUMN_COUNT;
@@ -440,7 +440,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
 
 void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
 {
-    wxASSERT( aRow >= 0 && aRow < MAX_LAYER_ROWS );
+    wxASSERT( aRow >= 0 );
 
     int         col;
     int         index = aRow * RND_COLUMN_COUNT;
