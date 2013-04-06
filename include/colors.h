@@ -37,12 +37,12 @@ enum EDA_COLOR_T
     LIGHTRED,
     LIGHTMAGENTA,
     YELLOW,
-    PUREBLUE,   
-    PUREGREEN,  
-    PURECYAN,   
-    PURERED,    
+    PUREBLUE,
+    PUREGREEN,
+    PURECYAN,
+    PURERED,
     PUREMAGENTA,
-    PUREYELLOW, 
+    PUREYELLOW,
     NBCOLORS,                    ///< Number of colors
     HIGHLIGHT_FLAG =  ( 1<<19 ),
     MASKCOLOR      =    31       ///< mask for color index into g_ColorRefs[]
@@ -55,14 +55,13 @@ inline EDA_COLOR_T ColorFromInt( int aColor )
     return static_cast<EDA_COLOR_T>( aColor );
 }
 
-inline EDA_COLOR_T operator++( EDA_COLOR_T& aColor )
+inline EDA_COLOR_T NextColor( EDA_COLOR_T& aColor )
 {
     // We have to accept NBCOLORS for loop termination conditions
     wxASSERT( aColor >= UNSPECIFIED_COLOR && aColor <= NBCOLORS );
     aColor = static_cast<EDA_COLOR_T>( int( aColor ) + 1 );
     return aColor;
 }
-
 
 /// Return only the plain color part
 inline EDA_COLOR_T ColorGetBase( EDA_COLOR_T aColor)

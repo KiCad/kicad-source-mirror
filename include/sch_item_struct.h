@@ -32,7 +32,7 @@
 
 #include <vector>
 #include <class_base_screen.h>
-#include <eeschema/general.h>
+#include <general.h>
 
 using namespace std;
 

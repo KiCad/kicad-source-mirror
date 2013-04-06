@@ -240,7 +240,10 @@ void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
     setActiveLayer( event.GetSelection() );
 
     if( layer != getActiveLayer() )
-        m_canvas->Refresh();
+    {
+        if( m_LayersManager->OnLayerSelected() )
+            m_canvas->Refresh();
+    }
 }
 
 

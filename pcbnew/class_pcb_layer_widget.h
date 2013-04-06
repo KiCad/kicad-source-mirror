@@ -89,7 +89,15 @@ public:
     void OnRenderEnable( int aId, bool isEnabled );
     //-----</implement LAYER_WIDGET abstract callback functions>----------
 
-    void OnLayerSelected();     // postprocess after an active layer selection
+    /**
+     * Function OnLayerSelected
+     * ensure the active layer is visible, and other layers not visible
+     * when m_alwaysShowActiveLayer is true
+     * Otherwise do nothing.
+     * @return true m_alwaysShowActiveLayer is true and the canvas is refreshed,
+     * and false if do nothing
+     */
+    bool OnLayerSelected();     // postprocess after an active layer selection
                                 // ensure active layer visible if
                                 // m_alwaysShowActiveCopperLayer is true;
 

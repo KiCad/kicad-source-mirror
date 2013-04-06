@@ -91,7 +91,8 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwn
 
     // since Popupmenu() calls this->ProcessEvent() we must call this->Connect()
     // and not m_LayerScrolledWindow->Connect()
-    Connect( ID_SHOW_ALL_COPPERS, ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE, wxEVT_COMMAND_MENU_SELECTED,
+    Connect( ID_SHOW_ALL_COPPERS, ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE,
+        wxEVT_COMMAND_MENU_SELECTED,
         wxCommandEventHandler( PCB_LAYER_WIDGET::onPopupSelection ), NULL, this );
 
     // install the right click handler into each control at end of ReFill()
@@ -102,9 +103,9 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwn
 void PCB_LAYER_WIDGET::installRightLayerClickHandler()
 {
     int rowCount = GetLayerRowCount();
-    for( int row=0;  row<rowCount;  ++row )
+    for( int row=0; row<rowCount; ++row )
     {
-        for( int col=0; col<LYR_COLUMN_COUNT;  ++col )
+        for( int col=0; col<LYR_COLUMN_COUNT; ++col )
         {
             wxWindow* w = getLayerComp( row, col );
 
@@ -143,16 +144,17 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     bool    visible;
     bool    force_active_layer_visible;
 
+    visible = menuId == ID_SHOW_ALL_COPPERS;
+    m_alwaysShowActiveCopperLayer = ( menuId == ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE );
+    force_active_layer_visible = ( menuId == ID_SHOW_NO_COPPERS_BUT_ACTIVE ||
+                                   menuId == ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE );
+
     switch( menuId )
     {
     case ID_SHOW_ALL_COPPERS:
     case ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE:
     case ID_SHOW_NO_COPPERS_BUT_ACTIVE:
     case ID_SHOW_NO_COPPERS:
-        visible = menuId == ID_SHOW_ALL_COPPERS;
-        m_alwaysShowActiveCopperLayer = ( menuId == ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE );
-        force_active_layer_visible = ( menuId == ID_SHOW_NO_COPPERS_BUT_ACTIVE ||
-                                       menuId == ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE );
         // Search the last copper layer row index:
         int lastCu = -1;
         rowCount = GetLayerRowCount();
@@ -353,16 +355,18 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
     return true;
 }
 
-void PCB_LAYER_WIDGET::OnLayerSelected()
+bool  PCB_LAYER_WIDGET::OnLayerSelected()
 {
     if( !m_alwaysShowActiveCopperLayer )
-        return;
+        return false;
 
     // postprocess after an active layer selection
     // ensure active layer visible
     wxCommandEvent event;
     event.SetId( ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE );
     onPopupSelection( event );
+
+    return true;
 }
 
 
