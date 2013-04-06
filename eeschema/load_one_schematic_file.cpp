@@ -227,7 +227,7 @@ again." );
         {
             // Load it if it wasn't by a factory
             if( !itemLoaded )
-            itemLoaded = item->Load( reader, msgDiag );
+                itemLoaded = item->Load( reader, msgDiag );
 
             if( !itemLoaded )
             {

@@ -45,7 +45,7 @@ class SCH_REFERENC_LIST;
 
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
 
-// Max pin number per component and footprint 
+// Max pin number per component and footprint
 #define MAXPIN 5000
 
 

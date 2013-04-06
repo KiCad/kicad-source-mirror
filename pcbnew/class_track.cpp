@@ -1206,7 +1206,7 @@ TRACK* TRACK::GetVia( const wxPoint& aPosition, LAYER_NUM aLayer)
         if( track->GetState( BUSY | IS_DELETED ) )
             continue;
 
-        if( aLayer == UNDEFINED_LAYER  )
+        if( aLayer == UNDEFINED_LAYER )
             break;
 
         if( track->IsOnLayer( aLayer ) )

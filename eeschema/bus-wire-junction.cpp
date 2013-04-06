@@ -345,7 +345,7 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
     if( ( screen->GetCurItem() == NULL ) || !screen->GetCurItem()->IsNew() )
         return;
 
-        DrawSegment( m_canvas, DC, wxDefaultPosition, false );
+    DrawSegment( m_canvas, DC, wxDefaultPosition, false );
 
     screen->Remove( screen->GetCurItem() );
     m_canvas->SetMouseCaptureCallback( NULL );

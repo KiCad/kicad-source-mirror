@@ -71,14 +71,14 @@ static void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM l
         if( layer == UNDEFINED_LAYER )                                  \
         {                                                               \
             RoutingMatrix.WriteCell( dy, dx, BOTTOM, color );           \
-            if( RoutingMatrix.m_RoutingLayersCount > 1 )                                              \
-                RoutingMatrix.WriteCell( dy, dx, TOP, color );                        \
+            if( RoutingMatrix.m_RoutingLayersCount > 1 )                \
+                RoutingMatrix.WriteCell( dy, dx, TOP, color );          \
         }                                                               \
         else                                                            \
         {                                                               \
             if( layer == g_Route_Layer_BOTTOM )                         \
                 RoutingMatrix.WriteCell( dy, dx, BOTTOM, color );       \
-            if( RoutingMatrix.m_RoutingLayersCount > 1 )                                              \
+            if( RoutingMatrix.m_RoutingLayersCount > 1 )                \
                 if( layer == g_Route_Layer_TOP )                        \
                     RoutingMatrix.WriteCell( dy, dx, TOP, color );      \
         }                                                               \

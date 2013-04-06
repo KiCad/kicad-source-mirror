@@ -280,7 +280,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         ZONE_CONTAINER* zone = Pcb->GetArea( ii );
 
         if( aPrintMaskLayer & GetLayerMask( zone->GetLayer() ) )
-        zone->DrawFilledArea( m_canvas, aDC, drawmode );
+            zone->DrawFilledArea( m_canvas, aDC, drawmode );
     }
 
     // Draw footprints, this is done at last in order to print the pad holes in

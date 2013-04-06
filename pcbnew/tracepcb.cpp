@@ -198,7 +198,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
 
     for( MODULE* module = m_Modules; module; module = module->Next() )
     {
-        bool    display     = true;
+        bool       display = true;
         LAYER_MSK  layerMask = ALL_CU_LAYERS;
 
         if( module->IsMoving() )

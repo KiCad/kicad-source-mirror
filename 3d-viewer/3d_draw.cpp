@@ -552,7 +552,7 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
                 break;
 
             case S_CIRCLE:
-                {
+            {
                 int radius = KiROUND( hypot( double(segment->GetStart().x - segment->GetEnd().x),
                                              double(segment->GetStart().y - segment->GetEnd().y) )
                                     );
@@ -998,12 +998,11 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
             polyPadShape.insert( polyPadShape.end(), holecornersBuffer.begin(),
                                  holecornersBuffer.end() );
         }
-
         break;
 
     case PAD_RECT:
     case PAD_TRAPEZOID:
-        {
+    {
         wxPoint coord[5];
         BuildPadPolygon( coord, wxSize(0,0), m_Orient );
         for( int ii = 0; ii < 4; ii ++ )
@@ -1018,7 +1017,7 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
             polyPadShape.insert( polyPadShape.end(), holecornersBuffer.begin(),
                                  holecornersBuffer.end() );
         }
-    break;
+        break;
 
     default:
         break;

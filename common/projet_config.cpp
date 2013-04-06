@@ -358,8 +358,8 @@ PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( const wxChar* ident, EDA_COLOR_T* ptpara
 
 PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool          Insetup,
                                         const wxChar* ident,
-                                        EDA_COLOR_T*          ptparam,
-                                        EDA_COLOR_T           default_val,
+                                        EDA_COLOR_T*  ptparam,
+                                        EDA_COLOR_T   default_val,
                                         const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_SETCOLOR, group )
 {
