@@ -79,7 +79,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 #ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
     int    showActualMaskSize = 0;  /* Layer number if the actual pad size on mask layer can
                                      * be displayed i.e. if only one layer is shown for this pad
-                                     * and this layer is a mask (solder mask or sloder paste
+                                     * and this layer is a mask (solder mask or solder paste
                                      */
 #endif
 
@@ -229,13 +229,13 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     // layer so we can see pads on paste or solder layer and the size of the
     // mask
     if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
-        DisplayOpt.ContrastModeDisplay && screen->m_Active_Layer > LAST_COPPER_LAYER )
+        DisplayOpt.ContrastModeDisplay && screen->m_Active_Layer >= FIRST_NON_COPPER_LAYER )
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
         {
             color = brd->GetLayerColor( screen->m_Active_Layer );
 
-            // In hight contrast mode, and if the active layer is the mask
+            // In high contrast mode, and if the active layer is the mask
             // layer shows the pad size with the mask clearance
             switch( screen->m_Active_Layer )
             {
@@ -268,8 +268,12 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     if( ( m_layerMask & ALL_CU_LAYERS ) == 0 )
         DisplayIsol = false;
 
-    if( GetAttribute() == PAD_HOLE_NOT_PLATED )
+    if( ( GetAttribute() == PAD_HOLE_NOT_PLATED ) &&
+        brd->IsElementVisible( NON_PLATED_VISIBLE ) )
+    {
         drawInfo.m_ShowNotPlatedHole = true;
+        drawInfo.m_NPHoleColor = brd->GetVisibleElementColor( NON_PLATED_VISIBLE );
+    }
 
     drawInfo.m_DrawMode    = aDraw_mode;
     drawInfo.m_Color       = color;
@@ -286,7 +290,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
      */
     drawInfo.m_PadClearance = DisplayIsol ? GetClearance() : 0;
 
-    /* Draw the pad number */
+    // Draw the pad number
     if( frame && !frame->m_DisplayPadNum )
         drawInfo.m_Display_padnum = false;
 
@@ -360,7 +364,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
                      seg_width, m_PadSketchModePenSize, aDrawInfo.m_Color );
         }
 
-        /* Draw the isolation line. */
+        // Draw the clearance line
         if( aDrawInfo.m_PadClearance )
         {
             seg_width += 2 * aDrawInfo.m_PadClearance;
@@ -392,18 +396,17 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         }
         break;
 
-
     default:
         break;
     }
 
-    /* Draw the pad hole */
+    // Draw the pad hole
     wxPoint holepos = m_Pos - aDrawInfo.m_Offset;
     int     hole    = m_Drill.x >> 1;
 
     bool drawhole = hole > 0;
 
-    if( !aDrawInfo.m_ShowPadFilled && !aDrawInfo. m_ShowNotPlatedHole )
+    if( !aDrawInfo.m_ShowPadFilled && !aDrawInfo.m_ShowNotPlatedHole )
         drawhole = false;
 
     if( drawhole )
@@ -439,13 +442,13 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             halfsize.x = m_Drill.x >> 1;
             halfsize.y = m_Drill.y >> 1;
 
-            if( m_Drill.x > m_Drill.y )  /* horizontal */
+            if( m_Drill.x > m_Drill.y )  // horizontal
             {
                 delta_cx = halfsize.x - halfsize.y;
                 delta_cy = 0;
                 seg_width    = m_Drill.y;
             }
-            else                         /* vertical */
+            else                         // vertical
             {
                 delta_cx = 0;
                 delta_cy = halfsize.y - halfsize.x;
@@ -469,7 +472,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
     GRSetDrawMode( aDC, aDrawInfo.m_DrawMode );
 
-    /* Draw "No connect" ( / or \ or cross X ) if necessary. : */
+    // Draw "No connect" ( / or \ or cross X ) if necessary
     if( m_Netname.IsEmpty() && aDrawInfo.m_ShowNCMark )
     {
         int dx0 = std::min( halfsize.x, halfsize.y );
@@ -479,12 +482,12 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             GRLine( aClipBox, aDC, holepos.x - dx0, holepos.y - dx0,
                     holepos.x + dx0, holepos.y + dx0, 0, nc_color );
 
-        if( m_layerMask & LAYER_BACK ) /* Draw / */
+        if( m_layerMask & LAYER_BACK )     // Draw / 
             GRLine( aClipBox, aDC, holepos.x + dx0, holepos.y - dx0,
                     holepos.x - dx0, holepos.y + dx0, 0, nc_color );
     }
 
-    /* Draw the pad number */
+    // Draw the pad number
     if( !aDrawInfo.m_Display_padnum && !aDrawInfo.m_Display_netname )
         return;
 
@@ -627,8 +630,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
     halfsize.x = m_Size.x >> 1;
     halfsize.y = m_Size.y >> 1;
 
-    /* For rectangular shapes, inflate is easy
-     */
+    // For rectangular shapes, inflate is easy
     if( GetShape() == PAD_RECT )
     {
         halfsize += aInflateValue;

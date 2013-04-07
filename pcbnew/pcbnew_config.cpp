@@ -439,6 +439,9 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorViaMicroEx" ),
                                                         ITEM_COLOR( VIA_MICROVIA_VISIBLE ),
                                                         CYAN ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNonPlatedEx" ),
+                                                        ITEM_COLOR( NON_PLATED_VISIBLE ),
+                                                        YELLOW ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorRatsEx" ),
                                                         ITEM_COLOR( RATSNEST_VISIBLE ),
                                                         WHITE ) );

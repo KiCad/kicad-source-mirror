@@ -637,6 +637,7 @@ EDA_COLOR_T BOARD::GetVisibleElementColor( int aPCB_VISIBLE )
 
     switch( aPCB_VISIBLE )
     {
+    case NON_PLATED_VISIBLE:
     case VIA_THROUGH_VISIBLE:
     case VIA_MICROVIA_VISIBLE:
     case VIA_BBLIND_VISIBLE:
@@ -663,6 +664,7 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, EDA_COLOR_T aColor )
 {
     switch( aPCB_VISIBLE )
     {
+    case NON_PLATED_VISIBLE:
     case VIA_THROUGH_VISIBLE:
     case VIA_MICROVIA_VISIBLE:
     case VIA_BBLIND_VISIBLE:
