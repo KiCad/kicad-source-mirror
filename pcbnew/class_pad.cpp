@@ -524,7 +524,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
         wxString msg = module->GetReference();
         aList.push_back( MSG_PANEL_ITEM( _( "Module" ), msg, DARKCYAN ) );
         ReturnStringPadName( Line );
-        aList.push_back( MSG_PANEL_ITEM( _( "RefP" ), Line, BROWN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), Line, BROWN ) );
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Net" ), m_Netname, DARKCYAN ) );
