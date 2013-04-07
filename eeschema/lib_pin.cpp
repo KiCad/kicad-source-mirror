@@ -179,7 +179,7 @@ const wxChar* MsgPinElectricType[] =
     wxT( "openCol" ),
     wxT( "openEm" ),
     wxT( "NotConnected" ),
-    wxT( "?????" )
+    wxT( "???" )
 };
 
 
@@ -1852,7 +1852,7 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), Text, DARKGREEN ) );
 
-    /* Display pin length */
+    // Display pin length
     Text = ReturnStringFromValue( g_UserUnit, m_length, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Length" ), Text, MAGENTA ) );
 

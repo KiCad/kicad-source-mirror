@@ -152,7 +152,7 @@ void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( LAYER_NUM aLayer )
         return;
     }
 
-    wxString msg = _( "Delete Layer " ) + GetBoard()->GetLayerName( aLayer );
+    wxString msg = _( "Delete everything on layer " ) + GetBoard()->GetLayerName( aLayer );
 
     if( !IsOK( this, msg ) )
         return;

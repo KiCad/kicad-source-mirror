@@ -131,13 +131,20 @@ void DialogEditModuleText::initDlg( )
 
     m_ModuleInfoText->SetLabel( msg );
 
-
-    if( m_currentText->GetType() == TEXT_is_VALUE )
+    switch( m_currentText->GetType() )
+    {
+    case TEXTE_MODULE::TEXT_is_VALUE:
         m_TextDataTitle->SetLabel( _( "Value:" ) );
-    else if( m_currentText->GetType() == TEXT_is_DIVERS )
+        break;
+
+    case TEXTE_MODULE::TEXT_is_DIVERS:
         m_TextDataTitle->SetLabel( _( "Text:" ) );
-    else if( m_currentText->GetType() != TEXT_is_REFERENCE )
-        m_TextDataTitle->SetLabel( wxT( "???" ) );
+        break;
+
+    default:
+        m_TextDataTitle->SetLabel( _( "Reference:" ) );
+        break;
+    }
 
     m_Name->SetValue( m_currentText->GetText() );
 

@@ -677,7 +677,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
                          double(pad->GetOrientation() - Module->GetOrientation()) / 10 );
                 fputs( line, rptfile );
 
-                static const char* shape_name[6] = { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
+                static const char* shape_name[6] = { "???", "Circ", "Rect", "Oval", "Trap", "Spec" };
 
                 sprintf( line, "Shape  %s\n", shape_name[pad->GetShape()] );
                 fputs( line, rptfile );
@@ -690,7 +690,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
                 if( pad->GetLayerMask() & LAYER_FRONT )
                     layer |= 2;
 
-                static const char* layer_name[4] = { "??? ", "copper", "component", "all" };
+                static const char* layer_name[4] = { "none", "back", "front", "both" };
 
                 sprintf( line, "Layer  %s\n", layer_name[layer] );
                 fputs( line, rptfile );

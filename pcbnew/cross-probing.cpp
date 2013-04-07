@@ -171,14 +171,12 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
         break;
 
     case PCB_MODULE_TEXT_T:
-        #define REFERENCE 0
-        #define VALUE     1
         module   = (MODULE*) objectToSync->GetParent();
         text_mod = (TEXTE_MODULE*) objectToSync;
 
-        if( text_mod->GetType() == REFERENCE )
+        if( text_mod->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
             text_key = "$REF:";
-        else if( text_mod->GetType() == VALUE )
+        else if( text_mod->GetType() == TEXTE_MODULE::TEXT_is_VALUE )
             text_key = "$VAL:";
         else
             break;

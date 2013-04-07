@@ -265,8 +265,6 @@ void PCB_LAYER_WIDGET::ReFill()
 
     int enabledLayers = brd->GetEnabledLayers();
 
-//    m_Layers->Freeze();     // no screen updates until done modifying
-
     ClearLayerRows();
 
     // show all coppers first, with front on top, back on bottom, then technical layers
@@ -327,8 +325,6 @@ void PCB_LAYER_WIDGET::ReFill()
     }
 
     installRightLayerClickHandler();
-
-//    m_Layers->Thaw();
 }
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------

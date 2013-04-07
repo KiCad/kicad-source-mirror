@@ -34,6 +34,7 @@
 #include <pcbcommon.h>
 #include <plot_common.h>
 
+#include <class_board.h>
 #include <class_pad.h>
 #include <class_zone_settings.h>
 #include <class_board_design_settings.h>
@@ -52,7 +53,7 @@ LAYER_MSK g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
 };
 
 
-DISPLAY_OPTIONS DisplayOpt;      /* Display options for board items */
+DISPLAY_OPTIONS DisplayOpt;      // Display options for board items
 
 int    g_RotationAngle;
 
@@ -183,4 +184,45 @@ LAYER_NUM ExtractLayer( LAYER_MSK aMask )
         }
     }
     return candidate;
+}
+
+wxString LayerMaskDescribe( const BOARD *aBoard, LAYER_MSK aMask )
+{
+    // Try the single or no- layer case (easy)
+    LAYER_NUM layer = ExtractLayer( aMask ); 
+    switch( layer )
+    {
+    case UNSELECTED_LAYER:
+        return _( "No layers" );
+
+    case UNDEFINED_LAYER:
+        break;
+
+    default:
+        return aBoard->GetLayerName( layer );
+    }
+
+    // Try to be smart and useful, starting with outer copper
+    // (which are more important than internal ones)
+    wxString layerInfo;
+    if( aMask & LAYER_FRONT )
+        AccumulateDescription( layerInfo, aBoard->GetLayerName( LAYER_N_FRONT ) );
+
+    if( aMask & LAYER_BACK )
+        AccumulateDescription( layerInfo, aBoard->GetLayerName( LAYER_N_BACK ) );
+    
+    if( aMask & INTERNAL_CU_LAYERS )
+        AccumulateDescription( layerInfo, _("Internal" ) );
+
+    if( aMask & ALL_NO_CU_LAYERS )
+        AccumulateDescription( layerInfo, _("Non-copper" ) );
+
+    return layerInfo;
+}
+
+void AccumulateDescription( wxString &aDesc, const wxString &aItem )
+{
+    if( !aDesc.IsEmpty() )
+        aDesc << wxT(", ");
+    aDesc << aItem;
 }

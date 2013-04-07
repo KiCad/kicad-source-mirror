@@ -124,12 +124,11 @@ void TEXTE_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     wxASSERT( board );
 
     if( m_Parent && m_Parent->Type() == PCB_DIMENSION_T )
-        aList.push_back( MSG_PANEL_ITEM( _( "DIMENSION" ), m_Text, DARKGREEN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Dimension" ), m_Text, DARKGREEN ) );
     else
         aList.push_back( MSG_PANEL_ITEM( _( "PCB Text" ), m_Text, DARKGREEN ) );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ),
-                                     board->GetLayerName( m_Layer ), BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BLUE ) );
 
     if( !m_Mirror )
         aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), _( "No" ), DARKGREEN ) );
@@ -161,15 +160,8 @@ void TEXTE_PCB::Rotate( const wxPoint& aRotCentre, double aAngle )
 void TEXTE_PCB::Flip(const wxPoint& aCentre )
 {
     m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
-//    NEGATE( m_Orient );   not needed: m_Mirror handles this
-    if( GetLayer() == LAYER_N_BACK
-        || GetLayer() == LAYER_N_FRONT
-        || GetLayer() == SILKSCREEN_N_BACK
-        || GetLayer() == SILKSCREEN_N_FRONT )
-    {
-        m_Mirror = not m_Mirror;      /* inverse mirror */
-    }
     SetLayer( FlipLayer( GetLayer() ) );
+    m_Mirror = !m_Mirror;
 }
 
 

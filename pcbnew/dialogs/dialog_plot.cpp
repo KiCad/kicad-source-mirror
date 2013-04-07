@@ -242,11 +242,7 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
             for( i = 0; i < m_layerList.size(); i++ )
             {
                 LAYER_MSK layermask = GetLayerMask( m_layerList[ i ] );
-                if( ( layermask &
-                    ( ALL_CU_LAYERS | SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT |
-                      SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
-                      SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT ) )
-                    != 0 )
+                if( layermask & ( ALL_CU_LAYERS | ALL_AUX_LAYERS ) )
                     m_layerCheckListBox->Check( i, true );
                 else
                     m_layerCheckListBox->Check( i, false );

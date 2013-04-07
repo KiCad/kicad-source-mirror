@@ -34,5 +34,7 @@ extern DLIST<TRACK> g_CurrentTrackList;
 
 #define g_FirstTrackSegment   g_CurrentTrackList.GetFirst()   ///< first segment created
 
+/// Utility for comma separated lists
+void AccumulateDescription( wxString &aDesc, const wxString &aItem );
 
 #endif  // PCBCOMMON_H_

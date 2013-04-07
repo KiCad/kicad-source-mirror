@@ -356,7 +356,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     end << GetEnd();
 
     aList.push_back( MSG_PANEL_ITEM( start, end, DARKGREEN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), board->GetLayerName( m_Layer ), DARKBROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), DARKBROWN ) );
     msg = ::CoordinateToString( m_Width );
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
 }
@@ -534,7 +534,7 @@ wxString DRAWSEGMENT::GetSelectMenuText() const
     wxString text;
     wxString temp = ::LengthDoubleToString( GetLength() );
 
-    text.Printf( _( "Pcb Graphic: %s length: %s on %s" ),
+    text.Printf( _( "Pcb Graphic: %s, length %s on %s" ),
                  GetChars( ShowShape( (STROKE_T) m_Shape ) ),
                  GetChars( temp ), GetChars( GetLayerName() ) );
 

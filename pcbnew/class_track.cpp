@@ -172,7 +172,8 @@ wxString SEGZONE::GetSelectMenuText() const
     }
     else
     {
-        text << _( "** BOARD NOT DEFINED **" );
+        wxFAIL_MSG( wxT( "SEGZONE::GetSelectMenuText: BOARD is NULL" ) );
+        text << wxT( "???" );
     }
 
     text << _( " on " ) << GetLayerName();
@@ -200,15 +201,15 @@ wxString SEGVIA::GetSelectMenuText() const
     NETINFO_ITEM* net;
     BOARD* board = GetBoard();
 
-    text << _( "Via" ) << wxT( " " ) << ShowWidth();
-
     int shape = GetShape();
 
     if( shape == VIA_BLIND_BURIED )
-        text << wxT( " " ) << _( "Blind/Buried" );
+        text << wxT( " " ) << _( "Blind/Buried " );
     else if( shape == VIA_MICROVIA )
-        text << wxT( " " ) << _( "Micro Via" );
+        text << wxT( " " ) << _( "Micro " );
     // else say nothing about normal (through) vias
+
+    text << _( "Via" ) << wxT( " " ) << ShowWidth();
 
     if( board )
     {
@@ -219,19 +220,17 @@ wxString SEGVIA::GetSelectMenuText() const
 
         text << wxChar( ' ' ) << _( "Net:" ) << GetNet();
 
-        if( shape != VIA_THROUGH )
-        {
-            // say which layers, only two for now
-            LAYER_NUM topLayer;
-            LAYER_NUM botLayer;
-            ReturnLayerPair( &topLayer, &botLayer );
-            text << _( " on " ) << board->GetLayerName( topLayer ).Trim() << wxT( " <-> " )
-                 << board->GetLayerName( botLayer ).Trim();
-        }
+        // say which layers, only two for now
+        LAYER_NUM topLayer;
+        LAYER_NUM botLayer;
+        ReturnLayerPair( &topLayer, &botLayer );
+        text << _( " on " ) << board->GetLayerName( topLayer ) << wxT( "/" )
+            << board->GetLayerName( botLayer );
     }
     else
     {
-        text << _( "** BOARD NOT DEFINED **" );
+        wxFAIL_MSG( wxT( "SEGVIA::GetSelectMenuText: BOARD is NULL" ) );
+        text << wxT( "???" );
     }
 
     return text;
@@ -1020,7 +1019,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
         {
         default:
         case 0:
-            msg =  _( "??? Via" ); // Not used yet, does not exist currently
+            msg =  wxT( "???" ); // Not used yet, does not exist currently
             break;
 
         case 1:
@@ -1049,7 +1048,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
         break;
 
     default:
-        msg = wxT( "????" );
+        msg = wxT( "???" );
         break;
     }
 
@@ -1068,7 +1067,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "NetName" ), msg, RED ) );
 
         /* Display net code : (useful in test or debug) */
-        msg.Printf( wxT( "%d .%d" ), GetNet(), GetSubNet() );
+        msg.Printf( wxT( "%d.%d" ), GetNet(), GetSubNet() );
         aList.push_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
     }
 
@@ -1117,7 +1116,8 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
         LAYER_NUM top_layer, bottom_layer;
 
         Via->ReturnLayerPair( &top_layer, &bottom_layer );
-        msg = board->GetLayerName( top_layer ) + wxT( "/" ) + board->GetLayerName( bottom_layer );
+        msg = board->GetLayerName( top_layer ) + wxT( "/" ) 
+            + board->GetLayerName( bottom_layer );
     }
     else
     {
@@ -1126,7 +1126,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, BROWN ) );
 
-    /* Display width */
+    // Display width
     msg = ::CoordinateToString( (unsigned) m_Width );
 
     if( Type() == PCB_VIA_T )      // Display Diam and Drill values
@@ -1330,7 +1330,7 @@ suite1:
         }
     }
 
-    /* General search. */
+    // General search
     for( nextSegment = aStartTrace; nextSegment != NULL; nextSegment =  nextSegment->Next() )
     {
         if( nextSegment->GetState( IS_DELETED | BUSY ) )
@@ -1524,11 +1524,12 @@ wxString TRACK::GetSelectMenuText() const
     }
     else
     {
-        text << _( "** BOARD NOT DEFINED **" );
+        wxFAIL_MSG( wxT( "TRACK::GetSelectMenuText: BOARD is NULL" ) );
+        text << wxT( "???" );
     }
 
-    text << _( " on " ) << GetLayerName() << wxT("  ") << _("Net:") << GetNet()
-         << wxT("  ") << _("Length:") << ::LengthDoubleToString( GetLength() );
+    text << _( " on " ) << GetLayerName() << wxT(", ") << _("Net:") << GetNet()
+         << wxT(", ") << _("Length:") << ::LengthDoubleToString( GetLength() );
 
     return text;
 }
@@ -1591,8 +1592,8 @@ void SEGVIA::Show( int nestLevel, std::ostream& os ) const
     " type=\"" << cp << '"';
 
     if( board )
-        os << " layers=\"" << board->GetLayerName( topLayer ).Trim().mb_str() << ","
-           << board->GetLayerName( botLayer ).Trim().mb_str() << '"';
+        os << " layers=\"" << board->GetLayerName( topLayer ).mb_str() << ","
+           << board->GetLayerName( botLayer ).mb_str() << '"';
 
     os << " width=\"" << m_Width << '"'
        << " drill=\"" << GetDrillValue() << '"'

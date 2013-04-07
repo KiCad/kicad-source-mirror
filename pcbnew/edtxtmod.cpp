@@ -139,7 +139,7 @@ void PCB_BASE_FRAME::DeleteTextModule( TEXTE_MODULE* Text )
 
     Module = (MODULE*) Text->GetParent();
 
-    if( Text->GetType() == TEXT_is_DIVERS )
+    if( Text->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
     {
         m_canvas->RefreshDrawingRect( Text->GetBoundingBox() );
         Text->DeleteStructure();

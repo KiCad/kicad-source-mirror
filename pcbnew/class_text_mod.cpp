@@ -49,21 +49,18 @@
 #include <pcbnew.h>
 
 
-TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
+TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     BOARD_ITEM( parent, PCB_MODULE_TEXT_T ),
     EDA_TEXT()
 {
     MODULE* module = (MODULE*) m_Parent;
 
-    m_Type = text_type;         /* Reference */
-
-    if( (m_Type != TEXT_is_REFERENCE) && (m_Type != TEXT_is_VALUE) )
-        m_Type = TEXT_is_DIVERS;
+    m_Type = text_type;
 
     m_NoShow = false;
 
     // Set text tickness to a default value
-    m_Thickness  = Millimeter2iu( 0.15 );
+    m_Thickness = Millimeter2iu( 0.15 );
 
     SetLayer( SILKSCREEN_N_FRONT );
 
@@ -71,20 +68,15 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
     {
         m_Pos = module->GetPosition();
 
-        LAYER_NUM moduleLayer = module->GetLayer();
-
-        if( moduleLayer == LAYER_N_BACK )
-            SetLayer( SILKSCREEN_N_BACK );
-        else if( moduleLayer == LAYER_N_FRONT )
-            SetLayer( SILKSCREEN_N_FRONT );
-        else
-            SetLayer( moduleLayer );
-
-        if(  moduleLayer == SILKSCREEN_N_BACK
-             || moduleLayer == ADHESIVE_N_BACK
-             || moduleLayer == LAYER_N_BACK )
+        if( IsBackLayer( module->GetLayer() ) )
         {
+            SetLayer( SILKSCREEN_N_BACK );
             m_Mirror = true;
+        }
+        else
+        {
+            SetLayer( SILKSCREEN_N_FRONT );
+            m_Mirror = false;
         }
     }
 }
@@ -367,7 +359,6 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         return;
 
     wxString msg, Line;
-    int      ii;
 
     static const wxString text_type_msg[3] =
     {
@@ -380,12 +371,8 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     Line = m_Text;
     aList.push_back( MSG_PANEL_ITEM( _( "Text" ), Line, BROWN ) );
 
-    ii = m_Type;
-
-    if( ii > 2 )
-        ii = 2;
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), text_type_msg[ii], DARKGREEN ) );
+    wxASSERT( m_Type >= TEXT_is_REFERENCE && m_Type <= TEXT_is_DIVERS );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), text_type_msg[m_Type], DARKGREEN ) );
 
     if( m_NoShow )
         msg = _( "No" );
@@ -394,21 +381,13 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Display" ), msg, DARKGREEN ) );
 
-    // Display text layer (use layer name if possible)
-    BOARD* board = NULL;
-    board = (BOARD*) module->GetParent();
-
-    if( m_Layer < NB_PCB_LAYERS && board )
-        msg = board->GetLayerName( m_Layer );
-    else
-        msg.Printf( wxT( "%d" ), m_Layer );
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, DARKGREEN ) );
-
-    msg = _( " No" );
+    // Display text layer
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), DARKGREEN ) );
 
     if( m_Mirror )
         msg = _( " Yes" );
+    else
+        msg = _( " No" );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), msg, DARKGREEN ) );
 
@@ -424,39 +403,6 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     msg = ::CoordinateToString( m_Size.y );
     aList.push_back( MSG_PANEL_ITEM( _( "V Size" ), msg, RED ) );
 }
-
-
-// see class_text_mod.h
-bool TEXTE_MODULE::IsOnLayer( LAYER_NUM aLayer ) const
-{
-    if( m_Layer == aLayer )
-        return true;
-
-    /* test the parent, which is a MODULE */
-    if( aLayer == GetParent()->GetLayer() )
-        return true;
-
-    if( aLayer == LAYER_N_BACK )
-    {
-        if( m_Layer==ADHESIVE_N_BACK || m_Layer==SILKSCREEN_N_BACK )
-            return true;
-    }
-    else if( aLayer == LAYER_N_FRONT )
-    {
-        if( m_Layer==ADHESIVE_N_FRONT || m_Layer==SILKSCREEN_N_FRONT )
-            return true;
-    }
-
-    return false;
-}
-
-
-/* see class_text_mod.h
- * bool TEXTE_MODULE::IsOnOneOfTheseLayers( int aLayerMask ) const
- * {
- *
- * }
- */
 
 
 wxString TEXTE_MODULE::GetSelectMenuText() const
@@ -476,7 +422,8 @@ wxString TEXTE_MODULE::GetSelectMenuText() const
 
     default:    // wrap this one in quotes:
         text << _( "Text" ) << wxT( " \"" ) << m_Text << wxT( "\"" ) << _( " of " )
-             << ( (MODULE*) GetParent() )->GetReference();
+             << ( (MODULE*) GetParent() )->GetReference() << _( " on " )
+             << GetLayerName();
         break;
     }
 

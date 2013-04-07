@@ -1187,9 +1187,9 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
 
     switch( aText->GetType() )
     {
-    case 0:      type = wxT( "reference" );     break;
-    case 1:      type = wxT( "value" );         break;
-    default:     type = wxT( "user" );
+    case TEXTE_MODULE::TEXT_is_REFERENCE: type = wxT( "reference" );     break;
+    case TEXTE_MODULE::TEXT_is_VALUE:     type = wxT( "value" );         break;
+    default:                              type = wxT( "user" );
     }
 
     // Due to the Pcbnew history, m_Orient is saved in screen value

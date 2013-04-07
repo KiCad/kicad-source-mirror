@@ -340,11 +340,11 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
         aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
         aEdge->SetLayer( module->GetLayer() );
 
-        if( module->GetLayer() == LAYER_N_FRONT )
-            aEdge->SetLayer( SILKSCREEN_N_FRONT );
-
-        if( module->GetLayer() == LAYER_N_BACK )
+        // The default layer for an edge is the corresponding silk layer
+        if( module->IsFlipped() )
             aEdge->SetLayer( SILKSCREEN_N_BACK );
+        else
+            aEdge->SetLayer( SILKSCREEN_N_FRONT );
 
         // Initialize the starting point of the new segment or arc
         aEdge->SetStart( GetScreen()->GetCrossHairPosition() );

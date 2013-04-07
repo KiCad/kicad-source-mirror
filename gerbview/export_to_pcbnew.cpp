@@ -395,7 +395,7 @@ void GBR_TO_PCB_EXPORTER::writePcbHeader()
     // Write copper layer count
     fprintf( m_fp, "LayerCount %d\n", m_pcbCopperLayersCount );
     // Write enabled layer mask:
-    int lmask = ALL_NO_CU_LAYERS | EXTERNAL_LAYERS;
+    int lmask = ALL_NO_CU_LAYERS | EXTERNAL_CU_LAYERS;
 
     for( int ii = 0; ii < m_pcbCopperLayersCount - 2; ii++ )
         lmask |= 2 << ii;
