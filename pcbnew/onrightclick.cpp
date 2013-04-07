@@ -775,7 +775,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* me
     }
 
     // Graphic texts can be deleted only if are not currently edited.
-    if( !flags && FpText->GetType() == TEXT_is_DIVERS )
+    if( !flags && FpText->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
     {
         AddMenuItem( sub_menu_Fp_text, ID_POPUP_PCB_DELETE_TEXTMODULE,
                      _( "Delete" ), KiBitmap( delete_xpm ) );

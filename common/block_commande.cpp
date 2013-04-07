@@ -108,7 +108,7 @@ void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
         break;
 
     default:
-        msg = wxT( "????" );
+        msg = wxT( "???" );
         break;
     }
 

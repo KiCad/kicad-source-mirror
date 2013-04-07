@@ -173,25 +173,22 @@ public:
 // Layer bit masks for each defined "Preset Layer Grouping"
 static const LAYER_MSK presets[] =
 {
-#define FRONT_AUX   (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT  | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT)
-#define BACK_AUX    (SILKSCREEN_LAYER_BACK  | SOLDERMASK_LAYER_BACK   | ADHESIVE_LAYER_BACK  | SOLDERPASTE_LAYER_BACK)
-
     NO_LAYERS,  // shift the array index up by one, matches with "Custom".
 
     // "Two layers, parts on Front only"
-    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | FRONT_AUX,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | FRONT_AUX_LAYERS,
 
     // "Two layers, parts on Back only",
-    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | BACK_AUX,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | BACK_AUX_LAYERS,
 
     // "Two layers, parts on Front and Back",
-    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | BACK_AUX | FRONT_AUX,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | ALL_AUX_LAYERS,
 
     // "Four layers, parts on Front only"
-    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | LAYER_2 | LAYER_3 | FRONT_AUX,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | LAYER_2 | LAYER_3 | FRONT_AUX_LAYERS,
 
     // "Four layers, parts on Front and Back"
-    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | LAYER_2 | LAYER_3 | FRONT_AUX | BACK_AUX,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | LAYER_2 | LAYER_3 | ALL_AUX_LAYERS,
 
     //  "All layers on",
     ALL_LAYERS,

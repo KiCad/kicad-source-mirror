@@ -57,7 +57,7 @@ const char* SheetLabelType[] =
     "BiDi",
     "3State",
     "UnSpc",
-    "?????"
+    "???"
 };
 
 /* Coding polygons for global symbol graphic shapes.

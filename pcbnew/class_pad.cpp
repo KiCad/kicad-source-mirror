@@ -126,7 +126,7 @@ EDA_RECT D_PAD::GetBoundingBox() const
     EDA_RECT area;
 
     // radius of pad area, enclosed in minimum sized circle
-    int     radius = boundingRadius();
+    int radius = boundingRadius();
 
     area.SetOrigin( m_Pos );
     area.Inflate( radius );
@@ -538,61 +538,8 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 
     board = GetBoard();
 
-    wxString layerInfo;
-
-    if( (m_layerMask & ALL_CU_LAYERS) == 0 )     // pad is not on any copper layers
-    {
-        LAYER_NUM pad_layer = ExtractLayer( m_layerMask & ~ALL_CU_LAYERS ); 
-        switch( pad_layer )
-        {
-        case UNSELECTED_LAYER:
-            layerInfo = _( "No layers" );
-            break;
-
-        case UNDEFINED_LAYER:
-            layerInfo = _( "Non-copper" );
-            break;
-
-        default:
-            layerInfo = board->GetLayerName( pad_layer );
-            break;
-        }
-    }
-    else
-    {
-        static const wxChar* andInternal = _( " & int" );
-
-        if( (m_layerMask & (LAYER_BACK | LAYER_FRONT)) == LAYER_BACK )
-        {
-            layerInfo = board->GetLayerName( LAYER_N_BACK );
-
-            if( m_layerMask & INTERNAL_LAYERS )
-                layerInfo += andInternal;
-        }
-
-        else if( (m_layerMask & (LAYER_BACK | LAYER_FRONT)) == (LAYER_BACK | LAYER_FRONT) )
-        {
-            layerInfo = board->GetLayerName( LAYER_N_BACK ) + wxT(", ") +
-                        board->GetLayerName( LAYER_N_FRONT );
-
-            if( m_layerMask & INTERNAL_LAYERS )
-                layerInfo += andInternal;
-        }
-
-        else if( (m_layerMask & (LAYER_BACK | LAYER_FRONT)) == LAYER_FRONT )
-        {
-            layerInfo = board->GetLayerName( LAYER_N_FRONT );
-
-            if( m_layerMask & INTERNAL_LAYERS )
-                layerInfo += andInternal;
-        }
-        else // necessarily true: if( m_layerMask & INTERNAL_LAYERS )
-        {
-            layerInfo = _( "internal" );
-        }
-    }
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), layerInfo, DARKGREEN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), 
+                     LayerMaskDescribe( board, m_layerMask ), DARKGREEN ) );
 
     aList.push_back( MSG_PANEL_ITEM( ShowPadShape(), ShowPadAttr(), DARKGREEN ) );
 
@@ -758,7 +705,7 @@ wxString D_PAD::ShowPadShape() const
         return _( "Trap" );
 
     default:
-        return wxT( "??Unknown??" );
+        return wxT( "???" );
     }
 }
 
@@ -771,7 +718,7 @@ wxString D_PAD::ShowPadAttr() const
         return _( "Std" );
 
     case PAD_SMD:
-        return _( "Smd" );
+        return _( "SMD" );
 
     case PAD_CONN:
         return _( "Conn" );
@@ -780,7 +727,7 @@ wxString D_PAD::ShowPadAttr() const
         return _( "Not Plated" );
 
     default:
-        return wxT( "??Unkown??" );
+        return wxT( "???" );
     }
 }
 
@@ -788,22 +735,21 @@ wxString D_PAD::ShowPadAttr() const
 wxString D_PAD::GetSelectMenuText() const
 {
     wxString text;
-    wxString padlayers;
-    BOARD * board = GetBoard();
+    wxString padlayers( LayerMaskDescribe( GetBoard(), m_layerMask ) );
+    wxString padname( GetPadName() );
 
-
-    if ( (m_layerMask & ALL_CU_LAYERS) == ALL_CU_LAYERS )
-        padlayers = _("all copper layers");
-    else if( (m_layerMask & LAYER_BACK ) == LAYER_BACK )
-        padlayers = board->GetLayerName(LAYER_N_BACK);
-    else if( (m_layerMask & LAYER_FRONT) == LAYER_FRONT )
-        padlayers = board->GetLayerName(LAYER_N_FRONT);
-    else
-        padlayers = _( "???" );
-
-    text.Printf( _( "Pad [%s] (%s) of %s" ),
-                 GetChars(GetPadName() ), GetChars( padlayers ),
+    if( padname.IsEmpty() )
+    {
+    text.Printf( _( "Pad on %s of %s" ),
+                 GetChars( padlayers ),
                  GetChars(( (MODULE*) GetParent() )->GetReference() ) );
+    }
+    else
+    {
+        text.Printf( _( "Pad %s on %s of %s" ),
+                     GetChars(GetPadName() ), GetChars( padlayers ),
+                     GetChars(( (MODULE*) GetParent() )->GetReference() ) );
+    }
 
     return text;
 }

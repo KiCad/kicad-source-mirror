@@ -104,7 +104,7 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( PCB_BASE_FRAME* parent,
 
     m_Parent = parent;
 
-    /* Build the layer list */
+    // Build the layer list
     LayerCount = 0;
     LAYER_MSK Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
     Masque_Layer |= ALL_NO_CU_LAYERS;

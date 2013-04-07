@@ -697,12 +697,18 @@ EDA_COLOR_T BOARD::GetLayerColor( LAYER_NUM aLayer ) const
 
 bool BOARD::IsModuleLayerVisible( LAYER_NUM layer )
 {
-    if( layer==LAYER_N_FRONT )
+    switch( layer )
+    {
+    case LAYER_N_FRONT:
         return IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) );
-    else if( layer==LAYER_N_BACK )
+
+    case LAYER_N_BACK:
         return IsElementVisible( PCB_VISIBLE(MOD_BK_VISIBLE) );
-    else
+
+    default:
+        wxFAIL_MSG( wxT( "BOARD::IsModuleLayerVisible() param error: bad layer" ) );
         return true;
+    }
 }
 
 
@@ -2023,10 +2029,10 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, LAYER_NUM aActiveLayer,
 {
     MODULE* pt_module;
     MODULE* module      = NULL;
-    MODULE* Altmodule   = NULL;
+    MODULE* alt_module  = NULL;
     int     min_dim     = 0x7FFFFFFF;
     int     alt_min_dim = 0x7FFFFFFF;
-    LAYER_NUM layer;
+    bool    current_layer_back = IsBackLayer( aActiveLayer );
 
     for( pt_module = m_Modules;  pt_module;  pt_module = (MODULE*) pt_module->Next() )
     {
@@ -2038,46 +2044,36 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, LAYER_NUM aActiveLayer,
         if( aIgnoreLocked && pt_module->IsLocked() )
             continue;
 
-        /* Calculate priority: the priority is given to the layer of the
-         * module and the copper layer if the module layer is indelible,
-         * adhesive copper, a layer if cmp module layer is indelible,
-         * adhesive component.
-         */
-        layer = pt_module->GetLayer();
+        LAYER_NUM layer = pt_module->GetLayer();
 
-        if( layer==ADHESIVE_N_BACK || layer==SILKSCREEN_N_BACK )
-            layer = LAYER_N_BACK;
-        else if( layer==ADHESIVE_N_FRONT || layer==SILKSCREEN_N_FRONT )
-            layer = LAYER_N_FRONT;
-
-        /* Test of minimum size to choosing the best candidate. */
-
-        EDA_RECT bb = pt_module->GetFootPrintRect();
-        int offx = bb.GetX() + bb.GetWidth() / 2;
-        int offy = bb.GetY() + bb.GetHeight() / 2;
-
-        //off x & offy point to the middle of the box.
-        int dist = abs( aPosition.x - offx ) + abs( aPosition.y - offy );
-
-        //int dist = std::min(lx, ly);  // to pick the smallest module (kinda
-        // screwy with same-sized modules -- this is bad!)
-
-        if( aActiveLayer == layer )
+        // Filter non visible modules if requested
+        if( (!aVisibleOnly) || IsModuleLayerVisible( layer ) )
         {
-            if( dist <= min_dim )
+            EDA_RECT bb = pt_module->GetFootPrintRect();
+            int offx = bb.GetX() + bb.GetWidth() / 2;
+            int offy = bb.GetY() + bb.GetHeight() / 2;
+
+            // off x & offy point to the middle of the box.
+            int dist = ( aPosition.x - offx ) * ( aPosition.x - offx ) +
+                       ( aPosition.y - offy ) * ( aPosition.y - offy );
+
+            if( current_layer_back == IsBackLayer( layer ) )
             {
-                /* better footprint shown on the active layer */
-                module  = pt_module;
-                min_dim = dist;
+                if( dist <= min_dim )
+                {
+                    // better footprint shown on the active side
+                    module  = pt_module;
+                    min_dim = dist;
+                }
             }
-        }
-        else if( aVisibleOnly && IsModuleLayerVisible( layer ) )
-        {
-            if( dist <= alt_min_dim )
+            else if( aVisibleOnly && IsModuleLayerVisible( layer ) )
             {
-                /* better footprint shown on other layers */
-                Altmodule   = pt_module;
-                alt_min_dim = dist;
+                if( dist <= alt_min_dim )
+                {
+                    // better footprint shown on the other side
+                    alt_module  = pt_module;
+                    alt_min_dim = dist;
+                }
             }
         }
     }
@@ -2087,9 +2083,9 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, LAYER_NUM aActiveLayer,
         return module;
     }
 
-    if( Altmodule )
+    if( alt_module)
     {
-        return Altmodule;
+        return alt_module;
     }
 
     return NULL;

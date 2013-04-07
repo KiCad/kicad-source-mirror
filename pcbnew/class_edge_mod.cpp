@@ -250,9 +250,10 @@ void EDGE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Value" ), module->GetValue(), BLUE ) );
     msg.Printf( wxT( "%8.8lX" ), module->GetTimeStamp() );
     aList.push_back( MSG_PANEL_ITEM( _( "TimeStamp" ), msg, BROWN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ),
-                                     RED ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Seg Layer" ), board->GetLayerName( GetLayer() ), RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Mod Layer" ), 
+                     module->GetLayerName(), RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Seg Layer" ), 
+                     GetLayerName(), RED ) );
     msg = ::CoordinateToString( m_Width );
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, BLUE ) );
 }
@@ -264,7 +265,7 @@ wxString EDGE_MODULE::GetSelectMenuText() const
     wxString text;
 
     text << _( "Graphic" ) << wxT( " " ) << ShowShape( (STROKE_T) m_Shape );
-    text << wxT( " (" ) << GetLayerName() << wxT( ")" );
+    text << wxT( " on " ) << GetLayerName();
     text << _( " of " ) << ( (MODULE*) GetParent() )->GetReference();
 
     return text;

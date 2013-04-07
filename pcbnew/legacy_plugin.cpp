@@ -948,12 +948,17 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
 
             TEXTE_MODULE* textm;
 
-            if( tnum == TEXT_is_REFERENCE )
-                textm = &module->Reference();
-            else if( tnum == TEXT_is_VALUE )
-                textm = &module->Value();
-            else
+            switch( tnum )
             {
+            case TEXTE_MODULE::TEXT_is_REFERENCE:
+                textm = &module->Reference();
+                break;
+
+            case TEXTE_MODULE::TEXT_is_VALUE:
+                textm = &module->Value();
+                break;
+
+            default:
                 // text is a drawing
                 textm = new TEXTE_MODULE( module.get() );
                 module->GraphicalItems().PushBack( textm );
@@ -1551,10 +1556,11 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     char*   hjust   = strtok( (char*) txt_end, delims );
     char*   vjust   = strtok( NULL, delims );
 
-    if( type != TEXT_is_REFERENCE && type != TEXT_is_VALUE )
-        type = TEXT_is_DIVERS;
+    if( type != TEXTE_MODULE::TEXT_is_REFERENCE 
+     && type != TEXTE_MODULE::TEXT_is_VALUE )
+        type = TEXTE_MODULE::TEXT_is_DIVERS;
 
-    aText->SetType( type );
+    aText->SetType( static_cast<TEXTE_MODULE::TEXT_TYPE>( type ) );
 
     aText->SetPos0( wxPoint( pos0_x, pos0_y ) );
     aText->SetSize( wxSize( size0_x, size0_y ) );
@@ -1730,8 +1736,8 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     dseg->SetTimeStamp( timestamp );
                     break;
                 case 4:
-                    int state;
-                    state = hexParse( data );
+                    STATUS_FLAGS state;
+                    state = static_cast<STATUS_FLAGS>( hexParse( data ) );
                     dseg->SetState( state, true );
                     break;
 

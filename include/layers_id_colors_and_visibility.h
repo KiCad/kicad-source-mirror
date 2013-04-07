@@ -30,6 +30,8 @@
 #ifndef _LAYERS_ID_AND_VISIBILITY_H_
 #define _LAYERS_ID_AND_VISIBILITY_H_
 
+class BOARD;
+
 /* NOTE: the idea here is to have LAYER_NUM and LAYER_MSK as abstract
  * type as possible (even if they're currently implemented as int and
  * unsigned int, respectively). In this way it would be reasonably easy
@@ -117,19 +119,24 @@ typedef unsigned LAYER_MSK;
 #define EDGE_LAYER              (1 << EDGE_N)
 
 //      extra bits              0xE0000000
-/* Helpful global layers mask : */
+
+// Helpful global layer masks:
+// ALL_AUX_LAYERS layers are technical layers, ALL_NO_CU_LAYERS has user
+// and edge layers too!
 #define ALL_LAYERS              0x1FFFFFFF              // Pcbnew used 29 layers
 #define FULL_LAYERS             0xFFFFFFFF              // Gerbview used 32 layers
 #define ALL_NO_CU_LAYERS        0x1FFF0000
 #define ALL_CU_LAYERS           0x0000FFFF
-#define INTERNAL_LAYERS         0x00007FFE
-#define EXTERNAL_LAYERS         0x00008001
-#define BACK_LAYERS            (LAYER_BACK | ADHESIVE_LAYER_BACK | \
-                                SOLDERPASTE_LAYER_BACK | SILKSCREEN_LAYER_BACK | \
-                                SOLDERMASK_LAYER_BACK)
-#define FRONT_LAYERS           (LAYER_FRONT | ADHESIVE_LAYER_FRONT | \
-                                SOLDERPASTE_LAYER_FRONT | SILKSCREEN_LAYER_FRONT | \
-                                SOLDERMASK_LAYER_FRONT)
+#define INTERNAL_CU_LAYERS      0x00007FFE
+#define EXTERNAL_CU_LAYERS      0x00008001
+#define FRONT_AUX_LAYERS       (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT \
+                               | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT)
+#define BACK_AUX_LAYERS        (SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK \
+                               | ADHESIVE_LAYER_BACK | SOLDERPASTE_LAYER_BACK)
+#define ALL_AUX_LAYERS         (FRONT_AUX_LAYERS | BACK_AUX_LAYERS)
+#define BACK_LAYERS            (LAYER_BACK | BACK_AUX_LAYERS)
+#define FRONT_LAYERS           (LAYER_FRONT | FRONT_AUX_LAYERS)
+
 #define NO_LAYERS               0x00000000
 
 /** return a one bit layer mask from a layer number
@@ -296,5 +303,12 @@ LAYER_MSK FlipLayerMask( LAYER_MSK aMask );
  * than one is set or UNSELECTED_LAYER if none is 
  */
 LAYER_NUM ExtractLayer( LAYER_MSK aMask );
+
+/**
+ * Return a string (to be shown to the user) describing a layer mask.
+ * Useful for showing where is a pad, track, entity, etc.
+ * The BOARD is needed because layer names are (somewhat) customizable
+ */
+wxString LayerMaskDescribe( const BOARD *aBoard, LAYER_MSK aMask );
 
 #endif // _LAYERS_ID_AND_VISIBILITY_H_

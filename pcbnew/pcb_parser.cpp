@@ -1669,18 +1669,19 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
             text->SetOrientation( orientation );
             text->SetDrawCoord();
 
-            if( text->GetType() == TEXT_is_REFERENCE )
+            switch( text->GetType() )
             {
+            case TEXTE_MODULE::TEXT_is_REFERENCE:
                 module->Reference() = *text;
                 delete text;
-            }
-            else if( text->GetType() == TEXT_is_VALUE )
-            {
+                break;
+
+            case TEXTE_MODULE::TEXT_is_VALUE:
                 module->Value() = *text;
                 delete text;
-            }
-            else
-            {
+                break;
+            
+            default:
                 module->GraphicalItems().PushBack( text );
             }
 
@@ -1743,11 +1744,11 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
     switch( token )
     {
     case T_reference:
-        text->SetType( TEXT_is_REFERENCE );
+        text->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );
         break;
 
     case T_value:
-        text->SetType( TEXT_is_VALUE );
+        text->SetType( TEXTE_MODULE::TEXT_is_VALUE );
         break;
 
     case T_user:

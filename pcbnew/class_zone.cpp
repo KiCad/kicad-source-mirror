@@ -657,23 +657,13 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         msg.Empty();
 
         if( GetDoNotAllowVias() )
-            msg = _("No via");
+            AccumulateDescription( msg, _("No via") );
 
         if( GetDoNotAllowTracks() )
-        {
-            if( !msg.IsEmpty() )
-                msg += wxT(", ");
-
-            msg += _("No track");
-        }
+            AccumulateDescription( msg, _("No track") );
 
         if( GetDoNotAllowCopperPour() )
-        {
-            if( !msg.IsEmpty() )
-                msg += wxT(", ");
-
-            msg += _("No copper pour");
-        }
+            AccumulateDescription( msg, _("No copper pour") );
 
         aList.push_back( MSG_PANEL_ITEM( _( "Keepout" ), msg, RED ) );
     }
@@ -712,8 +702,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Non Copper Zone" ), wxEmptyString, RED ) );
     }
 
-    msg = board->GetLayerName( m_Layer );
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BROWN ) );
 
     msg.Printf( wxT( "%d" ), (int) m_Poly->m_CornersList.size() );
     aList.push_back( MSG_PANEL_ITEM( _( "Corners" ), msg, BLUE ) );
@@ -975,7 +964,7 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
         }
     }
 
-    text << _( " on layer " ) << GetLayerName();
+    text << _( " on " ) << GetLayerName();
 
     return text;
 }

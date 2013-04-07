@@ -79,19 +79,19 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
     {
         TEXTE_MODULE* text = (TEXTE_MODULE*) Item;
 
-        if( text->GetType() == TEXT_is_REFERENCE )
+        switch( text->GetType() )
         {
+        case TEXTE_MODULE::TEXT_is_REFERENCE:
             DisplayError( this, _( "Cannot delete REFERENCE!" ) );
             break;
-        }
 
-        if( text->GetType() == TEXT_is_VALUE )
-        {
+        case TEXTE_MODULE::TEXT_is_VALUE:
             DisplayError( this, _( "Cannot delete VALUE!" ) );
             break;
-        }
 
-        DeleteTextModule( text );
+        default:               
+            DeleteTextModule( text );
+        }
     }
     break;
 

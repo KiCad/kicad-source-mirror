@@ -482,12 +482,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( val && ref )
             {
-                ref->SetType( TEXT_is_REFERENCE );    // just in case ...
+                ref->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );    // just in case ...
 
                 if( ref->GetLength() == 0 )
                     ref->SetText( wxT( "Ref**" ) );
 
-                val->SetType( TEXT_is_VALUE );        // just in case ...
+                val->SetType( TEXTE_MODULE::TEXT_is_VALUE );        // just in case ...
 
                 if( val->GetLength() == 0 )
                     val->SetText( L"Val**" );

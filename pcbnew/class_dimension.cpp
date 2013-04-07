@@ -490,7 +490,8 @@ wxString DIMENSION::GetSelectMenuText() const
 {
     wxString text;
 
-    text << _( "Dimension" ) << wxT( " \"" ) << GetText() << wxT( "\"" );
+    text << _( "Dimension" ) << wxT( " \"" ) << GetText() << wxT( "\" on " )
+         << GetLayerName();
 
     return text;
 }

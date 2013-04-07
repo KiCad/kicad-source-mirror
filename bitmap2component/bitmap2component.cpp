@@ -26,6 +26,7 @@
 // For some unknown reasons, polygon.hpp shoul be included first
 #include <boost/polygon/polygon.hpp>
 
+#include <wx/wx.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>

@@ -51,7 +51,7 @@
  * parameter
  */
 #define HERSHEY_SCALE_FACTOR 1 / 21.0
-double s_HerscheyScaleFactor = HERSHEY_SCALE_FACTOR;
+double s_HersheyScaleFactor = HERSHEY_SCALE_FACTOR;
 
 
 /* Helper function for texts with over bar
@@ -186,7 +186,7 @@ int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool aItalic, boo
         // Get metrics
         int         xsta    = *shape_ptr++ - 'R';
         int         xsto    = *shape_ptr++ - 'R';
-        tally += KiROUND( aXSize * (xsto - xsta) * s_HerscheyScaleFactor );
+        tally += KiROUND( aXSize * (xsto - xsta) * s_HersheyScaleFactor );
     }
 
     // For italic correction, add 1/8 size
@@ -429,10 +429,8 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
         overbar_italic_comp = 0;
     }
 
-    ;
-
-    int overbars = 0;   /* Number of '~' seen (except '~~') */
-    ptr = 0;            /* ptr = text index */
+    int overbars = 0;   // Number of '~' seen (except '~~')
+    ptr = 0;            // ptr = text index
 
     while( ptr < char_count )
     {
@@ -444,7 +442,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
 
             else
             {
-                /* Found an overbar, adjust the pointers */
+                // Found an overbar, adjust the pointers
                 overbars++;
 
                 if( overbars & 1 )      // odd overbars count
@@ -469,7 +467,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
                                           sketch_mode, 2, coord, aCallback, aPlotter );
                 }
 
-                continue;    /* Skip ~ processing */
+                continue;    // Skip ~ processing
             }
         }
 
@@ -494,9 +492,9 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
             else
             {
                 // End of character, insert a synthetic pen up:
-                hc1     = ' ';
-                hc2     = 'R';
-                endcar  = true;
+                hc1    = ' ';
+                hc2    = 'R';
+                endcar = true;
             }
 
             // Do the Hershey decode thing:
@@ -504,7 +502,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
             hc1 -= 'R';
             hc2 -= 'R';
 
-            /* Pen up request */
+            // Pen up request
             if( hc1 == -50 && hc2 == 0 )
             {
                 if( point_count )
@@ -523,8 +521,8 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
             {
                 wxPoint currpoint;
                 hc1 -= xsta; hc2 -= 11;    // Align the midpoint
-                hc1 = KiROUND( hc1 * size_h * s_HerscheyScaleFactor );
-                hc2 = KiROUND( hc2 * size_v * s_HerscheyScaleFactor );
+                hc1  = KiROUND( hc1 * size_h * s_HersheyScaleFactor );
+                hc2  = KiROUND( hc2 * size_v * s_HersheyScaleFactor );
 
                 // To simulate an italic font,
                 // add a x offset depending on the y offset
@@ -545,18 +543,19 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
         ptr++;
 
         // Apply the advance width
-        current_char_pos.x += KiROUND( size_h * (xsto - xsta) * s_HerscheyScaleFactor );
+        current_char_pos.x += KiROUND( size_h * (xsto - xsta) * s_HersheyScaleFactor );
     }
 
     if( overbars % 2 )
     {
-        /* Close the last overbar */
-        coord[0]        = overbar_pos;
-        overbar_pos     = current_char_pos;
-        overbar_pos.y   -= OverbarPositionY( size_v, aWidth );
+        // Close the last overbar
+        coord[0]       = overbar_pos;
+        overbar_pos    = current_char_pos;
+        overbar_pos.y -= OverbarPositionY( size_v, aWidth );
         RotatePoint( &overbar_pos, aPos, aOrient );
         coord[1] = overbar_pos;
-        /* Plot the overbar segment */
+
+        // Plot the overbar segment
         DrawGraphicTextPline( clipBox, aDC, aColor, aWidth,
                               sketch_mode, 2, coord, aCallback, aPlotter );
     }

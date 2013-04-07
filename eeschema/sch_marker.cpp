@@ -49,7 +49,7 @@ const wxChar* NameMarqueurType[] =
     wxT( "ERC" ),
     wxT( "PCB" ),
     wxT( "SIMUL" ),
-    wxT( "?????" )
+    wxT( "???" )
 };
 
 

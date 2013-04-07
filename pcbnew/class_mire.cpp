@@ -217,8 +217,8 @@ wxString PCB_TARGET::GetSelectMenuText() const
 
     msg = ::CoordinateToString( m_Size );
 
-    text.Printf( _( "Target on %s size %s" ),
-                 GetChars( GetLayerName() ), GetChars( msg ) );
+    // Targets are on *every* layer by definition
+    text.Printf( _( "Target size %s" ), GetChars( msg ) );
 
     return text;
 }
