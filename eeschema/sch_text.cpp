@@ -643,13 +643,21 @@ void SCH_TEXT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
 
 bool SCH_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TextHitTest( aPosition, aAccuracy );
+    EDA_RECT bBox = GetBoundingBox();
+    bBox.Inflate( aAccuracy );
+    return bBox.Contains( aPosition );
 }
 
 
 bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    return TextHitTest( aRect, aContained, aAccuracy );
+    EDA_RECT bBox = GetBoundingBox();
+    bBox.Inflate( aAccuracy );
+
+    if( aContained )
+        return aRect.Contains( bBox );
+
+    return aRect.Intersects( bBox );
 }
 
 
@@ -1018,11 +1026,6 @@ wxString SCH_LABEL::GetSelectMenuText() const
     return msg;
 }
 
-
-bool SCH_LABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
-{
-    return TextHitTest( aPosition, aAccuracy );
-}
 
 
 SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
@@ -1454,11 +1457,6 @@ wxString SCH_GLOBALLABEL::GetSelectMenuText() const
 }
 
 
-bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
-{
-    return TextHitTest( aPosition, aAccuracy );
-}
-
 
 SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     SCH_TEXT( pos, text, aType )
@@ -1801,10 +1799,4 @@ wxString SCH_HIERLABEL::GetSelectMenuText() const
     wxString msg;
     msg.Printf( _( "Hierarchical Label %s" ), GetChars( tmp ) );
     return msg;
-}
-
-
-bool SCH_HIERLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
-{
-    return TextHitTest( aPosition, aAccuracy );
 }
