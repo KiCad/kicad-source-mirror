@@ -71,6 +71,7 @@ set(COMMON_SRCS
     netlist_keywords.cpp
     newstroke_font.cpp
     projet_config.cpp
+    ptree.cpp
     richio.cpp
     selcolor.cpp
     string.cpp
