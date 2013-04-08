@@ -344,7 +344,10 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
     myframe->setActiveLayer( aLayer, false );
 
 #ifdef KICAD_GAL
-    myframe->GetGalCanvas()->GetView()->GetPainter()->GetSettings()->SetActiveLayer( aLayer );
+    // Set display settings for high contrast mode
+    KiGfx::VIEW* view = myframe->GetGalCanvas()->GetView();
+    view->GetPainter()->GetSettings()->SetActiveLayer( aLayer );
+    view->SetTopLayer( aLayer );
 #endif /* KICAD_GAL */
 
     if(DisplayOpt.ContrastModeDisplay)
@@ -353,7 +356,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
         if( myframe->IsGalCanvasActive() )
             myframe->GetGalCanvas()->Refresh();
         else
-#endif
+#endif /* KICAD_GAL */
             myframe->GetCanvas()->Refresh();
     }
 

@@ -237,6 +237,8 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         {
             view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( i ) );
         }
+
+        view->SetTopLayer( m_Pcb->GetLayer() );
     }
 #endif
 }

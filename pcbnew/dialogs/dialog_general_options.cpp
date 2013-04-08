@@ -42,7 +42,11 @@
 #include <class_board.h>
 
 #include <dialog_general_options.h>
-
+#ifdef KICAD_GAL
+#include <class_drawpanel_gal.h>
+#include <view/view.h>
+#include <pcb_painter.h>
+#endif /* KICAD_GAL */
 
 DIALOG_GENERALOPTIONS::DIALOG_GENERALOPTIONS( PCB_EDIT_FRAME* parent ) :
     DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( parent )
@@ -217,6 +221,9 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         DisplayOpt.ContrastModeDisplay = state;
+#ifdef KICAD_GAL
+        m_galCanvas->GetView()->EnableTopLayer( state );
+#endif /* KICAD_GAL */
         m_canvas->Refresh();
         break;
 
@@ -242,4 +249,18 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
                       wxT( "PCB_EDIT_FRAME::OnSelectOptionToolbar error \n (event not handled!)" ) );
         break;
     }
+
+#ifdef KICAD_GAL
+    // Apply new display options to the GAL canvas
+    KiGfx::PCB_PAINTER* painter =
+            static_cast<KiGfx::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
+    KiGfx::PCB_RENDER_SETTINGS* settings =
+            static_cast<KiGfx::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    settings->LoadDisplayOptions( DisplayOpt );
+
+    if( IsGalCanvasActive() )
+    {
+        m_galCanvas->Refresh();
+    }
+#endif
 }

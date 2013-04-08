@@ -33,6 +33,8 @@
 
 class EDA_ITEM;
 class COLORS_DESIGN_SETTINGS;
+class DISPLAY_OPTIONS;
+
 class BOARD_ITEM;
 class BOARD;
 class SEGVIA;
@@ -75,6 +77,14 @@ public:
 
     /// @copydoc RENDER_SETTINGS::ImportLegacyColors()
     void ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings );
+
+    /**
+     * Function LoadDisplayOptions
+     * Loads settings related to display options (high-contrast mode, full or outline modes
+     * for vias/pads/tracks and so on).
+     * @param aOptions are settings that you want to use for displaying items.
+     */
+    void LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions );
 
 protected:
 

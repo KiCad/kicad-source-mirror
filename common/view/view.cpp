@@ -37,7 +37,9 @@
 
 using namespace KiGfx;
 
+// Static constants
 const unsigned int VIEW::VIEW_MAX_LAYERS = 64;
+const int          VIEW::TOP_LAYER       = -1;
 
 void VIEW::AddLayer( int aLayer, bool aDisplayOnly )
 {
@@ -134,12 +136,15 @@ int VIEW::Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult )
 
 
 VIEW::VIEW( bool aIsDynamic, bool aUseGroups ) :
+    m_enableTopLayer( false ),
     m_scale ( 1.0 ),
     m_painter( NULL ),
     m_gal( NULL ),
     m_dynamic( aIsDynamic ),
     m_useGroups( aUseGroups )
 {
+    // By default there is not layer on the top
+    m_topLayer.enabled = false;
 }
 
 
@@ -289,6 +294,57 @@ void VIEW::SetLayerOrder( int aLayer, int aRenderingOrder )
 {
     m_layers[aLayer].renderingOrder = aRenderingOrder;
     sortLayers();
+}
+
+
+void VIEW::SetTopLayer( int aLayer )
+{
+    // Restore previous order
+    if( m_topLayer.enabled )
+        m_layers[m_topLayer.id].renderingOrder = m_topLayer.renderingOrder;
+
+    if( aLayer >= 0 && aLayer < VIEW_MAX_LAYERS )
+    {
+        // Save settings, so it can be restored later
+        m_topLayer.renderingOrder = m_layers[aLayer].renderingOrder;
+        m_topLayer.id = m_layers[aLayer].id;
+
+        // Apply new settings only if the option is enabled
+        if( m_enableTopLayer )
+            m_layers[aLayer].renderingOrder = TOP_LAYER;
+
+        // Set the flag saying that settings stored in m_topLayer are valid
+        m_topLayer.enabled = true;
+    }
+    else
+    {
+        // There are no valid settings in m_topLayer
+        m_topLayer.enabled = false;
+    }
+
+    sortLayers();
+}
+
+
+void VIEW::EnableTopLayer( bool aEnable )
+{
+    if( aEnable == m_enableTopLayer ) return;
+
+    // Use stored settings only if applicable
+    // (topLayer.enabled == false means there are no valid settings stored)
+    if( m_topLayer.enabled )
+    {
+        if( aEnable )
+        {
+            m_layers[m_topLayer.id].renderingOrder = TOP_LAYER;
+        }
+        else
+        {
+            m_layers[m_topLayer.id].renderingOrder = m_topLayer.renderingOrder;
+        }
+    }
+
+    m_enableTopLayer = aEnable;
 }
 
 
