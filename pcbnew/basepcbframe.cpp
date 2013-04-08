@@ -211,14 +211,17 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
             view->Add( zone );
         }
 
-        // Apply layer coloring scheme
+        // Apply layer coloring scheme & display options
         if( view->GetPainter() )
         {
-            KiGfx::PCB_RENDER_SETTINGS* colorSettings = new KiGfx::PCB_RENDER_SETTINGS();
+            KiGfx::PCB_RENDER_SETTINGS* settings = new KiGfx::PCB_RENDER_SETTINGS();
 
             // Load layers' colors from PCB data
-            colorSettings->ImportLegacyColors( m_Pcb->GetColorsSettings() );
-            view->GetPainter()->ApplySettings( colorSettings );
+            settings->ImportLegacyColors( m_Pcb->GetColorsSettings() );
+            view->GetPainter()->ApplySettings( settings );
+
+            // Load display options (such as filled/outline display of items)
+            settings->LoadDisplayOptions( DisplayOpt );
         }
 
         // Set rendering order of layers (check m_galLayerOrder to see the order)
@@ -489,7 +492,20 @@ void PCB_BASE_FRAME::OnTogglePolarCoords( wxCommandEvent& aEvent )
 void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 {
     m_DisplayPadFill = DisplayOpt.DisplayPadFill = !m_DisplayPadFill;
-    m_canvas->Refresh();
+
+#ifdef KICAD_GAL
+    // Apply new display options to the GAL canvas
+    KiGfx::PCB_PAINTER* painter =
+            static_cast<KiGfx::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
+    KiGfx::PCB_RENDER_SETTINGS* settings =
+            static_cast<KiGfx::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    settings->LoadDisplayOptions( DisplayOpt );
+
+    if( IsGalCanvasActive() )
+        m_galCanvas->Refresh();
+    else
+#endif
+        m_canvas->Refresh();
 }
 
 

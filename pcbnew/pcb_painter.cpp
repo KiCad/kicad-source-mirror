@@ -45,6 +45,12 @@ using namespace KiGfx;
 
 PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 {
+    // By default everything should be displayed as filled
+    for( unsigned int i = 0; i < END_PCB_VISIBLE_LIST; ++i )
+    {
+        m_sketchModeSelect[i] = false;
+    }
+
     Update();
 }
 
@@ -61,10 +67,10 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
         m_itemColors[i] = m_legacyColorMap[aSettings->GetItemColor( i )];
     }
 
-    m_itemColors[VIA_HOLES_VISIBLE] = COLOR4D( 0.5f, 0.4f, 0.0f, 1.0f );
-    m_itemColors[PAD_HOLES_VISIBLE] = COLOR4D( 0.0f, 0.5f, 0.5f, 1.0f );
-    m_itemColors[VIAS_VISIBLE]      = COLOR4D( 0.7f, 0.7f, 0.7f, 1.0f );
-    m_itemColors[PADS_VISIBLE]      = COLOR4D( 0.7f, 0.7f, 0.7f, 1.0f );
+    m_itemColors[VIA_HOLES_VISIBLE] = COLOR4D( 0.5, 0.4, 0.0, 1.0 );
+    m_itemColors[PAD_HOLES_VISIBLE] = COLOR4D( 0.0, 0.5, 0.5, 1.0 );
+    m_itemColors[VIAS_VISIBLE]      = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
+    m_itemColors[PADS_VISIBLE]      = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
 
     Update();
 }
@@ -73,6 +79,11 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
 void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions )
 {
     m_hiContrastEnabled = aOptions.ContrastModeDisplay;
+
+    // Whether to draw tracks, vias & pads filled or as outlines
+    m_sketchModeSelect[PADS_VISIBLE]   = !aOptions.DisplayPadFill;
+    m_sketchModeSelect[VIAS_VISIBLE]   = !aOptions.DisplayViaFill;
+    m_sketchModeSelect[TRACKS_VISIBLE] = !aOptions.DisplayPcbTrackFill;
 }
 
 
@@ -217,9 +228,38 @@ void PCB_PAINTER::draw( const TRACK* aTrack )
 
     m_gal->SetLineCap( LINE_CAP_ROUND );
     m_gal->SetLineJoin( LINE_JOIN_ROUND );
-    m_gal->SetLineWidth( aTrack->GetWidth() );
     m_gal->SetStrokeColor( strokeColor );
-    m_gal->DrawLine( start, end );
+    if( m_pcbSettings->m_sketchModeSelect[TRACKS_VISIBLE] )
+    {
+        // Outline mode
+        VECTOR2D line   = end - start;
+        double   length = line.EuclideanNorm();
+        int      width  = aTrack->GetWidth();
+
+        m_gal->SetLineWidth( m_pcbSettings->m_outlineWidth );
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->Save();
+
+        m_gal->Translate( start );
+        m_gal->Rotate( line.Angle() );
+        m_gal->DrawLine( VECTOR2D( 0,       width / 2 ),
+                         VECTOR2D( length,  width / 2 ) );
+        m_gal->DrawLine( VECTOR2D( 0,      -width / 2 ),
+                         VECTOR2D( length, -width / 2 ) );
+        m_gal->DrawArc( VECTOR2D( 0, 0 ),      width / 2, M_PI / 2, 3 * M_PI / 2 );
+        m_gal->DrawArc( VECTOR2D( length, 0 ), width / 2, M_PI / 2, -M_PI / 2 );
+
+        m_gal->Restore();
+    }
+    else
+    {
+        // Filled mode
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetLineWidth( aTrack->GetWidth() );
+        m_gal->DrawLine( start, end );
+    }
 }
 
 
@@ -227,35 +267,68 @@ void PCB_PAINTER::draw( const SEGVIA* aVia, int aLayer )
 {
     VECTOR2D center( aVia->GetStart() );
     double   radius;
-    COLOR4D  fillColor;
+    COLOR4D  color;
 
     // Choose drawing settings depending on if we are drawing via's pad or hole
     if( aLayer == ITEM_GAL_LAYER( VIAS_VISIBLE ) )
     {
-        radius = aVia->GetWidth() / 2.0f;
+        radius = aVia->GetWidth() / 2.0;
     }
     else if( aLayer == ITEM_GAL_LAYER( VIA_HOLES_VISIBLE ) )
     {
-        radius = aVia->GetDrillValue() / 2.0f;
+        radius = aVia->GetDrillValue() / 2.0;
     }
     else
         return;
 
-    fillColor = getLayerColor( aLayer, aVia->GetNet() );
+    color = getLayerColor( aLayer, aVia->GetNet() );
 
-    m_gal->SetIsStroke( false );
-    m_gal->SetIsFill( true );
-    m_gal->SetFillColor( fillColor );
-    m_gal->DrawCircle( center, radius );
+    if( m_pcbSettings->m_sketchModeSelect[VIAS_VISIBLE] )
+    {
+        // Outline mode
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( m_pcbSettings->m_outlineWidth );
+        m_gal->SetStrokeColor( color );
+        m_gal->DrawCircle( center, radius );
+    }
+    else
+    {
+        // Filled mode
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetFillColor( color );
+        m_gal->DrawCircle( center, radius );
+    }
 }
 
 
 void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 {
-    COLOR4D     fillColor;
+    COLOR4D     color;
     VECTOR2D    size;
     PAD_SHAPE_T shape;
     double      m, n;
+
+    color = getLayerColor( aLayer, aPad->GetNet() );
+
+    if( m_pcbSettings->m_sketchModeSelect[PADS_VISIBLE] )
+    {
+        // Outline mode
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineCap( LINE_CAP_ROUND );
+        m_gal->SetLineJoin( LINE_JOIN_MITER );
+        m_gal->SetLineWidth( m_pcbSettings->m_outlineWidth );
+        m_gal->SetStrokeColor( color );
+    }
+    else
+    {
+        // Filled mode
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetFillColor( color );
+    }
 
     m_gal->Save();
     m_gal->Translate( VECTOR2D( aPad->GetPosition() ) );
@@ -265,22 +338,16 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     if( aLayer == ITEM_GAL_LAYER( PAD_HOLES_VISIBLE ) )
     {
         // Drawing hole
-        size  = VECTOR2D( aPad->GetDrillSize() ) / 2.0f;
+        size  = VECTOR2D( aPad->GetDrillSize() ) / 2.0;
         shape = aPad->GetDrillShape();
     }
     else
     {
         // Drawing every kind of pad
         m_gal->Translate( VECTOR2D( aPad->GetOffset() ) );
-        size  = VECTOR2D( aPad->GetSize() ) / 2.0f;
+        size  = VECTOR2D( aPad->GetSize() ) / 2.0;
         shape = aPad->GetShape();
     }
-
-    fillColor = getLayerColor( aLayer, aPad->GetNet() );
-
-    m_gal->SetIsFill( true );
-    m_gal->SetIsStroke( false );
-    m_gal->SetFillColor( fillColor );
 
     switch( shape )
     {
@@ -290,18 +357,42 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m = ( size.y - size.x );
             n = size.x;
 
-            m_gal->DrawCircle( VECTOR2D( 0, -m ), n );
-            m_gal->DrawCircle( VECTOR2D( 0, m ), n );
-            m_gal->DrawRectangle( VECTOR2D( -n, -m ), VECTOR2D( n, m ) );
+            if( m_pcbSettings->m_sketchModeSelect[PADS_VISIBLE] )
+            {
+                // Outline mode
+                m_gal->DrawArc( VECTOR2D( 0, -m ), n, -M_PI, 0 );
+                m_gal->DrawArc( VECTOR2D( 0, m ),  n, M_PI, 0 );
+                m_gal->DrawLine( VECTOR2D( -n, -m ), VECTOR2D( -n, m ) );
+                m_gal->DrawLine( VECTOR2D( n, -m ),  VECTOR2D( n, m ) );
+            }
+            else
+            {
+                // Filled mode
+                m_gal->DrawCircle( VECTOR2D( 0, -m ), n );
+                m_gal->DrawCircle( VECTOR2D( 0, m ),  n );
+                m_gal->DrawRectangle( VECTOR2D( -n, -m ), VECTOR2D( n, m ) );
+            }
         }
         else
         {
             m = ( size.x - size.y );
             n = size.y;
 
-            m_gal->DrawCircle( VECTOR2D( -m, 0 ), n );
-            m_gal->DrawCircle( VECTOR2D( m, 0 ), n );
-            m_gal->DrawRectangle( VECTOR2D( -m, -n ), VECTOR2D( m, n ) );
+            if( m_pcbSettings->m_sketchModeSelect[PADS_VISIBLE] )
+            {
+                // Outline mode
+                m_gal->DrawArc( VECTOR2D( -m, 0 ), n, M_PI / 2, 3 * M_PI / 2 );
+                m_gal->DrawArc( VECTOR2D( m, 0 ),  n, M_PI / 2, -M_PI / 2 );
+                m_gal->DrawLine( VECTOR2D( -m, -n ), VECTOR2D( m, -n ) );
+                m_gal->DrawLine( VECTOR2D( -m, n ),  VECTOR2D( m, n ) );
+            }
+            else
+            {
+                // Filled mode
+                m_gal->DrawCircle( VECTOR2D( -m, 0 ), n );
+                m_gal->DrawCircle( VECTOR2D( m, 0 ),  n );
+                m_gal->DrawRectangle( VECTOR2D( -m, -n ), VECTOR2D( m, n ) );
+            }
         }
         break;
 
