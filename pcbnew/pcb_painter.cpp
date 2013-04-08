@@ -500,7 +500,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
     std::vector<CPolyPt> polyPoints = aContainer->GetFilledPolysList();
     std::deque<VECTOR2D> corners;
 
-    m_gal->SetLineCap( LINE_CAP_ROUND );
+    m_gal->SetLineCap( LINE_CAP_BUTT );
     m_gal->SetLineJoin( LINE_JOIN_ROUND );
     m_gal->SetFillColor( fillColor );
     m_gal->SetStrokeColor( fillColor );
