@@ -265,6 +265,23 @@ public:
     void    SetLayerOrder( int aLayer, int aRenderingOrder );
 
     /**
+     * Function SetTopLayer()
+     * Sets given layer to be displayed on the top or sets back the default order of layers.
+     * @param aLayer: the layer or -1 in case when no particular layer should
+     * be displayed on the top.
+     */
+    void    SetTopLayer( int aLayer );
+
+    /**
+     * Function EnableTopLayer()
+     * Enables or disables display of the top layer. When disabled - layers are rendered as usual
+     * with no influence from SetTopLayer function. Otherwise on the top there is displayed the
+     * layer set previously with SetTopLayer function.
+     * @param aEnabled: whether to enable or disable display of the top layer.
+     */
+    void    EnableTopLayer( bool aEnable );
+
+    /**
      * Function Redraw()
      * Immediately redraws the whole view.
      */
@@ -285,6 +302,7 @@ public:
     bool IsDynamic() const { return m_dynamic; }
 
     static const unsigned int VIEW_MAX_LAYERS;   ///* maximum number of layers that may be shown
+    static const int          TOP_LAYER;         ///* layer number for displaying items on the top
 
 private:
 
@@ -311,6 +329,12 @@ private:
     struct clearItemCache;
     struct unlinkItem;
     struct drawItem;
+
+    ///* Saves current top layer settings in order to restore it when it's not top anymore
+    VIEW_LAYER m_topLayer;
+
+    ///* Whether to use top layer settings or not
+    bool m_enableTopLayer;
 
     ///* Redraws contents within rect aRect
     void    redrawRect( const BOX2I& aRect );

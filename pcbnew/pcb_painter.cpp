@@ -33,6 +33,7 @@
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
 #include <class_mire.h>
+#include <pcbstruct.h>
 
 #include <view/view.h>
 #include <pcb_painter.h>
@@ -69,6 +70,12 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
 }
 
 
+void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions )
+{
+    m_hiContrastEnabled = aOptions.ContrastModeDisplay;
+}
+
+
 void PCB_RENDER_SETTINGS::Update()
 {
     // Calculate darkened/highlighted variants of layer colors
@@ -88,7 +95,7 @@ void PCB_RENDER_SETTINGS::Update()
         m_itemColorsSel[i]  = m_itemColors[i].Highlighted( m_selectFactor );
     }
 
-    m_hiContrastColor = COLOR4D( m_hiContrastFactor, m_hiContrastFactor, m_highlightFactor,
+    m_hiContrastColor = COLOR4D( m_hiContrastFactor, m_hiContrastFactor, m_hiContrastFactor,
                                  m_layerOpacity );
 }
 
@@ -101,10 +108,6 @@ PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
 
 const COLOR4D& PCB_PAINTER::getLayerColor( int aLayer, int aNetCode ) const
 {
-    // For item layers (vias, texts, and so on)
-    if( aLayer >= LAYER_COUNT )
-        return getItemColor( aLayer - LAYER_COUNT, aNetCode );
-
     if( m_pcbSettings->m_hiContrastEnabled && m_pcbSettings->m_activeLayer != aLayer )
     {
         return m_pcbSettings->m_hiContrastColor;
@@ -122,6 +125,10 @@ const COLOR4D& PCB_PAINTER::getLayerColor( int aLayer, int aNetCode ) const
     }
     else
     {
+        // For item layers (vias, texts, and so on)
+        if( aLayer >= LAYER_COUNT )
+            return getItemColor( aLayer - LAYER_COUNT, aNetCode );
+
         return m_pcbSettings->m_layerColors[aLayer];
     }
 }
