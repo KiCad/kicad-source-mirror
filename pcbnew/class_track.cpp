@@ -197,40 +197,46 @@ EDA_ITEM* SEGVIA::Clone() const
 
 wxString SEGVIA::GetSelectMenuText() const
 {
+    // Note: we use here Printf to make message translatable.
     wxString text;
+    wxString format;
     NETINFO_ITEM* net;
     BOARD* board = GetBoard();
 
     int shape = GetShape();
 
     if( shape == VIA_BLIND_BURIED )
-        text << wxT( " " ) << _( "Blind/Buried " );
+        format = _( "Blind/Buried Via %s, net[%s] (%d) on layers %s/%s" );
     else if( shape == VIA_MICROVIA )
-        text << wxT( " " ) << _( "Micro " );
+        format = _( "Micro Via %s, Net [%s] (%d) on layers %s/%s" );
     // else say nothing about normal (through) vias
-
-    text << _( "Via" ) << wxT( " " ) << ShowWidth();
+    else format = _( "Via %s net [%s] (%d) on layers %s/%s" );
 
     if( board )
     {
         net = board->FindNet( GetNet() );
+        wxString netname;
 
         if( net )
-            text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
-
-        text << wxChar( ' ' ) << _( "Net:" ) << GetNet();
+            netname = net->GetNetname();
 
         // say which layers, only two for now
         LAYER_NUM topLayer;
         LAYER_NUM botLayer;
         ReturnLayerPair( &topLayer, &botLayer );
-        text << _( " on " ) << board->GetLayerName( topLayer ) << wxT( "/" )
-            << board->GetLayerName( botLayer );
+        text.Printf( format.GetData(), GetChars( ShowWidth() ),
+                     GetChars( netname ), GetNet(),
+                     GetChars( board->GetLayerName( topLayer ) ),
+                     GetChars( board->GetLayerName( botLayer ) ) );
+
     }
     else
     {
         wxFAIL_MSG( wxT( "SEGVIA::GetSelectMenuText: BOARD is NULL" ) );
         text << wxT( "???" );
+        text.Printf( format.GetData(), GetChars( ShowWidth() ),
+                     wxT( "???" ), 0,
+                     wxT( "??" ), wxT( "??" ) );
     }
 
     return text;
@@ -1116,7 +1122,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
         LAYER_NUM top_layer, bottom_layer;
 
         Via->ReturnLayerPair( &top_layer, &bottom_layer );
-        msg = board->GetLayerName( top_layer ) + wxT( "/" ) 
+        msg = board->GetLayerName( top_layer ) + wxT( "/" )
             + board->GetLayerName( bottom_layer );
     }
     else
@@ -1507,29 +1513,31 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
 wxString TRACK::GetSelectMenuText() const
 {
     wxString text;
-    wxString temp;
+    wxString netname;
     NETINFO_ITEM* net;
     BOARD* board = GetBoard();
 
     // deleting tracks requires all the information we can get to
     // disambiguate all the choices under the cursor!
-    text << _( "Track" ) << wxT( " " ) << ShowWidth();
-
     if( board )
     {
         net = board->FindNet( GetNet() );
 
         if( net )
-            text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
+            netname = net->GetNetname();
+        else
+            netname = _("Not found");
     }
     else
     {
         wxFAIL_MSG( wxT( "TRACK::GetSelectMenuText: BOARD is NULL" ) );
-        text << wxT( "???" );
+        netname = wxT( "???" );
     }
 
-    text << _( " on " ) << GetLayerName() << wxT(", ") << _("Net:") << GetNet()
-         << wxT(", ") << _("Length:") << ::LengthDoubleToString( GetLength() );
+    text.Printf( _("Track %s, net [%s] (%d) on layer %s, length: %s" ),
+                 GetChars( ShowWidth() ), GetChars( netname ),
+                 GetNet(), GetLayerName(),
+                 GetChars( ::LengthDoubleToString( GetLength() ) ) );
 
     return text;
 }
