@@ -209,7 +209,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( m_Flags & FORCE_SKETCH )
         mode = SKETCH;
 
-    if( l_trace < DC->DeviceToLogicalXRel( MIN_DRAW_WIDTH ) )
+    if( DC->LogicalToDeviceXRel( l_trace ) <= MIN_DRAW_WIDTH )
         mode = LINE;
 
     switch( m_Shape )

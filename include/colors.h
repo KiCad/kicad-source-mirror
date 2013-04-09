@@ -139,6 +139,12 @@ EDA_COLOR_T ColorByName( const wxChar *aName );
 /// Find the nearest color match
 EDA_COLOR_T ColorFindNearest( const wxColour &aColor );
 
+/**
+ * Check if a color is light i.e. if black would be more readable than
+ * white on it
+ */
+bool ColorIsLight( EDA_COLOR_T aColor );
+
 inline const wxChar *ColorGetName( EDA_COLOR_T aColor )
 {
     EDA_COLOR_T base = ColorGetBase( aColor );

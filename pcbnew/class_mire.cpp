@@ -115,7 +115,7 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
     typeaff = DisplayOpt.DisplayDrawItems;
     width   = m_Width;
 
-    if( DC->LogicalToDeviceXRel( width ) < 2 )
+    if( DC->LogicalToDeviceXRel( width ) <= MIN_DRAW_WIDTH )
         typeaff = LINE;
 
     radius = m_Size / 3;

@@ -433,7 +433,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         switch( m_DrillShape )
         {
         case PAD_CIRCLE:
-            if( aDC->LogicalToDeviceXRel( hole ) > 1 )
+            if( aDC->LogicalToDeviceXRel( hole ) > MIN_DRAW_WIDTH )
                 GRFilledCircle( aClipBox, aDC, holepos.x, holepos.y, hole, 0,
                                 aDrawInfo.m_Color, hole_color );
             break;
@@ -486,6 +486,11 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             GRLine( aClipBox, aDC, holepos.x + dx0, holepos.y - dx0,
                     holepos.x - dx0, holepos.y + dx0, 0, nc_color );
     }
+
+    if( aDrawInfo.m_DrawMode != GR_XOR )
+        GRSetDrawMode( aDC, GR_COPY );
+    else
+        GRSetDrawMode( aDC, GR_XOR );
 
     // Draw the pad number
     if( !aDrawInfo.m_Display_padnum && !aDrawInfo.m_Display_netname )
@@ -542,15 +547,17 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         numpad_len = std::max( numpad_len, MIN_CHAR_COUNT );
 
         tsize = std::min( AreaSize.y, AreaSize.x / numpad_len );
-        #define CHAR_SIZE_MIN 5
 
-        if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN ) // Not drawable when size too small.
+        if( aDC->LogicalToDeviceXRel( tsize ) >= MIN_TEXT_SIZE ) // Not drawable when size too small.
         {
             // tsize reserve room for marges and segments thickness
-            tsize = (int) ( tsize * 0.8 );
-            DrawGraphicText( aDrawInfo.m_DrawPanel, aDC, tpos, WHITE, buffer, t_angle,
-                             wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,
-                             GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
+            tsize = ( tsize * 8 ) / 10;
+            DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos, 
+                                 aDrawInfo.m_Color, BLACK, WHITE, 
+                                 buffer, t_angle,
+                                 wxSize( tsize , tsize ), GR_TEXT_HJUSTIFY_CENTER,
+                                 GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
+
         }
     }
 
@@ -561,7 +568,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     shortname_len = std::max( shortname_len, MIN_CHAR_COUNT );
     tsize = std::min( AreaSize.y, AreaSize.x / shortname_len );
 
-    if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )  // Not drawable in size too small.
+    if( aDC->LogicalToDeviceXRel( tsize ) >= MIN_TEXT_SIZE )  // Not drawable in size too small.
     {
         tpos = tpos0;
 
@@ -571,10 +578,12 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         RotatePoint( &tpos, shape_pos, angle );
 
         // tsize reserve room for marges and segments thickness
-        tsize = (int) ( tsize * 0.8 );
-        DrawGraphicText( aDrawInfo.m_DrawPanel, aDC, tpos, WHITE, m_ShortNetname, t_angle,
-                         wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,
-                         GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
+        tsize = ( tsize * 8 ) / 10;
+        DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos, 
+                             aDrawInfo.m_Color, BLACK, WHITE, 
+                             m_ShortNetname, t_angle,
+                             wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,
+                             GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
     }
 }
 

@@ -1512,6 +1512,14 @@ EDA_COLOR_T ColorByName( const wxChar *aName )
     return UNSPECIFIED_COLOR;
 }
 
+bool ColorIsLight( EDA_COLOR_T aColor )
+{
+    const StructColors &c = g_ColorRefs[ColorGetBase( aColor )];
+    int r = c.m_Red;
+    int g = c.m_Green;
+    int b = c.m_Blue;
+    return ((r * r) + (g * g) + (b * b)) > (128 * 128 * 3);
+}
 
 EDA_COLOR_T ColorFindNearest( const wxColour &aColor )
 {
