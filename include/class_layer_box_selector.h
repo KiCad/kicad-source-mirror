@@ -35,15 +35,15 @@ public:
 
     // Returns a color index from the layer id
     // Virtual function because GerbView uses its own functions in a derived class
-    virtual EDA_COLOR_T GetLayerColor( LAYER_NUM aLayerIndex ) const = 0;
+    virtual EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const = 0;
 
     // Returns the name of the layer id
     // Virtual pure function because GerbView uses its own functions in a derived class
-    virtual wxString GetLayerName( LAYER_NUM aLayerIndex ) const = 0;
+    virtual wxString GetLayerName( LAYER_NUM aLayer ) const = 0;
 
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
     // Virtual function pure because GerbView uses its own functions in a derived class
-    virtual bool IsLayerEnabled( LAYER_NUM aLayerIndex ) const = 0;
+    virtual bool IsLayerEnabled( LAYER_NUM aLayer ) const = 0;
 
    // Get Current Item #
     int GetChoice();
@@ -66,7 +66,7 @@ public:
 
 protected:
    // Fills the layer bitmap aLayerbmp with the layer color
-    void SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayerIndex );
+    void SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer );
 };
 
 #define DECLARE_LAYERS_HOTKEY(list) int list[NB_LAYERS] = \

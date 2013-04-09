@@ -156,13 +156,15 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
 
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness );
 
-    for( LAYER_NUM layer=FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER;  ++layer )
+    for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; 
+         layer <= LAST_NON_COPPER_LAYER; ++layer )
     {
         m_LayerSelectionCtrl->Append( m_parent->GetBoard()->GetLayerName( layer ) );
     }
 
     LAYER_NUM layer = m_Item->GetLayer();
-    // Control:
+    
+    // It has to be an aux layer
     if ( layer < FIRST_NON_COPPER_LAYER )
         layer = FIRST_NON_COPPER_LAYER;
     if ( layer > LAST_NON_COPPER_LAYER )

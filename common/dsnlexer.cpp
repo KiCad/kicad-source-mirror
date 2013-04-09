@@ -29,7 +29,7 @@
 #include <cstdlib>         // bsearch()
 #include <cctype>
 
-
+#include <macros.h>
 #include <dsnlexer.h>
 
 //#include "fctsys.h"

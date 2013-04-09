@@ -451,12 +451,12 @@ public:
      * Function IsLayerVisible
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * tests whether a given layer is visible
-     * @param aLayerIndex = The index of the layer to be tested
+     * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool IsLayerVisible( LAYER_NUM aLayerIndex ) const
+    bool IsLayerVisible( LAYER_NUM aLayer ) const
     {
-        return m_designSettings.IsLayerVisible( aLayerIndex );
+        return m_designSettings.IsLayerVisible( aLayer );
     }
 
     /**
@@ -588,26 +588,26 @@ public:
 
     /**
      * Function GetLayerName
-     * returns the name of a layer given by aLayerIndex.  Copper layers may
+     * returns the name of a layer given by aLayer.  Copper layers may
      * have custom names.
      *
-     * @param aLayerIndex = A layer index, like LAYER_N_BACK, etc.
+     * @param aLayer = A layer, like LAYER_N_BACK, etc.
      *
      * @return wxString -   the layer name, which for copper layers may
      *                      be custom, else standard.
      */
-    wxString GetLayerName( LAYER_NUM aLayerIndex ) const;
+    wxString GetLayerName( LAYER_NUM aLayer ) const;
 
     /**
      * Function SetLayerName
-     * changes the name of the layer given by aLayerIndex.
+     * changes the name of the layer given by aLayer.
      *
-     * @param aLayerIndex A layer index, like LAYER_N_BACK, etc.
+     * @param aLayer A layer, like LAYER_N_BACK, etc.
      * @param aLayerName The new layer name
      * @return bool - true if aLayerName was legal and unique among other
-     *   layer names at other layer indices and aLayerIndex was within range, else false.
+     *   layer names at other layer indices and aLayer was within range, else false.
      */
-    bool SetLayerName( LAYER_NUM aLayerIndex, const wxString& aLayerName );
+    bool SetLayerName( LAYER_NUM aLayer, const wxString& aLayerName );
 
     /**
      * Function GetStandardLayerName
@@ -626,23 +626,23 @@ public:
 
     /**
      * Function GetLayerType
-     * returns the type of the copper layer given by aLayerIndex.
+     * returns the type of the copper layer given by aLayer.
      *
-     * @param aLayerIndex A layer index, like LAYER_N_BACK, etc.
+     * @param aLayer A layer index, like LAYER_N_BACK, etc.
      * @return LAYER_T - the layer type, or LAYER_T(-1) if the
      *  index was out of range.
      */
-    LAYER_T GetLayerType( LAYER_NUM aLayerIndex ) const;
+    LAYER_T GetLayerType( LAYER_NUM aLayer ) const;
 
     /**
      * Function SetLayerType
-     * changes the type of the layer given by aLayerIndex.
+     * changes the type of the layer given by aLayer.
      *
-     * @param aLayerIndex A layer index, like LAYER_N_BACK, etc.
+     * @param aLayer A layer index, like LAYER_N_BACK, etc.
      * @param aLayerType The new layer type.
-     * @return bool - true if aLayerType was legal and aLayerIndex was within range, else false.
+     * @return bool - true if aLayerType was legal and aLayer was within range, else false.
      */
-    bool SetLayerType( LAYER_NUM aLayerIndex, LAYER_T aLayerType );
+    bool SetLayerType( LAYER_NUM aLayer, LAYER_T aLayerType );
 
     /**
      * Function SetLayerColor

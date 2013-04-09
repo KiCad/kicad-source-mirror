@@ -196,10 +196,10 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     }
 
     LAYER_NUM layer = m_layerId[idx];
-    if( IsValidCopperLayerIndex( layer ) )
+    if( IsCopperLayer( layer ) )
     {
-        /* an edge is put on a copper layer, and it is very dangerous. a
-         *confirmation is requested */
+        /* an edge is put on a copper layer: this it is very dangerous. a
+         * confirmation is requested */
         if( !IsOK( NULL,
                    _( "The graphic item will be on a copper layer. This is very dangerous. Are you sure?" ) ) )
             return;

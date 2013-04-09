@@ -62,7 +62,7 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
         CombineAllAreasInNet( aModifiedZonesList, modified_area->GetNet(), true );
     }
 
-    if( layer >= FIRST_NON_COPPER_LAYER )    // Refill non copper zones on this layer
+    if( !IsCopperLayer( layer ) )       // Refill non copper zones on this layer
     {
         for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
             if( m_ZoneDescriptorList[ia]->GetLayer() == layer )

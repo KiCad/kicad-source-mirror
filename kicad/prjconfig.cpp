@@ -38,6 +38,7 @@
 #include <wildcards_and_files_ext.h>
 #include <vector>
 #include <build_version.h>
+#include <macros.h>
 
 #include <wx/dir.h>
 #include <wx/filename.h>

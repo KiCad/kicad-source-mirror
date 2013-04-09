@@ -195,7 +195,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* LayerLookUpTable )
         LAYER_NUM layer = gerb_item->GetLayer();
         LAYER_NUM pcb_layer_number = LayerLookUpTable[layer];
 
-        if( pcb_layer_number < FIRST_LAYER || pcb_layer_number > LAST_NON_COPPER_LAYER )
+        if( !IsPcbLayer( pcb_layer_number ) )
             continue;
 
         if( pcb_layer_number > LAST_COPPER_LAYER )

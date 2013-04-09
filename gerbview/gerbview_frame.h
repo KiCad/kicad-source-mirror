@@ -313,10 +313,10 @@ public:
     /**
      * Function IsLayerVisible
      * tests whether a given layer is visible
-     * @param aLayerIndex = The index of the layer to be tested
+     * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool    IsLayerVisible( LAYER_NUM aLayerIndex ) const;
+    bool    IsLayerVisible( LAYER_NUM aLayer ) const;
 
     /**
      * Function GetVisibleElementColor

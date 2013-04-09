@@ -229,7 +229,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     // layer so we can see pads on paste or solder layer and the size of the
     // mask
     if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
-        DisplayOpt.ContrastModeDisplay && screen->m_Active_Layer >= FIRST_NON_COPPER_LAYER )
+        DisplayOpt.ContrastModeDisplay && !IsCopperLayer( screen->m_Active_Layer ) )
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
         {

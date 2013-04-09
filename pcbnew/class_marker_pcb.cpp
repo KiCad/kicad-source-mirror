@@ -88,7 +88,7 @@ MARKER_PCB::~MARKER_PCB()
  */
 bool MARKER_PCB::IsOnLayer( LAYER_NUM aLayer ) const
 {
-    return IsValidCopperLayerIndex( aLayer );
+    return IsCopperLayer( aLayer );
 }
 
 void MARKER_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )

@@ -55,7 +55,7 @@
 static bool ShowClearance( const TRACK* aTrack )
 {
     // maybe return true for tracks and vias, not for zone segments
-    return aTrack->GetLayer() <= LAST_COPPER_LAYER
+    return IsCopperLayer( aTrack->GetLayer() )
            && ( aTrack->Type() == PCB_TRACE_T || aTrack->Type() == PCB_VIA_T )
            && ( ( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
                   && ( aTrack->IsDragging() || aTrack->IsMoving() || aTrack->IsNew() ) )
@@ -87,7 +87,8 @@ inline bool IsNear( wxPoint& p1, wxPoint& p2, int max_dist )
 }
 
 
-TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask )
+TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition,
+                 LAYER_MSK aLayerMask )
 {
     TRACK* PtSegm;
 
@@ -389,14 +390,8 @@ void TRACK::Flip( const wxPoint& aCentre )
     m_Start.y = aCentre.y - (m_Start.y - aCentre.y);
     m_End.y   = aCentre.y - (m_End.y - aCentre.y);
 
-    if( Type() == PCB_VIA_T )
-    {
-        // Huh?  Wouldn't it be better to us Type() != VIA and get rid of these brackets?
-    }
-    else
-    {
+    if( Type() != PCB_VIA_T )
         SetLayer( FlipLayer( GetLayer() ) );
-    }
 }
 
 
@@ -405,10 +400,6 @@ SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
                             const KICAD_T scanTypes[] )
 {
     KICAD_T stype = *scanTypes;
-
-#if 0 && defined(DEBUG)
-    std::cout << GetClass().mb_str() << ' ';
-#endif
 
     // If caller wants to inspect my type
     if( stype == Type() )

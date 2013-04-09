@@ -139,7 +139,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 
     layer_max = NB_LAYERS;
     // Create layer list
-    for(LAYER_NUM ii = FIRST_LAYER; ii < layer_max; ++ii )
+    for( LAYER_NUM ii = FIRST_LAYER; ii < layer_max; ++ii )
     {
         LAYER_MSK mask = GetLayerMask( ii );
         msg = _( "Layer" );

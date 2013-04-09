@@ -62,6 +62,7 @@ enum EDA_DRAW_MODE_T {
 
 #define DEFAULT_SIZE_TEXT 60    /* default text height (in mils or 1/1000") */
 #define TEXT_NO_VISIBLE   1     //< EDA_TEXT::m_Attribut(e?) visibility flag.
+#define DIM_ANCRE_TEXTE  2      // Anchor size for text
 
 
 /**
