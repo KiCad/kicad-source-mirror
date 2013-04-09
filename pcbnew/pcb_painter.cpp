@@ -71,6 +71,7 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
     m_itemColors[PAD_HOLES_VISIBLE] = COLOR4D( 0.0, 0.5, 0.5, 1.0 );
     m_itemColors[VIAS_VISIBLE]      = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
     m_itemColors[PADS_VISIBLE]      = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
+    m_itemColors[NETNAME_VISIBLE]   = COLOR4D( 0.9, 0.9, 0.9, 1.0 );
 
     Update();
 }
@@ -110,6 +111,8 @@ void PCB_RENDER_SETTINGS::Update()
                                  m_layerOpacity );
 }
 
+
+const double PCB_PAINTER::MAX_FONT_SIZE = 1500000;
 
 PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
     PAINTER( aGal )
@@ -307,10 +310,77 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 {
     COLOR4D     color;
     VECTOR2D    size;
+    VECTOR2D    position( aPad->GetPosition() );
     PAD_SHAPE_T shape;
     double      m, n;
+    double      orientation = aPad->GetOrientation();
+    NORMALIZE_ANGLE_90( orientation );  // do not display descriptions upside down
+    orientation = orientation * M_PI / 1800.0;
 
     color = getLayerColor( aLayer, aPad->GetNet() );
+
+    // Draw description layer
+    if( aLayer == ITEM_GAL_LAYER( NETNAME_VISIBLE ) )
+    {
+        size = VECTOR2D( aPad->GetSize() / 2 );
+
+        // Font size limits
+        if( size.x > MAX_FONT_SIZE )
+            size.x = MAX_FONT_SIZE;
+        if( size.y > MAX_FONT_SIZE )
+            size.y = MAX_FONT_SIZE;
+
+        // Keep the size ratio for the font, but make it smaller
+        if( size.x < size.y )
+        {
+            orientation -= M_PI / 2;
+            size.y = size.x * 4.0 / 3.0;
+        }
+        else
+        {
+            size.x = size.y * 3.0 / 4.0;
+        }
+
+        m_gal->Save();
+        m_gal->Translate( position );
+        m_gal->Rotate( -orientation );
+
+        // Default font settings
+        m_stroke_font->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+        m_stroke_font->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+        m_stroke_font->SetBold( false );
+        m_stroke_font->SetItalic( false );
+        m_stroke_font->SetMirrored( false );
+        m_gal->SetStrokeColor( color );
+
+        // Let's make some space for a netname too, if there's one to display
+        if( !aPad->GetNetname().empty() )
+        {
+            size = size / 2.0;
+            m_stroke_font->SetGlyphSize( size );
+            m_gal->SetLineWidth( size.y / 10.0 );
+
+            m_stroke_font->Draw( std::string( aPad->GetNetname().mb_str() ),
+                                 VECTOR2D( 0, size.y ), 0.0 );
+            m_gal->Translate( VECTOR2D( 0.0, -size.y / 2.0 ) );
+        }
+        else
+        {
+            // In case when there's no netname assigned
+            m_stroke_font->SetGlyphSize( size );
+            m_gal->SetLineWidth( size.y / 10.0 );
+        }
+
+        m_stroke_font->Draw( std::string( aPad->GetPadName().mb_str() ), VECTOR2D( 0, 0 ), 0.0 );
+
+        m_gal->Restore();
+        return;
+    }
+
+    // Pad/hole drawing
+    m_gal->Save();
+    m_gal->Translate( position );
+    m_gal->Rotate( -orientation );
 
     if( m_pcbSettings->m_sketchModeSelect[PADS_VISIBLE] )
     {
@@ -329,10 +399,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         m_gal->SetIsStroke( false );
         m_gal->SetFillColor( color );
     }
-
-    m_gal->Save();
-    m_gal->Translate( VECTOR2D( aPad->GetPosition() ) );
-    m_gal->Rotate( -aPad->GetOrientation() * M_PI / 1800.0 );    // orientation is in tenths of degree
 
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
     if( aLayer == ITEM_GAL_LAYER( PAD_HOLES_VISIBLE ) )
