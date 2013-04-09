@@ -23,10 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+// Something in either <boost/property_tree/ptree.hpp> causes a bunch of compiler
+// errors in <wx/msw/winundef.h> version 2.9 on MinGW.
+#include <macros.h>
+
 #include <boost/property_tree/ptree.hpp>
 
 #include <assert.h>
-#include <macros.h>
 #include <ptree.h>
 
 typedef PTREE::const_iterator           CITER;
