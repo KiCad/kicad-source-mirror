@@ -652,15 +652,16 @@ bool OpenPDF( const wxString& file )
 
         if( !success )
         {
-            wxString msg = _( "Problem while running the PDF viewer" );
-            msg << _( "\n command is " ) << command;
+            wxString msg;
+            msg.Printf( _( "Problem while running the PDF viewer\nCommand is '%s'" ),
+                        GetChars( command ) );
             DisplayError( NULL, msg );
         }
     }
     else
     {
-        wxString msg = _( "Unable to find a PDF viewer for" );
-        msg << wxT( " " ) << filename;
+        wxString msg;
+        msg.Printf( _( "Unable to find a PDF viewer for <%s>" ), GetChars( filename ) );
         DisplayError( NULL, msg );
         success = false;
     }

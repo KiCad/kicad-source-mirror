@@ -158,7 +158,7 @@ EDA_ITEM* SEGZONE::Clone() const
 
 wxString SEGZONE::GetSelectMenuText() const
 {
-    wxString text;
+    wxString text, nettxt;
     NETINFO_ITEM* net;
     BOARD* board = GetBoard();
 
@@ -169,15 +169,16 @@ wxString SEGZONE::GetSelectMenuText() const
         net = board->FindNet( GetNet() );
 
         if( net )
-            text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
+            nettxt = net->GetNetname();
     }
     else
     {
         wxFAIL_MSG( wxT( "SEGZONE::GetSelectMenuText: BOARD is NULL" ) );
-        text << wxT( "???" );
+        nettxt = wxT( "???" );
     }
 
-    text << _( " on " ) << GetLayerName();
+    text.Printf( _( "Zone (%08lX) [%s] on %s" ), 
+                 m_TimeStamp, GetChars( nettxt ), GetChars( GetLayerName() ) );
 
     return text;
 }
@@ -198,7 +199,6 @@ EDA_ITEM* SEGVIA::Clone() const
 
 wxString SEGVIA::GetSelectMenuText() const
 {
-    // Note: we use here Printf to make message translatable.
     wxString text;
     wxString format;
     NETINFO_ITEM* net;
@@ -234,7 +234,6 @@ wxString SEGVIA::GetSelectMenuText() const
     else
     {
         wxFAIL_MSG( wxT( "SEGVIA::GetSelectMenuText: BOARD is NULL" ) );
-        text << wxT( "???" );
         text.Printf( format.GetData(), GetChars( ShowWidth() ),
                      wxT( "???" ), 0,
                      wxT( "??" ), wxT( "??" ) );

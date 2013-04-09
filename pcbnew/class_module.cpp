@@ -512,8 +512,9 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "3D-Shape" ), msg, RED ) );
 
-    wxString doc     = _( "Doc:  " ) + m_Doc;
-    wxString keyword = _( "KeyW: " ) + m_KeyWord;
+    wxString doc, keyword;
+    doc.Printf( _( "Doc: %s" ), GetChars( m_Doc ) );
+    keyword.Printf( _( "KeyW: %s" ), GetChars( m_KeyWord ) );
     aList.push_back( MSG_PANEL_ITEM( doc, keyword, BLACK ) );
 }
 
@@ -673,9 +674,9 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 wxString MODULE::GetSelectMenuText() const
 {
     wxString text;
-
-    text << _( "Footprint" ) << wxT( " " ) << GetReference();
-    text << wxT( " on " ) << GetLayerName();
+    text.Printf( _( "Footprint %s on %s" ),
+                 GetChars ( GetReference() ),
+                 GetChars ( GetLayerName() ) );
 
     return text;
 }

@@ -185,7 +185,7 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
     dest = wxFopen( D_Code_FullFileName, wxT( "rt" ) );
     if( dest == 0 )
     {
-        msg = _( "File " ) + D_Code_FullFileName + _( " not found" );
+        msg.Printf( _( "File <%s> not found" ), GetChars( D_Code_FullFileName ) );
         DisplayError( this, msg, 10 );
         return -1;
     }

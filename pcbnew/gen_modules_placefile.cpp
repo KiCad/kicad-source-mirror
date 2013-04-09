@@ -235,9 +235,9 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     }
 
     if( singleFile  )
-        msg.Printf( _( "Place file: %s\n" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Place file: <%s>\n" ), GetChars( fn.GetFullPath() ) );
     else
-        msg.Printf( _( "Component side place file: %s\n" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Component side place file: <%s>\n" ), GetChars( fn.GetFullPath() ) );
 
     AddMessage( msg );
     msg.Printf( _( "Footprint count %d\n" ), fpcount );
@@ -268,7 +268,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     // Display results
     if( !singleFile )
     {
-        msg.Printf( _( "Copper side place file: %s\n" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Copper side place file: <%s>\n" ), GetChars( fn.GetFullPath() ) );
         AddMessage( msg );
         msg.Printf( _( "Footprint count %d\n" ), fpcount );
         AddMessage( msg );
@@ -531,7 +531,7 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
     wxString msg;
     if( success )
     {
-        msg.Printf( _( "Module report file created:\n%s" ),
+        msg.Printf( _( "Module report file created:\n<%s>" ),
                     GetChars( fn.GetFullPath() ) );
         wxMessageBox( msg, _( "Module Report" ), wxICON_INFORMATION );
     }

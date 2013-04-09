@@ -63,9 +63,9 @@ const wxString pageFmts[] =
     _("C 17x22in"),
     _("D 22x34in"),
     _("E 34x44in"),
-    _("USLetter 8.5x11in"),
-    _("USLegal 8.5x14in"),
-    _("USLedger 11x17in"),
+    _("US Letter 8.5x11in"),
+    _("US Legal 8.5x14in"),
+    _("US Ledger 11x17in"),
     _("User (Custom)"),
     wxT("")                 // end of list
 };

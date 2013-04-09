@@ -263,10 +263,10 @@ void EDGE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 wxString EDGE_MODULE::GetSelectMenuText() const
 {
     wxString text;
-
-    text << _( "Graphic" ) << wxT( " " ) << ShowShape( (STROKE_T) m_Shape );
-    text << wxT( " on " ) << GetLayerName();
-    text << _( " of " ) << ( (MODULE*) GetParent() )->GetReference();
+    text.Printf( _( "Graphic (%s) on %s of %s" ),
+            GetChars( ShowShape( (STROKE_T) m_Shape ) ),
+            GetChars( GetLayerName() ),
+            GetChars( ((MODULE*) GetParent())->GetReference() ) );
 
     return text;
 }

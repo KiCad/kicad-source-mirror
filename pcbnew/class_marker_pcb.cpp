@@ -99,8 +99,9 @@ void MARKER_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     wxString errorTxt;
 
-    errorTxt << _( "ErrType" ) << wxT( "(" ) << rpt.GetErrorCode() << wxT( ")-  " )
-             << rpt.GetErrorText() << wxT( ":" );
+    errorTxt.Printf( _( "ErrType (%d)- %s:" ),
+            rpt.GetErrorCode(),
+            GetChars( rpt.GetErrorText() ) );
 
     aList.push_back( MSG_PANEL_ITEM( errorTxt, wxEmptyString, RED ) );
 
@@ -131,8 +132,7 @@ void MARKER_PCB::Flip(const wxPoint& aCentre )
 wxString MARKER_PCB::GetSelectMenuText() const
 {
     wxString text;
-
-    text << _( "Marker" ) << wxT( " @(" ) << GetPos().x << wxT( "," ) << GetPos().y << wxT( ")" );
+    text.Printf( _( "Marker @(%d,%d)" ), GetPos().x, GetPos().y );
 
     return text;
 }

@@ -131,7 +131,7 @@ bool LIB_ARC::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
                   &m_Convert, &m_Width, tmp, &startx, &starty, &endx, &endy );
     if( cnt < 8 )
     {
-        aErrorMsg.Printf( _( "arc only had %d parameters of the required 8" ), cnt );
+        aErrorMsg.Printf( _( "Arc only had %d parameters of the required 8" ), cnt );
         return false;
     }
 

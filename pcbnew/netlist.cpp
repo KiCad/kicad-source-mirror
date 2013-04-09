@@ -78,7 +78,7 @@ static FILE* OpenNetlistFile( const wxString& aFullFileName )
     if( file == NULL )
     {
         wxString msg;
-        msg.Printf( _( "Netlist file %s not found" ), GetChars( aFullFileName ) );
+        msg.Printf( _( "Netlist file <%s> not found" ), GetChars( aFullFileName ) );
         wxMessageBox( msg );
     }
 
@@ -126,12 +126,12 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
     if( aMessageWindow )
     {
         wxString msg;
-        msg.Printf( _( "Reading Netlist \"%s\"" ), GetChars( aNetlistFullFilename ) );
+        msg.Printf( _( "Reading Netlist <%s>" ), GetChars( aNetlistFullFilename ) );
         aMessageWindow->AppendText( msg + wxT( "\n" ) );
 
         if( useCmpfile )
         {
-            msg.Printf( _( "Using component/footprint link file \"%s\"" ),
+            msg.Printf( _( "Using component/footprint link file <%s>" ),
                         GetChars( aCmpFullFileName ) );
             aMessageWindow->AppendText( msg + wxT( "\n" ) );
         }
@@ -176,7 +176,7 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
     if( aDeleteExtraFootprints )
     {
         if( IsOK( NULL,
-            _( "Ok to delete not locked footprints not found in netlist?" ) ) )
+            _( "OK to delete not locked footprints not found in netlist?" ) ) )
             netList_Reader.RemoveExtraFootprints();
     }
 

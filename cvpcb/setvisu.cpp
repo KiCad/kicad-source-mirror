@@ -60,15 +60,16 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
     if( !footprintName.IsEmpty() )
     {
-        msg = _( "Footprint: " ) + footprintName;
+        msg.Printf( _( "Footprint: %s" ), GetChars( footprintName ) );
         SetTitle( msg );
         FOOTPRINT_INFO* module_info = parentframe->m_footprints.GetModuleInfo( footprintName );
-        msg = _( "Lib: " );
 
+        const wxChar *libname;
         if( module_info )
-            msg += module_info->m_LibName;
+            libname = GetChars( module_info->m_LibName );
         else
-            msg += wxT( "???" );
+            libname = GetChars( wxT( "???" ) );
+        msg.Printf( _( "Lib: %s" ), libname );
 
         SetStatusText( msg, 0 );
 

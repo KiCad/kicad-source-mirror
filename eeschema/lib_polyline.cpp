@@ -85,13 +85,13 @@ bool LIB_POLYLINE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
     if( i < 4 )
     {
-        aErrorMsg.Printf( _( "polyline only had %d parameters of the required 4" ), i );
+        aErrorMsg.Printf( _( "Polyline only had %d parameters of the required 4" ), i );
         return false;
     }
 
     if( ccount <= 0 )
     {
-        aErrorMsg.Printf( _( "polyline count parameter %d is invalid" ), ccount );
+        aErrorMsg.Printf( _( "Polyline count parameter %d is invalid" ), ccount );
         return false;
     }
 
@@ -107,7 +107,7 @@ bool LIB_POLYLINE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
         if( p == NULL || sscanf( p, "%d", &pt.x ) != 1 )
         {
-            aErrorMsg.Printf( _( "polyline point %d X position not defined" ), i );
+            aErrorMsg.Printf( _( "Polyline point %d X position not defined" ), i );
             return false;
         }
 
@@ -115,7 +115,7 @@ bool LIB_POLYLINE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
         if( p == NULL || sscanf( p, "%d", &pt.y ) != 1 )
         {
-            aErrorMsg.Printf( _( "polyline point %d Y position not defined" ), i );
+            aErrorMsg.Printf( _( "Polyline point %d Y position not defined" ), i );
             return false;
         }
 

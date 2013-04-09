@@ -924,8 +924,6 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     NETINFO_ITEM* net;
     BOARD* board = GetBoard();
 
-    text = _( "Zone Outline" );
-
     int ncont = m_Poly->GetContour( m_CornerSelection );
 
     if( ncont )
@@ -934,8 +932,7 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     if( GetIsKeepout() )
         text << wxT( " " ) << _( "(Keepout)" );
 
-    text << wxT( " " );
-    text << wxString::Format( wxT( "(%08lX)" ), m_TimeStamp );
+    text << wxString::Format( wxT( " (%08lX)" ), m_TimeStamp );
 
     // Display net name for copper zones
     if( !GetIsKeepout() )
@@ -964,7 +961,8 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
         }
     }
 
-    text << _( " on " ) << GetLayerName();
+    text.Printf( _( "Zone Outline %s on %s" ), GetChars( text ),
+                 GetChars( GetLayerName() ) );
 
     return text;
 }

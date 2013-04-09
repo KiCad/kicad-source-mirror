@@ -122,8 +122,7 @@ bool GetAssociatedDocument( wxFrame* aFrame,
 
     if( !wxFileExists( fullfilename ) )
     {
-        msg = _( "Doc File " );
-        msg << wxT("\"") << aDocName << wxT("\"") << _( " not found" );
+        msg.Printf( _( "Doc File <%s> not found" ), GetChars( aDocName ) );
         DisplayError( aFrame, msg );
         return false;
     }

@@ -235,8 +235,11 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
     if( !m_ProjectFileName.FileExists() && !filename.IsSameAs( nameless_prj ) )
     {
-        DisplayError( this, _( "KiCad project file <" ) +
-                      m_ProjectFileName.GetFullPath() + _( "> not found" ) );
+        wxString msg;
+        msg.Printf( _( "KiCad project file <%s> not found" ), 
+                    GetChars( m_ProjectFileName.GetFullPath() ) );
+
+        DisplayError( this, msg );
         return;
     }
 
@@ -260,10 +263,11 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_INIT_WATCHED_PATHS );
     wxPostEvent( this, cmd);
 #endif
-
-    PrintMsg( _( "Working dir: " ) + m_ProjectFileName.GetPath() +
-              _( "\nProject: " ) + m_ProjectFileName.GetFullName() +
-              wxT( "\n" ) );
+    wxString msg;
+    msg.Format( _( "Working dir: <%s>\nProject: <%s>\n" ),
+                GetChars( m_ProjectFileName.GetPath() ),
+                GetChars( m_ProjectFileName.GetFullName() ) );
+    PrintMsg( msg );
 }
 
 

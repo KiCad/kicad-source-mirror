@@ -301,36 +301,54 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 {
     wxString msg, name;
 
-    name << wxT(" ");
-    switch( Field->GetId() )
-    {
-        case REFERENCE: name << _( "Reference" ); break;
-        case VALUE:     name << _( "Value" ); break;
-        case FOOTPRINT: name << _( "Footprint Field" ); break;
-        default:        name << _( "Field" ); break;
-    }
-
     if( !Field->GetFlags() )
     {
-        msg = AddHotkeyName( _( "Move" ) + name, s_Schematic_Hokeys_Descr,
-                             HK_MOVE_COMPONENT_OR_ITEM );
+        switch( Field->GetId() )
+        {
+        case REFERENCE: name = _( "Move reference" ); break;
+        case VALUE:     name = _( "Move value" ); break;
+        case FOOTPRINT: name = _( "Move footprint field" ); break;
+        default:        name = _( "Move field" ); break;
+        }
+
+        msg = AddHotkeyName( name, s_Schematic_Hokeys_Descr,
+                HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_text_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate" ) + name, s_Schematic_Hokeys_Descr,
-                         HK_ROTATE );
+    switch( Field->GetId() )
+    {
+    case REFERENCE: name = _( "Rotate reference" ); break;
+    case VALUE:     name = _( "Rotate value" ); break;
+    case FOOTPRINT: name = _( "Rotate footprint field" ); break;
+    default:        name = _( "Rotate field" ); break;
+    }
+
+    msg = AddHotkeyName( name, s_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_field_xpm ) );
 
     // Ref, value and footprint have specific hotkeys. Show the specific hotkey:
     hotkey_id_commnand id;
     switch( Field->GetId() )
     {
-        case REFERENCE: id = HK_EDIT_COMPONENT_REFERENCE; break;
-        case VALUE:     id = HK_EDIT_COMPONENT_VALUE; break;
-        case FOOTPRINT: id = HK_EDIT_COMPONENT_FOOTPRINT; break;
-        default:        id = HK_EDIT; break;
+    case REFERENCE:
+        id = HK_EDIT_COMPONENT_REFERENCE;
+        name = _( "Edit reference" );
+        break;
+    case VALUE:
+        id = HK_EDIT_COMPONENT_VALUE;
+        name = _( "Edit value" );
+        break;
+    case FOOTPRINT:
+        id = HK_EDIT_COMPONENT_FOOTPRINT;
+        name = _( "Edit footprint field" );
+        break;
+    default:
+        id = HK_EDIT;
+        name = _( "Edit field" );
+        break;
     }
-    msg = AddHotkeyName( _( "Edit" ) + name, s_Schematic_Hokeys_Descr, id );
+    msg = AddHotkeyName( name, s_Schematic_Hokeys_Descr, id );
     AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
 }
 
@@ -350,8 +368,8 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     if( !Component->GetFlags() )
     {
-        msg = _( "Move Component" );
-        msg << wxT( " " ) << Component->GetField( REFERENCE )->GetText();
+        msg.Printf( _( "Move Component %s" ), 
+                    GetChars( Component->GetField( REFERENCE )->GetText() ) );
         msg = AddHotkeyName( msg, s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
         msg = AddHotkeyName( _( "Drag Component" ), s_Schematic_Hokeys_Descr, HK_DRAG );
@@ -825,7 +843,7 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
         msg = AddHotkeyName( _( "Mirror Block --" ), s_Schematic_Hokeys_Descr,
                              HK_MIRROR_X_COMPONENT );
         AddMenuItem( PopMenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
-        msg = AddHotkeyName( _( "Rotate Block ccw" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
+        msg = AddHotkeyName( _( "Rotate Block CCW" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
 
 #if 0

@@ -74,7 +74,7 @@ bool LIB_CIRCLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
     if( cnt < 6 )
     {
-        aErrorMsg.Printf( _( "circle only had %d parameters of the required 6" ), cnt );
+        aErrorMsg.Printf( _( "Circle only had %d parameters of the required 6" ), cnt );
         return false;
     }
 

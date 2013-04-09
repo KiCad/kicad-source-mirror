@@ -302,7 +302,7 @@ MODULE* PCB_BASE_FRAME::loadFootprintFromLibrary( const wxString& aLibraryPath,
             if( aDisplayError )
             {
                 wxString msg = wxString::Format(
-                    _( "Footprint '%s' not found in library '%s'" ),
+                    _( "Footprint %s not found in library <%s>" ),
                     aFootprintName.GetData(),
                     libPath.GetData() );
 
@@ -375,7 +375,7 @@ MODULE* PCB_BASE_FRAME::loadFootprintFromLibraries(
             if( aDisplayError )
             {
                 wxString msg = wxString::Format(
-                    _( "Footprint '%s' not found in any library" ),
+                    _( "Footprint %s not found in any library" ),
                     aFootprintName.GetData() );
 
                 DisplayError( NULL, msg );
@@ -574,7 +574,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
     }
 
     wxString msg = wxString::Format(
-                    _( "Footprint library\n'%s' saved as\n'%s'" ),
+                    _( "Footprint library\n<%s> saved as\n<%s>" ),
                     GetChars( curLibPath ), GetChars( dstLibPath ) );
 
     DisplayInfoMessage( this, msg );

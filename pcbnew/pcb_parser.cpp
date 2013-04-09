@@ -89,7 +89,7 @@ double PCB_PARSER::parseDouble() throw( IO_ERROR )
     if( errno )
     {
         wxString error;
-        error.Printf( _( "invalid floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
+        error.Printf( _( "invalid floating point number in\nfile: <%s>\nline: %d\noffset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
@@ -98,7 +98,7 @@ double PCB_PARSER::parseDouble() throw( IO_ERROR )
     if( CurText() == tmp )
     {
         wxString error;
-        error.Printf( _( "missing floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
+        error.Printf( _( "missing floating point number in\nfile: <%s>\nline: %d\noffset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
@@ -754,7 +754,7 @@ T PCB_PARSER::lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR )
 #endif
 
         wxString error = wxString::Format(
-            _( "Layer '%s' in file <%s> at line %d, position %d, was not defined in the layers section" ),
+            _( "Layer %s in file <%s> at line %d, position %d, was not defined in the layers section" ),
             GetChars( FROM_UTF8( CurText() ) ), GetChars( CurSource() ),
             CurLineNumber(), CurOffset() );
 
@@ -1128,7 +1128,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
         // auto_ptr will delete nc on this code path
 
         wxString error;
-        error.Printf( _( "duplicate NETCLASS name '%s' in file %s at line %d, offset %d" ),
+        error.Printf( _( "duplicate NETCLASS name '%s' in file <%s> at line %d, offset %d" ),
                       nc->GetName().GetData(), CurSource().GetData(), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }

@@ -130,7 +130,7 @@ bool LIB_TEXT::Load( LINE_READER& aLineReader, wxString& errorMsg )
 
         if( cnt < 8 )
         {
-            errorMsg.Printf( _( "text only had %d parameters of the required 8" ), cnt );
+            errorMsg.Printf( _( "Text only had %d parameters of the required 8" ), cnt );
             return false;
         }
 

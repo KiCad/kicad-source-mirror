@@ -245,7 +245,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
             if( IsCopperLayer( getActiveLayer() ) )
             {
-                DisplayError( this, _( "Graphic not authorized on Copper layers" ) );
+                DisplayError( this, _( "Graphic not allowed on Copper layers" ) );
                 break;
             }
 
@@ -368,7 +368,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_PCB_DIMENSION_BUTT:
         if( IsCopperLayer( getActiveLayer() ) )
         {
-            DisplayError( this, _( "Dimension not authorized on Copper layers" ) );
+            DisplayError( this, _( "Dimension not allowed on Copper layers" ) );
             break;
         }
 

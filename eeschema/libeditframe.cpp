@@ -369,7 +369,7 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         if( lib.IsModified() )
         {
             wxString msg;
-            msg.Printf( _( "Library \"%s\" was modified!\nDiscard changes?" ),
+            msg.Printf( _( "Library %s was modified!\nDiscard changes?" ),
                         GetChars( lib.GetName() ) );
 
             if( !IsOK( this, msg ) )

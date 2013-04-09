@@ -648,7 +648,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
 
         if( m_canvas->GetAbortRequest() )
         {
-            if( IsOK( this, _( "Ok to abort?" ) ) )
+            if( IsOK( this, _( "OK to abort?" ) ) )
                 return ESC;
             else
                 m_canvas->SetAbortRequest( false );

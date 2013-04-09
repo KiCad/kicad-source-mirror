@@ -154,7 +154,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    msg.Printf( _( "Saving symbol in [%s]" ), GetChars( fn.GetPath() ) );
+    msg.Printf( _( "Saving symbol in <%s>" ), GetChars( fn.GetPath() ) );
     SetStatusText( msg );
 
     wxString line;

@@ -84,9 +84,9 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
         wxString msg;
 
         if( PlotOneSheetDXF( plotFileName, screen, plot_offset, 1.0, aPlotFrameRef ) )
-            msg.Printf( _( "Plot: %s OK\n" ), GetChars( plotFileName ) );
+            msg.Printf( _( "Plot: <%s> OK\n" ), GetChars( plotFileName ) );
         else    // Error
-             msg.Printf( _( "** Unable to create %s **\n" ), GetChars( plotFileName ) );
+            msg.Printf( _( "Unable to create <%s>\n" ), GetChars( plotFileName ) );
 
         m_MessagesBox->AppendText( msg );
 

@@ -60,7 +60,8 @@ DIALOG_PCBNEW_CONFIG_LIBS::DIALOG_PCBNEW_CONFIG_LIBS( PCB_EDIT_FRAME* parent ):
 
     Init( );
 
-    wxString title = _( "from " ) + wxGetApp().GetCurrentOptionFile();
+    wxString title;
+    title.Printf( _( "from <%s>" ), GetChars( wxGetApp().GetCurrentOptionFile() ) );
     SetTitle( title );
 
     m_sdbSizer1OK->SetDefault();
