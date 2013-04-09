@@ -202,7 +202,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
     if( new_layer < 0 )
         return;
 
-    if( IsValidCopperLayerIndex( new_layer ) )
+    if( IsCopperLayer( new_layer ) )
     {
         /* an edge is put on a copper layer, and it is very dangerous. a
          *confirmation is requested */

@@ -40,15 +40,15 @@ public:
 
     // Returns a color index from the layer id
     // Virtual function
-    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayerIndex ) const;
+    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const;
 
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
     // Virtual function
-    bool IsLayerEnabled( LAYER_NUM aLayerIndex ) const;
+    bool IsLayerEnabled( LAYER_NUM aLayer ) const;
 
     // Returns the name of the layer id
     // Virtual function
-    wxString GetLayerName( LAYER_NUM aLayerIndex ) const;
+    wxString GetLayerName( LAYER_NUM aLayer ) const;
 };
 
 #endif //CLASS_PCB_PCB_LAYER_BOX_SELECTOR_H

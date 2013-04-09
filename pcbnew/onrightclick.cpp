@@ -204,7 +204,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING,
                              _( "Delete Drawing" ), KiBitmap( delete_xpm ) );
 
-                if( item->GetLayer() > LAST_COPPER_LAYER )
+                if( !IsCopperLayer( item->GetLayer() ) )
                     AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING_LAYER,
                                  _( "Delete All Drawings on Layer" ), KiBitmap( delete_xpm ) );
             }

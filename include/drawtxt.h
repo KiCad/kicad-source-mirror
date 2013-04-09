@@ -10,6 +10,9 @@
 #include <base_struct.h>
 #include <eda_text.h>               // EDA_TEXT_HJUSTIFY_T and EDA_TEXT_VJUSTIFY_T
 
+/// Minimum dimension in pixel for drawing text
+#define MIN_TEXT_SIZE   5
+
 class EDA_DRAW_PANEL;
 class PLOTTER;
 

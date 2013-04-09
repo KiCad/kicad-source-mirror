@@ -1551,3 +1551,16 @@ EDA_COLOR_T ColorFindNearest( const wxColour &aColor )
 
     return candidate;
 }
+
+void GRDrawAnchor( EDA_RECT *aClipBox, wxDC *aDC, int x, int y, 
+                   int aSize, EDA_COLOR_T aColor )
+{
+        int anchor_size = aDC->DeviceToLogicalXRel( aSize );
+
+        GRLine( aClipBox, aDC,
+                x - anchor_size, y,
+                x + anchor_size, y, 0, aColor );
+        GRLine( aClipBox, aDC,
+                x, y - anchor_size,
+                x, y + anchor_size, 0, aColor );
+}

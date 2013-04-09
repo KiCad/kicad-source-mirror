@@ -216,39 +216,52 @@ enum PCB_VISIBLE
     END_PCB_VISIBLE_LIST  // sentinel
 };
 
-
 /**
- * Function IsValidPcbLayerIndex
- * tests whether a given integer is a valid layer index
- * @param aLayerIndex = Layer index to test
+ * Function IsValidLayer
+ * tests whether a given integer is a valid layer index, i.e. can
+ * be safely put in a LAYER_NUM
+ * @param aLayerIndex = Layer index to test. It can be an int, so its
+ * useful during I/O
  * @return true if aLayerIndex is a valid layer index
  */
-inline bool IsValidPcbLayerIndex( LAYER_NUM aLayerIndex )
+inline bool IsValidLayer( int aLayerIndex )
 {
-    return aLayerIndex >= FIRST_LAYER && aLayerIndex < NB_PCB_LAYERS;
+    return aLayerIndex >= FIRST_LAYER && aLayerIndex < NB_LAYERS;
 }
 
 /**
- * Function IsValidCopperLayerIndex
- * tests whether an integer is a valid copper layer index
- * @param aLayerIndex = Layer index to test
- * @return true if aLayerIndex is a valid copper layer index
+ * Function IsPcbLayer
+ * tests whether a layer is a valid layer for pcbnew
+ * @param aLayer = Layer to test
+ * @return true if aLayer is a layer valid in pcbnew
  */
-inline bool IsValidCopperLayerIndex( LAYER_NUM aLayerIndex )
+inline bool IsPcbLayer( LAYER_NUM aLayer )
 {
-    return aLayerIndex >= FIRST_COPPER_LAYER && aLayerIndex <= LAST_COPPER_LAYER;
+    return aLayer >= FIRST_LAYER && aLayer < NB_PCB_LAYERS;
 }
 
 /**
- * Function IsValidNonCopperLayerIndex
- * tests whether an integer is a valid non copper layer index
- * @param aLayerIndex = Layer index to test
- * @return true if aLayerIndex is a valid non copper layer index
+ * Function IsCopperLayer
+ * tests whether a layer is a copper layer
+ * @param aLayer = Layer  to test
+ * @return true if aLayer is a valid copper layer 
  */
-inline bool IsValidNonCopperLayerIndex( LAYER_NUM aLayerIndex )
+inline bool IsCopperLayer( LAYER_NUM aLayer )
 {
-    return aLayerIndex >= FIRST_NON_COPPER_LAYER
-        && aLayerIndex <= LAST_NON_COPPER_LAYER;
+    return aLayer >= FIRST_COPPER_LAYER 
+        && aLayer <= LAST_COPPER_LAYER;
+}
+
+/**
+ * Function IsNonCopperLayer
+ * tests whether a layer is a non copper layer
+ * @param aLayer = Layer to test
+ * @return true if aLayer is a non copper layer
+ */
+inline bool IsNonCopperLayer( LAYER_NUM aLayer )
+{
+    return aLayer >= FIRST_NON_COPPER_LAYER
+        && aLayer <= LAST_NON_COPPER_LAYER;
 }
 
 /* IMPORTANT: If a layer is not a front layer not necessarily is true

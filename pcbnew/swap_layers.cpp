@@ -291,7 +291,7 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
 
     jj = m_Parent->SelectLayer( jj, UNDEFINED_LAYER, UNDEFINED_LAYER, true );
 
-    if( (jj < FIRST_LAYER) || (jj > NB_PCB_LAYERS) )
+    if( !IsValidLayer( jj ) )
         return;
 
     // No change if the selected layer matches the layer being edited.

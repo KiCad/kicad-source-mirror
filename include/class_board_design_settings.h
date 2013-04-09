@@ -75,26 +75,22 @@ public:
     /**
      * Function IsLayerVisible
      * tests whether a given layer is visible
-     * @param aLayerIndex = The index of the layer to be tested
+     * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool IsLayerVisible( LAYER_NUM aLayerIndex ) const
+    bool IsLayerVisible( LAYER_NUM aLayer ) const
     {
-        // @@IMB: Altough Pcbnew uses only 29, GerbView uses all 32 layers
-        if( aLayerIndex < FIRST_LAYER || aLayerIndex >= NB_LAYERS )
-            return false;
-
         // If a layer is disabled, it is automatically invisible
-        return bool( m_VisibleLayers & m_EnabledLayers & GetLayerMask( aLayerIndex ) );
+        return m_VisibleLayers & m_EnabledLayers & GetLayerMask( aLayer );
     }
 
     /**
      * Function SetLayerVisibility
      * changes the visibility of a given layer
-     * @param aLayerIndex = The index of the layer to be changed
+     * @param aLayer = The layer to be changed
      * @param aNewState = The new visibility state of the layer
      */
-    void SetLayerVisibility( LAYER_NUM aLayerIndex, bool aNewState );
+    void SetLayerVisibility( LAYER_NUM aLayer, bool aNewState );
 
     /**
      * Function GetVisibleElements
@@ -158,12 +154,12 @@ public:
     /**
      * Function IsLayerEnabled
      * tests whether a given layer is enabled
-     * @param aLayerIndex = The index of the layer to be tested
+     * @param aLayer = The of the layer to be tested
      * @return bool - true if the layer is enabled
      */
-    bool IsLayerEnabled( LAYER_NUM aLayerIndex ) const
+    bool IsLayerEnabled( LAYER_NUM aLayer ) const
     {
-        return bool( m_EnabledLayers & GetLayerMask( aLayerIndex ) );
+        return m_EnabledLayers & GetLayerMask( aLayer );
     }
 
     /**

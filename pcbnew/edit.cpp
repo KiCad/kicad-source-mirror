@@ -1248,7 +1248,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
 
     // Copper layers cannot be selected unconditionally; how many
     // of those layers are currently enabled needs to be checked.
-    if( IsValidCopperLayerIndex( layer ) )
+    if( IsCopperLayer( layer ) )
     {
         // If only one copper layer is enabled, the only such layer
         // that can be selected to is the "Back" layer (so the

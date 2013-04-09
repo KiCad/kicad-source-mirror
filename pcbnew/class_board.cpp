@@ -356,23 +356,23 @@ bool BOARD::SetLayer( LAYER_NUM aIndex, const LAYER& aLayer )
 }
 
 
-wxString BOARD::GetLayerName( LAYER_NUM aLayerIndex ) const
+wxString BOARD::GetLayerName( LAYER_NUM aLayer ) const
 {
-    if( !IsValidPcbLayerIndex( aLayerIndex ) )
+    if( !IsPcbLayer( aLayer ) )
         return wxEmptyString;
 
     // All layer names are stored in the BOARD.
-    if( IsLayerEnabled( aLayerIndex ) )
+    if( IsLayerEnabled( aLayer ) )
     {
         // Standard names were set in BOARD::BOARD() but they may be
         // over-ridden by BOARD::SetLayerName().
         // For copper layers, return the actual copper layer name,
         // otherwise return the Standard English layer name.
-        if( aLayerIndex < FIRST_NON_COPPER_LAYER )
-            return m_Layer[aLayerIndex].m_Name;
+        if( IsCopperLayer( aLayer ) )
+            return m_Layer[aLayer].m_Name;
     }
 
-    return GetStandardLayerName( aLayerIndex );
+    return GetStandardLayerName( aLayer );
 }
 
 
@@ -422,9 +422,9 @@ wxString BOARD::GetStandardLayerName( LAYER_NUM aLayerNumber )
 }
 
 
-bool BOARD::SetLayerName( LAYER_NUM aLayerIndex, const wxString& aLayerName )
+bool BOARD::SetLayerName( LAYER_NUM aLayer, const wxString& aLayerName )
 {
-    if( !IsValidCopperLayerIndex( aLayerIndex ) )
+    if( !IsCopperLayer( aLayer ) )
         return false;
 
     if( aLayerName == wxEmptyString || aLayerName.Len() > 20 )
@@ -439,15 +439,15 @@ bool BOARD::SetLayerName( LAYER_NUM aLayerIndex, const wxString& aLayerName )
     // replace any spaces with underscores before we do any comparing
     NameTemp.Replace( wxT( " " ), wxT( "_" ) );
 
-    if( IsLayerEnabled( aLayerIndex ) )
+    if( IsLayerEnabled( aLayer ) )
     {
         for( LAYER_NUM i = FIRST_COPPER_LAYER; i < NB_COPPER_LAYERS; ++i )
         {
-            if( i != aLayerIndex && IsLayerEnabled( i ) && NameTemp == m_Layer[i].m_Name )
+            if( i != aLayer && IsLayerEnabled( i ) && NameTemp == m_Layer[i].m_Name )
                 return false;
         }
 
-        m_Layer[aLayerIndex].m_Name = NameTemp;
+        m_Layer[aLayer].m_Name = NameTemp;
 
         return true;
     }
@@ -456,30 +456,30 @@ bool BOARD::SetLayerName( LAYER_NUM aLayerIndex, const wxString& aLayerName )
 }
 
 
-LAYER_T BOARD::GetLayerType( LAYER_NUM aLayerIndex ) const
+LAYER_T BOARD::GetLayerType( LAYER_NUM aLayer ) const
 {
-    if( !IsValidCopperLayerIndex( aLayerIndex ) )
+    if( !IsCopperLayer( aLayer ) )
         return LT_SIGNAL;
 
     //@@IMB: The original test was broken due to the discontinuity
     // in the layer sequence.
-    if( IsLayerEnabled( aLayerIndex ) )
-        return m_Layer[aLayerIndex].m_Type;
+    if( IsLayerEnabled( aLayer ) )
+        return m_Layer[aLayer].m_Type;
 
     return LT_SIGNAL;
 }
 
 
-bool BOARD::SetLayerType( LAYER_NUM aLayerIndex, LAYER_T aLayerType )
+bool BOARD::SetLayerType( LAYER_NUM aLayer, LAYER_T aLayerType )
 {
-    if( !IsValidCopperLayerIndex( aLayerIndex ) )
+    if( !IsCopperLayer( aLayer ) )
         return false;
 
     //@@IMB: The original test was broken due to the discontinuity
     // in the layer sequence.
-    if( IsLayerEnabled( aLayerIndex ) )
+    if( IsLayerEnabled( aLayer ) )
     {
-        m_Layer[aLayerIndex].m_Type = aLayerType;
+        m_Layer[aLayer].m_Type = aLayerType;
         return true;
     }
 

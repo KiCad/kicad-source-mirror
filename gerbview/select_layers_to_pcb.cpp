@@ -360,12 +360,12 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
     }
 
     LAYER_NUM jj = m_layersLookUpTable[m_buttonTable[ii]];
-    if( ( jj < FIRST_LAYER ) || ( jj > NB_LAYERS ) )
+    if( !IsValidLayer( jj ) )
         jj = LAYER_N_BACK;  // (Defaults to "Copper" layer.)
 
     jj = m_Parent->SelectPCBLayer( jj, m_exportBoardCopperLayersCount, true );
 
-    if( ( jj < FIRST_LAYER ) || ( jj > NB_LAYERS ) )
+    if( !IsValidLayer( jj ) )
         return;
 
     if( jj != m_layersLookUpTable[m_buttonTable[ii]] )

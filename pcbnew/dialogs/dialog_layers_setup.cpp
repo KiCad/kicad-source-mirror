@@ -580,7 +580,7 @@ wxString DIALOG_LAYERS_SETUP::getLayerName( LAYER_NUM aLayer )
 {
     wxString ret;
 
-    wxASSERT( aLayer >= FIRST_COPPER_LAYER && aLayer <= LAST_COPPER_LAYER );
+    wxASSERT( IsCopperLayer( aLayer ) );
 
     wxTextCtrl*  ctl = (wxTextCtrl*) getName( aLayer );
 

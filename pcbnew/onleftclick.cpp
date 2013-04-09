@@ -243,7 +243,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             if( GetToolId() == ID_PCB_ARC_BUTT )
                 shape = S_ARC;
 
-            if( getActiveLayer() <= LAST_COPPER_LAYER )
+            if( IsCopperLayer( getActiveLayer() ) )
             {
                 DisplayError( this, _( "Graphic not authorized on Copper layers" ) );
                 break;
@@ -267,7 +267,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_TRACK_BUTT:
-        if( getActiveLayer() > LAST_COPPER_LAYER )
+        if( !IsCopperLayer( getActiveLayer() ) )
         {
             DisplayError( this, _( "Tracks on Copper layers only " ) );
             break;
@@ -366,7 +366,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_DIMENSION_BUTT:
-        if( getActiveLayer() <= LAST_COPPER_LAYER )
+        if( IsCopperLayer( getActiveLayer() ) )
         {
             DisplayError( this, _( "Dimension not authorized on Copper layers" ) );
             break;

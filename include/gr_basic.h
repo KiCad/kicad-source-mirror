@@ -260,4 +260,7 @@ void GRSFilledRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1,
 void GRLineArray(  EDA_RECT* aClipBox, wxDC* aDC,std::vector<wxPoint>& aLines,
                    int aWidth, EDA_COLOR_T aColor );
 
+void GRDrawAnchor( EDA_RECT* aClipBox, wxDC *aDC, int x, int y, int aSize, 
+                   EDA_COLOR_T aColor );
+
 #endif      /* define GR_BASIC */

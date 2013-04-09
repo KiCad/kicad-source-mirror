@@ -181,21 +181,13 @@ MODULE::~MODULE()
 void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                         int dim_ancre, GR_DRAWMODE draw_mode )
 {
-    int anchor_size = DC->DeviceToLogicalXRel( dim_ancre );
-
     GRSetDrawMode( DC, draw_mode );
 
     if( GetBoard()->IsElementVisible( ANCHOR_VISIBLE ) )
     {
-        EDA_COLOR_T color = g_ColorsSettings.GetItemColor( ANCHOR_VISIBLE );
-        GRLine( panel->GetClipBox(), DC,
-                m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
-                m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,
-                0, color );
-        GRLine( panel->GetClipBox(), DC,
-                m_Pos.x - offset.x, m_Pos.y - offset.y - anchor_size,
-                m_Pos.x - offset.x, m_Pos.y - offset.y + anchor_size,
-                0, color );
+        GRDrawAnchor( panel->GetClipBox(), DC, m_Pos.x, m_Pos.y, 
+                      dim_ancre,
+                      g_ColorsSettings.GetItemColor( ANCHOR_VISIBLE ) );
     }
 }
 

@@ -24,12 +24,12 @@ GBR_LAYOUT::~GBR_LAYOUT()
 
 /* Function IsLayerVisible
  * tests whether a given layer is visible
- * param aLayerIndex = The index of the layer to be tested
+ * param aLayer = The layer to be tested
  * return bool - true if the layer is visible.
  */
-bool GBR_LAYOUT::IsLayerVisible( LAYER_NUM aLayerIndex ) const
+bool GBR_LAYOUT::IsLayerVisible( LAYER_NUM aLayer ) const
 {
-    return m_printLayersMask & GetLayerMask( aLayerIndex );
+    return m_printLayersMask & GetLayerMask( aLayer );
 }
 
 

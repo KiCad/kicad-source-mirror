@@ -29,8 +29,7 @@
 #define FLG_START 0             // Flag used in locate routines
 #define FLG_END   1             // Flag used in locate routines
 
-#define DIM_ANCRE_MODULE 3       /* Anchor size (footprint center) */
-#define DIM_ANCRE_TEXTE  2       /* Anchor size (Text center) */
+#define DIM_ANCRE_MODULE 3       // Anchor size (footprint center)
 
 
 #define TEXTS_MIN_SIZE  DMils2iu( 50 )      ///< Minimum text size in Pcbnew units value (50 * 0.0001 mils)

@@ -288,14 +288,8 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
     {
         EDA_COLOR_T anchor_color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
-        int anchor_size = DC->DeviceToLogicalXRel( 2 );
-
-        GRLine( panel->GetClipBox(), DC,
-                pos.x - anchor_size, pos.y,
-                pos.x + anchor_size, pos.y, 0, anchor_color );
-        GRLine( panel->GetClipBox(), DC,
-                pos.x, pos.y - anchor_size,
-                pos.x, pos.y + anchor_size, 0, anchor_color );
+        GRDrawAnchor( panel->GetClipBox(), DC, pos.x, pos.y, 
+                      DIM_ANCRE_TEXTE, anchor_color );
     }
 
     // Draw the text proper, with the right attributes

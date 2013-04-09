@@ -269,22 +269,12 @@ void EDA_TEXT::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     if( aDrawMode != -1 )
         GRSetDrawMode( aDC, aDrawMode );
 
-    /* Draw text anchor, if allowed */
+    // Draw text anchor, if requested
     if( aAnchor_color != UNSPECIFIED_COLOR )
     {
-
-        int anchor_size = aDC->DeviceToLogicalXRel( 2 );
-
-        aAnchor_color = (EDA_COLOR_T) ( aAnchor_color & MASKCOLOR );
-
-        int cX = aPos.x + aOffset.x;
-        int cY = aPos.y + aOffset.y;
-
-        GRLine( aPanel->GetClipBox(), aDC, cX - anchor_size, cY,
-                cX + anchor_size, cY, 0, aAnchor_color );
-
-        GRLine( aPanel->GetClipBox(), aDC, cX, cY - anchor_size,
-                cX, cY + anchor_size, 0, aAnchor_color );
+        GRDrawAnchor( aPanel->GetClipBox(), aDC,
+                      aPos.x + aOffset.x, aPos.y + aOffset.y,
+                      DIM_ANCRE_TEXTE, aAnchor_color );
     }
 
     if( aFillMode == SKETCH )

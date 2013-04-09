@@ -1475,7 +1475,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             ERECT   r( gr->second );
             LAYER_NUM layer = kicad_layer( r.layer );
 
-            if( IsValidCopperLayerIndex( layer ) )
+            if( IsCopperLayer( layer ) )
             {
                 // use a "netcode = 0" type ZONE:
                 ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
@@ -1910,7 +1910,7 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
     EWIRE   w( aTree );
     LAYER_NUM layer = kicad_layer( w.layer );
 
-    if( IsValidNonCopperLayerIndex( layer ) )  // skip copper package wires
+    if( IsNonCopperLayer( layer ) )  // skip copper package wires
     {
         wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
         wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
@@ -2120,7 +2120,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
     ERECT   r( aTree );
     LAYER_NUM layer = kicad_layer( r.layer );
 
-    if( IsValidNonCopperLayerIndex( layer ) )  // skip copper "package.rectangle"s
+    if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
         EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
         aModule->GraphicalItems().PushBack( dwg );
@@ -2153,7 +2153,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
     EPOLYGON    p( aTree );
     LAYER_NUM layer = kicad_layer( p.layer );
 
-    if( IsValidNonCopperLayerIndex( layer ) )  // skip copper "package.rectangle"s
+    if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
         EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
         aModule->GraphicalItems().PushBack( dwg );
@@ -2259,7 +2259,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
     ESMD    e( aTree );
     LAYER_NUM layer = kicad_layer( e.layer );
 
-    if( !IsValidCopperLayerIndex( layer ) )
+    if( !IsCopperLayer( layer ) )
     {
         return;
     }
@@ -2351,7 +2351,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 EWIRE   w( it->second );
                 LAYER_NUM layer = kicad_layer( w.layer );
 
-                if( IsValidCopperLayerIndex( layer ) )
+                if( IsCopperLayer( layer ) )
                 {
                     TRACK*  t = new TRACK( m_board );
 
@@ -2386,8 +2386,8 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 LAYER_NUM layer_front_most = kicad_layer( v.layer_front_most );
                 LAYER_NUM layer_back_most  = kicad_layer( v.layer_back_most );
 
-                if( IsValidCopperLayerIndex( layer_front_most ) &&
-                    IsValidCopperLayerIndex( layer_back_most ) )
+                if( IsCopperLayer( layer_front_most ) &&
+                    IsCopperLayer( layer_back_most ) )
                 {
                     int     kidiam;
                     int     drillz = kicad( v.drill );
@@ -2464,7 +2464,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 EPOLYGON p( it->second );
                 LAYER_NUM layer = kicad_layer( p.layer );
 
-                if( IsValidCopperLayerIndex( layer ) )
+                if( IsCopperLayer( layer ) )
                 {
                     // use a "netcode = 0" type ZONE:
                     ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );

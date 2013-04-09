@@ -106,14 +106,14 @@ void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
 }
 
 
-void LAYER_BOX_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayerIndex )
+void LAYER_BOX_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer )
 {
     wxMemoryDC bmpDC;
     wxBrush    brush;
 
     // Prepare Bitmap
     bmpDC.SelectObject( aLayerbmp );
-    brush.SetColour( MakeColour( GetLayerColor( aLayerIndex ) ) );
+    brush.SetColour( MakeColour( GetLayerColor( aLayer ) ) );
     brush.SetStyle( wxSOLID );
 
     bmpDC.SetBrush( brush );

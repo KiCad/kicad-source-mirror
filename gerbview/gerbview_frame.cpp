@@ -558,15 +558,15 @@ void GERBVIEW_FRAME::SetVisibleLayers( LAYER_MSK aLayerMask )
 /**
  * Function IsLayerVisible
  * tests whether a given layer is visible
- * @param aLayerIndex = The index of the layer to be tested
+ * @param aLayer = The layer to be tested
  * @return bool - true if the layer is visible.
  */
-bool GERBVIEW_FRAME::IsLayerVisible( LAYER_NUM aLayerIndex ) const
+bool GERBVIEW_FRAME::IsLayerVisible( LAYER_NUM aLayer ) const
 {
     if( ! m_DisplayOptions.m_IsPrinting )
-        return m_LayersManager->IsLayerVisible( aLayerIndex );
+        return m_LayersManager->IsLayerVisible( aLayer );
     else
-        return GetLayout()->IsLayerVisible( aLayerIndex );
+        return GetLayout()->IsLayerVisible( aLayer );
 }
 
 

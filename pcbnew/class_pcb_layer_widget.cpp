@@ -163,7 +163,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
             LAYER_NUM layer = getDecodedId( cb->GetId() );
-            if( IsValidCopperLayerIndex( layer ) )
+            if( IsCopperLayer( layer ) )
             {
                 lastCu = row;
                 break;
@@ -176,7 +176,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
             LAYER_NUM layer = getDecodedId( cb->GetId() );
 
-            if( IsValidCopperLayerIndex( layer ) )
+            if( IsCopperLayer( layer ) )
             {
                 bool loc_visible = visible;
                 if( force_active_layer_visible && (layer == myframe->getActiveLayer() ) )
@@ -262,36 +262,36 @@ void PCB_LAYER_WIDGET::SyncLayerVisibilities()
 void PCB_LAYER_WIDGET::ReFill()
 {
     BOARD*  brd = myframe->GetBoard();
-    LAYER_NUM layer;
-
-    int enabledLayers = brd->GetEnabledLayers();
+    int     enabledLayers = brd->GetEnabledLayers();
 
     ClearLayerRows();
 
     // show all coppers first, with front on top, back on bottom, then technical layers
-
-    layer = LAYER_N_FRONT;
-    if( enabledLayers & GetLayerMask( layer ) )
-    {
-        AppendLayerRow( LAYER_WIDGET::ROW(
-            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("Front copper layer"), true ) );
-    }
-
-    for( layer = LAYER_N_FRONT-1; layer >= 1; --layer )
+    for( LAYER_NUM layer = LAYER_N_FRONT; layer >= FIRST_LAYER; --layer )
     {
         if( enabledLayers & GetLayerMask( layer ) )
         {
+            const wxChar *dsc;
+            switch( layer )
+            {
+            case LAYER_N_FRONT:
+                dsc = _("Front copper layer");
+                break;
+
+            case LAYER_N_BACK:
+                dsc = _("Back copper layer");
+                break;
+
+            default:
+                dsc = _("Inner copper layer");
+                break;
+            }
+
             AppendLayerRow( LAYER_WIDGET::ROW(
-                brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("An innner copper layer"), true ) );
+                brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), dsc, true ) );
         }
     }
 
-    layer = LAYER_N_BACK;
-    if( enabledLayers & GetLayerMask( layer ) )
-    {
-        AppendLayerRow( LAYER_WIDGET::ROW(
-            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("Back copper layer"), true ) );
-    }
 
     // technical layers are shown in this order:
     static const struct {
@@ -315,7 +315,7 @@ void PCB_LAYER_WIDGET::ReFill()
 
     for( unsigned i=0;  i<DIM(techLayerSeq);  ++i )
     {
-        layer = techLayerSeq[i].layerId;
+        LAYER_NUM layer = techLayerSeq[i].layerId;
 
         if( !(enabledLayers & GetLayerMask( layer )) )
             continue;

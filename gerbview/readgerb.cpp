@@ -11,6 +11,7 @@
 #include <class_GERBER.h>
 
 #include <html_messagebox.h>
+#include <macros.h>
 
 /* Read a gerber file, RS274D or RS274X format.
  */
