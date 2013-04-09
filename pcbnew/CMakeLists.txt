@@ -428,9 +428,21 @@ target_link_libraries(pcbnew
 
 if(KICAD_GAL)
 target_link_libraries(pcbnew
-    gal
-    ${GLEW_LIBRARIES}
+	gal
+	${GLEW_LIBRARIES}
+	${CAIRO_LIBRARIES}
     )
+    
+if(WIN32)
+target_link_libraries(pcbnew
+	opengl32
+	glu32
+	pixman-1
+	fontconfig
+	freetype
+	bz2
+	)
+endif(WIN32)
 endif(KICAD_GAL)
 
 ###

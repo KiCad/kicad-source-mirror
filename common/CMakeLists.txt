@@ -25,6 +25,10 @@ set(GAL_SRCS
     )
 
 add_library(gal STATIC ${GAL_SRCS})
+
+if(WIN32)
+add_definitions(-DGLEW_STATIC)
+endif(WIN32)
 endif(KICAD_GAL)
 
 set(COMMON_ABOUT_DLG_SRCS
