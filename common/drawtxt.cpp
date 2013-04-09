@@ -561,6 +561,38 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
     }
 }
 
+void DrawGraphicHaloText( EDA_DRAW_PANEL * aPanel,
+                          wxDC * aDC,
+                          const wxPoint &aPos,
+                          enum EDA_COLOR_T aBgColor,
+                          enum EDA_COLOR_T aColor1,
+                          enum EDA_COLOR_T aColor2,
+                          const wxString &aText,
+                          int aOrient,
+                          const wxSize &aSize,
+                          enum EDA_TEXT_HJUSTIFY_T aH_justify,
+                          enum EDA_TEXT_VJUSTIFY_T aV_justify,
+                          int aWidth,
+                          bool aItalic,
+                          bool aBold,
+                          void (*aCallback)( int x0, int y0, int xf, int yf ),
+                          PLOTTER * aPlotter )
+{
+    // Swap color if contrast would be better
+    if( ColorIsLight( aBgColor ) ) {
+        EDA_COLOR_T c = aColor1;
+        aColor1 = aColor2;
+        aColor2 = c;
+    }
+
+    DrawGraphicText( aPanel, aDC, aPos, aColor1, aText, aOrient, aSize, 
+                     aH_justify, aV_justify, aWidth, aItalic, aBold, 
+                     aCallback, aPlotter );
+    
+    DrawGraphicText( aPanel, aDC, aPos, aColor2, aText, aOrient, aSize, 
+                     aH_justify, aV_justify, aWidth / 4, aItalic, aBold, 
+                     aCallback, aPlotter );
+}
 
 /**
  * Function PlotGraphicText

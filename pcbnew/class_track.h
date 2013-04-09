@@ -50,6 +50,7 @@ class MSG_PANEL_ITEM;
 
 #define UNDEFINED_DRILL_DIAMETER  -1       //< Undefined via drill diameter.
 
+#define MIN_VIA_DRAW_SIZE          4       /// Minimum size in pixel for full drawing
 
 /**
  * Function GetTrace

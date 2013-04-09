@@ -275,7 +275,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
     int width = m_Thickness;
     if( ( frame->m_DisplayModText == LINE )
-        || ( DC->LogicalToDeviceXRel( width ) < MIN_DRAW_WIDTH ) )
+        || ( DC->LogicalToDeviceXRel( width ) <= MIN_DRAW_WIDTH ) )
         width = 0;
     else if( frame->m_DisplayModText == SKETCH )
         width = -width;

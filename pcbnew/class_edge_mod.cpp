@@ -146,7 +146,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
             typeaff = SKETCH;
     }
 
-    if( DC->LogicalToDeviceXRel( m_Width ) < MIN_DRAW_WIDTH )
+    if( DC->LogicalToDeviceXRel( m_Width ) <= MIN_DRAW_WIDTH )
         typeaff = LINE;
 
     switch( type_trace )
