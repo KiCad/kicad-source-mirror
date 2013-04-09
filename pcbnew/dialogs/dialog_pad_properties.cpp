@@ -174,7 +174,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     wxPaintDC    dc( m_panelShowPad );
     PAD_DRAWINFO drawInfo;
 
-    EDA_COLOR_T color = ColorFromInt( 0 ); // XXX EVIL merge
+    EDA_COLOR_T color = BLACK;
 
     if( m_dummyPad->GetLayerMask() & LAYER_FRONT )
     {
@@ -183,10 +183,12 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     if( m_dummyPad->GetLayerMask() & LAYER_BACK )
     {
-        color = ColorFromInt( color | m_board->GetVisibleElementColor( PAD_BK_VISIBLE ) ); // XXX EVIL merge
+        color = ColorMix( color, m_board->GetVisibleElementColor( PAD_BK_VISIBLE ) );
     }
 
-    if( color == 0 )
+    // What could happen: the pad color is *actually* black, or no
+    // copper was selected
+    if( color == BLACK )
         color = LIGHTGRAY;
 
     drawInfo.m_Color     = color;
@@ -229,9 +231,8 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     // Draw X and Y axis.
     // this is particularly useful to show the reference position of pads
     // with offset and no hole
-    int width = 0;
-    GRLine( NULL, &dc, -dim, 0, dim, 0, width, BLUE );   // X axis
-    GRLine( NULL, &dc, 0, -dim, 0, dim, width, BLUE );   // Y axis
+    GRLine( NULL, &dc, -dim, 0, dim, 0, 0, BLUE );   // X axis
+    GRLine( NULL, &dc, 0, -dim, 0, dim, 0, BLUE );   // Y axis
 
     event.Skip();
 }
