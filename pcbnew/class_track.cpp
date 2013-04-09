@@ -1536,7 +1536,7 @@ wxString TRACK::GetSelectMenuText() const
 
     text.Printf( _("Track %s, net [%s] (%d) on layer %s, length: %s" ),
                  GetChars( ShowWidth() ), GetChars( netname ),
-                 GetNet(), GetLayerName(),
+                 GetNet(), GetChars( GetLayerName() ),
                  GetChars( ::LengthDoubleToString( GetLength() ) ) );
 
     return text;
