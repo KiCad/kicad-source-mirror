@@ -437,6 +437,7 @@ inline void OPENGL_GAL::selectShader( int aIndex )
     }
 }
 
+
 void OPENGL_GAL::drawRoundedSegment( VECTOR2D aStartPoint, VECTOR2D aEndPoint,
                                      double aWidth, bool aStroke, bool aGlBegin )
 {
@@ -863,99 +864,56 @@ void OPENGL_GAL::DrawCircle( VECTOR2D aCenterPoint, double aRadius )
         return;
     }
 
-    switch( m_drawMode )
-    {
     // Draw the middle of the circle (not anti-aliased)
-    case DRAW_MODE_NORMAL:
+    // Compute the factors for the unit circle
+    double outerScale = lineWidth / aRadius / 2;
+    double innerScale = -outerScale;
+    outerScale += 1.0;
+    innerScale += 1.0;
+
+    if( isUseShader )
     {
-        // Compute the factors for the unit circle
-        double outerScale = lineWidth / aRadius / 2;
-        double innerScale = -outerScale;
-        outerScale += 1.0;
-        innerScale += 1.0;
+        innerScale *= 1.0 / cos( M_PI / CIRCLE_POINTS );
+    }
 
-        if( isUseShader )
+    if( isStrokeEnabled )
+    {
+        if( innerScale < outerScale )
         {
-            innerScale *= 1.0 / cos( M_PI / CIRCLE_POINTS );
-        }
-
-        if( isStrokeEnabled )
-        {
-            if( innerScale < outerScale )
-            {
-                // Draw the outline
-                glColor4d( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-
-                glPushMatrix();
-
-                glTranslated( aCenterPoint.x, aCenterPoint.y, 0.0 );
-                glScaled( aRadius, aRadius, 1.0 );
-
-                glBegin( GL_QUAD_STRIP );
-                for( std::deque<VECTOR2D>::const_iterator it = unitCirclePoints.begin();
-                        it != unitCirclePoints.end(); it++ )
-                {
-                    glVertex3d( it->x * innerScale, it->y * innerScale, layerDepth );
-                    glVertex3d( it->x * outerScale, it->y * outerScale, layerDepth );
-                }
-                glEnd();
-
-                glPopMatrix();
-            }
-        }
-
-        // Filled circles are easy to draw by using the stored display list, scaling and translating
-        if( isFillEnabled )
-        {
-            glColor4d( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+            // Draw the outline
+            glColor4d( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
             glPushMatrix();
 
-            glTranslated( aCenterPoint.x, aCenterPoint.y, layerDepth );
+            glTranslated( aCenterPoint.x, aCenterPoint.y, 0.0 );
             glScaled( aRadius, aRadius, 1.0 );
 
-            glBegin( GL_TRIANGLE_FAN );
-            glVertex3d( 0, 0, 0 );
-            glCallList( displayListCircle );
+            glBegin( GL_QUAD_STRIP );
+            for( std::deque<VECTOR2D>::const_iterator it = unitCirclePoints.begin();
+                    it != unitCirclePoints.end(); it++ )
+            {
+                glVertex3d( it->x * innerScale, it->y * innerScale, layerDepth );
+                glVertex3d( it->x * outerScale, it->y * outerScale, layerDepth );
+            }
             glEnd();
 
             glPopMatrix();
         }
-
-        glColor4d( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
     }
-        break;
 
-        // Prepare / draw anti-aliased edges
-    case DRAW_MODE_PREPARE_EDGES:
-    case DRAW_MODE_DRAW_EDGES:
-        if( isUseShader )
-        {
-            // Set the color
-            // Now we enable the shader program for the circle
-            // the shader requires the screen size as uniform argument
-            shaderList[0].Use();
-            shaderList[0].SetParameter( 0, screenSize.x / 2 );
-            shaderList[0].SetParameter( 1, screenSize.y / 2 );
-            glBegin( GL_LINES );
-            if( isStrokeEnabled )
-            {
-                glColor4d( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-                glVertex3d( aCenterPoint.x, aCenterPoint.y, layerDepth );
-                glVertex3d( aRadius - lineWidth / 2, aRadius + lineWidth / 2, 0 );
-            }
-            else
-            {
-                glColor4d( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
-                glVertex3d( aCenterPoint.x, aCenterPoint.y, layerDepth );
-                glVertex3d( 0, aRadius, 0 );
-            }
-            glEnd();
-            shaderList[0].Deactivate();
-        }
-        break;
-    default:
-        break;
+    // Filled circles are easy to draw by using the stored display list, scaling and translating
+    if( isFillEnabled )
+    {
+        glColor4d( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+
+        glPushMatrix();
+
+        glTranslated( aCenterPoint.x, aCenterPoint.y, layerDepth );
+        glScaled( aRadius, aRadius, 1.0 );
+
+        glCallList( displayListCircle );
+
+        glPopMatrix();
     }
 }
 
@@ -970,9 +928,7 @@ void OPENGL_GAL::drawSemiCircle( VECTOR2D aCenterPoint, double aRadius, double a
     glScaled( aRadius, aRadius, 1.0 );
     glRotated( aAngle * 360.0 / ( 2 * M_PI ), 0, 0, 1 );
 
-    glBegin( GL_TRIANGLE_FAN );
     glCallList( displayListSemiCircle );
-    glEnd();
 
     glPopMatrix();
 }
@@ -1362,15 +1318,18 @@ void OPENGL_GAL::computeUnitCircle()
     displayListCircle = glGenLists( 1 );
     glNewList( displayListCircle, GL_COMPILE );
 
+    glBegin( GL_TRIANGLE_FAN );
+    glVertex2d( 0, 0 );
     // Compute the circle points for a given number of segments
     // Insert in a display list and a vector
     for( int i = 0; i < CIRCLE_POINTS + 1; i++ )
     {
-        double valueX = cos( 2 * M_PI / CIRCLE_POINTS * i );
-        double valueY = sin( 2 * M_PI / CIRCLE_POINTS * i );
-        glVertex3d( valueX, valueY, 0 );
+        double valueX = cos( 2.0 * M_PI / CIRCLE_POINTS * i );
+        double valueY = sin( 2.0 * M_PI / CIRCLE_POINTS * i );
+        glVertex2d( valueX, valueY );
         unitCirclePoints.push_back( VECTOR2D( valueX, valueY ) );
     }
+    glEnd();
 
     glEndList();
 }
@@ -1381,10 +1340,13 @@ void OPENGL_GAL::computeUnitSemiCircle()
     displayListSemiCircle = glGenLists( 1 );
     glNewList( displayListSemiCircle, GL_COMPILE );
 
+    glBegin( GL_TRIANGLE_FAN );
+    glVertex2d( 0, 0 );
     for( int i = 0; i < CIRCLE_POINTS / 2 + 1; i++ )
     {
-        glVertex3d( cos( 2 * M_PI / CIRCLE_POINTS * i ), sin( 2 * M_PI / CIRCLE_POINTS * i ), 0 );
+        glVertex2d( cos( 2.0 * M_PI / CIRCLE_POINTS * i ), sin( 2.0 * M_PI / CIRCLE_POINTS * i ) );
     }
+    glEnd();
 
     glEndList();
 }
