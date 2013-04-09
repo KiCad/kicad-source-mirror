@@ -107,13 +107,18 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     {
         if( ( useScreen != NULL ) || loadFromFile )            // Load from existing file.
         {
-            msg.Printf( _( "A file named \"%s\" already exists" ),
-                        GetChars( newFullFilename ) );
-
             if( useScreen != NULL )
-                msg += _( " in the current schematic hierarchy" );
+            {
+                msg.Printf( _( "A file named <%s> already exists in the current schematic hierarchy." ),
+                            GetChars( newFullFilename ) );
+            }
+            else
+            {
+                msg.Printf( _( "A file named <%s> already exists." ),
+                            GetChars( newFullFilename ) );
+            }
 
-            msg += _(".\n\nDo you want to create a sheet with the contents of this file?" );
+            msg += _("\n\nDo you want to create a sheet with the contents of this file?" );
 
             if( !IsOK( this, msg ) )
                 return false;
@@ -141,14 +146,20 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
             if( ( useScreen != NULL ) || loadFromFile )        // Load from existing file.
             {
-                tmp.Printf( _( "A file named \"%s\" already exists" ),
-                            GetChars( newFullFilename ) );
-                msg += tmp;
-
+                wxString tmp;
                 if( useScreen != NULL )
-                    msg += _( " in the current schematic hierarchy" );
+                {
+                    tmp.Printf( _( "A file named <%s> already exists in the current schematic hierarchy." ),
+                            GetChars( newFullFilename ) );
+                }
+                else
+                {
+                    tmp.Printf( _( "A file named <%s> already exists." ),
+                            GetChars( newFullFilename ) );
+                }
 
-                msg += _(".\n\nDo you want to replace the sheet with the contents of this file?" );
+                msg += tmp;
+                msg += _("\n\nDo you want to replace the sheet with the contents of this file?" );
 
                 if( !IsOK( this, msg ) )
                     return false;

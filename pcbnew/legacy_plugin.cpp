@@ -90,7 +90,7 @@
 typedef LEGACY_PLUGIN::BIU      BIU;
 
 
-#define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
+#define VERSION_ERROR_FORMAT    _( "File <%s> is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
 #define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
 #define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
@@ -2739,7 +2739,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in\nfile: '%s'\nline: %d\noffset: %d" ),
+        m_error.Printf( _( "invalid float number in\nfile: <%s>\nline: %d\noffset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2747,7 +2747,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in\nfile: '%s'\nline: %d\noffset: %d" ),
+        m_error.Printf( _( "missing float number in\nfile: <%s>\nline: %d\noffset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2774,7 +2774,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in\nfile: '%s'\nline: %d\noffset: %d" ),
+        m_error.Printf( _( "invalid float number in\nfile: <%s>\nline: %d\noffset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2782,7 +2782,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in\nfile: '%s'\nline: %d\noffset: %d" ),
+        m_error.Printf( _( "missing float number in\nfile: <%s>\nline: %d\noffset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2830,7 +2830,7 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
     FILE* fp = wxFopen( aFileName, wxT( "w" ) );
     if( !fp )
     {
-        m_error.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
+        m_error.Printf( _( "Unable to open file <%s>" ), aFileName.GetData() );
         THROW_IO_ERROR( m_error );
     }
 
@@ -2867,7 +2867,7 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
 
 wxString LEGACY_PLUGIN::writeError() const
 {
-    return wxString::Format( _( "error writing to file '%s'" ), m_filename.GetData() );
+    return wxString::Format( _( "error writing to file <%s>" ), m_filename.GetData() );
 }
 
 #define CHECK_WRITE_ERROR() \
@@ -3991,7 +3991,7 @@ void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
     }
 
 L_bad_library:
-    THROW_IO_ERROR( wxString::Format( _( "File '%s' is empty or is not a legacy library" ),
+    THROW_IO_ERROR( wxString::Format( _( "File <%s> is empty or is not a legacy library" ),
         m_lib_path.GetData() ) );
 }
 
@@ -4104,7 +4104,7 @@ void FPL_CACHE::Save()
     if( !m_writable )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "Legacy library file '%s' is read only" ), m_lib_path.GetData() ) );
+            _( "Legacy library file <%s> is read only" ), m_lib_path.GetData() ) );
     }
 
     wxString tempFileName;
@@ -4124,7 +4124,7 @@ void FPL_CACHE::Save()
         if( !fp )
         {
             THROW_IO_ERROR( wxString::Format(
-                _( "Unable to open or create legacy library file '%s'" ),
+                _( "Unable to open or create legacy library file <%s>" ),
                 m_lib_path.GetData() ) );
         }
 
@@ -4150,7 +4150,7 @@ void FPL_CACHE::Save()
     if( wxRename( tempFileName, m_lib_path ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "Unable to rename tempfile '%s' to library file '%s'" ),
+            _( "Unable to rename tempfile <%s> to library file <%s>" ),
             tempFileName.GetData(),
             m_lib_path.GetData() ) );
     }
@@ -4266,7 +4266,7 @@ void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* a
 
     if( !m_cache->m_writable )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ), aLibraryPath.GetData() ) );
     }
 
     std::string footprintName = TO_UTF8( aFootprint->GetLibRef() );
@@ -4310,7 +4310,7 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
 
     if( !m_cache->m_writable )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ), aLibraryPath.GetData() ) );
     }
 
     std::string footprintName = TO_UTF8( aFootprintName );
@@ -4320,7 +4320,7 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
     if( erasedCount != 1 )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library '%s' has no footprint '%s' to delete" ),
+            _( "library <%s> has no footprint %s to delete" ),
             aLibraryPath.GetData(), aFootprintName.GetData() ) );
     }
 
@@ -4333,7 +4333,7 @@ void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES
     if( wxFileExists( aLibraryPath ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library '%s' already exists, will not create anew" ),
+            _( "library <%s> already exists, will not create anew" ),
             aLibraryPath.GetData() ) );
     }
 
@@ -4360,7 +4360,7 @@ bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES
     if( wxRemove( aLibraryPath ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library '%s' cannot be deleted" ),
+            _( "library <%s> cannot be deleted" ),
             aLibraryPath.GetData() ) );
     }
 

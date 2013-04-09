@@ -452,7 +452,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     {
         wxBitmapButton* bmb = makeColorButton( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
         bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
-        bmb->SetToolTip( _("Middle click for color change" ) );
+        bmb->SetToolTip( _( "Middle click for color change" ) );
         m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
         // could add a left click handler on the color button that toggles checkbox.
@@ -530,7 +530,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
     m_LayerPanel->SetSizer( bSizer3 );
     m_LayerPanel->Layout();
     bSizer3->Fit( m_LayerPanel );
-    m_notebook->AddPage( m_LayerPanel, _("Layer"), true );
+    m_notebook->AddPage( m_LayerPanel, _( "Layer" ), true );
     m_RenderingPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
     wxBoxSizer* bSizer4;
@@ -550,7 +550,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
     m_RenderingPanel->SetSizer( bSizer4 );
     m_RenderingPanel->Layout();
     bSizer4->Fit( m_RenderingPanel );
-    m_notebook->AddPage( m_RenderingPanel, _("Render"), false );
+    m_notebook->AddPage( m_RenderingPanel, _( "Render" ), false );
 
     boxSizer->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 

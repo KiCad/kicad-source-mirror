@@ -194,7 +194,7 @@ void DIALOG_LABEL_EDITOR::InitDialog()
     m_TextStyle->SetSelection( style );
 
     wxString units = ReturnUnitSymbol( g_UserUnit, wxT( "(%s)" ) );
-    msg = _( "H" ) + units + _( " x W" ) + units;
+    msg.Printf( _( "H%s x W%s" ), GetChars( units ), GetChars( units ) );
     m_staticSizeUnits->SetLabel( msg );
 
     msg = ReturnStringFromValue( g_UserUnit, m_CurrentText->GetSize().x );

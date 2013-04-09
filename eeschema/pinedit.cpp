@@ -645,6 +645,9 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 
         dup_error++;
         Pin->ReturnPinStringNum( stringPinNum );
+
+        /* TODO I dare someone to find a way to make happy translators on
+           this thing! Lorenzo */
         curr_pin->ReturnPinStringNum( stringCurrPinNum );
         msg.Printf( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, \
 %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),

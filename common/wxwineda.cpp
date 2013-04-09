@@ -57,7 +57,8 @@ EDA_GRAPHIC_TEXT_CTRL::EDA_GRAPHIC_TEXT_CTRL( wxWindow*       parent,
 
     if( !Title.IsEmpty() )
     {
-        wxString      msg = _( "Size" ) + ReturnUnitSymbol( m_UserUnit );
+        wxString      msg;
+        msg.Printf( _( "Size%s" ), GetChars( ReturnUnitSymbol( m_UserUnit ) ) );
         wxStaticText* text = new wxStaticText( parent, -1, msg );
 
         BoxSizer->Add( text, 0, wxGROW | wxLEFT | wxRIGHT, 5 );

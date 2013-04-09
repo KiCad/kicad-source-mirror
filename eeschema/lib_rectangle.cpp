@@ -76,7 +76,7 @@ bool LIB_RECTANGLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
     if( cnt < 7 )
     {
-        aErrorMsg.Printf( _( "rectangle only had %d parameters of the required 7" ), cnt );
+        aErrorMsg.Printf( _( "Rectangle only had %d parameters of the required 7" ), cnt );
         return false;
     }
 

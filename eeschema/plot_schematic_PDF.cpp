@@ -90,7 +90,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 
             if( ! plotter->OpenFile( plotFileName ) )
             {
-                msg.Printf( _( "** Unable to create %s **\n" ), GetChars( plotFileName ) );
+                msg.Printf( _( "Unable to create <%s>\n" ), GetChars( plotFileName ) );
                 m_MessagesBox->AppendText( msg );
                 delete plotter;
                 return;
@@ -124,7 +124,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
     m_parent->SetSheetNumberAndCount();
 
-    msg.Printf( _( "Plot: %s OK\n" ), GetChars( plotFileName ) );
+    msg.Printf( _( "Plot: <%s> OK\n" ), GetChars( plotFileName ) );
     m_MessagesBox->AppendText( msg );
 }
 

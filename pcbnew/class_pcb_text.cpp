@@ -174,7 +174,7 @@ wxString TEXTE_PCB::GetSelectMenuText() const
     else
         shorttxt += m_Text.Left( 10 ) + wxT( "..." );
 
-    text.Printf( _( "Pcb Text %s on %s"),
+    text.Printf( _( "Pcb Text \"%s\" on %s"),
                  GetChars ( shorttxt ), GetChars( GetLayerName() ) );
 
     return text;

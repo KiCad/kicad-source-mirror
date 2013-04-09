@@ -117,8 +117,8 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
         }
     }
 
-    /* Ask for a component name or key words */
-    msg.Printf( _( "component selection (%d items loaded):" ), CmpCount );
+    // Ask for a component name or key words
+    msg.Printf( _( "Component selection (%d items loaded):" ), CmpCount );
 
     DIALOG_GET_COMPONENT dlg( this, aHistoryList, msg, aUseLibBrowser );
 

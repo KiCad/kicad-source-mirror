@@ -380,7 +380,9 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
     {
         if( ( f = wxFopen( aFullFileName, wxT( "wt" ) ) ) == NULL )
         {
-            wxString msg = _( "Failed to create file " ) + aFullFileName;
+            wxString msg;
+            msg.Printf( _( "Failed to create file <%s>" ), 
+                        GetChars( aFullFileName ) );
             DisplayError( this, msg );
             return false;
         }
@@ -1102,7 +1104,8 @@ bool NETLIST_EXPORT_TOOL::WriteGENERICNetList( const wxString& aOutFileName )
 
     if( ( out = wxFopen( aOutFileName, wxT( "wt" ) ) ) == NULL )
     {
-        wxString msg = _( "Failed to create file " ) + aOutFileName;
+        wxString msg;
+        msg.Printf( _( "Failed to create file <%s>" ), GetChars( aOutFileName ) );
         DisplayError( NULL, msg );
         return false;
     }

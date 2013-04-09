@@ -44,7 +44,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
     gerber->m_Current_File = wxFopen( GERBER_FullFileName, wxT( "rt" ) );
     if( gerber->m_Current_File == 0 )
     {
-        msg = _( "File " ) + GERBER_FullFileName + _( " not found" );
+        msg.Printf( _( "File <%s> not found" ), GetChars( GERBER_FullFileName ) );
         DisplayError( this, msg, 10 );
         return false;
     }

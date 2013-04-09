@@ -146,14 +146,14 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     if( g_NetObjectslist.size() == 0 )
         return;  // no objects
 
-    activity << wxT( " " ) << _( "net count =" ) << wxT( " " ) << g_NetObjectslist.size();
+    activity += wxString::Format( _( " net count = %u" ), g_NetObjectslist.size() );
     SetStatusText( activity );
 
     /* Sort objects by Sheet */
 
     sort( g_NetObjectslist.begin(), g_NetObjectslist.end(), SortItemsBySheet );
 
-    activity << wxT( ",  " ) << _( "connections" ) << wxT( "..." );
+    activity += _( ", connections... " );
     SetStatusText( activity );
 
     sheet = &(g_NetObjectslist[0]->m_SheetList);
@@ -261,13 +261,13 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    activity << _( "done" );
+    activity += _( "done" );
     SetStatusText( activity );
 
     /* Updating the Bus Labels Netcode connected by Bus */
     ConnectBusLabels( g_NetObjectslist );
 
-    activity << wxT( ",  " ) << _( "bus labels" ) << wxT( "..." );
+    activity += _( ", bus labels..." );
     SetStatusText( activity );
 
     /* Group objects by label. */
@@ -306,11 +306,11 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    activity << _( "done" );
+    activity += _( "done" );
     SetStatusText( activity );
 
     /* Connection hierarchy. */
-    activity << wxT( ", " ) << _( "hierarchy..." );
+    activity += _( ", hierarchy..." );
     SetStatusText( activity );
 
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
@@ -328,7 +328,7 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    activity << _( "done" );
+    activity += _( "done" );
     SetStatusText( activity );
 
     /* Compress numbers of Netcode having consecutive values. */

@@ -489,9 +489,8 @@ EDA_RECT DIMENSION::GetBoundingBox() const
 wxString DIMENSION::GetSelectMenuText() const
 {
     wxString text;
-
-    text << _( "Dimension" ) << wxT( " \"" ) << GetText() << wxT( "\" on " )
-         << GetLayerName();
+    text.Printf( _( "Dimension \"%s\" on %s" ),
+                GetChars( GetText() ), GetChars( GetLayerName() ) );
 
     return text;
 }

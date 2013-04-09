@@ -56,18 +56,31 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
 
     if( nameList.empty() )
     {
-        msg = _( "No components found matching " );
-
-        if( !BufName.IsEmpty() )
+        if( !BufName.IsEmpty() ) 
         {
-            msg += _( "name search criteria <" ) + BufName + wxT( "> " );
-
-            if( !Keys.IsEmpty() )
-                msg += _( "and " );
+            if( !Keys.IsEmpty() ) 
+            {
+                msg.Printf( _( "No components found matching name search criteria '%s' and key search criteria '%s'" ),
+                            GetChars( BufName ), GetChars( Keys ) );
+            }
+            else
+            {
+                msg.Printf( _( "No components found matching name search criteria '%s'" ),
+                            GetChars( BufName ) );
+            }
         }
-
-        if( !Keys.IsEmpty() )
-            msg += _( "key search criteria <" ) + Keys + wxT( "> " );
+        else
+        {
+            if( !Keys.IsEmpty() ) 
+            {
+                msg.Printf( _( "No components found matching key search criteria '%s'" ),
+                            GetChars( Keys ) );
+            }
+            else
+            {
+                msg = _( "No components found matching" );
+            }
+        }
 
         DisplayInfoMessage( frame, msg );
 

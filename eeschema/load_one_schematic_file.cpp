@@ -86,7 +86,7 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
 
     if( ( f = wxFopen( fname, wxT( "rt" ) ) ) == NULL )
     {
-        msgDiag = _( "Failed to open " ) + aFullFileName;
+        msgDiag.Printf( _( "Failed to open <%s>" ), GetChars( aFullFileName ) );
         DisplayError( this, msgDiag );
         return false;
     }
@@ -94,14 +94,14 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     // reader now owns the open FILE.
     FILE_LINE_READER    reader( f, aFullFileName );
 
-    msgDiag = _( "Loading " ) + aScreen->GetFileName();
+    msgDiag.Printf( _( "Loading <%s>" ), GetChars( aScreen->GetFileName() ) );
     PrintMsg( msgDiag );
 
     if( !reader.ReadLine()
         || strncmp( (char*)reader + 9, SCHEMATIC_HEAD_STRING,
                     sizeof( SCHEMATIC_HEAD_STRING ) - 1 ) != 0 )
     {
-        msgDiag = aFullFileName + _( " is NOT an Eeschema file!" );
+        msgDiag.Printf( _( "<%s> is NOT an Eeschema file!" ), GetChars( aFullFileName ) );
         DisplayError( this, msgDiag );
         return false;
     }
@@ -119,8 +119,9 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
 
     if( version > EESCHEMA_VERSION )
     {
-        msgDiag = aFullFileName + _( " was created by a more recent \
-version of Eeschema and may not load correctly. Please consider updating!" );
+        msgDiag.Printf( _( "<%s> was created by a more recent \
+version of Eeschema and may not load correctly. Please consider updating!" ),
+                GetChars( aFullFileName ) );
         DisplayInfoMessage( this, msgDiag );
     }
 
@@ -138,7 +139,7 @@ again." );
 
     if( !reader.ReadLine() || strncmp( reader, "LIBS:", 5 ) != 0 )
     {
-        msgDiag = aFullFileName + _( " is NOT an Eeschema file!" );
+        msgDiag.Printf( _( "<%s> is NOT an Eeschema file!" ), GetChars( aFullFileName ) );
         DisplayError( this, msgDiag );
         return false;
     }
@@ -252,7 +253,7 @@ again." );
 
     aScreen->TestDanglingEnds();
 
-    msgDiag = _( "Done Loading " ) + aScreen->GetFileName();
+    msgDiag.Printf( _( "Done Loading <%s>" ), GetChars( aScreen->GetFileName() ) );
     PrintMsg( msgDiag );
 
     return true;    // Although it may be that file is only partially loaded.

@@ -472,7 +472,7 @@ void DIALOG_BUILD_BOM::CreateSpreadSheetPartsShortList( )
     if( ( f = wxFopen( m_listFileName, wxT( "wt" ) ) ) == NULL )
     {
         wxString msg;
-        msg.Printf( _( "Failed to open file '%s'" ), GetChars(m_listFileName) );
+        msg.Printf( _( "Failed to open file <%s>" ), GetChars(m_listFileName) );
         DisplayError( this, msg );
         return;
     }
@@ -509,8 +509,7 @@ void DIALOG_BUILD_BOM::CreateSpreadSheetPartsFullList( bool aIncludeSubComponent
 
     if( ( f = wxFopen( m_listFileName, wxT( "wt" ) ) ) == NULL )
     {
-        msg = _( "Failed to open file " );
-        msg << m_listFileName;
+        msg.Printf( _( "Failed to open file <%s>" ), GetChars( m_listFileName ) );
         DisplayError( this, msg );
         return;
     }
@@ -553,8 +552,7 @@ void DIALOG_BUILD_BOM::CreatePartsAndLabelsFullList( bool aIncludeSubComponents 
 
     if( ( f = wxFopen( m_listFileName, wxT( "wt" ) ) ) == NULL )
     {
-        msg = _( "Failed to open file " );
-        msg << m_listFileName;
+        msg.Printf( _( "Failed to open file <%s>" ), GetChars( m_listFileName ) );
         DisplayError( this, msg );
         return;
     }

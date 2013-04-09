@@ -68,7 +68,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
     }
     else
     {
-        if( !IsOK( this, _( "Ok to delete selected items ?" ) ) )
+        if( !IsOK( this, _( "OK to delete selected items ?" ) ) )
             return;
 
         BOARD * pcb = m_Parent->GetBoard();

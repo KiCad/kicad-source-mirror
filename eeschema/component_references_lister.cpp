@@ -708,14 +708,20 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             else
                 tmp = wxT( "?" );
 
-            msg.Printf( _( "Item not annotated: %s%s" ),
-                        GetChars( componentFlatList[ii].GetRef() ), GetChars( tmp ) );
 
             if(  ( componentFlatList[ii].m_Unit > 0 )
               && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF )  )
             {
-                tmp.Printf( _( " (unit %d)" ), componentFlatList[ii].m_Unit );
-                msg << tmp;
+                msg.Printf( _( "Item not annotated: %s%s (unit %d)\n" ),
+                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( tmp ),
+                            componentFlatList[ii].m_Unit );
+            }
+            else
+            {
+                msg.Printf( _( "Item not annotated: %s%s\n" ),
+                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( tmp ) );
             }
 
             if( aMessageList )
@@ -736,16 +742,14 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             else
                 tmp = wxT( "?" );
 
-            msg.Printf( _( "Error item %s%s" ), GetChars( componentFlatList[ii].GetRef() ),
-                        GetChars( tmp ) );
-
-            tmp.Printf( _( " unit %d and no more than %d parts" ),
+            msg.Printf( _( "Error item %s%s unit %d and no more than %d parts\n" ),
+                        GetChars( componentFlatList[ii].GetRef() ),
+                        GetChars( tmp ),
                         componentFlatList[ii].m_Unit,
                         componentFlatList[ii].GetLibComponent()->GetPartCount() );
-            msg << tmp;
 
             if( aMessageList )
-                aMessageList->Add( msg + wxT( "\n" ) );
+                aMessageList->Add( msg );
 
             error++;
             break;
@@ -775,18 +779,23 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             else
                 tmp = wxT( "?" );
 
-            msg.Printf( _( "Multiple item %s%s" ),
-                        GetChars( componentFlatList[ii].GetRef() ), GetChars( tmp ) );
-
-            if(  ( componentFlatList[ii].m_Unit > 0 )
-              && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF )  )
+            if( ( componentFlatList[ii].m_Unit > 0 )
+             && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF ) )
             {
-                tmp.Printf( _( " (unit %d)" ), componentFlatList[ii].m_Unit );
-                msg << tmp;
+                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ), 
+                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( tmp ),
+                            componentFlatList[ii].m_Unit );
+            }
+            else
+            {
+                msg.Printf( _( "Multiple item %s%s\n" ),
+                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( tmp ) );
             }
 
             if( aMessageList )
-                aMessageList->Add( msg + wxT( "\n" ) );
+                aMessageList->Add( msg );
 
             error++;
             continue;
@@ -802,18 +811,23 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             else
                 tmp = wxT( "?" );
 
-            msg.Printf( _( "Multiple item %s%s" ),
-                        GetChars( componentFlatList[ii].GetRef() ), GetChars( tmp ) );
-
-            if(  ( componentFlatList[ii].m_Unit > 0 )
-              && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF )  )
+            if( ( componentFlatList[ii].m_Unit > 0 )
+             && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF ) )
             {
-                tmp.Printf( _( " (unit %d)" ), componentFlatList[ii].m_Unit );
-                msg << tmp;
+                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ), 
+                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( tmp ),
+                            componentFlatList[ii].m_Unit );
+            }
+            else
+            {
+                msg.Printf( _( "Multiple item %s%s\n" ),
+                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( tmp ) );
             }
 
             if( aMessageList )
-                aMessageList->Add( msg + wxT( "\n" ));
+                aMessageList->Add( msg );
 
             error++;
         }

@@ -153,7 +153,7 @@ bool EnsureOutputDirectory( wxFileName *aOutputDir,
     if( !aOutputDir->MakeAbsolute( boardFilePath ) )
     {
         wxString msg;
-        msg.Printf( _( "Cannot make %s absolute with respect to %s!" ),
+        msg.Printf( _( "Cannot make <%s> absolute with respect to <%s>!" ),
                     GetChars( aOutputDir->GetPath() ),
                     GetChars( boardFilePath ) );
         wxMessageBox( msg, _( "Plot" ), wxOK | wxICON_ERROR );
@@ -168,9 +168,9 @@ bool EnsureOutputDirectory( wxFileName *aOutputDir,
             if( aMessageBox )
             {
                 wxString msg;
-                msg.Printf( _( "Directory %s created.\n" ), GetChars( outputPath ) );
+                msg.Printf( _( "Directory <%s> created.\n" ), GetChars( outputPath ) );
                 aMessageBox->AppendText( msg );
-                    return true;
+                return true;
             }
         }
         else

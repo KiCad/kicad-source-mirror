@@ -388,7 +388,8 @@ void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
     wildcard += wxT( ".exe" );
 #endif
 
-    wildcard = _( "Executable file (" ) + wildcard + wxT( ")|" ) + wildcard;
+    wildcard.Printf( _( "Executable file (%s)|%s" ), 
+                     GetChars( wildcard ), GetChars( wildcard ) );
 
     wxFileDialog dlg( this, _( "Select Preferred Editor" ), fn.GetPath(),
                       fn.GetFullName(), wildcard,
@@ -644,7 +645,8 @@ edits you made?" ),
             // Rename the old file to the backup file name.
             if( !wxRenameFile( aFileName.GetFullPath(), backupFileName.GetFullPath() ) )
             {
-                msg = _( "Could not create backup file " ) + backupFileName.GetFullPath();
+                msg.Printf( _( "Could not create backup file <%s>" ),
+                            GetChars( backupFileName.GetFullPath() ) );
                 wxMessageBox( msg );
             }
         }

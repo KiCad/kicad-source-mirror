@@ -362,7 +362,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
         }
 
         msg.Printf( wxT( "%d" ), nbsucces );
-        AppendMsgPanel( wxT( "Ok" ), msg, GREEN );
+        AppendMsgPanel( wxT( "OK" ), msg, GREEN );
         msg.Printf( wxT( "%d" ), nbunsucces );
         AppendMsgPanel( wxT( "Fail" ), msg, RED );
         msg.Printf( wxT( "  %d" ), GetBoard()->GetUnconnectedNetCount() );

@@ -406,18 +406,18 @@ wxString TEXTE_MODULE::GetSelectMenuText() const
     switch( m_Type )
     {
     case TEXT_is_REFERENCE:
-        text << _( "Reference" ) << wxT( " " ) << m_Text;
+        text.Printf( _( "Reference %s" ), GetChars( m_Text ) );
         break;
 
     case TEXT_is_VALUE:
-        text << _( "Value" ) << wxT( " " ) << m_Text << _( " of " )
-             << ( (MODULE*) GetParent() )->GetReference();
+        text.Printf( _( "Value %s of %s" ), GetChars( m_Text ),
+                     GetChars( ( (MODULE*) GetParent() )->GetReference() ) );
         break;
 
     default:    // wrap this one in quotes:
-        text << _( "Text" ) << wxT( " \"" ) << m_Text << wxT( "\"" ) << _( " of " )
-             << ( (MODULE*) GetParent() )->GetReference() << _( " on " )
-             << GetLayerName();
+        text.Printf( _( "Text \"%s\" on %s of %s" ), GetChars( m_Text ),
+                     GetChars( GetLayerName() ),
+                     GetChars( ( (MODULE*) GetParent() )->GetReference() ) );
         break;
     }
 

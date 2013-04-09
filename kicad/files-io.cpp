@@ -71,7 +71,9 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    PrintMsg( _( "\nOpen " ) + dlg.GetPath() + wxT( "\n" ) );
+    wxString msg;
+    msg.Printf( _("\nOpen <%s>\n" ), GetChars( dlg.GetPath() ) );
+    PrintMsg( msg );
 
     wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(),
                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
@@ -80,7 +82,8 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
         return;
 
     wxSetWorkingDirectory( dirDlg.GetPath() );
-    PrintMsg( _( "Unzipping project in " ) + dirDlg.GetPath() + wxT( "\n" ) );
+    msg.Printf( _( "Unzipping project in <%s>\n" ), GetChars( dirDlg.GetPath() ) );
+    PrintMsg( msg );
 
     wxFileSystem zipfilesys;
     zipfilesys.AddHandler( new wxZipFSHandler );
@@ -100,7 +103,8 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 
         wxString unzipfilename = localfilename.AfterLast( ':' );
 
-        PrintMsg( _( "Extract file " ) + unzipfilename );
+        msg.Printf( _( "Extract file <%s>" ), GetChars( unzipfilename ) );
+        PrintMsg( msg );
 
         wxInputStream*       stream = zipfile->GetStream();
 
@@ -176,7 +180,8 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
         while( cont )
         {
             wxFileSystem fsfile;
-            PrintMsg( _( "Archive file " ) + currFilename );
+            msg.Printf(_( "Archive file <%s>" ), GetChars( currFilename ) );
+            PrintMsg( msg );
             // Read input file and put it in zip file:
             wxFSFile * infile = fsfile.OpenFile(currFilename);
             if( infile )

@@ -136,7 +136,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 
     if( ( file = wxFopen( dlg.GetPath(), wxT( "wt" ) ) ) == NULL )
     {
-        msg = _( "Unable to create " ) + dlg.GetPath();
+        msg.Printf( _( "Unable to create <%s>" ), GetChars( dlg.GetPath() ) );
         DisplayError( this, msg ); return;
     }
 

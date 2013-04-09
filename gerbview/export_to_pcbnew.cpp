@@ -160,7 +160,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
 
     if( wxFileExists( fileName ) )
     {
-        if( !IsOK( this, _( "Ok to change the existing file ?" ) ) )
+        if( !IsOK( this, _( "OK to change the existing file ?" ) ) )
             return;
     }
 

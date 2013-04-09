@@ -256,7 +256,7 @@ void NETLIST_READER::TestFootprintsMatchingAndExchange()
                 else if( m_messageWindow )
                 {
                 wxString msg;
-                msg.Printf( _( "Component \"%s\": module [%s] not found\n" ),
+                msg.Printf( _( "Component %s: module %s not found\n" ),
                             GetChars( cmp_info->m_Reference ),
                             GetChars( cmp_info->m_Footprint ) );
 
@@ -266,7 +266,7 @@ void NETLIST_READER::TestFootprintsMatchingAndExchange()
             else if( m_messageWindow )
             {
                 wxString msg;
-                msg.Printf( _( "Component \"%s\": Mismatch! module is [%s] and netlist said [%s]\n" ),
+                msg.Printf( _( "Component %s: Mismatch! module is %s and netlist said %s\n" ),
                             GetChars( cmp_info->m_Reference ),
                             GetChars( module->GetLibRef() ),
                             GetChars( cmp_info->m_Footprint ) );
@@ -323,7 +323,7 @@ int NETLIST_READER::SetPadsNetName( const wxString & aModule, const wxString & a
         if( m_messageWindow )
         {
             wxString msg;
-            msg.Printf( _( "Module [%s]: Pad [%s] not found" ),
+            msg.Printf( _( "Module %s: Pad %s not found" ),
                         GetChars( aModule ), GetChars( aPadname ) );
             m_messageWindow->AppendText( msg + wxT( "\n" ) );
         }
@@ -564,7 +564,7 @@ bool NETLIST_READER::loadNewModules()
                 if( m_messageWindow )
                 {
                     wxString msg;
-                    msg.Printf( _( "Component [%s]: footprint <%s> not found" ),
+                    msg.Printf( _( "Component %s: footprint %s not found" ),
                                 GetChars( cmp_info->m_Reference ),
                                 GetChars( cmp_info->m_Footprint ) );
 
