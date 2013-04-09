@@ -213,6 +213,9 @@ void STROKE_FONT::Draw( std::string aText, VECTOR2D aPosition, double aRotationA
     double scaleY = m_scaleFactor * m_glyphSize.y;
     double scaleX = m_scaleFactor * glyphSizeX;
 
+    m_gal->SetLineCap( LINE_CAP_ROUND );
+    m_gal->SetLineJoin( LINE_JOIN_ROUND );
+
     if( m_bold )
     {
         m_gal->SetLineWidth( m_gal->GetLineWidth() * 1.3 );
