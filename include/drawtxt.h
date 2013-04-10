@@ -51,6 +51,12 @@ int ReturnGraphicTextWidth( const wxString& aText, int size_h, bool italic, bool
 int NegableTextLength( const wxString& aText );
 
 /**
+ * Helper function for texts with over bar, can be used as strut value
+ * for multiline text (add interline spacing)
+ */
+int OverbarPositionY( int size_v );
+
+/**
  * Function DrawGraphicText
  * Draw a graphic text (like module texts)
  *  @param aPanel = the current DrawPanel. NULL if draw within a 3D GL Canvas
