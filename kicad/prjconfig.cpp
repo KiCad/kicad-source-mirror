@@ -58,8 +58,9 @@ PARAM_CFG_ARRAY s_KicadManagerParams;
 
 void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, bool aTemplateSelector = false )
 {
-    wxString   filename;
-    wxFileName newProjectName = aPrjFullFileName;
+    wxString    filename;
+    wxFileName  newProjectName = aPrjFullFileName;
+    wxChar      sep[2] = { SEP(), 0 };  // nul terminated separator wxChar string.
 
     ClearMsg();
 
@@ -71,40 +72,42 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, boo
     {
         DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( this );
 
-        wxFileName templatePath;
+        wxFileName  templatePath;
+        wxString    envStr;
+
+        wxGetEnv( wxT( "KICAD" ), &envStr );
 
         // Add a new tab for system templates
-        if( ::wxGetEnv( wxT( "KICAD" ), NULL ) )
+        if( !envStr.empty() )
         {
-            wxString kicadEnv;
-            wxGetEnv( wxT( "KICAD"), &kicadEnv );
+            // user may or may not have including terminating separator.
+            if( !envStr.EndsWith( sep ) )
+                envStr += sep;
 
-            templatePath = kicadEnv + SEP() + wxT("template") + SEP();
+            templatePath = envStr + wxT("template") + sep;
         }
         else
         {
             templatePath = wxPathOnly(wxStandardPaths::Get().GetExecutablePath()) +
-                SEP() + wxT( ".." ) + SEP() + wxT( "share" ) + SEP() + wxT( "template" ) + SEP();
+                sep + wxT( ".." ) + sep + wxT( "share" ) + sep + wxT( "template" ) + sep;
         }
 
         ps->AddPage( _( "System Templates" ), templatePath );
 
         // Add a new tab for user templates
         wxFileName userPath = wxStandardPaths::Get().GetDocumentsDir() +
-                SEP() + wxT( "kicad" ) + SEP() + wxT( "template" ) + SEP();
+                sep + wxT( "kicad" ) + sep + wxT( "template" ) + sep;
 
         ps->AddPage( _( "User Templates" ), userPath );
 
-        // Check to see if a custom template location is available and setup a new selection tab
-        // if there is
-        wxString envStr;
+        // Check to see if a custom template location is available and setup a
+        // new selection tab if there is.
+        envStr.clear();
         wxGetEnv( wxT( "KICAD_PTEMPLATES" ), &envStr );
 
-        if( envStr )
+        if( !envStr.empty() )
         {
-            wxChar sep = SEP();
-
-            if( !envStr.EndsWith( &sep ) )
+            if( !envStr.EndsWith( sep ) )
                 envStr += sep;
 
             wxFileName envPath = envStr;
