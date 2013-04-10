@@ -78,11 +78,12 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, boo
         {
             wxString kicadEnv;
             wxGetEnv( wxT( "KICAD"), &kicadEnv );
-            templatePath = kicadEnv + SEP() + wxT("template")+SEP();
+
+            templatePath = kicadEnv + SEP() + wxT("template") + SEP();
         }
         else
         {
-            wxFileName templatePath = wxPathOnly(wxStandardPaths::Get().GetExecutablePath()) +
+            templatePath = wxPathOnly(wxStandardPaths::Get().GetExecutablePath()) +
                 SEP() + wxT( ".." ) + SEP() + wxT( "share" ) + SEP() + wxT( "template" ) + SEP();
         }
 
@@ -97,13 +98,18 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, boo
         // Check to see if a custom template location is available and setup a new selection tab
         // if there is
         wxString envStr;
-        wxGetEnv( wxT("KICAD_PTEMPLATES"), &envStr );
-        wxFileName envPath = envStr;
+        wxGetEnv( wxT( "KICAD_PTEMPLATES" ), &envStr );
 
-        if( envStr != wxEmptyString )
+        if( envStr )
         {
+            wxChar sep = SEP();
+
+            if( !envStr.EndsWith( &sep ) )
+                envStr += sep;
+
             wxFileName envPath = envStr;
-            ps->AddPage( _("Portable Templates"), envPath );
+
+            ps->AddPage( _( "Portable Templates" ), envPath );
         }
 
         // Show the project template selector dialog
@@ -236,7 +242,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     if( !m_ProjectFileName.FileExists() && !filename.IsSameAs( nameless_prj ) )
     {
         wxString msg;
-        msg.Printf( _( "KiCad project file <%s> not found" ), 
+        msg.Printf( _( "KiCad project file <%s> not found" ),
                     GetChars( m_ProjectFileName.GetFullPath() ) );
 
         DisplayError( this, msg );
@@ -256,6 +262,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     SetTitle( title );
     UpdateFileHistory( m_ProjectFileName.GetFullPath() );
     m_LeftWin->ReCreateTreePrj();
+
 #ifdef KICAD_USE_FILES_WATCHER
     // Rebuild the list of watched paths.
     // however this is possible only when the main loop event handler is running,
@@ -263,6 +270,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_INIT_WATCHED_PATHS );
     wxPostEvent( this, cmd);
 #endif
+
     wxString msg;
     msg.Format( _( "Working dir: <%s>\nProject: <%s>\n" ),
                 GetChars( m_ProjectFileName.GetPath() ),

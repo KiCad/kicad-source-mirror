@@ -114,7 +114,7 @@ void TEMPLATE_WIDGET::OnMouse( wxMouseEvent& event )
 
 void DIALOG_TEMPLATE_SELECTOR::onNotebookResize(wxSizeEvent& event)
 {
-    for ( size_t i=0; i < m_notebook->GetPageCount(); i++ )
+    for( size_t i=0; i < m_notebook->GetPageCount(); i++ )
     {
         m_panels[i]->SetSize( m_notebook->GetSize().GetWidth() - 6, 140 );
         m_panels[i]->m_SizerBase->FitInside( m_panels[i] );
@@ -190,24 +190,29 @@ void DIALOG_TEMPLATE_SELECTOR::AddPage( const wxString& aTitle, wxFileName& aPat
     m_panels.push_back( p );
 
     // Get a list of files under the template path to include as choices...
-    wxArrayString files;
-    wxDir dir, sub;
+    wxArrayString   files;
+    wxDir           dir;
 
-    if ( dir.Open( aPath.GetPath() ) )
+    wxString path = aPath.GetFullPath();    // caller ensures this ends with file separator.
+
+    if( dir.Open( path ) )
     {
-        wxString filename;
-        bool cont = dir.GetFirst( &filename, wxEmptyString, wxDIR_FILES | wxDIR_DIRS );
+        wxDir       sub_dir;
+        wxString    sub_name;
 
+        bool cont = dir.GetFirst( &sub_name, wxEmptyString, wxDIR_DIRS );
         while( cont )
         {
-            if( sub.Open( aPath.GetPathWithSep() + filename ) )
+            wxString sub_full = path + sub_name;
+            if( sub_dir.Open( sub_full ) )
             {
-                files.Add( filename );
-                PROJECT_TEMPLATE* pt = new PROJECT_TEMPLATE( aPath.GetPathWithSep() + filename );
+                files.Add( sub_name );
+
+                PROJECT_TEMPLATE* pt = new PROJECT_TEMPLATE( sub_full );
                 AddTemplate( m_notebook->GetPageCount() - 1, pt );
             }
 
-            cont = dir.GetNext( &filename );
+            cont = dir.GetNext( &sub_name );
         }
     }
 }
