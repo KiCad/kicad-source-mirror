@@ -278,7 +278,7 @@ void GPCB_FPL_CACHE::Remove( const wxString& aFootprintName )
 
     if( it == m_modules.end() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library <%s> has no footprint %s to delete" ),
+        THROW_IO_ERROR( wxString::Format( _( "library <%s> has no footprint '%s' to delete" ),
                                           m_lib_path.GetPath().GetData(),
                                           aFootprintName.GetData() ) );
     }
