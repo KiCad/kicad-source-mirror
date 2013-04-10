@@ -551,7 +551,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         if( aDC->LogicalToDeviceXRel( tsize ) >= MIN_TEXT_SIZE ) // Not drawable when size too small.
         {
             // tsize reserve room for marges and segments thickness
-            tsize = ( tsize * 8 ) / 10;
+            tsize = ( tsize * 7 ) / 10;
             DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos, 
                                  aDrawInfo.m_Color, BLACK, WHITE, 
                                  buffer, t_angle,
@@ -578,7 +578,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         RotatePoint( &tpos, shape_pos, angle );
 
         // tsize reserve room for marges and segments thickness
-        tsize = ( tsize * 8 ) / 10;
+        tsize = ( tsize * 7 ) / 10;
         DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos, 
                              aDrawInfo.m_Color, BLACK, WHITE, 
                              m_ShortNetname, t_angle,

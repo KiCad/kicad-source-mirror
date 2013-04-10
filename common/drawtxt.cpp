@@ -54,11 +54,9 @@
 double s_HersheyScaleFactor = HERSHEY_SCALE_FACTOR;
 
 
-/* Helper function for texts with over bar
- */
-int OverbarPositionY( int size_v, int thickness )
+int OverbarPositionY( int size_v )
 {
-    return KiROUND( ( (double) size_v * 1.1 ) + ( (double) thickness * 1.5 ) );
+    return KiROUND( size_v * 1.22 );
 }
 
 
@@ -155,7 +153,7 @@ static const char* GetHersheyShapeDescription( int AsciiCode )
         AsciiCode = '?';
 
     if( AsciiCode < 32 )
-        AsciiCode = 32; /* Clamp control chars */
+        AsciiCode = 32; // Clamp control chars
 
     AsciiCode -= 32;
 
@@ -391,9 +389,9 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
 
     /* if a text size is too small, the text cannot be drawn, and it is drawn as a single
      * graphic line */
-    if( std::abs( aSize.x ) < 3 )
+    if( aDC && ( aDC->LogicalToDeviceYRel( std::abs( aSize.y ) ) < MIN_TEXT_SIZE ))
     {
-        /* draw the text as a line always vertically centered */
+        // draw the text as a line always vertically centered
         wxPoint end( current_char_pos.x + dx, current_char_pos.y );
 
         RotatePoint( &current_char_pos, aPos, aOrient );
@@ -417,7 +415,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
 
     if( aItalic )
     {
-        overbar_italic_comp = OverbarPositionY( size_v, aWidth ) / 8;
+        overbar_italic_comp = OverbarPositionY( size_v ) / 8;
 
         if( italic_reverse )
         {
@@ -450,7 +448,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
                     // Starting the overbar
                     overbar_pos     = current_char_pos;
                     overbar_pos.x   += overbar_italic_comp;
-                    overbar_pos.y   -= OverbarPositionY( size_v, aWidth );
+                    overbar_pos.y   -= OverbarPositionY( size_v );
                     RotatePoint( &overbar_pos, aPos, aOrient );
                 }
                 else
@@ -459,7 +457,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
                     coord[0]        = overbar_pos;
                     overbar_pos     = current_char_pos;
                     overbar_pos.x   += overbar_italic_comp;
-                    overbar_pos.y   -= OverbarPositionY( size_v, aWidth );
+                    overbar_pos.y   -= OverbarPositionY( size_v );
                     RotatePoint( &overbar_pos, aPos, aOrient );
                     coord[1] = overbar_pos;
                     // Plot the overbar segment
@@ -520,7 +518,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
             else
             {
                 wxPoint currpoint;
-                hc1 -= xsta; hc2 -= 11;    // Align the midpoint
+                hc1 -= xsta; hc2 -= 10;    // Align the midpoint
                 hc1  = KiROUND( hc1 * size_h * s_HersheyScaleFactor );
                 hc2  = KiROUND( hc2 * size_v * s_HersheyScaleFactor );
 
@@ -551,7 +549,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
         // Close the last overbar
         coord[0]       = overbar_pos;
         overbar_pos    = current_char_pos;
-        overbar_pos.y -= OverbarPositionY( size_v, aWidth );
+        overbar_pos.y -= OverbarPositionY( size_v );
         RotatePoint( &overbar_pos, aPos, aOrient );
         coord[1] = overbar_pos;
 
