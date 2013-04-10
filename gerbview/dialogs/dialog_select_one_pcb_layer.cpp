@@ -61,7 +61,8 @@ END_EVENT_TABLE()
  * different radiobutton is clicked on) prior to then clicking on the "Deselect"
  * button provided within the "Layer selection:" dialog box).
  */
-LAYER_NUM GERBVIEW_FRAME::SelectPCBLayer( LAYER_NUM aDefaultLayer, int aCopperLayerCount, bool aShowDeselectOption )
+LAYER_NUM GERBVIEW_FRAME::SelectPCBLayer( LAYER_NUM aDefaultLayer, int aCopperLayerCount,
+                                          bool aShowDeselectOption )
 {
     LAYER_NUM layer;
     SELECT_LAYER_DIALOG* frame = new SELECT_LAYER_DIALOG( this, aDefaultLayer,
@@ -89,7 +90,7 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
 {
     wxButton* Button;
     LAYER_NUM ii;
-    wxString  LayerList[NB_LAYERS + 1]; // One extra element for "(Deselect)"
+    wxString  LayerList[NB_PCB_LAYERS + 1]; // One extra element for "(Deselect)"
                                         // radiobutton
     int       LayerCount, LayerSelect = -1;
 
@@ -112,8 +113,8 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
             LayerCount++;
         }
     }
-    // Build the layer list; build copper layers list
-    for( ; ii < NB_LAYERS; ++ii )
+    // Build the layer list; build non copper layers list
+    for( ; ii < NB_PCB_LAYERS; ++ii )
     {
         m_LayerId[ii] = FIRST_LAYER;
 
@@ -188,36 +189,36 @@ const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber )
     // Use a switch to explicitly show the mapping more clearly
     switch( aLayerNumber )
     {
-    case LAYER_N_FRONT:         txt = _( "Front" );         break;
-    case LAYER_N_2:             txt = _( "Inner1" );        break;
-    case LAYER_N_3:             txt = _( "Inner2" );        break;
-    case LAYER_N_4:             txt = _( "Inner3" );        break;
-    case LAYER_N_5:             txt = _( "Inner4" );        break;
-    case LAYER_N_6:             txt = _( "Inner5" );        break;
-    case LAYER_N_7:             txt = _( "Inner6" );        break;
-    case LAYER_N_8:             txt = _( "Inner7" );        break;
-    case LAYER_N_9:             txt = _( "Inner8" );        break;
-    case LAYER_N_10:            txt = _( "Inner9" );        break;
-    case LAYER_N_11:            txt = _( "Inner10" );       break;
-    case LAYER_N_12:            txt = _( "Inner11" );       break;
-    case LAYER_N_13:            txt = _( "Inner12" );       break;
-    case LAYER_N_14:            txt = _( "Inner13" );       break;
-    case LAYER_N_15:            txt = _( "Inner14" );       break;
-    case LAYER_N_BACK:          txt = _( "Back" );          break;
-    case ADHESIVE_N_BACK:       txt = _( "Adhes_Back" );    break;
-    case ADHESIVE_N_FRONT:      txt = _( "Adhes_Front" );   break;
-    case SOLDERPASTE_N_BACK:    txt = _( "SoldP_Back" );    break;
-    case SOLDERPASTE_N_FRONT:   txt = _( "SoldP_Front" );   break;
-    case SILKSCREEN_N_BACK:     txt = _( "SilkS_Back" );    break;
-    case SILKSCREEN_N_FRONT:    txt = _( "SilkS_Front" );   break;
-    case SOLDERMASK_N_BACK:     txt = _( "Mask_Back" );     break;
-    case SOLDERMASK_N_FRONT:    txt = _( "Mask_Front" );    break;
-    case DRAW_N:                txt = _( "Drawings" );      break;
-    case COMMENT_N:             txt = _( "Comments" );      break;
-    case ECO1_N:                txt = _( "Eco1" );          break;
-    case ECO2_N:                txt = _( "Eco2" );          break;
-    case EDGE_N:                txt = _( "PCB_Edges" );     break;
-    default:                    txt = wxT( "BAD INDEX" );   break;
+    case LAYER_N_FRONT:         txt = wxT( "F.Cu" );            break;
+    case LAYER_N_2:             txt = wxT( "Inner1.Cu" );       break;
+    case LAYER_N_3:             txt = wxT( "Inner2.Cu" );       break;
+    case LAYER_N_4:             txt = wxT( "Inner3.Cu" );       break;
+    case LAYER_N_5:             txt = wxT( "Inner4.Cu" );       break;
+    case LAYER_N_6:             txt = wxT( "Inner5.Cu" );       break;
+    case LAYER_N_7:             txt = wxT( "Inner6.Cu" );       break;
+    case LAYER_N_8:             txt = wxT( "Inner7.Cu" );       break;
+    case LAYER_N_9:             txt = wxT( "Inner8.Cu" );       break;
+    case LAYER_N_10:            txt = wxT( "Inner9.Cu" );       break;
+    case LAYER_N_11:            txt = wxT( "Inner10.Cu" );      break;
+    case LAYER_N_12:            txt = wxT( "Inner11.Cu" );      break;
+    case LAYER_N_13:            txt = wxT( "Inner12.Cu" );      break;
+    case LAYER_N_14:            txt = wxT( "Inner13.Cu" );      break;
+    case LAYER_N_15:            txt = wxT( "Inner14.Cu" );      break;
+    case LAYER_N_BACK:          txt = wxT( "B.Cu" );            break;
+    case ADHESIVE_N_BACK:       txt = wxT( "B.Adhes" );         break;
+    case ADHESIVE_N_FRONT:      txt = wxT( "F.Adhes" );         break;
+    case SOLDERPASTE_N_BACK:    txt = wxT( "B.Paste" );         break;
+    case SOLDERPASTE_N_FRONT:   txt = wxT( "F.Paste" );         break;
+    case SILKSCREEN_N_BACK:     txt = wxT( "B.SilkS" );         break;
+    case SILKSCREEN_N_FRONT:    txt = wxT( "F.SilkS" );         break;
+    case SOLDERMASK_N_BACK:     txt = wxT( "B.Mask" );          break;
+    case SOLDERMASK_N_FRONT:    txt = wxT( "F.Mask" );          break;
+    case DRAW_N:                txt = wxT( "Dwgs.User" );       break;
+    case COMMENT_N:             txt = wxT( "Cmts.User" );       break;
+    case ECO1_N:                txt = wxT( "Eco1.User" );       break;
+    case ECO2_N:                txt = wxT( "Eco2.User" );       break;
+    case EDGE_N:                txt = wxT( "Edge.Cuts" );       break;
+    default:                    txt = wxT( "BAD_INDEX" );       break;
     }
 
     return wxString( txt );
