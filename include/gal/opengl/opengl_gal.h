@@ -67,13 +67,6 @@ class OPENGL_GAL : public GAL, public wxGLCanvas
 {
 public:
 
-    /// Current drawing mode
-    enum DrawMode {
-        DRAW_MODE_NORMAL,           ///< Normal drawing mode
-        DRAW_MODE_PREPARE_EDGES,    ///< Prepare the object edges
-        DRAW_MODE_DRAW_EDGES        ///< Draw anti-aliased object edges
-    };
-
     /**
      * @brief Constructor OPENGL_GAL
      *
@@ -311,56 +304,9 @@ public:
         paintListener = aPaintListener;
     }
 
-    // Special methods for OpenGL only
-    void SetDrawMode( DrawMode aDrawMode )
-    {
-        m_drawMode = aDrawMode;
-
-        switch( aDrawMode )
-        {
-        case DRAW_MODE_NORMAL:
-            glColorMask( true, true, true, true );
-            glEnable( GL_DEPTH_TEST );
-            glDepthFunc( GL_LESS );
-            break;
-
-        case DRAW_MODE_PREPARE_EDGES:
-            // We just manipulate the Z-buffer in this mode
-            glColorMask( false, false, false, false );
-            glEnable( GL_DEPTH_TEST );
-            glDepthFunc( GL_LESS );
-            // Shift the depth of the edge points a very small value deeper
-            // this way we prevent that overlapping edge points are not drawn twice
-            // and brighter, if we have used transparency.
-            glTranslated( 0, 0, (depthRange.y - depthRange.x) * DEPTH_ADJUST_FACTOR );
-            break;
-
-        case DRAW_MODE_DRAW_EDGES:
-            glColorMask( true, true, true, true );
-            glEnable( GL_DEPTH_TEST );
-            glDepthFunc( GL_LESS );
-            // Restore the shifted position
-            glTranslated( 0, 0, -(depthRange.y - depthRange.x) * DEPTH_ADJUST_FACTOR );
-            break;
-
-        default:
-            break;
-        }
-    }
-
     void SetShaderPath( const std::string& aPath )
     {
         shaderPath = aPath;
-    }
-
-    /**
-     * @brief Get the current drawing mode.
-     *
-     * @return the current drawing mode.
-     */
-    DrawMode GetDrawMode()
-    {
-        return m_drawMode;
     }
 
 protected:
@@ -369,8 +315,6 @@ protected:
 private:
     /// Super class definition
     typedef GAL super;
-
-    DrawMode            m_drawMode;             ///< Current drawing mode
 
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
