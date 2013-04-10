@@ -126,15 +126,16 @@ bool EDA_APP::OnInit()
             wxSetWorkingDirectory( fn.GetPath() );
 
         // Load all files specified on the command line.
-        int jj = 0;
+        LAYER_NUM jj = FIRST_LAYER;
 
-        for( int ii = 1; ii < argc && ii <= GERBVIEW_LAYER_COUNT; ++ii )
+        for( LAYER_NUM ii = LAYER_N_2; ii < argc && ii <= NB_GERBER_LAYERS; ++ii )
         {
             fn = wxFileName( argv[ii] );
 
             if( fn.FileExists() )
             {
-                frame->setActiveLayer( jj++ );
+                frame->setActiveLayer( jj );
+                ++jj;
                 frame->LoadGerberFiles( fn.GetFullPath() );
             }
         }

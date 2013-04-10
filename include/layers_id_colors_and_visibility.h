@@ -1,13 +1,48 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file layers_id_colors_and_visibility.h
- * @brief Classes and definitions used in Pcbnew.
+ * @brief Board layer functions and definitions.
  */
 
 #ifndef _LAYERS_ID_AND_VISIBILITY_H_
 #define _LAYERS_ID_AND_VISIBILITY_H_
 
+class BOARD;
+
+/* NOTE: the idea here is to have LAYER_NUM and LAYER_MSK as abstract
+ * type as possible (even if they're currently implemented as int and
+ * unsigned int, respectively). In this way it would be reasonably easy
+ * to overcome the current 32 layer limit. For example switching to a 64
+ * bit mask or even some kind of bit array */
+
 /* Layer identification (layer number) */
+typedef int LAYER_NUM;
 #define UNDEFINED_LAYER         -1
+#define NO_LAYER                0
+#define FIRST_LAYER             0
 #define FIRST_COPPER_LAYER      0
 #define LAYER_N_BACK            0
 #define LAYER_N_2               1
@@ -26,9 +61,9 @@
 #define LAYER_N_15              14
 #define LAYER_N_FRONT           15
 #define LAST_COPPER_LAYER       LAYER_N_FRONT
-#define NB_COPPER_LAYERS        (LAST_COPPER_LAYER + 1)
+#define NB_COPPER_LAYERS        (LAST_COPPER_LAYER - FIRST_COPPER_LAYER + 1)
 
-#define FIRST_NO_COPPER_LAYER   16
+#define FIRST_NON_COPPER_LAYER  16
 #define ADHESIVE_N_BACK         16
 #define ADHESIVE_N_FRONT        17
 #define SOLDERPASTE_N_BACK      18
@@ -42,15 +77,17 @@
 #define ECO1_N                  26
 #define ECO2_N                  27
 #define EDGE_N                  28
-#define LAST_NO_COPPER_LAYER    28
+#define LAST_NON_COPPER_LAYER   28
+#define NB_PCB_LAYERS           (LAST_NON_COPPER_LAYER + 1)
 #define UNUSED_LAYER_29         29
 #define UNUSED_LAYER_30         30
 #define UNUSED_LAYER_31         31
-#define NB_LAYERS               (LAST_NO_COPPER_LAYER + 1)
-
-#define LAYER_COUNT             32
+#define NB_GERBER_LAYERS        32
+#define NB_LAYERS               32
+#define UNSELECTED_LAYER        32
 
 // Masks to identify a layer by a bit map
+typedef unsigned LAYER_MSK;
 #define LAYER_BACK              (1 << LAYER_N_BACK)     ///< bit mask for copper layer
 #define LAYER_2                 (1 << LAYER_N_2)        ///< bit mask for layer 2
 #define LAYER_3                 (1 << LAYER_N_3)        ///< bit mask for layer 3
@@ -81,23 +118,55 @@
 #define ECO2_LAYER              (1 << ECO2_N)
 #define EDGE_LAYER              (1 << EDGE_N)
 
-#define FIRST_NON_COPPER_LAYER  ADHESIVE_N_BACK
-#define LAST_NON_COPPER_LAYER   EDGE_N
-
 //      extra bits              0xE0000000
-/* Helpful global layers mask : */
+
+// Helpful global layer masks:
+// ALL_AUX_LAYERS layers are technical layers, ALL_NO_CU_LAYERS has user
+// and edge layers too!
 #define ALL_LAYERS              0x1FFFFFFF              // Pcbnew used 29 layers
 #define FULL_LAYERS             0xFFFFFFFF              // Gerbview used 32 layers
 #define ALL_NO_CU_LAYERS        0x1FFF0000
 #define ALL_CU_LAYERS           0x0000FFFF
-#define INTERNAL_LAYERS         0x00007FFE
-#define EXTERNAL_LAYERS         0x00008001
+#define INTERNAL_CU_LAYERS      0x00007FFE
+#define EXTERNAL_CU_LAYERS      0x00008001
+#define FRONT_AUX_LAYERS       (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT \
+                               | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT)
+#define BACK_AUX_LAYERS        (SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK \
+                               | ADHESIVE_LAYER_BACK | SOLDERPASTE_LAYER_BACK)
+#define ALL_AUX_LAYERS         (FRONT_AUX_LAYERS | BACK_AUX_LAYERS)
+#define BACK_LAYERS            (LAYER_BACK | BACK_AUX_LAYERS)
+#define FRONT_LAYERS           (LAYER_FRONT | FRONT_AUX_LAYERS)
+
+#define NO_LAYERS               0x00000000
+
+/** return a one bit layer mask from a layer number
+ * aLayerNumber = the layer number to convert (0 .. LAYERS-1)
+ */
+inline LAYER_MSK GetLayerMask( LAYER_NUM aLayerNumber )
+{
+    return 1 << aLayerNumber;
+}
+
+/**
+ * Count the number of set layers in the mask
+ */
+inline int LayerMaskCountSet( LAYER_MSK aMask )
+{
+    int count = 0;
+
+    for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
+    {
+        if( aMask & GetLayerMask( i ) )
+            ++count;
+    }
+    return count;
+}
 
 
 // layers order in dialogs (plot, print and toolbars)
 // in same order than in setup layers dialog
 // (Front or Top to Back or Bottom)
-#define DECLARE_LAYERS_ORDER_LIST(list) int list[LAYER_COUNT] =\
+#define DECLARE_LAYERS_ORDER_LIST(list) const LAYER_NUM list[NB_LAYERS] =\
 {   LAYER_N_FRONT,\
     LAYER_N_15, LAYER_N_14, LAYER_N_13, LAYER_N_12,\
     LAYER_N_11, LAYER_N_10, LAYER_N_9, LAYER_N_8,\
@@ -127,6 +196,7 @@ enum PCB_VISIBLE
     VIA_MICROVIA_VISIBLE,
     VIA_BBLIND_VISIBLE,
     VIA_THROUGH_VISIBLE,
+    NON_PLATED_VISIBLE,
     MOD_TEXT_FR_VISIBLE,
     MOD_TEXT_BK_VISIBLE,
     MOD_TEXT_INVISIBLE,         ///< text marked as invisible
@@ -152,43 +222,118 @@ enum PCB_VISIBLE
 };
 
 /// macro for obtaining layer number for specific item (eg. pad or text)
-#define ITEM_GAL_LAYER(layer)	(LAYER_COUNT + layer)
+#define ITEM_GAL_LAYER(layer)	(NB_LAYERS + layer)
 
 /// number of *all* layers including PCB and item layers
-#define TOTAL_LAYER_COUNT	    (LAYER_COUNT + END_PCB_VISIBLE_LIST)
+#define TOTAL_LAYER_COUNT	    (NB_LAYERS + END_PCB_VISIBLE_LIST)
 
 /**
- * Function IsValidLayerIndex
- * tests whether a given integer is a valid layer index
- * @param aLayerIndex = Layer index to test
+ * Function IsValidLayer
+ * tests whether a given integer is a valid layer index, i.e. can
+ * be safely put in a LAYER_NUM
+ * @param aLayerIndex = Layer index to test. It can be an int, so its
+ * useful during I/O
  * @return true if aLayerIndex is a valid layer index
  */
-inline bool IsValidLayerIndex( int aLayerIndex )
+inline bool IsValidLayer( int aLayerIndex )
 {
-    return aLayerIndex >= 0 && aLayerIndex < NB_LAYERS;
+    return aLayerIndex >= FIRST_LAYER && aLayerIndex < NB_LAYERS;
 }
 
 /**
- * Function IsValidCopperLayerIndex
- * tests whether an integer is a valid copper layer index
- * @param aLayerIndex = Layer index to test
- * @return true if aLayerIndex is a valid copper layer index
+ * Function IsPcbLayer
+ * tests whether a layer is a valid layer for pcbnew
+ * @param aLayer = Layer to test
+ * @return true if aLayer is a layer valid in pcbnew
  */
-inline bool IsValidCopperLayerIndex( int aLayerIndex )
+inline bool IsPcbLayer( LAYER_NUM aLayer )
 {
-    return aLayerIndex >= FIRST_COPPER_LAYER && aLayerIndex <= LAST_COPPER_LAYER;
+    return aLayer >= FIRST_LAYER && aLayer < NB_PCB_LAYERS;
 }
 
 /**
- * Function IsValidNonCopperLayerIndex
- * tests whether an integer is a valid non copper layer index
- * @param aLayerIndex = Layer index to test
- * @return true if aLayerIndex is a valid non copper layer index
+ * Function IsCopperLayer
+ * tests whether a layer is a copper layer
+ * @param aLayer = Layer  to test
+ * @return true if aLayer is a valid copper layer 
  */
-inline bool IsValidNonCopperLayerIndex( int aLayerIndex )
+inline bool IsCopperLayer( LAYER_NUM aLayer )
 {
-    return aLayerIndex >= FIRST_NO_COPPER_LAYER
-        && aLayerIndex <= LAST_NO_COPPER_LAYER;
+    return aLayer >= FIRST_COPPER_LAYER 
+        && aLayer <= LAST_COPPER_LAYER;
 }
+
+/**
+ * Function IsNonCopperLayer
+ * tests whether a layer is a non copper layer
+ * @param aLayer = Layer to test
+ * @return true if aLayer is a non copper layer
+ */
+inline bool IsNonCopperLayer( LAYER_NUM aLayer )
+{
+    return aLayer >= FIRST_NON_COPPER_LAYER
+        && aLayer <= LAST_NON_COPPER_LAYER;
+}
+
+/* IMPORTANT: If a layer is not a front layer not necessarily is true
+   the converse. The same hold for a back layer.
+   So a layer can be:
+   - Front
+   - Back
+   - Neither (internal or auxiliary) 
+   
+   The check most frequent is for back layers, since it involves flips */
+
+
+/** 
+ * Layer classification: check if it's a front layer
+ */
+inline bool IsFrontLayer( LAYER_NUM aLayer )
+{
+    return ( aLayer == LAYER_N_FRONT ||
+             aLayer == ADHESIVE_N_FRONT ||
+             aLayer == SOLDERPASTE_N_FRONT ||
+             aLayer == SILKSCREEN_N_FRONT ||
+             aLayer == SOLDERPASTE_N_FRONT );
+}
+
+/** 
+ * Layer classification: check if it's a back layer
+ */
+inline bool IsBackLayer( LAYER_NUM aLayer )
+{
+    return ( aLayer == LAYER_N_BACK ||
+             aLayer == ADHESIVE_N_BACK ||
+             aLayer == SOLDERPASTE_N_BACK ||
+             aLayer == SILKSCREEN_N_BACK ||
+             aLayer == SOLDERPASTE_N_BACK );
+}
+
+/**
+ * Function ReturnFlippedLayerNumber
+ * @return the layer number after flipping an item
+ * some (not all) layers: external copper, Mask, Paste, and solder
+ * are swapped between front and back sides
+ */
+LAYER_NUM FlipLayer( LAYER_NUM oldlayer );
+
+/**
+ * Calculate the mask layer when flipping a footprint
+ * BACK and FRONT copper layers, mask, paste, solder layers are swapped
+ */
+LAYER_MSK FlipLayerMask( LAYER_MSK aMask );
+
+/**
+ * Extract the set layer from a mask. Returns UNDEFINED_LAYER if more
+ * than one is set or UNSELECTED_LAYER if none is 
+ */
+LAYER_NUM ExtractLayer( LAYER_MSK aMask );
+
+/**
+ * Return a string (to be shown to the user) describing a layer mask.
+ * Useful for showing where is a pad, track, entity, etc.
+ * The BOARD is needed because layer names are (somewhat) customizable
+ */
+wxString LayerMaskDescribe( const BOARD *aBoard, LAYER_MSK aMask );
 
 #endif // _LAYERS_ID_AND_VISIBILITY_H_

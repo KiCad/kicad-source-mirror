@@ -66,7 +66,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     SetDoNotAllowVias( true );                  // has meaning only if m_isKeepout == true
     SetDoNotAllowTracks( true );                // has meaning only if m_isKeepout == true
     m_cornerRadius = 0;
-    utility    = 0;                             // flags used in polygon calculations
+    SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
     m_Poly     = new CPolyLine();               // Outlines
     aBoard->GetZoneSettings().ExportSetting( *this );
 }
@@ -101,8 +101,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_cornerSmoothingType = aZone.m_cornerSmoothingType;
     m_cornerRadius = aZone.m_cornerRadius;
 
-
-    utility    = aZone.utility;
+    SetLocalFlags( aZone.GetLocalFlags() );
 }
 
 
@@ -171,7 +170,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
         return;
 
     wxPoint seg_start, seg_end;
-    int     curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
     BOARD*  brd   = GetBoard();
     EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
@@ -190,8 +189,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
     if( aDrawMode & GR_HIGHLIGHT )
         ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
 
-    if( color & HIGHLIGHT_FLAG )
-        color = ColorRefs[color & MASKCOLOR].m_LightColor;
+    ColorApplyHighlightFlag( &color );
 
     SetAlpha( &color, 150 );
 
@@ -256,7 +254,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
         return;
 
     BOARD* brd = GetBoard();
-    int    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
 
     if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
@@ -273,8 +271,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
     if( aDrawMode & GR_HIGHLIGHT )
         ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
 
-    if( color & HIGHLIGHT_FLAG )
-        color = ColorRefs[color & MASKCOLOR].m_LightColor;
+    ColorApplyHighlightFlag( &color );
 
     SetAlpha( &color, 150 );
 
@@ -401,7 +398,7 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
     if( DC == NULL )
         return;
 
-    int    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     BOARD* brd   = GetBoard();
     EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
 
@@ -660,23 +657,13 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         msg.Empty();
 
         if( GetDoNotAllowVias() )
-            msg = _("No via");
+            AccumulateDescription( msg, _("No via") );
 
         if( GetDoNotAllowTracks() )
-        {
-            if( !msg.IsEmpty() )
-                msg += wxT(", ");
-
-            msg += _("No track");
-        }
+            AccumulateDescription( msg, _("No track") );
 
         if( GetDoNotAllowCopperPour() )
-        {
-            if( !msg.IsEmpty() )
-                msg += wxT(", ");
-
-            msg += _("No copper pour");
-        }
+            AccumulateDescription( msg, _("No copper pour") );
 
         aList.push_back( MSG_PANEL_ITEM( _( "Keepout" ), msg, RED ) );
     }
@@ -715,8 +702,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Non Copper Zone" ), wxEmptyString, RED ) );
     }
 
-    msg = board->GetLayerName( m_Layer );
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BROWN ) );
 
     msg.Printf( wxT( "%d" ), (int) m_Poly->m_CornersList.size() );
     aList.push_back( MSG_PANEL_ITEM( _( "Corners" ), msg, BLUE ) );
@@ -829,7 +815,7 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 {
     Mirror( aCentre );
-    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer() ) );
 }
 
 
@@ -938,8 +924,6 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     NETINFO_ITEM* net;
     BOARD* board = GetBoard();
 
-    text = _( "Zone Outline" );
-
     int ncont = m_Poly->GetContour( m_CornerSelection );
 
     if( ncont )
@@ -948,8 +932,7 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     if( GetIsKeepout() )
         text << wxT( " " ) << _( "(Keepout)" );
 
-    text << wxT( " " );
-    text << wxString::Format( wxT( "(%08lX)" ), m_TimeStamp );
+    text << wxString::Format( wxT( " (%08lX)" ), m_TimeStamp );
 
     // Display net name for copper zones
     if( !GetIsKeepout() )
@@ -978,7 +961,8 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
         }
     }
 
-    text << _( " on layer " ) << GetLayerName();
+    text.Printf( _( "Zone Outline %s on %s" ), GetChars( text ),
+                 GetChars( GetLayerName() ) );
 
     return text;
 }

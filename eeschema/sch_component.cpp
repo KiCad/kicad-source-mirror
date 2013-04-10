@@ -157,7 +157,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet
             schField = AddField( fld );
         }
 
-        schField->SetPosition( m_Pos + it->GetPosition() );
+        schField->SetTextPosition( m_Pos + it->GetTextPosition() );
 
         schField->ImportValues( *it );
 
@@ -218,9 +218,9 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
     {
         SCH_FIELD field( pos, i, this, TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
 
-        if( i==REFERENCE )
+        if( i == REFERENCE )
             field.SetLayer( LAYER_REFERENCEPART );
-        else if( i==VALUE )
+        else if( i == VALUE )
             field.SetLayer( LAYER_VALUEPART );
 
         // else keep LAYER_FIELDS from SCH_FIELD constructor
@@ -490,11 +490,11 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     SCH_FIELD* rf = GetField( REFERENCE );
 
     if( rf->GetText().IsEmpty()
-      || ( abs( rf->GetPosition().x - m_Pos.x ) +
-           abs( rf->GetPosition().y - m_Pos.y ) > 10000 ) )
+      || ( abs( rf->GetTextPosition().x - m_Pos.x ) +
+           abs( rf->GetTextPosition().y - m_Pos.y ) > 10000 ) )
     {
         // move it to a reasonable position
-        rf->SetPosition( m_Pos + wxPoint( 50, 50 ) );
+        rf->SetTextPosition( m_Pos + wxPoint( 50, 50 ) );
     }
 
     rf->SetText( ref );  // for drawing.
@@ -1206,7 +1206,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             for( int i = 0; i<GetFieldCount();  i++ )
             {
                 if( GetField( i )->GetText().IsEmpty() )
-                    GetField( i )->SetPosition( m_Pos );
+                    GetField( i )->SetTextPosition( m_Pos );
             }
         }
         else if( line[0] == 'A' && line[1] == 'R' )
@@ -1511,9 +1511,9 @@ void SCH_COMPONENT::MirrorY( int aYaxis_position )
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
         // Move the fields to the new position because the component itself has moved.
-        wxPoint pos = GetField( ii )->GetPosition();
+        wxPoint pos = GetField( ii )->GetTextPosition();
         pos.x -= dx;
-        GetField( ii )->SetPosition( pos );
+        GetField( ii )->SetTextPosition( pos );
     }
 }
 
@@ -1531,9 +1531,9 @@ void SCH_COMPONENT::MirrorX( int aXaxis_position )
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
         // Move the fields to the new position because the component itself has moved.
-        wxPoint pos = GetField( ii )->GetPosition();
+        wxPoint pos = GetField( ii )->GetTextPosition();
         pos.y -= dy;
-        GetField( ii )->SetPosition( pos );
+        GetField( ii )->SetTextPosition( pos );
     }
 }
 
@@ -1550,10 +1550,10 @@ void SCH_COMPONENT::Rotate( wxPoint aPosition )
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
         // Move the fields to the new position because the component itself has moved.
-        wxPoint pos = GetField( ii )->GetPosition();
+        wxPoint pos = GetField( ii )->GetTextPosition();
         pos.x -= prev.x - m_Pos.x;
         pos.y -= prev.y - m_Pos.y;
-        GetField( ii )->SetPosition( pos );
+        GetField( ii )->SetTextPosition( pos );
     }
 }
 
@@ -1607,9 +1607,9 @@ bool SCH_COMPONENT::IsSelectStateChanged( const wxRect& aRect )
     EDA_RECT boundingBox = GetBoundingBox();
 
     if( aRect.Intersects( boundingBox ) )
-        m_Flags |= SELECTED;
+        SetFlags( SELECTED );
     else
-        m_Flags &= ~SELECTED;
+        ClearFlags( SELECTED );
 
     return previousState != IsSelected();
 }

@@ -44,7 +44,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_IMAGE* aGerberpa
     EDA_ITEM( (EDA_ITEM*)aParent, TYPE_GERBER_DRAW_ITEM )
 {
     m_imageParams = aGerberparams;
-    m_Layer         = 0;
+    m_Layer         = FIRST_LAYER;
     m_Shape         = GBR_SEGMENT;
     m_Flashed       = false;
     m_DCode         = 0;
@@ -328,8 +328,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     if( aDrawMode & GR_HIGHLIGHT )
         ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
 
-    if( color & HIGHLIGHT_FLAG )
-        color = ColorRefs[color & MASKCOLOR].m_LightColor;
+    ColorApplyHighlightFlag( &color );
 
     alt_color = gerbFrame->GetNegativeItemsColor();
 
@@ -621,7 +620,7 @@ void GERBER_DRAW_ITEM::Show( int nestLevel, std::ostream& os ) const
     " layer=\"" << m_Layer << '"' <<
     " size=\"" << m_Size << '"' <<
     " flags=\"" << m_Flags << '"' <<
-    " status=\"" << GetState( -1 ) << '"' <<
+    " status=\"" << GetStatus() << '"' <<
     "<start" << m_Start << "/>" <<
     "<end" << m_End << "/>";
 

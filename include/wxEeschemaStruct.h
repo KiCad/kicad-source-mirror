@@ -48,7 +48,9 @@ class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_DRAW_ITEM;
 class EDA_ITEM;
-class SCH_BUS_ENTRY;
+class SCH_BUS_ENTRY_BASE;
+class SCH_BUS_WIRE_ENTRY;
+class SCH_BUS_BUS_ENTRY;
 class SCH_GLOBALLABEL;
 class SCH_TEXT;
 class SCH_BITMAP;
@@ -811,8 +813,9 @@ private:
     void UpdateTitle();
 
     // Bus Entry
-    SCH_BUS_ENTRY* CreateBusEntry( wxDC* DC, int entry_type );
-    void SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int entry_type );
+    SCH_BUS_WIRE_ENTRY* CreateBusWireEntry( wxDC* DC );
+    SCH_BUS_BUS_ENTRY* CreateBusBusEntry( wxDC* DC );
+    void SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY_BASE* BusEntry, char entry_shape );
 
     /**
      * Function AddNoConnect
@@ -1219,7 +1222,7 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, int aPrintMask,
+    virtual void PrintPage( wxDC* aDC, LAYER_MSK aPrintMask,
                             bool aPrintMirrorMode, void* aData = NULL );
 
     void SetSimulatorCommand( const wxString& aCommand ) { m_simulatorCommand = aCommand; }

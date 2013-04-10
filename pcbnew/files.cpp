@@ -161,8 +161,9 @@ bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
 {
     if( GetScreen()->IsModify() && !aAppend )
     {
-        if( !IsOK( this, _( "The current board has been modified.  Do you wish to discard \
-the changes?" ) ) )
+        if( !IsOK( this,
+                   _( "The current board has been modified.\n"
+                      "Do you wish to discard the changes?" ) ) )
             return false;
     }
 

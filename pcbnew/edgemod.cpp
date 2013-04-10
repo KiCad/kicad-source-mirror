@@ -191,7 +191,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
 void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
 {
     MODULE* module    = GetBoard()->m_Modules;
-    int     new_layer = SILKSCREEN_N_FRONT;
+    LAYER_NUM new_layer = SILKSCREEN_N_FRONT;
 
     if( aEdge )
         new_layer = aEdge->GetLayer();
@@ -202,7 +202,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
     if( new_layer < 0 )
         return;
 
-    if( IsValidCopperLayerIndex( new_layer ) )
+    if( IsCopperLayer( new_layer ) )
     {
         /* an edge is put on a copper layer, and it is very dangerous. a
          *confirmation is requested */
@@ -340,11 +340,11 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
         aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
         aEdge->SetLayer( module->GetLayer() );
 
-        if( module->GetLayer() == LAYER_N_FRONT )
-            aEdge->SetLayer( SILKSCREEN_N_FRONT );
-
-        if( module->GetLayer() == LAYER_N_BACK )
+        // The default layer for an edge is the corresponding silk layer
+        if( module->IsFlipped() )
             aEdge->SetLayer( SILKSCREEN_N_BACK );
+        else
+            aEdge->SetLayer( SILKSCREEN_N_FRONT );
 
         // Initialize the starting point of the new segment or arc
         aEdge->SetStart( GetScreen()->GetCrossHairPosition() );

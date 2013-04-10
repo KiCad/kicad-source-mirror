@@ -330,7 +330,7 @@ void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aContro
                            GetCustomWidthMils() * 25.4 / 1000.0,
                            GetCustomHeightMils() * 25.4 / 1000.0 );
 
-    if( IsCustom() && IsPortrait() )
+    if( !IsCustom() && IsPortrait() )
         aFormatter->Print( 0, " portrait" );
 
     aFormatter->Print( 0, ")\n" );

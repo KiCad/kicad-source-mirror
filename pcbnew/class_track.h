@@ -50,6 +50,7 @@ class MSG_PANEL_ITEM;
 
 #define UNDEFINED_DRILL_DIAMETER  -1       //< Undefined via drill diameter.
 
+#define MIN_VIA_DRAW_SIZE          4       /// Minimum size in pixel for full drawing
 
 /**
  * Function GetTrace
@@ -68,7 +69,7 @@ class MSG_PANEL_ITEM;
  * @return A TRACK object pointer if found otherwise NULL.
  */
 extern TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition,
-                        int aLayerMask );
+                        LAYER_MSK aLayerMask );
 
 
 class TRACK : public BOARD_CONNECTED_ITEM
@@ -215,12 +216,12 @@ public:
     bool IsDrillDefault()       { return m_Drill <= 0; }
 
     /**
-     * Function ReturnMaskLayer
+     * Function GetLayerMask
      * returns a "layer mask", which is a bitmap of all layers on which the
      * TRACK segment or SEGVIA physically resides.
      * @return int - a layer mask, see pcbstruct.h's LAYER_BACK, etc.
      */
-    int ReturnMaskLayer() const;
+    LAYER_MSK GetLayerMask() const;
 
     /**
      * Function IsPointOnEnds
@@ -229,7 +230,7 @@ public:
      * (dist = min_dist) both ends, or 0 if none of the above.
      * if min_dist < 0: min_dist = track_width/2
      */
-    int IsPointOnEnds( const wxPoint& point, int min_dist = 0 );
+    STATUS_FLAGS IsPointOnEnds( const wxPoint& point, int min_dist = 0 );
 
     /**
      * Function IsNull
@@ -265,10 +266,10 @@ public:
      * finds the first SEGVIA object at \a aPosition on \a aLayer starting at the trace.
      *
      * @param aPosition The wxPoint to HitTest() against.
-     * @param aLayerMask The layer to match, pass -1 for a don't care.
+     * @param aLayer The layer to match, pass -1 for a don't care.
      * @return A pointer to a SEGVIA object if found, else NULL.
      */
-    TRACK* GetVia( const wxPoint& aPosition, int aLayerMask = -1 );
+    TRACK* GetVia( const wxPoint& aPosition, LAYER_NUM aLayer = UNDEFINED_LAYER );
 
     /**
      * Function GetVia
@@ -280,7 +281,7 @@ public:
      * @param aLayerMask The layers to match, pass -1 for a don't care.
      * @return A pointer to a SEGVIA object if found, else NULL.
      */
-    TRACK* GetVia( TRACK* aEndTrace, const wxPoint& aPosition, int aLayerMask );
+    TRACK* GetVia( TRACK* aEndTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask );
 
     /**
      * Function GetTrace
@@ -377,7 +378,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
-    bool IsOnLayer( int aLayer ) const;
+    bool IsOnLayer( LAYER_NUM aLayer ) const;
 
     /**
      * Function SetLayerPair
@@ -389,7 +390,7 @@ public:
      * @param top_layer = first layer connected by the via
      * @param bottom_layer = last layer connected by the via
      */
-    void SetLayerPair( int top_layer, int bottom_layer );
+    void SetLayerPair( LAYER_NUM top_layer, LAYER_NUM bottom_layer );
 
     /**
      * Function ReturnLayerPair
@@ -398,7 +399,7 @@ public:
      *  @param top_layer = pointer to the first layer (can be null)
      *  @param bottom_layer = pointer to the last layer (can be null)
      */
-    void ReturnLayerPair( int* top_layer, int* bottom_layer ) const;
+    void ReturnLayerPair( LAYER_NUM* top_layer, LAYER_NUM* bottom_layer ) const;
 
     const wxPoint& GetPosition() const  {  return m_Start; }       // was overload
     void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }    // was overload

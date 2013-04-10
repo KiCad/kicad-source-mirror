@@ -171,7 +171,7 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 
 
 // see pcbstruct.h
-int BOARD_DESIGN_SETTINGS::GetVisibleLayers() const
+LAYER_MSK BOARD_DESIGN_SETTINGS::GetVisibleLayers() const
 {
     return m_VisibleLayers;
 }
@@ -184,23 +184,18 @@ void BOARD_DESIGN_SETTINGS::SetVisibleAlls()
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetVisibleLayers( int aMask )
+void BOARD_DESIGN_SETTINGS::SetVisibleLayers( LAYER_MSK aMask )
 {
-    // Although Pcbnew uses only 29, GerbView uses all 32 layers
     m_VisibleLayers = aMask & m_EnabledLayers & FULL_LAYERS;
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetLayerVisibility( int aLayerIndex, bool aNewState )
+void BOARD_DESIGN_SETTINGS::SetLayerVisibility( LAYER_NUM aLayer, bool aNewState )
 {
-    // Altough Pcbnew uses only 29, GerbView uses all 32 layers
-    if( aLayerIndex < 0 || aLayerIndex >= 32 )
-        return;
-
-    if( aNewState && IsLayerEnabled( aLayerIndex ) )
-        m_VisibleLayers |= 1 << aLayerIndex;
+    if( aNewState && IsLayerEnabled( aLayer ) )
+        m_VisibleLayers |= GetLayerMask( aLayer );
     else
-        m_VisibleLayers &= ~( 1 << aLayerIndex );
+        m_VisibleLayers &= ~GetLayerMask( aLayer );
 }
 
 
@@ -229,12 +224,12 @@ void BOARD_DESIGN_SETTINGS::SetCopperLayerCount( int aNewLayerCount )
     if( m_CopperLayerCount > 1 )
         m_EnabledLayers |= LAYER_FRONT;
 
-    for( int ii = 1; ii < aNewLayerCount - 1; ii++ )
-        m_EnabledLayers |= 1 << ii;
+    for( LAYER_NUM ii = LAYER_N_2; ii < aNewLayerCount - 1; ++ii )
+        m_EnabledLayers |= GetLayerMask( ii );
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetEnabledLayers( int aMask )
+void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LAYER_MSK aMask )
 {
     // Back and front layers are always enabled.
     aMask |= LAYER_BACK | LAYER_FRONT;
@@ -245,11 +240,5 @@ void BOARD_DESIGN_SETTINGS::SetEnabledLayers( int aMask )
     m_VisibleLayers &= aMask;
 
     // update m_CopperLayerCount to ensure its consistency with m_EnabledLayers
-    m_CopperLayerCount = 0;
-
-    for( int ii = 0;  aMask && ii < NB_COPPER_LAYERS;  ii++, aMask >>= 1 )
-    {
-        if( aMask & 1 )
-            m_CopperLayerCount++;
-    }
+    m_CopperLayerCount = LayerMaskCountSet( aMask & ALL_CU_LAYERS);
 }

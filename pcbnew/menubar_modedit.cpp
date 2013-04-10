@@ -102,8 +102,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Save the currently loaded legacy library as an s-expression library.
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBRARY_AS,
-                 _( "Save Current Library as Other" ),
-                 _( "Save entire current library as new library." ),
+                 _( "Save Current Library as ..." ),
+                 _( "Save entire current library under a new name." ),
                  wxNullBitmap );
 
     // Save module

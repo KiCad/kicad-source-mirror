@@ -92,7 +92,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
 
     SetLayout( new GBR_LAYOUT() );
 
-    SetVisibleLayers( -1 );     // All 32 layers visible.
+    SetVisibleLayers( FULL_LAYERS );     // All 32 layers visible.
 
     SetScreen( new GBR_SCREEN( GetLayout()->GetPageSettings().GetSizeIU() ) );
 
@@ -325,21 +325,21 @@ void GERBVIEW_FRAME::SetElementVisibility( GERBER_VISIBLE_ID aItemIdVisible,
 }
 
 
-int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
+LAYER_NUM GERBVIEW_FRAME::getNextAvailableLayer( LAYER_NUM aLayer ) const
 {
-    int layer = aLayer;
+    LAYER_NUM layer = aLayer;
 
-    for( int i = 0; i < GERBVIEW_LAYER_COUNT; i++ )
+    for( LAYER_NUM i = FIRST_LAYER; i < NB_GERBER_LAYERS; ++i )
     {
         GERBER_IMAGE* gerber = g_GERBER_List[ layer ];
 
         if( gerber == NULL || gerber->m_FileName.IsEmpty() )
             return layer;
 
-        layer++;
+        ++layer;
 
-        if( layer >= GERBVIEW_LAYER_COUNT )
-            layer = 0;
+        if( layer >= NB_GERBER_LAYERS )
+            layer = FIRST_LAYER;
     }
 
     return NO_AVAILABLE_LAYERS;
@@ -385,9 +385,9 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     wxString        Line;
     wxArrayString   list;
     double          scale = IU_PER_MILS * 1000;
-    int             curr_layer = getActiveLayer();
+    LAYER_NUM       curr_layer = getActiveLayer();
 
-    for( int layer = 0; layer < 32; layer++ )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
     {
         GERBER_IMAGE* gerber = g_GERBER_List[layer];
 
@@ -478,7 +478,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
     gerber->DisplayImageInfo();
 
     // Display Image Name and Layer Name (from the current gerber data):
-    text.Printf( _( "Image name: \"%s\"  Layer name: \"%s\"" ),
+    text.Printf( _( "Image name: '%s'  Layer name: '%s'" ),
                  GetChars( gerber->m_ImageName ),
                  GetChars( gerber->GetLayerParams().m_LayerName ) );
     SetStatusText( text, 0 );
@@ -537,9 +537,9 @@ void GERBVIEW_FRAME::SetVisibleAlls()
  * Returns a bit-mask of all the layers that are visible
  * @return int - the visible layers in bit-mapped form.
  */
-int GERBVIEW_FRAME::GetVisibleLayers() const
+LAYER_MSK GERBVIEW_FRAME::GetVisibleLayers() const
 {
-    return -1;    // TODO
+    return FULL_LAYERS;    // TODO
 }
 
 
@@ -549,7 +549,7 @@ int GERBVIEW_FRAME::GetVisibleLayers() const
  * changes the bit-mask of visible layers
  * @param aLayerMask = The new bit-mask of visible layers
  */
-void GERBVIEW_FRAME::SetVisibleLayers( int aLayerMask )
+void GERBVIEW_FRAME::SetVisibleLayers( LAYER_MSK aLayerMask )
 {
     GetLayout()->SetVisibleLayers( aLayerMask );
 }
@@ -558,15 +558,15 @@ void GERBVIEW_FRAME::SetVisibleLayers( int aLayerMask )
 /**
  * Function IsLayerVisible
  * tests whether a given layer is visible
- * @param aLayerIndex = The index of the layer to be tested
+ * @param aLayer = The layer to be tested
  * @return bool - true if the layer is visible.
  */
-bool GERBVIEW_FRAME::IsLayerVisible( int aLayerIndex ) const
+bool GERBVIEW_FRAME::IsLayerVisible( LAYER_NUM aLayer ) const
 {
     if( ! m_DisplayOptions.m_IsPrinting )
-        return m_LayersManager->IsLayerVisible( aLayerIndex );
+        return m_LayersManager->IsLayerVisible( aLayer );
     else
-        return GetLayout()->IsLayerVisible( aLayerIndex );
+        return GetLayout()->IsLayerVisible( aLayer );
 }
 
 
@@ -650,7 +650,7 @@ EDA_COLOR_T GERBVIEW_FRAME::GetNegativeItemsColor() const
  * Function GetLayerColor
  * gets a layer color for any valid layer.
  */
-EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
+EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( LAYER_NUM aLayer ) const
 {
     return m_colorsSettings->GetLayerColor( aLayer );
 }
@@ -660,7 +660,7 @@ EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
  * Function SetLayerColor
  * changes a layer color for any valid layer.
  */
-void GERBVIEW_FRAME::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
+void GERBVIEW_FRAME::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
 {
     m_colorsSettings->SetLayerColor( aLayer, aColor );
 }
@@ -670,7 +670,7 @@ void GERBVIEW_FRAME::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
  * Function getActiveLayer
  * returns the active layer
  */
-int GERBVIEW_FRAME::getActiveLayer()
+LAYER_NUM GERBVIEW_FRAME::getActiveLayer()
 {
     return ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer;
 }
@@ -681,7 +681,7 @@ int GERBVIEW_FRAME::getActiveLayer()
  * will change the currently active layer to \a aLayer and also
  * update the PCB_LAYER_WIDGET.
  */
-void GERBVIEW_FRAME::setActiveLayer( int aLayer, bool doLayerWidgetUpdate )
+void GERBVIEW_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
 {
     ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 

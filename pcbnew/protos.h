@@ -51,13 +51,6 @@ void DrawTraces( EDA_DRAW_PANEL* panel,
 /* MODULES.C */
 /*************/
 
-/**
- * Function ChangeSideMaskLayer
- * calculates the mask layer when flipping a footprint.
- * BACK and FRONT copper layers , mask, paste, solder layers are swapped.
- */
-int ChangeSideMaskLayer( int aMask );
-
 void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module );
 
 
@@ -65,7 +58,7 @@ void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module );
 /* EDITRACK.C : */
 /****************/
 
-TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoint& aRef );
+TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, LAYER_NUM aLayer, const wxPoint& aRef );
 
 void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                    bool aErase );

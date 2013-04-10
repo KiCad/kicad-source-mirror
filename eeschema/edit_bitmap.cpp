@@ -85,7 +85,7 @@ static void moveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosit
         dirty.Inflate( 4 );     // Give a margin
         aPanel->SetMouseCapture( NULL, NULL );  // Avoid loop in redraw panel
 
-        int flgs = image->GetFlags();
+        STATUS_FLAGS flgs = image->GetFlags();
         image->ClearFlags();
         aPanel->RefreshDrawingRect( dirty );
         image->SetFlags( flgs );

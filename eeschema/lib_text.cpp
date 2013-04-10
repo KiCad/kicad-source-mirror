@@ -130,7 +130,7 @@ bool LIB_TEXT::Load( LINE_READER& aLineReader, wxString& errorMsg )
 
         if( cnt < 8 )
         {
-            errorMsg.Printf( _( "text only had %d parameters of the required 8" ), cnt );
+            errorMsg.Printf( _( "Text only had %d parameters of the required 8" ), cnt );
             return false;
         }
 
@@ -495,7 +495,7 @@ wxString LIB_TEXT::GetSelectMenuText() const
 }
 
 
-void LIB_TEXT::BeginEdit( int aEditMode, const wxPoint aPosition )
+void LIB_TEXT::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
     wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED ) ) != 0,
                  wxT( "Invalid edit mode for LIB_TEXT object." ) );

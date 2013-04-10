@@ -195,7 +195,7 @@ UNDO_REDO_T PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx )
 }
 
 
-int PICKED_ITEMS_LIST::GetPickerFlags( unsigned aIdx )
+STATUS_FLAGS PICKED_ITEMS_LIST::GetPickerFlags( unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].GetFlags();
@@ -253,7 +253,7 @@ bool PICKED_ITEMS_LIST::SetPickedItemStatus( UNDO_REDO_T aStatus, unsigned aIdx 
 }
 
 
-bool PICKED_ITEMS_LIST::SetPickerFlags( int aFlags, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetPickerFlags( STATUS_FLAGS aFlags, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {

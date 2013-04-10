@@ -19,7 +19,7 @@
 
 #include <pad_shapes.h>
 #include <wx/gdicmn.h>      // for wxPoint definition
-
+#include <layers_id_colors_and_visibility.h>
 #include <polygons_defs.h>
 
 class CRect
@@ -98,7 +98,7 @@ public:
     /* initialize a contour
      * set layer, hatch style, and starting point
      */
-    void        Start( int layer, int x, int y, int hatch );
+    void        Start( LAYER_NUM layer, int x, int y, int hatch );
 
     void        AppendCorner( int x, int y );
     void        InsertCorner( int ic, int x, int y );
@@ -175,8 +175,8 @@ public:
     void        AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num );
 
     // access functions
-    void       SetLayer( int aLayer ) { m_layer = aLayer; }
-    int        GetLayer() const { return m_layer; }
+    void       SetLayer( LAYER_NUM aLayer ) { m_layer = aLayer; }
+    LAYER_NUM  GetLayer() const { return m_layer; }
     int        GetNumCorners();
     int        GetNumSides();
     int        GetClosed();
@@ -254,7 +254,7 @@ public:
     int     Distance( wxPoint aStart, wxPoint aEnd, int aWidth );
 
 private:
-    int                     m_layer;                // layer to draw on
+    LAYER_NUM               m_layer;                // layer to draw on
     enum HATCH_STYLE        m_hatchStyle;           // hatch style, see enum above
     int                     m_hatchPitch;           // for DIAGONAL_EDGE hatched outlines, basic distance between 2 hatch lines
                                                     // and the len of eacvh segment

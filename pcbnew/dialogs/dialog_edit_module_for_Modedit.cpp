@@ -7,9 +7,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2012 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -302,17 +303,18 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
 #ifdef __WINDOWS__
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
+
     fullfilename = EDA_FileSelector( _( "3D Shape:" ),
                                      fullpath,
                                      wxEmptyString,
-                                     VrmlFileExtension,
-                                     wxGetTranslation( VrmlFileWildcard ),
+                                     wxEmptyString,
+                                     wxGetTranslation( Shapes3DFileWildcard ),
                                      this,
                                      wxFD_OPEN,
                                      true
                                      );
 
-    if( fullfilename == wxEmptyString )
+    if( fullfilename.IsEmpty() )
         return;
 
     wxFileName fn = fullfilename;

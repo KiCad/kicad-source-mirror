@@ -127,7 +127,7 @@ bool PCB_EDIT_FRAME::ReOrientModules( const wxString& ModuleMask,
     wxString line;
     bool modified = false;
 
-    line.Printf( _( "Ok to set footprints orientation to %.1f degrees ?" ), (double)Orient / 10 );
+    line.Printf( _( "OK to set footprints orientation to %.1f degrees ?" ), (double)Orient / 10 );
     if( !IsOK( this, line ) )
         return false;
 

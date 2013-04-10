@@ -149,19 +149,19 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     {
         if( createLib )
         {
-            msg = fn.GetFullPath() + _( " - OK" );
+            msg.Printf( _( "<%s> - OK" ), GetChars( fn.GetFullPath() ) );
             DisplayInfoMessage( this, _( "This library will not be available \
 until it is loaded by Eeschema.\n\nModify the Eeschema library configuration \
 if you want to include it as part of this project." ) );
         }
         else
         {
-            msg = fn.GetFullPath() + _( " - Export OK" );
+            msg.Printf( _( "<%s> - Export OK" ), GetChars( fn.GetFullPath() ) );
         }
     }   // Error
     else
     {
-        msg = _( "Error creating " ) + fn.GetFullName();
+        msg.Printf( _( "Error creating <%s>" ), GetChars( fn.GetFullName() ) );
     }
 
     SetStatusText( msg );

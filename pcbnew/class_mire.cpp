@@ -53,7 +53,7 @@ PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
     m_Size  = 5000;
 }
 
-PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent, int aShape, int aLayer,
+PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent, int aShape, LAYER_NUM aLayer,
     const wxPoint& aPos, int aSize, int aWidth ) :
     BOARD_ITEM( aParent, PCB_TARGET_T )
 {
@@ -115,7 +115,7 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
     typeaff = DisplayOpt.DisplayDrawItems;
     width   = m_Width;
 
-    if( DC->LogicalToDeviceXRel( width ) < 2 )
+    if( DC->LogicalToDeviceXRel( width ) <= MIN_DRAW_WIDTH )
         typeaff = LINE;
 
     radius = m_Size / 3;
@@ -194,7 +194,7 @@ void PCB_TARGET::Rotate(const wxPoint& aRotCentre, double aAngle)
 void PCB_TARGET::Flip(const wxPoint& aCentre )
 {
     m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
-    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer() ) );
 }
 
 
@@ -217,8 +217,8 @@ wxString PCB_TARGET::GetSelectMenuText() const
 
     msg = ::CoordinateToString( m_Size );
 
-    text.Printf( _( "Target on %s size %s" ),
-                 GetChars( GetLayerName() ), GetChars( msg ) );
+    // Targets are on *every* layer by definition
+    text.Printf( _( "Target size %s" ), GetChars( msg ) );
 
     return text;
 }

@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -289,7 +289,7 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
 
         if( !wxFileName::FileExists( fn ) )
         {
-            msg = type + _( " file <" ) + fn + _( "> was not found." );
+            msg.Printf( wxT( "file <%s> was not found." ), GetChars( fn ) );
             wxMessageBox( msg );
             fileHistory->RemoveFileFromHistory( i );
             fn = wxEmptyString;
@@ -388,7 +388,8 @@ void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
     wildcard += wxT( ".exe" );
 #endif
 
-    wildcard = _( "Executable file (" ) + wildcard + wxT( ")|" ) + wildcard;
+    wildcard.Printf( _( "Executable file (%s)|%s" ), 
+                     GetChars( wildcard ), GetChars( wildcard ) );
 
     wxFileDialog dlg( this, _( "Select Preferred Editor" ), fn.GetPath(),
                       fn.GetFullName(), wildcard,
@@ -644,7 +645,8 @@ edits you made?" ),
             // Rename the old file to the backup file name.
             if( !wxRenameFile( aFileName.GetFullPath(), backupFileName.GetFullPath() ) )
             {
-                msg = _( "Could not create backup file " ) + backupFileName.GetFullPath();
+                msg.Printf( _( "Could not create backup file <%s>" ),
+                            GetChars( backupFileName.GetFullPath() ) );
                 wxMessageBox( msg );
             }
         }

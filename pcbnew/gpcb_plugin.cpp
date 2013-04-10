@@ -232,7 +232,7 @@ void GPCB_FPL_CACHE::Load()
 
     if( !dir.IsOpened() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "footprint library path '%s' does not exist" ),
+        THROW_IO_ERROR( wxString::Format( _( "footprint library path <%s> does not exist" ),
                                           m_lib_path.GetPath().GetData() ) );
     }
 
@@ -278,7 +278,7 @@ void GPCB_FPL_CACHE::Remove( const wxString& aFootprintName )
 
     if( it == m_modules.end() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library '%s' has no footprint '%s' to delete" ),
+        THROW_IO_ERROR( wxString::Format( _( "library <%s> has no footprint %s to delete" ),
                                           m_lib_path.GetPath().GetData(),
                                           aFootprintName.GetData() ) );
     }
@@ -878,7 +878,7 @@ void GPCB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString&
 
     if( !m_cache->IsWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ),
+        THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -897,7 +897,7 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* 
 
     if( !fn.IsDirWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "user does not have permission to delete directory '%s'" ),
+        THROW_IO_ERROR( wxString::Format( _( "user does not have permission to delete directory <%s>" ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -905,7 +905,7 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* 
 
     if( dir.HasSubDirs() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library directory '%s' has unexpected sub-directories" ),
+        THROW_IO_ERROR( wxString::Format( _( "library directory <%s> has unexpected sub-directories" ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -924,7 +924,7 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* 
 
             if( tmp.GetExt() != KiCadFootprintFileExtension )
             {
-                THROW_IO_ERROR( wxString::Format( _( "unexpected file '%s' has found in library path '%'" ),
+                THROW_IO_ERROR( wxString::Format( _( "unexpected file <%s> was found in library path '%s'" ),
                                                   files[i].GetData(), aLibraryPath.GetData() ) );
             }
         }
@@ -942,7 +942,7 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* 
     // we don't want that.  we want bare metal portability with no UI here.
     if( !wxRmdir( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "footprint library '%s' cannot be deleted" ),
+        THROW_IO_ERROR( wxString::Format( _( "footprint library <%s> cannot be deleted" ),
                                           aLibraryPath.GetData() ) );
     }
 

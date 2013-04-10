@@ -221,25 +221,8 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_LeftBoxSizer->Add( fgSizerShapeType, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	wxBoxSizer* bMiddleUpperSizer;
-	bMiddleUpperSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_DrillShapeBoxSizer = new wxBoxSizer( wxVERTICAL );
-	
-	
-	bMiddleUpperSizer->Add( m_DrillShapeBoxSizer, 0, wxBOTTOM, 5 );
-	
-	wxBoxSizer* m_MiddleRightBoxSizer;
-	m_MiddleRightBoxSizer = new wxBoxSizer( wxVERTICAL );
-	
-	
-	bMiddleUpperSizer->Add( m_MiddleRightBoxSizer, 0, wxBOTTOM, 5 );
-	
-	
-	m_LeftBoxSizer->Add( bMiddleUpperSizer, 0, wxEXPAND, 5 );
-	
 	wxStaticBoxSizer* sbSizeModuleInfo;
-	sbSizeModuleInfo = new wxStaticBoxSizer( new wxStaticBox( m_panelGeneral, wxID_ANY, _("Footprint Orientation") ), wxVERTICAL );
+	sbSizeModuleInfo = new wxStaticBoxSizer( new wxStaticBox( m_panelGeneral, wxID_ANY, _("Parent footprint orientation") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer4;
 	fgSizer4 = new wxFlexGridSizer( 2, 2, 0, 0 );
@@ -264,13 +247,13 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizer4->Add( m_staticModuleSideValue, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	
-	sbSizeModuleInfo->Add( fgSizer4, 1, wxEXPAND, 5 );
+	sbSizeModuleInfo->Add( fgSizer4, 0, 0, 5 );
 	
 	
-	m_LeftBoxSizer->Add( sbSizeModuleInfo, 0, wxEXPAND|wxBOTTOM, 5 );
+	m_LeftBoxSizer->Add( sbSizeModuleInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
-	bGeneralSizer->Add( m_LeftBoxSizer, 0, wxALL|wxEXPAND, 5 );
+	bGeneralSizer->Add( m_LeftBoxSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
@@ -280,6 +263,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	wxFlexGridSizer* fgSizerGeometry;
 	fgSizerGeometry = new wxFlexGridSizer( 14, 3, 0, 0 );
+	fgSizerGeometry->AddGrowableCol( 1 );
 	fgSizerGeometry->SetFlexibleDirection( wxBOTH );
 	fgSizerGeometry->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -322,10 +306,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizerGeometry->Add( m_PadDrill_Y_Unit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
-	sbSizer2->Add( fgSizerGeometry, 1, wxEXPAND, 5 );
+	sbSizer2->Add( fgSizerGeometry, 0, wxEXPAND, 5 );
 	
 	
-	bSizer10->Add( sbSizer2, 0, wxALL, 5 );
+	bSizer10->Add( sbSizer2, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* m_LayersSizer;
 	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGeneral, wxID_ANY, _("Layers") ), wxVERTICAL );
@@ -386,7 +370,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_LayersSizer->Add( sbSizerTechlayers, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer10->Add( m_LayersSizer, 1, wxALL|wxEXPAND, 5 );
+	bSizer10->Add( m_LayersSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bGeneralSizer->Add( bSizer10, 0, wxALL|wxEXPAND, 5 );
@@ -397,8 +381,8 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bGeneralSizer->Fit( m_panelGeneral );
 	m_notebook->AddPage( m_panelGeneral, _("General"), true );
 	m_localSettingsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer14;
-	bSizer14 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerPanelClearance;
+	bSizerPanelClearance = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* bSizerClearance;
 	bSizerClearance = new wxBoxSizer( wxVERTICAL );
@@ -408,6 +392,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	wxFlexGridSizer* fgClearancesGridSizer;
 	fgClearancesGridSizer = new wxFlexGridSizer( 4, 3, 0, 0 );
+	fgClearancesGridSizer->AddGrowableCol( 1 );
 	fgClearancesGridSizer->SetFlexibleDirection( wxBOTH );
 	fgClearancesGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -468,16 +453,17 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgClearancesGridSizer->Add( m_SolderPasteRatioMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
-	sbClearancesSizer->Add( fgClearancesGridSizer, 1, wxEXPAND, 5 );
+	sbClearancesSizer->Add( fgClearancesGridSizer, 0, wxEXPAND, 5 );
 	
 	
-	bSizerClearance->Add( sbClearancesSizer, 0, wxEXPAND|wxALL, 5 );
+	bSizerClearance->Add( sbClearancesSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerZonesSettings;
 	sbSizerZonesSettings = new wxStaticBoxSizer( new wxStaticBox( m_localSettingsPanel, wxID_ANY, _("Copper Zones") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer41;
 	fgSizer41 = new wxFlexGridSizer( 3, 3, 0, 0 );
+	fgSizer41->AddGrowableCol( 1 );
 	fgSizer41->SetFlexibleDirection( wxBOTH );
 	fgSizer41->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -489,7 +475,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	int m_ZoneConnectionChoiceNChoices = sizeof( m_ZoneConnectionChoiceChoices ) / sizeof( wxString );
 	m_ZoneConnectionChoice = new wxChoice( m_localSettingsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneConnectionChoiceNChoices, m_ZoneConnectionChoiceChoices, 0 );
 	m_ZoneConnectionChoice->SetSelection( 0 );
-	fgSizer41->Add( m_ZoneConnectionChoice, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 5 );
+	fgSizer41->Add( m_ZoneConnectionChoice, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxEXPAND, 5 );
 	
 	m_staticText53 = new wxStaticText( m_localSettingsPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText53->Wrap( -1 );
@@ -520,10 +506,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizer41->Add( m_ThermalGapUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
-	sbSizerZonesSettings->Add( fgSizer41, 1, wxEXPAND, 5 );
+	sbSizerZonesSettings->Add( fgSizer41, 0, wxEXPAND, 5 );
 	
 	
-	bSizerClearance->Add( sbSizerZonesSettings, 0, wxEXPAND|wxALL, 5 );
+	bSizerClearance->Add( sbSizerZonesSettings, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticTextWarning = new wxStaticText( m_localSettingsPanel, wxID_ANY, _("Set fields to 0 to use parent or global values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextWarning->Wrap( -1 );
@@ -532,29 +518,26 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerClearance->Add( m_staticTextWarning, 0, wxALL, 5 );
 	
 	
-	bSizer14->Add( bSizerClearance, 0, wxALL, 5 );
+	bSizerPanelClearance->Add( bSizerClearance, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer14->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	
-	m_localSettingsPanel->SetSizer( bSizer14 );
+	m_localSettingsPanel->SetSizer( bSizerPanelClearance );
 	m_localSettingsPanel->Layout();
-	bSizer14->Fit( m_localSettingsPanel );
+	bSizerPanelClearance->Fit( m_localSettingsPanel );
 	m_notebook->AddPage( m_localSettingsPanel, _("Local Clearance and Settings"), false );
 	
-	bSizerUpper->Add( m_notebook, 0, wxALL|wxEXPAND, 5 );
+	bSizerUpper->Add( m_notebook, 0, wxALL, 5 );
 	
-	wxBoxSizer* bSizer13x;
-	bSizer13x = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerDisplayPad;
+	bSizerDisplayPad = new wxBoxSizer( wxVERTICAL );
 	
 	m_panelShowPad = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxSize( 200,200 ), wxFULL_REPAINT_ON_RESIZE|wxSIMPLE_BORDER );
 	m_panelShowPad->SetBackgroundColour( wxColour( 0, 0, 0 ) );
 	
-	bSizer13x->Add( m_panelShowPad, 1, wxRIGHT|wxTOP, 5 );
+	bSizerDisplayPad->Add( m_panelShowPad, 1, wxRIGHT|wxTOP|wxEXPAND, 5 );
 	
 	
-	bSizerUpper->Add( bSizer13x, 1, wxALL, 5 );
+	bSizerUpper->Add( bSizerDisplayPad, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
 	m_MainSizer->Add( bSizerUpper, 1, wxEXPAND, 5 );
@@ -572,12 +555,11 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	m_MainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
+	m_MainSizer->Add( m_sdbSizer1, 0, wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( m_MainSizer );
 	this->Layout();
-	m_MainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

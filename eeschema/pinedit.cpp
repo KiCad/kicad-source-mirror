@@ -72,7 +72,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     if( m_drawItem == NULL || m_drawItem->Type() != LIB_PIN_T )
         return;
 
-    int item_flags = m_drawItem->GetFlags();       // save flags to restore them after editing
+    STATUS_FLAGS item_flags = m_drawItem->GetFlags(); // save flags to restore them after editing
     LIB_PIN* pin = (LIB_PIN*) m_drawItem;
 
     DIALOG_LIB_EDIT_PIN dlg( this, pin );
@@ -645,6 +645,9 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 
         dup_error++;
         Pin->ReturnPinStringNum( stringPinNum );
+
+        /* TODO I dare someone to find a way to make happy translators on
+           this thing! Lorenzo */
         curr_pin->ReturnPinStringNum( stringCurrPinNum );
         msg.Printf( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, \
 %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),

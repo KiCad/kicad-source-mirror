@@ -144,13 +144,13 @@ void PCB_ARC::Flip()
     m_startX = -m_startX;
     m_angle = -m_angle;
 
-    m_KiCadLayer = FlipLayers( m_KiCadLayer );
+    m_KiCadLayer = FlipLayer( m_KiCadLayer );
 }
 
 
 void PCB_ARC::AddToModule( MODULE* aModule )
 {
-    if( IsValidNonCopperLayerIndex( m_KiCadLayer ) )
+    if( IsNonCopperLayer( m_KiCadLayer ) )
     {
         EDGE_MODULE* arc = new EDGE_MODULE( aModule, S_ARC );
         aModule->GraphicalItems().PushBack( arc );

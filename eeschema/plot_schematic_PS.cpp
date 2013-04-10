@@ -108,9 +108,9 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
 
         if( plotOneSheetPS( plotFileName, screen, plotPage, plot_offset,
                             scale, aPlotFrameRef ) )
-            msg.Printf( _( "Plot: %s OK\n" ), GetChars( plotFileName ) );
+            msg.Printf( _( "Plot: <%s> OK\n" ), GetChars( plotFileName ) );
         else    // Error
-             msg.Printf( _( "** Unable to create %s **\n" ), GetChars( plotFileName ) );
+            msg.Printf( _( "Unable to create <%s>\n" ), GetChars( plotFileName ) );
 
         m_MessagesBox->AppendText( msg );
 

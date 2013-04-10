@@ -49,7 +49,7 @@ DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, PCB_DIMENSION_T ),
     m_Text( this )
 {
-    m_Layer = DRAW_LAYER;
+    m_Layer = DRAW_N;
     m_Width = Millimeter2iu( 0.2 );
     m_Value = 0;
     m_Shape = 0;
@@ -86,7 +86,7 @@ const wxString DIMENSION::GetText() const
 }
 
 
-void DIMENSION::SetLayer( int aLayer )
+void DIMENSION::SetLayer( LAYER_NUM aLayer )
 {
     m_Layer = aLayer;
     m_Text.SetLayer( aLayer );
@@ -176,7 +176,7 @@ void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 void DIMENSION::Flip( const wxPoint& aCentre )
 {
     Mirror( aCentre );
-    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer() ) );
 }
 
 
@@ -350,7 +350,7 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
     typeaff = DisplayOpt.DisplayDrawItems;
     width   = m_Width;
 
-    if( DC->LogicalToDeviceXRel( width ) < 2 )
+    if( DC->LogicalToDeviceXRel( width ) <= MIN_DRAW_WIDTH )
         typeaff = LINE;
 
     switch( typeaff )
@@ -489,8 +489,8 @@ EDA_RECT DIMENSION::GetBoundingBox() const
 wxString DIMENSION::GetSelectMenuText() const
 {
     wxString text;
-
-    text << _( "Dimension" ) << wxT( " \"" ) << GetText() << wxT( "\"" );
+    text.Printf( _( "Dimension \"%s\" on %s" ),
+                GetChars( GetText() ), GetChars( GetLayerName() ) );
 
     return text;
 }

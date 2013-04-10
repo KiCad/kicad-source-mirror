@@ -330,9 +330,9 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         uniqifier += 'A';               // A for all layers
 
     const int copperCount = aBoard->GetCopperLayerCount();
-    for( int layer=0;  layer<copperCount;  ++layer )
+    for( LAYER_NUM layer=FIRST_LAYER; layer<copperCount; ++layer )
     {
-        int kilayer = pcbLayer2kicad[layer];
+        LAYER_NUM kilayer = pcbLayer2kicad[layer];
 
         if( onAllCopperLayers || aPad->IsOnLayer( kilayer ) )
         {
@@ -376,7 +376,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         {
             double  diameter = scale(aPad->GetSize().x);
 
-            for( int ndx=0;  ndx<reportedLayers;  ++ndx )
+            for( LAYER_NUM ndx=FIRST_LAYER; ndx<reportedLayers; ++ndx )
             {
                 SHAPE*      shape = new SHAPE( padstack );
                 padstack->Append( shape );
@@ -409,7 +409,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             lowerLeft  += dsnOffset;
             upperRight += dsnOffset;
 
-            for( int ndx=0;  ndx<reportedLayers;  ++ndx )
+            for( LAYER_NUM ndx=FIRST_LAYER; ndx<reportedLayers; ++ndx )
             {
                 SHAPE*      shape = new SHAPE( padstack );
                 padstack->Append( shape );
@@ -460,7 +460,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             start += dsnOffset;
             stop  += dsnOffset;
 
-            for( int ndx=0;  ndx<reportedLayers;  ++ndx )
+            for( LAYER_NUM ndx=FIRST_LAYER; ndx<reportedLayers; ++ndx )
             {
                 SHAPE*  shape;
                 PATH*   path;
@@ -501,7 +501,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             upperRight += dsnOffset;
             lowerRight += dsnOffset;
 
-            for( int ndx=0;  ndx<reportedLayers;  ++ndx )
+            for( LAYER_NUM ndx=FIRST_LAYER; ndx<reportedLayers; ++ndx )
             {
                 SHAPE*      shape = new SHAPE( padstack );
                 padstack->Append( shape );
@@ -569,7 +569,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
             POINT   vertex   = mapPt( pad->GetPos0() );
 
             int layerCount = aBoard->GetCopperLayerCount();
-            for( int layer=0;  layer<layerCount;  ++layer )
+            for( LAYER_NUM layer=FIRST_LAYER;  layer<layerCount;  ++layer )
             {
                 KEEPOUT* keepout = new KEEPOUT(image, T_keepout);
                 image->keepouts.push_back( keepout );
@@ -716,14 +716,14 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
 
 PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
-                               int aTopLayer, int aBotLayer )
+                               LAYER_NUM aTopLayer, LAYER_NUM aBotLayer )
 {
     char        name[48];
     PADSTACK*   padstack = new PADSTACK();
 
     double      dsnDiameter = scale( aCopperDiameter );
 
-    for( int layer=aTopLayer;  layer<=aBotLayer;  ++layer )
+    for( LAYER_NUM layer=aTopLayer; layer<=aBotLayer; ++layer )
     {
         SHAPE* shape = new SHAPE( padstack );
         padstack->Append( shape );
@@ -750,8 +750,8 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
 
 PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
 {
-    int     topLayer;
-    int     botLayer;
+    LAYER_NUM topLayer;
+    LAYER_NUM botLayer;
 
     aVia->ReturnLayerPair( &topLayer, &botLayer );
 
@@ -964,7 +964,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
             if( module->GetReference() == wxEmptyString )
             {
-                ThrowIOError( _("Component with value of \"%s\" has empty reference id."),
+                ThrowIOError( _("Component with value of %s has empty reference id."),
                                 GetChars( module->GetValue() ) );
             }
 
@@ -972,7 +972,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             STRINGSET_PAIR refpair = refs.insert( TO_UTF8( module->GetReference() ) );
             if( !refpair.second )      // insert failed
             {
-                ThrowIOError( _("Multiple components have identical reference IDs of \"%s\"."),
+                ThrowIOError( _("Multiple components have identical reference IDs of %s."),
                       GetChars( module->GetReference() ) );
             }
         }
@@ -991,7 +991,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
         int layerCount = aBoard->GetCopperLayerCount();
 
-        for( int pcbNdx=0;  pcbNdx<layerCount; ++pcbNdx )
+        for( LAYER_NUM pcbNdx=FIRST_LAYER; pcbNdx<layerCount; ++pcbNdx )
         {
             LAYER*      layer = new LAYER( pcb->structure );
             pcb->structure->layers.push_back( layer );
@@ -1415,7 +1415,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         NETCLASS*   netclass  = nclasses.GetDefault();
 
         PADSTACK*   via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
-                                   0, aBoard->GetCopperLayerCount()-1 );
+                                   FIRST_LAYER, aBoard->GetCopperLayerCount()-1 );
 
         // we AppendVia() this first one, there is no way it can be a duplicate,
         // the pcb->library via container is empty at this point.  After this,
@@ -1431,7 +1431,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             int viaDrill = aBoard->m_ViasDimensionsList[i].m_Drill;
 
             via = makeVia( viaSize, viaDrill,
-                           0, aBoard->GetCopperLayerCount()-1 );
+                           FIRST_LAYER, aBoard->GetCopperLayerCount()-1 );
 
             // maybe add 'via' to the library, but only if unique.
             PADSTACK* registered = pcb->library->LookupVia( via );
@@ -1448,7 +1448,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             netclass = nc->second;
 
             via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
-                           0, aBoard->GetCopperLayerCount()-1 );
+                           FIRST_LAYER, aBoard->GetCopperLayerCount()-1 );
 
             // maybe add 'via' to the library, but only if unique.
             PADSTACK* registered = pcb->library->LookupVia( via );
@@ -1474,7 +1474,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
         int old_netcode = -1;
         int old_width = -1;
-        int old_layer = -1;
+        LAYER_NUM old_layer = UNDEFINED_LAYER;
 
         for( int i=0;  i<items.GetCount();  ++i )
         {
@@ -1508,8 +1508,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
                 wire->wire_type = T_protect;  // @todo, this should be configurable
 
-                int kiLayer  = track->GetLayer();
-                int pcbLayer = kicadLayer2pcb[kiLayer];
+                LAYER_NUM kiLayer  = track->GetLayer();
+                LAYER_NUM pcbLayer = kicadLayer2pcb[kiLayer];
 
                 path = new PATH( wire );
                 wire->SetShape( path );
@@ -1666,7 +1666,7 @@ void SPECCTRA_DB::exportNETCLASS( NETCLASS* aNetClass, BOARD* aBoard )
     // this should never become a performance issue.
 
     PADSTACK* via = makeVia( aNetClass->GetViaDiameter(), aNetClass->GetViaDrill(),
-                             0, aBoard->GetCopperLayerCount()-1 );
+                             FIRST_LAYER, aBoard->GetCopperLayerCount()-1 );
 
     snprintf( text, sizeof(text), "(use_via %s)", via->GetPadstackId().c_str() );
     clazz->circuit.push_back( text );

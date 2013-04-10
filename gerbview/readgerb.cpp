@@ -11,6 +11,7 @@
 #include <class_GERBER.h>
 
 #include <html_messagebox.h>
+#include <macros.h>
 
 /* Read a gerber file, RS274D or RS274X format.
  */
@@ -24,7 +25,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
 
     wxString msg;
     char*    text;
-    int      layer;         /* current layer used in GerbView */
+    LAYER_NUM layer;         // current layer used in GerbView
 
     layer = getActiveLayer();
 
@@ -43,7 +44,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
     gerber->m_Current_File = wxFopen( GERBER_FullFileName, wxT( "rt" ) );
     if( gerber->m_Current_File == 0 )
     {
-        msg = _( "File " ) + GERBER_FullFileName + _( " not found" );
+        msg.Printf( _( "File <%s> not found" ), GetChars( GERBER_FullFileName ) );
         DisplayError( this, msg, 10 );
         return false;
     }

@@ -10,6 +10,9 @@
 #include <base_struct.h>
 #include <eda_text.h>               // EDA_TEXT_HJUSTIFY_T and EDA_TEXT_VJUSTIFY_T
 
+/// Minimum dimension in pixel for drawing text
+#define MIN_TEXT_SIZE   5
+
 class EDA_DRAW_PANEL;
 class PLOTTER;
 
@@ -84,5 +87,28 @@ void DrawGraphicText( EDA_DRAW_PANEL * aPanel,
                       void (*aCallback)( int x0, int y0, int xf, int yf ) = NULL,
                       PLOTTER * aPlotter = NULL );
 
+
+/**
+ * Draw graphic text with a border, so that it can be read on different
+ * backgrounds. See DrawGraphicText for most of the parameters.
+ * If aBgColor is a dark color text is drawn in aColor2 with aColor1
+ * border; otherwise colors are swapped.
+ */
+void DrawGraphicHaloText( EDA_DRAW_PANEL * aPanel,
+                          wxDC * aDC,
+                          const wxPoint &aPos,
+                          enum EDA_COLOR_T aBgColor,
+                          enum EDA_COLOR_T aColor1,
+                          enum EDA_COLOR_T aColor2,
+                          const wxString &aText,
+                          int aOrient,
+                          const wxSize &aSize,
+                          enum EDA_TEXT_HJUSTIFY_T aH_justify,
+                          enum EDA_TEXT_VJUSTIFY_T aV_justify,
+                          int aWidth,
+                          bool aItalic,
+                          bool aBold,
+                          void (*aCallback)( int x0, int y0, int xf, int yf ) = NULL,
+                          PLOTTER * aPlotter = NULL );
 
 #endif /* __INCLUDE__DRAWTXT_H__ */

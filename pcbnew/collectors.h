@@ -71,13 +71,13 @@ public:
      * Function IsLayerLocked
      * @return bool - true if the given layer is locked, else false.
      */
-    virtual     bool IsLayerLocked( int layer ) const = 0;
+    virtual     bool IsLayerLocked( LAYER_NUM layer ) const = 0;
 
     /**
      * Function IsLayerVisible
      * @return bool - true if the given layer is visible, else false.
      */
-    virtual     bool IsLayerVisible( int layer ) const = 0;
+    virtual     bool IsLayerVisible( LAYER_NUM layer ) const = 0;
 
     /**
      * Function IgnoreLockedLayers
@@ -95,7 +95,7 @@ public:
      * Function GetPreferredLayer
      * @return int - the preferred layer for HitTest()ing.
      */
-    virtual     int GetPreferredLayer() const = 0;
+    virtual     LAYER_NUM GetPreferredLayer() const = 0;
 
     /**
      * Function IgnorePreferredLayer
@@ -376,13 +376,13 @@ private:
     // the storage architecture here is not important, since this is only
     // a carrier object and its functions are what is used, and data only indirectly.
 
-    int     m_PreferredLayer;
+    LAYER_NUM m_PreferredLayer;
     bool    m_IgnorePreferredLayer;
 
-    int     m_LayerLocked;                  ///< bit-mapped layer locked bits
+    LAYER_MSK m_LayerLocked;                  ///< bit-mapped layer locked bits
     bool    m_IgnoreLockedLayers;
 
-    int     m_LayerVisible;                 ///< bit-mapped layer visible bits
+    LAYER_MSK m_LayerVisible;                 ///< bit-mapped layer visible bits
     bool    m_IgnoreNonVisibleLayers;
 
     bool    m_IgnoreLockedItems;
@@ -407,11 +407,11 @@ public:
      * @param aVisibleLayerMask = current visible layers (bit mask)
      * @param aPreferredLayer = the layer to search first
      */
-    GENERAL_COLLECTORS_GUIDE( int aVisibleLayerMask, int aPreferredLayer )
+    GENERAL_COLLECTORS_GUIDE( LAYER_MSK aVisibleLayerMask, LAYER_NUM aPreferredLayer )
     {
         m_PreferredLayer            = LAYER_N_FRONT;
         m_IgnorePreferredLayer      = false;
-        m_LayerLocked               = 0;
+        m_LayerLocked               = NO_LAYERS;
         m_LayerVisible              = aVisibleLayerMask;
         m_IgnoreLockedLayers        = true;
         m_IgnoreNonVisibleLayers    = true;
@@ -443,13 +443,16 @@ public:
      * Function IsLayerLocked
      * @return bool - true if the given layer is locked, else false.
      */
-    bool IsLayerLocked( int aLayer ) const  {  return (1<<aLayer) & m_LayerLocked; }
-    void SetLayerLocked( int aLayer, bool isLocked )
+    bool IsLayerLocked( LAYER_NUM aLayer ) const  
+    {  
+        return GetLayerMask( aLayer ) & m_LayerLocked; 
+    }
+    void SetLayerLocked( LAYER_NUM aLayer, bool isLocked )
     {
         if( isLocked )
-            m_LayerLocked |= 1 << aLayer;
+            m_LayerLocked |= GetLayerMask( aLayer );
         else
-            m_LayerLocked &= ~(1 << aLayer);
+            m_LayerLocked &= ~GetLayerMask( aLayer );
     }
 
 
@@ -457,15 +460,18 @@ public:
      * Function IsLayerVisible
      * @return bool - true if the given layer is visible, else false.
      */
-    bool IsLayerVisible( int aLayer ) const { return (1<<aLayer) & m_LayerVisible; }
-    void SetLayerVisible( int aLayer, bool isVisible )
+    bool IsLayerVisible( LAYER_NUM aLayer ) const 
+    { 
+        return GetLayerMask( aLayer ) & m_LayerVisible; 
+    }
+    void SetLayerVisible( LAYER_NUM aLayer, bool isVisible )
     {
         if( isVisible )
-            m_LayerVisible |= 1 << aLayer;
+            m_LayerVisible |= GetLayerMask( aLayer );
         else
-            m_LayerVisible &= ~(1 << aLayer);
+            m_LayerVisible &= ~GetLayerMask( aLayer );
     }
-    void SetLayerVisibleBits( int aLayerBits ) { m_LayerVisible = aLayerBits; }
+    void SetLayerVisibleBits( LAYER_MSK aLayerBits ) { m_LayerVisible = aLayerBits; }
 
 
     /**
@@ -488,8 +494,8 @@ public:
      * Function GetPreferredLayer
      * @return int - the preferred layer for HitTest()ing.
      */
-    int GetPreferredLayer() const { return m_PreferredLayer; }
-    void SetPreferredLayer( int aLayer )  { m_PreferredLayer = aLayer; }
+    LAYER_NUM GetPreferredLayer() const { return m_PreferredLayer; }
+    void SetPreferredLayer( LAYER_NUM aLayer )  { m_PreferredLayer = aLayer; }
 
 
     /**

@@ -394,7 +394,10 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
         break;
 
     case LAYER_WIRE:
-        if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_BUS_ENTRY_T ) )
+        if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_BUS_WIRE_ENTRY_T) )
+            return true;
+
+        if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_BUS_BUS_ENTRY_T) )
             return true;
 
         if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_JUNCTION_T ) )
@@ -505,7 +508,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     }
 
     // This section is not used, but written for file compatibility
-    if( fprintf( aFile, "EELAYER %d %d\n", MAX_LAYERS, 0 ) < 0
+    if( fprintf( aFile, "EELAYER %d %d\n", NB_SCH_LAYERS, 0 ) < 0
         || fprintf( aFile, "EELAYER END\n" ) < 0 )
         return false;
 
@@ -958,13 +961,15 @@ bool SCH_SCREEN::BreakSegmentsOnJunctions()
             if( BreakSegment( junction->GetPosition() ) )
                 brokenSegments = true;
         }
-        else if( item->Type() == SCH_BUS_ENTRY_T )
+        else 
         {
-            SCH_BUS_ENTRY* busEntry = ( SCH_BUS_ENTRY* ) item;
-
-            if( BreakSegment( busEntry->GetPosition() )
-                || BreakSegment( busEntry->m_End() ) )
-                brokenSegments = true;
+            SCH_BUS_ENTRY_BASE* busEntry = dynamic_cast<SCH_BUS_ENTRY_BASE*>( item );
+            if( busEntry )
+            {
+                if( BreakSegment( busEntry->GetPosition() )
+                 || BreakSegment( busEntry->m_End() ) )
+                    brokenSegments = true;
+            }
         }
     }
 
@@ -1084,10 +1089,10 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
              */
             SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
             if( fpfield->GetText().IsEmpty()
-              && ( fpfield->GetPosition() == component->GetPosition() ) )
+              && ( fpfield->GetTextPosition() == component->GetPosition() ) )
             {
                 fpfield->SetOrientation( component->GetField( VALUE )->GetOrientation() );
-                fpfield->SetPosition( component->GetField( VALUE )->GetPosition() );
+                fpfield->SetTextPosition( component->GetField( VALUE )->GetTextPosition() );
                 fpfield->SetSize( component->GetField( VALUE )->GetSize() );
 
                 if( fpfield->GetOrientation() == 0 )

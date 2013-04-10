@@ -61,12 +61,12 @@ void PCB_PARSER::init()
     // Add untranslated default (i.e. english) layernames.
     // Some may be overridden later if parsing a board rather than a footprint.
     // The english name will survive if parsing only a footprint.
-    for( int layerNdx = 0;  layerNdx < NB_LAYERS;  ++layerNdx )
+    for( LAYER_NUM layerNdx = FIRST_LAYER;  layerNdx < NB_PCB_LAYERS;  ++layerNdx )
     {
         std::string untranslated = TO_UTF8( BOARD::GetStandardLayerName( layerNdx ) );
 
         m_layerIndices[ untranslated ] = layerNdx;
-        m_layerMasks[ untranslated ]   = 1 << layerNdx;
+        m_layerMasks[ untranslated ]   = GetLayerMask( layerNdx );
     }
 
     m_layerMasks[ "*.Cu" ]      = ALL_CU_LAYERS;
@@ -89,7 +89,7 @@ double PCB_PARSER::parseDouble() throw( IO_ERROR )
     if( errno )
     {
         wxString error;
-        error.Printf( _( "invalid floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
+        error.Printf( _( "invalid floating point number in file: <%s>\nline: %d, offset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
@@ -98,7 +98,7 @@ double PCB_PARSER::parseDouble() throw( IO_ERROR )
     if( CurText() == tmp )
     {
         wxString error;
-        error.Printf( _( "missing floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
+        error.Printf( _( "missing floating point number in file: <%s>\nline: %d, offset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
@@ -665,10 +665,10 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
     T           token;
     std::string name;
     std::string type;
-    int         layerIndex;
+    LAYER_NUM   layerIndex;
     bool        isVisible = true;
-    int         visibleLayers = 0;
-    int         enabledLayers = 0;
+    LAYER_MSK   visibleLayers = NO_LAYERS;
+    LAYER_MSK   enabledLayers = NO_LAYERS;
     int         copperLayerCount = 0;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -700,13 +700,13 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
             Expecting( "hide or )" );
         }
 
-        enabledLayers |= 1 << layerIndex;
+        enabledLayers |= GetLayerMask( layerIndex );
 
         if( isVisible )
-            visibleLayers |= 1 << layerIndex;
+            visibleLayers |= GetLayerMask( layerIndex );
 
         m_layerIndices[ name ] = layerIndex;
-        m_layerMasks[ name ]   = 1 << layerIndex;
+        m_layerMasks[ name ]   = GetLayerMask(layerIndex);
 
         wxString        wname = FROM_UTF8( name.c_str() );
         enum LAYER_T    layerType = LAYER::ParseType( type.c_str() );
@@ -736,10 +736,11 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-int PCB_PARSER::lookUpLayer( const LAYER_MAP& aMap ) throw( PARSE_ERROR, IO_ERROR )
+template<class T, class M>
+T PCB_PARSER::lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR )
 {
     // avoid constructing another std::string, use lexer's directly
-    LAYER_MAP::const_iterator it = aMap.find( curText );
+    typename M::const_iterator it = aMap.find( curText );
 
     if( it == aMap.end() )
     {
@@ -747,13 +748,13 @@ int PCB_PARSER::lookUpLayer( const LAYER_MAP& aMap ) throw( PARSE_ERROR, IO_ERRO
         // dump the whole darn table, there's something wrong with it.
         for( it = aMap.begin();  it != aMap.end();  ++it )
         {
-            printf( &aMap == &m_layerIndices ? "lm[%s] = %d\n" : "lm[%s] = %08X\n",
+            printf( &aMap == (void*)&m_layerIndices ? "lm[%s] = %d\n" : "lm[%s] = %08X\n",
                 it->first.c_str(), it->second );
         }
 #endif
 
         wxString error = wxString::Format(
-            _( "Layer '%s' in file <%s> at line %d, position %d, was not defined in the layers section" ),
+            _( "Layer %s in file <%s> at line %d, position %d, was not defined in the layers section" ),
             GetChars( FROM_UTF8( CurText() ) ), GetChars( CurSource() ),
             CurLineNumber(), CurOffset() );
 
@@ -764,14 +765,14 @@ int PCB_PARSER::lookUpLayer( const LAYER_MAP& aMap ) throw( PARSE_ERROR, IO_ERRO
 }
 
 
-int PCB_PARSER::parseBoardItemLayer() throw( PARSE_ERROR, IO_ERROR )
+LAYER_NUM PCB_PARSER::parseBoardItemLayer() throw( PARSE_ERROR, IO_ERROR )
 {
     wxCHECK_MSG( CurTok() == T_layer, UNDEFINED_LAYER,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as layer." ) );
 
     NextTok();
 
-    int layerIndex = lookUpLayer( m_layerIndices );
+    LAYER_NUM layerIndex = lookUpLayer<LAYER_NUM>( m_layerIndices );
 
     // Handle closing ) in object parser.
 
@@ -779,17 +780,17 @@ int PCB_PARSER::parseBoardItemLayer() throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-int PCB_PARSER::parseBoardItemLayersAsMask() throw( PARSE_ERROR, IO_ERROR )
+LAYER_MSK PCB_PARSER::parseBoardItemLayersAsMask() throw( PARSE_ERROR, IO_ERROR )
 {
-    wxCHECK_MSG( CurTok() == T_layers, 0,
+    wxCHECK_MSG( CurTok() == T_layers, NO_LAYERS,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as item layer mask." ) );
 
-    int layerMask = 0;
+    LAYER_MSK layerMask = NO_LAYERS;
 
     for( T token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
-        int mask = lookUpLayer( m_layerMasks );
+        LAYER_MSK mask = lookUpLayer<LAYER_MSK>( m_layerMasks );
         layerMask |= mask;
     }
 
@@ -1127,7 +1128,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
         // auto_ptr will delete nc on this code path
 
         wxString error;
-        error.Printf( _( "duplicate NETCLASS name '%s' in file %s at line %d, offset %d" ),
+        error.Printf( _( "duplicate NETCLASS name '%s' in file <%s> at line %d, offset %d" ),
                       nc->GetName().GetData(), CurSource().GetData(), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
@@ -1282,7 +1283,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_status:
-            segment->SetStatus( parseHex() );
+            segment->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
         default:
@@ -1668,18 +1669,19 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
             text->SetOrientation( orientation );
             text->SetDrawCoord();
 
-            if( text->GetType() == TEXT_is_REFERENCE )
+            switch( text->GetType() )
             {
+            case TEXTE_MODULE::TEXT_is_REFERENCE:
                 module->Reference() = *text;
                 delete text;
-            }
-            else if( text->GetType() == TEXT_is_VALUE )
-            {
+                break;
+
+            case TEXTE_MODULE::TEXT_is_VALUE:
                 module->Value() = *text;
                 delete text;
-            }
-            else
-            {
+                break;
+
+            default:
                 module->GraphicalItems().PushBack( text );
             }
 
@@ -1742,11 +1744,11 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
     switch( token )
     {
     case T_reference:
-        text->SetType( TEXT_is_REFERENCE );
+        text->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );
         break;
 
     case T_value:
-        text->SetType( TEXT_is_VALUE );
+        text->SetType( TEXTE_MODULE::TEXT_is_VALUE );
         break;
 
     case T_user:
@@ -1966,7 +1968,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_status:
-            segment->SetStatus( parseHex() );
+            segment->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
         default:
@@ -2152,16 +2154,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
 
         case T_layers:
             {
-                int layerMask = parseBoardItemLayersAsMask();
-
-                // 15-Nov-2012 before today, only the cu layers that were used were
-                // saved.  After wildcard *.Cu support went into effect, this is no
-                // longer an issue, but in order to load the interrim s-expression files,
-                // turn on all Cu layers for thru hole pads.  New files will not need this
-                // and eventually this code can be removed.
-                if( pad->GetAttribute() == PAD_STANDARD )
-                    layerMask |= ALL_CU_LAYERS;
-
+                LAYER_MSK layerMask = parseBoardItemLayersAsMask();
                 pad->SetLayerMask( layerMask );
             }
             break;
@@ -2272,7 +2265,7 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_status:
-            track->SetStatus( parseHex() );
+            track->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
         default:
@@ -2331,11 +2324,11 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
 
         case T_layers:
             {
-                int layer1, layer2;
+                LAYER_NUM layer1, layer2;
                 NextTok();
-                layer1 = lookUpLayer( m_layerIndices );
+                layer1 = lookUpLayer<LAYER_NUM>( m_layerIndices );
                 NextTok();
-                layer2 = lookUpLayer( m_layerIndices );
+                layer2 = lookUpLayer<LAYER_NUM>( m_layerIndices );
                 via->SetLayerPair( layer1, layer2 );
                 NeedRIGHT();
             }
@@ -2352,7 +2345,7 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_status:
-            via->SetStatus( parseHex() );
+            via->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             NeedRIGHT();
             break;
 

@@ -90,7 +90,7 @@
 typedef LEGACY_PLUGIN::BIU      BIU;
 
 
-#define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
+#define VERSION_ERROR_FORMAT    _( "File <%s> is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
 #define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
 #define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
@@ -208,6 +208,14 @@ static inline int intParse( const char* next, const char** out = NULL )
     return (int) strtol( next, (char**) out, 10 );
 }
 
+/**
+ * Function layerParse
+ * Like intParse but returns a LAYER_NUM
+ */
+static inline LAYER_NUM layerParse( const char* next, const char** out = NULL )
+{
+    return intParse( next, out );
+}
 
 /**
  * Function hexParse
@@ -409,7 +417,7 @@ void LEGACY_PLUGIN::loadGENERAL()
 
         else if( TESTLINE( "EnabledLayers" ) )
         {
-            int enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
+            LAYER_MSK enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
 
             // layer usage
             m_board->SetEnabledLayers( enabledLayers );
@@ -420,22 +428,15 @@ void LEGACY_PLUGIN::loadGENERAL()
 
         else if( TESTLINE( "VisibleLayers" ) )
         {
-            int visibleLayers = hexParse( line + SZ( "VisibleLayers" ) );
+            LAYER_MSK visibleLayers = hexParse( line + SZ( "VisibleLayers" ) );
             m_board->SetVisibleLayers( visibleLayers );
         }
 
         else if( TESTLINE( "Ly" ) )    // Old format for Layer count
         {
-            int layer_mask  = hexParse( line + SZ( "Ly" ) );
-            int layer_count = 0;
+            LAYER_MSK layer_mask  = hexParse( line + SZ( "Ly" ) );
 
-            for( int ii = 0;  ii < NB_COPPER_LAYERS && layer_mask;  ++ii, layer_mask >>= 1 )
-            {
-                if( layer_mask & 1 )
-                    layer_count++;
-            }
-
-            m_board->SetCopperLayerCount( layer_count );
+            m_board->SetCopperLayerCount( LayerMaskCountSet( layer_mask & ALL_CU_LAYERS ) );
         }
 
         else if( TESTLINE( "BoardThickness" ) )
@@ -657,7 +658,7 @@ void LEGACY_PLUGIN::loadSETUP()
         {
             // eg: "Layer[n]  <a_Layer_name_with_no_spaces> <LAYER_T>"
 
-            int   layer = intParse( line + SZ( "Layer[" ), &data );
+            LAYER_NUM layer = layerParse( line + SZ( "Layer[" ), &data );
 
             data = strtok( (char*) data+1, delims );    // +1 for ']'
             if( data )
@@ -947,12 +948,17 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
 
             TEXTE_MODULE* textm;
 
-            if( tnum == TEXT_is_REFERENCE )
-                textm = &module->Reference();
-            else if( tnum == TEXT_is_VALUE )
-                textm = &module->Value();
-            else
+            switch( tnum )
             {
+            case TEXTE_MODULE::TEXT_is_REFERENCE:
+                textm = &module->Reference();
+                break;
+
+            case TEXTE_MODULE::TEXT_is_VALUE:
+                textm = &module->Value();
+                break;
+
+            default:
                 // text is a drawing
                 textm = new TEXTE_MODULE( module.get() );
                 module->GraphicalItems().PushBack( textm );
@@ -970,7 +976,7 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             BIU pos_x  = biuParse( line + SZ( "Po" ), &data );
             BIU pos_y  = biuParse( data, &data );
             int orient = intParse( data, &data );
-            int layer  = intParse( data, &data );
+            LAYER_NUM layer = layerParse( data, &data );
 
             long edittime  = hexParse( data, &data );
             time_t timestamp = hexParse( data, &data );
@@ -1239,7 +1245,6 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             // sscanf( PtLine, "%s %s %X", BufLine, BufCar, &m_layerMask );
 
             PAD_ATTR_T  attribute;
-            int         layer_mask;
 
             data = strtok( line + SZ( "At" ), delims );
 
@@ -1255,7 +1260,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             data = strtok( NULL, delims );  // skip BufCar
             data = strtok( NULL, delims );
 
-            layer_mask = hexParse( data );
+            LAYER_MSK layer_mask = hexParse( data );
 
             pad->SetLayerMask( layer_mask );
             pad->SetAttribute( attribute );
@@ -1378,7 +1383,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 
     // common to all cases, and we have to check their values uniformly at end
     BIU     width = 1;
-    int     layer = FIRST_NON_COPPER_LAYER;
+    LAYER_NUM layer = FIRST_NON_COPPER_LAYER;
 
     switch( shape )
     {
@@ -1392,7 +1397,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
             double  angle    = degParse( data, &data );
 
             width   = biuParse( data, &data );
-            layer   = intParse( data );
+            layer   = layerParse( data );
 
             dwg->SetAngle( angle );
             dwg->m_Start0 = wxPoint( start0_x, start0_y );
@@ -1412,7 +1417,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
             BIU     end0_y   = biuParse( data, &data );
 
             width   = biuParse( data, &data );
-            layer   = intParse( data );
+            layer   = layerParse( data );
 
             dwg->m_Start0 = wxPoint( start0_x, start0_y );
             dwg->m_End0   = wxPoint( end0_x, end0_y );
@@ -1431,7 +1436,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
             int ptCount  = intParse( data, &data );
 
             width   = biuParse( data, &data );
-            layer   = intParse( data );
+            layer   = layerParse( data );
 
             dwg->m_Start0 = wxPoint( start0_x, start0_y );
             dwg->m_End0   = wxPoint( end0_x, end0_y );
@@ -1482,7 +1487,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
     // can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
     // @todo: changes use of EDGE_MODULE these footprints and allows only
     // m_Layer >= FIRST_NON_COPPER_LAYER
-    if( layer < 0 || layer > LAST_NON_COPPER_LAYER )
+    if( layer < FIRST_LAYER || layer > LAST_NON_COPPER_LAYER )
         layer = SILKSCREEN_N_FRONT;
 
     dwg->SetWidth( width );
@@ -1541,19 +1546,21 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
     // after switching to strtok, there's no easy coming back because of the
     // embedded nul(s?) placed to the right of the current field.
+    // (that's the reason why strtok was deprecated...)
     char*   mirror  = strtok( (char*) data, delims );
     char*   hide    = strtok( NULL, delims );
     char*   tmp     = strtok( NULL, delims );
-    int     layer   = tmp ? intParse( tmp ) : SILKSCREEN_N_FRONT;
+    LAYER_NUM layer = tmp ? layerParse( tmp ) : SILKSCREEN_N_FRONT;
     char*   italic  = strtok( NULL, delims );
 
     char*   hjust   = strtok( (char*) txt_end, delims );
     char*   vjust   = strtok( NULL, delims );
 
-    if( type != TEXT_is_REFERENCE && type != TEXT_is_VALUE )
-        type = TEXT_is_DIVERS;
+    if( type != TEXTE_MODULE::TEXT_is_REFERENCE
+     && type != TEXTE_MODULE::TEXT_is_VALUE )
+        type = TEXTE_MODULE::TEXT_is_DIVERS;
 
-    aText->SetType( type );
+    aText->SetType( static_cast<TEXTE_MODULE::TEXT_TYPE>( type ) );
 
     aText->SetPos0( wxPoint( pos0_x, pos0_y ) );
     aText->SetSize( wxSize( size0_x, size0_y ) );
@@ -1585,10 +1592,10 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     if( vjust )
         aText->SetVertJustify( vertJustify( vjust ) );
 
-    if( layer < 0 )
-        layer = 0;
-    else if( layer > LAST_NO_COPPER_LAYER )
-        layer = LAST_NO_COPPER_LAYER;
+    if( layer < FIRST_LAYER )
+        layer = FIRST_LAYER;
+    else if( layer > LAST_NON_COPPER_LAYER )
+        layer = LAST_NON_COPPER_LAYER;
     else if( layer == LAYER_N_BACK )
         layer = SILKSCREEN_N_BACK;
     else if( layer == LAYER_N_FRONT )
@@ -1702,14 +1709,14 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                 switch( i )
                 {
                 case 0:
-                    int layer;
-                    layer = intParse( data );
+                    LAYER_NUM layer;
+                    layer = layerParse( data );
 
-                    if( layer < FIRST_NO_COPPER_LAYER )
-                        layer = FIRST_NO_COPPER_LAYER;
+                    if( layer < FIRST_NON_COPPER_LAYER )
+                        layer = FIRST_NON_COPPER_LAYER;
 
-                    else if( layer > LAST_NO_COPPER_LAYER )
-                        layer = LAST_NO_COPPER_LAYER;
+                    else if( layer > LAST_NON_COPPER_LAYER )
+                        layer = LAST_NON_COPPER_LAYER;
 
                     dseg->SetLayer( layer );
                     break;
@@ -1729,9 +1736,9 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     dseg->SetTimeStamp( timestamp );
                     break;
                 case 4:
-                    int state;
-                    state = hexParse( data );
-                    dseg->SetState( state, ON );
+                    STATUS_FLAGS state;
+                    state = static_cast<STATUS_FLAGS>( hexParse( data ) );
+                    dseg->SetState( state, true );
                     break;
 
                     // Bezier Control Points
@@ -1894,7 +1901,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             // e.g. "De 21 1 0 Normal C\r\n"
             // sscanf( line + 2, " %d %d %lX %s %c\n", &m_Layer, &normal_display, &m_TimeStamp, style, &hJustify );
 
-            int     layer       = intParse( line + SZ( "De" ), &data );
+            LAYER_NUM layer     = layerParse( line + SZ( "De" ), &data );
             int     notMirrored = intParse( data, &data );
             time_t  timestamp   = hexParse( data, &data );
             char*   style       = strtok( (char*) data, delims );
@@ -1918,8 +1925,8 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 
             if( layer < FIRST_COPPER_LAYER )
                 layer = FIRST_COPPER_LAYER;
-            else if( layer > LAST_NO_COPPER_LAYER )
-                layer = LAST_NO_COPPER_LAYER;
+            else if( layer > LAST_NON_COPPER_LAYER )
+                layer = LAST_NON_COPPER_LAYER;
 
             pcbtxt->SetLayer( layer );
         }
@@ -1990,11 +1997,14 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         int         makeType;
         time_t      timeStamp;
-        int         layer, type, flags, net_code;
+        int         layer, type, net_code, flags_int;
 
         // parse the 2nd line to determine the type of object
         // e.g. "De 15 1 7 0 0"   for a via
-        sscanf( line + SZ( "De" ), " %d %d %d %lX %X", &layer, &type, &net_code, &timeStamp, &flags );
+        sscanf( line + SZ( "De" ), " %d %d %d %lX %X", &layer, &type, &net_code,
+                &timeStamp, &flags_int );
+        STATUS_FLAGS flags;
+        flags = static_cast<STATUS_FLAGS>( flags_int );
 
         if( aStructType==PCB_TRACE_T && type==1 )
             makeType = PCB_VIA_T;
@@ -2044,7 +2054,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         }
 
         newTrack->SetNet( net_code );
-        newTrack->SetState( flags, ON );
+        newTrack->SetState( flags, true );
     }
 
     THROW_IO_ERROR( "Missing '$EndTRACK'" );
@@ -2198,7 +2208,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
         else if( TESTLINE( "ZLayer" ) )     // layer found
         {
-            int layer = intParse( line + SZ( "ZLayer" ) );
+            LAYER_NUM layer = layerParse( line + SZ( "ZLayer" ) );
             zc->SetLayer( layer );
         }
 
@@ -2348,9 +2358,9 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 BIU     y = biuParse( data, &data );
 
                 bool    end_contour = intParse( data, &data );  // end_countour was a bool when file saved, so '0' or '1' here
-                int     utility     = intParse( data );
+                int     cornerUtilityFlg  = intParse( data );
 
-               polysList.push_back( CPolyPt( x, y, end_contour, utility ) );
+               polysList.push_back( CPolyPt( x, y, end_contour, cornerUtilityFlg ) );
             }
             zc->AddFilledPolysList( polysList );
         }
@@ -2433,17 +2443,18 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
         else if( TESTLINE( "Ge" ) )
         {
-            int     layer;
+            LAYER_NUM layer;
             time_t  timestamp;
             int     shape;
+            int     ilayer;
 
-            sscanf( line + SZ( "Ge" ), " %d %d %lX", &shape, &layer, &timestamp );
+            sscanf( line + SZ( "Ge" ), " %d %d %lX", &shape, &ilayer, &timestamp );
 
-            if( layer < FIRST_NO_COPPER_LAYER )
-                layer = FIRST_NO_COPPER_LAYER;
-
-            else if( layer > LAST_NO_COPPER_LAYER )
-                layer = LAST_NO_COPPER_LAYER;
+            if( ilayer < FIRST_NON_COPPER_LAYER )
+                layer = FIRST_NON_COPPER_LAYER;
+            else if( ilayer > LAST_NON_COPPER_LAYER )
+                layer = LAST_NON_COPPER_LAYER;
+            else layer = ilayer;
 
             dim->SetLayer( layer );
             dim->SetTimeStamp( timestamp );
@@ -2623,18 +2634,18 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
             // sscanf( Line + 2, " %X %d %d %d %d %d %lX", &m_Shape, &m_Layer, &m_Pos.x, &m_Pos.y, &m_Size, &m_Width, &m_TimeStamp );
 
             int shape = intParse( line + SZ( "Po" ), &data );
-            int layer = intParse( data, &data );
+            LAYER_NUM layer = layerParse( data, &data );
             BIU pos_x = biuParse( data, &data );
             BIU pos_y = biuParse( data, &data );
             BIU size  = biuParse( data, &data );
             BIU width = biuParse( data, &data );
             time_t timestamp = hexParse( data );
 
-            if( layer < FIRST_NO_COPPER_LAYER )
-                layer = FIRST_NO_COPPER_LAYER;
+            if( layer < FIRST_NON_COPPER_LAYER )
+                layer = FIRST_NON_COPPER_LAYER;
 
-            else if( layer > LAST_NO_COPPER_LAYER )
-                layer = LAST_NO_COPPER_LAYER;
+            else if( layer > LAST_NON_COPPER_LAYER )
+                layer = LAST_NON_COPPER_LAYER;
 
             PCB_TARGET* t = new PCB_TARGET( m_board, shape, layer, wxPoint( pos_x, pos_y ), size, width );
             m_board->Add( t, ADD_APPEND );
@@ -2728,16 +2739,18 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in\nfile: '%s'\nline: %d\noffset: %d" ),
-            m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
+        m_error.Printf( _( "invalid float number in file: <%s>\nline: %d, offset: %d" ),
+            m_reader->GetSource().GetData(),
+            m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in\nfile: '%s'\nline: %d\noffset: %d" ),
-            m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
+        m_error.Printf( _( "missing float number in file: <%s>\nline: %d, offset: %d" ),
+            m_reader->GetSource().GetData(),
+            m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }
@@ -2763,7 +2776,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in\nfile: '%s'\nline: %d\noffset: %d" ),
+        m_error.Printf( _( "invalid float number in file: <%s>\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2771,7 +2784,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in\nfile: '%s'\nline: %d\noffset: %d" ),
+        m_error.Printf( _( "missing float number in file: <%s>\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2819,7 +2832,7 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
     FILE* fp = wxFopen( aFileName, wxT( "w" ) );
     if( !fp )
     {
-        m_error.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
+        m_error.Printf( _( "Unable to open file <%s>" ), aFileName.GetData() );
         THROW_IO_ERROR( m_error );
     }
 
@@ -2856,7 +2869,7 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
 
 wxString LEGACY_PLUGIN::writeError() const
 {
-    return wxString::Format( _( "error writing to file '%s'" ), m_filename.GetData() );
+    return wxString::Format( _( "error writing to file <%s>" ), m_filename.GetData() );
 }
 
 #define CHECK_WRITE_ERROR() \
@@ -2971,9 +2984,9 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 
     unsigned layerMask = ALL_CU_LAYERS & aBoard->GetEnabledLayers();
 
-    for( int layer = 0;  layerMask;  ++layer, layerMask >>= 1 )
+    for( LAYER_NUM layer = FIRST_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
     {
-        if( layerMask & 1 )
+        if( layerMask & GetLayerMask( layer ) )
         {
             fprintf( m_fp, "Layer[%d] %s %s\n", layer,
                      TO_UTF8( aBoard->GetLayerName( layer ) ),
@@ -3980,7 +3993,7 @@ void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
     }
 
 L_bad_library:
-    THROW_IO_ERROR( wxString::Format( _( "File '%s' is empty or is not a legacy library" ),
+    THROW_IO_ERROR( wxString::Format( _( "File <%s> is empty or is not a legacy library" ),
         m_lib_path.GetData() ) );
 }
 
@@ -4093,7 +4106,7 @@ void FPL_CACHE::Save()
     if( !m_writable )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "Legacy library file '%s' is read only" ), m_lib_path.GetData() ) );
+            _( "Legacy library file <%s> is read only" ), m_lib_path.GetData() ) );
     }
 
     wxString tempFileName;
@@ -4113,7 +4126,7 @@ void FPL_CACHE::Save()
         if( !fp )
         {
             THROW_IO_ERROR( wxString::Format(
-                _( "Unable to open or create legacy library file '%s'" ),
+                _( "Unable to open or create legacy library file <%s>" ),
                 m_lib_path.GetData() ) );
         }
 
@@ -4139,7 +4152,7 @@ void FPL_CACHE::Save()
     if( wxRename( tempFileName, m_lib_path ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "Unable to rename tempfile '%s' to library file '%s'" ),
+            _( "Unable to rename tempfile <%s> to library file <%s>" ),
             tempFileName.GetData(),
             m_lib_path.GetData() ) );
     }
@@ -4255,7 +4268,7 @@ void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* a
 
     if( !m_cache->m_writable )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ), aLibraryPath.GetData() ) );
     }
 
     std::string footprintName = TO_UTF8( aFootprint->GetLibRef() );
@@ -4299,7 +4312,7 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
 
     if( !m_cache->m_writable )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ), aLibraryPath.GetData() ) );
     }
 
     std::string footprintName = TO_UTF8( aFootprintName );
@@ -4309,7 +4322,7 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
     if( erasedCount != 1 )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library '%s' has no footprint '%s' to delete" ),
+            _( "library <%s> has no footprint %s to delete" ),
             aLibraryPath.GetData(), aFootprintName.GetData() ) );
     }
 
@@ -4322,7 +4335,7 @@ void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES
     if( wxFileExists( aLibraryPath ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library '%s' already exists, will not create anew" ),
+            _( "library <%s> already exists, will not create a new" ),
             aLibraryPath.GetData() ) );
     }
 
@@ -4349,7 +4362,7 @@ bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES
     if( wxRemove( aLibraryPath ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library '%s' cannot be deleted" ),
+            _( "library <%s> cannot be deleted" ),
             aLibraryPath.GetData() ) );
     }
 

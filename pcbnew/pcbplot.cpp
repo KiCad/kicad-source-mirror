@@ -44,7 +44,7 @@
 
 /** Get the 'traditional' gerber extension depending on the layer
 */
-static wxString GetGerberExtension( int layer )/*{{{*/
+static wxString GetGerberExtension( LAYER_NUM layer )/*{{{*/
 {
     switch( layer )
     {
@@ -153,7 +153,7 @@ bool EnsureOutputDirectory( wxFileName *aOutputDir,
     if( !aOutputDir->MakeAbsolute( boardFilePath ) )
     {
         wxString msg;
-        msg.Printf( _( "Cannot make %s absolute with respect to %s!" ),
+        msg.Printf( _( "Cannot make <%s> absolute with respect to <%s>!" ),
                     GetChars( aOutputDir->GetPath() ),
                     GetChars( boardFilePath ) );
         wxMessageBox( msg, _( "Plot" ), wxOK | wxICON_ERROR );
@@ -168,9 +168,9 @@ bool EnsureOutputDirectory( wxFileName *aOutputDir,
             if( aMessageBox )
             {
                 wxString msg;
-                msg.Printf( _( "Directory %s created.\n" ), GetChars( outputPath ) );
+                msg.Printf( _( "Directory <%s> created.\n" ), GetChars( outputPath ) );
                 aMessageBox->AppendText( msg );
-                    return true;
+                return true;
             }
         }
         else
@@ -190,8 +190,6 @@ bool EnsureOutputDirectory( wxFileName *aOutputDir,
  */
 void DIALOG_PLOT::Plot( wxCommandEvent& event )
 {
-    int        layer;
-
     applyPlotSettings();
 
     // Create output directory if it does not exist (also transform it in
@@ -255,11 +253,9 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     // Save the current plot options in the board
     m_parent->SetPlotSettings( m_plotOpts );
 
-    long layerMask = 1;
-
-    for( layer = 0; layer < NB_LAYERS; layer++, layerMask <<= 1 )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
     {
-        if( m_plotOpts.GetLayerSelection() & layerMask )
+        if( m_plotOpts.GetLayerSelection() & GetLayerMask( layer ) )
         {
             // Pick the basename from the board file
             wxFileName fn( boardFilename );
@@ -374,7 +370,7 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix, /*{{{*/
 }/*}}}*/
 
 /** Plot a single layer on the current plotfile */
-bool PLOT_CONTROLLER::PlotLayer( int aLayer )/*{{{*/
+bool PLOT_CONTROLLER::PlotLayer( LAYER_NUM aLayer )/*{{{*/
 {
     LOCALE_IO toggle;
 

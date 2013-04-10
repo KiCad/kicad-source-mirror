@@ -72,9 +72,9 @@ MODULE::MODULE( BOARD* parent ) :
     m_ThermalWidth = 0; // Use zone setting by default
     m_ThermalGap = 0; // Use zone setting by default
 
-    m_Reference = new TEXTE_MODULE( this, TEXT_is_REFERENCE );
+    m_Reference = new TEXTE_MODULE( this, TEXTE_MODULE::TEXT_is_REFERENCE );
 
-    m_Value = new TEXTE_MODULE( this, TEXT_is_VALUE );
+    m_Value = new TEXTE_MODULE( this, TEXTE_MODULE::TEXT_is_VALUE );
 
     // Reserve one void 3D entry, to avoid problems with void list
     m_3D_Drawings.PushBack( new S3D_MASTER( this ) );
@@ -181,21 +181,13 @@ MODULE::~MODULE()
 void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                         int dim_ancre, GR_DRAWMODE draw_mode )
 {
-    int anchor_size = DC->DeviceToLogicalXRel( dim_ancre );
-
     GRSetDrawMode( DC, draw_mode );
 
     if( GetBoard()->IsElementVisible( ANCHOR_VISIBLE ) )
     {
-        EDA_COLOR_T color = g_ColorsSettings.GetItemColor( ANCHOR_VISIBLE );
-        GRLine( panel->GetClipBox(), DC,
-                m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
-                m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,
-                0, color );
-        GRLine( panel->GetClipBox(), DC,
-                m_Pos.x - offset.x, m_Pos.y - offset.y - anchor_size,
-                m_Pos.x - offset.x, m_Pos.y - offset.y + anchor_size,
-                0, color );
+        GRDrawAnchor( panel->GetClipBox(), DC, m_Pos.x, m_Pos.y, 
+                      dim_ancre,
+                      g_ColorsSettings.GetItemColor( ANCHOR_VISIBLE ) );
     }
 }
 
@@ -440,7 +432,6 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     int      nbpad;
     char     bufcar[512], Line[512];
     wxString msg;
-    BOARD*   board = GetBoard();
 
     aList.push_back( MSG_PANEL_ITEM( m_Reference->GetText(), m_Value->GetText(), DARKCYAN ) );
 
@@ -458,7 +449,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     // display time stamp in schematic
     msg.Printf( wxT( "%8.8lX" ), m_TimeStamp );
     aList.push_back( MSG_PANEL_ITEM( _( "Netlist path" ), m_Path, BROWN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), board->GetLayerName( m_Layer ), RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), RED ) );
 
     EDA_ITEM* PtStruct = m_Pads;
     nbpad = 0;
@@ -485,7 +476,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
     aList.push_back( MSG_PANEL_ITEM( _( "Orient" ), msg, BROWN ) );
 
-    /* Controls on right side of the dialog */
+    // Controls on right side of the dialog
     switch( m_Attributs & 255 )
     {
     case 0:
@@ -521,8 +512,9 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "3D-Shape" ), msg, RED ) );
 
-    wxString doc     = _( "Doc:  " ) + m_Doc;
-    wxString keyword = _( "KeyW: " ) + m_KeyWord;
+    wxString doc, keyword;
+    doc.Printf( _( "Doc: %s" ), GetChars( m_Doc ) );
+    keyword.Printf( _( "KeyW: %s" ), GetChars( m_KeyWord ) );
     aList.push_back( MSG_PANEL_ITEM( doc, keyword, BLACK ) );
 }
 
@@ -573,9 +565,9 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 }
 
 
-D_PAD* MODULE::GetPad( const wxPoint& aPosition, int aLayerMask )
+D_PAD* MODULE::GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
-    for( D_PAD* pad = m_Pads;   pad;   pad = pad->Next() )
+    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
     {
         // ... and on the correct layer.
         if( ( pad->GetLayerMask() & aLayerMask ) == 0 )
@@ -682,9 +674,9 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 wxString MODULE::GetSelectMenuText() const
 {
     wxString text;
-
-    text << _( "Footprint" ) << wxT( " " ) << GetReference();
-    text << wxT( " (" ) << GetLayerName() << wxT( ")" );
+    text.Printf( _( "Footprint %s on %s" ),
+                 GetChars ( GetReference() ),
+                 GetChars ( GetLayerName() ) );
 
     return text;
 }
@@ -758,36 +750,25 @@ void MODULE::Flip( const wxPoint& aCentre )
     SetPosition( finalPos );
 
     // Flip layer
-    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer() ) );
 
     // Reverse mirror orientation.
     NEGATE( m_Orient );
     NORMALIZE_ANGLE_POS( m_Orient );
 
     // Mirror pads to other side of board about the x axis, i.e. vertically.
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
         pad->Flip( m_Pos.y );
 
     // Mirror reference.
     text = m_Reference;
     text->m_Pos.y -= m_Pos.y;
-    text->m_Pos.y  = -text->m_Pos.y;
+    NEGATE( text->m_Pos.y );
     text->m_Pos.y += m_Pos.y;
     NEGATE(text->m_Pos0.y);
-    text->m_Mirror = false;
     NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );
-    text->SetLayer( GetLayer() );
-    text->SetLayer( BOARD::ReturnFlippedLayerNumber( text->GetLayer() ) );
-
-    if( GetLayer() == LAYER_N_BACK )
-        text->SetLayer( SILKSCREEN_N_BACK );
-
-    if( GetLayer() == LAYER_N_FRONT )
-        text->SetLayer( SILKSCREEN_N_FRONT );
-
-    if( (GetLayer() == SILKSCREEN_N_BACK)
-       || (GetLayer() == ADHESIVE_N_BACK) || (GetLayer() == LAYER_N_BACK) )
-        text->m_Mirror = true;
+    text->SetLayer( FlipLayer( text->GetLayer() ) );
+    text->m_Mirror = IsBackLayer( GetLayer() );
 
     // Mirror value.
     text = m_Value;
@@ -795,29 +776,18 @@ void MODULE::Flip( const wxPoint& aCentre )
     NEGATE( text->m_Pos.y );
     text->m_Pos.y += m_Pos.y;
     NEGATE( text->m_Pos0.y );
-    text->m_Mirror = false;
     NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );
-    text->SetLayer( GetLayer() );
-    text->SetLayer( BOARD::ReturnFlippedLayerNumber( text->GetLayer() ) );
-
-    if( GetLayer() == LAYER_N_BACK )
-        text->SetLayer( SILKSCREEN_N_BACK );
-
-    if( GetLayer() == LAYER_N_FRONT )
-        text->SetLayer( SILKSCREEN_N_FRONT );
-
-    if( (GetLayer() == SILKSCREEN_N_BACK)
-       || (GetLayer() == ADHESIVE_N_BACK) || (GetLayer() == LAYER_N_BACK) )
-        text->m_Mirror = true;
+    text->SetLayer( FlipLayer( text->GetLayer() ) );
+    text->m_Mirror = IsBackLayer( GetLayer() );
 
     // Reverse mirror module graphics and texts.
-    for( EDA_ITEM* item = m_Drawings;  item;  item = item->Next() )
+    for( EDA_ITEM* item = m_Drawings; item; item = item->Next() )
     {
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
             {
-                EDGE_MODULE*  em = (EDGE_MODULE*) item;
+                EDGE_MODULE* em = (EDGE_MODULE*) item;
 
                 wxPoint s = em->GetStart();
                 s.y -= m_Pos.y;
@@ -839,36 +809,19 @@ void MODULE::Flip( const wxPoint& aCentre )
                     em->SetAngle( -em->GetAngle() );
                 }
 
-                em->SetLayer( BOARD::ReturnFlippedLayerNumber( em->GetLayer() ) );
+                em->SetLayer( FlipLayer( em->GetLayer() ) );
             }
             break;
 
         case PCB_MODULE_TEXT_T:
-            // Reverse mirror position and mirror.
             text = (TEXTE_MODULE*) item;
             text->m_Pos.y -= m_Pos.y;
-            text->m_Pos.y  = -text->m_Pos.y;
+            NEGATE( text->m_Pos0.y );
             text->m_Pos.y += m_Pos.y;
             NEGATE( text->m_Pos0.y );
-            text->m_Mirror = false;
             NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );
-
-            text->SetLayer( GetLayer() );
-            text->SetLayer( BOARD::ReturnFlippedLayerNumber( text->GetLayer() ) );
-
-            if( GetLayer() == LAYER_N_BACK )
-                text->SetLayer( SILKSCREEN_N_BACK );
-
-            if( GetLayer() == LAYER_N_FRONT )
-                text->SetLayer( SILKSCREEN_N_FRONT );
-
-            if(  GetLayer() == SILKSCREEN_N_BACK
-                 || GetLayer() == ADHESIVE_N_BACK
-                 || GetLayer() == LAYER_N_BACK )
-            {
-                text->m_Mirror = true;
-            }
-
+            text->SetLayer( FlipLayer( text->GetLayer() ) );
+            text->m_Mirror = IsBackLayer( GetLayer() );
             break;
 
         default:
@@ -1027,13 +980,11 @@ void MODULE::SetOrientation( double newangle )
 
 void MODULE::Show( int nestLevel, std::ostream& os ) const
 {
-    BOARD* board = GetBoard();
-
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
     " ref=\"" << m_Reference->GetText().mb_str() << '"' <<
     " value=\"" << m_Value->GetText().mb_str() << '"' <<
-    " layer=\"" << board->GetLayerName( m_Layer ).mb_str() << '"' <<
+    " layer=\"" << GetLayerName().mb_str() << '"' <<
     ">\n";
 
     NestedSpace( nestLevel + 1, os ) << "<boundingBox" << m_BoundaryBox.GetPosition()

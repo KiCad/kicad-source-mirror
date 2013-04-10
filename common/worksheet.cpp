@@ -20,17 +20,833 @@
 
 // Must be defined in main applications:
 
+#if defined(KICAD_GOST)
+
+// Center - right bottom corner
+
+Ki_WorkSheetData WS_Osn1_Line1 =
+{
+    WS_OSN,
+    &WS_Osn1_Line2,
+    Mm2mils( 185 ), Mm2mils( 55 ),
+    0,              Mm2mils( 55 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line2 =
+{
+    WS_OSN,
+    &WS_Osn1_Line3,
+    Mm2mils( 120 ), Mm2mils( 40 ),
+    0,              Mm2mils( 40 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line3 =
+{
+    WS_OSN,
+    &WS_Osn1_Line4,
+    Mm2mils( 185 ), Mm2mils( 35 ),
+    Mm2mils( 120 ), Mm2mils( 35 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line4 =
+{
+    WS_OSN,
+    &WS_Osn1_Line5,
+    Mm2mils( 50 ),  Mm2mils( 35 ),
+    0,              Mm2mils( 35 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line5 =
+{
+    WS_OSN,
+    &WS_Osn1_Line6,
+    Mm2mils( 185 ), Mm2mils( 30 ),
+    Mm2mils( 120 ), Mm2mils( 30 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line6 =
+{
+    WS_OSN,
+    &WS_Osn1_Line7,
+    Mm2mils( 50 ),  Mm2mils( 20 ),
+    0,              Mm2mils( 20 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line7 =
+{
+    WS_OSN,
+    &WS_Osn1_Line8,
+    Mm2mils( 120 ), Mm2mils( 15 ),
+    0,              Mm2mils( 15 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line8 =
+{
+    WS_OSN,
+    &WS_Osn1_Line9,
+    Mm2mils( 185 ), Mm2mils( 55 ),
+    Mm2mils( 185 ), 0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line9 =
+{
+    WS_OSN,
+    &WS_Osn1_Line10,
+    Mm2mils( 178 ), Mm2mils( 55 ),
+    Mm2mils( 178 ), Mm2mils( 30 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line10 =
+{
+    WS_OSN,
+    &WS_Osn1_Line11,
+    Mm2mils( 168 ), Mm2mils( 55 ),
+    Mm2mils( 168 ), 0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line11 =
+{
+    WS_OSN,
+    &WS_Osn1_Line12,
+    Mm2mils( 145 ), Mm2mils( 55 ),
+    Mm2mils( 145 ), 0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line12 =
+{
+    WS_OSN,
+    &WS_Osn1_Line13,
+    Mm2mils( 130 ), Mm2mils( 55 ),
+    Mm2mils( 130 ), 0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line13 =
+{
+    WS_OSN,
+    &WS_Osn1_Line14,
+    Mm2mils( 120 ), Mm2mils( 55 ),
+    Mm2mils( 120 ), 0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line14 =
+{
+    WS_OSN,
+    &WS_Osn1_Line15,
+    Mm2mils( 50 ),  Mm2mils( 40 ),
+    Mm2mils( 50 ),  0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line15 =
+{
+    WS_OSN,
+    &WS_Osn1_Line16,
+    Mm2mils( 35 ),  Mm2mils( 40 ),
+    Mm2mils( 35 ),  Mm2mils( 20 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line16 =
+{
+    WS_OSN,
+    &WS_Osn1_Line17,
+    Mm2mils( 30 ),  Mm2mils( 20 ),
+    Mm2mils( 30 ),  Mm2mils( 15 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line17 =
+{
+    WS_OSN,
+    &WS_Osn1_Line18,
+    Mm2mils( 18 ),  Mm2mils( 40 ),
+    Mm2mils( 18 ),  Mm2mils( 20 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line18 =
+{
+    WS_TONK,
+    &WS_Osn1_Line19,
+    Mm2mils( 185 ), Mm2mils( 50 ),
+    Mm2mils( 120 ), Mm2mils( 50 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line19 =
+{
+    WS_TONK,
+    &WS_Osn1_Line20,
+    Mm2mils( 185 ), Mm2mils( 45 ),
+    Mm2mils( 120 ), Mm2mils( 45 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line20 =
+{
+    WS_TONK,
+    &WS_Osn1_Line21,
+    Mm2mils( 185 ), Mm2mils( 40 ),
+    Mm2mils( 120 ), Mm2mils( 40 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line21 =
+{
+    WS_TONK,
+    &WS_Osn1_Line22,
+    Mm2mils( 185 ), Mm2mils( 25 ),
+    Mm2mils( 120 ), Mm2mils( 25 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line22 =
+{
+    WS_TONK,
+    &WS_Osn1_Line23,
+    Mm2mils( 185 ), Mm2mils( 20 ),
+    Mm2mils( 120 ), Mm2mils( 20 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line23 =
+{
+    WS_TONK,
+    &WS_Osn1_Line24,
+    Mm2mils( 185 ), Mm2mils( 15 ),
+    Mm2mils( 120 ), Mm2mils( 15 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line24 =
+{
+    WS_TONK,
+    &WS_Osn1_Line25,
+    Mm2mils( 185 ), Mm2mils( 10 ),
+    Mm2mils( 120 ), Mm2mils( 10 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line25 =
+{
+    WS_TONK,
+    &WS_Osn1_Line26,
+    Mm2mils( 185 ), Mm2mils( 5 ),
+    Mm2mils( 120 ), Mm2mils( 5 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line26 =
+{
+    WS_TONK,
+    &WS_Osn1_Line27,
+    Mm2mils( 45 ),  Mm2mils( 35 ),
+    Mm2mils( 45 ),  Mm2mils( 20 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Line27 =
+{
+    WS_TONK,
+    &WS_Osn1_Text1,
+    Mm2mils( 40 ),  Mm2mils( 35 ),
+    Mm2mils( 40 ),  Mm2mils( 20 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text1 =
+{
+    WS_TEXT,
+    &WS_Osn1_Text2,
+    Mm2mils( 181.5 ),   Mm2mils( 32.5 ),
+    0,                  0,
+    wxT( "Изм." ),      NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text2 =
+{
+    WS_TEXTL,
+    &WS_Osn1_Text3,
+    Mm2mils( 184 ),     Mm2mils( 27.5 ),
+    0,                  0,
+    wxT( "Разраб." ),   NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text3 =
+{
+    WS_TEXTL,
+    &WS_Osn1_Text4,
+    Mm2mils( 184 ),     Mm2mils( 22.5 ),
+    0,                  0,
+    wxT( "Пров." ),     NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text4 =
+{
+    WS_TEXTL,
+    &WS_Osn1_Text5,
+    Mm2mils( 184 ),    Mm2mils( 17.5 ),
+    0,                      0,
+    wxT( "Т.контр." ),      NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text5 =
+{
+    WS_TEXTL,
+    &WS_Osn1_Text6,
+    Mm2mils( 184 ),     Mm2mils( 7.5 ),
+    0,                  0,
+    wxT( "Н.контр." ),  NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text6 =
+{
+    WS_TEXTL,
+    &WS_Osn1_Text7,
+    Mm2mils( 184 ),     Mm2mils( 2.5 ),
+    0,                      0,
+    wxT( "Утв." ),          NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text7 =
+{
+    WS_TEXT,
+    &WS_Osn1_Text8,
+    Mm2mils( 173 ),     Mm2mils( 32.5 ),
+    0,                      0,
+    wxT( "Лист" ),          NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text8 =
+{
+    WS_TEXT,
+    &WS_Osn1_Text9,
+    Mm2mils( 156.5 ),   Mm2mils( 32.5 ),
+    0,                  0,
+    wxT( "N докум." ),  NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text9 =
+{
+    WS_TEXT,
+    &WS_Osn1_Text10,
+    Mm2mils( 137.5 ),   Mm2mils( 32.5 ),
+    0,                  0,
+    wxT( "Подп." ),     NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text10 =
+{
+    WS_TEXT,
+    &WS_Osn1_Text11,
+    Mm2mils( 125 ),     Mm2mils( 32.5 ),
+    0,                  0,
+    wxT( "Дата" ),      NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text11 =
+{
+    WS_TEXT,
+    &WS_Osn1_Text12,
+    Mm2mils( 42.5 ),    Mm2mils( 37.5 ),
+    0,                  0,
+    wxT( "Лит." ),      NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text12 =
+{
+    WS_TEXT,
+    &WS_Osn1_Text13,
+    Mm2mils( 26.5 ),    Mm2mils( 37.5 ),
+    0,                      0,
+    wxT( "Масса" ),         NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text13 =
+{
+    WS_TEXT,
+    &WS_Osn1_Text14,
+    Mm2mils( 9 ),       Mm2mils( 37.5 ),
+    0,                  0,
+    wxT( "Масштаб" ),   NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text14 =
+{
+    WS_TEXTL,
+    &WS_Osn1_Text15,
+    Mm2mils( 49 ),      Mm2mils( 17.5 ),
+    0,                  0,
+    wxT( "Лист" ),      NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text15 =
+{
+    WS_TEXTL,
+    &WS_Osn1_Text16,
+    Mm2mils( 29 ),      Mm2mils( 17.5 ),
+    0,                  0,
+    wxT( "Листов" ),    NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text16 =
+{
+    WS_TEXTL,
+    &WS_Osn1_Text17,
+    Mm2mils( 40 ),     -Mm2mils( 2.5 ),
+    0,                  0,
+    wxT( "Формат" ),    NULL
+};
+
+Ki_WorkSheetData WS_Osn1_Text17 =
+{
+    WS_TEXTL,
+    NULL,
+    Mm2mils( 110 ),    -Mm2mils( 2.5 ),
+    0,                  0,
+    wxT( "Копировал" ), NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Line1 =
+{
+    WS_OSN,
+    &WS_Osn2a_Line2,
+    Mm2mils( 185 ), Mm2mils( 15 ),
+    0,              Mm2mils( 15 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Line2 =
+{
+    WS_OSN,
+    &WS_Osn2a_Line3,
+    Mm2mils( 185 ), Mm2mils( 5 ),
+    Mm2mils( 120 ), Mm2mils( 5 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Line3 =
+{
+    WS_OSN,
+    &WS_Osn2a_Line4,
+    Mm2mils( 10 ),  Mm2mils( 8 ),
+    0,              Mm2mils( 8 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Line4 =
+{
+    WS_OSN,
+    &WS_Osn2a_Line5,
+    Mm2mils( 185 ), Mm2mils( 15 ),
+    Mm2mils( 185 ), 0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Line5 =
+{
+    WS_OSN,
+    &WS_Osn2a_Line6,
+    Mm2mils( 178 ), Mm2mils( 15 ),
+    Mm2mils( 178 ), 0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Line6 =
+{
+    WS_OSN,
+    &WS_Osn2a_Line7,
+    Mm2mils( 168 ), Mm2mils( 15 ),
+    Mm2mils( 168 ), 0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Line7 =
+{
+    WS_OSN,
+    &WS_Osn2a_Line8,
+    Mm2mils( 145 ), Mm2mils( 15 ),
+    Mm2mils( 145 ), 0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Line8 =
+{
+    WS_OSN,
+    &WS_Osn2a_Line9,
+    Mm2mils( 130 ), Mm2mils( 15 ),
+    Mm2mils( 130 ), 0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Line9 =
+{
+    WS_OSN,
+    &WS_Osn2a_Line10,
+    Mm2mils( 120 ), Mm2mils( 15 ),
+    Mm2mils( 120 ), 0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Line10 =
+{
+    WS_OSN,
+    &WS_Osn2a_Line11,
+    Mm2mils( 10 ),  Mm2mils( 15 ),
+    Mm2mils( 10 ),  0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Line11 =
+{
+    WS_TONK,
+    &WS_Osn2a_Text1,
+    Mm2mils( 185 ), Mm2mils( 10 ),
+    Mm2mils( 120 ), Mm2mils( 10 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Text1 =
+{
+    WS_TEXT,
+    &WS_Osn2a_Text2,
+    Mm2mils( 181.5 ),   Mm2mils( 2.5 ),
+    0,                  0,
+    wxT( "Изм." ),      NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Text2 =
+{
+    WS_TEXT,
+    &WS_Osn2a_Text3,
+    Mm2mils( 173 ),     Mm2mils( 2.5 ),
+    0,                  0,
+    wxT( "Лист" ),      NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Text3 =
+{
+    WS_TEXT,
+    &WS_Osn2a_Text4,
+    Mm2mils( 156.5 ),   Mm2mils( 2.5 ),
+    0,                  0,
+    wxT( "N докум." ),  NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Text4 =
+{
+    WS_TEXT,
+    &WS_Osn2a_Text5,
+    Mm2mils( 137.5 ),   Mm2mils( 2.5 ),
+    0,                  0,
+    wxT( "Подп." ),     NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Text5 =
+{
+    WS_TEXT,
+    &WS_Osn2a_Text6,
+    Mm2mils( 125 ),     Mm2mils( 2.5 ),
+    0,                  0,
+    wxT( "Дата" ),      NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Text6 =
+{
+    WS_TEXT,
+    &WS_Osn2a_Text7,
+    Mm2mils( 5 ),       Mm2mils( 11.5 ),
+    0,                  0,
+    wxT( "Лист" ),      NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Text7 =
+{
+    WS_TEXTL,
+    &WS_Osn2a_Text8,
+    Mm2mils( 40 ),     -Mm2mils( 2.5 ),
+    0,                  0,
+    wxT( "Формат" ),    NULL
+};
+
+Ki_WorkSheetData WS_Osn2a_Text8 =
+{
+    WS_TEXTL,
+    NULL,
+    Mm2mils( 110 ),    -Mm2mils( 2.5 ),
+    0,                  0,
+    wxT( "Копировал" ), NULL
+};
+
+// Center - left bottom corner
+
+Ki_WorkSheetData WS_DopLeft_Line1 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line2,
+    Mm2mils( 12 ),  Mm2mils( 145 ),
+    0,              Mm2mils( 145 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line2 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line3,
+    Mm2mils( 12 ),  Mm2mils( 110 ),
+    0,              Mm2mils( 110 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line3 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line4,
+    Mm2mils( 12 ),  Mm2mils( 85 ),
+    0,              Mm2mils( 85 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line4 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line5,
+    Mm2mils( 12 ),  Mm2mils( 60 ),
+    0,              Mm2mils( 60 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line5 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line6,
+    Mm2mils( 12 ),  Mm2mils( 25 ),
+    0,              Mm2mils( 25 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line6 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line7,
+    Mm2mils( 12 ),  0,
+    0,              0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line7 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line8,
+    Mm2mils( 12 ),  Mm2mils( 145 ),
+    Mm2mils( 12 ),  0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line8 =
+{
+    WS_OSN,
+    &WS_DopLeft_Text1,
+    Mm2mils( 7 ),   Mm2mils( 145 ),
+    Mm2mils( 7 ),   0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Text1 =
+{
+    WS_TEXT,
+    &WS_DopLeft_Text2,
+    Mm2mils( 9.5 ),         Mm2mils( 12.5 ),
+    0,                      0,
+    wxT( "Инв.N подл." ),   NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Text2 =
+{
+    WS_TEXT,
+    &WS_DopLeft_Text3,
+    Mm2mils( 9.5 ),         Mm2mils( 42.5 ),
+    0,                      0,
+    wxT( "Подп. и дата" ),  NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Text3 =
+{
+    WS_TEXT,
+    &WS_DopLeft_Text4,
+    Mm2mils( 9.5 ),         Mm2mils( 72.5 ),
+    0,                      0,
+    wxT( "Взам.инв.N" ),    NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Text4 =
+{
+    WS_TEXT,
+    &WS_DopLeft_Text5,
+    Mm2mils( 9.5 ),         Mm2mils( 97.5 ),
+    0,                      0,
+    wxT( "Инв.N дубл." ),   NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Text5 =
+{
+    WS_TEXT,
+    &WS_DopLeft_Line9,
+    Mm2mils( 9.5 ),         Mm2mils( 127.5 ),
+    0,                      0,
+    wxT( "Подп. и дата" ),  NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line9 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line10,
+    Mm2mils( 7 ),  Mm2mils( 287 ),
+    Mm2mils( 7 ),  Mm2mils( 167 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line10 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line11,
+    Mm2mils( 12 ),  Mm2mils( 287 ),
+    Mm2mils( 12 ),  Mm2mils( 167 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line11 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line12,
+    Mm2mils( 12 ),  Mm2mils( 287 ),
+    Mm2mils( 12 ),  Mm2mils( 167 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line12 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line13,
+    Mm2mils( 12 ),  Mm2mils( 167 ),
+    0,              Mm2mils( 167 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line13 =
+{
+    WS_OSN,
+    &WS_DopLeft_Line14,
+    Mm2mils( 12 ),  Mm2mils( 227 ),
+    0,              Mm2mils( 227 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Line14 =
+{
+    WS_OSN,
+    &WS_DopLeft_Text6,
+    Mm2mils( 12 ),  Mm2mils( 287 ),
+    0,              Mm2mils( 287 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Text6 =
+{
+    WS_TEXT,
+    &WS_DopLeft_Text7,
+    Mm2mils( 9.5 ),         Mm2mils( 197 ),
+    0,                      0,
+    wxT( "Справ. N" ),      NULL
+};
+
+Ki_WorkSheetData WS_DopLeft_Text7 =
+{
+    WS_TEXT,
+    NULL,
+    Mm2mils( 9.5 ),         Mm2mils( 257 ),
+    0,                      0,
+    wxT( "Перв. примен." ), NULL
+};
+
+// Center - left top corner
+
+Ki_WorkSheetData WS_DopTop_Line1 =
+{
+    WS_OSN,
+    &WS_DopTop_Line2,
+    Mm2mils( 70 ),  0,
+    Mm2mils( 70 ),  Mm2mils( 14 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopTop_Line2 =
+{
+    WS_OSN,
+    &WS_DopTop_Line3,
+    Mm2mils( 70 ),  Mm2mils( 14 ),
+    0,              Mm2mils( 14 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopTop_Line3 =
+{
+    WS_OSN,
+    &WS_DopTop_Line4,
+    Mm2mils( 70 ),  Mm2mils( 14 ),
+    Mm2mils( 137 ), Mm2mils( 14 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopTop_Line4 =
+{
+    WS_OSN,
+    &WS_DopTop_Line5,
+    Mm2mils( 84 ),  Mm2mils( 7 ),
+    Mm2mils( 137 ), Mm2mils( 7 ),
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopTop_Line5 =
+{
+    WS_OSN,
+    &WS_DopTop_Line6,
+    Mm2mils( 84 ),  Mm2mils( 14 ),
+    Mm2mils( 84 ),  0,
+    NULL,           NULL
+};
+
+Ki_WorkSheetData WS_DopTop_Line6 =
+{
+    WS_OSN,
+    NULL,
+    Mm2mils( 137 ), Mm2mils( 14 ),
+    Mm2mils( 137 ), 0,
+    NULL,           NULL
+};
+
+#else
+
 Ki_WorkSheetData WS_Date =
 {
     WS_DATE,
     &WS_Licence,
     BLOCK_DATE_X,   BLOCK_DATE_Y,
     0,              0,
-#if defined(KICAD_GOST)
-    NULL,           NULL
-#else
     wxT( "Date: " ),NULL
-#endif
 };
 
 Ki_WorkSheetData WS_Licence =
@@ -46,29 +862,14 @@ Ki_WorkSheetData WS_Revision =
 {
     WS_REV,
     &WS_SizeSheet,
-#if defined(KICAD_GOST)
-    STAMP_X_185 - 30,STAMP_Y_30 + 90,
-#else
     BLOCK_REV_X,     BLOCK_REV_Y,
-#endif
     0,               0,
-#if defined(KICAD_GOST)
-    NULL,            NULL
-#else
     wxT( "Rev: " ),  NULL
-#endif
 };
 
 Ki_WorkSheetData WS_SizeSheet =
 {
     WS_SIZESHEET,
-#if defined(KICAD_GOST)
-    &WS_Title,
-    BLOCK_SIZE_SHEET_X,BLOCK_SIZE_SHEET_Y,
-    0,                 0,
-    NULL,              NULL
-};
-#else
     &WS_IdentSheet,
     BLOCK_SIZE_SHEET_X, BLOCK_SIZE_SHEET_Y,
     0, 0,
@@ -83,21 +884,14 @@ Ki_WorkSheetData WS_IdentSheet =
     0,               0,
     wxT( "Id: " ),   NULL
 };
-#endif
 
 Ki_WorkSheetData WS_Title =
 {
     WS_TITLE,
     &WS_SheetFilename,
-#if defined(KICAD_GOST)
-    STAMP_X_85,       STAMP_Y_25 + 90,
-    0,                0,
-    NULL,             NULL
-#else
     BLOCK_TITLE_X,    BLOCK_TITLE_Y,
     0,                0,
     wxT( "Title: " ), NULL
-#endif
 };
 
 Ki_WorkSheetData WS_SheetFilename =
@@ -122,13 +916,8 @@ Ki_WorkSheetData WS_Company =
 {
     WS_COMPANY_NAME,
     &WS_Comment1,
-#if defined(KICAD_GOST)
-    STAMP_X_50 / 2, STAMP_Y_0 + 270,
-    0,              0,
-#else
     BLOCK_COMMENT_X,BLOCK_COMPANY_Y,
     0,              0,
-#endif
     NULL,           NULL
 };
 
@@ -136,13 +925,8 @@ Ki_WorkSheetData WS_Comment1 =
 {
     WS_COMMENT1,
     &WS_Comment2,
-#if defined(KICAD_GOST)
-    STAMP_X_120 / 2,STAMP_Y_40 + 270,
-    STAMP_OX,       0,
-#else
     BLOCK_COMMENT_X,BLOCK_COMMENT1_Y,
     0,              0,
-#endif
     NULL,           NULL
 };
 
@@ -150,13 +934,8 @@ Ki_WorkSheetData WS_Comment2 =
 {
     WS_COMMENT2,
     &WS_Comment3,
-#if defined(KICAD_GOST)
-    STAMP_X_168 - 30,      STAMP_Y_25 + 90,
-    STAMP_OX,       0,
-#else
     BLOCK_COMMENT_X,BLOCK_COMMENT2_Y,
     0,              0,
-#endif
     NULL,           NULL
 };
 
@@ -164,13 +943,8 @@ Ki_WorkSheetData WS_Comment3 =
 {
     WS_COMMENT3,
     &WS_Comment4,
-#if defined(KICAD_GOST)
-    STAMP_X_168 - 30,      STAMP_Y_20 + 90,
-    STAMP_OX,       0,
-#else
     BLOCK_COMMENT_X,BLOCK_COMMENT3_Y,
     0,              0,
-#endif
     NULL,           NULL
 };
 
@@ -178,13 +952,8 @@ Ki_WorkSheetData WS_Comment4 =
 {
     WS_COMMENT4,
     &WS_MostLeftLine,
-#if defined(KICAD_GOST)
-    STAMP_X_168 - 30,      STAMP_Y_0 + 90,
-    STAMP_OX,        0,
-#else
     BLOCK_COMMENT_X, BLOCK_COMMENT4_Y,
     0,               0,
-#endif
     NULL,            NULL
 };
 
@@ -193,11 +962,6 @@ Ki_WorkSheetData WS_Comment4 =
 Ki_WorkSheetData WS_MostLeftLine =
 {
     WS_LEFT_SEGMENT,
-#if defined(KICAD_GOST)
-    &WS_MostUpperLine,
-    STAMP_OX,         STAMP_OY,
-    STAMP_OX,         0,
-#else
     &WS_SeparatorLine,
     BLOCK_OX,         SIZETEXT * 16,
     BLOCK_OX,         0,
@@ -212,7 +976,6 @@ Ki_WorkSheetData WS_SeparatorLine =
     &WS_MostUpperLine,
     BLOCK_OX,         VARIABLE_BLOCK_START_POSITION,
     0,                VARIABLE_BLOCK_START_POSITION,
-#endif
     NULL,             NULL
 };
 
@@ -222,13 +985,8 @@ Ki_WorkSheetData WS_MostUpperLine =
 {
     WS_UPPER_SEGMENT,
     &WS_Segm3,
-#if defined(KICAD_GOST)
-    STAMP_OX,        STAMP_OY,
-    0,               STAMP_OY,
-#else
     BLOCK_OX,        SIZETEXT * 16,
     0,               SIZETEXT * 16,
-#endif
     NULL,            NULL
 };
 
@@ -238,13 +996,8 @@ Ki_WorkSheetData WS_Segm3 =
 {
     WS_SEGMENT,
     &WS_Segm4,
-#if defined(KICAD_GOST)
-    STAMP_OX,   STAMP_Y_50,
-    STAMP_X_120,STAMP_Y_50,
-#else
     BLOCK_OX,   SIZETEXT * 6,
     0,          SIZETEXT * 6,
-#endif
     NULL,       NULL
 };
 
@@ -254,13 +1007,8 @@ Ki_WorkSheetData WS_Segm4 =
 {
     WS_SEGMENT,
     &WS_Segm5,
-#if defined(KICAD_GOST)
-    STAMP_OX,              STAMP_Y_45,
-    STAMP_X_120,           STAMP_Y_45,
-#else
     BLOCK_REV_X + SIZETEXT,SIZETEXT * 4,
     BLOCK_REV_X + SIZETEXT,0,
-#endif
     NULL,                  NULL
 };
 
@@ -269,13 +1017,8 @@ Ki_WorkSheetData WS_Segm5 =
 {
     WS_SEGMENT,
     &WS_Segm6,
-#if defined(KICAD_GOST)
-    STAMP_OX,  STAMP_Y_40,
-    0,         STAMP_Y_40,
-#else
     BLOCK_OX,  SIZETEXT * 2,
     0,         SIZETEXT * 2,
-#endif
     NULL,      NULL
 };
 
@@ -284,13 +1027,8 @@ Ki_WorkSheetData WS_Segm6 =
 {
     WS_SEGMENT,
     &WS_Segm7,
-#if defined(KICAD_GOST)
-    STAMP_OX,   STAMP_Y_35,
-    STAMP_X_120,STAMP_Y_35,
-#else
     BLOCK_OX,   SIZETEXT * 4,
     0,          SIZETEXT * 4,
-#endif
     NULL,       NULL
 };
 
@@ -298,710 +1036,13 @@ Ki_WorkSheetData WS_Segm6 =
 Ki_WorkSheetData WS_Segm7 =
 {
     WS_SEGMENT,
-#if defined(KICAD_GOST)
-    &WS_Segm8,
-    STAMP_X_50,STAMP_Y_35,
-    0,         STAMP_Y_35,
-    NULL,      NULL
-};
-
-Ki_WorkSheetData WS_Segm8 =
-{
-    WS_SEGMENT,
-    &WS_Segm9,
-    STAMP_OX,   STAMP_Y_30,
-    STAMP_X_120,STAMP_Y_30,
-    NULL,       NULL
-};
-
-Ki_WorkSheetData WS_Segm9 =
-{
-    WS_SEGMENT,
-    &WS_Segm10,
-    STAMP_OX,   STAMP_Y_25,
-    STAMP_X_120,STAMP_Y_25,
-    NULL,       NULL
-};
-
-Ki_WorkSheetData WS_Segm10 =
-{
-    WS_SEGMENT,
-    &WS_Segm11,
-    STAMP_OX,   STAMP_Y_20,
-    STAMP_X_120,STAMP_Y_20,
-    NULL,       NULL
-};
-
-Ki_WorkSheetData WS_Segm11 =
-{
-    WS_SEGMENT,
-    &WS_Segm12,
-    STAMP_X_50,STAMP_Y_20,
-    0,         STAMP_Y_20,
-    NULL,      NULL
-};
-
-Ki_WorkSheetData WS_Segm12 =
-{
-    WS_SEGMENT,
-    &WS_Segm13,
-    STAMP_OX,  STAMP_Y_15,
-    0,         STAMP_Y_15,
-    NULL,      NULL
-};
-
-Ki_WorkSheetData WS_Segm13 =
-{
-    WS_SEGMENT,
-    &WS_Segm14,
-    STAMP_OX,   STAMP_Y_10,
-    STAMP_X_120,STAMP_Y_10,
-    NULL,       NULL
-};
-
-Ki_WorkSheetData WS_Segm14 =
-{
-    WS_SEGMENT,
-    &WS_Segm15,
-    STAMP_OX,   STAMP_Y_5,
-    STAMP_X_120,STAMP_Y_5,
-    NULL,       NULL
-};
-
-Ki_WorkSheetData WS_Segm15 =
-{
-    WS_SEGMENT,
-    &WS_Segm16,
-    STAMP_X_178,STAMP_OY,
-    STAMP_X_178,STAMP_Y_30,
-    NULL,       NULL
-};
-
-Ki_WorkSheetData WS_Segm16 =
-{
-    WS_SEGMENT,
-    &WS_Segm17,
-    STAMP_X_168,STAMP_OY,
-    STAMP_X_168,0,
-    NULL,       NULL
-};
-
-Ki_WorkSheetData WS_Segm17 =
-{
-    WS_SEGMENT,
-    &WS_Segm18,
-    STAMP_X_145,STAMP_OY,
-    STAMP_X_145,0,
-    NULL,       NULL
-};
-
-Ki_WorkSheetData WS_Segm18 =
-{
-    WS_SEGMENT,
-    &WS_Segm19,
-    STAMP_X_130,STAMP_OY,
-    STAMP_X_130,0,
-    NULL,       NULL
-};
-
-Ki_WorkSheetData WS_Segm19 =
-{
-    WS_SEGMENT,
-    &WS_Segm20,
-    STAMP_X_120,STAMP_OY,
-    STAMP_X_120,0,
-    NULL,       NULL
-};
-
-Ki_WorkSheetData WS_Segm20 =
-{
-    WS_SEGMENT,
-    &WS_Segm21,
-    STAMP_X_50,STAMP_Y_40,
-    STAMP_X_50,0,
-    NULL,      NULL
-};
-
-Ki_WorkSheetData WS_Segm21 =
-{
-    WS_SEGMENT,
-    &WS_Segm22,
-    STAMP_X_45,STAMP_Y_35,
-    STAMP_X_45,STAMP_Y_20,
-    NULL,      NULL
-};
-
-Ki_WorkSheetData WS_Segm22 =
-{
-    WS_SEGMENT,
-    &WS_Segm23,
-    STAMP_X_40,STAMP_Y_35,
-    STAMP_X_40,STAMP_Y_20,
-    NULL,      NULL
-};
-
-Ki_WorkSheetData WS_Segm23 =
-{
-    WS_SEGMENT,
-    &WS_Segm24,
-    STAMP_X_35,STAMP_Y_40,
-    STAMP_X_35,STAMP_Y_20,
-    NULL,      NULL
-};
-
-Ki_WorkSheetData WS_Segm24 =
-{
-    WS_SEGMENT,
-    &WS_Segm25,
-    STAMP_X_30,STAMP_Y_20,
-    STAMP_X_30,STAMP_Y_15,
-    NULL,      NULL
-};
-
-Ki_WorkSheetData WS_Segm25 =
-{
-    WS_SEGMENT,
-    &WS_Izm,
-    STAMP_X_18,STAMP_Y_40,
-    STAMP_X_18,STAMP_Y_20,
-    NULL,      NULL
-};
-
-Ki_WorkSheetData WS_Izm =
-{
-    WS_PODPIS,
-    &WS_Razr,
-    STAMP_X_185 - 30,STAMP_Y_30 + 90,
-    0,               0,
-    wxT( "Изм." ),NULL
-};
-
-Ki_WorkSheetData WS_Razr =
-{
-    WS_PODPIS,
-    &WS_Prov,
-    STAMP_X_185 - 30,      STAMP_Y_25 + 90,
-    0,                     0,
-    wxT( "Разраб." ),NULL
-};
-
-Ki_WorkSheetData WS_Prov =
-{
-    WS_PODPIS,
-    &WS_TKon,
-    STAMP_X_185 - 30,  STAMP_Y_20 + 90,
-    0,                 0,
-    wxT( "Пров." ),NULL
-};
-
-Ki_WorkSheetData WS_TKon =
-{
-    WS_PODPIS,
-    &WS_NKon,
-    STAMP_X_185 - 30,       STAMP_Y_15 + 90,
-    0,                      0,
-    wxT( "Т.контр." ),NULL
-};
-
-Ki_WorkSheetData WS_NKon =
-{
-    WS_PODPIS,
-    &WS_Utv,
-    STAMP_X_185 - 30,       STAMP_Y_5 + 90,
-    0,                      0,
-    wxT( "Н.контр." ),NULL
-};
-
-Ki_WorkSheetData WS_Utv =
-{
-    WS_PODPIS,
-    &WS_List,
-    STAMP_X_185 - 30,STAMP_Y_0 + 90,
-    0,               0,
-    wxT( "Утв." ),NULL
-};
-
-Ki_WorkSheetData WS_List =
-{
-    WS_PODPIS,
-    &WS_NDoc,
-    STAMP_X_178 - 30, STAMP_Y_30 + 90,
-    0,                0,
-    wxT( "Лист" ),NULL
-};
-
-Ki_WorkSheetData WS_NDoc =
-{
-    WS_PODPIS,
-    &WS_Podp,
-    STAMP_X_168 - 30,      STAMP_Y_30 + 90,
-    0,                     0,
-    wxT( "N докум." ),NULL
-};
-
-Ki_WorkSheetData WS_Podp =
-{
-    WS_PODPIS,
-    &WS_Data,
-    STAMP_X_145 - 30,  STAMP_Y_30 + 90,
-    0,                 0,
-    wxT( "Подп." ),NULL
-};
-
-Ki_WorkSheetData WS_Data =
-{
-    WS_PODPIS,
-    &WS_Art,
-    STAMP_X_130 - 30, STAMP_Y_30 + 90,
-    0,                0,
-    wxT( "Дата" ),NULL
-};
-
-Ki_WorkSheetData WS_Art =
-{
-    WS_PODPIS,
-    &WS_Mass,
-    STAMP_X_50 - 30, STAMP_Y_35 + 90,
-    0,               0,
-    wxT( "Лит." ),NULL
-};
-
-Ki_WorkSheetData WS_Mass =
-{
-    WS_PODPIS,
-    &WS_Msht,
-    STAMP_X_35 - 30,    STAMP_Y_35 + 90,
-    0,                  0,
-    wxT( "Масса" ),NULL
-};
-
-Ki_WorkSheetData WS_Msht =
-{
-    WS_PODPIS,
-    &WS_List1,
-    STAMP_X_18 - 30,        STAMP_Y_35 + 90,
-    0,                      0,
-    wxT( "Масштаб" ),NULL
-};
-
-Ki_WorkSheetData WS_List1 =
-{
-    WS_IDENTSHEET,
-    &WS_List2,
-    STAMP_X_50 - 30,   STAMP_Y_15 + 90,
-    0,                 0,
-    wxT( "Лист " ),NULL
-};
-
-Ki_WorkSheetData WS_List2 =
-{
-    WS_SHEETS,
-    NULL,
-    STAMP_X_30 - 30,       STAMP_Y_15 + 90,
-    0,                     0,
-    wxT( "Листов " ),NULL
-};
-
-Ki_WorkSheetData WS_CADRE_D =
-{
-    WS_CADRE,
-    &WS_Segm1_D,
-    STAMP_X_65,      STAMP_Y_0 + 270,
-    0,          0,
-    NULL,       NULL
-};
-
-Ki_WorkSheetData WS_Segm1_D =
-{
-    WS_LEFT_SEGMENT_D,
-    &WS_Segm2_D,
-    STAMP_OX,         STAMP_Y_15,
-    STAMP_OX,         0,
-    NULL,             NULL
-};
-
-Ki_WorkSheetData WS_Segm2_D =
-{
-    WS_SEGMENT_D,
-    &WS_Segm3_D,
-    STAMP_X_178, STAMP_Y_15,
-    STAMP_X_178, 0,
-    NULL,        NULL
-};
-
-Ki_WorkSheetData WS_Segm3_D =
-{
-    WS_SEGMENT_D,
-    &WS_Segm4_D,
-    STAMP_X_168, STAMP_Y_15,
-    STAMP_X_168, 0,
-    NULL,        NULL
-};
-
-Ki_WorkSheetData WS_Segm4_D =
-{
-    WS_SEGMENT_D,
-    &WS_Segm5_D,
-    STAMP_X_145, STAMP_Y_15,
-    STAMP_X_145, 0,
-    NULL,        NULL
-};
-
-Ki_WorkSheetData WS_Segm5_D =
-{
-    WS_SEGMENT_D,
-    &WS_Segm6_D,
-    STAMP_X_130, STAMP_Y_15,
-    STAMP_X_130, 0,
-    NULL,        NULL
-};
-
-Ki_WorkSheetData WS_Segm6_D =
-{
-    WS_SEGMENT_D,
-    &WS_Segm7_D,
-    STAMP_X_120, STAMP_Y_15,
-    STAMP_X_120, 0,
-    NULL,        NULL
-};
-
-Ki_WorkSheetData WS_Segm7_D =
-{
-    WS_SEGMENT_D,
-    &WS_Segm8_D,
-    STAMP_X_10,  STAMP_Y_15,
-    STAMP_X_10,  0,
-    NULL,        NULL
-};
-
-Ki_WorkSheetData WS_Segm8_D =
-{
-    WS_SEGMENT_D,
-    &WS_Segm9_D,
-    STAMP_X_185, STAMP_Y_10,
-    STAMP_X_120, STAMP_Y_10,
-    NULL,        NULL
-};
-
-Ki_WorkSheetData WS_Segm9_D =
-{
-    WS_SEGMENT_D,
-    &WS_Segm10_D,
-    STAMP_X_185, STAMP_Y_5,
-    STAMP_X_120, STAMP_Y_5,
-    NULL,        NULL
-};
-
-Ki_WorkSheetData WS_Segm10_D =
-{
-    WS_SEGMENT_D,
-    &WS_Segm11_D,
-    STAMP_X_10,  STAMP_Y_8,
-    0,           STAMP_Y_8,
-    NULL,        NULL
-};
-
-Ki_WorkSheetData WS_Segm11_D =
-{
-    WS_SEGMENT_D,
-    &WS_Izm_D,
-    STAMP_X_185, STAMP_Y_15,
-    0,           STAMP_Y_15,
-    NULL,        NULL
-};
-
-Ki_WorkSheetData WS_Izm_D =
-{
-    WS_PODPIS_D,
-    &WS_List_D,
-    STAMP_X_185 - 30,STAMP_Y_0 + 90,
-    0,               0,
-    wxT( "Изм." ),NULL
-};
-
-Ki_WorkSheetData WS_List_D =
-{
-    WS_PODPIS_D,
-    &WS_NDoc_D,
-    STAMP_X_178 - 30, STAMP_Y_0 + 90,
-    0,                0,
-    wxT( "Лист" ),NULL
-};
-
-Ki_WorkSheetData WS_NDoc_D =
-{
-    WS_PODPIS_D,
-    &WS_Podp_D,
-    STAMP_X_168 - 30,      STAMP_Y_0 + 90,
-    0,                     0,
-    wxT( "N докум." ),NULL
-};
-
-Ki_WorkSheetData WS_Podp_D =
-{
-    WS_PODPIS_D,
-    &WS_Date_D,
-    STAMP_X_145 - 30,  STAMP_Y_0 + 90,
-    0,                 0,
-    wxT( "Подп." ),NULL
-};
-
-Ki_WorkSheetData WS_Date_D =
-{
-    WS_PODPIS_D,
-    &WS_List1_D,
-    STAMP_X_130 - 30, STAMP_Y_0 + 90,
-    0,                0,
-    wxT( "Дата" ),NULL
-};
-
-Ki_WorkSheetData WS_List1_D =
-{
-    WS_PODPIS_D,
-    &WS_ListN_D,
-    STAMP_X_10 - 30,  STAMP_Y_8 + 90,
-    0,                0,
-    wxT( "Лист" ),NULL
-};
-
-Ki_WorkSheetData WS_ListN_D =
-{
-    WS_IDENTSHEET_D,
-    NULL,
-    STAMP_Y_0 + 196,STAMP_Y_0 + 90,
-    0,              0,
-    NULL,           NULL
-};
-
-Ki_WorkSheetData WS_Segm1_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm2_LU,
-    STAMP_12,     STAMP_145,
-    STAMP_12,     0,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm2_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm3_LU,
-    STAMP_7,      STAMP_145,
-    STAMP_7,      0,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm3_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm4_LU,
-    STAMP_12,     STAMP_145,
-    0,            STAMP_145,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm4_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm5_LU,
-    STAMP_12,     STAMP_110,
-    0,            STAMP_110,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm5_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm6_LU,
-    STAMP_12,     STAMP_85,
-    0,            STAMP_85,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm6_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm7_LU,
-    STAMP_12,     STAMP_60,
-    0,            STAMP_60,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm7_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm8_LU,
-    STAMP_12,     STAMP_25,
-    0,            STAMP_25,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm8_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm9_LU,
-    STAMP_12,     0,
-    0,            0,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm9_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm10_LU,
-    STAMP_12,     STAMP_287,
-    STAMP_12,     STAMP_167,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm10_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm11_LU,
-    STAMP_7,     STAMP_287,
-    STAMP_7,     STAMP_167,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm11_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm12_LU,
-    STAMP_12,     STAMP_287,
-    0,            STAMP_287,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm12_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Segm13_LU,
-    STAMP_12,     STAMP_227,
-    0,            STAMP_227,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm13_LU =
-{
-    WS_SEGMENT_LU,
-    &WS_Podp1_LU,
-    STAMP_12,     STAMP_167,
-    0,            STAMP_167,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Podp1_LU =
-{
-    WS_PODPIS_LU,
-    &WS_Podp2_LU,
-    STAMP_7 + 90, 0 + 492,
-    0,            0,
-    wxT( "Инв.N подл." ),NULL
-};
-
-Ki_WorkSheetData WS_Podp2_LU =
-{
-    WS_PODPIS_LU,
-    &WS_Podp3_LU,
-    STAMP_7 + 90, STAMP_25 + 688,
-    0,            0,
-    wxT( "Подп. и дата" ),NULL
-};
-
-Ki_WorkSheetData WS_Podp3_LU =
-{
-    WS_PODPIS_LU,
-    &WS_Podp4_LU,
-    STAMP_7 + 90, STAMP_60 + 492,
-    0,            0,
-    wxT( "Взам.инв.N" ),NULL
-};
-
-Ki_WorkSheetData WS_Podp4_LU =
-{
-    WS_PODPIS_LU,
-    &WS_Podp5_LU,
-    STAMP_7 + 90,  STAMP_85 + 492,
-    0,             0,
-    wxT( "Инв.N дубл." ),NULL
-};
-
-Ki_WorkSheetData WS_Podp5_LU =
-{
-    WS_PODPIS_LU,
-    &WS_Podp6_LU,
-    STAMP_7 + 90, STAMP_110 + 688,
-    0,            0,
-    wxT( "Подп. и дата" ),NULL
-};
-
-Ki_WorkSheetData WS_Podp6_LU =
-{
-    WS_PODPIS_LU,
-    &WS_Podp7_LU,
-    STAMP_7 + 90, STAMP_167 + 1180,
-    0,            0,
-    wxT( "Справ. N" ),NULL
-};
-
-Ki_WorkSheetData WS_Podp7_LU =
-{
-    WS_PODPIS_LU,
-    NULL,
-    STAMP_7 + 90, STAMP_227 + 1180,
-    0,            0,
-    wxT( "Перв. примен." ),NULL
-};
-
-Ki_WorkSheetData WS_Segm1_LT =
-{
-    WS_SEGMENT_LT,
-    &WS_Segm2_LT,
-    STAMP_X_0,    STAMP_Y_14,
-    STAMP_X_137,  STAMP_Y_14,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm2_LT =
-{
-    WS_SEGMENT_LT,
-    &WS_Segm3_LT,
-    STAMP_X_137,  STAMP_Y_14,
-    STAMP_X_137,  0,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm3_LT =
-{
-    WS_SEGMENT_LT,
-    &WS_Segm4_LT,
-    STAMP_X_137,  STAMP_Y_7,
-    STAMP_X_84,   STAMP_Y_7,
-    NULL,         NULL
-};
-
-Ki_WorkSheetData WS_Segm4_LT =
-{
-    WS_SEGMENT_LT,
-    &WS_Segm5_LT,
-    STAMP_X_84,   STAMP_Y_14,
-    STAMP_X_84,   0,
-    NULL,         NULL
-};
-Ki_WorkSheetData WS_Segm5_LT =
-{
-    WS_SEGMENT_LT,
-    NULL,
-    STAMP_X_70,   STAMP_Y_14,
-    STAMP_X_70,   0,
-#else
     NULL,
     BLOCK_OX - (SIZETEXT * 11),SIZETEXT * 4,
     BLOCK_OX - (SIZETEXT * 11),SIZETEXT * 2,
-#endif
     NULL,                      NULL
 };
 
+#endif
 
 void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
                                      double aScalar, const wxString &aFilename )
@@ -1041,6 +1082,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
                                      EDA_COLOR_T aClr1, EDA_COLOR_T aClr2 )
 {
     wxPoint pos;
+    wxPoint end;
     int refx, refy;
     wxString Line;
     Ki_WorkSheetData* WsItem;
@@ -1060,261 +1102,488 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
     yg   = aSz.y - aRB.y;
 
 #if defined(KICAD_GOST)
+
+    int lnMsg, ln;
+    int lnWosn = aLnW * 2;
+    int lnWtonk = aLnW;
+    wxSize sz;
+    wxSize size0_8( SIZETEXT * aScalar * 0.8, SIZETEXT * aScalar * 1 );
+    wxSize size1_5( SIZETEXT * aScalar * 1.5, SIZETEXT * aScalar * 1.5 );
+    wxSize size2( SIZETEXT * aScalar * 2, SIZETEXT * aScalar * 2 );
+    wxSize size3( SIZETEXT * aScalar * 3, SIZETEXT * aScalar * 3 );
+
     // Draw the border.
     GRRect( m_canvas->GetClipBox(), aDC, refx * aScalar, refy * aScalar,
-            xg * aScalar, yg * aScalar, aLnW, aClr1 );
+            xg * aScalar, yg * aScalar, lnWosn, aClr1 );
 
-    refx = aLT.x;
-    refy = aSz.y - aRB.y; // Lower left corner
-    for( WsItem = &WS_Segm1_LU; WsItem != NULL; WsItem = WsItem->Pnext )
-    {
-        pos.x = ( refx - WsItem->m_Posx ) * aScalar;
-        pos.y = ( refy - WsItem->m_Posy ) * aScalar;
-        msg.Empty();
-        switch( WsItem->m_Type )
-        {
-        case WS_CADRE:
-            break;
-
-        case WS_PODPIS_LU:
-            if( WsItem->m_Legende )
-                msg = WsItem->m_Legende;
-            DrawGraphicText( m_canvas, aDC, pos, aClr1,
-                             msg, TEXT_ORIENT_VERT, size,
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
-                             aLnW, false, false );
-            break;
-
-        case WS_SEGMENT_LU:
-            xg = aLT.x - WsItem->m_Endx;
-            yg = aSz.y - aRB.y - WsItem->m_Endy;
-            GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
-                    xg * aScalar, yg * aScalar, aLnW, aClr1 );
-            break;
-        }
-    }
-
-    refy = aRB.y; // Left Top corner
-    for( WsItem = &WS_Segm1_LT; WsItem != NULL; WsItem = WsItem->Pnext )
-    {
-        pos.x = ( refx + WsItem->m_Posx ) * aScalar;
-        pos.y = ( refy + WsItem->m_Posy ) * aScalar;
-        msg.Empty();
-        switch( WsItem->m_Type )
-        {
-        case WS_SEGMENT_LT:
-            xg = aLT.x + WsItem->m_Endx;
-            yg = aRB.y + WsItem->m_Endy;
-            GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
-                    xg * aScalar, yg * aScalar, aLnW, aClr1 );
-            break;
-        }
-    }
-
-    wxSize size2( SIZETEXT * aScalar * 2, SIZETEXT * aScalar * 2);
-    wxSize size3( SIZETEXT * aScalar * 3, SIZETEXT * aScalar * 3);
-    wxSize size1_5( SIZETEXT * aScalar * 1.5, SIZETEXT * aScalar * 1.5);
-    // lower right corner
+    // Center - right bottom corner
     refx = aSz.x - aRB.x;
     refy = aSz.y - aRB.y;
 
+    // First page
     if( aScr == 1 )
     {
-        for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
+        for( WsItem = &WS_Osn1_Line1; WsItem != NULL; WsItem = WsItem->Pnext )
         {
             pos.x = (refx - WsItem->m_Posx) * aScalar;
             pos.y = (refy - WsItem->m_Posy) * aScalar;
-            msg.Empty();
+            end.x = (refx - WsItem->m_Endx) * aScalar;
+            end.y = (refy - WsItem->m_Endy) * aScalar;
+            msg = WsItem->m_Legende;
             switch( WsItem->m_Type )
             {
-            case WS_DATE:
+            case WS_OSN:
+                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y, end.x, end.y,
+                        lnWosn, aClr1 );
                 break;
 
-            case WS_REV:
+            case WS_TONK:
+                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y, end.x, end.y,
+                        lnWtonk, aClr1 );
                 break;
 
-            case WS_KICAD_VERSION:
+            case WS_TEXT:
+                if( !msg.IsEmpty() )
+                {
+                    if( WsItem == &WS_Osn1_Text1 )
+                        DrawGraphicText( m_canvas, aDC, pos, aClr1,
+                                         msg, TEXT_ORIENT_HORIZ, size0_8,
+                                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                         aLnW, false, false );
+                    else
+                        DrawGraphicText( m_canvas, aDC, pos, aClr1,
+                                         msg, TEXT_ORIENT_HORIZ, size,
+                                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                         aLnW, false, false );
+                }
                 break;
 
-            case WS_PODPIS:
-                if( WsItem->m_Legende )
-                    msg = WsItem->m_Legende;
-                DrawGraphicText( m_canvas, aDC, pos, aClr1,
-                                 msg, TEXT_ORIENT_HORIZ, size,
-                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+            case WS_TEXTL:
+                if( !msg.IsEmpty() )
+                    DrawGraphicText( m_canvas, aDC, pos, aClr1,
+                                     msg, TEXT_ORIENT_HORIZ, size,
+                                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                                     aLnW, false, false );
+                break;
+
+            }
+        }
+
+        // Sheet number
+        if( aNScr > 1 )
+        {
+            pos.x = (refx - Mm2mils( 36 )) * aScalar;
+            pos.y = (refy - Mm2mils( 17.5 )) * aScalar;
+            msg.Empty();
+            msg << aScr;
+            DrawGraphicText( m_canvas, aDC, pos, aClr1, msg,
+                             TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_CENTER,
+                             GR_TEXT_VJUSTIFY_CENTER, aLnW, false, false );
+        }
+
+        // Count of sheets
+        pos.x = (refx - Mm2mils( 10 )) * aScalar;
+        pos.y = (refy - Mm2mils( 17.5 )) * aScalar;
+        msg.Empty();
+        msg << aNScr;
+        DrawGraphicText( m_canvas, aDC, pos, aClr1, msg,
+                         TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
+                         GR_TEXT_VJUSTIFY_CENTER, aLnW, false, false );
+
+        // Company name
+        msg = aTb.GetCompany();
+        if( !msg.IsEmpty() )
+        {
+            sz = size1_5;
+            lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            ln = Mm2mils( 49 );
+            if( lnMsg > ln )
+                sz.x *= float( ln ) / lnMsg;
+            pos.x = (refx - Mm2mils( 25 )) * aScalar;
+            pos.y = (refy - Mm2mils( 7.5 )) * aScalar;
+            DrawGraphicText( m_canvas, aDC, pos, aClr2,
+                             msg, TEXT_ORIENT_HORIZ, sz,
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                             aLnW, false, false );
+        }
+
+        // Title
+        msg = aTb.GetTitle();
+        if( !msg.IsEmpty() )
+        {
+            sz = size1_5;
+            wxArrayString lines;
+            int titleWidth = 0;
+            int titleHeight = (sz.y + sz.y * 0.5) / aScalar;
+            int titleFieldWidth = Mm2mils( 69 );
+            int titleFieldHeight = Mm2mils( 24 );
+            int index = 0;
+            wxString fullMsg = msg;
+            do // Reduce the height of wrapped title until the fit
+            {
+                do // Wrap the title
+                {
+                    titleWidth = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+                    if( titleWidth > titleFieldWidth )
+                    {
+                        index = 0;
+                        do
+                        {
+                            msg = msg.Left( msg.Length() - 1 );
+                            if( msg.Length() == 0 )
+                            {
+                                lines.Clear();
+                                msg = fullMsg;
+                                sz.x -= aScalar;
+                                break;
+                            }
+                            else
+                            {
+                                index++;
+                                titleWidth = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+
+                                wxString ch = wxString( msg.Last() );
+                                if( titleWidth < titleFieldWidth && ch == wxT( " " ) )
+                                {
+                                    // New sentence on a new line
+                                    int dot = msg.Index( wxT( ". " ) );
+                                    if( dot != wxNOT_FOUND )
+                                    {
+                                        index += msg.Length() - dot - 2;
+                                        msg = msg.Left( dot + 1 );
+                                        lines.Add( msg );
+                                        msg = fullMsg.Right( index );
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        msg = msg.Left( msg.Length() - 1 );
+                                        lines.Add( msg );
+                                        msg = fullMsg.Right( index );
+                                        break;
+                                    }
+                                }
+                            }
+                        }while( 1 );
+                    }
+                    else
+                    {
+                        // New sentence on a new line
+                        int dot = msg.Index( wxT( ". " ) );
+                        if( dot != wxNOT_FOUND )
+                        {
+                            lines.Add( msg.Left( dot + 1 ) );
+                            lines.Add( fullMsg.Right( msg.Length() - dot - 2 ) );
+                        }
+                        else
+                            lines.Add( msg );
+                        break;
+                    }
+                }while( 1 );
+
+                if( titleFieldHeight < titleHeight * lines.Count() )
+                {
+                    sz.y -= aScalar;
+                    sz.x -= aScalar;
+                    msg = fullMsg;
+                    lines.Clear();
+                }
+                else
+                    break;
+            }while( 1 );
+
+            pos.x = (refx - Mm2mils( 85 )) * aScalar;
+            pos.y = (refy - Mm2mils( 27.5 ) - (titleHeight * (lines.Count() - 1) / 2)) * aScalar;
+
+            for( int curLn = 0; curLn < lines.Count(); curLn++ )
+            {
+                msg = lines[curLn];
+                DrawGraphicText( m_canvas, aDC, pos, aClr2,
+                                 msg, TEXT_ORIENT_HORIZ, sz,
+                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                  aLnW, false, false );
+                pos.y += titleHeight * aScalar;
+            }
+        }
+
+        // Decimal number
+        msg = aTb.GetComment1();
+        if( !msg.IsEmpty() )
+        {
+            sz = size3;
+            lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            ln = Mm2mils( 119 );
+            if( lnMsg > ln )
+                sz.x *= float( ln ) / lnMsg;
+            pos.x = (refx - Mm2mils( 60 )) * aScalar;
+            pos.y = (refy - Mm2mils( 47.5 )) * aScalar;
+            DrawGraphicText( m_canvas, aDC, pos, aClr2,
+                             msg, TEXT_ORIENT_HORIZ, sz,
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                             aLnW, false, false );
+        }
+
+        // Developer
+        msg = aTb.GetComment2();
+        if( !msg.IsEmpty() )
+        {
+            sz = size;
+            lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            ln = Mm2mils( 22 );
+            if( lnMsg > ln )
+                sz.x *= float( ln ) / lnMsg;
+            pos.x = (refx - Mm2mils( 167.5 )) * aScalar;
+            pos.y = (refy - Mm2mils( 27.5 )) * aScalar;
+            DrawGraphicText( m_canvas, aDC, pos, aClr2,
+                             msg, TEXT_ORIENT_HORIZ, sz,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                             aLnW, false, false );
+        }
+
+        // Verifier
+        msg = aTb.GetComment3();
+        if( !msg.IsEmpty() )
+        {
+            sz = size;
+            lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            ln = Mm2mils( 22 );
+            if( lnMsg > ln )
+                sz.x *= float( ln ) / lnMsg;
+            pos.x = (refx - Mm2mils( 167 )) * aScalar;
+            pos.y = (refy - Mm2mils( 22.5 )) * aScalar;
+            DrawGraphicText( m_canvas, aDC, pos, aClr2,
+                             msg, TEXT_ORIENT_HORIZ, sz,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                             aLnW, false, false );
+        }
+
+        // Approver
+        msg = aTb.GetComment4();
+        if( !msg.IsEmpty() )
+        {
+            sz = size;
+            lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            ln = Mm2mils( 22 );
+            if( lnMsg > ln )
+                sz.x *= float( ln ) / lnMsg;
+            pos.x = (refx - Mm2mils( 167 )) * aScalar;
+            pos.y = (refy - Mm2mils( 2.5 )) * aScalar;
+            DrawGraphicText( m_canvas, aDC, pos, aClr2,
+                             msg, TEXT_ORIENT_HORIZ, sz,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                             aLnW, false, false );
+        }
+    }
+    else // other pages
+    {
+        for( WsItem = &WS_Osn2a_Line1; WsItem != NULL; WsItem = WsItem->Pnext )
+        {
+            pos.x = (refx - WsItem->m_Posx) * aScalar;
+            pos.y = (refy - WsItem->m_Posy) * aScalar;
+            end.x = (refx - WsItem->m_Endx) * aScalar;
+            end.y = (refy - WsItem->m_Endy) * aScalar;
+            msg = WsItem->m_Legende;
+            switch( WsItem->m_Type )
+            {
+            case WS_OSN:
+                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y, end.x, end.y,
+                        lnWosn, aClr1 );
                 break;
 
-            case WS_SIZESHEET:
+            case WS_TONK:
+                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y, end.x, end.y,
+                        lnWtonk, aClr1 );
                 break;
 
-            case WS_IDENTSHEET:
-                if( WsItem->m_Legende )
-                    msg = WsItem->m_Legende;
-                if( aNScr > 1 )
-                    msg << aScr;
-                DrawGraphicText( m_canvas, aDC, pos, aClr1, msg,
-                                 TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
-                                 GR_TEXT_VJUSTIFY_CENTER, aLnW, false, false );
-                break;
-
-            case WS_SHEETS:
-                if( WsItem->m_Legende )
-                    msg = WsItem->m_Legende;
-                msg << aNScr;
-                DrawGraphicText( m_canvas, aDC, pos, aClr1, msg,
-                                 TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
-                                 GR_TEXT_VJUSTIFY_CENTER, aLnW, false, false );
-                break;
-
-            case WS_COMPANY_NAME:
-            msg = aTb.GetCompany();
+            case WS_TEXT:
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
-                                     msg, TEXT_ORIENT_HORIZ, size1_5,
-                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     aLnW, false, false );
+                    if( WsItem == &WS_Osn2a_Text1 )
+                        DrawGraphicText( m_canvas, aDC, pos, aClr1,
+                                         msg, TEXT_ORIENT_HORIZ, size0_8,
+                                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                         aLnW, false, false );
+                    else
+                        DrawGraphicText( m_canvas, aDC, pos, aClr1,
+                                         msg, TEXT_ORIENT_HORIZ, size,
+                                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                         aLnW, false, false );
                 }
                 break;
 
-            case WS_TITLE:
-            msg = aTb.GetTitle();
+            case WS_TEXTL:
                 if( !msg.IsEmpty() )
-                {
-                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
-                                     msg, TEXT_ORIENT_HORIZ, size1_5,
-                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     aLnW, false, false );
-                }
-                break;
-
-            case WS_COMMENT1:
-            msg = aTb.GetComment1();
-                if( !msg.IsEmpty() )
-                {
-                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
-                                     msg, TEXT_ORIENT_HORIZ, size3,
-                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     aLnW, false, false );
-                    pos.x = (aLT.x + 1260) * aScalar;
-                    pos.y = (aLT.y + 270) * aScalar;
-                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
-                                     msg, 1800, size2,
-                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     aLnW, false, false );
-                }
-                break;
-
-            case WS_COMMENT2:
-            msg = aTb.GetComment2();
-                if( !msg.IsEmpty() )
-                {
-                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
+                    DrawGraphicText( m_canvas, aDC, pos, aClr1,
                                      msg, TEXT_ORIENT_HORIZ, size,
                                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                      aLnW, false, false );
-                }
-                break;
-
-            case WS_COMMENT3:
-            msg = aTb.GetComment3();
-                if( !msg.IsEmpty() )
-                {
-                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
-                                     msg, TEXT_ORIENT_HORIZ, size,
-                                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                     aLnW, false, false );
-                }
-                break;
-
-            case WS_COMMENT4:
-            msg = aTb.GetComment4();
-                if( !msg.IsEmpty() )
-                {
-                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
-                                     msg, TEXT_ORIENT_HORIZ, size,
-                                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                     aLnW, false, false );
-                }
-                break;
-
-            case WS_UPPER_SEGMENT:
-            case WS_LEFT_SEGMENT:
-                WS_MostUpperLine.m_Posy = WS_MostUpperLine.m_Endy =
-                    WS_MostLeftLine.m_Posy = STAMP_OY;
-                pos.y = ( refy - WsItem->m_Posy ) * aScalar;
-
-            case WS_SEGMENT:
-                xg = aSz.x - aRB.x - WsItem->m_Endx;
-                yg = aSz.y - aRB.y - WsItem->m_Endy;
-                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
-                        xg * aScalar, yg * aScalar, aLnW, aClr1 );
                 break;
             }
         }
-    }
-    else
-    {
-        for( WsItem = &WS_CADRE_D; WsItem != NULL; WsItem = WsItem->Pnext )
-        {
-            pos.x = ( refx - WsItem->m_Posx ) * aScalar;
-            pos.y = ( refy - WsItem->m_Posy ) * aScalar;
-            msg.Empty();
 
+        // Sheet number
+        pos.x = (refx - Mm2mils( 5 )) * aScalar;
+        pos.y = (refy - Mm2mils( 4 )) * aScalar;
+        msg.Empty();
+        msg << aScr;
+        DrawGraphicText( m_canvas, aDC, pos, aClr1, msg,
+                         TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_CENTER,
+                         GR_TEXT_VJUSTIFY_CENTER, aLnW, false, false );
+
+        // Decimal number
+        msg = aTb.GetComment1();
+        if( !msg.IsEmpty() )
+        {
+            sz = size3;
+            lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            ln = Mm2mils( 109 );
+            if( lnMsg > ln )
+                sz.x *= float( ln ) / lnMsg;
+            pos.x = (refx - Mm2mils( 65 )) * aScalar;
+            pos.y = (refy - Mm2mils( 7.5 )) * aScalar;
+            DrawGraphicText( m_canvas, aDC, pos, aClr2,
+                             msg, TEXT_ORIENT_HORIZ, sz,
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                             aLnW, false, false );
+        }
+    }
+
+    // Format
+    pos.x = (refx - Mm2mils( 23 )) * aScalar;
+    pos.y = (refy + Mm2mils( 2.5 )) * aScalar;
+    msg.Empty();
+    msg << aType;
+    DrawGraphicText( m_canvas, aDC, pos, aClr1,
+                     msg, TEXT_ORIENT_HORIZ, size,
+                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                     aLnW, false, false );
+
+    // Center - left bottom corner
+    refx = aLT.x;
+    refy = aSz.y - aRB.y;
+    for( WsItem = &WS_DopLeft_Line1; WsItem != NULL; WsItem = WsItem->Pnext )
+    {
+        if( aScr > 1 && WsItem == &WS_DopLeft_Line9 ) // Some fields for first page only
+            break;
+
+        pos.x = (refx - WsItem->m_Posx) * aScalar;
+        pos.y = (refy - WsItem->m_Posy) * aScalar;
+        end.x = (refx - WsItem->m_Endx) * aScalar;
+        end.y = (refy - WsItem->m_Endy) * aScalar;
+        msg = WsItem->m_Legende;
+        switch( WsItem->m_Type )
+        {
+        case WS_OSN:
+            GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y, end.x, end.y,
+                    lnWosn, aClr1 );
+            break;
+
+        case WS_TEXT:
+            if( !msg.IsEmpty() )
+                DrawGraphicText( m_canvas, aDC, pos, aClr1,
+                                 msg, TEXT_ORIENT_VERT, size,
+                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                 aLnW, false, false );
+            break;
+        }
+    }
+
+    if( aType == PAGE_INFO::A4 || aSz.x > aSz.y ) // A4 or Landscape
+    {
+        // Center - left top corner
+        refx = aLT.x;
+        refy = aLT.y;
+        for( WsItem = &WS_DopTop_Line1; WsItem != NULL; WsItem = WsItem->Pnext )
+        {
+            if( aScr > 1 && WsItem == &WS_DopTop_Line3 ) // Some fields for first page only
+                break;
+
+            pos.x = (refx + WsItem->m_Posx) * aScalar;
+            pos.y = (refy + WsItem->m_Posy) * aScalar;
+            end.x = (refx + WsItem->m_Endx) * aScalar;
+            end.y = (refy + WsItem->m_Endy) * aScalar;
+            msg = WsItem->m_Legende;
             switch( WsItem->m_Type )
             {
-            case WS_CADRE:
-            // Begin list number > 1
-            msg = aTb.GetComment1();
-                if( !msg.IsEmpty() )
-                {
-                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
-                                     msg, TEXT_ORIENT_HORIZ, size3,
-                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     aLnW, false, false );
-                    pos.x = (aLT.x + 1260) * aScalar;
-                    pos.y = (aLT.y + 270) * aScalar;
-                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
-                                     msg, 1800, size2,
-                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     aLnW, false, false );
-                }
+            case WS_OSN:
+                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y, end.x, end.y,
+                        lnWosn, aClr1 );
                 break;
 
-            case WS_PODPIS_D:
-                if( WsItem->m_Legende )
-                    msg = WsItem->m_Legende;
-                DrawGraphicText( m_canvas, aDC, pos, aClr1,
-                                 msg, TEXT_ORIENT_HORIZ, size,
-                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 aLnW, false, false );
-                break;
-
-            case WS_IDENTSHEET_D:
-                if( WsItem->m_Legende )
-                    msg = WsItem->m_Legende;
-                msg << aScr;
-                DrawGraphicText( m_canvas, aDC, pos, aClr1,
-                                 msg, TEXT_ORIENT_HORIZ, size,
-                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 aLnW, false, false );
-                break;
-
-            case WS_LEFT_SEGMENT_D:
-                pos.y = ( refy - WsItem->m_Posy ) * aScalar;
-
-            case WS_SEGMENT_D:
-                xg = aSz.x - aRB.x - WsItem->m_Endx;
-                yg = aSz.y - aRB.y - WsItem->m_Endy;
-                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
-                        xg * aScalar, yg * aScalar, aLnW, aClr1 );
+            case WS_TONK:
+                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y, end.x, end.y,
+                        lnWtonk, aClr1 );
                 break;
             }
+        }
+
+        // Decimal number
+        msg = aTb.GetComment1();
+        if( !msg.IsEmpty() )
+        {
+            sz = size2;
+            lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            ln = Mm2mils( 69 );
+            if( lnMsg > ln )
+                sz.x *= float( ln ) / lnMsg;
+            pos.x = (refx + Mm2mils( 35 )) * aScalar;
+            pos.y = (refy + Mm2mils( 7 )) * aScalar;
+            DrawGraphicText( m_canvas, aDC, pos, aClr2,
+                             msg, 1800, sz,
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                             aLnW, false, false );
+        }
+    }
+    else // Portrait
+    {
+        // Center - right top corner
+        // Lines are used from the upper left corner by the change of coordinates
+        refx = aSz.x - aRB.x;
+        refy = aLT.y;
+        for( WsItem = &WS_DopTop_Line1; WsItem != NULL; WsItem = WsItem->Pnext )
+        {
+            if( aScr > 1 && WsItem == &WS_DopTop_Line3 ) // Some fields for first page only
+                break;
+
+            pos.x = (refx - WsItem->m_Posy) * aScalar;
+            pos.y = (refy + WsItem->m_Posx) * aScalar;
+            end.x = (refx - WsItem->m_Endy) * aScalar;
+            end.y = (refy + WsItem->m_Endx) * aScalar;
+            msg = WsItem->m_Legende;
+            switch( WsItem->m_Type )
+            {
+            case WS_OSN:
+                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y, end.x, end.y,
+                        lnWosn, aClr1 );
+                break;
+
+            case WS_TONK:
+                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y, end.x, end.y,
+                        lnWtonk, aClr1 );
+                break;
+            }
+        }
+
+        // Decimal number
+        msg = aTb.GetComment1();
+        if( !msg.IsEmpty() )
+        {
+            sz = size2;
+            lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            ln = Mm2mils( 69 );
+            if( lnMsg > ln )
+                sz.x *= float( ln ) / lnMsg;
+            pos.x = (refx - Mm2mils( 7 )) * aScalar;
+            pos.y = (refy + Mm2mils( 35 )) * aScalar;
+            DrawGraphicText( m_canvas, aDC, pos, aClr2,
+                             msg, TEXT_ORIENT_VERT, sz,
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                             aLnW, false, false );
         }
     }
 
 #else
+
     // Draw the border.
     int ii, jj, ipas, gxpas, gypas;
     for( ii = 0; ii < 2; ii++ )
@@ -1602,6 +1871,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
     }
 
 #endif
+
 }
 
 

@@ -39,7 +39,6 @@
 #include <sch_line.h>
 #include <sch_no_connect.h>
 #include <sch_component.h>
-#include <sch_polyline.h>
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
 

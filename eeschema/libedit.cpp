@@ -170,7 +170,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 
     if( libEntry == NULL )
     {
-        msg.Printf( _( "Component name \"%s\" not found in library \"%s\"." ),
+        msg.Printf( _( "Component name %s not found in library %s" ),
                     GetChars( CmpName ),
                     GetChars( searchLib->GetName() ) );
         DisplayError( this, msg );
@@ -337,7 +337,8 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     {
         fn = wxFileName( m_library->GetFullFileName() );
 
-        msg = _( "Modify library file \"" ) + fn.GetFullPath() + _( "\"?" );
+        msg.Printf( _( "Modify library file <%s> ?" ), 
+                    GetChars( fn.GetFullPath() ) );
 
         if( !IsOK( this, msg ) )
             return false;
@@ -374,7 +375,8 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
         if( !m_library->Save( libFormatter ) )
         {
-            msg = _( "Error occurred while saving library file \"" ) + fn.GetFullPath() + _( "\"." );
+            msg.Printf( _( "Error occurred while saving library file <%s>" ),
+                        GetChars( fn.GetFullPath() ) );
             AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
             DisplayError( this, msg );
             return false;
@@ -383,7 +385,8 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     catch( ... /* IO_ERROR ioe */ )
     {
         libFileName.MakeAbsolute();
-        msg = wxT( "Failed to create component library file " ) + libFileName.GetFullPath();
+        msg.Printf( _( "Failed to create component library file <%s>" ), 
+                    GetChars( libFileName.GetFullPath() ) );
         DisplayError( this, msg );
         return false;
     }
@@ -413,8 +416,8 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
         if( !m_library->SaveDocs( docFormatter ) )
         {
-            msg = _( "Error occurred while saving library document file \"" ) +
-                  docFileName.GetFullPath() + _( "\"." );
+            msg.Printf( _( "Error occurred while saving library documentation file <%s>" ),
+                        GetChars( docFileName.GetFullPath() ) );
             AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
             DisplayError( this, msg );
             return false;
@@ -423,15 +426,16 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     catch( ... /* IO_ERROR ioe */ )
     {
         docFileName.MakeAbsolute();
-        msg = wxT( "Failed to create component document library file " ) +
-              docFileName.GetFullPath();
+        msg.Printf( _( "Failed to create component document library file <%s>" ),
+                    GetChars( docFileName.GetFullPath() ) );
         DisplayError( this, msg );
         return false;
     }
 
-    msg = _( "Library file \"" ) + fn.GetFullName() + wxT( "\" Ok" );
+    msg.Printf( _( "Library file <%s> OK" ), GetChars( fn.GetFullName() ) );
     fn.SetExt( DOC_EXT );
-    wxString msg1 = _( "Document file \"" ) + fn.GetFullPath() + wxT( "\" Ok" );
+    wxString msg1;
+    msg1.Printf( _( "Documentation file <%s> OK" ), GetChars( fn.GetFullPath() ) );
     AppendMsgPanel( msg, msg1, BLUE );
 
     return true;
@@ -539,7 +543,7 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
         return;
     }
 
-    msg.Printf( _( "Delete component \"%s\" from library \"%s\"?" ),
+    msg.Printf( _( "Delete component %s from library %s?" ),
                 GetChars( LibEntry->GetName() ),
                 GetChars( m_library->GetName() ) );
 
@@ -615,7 +619,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
     if( m_library && m_library->FindEntry( name ) )
     {
         wxString msg;
-        msg.Printf( _( "Component \"%s\" already exists in library \"%s\"." ),
+        msg.Printf( _( "Component %s already exists in library %s" ),
                     GetChars( name ),
                     GetChars( m_library->GetName() ) );
         DisplayError( this, msg );
@@ -704,7 +708,7 @@ void LIB_EDIT_FRAME::SaveOnePartInMemory()
 
     if( oldComponent != NULL )
     {
-        msg.Printf( _( "Component \"%s\" already exists. Change it?" ),
+        msg.Printf( _( "Component %s already exists. Change it?" ),
                     GetChars( m_component->GetName() ) );
 
         if( !IsOK( this, msg ) )

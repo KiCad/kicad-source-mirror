@@ -156,18 +156,20 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
 
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness );
 
-    for( int layer=FIRST_NO_COPPER_LAYER; layer <= LAST_NO_COPPER_LAYER;  ++layer )
+    for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; 
+         layer <= LAST_NON_COPPER_LAYER; ++layer )
     {
         m_LayerSelectionCtrl->Append( m_parent->GetBoard()->GetLayerName( layer ) );
     }
 
-    int layer =  m_Item->GetLayer();
-    // Control:
-    if ( layer < FIRST_NO_COPPER_LAYER )
-        layer = FIRST_NO_COPPER_LAYER;
-    if ( layer > LAST_NO_COPPER_LAYER )
-        layer = LAST_NO_COPPER_LAYER;
-    m_LayerSelectionCtrl->SetSelection( layer - FIRST_NO_COPPER_LAYER );
+    LAYER_NUM layer = m_Item->GetLayer();
+    
+    // It has to be an aux layer
+    if ( layer < FIRST_NON_COPPER_LAYER )
+        layer = FIRST_NON_COPPER_LAYER;
+    if ( layer > LAST_NON_COPPER_LAYER )
+        layer = LAST_NON_COPPER_LAYER;
+    m_LayerSelectionCtrl->SetSelection( layer - FIRST_NON_COPPER_LAYER );
 }
 
 
@@ -177,7 +179,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnLayerChoice( wxCommandEvent& event )
 {
     int thickness;
 
-    if( (m_LayerSelectionCtrl->GetCurrentSelection() + FIRST_NO_COPPER_LAYER) == EDGE_N )
+    if( (m_LayerSelectionCtrl->GetCurrentSelection() + FIRST_NON_COPPER_LAYER) == EDGE_N )
         thickness =  m_brdSettings.m_EdgeSegmentWidth;
     else
         thickness =  m_brdSettings.m_DrawSegmentWidth;
@@ -216,7 +218,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     msg = m_DefaultThicknessCtrl->GetValue();
     int thickness = ReturnValueFromString( g_UserUnit, msg );
 
-    m_Item->SetLayer( m_LayerSelectionCtrl->GetCurrentSelection() + FIRST_NO_COPPER_LAYER);
+    m_Item->SetLayer( FIRST_NON_COPPER_LAYER + m_LayerSelectionCtrl->GetCurrentSelection() );
 
     if( m_Item->GetLayer() == EDGE_N )
          m_brdSettings.m_EdgeSegmentWidth = thickness;

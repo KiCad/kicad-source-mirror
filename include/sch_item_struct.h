@@ -32,6 +32,7 @@
 
 #include <vector>
 #include <class_base_screen.h>
+#include <general.h>
 
 using namespace std;
 
@@ -83,8 +84,9 @@ enum DANGLING_END_T {
  */
 class DANGLING_END_ITEM
 {
+private:
     /// A pointer to the connectable object.
-    const void*    m_item;
+    const EDA_ITEM* m_item;
 
     /// The position of the connection point.
     wxPoint        m_pos;
@@ -93,7 +95,7 @@ class DANGLING_END_ITEM
     DANGLING_END_T m_type;
 
 public:
-    DANGLING_END_ITEM( DANGLING_END_T aType, const void* aItem, const wxPoint& aPosition )
+    DANGLING_END_ITEM( DANGLING_END_T aType, const EDA_ITEM* aItem, const wxPoint& aPosition )
     {
         m_item = aItem;
         m_type = aType;
@@ -101,7 +103,7 @@ public:
     }
 
     wxPoint GetPosition() const { return m_pos; }
-    const void* GetItem() const { return m_item; }
+    const EDA_ITEM* GetItem() const { return m_item; }
     DANGLING_END_T GetType() const { return m_type; }
 };
 
@@ -116,7 +118,7 @@ public:
 class SCH_ITEM : public EDA_ITEM
 {
 protected:
-    int            m_Layer;
+    LayerNumber    m_Layer;
     EDA_ITEMS      m_connections;   ///< List of items connected to this item.
 
 public:
@@ -146,14 +148,14 @@ public:
      * Function GetLayer
      * returns the layer this item is on.
      */
-    int GetLayer() const { return m_Layer; }
+    LayerNumber GetLayer() const { return m_Layer; }
 
     /**
      * Function SetLayer
      * sets the layer this item is on.
      * @param aLayer The layer number.
      */
-    void SetLayer( int aLayer )  { m_Layer = aLayer; }
+    void SetLayer( LayerNumber aLayer )  { m_Layer = aLayer; }
 
     /**
      * Function GetPenSize virtual pure

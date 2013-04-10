@@ -90,7 +90,7 @@ void EDA_ITEM::InitVars()
 
 void EDA_ITEM::SetModified()
 {
-    m_Flags |= IS_CHANGED;
+    SetFlags( IS_CHANGED );
 
     // If this a child object, then the parent modification state also needs to be set.
     if( m_Parent )

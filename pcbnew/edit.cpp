@@ -62,7 +62,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     int         id = event.GetId();
     wxPoint     pos;
 
-    int         itmp;
+    LAYER_NUM itmp;
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     MODULE* module;
 
@@ -916,7 +916,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER:
-        itmp = SelectLayer( getActiveLayer(), -1, -1 );
+        itmp = SelectLayer( getActiveLayer(), UNDEFINED_LAYER, UNDEFINED_LAYER );
 
         if( itmp >= 0 )
             setActiveLayer( itmp );
@@ -929,7 +929,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
-        itmp = SelectLayer( getActiveLayer(), FIRST_NO_COPPER_LAYER, -1 );
+        itmp = SelectLayer( getActiveLayer(), FIRST_NON_COPPER_LAYER, UNDEFINED_LAYER );
 
         if( itmp >= 0 )
             setActiveLayer( itmp );
@@ -938,7 +938,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
-        itmp = SelectLayer( getActiveLayer(), -1, LAST_COPPER_LAYER );
+        itmp = SelectLayer( getActiveLayer(), UNDEFINED_LAYER, LAST_COPPER_LAYER );
 
         if( itmp >= 0 )
             setActiveLayer( itmp );
@@ -951,7 +951,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
-        setActiveLayer( (size_t) m_SelLayerBox->GetLayerSelection());
+        setActiveLayer( m_SelLayerBox->GetLayerSelection() );
 
         if( DisplayOpt.ContrastModeDisplay )
             m_canvas->Refresh( true );
@@ -1238,9 +1238,9 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 }
 
 
-void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, int layer )
+void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
 {
-    int curLayer = getActiveLayer();
+    LAYER_NUM curLayer = getActiveLayer();
 
     // Check if the specified layer matches the present layer
     if( layer == curLayer )
@@ -1248,7 +1248,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, int layer )
 
     // Copper layers cannot be selected unconditionally; how many
     // of those layers are currently enabled needs to be checked.
-    if( IsValidCopperLayerIndex( layer ) )
+    if( IsCopperLayer( layer ) )
     {
         // If only one copper layer is enabled, the only such layer
         // that can be selected to is the "Back" layer (so the
@@ -1329,7 +1329,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_TRACK_BUTT:
-        if( Drc_On )
+        if( g_Drc_On )
             SetToolID( id, wxCURSOR_PENCIL, _( "Add tracks" ) );
         else
             SetToolID( id, wxCURSOR_QUESTION_ARROW, _( "Add tracks" ) );

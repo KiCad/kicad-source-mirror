@@ -231,7 +231,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         }
 
         // Load layer & elements visibility settings
-        for( unsigned int i = 0; i < LAYER_COUNT; ++i )
+        for( unsigned int i = 0; i < NB_LAYERS; ++i )
         {
             view->SetLayerVisible( i, m_Pcb->IsLayerVisible( i ) );
         }
@@ -432,9 +432,9 @@ void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 
 
 // Note: virtual, overridden in PCB_EDIT_FRAME;
-void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, int layer )
+void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
 {
-    int preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
+    LAYER_NUM preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
 
     // Check if the specified layer matches the present layer
     if( layer == preslayer )
@@ -442,7 +442,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, int layer )
 
     // Copper layers cannot be selected unconditionally; how many
     // of those layers are currently enabled needs to be checked.
-    if( IsValidCopperLayerIndex( layer ) )
+    if( IsCopperLayer( layer ) )
     {
         // If only one copper layer is enabled, the only such layer
         // that can be selected to is the "Copper" layer (so the

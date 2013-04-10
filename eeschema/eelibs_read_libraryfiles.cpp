@@ -68,12 +68,11 @@ void SCH_EDIT_FRAME::LoadLibraries( void )
         }
 
         // Loaded library statusbar message
-        msg = _( "Library " ) + tmp;
         fn = tmp;
 
         if( CMP_LIBRARY::AddLibrary( fn, errMsg ) )
         {
-            msg += _( " loaded" );
+            msg.Printf( _( "Library <%s> loaded" ), GetChars( tmp ) );
             sortOrder.Add( fn.GetName() );
         }
         else
@@ -84,7 +83,7 @@ void SCH_EDIT_FRAME::LoadLibraries( void )
                            GetChars( fn.GetFullPath() ),
                            GetChars( errMsg ) );
             DisplayError( this, prompt );
-            msg += _( " error!" );
+            msg.Printf( _( "Library <%s> error!" ), GetChars( tmp ) );
         }
 
         PrintMsg( msg );

@@ -129,7 +129,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    int            ll;
+    LAYER_NUM      ll;
     unsigned int   cnt;
 
     switch( hk_id )
@@ -249,9 +249,9 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( GetBoard()->GetCopperLayerCount() < 2 ) // Single layer
             ll = LAYER_N_BACK;
         else if( ll == LAYER_N_FRONT )
-            ll = std::max( LAYER_N_BACK, GetBoard()->GetCopperLayerCount() - 2 );
+            ll = std::max( LAYER_N_BACK, FIRST_COPPER_LAYER + GetBoard()->GetCopperLayerCount() - 2 );
         else
-            ll--;
+            --ll;
 
         SwitchLayer( aDC, ll );
         break;
@@ -267,7 +267,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         else if( ll >= GetBoard()->GetCopperLayerCount() - 2 )
             ll = LAYER_N_FRONT;
         else
-            ll++;
+            ++ll;
 
         SwitchLayer( aDC, ll );
         break;
@@ -585,7 +585,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
         if( ItemFree )
         {
             wxPoint pos = GetScreen()->RefPos( false );
-            MODULE* module = GetBoard()->GetFootprint( pos, ALL_LAYERS, false );
+            MODULE* module = GetBoard()->GetFootprint( pos, UNDEFINED_LAYER, false );
 
             if( module == NULL )
                 return false;

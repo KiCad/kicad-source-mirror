@@ -34,6 +34,7 @@
 #include <pcbcommon.h>
 #include <plot_common.h>
 
+#include <class_board.h>
 #include <class_pad.h>
 #include <class_zone_settings.h>
 #include <class_board_design_settings.h>
@@ -42,36 +43,9 @@
 class MODULE;
 
 
-/* return a one bit layer mask from a layer number
- * aLayerNumber = the layer number to convert (0 .. LAYER_COUNT-1)
- */
-int GetLayerMask( int aLayerNumber )
-{
-    wxASSERT( aLayerNumber < LAYER_COUNT && aLayerNumber >= 0 );
-
-#if 0
-    // Look up Table for conversion one layer number -> one bit layer mask:
-    static int tabOneLayerMask[LAYER_COUNT] =
-    {
-        0x00000001, 0x00000002, 0x00000004, 0x00000008,
-        0x00000010, 0x00000020, 0x00000040, 0x00000080,
-        0x00000100, 0x00000200, 0x00000400, 0x00000800,
-        0x00001000, 0x00002000, 0x00004000, 0x00008000,
-        0x00010000, 0x00020000, 0x00040000, 0x00080000,
-        0x00100000, 0x00200000, 0x00400000, 0x00800000,
-        0x01000000, 0x02000000, 0x04000000, 0x08000000,
-        0x10000000, 0x20000000, 0x40000000, 0x80000000
-    };
-
-    return( tabOneLayerMask[aLayerNumber] );
-#else
-    return 1 << aLayerNumber;
-#endif
-}
-
 /* Look up Table for conversion copper layer count -> general copper layer
  * mask: */
-int g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
+LAYER_MSK g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
     0x0001, 0x8001, 0x8003, 0x8007,
     0x800F, 0x801F, 0x803F, 0x807F,
     0x80FF, 0x81FF, 0x83FF, 0x87FF,
@@ -79,7 +53,7 @@ int g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
 };
 
 
-DISPLAY_OPTIONS DisplayOpt;      /* Display options for board items */
+DISPLAY_OPTIONS DisplayOpt;      // Display options for board items
 
 int    g_RotationAngle;
 
@@ -99,3 +73,156 @@ int    g_PadCMPColor        = RED;
  */
 DLIST<TRACK> g_CurrentTrackList;
 
+LAYER_NUM FlipLayer( LAYER_NUM oldlayer )
+{
+    switch( oldlayer )
+    {
+    case LAYER_N_BACK:
+        return LAYER_N_FRONT;
+
+    case LAYER_N_FRONT:
+        return LAYER_N_BACK;
+
+    case SILKSCREEN_N_BACK:
+        return SILKSCREEN_N_FRONT;
+
+    case SILKSCREEN_N_FRONT:
+        return SILKSCREEN_N_BACK;
+
+    case ADHESIVE_N_BACK:
+        return ADHESIVE_N_FRONT;
+
+    case ADHESIVE_N_FRONT:
+        return ADHESIVE_N_BACK;
+
+    case SOLDERMASK_N_BACK:
+        return SOLDERMASK_N_FRONT;
+
+    case SOLDERMASK_N_FRONT:
+        return SOLDERMASK_N_BACK;
+
+    case SOLDERPASTE_N_BACK:
+        return SOLDERPASTE_N_FRONT;
+
+    case SOLDERPASTE_N_FRONT:
+        return SOLDERPASTE_N_BACK;
+
+    // No change for the other layers
+    default:
+        return oldlayer;
+    }
+}
+
+
+LAYER_MSK FlipLayerMask( LAYER_MSK aMask )
+{
+    LAYER_MSK newMask;
+
+    newMask = aMask & ~(LAYER_BACK | LAYER_FRONT |
+                        SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT |
+                        ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT |
+                        SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
+                        SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT |
+                        ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT);
+
+    if( aMask & LAYER_BACK )
+        newMask |= LAYER_FRONT;
+
+    if( aMask & LAYER_FRONT )
+        newMask |= LAYER_BACK;
+
+    if( aMask & SILKSCREEN_LAYER_BACK )
+        newMask |= SILKSCREEN_LAYER_FRONT;
+
+    if( aMask & SILKSCREEN_LAYER_FRONT )
+        newMask |= SILKSCREEN_LAYER_BACK;
+
+    if( aMask & ADHESIVE_LAYER_BACK )
+        newMask |= ADHESIVE_LAYER_FRONT;
+
+    if( aMask & ADHESIVE_LAYER_FRONT )
+        newMask |= ADHESIVE_LAYER_BACK;
+
+    if( aMask & SOLDERMASK_LAYER_BACK )
+        newMask |= SOLDERMASK_LAYER_FRONT;
+
+    if( aMask & SOLDERMASK_LAYER_FRONT )
+        newMask |= SOLDERMASK_LAYER_BACK;
+
+    if( aMask & SOLDERPASTE_LAYER_BACK )
+        newMask |= SOLDERPASTE_LAYER_FRONT;
+
+    if( aMask & SOLDERPASTE_LAYER_FRONT )
+        newMask |= SOLDERPASTE_LAYER_BACK;
+
+    if( aMask & ADHESIVE_LAYER_BACK )
+        newMask |= ADHESIVE_LAYER_FRONT;
+
+    if( aMask & ADHESIVE_LAYER_FRONT )
+        newMask |= ADHESIVE_LAYER_BACK;
+
+    return newMask;
+}
+
+LAYER_NUM ExtractLayer( LAYER_MSK aMask )
+{
+    if( aMask == NO_LAYERS )
+        return UNSELECTED_LAYER;
+
+    LAYER_NUM candidate = UNDEFINED_LAYER;
+
+    // Scan all the layers and take note of the first set; if other are
+    // then found return UNDEFINED_LAYER
+    for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
+    {
+        if( aMask & GetLayerMask( i ) )
+        {
+            if( candidate == UNDEFINED_LAYER )
+                candidate = i;
+            else 
+                return UNDEFINED_LAYER;
+        }
+    }
+    return candidate;
+}
+
+wxString LayerMaskDescribe( const BOARD *aBoard, LAYER_MSK aMask )
+{
+    // Try the single or no- layer case (easy)
+    LAYER_NUM layer = ExtractLayer( aMask ); 
+    switch( layer )
+    {
+    case UNSELECTED_LAYER:
+        return _( "No layers" );
+
+    case UNDEFINED_LAYER:
+        break;
+
+    default:
+        return aBoard->GetLayerName( layer );
+    }
+
+    // Try to be smart and useful, starting with outer copper
+    // (which are more important than internal ones)
+    wxString layerInfo;
+    if( aMask & LAYER_FRONT )
+        AccumulateDescription( layerInfo, aBoard->GetLayerName( LAYER_N_FRONT ) );
+
+    if( aMask & LAYER_BACK )
+        AccumulateDescription( layerInfo, aBoard->GetLayerName( LAYER_N_BACK ) );
+    
+    if( aMask & INTERNAL_CU_LAYERS )
+        AccumulateDescription( layerInfo, _("Internal" ) );
+
+    if( aMask & ALL_NO_CU_LAYERS )
+        AccumulateDescription( layerInfo, _("Non-copper" ) );
+
+    return layerInfo;
+}
+
+void AccumulateDescription( wxString &aDesc, const wxString &aItem )
+{
+    if( !aDesc.IsEmpty() )
+        aDesc << wxT(", ");
+    aDesc << aItem;
+}

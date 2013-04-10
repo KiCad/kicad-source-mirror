@@ -53,7 +53,7 @@
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 
-static EDA_COLOR_T s_layerColor[MAX_LAYERS];
+static EDA_COLOR_T s_layerColor[NB_SCH_LAYERS];
 
 // The width to draw busses that do not have a specific width
 static int s_defaultBusThickness;
@@ -65,7 +65,7 @@ int GetDefaultBusThickness()
 
 void SetDefaultBusThickness( int aThickness)
 {
-    if( aThickness >=1 )
+    if( aThickness >= 1 )
         s_defaultBusThickness = aThickness;
     else
         s_defaultBusThickness = 1;
@@ -90,7 +90,7 @@ void SetDefaultLineThickness( int aThickness)
         s_drawDefaultLineThickness = 1;
 }
 
-EDA_COLOR_T ReturnLayerColor( int aLayer )
+EDA_COLOR_T GetLayerColor( LayerNumber aLayer )
 {
     return s_layerColor[aLayer];
 }
@@ -460,80 +460,77 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
 
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
                                                    (int*)&g_UserUnit, MILLIMETRES ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColWire" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorWireEx" ),
                                                         &s_layerColor[LAYER_WIRE],
                                                         GREEN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBus" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBusEx" ),
                                                         &s_layerColor[LAYER_BUS],
                                                         BLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorConn" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorConnEx" ),
                                                         &s_layerColor[LAYER_JUNCTION],
                                                         GREEN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLlab" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLLabelEx" ),
                                                         &s_layerColor[LAYER_LOCLABEL],
                                                         BLACK ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorHlab" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorHLabelEx" ),
                                                         &s_layerColor[LAYER_HIERLABEL],
                                                         BROWN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGbllab" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGLabelEx" ),
                                                         &s_layerColor[LAYER_GLOBLABEL],
                                                         RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinF" ),
-                                                        &s_layerColor[LAYER_PINFUN],
-                                                        MAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColPinN" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinNumEx" ),
                                                         &s_layerColor[LAYER_PINNUM],
                                                         RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPNam" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinNameEx" ),
                                                         &s_layerColor[LAYER_PINNAM],
                                                         CYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorField" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorFieldEx" ),
                                                         &s_layerColor[LAYER_FIELDS],
                                                         MAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorRef" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorReferenceEx" ),
                                                         &s_layerColor[LAYER_REFERENCEPART],
                                                         CYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorValue" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorValueEx" ),
                                                         &s_layerColor[LAYER_VALUEPART],
                                                         CYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNote" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNoteEx" ),
                                                         &s_layerColor[LAYER_NOTES],
                                                         LIGHTBLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBody" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBodyEx" ),
                                                         &s_layerColor[LAYER_DEVICE],
                                                         RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBodyBg" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBodyBgEx" ),
                                                         &s_layerColor[LAYER_DEVICE_BACKGROUND],
                                                         LIGHTYELLOW ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNetN" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNetNameEx" ),
                                                         &s_layerColor[LAYER_NETNAM],
                                                         DARKGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPin" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinEx" ),
                                                         &s_layerColor[LAYER_PIN],
                                                         RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheet" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetEx" ),
                                                         &s_layerColor[LAYER_SHEET],
                                                         MAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
-                                                        wxT( "ColorSheetFileName" ),
+                                                        wxT( "ColorSheetFileNameEx" ),
                                                         &s_layerColor[LAYER_SHEETFILENAME],
                                                         BROWN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetName" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetNameEx" ),
                                                         &s_layerColor[LAYER_SHEETNAME],
                                                         CYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetLab" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetLabelEx" ),
                                                         &s_layerColor[LAYER_SHEETLABEL],
                                                         BROWN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNoCo" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNoConnectEx" ),
                                                         &s_layerColor[LAYER_NOCONNECT],
                                                         BLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcW" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcWEx" ),
                                                         &s_layerColor[LAYER_ERC_WARN],
                                                         GREEN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcE" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcEEx" ),
                                                         &s_layerColor[LAYER_ERC_ERR],
                                                         RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGrid" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGridEx" ),
                                                         &s_layerColor[LAYER_GRID],
                                                         DARKGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintMonochrome" ),
@@ -558,7 +555,7 @@ void SCH_EDIT_FRAME::LoadSettings()
     wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
 
     // This is required until someone gets rid of the global variable s_layerColor.
-    m_GridColor = ReturnLayerColor( LAYER_GRID );
+    m_GridColor = GetLayerColor( LAYER_GRID );
 
     SetDefaultBusThickness( cfg->Read( DefaultBusWidthEntry, 12l ) );
     SetDefaultLineThickness( cfg->Read( DefaultDrawLineWidthEntry, 6l ) );

@@ -135,7 +135,7 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
     }
 
     // calculate z position for each non copper layer
-    for( int layer_id = FIRST_NO_COPPER_LAYER; layer_id < NB_LAYERS; layer_id++ )
+    for( int layer_id = FIRST_NON_COPPER_LAYER; layer_id < NB_PCB_LAYERS; layer_id++ )
     {
         double zpos;
         #define NonCopperLayerThicknessMargin 1.1
@@ -184,7 +184,7 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
 
         default:
             zpos = zpos_copper_front +
-                   (layer_id - FIRST_NO_COPPER_LAYER + 5) *
+                   (layer_id - FIRST_NON_COPPER_LAYER + 5) *
                    m_NonCopperLayerThickness * NonCopperLayerThicknessMargin;
             break;
         }

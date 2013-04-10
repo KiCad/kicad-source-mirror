@@ -256,7 +256,7 @@ struct EWIRE
     double      x2;
     double      y2;
     double      width;
-    int         layer;
+    LAYER_NUM   layer;
 
     // for style: (continuous | longdash | shortdash | dashdot)
     enum {
@@ -388,7 +388,7 @@ struct ECIRCLE
     double  y;
     double  radius;
     double  width;
-    int     layer;
+    LAYER_NUM layer;
 
     ECIRCLE( CPTREE& aCircle );
 };
@@ -1312,7 +1312,7 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 
     for( EITER it = cu.begin();  it != cu.end();  ++it )
     {
-        int layer = kicad_layer( it->number );
+        LAYER_NUM layer = kicad_layer( it->number );
 
         m_board->SetLayerName( layer, FROM_UTF8( it->name.c_str() ) );
         m_board->SetLayerType( layer, LT_SIGNAL );
@@ -1333,9 +1333,9 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
         {
             m_xpath->push( "wire" );
             EWIRE   w( gr->second );
-            int     layer = kicad_layer( w.layer );
+            LAYER_NUM layer = kicad_layer( w.layer );
 
-            if( layer != -1 )
+            if( layer != UNDEFINED_LAYER )
             {
                 DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
                 m_board->Add( dseg, ADD_APPEND );
@@ -1360,7 +1360,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 #endif
             m_xpath->push( "text" );
             ETEXT   t( gr->second );
-            int     layer = kicad_layer( t.layer );
+            LAYER_NUM layer = kicad_layer( t.layer );
 
             if( layer != -1 )       // supported layer
             {
@@ -1450,9 +1450,9 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
         {
             m_xpath->push( "circle" );
             ECIRCLE c( gr->second );
-            int     layer = kicad_layer( c.layer );
+            LAYER_NUM layer = kicad_layer( c.layer );
 
-            if( layer != -1 )       // unsupported layer
+            if( layer != UNDEFINED_LAYER )       // unsupported layer
             {
                 DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
                 m_board->Add( dseg, ADD_APPEND );
@@ -1473,9 +1473,9 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
         {
             m_xpath->push( "rectangle" );
             ERECT   r( gr->second );
-            int     layer = kicad_layer( r.layer );
+            LAYER_NUM layer = kicad_layer( r.layer );
 
-            if( IsValidCopperLayerIndex( layer ) )
+            if( IsCopperLayer( layer ) )
             {
                 // use a "netcode = 0" type ZONE:
                 ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
@@ -1908,9 +1908,9 @@ MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const std::string& aPkgName 
 void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
 {
     EWIRE   w( aTree );
-    int     layer = kicad_layer( w.layer );
+    LAYER_NUM layer = kicad_layer( w.layer );
 
-    if( IsValidNonCopperLayerIndex( layer ) )  // skip copper package wires
+    if( IsNonCopperLayer( layer ) )  // skip copper package wires
     {
         wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
         wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
@@ -2015,7 +2015,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 {
     ETEXT   t( aTree );
-    int     layer = kicad_layer( t.layer );
+    LAYER_NUM layer = kicad_layer( t.layer );
 
     TEXTE_MODULE* txt;
 
@@ -2118,9 +2118,9 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
 {
     ERECT   r( aTree );
-    int     layer = kicad_layer( r.layer );
+    LAYER_NUM layer = kicad_layer( r.layer );
 
-    if( IsValidNonCopperLayerIndex( layer ) )  // skip copper "package.rectangle"s
+    if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
         EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
         aModule->GraphicalItems().PushBack( dwg );
@@ -2151,9 +2151,9 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 {
     EPOLYGON    p( aTree );
-    int         layer = kicad_layer( p.layer );
+    LAYER_NUM layer = kicad_layer( p.layer );
 
-    if( IsValidNonCopperLayerIndex( layer ) )  // skip copper "package.rectangle"s
+    if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
         EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
         aModule->GraphicalItems().PushBack( dwg );
@@ -2200,7 +2200,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packageCircle( MODULE* aModule, CPTREE& aTree ) const
 {
     ECIRCLE e( aTree );
-    int     layer = kicad_layer( e.layer );
+    LAYER_NUM layer = kicad_layer( e.layer );
 
     EDGE_MODULE* gr = new EDGE_MODULE( aModule, S_CIRCLE );
     aModule->GraphicalItems().PushBack( gr );
@@ -2257,9 +2257,9 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
 {
     ESMD    e( aTree );
-    int     layer = kicad_layer( e.layer );
+    LAYER_NUM layer = kicad_layer( e.layer );
 
-    if( !IsValidCopperLayerIndex( layer ) )
+    if( !IsCopperLayer( layer ) )
     {
         return;
     }
@@ -2349,9 +2349,9 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
             {
                 m_xpath->push( "wire" );
                 EWIRE   w( it->second );
-                int     layer = kicad_layer( w.layer );
+                LAYER_NUM layer = kicad_layer( w.layer );
 
-                if( IsValidCopperLayerIndex( layer ) )
+                if( IsCopperLayer( layer ) )
                 {
                     TRACK*  t = new TRACK( m_board );
 
@@ -2383,11 +2383,11 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 m_xpath->push( "via" );
                 EVIA    v( it->second );
 
-                int layer_front_most = kicad_layer( v.layer_front_most );
-                int layer_back_most  = kicad_layer( v.layer_back_most );
+                LAYER_NUM layer_front_most = kicad_layer( v.layer_front_most );
+                LAYER_NUM layer_back_most  = kicad_layer( v.layer_back_most );
 
-                if( IsValidCopperLayerIndex( layer_front_most ) &&
-                    IsValidCopperLayerIndex( layer_back_most ) )
+                if( IsCopperLayer( layer_front_most ) &&
+                    IsCopperLayer( layer_back_most ) )
                 {
                     int     kidiam;
                     int     drillz = kicad( v.drill );
@@ -2462,9 +2462,9 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
             {
                 m_xpath->push( "polygon" );
                 EPOLYGON p( it->second );
-                int      layer = kicad_layer( p.layer );
+                LAYER_NUM layer = kicad_layer( p.layer );
 
-                if( IsValidCopperLayerIndex( layer ) )
+                if( IsCopperLayer( layer ) )
                 {
                     // use a "netcode = 0" type ZONE:
                     ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
@@ -2545,7 +2545,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 }
 
 
-int EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
+LAYER_NUM EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 {
     /* will assume this is a valid mapping for all eagle boards until I get paid more:
 
@@ -2625,7 +2625,7 @@ int EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
     else
     {
 /*
-#define FIRST_NO_COPPER_LAYER   16
+#define FIRST_NON_COPPER_LAYER  16
 #define ADHESIVE_N_BACK         16
 #define ADHESIVE_N_FRONT        17
 #define SOLDERPASTE_N_BACK      18
@@ -2639,7 +2639,7 @@ int EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 #define ECO1_N                  26
 #define ECO2_N                  27
 #define EDGE_N                  28
-#define LAST_NO_COPPER_LAYER    28
+#define LAST_NON_COPPER_LAYER   28
 #define UNUSED_LAYER_29         29
 #define UNUSED_LAYER_30         30
 #define UNUSED_LAYER_31         31

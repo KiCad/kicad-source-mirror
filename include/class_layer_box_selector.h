@@ -3,6 +3,7 @@
 
 #include <hotkeys_basic.h>
 #include <wx/bmpcbox.h>
+#include <layers_id_colors_and_visibility.h>
 
 
 class wxAuiToolBar;
@@ -34,24 +35,24 @@ public:
 
     // Returns a color index from the layer id
     // Virtual function because GerbView uses its own functions in a derived class
-    virtual EDA_COLOR_T GetLayerColor( int aLayerIndex ) const = 0;
+    virtual EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const = 0;
 
     // Returns the name of the layer id
     // Virtual pure function because GerbView uses its own functions in a derived class
-    virtual wxString GetLayerName( int aLayerIndex ) const = 0;
+    virtual wxString GetLayerName( LAYER_NUM aLayer ) const = 0;
 
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
     // Virtual function pure because GerbView uses its own functions in a derived class
-    virtual bool IsLayerEnabled( int aLayerIndex ) const = 0;
+    virtual bool IsLayerEnabled( LAYER_NUM aLayer ) const = 0;
 
    // Get Current Item #
     int GetChoice();
 
     // Get Current Layer
-    int GetLayerSelection();
+    LAYER_NUM GetLayerSelection() const;
 
     // Set Layer #
-    int SetLayerSelection(int layer);
+    int SetLayerSelection(LAYER_NUM layer);
 
     // Reload the Layers
     // Virtual pure function because GerbView uses its own functions in a derived class
@@ -65,10 +66,10 @@ public:
 
 protected:
    // Fills the layer bitmap aLayerbmp with the layer color
-    void SetBitmapLayer( wxBitmap& aLayerbmp, int aLayerIndex );
+    void SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer );
 };
 
-#define DECLARE_LAYERS_HOTKEY(list) int list[LAYER_COUNT] = \
+#define DECLARE_LAYERS_HOTKEY(list) int list[NB_LAYERS] = \
         { \
             HK_SWITCH_LAYER_TO_COPPER,   \
             HK_SWITCH_LAYER_TO_INNER1,   \

@@ -9,6 +9,7 @@
 #include <fctsys.h>         // wxWidgets include.
 #include <base_struct.h>    // IS_DRAGGED and IN_EDIT definitions.
 #include <convert_to_biu.h> // to define DMils2iu() conversion function
+#include <layers_id_colors_and_visibility.h>
 
 // Arcs are approximated by segments: define the number of segments per 360 deg (KiCad uses 0.1
 // deg approximation).  Be aware 3600 / ARC_APPROX_SEGMENTS_COUNT_LOW_DEF is an integer.
@@ -28,8 +29,7 @@
 #define FLG_START 0             // Flag used in locate routines
 #define FLG_END   1             // Flag used in locate routines
 
-#define DIM_ANCRE_MODULE 3       /* Anchor size (footprint center) */
-#define DIM_ANCRE_TEXTE  2       /* Anchor size (Text center) */
+#define DIM_ANCRE_MODULE 3       // Anchor size (footprint center)
 
 
 #define TEXTS_MIN_SIZE  DMils2iu( 50 )      ///< Minimum text size in Pcbnew units value (50 * 0.0001 mils)
@@ -49,17 +49,17 @@
 extern wxString g_DocModulesFileName;
 
 /* variables */
-extern bool Drc_On;
+extern bool g_Drc_On;
 extern bool g_AutoDeleteOldTrack;
 extern bool g_Show_Module_Ratsnest;
 extern bool g_Raccord_45_Auto;
 extern bool        g_Track_45_Only_Allowed;
 extern bool        g_Alternate_Track_Posture;
-extern bool        Segments_45_Only;
+extern bool        g_Segments_45_Only;
 
 /* Layer pair for auto routing and switch layers by hotkey */
-extern int         Route_Layer_TOP;
-extern int         Route_Layer_BOTTOM;
+extern LAYER_NUM   g_Route_Layer_TOP;
+extern LAYER_NUM   g_Route_Layer_BOTTOM;
 
 extern int         g_MaxLinksShowed;        // Max count links showed in routing
 extern bool        g_TwoSegmentTrackBuild;

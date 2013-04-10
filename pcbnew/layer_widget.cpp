@@ -174,7 +174,7 @@ int LAYER_WIDGET::encodeId( int aColumn, int aId )
 }
 
 
-int LAYER_WIDGET::getDecodedId( int aControlId )
+LAYER_NUM LAYER_WIDGET::getDecodedId( int aControlId )
 {
     int id = aControlId / LYR_COLUMN_COUNT;    // rounding is OK.
     return id;
@@ -223,7 +223,7 @@ wxBitmapButton* LAYER_WIDGET::makeColorButton( wxWindow* aParent, EDA_COLOR_T aC
 void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 {
     int row;
-    int layer;
+    LAYER_NUM layer;
 
     wxWindow* eventSource = (wxWindow*) event.GetEventObject();
 
@@ -284,7 +284,7 @@ void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& event )
         wxBitmap bm = makeBitmap( newColor );
         eventSource->SetBitmapLabel( bm );
 
-        int layer = getDecodedId( eventSource->GetId() );
+        LAYER_NUM layer = getDecodedId( eventSource->GetId() );
 
         // tell the client code.
         OnLayerColorChange( layer, newColor );
@@ -297,7 +297,7 @@ void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& event )
 void LAYER_WIDGET::OnLayerCheckBox( wxCommandEvent& event )
 {
     wxCheckBox* eventSource = (wxCheckBox*) event.GetEventObject();
-    int layer = getDecodedId( eventSource->GetId() );
+    LAYER_NUM layer = getDecodedId( eventSource->GetId() );
     OnLayerVisible( layer, eventSource->IsChecked() );
     passOnFocus();
 }
@@ -319,7 +319,7 @@ void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
         wxBitmap bm = makeBitmap( newColor );
         eventSource->SetBitmapLabel( bm );
 
-        int id = getDecodedId( eventSource->GetId() );
+        LAYER_NUM id = getDecodedId( eventSource->GetId() );
 
         // tell the client code.
         OnRenderColorChange( id, newColor );
@@ -331,7 +331,7 @@ void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
 void LAYER_WIDGET::OnRenderCheckBox( wxCommandEvent& event )
 {
     wxCheckBox* eventSource = (wxCheckBox*) event.GetEventObject();
-    int id = getDecodedId( eventSource->GetId() );
+    LAYER_NUM id = getDecodedId( eventSource->GetId() );
     OnRenderEnable( id, eventSource->IsChecked() );
     passOnFocus();
 }
@@ -348,14 +348,14 @@ void LAYER_WIDGET::OnTabChange( wxNotebookEvent& event )
 
 wxWindow* LAYER_WIDGET::getLayerComp( int aRow, int aColumn ) const
 {
-    int ndx = aRow * LYR_COLUMN_COUNT + aColumn;
-    if( (unsigned) ndx < m_LayersFlexGridSizer->GetChildren().GetCount() )
+    unsigned ndx = aRow * LYR_COLUMN_COUNT + aColumn;
+    if( ndx < m_LayersFlexGridSizer->GetChildren().GetCount() )
         return m_LayersFlexGridSizer->GetChildren()[ndx]->GetWindow();
     return NULL;
 }
 
 
-int LAYER_WIDGET::findLayerRow( int aLayer ) const
+int LAYER_WIDGET::findLayerRow( LAYER_NUM aLayer ) const
 {
     int count = GetLayerRowCount();
     for( int row=0;  row<count;  ++row )
@@ -398,7 +398,7 @@ int LAYER_WIDGET::findRenderRow( int aId ) const
 
 void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
 {
-    wxASSERT( aRow >= 0 && aRow < MAX_LAYER_ROWS );
+    wxASSERT( aRow >= 0 );
 
     int         col;
     int         index = aRow * LYR_COLUMN_COUNT;
@@ -440,7 +440,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
 
 void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
 {
-    wxASSERT( aRow >= 0 && aRow < MAX_LAYER_ROWS );
+    wxASSERT( aRow >= 0 );
 
     int         col;
     int         index = aRow * RND_COLUMN_COUNT;
@@ -452,7 +452,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     {
         wxBitmapButton* bmb = makeColorButton( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
         bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
-        bmb->SetToolTip( _("Middle click for color change" ) );
+        bmb->SetToolTip( _( "Middle click for color change" ) );
         m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
         // could add a left click handler on the color button that toggles checkbox.
@@ -530,7 +530,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
     m_LayerPanel->SetSizer( bSizer3 );
     m_LayerPanel->Layout();
     bSizer3->Fit( m_LayerPanel );
-    m_notebook->AddPage( m_LayerPanel, _("Layer"), true );
+    m_notebook->AddPage( m_LayerPanel, _( "Layer" ), true );
     m_RenderingPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
     wxBoxSizer* bSizer4;
@@ -550,7 +550,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
     m_RenderingPanel->SetSizer( bSizer4 );
     m_RenderingPanel->Layout();
     bSizer4->Fit( m_RenderingPanel );
-    m_notebook->AddPage( m_RenderingPanel, _("Render"), false );
+    m_notebook->AddPage( m_RenderingPanel, _( "Render" ), false );
 
     boxSizer->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 
@@ -739,24 +739,24 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
 }
 
 
-void LAYER_WIDGET::SelectLayer( int aLayer )
+void LAYER_WIDGET::SelectLayer( LAYER_NUM aLayer )
 {
     int row = findLayerRow( aLayer );
     SelectLayerRow( row );
 }
 
 
-int LAYER_WIDGET::GetSelectedLayer()
+LAYER_NUM LAYER_WIDGET::GetSelectedLayer()
 {
     wxWindow* w = getLayerComp( m_CurrentRow, 0 );
     if( w )
         return getDecodedId( w->GetId() );
 
-    return -1;
+    return UNDEFINED_LAYER;
 }
 
 
-void LAYER_WIDGET::SetLayerVisible( int aLayer, bool isVisible )
+void LAYER_WIDGET::SetLayerVisible( LAYER_NUM aLayer, bool isVisible )
 {
     int row = findLayerRow( aLayer );
     if( row >= 0 )
@@ -768,7 +768,7 @@ void LAYER_WIDGET::SetLayerVisible( int aLayer, bool isVisible )
 }
 
 
-bool LAYER_WIDGET::IsLayerVisible( int aLayer )
+bool LAYER_WIDGET::IsLayerVisible( LAYER_NUM aLayer )
 {
     int row = findLayerRow( aLayer );
     if( row >= 0 )
@@ -781,7 +781,7 @@ bool LAYER_WIDGET::IsLayerVisible( int aLayer )
 }
 
 
-void LAYER_WIDGET::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
+void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
 {
     int row = findLayerRow( aLayer );
     if( row >= 0 )
@@ -798,7 +798,7 @@ void LAYER_WIDGET::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
 }
 
 
-EDA_COLOR_T LAYER_WIDGET::GetLayerColor( int aLayer ) const
+EDA_COLOR_T LAYER_WIDGET::GetLayerColor( LAYER_NUM aLayer ) const
 {
     int row = findLayerRow( aLayer );
     if( row >= 0 )
@@ -875,7 +875,7 @@ class MYFRAME : public wxFrame
         {
         }
 
-        void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
+        void OnLayerColorChange( LAYER aLayer, EDA_COLOR_T aColor )
         {
             printf( "OnLayerColorChange( aLayer:%d, aColor:%d )\n", aLayer, aColor );
 
@@ -888,13 +888,13 @@ class MYFRAME : public wxFrame
             */
         }
 
-        bool OnLayerSelect( int aLayer )
+        bool OnLayerSelect( LAYER aLayer )
         {
             printf( "OnLayerSelect( aLayer:%d )\n", aLayer );
             return true;
         }
 
-        void OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
+        void OnLayerVisible( LAYER aLayer, bool isVisible, bool isFinal )
         {
             printf( "OnLayerVisible( aLayer:%d, isVisible:%d isFinal:%d)\n", aLayer, isVisible, isFinal );
         }

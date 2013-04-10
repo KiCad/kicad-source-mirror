@@ -36,34 +36,27 @@ static const EDA_COLOR_T default_layer_color[LAYERSCOLORSBUFFERSIZE] =
 
 static const EDA_COLOR_T default_items_color[LAYERSCOLORSBUFFERSIZE] =
 {
-    LIGHTGRAY,  // unused
-    CYAN,       // VIA_MICROVIA_VISIBLE
-    BROWN,      // VIA_BBLIND_VISIBLE
-    LIGHTGRAY,  // VIA_THROUGH_VISIBLE
-    LIGHTGRAY,  // MOD_TEXT_FR_VISIBLE
+    LIGHTGRAY, // unused
+    CYAN,      // VIA_MICROVIA_VISIBLE
+    BROWN,     // VIA_BBLIND_VISIBLE
+    LIGHTGRAY, // VIA_THROUGH_VISIBLE
+    YELLOW,    // NON_PLATED_VISIBLE
+    LIGHTGRAY, // MOD_TEXT_FR_VISIBLE
     BLUE,      // MOD_TEXT_BK_VISIBLE
     DARKGRAY,  // MOD_TEXT_INVISIBLE
     BLUE,      // ANCHOR_VISIBLE
     RED,       // PAD_FR_VISIBLE
     GREEN,     // PAD_BK_VISIBLE
     LIGHTGRAY, // RATSNEST_VISIBLE
-    DARKGRAY,  //GRID_VISIBLE
+    DARKGRAY,  // GRID_VISIBLE
     LIGHTRED,  LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
-    LIGHTGRAY, LIGHTGRAY,
-    LIGHTGRAY, LIGHTGRAY,
-    LIGHTGRAY, LIGHTGRAY,
-    LIGHTGRAY, LIGHTGRAY,
-    LIGHTGRAY,
-    LIGHTGRAY,
-    LIGHTGRAY,
-    LIGHTGRAY,
-    LIGHTGRAY,
-    LIGHTGRAY,
-    LIGHTGRAY,
-    LIGHTGRAY
+    LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
+    LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
+    LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
+    LIGHTGRAY, LIGHTGRAY, LIGHTGRAY
 };
 
-COLORS_DESIGN_SETTINGS:: COLORS_DESIGN_SETTINGS()
+COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS()
 {
     for( unsigned ii = 0; ii < DIM(m_LayersColors); ii++ )
         m_LayersColors[ii] = default_layer_color[ii];
@@ -78,7 +71,7 @@ COLORS_DESIGN_SETTINGS:: COLORS_DESIGN_SETTINGS()
  * @return the color for aLayer which is one of the layer indices given
  * in pcbstruct.h or in schematic
  */
-EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetLayerColor( int aLayer ) const
+EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetLayerColor( LAYER_NUM aLayer ) const
 {
     if( (unsigned) aLayer < DIM(m_LayersColors) )
     {
@@ -93,7 +86,7 @@ EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetLayerColor( int aLayer ) const
  * sets the color for aLayer which is one of the layer indices given
  * in pcbstruct.h or in schematic
  */
-void COLORS_DESIGN_SETTINGS::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
+void COLORS_DESIGN_SETTINGS::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
 {
     if( (unsigned) aLayer < DIM(m_LayersColors) )
     {

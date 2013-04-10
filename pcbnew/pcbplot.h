@@ -32,6 +32,7 @@
 #include <wx/filename.h>
 #include <pad_shapes.h>
 #include <pcb_plot_params.h>
+#include <layers_id_colors_and_visibility.h>
 
 class PLOTTER;
 class TEXTE_PCB;
@@ -147,7 +148,7 @@ public:
      * and in B&W mode, is plotted as white but other colors are plotted in BLACK
      * so the returned color is LIGHTGRAY when the layer color is WHITE
      */
-    EDA_COLOR_T getColor( int aLayer );
+    EDA_COLOR_T getColor( LAYER_NUM aLayer );
 
 private:
     /** Helper function to plot a single drill mark. It compensate and clamp
@@ -175,7 +176,7 @@ PLOTTER* StartPlotBoard( BOARD* aBoard,
  * @param aLayer = the layer id to plot
  * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
  */
-void PlotOneBoardLayer( BOARD* aBoard, PLOTTER* aPlotter, int aLayer,
+void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
                         const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
@@ -199,7 +200,7 @@ void PlotOneBoardLayer( BOARD* aBoard, PLOTTER* aPlotter, int aLayer,
  *      SetDrillMarksType( DrillMarksType aVal ) controle the actual hole:
  *              no hole, small hole, actual hole
  */
-void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, long aLayerMask,
+void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
                         const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
@@ -211,7 +212,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, long aLayerMask,
  * @param aLayerMask = the mask to define the layers to plot (silkscreen Front and/or Back)
  * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
  */
-void PlotSilkScreen( BOARD* aBoard, PLOTTER* aPlotter, long aLayerMask,
+void PlotSilkScreen( BOARD* aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
                      const PCB_PLOT_PARAMS&  aPlotOpt );
 
 

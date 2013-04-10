@@ -1,13 +1,15 @@
-/*******************************************************************/
-/* dialog_pad_properties.cpp: Pad editing functions and dialog box */
-/* see also dialog_pad_properties_base.xxx (built with wxFormBuilder)   */
-/*******************************************************************/
+/**
+ * @file dialog_pad_properties.cpp.
+ * @brief Pad editing functions and dialog pad editor
+ */
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +65,7 @@ static PAD_ATTR_T CodeType[] = {
 
 
 // Default mask layers setup for pads according to the pad type
-static long Std_Pad_Layers[] = {
+static const LAYER_MSK Std_Pad_Layers[] = {
 
     // PAD_STANDARD:
     PAD_STANDARD_DEFAULT_LAYERS,
@@ -93,15 +95,16 @@ public:
     }
 
 private:
-    PCB_BASE_FRAME* m_Parent;
-    D_PAD*  m_CurrentPad;            // pad currently being edited
+    PCB_BASE_FRAME* m_parent;
+    D_PAD*  m_currentPad;            // pad currently being edited
     D_PAD*  m_dummyPad;              // a working copy used to show changes
-    BOARD*  m_Board;
-    D_PAD&  m_Pad_Master;
+    BOARD*  m_board;
+    D_PAD&  m_padMaster;
     bool    m_isFlipped;            // true if the parent footprint (therefore pads) is flipped (mirrored)
                                     // in this case, some Y coordinates values must be negated
     bool    m_canUpdate;
 
+private:
     void initValues();
 
     bool padValuesOK();       ///< test if all values are acceptable for the pad
@@ -111,7 +114,7 @@ private:
      * updates the CheckBox states in pad layers list,
      * @param layer_mask = pad layer mask (ORed layers bit mask)
      */
-    void setPadLayersList( long layer_mask );
+    void setPadLayersList( LAYER_MSK layer_mask );
 
     /// Copy values from dialog field to aPad's members
     bool transferDataToPad( D_PAD* aPad );
@@ -143,18 +146,18 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     // use aParent's parent, which is the original BOARD, not the dummy module editor BOARD,
     // since FOOTPRINT_EDIT_FRAME::GetDesignSettings() is tricked out to use the PCB_EDIT_FRAME's
     // BOARD, not its own BOARD.
-    m_Pad_Master( aParent->GetDesignSettings().m_Pad_Master )
+    m_padMaster( aParent->GetDesignSettings().m_Pad_Master )
 {
     m_canUpdate  = false;
-    m_Parent     = aParent;
-    m_CurrentPad = aPad;
-    m_Board      = m_Parent->GetBoard();
+    m_parent     = aParent;
+    m_currentPad = aPad;
+    m_board      = m_parent->GetBoard();
     m_dummyPad   = new D_PAD( (MODULE*) NULL );
 
     if( aPad )
         m_dummyPad->Copy( aPad );
     else
-        m_dummyPad->Copy( &m_Pad_Master );
+        m_dummyPad->Copy( &m_padMaster );
 
     initValues();
 
@@ -171,19 +174,21 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     wxPaintDC    dc( m_panelShowPad );
     PAD_DRAWINFO drawInfo;
 
-    EDA_COLOR_T color = ColorFromInt( 0 ); // XXX EVIL merge
+    EDA_COLOR_T color = BLACK;
 
     if( m_dummyPad->GetLayerMask() & LAYER_FRONT )
     {
-        color = m_Board->GetVisibleElementColor( PAD_FR_VISIBLE );
+        color = m_board->GetVisibleElementColor( PAD_FR_VISIBLE );
     }
 
     if( m_dummyPad->GetLayerMask() & LAYER_BACK )
     {
-        color = ColorFromInt( color | m_Board->GetVisibleElementColor( PAD_BK_VISIBLE ) ); // XXX EVIL merge
+        color = ColorMix( color, m_board->GetVisibleElementColor( PAD_BK_VISIBLE ) );
     }
 
-    if( color == 0 )
+    // What could happen: the pad color is *actually* black, or no
+    // copper was selected
+    if( color == BLACK )
         color = LIGHTGRAY;
 
     drawInfo.m_Color     = color;
@@ -226,9 +231,8 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     // Draw X and Y axis.
     // this is particularly useful to show the reference position of pads
     // with offset and no hole
-    int width = 0;
-    GRLine( NULL, &dc, -dim, 0, dim, 0, width, BLUE );   // X axis
-    GRLine( NULL, &dc, 0, -dim, 0, dim, width, BLUE );   // Y axis
+    GRLine( NULL, &dc, -dim, 0, dim, 0, 0, BLUE );   // X axis
+    GRLine( NULL, &dc, 0, -dim, 0, dim, 0, BLUE );   // Y axis
 
     event.Skip();
 }
@@ -249,26 +253,26 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     // Setup layers names from board
     // Should be made first, before calling m_rbCopperLayersSel->SetSelection()
-    m_rbCopperLayersSel->SetString( 0, m_Board->GetLayerName( LAYER_N_FRONT ) );
-    m_rbCopperLayersSel->SetString( 1, m_Board->GetLayerName( LAYER_N_BACK ) );
+    m_rbCopperLayersSel->SetString( 0, m_board->GetLayerName( LAYER_N_FRONT ) );
+    m_rbCopperLayersSel->SetString( 1, m_board->GetLayerName( LAYER_N_BACK ) );
 
-    m_PadLayerAdhCmp->SetLabel( m_Board->GetLayerName( ADHESIVE_N_FRONT ) );
-    m_PadLayerAdhCu->SetLabel( m_Board->GetLayerName( ADHESIVE_N_BACK ) );
-    m_PadLayerPateCmp->SetLabel( m_Board->GetLayerName( SOLDERPASTE_N_FRONT ) );
-    m_PadLayerPateCu->SetLabel( m_Board->GetLayerName( SOLDERPASTE_N_BACK ) );
-    m_PadLayerSilkCmp->SetLabel( m_Board->GetLayerName( SILKSCREEN_N_FRONT ) );
-    m_PadLayerSilkCu->SetLabel( m_Board->GetLayerName( SILKSCREEN_N_BACK ) );
-    m_PadLayerMaskCmp->SetLabel( m_Board->GetLayerName( SOLDERMASK_N_FRONT ) );
-    m_PadLayerMaskCu->SetLabel( m_Board->GetLayerName( SOLDERMASK_N_BACK ) );
-    m_PadLayerECO1->SetLabel( m_Board->GetLayerName( ECO1_N ) );
-    m_PadLayerECO2->SetLabel( m_Board->GetLayerName( ECO2_N ) );
-    m_PadLayerDraft->SetLabel( m_Board->GetLayerName( DRAW_N ) );
+    m_PadLayerAdhCmp->SetLabel( m_board->GetLayerName( ADHESIVE_N_FRONT ) );
+    m_PadLayerAdhCu->SetLabel( m_board->GetLayerName( ADHESIVE_N_BACK ) );
+    m_PadLayerPateCmp->SetLabel( m_board->GetLayerName( SOLDERPASTE_N_FRONT ) );
+    m_PadLayerPateCu->SetLabel( m_board->GetLayerName( SOLDERPASTE_N_BACK ) );
+    m_PadLayerSilkCmp->SetLabel( m_board->GetLayerName( SILKSCREEN_N_FRONT ) );
+    m_PadLayerSilkCu->SetLabel( m_board->GetLayerName( SILKSCREEN_N_BACK ) );
+    m_PadLayerMaskCmp->SetLabel( m_board->GetLayerName( SOLDERMASK_N_FRONT ) );
+    m_PadLayerMaskCu->SetLabel( m_board->GetLayerName( SOLDERMASK_N_BACK ) );
+    m_PadLayerECO1->SetLabel( m_board->GetLayerName( ECO1_N ) );
+    m_PadLayerECO2->SetLabel( m_board->GetLayerName( ECO2_N ) );
+    m_PadLayerDraft->SetLabel( m_board->GetLayerName( DRAW_N ) );
 
     m_isFlipped = false;
 
-    if( m_CurrentPad )
+    if( m_currentPad )
     {
-        MODULE* module = m_CurrentPad->GetParent();
+        MODULE* module = m_currentPad->GetParent();
 
         if( module->GetLayer() == LAYER_N_BACK )
         {
@@ -291,7 +295,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_dummyPad->SetDelta( sz );
 
         // flip pad's layers
-        m_dummyPad->SetLayerMask( ChangeSideMaskLayer( m_dummyPad->GetLayerMask() ) );
+        m_dummyPad->SetLayerMask( FlipLayerMask( m_dummyPad->GetLayerMask() ) );
     }
 
     m_staticTextWarningPadFlipped->Show(m_isFlipped);
@@ -383,11 +387,11 @@ void DIALOG_PAD_PROPERTIES::initValues()
         break;
     }
 
-    if( m_CurrentPad )
+    if( m_currentPad )
     {
-        MODULE* module = m_CurrentPad->GetParent();
+        MODULE* module = m_currentPad->GetParent();
 
-        angle = m_CurrentPad->GetOrientation() - module->GetOrientation();
+        angle = m_currentPad->GetOrientation() - module->GetOrientation();
 
         if( m_isFlipped )
             NEGATE( angle );
@@ -589,13 +593,12 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 {
-    long        layer_mask;
     unsigned    ii = m_PadType->GetSelection();
 
     if( ii >= NBTYPES ) // catches < 0 also
         ii = 0;
 
-    layer_mask = Std_Pad_Layers[ii];
+    LAYER_MSK layer_mask = Std_Pad_Layers[ii];
     setPadLayersList( layer_mask );
 
     // Enable/disable drill dialog items:
@@ -616,7 +619,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 }
 
 
-void DIALOG_PAD_PROPERTIES::setPadLayersList( long layer_mask )
+void DIALOG_PAD_PROPERTIES::setPadLayersList( LAYER_MSK layer_mask )
 {
     if( ( layer_mask & ALL_CU_LAYERS ) == LAYER_FRONT )
         m_rbCopperLayersSel->SetSelection(0);
@@ -669,7 +672,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         error_msgs.Add(  _( "Incorrect value for pad drill: pad drill bigger than pad size" ) );
     }
 
-    int padlayers_mask = m_dummyPad->GetLayerMask();
+    LAYER_MSK padlayers_mask = m_dummyPad->GetLayerMask();
     if( ( padlayers_mask == 0 ) && ( m_dummyPad->GetAttribute() != PAD_HOLE_NOT_PLATED ) )
         error_msgs.Add( _( "Error: pad has no layer and is not a mechanical pad" ) );
 
@@ -740,115 +743,114 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     bool rastnestIsChanged = false;
     int  isign = m_isFlipped ? -1 : 1;
 
-    transferDataToPad( &m_Pad_Master );
+    transferDataToPad( &m_padMaster );
 
-    if( m_CurrentPad )   // Set current Pad parameters
+    if( m_currentPad )   // Set current Pad parameters
     {
         wxSize  size;
-        MODULE* module = m_CurrentPad->GetParent();
+        MODULE* module = m_currentPad->GetParent();
 
-        m_Parent->SaveCopyInUndoList( module, UR_CHANGED );
+        m_parent->SaveCopyInUndoList( module, UR_CHANGED );
         module->SetLastEditTime();
 
         // redraw the area where the pad was, without pad (delete pad on screen)
-        m_CurrentPad->SetFlags( DO_NOT_DRAW );
-        m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentPad->GetBoundingBox() );
-        m_CurrentPad->ClearFlags( DO_NOT_DRAW );
+        m_currentPad->SetFlags( DO_NOT_DRAW );
+        m_parent->GetCanvas()->RefreshDrawingRect( m_currentPad->GetBoundingBox() );
+        m_currentPad->ClearFlags( DO_NOT_DRAW );
 
         // Update values
-        m_CurrentPad->SetShape( m_Pad_Master.GetShape() );
-        m_CurrentPad->SetAttribute( m_Pad_Master.GetAttribute() );
+        m_currentPad->SetShape( m_padMaster.GetShape() );
+        m_currentPad->SetAttribute( m_padMaster.GetAttribute() );
 
-        if( m_CurrentPad->GetPosition() != m_Pad_Master.GetPosition() )
+        if( m_currentPad->GetPosition() != m_padMaster.GetPosition() )
         {
-            m_CurrentPad->SetPosition( m_Pad_Master.GetPosition() );
+            m_currentPad->SetPosition( m_padMaster.GetPosition() );
             rastnestIsChanged = true;
         }
 
         // compute the pos 0 value, i.e. pad position for module with orientation = 0
         // i.e. relative to module origin (module position)
-        wxPoint pt = m_CurrentPad->GetPosition() - module->GetPosition();
+        wxPoint pt = m_currentPad->GetPosition() - module->GetPosition();
 
         RotatePoint( &pt, -module->GetOrientation() );
 
-        m_CurrentPad->SetPos0( pt );
+        m_currentPad->SetPos0( pt );
 
-        m_CurrentPad->SetOrientation( m_Pad_Master.GetOrientation() * isign + module->GetOrientation() );
+        m_currentPad->SetOrientation( m_padMaster.GetOrientation() * isign + module->GetOrientation() );
 
-        m_CurrentPad->SetSize( m_Pad_Master.GetSize() );
+        m_currentPad->SetSize( m_padMaster.GetSize() );
 
-        size = m_Pad_Master.GetDelta();
+        size = m_padMaster.GetDelta();
         size.y *= isign;
-        m_CurrentPad->SetDelta( size );
+        m_currentPad->SetDelta( size );
 
-        m_CurrentPad->SetDrillSize( m_Pad_Master.GetDrillSize() );
-        m_CurrentPad->SetDrillShape( m_Pad_Master.GetDrillShape() );
+        m_currentPad->SetDrillSize( m_padMaster.GetDrillSize() );
+        m_currentPad->SetDrillShape( m_padMaster.GetDrillShape() );
 
-        wxPoint offset = m_Pad_Master.GetOffset();
+        wxPoint offset = m_padMaster.GetOffset();
         offset.y *= isign;
-        m_CurrentPad->SetOffset( offset );
+        m_currentPad->SetOffset( offset );
 
-        m_CurrentPad->SetPadToDieLength( m_Pad_Master.GetPadToDieLength() );
+        m_currentPad->SetPadToDieLength( m_padMaster.GetPadToDieLength() );
 
-        if( m_CurrentPad->GetLayerMask() != m_Pad_Master.GetLayerMask() )
+        if( m_currentPad->GetLayerMask() != m_padMaster.GetLayerMask() )
         {
             rastnestIsChanged = true;
-            m_CurrentPad->SetLayerMask( m_Pad_Master.GetLayerMask() );
+            m_currentPad->SetLayerMask( m_padMaster.GetLayerMask() );
         }
 
         if( m_isFlipped )
-            m_CurrentPad->SetLayerMask( ChangeSideMaskLayer( m_CurrentPad->GetLayerMask() ) );
+            m_currentPad->SetLayerMask( FlipLayerMask( m_currentPad->GetLayerMask() ) );
 
-        m_CurrentPad->SetPadName( m_Pad_Master.GetPadName() );
+        m_currentPad->SetPadName( m_padMaster.GetPadName() );
 
-        if( m_CurrentPad->GetNetname() != m_Pad_Master.GetNetname() )
+        if( m_currentPad->GetNetname() != m_padMaster.GetNetname() )
         {
-            if( m_Pad_Master.GetNetname().IsEmpty() )
+            if( m_padMaster.GetNetname().IsEmpty() )
             {
                 rastnestIsChanged = true;
-                m_CurrentPad->SetNet( 0 );
-                m_CurrentPad->SetNetname( wxEmptyString );
+                m_currentPad->SetNet( 0 );
+                m_currentPad->SetNetname( wxEmptyString );
             }
             else
             {
-                const NETINFO_ITEM* net = m_Parent->GetBoard()->FindNet( m_Pad_Master.GetNetname() );
+                const NETINFO_ITEM* net = m_board->FindNet( m_padMaster.GetNetname() );
                 if( net )
                 {
                     rastnestIsChanged = true;
-                    m_CurrentPad->SetNetname( m_Pad_Master.GetNetname() );
-                    m_CurrentPad->SetNet( net->GetNet() );
+                    m_currentPad->SetNetname( m_padMaster.GetNetname() );
+                    m_currentPad->SetNet( net->GetNet() );
                 }
                 else
                     DisplayError( NULL, _( "Unknown netname, netname not changed" ) );
             }
         }
 
-        m_CurrentPad->SetLocalClearance( m_Pad_Master.GetLocalClearance() );
-        m_CurrentPad->SetLocalSolderMaskMargin( m_Pad_Master.GetLocalSolderMaskMargin() );
-        m_CurrentPad->SetLocalSolderPasteMargin( m_Pad_Master.GetLocalSolderPasteMargin() );
-        m_CurrentPad->SetLocalSolderPasteMarginRatio( m_Pad_Master.GetLocalSolderPasteMarginRatio() );
-        m_CurrentPad->SetZoneConnection( m_Pad_Master.GetZoneConnection() );
-        m_CurrentPad->SetThermalWidth( m_Pad_Master.GetThermalWidth() );
-        m_CurrentPad->SetThermalGap( m_Pad_Master.GetThermalGap() );
+        m_currentPad->SetLocalClearance( m_padMaster.GetLocalClearance() );
+        m_currentPad->SetLocalSolderMaskMargin( m_padMaster.GetLocalSolderMaskMargin() );
+        m_currentPad->SetLocalSolderPasteMargin( m_padMaster.GetLocalSolderPasteMargin() );
+        m_currentPad->SetLocalSolderPasteMarginRatio( m_padMaster.GetLocalSolderPasteMarginRatio() );
+        m_currentPad->SetZoneConnection( m_padMaster.GetZoneConnection() );
+        m_currentPad->SetThermalWidth( m_padMaster.GetThermalWidth() );
+        m_currentPad->SetThermalGap( m_padMaster.GetThermalGap() );
 
         module->CalculateBoundingBox();
-        m_Parent->SetMsgPanel( m_CurrentPad );
+        m_parent->SetMsgPanel( m_currentPad );
 
         // redraw the area where the pad was
-        m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentPad->GetBoundingBox() );
-        m_Parent->OnModify();
+        m_parent->GetCanvas()->RefreshDrawingRect( m_currentPad->GetBoundingBox() );
+        m_parent->OnModify();
     }
 
     EndModal( wxID_OK );
 
     if( rastnestIsChanged )  // The net ratsnest must be recalculated
-        m_Parent->GetBoard()->m_Status_Pcb = 0;
+        m_board->m_Status_Pcb = 0;
 }
 
 
 bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 {
-    long        padLayerMask;
     wxString    msg;
     int         x, y;
 
@@ -1035,7 +1037,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         break;
     }
 
-    padLayerMask = 0;
+    LAYER_MSK padLayerMask = NO_LAYERS;
 
     switch( m_rbCopperLayersSel->GetSelection() )
     {

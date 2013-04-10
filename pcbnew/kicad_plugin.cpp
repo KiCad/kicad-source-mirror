@@ -158,13 +158,13 @@ void FP_CACHE::Save()
 {
     if( !m_lib_path.DirExists() && !m_lib_path.Mkdir() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Cannot create footprint library path '%s'." ),
+        THROW_IO_ERROR( wxString::Format( _( "Cannot create footprint library path <%s>" ),
                                           m_lib_path.GetPath().GetData() ) );
     }
 
     if( !m_lib_path.IsDirWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Footprint library path '%s' is read only" ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint library path <%s> is read only" ),
                                           GetChars( m_lib_path.GetPath() ) ) );
     }
 
@@ -193,7 +193,7 @@ void FP_CACHE::Save()
 
         if( wxRename( tempFileName, fn.GetFullPath() ) )
         {
-            THROW_IO_ERROR( wxString::Format( _( "cannot rename temporary file '%s' to footprint library file '%s'" ),
+            THROW_IO_ERROR( wxString::Format( _( "Cannot rename temporary file <%s> to footprint library file <%s>" ),
                                               tempFileName.GetData(),
                                               fn.GetFullPath().GetData() ) );
         }
@@ -210,7 +210,7 @@ void FP_CACHE::Load()
 
     if( !dir.IsOpened() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "footprint library path '%s' does not exist" ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint library path <%s> does not exist" ),
                                           m_lib_path.GetPath().GetData() ) );
     }
 
@@ -249,7 +249,7 @@ void FP_CACHE::Remove( const wxString& aFootprintName )
 
     if( it == m_modules.end() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library '%s' has no footprint '%s' to delete" ),
+        THROW_IO_ERROR( wxString::Format( _( "library <%s> has no footprint %s to delete" ),
                                           m_lib_path.GetPath().GetData(),
                                           aFootprintName.GetData() ) );
     }
@@ -383,7 +383,7 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 {
     if( m_ctl & CTL_STD_LAYER_NAMES )
     {
-        int layer = aItem->GetLayer();
+        LAYER_NUM layer = aItem->GetLayer();
 
         // English layer names should never need quoting.
         m_out->Print( 0, " (layer %s)", TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
@@ -424,12 +424,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     // Layers.
     m_out->Print( aNestLevel, "(layers\n" );
 
-    unsigned mask = LAYER_FRONT;
-    unsigned layer = LAYER_N_FRONT;
-
     // Save only the used copper layers from front to back.
-    while( mask != 0 )
+    for( LAYER_NUM layer = LAST_COPPER_LAYER; layer >= FIRST_COPPER_LAYER; --layer) 
     {
+        LAYER_MSK mask = GetLayerMask( layer );
         if( mask & aBoard->GetEnabledLayers() )
         {
             m_out->Print( aNestLevel+1, "(%d %s %s", layer,
@@ -441,17 +439,12 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
             m_out->Print( 0, ")\n" );
         }
-
-        mask >>= 1;
-        layer--;
     }
 
-    mask = ADHESIVE_LAYER_BACK;
-    layer = ADHESIVE_N_BACK;
-
     // Save used non-copper layers in the order they are defined.
-    while( layer < LAYER_COUNT )
+    for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER; ++layer)
     {
+        LAYER_MSK mask = GetLayerMask( layer );
         if( mask & aBoard->GetEnabledLayers() )
         {
             m_out->Print( aNestLevel+1, "(%d %s user", layer,
@@ -462,9 +455,6 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
             m_out->Print( 0, ")\n" );
         }
-
-        mask <<= 1;
-        layer++;
     }
 
     m_out->Print( aNestLevel, ")\n\n" );
@@ -980,12 +970,12 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 }
 
 
-void PCB_IO::formatLayers( int aLayerMask, int aNestLevel ) const
+void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
     throw( IO_ERROR )
 {
     m_out->Print( aNestLevel, "(layers" );
 
-    int cuMask = ALL_CU_LAYERS;
+    LAYER_MSK cuMask = ALL_CU_LAYERS;
 
     if( m_board )
         cuMask &= m_board->GetEnabledLayers();
@@ -1029,16 +1019,14 @@ void PCB_IO::formatLayers( int aLayerMask, int aNestLevel ) const
 
     // output any individual layers not handled in wildcard combos above
 
-    unsigned layerMask = aLayerMask;
-
     if( m_board )
-        layerMask &= m_board->GetEnabledLayers();
+        aLayerMask &= m_board->GetEnabledLayers();
 
     wxString layerName;
 
-    for( int layer = 0;  layerMask;  ++layer, layerMask >>= 1 )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
     {
-        if( layerMask & 1 )
+        if( aLayerMask & GetLayerMask( layer ) )
         {
             if( m_board && !(m_ctl & CTL_STD_LAYER_NAMES) )
                 layerName = m_board->GetLayerName( layer );
@@ -1199,9 +1187,9 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
 
     switch( aText->GetType() )
     {
-    case 0:      type = wxT( "reference" );     break;
-    case 1:      type = wxT( "value" );         break;
-    default:     type = wxT( "user" );
+    case TEXTE_MODULE::TEXT_is_REFERENCE: type = wxT( "reference" );     break;
+    case TEXTE_MODULE::TEXT_is_VALUE:     type = wxT( "value" );         break;
+    default:                              type = wxT( "user" );
     }
 
     // Due to the Pcbnew history, m_Orient is saved in screen value
@@ -1236,7 +1224,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 {
     if( aTrack->Type() == PCB_VIA_T )
     {
-        int layer1, layer2;
+        LAYER_NUM layer1, layer2;
 
         SEGVIA* via = (SEGVIA*) aTrack;
         BOARD* board = (BOARD*) via->GetParent();
@@ -1644,7 +1632,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 
     if( !m_cache->IsWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ),
+        THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -1657,13 +1645,13 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 
     if( !fn.IsOk() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Footprint file name '%s' is not valid." ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint file name <%s> is not valid." ),
                                           GetChars( fn.GetFullPath() ) ) );
     }
 
     if( fn.FileExists() && !fn.IsFileWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "user does not have write permission to delete file '%s' " ),
+        THROW_IO_ERROR( wxString::Format( _( "user does not have write permission to delete file <%s> " ),
                                           GetChars( fn.GetFullPath() ) ) );
     }
 
@@ -1706,7 +1694,7 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 
     if( !m_cache->IsWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ),
+        THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -1718,7 +1706,7 @@ void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProp
 {
     if( wxDir::Exists( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "cannot overwrite library path '%s'" ),
+        THROW_IO_ERROR( wxString::Format( _( "cannot overwrite library path <%s>" ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -1743,7 +1731,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProp
 
     if( !fn.IsDirWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "user does not have permission to delete directory '%s'" ),
+        THROW_IO_ERROR( wxString::Format( _( "user does not have permission to delete directory <%s>" ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -1751,7 +1739,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProp
 
     if( dir.HasSubDirs() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library directory '%s' has unexpected sub-directories" ),
+        THROW_IO_ERROR( wxString::Format( _( "library directory <%s> has unexpected sub-directories" ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -1770,7 +1758,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProp
 
             if( tmp.GetExt() != KiCadFootprintFileExtension )
             {
-                THROW_IO_ERROR( wxString::Format( _( "unexpected file '%s' has found in library path '%'" ),
+                THROW_IO_ERROR( wxString::Format( _( "unexpected file <%s> was found in library path '%s'" ),
                                                   files[i].GetData(), aLibraryPath.GetData() ) );
             }
         }
@@ -1788,7 +1776,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProp
     // we don't want that.  we want bare metal portability with no UI here.
     if( !wxRmdir( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "footprint library '%s' cannot be deleted" ),
+        THROW_IO_ERROR( wxString::Format( _( "footprint library <%s> cannot be deleted" ),
                                           aLibraryPath.GetData() ) );
     }
 

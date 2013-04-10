@@ -44,7 +44,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_plotOriginOpt->SetSelection( 0 );
 	m_paperHPGLSizer->Add( m_plotOriginOpt, 0, wxALL, 5 );
 	
-	m_penHPLGWidthTitle = new wxStaticText( this, wxID_ANY, _("Pen Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_penHPLGWidthTitle = new wxStaticText( this, wxID_ANY, _("Pen width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_penHPLGWidthTitle->Wrap( -1 );
 	m_paperHPGLSizer->Add( m_penHPLGWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -67,7 +67,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	wxStaticBoxSizer* sbSizerPlotFormat;
 	sbSizerPlotFormat = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General Options") ), wxVERTICAL );
 	
-	m_defaultLineWidthTitle = new wxStaticText( this, wxID_ANY, _("Default Line Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_defaultLineWidthTitle = new wxStaticText( this, wxID_ANY, _("Default line thickness"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_defaultLineWidthTitle->Wrap( -1 );
 	sbSizerPlotFormat->Add( m_defaultLineWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	

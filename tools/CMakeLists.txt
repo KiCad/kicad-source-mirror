@@ -65,13 +65,14 @@ add_executable( test-nm-biu-to-ascii-mm-round-tripping
     test-nm-biu-to-ascii-mm-round-tripping.cpp
     )
 
-add_executable( parser_gen
+add_executable( property_tree
     EXCLUDE_FROM_ALL
-    parser_gen.cpp
+    property_tree.cpp
     ../common/richio.cpp
     ../common/dsnlexer.cpp
+    ../common/ptree.cpp
     )
-target_link_libraries( parser_gen
+target_link_libraries( property_tree
     ${wxWidgets_LIBRARIES}
     )
 

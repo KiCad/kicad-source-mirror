@@ -70,8 +70,8 @@ public:
     int m_Hole_Orient;              // Hole rotation (= pad rotation) for oblong holes
     int m_Hole_Shape;               // hole shape: round (0) or oval (1)
     wxPoint m_Hole_Pos;             // hole position
-    int m_Hole_Bottom_Layer;        // hole starting layer (usually back layer)
-    int m_Hole_Top_Layer;           // hole ending layer (usually front layer):
+    LAYER_NUM m_Hole_Bottom_Layer;  // hole starting layer (usually back layer)
+    LAYER_NUM m_Hole_Top_Layer;     // hole ending layer (usually front layer):
                                     // m_Hole_First_Layer < m_Hole_Last_Layer
     bool m_Hole_NotPlated;          // hole not plated. Must be in a specific drill file
 public:

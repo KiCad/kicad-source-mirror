@@ -43,43 +43,43 @@
 #include <autorout.h>
 #include <cell.h>
 
-void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color );
+void TracePcbLine( int x0, int y0, int x1, int y1, LAYER_NUM layer, int color );
 
 void TraceArc( int ux0, int uy0,
                int ux1, int uy1,
                int ArcAngle,
-               int lg, int layer, int color,
+               int lg, LAYER_NUM layer, int color,
                int op_logic );
 
 
 static void DrawSegmentQcq( int ux0, int uy0,
                             int ux1, int uy1,
-                            int lg, int layer, int color,
+                            int lg, LAYER_NUM layer, int color,
                             int op_logic );
 
 static void TraceFilledCircle( int    cx, int cy, int radius,
-                               int    aLayerMask,
+                               LAYER_MSK aLayerMask,
                                int    color,
                                int    op_logic );
 
-static void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
+static void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer,
                          int color, int op_logic );
 
 // Macro call to update cell.
 #define OP_CELL( layer, dy, dx )                                        \
     {                                                                   \
-        if( layer < 0 )                                                 \
+        if( layer == UNDEFINED_LAYER )                                  \
         {                                                               \
             RoutingMatrix.WriteCell( dy, dx, BOTTOM, color );           \
-            if( RoutingMatrix.m_RoutingLayersCount > 1 )                                              \
-                RoutingMatrix.WriteCell( dy, dx, TOP, color );                        \
+            if( RoutingMatrix.m_RoutingLayersCount > 1 )                \
+                RoutingMatrix.WriteCell( dy, dx, TOP, color );          \
         }                                                               \
         else                                                            \
         {                                                               \
-            if( layer == Route_Layer_BOTTOM )                           \
+            if( layer == g_Route_Layer_BOTTOM )                         \
                 RoutingMatrix.WriteCell( dy, dx, BOTTOM, color );       \
-            if( RoutingMatrix.m_RoutingLayersCount > 1 )                                              \
-                if( layer == Route_Layer_TOP )                          \
+            if( RoutingMatrix.m_RoutingLayersCount > 1 )                \
+                if( layer == g_Route_Layer_TOP )                        \
                     RoutingMatrix.WriteCell( dy, dx, TOP, color );      \
         }                                                               \
     }
@@ -140,7 +140,7 @@ void PlacePad( D_PAD* aPad, int color, int marge, int op_logic )
  * op_logic: type of writing in the cell (WRITE, OR)
  */
 void TraceFilledCircle( int    cx, int cy, int radius,
-                        int    aLayerMask,
+                        LAYER_MSK aLayerMask,
                         int    color,
                         int    op_logic )
 {
@@ -152,10 +152,10 @@ void TraceFilledCircle( int    cx, int cy, int radius,
     int   tstwrite = 0;
     int   distmin;
 
-    if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
+    if( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) )
         trace = 1;       // Trace on BOTTOM
 
-    if( aLayerMask & GetLayerMask( Route_Layer_TOP ) )
+    if( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) )
         if( RoutingMatrix.m_RoutingLayersCount > 1 )
             trace |= 2;  // Trace on TOP
 
@@ -273,32 +273,32 @@ void TraceSegmentPcb( TRACK* pt_segm, int color, int marge, int op_logic )
     // Test if VIA (filled circle was drawn)
     if( pt_segm->Type() == PCB_VIA_T )
     {
-        int mask_layer = 0;
+        LAYER_MSK layer_mask = NO_LAYERS;
 
-        if( pt_segm->IsOnLayer( Route_Layer_BOTTOM ) )
-            mask_layer = 1 << Route_Layer_BOTTOM;
+        if( pt_segm->IsOnLayer( g_Route_Layer_BOTTOM ) )
+            layer_mask = GetLayerMask( g_Route_Layer_BOTTOM );
 
-        if( pt_segm->IsOnLayer( Route_Layer_TOP ) )
+        if( pt_segm->IsOnLayer( g_Route_Layer_TOP ) )
         {
-            if( mask_layer == 0 )
-                mask_layer = 1 << Route_Layer_TOP;
+            if( layer_mask == 0 )
+                layer_mask = GetLayerMask( g_Route_Layer_TOP );
             else
-                mask_layer = -1;
+                layer_mask = FULL_LAYERS;
         }
 
         if( color == VIA_IMPOSSIBLE )
-            mask_layer = -1;
+            layer_mask = FULL_LAYERS;
 
-        if( mask_layer )
+        if( layer_mask )
             TraceFilledCircle( pt_segm->GetStart().x, pt_segm->GetStart().y,
-                               half_width, mask_layer, color, op_logic );
+                               half_width, layer_mask, color, op_logic );
         return;
     }
 
-    int layer = pt_segm->GetLayer();
+    LAYER_NUM layer = pt_segm->GetLayer();
 
     if( color == VIA_IMPOSSIBLE )
-        layer = -1;
+        layer = UNDEFINED_LAYER;
 
     // The segment is here a straight line or a circle or an arc.:
     if( pt_segm->GetShape() == S_CIRCLE )
@@ -328,7 +328,7 @@ void TraceSegmentPcb( TRACK* pt_segm, int color, int marge, int op_logic )
 
 /* Draws a line, if layer = -1 on all layers
  */
-void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_logic  )
+void TracePcbLine( int x0, int y0, int x1, int y1, LAYER_NUM layer, int color, int op_logic  )
 {
     int  dx, dy, lim;
     int  cumul, inc, il, delta;
@@ -474,10 +474,10 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
     int  row_min, row_max, col_min, col_max;
     int  trace = 0;
 
-    if( ( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) ) )
+    if( ( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) ) )
         trace = 1;     // Trace on BOTTOM
 
-    if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) &&
+    if( ( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) ) &&
         RoutingMatrix.m_RoutingLayersCount > 1 )
         trace |= 2;    // Trace on TOP
 
@@ -531,7 +531,7 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
 
 
 void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
-                           int angle, int aLayerMask, int color, int op_logic )
+                           int angle, LAYER_MSK aLayerMask, int color, int op_logic )
 {
     int  row, col;
     int  cx, cy;    // Center of rectangle
@@ -540,10 +540,10 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
     int  rotrow, rotcol;
     int  trace = 0;
 
-    if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
+    if( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) )
         trace = 1;     // Trace on BOTTOM
 
-    if( aLayerMask & GetLayerMask( Route_Layer_TOP ) )
+    if( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) )
     {
         if( RoutingMatrix.m_RoutingLayersCount > 1 )
             trace |= 2;  // Trace on TOP
@@ -623,7 +623,7 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
  * half-width = lg, org = ux0,uy0 end = ux1,uy1
  * coordinates are in PCB units
  */
-void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
+void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer,
                      int color, int op_logic )
 {
     int  row, col;
@@ -749,7 +749,7 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
  * half-width = lg, center = ux0, uy0, ux1,uy1 is a point on the circle.
  * coord are in PCB units.
  */
-void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
+void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer,
                   int color, int op_logic )
 {
     int radius, nb_segm;
@@ -794,7 +794,7 @@ void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
  * PCB units.
  */
 void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg,
-               int layer, int color, int op_logic )
+               LAYER_NUM layer, int color, int op_logic )
 {
     int radius, nb_segm;
     int x0, y0,             // Starting point of the current segment trace

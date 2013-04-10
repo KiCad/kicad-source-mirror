@@ -42,7 +42,7 @@ option(KICAD_STABLE_VERSION
     )
 
 option(KICAD_TESTING_VERSION
-    "set this option to ON to build the stable version of KICAD. mainly used to set version ID (default OFF)"
+    "set this option to ON to build the testing version of KICAD. mainly used to set version ID (default OFF)"
     )
 
 option(KICAD_SCRIPTING

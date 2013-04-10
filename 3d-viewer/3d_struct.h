@@ -115,26 +115,6 @@ public:
 
     void Copy( S3D_MASTER* pattern );
     int  ReadData();
-
-    /**
-     * Function ReadMaterial
-     * read the description of a 3D material definition in the form:
-     * DEF yellow material Material (
-     * DiffuseColor 1.00000 1.00000 0.00000e 0
-     * EmissiveColor 0.00000e 0 0.00000e 0 0.00000e 0
-     * SpecularColor 1.00000 1.00000 1.00000
-     * AmbientIntensity 1.00000
-     * Transparency 0.00000e 0
-     * Shininess 1.00000
-     *)
-     * Or type:
-     * USE yellow material
-     */
-    int  ReadMaterial( FILE* file, int* LineNum );
-    int  ReadChildren( FILE* file, int* LineNum );
-    int  ReadShape( FILE* file, int* LineNum );
-    int  ReadAppearance( FILE* file, int* LineNum );
-    int  ReadGeometry( FILE* file, int* LineNum );
     void Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices );
 
 #if defined(DEBUG)

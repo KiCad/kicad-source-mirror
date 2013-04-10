@@ -85,13 +85,13 @@ bool LIB_POLYLINE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
     if( i < 4 )
     {
-        aErrorMsg.Printf( _( "polyline only had %d parameters of the required 4" ), i );
+        aErrorMsg.Printf( _( "Polyline only had %d parameters of the required 4" ), i );
         return false;
     }
 
     if( ccount <= 0 )
     {
-        aErrorMsg.Printf( _( "polyline count parameter %d is invalid" ), ccount );
+        aErrorMsg.Printf( _( "Polyline count parameter %d is invalid" ), ccount );
         return false;
     }
 
@@ -107,7 +107,7 @@ bool LIB_POLYLINE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
         if( p == NULL || sscanf( p, "%d", &pt.x ) != 1 )
         {
-            aErrorMsg.Printf( _( "polyline point %d X position not defined" ), i );
+            aErrorMsg.Printf( _( "Polyline point %d X position not defined" ), i );
             return false;
         }
 
@@ -115,7 +115,7 @@ bool LIB_POLYLINE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
         if( p == NULL || sscanf( p, "%d", &pt.y ) != 1 )
         {
-            aErrorMsg.Printf( _( "polyline point %d Y position not defined" ), i );
+            aErrorMsg.Printf( _( "Polyline point %d Y position not defined" ), i );
             return false;
         }
 
@@ -242,13 +242,13 @@ void LIB_POLYLINE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->PlotPoly( cornerList, FILLED_WITH_BG_BODYCOLOR, 0 );
         aFill = false;  // body is now filled, do not fill it later.
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE ) );
+    aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
     aPlotter->PlotPoly( cornerList, already_filled ? NO_FILL : m_Fill, GetPenSize() );
 }
 
@@ -270,7 +270,7 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
                                 const TRANSFORM& aTransform )
 {
     wxPoint  pos1;
-    EDA_COLOR_T color = ReturnLayerColor( LAYER_DEVICE );
+    EDA_COLOR_T color = GetLayerColor( LAYER_DEVICE );
     wxPoint* buffer = NULL;
 
     if( aColor < 0 )                // Used normal color or selected color
@@ -299,8 +299,8 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
-                (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
-                ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                (m_Flags & IS_MOVED) ? color : GetLayerColor( LAYER_DEVICE_BACKGROUND ),
+                GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
                 color, color );
@@ -420,7 +420,7 @@ wxString LIB_POLYLINE::GetSelectMenuText() const
 }
 
 
-void LIB_POLYLINE::BeginEdit( int aEditMode, const wxPoint aPosition )
+void LIB_POLYLINE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
     wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                  wxT( "Invalid edit mode for LIB_POLYLINE object." ) );

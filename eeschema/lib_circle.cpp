@@ -74,7 +74,7 @@ bool LIB_CIRCLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
     if( cnt < 6 )
     {
-        aErrorMsg.Printf( _( "circle only had %d parameters of the required 6" ), cnt );
+        aErrorMsg.Printf( _( "Circle only had %d parameters of the required 6" ), cnt );
         return false;
     }
 
@@ -194,12 +194,12 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->Circle( pos, m_Radius * 2, FILLED_SHAPE, 0 );
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE ) );
+    aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
     aPlotter->Circle( pos, m_Radius * 2, already_filled ? NO_FILL : m_Fill, GetPenSize() );
 }
 
@@ -216,7 +216,7 @@ void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 {
     wxPoint pos1;
 
-    EDA_COLOR_T color = ReturnLayerColor( LAYER_DEVICE );
+    EDA_COLOR_T color = GetLayerColor( LAYER_DEVICE );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -237,8 +237,8 @@ void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledCircle( aPanel->GetClipBox(), aDC, pos1.x, pos1.y, m_Radius, GetPenSize(),
-                        (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
-                        ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                        (m_Flags & IS_MOVED) ? color : GetLayerColor( LAYER_DEVICE_BACKGROUND ),
+                        GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE )
         GRFilledCircle( aPanel->GetClipBox(), aDC, pos1.x, pos1.y, m_Radius, 0, color, color );
     else
@@ -296,7 +296,7 @@ wxString LIB_CIRCLE::GetSelectMenuText() const
 }
 
 
-void LIB_CIRCLE::BeginEdit( int aEditMode, const wxPoint aPosition )
+void LIB_CIRCLE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
     wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                  wxT( "Invalid edit mode for LIB_CIRCLE object." ) );

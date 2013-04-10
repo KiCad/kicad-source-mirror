@@ -182,9 +182,9 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
         wxString msg;
         if( Plot_1_Page_HPGL( plotFileName, screen, plotPage, plotOffset,
                               plot_scale, aPlotFrameRef ) )
-            msg.Printf( _( "Plot: %s OK\n" ), GetChars( plotFileName ) );
+            msg.Printf( _( "Plot: <%s> OK\n" ), GetChars( plotFileName ) );
         else    // Error
-             msg.Printf( _( "** Unable to create %s **\n" ), GetChars( plotFileName ) );
+            msg.Printf( _( "Unable to create <%s>\n" ), GetChars( plotFileName ) );
 
         m_MessagesBox->AppendText( msg );
 

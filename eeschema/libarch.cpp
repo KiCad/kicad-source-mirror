@@ -102,7 +102,8 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     }
     catch( ... /* IO_ERROR ioe */ )
     {
-        msg = wxT( "Failed to create component library file " ) + aFileName;
+        msg.Printf( _( "Failed to create component library file <%s>" ), 
+                GetChars( aFileName ) );
         DisplayError( this, msg );
         return false;
     }

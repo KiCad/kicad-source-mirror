@@ -57,7 +57,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 
 void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings )
 {
-    for( int i = 0; i < LAYER_COUNT; i++ )
+    for( int i = 0; i < NB_LAYERS; i++ )
     {
         m_layerColors[i] = m_legacyColorMap[aSettings->GetLayerColor( i )];
     }
@@ -90,7 +90,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions )
 void PCB_RENDER_SETTINGS::Update()
 {
     // Calculate darkened/highlighted variants of layer colors
-    for( int i = 0; i < LAYER_COUNT; i++ )
+    for( int i = 0; i < NB_LAYERS; i++ )
     {
         m_layerColors[i].a   = m_layerOpacity;
         m_layerColorsHi[i]   = m_layerColors[i].Highlighted( m_highlightFactor );
@@ -137,8 +137,8 @@ const COLOR4D& PCB_PAINTER::getLayerColor( int aLayer, int aNetCode ) const
     else
     {
         // For item layers (vias, texts, and so on)
-        if( aLayer >= LAYER_COUNT )
-            return getItemColor( aLayer - LAYER_COUNT, aNetCode );
+        if( aLayer >= NB_LAYERS )
+            return getItemColor( aLayer - NB_LAYERS, aNetCode );
 
         return m_pcbSettings->m_layerColors[aLayer];
     }

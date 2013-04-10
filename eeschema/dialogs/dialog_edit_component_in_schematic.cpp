@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file dialog_edit_component_in_schematic.cpp
  */
@@ -79,18 +102,9 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     columnLabel.SetText( _( "Value" ) );
     fieldListCtrl->InsertColumn( 1, columnLabel );
 
-    wxString label = _( "Size" ) + ReturnUnitSymbol( g_UserUnit );
-    textSizeLabel->SetLabel( label );
-
-    label  = _( "Pos " );
-    label += _( "X" );
-    label += ReturnUnitSymbol( g_UserUnit );
-    posXLabel->SetLabel( label );
-
-    label  = _( "Pos " );
-    label += _( "Y" );
-    label += ReturnUnitSymbol( g_UserUnit );
-    posYLabel->SetLabel( label );
+    m_staticTextUnitSize->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_staticTextUnitPosX->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_staticTextUnitPosY->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
     copySelectedFieldToPanel();
 
@@ -142,8 +156,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     newname.Replace( wxT( " " ), wxT( "_" ) );
 
     if( newname.IsEmpty() )
+    {
         DisplayError( NULL, _( "No Component Name!" ) );
-
+    }
     else if( newname.CmpNoCase( m_Cmp->m_ChipName ) )
     {
         if( CMP_LIBRARY::FindLibraryEntry( newname ) == NULL )
@@ -230,12 +245,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
     copyPanelToOptions();
 
-    // change all field positions from relative to absolute
-    for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
-    {
-        m_FieldsBuf[i].SetPosition( m_FieldsBuf[i].GetPosition() + m_Cmp->m_Pos );
-    }
-
     // Delete any fields with no name before we copy all of m_FieldsBuf back into the component.
     for( unsigned i = MANDATORY_FIELDS;  i<m_FieldsBuf.size(); )
     {
@@ -251,9 +260,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
             {
                 wxString msg;
 
-                msg.Printf( _( "The field name <%s> does not have a value and is not defined in \
-the field template list.  Empty field values are invalid an will be removed from the component.  \
-Do you wish to remove this and all remaining undefined fields?" ),
+                msg.Printf( _( "The field name <%s> does not have a value and is not defined in "
+                               "the field template list.  Empty field values are invalid an will "
+                               "be removed from the component.  Do you wish to remove this and "
+                               "all remaining undefined fields?" ),
                             GetChars( m_FieldsBuf[i].GetName( false ) ) );
 
                 wxMessageDialog dlg( this, msg, _( "Remove Fields" ), wxYES_NO | wxNO_DEFAULT );
@@ -269,6 +279,12 @@ Do you wish to remove this and all remaining undefined fields?" ),
         }
 
         ++i;
+    }
+
+    // change all field positions from relative to absolute
+    for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
+    {
+        m_FieldsBuf[i].SetTextPosition( m_FieldsBuf[i].GetTextPosition() + m_Cmp->m_Pos );
     }
 
     LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( m_Cmp->m_ChipName );
@@ -440,8 +456,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 #if 0 && defined(DEBUG)
     for( int i = 0;  i<aComponent->GetFieldCount();  ++i )
     {
-        printf( "Orig[%d] (x=%d, y=%d)\n", i, aComponent->m_Fields[i].m_Pos.x,
-                aComponent->m_Fields[i].m_Pos.y );
+        printf( "Orig[%d] (x=%d, y=%d)\n", i, aComponent->m_Fields[i].GetTextPosition().x,
+                aComponent->m_Fields[i].GetTextPosition().y );
     }
 
 #endif
@@ -458,7 +474,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
         m_FieldsBuf.push_back(  aComponent->m_Fields[i] );
 
         // make the editable field position relative to the component
-        m_FieldsBuf[i].SetPosition( m_FieldsBuf[i].GetPosition() - m_Cmp->m_Pos );
+        m_FieldsBuf[i].SetTextPosition( m_FieldsBuf[i].GetTextPosition() - m_Cmp->m_Pos );
     }
 
     // Add template fieldnames:
@@ -491,7 +507,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
             fld = *schField;
 
             // make the editable field position relative to the component
-            fld.SetPosition( fld.GetPosition() - m_Cmp->m_Pos );
+            fld.SetTextPosition( fld.GetTextPosition() - m_Cmp->m_Pos );
         }
 
         m_FieldsBuf.push_back( fld );
@@ -510,7 +526,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
             m_FieldsBuf.push_back( *cmp );
 
             // make the editable field position relative to the component
-            m_FieldsBuf[newNdx].SetPosition( m_FieldsBuf[newNdx].GetPosition() - m_Cmp->m_Pos );
+            m_FieldsBuf[newNdx].SetTextPosition( m_FieldsBuf[newNdx].GetTextPosition() -
+                                                 m_Cmp->m_Pos );
         }
     }
 
@@ -606,18 +623,18 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     // Select the right text justification
     if( field.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-        m_FieldHJustifyCtrl->SetSelection(0);
+        m_FieldHJustifyCtrl->SetSelection( 0 );
     else if( field.GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
-        m_FieldHJustifyCtrl->SetSelection(2);
+        m_FieldHJustifyCtrl->SetSelection( 2 );
     else
-        m_FieldHJustifyCtrl->SetSelection(1);
+        m_FieldHJustifyCtrl->SetSelection( 1 );
 
     if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
-        m_FieldVJustifyCtrl->SetSelection(0);
+        m_FieldVJustifyCtrl->SetSelection( 0 );
     else if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
-        m_FieldVJustifyCtrl->SetSelection(2);
+        m_FieldVJustifyCtrl->SetSelection( 2 );
     else
-        m_FieldVJustifyCtrl->SetSelection(1);
+        m_FieldVJustifyCtrl->SetSelection( 1 );
 
 
     fieldNameTextCtrl->SetValue( field.GetName( false ) );
@@ -644,7 +661,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetSize().x ) );
 
-    wxPoint coord = field.GetPosition();
+    wxPoint coord = field.GetTextPosition();
     wxPoint zero  = -m_Cmp->m_Pos;  // relative zero
 
     // If the field value is empty and the position is at relative zero, we
@@ -655,10 +672,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     {
         rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].GetOrientation() == TEXT_ORIENT_VERT );
 
-        coord.x = m_FieldsBuf[REFERENCE].GetPosition().x
+        coord.x = m_FieldsBuf[REFERENCE].GetTextPosition().x
             + ( fieldNdx - MANDATORY_FIELDS + 1 ) * 100;
 
-        coord.y = m_FieldsBuf[REFERENCE].GetPosition().y
+        coord.y = m_FieldsBuf[REFERENCE].GetTextPosition().y
             + ( fieldNdx - MANDATORY_FIELDS + 1 ) * 100;
 
         // coord can compute negative if field is < MANDATORY_FIELDS, e.g. FOOTPRINT.
@@ -728,7 +745,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     wxPoint pos;
     pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue() );
     pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue() );
-    field.SetPosition( pos );
+    field.SetTextPosition( pos );
 
     return true;
 }
@@ -844,11 +861,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     // Perhaps the FOOTPRINT field should also be considered,
     // but for most of components it is not set in library
     LIB_FIELD& refField = entry->GetReferenceField();
-    m_Cmp->GetField( REFERENCE )->SetPosition( refField.GetPosition() + m_Cmp->m_Pos );
+    m_Cmp->GetField( REFERENCE )->SetTextPosition( refField.GetTextPosition() + m_Cmp->m_Pos );
     m_Cmp->GetField( REFERENCE )->ImportValues( refField );
 
     LIB_FIELD& valField = entry->GetValueField();
-    m_Cmp->GetField( VALUE )->SetPosition( valField.GetPosition() + m_Cmp->m_Pos );
+    m_Cmp->GetField( VALUE )->SetTextPosition( valField.GetTextPosition() + m_Cmp->m_Pos );
     m_Cmp->GetField( VALUE )->ImportValues( valField );
 
     m_Cmp->SetOrientation( CMP_NORMAL );

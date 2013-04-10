@@ -49,7 +49,7 @@ const wxChar* NameMarqueurType[] =
     wxT( "ERC" ),
     wxT( "PCB" ),
     wxT( "SIMUL" ),
-    wxT( "?????" )
+    wxT( "???" )
 };
 
 
@@ -111,8 +111,8 @@ void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     if( GetMarkerType() == MARK_ERC )
     {
-        color = ( GetErrorLevel() == WAR ) ? ReturnLayerColor( LAYER_ERC_WARN ) :
-                                             ReturnLayerColor( LAYER_ERC_ERR );
+        color = ( GetErrorLevel() == WAR ) ? GetLayerColor( LAYER_ERC_WARN ) :
+                                             GetLayerColor( LAYER_ERC_ERR );
     }
 
     if( aColor < 0 )
@@ -193,9 +193,9 @@ bool SCH_MARKER::IsSelectStateChanged( const wxRect& aRect )
     bool previousState = IsSelected();
 
     if( aRect.Contains( m_Pos ) )
-        m_Flags |= SELECTED;
+        SetFlags( SELECTED );
     else
-        m_Flags &= ~SELECTED;
+        ClearFlags( SELECTED );
 
     return previousState != IsSelected();
 }

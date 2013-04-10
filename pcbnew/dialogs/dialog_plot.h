@@ -43,7 +43,7 @@ private:
     BOARD*              m_board;
     BOARD_DESIGN_SETTINGS  m_brdSettings;
     wxConfig*           m_config;
-    std::vector<int>    m_layerList;                // List to hold CheckListBox layer numbers
+    std::vector<LAYER_NUM> m_layerList;                // List to hold CheckListBox layer numbers
     double              m_XScaleAdjust;             // X scale factor adjust to compensate
                                                     // plotter X scaling error
     double              m_YScaleAdjust;             // X scale factor adjust to compensate

@@ -55,6 +55,8 @@ GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFo
     LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
     myframe( aParent )
 {
+    m_alwaysShowActiveLayer = false;
+
     ReFillRender();
 
     // Update default tabs labels for GerbView
@@ -67,7 +69,8 @@ GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFo
 
     // since Popupmenu() calls this->ProcessEvent() we must call this->Connect()
     // and not m_LayerScrolledWindow->Connect()
-    Connect( ID_SHOW_ALL_COPPERS, ID_SHOW_NO_COPPERS_BUT_ACTIVE, wxEVT_COMMAND_MENU_SELECTED,
+    Connect( ID_SHOW_ALL_LAYERS, ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE,
+        wxEVT_COMMAND_MENU_SELECTED,
         wxCommandEventHandler( GERBER_LAYER_WIDGET::onPopupSelection ), NULL, this );
 
     // install the right click handler into each control at end of ReFill()
@@ -144,13 +147,16 @@ void GERBER_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
 
     // menu text is capitalized:
     // http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_COPPERS,
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_LAYERS,
                                  _("Show All Layers") ) );
 
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS_BUT_ACTIVE,
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_LAYERS_BUT_ACTIVE,
                                  _( "Hide All Layers But Active" ) ) );
 
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS,
+    menu.Append( new wxMenuItem( &menu, ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE,
+                                 _( "Always Hide All Layers But Active" ) ) );
+
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_LAYERS,
                                  _( "Hide All Layers" ) ) );
 
     PopupMenu( &menu );
@@ -162,28 +168,36 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 {
     int     rowCount;
     int     menuId = event.GetId();
-    bool    visible = (menuId == ID_SHOW_ALL_COPPERS) ? true : false;;
-    int     visibleLayers = 0;
+    bool    visible = (menuId == ID_SHOW_ALL_LAYERS) ? true : false;;
+    LAYER_MSK visibleLayers = NO_LAYERS;
+    bool force_active_layer_visible;
+
+    m_alwaysShowActiveLayer = ( menuId == ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE );
+    force_active_layer_visible = ( menuId == ID_SHOW_NO_LAYERS_BUT_ACTIVE ||
+                                   menuId == ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE );
 
     switch( menuId )
     {
-    case ID_SHOW_ALL_COPPERS:
-    case ID_SHOW_NO_COPPERS:
-    case ID_SHOW_NO_COPPERS_BUT_ACTIVE:
+    case ID_SHOW_ALL_LAYERS:
+    case ID_SHOW_NO_LAYERS:
+    case ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE:
+    case ID_SHOW_NO_LAYERS_BUT_ACTIVE:
         rowCount = GetLayerRowCount();
         for( int row=0; row < rowCount; ++row )
         {
+            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
+            LAYER_NUM layer = getDecodedId( cb->GetId() );
             bool loc_visible = visible;
-            if( (menuId == ID_SHOW_NO_COPPERS_BUT_ACTIVE ) &&
-                (row == m_CurrentRow ) )
+
+            if( force_active_layer_visible && (layer == myframe->getActiveLayer() ) )
                 loc_visible = true;
 
-            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
             cb->SetValue( loc_visible );
+
             if( loc_visible )
-                visibleLayers |= (1 << row);
+                visibleLayers |= GetLayerMask( row );
             else
-                visibleLayers &= ~(1 << row);
+                visibleLayers &= ~GetLayerMask( row );
         }
 
         myframe->SetVisibleLayers( visibleLayers );
@@ -192,14 +206,25 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     }
 }
 
+bool  GERBER_LAYER_WIDGET::OnLayerSelected()
+{
+    if( !m_alwaysShowActiveLayer )
+        return false;
+
+    // postprocess after an active layer selection
+    // ensure active layer visible
+    wxCommandEvent event;
+    event.SetId( ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE );
+    onPopupSelection( event );
+    return true;
+}
 
 
 void GERBER_LAYER_WIDGET::ReFill()
 {
-    int     layer;
     ClearLayerRows();
 
-    for( layer = 0; layer < GERBVIEW_LAYER_COUNT; layer++ )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_GERBER_LAYERS; ++layer )
     {
         wxString msg;
         msg.Printf( _("Layer %d"), layer+1 );
@@ -212,35 +237,38 @@ void GERBER_LAYER_WIDGET::ReFill()
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
 
-void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
+void GERBER_LAYER_WIDGET::OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor )
 {
     myframe->SetLayerColor( aLayer, aColor );
     myframe->m_SelLayerBox->ResyncBitmapOnly();
     myframe->GetCanvas()->Refresh();
 }
 
-bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
+bool GERBER_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
 {
     // the layer change from the GERBER_LAYER_WIDGET can be denied by returning
     // false from this function.
-    int layer = myframe->getActiveLayer( );
+    LAYER_NUM layer = myframe->getActiveLayer( );
     myframe->setActiveLayer( aLayer, false );
     myframe->syncLayerBox();
 
     if( layer != myframe->getActiveLayer( ) )
-        myframe->GetCanvas()->Refresh();
+    {
+        if( ! OnLayerSelected() )
+            myframe->GetCanvas()->Refresh();
+    }
 
     return true;
 }
 
-void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
+void GERBER_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal )
 {
-    int visibleLayers = myframe->GetVisibleLayers();
+    LAYER_MSK visibleLayers = myframe->GetVisibleLayers();
 
     if( isVisible )
-        visibleLayers |= (1 << aLayer);
+        visibleLayers |= GetLayerMask( aLayer );
     else
-        visibleLayers &= ~(1 << aLayer);
+        visibleLayers &= ~GetLayerMask( aLayer );
 
     myframe->SetVisibleLayers( visibleLayers );
 

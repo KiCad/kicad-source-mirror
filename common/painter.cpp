@@ -46,12 +46,12 @@ RENDER_SETTINGS::RENDER_SETTINGS()
     m_outlineWidth      = 60000;
 
     // Store the predefined colors used in KiCad in format used by GAL
-    for( int i = 0; i < NBCOLOR; i++ )
+    for( int i = 0; i < NBCOLORS; i++ )
     {
-        m_legacyColorMap[ColorRefs[i].m_Numcolor] = COLOR4D( (double) ColorRefs[i].m_Red / 255.0,
-                                                             (double) ColorRefs[i].m_Green / 255.0,
-                                                             (double) ColorRefs[i].m_Blue / 255.0,
-                                                             m_layerOpacity );
+        m_legacyColorMap[g_ColorRefs[i].m_Numcolor] = COLOR4D( (double) g_ColorRefs[i].m_Red / 255.0,
+                                                               (double) g_ColorRefs[i].m_Green / 255.0,
+                                                               (double) g_ColorRefs[i].m_Blue / 255.0,
+                                                               m_layerOpacity );
     }
 }
 
