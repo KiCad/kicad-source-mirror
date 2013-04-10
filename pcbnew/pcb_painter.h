@@ -151,9 +151,6 @@ protected:
     void draw( const ZONE_CONTAINER* );
     void draw( const DIMENSION* );
     void draw( const PCB_TARGET* );
-
-    /// Maximum font size for drawing descriptions
-    static const double MAX_FONT_SIZE;
 };
 } // namespace KiGfx
 
