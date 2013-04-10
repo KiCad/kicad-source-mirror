@@ -4322,7 +4322,7 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
     if( erasedCount != 1 )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library <%s> has no footprint %s to delete" ),
+            _( "library <%s> has no footprint '%s' to delete" ),
             aLibraryPath.GetData(), aFootprintName.GetData() ) );
     }
 
