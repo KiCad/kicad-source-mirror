@@ -101,10 +101,13 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_painter = new KiGfx::PCB_PAINTER( m_gal );
     m_view->SetPainter( m_painter );
 
+#if wxCHECK_VERSION( 2, 9, 0 )
+    Connect( KiGfx::EVT_GAL_REDRAW, wxEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
+#elif wxCHECK_VERSION( 2, 8, 0 )
     // FIXME Cairo needs this to be uncommented to remove blinking on refreshing
-    // Connect( wxEVT_PAINT, wxEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
-    Connect(KiGfx::EVT_GAL_REDRAW, wxEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
-    Connect(wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
+    Connect( wxEVT_PAINT, wxEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
+#endif
+    Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
 }
 
 
