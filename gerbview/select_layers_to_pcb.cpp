@@ -423,7 +423,5 @@ void LAYERS_MAP_DIALOG::OnOkClick( wxCommandEvent& event )
         _("The exported board has not enough copper layers to handle selected inner layers") );
         return;
     }
-    // XXX EVIL usage of LAYER
-    m_layersLookUpTable[NB_GERBER_LAYERS] = m_exportBoardCopperLayersCount;
     EndModal( wxID_OK );
 }

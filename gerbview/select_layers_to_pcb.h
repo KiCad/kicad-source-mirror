@@ -20,16 +20,16 @@ private:
     static int m_exportBoardCopperLayersCount;
     wxFlexGridSizer* m_flexRightColumnBoxSizer;     // An extra wxFlexGridSizer used
                                                     // when we have more than 16 gerber files loaded
-    LAYER_NUM m_layersLookUpTable[int(NB_LAYERS)+1];   // Indexes Gerber layers to PCB file layers
+    LAYER_NUM m_layersLookUpTable[NB_GERBER_LAYERS]; // Indexes Gerber layers to PCB file layers
                                                     // the last value in table is the number of copper layers
-    int    m_buttonTable[32];                       // Indexes buttons to Gerber layers
-    wxStaticText* m_layersList[32];                 // Indexes text strings to buttons
+    int    m_buttonTable[int(NB_GERBER_LAYERS)+1];       // Indexes buttons to Gerber layers
+    wxStaticText* m_layersList[int(NB_GERBER_LAYERS)+1]; // Indexes text strings to buttons
 
 public: LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent );
     ~LAYERS_MAP_DIALOG() {};
 
     LAYER_NUM * GetLayersLookUpTable() { return m_layersLookUpTable; }
-    int GetCopperLayersCount() { return m_exportBoardCopperLayersCount; }
+    static int GetCopperLayersCount() { return m_exportBoardCopperLayersCount; }
 
 private:
     void initDialog();

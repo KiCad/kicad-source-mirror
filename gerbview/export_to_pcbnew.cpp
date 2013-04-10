@@ -44,7 +44,7 @@ public:
      * Function ExportPcb
      * saves a board from a set of Gerber images.
      */
-    bool    ExportPcb( LAYER_NUM* LayerLookUpTable );
+    bool    ExportPcb( LAYER_NUM* LayerLookUpTable, int aCopperLayers );
 
 private:
     /**
@@ -166,11 +166,12 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
 
     GBR_TO_PCB_EXPORTER gbr_exporter( this, fileName );
 
-    gbr_exporter.ExportPcb( layerdlg->GetLayersLookUpTable() );
+    gbr_exporter.ExportPcb( layerdlg->GetLayersLookUpTable(),
+                            layerdlg->GetCopperLayersCount() );
 }
 
 
-bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* LayerLookUpTable )
+bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* LayerLookUpTable, int aCopperLayers )
 {
     m_fp = wxFopen( m_pcb_file_name, wxT( "wt" ) );
 
@@ -182,7 +183,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* LayerLookUpTable )
         return false;
     }
 
-    m_pcbCopperLayersCount = LayerLookUpTable[NB_GERBER_LAYERS];
+    m_pcbCopperLayersCount = aCopperLayers;
 
     writePcbHeader();
 
