@@ -77,12 +77,18 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
             bool success = plotOneSheetSVG( m_parent, fn.GetFullPath(), screen,
                                             getModeColor() ? false : true,
                                             aPrintFrameRef );
-            msg = _( "Create file " ) + fn.GetFullPath();
 
             if( !success )
-                msg += _( " error" );
+            {
+                msg.Printf( _( "Error creating file <%s>\n" ), 
+                            GetChars( fn.GetFullPath() ) );
+            }
+            else
+            {
+                msg.Printf( _( "File <%s> OK\n" ), 
+                            GetChars( fn.GetFullPath() ) );
+            }
 
-            msg += wxT( "\n" );
             m_MessagesBox->AppendText( msg );
         }
 
@@ -102,10 +108,10 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
                                         getModeColor() ? false : true,
                                         aPrintFrameRef );
         if( success )
-            msg.Printf( _( "Plot: %s OK\n" ),
+            msg.Printf( _( "Plot: <%s> OK\n" ),
                         GetChars( fn.GetFullPath() ) );
         else    // Error
-             msg.Printf( _( "** Unable to create %s **\n" ),
+             msg.Printf( _( "Unable to create <%s>\n" ),
                         GetChars( fn.GetFullPath() ) );
 
         m_MessagesBox->AppendText( msg );

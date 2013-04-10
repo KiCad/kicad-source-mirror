@@ -48,12 +48,6 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, EDA_COLOR_T Color );
 
 
-/***********************************/
-/* dialogs/dialog_color_config.cpp */
-/***********************************/
-EDA_COLOR_T ReturnLayerColor( int Layer );
-
-
 /***************/
 /* SELPART.CPP */
 /***************/

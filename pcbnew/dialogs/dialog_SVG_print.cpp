@@ -103,8 +103,8 @@ void DIALOG_SVG_PRINT::initDialog()
         ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness ) );
 
     // Create layers list
-    int     layer;
-    for( layer = 0; layer < NB_LAYERS; ++layer )
+    LAYER_NUM layer;
+    for( layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
     {
         if( !m_board->IsLayerEnabled( layer ) )
             m_boxSelectLayer[layer] = NULL;
@@ -118,7 +118,7 @@ void DIALOG_SVG_PRINT::initDialog()
     // (Front or Top to Back or Bottom)
     DECLARE_LAYERS_ORDER_LIST( layersOrder );
 
-    for( int layer_idx = 0; layer_idx < NB_LAYERS; ++layer_idx )
+    for( LAYER_NUM layer_idx = FIRST_LAYER; layer_idx < NB_LAYERS; ++layer_idx )
     {
         layer = layersOrder[layer_idx];
 
@@ -127,12 +127,12 @@ void DIALOG_SVG_PRINT::initDialog()
         if( m_boxSelectLayer[layer] == NULL )
             continue;
 
-        long mask = 1 << layer;
+        LAYER_MSK mask = GetLayerMask( layer );
 
         if( mask & s_SelectedLayers )
             m_boxSelectLayer[layer]->SetValue( true );
 
-        if( layer < 16 )
+        if( layer <= LAST_COPPER_LAYER )
             m_CopperLayersBoxSizer->Add(  m_boxSelectLayer[layer],
                                           0,
                                           wxGROW | wxALL,
@@ -148,7 +148,7 @@ void DIALOG_SVG_PRINT::initDialog()
     {
         wxString layerKey;
 
-        for( int layer = 0; layer<NB_LAYERS; ++layer )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
         {
             bool option;
 
@@ -235,18 +235,18 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
     SetPenWidth();
 
     // Build layers mask
-    int printMaskLayer = 0;
+    LAYER_MSK printMaskLayer = NO_LAYERS;
 
-    for( int layer = 0; layer<NB_LAYERS; layer++ )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
     {
         if( m_boxSelectLayer[layer] && m_boxSelectLayer[layer]->GetValue() )
-            printMaskLayer |= 1 << layer;
+            printMaskLayer |= GetLayerMask( layer );
     }
 
     wxString    msg;
-    for( int layer = 0; layer<NB_LAYERS; layer++ )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
     {
-        int currlayer_mask = 1 << layer;
+        LAYER_MSK currlayer_mask = GetLayerMask( layer );
         if( (printMaskLayer & currlayer_mask ) == 0 )
             continue;
 
@@ -363,7 +363,7 @@ void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
 
         wxString layerKey;
 
-        for( int layer = 0; layer<NB_LAYERS; ++layer )
+        for( LAYER_NUM layer = FIRST_LAYER; layer<NB_LAYERS;  ++layer )
         {
             if( m_boxSelectLayer[layer] == NULL )
                 continue;

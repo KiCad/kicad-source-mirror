@@ -136,7 +136,7 @@ void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
     if( aColor >= 0 )
         color = aColor;
     else
-        color = ReturnLayerColor( LAYER_NOCONNECT );
+        color = GetLayerColor( LAYER_NOCONNECT );
 
     GRSetDrawMode( aDC, aDrawMode );
 
@@ -174,9 +174,9 @@ bool SCH_NO_CONNECT::IsSelectStateChanged( const wxRect& aRect )
     bool previousState = IsSelected();
 
     if( aRect.Contains( m_pos ) )
-        m_Flags |= SELECTED;
+        SetFlags( SELECTED );
     else
-        m_Flags &= ~SELECTED;
+        ClearFlags( SELECTED );
 
     return previousState != IsSelected();
 }
@@ -243,7 +243,7 @@ void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter )
     pY = m_pos.y;
 
     aPlotter->SetCurrentLineWidth( GetPenSize() );
-    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
     aPlotter->MoveTo( wxPoint( pX - delta, pY - delta ) );
     aPlotter->FinishTo( wxPoint( pX + delta, pY + delta ) );
     aPlotter->MoveTo( wxPoint( pX + delta, pY - delta ) );

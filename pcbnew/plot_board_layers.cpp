@@ -67,7 +67,7 @@ static void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
  * Silkscreen layers have specific requirement for pads (not filled) and texts
  * (with option to remove them from some copper areas (pads...)
  */
-void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
+void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
                      const PCB_PLOT_PARAMS& aPlotOpt )
 {
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
@@ -93,7 +93,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
             for( D_PAD * pad = Module->Pads(); pad != NULL; pad = pad->Next() )
             {
                 // See if the pad is on this layer
-                int masklayer = pad->GetLayerMask();
+                LAYER_MSK masklayer = pad->GetLayerMask();
                 if( (masklayer & layersmask_plotpads) == 0 )
                     continue;
 
@@ -124,7 +124,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
     {
         ZONE_CONTAINER* edge_zone = aBoard->GetArea( ii );
 
-        if( ( ( 1 << edge_zone->GetLayer() ) & aLayerMask ) == 0 )
+        if( ( GetLayerMask( edge_zone->GetLayer() ) & aLayerMask ) == 0 )
             continue;
 
         itemplotter.PlotFilledAreas( edge_zone );
@@ -134,7 +134,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
     // compatibility):
     for( SEGZONE* seg = aBoard->m_Zone; seg != NULL; seg = seg->Next() )
     {
-        if( ( ( 1 << seg->GetLayer() ) & aLayerMask ) == 0 )
+        if( ( GetLayerMask( seg->GetLayer() ) & aLayerMask ) == 0 ) 
             continue;
 
         aPlotter->ThickSegment( seg->GetStart(), seg->GetEnd(), seg->GetWidth(),
@@ -142,7 +142,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
     }
 }
 
-void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
+void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
                      const PCB_PLOT_PARAMS& aPlotOpt )
 {
     PCB_PLOT_PARAMS plotOpt = aPlotOpt;
@@ -154,7 +154,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
 
     // Specify that the contents of the "Edges Pcb" layer are to be plotted
     // in addition to the contents of the currently specified layer.
-    int layer_mask = GetLayerMask( aLayer );
+    LAYER_MSK layer_mask = GetLayerMask( aLayer );
 
     if( !aPlotOpt.GetExcludeEdgeLayer() )
         layer_mask |= EDGE_LAYER;
@@ -240,7 +240,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
  * Silk screen layers are not plotted here.
  */
 void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
-                        long aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt )
+                        LAYER_MSK aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt )
 {
 
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
@@ -367,7 +367,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         // vias are not plotted if not on selected layer, but if layer
         // is SOLDERMASK_LAYER_BACK or SOLDERMASK_LAYER_FRONT,vias are drawn,
         // only if they are on the corresponding external copper layer
-        int via_mask_layer = Via->ReturnMaskLayer();
+        int via_mask_layer = Via->GetLayerMask();
 
         if( aPlotOpt.GetPlotViaOnMaskLayer() )
         {
@@ -435,7 +435,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     {
         ZONE_CONTAINER* zone = aBoard->GetArea( ii );
 
-        if( ( ( 1 << zone->GetLayer() ) & aLayerMask ) == 0 )
+        if( ( GetLayerMask(zone->GetLayer() )  & aLayerMask ) == 0 )
             continue;
 
         itemplotter.PlotFilledAreas( zone );
@@ -468,7 +468,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
                           long aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
                           int aMinThickness )
 {
-    int layer = ( aLayerMask & SOLDERMASK_LAYER_BACK ) ?
+    LAYER_NUM layer = ( aLayerMask & SOLDERMASK_LAYER_BACK ) ?
                  SOLDERMASK_N_BACK : SOLDERMASK_N_FRONT;
     int inflate = aMinThickness/2;
 
@@ -580,7 +580,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
             // vias are plotted only if they are on the corresponding
             // external copper layer
-            int via_mask_layer = via->ReturnMaskLayer();
+            LAYER_MSK via_mask_layer = via->GetLayerMask();
 
             if( via_mask_layer & LAYER_BACK )
                 via_mask_layer |= SOLDERMASK_LAYER_BACK;

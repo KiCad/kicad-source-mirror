@@ -25,7 +25,7 @@ public:
     void ClosePlot();
     bool OpenPlotfile( const wxString &aSuffix, PlotFormat aFormat,
                        const wxString &aSheetDesc );
-    bool PlotLayer( int layer );
+    bool PlotLayer( LAYER_NUM layer );
 
 private:
     /// Option bank

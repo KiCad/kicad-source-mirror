@@ -17,7 +17,7 @@
 #define TO_UTF8( wxstring )  ( (const char*) (wxstring).utf8_str() )
 
 /**
- * Macro FROM_UTF8
+ * function FROM_UTF8
  * converts a UTF8 encoded C string to a wxString for all wxWidgets build modes.
  */
 //#define FROM_UTF8( cstring )    wxString::FromUTF8( cstring )

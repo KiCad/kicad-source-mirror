@@ -41,7 +41,6 @@
 #include <sch_line.h>
 #include <sch_no_connect.h>
 #include <sch_component.h>
-#include <sch_polyline.h>
 #include <sch_text.h>
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
@@ -87,7 +86,7 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
 
     if( ( f = wxFopen( fname, wxT( "rt" ) ) ) == NULL )
     {
-        msgDiag = _( "Failed to open " ) + aFullFileName;
+        msgDiag.Printf( _( "Failed to open <%s>" ), GetChars( aFullFileName ) );
         DisplayError( this, msgDiag );
         return false;
     }
@@ -95,14 +94,14 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     // reader now owns the open FILE.
     FILE_LINE_READER    reader( f, aFullFileName );
 
-    msgDiag = _( "Loading " ) + aScreen->GetFileName();
+    msgDiag.Printf( _( "Loading <%s>" ), GetChars( aScreen->GetFileName() ) );
     PrintMsg( msgDiag );
 
     if( !reader.ReadLine()
         || strncmp( (char*)reader + 9, SCHEMATIC_HEAD_STRING,
                     sizeof( SCHEMATIC_HEAD_STRING ) - 1 ) != 0 )
     {
-        msgDiag = aFullFileName + _( " is NOT an Eeschema file!" );
+        msgDiag.Printf( _( "<%s> is NOT an Eeschema file!" ), GetChars( aFullFileName ) );
         DisplayError( this, msgDiag );
         return false;
     }
@@ -120,8 +119,9 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
 
     if( version > EESCHEMA_VERSION )
     {
-        msgDiag = aFullFileName + _( " was created by a more recent \
-version of Eeschema and may not load correctly. Please consider updating!" );
+        msgDiag.Printf( _( "<%s> was created by a more recent \
+version of Eeschema and may not load correctly. Please consider updating!" ),
+                GetChars( aFullFileName ) );
         DisplayInfoMessage( this, msgDiag );
     }
 
@@ -139,7 +139,7 @@ again." );
 
     if( !reader.ReadLine() || strncmp( reader, "LIBS:", 5 ) != 0 )
     {
-        msgDiag = aFullFileName + _( " is NOT an Eeschema file!" );
+        msgDiag.Printf( _( "<%s> is NOT an Eeschema file!" ), GetChars( aFullFileName ) );
         DisplayError( this, msgDiag );
         return false;
     }
@@ -148,6 +148,7 @@ again." );
 
     while( reader.ReadLine() )
     {
+        itemLoaded = false;
         line = reader.Line();
 
         item = NULL;
@@ -168,6 +169,8 @@ again." );
                 itemLoaded = ReadSchemaDescr( &reader, msgDiag, aScreen );
             else if( line[1] == 'B' )
                 item = new SCH_BITMAP();
+            else if( line[1] == 'E' )
+                itemLoaded = true; // The EOF marker
             break;
 
         case 'L':        // Its a library item.
@@ -179,11 +182,9 @@ again." );
             break;
 
         case 'E':        // Its a WIRE or BUS item.
-            item = new SCH_BUS_ENTRY();
-            break;
-
-        case 'P':        // Its a polyline item.
-            item = new SCH_POLYLINE();
+            /* The bus entry can be represented by two different
+             * classes, so we need a factory function */
+            itemLoaded = SCH_BUS_ENTRY_BASE::Load( reader, msgDiag, &item );
             break;
 
         case 'C':        // It is a connection item.
@@ -225,7 +226,9 @@ again." );
 
         if( item )
         {
-            itemLoaded = item->Load( reader, msgDiag );
+            // Load it if it wasn't by a factory
+            if( !itemLoaded )
+                itemLoaded = item->Load( reader, msgDiag );
 
             if( !itemLoaded )
             {
@@ -250,7 +253,7 @@ again." );
 
     aScreen->TestDanglingEnds();
 
-    msgDiag = _( "Done Loading " ) + aScreen->GetFileName();
+    msgDiag.Printf( _( "Done Loading <%s>" ), GetChars( aScreen->GetFileName() ) );
     PrintMsg( msgDiag );
 
     return true;    // Although it may be that file is only partially loaded.

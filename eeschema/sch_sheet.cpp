@@ -577,7 +577,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     if( aColor >= 0 )
         color = aColor;
     else
-        color = ReturnLayerColor( m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( aDC, aDrawMode );
 
@@ -596,7 +596,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     if( aColor > 0 )
         txtcolor = aColor;
     else
-        txtcolor = ReturnLayerColor( LAYER_SHEETNAME );
+        txtcolor = GetLayerColor( LAYER_SHEETNAME );
 
     Text = wxT( "Sheet: " ) + m_name;
     DrawGraphicText( aPanel, aDC, pos_sheetname,
@@ -609,7 +609,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     if( aColor >= 0 )
         txtcolor = aColor;
     else
-        txtcolor = ReturnLayerColor( LAYER_SHEETFILENAME );
+        txtcolor = GetLayerColor( LAYER_SHEETFILENAME );
 
     Text = wxT( "File: " ) + m_fileName;
     DrawGraphicText( aPanel, aDC, pos_filename,
@@ -992,9 +992,9 @@ bool SCH_SHEET::IsSelectStateChanged( const wxRect& aRect )
     EDA_RECT boundingBox = GetBoundingBox();
 
     if( aRect.Intersects( boundingBox ) )
-        m_Flags |= SELECTED;
+        SetFlags( SELECTED );
     else
-        m_Flags &= ~SELECTED;
+        ClearFlags( SELECTED );
 
     return previousState != IsSelected();
 }
@@ -1106,7 +1106,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     wxPoint     pos_sheetname, pos_filename;
     wxPoint     pos;
 
-    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
 
     int thickness = GetPenSize();
     aPlotter->SetCurrentLineWidth( thickness );
@@ -1146,7 +1146,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     thickness = GetDefaultLineThickness();
     thickness = Clamp_Text_PenSize( thickness, size, false );
 
-    aPlotter->SetColor( ReturnLayerColor( LAYER_SHEETNAME ) );
+    aPlotter->SetColor( GetLayerColor( LAYER_SHEETNAME ) );
 
     bool italic = false;
     aPlotter->Text( pos_sheetname, txtcolor, Text, name_orientation, size,
@@ -1159,13 +1159,13 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     thickness = GetDefaultLineThickness();
     thickness = Clamp_Text_PenSize( thickness, size, false );
 
-    aPlotter->SetColor( ReturnLayerColor( LAYER_SHEETFILENAME ) );
+    aPlotter->SetColor( GetLayerColor( LAYER_SHEETFILENAME ) );
 
     aPlotter->Text( pos_filename, txtcolor, Text, name_orientation, size,
                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
                     thickness, italic, false );
 
-    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
 
     /* Draw texts : SheetLabel */
     for( size_t i = 0; i < m_pins.size(); i++ )

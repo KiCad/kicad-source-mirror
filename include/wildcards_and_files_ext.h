@@ -91,7 +91,7 @@ extern const wxString DrillFileWildcard;
 extern const wxString SVGFileWildcard;
 extern const wxString ReportFileWildcard;
 extern const wxString FootprintPlaceFileWildcard;
-extern const wxString VrmlFileWildcard;
+extern const wxString Shapes3DFileWildcard;
 extern const wxString DocModulesFileName;
 extern const wxString LegacyFootprintLibPathWildcard;
 extern const wxString KiCadFootprintLibFileWildcard;

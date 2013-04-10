@@ -41,11 +41,11 @@
 #include <class_GERBER.h>
 
 
-void GERBVIEW_FRAME::PrintPage( wxDC* aDC, int aPrintMasklayer,
+void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
                                 bool aPrintMirrorMode, void* aData )
 {
     // Save current draw options, because print mode has specific options:
-    int             visiblemask = GetVisibleLayers();
+    LAYER_MSK visiblemask = GetVisibleLayers();
     GBR_DISPLAY_OPTIONS imgDisplayOptions = m_DisplayOptions;
 
     // Set draw options for printing:
@@ -193,9 +193,9 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     bool end = false;
 
-    for( int layer = 0; !end; layer++ )
+    for( LAYER_NUM layer = FIRST_LAYER; !end; ++layer )
     {
-        int active_layer = gerbFrame->getActiveLayer();
+        LAYER_NUM active_layer = gerbFrame->getActiveLayer();
 
         if( layer == active_layer ) // active layer will be drawn after other layers
             continue;

@@ -166,9 +166,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* aParent,
     m_messagePanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_FrameSize.y ),
                                          wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
 
-    m_messagePanel->SetBackgroundColour( wxColour( ColorRefs[LIGHTGRAY].m_Red,
-                                                   ColorRefs[LIGHTGRAY].m_Green,
-                                                   ColorRefs[LIGHTGRAY].m_Blue ) );
+    m_messagePanel->SetBackgroundColour( MakeColour( LIGHTGRAY ) );
 }
 
 
@@ -324,7 +322,7 @@ void EDA_DRAW_FRAME::ToolOnRightClick( wxCommandEvent& event )
 }
 
 
-void EDA_DRAW_FRAME::PrintPage( wxDC* aDC,int aPrintMask, bool aPrintMirrorMode, void* aData )
+void EDA_DRAW_FRAME::PrintPage( wxDC* aDC,LAYER_MSK aPrintMask, bool aPrintMirrorMode, void* aData )
 {
     wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error") );
 }

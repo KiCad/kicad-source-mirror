@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -23,6 +23,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bdirnameSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output directory:") ), wxHORIZONTAL );
 	
 	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_outputDirectoryName->SetMaxLength( 0 ); 
 	bdirnameSizer->Add( m_outputDirectoryName, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonBrowse = new wxButton( this, wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -79,7 +80,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bMiddleBoxSizer->Add( m_Choice_Drill_Map, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbOptSizer;
-	sbOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
+	sbOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Drill File Options:") ), wxVERTICAL );
 	
 	m_Check_Mirror = new wxCheckBox( this, wxID_ANY, _("Mirror y axis"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbOptSizer->Add( m_Check_Mirror, 0, wxRIGHT|wxLEFT, 5 );
@@ -163,7 +164,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	bSizerButtons->Add( 10, 20, 0, 0, 5 );
 	
-	m_buttonDrill = new wxButton( this, ID_GEN_DRILL_FILE, _("Drill Fille"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonDrill = new wxButton( this, ID_GEN_DRILL_FILE, _("Drill File"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonDrill->SetDefault(); 
 	bSizerButtons->Add( m_buttonDrill, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
@@ -186,6 +187,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bmsgSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Messages:") ), wxVERTICAL );
 	
 	m_messagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
+	m_messagesBox->SetMaxLength( 0 ); 
 	m_messagesBox->SetMinSize( wxSize( -1,90 ) );
 	
 	bmsgSizer->Add( m_messagesBox, 1, wxALL|wxEXPAND, 5 );

@@ -36,7 +36,7 @@
 #define PIN_LENGTH          300 /* Default Length of each pin to be drawn. */
 
 #if defined(KICAD_GOST)
-#define INVERT_PIN_RADIUS   20  /* Radius of inverted pin circle. */
+#define INVERT_PIN_RADIUS   30  /* Radius of inverted pin circle. */
 #else
 #define INVERT_PIN_RADIUS   35  /* Radius of inverted pin circle. */
 #endif

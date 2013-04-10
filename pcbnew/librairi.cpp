@@ -53,27 +53,27 @@
 
 // unique, "file local" translations:
 
-#define FMT_OK_OVERWRITE    _( "Library '%s' exists, OK to replace ?" )
+#define FMT_OK_OVERWRITE    _( "Library <%s> exists, OK to replace ?" )
 #define FMT_CREATE_LIB      _( "Create New Library" )
-#define FMT_OK_DELETE       _( "Ok to delete module '%s' in library '%s'" )
+#define FMT_OK_DELETE       _( "OK to delete module %s in library <%s>" )
 #define FMT_IMPORT_MODULE   _( "Import Footprint Module" )
-#define FMT_FILE_NOT_FOUND  _( "File '%s' not found" )
+#define FMT_FILE_NOT_FOUND  _( "File <%s> not found" )
 #define FMT_NOT_MODULE      _( "Not a module file" )
-#define FMT_MOD_NOT_FOUND   _( "Unable to find or load footprint '%s' from lib path '%s'" )
-#define FMT_BAD_PATH        _( "Unable to find or load footprint from path '%s'" )
-#define FMT_BAD_PATHS       _( "The footprint library '%s' could not be found in any of the search paths." )
-#define FMT_LIB_READ_ONLY   _( "Library '%s' is read only, not writable" )
+#define FMT_MOD_NOT_FOUND   _( "Unable to find or load footprint %s from lib path <%s>" )
+#define FMT_BAD_PATH        _( "Unable to find or load footprint from path <%s>" )
+#define FMT_BAD_PATHS       _( "The footprint library <%s> could not be found in any of the search paths." )
+#define FMT_LIB_READ_ONLY   _( "Library <%s> is read only, not writable" )
 
 #define FMT_EXPORT_MODULE   _( "Export Module" )
 #define FMT_SAVE_MODULE     _( "Save Module" )
 #define FMT_MOD_REF         _( "Module Reference:" )
-#define FMT_EXPORTED        _( "Module exported to file '%s'" )
-#define FMT_MOD_DELETED     _( "Component '%s' deleted from library '%s'" )
+#define FMT_EXPORTED        _( "Module exported to file <%s>" )
+#define FMT_MOD_DELETED     _( "Module %s deleted from library <%s>" )
 #define FMT_MOD_CREATE      _( "Module Creation" )
 
 #define FMT_NO_MODULES      _( "No modules to archive!" )
 #define FMT_LIBRARY         _( "Library" )                                      // window title
-#define FMT_MOD_EXISTS      _( "Footprint '%s' already exists in library '%s'" )
+#define FMT_MOD_EXISTS      _( "Module %s already exists in library <%s>" )
 #define FMT_NO_REF_ABORTED  _( "No reference, aborted" )
 #define FMT_SELECT_LIB      _( "Select Active Library:" )
 

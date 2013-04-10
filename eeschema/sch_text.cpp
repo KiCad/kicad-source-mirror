@@ -57,7 +57,7 @@ const char* SheetLabelType[] =
     "BiDi",
     "3State",
     "UnSpc",
-    "?????"
+    "???"
 };
 
 /* Coding polygons for global symbol graphic shapes.
@@ -350,7 +350,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     if( Color >= 0 )
         color = Color;
     else
-        color = ReturnLayerColor( m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -543,7 +543,7 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
             break;
         }
 
-        if( m_isDangling == false )
+        if( !m_isDangling )
             break;
     }
 
@@ -556,9 +556,9 @@ bool SCH_TEXT::IsSelectStateChanged( const wxRect& aRect )
     bool previousState = IsSelected();
 
     if( aRect.Contains( m_Pos ) )
-        m_Flags |= SELECTED;
+        SetFlags( SELECTED );
     else
-        m_Flags &= ~SELECTED;
+        SetFlags( SELECTED );
 
     return previousState != IsSelected();
 }
@@ -643,13 +643,21 @@ void SCH_TEXT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
 
 bool SCH_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TextHitTest( aPosition, aAccuracy );
+    EDA_RECT bBox = GetBoundingBox();
+    bBox.Inflate( aAccuracy );
+    return bBox.Contains( aPosition );
 }
 
 
 bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    return TextHitTest( aRect, aContained, aAccuracy );
+    EDA_RECT bBox = GetBoundingBox();
+    bBox.Inflate( aAccuracy );
+
+    if( aContained )
+        return aRect.Contains( bBox );
+
+    return aRect.Intersects( bBox );
 }
 
 
@@ -657,7 +665,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
     static std::vector <wxPoint> Poly;
 
-    EDA_COLOR_T color = ReturnLayerColor( GetLayer() );
+    EDA_COLOR_T color = GetLayerColor( GetLayer() );
     wxPoint     textpos   = m_Pos + GetSchematicTextOffset();
     int         thickness = GetPenSize();
 
@@ -1019,11 +1027,6 @@ wxString SCH_LABEL::GetSelectMenuText() const
 }
 
 
-bool SCH_LABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
-{
-    return TextHitTest( aPosition, aAccuracy );
-}
-
 
 SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
     SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
@@ -1276,7 +1279,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     if( Color >= 0 )
         color = Color;
     else
-        color = ReturnLayerColor( m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -1454,11 +1457,6 @@ wxString SCH_GLOBALLABEL::GetSelectMenuText() const
 }
 
 
-bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
-{
-    return TextHitTest( aPosition, aAccuracy );
-}
-
 
 SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     SCH_TEXT( pos, text, aType )
@@ -1614,7 +1612,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
     if( Color >= 0 )
         color = Color;
     else
-        color = ReturnLayerColor( m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -1801,10 +1799,4 @@ wxString SCH_HIERLABEL::GetSelectMenuText() const
     wxString msg;
     msg.Printf( _( "Hierarchical Label %s" ), GetChars( tmp ) );
     return msg;
-}
-
-
-bool SCH_HIERLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
-{
-    return TextHitTest( aPosition, aAccuracy );
 }

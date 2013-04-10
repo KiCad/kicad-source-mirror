@@ -597,9 +597,9 @@ public:
     // layerhandling:
     // (See pcbnew/sel_layer.cpp for description of why null_layer parameter
     // is provided)
-    int SelectLayer( int default_layer, int min_layer, int max_layer, bool null_layer = false );
+    LAYER_NUM SelectLayer( LAYER_NUM default_layer, LAYER_NUM min_layer, LAYER_NUM max_layer, bool null_layer = false );
     void SelectLayerPair();
-    virtual void SwitchLayer( wxDC* DC, int layer );
+    virtual void SwitchLayer( wxDC* DC, LAYER_NUM layer );
 
     void InstallGridFrame( const wxPoint& pos );
 

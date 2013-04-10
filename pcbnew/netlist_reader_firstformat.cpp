@@ -279,7 +279,7 @@ void* NETLIST_READER::ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildList
         if( m_messageWindow )
         {
             wxString msg;
-            msg.Printf( _( "Component [%s] not found" ), GetChars( cmpReference ) );
+            msg.Printf( _( "Component %s not found" ), GetChars( cmpReference ) );
             m_messageWindow->AppendText( msg + wxT( "\n" ) );
         }
     }
@@ -334,7 +334,7 @@ bool NETLIST_READER::SetPadNetName( char* aText )
         if( m_messageWindow )
         {
             wxString msg;
-            msg.Printf( _( "Module [%s]: Pad [%s] not found" ),
+            msg.Printf( _( "Module %s: Pad %s not found" ),
                         GetChars( m_currModule->GetReference() ),
                         GetChars( pinName ) );
             m_messageWindow->AppendText( msg + wxT( "\n" ) );

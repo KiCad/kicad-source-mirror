@@ -89,17 +89,17 @@ public:
 protected:
 
     /// Colors for all layers (including special, highlighted & darkened versions)
-    COLOR4D m_layerColors    [LAYER_COUNT];
-    COLOR4D m_layerColorsHi  [LAYER_COUNT];
-    COLOR4D m_layerColorsSel [LAYER_COUNT];
-    COLOR4D m_layerColorsDark[LAYER_COUNT];
+    COLOR4D m_layerColors    [NB_LAYERS];
+    COLOR4D m_layerColorsHi  [NB_LAYERS];
+    COLOR4D m_layerColorsSel [NB_LAYERS];
+    COLOR4D m_layerColorsDark[NB_LAYERS];
     COLOR4D m_itemColors     [END_PCB_VISIBLE_LIST];
     COLOR4D m_itemColorsHi   [END_PCB_VISIBLE_LIST];
     COLOR4D m_itemColorsSel  [END_PCB_VISIBLE_LIST];
     COLOR4D m_itemColorsDark [END_PCB_VISIBLE_LIST];
 
     bool    m_sketchModeSelect[END_PCB_VISIBLE_LIST];
-    bool    m_visibleLayers   [LAYER_COUNT];
+    bool    m_visibleLayers   [NB_LAYERS];
     bool    m_visibleItems    [END_PCB_VISIBLE_LIST];
 };
 

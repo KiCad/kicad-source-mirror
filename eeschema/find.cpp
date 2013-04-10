@@ -122,7 +122,6 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     wxPoint         pos, curpos;
     bool            centerAndRedraw = false;
     bool            notFound = true;
-    wxString        msg;
     LIB_PIN*        pin;
     SCH_SHEET_LIST  sheetList;
 
@@ -236,28 +235,29 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
     /* Print diag */
     wxString msg_item;
-    msg = aReference;
+    wxString msg;
 
     switch( aSearchType )
     {
     default:
     case FIND_COMPONENT_ONLY:      // Find component only
+        msg_item = _( "component" );
         break;
 
     case FIND_PIN:                 // find a pin
-        msg_item = _( "Pin " ) + aSearchText;
+        msg_item.Printf( _( "pin %s" ), GetChars( aSearchText ) );
         break;
 
     case FIND_REFERENCE:           // find reference
-        msg_item = _( "Ref " ) + aSearchText;
+        msg_item.Printf( _( "reference %s" ), GetChars( aSearchText ) );
         break;
 
     case FIND_VALUE:               // find value
-        msg_item = _( "Value " ) + aSearchText;
+        msg_item.Printf( _( "value" ), GetChars( aSearchText ) );
         break;
 
     case FIND_FIELD:               // find field. todo
-        msg_item = _( "Field " ) + aSearchText;
+        msg_item.Printf( _( "field" ), GetChars( aSearchText ) );
         break;
     }
 
@@ -265,27 +265,19 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     {
         if( !notFound )
         {
-            if( !msg_item.IsEmpty() )
-                msg += wxT( " " ) + msg_item;
-
-            msg += _( " found" );
+            msg.Printf( _( "%s %s found" ),
+                        GetChars( aReference ), GetChars( msg_item ) );
         }
         else
         {
-            msg += _( " found" );
-
-            if( !msg_item.IsEmpty() )
-            {
-                msg += wxT( " but " ) + msg_item + _( " not found" );
-            }
+            msg.Printf( _( "%s found but %s not found" ),
+                        GetChars( aReference ), GetChars( msg_item ) );
         }
     }
     else
     {
-        if( !msg_item.IsEmpty() )
-            msg += wxT( " " ) + msg_item;
-
-        msg += _( " not found" );
+        msg.Printf( _( "Component %s not found" ),
+                    GetChars( aReference ) );
     }
 
     SetStatusText( msg );

@@ -122,10 +122,8 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( wxString& aFullFilename,
 
                 if( aForceFieldsVisibleAttribute )
                 {
-                    if( aFieldsVisibleAttributeState )
-                        component->GetField( FOOTPRINT )->SetVisible( false );
-                    else
-                        component->GetField( FOOTPRINT )->SetVisible( true );
+                        component->GetField( FOOTPRINT )
+                            ->SetVisible( aFieldsVisibleAttributeState );
                 }
             }
         }

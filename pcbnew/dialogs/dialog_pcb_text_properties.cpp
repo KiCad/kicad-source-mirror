@@ -56,7 +56,7 @@ private:
     PCB_EDIT_FRAME*     m_Parent;
     wxDC*               m_DC;
     TEXTE_PCB*          m_SelectedPCBText;
-    std::vector<int>    layerList;
+    std::vector<LAYER_NUM> layerList;
 
     void MyInit();
 
@@ -126,11 +126,11 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     PutValueInLocalUnits( *m_PositionXCtrl, m_SelectedPCBText->GetTextPosition().x );
     PutValueInLocalUnits( *m_PositionYCtrl, m_SelectedPCBText->GetTextPosition().y );
 
-    int enabledLayers = m_Parent->GetBoard()->GetEnabledLayers();
+    LAYER_MSK enabledLayers = m_Parent->GetBoard()->GetEnabledLayers();
 
-    for( int layer = 0; layer < NB_LAYERS;  ++layer )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS;  ++layer )
     {
-        if( enabledLayers & (1 << layer) )
+        if( enabledLayers & GetLayerMask( layer ) )
         {
             layerList.push_back( layer );
             int itemIndex =

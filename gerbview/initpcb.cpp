@@ -39,7 +39,7 @@
 
 bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 {
-    int layer;
+    LAYER_NUM layer;
 
     if( GetLayout() == NULL )
         return false;
@@ -52,7 +52,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 
     GetLayout()->m_Drawings.DeleteAll();
 
-    for( layer = 0; layer < GERBVIEW_LAYER_COUNT; layer++ )
+    for( layer = FIRST_LAYER; layer < NB_GERBER_LAYERS; ++layer )
     {
         if( g_GERBER_List[layer] )
         {
@@ -65,7 +65,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 
     SetScreen( new GBR_SCREEN( GetPageSettings().GetSizeIU() ) );
 
-    setActiveLayer(0);
+    setActiveLayer( FIRST_LAYER );
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
     return true;
@@ -74,7 +74,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 
 void GERBVIEW_FRAME::Erase_Current_Layer( bool query )
 {
-    int      layer = getActiveLayer();
+    LAYER_NUM layer = getActiveLayer();
     wxString msg;
 
     msg.Printf( _( "Clear layer %d?" ), layer + 1 );

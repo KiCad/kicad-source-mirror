@@ -45,7 +45,7 @@ void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 
     SetDefaultLineWidth( 0 );               // No line width on DXF
     plotMirror = false;                     // No mirroring on DXF
-    currentColor = BLACK;
+    m_currentColor = BLACK;
 }
 
 /**
@@ -151,7 +151,7 @@ bool DXF_PLOTTER::StartPlot()
              "  2\n"
              "LAYER\n"
              "  70\n"
-             "%d\n", NBCOLOR );
+             "%d\n", NBCOLORS );
 
     /* The layer/colors palette. The acad/DXF palette is divided in 3 zones:
 
@@ -159,7 +159,7 @@ bool DXF_PLOTTER::StartPlot()
        - An HSV zone (10-250, 5 values x 2 saturations x 10 hues
        - Greys (251 - 255)
 
-       The is *no* black... the white does it on paper, usually, and
+       There is *no* black... the white does it on paper, usually, and
        anyway it depends on the plotter configuration, since DXF colors
        are meant to be logical only (they represent *both* line color and
        width); later version with plot styles only complicate the matter!
@@ -170,36 +170,41 @@ bool DXF_PLOTTER::StartPlot()
     static const struct {
         const char *name;
         int color;
-    } dxf_layer[NBCOLOR] = {
-        { "BLACK",              250 },
-        { "BLUE",               5 },
-        { "GREEN",              3 },
-        { "CYAN",               4 },
-        { "RED",                1 },
-        { "MAGENTA",            6 },
-        { "BROWN",              54 },
-        { "LIGHTGRAY",          9 },
-        { "DARKGRAY",           8 },
-        { "LIGHTBLUE",          171 },
-        { "LIGHTGREEN",         91 },
-        { "LIGHTCYAN",          131 },
-        { "LIGHTRED",           11 },
-        { "LIGHTMAGENTA",       221 },
-        { "YELLOW",             2 },
-        { "WHITE",              7 },
-        { "DARKDARKGRAY",       251 },
-        { "DARKBLUE",           178 },
-        { "DARKGREEN",          98 },
-        { "DARKCYAN",           138 },
-        { "DARKRED",            18 },
-        { "DARKMAGENTA",        228 },
-        { "DARKBROWN",          58 },
-        { "LIGHTYELLOW",        51 },
+    } dxf_layer[NBCOLORS] = {
+        { "BLACK",      7 },    // In DXF, color 7 is *both* white and black!
+        { "GRAY1",      251 },
+        { "GRAY2",      8 },
+        { "GRAY3",      9 },
+        { "WHITE",      7 },
+        { "LYELLOW",    51 },
+        { "BLUE1",      178 },
+        { "GREEN1",     98 },
+        { "CYAN1",      138 },
+        { "RED1",       18 },
+        { "MAGENTA1",   228 },
+        { "BROWN1",     58 },
+        { "BLUE2",      5 },
+        { "GREEN2",     3 },
+        { "CYAN2",      4 },
+        { "RED2",       1 },
+        { "MAGENTA2",   6 },
+        { "BROWN2",     54 },
+        { "BLUE3",      171 },
+        { "GREEN3",     91 },
+        { "CYAN3",      131 },
+        { "RED3",       11 },
+        { "MAGENTA3",   221 },
+        { "YELLOW3",    2 },
+        { "BLUE4",      5 },
+        { "GREEN4",     3 },
+        { "CYAN4",      4 },
+        { "RED4",       1 },
+        { "MAGENTA4",   6 },
+        { "YELLOW4",    2 }
     };
 
-    for( int i = 0; i < NBCOLOR; i++ )
+    for( EDA_COLOR_T i = BLACK; i < NBCOLORS; i = NextColor(i) )
     {
-        wxString cname = ColorRefs[i].m_Name;
         fprintf( outputFile,
                  "  0\n"
                  "LAYER\n"
@@ -254,10 +259,10 @@ void DXF_PLOTTER::SetColor( EDA_COLOR_T color )
        || ( color == BLACK )
        || ( color == WHITE ) )
     {
-        currentColor = color;
+        m_currentColor = color;
     }
     else
-        currentColor = BLACK;
+        m_currentColor = BLACK;
 }
 
 /**
@@ -287,7 +292,7 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int 
     DPOINT centre_dev = userToDeviceCoordinates( centre );
     if( radius > 0 )
     {
-        wxString cname = ColorRefs[currentColor].m_Name;
+        wxString cname( ColorGetName( m_currentColor ) );
         if (!fill)
         {
             fprintf( outputFile, "0\nCIRCLE\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n",
@@ -349,7 +354,7 @@ void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
     if( penLastpos != pos && plume == 'D' )
     {
         // DXF LINE
-        wxString cname = ColorRefs[currentColor].m_Name;
+        wxString cname( ColorGetName( m_currentColor ) );
         fprintf( outputFile, "0\nLINE\n8\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
                  TO_UTF8( cname ),
                  pen_lastpos_dev.x, pen_lastpos_dev.y, pos_dev.x, pos_dev.y );
@@ -396,7 +401,7 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int rad
     double radius_dev = userToDeviceSize( radius );
 
     // Emit a DXF ARC entity
-    wxString cname = ColorRefs[currentColor].m_Name;
+    wxString cname( ColorGetName( m_currentColor ) );
     fprintf( outputFile,
              "0\nARC\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n50\n%g\n51\n%g\n",
              TO_UTF8( cname ),
@@ -570,7 +575,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
            more useful as a CAD object */
         DPOINT origin_dev = userToDeviceCoordinates( aPos );
         SetColor( aColor );
-        wxString cname = ColorRefs[currentColor].m_Name;
+        wxString cname( ColorGetName( m_currentColor ) );
         DPOINT size_dev = userToDeviceSize( aSize );
         int h_code = 0, v_code = 0;
         switch( aH_justify )

@@ -19,10 +19,10 @@
 
 CPolyLine::CPolyLine()
 {
-    m_hatchStyle    = NO_HATCH;
-    m_hatchPitch    = 0;
-    m_layer     = 0;
-    m_utility   = 0;
+    m_hatchStyle = NO_HATCH;
+    m_hatchPitch = 0;
+    m_layer      = LAYER_N_FRONT;
+    m_utility    = 0;
 }
 
 
@@ -207,7 +207,7 @@ void CPolyLine::ImportSettings( const CPolyLine * aPoly )
 /* initialize a contour
  * set layer, hatch style, and starting point
  */
-void CPolyLine::Start( int layer, int x, int y, int hatch )
+void CPolyLine::Start( LAYER_NUM layer, int x, int y, int hatch )
 {
     m_layer = layer;
     SetHatchStyle( (enum HATCH_STYLE) hatch );
@@ -795,7 +795,7 @@ void CPolyLine::Hatch()
     double  hatch_line_len = m_hatchPitch;
 
     // To have a better look, give a slope depending on the layer
-    int     layer = GetLayer();
+    LAYER_NUM layer = GetLayer();
     int     slope_flag = (layer & 1) ? 1 : -1;  // 1 or -1
     double  slope = 0.707106 * slope_flag;      // 45 degrees slope
     int     max_a, min_a;

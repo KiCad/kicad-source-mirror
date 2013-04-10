@@ -113,10 +113,10 @@ void PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
 {
-    bool state = !Drc_On;
+    bool state = !g_Drc_On;
     aEvent.Check( state );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
-                                        Drc_On ?
+                                        g_Drc_On ?
                                         _( "Disable design rule checking" ) :
                                         _( "Enable design rule checking" ) );
 }

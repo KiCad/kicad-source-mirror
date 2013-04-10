@@ -637,7 +637,7 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, int aPrintMask,
+    virtual void PrintPage( wxDC* aDC, LAYER_MSK aPrintMask,
                             bool aPrintMirrorMode, void* aData = NULL );
 
     /**

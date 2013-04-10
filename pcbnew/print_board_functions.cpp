@@ -45,11 +45,11 @@
 
 
 static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
-                          GR_DRAWMODE aDraw_mode, int aMasklayer,
+                          GR_DRAWMODE aDraw_mode, LAYER_MSK aMasklayer,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt );
 
 void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
-                                      int   aPrintMaskLayer,
+                                      LAYER_MSK aPrintMaskLayer,
                                       bool  aPrintMirrorMode,
                                       void * aData)
 {
@@ -131,7 +131,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
  * @param aData = a pointer to an optional data (NULL if not used)
  */
 void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
-                                int   aPrintMaskLayer,
+                                LAYER_MSK aPrintMaskLayer,
                                 bool  aPrintMirrorMode,
                                 void* aData)
 {
@@ -156,7 +156,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     }
 
     save_opt = DisplayOpt;
-    int activeLayer = GetScreen()->m_Active_Layer;
+    LAYER_NUM activeLayer = GetScreen()->m_Active_Layer;
 
     DisplayOpt.ContrastModeDisplay = false;
     DisplayOpt.DisplayPadFill = true;
@@ -172,11 +172,11 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             DisplayOpt.DisplayPadFill = true;
 
             // Calculate the active layer number to print from its mask layer:
-            GetScreen()->m_Active_Layer = 0;
+            GetScreen()->m_Active_Layer = FIRST_LAYER;
 
-            for(int kk = 0; kk < 32; kk ++ )
+            for( LAYER_NUM kk = FIRST_LAYER; kk < NB_LAYERS; ++kk )
             {
-                if( ((1 << kk) & aPrintMaskLayer) != 0 )
+                if( GetLayerMask( kk ) & aPrintMaskLayer )
                 {
                     GetScreen()->m_Active_Layer = kk;
                     break;
@@ -232,10 +232,8 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         case PCB_DIMENSION_T:
         case PCB_TEXT_T:
         case PCB_TARGET_T:
-            if( ( ( 1 << item->GetLayer() ) & aPrintMaskLayer ) == 0 )
-                break;
-
-            item->Draw( m_canvas, aDC, drawmode );
+            if( GetLayerMask( item->GetLayer() ) & aPrintMaskLayer )
+                item->Draw( m_canvas, aDC, drawmode );
             break;
 
         case PCB_MARKER_T:
@@ -247,7 +245,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     // Print tracks
     for( TRACK * track = Pcb->m_Track; track; track = track->Next() )
     {
-        if( ( aPrintMaskLayer & track->ReturnMaskLayer() ) == 0 )
+        if( !( aPrintMaskLayer & track->GetLayerMask() ) )
             continue;
 
         if( track->Type() == PCB_VIA_T ) // VIA encountered.
@@ -270,7 +268,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     // Outdated: only for compatibility to old boards
     for( TRACK * track = Pcb->m_Zone; track != NULL; track = track->Next() )
     {
-        if( ( aPrintMaskLayer & track->ReturnMaskLayer() ) == 0 )
+        if( !( aPrintMaskLayer & track->GetLayerMask() ) )
             continue;
 
         track->Draw( m_canvas, aDC, drawmode );
@@ -281,10 +279,8 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     {
         ZONE_CONTAINER* zone = Pcb->GetArea( ii );
 
-        if( ( aPrintMaskLayer & ( 1 << zone->GetLayer() ) ) == 0 )
-            continue;
-
-        zone->DrawFilledArea( m_canvas, aDC, drawmode );
+        if( aPrintMaskLayer & GetLayerMask( zone->GetLayer() ) )
+            zone->DrawFilledArea( m_canvas, aDC, drawmode );
     }
 
     // Draw footprints, this is done at last in order to print the pad holes in
@@ -312,7 +308,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
         for( ; track != NULL; track = track->Next() )
         {
-            if( ( aPrintMaskLayer & track->ReturnMaskLayer() ) == 0 )
+            if( !( aPrintMaskLayer & track->GetLayerMask() ) )
                 continue;
 
             if( track->Type() == PCB_VIA_T ) // VIA encountered.
@@ -350,13 +346,13 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
 
 static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
-                          GR_DRAWMODE aDraw_mode, int aMasklayer,
+                          GR_DRAWMODE aDraw_mode, LAYER_MSK aMasklayer,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt )
 {
     // Print pads
     for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
     {
-        if( (pad->GetLayerMask() & aMasklayer ) == 0 )
+        if( !(pad->GetLayerMask() & aMasklayer ) )
             continue;
 
         // Manage hole according to the print drill option
@@ -387,7 +383,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
     }
 
     // Print footprint graphic shapes
-    int mlayer   = GetLayerMask( aModule->GetLayer() );
+    LAYER_MSK mlayer = GetLayerMask( aModule->GetLayer() );
 
     if( aModule->GetLayer() == LAYER_N_BACK )
         mlayer = SILKSCREEN_LAYER_BACK;

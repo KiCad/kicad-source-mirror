@@ -1,8 +1,33 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_edit_module_text.cpp
-// Author:      jean-pierre Charras
-// Licence:		GPL
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file dialog_edit_module_text.cpp.
+ * @brief dialog editor for texts (fields) in footprints
+ */
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2013 Jean-Pierre Charras
+ * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 
 #include <fctsys.h>
@@ -106,13 +131,20 @@ void DialogEditModuleText::initDlg( )
 
     m_ModuleInfoText->SetLabel( msg );
 
-
-    if( m_currentText->GetType() == TEXT_is_VALUE )
+    switch( m_currentText->GetType() )
+    {
+    case TEXTE_MODULE::TEXT_is_VALUE:
         m_TextDataTitle->SetLabel( _( "Value:" ) );
-    else if( m_currentText->GetType() == TEXT_is_DIVERS )
+        break;
+
+    case TEXTE_MODULE::TEXT_is_DIVERS:
         m_TextDataTitle->SetLabel( _( "Text:" ) );
-    else if( m_currentText->GetType() != TEXT_is_REFERENCE )
-        m_TextDataTitle->SetLabel( wxT( "???" ) );
+        break;
+
+    default:
+        m_TextDataTitle->SetLabel( _( "Reference:" ) );
+        break;
+    }
 
     m_Name->SetValue( m_currentText->GetText() );
 
@@ -134,7 +166,7 @@ void DialogEditModuleText::initDlg( )
     PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->GetThickness() );
 
     int text_orient = m_currentText->GetOrientation();
-    NORMALIZE_ANGLE_90(text_orient)
+    NORMALIZE_ANGLE_90( text_orient );
 
     if( (text_orient != 0) )
         m_Orient->SetSelection( 1 );

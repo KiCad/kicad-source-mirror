@@ -15,6 +15,7 @@
 #include <class_title_block.h>
 #include <class_gerber_draw_item.h>
 
+#include <gr_basic.h>
 
 /**
  * Class GBR_LAYOUT
@@ -27,7 +28,7 @@ private:
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;
     wxPoint                 m_originAxisPosition;
-    int                     m_printLayersMask; // When printing: the list of layers to print
+    LAYER_MSK               m_printLayersMask; // When printing: the list of layers to print
 public:
 
     DLIST<GERBER_DRAW_ITEM> m_Drawings;     // linked list of Gerber Items
@@ -90,7 +91,7 @@ public:
      * changes the bit-mask of visible layers
      * @param aLayerMask = The new bit-mask of visible layers
      */
-    void    SetVisibleLayers( int aLayerMask )
+    void    SetVisibleLayers( LAYER_MSK aLayerMask )
     {
         m_printLayersMask = aLayerMask;
     }
@@ -98,10 +99,10 @@ public:
     /**
      * Function IsLayerVisible
      * tests whether a given layer is visible
-     * @param aLayerIndex = The index of the layer to be tested
+     * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool    IsLayerVisible( int aLayerIndex ) const;
+    bool    IsLayerVisible( LAYER_NUM aLayer ) const;
 
 #if defined(DEBUG)
     void    Show( int nestLevel, std::ostream& os ) const;  // overload

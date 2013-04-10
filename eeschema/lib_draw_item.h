@@ -175,7 +175,7 @@ public:
      *                  started.  This may or may not be required depending on the item
      *                  being edited and the edit mode.
      */
-    virtual void BeginEdit( int aEditMode, const wxPoint aPosition = wxPoint( 0, 0 ) ) {}
+    virtual void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition = wxPoint( 0, 0 ) ) {}
 
     /**
      * Continue an edit in progress at \a aPosition.

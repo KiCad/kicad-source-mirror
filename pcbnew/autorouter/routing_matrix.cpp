@@ -198,7 +198,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 {
     int       ux0 = 0, uy0 = 0, ux1, uy1, dx, dy;
     int       marge, via_marge;
-    int       layerMask;
+    LAYER_MSK layerMask;
 
     // use the default NETCLASS?
     NETCLASS* nc = aPcb->m_NetClasses.GetDefault();
@@ -240,7 +240,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
                 tmpSegm.SetLayer( edge->GetLayer() );
 
                 if( tmpSegm.GetLayer() == EDGE_N )
-                    tmpSegm.SetLayer( -1 );
+                    tmpSegm.SetLayer( UNDEFINED_LAYER );
 
                 tmpSegm.SetStart( edge->GetStart() );
                 tmpSegm.SetEnd(   edge->GetEnd() );
@@ -275,7 +275,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
             if( DrawSegm->GetLayer() == EDGE_N )
             {
-                tmpSegm.SetLayer( -1 );
+                tmpSegm.SetLayer( UNDEFINED_LAYER );
                 type_cell |= CELL_is_EDGE;
             }
 

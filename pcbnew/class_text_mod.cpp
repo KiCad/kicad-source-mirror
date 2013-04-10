@@ -49,20 +49,18 @@
 #include <pcbnew.h>
 
 
-TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
+TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     BOARD_ITEM( parent, PCB_MODULE_TEXT_T ),
     EDA_TEXT()
 {
     MODULE* module = (MODULE*) m_Parent;
 
-    m_Type = text_type;         /* Reference */
-
-    if( (m_Type != TEXT_is_REFERENCE) && (m_Type != TEXT_is_VALUE) )
-        m_Type = TEXT_is_DIVERS;
+    m_Type = text_type;
 
     m_NoShow = false;
-    m_Size.x = m_Size.y = 400;
-    m_Thickness  = 120;   /* Set default dimension to a reasonable value. */
+
+    // Set text tickness to a default value
+    m_Thickness = Millimeter2iu( 0.15 );
 
     SetLayer( SILKSCREEN_N_FRONT );
 
@@ -70,20 +68,15 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
     {
         m_Pos = module->GetPosition();
 
-        int moduleLayer = module->GetLayer();
-
-        if( moduleLayer == LAYER_N_BACK )
-            SetLayer( SILKSCREEN_N_BACK );
-        else if( moduleLayer == LAYER_N_FRONT )
-            SetLayer( SILKSCREEN_N_FRONT );
-        else
-            SetLayer( moduleLayer );
-
-        if(  moduleLayer == SILKSCREEN_N_BACK
-             || moduleLayer == ADHESIVE_N_BACK
-             || moduleLayer == LAYER_N_BACK )
+        if( IsBackLayer( module->GetLayer() ) )
         {
+            SetLayer( SILKSCREEN_N_BACK );
             m_Mirror = true;
+        }
+        else
+        {
+            SetLayer( SILKSCREEN_N_FRONT );
+            m_Mirror = false;
         }
     }
 }
@@ -240,79 +233,74 @@ EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                          const wxPoint& offset )
 {
-    int             width, orient;
-    wxSize          size;
-    wxPoint         pos;      // Center of text
-    PCB_BASE_FRAME* frame;
-    MODULE*         module = (MODULE*) m_Parent;   /* parent must *not* be null
-                                                    *  (a module text without a footprint
-                                                    * parent has no sense) */
+    MODULE* module = (MODULE*) m_Parent;   
 
+    /* parent must *not* be NULL (a module text without a footprint
+       parent has no sense) */
+    wxASSERT( module );
 
     if( panel == NULL )
         return;
 
-    frame  = (PCB_BASE_FRAME*) panel->GetParent();
+    BOARD* brd = GetBoard( );
+    EDA_COLOR_T color;
+    // Determine the element color or suppress it element if hidden
+    switch( module->GetLayer() )
+    {
+    case LAYER_N_BACK:
+        if( !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE ) )
+            return;
+        color = brd->GetVisibleElementColor( MOD_TEXT_BK_VISIBLE );
+        break;
 
-    pos.x = m_Pos.x - offset.x;
-    pos.y = m_Pos.y - offset.y;
+    case LAYER_N_FRONT:
+        if( !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ) )
+            return;
+        color = brd->GetVisibleElementColor( MOD_TEXT_FR_VISIBLE );
+        break;
 
-    size   = m_Size;
-    orient = GetDrawRotation();
-    width  = m_Thickness;
+    default:
+        color = brd->GetLayerColor( module->GetLayer() );
+    }
 
+    // 'Ghost' the element if forced show
+    if( m_NoShow )
+    {
+        if( !brd->IsElementVisible( MOD_TEXT_INVISIBLE ) )
+            return;
+        color = brd->GetVisibleElementColor( MOD_TEXT_INVISIBLE );
+    }
+
+    // Draw mode compensation for the width
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
+    int width = m_Thickness;
     if( ( frame->m_DisplayModText == LINE )
-        || ( DC->LogicalToDeviceXRel( width ) < MIN_DRAW_WIDTH ) )
+        || ( DC->LogicalToDeviceXRel( width ) <= MIN_DRAW_WIDTH ) )
         width = 0;
     else if( frame->m_DisplayModText == SKETCH )
         width = -width;
 
     GRSetDrawMode( DC, draw_mode );
+    wxPoint pos( m_Pos.x - offset.x, 
+                 m_Pos.y - offset.y);
 
-    BOARD * brd =  GetBoard( );
-    EDA_COLOR_T color;
+    // Draw the text anchor point
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
     {
-        color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
-
-        int anchor_size = DC->DeviceToLogicalXRel( 2 );
-
-        GRLine( panel->GetClipBox(), DC,
-                pos.x - anchor_size, pos.y,
-                pos.x + anchor_size, pos.y, 0, color );
-        GRLine( panel->GetClipBox(), DC,
-                pos.x, pos.y - anchor_size,
-                pos.x, pos.y + anchor_size, 0, color );
+        EDA_COLOR_T anchor_color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
+        GRDrawAnchor( panel->GetClipBox(), DC, pos.x, pos.y, 
+                      DIM_ANCRE_TEXTE, anchor_color );
     }
 
-    color = brd->GetLayerColor(module->GetLayer());
+    // Draw the text proper, with the right attributes
+    wxSize size   = m_Size;
+    int    orient = GetDrawRotation();
 
-
-    if( module->GetLayer() == LAYER_N_BACK )
-    {
-        if( brd->IsElementVisible( MOD_TEXT_BK_VISIBLE ) == false )
-            return;
-        color = brd->GetVisibleElementColor(MOD_TEXT_BK_VISIBLE);
-    }
-    else if( module->GetLayer() == LAYER_N_FRONT )
-    {
-        if( brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ) == false )
-            return;
-        color = brd->GetVisibleElementColor(MOD_TEXT_FR_VISIBLE);
-    }
-
-    if( m_NoShow )
-    {
-        if( brd->IsElementVisible( MOD_TEXT_INVISIBLE ) == false )
-            return;
-        color = brd->GetVisibleElementColor(MOD_TEXT_INVISIBLE);
-    }
-
-    /* If the text is mirrored : negate size.x (mirror / Y axis) */
+    // If the text is mirrored : negate size.x (mirror / Y axis)
     if( m_Mirror )
         size.x = -size.x;
 
-    DrawGraphicText( panel, DC, pos, (enum EDA_COLOR_T) color, m_Text, orient,
+    DrawGraphicText( panel, DC, pos, color, m_Text, orient,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
@@ -365,7 +353,6 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         return;
 
     wxString msg, Line;
-    int      ii;
 
     static const wxString text_type_msg[3] =
     {
@@ -378,12 +365,8 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     Line = m_Text;
     aList.push_back( MSG_PANEL_ITEM( _( "Text" ), Line, BROWN ) );
 
-    ii = m_Type;
-
-    if( ii > 2 )
-        ii = 2;
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), text_type_msg[ii], DARKGREEN ) );
+    wxASSERT( m_Type >= TEXT_is_REFERENCE && m_Type <= TEXT_is_DIVERS );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), text_type_msg[m_Type], DARKGREEN ) );
 
     if( m_NoShow )
         msg = _( "No" );
@@ -392,21 +375,13 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Display" ), msg, DARKGREEN ) );
 
-    // Display text layer (use layer name if possible)
-    BOARD* board = NULL;
-    board = (BOARD*) module->GetParent();
-
-    if( m_Layer < NB_LAYERS && board )
-        msg = board->GetLayerName( m_Layer );
-    else
-        msg.Printf( wxT( "%d" ), m_Layer );
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, DARKGREEN ) );
-
-    msg = _( " No" );
+    // Display text layer
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), DARKGREEN ) );
 
     if( m_Mirror )
         msg = _( " Yes" );
+    else
+        msg = _( " No" );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), msg, DARKGREEN ) );
 
@@ -424,39 +399,6 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 }
 
 
-// see class_text_mod.h
-bool TEXTE_MODULE::IsOnLayer( int aLayer ) const
-{
-    if( m_Layer == aLayer )
-        return true;
-
-    /* test the parent, which is a MODULE */
-    if( aLayer == GetParent()->GetLayer() )
-        return true;
-
-    if( aLayer == LAYER_N_BACK )
-    {
-        if( m_Layer==ADHESIVE_N_BACK || m_Layer==SILKSCREEN_N_BACK )
-            return true;
-    }
-    else if( aLayer == LAYER_N_FRONT )
-    {
-        if( m_Layer==ADHESIVE_N_FRONT || m_Layer==SILKSCREEN_N_FRONT )
-            return true;
-    }
-
-    return false;
-}
-
-
-/* see class_text_mod.h
- * bool TEXTE_MODULE::IsOnOneOfTheseLayers( int aLayerMask ) const
- * {
- *
- * }
- */
-
-
 wxString TEXTE_MODULE::GetSelectMenuText() const
 {
     wxString text;
@@ -464,17 +406,18 @@ wxString TEXTE_MODULE::GetSelectMenuText() const
     switch( m_Type )
     {
     case TEXT_is_REFERENCE:
-        text << _( "Reference" ) << wxT( " " ) << m_Text;
+        text.Printf( _( "Reference %s" ), GetChars( m_Text ) );
         break;
 
     case TEXT_is_VALUE:
-        text << _( "Value" ) << wxT( " " ) << m_Text << _( " of " )
-             << ( (MODULE*) GetParent() )->GetReference();
+        text.Printf( _( "Value %s of %s" ), GetChars( m_Text ),
+                     GetChars( ( (MODULE*) GetParent() )->GetReference() ) );
         break;
 
     default:    // wrap this one in quotes:
-        text << _( "Text" ) << wxT( " \"" ) << m_Text << wxT( "\"" ) << _( " of " )
-             << ( (MODULE*) GetParent() )->GetReference();
+        text.Printf( _( "Text \"%s\" on %s of %s" ), GetChars( m_Text ),
+                     GetChars( GetLayerName() ),
+                     GetChars( ( (MODULE*) GetParent() )->GetReference() ) );
         break;
     }
 

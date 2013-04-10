@@ -126,7 +126,7 @@ EDA_RECT D_PAD::GetBoundingBox() const
     EDA_RECT area;
 
     // radius of pad area, enclosed in minimum sized circle
-    int     radius = boundingRadius();
+    int radius = boundingRadius();
 
     area.SetOrigin( m_Pos );
     area.Inflate( radius );
@@ -168,7 +168,7 @@ void D_PAD::Flip( int aTranslationY )
     SetOrientation( -GetOrientation() );
 
     // flip pads layers
-    SetLayerMask( ChangeSideMaskLayer( m_layerMask ) );
+    SetLayerMask( FlipLayerMask( m_layerMask ) );
 
     // m_boundingRadius = -1;  the shape has not been changed
 }
@@ -176,8 +176,17 @@ void D_PAD::Flip( int aTranslationY )
 
 void D_PAD::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 {
+    // Parameters stored in config are only significant parameters
+    // for a template.
+    // So not all parameters are stored, just few.
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PadDrill" ),
                             &m_Drill.x,
+                            Millimeter2iu( 0.6 ),
+                            Millimeter2iu( 0.1 ), Millimeter2iu( 10.0 ),
+                            NULL, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PadDrillOvalY" ),
+                            &m_Drill.y,
                             Millimeter2iu( 0.6 ),
                             Millimeter2iu( 0.1 ), Millimeter2iu( 10.0 ),
                             NULL, MM_PER_IU ) );
@@ -427,7 +436,7 @@ int D_PAD::GetSolderMaskMargin()
  * value is
  * 1 - the local value
  * 2 - if null, the parent footprint value
- * 1 - if null, the global value
+ * 3 - if null, the global value
  */
 wxSize D_PAD::GetSolderPasteMargin()
 {
@@ -515,7 +524,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
         wxString msg = module->GetReference();
         aList.push_back( MSG_PANEL_ITEM( _( "Module" ), msg, DARKCYAN ) );
         ReturnStringPadName( Line );
-        aList.push_back( MSG_PANEL_ITEM( _( "RefP" ), Line, BROWN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), Line, BROWN ) );
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Net" ), m_Netname, DARKCYAN ) );
@@ -529,106 +538,8 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 
     board = GetBoard();
 
-    wxString layerInfo;
-
-    if( (m_layerMask & ALL_CU_LAYERS) == 0 )     // pad is not on any copper layers
-    {
-        switch( m_layerMask & ~ALL_CU_LAYERS )
-        {
-        case ADHESIVE_LAYER_BACK:
-            layerInfo = board->GetLayerName( ADHESIVE_N_BACK );
-            break;
-
-        case ADHESIVE_LAYER_FRONT:
-            layerInfo = board->GetLayerName( ADHESIVE_N_FRONT );
-            break;
-
-        case SOLDERPASTE_LAYER_BACK:
-            layerInfo = board->GetLayerName( SOLDERPASTE_N_BACK );
-            break;
-
-        case SOLDERPASTE_LAYER_FRONT:
-            layerInfo = board->GetLayerName( SOLDERPASTE_N_FRONT );
-            break;
-
-        case SILKSCREEN_LAYER_BACK:
-            layerInfo = board->GetLayerName( SILKSCREEN_N_BACK );
-            break;
-
-        case SILKSCREEN_LAYER_FRONT:
-            layerInfo = board->GetLayerName( SILKSCREEN_N_FRONT );
-            break;
-
-        case SOLDERMASK_LAYER_BACK:
-            layerInfo = board->GetLayerName( SOLDERMASK_N_BACK );
-            break;
-
-        case SOLDERMASK_LAYER_FRONT:
-            layerInfo = board->GetLayerName( SOLDERMASK_N_FRONT );
-            break;
-
-        case DRAW_LAYER:
-            layerInfo = board->GetLayerName( DRAW_N );
-            break;
-
-        case COMMENT_LAYER:
-            layerInfo = board->GetLayerName( COMMENT_N );
-            break;
-
-        case ECO1_LAYER:
-            layerInfo = board->GetLayerName( ECO1_N );
-            break;
-
-        case ECO2_LAYER:
-            layerInfo = board->GetLayerName( ECO2_N );
-            break;
-
-        case EDGE_LAYER:
-            layerInfo = board->GetLayerName( EDGE_N );
-            break;
-
-        default:
-            layerInfo = _( "Non-copper" );
-            break;
-        }
-    }
-    else
-    {
-#define INTERIOR_COPPER     (ALL_CU_LAYERS & ~(LAYER_BACK | LAYER_FRONT))
-
-        static const wxChar* andInternal = _( " & int" );
-
-        if( (m_layerMask & (LAYER_BACK | LAYER_FRONT)) == LAYER_BACK )
-        {
-            layerInfo = board->GetLayerName( LAYER_N_BACK );
-
-            if( m_layerMask & INTERIOR_COPPER )
-                layerInfo += andInternal;
-        }
-
-        else if( (m_layerMask & (LAYER_BACK | LAYER_FRONT)) == (LAYER_BACK | LAYER_FRONT) )
-        {
-            layerInfo = board->GetLayerName( LAYER_N_BACK ) + wxT(", ") +
-                        board->GetLayerName( LAYER_N_FRONT );
-
-            if( m_layerMask & INTERIOR_COPPER )
-                layerInfo += andInternal;
-        }
-
-        else if( (m_layerMask & (LAYER_BACK | LAYER_FRONT)) == LAYER_FRONT )
-        {
-            layerInfo = board->GetLayerName( LAYER_N_FRONT );
-
-            if( m_layerMask & INTERIOR_COPPER )
-                layerInfo += andInternal;
-        }
-        else // necessarily true: if( m_layerMask & INTERIOR_COPPER )
-        {
-            layerInfo = _( "internal" );
-        }
-    }
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), layerInfo, DARKGREEN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), 
+                     LayerMaskDescribe( board, m_layerMask ), DARKGREEN ) );
 
     aList.push_back( MSG_PANEL_ITEM( ShowPadShape(), ShowPadAttr(), DARKGREEN ) );
 
@@ -679,9 +590,9 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 
 
 // see class_pad.h
-bool D_PAD::IsOnLayer( int aLayer ) const
+bool D_PAD::IsOnLayer( LAYER_NUM aLayer ) const
 {
-    return (1 << aLayer) & m_layerMask;
+    return ::GetLayerMask( aLayer ) & m_layerMask;
 }
 
 
@@ -794,7 +705,7 @@ wxString D_PAD::ShowPadShape() const
         return _( "Trap" );
 
     default:
-        return wxT( "??Unknown??" );
+        return wxT( "???" );
     }
 }
 
@@ -807,7 +718,7 @@ wxString D_PAD::ShowPadAttr() const
         return _( "Std" );
 
     case PAD_SMD:
-        return _( "Smd" );
+        return _( "SMD" );
 
     case PAD_CONN:
         return _( "Conn" );
@@ -816,7 +727,7 @@ wxString D_PAD::ShowPadAttr() const
         return _( "Not Plated" );
 
     default:
-        return wxT( "??Unkown??" );
+        return wxT( "???" );
     }
 }
 
@@ -824,22 +735,21 @@ wxString D_PAD::ShowPadAttr() const
 wxString D_PAD::GetSelectMenuText() const
 {
     wxString text;
-    wxString padlayers;
-    BOARD * board = GetBoard();
+    wxString padlayers( LayerMaskDescribe( GetBoard(), m_layerMask ) );
+    wxString padname( GetPadName() );
 
-
-    if ( (m_layerMask & ALL_CU_LAYERS) == ALL_CU_LAYERS )
-        padlayers = _("all copper layers");
-    else if( (m_layerMask & LAYER_BACK ) == LAYER_BACK )
-        padlayers = board->GetLayerName(LAYER_N_BACK);
-    else if( (m_layerMask & LAYER_FRONT) == LAYER_FRONT )
-        padlayers = board->GetLayerName(LAYER_N_FRONT);
-    else
-        padlayers = _( "???" );
-
-    text.Printf( _( "Pad [%s] (%s) of %s" ),
-                 GetChars(GetPadName() ), GetChars( padlayers ),
+    if( padname.IsEmpty() )
+    {
+    text.Printf( _( "Pad on %s of %s" ),
+                 GetChars( padlayers ),
                  GetChars(( (MODULE*) GetParent() )->GetReference() ) );
+    }
+    else
+    {
+        text.Printf( _( "Pad %s on %s of %s" ),
+                     GetChars(GetPadName() ), GetChars( padlayers ),
+                     GetChars(( (MODULE*) GetParent() )->GetReference() ) );
+    }
 
     return text;
 }

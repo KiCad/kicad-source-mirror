@@ -54,7 +54,7 @@ DIALOG_CVPCB_CONFIG::DIALOG_CVPCB_CONFIG( CVPCB_MAINFRAME* parent ) :
     m_Config = wxGetApp().GetCommonSettings();
 
     Init( );
-    title = _( "Project file: " ) + fn.GetFullPath();
+    title.Format( _( "Project file: <%s>" ), GetChars( fn.GetFullPath() ) );
     SetTitle( title );
 
     if( GetSizer() )

@@ -70,7 +70,8 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             case SCH_TEXT_T:
             case SCH_SHEET_PIN_T:
             case SCH_SHEET_T:
-            case SCH_BUS_ENTRY_T:
+            case SCH_BUS_WIRE_ENTRY_T:
+            case SCH_BUS_BUS_ENTRY_T:
             case SCH_JUNCTION_T:
             case SCH_COMPONENT_T:
             case SCH_FIELD_T:
@@ -157,11 +158,20 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_WIRETOBUS_ENTRY_BUTT:
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
+        {
+            CreateBusWireEntry( aDC );
+            m_canvas->SetAutoPanRequest( true );
+        }
+        else
+        {
+            addCurrentItemToList( aDC );
+        }
+        break;
     case ID_BUSTOBUS_ENTRY_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            CreateBusEntry( aDC, ( GetToolId() == ID_WIRETOBUS_ENTRY_BUTT ) ?
-                            WIRE_TO_BUS : BUS_TO_BUS );
+            CreateBusBusEntry( aDC );
             m_canvas->SetAutoPanRequest( true );
         }
         else

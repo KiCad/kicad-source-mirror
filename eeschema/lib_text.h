@@ -100,7 +100,7 @@ public:
 
     void Rotate();
 
-    void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
+    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
 
     bool ContinueEdit( const wxPoint aNextPoint );
 

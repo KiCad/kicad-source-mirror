@@ -148,7 +148,8 @@ void DIALOG_PLOT::Init_Dialog()
     // List layers in same order than in setup layers dialog
     // (Front or Top to Back or Bottom)
     DECLARE_LAYERS_ORDER_LIST( layersOrder );
-    int layerIndex, checkIndex, layer;
+    int layerIndex, checkIndex;
+    LAYER_NUM layer;
 
     for( layerIndex = 0; layerIndex < NB_LAYERS; layerIndex++ )
     {
@@ -162,7 +163,7 @@ void DIALOG_PLOT::Init_Dialog()
         m_layerList.push_back( layer );
         checkIndex = m_layerCheckListBox->Append( m_board->GetLayerName( layer ) );
 
-        if( m_plotOpts.GetLayerSelection() & ( 1 << layer ) )
+        if( m_plotOpts.GetLayerSelection() & GetLayerMask( layer ) ) 
             m_layerCheckListBox->Check( checkIndex );
     }
 
@@ -237,15 +238,11 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
 
     switch( event.GetId() )
     {
-        case ID_LAYER_FAB: // Select layers usually neede d to build a board
+        case ID_LAYER_FAB: // Select layers usually needed to build a board
             for( i = 0; i < m_layerList.size(); i++ )
             {
-                long layermask = 1 << m_layerList[ i ];
-                if( ( layermask &
-                    ( ALL_CU_LAYERS | SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT |
-                      SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
-                      SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT ) )
-                    != 0 )
+                LAYER_MSK layermask = GetLayerMask( m_layerList[ i ] );
+                if( layermask & ( ALL_CU_LAYERS | ALL_AUX_LAYERS ) )
                     m_layerCheckListBox->Check( i, true );
                 else
                     m_layerCheckListBox->Check( i, false );
@@ -627,7 +624,7 @@ void DIALOG_PLOT::applyPlotSettings()
         m_messagesBox->AppendText( msg );
     }
 
-    m_config->Write( OPTKEY_PLOT_X_FINESCALE_ADJ, m_XScaleAdjust );
+   ConfigBaseWriteDouble( m_config, OPTKEY_PLOT_X_FINESCALE_ADJ, m_XScaleAdjust );
 
     // Y scale
     msg = m_fineAdjustYscaleOpt->GetValue();
@@ -641,7 +638,7 @@ void DIALOG_PLOT::applyPlotSettings()
         m_messagesBox->AppendText( msg );
     }
 
-    m_config->Write( OPTKEY_PLOT_Y_FINESCALE_ADJ, m_YScaleAdjust );
+    ConfigBaseWriteDouble( m_config, OPTKEY_PLOT_Y_FINESCALE_ADJ, m_YScaleAdjust );
 
     // PS Width correction
     msg = m_PSFineAdjustWidthOpt->GetValue();
@@ -661,7 +658,8 @@ void DIALOG_PLOT::applyPlotSettings()
     }
 
     // Store m_PSWidthAdjust in mm in user config
-    m_config->Write( CONFIG_PS_FINEWIDTH_ADJ, (double)m_PSWidthAdjust / IU_PER_MM );
+    ConfigBaseWriteDouble( m_config, CONFIG_PS_FINEWIDTH_ADJ,
+                           (double)m_PSWidthAdjust / IU_PER_MM );
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
 
@@ -673,7 +671,7 @@ void DIALOG_PLOT::applyPlotSettings()
     for( i = 0; i < m_layerList.size(); i++ )
     {
         if( m_layerCheckListBox->IsChecked( i ) )
-            selectedLayers |= (1 << m_layerList[i]);
+            selectedLayers |= GetLayerMask( m_layerList[i] );
     }
 
     tempOptions.SetLayerSelection( selectedLayers );

@@ -55,7 +55,8 @@
 DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype )
 {
-    m_Width = m_Flags = m_Type = m_Angle = 0;
+    m_Width = m_Type = m_Angle = 0;
+    m_Flags = 0;
     m_Shape = S_SEGMENT;
 }
 
@@ -110,7 +111,7 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre )
         NEGATE( m_Angle );
     }
 
-    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer() ) );
 }
 
 const wxPoint DRAWSEGMENT::GetArcEnd() const
@@ -175,7 +176,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     int l_trace;
     int mode;
     int radius;
-    int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     EDA_COLOR_T color;
 
     BOARD * brd =  GetBoard( );
@@ -208,7 +209,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( m_Flags & FORCE_SKETCH )
         mode = SKETCH;
 
-    if( l_trace < DC->DeviceToLogicalXRel( MIN_DRAW_WIDTH ) )
+    if( DC->LogicalToDeviceXRel( l_trace ) <= MIN_DRAW_WIDTH )
         mode = LINE;
 
     switch( m_Shape )
@@ -355,7 +356,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     end << GetEnd();
 
     aList.push_back( MSG_PANEL_ITEM( start, end, DARKGREEN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), board->GetLayerName( m_Layer ), DARKBROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), DARKBROWN ) );
     msg = ::CoordinateToString( m_Width );
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
 }
@@ -533,7 +534,7 @@ wxString DRAWSEGMENT::GetSelectMenuText() const
     wxString text;
     wxString temp = ::LengthDoubleToString( GetLength() );
 
-    text.Printf( _( "Pcb Graphic: %s length: %s on %s" ),
+    text.Printf( _( "Pcb Graphic: %s, length %s on %s" ),
                  GetChars( ShowShape( (STROKE_T) m_Shape ) ),
                  GetChars( temp ), GetChars( GetLayerName() ) );
 

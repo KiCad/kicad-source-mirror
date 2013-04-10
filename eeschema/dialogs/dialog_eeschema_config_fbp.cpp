@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,14 +16,21 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* sbLibsChoiceSizer;
-	sbLibsChoiceSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Component library files") ), wxHORIZONTAL );
+	wxBoxSizer* bSizerUpper;
+	bSizerUpper = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextLibsList = new wxStaticText( this, wxID_ANY, _("Component library files"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLibsList->Wrap( -1 );
+	bSizerUpper->Add( m_staticTextLibsList, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizerLibsChoice;
+	bSizerLibsChoice = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_ListLibr = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE ); 
 	m_ListLibr->SetToolTip( _("List of active library files.\nOnly library files in this list are loaded by Eeschema.\nThe order of this list is important:\nEeschema searchs for a given component using this list order priority.") );
 	m_ListLibr->SetMinSize( wxSize( 400,250 ) );
 	
-	sbLibsChoiceSizer->Add( m_ListLibr, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerLibsChoice->Add( m_ListLibr, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -49,18 +56,30 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	m_buttonDown = new wxButton( this, wxID_ANY, _("Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonDown, 0, wxALL|wxEXPAND, 5 );
 	
-	sbLibsChoiceSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	bMainSizer->Add( sbLibsChoiceSizer, 2, wxALL|wxEXPAND, 5 );
+	bSizerLibsChoice->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User defined search path") ), wxHORIZONTAL );
+	
+	bSizerUpper->Add( bSizerLibsChoice, 1, wxEXPAND, 5 );
+	
+	
+	bMainSizer->Add( bSizerUpper, 2, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizerMiddle;
+	bSizerMiddle = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextPaths = new wxStaticText( this, wxID_ANY, _("User defined search path"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPaths->Wrap( -1 );
+	bSizerMiddle->Add( m_staticTextPaths, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizerPathsChoice;
+	bSizerPathsChoice = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_listUserPaths = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE ); 
 	m_listUserPaths->SetToolTip( _("Additional paths used in this project. The priority is higher than default KiCad paths.") );
 	m_listUserPaths->SetMinSize( wxSize( 400,90 ) );
 	
-	sbSizer4->Add( m_listUserPaths, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerPathsChoice->Add( m_listUserPaths, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bUserPathsButtonsSizer;
 	bUserPathsButtonsSizer = new wxBoxSizer( wxVERTICAL );
@@ -74,19 +93,29 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	m_buttonRemovePath = new wxButton( this, wxID_REMOVE_PATH, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
 	bUserPathsButtonsSizer->Add( m_buttonRemovePath, 0, wxALL|wxEXPAND, 5 );
 	
-	sbSizer4->Add( bUserPathsButtonsSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	bMainSizer->Add( sbSizer4, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerPathsChoice->Add( bUserPathsButtonsSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	wxStaticBoxSizer* sbLibPathSizer;
-	sbLibPathSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Current search path list") ), wxVERTICAL );
+	
+	bSizerMiddle->Add( bSizerPathsChoice, 1, wxEXPAND, 5 );
+	
+	
+	bMainSizer->Add( bSizerMiddle, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizerLower;
+	bSizerLower = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextPathlist = new wxStaticText( this, wxID_ANY, _("Current search path list"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPathlist->Wrap( -1 );
+	bSizerLower->Add( m_staticTextPathlist, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_DefaultLibraryPathslistBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_NEEDED_SB ); 
 	m_DefaultLibraryPathslistBox->SetToolTip( _("System and user paths used to search and load library files and component doc files.\nSorted by decreasing priority order.") );
 	
-	sbLibPathSizer->Add( m_DefaultLibraryPathslistBox, 1, wxALL|wxEXPAND, 5 );
+	bSizerLower->Add( m_DefaultLibraryPathslistBox, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	bMainSizer->Add( sbLibPathSizer, 1, wxALL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
+	bMainSizer->Add( bSizerLower, 1, wxEXPAND, 5 );
 	
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline3, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -97,7 +126,9 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

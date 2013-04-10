@@ -3577,10 +3577,10 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     STRINGS         layerIds;       ///< indexed by PCB layer number
 
     /// maps BOARD layer number to PCB layer numbers
-    std::vector<int>    kicadLayer2pcb;
+    std::vector<LAYER_NUM> kicadLayer2pcb;
 
     /// maps PCB layer number to BOARD layer numbers
-    std::vector<int>    pcbLayer2kicad;
+    std::vector<LAYER_NUM> pcbLayer2kicad;
 
     /// used during FromSESSION() only, memory for it is not owned here.
     UNIT_RES*       routeResolution;
@@ -3608,7 +3608,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * Function findLayerName
      * returns the PCB layer index for a given layer name
      */
-    int findLayerName( const std::string& aLayerName ) const;
+    LAYER_NUM findLayerName( const std::string& aLayerName ) const;
 
     /**
      * Function readCOMPnPIN
@@ -3740,7 +3740,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      *  or delete it.
      */
     PADSTACK* makeVia( int aCopperDiameter, int aDrillDiameter,
-                               int aTopLayer, int aBotLayer );
+                       LAYER_NUM aTopLayer, LAYER_NUM aBotLayer );
 
     /**
      * Function makeVia

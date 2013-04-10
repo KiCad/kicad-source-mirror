@@ -80,7 +80,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 
     if( FichBom == NULL )
     {
-        msg = _( "Unable to create file " ) + fn.GetFullPath();
+        msg.Printf( _( "Unable to create file <%s>" ), GetChars( fn.GetFullPath() ) );
         DisplayError( this, msg );
         return;
     }

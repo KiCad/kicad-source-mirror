@@ -103,7 +103,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     int             ux0, uy0, dx, dy, radius, StAngle, EndAngle;
     int             type_trace;
     int             typeaff;
-    int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     PCB_BASE_FRAME* frame;
     MODULE* module = (MODULE*) m_Parent;
 
@@ -146,7 +146,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
             typeaff = SKETCH;
     }
 
-    if( DC->LogicalToDeviceXRel( m_Width ) < MIN_DRAW_WIDTH )
+    if( DC->LogicalToDeviceXRel( m_Width ) <= MIN_DRAW_WIDTH )
         typeaff = LINE;
 
     switch( type_trace )
@@ -250,9 +250,10 @@ void EDGE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Value" ), module->GetValue(), BLUE ) );
     msg.Printf( wxT( "%8.8lX" ), module->GetTimeStamp() );
     aList.push_back( MSG_PANEL_ITEM( _( "TimeStamp" ), msg, BROWN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ),
-                                     RED ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Seg Layer" ), board->GetLayerName( GetLayer() ), RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Mod Layer" ), 
+                     module->GetLayerName(), RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Seg Layer" ), 
+                     GetLayerName(), RED ) );
     msg = ::CoordinateToString( m_Width );
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, BLUE ) );
 }
@@ -262,10 +263,10 @@ void EDGE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 wxString EDGE_MODULE::GetSelectMenuText() const
 {
     wxString text;
-
-    text << _( "Graphic" ) << wxT( " " ) << ShowShape( (STROKE_T) m_Shape );
-    text << wxT( " (" ) << GetLayerName() << wxT( ")" );
-    text << _( " of " ) << ( (MODULE*) GetParent() )->GetReference();
+    text.Printf( _( "Graphic (%s) on %s of %s" ),
+            GetChars( ShowShape( (STROKE_T) m_Shape ) ),
+            GetChars( GetLayerName() ),
+            GetChars( ((MODULE*) GetParent())->GetReference() ) );
 
     return text;
 }

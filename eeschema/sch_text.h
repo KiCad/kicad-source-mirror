@@ -262,8 +262,6 @@ public:
 
     bool IsReplaceable() const { return true; }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
-
     EDA_ITEM* Clone() const;
 
 private:
@@ -314,8 +312,6 @@ public:
     wxString GetSelectMenuText() const;
 
     BITMAP_DEF GetMenuImage() const { return  add_glabel_xpm; }
-
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
 
     EDA_ITEM* Clone() const;
 
@@ -369,8 +365,6 @@ public:
     wxString GetSelectMenuText() const;
 
     BITMAP_DEF GetMenuImage() const { return  add_hierarchical_label_xpm; }
-
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
 
     EDA_ITEM* Clone() const;
 

@@ -108,7 +108,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_append_button = new wxButton( m_top, wxID_ANY, _("Append Row"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_append_button->SetToolTip( _("Add a pcb library row to this table") );
+	m_append_button->SetToolTip( _("Add a PCB library row to this table") );
 	
 	bSizer51->Add( m_append_button, 0, wxALL, 5 );
 	

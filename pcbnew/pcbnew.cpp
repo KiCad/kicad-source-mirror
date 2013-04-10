@@ -56,17 +56,17 @@
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
 
-bool           Drc_On = true;
+bool           g_Drc_On = true;
 bool           g_AutoDeleteOldTrack = true;
 bool           g_Show_Module_Ratsnest;
 bool           g_Raccord_45_Auto = true;
 bool 	       g_Alternate_Track_Posture = false;
 bool           g_Track_45_Only_Allowed = true;  // True to allow horiz, vert. and 45deg only tracks
-bool           Segments_45_Only;                // True to allow horiz, vert. and 45deg only graphic segments
+bool           g_Segments_45_Only;                // True to allow horiz, vert. and 45deg only graphic segments
 bool           g_TwoSegmentTrackBuild = true;
 
-int            Route_Layer_TOP;
-int            Route_Layer_BOTTOM;
+LAYER_NUM      g_Route_Layer_TOP;
+LAYER_NUM      g_Route_Layer_BOTTOM;
 int            g_MaxLinksShowed;
 int            g_MagneticPadOption   = capture_cursor_in_track_tool;
 int            g_MagneticTrackOption = capture_cursor_in_track_tool;

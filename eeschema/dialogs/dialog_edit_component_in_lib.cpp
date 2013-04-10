@@ -49,18 +49,17 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::initDlg()
         return;
     }
 
-    wxString title = _( "Properties for " );
-
+    wxString title;
     bool isRoot = m_Parent->GetAliasName().CmpNoCase( component->GetName() ) == 0;
 
     if( !isRoot )
     {
-        title += m_Parent->GetAliasName() + _( " (alias of " ) + component->GetName() + wxT( ")" );
+        title.Printf( _( "Properties for %s (alias of %s)" ),
+                      GetChars( m_Parent->GetAliasName() ),
+                      GetChars( component->GetName() ) );
     }
     else
-    {
-        title += component->GetName();
-    }
+        title.Printf( _( "Properties for %s" ), GetChars( component->GetName() ) );
 
     SetTitle( title );
     InitPanelDoc();
@@ -453,7 +452,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter( wxCommandEvent& event )
 {
-    if( IsOK( this, _( "Ok to Delete FootprintFilter LIST" ) ) )
+    if( IsOK( this, _( "OK to delete the footprint filter list ?" ) ) )
     {
         m_FootprintFilterListBox->Clear();
         m_ButtonDeleteAllFootprintFilter->Enable( false );

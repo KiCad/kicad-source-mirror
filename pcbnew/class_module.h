@@ -312,7 +312,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a D_PAD object if found otherwise NULL.
      */
-    D_PAD* GetPad( const wxPoint& aPosition, int aLayerMask = ALL_LAYERS );
+    D_PAD* GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask = ALL_LAYERS );
 
     /**
      * GetPadCount

@@ -44,7 +44,11 @@
 SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_JUNCTION_T )
 {
+#if defined(KICAD_GOST)
+#define DRAWJUNCTION_DIAMETER 50   /* Diameter of junction symbol between wires by GOST*/
+#else
 #define DRAWJUNCTION_DIAMETER 32   /* Diameter of junction symbol between wires */
+#endif
     m_pos    = pos;
     m_Layer  = LAYER_JUNCTION;
     m_size.x = m_size.y = DRAWJUNCTION_DIAMETER;
@@ -121,7 +125,7 @@ void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
     if( aColor >= 0 )
         color = aColor;
     else
-        color = ReturnLayerColor( m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( aDC, aDrawMode );
 
@@ -164,9 +168,9 @@ bool SCH_JUNCTION::IsSelectStateChanged( const wxRect& aRect )
     bool previousState = IsSelected();
 
     if( aRect.Contains( m_pos ) )
-        m_Flags |= SELECTED;
+        SetFlags( SELECTED );
     else
-        m_Flags &= ~SELECTED;
+        ClearFlags( SELECTED );
 
     return previousState != IsSelected();
 }
@@ -238,6 +242,6 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
     aPlotter->Circle( m_pos, m_size.x, FILLED_SHAPE );
 }

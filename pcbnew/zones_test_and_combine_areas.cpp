@@ -53,7 +53,7 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
     bool modified = NormalizeAreaPolygon( aModifiedZonesList, modified_area );
 
     // now see if we need to clip against other areas
-    int  layer = modified_area->GetLayer();
+    LAYER_NUM layer = modified_area->GetLayer();
     bool bCheckAllAreas = TestAreaIntersections( modified_area );
 
     if( bCheckAllAreas )
@@ -62,7 +62,7 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
         CombineAllAreasInNet( aModifiedZonesList, modified_area->GetNet(), true );
     }
 
-    if( layer >= FIRST_NO_COPPER_LAYER )    // Refill non copper zones on this layer
+    if( !IsCopperLayer( layer ) )       // Refill non copper zones on this layer
     {
         for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
             if( m_ZoneDescriptorList[ia]->GetLayer() == layer )
@@ -86,7 +86,7 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
 
 
 bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
-                                  bool aUseUtility )
+                                  bool aUseLocalFlags )
 {
     if( m_ZoneDescriptorList.size() <= 1 )
         return false;
@@ -127,7 +127,8 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
                    || b1.bottom > b2.top || b1.top < b2.bottom ) )
             {
                 // check area2 against curr_area
-                if( curr_area->GetFlags() || area2->GetFlags() || aUseUtility == false )
+                if( curr_area->GetLocalFlags() || area2->GetLocalFlags()
+                    || aUseLocalFlags == false )
                 {
                     bool ret = TestAreaIntersection( curr_area, area2 );
 
@@ -350,7 +351,7 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
 
     RemoveArea( aDeletedList, area_to_combine );
 
-    area_ref->SetFlags( 1 );
+    area_ref->SetLocalFlags( 1 );
     area_ref->Outline()->Hatch();
 
     return true;

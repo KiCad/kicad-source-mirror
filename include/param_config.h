@@ -14,6 +14,31 @@
 
 
 
+/**
+ * inline ConfigBaseWriteDouble
+ * This is a helper funvtion tor write doubles in config
+ * We cannot use wxConfigBase->Write for a double, because
+ * this function uses a format with very few digits in mantissa,
+ * and truncation issues are frequent.
+ * We use here a better floatting format.
+ *
+ * Note: prior to 2.9.1, the separator was localized, and after, uses
+ * the "C" notation
+ */
+ void inline ConfigBaseWriteDouble( wxConfigBase* aConfig,
+                                    const wxString& aKey, double aValue )
+ {
+    wxString tnumber;
+
+#if wxCHECK_VERSION(2,9,1)
+    tnumber = wxString::FromCDouble( aValue, 12 );
+#else
+    tnumber.Printf( wxT("%12f"), aValue );
+#endif
+    aConfig->Write( aKey, tnumber );
+}
+
+
 /** Type of parameter in the configuration file */
 enum paramcfg_id {
     PARAM_INT,
@@ -136,7 +161,7 @@ public:
 
 public:
     PARAM_CFG_SETCOLOR( const wxChar* ident, EDA_COLOR_T* ptparam,
-                            EDA_COLOR_T default_val, const wxChar* group = NULL );
+                        EDA_COLOR_T default_val, const wxChar* group = NULL );
     PARAM_CFG_SETCOLOR( bool Insetup, const wxChar* ident, EDA_COLOR_T* ptparam,
                         EDA_COLOR_T default_val, const wxChar* group = NULL );
 

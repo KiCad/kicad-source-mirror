@@ -43,7 +43,7 @@
 
 #include <wx/imaglist.h>    // needed for wx/listctrl.h, in wxGTK 2.8.12
 #include <wx/listctrl.h>
-
+#include <layers_id_colors_and_visibility.h>
 
 
 /**
@@ -70,7 +70,7 @@ private:
                                             ///< true = pad count sort.
 
     long            m_NetFiltering;
-    std::vector<int> m_LayerId;             ///< Handle the real layer number from layer
+    std::vector<LAYER_NUM> m_LayerId;       ///< Handle the real layer number from layer
                                             ///< name position in m_LayerSelectionCtrl
 
     static wxString m_netNameShowFilter;    ///< the filter to show nets (default * "*").
@@ -85,7 +85,6 @@ private:
     void OnButtonOkClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
     void OnClose( wxCloseEvent& event );
-    void OnSize( wxSizeEvent& event );
     void OnCornerSmoothingModeChoice( wxCommandEvent& event );
 
     /**
@@ -132,9 +131,6 @@ ZONE_EDIT_T InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSe
     DIALOG_COPPER_ZONE dlg( aCaller, aSettings );
 
     ZONE_EDIT_T result = ZONE_EDIT_T( dlg.ShowModal() );
-
-    // D(printf( "%s: result:%d\n", __FUNCTION__, result );)
-
     return result;
 }
 
@@ -161,6 +157,7 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     initDialog();
 
     GetSizer()->SetSizeHints( this );
+    Center();
 }
 
 
@@ -246,17 +243,16 @@ void DIALOG_COPPER_ZONE::initDialog()
         m_settings.m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF ? 1 : 0 );
 
     // Create one column in m_LayerSelectionCtrl
-    wxListItem col0;
-    col0.SetId( 0 );
-    m_LayerSelectionCtrl->InsertColumn( 0, col0 );
+    wxListItem column0;
+    column0.SetId( 0 );
+    m_LayerSelectionCtrl->InsertColumn( 0, column0 );
     // Build copper layer list and append to layer widget
     int layerCount = board->GetCopperLayerCount();
-    int layerNumber, itemIndex;
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
-    for( int ii = 0; ii < layerCount; ii++ )
+    for( LAYER_NUM ii = FIRST_LAYER; ii < layerCount; ++ii )
     {
-        layerNumber = LAYER_N_BACK;
+        LAYER_NUM layerNumber = LAYER_N_BACK;
 
         if( layerCount <= 1 || ii < layerCount - 1 )
             layerNumber = ii;
@@ -268,11 +264,13 @@ void DIALOG_COPPER_ZONE::initDialog()
         msg = board->GetLayerName( layerNumber ).Trim();
         EDA_COLOR_T layerColor = board->GetLayerColor( layerNumber );
         imageList->Add( makeLayerBitmap( layerColor ) );
-        itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, ii );
+        int itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, ii );
 
         if( m_settings.m_CurrentZone_Layer == layerNumber )
             m_LayerSelectionCtrl->Select( itemIndex );
     }
+
+    m_LayerSelectionCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE);
 
     wxString netNameDoNotShowFilter = wxT( "N-*" );
     if( m_Config )
@@ -320,16 +318,6 @@ void DIALOG_COPPER_ZONE::OnClose( wxCloseEvent& event )
         *m_ptr = m_settings;
 
     EndModal( m_OnExitCode );
-}
-
-
-void DIALOG_COPPER_ZONE::OnSize( wxSizeEvent& event )
-{
-    Layout();
-
-    // Set layer list column width to widget width minus a few pixels
-    m_LayerSelectionCtrl->SetColumnWidth( 0, m_LayerSelectionCtrl->GetSize().x - 5 );
-    event.Skip();
 }
 
 
@@ -427,21 +415,20 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         m_settings.m_Zone_45_Only = true;
 
     m_settings.m_ThermalReliefGap = ReturnValueFromTextCtrl( *m_AntipadSizeValue );
-
     m_settings.m_ThermalReliefCopperBridge = ReturnValueFromTextCtrl( *m_CopperWidthValue );
 
     if( m_Config )
     {
-        m_Config->Write( ZONE_CLEARANCE_WIDTH_STRING_KEY,
-            (double) m_settings.m_ZoneClearance / IU_PER_MILS );
+        ConfigBaseWriteDouble( m_Config, ZONE_CLEARANCE_WIDTH_STRING_KEY,
+                               (double) m_settings.m_ZoneClearance / IU_PER_MILS );
 
-        m_Config->Write( ZONE_MIN_THICKNESS_WIDTH_STRING_KEY,
+        ConfigBaseWriteDouble( m_Config, ZONE_MIN_THICKNESS_WIDTH_STRING_KEY,
             (double) m_settings.m_ZoneMinThickness / IU_PER_MILS );
 
-        m_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
+        ConfigBaseWriteDouble( m_Config, ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
             (double) m_settings.m_ThermalReliefGap / IU_PER_MILS );
 
-        m_Config->Write( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
+        ConfigBaseWriteDouble( m_Config, ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
             (double) m_settings.m_ThermalReliefCopperBridge / IU_PER_MILS );
     }
 

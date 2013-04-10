@@ -65,7 +65,7 @@ PRINT_PARAMETERS::PRINT_PARAMETERS()
     m_XScaleAdjust          = 1.0;
     m_YScaleAdjust          = 1.0;
     m_Print_Sheet_Ref       = false;
-    m_PrintMaskLayer        = 0xFFFFFFFF;
+    m_PrintMaskLayer        = FULL_LAYERS;
     m_PrintMirror           = false;
     m_Print_Black_and_White = true;
     m_OptionPrintPage       = 1;
@@ -90,20 +90,22 @@ BOARD_PRINTOUT_CONTROLLER::BOARD_PRINTOUT_CONTROLLER( const PRINT_PARAMETERS& aP
 bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
 {
 #ifdef PCBNEW
-    int layers_count = NB_LAYERS;
+    LAYER_NUM layers_count = NB_PCB_LAYERS;
 #else
-    int layers_count = LAYER_COUNT;
+    LAYER_NUM layers_count = NB_LAYERS;
 #endif
 
-    int mask_layer = m_PrintParams.m_PrintMaskLayer;
+    LAYER_MSK mask_layer = m_PrintParams.m_PrintMaskLayer;
 
     // compute layer mask from page number if we want one page per layer
     if( m_PrintParams.m_OptionPrintPage == 0 )  // One page per layer
     {
-        int ii, jj, mask = 1;
+        int jj;
+        LAYER_NUM ii;
 
-        for( ii = 0, jj = 0; ii < layers_count; ii++ )
+        for( ii = FIRST_LAYER, jj = 0; ii < layers_count; ++ii )
         {
+            LAYER_MSK mask = GetLayerMask( ii );
             if( mask_layer & mask )
                 jj++;
 
@@ -112,8 +114,6 @@ bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
                 m_PrintParams.m_PrintMaskLayer = mask;
                 break;
             }
-
-            mask <<= 1;
         }
     }
 

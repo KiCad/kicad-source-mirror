@@ -11,6 +11,7 @@
 #include <protos.h>
 
 #include <dialog_color_config.h>
+#include <layers_id_colors_and_visibility.h>
 
 
 #define ID_COLOR_SETUP  1800
@@ -66,7 +67,7 @@ static ButtonIndex buttonGroups[] = {
 };
 
 
-static EDA_COLOR_T currentColors[ MAX_LAYER ];
+static EDA_COLOR_T currentColors[ NB_SCH_LAYERS ];
 
 
 IMPLEMENT_DYNAMIC_CLASS( DIALOG_COLOR_CONFIG, wxDialog )
@@ -129,7 +130,6 @@ void DIALOG_COLOR_CONFIG::Init()
 void DIALOG_COLOR_CONFIG::CreateControls()
 {
     wxStaticText* label;
-    int color;
     int buttonId = 1800;
     ButtonIndex* groups = buttonGroups;
 
@@ -167,12 +167,11 @@ void DIALOG_COLOR_CONFIG::CreateControls()
             wxBitmap   bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
 
             iconDC.SelectObject( bitmap );
-            color = currentColors[ buttons->m_Layer ] = ReturnLayerColor( buttons->m_Layer );
+            EDA_COLOR_T color = GetLayerColor( LayerNumber( buttons->m_Layer ) );
+            currentColors[ buttons->m_Layer ] = color;
             iconDC.SetPen( *wxBLACK_PEN );
             wxBrush brush;
-            brush.SetColour( ColorRefs[ color ].m_Red,
-                             ColorRefs[ color ].m_Green,
-                             ColorRefs[ color ].m_Blue );
+            ColorSetBrush( &brush, color );
             brush.SetStyle( wxSOLID );
 
             iconDC.SetBrush( brush );
@@ -266,9 +265,7 @@ void DIALOG_COLOR_CONFIG::SetColor( wxCommandEvent& event )
     iconDC.SelectObject( bitmap );
     wxBrush  brush;
     iconDC.SetPen( *wxBLACK_PEN );
-    brush.SetColour( ColorRefs[ color ].m_Red,
-                     ColorRefs[ color ].m_Green,
-                     ColorRefs[ color ].m_Blue );
+    ColorSetBrush( &brush, color);
     brush.SetStyle( wxSOLID );
 
     iconDC.SetBrush( brush );
@@ -290,17 +287,17 @@ bool DIALOG_COLOR_CONFIG::UpdateColorsSettings()
 
     bool warning = false;
 
-    for( int ii = 0;  ii < MAX_LAYERS;  ii++ )
+    for( LayerNumber ii = LAYER_WIRE; ii < NB_SCH_LAYERS; ++ii )
     {
         SetLayerColor( currentColors[ ii ], ii );
 
-        if( g_DrawBgColor == ReturnLayerColor( ii ) )
+        if( g_DrawBgColor == GetLayerColor( ii ) )
             warning = true;
     }
 
-    m_Parent->SetGridColor( ReturnLayerColor( LAYER_GRID ) );
+    m_Parent->SetGridColor( GetLayerColor( LAYER_GRID ) );
 
-    if( g_DrawBgColor == ReturnLayerColor( LAYER_GRID ) )
+    if( g_DrawBgColor == GetLayerColor( LAYER_GRID ) )
         warning = true;
 
     return warning;

@@ -58,11 +58,11 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
     static DECLARE_LAYERS_ORDER_LIST( layertranscode );
     static DECLARE_LAYERS_HOTKEY( layerhk );
 
-    for( int i = 0; i < LAYER_COUNT; i++ )
+    for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
     {
         wxBitmap   layerbmp( 14, 14 );
         wxString   layername;
-        int        layerid = i;
+        LAYER_NUM  layerid = i;
 
         if( m_layerorder )
             layerid = layertranscode[i];
@@ -83,33 +83,33 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
 
 
 // Returns true if the layer id is enabled (i.e. is it should be displayed)
-bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( int aLayerIndex ) const
+bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( LAYER_NUM aLayer ) const
 {
     PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
     BOARD* board = pcbFrame->GetBoard();
     wxASSERT( board != NULL );
 
-    return board->IsLayerEnabled( aLayerIndex );
+    return board->IsLayerEnabled( aLayer );
 }
 
 
 // Returns a color index from the layer id
-EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex ) const
+EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
 {
     PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
     BOARD* board = pcbFrame->GetBoard();
     wxASSERT( board != NULL );
 
-    return board->GetLayerColor( aLayerIndex );
+    return board->GetLayerColor( aLayer );
 }
 
 
 // Returns the name of the layer id
-wxString PCB_LAYER_BOX_SELECTOR::GetLayerName( int aLayerIndex ) const
+wxString PCB_LAYER_BOX_SELECTOR::GetLayerName( LAYER_NUM aLayer ) const
 {
     PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
     BOARD* board = pcbFrame->GetBoard();
     wxASSERT( board != NULL );
 
-    return board->GetLayerName( aLayerIndex );
+    return board->GetLayerName( aLayer );
 }

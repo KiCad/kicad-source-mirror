@@ -53,7 +53,7 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard );
 bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 {
     wxString    msg;
-    int         flags = 0;
+    STATUS_FLAGS flags = 0;
     bool        locate_track = false;
     bool        blockActive  = !GetScreen()->m_BlockLocate.IsIdle();
 
@@ -204,7 +204,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING,
                              _( "Delete Drawing" ), KiBitmap( delete_xpm ) );
 
-                if( item->GetLayer() > LAST_COPPER_LAYER )
+                if( !IsCopperLayer( item->GetLayer() ) )
                     AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING_LAYER,
                                  _( "Delete All Drawings on Layer" ), KiBitmap( delete_xpm ) );
             }
@@ -775,7 +775,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* me
     }
 
     // Graphic texts can be deleted only if are not currently edited.
-    if( !flags && FpText->GetType() == TEXT_is_DIVERS )
+    if( !flags && FpText->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
     {
         AddMenuItem( sub_menu_Fp_text, ID_POPUP_PCB_DELETE_TEXTMODULE,
                      _( "Delete" ), KiBitmap( delete_xpm ) );

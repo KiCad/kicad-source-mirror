@@ -24,8 +24,6 @@ class PAGE_INFO;
 */
 #define GERBER_BUFZ     4000
 
-#define GERBVIEW_LAYER_COUNT 32     // Number of different layers shown by GerbView
-
 /// List of page sizes
 extern const wxChar* g_GerberPageSizeList[8];
 

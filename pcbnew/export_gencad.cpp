@@ -136,7 +136,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 
     if( ( file = wxFopen( dlg.GetPath(), wxT( "wt" ) ) ) == NULL )
     {
-        msg = _( "Unable to create " ) + dlg.GetPath();
+        msg.Printf( _( "Unable to create <%s>" ), GetChars( dlg.GetPath() ) );
         DisplayError( this, msg ); return;
     }
 
@@ -231,8 +231,8 @@ static int ViaSort( const void* aRefptr, const void* aObjptr )
     if( padref->GetDrillValue() != padcmp->GetDrillValue() )
         return padref->GetDrillValue() - padcmp->GetDrillValue();
 
-    if( padref->ReturnMaskLayer() != padcmp->ReturnMaskLayer() )
-        return padref->ReturnMaskLayer() - padcmp->ReturnMaskLayer();
+    if( padref->GetLayerMask() != padcmp->GetLayerMask() )
+        return padref->GetLayerMask() - padcmp->GetLayerMask();
 
     return 0;
 }
@@ -258,7 +258,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     padstacks.resize( 1 ); // We count pads from 1
 
     // The master layermask (i.e. the enabled layers) for padstack generation
-    unsigned master_layermask = aPcb->GetDesignSettings().GetEnabledLayers();
+    LAYER_MSK master_layermask = aPcb->GetDesignSettings().GetEnabledLayers();
 
     fputs( "$PADS\n", aFile );
 
@@ -293,7 +293,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         viastacks.push_back( via );
         fprintf( aFile, "PAD V%d.%d.%X ROUND %g\nCIRCLE 0 0 %g\n",
                 via->GetWidth(), via->GetDrillValue(),
-                via->ReturnMaskLayer(),
+                via->GetLayerMask(),
                 via->GetDrillValue() / SCALE_FACTOR,
                 via->GetWidth() / (SCALE_FACTOR * 2) );
     }
@@ -434,14 +434,14 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     for( unsigned i = 0; i < viastacks.size(); i++ )
     {
         TRACK*   via  = viastacks[i];
-        unsigned mask = via->ReturnMaskLayer() & master_layermask;
+        LAYER_MSK mask = via->GetLayerMask() & master_layermask;
         fprintf( aFile, "PADSTACK VIA%d.%d.%X %g\n",
                  via->GetWidth(), via->GetDrillValue(), mask,
                  via->GetDrillValue() / SCALE_FACTOR );
 
-        for( int layer = 0; layer < 32; layer++ )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
         {
-            if( mask & (1 << layer) )
+            if( mask & GetLayerMask( layer ) )
             {
                 fprintf( aFile, "PAD V%d.%d.%X %s 0 0\n",
                         via->GetWidth(), via->GetDrillValue(),
@@ -463,9 +463,9 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         // Straight padstack
         fprintf( aFile, "PADSTACK PAD%d %g\n", i,
                  pad->GetDrillSize().x / SCALE_FACTOR );
-        for( int layer = 0; layer < 32; layer++ )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
         {
-            if( pad->GetLayerMask() & (1 << layer) & master_layermask )
+            if( pad->GetLayerMask() & GetLayerMask( layer ) & master_layermask )
             {
                 fprintf( aFile, "PAD P%d %s 0 0\n", i,
                         TO_UTF8( GenCADLayerName[layer] ) );
@@ -475,9 +475,9 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         // Flipped padstack
         fprintf( aFile, "PADSTACK PAD%dF %g\n", i,
                  pad->GetDrillSize().x / SCALE_FACTOR );
-        for( int layer = 0; layer < 32; layer++ )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
         {
-            if( pad->GetLayerMask() & (1 << layer) & master_layermask )
+            if( pad->GetLayerMask() & GetLayerMask( layer ) & master_layermask )
             {
                 fprintf( aFile, "PAD P%d %s 0 0\n", i,
                         TO_UTF8( GenCADLayerNameFlipped[layer] ) );
@@ -760,7 +760,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
     int      vianum = 1;
     int      old_netcode, old_width, old_layer;
     int      nbitems, ii;
-    unsigned master_layermask = aPcb->GetDesignSettings().GetEnabledLayers();
+    LAYER_MSK master_layermask = aPcb->GetDesignSettings().GetEnabledLayers();
 
     // Count items
     nbitems = 0;
@@ -836,7 +836,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
         {
             fprintf( aFile, "VIA VIA%d.%d.%X %g %g ALL %g via%d\n",
                      track->GetWidth(), track->GetDrillValue(),
-                     track->ReturnMaskLayer() & master_layermask,
+                     track->GetLayerMask() & master_layermask,
                      MapXTo( track->GetStart().x ), MapYTo( track->GetStart().y ),
                      track->GetDrillValue() / SCALE_FACTOR, vianum++ );
         }

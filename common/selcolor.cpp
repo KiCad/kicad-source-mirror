@@ -54,7 +54,7 @@ EDA_COLOR_T DisplayColorFrame( wxWindow* parent, int OldColor )
                                                             framepos, OldColor );
     color = static_cast<EDA_COLOR_T>( frame->ShowModal() );
     frame->Destroy();
-    if( color > NBCOLOR )
+    if( color > NBCOLORS )
         color = UNSPECIFIED_COLOR;
     return color;
 }
@@ -125,7 +125,7 @@ void WinEDA_SelColorFrame::Init_Dialog( int aOldColor )
     wxStdDialogButtonSizer* StdDialogButtonSizer = NULL;
     wxButton* Button = NULL;
 
-    int       ii, butt_ID, buttcolor;
+    int       ii, butt_ID;
     int       w = 20, h = 20;
     bool      ColorFound = false;
 
@@ -137,17 +137,17 @@ void WinEDA_SelColorFrame::Init_Dialog( int aOldColor )
     MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     OuterBoxSizer->Add( MainBoxSizer, 1, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
-    for( ii = 0; ColorRefs[ii].m_Name != NULL && ii < NBCOLOR; ii++ )
+    for( ii = 0; ii < NBCOLORS; ++ii )
     {
-        // Provide a separate column for every eight buttons (and their
+        // Provide a separate column for every six buttons (and their
         // associated text strings), so provide a FlexGrid Sizer with
         // eight rows and two columns.
-        if( ii % 8 == 0 )
+        if( ii % 6 == 0 )
         {
-            FlexColumnBoxSizer = new wxFlexGridSizer( 8, 2, 0, 0 );
+            FlexColumnBoxSizer = new wxFlexGridSizer( 6, 2, 0, 0 );
 
             // Specify that all of the rows can be expanded.
-            for( int ii = 0; ii < 8; ii++ )
+            for( int ii = 0; ii < 6; ii++ )
             {
                 FlexColumnBoxSizer->AddGrowableRow( ii );
             }
@@ -163,11 +163,9 @@ void WinEDA_SelColorFrame::Init_Dialog( int aOldColor )
         wxBitmap   ButtBitmap( w, h );
         wxBrush    Brush;
         iconDC.SelectObject( ButtBitmap );
-        buttcolor = ColorRefs[ii].m_Numcolor;
+        EDA_COLOR_T buttcolor = g_ColorRefs[ii].m_Numcolor;
         iconDC.SetPen( *wxBLACK_PEN );
-        Brush.SetColour( ColorRefs[buttcolor].m_Red,
-                         ColorRefs[buttcolor].m_Green,
-                         ColorRefs[buttcolor].m_Blue );
+        ColorSetBrush( &Brush, buttcolor );
         Brush.SetStyle( wxSOLID );
 
         iconDC.SetBrush( Brush );
@@ -190,7 +188,7 @@ void WinEDA_SelColorFrame::Init_Dialog( int aOldColor )
             BitmapButton->SetFocus();
         }
 
-        Label = new wxStaticText( this, -1, ColorRefs[ii].m_Name,
+        Label = new wxStaticText( this, -1, ColorGetName( buttcolor ),
                                   wxDefaultPosition, wxDefaultSize, 0 );
         FlexColumnBoxSizer->Add( Label, 1,
                                  wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |

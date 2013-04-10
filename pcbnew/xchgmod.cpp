@@ -192,7 +192,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     {
         if( ShowError )
         {
-            msg.Printf( _( "file %s not found" ), GetChars( fn.GetFullPath() ) );
+            msg.Printf( _( "file <%s> not found" ), GetChars( fn.GetFullPath() ) );
             m_WinMessages->AppendText( msg );
         }
 
@@ -207,7 +207,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     {
         if( ShowError )
         {
-            msg.Printf( _( "Unable to create file %s" ),
+            msg.Printf( _( "Unable to create file <%s>" ),
                         GetChars( tmpFileName.GetFullPath() ) );
             m_WinMessages->AppendText( msg );
         }
@@ -323,14 +323,14 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
     {
         check_module_value = true;
         value = m_CurrentModule->GetValue();
-        msg.Printf( _( "Change modules <%s> -> <%s> (val = %s)?" ),
+        msg.Printf( _( "Change modules %s -> %s (for value = %s)?" ),
                     GetChars( m_CurrentModule->GetLibRef() ),
                     GetChars( newmodulename ),
                     GetChars( m_CurrentModule->GetValue() ) );
     }
     else
     {
-        msg.Printf( _( "Change modules <%s> -> <%s> ?" ),
+        msg.Printf( _( "Change modules %s -> %s ?" ),
                     GetChars( lib_reference ), GetChars( newmodulename ) );
     }
 
@@ -462,7 +462,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
     namecmp    = new_module;
 
     /* Load module. */
-    line.Printf( _( "Change module %s (%s)  " ),
+    line.Printf( _( "Change module %s (from %s)  " ),
                  GetChars( Module->GetReference() ),
                  GetChars( oldnamecmp ) );
     m_WinMessages->AppendText( line );
@@ -480,7 +480,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
     if( Module == m_CurrentModule )
         m_CurrentModule = NewModule;
 
-    m_WinMessages->AppendText( wxT( "Ok\n" ) );
+    m_WinMessages->AppendText( wxT( "OK\n" ) );
 
     m_Parent->Exchange_Module( Module, NewModule, aUndoPickList );
 

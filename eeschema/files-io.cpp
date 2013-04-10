@@ -336,7 +336,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
     }
 
     // Reloading configuration.
-    msg = _( "Ready\nWorking dir: \n" ) + wxGetCwd();
+    msg.Printf( _( "Ready\nWorking dir: <%s>\n" ), GetChars( wxGetCwd() ) );
     PrintMsg( msg );
 
     LoadProjectFile( wxEmptyString, false );

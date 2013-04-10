@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,20 +16,21 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* sbLibsChoiceSizer;
-	sbLibsChoiceSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint library files") ), wxHORIZONTAL );
+	wxBoxSizer* bLibsChoiceSizer;
+	bLibsChoiceSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxBoxSizer* bLibsButtonsSizer;
-	bLibsButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
+	m_staticTextLibs = new wxStaticText( this, wxID_ANY, _("Footprint library files"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLibs->Wrap( -1 );
+	bLibsChoiceSizer->Add( m_staticTextLibs, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	
-	sbLibsChoiceSizer->Add( bLibsButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	wxBoxSizer* bLibsChoiceListSizer;
+	bLibsChoiceListSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_ListLibr = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE ); 
 	m_ListLibr->SetToolTip( _("List of active library files.\nOnly library files in this list are loaded by Pcbnew.\nThe order of this list is important:\nPcbnew searchs for a given footprint using this list order priority.") );
 	m_ListLibr->SetMinSize( wxSize( 400,90 ) );
 	
-	sbLibsChoiceSizer->Add( m_ListLibr, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLibsChoiceListSizer->Add( m_ListLibr, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -56,37 +57,51 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	bRightSizer->Add( m_buttonDown, 0, wxALL, 5 );
 	
 	
-	sbLibsChoiceSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bLibsChoiceListSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bMainSizer->Add( sbLibsChoiceSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bLibsChoiceSizer->Add( bLibsChoiceListSizer, 1, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbModulesDocSizer;
-	sbModulesDocSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint documentation file") ), wxHORIZONTAL );
+	
+	bMainSizer->Add( bLibsChoiceSizer, 2, wxEXPAND, 5 );
+	
+	wxBoxSizer* bModulesDocSizer;
+	bModulesDocSizer = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextModulesDoc = new wxStaticText( this, wxID_ANY, _("Footprint documentation file"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextModulesDoc->Wrap( -1 );
+	bModulesDocSizer->Add( m_staticTextModulesDoc, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizerDoc;
+	bSizerDoc = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_TextHelpModulesFileName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbModulesDocSizer->Add( m_TextHelpModulesFileName, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_TextHelpModulesFileName->SetMaxLength( 0 ); 
+	bSizerDoc->Add( m_TextHelpModulesFileName, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonModDoc = new wxButton( this, wxID_BROWSE_MOD_DOC, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbModulesDocSizer->Add( m_buttonModDoc, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
+	bSizerDoc->Add( m_buttonModDoc, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
 	
 	
-	bMainSizer->Add( sbModulesDocSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bModulesDocSizer->Add( bSizerDoc, 1, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User defined search paths") ), wxHORIZONTAL );
 	
-	sbSizer4->SetMinSize( wxSize( 400,70 ) ); 
-	wxBoxSizer* bUserListSizer;
-	bUserListSizer = new wxBoxSizer( wxVERTICAL );
+	bMainSizer->Add( bModulesDocSizer, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizerPaths;
+	bSizerPaths = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextPaths = new wxStaticText( this, wxID_ANY, _("User defined search paths"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPaths->Wrap( -1 );
+	bSizerPaths->Add( m_staticTextPaths, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizerPathsChoice;
+	bSizerPathsChoice = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_listUserPaths = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	m_listUserPaths->SetToolTip( _("Additional paths used in this project. The priority is higher than default KiCad paths.") );
 	
-	bUserListSizer->Add( m_listUserPaths, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	
-	sbSizer4->Add( bUserListSizer, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bSizerPathsChoice->Add( m_listUserPaths, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bUserPathsButtonsSizer;
 	bUserPathsButtonsSizer = new wxBoxSizer( wxVERTICAL );
@@ -101,28 +116,29 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	bUserPathsButtonsSizer->Add( m_buttonRemovePath, 0, wxALL|wxBOTTOM, 5 );
 	
 	
-	sbSizer4->Add( bUserPathsButtonsSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	bSizerPathsChoice->Add( bUserPathsButtonsSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	
-	bMainSizer->Add( sbSizer4, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	wxStaticBoxSizer* sbLibPathSizer;
-	sbLibPathSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Current search path list") ), wxVERTICAL );
-	
-	wxBoxSizer* bUserLibPathSizer;
-	bUserLibPathSizer = new wxBoxSizer( wxHORIZONTAL );
+	bSizerPaths->Add( bSizerPathsChoice, 1, wxEXPAND, 5 );
 	
 	
-	sbLibPathSizer->Add( bUserLibPathSizer, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bSizerPaths, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bLibPathSizer;
+	bLibPathSizer = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextPathList = new wxStaticText( this, wxID_ANY, _("Current search path list"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPathList->Wrap( -1 );
+	bLibPathSizer->Add( m_staticTextPathList, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_DefaultLibraryPathslistBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_NEEDED_SB ); 
 	m_DefaultLibraryPathslistBox->SetToolTip( _("System and user paths used to search and load library files and component doc files.\nSorted by decreasing priority order.") );
 	m_DefaultLibraryPathslistBox->SetMinSize( wxSize( -1,70 ) );
 	
-	sbLibPathSizer->Add( m_DefaultLibraryPathslistBox, 0, wxALL|wxEXPAND, 5 );
+	bLibPathSizer->Add( m_DefaultLibraryPathslistBox, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bMainSizer->Add( sbLibPathSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bLibPathSizer, 1, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -139,7 +155,6 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

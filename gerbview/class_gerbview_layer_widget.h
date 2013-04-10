@@ -42,11 +42,14 @@
 class GERBER_LAYER_WIDGET : public LAYER_WIDGET
 {
     GERBVIEW_FRAME*    myframe;
+    bool m_alwaysShowActiveLayer;   // If true: Only shows the current active layer
+                                    // even if it is changed
 
     // popup menu ids.
-#define ID_SHOW_ALL_COPPERS             wxID_HIGHEST
-#define ID_SHOW_NO_COPPERS              (wxID_HIGHEST+1)
-#define ID_SHOW_NO_COPPERS_BUT_ACTIVE   (wxID_HIGHEST+2)
+#define ID_SHOW_ALL_LAYERS                      wxID_HIGHEST
+#define ID_SHOW_NO_LAYERS                       (wxID_HIGHEST+1)
+#define ID_SHOW_NO_LAYERS_BUT_ACTIVE            (wxID_HIGHEST+2)
+#define ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE     (wxID_HIGHEST+3)
 
     /**
      * Function OnRightDownLayers
@@ -88,9 +91,9 @@ public:
     void ReFillRender();
 
     //-----<implement LAYER_WIDGET abstract callback functions>-----------
-    void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor );
-    bool OnLayerSelect( int aLayer );
-    void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
+    void OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor );
+    bool OnLayerSelect( LAYER_NUM aLayer );
+    void OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal );
     void OnRenderColorChange( int aId, EDA_COLOR_T aColor );
     void OnRenderEnable( int aId, bool isEnabled );
     /**
@@ -100,6 +103,18 @@ public:
      */
     void SetLayersManagerTabsText( );
     //-----</implement LAYER_WIDGET abstract callback functions>----------
+
+    /**
+     * Function OnLayerSelected
+     * ensure the active layer is visible, and other layers not visible
+     * when m_alwaysShowActiveLayer is true
+     * Otherwise do nothing.
+     * @return true m_alwaysShowActiveLayer is true and the canvas is refreshed,
+     * and false if do nothing
+     */
+    bool OnLayerSelected();     // postprocess after an active layer selection
+                                // ensure active layer visible if
+                                // m_alwaysShowActiveCopperLayer is true;
 
     /**
      * Function UpdateLayerIcons

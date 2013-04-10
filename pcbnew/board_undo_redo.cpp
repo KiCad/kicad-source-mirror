@@ -198,7 +198,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     if( aItem->Type() != PCB_MODULE_T && aItem->Type() != PCB_ZONE_AREA_T )
     {
         // These items have a global swap function.
-        int layer, layerimg;
+        LAYER_NUM layer, layerimg;
         layer    = aItem->GetLayer();
         layerimg = aImage->GetLayer();
         aItem->SetLayer( layerimg );

@@ -56,7 +56,7 @@ public:
      * returns a bit-mask of all the layers that are visible
      * @return int - the visible layers in bit-mapped form.
      */
-    int  GetVisibleLayers() const;
+    LAYER_MSK GetVisibleLayers() const;
 
     /**
      * Function SetVisibleAlls
@@ -70,31 +70,27 @@ public:
      * changes the bit-mask of visible layers
      * @param aMask = The new bit-mask of visible layers
      */
-    void SetVisibleLayers( int aMask );
+    void SetVisibleLayers( LAYER_MSK aMask );
 
     /**
      * Function IsLayerVisible
      * tests whether a given layer is visible
-     * @param aLayerIndex = The index of the layer to be tested
+     * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool IsLayerVisible( int aLayerIndex ) const
+    bool IsLayerVisible( LAYER_NUM aLayer ) const
     {
-        // @@IMB: Altough Pcbnew uses only 29, GerbView uses all 32 layers
-        if( aLayerIndex < 0 || aLayerIndex >= 32 )
-            return false;
-
         // If a layer is disabled, it is automatically invisible
-        return (bool) ( m_VisibleLayers & m_EnabledLayers & (1 << aLayerIndex) );
+        return m_VisibleLayers & m_EnabledLayers & GetLayerMask( aLayer );
     }
 
     /**
      * Function SetLayerVisibility
      * changes the visibility of a given layer
-     * @param aLayerIndex = The index of the layer to be changed
+     * @param aLayer = The layer to be changed
      * @param aNewState = The new visibility state of the layer
      */
-    void SetLayerVisibility( int aLayerIndex, bool aNewState );
+    void SetLayerVisibility( LAYER_NUM aLayer, bool aNewState );
 
     /**
      * Function GetVisibleElements
@@ -143,7 +139,7 @@ public:
      * returns a bit-mask of all the layers that are enabled
      * @return int - the enabled layers in bit-mapped form.
      */
-    inline int GetEnabledLayers() const
+    inline LAYER_MSK GetEnabledLayers() const
     {
         return m_EnabledLayers;
     }
@@ -153,17 +149,17 @@ public:
      * changes the bit-mask of enabled layers
      * @param aMask = The new bit-mask of enabled layers
      */
-    void SetEnabledLayers( int aMask );
+    void SetEnabledLayers( LAYER_MSK aMask );
 
     /**
      * Function IsLayerEnabled
      * tests whether a given layer is enabled
-     * @param aLayerIndex = The index of the layer to be tested
+     * @param aLayer = The of the layer to be tested
      * @return bool - true if the layer is enabled
      */
-    bool IsLayerEnabled( int aLayerIndex ) const
+    bool IsLayerEnabled( LAYER_NUM aLayer ) const
     {
-        return bool( m_EnabledLayers & (1 << aLayerIndex) );
+        return m_EnabledLayers & GetLayerMask( aLayer );
     }
 
     /**
@@ -194,11 +190,11 @@ public:
     void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
 
 private:
-    int     m_CopperLayerCount;     ///< Number of copper layers for this design
-    int     m_EnabledLayers;        ///< Bit-mask for layer enabling
-    int     m_VisibleLayers;        ///< Bit-mask for layer visibility
-    int     m_VisibleElements;      ///< Bit-mask for element category visibility
-    int     m_boardThickness;       ///< Board thickness for 3D viewer
+    int       m_CopperLayerCount;   ///< Number of copper layers for this design
+    LAYER_MSK m_EnabledLayers;      ///< Bit-mask for layer enabling
+    LAYER_MSK m_VisibleLayers;      ///< Bit-mask for layer visibility
+    int       m_VisibleElements;    ///< Bit-mask for element category visibility
+    int       m_boardThickness;     ///< Board thickness for 3D viewer
 };
 
 #endif  // BOARD_DESIGN_SETTINGS_H_

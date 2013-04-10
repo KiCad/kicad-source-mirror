@@ -48,7 +48,7 @@
 
 namespace PCAD2KICAD {
 
-int PCB::GetKiCadLayer( int aPCadLayer )
+LAYER_NUM PCB::GetKiCadLayer( int aPCadLayer )
 {
     wxASSERT( aPCadLayer >= 0 && aPCadLayer < MAX_PCAD_LAYER_QTY );
     return m_layersMap[aPCadLayer].KiCadLayer;
@@ -447,9 +447,7 @@ void PCB::ConnectPinToNet( wxString aCompRef, wxString aPinRef, wxString aNetNam
 
 int PCB::FindLayer( wxString aLayerName )
 {
-    int i;
-
-    for ( i = 0; i < (int) m_layersStackup.GetCount(); i++ )
+    for ( LAYER_NUM i = FIRST_COPPER_LAYER; i < (int)m_layersStackup.GetCount(); ++i )
     {
         if( m_layersStackup[i] == aLayerName )
             return i;
@@ -479,7 +477,7 @@ int PCB::FindLayer( wxString aLayerName )
 void PCB::MapLayer( XNODE* aNode )
 {
     wxString    lName, layerType;
-    int         KiCadLayer;
+    LAYER_NUM   KiCadLayer;
     long        num = 0;
 
     aNode->GetAttribute( wxT( "Name" ), &lName );
@@ -509,12 +507,12 @@ void PCB::MapLayer( XNODE* aNode )
         KiCadLayer = EDGE_N;
     else
     {
-        KiCadLayer = FindLayer( lName );
+        int layernum = FindLayer( lName );
 
-        if( KiCadLayer == -1 )
+        if( layernum == -1 )
             KiCadLayer = DRAW_N;    // default
         else
-            KiCadLayer = FIRST_COPPER_LAYER + m_layersStackup.GetCount() - 1 - KiCadLayer;
+            KiCadLayer = FIRST_COPPER_LAYER + m_layersStackup.GetCount() - 1 - layernum;
     }
 
     if( FindNode( aNode, wxT( "layerNum" ) ) )

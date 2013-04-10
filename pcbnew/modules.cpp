@@ -129,7 +129,7 @@ void PCB_EDIT_FRAME::StartMoveModule( MODULE* aModule, wxDC* aDC,
             TRACK* segm = g_DragSegmentList[ii].m_Track;
             itemWrapper.SetItem( segm );
             itemWrapper.SetLink( segm->Clone() );
-            itemWrapper.GetLink()->SetState( IN_EDIT, OFF );
+            itemWrapper.GetLink()->SetState( IN_EDIT, false );
             s_PickedList.PushItem( itemWrapper );
         }
 
@@ -179,7 +179,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
             {
                 pt_segm = g_DragSegmentList[ii].m_Track;
                 pt_segm->Draw( Panel, DC, GR_XOR );
-                pt_segm->SetState( IN_EDIT, OFF );
+                pt_segm->SetState( IN_EDIT, false );
                 g_DragSegmentList[ii].RestoreInitialValues();
                 pt_segm->Draw( Panel, DC, GR_OR );
             }
@@ -276,7 +276,7 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeD
 
     /* Remove module from list, and put it in undo command list */
     m_Pcb->m_Modules.Remove( aModule );
-    aModule->SetState( IS_DELETED, ON );
+    aModule->SetState( IS_DELETED, true );
     SaveCopyInUndoList( aModule, UR_DELETED );
 
     if( aDC && GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
@@ -404,7 +404,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         TRACK * track = g_DragSegmentList[ii].m_Track;
-        track->SetState( IN_EDIT, OFF );
+        track->SetState( IN_EDIT, false );
 
         if( aDC )
             track->Draw( m_canvas, aDC, GR_OR );

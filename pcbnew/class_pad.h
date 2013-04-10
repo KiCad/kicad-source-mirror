@@ -186,8 +186,8 @@ public:
     void SetDrillShape( PAD_SHAPE_T aDrillShape ) { m_DrillShape = aDrillShape; }
     PAD_SHAPE_T GetDrillShape() const           { return m_DrillShape; }
 
-    void SetLayerMask( int aLayerMask )         { m_layerMask = aLayerMask; }
-    int GetLayerMask() const                    { return m_layerMask; }
+    void SetLayerMask( LAYER_MSK aLayerMask )         { m_layerMask = aLayerMask; }
+    LAYER_MSK GetLayerMask() const                    { return m_layerMask; }
 
     void SetAttribute( PAD_ATTR_T aAttribute );
     PAD_ATTR_T GetAttribute() const             { return m_Attribute; }
@@ -345,7 +345,7 @@ public:
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
-    bool IsOnLayer( int aLayer ) const;
+    bool IsOnLayer( LAYER_NUM aLayer ) const;
 
     bool HitTest( const wxPoint& aPosition );
 
@@ -457,7 +457,7 @@ private:
      */
     wxPoint     m_Offset;
 
-    int         m_layerMask;        ///< Bitwise layer :1= copper layer, 15= cmp,
+    LAYER_MSK   m_layerMask;        ///< Bitwise layer :1= copper layer, 15= cmp,
                                     ///< 2..14 = internal layers
                                     ///< 16 .. 31 = technical layers
 

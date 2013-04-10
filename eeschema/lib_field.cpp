@@ -523,15 +523,15 @@ EDA_COLOR_T LIB_FIELD::GetDefaultColor()
     switch( m_id )
     {
     case REFERENCE:
-        color = ReturnLayerColor( LAYER_REFERENCEPART );
+        color = GetLayerColor( LAYER_REFERENCEPART );
         break;
 
     case VALUE:
-        color = ReturnLayerColor( LAYER_VALUEPART );
+        color = GetLayerColor( LAYER_VALUEPART );
         break;
 
     default:
-        color = ReturnLayerColor( LAYER_FIELDS );
+        color = GetLayerColor( LAYER_FIELDS );
         break;
     }
 
@@ -659,7 +659,7 @@ wxString LIB_FIELD::GetSelectMenuText() const
 }
 
 
-void LIB_FIELD::BeginEdit( int aEditMode, const wxPoint aPosition )
+void LIB_FIELD::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
     wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED ) ) != 0,
                  wxT( "Invalid edit mode for LIB_FIELD object." ) );

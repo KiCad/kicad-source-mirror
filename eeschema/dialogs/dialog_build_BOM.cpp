@@ -472,7 +472,7 @@ void DIALOG_BUILD_BOM::CreateSpreadSheetPartsShortList( )
     if( ( f = wxFopen( m_listFileName, wxT( "wt" ) ) ) == NULL )
     {
         wxString msg;
-        msg.Printf( _( "Failed to open file '%s'" ), GetChars(m_listFileName) );
+        msg.Printf( _( "Failed to open file <%s>" ), GetChars(m_listFileName) );
         DisplayError( this, msg );
         return;
     }
@@ -481,7 +481,7 @@ void DIALOG_BUILD_BOM::CreateSpreadSheetPartsShortList( )
     bom_lister.SetCvsFormOn( s_ExportSeparatorSymbol );
 
     // Set the list of fields to add to list
-    for( int ii = FOOTPRINT; ii < FIELD8; ii++ )
+    for( int ii = FOOTPRINT; ii <= FIELD8; ii++ )
         if( IsFieldChecked( ii ) )
             bom_lister.AddFieldIdToPrintList( ii );
     // Write the list of components grouped by values:
@@ -509,8 +509,7 @@ void DIALOG_BUILD_BOM::CreateSpreadSheetPartsFullList( bool aIncludeSubComponent
 
     if( ( f = wxFopen( m_listFileName, wxT( "wt" ) ) ) == NULL )
     {
-        msg = _( "Failed to open file " );
-        msg << m_listFileName;
+        msg.Printf( _( "Failed to open file <%s>" ), GetChars( m_listFileName ) );
         DisplayError( this, msg );
         return;
     }
@@ -530,7 +529,7 @@ void DIALOG_BUILD_BOM::CreateSpreadSheetPartsFullList( bool aIncludeSubComponent
                                  aIncludeSubComponents );
 
     // Set the list of fields to add to list
-    for( int ii = FOOTPRINT; ii < FIELD8; ii++ )
+    for( int ii = FOOTPRINT; ii <= FIELD8; ii++ )
         if( IsFieldChecked( ii ) )
             bom_lister.AddFieldIdToPrintList( ii );
 
@@ -553,8 +552,7 @@ void DIALOG_BUILD_BOM::CreatePartsAndLabelsFullList( bool aIncludeSubComponents 
 
     if( ( f = wxFopen( m_listFileName, wxT( "wt" ) ) ) == NULL )
     {
-        msg = _( "Failed to open file " );
-        msg << m_listFileName;
+        msg.Printf( _( "Failed to open file <%s>" ), GetChars( m_listFileName ) );
         DisplayError( this, msg );
         return;
     }
@@ -564,7 +562,7 @@ void DIALOG_BUILD_BOM::CreatePartsAndLabelsFullList( bool aIncludeSubComponents 
     bom_lister.SetCvsFormOff();
     bom_lister.SetPrintLocation( s_Add_Location );
     // Set the list of fields to add to list
-    for( int ii = FOOTPRINT; ii < FIELD8; ii++ )
+    for( int ii = FOOTPRINT; ii <= FIELD8; ii++ )
         if( IsFieldChecked( ii ) )
             bom_lister.AddFieldIdToPrintList( ii );
 

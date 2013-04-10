@@ -58,7 +58,7 @@ bool sort_schematic_items( const SCH_ITEM* aItem1, const SCH_ITEM* aItem2 )
 SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType ) :
     EDA_ITEM( aParent, aType )
 {
-    m_Layer = 0;
+    m_Layer = LAYER_WIRE; // It's only a default, in fact
 }
 
 

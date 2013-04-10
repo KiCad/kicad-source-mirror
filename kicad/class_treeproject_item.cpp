@@ -151,7 +151,7 @@ bool TREEPROJECT_ITEM::Delete( bool check )
 {
     wxString        msg;
 
-    msg.Printf( _( "Do you really want to delete '%s'" ), GetChars( GetFileName() ) );
+    msg.Printf( _( "Do you really want to delete <%s>" ), GetChars( GetFileName() ) );
     wxMessageDialog dialog( m_parent, msg,
                             _( "Delete File" ), wxYES_NO | wxICON_QUESTION );
 

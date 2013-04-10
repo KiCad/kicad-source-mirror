@@ -165,7 +165,7 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
     wxString msg;
     D_CODE*  dcode;
     FILE*    dest;
-    int      layer = getActiveLayer();
+    LAYER_NUM      layer = getActiveLayer();
     int      type_outil;
 
     if( g_GERBER_List[layer] == NULL )
@@ -185,7 +185,7 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
     dest = wxFopen( D_Code_FullFileName, wxT( "rt" ) );
     if( dest == 0 )
     {
-        msg = _( "File " ) + D_Code_FullFileName + _( " not found" );
+        msg.Printf( _( "File <%s> not found" ), GetChars( D_Code_FullFileName ) );
         DisplayError( this, msg, 10 );
         return -1;
     }

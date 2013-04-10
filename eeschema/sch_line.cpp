@@ -49,7 +49,6 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
 {
     m_start = pos;
     m_end   = pos;
-    m_width = 0;        // Default thickness used
     m_startIsDangling = m_endIsDangling = false;
 
     switch( layer )
@@ -74,7 +73,6 @@ SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
 {
     m_start = aLine.m_start;
     m_end = aLine.m_end;
-    m_width = aLine.m_width;
     m_startIsDangling = m_endIsDangling = false;
 }
 
@@ -107,7 +105,6 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
                                  << " layer=\"" << m_Layer << '"'
-                                 << " width=\"" << m_width << '"'
                                  << " startIsDangling=\"" << m_startIsDangling
                                  << '"' << " endIsDangling=\""
                                  << m_endIsDangling << '"' << ">"
@@ -210,14 +207,11 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 int SCH_LINE::GetPenSize() const
 {
-    int pensize = ( m_width == 0 ) ? GetDefaultLineThickness() : m_width;
 
     if( m_Layer == LAYER_BUS )
-    {
-        pensize = ( m_width == 0 ) ? GetDefaultBusThickness() : m_width;
-    }
+        return GetDefaultBusThickness();
 
-    return pensize;
+    return GetDefaultLineThickness();
 }
 
 
@@ -230,7 +224,7 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
     if( Color >= 0 )
         color = Color;
     else
-        color = ReturnLayerColor( m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -436,22 +430,22 @@ bool SCH_LINE::IsSelectStateChanged( const wxRect& aRect )
 
     if( aRect.Contains( m_start ) && aRect.Contains( m_end ) )
     {
-        m_Flags |= SELECTED;
-        m_Flags &= ~(STARTPOINT | ENDPOINT);
+        SetFlags( SELECTED );
+        ClearFlags( STARTPOINT | ENDPOINT );
     }
     else if( aRect.Contains( m_start ) )
     {
-        m_Flags &= ~STARTPOINT;
-        m_Flags |= ( SELECTED | ENDPOINT );
+        ClearFlags( STARTPOINT );
+        SetFlags( SELECTED | ENDPOINT );
     }
     else if( aRect.Contains( m_end ) )
     {
-        m_Flags &= ~ENDPOINT;
-        m_Flags |= ( SELECTED | STARTPOINT );
+        ClearFlags( ENDPOINT );
+        SetFlags( SELECTED | STARTPOINT );
     }
     else
     {
-        m_Flags &= ~( SELECTED | STARTPOINT | ENDPOINT );
+        ClearFlags( SELECTED | STARTPOINT | ENDPOINT );
     }
 
     return previousState != IsSelected();
@@ -602,7 +596,7 @@ bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_LINE::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
     aPlotter->SetCurrentLineWidth( GetPenSize() );
 
     if( m_Layer == LAYER_NOTES )

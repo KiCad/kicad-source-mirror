@@ -37,8 +37,9 @@
 #include <gerbview.h>
 #include <class_gbr_layout.h>
 #include <class_gbr_screen.h>
+#include <layers_id_colors_and_visibility.h>
 
-#define NO_AVAILABLE_LAYERS -1
+#define NO_AVAILABLE_LAYERS UNDEFINED_LAYER
 
 class DCODE_SELECTION_BOX;
 class GERBER_LAYER_WIDGET;
@@ -144,10 +145,10 @@ public:
     void                SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo = true );
 
     /** Install the dialog box for layer selection
-     * @param aDefaultLayer = Preselection (NB_LAYERS for "(Deselect)" layer)
+     * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
      * @param aCopperLayerCount = number of copper layers
      * @param aShowDeselectOption = display a "(Deselect)" radiobutton (when set to true)
-     * @return new layer value (NB_LAYERS when "(Deselect)" radiobutton selected),
+     * @return new layer value (NB_PCB_LAYERS when "(Deselect)" radiobutton selected),
      *                         or -1 if canceled
      *
      * Providing the option to also display a "(Deselect)" radiobutton makes the
@@ -158,7 +159,7 @@ public:
      * different radiobutton is clicked on) prior to then clicking on the "Deselect"
      * button provided within the "Layer selection:" dialog box).
      */
-    int SelectPCBLayer( int aDefaultLayer, int aOpperLayerCount, bool aNullLayer = false );
+    LAYER_NUM SelectPCBLayer( LAYER_NUM aDefaultLayer, int aOpperLayerCount, bool aNullLayer = false );
 
 protected:
     GERBER_LAYER_WIDGET*    m_LayersManager;
@@ -299,7 +300,7 @@ public:
      * Returns a bit-mask of all the layers that are visible
      * @return int - the visible layers in bit-mapped form.
      */
-    int     GetVisibleLayers() const;
+    LAYER_MSK GetVisibleLayers() const;
 
     /**
      * Function SetVisibleLayers
@@ -307,15 +308,15 @@ public:
      * changes the bit-mask of visible layers
      * @param aLayerMask = The new bit-mask of visible layers
      */
-    void    SetVisibleLayers( int aLayerMask );
+    void    SetVisibleLayers( LAYER_MSK aLayerMask );
 
     /**
      * Function IsLayerVisible
      * tests whether a given layer is visible
-     * @param aLayerIndex = The index of the layer to be tested
+     * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool    IsLayerVisible( int aLayerIndex ) const;
+    bool    IsLayerVisible( LAYER_NUM aLayer ) const;
 
     /**
      * Function GetVisibleElementColor
@@ -329,13 +330,13 @@ public:
      * Function GetLayerColor
      * gets a layer color for any valid layer.
      */
-    EDA_COLOR_T GetLayerColor( int aLayer ) const;
+    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const;
 
     /**
      * Function SetLayerColor
      * changes a layer color for any valid layer.
      */
-    void    SetLayerColor( int aLayer, EDA_COLOR_T aColor );
+    void    SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor );
 
     /**
      * Function GetNegativeItemsColor
@@ -387,13 +388,13 @@ public:
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    void    setActiveLayer( int aLayer, bool doLayerWidgetUpdate = true );
+    void    setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
 
     /**
      * Function getActiveLayer
      * returns the active layer
      */
-    int     getActiveLayer();
+    LAYER_NUM getActiveLayer();
 
     /**
      * Function getNextAvailableLayer
@@ -402,7 +403,7 @@ public:
      * @param aLayer The first layer to search.
      * @return The first empty layer found or NO_AVAILABLE_LAYERS.
      */
-    int     getNextAvailableLayer( int aLayer = 0 ) const;
+    LAYER_NUM getNextAvailableLayer( LAYER_NUM aLayer = FIRST_LAYER ) const;
 
     bool hasAvailableLayers() const
     {
@@ -716,7 +717,7 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void    PrintPage( wxDC* aDC, int aPrintMasklayer, bool aPrintMirrorMode,
+    virtual void    PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer, bool aPrintMirrorMode,
                                void* aData = NULL );
 
     /**

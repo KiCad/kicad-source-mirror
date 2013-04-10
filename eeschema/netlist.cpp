@@ -49,15 +49,21 @@
 const SCH_SHEET_PATH BOM_LABEL::emptySheetPath;
 
 
+enum BUS_OR_WIRE
+{
+    IS_WIRE = 0,
+    IS_BUS = 1
+};
+
 // Buffer to build the list of items used in netlist and erc calculations
 NETLIST_OBJECT_LIST g_NetObjectslist;
 
 //#define NETLIST_DEBUG
 
-static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus );
+static void PropageNetCode( int OldNetCode, int NewNetCode, BUS_OR_WIRE IsBus );
 static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel );
-static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus, int start );
-static void SegmentToPointConnect( NETLIST_OBJECT* Jonction, int IsBus, int start );
+static void PointToPointConnect( NETLIST_OBJECT* Ref, BUS_OR_WIRE IsBus, int start );
+static void SegmentToPointConnect( NETLIST_OBJECT* Jonction, BUS_OR_WIRE IsBus, int start );
 static void LabelConnect( NETLIST_OBJECT* Label );
 static void ConnectBusLabels( NETLIST_OBJECT_LIST& aNetItemBuffer );
 static void SetUnconnectedFlag( NETLIST_OBJECT_LIST& aNetItemBuffer );
@@ -140,14 +146,14 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     if( g_NetObjectslist.size() == 0 )
         return;  // no objects
 
-    activity << wxT( " " ) << _( "net count =" ) << wxT( " " ) << g_NetObjectslist.size();
+    activity += wxString::Format( _( " net count = %u" ), g_NetObjectslist.size() );
     SetStatusText( activity );
 
     /* Sort objects by Sheet */
 
     sort( g_NetObjectslist.begin(), g_NetObjectslist.end(), SortItemsBySheet );
 
-    activity << wxT( ",  " ) << _( "connections" ) << wxT( "..." );
+    activity += _( ", connections... " );
     SetStatusText( activity );
 
     sheet = &(g_NetObjectslist[0]->m_SheetList);
@@ -184,7 +190,7 @@ void SCH_EDIT_FRAME::BuildNetListBase()
                 LastNetCode++;
             }
 
-            PointToPointConnect( net_item, 0, istart );
+            PointToPointConnect( net_item, IS_WIRE, istart );
             break;
 
         case NET_JUNCTION:
@@ -195,7 +201,7 @@ void SCH_EDIT_FRAME::BuildNetListBase()
                 LastNetCode++;
             }
 
-            SegmentToPointConnect( net_item, 0, istart );
+            SegmentToPointConnect( net_item, IS_WIRE, istart );
 
             /* Control of the junction, on BUS. */
             if( net_item->m_BusNetCode == 0 )
@@ -204,7 +210,7 @@ void SCH_EDIT_FRAME::BuildNetListBase()
                 LastBusNetCode++;
             }
 
-            SegmentToPointConnect( net_item, ISBUS, istart );
+            SegmentToPointConnect( net_item, IS_BUS, istart );
             break;
 
         case NET_LABEL:
@@ -217,7 +223,7 @@ void SCH_EDIT_FRAME::BuildNetListBase()
                 LastNetCode++;
             }
 
-            SegmentToPointConnect( net_item, 0, istart );
+            SegmentToPointConnect( net_item, IS_WIRE, istart );
             break;
 
         case NET_SHEETBUSLABELMEMBER:
@@ -232,7 +238,7 @@ void SCH_EDIT_FRAME::BuildNetListBase()
                 LastBusNetCode++;
             }
 
-            PointToPointConnect( net_item, ISBUS, istart );
+            PointToPointConnect( net_item, IS_BUS, istart );
             break;
 
         case NET_BUSLABELMEMBER:
@@ -245,7 +251,7 @@ void SCH_EDIT_FRAME::BuildNetListBase()
                 LastBusNetCode++;
             }
 
-            SegmentToPointConnect( net_item, ISBUS, istart );
+            SegmentToPointConnect( net_item, IS_BUS, istart );
             break;
         }
     }
@@ -255,13 +261,13 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    activity << _( "done" );
+    activity += _( "done" );
     SetStatusText( activity );
 
     /* Updating the Bus Labels Netcode connected by Bus */
     ConnectBusLabels( g_NetObjectslist );
 
-    activity << wxT( ",  " ) << _( "bus labels" ) << wxT( "..." );
+    activity += _( ", bus labels..." );
     SetStatusText( activity );
 
     /* Group objects by label. */
@@ -300,11 +306,11 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    activity << _( "done" );
+    activity += _( "done" );
     SetStatusText( activity );
 
     /* Connection hierarchy. */
-    activity << wxT( ", " ) << _( "hierarchy..." );
+    activity += _( ", hierarchy..." );
     SetStatusText( activity );
 
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
@@ -322,7 +328,7 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    activity << _( "done" );
+    activity += _( "done" );
     SetStatusText( activity );
 
     /* Compress numbers of Netcode having consecutive values. */
@@ -547,7 +553,7 @@ static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel )
 
         /* Propagate Netcode having all the objects of the same Netcode. */
         if( ObjetNet->GetNet() )
-            PropageNetCode( ObjetNet->GetNet(), SheetLabel->GetNet(), 0 );
+            PropageNetCode( ObjetNet->GetNet(), SheetLabel->GetNet(), IS_WIRE );
         else
             ObjetNet->SetNet( SheetLabel->GetNet() );
     }
@@ -593,7 +599,7 @@ static void ConnectBusLabels( NETLIST_OBJECT_LIST& aNetItemBuffer )
                     if( LabelInTst->GetNet() == 0 )
                         LabelInTst->SetNet( Label->GetNet() );
                     else
-                        PropageNetCode( LabelInTst->GetNet(), Label->GetNet(), 0 );
+                        PropageNetCode( LabelInTst->GetNet(), Label->GetNet(), IS_WIRE );
                 }
             }
         }
@@ -607,12 +613,12 @@ static void ConnectBusLabels( NETLIST_OBJECT_LIST& aNetItemBuffer )
  * If IsBus == 0; Netcode is the member who is spreading
  * If IsBus != 0; is the member who is spreading BusNetCode
  */
-static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus )
+static void PropageNetCode( int OldNetCode, int NewNetCode, BUS_OR_WIRE IsBus )
 {
     if( OldNetCode == NewNetCode )
         return;
 
-    if( IsBus == 0 )    /* Propagate NetCode */
+    if( IsBus == IS_WIRE )    // Propagate NetCode 
     {
         for( unsigned jj = 0; jj < g_NetObjectslist.size(); jj++ )
         {
@@ -658,11 +664,11 @@ static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus )
  * Leaf schema
  * (There can be no physical connection between elements of different sheets)
  */
-static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus, int start )
+static void PointToPointConnect( NETLIST_OBJECT* Ref, BUS_OR_WIRE IsBus, int start )
 {
     int netCode;
 
-    if( IsBus == 0 )    /* Objects other than BUS and BUSLABELS. */
+    if( IsBus == IS_WIRE )    // Objects other than BUS and BUSLABELS
     {
         netCode = Ref->GetNet();
 
@@ -692,7 +698,7 @@ static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus, int start )
                     if( item->GetNet() == 0 )
                         item->SetNet( netCode );
                     else
-                        PropageNetCode( item->GetNet(), netCode, 0 );
+                        PropageNetCode( item->GetNet(), netCode, IS_WIRE );
                 }
                 break;
 
@@ -744,7 +750,7 @@ static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus, int start )
                     if( item->m_BusNetCode == 0 )
                         item->m_BusNetCode = netCode;
                     else
-                        PropageNetCode( item->m_BusNetCode, netCode, 1 );
+                        PropageNetCode( item->m_BusNetCode, netCode, IS_BUS );
                 }
                 break;
             }
@@ -760,7 +766,7 @@ static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus, int start )
  * The list of objects is expected sorted by sheets.
  * Search is done from index aIdxStart to the last element of g_NetObjectslist
  */
-static void SegmentToPointConnect( NETLIST_OBJECT* aJonction, int aIsBus, int aIdxStart )
+static void SegmentToPointConnect( NETLIST_OBJECT* aJonction, BUS_OR_WIRE aIsBus, int aIdxStart )
 {
     for( unsigned i = aIdxStart; i < g_NetObjectslist.size(); i++ )
     {
@@ -770,7 +776,7 @@ static void SegmentToPointConnect( NETLIST_OBJECT* aJonction, int aIsBus, int aI
         if( Segment->m_SheetList != aJonction->m_SheetList )
             continue;
 
-        if( aIsBus == 0 )
+        if( aIsBus == IS_WIRE )
         {
             if( Segment->m_Type != NET_SEGMENT )
                 continue;
@@ -784,7 +790,7 @@ static void SegmentToPointConnect( NETLIST_OBJECT* aJonction, int aIsBus, int aI
         if( SegmentIntersect( Segment->m_Start, Segment->m_End, aJonction->m_Start ) )
         {
             /* Propagation Netcode has all the objects of the same Netcode. */
-            if( aIsBus == 0 )
+            if( aIsBus == IS_WIRE )
             {
                 if( Segment->GetNet() )
                     PropageNetCode( Segment->GetNet(), aJonction->GetNet(), aIsBus );
@@ -849,7 +855,7 @@ void LabelConnect( NETLIST_OBJECT* LabelRef )
                 continue;
 
             if( g_NetObjectslist[i]->GetNet() )
-                PropageNetCode( g_NetObjectslist[i]->GetNet(), LabelRef->GetNet(), 0 );
+                PropageNetCode( g_NetObjectslist[i]->GetNet(), LabelRef->GetNet(), IS_WIRE );
             else
                 g_NetObjectslist[i]->SetNet( LabelRef->GetNet() );
         }

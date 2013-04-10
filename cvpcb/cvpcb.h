@@ -28,7 +28,6 @@ typedef boost::ptr_vector< COMPONENT_INFO > COMPONENT_LIST;
 extern const wxString FootprintAliasFileExtension;
 extern const wxString RetroFileExtension;
 
-extern const wxString RetroFileWildcard;
 extern const wxString FootprintAliasFileWildcard;
 
 extern const wxString titleLibLoadError;

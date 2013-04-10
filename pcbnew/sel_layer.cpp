@@ -25,12 +25,12 @@ class SELECT_LAYER_DIALOG : public wxDialog
 private:
     PCB_BASE_FRAME* m_Parent;
     wxRadioBox*     m_LayerList;
-    int m_LayerId[NB_LAYERS + 1]; // One extra element for "(Deselect)" radiobutton
+    LAYER_NUM m_LayerId[int(NB_PCB_LAYERS) + 1]; // One extra element for "(Deselect)" radiobutton
 
 public:
     // Constructor and destructor
-    SELECT_LAYER_DIALOG( PCB_BASE_FRAME* parent, int default_layer,
-                         int min_layer, int max_layer, bool null_layer );
+    SELECT_LAYER_DIALOG( PCB_BASE_FRAME* parent, LAYER_NUM default_layer,
+                         LAYER_NUM min_layer, LAYER_NUM max_layer, bool null_layer );
     ~SELECT_LAYER_DIALOG() { };
 
 private:
@@ -49,11 +49,11 @@ END_EVENT_TABLE()
 
 
 /** Install the dialog box for layer selection
- * @param default_layer = Preselection (NB_LAYERS for "(Deselect)" layer)
+ * @param default_layer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
  * @param min_layer = min layer value (-1 if no min value)
  * @param max_layer = max layer value (-1 if no max value)
  * @param null_layer = display a "(Deselect)" radiobutton (when set to true)
- * @return new layer value (NB_LAYERS when "(Deselect)" radiobutton selected),
+ * @return new layer value (NB_PCB_LAYERS when "(Deselect)" radiobutton selected),
  *                         or -1 if canceled
  *
  * Providing the option to also display a "(Deselect)" radiobutton makes the
@@ -65,19 +65,18 @@ END_EVENT_TABLE()
  * "Deselect"
  * button provided within the "Swap Layers:" or "Layer selection:" dialog box).
  */
-int PCB_BASE_FRAME::SelectLayer( int  default_layer,
-                                 int  min_layer,
-                                 int  max_layer,
-                                 bool null_layer )
+LAYER_NUM PCB_BASE_FRAME::SelectLayer( LAYER_NUM  default_layer,
+                                       LAYER_NUM  min_layer,
+                                       LAYER_NUM  max_layer,
+                                       bool null_layer )
 {
-    int layer;
     SELECT_LAYER_DIALOG* frame = new SELECT_LAYER_DIALOG( this,
                                                             default_layer,
                                                             min_layer,
                                                             max_layer,
                                                             null_layer );
 
-    layer = frame->ShowModal();
+    LAYER_NUM layer = frame->ShowModal();
     frame->Destroy();
     return layer;
 }
@@ -90,29 +89,29 @@ int PCB_BASE_FRAME::SelectLayer( int  default_layer,
  * to the right of that radiobox.
  */
 SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( PCB_BASE_FRAME* parent,
-                                            int default_layer, int min_layer,
-                                            int max_layer, bool null_layer ) :
+                                          LAYER_NUM default_layer, LAYER_NUM min_layer,
+                                          LAYER_NUM max_layer, bool null_layer ) :
     wxDialog( parent, -1, _( "Select Layer:" ), wxPoint( -1, -1 ),
               wxSize( 470, 250 ),
               DIALOG_STYLE )
 {
     BOARD*    board = parent->GetBoard();
     wxButton* Button;
-    int       ii;
-    wxString  LayerList[NB_LAYERS + 1]; // One extra element for "(Deselect)"
+    LAYER_NUM ii;
+    wxString  LayerList[NB_PCB_LAYERS + 1]; // One extra element for "(Deselect)"
                                         // radiobutton
     int       LayerCount, LayerSelect = -1;
 
     m_Parent = parent;
 
-    /* Build the layer list */
+    // Build the layer list
     LayerCount = 0;
-    int Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
-    Masque_Layer += ALL_NO_CU_LAYERS;
+    LAYER_MSK Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
+    Masque_Layer |= ALL_NO_CU_LAYERS;
 
-    for( ii = 0; ii < NB_LAYERS; ii++ )
+    for( ii = FIRST_LAYER; ii < NB_PCB_LAYERS; ++ii )
     {
-        m_LayerId[ii] = 0;
+        m_LayerId[ii] = FIRST_LAYER;
 
         if( GetLayerMask( ii ) & Masque_Layer )
         {
@@ -137,10 +136,10 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( PCB_BASE_FRAME* parent,
     {
         LayerList[LayerCount] = _( "(Deselect)" );
 
-        if( NB_LAYERS == default_layer )
+        if( NB_PCB_LAYERS == default_layer )
             LayerSelect = LayerCount;
 
-        m_LayerId[LayerCount] = NB_LAYERS;
+        m_LayerId[LayerCount] = NB_PCB_LAYERS;
         LayerCount++;
     }
 
@@ -198,7 +197,7 @@ private:
     PCB_BASE_FRAME* m_Parent;
     wxRadioBox*     m_LayerListTOP;
     wxRadioBox*     m_LayerListBOTTOM;
-    int m_LayerId[NB_COPPER_LAYERS];
+    LAYER_NUM m_LayerId[NB_COPPER_LAYERS];
 
 public: SELECT_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* parent );
     ~SELECT_LAYERS_PAIR_DIALOG() { };
@@ -255,19 +254,19 @@ SELECT_LAYERS_PAIR_DIALOG::SELECT_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* parent ) :
 {
     BOARD*    board = parent->GetBoard();
     wxButton* Button;
-    int       ii, LayerCount;
     wxString  LayerList[NB_COPPER_LAYERS];
-    int       LayerTopSelect = 0, LayerBottomSelect = 0;
+    LAYER_NUM LayerTopSelect = FIRST_LAYER, LayerBottomSelect = FIRST_LAYER;
 
     m_Parent = parent;
 
     PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
-    int         Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
-    Masque_Layer += ALL_NO_CU_LAYERS;
+    LAYER_MSK Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
+    Masque_Layer |= ALL_NO_CU_LAYERS;
 
-    for( ii = 0, LayerCount = 0; ii < NB_COPPER_LAYERS; ii++ )
+    LAYER_NUM LayerCount = FIRST_LAYER;
+    for( LAYER_NUM ii = FIRST_COPPER_LAYER; ii < NB_COPPER_LAYERS; ++ii )
     {
-        m_LayerId[ii] = 0;
+        m_LayerId[ii] = FIRST_LAYER;
 
         if( (GetLayerMask( ii ) & Masque_Layer) )
         {
@@ -280,7 +279,7 @@ SELECT_LAYERS_PAIR_DIALOG::SELECT_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* parent ) :
                 LayerBottomSelect = LayerCount;
 
             m_LayerId[LayerCount] = ii;
-            LayerCount++;
+            ++LayerCount;
         }
     }
 

@@ -369,7 +369,7 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         if( lib.IsModified() )
         {
             wxString msg;
-            msg.Printf( _( "Library \"%s\" was modified!\nDiscard changes?" ),
+            msg.Printf( _( "Library %s was modified!\nDiscard changes?" ),
                         GetChars( lib.GetName() ) );
 
             if( !IsOK( this, msg ) )
@@ -469,7 +469,11 @@ void LIB_EDIT_FRAME::UpdatePartSelectList()
         for( int i = 0; i < m_component->GetPartCount(); i++ )
         {
             wxString msg;
+#if defined(KICAD_GOST)
+            msg.Printf( _( "Part %d" ), i + 1 );
+#else
             msg.Printf( _( "Part %c" ), 'A' + i );
+#endif
             m_partSelectBox->Append( msg );
         }
     }
@@ -750,7 +754,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
 
         m_canvas->MoveCursorToCrossHair();
-        int oldFlags = m_drawItem->GetFlags();
+        STATUS_FLAGS oldFlags = m_drawItem->GetFlags();
         m_drawItem->ClearFlags();
         m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL, DefaultTransform );
         ( (LIB_POLYLINE*) m_drawItem )->DeleteSegment( GetScreen()->GetCrossHairPosition( true ) );
