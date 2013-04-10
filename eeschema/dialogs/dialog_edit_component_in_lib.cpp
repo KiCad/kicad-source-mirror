@@ -452,7 +452,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter( wxCommandEvent& event )
 {
-    if( IsOK( this, _( "OK to Delete FootprintFilter LIST" ) ) )
+    if( IsOK( this, _( "OK to delete the footprint filter list ?" ) ) )
     {
         m_FootprintFilterListBox->Clear();
         m_ButtonDeleteAllFootprintFilter->Enable( false );

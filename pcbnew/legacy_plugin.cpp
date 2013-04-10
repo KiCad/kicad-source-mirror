@@ -1556,7 +1556,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     char*   hjust   = strtok( (char*) txt_end, delims );
     char*   vjust   = strtok( NULL, delims );
 
-    if( type != TEXTE_MODULE::TEXT_is_REFERENCE 
+    if( type != TEXTE_MODULE::TEXT_is_REFERENCE
      && type != TEXTE_MODULE::TEXT_is_VALUE )
         type = TEXTE_MODULE::TEXT_is_DIVERS;
 
@@ -2739,16 +2739,18 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in\nfile: <%s>\nline: %d\noffset: %d" ),
-            m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
+        m_error.Printf( _( "invalid float number in file: <%s>\nline: %d, offset: %d" ),
+            m_reader->GetSource().GetData(),
+            m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in\nfile: <%s>\nline: %d\noffset: %d" ),
-            m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
+        m_error.Printf( _( "missing float number in file: <%s>\nline: %d, offset: %d" ),
+            m_reader->GetSource().GetData(),
+            m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }
@@ -2774,7 +2776,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in\nfile: <%s>\nline: %d\noffset: %d" ),
+        m_error.Printf( _( "invalid float number in file: <%s>\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2782,7 +2784,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in\nfile: <%s>\nline: %d\noffset: %d" ),
+        m_error.Printf( _( "missing float number in file: <%s>\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -4333,7 +4335,7 @@ void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES
     if( wxFileExists( aLibraryPath ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library <%s> already exists, will not create anew" ),
+            _( "library <%s> already exists, will not create a new" ),
             aLibraryPath.GetData() ) );
     }
 

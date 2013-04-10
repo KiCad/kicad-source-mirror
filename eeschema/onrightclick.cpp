@@ -305,10 +305,10 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
     {
         switch( Field->GetId() )
         {
-        case REFERENCE: name = _( "Move reference" ); break;
-        case VALUE:     name = _( "Move value" ); break;
-        case FOOTPRINT: name = _( "Move footprint field" ); break;
-        default:        name = _( "Move field" ); break;
+        case REFERENCE: name = _( "Move Reference" ); break;
+        case VALUE:     name = _( "Move Value" ); break;
+        case FOOTPRINT: name = _( "Move Footprint Field" ); break;
+        default:        name = _( "Move Field" ); break;
         }
 
         msg = AddHotkeyName( name, s_Schematic_Hokeys_Descr,
@@ -318,10 +318,10 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 
     switch( Field->GetId() )
     {
-    case REFERENCE: name = _( "Rotate reference" ); break;
-    case VALUE:     name = _( "Rotate value" ); break;
-    case FOOTPRINT: name = _( "Rotate footprint field" ); break;
-    default:        name = _( "Rotate field" ); break;
+    case REFERENCE: name = _( "Rotate Reference" ); break;
+    case VALUE:     name = _( "Rotate Value" ); break;
+    case FOOTPRINT: name = _( "Rotate Footprint Field" ); break;
+    default:        name = _( "Rotate Field" ); break;
     }
 
     msg = AddHotkeyName( name, s_Schematic_Hokeys_Descr, HK_ROTATE );
@@ -333,19 +333,19 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
     {
     case REFERENCE:
         id = HK_EDIT_COMPONENT_REFERENCE;
-        name = _( "Edit reference" );
+        name = _( "Edit Reference" );
         break;
     case VALUE:
         id = HK_EDIT_COMPONENT_VALUE;
-        name = _( "Edit value" );
+        name = _( "Edit Value" );
         break;
     case FOOTPRINT:
         id = HK_EDIT_COMPONENT_FOOTPRINT;
-        name = _( "Edit footprint field" );
+        name = _( "Edit Footprint Field" );
         break;
     default:
         id = HK_EDIT;
-        name = _( "Edit field" );
+        name = _( "Edit Field" );
         break;
     }
     msg = AddHotkeyName( name, s_Schematic_Hokeys_Descr, id );
@@ -368,7 +368,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     if( !Component->GetFlags() )
     {
-        msg.Printf( _( "Move Component %s" ), 
+        msg.Printf( _( "Move Component %s" ),
                     GetChars( Component->GetField( REFERENCE )->GetText() ) );
         msg = AddHotkeyName( msg, s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );

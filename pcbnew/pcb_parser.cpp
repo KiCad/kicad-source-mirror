@@ -89,7 +89,7 @@ double PCB_PARSER::parseDouble() throw( IO_ERROR )
     if( errno )
     {
         wxString error;
-        error.Printf( _( "invalid floating point number in\nfile: <%s>\nline: %d\noffset: %d" ),
+        error.Printf( _( "invalid floating point number in file: <%s>\nline: %d, offset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
@@ -98,7 +98,7 @@ double PCB_PARSER::parseDouble() throw( IO_ERROR )
     if( CurText() == tmp )
     {
         wxString error;
-        error.Printf( _( "missing floating point number in\nfile: <%s>\nline: %d\noffset: %d" ),
+        error.Printf( _( "missing floating point number in file: <%s>\nline: %d, offset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
@@ -1680,7 +1680,7 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
                 module->Value() = *text;
                 delete text;
                 break;
-            
+
             default:
                 module->GraphicalItems().PushBack( text );
             }
