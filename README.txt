@@ -5,16 +5,15 @@ Documentation subfolder.
 
 Files
 -----
-AUTHORS.txt     - The authors, contributors, document writers and translators list
-CHANGELOG.txt   - This years changelog (see for previous years Documentation/changelogs)
-CMakeList.txt   - CMAKE build tool script
-COPYRIGHT.txt   - A copy of the GNU General Public License Version 2
-CTestConfig.txt - Support for CTest and CDash testing tools
-Doxyfile        - Doxygen preferences
-INSTALL.txt     - The release (binairy) installation instructions
-TODO.txt        - Todo list
-uncrustify.cfg  - Uncrustify code formatting tool preferences
-version.txt     - The current stable released version
+AUTHORS.txt         - The authors, contributors, document writers and translators list
+CHANGELOG.txt       - This years changelog (see for previous years Documentation/changelogs)
+CMakeList.txt       - CMAKE build tool script
+COPYRIGHT.txt       - A copy of the GNU General Public License Version 2
+CTestConfig.cmake   - Support for CTest and CDash testing tools
+Doxyfile            - Doxygen config file for Kicad
+INSTALL.txt         - The release (binairy) installation instructions
+TODO.txt            - Todo list
+uncrustify.cfg      - Uncrustify config file for uncrustify sorces formatting tool
 
 Subdirectories
 --------------
@@ -37,6 +36,6 @@ packaging      - Files for packaging on Windows and Mac OSX
 pcbnew         - Sourcecode of the printed circuit board editor
 polygon        - Sourcecode of the polygon library
 resources      - Resources for installation, freedesktop mime-types for linux
-scripts        - Helper scripts. For building, sourcecode packaging, font setting, pcb adjusting.
+scripts        - Helper scripts. For building, sourcecode packaging.
 template       - Project template(s)
 

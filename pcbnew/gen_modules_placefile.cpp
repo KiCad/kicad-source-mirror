@@ -237,7 +237,8 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     if( singleFile  )
         msg.Printf( _( "Place file: <%s>\n" ), GetChars( fn.GetFullPath() ) );
     else
-        msg.Printf( _( "Component side place file: <%s>\n" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Front side (top side) place file: <%s>\n" ),
+                    GetChars( fn.GetFullPath() ) );
 
     AddMessage( msg );
     msg.Printf( _( "Footprint count %d\n" ), fpcount );
@@ -268,7 +269,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     // Display results
     if( !singleFile )
     {
-        msg.Printf( _( "Copper side place file: <%s>\n" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Back side (bottom side) place file: <%s>\n" ), GetChars( fn.GetFullPath() ) );
         AddMessage( msg );
         msg.Printf( _( "Footprint count %d\n" ), fpcount );
         AddMessage( msg );

@@ -441,7 +441,7 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
         wxArrayString headers;
         headers.Add( wxT("Module") );
         std::vector<wxArrayString> itemsToDisplay;
-        
+
         // Conversion from wxArrayString to vector of ArrayString
         for( unsigned i = 0; i < footprint_names_list.GetCount(); i++ )
         {
@@ -449,7 +449,7 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
             item.Add( footprint_names_list[i] );
             itemsToDisplay.push_back( item );
         }
-        
+
         msg.Printf( _( "Modules [%d items]" ), (int) footprint_names_list.GetCount() );
         EDA_LIST_DIALOG dlg( aWindow, msg, headers, itemsToDisplay, OldName,
                              DisplayCmpDoc );
@@ -512,14 +512,14 @@ MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
     wxArrayString headers;
     headers.Add( wxT("Module") );
     std::vector<wxArrayString> itemsToDisplay;
-    
+
     // Conversion from wxArrayString to vector of ArrayString
     for( unsigned i = 0; i < listnames.GetCount(); i++ )
     {
         wxArrayString item;
         item.Add( listnames[i] );
         itemsToDisplay.push_back( item );
-    } 
+    }
     EDA_LIST_DIALOG dlg( this, msg, headers, itemsToDisplay, wxEmptyString, NULL, SORT_LIST );
 
     if( dlg.ShowModal() == wxID_OK )
@@ -574,7 +574,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
     }
 
     wxString msg = wxString::Format(
-                    _( "Footprint library\n<%s> saved as\n<%s>" ),
+                    _( "Footprint library <%s> saved as <%s>" ),
                     GetChars( curLibPath ), GetChars( dstLibPath ) );
 
     DisplayInfoMessage( this, msg );
