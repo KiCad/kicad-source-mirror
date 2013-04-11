@@ -125,7 +125,7 @@ void STROKE_FONT::LoadAttributes( const EDA_TEXT* aText )
 }
 
 
-BOX2D STROKE_FONT::computeBoundingBox( Glyph aGlyph, VECTOR2D aGlyphBoundingX )
+BOX2D STROKE_FONT::computeBoundingBox( const Glyph& aGlyph, const VECTOR2D& aGlyphBoundingX ) const
 {
     BOX2D boundingBox;
 
@@ -134,9 +134,9 @@ BOX2D STROKE_FONT::computeBoundingBox( Glyph aGlyph, VECTOR2D aGlyphBoundingX )
     boundingPoints.push_back( VECTOR2D( aGlyphBoundingX.x, 0 ) );
     boundingPoints.push_back( VECTOR2D( aGlyphBoundingX.y, 0 ) );
 
-    for( Glyph::iterator pointListIt = aGlyph.begin(); pointListIt != aGlyph.end(); ++pointListIt )
+    for( Glyph::const_iterator pointListIt = aGlyph.begin(); pointListIt != aGlyph.end(); ++pointListIt )
     {
-        for( std::deque<VECTOR2D>::iterator pointIt = pointListIt->begin();
+        for( std::deque<VECTOR2D>::const_iterator pointIt = pointListIt->begin();
                 pointIt != pointListIt->end(); ++pointIt )
         {
             boundingPoints.push_back( VECTOR2D( aGlyphBoundingX.x, pointIt->y ) );
@@ -149,10 +149,25 @@ BOX2D STROKE_FONT::computeBoundingBox( Glyph aGlyph, VECTOR2D aGlyphBoundingX )
 }
 
 
-void STROKE_FONT::Draw( std::string aText, VECTOR2D aPosition, double aRotationAngle )
+void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRotationAngle )
 {
+    // Split multiline strings into separate ones and draw line by line
+    size_t newlinePos = aText.find( '\n' );
+
+    if( newlinePos != std::string::npos )
+    {
+        VECTOR2D nextlinePosition( aPosition );
+        nextlinePosition += VECTOR2D( 0.0, m_glyphSize.y * 1.6 );   // FIXME remove magic number
+
+        Draw( aText.substr( newlinePos + 1 ), nextlinePosition, aRotationAngle );
+        aText = aText.substr( 0, newlinePos );
+    }
+
     // Compute the text size
     VECTOR2D textsize = computeTextSize( aText );
+
+    // By default overbar is turned off
+    m_overbar = false;
 
     // Context needs to be saved before any transformations
     m_gal->Save();
@@ -221,8 +236,14 @@ void STROKE_FONT::Draw( std::string aText, VECTOR2D aPosition, double aRotationA
         m_gal->SetLineWidth( m_gal->GetLineWidth() * 1.3 );
     }
 
-    for( std::string::iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
+    for( std::string::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
     {
+        if( *chIt == '~' )
+        {
+            m_overbar = !m_overbar;
+            continue;
+        }
+
         GlyphList::iterator glyphIt = m_glyphs.begin();
         std::deque<BOX2D>::iterator bbIt = m_glyphBoundingBoxes.begin();
 
@@ -254,26 +275,34 @@ void STROKE_FONT::Draw( std::string aText, VECTOR2D aPosition, double aRotationA
             m_gal->DrawPolyline( pointListScaled );
         }
 
-        xOffset += m_scaleFactor * glyphSizeX *
-                   ( bbIt->GetEnd().x - bbIt->GetOrigin().x );
+        if( m_overbar )
+        {
+            VECTOR2D startOverbar( xOffset, -textsize.y * 1.2 );
+            VECTOR2D endOverbar( xOffset + m_scaleFactor * glyphSizeX * bbIt->GetEnd().x,
+                                 -textsize.y * 1.2 );
+            m_gal->DrawLine( startOverbar, endOverbar );
+        }
+
+        xOffset += m_scaleFactor * glyphSizeX * bbIt->GetEnd().x;
     }
 
     m_gal->Restore();
 }
 
 
-VECTOR2D STROKE_FONT::computeTextSize( std::string aText )
+VECTOR2D STROKE_FONT::computeTextSize( const std::string& aText ) const
 {
-    VECTOR2D result = VECTOR2D( 0.0, 0.0 );
+    VECTOR2D result = VECTOR2D( 0.0, m_glyphSize.y );
 
-    for( std::string::iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
+    for( std::string::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
     {
-        std::deque<BOX2D>::iterator bbIt = m_glyphBoundingBoxes.begin();
-        advance( bbIt, (int) ( *chIt ) - (int) ' ' );
-        result.x += m_scaleFactor * m_glyphSize.x * ( bbIt->GetEnd().x - bbIt->GetOrigin().x );
-    }
+        if( *chIt == '~' )
+            continue;
 
-    result.y = m_glyphSize.y;
+        std::deque<BOX2D>::const_iterator bbIt = m_glyphBoundingBoxes.begin();
+        advance( bbIt, (int) ( *chIt ) - (int) ' ' );
+        result.x += m_scaleFactor * m_glyphSize.x * bbIt->GetEnd().x;
+    }
 
     return result;
 }

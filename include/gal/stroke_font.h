@@ -80,7 +80,7 @@ public:
      * @param aPosition is the text position in world coordinates.
      * @param aRotationAngle is the text rotation angle.
      */
-    void Draw( std::string aText, VECTOR2D aPosition, double aRotationAngle );
+    void Draw( std::string aText, const VECTOR2D& aPosition, double aRotationAngle );
 
     /**
      * @brief Set the scale factor of the font for the glyph size.
@@ -153,15 +153,14 @@ public:
     }
 
 private:
-    GAL*                        m_gal;                          ///< Pointer to the GAL
-
-    GlyphList                   m_glyphs;                       ///< Glyph list
-    std::deque<BOX2D>           m_glyphBoundingBoxes;           ///< Bounding boxes of the glyphs
-    double                      m_scaleFactor;                  ///< Scale factor for the glyph
-    VECTOR2D                    m_glyphSize;                    ///< Size of the glyphs
-    EDA_TEXT_HJUSTIFY_T         m_horizontalJustify;            ///< Horizontal justification
-    EDA_TEXT_VJUSTIFY_T         m_verticalJustify;              ///< Vertical justification
-    bool                        m_bold, m_italic, m_mirrored;   ///< Properties of text
+    GAL*                m_gal;                                    ///< Pointer to the GAL
+    GlyphList           m_glyphs;                                 ///< Glyph list
+    std::deque<BOX2D>   m_glyphBoundingBoxes;                     ///< Bounding boxes of the glyphs
+    double              m_scaleFactor;                            ///< Scale factor for the glyph
+    VECTOR2D            m_glyphSize;                              ///< Size of the glyphs
+    EDA_TEXT_HJUSTIFY_T m_horizontalJustify;                      ///< Horizontal justification
+    EDA_TEXT_VJUSTIFY_T m_verticalJustify;                        ///< Vertical justification
+    bool                m_bold, m_italic, m_mirrored, m_overbar;  ///< Properties of text
 
     /**
      * @brief Compute the bounding box of a given glyph.
@@ -170,7 +169,7 @@ private:
      * @param aGlyphBoundingX is the x-component of the bounding box size.
      * @return is the complete bounding box size.
      */
-    BOX2D computeBoundingBox( Glyph aGlyph, VECTOR2D aGlyphBoundingX );
+    BOX2D computeBoundingBox( const Glyph& aGlyph, const VECTOR2D& aGlyphBoundingX ) const;
 
     /**
      * @brief Compute the size of a given text.
@@ -178,7 +177,7 @@ private:
      * @param aText is the text string.
      * @return is the text size.
      */
-    VECTOR2D computeTextSize( const std::string aText );
+    VECTOR2D computeTextSize( const std::string& aText ) const;
 };
 } // namespace KiGfx
 
