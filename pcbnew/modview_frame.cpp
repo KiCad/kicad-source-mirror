@@ -45,6 +45,7 @@
 
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
+#include <pcbnew_config.h>
 
 
 /**
@@ -697,3 +698,9 @@ void FOOTPRINT_VIEWER_FRAME::Update3D_Frame( bool aForceReloadFootprint )
             m_Draw3DFrame->NewDisplay();
     }
 }
+
+EDA_COLOR_T FOOTPRINT_VIEWER_FRAME::GetGridColor() const
+{
+    return g_ColorsSettings.GetItemColor( GRID_VISIBLE );
+}
+

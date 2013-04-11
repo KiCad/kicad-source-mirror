@@ -489,11 +489,6 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 }
 
 
-void EDA_DRAW_FRAME::OnGrid( int grid_type )
-{
-}
-
-
 wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
 {
     wxPoint pos = aPosition;

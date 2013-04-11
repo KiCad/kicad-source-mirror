@@ -86,6 +86,7 @@ public:
     wxString& GetSelectedFootprint( void ) const { return m_selectedFootprintName; }
     const wxString GetSelectedLibraryFullName( void );
 
+    virtual EDA_COLOR_T GetGridColor( void ) const;
 private:
 
     void OnSize( wxSizeEvent& event );
