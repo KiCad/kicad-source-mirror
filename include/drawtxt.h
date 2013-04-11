@@ -10,8 +10,19 @@
 #include <base_struct.h>
 #include <eda_text.h>               // EDA_TEXT_HJUSTIFY_T and EDA_TEXT_VJUSTIFY_T
 
-/// Minimum dimension in pixel for drawing text
+/* Minimum dimension in pixel for drawing/no drawing a text
+ * used in Pcbnew to decide to draw (or not) some texts
+ * ( like net names on pads/tracks )
+ * When a text height is smaller than MIN_TEXT_SIZE,
+ * it is not drawn by Pcbnew
+ */
 #define MIN_TEXT_SIZE   5
+
+/* Absolute minimum dimension in pixel to draw a text as text or a line
+ * When a text height is smaller than MIN_DRAWABLE_TEXT_SIZE,
+ * it is drawn, but like a line by the draw text function
+*/
+#define MIN_DRAWABLE_TEXT_SIZE 3
 
 class EDA_DRAW_PANEL;
 class PLOTTER;

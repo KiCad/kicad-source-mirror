@@ -389,7 +389,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
 
     /* if a text size is too small, the text cannot be drawn, and it is drawn as a single
      * graphic line */
-    if( aDC && ( aDC->LogicalToDeviceYRel( std::abs( aSize.y ) ) < MIN_TEXT_SIZE ))
+    if( aDC && ( aDC->LogicalToDeviceYRel( std::abs( aSize.y ) ) < MIN_DRAWABLE_TEXT_SIZE ))
     {
         // draw the text as a line always vertically centered
         wxPoint end( current_char_pos.x + dx, current_char_pos.y );
@@ -583,12 +583,12 @@ void DrawGraphicHaloText( EDA_DRAW_PANEL * aPanel,
         aColor2 = c;
     }
 
-    DrawGraphicText( aPanel, aDC, aPos, aColor1, aText, aOrient, aSize, 
-                     aH_justify, aV_justify, aWidth, aItalic, aBold, 
+    DrawGraphicText( aPanel, aDC, aPos, aColor1, aText, aOrient, aSize,
+                     aH_justify, aV_justify, aWidth, aItalic, aBold,
                      aCallback, aPlotter );
-    
-    DrawGraphicText( aPanel, aDC, aPos, aColor2, aText, aOrient, aSize, 
-                     aH_justify, aV_justify, aWidth / 4, aItalic, aBold, 
+
+    DrawGraphicText( aPanel, aDC, aPos, aColor2, aText, aOrient, aSize,
+                     aH_justify, aV_justify, aWidth / 4, aItalic, aBold,
                      aCallback, aPlotter );
 }
 
