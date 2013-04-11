@@ -1,5 +1,5 @@
 EESchema Schematic File Version 2  date Thu 18 Oct 2012 10:04:05 PM PDT
-LIBS:BoosterPack
+LIBS:boosterpack
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -30,7 +30,7 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:BoosterPack40-cache
+LIBS:boosterpack40-cache
 EELAYER 27 0
 EELAYER END
 $Descr A4 11693 8268
