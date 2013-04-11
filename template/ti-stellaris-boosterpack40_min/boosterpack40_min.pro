@@ -10,7 +10,7 @@ RptD_Y=100
 RptLab=1
 LabSize=60
 [eeschema/libraries]
-LibName1=BoosterPack
+LibName1=boosterpack
 LibName2=power
 LibName3=device
 LibName4=transistors
@@ -48,7 +48,7 @@ NetIExt=net
 EquName1=devcms
 [pcbnew]
 version=1
-LastNetListRead=BoosterPack20.net
+LastNetListRead=boosterpack20.net
 PadDrill=1.016
 PadSizeH=1.524
 PadSizeV=1.524
@@ -64,7 +64,7 @@ BoardOutlineThickness=0.15
 ModuleOutlineThickness=0.15
 [pcbnew/libraries]
 LibDir=
-LibName1=BoosterPack20
+LibName1=boosterpack20
 LibName2=sockets
 LibName3=connect
 LibName4=discret
