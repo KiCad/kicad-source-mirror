@@ -2,7 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (c) 2005 Michael Niedermayer <michaelni@gmx.at>
- * Copyright (C) 2013 Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) CERN
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
