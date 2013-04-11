@@ -58,10 +58,10 @@ private:
     wxString            m_configPath;       // subpath for configuration
 
 protected:
-    static wxString m_libraryName;                  // Current selected libary
-    static wxString m_footprintName;                // Current selected footprint
-    static wxString m_selectedFootprintName;   // When the viewer is used to select a footprint
-                                                    // the selected footprint is here
+    static wxString m_libraryName;              // Current selected libary
+    static wxString m_footprintName;            // Current selected footprint
+    static wxString m_selectedFootprintName;    // When the viewer is used to select a footprint
+                                                // the selected footprint is here
 
 public:
     FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* parent, wxSemaphore* semaphore = NULL,
@@ -84,6 +84,7 @@ public:
     static FOOTPRINT_VIEWER_FRAME* GetActiveFootprintViewer();
 
     wxString& GetSelectedFootprint( void ) const { return m_selectedFootprintName; }
+    const wxString GetSelectedLibraryFullName( void );
 
 private:
 

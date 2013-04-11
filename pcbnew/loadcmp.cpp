@@ -132,7 +132,12 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser( void )
         wxMilliSleep( 50 );
     }
 
-    wxString fpname = viewer->GetSelectedFootprint();
+    // Returnd the full fp name, i.e. the lib name and th fp name,
+    // separated by a '/'
+    // (/ is now an illegal char in fp names)
+    wxString fpname = viewer->GetSelectedLibraryFullName();
+    fpname << wxT("/") << viewer->GetSelectedFootprint();
+
     viewer->Destroy();
 
     return fpname;
@@ -146,6 +151,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
     MODULE*     module;
     wxPoint     curspos = GetScreen()->GetCrossHairPosition();
     wxString    moduleName, keys;
+    wxString    libName = aLibrary;
     bool        allowWildSeach = true;
 
     static wxArrayString HistoryList;
@@ -162,7 +168,12 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
 
     if( dlg.m_GetExtraFunction )
     {
-        moduleName = SelectFootprintFromLibBrowser();
+        // SelectFootprintFromLibBrowser() returns the
+        // "full" footprint name, i.e.
+        // <lib_name>/<footprint name>
+        wxString full_fpname = SelectFootprintFromLibBrowser();
+        moduleName = full_fpname.AfterLast( '/' );
+        libName = full_fpname.BeforeLast( '/' );
     }
     else
     {
@@ -179,7 +190,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
     {
         allowWildSeach = false;
         keys = moduleName;
-        moduleName = Select_1_Module_From_List( this, aLibrary, wxEmptyString, keys );
+        moduleName = Select_1_Module_From_List( this, libName, wxEmptyString, keys );
 
         if( moduleName.IsEmpty() )  // Cancel command
         {
@@ -191,7 +202,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
             || ( moduleName.Contains( wxT( "*" ) ) ) )  // Selection wild card
     {
         allowWildSeach = false;
-        moduleName     = Select_1_Module_From_List( this, aLibrary, moduleName, wxEmptyString );
+        moduleName     = Select_1_Module_From_List( this, libName, moduleName, wxEmptyString );
 
         if( moduleName.IsEmpty() )
         {
@@ -200,7 +211,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         }
     }
 
-    module = GetModuleLibrary( aLibrary, moduleName, false );
+    module = GetModuleLibrary( libName, moduleName, false );
 
     if( !module && allowWildSeach )    // Search with wild card
     {
@@ -209,7 +220,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         wxString wildname = wxChar( '*' ) + moduleName + wxChar( '*' );
         moduleName = wildname;
 
-        moduleName = Select_1_Module_From_List( this, aLibrary, moduleName, wxEmptyString );
+        moduleName = Select_1_Module_From_List( this, libName, moduleName, wxEmptyString );
 
         if( moduleName.IsEmpty() )
         {
@@ -218,7 +229,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         }
         else
         {
-            module = GetModuleLibrary( aLibrary, moduleName, true );
+            module = GetModuleLibrary( libName, moduleName, true );
         }
     }
 
