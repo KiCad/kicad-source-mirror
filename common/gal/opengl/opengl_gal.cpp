@@ -1394,6 +1394,18 @@ void CALLBACK VertexCallback( GLvoid* aVertexPtr )
 }
 
 
+void CALLBACK CombineCallback( GLdouble coords[3],
+                               GLdouble* vertex_data[4],
+                               GLfloat weight[4], GLdouble** dataOut )
+{
+   GLdouble* vertex = new GLdouble[3];
+
+   memcpy( vertex, coords, 3 * sizeof(GLdouble) );
+
+   *dataOut = vertex;
+}
+
+
 void CALLBACK BeginCallback( GLenum aWhich )
 {
     glBegin( aWhich );
@@ -1417,10 +1429,11 @@ void CALLBACK ErrorCallback( GLenum aErrorCode )
 
 void InitTesselatorCallbacks( GLUtesselator* aTesselator )
 {
-    gluTessCallback( aTesselator, GLU_TESS_VERTEX, ( void (CALLBACK*)() )VertexCallback );
-    gluTessCallback( aTesselator, GLU_TESS_BEGIN, ( void (CALLBACK*)() )BeginCallback );
-    gluTessCallback( aTesselator, GLU_TESS_END, ( void (CALLBACK*)() )EndCallback );
-    gluTessCallback( aTesselator, GLU_TESS_ERROR, ( void (CALLBACK*)() )ErrorCallback );
+    gluTessCallback( aTesselator, GLU_TESS_VERTEX,  ( void (CALLBACK*)() )VertexCallback );
+    gluTessCallback( aTesselator, GLU_TESS_COMBINE, ( void (CALLBACK*)() )CombineCallback );
+    gluTessCallback( aTesselator, GLU_TESS_BEGIN,   ( void (CALLBACK*)() )BeginCallback );
+    gluTessCallback( aTesselator, GLU_TESS_END,     ( void (CALLBACK*)() )EndCallback );
+    gluTessCallback( aTesselator, GLU_TESS_ERROR,   ( void (CALLBACK*)() )ErrorCallback );
 }
 
 
