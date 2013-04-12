@@ -29,6 +29,7 @@
 #include <gal/definitions.h>
 
 #include <wx/log.h>
+#include <macros.h>
 
 #ifndef CALLBACK
 #define CALLBACK
@@ -256,8 +257,8 @@ void OPENGL_GAL::initGlew()
     }
     else
     {
-        wxLogDebug( wxString( "Status: Using GLEW " ) +
-                    wxString::FromUTF8( (char*) glewGetString( GLEW_VERSION ) )  );
+        wxLogDebug( wxString( wxT( "Status: Using GLEW " ) ) +
+                    FROM_UTF8( (char*) glewGetString( GLEW_VERSION ) )  );
     }
 
     // Check the OpenGL version (minimum 2.1 is required)

@@ -429,7 +429,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
     prof_end( &totalCycles );
     prof_end( &totalRealTime );
 
-    wxLogDebug( "Redraw::items %d (%d cached), %.1f ms/frame (%.0f FPS), draw/geometry ratio: %.1f%%",
+    wxLogDebug( wxT( "Redraw::items %d (%d cached), %.1f ms/frame (%.0f FPS), draw/geometry ratio: %.1f%%" ),
             totalItems, totalCached, (double) totalRealTime.value / 1000.0,
             1000000.0 / (double) totalRealTime.value,
             (double) totalDrawTime / (double) totalCycles.value * 100.0 );
