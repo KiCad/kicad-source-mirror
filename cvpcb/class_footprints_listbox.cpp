@@ -119,7 +119,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFullList( FOOTPRINT_LIST& list )
     for( unsigned ii = 0; ii < list.GetCount(); ii++ )
     {
         FOOTPRINT_INFO & footprint = list.GetItem(ii);
-        msg.Printf( wxT( "%3d %s" ), (int) m_FullFootprintList.GetCount() + 1,
+        msg.Printf( wxT( "%3zu %s" ), m_FullFootprintList.GetCount() + 1,
                    GetChars(footprint.m_Module) );
         m_FullFootprintList.Add( msg );
     }
@@ -154,7 +154,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT_INFO* Component,
             candidate = Component->m_FootprintFilter[jj].Upper();
             if( !module.Matches( candidate ) )
                 continue;
-            msg.Printf( wxT( "%3d %s" ), m_FilteredFootprintList.GetCount() + 1,
+            msg.Printf( wxT( "%3zu %s" ), m_FilteredFootprintList.GetCount() + 1,
                        footprint.m_Module.GetData() );
             m_FilteredFootprintList.Add( msg );
             hasItem = true;
@@ -186,7 +186,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredByPinCount( COMPONENT_INFO* Compone
 
         if( Component->m_pinCount == footprint.m_padCount )
         {
-            msg.Printf( wxT( "%3d %s" ), m_FilteredFootprintList.GetCount() + 1,
+            msg.Printf( wxT( "%3zu %s" ), m_FilteredFootprintList.GetCount() + 1,
                      footprint.m_Module.GetData() );
             m_FilteredFootprintList.Add( msg );
             hasItem = true;

@@ -146,11 +146,10 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     if( g_NetObjectslist.size() == 0 )
         return;  // no objects
 
-    /* Here wx gives its best... depending on the build option size can
-       be unsigned int or unsigned long (probably even size_t, but it doesn't
-       support the %z specifier). So the cast is for platform compability */
-    activity += wxString::Format( _( " net count = %lu" ), 
-            (unsigned long)( g_NetObjectslist.size() ) );
+    /* The new %zu specification is needed to properly format a size_t
+     * value (returned by size(), here) */
+    activity += wxString::Format( _( " net count = %zu" ), 
+                g_NetObjectslist.size() );
     SetStatusText( activity );
 
     /* Sort objects by Sheet */
