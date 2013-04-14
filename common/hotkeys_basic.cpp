@@ -563,7 +563,7 @@ int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
     ParseHotkeyConfig( data, aDescList );
 
     /* cleanup */
-    delete buffer;
+    delete[] buffer;
     cfgfile.Close();
     return 1;
 }
