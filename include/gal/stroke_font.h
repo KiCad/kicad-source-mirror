@@ -152,6 +152,16 @@ public:
         m_verticalJustify = aVerticalJustify;
     }
 
+    /**
+     * Function SetGAL
+     * Changes Graphics Abstraction Layer used for drawing items for a new one.
+     * @param aGal is the new GAL instance.
+     */
+    void SetGAL( GAL* aGal )
+    {
+        m_gal = aGal;
+    }
+
 private:
     GAL*                m_gal;                                    ///< Pointer to the GAL
     GlyphList           m_glyphs;                                 ///< Glyph list

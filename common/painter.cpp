@@ -80,3 +80,10 @@ PAINTER::~PAINTER()
 {
     delete m_stroke_font;
 }
+
+
+void PAINTER::SetGAL( GAL* aGal )
+{
+    m_gal = aGal;
+    m_stroke_font->SetGAL( aGal );
+}
