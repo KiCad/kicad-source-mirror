@@ -181,6 +181,13 @@ public:
     }
 
     /**
+     * Function SetGAL
+     * Changes Graphics Abstraction Layer used for drawing items for a new one.
+     * @param aGal is the new GAL instance.
+     */
+    void SetGAL( GAL* aGal );
+
+    /**
      * Function GetSettings
      * Returns pointer to current settings that are going to be used when drawing items.
      * @return Current rendering settings.
