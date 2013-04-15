@@ -786,11 +786,11 @@ void CAIRO_GAL::ComputeWorldScreenMatrix()
 
     MATRIX3x3D translation;
     translation.SetIdentity();
-    translation.SetTranslation( 0.5 * VECTOR2D( screenSize.x, screenSize.y ) );
+    translation.SetTranslation( 0.5 * screenSize );
 
     MATRIX3x3D scale;
     scale.SetIdentity();
-    scale.SetScale( VECTOR2D( worldScale, -worldScale ) );
+    scale.SetScale( VECTOR2D( worldScale, worldScale ) );
 
     MATRIX3x3D lookat;
     lookat.SetIdentity();
