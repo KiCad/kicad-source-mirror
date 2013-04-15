@@ -59,6 +59,10 @@
 #include <python_scripting.h>
 #endif
 
+#if defined(KICAD_GAL)
+#include <class_drawpanel_gal.h>
+#endif
+
 // Keys used in read/write config
 #define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth_mm" )
 #define PCB_SHOW_FULL_RATSNET_OPT       wxT( "PcbFullRatsnest" )
@@ -151,6 +155,11 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, PCB_EDIT_FRAME::Show3D_Frame )
+
+    // Switching canvases
+    EVT_MENU( ID_MENU_CANVAS_DEFAULT, PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_CAIRO,   PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL,  PCB_EDIT_FRAME::SwitchCanvas )
 
     // Menu Get Design Rules Editor
     EVT_MENU( ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG, PCB_EDIT_FRAME::ShowDesignRulesEditor )
@@ -555,6 +564,32 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
     m_Draw3DFrame->SetDefaultFileName( GetBoard()->GetFileName() );
     m_Draw3DFrame->Show( true );
 }
+
+
+void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
+{
+#ifdef KICAD_GAL
+    int id = aEvent.GetId();
+
+    switch( id )
+    {
+    case ID_MENU_CANVAS_DEFAULT:
+        UseGalCanvas( false );
+        break;
+
+    case ID_MENU_CANVAS_CAIRO:
+        m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO, false );
+        UseGalCanvas( true );
+        break;
+
+    case ID_MENU_CANVAS_OPENGL:
+        m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL, false );
+        UseGalCanvas( true );
+        break;
+    }
+#endif
+}
+
 
 
 void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )

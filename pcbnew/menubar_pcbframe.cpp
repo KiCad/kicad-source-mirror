@@ -352,10 +352,25 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Switching GAL-based canvas on/off
     viewMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Switch canvas" ), g_Pcbnew_Editor_Hokeys_Descr, HK_SWITCH_CANVAS, IS_ACCELERATOR );
+    text = AddHotkeyName( _( "&Switch canvas to default" ), g_Pcbnew_Editor_Hokeys_Descr,
+            HK_CANVAS_DEFAULT, IS_ACCELERATOR );
 
-    AddMenuItem( viewMenu, ID_SWITCH_CANVAS,
-                 text, _( "Switch the canvas implementation between old (XOR-based) and new (GAL-based)" ),
+    AddMenuItem( viewMenu, ID_MENU_CANVAS_DEFAULT,
+                 text, _( "Switch the canvas implementation to default" ),
+                KiBitmap( tools_xpm ) );
+
+    text = AddHotkeyName( _( "&Switch canvas to OpenGL" ), g_Pcbnew_Editor_Hokeys_Descr,
+            HK_CANVAS_OPENGL, IS_ACCELERATOR );
+
+    AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
+                 text, _( "Switch the canvas implementation to OpenGL" ),
+                KiBitmap( tools_xpm ) );
+
+    text = AddHotkeyName( _( "&Switch canvas to Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
+            HK_CANVAS_CAIRO, IS_ACCELERATOR );
+
+    AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
+                 text, _( "Switch the canvas implementation to Cairo" ),
                 KiBitmap( tools_xpm ) );
 #endif
 
