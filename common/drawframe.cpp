@@ -46,7 +46,10 @@
 #include <math/box2.h>
 
 #include <wx/fontdlg.h>
-
+#ifdef KICAD_GAL
+#include <view/view.h>
+#include <gal/graphics_abstraction_layer.h>
+#endif /* KICAD_GAL */
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -67,7 +70,6 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, EDA_BASE_FRAME )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
     EVT_MENU_RANGE( ID_ZOOM_IN, ID_ZOOM_REDRAW, EDA_DRAW_FRAME::OnZoom )
-    EVT_MENU( ID_SWITCH_CANVAS, EDA_DRAW_FRAME::OnZoom )
     EVT_MENU_RANGE( ID_OFFCENTER_ZOOM_IN, ID_OFFCENTER_ZOOM_OUT, EDA_DRAW_FRAME::OnZoom )
     EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
                     EDA_DRAW_FRAME::OnZoom )
@@ -943,22 +945,41 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
 void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 {
+    if( aEnable && m_galCanvasActive )
+    {
+        // When we switch between GAL based canvases, all we need is a refresh
+        m_galCanvas->Refresh();
+    }
+
     if( !( aEnable ^ m_galCanvasActive ) )
         return;
 
+    KiGfx::VIEW* view = m_galCanvas->GetView();
+    KiGfx::GAL* gal = m_galCanvas->GetGAL();
+    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+
+    // Display the same view after canvas switching
     if( aEnable )
     {
-        m_canvas->Hide();
+        double zoom =  1 / ( zoomFactor * m_canvas->GetZoom() );
+        view->SetScale( zoom );
+
+        view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+
         m_galCanvas->Show();
-        m_galCanvas->Raise();
         m_galCanvas->Refresh();
     }
     else
     {
         m_galCanvas->Hide();
+
+        double zoom = 1 / ( zoomFactor * view->GetScale() );
+        m_canvas->SetZoom( zoom );
+
+        VECTOR2D center = view->GetCenter();
+        RedrawScreen( wxPoint( center.x, center.y ), false );
+
         m_canvas->Show();
-        m_canvas->Raise();
-        m_canvas->Refresh();
     }
 
     m_galCanvasActive = aEnable;

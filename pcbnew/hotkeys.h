@@ -83,7 +83,9 @@ enum hotkey_id_commnand {
     HK_MACRO_ID_END,
     HK_SWITCH_HIGHCONTRAST_MODE,
 #ifdef KICAD_GAL
-    HK_SWITCH_CANVAS,
+    HK_CANVAS_DEFAULT,
+    HK_CANVAS_OPENGL,
+    HK_CANVAS_CAIRO,
 #endif
 };
 

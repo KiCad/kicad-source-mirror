@@ -581,6 +581,13 @@ public:
      * displays the 3D view of current printed circuit board.
      */
     void Show3D_Frame( wxCommandEvent& event );
+
+    /**
+     * Function ChangeCanvas
+     * switches currently used canvas (default / Cairo / OpenGL).
+     */
+    void SwitchCanvas( wxCommandEvent& aEvent );
+
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**

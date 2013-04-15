@@ -52,7 +52,6 @@ public:
     enum GalType {
         GAL_TYPE_OPENGL,    ///< OpenGL implementation
         GAL_TYPE_CAIRO,     ///< Cairo implementation
-        GAL_TYPE_WXDC       ///< WXDC implementation
     };
 
     EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,

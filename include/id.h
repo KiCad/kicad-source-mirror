@@ -213,7 +213,6 @@ enum main_id
     ID_ZOOM_OUT,
     ID_ZOOM_PAGE,
     ID_ZOOM_REDRAW,
-    ID_SWITCH_CANVAS,
 
     /* Panning command event IDs. */
     ID_PAN_UP,
