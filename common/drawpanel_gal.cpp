@@ -78,12 +78,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     m_viewControls = new KiGfx::WX_VIEW_CONTROLS( m_view, this );
 
-#if wxCHECK_VERSION( 2, 9, 0 )
     Connect( KiGfx::EVT_GAL_REDRAW, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
-#elif wxCHECK_VERSION( 2, 8, 0 )
-    // FIXME Cairo needs this to be uncommented to remove blinking on refreshing
-    Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
-#endif
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
 }
 
@@ -106,6 +101,18 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& aEvent )
 {
+    Refresh();
+}
+
+
+void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
+{
+    m_gal->ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
+}
+
+
+void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
+{
     m_gal->BeginDrawing();
     m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0, 0, 0, 1.0 ) );
     m_gal->ClearScreen();
@@ -119,12 +126,6 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& aEvent )
     m_view->Redraw();
 
     m_gal->EndDrawing();
-}
-
-
-void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
-{
-    m_gal->ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
 }
 
 
