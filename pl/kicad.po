@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-12 17:43+0100\n"
-"PO-Revision-Date: 2013-04-12 17:45+0100\n"
+"POT-Creation-Date: 2013-04-16 17:42+0100\n"
+"PO-Revision-Date: 2013-04-16 17:43+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1033,8 +1033,7 @@ msgstr "Pliki schematów"
 msgid "Could not save backup of file <%s>"
 msgstr "Nie mogę zapisać kopii pliku <%s>"
 
-#: eeschema/files-io.cpp:114 eeschema/netform.cpp:384
-#: eeschema/netform.cpp:1108
+#: eeschema/files-io.cpp:114 eeschema/netform.cpp:380
 #, c-format
 msgid "Failed to create file <%s>"
 msgstr "Błąd przy tworzeniu pliku <%s>"
@@ -2730,24 +2729,24 @@ msgstr "Otwórz podręcznik programu Eeschema"
 msgid "Building net list:"
 msgstr "Tworzenie listy połączeń:"
 
-#: eeschema/netlist.cpp:149
+#: eeschema/netlist.cpp:151
 #, c-format
-msgid " net count = %u"
-msgstr "liczba sieci = %u"
+msgid " net count = %zu"
+msgstr " liczba sieci = %zu"
 
-#: eeschema/netlist.cpp:156
+#: eeschema/netlist.cpp:159
 msgid ", connections... "
 msgstr ", połączeń..."
 
-#: eeschema/netlist.cpp:264 eeschema/netlist.cpp:309 eeschema/netlist.cpp:331
+#: eeschema/netlist.cpp:267 eeschema/netlist.cpp:312 eeschema/netlist.cpp:334
 msgid "done"
 msgstr "wkonano"
 
-#: eeschema/netlist.cpp:270
+#: eeschema/netlist.cpp:273
 msgid ", bus labels..."
 msgstr ", etykiet magistrali..."
 
-#: eeschema/netlist.cpp:313
+#: eeschema/netlist.cpp:316
 msgid ", hierarchy..."
 msgstr ", hierarchii..."
 
@@ -5685,57 +5684,48 @@ msgid "Advanced Format"
 msgstr "Format rozszerzony"
 
 #: eeschema/dialogs/dialog_netlist.cpp:158
-#: eeschema/dialogs/dialog_netlist.cpp:273
 msgid "Netlist Options:"
 msgstr "Opcje listy sieci:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:267
+#: eeschema/dialogs/dialog_netlist.cpp:264
 msgid "Prefix references 'U' and 'IC' with 'X'"
 msgstr "Przedrostek odnośnika 'U' i 'IC' z 'X'"
 
-#: eeschema/dialogs/dialog_netlist.cpp:272
-msgid "Use Net Names"
-msgstr "Użyj nazw sieci"
-
-#: eeschema/dialogs/dialog_netlist.cpp:272
-msgid "Use Net Numbers"
-msgstr "Użyj numerów sieci"
-
-#: eeschema/dialogs/dialog_netlist.cpp:283
+#: eeschema/dialogs/dialog_netlist.cpp:268
 msgid "Simulator command:"
 msgstr "Polecenie symulatora:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:296
+#: eeschema/dialogs/dialog_netlist.cpp:281
 msgid "&Run Simulator"
 msgstr "&Uruchom symulator"
 
-#: eeschema/dialogs/dialog_netlist.cpp:337
+#: eeschema/dialogs/dialog_netlist.cpp:322
 #: eeschema/dialogs/dialog_netlist_base.cpp:104
 msgid "Netlist command:"
 msgstr "Polecenie listy sieci:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:350
+#: eeschema/dialogs/dialog_netlist.cpp:335
 msgid "Title:"
 msgstr "Tytuł:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:460
+#: eeschema/dialogs/dialog_netlist.cpp:440
 msgid "Save Netlist File"
 msgstr "Zapisz pliki z listą sieci"
 
-#: eeschema/dialogs/dialog_netlist.cpp:496
+#: eeschema/dialogs/dialog_netlist.cpp:474
 #, c-format
 msgid "%s Export"
 msgstr "%s Eksportuj"
 
-#: eeschema/dialogs/dialog_netlist.cpp:549
+#: eeschema/dialogs/dialog_netlist.cpp:527
 msgid "SPICE netlist file (.cir)|*.cir"
 msgstr "Lista sieci programu SPICE (.cir)|*cir"
 
-#: eeschema/dialogs/dialog_netlist.cpp:554
+#: eeschema/dialogs/dialog_netlist.cpp:532
 msgid "CadStar netlist file (.frp)|*.frp"
 msgstr "Lista sieci programu CadStar (.frp)|*.frp"
 
-#: eeschema/dialogs/dialog_netlist.cpp:595
+#: eeschema/dialogs/dialog_netlist.cpp:573
 msgid ""
 "Some items are not annotated\n"
 "Do you want to annotate schematic?"
@@ -5743,27 +5733,27 @@ msgstr ""
 "Niektóre elementy nie są ponumerowane\n"
 "Czy chcesz ponumerować schemat?"
 
-#: eeschema/dialogs/dialog_netlist.cpp:610
+#: eeschema/dialogs/dialog_netlist.cpp:588
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Błąd: Zdublowane nazwy arkuszy. Kontunować?"
 
-#: eeschema/dialogs/dialog_netlist.cpp:763
+#: eeschema/dialogs/dialog_netlist.cpp:737
 msgid "This plugin already exists. Abort"
 msgstr "Ta wtyczka już istnieje. Przerwano."
 
-#: eeschema/dialogs/dialog_netlist.cpp:793
+#: eeschema/dialogs/dialog_netlist.cpp:767
 msgid "Error. You must provide a command String"
 msgstr "Błąd. Musisz wypełnić pole \"Polecenie netlisty\""
 
-#: eeschema/dialogs/dialog_netlist.cpp:799
+#: eeschema/dialogs/dialog_netlist.cpp:773
 msgid "Error. You must provide a Title"
 msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
 
-#: eeschema/dialogs/dialog_netlist.cpp:820
+#: eeschema/dialogs/dialog_netlist.cpp:794
 msgid "Plugin files:"
 msgstr "Pliki wtyczek:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:851
+#: eeschema/dialogs/dialog_netlist.cpp:825
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
@@ -6769,63 +6759,63 @@ msgstr "Ukryj wszystkie warstwy miedzi"
 msgid "Render"
 msgstr "Pokaż"
 
-#: pcbnew/class_pcb_layer_widget.cpp:278
+#: pcbnew/class_pcb_layer_widget.cpp:283
 msgid "Front copper layer"
 msgstr "Górna strona ścieżek"
 
-#: pcbnew/class_pcb_layer_widget.cpp:282
+#: pcbnew/class_pcb_layer_widget.cpp:287
 msgid "Back copper layer"
 msgstr "Dolna strona ścieżek"
 
-#: pcbnew/class_pcb_layer_widget.cpp:286
+#: pcbnew/class_pcb_layer_widget.cpp:291
 msgid "Inner copper layer"
 msgstr "Wewnętrzna strona ścieżek"
 
-#: pcbnew/class_pcb_layer_widget.cpp:301
+#: pcbnew/class_pcb_layer_widget.cpp:309
 msgid "Adhesive on board's front"
 msgstr "Warstwa kleju na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:302
+#: pcbnew/class_pcb_layer_widget.cpp:310
 msgid "Adhesive on board's back"
 msgstr "Warstwa kleju na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:303
+#: pcbnew/class_pcb_layer_widget.cpp:311
 msgid "Solder paste on board's front"
 msgstr "Pasty lutowniczej na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:304
+#: pcbnew/class_pcb_layer_widget.cpp:312
 msgid "Solder paste on board's back"
 msgstr "Pasty lutowniczej na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:305
+#: pcbnew/class_pcb_layer_widget.cpp:313
 msgid "Silkscreen on board's front"
 msgstr "Warstwa opisowa na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:306
+#: pcbnew/class_pcb_layer_widget.cpp:314
 msgid "Silkscreen on board's back"
 msgstr "Warstwa opisowa na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:307
+#: pcbnew/class_pcb_layer_widget.cpp:315
 msgid "Solder mask on board's front"
 msgstr "Maska lutownicza na warstwie górnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:308
+#: pcbnew/class_pcb_layer_widget.cpp:316
 msgid "Solder mask on board's back"
 msgstr "Maska lutowniczna na warstwie dolnej"
 
-#: pcbnew/class_pcb_layer_widget.cpp:309
+#: pcbnew/class_pcb_layer_widget.cpp:317
 msgid "Explanatory drawings"
 msgstr "Rysunkowa dodatkowa"
 
-#: pcbnew/class_pcb_layer_widget.cpp:310
+#: pcbnew/class_pcb_layer_widget.cpp:318
 msgid "Explanatory comments"
 msgstr "Komentarzy"
 
-#: pcbnew/class_pcb_layer_widget.cpp:311 pcbnew/class_pcb_layer_widget.cpp:312
+#: pcbnew/class_pcb_layer_widget.cpp:319 pcbnew/class_pcb_layer_widget.cpp:320
 msgid "User defined meaning"
 msgstr "Znaczenie zdefiniowane przez użytkownika"
 
-#: pcbnew/class_pcb_layer_widget.cpp:313
+#: pcbnew/class_pcb_layer_widget.cpp:321
 msgid "Board's perimeter definition"
 msgstr "Rysunkowa z obrzeżem płytki"
 
@@ -18139,6 +18129,12 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:294
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Use Net Names"
+#~ msgstr "Użyj nazw sieci"
+
+#~ msgid "Use Net Numbers"
+#~ msgstr "Użyj numerów sieci"
 
 #~ msgid "> not found"
 #~ msgstr "> nie został znaleziony"
