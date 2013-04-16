@@ -305,6 +305,7 @@ void CAIRO_GAL::DrawCircle( VECTOR2D aCenterPoint, double aRadius )
     // A circle is drawn using an arc
     cairo_new_sub_path( cairoImage );
     cairo_arc( cairoImage, aCenterPoint.x, aCenterPoint.y, aRadius, 0.0, 2 * M_PI );
+
     isElementAdded = true;
 }
 
@@ -314,6 +315,7 @@ void CAIRO_GAL::DrawArc( VECTOR2D aCenterPoint, double aRadius, double aStartAng
 {
     cairo_new_sub_path( cairoImage );
     cairo_arc( cairoImage, aCenterPoint.x, aCenterPoint.y, aRadius, aStartAngle, aEndAngle );
+
     isElementAdded = true;
 }
 
@@ -357,6 +359,9 @@ void CAIRO_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
             cairo_line_to( cairoImage, it->x, it->y );
         }
     }
+
+    cairo_set_source_rgba( cairoImage, fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+    cairo_fill_preserve( cairoImage );
 
     isElementAdded = true;
 }
