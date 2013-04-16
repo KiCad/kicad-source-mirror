@@ -75,7 +75,7 @@ public:
     void SetView( KiGfx::VIEW* aView ) { m_view = aView; }
     KiGfx::VIEW* GetView() const { return m_view; }
 
-    //void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
+    virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
 
 protected:
     void onPaint( wxPaintEvent& aEvent );
