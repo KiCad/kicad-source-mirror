@@ -75,12 +75,11 @@ public:
     void SetView( KiGfx::VIEW* aView ) { m_view = aView; }
     KiGfx::VIEW* GetView() const { return m_view; }
 
+    //void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
+
 protected:
-    void onPaint( wxEvent& event );
+    void onPaint( wxPaintEvent& aEvent );
     void onSize( wxSizeEvent& aEvent );
-    void onMotion( wxMouseEvent& event );
-    void onButton( wxMouseEvent& event );
-    void onEraseBackground( wxEvent& event );
 
     KiGfx::GAL*              m_gal;              ///< Interface for drawing objects on a 2D-surface
     KiGfx::VIEW*             m_view;             ///< Stores view settings (scale, center, etc.)
@@ -92,7 +91,7 @@ protected:
     VECTOR2D                 m_screenSize;       ///< Stores current screen size
     wxWindow*                m_parentFrame;      ///< Pointer to the parent frame
 
-    std::string m_galShaderPath;            ///< Path to shader files, used in OpenGL mode
+    std::string              m_galShaderPath;    ///< Path to shader files, used in OpenGL mode
 };
 
 #endif

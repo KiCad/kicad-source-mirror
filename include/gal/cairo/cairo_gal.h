@@ -377,7 +377,6 @@ private:
      * @param aEvent is the paint event.
      */
     void onPaint( wxPaintEvent& aEvent );
-    void onEraseBackground( wxEraseEvent& aEvent );
 
     /**
      * @brief Window resizing event handler.
