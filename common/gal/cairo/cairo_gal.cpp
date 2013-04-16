@@ -51,25 +51,16 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     SetSize( aParent->GetSize() );
 
     // Connecting the event handlers
+    Connect( wxEVT_SIZE, wxSizeEventHandler( CAIRO_GAL::onSize ) );
+    Connect( wxEVT_PAINT, wxPaintEventHandler( CAIRO_GAL::onPaint ) );
+
     // Mouse events are skipped to the parent
-    this->Connect( wxEVT_SIZE, wxSizeEventHandler( CAIRO_GAL::onSize ) );
-    this->Connect( wxEVT_PAINT, wxPaintEventHandler( CAIRO_GAL::onPaint ) );
-    this->Connect( wxEVT_ERASE_BACKGROUND, wxEraseEventHandler( CAIRO_GAL::onEraseBackground ) );
-    aParent->Connect( wxEVT_ERASE_BACKGROUND,
-                      wxEraseEventHandler( CAIRO_GAL::onEraseBackground ) );
-    aParent->GetParent()->Connect( wxEVT_ERASE_BACKGROUND,
-                                   wxEraseEventHandler( CAIRO_GAL::onEraseBackground ) );
-
-    SetBackgroundStyle( wxBG_STYLE_CUSTOM );
-    aParent->SetBackgroundStyle( wxBG_STYLE_CUSTOM );
-    aParent->GetParent()->SetBackgroundStyle( wxBG_STYLE_CUSTOM );
-
-    this->Connect( wxEVT_MOTION, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
-    this->Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
-    this->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
-    this->Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
-    this->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
-    this->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MOTION, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEFT_UP, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
 
     // Initialize line attributes map
     lineCapMap[LINE_CAP_BUTT]    = CAIRO_LINE_CAP_BUTT;
@@ -88,8 +79,6 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     initCursor( 21 );
 
-    screenSizeY = screenSize.y;
-
     // Allocate memory
     allocateBitmaps();
 
@@ -105,9 +94,7 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 CAIRO_GAL::~CAIRO_GAL()
 {
     // TODO Deleting of list contents like groups and paths
-    delete[] bitmapBuffer;
-    delete[] bitmapBufferBackup;
-    delete wxBitmap_;
+    deleteBitmaps();
 }
 
 
@@ -117,17 +104,10 @@ void CAIRO_GAL::onPaint( wxPaintEvent& aEvent )
 }
 
 
-void CAIRO_GAL::onEraseBackground( wxEraseEvent& aEvent )
-{
-    // FIXME
-}
-
-
 void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
 {
     deleteBitmaps();
 
-    screenSizeY = aHeight;
     screenSize  = VECTOR2D( aWidth, aHeight );
 
     // Recreate the bitmaps
@@ -141,9 +121,8 @@ void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
 
 void CAIRO_GAL::onSize( wxSizeEvent& aEvent )
 {
-    wxSize newSize = aEvent.GetSize();
-
-    ResizeScreen( newSize.x, newSize.y );
+    ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
+    PostPaint();
 }
 
 
@@ -225,7 +204,7 @@ void CAIRO_GAL::EndDrawing()
     int offset = 0;
 
     // Copy the cairo image to the wxDC bitmap
-    for( int j = 0; j < screenSizeY; j++ )
+    for( int j = 0; j < screenSize.y; j++ )
     {
         offset = j * (int) screenSize.x;
 
@@ -234,7 +213,7 @@ void CAIRO_GAL::EndDrawing()
             unsigned int value    = bitmapBuffer[offset + column];
             pixelIterator.Red()   = value >> 16;
             pixelIterator.Green() = value >> 8;
-            pixelIterator.Blue()  = value >> 0;
+            pixelIterator.Blue()  = value;
             pixelIterator++;
         }
 
@@ -287,7 +266,7 @@ void CAIRO_GAL::SaveScreen()
     // Copy the current bitmap to the backup buffer
     int offset = 0;
 
-    for( int j = 0; j < screenSizeY; j++ )
+    for( int j = 0; j < screenSize.y; j++ )
     {
         for( int i = 0; i < stride; i++ )
         {
@@ -302,7 +281,7 @@ void CAIRO_GAL::RestoreScreen()
 {
     int offset = 0;
 
-    for( int j = 0; j < screenSizeY; j++ )
+    for( int j = 0; j < screenSize.y; j++ )
     {
         for( int i = 0; i < stride; i++ )
         {

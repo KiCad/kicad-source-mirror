@@ -40,30 +40,6 @@
 
 #define METRIC_UNIT_LENGTH (1e9)
 
-void EDA_DRAW_PANEL_GAL::onPaint( wxEvent& event )
-{
-    m_gal->BeginDrawing();
-    m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0, 0, 0, 1.0 ) );
-    m_gal->ClearScreen();
-    m_gal->SetGridOrigin( VECTOR2D( 0, 0 ) );
-    m_gal->SetGridOriginMarkerSize( 15 );
-    m_gal->SetGridSize( VECTOR2D( METRIC_UNIT_LENGTH / 10000.0, METRIC_UNIT_LENGTH / 10000.0 ) );
-    m_gal->SetGridDrawThreshold( 10 );
-    m_gal->SetLayerDepth( 0 );
-
-    m_gal->DrawGrid();
-    m_view->Redraw();
-
-    m_gal->EndDrawing();
-    m_gal->Flush();
-}
-
-
-void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
-{
-    m_gal->ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
-}
-
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
@@ -102,14 +78,11 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     m_viewControls = new KiGfx::WX_VIEW_CONTROLS( m_view, this );
 
-    m_painter = new KiGfx::PCB_PAINTER( m_gal );
-    m_view->SetPainter( m_painter );
-
 #if wxCHECK_VERSION( 2, 9, 0 )
-    Connect( KiGfx::EVT_GAL_REDRAW, wxEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
+    Connect( KiGfx::EVT_GAL_REDRAW, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
 #elif wxCHECK_VERSION( 2, 8, 0 )
     // FIXME Cairo needs this to be uncommented to remove blinking on refreshing
-    Connect( wxEVT_PAINT, wxEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
+    Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
 #endif
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
 }
@@ -128,6 +101,30 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 
     if( m_gal )
         delete m_gal;
+}
+
+
+void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& aEvent )
+{
+    m_gal->BeginDrawing();
+    m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0, 0, 0, 1.0 ) );
+    m_gal->ClearScreen();
+    m_gal->SetGridOrigin( VECTOR2D( 0, 0 ) );
+    m_gal->SetGridOriginMarkerSize( 15 );
+    m_gal->SetGridSize( VECTOR2D( METRIC_UNIT_LENGTH / 10000.0, METRIC_UNIT_LENGTH / 10000.0 ) );
+    m_gal->SetGridDrawThreshold( 10 );
+    m_gal->SetLayerDepth( 0 );
+
+    m_gal->DrawGrid();
+    m_view->Redraw();
+
+    m_gal->EndDrawing();
+}
+
+
+void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
+{
+    m_gal->ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
 }
 
 
