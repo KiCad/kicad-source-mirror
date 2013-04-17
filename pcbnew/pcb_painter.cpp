@@ -486,7 +486,6 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
     COLOR4D fillColor = getLayerColor( aContainer->GetLayer(), aContainer->GetNet() );
     std::vector<CPolyPt>::iterator polyIterator;
     std::deque<VECTOR2D> corners;
-    VECTOR2D startPoint;
     int fillMode = aContainer->GetFillMode();
 
     m_gal->SetFillColor( fillColor );
@@ -501,23 +500,15 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
 
     if( fillMode == 0 )
     {
-        startPoint = VECTOR2D( polyPoints.front() );
         for( polyIterator = polyPoints.begin(); polyIterator != polyPoints.end(); polyIterator++ )
         {
             // Find out all of polygons and then draw them
-            if( !polyIterator->end_contour )
-            {
-                corners.push_back( VECTOR2D( *polyIterator ) );
-            }
-            else
+            corners.push_back( VECTOR2D( *polyIterator ) );
+
+            if( polyIterator->end_contour )
             {
                 m_gal->DrawPolygon( corners );
-
-                // Closing point for polyline
-                corners.push_back( VECTOR2D( startPoint ) );
                 m_gal->DrawPolyline( corners );
-                startPoint = VECTOR2D( *( polyIterator + 1 ) );
-
                 corners.clear();
             }
         }
