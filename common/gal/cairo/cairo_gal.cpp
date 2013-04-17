@@ -403,9 +403,6 @@ void CAIRO_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
         }
     }
 
-    cairo_set_source_rgba( cairoImage, fillColor.r, fillColor.g, fillColor.b, fillColor.a );
-    cairo_fill_preserve( cairoImage );
-
     isElementAdded = true;
 }
 
