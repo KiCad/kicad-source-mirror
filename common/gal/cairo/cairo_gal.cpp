@@ -29,6 +29,7 @@
 #include <wx/log.h>
 
 #include <gal/cairo/cairo_gal.h>
+#include <gal/definitions.h>
 
 using namespace KiGfx;
 
@@ -313,6 +314,8 @@ void CAIRO_GAL::DrawCircle( VECTOR2D aCenterPoint, double aRadius )
 void CAIRO_GAL::DrawArc( VECTOR2D aCenterPoint, double aRadius, double aStartAngle,
                          double aEndAngle )
 {
+    SWAP( aStartAngle, >, aEndAngle );
+
     cairo_new_sub_path( cairoImage );
     cairo_arc( cairoImage, aCenterPoint.x, aCenterPoint.y, aRadius, aStartAngle, aEndAngle );
 
