@@ -103,7 +103,7 @@ public:
     virtual void EndDrawing();
 
     /// @copydoc GAL::DrawLine()
-    virtual void DrawLine( VECTOR2D aStartPoint, VECTOR2D aEndPoint );
+    virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /// @copydoc GAL::DrawSegment()
     virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth );
@@ -112,21 +112,21 @@ public:
     virtual void DrawPolyline( std::deque<VECTOR2D>& aPointList );
 
     /// @copydoc GAL::DrawCircle()
-    virtual void DrawCircle( VECTOR2D aCenterPoint, double aRadius );
+    virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius );
 
     /// @copydoc GAL::DrawArc()
     virtual void
-    DrawArc( VECTOR2D aCenterPoint, double aRadius, double aStartAngle, double aEndAngle );
+    DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle );
 
     /// @copydoc GAL::DrawRectangle()
-    virtual void DrawRectangle( VECTOR2D aStartPoint, VECTOR2D aEndPoint );
+    virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /// @copydoc GAL::DrawPolygon()
     virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList );
 
     /// @copydoc GAL::DrawCurve()
-    virtual void DrawCurve( VECTOR2D startPoint, VECTOR2D controlPointA, VECTOR2D controlPointB,
-                            VECTOR2D endPoint );
+    virtual void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
+                            const VECTOR2D& controlPointB, const VECTOR2D& endPoint );
 
     // --------------
     // Screen methods
@@ -206,10 +206,10 @@ public:
     virtual void Rotate( double aAngle );
 
     /// @copydoc GAL::Translate()
-    virtual void Translate( VECTOR2D aTranslation );
+    virtual void Translate( const VECTOR2D& aTranslation );
 
     /// @copydoc GAL::Scale()
-    virtual void Scale( VECTOR2D aScale );
+    virtual void Scale( const VECTOR2D& aScale );
 
     /// @copydoc GAL::Save()
     virtual void Save();
@@ -253,7 +253,7 @@ public:
     void SetScreenDPI( double aScreenDPI );
 
     /// @copydoc GAL::SetLookAtPoint()
-    void SetLookAtPoint( VECTOR2D aPoint );
+    void SetLookAtPoint( const VECTOR2D& aPoint );
 
     /// @copydoc GAL::GetLookAtPoint()
     VECTOR2D GetLookAtPoint();
@@ -275,7 +275,7 @@ public:
     // -------
 
     /// @copydoc GAL::ComputeCursorToWorld()
-    virtual VECTOR2D ComputeCursorToWorld( VECTOR2D aCursorPosition );
+    virtual VECTOR2D ComputeCursorToWorld( const VECTOR2D& aCursorPosition );
 
     /// @copydoc GAL::SetIsCursorEnabled()
     void SetIsCursorEnabled( bool aIsCursorEnabled );
@@ -313,7 +313,7 @@ public:
     }
 
 protected:
-    virtual void DrawGridLine( VECTOR2D aStartPoint, VECTOR2D aEndPoint );
+    virtual void DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
 private:
     /// Super class definition
@@ -384,7 +384,7 @@ private:
      * @param ADepthOffset is the relative depth of the semi-circle.
      *
      */
-    void drawSemiCircle( VECTOR2D aCenterPoint, double aRadius, double aAngle,
+    void drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle,
                          double aDepthOffset );
 
     /// Compute the points of a unit circle.
@@ -470,7 +470,7 @@ private:
      * @param aStartPoint is the start point of the line.
      * @param aEndPoint is the end point of the line.
      */
-    inline void drawLineQuad( VECTOR2D aStartPoint, VECTOR2D aEndPoint );
+    inline void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /**
      * @brief Draw the line cap
@@ -479,12 +479,13 @@ private:
      * @param aEndPoint is the end point of the line.
      * @param aDepthOffset is the relative depth of the line cap.
      */
-    inline void drawLineCap( VECTOR2D aStartPoint, VECTOR2D aEndPoint, double aDepthOffset );
+    inline void drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
+                             double aDepthOffset );
 
     inline void selectShader( int aIndex );
 
     /// @copydoc GAL::DrawRoundedSegment()
-    void drawRoundedSegment( VECTOR2D aStartPoint, VECTOR2D aEndPoint, double aWidth,
+    void drawRoundedSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth,
                              bool aStroke = false, bool aGlBegin = false );
 
 

@@ -105,7 +105,7 @@ public:
      * @param aStartPoint   is the start point of the line.
      * @param aEndPoint     is the end point of the line.
      */
-    virtual void DrawLine( VECTOR2D aStartPoint, VECTOR2D aEndPoint ) = 0;
+    virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
 
     /**
      * @brief Draw a rounded segment.
@@ -131,7 +131,7 @@ public:
      * @param aCenterPoint is the center point of the circle.
      * @param aRadius is the radius of the circle.
      */
-    virtual void DrawCircle( VECTOR2D aCenterPoint, double aRadius ) = 0;
+    virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) = 0;
 
     /**
      * @brief Draw an arc.
@@ -142,7 +142,7 @@ public:
      * @param aEndAngle     is the end angle of the arc.
      */
     virtual void
-    DrawArc( VECTOR2D aCenterPoint, double aRadius, double aStartAngle, double aEndAngle ) = 0;
+    DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle ) = 0;
 
     /**
      * @brief Draw a rectangle.
@@ -150,7 +150,7 @@ public:
      * @param aStartPoint   is the start point of the rectangle.
      * @param aEndPoint     is the end point of the rectangle.
      */
-    virtual void DrawRectangle( VECTOR2D aStartPoint, VECTOR2D aEndPoint ) = 0;
+    virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
 
     /**
      * @brief Draw a polygon.
@@ -167,8 +167,8 @@ public:
      * @param controlPointB is the second control point.
      * @param endPoint      is the end point of the spline.
      */
-    virtual void DrawCurve( VECTOR2D startPoint,    VECTOR2D controlPointA,
-                            VECTOR2D controlPointB, VECTOR2D endPoint ) = 0;
+    virtual void DrawCurve( const VECTOR2D& startPoint,    const VECTOR2D& controlPointA,
+                            const VECTOR2D& controlPointB, const VECTOR2D& endPoint ) = 0;
 
     // --------------
     // Screen methods
@@ -326,14 +326,14 @@ public:
      *
      * @param aTranslation is the translation vector.
      */
-    virtual void Translate( VECTOR2D aTranslation ) = 0;
+    virtual void Translate( const VECTOR2D& aTranslation ) = 0;
 
     /**
      * @brief Scale the context.
      *
      * @param aScale is the scale factor for the x- and y-axis.
      */
-    virtual void Scale( VECTOR2D aScale ) = 0;
+    virtual void Scale( const VECTOR2D& aScale ) = 0;
 
     /// @brief Save the context.
     virtual void Save() = 0;
@@ -476,7 +476,7 @@ public:
      * @param aDepthRange is the depth range where component x is the near clipping plane and y
      *        is the far clipping plane.
      */
-    inline void SetDepthRange( VECTOR2D aDepthRange )
+    inline void SetDepthRange( const VECTOR2D& aDepthRange )
     {
         depthRange = aDepthRange;
     }
@@ -617,7 +617,7 @@ public:
      * @param aCursorPosition is the cursor position in screen coordinates.
      * @return the cursor position in world coordinates.
      */
-    virtual VECTOR2D ComputeCursorToWorld( VECTOR2D aCursorPosition ) = 0;
+    virtual VECTOR2D ComputeCursorToWorld( const VECTOR2D& aCursorPosition ) = 0;
 
     /**
      * @brief Enable/Disable cursor.
@@ -720,7 +720,7 @@ protected:
      * @param aStartPoint is the start point of the line.
      * @param aEndPoint is the end point of the line.
      */
-    virtual void DrawGridLine( VECTOR2D aStartPoint, VECTOR2D aEndPoint ) = 0;
+    virtual void DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
 };
 } // namespace KiGfx
 

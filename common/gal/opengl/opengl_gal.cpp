@@ -439,7 +439,7 @@ inline void OPENGL_GAL::selectShader( int aIndex )
 }
 
 
-void OPENGL_GAL::drawRoundedSegment( VECTOR2D aStartPoint, VECTOR2D aEndPoint,
+void OPENGL_GAL::drawRoundedSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
                                      double aWidth, bool aStroke, bool aGlBegin )
 {
     VECTOR2D l     = (aEndPoint - aStartPoint);
@@ -493,7 +493,7 @@ void OPENGL_GAL::drawRoundedSegment( VECTOR2D aStartPoint, VECTOR2D aEndPoint,
 }
 
 
-inline void OPENGL_GAL::drawLineQuad( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
+inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
     double   lineLength     = startEndVector.EuclideanNorm();
@@ -564,10 +564,11 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
 }
 
 
-inline void OPENGL_GAL::drawLineCap( VECTOR2D aStartPoint, VECTOR2D aEndPoint, double aDepthOffset )
+inline void OPENGL_GAL::drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
+                                     double aDepthOffset )
 {
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
-    double   lineLength     = startEndVector.EuclideanNorm();
+    // double   lineLength     = startEndVector.EuclideanNorm();
     double   lineAngle      = atan2( startEndVector.y, startEndVector.x );
 
     switch( lineCap )
@@ -582,16 +583,16 @@ inline void OPENGL_GAL::drawLineCap( VECTOR2D aStartPoint, VECTOR2D aEndPoint, d
         break;
 
     case LINE_CAP_SQUARED:
-        VECTOR2D offset;
-        offset = startEndVector * ( lineWidth / lineLength / 2.0 );
-        aStartPoint = aStartPoint - offset;
-        aEndPoint = aEndPoint + offset;
+        // FIXME? VECTOR2D offset;
+        // offset = startEndVector * ( lineWidth / lineLength / 2.0 );
+        // aStartPoint = aStartPoint - offset;
+        // aEndPoint = aEndPoint + offset;
         break;
     }
 }
 
 
-void OPENGL_GAL::DrawLine( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
+void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     if( isUseShader )
     {
@@ -816,7 +817,7 @@ void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
 }
 
 
-void OPENGL_GAL::DrawRectangle( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
+void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     // Compute the diagonal points of the rectangle
     VECTOR2D diagonalPointA( aEndPoint.x, aStartPoint.y );
@@ -890,7 +891,7 @@ void OPENGL_GAL::DrawRectangle( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
 }
 
 
-void OPENGL_GAL::DrawCircle( VECTOR2D aCenterPoint, double aRadius )
+void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 {
     // We need a minimum radius, else simply don't draw the circle
     if( aRadius <= 0.0 )
@@ -959,7 +960,7 @@ void OPENGL_GAL::DrawCircle( VECTOR2D aCenterPoint, double aRadius )
 
 
 // This method is used for round line caps
-void OPENGL_GAL::drawSemiCircle( VECTOR2D aCenterPoint, double aRadius, double aAngle,
+void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle,
                                  double aDepthOffset )
 {
     // XXX Depth seems to be buggy
@@ -975,7 +976,7 @@ void OPENGL_GAL::drawSemiCircle( VECTOR2D aCenterPoint, double aRadius, double a
 
 
 // FIXME Optimize
-void OPENGL_GAL::DrawArc( VECTOR2D aCenterPoint, double aRadius, double aStartAngle,
+void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
                           double aEndAngle )
 {
     if( aRadius <= 0 )
@@ -1158,8 +1159,8 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 }
 
 
-void OPENGL_GAL::DrawCurve( VECTOR2D aStartPoint, VECTOR2D aControlPointA,
-                            VECTOR2D aControlPointB, VECTOR2D aEndPoint )
+void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControlPointA,
+                            const VECTOR2D& aControlPointB, const VECTOR2D& aEndPoint )
 {
     // FIXME The drawing quality needs to be improved
     // FIXME Perhaps choose a quad/triangle strip instead?
@@ -1266,13 +1267,13 @@ void OPENGL_GAL::Rotate( double aAngle )
 }
 
 
-void OPENGL_GAL::Translate( VECTOR2D aVector )
+void OPENGL_GAL::Translate( const VECTOR2D& aVector )
 {
     glTranslated( aVector.x, aVector.y, 0 );
 }
 
 
-void OPENGL_GAL::Scale( VECTOR2D aScale )
+void OPENGL_GAL::Scale( const VECTOR2D& aScale )
 {
     // TODO: Check method
     glScaled( aScale.x, aScale.y, 0 );
@@ -1487,11 +1488,12 @@ void OPENGL_GAL::initCursor( int aCursorSize )
 }
 
 
-VECTOR2D OPENGL_GAL::ComputeCursorToWorld( VECTOR2D aCursorPosition )
+VECTOR2D OPENGL_GAL::ComputeCursorToWorld( const VECTOR2D& aCursorPosition )
 {
-    aCursorPosition.y = screenSize.y - aCursorPosition.y;
+    VECTOR2D cursorPosition = aCursorPosition;
+    cursorPosition.y = screenSize.y - aCursorPosition.y;
     MATRIX3x3D inverseMatrix = worldScreenMatrix.Inverse();
-    VECTOR2D    cursorPositionWorld = inverseMatrix * aCursorPosition;
+    VECTOR2D   cursorPositionWorld = inverseMatrix * cursorPosition;
 
     return cursorPositionWorld;
 }
@@ -1552,7 +1554,7 @@ void OPENGL_GAL::DrawCursor( VECTOR2D aCursorPosition )
 }
 
 
-void OPENGL_GAL::DrawGridLine( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
+void OPENGL_GAL::DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     // We check, if we got a horizontal or a vertical grid line and compute the offset
     VECTOR2D perpendicularVector;
