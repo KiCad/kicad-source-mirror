@@ -550,21 +550,37 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension )
 
 void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 {
-    COLOR4D strokeColor = getLayerColor( aTarget->GetLayer(), 0 );
-    double  radius;
+    COLOR4D  strokeColor = getLayerColor( aTarget->GetLayer(), 0 );
+    VECTOR2D position( aTarget->GetPosition() );
+    double   size, radius;
 
-    // according to PCB_TARGET::Draw() (class_mire.cpp)
-    if( aTarget->GetShape() )    // shape X
+    m_gal->SetLineWidth( aTarget->GetWidth() );
+    m_gal->SetStrokeColor( strokeColor );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+
+    m_gal->Save();
+    m_gal->Translate( position );
+
+    if( aTarget->GetShape() )
     {
-        radius = aTarget->GetSize() / 2;
+        // shape x
+        m_gal->Rotate( M_PI / 4.0 );
+        size   = 2.0 * aTarget->GetSize() / 3.0;
+        radius = aTarget->GetSize() / 2.0;
     }
     else
     {
-        radius = aTarget->GetSize() / 3;
+        // shape +
+        size   = aTarget->GetSize() / 2.0;
+        radius = aTarget->GetSize() / 3.0;
     }
 
-    m_gal->SetStrokeColor( strokeColor );
-    m_gal->SetIsFill( true );
-    m_gal->SetIsStroke( true );
-    m_gal->DrawCircle( VECTOR2D( aTarget->GetPosition() ), radius );
+    m_gal->DrawLine( VECTOR2D( -size, 0.0 ),
+                     VECTOR2D(  size, 0.0 ) );
+    m_gal->DrawLine( VECTOR2D( 0.0, -size ),
+                     VECTOR2D( 0.0,  size ) );
+    m_gal->DrawCircle( VECTOR2D( 0.0, 0.0 ), radius );
+
+    m_gal->Restore();
 }
