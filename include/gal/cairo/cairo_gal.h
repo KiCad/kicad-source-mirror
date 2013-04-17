@@ -98,6 +98,9 @@ public:
     /// @copydoc GAL::DrawLine()
     virtual void DrawLine( VECTOR2D aStartPoint, VECTOR2D aEndPoint );
 
+    /// @copydoc GAL::DrawSegment()
+    virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth );
+
     /// @copydoc GAL::DrawPolyline()
     virtual void DrawPolyline( std::deque<VECTOR2D>& aPointList );
 

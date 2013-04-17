@@ -224,42 +224,26 @@ void PCB_PAINTER::draw( const TRACK* aTrack )
 {
     VECTOR2D start( aTrack->GetStart() );
     VECTOR2D end( aTrack->GetEnd() );
-    COLOR4D  strokeColor = getLayerColor( aTrack->GetLayer(), aTrack->GetNet() );
+    int      width = aTrack->GetWidth();
+    COLOR4D  color = getLayerColor( aTrack->GetLayer(), aTrack->GetNet() );
 
-    m_gal->SetLineCap( LINE_CAP_ROUND );
-    m_gal->SetLineJoin( LINE_JOIN_ROUND );
-    m_gal->SetStrokeColor( strokeColor );
+    m_gal->SetStrokeColor( color );
+    m_gal->SetIsStroke( true );
+
     if( m_pcbSettings->m_sketchModeSelect[TRACKS_VISIBLE] )
     {
         // Outline mode
-        VECTOR2D line   = end - start;
-        double   length = line.EuclideanNorm();
-        int      width  = aTrack->GetWidth();
-
         m_gal->SetLineWidth( m_pcbSettings->m_outlineWidth );
         m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->Save();
-
-        m_gal->Translate( start );
-        m_gal->Rotate( line.Angle() );
-        m_gal->DrawLine( VECTOR2D( 0,       width / 2 ),
-                         VECTOR2D( length,  width / 2 ) );
-        m_gal->DrawLine( VECTOR2D( 0,      -width / 2 ),
-                         VECTOR2D( length, -width / 2 ) );
-        m_gal->DrawArc( VECTOR2D( 0, 0 ),      width / 2, M_PI / 2, 3 * M_PI / 2 );
-        m_gal->DrawArc( VECTOR2D( length, 0 ), width / 2, M_PI / 2, -M_PI / 2 );
-
-        m_gal->Restore();
     }
     else
     {
         // Filled mode
+        m_gal->SetFillColor( color );
         m_gal->SetIsFill( true );
-        m_gal->SetIsStroke( false );
-        m_gal->SetLineWidth( aTrack->GetWidth() );
-        m_gal->DrawLine( start, end );
     }
+
+    m_gal->DrawSegment( start, end, width );
 }
 
 

@@ -301,6 +301,46 @@ void CAIRO_GAL::DrawLine( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
 }
 
 
+void CAIRO_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth )
+{
+    cairo_set_line_cap( cairoImage, CAIRO_LINE_CAP_ROUND );
+    cairo_set_line_join( cairoImage, CAIRO_LINE_JOIN_ROUND );
+
+    if( isFillEnabled )
+    {
+        cairo_set_line_width( cairoImage, aWidth );
+
+        cairo_move_to( cairoImage, (double) aStartPoint.x, (double) aStartPoint.y );
+        cairo_line_to( cairoImage, (double) aEndPoint.x, (double) aEndPoint.y );
+    }
+    else
+    {
+        VECTOR2D startEndVector = aEndPoint - aStartPoint;
+        double   lineAngle      = atan2( startEndVector.y, startEndVector.x );
+        double   lineLength     = startEndVector.EuclideanNorm();
+
+        cairo_save( cairoImage );
+
+        cairo_translate( cairoImage, aStartPoint.x, aStartPoint.y );
+        cairo_rotate( cairoImage, lineAngle );
+
+        cairo_arc( cairoImage, 0.0, 0.0,        aWidth / 2.0,  M_PI / 2.0, 3.0 * M_PI / 2.0 );
+        cairo_arc( cairoImage, lineLength, 0.0, aWidth / 2.0, -M_PI / 2.0, M_PI / 2.0 );
+
+        cairo_move_to( cairoImage, 0.0,        aWidth / 2.0 );
+        cairo_line_to( cairoImage, lineLength, aWidth / 2.0 );
+
+        cairo_move_to( cairoImage, 0.0,        -aWidth / 2.0 );
+        cairo_line_to( cairoImage, lineLength, -aWidth / 2.0 );
+
+        cairo_restore( cairoImage );
+
+    }
+
+    isElementAdded = true;
+}
+
+
 void CAIRO_GAL::DrawCircle( VECTOR2D aCenterPoint, double aRadius )
 {
     // A circle is drawn using an arc
