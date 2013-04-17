@@ -293,7 +293,7 @@ void CAIRO_GAL::RestoreScreen()
 }
 
 
-void CAIRO_GAL::DrawLine( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
+void CAIRO_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     cairo_move_to( cairoImage, aStartPoint.x, aStartPoint.y );
     cairo_line_to( cairoImage, aEndPoint.x, aEndPoint.y );
@@ -341,7 +341,7 @@ void CAIRO_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPo
 }
 
 
-void CAIRO_GAL::DrawCircle( VECTOR2D aCenterPoint, double aRadius )
+void CAIRO_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 {
     // A circle is drawn using an arc
     cairo_new_sub_path( cairoImage );
@@ -351,7 +351,7 @@ void CAIRO_GAL::DrawCircle( VECTOR2D aCenterPoint, double aRadius )
 }
 
 
-void CAIRO_GAL::DrawArc( VECTOR2D aCenterPoint, double aRadius, double aStartAngle,
+void CAIRO_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
                          double aEndAngle )
 {
     SWAP( aStartAngle, >, aEndAngle );
@@ -368,7 +368,7 @@ void CAIRO_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
     bool isFirstPoint = true;
 
     // Iterate over the point list and draw the segments
-    for( std::deque<VECTOR2D>::iterator it = aPointList.begin(); it != aPointList.end(); ++it )
+    for( std::deque<VECTOR2D>::const_iterator it = aPointList.begin(); it != aPointList.end(); ++it )
     {
         if( isFirstPoint )
         {
@@ -410,7 +410,7 @@ void CAIRO_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 }
 
 
-void CAIRO_GAL::DrawRectangle( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
+void CAIRO_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     // Calculate the diagonal points
     VECTOR2D diagonalPointA( aEndPoint.x, aStartPoint.y );
@@ -427,8 +427,8 @@ void CAIRO_GAL::DrawRectangle( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
 }
 
 
-void CAIRO_GAL::DrawCurve( VECTOR2D aStartPoint, VECTOR2D aControlPointA,
-                           VECTOR2D aControlPointB, VECTOR2D aEndPoint )
+void CAIRO_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControlPointA,
+                           const VECTOR2D& aControlPointB, const VECTOR2D& aEndPoint )
 {
     cairo_move_to( cairoImage, aStartPoint.x, aStartPoint.y );
     cairo_curve_to( cairoImage, aControlPointA.x, aControlPointA.y, aControlPointB.x,
@@ -606,7 +606,7 @@ void CAIRO_GAL::Rotate( double aAngle )
 }
 
 
-void CAIRO_GAL::Translate( VECTOR2D aTranslation )
+void CAIRO_GAL::Translate( const VECTOR2D& aTranslation )
 {
     storePath();
 
@@ -623,7 +623,7 @@ void CAIRO_GAL::Translate( VECTOR2D aTranslation )
 }
 
 
-void CAIRO_GAL::Scale( VECTOR2D aScale )
+void CAIRO_GAL::Scale( const VECTOR2D& aScale )
 {
     storePath();
 
@@ -905,9 +905,8 @@ void CAIRO_GAL::initCursor( int aCursorSize )
 }
 
 
-VECTOR2D CAIRO_GAL::ComputeCursorToWorld( VECTOR2D aCursorPosition )
+VECTOR2D CAIRO_GAL::ComputeCursorToWorld( const VECTOR2D& aCursorPosition )
 {
-
     MATRIX3x3D inverseMatrix = worldScreenMatrix.Inverse();
     VECTOR2D   cursorPositionWorld = inverseMatrix * aCursorPosition;
 
@@ -953,7 +952,7 @@ void CAIRO_GAL::DrawCursor( VECTOR2D aCursorPosition )
 }
 
 
-void CAIRO_GAL::DrawGridLine( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
+void CAIRO_GAL::DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     cairo_move_to( cairoImage, aStartPoint.x, aStartPoint.y );
     cairo_line_to( cairoImage, aEndPoint.x, aEndPoint.y );
