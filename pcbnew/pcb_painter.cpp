@@ -495,33 +495,47 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 
 void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
 {
+    std::vector<CPolyPt> polyPoints = aContainer->GetFilledPolysList();
+    if( polyPoints.size() == 0 )  // Nothing to draw
+                return;
+
     COLOR4D fillColor = getLayerColor( aContainer->GetLayer(), aContainer->GetNet() );
     std::vector<CPolyPt>::iterator polyIterator;
-    std::vector<CPolyPt> polyPoints = aContainer->GetFilledPolysList();
     std::deque<VECTOR2D> corners;
+    VECTOR2D startPoint;
+    int fillMode = aContainer->GetFillMode();
 
-    m_gal->SetLineCap( LINE_CAP_BUTT );
-    m_gal->SetLineJoin( LINE_JOIN_ROUND );
     m_gal->SetFillColor( fillColor );
     m_gal->SetStrokeColor( fillColor );
-    m_gal->SetIsFill( aContainer->IsFilled() );
+    m_gal->SetIsFill( !fillMode );
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( aContainer->GetThermalReliefCopperBridge() / 2.0 );
+    m_gal->SetLineCap( LINE_CAP_ROUND );
+    m_gal->SetLineJoin( LINE_JOIN_ROUND );
 
     // FIXME implement hatch mode
 
-    for( polyIterator = polyPoints.begin(); polyIterator != polyPoints.end(); polyIterator++ )
+    if( fillMode == 0 )
     {
-        // Find out all of polygons and then draw them
-        if( !polyIterator->end_contour )
+        startPoint = VECTOR2D( polyPoints.front() );
+        for( polyIterator = polyPoints.begin(); polyIterator != polyPoints.end(); polyIterator++ )
         {
-            corners.push_back( VECTOR2D( *polyIterator ) );
-        }
-        else
-        {
-            m_gal->DrawPolygon( corners );
-            m_gal->DrawPolyline( corners );
-            corners.clear();
+            // Find out all of polygons and then draw them
+            if( !polyIterator->end_contour )
+            {
+                corners.push_back( VECTOR2D( *polyIterator ) );
+            }
+            else
+            {
+                m_gal->DrawPolygon( corners );
+
+                // Closing point for polyline
+                corners.push_back( VECTOR2D( startPoint ) );
+                m_gal->DrawPolyline( corners );
+                startPoint = VECTOR2D( *( polyIterator + 1 ) );
+
+                corners.clear();
+            }
         }
     }
 }
