@@ -525,6 +525,45 @@ inline void OPENGL_GAL::drawLineQuad( VECTOR2D aStartPoint, VECTOR2D aEndPoint )
 }
 
 
+void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth )
+{
+    VECTOR2D startEndVector = aEndPoint - aStartPoint;
+    double   lineAngle      = atan2( startEndVector.y, startEndVector.x );
+
+    if( isFillEnabled )
+    {
+        glColor4d( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+
+        SetLineWidth( aWidth );
+        drawSemiCircle( aStartPoint, aWidth / 2, lineAngle + M_PI / 2, layerDepth );
+        drawSemiCircle( aEndPoint,   aWidth / 2, lineAngle - M_PI / 2, layerDepth );
+        drawLineQuad( aStartPoint, aEndPoint );
+    }
+    else
+    {
+        double lineLength = startEndVector.EuclideanNorm();
+
+        glColor4d( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
+        glPushMatrix();
+
+        glTranslated( aStartPoint.x, aStartPoint.y, 0.0 );
+        glRotated( lineAngle * ( 360 / ( 2 * M_PI ) ), 0, 0, 1 );
+
+        drawLineQuad( VECTOR2D( 0.0,         aWidth / 2.0 ),
+                      VECTOR2D( lineLength,  aWidth / 2.0 ) );
+
+        drawLineQuad( VECTOR2D( 0.0,        -aWidth / 2.0 ),
+                      VECTOR2D( lineLength, -aWidth / 2.0 ) );
+
+        DrawArc( VECTOR2D( 0.0, 0.0 ),        aWidth / 2.0, M_PI / 2.0, 3.0 * M_PI / 2.0 );
+        DrawArc( VECTOR2D( lineLength, 0.0 ), aWidth / 2.0, M_PI / 2.0, -M_PI / 2.0 );
+
+        glPopMatrix();
+    }
+}
+
+
 inline void OPENGL_GAL::drawLineCap( VECTOR2D aStartPoint, VECTOR2D aEndPoint, double aDepthOffset )
 {
     VECTOR2D startEndVector = aEndPoint - aStartPoint;

@@ -108,6 +108,17 @@ public:
     virtual void DrawLine( VECTOR2D aStartPoint, VECTOR2D aEndPoint ) = 0;
 
     /**
+     * @brief Draw a rounded segment.
+     *
+     * Start and end points are defined as 2D-Vectors.
+     *
+     * @param aStartPoint   is the start point of the segment.
+     * @param aEndPoint     is the end point of the segment.
+     * @param aWidth        is a width of the segment
+     */
+    virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth ) = 0;
+
+    /**
      * @brief Draw a polyline
      *
      * @param aPointList is a list of 2D-Vectors containing the polyline points.
