@@ -417,7 +417,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
                           wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     if( m_galCanvas )
-        m_auimgr.AddPane( m_galCanvas,
+        m_auimgr.AddPane( (wxWindow*) m_galCanvas,
                           wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
 
     if( m_messagePanel )
