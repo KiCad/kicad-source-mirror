@@ -51,7 +51,7 @@
 // the translated and the not translated version.
 // when displayed in dialog we should explicitely call wxGetTranslation()
 // to show the translated version.
-const wxString pageFmts[] =
+static const wxString pageFmts[] =
 {
     _("A4 210x297mm"),
     _("A3 297x420mm"),
