@@ -384,3 +384,19 @@ bool PLOT_CONTROLLER::PlotLayer( LAYER_NUM aLayer )/*{{{*/
     return true;
 }/*}}}*/
 
+void PLOT_CONTROLLER::SetColorMode( bool aColorMode )
+{
+    if( !m_plotter )
+        return;
+
+    m_plotter->SetColorMode( aColorMode );
+}
+
+bool PLOT_CONTROLLER::GetColorMode()
+{
+    if( !m_plotter )
+        return false;
+
+    return m_plotter->GetColorMode();
+}
+
