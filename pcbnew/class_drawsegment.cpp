@@ -320,8 +320,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     wxString msg;
     wxString coords;
 
-    BOARD*   board = (BOARD*) m_Parent;
-    wxASSERT( board );
+    wxASSERT( m_Parent );
 
     msg = wxT( "DRAWING" );
 

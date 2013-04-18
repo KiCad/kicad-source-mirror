@@ -758,6 +758,8 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         break;
     }
 
+    (void) seq_len;     // quiet g++, or delete the unused variable.
+
     ok = GetEndOfBlock( buff, text, m_Current_File );
 
     return ok;
@@ -787,6 +789,7 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
 
     return false;
 }
+
 
 /**
  * Function GetNextLine
