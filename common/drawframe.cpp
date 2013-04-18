@@ -966,20 +966,23 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 
         view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
-        m_galCanvas->Show();
-        m_galCanvas->Refresh();
+        // Switch panes
+        m_auimgr.GetPane( wxT( "DrawFrame" ) ).Hide();
+        m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show();
+        m_auimgr.Update();
     }
     else
     {
-        m_galCanvas->Hide();
-
         double zoom = 1 / ( zoomFactor * view->GetScale() );
         m_canvas->SetZoom( zoom );
 
         VECTOR2D center = view->GetCenter();
         RedrawScreen( wxPoint( center.x, center.y ), false );
 
-        m_canvas->Show();
+        // Switch panes
+        m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Hide();
+        m_auimgr.GetPane( wxT( "DrawFrame" ) ).Show();
+        m_auimgr.Update();
     }
 
     m_galCanvasActive = aEnable;

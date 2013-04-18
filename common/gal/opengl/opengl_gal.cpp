@@ -88,7 +88,6 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     SetGridLineWidth( 1.0 );
 
     // Connecting the event handlers.
-    Connect( wxEVT_SIZE, wxSizeEventHandler( OPENGL_GAL::onSize ) );
     Connect( wxEVT_PAINT, wxPaintEventHandler( OPENGL_GAL::onPaint ) );
 
     // Mouse events are skipped to the parent
@@ -144,13 +143,6 @@ void OPENGL_GAL::ResizeScreen( int aWidth, int aHeight )
     }
 
     wxGLCanvas::SetSize( aWidth, aHeight );
-}
-
-
-void OPENGL_GAL::onSize( wxSizeEvent& aEvent )
-{
-    ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
-    PostPaint();
 }
 
 

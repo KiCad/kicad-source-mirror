@@ -134,7 +134,6 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
 #ifdef KICAD_GAL
     m_galCanvas           = new EDA_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                               EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-    m_galCanvas->Hide();
 #endif /* KICAD_GAL */
 
     m_auxiliaryToolBar    = NULL;
@@ -242,6 +241,9 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         }
 
         view->SetTopLayer( m_Pcb->GetLayer() );
+
+        if( m_galCanvasActive )
+            m_galCanvas->Refresh();
     }
 #endif
 }

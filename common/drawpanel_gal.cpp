@@ -44,8 +44,7 @@
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
                                         GalType aGalType ) :
-    wxWindow( aParentWindow, aWindowId, aPosition, aSize ),
-    m_screenSize( aSize.x, aSize.y ), m_parentFrame( aParentWindow )
+    wxWindow( aParentWindow, aWindowId, aPosition, aSize )
 {
     m_gal   = NULL;
     m_view  = NULL;
@@ -78,7 +77,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     m_viewControls = new KiGfx::WX_VIEW_CONTROLS( m_view, this );
 
-    Connect( KiGfx::EVT_GAL_REDRAW, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
+    Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
 }
 
