@@ -143,7 +143,7 @@ VIEW::VIEW( bool aIsDynamic, bool aUseGroups ) :
     m_dynamic( aIsDynamic ),
     m_useGroups( aUseGroups )
 {
-    // By default there is not layer on the top
+    // By default there is no layer on the top
     m_topLayer.enabled = false;
 }
 
@@ -200,6 +200,10 @@ void VIEW::CopySettings( const VIEW* aOtherView )
 void VIEW::SetGAL( GAL* aGal )
 {
     m_gal = aGal;
+
+    // items need to be recached after changing GAL
+    if( m_useGroups )
+        itemsRecache();
 
     // force the new GAL to display the current viewport.
     SetCenter( m_center );
@@ -374,19 +378,14 @@ struct VIEW::drawItem
             {
                 group = gal->BeginGroup();
                 aItem->m_cachedGroup = group;
-                aItem->ViewDraw( 0, gal, tmp );
+                view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), currentLayer );
                 gal->EndGroup();
                 gal->DrawGroup( group );
             }
         }
         else if( aItem->ViewIsVisible() )
         {
-            if( !( view->m_painter
-                   && view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), currentLayer ) ) )
-            {
-                // Fallback, if there is no painter or painter does not know how to draw aItem
-                aItem->ViewDraw( currentLayer, gal, tmp );
-            }
+            view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), currentLayer );
         }
 
         time += rdtsc() - ts;
@@ -441,6 +440,15 @@ struct VIEW::unlinkItem
     void operator()( VIEW_ITEM* aItem )
     {
         aItem->m_view = NULL;
+    }
+};
+
+
+struct VIEW::recacheItem
+{
+    void operator()( VIEW_ITEM* aItem )
+    {
+        aItem->m_cachedGroup = -1;
     }
 };
 
@@ -541,6 +549,21 @@ void VIEW::clearGroupCache()
     {
         VIEW_LAYER* l = & ( ( *i ).second );
         clearItemCache visitor( this );
+        l->items->Query( r, visitor );
+    };
+}
+
+
+void VIEW::itemsRecache()
+{
+    BOX2I r;
+
+    r.SetMaximum();
+
+    for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
+    {
+        VIEW_LAYER* l = & ( ( *i ).second );
+        recacheItem visitor;
         l->items->Query( r, visitor );
     };
 }
