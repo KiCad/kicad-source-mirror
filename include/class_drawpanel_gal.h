@@ -88,9 +88,6 @@ protected:
                                                  ///< using GAL
     KiGfx::WX_VIEW_CONTROLS* m_viewControls;     ///< Control for VIEW (moving, zooming, etc.)
 
-    VECTOR2D                 m_screenSize;       ///< Stores current screen size
-    wxWindow*                m_parentFrame;      ///< Pointer to the parent frame
-
     std::string              m_galShaderPath;    ///< Path to shader files, used in OpenGL mode
 };
 

@@ -38,8 +38,6 @@
 
 namespace KiGfx
 {
-// Event declaration
-extern const wxEventType EVT_GAL_REDRAW;
 
 /**
  * LineCap: Type definition of the line end point style

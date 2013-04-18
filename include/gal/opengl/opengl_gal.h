@@ -292,7 +292,7 @@ public:
     {
         if( paintListener )
         {
-            wxCommandEvent redrawEvent( EVT_GAL_REDRAW );
+            wxPaintEvent redrawEvent;
             wxPostEvent( paintListener, redrawEvent );
         }
     }
@@ -410,13 +410,6 @@ private:
      * @param aEvent is the OnPaint event.
      */
     void onPaint( wxPaintEvent& aEvent );
-
-    /**
-     * @brief Window resizing event handler.
-     *
-     * @param aEvent is the window resizing event.
-     */
-    void onSize( wxSizeEvent& aEvent );
 
     /**
      * @brief Skip the mouse event to the parent.

@@ -52,7 +52,6 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     SetSize( aParent->GetSize() );
 
     // Connecting the event handlers
-    Connect( wxEVT_SIZE, wxSizeEventHandler( CAIRO_GAL::onSize ) );
     Connect( wxEVT_PAINT, wxPaintEventHandler( CAIRO_GAL::onPaint ) );
 
     // Mouse events are skipped to the parent
@@ -115,15 +114,6 @@ void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
     allocateBitmaps();
 
     SetSize( wxSize( aWidth, aHeight ) );
-
-    PostPaint();
-}
-
-
-void CAIRO_GAL::onSize( wxSizeEvent& aEvent )
-{
-    ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
-    PostPaint();
 }
 
 
@@ -188,46 +178,6 @@ void CAIRO_GAL::EndDrawing()
     // Force remaining objects to be drawn
     Flush();
 
-    // FIXME Accelerate support for wxWidgets 2.8.10
-
-#if wxCHECK_VERSION( 2, 9, 0 )
-    // Copy the cairo image contents to the wxBitmap
-    wxNativePixelData pixelData( *wxBitmap_ );
-
-    if( !pixelData )
-    {
-        wxLogError( wxString::FromUTF8( "Can't access pixel data!" ) );
-        return;
-    }
-
-    wxNativePixelData::Iterator pixelIterator( pixelData );
-
-    int offset = 0;
-
-    // Copy the cairo image to the wxDC bitmap
-    for( int j = 0; j < screenSize.y; j++ )
-    {
-        offset = j * (int) screenSize.x;
-
-        for( int column = 0; column < clientRectangle.width; column++ )
-        {
-            unsigned int value    = bitmapBuffer[offset + column];
-            pixelIterator.Red()   = value >> 16;
-            pixelIterator.Green() = value >> 8;
-            pixelIterator.Blue()  = value;
-            pixelIterator++;
-        }
-
-        pixelIterator.MoveTo( pixelData, 0, j );
-    }
-
-    // Blit the contents to the screen
-    wxClientDC   client_dc( this );
-    wxBufferedDC dc( &client_dc );
-    dc.DrawBitmap( *wxBitmap_, 0, 0 );
-
-#elif wxCHECK_VERSION( 2, 8, 0 )
-
     // This code was taken from the wxCairo example - it's not the most efficient one
     // Here is a good place for optimizations
 
@@ -237,12 +187,9 @@ void CAIRO_GAL::EndDrawing()
     for( size_t count = 0; count < bufferSize; count++ )
     {
         unsigned int value = bitmapBuffer[count];
-        // Red pixel
-        *wxOutputPtr++ = (value >> 16) & 0xff;
-        // Green pixel
-        *wxOutputPtr++ = (value >> 8) & 0xff;
-        // Blue pixel
-        *wxOutputPtr++ = (value >> 0) & 0xff;
+        *wxOutputPtr++ = (value >> 16) & 0xff;  // Red pixel
+        *wxOutputPtr++ = (value >> 8) & 0xff;   // Green pixel
+        *wxOutputPtr++ = value & 0xff;          // Blue pixel
     }
 
     wxImage      img( (int) screenSize.x, (int) screenSize.y, (unsigned char*) wxOutput, true);
@@ -251,10 +198,6 @@ void CAIRO_GAL::EndDrawing()
     wxBufferedDC dc;
     // client_dc.DrawBitmap(bmp, 0, 0, false);
     dc.Init( &client_dc, bmp );
-
-#else
-#error "need wxWidgets-2.8 as a minimum"
-#endif
 
     // Destroy Cairo objects
     cairo_destroy( cairoImage );
@@ -967,7 +910,6 @@ void CAIRO_GAL::allocateBitmaps()
     bitmapBuffer       	= new unsigned int[bufferSize];
     bitmapBufferBackup 	= new unsigned int[bufferSize];
     wxOutput            = new unsigned char[bufferSize * 4];
-    wxBitmap_           = new wxBitmap( screenSize.x, screenSize.y, SCREEN_DEPTH );
 }
 
 
@@ -976,7 +918,6 @@ void CAIRO_GAL::deleteBitmaps()
     delete[] bitmapBuffer;
     delete[] bitmapBufferBackup;
     delete[] wxOutput;
-    delete   wxBitmap_;
 }
 
 

@@ -33,8 +33,6 @@
 
 using namespace KiGfx;
 
-const wxEventType KiGfx::EVT_GAL_REDRAW = wxNewEventType();
-
 GAL::GAL()
 {
     // Set the default values for the internal variables

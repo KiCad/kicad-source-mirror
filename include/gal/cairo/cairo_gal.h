@@ -274,7 +274,7 @@ public:
     {
         if( paintListener )
         {
-            wxCommandEvent redrawEvent( EVT_GAL_REDRAW );
+            wxPaintEvent redrawEvent;
             wxPostEvent( paintListener, redrawEvent );
         }
     }
@@ -361,10 +361,8 @@ private:
     cairo_surface_t*    cairoSurface;           ///< Cairo surface
     unsigned int*       bitmapBuffer;           ///< Storage of the cairo image
     unsigned int*       bitmapBufferBackup;     ///< Backup storage of the cairo image
-    wxBitmap*           wxBitmap_;              ///< Pointer to the wxWidgets bitmap
     int                 stride;                 ///< Stride value for Cairo
     // wxClientDC*         clientDC;               ///< Pointer to the clientDC
-    int                 screenSizeY;            ///< Vertical size of the actual surface
 
     // Mapping between Cairo and GAL line attributes
     std::map<LineCap, cairo_line_cap_t>     lineCapMap;     ///< Line cap style mapping
@@ -380,13 +378,6 @@ private:
      * @param aEvent is the paint event.
      */
     void onPaint( wxPaintEvent& aEvent );
-
-    /**
-     * @brief Window resizing event handler.
-     *
-     * @param aEvent is the resizing event.
-     */
-    void onSize( wxSizeEvent& aEvent );
 
     /**
      * @brief Mouse event handler, forwards the event to the child.
