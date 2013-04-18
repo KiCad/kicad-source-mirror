@@ -328,6 +328,7 @@ private:
     // Function objects that need to access VIEW/VIEW_ITEM private/protected members
     struct clearItemCache;
     struct unlinkItem;
+    struct recacheItem;
     struct drawItem;
 
     ///* Saves current top layer settings in order to restore it when it's not top anymore
@@ -348,6 +349,9 @@ private:
 
     ///* Clears cached GAL display lists
     void    clearGroupCache();
+
+    ///* Rebuilds GAL display lists
+    void    itemsRecache();
 
     /// Determines rendering order of layers. Used in display order sorting function.
     static bool compareRenderingOrder( VIEW_LAYER* i, VIEW_LAYER* j )
