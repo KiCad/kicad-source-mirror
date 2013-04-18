@@ -37,7 +37,7 @@ print "LISTING DRAWINGS:"
 
 for item in pcb.GetDrawings():
 	if type(item) is TEXTE_PCB:
-		print "* Text:    '%s' at %s"%(item.GetText(),item.GetPosition())
+		print "* Text:    '%s' at %s"%(item.GetText(), item.GetPosition())
 	elif type(item) is DRAWSEGMENT:
 		print "* Drawing: %s"%item.GetShapeStr() # dir(item)
 	else:
