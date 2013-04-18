@@ -945,6 +945,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
 void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 {
+#ifdef KICAD_GAL
     if( aEnable && m_galCanvasActive )
     {
         // When we switch between GAL based canvases, all we need is a refresh
@@ -986,4 +987,5 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     }
 
     m_galCanvasActive = aEnable;
+#endif /* KICAD_GAL */
 }
