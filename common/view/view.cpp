@@ -419,9 +419,11 @@ void VIEW::redrawRect( const BOX2I& aRect )
         {
             drawItem drawFunc( this, l->id );
 
+            m_gal->BeginLayer();
             m_gal->SetLayerDepth( (double) l->renderingOrder );
             l->items->Query( aRect, drawFunc );
             l->isDirty = false;
+            m_gal->EndLayer();
 
             totalItems    += drawFunc.count;
             totalDrawTime += drawFunc.time;

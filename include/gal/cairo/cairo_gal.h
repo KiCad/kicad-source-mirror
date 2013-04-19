@@ -95,6 +95,12 @@ public:
     /// @copydoc GAL::EndDrawing()
     virtual void EndDrawing();
 
+    /// @copydoc GAL::BeginLayer()
+    virtual void BeginLayer();
+
+    /// @copydoc GAL::EndLayer()
+    virtual void EndLayer();
+
     /// @copydoc GAL::DrawLine()
     virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
