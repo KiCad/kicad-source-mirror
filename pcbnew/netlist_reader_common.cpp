@@ -250,6 +250,12 @@ void NETLIST_READER::TestFootprintsMatchingAndExchange()
 
                 if( newModule )
                 {
+                    wxString msg;
+                    msg.Printf( _( "Module ref %s, change footprint %s to %s\n" ),
+                                 GetChars( module->GetReference() ),
+                                 GetChars( module->GetLibRef() ),
+                                 GetChars( cmp_info->m_Footprint ) );
+                    m_messageWindow->AppendText( msg );
                     // Change old module to the new module (and delete the old one)
                     m_pcbframe->Exchange_Module( module, newModule, NULL );
                 }
