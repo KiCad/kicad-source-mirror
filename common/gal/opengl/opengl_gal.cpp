@@ -40,14 +40,7 @@ using namespace KiGfx;
 // Prototypes
 void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 
-// FIXME Checking of attributes
-
-// #if defined(__WXGTK__)
 const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
-// #elif defined(__WXMSW__)
-// #define glAttributes NULL
-// #endif
-
 
 OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                         wxEvtHandler* aPaintListener, bool isUseShaders, const wxString& aName ) :

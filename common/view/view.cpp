@@ -150,6 +150,10 @@ VIEW::VIEW( bool aIsDynamic, bool aUseGroups ) :
 
 VIEW::~VIEW()
 {
+    BOOST_FOREACH( LayerMap::value_type& l, m_layers )
+    {
+        delete l.second.items;
+    }
 }
 
 

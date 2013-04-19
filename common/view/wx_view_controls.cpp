@@ -126,7 +126,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& event )
     {
         m_isDragPanning     = true;
         m_dragStartPoint    = VECTOR2D( event.GetX(), event.GetY() );
-        m_lookStartPoint    = m_view->GetCenter(); // ookAtPoint();
+        m_lookStartPoint    = m_view->GetCenter();
     }
     else if( event.RightUp() )
     {

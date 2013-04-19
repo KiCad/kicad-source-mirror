@@ -25,7 +25,7 @@
  */
 
 #include <wx/dcbuffer.h>
-#include <wx/rawbmp.h>
+#include <wx/image.h>
 #include <wx/log.h>
 
 #include <gal/cairo/cairo_gal.h>
@@ -93,6 +93,9 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
 CAIRO_GAL::~CAIRO_GAL()
 {
+    delete cursorPixels;
+    delete cursorPixelsSaved;
+
     // TODO Deleting of list contents like groups and paths
     deleteBitmaps();
 }
@@ -192,11 +195,10 @@ void CAIRO_GAL::EndDrawing()
         *wxOutputPtr++ = value & 0xff;          // Blue pixel
     }
 
-    wxImage      img( (int) screenSize.x, (int) screenSize.y, (unsigned char*) wxOutput, true);
+    wxImage      img( (int) screenSize.x, (int) screenSize.y, (unsigned char*) wxOutput, true );
     wxBitmap     bmp( img );
     wxClientDC   client_dc( this );
     wxBufferedDC dc;
-    // client_dc.DrawBitmap(bmp, 0, 0, false);
     dc.Init( &client_dc, bmp );
 
     // Destroy Cairo objects
@@ -909,7 +911,7 @@ void CAIRO_GAL::allocateBitmaps()
 
     bitmapBuffer       	= new unsigned int[bufferSize];
     bitmapBufferBackup 	= new unsigned int[bufferSize];
-    wxOutput            = new unsigned char[bufferSize * 4];
+    wxOutput            = new unsigned char[bufferSize * 3];
 }
 
 
