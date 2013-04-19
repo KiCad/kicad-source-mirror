@@ -644,7 +644,7 @@ public:
      */
     virtual void DrawCursor( VECTOR2D aCursorPosition ) = 0;
 
-    void AdvanceDepth()
+    inline void AdvanceDepth()
     {
         layerDepth -= 0.1;    // fixme: there should be a minimum step
     }
@@ -652,7 +652,7 @@ public:
     /**
      * @brief Stores current drawing depth on the depth stack.
      */
-    void PushDepth()
+    inline void PushDepth()
     {
         depthStack.push( layerDepth );
     }
@@ -660,7 +660,7 @@ public:
     /**
      * @brief Restores previously stored drawing depth for the depth stack.
      */
-    void PopDepth()
+    inline void PopDepth()
     {
         layerDepth = depthStack.top();
         depthStack.pop();

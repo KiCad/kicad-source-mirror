@@ -46,8 +46,9 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
                                         GalType aGalType ) :
     wxWindow( aParentWindow, aWindowId, aPosition, aSize )
 {
-    m_gal   = NULL;
-    m_view  = NULL;
+    m_gal     = NULL;
+    m_view    = NULL;
+    m_painter = NULL;
 
     m_galShaderPath = std::string( ::wxGetCwd().mb_str() ) + "/../../gal/opengl/shader/";
 
