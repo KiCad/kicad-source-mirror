@@ -177,7 +177,6 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     FILE*       FichCmp, * NewFile;
     char        line[1024];
     wxString    msg;
-//    char*  quiet_gcc_4_4_3;
 
     if( old_name == new_name )
         return 0;

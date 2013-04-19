@@ -2182,7 +2182,8 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_solder_paste_margin_ratio:
-            pad->SetLocalSolderPasteMarginRatio( parseBoardUnits( T_solder_paste_margin_ratio ) );
+            pad->SetLocalSolderPasteMarginRatio(
+                parseDouble( "pad local solder paste margin ratio value" ) );
             NeedRIGHT();
             break;
 
