@@ -612,6 +612,21 @@ void CAIRO_GAL::Restore()
 }
 
 
+void CAIRO_GAL::BeginLayer()
+{
+    cairo_push_group( cairoImage );
+}
+
+
+void CAIRO_GAL::EndLayer()
+{
+    storePath();
+
+    cairo_pop_group_to_source( cairoImage );
+    cairo_paint_with_alpha( cairoImage, fillColor.a );
+}
+
+
 int CAIRO_GAL::BeginGroup()
 {
     // If the grouping is started: the actual path is stored in the group, when
@@ -693,15 +708,13 @@ void CAIRO_GAL::DrawGroup( int aGroupNumber )
             break;
 
         case CMD_STROKE_PATH:
-            cairo_set_source_rgba( cairoImage, strokeColor.r, strokeColor.g, strokeColor.b,
-                                   strokeColor.a );
+            cairo_set_source_rgb( cairoImage, strokeColor.r, strokeColor.g, strokeColor.b );
             cairo_append_path( cairoImage, it->cairoPath );
             cairo_stroke( cairoImage );
             break;
 
         case CMD_FILL_PATH:
-            cairo_set_source_rgba( cairoImage, fillColor.r, fillColor.g, fillColor.b,
-                                   fillColor.a );
+            cairo_set_source_rgb( cairoImage, fillColor.r, fillColor.g, fillColor.b );
             cairo_append_path( cairoImage, it->cairoPath );
             cairo_fill( cairoImage );
             break;
@@ -779,15 +792,13 @@ void CAIRO_GAL::storePath()
         {
             if( isFillEnabled )
             {
-                cairo_set_source_rgba( cairoImage, fillColor.r, fillColor.g, fillColor.b,
-                                       fillColor.a );
+                cairo_set_source_rgb( cairoImage, fillColor.r, fillColor.g, fillColor.b );
                 cairo_fill_preserve( cairoImage );
             }
 
             if( isStrokeEnabled )
             {
-                cairo_set_source_rgba( cairoImage, strokeColor.r, strokeColor.g, strokeColor.b,
-                                       strokeColor.a );
+                cairo_set_source_rgb( cairoImage, strokeColor.r, strokeColor.g, strokeColor.b );
                 cairo_stroke_preserve( cairoImage );
             }
         }
