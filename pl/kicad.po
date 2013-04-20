@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-16 17:42+0100\n"
-"PO-Revision-Date: 2013-04-16 17:43+0100\n"
+"POT-Creation-Date: 2013-04-19 17:45+0100\n"
+"PO-Revision-Date: 2013-04-19 17:49+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1329,7 +1329,7 @@ msgstr "Symbol"
 
 #: eeschema/libedit.cpp:487 eeschema/lib_draw_item.cpp:65
 #: eeschema/lib_pin.cpp:1842 eeschema/sch_text.cpp:796
-#: pcbnew/class_drawsegment.cpp:328 pcbnew/class_marker_pcb.cpp:98
+#: pcbnew/class_drawsegment.cpp:327 pcbnew/class_marker_pcb.cpp:98
 #: pcbnew/class_text_mod.cpp:369 pcbnew/class_track.cpp:1072
 #: pcbnew/class_zone.cpp:653 pcbnew/dialogs/dialog_layers_setup.cpp:290
 #: gerbview/class_gerber_draw_item.cpp:548
@@ -1798,7 +1798,7 @@ msgstr ""
 "Czy chcesz usunąć wszystkie niepasujące aliasy z tego symbolu?"
 
 #: eeschema/lib_arc.cpp:96 pcbnew/class_board_item.cpp:44
-#: pcbnew/class_drawsegment.cpp:339 gerbview/class_gerber_draw_item.cpp:186
+#: pcbnew/class_drawsegment.cpp:338 gerbview/class_gerber_draw_item.cpp:186
 msgid "Arc"
 msgstr "Łuk"
 
@@ -1848,7 +1848,7 @@ msgid "Bezier point %d Y position not defined"
 msgstr "Pozycja punktu Y krzywej Beziera %d nie jest ustalona"
 
 #: eeschema/lib_circle.cpp:54 pcbnew/class_board_item.cpp:45
-#: pcbnew/class_drawsegment.cpp:335 pcbnew/class_pad.cpp:696
+#: pcbnew/class_drawsegment.cpp:334 pcbnew/class_pad.cpp:696
 #: gerbview/class_gerber_draw_item.cpp:189
 msgid "Circle"
 msgstr "Okrąg"
@@ -1977,14 +1977,14 @@ msgstr "Pole %s %s"
 msgid "Style"
 msgstr "Styl"
 
-#: eeschema/lib_field.cpp:738 pcbnew/class_pcb_text.cpp:145
+#: eeschema/lib_field.cpp:738 pcbnew/class_pcb_text.cpp:146
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:34
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:39
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:41
 msgid "Size X"
 msgstr "Rozmiar X"
 
-#: eeschema/lib_field.cpp:741 pcbnew/class_pcb_text.cpp:148
+#: eeschema/lib_field.cpp:741 pcbnew/class_pcb_text.cpp:149
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:41
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:46
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:76
@@ -2138,7 +2138,7 @@ msgstr "Nazwa"
 msgid "Number"
 msgstr "Numer"
 
-#: eeschema/lib_pin.cpp:1849 pcbnew/class_pcb_text.cpp:136
+#: eeschema/lib_pin.cpp:1849 pcbnew/class_pcb_text.cpp:137
 #: pcbnew/class_text_mod.cpp:374
 #: pcbnew/dialogs/dialog_display_options_base.cpp:128
 #: gerbview/class_gerber_draw_item.cpp:571
@@ -2146,7 +2146,7 @@ msgstr "Numer"
 msgid "Yes"
 msgstr "Tak"
 
-#: eeschema/lib_pin.cpp:1851 pcbnew/class_pcb_text.cpp:134
+#: eeschema/lib_pin.cpp:1851 pcbnew/class_pcb_text.cpp:135
 #: pcbnew/class_text_mod.cpp:372
 #: pcbnew/dialogs/dialog_display_options_base.cpp:128
 #: gerbview/class_gerber_draw_item.cpp:571
@@ -2164,7 +2164,7 @@ msgid "Length"
 msgstr "Długość"
 
 #: eeschema/lib_pin.cpp:1860 eeschema/sch_text.cpp:767
-#: pcbnew/class_pcb_text.cpp:139
+#: pcbnew/class_pcb_text.cpp:140
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:68
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:82
 msgid "Orientation"
@@ -4746,7 +4746,7 @@ msgid "Mirror |"
 msgstr "Odbij pionowo |"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:54
-#: pcbnew/class_pcb_text.cpp:134 pcbnew/class_pcb_text.cpp:136
+#: pcbnew/class_pcb_text.cpp:135 pcbnew/class_pcb_text.cpp:137
 #: pcbnew/class_text_mod.cpp:386 pcbnew/modedit_onclick.cpp:264
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:75
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:97
@@ -5469,7 +5469,7 @@ msgstr "Szerokość:"
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:52
 #: common/common.cpp:195 common/common.cpp:245 common/drawframe.cpp:450
-#: common/dialogs/dialog_page_settings.cpp:410
+#: common/dialogs/dialog_page_settings.cpp:406
 #: pcb_calculator/UnitSelector.cpp:14
 msgid "mm"
 msgstr "mm"
@@ -6167,7 +6167,7 @@ msgstr "Operacje na blokach"
 msgid "Comma separated value files (*.csv)|*.csv"
 msgstr "Plik wartości oddzielonych przecinkiem (*.csv)|*.csv"
 
-#: pcbnew/build_BOM_from_board.cpp:62 pcbnew/xchgmod.cpp:619
+#: pcbnew/build_BOM_from_board.cpp:62 pcbnew/xchgmod.cpp:618
 msgid "No Modules!"
 msgstr "Brak footprintów!"
 
@@ -6175,7 +6175,7 @@ msgstr "Brak footprintów!"
 msgid "Save Bill of Materials"
 msgstr "Zapisz listę materiałów"
 
-#: pcbnew/build_BOM_from_board.cpp:83 pcbnew/xchgmod.cpp:210
+#: pcbnew/build_BOM_from_board.cpp:83 pcbnew/xchgmod.cpp:209
 #, c-format
 msgid "Unable to create file <%s>"
 msgstr "Nie mogę utworzyć pliku <%s>"
@@ -6262,27 +6262,27 @@ msgstr "Wielokąt"
 msgid "Dimension \"%s\" on %s"
 msgstr "Wymiar \"%s\" na %s"
 
-#: pcbnew/class_drawsegment.cpp:330
+#: pcbnew/class_drawsegment.cpp:329
 msgid "Shape"
 msgstr "Kształt"
 
-#: pcbnew/class_drawsegment.cpp:341
+#: pcbnew/class_drawsegment.cpp:340
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:904
 msgid "Angle"
 msgstr "Kąt"
 
-#: pcbnew/class_drawsegment.cpp:345
+#: pcbnew/class_drawsegment.cpp:344
 msgid "Curve"
 msgstr "Krzywa"
 
-#: pcbnew/class_drawsegment.cpp:349
+#: pcbnew/class_drawsegment.cpp:348
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 msgid "Segment"
 msgstr "Segment"
 
-#: pcbnew/class_drawsegment.cpp:359 pcbnew/class_module.cpp:452
+#: pcbnew/class_drawsegment.cpp:358 pcbnew/class_module.cpp:452
 #: pcbnew/class_pad.cpp:541 pcbnew/class_pcb_layer_widget.cpp:201
-#: pcbnew/class_pcb_text.cpp:131 pcbnew/class_text_mod.cpp:379
+#: pcbnew/class_pcb_text.cpp:132 pcbnew/class_text_mod.cpp:379
 #: pcbnew/class_track.cpp:1144 pcbnew/class_zone.cpp:705
 #: pcbnew/layer_widget.cpp:533 pcbnew/sel_layer.cpp:146
 #: gerbview/class_gerbview_layer_widget.cpp:87
@@ -6291,14 +6291,14 @@ msgstr "Segment"
 msgid "Layer"
 msgstr "Warstwy sygnałowe"
 
-#: pcbnew/class_drawsegment.cpp:361 pcbnew/class_edge_mod.cpp:258
+#: pcbnew/class_drawsegment.cpp:360 pcbnew/class_edge_mod.cpp:258
 #: pcbnew/class_track.cpp:1171 pcbnew/mirepcb.cpp:109
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:327
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:48
 msgid "Width"
 msgstr "Szerokość"
 
-#: pcbnew/class_drawsegment.cpp:537
+#: pcbnew/class_drawsegment.cpp:536
 #, c-format
 msgid "Pcb Graphic: %s, length %s on %s"
 msgstr "Grafika PCB: %s, długość %s na %s"
@@ -6819,21 +6819,21 @@ msgstr "Znaczenie zdefiniowane przez użytkownika"
 msgid "Board's perimeter definition"
 msgstr "Rysunkowa z obrzeżem płytki"
 
-#: pcbnew/class_pcb_text.cpp:127
+#: pcbnew/class_pcb_text.cpp:128
 msgid "Dimension"
 msgstr "Wymiar"
 
-#: pcbnew/class_pcb_text.cpp:129
+#: pcbnew/class_pcb_text.cpp:130
 msgid "PCB Text"
 msgstr "Tekst PCB"
 
-#: pcbnew/class_pcb_text.cpp:142 pcbnew/class_text_mod.cpp:392
+#: pcbnew/class_pcb_text.cpp:143 pcbnew/class_text_mod.cpp:392
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:73
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:110
 msgid "Thickness"
 msgstr "Grubość"
 
-#: pcbnew/class_pcb_text.cpp:177
+#: pcbnew/class_pcb_text.cpp:178
 #, c-format
 msgid "Pcb Text \"%s\" on %s"
 msgstr "Tekst PCB \"%s\" na %s"
@@ -9008,31 +9008,36 @@ msgstr "Brak footprintów"
 msgid "Components"
 msgstr "Komponenty"
 
-#: pcbnew/netlist_reader_common.cpp:259
+#: pcbnew/netlist_reader_common.cpp:254
+#, c-format
+msgid "Module ref %s, change footprint %s to %s\n"
+msgstr "Komponent %s, zmiana footprintu %s na %s\n"
+
+#: pcbnew/netlist_reader_common.cpp:265
 #, c-format
 msgid "Component %s: module %s not found\n"
 msgstr "Komponent %s: footprint %s nie został znaleziony\n"
 
-#: pcbnew/netlist_reader_common.cpp:269
+#: pcbnew/netlist_reader_common.cpp:275
 #, c-format
 msgid "Component %s: Mismatch! module is %s and netlist said %s\n"
 msgstr ""
 "Komponent %s: Niedopasowanie! Footprint to %s, a lista sieci wskazuje %s\n"
 
-#: pcbnew/netlist_reader_common.cpp:326
+#: pcbnew/netlist_reader_common.cpp:332
 #: pcbnew/netlist_reader_firstformat.cpp:337
 #, c-format
 msgid "Module %s: Pad %s not found"
 msgstr "Footprint %s: Nie znaleziono pola lutowniczego %s"
 
-#: pcbnew/netlist_reader_common.cpp:422
+#: pcbnew/netlist_reader_common.cpp:428
 #, c-format
 msgid "File <%s> not found, use Netlist for footprints selection"
 msgstr ""
 "Plik <%s> nie zosał znaleziony, wygeneruj listę sieci by móc przypisywać "
 "footprinty"
 
-#: pcbnew/netlist_reader_common.cpp:567
+#: pcbnew/netlist_reader_common.cpp:573
 #, c-format
 msgid "Component %s: footprint %s not found"
 msgstr "Komponent %s: nie znaleziono footprintu %s"
@@ -10099,35 +10104,35 @@ msgstr "Przelotka "
 msgid "+/- to switch"
 msgstr "+/- aby zmienić"
 
-#: pcbnew/xchgmod.cpp:195
+#: pcbnew/xchgmod.cpp:194
 #, c-format
 msgid "file <%s> not found"
 msgstr "plik <%s> nie został odnaleziony"
 
-#: pcbnew/xchgmod.cpp:326
+#: pcbnew/xchgmod.cpp:325
 #, c-format
 msgid "Change modules %s -> %s (for value = %s)?"
 msgstr "Zamienić footprinty %s -> %s (o wartości = %s)?"
 
-#: pcbnew/xchgmod.cpp:333
+#: pcbnew/xchgmod.cpp:332
 #, c-format
 msgid "Change modules %s -> %s ?"
 msgstr "Zamienić footprinty %s -> %s?"
 
-#: pcbnew/xchgmod.cpp:399
+#: pcbnew/xchgmod.cpp:398
 msgid "Change ALL modules ?"
 msgstr "Zamienić WSZYSTKIE footprinty?"
 
-#: pcbnew/xchgmod.cpp:465
+#: pcbnew/xchgmod.cpp:464
 #, c-format
 msgid "Change module %s (from %s)  "
 msgstr "Zamień footprint %s (z %s) "
 
-#: pcbnew/xchgmod.cpp:628
+#: pcbnew/xchgmod.cpp:627
 msgid "Save Component Files"
 msgstr "Zapisz pliki komponentów"
 
-#: pcbnew/xchgmod.cpp:641
+#: pcbnew/xchgmod.cpp:640
 msgid "Unable to create file "
 msgstr "Nie mogę utworzyć pliku "
 
@@ -15688,7 +15693,7 @@ msgstr "Znacznik"
 msgid "\""
 msgstr "\""
 
-#: common/common.cpp:218 common/dialogs/dialog_page_settings.cpp:410
+#: common/common.cpp:218 common/dialogs/dialog_page_settings.cpp:406
 msgid "inches"
 msgstr "cale"
 
@@ -16263,28 +16268,28 @@ msgid "E 34x44in"
 msgstr "E 34x44in"
 
 #: common/dialogs/dialog_page_settings.cpp:66
-msgid "US Letter 8.5x11in"
-msgstr "US Letter 8.5x11in"
+msgid "USLetter 8.5x11in"
+msgstr "USLetter 8.5x11in"
 
 #: common/dialogs/dialog_page_settings.cpp:67
-msgid "US Legal 8.5x14in"
-msgstr "US Legal 8.5x14in"
+msgid "USLegal 8.5x14in"
+msgstr "USLegal 8.5x14in"
 
 #: common/dialogs/dialog_page_settings.cpp:68
-msgid "US Ledger 11x17in"
-msgstr "US Ledger 11x17in"
+msgid "USLedger 11x17in"
+msgstr "USLedger 11x17in"
 
 #: common/dialogs/dialog_page_settings.cpp:69
 msgid "User (Custom)"
 msgstr "Użytkownika"
 
-#: common/dialogs/dialog_page_settings.cpp:261
-#: common/dialogs/dialog_page_settings.cpp:658
+#: common/dialogs/dialog_page_settings.cpp:257
+#: common/dialogs/dialog_page_settings.cpp:654
 #: common/dialogs/dialog_page_settings_base.cpp:47
 msgid "Portrait"
 msgstr "Pionowo"
 
-#: common/dialogs/dialog_page_settings.cpp:406
+#: common/dialogs/dialog_page_settings.cpp:402
 #, c-format
 msgid ""
 "Selected custom paper size\n"
@@ -16297,11 +16302,11 @@ msgstr ""
 "%.1f - %.1f %s!\n"
 "Chcesz wybrać inny rozmiar papieru?"
 
-#: common/dialogs/dialog_page_settings.cpp:412
+#: common/dialogs/dialog_page_settings.cpp:408
 msgid "Warning!"
 msgstr "Ostrzeżenie!"
 
-#: common/dialogs/dialog_page_settings.cpp:660
+#: common/dialogs/dialog_page_settings.cpp:656
 #: common/dialogs/dialog_page_settings_base.cpp:47
 msgid "Landscape"
 msgstr "Poziomo"
