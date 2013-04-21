@@ -56,7 +56,8 @@ static const wxString GeneralGroupName( wxT( "/general" ) );
 PARAM_CFG_ARRAY s_KicadManagerParams;
 
 
-void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, bool aTemplateSelector = false )
+void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName,
+                                            bool           aTemplateSelector = false )
 {
     wxString    filename;
     wxFileName  newProjectName = aPrjFullFileName;
@@ -118,12 +119,16 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, boo
         // Show the project template selector dialog
         int result = ps->ShowModal();
 
-        if( result != wxID_OK )
+        if( (result != wxID_OK) || (ps->GetWidget() == NULL) )
         {
-            wxMessageBox( _( "Did not generate new project from template" ),
-                          _( "Cancelled new project from template" ),
-                          wxOK | wxICON_EXCLAMATION,
-                          this );
+            if( ps->GetWidget() == NULL )
+            {
+                wxMessageBox( _( "No project template was selected.  Cannot generate new "
+                                 "project." ),
+                              _( "Error" ),
+                              wxOK | wxICON_ERROR,
+                              this );
+            }
         }
         else
         {
@@ -132,7 +137,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, boo
             if( !ps->GetWidget()->GetTemplate()->CreateProject( newProjectName ) )
             {
                 wxMessageBox( _( "Problem whilst creating new project from template!" ),
-                              _( "Could not generate new project" ),
+                              _( "Template Error" ),
                               wxOK | wxICON_ERROR,
                               this );
             }
@@ -205,17 +210,19 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
             // Check if the project directory is empty
             wxDir directory ( m_ProjectFileName.GetPath() );
+
             if( directory.HasFiles() )
             {
-                wxString msg = _( "The selected directory is not empty. "
-                        "We recommend you create projects in their own clean directory.\n\n"
-                        "Do you want to create a new empty directory for the project?" );
+                wxString msg = _( "The selected directory is not empty.  We recommend you "
+                                  "create projects in their own clean directory.\n\nDo you "
+                                  "want to create a new empty directory for the project?" );
 
                 if( IsOK( this, msg ) )
                 {
                     // Append a new directory with the same name of the project file
                     // and try to create it
                     m_ProjectFileName.AppendDir( m_ProjectFileName.GetName() );
+
                     if( !wxMkdir( m_ProjectFileName.GetPath() ) )
                         // There was a problem, undo
                         m_ProjectFileName.RemoveLastDir();
