@@ -54,6 +54,7 @@ public:
     void    onWheel( wxMouseEvent& event );
     void    onMotion( wxMouseEvent& event );
     void    onButton( wxMouseEvent& event );
+    void    onEnter( wxMouseEvent& event );
 
 private:
 

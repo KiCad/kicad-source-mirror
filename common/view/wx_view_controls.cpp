@@ -46,28 +46,30 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
                                 WX_VIEW_CONTROLS::onButton ), NULL, this );
     m_parentPanel->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler(
                                 WX_VIEW_CONTROLS::onButton ), NULL, this );
+#if defined _WIN32 || defined _WIN64
+    m_parentPanel->Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler(
+                                WX_VIEW_CONTROLS::onEnter ), NULL, this );
+#endif
 }
 
 
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& event )
 {
-    VECTOR2D mousePoint( event.GetX(), event.GetY() );
+    // workaround for wxmsw..
+    //if( event.Entering() )
+        //m_parentPanel->SetFocus();
 
-    if( event.Dragging() )
+    if( event.Dragging() && m_isDragPanning )
     {
-        if( m_isDragPanning )
-        {
-            VECTOR2D d     = m_dragStartPoint - mousePoint;
-            VECTOR2D delta = m_view->ToWorld( d, false );
+        VECTOR2D mousePoint( event.GetX(), event.GetY() );
+        VECTOR2D d     = m_dragStartPoint - mousePoint;
+        VECTOR2D delta = m_view->ToWorld( d, false );
 
-            m_view->SetCenter( m_lookStartPoint + delta );
-            m_parentPanel->Refresh();
-        }
-        else
-        {
-            event.Skip();
-        }
+        m_view->SetCenter( m_lookStartPoint + delta );
+        m_parentPanel->Refresh();
     }
+
+    event.Skip();
 }
 
 
@@ -117,6 +119,8 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& event )
         m_view->SetCenter( m_view->GetCenter() + delta );
         m_parentPanel->Refresh();
     }
+
+    event.Skip();
 }
 
 
@@ -134,4 +138,10 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& event )
     }
 
     event.Skip();
+}
+
+
+void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& event )
+{
+    m_parentPanel->SetFocus();
 }
