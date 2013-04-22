@@ -966,11 +966,6 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         view->SetScale( zoom );
 
         view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
-
-        // Switch panes
-        m_auimgr.GetPane( wxT( "DrawFrame" ) ).Hide();
-        m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show();
-        m_auimgr.Update();
     }
     else
     {
@@ -979,12 +974,15 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 
         VECTOR2D center = view->GetCenter();
         RedrawScreen( wxPoint( center.x, center.y ), false );
-
-        // Switch panes
-        m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Hide();
-        m_auimgr.GetPane( wxT( "DrawFrame" ) ).Show();
-        m_auimgr.Update();
     }
+
+    m_canvas->SetEvtHandlerEnabled( !aEnable );
+    m_galCanvas->SetEvtHandlerEnabled( aEnable );
+
+    // Switch panes
+    m_auimgr.GetPane( wxT( "DrawFrame" ) ).Show( !aEnable );
+    m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show( aEnable );
+    m_auimgr.Update();
 
     m_galCanvasActive = aEnable;
 #endif /* KICAD_GAL */

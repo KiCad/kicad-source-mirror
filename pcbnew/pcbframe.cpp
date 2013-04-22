@@ -595,7 +595,6 @@ void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
 }
 
 
-
 void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
 {
     DIALOG_DESIGN_RULES dR_editor( this );
