@@ -765,15 +765,26 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     if( m_Attribute == PAD_SMD || m_Attribute == PAD_CONN)
     {
         // Single layer pad (smd) without hole
-        aLayers[0] = GetParent()->GetLayer();
-        aCount     = 1;
+        if( IsOnLayer( LAYER_N_FRONT ) )
+            aLayers[0] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
+        else if( IsOnLayer( LAYER_N_BACK ) )
+            aLayers[0] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
+#ifdef __WXDEBUG__
+        else    // Should not occur
+        {
+            wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD on layer different than FRONT/BACK") );
+        }
+#endif
+
+        aCount = 1;
     }
     else
     {
         // Multi layer pad with hole - pad is shown on one common layer, hole on the other
         aLayers[0] = ITEM_GAL_LAYER( PADS_VISIBLE );
         aLayers[1] = ITEM_GAL_LAYER( PAD_HOLES_VISIBLE );
-        aCount     = 2;
+
+        aCount = 2;
     }
 }
 
