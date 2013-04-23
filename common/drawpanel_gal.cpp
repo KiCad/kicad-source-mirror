@@ -27,7 +27,8 @@
 #include <wx/window.h>
 #include <wx/event.h>
 #include <wx/colour.h>
-#include <wx/filefn.h>
+#include <wx/stdpaths.h>
+#include <wx/filename.h>
 
 #include <class_drawpanel_gal.h>
 #include <view/view.h>
@@ -50,7 +51,9 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_view    = NULL;
     m_painter = NULL;
 
-    m_galShaderPath = std::string( ::wxGetCwd().mb_str() ) + "/../../gal/opengl/shader/";
+    wxStandardPaths paths;
+    wxFileName executableFile( paths.GetExecutablePath() );
+    m_galShaderPath = std::string( executableFile.GetPath() + "/../../common/gal/opengl/shader/" );
 
     SwitchBackend( aGalType, false );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );

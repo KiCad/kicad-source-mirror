@@ -65,7 +65,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     isUseShader              = isUseShaders;
     isShaderInitialized      = false;
     isGroupStarted           = false;
-    shaderPath               = "../../../gal/opengl/shader/";
+    shaderPath               = "../../common/gal/opengl/shader/";
     wxSize parentSize        = aParent->GetSize();
 
     SetSize( parentSize );
