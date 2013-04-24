@@ -1288,15 +1288,6 @@ void OPENGL_GAL::Restore()
 }
 
 
-void OPENGL_GAL::BeginLayer()
-{
-}
-
-void OPENGL_GAL::EndLayer()
-{
-}
-
-
 // TODO Error handling
 int OPENGL_GAL::BeginGroup()
 {

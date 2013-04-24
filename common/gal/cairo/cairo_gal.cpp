@@ -178,6 +178,8 @@ void CAIRO_GAL::BeginDrawing() throw( int )
     lineWidth = 0;
 
     isDeleteSavedPixels = true;
+
+    cairo_push_group( cairoImage );
 }
 
 
@@ -185,6 +187,9 @@ void CAIRO_GAL::EndDrawing()
 {
     // Force remaining objects to be drawn
     Flush();
+
+    cairo_pop_group_to_source( cairoImage );
+    cairo_paint_with_alpha( cairoImage, fillColor.a );
 
     // This code was taken from the wxCairo example - it's not the most efficient one
     // Here is a good place for optimizations
@@ -521,6 +526,19 @@ void CAIRO_GAL::ClearScreen()
 }
 
 
+void CAIRO_GAL::SetLayerDepth( double aLayerDepth )
+{
+    super::SetLayerDepth( aLayerDepth );
+
+    storePath();
+
+    cairo_pop_group_to_source( cairoImage );
+    cairo_paint_with_alpha( cairoImage, fillColor.a );
+
+    cairo_push_group( cairoImage );
+}
+
+
 void CAIRO_GAL::Transform( MATRIX3x3D aTransformation )
 {
     cairo_matrix_t cairoTransformation;
@@ -614,21 +632,6 @@ void CAIRO_GAL::Restore()
         groupElement.command = CMD_RESTORE;
         groups.back().push_back( groupElement );
     }
-}
-
-
-void CAIRO_GAL::BeginLayer()
-{
-    cairo_push_group( cairoImage );
-}
-
-
-void CAIRO_GAL::EndLayer()
-{
-    storePath();
-
-    cairo_pop_group_to_source( cairoImage );
-    cairo_paint_with_alpha( cairoImage, fillColor.a );
 }
 
 

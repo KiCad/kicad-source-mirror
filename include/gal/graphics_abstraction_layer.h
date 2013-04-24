@@ -95,12 +95,6 @@ public:
     /// @brief End the drawing, needs to be called for every new frame.
     virtual void EndDrawing() = 0;
 
-    /// @brief Begin the layer drawing, needs to be called for every new layer.
-    virtual void BeginLayer() = 0;
-
-    /// @brief Finish the layer drawing, needs to be called for every new layer.
-    virtual void EndLayer() = 0;
-
     /**
      * @brief Draw a line.
      *
