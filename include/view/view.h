@@ -351,7 +351,7 @@ private:
     void    clearGroupCache();
 
     ///* Rebuilds GAL display lists
-    void    itemsRecache();
+    void    recacheAllItems();
 
     /// Determines rendering order of layers. Used in display order sorting function.
     static bool compareRenderingOrder( VIEW_LAYER* i, VIEW_LAYER* j )

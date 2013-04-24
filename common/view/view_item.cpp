@@ -66,3 +66,70 @@ void VIEW_ITEM::ViewRelease()
         m_view->Remove( this );
     }
 }
+
+
+int VIEW_ITEM::getGroup( int aLayer ) const
+{
+    for( int i = 0; i < m_groupsSize; ++i )
+    {
+        if( m_groups[i].first == aLayer )
+            return m_groups[i].second;
+    }
+
+    return -1;
+}
+
+
+std::vector<int> VIEW_ITEM::getAllGroups() const
+{
+    std::vector<int> groups( m_groupsSize );
+
+    for( int i = 0; i < m_groupsSize; ++i )
+    {
+        groups[i] = m_groups[i].second;
+    }
+
+    return groups;
+}
+
+
+void VIEW_ITEM::setGroup( int aLayer, int aId )
+{
+    // Look if there is already an entry for the layer
+    for( int i = 0; i < m_groupsSize; ++i )
+    {
+        if( m_groups[i].first == aLayer )
+        {
+            m_groups[i].second = aId;
+            return;
+        }
+    }
+
+    // If there was no entry for the given layer - create one
+    GroupPair* newGroups = new GroupPair[m_groupsSize + 1];
+
+    if( m_groupsSize > 0 )
+    {
+        std::copy( m_groups, m_groups + m_groupsSize, newGroups );
+        delete m_groups;
+    }
+
+    m_groups = newGroups;
+    newGroups[m_groupsSize++] = GroupPair( aLayer, aId );
+}
+
+
+void VIEW_ITEM::deleteGroups()
+{
+    if( m_groupsSize > 0 )
+    {
+        delete m_groups;
+        m_groupsSize = 0;
+    }
+}
+
+
+bool VIEW_ITEM::storesGroups() const
+{
+    return ( m_groupsSize > 0 );
+}
