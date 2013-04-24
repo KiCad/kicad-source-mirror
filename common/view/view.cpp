@@ -207,7 +207,7 @@ void VIEW::SetGAL( GAL* aGal )
 
     // items need to be recached after changing GAL
     if( m_useGroups )
-        itemsRecache();
+        recacheAllItems();
 
     // force the new GAL to display the current viewport.
     SetCenter( m_center );
@@ -371,7 +371,7 @@ struct VIEW::drawItem
 
         if( view->m_useGroups )
         {
-            int group = aItem->m_cachedGroup;
+            int group = aItem->getGroup( currentLayer );
 
             if( group >= 0 && aItem->ViewIsVisible() )
             {
@@ -381,7 +381,7 @@ struct VIEW::drawItem
             else
             {
                 group = gal->BeginGroup();
-                aItem->m_cachedGroup = group;
+                aItem->setGroup( currentLayer, group );
                 view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), currentLayer );
                 gal->EndGroup();
                 gal->DrawGroup( group );
@@ -419,11 +419,9 @@ void VIEW::redrawRect( const BOX2I& aRect )
         {
             drawItem drawFunc( this, l->id );
 
-            m_gal->BeginLayer();
             m_gal->SetLayerDepth( (double) l->renderingOrder );
             l->items->Query( aRect, drawFunc );
             l->isDirty = false;
-            m_gal->EndLayer();
 
             totalItems    += drawFunc.count;
             totalDrawTime += drawFunc.time;
@@ -454,7 +452,7 @@ struct VIEW::recacheItem
 {
     void operator()( VIEW_ITEM* aItem )
     {
-        aItem->m_cachedGroup = -1;
+        aItem->deleteGroups();
     }
 };
 
@@ -513,14 +511,19 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
             l->items->Insert( aItem );    /* reinsert */
 
             if( m_useGroups )
-                aItem->m_cachedGroup = -1;
+                aItem->deleteGroups();
         }
     }
 
-    if( m_useGroups && aItem->m_cachedGroup >= 0 )
+    if( m_useGroups && aItem->storesGroups() )
     {
-        m_gal->DeleteGroup( aItem->m_cachedGroup );
-        aItem->m_cachedGroup = -1;
+        std::vector<int> groups = aItem->getAllGroups();
+        for(std::vector<int>::iterator i = groups.begin(); i != groups.end(); i++ )
+        {
+            m_gal->DeleteGroup( *i );
+        }
+
+        aItem->deleteGroups();
     }
 }
 
@@ -534,10 +537,15 @@ struct VIEW::clearItemCache
 
     void operator()( VIEW_ITEM* aItem )
     {
-        if( aItem->m_cachedGroup >= 0 )
+        if( aItem->storesGroups() )
         {
-            view->GetGAL()->DeleteGroup( aItem->m_cachedGroup );
-            aItem->m_cachedGroup = -1;
+            std::vector<int> groups = aItem->getAllGroups();
+            for(std::vector<int>::iterator i = groups.begin(); i != groups.end(); i++ )
+            {
+                view->GetGAL()->DeleteGroup( *i );
+            }
+
+            aItem->deleteGroups();
         }
     }
 
@@ -560,7 +568,7 @@ void VIEW::clearGroupCache()
 }
 
 
-void VIEW::itemsRecache()
+void VIEW::recacheAllItems()
 {
     BOX2I r;
 

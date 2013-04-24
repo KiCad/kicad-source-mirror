@@ -30,6 +30,8 @@
 #ifndef __VIEW_ITEM_H
 #define __VIEW_ITEM_H
 
+#include <vector>
+
 #include <math/box2.h>
 
 namespace KiGfx
@@ -52,7 +54,6 @@ class VIEW;
 class VIEW_ITEM
 {
 public:
-
     /**
      * Enum ViewUpdateFlags.
      * Defines the how severely the shape/appearance of the item has been changed:
@@ -67,7 +68,7 @@ public:
         ALL = 0xff
     };
 
-    VIEW_ITEM() : m_view( NULL ), m_viewVisible( true ), m_cachedGroup( -1 ) {}
+    VIEW_ITEM() : m_view( NULL ), m_viewVisible( true ), m_groupsSize( 0 ) {}
 
     /**
      * Destructor. For dynamic views, removes the item from the view.
@@ -167,13 +168,59 @@ protected:
         // release the item from a previously assigned dynamic view (if there is any)
         ViewRelease();
         m_view = aView;
-        m_cachedGroup = -1;
+        deleteGroups();
     }
 
     VIEW*   m_view;         ///* Current dynamic view the item is assigned to.
     bool    m_viewVisible;  ///* Are we visible in the current dynamic VIEW.
 private:
-    int     m_cachedGroup;  ///* Index of cached GAL display list corresponding to the item
+    ///* Helper for storing cached items group ids
+    typedef std::pair<int, int> GroupPair;
+
+    ///* Indexes of cached GAL display lists corresponding to the item (for every layer it occupies).
+    ///* (in the std::pair "first" stores layer number, "second" stores group id).
+    GroupPair* m_groups;
+    int        m_groupsSize;
+
+    /**
+     * Function getGroup()
+     * Returns number of the group id for the given layer, or -1 in case it was not cached before.
+     *
+     * @param aLayer is the layer number for which group id is queried.
+     * @return group id or -1 in case there is no group id (ie. item is not cached).
+     */
+    int getGroup( int aLayer ) const;
+
+    /**
+     * Function getAllGroups()
+     * Returns all group ids for the item (collected from all layers the item occupies).
+     *
+     * @return vector of group ids.
+     */
+    std::vector<int> getAllGroups() const;
+
+    /**
+     * Function setGroup()
+     * Sets a group id for the item and the layer combination.
+     *
+     * @param aLayer is the layer numbe.
+     * @param aGroup is the group id.
+     */
+    void setGroup( int aLayer, int aGroup );
+
+    /**
+     * Function deleteGroups()
+     * Removes all of the stored group ids. Forces recaching of the item.
+     */
+    void deleteGroups();
+
+    /**
+     * Function storesGroups()
+     * Returns information if the item uses at least one group id (ie. if it is cached at all).
+     *
+     * @returns true in case it is cached at least for one layer.
+     */
+    bool storesGroups() const;
 };
 } // namespace KiGfx
 
