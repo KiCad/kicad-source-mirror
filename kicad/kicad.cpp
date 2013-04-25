@@ -63,9 +63,9 @@ void EDA_APP::MacOpenFile( const wxString &fileName )
     }
 
     wxCommandEvent loadEvent;
-    loadEvent.SetId(wxID_ANY);
+    loadEvent.SetId( wxID_ANY );
   
-    frame->OnLoadProject(loadEvent);
+    frame->OnLoadProject( loadEvent );
 
     wxString title = GetTitle() + wxT( " " ) + GetBuildVersion() +
                      wxT( " " ) + frame->m_ProjectFileName.GetFullPath();
