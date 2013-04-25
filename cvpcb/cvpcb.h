@@ -21,10 +21,6 @@
 
 #define LISTB_STYLE     (wxSUNKEN_BORDER | wxLC_NO_HEADER | wxLC_REPORT | wxLC_VIRTUAL)
 
-#include <netlist_reader.h>
-
-typedef boost::ptr_vector< COMPONENT_INFO > COMPONENT_LIST;
-
 extern const wxString FootprintAliasFileExtension;
 extern const wxString RetroFileExtension;
 
