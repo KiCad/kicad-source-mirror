@@ -1183,44 +1183,32 @@ void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aContro
 
 void OPENGL_GAL::SetStrokeColor( COLOR4D aColor )
 {
-    if( strokeColor != aColor )
-    {
-        isSetAttributes = true;
-        strokeColor     = aColor;
+    isSetAttributes = true;
+    strokeColor     = aColor;
 
-        // This is the default drawing color
-        glColor4d( aColor.r, aColor.g, aColor.b, aColor.a );
-    }
+    // This is the default drawing color
+    glColor4d( aColor.r, aColor.g, aColor.b, aColor.a );
 }
 
 
 void OPENGL_GAL::SetFillColor( COLOR4D aColor )
 {
-    if( fillColor != aColor )
-    {
-        isSetAttributes = true;
-        fillColor = aColor;
-    }
+    isSetAttributes = true;
+    fillColor = aColor;
 }
 
 
 void OPENGL_GAL::SetBackgroundColor( COLOR4D aColor )
 {
-    if( backgroundColor != aColor )
-    {
-        isSetAttributes = true;
-        backgroundColor = aColor;
-    }
+    isSetAttributes = true;
+    backgroundColor = aColor;
 }
 
 
 void OPENGL_GAL::SetLineWidth( double aLineWidth )
 {
-    if( lineWidth != aLineWidth )
-    {
-        isSetAttributes = true;
-        lineWidth = aLineWidth;
-    }
+    isSetAttributes = true;
+    lineWidth = aLineWidth;
 }
 
 
