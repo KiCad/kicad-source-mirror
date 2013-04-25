@@ -214,9 +214,14 @@ void PCB_LAYER_WIDGET::ReFillRender()
     ClearRenderRows();
 
     // Add "Render" tab rows to LAYER_WIDGET, after setting color and checkbox state.
+    // Because s_render_rows is created static, we must explicitely call
+    // wxGetTranslation for texts which are internationalized (tool tips
+    // and item names)
     for( unsigned row=0;  row<DIM(s_render_rows);  ++row )
     {
         LAYER_WIDGET::ROW renderRow = s_render_rows[row];
+        renderRow.tooltip = wxGetTranslation( s_render_rows[row].tooltip);
+        renderRow.rowName = wxGetTranslation( s_render_rows[row].rowName);
 
         if( renderRow.color != -1 )       // does this row show a color?
         {
@@ -293,12 +298,15 @@ void PCB_LAYER_WIDGET::ReFill()
             }
 
             AppendLayerRow( LAYER_WIDGET::ROW(
-                brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), dsc, true ) );
+                brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ),
+                dsc, true ) );
         }
     }
 
 
     // technical layers are shown in this order:
+    // Because they are static, wxGetTranslation must be explicitely
+    // called for tooltips.
     static const struct {
         LAYER_NUM   layerId;
         wxString    tooltip;
@@ -327,7 +335,7 @@ void PCB_LAYER_WIDGET::ReFill()
 
         AppendLayerRow( LAYER_WIDGET::ROW(
             brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ),
-            techLayerSeq[i].tooltip, true ) );
+            wxGetTranslation( techLayerSeq[i].tooltip ), true ) );
     }
 
     installRightLayerClickHandler();

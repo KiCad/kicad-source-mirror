@@ -670,7 +670,6 @@ public:
     void OnEraseBackground( wxEraseEvent& SizeEvent );
 
     virtual void OnZoom( wxCommandEvent& event );
-    void OnGrid( int grid_type );
 
     /**
      * Function RedrawScreen

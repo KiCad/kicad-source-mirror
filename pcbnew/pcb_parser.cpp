@@ -89,7 +89,7 @@ double PCB_PARSER::parseDouble() throw( IO_ERROR )
     if( errno )
     {
         wxString error;
-        error.Printf( _( "invalid floating point number in file: <%s>\nline: %d, offset: %d" ),
+        error.Printf( _( "invalid floating point number in\nfile: <%s>\nline: %d\noffset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
@@ -98,7 +98,7 @@ double PCB_PARSER::parseDouble() throw( IO_ERROR )
     if( CurText() == tmp )
     {
         wxString error;
-        error.Printf( _( "missing floating point number in file: <%s>\nline: %d, offset: %d" ),
+        error.Printf( _( "missing floating point number in\nfile: <%s>\nline: %d\noffset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
@@ -754,7 +754,7 @@ T PCB_PARSER::lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR )
 #endif
 
         wxString error = wxString::Format(
-            _( "Layer %s in file <%s> at line %d, position %d, was not defined in the layers section" ),
+            _( "Layer '%s' in file <%s> at line %d, position %d, was not defined in the layers section" ),
             GetChars( FROM_UTF8( CurText() ) ), GetChars( CurSource() ),
             CurLineNumber(), CurOffset() );
 
@@ -2182,7 +2182,8 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_solder_paste_margin_ratio:
-            pad->SetLocalSolderPasteMarginRatio( parseBoardUnits( T_solder_paste_margin_ratio ) );
+            pad->SetLocalSolderPasteMarginRatio(
+                parseDouble( "pad local solder paste margin ratio value" ) );
             NeedRIGHT();
             break;
 
@@ -2487,18 +2488,22 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
                     // @todo Create an enum for fill modes.
                     zone->SetFillMode( token == T_polygon ? 0 : 1 );
+                    NeedRIGHT();
                     break;
 
                 case T_arc_segments:
                     zone->SetArcSegmentCount( parseInt( "arc segment count" ) );
+                    NeedRIGHT();
                     break;
 
                 case T_thermal_gap:
                     zone->SetThermalReliefGap( parseBoardUnits( T_thermal_gap ) );
+                    NeedRIGHT();
                     break;
 
                 case T_thermal_bridge_width:
                     zone->SetThermalReliefCopperBridge( parseBoardUnits( T_thermal_bridge_width ) );
+                    NeedRIGHT();
                     break;
 
                 case T_smoothing:
@@ -2519,21 +2524,19 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                     default:
                         Expecting( "none, chamfer, or fillet" );
                     }
-
+                    NeedRIGHT();
                     break;
 
                 case T_radius:
                     zone->SetCornerRadius( parseBoardUnits( "corner radius" ) );
+                    NeedRIGHT();
                     break;
 
                 default:
                     Expecting( "mode, arc_segments, thermal_gap, thermal_bridge_width, "
                                "smoothing, or radius" );
                 }
-
-                NeedRIGHT();
             }
-
             break;
 
         case T_keepout:

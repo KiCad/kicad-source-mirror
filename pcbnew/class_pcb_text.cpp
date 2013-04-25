@@ -111,17 +111,18 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
 void TEXTE_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString    msg;
-    BOARD*      board;
-    BOARD_ITEM* parent = (BOARD_ITEM*) m_Parent;
 
+#if defined(DEBUG)
+    BOARD_ITEM* parent = (BOARD_ITEM*) m_Parent;
     wxASSERT( parent );
 
+    BOARD*      board;
     if( parent->Type() == PCB_DIMENSION_T )
         board = (BOARD*) parent->GetParent();
     else
         board = (BOARD*) parent;
-
     wxASSERT( board );
+#endif
 
     if( m_Parent && m_Parent->Type() == PCB_DIMENSION_T )
         aList.push_back( MSG_PANEL_ITEM( _( "Dimension" ), m_Text, DARKGREEN ) );

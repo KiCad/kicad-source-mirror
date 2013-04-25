@@ -146,7 +146,10 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     if( g_NetObjectslist.size() == 0 )
         return;  // no objects
 
-    activity += wxString::Format( _( " net count = %u" ), g_NetObjectslist.size() );
+    /* The new %zu specification is needed to properly format a size_t
+     * value (returned by size(), here) */
+    activity += wxString::Format( _( " net count = %zu" ), 
+                g_NetObjectslist.size() );
     SetStatusText( activity );
 
     /* Sort objects by Sheet */

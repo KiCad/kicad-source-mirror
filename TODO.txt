@@ -10,7 +10,7 @@ WXMAC Platform
 Common
 ------
 * Grep for @TODO or TODO for sourcecode tasks
-* Use doxygen compatible comments on member functions (.h files)
+* Use Doxygen compatible comments on member functions (.h files)
 * Add tooltip text to all non-obvious controls in every dialog window.
   Use wxFormBuilder.
 * Component and module search displays in which library the
@@ -113,9 +113,9 @@ const wxString FP_LIB_TABLE::ExpandSubtitutions( const wxString aString )
 
 
 
-EESchema
+Eeschema
 --------
-* Drag and drop between two EESchema windows.
+* Drag and drop between two Eeschema windows.
 
 Wayne:
 E3)  Hook up perform last library search hot key to replace search libraries for
@@ -159,5 +159,6 @@ PCBNew
     of PLUGIN::Footprint*() functions.  At least LEGACY and KICAD are both needed
     concurrently.
 
-
+*)  Add a hot key to toggle the 45 degree constraint on and off so that it can be
+    changed when drawing a trace.
 

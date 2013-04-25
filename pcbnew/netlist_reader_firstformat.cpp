@@ -6,6 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 Jean-Pierre Charras.
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>.
  * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -26,67 +27,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-/*
- *  Netlist reader using the first format of pcbnew netlist.
- * This netlist reader build the list of modules found in netlist
- * (list in m_componentsInNetlist)
- * and update pads netnames
- */
-
 #include <fctsys.h>
-#include <kicad_string.h>
-#include <wxPcbStruct.h>
 #include <richio.h>
-
-#include <class_board.h>
-#include <class_module.h>
-#include <pcbnew.h>
+#include <kicad_string.h>
 
 #include <netlist_reader.h>
-#include <boost/foreach.hpp>
-
-// constants used by ReadOldFmtNetlistModuleDescr():
-#define BUILDLIST  true
-#define READMODULE false
 
 
-/*
- * Function ReadOldFmtdNetList
- * Update footprints (load missing footprints and delete on request extra
- * footprints)
- * Update References, values, "TIME STAMP" and connectivity data
- * return true if Ok
- *
- *  the format of the netlist is something like:
- * # EESchema Netlist Version 1.0 generee le  18/5/2005-12:30:22
- *  (
- *  ( 40C08647 $noname R20 4,7K {Lib=R}
- *  (    1 VCC )
- *  (    2 MODB_1 )
- *  )
- *  ( 40C0863F $noname R18 4,7_k {Lib=R}
- *  (    1 VCC )
- *  (    2 MODA_1 )
- *  )
- *  }
- * #End
- */
-bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
+
+void LEGACY_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR )
 {
-    int  state = 0;
-    bool is_comment = false;
+    int state            = 0;
+    bool is_comment      = false;
+    COMPONENT* component = NULL;
 
-    /* First, read the netlist: Build the list of footprints found in netlist
-     */
-
-    // netlineReader dtor will close aFile
-    FILE_LINE_READER    netlineReader( aFile, m_netlistFullName );
-    COMPONENT_INFO*     curComponent = NULL;
-
-    while( netlineReader.ReadLine() )
+    while( m_lineReader->ReadLine() )
     {
-        char* line = StrPurge( netlineReader.Line() );
+        char* line = StrPurge( m_lineReader->Line() );
 
         if( is_comment ) // Comments in progress
         {
@@ -96,92 +53,17 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
 
             is_comment = false;
         }
+
         if( *line == '{' ) // Start Comment or Pcbnew info section
         {
             is_comment = true;
-            if( ReadLibpartSectionOpt() && state == 0 &&
-                (strnicmp( line, "{ Allowed footprints", 20 ) == 0) )
+
+            if( m_loadFootprintFilters && state == 0
+              && (strnicmp( line, "{ Allowed footprints", 20 ) == 0) )
             {
-                ReadOldFmtFootprintFilterList( netlineReader );
+                loadFootprintFilters();
                 continue;
             }
-            if( ( line = strchr( line, '}' ) ) == NULL )
-                continue;
-        }
-
-        if( *line == '(' )
-            state++;
-
-        if( *line == ')' )
-            state--;
-
-        if( state == 2 )
-        {
-            curComponent = (COMPONENT_INFO*) ReadOldFmtNetlistModuleDescr( line, BUILDLIST );
-            continue;
-        }
-
-        if( state >= 3 ) // First pass: pad descriptions are not read here.
-        {
-            if( curComponent )
-                curComponent->m_pinCount++;
-
-            state--;
-        }
-    }
-
-    if( IsCvPcbMode() )
-    {
-        for( ; ; )
-        {
-            /* Search the beginning of Allowed footprints section */
-
-            if( netlineReader.ReadLine( ) == 0 )
-                break;
-            char* line = StrPurge( netlineReader.Line() );
-            if( strnicmp( line, "{ Allowed footprints", 20 ) == 0 )
-            {
-                ReadOldFmtFootprintFilterList( netlineReader );
-                return true;
-            }
-        }
-        return true;
-    }
-
-    if( BuildModuleListOnlyOpt() )
-        return true;  // at this point, the module list is read and built.
-
-    // Load new footprints
-    bool success = InitializeModules();
-
-    if( !success )
-        wxMessageBox( _( "Some footprints are not found in libraries" ) );
-
-    TestFootprintsMatchingAndExchange();
-
-    /* Second read , All footprints are on board.
-     * Update the schematic info (pad netnames)
-     */
-    netlineReader.Rewind();
-    m_currModule = NULL;
-    state = 0;
-    is_comment = false;
-
-    while( netlineReader.ReadLine() )
-    {
-        char* line = StrPurge( netlineReader.Line() );
-
-        if( is_comment )   // we are reading a comment
-        {
-            // Test for end of the current comment
-            if( ( line = strchr( line, '}' ) ) == NULL )
-                continue;
-            is_comment = false;
-        }
-
-        if( *line == '{' ) // this is the beginning of a comment
-        {
-            is_comment = true;
 
             if( ( line = strchr( line, '}' ) ) == NULL )
                 continue;
@@ -195,190 +77,142 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
 
         if( state == 2 )
         {
-            m_currModule = (MODULE*) ReadOldFmtNetlistModuleDescr( line, READMODULE );
+            component = loadComponent( line );
             continue;
         }
 
-        if( state >= 3 )
+        if( state >= 3 ) // Pad descriptions are read here.
         {
-            if( m_currModule )
-                SetPadNetName( line );
+            wxASSERT( component != NULL );
+
+            loadNet( line, component );
             state--;
         }
     }
 
-    return true;
+    if( m_footprintReader )
+    {
+        m_footprintReader->Load( m_netlist );
+    }
 }
 
 
-/* Function ReadOldFmtNetlistModuleDescr
- * Read the beginning of a footprint  description, from the netlist
- * and add a module info to m_componentsInNetlist
- * Analyze the first line of a component description in netlist like:
- * ( /40C08647 $noname R20 4.7K {Lib=R}
- * (1 VCC)
- * (2 MODB_1)
- * )
- */
-void* NETLIST_READER::ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildList )
+COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText ) throw( PARSE_ERROR )
 {
     char*    text;
-    wxString timeStampPath;         // the full time stamp read from netlist
-    wxString footprintName;         // the footprint name read from netlist
-    wxString cmpValue;              // the component value read from netlist
-    wxString cmpReference;          // the component schematic reference read from netlist
-    bool     error = false;
+    wxString msg;
+    wxString timeStamp;         // the full time stamp read from netlist
+    wxString name;              // the component name read from netlist
+    wxString value;             // the component value read from netlist
+    wxString reference;         // the component schematic reference designator read from netlist
     char     line[1024];
 
     strcpy( line, aText );
 
-    cmpValue = wxT( "~" );
+    value = wxT( "~" );
 
-    // Read descr line like  /40C08647 $noname R20 4.7K {Lib=R}
+    // Sample component line:   /40C08647 $noname R20 4.7K {Lib=R}
 
     // Read time stamp (first word)
     if( ( text = strtok( line, " ()\t\n" ) ) == NULL )
-        error = true;
-    else
-        timeStampPath = FROM_UTF8( text );
+    {
+        msg = _( "Cannot parse time stamp in component section of netlist." );
+        THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), line, m_lineReader->LineNumber(),
+                           m_lineReader->Length() );
+    }
+
+    timeStamp = FROM_UTF8( text );
 
     // Read footprint name (second word)
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
-        error = true;
-    else
-        footprintName = FROM_UTF8( text );
+    {
+        msg = _( "Cannot parse name in component section of netlist." );
+        THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), aText, m_lineReader->LineNumber(),
+                           m_lineReader->Length() );
+    }
 
-    // Read schematic reference (third word)
+    name = FROM_UTF8( text );
+
+    // Read schematic reference designator (third word)
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
-        error = true;
-    else
-        cmpReference = FROM_UTF8( text );
+    {
+        msg = _( "Cannot parse reference designator in component section of netlist." );
+        THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), aText, m_lineReader->LineNumber(),
+                           m_lineReader->Length() );
+    }
+
+    reference = FROM_UTF8( text );
 
     // Read schematic value (forth word)
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
-        error = true;
-    else
-        cmpValue = FROM_UTF8( text );
-
-    if( error )
-        return NULL;
-
-    if( aBuildList )
     {
-        COMPONENT_INFO* cmp_info = new COMPONENT_INFO( footprintName, cmpReference,
-                                                 cmpValue, timeStampPath );
-        AddModuleInfo( cmp_info );
-        return cmp_info;
+        msg = _( "Cannot parse value in component section of netlist." );
+        THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), aText, m_lineReader->LineNumber(),
+                           m_lineReader->Length() );
     }
 
-    // search the module loaded on board
-    // reference and time stamps are already updated so we can use search by reference only
-    MODULE* module = m_pcbframe->GetBoard()->FindModuleByReference( cmpReference );
-    if( module == NULL )
-    {
-        if( m_messageWindow )
-        {
-            wxString msg;
-            msg.Printf( _( "Component %s not found" ), GetChars( cmpReference ) );
-            m_messageWindow->AppendText( msg + wxT( "\n" ) );
-        }
-    }
+    value = FROM_UTF8( text );
 
-    return module;
+    COMPONENT* component = new COMPONENT( name, reference, value, timeStamp );
+    m_netlist->AddComponent( component );
+    return component;
 }
 
 
-/*
- * Function SetPadNetName
- *  Update a pad netname using the current footprint
- *  Line format: ( <pad number> = <net name> )
- *  Param aText = current line read from netlist
- */
-bool NETLIST_READER::SetPadNetName( char* aText )
+void LEGACY_NETLIST_READER::loadNet( char* aText, COMPONENT* aComponent ) throw( PARSE_ERROR )
 {
-    char* p;
-    char  line[256];
+    wxString msg;
+    char*    p;
+    char     line[256];
 
-    if( m_currModule == NULL )
-        return false;
-
-    strncpy( line, aText, sizeof(line) );
+    strncpy( line, aText, sizeof( line ) );
 
     if( ( p = strtok( line, " ()\t\n" ) ) == NULL )
-        return false;
+    {
+        msg = _( "Cannot parse pin name in component net section of netlist." );
+        THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), line, m_lineReader->LineNumber(),
+                           m_lineReader->Length() );
+    }
 
     wxString pinName = FROM_UTF8( p );
 
     if( ( p = strtok( NULL, " ()\t\n" ) ) == NULL )
-        return false;
+    {
+        msg = _( "Cannot parse net name in component net section of netlist." );
+        THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), line, m_lineReader->LineNumber(),
+                           m_lineReader->Length() );
+    }
 
     wxString netName = FROM_UTF8( p );
 
-    bool     found = false;
-    for( D_PAD* pad = m_currModule->Pads(); pad; pad = pad->Next() )
-    {
-        wxString padName = pad->GetPadName();
+    if( (char) netName[0] == '?' )       // ? indicates no net connected to pin.
+        netName = wxEmptyString;
 
-        if( padName == pinName )
-        {
-            found = true;
-            if( (char) netName[0] != '?' )
-                pad->SetNetname( netName );
-            else
-                pad->SetNetname( wxEmptyString );
-        }
-    }
-
-    if( !found )
-    {
-        if( m_messageWindow )
-        {
-            wxString msg;
-            msg.Printf( _( "Module %s: Pad %s not found" ),
-                        GetChars( m_currModule->GetReference() ),
-                        GetChars( pinName ) );
-            m_messageWindow->AppendText( msg + wxT( "\n" ) );
-        }
-    }
-
-    return found;
+    aComponent->AddNet( pinName, netName );
 }
 
 
-/*
- * Read the section "Allowed footprints" like:
- *  { Allowed footprints by component:
- *  $component R11
- *  R?
- *  SM0603
- *  SM0805
- *  R?-*
- *  SM1206
- *  $endlist
- *  $endfootprintlist
- *  }
- *
- *  And add the strings giving the footprint filter to m_FootprintFilter
- *  of the corresponding module info
- *  This section is used by CvPcb, and is not useful in Pcbnew,
- *  therefore it it not always read
- */
-bool NETLIST_READER::ReadOldFmtFootprintFilterList(  FILE_LINE_READER& aNetlistReader )
+void LEGACY_NETLIST_READER::loadFootprintFilters() throw( IO_ERROR, PARSE_ERROR )
 {
-    wxString        cmpRef;
-    COMPONENT_INFO* cmp_info = NULL;
-    char*           line;
+    wxArrayString filters;
+    wxString      cmpRef;
+    char*         line;
+    COMPONENT*    component;
 
-    while( ( line = aNetlistReader.ReadLine() ) != NULL )
+    while( ( line = m_lineReader->ReadLine() ) != NULL )
     {
-        if( strnicmp( line, "$endlist", 8 ) == 0 ) // end of list for the current component
+        if( strnicmp( line, "$endlist", 8 ) == 0 )   // end of list for the current component
         {
-            cmp_info = NULL;
+            wxASSERT( component != NULL );
+            component->SetFootprintFilters( filters );
+            component = NULL;
+            filters.Clear();
             continue;
         }
+
         if( strnicmp( line, "$endfootprintlist", 4 ) == 0 )
             // End of this section
-            return 0;
+            return;
 
         if( strnicmp( line, "$component", 10 ) == 0 ) // New component reference found
         {
@@ -386,25 +220,25 @@ bool NETLIST_READER::ReadOldFmtFootprintFilterList(  FILE_LINE_READER& aNetlistR
             cmpRef.Trim( true );
             cmpRef.Trim( false );
 
-            // Search the current component in module info list:
-            BOOST_FOREACH( COMPONENT_INFO * &component, m_componentsInNetlist )
+            component = m_netlist->GetComponentByReference( cmpRef );
+
+            // Cannot happen if the netlist is valid.
+            if( component == NULL )
             {
-                if( component->m_Reference == cmpRef )
-                {
-                    cmp_info = component;
-                    break;
-                }
+                wxString msg;
+                msg.Printf( _( "Cannot find component \'%s\' in footprint filter section "
+                               "of netlist." ), GetChars( cmpRef ) );
+                THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), line, m_lineReader->LineNumber(),
+                                   m_lineReader->Length() );
             }
         }
-        else if( cmp_info )
+        else
         {
             // Add new filter to list
             wxString fp = FROM_UTF8( line + 1 );
             fp.Trim( false );
             fp.Trim( true );
-            cmp_info->m_FootprintFilter.Add( fp );
+            filters.Add( fp );
         }
     }
-
-    return true;
 }

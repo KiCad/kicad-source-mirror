@@ -41,17 +41,17 @@
 
 void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 {
-    COMPONENT_INFO* component;
+    COMPONENT* component;
     bool       hasFootprint = false;
     int        componentIndex;
     wxString   description;
 
-    if( m_components.empty() )
+    if( m_netlist.IsEmpty() )
         return;
 
-    // if no component is selected, select the first one
+    // If no component is selected, select the first one
 
-    if(m_ListCmp->GetFirstSelected() < 0)
+    if( m_ListCmp->GetFirstSelected() < 0 )
     {
         componentIndex = 0;
         m_ListCmp->SetSelection( componentIndex, true );
@@ -61,28 +61,28 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 
     while( m_ListCmp->GetFirstSelected() != -1)
     {
-        // get the component for the current iteration
+        // Get the component for the current iteration
 
         componentIndex = m_ListCmp->GetFirstSelected();
-        component = &m_components[componentIndex];
+        component = m_netlist.GetComponent( componentIndex );
 
         if( component == NULL )
             return;
 
-        // check to see if the component has allready a footprint set.
+        // Check to see if the component has already a footprint set.
 
-        hasFootprint = !(component->m_Footprint.IsEmpty());
+        hasFootprint = !(component->GetFootprintLibName().IsEmpty());
 
-        component->m_Footprint = aFootprintName;
+        component->SetFootprintLibName( aFootprintName );
 
         // create the new component description
 
         description.Printf( CMP_FORMAT, componentIndex + 1,
-                    GetChars( component->m_Reference ),
-                    GetChars( component->m_Value ),
-                    GetChars( component->m_Footprint ) );
+                            GetChars( component->GetReference() ),
+                            GetChars( component->GetValue() ),
+                            GetChars( component->GetFootprintLibName() ) );
 
-        // if the component hasn't had a footprint associated with it
+        // If the component hasn't had a footprint associated with it
         // it now has, so we decrement the count of components without
         // a footprint assigned.
 
@@ -92,12 +92,12 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
             m_undefinedComponentCnt -= 1;
         }
 
-        // set the new description and deselect the processed component
+        // Set the new description and deselect the processed component
         m_ListCmp->SetString( componentIndex, description );
         m_ListCmp->SetSelection( componentIndex, false );
     }
 
-    // mark this "session" as modified
+    // Mark this "session" as modified
     m_modified = true;
 
     // select the next component, if there is one
@@ -113,22 +113,10 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 
 bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
 {
+    COMPONENT* component;
     wxString   msg;
-    int        error_level;
 
-    error_level = ReadSchematicNetlist();
-
-    if( error_level < 0 )
-    {
-        msg.Printf( _( "File <%s> does not appear to be a valid KiCad net list file." ),
-                    GetChars( m_NetlistFileName.GetFullPath() ) );
-        wxMessageBox( msg, _( "File Error" ), wxOK | wxICON_ERROR, this );
-        m_NetlistFileName.Clear();
-        UpdateTitle();
-        return false;
-    }
-
-    LoadComponentLinkFile( m_NetlistFileName.GetFullPath() );
+    ReadSchematicNetlist();
 
     if( m_ListCmp == NULL )
         return false;
@@ -140,19 +128,21 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
     m_ListCmp->Clear();
     m_undefinedComponentCnt = 0;
 
-    BOOST_FOREACH( COMPONENT_INFO& component, m_components )
+    for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
     {
+        component = m_netlist.GetComponent( i );
+
         msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
-                    GetChars( component.m_Reference ),
-                    GetChars( component.m_Value ),
-                    GetChars( component.m_Footprint ) );
+                    GetChars( component->GetReference() ),
+                    GetChars( component->GetValue() ),
+                    GetChars( component->GetFootprintLibName() ) );
         m_ListCmp->AppendLine( msg );
 
-        if( component.m_Footprint.IsEmpty() )
+        if( component->GetFootprintLibName().IsEmpty() )
             m_undefinedComponentCnt += 1;
     }
 
-    if( !m_components.empty() )
+    if( !m_netlist.IsEmpty() )
         m_ListCmp->SetSelection( 0, true );
 
     DisplayStatus();
@@ -165,37 +155,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
 }
 
 
-bool CVPCB_MAINFRAME::LoadComponentLinkFile( const wxString& aFileName )
-{
-    FILE*       linkfile;
-    wxFileName  fn = aFileName;
-
-    fn.SetExt( ComponentFileExtension );
-
-    linkfile = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
-    if( linkfile == NULL )
-    {
-        wxString msg;
-        msg.Printf( _( "Cannot open CvPcb component file <%s>." ),
-                    GetChars( fn.GetFullPath() ) );
-        msg << wxT( "\n" ) << _( "This is normal if you are opening a new netlist file" );
-        wxMessageBox( msg, titleComponentLibErr, wxOK | wxICON_ERROR );
-        return false;
-    }
-
-    // read and close the file
-    if( ! ReadComponentLinkFile( linkfile ) )
-    {
-        wxString msg;
-        msg.Printf( _( " <%s> does not appear to be a valid KiCad component link file." ),
-                    GetChars( fn.GetFullPath() ) );
-        wxMessageBox( msg, titleComponentLibErr, wxOK | wxICON_ERROR );
-        return false;
-    }
-
-    return true;
-}
-
 int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
 {
     wxFileName fn;
@@ -207,7 +166,7 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
     }
     else
     {
-        wxFileDialog dlg( this, _( "Save Component/Footprint Link File" ), wxGetCwd(),
+        wxFileDialog dlg( this, _( "Save Component Footprint Link File" ), wxGetCwd(),
                           wxEmptyString, ComponentFileWildcard, wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -224,7 +183,7 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
 
     if( WriteComponentLinkFile( fn.GetFullPath() ) == 0 )
     {
-        DisplayError( this, _( "Unable to create component file (.cmp)" ) );
+        DisplayError( this, _( "Unable to create component footprint link file (.cmp)" ) );
         return 0;
     }
 

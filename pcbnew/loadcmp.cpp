@@ -132,7 +132,12 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser( void )
         wxMilliSleep( 50 );
     }
 
-    wxString fpname = viewer->GetSelectedFootprint();
+    // Returns the full fp name, i.e. the lib name and th fp name,
+    // separated by a '/'
+    // (/ is now an illegal char in fp names)
+    wxString fpname = viewer->GetSelectedLibraryFullName();
+    fpname << wxT("/") << viewer->GetSelectedFootprint();
+
     viewer->Destroy();
 
     return fpname;
@@ -146,6 +151,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
     MODULE*     module;
     wxPoint     curspos = GetScreen()->GetCrossHairPosition();
     wxString    moduleName, keys;
+    wxString    libName = aLibrary;
     bool        allowWildSeach = true;
 
     static wxArrayString HistoryList;
@@ -162,7 +168,12 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
 
     if( dlg.m_GetExtraFunction )
     {
-        moduleName = SelectFootprintFromLibBrowser();
+        // SelectFootprintFromLibBrowser() returns the
+        // "full" footprint name, i.e.
+        // <lib_name>/<footprint name>
+        wxString full_fpname = SelectFootprintFromLibBrowser();
+        moduleName = full_fpname.AfterLast( '/' );
+        libName = full_fpname.BeforeLast( '/' );
     }
     else
     {
@@ -179,7 +190,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
     {
         allowWildSeach = false;
         keys = moduleName;
-        moduleName = Select_1_Module_From_List( this, aLibrary, wxEmptyString, keys );
+        moduleName = Select_1_Module_From_List( this, libName, wxEmptyString, keys );
 
         if( moduleName.IsEmpty() )  // Cancel command
         {
@@ -191,7 +202,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
             || ( moduleName.Contains( wxT( "*" ) ) ) )  // Selection wild card
     {
         allowWildSeach = false;
-        moduleName     = Select_1_Module_From_List( this, aLibrary, moduleName, wxEmptyString );
+        moduleName     = Select_1_Module_From_List( this, libName, moduleName, wxEmptyString );
 
         if( moduleName.IsEmpty() )
         {
@@ -200,7 +211,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         }
     }
 
-    module = GetModuleLibrary( aLibrary, moduleName, false );
+    module = GetModuleLibrary( libName, moduleName, false );
 
     if( !module && allowWildSeach )    // Search with wild card
     {
@@ -209,7 +220,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         wxString wildname = wxChar( '*' ) + moduleName + wxChar( '*' );
         moduleName = wildname;
 
-        moduleName = Select_1_Module_From_List( this, aLibrary, moduleName, wxEmptyString );
+        moduleName = Select_1_Module_From_List( this, libName, moduleName, wxEmptyString );
 
         if( moduleName.IsEmpty() )
         {
@@ -218,7 +229,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         }
         else
         {
-            module = GetModuleLibrary( aLibrary, moduleName, true );
+            module = GetModuleLibrary( libName, moduleName, true );
         }
     }
 
@@ -258,15 +269,6 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
 }
 
 
-/* scans active libraries to find and load aFootprintName.
- * If found  the module is added to the BOARD, just for good measure.
- *  aLibraryPath is the full/short name of the library.
- *                      if empty, search in all libraries
- *  aFootprintName is the footprint to load
- *  aDisplayError = true to display an error message if any.
- *
- *  return a pointer to the new module, or NULL
- */
 MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryPath,
                                           const wxString& aFootprintName,
                                           bool aDisplayError )
@@ -278,12 +280,6 @@ MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryPath,
 }
 
 
-/* loads aFootprintName from aLibraryPath.
- * If found the module is added to the BOARD, just for good measure.
- *
- * aLibraryPath - the full filename or the short name of the library to read.
- * if it is a short name, the file is searched in all library valid paths
- */
 MODULE* PCB_BASE_FRAME::loadFootprintFromLibrary( const wxString& aLibraryPath,
                                                   const wxString& aFootprintName,
                                                   bool            aDisplayError,
@@ -326,10 +322,6 @@ MODULE* PCB_BASE_FRAME::loadFootprintFromLibrary( const wxString& aLibraryPath,
 }
 
 
-/* Explore the libraries list and
- * loads aFootprintName from the first library it is found
- * If found add the module is also added to the BOARD, just for good measure.
- */
 MODULE* PCB_BASE_FRAME::loadFootprintFromLibraries(
         const wxString& aFootprintName, bool aDisplayError )
 {
@@ -388,6 +380,35 @@ MODULE* PCB_BASE_FRAME::loadFootprintFromLibraries(
     {
         DisplayError( this, ioe.errorText );
     }
+
+    return NULL;
+}
+
+
+MODULE* PCB_BASE_FRAME::loadFootprint( const wxString& aFootprintName )
+    throw( IO_ERROR, PARSE_ERROR )
+{
+    wxString   libPath;
+    wxFileName fn;
+    MODULE*    footprint;
+
+    PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+
+    for( unsigned ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
+    {
+        fn = wxFileName( wxEmptyString, g_LibraryNames[ii], LegacyFootprintLibPathExtension );
+
+        libPath = wxGetApp().FindLibraryPath( fn );
+
+        if( !libPath )
+            continue;
+
+        footprint = pi->FootprintLoad( libPath, aFootprintName );
+
+        if( footprint )
+            return footprint;
+    }
+
     return NULL;
 }
 
@@ -475,9 +496,6 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
 }
 
 
-/* Find and display the doc Component Name
- * The list of doc is pointed to by mlist.
- */
 static void DisplayCmpDoc( wxString& Name )
 {
     FOOTPRINT_INFO* module_info = MList.GetModuleInfo( Name );

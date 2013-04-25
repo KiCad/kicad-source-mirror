@@ -30,6 +30,7 @@
 #include <wildcards_and_files_ext.h>
 #include <menus_helpers.h>
 #include <footprint_wizard_frame.h>
+#include <pcbnew_config.h>
 
 
 // Functions defined in block_module_editor, but used here
@@ -877,3 +878,9 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
         SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
     }
 }
+
+EDA_COLOR_T FOOTPRINT_EDIT_FRAME::GetGridColor() const
+{
+    return g_ColorsSettings.GetItemColor( GRID_VISIBLE );
+}
+

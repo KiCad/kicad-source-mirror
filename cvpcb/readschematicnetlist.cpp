@@ -26,7 +26,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/* Read a nelist type Eeschema (New and Old format)
+/* Read a netlist type Eeschema (New and Old format)
  * or OrcadPCB2 and build the component list
  */
 
@@ -35,82 +35,56 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <macros.h>
+#include <wildcards_and_files_ext.h>
 
 #include <cvpcb_mainframe.h>
 #include <richio.h>
 
-
 #include <netlist_reader.h>
-
-// COMPONENT_INFO object list sort function:
-bool operator < ( const COMPONENT_INFO& item1, const COMPONENT_INFO& item2 )
-{
-    return StrNumCmp( item1.m_Reference, item2.m_Reference, INT_MAX, true ) < 0;
-}
 
 
 int CVPCB_MAINFRAME::ReadSchematicNetlist()
 {
-    FILE* netfile = wxFopen( m_NetlistFileName.GetFullPath(), wxT( "rt" ) );
+    wxBusyCursor    dummy;           // Shows an hourglass while loading.
+    NETLIST_READER* netlistReader;
+    wxString        msg;
+    wxString        compFootprintLinkFileName;
+    wxFileName      fn = m_NetlistFileName;
 
-    if( netfile == NULL )
+    // Load the footprint association file if it has already been created.
+    fn.SetExt( ComponentFileExtension );
+
+    if( fn.FileExists() && fn.IsFileReadable() )
+        compFootprintLinkFileName = fn.GetFullPath();
+
+    m_netlist.Clear();
+
+    try
     {
-        wxString msg;
-        msg.Printf( _( "Could not open file <%>" ),
-                    GetChars( m_NetlistFileName.GetFullPath() ) );
-        wxMessageBox( msg );
-        return -1;
+        netlistReader = NETLIST_READER::GetNetlistReader( &m_netlist,
+                                                          m_NetlistFileName.GetFullPath(),
+                                                          compFootprintLinkFileName );
+        std::auto_ptr< NETLIST_READER > nlr( netlistReader );
+        netlistReader->LoadNetlist();
+    }
+    catch( IO_ERROR& ioe )
+    {
+        msg = wxString::Format( _( "Error loading netlist.\n%s" ), ioe.errorText.GetData() );
+        wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
+        return 1;
     }
 
-    NETLIST_READER netList_Reader( NULL, NULL );
-    netList_Reader.m_UseTimeStamp     = false;
-    netList_Reader.m_ChangeFootprints = false;
-    netList_Reader.m_UseCmpFile = false;
-    netList_Reader.SetFilesnames( m_NetlistFileName.GetFullPath(), wxEmptyString );
 
-    // True to read footprint filters section: true for CvPcb, false for Pcbnew
-    netList_Reader.ReadLibpartSectionSetOpt( true );
-
-    // on OSX otherwise reloading a file you will see duplicates
-    m_components.clear();
-
-    bool success = netList_Reader.ReadNetList( netfile );
-    if( !success )
+    // We also remove footprint name if it is "$noname" because this is a dummy name,
+    // not the actual name of the footprint.
+    for( unsigned ii = 0; ii < m_netlist.GetCount(); ii++ )
     {
-        wxMessageBox( _("Netlist read error") );
-        return false;
+        if( m_netlist.GetComponent( ii )->GetFootprintLibName() == wxT( "$noname" ) )
+            m_netlist.GetComponent( ii )->SetFootprintLibName( wxEmptyString );
     }
-
-    // Now copy footprints info into Cvpcb list:
-    // We also remove footprint name if it is "$noname"
-    // because this is a dummy name,, not an actual name
-    COMPONENT_INFO_LIST& cmpInfo = netList_Reader.GetComponentInfoList();
-    for( unsigned ii = 0; ii < cmpInfo.size(); ii++ )
-    {
-        m_components.push_back( cmpInfo[ii] );
-        if( cmpInfo[ii]->m_Footprint == wxT( "$noname" ) )
-            cmpInfo[ii]->m_Footprint.Empty();
-    }
-    cmpInfo.clear();    // cmpInfo is no more owner of the list.
 
     // Sort components by reference:
-    sort( m_components.begin(), m_components.end() );
-
-    // Now copy filters in m_components, if netlist type is KICAD
-    // ( when the format is the "old" PCBNEW format, filters are already in
-    // m_component list
-    if( NETLIST_TYPE_KICAD == netList_Reader.GetNetlistType() )
-    {
-        for( unsigned ii = 0; ii < m_components.size(); ii++ )
-        {
-            LIPBART_INFO* libpart = netList_Reader.GetLibpart(m_components[ii].m_Libpart);
-            if( libpart == NULL )
-                continue;
-
-            // now copy filter list
-            m_components[ii].m_FootprintFilter = libpart->m_FootprintFilter;
-        }
-    }
+    m_netlist.SortByReference();
 
     return 0;
 }

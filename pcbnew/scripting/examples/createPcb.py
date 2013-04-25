@@ -12,7 +12,7 @@ pcb.m_NetClasses.GetDefault().SetClearance(FromMM(0.1))
 # create a new module, it's parent is our previously created pcb
 module = MODULE(pcb)
 module.SetReference("M1")   # give it a reference name
-module.m_Reference.SetPos0(wxPointMM(-10,-10))
+module.Reference().SetPos0(wxPointMM(-10,-10))
 pcb.Add(module)             # add it to our pcb
 m_pos = wxPointMM(50,50)
 module.SetPosition(m_pos)
@@ -41,8 +41,8 @@ pcb = LoadBoard("/tmp/my2.brd")
 print map( lambda x: x.GetReference() , list(pcb.GetModules()))
 
 for m in pcb.GetModules():
-    for p in m.GetPads():
-        print p.GetPadName(),p.GetPosition(), p.GetOffset()
+    for p in m.Pads():
+        print p.GetPadName(), p.GetPosition(), p.GetOffset()
 
 
 # pcb.GetDesignSettings()

@@ -398,6 +398,18 @@ public:
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
 
+    /**
+     * Function CopyNetlistSettings
+     * copies the netlist settings to \a aPad.
+     *
+     * The netlist settings are all of the #D_PAD settings not define by a #D_PAD in
+     * a netlist.  These setting include local clearances, net names, etc.  The pad
+     * physical geometry settings are not copied.
+     *
+     * @param aPad is the #D_PAD to copy the settings to.
+     */
+    void CopyNetlistSettings( D_PAD* aPad );
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif

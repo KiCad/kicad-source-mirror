@@ -13,7 +13,7 @@ pcb.m_NetClasses.GetDefault().SetClearance(FromMM(0.1))
 # create a new module, it's parent is our previously created pcb
 module = MODULE(pcb)
 module.SetReference("FPC"+str(pads))   # give it a reference name
-module.m_Reference.SetPos0(wxPointMM(-1,-1))
+module.Reference().SetPos0(wxPointMM(-1,-1))
 pcb.Add(module)             # add it to our pcb
 m_pos = wxPointMM(50,50)
 module.SetPosition(m_pos)
@@ -52,7 +52,7 @@ module.Add(e)
 # save the PCB to disk
 module.SetLibRef("FPC"+str(pads))
 try:
-    FootprintLibCreate("fpc.mod")
+    FootprintLibCreate("fpc40.mod")
 except:
     pass # we try to create, but may be it exists already
 FootprintSave("fpc40.mod",module)

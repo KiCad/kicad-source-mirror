@@ -110,7 +110,6 @@ public:
 
 // Options for Spice netlist generation (OR'ed bits
 enum netlistOptions {
-    NET_USE_NETNAMES = 1,           // for Spice netlist : use netnames instead of numbers
     NET_USE_X_PREFIX = 2,           // for Spice netlist : change "U" and "IC" reference prefix to "X"
     NET_PCBNEW_USE_NEW_FORMAT = 1,  // For Pcbnew use the new format (S expression and SWEET)
 };
@@ -125,8 +124,6 @@ public:
 
 private:
     wxConfig* m_config;
-    bool      m_spiceNetlistUseNames;   /* true to use names rather than net
-                                         * numbers (PSPICE netlist only) */
 
 public:
 

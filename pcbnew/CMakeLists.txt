@@ -181,9 +181,6 @@ set(PCBNEW_CLASS_SRCS
     muonde.cpp
     muwave_command.cpp
     netlist.cpp
-    netlist_reader_common.cpp
-    netlist_reader_firstformat.cpp
-    netlist_reader_kicad.cpp
     onleftclick.cpp
     onrightclick.cpp
     pad_edition_functions.cpp

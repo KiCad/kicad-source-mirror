@@ -249,7 +249,7 @@ void FP_CACHE::Remove( const wxString& aFootprintName )
 
     if( it == m_modules.end() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library <%s> has no footprint %s to delete" ),
+        THROW_IO_ERROR( wxString::Format( _( "library <%s> has no footprint '%s' to delete" ),
                                           m_lib_path.GetPath().GetData(),
                                           aFootprintName.GetData() ) );
     }
@@ -425,7 +425,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel, "(layers\n" );
 
     // Save only the used copper layers from front to back.
-    for( LAYER_NUM layer = LAST_COPPER_LAYER; layer >= FIRST_COPPER_LAYER; --layer) 
+    for( LAYER_NUM layer = LAST_COPPER_LAYER; layer >= FIRST_COPPER_LAYER; --layer)
     {
         LAYER_MSK mask = GetLayerMask( layer );
         if( mask & aBoard->GetEnabledLayers() )
@@ -1087,8 +1087,10 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, " (rect_delta %s )", FMT_IU( aPad->GetDelta() ).c_str() );
 
     wxSize sz = aPad->GetDrillSize();
+    wxPoint shapeoffset = aPad->GetOffset();
 
-    if( (sz.GetWidth() > 0) || (sz.GetHeight() > 0) )
+    if( (sz.GetWidth() > 0) || (sz.GetHeight() > 0) ||
+        (shapeoffset.x > 0) || (shapeoffset.y > 0) )
     {
         m_out->Print( 0, " (drill" );
 
@@ -1101,7 +1103,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         if( sz.GetHeight() > 0  && sz.GetWidth() != sz.GetHeight() )
             m_out->Print( 0,  " %s", FMT_IU( sz.GetHeight() ).c_str() );
 
-        if( (aPad->GetOffset().x != 0) || (aPad->GetOffset().y != 0) )
+        if( (shapeoffset.x != 0) || (shapeoffset.y != 0) )
             m_out->Print( 0, " (offset %s)", FMT_IU( aPad->GetOffset() ).c_str() );
 
         m_out->Print( 0, ")" );

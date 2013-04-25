@@ -1,5 +1,5 @@
 #ifndef NETLIST_READER_H
-#define  NETLIST_READER_H
+#define NETLIST_READER_H
 
 /**
  * @file netlist_reader.h
@@ -9,6 +9,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras.
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>.
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -33,304 +34,472 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <fctsys.h>
-#include <kicad_string.h>
-#include <wxPcbStruct.h>
-#include <richio.h>
 #include <macros.h>
 
-#include <class_board.h>
-#include <class_module.h>
-#include <pcbnew.h>
+#include <netlist_lexer.h>    // netlist_lexer is common to Eeschema and Pcbnew
 
-/*
- * Helper class, to store for a footprint the footprint filter info,
- * found in new format KiCad netlist.
- * For CvPcb only
- * Note: features for CvPcb are for a temporary use.
- * They could be removed when CvPcb is modified
- * (perhaps when it does not use anumore a netlist to build the component to footprint link)
+
+using namespace NL_T;
+
+
+class MODULE;
+class LINE_READER;
+class REPORTER;
+
+
+/**
+ * Class COMPONENT_NET
+ * is used to store the component pin name to net name associations stored in a netlist.
  */
-class LIPBART_INFO
+class COMPONENT_NET
 {
-public:
-    wxString m_Libpart;                 // the libpart name.
-    wxArrayString m_FootprintFilter;    // an array of footprint filters found in netlist,
-                                        // for this footprint
+    wxString m_pinName;
+    wxString m_netNumber;
+    wxString m_netName;
 
 public:
+    COMPONENT_NET() {}
 
-    LIPBART_INFO( const wxString& aLibpart )
+    COMPONENT_NET( const wxString& aPinName, const wxString& aNetName )
     {
-        m_Libpart = aLibpart;
+        m_pinName = aPinName;
+        m_netName = aNetName;
     }
+
+    const wxString& GetPinName() const { return m_pinName; }
+
+    const wxString& GetNetName() const { return m_netName; }
+
+    bool IsValid() const { return !m_pinName.IsEmpty(); }
+
+    bool operator <( const COMPONENT_NET& aNet ) const
+    {
+        return m_pinName < aNet.m_pinName;
+    }
+
+#if defined(DEBUG)
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param aNestLevel An aid to prettier tree indenting, and is the level
+     *                   of nesting of this object within the overall tree.
+     * @param aReporter A reference to a #REPORTER object to output to.
+     */
+    virtual void Show( int aNestLevel, REPORTER& aReporter );
+#endif
 };
 
-typedef std::vector <LIPBART_INFO *> LIPBART_INFO_LIST;
+
+typedef std::vector< COMPONENT_NET > COMPONENT_NETS;
 
 
-/*
- * Helper class, to store components and footprints info found in netlist.
- * (component reference and time stamp, footprint name ...
+/**
+ * Class COMPONENT
+ * is used to store components and all of their related information found in a netlist.
  */
-class COMPONENT_INFO
+class COMPONENT
 {
-public:
-    wxString m_Footprint;               // the footprint name found in netlist, the in .cmp file
-    wxString m_Reference;               // the schematic reference found in netlist
-    wxString m_Value;                   // the schematic value found in netlist
+    COMPONENT_NETS m_nets;
+    wxArrayString  m_footprintFilters; ///< Footprint filters found in netlist.
+    wxString       m_reference;        ///< The component reference designator found in netlist.
+    wxString       m_value;            ///< The component value found in netlist.
+
     // ZZZ This timestamp is string, not time_t
-    wxString m_TimeStamp;               // the schematic full time stamp found in netlist
-    wxString m_Libpart;                 // the schematic libpart found in netlist
-    wxArrayString m_FootprintFilter;    // a footprint filters list found in old format netlist
-    int m_pinCount;                     // the number of pins found in the netlist
+    wxString       m_timeStamp;        ///< The component full time stamp found in netlist.
+    wxString       m_name;             ///< The name of the component found in the netlist.
 
-public: COMPONENT_INFO( const wxString& libname,
-                     const wxString& cmpname,
-                     const wxString& value,
-                     const wxString& timestamp )
+    /// The name of the footprint in the library assigned to the component.
+    wxString       m_footprintLibName;
+
+    /// The lib part name used to look up the component library part information.  This only has
+    /// meaning in the new s-expression netlist file format.
+    wxString       m_libraryName;
+    wxString       m_libraryPartName;
+
+    /// The footprint loaded from the library for this component.
+    std::auto_ptr< MODULE > m_footprint;
+
+    static COMPONENT_NET    m_emptyNet;
+
+public:
+    COMPONENT( const wxString& aName,
+               const wxString& aReference,
+               const wxString& aValue,
+               const wxString& aTimeStamp )
     {
-        m_Footprint = libname;
-        m_Reference = cmpname;
-        m_Value = value;
-        m_TimeStamp = timestamp;
-        m_pinCount = 0;
+        m_name      = aName;
+        m_reference = aReference;
+        m_value     = aValue;
+        m_timeStamp = aTimeStamp;
     }
 
-    ~COMPONENT_INFO() { };
+    virtual ~COMPONENT() { };
+
+    void AddNet( const wxString& aPinName, const wxString& aNetName )
+    {
+        m_nets.push_back( COMPONENT_NET( aPinName, aNetName ) );
+    }
+
+    unsigned GetNetCount() const { return m_nets.size(); }
+
+    const COMPONENT_NET& GetNet( unsigned aIndex ) const { return m_nets[aIndex]; }
+
+    const COMPONENT_NET& GetNet( const wxString& aPinName );
+
+    void SortPins() { sort( m_nets.begin(), m_nets.end() ); }
+
+    const wxString& GetReference() const { return m_reference; }
+
+    const wxString& GetValue() const { return m_value; }
+
+    void SetFootprintLibName( const wxString& aFootprintLibName )
+    {
+        m_footprintLibName = aFootprintLibName;
+    }
+
+    const wxString& GetFootprintLibName() const { return m_footprintLibName; }
+
+    const wxString& GetTimeStamp() const { return m_timeStamp; }
+
+    const wxString& GetLibName() const { return m_name; }
+
+    void SetLibrarySource( const wxString& aLibName, const wxString& aCompName )
+    {
+        m_libraryName     = aLibName;
+        m_libraryPartName = aCompName;
+    }
+
+    void SetFootprintFilters( const wxArrayString& aFilterList )
+    {
+        m_footprintFilters = aFilterList;
+    }
+
+    const wxArrayString& GetFootprintFilters() const { return m_footprintFilters; }
+
+    MODULE* GetModule( bool aRelease = false )
+    {
+        return ( aRelease ) ? m_footprint.release() : m_footprint.get();
+    }
+
+    void SetModule( MODULE* aModule );
+
+    bool IsLibSource( const wxString& aLibName, const wxString& aCompName ) const
+    {
+        return aLibName == m_libraryName && aCompName == m_libraryPartName;
+    }
+
+#if defined(DEBUG)
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param aNestLevel An aid to prettier tree indenting, and is the level
+     *                   of nesting of this object within the overall tree.
+     * @param aReporter A reference to a #REPORTER object to output to.
+     */
+    virtual void Show( int aNestLevel, REPORTER& aReporter );
+#endif
 };
 
-enum typenetlist
+
+typedef boost::ptr_vector< COMPONENT > COMPONENTS;
+typedef COMPONENTS::iterator           COMPONENTS_ITER;
+typedef COMPONENTS::const_iterator     COMPONENTS_CITER;
+
+
+/**
+ * Class NETLIST
+ * stores all of information read from a netlist along with the flags used to update
+ * the NETLIST in the #BOARD.
+ */
+class NETLIST
 {
-    NETLIST_TYPE_UNSPECIFIED = 0,
-    NETLIST_TYPE_ORCADPCB2,     // the basic format used by pcbnew
-    NETLIST_TYPE_PCBNEW,        // the format used by pcbnew, basic format + more info
-    NETLIST_TYPE_KICAD          // new format using common S expression
+    COMPONENTS         m_components;           ///< Components found in the netlist.
+
+    /// Remove footprints from #BOARD not found in netlist when true.
+    bool               m_deleteExtraFootprints;
+
+    /// Do not actually make any changes.  Only report changes to #BOARD from netlist
+    /// when true.
+    bool               m_isDryRun;
+
+    /// Find component by time stamp if true or reference designator if false.
+    bool               m_findByTimeStamp;
+
+    /// Replace component footprints when they differ from the netlist if true.
+    bool               m_replaceFootprints;
+
+public:
+    NETLIST() :
+        m_deleteExtraFootprints( false ),
+        m_isDryRun( false ),
+        m_findByTimeStamp( false ),
+        m_replaceFootprints( false )
+    {
+    }
+
+    /**
+     * Function IsEmpty()
+     * @return true if there are no components in the netlist.
+     */
+    bool IsEmpty() const { return m_components.empty(); }
+
+    /**
+     * Function Clear
+     * removes all components from the netlist.
+     */
+    void Clear() { m_components.clear(); }
+
+    /**
+     * Function GetCount
+     * @return the number of components in the netlist.
+     */
+    unsigned GetCount() const { return m_components.size(); }
+
+    /**
+     * Function GetComponent
+     * returns the #COMPONENT at \a aIndex.
+     *
+     * @param aIndex the index in #m_components to fetch.
+     * @return a pointer to the #COMPONENT at \a Index.
+     */
+    COMPONENT* GetComponent( unsigned aIndex ) { return &m_components[ aIndex ]; }
+
+    /**
+     * Function AddComponent
+     * adds \a aComponent to the NETLIST.
+     *
+     * @note If \a aComponent already exists in the NETLIST, \a aComponent is deleted
+     *       to prevent memory leaks.  An assertion is raised in debug builds.
+     *
+     * @param aComponent is the COMPONENT to save to the NETLIST.
+     */
+    void AddComponent( COMPONENT* aComponent );
+
+    /*
+     * Function GetComponentByReference
+     * returns a #COMPONENT by \a aReference.
+     *
+     * @param aReference is the reference designator the #COMPONENT.
+     * @return a pointer to the #COMPONENT that matches \a aReference if found.  Otherwise NULL.
+     */
+    COMPONENT* GetComponentByReference( const wxString& aReference );
+
+    /*
+     * Function GetComponentByTimeStamp
+     * returns a #COMPONENT by \a aTimeStamp.
+     *
+     * @param aTimeStamp is the time stamp the #COMPONENT.
+     * @return a pointer to the #COMPONENT that matches \a aTimeStamp if found.  Otherwise NULL.
+     */
+    COMPONENT* GetComponentByTimeStamp( const wxString& aTimeStamp );
+
+    /*
+     * Function GetComponentByLibName
+     * returns a #COMPONENT by \a aLibName.
+     *
+     * @param aLibName is the component library name of the #COMPONENT.
+     * @return a pointer to the #COMPONENT that matches \a aLibName if found.  Otherwise NULL.
+     */
+    COMPONENT* GetComponentByLibName( const wxString& aLibName );
+
+    void SortByFootprintLibName();
+
+    void SortByReference();
+
+    void SetDeleteExtraFootprints( bool aDeleteExtraFootprints )
+    {
+        m_deleteExtraFootprints = aDeleteExtraFootprints;
+    }
+
+    bool GetDeleteExtraFootprints() const { return m_deleteExtraFootprints; }
+
+    void SetIsDryRun( bool aIsDryRun ) { m_isDryRun = aIsDryRun; }
+
+    bool IsDryRun() const { return m_isDryRun; }
+
+    void SetFindByTimeStamp( bool aFindByTimeStamp ) { m_findByTimeStamp = aFindByTimeStamp; }
+
+    bool IsFindByTimeStamp() const { return m_findByTimeStamp; }
+
+    void SetReplaceFootprints( bool aReplaceFootprints )
+    {
+        m_replaceFootprints = aReplaceFootprints;
+    }
+
+    bool GetReplaceFootprints() const { return m_replaceFootprints; }
+
+#if defined(DEBUG)
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param aNestLevel An aid to prettier tree indenting, and is the level
+     *                   of nesting of this object within the overall tree.
+     * @param aReporter A reference to a #REPORTER object to output to.
+     */
+    virtual void Show( int aNestLevel, REPORTER& aReporter );
+#endif
 };
 
 
-typedef std::vector <COMPONENT_INFO*> COMPONENT_INFO_LIST;
-/*
- * Helper class, to read a netlist.
+/**
+ * Class CMP_READER
+ * reads a component footprint link file (*.cmp) format.
+ */
+class CMP_READER
+{
+    LINE_READER* m_lineReader;            ///< The line reader to read.
+
+public:
+    CMP_READER( LINE_READER* aLineReader )
+    {
+        m_lineReader = aLineReader;
+    }
+
+    /**
+     * Function Load
+     * read the *.cmp file format contains the component footprint assignments created by CvPcb
+     * into \a aNetlist.
+     *
+     * @param aNetlist is the #NETLIST to read into.
+     *
+     * @todo At some point in the future, use the footprint field in the new s-expression
+     *       netlist file to assign a footprint to a component instead of using a secondary
+     *       (*.cmp) file.
+     *
+     * Sample file footprint assignment entry:
+     *
+     * Cmp-Mod V01 Genere by CvPcb 29/10/2003-13: 11:6 *
+     *  BeginCmp
+     *  TimeStamp = /32307DE2/AA450F67;
+     *  Reference = C1;
+     *  ValeurCmp = 47uF;
+     *  IdModule  = CP6;
+     *  EndCmp
+     *
+     * @throw IO_ERROR if a the #LINE_READER IO error occurs.
+     * @throw PARSE_ERROR if an error occurs while parsing the file.
+     */
+    void Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR );
+};
+
+
+/**
+ * Class NETLIST_READER
+ * is a pure virtual class to derive a specific type of netlist reader from.
  */
 class NETLIST_READER
 {
-private:
-    PCB_EDIT_FRAME*  m_pcbframe;            // the main Pcbnew frame (or NULL for CvPcb)
-    wxTextCtrl*      m_messageWindow;       // a textctrl to show messages (can be NULL)
-    wxString         m_netlistFullName;     // The full netlist filename
-    wxString         m_cmplistFullName;     // The full component/footprint association filename
-    MODULE*          m_currModule;          // The footprint currently being read in netlist
-    COMPONENT_INFO_LIST m_componentsInNetlist;    // The list of footprints, found in netlist
-                                            // (must be loaded from libraries)
-    COMPONENT_INFO_LIST m_newModulesList;      // The list of new footprints,
-                                            // found in netlist, but not on board
-                                            // (must be loaded from libraries)
-    LIPBART_INFO_LIST  m_libpartList;       // For Kicad new netlist format:
-                                            // list of libpart found in netlist
-                                            // A libpart contains the footprint filters for CvPcb
-    bool m_buildModuleListOnly;             // if true read netlist, populates m_componentsInNetlist
-                                            // but do not read and change nets and modules on board
-    bool m_readLibpartSection;              // if true read Libparts section,
-                                            // and therefore the footprints filters
-    enum typenetlist m_typeNetlist;         // type opt the netlist currently read
+protected:
+    NETLIST*     m_netlist;               ///< The net list to read the file(s) into.
+    bool         m_loadFootprintFilters;  ///< Load the component footprint filters section if true.
+    bool         m_loadNets;              ///< Load the nets section of the netlist file if true.
+    LINE_READER* m_lineReader;            ///< The line reader of the netlist.
 
-public:
-    bool m_UseCmpFile;              // true to use .cmp files as component/footprint file link
-                                    // false to use netlist only to know component/footprint link
-    bool m_UseTimeStamp;            // Set to true to identify footprints by time stamp
-                                    // false to use schematic reference
-    bool m_ChangeFootprints;        // Set to true to change existing footprints to new ones
-                                    // when netlist gives a different footprint name
+    /// The reader used to load the footprint links.  If NULL, footprint links are not read.
+    CMP_READER*  m_footprintReader;
 
 public:
 
-    NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NULL )
+    enum NETLIST_FILE_T
     {
-        m_pcbframe = aFrame;
-        m_messageWindow    = aMessageWindow;
-        m_UseTimeStamp     = false;
-        m_ChangeFootprints = false;
-        m_UseCmpFile = true;
-        m_buildModuleListOnly = false;
-        m_readLibpartSection = false;
-        m_typeNetlist = NETLIST_TYPE_UNSPECIFIED;
+        UNKNOWN = -1,
+        ORCAD,
+        LEGACY,
+        KICAD,
+
+        // Add new types here.  Don't forget to create the appropriate class derived from
+        // NETCLASS_READER and add the entry to the NETLIST_READER::GetNetlistReader()
+        // function.
+    };
+
+    NETLIST_READER( LINE_READER*  aLineReader,
+                    NETLIST*      aNetlist,
+                    CMP_READER*   aFootprintLinkReader = NULL )
+    {
+        wxASSERT( aLineReader != NULL );
+
+        m_lineReader           = aLineReader;
+        m_footprintReader      = aFootprintLinkReader;
+        m_netlist              = aNetlist;
+        m_loadFootprintFilters = true;
+        m_loadNets             = true;
     }
 
-    ~NETLIST_READER()
-    {
-        // Free modules info list:
-        for( unsigned ii = 0; ii < m_newModulesList.size(); ii++ )
-            delete m_componentsInNetlist[ii];
-
-        m_componentsInNetlist.clear();
-        m_newModulesList.clear();
-
-        // Free libpart info list:
-        for( unsigned ii = 0; ii < m_libpartList.size(); ii++ )
-            delete m_libpartList[ii];
-        m_libpartList.clear();
-    }
+    virtual ~NETLIST_READER();
 
     /**
-     * Function GetNetlistType
-     * @return the type of netlist read:
-     *  NETLIST_TYPE_UNSPECIFIED:   Unknown format
-     *  NETLIST_TYPE_ORCADPCB2:     the basic format used by pcbnew
-     *  NETLIST_TYPE_PCBNEW:        the format used by pcbnew, basic format + more info
-     *  NETLIST_TYPE_KICAD:         the new format
+     * Function GuessNetlistFileType
+     * looks at \a aFileHeaderLine to see if it matches any of the netlist file types it
+     * knows about.
+     *
+     * @param aLineReader is the #LINE_READER object containing lines from the netlist to test.
+     * @return the #NETLIST_FILE_T of \a aLineReader.
      */
-    int GetNetlistType()
-    {
-        return m_typeNetlist;
-    }
+    static NETLIST_FILE_T GuessNetlistFileType( LINE_READER* aLineReader );
 
     /**
-     * Function GetComponentInfoList
-     * @return the component info list built from the netlist
+     * Function GetNetlistReader
+     * attempts to determine the net list file type of \a aNetlistFileName and return the
+     * appropriate NETLIST_READER type.
+     *
+     * @param aNetlist is the netlist to load \a aNetlistFileName into.
+     * @param aNetlistFileName is the full path and file name of the net list to read.
+     * @param aCompFootprintFileName is the full path and file name of the component footprint
+     *                               associations to read.  Set to wxEmptyString if loading the
+     *                               footprint association file is not required.
+     * @return the appropriate NETLIST_READER if \a aNetlistFileName is a valid netlist or
+     *         NULL if \a aNetlistFileName is not a valid netlist files.
      */
-    COMPONENT_INFO_LIST& GetComponentInfoList()
-    {
-        return m_componentsInNetlist;
-    }
+    static NETLIST_READER* GetNetlistReader( NETLIST*        aNetlist,
+                                             const wxString& aNetlistFileName,
+                                             const wxString& aCompFootprintFileName = wxEmptyString )
+        throw( IO_ERROR );
 
     /**
-     * Function GetComponentInfoList
-     * @return a reference to the libpart info corresponding to a given part
-     * @param aPartname = the name of the libpart
+     * Function LoadNetlist
+     * loads the contents of the netlist file into \a aNetlist.
+     *
+     * @throw IO_ERROR if a file IO error occurs.
+     * @throw PARSE_ERROR if an error occurs while parsing the file.
      */
-    LIPBART_INFO* GetLibpart(const wxString & aPartname);
+    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR ) = 0;
 
     /**
-     * Function IsCvPcbMode
-     * @return true if the netlist is read by CvPcb
-     * In cvpcb mode, nets are stored in module info,
-     * and the footprint filters list is read.
-     * There is also no board in CvPcb
+     * Function GetLineReader()
+     * @return the #LINE_READER associated with the #NETLIST_READER.
      */
-    bool IsCvPcbMode() { return m_pcbframe == 0; }
+    LINE_READER* GetLineReader();
+};
 
+
+/**
+ * Class LEGACY_NETLIST_READER
+ * reads the KiCad legacy and the old Orcad netlist formats.
+ *
+ * The KiCad legacy netlist format was derived directly from an old Orcad netlist format.  The
+ * primary difference is the header was changed so this reader can read both formats.
+ */
+class LEGACY_NETLIST_READER : public NETLIST_READER
+{
     /**
-     * Function AddModuleInfo
-     * Add a new module info to the main list of modules ifo
-     * @param aModInfo = a reference to the item to add
+     * Function loadComponent
+     * read the \a aLine containing the description of a component from a legacy format
+     * netlist and add it to the netlist.
+     *
+     * Analyze the first line of a component description in netlist:
+     * ( /40C08647 $noname R20 4.7K {Lib=R}
+     *
+     * @param  aText contains the first line of description
+     * @return the new component created by parsing \a aLine
+     * @throw PARSE_ERROR when \a aLine is not a valid component description.
      */
-    void AddModuleInfo( COMPONENT_INFO* aModInfo )
-    {
-        m_componentsInNetlist.push_back( aModInfo );
-    }
+    COMPONENT* loadComponent( char* aText ) throw( PARSE_ERROR );
 
     /**
-     * Function AddLibpartInfo
-     * LIPBART_INFO items (and therefore footprint filter strings) are stored in
-     * m_libpartList
-     * @param aPartInfo = a refernce to the LIPBART_INFO to add in list
-     */
-    void AddLibpartInfo( LIPBART_INFO * aPartInfo )
-    {
-        m_libpartList.push_back( aPartInfo );
-    }
-
-    /**
-     * Function ReadLibpartSectionSetOpt
-     * Set to true or false the read Partlists section.
-     * footprint filters are found in this section
-     * When this option is false, the Partlists section is ignored
-     * When this option is true, the Partlists section is read,
-     * Libpart items (and therefore footprint filter strings) are stored in
-     * m_libpartList
-     * @param aOpt = the value of option
-     */
-    void ReadLibpartSectionSetOpt( bool aOpt )
-    {
-        m_readLibpartSection = aOpt;
-    }
-
-    /**
-     * Function ReadLibpartSectionOpt
-     * @return the readPartlist option
-     */
-    bool ReadLibpartSectionOpt() { return m_readLibpartSection; }
-
-    /**
-     * Function BuildModuleListOnlySetOpt
-     * Set to true or false the Build Module List Only option
-     * When this option is false, a full netlist read is made,
-     * and modules are added/modified
-     * When this option is true, a partial netlist read is made
-     * and only the list of modules found in netlist is built
-     * @param aOpt = the value of option
-     */
-    void BuildModuleListOnlySetOpt( bool aOpt )
-    {
-        m_buildModuleListOnly = aOpt;
-    }
-
-    /**
-     * Function BuildModuleListOnlyOpt
-     * Get the Build Module List Only option state
-     * @return the state of option (true/false)
-     */
-     bool BuildModuleListOnlyOpt()
-    {
-        return m_buildModuleListOnly;
-    }
-
-    /**
-     * Function InitializeModules
-     * Called when reading a netlist and after the module info list is populated
-     * Load new module and clear pads netnames
-     * return true if all modules are loaded, false if some are missing
-     */
-    bool InitializeModules();
-
-    /**
-     * Function TestFootprintsMatchingAndExchange
-     * Called when reading a netlist, after the module info list is populated
-     * module reference updated (after a call to InitializeModules)
-     * Test, for each module, if the current footprint matches the footprint
-     * given by the netlist (or the cmp file, if used)
-     * print a list of mismatches od exchange footprints i
-     * m_ChangeFootprints == true
-     */
-    void TestFootprintsMatchingAndExchange();
-
-
-    /**
-     * Function SetFilesnames
-     * initialize filenames
-     * @param aNetlistFileName = full filename of netlist
-     * @param aCmplistFileName = full filename of components file (can be empty)
-     * and the components file will be non used
-     */
-     void SetFilesnames( const wxString& aNetlistFileName,
-                      const wxString& aCmplistFileName )
-    {
-        m_netlistFullName = aNetlistFileName;
-        m_cmplistFullName = aCmplistFileName;
-    }
-
-    /**
-     * Function ReadNetList
-     * The main function to detect a netlist format, read the netlist,
-     * and update the board
-     * depending on the detected format, calls ReadOldFmtdNetList or ReadKicadNetList
-     * @param aFile = the already opened file (will be closed by the netlist reader)
-     * @return true if success
-     */
-    bool ReadNetList( FILE* aFile );
-
-    /**
-     * Function ReadOldFmtdNetList
-     * The main function to read a netlist (old netlist format),
-     * and update the board
-     * @param aFile = the already opened file (will be closed by ReadOldFmtdNetList)
-     * @return true if success
-     */
-    bool ReadOldFmtdNetList( FILE* aFile );
-
-    /**
-     * Function ReadOldFmtFootprintFilterList
-     * Read the section "Allowed footprints" like:
+     * Function loadFootprintFilters
+     * loads the footprint filter section of netlist file.
+     *
+     * Sample legacy footprint filter section:
      *  { Allowed footprints by component:
      *  $component R11
      *  R?
@@ -342,99 +511,168 @@ public:
      *  $endfootprintlist
      *  }
      *
-     *  And add the strings giving the footprint filter to m_FootprintFilter
+     * @throw IO_ERROR if a file IO error occurs.
+     * @throw PARSE_ERROR if an error occurs while parsing the file.
+     */
+    void loadFootprintFilters() throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * Function loadNet
+     * read a component net description from \a aText.
+     *
+     * @param aText is current line read from the netlist.
+     * @param aComponent is the component to add the net to.
+     * @throw PARSE_ERROR if a error occurs reading \a aText.
+     */
+    void loadNet( char* aText, COMPONENT* aComponent ) throw( PARSE_ERROR );
+
+public:
+
+    LEGACY_NETLIST_READER( LINE_READER*  aLineReader,
+                           NETLIST*      aNetlist,
+                           CMP_READER*   aFootprintLinkReader = NULL ) :
+        NETLIST_READER( aLineReader, aNetlist, aFootprintLinkReader )
+    {
+    }
+
+    /**
+     * Function LoadNetlist
+     * read the netlist file in the legacy format into \a aNetlist.
+     *
+     * The legacy netlist format is:
+     * \# EESchema Netlist Version 1.0 generee le  18/5/2005-12:30:22
+     *  (
+     *  ( 40C08647 $noname R20 4,7K {Lib=R}
+     *  (    1 VCC )
+     *  (    2 MODB_1 )
+     *  )
+     *  ( 40C0863F $noname R18 4,7_k {Lib=R}
+     *  (    1 VCC )
+     *  (    2 MODA_1 )
+     *  )
+     *  }
+     * \#End
+     *
+     * @throw IO_ERROR if a file IO error occurs.
+     * @throw PARSE_ERROR if an error occurs while parsing the file.
+     */
+    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR );
+};
+
+
+/**
+ * Class KICAD_NETLIST_PARSER
+ * is the parser for reading the KiCad s-expression netlist format.
+ */
+class KICAD_NETLIST_PARSER : public NETLIST_LEXER
+{
+private:
+    T            token;
+    LINE_READER* m_lineReader;  ///< The line reader used to parse the netlist.  Not owned.
+    NETLIST*     m_netlist;     ///< The netlist to parse into.  Not owned.
+
+    /**
+     * Function skipCurrent
+     * Skip the current token level, i.e
+     * search for the RIGHT parenthesis which closes the current description
+     */
+    void skipCurrent() throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * Function parseComponent
+     * parse a component description:
+     * (comp (ref P1)
+     * (value DB25FEMELLE)
+     * (footprint DB25FC)
+     * (libsource (lib conn) (part DB25))
+     * (sheetpath (names /) (tstamps /))
+     * (tstamp 3256759C))
+     */
+    void parseComponent() throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * Function parseNet
+     * Parses a section like
+     * (net (code 20) (name /PC-A0)
+     *  (node (ref BUS1) (pin 62))
+     *  (node (ref U3) (pin 3))
+     *  (node (ref U9) (pin M6)))
+     *
+     * and set the corresponding pads netnames
+     */
+    void parseNet() throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * Function parseLibPartList
+     * reads the section "libparts" in the netlist:
+     * (libparts
+     *   (libpart (lib device) (part C)
+     *     (description "Condensateur non polarise")
+     *     (footprints
+     *       (fp SM*)
+     *       (fp C?)
+     *       (fp C1-1))
+     *     (fields
+     *       (field (name Reference) C)
+     *       (field (name Value) C))
+     *     (pins
+     *       (pin (num 1) (name ~) (type passive))
+     *       (pin (num 2) (name ~) (type passive))))
+     *
+     *  And add the strings giving the footprint filter (subsection footprints)
      *  of the corresponding module info
      *  <p>This section is used by CvPcb, and is not useful in Pcbnew,
      *  therefore it it not always read </p>
      */
-    bool ReadOldFmtFootprintFilterList(  FILE_LINE_READER& aNetlistReader );
+    void parseLibPartList() throw( IO_ERROR, PARSE_ERROR );
+
+
+public:
+    KICAD_NETLIST_PARSER( LINE_READER* aReader, NETLIST* aNetlist );
+
+    void SetLineReader( LINE_READER* aLineReader );
+
+    void SetNetlist( NETLIST* aNetlist ) { m_netlist = aNetlist; }
 
     /**
-     * Function ReadKicadNetList
-     * The main function to read a netlist (new netlist format, using S expressions),
-     * and update the board
-     * @param aFile = the already opened file (will be closed by ReadKicadNetList)
-     * @return true if success
+     * Function Parse
+     * parse the full netlist
      */
-    bool ReadKicadNetList( FILE* aFile );
+    void Parse() throw( IO_ERROR, PARSE_ERROR );
 
-    /**
-     * function RemoveExtraFootprints
-     * Remove (delete) not locked footprints found on board, but not in netlist
-     * The netlist is expected to be read, and the main module list info up to date
-     */
-    void  RemoveExtraFootprints( );
-
-    /**
-     * Function SetPadsNetName
-     *  Update pads netnames for a given module.
-     *  Because a pad name can be found more than once in this module,
-     *  all pads matching the pad name are updated
-     *  @param aModule = module reference
-     *  @param aPadname = pad name (pad num)
-     *  @param aNetname = new net name of the pad
-     *  @param aPadList = a std::vector<D_PAD*>& buffer where the updated pads can be stored
-     *  @return the pad count
-     */
-    int SetPadsNetName( const wxString & aModule, const wxString & aPadname,
-                          const wxString & aNetname, std::vector<D_PAD*> & aPadList );
-
-private:
-
-    /**
-     * Function FindModule
-     *  search for a module id the modules existing in the current BOARD.
-     *  @param aId = the key to identify the module to find:
-     *   The reference or the full time stamp, according to m_UseTimeStamp
-     * @return the module found, or NULL.
-     */
-    MODULE* FindModule( const wxString& aId );
-
-    /**
-     * Function SetPadNetName
-     *  Update a pad netname using the current footprint
-     *  from the netlist (line format: ( \<pad number\> \<net name\> ) )
-     *  @param aText = current line read from netlist
-     */
-    bool    SetPadNetName( char* aText );
-
-    /**
-     * Function ReadOldFmtNetlistModuleDescr
-     * Read the full description of a footprint, from the netlist
-     * and update the corresponding module.
-     * @param aBuildList bool to switch between 2 modes:
-     *      aBuildList = true:
-     *          add module info added to m_newModulesList
-     *      aBuildList = false:
-     *          The module is searched in the board modules list
-     * @param  aText contains the first line of description
-     * This function uses m_useFichCmp as a flag to know the footprint name:
-     *      If true: component file *.cmp is used
-     *      If false: the netlist only is used
-     *      This flag is reset to false if the .cmp file is not found
-     * @return if aBuildList = true, a reference to the COMPONENT_INFO
-     *         if aBuildList = false, a reference to the corresponding MODULE on board (NULL if not found)
-     */
-    void* ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildList );
-
-    /**
-     * Function loadNewModules
-     * Load from libraries new modules found in netlist and add them to the current Board.
-     * modules to load come from m_newModulesList
-     * @return false if a footprint is not found, true if all footprints are loaded
-     */
-    bool    loadNewModules();
-
-    /**
-     * function readModuleComponentLinkfile
-     * read the *.cmp file ( filename in m_cmplistFullName )
-     * and initialize the m_Footprint member of each item in m_componentsInNetlist,
-     * when it is found in file, and with a non empty footprint value
-     * giving the equivalence between footprint names and components
-     * to find the footprint name corresponding to aCmpIdent
-     * @return true and the file can be read
-     */
-    bool    readModuleComponentLinkfile();
+    // Useful for debug only:
+    const char* getTokenName( T aTok )
+    {
+        return NETLIST_LEXER::TokenName( aTok );
+    }
 };
 
-#endif  // NETLIST_READER_H
+
+/**
+ * Class KICAD_NETLIST_READER
+ * read the new s-expression based KiCad netlist format.
+ */
+class KICAD_NETLIST_READER : public NETLIST_READER
+{
+    KICAD_NETLIST_PARSER* m_parser;     ///< The s-expression format parser.
+
+public:
+    KICAD_NETLIST_READER( LINE_READER*  aLineReader,
+                          NETLIST*      aNetlist,
+                          CMP_READER*   aFootprintLinkReader = NULL ) :
+        NETLIST_READER( aLineReader, aNetlist, aFootprintLinkReader ),
+        m_parser( new KICAD_NETLIST_PARSER( aLineReader, aNetlist ) )
+    {
+    }
+
+    virtual ~KICAD_NETLIST_READER()
+    {
+        if( m_parser )
+            delete m_parser;
+    }
+
+    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR );
+};
+
+
+#endif   // NETLIST_READER_H

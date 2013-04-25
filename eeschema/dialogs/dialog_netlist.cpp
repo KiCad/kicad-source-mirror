@@ -188,9 +188,6 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     long tmp;
     m_config->Read( NETLIST_USE_DEFAULT_NETNAME, &tmp, 0l );
     m_cbUseDefaultNetlistName->SetValue( tmp );
-    m_config->Read( NETLIST_PSPICE_USE_NETNAME,  &m_spiceNetlistUseNames, true );
-
-
     m_NetFmtName = m_Parent->GetNetListFormatName();
 
     for( int ii = 0; ii < PANELCUSTOMBASE + CUSTOMPANEL_COUNTMAX; ii++ )
@@ -267,18 +264,6 @@ void NETLIST_DIALOG::InstallPageSpice()
                                            _( "Prefix references 'U' and 'IC' with 'X'" ) );
     page->m_AddSubPrefix->SetValue( m_Parent->GetAddReferencePrefix() );
     page->m_LeftBoxSizer->Add( page->m_AddSubPrefix, 0, wxGROW | wxALL, 5 );
-
-
-    wxString netlist_opt[2] = { _( "Use Net Names" ), _( "Use Net Numbers" ) };
-    page->m_NetOption = new wxRadioBox( page, -1, _( "Netlist Options:" ),
-                                        wxDefaultPosition, wxDefaultSize,
-                                        2, netlist_opt, 1,
-                                        wxRA_SPECIFY_COLS );
-
-    if( !m_spiceNetlistUseNames )
-        page->m_NetOption->SetSelection( 1 );
-
-    page->m_LeftBoxSizer->Add( page->m_NetOption, 0, wxGROW | wxALL, 5 );
 
     page->m_LowBoxSizer->Add( new wxStaticText( page, -1, _( "Simulator command:" ) ), 0,
                               wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
@@ -438,11 +423,6 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
         if( m_PanelNetType[ii]->m_IsCurrentFormat->GetValue() == true )
             m_Parent->SetNetListFormatName( m_PanelNetType[ii]->GetPageNetFmtName() );
     }
-
-    m_spiceNetlistUseNames = true; // Used for pspice, gnucap
-
-    if( m_PanelNetType[PANELSPICE]->m_NetOption->GetSelection() == 1 )
-        m_spiceNetlistUseNames = 	false;
 }
 
 
@@ -475,8 +455,6 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     {
     case NET_TYPE_SPICE:
         // Set spice netlist options:
-        if( m_spiceNetlistUseNames )
-            netlist_opt |= NET_USE_NETNAMES;
         if( currPage->m_AddSubPrefix->GetValue() )
             netlist_opt |= NET_USE_X_PREFIX;
         break;
@@ -647,13 +625,10 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
 
     NETLIST_PAGE_DIALOG* currPage;
     currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
-    m_spiceNetlistUseNames = currPage->m_NetOption->GetSelection() == 0;
 
     // Set spice netlist options:
     unsigned netlist_opt = 0;
 
-    if( m_spiceNetlistUseNames )
-        netlist_opt |= NET_USE_NETNAMES;
     if( currPage->m_AddSubPrefix && currPage->m_AddSubPrefix->GetValue() )
         netlist_opt |= NET_USE_X_PREFIX;
 
@@ -676,7 +651,6 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup( void )
     NetlistUpdateOpt();
 
     m_config->Write( NETLIST_USE_DEFAULT_NETNAME, GetUseDefaultNetlistName() );
-    m_config->Write( NETLIST_PSPICE_USE_NETNAME,  m_spiceNetlistUseNames );
 
     // Update the new titles
     for( int ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
