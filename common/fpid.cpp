@@ -310,6 +310,26 @@ std::string FPID::Format( const std::string& aLogicalLib, const std::string& aFo
 }
 
 
+int FPID::compare( const FPID& aFPID ) const
+{
+    // Don't bother comparing the same object.
+    if( this == &aFPID )
+        return 0;
+
+    int retv = nickname.compare( aFPID.nickname );
+
+    if( retv != 0 )
+        return retv;
+
+    retv = footprint.compare( aFPID.footprint );
+
+    if( retv != 0 )
+        return retv;
+
+    return revision.compare( aFPID.revision );
+}
+
+
 #if 0 && defined(DEBUG)
 
 // build this with Debug CMAKE_BUILD_TYPE

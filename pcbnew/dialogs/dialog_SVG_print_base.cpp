@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -24,6 +24,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_outputDirectoryName->SetMaxLength( 0 ); 
 	m_outputDirectoryName->SetToolTip( _("Enter a filename if you do not want to use default file names\nCan be used only when printing the current sheet") );
 	m_outputDirectoryName->SetMinSize( wxSize( 450,-1 ) );
 	
@@ -64,6 +65,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	sbOptionsSizer->Add( m_TextPenWidth, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_DialogDefaultPenSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_DialogDefaultPenSize->SetMaxLength( 0 ); 
 	sbOptionsSizer->Add( m_DialogDefaultPenSize, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and white") };
@@ -118,6 +120,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	bMainSizer->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_messagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	m_messagesBox->SetMaxLength( 0 ); 
 	m_messagesBox->SetMinSize( wxSize( -1,100 ) );
 	
 	bMainSizer->Add( m_messagesBox, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );

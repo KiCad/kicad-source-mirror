@@ -133,7 +133,30 @@ public:
                                const std::string& aRevision )
         throw( PARSE_ERROR );
 
+    /**
+     * Function clear
+     * clears the contents of the library nickname, footprint name, and revision strings.
+     */
     void clear();
+
+    /**
+     * Function empty
+     * @return a boolean true value if the FPID is empty.  Otherwise return false.
+     */
+    bool empty() const { return nickname.empty() && footprint.empty() && revision.empty(); }
+
+    /**
+     * Function Compare
+     * compares the contents of FPID objects by performing a std::string comparison of the
+     * library nickname, footprint name, and revision strings respectively.
+     *
+     * @param aFPID is the FPID to compare against.
+     * @return -1 if less than \a aFPID, 1 if greater than \a aFPID, and 0 if equal to \a aFPID.
+     */
+    int compare( const FPID& aFPID ) const;
+
+    bool operator <( const FPID& aFPID ) const { return this->compare( aFPID ) < 0; }
+    bool operator ==( const FPID& aFPID ) const { return this->compare( aFPID ) == 0; }
 
 #if defined(DEBUG)
     static void Test();

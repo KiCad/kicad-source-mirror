@@ -99,13 +99,6 @@ void NETINFO_ITEM::Draw( EDA_DRAW_PANEL* panel,
 }
 
 
-/**
- * Function DisplayInfo
- * has knowledge about the frame and how and where to put status information
- * about this object into the frame's message panel.
- * Is virtual from EDA_ITEM.
- * @param frame A EDA_DRAW_FRAME in which to print status information.
- */
 void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     int       count;

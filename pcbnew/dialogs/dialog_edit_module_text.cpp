@@ -1,6 +1,6 @@
 /**
- * @file dialog_edit_module_text.cpp.
- * @brief dialog editor for texts (fields) in footprints
+ * @file dialog_edit_module_text.cpp
+ * @brief dialog editor for texts (fields) in footprints.
  */
 
 /*

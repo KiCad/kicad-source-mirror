@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2011 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file cvpcb_mainframe.h
  */
@@ -7,6 +31,7 @@
 
 #include <wx/listctrl.h>
 #include <wx/filename.h>
+#include <netlist_reader.h>
 
 #include <wxBasePcbFrame.h>
 #include <param_config.h>
@@ -28,19 +53,19 @@ class CVPCB_MAINFRAME : public EDA_BASE_FRAME
 {
 public:
 
-    bool m_KeepCvpcbOpen;
+    bool                      m_KeepCvpcbOpen;
     FOOTPRINTS_LISTBOX*       m_FootprintList;
     COMPONENTS_LISTBOX*       m_ListCmp;
     DISPLAY_FOOTPRINTS_FRAME* m_DisplayFootprintFrame;
-    wxAuiToolBar* m_mainToolBar;
-    wxFileName m_NetlistFileName;
+    wxAuiToolBar*             m_mainToolBar;
+    wxFileName                m_NetlistFileName;
     wxArrayString             m_ModuleLibNames;
     wxArrayString             m_AliasLibNames;
-    wxString        m_UserLibraryPath;
-    wxString        m_NetlistFileExtension;
-    wxString        m_DocModulesFileName;
-    FOOTPRINT_LIST  m_footprints;
-    COMPONENT_LIST  m_components;
+    wxString                  m_UserLibraryPath;
+    wxString                  m_NetlistFileExtension;
+    wxString                  m_DocModulesFileName;
+    FOOTPRINT_LIST            m_footprints;
+    NETLIST                   m_netlist;
 
 protected:
     int             m_undefinedComponentCnt;
@@ -60,7 +85,7 @@ public:
     /**
      * Function OnSelectComponent
      * Called when clicking on a component in component list window
-     * * Updates the filtered foorprint list, if the filtered list option is selected
+     * * Updates the filtered footprint list, if the filtered list option is selected
      * * Updates the current selected footprint in footprint list
      * * Updates the footprint shown in footprint display window (if opened)
      */
@@ -141,21 +166,11 @@ public:
      *                      file name of the netlist or cmp file.
      * If aFullFileName is empty, a file name will be asked to the user
      * @return  0 if an error occurred saving the link file to \a aFullFileName.
-     *          -1 if cancelled
+     *          -1 if canceled
      *          1 if OK
      */
     int              SaveCmpLinkFile( const wxString& aFullFileName );
 
-
-    /**
-     * Function LoadComponentFile
-     * loads the .cmp link file \a aCmpFileName which stores
-     * the component/footprint association.
-     *
-     * @param aFileName The full filename of .cmp file to load
-     * If empty, a filename will be asked to the user
-     */
-    bool             LoadComponentLinkFile( const wxString& aFileName );
 
     /**
      * Function WriteComponentLinkFile
@@ -165,16 +180,6 @@ public:
      * @return true if OK, false if error.
      */
     bool              WriteComponentLinkFile( const wxString& aFullFileName );
-
-    /**
-     * Function ReadComponentLinkFile
-     * Reads the component footprint link file \a aFullFileName.
-     *
-     * @param aFile = the opened the opened file to read.
-     *  ReadComponentLinkFile will close the file
-     * @return true if OK, false if error.
-     */
-    bool              ReadComponentLinkFile( FILE * aFile );
 
     /**
      * Function ReadNetList

@@ -334,7 +334,7 @@ void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
     int ii = 0;
     int selection;
 
-    if( m_components.empty() )
+    if( m_netlist.IsEmpty() )
         return;
 
     selection = m_ListCmp->GetSelection();
@@ -342,9 +342,9 @@ void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
     if( selection < 0 )
         selection = 0;
 
-    BOOST_FOREACH( COMPONENT_INFO & component, m_components )
+    for( unsigned jj = 0;  jj < m_netlist.GetCount();  jj++ )
     {
-        if( component.m_Footprint.IsEmpty() && ii > selection )
+        if( m_netlist.GetComponent( jj )->GetFootprintLibName().IsEmpty() && ii > selection )
         {
             m_ListCmp->SetSelection( ii );
             SendMessageToEESCHEMA();
@@ -363,7 +363,7 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
     int ii;
     int selection;
 
-    if( m_components.empty() )
+    if( m_netlist.IsEmpty() )
         return;
 
     ii = m_ListCmp->GetCount() - 1;
@@ -372,9 +372,9 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
     if( selection < 0 )
         selection = m_ListCmp->GetCount() - 1;
 
-    BOOST_REVERSE_FOREACH( COMPONENT_INFO & component, m_components )
+    for( unsigned kk = m_netlist.GetCount() - 1;  kk >= 0;  kk-- )
     {
-        if( component.m_Footprint.IsEmpty() && ii < selection )
+        if( m_netlist.GetComponent( kk )->GetFootprintLibName().IsEmpty() && ii < selection )
         {
             m_ListCmp->SetSelection( ii );
             SendMessageToEESCHEMA();
@@ -412,15 +412,15 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
         m_skipComponentSelect = true;
         m_ListCmp->SetSelection( 0 );
 
-        BOOST_FOREACH( COMPONENT_INFO & component, m_components )
+        for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
         {
-            component.m_Footprint.Empty();
+            m_netlist.GetComponent( i )->SetFootprintLibName( wxEmptyString );
             SetNewPkg( wxEmptyString );
         }
 
         m_skipComponentSelect = false;
         m_ListCmp->SetSelection( 0 );
-        m_undefinedComponentCnt = m_components.size();
+        m_undefinedComponentCnt = m_netlist.GetCount();
     }
 
     DisplayStatus();
@@ -538,18 +538,18 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 
         else
         {
-            if( &m_components[ selection ] == NULL )
+            if( m_netlist.GetComponent( selection ) == NULL )
                 m_FootprintList->SetActiveFootprintList( SELECT_FULL_LIST, REDRAW_LIST );
             else
             {
                 if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST ) )
                 {
-                    m_FootprintList->SetFootprintFilteredByPinCount( &m_components[ selection ],
+                    m_FootprintList->SetFootprintFilteredByPinCount( m_netlist.GetComponent( selection ),
                                                                      m_footprints );
                 }
                 else
                 {
-                    m_FootprintList->SetFootprintFilteredList( &m_components[ selection ],
+                    m_FootprintList->SetFootprintFilteredList( m_netlist.GetComponent( selection ),
                                                                m_footprints );
                 }
             }
@@ -568,7 +568,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 
     if( FindFocus() ==  m_ListCmp )
     {
-        wxString module = *(&m_components[ selection ].m_Footprint);
+        wxString module = m_netlist.GetComponent( selection )->GetFootprintLibName();
 
         bool found = false;
         for( int ii = 0; ii < m_FootprintList->GetCount(); ii++ )
@@ -642,7 +642,8 @@ void CVPCB_MAINFRAME::DisplayStatus()
 {
     wxString msg;
 
-    msg.Printf( _( "Components: %d (free: %d)" ), (int) m_components.size(), m_undefinedComponentCnt );
+    msg.Printf( _( "Components: %d (free: %d)" ), (int) m_netlist.GetCount(),
+                m_undefinedComponentCnt );
     SetStatusText( msg, 0 );
 
     SetStatusText( wxEmptyString, 1 );
@@ -733,9 +734,9 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA()
 {
     char          cmd[1024];
     int           selection;
-    COMPONENT_INFO*    Component;
+    COMPONENT*    Component;
 
-    if( m_components.empty() )
+    if( m_netlist.IsEmpty() )
         return;
 
     selection = m_ListCmp->GetSelection();
@@ -743,12 +744,12 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA()
     if ( selection < 0 )
         selection = 0;
 
-    if( &m_components[ selection ] == NULL )
+    if( m_netlist.GetComponent( selection ) == NULL )
         return;
 
-    Component = &m_components[ selection ];
+    Component = m_netlist.GetComponent( selection );
 
-    sprintf( cmd, "$PART: \"%s\"", TO_UTF8( Component->m_Reference ) );
+    sprintf( cmd, "$PART: \"%s\"", TO_UTF8( Component->GetReference() ) );
 
     SendCommand( MSG_TO_SCH, cmd );
 
