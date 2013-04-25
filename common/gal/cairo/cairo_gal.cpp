@@ -263,7 +263,7 @@ void CAIRO_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPo
 
     if( isFillEnabled )
     {
-        cairo_set_line_width( cairoImage, aWidth );
+        SetLineWidth( aWidth );
 
         cairo_move_to( cairoImage, (double) aStartPoint.x, (double) aStartPoint.y );
         cairo_line_to( cairoImage, (double) aEndPoint.x, (double) aEndPoint.y );
