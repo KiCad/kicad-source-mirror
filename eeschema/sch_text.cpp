@@ -46,7 +46,6 @@
 
 
 extern void IncrementLabelMember( wxString& name );
-extern int OverbarPositionY( int size_v, int thickness );
 
 
 /* Names of sheet label types. */
@@ -1320,11 +1319,11 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
     int x = symb_len + linewidth + 3;
 
     // Use negation bar Y position to calculate full vertical size
-    #define Y_CORRECTION 1.22
+    #define Y_CORRECTION 1.3
     // Note: this factor is due to the fact the negation bar Y position
     // does not give exactly the full Y size of text
     // and is experimentally set  to this value
-    int y = KiROUND( OverbarPositionY( HalfSize, linewidth ) * Y_CORRECTION );
+    int y = KiROUND( OverbarPositionY( HalfSize ) * Y_CORRECTION );
     // add room for line thickness and space between top of text and graphic shape
     y += linewidth;
 

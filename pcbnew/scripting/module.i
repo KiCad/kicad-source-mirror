@@ -33,11 +33,6 @@
   %pythoncode
   {
      
-    def GetPads(self):		      return self.m_Pads
-    def GetDrawings(self):            return self.m_Drawings
-    def GetReferenceObj(self):	      return self.m_Reference
-    def GetValueObj(self):	      return self.m_Value
-     
     #def SaveToLibrary(self,filename):
     #  return SaveModuleToLibrary(filename,self)
     
@@ -52,10 +47,10 @@
     	
     	if type(itemC) is D_PAD:
     		item.thisown=0
-    		self.m_Pads.PushBack(itemC)
+    		self.Pads().PushBack(itemC)
     	elif type(itemC) in [ TEXTE_PCB, DIMENSION, TEXTE_MODULE, DRAWSEGMENT,EDGE_MODULE]:
     		item.thisown = 0
-    		self.m_Drawings.PushBack(item)
+    		self.GraphicalItems().PushBack(item)
   }
   
 }

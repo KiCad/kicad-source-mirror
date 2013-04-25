@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file listboxes.cpp
  * @brief Implementation of class for displaying footprint list and component lists.
@@ -67,9 +90,10 @@ CVPCB_MAINFRAME* ITEMS_LISTBOX_BASE::GetParent()
  */
 void CVPCB_MAINFRAME::BuildCmpListBox()
 {
-    wxString msg;
-    wxSize   size( 10, 10 );
-    wxFont   guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    COMPONENT*  component;
+    wxString    msg;
+    wxSize      size( 10, 10 );
+    wxFont      guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 
     if( m_ListCmp == NULL )
     {
@@ -86,11 +110,14 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
 
     m_ListCmp->m_ComponentList.Clear();
 
-    BOOST_FOREACH( COMPONENT_INFO & component, m_components ) {
+    for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
+    {
+        component = m_netlist.GetComponent( i );
+
         msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
-                   GetChars(component.m_Reference),
-                   GetChars(component.m_Value),
-                   GetChars(component.m_Footprint) );
+                    GetChars( component->GetReference() ),
+                    GetChars( component->GetValue() ),
+                    GetChars( component->GetFootprintLibName() ) );
         m_ListCmp->m_ComponentList.Add( msg );
     }
 

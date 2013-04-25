@@ -13,6 +13,7 @@
 
 #include <pcbstruct.h>
 #include <class_module.h>
+#include <class_board.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
@@ -45,9 +46,9 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 
             if( !libPath )
             {
-                wxString msg = wxString::Format(
-                    _("PCB foot print library file <%s> could not be found in the default search paths." ),
-                    fn.GetFullName().GetData() );
+                wxString msg = wxString::Format( _( "PCB footprint library file <%s> could not "
+                                                    "be found in the default search paths." ),
+                                                 fn.GetFullName().GetData() );
 
                 // @todo we should not be using wxMessageBox directly.
                 wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
@@ -58,7 +59,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 
             if( footprint )
             {
-                footprint->SetParent( GetBoard() );
+                footprint->SetParent( (EDA_ITEM*) GetBoard() );
                 footprint->SetPosition( wxPoint( 0, 0 ) );
                 return footprint;
             }
@@ -74,4 +75,3 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
     DisplayError( this, msg );
     return NULL;
 }
-

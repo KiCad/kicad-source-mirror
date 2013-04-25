@@ -259,7 +259,7 @@ public:
      * true.
      * @param aList = array of PARAM_CFG_BASE pointers
      */
-    void SaveCurrentSetupValues( const PARAM_CFG_ARRAY& List );
+    void SaveCurrentSetupValues( const PARAM_CFG_ARRAY& aList );
 
     /**
      * Function ReadCurrentSetupValues
@@ -268,7 +268,7 @@ public:
      * true.
      * @param aList = array of PARAM_CFG_BASE pointers
      */
-    void ReadCurrentSetupValues( const PARAM_CFG_ARRAY& List );
+    void ReadCurrentSetupValues( const PARAM_CFG_ARRAY& aList );
 
     /**
      * Function ReadProjectConfig

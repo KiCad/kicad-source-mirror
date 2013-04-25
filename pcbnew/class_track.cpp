@@ -750,7 +750,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
             if( (aDrawMode & GR_XOR) == 0 )
                 GRSetDrawMode( aDC, GR_COPY );
 
-            tsize = (tsize * 8) / 10;       // small reduction to give a better look
+            tsize = (tsize * 7) / 10;       // small reduction to give a better look
             DrawGraphicHaloText( panel, aDC, tpos,
                                     color, BLACK, WHITE, net->GetShortNetname(), angle, 
                                     wxSize( tsize, tsize ),
@@ -961,7 +961,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
         if( aDC->LogicalToDeviceXRel( tsize ) >= MIN_TEXT_SIZE )
         {
-            tsize = (tsize * 8) / 10;        // small reduction to give a better look, inside via
+            tsize = (tsize * 7) / 10;        // small reduction to give a better look, inside via
             if( (aDrawMode & GR_XOR) == 0 )
                 GRSetDrawMode( aDC, GR_COPY );
 

@@ -301,10 +301,6 @@ void D_PAD::SetPadName( const wxString& name )
 }
 
 
-/**
- * Function SetNetname
- * @param aNetname: the new netname
- */
 void D_PAD::SetNetname( const wxString& aNetname )
 {
     m_Netname = aNetname;
@@ -348,14 +344,23 @@ void D_PAD::Copy( D_PAD* source )
 }
 
 
-/**
- * Function GetClearance (virtual)
- * returns the clearance in internal units.  If \a aItem is not NULL then the
- * returned clearance is the greater of this object's clearance and
- * aItem's clearance.  If \a aItem is NULL, then this object clearance is returned.
- * @param aItem is another BOARD_CONNECTED_ITEM or NULL
- * @return int - the clearance in internal units.
- */
+void D_PAD::CopyNetlistSettings( D_PAD* aPad )
+{
+    // Don't do anything foolish like trying to copy to yourself.
+    wxCHECK_RET( aPad != NULL && aPad != this, wxT( "Cannot copy to NULL or yourself." ) );
+
+    aPad->SetNetname( GetNetname() );
+
+    aPad->SetLocalClearance( m_LocalClearance );
+    aPad->SetLocalSolderMaskMargin( m_LocalSolderMaskMargin );
+    aPad->SetLocalSolderPasteMargin( m_LocalSolderPasteMargin );
+    aPad->SetLocalSolderPasteMarginRatio( m_LocalSolderPasteMarginRatio );
+    aPad->SetZoneConnection( m_ZoneConnection );
+    aPad->SetThermalWidth( m_ThermalWidth );
+    aPad->SetThermalGap( m_ThermalGap );
+}
+
+
 int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 {
     // A pad can have specific clearance parameters that
@@ -387,15 +392,6 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 
 // Mask margins handling:
 
-/**
- * Function GetSolderMaskMargin
- * @return the margin for the solder mask layer
- * usually > 0 (mask shape bigger than pad
- * value is
- * 1 - the local value
- * 2 - if null, the parent footprint value
- * 1 - if null, the global value
- */
 int D_PAD::GetSolderMaskMargin()
 {
     int     margin = m_LocalSolderMaskMargin;
@@ -429,15 +425,6 @@ int D_PAD::GetSolderMaskMargin()
 }
 
 
-/**
- * Function GetSolderPasteMargin
- * @return the margin for the solder mask layer
- * usually < 0 (mask shape smaller than pad
- * value is
- * 1 - the local value
- * 2 - if null, the parent footprint value
- * 3 - if null, the global value
- */
 wxSize D_PAD::GetSolderPasteMargin()
 {
     int     margin = m_LocalSolderPasteMargin;
@@ -538,7 +525,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 
     board = GetBoard();
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), 
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ),
                      LayerMaskDescribe( board, m_layerMask ), DARKGREEN ) );
 
     aList.push_back( MSG_PANEL_ITEM( ShowPadShape(), ShowPadAttr(), DARKGREEN ) );
@@ -753,6 +740,7 @@ wxString D_PAD::GetSelectMenuText() const
 
     return text;
 }
+
 
 EDA_ITEM* D_PAD::Clone() const
 {

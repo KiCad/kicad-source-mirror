@@ -87,7 +87,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary( wxCommandEvent& event )
     wxArrayString headers;
     headers.Add( wxT("Library") );
     std::vector<wxArrayString> itemsToDisplay;
-    
+
     // Conversion from wxArrayString to vector of ArrayString
     for( unsigned i = 0; i < g_LibraryNames.GetCount(); i++ )
     {
@@ -145,6 +145,13 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
 }
 
 
+const wxString FOOTPRINT_VIEWER_FRAME::GetSelectedLibraryFullName( void )
+{
+    wxString fullname = m_libraryName + wxT(".") + LegacyFootprintLibPathExtension;
+    return fullname;
+}
+
+
 /* Routine to view one selected library content. */
 void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
 {
@@ -171,8 +178,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         SetCurItem( NULL );
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
-        GetModuleLibrary( m_libraryName + wxT(".") + LegacyFootprintLibPathExtension,
-                          m_footprintName, true );
+        GetModuleLibrary( GetSelectedLibraryFullName(), m_footprintName, true );
         Update3D_Frame();
     }
 

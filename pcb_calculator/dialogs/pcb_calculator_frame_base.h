@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 17 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,7 +11,11 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include "UnitSelector.h"
+class UNIT_SELECTOR_ANGLE;
+class UNIT_SELECTOR_FREQUENCY;
+class UNIT_SELECTOR_LEN;
+class UNIT_SELECTOR_RESISTOR;
+
 #include <wx/string.h>
 #include <wx/menu.h>
 #include <wx/gdicmn.h>

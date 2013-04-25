@@ -290,15 +290,45 @@ void MODULE::Copy( MODULE* aModule )
 }
 
 
-/**
- * Function Draw
- *  Draws the footprint to the current Device Context
- * @param aPanel = draw panel, Used to know the clip box
- * @param aDC = Current Device Context
- * @param aDrawMode = GR_OR, GR_XOR..
- * @param aOffset = draw offset (usually wxPoint(0,0)
- */
-void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aOffset )
+void MODULE::CopyNetlistSettings( MODULE* aModule )
+{
+    // Don't do anything foolish like trying to copy to yourself.
+    wxCHECK_RET( aModule != NULL && aModule != this, wxT( "Cannot copy to NULL or yourself." ) );
+
+    // Not sure what to do with the value field.  Use netlist for now.
+    aModule->SetPosition( GetPosition() );
+
+    if( aModule->GetLayer() != GetLayer() )
+        aModule->Flip( aModule->GetPosition() );
+
+    if( aModule->GetOrientation() != GetOrientation() )
+        aModule->Rotate( aModule->GetPosition(), GetOrientation() );
+
+    aModule->SetLocalSolderMaskMargin( GetLocalSolderMaskMargin() );
+    aModule->SetLocalClearance( GetLocalClearance() );
+    aModule->SetLocalSolderPasteMargin( GetLocalSolderPasteMargin() );
+    aModule->SetLocalSolderPasteMarginRatio( GetLocalSolderPasteMarginRatio() );
+    aModule->SetZoneConnection( GetZoneConnection() );
+    aModule->SetThermalWidth( GetThermalWidth() );
+    aModule->SetThermalGap( GetThermalGap() );
+
+    for( D_PAD* pad = Pads();  pad;  pad = pad->Next() )
+    {
+        D_PAD* newPad = aModule->FindPadByName( pad->GetPadName() );
+
+        if( newPad )
+            pad->CopyNetlistSettings( newPad );
+    }
+
+    // Not sure about copying description, keywords, 3D models or any other
+    // local user changes to footprint.  Stick with the new footprint settings
+    // called out in the footprint loaded in the netlist.
+    aModule->CalculateBoundingBox();
+}
+
+
+void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
+                   const wxPoint& aOffset )
 {
     if( (m_Flags & DO_NOT_DRAW) || (IsMoving()) )
         return;
@@ -354,14 +384,6 @@ void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, con
 }
 
 
-/**
- * Function DrawEdgesOnly
- *  Draws the footprint edges only to the current Device Context
- *  @param panel = The active Draw Panel (used to know the clip box)
- *  @param DC = current Device Context
- *  @param offset = draw offset (usually wxPoint(0,0)
- *  @param draw_mode =  GR_OR, GR_XOR, GR_AND
- */
 void MODULE::DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                             GR_DRAWMODE draw_mode )
 {
@@ -687,6 +709,7 @@ EDA_ITEM* MODULE::Clone() const
     return new MODULE( *this );
 }
 
+
 /* Test for validity of the name in a library of the footprint
  * ( no spaces, dir separators ... )
  * return true if the given name is valid
@@ -874,6 +897,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
     CalculateBoundingBox();
 }
 
+
 void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
 {
     /* Move the reference point of the footprint
@@ -931,6 +955,7 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
 
     CalculateBoundingBox();
 }
+
 
 void MODULE::SetOrientation( double newangle )
 {

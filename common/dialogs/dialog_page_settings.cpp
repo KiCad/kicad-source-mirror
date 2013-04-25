@@ -51,7 +51,7 @@
 // the translated and the not translated version.
 // when displayed in dialog we should explicitely call wxGetTranslation()
 // to show the translated version.
-const wxString pageFmts[] =
+static const wxString pageFmts[] =
 {
     _("A4 210x297mm"),
     _("A3 297x420mm"),
@@ -63,11 +63,10 @@ const wxString pageFmts[] =
     _("C 17x22in"),
     _("D 22x34in"),
     _("E 34x44in"),
-    _("US Letter 8.5x11in"),
-    _("US Legal 8.5x14in"),
-    _("US Ledger 11x17in"),
+    _("USLetter 8.5x11in"),     // USLetter without space is correct
+    _("USLegal 8.5x14in"),      // USLegal without space is correct
+    _("USLedger 11x17in"),      // USLedger without space is correct
     _("User (Custom)"),
-    wxT("")                 // end of list
 };
 
 void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
@@ -115,11 +114,8 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     // The first shows translated strings, the second contains not translated strings
     m_paperSizeComboBox->Clear();
 
-    for( unsigned ii = 0; ; ii++ )
+    for( unsigned ii = 0; ii<DIM(pageFmts); ii++ )
     {
-        if( pageFmts[ii].IsEmpty() )
-            break;
-
         m_pageFmt.Add( pageFmts[ii] );
         m_paperSizeComboBox->Append( wxGetTranslation( pageFmts[ii] ) );
     }

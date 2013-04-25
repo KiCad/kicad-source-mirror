@@ -25,7 +25,11 @@ public:
     void ClosePlot();
     bool OpenPlotfile( const wxString &aSuffix, PlotFormat aFormat,
                        const wxString &aSheetDesc );
+    
     bool PlotLayer( LAYER_NUM layer );
+    
+    void SetColorMode( bool aColorMode );
+    bool GetColorMode();
 
 private:
     /// Option bank

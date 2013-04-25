@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file class_board.h
  * @brief Class BOARD to handle a board.
@@ -30,6 +54,8 @@ class TRACK;
 class D_PAD;
 class MARKER_PCB;
 class MSG_PANEL_ITEM;
+class NETLIST;
+class REPORTER;
 
 
 // non-owning container of item candidates when searching for items on the same track.
@@ -281,6 +307,12 @@ public:
 
     BOARD();
     ~BOARD();
+
+    bool IsEmpty() const
+    {
+        return m_Drawings.GetCount() == 0 && m_Modules.GetCount() == 0 &&
+               m_Track.GetCount() == 0 && m_Zone.GetCount() == 0;
+    }
 
     void Move( const wxPoint& aMoveVector );        // overload
 
@@ -850,6 +882,47 @@ public:
     MODULE* FindModuleByReference( const wxString& aReference ) const;
 
     /**
+     * Function FindModule
+     * searches for a module matching \a aRefOrTimeStamp depending on the state of
+     * \a aSearchByTimeStamp.
+     * @param aRefOrTimeStamp is the search string.
+     * @param aSearchByTimeStamp searches by the module time stamp value if true.  Otherwise
+     *                           search by reference designator.
+     * @return the module found or NULL if not module is found that meets the search criteria.
+     */
+    MODULE* FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeStamp = false );
+
+    /**
+     * Function ReplaceNetlist
+     * updates the #BOARD according to \a aNetlist.
+     *
+     * The changes are made to the board are as follows they are not disabled in the status
+     * settings in the #NETLIST:
+     * - If a new component is found in the #NETLIST and not in the #BOARD, it is added
+     *   to the #BOARD.
+     * - If a the component in the #NETLIST is already on the #BOARD, then one or more of the
+     *   following actions can occur:
+     *   + If the footprint name in the #NETLIST does not match the footprint name on the
+     *     #BOARD, the footprint on the #BOARD is replaced with the footprint specified in
+     *     the #NETLIST and the proper parameters are copied from the existing footprint.
+     *   + If the reference designator in the #NETLIST does not match the reference designator
+     *     on the #BOARD, the reference designator is updated from the #NETLIST.
+     *   + If the value field in the #NETLIST does not match the value field on the #BOARD,
+     *     the value field is updated from the #NETLIST.
+     *   + If the time stamp in the #NETLIST does not match the time stamp  on the #BOARD,
+     *     the time stamp is updated from the #NETLIST.
+     * - After each footprint is added or update as described above, each footprint pad net
+     *   name is compared and updated to the value defined in the #NETLIST.
+     * - After all of the footprints have been added, updated, and net names properly set,
+     *   any extra unlock footprints are removed from the #BOARD.
+     *
+     * @param aNetlist is the new netlist to revise the contents of the #BOARD with.
+     * @param aReporter is a #REPORTER object to report the changes \a aNetlist makes to
+     *                  the #BOARD.  If NULL, no change reporting occurs.
+     */
+    void ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter = NULL );
+
+    /**
      * Function ReturnSortedNetnamesList
      * @param aNames An array string to fill with net names.
      * @param aSortbyPadsCount  true = sort by active pads count, false = no sort (i.e.
@@ -1229,12 +1302,12 @@ public:
 
     /**
      * Function GetPadFast
-     * return pad found at \a aPosition on \a aLayer using the fast search method.
+     * return pad found at \a aPosition on \a aLayerMask using the fast search method.
      * <p>
      * The fast search method only works if the pad list has already been built.
      * </p>
      * @param aPosition A wxPoint object containing the position to hit test.
-     * @param aLayer A layer or layers to mask the hit test.
+     * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a D_PAD object if found or NULL if not found.
      */
     D_PAD* GetPadFast( const wxPoint& aPosition, LAYER_MSK aLayerMask );

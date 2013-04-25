@@ -25,184 +25,96 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/*
- *  Functions to read a netlist:
- *  - Load new footprints and initialize net info
- *  - Test for missing or extra footprints
- *  - Recalculate full connectivity info
- *
- *  Important remark:
- *  When reading a netlist, Pcbnew must identify existing footprints (link
- * between existing footprints an components in netlist)
- *  This identification can be made from 2 fields:
- *      - The reference (U2, R5 ..): this is the normal mode
- *      - The Time Stamp : useful after a full schematic
- * reannotation because references can be changed for the component linked to its footprint.
- * So when reading a netlist, ReadPcbNetlist() can use references or time stamps
- * to identify footprints on board and the corresponding component in schematic.
- *  If we want to fully reannotate a schematic this sequence must be used
- *   1 - SAVE your board !!!
- *   2 - Create and read the netlist (to ensure all info is correct, mainly
- * references and time stamp)
- *   3 - Reannotate the schematic (references will be changed, but not time stamps )
- *   4 - Recreate and read the new netlist using the Time Stamp identification
- * (that reinit the new references)
- */
-
-
-
 #include <fctsys.h>
+#include <appl_wxstruct.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <richio.h>
 #include <dialog_helpers.h>
+#include <wxPcbStruct.h>
+#include <netlist_reader.h>
+#include <reporter.h>
+#include <wildcards_and_files_ext.h>
+
 #include <class_board.h>
 #include <class_module.h>
 #include <pcbnew.h>
-#include <dialog_netlist.h>
-#include <netlist_reader.h>
+#include <io_mgr.h>
 
 #include <algorithm>
 
-/**
- * Function OpenNetlistFile
- *  used to open a netlist file
- */
-static FILE* OpenNetlistFile( const wxString& aFullFileName )
-{
-    if( aFullFileName.IsEmpty() )
-        return NULL;  // No filename: exit
 
-    FILE* file = wxFopen( aFullFileName, wxT( "rt" ) );
-
-    if( file == NULL )
-    {
-        wxString msg;
-        msg.Printf( _( "Netlist file <%s> not found" ), GetChars( aFullFileName ) );
-        wxMessageBox( msg );
-    }
-
-    return file;
-}
-
-
-
-/* Update footprints (load missing footprints and delete on request extra footprints)
- * Update connectivity info ( Net Name list )
- * Update Reference, value and "TIME STAMP"
- * param aNetlistFullFilename = netlist file name (*.net)
- * param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found,
- * param aMessageWindow  = a wxTextCtrl to print messages (can be NULL).
- * param aChangeFootprint = true to change existing footprints
- *                              when the netlist gives a different footprint.
- *                           false to keep existing footprints
- * param aDeleteBadTracks - true to erase erroneous tracks after updating connectivity info.
- * param aDeleteExtraFootprints - true to remove unlocked footprints found on board but not
- *                                 in netlist.
- * param aSelect_By_Timestamp - true to use schematic timestamps instead of schematic references
- *                              to identify footprints on board
- *                              (Must be used after a full reannotation in schematic).
- * param aUseCmpFileForFootprintsNames = false to use only the netlist to know the
- *                      fontprint names of each component.
- *                                     = true to use the .cmp file created by CvPcb
- * return true if Ok
- */
-bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
-                                     const wxString& aCmpFullFileName,
-                                     wxTextCtrl*     aMessageWindow,
-                                     bool            aChangeFootprint,
-                                     bool            aDeleteBadTracks,
+void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
+                                     const wxString& aCmpFileName,
+                                     REPORTER*       aReporter,
+                                     bool            aChangeFootprints,
+                                     bool            aDeleteUnconnectedTracks,
                                      bool            aDeleteExtraFootprints,
-                                     bool            aSelect_By_Timestamp )
+                                     bool            aSelectByTimeStamp,
+                                     bool            aIsDryRun )
 {
-    FILE*   netfile = OpenNetlistFile( aNetlistFullFilename );
+    wxString        msg;
+    NETLIST         netlist;
+    NETLIST_READER* netlistReader;
 
-    if( !netfile )
-        return false;
-
-    SetLastNetListRead( aNetlistFullFilename );
-    bool useCmpfile = !aCmpFullFileName.IsEmpty() && wxFileExists( aCmpFullFileName );
-
-    if( aMessageWindow )
+    try
     {
-        wxString msg;
-        msg.Printf( _( "Reading Netlist <%s>" ), GetChars( aNetlistFullFilename ) );
-        aMessageWindow->AppendText( msg + wxT( "\n" ) );
+        netlistReader = NETLIST_READER::GetNetlistReader( &netlist, aNetlistFileName,
+                                                          aCmpFileName );
 
-        if( useCmpfile )
+        if( netlistReader == NULL )
         {
-            msg.Printf( _( "Using component/footprint link file <%s>" ),
-                        GetChars( aCmpFullFileName ) );
-            aMessageWindow->AppendText( msg + wxT( "\n" ) );
+            msg.Printf( _( "Cannot open netlist file \"%s\"." ), GetChars( aNetlistFileName ) );
+            wxMessageBox( msg, _( "Netlist Load Error." ), wxOK | wxICON_ERROR, this );
+            return;
         }
 
-        if( aSelect_By_Timestamp )
-        {
-            msg.Printf( _( "Using time stamp selection" ),
-                        GetChars( aCmpFullFileName ) );
-            aMessageWindow->AppendText( msg + wxT( "\n" ) );
-        }
+        std::auto_ptr< NETLIST_READER > nlr( netlistReader );
+        SetLastNetListRead( aNetlistFileName );
+        netlistReader->LoadNetlist();
+        loadFootprints( netlist, aReporter );
     }
+    catch( IO_ERROR& ioe )
+    {
+        msg = wxString::Format( _( "Error loading netlist.\n%s" ), ioe.errorText.GetData() );
+        wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
+        return;
+    }
+
+    netlist.SetIsDryRun( aIsDryRun );
+    netlist.SetFindByTimeStamp( aSelectByTimeStamp );
+    netlist.SetDeleteExtraFootprints( aDeleteExtraFootprints );
+    netlist.SetReplaceFootprints( aChangeFootprints );
 
     // Clear undo and redo lists to avoid inconsistencies between lists
-    GetScreen()->ClearUndoRedoList();
+    if( !netlist.IsDryRun() )
+        GetScreen()->ClearUndoRedoList();
+
+    netlist.SortByReference();
+    GetBoard()->ReplaceNetlist( netlist, aReporter );
+
+    // If it was a dry run, nothing has changed so we're done.
+    if( netlist.IsDryRun() )
+        return;
 
     OnModify();
 
-    // Clear flags and pointers to avoid inconsistencies
-    GetBoard()->m_Status_Pcb = 0;
     SetCurItem( NULL );
 
-    wxBusyCursor   dummy;      // Shows an hourglass while calculating
-
-    NETLIST_READER netList_Reader( this, aMessageWindow );
-    netList_Reader.m_UseTimeStamp     = aSelect_By_Timestamp;
-    netList_Reader.m_ChangeFootprints = aChangeFootprint;
-    netList_Reader.m_UseCmpFile = useCmpfile;
-    netList_Reader.SetFilesnames( aNetlistFullFilename, aCmpFullFileName );
-
-    // True to read footprint filters section: true for CvPcb, false for Pcbnew
-    netList_Reader.ReadLibpartSectionSetOpt( false );
-
-    bool success = netList_Reader.ReadNetList( netfile );
-
-    if( !success )
+    if( aDeleteUnconnectedTracks && GetBoard()->m_Track )
     {
-        wxMessageBox( _("Netlist read error") );
-        return false;
-    }
-
-    // Delete footprints not found in netlist:
-    if( aDeleteExtraFootprints )
-    {
-        if( IsOK( NULL,
-            _( "OK to delete not locked footprints not found in netlist?" ) ) )
-            netList_Reader.RemoveExtraFootprints();
+        // Remove erroneous tracks.  This should probably pushed down to the #BOARD object.
+        RemoveMisConnectedTracks();
     }
 
     // Rebuild the board connectivity:
     Compile_Ratsnest( NULL, true );
-
-    if( aDeleteBadTracks && GetBoard()->m_Track )
-    {
-        // Remove erroneous tracks
-        if( RemoveMisConnectedTracks() )
-            Compile_Ratsnest( NULL, true );
-    }
-
     SetMsgPanel( GetBoard() );
     m_canvas->Refresh();
-
-    return true;
 }
 
 
-/**
- * build and shows a list of existing modules on board
- * The user can select a module from this list
- * @return a pointer to the selected module or NULL
- */
-MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName( void )
+MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
 {
     MODULE* Module;
 
@@ -219,9 +131,9 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName( void )
         listnames.Add( Module->GetReference() );
 
     wxArrayString headers;
-    headers.Add( wxT("Module") );
+    headers.Add( wxT( "Module" ) );
     std::vector<wxArrayString> itemsToDisplay;
-    
+
     // Conversion from wxArrayString to vector of ArrayString
     for( unsigned i = 0; i < listnames.GetCount(); i++ )
     {
@@ -229,6 +141,7 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName( void )
         item.Add( listnames[i] );
         itemsToDisplay.push_back( item );
     }
+
     EDA_LIST_DIALOG dlg( this, _( "Components" ), headers, itemsToDisplay, wxEmptyString );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -247,84 +160,70 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName( void )
 }
 
 
-/*
- * Function Test_Duplicate_Missing_And_Extra_Footprints
- * Build a list of duplicate, missing and extra footprints
- * from the current board and a netlist netlist :
- * Shows 3 lists:
- *  1 - duplicate footprints on board
- *  2 - missing footprints (found in netlist but not on board)
- *  3 - footprints not in netlist but on board
- * param aFilename = the full filename netlist
- * param aDuplicate = the list of duplicate modules to populate
- * param aMissing = the list of missing module references and values
- *      to populate. For each missing item, the first string is the ref,
- *                   the second is the value.
- * param aNotInNetlist = the list of not-in-netlist modules to populate
- */
-bool PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
-        const wxString& aFilename,
-        std::vector <MODULE*>& aDuplicate,
-        wxArrayString& aMissing,
-        std::vector <MODULE*>& aNotInNetlist )
+void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
+    throw( IO_ERROR, PARSE_ERROR )
 {
-    FILE*   netfile = OpenNetlistFile( aFilename );
-    if( !netfile )
-        return false;
+    wxString   msg;
+    wxString   lastFootprintLibName;
+    COMPONENT* component;
+    MODULE*    module;
 
-    // Build the list of references of the net list modules.
-    NETLIST_READER netList_Reader( this );
-    netList_Reader.SetFilesnames( aFilename, wxEmptyString );
-    netList_Reader.BuildModuleListOnlySetOpt( true );
-    if( ! netList_Reader.ReadNetList( netfile ) )
-        return false;  // error
+    if( aNetlist.IsEmpty() )
+        return;
 
-    COMPONENT_INFO_LIST& moduleInfoList = netList_Reader.GetComponentInfoList();
+    aNetlist.SortByFootprintLibName();
 
-    // Search for duplicate footprints.
-    MODULE* module = GetBoard()->m_Modules;
+    wxString   libPath;
+    wxFileName fn;
 
-    for( ; module != NULL; module = module->Next() )
+    PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+
+    for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
     {
-        MODULE* altmodule = module->Next();
+        component = aNetlist.GetComponent( ii );
 
-        for( ; altmodule != NULL; altmodule = altmodule->Next() )
+        if( ii == 0 || component->GetFootprintLibName() != lastFootprintLibName )
         {
-            if( module->GetReference().CmpNoCase( altmodule->GetReference() ) == 0 )
+            module = NULL;
+
+            for( unsigned ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
             {
-                aDuplicate.push_back( module );
-                break;
+                fn = wxFileName( wxEmptyString, g_LibraryNames[ii],
+                                 LegacyFootprintLibPathExtension );
+
+                libPath = wxGetApp().FindLibraryPath( fn );
+
+                if( !libPath )
+                    continue;
+
+                module = pi->FootprintLoad( libPath, component->GetFootprintLibName() );
+
+                if( module )
+                {
+                    lastFootprintLibName = component->GetFootprintLibName();
+                    break;
+                }
+            }
+
+            if( module == NULL )
+            {
+                wxString msg;
+                msg.Printf( _( "Component `%s` footprint <%s> was not found in any libraries." ),
+                            GetChars( component->GetReference() ),
+                            GetChars( component->GetFootprintLibName() ) );
+                THROW_IO_ERROR( msg );
             }
         }
-    }
-
-    // Search for missing modules on board.
-    for( unsigned ii = 0; ii < moduleInfoList.size(); ii++ )
-    {
-        COMPONENT_INFO* cmp_info = moduleInfoList[ii];
-        module = GetBoard()->FindModuleByReference( cmp_info->m_Reference );
-        if( module == NULL )    // Module missing, not found in board
+        else
         {
-            aMissing.Add( cmp_info->m_Reference );
-            aMissing.Add( cmp_info->m_Value );
-        }
-    }
+            // Footprint already loaded from a library, duplicate it (faster)
+            if( module == NULL )
+                continue;            // Module does not exist in any library.
 
-    // Search for modules found on board but not in net list.
-    module = GetBoard()->m_Modules;
-    for( ; module != NULL; module = module->Next() )
-    {
-        unsigned ii;
-        for( ii = 0; ii < moduleInfoList.size(); ii++ )
-        {
-            COMPONENT_INFO* cmp_info = moduleInfoList[ii];
-            if( module->GetReference().CmpNoCase( cmp_info->m_Reference ) == 0 )
-                break; // Module is in net list.
+            module = new MODULE( *module );
         }
 
-        if( ii == moduleInfoList.size() )   // Module not found in netlist
-            aNotInNetlist.push_back( module );
+        wxASSERT( module != NULL );
+        component->SetModule( module );
     }
-
-    return true;
 }

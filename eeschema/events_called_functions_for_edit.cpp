@@ -32,10 +32,9 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
         newitem->SetTimeStamp( GetNewTimeStamp() );
         newitem->ClearAnnotation( NULL );
         newitem->SetFlags( IS_NEW );
-        MoveItem( (SCH_ITEM*) newitem, &dc );
-
-        // Redraw the original part, because StartMovePart() erased it from screen.
-        curr_item->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
+        // Draw the new part, MoveItem() expects it to be already on screen.
+        newitem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
+        MoveItem( newitem, &dc );
     }
     break;
 
@@ -46,10 +45,9 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
     {
         SCH_TEXT* newitem = (SCH_TEXT*) curr_item->Clone();
         newitem->SetFlags( IS_NEW );
-        MoveItem( (SCH_ITEM*) newitem, &dc );
-
-        /* Redraw the original part in XOR mode */
-        curr_item->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
+        // Draw the new item, MoveItem() expects it to be already on screen.
+        newitem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
+        MoveItem( newitem, &dc );
     }
         break;
 

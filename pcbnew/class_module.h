@@ -229,6 +229,14 @@ public:
 
     /* drawing functions */
 
+    /**
+     * Function Draw
+     * draws the footprint to the \a aDC.
+     * @param aPanel = draw panel, Used to know the clip box
+     * @param aDC = Current Device Context
+     * @param aDrawMode = GR_OR, GR_XOR..
+     * @param aOffset = draw offset (usually wxPoint(0,0)
+     */
     void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC*           aDC,
                GR_DRAWMODE     aDrawMode,
@@ -236,6 +244,14 @@ public:
 
     void Draw3D( EDA_3D_CANVAS* glcanvas );
 
+    /**
+     * Function DrawEdgesOnly
+     *  Draws the footprint edges only to the current Device Context
+     *  @param panel = The active Draw Panel (used to know the clip box)
+     *  @param DC = current Device Context
+     *  @param offset = draw offset (usually wxPoint(0,0)
+     *  @param draw_mode =  GR_OR, GR_XOR, GR_AND
+     */
     void DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                         GR_DRAWMODE draw_mode );
 
@@ -306,7 +322,7 @@ public:
 
     /**
      * Function GetPad
-     * get a pad at \a aPosition on \a aLayer in the footprint.
+     * get a pad at \a aPosition on \a aLayerMask in the footprint.
      *
      * @param aPosition A wxPoint object containing the position to hit test.
      * @param aLayerMask A layer or layers to mask the hit test.
@@ -360,6 +376,19 @@ public:
     BITMAP_DEF GetMenuImage() const { return  module_xpm; }
 
     EDA_ITEM* Clone() const;
+
+    /**
+     * Function CopyNetlistSettings
+     * copies the netlist settings to \a aModule.
+     *
+     * The netlist settings are all of the #MODULE settings not define by a #MODULE in
+     * a netlist.  These setting include position, orientation, local clearances, ets.
+     * The reference designator, value, path, and physical geometry settings are not
+     * copied.
+     *
+     * @param aModule is the #MODULE to copy the settings to.
+     */
+    void CopyNetlistSettings( MODULE* aModule );
 
     /**
      * static function IsLibNameValid

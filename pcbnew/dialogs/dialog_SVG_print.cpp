@@ -118,11 +118,11 @@ void DIALOG_SVG_PRINT::initDialog()
     // (Front or Top to Back or Bottom)
     DECLARE_LAYERS_ORDER_LIST( layersOrder );
 
-    for( LAYER_NUM layer_idx = FIRST_LAYER; layer_idx < NB_LAYERS; ++layer_idx )
+    for( LAYER_NUM layer_idx = FIRST_LAYER; layer_idx < NB_PCB_LAYERS; ++layer_idx )
     {
         layer = layersOrder[layer_idx];
 
-        wxASSERT( layer < NB_LAYERS );
+        wxASSERT( layer < NB_PCB_LAYERS );
 
         if( m_boxSelectLayer[layer] == NULL )
             continue;
@@ -148,7 +148,7 @@ void DIALOG_SVG_PRINT::initDialog()
     {
         wxString layerKey;
 
-        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
         {
             bool option;
 
@@ -237,7 +237,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
     // Build layers mask
     LAYER_MSK printMaskLayer = NO_LAYERS;
 
-    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
     {
         if( m_boxSelectLayer[layer] && m_boxSelectLayer[layer]->GetValue() )
             printMaskLayer |= GetLayerMask( layer );
@@ -363,7 +363,7 @@ void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
 
         wxString layerKey;
 
-        for( LAYER_NUM layer = FIRST_LAYER; layer<NB_LAYERS;  ++layer )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
         {
             if( m_boxSelectLayer[layer] == NULL )
                 continue;

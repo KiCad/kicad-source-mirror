@@ -96,7 +96,7 @@
 
     wxStandardPaths::GetExecutableDir()/../share/template/
     wxStandardPaths::GetUserDataDir()/templates/
-    wxGetEnv(wxT("KICAD_TEMPLATES"))
+    wxGetEnv(wxT("KICAD_PTEMPLATES"))
     wxGetEnv(wxT("KICAD"))/template/
 
 */
