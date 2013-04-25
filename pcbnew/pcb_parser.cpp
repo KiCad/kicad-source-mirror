@@ -2488,18 +2488,22 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
                     // @todo Create an enum for fill modes.
                     zone->SetFillMode( token == T_polygon ? 0 : 1 );
+                    NeedRIGHT();
                     break;
 
                 case T_arc_segments:
                     zone->SetArcSegmentCount( parseInt( "arc segment count" ) );
+                    NeedRIGHT();
                     break;
 
                 case T_thermal_gap:
                     zone->SetThermalReliefGap( parseBoardUnits( T_thermal_gap ) );
+                    NeedRIGHT();
                     break;
 
                 case T_thermal_bridge_width:
                     zone->SetThermalReliefCopperBridge( parseBoardUnits( T_thermal_bridge_width ) );
+                    NeedRIGHT();
                     break;
 
                 case T_smoothing:
@@ -2520,21 +2524,19 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                     default:
                         Expecting( "none, chamfer, or fillet" );
                     }
-
+                    NeedRIGHT();
                     break;
 
                 case T_radius:
                     zone->SetCornerRadius( parseBoardUnits( "corner radius" ) );
+                    NeedRIGHT();
                     break;
 
                 default:
                     Expecting( "mode, arc_segments, thermal_gap, thermal_bridge_width, "
                                "smoothing, or radius" );
                 }
-
-                NeedRIGHT();
             }
-
             break;
 
         case T_keepout:
