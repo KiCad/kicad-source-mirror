@@ -1,5 +1,5 @@
 /**
- * @file DIALOG_ORIENT_FOOTPRINTS.cpp
+ * @file dialog_orient_footprints.cpp
  */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
@@ -58,10 +58,12 @@ public:
     {
         return m_ApplyToLocked->IsChecked();
     }
+
     int GetOrientation()
     {
         return newOrientation;
     }
+
     wxString GetFilter()
     {
         return m_FilterPattern->GetValue();
@@ -73,6 +75,8 @@ private:
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
 };
+
+
 int DIALOG_ORIENT_FOOTPRINTS::newOrientation = 0;
 
 
@@ -81,23 +85,18 @@ DIALOG_ORIENT_FOOTPRINTS::DIALOG_ORIENT_FOOTPRINTS( PCB_EDIT_FRAME* parent )
 {
     m_Parent = parent;
     wxString txt;
-    txt.Printf(wxT("%g"), (double) newOrientation/10);
-    m_OrientationCtrl->SetValue(txt);
-    SetFocus( );
-    GetSizer()->SetSizeHints(this);
+    txt.Printf( wxT( "%g" ), (double) newOrientation/10 );
+    m_OrientationCtrl->SetValue( txt );
+    SetFocus();
+    GetSizer()->SetSizeHints( this );
     Centre();
 }
 
 
-/****************************************************************/
 void PCB_EDIT_FRAME::OnOrientFootprints( wxCommandEvent& event )
-/****************************************************************/
-/**
- * Function OnOrientFootprints
- * install the dialog box for the comman Orient Footprints
- */
 {
-    DIALOG_ORIENT_FOOTPRINTS dlg(this);
+    DIALOG_ORIENT_FOOTPRINTS dlg( this );
+
     if( dlg.ShowModal() != wxID_OK )
         return;
 
@@ -111,23 +110,13 @@ void PCB_EDIT_FRAME::OnOrientFootprints( wxCommandEvent& event )
 }
 
 
-/*******************************************************************/
-bool PCB_EDIT_FRAME::ReOrientModules( const wxString& ModuleMask,
-                                      int Orient, bool include_fixe )
-/*******************************************************************/
-/**
- * Function ReOrientModules
- * Set the orientation of footprints
- * @param ModuleMask = mask (wildcard allowed) selection
- * @param Orient = new orientation
- * @param include_fixe = true to orient locked footprints
- * @return true if some footprints modified, false if no change
- */
+bool PCB_EDIT_FRAME::ReOrientModules( const wxString& ModuleMask, int Orient, bool include_fixe )
 {
     wxString line;
     bool modified = false;
 
     line.Printf( _( "OK to set footprints orientation to %.1f degrees ?" ), (double)Orient / 10 );
+
     if( !IsOK( this, line ) )
         return false;
 
@@ -155,13 +144,13 @@ void DIALOG_ORIENT_FOOTPRINTS::OnOkClick( wxCommandEvent& event )
     double d_orient;
     wxString text = m_OrientationCtrl->GetValue();
 
-    if ( ! text.ToDouble(&d_orient) )
+    if ( ! text.ToDouble( &d_orient ) )
     {
-        DisplayError(this, _("Bad value for footprints orientation"));
+        DisplayError( this, _( "Bad value for footprints orientation" ) );
         return;
     }
 
-    newOrientation = KiROUND(d_orient * 10);
+    newOrientation = KiROUND( d_orient * 10 );
     NORMALIZE_ANGLE_180( newOrientation );
     EndModal( wxID_OK );
 }

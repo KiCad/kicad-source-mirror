@@ -39,6 +39,8 @@
 #include <pcbcommon.h>
 #include <wxBasePcbFrame.h>
 #include <msgpanel.h>
+#include <netlist_reader.h>
+#include <reporter.h>
 
 #include <pcbnew.h>
 #include <colors_selection.h>
@@ -1411,6 +1413,26 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 }
 
 
+MODULE* BOARD::FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeStamp )
+{
+    for( MODULE* module = m_Modules;  module != NULL;  module = module->Next() )
+    {
+        if( aSearchByTimeStamp )
+        {
+            if( aRefOrTimeStamp.CmpNoCase( module->GetPath() ) == 0 )
+                return module;
+        }
+        else
+        {
+            if( aRefOrTimeStamp.CmpNoCase( module->GetReference() ) == 0 )
+                return module;
+        }
+    }
+
+    return NULL;
+}
+
+
 // Sort nets by decreasing pad count
 static bool s_SortByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 {
@@ -2307,6 +2329,251 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
     curr_polygon->Hatch();
 
     return true;
+}
+
+
+void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
+{
+    unsigned       i;
+    wxPoint        bestPosition;
+    wxString       msg;
+    D_PAD*         pad;
+    MODULE*        footprint;
+    COMPONENT*     component;
+    COMPONENT_NET  net;
+
+    if( !IsEmpty() )
+    {
+        // Position new components below any existing board features.
+        EDA_RECT bbbox = ComputeBoundingBox( true );
+
+        if( bbbox.GetWidth() || bbbox.GetHeight() )
+        {
+            bestPosition.x = bbbox.Centre().x;
+            bestPosition.y = bbbox.GetBottom() + DMils2iu( 5000 );
+        }
+    }
+    else
+    {
+        // Position new components in the center of the page when the board is empty.
+        wxSize pageSize = m_paper.GetSizeIU();
+
+        bestPosition.x = pageSize.GetWidth() / 2;
+        bestPosition.y = pageSize.GetHeight() / 2;
+    }
+
+    m_Status_Pcb = 0;
+
+    for( i = 0;  i < aNetlist.GetCount();  i++ )
+    {
+        component = aNetlist.GetComponent( i );
+
+        if( aReporter )
+        {
+            msg.Printf( _( "Checking netlist component footprint \"%s:%s:%s\".\n" ),
+                        GetChars( component->GetReference() ),
+                        GetChars( component->GetTimeStamp() ),
+                        GetChars( component->GetFootprintLibName() ) );
+            aReporter->Report( msg );
+        }
+
+        if( aNetlist.IsFindByTimeStamp() )
+            footprint = FindModule( aNetlist.GetComponent( i )->GetTimeStamp(), true );
+        else
+            footprint = FindModule( aNetlist.GetComponent( i )->GetReference() );
+
+        if( footprint == NULL )        // A new footprint.
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
+                            GetChars( component->GetReference() ),
+                            GetChars( component->GetTimeStamp() ),
+                            GetChars( component->GetFootprintLibName() ) );
+                aReporter->Report( msg );
+            }
+
+            // Owned by NETLIST, can only copy and read it.
+            footprint = component->GetModule();
+
+            wxCHECK2_MSG( footprint != NULL, continue,
+                          wxString::Format( wxT( "No footprint loaded for component \"%s\"." ),
+                                            GetChars( component->GetReference() ) ) );
+
+            if( !aNetlist.IsDryRun() )
+            {
+                footprint = new MODULE( *footprint );
+                footprint->SetParent( this );
+                footprint->SetPosition( bestPosition );
+                footprint->SetTimeStamp( GetNewTimeStamp() );
+                Add( footprint, ADD_APPEND );
+            }
+        }
+        else                           // An existing footprint.
+        {
+            // Test for footprint change.
+            if( !component->GetFootprintLibName().IsEmpty() &&
+                footprint->GetLibRef() != component->GetFootprintLibName() )
+            {
+                if( aNetlist.GetReplaceFootprints() )
+                {
+                    if( aReporter )
+                    {
+                        msg.Printf( _( "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n" ),
+                                    GetChars( footprint->GetReference() ),
+                                    GetChars( footprint->GetPath() ),
+                                    GetChars( footprint->GetLibRef() ),
+                                    GetChars( component->GetFootprintLibName() ) );
+                        aReporter->Report( msg );
+                    }
+
+                    if( !aNetlist.IsDryRun() )
+                    {
+                        wxASSERT( footprint != NULL );
+                        MODULE* newFootprint = new MODULE( *component->GetModule() );
+
+                        if( aNetlist.IsFindByTimeStamp() )
+                            newFootprint->SetReference( footprint->GetReference() );
+                        else
+                            newFootprint->SetPath( footprint->GetPath() );
+
+                        footprint->CopyNetlistSettings( newFootprint );
+                        Remove( footprint );
+                        Add( newFootprint, ADD_APPEND );
+                        footprint = newFootprint;
+                    }
+                }
+            }
+
+            // Test for reference designator field change.
+            if( footprint->GetReference() != component->GetReference() )
+            {
+                if( aReporter )
+                {
+                    msg.Printf( _( "Changing footprint \"%s:%s\" reference to \"%s\".\n" ),
+                                GetChars( footprint->GetReference() ),
+                                GetChars( footprint->GetPath() ),
+                                GetChars( component->GetReference() ) );
+                    aReporter->Report( msg );
+                }
+
+                if( !aNetlist.IsDryRun() )
+                    footprint->SetReference( component->GetReference() );
+            }
+
+            // Test for value field change.
+            if( footprint->GetValue() != component->GetValue() )
+            {
+                if( aReporter )
+                {
+                    msg.Printf( _( "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n" ),
+                                GetChars( footprint->GetReference() ),
+                                GetChars( footprint->GetPath() ),
+                                GetChars( footprint->GetValue() ),
+                                GetChars( component->GetValue() ) );
+                    aReporter->Report( msg );
+                }
+
+                if( !aNetlist.IsDryRun() )
+                    footprint->SetValue( component->GetValue() );
+            }
+
+            // Test for time stamp change.
+            if( footprint->GetPath() != component->GetTimeStamp() )
+            {
+                if( aReporter )
+                {
+                    msg.Printf( _( "Changing footprint path \"%s:%s\" to \"%s\".\n" ),
+                                GetChars( footprint->GetReference() ),
+                                GetChars( footprint->GetPath() ),
+                                GetChars( component->GetTimeStamp() ) );
+                    aReporter->Report( msg );
+                }
+
+                if( !aNetlist.IsDryRun() )
+                    footprint->SetPath( component->GetTimeStamp() );
+            }
+        }
+
+        wxASSERT( component != NULL );
+
+        // At this point, the component footprint is updated.  Now update the nets.
+        for( pad = footprint->Pads();  pad;  pad = pad->Next() )
+        {
+            net = component->GetNet( pad->GetPadName() );
+
+            if( !net.IsValid() )                // Footprint pad had no net.
+            {
+                if( !pad->GetNetname().IsEmpty() )
+                {
+                    if( aReporter )
+                    {
+                        msg.Printf( _( "Clearing component \"%s:%s\" pin \"%s\" net name.\n" ),
+                                    GetChars( footprint->GetReference() ),
+                                    GetChars( footprint->GetPath() ),
+                                    GetChars( pad->GetPadName() ) );
+                        aReporter->Report( msg );
+                    }
+
+                    if( !aNetlist.IsDryRun() )
+                        pad->SetNetname( wxEmptyString );
+                }
+            }
+            else                                 // Footprint pad has a net.
+            {
+                if( net.GetNetName() != pad->GetNetname() )
+                {
+                    if( aReporter )
+                    {
+                        msg.Printf( _( "Changing component \"%s:%s\" pin \"%s\" net name from "
+                                       "\"%s\" to \"%s\".\n" ),
+                                    GetChars( footprint->GetReference() ),
+                                    GetChars( footprint->GetPath() ),
+                                    GetChars( pad->GetPadName() ),
+                                    GetChars( pad->GetNetname() ),
+                                    GetChars( net.GetNetName() ) );
+                        aReporter->Report( msg );
+                    }
+
+                    if( !aNetlist.IsDryRun() )
+                        pad->SetNetname( net.GetNetName() );
+                }
+            }
+        }
+    }
+
+    // Remove all components not in the netlist.
+    if( aNetlist.GetDeleteExtraFootprints() )
+    {
+        MODULE* nextModule;
+
+        for( MODULE* module = m_Modules;  module != NULL;  module = nextModule )
+        {
+            nextModule = module->Next();
+
+            if( module->IsLocked() )
+                continue;
+
+            if( aNetlist.IsFindByTimeStamp() )
+                component = aNetlist.GetComponentByTimeStamp( module->GetPath() );
+            else
+                component = aNetlist.GetComponentByReference( module->GetReference() );
+
+            if( component == NULL )
+            {
+                if( aReporter )
+                {
+                    msg.Printf( _( "Removing footprint \"%s:%s\".\n" ),
+                                GetChars( module->GetReference() ),
+                                GetChars( module->GetPath() ) );
+                    aReporter->Report( msg );
+                }
+
+                if( !aNetlist.IsDryRun() )
+                    module->DeleteStructure();
+            }
+        }
+    }
 }
 
 

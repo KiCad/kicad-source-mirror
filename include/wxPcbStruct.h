@@ -59,6 +59,10 @@ class PCB_LAYER_WIDGET;
 class MARKER_PCB;
 class BOARD_ITEM;
 class PCB_LAYER_BOX_SELECTOR;
+class NETLIST;
+class REPORTER;
+class PARSE_ERROR;
+class IO_ERROR;
 
 
 /**
@@ -79,6 +83,18 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     wxAuiToolBar* m_microWaveToolBar;
+
+    /**
+     * Function loadFootprints
+     * loads the footprints for each #COMPONENT in \a aNetlist from the list of libraries.
+     *
+     * @param aNetlist is the netlist of components to load the footprints into.
+     * @param aReporter is the #REPORTER object to report to.
+     * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
+     *           occurs while reading footprint library files.
+     */
+    void loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
+        throw( IO_ERROR, PARSE_ERROR );
 
 protected:
 
@@ -413,27 +429,6 @@ public:
     {
         m_useCmpFileForFpNames = aUseCmpfile;
     }
-
-    /**
-     * Function Test_Duplicate_Missing_And_Extra_Footprints
-     * Build a list of duplicate, missing and extra footprints
-     * from the current board and a netlist netlist :
-     * Shows 3 lists:
-     *  1 - duplicate footprints on board
-     *  2 - missing footprints (found in netlist but not on board)
-     *  3 - footprints not in netlist but on board
-     * @param aFilename = the full filename netlist
-     * @param aDuplicate = the list of duplicate modules to populate
-     * @param aMissing = the list of missing module references and values
-     *      to populate. For each missing item, the first string is the ref,
-     *                   the second is the value.
-     * @param aNotInNetlist = the list of not-in-netlist modules to populate
-     * @return true if the netlist was read, or false
-     */
-    bool Test_Duplicate_Missing_And_Extra_Footprints( const wxString& aFilename,
-        std::vector <MODULE*>& aDuplicate,
-        wxArrayString& aMissing,
-        std::vector <MODULE*>& aNotInNetlist );
 
     /**
      * Function OnHotKey.
@@ -960,6 +955,11 @@ public:
      */
     void Access_to_External_Tool( wxCommandEvent& event );
 
+    /**
+     * Function ListAndSelectModuleName
+     * builds and shows a list of existing modules on board that the user can select.
+     * @return a pointer to the selected module or NULL.
+     */
     MODULE* ListAndSelectModuleName();
 
     /**
@@ -1421,29 +1421,31 @@ public:
 
     /**
      * Function ReadPcbNetlist
-     * Update footprints (load missing footprints and delete on demand extra
-     * footprints)
+     * reads \a aNetlistFileName and ppdates the footprints (load missing footprints and
+     * delete on demand extra footprints) on the board.
      * Update connectivity info, references, values and "TIME STAMP"
-     * @param aNetlistFullFilename = netlist file name (*.net)
-     * @param aCmpFullFileName = cmp/footprint link file name (*.cmp).
-     *                         if not found or empty, only the netlist will be used
-     * @param aMessageWindow = a reference to a wxTextCtrl where to display messages.
-     *                  can be NULL
+     *
+     * @param aNetlistFileName = netlist file name (*.net)
+     * @param aCmpFileName = cmp/footprint link file name (*.cmp).
+     *                       if not found or empty, only the netlist will be used
+     * @param aReporter is a pointer to a #REPORTER object to write display messages.
+     *                  can be NULL.
      * @param aChangeFootprint if true, footprints that have changed in netlist will be changed
      * @param aDeleteBadTracks if true, erroneous tracks will be deleted
      * @param aDeleteExtraFootprints if true, remove unlocked footprints that are not in netlist
-     * @param aSelect_By_Timestamp if true, use timestamp instead of reference to identify
-     *                             footprints from components (use after reannotation of the
-     *                             schematic)
-     * @return true if Ok
+     * @param aSelectByTimestamp if true, use timestamp instead of reference to identify
+     *                           footprints from components (use after reannotation of the
+     *                           schematic)
+     * @param aIsDryRun performs a dry run without making any changes if true.
      */
-    bool ReadPcbNetlist( const wxString&  aNetlistFullFilename,
-                         const wxString&  aCmpFullFileName,
-                         wxTextCtrl*      aMessageWindow,
+    void ReadPcbNetlist( const wxString&  aNetlistFileName,
+                         const wxString&  aCmpFileName,
+                         REPORTER*        aReporter,
                          bool             aChangeFootprint,
                          bool             aDeleteBadTracks,
                          bool             aDeleteExtraFootprints,
-                         bool             aSelect_By_Timestamp );
+                         bool             aSelectByTimestamp,
+                         bool             aIsDryRun );
 
     /**
      * Function RemoveMisConnectedTracks
@@ -1480,8 +1482,7 @@ public:
      * @param include_fixe = true to orient locked footprints
      * @return true if some footprints modified, false if no change
      */
-    bool ReOrientModules( const wxString& ModuleMask, int Orient,
-                                  bool include_fixe );
+    bool ReOrientModules( const wxString& ModuleMask, int Orient, bool include_fixe );
     void LockModule( MODULE* aModule, bool aLocked );
     void AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );
 

@@ -54,6 +54,7 @@ static char HeaderLinkFile[] = { "Cmp-Mod V01" };
 
 bool CVPCB_MAINFRAME::WriteComponentLinkFile( const wxString& aFullFileName )
 {
+    COMPONENT*  component;
     FILE*       outputFile;
     wxFileName  fn( aFullFileName );
     wxString    Title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion();
@@ -69,13 +70,15 @@ bool CVPCB_MAINFRAME::WriteComponentLinkFile( const wxString& aFullFileName )
     retval |= fprintf( outputFile, " Created by %s", TO_UTF8( Title ) );
     retval |= fprintf( outputFile, " date = %s\n", TO_UTF8( DateAndTime() ) );
 
-    BOOST_FOREACH( COMPONENT_INFO& component, m_components )
+    for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
     {
+        component = m_netlist.GetComponent( i );
         retval |= fprintf( outputFile, "\nBeginCmp\n" );
-        retval |= fprintf( outputFile, "TimeStamp = %s;\n", TO_UTF8( component.m_TimeStamp ) );
-        retval |= fprintf( outputFile, "Reference = %s;\n", TO_UTF8( component.m_Reference ) );
-        retval |= fprintf( outputFile, "ValeurCmp = %s;\n", TO_UTF8( component.m_Value ) );
-        retval |= fprintf( outputFile, "IdModule  = %s;\n", TO_UTF8( component.m_Footprint ) );
+        retval |= fprintf( outputFile, "TimeStamp = %s;\n", TO_UTF8( component->GetTimeStamp() ) );
+        retval |= fprintf( outputFile, "Reference = %s;\n", TO_UTF8( component->GetReference() ) );
+        retval |= fprintf( outputFile, "ValeurCmp = %s;\n", TO_UTF8( component->GetValue() ) );
+        retval |= fprintf( outputFile, "IdModule  = %s;\n",
+                           TO_UTF8( component->GetFootprintLibName() ) );
         retval |= fprintf( outputFile, "EndCmp\n" );
     }
 
@@ -83,98 +86,3 @@ bool CVPCB_MAINFRAME::WriteComponentLinkFile( const wxString& aFullFileName )
     fclose( outputFile );
     return retval >= 0;
 }
-
-bool CVPCB_MAINFRAME::ReadComponentLinkFile( FILE * aFile )
-{
-    wxString    timestamp, valeur, ilib, namecmp, msg;
-    bool        read_cmp_data = false, eof = false;
-    char        Line[1024], * ident, * data;
-
-    // Identification of the type of link file
-    if( fgets( Line, sizeof(Line), aFile ) == 0 ||
-        strnicmp( Line, HeaderLinkFile, 11 ) != 0 )
-    {
-        fclose( aFile );
-        return false;
-    }
-
-    while( !eof && fgets( Line, sizeof(Line), aFile ) != 0 )
-    {
-        if( strnicmp( Line, "EndListe", 8 ) == 0 )
-            break;
-
-        /* Search the beginning of the component description. */
-        if( strnicmp( Line, "BeginCmp", 8 ) != 0 )
-            continue;
-
-        timestamp.Empty();
-        valeur.Empty();
-        ilib.Empty();
-        namecmp.Empty();
-        read_cmp_data = true;
-
-        while( !eof && read_cmp_data )
-        {
-            if( fgets( Line, 1024, aFile ) == 0 )
-            {
-                eof = true;
-                break;
-            }
-
-            if( strnicmp( Line, "EndCmp", 6 ) == 0 )
-            {
-                read_cmp_data = true;
-                break;
-            }
-
-            ident = strtok( Line, "=;\n\r" );
-            data  = strtok( NULL, ";\n\r" );
-
-            if( strnicmp( ident, "TimeStamp", 9 ) == 0 )
-            {
-                timestamp = FROM_UTF8( data );
-                timestamp.Trim( true );
-                timestamp.Trim( false );
-                continue;
-            }
-
-            if( strnicmp( ident, "Reference", 9 ) == 0 )
-            {
-                namecmp = FROM_UTF8( data );
-                namecmp.Trim( true );
-                namecmp.Trim( false );
-                continue;
-            }
-
-            if( strnicmp( ident, "ValeurCmp", 9 ) == 0 )
-            {
-                valeur = FROM_UTF8( data );
-                valeur.Trim( true );
-                valeur.Trim( false );
-                continue;
-            }
-
-            if( strnicmp( ident, "IdModule", 8 ) == 0 )
-            {
-                ilib = FROM_UTF8( data );
-                ilib.Trim( true );
-                ilib.Trim( false );
-                continue;
-            }
-        }   // End reading one component link block.
-
-        // Search corresponding component info in list and update its parameters.
-        BOOST_FOREACH( COMPONENT_INFO& component, m_components )
-        {
-            if( namecmp != component.m_Reference )
-                continue;
-
-            /* Copy the name of the corresponding module. */
-            component.m_Footprint = ilib;
-        }
-    }
-
-    fclose( aFile );
-    return true;
-}
-

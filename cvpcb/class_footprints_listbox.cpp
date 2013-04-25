@@ -1,6 +1,30 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file class_footprints_listbox.cpp
- * class to display the list fo available footprints
+ * class to display the list of available footprints
  */
 
 #include <fctsys.h>
@@ -132,7 +156,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFullList( FOOTPRINT_LIST& list )
 }
 
 
-void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT_INFO* Component,
+void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT*      aComponent,
                                                    FOOTPRINT_LIST& list )
 {
     wxString msg;
@@ -149,13 +173,16 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT_INFO* Component,
         // The search is case insensitive
         wxString module = footprint.m_Module.Upper();
         wxString candidate;
-        for( jj = 0; jj < Component->m_FootprintFilter.GetCount(); jj++ )
+
+        for( jj = 0; jj < aComponent->GetFootprintFilters().GetCount(); jj++ )
         {
-            candidate = Component->m_FootprintFilter[jj].Upper();
+            candidate = aComponent->GetFootprintFilters()[jj].Upper();
+
             if( !module.Matches( candidate ) )
                 continue;
+
             msg.Printf( wxT( "%3zu %s" ), m_FilteredFootprintList.GetCount() + 1,
-                       footprint.m_Module.GetData() );
+                        footprint.m_Module.GetData() );
             m_FilteredFootprintList.Add( msg );
             hasItem = true;
         }
@@ -172,8 +199,10 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT_INFO* Component,
     Refresh();
 }
 
-void FOOTPRINTS_LISTBOX::SetFootprintFilteredByPinCount( COMPONENT_INFO* Component,
-                                                         FOOTPRINT_LIST& list ) {
+
+void FOOTPRINTS_LISTBOX::SetFootprintFilteredByPinCount( COMPONENT*      aComponent,
+                                                         FOOTPRINT_LIST& list )
+{
     wxString msg;
     int      oldSelection = GetSelection();
     bool     hasItem = false;
@@ -184,10 +213,10 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredByPinCount( COMPONENT_INFO* Compone
     {
         FOOTPRINT_INFO& footprint = list.GetItem(ii);
 
-        if( Component->m_pinCount == footprint.m_padCount )
+        if( aComponent->GetNetCount() == footprint.m_padCount )
         {
             msg.Printf( wxT( "%3zu %s" ), m_FilteredFootprintList.GetCount() + 1,
-                     footprint.m_Module.GetData() );
+                        footprint.m_Module.GetData() );
             m_FilteredFootprintList.Add( msg );
             hasItem = true;
         }
@@ -204,13 +233,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredByPinCount( COMPONENT_INFO* Compone
     Refresh();
 }
 
-/** Set the footprint list. We can have 2 footprint list:
- *  The full footprint list
- *  The filtered footprint list (if the current selected component has a
- * filter for footprints)
- *  @param FullList true = full footprint list, false = filtered footprint list
- *  @param Redraw = true to redraw the window
- */
+
 void FOOTPRINTS_LISTBOX::SetActiveFootprintList( bool FullList, bool Redraw )
 {
     bool old_selection = m_UseFootprintFullList;
@@ -226,10 +249,12 @@ void FOOTPRINTS_LISTBOX::SetActiveFootprintList( bool FullList, bool Redraw )
     if( m_ActiveFootprintList )
     {
         bool new_selection;
+
         if( FullList )
             new_selection = true;
         else
             new_selection = false;
+
         if( new_selection != old_selection )
             SetSelection( 0, true );
     }
@@ -264,14 +289,12 @@ void FOOTPRINTS_LISTBOX::SetActiveFootprintList( bool FullList, bool Redraw )
 /**************************************/
 
 BEGIN_EVENT_TABLE( FOOTPRINTS_LISTBOX, ITEMS_LISTBOX_BASE )
-EVT_SIZE( ITEMS_LISTBOX_BASE::OnSize )
-EVT_CHAR( FOOTPRINTS_LISTBOX::OnChar )
+    EVT_SIZE( ITEMS_LISTBOX_BASE::OnSize )
+    EVT_CHAR( FOOTPRINTS_LISTBOX::OnChar )
 END_EVENT_TABLE()
 
 
-/********************************************************/
 void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
-/********************************************************/
 {
     FOOTPRINT_INFO* Module;
     wxString   footprintName = GetSelectedFootprint();
@@ -297,9 +320,7 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
 }
 
 
-/******************************************************/
 void FOOTPRINTS_LISTBOX::OnLeftDClick( wxListEvent& event )
-/******************************************************/
 {
     wxString footprintName = GetSelectedFootprint();
 
@@ -307,21 +328,10 @@ void FOOTPRINTS_LISTBOX::OnLeftDClick( wxListEvent& event )
 }
 
 
-/**
- * Function OnChar
- * called on a key pressed
- * Call default handler for some special keys,
- * and for "ascii" keys, select the first footprint
- * that the name starts by the letter.
- * This is the defaut behaviour of a listbox, but because we use
- * virtual lists, the listbox does not know anything to what is displayed,
- * we must handle this behaviour here.
- * Furthermore the footprint name is not at the beginning of
- * displayed lines (the first word is the line number)
- */
 void FOOTPRINTS_LISTBOX::OnChar( wxKeyEvent& event )
 {
     int key = event.GetKeyCode();
+
     switch( key )
     {
         case WXK_LEFT:
@@ -343,16 +353,20 @@ void FOOTPRINTS_LISTBOX::OnChar( wxKeyEvent& event )
         default:
             break;
     }
+
     // Search for an item name starting by the key code:
     key = toupper(key);
+
     for( unsigned ii = 0; ii < m_ActiveFootprintList->GetCount(); ii++ )
     {
         wxString text = m_ActiveFootprintList->Item(ii);
+
         /* search for the start char of the footprint name.
          * we must skip the line number
-        */
+         */
         text.Trim(false);      // Remove leading spaces in line
         unsigned jj = 0;
+
         for( ; jj < text.Len(); jj++ )
         {
             // skip line number
@@ -367,6 +381,7 @@ void FOOTPRINTS_LISTBOX::OnChar( wxKeyEvent& event )
         }
 
         int start_char = toupper( text[jj] );
+
         if( key == start_char )
         {
             Focus( ii );

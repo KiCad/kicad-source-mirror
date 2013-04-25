@@ -170,8 +170,10 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( GetCanvas()->IsMouseCaptured() )
             GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
 
-        GetBoard()->SetTrackWidthIndex( ( GetBoard()->GetTrackWidthIndex() + 1 ) %
-                                        GetBoard()->m_TrackWidthList.size() );
+        if( GetBoard()->GetTrackWidthIndex() < GetBoard()->m_TrackWidthList.size() - 1)
+            GetBoard()->SetTrackWidthIndex( GetBoard()->GetTrackWidthIndex() + 1 );
+        else
+            GetBoard()->SetTrackWidthIndex( 0 );
 
         if( GetCanvas()->IsMouseCaptured() )
             GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
@@ -182,10 +184,10 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( GetCanvas()->IsMouseCaptured() )
             GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
 
-        if( GetBoard()->GetTrackWidthIndex() == 0 )
-            GetBoard()->SetTrackWidthIndex( GetBoard()->m_TrackWidthList.size() );
-
-        GetBoard()->SetTrackWidthIndex( GetBoard()->GetTrackWidthIndex() - 1 );
+        if( GetBoard()->GetTrackWidthIndex() <= 0 )
+            GetBoard()->SetTrackWidthIndex( GetBoard()->m_TrackWidthList.size() -1 );
+        else
+            GetBoard()->SetTrackWidthIndex( GetBoard()->GetTrackWidthIndex() - 1 );
 
         if( GetCanvas()->IsMouseCaptured() )
             GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );

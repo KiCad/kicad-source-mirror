@@ -217,7 +217,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const std::vector<CPolyPt>& aPolysList,
 
 
 /* draw the solid polygon found in aPolysList
- * The first polygonj is the main polygon, others are holes
+ * The first polygon is the main polygon, others are holes
  * See Draw3D_SolidHorizontalPolyPolygons for more info
  */
 void Draw3D_SolidHorizontalPolygonWithHoles( const std::vector<CPolyPt>& aPolysList,

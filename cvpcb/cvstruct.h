@@ -1,6 +1,29 @@
-/*********************************************************/
-/*                      cvstruct.h                       */
-/*********************************************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file cvstruct.h
+ */
 
 #ifndef CVSTRUCT_H
 #define CVSTRUCT_H
@@ -10,6 +33,8 @@
 
 /*  Forward declarations of all top-level window classes. */
 class CVPCB_MAINFRAME;
+class COMPONENT;
+
 
 /*********************************************************************/
 /* ListBox (base class) to display lists of components or footprints */
@@ -53,10 +78,19 @@ public:
     void     SetString( unsigned linecount, const wxString& text );
     void     AppendLine( const wxString& text );
     void     SetFootprintFullList( FOOTPRINT_LIST& list );
-    void     SetFootprintFilteredList( COMPONENT_INFO*      Component,
-                                       FOOTPRINT_LIST& list );
-    void     SetFootprintFilteredByPinCount( COMPONENT_INFO* Component,
-                                             FOOTPRINT_LIST& list );
+    void     SetFootprintFilteredList( COMPONENT*      aComponent,
+                                       FOOTPRINT_LIST& aList );
+    void     SetFootprintFilteredByPinCount( COMPONENT*      aComponent,
+                                             FOOTPRINT_LIST& aList );
+
+    /**
+     * Set the footprint list. We can have 2 footprint list:
+     *  The full footprint list
+     *  The filtered footprint list (if the current selected component has a
+     * filter for footprints)
+     *  @param FullList true = full footprint list, false = filtered footprint list
+     *  @param Redraw = true to redraw the window
+     */
     void     SetActiveFootprintList( bool FullList, bool Redraw = false );
 
     wxString GetSelectedFootprint();
@@ -65,6 +99,19 @@ public:
     // Events functions:
     void     OnLeftClick( wxListEvent& event );
     void     OnLeftDClick( wxListEvent& event );
+
+    /**
+     * Function OnChar
+     * called on a key pressed
+     * Call default handler for some special keys,
+     * and for "ascii" keys, select the first footprint
+     * that the name starts by the letter.
+     * This is the default behavior of a listbox, but because we use
+     * virtual lists, the listbox does not know anything to what is displayed,
+     * we must handle this behavior here.
+     * Furthermore the footprint name is not at the beginning of
+     * displayed lines (the first word is the line number)
+     */
     void     OnChar( wxKeyEvent& event );
 
     DECLARE_EVENT_TABLE()
@@ -78,7 +125,7 @@ class COMPONENTS_LISTBOX : public ITEMS_LISTBOX_BASE
 {
 public:
     wxArrayString      m_ComponentList;
-    CVPCB_MAINFRAME* m_Parent;
+    CVPCB_MAINFRAME*   m_Parent;
 
 public:
 

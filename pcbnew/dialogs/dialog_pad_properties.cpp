@@ -1,6 +1,6 @@
 /**
- * @file dialog_pad_properties.cpp.
- * @brief Pad editing functions and dialog pad editor
+ * @file dialog_pad_properties.cpp
+ * @brief Pad editing functions and dialog pad editor.
  */
 
 /*

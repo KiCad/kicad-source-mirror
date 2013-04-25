@@ -91,6 +91,19 @@ protected:
     void updateZoomSelectBox();
     virtual void unitsChangeRefresh();
 
+    /**
+     * Function loadFootprint
+     * attempts to load \a aFootprintName from the list of libraries.
+     *
+     * @param aFootprintName is the name of component footprint to load.
+     * @return the #MODULE if found or NULL if \a aFootprintName not found in any of the
+     *         libraries.
+     * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
+     *                 occurs while reading footprint library files.
+     */
+    MODULE* loadFootprint( const wxString& aFootprintName )
+        throw( IO_ERROR, PARSE_ERROR );
+
 public:
     PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
                     const wxString& aTitle,
