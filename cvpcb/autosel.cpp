@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file autosel.cpp
  */
@@ -39,10 +62,16 @@ typedef boost::ptr_vector< FOOTPRINT_ALIAS > FOOTPRINT_ALIAS_LIST;
 wxString GetQuotedText( wxString & text )
 {
     int i = text.Find( QUOTE );
-    if( wxNOT_FOUND == i ) return wxT( "" );
+
+    if( wxNOT_FOUND == i )
+        return wxT( "" );
+
     wxString shrt = text.Mid( i + 1 );
     i = shrt.Find( QUOTE );
-    if( wxNOT_FOUND == i ) return wxT( "" );
+
+    if( wxNOT_FOUND == i )
+        return wxT( "" );
+
     text = shrt.Mid( i + 1 );
     return shrt.Mid( 0, i );
 }
@@ -52,13 +81,14 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 {
     FOOTPRINT_ALIAS_LIST aliases;
     FOOTPRINT_ALIAS*     alias;
+    COMPONENT*           component;
     wxFileName           fn;
     wxString             msg, tmp;
     char                 Line[1024];
     FILE*                file;
     size_t               ii;
 
-    if( m_components.empty() )
+    if( m_netlist.IsEmpty() )
         return;
 
     /* Find equivalents in all available files. */
@@ -79,8 +109,8 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 
         if( !tmp )
         {
-            msg.Printf( _( "Footprint alias library file <%s> could not be \
-found in the default search paths." ),
+            msg.Printf( _( "Footprint alias library file <%s> could not be found in the "
+                           "default search paths." ),
                         GetChars( fn.GetFullName() ) );
             wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
             continue;
@@ -127,18 +157,21 @@ found in the default search paths." ),
 
     m_skipComponentSelect = true;
     ii = 0;
-    BOOST_FOREACH( COMPONENT_INFO& component, m_components )
+
+    for( unsigned kk = 0;  kk < m_netlist.GetCount();  kk++ )
     {
+        component = m_netlist.GetComponent( kk );
+
         bool found = false;
         m_ListCmp->SetSelection( ii++, true );
 
-        if( !component.m_Footprint.IsEmpty() )
+        if( !component->GetFootprintLibName().IsEmpty() )
             continue;
 
         BOOST_FOREACH( FOOTPRINT_ALIAS& alias, aliases )
         {
 
-            if( alias.m_Name.CmpNoCase( component.m_Value ) != 0 )
+            if( alias.m_Name.CmpNoCase( component->GetValue() ) != 0 )
                 continue;
 
             /* filter alias so one can use multiple aliases (for polar and nonpolar caps for
@@ -147,23 +180,23 @@ found in the default search paths." ),
 
             if( module )
             {
-                size_t filtercount = component.m_FootprintFilter.GetCount();
+                size_t filtercount = component->GetFootprintFilters().GetCount();
                 found = ( 0 == filtercount ); // if no entries, do not filter
 
                 for( size_t jj = 0; jj < filtercount && !found; jj++ )
                 {
-                    found = module->m_Module.Matches( component.m_FootprintFilter[jj] );
+                    found = module->m_Module.Matches( component->GetFootprintFilters()[jj] );
                 }
             }
             else
             {
-                msg.Printf( _( "Component %s: footprint %s not found in \
-any of the project footprint libraries." ),
-                            GetChars( component.m_Reference ),
+                msg.Printf( _( "Component %s: footprint %s not found in any of the project "
+                               "footprint libraries." ),
+                            GetChars( component->GetReference() ),
                             GetChars( alias.m_FootprintName ) );
-                wxMessageBox( msg, _( "CvPcb Error" ), wxOK | wxICON_ERROR,
-                              this );
+                wxMessageBox( msg, _( "CvPcb Error" ), wxOK | wxICON_ERROR, this );
             }
+
             if( found )
             {
                 SetNewPkg( alias.m_FootprintName );
@@ -171,15 +204,20 @@ any of the project footprint libraries." ),
             }
 
         }
+
         /* obviously the last chance: there's only one filter matching one footprint */
-        if( !found && 1 == component.m_FootprintFilter.GetCount() ) {
+        if( !found && 1 == component->GetFootprintFilters().GetCount() )
+        {
             /* we do not need to analyse wildcards: single footprint do not contain them */
             /* and if there are wildcards it just will not match any */
-            FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( component.m_FootprintFilter[0] );
-            if( module ) {
-                SetNewPkg( component.m_FootprintFilter[0] );
+            FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( component->GetFootprintFilters()[0] );
+
+            if( module )
+            {
+                SetNewPkg( component->GetFootprintFilters()[0] );
             }
         }
     }
+
     m_skipComponentSelect = false;
 }

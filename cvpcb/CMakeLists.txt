@@ -27,9 +27,6 @@ set(CVPCB_DIALOGS
 
 set(CVPCB_SRCS
     ../common/base_units.cpp
-    ../pcbnew/netlist_reader_common.cpp
-    ../pcbnew/netlist_reader_kicad.cpp
-    ../pcbnew/netlist_reader_firstformat.cpp
     ../pcbnew/class_drc_item.cpp
     autosel.cpp
     cfg.cpp

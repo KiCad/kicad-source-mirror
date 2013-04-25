@@ -688,40 +688,40 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         break;
 
     case 2:     // Arc Stub created by a polygonal approach:
+    {
+        EDGE_MODULE* edge = new EDGE_MODULE( module );
+        module->GraphicalItems().PushFront( edge );
+
+        edge->SetShape( S_POLYGON );
+        edge->SetLayer( LAYER_N_FRONT );
+
+        int numPoints = angle / 50 + 3;     // Note: angles are in 0.1 degrees
+        std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
+        polyPoints.reserve( numPoints );
+
+        edge->m_Start0.y = -pad->GetSize().y / 2;
+
+        polyPoints.push_back( wxPoint( 0, 0 ) );
+
+        int theta = -angle / 2;
+
+        for( int ii = 1; ii<numPoints - 1; ii++ )
         {
-            EDGE_MODULE* edge = new EDGE_MODULE( module );
-            module->GraphicalItems().PushFront( edge );
+            wxPoint pt( 0, -gap_size );
 
-            edge->SetShape( S_POLYGON );
-            edge->SetLayer( LAYER_N_FRONT );
+            RotatePoint( &pt.x, &pt.y, theta );
 
-            int numPoints = angle / 50 + 3;     // Note: angles are in 0.1 degrees
-            std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
-            polyPoints.reserve( numPoints );
+            polyPoints.push_back( pt );
 
-            edge->m_Start0.y = -pad->GetSize().y / 2;
+            theta += 50;
 
-            polyPoints.push_back( wxPoint( 0, 0 ) );
-
-            int theta = -angle / 2;
-
-            for( int ii = 1; ii<numPoints - 1; ii++ )
-            {
-                wxPoint pt( 0, -gap_size );
-
-                RotatePoint( &pt.x, &pt.y, theta );
-
-                polyPoints.push_back( pt );
-
-                theta += 50;
-
-                if( theta > angle / 2 )
-                    theta = angle / 2;
-            }
-
-            // Close the polygon:
-            polyPoints.push_back( polyPoints[0] );
+            if( theta > angle / 2 )
+                theta = angle / 2;
         }
+
+        // Close the polygon:
+        polyPoints.push_back( polyPoints[0] );
+    }
         break;
 
     default:

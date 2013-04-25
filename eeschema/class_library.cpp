@@ -148,7 +148,7 @@ void CMP_LIBRARY::GetEntryNames( wxArrayString& aNames, bool aSort, bool aMakeUp
  * simple function used as comparator to sort a std::vector<wxArrayString>&.
  *
  * @param aItem1 is the first comparison parameter.
- * @param aItem1 is the second.
+ * @param aItem2 is the second.
  * @return bool - which item should be put first in the sorted list.
  */
 bool sortFunction( wxArrayString aItem1, wxArrayString aItem2 )

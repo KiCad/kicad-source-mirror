@@ -112,7 +112,8 @@ public:
      * Function GetNodeProperties
      * Collects all node properties to map.
      *
-     * @param aProps contains map of found properties
+     * @param aNode is an XML node.
+     * @param aProps contains map of found properties.
      */
     static void GetNodeProperties( wxXmlNode* aNode, PROPERTY_MAP& aProps );
 
