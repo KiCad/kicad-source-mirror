@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-04-25 18:40+0100\n"
-"PO-Revision-Date: 2013-04-25 19:07+0100\n"
+"PO-Revision-Date: 2013-04-25 20:35+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -6247,7 +6247,7 @@ msgstr "Niepołączone"
 #: pcbnew/class_board.cpp:2373
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
-msgstr "Sprawdzam footprint komponentu \"%s:%s:%s\" z listy sieci.\n"
+msgstr "Sprawdzam footprint komponentu z listy sieci \"%s:%s:%s\".\n"
 
 #: pcbnew/class_board.cpp:2389
 #, c-format
@@ -6257,12 +6257,12 @@ msgstr "Dodaję nowy komponent \"%s:%s\" o footprincie \"%s\".\n"
 #: pcbnew/class_board.cpp:2422
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
-msgstr "Zamieniam komponent \"%s:%s\" o footprincie \"%s\" na \"%s\".\n"
+msgstr "Zamieniam footprint komponentu \"%s:%s\" z \"%s\" na \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2453
 #, c-format
 msgid "Changing footprint \"%s:%s\" reference to \"%s\".\n"
-msgstr "Zmianiam odnośnik footprintu \"%s:%s\" na \"%s\".\n"
+msgstr "Zmieniam odnośnik footprintu \"%s:%s\" na \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2469
 #, c-format
@@ -6277,14 +6277,14 @@ msgstr "Zmieniam ścieżkę footprintu \"%s:%s\" na \"%s\".\n"
 #: pcbnew/class_board.cpp:2511
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
-msgstr "Kasuje z pinu komponentu \"%s:%s\" nazwę sieci \"%s\".\n"
+msgstr "Kasuje nazwę sieci z komponentu \"%s:%s\" pin \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2528
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr ""
-"Zmieniam pin komponentu \"%s:%s\" z nazwą sieci \"%s\" z \"%s\" na \"%s\".\n"
+"Zmieniam nazwę sieci komponentu \"%s:%s\" pin \"%s\" z \"%s\" na \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2566
 #, c-format
@@ -13537,7 +13537,7 @@ msgstr "Zapisz wiadomości do pliku"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:111
 msgid "Only report changes in message panel"
-msgstr "Raportuj tylko zmiany w oknie wiadomości"
+msgstr "Raportuj wyłącznie zmiany w oknie wiadomości"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:123
 msgid "Netlist File:"
