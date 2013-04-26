@@ -253,7 +253,6 @@ public:
 
     void SetOutline( CPolyLine* aOutline ) { m_Poly = aOutline; }
 
-    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
     virtual bool HitTest( const wxPoint& aPosition );
 
     /**
@@ -324,7 +323,6 @@ public:
      */
     bool HitTestForEdge( const wxPoint& refPos );
 
-    /** @copydoc EDA_ITEM::HitTest(const EDA_RECT&)const */
     virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**

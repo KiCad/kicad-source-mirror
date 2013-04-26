@@ -135,9 +135,6 @@ public:
         return NULL;
     }
 
-    /**
-     * @copydoc INSPECTOR::Inspect()
-     */
     SEARCH_RESULT Inspect( EDA_ITEM* aItem, const void* aTestData = NULL );
 
     /**
@@ -330,9 +327,6 @@ public:
      */
     bool ReplaceItem();
 
-    /**
-     * @copydoc INSPECTOR::Inspect()
-     */
     SEARCH_RESULT Inspect( EDA_ITEM* aItem, const void* aTestData = NULL );
 
     /**

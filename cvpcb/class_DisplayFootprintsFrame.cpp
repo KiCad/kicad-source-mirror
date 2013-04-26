@@ -35,19 +35,17 @@
 #include <macros.h>
 #include <bitmaps.h>
 #include <msgpanel.h>
+#include <wildcards_and_files_ext.h>
 
+#include <io_mgr.h>
+#include <class_module.h>
 #include <class_board.h>
 
-#include <cvpcb.h>
 #include <cvpcb_mainframe.h>
 #include <class_DisplayFootprintsFrame.h>
 #include <cvpcb_id.h>
+#include <cvstruct.h>
 
-/*
- * NOTE: There is something in 3d_viewer.h that causes a compiler error in
- *       <boost/foreach.hpp> in Linux so move it after cvpcb.h where it is
- *       included to prevent the error from occurring.
- */
 #include <3d_viewer.h>
 
 
@@ -70,9 +68,6 @@ END_EVENT_TABLE()
 
 #define DISPLAY_FOOTPRINTS_FRAME_NAME wxT( "CmpFrame" )
 
-/***************************************************************************/
-/* DISPLAY_FOOTPRINTS_FRAME: the frame to display the current focused footprint */
-/***************************************************************************/
 
 DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* parent,
                                                     const wxString& title,
@@ -98,6 +93,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* parent,
     if( (m_LastGridSizeId <= 0) ||
         (m_LastGridSizeId > (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
+
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
 
     // Initialize some display options
@@ -155,9 +151,6 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 }
 
 
-/* Called when the frame is closed
- *  Save current settings (frame position and size
- */
 void DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow( wxCloseEvent& event )
 {
     if( m_Draw3DFrame )
@@ -426,9 +419,6 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPositi
 }
 
 
-/**
- * Display 3D frame of current footprint selection.
- */
 void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     if( m_Draw3DFrame )
@@ -463,33 +453,157 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
 }
 
 
-/**
- * Function IsGridVisible() , virtual
- * @return true if the grid must be shown
- */
 bool DISPLAY_FOOTPRINTS_FRAME::IsGridVisible() const
 {
     return m_DrawGrid;
 }
 
 
-/**
- * Function SetGridVisibility() , virtual
- * It may be overloaded by derived classes
- * if you want to store/retrieve the grid visibility in configuration.
- * @param aVisible = true if the grid must be shown
- */
 void DISPLAY_FOOTPRINTS_FRAME::SetGridVisibility(bool aVisible)
 {
     m_DrawGrid = aVisible;
 }
 
 
-/**
- * Function GetGridColor() , virtual
- * @return the color of the grid
- */
 EDA_COLOR_T DISPLAY_FOOTPRINTS_FRAME::GetGridColor() const
 {
     return DARKGRAY;
+}
+
+
+MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
+{
+    CVPCB_MAINFRAME* parent = ( CVPCB_MAINFRAME* ) GetParent();
+
+    try
+    {
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+
+        for( unsigned i = 0; i < parent->m_ModuleLibNames.GetCount();  ++i )
+        {
+            wxFileName fn = parent->m_ModuleLibNames[i];
+
+            fn.SetExt( LegacyFootprintLibPathExtension );
+
+            wxString libPath = wxGetApp().FindLibraryPath( fn );
+
+            if( !libPath )
+            {
+                wxString msg = wxString::Format( _( "PCB footprint library file <%s> could not "
+                                                    "be found in the default search paths." ),
+                                                 fn.GetFullName().GetData() );
+
+                // @todo we should not be using wxMessageBox directly.
+                wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
+                continue;
+            }
+
+            MODULE* footprint = pi->FootprintLoad( libPath, aFootprintName );
+
+            if( footprint )
+            {
+                footprint->SetParent( (EDA_ITEM*) GetBoard() );
+                footprint->SetPosition( wxPoint( 0, 0 ) );
+                return footprint;
+            }
+        }
+    }
+    catch( IO_ERROR ioe )
+    {
+        DisplayError( this, ioe.errorText );
+        return NULL;
+    }
+
+    wxString msg = wxString::Format( _( "Footprint '%s' not found" ), aFootprintName.GetData() );
+    DisplayError( this, msg );
+    return NULL;
+}
+
+
+void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
+{
+    wxString msg;
+    CVPCB_MAINFRAME * parentframe = (CVPCB_MAINFRAME *) GetParent();
+    wxString footprintName = parentframe->m_FootprintList->GetSelectedFootprint();
+
+    if( !footprintName.IsEmpty() )
+    {
+        msg.Printf( _( "Footprint: %s" ), GetChars( footprintName ) );
+        SetTitle( msg );
+        FOOTPRINT_INFO* module_info = parentframe->m_footprints.GetModuleInfo( footprintName );
+
+        const wxChar *libname;
+        if( module_info )
+            libname = GetChars( module_info->m_LibName );
+        else
+            libname = GetChars( wxT( "???" ) );
+        msg.Printf( _( "Lib: %s" ), libname );
+
+        SetStatusText( msg, 0 );
+
+        if( GetBoard()->m_Modules.GetCount() )
+        {
+            // there is only one module in the list
+            GetBoard()->m_Modules.DeleteAll();
+        }
+
+        MODULE* module = Get_Module( footprintName );
+
+        if( module )
+            GetBoard()->m_Modules.PushBack( module );
+
+        Zoom_Automatique( false );
+
+    }
+    else   // No footprint to display. Erase old footprint, if any
+    {
+        if( GetBoard()->m_Modules.GetCount() )
+        {
+            GetBoard()->m_Modules.DeleteAll();
+            Zoom_Automatique( false );
+            SetStatusText( wxEmptyString, 0 );
+        }
+    }
+
+    // Display new cursor coordinates and zoom value:
+    UpdateStatusBar();
+
+    GetCanvas()->Refresh();
+
+    if( m_Draw3DFrame )
+        m_Draw3DFrame->NewDisplay();
+}
+
+
+void DISPLAY_FOOTPRINTS_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+{
+    if( !GetBoard() )
+        return;
+
+    m_canvas->DrawBackGround( DC );
+    GetBoard()->Draw( m_canvas, DC, GR_COPY );
+
+    MODULE* Module = GetBoard()->m_Modules;
+
+    if ( Module )
+    {
+        MSG_PANEL_ITEMS items;
+        Module->GetMsgPanelInfo( items );
+        SetMsgPanel( items );
+    }
+
+    m_canvas->DrawCrossHair( DC );
+}
+
+
+/*
+ * Redraw the BOARD items but not cursors, axis or grid.
+ */
+void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                  GR_DRAWMODE aDrawMode, const wxPoint& aOffset )
+{
+    if( m_Modules )
+    {
+        m_Modules->Draw( aPanel, aDC, GR_COPY );
+    }
 }
