@@ -156,6 +156,11 @@ public:
     void             SetNewPkg( const wxString& aFootprintName );
     void             BuildCmpListBox();
     void             BuildFOOTPRINTS_LISTBOX();
+
+    /**
+     * Create or Update the frame showing the current highlighted footprint
+     * and (if showed) the 3D display frame
+     */
     void             CreateScreenCmp();
 
     /**

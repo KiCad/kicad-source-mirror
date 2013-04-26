@@ -29,7 +29,6 @@
 #include <appl_wxstruct.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <richio.h>
 #include <dialog_helpers.h>
 #include <wxPcbStruct.h>
 #include <netlist_reader.h>
@@ -40,8 +39,6 @@
 #include <class_module.h>
 #include <pcbnew.h>
 #include <io_mgr.h>
-
-#include <algorithm>
 
 
 void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
@@ -182,6 +179,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     {
         component = aNetlist.GetComponent( ii );
 
+        // @todo Check if component is already on BOARD and only load footprint if it's needed.
         if( ii == 0 || component->GetFootprintLibName() != lastFootprintLibName )
         {
             module = NULL;
@@ -207,11 +205,17 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
 
             if( module == NULL )
             {
-                wxString msg;
-                msg.Printf( _( "Component `%s` footprint <%s> was not found in any libraries." ),
-                            GetChars( component->GetReference() ),
-                            GetChars( component->GetFootprintLibName() ) );
-                THROW_IO_ERROR( msg );
+                if( aReporter )
+                {
+                    wxString msg;
+                    msg.Printf( _( "*** Warning: component `%s` footprint <%s> was not found in "
+                                   "any libraries. ***\n" ),
+                                GetChars( component->GetReference() ),
+                                GetChars( component->GetFootprintLibName() ) );
+                    aReporter->Report( msg );
+                }
+
+                continue;
             }
         }
         else
