@@ -1,3 +1,4 @@
+
 /**
  * @file pcbnew/dialogs/dialog_netlist.cpp
  */
@@ -140,7 +141,8 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
     }
 
     // Give the user a chance to bail out when making changes from a netlist.
-    if( !m_parent->GetBoard()->IsEmpty()
+    if( !m_checkDryRun->GetValue()
+      && !m_parent->GetBoard()->IsEmpty()
       && !IsOK( NULL, _( "The changes made by reading the netlist cannot be undone.  Are you "
                          "sure you want to read the netlist?" ) ) )
         return;

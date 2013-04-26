@@ -36,12 +36,8 @@ set(CVPCB_SRCS
     cvframe.cpp
     cvpcb.cpp
     listboxes.cpp
-    loadcmp.cpp
     menubar.cpp
-    readschematicnetlist.cpp
-    read_write_cmpfile.cpp
     readwrite_dlgs.cpp
-    setvisu.cpp
     tool_cvpcb.cpp
     )
 

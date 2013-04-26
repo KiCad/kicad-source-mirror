@@ -2386,23 +2386,25 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
-                            GetChars( component->GetReference() ),
-                            GetChars( component->GetTimeStamp() ),
-                            GetChars( component->GetFootprintLibName() ) );
+                if( component->GetModule() != NULL )
+                    msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
+                                GetChars( component->GetReference() ),
+                                GetChars( component->GetTimeStamp() ),
+                                GetChars( component->GetFootprintLibName() ) );
+                else
+                    msg.Printf( _( "Cannot add new component \"%s:%s\" due to missing "
+                                   "footprint \"%s\".\n" ),
+                                GetChars( component->GetReference() ),
+                                GetChars( component->GetTimeStamp() ),
+                                GetChars( component->GetFootprintLibName() ) );
+
                 aReporter->Report( msg );
             }
 
-            // Owned by NETLIST, can only copy and read it.
-            footprint = component->GetModule();
-
-            wxCHECK2_MSG( footprint != NULL, continue,
-                          wxString::Format( wxT( "No footprint loaded for component \"%s\"." ),
-                                            GetChars( component->GetReference() ) ) );
-
-            if( !aNetlist.IsDryRun() )
+            if( !aNetlist.IsDryRun() && (component->GetModule() != NULL) )
             {
-                footprint = new MODULE( *footprint );
+                // Owned by NETLIST, can only copy it.
+                footprint = new MODULE( *component->GetModule() );
                 footprint->SetParent( this );
                 footprint->SetPosition( bestPosition );
                 footprint->SetTimeStamp( GetNewTimeStamp() );
@@ -2419,15 +2421,24 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n" ),
-                                    GetChars( footprint->GetReference() ),
-                                    GetChars( footprint->GetPath() ),
-                                    GetChars( footprint->GetLibRef() ),
-                                    GetChars( component->GetFootprintLibName() ) );
+                        if( component->GetModule() != NULL )
+                            msg.Printf( _( "Replacing component \"%s:%s\" footprint \"%s\" with "
+                                           "\"%s\".\n" ),
+                                        GetChars( footprint->GetReference() ),
+                                        GetChars( footprint->GetPath() ),
+                                        GetChars( footprint->GetLibRef() ),
+                                        GetChars( component->GetFootprintLibName() ) );
+                        else
+                            msg.Printf( _( "Cannot replace component \"%s:%s\" due to missing "
+                                           "footprint \"%s\".\n" ),
+                                        GetChars( footprint->GetReference() ),
+                                        GetChars( footprint->GetPath() ),
+                                        GetChars( component->GetFootprintLibName() ) );
+
                         aReporter->Report( msg );
                     }
 
-                    if( !aNetlist.IsDryRun() )
+                    if( !aNetlist.IsDryRun() && (component->GetModule() != NULL) )
                     {
                         wxASSERT( footprint != NULL );
                         MODULE* newFootprint = new MODULE( *component->GetModule() );
@@ -2495,7 +2506,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
             }
         }
 
-        wxASSERT( component != NULL );
+        if( footprint == NULL )
+            continue;
 
         // At this point, the component footprint is updated.  Now update the nets.
         for( pad = footprint->Pads();  pad;  pad = pad->Next() )
