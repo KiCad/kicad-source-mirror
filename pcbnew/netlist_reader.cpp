@@ -28,7 +28,6 @@
 
 
 
-#include <richio.h>
 #include <kicad_string.h>
 #include <reporter.h>
 
@@ -207,7 +206,7 @@ static bool SortByLibName( const COMPONENT& ref, const COMPONENT& cmp )
 
 void NETLIST::SortByFootprintLibName()
 {
-    sort( m_components.begin(), m_components.end(), SortByLibName );
+    m_components.sort( SortByLibName );
 }
 
 
@@ -223,7 +222,7 @@ bool operator < ( const COMPONENT& item1, const COMPONENT& item2 )
 
 void NETLIST::SortByReference()
 {
-    sort( m_components.begin(), m_components.end() );
+    m_components.sort();
 }
 
 
