@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-25 18:40+0100\n"
-"PO-Revision-Date: 2013-04-25 20:35+0100\n"
+"POT-Creation-Date: 2013-04-26 19:03+0100\n"
+"PO-Revision-Date: 2013-04-26 19:11+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -3735,18 +3735,18 @@ msgstr "Wyłącz siatkę"
 
 #: eeschema/tool_lib.cpp:231 eeschema/tool_sch.cpp:285
 #: pcbnew/tool_modedit.cpp:220 pcbnew/tool_pcb.cpp:337
-#: cvpcb/class_DisplayFootprintsFrame.cpp:196
+#: cvpcb/class_DisplayFootprintsFrame.cpp:189
 msgid "Units in inches"
 msgstr "Jednostki w calach"
 
 #: eeschema/tool_lib.cpp:235 eeschema/tool_sch.cpp:289
 #: pcbnew/tool_modedit.cpp:224 pcbnew/tool_pcb.cpp:340
-#: cvpcb/class_DisplayFootprintsFrame.cpp:200
+#: cvpcb/class_DisplayFootprintsFrame.cpp:193
 msgid "Units in millimeters"
 msgstr "Jednostki w milimetrach"
 
 #: eeschema/tool_lib.cpp:239 eeschema/tool_sch.cpp:293 pcbnew/tool_pcb.cpp:343
-#: cvpcb/class_DisplayFootprintsFrame.cpp:204 gerbview/toolbars_gerber.cpp:166
+#: cvpcb/class_DisplayFootprintsFrame.cpp:197 gerbview/toolbars_gerber.cpp:166
 msgid "Change cursor shape"
 msgstr "Zmień kształt kursora"
 
@@ -6130,12 +6130,12 @@ msgid "Display rectangular coordinates"
 msgstr "Pokaż współrzędne kartezyjskie"
 
 #: pcbnew/basepcbframe.cpp:378 pcbnew/tool_pcb.cpp:334
-#: cvpcb/class_DisplayFootprintsFrame.cpp:192
+#: cvpcb/class_DisplayFootprintsFrame.cpp:185
 msgid "Display polar coordinates"
 msgstr "Pokaż współrzędne polarne"
 
 #: pcbnew/basepcbframe.cpp:387 pcbnew/tool_pcb.cpp:373
-#: cvpcb/class_DisplayFootprintsFrame.cpp:209
+#: cvpcb/class_DisplayFootprintsFrame.cpp:202
 msgid "Show pads in outline mode"
 msgstr "Pokaż pola lutownicze jako zarys"
 
@@ -6249,44 +6249,57 @@ msgstr "Niepołączone"
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Sprawdzam footprint komponentu z listy sieci \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2389
+#: pcbnew/class_board.cpp:2390
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Dodaję nowy komponent \"%s:%s\" o footprincie \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2422
+#: pcbnew/class_board.cpp:2395
+#, c-format
+msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
+msgstr ""
+"Nie mogę dodać nowego komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s"
+"\".\n"
+
+#: pcbnew/class_board.cpp:2425
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Zamieniam footprint komponentu \"%s:%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2453
+#: pcbnew/class_board.cpp:2432
+#, c-format
+msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
+msgstr ""
+"Nie mogę zamienić komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s\".\n"
+
+#: pcbnew/class_board.cpp:2464
 #, c-format
 msgid "Changing footprint \"%s:%s\" reference to \"%s\".\n"
 msgstr "Zmieniam odnośnik footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2469
+#: pcbnew/class_board.cpp:2480
 #, c-format
 msgid "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Zmieniam wartość footprintu \"%s:%s\" z \"%s\" do \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2486
+#: pcbnew/class_board.cpp:2497
 #, c-format
 msgid "Changing footprint path \"%s:%s\" to \"%s\".\n"
 msgstr "Zmieniam ścieżkę footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2511
+#: pcbnew/class_board.cpp:2523
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Kasuje nazwę sieci z komponentu \"%s:%s\" pin \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2528
+#: pcbnew/class_board.cpp:2540
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr ""
 "Zmieniam nazwę sieci komponentu \"%s:%s\" pin \"%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2566
+#: pcbnew/class_board.cpp:2578
 #, c-format
 msgid "Removing footprint \"%s:%s\".\n"
 msgstr "Usuwam footprint \"%s:%s\".\n"
@@ -6472,7 +6485,8 @@ msgid "Graphic Item"
 msgstr "Elementy graficzne"
 
 #: pcbnew/class_edge_mod.cpp:249 pcbnew/class_module.cpp:522
-#: pcbnew/class_pad.cpp:512 pcbnew/class_text_mod.cpp:363 cvpcb/setvisu.cpp:36
+#: pcbnew/class_pad.cpp:512 pcbnew/class_text_mod.cpp:363
+#: cvpcb/cvframe.cpp:857
 msgid "Module"
 msgstr "Footprint"
 
@@ -7657,6 +7671,11 @@ msgstr "Wtyczka typu '%s' nie została znaleziona."
 msgid "Unknown PCB_FILE_T value: %d"
 msgstr "Nieznana wartość PCB_FILE_T: %d"
 
+#: pcbnew/kicad_netlist_reader.cpp:252
+#, c-format
+msgid "Cannot find component with reference \"%s\" in netlist."
+msgstr "Nie mogę odnaleźć komponentu z oznaczeniem \"%s\" na liście sieci."
+
 #: pcbnew/kicad_plugin.cpp:161
 #, c-format
 msgid "Cannot create footprint library path <%s>"
@@ -7727,6 +7746,37 @@ msgstr "Włącz by była widoczna"
 #: pcbnew/layer_widget.cpp:455
 msgid "Middle click for color change"
 msgstr "Zmiana koloru środkowym klawiszem"
+
+#: pcbnew/legacy_netlist_reader.cpp:119
+msgid "Cannot parse time stamp in component section of netlist."
+msgstr ""
+"Nie mogę przetworzyć odcisku czasowego w sekcji komponentów listy sieci."
+
+#: pcbnew/legacy_netlist_reader.cpp:129
+msgid "Cannot parse name in component section of netlist."
+msgstr "Nie mogę przetworzyć nazwy w sekcji komponentów listy sieci."
+
+#: pcbnew/legacy_netlist_reader.cpp:139
+msgid "Cannot parse reference designator in component section of netlist."
+msgstr "Nie mogę przetworzyć odnośnika w sekcji komponentów listy sieci."
+
+#: pcbnew/legacy_netlist_reader.cpp:149
+msgid "Cannot parse value in component section of netlist."
+msgstr "Nie mogę przetworzyć wartości w sekcji komponentów listy sieci."
+
+#: pcbnew/legacy_netlist_reader.cpp:172
+msgid "Cannot parse pin name in component net section of netlist."
+msgstr "Nie mogę przetworzyć nazwy pinu w seckcji komponentów listy sieci."
+
+#: pcbnew/legacy_netlist_reader.cpp:181
+msgid "Cannot parse net name in component net section of netlist."
+msgstr "Nie mogę przetworzyć nazwy sieci w sekcji komponentów listy sieci."
+
+#: pcbnew/legacy_netlist_reader.cpp:229
+#, c-format
+msgid "Cannot find component '%s' in footprint filter section of netlist."
+msgstr ""
+"Nie mogę odnależć komponentu '%s' w sekcji filtrów footprintów listy sieci."
 
 #: pcbnew/legacy_plugin.cpp:93
 #, c-format
@@ -8871,7 +8921,7 @@ msgstr ""
 "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
 #: pcbnew/moduleframe.cpp:477 pcbnew/pcbframe.cpp:554
-#: cvpcb/class_DisplayFootprintsFrame.cpp:450
+#: cvpcb/class_DisplayFootprintsFrame.cpp:440
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
@@ -9020,16 +9070,16 @@ msgstr "Dodaj wycinek łuku"
 msgid "Add Polynomial Shape"
 msgstr "Dodaj wielokątny kształt"
 
-#: pcbnew/netlist.cpp:67 pcbnew/dialogs/dialog_netlist.cpp:392
+#: pcbnew/netlist.cpp:64 pcbnew/dialogs/dialog_netlist.cpp:394
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
 msgstr "Nie można otworzyć pliku listy sieci \"%s\"."
 
-#: pcbnew/netlist.cpp:68 pcbnew/dialogs/dialog_netlist.cpp:393
+#: pcbnew/netlist.cpp:65 pcbnew/dialogs/dialog_netlist.cpp:395
 msgid "Netlist Load Error."
 msgstr "Błąd odczytu listy sieci."
 
-#: pcbnew/netlist.cpp:79 cvpcb/readschematicnetlist.cpp:72
+#: pcbnew/netlist.cpp:76 cvpcb/cvframe.cpp:781
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -9038,70 +9088,37 @@ msgstr ""
 "Błąd podczas odczytywania listy sieci.\n"
 "%s"
 
-#: pcbnew/netlist.cpp:80 pcbnew/dialogs/dialog_netlist.cpp:403
-#: cvpcb/readschematicnetlist.cpp:73
+#: pcbnew/netlist.cpp:77 pcbnew/dialogs/dialog_netlist.cpp:405
+#: cvpcb/cvframe.cpp:782
 msgid "Netlist Load Error"
 msgstr "Błąd odczytu listy sieci"
 
-#: pcbnew/netlist.cpp:123
+#: pcbnew/netlist.cpp:120
 msgid "No Modules"
 msgstr "Brak footprintów"
 
-#: pcbnew/netlist.cpp:145
+#: pcbnew/netlist.cpp:142
 msgid "Components"
 msgstr "Komponenty"
 
 #: pcbnew/netlist.cpp:211
 #, c-format
-msgid "Component `%s` footprint <%s> was not found in any libraries."
+msgid ""
+"*** Warning: component `%s` footprint <%s> was not found in any libraries. "
+"***\n"
 msgstr ""
-"Komponent `%s` Footprint <%s> nie został znaleziony w żadnej z bibliotek"
+"*** OSTRZEŻENIE: Komponent `%s`, footprint <%s> nie został znaleziony w "
+"żadnej z bibliotek. *** \n"
 
-#: pcbnew/netlist_reader_common.cpp:313
+#: pcbnew/netlist_reader.cpp:312
 #, c-format
 msgid "Cannot open file %s for reading."
 msgstr "Nie mogę otworzyć pliku %s do odczytu."
 
-#: pcbnew/netlist_reader_common.cpp:411
+#: pcbnew/netlist_reader.cpp:410
 #, c-format
 msgid "Cannot find component '%s' in footprint assignment file."
 msgstr "Nie mogę odnaleźć komponentu '%s; w pliku łącz footprintów."
-
-#: pcbnew/netlist_reader_firstformat.cpp:119
-msgid "Cannot parse time stamp in component section of netlist."
-msgstr ""
-"Nie mogę przetworzyć odcisku czasowego w sekcji komponentów listy sieci."
-
-#: pcbnew/netlist_reader_firstformat.cpp:129
-msgid "Cannot parse name in component section of netlist."
-msgstr "Nie mogę przetworzyć nazwy w sekcji komponentów listy sieci."
-
-#: pcbnew/netlist_reader_firstformat.cpp:139
-msgid "Cannot parse reference designator in component section of netlist."
-msgstr "Nie mogę przetworzyć odnośnika w sekcji komponentów listy sieci."
-
-#: pcbnew/netlist_reader_firstformat.cpp:149
-msgid "Cannot parse value in component section of netlist."
-msgstr "Nie mogę przetworzyć wartości w sekcji komponentów listy sieci."
-
-#: pcbnew/netlist_reader_firstformat.cpp:172
-msgid "Cannot parse pin name in component net section of netlist."
-msgstr "Nie mogę przetworzyć nazwy pinu w seckcji komponentów listy sieci."
-
-#: pcbnew/netlist_reader_firstformat.cpp:181
-msgid "Cannot parse net name in component net section of netlist."
-msgstr "Nie mogę przetworzyć nazwy sieci w sekcji komponentów listy sieci."
-
-#: pcbnew/netlist_reader_firstformat.cpp:229
-#, c-format
-msgid "Cannot find component '%s' in footprint filter section of netlist."
-msgstr ""
-"Nie mogę odnależć komponentu '%s' w sekcji filtrów footprintów listy sieci."
-
-#: pcbnew/netlist_reader_kicad.cpp:252
-#, c-format
-msgid "Cannot find component with reference \"%s\" in netlist."
-msgstr "Nie mogę odnaleźć komponentu z oznaczeniem \"%s\" na liście sieci."
 
 #: pcbnew/onleftclick.cpp:248
 msgid "Graphic not allowed on Copper layers"
@@ -10000,7 +10017,7 @@ msgid "Add Text"
 msgstr "Dodaj tekst"
 
 #: pcbnew/tool_modedit.cpp:212 pcbnew/tool_pcb.cpp:331
-#: cvpcb/class_DisplayFootprintsFrame.cpp:188 common/drawframe.cpp:288
+#: cvpcb/class_DisplayFootprintsFrame.cpp:181 common/drawframe.cpp:288
 msgid "Hide grid"
 msgstr "Schowaj siatkę"
 
@@ -13326,15 +13343,15 @@ msgstr ""
 "lutowniczego.\n"
 "Ostateczna wartość prześwitu jest sumą tej wartości i wartością prześwitu"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:79
+#: pcbnew/dialogs/dialog_netlist.cpp:80
 msgid "The project configuration has changed.  Do you want to save it?"
 msgstr "Konfiguracja projektu została zmieniona. Zapisać ją ?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:119
+#: pcbnew/dialogs/dialog_netlist.cpp:120
 msgid "Select Netlist"
 msgstr "Wybierz listę sieci"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:144
+#: pcbnew/dialogs/dialog_netlist.cpp:146
 msgid ""
 "The changes made by reading the netlist cannot be undone.  Are you sure you "
 "want to read the netlist?"
@@ -13342,72 +13359,72 @@ msgstr ""
 "Zmiany wprowadzone podczas odczytania lisy sieci nie mogą zostać cofnięte. "
 "Czy chcesz odczytać listę sieci?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:151
+#: pcbnew/dialogs/dialog_netlist.cpp:153
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
 msgstr "Wczytuję listę sieci \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:156
+#: pcbnew/dialogs/dialog_netlist.cpp:158
 #, c-format
 msgid "Using component footprint link file \"%s\".\n"
 msgstr "Użyty zostanie plik połączeń komponentów z footprintami \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:162
+#: pcbnew/dialogs/dialog_netlist.cpp:164
 #, c-format
 msgid "Using time stamps to select footprints in file \"%s\".\n"
 msgstr ""
 "Użyte zostaną odciski czasowe przy wybieraniu footprintów z pliku \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:182
+#: pcbnew/dialogs/dialog_netlist.cpp:184
 msgid "No modules"
 msgstr "Brak footprintów"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:214
+#: pcbnew/dialogs/dialog_netlist.cpp:216
 msgid "No duplicate."
 msgstr "Brak duplikatów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:217
+#: pcbnew/dialogs/dialog_netlist.cpp:219
 msgid "Duplicates:"
 msgstr "Duplikaty:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:241
+#: pcbnew/dialogs/dialog_netlist.cpp:243
 msgid "No missing modules."
 msgstr "Brak brakujących footprintów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:244
+#: pcbnew/dialogs/dialog_netlist.cpp:246
 msgid "Missing:"
 msgstr "Brakujące:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:260
+#: pcbnew/dialogs/dialog_netlist.cpp:262
 msgid "No extra modules."
 msgstr "Brak dodatkowych footprintów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:263
+#: pcbnew/dialogs/dialog_netlist.cpp:265
 msgid "Not in Netlist:"
 msgstr "Brak na liście sieci:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:288
+#: pcbnew/dialogs/dialog_netlist.cpp:290
 msgid "Too many errors: some are skipped"
 msgstr "Zbyt dużo błędów: niektóre zostały pominięte"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:292
+#: pcbnew/dialogs/dialog_netlist.cpp:294
 msgid "Check Modules"
 msgstr "Sprawdź footprinty"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:332
+#: pcbnew/dialogs/dialog_netlist.cpp:334
 msgid "Save contents of message window"
 msgstr "Zapisz zawartość okna z wiadomościami"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:349
+#: pcbnew/dialogs/dialog_netlist.cpp:351
 #, c-format
 msgid "Cannot write message contents to file \"%s\"."
 msgstr "Nie można zapisać zawartości okna wiadomości do pliku \"%s\"."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:351
+#: pcbnew/dialogs/dialog_netlist.cpp:353
 msgid "File Write Error"
 msgstr "Błąd zapisu pliku"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:402
+#: pcbnew/dialogs/dialog_netlist.cpp:404
 #, c-format
 msgid ""
 "Error loading netlist file:\n"
@@ -14554,56 +14571,80 @@ msgstr ""
 msgid "CvPcb Error"
 msgstr "Błąd CvPcb"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:213
-#: cvpcb/class_DisplayFootprintsFrame.cpp:260
+#: cvpcb/class_DisplayFootprintsFrame.cpp:206
+#: cvpcb/class_DisplayFootprintsFrame.cpp:253
 msgid "Show texts in line mode"
 msgstr "Pokaż tekst jako linie"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:217
-#: cvpcb/class_DisplayFootprintsFrame.cpp:277
+#: cvpcb/class_DisplayFootprintsFrame.cpp:210
+#: cvpcb/class_DisplayFootprintsFrame.cpp:270
 msgid "Show outlines in line mode"
 msgstr "Pokaż szkic jako linie"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:232
+#: cvpcb/class_DisplayFootprintsFrame.cpp:225
 #: pcbnew/dialogs/dialog_display_options_base.h:71
 msgid "Display options"
 msgstr "Opcje wyświetlania"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:237
+#: cvpcb/class_DisplayFootprintsFrame.cpp:230
 msgid "Zoom in (F1)"
 msgstr "Powiększ (F1)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:240
+#: cvpcb/class_DisplayFootprintsFrame.cpp:233
 msgid "Zoom out (F2)"
 msgstr "Pomniejsz (F2)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:243
+#: cvpcb/class_DisplayFootprintsFrame.cpp:236
 msgid "Redraw view (F3)"
 msgstr "Odśwież widok (F3)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:246
+#: cvpcb/class_DisplayFootprintsFrame.cpp:239
 msgid "Zoom auto (Home)"
 msgstr "Dopasuj powiększenie (Home)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:250
+#: cvpcb/class_DisplayFootprintsFrame.cpp:243
 msgid "3D Display"
 msgstr "Widok 3D"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:261
+#: cvpcb/class_DisplayFootprintsFrame.cpp:254
 msgid "Show texts in filled mode"
 msgstr "Pokaż tekst jako wypełniony"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:262
+#: cvpcb/class_DisplayFootprintsFrame.cpp:255
 msgid "Show texts in sketch mode"
 msgstr "Pokaż tylko zarys tekstu"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:278
+#: cvpcb/class_DisplayFootprintsFrame.cpp:271
 msgid "Show outlines in filled mode"
 msgstr "Pokaż szkic jako wypełniony"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:279
+#: cvpcb/class_DisplayFootprintsFrame.cpp:272
 msgid "Show outlines in sketch mode"
 msgstr "Pokaż tylko zarys szkicu"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:492
+#, c-format
+msgid ""
+"PCB footprint library file <%s> could not be found in the default search "
+"paths."
+msgstr ""
+"Biblioteka footprintów <%s> nie może zostać odnaleziona w domyślych "
+"ścieżkach wyszukiwania."
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:517
+#, c-format
+msgid "Footprint '%s' not found"
+msgstr "Footprintu '%s' nie znaleziono"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:531
+#, c-format
+msgid "Footprint: %s"
+msgstr "Footprint: %s"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:540
+#, c-format
+msgid "Lib: %s"
+msgstr "Biblioteka: %s"
 
 #: cvpcb/cvframe.cpp:256
 msgid ""
@@ -14673,20 +14714,6 @@ msgstr "Błąd podczas ładowania biblioteki"
 msgid "CvPcb is already running, Continue?"
 msgstr "CvPcb jest już uruchomiony. Kontynuować?"
 
-#: cvpcb/loadcmp.cpp:49
-#, c-format
-msgid ""
-"PCB footprint library file <%s> could not be found in the default search "
-"paths."
-msgstr ""
-"Biblioteka footprintów <%s> nie może zostać odnaleziona w domyślych "
-"ścieżkach wyszukiwania."
-
-#: cvpcb/loadcmp.cpp:74
-#, c-format
-msgid "Footprint '%s' not found"
-msgstr "Footprintu '%s' nie znaleziono"
-
 #: cvpcb/menubar.cpp:84
 msgid "Open a recent opened netlist document"
 msgstr "Otwórz często otwierane dokumenty z listą sieci"
@@ -14754,16 +14781,6 @@ msgstr "Zapisz plik łącz komponentów z footprintami (plik .cmp)"
 #: cvpcb/readwrite_dlgs.cpp:186
 msgid "Unable to create component footprint link file (.cmp)"
 msgstr "Nie mogę utworzyć pliku łącz komponentów (.cmp)"
-
-#: cvpcb/setvisu.cpp:63
-#, c-format
-msgid "Footprint: %s"
-msgstr "Footprint: %s"
-
-#: cvpcb/setvisu.cpp:72
-#, c-format
-msgid "Lib: %s"
-msgstr "Biblioteka: %s"
 
 #: cvpcb/tool_cvpcb.cpp:61
 msgid "Configuration"
