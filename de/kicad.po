@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-22 23:37+0100\n"
-"PO-Revision-Date: 2013-04-22 23:58+0100\n"
+"POT-Creation-Date: 2013-04-27 20:46+0100\n"
+"PO-Revision-Date: 2013-04-27 22:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: Benno Achermann <bennoachermann@bluewin.ch>\n"
 "Language: de_CH\n"
@@ -59,19 +59,19 @@ msgstr "Rückansicht"
 
 #: 3d-viewer/3d_canvas.cpp:367
 msgid "Move left <-"
-msgstr "Bewege nach links <-"
+msgstr "Nach links bewegen"
 
 #: 3d-viewer/3d_canvas.cpp:371
 msgid "Move right ->"
-msgstr "Bewege nach rechts ->"
+msgstr "Nach rechts bewegen"
 
 #: 3d-viewer/3d_canvas.cpp:375
 msgid "Move Up ^"
-msgstr "Bewege nach oben ^"
+msgstr "Nach oben bewegen"
 
 #: 3d-viewer/3d_canvas.cpp:379 pcbnew/dialogs/dialog_fp_lib_table_base.cpp:125
 msgid "Move Down"
-msgstr "Bewege nach unten"
+msgstr "Nach unten bewegen"
 
 #: 3d-viewer/3d_canvas.cpp:604
 msgid "3D Image filename:"
@@ -357,18 +357,6 @@ msgstr "Sprache"
 msgid "Select application language (only for testing!)"
 msgstr "Wähle Sprache für Applikation (nur für Testzwecke!)"
 
-#: common/fpid.cpp:179
-msgid "Illegal character found in FPID string"
-msgstr "Unzulässiges Zeichen in FPID-Zeichenfolge gefunden."
-
-#: common/fpid.cpp:281
-msgid "Illegal character found in logical library name"
-msgstr "Unzulässiges Zeichen im logischen Bibliotheksnamen gefunden."
-
-#: common/fpid.cpp:298
-msgid "Illegal character found in revision"
-msgstr "Unzulässiges Zeichen in der Revision gefunden."
-
 #: common/fp_lib_table.cpp:171
 #, c-format
 msgid "'%s' is a duplicate footprint library nickName"
@@ -415,110 +403,6 @@ msgstr "Ein Fehler ist beim Schreiben von Datei <%s> aufgetreten."
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER Schreibfehler"
 
-#: common/wildcards_and_files_ext.cpp:67
-msgid "KiCad drawing symbol file (*.sym)|*.sym"
-msgstr "KiCad Zeichensymboldateien (*.sym)|*.sym"
-
-#: common/wildcards_and_files_ext.cpp:68
-msgid "KiCad component library file (*.lib)|*.lib"
-msgstr "KiCad Bauteilebibliotheksdateien (*.lib)|*.lib"
-
-#: common/wildcards_and_files_ext.cpp:69
-msgid "KiCad project files (*.pro)|*.pro"
-msgstr "KiCad Projektdateien (*.pro)|*.pro"
-
-#: common/wildcards_and_files_ext.cpp:70
-msgid "KiCad schematic files (*.sch)|*.sch"
-msgstr "KiCad Schaltplandateien (*.sch)|*.sch"
-
-#: common/wildcards_and_files_ext.cpp:71
-msgid "KiCad netlist files (*.net)|*.net"
-msgstr "KiCad Netzlistedateien (*.net)|*.net"
-
-#: common/wildcards_and_files_ext.cpp:72
-msgid "Gerber files (*.pho)|*.pho"
-msgstr "Gerber Dateien (*.pho)|*.pho"
-
-#: common/wildcards_and_files_ext.cpp:73
-msgid "KiCad printed circuit board files (*.brd)|*.brd"
-msgstr "KiCad Dateien gedruckter Schaltungen (*.brd)|*.brd"
-
-#: common/wildcards_and_files_ext.cpp:74
-msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
-msgstr "Eagle Ver. 6.x XML PCB Dateien (*.brd)|*.brd"
-
-#: common/wildcards_and_files_ext.cpp:75
-msgid "P-Cad 2002/2004 ASCII PCB files (*.pcb)|*.pcb"
-msgstr "P-Cad 2002/2004 ASCII PCB Dateien (*.pcb)|*.pcb"
-
-#: common/wildcards_and_files_ext.cpp:76
-msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
-msgstr "KiCad s-expr Dateien gedruckter Schaltungen (*.kicad_pcb)|*.kicad_pcb"
-
-#: common/wildcards_and_files_ext.cpp:77
-msgid "KiCad footprint s-expre library file (*.kicad_mod)|*.kicad_mod"
-msgstr "KiCad Footprint S-Expre Bibliotheksdateien (*.kicad_mod)|*.kicad_mod"
-
-#: common/wildcards_and_files_ext.cpp:78
-msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
-msgstr "KiCad Footprint S-Expre Bibliothekspfad (*.pretty)|*.pretty"
-
-#: common/wildcards_and_files_ext.cpp:79
-msgid "Legacy footprint library file (*.mod)|*.mod"
-msgstr "Altes Footprint Bibliotheksformat (*.mod)|*.mod"
-
-#: common/wildcards_and_files_ext.cpp:80
-msgid "Eagle ver. 6.x XML library files (*.lbr)|*.lbr"
-msgstr "Eagle Ver. 6.x XML Bibliotheksdateien (*.lbr)|*.lbr"
-
-#: common/wildcards_and_files_ext.cpp:81
-msgid "Geda PCB footprint library file (*.fp)|*.fp"
-msgstr "Geda PCB Footprint Bibliotheksdateien (*.fp)|*.fp"
-
-#: common/wildcards_and_files_ext.cpp:82
-msgid "KiCad recorded macros (*.mcr)|*.mcr"
-msgstr "KiCad aufgezeichnete Makros (*.mcr)|*.mcr"
-
-#: common/wildcards_and_files_ext.cpp:83
-msgid "Component-footprint link file (*.cmp)|*cmp"
-msgstr "Bauteile-Footprint-Zuordnungsdateien (*.cmp)|*.cmp"
-
-#: common/wildcards_and_files_ext.cpp:86
-msgid "All files (*)|*"
-msgstr "Alle Dateien (*)|*"
-
-#: common/wildcards_and_files_ext.cpp:89
-msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
-msgstr "KiCad Bauteile/Footprint-Zuordnungsdatei (*.cmp)|*.cmp"
-
-#: common/wildcards_and_files_ext.cpp:92
-msgid "Drill files (*.drl)|*.drl;*.DRL"
-msgstr "Bohrdateien (*.drl)|*.drl;*.DRL"
-
-#: common/wildcards_and_files_ext.cpp:93
-msgid "SVG files (*.svg)|*.svg;*.SVG"
-msgstr "SVG Dateien (*.svg)|*.svg;*.SVG"
-
-#: common/wildcards_and_files_ext.cpp:94
-msgid "Portable document format files (*.pdf)|*.pdf"
-msgstr "Portable document format Dateien (*.pdf)|*.pdf"
-
-#: common/wildcards_and_files_ext.cpp:95
-msgid "PostScript files (.ps)|*.ps"
-msgstr "PostScript Dateien (.ps)|*.ps"
-
-#: common/wildcards_and_files_ext.cpp:96
-msgid "Report files (*.rpt)|*.rpt"
-msgstr "Protokolldateien (*.rpt)|*.rpt"
-
-#: common/wildcards_and_files_ext.cpp:97
-msgid "Footprint place files (*.pos)|*.pos"
-msgstr "Footprintplatzierungsdateien (*.pos)|*.pos"
-
-#: common/wildcards_and_files_ext.cpp:98
-msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
-msgstr "Vrml und x3d Dateien (*.wrl *.x3d)|*.wrl;*.x3d"
-
 #: common/zoom.cpp:208
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:125
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:131
@@ -560,12 +444,12 @@ msgstr "Benutzerdef. Raster"
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:70
 #: pcbnew/dialogs/dialog_find_base.cpp:45
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:177
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:96
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:373
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:107
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:109
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:99
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:106
 msgid "Close"
 msgstr "Schliessen"
@@ -778,7 +662,7 @@ msgstr ""
 msgid "Inches"
 msgstr "Zoll"
 
-#: common/drawframe.cpp:288 cvpcb/class_DisplayFootprintsFrame.cpp:188
+#: common/drawframe.cpp:288 cvpcb/class_DisplayFootprintsFrame.cpp:181
 #: pcbnew/tool_modedit.cpp:212 pcbnew/tool_pcb.cpp:331
 msgid "Hide grid"
 msgstr "Raster ausblenden"
@@ -850,7 +734,7 @@ msgstr "Unbekannter MIME Typ für Doc Datei <%s>"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:159
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
-#: pcbnew/class_module.cpp:483 pcbnew/muonde.cpp:818
+#: pcbnew/class_module.cpp:505 pcbnew/muonde.cpp:818
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:75
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:131
@@ -982,6 +866,126 @@ msgstr "&Tastaturbefehle"
 #: common/hotkeys_basic.cpp:769
 msgid "Hotkeys configuration and preferences"
 msgstr "Konfiguration und Einstellungen der Tastaturbefehle"
+
+#: common/fpid.cpp:179
+msgid "Illegal character found in FPID string"
+msgstr "Unzulässiges Zeichen in FPID-Zeichenfolge gefunden."
+
+#: common/fpid.cpp:281
+msgid "Illegal character found in logical library name"
+msgstr "Unzulässiges Zeichen im logischen Bibliotheksnamen gefunden."
+
+#: common/fpid.cpp:298
+msgid "Illegal character found in revision"
+msgstr "Unzulässiges Zeichen in der Revision gefunden."
+
+#: common/wildcards_and_files_ext.cpp:67
+msgid "KiCad drawing symbol file (*.sym)|*.sym"
+msgstr "KiCad Zeichensymboldateien (*.sym)|*.sym"
+
+#: common/wildcards_and_files_ext.cpp:68
+msgid "KiCad component library file (*.lib)|*.lib"
+msgstr "KiCad Bauteilebibliotheksdateien (*.lib)|*.lib"
+
+#: common/wildcards_and_files_ext.cpp:69
+msgid "KiCad project files (*.pro)|*.pro"
+msgstr "KiCad Projektdateien (*.pro)|*.pro"
+
+#: common/wildcards_and_files_ext.cpp:70
+msgid "KiCad schematic files (*.sch)|*.sch"
+msgstr "KiCad Schaltplandateien (*.sch)|*.sch"
+
+#: common/wildcards_and_files_ext.cpp:71
+msgid "KiCad netlist files (*.net)|*.net"
+msgstr "KiCad Netzlistedateien (*.net)|*.net"
+
+#: common/wildcards_and_files_ext.cpp:72
+msgid "Gerber files (*.pho)|*.pho"
+msgstr "Gerber Dateien (*.pho)|*.pho"
+
+#: common/wildcards_and_files_ext.cpp:73
+msgid "KiCad printed circuit board files (*.brd)|*.brd"
+msgstr "KiCad Dateien gedruckter Schaltungen (*.brd)|*.brd"
+
+#: common/wildcards_and_files_ext.cpp:74
+msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
+msgstr "Eagle Ver. 6.x XML PCB Dateien (*.brd)|*.brd"
+
+#: common/wildcards_and_files_ext.cpp:75
+msgid "P-Cad 2002/2004 ASCII PCB files (*.pcb)|*.pcb"
+msgstr "P-Cad 2002/2004 ASCII PCB Dateien (*.pcb)|*.pcb"
+
+#: common/wildcards_and_files_ext.cpp:76
+msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
+msgstr "KiCad s-expr Dateien gedruckter Schaltungen (*.kicad_pcb)|*.kicad_pcb"
+
+#: common/wildcards_and_files_ext.cpp:77
+msgid "KiCad footprint s-expre library file (*.kicad_mod)|*.kicad_mod"
+msgstr "KiCad Footprint S-Expre Bibliotheksdateien (*.kicad_mod)|*.kicad_mod"
+
+#: common/wildcards_and_files_ext.cpp:78
+msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
+msgstr "KiCad Footprint S-Expre Bibliothekspfad (*.pretty)|*.pretty"
+
+#: common/wildcards_and_files_ext.cpp:79
+msgid "Legacy footprint library file (*.mod)|*.mod"
+msgstr "Altes Footprint Bibliotheksformat (*.mod)|*.mod"
+
+#: common/wildcards_and_files_ext.cpp:80
+msgid "Eagle ver. 6.x XML library files (*.lbr)|*.lbr"
+msgstr "Eagle Ver. 6.x XML Bibliotheksdateien (*.lbr)|*.lbr"
+
+#: common/wildcards_and_files_ext.cpp:81
+msgid "Geda PCB footprint library file (*.fp)|*.fp"
+msgstr "Geda PCB Footprint Bibliotheksdateien (*.fp)|*.fp"
+
+#: common/wildcards_and_files_ext.cpp:82
+msgid "KiCad recorded macros (*.mcr)|*.mcr"
+msgstr "KiCad aufgezeichnete Makros (*.mcr)|*.mcr"
+
+#: common/wildcards_and_files_ext.cpp:83
+msgid "Component-footprint link file (*.cmp)|*cmp"
+msgstr "Bauteile-Footprint-Zuordnungsdateien (*.cmp)|*.cmp"
+
+#: common/wildcards_and_files_ext.cpp:86
+msgid "All files (*)|*"
+msgstr "Alle Dateien (*)|*"
+
+#: common/wildcards_and_files_ext.cpp:89
+msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
+msgstr "KiCad Bauteile/Footprint-Zuordnungsdatei (*.cmp)|*.cmp"
+
+#: common/wildcards_and_files_ext.cpp:92
+msgid "Drill files (*.drl)|*.drl;*.DRL"
+msgstr "Bohrdateien (*.drl)|*.drl;*.DRL"
+
+#: common/wildcards_and_files_ext.cpp:93
+msgid "SVG files (*.svg)|*.svg;*.SVG"
+msgstr "SVG Dateien (*.svg)|*.svg;*.SVG"
+
+#: common/wildcards_and_files_ext.cpp:94
+msgid "Portable document format files (*.pdf)|*.pdf"
+msgstr "Portable document format Dateien (*.pdf)|*.pdf"
+
+#: common/wildcards_and_files_ext.cpp:95
+msgid "PostScript files (.ps)|*.ps"
+msgstr "PostScript Dateien (.ps)|*.ps"
+
+#: common/wildcards_and_files_ext.cpp:96
+msgid "Report files (*.rpt)|*.rpt"
+msgstr "Protokolldateien (*.rpt)|*.rpt"
+
+#: common/wildcards_and_files_ext.cpp:97
+msgid "Footprint place files (*.pos)|*.pos"
+msgstr "Footprintplatzierungsdateien (*.pos)|*.pos"
+
+#: common/wildcards_and_files_ext.cpp:98
+msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
+msgstr "Vrml und x3d Dateien (*.wrl *.x3d)|*.wrl;*.x3d"
+
+#: common/wildcards_and_files_ext.cpp:99
+msgid "Text files (*.txt)|*.txt"
+msgstr "Textdateien (*.txt)|*.txt"
 
 #: common/dialogs/dialog_exit_base.cpp:34
 msgid "Save the changes before closing?"
@@ -1124,9 +1128,9 @@ msgstr "Elemente:"
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:82
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:187
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:78
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:119
 #: pcbnew/dialogs/dialog_plot_base.cpp:352
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:116
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:118
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:131
 msgid "Messages:"
 msgstr "Meldungen:"
 
@@ -1428,214 +1432,9 @@ msgstr ""
 msgid "Lib Version Info"
 msgstr ""
 
-#: cvpcb/autosel.cpp:82
-#, c-format
-msgid ""
-"Footprint alias library file <%s> could not be found in the default search "
-"paths."
-msgstr ""
-"Footprint Alias-Bibliotheksdatei <%s> konnte nicht im voreingestellten "
-"Suchpfad gefunden werden."
-
-#: cvpcb/autosel.cpp:93
-#, c-format
-msgid "Error opening alias library <%s>."
-msgstr "Fehler beim Öffnen der Alias-Bibliotheksdatei <%s>."
-
-#: cvpcb/autosel.cpp:125
-#, c-format
-msgid "%d footprint aliases found."
-msgstr "%d Footprint Alias gefunden."
-
-#: cvpcb/autosel.cpp:160
-#, c-format
-msgid ""
-"Component %s: footprint %s not found in any of the project footprint "
-"libraries."
-msgstr ""
-"Bauteil %s: Konnte Footprint %s in keiner dem Projekt zugehörigen Bibliothek "
-"finden."
-
-#: cvpcb/autosel.cpp:164
-msgid "CvPcb Error"
-msgstr "CvPcb Fehler"
-
 #: cvpcb/cfg.cpp:74 pcbnew/pcbnew_config.cpp:282
 msgid "Save Project File"
 msgstr "Projektdatei speichern"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:192 pcbnew/basepcbframe.cpp:378
-#: pcbnew/tool_pcb.cpp:334
-msgid "Display polar coordinates"
-msgstr "Polarkoordinaten einblenden"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:196 eeschema/tool_lib.cpp:231
-#: eeschema/tool_sch.cpp:285 pcbnew/tool_modedit.cpp:220
-#: pcbnew/tool_pcb.cpp:337
-msgid "Units in inches"
-msgstr "Einheiten in Zoll"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:200 eeschema/tool_lib.cpp:235
-#: eeschema/tool_sch.cpp:289 pcbnew/tool_modedit.cpp:224
-#: pcbnew/tool_pcb.cpp:340
-msgid "Units in millimeters"
-msgstr "Einheiten in Millimeter"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:204 eeschema/tool_lib.cpp:239
-#: eeschema/tool_sch.cpp:293 pcbnew/tool_pcb.cpp:343
-#: gerbview/toolbars_gerber.cpp:166
-msgid "Change cursor shape"
-msgstr "Ändere Cursorform"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:209 pcbnew/basepcbframe.cpp:387
-#: pcbnew/tool_pcb.cpp:373
-msgid "Show pads in outline mode"
-msgstr "Pads als Umriss darstellen"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:213
-#: cvpcb/class_DisplayFootprintsFrame.cpp:260
-msgid "Show texts in line mode"
-msgstr "Texte durch Linien darstellen"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:217
-#: cvpcb/class_DisplayFootprintsFrame.cpp:277
-msgid "Show outlines in line mode"
-msgstr "Silhouette durch Linien darstellen"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:232
-#: pcbnew/dialogs/dialog_display_options_base.h:71
-msgid "Display options"
-msgstr "Anzeigeoptionen"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:237
-msgid "Zoom in (F1)"
-msgstr "Hineinzoomen (F1)"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:240
-msgid "Zoom out (F2)"
-msgstr "Herauszoomen (F2)"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:243
-msgid "Redraw view (F3)"
-msgstr "Aktualisieren (F3)"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:246
-msgid "Zoom auto (Home)"
-msgstr "Autozoom (Home)"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:250
-msgid "3D Display"
-msgstr "3D Darstellung"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:261
-msgid "Show texts in filled mode"
-msgstr "Texte ausgefüllt darstellen"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:262
-msgid "Show texts in sketch mode"
-msgstr "Texte als Umriss darstellen"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:278
-msgid "Show outlines in filled mode"
-msgstr "Silhouette ausgefüllt darstellen"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:279
-msgid "Show outlines in sketch mode"
-msgstr "Silhouette als Umriss darstellen"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:450 pcbnew/pcbframe.cpp:554
-#: pcbnew/moduleframe.cpp:477
-msgid "3D Viewer"
-msgstr "3D Viewer"
-
-#: cvpcb/cvframe.cpp:256
-msgid ""
-"Component to Footprint links modified.\n"
-"Save before exit ?"
-msgstr ""
-"Zuordnung von Footprints mit Bauteilen wurde verändert.\n"
-"Möchten Sie die Änderungen speichern?"
-
-#: cvpcb/cvframe.cpp:278
-msgid "Problem when saving file, exit anyway ?"
-msgstr ""
-"Während des Speicherns der Dateien ist ein Fehler aufgetreten.\n"
-"Möchten Sie das Programm trotzdem beenden?"
-
-#: cvpcb/cvframe.cpp:410
-msgid "Delete selections"
-msgstr "Möchten Sie die Zuordnungen entfernen?"
-
-#: cvpcb/cvframe.cpp:438 eeschema/dialogs/dialog_netlist_base.cpp:46
-#: eeschema/dialogs/dialog_netlist_base.h:76
-#: pcbnew/dialogs/dialog_netlist_fbp.h:74
-msgid "Netlist"
-msgstr "Netzliste"
-
-#: cvpcb/cvframe.cpp:442
-msgid "Open Net List"
-msgstr "Öffnen einer Netzliste"
-
-#: cvpcb/cvframe.cpp:645
-#, c-format
-msgid "Components: %d (free: %d)"
-msgstr "Bauteile: %d (Frei: %d)"
-
-#: cvpcb/cvframe.cpp:653
-#, c-format
-msgid "Footprints (All): %d"
-msgstr "Footprints (Alle): %d"
-
-#: cvpcb/cvframe.cpp:656
-#, c-format
-msgid "Footprints (filtered): %d"
-msgstr "Footprints (gefiltert): %d"
-
-#: cvpcb/cvframe.cpp:673
-msgid "No PCB footprint libraries are listed in the current project file."
-msgstr ""
-"Es sind keine PCB Footprint Bibliotheken in der gegewärtigen Projektdatei "
-"aufgeführt."
-
-#: cvpcb/cvframe.cpp:674
-msgid "Project File Error"
-msgstr "Projektdateifehler"
-
-#: cvpcb/cvframe.cpp:683
-msgid "Load Error"
-msgstr "Fehler"
-
-#: cvpcb/cvframe.cpp:687
-msgid "Some files could not be found!"
-msgstr "Einige Dateien konnten nicht gefunden werden!"
-
-#: cvpcb/cvframe.cpp:695
-msgid "Some files are invalid!"
-msgstr "Einige Dateien sind ungültig!"
-
-#: cvpcb/cvframe.cpp:716 eeschema/schframe.cpp:1011 eeschema/libedit.cpp:62
-#: kicad/kicad.cpp:78 kicad/prjconfig.cpp:270 pcbnew/pcbframe.cpp:801
-#: pcbnew/moduleframe.cpp:602
-msgid " [Read Only]"
-msgstr " [Nur lesbar]"
-
-#: cvpcb/cvframe.cpp:721 eeschema/schframe.cpp:1014
-msgid " [no file]"
-msgstr " [keine Datei]"
-
-#: cvpcb/loadcmp.cpp:49
-#, c-format
-msgid ""
-"PCB foot print library file <%s> could not be found in the default search "
-"paths."
-msgstr ""
-"PCB Footprint Bibliotheksdatei <%s> konnte nicht im voreingestellten "
-"Suchpfad gefunden werden."
-
-#: cvpcb/loadcmp.cpp:73
-#, c-format
-msgid "Footprint '%s' not found"
-msgstr "Footprint '%s' nicht gefunden"
 
 #: cvpcb/menubar.cpp:69 eeschema/menubar.cpp:77 pcbnew/menubar_pcbframe.cpp:72
 msgid "&Open"
@@ -1726,54 +1525,6 @@ msgstr "Über CvPcb Footprintselektor"
 msgid "&Help"
 msgstr "&Hilfe"
 
-#: cvpcb/readschematicnetlist.cpp:59
-msgid "Could not open file <%>"
-msgstr "Konnte Datei <%s> nicht öffnen"
-
-#: cvpcb/readschematicnetlist.cpp:80 pcbnew/netlist.cpp:171
-msgid "Netlist read error"
-msgstr "Fehler beim Einlesen der Netzliste"
-
-#: cvpcb/readwrite_dlgs.cpp:40
-msgid "Component Library Error"
-msgstr "Bauteilebibliotheksfehler"
-
-#: cvpcb/readwrite_dlgs.cpp:123
-#, c-format
-msgid "File <%s> does not appear to be a valid KiCad net list file."
-msgstr "Datei <%s> scheint keine gültige KiCad Datei einer Netzliste zu sein."
-
-#: cvpcb/readwrite_dlgs.cpp:125
-msgid "File Error"
-msgstr "Dateifehler"
-
-#: cvpcb/readwrite_dlgs.cpp:179
-#, c-format
-msgid "Cannot open CvPcb component file <%s>."
-msgstr "Kann CvPcb Bauteildatei <%s> nicht öffnen."
-
-#: cvpcb/readwrite_dlgs.cpp:181
-msgid "This is normal if you are opening a new netlist file"
-msgstr "Dies is normal, wenn eine Netzliste geöffnet wird."
-
-#: cvpcb/readwrite_dlgs.cpp:190
-#, c-format
-msgid " <%s> does not appear to be a valid KiCad component link file."
-msgstr " <%s> scheint keine gültige KiCad Bauteilezuordnungsdatei zu sein."
-
-#: cvpcb/readwrite_dlgs.cpp:210
-msgid "Save Component/Footprint Link File"
-msgstr "Speichere Bauteile/Footprint Zuordnungsdatei"
-
-#: cvpcb/readwrite_dlgs.cpp:227
-msgid "Unable to create component file (.cmp)"
-msgstr "Konnte Bauteildatei (.cmp) nicht erstellen"
-
-#: cvpcb/readwrite_dlgs.cpp:232 eeschema/files-io.cpp:143
-#, c-format
-msgid "File %s saved"
-msgstr "Datei %s gespeichert."
-
 #: cvpcb/tool_cvpcb.cpp:61
 msgid "Configuration"
 msgstr "Konfiguration"
@@ -1831,21 +1582,257 @@ msgstr ""
 "CvPcb ist bereits gestartet.\n"
 "Möchten Sie trotzdem fortfahren?"
 
-#: cvpcb/setvisu.cpp:36 pcbnew/class_edge_mod.cpp:249
-#: pcbnew/class_module.cpp:500 pcbnew/class_pad.cpp:525
-#: pcbnew/class_text_mod.cpp:363
-msgid "Module"
-msgstr "Bauteil"
+#: cvpcb/autosel.cpp:112
+#, c-format
+msgid ""
+"Footprint alias library file <%s> could not be found in the default search "
+"paths."
+msgstr ""
+"Footprint Alias-Bibliotheksdatei <%s> konnte nicht im voreingestellten "
+"Suchpfad gefunden werden."
 
-#: cvpcb/setvisu.cpp:63
+#: cvpcb/autosel.cpp:123
+#, c-format
+msgid "Error opening alias library <%s>."
+msgstr "Fehler beim Öffnen der Alias-Bibliotheksdatei <%s>."
+
+#: cvpcb/autosel.cpp:155
+#, c-format
+msgid "%d footprint aliases found."
+msgstr "%d Footprint Alias gefunden."
+
+#: cvpcb/autosel.cpp:193
+#, c-format
+msgid ""
+"Component %s: footprint %s not found in any of the project footprint "
+"libraries."
+msgstr ""
+"Bauteil %s: Konnte Footprint %s in keiner dem Projekt zugehörigen Bibliothek "
+"finden."
+
+#: cvpcb/autosel.cpp:197
+msgid "CvPcb Error"
+msgstr "CvPcb Fehler"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:185 pcbnew/basepcbframe.cpp:378
+#: pcbnew/tool_pcb.cpp:334
+msgid "Display polar coordinates"
+msgstr "Polarkoordinaten einblenden"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:189 eeschema/tool_lib.cpp:231
+#: eeschema/tool_sch.cpp:285 pcbnew/tool_modedit.cpp:220
+#: pcbnew/tool_pcb.cpp:337
+msgid "Units in inches"
+msgstr "Einheiten in Zoll"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:193 eeschema/tool_lib.cpp:235
+#: eeschema/tool_sch.cpp:289 pcbnew/tool_modedit.cpp:224
+#: pcbnew/tool_pcb.cpp:340
+msgid "Units in millimeters"
+msgstr "Einheiten in Millimeter"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:197 eeschema/tool_lib.cpp:239
+#: eeschema/tool_sch.cpp:293 pcbnew/tool_pcb.cpp:343
+#: gerbview/toolbars_gerber.cpp:166
+msgid "Change cursor shape"
+msgstr "Ändere Cursorform"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:202 pcbnew/basepcbframe.cpp:387
+#: pcbnew/tool_pcb.cpp:373
+msgid "Show pads in outline mode"
+msgstr "Pads als Umriss darstellen"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:206
+#: cvpcb/class_DisplayFootprintsFrame.cpp:253
+msgid "Show texts in line mode"
+msgstr "Texte durch Linien darstellen"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:210
+#: cvpcb/class_DisplayFootprintsFrame.cpp:270
+msgid "Show outlines in line mode"
+msgstr "Silhouette durch Linien darstellen"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:225
+#: pcbnew/dialogs/dialog_display_options_base.h:71
+msgid "Display options"
+msgstr "Anzeigeoptionen"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:230
+msgid "Zoom in (F1)"
+msgstr "Hineinzoomen (F1)"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:233
+msgid "Zoom out (F2)"
+msgstr "Herauszoomen (F2)"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:236
+msgid "Redraw view (F3)"
+msgstr "Aktualisieren (F3)"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:239
+msgid "Zoom auto (Home)"
+msgstr "Autozoom (Home)"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:243
+msgid "3D Display"
+msgstr "3D Darstellung"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:254
+msgid "Show texts in filled mode"
+msgstr "Texte ausgefüllt darstellen"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:255
+msgid "Show texts in sketch mode"
+msgstr "Texte als Umriss darstellen"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:271
+msgid "Show outlines in filled mode"
+msgstr "Silhouette ausgefüllt darstellen"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:272
+msgid "Show outlines in sketch mode"
+msgstr "Silhouette als Umriss darstellen"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:440 pcbnew/pcbframe.cpp:554
+#: pcbnew/moduleframe.cpp:477
+msgid "3D Viewer"
+msgstr "3D Viewer"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:492
+#, c-format
+msgid ""
+"PCB footprint library file <%s> could not be found in the default search "
+"paths."
+msgstr ""
+"PCB Footprint Bibliotheksdatei <%s> konnte nicht in den voreingestellten "
+"Suchpfaden gefunden werden."
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:517
+#, c-format
+msgid "Footprint '%s' not found"
+msgstr "Footprint '%s' nicht gefunden"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:531
 #, c-format
 msgid "Footprint: %s"
 msgstr "Footprint: %s"
 
-#: cvpcb/setvisu.cpp:72
+#: cvpcb/class_DisplayFootprintsFrame.cpp:540
 #, c-format
 msgid "Lib: %s"
 msgstr "Bibliothek: %s"
+
+#: cvpcb/cvframe.cpp:256
+msgid ""
+"Component to Footprint links modified.\n"
+"Save before exit ?"
+msgstr ""
+"Zuordnung von Footprints mit Bauteilen wurde verändert.\n"
+"Möchten Sie die Änderungen speichern?"
+
+#: cvpcb/cvframe.cpp:278
+msgid "Problem when saving file, exit anyway ?"
+msgstr ""
+"Während des Speicherns der Dateien ist ein Fehler aufgetreten.\n"
+"Möchten Sie das Programm trotzdem beenden?"
+
+#: cvpcb/cvframe.cpp:410
+msgid "Delete selections"
+msgstr "Möchten Sie die Zuordnungen entfernen?"
+
+#: cvpcb/cvframe.cpp:438 eeschema/dialogs/dialog_netlist_base.cpp:46
+#: eeschema/dialogs/dialog_netlist_base.h:76
+#: pcbnew/dialogs/dialog_netlist_fbp.h:80
+msgid "Netlist"
+msgstr "Netzliste"
+
+#: cvpcb/cvframe.cpp:442
+msgid "Open Net List"
+msgstr "Öffnen einer Netzliste"
+
+#: cvpcb/cvframe.cpp:645
+#, c-format
+msgid "Components: %d (free: %d)"
+msgstr "Bauteile: %d (Frei: %d)"
+
+#: cvpcb/cvframe.cpp:654
+#, c-format
+msgid "Footprints (All): %d"
+msgstr "Footprints (Alle): %d"
+
+#: cvpcb/cvframe.cpp:657
+#, c-format
+msgid "Footprints (filtered): %d"
+msgstr "Footprints (gefiltert): %d"
+
+#: cvpcb/cvframe.cpp:674
+msgid "No PCB footprint libraries are listed in the current project file."
+msgstr ""
+"Es sind keine PCB Footprint Bibliotheken in der gegewärtigen Projektdatei "
+"aufgeführt."
+
+#: cvpcb/cvframe.cpp:675
+msgid "Project File Error"
+msgstr "Projektdateifehler"
+
+#: cvpcb/cvframe.cpp:684
+msgid "Load Error"
+msgstr "Fehler"
+
+#: cvpcb/cvframe.cpp:688
+msgid "Some files could not be found!"
+msgstr "Einige Dateien konnten nicht gefunden werden!"
+
+#: cvpcb/cvframe.cpp:696
+msgid "Some files are invalid!"
+msgstr "Einige Dateien sind ungültig!"
+
+#: cvpcb/cvframe.cpp:717 eeschema/schframe.cpp:1011 eeschema/libedit.cpp:62
+#: kicad/kicad.cpp:78 kicad/prjconfig.cpp:270 pcbnew/pcbframe.cpp:801
+#: pcbnew/moduleframe.cpp:602
+msgid " [Read Only]"
+msgstr " [Nur lesbar]"
+
+#: cvpcb/cvframe.cpp:722 eeschema/schframe.cpp:1014
+msgid " [no file]"
+msgstr " [keine Datei]"
+
+#: cvpcb/cvframe.cpp:781 pcbnew/netlist.cpp:76
+#, c-format
+msgid ""
+"Error loading netlist.\n"
+"%s"
+msgstr ""
+"Fehler beim Einlesen der Netzliste.\n"
+"%s"
+
+#: cvpcb/cvframe.cpp:782 pcbnew/netlist.cpp:77
+#: pcbnew/dialogs/dialog_netlist.cpp:405
+msgid "Netlist Load Error"
+msgstr "Fehler beim Einlesen der Netzliste"
+
+#: cvpcb/cvframe.cpp:857 pcbnew/class_edge_mod.cpp:249
+#: pcbnew/class_module.cpp:522 pcbnew/class_pad.cpp:512
+#: pcbnew/class_text_mod.cpp:363
+msgid "Module"
+msgstr "Bauteil"
+
+#: cvpcb/readwrite_dlgs.cpp:40
+msgid "Component Library Error"
+msgstr "Bauteilebibliotheksfehler"
+
+#: cvpcb/readwrite_dlgs.cpp:169
+msgid "Save Component Footprint Link File"
+msgstr "Speichern der Bauteile-Footprint Zuordnungsdatei"
+
+#: cvpcb/readwrite_dlgs.cpp:186
+msgid "Unable to create component footprint link file (.cmp)"
+msgstr "Konnte die Bauteile-Footprint Zuordnungsdatei (.cmp) nicht erstellen."
+
+#: cvpcb/readwrite_dlgs.cpp:191 eeschema/files-io.cpp:143
+#, c-format
+msgid "File %s saved"
+msgstr "Datei %s gespeichert."
 
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:20
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:22
@@ -1892,7 +1879,7 @@ msgstr "Eine neue Bibliothek nach der ausgewählten einfügen und diese einlesen
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:130
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:43
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:90
-#: pcbnew/class_module.cpp:487
+#: pcbnew/class_module.cpp:509
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:43
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:112
 msgid "Insert"
@@ -2042,8 +2029,8 @@ msgstr "Kanten:"
 msgid "Text"
 msgstr "Text"
 
-#: cvpcb/dialogs/dialog_display_options_base.cpp:44 pcbnew/class_board.cpp:988
-#: pcbnew/class_module.cpp:464 pcbnew/class_netinfo_item.cpp:140
+#: cvpcb/dialogs/dialog_display_options_base.cpp:44 pcbnew/class_board.cpp:990
+#: pcbnew/class_module.cpp:486 pcbnew/class_netinfo_item.cpp:133
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:61
 msgid "Pads"
 msgstr "Pads"
@@ -4511,7 +4498,7 @@ msgstr "%s %s gefunden."
 msgid "%s found but %s not found"
 msgstr "%s gefunden, jedoch %s nicht gefunden."
 
-#: eeschema/find.cpp:279 pcbnew/netlist_reader_firstformat.cpp:282
+#: eeschema/find.cpp:279
 #, c-format
 msgid "Component %s not found"
 msgstr "Bauteil %s nicht gefunden."
@@ -4547,7 +4534,7 @@ msgid "Arc center (%s, %s), radius %s"
 msgstr "Kreisbogenmitte (%s, %s), Radius %s"
 
 #: eeschema/lib_circle.cpp:54 pcbnew/class_board_item.cpp:45
-#: pcbnew/class_drawsegment.cpp:334 pcbnew/class_pad.cpp:696
+#: pcbnew/class_drawsegment.cpp:334 pcbnew/class_pad.cpp:683
 #: gerbview/class_gerber_draw_item.cpp:189
 msgid "Circle"
 msgstr "Kreis"
@@ -7099,7 +7086,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:80
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:69
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:71
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
 msgid "Color"
 msgstr "Farbe"
@@ -7107,7 +7094,7 @@ msgstr "Farbe"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:80
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:69
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:71
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
 msgid "Black and white"
 msgstr "Schwarz-Weiß"
@@ -7119,7 +7106,7 @@ msgstr "Farbmodus"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:84
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:38
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:113
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:73
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:75
 msgid ""
 "Choose if you want to draw the sheet like it appears on screen,\n"
 "or in black and white mode, better to print it when using  black and white "
@@ -7910,40 +7897,7 @@ msgstr "Bezeichnung"
 msgid "Supplier and ref"
 msgstr "Anbieter und Ref"
 
-#: pcbnew/class_board.cpp:88
-msgid "This is the default net class."
-msgstr "Dies ist die voreingestellte Netzklasse."
-
-#: pcbnew/class_board.cpp:991 pcbnew/class_netinfo_item.cpp:161
-#: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
-msgid "Vias"
-msgstr "Durchkontakt."
-
-#: pcbnew/class_board.cpp:994
-msgid "trackSegm"
-msgstr "Leiterb.seg."
-
-#: pcbnew/class_board.cpp:997
-msgid "Nodes"
-msgstr "Knoten"
-
-#: pcbnew/class_board.cpp:1000
-msgid "Nets"
-msgstr "Netze"
-
-#: pcbnew/class_board.cpp:1008
-msgid "Links"
-msgstr "Verbindungen"
-
-#: pcbnew/class_board.cpp:1011
-msgid "Connect"
-msgstr "verbunden"
-
-#: pcbnew/class_board.cpp:1014 pcbnew/dialogs/dialog_drc_base.cpp:177
-msgid "Unconnected"
-msgstr "Nicht verbunden"
-
-#: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:702
+#: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:689
 msgid "Rect"
 msgstr "Rechteck"
 
@@ -7978,8 +7932,8 @@ msgstr "Bogen"
 msgid "Segment"
 msgstr "Segment"
 
-#: pcbnew/class_drawsegment.cpp:358 pcbnew/class_module.cpp:452
-#: pcbnew/class_pad.cpp:541 pcbnew/class_pcb_layer_widget.cpp:201
+#: pcbnew/class_drawsegment.cpp:358 pcbnew/class_module.cpp:474
+#: pcbnew/class_pad.cpp:528 pcbnew/class_pcb_layer_widget.cpp:201
 #: pcbnew/class_pcb_text.cpp:132 pcbnew/class_text_mod.cpp:379
 #: pcbnew/class_track.cpp:1144 pcbnew/class_zone.cpp:705
 #: pcbnew/layer_widget.cpp:533 pcbnew/sel_layer.cpp:146
@@ -8159,148 +8113,222 @@ msgstr "Marker @(%d,%d)"
 msgid "Target size %s"
 msgstr "Zielgrösse %s"
 
-#: pcbnew/class_module.cpp:447
+#: pcbnew/class_board.cpp:90
+msgid "This is the default net class."
+msgstr "Dies ist die voreingestellte Netzklasse."
+
+#: pcbnew/class_board.cpp:993 pcbnew/class_netinfo_item.cpp:154
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
+msgid "Vias"
+msgstr "Durchkontakt."
+
+#: pcbnew/class_board.cpp:996
+msgid "trackSegm"
+msgstr "Leiterb.seg."
+
+#: pcbnew/class_board.cpp:999
+msgid "Nodes"
+msgstr "Knoten"
+
+#: pcbnew/class_board.cpp:1002
+msgid "Nets"
+msgstr "Netze"
+
+#: pcbnew/class_board.cpp:1010
+msgid "Links"
+msgstr "Verbindungen"
+
+#: pcbnew/class_board.cpp:1013
+msgid "Connect"
+msgstr "verbunden"
+
+#: pcbnew/class_board.cpp:1016 pcbnew/dialogs/dialog_drc_base.cpp:177
+msgid "Unconnected"
+msgstr "Nicht verbunden"
+
+#: pcbnew/class_board.cpp:2373
+#, c-format
+msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
+msgstr "Überprüfe aus der Netzliste den Bauteilefootprint \"%s:%s:%s\".\n"
+
+#: pcbnew/class_board.cpp:2390
+#, c-format
+msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
+msgstr "Füge neues Bauteil \"%s:%s\" mit Footprint \"%s\" hinzu.\n"
+
+#: pcbnew/class_board.cpp:2395
+#, c-format
+msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
+msgstr ""
+"Neues Bauteil \"%s:%s\" konnte nicht hinzugefügt werden, wegen fehlenden "
+"Footprint \"%s\".\n"
+
+#: pcbnew/class_board.cpp:2425
+#, c-format
+msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
+msgstr "Ersetze von Bauteil \"%s:%s\" den Footprint \"%s\" mit \"%s\".\n"
+
+#: pcbnew/class_board.cpp:2432
+#, c-format
+msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
+msgstr ""
+"Bauteil \"%s:%s\" konnte nicht ersetzt werden, wegen fehlenden Footprint \"%s"
+"\".\n"
+
+#: pcbnew/class_board.cpp:2464
+#, c-format
+msgid "Changing footprint \"%s:%s\" reference to \"%s\".\n"
+msgstr "Ändere die Referenz von Footprint \"%s:%s\" zu \"%s\".\n"
+
+#: pcbnew/class_board.cpp:2480
+#, c-format
+msgid "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
+msgstr "Ändere Wert von Footprint \"%s:%s\" von \"%s\" zu \"%s\".\n"
+
+#: pcbnew/class_board.cpp:2497
+#, c-format
+msgid "Changing footprint path \"%s:%s\" to \"%s\".\n"
+msgstr "Ändere Footprintpfad \"%s:%s\" zu \"%s\".\n"
+
+#: pcbnew/class_board.cpp:2523
+#, c-format
+msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
+msgstr "Bereinige Netznamen von Bauteil \"%s:%s\" Pin \"%s\".\n"
+
+#: pcbnew/class_board.cpp:2540
+#, c-format
+msgid ""
+"Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
+msgstr ""
+"Ändere Netzname von Bauteil \"%s:%s\" Pin \"%s\" von \"%s\" zu \"%s\".\n"
+
+#: pcbnew/class_board.cpp:2578
+#, c-format
+msgid "Removing footprint \"%s:%s\".\n"
+msgstr "Entferne Footprint \"%s:%s\".\n"
+
+#: pcbnew/class_module.cpp:469
 msgid "Last Change"
 msgstr "Letzte Änderung"
 
-#: pcbnew/class_module.cpp:451
+#: pcbnew/class_module.cpp:473
 msgid "Netlist path"
 msgstr "Netzlistepfad"
 
-#: pcbnew/class_module.cpp:474
+#: pcbnew/class_module.cpp:496
 msgid "Stat"
 msgstr "Stat"
 
-#: pcbnew/class_module.cpp:477 pcbnew/class_pad.cpp:576
+#: pcbnew/class_module.cpp:499 pcbnew/class_pad.cpp:563
 #: pcbnew/class_text_mod.cpp:389
 msgid "Orient"
 msgstr "Ausrichtung"
 
-#: pcbnew/class_module.cpp:491
+#: pcbnew/class_module.cpp:513
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:131
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
 msgid "Virtual"
 msgstr "Virtuell"
 
-#: pcbnew/class_module.cpp:499
+#: pcbnew/class_module.cpp:521
 msgid "Attrib"
 msgstr "Attribut"
 
-#: pcbnew/class_module.cpp:502
+#: pcbnew/class_module.cpp:524
 msgid "No 3D shape"
 msgstr "Keine 3D Form"
 
-#: pcbnew/class_module.cpp:513
+#: pcbnew/class_module.cpp:535
 msgid "3D-Shape"
 msgstr "3D-Form"
 
-#: pcbnew/class_module.cpp:516
+#: pcbnew/class_module.cpp:538
 #, c-format
 msgid "Doc: %s"
 msgstr "Beschreibung: %s"
 
-#: pcbnew/class_module.cpp:517
+#: pcbnew/class_module.cpp:539
 #, c-format
 msgid "KeyW: %s"
 msgstr "Kürzel: %s"
 
-#: pcbnew/class_module.cpp:677
+#: pcbnew/class_module.cpp:699
 #, c-format
 msgid "Footprint %s on %s"
 msgstr "Footprint %s auf %s"
 
-#: pcbnew/class_pad.cpp:527
+#: pcbnew/class_pad.cpp:514
 msgid "Pad"
 msgstr "Pad"
 
-#: pcbnew/class_pad.cpp:530 pcbnew/dialogs/dialog_design_rules.cpp:50
+#: pcbnew/class_pad.cpp:517 pcbnew/dialogs/dialog_design_rules.cpp:50
 msgid "Net"
 msgstr "Netz"
 
-#: pcbnew/class_pad.cpp:547 pcbnew/class_text_mod.cpp:395
+#: pcbnew/class_pad.cpp:534 pcbnew/class_text_mod.cpp:395
 msgid "H Size"
 msgstr "H Grösse"
 
-#: pcbnew/class_pad.cpp:550 pcbnew/class_text_mod.cpp:398
+#: pcbnew/class_pad.cpp:537 pcbnew/class_text_mod.cpp:398
 msgid "V Size"
 msgstr "V Grösse"
 
-#: pcbnew/class_pad.cpp:556 pcbnew/class_track.cpp:1159
+#: pcbnew/class_pad.cpp:543 pcbnew/class_track.cpp:1159
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:278
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid "Drill"
 msgstr "Bohrung"
 
-#: pcbnew/class_pad.cpp:564
+#: pcbnew/class_pad.cpp:551
 msgid "Drill X / Y"
 msgstr "Bohrung X / Y"
 
-#: pcbnew/class_pad.cpp:579
+#: pcbnew/class_pad.cpp:566
 msgid "X Pos"
 msgstr "X-Pos"
 
-#: pcbnew/class_pad.cpp:582
+#: pcbnew/class_pad.cpp:569
 msgid "Y pos"
 msgstr "Y-Pos"
 
-#: pcbnew/class_pad.cpp:587
+#: pcbnew/class_pad.cpp:574
 msgid "Length in package"
 msgstr "Länge in Package"
 
-#: pcbnew/class_pad.cpp:699 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
+#: pcbnew/class_pad.cpp:686 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Oval"
 msgstr "Oval"
 
-#: pcbnew/class_pad.cpp:705
+#: pcbnew/class_pad.cpp:692
 msgid "Trap"
 msgstr "Trap"
 
-#: pcbnew/class_pad.cpp:718
+#: pcbnew/class_pad.cpp:705
 msgid "Std"
 msgstr "Std"
 
-#: pcbnew/class_pad.cpp:721 pcbnew/dialogs/dialog_pad_properties_base.cpp:58
+#: pcbnew/class_pad.cpp:708 pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "SMD"
 msgstr "SMD"
 
-#: pcbnew/class_pad.cpp:724
+#: pcbnew/class_pad.cpp:711
 msgid "Conn"
 msgstr "Verbinder"
 
-#: pcbnew/class_pad.cpp:727
+#: pcbnew/class_pad.cpp:714
 msgid "Not Plated"
 msgstr "Nicht plattiert"
 
-#: pcbnew/class_pad.cpp:743
+#: pcbnew/class_pad.cpp:730
 #, c-format
 msgid "Pad on %s of %s"
 msgstr "Pad auf %s von %s"
 
-#: pcbnew/class_pad.cpp:749
+#: pcbnew/class_pad.cpp:736
 #, c-format
 msgid "Pad %s on %s of %s"
 msgstr "Pad %s auf %s von %s"
-
-#: pcbnew/class_netinfo_item.cpp:119
-msgid "Net Name"
-msgstr "Netz Name"
-
-#: pcbnew/class_netinfo_item.cpp:122
-msgid "Net Code"
-msgstr "Netz Code"
-
-#: pcbnew/class_netinfo_item.cpp:165
-msgid "Net Length:"
-msgstr "Netzlänge:"
-
-#: pcbnew/class_netinfo_item.cpp:169
-msgid "On Board"
-msgstr "Auf Platine"
-
-#: pcbnew/class_netinfo_item.cpp:173 pcbnew/class_track.cpp:1002
-msgid "In Package"
-msgstr "In Package"
 
 #: pcbnew/editmod.cpp:85
 msgid "Cannot delete REFERENCE!"
@@ -8609,6 +8637,10 @@ msgstr "Leiterbahnlänge"
 msgid "Full Len"
 msgstr "Volle Länge"
 
+#: pcbnew/class_track.cpp:1002 pcbnew/class_netinfo_item.cpp:166
+msgid "In Package"
+msgstr "In Package"
+
 #: pcbnew/class_track.cpp:1010
 msgid "NC Name"
 msgstr "NC Name"
@@ -8840,6 +8872,22 @@ msgstr "Netz hervorheben"
 #: pcbnew/edit.cpp:1408
 msgid "Select rats nest"
 msgstr "Netzlinien wählen"
+
+#: pcbnew/class_netinfo_item.cpp:112
+msgid "Net Name"
+msgstr "Netz Name"
+
+#: pcbnew/class_netinfo_item.cpp:115
+msgid "Net Code"
+msgstr "Netz Code"
+
+#: pcbnew/class_netinfo_item.cpp:158
+msgid "Net Length:"
+msgstr "Netzlänge:"
+
+#: pcbnew/class_netinfo_item.cpp:162
+msgid "On Board"
+msgstr "Auf Platine"
 
 #: pcbnew/controle.cpp:204 pcbnew/modedit.cpp:94
 msgid "Selection Clarification"
@@ -9256,29 +9304,26 @@ msgid "Insert footprint in board"
 msgstr "Footprint der Platine hinzufügen"
 
 #: pcbnew/gen_modules_placefile.cpp:151 pcbnew/gen_modules_placefile.cpp:521
-#: pcbnew/dialogs/dialog_SVG_print.cpp:178
 #: pcbnew/dialogs/dialog_gendrill.cpp:278 pcbnew/dialogs/dialog_plot.cpp:316
+#: pcbnew/dialogs/dialog_SVG_print.cpp:178
 msgid "Select Output Directory"
 msgstr "Wähle das Ausgabeverzeichnis"
 
-#: pcbnew/gen_modules_placefile.cpp:158
-#: pcbnew/dialogs/dialog_SVG_print.cpp:185
-#: pcbnew/dialogs/dialog_gendrill.cpp:285 pcbnew/dialogs/dialog_plot.cpp:323
+#: pcbnew/gen_modules_placefile.cpp:158 pcbnew/dialogs/dialog_gendrill.cpp:285
+#: pcbnew/dialogs/dialog_plot.cpp:323 pcbnew/dialogs/dialog_SVG_print.cpp:185
 msgid "Use a relative path? "
 msgstr "Einen relativen Pfad verwenden?"
 
 #: pcbnew/gen_modules_placefile.cpp:159 pcbnew/gen_modules_placefile.cpp:168
-#: pcbnew/dialogs/dialog_SVG_print.cpp:186
-#: pcbnew/dialogs/dialog_SVG_print.cpp:196
 #: pcbnew/dialogs/dialog_gendrill.cpp:286
 #: pcbnew/dialogs/dialog_gendrill.cpp:296 pcbnew/dialogs/dialog_plot.cpp:324
-#: pcbnew/dialogs/dialog_plot.cpp:334
+#: pcbnew/dialogs/dialog_plot.cpp:334 pcbnew/dialogs/dialog_SVG_print.cpp:186
+#: pcbnew/dialogs/dialog_SVG_print.cpp:196
 msgid "Plot Output Directory"
 msgstr "Ausgabeverzeichnis für Plot"
 
-#: pcbnew/gen_modules_placefile.cpp:167
-#: pcbnew/dialogs/dialog_SVG_print.cpp:195
-#: pcbnew/dialogs/dialog_gendrill.cpp:295 pcbnew/dialogs/dialog_plot.cpp:333
+#: pcbnew/gen_modules_placefile.cpp:167 pcbnew/dialogs/dialog_gendrill.cpp:295
+#: pcbnew/dialogs/dialog_plot.cpp:333 pcbnew/dialogs/dialog_SVG_print.cpp:195
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
@@ -9385,7 +9430,7 @@ msgstr "Die Footprintbibliothek <%s> konnte nicht gelöscht werden."
 
 #: pcbnew/highlight.cpp:56
 msgid "Filter Net Names"
-msgstr "Filtere nach Netznamen"
+msgstr "Nach Netznamen filtern"
 
 #: pcbnew/highlight.cpp:56
 msgid "Net Filter"
@@ -9626,31 +9671,31 @@ msgstr "Die Bibliothek <%s> kann nicht gelöscht werden."
 msgid "Load Module"
 msgstr "Bauteil öffnen"
 
-#: pcbnew/loadcmp.cpp:316
+#: pcbnew/loadcmp.cpp:301
 #, c-format
 msgid "Footprint %s not found in library <%s>"
 msgstr "Footprint %s konnte nicht in der Bibliothek <%s> gefunden werden."
 
-#: pcbnew/loadcmp.cpp:365
+#: pcbnew/loadcmp.cpp:346
 #, c-format
 msgid "PCB footprint library file <%s> not found in search paths."
 msgstr "PCB Footprint Bibliotheksdatei <%s> nicht im Suchpfad gefunden."
 
-#: pcbnew/loadcmp.cpp:389
+#: pcbnew/loadcmp.cpp:370
 #, c-format
 msgid "Footprint %s not found in any library"
 msgstr "Der Footprint %s konnte in keiner Bibliothek gefunden werden."
 
-#: pcbnew/loadcmp.cpp:464 pcbnew/loadcmp.cpp:521
+#: pcbnew/loadcmp.cpp:474 pcbnew/loadcmp.cpp:528
 #, c-format
 msgid "Modules [%d items]"
 msgstr "Bauteile [%d Elemente]"
 
-#: pcbnew/loadcmp.cpp:478
+#: pcbnew/loadcmp.cpp:488
 msgid "No footprint found"
 msgstr "Kein Footprint gefunden."
 
-#: pcbnew/loadcmp.cpp:588
+#: pcbnew/loadcmp.cpp:595
 #, c-format
 msgid "Footprint library <%s> saved as <%s>"
 msgstr "Die Footprintbibliothek <%s> wurde gespeichert als <%s>."
@@ -10287,7 +10332,7 @@ msgstr "&Raster"
 
 #: pcbnew/menubar_pcbframe.cpp:461
 msgid "Adjust user grid dimensions"
-msgstr "Anpassen der Rastergrösse"
+msgstr "Rastergrösse anpassen"
 
 #: pcbnew/menubar_pcbframe.cpp:466
 msgid "Te&xts and Drawings"
@@ -10295,7 +10340,7 @@ msgstr "Te&xte und Zeichnungen"
 
 #: pcbnew/menubar_pcbframe.cpp:467
 msgid "Adjust dimensions for texts and drawings"
-msgstr "Anpassen der Grösse für Texte und Zeichnungen"
+msgstr "Grösse für Texte und Zeichnungen anpassen"
 
 #: pcbnew/menubar_pcbframe.cpp:472
 msgid "&Pads"
@@ -10307,7 +10352,7 @@ msgstr "Standard Padeigenschaften einstellen"
 
 #: pcbnew/menubar_pcbframe.cpp:477
 msgid "Pads &Mask Clearance"
-msgstr "&Abstandsmaske von Pads"
+msgstr "Padabstands&maske"
 
 #: pcbnew/menubar_pcbframe.cpp:478
 msgid "Adjust the global clearance between pads and the solder resist mask"
@@ -10569,48 +10614,6 @@ msgstr "Bauteil %s (Wert %s) entfernen?"
 msgid "Footprint Library Browser"
 msgstr "Footprint Bibliotheksbrowser"
 
-#: pcbnew/netlist.cpp:81
-#, c-format
-msgid "Netlist file <%s> not found"
-msgstr "Die Netzliste <%s> wurde nicht gefunden."
-
-#: pcbnew/netlist.cpp:129
-#, c-format
-msgid "Reading Netlist <%s>"
-msgstr "Lese Netzliste <%s>"
-
-#: pcbnew/netlist.cpp:134
-#, c-format
-msgid "Using component/footprint link file <%s>"
-msgstr "Verwende Bauteil/Footprint Zuordnungsdateien <%s>."
-
-#: pcbnew/netlist.cpp:141
-msgid "Using time stamp selection"
-msgstr "Verwende Zeitstempelauswahl"
-
-#: pcbnew/netlist.cpp:179
-msgid "OK to delete not locked footprints not found in netlist?"
-msgstr ""
-"Sollen die nicht gesperrten Footprints entfernt werden, welche nicht in der "
-"Netzliste gefunden wurden?"
-
-#: pcbnew/netlist.cpp:211
-msgid "No Modules"
-msgstr "Keine Bauteile vorhanden"
-
-#: pcbnew/netlist.cpp:232
-msgid "Components"
-msgstr "Bauteile"
-
-#: pcbnew/move_or_drag_track.cpp:747
-msgid "Unable to drag this segment: too many segments connected"
-msgstr ""
-"Kann das Segment nicht verschieben: Zu viele Segmente miteinander verbunden"
-
-#: pcbnew/move_or_drag_track.cpp:818
-msgid "Unable to drag this segment: two collinear segments"
-msgstr "Kann das Segment nicht verschieben: Zwei kollineare Segmente"
-
 #: pcbnew/muonde.cpp:203
 msgid "Length:"
 msgstr "Länge"
@@ -10699,6 +10702,41 @@ msgstr "Zwischenraum:"
 msgid "Create Microwave Gap"
 msgstr "Erstelle Microwave Abstand"
 
+#: pcbnew/move_or_drag_track.cpp:747
+msgid "Unable to drag this segment: too many segments connected"
+msgstr ""
+"Kann das Segment nicht verschieben: Zu viele Segmente miteinander verbunden"
+
+#: pcbnew/move_or_drag_track.cpp:818
+msgid "Unable to drag this segment: two collinear segments"
+msgstr "Kann das Segment nicht verschieben: Zwei kollineare Segmente"
+
+#: pcbnew/netlist.cpp:64 pcbnew/dialogs/dialog_netlist.cpp:394
+#, c-format
+msgid "Cannot open netlist file \"%s\"."
+msgstr "Konnte die Netzliste \"%s\" nicht öffnen."
+
+#: pcbnew/netlist.cpp:65 pcbnew/dialogs/dialog_netlist.cpp:395
+msgid "Netlist Load Error."
+msgstr "Fehler beim Einlesen der Netzliste."
+
+#: pcbnew/netlist.cpp:120
+msgid "No Modules"
+msgstr "Keine Bauteile vorhanden"
+
+#: pcbnew/netlist.cpp:142
+msgid "Components"
+msgstr "Bauteile"
+
+#: pcbnew/netlist.cpp:211
+#, c-format
+msgid ""
+"*** Warning: component `%s` footprint <%s> was not found in any libraries. "
+"***\n"
+msgstr ""
+"*** Warnung: Bauteil '%s' mit Footprint <%s> konnte in keiner Bibliothek "
+"gefunden werden. ***\n"
+
 #: pcbnew/muwave_command.cpp:42
 msgid "Add Line"
 msgstr "Linie hinzufügen"
@@ -10719,46 +10757,56 @@ msgstr "Stub Kreisbogen hinzufügen"
 msgid "Add Polynomial Shape"
 msgstr "Polynomische Form hinzufügen"
 
-#: pcbnew/netlist_reader_common.cpp:254
+#: pcbnew/kicad_netlist_reader.cpp:252
 #, c-format
-msgid "Module ref %s, change footprint %s to %s\n"
-msgstr "Bauteilreferenz %s: Änderung von Footprint %s nach %s\n"
+msgid "Cannot find component with reference \"%s\" in netlist."
+msgstr "Konnte in der Netzliste kein Bauteil mit der Referenz \"%s\" finden."
 
-#: pcbnew/netlist_reader_common.cpp:265
-#, c-format
-msgid "Component %s: module %s not found\n"
-msgstr "Bauteil %s: Modul <%s> nicht gefunden.\n"
-
-#: pcbnew/netlist_reader_common.cpp:275
-#, c-format
-msgid "Component %s: Mismatch! module is %s and netlist said %s\n"
+#: pcbnew/legacy_netlist_reader.cpp:119
+msgid "Cannot parse time stamp in component section of netlist."
 msgstr ""
-"Bauteil %s: Keine Übereinstimmung! Bauteil ist %s, jedoch laut Netzliste "
-"%s.\n"
+"Konnte einen Zeitstempel in der Bauteilesektion der Netzliste nicht parsen."
 
-#: pcbnew/netlist_reader_common.cpp:332
-#: pcbnew/netlist_reader_firstformat.cpp:337
+#: pcbnew/legacy_netlist_reader.cpp:129
+msgid "Cannot parse name in component section of netlist."
+msgstr "Konnte einen Namen in der Bauteilesektion der Netzliste nicht parsen."
+
+#: pcbnew/legacy_netlist_reader.cpp:139
+msgid "Cannot parse reference designator in component section of netlist."
+msgstr ""
+"Konnte einen Referenzbezeichner in der Bauteilesektion der Netzliste nicht "
+"parsen."
+
+#: pcbnew/legacy_netlist_reader.cpp:149
+msgid "Cannot parse value in component section of netlist."
+msgstr "Konnte einen Wert in der Bauteilesektion der Netzliste nicht parsen."
+
+#: pcbnew/legacy_netlist_reader.cpp:172
+msgid "Cannot parse pin name in component net section of netlist."
+msgstr ""
+"Konnte einen Pinnamen in der Bauteilesektion der Netzliste nicht parsen."
+
+#: pcbnew/legacy_netlist_reader.cpp:181
+msgid "Cannot parse net name in component net section of netlist."
+msgstr ""
+"Konnte einen Netznamen in der Bauteilesektion der Netzliste nicht parsen."
+
+#: pcbnew/legacy_netlist_reader.cpp:229
 #, c-format
-msgid "Module %s: Pad %s not found"
-msgstr "Bauteil %s: Pad <%s> nicht gefunden."
+msgid "Cannot find component '%s' in footprint filter section of netlist."
+msgstr ""
+"Konnte das Bauteil '%s' in der Footprintfiltersektion der Netzliste nicht "
+"finden."
 
-#: pcbnew/netlist_reader_common.cpp:428
+#: pcbnew/netlist_reader.cpp:312
 #, c-format
-msgid "File <%s> not found, use Netlist for footprints selection"
-msgstr "Datei <%s> nicht gefunden. Verwende Netzliste für Bauteileauswahl."
+msgid "Cannot open file %s for reading."
+msgstr "Konnte Datei <%s> nicht öffnen."
 
-#: pcbnew/netlist_reader_common.cpp:573
+#: pcbnew/netlist_reader.cpp:410
 #, c-format
-msgid "Component %s: footprint %s not found"
-msgstr "Bauteil %s: Footprint %s nicht gefunden."
-
-#: pcbnew/netlist_reader_firstformat.cpp:158
-msgid "Some footprints are not found in libraries"
-msgstr "Einige Footprints konnten nicht in den Bibliotheken gefunden werden."
-
-#: pcbnew/netlist_reader_kicad.cpp:132
-msgid "Netlist error."
-msgstr "Fehler in der Netzliste."
+msgid "Cannot find component '%s' in footprint assignment file."
+msgstr "Konnte Bauteil '%s' nicht in der Footprintzuweisungsdatei finden."
 
 #: pcbnew/onleftclick.cpp:248
 msgid "Graphic not allowed on Copper layers"
@@ -11268,7 +11316,7 @@ msgstr "Kann <%s> nicht absolut erstellen unter Berücksichtigung von <%s>!"
 
 #: pcbnew/pcbplot.cpp:159 pcbnew/pcbplot.cpp:180
 #: pcbnew/dialogs/dialog_plot_base.cpp:366
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:104
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:106
 #: pcbnew/dialogs/dialog_plot_base.h:128
 msgid "Plot"
 msgstr "Plotten"
@@ -13818,7 +13866,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:37
 #: pcbnew/dialogs/dialog_plot_base.cpp:56
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:32
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:33
 msgid "Browse..."
 msgstr "Suchen..."
 
@@ -14139,7 +14187,7 @@ msgstr "Allgemein:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:98
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:82
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:60
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:61
 msgid "Default pen size"
 msgstr "Voreinstellung für Stiftgrösse"
 
@@ -14309,182 +14357,6 @@ msgstr ""
 "werden.\n"
 "Das endgültige Abstandsmaß ist die Summe aus diesem Wert und dem "
 "Abstandsverhältnis."
-
-#: pcbnew/dialogs/dialog_netlist.cpp:76
-msgid "Project config has changed. Save it ?"
-msgstr ""
-"Die Projektkonfiguration wurde verändert.\n"
-"Möchte Sie diese speichern?"
-
-#: pcbnew/dialogs/dialog_netlist.cpp:117
-msgid "Select Netlist"
-msgstr "Wähle Netzliste"
-
-#: pcbnew/dialogs/dialog_netlist.cpp:150
-msgid "No modules"
-msgstr "Keine Bauteile"
-
-#: pcbnew/dialogs/dialog_netlist.cpp:163
-msgid "Netlist file not found!"
-msgstr "Netzliste wurde nicht gefunden."
-
-#: pcbnew/dialogs/dialog_netlist.cpp:178
-msgid "No duplicate."
-msgstr "Kein Duplikat"
-
-#: pcbnew/dialogs/dialog_netlist.cpp:181
-msgid "Duplicates:"
-msgstr "Duplikate:"
-
-#: pcbnew/dialogs/dialog_netlist.cpp:205
-msgid "No missing modules."
-msgstr "Keine fehlenden Bauteile."
-
-#: pcbnew/dialogs/dialog_netlist.cpp:208
-msgid "Missing:"
-msgstr "Fehlend:"
-
-#: pcbnew/dialogs/dialog_netlist.cpp:224
-msgid "No extra modules."
-msgstr "Keine extra Bauteile."
-
-#: pcbnew/dialogs/dialog_netlist.cpp:227
-msgid "Not in Netlist:"
-msgstr "Nicht in Netzliste vorhanden:"
-
-#: pcbnew/dialogs/dialog_netlist.cpp:252
-msgid "Too many errors: some are skipped"
-msgstr "Zu viele Fehler: Einige wurden übersprungen"
-
-#: pcbnew/dialogs/dialog_netlist.cpp:256
-msgid "Check Modules"
-msgstr "Footprinttest"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:25
-msgid "Timestamp"
-msgstr "Zeitstempel"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:27
-msgid "Module Selection:"
-msgstr "Bauteilauswahl:"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:29
-msgid ""
-"Select how footprints are recognized:\n"
-"by their reference (U1, R3...) (normal setting)\n"
-"or their time stamp (special setting after a full schematic reannotation)"
-msgstr ""
-"Wähle wie Footprints erkannt werden:\n"
-"nach ihrer Referenz (U1, R3...) (übliche Einstellung)\n"
-"oder nach ihren Zeitstempeln (spezielle Einstellung nach einer völligen "
-"Neuannotation der Bauteile im Schaltplan)"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
-msgid "From netlist"
-msgstr "Aus Netzliste"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
-msgid "From separate .cmp file"
-msgstr "Von separater cmp-Datei"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
-msgid "Module Name Source:"
-msgstr "Bauteilnamensquelle:"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:37
-msgid ""
-"Source of footprints names for component:\n"
-"- the netlist (if you have filled the footprint field of each component  in "
-"schematic)\n"
-"- the .cmp file created by CvPcb"
-msgstr ""
-"Quellen für Bauteilefootprintnamen:\n"
-"- Netzliste (wenn das Footprintfeld eines jeden Bauteils im Schaltplan "
-"ausgefüllt wurde)\n"
-"- Die von CvPcb erzeugte cmp-Datei"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
-msgid "Keep"
-msgstr "Behalten"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
-msgid "Change"
-msgstr "Ändern"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
-msgid "Exchange Module:"
-msgstr "Bauteil austauschen:"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:45
-msgid ""
-"Keep or change an existing footprint when the netlist gives a different "
-"footprint"
-msgstr ""
-"Behalte oder ändere einen existierenden Footprint, wenn die Netzliste einen "
-"unterschiedlichen Footprint liefert"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:57
-msgid "Bad Tracks Deletion:"
-msgstr "Schlechte Leiterbahnen:"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:59
-msgid "Keep or delete bad tracks after a netlist change"
-msgstr ""
-"Behalte oder entferne ungültige Leiterbahnen nach einer Änderung der "
-"Netzliste"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
-msgid "Extra Footprints"
-msgstr "Zusätzliche Footprints"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:67
-msgid ""
-"Remove footprints found on the Board but not in netlist\n"
-"Note: only not locked footprints will be removed"
-msgstr ""
-"Entferne Footprints, die auf der Platine aber nicht in der Netzliste "
-"gefunden wurden\n"
-"Beachte: Nur nicht gesperrte Footprints werden entfernt"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:77
-msgid "Browse Netlist Files"
-msgstr "Browse nach Netzliste Dateien"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:80
-msgid "Read Current Netlist"
-msgstr "Lese aktuelle Netzliste"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:82
-msgid "Read the current netlist and update connections and connectivity info"
-msgstr ""
-"Lese die aktuelle Netzliste und aktualisiere alle Verbindungen und damit "
-"zusammenhängende Informationen"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:86
-msgid "Footprints Test"
-msgstr "Footprinttest"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:87
-msgid "Read the current neltist file and list missing and extra footprints"
-msgstr ""
-"Lese Datei der aktuellen Netzliste und zeige alle fehlenden und zusätzlichen "
-"Footprints"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:91
-msgid "Rebuild Board Connectivity"
-msgstr "Neuaufbau der Konnektivität auf Platine"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:92
-msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
-msgstr ""
-"Neuaufbau der gesamten Netzlinien (nützlich nach einer manuellen Änderungen "
-"eines Netznamens eines Pads)"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:111
-msgid "Netlist File:"
-msgstr "Netzliste-Datei:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:30
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.h:83
@@ -14883,7 +14755,7 @@ msgid "Page Options"
 msgstr "Seiteneinstellungen"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:20
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:42
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:43
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:20
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:25
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:30
@@ -14891,12 +14763,12 @@ msgid "Layers:"
 msgstr "Lagen:"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:25
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:44
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:45
 msgid "Copper Layers:"
 msgstr "Kupferlagen:"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:30
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:49
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:50
 msgid "Technical Layers:"
 msgstr "Technische Lagen:"
 
@@ -15014,86 +14886,6 @@ msgstr "Kombiniert!"
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:119
 msgid "Grid 2:"
 msgstr "Raster 2:"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:27
-msgid ""
-"Enter a filename if you do not want to use default file names\n"
-"Can be used only when printing the current sheet"
-msgstr ""
-"Vergebe einen Dateinamen, wenn nicht der voreingestellte Dateiname verwendet "
-"werden soll.\n"
-"Kann nur angewandt werden, wenn der aktuelle Schaltplan gedruckt wird."
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:58
-msgid "Print SVG options:"
-msgstr "SVG-Einstellungen für Ausdruck:"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:62
-msgid ""
-"Selection of the pen size used to draw items which have no pen size "
-"specified."
-msgstr ""
-"Auswahl der Stiftbreite zum Zeichnen von Elementen, welche keine "
-"spezifizierte Stiftgrösse besitzen."
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:71
-msgid "Print mode"
-msgstr "Druckmodus"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:77
-msgid "Full page with  frame ref"
-msgstr "Gesamte Seite mit Seitenreferenz"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:77
-msgid "Current page size"
-msgstr "Gegenwärtiges Seitenformat"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:77
-msgid "Board area only"
-msgstr "Nur Platinenareal"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:79
-msgid "SVG Page Size"
-msgstr "SVG Seitenformat"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:83
-msgid "Print board edges"
-msgstr "Platinenumriss drucken"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:85
-msgid "Print (or not) the edges layer on others layers"
-msgstr "Die Umrisslage mit anderen Lagen ausdrucken"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:89
-msgid "Print mirrored"
-msgstr "Gespiegelt drucken"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:98
-msgid "One file per layer"
-msgstr "Pro Lage eine Datei"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:98
-msgid "All in one file"
-msgstr "Alles in einer Datei"
-
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:100
-msgid "File option:"
-msgstr "Dateioptionen:"
-
-#: pcbnew/dialogs/dialog_SVG_print.cpp:273
-#: pcbnew/dialogs/dialog_gendrill.cpp:424
-#: pcbnew/dialogs/dialog_gendrill.cpp:598
-#, c-format
-msgid "Plot: %s OK\n"
-msgstr "Plot: %s OK\n"
-
-#: pcbnew/dialogs/dialog_SVG_print.cpp:275
-#: pcbnew/dialogs/dialog_gendrill.cpp:417
-#: pcbnew/dialogs/dialog_gendrill.cpp:521
-#: pcbnew/dialogs/dialog_gendrill.cpp:591
-#, c-format
-msgid "** Unable to create %s **\n"
-msgstr "Konnte Datei <%s> nicht erstellen.\n"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:388
 #, c-format
@@ -15741,10 +15533,6 @@ msgstr ""
 "Dieses Pad ist auf der Platine verkehrt herum.\n"
 "Rück- und Vorderseite werden vertauscht sein."
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:137
-msgid "Value:"
-msgstr "Wert:"
-
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:25
 msgid "Library Tables by Scope"
 msgstr "Bibliotheken nach Geltungsbereich"
@@ -15805,6 +15593,21 @@ msgstr "Pfadabschnitt"
 #: pcbnew/dialogs/dialog_gendrill.cpp:128
 msgid "Use Netclasses values"
 msgstr "Verwende Werte der Netzklassen"
+
+#: pcbnew/dialogs/dialog_gendrill.cpp:417
+#: pcbnew/dialogs/dialog_gendrill.cpp:521
+#: pcbnew/dialogs/dialog_gendrill.cpp:591
+#: pcbnew/dialogs/dialog_SVG_print.cpp:275
+#, c-format
+msgid "** Unable to create %s **\n"
+msgstr "Konnte Datei <%s> nicht erstellen.\n"
+
+#: pcbnew/dialogs/dialog_gendrill.cpp:424
+#: pcbnew/dialogs/dialog_gendrill.cpp:598
+#: pcbnew/dialogs/dialog_SVG_print.cpp:273
+#, c-format
+msgid "Plot: %s OK\n"
+msgstr "Plot: %s OK\n"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:501
 msgid "Save Drill Report File"
@@ -15955,12 +15758,307 @@ msgstr "'signal' ist ein reservierter Lagenname"
 msgid "Layer name is a duplicate of another"
 msgstr "Lagenname existiert bereits"
 
-#: pcbnew/dialogs/dialog_orient_footprints.cpp:130
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:28
+msgid ""
+"Enter a filename if you do not want to use default file names\n"
+"Can be used only when printing the current sheet"
+msgstr ""
+"Vergebe einen Dateinamen, wenn nicht der voreingestellte Dateiname verwendet "
+"werden soll.\n"
+"Kann nur angewandt werden, wenn der aktuelle Schaltplan gedruckt wird."
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:59
+msgid "Print SVG options:"
+msgstr "SVG-Einstellungen für Ausdruck:"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:63
+msgid ""
+"Selection of the pen size used to draw items which have no pen size "
+"specified."
+msgstr ""
+"Auswahl der Stiftbreite zum Zeichnen von Elementen, welche keine "
+"spezifizierte Stiftgrösse besitzen."
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:73
+msgid "Print mode"
+msgstr "Druckmodus"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:79
+msgid "Full page with  frame ref"
+msgstr "Gesamte Seite mit Seitenreferenz"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:79
+msgid "Current page size"
+msgstr "Gegenwärtiges Seitenformat"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:79
+msgid "Board area only"
+msgstr "Nur Platinenareal"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
+msgid "SVG Page Size"
+msgstr "SVG Seitenformat"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:85
+msgid "Print board edges"
+msgstr "Platinenumriss drucken"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:87
+msgid "Print (or not) the edges layer on others layers"
+msgstr "Die Umrisslage mit anderen Lagen ausdrucken"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:91
+msgid "Print mirrored"
+msgstr "Gespiegelt drucken"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:100
+msgid "One file per layer"
+msgstr "Pro Lage eine Datei"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:100
+msgid "All in one file"
+msgstr "Alles in einer Datei"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:102
+msgid "File option:"
+msgstr "Dateioptionen:"
+
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:137
+msgid "Value:"
+msgstr "Wert:"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:80
+msgid "The project configuration has changed.  Do you want to save it?"
+msgstr ""
+"Die Projektkonfiguration wurde verändert.\n"
+"Möchte Sie diese speichern?"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:120
+msgid "Select Netlist"
+msgstr "Wähle Netzliste"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:146
+msgid ""
+"The changes made by reading the netlist cannot be undone.  Are you sure you "
+"want to read the netlist?"
+msgstr ""
+"Die durch das Einlesen der Netzliste durchgeführten Änderungen können nicht "
+"rückgängig gemacht werden.\n"
+"Möchten Sie wirklich die Netzliste einlesen?"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:153
+#, c-format
+msgid "Reading netlist file \"%s\".\n"
+msgstr "Lese Netzliste  \"%s\".\n"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:158
+#, c-format
+msgid "Using component footprint link file \"%s\".\n"
+msgstr "Verwende Bauteil-Footprint Zuordnungsdateien \"%s\".\n"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:164
+#, c-format
+msgid "Using time stamps to select footprints in file \"%s\".\n"
+msgstr "Verwende Zeitstempel für die Auswahl von Footprints in Datei \"%s\".\n"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:184
+msgid "No modules"
+msgstr "Keine Bauteile"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:216
+msgid "No duplicate."
+msgstr "Kein Duplikat"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:219
+msgid "Duplicates:"
+msgstr "Duplikate:"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:243
+msgid "No missing modules."
+msgstr "Keine fehlenden Bauteile."
+
+#: pcbnew/dialogs/dialog_netlist.cpp:246
+msgid "Missing:"
+msgstr "Fehlend:"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:262
+msgid "No extra modules."
+msgstr "Keine extra Bauteile."
+
+#: pcbnew/dialogs/dialog_netlist.cpp:265
+msgid "Not in Netlist:"
+msgstr "Nicht in Netzliste vorhanden:"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:290
+msgid "Too many errors: some are skipped"
+msgstr "Zu viele Fehler: Einige wurden übersprungen"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:294
+msgid "Check Modules"
+msgstr "Footprinttest"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:334
+msgid "Save contents of message window"
+msgstr "Vorliegende Meldungen speichern"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:351
+#, c-format
+msgid "Cannot write message contents to file \"%s\"."
+msgstr "Konnte die Datei \"%s\" mit Meldungen erstellen."
+
+#: pcbnew/dialogs/dialog_netlist.cpp:353
+msgid "File Write Error"
+msgstr "Fehler bei Dateischreibvorgang"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:404
+#, c-format
+msgid ""
+"Error loading netlist file:\n"
+"%s"
+msgstr ""
+"Fehler beim Einlesen der Netzliste:\n"
+"%s"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:25
+msgid "Timestamp"
+msgstr "Zeitstempel"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:27
+msgid "Module Selection"
+msgstr "Bauteilauswahl"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:29
+msgid ""
+"Select how footprints are recognized:\n"
+"by their reference (U1, R3...) (normal setting)\n"
+"or their time stamp (special setting after a full schematic reannotation)"
+msgstr ""
+"Wähle wie Footprints erkannt werden:\n"
+"nach ihrer Referenz (U1, R3...) (übliche Einstellung)\n"
+"oder nach ihren Zeitstempeln (spezielle Einstellung nach einer völligen "
+"Neuannotation der Bauteile im Schaltplan)"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
+msgid "From netlist"
+msgstr "Aus Netzliste"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
+msgid "From separate .cmp file"
+msgstr "Von separater cmp-Datei"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
+msgid "Module Name Source"
+msgstr "Bauteilnamensquelle"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:37
+msgid ""
+"Source of footprints names for component:\n"
+"- the netlist (if you have filled the footprint field of each component  in "
+"schematic)\n"
+"- the .cmp file created by CvPcb"
+msgstr ""
+"Quellen für Bauteilefootprintnamen:\n"
+"- Netzliste (wenn das Footprintfeld eines jeden Bauteils im Schaltplan "
+"ausgefüllt wurde)\n"
+"- Die von CvPcb erzeugte cmp-Datei"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
+msgid "Keep"
+msgstr "Behalten"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
+msgid "Change"
+msgstr "Ändern"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
+msgid "Exchange Module"
+msgstr "Bauteilaustausch"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:45
+msgid ""
+"Keep or change an existing footprint when the netlist gives a different "
+"footprint"
+msgstr ""
+"Behalte oder ändere einen existierenden Footprint, wenn die Netzliste einen "
+"unterschiedlichen Footprint liefert"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:57
+msgid "Unconnected Tracks"
+msgstr "Nicht verbundene Leiterbahnen"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:59
+msgid "Keep or delete bad tracks after a netlist change"
+msgstr ""
+"Behalte oder entferne ungültige Leiterbahnen nach einer Änderung der "
+"Netzliste"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
+msgid "Extra Footprints"
+msgstr "Zusätzliche Footprints"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:67
+msgid ""
+"Remove footprints found on the Board but not in netlist\n"
+"Note: only not locked footprints will be removed"
+msgstr ""
+"Entferne Footprints, die auf der Platine aber nicht in der Netzliste "
+"gefunden wurden\n"
+"Beachte: Nur nicht gesperrte Footprints werden entfernt"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:77
+msgid "Open Netlist File"
+msgstr "Netzliste öffnen"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:80
+msgid "Read Current Netlist"
+msgstr "Aktuelle Netzliste einlesen"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:82
+msgid "Read the current netlist and update connections and connectivity info"
+msgstr ""
+"Lese die aktuelle Netzliste und aktualisiere alle Verbindungen und damit "
+"zusammenhängende Informationen"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:86
+msgid "Test Footprints"
+msgstr "Footprints testen"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:87
+msgid "Read the current neltist file and list missing and extra footprints"
+msgstr ""
+"Lese Datei der aktuellen Netzliste und zeige alle fehlenden und zusätzlichen "
+"Footprints"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:91
+msgid "Rebuild Board Connectivity"
+msgstr "Konnektivität der Platine erneuern"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:92
+msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
+msgstr ""
+"Neuaufbau der gesamten Netzlinien (nützlich nach einer manuellen Änderungen "
+"eines Netznamens eines Pads)"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:96
+msgid "Save Messages to File"
+msgstr "Meldungen speichern"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:111
+msgid "Only report changes in message panel"
+msgstr "Nur Änderungen melden"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:123
+msgid "Netlist File:"
+msgstr "Datei für Netzliste:"
+
+#: pcbnew/dialogs/dialog_orient_footprints.cpp:118
 #, c-format
 msgid "OK to set footprints orientation to %.1f degrees ?"
 msgstr "Möchten Sie die Footprintausrichtung auf %.1f Grad setzen?"
 
-#: pcbnew/dialogs/dialog_orient_footprints.cpp:160
+#: pcbnew/dialogs/dialog_orient_footprints.cpp:149
 msgid "Bad value for footprints orientation"
 msgstr "Falscher Wert für Ausrichtung von Footprints"
 
@@ -16988,10 +17086,6 @@ msgstr "Footprint Ausrichtung"
 msgid "Grid Properties"
 msgstr "Raster Eigenschaften"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.h:70
-msgid "Export SVG file"
-msgstr "Als SVG exportieren"
-
 #: pcbnew/dialogs/dialog_layers_setup_base.h:269
 msgid "Layer Setup"
 msgstr "Lagen Einstellungen"
@@ -17008,6 +17102,10 @@ msgstr "PCB Bibliothekstabelle"
 msgid "Footprint Wizards"
 msgstr "Footprintwizards"
 
+#: pcbnew/dialogs/dialog_SVG_print_base.h:72
+msgid "Export SVG file"
+msgstr "Als SVG exportieren"
+
 #: gerbview/dialogs/dialog_show_page_borders_base.h:50
 msgid "Page Borders"
 msgstr "Seitenbegrenzung"
@@ -17015,6 +17113,66 @@ msgstr "Seitenbegrenzung"
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.h:65
 msgid "Gerbview Options"
 msgstr "GerbView Optionen"
+
+#~ msgid "Could not open file <%>"
+#~ msgstr "Konnte Datei <%s> nicht öffnen"
+
+#~ msgid "File <%s> does not appear to be a valid KiCad net list file."
+#~ msgstr ""
+#~ "Datei <%s> scheint keine gültige KiCad Datei einer Netzliste zu sein."
+
+#~ msgid "This is normal if you are opening a new netlist file"
+#~ msgstr "Dies is normal, wenn eine Netzliste geöffnet wird."
+
+#~ msgid " <%s> does not appear to be a valid KiCad component link file."
+#~ msgstr " <%s> scheint keine gültige KiCad Bauteilezuordnungsdatei zu sein."
+
+#~ msgid "Netlist file <%s> not found"
+#~ msgstr "Die Netzliste <%s> wurde nicht gefunden."
+
+#~ msgid "Using time stamp selection"
+#~ msgstr "Verwende Zeitstempelauswahl"
+
+#~ msgid "OK to delete not locked footprints not found in netlist?"
+#~ msgstr ""
+#~ "Sollen die nicht gesperrten Footprints entfernt werden, welche nicht in "
+#~ "der Netzliste gefunden wurden?"
+
+#~ msgid "Module ref %s, change footprint %s to %s\n"
+#~ msgstr "Bauteilreferenz %s: Änderung von Footprint %s nach %s\n"
+
+#~ msgid "Component %s: module %s not found\n"
+#~ msgstr "Bauteil %s: Modul <%s> nicht gefunden.\n"
+
+#~ msgid "Component %s: Mismatch! module is %s and netlist said %s\n"
+#~ msgstr ""
+#~ "Bauteil %s: Keine Übereinstimmung! Bauteil ist %s, jedoch laut Netzliste "
+#~ "%s.\n"
+
+#~ msgid "Module %s: Pad %s not found"
+#~ msgstr "Bauteil %s: Pad <%s> nicht gefunden."
+
+#~ msgid "File <%s> not found, use Netlist for footprints selection"
+#~ msgstr "Datei <%s> nicht gefunden. Verwende Netzliste für Bauteileauswahl."
+
+#~ msgid "Some footprints are not found in libraries"
+#~ msgstr ""
+#~ "Einige Footprints konnten nicht in den Bibliotheken gefunden werden."
+
+#~ msgid "Netlist error."
+#~ msgstr "Fehler in der Netzliste."
+
+#~ msgid "Netlist file not found!"
+#~ msgstr "Netzliste wurde nicht gefunden."
+
+#~ msgid "Bad Tracks Deletion:"
+#~ msgstr "Schlechte Leiterbahnen:"
+
+#~ msgid "Browse Netlist Files"
+#~ msgstr "Browse nach Netzliste Dateien"
+
+#~ msgid "Footprints Test"
+#~ msgstr "Footprinttest"
 
 #~ msgid "Use Net Names"
 #~ msgstr "Verwende Netznamen"
@@ -18125,9 +18283,6 @@ msgstr "GerbView Optionen"
 #~ msgid "<%s> is an old version component file."
 #~ msgstr "<%s> entspricht einer älteren Version einer Bauteildatei."
 
-#~ msgid "Component %s %s pin %s : Different Nets"
-#~ msgstr "Bauteil %s %s Pin %s : Unterschiedliche Netze"
-
 #~ msgid " found in "
 #~ msgstr " gefunden in "
 
@@ -18148,9 +18303,6 @@ msgstr "GerbView Optionen"
 
 #~ msgid "Annotate schematic"
 #~ msgstr "Annotation im Schaltplan durchführen"
-
-#~ msgid "Back annotate component foot prints"
-#~ msgstr "Rückwärts-Annotation von Footprints durchführen"
 
 #~ msgid "Pcb calculator"
 #~ msgstr "Pcb calculator"
