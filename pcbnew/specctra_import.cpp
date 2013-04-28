@@ -320,7 +320,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
     else    // VIA_MICROVIA or VIA_BLIND_BURIED
     {
         LAYER_NUM topLayerNdx = UNDEFINED_LAYER;
-        LAYER_NUM botLayerNdx = 7000;
+        LAYER_NUM botLayerNdx = 7000; // Ask Dick if this number loses its magic
         int viaDiam = -1;
 
         for( int i=0; i<shapeCount;  ++i )
