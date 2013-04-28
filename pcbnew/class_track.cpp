@@ -162,8 +162,6 @@ wxString SEGZONE::GetSelectMenuText() const
     NETINFO_ITEM* net;
     BOARD* board = GetBoard();
 
-    text << _( "Zone" ) << wxT( " " ) << wxString::Format( wxT( "(%08lX)" ), m_TimeStamp );
-
     if( board )
     {
         net = board->FindNet( GetNet() );

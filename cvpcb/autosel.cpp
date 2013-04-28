@@ -165,7 +165,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
         bool found = false;
         m_ListCmp->SetSelection( ii++, true );
 
-        if( !component->GetFootprintLibName().IsEmpty() )
+        if( !component->GetFootprintName().IsEmpty() )
             continue;
 
         BOOST_FOREACH( FOOTPRINT_ALIAS& alias, aliases )

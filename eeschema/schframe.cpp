@@ -274,10 +274,14 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
     SetScreen( NULL );
-    SAFE_DELETE( m_CurrentSheet );     // a SCH_SHEET_PATH, on the heap.
-    SAFE_DELETE( m_undoItem );
-    SAFE_DELETE( g_RootSheet );
-    SAFE_DELETE( m_findReplaceData );
+    delete m_CurrentSheet;     // a SCH_SHEET_PATH, on the heap.
+    delete m_undoItem;
+    delete g_RootSheet;
+    delete m_findReplaceData;
+    m_CurrentSheet = NULL;
+    m_undoItem = NULL;
+    g_RootSheet = NULL;
+    m_findReplaceData = NULL;
     CMP_LIBRARY::RemoveAllLibraries();
 }
 

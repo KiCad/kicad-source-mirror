@@ -344,7 +344,7 @@ void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
 
     for( unsigned jj = 0;  jj < m_netlist.GetCount();  jj++ )
     {
-        if( m_netlist.GetComponent( jj )->GetFootprintLibName().IsEmpty() && ii > selection )
+        if( m_netlist.GetComponent( jj )->GetFootprintName().IsEmpty() && ii > selection )
         {
             m_ListCmp->SetSelection( ii );
             SendMessageToEESCHEMA();
@@ -374,7 +374,7 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
 
     for( unsigned kk = m_netlist.GetCount() - 1;  kk >= 0;  kk-- )
     {
-        if( m_netlist.GetComponent( kk )->GetFootprintLibName().IsEmpty() && ii < selection )
+        if( m_netlist.GetComponent( kk )->GetFootprintName().IsEmpty() && ii < selection )
         {
             m_ListCmp->SetSelection( ii );
             SendMessageToEESCHEMA();
@@ -414,7 +414,7 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
 
         for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
         {
-            m_netlist.GetComponent( i )->SetFootprintLibName( wxEmptyString );
+            m_netlist.GetComponent( i )->SetFootprintName( wxEmptyString );
             SetNewPkg( wxEmptyString );
         }
 
@@ -568,7 +568,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 
     if( FindFocus() ==  m_ListCmp )
     {
-        wxString module = m_netlist.GetComponent( selection )->GetFootprintLibName();
+        wxString module = m_netlist.GetComponent( selection )->GetFootprintName();
 
         bool found = false;
         for( int ii = 0; ii < m_FootprintList->GetCount(); ii++ )
@@ -788,8 +788,8 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
     // not the actual name of the footprint.
     for( unsigned ii = 0; ii < m_netlist.GetCount(); ii++ )
     {
-        if( m_netlist.GetComponent( ii )->GetFootprintLibName() == wxT( "$noname" ) )
-            m_netlist.GetComponent( ii )->SetFootprintLibName( wxEmptyString );
+        if( m_netlist.GetComponent( ii )->GetFootprintName() == wxT( "$noname" ) )
+            m_netlist.GetComponent( ii )->SetFootprintName( wxEmptyString );
     }
 
     // Sort components by reference:
@@ -840,7 +840,7 @@ bool CVPCB_MAINFRAME::WriteComponentLinkFile( const wxString& aFullFileName )
         retval |= fprintf( outputFile, "Reference = %s;\n", TO_UTF8( component->GetReference() ) );
         retval |= fprintf( outputFile, "ValeurCmp = %s;\n", TO_UTF8( component->GetValue() ) );
         retval |= fprintf( outputFile, "IdModule  = %s;\n",
-                           TO_UTF8( component->GetFootprintLibName() ) );
+                           TO_UTF8( component->GetFootprintName() ) );
         retval |= fprintf( outputFile, "EndCmp\n" );
     }
 

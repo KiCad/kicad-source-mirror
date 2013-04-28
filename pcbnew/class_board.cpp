@@ -2373,7 +2373,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
             msg.Printf( _( "Checking netlist component footprint \"%s:%s:%s\".\n" ),
                         GetChars( component->GetReference() ),
                         GetChars( component->GetTimeStamp() ),
-                        GetChars( component->GetFootprintLibName() ) );
+                        GetChars( component->GetFootprintName() ) );
             aReporter->Report( msg );
         }
 
@@ -2390,13 +2390,13 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
                     msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetTimeStamp() ),
-                                GetChars( component->GetFootprintLibName() ) );
+                                GetChars( component->GetFootprintName() ) );
                 else
                     msg.Printf( _( "Cannot add new component \"%s:%s\" due to missing "
                                    "footprint \"%s\".\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetTimeStamp() ),
-                                GetChars( component->GetFootprintLibName() ) );
+                                GetChars( component->GetFootprintName() ) );
 
                 aReporter->Report( msg );
             }
@@ -2414,8 +2414,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
         else                           // An existing footprint.
         {
             // Test for footprint change.
-            if( !component->GetFootprintLibName().IsEmpty() &&
-                footprint->GetLibRef() != component->GetFootprintLibName() )
+            if( !component->GetFootprintName().IsEmpty() &&
+                footprint->GetLibRef() != component->GetFootprintName() )
             {
                 if( aNetlist.GetReplaceFootprints() )
                 {
@@ -2427,13 +2427,13 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
                                         GetChars( footprint->GetReference() ),
                                         GetChars( footprint->GetPath() ),
                                         GetChars( footprint->GetLibRef() ),
-                                        GetChars( component->GetFootprintLibName() ) );
+                                        GetChars( component->GetFootprintName() ) );
                         else
                             msg.Printf( _( "Cannot replace component \"%s:%s\" due to missing "
                                            "footprint \"%s\".\n" ),
                                         GetChars( footprint->GetReference() ),
                                         GetChars( footprint->GetPath() ),
-                                        GetChars( component->GetFootprintLibName() ) );
+                                        GetChars( component->GetFootprintName() ) );
 
                         aReporter->Report( msg );
                     }

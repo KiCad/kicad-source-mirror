@@ -117,9 +117,9 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_ValueCtrl->SetValue( m_valueCopy->GetText() );
     m_FootprintNameCtrl->SetValue( m_currentModule->GetLibRef() );
 
-    m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non smd components" ) );
+    m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non SMD components" ) );
     m_AttributsCtrl->SetItemToolTip( 1,
-                                    _( "Use this attribute for smd components.\nOnly components with this option are put in the footprint position list file" ) );
+                                    _( "Use this attribute for SMD components.\nOnly components with this option are put in the footprint position list file" ) );
     m_AttributsCtrl->SetItemToolTip( 2,
                                     _( "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)" ) );
 
