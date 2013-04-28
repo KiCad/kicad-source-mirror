@@ -116,8 +116,6 @@ enum pseudokeys {
 #define TEXT_ORIENT_HORIZ 0
 #define TEXT_ORIENT_VERT  900
 
-#define ON  1
-#define OFF 0
 
 
 //-----<KiROUND KIT>------------------------------------------------------------

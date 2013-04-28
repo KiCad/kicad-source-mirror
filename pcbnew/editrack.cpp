@@ -460,7 +460,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
                     // creates a lock point if not exists
         {
              // Creates a lock point, if not already exists:
-            wxPoint hp = g_CurrentTrackSegment->GetEnd(); 
+            wxPoint hp = g_CurrentTrackSegment->GetEnd();
             LockPoint = GetBoard()->CreateLockPoint( hp, (TRACK*) LockPoint, &s_ItemsListPicker );
             g_CurrentTrackSegment->SetEnd(hp);
         }
