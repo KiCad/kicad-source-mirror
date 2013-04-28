@@ -98,6 +98,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
     GetSizer()->SetSizeHints( this );
 }
 
+
 void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
 {
     wxString lastPath = wxFileName::GetCwd();

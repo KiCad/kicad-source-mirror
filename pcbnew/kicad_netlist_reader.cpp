@@ -283,12 +283,12 @@ void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR )
      */
     wxString ref;
     wxString value;
-    wxString componentName;
-    wxString libPartName;
-    wxString libName;
+    wxString footprintName;
+    wxString library;
+    wxString name;
     wxString pathtimestamp, timestamp;
-    // The token comp was read, so the next data is (ref P1)
 
+    // The token comp was read, so the next data is (ref P1)
     while( (token = NextTok()) != T_RIGHT )
     {
         if( token == T_LEFT )
@@ -310,7 +310,7 @@ void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR )
 
         case T_footprint:
             NeedSYMBOLorNUMBER();
-            componentName = FROM_UTF8( CurText() );
+            footprintName = FROM_UTF8( CurText() );
             NeedRIGHT();
             break;
 
@@ -324,13 +324,13 @@ void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR )
                 if( token == T_lib )
                 {
                     NeedSYMBOLorNUMBER();
-                    libName = FROM_UTF8( CurText() );
+                    library = FROM_UTF8( CurText() );
                     NeedRIGHT();
                 }
                 else if( token == T_part )
                 {
                     NeedSYMBOLorNUMBER();
-                    libPartName = FROM_UTF8( CurText() );
+                    name = FROM_UTF8( CurText() );
                     NeedRIGHT();
                 }
                 else
@@ -362,8 +362,9 @@ void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR )
     }
 
     pathtimestamp += timestamp;
-    COMPONENT* component = new COMPONENT( componentName, ref, value, pathtimestamp );
-    component->SetLibrarySource( libName, libPartName );
+    COMPONENT* component = new COMPONENT( footprintName, ref, value, pathtimestamp );
+    component->SetName( name );
+    component->SetLibrary( library );
     m_netlist->AddComponent( component );
 }
 
