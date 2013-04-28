@@ -51,11 +51,6 @@
 #include <wx/overlay.h>
 #endif
 
-// C++ guarantees that operator delete checks its argument for null-ness
-#ifndef SAFE_DELETE
-#define SAFE_DELETE( p ) delete (p); (p) = NULL;
-#endif
-
 // Option for dialog boxes
 #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER
 
