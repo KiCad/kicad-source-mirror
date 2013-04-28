@@ -102,9 +102,10 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText ) throw( PARSE_ERRO
     char*    text;
     wxString msg;
     wxString timeStamp;         // the full time stamp read from netlist
-    wxString name;              // the component name read from netlist
+    wxString footprintName;     // the footprint name read from netlist
     wxString value;             // the component value read from netlist
     wxString reference;         // the component schematic reference designator read from netlist
+    wxString name;              // the name of component that was placed in the schematic
     char     line[1024];
 
     strcpy( line, aText );
@@ -126,12 +127,16 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText ) throw( PARSE_ERRO
     // Read footprint name (second word)
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
     {
-        msg = _( "Cannot parse name in component section of netlist." );
+        msg = _( "Cannot parse footprint name in component section of netlist." );
         THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), aText, m_lineReader->LineNumber(),
                            m_lineReader->Length() );
     }
 
-    name = FROM_UTF8( text );
+    footprintName = FROM_UTF8( text );
+
+    // The footprint name will have to be looked up in the *.cmp file.
+    if( footprintName == wxT( "$noname" ) )
+        footprintName = wxEmptyString;
 
     // Read schematic reference designator (third word)
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
@@ -153,7 +158,18 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText ) throw( PARSE_ERRO
 
     value = FROM_UTF8( text );
 
-    COMPONENT* component = new COMPONENT( name, reference, value, timeStamp );
+    // Read component name (fifth word) {Lib=C}
+    if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
+    {
+        msg = _( "Cannot parse name comment in component section of netlist." );
+        THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), aText, m_lineReader->LineNumber(),
+                           m_lineReader->Length() );
+    }
+
+    name = FROM_UTF8( text ).AfterFirst( wxChar( '=' ) ).BeforeLast( wxChar( '}' ) );
+
+    COMPONENT* component = new COMPONENT( footprintName, reference, value, timeStamp );
+    component->SetName( name );
     m_netlist->AddComponent( component );
     return component;
 }

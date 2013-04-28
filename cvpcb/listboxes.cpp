@@ -117,7 +117,7 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
         msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
                     GetChars( component->GetReference() ),
                     GetChars( component->GetValue() ),
-                    GetChars( component->GetFootprintLibName() ) );
+                    GetChars( component->GetFootprintName() ) );
         m_ListCmp->m_ComponentList.Add( msg );
     }
 

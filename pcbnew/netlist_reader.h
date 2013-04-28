@@ -30,7 +30,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <algorithm>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <fctsys.h>
@@ -106,31 +105,46 @@ class COMPONENT
 
     // ZZZ This timestamp is string, not time_t
     wxString       m_timeStamp;        ///< The component full time stamp found in netlist.
-    wxString       m_name;             ///< The name of the component found in the netlist.
 
-    /// The name of the footprint in the library assigned to the component.
-    wxString       m_footprintLibName;
+    /// The name of the component in #m_library used when it was placed on the schematic..
+    wxString       m_name;
 
-    /// The lib part name used to look up the component library part information.  This only has
-    /// meaning in the new s-expression netlist file format.
-    wxString       m_libraryName;
-    wxString       m_libraryPartName;
+    /**
+     * The name of the component library where #m_name was found.  This will be set to
+     * wxEmptyString for legacy netlist files.
+     */
+    wxString       m_library;
 
-    /// The footprint loaded from the library for this component.
+    /// The name of the footprint in the footprint library assigned to the component.
+    wxString       m_footprintName;
+
+    /**
+     * The name of the footprint library that #m_footprintName is located.  This will be
+     * set to wxEmptyString for legacy netlist formats indicating that all libraries need
+     * to be searched.
+     */
+    wxString       m_footprintLib;
+
+    /// The #MODULE loaded for #m_footprintName found in #m_footprintLib.
     std::auto_ptr< MODULE > m_footprint;
+
+    /// Set to true if #m_footprintName or #m_footprintLib was changed when the footprint
+    /// link file was read.
+    bool           m_footprintChanged;
 
     static COMPONENT_NET    m_emptyNet;
 
 public:
-    COMPONENT( const wxString& aName,
+    COMPONENT( const wxString& aFootprintName,
                const wxString& aReference,
                const wxString& aValue,
                const wxString& aTimeStamp )
     {
-        m_name      = aName;
-        m_reference = aReference;
-        m_value     = aValue;
-        m_timeStamp = aTimeStamp;
+        m_footprintName    = aFootprintName;
+        m_reference        = aReference;
+        m_value            = aValue;
+        m_timeStamp        = aTimeStamp;
+        m_footprintChanged = false;
     }
 
     virtual ~COMPONENT() { };
@@ -148,26 +162,33 @@ public:
 
     void SortPins() { sort( m_nets.begin(), m_nets.end() ); }
 
+    void SetName( const wxString& aName ) { m_name = aName;}
+    const wxString& GetName() const { return m_name; }
+
+    void SetLibrary( const wxString& aLibrary ) { m_library = aLibrary; }
+    const wxString& GetLibrary() const { return m_library; }
+
     const wxString& GetReference() const { return m_reference; }
 
     const wxString& GetValue() const { return m_value; }
 
-    void SetFootprintLibName( const wxString& aFootprintLibName )
+    void SetFootprintName( const wxString& aFootprintName )
     {
-        m_footprintLibName = aFootprintLibName;
+        m_footprintChanged = !m_footprintName.IsEmpty() && (m_footprintName != aFootprintName);
+        m_footprintName = aFootprintName;
     }
 
-    const wxString& GetFootprintLibName() const { return m_footprintLibName; }
+    const wxString& GetFootprintName() const { return m_footprintName; }
+
+    void SetFootprintLib( const wxString& aFootprintLib )
+    {
+        m_footprintChanged = !m_footprintLib.IsEmpty() && (m_footprintLib != aFootprintLib);
+        m_footprintLib = aFootprintLib;
+    }
+
+    const wxString& GetFootprintLib() const { return m_footprintLib; }
 
     const wxString& GetTimeStamp() const { return m_timeStamp; }
-
-    const wxString& GetLibName() const { return m_name; }
-
-    void SetLibrarySource( const wxString& aLibName, const wxString& aCompName )
-    {
-        m_libraryName     = aLibName;
-        m_libraryPartName = aCompName;
-    }
 
     void SetFootprintFilters( const wxArrayString& aFilterList )
     {
@@ -183,10 +204,12 @@ public:
 
     void SetModule( MODULE* aModule );
 
-    bool IsLibSource( const wxString& aLibName, const wxString& aCompName ) const
+    bool IsLibSource( const wxString& aLibrary, const wxString& aName ) const
     {
-        return aLibName == m_libraryName && aCompName == m_libraryPartName;
+        return aLibrary == m_library && aName == m_name;
     }
+
+    bool FootprintChanged() const { return m_footprintChanged; }
 
 #if defined(DEBUG)
     /**
@@ -293,16 +316,7 @@ public:
      */
     COMPONENT* GetComponentByTimeStamp( const wxString& aTimeStamp );
 
-    /*
-     * Function GetComponentByLibName
-     * returns a #COMPONENT by \a aLibName.
-     *
-     * @param aLibName is the component library name of the #COMPONENT.
-     * @return a pointer to the #COMPONENT that matches \a aLibName if found.  Otherwise NULL.
-     */
-    COMPONENT* GetComponentByLibName( const wxString& aLibName );
-
-    void SortByFootprintLibName();
+    void SortByFootprintName();
 
     void SortByReference();
 
@@ -327,6 +341,31 @@ public:
     }
 
     bool GetReplaceFootprints() const { return m_replaceFootprints; }
+
+    /**
+     * Function AnyFootprintsLinked
+     * @return true if any component with a footprint link is found.
+     */
+    bool AnyFootprintsLinked() const;
+
+    /**
+     * Function AllFootprintsLinked
+     * @return true if all components have a footprint link.
+     */
+    bool AllFootprintsLinked() const;
+
+    /**
+     * Function NoFootprintsLinked
+     * @return true if none of the components have a footprint link.
+     */
+    bool NoFootprintsLinked() const { return !AnyFootprintsLinked(); }
+
+    /**
+     * Function AnyFootprintsChanged
+     * @return true if any components footprints were changed when the footprint link file
+     *         (*.cmp)  was loaded.
+     */
+    bool AnyFootprintsChanged() const;
 
 #if defined(DEBUG)
     /**
