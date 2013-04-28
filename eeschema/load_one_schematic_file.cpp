@@ -232,7 +232,7 @@ again." );
 
             if( !itemLoaded )
             {
-                SAFE_DELETE( item );
+                delete item;
             }
             else
             {

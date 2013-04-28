@@ -143,7 +143,8 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     // Delete previous library component, if any
     if( m_component )
     {
-        SAFE_DELETE( m_component );
+        delete m_component;
+        m_component = NULL;
         m_aliasName.Empty();
     }
 
@@ -212,7 +213,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLib
 
     if( m_component )
     {
-        SAFE_DELETE( m_component );
+        delete m_component;
         m_aliasName.Empty();
     }
 
@@ -574,7 +575,8 @@ All changes will be lost. Discard changes?" ) ) )
     }
     else
     {
-        SAFE_DELETE( m_component );
+        delete m_component;
+        m_component = NULL;
         m_aliasName.Empty();
     }
 
@@ -660,7 +662,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
 
     if( m_component )
     {
-        SAFE_DELETE( m_component );
+        delete m_component;
         m_aliasName.Empty();
     }
 
