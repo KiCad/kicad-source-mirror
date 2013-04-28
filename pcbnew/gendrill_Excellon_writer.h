@@ -228,11 +228,12 @@ public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
     /**
      * Function GenDrillMapFile
      * Plot a map of drill marks for holes.
-     * @param aFullFileName : the name of this file (to plot it)
+     * @param aFullFileNameWithoutExt : the full filename of the file to create,
+     *              without extension (will be added accordint ti the format)
      * @param aSheet : the paper sheet touse for plot
      * @param aFormat : one of the supported plot formats (see enum PlotFormat )
      */
-    bool GenDrillMapFile( const wxString& aFullFileName,
+    bool GenDrillMapFile( const wxString& aFullFileNameWithoutExt,
                           const PAGE_INFO& aSheet,
                           PlotFormat aFormat );
 private:

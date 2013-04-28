@@ -440,9 +440,10 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
                 if( choice >= m_Choice_Drill_Map->GetCount() )
                     choice = 1;
 
-                fn.SetExt( wxEmptyString ); // Will be modified by GenDrillMap
+                fn.SetExt( wxEmptyString ); // Will be added by GenDrillMap
+                wxString fullfilename = fn.GetFullPath() + wxT( "-drl_map" );
 
-                GenDrillMap( fn.GetFullPath(), excellonWriter, filefmt[choice] );
+                GenDrillMap( fullfilename, excellonWriter, filefmt[choice] );
             }
         }
 
@@ -530,7 +531,7 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
 
 
 // Generate the drill map of the board
-void DIALOG_GENDRILL::GenDrillMap( const wxString aFileName,
+void DIALOG_GENDRILL::GenDrillMap( const wxString aFullFileNameWithoutExt,
                                    EXCELLON_WRITER& aExcellonWriter,
                                    PlotFormat     format )
 {
@@ -574,11 +575,9 @@ void DIALOG_GENDRILL::GenDrillMap( const wxString aFileName,
         return;
     }
 
-    /* Init file name */
-    wxFileName fn = aFileName;
-    fn.SetName( fn.GetName() + wxT( "-drl_map" ) );
-    fn.SetExt( ext );
-    wxString fullFilename = fn.GetFullPath();
+    // Add file name extension
+    wxString fullFilename = aFullFileNameWithoutExt;
+    fullFilename << wxT(".") << ext;
 
     bool success = aExcellonWriter.GenDrillMapFile( fullFilename,
                                                    m_parent->GetPageSettings(),

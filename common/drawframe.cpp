@@ -168,7 +168,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* aParent,
 
 EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 {
-    SAFE_DELETE( m_currentScreen );
+    delete m_currentScreen;
+    m_currentScreen = NULL;
 
     m_auimgr.UnInit();
 }

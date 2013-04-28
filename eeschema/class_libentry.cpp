@@ -868,7 +868,7 @@ bool LIB_COMPONENT::LoadDrawEntries( LINE_READER& aLineReader, wxString& aErrorM
         {
             aErrorMsg.Printf( wxT( "error <%s> in DRAW command %c" ),
                               GetChars( aErrorMsg ), line[0] );
-            SAFE_DELETE( newEntry );
+            delete newEntry;
 
             // Flush till end of draw section
             do
@@ -913,7 +913,7 @@ bool LIB_COMPONENT::LoadField( LINE_READER& aLineReader, wxString& aErrorMsg )
 
     if( !field->Load( aLineReader, aErrorMsg ) )
     {
-        SAFE_DELETE( field );
+        delete field;
         return false;
     }
 
@@ -931,7 +931,7 @@ bool LIB_COMPONENT::LoadField( LINE_READER& aLineReader, wxString& aErrorMsg )
         if( field->GetId() == VALUE )
             m_name = field->GetText();
 
-        SAFE_DELETE( field );
+        delete field;
     }
     else
     {

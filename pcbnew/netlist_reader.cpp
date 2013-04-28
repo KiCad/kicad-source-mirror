@@ -72,7 +72,7 @@ void COMPONENT::SetModule( MODULE* aModule )
 
     aModule->SetReference( m_reference );
     aModule->SetValue( m_value );
-    aModule->SetLibRef( m_footprintLibName );
+    aModule->SetLibRef( m_footprintName );
     aModule->SetPath( m_timeStamp );
 }
 
@@ -98,9 +98,11 @@ void COMPONENT::Show( int aNestLevel, REPORTER& aReporter )
     NestedSpace( aNestLevel, aReporter );
     aReporter.Report( wxT( "<component>\n" ) );
     NestedSpace( aNestLevel+1, aReporter );
-    aReporter.Report( wxString::Format( wxT( "<ref=%s value=%s name=%s fpid=%s timestamp=%s>\n" ),
+    aReporter.Report( wxString::Format( wxT( "<ref=%s value=%s name=%s library=%s footprint=%s "
+                                             "footprint-lib=%s timestamp=%s>\n" ),
                                         GetChars( m_reference ), GetChars( m_value ),
-                                        GetChars( m_name ), GetChars( m_footprintLibName ),
+                                        GetChars( m_name ), GetChars( m_library ),
+                                        GetChars( m_footprintName ), GetChars( m_footprintLib ),
                                         GetChars( m_timeStamp ) ) );
 
     if( !m_footprintFilters.IsEmpty() )
@@ -177,36 +179,19 @@ COMPONENT* NETLIST::GetComponentByTimeStamp( const wxString& aTimeStamp )
 }
 
 
-COMPONENT* NETLIST::GetComponentByLibName( const wxString& aLibName )
-{
-    COMPONENT* component = NULL;
-
-    for( unsigned i = 0;  i < m_components.size();  i++ )
-    {
-        if( m_components[i].GetLibName() == aLibName )
-        {
-            component = &m_components[i];
-            break;
-        }
-    }
-
-    return component;
-}
-
-
 /**
- * Function SortByLibName
+ * Function ByFootprintName
  * is a helper function used to sort the component list used by loadNewModules.
  */
-static bool SortByLibName( const COMPONENT& ref, const COMPONENT& cmp )
+static bool ByFootprintName( const COMPONENT& ref, const COMPONENT& cmp )
 {
-    return ref.GetFootprintLibName().CmpNoCase( cmp.GetFootprintLibName() ) > 0;
+    return ref.GetFootprintName().CmpNoCase( cmp.GetFootprintName() ) > 0;
 }
 
 
-void NETLIST::SortByFootprintLibName()
+void NETLIST::SortByFootprintName()
 {
-    m_components.sort( SortByLibName );
+    m_components.sort( ByFootprintName );
 }
 
 
@@ -223,6 +208,42 @@ bool operator < ( const COMPONENT& item1, const COMPONENT& item2 )
 void NETLIST::SortByReference()
 {
     m_components.sort();
+}
+
+
+bool NETLIST::AnyFootprintsLinked() const
+{
+    for( unsigned i = 0;  i < m_components.size();  i++ )
+    {
+        if( !m_components[i].GetFootprintName().IsEmpty() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool NETLIST::AllFootprintsLinked() const
+{
+    for( unsigned i = 0;  i < m_components.size();  i++ )
+    {
+        if( m_components[i].GetFootprintName().IsEmpty() )
+            return false;
+    }
+
+    return true;
+}
+
+
+bool NETLIST::AnyFootprintsChanged() const
+{
+    for( unsigned i = 0;  i < m_components.size();  i++ )
+    {
+        if( m_components[i].FootprintChanged() )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -413,6 +434,6 @@ void CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
                                m_lineReader->LineNumber(), m_lineReader->Length() );
         }
 
-        component->SetFootprintLibName( footprint );
+        component->SetFootprintName( footprint );
     }
 }

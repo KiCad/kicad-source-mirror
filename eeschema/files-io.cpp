@@ -293,7 +293,8 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
     // Clear the screen before open a new file
     if( g_RootSheet )
     {
-        SAFE_DELETE( g_RootSheet );
+        delete g_RootSheet;
+        g_RootSheet = NULL;
     }
 
     CreateScreens();
