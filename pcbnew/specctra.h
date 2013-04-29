@@ -3577,7 +3577,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     STRINGS         layerIds;       ///< indexed by PCB layer number
 
     /// maps BOARD layer number to PCB layer numbers
-    std::vector<LAYER_NUM> kicadLayer2pcb;
+    std::vector<int> kicadLayer2pcb;
 
     /// maps PCB layer number to BOARD layer numbers
     std::vector<LAYER_NUM> pcbLayer2kicad;
@@ -3606,9 +3606,13 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
 
     /**
      * Function findLayerName
-     * returns the PCB layer index for a given layer name
+     * returns the PCB layer index for a given layer name, within the specctra session
+     * file.
+     *
+     * @return int - the layer index within the specctra session file, or -1 if
+     *  aLayerName is not found.
      */
-    LAYER_NUM findLayerName( const std::string& aLayerName ) const;
+    int findLayerName( const std::string& aLayerName ) const;
 
     /**
      * Function readCOMPnPIN
