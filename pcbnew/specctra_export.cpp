@@ -783,8 +783,8 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
         }
         else    // remove graphics not on EDGE_N layer
         {
-            ++i;
             D( items[i]->Show( 0, std::cout );)
+            ++i;
         }
     }
 
