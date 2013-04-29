@@ -166,8 +166,8 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
     }
     else
     {
-        wxFileDialog dlg( this, _( "Save Component Footprint Link File" ), wxGetCwd(),
-                          wxEmptyString, ComponentFileWildcard, wxFD_SAVE );
+        wxFileDialog dlg( this, _( "Save Component Footprint Link File" ), wxEmptyString,
+                          _( "Unnamed file" ), ComponentFileWildcard, wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return -1;
