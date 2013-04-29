@@ -319,8 +319,9 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
     }
     else    // VIA_MICROVIA or VIA_BLIND_BURIED
     {
-        LAYER_NUM topLayerNdx = UNDEFINED_LAYER;
-        LAYER_NUM botLayerNdx = 7000; // Ask Dick if this number loses its magic
+        int topLayerNdx = -1;           // session layer detectors
+        int botLayerNdx = INT_MAX;
+
         int viaDiam = -1;
 
         for( int i=0; i<shapeCount;  ++i )
@@ -333,8 +334,8 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
             CIRCLE* circle = (CIRCLE*) shape->shape;
 
-            LAYER_NUM layerNdx = findLayerName( circle->layer_id );
-            if( layerNdx == UNDEFINED_LAYER )
+            int layerNdx = findLayerName( circle->layer_id );
+            if( layerNdx == -1 )
             {
                 wxString layerName = FROM_UTF8( circle->layer_id.c_str() );
                 ThrowIOError( _("Session file uses invalid layer id \"%s\""),
@@ -363,10 +364,10 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
         via->SetWidth( viaDiam );
 
-        topLayerNdx = pcbLayer2kicad[topLayerNdx];
-        botLayerNdx = pcbLayer2kicad[botLayerNdx];
+        LAYER_NUM topLayer = pcbLayer2kicad[topLayerNdx];
+        LAYER_NUM botLayer = pcbLayer2kicad[botLayerNdx];
 
-        via->SetLayerPair( topLayerNdx, botLayerNdx );
+        via->SetLayerPair( topLayer, botLayer );
     }
 
     if( via )
