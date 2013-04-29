@@ -23,7 +23,7 @@ public:
     int       m_Num;        ///< Order number in the display list.
     wxString  m_Doc;        ///< Footprint description.
     wxString  m_KeyWord;    ///< Footprint key words.
-    int       m_padCount;   ///< Number of pads
+    unsigned  m_padCount;   ///< Number of pads
 
     FOOTPRINT_INFO()
     {
@@ -80,7 +80,7 @@ public:
      */
     void AddItem( FOOTPRINT_INFO* aItem )
     {
-        m_List.push_back( aItem);
+        m_List.push_back( aItem );
     }
 
     /**

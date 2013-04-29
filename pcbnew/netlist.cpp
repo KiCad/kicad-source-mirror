@@ -188,7 +188,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         else
             fpOnBoard = m_Pcb->FindModule( aNetlist.GetComponent( ii )->GetReference() );
 
-        loadFootprint = (fpOnBoard != NULL) &&
+        loadFootprint = (fpOnBoard == NULL) ||
                         (fpOnBoard->GetPath() != component->GetFootprintName());
 
         if( loadFootprint && (component->GetFootprintName() != lastFootprintLibName) )
@@ -203,7 +203,17 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
                 libPath = wxGetApp().FindLibraryPath( fn );
 
                 if( !libPath )
+                {
+                    if( aReporter )
+                    {
+                        msg.Printf( _( "*** Warning: Cannot find footprint library file \"%s\" "
+                                       "in any of the standard KiCad library search paths. ***\n" ),
+                                    GetChars( fn.GetFullPath() ) );
+                        aReporter->Report( msg );
+                    }
+
                     continue;
+                }
 
                 module = pi->FootprintLoad( libPath, component->GetFootprintName() );
 
@@ -238,7 +248,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             module = new MODULE( *module );
         }
 
-        wxASSERT( module != NULL );
-        component->SetModule( module );
+        if( loadFootprint && module != NULL )
+            component->SetModule( module );
     }
 }

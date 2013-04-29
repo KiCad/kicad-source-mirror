@@ -37,6 +37,7 @@
 #include <wx/regex.h>
 
 
+#if defined(DEBUG)
 /**
  * Function NestedSpace
  * outputs nested space for pretty indenting.
@@ -53,7 +54,6 @@ static REPORTER& NestedSpace( int aNestLevel, REPORTER& aReporter )
 }
 
 
-#if defined(DEBUG)
 void COMPONENT_NET::Show( int aNestLevel, REPORTER& aReporter )
 {
     NestedSpace( aNestLevel, aReporter );
