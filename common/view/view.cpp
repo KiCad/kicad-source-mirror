@@ -209,8 +209,8 @@ void VIEW::SetGAL( GAL* aGal )
         m_painter->SetGAL( m_gal );
 
     // items need to be recached after changing GAL
-    if( m_useGroups )
-        recacheAllItems();
+    //if( m_useGroups )
+        //RecacheAllItems();
 
     // force the new GAL to display the current viewport.
     SetCenter( m_center );
@@ -387,7 +387,7 @@ struct VIEW::drawItem
                 aItem->setGroup( currentLayer, group );
                 view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), currentLayer );
                 gal->EndGroup();
-                gal->DrawGroup( group );
+                //gal->DrawGroup( group );
             }
         }
         else if( aItem->ViewIsVisible() )
@@ -453,10 +453,33 @@ struct VIEW::unlinkItem
 
 struct VIEW::recacheItem
 {
+    recacheItem( VIEW* aView, GAL* aGal, int aLayer, bool aImmediately ) :
+        view( aView ), gal( aGal ), layer( aLayer ), immediately( aImmediately )
+    {
+    }
+
     void operator()( VIEW_ITEM* aItem )
     {
-        aItem->deleteGroups();
+        //aItem->deleteGroups();
+        /*int prevGroup = aItem->getGroup( layer );
+        if( prevGroup != -1 )
+        {
+            gal->DeleteGroup( prevGroup );
+        }*/
+
+        if( immediately )
+        {
+            int group = gal->BeginGroup();
+            aItem->setGroup( layer, group );
+            view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), layer );
+            gal->EndGroup();
+        }
     }
+
+    VIEW* view;
+    GAL* gal;
+    int layer;
+    bool immediately;
 };
 
 
@@ -571,16 +594,24 @@ void VIEW::clearGroupCache()
 }
 
 
-void VIEW::recacheAllItems()
+void VIEW::RecacheAllItems( bool aImmediately )
 {
     BOX2I r;
 
     r.SetMaximum();
 
+    wxLogDebug( wxT( "RecacheAllItems::immediately: %u" ), aImmediately );
+
+    if( aImmediately )
+        m_gal->BeginDrawing();
+
     for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = & ( ( *i ).second );
-        recacheItem visitor;
+        recacheItem visitor( this, m_gal, l->id, aImmediately );
         l->items->Query( r, visitor );
     };
+
+    if( aImmediately )
+        m_gal->EndDrawing();
 }

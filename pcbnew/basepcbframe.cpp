@@ -243,7 +243,10 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         view->SetTopLayer( m_Pcb->GetLayer() );
 
         if( m_galCanvasActive )
+        {
+            view->RecacheAllItems( true );
             m_galCanvas->Refresh();
+        }
     }
 #endif
 }

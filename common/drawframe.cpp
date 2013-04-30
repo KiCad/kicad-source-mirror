@@ -941,17 +941,19 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 {
 #ifdef KICAD_GAL
+    KiGfx::VIEW* view = m_galCanvas->GetView();
+    KiGfx::GAL* gal = m_galCanvas->GetGAL();
+
     if( aEnable && m_galCanvasActive )
     {
         // When we switch between GAL based canvases, all we need is a refresh
+        view->RecacheAllItems( true );
         m_galCanvas->Refresh();
     }
 
     if( !( aEnable ^ m_galCanvasActive ) )
         return;
 
-    KiGfx::VIEW* view = m_galCanvas->GetView();
-    KiGfx::GAL* gal = m_galCanvas->GetGAL();
     double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
 
     // Display the same view after canvas switching
@@ -978,6 +980,9 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     m_auimgr.GetPane( wxT( "DrawFrame" ) ).Show( !aEnable );
     m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show( aEnable );
     m_auimgr.Update();
+
+    if( aEnable )
+        view->RecacheAllItems( true );
 
     m_galCanvasActive = aEnable;
 #endif /* KICAD_GAL */
