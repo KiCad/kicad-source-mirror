@@ -55,6 +55,7 @@
 namespace KiGfx
 {
 class SHADER;
+class VBO_ITEM;
 
 /**
  * @brief Class OpenGL_GAL is the OpenGL implementation of the Graphics Abstraction Layer.
@@ -88,7 +89,7 @@ public:
      */
     OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener = NULL,
                 wxEvtHandler* aPaintListener = NULL, bool isUseShaders = false,
-                const wxString& aName = wxT("GLCanvas") );
+                const wxString& aName = wxT( "GLCanvas" ) );
 
     virtual ~OPENGL_GAL();
 
@@ -132,7 +133,7 @@ public:
     // Screen methods
     // --------------
 
-/// @brief Resizes the canvas.
+    /// @brief Resizes the canvas.
     virtual void ResizeScreen ( int aWidth, int aHeight );
 
     /// @brief Shows/hides the GAL canvas
@@ -335,19 +336,28 @@ private:
     wxEvtHandler*   paintListener;
 
     // Display lists
-    GLuint          displayListsArcs;       ///< Arc display list
-    GLuint          displayListCircle;      ///< Circle display list
-    GLuint          displayListSemiCircle;  ///< Semi circle display list
-    std::deque<GLuint> displayListsGroup;   ///< List of display lists used for groups
+    GLuint                displayListsArcs;       ///< Arc display list
+    GLuint                displayListCircle;      ///< Circle display list
+    GLuint                displayListSemiCircle;  ///< Semi circle display list
+    std::deque<GLuint>    displayListsGroup;      ///< List of display lists used for groups
 
-    double               curvePoints[12];   ///< Coefficients for curves
-    std::deque<VECTOR2D> unitCirclePoints;  ///< List of the points on a unit circle
+    // Vertex buffer objects related fields
+    std::deque<VBO_ITEM*> vboItems;               ///< Stores informations about VBO objects
+    VBO_ITEM*             curVboItem;
+    GLuint                curVboVertId;
+    GLuint                curVboIndId;
+
+    int                   vboSize;
+    bool                  vboNeedsUpdate;
+
+    double                curvePoints[12];  ///< Coefficients for curves
+    std::deque<VECTOR2D>  unitCirclePoints; ///< List of the points on a unit circle
 
     // Polygon tesselation
-    GLUtesselator*  tesselator;             ///< Pointer to the tesselator
+    GLUtesselator*        tesselator;       ///< Pointer to the tesselator
 
     // Shader
-    std::deque<SHADER> shaderList;          ///< List of the shaders
+    std::deque<SHADER>    shaderList;       ///< List of the shaders
 
     // Cursor
     int             cursorSize;             ///< Size of the cursor in pixels
@@ -368,6 +378,7 @@ private:
     bool            isCreated;
     bool            isGlewInitialized;          ///< Is GLEW initialized?
     bool            isFrameBufferInitialized;   ///< Are the frame buffers initialized?
+    bool            isVboInitialized;
     bool            isShaderInitialized;        ///< Was the shader initialized?
     bool            isShaderEnabled;            ///< Are the shaders enabled?
     bool            isUseShader;                ///< Should the shaders be used?
@@ -456,6 +467,15 @@ private:
      * @param aTexture is the pointer to the texture handle.
      */
     void deleteFrameBuffer( GLuint* aFrameBuffer, GLuint* aDepthBuffer, GLuint* aTexture );
+
+    // TODO comment
+    void initVertexBufferObjects();
+
+    // TODO comment
+    void deleteVertexBufferObjects();
+
+    // TODO comment
+    void rebuildVbo();
 
     /**
      * @brief Draw a quad for the line.

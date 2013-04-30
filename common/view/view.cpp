@@ -205,6 +205,9 @@ void VIEW::SetGAL( GAL* aGal )
 {
     m_gal = aGal;
 
+    if( m_painter )
+        m_painter->SetGAL( m_gal );
+
     // items need to be recached after changing GAL
     if( m_useGroups )
         recacheAllItems();

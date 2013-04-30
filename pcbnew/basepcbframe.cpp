@@ -166,7 +166,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         // in order to be displayed
 
         // Load zones
-        for( int i = 0; i < m_Pcb->GetAreaCount(); ++i )
+        /*for( int i = 0; i < m_Pcb->GetAreaCount(); ++i )
         {
             view->Add( (KiGfx::VIEW_ITEM*) ( m_Pcb->GetArea( i ) ) );
         }
@@ -175,7 +175,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         for( BOARD_ITEM* drawing = m_Pcb->m_Drawings; drawing; drawing = drawing->Next() )
         {
             view->Add( drawing );
-        }
+        }*/
 
         // Load tracks
         for( TRACK* track = m_Pcb->m_Track; track; track = track->Next() )
@@ -184,7 +184,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         }
 
         // Load modules and its additional elements
-        for( MODULE* module = m_Pcb->m_Modules; module; module = module->Next() )
+        /*for( MODULE* module = m_Pcb->m_Modules; module; module = module->Next() )
         {
             // Load module's pads
             for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
@@ -208,7 +208,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         for( SEGZONE* zone = m_Pcb->m_Zone; zone; zone = zone->Next() )
         {
             view->Add( zone );
-        }
+        }*/
 
         // Apply layer coloring scheme & display options
         if( view->GetPainter() )

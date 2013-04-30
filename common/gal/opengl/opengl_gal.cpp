@@ -26,10 +26,14 @@
 
 #include <gal/opengl/opengl_gal.h>
 #include <gal/opengl/shader.h>
+#include <gal/opengl/vbo_item.h>
 #include <gal/definitions.h>
 
 #include <wx/log.h>
 #include <macros.h>
+#ifdef __WXDEBUG__
+#include <profile.h>
+#endif /* __WXDEBUG__ */
 
 #ifndef CALLBACK
 #define CALLBACK
@@ -67,6 +71,10 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     isGroupStarted           = false;
     shaderPath               = "../../common/gal/opengl/shader/";
     wxSize parentSize        = aParent->GetSize();
+
+    isVboInitialized         = false;
+    curVboItem               = NULL;
+    vboSize                  = 0;
 
     SetSize( parentSize );
 
@@ -114,6 +122,11 @@ OPENGL_GAL::~OPENGL_GAL()
     {
         deleteFrameBuffer( &frameBuffer, &depthBuffer, &texture );
         deleteFrameBuffer( &frameBufferBackup, &depthBufferBackup, &textureBackup );
+    }
+
+    if( isVboInitialized )
+    {
+        deleteVertexBufferObjects();
     }
 
     delete glContext;
@@ -214,6 +227,28 @@ void OPENGL_GAL::initFrameBuffers()
 }
 
 
+void OPENGL_GAL::initVertexBufferObjects()
+{
+    // Generate buffers for vertices and indices
+    glGenBuffers( 1, &curVboVertId );
+    glGenBuffers( 1, &curVboIndId );
+
+    isVboInitialized = true;
+}
+
+
+void OPENGL_GAL::deleteVertexBufferObjects()
+{
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
+
+    glDeleteBuffers( 1, &curVboVertId );
+    glDeleteBuffers( 1, &curVboIndId );
+
+    isVboInitialized = false;
+}
+
+
 void OPENGL_GAL::SaveScreen()
 {
     glBindFramebuffer( GL_DRAW_FRAMEBUFFER, frameBufferBackup );
@@ -269,6 +304,15 @@ void OPENGL_GAL::initGlew()
         exit( 1 );
     }
 
+    // Vertex buffer have to be supported
+    if ( !GLEW_ARB_vertex_buffer_object )
+    {
+        wxLogError( wxT( "Vertex buffer objects are not supported!" ) );
+        exit( 1 );
+    }
+
+    initVertexBufferObjects();
+
     // Compute the unit circles, used for speed up of the circle drawing
     computeUnitCircle();
     computeUnitSemiCircle();
@@ -284,7 +328,7 @@ void OPENGL_GAL::BeginDrawing()
 
     clientDC = new wxClientDC( this );
 
-    // Initialize GLEW & FBOs
+    // Initialize GLEW, FBOs & VBOs
     if( !isGlewInitialized )
     {
         initGlew();
@@ -359,6 +403,7 @@ void OPENGL_GAL::BeginDrawing()
     SetFillColor( fillColor );
     SetStrokeColor( strokeColor );
     isDeleteSavedPixels = true;
+    vboNeedsUpdate = false;
 }
 
 
@@ -410,12 +455,78 @@ void OPENGL_GAL::blitMainTexture( bool aIsClearFrameBuffer )
 
 void OPENGL_GAL::EndDrawing()
 {
+    // If any of VBO items is dirty - recache everything
+    if( vboNeedsUpdate )
+    {
+        rebuildVbo();
+        vboNeedsUpdate = false;
+    }
+
     // Draw the remaining contents, blit the main texture to the screen, swap the buffers
     glFlush();
     blitMainTexture( true );
     SwapBuffers();
 
     delete clientDC;
+}
+
+
+void OPENGL_GAL::rebuildVbo()
+{
+    /* FIXME should be done less naively, maybe sth like:
+    float *ptr = (float*)glMapBufferARB(GL_ARRAY_BUFFER_ARB, GL_READ_WRITE_ARB);
+    if(ptr)
+    {
+        updateVertices(....);
+        glUnmapBufferARB(GL_ARRAY_BUFFER_ARB); // release pointer to mapping buffer
+    }*/
+
+#ifdef __WXDEBUG__
+    prof_counter totalTime;
+    prof_start( &totalTime, false );
+#endif /* __WXDEBUG__ */
+
+    // Buffers for storing cached items data
+    GLfloat* verticesBuffer = new GLfloat[VBO_ITEM::VertStride * vboSize];
+    GLuint*  indicesBuffer  = new GLuint[vboSize];
+
+    // Pointers for easier usage with memcpy
+    GLfloat* verticesBufferPtr = verticesBuffer;
+    GLuint*  indicesBufferPtr  = indicesBuffer;
+
+    // Fill out buffers with data
+    for( std::deque<VBO_ITEM*>::iterator vboItem = vboItems.begin();
+                vboItem != vboItems.end(); vboItem++ )
+    {
+        int size = (*vboItem)->GetSize();
+
+        memcpy( verticesBufferPtr, (*vboItem)->GetVertices(), size * VBO_ITEM::VertSize );
+        verticesBufferPtr += size * VBO_ITEM::VertStride;
+
+        memcpy( indicesBufferPtr, (*vboItem)->GetIndices(), size * VBO_ITEM::IndSize );
+        indicesBufferPtr += size * VBO_ITEM::IndStride;
+    }
+
+    deleteVertexBufferObjects();
+    initVertexBufferObjects();
+
+    glBindBuffer( GL_ARRAY_BUFFER, curVboVertId );
+    glBufferData( GL_ARRAY_BUFFER, vboSize * VBO_ITEM::VertSize, verticesBuffer, GL_DYNAMIC_DRAW );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, curVboIndId );
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboSize * VBO_ITEM::IndSize, indicesBuffer, GL_DYNAMIC_DRAW );
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
+
+    delete verticesBuffer;
+    delete indicesBuffer;
+
+#ifdef __WXDEBUG__
+    prof_end( &totalTime );
+
+    wxLogDebug( wxT( "Rebuilding VBO::items %d / %.1f ms" ),
+            vboSize, (double) totalTime.value / 1000.0 );
+#endif /* __WXDEBUG__ */
 }
 
 
@@ -527,6 +638,44 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
 {
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
     double   lineAngle      = atan2( startEndVector.y, startEndVector.x );
+
+    if ( isGroupStarted )
+    {
+        // Angle of a line perpendicular to the segment being drawn
+        double beta = ( M_PI / 2.0 ) - lineAngle;
+
+        VECTOR2D v0( aStartPoint.x - ( aWidth * cos( beta ) / 2.0 ),
+                     aStartPoint.y + ( aWidth * sin( beta ) / 2.0 ) );
+        VECTOR2D v1( aStartPoint.x + ( aWidth * cos( beta ) / 2.0 ),
+                     aStartPoint.y - ( aWidth * sin( beta ) / 2.0 ) );
+        VECTOR2D v2( aEndPoint.x + ( aWidth * cos( beta ) / 2.0 ),
+                     aEndPoint.y - ( aWidth * sin( beta ) / 2.0 ) );
+        VECTOR2D v3( aEndPoint.x - ( aWidth * cos( beta ) / 2.0 ),
+                     aEndPoint.y + ( aWidth * sin( beta ) / 2.0 ) );
+
+        // First triangle
+        GLfloat newVertex1[] = { v0.x, v0.y, layerDepth,
+                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
+        GLfloat newVertex2[] = { v1.x, v1.y, layerDepth,
+                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
+        GLfloat newVertex3[] = { v2.x, v2.y, layerDepth,
+                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
+
+        // Second triangle
+        GLfloat newVertex4[] = { v0.x, v0.y, layerDepth,
+                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
+        GLfloat newVertex5[] = { v2.x, v2.y, layerDepth,
+                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
+        GLfloat newVertex6[] = { v3.x, v3.y, layerDepth,
+                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
+
+        curVboItem->PushVertex( newVertex1 );
+        curVboItem->PushVertex( newVertex2 );
+        curVboItem->PushVertex( newVertex3 );
+        curVboItem->PushVertex( newVertex4 );
+        curVboItem->PushVertex( newVertex5 );
+        curVboItem->PushVertex( newVertex6 );
+    }
 
     if( isFillEnabled )
     {
@@ -713,6 +862,7 @@ void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
                     glEnd();
                     break;
                 }
+
                 case LINE_JOIN_BEVEL:
                 {
                     // We compute the edge points of the line segments at the joint
@@ -741,6 +891,7 @@ void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
 
                     break;
                 }
+
                 case LINE_JOIN_MITER:
                 {
                     // Compute points of the outer edges
@@ -1313,40 +1464,73 @@ void OPENGL_GAL::Restore()
 }
 
 
-// TODO Error handling
 int OPENGL_GAL::BeginGroup()
 {
     isGroupStarted = true;
-    GLint displayList = glGenLists( 1 );
-    glNewList( displayList, GL_COMPILE );
-    displayListsGroup.push_back( displayList );
 
-    return (int) displayList;
+    // There is a new group that is not in VBO yet
+    vboNeedsUpdate = true;
+
+    // Save the pointer for usage with the current item
+    curVboItem = new VBO_ITEM;
+    curVboItem->SetOffset( vboSize );
+    vboItems.push_back( curVboItem );
+
+    return vboItems.size() - 1;
 }
 
 
 void OPENGL_GAL::EndGroup()
 {
+    vboSize += curVboItem->GetSize();
+
+    // TODO this has to be removed in final version
+    rebuildVbo();
+
     isGroupStarted = false;
-    glEndList();
-    glCallList( displayListsGroup.back() );
 }
 
 
 void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 {
-    std::deque<GLuint>::iterator it = displayListsGroup.begin();
+    std::deque<VBO_ITEM*>::iterator it = vboItems.begin();
     std::advance( it, aGroupNumber );
 
-    displayListsGroup.erase( it );
+    delete *it;
+    vboItems.erase( it );
 
-    glDeleteLists( (GLint) aGroupNumber, 1 );
+    vboNeedsUpdate = true;
 }
 
 
 void OPENGL_GAL::DrawGroup( int aGroupNumber )
 {
-    glCallList( (GLint) aGroupNumber );
+    std::deque<VBO_ITEM*>::iterator it = vboItems.begin();
+    std::advance( it, aGroupNumber );
+
+    // TODO Checking if we are using right VBOs, in other case do the binding.
+    // Right now there is only one VBO, so there is no problem.
+
+    glEnableClientState( GL_VERTEX_ARRAY );
+    glEnableClientState( GL_COLOR_ARRAY );
+
+    // Bind vertices data buffer and point to the data
+    glBindBuffer( GL_ARRAY_BUFFER, curVboVertId );
+    glVertexPointer( 3, GL_FLOAT, VBO_ITEM::VertSize, 0 );
+    glColorPointer( 4, GL_FLOAT, VBO_ITEM::VertSize, (GLvoid*) VBO_ITEM::ColorOffset );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+
+    // Bind indices data buffer
+    int size = (*it)->GetSize();
+    int offset = (*it)->GetOffset();
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, curVboIndId );
+    glDrawRangeElements( GL_TRIANGLES, 0, vboSize - 1, size,
+                         GL_UNSIGNED_INT, (GLvoid*) ( offset * VBO_ITEM::IndSize ) );
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
+
+    // Deactivate vertex array
+    glDisableClientState( GL_COLOR_ARRAY );
+    glDisableClientState( GL_VERTEX_ARRAY );
 }
 
 
