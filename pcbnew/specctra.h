@@ -3704,13 +3704,13 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     //-----<FromBOARD>-------------------------------------------------------
 
     /**
-     * Function makeBOUNDARY
-     * makes the board perimeter for the DSN file.
+     * Function fillBOUNDARY
+     * makes the board perimeter for the DSN file by filling the BOUNDARY element
+     * in the specctra element tree.
      * @param aBoard The BOARD to get information from in order to make the BOUNDARY.
      * @param aBoundary The empty BOUNDARY to fill in.
      */
     void fillBOUNDARY( BOARD* aBoard, BOUNDARY* aBoundary ) throw( IO_ERROR );
-
 
     /**
      * Function makeIMAGE
@@ -3721,7 +3721,6 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * @return IMAGE* - not tested for duplication yet.
      */
     IMAGE* makeIMAGE( BOARD* aBoard, MODULE* aModule );
-
 
     /**
      * Function makePADSTACK
@@ -3755,7 +3754,6 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      */
     PADSTACK* makeVia( const SEGVIA* aVia );
 
-
     /**
      * Function deleteNETs
      * deletes all the NETs that may be in here.
@@ -3768,13 +3766,11 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
         nets.clear();
     }
 
-
     /**
      * Function exportNETCLASS
      * exports \a aNetClass to the DSN file.
      */
     void exportNETCLASS( NETCLASS* aNetClass, BOARD* aBoard );
-
 
     //-----</FromBOARD>------------------------------------------------------
 
@@ -3785,7 +3781,6 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * creates a TRACK form the PATH and BOARD info.
      */
     TRACK* makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IO_ERROR );
-
 
     /**
      * Function makeVIA
@@ -3847,7 +3842,6 @@ public:
     }
     SESSION* GetSESSION() { return session; }
 
-
     /**
      * Function LoadPCB
      * is a recursive descent parser for a SPECCTRA DSN "design" file.
@@ -3858,7 +3852,6 @@ public:
      * @throw IO_ERROR if there is a lexer or parser error.
      */
     void LoadPCB( const wxString& filename ) throw( IO_ERROR );
-
 
     /**
      * Function LoadSESSION
@@ -3872,9 +3865,7 @@ public:
      */
     void LoadSESSION( const wxString& filename ) throw( IO_ERROR );
 
-
     void ThrowIOError( const wxChar* fmt, ... ) throw( IO_ERROR );
-
 
     /**
      * Function ExportPCB
@@ -3886,7 +3877,6 @@ public:
      * @throw IO_ERROR, if an i/o error occurs saving the file.
      */
     void ExportPCB( wxString aFilename,  bool aNameChange=false ) throw( IO_ERROR );
-
 
     /**
      * Function FromBOARD
