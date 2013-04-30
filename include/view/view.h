@@ -295,6 +295,14 @@ public:
     void    PartialRedraw();
 
     /**
+     * Function RecacheAllItems()
+     * Rebuilds GAL display lists.
+     * @param aForceNow decides if every item should be instantly recached. Otherwise items are
+     *        going to be recached when they become visible.
+     */
+    void    RecacheAllItems( bool aForceNow = false );
+
+    /**
      * Function IsDynamic()
      * Tells if the VIEW is dynamic (ie. can be changed, for example displaying PCBs in a window)
      * or static (that cannot be modified, eg. displaying image/PDF).
@@ -349,9 +357,6 @@ private:
 
     ///* Clears cached GAL display lists
     void    clearGroupCache();
-
-    ///* Rebuilds GAL display lists
-    void    recacheAllItems();
 
     /// Determines rendering order of layers. Used in display order sorting function.
     static bool compareRenderingOrder( VIEW_LAYER* i, VIEW_LAYER* j )

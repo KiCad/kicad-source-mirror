@@ -403,7 +403,10 @@ void OPENGL_GAL::BeginDrawing()
     SetFillColor( fillColor );
     SetStrokeColor( strokeColor );
     isDeleteSavedPixels = true;
-    vboNeedsUpdate = false;
+
+    // If any of VBO items is dirty - recache everything
+    if( vboNeedsUpdate )
+        rebuildVbo();
 }
 
 
@@ -455,13 +458,6 @@ void OPENGL_GAL::blitMainTexture( bool aIsClearFrameBuffer )
 
 void OPENGL_GAL::EndDrawing()
 {
-    // If any of VBO items is dirty - recache everything
-    if( vboNeedsUpdate )
-    {
-        rebuildVbo();
-        vboNeedsUpdate = false;
-    }
-
     // Draw the remaining contents, blit the main texture to the screen, swap the buffers
     glFlush();
     blitMainTexture( true );
@@ -520,6 +516,8 @@ void OPENGL_GAL::rebuildVbo()
 
     delete verticesBuffer;
     delete indicesBuffer;
+
+    vboNeedsUpdate = false;
 
 #ifdef __WXDEBUG__
     prof_end( &totalTime );
@@ -1483,9 +1481,6 @@ int OPENGL_GAL::BeginGroup()
 void OPENGL_GAL::EndGroup()
 {
     vboSize += curVboItem->GetSize();
-
-    // TODO this has to be removed in final version
-    rebuildVbo();
 
     isGroupStarted = false;
 }
