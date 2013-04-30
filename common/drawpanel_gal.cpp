@@ -65,9 +65,8 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_gal->ComputeWorldScreenMatrix();
 
     m_painter = new KiGfx::PCB_PAINTER( m_gal );
-    m_painter->SetGAL( m_gal );
 
-    m_view = new KiGfx::VIEW( true );
+    m_view = new KiGfx::VIEW( true, true );
     m_view->SetPainter( m_painter );
     m_view->SetGAL( m_gal );
 
@@ -156,9 +155,6 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
 
     if( m_view )
         m_view->SetGAL( m_gal );
-
-    if( m_painter )
-        m_painter->SetGAL( m_gal );
 
     wxSize size = GetClientSize();
     m_gal->ResizeScreen( size.GetX(), size.GetY() );
