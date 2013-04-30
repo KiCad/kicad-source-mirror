@@ -1076,7 +1076,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
             {
                 wxString error = wxString::Format(
                     _( "Unable to find the next segment with an endpoint of (%d,%d).\n"
-                       "Edit Edge.Cuts line segments, making them contiguous." ),
+                       "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each." ),
                     prevPt.x,
                     prevPt.y );
                 ThrowIOError( error );
@@ -1212,7 +1212,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                     if( !graphic )
                     {
                         wxString error = wxString::Format(
-                            _( "Unable to find the next segment with an endpoint of (%d,%d)\n."
+                            _( "Unable to find the next segment with an endpoint of (%d,%d).\n"
                                "Edit Edge.Cuts interior graphics, making them contiguous polygons each." ),
                             prevPt.x,
                             prevPt.y
