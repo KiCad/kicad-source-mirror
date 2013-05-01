@@ -1870,58 +1870,54 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IO_ERROR )
 {
     T       tok;
 
-    NeedLEFT();
-
-    tok = NextTok();
-    if( tok==T_unit || tok==T_resolution )
+    while( (tok = NextTok()) != T_RIGHT )
     {
-        growth->unit = new UNIT_RES( growth, tok );
-        if( tok==T_resolution )
-            doRESOLUTION( growth->unit );
-        else
-            doUNIT( growth->unit );
+        if( tok == T_EOF )
+            Unexpected( T_EOF );
 
-        if( NextTok() != T_LEFT )
-            Expecting( T_LEFT );
-        tok = NextTok();
-    }
-
-    if( tok == T_place_control )
-    {
-        if( NextTok() != T_LEFT )
+        if( tok != T_LEFT )
             Expecting( T_LEFT );
 
         tok = NextTok();
-        if( tok != T_flip_style )
-            Expecting( T_flip_style );
 
-        tok = NextTok();
-        if( tok==T_mirror_first || tok==T_rotate_first )
-            growth->flip_style = tok;
-        else
-            Expecting("mirror_first|rotate_first");
+        switch( tok )
+        {
+        case T_unit:
+        case T_resolution:
+            growth->unit = new UNIT_RES( growth, tok );
+            if( tok==T_resolution )
+                doRESOLUTION( growth->unit );
+            else
+                doUNIT( growth->unit );
+            break;
 
-        NeedRIGHT();
-        NeedRIGHT();
-        NeedLEFT();
-        tok = NextTok();
-    }
-
-    while( tok == T_component )
-    {
-        COMPONENT* component = new COMPONENT( growth );
-        growth->components.push_back( component );
-        doCOMPONENT( component );
-
-        tok = NextTok();
-        if( tok == T_RIGHT )
-            return;
-
-        else if( tok == T_LEFT )
+        case T_place_control:
+            NeedRIGHT();
             tok = NextTok();
-    }
+            if( tok != T_flip_style )
+                Expecting( T_flip_style );
 
-    Unexpected( CurText() );
+            tok = NextTok();
+            if( tok==T_mirror_first || tok==T_rotate_first )
+                growth->flip_style = tok;
+            else
+                Expecting( "mirror_first|rotate_first" );
+
+            NeedRIGHT();
+            NeedRIGHT();
+            break;
+
+        case T_component:
+            COMPONENT* component;
+            component = new COMPONENT( growth );
+            growth->components.push_back( component );
+            doCOMPONENT( component );
+            break;
+
+        default:
+            Unexpected( tok );
+        }
+    }
 }
 
 

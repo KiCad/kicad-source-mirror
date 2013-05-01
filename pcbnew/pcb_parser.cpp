@@ -744,7 +744,7 @@ T PCB_PARSER::lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR )
 
     if( it == aMap.end() )
     {
-#if 1 && defined(DEBUG)
+#if 0 && defined(DEBUG)
         // dump the whole darn table, there's something wrong with it.
         for( it = aMap.begin();  it != aMap.end();  ++it )
         {
