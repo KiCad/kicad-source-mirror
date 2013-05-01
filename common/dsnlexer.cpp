@@ -2,7 +2,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@
 #include <cctype>
 
 #include <macros.h>
+#include <fctsys.h>
 #include <dsnlexer.h>
 
 //#include "fctsys.h"
@@ -60,6 +61,8 @@ void DSNLEXER::init()
     space_in_quoted_tokens = false;
 
     commentsAreTokens = false;
+
+    D(printf( "readerStack::count:%zu\n", readerStack.size() );)
 }
 
 
@@ -102,6 +105,8 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
 
 DSNLEXER::~DSNLEXER()
 {
+    D(printf( "~readerStack::count:%zu\n", readerStack.size() );)
+
     if( iOwnReaders )
     {
         // delete the LINE_READERs from the stack, since I own them.

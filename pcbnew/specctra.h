@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -3796,7 +3796,9 @@ public:
     SPECCTRA_DB() :
         SPECCTRA_LEXER( 0 )         // LINE_READER* == NULL, no DSNLEXER::PushReader()
     {
-        iOwnReaders = true;         // if an exception is thrown, close file.
+        // The LINE_READER will be pushed from an automatic instantiation,
+        // we don't own it:
+        wxASSERT( !iOwnReaders );
 
         pcb   = 0;
         session = 0;

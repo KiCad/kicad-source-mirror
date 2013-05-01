@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -94,7 +94,6 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
         return;
 
     SPECCTRA_DB     db;
-
     LOCALE_IO       toggle;
 
     try
@@ -118,7 +117,7 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 
     /* At this point we should call Compile_Ratsnest()
      * but this could be time consumming.
-     * So if incorrect number of Connecred and No connected pads is accepted
+     * So if incorrect number of Connected and No connected pads is accepted
      * until Compile_Ratsnest() is called (when track tool selected for instance)
      * leave the next line commented
      * Otherwise uncomment this line
@@ -375,7 +374,6 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
     return via;
 }
-
 
 
 // no UI code in this function, throw exception to report problems to the
