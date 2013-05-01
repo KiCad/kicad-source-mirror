@@ -214,7 +214,7 @@ public:
     void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
                                                int                    aClearanceValue,
                                                int                    aCircleToSegmentsCount,
-                                               double                 aCorrectionFactor );
+                                               double                 aCorrectionFactor ) const;
 
     virtual wxString GetSelectMenuText() const;
 

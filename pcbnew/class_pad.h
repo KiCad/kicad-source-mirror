@@ -223,7 +223,7 @@ public:
     void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
                                                int aClearanceValue,
                                                int aCircleToSegmentsCount,
-                                               double aCorrectionFactor );
+                                               double aCorrectionFactor ) const;;
 
      /**
      * Function GetClearance
@@ -274,8 +274,6 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
-    void Draw3D( EDA_3D_CANVAS* glcanvas );
-
     /**
      * Function DrawShape
      * basic function to draw a pad.
@@ -299,6 +297,43 @@ public:
      * @param aRotation = full rotation of the polygon
      */
     void BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const;
+
+    /**
+     * Function BuildPadShapePolygon
+     * Build the Corner list of the polygonal shape,
+     * depending on shape, extra size (clearance ...) pad and orientation
+     * This function is similar to TransformShapeWithClearanceToPolygon,
+     * but the difference is BuildPadShapePolygon creates a polygon shape exactly
+     * similar to pad shape, which a size inflated by aInflateValue
+     * and TransformShapeWithClearanceToPolygon creates a more complex shape (for instance
+     * a rectangular pad is converted in a rectangulr shape with ronded corners)
+     * @param aCornerBuffer = a buffer to fill.
+     * @param aInflateValue = the clearance or margin value.
+     *              value > 0: inflate, < 0 deflate, = 0 : no change
+     *              the clearance can have different values for x and y directions
+     *              (relative to the pad)
+     * @param aSegmentsPerCircle = number of segments to approximate a circle
+     *              (used for round and oblong shapes only (16 to 32 is a good value)
+     * @param aCorrectionFactor = the correction to apply to circles radius to keep
+     *        the pad size when the circle is approximated by segments
+     */
+    void BuildPadShapePolygon( std::vector <CPolyPt>& aCornerBuffer,
+                               wxSize aInflateValue, int aSegmentsPerCircle,
+                               double aCorrectionFactor ) const;
+
+    /**
+     * Function BuildPadDrillShapePolygon
+     * Build the Corner list of the polygonal drill shape,
+     * depending on shape pad hole and orientation
+     * @param aCornerBuffer = a buffer to fill.
+     * @param aInflateValue = the clearance or margin value.
+     *              value > 0: inflate, < 0 deflate, = 0 : no change
+     * @param aSegmentsPerCircle = number of segments to approximate a circle
+     *              (used for round and oblong shapes only(16 to 32 is a good value)
+     * @return false if the pad has no hole, true otherwise
+     */
+    bool BuildPadDrillShapePolygon( std::vector <CPolyPt>& aCornerBuffer,
+                                    int aInflateValue, int aSegmentsPerCircle ) const;
 
     /**
      * Function BuildSegmentFromOvalShape

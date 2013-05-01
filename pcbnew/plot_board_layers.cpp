@@ -134,7 +134,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
     // compatibility):
     for( SEGZONE* seg = aBoard->m_Zone; seg != NULL; seg = seg->Next() )
     {
-        if( ( GetLayerMask( seg->GetLayer() ) & aLayerMask ) == 0 ) 
+        if( ( GetLayerMask( seg->GetLayer() ) & aLayerMask ) == 0 )
             continue;
 
         aPlotter->ThickSegment( seg->GetStart(), seg->GetEnd(), seg->GetWidth(),
@@ -515,53 +515,16 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     double correction = 1.0 / cos( M_PI / circleToSegmentsCount );
 
     // Plot pads
-    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
     {
-        for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
-        {
-            if( (pad->GetLayerMask() & aLayerMask) == 0 )
-                continue;
-
-            int clearance = pad->GetSolderMaskMargin();
-            int margin = clearance + inflate;
-
-            // For rect and trap. pads, use a polygon with the same shape
-            // (i.e. with no rounded corners)
-            if( (pad->GetShape() == PAD_RECT) || (pad->GetShape() == PAD_TRAPEZOID) )
-            {
-                wxPoint coord[4];
-                CPolyPt corner;
-                pad->BuildPadPolygon( coord, wxSize( margin, margin ),
-                                      pad->GetOrientation() );
-                for( int ii = 0; ii < 4; ii++ )
-                {
-                    coord[ii] += pad->ReturnShapePos();
-                    corner.x = coord[ii].x;
-                    corner.y = coord[ii].y;
-                    corner.end_contour = (ii == 3);
-                    bufferPolys.push_back( corner );
-                }
-                pad->BuildPadPolygon( coord, wxSize( clearance, clearance ),
-                                      pad->GetOrientation() );
-                for( int ii = 0; ii < 4; ii++ )
-                {
-                    coord[ii] += pad->ReturnShapePos();
-                    corner.x = coord[ii].x;
-                    corner.y = coord[ii].y;
-                    corner.end_contour = (ii == 3);
-                    initialPolys.push_back( corner );
-                }
-            }
-            else
-            {
-                pad->TransformShapeWithClearanceToPolygon( bufferPolys, clearance + inflate,
-                                                           circleToSegmentsCount,
-                                                           correction );
-                pad->TransformShapeWithClearanceToPolygon( initialPolys, clearance,
-                                                           circleToSegmentsCount,
-                                                           correction );
-            }
-        }
+        // add shapes with exact size
+        module->TransformPadsShapesWithClearanceToPolygon( layer,
+                        initialPolys, 0,
+                        circleToSegmentsCount, correction );
+        // add shapes inflated by aMinThickness/2
+        module->TransformPadsShapesWithClearanceToPolygon( layer,
+                        bufferPolys, inflate,
+                        circleToSegmentsCount, correction );
     }
 
     // Plot vias on solder masks, if aPlotOpt.GetPlotViaOnMaskLayer() is true,
@@ -608,9 +571,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( zone->GetLayer() != layer )
             continue;
 
-        zone->TransformShapeWithClearanceToPolygon( bufferPolys,
-                    inflate, circleToSegmentsCount,
-                    correction, true );
+        zone->TransformOutlinesShapeWithClearanceToPolygon( bufferPolys,
+                    inflate, true );
     }
 
     // Now:
