@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,7 @@ class EDA_DRAW_PANEL;
 class D_PAD;
 class BOARD;
 class MSG_PANEL_ITEM;
+class CPolyPt;
 
 
 /**
@@ -242,7 +243,60 @@ public:
                GR_DRAWMODE     aDrawMode,
                const wxPoint&  aOffset = ZeroOffset );
 
-    void Draw3D( EDA_3D_CANVAS* glcanvas );
+    /**
+     * function ReadandInsert3DComponentShape
+     * read the 3D component shape(s) of the footprint (physical shape)
+     * and insert mesh in gl list
+     */
+    void ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas );
+
+    /**
+     * function TransformPadsShapesWithClearanceToPolygon
+     * generate pads shapes on layer aLayer as polygons,
+     * and adds these polygons to aCornerBuffer
+     * Useful to generate a polygonal representation of a footprint
+     * in 3D view and plot functions, when a full polygonal approach is needed
+     * @param aLayer = the current layer: pads on this layer are considered
+     * @param aCornerBuffer = the buffer to store polygons
+     * @param aInflateValue = an additionnal size to add to pad shapes
+     *          aInflateValue = 0 to have the exact pad size
+     * @param aCircleToSegmentsCount = number of segments to generate a circle
+     * @param aCorrectionFactor = the correction to apply to a circle radius
+     *  to approximate a circle by the polygon.
+     *  if aCorrectionFactor = 1.0, the polygon is inside the circle
+     *  the radius of circle approximated by segments is
+     *  initial radius * aCorrectionFactor
+     */
+    void TransformPadsShapesWithClearanceToPolygon( LAYER_NUM aLayer,
+                            std::vector <CPolyPt>& aCornerBuffer,
+                            int                    aInflateValue,
+                            int                    aCircleToSegmentsCount,
+                            double                 aCorrectionFactor );
+
+    /**
+     * function TransformGraphicShapesWithClearanceToPolygonSet
+     * generate shapes of graphic items (outlines) on layer aLayer as polygons,
+     * and adds these polygons to aCornerBuffer
+     * Useful to generate a polygonal representation of a footprint
+     * in 3D view and plot functions, when a full polygonal approach is needed
+     * @param aLayer = the current layer: items on this layer are considered
+     * @param aCornerBuffer = the buffer to store polygons
+     * @param aInflateValue = a value to inflate shapes
+     *          aInflateValue = 0 to have the exact shape size
+     * @param aCircleToSegmentsCount = number of segments to generate a circle
+     * @param aCorrectionFactor = the correction to apply to a circle radius
+     *  to approximate a circle by the polygon.
+     *  if aCorrectionFactor = 1.0, the polygon is inside the circle
+     *  the radius of circle approximated by segments is
+     *  initial radius * aCorrectionFactor
+     */
+    void TransformGraphicShapesWithClearanceToPolygonSet(
+                            LAYER_NUM aLayer,
+                            std::vector <CPolyPt>& aCornerBuffer,
+                            int                    aInflateValue,
+                            int                    aCircleToSegmentsCount,
+                            double                 aCorrectionFactor );
+
 
     /**
      * Function DrawEdgesOnly

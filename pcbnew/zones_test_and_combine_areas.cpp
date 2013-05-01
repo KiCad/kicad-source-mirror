@@ -66,7 +66,7 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
     {
         for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
             if( m_ZoneDescriptorList[ia]->GetLayer() == layer )
-                m_ZoneDescriptorList[ia]->BuildFilledPolysListData( this );
+                m_ZoneDescriptorList[ia]->BuildFilledSolidAreasPolygons( this );
     }
 
     // Test for bad areas: all zones must have more than 2 corners:

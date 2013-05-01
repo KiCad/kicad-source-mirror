@@ -100,7 +100,8 @@ public:
 
     /**
      * Function CreateDrawGL_List
-     * creates the OpenGL draw list items.
+     * Prepares the parameters of the OpenGL draw list
+     * creates the OpenGL draw list items (board, grid ...
      */
     GLuint CreateDrawGL_List();
     void   InitGL();
@@ -111,47 +112,16 @@ public:
         m_draw3dOffset.y = aPosY;
     }
 
+    /**
+     * Function BuildBoard3DView
+     * Called by CreateDrawGL_List()
+     * Fills the OpenGL draw list with board items draw list.
+     */
+    void   BuildBoard3DView();
+
     void   DrawGrid( double aGriSizeMM );
-
-    /**
-     * Function Draw3D_Track
-     * @param aTrack = the aTrack to draw
-    */
-    void   Draw3D_Track( TRACK* aTrack );
-
-    /**
-     * Function Draw3D_Via
-     * draws 3D via as a cylinder and filled circles.
-     */
-    void   Draw3D_Via( SEGVIA* via );
-
-    /**
-     * Function Draw3D_DrawSegment
-     * draws a 3D segment (line, arc or circle).
-     */
-    void   Draw3D_DrawSegment( DRAWSEGMENT* segment );
-
-    /**
-     * Function Draw3D_Zone
-     * draw all solid areas in aZone
-     * @param aZone = the zone to draw
-    */
-    void Draw3D_Zone( ZONE_CONTAINER* aZone );
-
-    /**
-     * Function Draw3D_DrawText
-     * draws 3D segments to create text objects.
-     * When DrawGraphicText is called to draw a text to an OpenGL DC
-     * it calls Draw3dTextSegm to each segment to draw.
-     * 2 parameters used by Draw3D_FilledSegment are not handled by DrawGraphicText
-     * but are used in Draw3D_FilledSegment().
-     * they are 2 local variables. This is an ugly, but trivial code.
-     * Using DrawGraphicText to draw all texts ensure texts have the same shape
-     * in all contexts
-     */
-    void   Draw3D_DrawText( TEXTE_PCB* text );
-
-    //int Get3DLayerEnable(int act_layer);
+    void   Draw3DViaHole( SEGVIA * aVia );
+    void   Draw3DPadHole( D_PAD * aPad );
 
     DECLARE_EVENT_TABLE()
 };
