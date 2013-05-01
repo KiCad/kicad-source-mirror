@@ -475,7 +475,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
             double dtmp = sqrt( ( (double) outer_radius * outer_radius ) -
                                 ( (double) corner.x * corner.x ) );
             corner.y = (int) dtmp;
-            RotatePoint( &corner, 90 );
+            RotatePoint( &corner, 90 ); // 9 degrees is the spoke fillet size
 
             // calculate the ending point of the outter arc
             corner_end.x = corner.y;

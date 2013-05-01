@@ -388,15 +388,13 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
         break;
 
     case S_CIRCLE:
-        radius = (int) hypot( (double) ( end.x - pos.x ),
-                              (double) ( end.y - pos.y ) );
+        radius = KiROUND( GetLineLength( end, pos ) );
         m_plotter->ThickCircle( pos, radius * 2, thickness, GetMode() );
         break;
 
     case S_ARC:
     {
-        radius = (int) hypot( (double) ( end.x - pos.x ),
-                                  (double) ( end.y - pos.y ) );
+        radius = KiROUND( GetLineLength( end, pos ) );
 
         double startAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
 
@@ -607,14 +605,12 @@ void BRDITEMS_PLOTTER::PlotDrawSegment(  DRAWSEGMENT* aSeg )
     switch( aSeg->GetShape() )
     {
     case S_CIRCLE:
-        radius = (int) hypot( (double) ( end.x - start.x ),
-                              (double) ( end.y - start.y ) );
+        radius = KiROUND( GetLineLength( end, start ) );
         m_plotter->ThickCircle( start, radius * 2, thickness, GetMode() );
         break;
 
     case S_ARC:
-        radius = (int) hypot( (double) ( end.x - start.x ),
-                              (double) ( end.y - start.y ) );
+        radius = KiROUND( GetLineLength( end, start ) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
         EndAngle = StAngle + aSeg->GetAngle();
         m_plotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, GetMode() );

@@ -107,8 +107,7 @@ bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
 
     wxPoint relpos = aPosRef - aTransform.TransformCoordinate( m_Pos );
 
-    int dist = KiROUND( sqrt( ( (double) relpos.x * relpos.x ) +
-                              ( (double) relpos.y * relpos.y ) ) );
+    int dist = KiROUND( EuclideanNorm( relpos ) ); 
 
     if( abs( dist - m_Radius ) <= aThreshold )
         return true;
@@ -348,7 +347,7 @@ void LIB_CIRCLE::calcEdit( const wxPoint& aPosition )
 
         int dx = m_Pos.x - aPosition.x;
         int dy = m_Pos.y - aPosition.y;
-        m_Radius = KiROUND( sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) ) );
+        m_Radius = KiROUND( hypot( dx, dy ) );
     }
     else
     {

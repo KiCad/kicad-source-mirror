@@ -377,10 +377,9 @@ void Draw3D_ArcSegment( const wxPoint&  aCenterPos, const wxPoint& aStartPoint,
 
     std::vector <CPolyPt> cornerBuffer;
     TransformArcToPolygon( cornerBuffer, aCenterPos, aStartPoint, aArcAngle,
-                            slice, aWidth );
+                           slice, aWidth );
 
     Draw3D_SolidHorizontalPolyPolygons( cornerBuffer, aZpos, aThickness, aBiuTo3DUnits );
-
 }
 
 

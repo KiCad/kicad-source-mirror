@@ -34,6 +34,7 @@
 #include <class_board_item.h>
 #include <class_board_connected_item.h>
 #include <PolyLine.h>
+#include <trigo.h>
 
 
 class TRACK;
@@ -155,10 +156,7 @@ public:
      */
     double GetLength() const
     {
-        double dx = m_Start.x - m_End.x;
-        double dy = m_Start.y - m_End.y;
-
-        return hypot( dx, dy );
+        return GetLineLength( m_Start, m_End );
     }
 
     /* Display on screen: */

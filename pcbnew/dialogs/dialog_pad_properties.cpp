@@ -280,7 +280,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
             m_staticModuleSideValue->SetLabel( _( "Back side (footprint is mirrored)" ) );
         }
 
-        msg.Printf( wxT( "%.1f" ), (double) module->GetOrientation() / 10 );
+        msg.Printf( wxT( "%.1f" ), module->GetOrientation() / 10.0 );
         m_staticModuleRotValue->SetLabel( msg );
     }
 

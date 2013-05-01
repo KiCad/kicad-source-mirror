@@ -104,8 +104,8 @@ static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     wxPoint poly[5];
     wxPoint pt    = Mself.m_End - Mself.m_Start;
-    int     angle = -KiROUND( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
-    int     len   = KiROUND( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
+    double  angle = -ArcTangente( pt.y, pt.x );
+    int     len   = KiROUND( EuclideanNorm( pt ) );
 
     // calculate corners
     pt.x = 0; pt.y = len / 4;
@@ -125,8 +125,8 @@ static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     Mself.m_End = aPanel->GetScreen()->GetCrossHairPosition();
     pt    = Mself.m_End - Mself.m_Start;
-    angle = -KiROUND( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
-    len   = KiROUND( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
+    angle = -ArcTangente( pt.y, pt.x );
+    len   = KiROUND( EuclideanNorm( pt ) );
 
     // calculate new corners
     pt.x = 0; pt.y = len / 4;
@@ -195,7 +195,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     Mself.m_End = GetScreen()->GetCrossHairPosition();
 
     wxPoint pt = Mself.m_End - Mself.m_Start;
-    int     min_len = KiROUND( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
+    int     min_len = KiROUND( EuclideanNorm( pt ) );
     Mself.lng = min_len;
 
     // Enter the desired length.
@@ -398,8 +398,8 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     #define ADJUST_SIZE 0.988
 
     wxPoint pt       = aEndPoint - aStartPoint;
-    int     angle    = -KiROUND( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
-    int     min_len  = KiROUND( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
+    double  angle    = -ArcTangente( pt.y, pt.x );
+    int     min_len  = KiROUND( EuclideanNorm( pt ) );
     int     segm_len = 0;           // length of segments
     int     full_len;               // full len of shape (sum of lenght of all segments + arcs)
 

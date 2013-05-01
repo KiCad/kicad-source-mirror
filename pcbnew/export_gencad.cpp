@@ -1058,9 +1058,8 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
 
                 case S_CIRCLE:
                 {
-                    int radius = (int) hypot(
-                        (double) ( PtEdge->m_End0.x - PtEdge->m_Start0.x ),
-                        (double) ( PtEdge->m_End0.y - PtEdge->m_Start0.y ) );
+                    int radius = KiROUND( GetLineLength( PtEdge->m_End0,
+                                                         PtEdge->m_Start0 ) );
                     fprintf( aFile, "CIRCLE %g %g %g\n",
                              PtEdge->m_Start0.x / SCALE_FACTOR,
                              Yaxis_sign * PtEdge->m_Start0.y / SCALE_FACTOR,

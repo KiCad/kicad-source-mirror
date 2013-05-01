@@ -122,7 +122,7 @@ void DialogEditModuleText::initDlg( )
         msg.Printf( format,
                     GetChars( m_module->GetReference() ),
                     GetChars( m_module->GetValue() ),
-                    (float) m_module->GetOrientation() / 10 );
+                    m_module->GetOrientation() / 10.0 );
     }
     else
     {

@@ -553,9 +553,8 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 
             case S_CIRCLE:
             {
-                int radius = KiROUND( hypot( double(segment->GetStart().x - segment->GetEnd().x),
-                                             double(segment->GetStart().y - segment->GetEnd().y) )
-                                    );
+                int radius = KiROUND( GetLineLength( segment->GetStart(), 
+                                                     segment->GetEnd() ) );
                 Draw3D_ZaxisCylinder( segment->GetStart(), radius,
                                       thickness, segment->GetWidth(),
                                       zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
@@ -587,9 +586,8 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 
             case S_CIRCLE:
             {
-                int radius = KiROUND( hypot( double(segment->GetStart().x - segment->GetEnd().x),
-                                             double(segment->GetStart().y - segment->GetEnd().y) )
-                                    );
+                int radius = KiROUND( GetLineLength( segment->GetStart(), 
+                                                     segment->GetEnd() ) );
                 Draw3D_ZaxisCylinder( segment->GetStart(), radius,
                                       thickness, segment->GetWidth(),
                                       zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
@@ -806,9 +804,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
 
             case S_CIRCLE:
             {
-               int radius = KiROUND( hypot( double(m_Start.x - m_End.x),
-                                            double(m_Start.y - m_End.y) )
-                                    );
+               int radius = KiROUND( GetLineLength( m_Start, m_End ) );
                 Draw3D_ZaxisCylinder( m_Start, radius,
                                       thickness, GetWidth(),
                                       zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
@@ -848,9 +844,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
 
         case S_CIRCLE:
         {
-            int radius = KiROUND( hypot( double(m_Start.x - m_End.x),
-                                         double(m_Start.y - m_End.y) )
-                                );
+            int radius = KiROUND( GetLineLength( m_Start, m_End ) );
             Draw3D_ZaxisCylinder( m_Start, radius,
                                   thickness, GetWidth(),
                                   zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );

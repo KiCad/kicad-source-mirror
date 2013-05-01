@@ -1075,7 +1075,7 @@ void GRArc1( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
         y0 = ClipBox->GetY();
         xm = ClipBox->GetRight();
         ym = ClipBox->GetBottom();
-        r  = (int) hypot( x1 - xc, y1 - yc );
+        r  = KiROUND( Distance( x1, y1, xc, yc ) );
         if( xc < ( x0 - r ) )
             return;
         if( yc < ( y0 - r ) )

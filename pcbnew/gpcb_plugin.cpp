@@ -564,7 +564,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
 
             wxPoint padPos( (x1 + x2) / 2, (y1 + y2) / 2 );
 
-            pad->SetSize( wxSize( KiROUND( hypot( (double)delta.x, (double)delta.y ) ) + width,
+            pad->SetSize( wxSize( KiROUND( EuclideanNorm( delta ) ) + width,
                                   width ) );
 
             padPos += module->GetPosition();

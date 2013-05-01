@@ -35,7 +35,7 @@
 #include <macros.h>
 #include <trigo.h>
 #include <pcbcommon.h>
-
+#include <math_for_graphics.h>
 #include <class_board.h>
 #include <class_track.h>
 
@@ -125,7 +125,7 @@ void PlacePad( D_PAD* aPad, int color, int marge, int op_logic )
     {
         TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy,
                               shape_pos.x + dx, shape_pos.y + dy,
-                              (int) aPad->GetOrientation(),
+                              aPad->GetOrientation(),
                               aPad->GetLayerMask(), color, op_logic );
     }
 }
@@ -561,8 +561,7 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
 
     cx    = (ux0 + ux1) / 2;
     cy    = (uy0 + uy1) / 2;
-    radius = (int) sqrt( (double) ( cx - ux0 ) * ( cx - ux0 )
-                       + (double) ( cy - uy0 ) * ( cy - uy0 ) );
+    radius = KiROUND( Distance( ux0, uy0, cx, cy ) );
 
     // Calculating coordinate limits belonging to the rectangle.
     row_max = ( cy + radius ) / RoutingMatrix.m_GridRouting;
@@ -689,7 +688,7 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer
 
     if( dx )
     {
-        angle = (int) ( atan2( (double) dy, (double) dx ) * 1800 / M_PI );
+        angle = ArcTangente( dy, dx );
     }
     else
     {
@@ -758,7 +757,7 @@ void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer,
     int ii;
     int angle;
 
-    radius = (int) hypot( (double) (ux1 - ux0), (double) (uy1 - uy0) );
+    radius = KiROUND( Distance( ux0, uy0, ux1, uy1 ) ); 
 
     x0 = x1 = radius;
     y0 = y1 = 0;
@@ -803,7 +802,7 @@ void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg,
     int angle, StAngle;
 
 
-    radius = (int) hypot( (double) (ux1 - ux0), (double) (uy1 - uy0) );
+    radius = KiROUND( Distance( ux0, uy0, ux1, uy1 ) );
 
     x0 = ux1 - ux0;
     y0 = uy1 - uy0;
@@ -813,7 +812,7 @@ void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg,
         lg = 1;
 
     nb_segm = ( 2 * radius ) / lg;
-    nb_segm = ( nb_segm * abs( ArcAngle ) ) / 3600;
+    nb_segm = ( nb_segm * std::abs( ArcAngle ) ) / 3600;
 
     if( nb_segm < 5 )
         nb_segm = 5;
@@ -826,11 +825,7 @@ void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg,
         angle  = ( ArcAngle * ii ) / nb_segm;
         angle += StAngle;
 
-        while( angle >= 3600 )
-            angle -= 3600;
-
-        while( angle < 0 )
-            angle += 3600;
+        NORMALIZE_ANGLE_POS( angle );
 
         x1 = (int) ( radius * cos( DEG2RAD( (double)angle / 10.0 ) ) );
         y1 = (int) ( radius * sin( DEG2RAD( (double)angle / 10.0 ) ) );

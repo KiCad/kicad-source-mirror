@@ -757,7 +757,7 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
         dy = m_ArcEnd.y - m_ArcStart.y;
         cX -= m_ArcStart.x;
         cY -= m_ArcStart.y;
-        angle = (int) ( atan2( (double) dy, (double) dx ) * 1800 / M_PI );
+        angle = ArcTangente( dy, dx );
         RotatePoint( &dx, &dy, angle );     /* The segment dx, dy is horizontal
                                              * -> Length = dx, dy = 0 */
         RotatePoint( &cX, &cY, angle );
@@ -786,11 +786,9 @@ void LIB_ARC::calcRadiusAngles()
 
     m_Radius = KiROUND( EuclideanNorm( centerStartVector ) );
 
-    m_t1 = (int) ( atan2( (double) centerStartVector.y,
-                          (double) centerStartVector.x ) * 1800 / M_PI );
-
-    m_t2 = (int) ( atan2( (double) centerEndVector.y,
-                          (double) centerEndVector.x ) * 1800 / M_PI );
+    // Angles in eeschema are still integers
+    m_t1 = KiROUND( ArcTangente( centerStartVector.y, centerStartVector.x ) );
+    m_t2 = KiROUND( ArcTangente( centerEndVector.y, centerEndVector.x ) );
 
     NORMALIZE_ANGLE_POS( m_t1 );
     NORMALIZE_ANGLE_POS( m_t2 );  // angles = 0 .. 3600

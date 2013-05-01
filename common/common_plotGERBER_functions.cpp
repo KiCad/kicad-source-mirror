@@ -433,11 +433,11 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
     wxASSERT( outputFile );
     wxSize size( aSize );
 
-    /* Plot as flashed. */
-    switch( orient )
+    // Plot as an aperture flash
+    switch( int( orient ) )
     {
     case 900:
-    case 2700:        /* rotation of 90 degrees or 270 swaps dimensions */
+    case 2700:        // rotation of 90 degrees or 270 swaps sizes
 	EXCHG( size.x, size.y );
 
 	// Pass through

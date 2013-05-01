@@ -1047,8 +1047,8 @@ void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int n
     // generate arc
     for( int ic = 0; ic < num; ic++ )
     {
-        int x   = KiROUND( xc + radius * cos( theta ) );
-        int y   = KiROUND( yc + radius * sin( theta ) );
+        int x   = xc + KiROUND( radius * cos( theta ) );
+        int y   = yc + KiROUND( radius * sin( theta ) );
         AppendCorner( x, y );
         theta += th_d;
     }

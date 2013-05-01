@@ -40,6 +40,7 @@
 #include <colors_selection.h>
 #include <richio.h>
 #include <macros.h>
+#include <math_for_graphics.h>
 #include <wxBasePcbFrame.h>
 #include <pcbcommon.h>
 #include <msgpanel.h>
@@ -163,7 +164,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         break;
 
     case S_CIRCLE:
-        radius = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
+        radius = KiROUND( Distance( ux0, uy0, dx, dy ) );
 
         if( typeaff == LINE )
         {
@@ -185,8 +186,8 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         break;
 
     case S_ARC:
-        radius   = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
-        StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
+        radius   = KiROUND( Distance( ux0, uy0, dx, dy ) );
+        StAngle  = ArcTangente( dy - uy0, dx - ux0 );
         EndAngle = StAngle + m_Angle;
 
         if( StAngle > EndAngle )

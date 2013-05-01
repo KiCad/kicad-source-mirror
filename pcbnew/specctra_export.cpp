@@ -769,8 +769,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
                 // lexer/beautifier, and the spec is not clear that this is
                 // required.  Fixed point floats are all that should be needed.
 
-                double radius = hypot( double(graphic->GetStart().x - graphic->GetEnd().x),
-                                       double(graphic->GetStart().y - graphic->GetEnd().y) );
+                double radius = GetLineLength( graphic->GetStart(), graphic->GetEnd() );
 
                 // better if evenly divisible into 360
                 const int DEGREE_INTERVAL = 18;         // 18 means 20 line segments
@@ -779,8 +778,8 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
                      radians < 2 * M_PI;
                      radians += DEGREE_INTERVAL * M_PI / 180.0 )
                 {
-                    wxPoint point( int( radius * cos( radians ) ),
-                                   int( radius * sin( radians ) ) );
+                    wxPoint point( KiROUND( radius * cos( radians ) ),
+                                   KiROUND( radius * sin( radians ) ) );
 
                     point += graphic->m_Start0;     // an offset
 

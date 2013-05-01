@@ -29,7 +29,8 @@ static inline double square( int x )    // helper function to calculate x*x
 {
     return (double) x * x;
 }
-bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist )
+bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, 
+                     wxPoint aEnd, int aDist )
 {
     // test for vertical or horizontal segment
     if( aEnd.x == aStart.x )
@@ -84,7 +85,7 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
         // the distance should be carefully calculated
         if( (aStart.x - aRefPoint.x) <= aDist )
         {
-            double dd = square( aRefPoint.x - aStart.x) +
+            double dd = square( aRefPoint.x - aStart.x ) +
                         square( aRefPoint.y - aStart.y );
             if( dd <= square( aDist ) )
                 return true;
@@ -92,8 +93,8 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
 
         if( (aRefPoint.x - aEnd.x) <= aDist )
         {
-            double dd = square(aRefPoint.x - aEnd.x) +
-                        square( aRefPoint.y - aEnd.y);
+            double dd = square( aRefPoint.x - aEnd.x ) +
+                        square( aRefPoint.y - aEnd.y );
             if( dd <= square( aDist ) )
                 return true;
         }
@@ -157,9 +158,14 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
 }
 
 
-int ArcTangente( int dy, int dx )
+double ArcTangente( int dy, int dx )
 {
-    double fangle;
+
+    /* gcc is surprisingly smart in optimizing these conditions in
+       a tree! */
+    
+    if( dx == 0 && dy == 0 )
+        return 0;
 
     if( dy == 0 )
     {
@@ -193,8 +199,7 @@ int ArcTangente( int dy, int dx )
             return 1800 - 450;
     }
 
-    fangle = atan2( (double) dy, (double) dx ) / M_PI * 1800;
-    return KiROUND( fangle );
+    return atan2( dy, dx ) / M_PI * 1800;
 }
 
 
@@ -202,11 +207,7 @@ void RotatePoint( int* pX, int* pY, double angle )
 {
     int tmp;
 
-    while( angle < 0 )
-        angle += 3600;
-
-    while( angle >= 3600 )
-        angle -= 3600;
+    NORMALIZE_ANGLE_POS( angle );
 
     // Cheap and dirty optimizations for 0, 90, 180, and 270 degrees.
     if( angle == 0 )
@@ -287,11 +288,7 @@ void RotatePoint( double* pX, double* pY, double angle )
 {
     double tmp;
 
-    while( angle < 0 )
-        angle += 3600;
-
-    while( angle >= 3600 )
-        angle -= 3600;
+    NORMALIZE_ANGLE_POS( angle );
 
     // Cheap and dirty optimizations for 0, 90, 180, and 270 degrees.
     if( angle == 0 )
@@ -327,37 +324,3 @@ void RotatePoint( double* pX, double* pY, double angle )
     }
 }
 
-
-double EuclideanNorm( wxPoint vector )
-{
-    return hypot( (double) vector.x, (double) vector.y );
-}
-
-double DistanceLinePoint( wxPoint linePointA, wxPoint linePointB, wxPoint referencePoint )
-{
-    return fabs( (double) ( (linePointB.x - linePointA.x) * (linePointA.y - referencePoint.y) -
-                 (linePointA.x - referencePoint.x ) * (linePointB.y - linePointA.y) )
-                  / EuclideanNorm( linePointB - linePointA ) );
-}
-
-
-bool HitTestPoints( wxPoint pointA, wxPoint pointB, double threshold )
-{
-    wxPoint vectorAB = pointB - pointA;
-    double  distance = EuclideanNorm( vectorAB );
-
-    return distance < threshold;
-}
-
-
-double CrossProduct( wxPoint vectorA, wxPoint vectorB )
-{
-    return (double)vectorA.x * vectorB.y - (double)vectorA.y * vectorB.x;
-}
-
-
-double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB )
-{
-    return hypot( (double) aPointA.x - (double) aPointB.x,
-                  (double) aPointA.y - (double) aPointB.y );
-}

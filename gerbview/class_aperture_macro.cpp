@@ -444,7 +444,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         wxPoint end = mapPt( params[4].GetValue( tool ),
                              params[5].GetValue( tool ), m_GerbMetric );
         wxPoint delta = end - start;
-        int     len   = KiROUND( hypot( delta.x, delta.y ) );
+        int     len   = KiROUND( EuclideanNorm( delta ) );
 
         // To build the polygon, we must create a horizonta polygon starting to "start"
         // and rotate it to have it end point to "end"
@@ -459,7 +459,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         aBuffer.push_back( currpt );
 
         // Rotate rectangle and move it to the actual start point
-        int angle = KiROUND( atan2( (double) delta.y, (double) delta.x ) * 1800.0 / M_PI );
+        int angle = ArcTangente( delta.y, delta.x );
 
         for( unsigned ii = 0; ii < 4; ii++ )
         {

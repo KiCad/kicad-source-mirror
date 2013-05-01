@@ -46,7 +46,7 @@
 #include <collectors.h>
 #include <class_drawpanel.h>
 #include <vector2d.h>
-
+#include <trigo.h>
 
 // Configuration entry names.
 static const wxString UserGridSizeXEntry( wxT( "PcbUserGrid_X" ) );
@@ -563,14 +563,9 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
         dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
 
-        if( dx==0 && dy==0 )
-            theta = 0.0;
-        else
-            theta = atan2( (double) -dy, (double) dx );
+        theta = ArcTangente( -dy, dx ) / 10;
 
-        theta = theta * 180.0 / M_PI;
-
-        ro = sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
+        ro = hypot( dx, dy );
         wxString formatter;
         switch( g_UserUnit )
         {
@@ -661,7 +656,7 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 #endif
 
         // We already decided the formatter above
-        line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
+        line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
         SetStatusText( line, 3 );
     }
 }

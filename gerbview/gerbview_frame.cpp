@@ -802,14 +802,10 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
         dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
 
-        if( dx==0 && dy==0 )
-            theta = 0.0;
-        else
-            theta = atan2( (double) -dy, (double) dx );
+        // atan2 in the 0,0 case returns 0
+        theta = RAD2DEG( atan2( -dy, dx ) );
 
-        theta = theta * 180.0 / M_PI;
-
-        ro = sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
+        ro = hypot( dx, dy );
         wxString formatter;
         switch( g_UserUnit )
         {
@@ -868,7 +864,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         dYpos = To_User_Unit( g_UserUnit, dy );
 
         // We already decided the formatter above
-        line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
+        line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
         SetStatusText( line, 3 );
     }
 }
