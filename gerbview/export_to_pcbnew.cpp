@@ -332,7 +332,8 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
     {
         seg_start = curr_start;
         wxPoint curr_end = start;
-        RotatePoint( &curr_end, aGbrItem->m_ArcCentre, -(int) (DELTA_ANGLE * ii * 1800 / M_PI) );
+        RotatePoint( &curr_end, aGbrItem->m_ArcCentre,
+                     -(int) (DELTA_ANGLE * ii * 1800 / M_PI) );
         seg_end = curr_end;
         // Reverse Y axis:
         NEGATE( seg_start.y );

@@ -65,8 +65,8 @@
 
 extern void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffer,
                                                      BOARD* aPcb, ZONE_CONTAINER* aZone,
-                                                      double aArcCorrection,
-                                                      int aRoundPadThermalRotation);
+                                                     double aArcCorrection,
+                                                     int aRoundPadThermalRotation);
 
 extern void Test_For_Copper_Island_And_Remove( BOARD*          aPcb,
                                                ZONE_CONTAINER* aZone_container );

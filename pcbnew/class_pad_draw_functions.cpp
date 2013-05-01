@@ -527,7 +527,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     // area of the pad
     RotatePoint( &tpos, shape_pos, angle );
 
-    /* Draw text with an angle between -90 deg and + 90 deg */
+    // Draw text with an angle between -90 deg and + 90 deg
     int t_angle = angle;
     NORMALIZE_ANGLE_90( t_angle );
 
@@ -595,7 +595,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
  * aSegStart and aSegEnd are the ending points of the equivalent segment of the shape
  * aRotation is the asked rotation of the segment (usually m_Orient)
  */
-int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation) const
+int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd,
+                                     int aRotation) const
 {
     int width;
 
@@ -628,7 +629,8 @@ int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int a
 }
 
 
-void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const
+void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue,
+                             int aRotation ) const
 {
     if( (GetShape() != PAD_RECT) && (GetShape() != PAD_TRAPEZOID) )
         return;
@@ -696,7 +698,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
         if( delta.y )    // lower and upper segment is horizontal
         {
             // Calculate angle of left (or right) segment with vertical axis
-            angle = atan2( double( m_DeltaSize.y ), double( m_Size.y ) );
+            angle = atan2( m_DeltaSize.y, m_Size.y );
 
             // left and right sides are moved by aInflateValue.x in their perpendicular direction
             // We must calculate the corresponding displacement on the horizontal axis

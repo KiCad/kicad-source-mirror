@@ -360,8 +360,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
         break;
 
     case GBR_CIRCLE:
-        radius = KiROUND(hypot( (double) ( m_End.x - m_Start.x ),
-                                (double) ( m_End.y - m_Start.y ) ));
+        radius = KiROUND( GetLineLength( m_Start, m_End ) );
 
         halfPenWidth = m_Size.x >> 1;
 

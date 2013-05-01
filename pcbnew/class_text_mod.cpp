@@ -385,7 +385,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), msg, DARKGREEN ) );
 
-    msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
+    msg.Printf( wxT( "%.1f" ), m_Orient / 10.0 );
     aList.push_back( MSG_PANEL_ITEM( _( "Orient" ), msg, DARKGREEN ) );
 
     msg = ::CoordinateToString( m_Thickness );

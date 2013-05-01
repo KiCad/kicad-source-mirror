@@ -251,11 +251,8 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
                 // a new track and that new track is parallel to the track the
                 // mouse is on. Find the nearest end point of the track under mouse
                 // to the mouse and return that.
-                double distStart = hypot( double( curpos->x - track->GetStart().x ),
-                                          double( curpos->y - track->GetStart().y ));
-
-                double distEnd   = hypot( double( curpos->x - track->GetEnd().x ),
-                                          double( curpos->y - track->GetEnd().y ));
+                double distStart = GetLineLength( *curpos, track->GetStart() );
+                double distEnd   = GetLineLength( *curpos, track->GetEnd() );
 
                 // if track not via, or if its a via dragging but not with its adjacent track
                 if( currTrack->Type() != PCB_VIA_T

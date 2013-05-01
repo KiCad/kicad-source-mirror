@@ -329,12 +329,12 @@ static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         delta = Dimension->m_featureLineDO - Dimension->m_featureLineGO;
 
         /* Calculating the direction of travel perpendicular to the selected axis. */
-        angle = atan2( (double)delta.y, (double)delta.x ) + (M_PI / 2);
+        angle = atan2( delta.y, delta.x ) + (M_PI / 2);
 
         delta = pos - Dimension->m_featureLineDO;
         depl   = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
-        dx = (int) ( depl * cos( angle ) );
-        dy = (int) ( depl * sin( angle ) );
+        dx = KiROUND( depl * cos( angle ) );
+        dy = KiROUND( depl * sin( angle ) );
         Dimension->m_crossBarO.x = Dimension->m_featureLineGO.x + dx;
         Dimension->m_crossBarO.y = Dimension->m_featureLineGO.y + dy;
         Dimension->m_crossBarF.x = Dimension->m_featureLineDO.x + dx;

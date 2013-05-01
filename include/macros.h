@@ -57,8 +57,8 @@ static inline const wxChar* GetChars( const wxString& s )
 #endif
 }
 
-// This really need a function? anyway is used *a lot* of times
-template<class T> inline void NEGATE( T& x ) { x = -x; }
+// This really needs a function? well, it is used *a lot* of times
+template<class T> inline void NEGATE( T &x ) { x = -x; }
 
 /// # of elements in an array
 #define DIM( x )    unsigned( sizeof(x) / sizeof( (x)[0] ) )    // not size_t

@@ -29,6 +29,7 @@
 #include <fctsys.h>
 #include <trigo.h>
 #include <macros.h>
+#include <common.h>
 #include <convert_basic_shapes_to_polygon.h>
 
 /**
@@ -85,7 +86,6 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
     wxPoint endp   = aEnd - aStart; // end point coordinate for the same segment starting at (0,0)
     wxPoint startp = aStart;
     wxPoint corner;
-    int     seg_len;
     CPolyPt polypoint;
 
     // normalize the position in order to have endp.x >= 0;
@@ -96,7 +96,7 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
     }
 
     int delta_angle = ArcTangente( endp.y, endp.x );    // delta_angle is in 0.1 degrees
-    seg_len = (int) sqrt( ( (double) endp.y * endp.y ) + ( (double) endp.x * endp.x ) );
+    int seg_len = KiROUND( EuclideanNorm( endp ) );
 
     int delta = 3600 / aCircleToSegmentsCount; // rot angle in 0.1 degree
 

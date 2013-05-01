@@ -138,16 +138,13 @@ const wxPoint DRAWSEGMENT::GetArcEnd() const
 const double DRAWSEGMENT::GetArcAngleStart() const
 {
     // due to the Y axis orient atan2 needs - y value
-    double angleStart = atan2( (double)(GetArcStart().y - GetCenter().y),
-                               (double)(GetArcStart().x - GetCenter().x) );
-    // angleStart is in radians, convert it in 1/10 degrees
-    angleStart = angleStart / M_PI * 1800.0;
+    double angleStart = ArcTangente( GetArcStart().y - GetCenter().y,
+                                     GetArcStart().x - GetCenter().x );
 
     // Normalize it to 0 ... 360 deg, to avoid discontinuity for angles near 180 deg
     // because 180 deg and -180 are very near angles when ampping betewwen -180 ... 180 deg.
     // and this is not easy to handle in calculations
-    if( angleStart < 0 )
-        angleStart += 3600.0;
+    NORMALIZE_ANGLE_POS( angleStart );
 
     return angleStart;
 }
@@ -156,7 +153,7 @@ void DRAWSEGMENT::SetAngle( double aAngle )
 {
     NORMALIZE_ANGLE_360( aAngle );
 
-    m_Angle = (int) aAngle;
+    m_Angle = aAngle;
 }
 
 
@@ -215,7 +212,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     switch( m_Shape )
     {
     case S_CIRCLE:
-        radius = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
+        radius = KiROUND( Distance( ux0, uy0, dx, dy ) );
 
         if( mode == LINE )
         {
@@ -235,8 +232,8 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
     case S_ARC:
         int StAngle, EndAngle;
-        radius    = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
-        StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
+        radius   = KiROUND( Distance( ux0, uy0, dx, dy ) );
+        StAngle  = ArcTangente( dy - uy0, dx - ux0 );
         EndAngle = StAngle + m_Angle;
 
         if( !panel->GetPrintMirrored() )
@@ -336,7 +333,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     case S_ARC:
         aList.push_back( MSG_PANEL_ITEM( shape, _( "Arc" ), RED ) );
-        msg.Printf( wxT( "%.1f" ), (double)m_Angle/10 );
+        msg.Printf( wxT( "%.1f" ), m_Angle / 10.0 );
         aList.push_back( MSG_PANEL_ITEM( _("Angle"), msg, RED ) );
         break;
 
@@ -434,7 +431,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition )
         {
             wxPoint relPos = aPosition - GetCenter();
             int radius = GetRadius();
-            int dist  = (int) hypot( (double) relPos.x, (double) relPos.y );
+            int dist   = KiROUND( EuclideanNorm( relPos ) );
 
             if( abs( radius - dist ) <= ( m_Width / 2 ) )
             {
@@ -449,8 +446,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition )
                 // and > arc angle if arc angle < 0 (CCW arc)
                 double arc_angle_start = GetArcAngleStart();    // Always 0.0 ... 360 deg, in 0.1 deg
 
-                double arc_hittest = atan2( (double) relPos.y, (double) relPos.x );
-                arc_hittest = arc_hittest / M_PI * 1800;    // angles are in 1/10 deg
+                double arc_hittest = ArcTangente( relPos.y, relPos.x );
 
                 // Calculate relative angle between the starting point of the arc, and the test point
                 arc_hittest -= arc_angle_start;

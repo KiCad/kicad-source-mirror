@@ -314,7 +314,6 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
                                                       STROKE_T     type_edge )
 {
     MODULE* module = GetBoard()->m_Modules;
-    int     angle  = 0;
 
     if( module == NULL )
         return NULL;
@@ -331,7 +330,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
 
         // Update characteristics of the segment or arc.
         aEdge->SetFlags( IS_NEW );
-        aEdge->SetAngle( angle );
+        aEdge->SetAngle( 0 );
         aEdge->SetShape( type_edge );
 
         if( aEdge->GetShape() == S_ARC )

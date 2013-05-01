@@ -1,6 +1,8 @@
 
 #include <macros.h>
 #include <transform.h>
+#include <common.h>
+#include <trigo.h>
 
 
 TRANSFORM& TRANSFORM::operator=( const TRANSFORM& aTransform )
@@ -77,7 +79,7 @@ bool TRANSFORM::MapAngles( int* aAngle1, int* aAngle2 ) const
     t = x * x1 + y * y1;
     y = x * x2 + y * y2;
     x = t;
-    *aAngle1 = (int) ( atan2( y, x ) * 1800.0 / M_PI + 0.5 );
+    *aAngle1 = KiROUND( ArcTangente( y, x ) );
 
     x = cos( *aAngle2 * M_PI / 1800.0 );
     y = sin( *aAngle2 * M_PI / 1800.0 );

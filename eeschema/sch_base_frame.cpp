@@ -159,7 +159,7 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     }
 
     // We already decided the formatter above
-    line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
+    line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
     SetStatusText( line, 3 );
 
     // refresh units display

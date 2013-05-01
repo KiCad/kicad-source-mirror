@@ -33,6 +33,7 @@
 #include <gr_basic.h>
 #include <common.h>
 #include <trigo.h>
+#include <macros.h>
 #include <class_drawpanel.h>
 #include <class_pcb_screen.h>
 #include <drawtxt.h>
@@ -295,7 +296,7 @@ STATUS_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
     {
         double dist = hypot( (double)dx, (double) dy );
 
-        if( min_dist >= (int) dist )
+        if( min_dist >= KiROUND( dist ) )
             result |= STARTPOINT;
     }
 
@@ -311,7 +312,7 @@ STATUS_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
     {
         double dist = hypot( (double) dx, (double) dy );
 
-        if( min_dist >= (int) dist )
+        if( min_dist >= KiROUND( dist ) )
             result |= ENDPOINT;
     }
 
@@ -618,8 +619,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     if( m_Shape == S_CIRCLE )
     {
-        radius = (int) hypot( (double) ( m_End.x - m_Start.x ),
-                              (double) ( m_End.y - m_Start.y ) );
+        radius = KiROUND( GetLineLength( m_Start, m_End ) );
 
         if( aDC->LogicalToDeviceXRel( l_trace ) <= MIN_DRAW_WIDTH )
         {
@@ -691,7 +691,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     #define THRESHOLD 10
 
-    int len = int( hypot( (m_End.x - m_Start.x), (m_End.y - m_Start.y) ) );
+    int len = KiROUND( GetLineLength( m_Start, m_End ) );
 
     if( len < THRESHOLD * m_Width )
         return;

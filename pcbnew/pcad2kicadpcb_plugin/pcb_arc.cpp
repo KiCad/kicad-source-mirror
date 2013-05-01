@@ -97,8 +97,7 @@ void PCB_ARC::Parse( XNODE*     aNode,
         int alpha2  = ArcTangente( endY - m_positionY, endX - m_positionX );
         m_angle = alpha1 - alpha2;
 
-        if( m_angle < 0 )
-            m_angle = 3600 + m_angle;
+        NORMALIZE_ANGLE_POS( m_angle );
     }
     else if( aNode->GetName() == wxT( "arc" ) )
     {
