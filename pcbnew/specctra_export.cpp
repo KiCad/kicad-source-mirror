@@ -855,6 +855,38 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
 }
 
 
+/**
+ * Function makeCircle
+ * does a line segmented circle into aPath.
+ */
+static void makeCircle( PATH* aPath, DRAWSEGMENT* aGraphic )
+{
+    // do a circle segmentation
+    const int   STEPS = 2 * 36;
+
+    wxPoint     start;
+    wxPoint     center  = aGraphic->GetCenter();
+    int         radius  = aGraphic->GetRadius();
+    double      angle   = 3600.0;
+
+    start   = center;
+    start.x += radius;
+
+    wxPoint nextPt;
+
+    for( int step = 0; step<STEPS; ++step )
+    {
+        double rotation = ( angle * step ) / STEPS;
+
+        nextPt = start;
+
+        RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
+
+        aPath->AppendPoint( mapPt( nextPt ) );
+    }
+}
+
+
 void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ERROR )
 {
     TYPE_COLLECTOR  items;
@@ -948,10 +980,18 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                 break;
 
             case S_CIRCLE:
-                // Freerouter does not understand circles.
-                // This might be a mounting hole or something, ignore it without error
-                // because some of our demo boards have used the edges pcb layer to
-                // hold islanded circles, rather than simply using holes.
+                {
+                    wxPoint pt = graphic->GetCenter();
+
+                    // pt has minimum x point
+                    pt.x -= graphic->GetRadius();
+
+                    if( pt.x < xmin.x )
+                    {
+                        xmin  = pt;
+                        xmini = i;
+                    }
+                }
                 break;
 
             default:
@@ -974,112 +1014,110 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
         // The first DRAWSEGMENT is in 'graphic', ok to remove it from 'items'
         items.Remove( xmini );
 
-        wxPoint startPt = wxPoint( graphic->GetEnd() );
-
-        prevPt = graphic->GetEnd();
-        path->AppendPoint( mapPt( prevPt ) );
-
-        // Do not append the other end point yet of this 'graphic', this first
-        // 'graphic' might be an arc.
-
         // Set maximum proximity threshold for point to point nearness metric for
         // board perimeter only, not interior keepouts yet.
         prox = Mils2iu( 0 );
 
-        // Output the Edge.Cuts perimeter polygon.
-        for(;;)
+        // Output the Edge.Cuts perimeter as circle or polygon.
+        if( graphic->GetShape() == S_CIRCLE )
         {
-            switch( graphic->GetShape() )
+            makeCircle( path, graphic );
+        }
+        else
+        {
+            wxPoint startPt = wxPoint( graphic->GetEnd() );
+
+            prevPt = graphic->GetEnd();
+            path->AppendPoint( mapPt( prevPt ) );
+
+            // Do not append the other end point yet of this 'graphic', this first
+            // 'graphic' might be an arc.
+
+            for(;;)
             {
-            case S_SEGMENT:
+                switch( graphic->GetShape() )
                 {
-                    wxPoint  nextPt;
-
-                    if( !close_enough( prevPt, graphic->GetStart(), prox ) )
+                case S_SEGMENT:
                     {
-                        wxASSERT( close_enough( prevPt, graphic->GetEnd(), prox ) );
-                        nextPt = graphic->GetStart();
-                    }
-                    else
-                    {
-                        wxASSERT( close_enough( prevPt, graphic->GetStart(), prox ) );
-                        nextPt = graphic->GetEnd();
-                    }
+                        wxPoint  nextPt;
 
-                    path->AppendPoint( mapPt( nextPt ) );
-                    prevPt = nextPt;
-                }
-                break;
-
-            case S_ARC:
-                // Freerouter does not yet understand arcs, so approximate
-                // an arc with a series of short lines and put those
-                // line segments into the !same! PATH.
-                {
-                    const int STEPS =  9;      // in an arc of 90 degrees
-
-                    wxPoint start  = graphic->GetArcStart();
-                    wxPoint end    = graphic->GetArcEnd();
-                    wxPoint center = graphic->GetCenter();
-                    double  angle  = -graphic->GetAngle();
-
-                    if( !close_enough( prevPt, start, prox ) )
-                    {
-                        wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), prox ) );
-
-                        angle = -angle;
-                        EXCHG( start, end );
-                    }
-
-                    wxPoint nextPt;
-
-                    for( int step = 1; step<=STEPS; ++step )
-                    {
-                        double rotation = ( angle * step ) / STEPS;
-
-                        nextPt = start;
-
-                        RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
+                        if( !close_enough( prevPt, graphic->GetStart(), prox ) )
+                        {
+                            wxASSERT( close_enough( prevPt, graphic->GetEnd(), prox ) );
+                            nextPt = graphic->GetStart();
+                        }
+                        else
+                        {
+                            wxASSERT( close_enough( prevPt, graphic->GetStart(), prox ) );
+                            nextPt = graphic->GetEnd();
+                        }
 
                         path->AppendPoint( mapPt( nextPt ) );
+                        prevPt = nextPt;
                     }
+                    break;
 
-                    prevPt = nextPt;
+                case S_ARC:
+                    // Freerouter does not yet understand arcs, so approximate
+                    // an arc with a series of short lines and put those
+                    // line segments into the !same! PATH.
+                    {
+                        const int STEPS =  9;      // in an arc of 90 degrees
+
+                        wxPoint start  = graphic->GetArcStart();
+                        wxPoint end    = graphic->GetArcEnd();
+                        wxPoint center = graphic->GetCenter();
+                        double  angle  = -graphic->GetAngle();
+
+                        if( !close_enough( prevPt, start, prox ) )
+                        {
+                            wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), prox ) );
+
+                            angle = -angle;
+                            EXCHG( start, end );
+                        }
+
+                        wxPoint nextPt;
+
+                        for( int step = 1; step<=STEPS; ++step )
+                        {
+                            double rotation = ( angle * step ) / STEPS;
+
+                            nextPt = start;
+
+                            RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
+
+                            path->AppendPoint( mapPt( nextPt ) );
+                        }
+
+                        prevPt = nextPt;
+                    }
+                    break;
+
+                default:
+                    {
+                        wxString error = wxString::Format( _( "Unsupported DRAWSEGMENT type %s" ),
+                            GetChars( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ) );
+
+                        ThrowIOError( error );
+                    }
+                    break;
                 }
-                break;
 
-            case S_CIRCLE:
-                // Freerouter does not understand circles.  And although we can mimic
-                // a circle for it by line segments, we'd have to ensure that the circle
-                // was the only graphic on the board's edge.  @todo that.
-                //
-                // Tell user his board has a problem, this is better than silently
-                // ignoring the error.
-                // fall thru here to report the error.
+                if( close_enough( startPt, prevPt, prox ) )     // the polygon is closed.
+                    break;
 
-            default:
+                graphic = findPoint( prevPt, &items, prox );
+
+                if( !graphic )
                 {
-                    wxString error = wxString::Format( _( "Unsupported DRAWSEGMENT type %s" ),
-                        GetChars( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ) );
-
+                    wxString error = wxString::Format(
+                        _( "Unable to find the next segment with an endpoint of (%d,%d).\n"
+                           "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each." ),
+                        prevPt.x,
+                        prevPt.y );
                     ThrowIOError( error );
                 }
-                break;
-            }
-
-            if( close_enough( startPt, prevPt, prox ) )     // the polygon is closed.
-                break;
-
-            graphic = findPoint( prevPt, &items, prox );
-
-            if( !graphic )
-            {
-                wxString error = wxString::Format(
-                    _( "Unable to find the next segment with an endpoint of (%d,%d).\n"
-                       "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each." ),
-                    prevPt.x,
-                    prevPt.y );
-                ThrowIOError( error );
             }
         }
 
@@ -1101,29 +1139,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 
             if( graphic->GetShape() == S_CIRCLE )
             {
-                // do a circle segmentation
-                const int   STEPS = 36;
-
-                wxPoint     start;
-                wxPoint     center  = graphic->GetCenter();
-                int         radius  = graphic->GetRadius();
-                double      angle   = 3600.0;
-
-                start   = center;
-                start.x += radius;
-
-                wxPoint nextPt;
-
-                for( int step = 0; step<STEPS; ++step )
-                {
-                    double rotation = ( angle * step ) / STEPS;
-
-                    nextPt = start;
-
-                    RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
-
-                    poly_ko->AppendPoint( mapPt( nextPt ) );
-                }
+                makeCircle( poly_ko, graphic );
             }
             else
             {
