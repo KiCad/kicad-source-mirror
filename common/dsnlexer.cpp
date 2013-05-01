@@ -61,8 +61,6 @@ void DSNLEXER::init()
     space_in_quoted_tokens = false;
 
     commentsAreTokens = false;
-
-    D(printf( "readerStack::count:%zu\n", readerStack.size() );)
 }
 
 
@@ -105,8 +103,6 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
 
 DSNLEXER::~DSNLEXER()
 {
-    D(printf( "~readerStack::count:%zu\n", readerStack.size() );)
-
     if( iOwnReaders )
     {
         // delete the LINE_READERs from the stack, since I own them.
