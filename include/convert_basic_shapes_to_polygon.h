@@ -36,6 +36,33 @@
 #include <PolyLine.h>
 
 /**
+ * Helper function CopyPolygonsFromKiPolygonListToPolysList
+ * We are using a lots polygons in calculations.
+ * and we are using 2 descriptions,
+ * one easy to use with boost::polygon (KI_POLYGON_SET)
+ * one easy to use in zones and in draw functions (std::vector<CPolyPt>)
+ * Copy polygons from a KI_POLYGON_SET set of polygons to
+ * a std::vector<CPolyPt> polygon list
+ * Therefore we need conversion functions between these 2 descriptions
+ * This function converts a KI_POLYGON_SET description to a
+ * std::vector<CPolyPt> description
+ * @param aKiPolyList = source (set of polygons)
+ * @param aPolysList = destination (set of polygons using CPolyPt corners descr)
+ */
+void CopyPolygonsFromKiPolygonListToPolysList( KI_POLYGON_SET& aKiPolyList,
+                                               std::vector<CPolyPt>& aPolysList );
+
+/**
+ * Helper function AddPolygonCornersToKiPolygonList
+ * This function adds a KI_POLYGON_SET description to a
+ * std::vector<CPolyPt> description
+ * @param aCornersBuffer = source (set of polygons using CPolyPt corners descr)
+ * @param aPolysList = destination (set of polygons)
+ */
+void AddPolygonCornersToKiPolygonList( std::vector <CPolyPt>& aCornersBuffer,
+                                       KI_POLYGON_SET&        aKiPolyList );
+
+/**
  * Function TransformCircleToPolygon
  * convert a circle to a polygon, using multiple straight lines
  * @param aCornerBuffer = a buffer to store the polygon
@@ -80,6 +107,20 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
  */
 void TransformArcToPolygon( std::vector <CPolyPt>& aCornerBuffer,
                             wxPoint aCentre, wxPoint aStart, int aArcAngle,
+                            int aCircleToSegmentsCount, int aWidth );
+
+/**
+ * Function TransformRingToPolygon
+ * Creates a polygon from a ring
+ * Convert arcs to multiple straight segments
+ * @param aCornerBuffer = a buffer to store the polygon
+ * @param aCentre = centre of the arc or circle
+ * @param aRadius = radius of the circle
+ * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+ * @param aWidth = width (thickness) of the ring
+ */
+void TransformRingToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+                            wxPoint aCentre, int aRadius,
                             int aCircleToSegmentsCount, int aWidth );
 
 #endif     // CONVERT_BASIC_SHAPES_TO_POLYGON_H
