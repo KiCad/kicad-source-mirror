@@ -482,7 +482,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             GRLine( aClipBox, aDC, holepos.x - dx0, holepos.y - dx0,
                     holepos.x + dx0, holepos.y + dx0, 0, nc_color );
 
-        if( m_layerMask & LAYER_BACK )     // Draw / 
+        if( m_layerMask & LAYER_BACK )     // Draw /
             GRLine( aClipBox, aDC, holepos.x + dx0, holepos.y - dx0,
                     holepos.x - dx0, holepos.y + dx0, 0, nc_color );
     }
@@ -552,8 +552,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         {
             // tsize reserve room for marges and segments thickness
             tsize = ( tsize * 7 ) / 10;
-            DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos, 
-                                 aDrawInfo.m_Color, BLACK, WHITE, 
+            DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos,
+                                 aDrawInfo.m_Color, BLACK, WHITE,
                                  buffer, t_angle,
                                  wxSize( tsize , tsize ), GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
@@ -579,8 +579,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
         // tsize reserve room for marges and segments thickness
         tsize = ( tsize * 7 ) / 10;
-        DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos, 
-                             aDrawInfo.m_Color, BLACK, WHITE, 
+        DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos,
+                             aDrawInfo.m_Color, BLACK, WHITE,
                              m_ShortNetname, t_angle,
                              wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,
                              GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
@@ -632,46 +632,48 @@ int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd,
 void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue,
                              int aRotation ) const
 {
-    if( (GetShape() != PAD_RECT) && (GetShape() != PAD_TRAPEZOID) )
-        return;
-
     wxSize delta;
     wxSize halfsize;
 
     halfsize.x = m_Size.x >> 1;
     halfsize.y = m_Size.y >> 1;
 
-    // For rectangular shapes, inflate is easy
-    if( GetShape() == PAD_RECT )
+    switch( GetShape() )
     {
-        halfsize += aInflateValue;
+        case PAD_RECT:
+            // For rectangular shapes, inflate is easy
+            halfsize += aInflateValue;
 
-        // Verify if do not deflate more than than size
-        // Only possible for inflate negative values.
-        if( halfsize.x < 0 )
-            halfsize.x = 0;
+            // Verify if do not deflate more than than size
+            // Only possible for inflate negative values.
+            if( halfsize.x < 0 )
+                halfsize.x = 0;
 
-        if( halfsize.y < 0 )
-            halfsize.y = 0;
-    }
-    else
-    {
-        // Trapezoidal pad: verify delta values
-        delta.x = ( m_DeltaSize.x >> 1 );
-        delta.y = ( m_DeltaSize.y >> 1 );
+            if( halfsize.y < 0 )
+                halfsize.y = 0;
+            break;
 
-        // be sure delta values are not to large
-        if( (delta.x < 0) && (delta.x <= -halfsize.y) )
-            delta.x = -halfsize.y + 1;
+        case PAD_TRAPEZOID:
+            // Trapezoidal pad: verify delta values
+            delta.x = ( m_DeltaSize.x >> 1 );
+            delta.y = ( m_DeltaSize.y >> 1 );
 
-        if( (delta.x > 0) && (delta.x >= halfsize.y) )
-            delta.x = halfsize.y - 1;
+            // be sure delta values are not to large
+            if( (delta.x < 0) && (delta.x <= -halfsize.y) )
+                delta.x = -halfsize.y + 1;
 
-        if( (delta.y < 0) && (delta.y <= -halfsize.x) )
-            delta.y = -halfsize.x + 1;
+            if( (delta.x > 0) && (delta.x >= halfsize.y) )
+                delta.x = halfsize.y - 1;
 
-        if( (delta.y > 0) && (delta.y >= halfsize.x) )
-            delta.y = halfsize.x - 1;
+            if( (delta.y < 0) && (delta.y <= -halfsize.x) )
+                delta.y = -halfsize.x + 1;
+
+            if( (delta.y > 0) && (delta.y >= halfsize.x) )
+                delta.y = halfsize.x - 1;
+        break;
+
+        default:    // is used only for rect and trap. pads
+            return;
     }
 
     // Build the basic rectangular or trapezoid shape
