@@ -36,6 +36,7 @@
 #include <base_units.h>
 #include <convert_from_iu.h>
 #include <wildcards_and_files_ext.h>
+#include <macros.h>
 
 #include <pcbnew.h>
 #include <pcbplot.h>

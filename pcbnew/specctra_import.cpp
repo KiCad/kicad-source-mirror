@@ -36,6 +36,7 @@
 #include <confirm.h>            // DisplayError()
 #include <gestfich.h>           // EDA_FileSelector()
 #include <wxPcbStruct.h>
+#include <macros.h>
 
 #include <class_board.h>
 #include <class_module.h>

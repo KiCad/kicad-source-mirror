@@ -287,12 +287,12 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, int aStAngle, int aEndAngle,
 {
     wxASSERT( outputFile );
     wxPoint start, end;
-    start.x = aCenter.x + KiROUND( aRadius*cos( DEG2RAD( aStAngle/10.0 ) ) );
-    start.y = aCenter.y - KiROUND( aRadius*sin( DEG2RAD( aStAngle/10.0 ) ) );
+    start.x = aCenter.x + KiROUND( cosdecideg( aRadius, aStAngle ) );
+    start.y = aCenter.y - KiROUND( sindecideg( aRadius, aStAngle ) );
     SetCurrentLineWidth( aWidth );
     MoveTo( start );
-    end.x = aCenter.x + KiROUND( aRadius*cos( DEG2RAD( aEndAngle/10.0 ) ) );
-    end.y = aCenter.y - KiROUND( aRadius*sin( DEG2RAD( aEndAngle/10.0 ) ) );
+    end.x = aCenter.x + KiROUND( cosdecideg( aRadius, aEndAngle ) );
+    end.y = aCenter.y - KiROUND( sindecideg( aRadius, aEndAngle ) );
     DPOINT devEnd = userToDeviceCoordinates( end );
     DPOINT devCenter = userToDeviceCoordinates( aCenter )
         - userToDeviceCoordinates( start );

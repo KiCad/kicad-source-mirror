@@ -115,7 +115,7 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
     abPos  += m_layerOffset + m_imageParams->m_ImageOffset;
     abPos.x = KiROUND( abPos.x * m_drawScale.x );
     abPos.y = KiROUND( abPos.y * m_drawScale.y );
-    int rotation = KiROUND(m_lyrRotation*10) + (m_imageParams->m_ImageRotation*10);
+    int rotation = m_lyrRotation * 10 + m_imageParams->m_ImageRotation * 10;
 
     if( rotation )
         RotatePoint( &abPos, -rotation );
@@ -142,7 +142,7 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition )
     if( !m_mirrorB )
         NEGATE( xyPos.y );
 
-    int rotation = KiROUND(m_lyrRotation*10) + (m_imageParams->m_ImageRotation*10);
+    int rotation = m_lyrRotation * 10 + m_imageParams->m_ImageRotation * 10;
 
     if( rotation )
         RotatePoint( &xyPos, rotation );

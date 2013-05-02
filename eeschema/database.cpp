@@ -7,7 +7,7 @@
 #include "eda_doc.h"
 #include "kicad_string.h"
 #include "wxstruct.h"
-
+#include <macros.h>
 #include "protos.h"
 #include "class_library.h"
 #include "dialog_helpers.h"

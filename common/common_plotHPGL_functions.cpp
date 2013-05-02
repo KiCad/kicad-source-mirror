@@ -401,8 +401,8 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int ra
 
     // Calculate start point,
     wxPoint cmap;
-    cmap.x  = int( centre.x + ( radius * cos( DEG2RAD( StAngle / 10.0 ) ) ) );
-    cmap.y  = int( centre.y - ( radius * sin( DEG2RAD( StAngle / 10.0 ) ) ) );
+    cmap.x  = centre.x + KiROUND( cosdecideg( radius, StAngle ) );
+    cmap.y  = centre.y - KiROUND( sindecideg( radius, StAngle ) );
     DPOINT  cmap_dev = userToDeviceCoordinates( cmap );
 
     fprintf( outputFile,
@@ -431,10 +431,8 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int or
      */
     if( size.x > size.y )
     {
-        EXCHG( size.x, size.y ); orient += 900;
-
-        if( orient >= 3600 )
-            orient -= 3600;
+        EXCHG( size.x, size.y ); 
+        orient = AddAngles( orient, 900 );
     }
 
     deltaxy = size.y - size.x;     // distance between centers of the oval

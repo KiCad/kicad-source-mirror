@@ -776,8 +776,8 @@ void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer,
     for( ii = 1; ii < nb_segm; ii++ )
     {
         angle = (3600 * ii) / nb_segm;
-        x1    = (int) ( radius * cos( DEG2RAD( (double)angle / 10.0 ) ) );
-        y1    = (int) ( radius * sin( DEG2RAD( (double)angle / 10.0 ) ) );
+        x1    = KiROUND( cosdecideg( radius, angle ) );
+        y1    = KiROUND( sindecideg( radius, angle ) );
         DrawSegmentQcq( x0 + ux0, y0 + uy0, x1 + ux0, y1 + uy0, lg, layer, color, op_logic );
         x0 = x1;
         y0 = y1;
@@ -827,8 +827,8 @@ void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg,
 
         NORMALIZE_ANGLE_POS( angle );
 
-        x1 = (int) ( radius * cos( DEG2RAD( (double)angle / 10.0 ) ) );
-        y1 = (int) ( radius * sin( DEG2RAD( (double)angle / 10.0 ) ) );
+        x1 = KiROUND( cosdecideg( radius, angle ) );
+        y1 = KiROUND( cosdecideg( radius, angle ) );
         DrawSegmentQcq( x0 + ux0, y0 + uy0, x1 + ux0, y1 + uy0, lg, layer, color, op_logic );
         x0 = x1;
         y0 = y1;

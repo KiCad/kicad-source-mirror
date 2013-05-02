@@ -559,7 +559,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             }
 
             // Negate angle (due to Y reversed axis) and convert it to internal units
-            angle = - angle * 1800.0 / M_PI;
+            angle = - RAD2DECIDEG( angle );
             pad->SetOrientation( KiROUND( angle ) );
 
             wxPoint padPos( (x1 + x2) / 2, (y1 + y2) / 2 );

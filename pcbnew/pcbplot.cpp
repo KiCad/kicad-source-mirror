@@ -40,6 +40,7 @@
 #include <pcb_plot_params.h>
 #include <wx/ffile.h>
 #include <dialog_plot.h>
+#include <macros.h>
 
 
 /** Get the 'traditional' gerber extension depending on the layer

@@ -39,6 +39,7 @@
 
 #include <plot_common.h>
 #include <trigo.h>
+#include <macros.h>
 #include <kicad_string.h>
 #include <wxPcbStruct.h>
 #include <appl_wxstruct.h>

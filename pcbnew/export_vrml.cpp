@@ -487,7 +487,7 @@ static void export_vrml_oval_pad( LAYER_NUM layer, double xc, double yc,
 
     fan.c.x = xc;
     fan.c.y = yc;
-    double angle = orient / 1800.0 * M_PI;
+    double angle = DECIDEG2RAD( orient );
     int divisions = SEGM_COUNT_PER_360 / 2;
 
     if( dy > dx )
@@ -1118,8 +1118,8 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         compose_quat( q1, q2, q1 );
 
         // Note here aModule->GetOrientation() is in 0.1 degrees,
-        // so module rotation is aModule->GetOrientation() / 1800.0
-        build_quat( 0, 0, 1, aModule->GetOrientation() / 1800.0 * M_PI, q2 );
+        // so module rotation has to be converted to radians
+        build_quat( 0, 0, 1, DECIDEG2RAD( aModule->GetOrientation() ), q2 );
         compose_quat( q1, q2, q1 );
         from_quat( q1, rot );
 

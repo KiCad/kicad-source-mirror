@@ -75,9 +75,7 @@ void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int 
     if( size.x > size.y )
     {
         EXCHG( size.x, size.y );
-        orient += 900;
-        if( orient >= 3600 )
-            orient -= 3600;
+        orient = AddAngles( orient, 900 );
     }
 
     delta = size.y - size.x;
@@ -345,11 +343,6 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
                                             double                   *ctm_f,
                                             double                   *heightFactor )
 {
-    // These are for the rotation matrix
-    double alpha = DEG2RAD( aOrient / 10.0 );
-    double sinalpha = sin( alpha );
-    double cosalpha = cos( alpha );
-
     // Compute the starting position (compensated for alignment)
     wxPoint start_pos = aPos;
 
@@ -399,6 +392,10 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
     *wideningFactor = sz_dev.y / sz_dev.x;
 
     // The CTM transformation matrix
+    double alpha = DECIDEG2RAD( aOrient );
+    double sinalpha = sin( alpha );
+    double cosalpha = cos( alpha );
+
     *ctm_a = cosalpha;
     *ctm_b = sinalpha;
     *ctm_c = -sinalpha;

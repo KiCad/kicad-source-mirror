@@ -74,15 +74,15 @@ bool TRANSFORM::MapAngles( int* aAngle1, int* aAngle2 ) const
         *aAngle2 += 1;
     }
 
-    x = cos( *aAngle1 * M_PI / 1800.0 );
-    y = sin( *aAngle1 * M_PI / 1800.0 );
+    x = cos( DECIDEG2RAD( *aAngle1 ) );
+    y = sin( DECIDEG2RAD( *aAngle1 ) );
     t = x * x1 + y * y1;
     y = x * x2 + y * y2;
     x = t;
     *aAngle1 = KiROUND( ArcTangente( y, x ) );
 
-    x = cos( *aAngle2 * M_PI / 1800.0 );
-    y = sin( *aAngle2 * M_PI / 1800.0 );
+    x = cos( DECIDEG2RAD( *aAngle2 ) );
+    y = sin( DECIDEG2RAD( *aAngle2 ) );
     t = x * x1 + y * y1;
     y = x * x2 + y * y2;
     x = t;

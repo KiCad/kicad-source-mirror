@@ -32,6 +32,7 @@
 #include <class_drawpanel.h>
 #include <build_version.h>
 #include <macros.h>
+#include <trigo.h>
 #include <base_units.h>
 #include <colors_selection.h>
 #include <class_gbr_layer_box_selector.h>

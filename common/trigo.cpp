@@ -199,7 +199,8 @@ double ArcTangente( int dy, int dx )
             return 1800 - 450;
     }
 
-    return atan2( dy, dx ) / M_PI * 1800;
+    // Of course dy and dx are treated as double
+    return RAD2DECIDEG( atan2( dy, dx ) );
 }
 
 
@@ -232,7 +233,7 @@ void RotatePoint( int* pX, int* pY, double angle )
     }
     else
     {
-        double fangle = DEG2RAD( angle / 10.0 );
+        double fangle = DECIDEG2RAD( angle );
         double sinus = sin( fangle );
         double cosinus = cos( fangle );
         double fpx = (*pY * sinus ) + (*pX * cosinus );
@@ -313,7 +314,7 @@ void RotatePoint( double* pX, double* pY, double angle )
     }
     else
     {
-        double fangle = DEG2RAD( angle / 10.0 );
+        double fangle = DECIDEG2RAD( angle );
         double sinus = sin( fangle );
         double cosinus = cos( fangle );
 

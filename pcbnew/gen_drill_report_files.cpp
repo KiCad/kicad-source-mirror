@@ -34,6 +34,7 @@
 #include <drawtxt.h>
 #include <confirm.h>
 #include <kicad_string.h>
+#include <macros.h>
 
 #include <class_board.h>
 

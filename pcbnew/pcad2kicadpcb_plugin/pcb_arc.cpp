@@ -121,8 +121,8 @@ void PCB_ARC::Parse( XNODE*     aNode,
         if( lNode )
             m_angle = StrToInt1Units( lNode->GetNodeContent() );
 
-        m_startX = KiROUND( m_positionX + (double)r * cos( a * M_PI / 1800.0 ) );
-        m_startY = KiROUND( m_positionY - (double)r * sin( a * M_PI / 1800.0 ) );
+        m_startX = m_positionX + KiROUND( cosdecideg( r, a ) );
+        m_startY = m_positionY - KiROUND( sindecideg( r, a ) );
     }
 }
 
