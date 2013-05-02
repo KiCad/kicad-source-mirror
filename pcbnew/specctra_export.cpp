@@ -263,7 +263,7 @@ static POINT mapPt( const wxPoint& pt )
 static DRAWSEGMENT* findPoint( const wxPoint& aPoint, TYPE_COLLECTOR* items, unsigned aLimit )
 {
     unsigned min_d = INT_MAX;
-    int      ndx_min;
+    int      ndx_min = 0;
 
     // find the point closest to aPoint and perhaps exactly matching aPoint.
     for( int i = 0; i<items->GetCount(); ++i )

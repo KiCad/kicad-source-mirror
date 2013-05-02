@@ -164,7 +164,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     wxString   msg;
     wxString   lastFootprintLibName;
     COMPONENT* component;
-    MODULE*    module;
+    MODULE*    module = 0;
     MODULE*    fpOnBoard;
 
     if( aNetlist.IsEmpty() )
