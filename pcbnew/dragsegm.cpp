@@ -34,6 +34,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <wxBasePcbFrame.h>
+#include <macros.h>
 
 #include <drag.h>
 #include <pcbnew.h>

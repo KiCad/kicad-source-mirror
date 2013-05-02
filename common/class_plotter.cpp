@@ -387,7 +387,7 @@ void PLOTTER::segmentAsOval( const wxPoint& start, const wxPoint& end, int width
     else if( size.x == 0 )
         orient = 900;
     else
-        orient = -(int) ( RAD2DEG( atan2( (double)size.y, (double)size.x ) ) * 10.0 );
+        orient = -ArcTangente( size.y, size.x );
 
     size.x = KiROUND( hypot( size.x, size.y ) ) + width;
     size.y = width;
@@ -407,9 +407,7 @@ void PLOTTER::sketchOval( const wxPoint& pos, const wxSize& aSize, int orient,
     if( size.x > size.y )
     {
         EXCHG( size.x, size.y );
-        orient += 900;
-        if( orient >= 3600 )
-            orient -= 3600;
+        orient = AddAngles( orient, 900 );
     }
 
     deltaxy = size.y - size.x;       /* distance between centers of the oval */

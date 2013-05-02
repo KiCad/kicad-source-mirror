@@ -144,7 +144,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
 
             default:
                 D( printf( "Error: Shape %d not implemented!\n",
-                    ((EDGE_MODULE*) item)->m_Shape ); )
+                    ((EDGE_MODULE*) item)->GetShape() ); )
                 break;
             }
                 break;
@@ -828,7 +828,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
                 wxPoint intpoint = corner;
                 intpoint.y -= aThermalGap / 4;
                 corners_buffer.push_back( intpoint + shape_offset );
-                RotatePoint( &corner, 90 );
+                RotatePoint( &corner, 90 ); // 9 degrees of thermal fillet
             }
             else
             {
@@ -850,7 +850,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
             corner_end.x =
                 (int) sqrt( ( (double) outer_radius *
                              outer_radius ) - ( (double) corner_end.y * corner_end.y ) );
-            RotatePoint( &corner_end, -90 );
+            RotatePoint( &corner_end, -90 ); // 9 degrees of thermal fillet
 
             // calculate intermediate arc points till limit is reached
             while( (corner.y > corner_end.y)  && (corner.x < corner_end.x) )
@@ -878,10 +878,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
                 }
 
                 aCornerBuffer.back().end_contour = true;
-                angle += 1800;       // this is calculate hole 3
-
-                if( angle >= 3600 )
-                    angle -= 3600;
+                angle = AddAngles( angle, 1800 ); // this is calculate hole 3
             }
 
             // Create holes, that are the mirrored from the previous holes
@@ -906,10 +903,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
                 }
 
                 aCornerBuffer.back().end_contour = true;
-                angle += 1800;
-
-                if( angle >= 3600 )
-                    angle -= 3600;
+                angle = AddAngles( angle, 1800 );
             }
         }
         break;
@@ -982,10 +976,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
                 }
 
                 aCornerBuffer.back().end_contour = true;
-                angle += 1800;       // this is calculate hole 3
-
-                if( angle >= 3600 )
-                    angle -= 3600;
+                angle = AddAngles( angle, 1800 );       // this is calculate hole 3
             }
 
             // Create holes, that are the mirrored from the previous holes
@@ -1008,10 +999,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
                 }
 
                 aCornerBuffer.back().end_contour = true;
-                angle += 1800;
-
-                if( angle >= 3600 )
-                    angle -= 3600;
+                angle = AddAngles( angle, 1800 );
             }
 
         }

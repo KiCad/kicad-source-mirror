@@ -736,9 +736,9 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
             }
             else
             {
-                /* atan2 is *not* the solution here, since can give upside
+                /* atan2 is *not* the solution here, since it can give upside
                    down text. We want to work only in the first and fourth quadrant */
-                angle = 10 * RAD2DEG( -atan( double( dy )/ double( dx ) ) );
+                angle = RAD2DECIDEG( -atan( double( dy ) / double( dx ) ) );
             }
         }
 
@@ -921,8 +921,8 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         ( (SEGVIA*) this )->ReturnLayerPair( &layer_top, &layer_bottom );
 
         // lines for the top layer
-        RotatePoint( &ax, &ay, layer_top * 3600 / brd->GetCopperLayerCount( ) );
-        RotatePoint( &bx, &by, layer_top * 3600 / brd->GetCopperLayerCount( ) );
+        RotatePoint( &ax, &ay, layer_top * 3600.0 / brd->GetCopperLayerCount( ) );
+        RotatePoint( &bx, &by, layer_top * 3600.0 / brd->GetCopperLayerCount( ) );
         GRLine( panel->GetClipBox(), aDC, m_Start.x + aOffset.x - ax,
                 m_Start.y + aOffset.y - ay,
                 m_Start.x + aOffset.x - bx,
@@ -930,8 +930,8 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
         // lines for the bottom layer 
         ax = 0; ay = radius; bx = 0; by = drill_radius;
-        RotatePoint( &ax, &ay, layer_bottom * 3600 / brd->GetCopperLayerCount( ) );
-        RotatePoint( &bx, &by, layer_bottom * 3600 / brd->GetCopperLayerCount( ) );
+        RotatePoint( &ax, &ay, layer_bottom * 3600.0 / brd->GetCopperLayerCount( ) );
+        RotatePoint( &bx, &by, layer_bottom * 3600.0 / brd->GetCopperLayerCount( ) );
         GRLine( panel->GetClipBox(), aDC, m_Start.x + aOffset.x - ax,
                 m_Start.y + aOffset.y - ay,
                 m_Start.x + aOffset.x - bx,

@@ -219,23 +219,20 @@ void PDF_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int rad
     SetCurrentLineWidth( width );
 
     // Usual trig arc plotting routine...
-    double alpha = DEG2RAD( StAngle / 10.0 );
-    start.x = centre.x + (int) ( radius * cos( -alpha ) );
-    start.y = centre.y + (int) ( radius * sin( -alpha ) );
+    start.x = centre.x + KiROUND( cosdecideg( radius, -StAngle ) );
+    start.y = centre.y + KiROUND( sindecideg( radius, -StAngle ) );
     DPOINT pos_dev = userToDeviceCoordinates( start );
     fprintf( workFile, "%g %g m ", pos_dev.x, pos_dev.y );
     for( int ii = StAngle + delta; ii < EndAngle; ii += delta )
     {
-        alpha = DEG2RAD( ii / 10.0 );
-        end.x = centre.x + (int) ( radius * cos( -alpha ) );
-        end.y = centre.y + (int) ( radius * sin( -alpha ) );
+        end.x = centre.x + KiROUND( cosdecideg( radius, -ii ) );
+        end.y = centre.y + KiROUND( sindecideg( radius, -ii ) );
         pos_dev = userToDeviceCoordinates( end );
         fprintf( workFile, "%g %g l ", pos_dev.x, pos_dev.y );
     }
 
-    alpha = DEG2RAD( EndAngle / 10.0 );
-    end.x = centre.x + (int) ( radius * cos( -alpha ) );
-    end.y = centre.y + (int) ( radius * sin( -alpha ) );
+    end.x = centre.x + KiROUND( cosdecideg( radius, -EndAngle ) );
+    end.y = centre.y + KiROUND( sindecideg( radius, -EndAngle ) );
     pos_dev = userToDeviceCoordinates( end );
     fprintf( workFile, "%g %g l ", pos_dev.x, pos_dev.y );
 

@@ -307,7 +307,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     textPos.y  = (m_crossBarF.y + m_featureLineGF.y) / 2;
     m_Text.SetTextPosition( textPos );
 
-    double newAngle = -(angle * 1800 / M_PI);
+    double newAngle = -RAD2DECIDEG( angle );
 
     NORMALIZE_ANGLE_POS( newAngle );
 

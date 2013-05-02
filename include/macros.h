@@ -63,56 +63,10 @@ template<class T> inline void NEGATE( T &x ) { x = -x; }
 /// # of elements in an array
 #define DIM( x )    unsigned( sizeof(x) / sizeof( (x)[0] ) )    // not size_t
 
-inline double DEG2RAD( double deg ) { return deg * M_PI / 180.0; }
-inline double RAD2DEG( double rad ) { return rad * 180.0 / M_PI; }
-
-/// Normalize angle to be in the -360.0 .. 360.0:
-template<class T> inline void NORMALIZE_ANGLE_360( T& Angle )
-{
-    while( Angle < -3600 )
-        Angle += 3600;
-    while( Angle > 3600 )
-        Angle -= 3600; 
-}
-
-/// Normalize angle to be in the 0.0 .. 360.0 range: 
-template<class T> inline void NORMALIZE_ANGLE_POS( T& Angle )
-{
-    while( Angle < 0 )
-        Angle += 3600;
-    while( Angle >= 3600 )
-        Angle -= 3600;
-}
-
-template<class T> inline void NEGATE_AND_NORMALIZE_ANGLE_POS( T& Angle )
-{
-    Angle = -Angle;
-    while( Angle < 0 )
-        Angle += 3600;
-    while( Angle >= 3600 )
-        Angle -= 3600;
-}
-
-/// Normalize angle to be in the -90.0 .. 90.0 range
-template<class T> inline void NORMALIZE_ANGLE_90( T& Angle )
-{
-    while( Angle < -900 )
-        Angle += 1800;
-    while( Angle > 900 )
-        Angle -= 1800;
-}
-
-/// Normalize angle to be in the -180.0 .. 180.0 range
-template<class T> inline void NORMALIZE_ANGLE_180( T& Angle )
-{
-    while( Angle <= -1800 )
-        Angle += 3600;
-    while( Angle > 1800 )
-        Angle -= 3600;
-}
-
-/// Exchange two values; std::swap works only with arguments of the
-// same type; here the compiler will figure out what to do (I hope)
+/// Exchange two values
+// std::swap works only with arguments of the same type (which is saner); 
+// here the compiler will figure out what to do (I hope to get rid of
+// this soon or late)
 template<class T, class T2> inline void EXCHG( T& a, T2& b )
 {
     T temp = a;

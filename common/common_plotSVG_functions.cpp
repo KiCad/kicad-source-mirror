@@ -361,12 +361,12 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int rad
     start += centre_dev;
     end += centre_dev;
 
-    double theta1 = StAngle * M_PI / 1800.0;
+    double theta1 = DECIDEG2RAD( StAngle );
 
     if( theta1 < 0 )
         theta1 = theta1 + M_PI * 2;
 
-    double theta2 = EndAngle * M_PI / 1800.0;
+    double theta2 = DECIDEG2RAD( EndAngle );
 
     if( theta2 < 0 )
         theta2 = theta2 + M_PI * 2;

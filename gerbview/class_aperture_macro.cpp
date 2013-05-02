@@ -176,8 +176,8 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = KiROUND( params[6].GetValue( tool ) * 10.0 );
-        if( rotation )
+        rotation = params[6].GetValue( tool ) * 10.0;
+        if( rotation != 0)
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
                 RotatePoint( &polybuffer[ii], -rotation );
@@ -205,8 +205,8 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = KiROUND( params[5].GetValue( tool ) * 10.0 );
-        if( rotation )
+        rotation = params[5].GetValue( tool ) * 10.0;
+        if( rotation != 0 )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
                 RotatePoint( &polybuffer[ii], -rotation );
@@ -234,8 +234,8 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = KiROUND( params[5].GetValue( tool ) * 10.0 );
-        if( rotation )
+        rotation = params[5].GetValue( tool ) * 10.0;
+        if( rotation != 0)
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
                 RotatePoint( &polybuffer[ii], -rotation );
@@ -264,7 +264,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = KiROUND( params[5].GetValue( tool ) * 10.0 );
+        rotation = params[5].GetValue( tool ) * 10.0;
 
         // Because a thermal shape has 4 identical sub-shapes, only one is created in polybuffer.
         // We must draw 4 sub-shapes rotated by 90 deg
@@ -329,7 +329,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         // Draw the cross:
         ConvertShapeToPolygon( aParent, polybuffer );
 
-        rotation = KiROUND( params[8].GetValue( tool ) * 10.0 );
+        rotation = params[8].GetValue( tool ) * 10.0;
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
             // shape rotation:
@@ -352,7 +352,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
          * type is not stored in parameters list, so the first parameter is exposure
          */
         int numPoints = (int) params[1].GetValue( tool );
-        rotation  = KiROUND( params[numPoints * 2 + 4].GetValue( tool ) * 10.0 );
+        rotation  = params[numPoints * 2 + 4].GetValue( tool ) * 10.0;
         wxPoint pos;
         // Read points. numPoints does not include the starting point, so add 1.
         for( int i = 0; i<numPoints + 1; ++i )
@@ -392,7 +392,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // rotate polygon and move it to the actual position
-        rotation  = KiROUND( params[5].GetValue( tool ) * 10.0 );
+        rotation  = params[5].GetValue( tool ) * 10.0;
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
             RotatePoint( &polybuffer[ii], -rotation );
@@ -512,8 +512,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         int outerRadius   = scaletoIU( params[2].GetValue( tool ), m_GerbMetric ) / 2;
         int innerRadius   = scaletoIU( params[3].GetValue( tool ), m_GerbMetric ) / 2;
         int halfthickness = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;
-        int angle_start   = KiROUND( asin(
-                                         (double) halfthickness / innerRadius ) * 1800 / M_PI );
+        int angle_start   = RAD2DECIDEG( asin( (double) halfthickness / innerRadius ) );
 
         // Draw shape in the first cadrant (X and Y > 0)
         wxPoint pos, startpos;
@@ -537,7 +536,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         // outer arc
         startpos.x  = outerRadius;
         startpos.y  = 0;
-        angle_start = KiROUND( asin( (double) halfthickness / outerRadius ) * 1800 / M_PI );
+        angle_start = RAD2DECIDEG( asin( (double) halfthickness / outerRadius ) );
         angle_end   = 900 - angle_start;
 
         // First point, near Y axis, outer arc

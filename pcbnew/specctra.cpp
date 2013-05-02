@@ -56,6 +56,7 @@
 #include <class_track.h>
 
 #include <specctra.h>
+#include <macros.h>
 
 
 namespace DSN {

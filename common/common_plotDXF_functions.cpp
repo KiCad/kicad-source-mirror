@@ -423,9 +423,7 @@ void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int ori
     if( size.x > size.y )
     {
         EXCHG( size.x, size.y );
-        orient += 900;
-        if( orient >= 3600 )
-            orient -= 3600;
+        orient = AddAngles( orient, 900 );
     }
     sketchOval( pos, size, orient, -1 );
 }

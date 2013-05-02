@@ -868,10 +868,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         if( padHalfsize.x > padHalfsize.y )
         {
             EXCHG( padHalfsize.x, padHalfsize.y );
-            orient += 900;
-
-            if( orient >= 3600 )
-                orient -= 3600;
+            orient = AddAngles( orient, 900 );
         }
 
         deltay = padHalfsize.y - padHalfsize.x;

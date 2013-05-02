@@ -155,4 +155,88 @@ inline double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB )
                   aPointA.y - aPointB.y );
 }
 
+// These are the usual degrees <-> radians conversion routines
+inline double DEG2RAD( double deg ) { return deg * M_PI / 180.0; }
+inline double RAD2DEG( double rad ) { return rad * 180.0 / M_PI; }
+
+// These are the same *but* work with the internal 'decidegrees' unit
+inline double DECIDEG2RAD( double deg ) { return deg * M_PI / 1800.0; }
+inline double RAD2DECIDEG( double rad ) { return rad * 1800.0 / M_PI; }
+
+/* These are templated over T (and not simply double) because eeschema
+   is still using int for angles in some place */
+
+/// Normalize angle to be in the -360.0 .. 360.0:
+template <class T> inline void NORMALIZE_ANGLE_360( T &Angle )
+{
+    while( Angle < -3600 )
+        Angle += 3600;
+    while( Angle > 3600 )
+        Angle -= 3600; 
+}
+
+/// Normalize angle to be in the 0.0 .. 360.0 range: 
+template <class T> inline void NORMALIZE_ANGLE_POS( T &Angle )
+{
+    while( Angle < 0 )
+        Angle += 3600;
+    while( Angle >= 3600 )
+        Angle -= 3600;
+}
+
+/// Add two angles (keeping the result normalized). T2 is here
+// because most of the time it's an int (and templates don't promote in
+// that way)
+template <class T, class T2> inline T AddAngles( T a1, T2 a2 )
+{
+    a1 += a2;
+    NORMALIZE_ANGLE_POS( a1 );
+    return a1;
+}
+
+template <class T> inline void NEGATE_AND_NORMALIZE_ANGLE_POS( T &Angle )
+{
+    Angle = -Angle;
+    while( Angle < 0 )
+        Angle += 3600;
+    while( Angle >= 3600 )
+        Angle -= 3600;
+}
+
+/// Normalize angle to be in the -90.0 .. 90.0 range
+template <class T> inline void NORMALIZE_ANGLE_90( T &Angle )
+{
+    while( Angle < -900 )
+        Angle += 1800;
+    while( Angle > 900 )
+        Angle -= 1800;
+}
+
+/// Normalize angle to be in the -180.0 .. 180.0 range
+template <class T> inline void NORMALIZE_ANGLE_180( T &Angle )
+{
+    while( Angle <= -1800 )
+        Angle += 3600;
+    while( Angle > 1800 )
+        Angle -= 3600;
+}
+
+/**
+ * Circle generation utility: computes r * sin(a)
+ * Where a is in decidegrees, not in radians.
+ */
+inline double sindecideg( double r, double a )
+{
+    return r * sin( DECIDEG2RAD( a ) );
+}
+
+/**
+ * Circle generation utility: computes r * cos(a)
+ * Where a is in decidegrees, not in radians.
+ */
+inline double cosdecideg( double r, double a )
+{
+    return r * cos( DECIDEG2RAD( a ) );
+}
+
 #endif
