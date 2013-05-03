@@ -11,6 +11,7 @@
 			<string>pcbnew_doc.icns</string>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>kicad_pcb</string>
 				<string>brd</string>
 			</array>
 			<key>CFBundleTypeName</key>
