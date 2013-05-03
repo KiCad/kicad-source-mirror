@@ -56,20 +56,16 @@ void EDA_APP::MacOpenFile( const wxString &fileName )
 
     frame->m_ProjectFileName = fn;
 
-    if( m_fileHistory.GetCount() )
+    if( !frame->m_ProjectFileName.FileExists() && m_fileHistory.GetCount() )
     {
-        frame->m_ProjectFileName = m_fileHistory.GetHistoryFile( 0 );
-
-        if( !frame->m_ProjectFileName.FileExists() )
-        {
-            m_fileHistory.RemoveFileFromHistory( 0 );
-        }
-        else
-        {
-            wxCommandEvent cmd( 0, wxID_FILE1 );
-            frame->OnFileHistory( cmd );
-        }
+        m_fileHistory.RemoveFileFromHistory( 0 );
+        return;
     }
+
+    wxCommandEvent loadEvent;
+    loadEvent.SetId( wxID_ANY );
+
+    frame->OnLoadProject( loadEvent );
 
     wxString title = GetTitle() + wxT( " " ) + GetBuildVersion() +
                      wxT( " " ) + frame->m_ProjectFileName.GetFullPath();

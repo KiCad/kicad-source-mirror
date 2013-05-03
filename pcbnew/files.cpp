@@ -445,12 +445,17 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
         pcbFileName = GetBoard()->GetFileName();
 
+        if( pcbFileName.GetName() == wxEmptyString )
+        {
+            pcbFileName.SetName( _( "Unnamed file" ) );
+        }
+
         // Match the default wildcard filter choice, with the inital file extension shown.
         // That'll be the extension unless user changes filter dropdown listbox.
         pcbFileName.SetExt( KiCadPcbFileExtension );
 
-        wxFileDialog dlg(   this, _( "Save Board File As" ), wxEmptyString,
-                            pcbFileName.GetFullPath(),
+        wxFileDialog dlg(   this, _( "Save Board File As" ), pcbFileName.GetPath(),
+                            pcbFileName.GetFullName(),
                             wildcard, wxFD_SAVE
                             /* wxFileDialog is not equipped to handle multiple wildcards and
                                 wxFD_OVERWRITE_PROMPT both together.

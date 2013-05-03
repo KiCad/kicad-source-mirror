@@ -123,7 +123,7 @@ void STRIPLINE::show_results()
     setResult( 1, atten_cond, "dB" );
     setResult( 2, atten_dielectric, "dB" );
 
-    setResult( 3, skindepth / UNIT_MICRON, "µm" );
+    setResult( 3, skindepth / UNIT_MICRON, "Âµm" );
 }
 
 
