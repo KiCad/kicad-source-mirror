@@ -506,7 +506,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
  */
 void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
 {
-    std::vector<CPolyPt> polysList = aZone->GetFilledPolysList();
+    const CPOLYGONS_LIST& polysList = aZone->GetFilledPolysList();
     unsigned imax = polysList.size();
 
     if( imax == 0 )  // Nothing to draw
@@ -526,10 +526,10 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
      */
     for( unsigned ic = 0; ic < imax; ic++ )
     {
-        CPolyPt* corner = &polysList[ic];
-        cornerList.push_back( wxPoint( corner->x, corner->y) );
+        const CPolyPt& corner = polysList[ic];
+        cornerList.push_back( wxPoint( corner.x, corner.y) );
 
-        if( corner->end_contour )   // Plot the current filled area outline
+        if( corner.end_contour )   // Plot the current filled area outline
         {
             // First, close the outline
             if( cornerList[0] != cornerList[cornerList.size() - 1] )

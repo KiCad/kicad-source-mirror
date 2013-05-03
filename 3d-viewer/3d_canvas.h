@@ -30,15 +30,8 @@
 #ifndef _3D_CANVAS_H_
 #define _3D_CANVAS_H_
 
-#include <wxBasePcbFrame.h>         // for m_auimanager member.
-#include <layers_id_colors_and_visibility.h>    // Layers id definitions
-#include <PolyLine.h>               // for CPolyPt
-
-#if !wxUSE_GLCANVAS
-#error Please set wxUSE_GLCANVAS to 1 in setup.h.
-#endif
-
 #include <wx/glcanvas.h>
+#include <wxBasePcbFrame.h>         // for m_auimanager member.
 
 #ifdef __WXMAC__
 #  ifdef __DARWIN__
@@ -53,10 +46,6 @@
 #include <3d_struct.h>
 
 class BOARD_DESIGN_SETTINGS;
-class TRACK;
-class TEXTE_PCB;
-class DRAWSEGMENT;
-class ZONE_CONTAINER;
 class EDA_3D_FRAME;
 class S3D_VERTEX;
 class SEGVIA;

@@ -1395,7 +1395,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     m_out->Print( 0, ")\n" );
 
-    const std::vector< CPolyPt >& cv = aZone->Outline()->m_CornersList;
+    const CPOLYGONS_LIST& cv = aZone->Outline()->m_CornersList;
     int newLine = 0;
 
     if( cv.size() )
@@ -1403,7 +1403,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(polygon\n");
         m_out->Print( aNestLevel+2, "(pts\n" );
 
-        for( std::vector< CPolyPt >::const_iterator it = cv.begin();  it != cv.end();  ++it )
+        for( CPOLYGONS_LIST::const_iterator it = cv.begin();  it != cv.end();  ++it )
         {
             if( newLine == 0 )
                 m_out->Print( aNestLevel+3, "(xy %s %s)",
@@ -1443,7 +1443,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     }
 
     // Save the PolysList
-    const std::vector< CPolyPt >& fv = aZone->GetFilledPolysList();
+    const CPOLYGONS_LIST& fv = aZone->GetFilledPolysList();
     newLine = 0;
 
     if( fv.size() )
@@ -1451,7 +1451,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(filled_polygon\n" );
         m_out->Print( aNestLevel+2, "(pts\n" );
 
-        for( std::vector< CPolyPt >::const_iterator it = fv.begin();  it != fv.end();  ++it )
+        for( CPOLYGONS_LIST::const_iterator it = fv.begin();  it != fv.end();  ++it )
         {
             if( newLine == 0 )
                 m_out->Print( aNestLevel+3, "(xy %s %s)",

@@ -76,6 +76,14 @@ public:
     { return (x != cpt2.x) || (y != cpt2.y) || (end_contour != cpt2.end_contour); }
 };
 
+/**
+ * CPOLYGONS_LIST handle a list of contours.
+ * Each contour is a polygon, i.e. a list of corners.
+ * Each corner is a CPolyPt item.
+ * The last cornet of each contour has its end_contour member = true
+ */
+typedef std::vector<CPolyPt> CPOLYGONS_LIST;
+
 
 class CPolyLine
 {
@@ -191,7 +199,7 @@ public:
 
     const wxPoint& GetPos( int ic ) const { return m_CornersList[ic]; }
 
-    int GetEndContour( int ic );
+    int        GetEndContour( int ic );
 
     int        GetUtility( int ic ) const { return m_CornersList[ic].m_utility; };
     void       SetUtility( int ic, int utility ) { m_CornersList[ic].m_utility = utility; };
@@ -262,7 +270,7 @@ private:
     int                     m_utility;              // a flag used in some calculations
 
 public:
-    std::vector <CPolyPt>   m_CornersList;          // array of points for corners
+    CPOLYGONS_LIST          m_CornersList;          // array of points for corners
     std::vector <CSegment>  m_HatchLines;           // hatch lines showing the polygon area
 };
 
@@ -273,8 +281,8 @@ public:
  * @param aPolysList = the list of corners of contours
  * @param aPolygoneWithHole = a KI_POLYGON_WITH_HOLES to populate
  */
-void CopyPolysListToKiPolygonWithHole( const std::vector<CPolyPt>&  aPolysList,
-                                       KI_POLYGON_WITH_HOLES&       aPolygoneWithHole );
+void CopyPolysListToKiPolygonWithHole( const CPOLYGONS_LIST&  aPolysList,
+                                       KI_POLYGON_WITH_HOLES& aPolygoneWithHole );
 
 
 /**
@@ -286,7 +294,7 @@ void CopyPolysListToKiPolygonWithHole( const std::vector<CPolyPt>&  aPolysList,
  * @param aPolysListWithHoles = the list of corners of contours (haing holes
  * @param aOnePolyList = a polygon with no holes
  */
-void ConvertPolysListWithHolesToOnePolygon( const std::vector<CPolyPt>&  aPolysListWithHoles,
-                                            std::vector<CPolyPt>&  aOnePolyList );
+void ConvertPolysListWithHolesToOnePolygon( const CPOLYGONS_LIST&  aPolysListWithHoles,
+                                            CPOLYGONS_LIST&  aOnePolyList );
 
 #endif    // #ifndef POLYLINE_H

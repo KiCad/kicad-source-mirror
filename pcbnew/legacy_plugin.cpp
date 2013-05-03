@@ -2346,7 +2346,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "$POLYSCORNERS" ) )
         {
             // Read the PolysList (polygons used for fill areas in the zone)
-            std::vector<CPolyPt> polysList;
+            CPOLYGONS_LIST polysList;
 
             while( ( line = READLINE( m_reader ) ) != NULL )
             {
@@ -3690,12 +3690,10 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
                     me->GetCornerSmoothingType(),
                     fmtBIU( me->GetCornerRadius() ).c_str() );
 
-    typedef std::vector< CPolyPt >    CPOLY_PTS;
-
     // Save the corner list
-    const CPOLY_PTS& cv = me->Outline()->m_CornersList;
+    const CPOLYGONS_LIST& cv = me->Outline()->m_CornersList;
 
-    for( CPOLY_PTS::const_iterator it = cv.begin();  it != cv.end();  ++it )
+    for( CPOLYGONS_LIST::const_iterator it = cv.begin();  it != cv.end();  ++it )
     {
         fprintf( m_fp,  "ZCorner %s %d\n",
                         fmtBIUPair( it->x, it->y ).c_str(),
@@ -3703,12 +3701,12 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     }
 
     // Save the PolysList
-    const CPOLY_PTS& fv = me->GetFilledPolysList();
+    const CPOLYGONS_LIST& fv = me->GetFilledPolysList();
     if( fv.size() )
     {
         fprintf( m_fp, "$POLYSCORNERS\n" );
 
-        for( CPOLY_PTS::const_iterator it = fv.begin(); it != fv.end(); ++it )
+        for( CPOLYGONS_LIST::const_iterator it = fv.begin(); it != fv.end(); ++it )
         {
             fprintf( m_fp, "%s %d %d\n",
                            fmtBIUPair( it->x, it->y ).c_str(),

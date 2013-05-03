@@ -31,8 +31,6 @@
 #define __3D_VIEWER_H__
 
 #include <wxBasePcbFrame.h>         // for m_auimanager member.
-#include <layers_id_colors_and_visibility.h>    // Layers id definitions
-#include <PolyLine.h>               // fot CPolyPt
 
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.

@@ -26,11 +26,11 @@
 #define OUTSIDE false
 #define INSIDE true
 
-bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
-                             int                   aIdxstart,
-                             int                   aIdxend,
-                             int                   aRefx,
-                             int                   aRefy)
+bool TestPointInsidePolygon( CPOLYGONS_LIST aPolysList,
+                             int            aIdxstart,
+                             int            aIdxend,
+                             int            aRefx,
+                             int            aRefy)
 
 /**
  * Function TestPointInsidePolygon

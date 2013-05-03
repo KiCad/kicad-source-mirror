@@ -37,6 +37,7 @@
 #include <class_board_item.h>
 
 #include <class_text_mod.h>
+#include <PolyLine.h>
 #include "zones.h"
 
 class LINE_READER;
@@ -46,7 +47,6 @@ class EDA_DRAW_PANEL;
 class D_PAD;
 class BOARD;
 class MSG_PANEL_ITEM;
-class CPolyPt;
 
 
 /**
@@ -268,10 +268,10 @@ public:
      *  initial radius * aCorrectionFactor
      */
     void TransformPadsShapesWithClearanceToPolygon( LAYER_NUM aLayer,
-                            std::vector <CPolyPt>& aCornerBuffer,
-                            int                    aInflateValue,
-                            int                    aCircleToSegmentsCount,
-                            double                 aCorrectionFactor );
+                            CPOLYGONS_LIST& aCornerBuffer,
+                            int             aInflateValue,
+                            int             aCircleToSegmentsCount,
+                            double          aCorrectionFactor );
 
     /**
      * function TransformGraphicShapesWithClearanceToPolygonSet
@@ -292,10 +292,10 @@ public:
      */
     void TransformGraphicShapesWithClearanceToPolygonSet(
                             LAYER_NUM aLayer,
-                            std::vector <CPolyPt>& aCornerBuffer,
-                            int                    aInflateValue,
-                            int                    aCircleToSegmentsCount,
-                            double                 aCorrectionFactor );
+                            CPOLYGONS_LIST& aCornerBuffer,
+                            int             aInflateValue,
+                            int             aCircleToSegmentsCount,
+                            double          aCorrectionFactor );
 
 
     /**

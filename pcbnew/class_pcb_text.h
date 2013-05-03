@@ -93,7 +93,7 @@ public:
      * to the real clearance value (usually near from 1.0)
      */
     void TransformBoundingBoxWithClearanceToPolygon(
-                    std::vector <CPolyPt>& aCornerBuffer,
+                    CPOLYGONS_LIST& aCornerBuffer,
                     int                    aClearanceValue ) const;
 
     /**
@@ -108,10 +108,10 @@ public:
      * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
-    void TransformShapeWithClearanceToPolygonSet( std::vector <CPolyPt>& aCornerBuffer,
-                                               int                    aClearanceValue,
-                                               int                    aCircleToSegmentsCount,
-                                               double                 aCorrectionFactor ) const;
+    void TransformShapeWithClearanceToPolygonSet( CPOLYGONS_LIST& aCornerBuffer,
+                                               int                aClearanceValue,
+                                               int                aCircleToSegmentsCount,
+                                               double             aCorrectionFactor ) const;
 
     wxString GetSelectMenuText() const;
 

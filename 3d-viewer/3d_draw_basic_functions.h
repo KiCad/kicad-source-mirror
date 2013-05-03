@@ -41,7 +41,7 @@
  *  The top side is located at aZpos + aThickness / 2
  *  The bottom side is located at aZpos - aThickness / 2
  */
-void    Draw3D_SolidHorizontalPolyPolygons( const std::vector<CPolyPt>& aPolysList,
+void    Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
                                             int aZpos, int aThickness, double aBiuTo3DUnits );
 
 /** draw the solid polygon found in aPolysList
@@ -55,7 +55,7 @@ void    Draw3D_SolidHorizontalPolyPolygons( const std::vector<CPolyPt>& aPolysLi
  *  The top side is located at aZpos + aThickness / 2
  *  The bottom side is located at aZpos - aThickness / 2
  */
-void    Draw3D_SolidHorizontalPolygonWithHoles( const std::vector<CPolyPt>& aPolysList,
+void    Draw3D_SolidHorizontalPolygonWithHoles( const CPOLYGONS_LIST& aPolysList,
                                                 int aZpos, int aThickness, double aBiuTo3DUnits );
 
 /** draw a thick segment using 3D primitives, in a XY plane

@@ -53,7 +53,7 @@
 #include <pcbplot.h>
 
 // Imported function
-extern void AddPolygonCornersToKiPolygonList( std::vector <CPolyPt>& aCornersBuffer,
+extern void AddPolygonCornersToKiPolygonList( CPOLYGONS_LIST& aCornersBuffer,
                                               KI_POLYGON_SET&        aKiPolyList );
 // Local
 /* Plot a solder mask layer.
@@ -506,8 +506,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // This extra margin is used to merge too close shapes
     // (distance < aMinThickness), and will be removed when creating
     // the actual shapes
-    std::vector <CPolyPt> bufferPolys;   // Contains shapes to plot
-    std::vector <CPolyPt> initialPolys;  // Contains exact shapes to plot
+    CPOLYGONS_LIST bufferPolys;   // Contains shapes to plot
+    CPOLYGONS_LIST initialPolys;  // Contains exact shapes to plot
 
     /* calculates the coeff to compensate radius reduction of holes clearance
      * due to the segment approx ( 1 /cos( PI/circleToSegmentsCount )

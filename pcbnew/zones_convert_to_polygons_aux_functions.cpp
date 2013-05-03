@@ -48,11 +48,11 @@
   *                      false to create the outline polygon.
   */
 void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
-            std::vector <CPolyPt>& aCornerBuffer,
+            CPOLYGONS_LIST& aCornerBuffer,
             int aClearanceValue, bool aAddClearance )
 {
     // Creates the zone outlines polygon (with linked holes if any)
-    std::vector <CPolyPt> zoneOutines;
+    CPOLYGONS_LIST zoneOutines;
     BuildFilledSolidAreasPolygons( NULL, &zoneOutines );
 
     // add clearance to outline
@@ -119,14 +119,14 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
  * Function BuildUnconnectedThermalStubsPolygonList
  * Creates a set of polygons corresponding to stubs created by thermal shapes on pads
  * which are not connected to a zone (dangling bridges)
- * @param aCornerBuffer = a std::vector<CPolyPt> where to store polygons
+ * @param aCornerBuffer = a CPOLYGONS_LIST where to store polygons
  * @param aPcb = the board.
  * @param aZone = a pointer to the ZONE_CONTAINER  to examine.
  * @param aArcCorrection = a pointer to the ZONE_CONTAINER  to examine.
  * @param aRoundPadThermalRotation = the rotation in 1.0 degree for thermal stubs in round pads
  */
 
-void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffer,
+void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
                                               BOARD*                aPcb,
                                               ZONE_CONTAINER*       aZone,
                                               double                aArcCorrection,
