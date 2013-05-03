@@ -186,16 +186,16 @@ public:
     void SetDrillShape( PAD_SHAPE_T aDrillShape ) { m_DrillShape = aDrillShape; }
     PAD_SHAPE_T GetDrillShape() const           { return m_DrillShape; }
 
-    void SetLayerMask( LAYER_MSK aLayerMask )         { m_layerMask = aLayerMask; }
-    LAYER_MSK GetLayerMask() const                    { return m_layerMask; }
+    void SetLayerMask( LAYER_MSK aLayerMask )   { m_layerMask = aLayerMask; }
+    LAYER_MSK GetLayerMask() const              { return m_layerMask; }
 
     void SetAttribute( PAD_ATTR_T aAttribute );
     PAD_ATTR_T GetAttribute() const             { return m_Attribute; }
 
-    void SetPadToDieLength( int aLength )      { m_LengthPadToDie = aLength; }
-    int GetPadToDieLength() const              { return m_LengthPadToDie; }
+    void SetPadToDieLength( int aLength )       { m_LengthPadToDie = aLength; }
+    int GetPadToDieLength() const               { return m_LengthPadToDie; }
 
-    int GetLocalSolderMaskMargin() const        { return m_LocalSolderMaskMargin; }
+    int GetLocalSolderMaskMargin() const            { return m_LocalSolderMaskMargin; }
     void SetLocalSolderMaskMargin( int aMargin ) { m_LocalSolderMaskMargin = aMargin; }
 
     int GetLocalClearance() const               { return m_LocalClearance; }
@@ -220,7 +220,7 @@ public:
      * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
     */
-    void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+    void TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                                int aClearanceValue,
                                                int aCircleToSegmentsCount,
                                                double aCorrectionFactor ) const;;
@@ -317,7 +317,7 @@ public:
      * @param aCorrectionFactor = the correction to apply to circles radius to keep
      *        the pad size when the circle is approximated by segments
      */
-    void BuildPadShapePolygon( std::vector <CPolyPt>& aCornerBuffer,
+    void BuildPadShapePolygon( CPOLYGONS_LIST& aCornerBuffer,
                                wxSize aInflateValue, int aSegmentsPerCircle,
                                double aCorrectionFactor ) const;
 
@@ -332,7 +332,7 @@ public:
      *              (used for round and oblong shapes only(16 to 32 is a good value)
      * @return false if the pad has no hole, true otherwise
      */
-    bool BuildPadDrillShapePolygon( std::vector <CPolyPt>& aCornerBuffer,
+    bool BuildPadDrillShapePolygon( CPOLYGONS_LIST& aCornerBuffer,
                                     int aInflateValue, int aSegmentsPerCircle ) const;
 
     /**

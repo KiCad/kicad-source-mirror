@@ -23,7 +23,7 @@
 
 /**
  * @file 3d_draw.cpp
-*/
+ */
 
 #include <fctsys.h>
 #include <common.h>
@@ -49,19 +49,19 @@
 #include <3d_draw_basic_functions.h>
 
 // Imported function:
-extern void SetGLColor( EDA_COLOR_T color );
-extern void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
-extern void CheckGLError();
+extern void     SetGLColor( EDA_COLOR_T color );
+extern void     Set_Object_Data( std::vector<S3D_VERTEX>& aVertices, double aBiuTo3DUnits );
+extern void     CheckGLError();
 
- /* returns true if aLayer should be displayed, false otherwise
-  */
-static bool    Is3DLayerEnabled( LAYER_NUM aLayer );
+/* returns true if aLayer should be displayed, false otherwise
+ */
+static bool     Is3DLayerEnabled( LAYER_NUM aLayer );
 
- /* returns the Z orientation parameter 1.0 or -1.0 for aLayer
-  * Z orientation is 1.0 for all layers but "back" layers:
-  *  LAYER_N_BACK , ADHESIVE_N_BACK, SOLDERPASTE_N_BACK ), SILKSCREEN_N_BACK
-  * used to calculate the Z orientation parameter for glNormal3f
-  */
+/* returns the Z orientation parameter 1.0 or -1.0 for aLayer
+ * Z orientation is 1.0 for all layers but "back" layers:
+ *  LAYER_N_BACK , ADHESIVE_N_BACK, SOLDERPASTE_N_BACK ), SILKSCREEN_N_BACK
+ * used to calculate the Z orientation parameter for glNormal3f
+ */
 static GLfloat  Get3DLayer_Z_Orientation( LAYER_NUM aLayer );
 
 /* Helper function BuildPadShapeThickOutlineAsPolygon:
@@ -69,33 +69,34 @@ static GLfloat  Get3DLayer_Z_Orientation( LAYER_NUM aLayer );
  * with a line thickness = aWidth
  * Used only to draw pads outlines on silkscreen layers.
  */
-static void BuildPadShapeThickOutlineAsPolygon( D_PAD * aPad,
-                                std::vector <CPolyPt>& aCornerBuffer,
-                                int aWidth,
-                                int aCircleToSegmentsCount,
-                                double aCorrectionFactor )
+static void BuildPadShapeThickOutlineAsPolygon( D_PAD*          aPad,
+                                                CPOLYGONS_LIST& aCornerBuffer,
+                                                int             aWidth,
+                                                int             aCircleToSegmentsCount,
+                                                double          aCorrectionFactor )
 {
     if( aPad->GetShape() == PAD_CIRCLE )    // Draw a ring
     {
         TransformRingToPolygon( aCornerBuffer, aPad->ReturnShapePos(),
-                        aPad->GetSize().x / 2, aCircleToSegmentsCount, aWidth );
+                                aPad->GetSize().x / 2, aCircleToSegmentsCount, aWidth );
         return;
     }
 
     // For other shapes, draw polygon outlines
-    std::vector <CPolyPt> corners;
+    CPOLYGONS_LIST corners;
     aPad->BuildPadShapePolygon( corners, wxSize( 0, 0 ),
-                        aCircleToSegmentsCount, aCorrectionFactor );
+                                aCircleToSegmentsCount, aCorrectionFactor );
 
     // Add outlines as thick segments in polygon buffer
     for( unsigned ii = 0, jj = corners.size() - 1; ii < corners.size(); jj = ii, ii++ )
     {
         TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                wxPoint( corners[jj].x, corners[jj].y ),
-                wxPoint( corners[ii].x, corners[ii].y ),
-                aCircleToSegmentsCount, aWidth );
+                                              wxPoint( corners[jj].x, corners[jj].y ),
+                                              wxPoint( corners[ii].x, corners[ii].y ),
+                                              aCircleToSegmentsCount, aWidth );
     }
 }
+
 
 void EDA_3D_CANVAS::Redraw( bool finish )
 {
@@ -145,39 +146,41 @@ void EDA_3D_CANVAS::Redraw( bool finish )
     SwapBuffers();
 }
 
+
 void EDA_3D_CANVAS::BuildBoard3DView()
 {
     PCB_BASE_FRAME* pcbframe = Parent()->Parent();
-    BOARD* pcb = pcbframe->GetBoard();
+    BOARD*          pcb = pcbframe->GetBoard();
 
     // Number of segments to draw a circle using segments
-    const int segcountforcircle = 16;
-    double correctionFactor = 1.0 / cos( M_PI / (segcountforcircle*2) );
-    const int segcountLowQuality = 12;      // segments to draw a circle with low quality
-                                            // to reduce time calculations
-                                            // for holes and items which do not need
-                                            // a fine representation
-    double correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality*2) );
-    std::vector <CPolyPt> bufferPolys;
-    bufferPolys.reserve( 200000 );          // Reserve for large board (tracks mainly)
-    std::vector <CPolyPt> bufferZonesPolys;
-    bufferPolys.reserve( 500000 );          // Reserve for large board ( copper zones mainly )
-    std::vector <CPolyPt> currLayerHoles;   // Contains holes for the current layer
-    std::vector <CPolyPt> allLayerHoles;    // Contains through holes, calculated only once
+    const int       segcountforcircle   = 16;
+    double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
+    const int       segcountLowQuality  = 12;   // segments to draw a circle with low quality
+                                                // to reduce time calculations
+                                                // for holes and items which do not need
+                                                // a fine representation
+    double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2) );
+    CPOLYGONS_LIST  bufferPolys;
+
+    bufferPolys.reserve( 200000 );                  // Reserve for large board (tracks mainly)
+    CPOLYGONS_LIST  bufferZonesPolys;
+    bufferPolys.reserve( 500000 );                  // Reserve for large board ( copper zones mainly )
+    CPOLYGONS_LIST  currLayerHoles;                 // Contains holes for the current layer
+    CPOLYGONS_LIST  allLayerHoles;                  // Contains through holes, calculated only once
     allLayerHoles.reserve( 20000 );
-    bool throughHolesListBuilt = false;     // flag to build the through hole polygon list only once
-    bool hightQualityMode = false;
+    bool            throughHolesListBuilt = false;  // flag to build the through hole polygon list only once
+    bool            hightQualityMode = false;
 
     for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER;
          layer++ )
     {
-
-        if( layer != LAST_COPPER_LAYER &&
-            layer >= g_Parm_3D_Visu.m_CopperLayersCount )
+        if( layer != LAST_COPPER_LAYER
+            && layer >= g_Parm_3D_Visu.m_CopperLayersCount )
             continue;
 
         if( !g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) )
             continue;
+
         bufferPolys.clear();
         bufferZonesPolys.clear();
         currLayerHoles.clear();
@@ -185,25 +188,26 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         // Draw tracks:
         for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
         {
-            if( !track->IsOnLayer(layer) )
+            if( !track->IsOnLayer( layer ) )
                 continue;
 
             track->TransformShapeWithClearanceToPolygon( bufferPolys,
-                                                     0, segcountforcircle,
-                                                     correctionFactor );
+                                                         0, segcountforcircle,
+                                                         correctionFactor );
 
             // Add via hole
             if( track->Type() == PCB_VIA_T )
             {
                 int shape = track->GetShape();
-                int holediameter = track->GetDrillValue();
-                int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
+                int holediameter    = track->GetDrillValue();
+                int thickness       = g_Parm_3D_Visu.GetCopperThicknessBIU();
                 int hole_outer_radius = (holediameter + thickness) / 2;
+
                 if( shape != VIA_THROUGH )
                     TransformCircleToPolygon( currLayerHoles,
                                               track->GetStart(), hole_outer_radius,
                                               segcountLowQuality );
-                else if( ! throughHolesListBuilt )
+                else if( !throughHolesListBuilt )
                     TransformCircleToPolygon( allLayerHoles,
                                               track->GetStart(), hole_outer_radius,
                                               segcountLowQuality );
@@ -214,16 +218,23 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
         {
             module->TransformPadsShapesWithClearanceToPolygon( layer,
-                    bufferPolys, 0, segcountforcircle, correctionFactor );
+                                                               bufferPolys,
+                                                               0,
+                                                               segcountforcircle,
+                                                               correctionFactor );
 
             // Micro-wave modukes may have items on copper layers
             module->TransformGraphicShapesWithClearanceToPolygonSet( layer,
-                    bufferPolys, 0, segcountforcircle, correctionFactor );
+                                                                     bufferPolys,
+                                                                     0,
+                                                                     segcountforcircle,
+                                                                     correctionFactor );
 
             // Add pad hole, if any
-            if( ! throughHolesListBuilt )
+            if( !throughHolesListBuilt )
             {
                 D_PAD* pad = module->Pads();
+
                 for( ; pad != NULL; pad = pad->Next() )
                     pad->BuildPadDrillShapePolygon( allLayerHoles, 0,
                                                     segcountLowQuality );
@@ -235,34 +246,34 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         {
             for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
             {
-                ZONE_CONTAINER * zone = pcb->GetArea( ii );
-                LAYER_NUM zonelayer = zone->GetLayer();
+                ZONE_CONTAINER* zone = pcb->GetArea( ii );
+                LAYER_NUM       zonelayer = zone->GetLayer();
 
                 if( zonelayer == layer )
                     zone->TransformSolidAreasShapesToPolygonSet(
-                                    hightQualityMode ? bufferPolys : bufferZonesPolys,
-                                    segcountLowQuality, correctionFactorLQ );
+                        hightQualityMode ? bufferPolys : bufferZonesPolys,
+                        segcountLowQuality, correctionFactorLQ );
             }
         }
 
         // draw graphic items
         for( BOARD_ITEM* item = pcb->m_Drawings; item; item = item->Next() )
         {
-            if( ! item->IsOnLayer( layer ) )
+            if( !item->IsOnLayer( layer ) )
                 continue;
 
             switch( item->Type() )
             {
             case PCB_LINE_T:
-                ((DRAWSEGMENT*) item)->TransformShapeWithClearanceToPolygon(
-                                        bufferPolys, 0,
-                                        segcountforcircle,
-                                        correctionFactor );
+                ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
+                    bufferPolys, 0,
+                    segcountforcircle,
+                    correctionFactor );
                 break;
 
             case PCB_TEXT_T:
-                ((TEXTE_PCB*) item)->TransformShapeWithClearanceToPolygonSet(
-                          bufferPolys, 0, segcountforcircle, correctionFactor );
+                ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet(
+                    bufferPolys, 0, segcountforcircle, correctionFactor );
                 break;
 
             default:
@@ -274,8 +285,8 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         if( bufferPolys.size() == 0 )
             continue;
 
-        KI_POLYGON_SET currLayerPolyset;
-        KI_POLYGON_SET polysetHoles;
+        KI_POLYGON_SET  currLayerPolyset;
+        KI_POLYGON_SET  polysetHoles;
 
         // Add polygons, without holes
         AddPolygonCornersToKiPolygonList( bufferPolys, currLayerPolyset );
@@ -283,6 +294,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         // Add holes in polygon list
         currLayerHoles.insert( currLayerHoles.begin(),
                                allLayerHoles.begin(), allLayerHoles.end() );
+
         if( currLayerHoles.size() > 0 )
             AddPolygonCornersToKiPolygonList( currLayerHoles, polysetHoles );
 
@@ -290,8 +302,8 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         currLayerPolyset -= polysetHoles;
 
         EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( layer );
-        int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
-        int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
+        int         thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
+        int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
 
         SetGLColor( color );
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
@@ -301,6 +313,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
                                             thickness,
                                             g_Parm_3D_Visu.m_BiuTo3Dunits );
+
         if( bufferZonesPolys.size() )
             Draw3D_SolidHorizontalPolyPolygons( bufferZonesPolys, zpos,
                                                 thickness,
@@ -313,10 +326,11 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
     {
         if( track->Type() == PCB_VIA_T )
-            Draw3DViaHole( (SEGVIA *) track );
+            Draw3DViaHole( (SEGVIA*) track );
     }
+
     // Draw pads holes (vertical cylinders)
-     for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
+    for( MODULE* module = pcb->m_Modules; module != NULL; module = module->Next() )
     {
         for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
             Draw3DPadHole( pad );
@@ -326,30 +340,31 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER;
          layer++ )
     {
-        if( ! Is3DLayerEnabled( layer ) )
+        if( !Is3DLayerEnabled( layer ) )
             continue;
 
         if( !g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) )
             continue;
 
         bufferPolys.clear();
+
         for( BOARD_ITEM* item = pcb->m_Drawings; item; item = item->Next() )
         {
-            if( ! item->IsOnLayer( layer ) )
+            if( !item->IsOnLayer( layer ) )
                 continue;
 
             switch( item->Type() )
             {
             case PCB_LINE_T:
-                ((DRAWSEGMENT*) item)->TransformShapeWithClearanceToPolygon(
-                                        bufferPolys, 0,
-                                        segcountforcircle,
-                                        correctionFactor );
+                ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
+                    bufferPolys, 0,
+                    segcountforcircle,
+                    correctionFactor );
                 break;
 
             case PCB_TEXT_T:
-                ((TEXTE_PCB*) item)->TransformShapeWithClearanceToPolygonSet(
-                          bufferPolys, 0, segcountforcircle, correctionFactor );
+                ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet(
+                    bufferPolys, 0, segcountforcircle, correctionFactor );
                 break;
 
             default:
@@ -361,24 +376,31 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         {
             if( layer == SILKSCREEN_N_FRONT || layer == SILKSCREEN_N_BACK )
             {
-                D_PAD* pad = module->Pads();
-                int linewidth = g_DrawDefaultLineThickness;
+                D_PAD*  pad = module->Pads();
+                int     linewidth = g_DrawDefaultLineThickness;
 
                 for( ; pad != NULL; pad = pad->Next() )
                 {
                     if( !pad->IsOnLayer( layer ) )
                         continue;
+
                     BuildPadShapeThickOutlineAsPolygon( pad, bufferPolys,
-                                    linewidth,
-                                    segcountforcircle, correctionFactor );
+                                                        linewidth,
+                                                        segcountforcircle, correctionFactor );
                 }
             }
             else
                 module->TransformPadsShapesWithClearanceToPolygon( layer,
-                            bufferPolys, 0, segcountforcircle, correctionFactor );
+                                                                   bufferPolys,
+                                                                   0,
+                                                                   segcountforcircle,
+                                                                   correctionFactor );
 
             module->TransformGraphicShapesWithClearanceToPolygonSet( layer,
-                            bufferPolys, 0, segcountforcircle, correctionFactor );
+                                                                     bufferPolys,
+                                                                     0,
+                                                                     segcountforcircle,
+                                                                     correctionFactor );
         }
 
         // bufferPolys contains polygons to merge. Many overlaps .
@@ -386,15 +408,16 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         if( bufferPolys.size() == 0 )
             continue;
 
-        KI_POLYGON_SET currLayerPolyset;
-        KI_POLYGON_SET polyset;
+        KI_POLYGON_SET  currLayerPolyset;
+        KI_POLYGON_SET  polyset;
         AddPolygonCornersToKiPolygonList( bufferPolys, polyset );
         // merge polys:
         currLayerPolyset += polyset;
 
         EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( layer );
-        int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
-        int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
+        int         thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
+        int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
+
         if( layer == EDGE_N )
         {
             thickness = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_FRONT )
@@ -417,12 +440,13 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         module->ReadAndInsert3DComponentShape( this );
 }
 
+
 GLuint EDA_3D_CANVAS::CreateDrawGL_List()
 {
     PCB_BASE_FRAME* pcbframe = Parent()->Parent();
-    BOARD* pcb = pcbframe->GetBoard();
+    BOARD*          pcb = pcbframe->GetBoard();
 
-    wxBusyCursor         dummy;
+    wxBusyCursor    dummy;
 
     m_gllist = glGenLists( 1 );
 
@@ -434,7 +458,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
     // draw axis
-    if (g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_AXIS])
+    if( g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_AXIS] )
     {
         glEnable( GL_COLOR_MATERIAL );
         SetGLColor( WHITE );
@@ -457,7 +481,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
 
     // Draw Board:
 // For testing purpose only display calculation time to generate 3D data
-//#define PRINT_CALCULATION_TIME
+// #define PRINT_CALCULATION_TIME
 
 #ifdef PRINT_CALCULATION_TIME
     unsigned strtime = GetRunningMicroSecs();
@@ -467,7 +491,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
 
     // Draw grid
     if( g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] )
-    DrawGrid( g_Parm_3D_Visu.m_3D_Grid );
+        DrawGrid( g_Parm_3D_Visu.m_3D_Grid );
 
     glEndList();
 
@@ -475,9 +499,9 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     CheckGLError();
 
 #ifdef PRINT_CALCULATION_TIME
-    unsigned endtime = GetRunningMicroSecs();
-    wxString msg;
-    msg.Printf( "Built data %.1f ms", (double)(endtime-strtime)/1000 );
+    unsigned    endtime = GetRunningMicroSecs();
+    wxString    msg;
+    msg.Printf( "Built data %.1f ms", (double) (endtime - strtime) / 1000 );
     Parent()->SetStatusText( msg, 0 );
 #endif
 
@@ -489,27 +513,27 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
 // and a vertical grid (XZ plane and Y = 0)
 void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
 {
-    double zpos = 0.0;
+    double      zpos = 0.0;
     EDA_COLOR_T gridcolor = DARKGRAY;           // Color of grid lines
     EDA_COLOR_T gridcolor_marker = LIGHTGRAY;   // Color of grid lines every 5 lines
-    double scale = g_Parm_3D_Visu.m_BiuTo3Dunits;
+    double      scale = g_Parm_3D_Visu.m_BiuTo3Dunits;
 
     glNormal3f( 0.0, 0.0, 1.0 );
 
-    wxSize brd_size = g_Parm_3D_Visu.m_BoardSize;
+    wxSize  brd_size = g_Parm_3D_Visu.m_BoardSize;
     wxPoint brd_center_pos = g_Parm_3D_Visu.m_BoardPos;
     NEGATE( brd_center_pos.y );
 
-    int xsize  = std::max( brd_size.x, Millimeter2iu( 100 ) );
-    int ysize  = std::max( brd_size.y, Millimeter2iu( 100 ) );
+    int     xsize   = std::max( brd_size.x, Millimeter2iu( 100 ) );
+    int     ysize   = std::max( brd_size.y, Millimeter2iu( 100 ) );
 
     // Grid limits, in 3D units
-    double xmin = (brd_center_pos.x - xsize/2) * scale;
-    double xmax = (brd_center_pos.x + xsize/2) * scale;
-    double ymin = (brd_center_pos.y - ysize/2) * scale;
-    double ymax = (brd_center_pos.y + ysize/2) * scale;
-    double zmin = Millimeter2iu( -50 ) * scale;
-    double zmax = Millimeter2iu( 100 ) * scale;
+    double  xmin    = (brd_center_pos.x - xsize / 2) * scale;
+    double  xmax    = (brd_center_pos.x + xsize / 2) * scale;
+    double  ymin    = (brd_center_pos.y - ysize / 2) * scale;
+    double  ymax    = (brd_center_pos.y + ysize / 2) * scale;
+    double  zmin    = Millimeter2iu( -50 ) * scale;
+    double  zmax    = Millimeter2iu( 100 ) * scale;
 
     // Draw horizontal grid centered on 3D origin (center of the board)
     for( int ii = 0; ; ii++ )
@@ -521,38 +545,39 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
 
         int delta = KiROUND( ii * aGriSizeMM * IU_PER_MM );
 
-        if( delta <= xsize/2 )    // Draw grid lines parallel to X axis
+        if( delta <= xsize / 2 )    // Draw grid lines parallel to X axis
         {
-            glBegin(GL_LINES);
+            glBegin( GL_LINES );
             glVertex3f( (brd_center_pos.x + delta) * scale, -ymin, zpos );
             glVertex3f( (brd_center_pos.x + delta) * scale, -ymax, zpos );
             glEnd();
 
             if( ii != 0 )
             {
-                glBegin(GL_LINES);
+                glBegin( GL_LINES );
                 glVertex3f( (brd_center_pos.x - delta) * scale, -ymin, zpos );
                 glVertex3f( (brd_center_pos.x - delta) * scale, -ymax, zpos );
                 glEnd();
             }
         }
 
-        if( delta <= ysize/2 )    // Draw grid lines parallel to Y axis
+        if( delta <= ysize / 2 )    // Draw grid lines parallel to Y axis
         {
-            glBegin(GL_LINES);
+            glBegin( GL_LINES );
             glVertex3f( xmin, -(brd_center_pos.y + delta) * scale, zpos );
             glVertex3f( xmax, -(brd_center_pos.y + delta) * scale, zpos );
             glEnd();
+
             if( ii != 0 )
             {
-                glBegin(GL_LINES);
+                glBegin( GL_LINES );
                 glVertex3f( xmin, -(brd_center_pos.y - delta) * scale, zpos );
                 glVertex3f( xmax, -(brd_center_pos.y - delta) * scale, zpos );
                 glEnd();
             }
         }
 
-        if( ( delta > ysize/2 ) && ( delta > xsize/2 ) )
+        if( ( delta > ysize / 2 ) && ( delta > xsize / 2 ) )
             break;
     }
 
@@ -569,20 +594,20 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
 
         double delta = ii * aGriSizeMM * IU_PER_MM;
 
-        glBegin(GL_LINES);
+        glBegin( GL_LINES );
         glVertex3f( (brd_center_pos.x + delta) * scale, -brd_center_pos.y * scale, zmin );
         glVertex3f( (brd_center_pos.x + delta) * scale, -brd_center_pos.y * scale, zmax );
         glEnd();
 
         if( ii != 0 )
         {
-            glBegin(GL_LINES);
+            glBegin( GL_LINES );
             glVertex3f( (brd_center_pos.x - delta) * scale, -brd_center_pos.y * scale, zmin );
             glVertex3f( (brd_center_pos.x - delta) * scale, -brd_center_pos.y * scale, zmax );
             glEnd();
         }
 
-        if( delta > xsize/2 )
+        if( delta > xsize / 2 )
             break;
     }
 
@@ -594,21 +619,23 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
         else
             SetGLColor( gridcolor_marker );
 
-        double delta = ii * aGriSizeMM * IU_PER_MM  * scale;
+        double delta = ii * aGriSizeMM * IU_PER_MM * scale;
 
         if( delta <= zmax )
-        {   // Draw grid lines on Z axis (positive Z axis coordinates)
-            glBegin(GL_LINES);
-            glVertex3f(xmin, -brd_center_pos.y * scale, delta);
-            glVertex3f(xmax, -brd_center_pos.y * scale, delta);
+        {
+            // Draw grid lines on Z axis (positive Z axis coordinates)
+            glBegin( GL_LINES );
+            glVertex3f( xmin, -brd_center_pos.y * scale, delta );
+            glVertex3f( xmax, -brd_center_pos.y * scale, delta );
             glEnd();
         }
 
         if( delta <= -zmin && ( ii != 0 ) )
-        {   // Draw grid lines on Z axis (negative Z axis coordinates)
-            glBegin(GL_LINES);
-            glVertex3f(xmin, -brd_center_pos.y * scale, -delta);
-            glVertex3f(xmax, -brd_center_pos.y * scale, -delta);
+        {
+            // Draw grid lines on Z axis (negative Z axis coordinates)
+            glBegin( GL_LINES );
+            glVertex3f( xmin, -brd_center_pos.y * scale, -delta );
+            glVertex3f( xmax, -brd_center_pos.y * scale, -delta );
             glEnd();
         }
 
@@ -617,22 +644,23 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
     }
 }
 
-void  EDA_3D_CANVAS::Draw3DViaHole( SEGVIA * aVia )
+
+void EDA_3D_CANVAS::Draw3DViaHole( SEGVIA* aVia )
 {
-    LAYER_NUM top_layer, bottom_layer;
-    int inner_radius = aVia->GetDrillValue() / 2;
-    int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
+    LAYER_NUM   top_layer, bottom_layer;
+    int         inner_radius    = aVia->GetDrillValue() / 2;
+    int         thickness       = g_Parm_3D_Visu.GetCopperThicknessBIU();
 
     aVia->ReturnLayerPair( &top_layer, &bottom_layer );
 
     // Drawing via hole:
     EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + aVia->GetShape() );
     SetGLColor( color );
-    int height = g_Parm_3D_Visu.GetLayerZcoordBIU(top_layer) -
-                 g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer ) - thickness;
-    int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(bottom_layer) + thickness/2;
+    int         height = g_Parm_3D_Visu.GetLayerZcoordBIU( top_layer ) -
+                         g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer ) - thickness;
+    int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer ) + thickness / 2;
 
-    Draw3D_ZaxisCylinder( aVia->GetStart(), inner_radius + thickness/2, height,
+    Draw3D_ZaxisCylinder( aVia->GetStart(), inner_radius + thickness / 2, height,
                           thickness, zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
 }
 
@@ -640,7 +668,7 @@ void  EDA_3D_CANVAS::Draw3DViaHole( SEGVIA * aVia )
 void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas )
 {
     // Draw module shape: 3D shape if exists (or module outlines if not exists)
-    S3D_MASTER* struct3D  = m_3D_Drawings;
+    S3D_MASTER* struct3D = m_3D_Drawings;
 
     if( g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE] )
     {
@@ -678,24 +706,24 @@ void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas )
 
 
 // Draw 3D pads.
-void EDA_3D_CANVAS::Draw3DPadHole( D_PAD * aPad )
+void EDA_3D_CANVAS::Draw3DPadHole( D_PAD* aPad )
 {
     // Draw the pad hole
-    wxSize drillsize = aPad->GetDrillSize();
-    bool hasHole = drillsize.x && drillsize.y;
+    wxSize  drillsize   = aPad->GetDrillSize();
+    bool    hasHole     = drillsize.x && drillsize.y;
 
-    if( ! hasHole )
+    if( !hasHole )
         return;
 
     // Store here the points to approximate hole by segments
-    std::vector <CPolyPt> holecornersBuffer;
-    int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
-    int height = g_Parm_3D_Visu.GetLayerZcoordBIU(LAYER_N_FRONT) -
-                 g_Parm_3D_Visu.GetLayerZcoordBIU(LAYER_N_BACK);
+    CPOLYGONS_LIST  holecornersBuffer;
+    int             thickness   = g_Parm_3D_Visu.GetCopperThicknessBIU();
+    int             height      = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_FRONT ) -
+                                  g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
 
     SetGLColor( DARKGRAY );
-    int holeZpoz = g_Parm_3D_Visu.GetLayerZcoordBIU(LAYER_N_BACK) + thickness/2;
-    int holeHeight = height - thickness;
+    int holeZpoz    = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK ) + thickness / 2;
+    int holeHeight  = height - thickness;
 
     if( drillsize.x == drillsize.y )    // usual round hole
     {
@@ -706,7 +734,7 @@ void EDA_3D_CANVAS::Draw3DPadHole( D_PAD * aPad )
     else    // Oblong hole
     {
         wxPoint ends_offset;
-        int width;
+        int     width;
 
         if( drillsize.x > drillsize.y )    // Horizontal oval
         {
@@ -721,9 +749,9 @@ void EDA_3D_CANVAS::Draw3DPadHole( D_PAD * aPad )
 
         RotatePoint( &ends_offset, aPad->GetOrientation() );
 
-        wxPoint start  = aPad->GetPosition() + ends_offset;
-        wxPoint end  = aPad->GetPosition() - ends_offset;
-        int hole_radius = ( width + thickness ) / 2;
+        wxPoint start   = aPad->GetPosition() + ends_offset;
+        wxPoint end     = aPad->GetPosition() - ends_offset;
+        int     hole_radius = ( width + thickness ) / 2;
 
         // Draw the hole
         Draw3D_ZaxisOblongCylinder( start, end, hole_radius, holeHeight,
@@ -731,33 +759,34 @@ void EDA_3D_CANVAS::Draw3DPadHole( D_PAD * aPad )
     }
 }
 
+
 bool Is3DLayerEnabled( LAYER_NUM aLayer )
 {
     int flg;
 
     // see if layer needs to be shown
     // check the flags
-    switch (aLayer)
+    switch( aLayer )
     {
-        case DRAW_N:
-            flg = g_Parm_3D_Visu.FL_DRAWINGS;
-            break;
+    case DRAW_N:
+        flg = g_Parm_3D_Visu.FL_DRAWINGS;
+        break;
 
-        case COMMENT_N:
-            flg = g_Parm_3D_Visu.FL_COMMENTS;
-            break;
+    case COMMENT_N:
+        flg = g_Parm_3D_Visu.FL_COMMENTS;
+        break;
 
-        case ECO1_N:
-            flg = g_Parm_3D_Visu.FL_ECO1;
-            break;
+    case ECO1_N:
+        flg = g_Parm_3D_Visu.FL_ECO1;
+        break;
 
-        case ECO2_N:
-            flg = g_Parm_3D_Visu.FL_ECO2;
-            break;
+    case ECO2_N:
+        flg = g_Parm_3D_Visu.FL_ECO2;
+        break;
 
-        default:
-            // the layer was not a layer with a flag, so show it
-            return true;
+    default:
+        // the layer was not a layer with a flag, so show it
+        return true;
     }
 
     // if the layer has a flag, return the flag
@@ -770,10 +799,10 @@ GLfloat Get3DLayer_Z_Orientation( LAYER_NUM aLayer )
     double nZ = 1.0;
 
     if( ( aLayer == LAYER_N_BACK )
-       || ( aLayer == ADHESIVE_N_BACK )
-       || ( aLayer == SOLDERPASTE_N_BACK )
-       || ( aLayer == SILKSCREEN_N_BACK )
-       || ( aLayer == SOLDERMASK_N_BACK ) )
+        || ( aLayer == ADHESIVE_N_BACK )
+        || ( aLayer == SOLDERPASTE_N_BACK )
+        || ( aLayer == SILKSCREEN_N_BACK )
+        || ( aLayer == SOLDERMASK_N_BACK ) )
         nZ = -1.0;
 
     return nZ;

@@ -64,7 +64,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 
 
-extern void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffer,
+extern void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
                                                      BOARD* aPcb, ZONE_CONTAINER* aZone,
                                                      double aArcCorrection,
                                                      int aRoundPadThermalRotation);
@@ -72,7 +72,7 @@ extern void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCorn
 extern void Test_For_Copper_Island_And_Remove( BOARD*          aPcb,
                                                ZONE_CONTAINER* aZone_container );
 
-extern void CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
+extern void CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                            D_PAD&                aPad,
                                            int                   aThermalGap,
                                            int                   aCopperThickness,
@@ -187,7 +187,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     int item_clearance;
 
     // static to avoid unnecessary memory allocation when filling many zones.
-    static std::vector <CPolyPt> cornerBufferPolysToSubstract;
+    static CPOLYGONS_LIST cornerBufferPolysToSubstract;
     cornerBufferPolysToSubstract.clear();
 
     /* Use a dummy pad to calculate hole clerance when a pad is not on all copper layers

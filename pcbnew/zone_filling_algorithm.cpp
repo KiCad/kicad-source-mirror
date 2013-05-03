@@ -55,7 +55,7 @@
  */
 
 bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb,
-                            std::vector <CPolyPt>* aCornerBuffer )
+                            CPOLYGONS_LIST* aCornerBuffer )
 {
     if( aCornerBuffer == NULL )
         m_FilledPolysList.clear();

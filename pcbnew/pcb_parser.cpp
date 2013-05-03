@@ -2371,7 +2371,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
     T       token;
 
     // bigger scope since each filled_polygon is concatenated in here
-    std::vector< CPolyPt > pts;
+    CPOLYGONS_LIST pts;
 
     auto_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
 

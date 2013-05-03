@@ -143,7 +143,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 
         // test if a candidate is inside a filled area of this zone
         unsigned indexstart = 0, indexend;
-        std::vector<CPolyPt> polysList = curr_zone->GetFilledPolysList();
+        const CPOLYGONS_LIST& polysList = curr_zone->GetFilledPolysList();
         for( indexend = 0; indexend < polysList.size(); indexend++ )
         {
             // end of a filled sub-area found

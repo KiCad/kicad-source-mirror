@@ -1204,7 +1204,7 @@ int CPolyLine::Distance( const wxPoint& aPoint )
  * @param aPolysList = the list of corners of contours
  * @param aPolygoneWithHole = a KI_POLYGON_WITH_HOLES to populate
  */
-void CopyPolysListToKiPolygonWithHole( const std::vector<CPolyPt>&  aPolysList,
+void CopyPolysListToKiPolygonWithHole( const CPOLYGONS_LIST&  aPolysList,
                                        KI_POLYGON_WITH_HOLES&       aPolygoneWithHole )
 {
     unsigned    corners_count = aPolysList.size();
@@ -1261,8 +1261,8 @@ void CopyPolysListToKiPolygonWithHole( const std::vector<CPolyPt>&  aPolysList,
  * @param aPolysListWithHoles = the list of corners of contours (haing holes
  * @param aOnePolyList = a polygon with no holes
  */
-void ConvertPolysListWithHolesToOnePolygon( const std::vector<CPolyPt>&  aPolysListWithHoles,
-                                            std::vector<CPolyPt>&  aOnePolyList )
+void ConvertPolysListWithHolesToOnePolygon( const CPOLYGONS_LIST& aPolysListWithHoles,
+                                            CPOLYGONS_LIST&  aOnePolyList )
 {
     unsigned corners_count = aPolysListWithHoles.size();
 
@@ -1338,9 +1338,7 @@ void ConvertPolysListWithHolesToOnePolygon( const std::vector<CPolyPt>&  aPolysL
         aOnePolyList.push_back( corner );
     }
 
-    corner.end_contour = true;
-    aOnePolyList.pop_back();
-    aOnePolyList.push_back( corner );
+    aOnePolyList.back().end_contour = true;
 }
 
 /**

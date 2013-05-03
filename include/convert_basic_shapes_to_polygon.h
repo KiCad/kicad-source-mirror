@@ -40,26 +40,26 @@
  * We are using a lots polygons in calculations.
  * and we are using 2 descriptions,
  * one easy to use with boost::polygon (KI_POLYGON_SET)
- * one easy to use in zones and in draw functions (std::vector<CPolyPt>)
+ * one easy to use in zones and in draw functions (CPOLYGONS_LIST)
  * Copy polygons from a KI_POLYGON_SET set of polygons to
- * a std::vector<CPolyPt> polygon list
+ * a CPOLYGONS_LIST corner polygon list
  * Therefore we need conversion functions between these 2 descriptions
  * This function converts a KI_POLYGON_SET description to a
- * std::vector<CPolyPt> description
+ * CPOLYGONS_LIST description
  * @param aKiPolyList = source (set of polygons)
  * @param aPolysList = destination (set of polygons using CPolyPt corners descr)
  */
 void CopyPolygonsFromKiPolygonListToPolysList( KI_POLYGON_SET& aKiPolyList,
-                                               std::vector<CPolyPt>& aPolysList );
+                                               CPOLYGONS_LIST& aPolysList );
 
 /**
  * Helper function AddPolygonCornersToKiPolygonList
  * This function adds a KI_POLYGON_SET description to a
- * std::vector<CPolyPt> description
+ * CPOLYGONS_LIST description
  * @param aCornersBuffer = source (set of polygons using CPolyPt corners descr)
  * @param aPolysList = destination (set of polygons)
  */
-void AddPolygonCornersToKiPolygonList( std::vector <CPolyPt>& aCornersBuffer,
+void AddPolygonCornersToKiPolygonList( CPOLYGONS_LIST& aCornersBuffer,
                                        KI_POLYGON_SET&        aKiPolyList );
 
 /**
@@ -72,7 +72,7 @@ void AddPolygonCornersToKiPolygonList( std::vector <CPolyPt>& aCornersBuffer,
  * Note: the polygon is inside the circle, so if you want to have the polygon
  * outside the circle, you should give aRadius calculated with a correction factor
  */
-void TransformCircleToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+void TransformCircleToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                            wxPoint aCenter, int aRadius,
                                            int aCircleToSegmentsCount );
 
@@ -88,7 +88,7 @@ void TransformCircleToPolygon( std::vector <CPolyPt>& aCornerBuffer,
  * Note: the polygon is inside the arc ends, so if you want to have the polygon
  * outside the circle, you should give aStart and aEnd calculated with a correction factor
  */
-void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                            wxPoint aStart, wxPoint aEnd,
                                            int aCircleToSegmentsCount,
                                            int aWidth );
@@ -105,7 +105,7 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
  * @param aWidth = width (thickness) of the line
  */
-void TransformArcToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+void TransformArcToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                             wxPoint aCentre, wxPoint aStart, int aArcAngle,
                             int aCircleToSegmentsCount, int aWidth );
 
@@ -119,7 +119,7 @@ void TransformArcToPolygon( std::vector <CPolyPt>& aCornerBuffer,
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
  * @param aWidth = width (thickness) of the ring
  */
-void TransformRingToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+void TransformRingToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                             wxPoint aCentre, int aRadius,
                             int aCircleToSegmentsCount, int aWidth );
 

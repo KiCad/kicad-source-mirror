@@ -274,7 +274,7 @@ public:
      * @param aCorrectionFactor = the correction to apply to arcs radius to roughly
      * keep arc radius when approximated by segments
      */
-    void TransformSolidAreasShapesToPolygonSet( std::vector <CPolyPt>& aCornerBuffer,
+    void TransformSolidAreasShapesToPolygonSet( CPOLYGONS_LIST& aCornerBuffer,
                                                 int                    aCircleToSegmentsCount,
                                                 double                 aCorrectionFactor );
     /**
@@ -296,7 +296,7 @@ public:
      * This function calls AddClearanceAreasPolygonsToPolysList()
      * to add holes for pads and tracks and other items not in net.
      */
-    bool BuildFilledSolidAreasPolygons( BOARD* aPcb, std::vector <CPolyPt>* aCornerBuffer = NULL );
+    bool BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST* aCornerBuffer = NULL );
 
     /**
      * Function CopyPolygonsFromKiPolygonListToFilledPolysList
@@ -339,7 +339,7 @@ public:
      * @param aAddClearance = true to add a clearance area to the polygon
      *                      false to create the outline polygon.
      */
-    void TransformOutlinesShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+    void TransformOutlinesShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                                int                    aClearanceValue,
                                                bool                   aAddClearance );
     /**
@@ -506,7 +506,7 @@ public:
      * returns a reference to the list of filled polygons.
      * @return Reference to the list of filled polygons.
      */
-    const std::vector<CPolyPt>& GetFilledPolysList() const
+    const CPOLYGONS_LIST& GetFilledPolysList() const
     {
         return m_FilledPolysList;
     }
@@ -515,7 +515,7 @@ public:
      * Function AddFilledPolysList
      * sets the list of filled polygons.
      */
-    void AddFilledPolysList( std::vector<CPolyPt>& aPolysList )
+    void AddFilledPolysList( CPOLYGONS_LIST& aPolysList )
     {
         m_FilledPolysList = aPolysList;
     }
@@ -549,7 +549,7 @@ public:
 
     void AddPolygon( std::vector< wxPoint >& aPolygon );
 
-    void AddFilledPolygon( std::vector< CPolyPt >& aPolygon )
+    void AddFilledPolygon( CPOLYGONS_LIST& aPolygon )
     {
         m_FilledPolysList.insert( m_FilledPolysList.end(), aPolygon.begin(), aPolygon.end() );
     }
@@ -652,7 +652,7 @@ private:
      * connecting "holes" with external main outline.  In complex cases an outline
      * described by m_Poly can have many filled areas
      */
-    std::vector <CPolyPt> m_FilledPolysList;
+    CPOLYGONS_LIST m_FilledPolysList;
 };
 
 

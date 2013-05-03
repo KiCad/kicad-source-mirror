@@ -175,10 +175,10 @@ public:
      * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
-    void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
-                                               int                    aClearanceValue,
-                                               int                    aCircleToSegmentsCount,
-                                               double                 aCorrectionFactor ) const;
+    void TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+                                               int             aClearanceValue,
+                                               int             aCircleToSegmentsCount,
+                                               double          aCorrectionFactor ) const;
     /**
      * Function SetDrill
      * sets the drill value for vias.
