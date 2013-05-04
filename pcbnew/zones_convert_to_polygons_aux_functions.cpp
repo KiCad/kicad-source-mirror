@@ -203,7 +203,7 @@ void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
                 copperThickness = 0;
 
             // Leave a small extra size to the copper area inside to pad
-            copperThickness += (int)(IU_PER_MM * 0.04);
+            copperThickness += KiROUND( IU_PER_MM * 0.04 );
 
             startpoint.x = std::min( pad->GetSize().x, copperThickness );
             startpoint.y = std::min( pad->GetSize().y, copperThickness );
@@ -216,7 +216,7 @@ void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
             int fAngle = pad->GetOrientation();
             if( pad->GetShape() == PAD_CIRCLE )
             {
-                endpoint.x     = (int) ( endpoint.x * aArcCorrection );
+                endpoint.x     = KiROUND( endpoint.x * aArcCorrection );
                 endpoint.y     = endpoint.x;
                 fAngle = aRoundPadThermalRotation;
             }

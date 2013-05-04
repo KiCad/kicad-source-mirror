@@ -123,7 +123,7 @@ public: INFO3D_VISU();
      */
     int GetLayerZcoordBIU( int aLayerId )
     {
-        return (int) (m_LayerZcoord[aLayerId] / m_BiuTo3Dunits );
+        return KiROUND( m_LayerZcoord[aLayerId] / m_BiuTo3Dunits );
     }
 
     /**
@@ -137,7 +137,7 @@ public: INFO3D_VISU();
     int GetCopperThicknessBIU() const
     {
         return m_DrawFlags[FL_USE_COPPER_THICKNESS] ?
-            (int) (m_CopperThickness / m_BiuTo3Dunits )
+            KiROUND( m_CopperThickness / m_BiuTo3Dunits )
             : 0;
     }
 
@@ -147,7 +147,7 @@ public: INFO3D_VISU();
      */
     int GetEpoxyThicknessBIU() const
     {
-        return (int) (m_EpoxyThickness / m_BiuTo3Dunits );
+        return KiROUND( m_EpoxyThickness / m_BiuTo3Dunits );
     }
 
     /**
@@ -160,7 +160,7 @@ public: INFO3D_VISU();
     int GetNonCopperLayerThicknessBIU() const
     {
         return  m_DrawFlags[FL_USE_COPPER_THICKNESS] ?
-            (int) (m_NonCopperLayerThickness / m_BiuTo3Dunits )
+            KiROUND( m_NonCopperLayerThickness / m_BiuTo3Dunits )
             : 0;
     }
 

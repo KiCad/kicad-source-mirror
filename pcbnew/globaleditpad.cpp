@@ -229,7 +229,7 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
 
     // Search and copy the name of library reference.
     MODULE* Module_Ref = module;
-    int pad_orient = aPad->GetOrientation() - Module_Ref->GetOrientation();
+    double pad_orient = aPad->GetOrientation() - Module_Ref->GetOrientation();
 
     // Prepare an undo list:
     if( aSaveForUndo )

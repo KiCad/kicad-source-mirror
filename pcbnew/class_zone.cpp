@@ -540,13 +540,14 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
             end_segm = tmp;                 // end_segm is the beginning of the current outline
         }
 
-        /* test the dist between segment and ref point */
-        int dist = (int) GetPointToLineSegmentDistance( refPos.x,
-                                                        refPos.y,
-                                                        m_Poly->m_CornersList[item_pos].x,
-                                                        m_Poly->m_CornersList[item_pos].y,
-                                                        m_Poly->m_CornersList[end_segm].x,
-                                                        m_Poly->m_CornersList[end_segm].y );
+        // test the dist between segment and ref point
+        int dist = KiROUND( GetPointToLineSegmentDistance( 
+                    refPos.x,
+                    refPos.y,
+                    m_Poly->m_CornersList[item_pos].x,
+                    m_Poly->m_CornersList[item_pos].y,
+                    m_Poly->m_CornersList[end_segm].x,
+                    m_Poly->m_CornersList[end_segm].y ) );
 
         if( dist < min_dist )
         {

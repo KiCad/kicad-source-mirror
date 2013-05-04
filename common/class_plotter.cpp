@@ -389,7 +389,7 @@ void PLOTTER::segmentAsOval( const wxPoint& start, const wxPoint& end, int width
     else
         orient = -ArcTangente( size.y, size.x );
 
-    size.x = KiROUND( hypot( size.x, size.y ) ) + width;
+    size.x = KiROUND( EuclideanNorm( size ) ) + width;
     size.y = width;
 
     FlashPadOval( center, size, orient, tracemode );

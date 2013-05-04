@@ -284,33 +284,22 @@ STATUS_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
     if( min_dist < 0 )
         min_dist = m_Width / 2;
 
-    int dx = m_Start.x - point.x;
-    int dy = m_Start.y - point.y;
-
     if( min_dist == 0 )
     {
-        if( (dx == 0) && (dy == 0 ) )
+        if( m_Start == point  )
             result |= STARTPOINT;
-    }
-    else
-    {
-        double dist = hypot( (double)dx, (double) dy );
 
-        if( min_dist >= KiROUND( dist ) )
-            result |= STARTPOINT;
-    }
-
-    dx = m_End.x - point.x;
-    dy = m_End.y - point.y;
-
-    if( min_dist == 0 )
-    {
-        if( (dx == 0) && (dy == 0 ) )
+        if( m_End == point )
             result |= ENDPOINT;
     }
     else
     {
-        double dist = hypot( (double) dx, (double) dy );
+        double dist = GetLineLength( m_Start, point );
+
+        if( min_dist >= KiROUND( dist ) )
+            result |= STARTPOINT;
+
+        dist = GetLineLength( m_End, point );
 
         if( min_dist >= KiROUND( dist ) )
             result |= ENDPOINT;
@@ -1152,7 +1141,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
         // Display drill value
         int drill_value = GetDrillValue();
 
-        msg = ::CoordinateToString( (unsigned) drill_value );
+        msg = ::CoordinateToString( drill_value );
 
         wxString title = _( "Drill" );
         title += wxT( " " );

@@ -28,7 +28,7 @@ void GERBVIEW_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     {
         if( DrawStruct && DrawStruct->GetFlags() )
         {
-            msg.Printf( wxT( "GERBVIEW_FRAME::OnLeftClick err: Struct %d, m_Flags = %X" ),
+            msg.Printf( wxT( "GERBVIEW_FRAME::OnLeftClick err: Struct %u, m_Flags = %X" ),
                         (unsigned) DrawStruct->Type(),
                         (unsigned) DrawStruct->GetFlags() );
             wxFAIL_MSG( msg );

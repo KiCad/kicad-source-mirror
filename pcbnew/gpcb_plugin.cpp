@@ -408,7 +408,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
     int tsize = ( parseInt( parameters[paramCnt-3] ) * TEXT_DEFAULT_SIZE ) / 100;
     int thickness = module->Reference().GetSize().x / 6;
 
-    tsize = std::max( (int)(5 * IU_PER_MILS), tsize );     // Ensure a minimal size = 5 mils
+    tsize = std::max( KiROUND(5 * IU_PER_MILS), tsize ); // Ensure a minimal size = 5 mils
     module->Reference().SetSize( wxSize( tsize, tsize ) );
     module->Reference().SetThickness( thickness );
     module->Value().SetOrientation( module->Reference().GetOrientation() );

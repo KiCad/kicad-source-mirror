@@ -103,14 +103,13 @@ int D_PAD::boundingRadius() const
         break;
 
     case PAD_RECT:
-        radius = 1 + (int) ( sqrt( (double) m_Size.y * m_Size.y
-                                 + (double) m_Size.x * m_Size.x ) / 2 );
+        radius = 1 + KiROUND( EuclideanNorm( m_Size ) / 2 );
         break;
 
     case PAD_TRAPEZOID:
         x = m_Size.x + std::abs( m_DeltaSize.y );   // Remember: m_DeltaSize.y is the m_Size.x change
         y = m_Size.y + std::abs( m_DeltaSize.x );   // Remember: m_DeltaSize.x is the m_Size.y change
-        radius = 1 + (int) ( sqrt( (double) y * y + (double) x * x ) / 2 );
+        radius = 1 + KiROUND( hypot( x, y ) / 2 );
         break;
 
     default:

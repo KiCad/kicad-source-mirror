@@ -43,7 +43,7 @@
 #include <transform.h>
 
 // Helper function
-static inline wxPoint twoPointVector( wxPoint startPoint, wxPoint endPoint )
+static inline wxPoint twoPointVector( const wxPoint &startPoint, const wxPoint &endPoint )
 {
     return endPoint - startPoint;
 }
@@ -195,7 +195,7 @@ bool LIB_ARC::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTran
 
     NEGATE( relativePosition.y );       // reverse Y axis
 
-    int distance = KiROUND( EuclideanNorm( twoPointVector( m_Pos, relativePosition ) ) );
+    int distance = KiROUND( GetLineLength( m_Pos, relativePosition ) );
 
     if( abs( distance - m_Radius ) > aThreshold )
         return false;
