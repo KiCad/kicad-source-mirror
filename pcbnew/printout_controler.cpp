@@ -250,8 +250,8 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
                 scalex, scaley );
 
     wxSize PlotAreaSizeInUserUnits;
-    PlotAreaSizeInUserUnits.x = (int) (PlotAreaSizeInPixels.x/scalex);
-    PlotAreaSizeInUserUnits.y = (int) (PlotAreaSizeInPixels.y/scaley);
+    PlotAreaSizeInUserUnits.x = KiROUND( PlotAreaSizeInPixels.x / scalex );
+    PlotAreaSizeInUserUnits.y = KiROUND( PlotAreaSizeInPixels.y / scaley );
     wxLogTrace( tracePrinting, wxT( "Scaled plot area in user units:   x=%d, y=%d" ),
                 PlotAreaSizeInUserUnits.x, PlotAreaSizeInUserUnits.y );
 
@@ -309,7 +309,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
          * (this is the upper left corner) but the Y axis is reversed, therefore the plotting area
          * is the y coordinate values from  - PlotAreaSize.y to 0 */
         int y_dc_offset = PlotAreaSizeInPixels.y;
-        y_dc_offset = (int) ( ( double ) y_dc_offset * userscale );
+        y_dc_offset = KiROUND( y_dc_offset  * userscale );
         dc->SetDeviceOrigin( 0, y_dc_offset );
 
         wxLogTrace( tracePrinting, wxT( "Device origin:                    x=%d, y=%d" ),

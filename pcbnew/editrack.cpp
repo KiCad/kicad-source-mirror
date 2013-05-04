@@ -652,7 +652,7 @@ static void PushTrack( EDA_DRAW_PANEL* panel )
 }
 
 
-//Helpre function: Draws Via circle and Via Clearence circle.
+//Helper function: Draws Via circle and Via Clearance circle.
 inline void DrawViaCirclesWhenEditingNewTrack( EDA_RECT* aPanelClipBox,
                                                wxDC* aDC, const wxPoint& aPos,
                                                int aViaRadius,

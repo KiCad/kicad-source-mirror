@@ -111,7 +111,8 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
         ClipperLib::Polygon& polygon = normalized_polygons[ii];
         cornerslist.clear();
         for( unsigned jj = 0; jj < polygon.size(); jj++ )
-            cornerslist.push_back( KI_POLY_POINT( (int)polygon[jj].X, (int)polygon[jj].Y ) );
+            cornerslist.push_back( KI_POLY_POINT( KiROUND( polygon[jj].X ), 
+                                                  KiROUND( polygon[jj].Y ) ) );
         mainpoly.set( cornerslist.begin(), cornerslist.end() );
         all_contours.push_back(  mainpoly );
     }
@@ -137,7 +138,8 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
                     ClipperLib::Polygon& polygon = normalized_polygons[ii];
                     cornerslist.clear();
                     for( unsigned jj = 0; jj < polygon.size(); jj++ )
-                        cornerslist.push_back( KI_POLY_POINT( (int)polygon[jj].X, (int)polygon[jj].Y ) );
+                        cornerslist.push_back( KI_POLY_POINT( KiROUND( polygon[jj].X ), 
+                                                              KiROUND( polygon[jj].Y ) ) );
                     bpl::set_points( poly_tmp, cornerslist.begin(), cornerslist.end() );
                     polysholes.push_back( poly_tmp );
                 }
@@ -367,27 +369,27 @@ CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
                 yb  = m_CornersList[index + 1].y - y1;
             }
 
-            unsigned int    lena        = (unsigned int) sqrt( (double) (xa * xa + ya * ya) );
-            unsigned int    lenb        = (unsigned int) sqrt( (double) (xb * xb + yb * yb) );
+            unsigned int    lena        = KiROUND( hypot( xa, ya ) );
+            unsigned int    lenb        = KiROUND( hypot( xb, yb ) );
             unsigned int    distance    = aDistance;
 
             // Chamfer one half of an edge at most
             if( 0.5 * lena < distance )
-                distance = (unsigned int) (0.5 * (double) lena);
+                distance = int( 0.5 * lena );
 
             if( 0.5 * lenb < distance )
-                distance = (unsigned int) (0.5 * (double) lenb);
+                distance = int( 0.5 * lenb );
 
-            nx  = (int) ( (double) (distance * xa) / sqrt( (double) (xa * xa + ya * ya) ) );
-            ny  = (int) ( (double) (distance * ya) / sqrt( (double) (xa * xa + ya * ya) ) );
+            nx  = KiROUND( (distance * xa) / hypot( xa, ya ) );
+            ny  = KiROUND( (distance * ya) / hypot( xa, ya ) );
 
             if( index == startIndex )
                 newPoly->Start( GetLayer(), x1 + nx, y1 + ny, GetHatchStyle() );
             else
                 newPoly->AppendCorner( x1 + nx, y1 + ny );
 
-            nx  = (int) ( (double) (distance * xb) / sqrt( (double) (xb * xb + yb * yb) ) );
-            ny  = (int) ( (double) (distance * yb) / sqrt( (double) (xb * xb + yb * yb) ) );
+            nx  = KiROUND( (distance * xb) / hypot( xb, yb ) );
+            ny  = KiROUND( (distance * yb) / hypot( xb, yb ) );
             newPoly->AppendCorner( x1 + nx, y1 + ny );
         }
 
@@ -447,8 +449,8 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
                 yb  = m_CornersList[index + 1].y - y1;
             }
 
-            double          lena    = sqrt( (double) (xa * xa + ya * ya) );
-            double          lenb    = sqrt( (double) (xb * xb + yb * yb) );
+            double          lena    = hypot( xa, ya );
+            double          lenb    = hypot( xb, yb );
             double          cosine  = ( xa * xb + ya * yb ) / ( lena * lenb );
 
             double          radius  = aRadius;
@@ -500,19 +502,19 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
             if( xa * yb - ya * xb <= 0 )
                 deltaAngle *= -1;
 
-            nx  = xc + xs + 0.5;
-            ny  = yc + ys + 0.5;
+            nx  = xc + xs;
+            ny  = yc + ys;
 
             if( index == startIndex )
-                newPoly->Start( GetLayer(), (int) nx, (int) ny, GetHatchStyle() );
+                newPoly->Start( GetLayer(), KiROUND( nx ), KiROUND( ny ), GetHatchStyle() );
             else
-                newPoly->AppendCorner( (int) nx, (int) ny );
+                newPoly->AppendCorner( KiROUND( nx ), KiROUND( ny ) );
 
             for( unsigned int j = 0; j < segments; j++ )
             {
-                nx  = xc + cos( startAngle + (j + 1) * deltaAngle ) * radius + 0.5;
-                ny  = yc - sin( startAngle + (j + 1) * deltaAngle ) * radius + 0.5;
-                newPoly->AppendCorner( (int) nx, (int) ny );
+                nx  = xc + cos( startAngle + (j + 1) * deltaAngle ) * radius;
+                ny  = yc - sin( startAngle + (j + 1) * deltaAngle ) * radius;
+                newPoly->AppendCorner( KiROUND( nx ), KiROUND( ny ) );
             }
         }
 
@@ -791,7 +793,7 @@ void CPolyLine::Hatch()
     else
         spacing = m_hatchPitch * 2;
 
-    // set the "lenght" of hatch lines (the lenght on horizontal axis)
+    // set the "length" of hatch lines (the lenght on horizontal axis)
     double  hatch_line_len = m_hatchPitch;
 
     // To have a better look, give a slope depending on the layer
@@ -802,13 +804,13 @@ void CPolyLine::Hatch()
 
     if( slope_flag == 1 )
     {
-        max_a   = (int) (max_y - slope * min_x);
-        min_a   = (int) (min_y - slope * max_x);
+        max_a   = KiROUND( max_y - slope * min_x );
+        min_a   = KiROUND( min_y - slope * max_x );
     }
     else
     {
-        max_a   = (int) (max_y - slope * max_x);
-        min_a   = (int) (min_y - slope * min_x);
+        max_a   = KiROUND( max_y - slope * max_x );
+        min_a   = KiROUND( min_y - slope * min_x );
     }
 
     min_a = (min_a / spacing) * spacing;
@@ -864,13 +866,13 @@ void CPolyLine::Hatch()
 
             if( ok )
             {
-                wxPoint point( (int) x, (int) y );
+                wxPoint point( KiROUND( x ), KiROUND( y ) );
                 pointbuffer.push_back( point );
             }
 
             if( ok == 2 )
             {
-                wxPoint point( (int) x2, (int) y2 );
+                wxPoint point( KiROUND( x2 ), KiROUND( y2 ) );
                 pointbuffer.push_back( point );
             }
 
@@ -1036,7 +1038,7 @@ void CPolyLine::SetEndContour( int ic, bool end_contour )
 void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num )
 {
     // get radius
-    double  radius = hypot( (double) (xi - xc), (double) (yi - yc) );
+    double  radius  = ::Distance( xi, yi, xf, yf );
 
     // get angles of start and finish
     double  th_i    = atan2( (double) (yi - yc), (double) (xi - xc) );

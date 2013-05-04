@@ -1028,7 +1028,7 @@ static inline int USCALE( unsigned arg, unsigned num, unsigned den )
 {
     int ii;
 
-    ii = (int) ( ( (double) arg * num ) / den );
+    ii = KiROUND( ( (double) arg * num ) / den );
     return ii;
 }
 

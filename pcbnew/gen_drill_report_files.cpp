@@ -109,15 +109,15 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
             wxSize      pageSizeIU = pageA4.GetSizeIU();
 
             // Reserve a margin around the page.
-            int         margin = (int) (20 * IU_PER_MM );
+            int         margin = KiROUND( 20 * IU_PER_MM );
 
             // Calculate a scaling factor to print the board on the sheet
-            double      Xscale = (double) ( pageSizeIU.x - ( 2 * margin ) ) / bbbox.GetWidth();
+            double      Xscale = double( pageSizeIU.x - ( 2 * margin ) ) / bbbox.GetWidth();
 
             // We should print the list of drill sizes, so reserve room for it
             // 60% height for board 40% height for list
-            int     ypagesize_for_board = (int) (pageSizeIU.y * 0.6);
-            double  Yscale = (double) ( ypagesize_for_board - margin ) / bbbox.GetHeight();
+            int     ypagesize_for_board = KiROUND( pageSizeIU.y * 0.6 );
+            double  Yscale = double( ypagesize_for_board - margin ) / bbbox.GetHeight();
 
             scale = std::min( Xscale, Yscale );
 
@@ -126,8 +126,9 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
             // So the scale is clipped at 3.0;
             scale = std::min( scale, 3.0 );
 
-            offset.x    = (int) ( (double) bbbox.Centre().x - ( pageSizeIU.x / 2.0 ) / scale );
-            offset.y    = (int) ( (double) bbbox.Centre().y -
+            offset.x    = KiROUND( double( bbbox.Centre().x ) - 
+                                  ( pageSizeIU.x / 2.0 ) / scale );
+            offset.y    = KiROUND( double( bbbox.Centre().y ) -
                                   ( ypagesize_for_board / 2.0 ) / scale );
 
             if( aFormat == PLOT_FORMAT_PDF )
@@ -200,7 +201,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
     int         intervalle = 0;
     char        line[1024];
     wxString    msg;
-    int         textmarginaftersymbol = (int) (2 * IU_PER_MM);
+    int         textmarginaftersymbol = KiROUND( 2 * IU_PER_MM );
 
     // Set Drill Symbols width
     plotter->SetDefaultLineWidth( 0.2 * IU_PER_MM / scale );
@@ -213,18 +214,18 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
     int     charSize    = 3 * IU_PER_MM;                    // text size in IUs
     double  charScale   = 1.0 / scale;                      // real scale will be 1/scale,
                                                             // because the global plot scale is scale
-    TextWidth   = (int) ( (charSize * charScale) / 10 );    // Set text width (thickness)
-    intervalle  = (int) ( charSize * charScale ) + TextWidth;
+    TextWidth   = KiROUND( (charSize * charScale) / 10.0 );    // Set text width (thickness)
+    intervalle  = KiROUND( charSize * charScale ) + TextWidth;
 
     // Trace information.
-    plotX   = (int) ( (double) bbbox.GetX() + textmarginaftersymbol * charScale );
+    plotX   = KiROUND( bbbox.GetX() + textmarginaftersymbol * charScale );
     plotY   = bbbox.GetBottom() + intervalle;
 
     // Plot title  "Info"
     wxString Text = wxT( "Drill Map:" );
     plotter->Text( wxPoint( plotX, plotY ), UNSPECIFIED_COLOR, Text, 0,
-                   wxSize( (int) ( charSize * charScale ),
-                           (int) ( charSize * charScale ) ),
+                   wxSize( KiROUND( charSize * charScale ),
+                           KiROUND( charSize * charScale ) ),
                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                    TextWidth, false, false );
 
@@ -237,10 +238,10 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
 
         plotY += intervalle;
 
-        plot_diam = (int) m_toolListBuffer[ii].m_Diameter;
-        x = (int) ( (double) plotX - textmarginaftersymbol * charScale
-                    - (double) plot_diam / 2.0 );
-        y = (int) ( (double) plotY + (double) charSize * charScale );
+        plot_diam = KiROUND( m_toolListBuffer[ii].m_Diameter );
+        x = KiROUND( plotX - textmarginaftersymbol * charScale
+                    - plot_diam / 2.0 );
+        y = KiROUND( plotY + charSize * charScale );
         plotter->Marker( wxPoint( x, y ), plot_diam, ii );
 
         // List the diameter of each drill in mm and inches.
@@ -268,13 +269,12 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         msg += FROM_UTF8( line );
         plotter->Text( wxPoint( plotX, y ), UNSPECIFIED_COLOR,
                        msg,
-                       0, wxSize( (int) ( charSize * charScale ),
-                                  (int) ( charSize * charScale ) ),
+                       0, wxSize( KiROUND( charSize * charScale ),
+                                  KiROUND( charSize * charScale ) ),
                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                        TextWidth, false, false );
 
-        intervalle  = (int) ( charSize * charScale ) + TextWidth;
-        intervalle  = (int) ( intervalle * 1.2 );
+        intervalle  = KiROUND( (( charSize * charScale ) + TextWidth) * 1.2);
 
         if( intervalle < (plot_diam + (1 * IU_PER_MM / scale) + TextWidth) )
             intervalle = plot_diam + (1 * IU_PER_MM / scale) + TextWidth;

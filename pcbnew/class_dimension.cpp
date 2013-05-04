@@ -238,7 +238,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     deltay  = m_featureLineDO.y - m_featureLineGO.y;
 
     // Calculate dimension value
-    measure = KiROUND( hypot( (double) deltax, (double) deltay ) );
+    measure = KiROUND( hypot( deltax, deltay ) );
 
     angle = atan2( deltay, deltax );
 
@@ -248,8 +248,8 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     // Taking into account the slope of the side lines.
     if( measure )
     {
-        hx  = (abs) ( (int) ( ( (double) deltay * hx ) / measure ) );
-        hy  = (abs) ( (int) ( ( (double) deltax * hy ) / measure ) );
+        hx  = abs( KiROUND( ( (double) deltay * hx ) / measure ) );
+        hy  = abs( KiROUND( ( (double) deltax * hy ) / measure ) );
 
         if( m_featureLineGO.x > m_crossBarO.x )
             hx = -hx;

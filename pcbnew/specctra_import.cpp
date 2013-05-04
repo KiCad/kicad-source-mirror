@@ -439,7 +439,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                 if( place->side == T_front )
                 {
                     // convert from degrees to tenths of degrees used in KiCad.
-                    int orientation = (int) (place->rotation * 10.0);
+                    int orientation = KiROUND( place->rotation * 10.0 );
 
                     if( module->GetLayer() != LAYER_N_FRONT )
                     {
@@ -451,7 +451,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                 }
                 else if( place->side == T_back )
                 {
-                    int orientation = (int) ((place->rotation + 180.0) * 10.0);
+                    int orientation = KiROUND( (place->rotation + 180.0) * 10.0 );
 
                     if( module->GetLayer() != LAYER_N_BACK )
                     {

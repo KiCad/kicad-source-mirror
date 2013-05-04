@@ -431,7 +431,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
     switch( m_PadShape )
     {
     case PAD_CIRCLE:
-        dx = (int) ( dx * aCorrectionFactor );
+        dx = KiROUND( dx * aCorrectionFactor );
         TransformCircleToPolygon( aCornerBuffer, PadShapePos, dx,
                                   aCircleToSegmentsCount );
         break;
@@ -444,13 +444,13 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
         wxPoint shape_offset;
         if( dy > dx )   // Oval pad X/Y ratio for choosing translation axis
         {
-            dy = (int) ( dy * aCorrectionFactor );
+            dy = KiROUND( dy * aCorrectionFactor );
             shape_offset.y = dy - dx;
             width = dx * 2;
         }
         else    //if( dy <= dx )
         {
-            dx = (int) ( dx * aCorrectionFactor );
+            dx = KiROUND( dx * aCorrectionFactor );
             shape_offset.x = dy - dx;
             width = dy * 2;
         }
@@ -474,8 +474,8 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
         angle = m_Orient;
 
         // Corner rounding radius
-        int rounding_radius = (int) ( aClearanceValue * aCorrectionFactor );
-        int angle_pg;  // Polygon increment angle
+        int rounding_radius = KiROUND( aClearanceValue * aCorrectionFactor );
+        double angle_pg;  // Polygon increment angle
 
         for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
         {
@@ -716,7 +716,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
             std::vector <wxPoint> corners_buffer;
 
             // Radius of outer arcs of the shape corrected for arc approximation by lines
-            int outer_radius = (int) ( (dx + aThermalGap) * aCorrectionFactor );
+            int outer_radius = KiROUND( (dx + aThermalGap) * aCorrectionFactor );
 
             // Crosspoint of thermal spoke sides, the first point of polygon buffer
             corners_buffer.push_back( wxPoint( copper_thickness.x / 2, copper_thickness.y / 2 ) );
@@ -725,7 +725,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
             // and first seg of arc approx
             corner.x = copper_thickness.x / 2;
             int y = outer_radius - (aThermalGap / 4);
-            corner.y = (int) sqrt( ( ( (double) y * y ) - (double) corner.x * corner.x ) );
+            corner.y = KiROUND( sqrt( ( (double) y * y  - (double) corner.x * corner.x ) ) );
 
             if( aThermalRot != 0 )
                 corners_buffer.push_back( corner );
@@ -733,9 +733,8 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
             // calculate the starting point of the outter arc
             corner.x = copper_thickness.x / 2;
 
-            double dtmp = sqrt( ( (double) outer_radius * outer_radius ) -
-                                ( (double) corner.x * corner.x ) );
-            corner.y = (int) dtmp;
+            corner.y = KiROUND( sqrt( ( (double) outer_radius * outer_radius ) -
+                                      ( (double) corner.x * corner.x ) ) );
             RotatePoint( &corner, 90 ); // 9 degrees is the spoke fillet size
 
             // calculate the ending point of the outter arc
@@ -818,8 +817,8 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
             if( copper_thickness.x > deltasize )
             {
                 corner.x = copper_thickness.x / 2;
-                corner.y =  (int) sqrt( ( (double) outer_radius * outer_radius ) -
-                                        ( (double) ( corner.x - delta ) * ( corner.x - deltasize ) ) );
+                corner.y = KiROUND( sqrt( ( (double) outer_radius * outer_radius ) -
+                                        ( (double) ( corner.x - delta ) * ( corner.x - deltasize ) ) ) );
                 corner.x -= deltasize;
 
                 /* creates an intermediate point, to have a > 90 deg angle
@@ -843,13 +842,13 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
             last_corner.y = copper_thickness.y / 2;
             int     px = outer_radius - (aThermalGap / 4);
             last_corner.x =
-                (int) sqrt( ( ( (double) px * px ) - (double) last_corner.y * last_corner.y ) );
+                KiROUND( sqrt( ( ( (double) px * px ) - (double) last_corner.y * last_corner.y ) ) );
 
             // Arc stop point calculation, the intersecting point of cutout arc and thermal spoke edge
             corner_end.y = copper_thickness.y / 2;
             corner_end.x =
-                (int) sqrt( ( (double) outer_radius *
-                             outer_radius ) - ( (double) corner_end.y * corner_end.y ) );
+                KiROUND( sqrt( ( (double) outer_radius *
+                             outer_radius ) - ( (double) corner_end.y * corner_end.y ) ) );
             RotatePoint( &corner_end, -90 ); // 9 degrees of thermal fillet
 
             // calculate intermediate arc points till limit is reached
@@ -948,7 +947,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
             corners_buffer.push_back( wxPoint( -(aThermalGap / 4 + copper_thickness.x / 2), -dy ) );
 
             int angle = aPad.GetOrientation();
-            int rounding_radius = (int) ( aThermalGap * aCorrectionFactor );    // Corner rounding radius
+            int rounding_radius = KiROUND( aThermalGap * aCorrectionFactor );   // Corner rounding radius
             int angle_pg;                                                       // Polygon increment angle
 
             for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )

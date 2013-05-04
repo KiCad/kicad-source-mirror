@@ -406,7 +406,7 @@ static void export_vrml_circle( LAYER_NUM layer, double startx, double starty, /
     double   hole, radius;
     FLAT_RING ring;
 
-    radius = hypot( startx - endx, starty - endy ) + ( width / 2);
+    radius = Distance( startx, starty, endx, endy ) + ( width / 2);
     hole  = radius - width;
 
     for( double alpha = 0; alpha < M_PI * 2; alpha += INC_ANGLE )
