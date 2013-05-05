@@ -3743,7 +3743,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      *  or delete it.
      */
     PADSTACK* makeVia( int aCopperDiameter, int aDrillDiameter,
-                       LAYER_NUM aTopLayer, LAYER_NUM aBotLayer );
+                       int aTopLayer, int aBotLayer );
 
     /**
      * Function makeVia
