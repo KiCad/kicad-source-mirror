@@ -464,7 +464,7 @@ public:
     static const wxChar* ReturnStringLibNameInvalidChars( bool aUserReadable );
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // overload
+    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
 #endif
 
 private:

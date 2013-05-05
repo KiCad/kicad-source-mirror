@@ -187,18 +187,3 @@ EDA_ITEM* TEXTE_PCB::Clone() const
     return new TEXTE_PCB( *this );
 }
 
-
-#if defined(DEBUG)
-
-void TEXTE_PCB::Show( int nestLevel, std::ostream& os ) const
-{
-    // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " string=\"" << m_Text.mb_str() << "\"/>\n";
-
-//    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str()
-//                                 << ">\n";
-}
-
-
-#endif
