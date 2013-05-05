@@ -209,7 +209,8 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, EDA_COLOR_T aColo
 {
     wxSize  size;
     wxPoint pos;
-    int     orient, thickness;
+    double  orient;
+    int     thickness;
 
     if( aColor == WHITE )
         aColor = LIGHTGRAY;
@@ -447,7 +448,8 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
 // Plot a PCB Text, i;e. a text found on a copper or technical layer
 void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 {
-    int     orient, thickness;
+    double  orient;
+    int     thickness;
     wxPoint pos;
     wxSize  size;
 
@@ -586,7 +588,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
 void BRDITEMS_PLOTTER::PlotDrawSegment(  DRAWSEGMENT* aSeg )
 {
     int     thickness;
-    int     radius = 0, StAngle = 0, EndAngle = 0;
+    int     radius = 0;
+    double  StAngle = 0, EndAngle = 0;
 
     if( (GetLayerMask( aSeg->GetLayer() ) & m_layerMask) == 0 )
         return;

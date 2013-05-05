@@ -421,7 +421,7 @@ static void export_vrml_circle( LAYER_NUM layer, double startx, double starty, /
 
 static void export_vrml_slot( TRIANGLEBAG& triangles, //{{{
                               LAYER_NUM top_layer, LAYER_NUM bottom_layer, double xc, double yc,
-                              double dx, double dy, int orient )
+                              double dx, double dy, double orient )
 {
     double capx, capy; // Cap center
     VLoop  loop;
@@ -429,7 +429,7 @@ static void export_vrml_slot( TRIANGLEBAG& triangles, //{{{
 
     loop.z_top    = layer_z[top_layer];
     loop.z_bottom = layer_z[bottom_layer];
-    double angle = orient / 1800.0 * M_PI;
+    double angle  = DECIDEG2RAD( orient );
 
     if( dy > dx )
     {
@@ -480,7 +480,7 @@ static void export_vrml_hole( TRIANGLEBAG& triangles,
 
 
 static void export_vrml_oval_pad( LAYER_NUM layer, double xc, double yc,
-                                  double dx, double dy, int orient )
+                                  double dx, double dy, double orient )
 {
     double  capx, capy; // Cap center
     FLAT_FAN fan;

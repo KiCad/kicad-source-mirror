@@ -417,11 +417,11 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
                                                    double          aCorrectionFactor ) const
 {
     wxPoint corner_position;
-    int     angle;
+    double  angle;
     int     dx = (m_Size.x / 2) + aClearanceValue;
     int     dy = (m_Size.y / 2) + aClearanceValue;
 
-    int     delta = 3600 / aCircleToSegmentsCount;  // rot angle in 0.1 degree
+    double  delta = 3600.0 / aCircleToSegmentsCount; // rot angle in 0.1 degree
     wxPoint PadShapePos = ReturnShapePos();         /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
     wxSize  psize = m_Size;                         /* pad size unsed in RECT and TRAPEZOIDAL pads
@@ -480,7 +480,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
         for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
         {
             corner_position = wxPoint( 0, -rounding_radius );
-            RotatePoint( &corner_position, (1800 / aCircleToSegmentsCount) );
+            RotatePoint( &corner_position, (1800.0 / aCircleToSegmentsCount) );
 
             // Start at half increment offset
             angle_pg = i * delta;
@@ -499,7 +499,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
         for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
         {
             corner_position = wxPoint( -rounding_radius, 0 );
-            RotatePoint( &corner_position, (1800 / aCircleToSegmentsCount) );
+            RotatePoint( &corner_position, (1800.0 / aCircleToSegmentsCount) );
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );
             corner_position -= wxPoint( psize.x / 2, -psize.y / 2 );
@@ -512,7 +512,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
         for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
         {
             corner_position = wxPoint( 0, rounding_radius );
-            RotatePoint( &corner_position, (1800 / aCircleToSegmentsCount) );
+            RotatePoint( &corner_position, (1800.0 / aCircleToSegmentsCount) );
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );
             corner_position += psize / 2;
@@ -525,7 +525,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
         for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
         {
             corner_position = wxPoint( rounding_radius, 0 );
-            RotatePoint( &corner_position, (1800 / aCircleToSegmentsCount) );
+            RotatePoint( &corner_position, (1800.0 / aCircleToSegmentsCount) );
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );
             corner_position -= wxPoint( -psize.x / 2, psize.y / 2 );
@@ -665,7 +665,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                        int             aMinThicknessValue,
                                        int             aCircleToSegmentsCount,
                                        double          aCorrectionFactor,
-                                       int             aThermalRot )
+                                       double          aThermalRot )
 {
     wxPoint corner, corner_end;
     wxPoint PadShapePos = aPad.ReturnShapePos();    /* Note: for pad having a shape offset,
@@ -675,7 +675,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
     int     dx = aPad.GetSize().x / 2;
     int     dy = aPad.GetSize().y / 2;
 
-    int     delta = 3600 / aCircleToSegmentsCount; // rot angle in 0.1 degree
+    double  delta = 3600.0 / aCircleToSegmentsCount; // rot angle in 0.1 degree
 
     /* Keep in account the polygon outline thickness
      * aThermalGap must be increased by aMinThicknessValue/2 because drawing external outline
@@ -759,8 +759,8 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
 
             // Now, add the 4 holes ( each is the pattern, rotated by 0, 90, 180 and 270  deg
             // aThermalRot = 450 (45.0 degrees orientation) work fine.
-            int angle_pad = aPad.GetOrientation();              // Pad orientation
-            int th_angle  = aThermalRot;
+            double angle_pad = aPad.GetOrientation();              // Pad orientation
+            double th_angle  = aThermalRot;
 
             for( unsigned ihole = 0; ihole < 4; ihole++ )
             {
@@ -864,7 +864,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
 
             /* Create 2 holes, rotated by pad rotation.
              */
-            int angle = aPad.GetOrientation() + supp_angle;
+            double angle = aPad.GetOrientation() + supp_angle;
 
             for( int irect = 0; irect < 2; irect++ )
             {
@@ -946,16 +946,16 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
             corners_buffer.push_back( wxPoint( -copper_thickness.x / 2, -(dy - aThermalGap / 4) ) );
             corners_buffer.push_back( wxPoint( -(aThermalGap / 4 + copper_thickness.x / 2), -dy ) );
 
-            int angle = aPad.GetOrientation();
+            double angle = aPad.GetOrientation();
             int rounding_radius = KiROUND( aThermalGap * aCorrectionFactor );   // Corner rounding radius
-            int angle_pg;                                                       // Polygon increment angle
+            double angle_pg;                                                    // Polygon increment angle
 
             for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
             {
                 wxPoint corner_position = wxPoint( 0, -rounding_radius );
 
                 // Start at half increment offset
-                RotatePoint( &corner_position, 1800 / aCircleToSegmentsCount );
+                RotatePoint( &corner_position, 1800.0 / aCircleToSegmentsCount );
                 angle_pg = i * delta;
 
                 RotatePoint( &corner_position, angle_pg );          // Rounding vector rotation

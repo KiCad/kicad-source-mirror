@@ -174,8 +174,8 @@ void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
         startp  = aEnd;
     }
 
-    int delta_angle = ArcTangente( endp.y, endp.x );    // delta_angle is in 0.1 degrees
-    int seg_len     = KiROUND( EuclideanNorm( endp ) );
+    double delta_angle = ArcTangente( endp.y, endp.x ); // delta_angle is in 0.1 degrees
+    int seg_len        = KiROUND( EuclideanNorm( endp ) );
 
     int delta = 3600 / aCircleToSegmentsCount;    // rot angle in 0.1 degree
 
@@ -237,7 +237,7 @@ void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
  * @param aWidth = width (thickness) of the line
  */
 void TransformArcToPolygon( CPOLYGONS_LIST& aCornerBuffer,
-                            wxPoint aCentre, wxPoint aStart, int aArcAngle,
+                            wxPoint aCentre, wxPoint aStart, double aArcAngle,
                             int aCircleToSegmentsCount, int aWidth )
 {
     wxPoint arc_start, arc_end;

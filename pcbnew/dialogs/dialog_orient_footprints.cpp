@@ -110,7 +110,7 @@ void PCB_EDIT_FRAME::OnOrientFootprints( wxCommandEvent& event )
 }
 
 
-bool PCB_EDIT_FRAME::ReOrientModules( const wxString& ModuleMask, int Orient,
+bool PCB_EDIT_FRAME::ReOrientModules( const wxString& ModuleMask, double Orient,
                                       bool include_fixe )
 {
     wxString line;

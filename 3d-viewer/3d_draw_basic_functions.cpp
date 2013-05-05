@@ -370,7 +370,7 @@ void Draw3D_SolidSegment( const wxPoint& aStart, const wxPoint& aEnd,
 
 
 void Draw3D_ArcSegment( const wxPoint&  aCenterPos, const wxPoint& aStartPoint,
-                        int aArcAngle, int aWidth, int aThickness,
+                        double aArcAngle, int aWidth, int aThickness,
                         int aZpos, double aBiuTo3DUnits )
 {
     const int   slice = SEGM_PER_CIRCLE;

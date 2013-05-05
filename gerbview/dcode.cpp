@@ -502,7 +502,7 @@ void D_CODE::ConvertShapeToPolygon()
         for( unsigned ii = 0; ii <= SEGS_CNT; ii++ )
         {
             currpos = initialpos;
-            RotatePoint( &currpos, ii * 3600 / SEGS_CNT );
+            RotatePoint( &currpos, ii * 3600.0 / SEGS_CNT );
             m_PolyCorners.push_back( currpos );
         }
 
@@ -552,7 +552,7 @@ void D_CODE::ConvertShapeToPolygon()
         for( ; ii <= SEGS_CNT / 2; ii++ )
         {
             currpos = initialpos;
-            RotatePoint( &currpos, ii * 3600 / SEGS_CNT );
+            RotatePoint( &currpos, ii * 3600.0 / SEGS_CNT );
             currpos.x += delta;
             m_PolyCorners.push_back( currpos );
         }
@@ -561,7 +561,7 @@ void D_CODE::ConvertShapeToPolygon()
         for( ii = SEGS_CNT / 2; ii <= SEGS_CNT; ii++ )
         {
             currpos = initialpos;
-            RotatePoint( &currpos, ii * 3600 / SEGS_CNT );
+            RotatePoint( &currpos, ii * 3600.0 / SEGS_CNT );
             currpos.x -= delta;
             m_PolyCorners.push_back( currpos );
         }
@@ -592,7 +592,7 @@ void D_CODE::ConvertShapeToPolygon()
         for( int ii = 0; ii <= m_EdgesCount; ii++ )
         {
             currpos = initialpos;
-            RotatePoint( &currpos, ii * 3600 / m_EdgesCount );
+            RotatePoint( &currpos, ii * 3600.0 / m_EdgesCount );
             m_PolyCorners.push_back( currpos );
         }
 
@@ -633,7 +633,7 @@ static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
         {
             currpos.x = 0;
             currpos.y = aSize.x / 2;            // aSize.x / 2 is the radius of the hole
-            RotatePoint( &currpos, ii * 3600 / SEGS_CNT );
+            RotatePoint( &currpos, ii * 3600.0 / SEGS_CNT );
             aBuffer.push_back( currpos );
         }
 

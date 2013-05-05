@@ -252,7 +252,7 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
                 if( aPadShapeFilter && ( pad->GetShape() != aPad->GetShape() ) )
                     continue;
 
-                int currpad_orient = pad->GetOrientation() - module->GetOrientation();
+                double currpad_orient = pad->GetOrientation() - module->GetOrientation();
 
                 if( aPadOrientFilter && ( currpad_orient != pad_orient ) )
                     continue;

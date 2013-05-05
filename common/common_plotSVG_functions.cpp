@@ -321,7 +321,7 @@ void SVG_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int wid
 }
 
 
-void SVG_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int radius,
+void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
                        FILL_T fill, int width )
 {
     /* Draws an arc of a circle, centred on (xc,yc), with starting point
@@ -347,7 +347,7 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int rad
 
     if( !plotMirror )
     {
-        int tmp = StAngle;
+        double tmp  = StAngle;
         StAngle     = -EndAngle;
         EndAngle    = -tmp;
     }
@@ -550,7 +550,7 @@ bool SVG_PLOTTER::EndPlot()
 void SVG_PLOTTER::Text( const wxPoint&              aPos,
                         enum EDA_COLOR_T            aColor,
                         const wxString&             aText,
-                        int                         aOrient,
+                        double                      aOrient,
                         const wxSize&               aSize,
                         enum EDA_TEXT_HJUSTIFY_T    aH_justify,
                         enum EDA_TEXT_VJUSTIFY_T    aV_justify,

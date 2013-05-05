@@ -144,7 +144,7 @@ void TEXTE_MODULE::SetLocalCoord()
 
     m_Pos0 = m_Pos - module->GetPosition();
 
-    int angle = module->GetOrientation();
+    double angle = module->GetOrientation();
 
     RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
 }
@@ -206,7 +206,7 @@ EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 {
     // Calculate area without text fields:
     EDA_RECT text_area;
-    int      angle = GetDrawRotation();
+    double   angle = GetDrawRotation();
     wxPoint  textstart, textend;
 
     text_area = GetTextRect();
@@ -294,7 +294,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
     // Draw the text proper, with the right attributes
     wxSize size   = m_Size;
-    int    orient = GetDrawRotation();
+    double orient = GetDrawRotation();
 
     // If the text is mirrored : negate size.x (mirror / Y axis)
     if( m_Mirror )
@@ -324,12 +324,10 @@ void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
 
 /* Return text rotation for drawings and plotting
  */
-int TEXTE_MODULE::GetDrawRotation() const
+double TEXTE_MODULE::GetDrawRotation() const
 {
-    int     rotation;
     MODULE* module = (MODULE*) m_Parent;
-
-    rotation = m_Orient;
+    double  rotation = m_Orient;
 
     if( module )
         rotation += module->GetOrientation();

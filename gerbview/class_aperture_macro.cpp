@@ -140,7 +140,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
 
     wxPoint curPos = aShapePos;
     D_CODE* tool   = aParent->GetDcodeDescr();
-    int rotation;
+    double rotation;
     if( mapExposure( aParent ) == false )
     {
         EXCHG(aColor, aAltColor);
@@ -272,7 +272,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         for( int ii = 0; ii < 4; ii++ )
         {
             subshape_poly = polybuffer;
-            int sub_rotation = rotation + 900 * ii;
+            double sub_rotation = rotation + 900 * ii;
             for( unsigned jj = 0; jj < subshape_poly.size(); jj++ )
                 RotatePoint( &subshape_poly[jj], -sub_rotation );
 
@@ -459,7 +459,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         aBuffer.push_back( currpt );
 
         // Rotate rectangle and move it to the actual start point
-        int angle = ArcTangente( delta.y, delta.x );
+        double angle = ArcTangente( delta.y, delta.x );
 
         for( unsigned ii = 0; ii < 4; ii++ )
         {
@@ -512,16 +512,15 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         int outerRadius   = scaletoIU( params[2].GetValue( tool ), m_GerbMetric ) / 2;
         int innerRadius   = scaletoIU( params[3].GetValue( tool ), m_GerbMetric ) / 2;
         int halfthickness = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;
-        int angle_start   = RAD2DECIDEG( asin( (double) halfthickness / innerRadius ) );
+        double angle_start = RAD2DECIDEG( asin( (double) halfthickness / innerRadius ) );
 
         // Draw shape in the first cadrant (X and Y > 0)
         wxPoint pos, startpos;
 
         // Inner arc
         startpos.x = innerRadius;
-        int angle_end = 900 - angle_start;
-        int angle;
-        for( angle = angle_start; angle < angle_end; angle += 100 )
+        double angle_end = 900 - angle_start;
+        for( double angle = angle_start; angle < angle_end; angle += 100 )
         {
             pos = startpos;
             RotatePoint( &pos, angle );
@@ -540,7 +539,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         angle_end   = 900 - angle_start;
 
         // First point, near Y axis, outer arc
-        for( angle = angle_end; angle > angle_start; angle -= 100 )
+        for( double angle = angle_end; angle > angle_start; angle -= 100 )
         {
             pos = startpos;
             RotatePoint( &pos, angle );

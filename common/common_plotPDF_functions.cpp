@@ -201,7 +201,7 @@ void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T aFill, int wi
  * The PDF engine can't directly plot arcs, it uses the base emulation.
  * So no filled arcs (not a great loss... )
  */
-void PDF_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int radius,
+void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
                       FILL_T fill, int width )
 {
     wxASSERT( workFile );
@@ -735,7 +735,7 @@ bool PDF_PLOTTER::EndPlot()
 void PDF_PLOTTER::Text( const wxPoint&              aPos,
                         enum EDA_COLOR_T            aColor,
                         const wxString&             aText,
-                        int                         aOrient,
+                        double                      aOrient,
                         const wxSize&               aSize,
                         enum EDA_TEXT_HJUSTIFY_T    aH_justify,
                         enum EDA_TEXT_VJUSTIFY_T    aV_justify,

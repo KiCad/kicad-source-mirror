@@ -41,7 +41,7 @@ class PCB_ARC : public PCB_COMPONENT
 public:
     int m_startX;
     int m_startY;
-    int m_angle;
+    double m_angle;
     int m_width;
 
     PCB_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );

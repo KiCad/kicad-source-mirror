@@ -85,7 +85,7 @@ void    Draw3D_SolidSegment( const wxPoint& aStart, const wxPoint& aEnd,
  * @param aBiuTo3DUnits = board internal units to 3D units scaling value
  */
 void Draw3D_ArcSegment( const wxPoint&  aCenterPos, const wxPoint& aStartPoint,
-                        int aArcAngle, int aWidth, int aThickness,
+                        double aArcAngle, int aWidth, int aThickness,
                         int aZpos, double aBiuTo3DUnits );
 
 

@@ -311,7 +311,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 {
     wxPoint coord[4];
     int     delta_cx, delta_cy;
-    int     angle = m_Orient;
+    double  angle = m_Orient;
     int     seg_width;
 
     GRSetDrawMode( aDC, aDrawInfo.m_DrawMode );
@@ -528,7 +528,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     RotatePoint( &tpos, shape_pos, angle );
 
     // Draw text with an angle between -90 deg and + 90 deg
-    int t_angle = angle;
+    double t_angle = angle;
     NORMALIZE_ANGLE_90( t_angle );
 
     /* Note: in next calculations, texte size is calculated for 3 or more
@@ -596,7 +596,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
  * aRotation is the asked rotation of the segment (usually m_Orient)
  */
 int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd,
-                                     int aRotation) const
+                                     double aRotation) const
 {
     int width;
 
@@ -630,7 +630,7 @@ int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd,
 
 
 void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue,
-                             int aRotation ) const
+                             double aRotation ) const
 {
     wxSize delta;
     wxSize halfsize;

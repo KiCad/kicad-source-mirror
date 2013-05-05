@@ -354,8 +354,6 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // If the reference segment is a via, we test it here
         if( aRefSeg->Type() == PCB_VIA_T )
         {
-            int angle = 0;  // angle du segment a tester;
-
             delta = track->GetEnd() - track->GetStart();
             segStartPoint = aRefSeg->GetStart() - track->GetStart();
 
@@ -371,8 +369,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             }
             else    // test via to segment
             {
-                // Compute l'angle
-                angle = ArcTangente( delta.y, delta.x );
+                // Compute l'angle du segment a tester;
+                double angle = ArcTangente( delta.y, delta.x );
 
                 // Compute new coordinates ( the segment become horizontal)
                 RotatePoint( &delta, angle );
@@ -528,7 +526,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                     delta = segEndPoint - segStartPoint;
 
                     // Compute the segment orientation (angle) en 0,1 degre
-                    int angle = ArcTangente( delta.y, delta.x );
+                    double angle = ArcTangente( delta.y, delta.x );
 
                     // Compute the segment lenght: delta.x = lenght after rotation
                     RotatePoint( &delta, angle );
@@ -572,7 +570,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 {
     int     dist;
 
-    int     pad_angle;
+    double  pad_angle;
 
     // Get the clerance between the 2 pads. this is the min distance between aRefPad and aPad
     int     dist_min = aRefPad->GetClearance( aPad );
@@ -804,7 +802,6 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist )
 {
     wxSize  padHalfsize;        // half the dimension of the pad
-    int     orient;
     wxPoint startPoint, endPoint;
     int     seuil;
     int     deltay;
@@ -843,7 +840,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
     startPoint.x = startPoint.y = 0;
     endPoint     = m_segmEnd;
 
-    orient = aPad->GetOrientation();
+    double orient = aPad->GetOrientation();
 
     RotatePoint( &startPoint, m_padToTestPos, -orient );
     RotatePoint( &endPoint, m_padToTestPos, -orient );

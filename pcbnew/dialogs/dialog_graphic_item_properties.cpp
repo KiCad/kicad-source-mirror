@@ -126,7 +126,10 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
         m_StartPointYLabel->SetLabel(_("Center Y"));
         m_EndPointXLabel->SetLabel(_("Start Point X"));
         m_EndPointYLabel->SetLabel(_("Start Point Y"));
-        msg << m_Item->GetAngle();
+
+        // Here the angle is a double, but the UI is still working 
+        // with integers
+        msg << int( m_Item->GetAngle() );
         m_Angle_Ctrl->SetValue(msg);
         break;
 

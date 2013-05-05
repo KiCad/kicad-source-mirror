@@ -93,8 +93,8 @@ void PCB_ARC::Parse( XNODE*     aNode,
             SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
                          &endX, &endY, aActualConversion );
 
-        int alpha1  = ArcTangente( m_startY - m_positionY, m_startX - m_positionX );
-        int alpha2  = ArcTangente( endY - m_positionY, endX - m_positionX );
+        double alpha1  = ArcTangente( m_startY - m_positionY, m_startX - m_positionX );
+        double alpha2  = ArcTangente( endY - m_positionY, endX - m_positionX );
         m_angle = alpha1 - alpha2;
 
         NORMALIZE_ANGLE_POS( m_angle );

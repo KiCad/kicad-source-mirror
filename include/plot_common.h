@@ -153,8 +153,8 @@ public:
                        int width = DEFAULT_LINE_WIDTH ) = 0;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = DEFAULT_LINE_WIDTH ) = 0;
-    virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle, int rayon,
-                      FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle, 
+                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
 
     /**
      * moveto/lineto primitive, moves the 'pen' to the specified direction
@@ -214,8 +214,8 @@ public:
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode );
-    virtual void ThickArc( const wxPoint& centre, int StAngle, int EndAngle, int rayon,
-                           int width, EDA_DRAW_MODE_T tracemode );
+    virtual void ThickArc( const wxPoint& centre, double StAngle, double EndAngle, 
+                           int rayon, int width, EDA_DRAW_MODE_T tracemode );
     virtual void ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
                             EDA_DRAW_MODE_T tracemode );
     virtual void ThickCircle( const wxPoint& pos, int diametre, int width,
@@ -224,10 +224,10 @@ public:
     // Flash primitives
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  EDA_DRAW_MODE_T trace_mode ) = 0;
-    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, int orient,
+    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
                                EDA_DRAW_MODE_T trace_mode ) = 0;
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               int orient, EDA_DRAW_MODE_T trace_mode ) = 0;
+                               double orient, EDA_DRAW_MODE_T trace_mode ) = 0;
 
     /** virtual function FlashPadTrapez
      * flash a trapezoidal pad
@@ -238,7 +238,7 @@ public:
      * @param aTrace_Mode = FILLED or SKETCH
      */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode ) = 0;
+                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode ) = 0;
 
 
     /**
@@ -247,7 +247,7 @@ public:
     virtual void Text( const wxPoint&              aPos,
                        enum EDA_COLOR_T            aColor,
                        const wxString&             aText,
-                       int                         aOrient,
+                       double                      aOrient,
                        const wxSize&               aSize,
                        enum EDA_TEXT_HJUSTIFY_T    aH_justify,
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
@@ -297,7 +297,7 @@ protected:
     // Helper function for sketched filler segment
     void segmentAsOval( const wxPoint& start, const wxPoint& end, int width,
                           EDA_DRAW_MODE_T tracemode );
-    void sketchOval( const wxPoint& pos, const wxSize& size, int orient,
+    void sketchOval( const wxPoint& pos, const wxSize& size, double orient,
                       int width );
 
     // Coordinate and scaling conversion functions
@@ -402,17 +402,17 @@ public:
 
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode );
-    virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle, int rayon,
-                      FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle, 
+                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
     virtual void PenTo( const wxPoint& pos, char plume );
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  EDA_DRAW_MODE_T trace_mode );
-    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, int orient,
+    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
                                EDA_DRAW_MODE_T trace_mode );
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               int orient, EDA_DRAW_MODE_T trace_mode );
+                               double orient, EDA_DRAW_MODE_T trace_mode );
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
+                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 
 protected:
     void penControl( char plume );
@@ -459,12 +459,12 @@ public:
     // Pad routines are handled with lower level primitives
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  EDA_DRAW_MODE_T trace_mode );
-    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, int orient,
+    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
                                EDA_DRAW_MODE_T trace_mode );
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               int orient, EDA_DRAW_MODE_T trace_mode );
+                               double orient, EDA_DRAW_MODE_T trace_mode );
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
+                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 
     /** The SetColor implementation is split with the subclasses:
      * The PSLIKE computes the rgb values, the subclass emits the
@@ -543,8 +543,8 @@ public:
                        int width = DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = DEFAULT_LINE_WIDTH );
-    virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle,
-              int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
+                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
@@ -556,7 +556,7 @@ public:
     virtual void Text( const wxPoint&              aPos,
                        enum EDA_COLOR_T            aColor,
                        const wxString&             aText,
-                       int                         aOrient,
+                       double                      aOrient,
                        const wxSize&               aSize,
                        enum EDA_TEXT_HJUSTIFY_T    aH_justify,
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
@@ -610,8 +610,8 @@ public:
                        int width = DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = DEFAULT_LINE_WIDTH );
-    virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle,
-              int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
+                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH);
@@ -621,7 +621,7 @@ public:
     virtual void Text( const wxPoint&              aPos,
                        enum EDA_COLOR_T            aColor,
                        const wxString&             aText,
-                       int                         aOrient,
+                       double                      aOrient,
                        const wxSize&               aSize,
                        enum EDA_TEXT_HJUSTIFY_T    aH_justify,
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
@@ -677,8 +677,8 @@ public:
                        int width = DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = DEFAULT_LINE_WIDTH );
-    virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle,
-              int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
+                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
@@ -690,7 +690,7 @@ public:
     virtual void Text( const wxPoint&              aPos,
                        enum EDA_COLOR_T            aColor,
                        const wxString&             aText,
-                       int                         aOrient,
+                       double                      aOrient,
                        const wxSize&               aSize,
                        enum EDA_TEXT_HJUSTIFY_T    aH_justify,
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
@@ -786,21 +786,21 @@ public:
                        int width = DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = DEFAULT_LINE_WIDTH );
-    virtual void Arc( const wxPoint& aCenter, int aStAngle, int aEndAngle, int aRadius,
-                      FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
+    virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle, 
+                      int aRadius, FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
 
     virtual void PenTo( const wxPoint& pos, char plume );
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  EDA_DRAW_MODE_T trace_mode );
-    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, int orient,
+    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
                                EDA_DRAW_MODE_T trace_mode );
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               int orient, EDA_DRAW_MODE_T trace_mode );
+                               double orient, EDA_DRAW_MODE_T trace_mode );
 
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
+                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 
     virtual void SetLayerPolarity( bool aPositive );
 
@@ -877,22 +877,22 @@ public:
                            FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode );
-    virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle, int rayon,
-                      FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle, 
+                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
     virtual void PenTo( const wxPoint& pos, char plume );
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  EDA_DRAW_MODE_T trace_mode );
-    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, int orient,
+    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
                                EDA_DRAW_MODE_T trace_mode );
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               int orient, EDA_DRAW_MODE_T trace_mode );
+                               double orient, EDA_DRAW_MODE_T trace_mode );
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
+                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 
     virtual void Text( const wxPoint&              aPos,
                        enum EDA_COLOR_T            aColor,
                        const wxString&             aText,
-                       int                         aOrient,
+                       double                      aOrient,
                        const wxSize&               aSize,
                        enum EDA_TEXT_HJUSTIFY_T    aH_justify,
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
