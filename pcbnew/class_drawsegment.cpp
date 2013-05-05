@@ -232,7 +232,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         break;
 
     case S_ARC:
-        int StAngle, EndAngle;
+        double StAngle, EndAngle;
         radius   = KiROUND( Distance( ux0, uy0, dx, dy ) );
         StAngle  = ArcTangente( dy - uy0, dx - ux0 );
         EndAngle = StAngle + m_Angle;

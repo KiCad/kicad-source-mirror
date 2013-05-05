@@ -291,7 +291,7 @@ public:
     MODULE* Create_1_Module( const wxString& aModuleName );
 
     void Edit_Module( MODULE* module, wxDC* DC );
-    void Rotate_Module( wxDC* DC, MODULE* module, int angle, bool incremental );
+    void Rotate_Module( wxDC* DC, MODULE* module, double angle, bool incremental );
 
     /**
      * Function PlaceModule

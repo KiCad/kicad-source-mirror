@@ -339,8 +339,8 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
      * angle is trigonometrical (counter-clockwise),
      * and axis is the X,Y gerber coordinates
      */
-    int start_angle = ArcTangente( start.y, start.x );
-    int end_angle   = ArcTangente( end.y, end.x );
+    double start_angle = ArcTangente( start.y, start.x );
+    double end_angle   = ArcTangente( end.y, end.x );
 
     // dummyTrack has right geometric parameters, but
     // fillArcGBRITEM calculates arc parameters for a draw function that expects
@@ -350,7 +350,7 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
     if( start_angle > end_angle )
         end_angle += 3600;
 
-    int arc_angle = start_angle - end_angle;
+    double arc_angle = start_angle - end_angle;
     // Approximate arc by 36 segments per 360 degree
     const int increment_angle = 3600 / 36;
     int count = std::abs( arc_angle / increment_angle );
@@ -361,7 +361,7 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
     wxPoint start_arc = start;
     for( int ii = 0; ii <= count; ii++ )
     {
-        int rot;
+        double rot;
         wxPoint end_arc = start;
         if( aClockwise )
             rot = ii * increment_angle; // rot is in 0.1 deg

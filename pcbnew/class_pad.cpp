@@ -550,7 +550,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Drill X / Y" ), Line, RED ) );
     }
 
-    int module_orient = module ? module->GetOrientation() : 0;
+    double module_orient = module ? module->GetOrientation() : 0;
 
     if( module_orient )
         Line.Printf( wxT( "%3.1f(+%3.1f)" ),

@@ -67,7 +67,7 @@
 extern void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
                                                      BOARD* aPcb, ZONE_CONTAINER* aZone,
                                                      double aArcCorrection,
-                                                     int aRoundPadThermalRotation);
+                                                     double aRoundPadThermalRotation);
 
 extern void Test_For_Copper_Island_And_Remove( BOARD*          aPcb,
                                                ZONE_CONTAINER* aZone_container );
@@ -79,10 +79,10 @@ extern void CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                            int                   aMinThicknessValue,
                                            int                   aCircleToSegmentsCount,
                                            double                aCorrectionFactor,
-                                           int                   aThermalRot );
+                                           double                aThermalRot );
 
 // Local Variables:
-static int s_thermalRot = 450;  // angle of stubs in thermal reliefs for round pads
+static double s_thermalRot = 450;  // angle of stubs in thermal reliefs for round pads
 
 // how many segments are used to create a polygon from a circle:
 static int s_CircleToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;   /* default value. the real value will be changed to

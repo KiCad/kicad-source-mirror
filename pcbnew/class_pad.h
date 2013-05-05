@@ -296,7 +296,7 @@ public:
      *                        inflate, < 0 deflate
      * @param aRotation = full rotation of the polygon
      */
-    void BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const;
+    void BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, double aRotation ) const;
 
     /**
      * Function BuildPadShapePolygon
@@ -347,7 +347,7 @@ public:
      * @param aRotation = full rotation of the segment
      * @return the width of the segment
      */
-    int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation ) const;
+    int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd, double aRotation ) const;
 
     void ReturnStringPadName( wxString& text ) const; // Return pad name as string in a buffer
 

@@ -67,7 +67,7 @@ public:
     int m_Hole_Diameter;            // hole value, and for oblong: min(hole size x, hole size y)
     int m_Tool_Reference;           // Tool reference for this hole = 1 ... n (values <=0 must not be used)
     wxSize m_Hole_Size;             // hole size for oblong holes
-    int m_Hole_Orient;              // Hole rotation (= pad rotation) for oblong holes
+    double m_Hole_Orient;           // Hole rotation (= pad rotation) for oblong holes
     int m_Hole_Shape;               // hole shape: round (0) or oval (1)
     wxPoint m_Hole_Pos;             // hole position
     LAYER_NUM m_Hole_Bottom_Layer;  // hole starting layer (usually back layer)

@@ -711,7 +711,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
         // Calculate angle: if the track segment is vertical, angle = 90 degrees
         // If horizontal 0 degrees, otherwise compute it
-        int angle;                              // angle is in 0.1 degree
+        double angle;                              // angle is in 0.1 degree
 
         if( dy == 0 )        // Horizontal segment
         {

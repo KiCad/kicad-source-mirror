@@ -381,7 +381,7 @@ void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
  * PU PY x, y; PD start_arc_X AA, start_arc_Y, angle, NbSegm; PU;
  * Or PU PY x, y; PD start_arc_X AA, start_arc_Y, angle, PU;
  */
-void HPGL_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int radius,
+void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
                         FILL_T fill, int width )
 {
     wxASSERT( outputFile );
@@ -419,7 +419,7 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int ra
 
 /* Plot oval pad.
  */
-void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int orient,
+void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
                                  EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( outputFile );
@@ -499,7 +499,7 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 
 
 void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
-                                 int orient, EDA_DRAW_MODE_T trace_mode )
+                                 double orient, EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( outputFile );
     wxSize  size;
@@ -616,7 +616,7 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
 
 
 void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorners,
-                                   int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
+                                   double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 {
     wxASSERT( outputFile );
     wxPoint polygone[4];        // coordinates of corners relatives to the pad

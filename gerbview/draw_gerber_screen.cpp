@@ -353,7 +353,8 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, GR_DRAWMODE aDrawMode )
 {
     wxPoint     pos;
-    int         width, orient;
+    int         width;
+    double      orient;
     wxString    Line;
 
     GRSetDrawMode( aDC, aDrawMode );

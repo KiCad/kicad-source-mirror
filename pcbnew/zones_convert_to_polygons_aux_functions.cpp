@@ -130,7 +130,7 @@ void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
                                               BOARD*                aPcb,
                                               ZONE_CONTAINER*       aZone,
                                               double                aArcCorrection,
-                                              int                   aRoundPadThermalRotation )
+                                              double                aRoundPadThermalRotation )
 {
     std::vector<wxPoint> corners_buffer;    // a local polygon buffer to store one stub
     corners_buffer.reserve( 4 );
@@ -213,7 +213,7 @@ void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
 
             // This is a CIRCLE pad tweak
             // for circle pads, the thermal stubs orientation is 45 deg
-            int fAngle = pad->GetOrientation();
+            double fAngle = pad->GetOrientation();
             if( pad->GetShape() == PAD_CIRCLE )
             {
                 endpoint.x     = KiROUND( endpoint.x * aArcCorrection );

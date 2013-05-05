@@ -282,7 +282,7 @@ void GERBER_PLOTTER::Circle( const wxPoint& aCenter, int aDiameter, FILL_T aFill
 }
 
 
-void GERBER_PLOTTER::Arc( const wxPoint& aCenter, int aStAngle, int aEndAngle,
+void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
                           int aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( outputFile );
@@ -370,7 +370,7 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 /**
  * Filled oval flashes are handled as aperture in the 90 degree positions only
  */
-void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int orient,
+void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
                                    EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( outputFile );
@@ -427,7 +427,7 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int 
  * Filled rect flashes are handled as aperture in the 90 degree positions only
  */
 void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
-                                   int orient, EDA_DRAW_MODE_T trace_mode )
+                                   double orient, EDA_DRAW_MODE_T trace_mode )
 
 {
     wxASSERT( outputFile );
@@ -494,7 +494,7 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
  * they require aperture macros
  */
 void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCorners,
-                                     int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
+                                     double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 
 {
     // XXX to do: use an aperture macro to declare the pad

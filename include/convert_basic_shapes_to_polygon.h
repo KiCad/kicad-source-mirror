@@ -106,7 +106,7 @@ void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
  * @param aWidth = width (thickness) of the line
  */
 void TransformArcToPolygon( CPOLYGONS_LIST& aCornerBuffer,
-                            wxPoint aCentre, wxPoint aStart, int aArcAngle,
+                            wxPoint aCentre, wxPoint aStart, double aArcAngle,
                             int aCircleToSegmentsCount, int aWidth );
 
 /**

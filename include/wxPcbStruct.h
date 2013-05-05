@@ -1482,7 +1482,7 @@ public:
      * @param include_fixe = true to orient locked footprints
      * @return true if some footprints modified, false if no change
      */
-    bool ReOrientModules( const wxString& ModuleMask, int Orient, bool include_fixe );
+    bool ReOrientModules( const wxString& ModuleMask, double Orient, bool include_fixe );
     void LockModule( MODULE* aModule, bool aLocked );
     void AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );
 

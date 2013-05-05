@@ -47,7 +47,7 @@ void TracePcbLine( int x0, int y0, int x1, int y1, LAYER_NUM layer, int color );
 
 void TraceArc( int ux0, int uy0,
                int ux1, int uy1,
-               int ArcAngle,
+               double ArcAngle,
                int lg, LAYER_NUM layer, int color,
                int op_logic );
 
@@ -531,7 +531,7 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
 
 
 void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
-                           int angle, LAYER_MSK aLayerMask, int color, int op_logic )
+                           double angle, LAYER_MSK aLayerMask, int color, int op_logic )
 {
     int  row, col;
     int  cx, cy;    // Center of rectangle
@@ -630,7 +630,6 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer
     int  row_max, col_max, row_min, col_min;
     int  demi_pas;
 
-    int  angle;
     int  cx, cy, dx, dy;
 
     RoutingMatrix.SetCellOperation( op_logic );
@@ -686,6 +685,7 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer
     dx = ux1 - ux0;
     dy = uy1 - uy0;
 
+    double angle;
     if( dx )
     {
         angle = ArcTangente( dy, dx );
@@ -792,14 +792,14 @@ void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer,
  * center = ux0,uy0, starting at ux1, uy1.  Coordinates are in
  * PCB units.
  */
-void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg,
+void TraceArc( int ux0, int uy0, int ux1, int uy1, double ArcAngle, int lg,
                LAYER_NUM layer, int color, int op_logic )
 {
     int radius, nb_segm;
     int x0, y0,             // Starting point of the current segment trace
         x1, y1;             // End point
     int ii;
-    int angle, StAngle;
+    double angle, StAngle;
 
 
     radius = KiROUND( Distance( ux0, uy0, ux1, uy1 ) );

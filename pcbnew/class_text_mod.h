@@ -98,7 +98,7 @@ public:
 
     int GetLength() const;        // text length
 
-    int GetDrawRotation() const;  // Return text rotation for drawings and plotting
+    double GetDrawRotation() const;  // Return text rotation for drawings and plotting
 
     /**
      * Function GetTextRect

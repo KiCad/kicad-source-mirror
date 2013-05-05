@@ -748,7 +748,7 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
         // artifacts left behind from the initial draw.
         int dx, dy;
         int cX, cY;
-        int angle;
+        double angle;
 
         cX = aPosition.x;
         cY = aPosition.y;
