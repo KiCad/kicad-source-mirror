@@ -99,7 +99,7 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
 
 int SPECCTRA_DB::findLayerName( const std::string& aLayerName ) const
 {
-    for( LAYER_NUM i=FIRST_LAYER;  i<int(layerIds.size());  ++i )
+    for( int i=0;  i < int(layerIds.size());  ++i )
     {
         if( 0 == aLayerName.compare( layerIds[i] ) )
             return i;

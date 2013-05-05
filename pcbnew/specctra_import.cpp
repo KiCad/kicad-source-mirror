@@ -224,7 +224,7 @@ static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
 
 TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IO_ERROR )
 {
-    LAYER_NUM layerNdx = findLayerName( aPath->layer_id );
+    int layerNdx = findLayerName( aPath->layer_id );
 
     if( layerNdx == -1 )
     {
