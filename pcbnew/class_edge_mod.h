@@ -80,7 +80,7 @@ public:
     EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // overload
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
 
 //protected:  @todo: is it just me?

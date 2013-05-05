@@ -428,17 +428,3 @@ EDA_ITEM* TEXTE_MODULE::Clone() const
     return new TEXTE_MODULE( *this );
 }
 
-
-#if defined(DEBUG)
-
-void TEXTE_MODULE::Show( int nestLevel, std::ostream& os ) const
-{
-    // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " string=\"" << m_Text.mb_str() << "\"/>\n";
-
-//    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str()
-//                                 << ">\n";
-}
-
-#endif

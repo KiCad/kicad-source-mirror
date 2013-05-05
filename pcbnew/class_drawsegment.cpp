@@ -543,25 +543,3 @@ EDA_ITEM* DRAWSEGMENT::Clone() const
     return new DRAWSEGMENT( *this );
 }
 
-
-#if defined(DEBUG)
-void DRAWSEGMENT::Show( int nestLevel, std::ostream& os ) const
-{
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-
-    " shape=\"" << m_Shape << '"' <<
-/*
-    " layer=\"" << GetLayer() << '"' <<
-    " width=\"" << m_Width << '"' <<
-    " angle=\"" << m_Angle << '"' <<  // Used only for Arcs: Arc angle in 1/10 deg
-*/
-    '>' <<
-    "<start" << m_Start << "/>" <<
-    "<end"   << m_End << "/>"
-    "<GetStart" << GetStart() << "/>" <<
-    "<GetEnd"   << GetEnd() << "/>"
-    ;
-
-    os << "</" << GetClass().Lower().mb_str() << ">\n";
-}
-#endif

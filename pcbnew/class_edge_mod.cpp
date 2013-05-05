@@ -278,22 +278,3 @@ EDA_ITEM* EDGE_MODULE::Clone() const
     return new EDGE_MODULE( *this );
 }
 
-
-#if defined(DEBUG)
-
-void EDGE_MODULE::Show( int nestLevel, std::ostream& os ) const
-{
-    wxString shape = ShowShape( (STROKE_T) m_Shape );
-
-    // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " type=\"" << TO_UTF8( shape ) << "\">";
-
-    os << " <start" << m_Start0 << "/>";
-    os << " <end" << m_End0 << "/>";
-
-    os << " </" << GetClass().Lower().mb_str() << ">\n";
-}
-
-
-#endif

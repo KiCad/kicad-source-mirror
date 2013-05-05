@@ -743,31 +743,3 @@ EDA_ITEM* D_PAD::Clone() const
     return new D_PAD( *this );
 }
 
-
-#if defined(DEBUG)
-
-void D_PAD::Show( int nestLevel, std::ostream& os ) const
-{
-    char padname[5] = { m_Padname[0], m_Padname[1], m_Padname[2], m_Padname[3], 0 };
-
-    char layerMask[16];
-
-    sprintf( layerMask, "0x%08X", m_layerMask );
-
-    // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " shape=\"" << ShowPadShape() << '"' <<
-    " attr=\"" << ShowPadAttr( ) << '"' <<
-    " num=\"" << padname << '"' <<
-    " net=\"" << m_Netname.mb_str() << '"' <<
-    " netcode=\"" << GetNet() << '"' <<
-    " layerMask=\"" << layerMask << '"' << m_Pos << "/>\n";
-
-//    NestedSpace( nestLevel+1, os ) << m_Text.mb_str() << '\n';
-
-//    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str()
-//    << ">\n";
-}
-
-
-#endif
