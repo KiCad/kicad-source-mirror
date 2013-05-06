@@ -183,7 +183,7 @@ void GERBER_PLOTTER::selectAperture( const wxSize&           size,
        || ( currentAperture->Type != type )
        || ( currentAperture->Size != size ) )
     {
-        /* Pick an existing aperture or create a new one */
+        // Pick an existing aperture or create a new one
         currentAperture = getAperture( size, type );
         fprintf( outputFile, "G54D%d*\n", currentAperture->DCode );
     }
@@ -198,32 +198,39 @@ void GERBER_PLOTTER::writeApertureList()
     wxASSERT( outputFile );
     char cbuf[1024];
 
-    /* Init : */
+    // Init
     for( std::vector<APERTURE>::iterator tool = apertures.begin();
          tool != apertures.end(); tool++ )
     {
         const double fscale = 0.0001f * plotScale
-				* iuPerDeviceUnit ; // For 3.4 format
+				* iuPerDeviceUnit ;
         char* text = cbuf + sprintf( cbuf, "%%ADD%d", tool->DCode );
+
+        /* Please note: the Gerber specs for mass parameters say that
+           exponential syntax is *not* allowed and the decimal point should
+           also be always inserted. So the %g format is ruled out, but %f is fine
+           (the # modifier forces the decimal point). Sadly the %f formatter
+           can't remove trailing zeros but thats not a problem, since nothing
+           forbid it (the file is only slightly longer) */
 
         switch( tool->Type )
         {
         case APERTURE::Circle:
-            sprintf( text, "C,%g*%%\n", tool->Size.x * fscale );
+            sprintf( text, "C,%#f*%%\n", tool->Size.x * fscale );
             break;
 
         case APERTURE::Rect:
-            sprintf( text, "R,%gX%g*%%\n",
+            sprintf( text, "R,%#fX%#f*%%\n",
 	             tool->Size.x * fscale,
                      tool->Size.y * fscale );
             break;
 
         case APERTURE::Plotting:
-            sprintf( text, "C,%g*%%\n", tool->Size.x * fscale );
+            sprintf( text, "C,%#f*%%\n", tool->Size.x * fscale );
             break;
 
         case APERTURE::Oval:
-            sprintf( text, "O,%gX%g*%%\n",
+            sprintf( text, "O,%#fX%#f*%%\n",
 	            tool->Size.x * fscale,
 		    tool->Size.y * fscale );
             break;
