@@ -93,7 +93,7 @@ static void moveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosit
     }
 
     // Draw the bitmap at it's new position.
-    image->Move( screen->GetCrossHairPosition() );
+    image->SetPosition( screen->GetCrossHairPosition() );
     image->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 }
 
