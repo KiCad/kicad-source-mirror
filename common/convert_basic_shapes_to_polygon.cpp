@@ -58,9 +58,7 @@ void CopyPolygonsFromKiPolygonListToPolysList( KI_POLYGON_SET&  aKiPolyList,
             aPolysList.push_back( corner );
         }
 
-        corner.end_contour = true;
-        aPolysList.pop_back();
-        aPolysList.push_back( corner );
+        aPolysList.back().end_contour = true;
     }
 }
 
