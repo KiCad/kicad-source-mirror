@@ -325,7 +325,7 @@ static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     {
         wxPoint delta;
         int dx, dy;
-        float angle, depl;
+        double angle, depl;
         delta = Dimension->m_featureLineDO - Dimension->m_featureLineGO;
 
         /* Calculating the direction of travel perpendicular to the selected axis. */
