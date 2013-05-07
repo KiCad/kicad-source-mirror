@@ -1201,9 +1201,11 @@ public:
      * creates a library file with the name of the root document plus the '-cache' suffix,
      * That file will contain all components used in the current schematic.
      *
-     * @return True if the file was written successfully.
+     * @param aUseCurrentSheetFilename = false to use the root shhet filename
+     * (default) or true to use the currently opened sheet.
+     * @return true if the file was written successfully.
      */
-    bool CreateArchiveLibraryCacheFile( void );
+    bool CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilename = false );
 
     /**
      * Function CreateArchiveLibrary
