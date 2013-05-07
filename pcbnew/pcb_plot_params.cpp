@@ -31,8 +31,8 @@
 #include <convert_to_biu.h>
 
 
-#define PLOT_LINEWIDTH_MIN        0
-#define PLOT_LINEWIDTH_MAX        (200*IU_PER_MILS)
+#define PLOT_LINEWIDTH_MIN        (0.02*IU_PER_MM)  // min value for default line thickness
+#define PLOT_LINEWIDTH_MAX        (2*IU_PER_MM)     // max value for default line thickness
 #define HPGL_PEN_DIAMETER_MIN     0
 #define HPGL_PEN_DIAMETER_MAX     100       // Unit = mil
 #define HPGL_PEN_SPEED_MIN        1         // this param is always in cm/s
@@ -40,15 +40,14 @@
 #define HPGL_PEN_NUMBER_MIN       1
 #define HPGL_PEN_NUMBER_MAX       16
 #define HPGL_PEN_OVERLAP_MIN      0
-#define HPGL_PEN_OVERLAP_MAX      50       // Unit = mil
+#define HPGL_PEN_OVERLAP_MAX      50        // Unit = mil
 
 
 /**
- * Default line thickness in PCnew units used to draw or plot items having a
- * default thickness line value (Frame references) (i.e. = 0 ).
- * 0 = single pixel line width.
+ * Default line thickness in internal units used to draw or plot items using a
+ * default thickness line value (Frame references)
  */
-int g_DrawDefaultLineThickness = 6*IU_PER_MILS;
+int g_DrawDefaultLineThickness = (0.15*IU_PER_MM);
 
 
 using namespace PCBPLOTPARAMS_T;
@@ -114,7 +113,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_textMode             = PLOTTEXTMODE_DEFAULT;
 
     // This parameter controls if the NPTH pads will be plotted or not
-    // it is are "local" parameters
+    // it is a "local" parameter
     m_skipNPTH_Pads        = false;
 }
 

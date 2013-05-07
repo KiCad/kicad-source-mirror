@@ -44,9 +44,15 @@
 #include <wildcards_and_files_ext.h>
 
 
-bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile()
+bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilename )
 {
-    wxFileName fn = GetScreen()->GetFileName();
+    wxFileName fn;
+
+    if( aUseCurrentSheetFilename )
+        fn = GetScreen()->GetFileName();
+    else
+        fn = g_RootSheet->GetScreen()->GetFileName();
+
     fn.SetName( fn.GetName() + wxT( "-cache" ) );
     fn.SetExt( SchematicLibraryFileExtension );
 
@@ -102,7 +108,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     }
     catch( ... /* IO_ERROR ioe */ )
     {
-        msg.Printf( _( "Failed to create component library file <%s>" ), 
+        msg.Printf( _( "Failed to create component library file <%s>" ),
                 GetChars( aFileName ) );
         DisplayError( this, msg );
         return false;
