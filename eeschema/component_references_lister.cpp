@@ -223,8 +223,8 @@ static bool engStrToDouble( wxString aStr, double* aDouble )
         multiplier = 1e12;
         break;
     case 'R':
-    case '.':       // floatting point separator
-    case ',':       // floatting point separator (some languages)
+    case '.':       // floating point separator
+    case ',':       // floating point separator (some languages)
     default:
         multiplier = 1;
         break;
@@ -262,7 +262,7 @@ static bool engStrToDouble( wxString aStr, double* aDouble )
         break;
     }
 
-    LOCALE_IO dummy;    // set to C floatting point standard
+    LOCALE_IO dummy;    // set to C floating point standard
     valueStr.ToDouble( aDouble );
     *aDouble *= multiplier;
 

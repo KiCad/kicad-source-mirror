@@ -238,7 +238,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / iusPerMil;
             ln = Mm2mils( 49 );
             if( lnMsg > ln )
-                sz.x *= float( ln ) / lnMsg;
+                sz.x *= double( ln ) / lnMsg;
             pos.x = (refx - Mm2mils( 25 )) * iusPerMil;
             pos.y = (refy - Mm2mils( 7.5 )) * iusPerMil;
             plotter->Text( pos, plotClr,
@@ -354,7 +354,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / iusPerMil;
             ln = Mm2mils( 119 );
             if( lnMsg > ln )
-                sz.x *= float( ln ) / lnMsg;
+                sz.x *= double( ln ) / lnMsg;
             pos.x = (refx - Mm2mils( 60 )) * iusPerMil;
             pos.y = (refy - Mm2mils( 47.5 )) * iusPerMil;
             plotter->Text( pos, plotClr,
@@ -371,7 +371,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / iusPerMil;
             ln = Mm2mils( 22 );
             if( lnMsg > ln )
-                sz.x *= float( ln ) / lnMsg;
+                sz.x *= double( ln ) / lnMsg;
             pos.x = (refx - Mm2mils( 167.5 )) * iusPerMil;
             pos.y = (refy - Mm2mils( 27.5 )) * iusPerMil;
             plotter->Text( pos, plotClr,
@@ -388,7 +388,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / iusPerMil;
             ln = Mm2mils( 22 );
             if( lnMsg > ln )
-                sz.x *= float( ln ) / lnMsg;
+                sz.x *= double( ln ) / lnMsg;
             pos.x = (refx - Mm2mils( 167.5 )) * iusPerMil;
             pos.y = (refy - Mm2mils( 22.5 )) * iusPerMil;
             plotter->Text( pos, plotClr,
@@ -405,7 +405,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / iusPerMil;
             ln = Mm2mils( 22 );
             if( lnMsg > ln )
-                sz.x *= float( ln ) / lnMsg;
+                sz.x *= double( ln ) / lnMsg;
             pos.x = (refx - Mm2mils( 167.5 )) * iusPerMil;
             pos.y = (refy - Mm2mils( 2.5 )) * iusPerMil;
             plotter->Text( pos, plotClr,
@@ -485,7 +485,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / iusPerMil;
             ln = Mm2mils( 109 );
             if( lnMsg > ln )
-                sz.x *= float( ln ) / lnMsg;
+                sz.x *= double( ln ) / lnMsg;
             pos.x = (refx - Mm2mils( 65 )) * iusPerMil;
             pos.y = (refy - Mm2mils( 7.5 )) * iusPerMil;
             plotter->Text( pos, plotClr,
@@ -589,7 +589,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / iusPerMil;
             ln = Mm2mils( 69 );
             if( lnMsg > ln )
-                sz.x *= float( ln ) / lnMsg;
+                sz.x *= double( ln ) / lnMsg;
             pos.x = (refx + Mm2mils( 35 )) * iusPerMil;
             pos.y = (refy + Mm2mils( 7 )) * iusPerMil;
             plotter->Text( pos, plotClr,
@@ -642,7 +642,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             lnMsg = ReturnGraphicTextWidth( msg, sz.x, false, false ) / iusPerMil;
             ln = Mm2mils( 69 );
             if( lnMsg > ln )
-                sz.x *= float( ln ) / lnMsg;
+                sz.x *= double( ln ) / lnMsg;
             pos.x = (refx - Mm2mils( 7 )) * iusPerMil;
             pos.y = (refy + Mm2mils( 35 )) * iusPerMil;
             plotter->Text( pos, plotClr,

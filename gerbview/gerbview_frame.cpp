@@ -418,8 +418,8 @@ void GERBVIEW_FRAME::Liste_D_Codes()
             Line.Printf( wxT( "tool %2.2d:   D%2.2d  V %2.4f  H %2.4f  %s" ),
                          jj,
                          pt_D_code->m_Num_Dcode,
-                         (float) pt_D_code->m_Size.y / scale,
-                         (float) pt_D_code->m_Size.x / scale,
+                         pt_D_code->m_Size.y / scale,
+                         pt_D_code->m_Size.x / scale,
                          D_CODE::ShowApertureType( pt_D_code->m_Shape )
                          );
 

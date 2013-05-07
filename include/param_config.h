@@ -20,7 +20,7 @@
  * We cannot use wxConfigBase->Write for a double, because
  * this function uses a format with very few digits in mantissa,
  * and truncation issues are frequent.
- * We use here a better floatting format.
+ * We use here a better floating format.
  *
  * Note: prior to 2.9.1, the separator was localized, and after, uses
  * the "C" notation
