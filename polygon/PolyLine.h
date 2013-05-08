@@ -77,13 +77,129 @@ public:
 };
 
 /**
- * CPOLYGONS_LIST handle a list of contours.
- * Each contour is a polygon, i.e. a list of corners.
+ * CPOLYGONS_LIST handle a list of contours (polygons corners).
  * Each corner is a CPolyPt item.
  * The last cornet of each contour has its end_contour member = true
  */
-typedef std::vector<CPolyPt> CPOLYGONS_LIST;
+class CPOLYGONS_LIST
+{
+private:
+    std::vector <CPolyPt> m_cornersList;    // array of points for corners
+public:
+    CPOLYGONS_LIST() {};
 
+    CPolyPt& operator [](int aIdx) {return m_cornersList[aIdx]; }
+
+    // Accessor:
+    const std::vector <CPolyPt>& GetList() const {return m_cornersList;}
+    int        GetX( int ic ) const { return m_cornersList[ic].x; }
+    void       SetX( int ic, int aValue ) { m_cornersList[ic].x = aValue; }
+    int        GetY( int ic ) const { return m_cornersList[ic].y; }
+    void       SetY( int ic, int aValue ) { m_cornersList[ic].y = aValue; }
+    int        GetUtility( int ic ) const { return m_cornersList[ic].m_utility; }
+    void       SetFlag( int ic, int aFlag )
+    {
+        m_cornersList[ic].m_utility = aFlag;
+    }
+
+    bool       IsEndContour( int ic ) const
+    {
+        return m_cornersList[ic].end_contour;
+    }
+
+    void        SetEndContour( int ic, bool end_contour )
+    {
+        m_cornersList[ic].end_contour = end_contour;
+    }
+
+    const wxPoint&  GetPos( int ic ) const { return m_cornersList[ic]; }
+    const CPolyPt&  GetCorner( int ic ) const { return m_cornersList[ic]; }
+
+    // vector <> methods
+    void reserve( int aSize ) { m_cornersList.reserve( aSize ); }
+    void clear() { m_cornersList.clear(); }
+    unsigned size() const { return m_cornersList.size(); }
+    void push_back( const CPolyPt& aItem ) { m_cornersList.push_back( aItem ); }
+    CPolyPt& back() { return m_cornersList.back(); }
+
+    unsigned GetCornersCount() const { return m_cornersList.size(); }
+
+    void DeleteCorner( int aIdx )
+    {
+        m_cornersList.erase( m_cornersList.begin() + aIdx );
+    }
+
+    void DeleteCorners( int aIdFirstCorner, int aIdLastCorner )
+    {
+        m_cornersList.erase( m_cornersList.begin() + aIdFirstCorner,
+                             m_cornersList.begin() + aIdLastCorner + 1 );
+    }
+
+    void Append( const CPOLYGONS_LIST& aList )
+    {
+        m_cornersList.insert( m_cornersList.end(),
+                              aList.m_cornersList.begin(),
+                              aList.m_cornersList.end() );
+    }
+
+    void Append( const CPolyPt& aItem )
+    {
+        m_cornersList.push_back( aItem );
+    }
+
+    void Append( const wxPoint& aItem )
+    {
+        CPolyPt item( aItem );
+
+        m_cornersList.push_back( aItem );
+    }
+
+    void InsertCorner( int aPosition, const CPolyPt& aItem )
+    {
+        m_cornersList.insert( m_cornersList.begin() + aPosition + 1, aItem );
+    }
+
+    /**
+     * Function ExportTo
+     * Copy all contours to a KI_POLYGON_SET
+     * @param aPolygons = the KI_POLYGON_WITH_HOLES to populate
+     */
+    void    ExportTo( KI_POLYGON_SET& aPolygons );
+
+    /**
+     * Function ExportTo
+     * Copy the contours to a KI_POLYGON_WITH_HOLES
+     * The first contour is the main outline, others are holes
+     * @param aPolygoneWithHole = the KI_POLYGON_WITH_HOLES to populate
+     */
+    void    ExportTo( KI_POLYGON_WITH_HOLES& aPolygoneWithHole );
+
+    /**
+     * Function ImportFrom
+     * Copy all polygons from a KI_POLYGON_SET in list
+     * @param aPolygons = the KI_POLYGON_SET to import
+     */
+    void    ImportFrom( KI_POLYGON_SET& aPolygons );
+
+    /**
+     * function AddCorner
+     * add a corner to the list
+     */
+    void    AddCorner( const CPolyPt& aCorner )
+    {
+        m_cornersList.push_back( aCorner );
+    }
+
+    /**
+     * function CloseLastContour
+     * Set the .end_contour member of the last corner in list to true
+     */
+    void    CloseLastContour()
+    {
+        if( m_cornersList.size() > 0 )
+            m_cornersList.back().end_contour = true;
+    }
+};
 
 class CPolyLine
 {
@@ -99,7 +215,7 @@ public:
      * Copy settings (layer, hatch styles) from aPoly
      * @param aPoly is the CPolyLine to import settings
      */
-    void ImportSettings( const CPolyLine * aPoly );
+    void        ImportSettings( const CPolyLine* aPoly );
 
     // functions for modifying the CPolyLine contours
 
@@ -117,9 +233,19 @@ public:
      * keep the controur closed by modifying the previous corner
      * @param ic = the index of the corner to delete
      */
-    void        DeleteCorner ( int ic );
+    void        DeleteCorner( int ic );
     void        MoveCorner( int ic, int x, int y );
-    void        CloseLastContour();
+
+    /**
+     * function CloseLastContour
+     * Set the .end_contour member of the last corner
+     *  of the last contour to true
+     */
+    void        CloseLastContour()
+    {
+        m_CornersList.CloseLastContour();
+    }
+
     void        RemoveContour( int icont );
 
     /**
@@ -132,7 +258,7 @@ public:
      * When a CPolyLine is self intersectic, it need to be normalized.
      * (converted to non intersecting polygons)
      */
-    bool IsPolygonSelfIntersecting();
+    bool        IsPolygonSelfIntersecting();
 
     /**
      * Function Chamfer
@@ -157,7 +283,7 @@ public:
      * (i.e. when 2 successive corners are at the same location)
      * @return the count of removed corners.
      */
-     int        RemoveNullSegments();
+    int         RemoveNullSegments();
 
     void        RemoveAllContours( void );
 
@@ -185,24 +311,25 @@ public:
     // access functions
     void       SetLayer( LAYER_NUM aLayer ) { m_layer = aLayer; }
     LAYER_NUM  GetLayer() const { return m_layer; }
-    int        GetNumCorners();
-    int        GetNumSides();
-    int        GetClosed();
-    int        GetContoursCount();
-    int        GetContour( int ic );
-    int        GetContourStart( int icont );
-    int        GetContourEnd( int icont );
-    int        GetContourSize( int icont );
+    int         GetNumCorners() const;
+    int         GetClosed();
+    int         GetContoursCount();
+    int         GetContour( int ic );
+    int         GetContourStart( int icont );
+    int         GetContourEnd( int icont );
+    int         GetContourSize( int icont );
 
-    int        GetX( int ic ) const { return m_CornersList[ic].x; }
-    int        GetY( int ic ) const { return m_CornersList[ic].y; }
+    int        GetX( int ic ) const { return m_CornersList.GetX( ic ); }
+    int        GetY( int ic ) const { return m_CornersList.GetY( ic ); }
+    bool       IsEndContour( int ic ) const
+    { return m_CornersList.IsEndContour( ic ); }
 
-    const wxPoint& GetPos( int ic ) const { return m_CornersList[ic]; }
+    const wxPoint& GetPos( int ic ) const { return m_CornersList.GetPos( ic ); }
 
-    int        GetEndContour( int ic );
+    int GetEndContour( int ic );
 
-    int        GetUtility( int ic ) const { return m_CornersList[ic].m_utility; };
-    void       SetUtility( int ic, int utility ) { m_CornersList[ic].m_utility = utility; };
+    int        GetUtility( int ic ) const { return m_CornersList.GetUtility( ic ); };
+    void       SetUtility( int ic, int aFlag ) { m_CornersList.SetFlag( ic, aFlag ); };
 
     int        GetHatchPitch() const { return m_hatchPitch; }
     static int GetDefaultHatchPitchMils() { return 20; }    // default hatch pitch value in mils
@@ -212,13 +339,25 @@ public:
     {
         SetHatchPitch( aHatchPitch );
         m_hatchStyle = (enum HATCH_STYLE) aHatchStyle;
+
         if( aRebuildHatch )
             Hatch();
     }
 
-    void    SetX( int ic, int x );
-    void    SetY( int ic, int y );
-    void    SetEndContour( int ic, bool end_contour );
+    void    SetX( int ic, int x )
+    {
+        m_CornersList.SetX( ic, x );
+    }
+
+    void    SetY( int ic, int y )
+    {
+        m_CornersList.SetY( ic, y );
+    }
+
+    void    SetEndContour( int ic, bool end_contour )
+    {
+        m_CornersList.SetEndContour( ic, end_contour );
+    }
 
     void       SetHatchStyle( enum HATCH_STYLE style )
     {
@@ -235,7 +374,7 @@ public:
      * @return the polygon count (always >= 1, because there is at least one polygon)
      * There are new polygons only if the polygon count  is > 1
      */
-    int NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList );
+    int     NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList );
 
     // Bezier Support
     void    AppendBezier( int x1, int y1, int x2, int y2, int x3, int y3 );
@@ -262,28 +401,16 @@ public:
     int     Distance( wxPoint aStart, wxPoint aEnd, int aWidth );
 
 private:
-    LAYER_NUM               m_layer;                // layer to draw on
-    enum HATCH_STYLE        m_hatchStyle;           // hatch style, see enum above
-    int                     m_hatchPitch;           // for DIAGONAL_EDGE hatched outlines, basic distance between 2 hatch lines
-                                                    // and the len of eacvh segment
-                                                    // for DIAGONAL_FULL, the pitch is twice this value
-    int                     m_utility;              // a flag used in some calculations
-
+    LAYER_NUM           m_layer;            // layer to draw on
+    enum HATCH_STYLE    m_hatchStyle;       // hatch style, see enum above
+    int                     m_hatchPitch;   // for DIAGONAL_EDGE hatched outlines, basic distance between 2 hatch lines
+                                            // and the len of eacvh segment
+                                            // for DIAGONAL_FULL, the pitch is twice this value
+    int                     m_utility;      // a flag used in some calculations
 public:
-    CPOLYGONS_LIST          m_CornersList;          // array of points for corners
-    std::vector <CSegment>  m_HatchLines;           // hatch lines showing the polygon area
+    CPOLYGONS_LIST          m_CornersList;  // array of points for corners
+    std::vector <CSegment>  m_HatchLines;   // hatch lines showing the polygon area
 };
-
-/**
- * Function CopyPolysListToKiPolygonWithHole
- * converts the outline contours aPolysList to a KI_POLYGON_WITH_HOLES
- *
- * @param aPolysList = the list of corners of contours
- * @param aPolygoneWithHole = a KI_POLYGON_WITH_HOLES to populate
- */
-void CopyPolysListToKiPolygonWithHole( const CPOLYGONS_LIST&  aPolysList,
-                                       KI_POLYGON_WITH_HOLES& aPolygoneWithHole );
-
 
 /**
  * Function ConvertPolysListWithHolesToOnePolygon
@@ -291,10 +418,11 @@ void CopyPolysListToKiPolygonWithHole( const CPOLYGONS_LIST&  aPolysList,
  * with no holes (only one contour)
  * holes are linked to main outlines by overlap segments, to give only one polygon
  *
- * @param aPolysListWithHoles = the list of corners of contours (haing holes
+ * @param aPolysListWithHoles = the list of corners of contours
+ *                             (main outline and holes)
  * @param aOnePolyList = a polygon with no holes
  */
-void ConvertPolysListWithHolesToOnePolygon( const CPOLYGONS_LIST&  aPolysListWithHoles,
-                                            CPOLYGONS_LIST&  aOnePolyList );
+void    ConvertPolysListWithHolesToOnePolygon( const CPOLYGONS_LIST&    aPolysListWithHoles,
+                                               CPOLYGONS_LIST&          aOnePolyList );
 
 #endif    // #ifndef POLYLINE_H

@@ -417,7 +417,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     if( cornerBufferPolysToSubstract.size() > 0 )
     {
         KI_POLYGON_SET polyset_holes;
-        AddPolygonCornersToKiPolygonList( cornerBufferPolysToSubstract, polyset_holes );
+        cornerBufferPolysToSubstract.ExportTo( polyset_holes );
         // Remove holes from initial area.:
         polyset_zone_solid_areas -= polyset_holes;
     }
@@ -443,7 +443,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     if( cornerBufferPolysToSubstract.size() )
     {
         KI_POLYGON_SET polyset_holes;
-        AddPolygonCornersToKiPolygonList( cornerBufferPolysToSubstract, polyset_holes );
+        cornerBufferPolysToSubstract.ExportTo( polyset_holes );
 
         // Remove unconnected stubs
         polyset_zone_solid_areas -= polyset_holes;
@@ -463,11 +463,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 void ZONE_CONTAINER::CopyPolygonsFromKiPolygonListToFilledPolysList( KI_POLYGON_SET& aKiPolyList )
 {
     m_FilledPolysList.clear();
-    CopyPolygonsFromKiPolygonListToPolysList( aKiPolyList, m_FilledPolysList );
+    m_FilledPolysList.ImportFrom( aKiPolyList );
 }
 
 
 void ZONE_CONTAINER::CopyPolygonsFromFilledPolysListToKiPolygonList( KI_POLYGON_SET& aKiPolyList )
 {
-    AddPolygonCornersToKiPolygonList( m_FilledPolysList, aKiPolyList );
+    m_FilledPolysList.ExportTo( aKiPolyList );
 }

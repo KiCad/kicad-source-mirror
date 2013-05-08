@@ -147,7 +147,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
         for( indexend = 0; indexend < polysList.size(); indexend++ )
         {
             // end of a filled sub-area found
-            if( polysList[indexend].end_contour )
+            if( polysList.IsEndContour( indexend ) )
             {
                 subnet++;
                 EDA_RECT bbox = curr_zone->CalculateSubAreaBoundaryBox( indexstart, indexend );

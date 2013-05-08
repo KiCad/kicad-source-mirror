@@ -36,33 +36,6 @@
 #include <PolyLine.h>
 
 /**
- * Helper function CopyPolygonsFromKiPolygonListToPolysList
- * We are using a lots polygons in calculations.
- * and we are using 2 descriptions,
- * one easy to use with boost::polygon (KI_POLYGON_SET)
- * one easy to use in zones and in draw functions (CPOLYGONS_LIST)
- * Copy polygons from a KI_POLYGON_SET set of polygons to
- * a CPOLYGONS_LIST corner polygon list
- * Therefore we need conversion functions between these 2 descriptions
- * This function converts a KI_POLYGON_SET description to a
- * CPOLYGONS_LIST description
- * @param aKiPolyList = source (set of polygons)
- * @param aPolysList = destination (set of polygons using CPolyPt corners descr)
- */
-void CopyPolygonsFromKiPolygonListToPolysList( KI_POLYGON_SET& aKiPolyList,
-                                               CPOLYGONS_LIST& aPolysList );
-
-/**
- * Helper function AddPolygonCornersToKiPolygonList
- * This function adds a KI_POLYGON_SET description to a
- * CPOLYGONS_LIST description
- * @param aCornersBuffer = source (set of polygons using CPolyPt corners descr)
- * @param aPolysList = destination (set of polygons)
- */
-void AddPolygonCornersToKiPolygonList( CPOLYGONS_LIST& aCornersBuffer,
-                                       KI_POLYGON_SET&        aKiPolyList );
-
-/**
  * Function TransformCircleToPolygon
  * convert a circle to a polygon, using multiple straight lines
  * @param aCornerBuffer = a buffer to store the polygon

@@ -177,8 +177,7 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet(
         return;
 
     // add filled areas polygons
-    aCornerBuffer.insert( aCornerBuffer.end(), m_FilledPolysList.begin(),
-                          m_FilledPolysList.end() );
+    aCornerBuffer.Append( m_FilledPolysList );
 
     // add filled areas outlines, which are drawn with thich lines
     wxPoint seg_start, seg_end;

@@ -26,11 +26,11 @@
 #define OUTSIDE false
 #define INSIDE true
 
-bool TestPointInsidePolygon( CPOLYGONS_LIST aPolysList,
-                             int            aIdxstart,
-                             int            aIdxend,
-                             int            aRefx,
-                             int            aRefy)
+bool TestPointInsidePolygon( const CPOLYGONS_LIST& aPolysList,
+                             int             aIdxstart,
+                             int             aIdxend,
+                             int             aRefx,
+                             int             aRefy)
 
 /**
  * Function TestPointInsidePolygon
@@ -50,10 +50,10 @@ bool TestPointInsidePolygon( CPOLYGONS_LIST aPolysList,
     // find all intersection points of line with polyline sides
     for( ics = aIdxstart, ice = aIdxend; ics <= aIdxend; ice = ics++ )
     {
-        int seg_startX = aPolysList[ics].x;
-        int seg_startY = aPolysList[ics].y;
-        int seg_endX   = aPolysList[ice].x;
-        int seg_endY   = aPolysList[ice].y;
+        int seg_startX = aPolysList.GetX( ics );
+        int seg_startY = aPolysList.GetY( ics );
+        int seg_endX   = aPolysList.GetX( ice );
+        int seg_endY   = aPolysList.GetY( ice );
 
         /* Trivial cases: skip if ref above or below the segment to test */
         if( ( seg_startY > aRefy ) && (seg_endY > aRefy ) )
