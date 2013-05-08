@@ -19,11 +19,11 @@ public:
  * @param aRefx, aRefy: the point coordinate to test
  * @return true if the point is inside, false for outside
  */
-bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
-                             int                   aIdxstart,
-                             int                   aIdxend,
-                             int                   aRefx,
-                             int                   aRefy);
+bool TestPointInsidePolygon( const CPOLYGONS_LIST& aPolysList,
+                             int             aIdxstart,
+                             int             aIdxend,
+                             int             aRefx,
+                             int             aRefy);
 /**
  * Function TestPointInsidePolygon (overlaid)
  * same as previous, but mainly use wxPoint

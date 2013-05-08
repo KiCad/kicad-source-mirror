@@ -52,9 +52,6 @@
 #include <pcbnew.h>
 #include <pcbplot.h>
 
-// Imported function
-extern void AddPolygonCornersToKiPolygonList( CPOLYGONS_LIST& aCornersBuffer,
-                                              KI_POLYGON_SET&        aKiPolyList );
 // Local
 /* Plot a solder mask layer.
  * Solder mask layers have a minimum thickness value and cannot be drawn like standard layers,
@@ -581,9 +578,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     //     having a thickness < aMinThickness
     // 2 - deflate resulting areas by aMinThickness/2
     KI_POLYGON_SET areasToMerge;
-    AddPolygonCornersToKiPolygonList( bufferPolys, areasToMerge );
+    bufferPolys.ExportTo( areasToMerge );
     KI_POLYGON_SET initialAreas;
-    AddPolygonCornersToKiPolygonList( initialPolys, initialAreas );
+    initialPolys.ExportTo( initialAreas );
 
     // Merge polygons: because each shape was created with an extra margin
     // = aMinThickness/2, shapes too close ( dist < aMinThickness )

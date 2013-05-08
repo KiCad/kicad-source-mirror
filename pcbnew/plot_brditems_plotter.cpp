@@ -528,10 +528,10 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
      */
     for( unsigned ic = 0; ic < imax; ic++ )
     {
-        const CPolyPt& corner = polysList[ic];
-        cornerList.push_back( wxPoint( corner.x, corner.y) );
+        wxPoint pos = polysList.GetPos( ic );
+        cornerList.push_back( pos );
 
-        if( corner.end_contour )   // Plot the current filled area outline
+        if(  polysList.IsEndContour( ic ) )   // Plot the current filled area outline
         {
             // First, close the outline
             if( cornerList[0] != cornerList[cornerList.size() - 1] )

@@ -551,7 +551,7 @@ public:
 
     void AddFilledPolygon( CPOLYGONS_LIST& aPolygon )
     {
-        m_FilledPolysList.insert( m_FilledPolysList.end(), aPolygon.begin(), aPolygon.end() );
+        m_FilledPolysList.Append( aPolygon );
     }
 
     void AddFillSegments( std::vector< SEGMENT >& aSegments )

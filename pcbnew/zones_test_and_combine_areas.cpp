@@ -295,8 +295,8 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
     // polygons intersect, combine them
     KI_POLYGON_WITH_HOLES areaRefPoly;
     KI_POLYGON_WITH_HOLES areaToMergePoly;
-    CopyPolysListToKiPolygonWithHole( area_ref->Outline()->m_CornersList, areaRefPoly );
-    CopyPolysListToKiPolygonWithHole( area_to_combine->Outline()->m_CornersList, areaToMergePoly );
+    area_ref->Outline()->m_CornersList.ExportTo( areaRefPoly );
+    area_to_combine->Outline()->m_CornersList.ExportTo(  areaToMergePoly );
 
     KI_POLYGON_WITH_HOLES_SET mergedOutlines;
     mergedOutlines.push_back( areaRefPoly );

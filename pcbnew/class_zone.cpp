@@ -202,7 +202,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
     {
         seg_start = GetCornerPosition( ic ) + offset;
 
-        if( m_Poly->m_CornersList[ic].end_contour == false && ic < GetNumCorners() - 1 )
+        if( !m_Poly->m_CornersList.IsEndContour( ic ) && ic < GetNumCorners() - 1 )
         {
             seg_end = GetCornerPosition( ic + 1 ) + offset;
         }
@@ -283,16 +283,13 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 
     for( int ic = 0; ic <= imax; ic++ )
     {
-        CPolyPt* corner = &m_FilledPolysList[ic];
-
-        wxPoint  coord( corner->x + offset.x, corner->y + offset.y );
-
+        const CPolyPt& corner = m_FilledPolysList.GetCorner( ic );
+        wxPoint  coord( corner.x + offset.x, corner.y + offset.y );
         CornersBuffer.push_back( coord );
-
-        CornersTypeBuffer.push_back( (char) corner->m_utility );
+        CornersTypeBuffer.push_back( (char) corner.m_utility );
 
         // the last corner of a filled area is found: draw it
-        if( (corner->end_contour) || (ic == imax) )
+        if( (corner.end_contour) || (ic == imax) )
         {
             /* Draw the current filled area: draw segments outline first
              * Curiously, draw segments outline first and after draw filled polygons
@@ -418,13 +415,13 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
         int yi = GetCornerPosition( ic ).y;
         int xf, yf;
 
-        if( m_Poly->m_CornersList[ic].end_contour == false && ic < icmax )
+        if( !m_Poly->m_CornersList.IsEndContour( ic ) && ic < icmax )
         {
             is_close_segment = false;
             xf = GetCornerPosition( ic + 1 ).x;
             yf = GetCornerPosition( ic + 1 ).y;
 
-            if( (m_Poly->m_CornersList[ic + 1].end_contour) || (ic == icmax - 1) )
+            if( m_Poly->m_CornersList.IsEndContour( ic + 1 ) || (ic == icmax - 1) )
                 current_gr_mode = GR_XOR;
             else
                 current_gr_mode = draw_mode;
@@ -497,8 +494,8 @@ bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 
     for( unsigned item_pos = 0; item_pos < lim; item_pos++ )
     {
-        delta.x = refPos.x - m_Poly->m_CornersList[item_pos].x;
-        delta.y = refPos.y - m_Poly->m_CornersList[item_pos].y;
+        delta.x = refPos.x - m_Poly->m_CornersList.GetX( item_pos );
+        delta.y = refPos.y - m_Poly->m_CornersList.GetY( item_pos );
 
         // Calculate a distance:
         int dist = std::max( abs( delta.x ), abs( delta.y ) );
@@ -533,7 +530,7 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
          * the last segment of the current outline starts at current corner, and ends
          * at the first corner of the outline
          */
-        if( m_Poly->m_CornersList[item_pos].end_contour || end_segm >= lim )
+        if( m_Poly->m_CornersList.IsEndContour ( item_pos ) || end_segm >= lim )
         {
             unsigned tmp = first_corner_pos;
             first_corner_pos = end_segm;    // first_corner_pos is now the beginning of the next outline
@@ -541,13 +538,12 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
         }
 
         // test the dist between segment and ref point
-        int dist = KiROUND( GetPointToLineSegmentDistance( 
-                    refPos.x,
-                    refPos.y,
-                    m_Poly->m_CornersList[item_pos].x,
-                    m_Poly->m_CornersList[item_pos].y,
-                    m_Poly->m_CornersList[end_segm].x,
-                    m_Poly->m_CornersList[end_segm].y ) );
+        int dist = KiROUND( GetPointToLineSegmentDistance(
+                    refPos.x, refPos.y,
+                    m_Poly->m_CornersList.GetX( item_pos ),
+                    m_Poly->m_CornersList.GetY( item_pos ),
+                    m_Poly->m_CornersList.GetX( end_segm ),
+                    m_Poly->m_CornersList.GetY( end_segm ) ) );
 
         if( dist < min_dist )
         {
@@ -616,10 +612,10 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos ) const
 
     for( indexend = 0; indexend < m_FilledPolysList.size(); indexend++ )
     {
-        if( m_FilledPolysList[indexend].end_contour )       // end of a filled sub-area found
+        if( m_FilledPolysList.IsEndContour( indexend ) )       // end of a filled sub-area found
         {
-            if( TestPointInsidePolygon( m_FilledPolysList, indexstart, indexend, aRefPos.x,
-                                        aRefPos.y ) )
+            if( TestPointInsidePolygon( m_FilledPolysList, indexstart, indexend,
+                                        aRefPos.x, aRefPos.y ) )
             {
                 inside = true;
                 break;
@@ -742,9 +738,8 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
     /* move filled areas: */
     for( unsigned ic = 0; ic < m_FilledPolysList.size(); ic++ )
     {
-        CPolyPt* corner = &m_FilledPolysList[ic];
-        corner->x += offset.x;
-        corner->y += offset.y;
+        m_FilledPolysList.SetX( ic, m_FilledPolysList.GetX( ic ) + offset.x );
+        m_FilledPolysList.SetY( ic, m_FilledPolysList.GetX( ic ) + offset.y );
     }
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
@@ -763,7 +758,7 @@ void ZONE_CONTAINER::MoveEdge( const wxPoint& offset )
     SetCornerPosition( ii, GetCornerPosition( ii ) + offset );
 
     // Move the end point of the selected edge:
-    if( m_Poly->m_CornersList[ii].end_contour || ii == GetNumCorners() - 1 )
+    if( m_Poly->m_CornersList.IsEndContour( ii ) || ii == GetNumCorners() - 1 )
     {
         int icont = m_Poly->GetContour( ii );
         ii = m_Poly->GetContourStart( icont );
@@ -783,13 +778,12 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 {
     wxPoint pos;
 
-    for( unsigned ii = 0; ii < m_Poly->m_CornersList.size(); ii++ )
+    for( unsigned ic = 0; ic < m_Poly->m_CornersList.size(); ic++ )
     {
-        pos.x = m_Poly->m_CornersList[ii].x;
-        pos.y = m_Poly->m_CornersList[ii].y;
+        pos = m_Poly->m_CornersList.GetPos( ic );
         RotatePoint( &pos, centre, angle );
-        m_Poly->m_CornersList[ii].x = pos.x;
-        m_Poly->m_CornersList[ii].y = pos.y;
+        m_Poly->SetX( ic, pos.x );
+        m_Poly->SetY( ic, pos.y );
     }
 
     m_Poly->Hatch();
@@ -797,12 +791,10 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
     /* rotate filled areas: */
     for( unsigned ic = 0; ic < m_FilledPolysList.size(); ic++ )
     {
-        CPolyPt* corner = &m_FilledPolysList[ic];
-        pos.x = corner->x;
-        pos.y = corner->y;
+        pos = m_FilledPolysList.GetPos( ic );
         RotatePoint( &pos, centre, angle );
-        corner->x = pos.x;
-        corner->y = pos.y;
+        m_FilledPolysList.SetX( ic, pos.x );
+        m_FilledPolysList.SetY( ic, pos.y );
     }
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
@@ -822,11 +814,11 @@ void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 
 void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 {
-    for( unsigned ii = 0; ii < m_Poly->m_CornersList.size(); ii++ )
+    for( unsigned ic = 0; ic < m_Poly->m_CornersList.size(); ic++ )
     {
-        m_Poly->m_CornersList[ii].y -= mirror_ref.y;
-        NEGATE( m_Poly->m_CornersList[ii].y );
-        m_Poly->m_CornersList[ii].y += mirror_ref.y;
+        int py = m_Poly->m_CornersList.GetY( ic ) - mirror_ref.y;
+        NEGATE( py );
+        m_Poly->m_CornersList.SetY( ic, py + mirror_ref.y );
     }
 
     m_Poly->Hatch();
@@ -834,10 +826,9 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
     /* mirror filled areas: */
     for( unsigned ic = 0; ic < m_FilledPolysList.size(); ic++ )
     {
-        CPolyPt* corner = &m_FilledPolysList[ic];
-        corner->y -= mirror_ref.y;
-        NEGATE( corner->y );
-        corner->y += mirror_ref.y;
+        int py = m_FilledPolysList.GetY( ic ) - mirror_ref.y;
+        NEGATE( py );
+        m_FilledPolysList.SetY( ic, py + mirror_ref.y );
     }
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )

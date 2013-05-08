@@ -91,8 +91,8 @@ static void BuildPadShapeThickOutlineAsPolygon( D_PAD*          aPad,
     for( unsigned ii = 0, jj = corners.size() - 1; ii < corners.size(); jj = ii, ii++ )
     {
         TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                                              wxPoint( corners[jj].x, corners[jj].y ),
-                                              wxPoint( corners[ii].x, corners[ii].y ),
+                                              corners.GetPos( jj ),
+                                              corners.GetPos( ii ),
                                               aCircleToSegmentsCount, aWidth );
     }
 }
@@ -289,14 +289,13 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         KI_POLYGON_SET  polysetHoles;
 
         // Add polygons, without holes
-        AddPolygonCornersToKiPolygonList( bufferPolys, currLayerPolyset );
+        bufferPolys.ExportTo( currLayerPolyset );
 
         // Add holes in polygon list
-        currLayerHoles.insert( currLayerHoles.begin(),
-                               allLayerHoles.begin(), allLayerHoles.end() );
+        currLayerHoles.Append( allLayerHoles );
 
         if( currLayerHoles.size() > 0 )
-            AddPolygonCornersToKiPolygonList( currLayerHoles, polysetHoles );
+            currLayerHoles.ExportTo( polysetHoles );
 
         // Merge polygons, remove holes
         currLayerPolyset -= polysetHoles;
@@ -309,7 +308,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
         bufferPolys.clear();
-        CopyPolygonsFromKiPolygonListToPolysList( currLayerPolyset, bufferPolys );
+        bufferPolys.ImportFrom( currLayerPolyset );
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
                                             thickness,
                                             g_Parm_3D_Visu.m_BiuTo3Dunits );
@@ -410,7 +409,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
 
         KI_POLYGON_SET  currLayerPolyset;
         KI_POLYGON_SET  polyset;
-        AddPolygonCornersToKiPolygonList( bufferPolys, polyset );
+        bufferPolys.ExportTo( polyset );
         // merge polys:
         currLayerPolyset += polyset;
 
@@ -430,7 +429,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
         bufferPolys.clear();
-        CopyPolygonsFromKiPolygonListToPolysList( currLayerPolyset, bufferPolys );
+        bufferPolys.ImportFrom( currLayerPolyset );
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
                                             thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
     }

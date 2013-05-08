@@ -107,9 +107,7 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
             aCornerBuffer.push_back( corner );
         }
 
-        corner.end_contour = true;
-        aCornerBuffer.pop_back();
-        aCornerBuffer.push_back( corner );
+        aCornerBuffer.back().end_contour = true;
     }
 }
 

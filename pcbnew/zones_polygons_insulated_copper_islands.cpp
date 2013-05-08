@@ -108,9 +108,7 @@ void ZONE_CONTAINER::TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb )
             }
             else                             // Not connected: remove this polygon
             {
-                m_FilledPolysList.erase( m_FilledPolysList.begin() + indexstart,
-                                         m_FilledPolysList.begin() + indexend + 1 );
-
+                m_FilledPolysList.DeleteCorners( indexstart, indexend );
                 indexend = indexstart;   /* indexstart points the first point of the next polygon
                                           * because the current poly is removed */
             }

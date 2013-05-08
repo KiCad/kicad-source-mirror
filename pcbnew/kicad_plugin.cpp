@@ -1403,14 +1403,14 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(polygon\n");
         m_out->Print( aNestLevel+2, "(pts\n" );
 
-        for( CPOLYGONS_LIST::const_iterator it = cv.begin();  it != cv.end();  ++it )
+        for( unsigned it = 0; it < cv.size(); ++it )
         {
             if( newLine == 0 )
                 m_out->Print( aNestLevel+3, "(xy %s %s)",
-                              FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+                              FMT_IU( cv.GetX( it ) ).c_str(), FMT_IU( cv.GetY( it ) ).c_str() );
             else
                 m_out->Print( 0, " (xy %s %s)",
-                              FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+                              FMT_IU( cv.GetX( it ) ).c_str(), FMT_IU( cv.GetY( it ) ).c_str() );
 
             if( newLine < 4 )
             {
@@ -1422,14 +1422,14 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                 m_out->Print( 0, "\n" );
             }
 
-            if( it->end_contour )
+            if( cv.IsEndContour( it ) )
             {
                 if( newLine != 0 )
                     m_out->Print( 0, "\n" );
 
                 m_out->Print( aNestLevel+2, ")\n" );
 
-                if( it+1 != cv.end() )
+                if( it+1 != cv.size() )
                 {
                     newLine = 0;
                     m_out->Print( aNestLevel+1, ")\n" );
@@ -1451,14 +1451,14 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(filled_polygon\n" );
         m_out->Print( aNestLevel+2, "(pts\n" );
 
-        for( CPOLYGONS_LIST::const_iterator it = fv.begin();  it != fv.end();  ++it )
+        for( unsigned it = 0; it < fv.size();  ++it )
         {
             if( newLine == 0 )
                 m_out->Print( aNestLevel+3, "(xy %s %s)",
-                              FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+                              FMT_IU( fv.GetX( it ) ).c_str(), FMT_IU( fv.GetY( it ) ).c_str() );
             else
                 m_out->Print( 0, " (xy %s %s)",
-                              FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+                              FMT_IU( fv.GetX( it ) ).c_str(), FMT_IU( fv.GetY( it ) ).c_str() );
 
             if( newLine < 4 )
             {
@@ -1470,14 +1470,14 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                 m_out->Print( 0, "\n" );
             }
 
-            if( it->end_contour )
+            if( fv.IsEndContour( it ) )
             {
                 if( newLine != 0 )
                     m_out->Print( 0, "\n" );
 
                 m_out->Print( aNestLevel+2, ")\n" );
 
-                if( it+1 != fv.end() )
+                if( it+1 != fv.size() )
                 {
                     newLine = 0;
                     m_out->Print( aNestLevel+1, ")\n" );
