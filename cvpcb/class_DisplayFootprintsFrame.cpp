@@ -533,9 +533,10 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
         const wxChar *libname;
         if( module_info )
-            libname = GetChars( module_info->m_LibName );
+            libname = GetChars( module_info->GetLibraryPath() );
         else
             libname = GetChars( wxT( "???" ) );
+
         msg.Printf( _( "Lib: %s" ), libname );
 
         SetStatusText( msg, 0 );

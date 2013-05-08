@@ -326,7 +326,7 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
     {
         m_KicadEnv.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
-        if( m_KicadEnv.Last() != '/' )
+        if( !m_KicadEnv.IsEmpty() && m_KicadEnv.Last() != '/' )
             m_KicadEnv += UNIX_STRING_DIR_SEP;
     }
 
