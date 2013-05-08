@@ -134,6 +134,25 @@ public:
         throw( PARSE_ERROR );
 
     /**
+     * Function IsValid
+     * @return true is the #FPID is valid.
+     *
+     * A valid #FPID must have both the footprint library nickname and the footprint name
+     * defined.  The revision field is optional.
+     *
+     * @note A return value of true does not indicated that the #FPID is a valid #FP_LIB_TABLE
+     *       entry.
+     */
+    bool IsValid() const { return !nickname.empty() && !footprint.empty(); }
+
+
+    /**
+     * Function IsLegacy
+     * @return true if the #FPID only has the #footprint name defined.
+     */
+    bool IsLegacy() const { return nickname.empty() && !footprint.empty() && revision.empty(); }
+
+    /**
      * Function clear
      * clears the contents of the library nickname, footprint name, and revision strings.
      */

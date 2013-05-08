@@ -45,23 +45,23 @@ class FOOTPRINT_VIEWER_FRAME : public PCB_BASE_FRAME
 private:
     // List of libraries (for selection )
     wxSashLayoutWindow* m_LibListWindow;
-    wxListBox*          m_LibList;          // The list of libs names
-    wxSize              m_LibListSize;      // size of the window
+    wxListBox*          m_LibList;               // The list of libs names
+    wxSize              m_LibListSize;           // size of the window
 
     // List of components in the selected library
     wxSashLayoutWindow* m_FootprintListWindow;
-    wxListBox*          m_FootprintList;          // The list of footprint names
-    wxSize              m_FootprintListSize;      // size of the window
+    wxListBox*          m_FootprintList;         // The list of footprint names
+    wxSize              m_FootprintListSize;     // size of the window
 
     // Flags
-    wxSemaphore*        m_Semaphore;        // != NULL if the frame must emulate a modal dialog
-    wxString            m_configPath;       // subpath for configuration
+    wxSemaphore*        m_Semaphore;             // != NULL if the frame must emulate a modal dialog
+    wxString            m_configPath;            // subpath for configuration
 
 protected:
-    static wxString m_libraryName;              // Current selected libary
-    static wxString m_footprintName;            // Current selected footprint
-    static wxString m_selectedFootprintName;    // When the viewer is used to select a footprint
-                                                // the selected footprint is here
+    static wxString     m_libraryName;           // Current selected library
+    static wxString     m_footprintName;         // Current selected footprint
+    static wxString     m_selectedFootprintName; // When the viewer is used to select a footprint
+                                                 // the selected footprint is here
 
 public:
     FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* parent, wxSemaphore* semaphore = NULL,
@@ -86,7 +86,14 @@ public:
     wxString& GetSelectedFootprint( void ) const { return m_selectedFootprintName; }
     const wxString GetSelectedLibraryFullName( void );
 
+    /**
+     * Function GetSelectedLibrary
+     * @return the selected library name from the #FP_LIB_TABLE.
+     */
+    const wxString& GetSelectedLibrary() { return m_libraryName; }
+
     virtual EDA_COLOR_T GetGridColor( void ) const;
+
 private:
 
     void OnSize( wxSizeEvent& event );
@@ -109,7 +116,14 @@ private:
     void ReCreateFootprintList();
     void Process_Special_Functions( wxCommandEvent& event );
     void DisplayLibInfos();
+
+    /**
+     * Function RedrawActiveWindow
+     * Display the current selected component.
+     * If the component is an alias, the ROOT component is displayed
+     */
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
+
     void OnCloseWindow( wxCloseEvent& Event );
     void ReCreateHToolbar();
     void ReCreateVToolbar();
@@ -150,6 +164,10 @@ private:
 
     void SelectCurrentLibrary( wxCommandEvent& event );
 
+    /**
+     * Function SelectCurrentFootprint
+     * Selects the current footprint name and display it
+     */
     void SelectCurrentFootprint( wxCommandEvent& event );
 
     /**
@@ -161,7 +179,8 @@ private:
     /**
      * Function SelectAndViewFootprint
      * Select and load the next or the previous footprint
-     * if no current footprint, Rebuild the list of footprints availlable in a given footprint library
+     * if no current footprint, Rebuild the list of footprints available in a given footprint
+     * library
      * @param aMode = NEXT_PART or PREVIOUS_PART
      */
     void SelectAndViewFootprint( int aMode );
@@ -179,7 +198,7 @@ private:
      * must be called after a footprint selection
      * Updates the 3D view and 3D frame title.
      * @param aForceReloadFootprint = true to reload data (default)
-     *   = false to update title only -(aftre creating the 3D viewer)
+     *   = false to update title only -(after creating the 3D viewer)
      */
     void Update3D_Frame( bool aForceReloadFootprint = true );
 

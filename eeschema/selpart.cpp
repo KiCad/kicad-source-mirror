@@ -28,10 +28,10 @@ CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame )
 
     wxArrayString headers;
     headers.Add( wxT("Library") );
-    
+
     libNamesList = CMP_LIBRARY::GetLibraryNames();
     std::vector<wxArrayString> itemsToDisplay;
-    
+
     // Conversion from wxArrayString to vector of ArrayString
     for( unsigned i = 0; i < libNamesList.GetCount(); i++ )
     {
@@ -77,7 +77,7 @@ int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
     headers.Add( wxT("Component") );
     headers.Add( wxT("Library") );
     std::vector<wxArrayString> itemsToDisplay;
-    
+
     // Conversion from wxArrayString to vector of ArrayString
     for( unsigned i = 0; i < nameList.GetCount(); i++ )
     {

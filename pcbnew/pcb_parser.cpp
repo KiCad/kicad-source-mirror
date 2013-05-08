@@ -612,39 +612,39 @@ void PCB_PARSER::parseTITLE_BLOCK() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_comment:
+        {
+            int commentNumber = parseInt( "comment" );
+
+            switch( commentNumber )
             {
-                int commentNumber = parseInt( "comment" );
-
-                switch( commentNumber )
-                {
-                case 1:
-                    NextTok();
-                    titleBlock.SetComment1( FromUTF8() );
-                    break;
-
-                case 2:
-                    NextTok();
-                    titleBlock.SetComment2( FromUTF8() );
-                    break;
-
-                case 3:
-                    NextTok();
-                    titleBlock.SetComment3( FromUTF8() );
-                    break;
-
-                case 4:
-                    NextTok();
-                    titleBlock.SetComment4( FromUTF8() );
-                    break;
-
-                default:
-                    wxString err;
-                    err.Printf( wxT( "%d is not a valid title block comment number" ), commentNumber );
-                    THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
-                }
-
+            case 1:
+                NextTok();
+                titleBlock.SetComment1( FromUTF8() );
                 break;
+
+            case 2:
+                NextTok();
+                titleBlock.SetComment2( FromUTF8() );
+                break;
+
+            case 3:
+                NextTok();
+                titleBlock.SetComment3( FromUTF8() );
+                break;
+
+            case 4:
+                NextTok();
+                titleBlock.SetComment4( FromUTF8() );
+                break;
+
+            default:
+                wxString err;
+                err.Printf( wxT( "%d is not a valid title block comment number" ), commentNumber );
+                THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
+
+            break;
+        }
 
         default:
             Expecting( "title, date, rev, company, or comment" );

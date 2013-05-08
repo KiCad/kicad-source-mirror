@@ -1,4 +1,28 @@
 /*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2011 Jean-Pierre Charras, <jp.charras@wanadoo.fr>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/*
  * @file footprint_info.h
  */
 
@@ -12,14 +36,16 @@
 
 /*
  * Class FOOTPRINT_INFO
- * is a helper class to handle the list of footprints
- * available in libraries. It stores footprint names, doc and keywords
+ * is a helper class to handle the list of footprints available in libraries. It stores
+ * footprint names, doc and keywords
  */
 class FOOTPRINT_INFO
 {
+    wxString  m_libName;    ///< Name of the library containing this module excluding path and ext.
+    wxString  m_libPath;    ///< The full library name and path associated the footprint.
+
 public:
     wxString  m_Module;     ///< Module name.
-    wxString  m_LibName;    ///< Name of the library containing this module.
     int       m_Num;        ///< Order number in the display list.
     wxString  m_Doc;        ///< Footprint description.
     wxString  m_KeyWord;    ///< Footprint key words.
@@ -30,6 +56,14 @@ public:
         m_Num = 0;
         m_padCount = 0;
     }
+
+    const wxString& GetFootprintName() const { return m_Module; }
+
+    void SetLibraryName( const wxString& aLibName ) { m_libName = aLibName; }
+    const wxString& GetLibraryName() const { return m_libName; }
+
+    void SetLibraryPath( const wxString& aLibPath ) { m_libPath = aLibPath; }
+    const wxString& GetLibraryPath() const { return m_libPath; }
 };
 
 
@@ -85,7 +119,7 @@ public:
 
     /**
      * Function ReadFootprintFiles
-     * Read the list of libraries (*.mod files) and populates m_List ( list of availaible
+     * Read the list of libraries (*.mod files) and populates m_List ( list of available
      * modules in libs ).
      * for each module, are stored
      *      the module name

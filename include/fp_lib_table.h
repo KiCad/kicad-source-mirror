@@ -365,6 +365,12 @@ public:
      */
     static const wxString ExpandSubtitutions( const wxString aString );
 
+    /**
+     * Function IsEmpty
+     * @return true if the footprint library table is empty.
+     */
+    bool IsEmpty() const { return rows.empty(); }
+
 protected:
 
     /**

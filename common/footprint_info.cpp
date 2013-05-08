@@ -48,20 +48,6 @@
 #include <wildcards_and_files_ext.h>
 
 
-/* Read the list of libraries (*.mod files)
- * for each module are stored
- *      the module name
- *      documentation string
- *      associated keywords
- *      lib name
- * Module description format:
- *   $MODULE c64acmd                    First line of module description
- *   Li c64acmd DIN connector           Library reference
- *   Cd Europe 96 AC male vertical      documentation string
- *   Kw PAD_CONN DIN                    associated keywords
- *   ...... other data (pads, outlines ..)
- *   $Endmodule
- */
 bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
 {
     // Clear data before reading files
@@ -76,12 +62,17 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
         // Parse Libraries Listed
         for( unsigned ii = 0; ii < aFootprintsLibNames.GetCount(); ii++ )
         {
-            wxFileName filename( wxEmptyString, aFootprintsLibNames[ii],
-                                 LegacyFootprintLibPathExtension );
+            // File names can be fully qualified or file name only.
+            wxFileName filename = aFootprintsLibNames[ii];
 
-            wxString libPath = wxGetApp().FindLibraryPath( filename );
+            if( !filename.IsAbsolute() )
+            {
+                filename = wxFileName( wxEmptyString, aFootprintsLibNames[ii],
+                                       LegacyFootprintLibPathExtension );
+                filename = wxGetApp().FindLibraryPath( filename );
+            }
 
-            if( !libPath )
+            if( !filename.FileExists() )
             {
                 m_filesNotFound << filename.GetFullName() << wxT( "\n" );
                 continue;
@@ -89,19 +80,21 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
 
             try
             {
-                wxArrayString fpnames = pi->FootprintEnumerate( libPath );
+                wxArrayString fpnames = pi->FootprintEnumerate( filename.GetFullPath() );
 
                 for( unsigned i=0; i<fpnames.GetCount();  ++i )
                 {
-                    std::auto_ptr<MODULE> m( pi->FootprintLoad( libPath, fpnames[i] ) );
+                    std::auto_ptr<MODULE> m( pi->FootprintLoad( filename.GetFullPath(),
+                                                                fpnames[i] ) );
 
                     // we're loading what we enumerated, all must be there.
                     wxASSERT( m.get() );
 
                     FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO();
 
+                    fpinfo->SetLibraryName( filename.GetName() );
+                    fpinfo->SetLibraryPath( filename.GetFullPath() );
                     fpinfo->m_Module   = fpnames[i];
-                    fpinfo->m_LibName  = libPath;
                     fpinfo->m_padCount = m->GetPadCount();
                     fpinfo->m_KeyWord  = m->GetKeywords();
                     fpinfo->m_Doc      = m->GetDescription();
@@ -111,7 +104,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
             }
             catch( IO_ERROR ioe )
             {
-                m_filesInvalid << ioe.errorText << wxT("\n");
+                m_filesInvalid << ioe.errorText << wxT( "\n" );
             }
         }
     }
