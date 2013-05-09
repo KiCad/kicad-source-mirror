@@ -2614,11 +2614,11 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
-                pts.push_back( CPolyPt( parseXY() ) );
+                pts.Append( CPolyPt( parseXY() ) );
             }
 
             NeedRIGHT();
-            pts.back().end_contour = true;
+            pts.CloseLastContour();
         }
 
             break;
@@ -2665,7 +2665,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
         zone->Outline()->SetHatch( hatchStyle, hatchPitch, true );
     }
 
-    if( pts.size() )
+    if( pts.GetCornersCount() )
         zone->AddFilledPolysList( pts );
 
     // Ensure keepout does not have a net (which have no sense for a keepout zone)

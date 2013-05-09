@@ -414,7 +414,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     // cornerBufferPolysToSubstract contains polygons to substract.
     // polyset_zone_solid_areas contains the main filled area
     // Calculate now actual solid areas
-    if( cornerBufferPolysToSubstract.size() > 0 )
+    if( cornerBufferPolysToSubstract.GetCornersCount() > 0 )
     {
         KI_POLYGON_SET polyset_holes;
         cornerBufferPolysToSubstract.ExportTo( polyset_holes );
@@ -440,7 +440,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                                                  s_Correction, s_thermalRot );
 
     // remove copper areas corresponding to not connected stubs
-    if( cornerBufferPolysToSubstract.size() )
+    if( cornerBufferPolysToSubstract.GetCornersCount() )
     {
         KI_POLYGON_SET polyset_holes;
         cornerBufferPolysToSubstract.ExportTo( polyset_holes );

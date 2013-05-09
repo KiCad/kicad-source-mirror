@@ -137,7 +137,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
                     RotatePoint( &corner.x, &corner.y, GetOrientation() );
                     corner.x += GetPosition().x;
                     corner.y += GetPosition().y;
-                    aCornerBuffer.push_back( corner );
+                    aCornerBuffer.Append( corner );
                 }
                 aCornerBuffer.back().end_contour = true;
                 break;
@@ -170,7 +170,7 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet(
         int                    aCircleToSegmentsCount,
         double                 aCorrectionFactor )
 {
-    unsigned cornerscount = GetFilledPolysList().size();
+    unsigned cornerscount = GetFilledPolysList().GetCornersCount();
     CPOLYGONS_LIST polygonslist;
 
     if( cornerscount == 0 )
@@ -239,7 +239,7 @@ void TEXTE_PCB::TransformBoundingBoxWithClearanceToPolygon(
     {
         // Rotate polygon
         RotatePoint( &corners[ii].x, &corners[ii].y, m_Pos.x, m_Pos.y, m_Orient );
-        aCornerBuffer.push_back( corners[ii] );
+        aCornerBuffer.Append( corners[ii] );
     }
 
     aCornerBuffer.back().end_contour = true;
@@ -492,7 +492,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
             // Rotate according to module orientation
             corner_position += PadShapePos;          // Shift origin to position
             CPolyPt polypoint( corner_position.x, corner_position.y );
-            aCornerBuffer.push_back( polypoint );
+            aCornerBuffer.Append( polypoint );
         }
 
         for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
@@ -505,7 +505,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
             RotatePoint( &corner_position, angle );
             corner_position += PadShapePos;
             CPolyPt polypoint( corner_position.x, corner_position.y );
-            aCornerBuffer.push_back( polypoint );
+            aCornerBuffer.Append( polypoint );
         }
 
         for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
@@ -518,7 +518,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
             RotatePoint( &corner_position, angle );
             corner_position += PadShapePos;
             CPolyPt polypoint( corner_position.x, corner_position.y );
-            aCornerBuffer.push_back( polypoint );
+            aCornerBuffer.Append( polypoint );
         }
 
         for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
@@ -531,10 +531,10 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
             RotatePoint( &corner_position, angle );
             corner_position += PadShapePos;
             CPolyPt polypoint( corner_position.x, corner_position.y );
-            aCornerBuffer.push_back( polypoint );
+            aCornerBuffer.Append( polypoint );
         }
 
-        aCornerBuffer.back().end_contour = true;
+        aCornerBuffer.CloseLastContour();
         break;
     }
 }
@@ -569,10 +569,10 @@ void D_PAD::BuildPadShapePolygon( CPOLYGONS_LIST& aCornerBuffer,
         {
             corners[ii] += PadShapePos;          // Shift origin to position
             CPolyPt polypoint( corners[ii].x, corners[ii].y );
-            aCornerBuffer.push_back( polypoint );
+            aCornerBuffer.Append( polypoint );
         }
 
-        aCornerBuffer.back().end_contour = true;
+        aCornerBuffer.CloseLastContour();
         break;
     }
 }
@@ -768,10 +768,10 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                     corner = corners_buffer[ii];
                     RotatePoint( &corner, th_angle + angle_pad );          // Rotate by segment angle and pad orientation
                     corner += PadShapePos;
-                    aCornerBuffer.push_back( CPolyPt( corner.x, corner.y ) );
+                    aCornerBuffer.Append( CPolyPt( corner.x, corner.y ) );
                 }
 
-                aCornerBuffer.back().end_contour = true;
+                aCornerBuffer.CloseLastContour();
                 th_angle += 900;       // Note: th_angle in in 0.1 deg.
             }
         }
@@ -872,7 +872,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                     wxPoint cpos = corners_buffer[ic];
                     RotatePoint( &cpos, angle );
                     cpos += PadShapePos;
-                    aCornerBuffer.push_back( CPolyPt( cpos.x, cpos.y ) );
+                    aCornerBuffer.Append( CPolyPt( cpos.x, cpos.y ) );
                 }
 
                 aCornerBuffer.back().end_contour = true;
@@ -897,7 +897,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                     wxPoint cpos = corners_buffer[ic];
                     RotatePoint( &cpos, angle );
                     cpos += PadShapePos;
-                    aCornerBuffer.push_back( CPolyPt( cpos.x, cpos.y ) );
+                    aCornerBuffer.Append( CPolyPt( cpos.x, cpos.y ) );
                 }
 
                 aCornerBuffer.back().end_contour = true;
@@ -970,10 +970,10 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                     wxPoint cpos = corners_buffer[ic];
                     RotatePoint( &cpos, angle );            // Rotate according to module orientation
                     cpos += PadShapePos;                    // Shift origin to position
-                    aCornerBuffer.push_back( CPolyPt( cpos.x, cpos.y ) );
+                    aCornerBuffer.Append( CPolyPt( cpos.x, cpos.y ) );
                 }
 
-                aCornerBuffer.back().end_contour = true;
+                aCornerBuffer.CloseLastContour();
                 angle = AddAngles( angle, 1800 );       // this is calculate hole 3
             }
 
@@ -993,10 +993,10 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                     wxPoint cpos = corners_buffer[ic];
                     RotatePoint( &cpos, angle );
                     cpos += PadShapePos;
-                    aCornerBuffer.push_back( CPolyPt( cpos.x, cpos.y ) );
+                    aCornerBuffer.Append( CPolyPt( cpos.x, cpos.y ) );
                 }
 
-                aCornerBuffer.back().end_contour = true;
+                aCornerBuffer.CloseLastContour();
                 angle = AddAngles( angle, 1800 );
             }
 

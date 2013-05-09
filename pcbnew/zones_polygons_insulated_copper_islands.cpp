@@ -40,7 +40,7 @@
 
 void ZONE_CONTAINER::TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb )
 {
-    if( m_FilledPolysList.size() == 0 )
+    if( m_FilledPolysList.GetCornersCount() == 0 )
         return;
 
     // Build a list of points connected to the net:
@@ -79,7 +79,7 @@ void ZONE_CONTAINER::TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb )
     unsigned indexstart = 0, indexend;
     bool     connected  = false;
 
-    for( indexend = 0; indexend < m_FilledPolysList.size(); indexend++ )
+    for( indexend = 0; indexend < m_FilledPolysList.GetCornersCount(); indexend++ )
     {
         if( m_FilledPolysList[indexend].end_contour )    // end of a filled sub-area found
         {

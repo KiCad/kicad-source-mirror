@@ -509,7 +509,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
 {
     const CPOLYGONS_LIST& polysList = aZone->GetFilledPolysList();
-    unsigned imax = polysList.size();
+    unsigned imax = polysList.GetCornersCount();
 
     if( imax == 0 )  // Nothing to draw
         return;
