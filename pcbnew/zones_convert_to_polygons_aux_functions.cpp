@@ -68,7 +68,7 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
     KI_POLYGON_SET polyset_zone_solid_areas;
     std::vector<KI_POLY_POINT> cornerslist;
     unsigned ic = 0;
-    unsigned corners_count = zoneOutines.size();
+    unsigned corners_count = zoneOutines.GetCornersCount();
     while( ic < corners_count )
     {
         cornerslist.clear();
@@ -104,10 +104,10 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
             corner.x = point.x();
             corner.y = point.y();
             corner.end_contour = false;
-            aCornerBuffer.push_back( corner );
+            aCornerBuffer.Append( corner );
         }
 
-        aCornerBuffer.back().end_contour = true;
+        aCornerBuffer.CloseLastContour();
     }
 }
 
@@ -284,8 +284,8 @@ void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
                     CPolyPt corner;
                     corner.x = cpos.x;
                     corner.y = cpos.y;
-                    corner.end_contour = ( ic < (corners_buffer.size() - 1) ) ? 0 : 1;
-                    aCornerBuffer.push_back( corner );
+                    corner.end_contour = ( ic < (corners_buffer.size() - 1) ) ? false : true;
+                    aCornerBuffer.Append( corner );
                 }
             }
         }

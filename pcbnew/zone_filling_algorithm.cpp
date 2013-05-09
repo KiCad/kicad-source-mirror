@@ -157,7 +157,7 @@ int ZONE_CONTAINER::FillZoneAreasWithSegments()
     // Read all filled areas in m_FilledPolysList
     m_FillSegmList.clear();
     istart = 0;
-    int end_list =  m_FilledPolysList.size()-1;
+    int end_list =  m_FilledPolysList.GetCornersCount()-1;
 
     for( int ic = 0; ic <= end_list; ic++ )
     {

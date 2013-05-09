@@ -449,7 +449,7 @@ public:
 
     int GetNumCorners( void ) const
     {
-        return m_Poly->GetNumCorners();
+        return m_Poly->GetCornersCount();
     }
 
     void RemoveAllContours( void )

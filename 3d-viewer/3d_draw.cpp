@@ -88,7 +88,8 @@ static void BuildPadShapeThickOutlineAsPolygon( D_PAD*          aPad,
                                 aCircleToSegmentsCount, aCorrectionFactor );
 
     // Add outlines as thick segments in polygon buffer
-    for( unsigned ii = 0, jj = corners.size() - 1; ii < corners.size(); jj = ii, ii++ )
+    for( unsigned ii = 0, jj = corners.GetCornersCount() - 1;
+         ii < corners.GetCornersCount(); jj = ii, ii++ )
     {
         TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
                                               corners.GetPos( jj ),
@@ -282,7 +283,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         }
 
         // bufferPolys contains polygons to merge. Many overlaps . Calculate merged polygons
-        if( bufferPolys.size() == 0 )
+        if( bufferPolys.GetCornersCount() == 0 )
             continue;
 
         KI_POLYGON_SET  currLayerPolyset;
@@ -294,7 +295,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         // Add holes in polygon list
         currLayerHoles.Append( allLayerHoles );
 
-        if( currLayerHoles.size() > 0 )
+        if( currLayerHoles.GetCornersCount() > 0 )
             currLayerHoles.ExportTo( polysetHoles );
 
         // Merge polygons, remove holes
@@ -313,7 +314,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
                                             thickness,
                                             g_Parm_3D_Visu.m_BiuTo3Dunits );
 
-        if( bufferZonesPolys.size() )
+        if( bufferZonesPolys.GetCornersCount() )
             Draw3D_SolidHorizontalPolyPolygons( bufferZonesPolys, zpos,
                                                 thickness,
                                                 g_Parm_3D_Visu.m_BiuTo3Dunits );
@@ -404,7 +405,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
 
         // bufferPolys contains polygons to merge. Many overlaps .
         // Calculate merged polygons and remove pads and vias holes
-        if( bufferPolys.size() == 0 )
+        if( bufferPolys.GetCornersCount() == 0 )
             continue;
 
         KI_POLYGON_SET  currLayerPolyset;

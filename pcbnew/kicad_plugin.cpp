@@ -1398,12 +1398,12 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     const CPOLYGONS_LIST& cv = aZone->Outline()->m_CornersList;
     int newLine = 0;
 
-    if( cv.size() )
+    if( cv.GetCornersCount() )
     {
         m_out->Print( aNestLevel+1, "(polygon\n");
         m_out->Print( aNestLevel+2, "(pts\n" );
 
-        for( unsigned it = 0; it < cv.size(); ++it )
+        for( unsigned it = 0; it < cv.GetCornersCount(); ++it )
         {
             if( newLine == 0 )
                 m_out->Print( aNestLevel+3, "(xy %s %s)",
@@ -1429,7 +1429,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
                 m_out->Print( aNestLevel+2, ")\n" );
 
-                if( it+1 != cv.size() )
+                if( it+1 != cv.GetCornersCount() )
                 {
                     newLine = 0;
                     m_out->Print( aNestLevel+1, ")\n" );
@@ -1446,12 +1446,12 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     const CPOLYGONS_LIST& fv = aZone->GetFilledPolysList();
     newLine = 0;
 
-    if( fv.size() )
+    if( fv.GetCornersCount() )
     {
         m_out->Print( aNestLevel+1, "(filled_polygon\n" );
         m_out->Print( aNestLevel+2, "(pts\n" );
 
-        for( unsigned it = 0; it < fv.size();  ++it )
+        for( unsigned it = 0; it < fv.GetCornersCount();  ++it )
         {
             if( newLine == 0 )
                 m_out->Print( aNestLevel+3, "(xy %s %s)",
@@ -1477,7 +1477,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
                 m_out->Print( aNestLevel+2, ")\n" );
 
-                if( it+1 != fv.size() )
+                if( it+1 != fv.GetCornersCount() )
                 {
                     newLine = 0;
                     m_out->Print( aNestLevel+1, ")\n" );

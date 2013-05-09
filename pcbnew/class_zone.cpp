@@ -120,7 +120,8 @@ EDA_ITEM* ZONE_CONTAINER::Clone() const
 
 bool ZONE_CONTAINER::UnFill()
 {
-    bool change = ( m_FilledPolysList.size() > 0 ) || ( m_FillSegmList.size() > 0 );
+    bool change = ( m_FilledPolysList.GetCornersCount() > 0 ) ||
+                  ( m_FillSegmList.size() > 0 );
 
     m_FilledPolysList.clear();
     m_FillSegmList.clear();
@@ -250,7 +251,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
     if( DisplayOpt.DisplayZonesMode == 1 )     // Do not show filled areas
         return;
 
-    if( m_FilledPolysList.size() == 0 )  // Nothing to draw
+    if( m_FilledPolysList.GetCornersCount() == 0 )  // Nothing to draw
         return;
 
     BOARD* brd = GetBoard();
@@ -279,7 +280,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
     CornersBuffer.clear();
 
     // Draw all filled areas
-    int imax = m_FilledPolysList.size() - 1;
+    int imax = m_FilledPolysList.GetCornersCount() - 1;
 
     for( int ic = 0; ic <= imax; ic++ )
     {
@@ -490,7 +491,7 @@ bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
     int min_dist = MIN_DIST_IN_MILS*IU_PER_MILS;
 
     wxPoint delta;
-    unsigned lim = m_Poly->m_CornersList.size();
+    unsigned lim = m_Poly->m_CornersList.GetCornersCount();
 
     for( unsigned item_pos = 0; item_pos < lim; item_pos++ )
     {
@@ -513,7 +514,7 @@ bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 
 bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 {
-    unsigned lim = m_Poly->m_CornersList.size();
+    unsigned lim = m_Poly->m_CornersList.GetCornersCount();
 
     m_CornerSelection = -1;     // Set to not found
 
@@ -610,7 +611,7 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos ) const
     unsigned indexstart = 0, indexend;
     bool     inside     = false;
 
-    for( indexend = 0; indexend < m_FilledPolysList.size(); indexend++ )
+    for( indexend = 0; indexend < m_FilledPolysList.GetCornersCount(); indexend++ )
     {
         if( m_FilledPolysList.IsEndContour( indexend ) )       // end of a filled sub-area found
         {
@@ -701,7 +702,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BROWN ) );
 
-    msg.Printf( wxT( "%d" ), (int) m_Poly->m_CornersList.size() );
+    msg.Printf( wxT( "%d" ), (int) m_Poly->m_CornersList.GetCornersCount() );
     aList.push_back( MSG_PANEL_ITEM( _( "Corners" ), msg, BLUE ) );
 
     if( m_FillMode )
@@ -715,9 +716,9 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     msg.Printf( wxT( "%d" ), (int) m_Poly->m_HatchLines.size() );
     aList.push_back( MSG_PANEL_ITEM( _( "Hatch lines" ), msg, BLUE ) );
 
-    if( m_FilledPolysList.size() )
+    if( m_FilledPolysList.GetCornersCount() )
     {
-        msg.Printf( wxT( "%d" ), (int) m_FilledPolysList.size() );
+        msg.Printf( wxT( "%d" ), (int) m_FilledPolysList.GetCornersCount() );
         aList.push_back( MSG_PANEL_ITEM( _( "Corners in DrawList" ), msg, BLUE ) );
     }
 }
@@ -728,7 +729,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 void ZONE_CONTAINER::Move( const wxPoint& offset )
 {
     /* move outlines */
-    for( unsigned ii = 0; ii < m_Poly->m_CornersList.size(); ii++ )
+    for( unsigned ii = 0; ii < m_Poly->m_CornersList.GetCornersCount(); ii++ )
     {
         SetCornerPosition( ii, GetCornerPosition( ii ) + offset );
     }
@@ -736,7 +737,7 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
     m_Poly->Hatch();
 
     /* move filled areas: */
-    for( unsigned ic = 0; ic < m_FilledPolysList.size(); ic++ )
+    for( unsigned ic = 0; ic < m_FilledPolysList.GetCornersCount(); ic++ )
     {
         m_FilledPolysList.SetX( ic, m_FilledPolysList.GetX( ic ) + offset.x );
         m_FilledPolysList.SetY( ic, m_FilledPolysList.GetX( ic ) + offset.y );
@@ -778,7 +779,7 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 {
     wxPoint pos;
 
-    for( unsigned ic = 0; ic < m_Poly->m_CornersList.size(); ic++ )
+    for( unsigned ic = 0; ic < m_Poly->m_CornersList.GetCornersCount(); ic++ )
     {
         pos = m_Poly->m_CornersList.GetPos( ic );
         RotatePoint( &pos, centre, angle );
@@ -789,7 +790,7 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
     m_Poly->Hatch();
 
     /* rotate filled areas: */
-    for( unsigned ic = 0; ic < m_FilledPolysList.size(); ic++ )
+    for( unsigned ic = 0; ic < m_FilledPolysList.GetCornersCount(); ic++ )
     {
         pos = m_FilledPolysList.GetPos( ic );
         RotatePoint( &pos, centre, angle );
@@ -814,7 +815,7 @@ void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 
 void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 {
-    for( unsigned ic = 0; ic < m_Poly->m_CornersList.size(); ic++ )
+    for( unsigned ic = 0; ic < m_Poly->m_CornersList.GetCornersCount(); ic++ )
     {
         int py = m_Poly->m_CornersList.GetY( ic ) - mirror_ref.y;
         NEGATE( py );
@@ -824,7 +825,7 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
     m_Poly->Hatch();
 
     /* mirror filled areas: */
-    for( unsigned ic = 0; ic < m_FilledPolysList.size(); ic++ )
+    for( unsigned ic = 0; ic < m_FilledPolysList.GetCornersCount(); ic++ )
     {
         int py = m_FilledPolysList.GetY( ic ) - mirror_ref.y;
         NEGATE( py );

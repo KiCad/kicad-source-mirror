@@ -118,8 +118,6 @@ public:
     // vector <> methods
     void reserve( int aSize ) { m_cornersList.reserve( aSize ); }
     void clear() { m_cornersList.clear(); }
-    unsigned size() const { return m_cornersList.size(); }
-    void push_back( const CPolyPt& aItem ) { m_cornersList.push_back( aItem ); }
     CPolyPt& back() { return m_cornersList.back(); }
 
     unsigned GetCornersCount() const { return m_cornersList.size(); }
@@ -311,7 +309,11 @@ public:
     // access functions
     void       SetLayer( LAYER_NUM aLayer ) { m_layer = aLayer; }
     LAYER_NUM  GetLayer() const { return m_layer; }
-    int         GetNumCorners() const;
+
+    int GetCornersCount() const
+    {
+        return m_CornersList.GetCornersCount();
+    }
     int         GetClosed();
     int         GetContoursCount();
     int         GetContour( int ic );

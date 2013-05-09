@@ -46,16 +46,25 @@ public:
     LINE_READER* GetReader() { return reader; };
 
     void Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( PARSE_ERROR, IO_ERROR );
-    bool ParseBool();
+
+private:
+    bool parseBool();
 
     /**
-     * Function ParseInt
+     * Function parseInt
      * parses an integer and constrains it between two values.
      * @param aMin is the smallest return value.
      * @param aMax is the largest return value.
      * @return int - the parsed integer.
      */
-    int ParseInt( int aMin, int aMax );
+    int parseInt( int aMin, int aMax );
+
+    /**
+     * Function parseDouble
+     * parses a double
+     * @return double - the parsed double.
+     */
+    double parseDouble();
 };
 
 

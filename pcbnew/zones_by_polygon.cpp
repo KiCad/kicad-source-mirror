@@ -358,7 +358,7 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone )
 {
     OnModify();
 
-    if( aZone->Outline()->GetNumCorners() <= 3 )
+    if( aZone->Outline()->GetCornersCount() <= 3 )
     {
         m_canvas->RefreshDrawingRect( aZone->GetBoundingBox() );
 

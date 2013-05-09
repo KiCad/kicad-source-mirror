@@ -96,11 +96,11 @@ static void Draw3D_VerticalPolygonalCylinder( const CPOLYGONS_LIST& aPolysList,
 
     // Draw the vertical polygonal side
     int startContour = 0;
-    for( unsigned ii = 0; ii < aPolysList.size(); ii++ )
+    for( unsigned ii = 0; ii < aPolysList.GetCornersCount(); ii++ )
     {
         unsigned jj = ii + 1;
 
-        if( aPolysList.IsEndContour( ii ) || jj >= aPolysList.size() )
+        if( aPolysList.IsEndContour( ii ) || jj >= aPolysList.GetCornersCount() )
         {
             jj = startContour;
             startContour = ii + 1;
@@ -170,7 +170,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
     {
         int startContour = 1;
 
-        for( unsigned ii = 0; ii < polylist.size(); ii++ )
+        for( unsigned ii = 0; ii < polylist.GetCornersCount(); ii++ )
         {
             if( startContour == 1 )
             {

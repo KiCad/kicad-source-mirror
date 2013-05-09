@@ -1502,7 +1502,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
             mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
 
-            int count = item->Outline()->m_CornersList.size();
+            int count = item->Outline()->m_CornersList.GetCornersCount();
             int ndx = 0;  // used in 2 for() loops below
             for( ; ndx<count; ++ndx )
             {
@@ -1579,7 +1579,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
             mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
 
-            int count = item->Outline()->m_CornersList.size();
+            int count = item->Outline()->m_CornersList.GetCornersCount();
             int ndx = 0;  // used in 2 for() loops below
             for( ; ndx<count; ++ndx )
             {

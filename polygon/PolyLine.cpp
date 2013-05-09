@@ -42,7 +42,7 @@ CPolyLine::~CPolyLine()
     int removed = 0;
 
     unsigned startcountour = 0;
-    for( unsigned icnt = 1; icnt < m_CornersList.size(); icnt ++ )
+    for( unsigned icnt = 1; icnt < m_CornersList.GetCornersCount(); icnt ++ )
     {
         unsigned last = icnt-1;
         if( m_CornersList[icnt].end_contour )
@@ -84,7 +84,7 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
     ClipperLib::Polygon raw_polygon;
     ClipperLib::Polygons normalized_polygons;
 
-    unsigned corners_count = m_CornersList.size();
+    unsigned corners_count = m_CornersList.GetCornersCount();
 
     KI_POLYGON_SET polysholes;
     KI_POLYGON_WITH_HOLES mainpoly;
@@ -216,7 +216,7 @@ void CPolyLine::Start( LAYER_NUM layer, int x, int y, int hatch )
     CPolyPt poly_pt( x, y );
     poly_pt.end_contour = false;
 
-    m_CornersList.push_back( poly_pt );
+    m_CornersList.Append( poly_pt );
 }
 
 
@@ -229,7 +229,7 @@ void CPolyLine::AppendCorner( int x, int y )
     poly_pt.end_contour = false;
 
     // add entries for new corner
-    m_CornersList.push_back( poly_pt );
+    m_CornersList.Append( poly_pt );
 }
 
 // move corner of polyline
@@ -535,16 +535,16 @@ void CPolyLine::InsertCorner( int ic, int x, int y )
 {
     UnHatch();
 
-    if( (unsigned) (ic) >= m_CornersList.size() )
+    if( (unsigned) (ic) >= m_CornersList.GetCornersCount() )
     {
-        m_CornersList.push_back( CPolyPt( x, y ) );
+        m_CornersList.Append( CPolyPt( x, y ) );
     }
     else
     {
         m_CornersList.InsertCorner(ic, CPolyPt( x, y ) );
     }
 
-    if( (unsigned) (ic + 1) < m_CornersList.size() )
+    if( (unsigned) (ic + 1) < m_CornersList.GetCornersCount() )
     {
         if( m_CornersList[ic].end_contour )
         {
@@ -585,7 +585,7 @@ CRect CPolyLine::GetCornerBounds()
     r.left  = r.bottom = INT_MAX;
     r.right = r.top = INT_MIN;
 
-    for( unsigned i = 0; i<m_CornersList.size(); i++ )
+    for( unsigned i = 0; i< m_CornersList.GetCornersCount(); i++ )
     {
         r.left      = std::min( r.left, m_CornersList[i].x );
         r.right     = std::max( r.right, m_CornersList[i].x );
@@ -618,26 +618,18 @@ CRect CPolyLine::GetCornerBounds( int icont )
 }
 
 
-int CPolyLine::GetNumCorners() const
-{
-    return m_CornersList.size();
-}
-
-
 int CPolyLine::GetContoursCount()
 {
     int ncont = 0;
 
-    if( !m_CornersList.size() )
+    if( !m_CornersList.GetCornersCount() )
         return 0;
 
-    for( unsigned ic = 0; ic < m_CornersList.size(); ic++ )
+    for( unsigned ic = 0; ic < m_CornersList.GetCornersCount(); ic++ )
         if( m_CornersList[ic].end_contour )
             ncont++;
 
-
-
-    if( !m_CornersList[m_CornersList.size() - 1].end_contour )
+    if( !m_CornersList[m_CornersList.GetCornersCount() - 1].end_contour )
         ncont++;
 
     return ncont;
@@ -665,7 +657,7 @@ int CPolyLine::GetContourStart( int icont )
 
     int ncont = 0;
 
-    for( unsigned i = 0; i<m_CornersList.size(); i++ )
+    for( unsigned i = 0; i<m_CornersList.GetCornersCount(); i++ )
     {
         if( m_CornersList[i].end_contour )
         {
@@ -687,11 +679,11 @@ int CPolyLine::GetContourEnd( int icont )
         return 0;
 
     if( icont == GetContoursCount() - 1 )
-        return m_CornersList.size() - 1;
+        return m_CornersList.GetCornersCount() - 1;
 
     int ncont = 0;
 
-    for( unsigned i = 0; i<m_CornersList.size(); i++ )
+    for( unsigned i = 0; i<m_CornersList.GetCornersCount(); i++ )
     {
         if( m_CornersList[i].end_contour )
         {
@@ -715,10 +707,10 @@ int CPolyLine::GetContourSize( int icont )
 
 int CPolyLine::GetClosed()
 {
-    if( m_CornersList.size() == 0 )
+    if( m_CornersList.GetCornersCount() == 0 )
         return 0;
     else
-        return m_CornersList[m_CornersList.size() - 1].end_contour;
+        return m_CornersList[m_CornersList.GetCornersCount() - 1].end_contour;
 }
 
 
@@ -747,7 +739,7 @@ void CPolyLine::Hatch()
     int min_y   = m_CornersList[0].y;
     int max_y   = m_CornersList[0].y;
 
-    for( unsigned ic = 1; ic < m_CornersList.size(); ic++ )
+    for( unsigned ic = 1; ic < m_CornersList.GetCornersCount(); ic++ )
     {
         if( m_CornersList[ic].x < min_x )
             min_x = m_CornersList[ic].x;
@@ -798,7 +790,7 @@ void CPolyLine::Hatch()
     min_a += offset;
 
     // now calculate and draw hatch lines
-    int nc = m_CornersList.size();
+    int nc = m_CornersList.GetCornersCount();
 
     // loop through hatch lines
     #define MAXPTS 200      // Usually we store only few values per one hatch line
@@ -824,7 +816,8 @@ void CPolyLine::Hatch()
             double  x, y, x2, y2;
             int     ok;
 
-            if( m_CornersList[ic].end_contour || ( ic == (int) (m_CornersList.size() - 1) ) )
+            if( m_CornersList[ic].end_contour ||
+                ( ic == (int) (m_CornersList.GetCornersCount() - 1) ) )
             {
                 ok = FindLineSegmentIntersection( a, slope,
                                                   m_CornersList[ic].x, m_CornersList[ic].y,
@@ -977,7 +970,7 @@ void CPolyLine::MoveOrigin( int x_off, int y_off )
 {
     UnHatch();
 
-    for( int ic = 0; ic < GetNumCorners(); ic++ )
+    for( int ic = 0; ic < GetCornersCount(); ic++ )
     {
         SetX( ic, GetX( ic ) + x_off );
         SetY( ic, GetY( ic ) + y_off );
@@ -1284,7 +1277,7 @@ void CPOLYGONS_LIST::ImportFrom( KI_POLYGON_SET& aPolygons )
 void ConvertPolysListWithHolesToOnePolygon( const CPOLYGONS_LIST& aPolysListWithHoles,
                                             CPOLYGONS_LIST&  aOnePolyList )
 {
-    unsigned corners_count = aPolysListWithHoles.size();
+    unsigned corners_count = aPolysListWithHoles.GetCornersCount();
 
     int      polycount = 0;
     for( unsigned ii = 0; ii < corners_count; ii++ )
@@ -1305,7 +1298,7 @@ void ConvertPolysListWithHolesToOnePolygon( const CPOLYGONS_LIST& aPolysListWith
     KI_POLYGON_SET mainpoly;
     KI_POLYGON poly_tmp;
     std::vector<KI_POLY_POINT> cornerslist;
-    corners_count = aPolysListWithHoles.size();
+    corners_count = aPolysListWithHoles.GetCornersCount();
 
     unsigned ic    = 0;
     // enter main outline
