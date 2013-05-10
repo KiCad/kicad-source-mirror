@@ -44,6 +44,7 @@ class PCB_TARGET;
 class TEXTE_MODULE;
 class ZONE_CONTAINER;
 class BOARD;
+class REPORTER;
 
 // Shared Config keys for plot and print
 #define OPTKEY_LAYERBASE             wxT( "PlotLayer_%d" )
@@ -218,16 +219,16 @@ void PlotSilkScreen( BOARD* aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
 
 /**
  * Function EnsureOutputDirectory (helper function)
- * Fix the output directory pathname to absolute and ensure it exists
- * (Creates it if not exists)
- * @param aOutputDir = the wxFileName to modify
- *          (contains the absolute or relative to the board path
- * @param aBoardFilename = the board full filename
- * @param aMessageBox = a wxMessageBox to show message (can be NULL)
+ * make \a OutputDir absolute and creates the path if it doesn't exist.
+ * @param aOutputDir  the wxFileName containing the full path and file name to modify.  The path
+ *                    may be absolute or relative to \a aBoardFilename .
+ * @param aBoardFilename the board full path and filename.
+ * @param aReporter a point to a REPORTER object use to show messages (can be NULL)
+ * @return true if \a aOutputDir already exists or was successfully created.
  */
-bool EnsureOutputDirectory( wxFileName* aOutputDir,
+bool EnsureOutputDirectory( wxFileName*     aOutputDir,
                             const wxString& aBoardFilename,
-                            wxTextCtrl* aMessageBox );
+                            REPORTER*       aReporter = NULL );
 
 /**
  * Function BuildPlotFileName (helper function)
@@ -236,15 +237,23 @@ bool EnsureOutputDirectory( wxFileName* aOutputDir,
  * the suffix is usually the layer name
  * replaces not allowed chars in suffix by '_'
  * @param aFilename = the wxFileName to initialize
- *                  Contians the base filename
+ *                  Contains the base filename
  * @param aOutputDir = the path
  * @param aSuffix = the suffix to add to the base filename
  * @param aExtension = the file extension
  */
-void BuildPlotFileName( wxFileName* aFilename,
+void BuildPlotFileName( wxFileName*     aFilename,
                         const wxString& aOutputDir,
                         const wxString& aSuffix,
                         const wxString& aExtension );
+
+
+/**
+ * Function GetGerberExtension
+ * @return the appropriate Gerber file extension for \a aLayer
+ */
+extern wxString GetGerberExtension( LAYER_NUM aLayer );
+
 
 // PLOTGERB.CPP
 void SelectD_CODE_For_LineDraw( PLOTTER* plotter, int aSize );

@@ -72,6 +72,9 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
                 }
             }
 
+            wxLogDebug( wxT( "Path <%s> -> <%s>." ), GetChars( aFootprintsLibNames[ii] ),
+                        GetChars( filename.GetFullPath() ) );
+
             if( !filename.FileExists() )
             {
                 m_filesNotFound << filename.GetFullName() << wxT( "\n" );
