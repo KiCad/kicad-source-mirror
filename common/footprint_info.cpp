@@ -32,20 +32,14 @@
  * and their documentation (comments and keywords)
  */
 #include <fctsys.h>
-#include <wxstruct.h>
 #include <common.h>
-#include <kicad_string.h>
 #include <macros.h>
 #include <appl_wxstruct.h>
-
-#include <pcbcommon.h>
-#include <pcbstruct.h>
+#include <wildcards_and_files_ext.h>
 #include <footprint_info.h>
 #include <io_mgr.h>
 
-#include <class_pad.h>
 #include <class_module.h>
-#include <wildcards_and_files_ext.h>
 
 
 bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
@@ -62,14 +56,20 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
         // Parse Libraries Listed
         for( unsigned ii = 0; ii < aFootprintsLibNames.GetCount(); ii++ )
         {
-            // File names can be fully qualified or file name only.
+            // Footprint library file names can be fully qualified or file name only.
             wxFileName filename = aFootprintsLibNames[ii];
 
-            if( !filename.IsAbsolute() )
+            if( !filename.FileExists() )
             {
-                filename = wxFileName( wxEmptyString, aFootprintsLibNames[ii],
-                                       LegacyFootprintLibPathExtension );
-                filename = wxGetApp().FindLibraryPath( filename );
+                filename = wxGetApp().FindLibraryPath( filename.GetFullName() );
+
+                if( !filename.FileExists() )
+                {
+                    filename = wxFileName( wxEmptyString, aFootprintsLibNames[ii],
+                                           LegacyFootprintLibPathExtension );
+
+                    filename = wxGetApp().FindLibraryPath( filename.GetFullName() );
+                }
             }
 
             if( !filename.FileExists() )
