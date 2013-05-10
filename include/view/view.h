@@ -355,14 +355,15 @@ private:
     ///* Sorts m_orderedLayers when layer rendering order has changed
     void    sortLayers();
 
-    ///* Clears cached GAL display lists
+    ///* Clears cached GAL group numbers (*ONLY* numbers stored in VIEW_ITEMs, not group objects
+    ///* used by GAL)
     void    clearGroupCache();
 
     /// Determines rendering order of layers. Used in display order sorting function.
     static bool compareRenderingOrder( VIEW_LAYER* i, VIEW_LAYER* j )
     {
         return i->renderingOrder > j->renderingOrder;
-    };
+    }
 
     /// Contains set of possible displayed layers and its properties
     LayerMap    m_layers;

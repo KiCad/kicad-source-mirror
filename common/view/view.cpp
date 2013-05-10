@@ -208,9 +208,9 @@ void VIEW::SetGAL( GAL* aGal )
     if( m_painter )
         m_painter->SetGAL( m_gal );
 
-    // items need to be recached after changing GAL
-    //if( m_useGroups )
-        //RecacheAllItems();
+    // clear group numbers, so everything is going to be recached
+    if( m_useGroups )
+        clearGroupCache();
 
     // force the new GAL to display the current viewport.
     SetCenter( m_center );
@@ -387,7 +387,6 @@ struct VIEW::drawItem
                 aItem->setGroup( currentLayer, group );
                 view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), currentLayer );
                 gal->EndGroup();
-                //gal->DrawGroup( group );
             }
         }
         else if( aItem->ViewIsVisible() )
@@ -460,19 +459,23 @@ struct VIEW::recacheItem
 
     void operator()( VIEW_ITEM* aItem )
     {
-        //aItem->deleteGroups();
-        /*int prevGroup = aItem->getGroup( layer );
-        if( prevGroup != -1 )
+        // Remove previously cached group
+        int prevGroup = aItem->getGroup( layer );
+        if( prevGroup >= 0 )
         {
             gal->DeleteGroup( prevGroup );
-        }*/
+        }
 
         if( immediately )
         {
             int group = gal->BeginGroup();
-            aItem->setGroup( layer, group );
             view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), layer );
+            aItem->setGroup( layer, group );
             gal->EndGroup();
+        }
+        else
+        {
+            aItem->setGroup( layer, -1 );
         }
     }
 
@@ -565,12 +568,6 @@ struct VIEW::clearItemCache
     {
         if( aItem->storesGroups() )
         {
-            std::vector<int> groups = aItem->getAllGroups();
-            for(std::vector<int>::iterator i = groups.begin(); i != groups.end(); i++ )
-            {
-                view->GetGAL()->DeleteGroup( *i );
-            }
-
             aItem->deleteGroups();
         }
     }
@@ -581,6 +578,9 @@ struct VIEW::clearItemCache
 
 void VIEW::clearGroupCache()
 {
+    if( !m_useGroups )
+            return;
+
     BOX2I r;
 
     r.SetMaximum();
@@ -596,22 +596,25 @@ void VIEW::clearGroupCache()
 
 void VIEW::RecacheAllItems( bool aImmediately )
 {
+    if( !m_useGroups )
+        return;
+
     BOX2I r;
 
     r.SetMaximum();
 
-    wxLogDebug( wxT( "RecacheAllItems::immediately: %u" ), aImmediately );
-
-    if( aImmediately )
+    //if( aImmediately )
         m_gal->BeginDrawing();
+
+    wxLogDebug( wxT( "RecacheAllItems::immediately: %u" ), aImmediately );
 
     for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = & ( ( *i ).second );
         recacheItem visitor( this, m_gal, l->id, aImmediately );
         l->items->Query( r, visitor );
-    };
+    }
 
-    if( aImmediately )
+    //if( aImmediately )
         m_gal->EndDrawing();
 }

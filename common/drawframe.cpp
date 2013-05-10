@@ -947,7 +947,6 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     if( aEnable && m_galCanvasActive )
     {
         // When we switch between GAL based canvases, all we need is a refresh
-        view->RecacheAllItems( true );
         m_galCanvas->Refresh();
     }
 
@@ -980,9 +979,6 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     m_auimgr.GetPane( wxT( "DrawFrame" ) ).Show( !aEnable );
     m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show( aEnable );
     m_auimgr.Update();
-
-    if( aEnable )
-        view->RecacheAllItems( true );
 
     m_galCanvasActive = aEnable;
 #endif /* KICAD_GAL */
