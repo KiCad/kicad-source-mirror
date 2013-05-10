@@ -1,7 +1,3 @@
-/**
- * @file pcbnew/pcbplot.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,6 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file pcbnew/pcbplot.cpp
+ */
+
 #include <fctsys.h>
 #include <plot_common.h>
 #include <confirm.h>
@@ -34,6 +34,7 @@
 #include <pcbplot.h>
 #include <pcbstruct.h>
 #include <base_units.h>
+#include <reporter.h>
 #include <class_board.h>
 #include <pcbnew.h>
 #include <plotcontroller.h>
@@ -43,9 +44,7 @@
 #include <macros.h>
 
 
-/** Get the 'traditional' gerber extension depending on the layer
-*/
-static wxString GetGerberExtension( LAYER_NUM layer )/*{{{*/
+wxString GetGerberExtension( LAYER_NUM layer )
 {
     switch( layer )
     {
@@ -107,17 +106,13 @@ static wxString GetGerberExtension( LAYER_NUM layer )/*{{{*/
     default:
         return wxString( wxT( "gbr" ) );
     }
-}/*}}}*/
+}
 
-/* Complete a plot filename: forces the output directory,
- * add a suffix to the name and sets the specified extension
- * the suffix is usually the layer name
- * replaces not allowed chars in suffix by '_'
- */
-void BuildPlotFileName( wxFileName *aFilename,
-                               const wxString& aOutputDir,
-                               const wxString& aSuffix,
-                               const wxString& aExtension )
+
+void BuildPlotFileName( wxFileName*     aFilename,
+                        const wxString& aOutputDir,
+                        const wxString& aSuffix,
+                        const wxString& aExtension )
 {
     aFilename->SetPath( aOutputDir );
 
@@ -141,190 +136,73 @@ void BuildPlotFileName( wxFileName *aFilename,
         aFilename->SetName( aFilename->GetName() + wxT( "-" ) + suffix );
 }
 
-/*
- * Fix the output directory pathname to absolute and ensure it exists
- * (Creates it if not exists)
- */
-bool EnsureOutputDirectory( wxFileName *aOutputDir,
+
+bool EnsureOutputDirectory( wxFileName*     aOutputDir,
                             const wxString& aBoardFilename,
-                            wxTextCtrl* aMessageBox )
+                            REPORTER*       aReporter )
 {
+    wxString msg;
     wxString boardFilePath = wxFileName( aBoardFilename ).GetPath();
 
     if( !aOutputDir->MakeAbsolute( boardFilePath ) )
     {
-        wxString msg;
-        msg.Printf( _( "Cannot make <%s> absolute with respect to <%s>!" ),
-                    GetChars( aOutputDir->GetPath() ),
-                    GetChars( boardFilePath ) );
-        wxMessageBox( msg, _( "Plot" ), wxOK | wxICON_ERROR );
+        if( aReporter )
+        {
+            msg.Printf( _( "*** Error: cannot make path <%s> absolute with respect to <%s>! ***" ),
+                        GetChars( aOutputDir->GetPath() ),
+                        GetChars( boardFilePath ) );
+            aReporter->Report( msg );
+        }
+
         return false;
     }
 
     wxString outputPath( aOutputDir->GetPath() );
+
     if( !wxFileName::DirExists( outputPath ) )
     {
         if( wxMkdir( outputPath ) )
         {
-            if( aMessageBox )
+            if( aReporter )
             {
-                wxString msg;
-                msg.Printf( _( "Directory <%s> created.\n" ), GetChars( outputPath ) );
-                aMessageBox->AppendText( msg );
+                msg.Printf( _( "Output directory <%s> created.\n" ), GetChars( outputPath ) );
+                aReporter->Report( msg );
                 return true;
             }
         }
         else
         {
-            if( aMessageBox )
-                wxMessageBox( _( "Cannot create output directory!" ),
-                              _( "Plot" ), wxOK | wxICON_ERROR );
+            if( aReporter )
+            {
+                msg.Printf( _( "*** Error: cannot create output directory <%s>! ***\n" ),
+                            GetChars( outputPath ) );
+                aReporter->Report( msg );
+            }
+
             return false;
         }
     }
+
     return true;
 }
 
-/*
- * DIALOG_PLOT:Plot
- * Actually creates the files
- */
-void DIALOG_PLOT::Plot( wxCommandEvent& event )
-{
-    applyPlotSettings();
 
-    // Create output directory if it does not exist (also transform it in
-    // absolute form). Bail if it fails
-    wxFileName outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
-    wxString boardFilename = m_parent->GetBoard()->GetFileName();
-    if( !EnsureOutputDirectory( &outputDir, boardFilename, m_messagesBox ) )
-        return;
-
-    m_plotOpts.SetAutoScale( false );
-    m_plotOpts.SetScale( 1 );
-    switch( m_plotOpts.GetScaleSelection() )
-    {
-    default:
-        break;
-
-    case 0:     // Autoscale option
-        m_plotOpts.SetAutoScale( true );
-        break;
-
-    case 2:     // 3:2 option
-        m_plotOpts.SetScale( 1.5 );
-        break;
-
-    case 3:     // 2:1 option
-        m_plotOpts.SetScale( 2 );
-        break;
-
-    case 4:     // 3:1 option
-        m_plotOpts.SetScale( 3 );
-        break;
-    }
-
-    /* If the scale factor edit controls are disabled or the scale value
-     * is 0, don't adjust the base scale factor.   This fixes a bug when
-     * the default scale adjust is initialized to 0 and saved in program
-     * settings resulting in a divide by zero fault.
-     */
-    if( m_fineAdjustXscaleOpt->IsEnabled()  && m_XScaleAdjust != 0.0 )
-        m_plotOpts.SetFineScaleAdjustX( m_XScaleAdjust );
-
-    if( m_fineAdjustYscaleOpt->IsEnabled() && m_YScaleAdjust != 0.0 )
-        m_plotOpts.SetFineScaleAdjustY( m_YScaleAdjust );
-
-    if( m_PSFineAdjustWidthOpt->IsEnabled() )
-        m_plotOpts.SetWidthAdjust( m_PSWidthAdjust );
-
-    wxString file_ext( GetDefaultPlotExtension( m_plotOpts.GetFormat() ) );
-
-    // Test for a reasonable scale value
-    // XXX could this actually happen? isn't it constrained in the apply
-    // function?
-    if( m_plotOpts.GetScale() < PLOT_MIN_SCALE )
-        DisplayInfoMessage( this,
-                            _( "Warning: Scale option set to a very small value" ) );
-
-    if( m_plotOpts.GetScale() > PLOT_MAX_SCALE )
-        DisplayInfoMessage( this,
-                            _( "Warning: Scale option set to a very large value" ) );
-
-    // Save the current plot options in the board
-    m_parent->SetPlotSettings( m_plotOpts );
-
-    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
-    {
-        if( m_plotOpts.GetLayerSelection() & GetLayerMask( layer ) )
-        {
-            // Pick the basename from the board file
-            wxFileName fn( boardFilename );
-
-            // Use Gerber Extensions based on layer number
-            // (See http://en.wikipedia.org/wiki/Gerber_File)
-            if( ( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER )
-                && m_useGerberExtensions->GetValue() )
-                file_ext = GetGerberExtension( layer );
-
-            // Create file name (from the English layer name for non copper layers).
-            BuildPlotFileName( &fn, outputDir.GetPath(),
-                               m_board->GetStandardLayerName( layer ),
-                               file_ext );
-
-            LOCALE_IO toggle;
-            BOARD *board = m_parent->GetBoard();
-            PLOTTER *plotter = StartPlotBoard(board, &m_plotOpts,
-                                              fn.GetFullPath(),
-                                              wxEmptyString );
-
-            // Print diags in messages box:
-            wxString msg;
-            if( plotter )
-            {
-                PlotOneBoardLayer( board, plotter, layer, m_plotOpts );
-                plotter->EndPlot();
-                delete plotter;
-
-                msg.Printf( _( "Plot file <%s> created" ), GetChars( fn.GetFullPath() ) );
-            }
-            else
-                msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
-
-            msg << wxT( "\n" );
-            m_messagesBox->AppendText( msg );
-        }
-    }
-
-    // If no layer selected, we have nothing plotted.
-    // Prompt user if it happens because he could think there is a bug in Pcbnew.
-    if( !m_plotOpts.GetLayerSelection() )
-        DisplayError( this, _( "No layer selected" ) );
-}
-
-void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
-{
-    DIALOG_PLOT dlg( this );
-    dlg.ShowModal();
-}
-
-/** Batch plotter constructor, nothing interesting here */
 PLOT_CONTROLLER::PLOT_CONTROLLER( BOARD *aBoard )
     : m_plotter( NULL ), m_board( aBoard )
 {
 }
 
-/** Batch plotter destructor, ensures that the last plot is closed */
+
 PLOT_CONTROLLER::~PLOT_CONTROLLER()
 {
     ClosePlot();
 }
 
+
 /* IMPORTANT THING TO KNOW: the locale during plots *MUST* be kept as
  * C/POSIX using a LOCALE_IO object on the stack. This even when
  * opening/closing the plotfile, since some drivers do I/O even then */
 
-/** Close the current plot, nothing happens if it isn't open */
 void PLOT_CONTROLLER::ClosePlot()
 {
     LOCALE_IO toggle;
@@ -337,10 +215,9 @@ void PLOT_CONTROLLER::ClosePlot()
     }
 }
 
-/** Open a new plotfile; works as a factory for plotter objects
- */
-bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix, /*{{{*/
-                                    PlotFormat aFormat,
+
+bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
+                                    PlotFormat     aFormat,
                                     const wxString &aSheetDesc )
 {
     LOCALE_IO toggle;
@@ -358,20 +235,20 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix, /*{{{*/
     wxString outputDirName = m_plotOpts.GetOutputDirectory() ;
     wxFileName outputDir = wxFileName::DirName( outputDirName );
     wxString boardFilename = m_board->GetFileName();
-    if( EnsureOutputDirectory( &outputDir, boardFilename, NULL ) )
+
+    if( EnsureOutputDirectory( &outputDir, boardFilename ) )
     {
         wxFileName fn( boardFilename );
-        BuildPlotFileName( &fn, outputDirName,
-                aSuffix, GetDefaultPlotExtension( aFormat ) );
+        BuildPlotFileName( &fn, outputDirName, aSuffix, GetDefaultPlotExtension( aFormat ) );
 
-        m_plotter = StartPlotBoard( m_board, &m_plotOpts, fn.GetFullPath(),
-                                    aSheetDesc );
+        m_plotter = StartPlotBoard( m_board, &m_plotOpts, fn.GetFullPath(), aSheetDesc );
     }
-    return( m_plotter != NULL );
-}/*}}}*/
 
-/** Plot a single layer on the current plotfile */
-bool PLOT_CONTROLLER::PlotLayer( LAYER_NUM aLayer )/*{{{*/
+    return( m_plotter != NULL );
+}
+
+
+bool PLOT_CONTROLLER::PlotLayer( LAYER_NUM aLayer )
 {
     LOCALE_IO toggle;
 
@@ -383,7 +260,8 @@ bool PLOT_CONTROLLER::PlotLayer( LAYER_NUM aLayer )/*{{{*/
     PlotOneBoardLayer( m_board, m_plotter, aLayer, m_plotOpts );
 
     return true;
-}/*}}}*/
+}
+
 
 void PLOT_CONTROLLER::SetColorMode( bool aColorMode )
 {
@@ -393,6 +271,7 @@ void PLOT_CONTROLLER::SetColorMode( bool aColorMode )
     m_plotter->SetColorMode( aColorMode );
 }
 
+
 bool PLOT_CONTROLLER::GetColorMode()
 {
     if( !m_plotter )
@@ -400,4 +279,3 @@ bool PLOT_CONTROLLER::GetColorMode()
 
     return m_plotter->GetColorMode();
 }
-

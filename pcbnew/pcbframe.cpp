@@ -53,6 +53,7 @@
 #include <module_editor_frame.h>
 #include <dialog_SVG_print.h>
 #include <dialog_helpers.h>
+#include <dialog_plot.h>
 #include <convert_from_iu.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
@@ -853,3 +854,9 @@ void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )
         }
 }
 
+
+void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
+{
+    DIALOG_PLOT dlg( this );
+    dlg.ShowModal();
+}
