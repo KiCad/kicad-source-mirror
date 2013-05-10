@@ -46,6 +46,9 @@ VBO_ITEM::~VBO_ITEM()
 {
     if( m_vertices )
         delete m_vertices;
+
+    if( m_indices )
+        delete m_indices;
 }
 
 
@@ -76,7 +79,7 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
     m_indices = newIndices;
 
     // Add the new vertex
-    newIndices[m_size] = m_offset + m_size;
+    m_indices[m_size] = m_offset + m_size;
 
     m_size++;
     m_isDirty = true;

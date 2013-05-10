@@ -339,7 +339,6 @@ private:
     GLuint                displayListsArcs;       ///< Arc display list
     GLuint                displayListCircle;      ///< Circle display list
     GLuint                displayListSemiCircle;  ///< Semi circle display list
-    std::deque<GLuint>    displayListsGroup;      ///< List of display lists used for groups
 
     // Vertex buffer objects related fields
     std::deque<VBO_ITEM*> vboItems;               ///< Stores informations about VBO objects
@@ -382,7 +381,7 @@ private:
     bool            isShaderInitialized;        ///< Was the shader initialized?
     bool            isShaderEnabled;            ///< Are the shaders enabled?
     bool            isUseShader;                ///< Should the shaders be used?
-    bool            isGroupStarted;             ///< Was a group started?
+    bool            isGrouping;                 ///< Was a group started?
     int             currentShader;              ///< ID of the shader currently in use
     std::string     shaderPath;
 

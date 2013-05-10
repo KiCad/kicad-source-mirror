@@ -52,7 +52,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                 wxEXPAND, aName )
 {
     // Create the OpenGL-Context
-    glContext = new wxGLContext( this );
+    glContext       = new wxGLContext( this );
     parentWindow    = aParent;
     mouseListener   = aMouseListener;
     paintListener   = aPaintListener;
@@ -68,11 +68,12 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     isFrameBufferInitialized = false;
     isUseShader              = isUseShaders;
     isShaderInitialized      = false;
-    isGroupStarted           = false;
+    isGrouping           = false;
     shaderPath               = "../../common/gal/opengl/shader/";
     wxSize parentSize        = aParent->GetSize();
 
     isVboInitialized         = false;
+    vboNeedsUpdate           = false;
     curVboItem               = NULL;
     vboSize                  = 0;
 
@@ -110,13 +111,6 @@ OPENGL_GAL::~OPENGL_GAL()
 {
     glFlush();
 
-    // Delete the stored display lists
-    for( std::deque<GLuint>::iterator group = displayListsGroup.begin();
-         group != displayListsGroup.end(); group++ )
-    {
-        glDeleteLists( *group, 1 );
-    }
-
     // Delete the buffers
     if( isFrameBufferInitialized )
     {
@@ -126,6 +120,12 @@ OPENGL_GAL::~OPENGL_GAL()
 
     if( isVboInitialized )
     {
+        std::deque<VBO_ITEM*>::iterator it, end;
+        for( it = vboItems.begin(), end = vboItems.end(); it != end; it++ )
+        {
+            delete *it;
+        }
+
         deleteVertexBufferObjects();
     }
 
@@ -514,8 +514,8 @@ void OPENGL_GAL::rebuildVbo()
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboSize * VBO_ITEM::IndSize, indicesBuffer, GL_DYNAMIC_DRAW );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
-    delete verticesBuffer;
-    delete indicesBuffer;
+    delete[] verticesBuffer;
+    delete[] indicesBuffer;
 
     vboNeedsUpdate = false;
 
@@ -607,7 +607,7 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
     // XXX Should be improved later.
     double scale     = 0.5 * lineWidth / lineLength;
     double scale1pix = 0.5001 / worldScale / lineLength;
-    if( lineWidth * worldScale < 1.0002 && !isGroupStarted )
+    if( lineWidth * worldScale < 1.0002 && !isGrouping )
     {
         scale = scale1pix;
     }
@@ -637,7 +637,7 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
     double   lineAngle      = atan2( startEndVector.y, startEndVector.x );
 
-    if ( isGroupStarted )
+    if ( isGrouping )
     {
         // Angle of a line perpendicular to the segment being drawn
         double beta = ( M_PI / 2.0 ) - lineAngle;
@@ -1464,7 +1464,7 @@ void OPENGL_GAL::Restore()
 
 int OPENGL_GAL::BeginGroup()
 {
-    isGroupStarted = true;
+    isGrouping = true;
 
     // There is a new group that is not in VBO yet
     vboNeedsUpdate = true;
@@ -1482,17 +1482,25 @@ void OPENGL_GAL::EndGroup()
 {
     vboSize += curVboItem->GetSize();
 
-    isGroupStarted = false;
+    isGrouping = false;
 }
 
 
 void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 {
+    if( aGroupNumber >= vboItems.size() )
+    {
+        // This should not happen
+        wxLogDebug( wxT( "Tried to delete not existing group" ) );
+        return;
+    }
+
     std::deque<VBO_ITEM*>::iterator it = vboItems.begin();
     std::advance( it, aGroupNumber );
 
+    //vboSize -= it->GetSize(); // FIXME?
     delete *it;
-    vboItems.erase( it );
+    //vboItems.erase( it );
 
     vboNeedsUpdate = true;
 }

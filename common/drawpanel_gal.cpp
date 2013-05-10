@@ -71,7 +71,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_view->SetGAL( m_gal );
 
     // View uses layers to display EDA_ITEMs (item may be displayed on several layers, for example
-    // pad may be shown on pad, pad hole nad solder paste layers). There are usual copper layers
+    // pad may be shown on pad, pad hole and solder paste layers). There are usual copper layers
     // (eg. F.Cu, B.Cu, internal and so on) and layers for displaying objects such as texts,
     // silkscreen, pads, vias, etc.
     for( int i = 0; i < TOTAL_LAYER_COUNT; i++ )
@@ -154,7 +154,10 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
     m_gal->ComputeWorldScreenMatrix();
 
     if( m_view )
+    {
         m_view->SetGAL( m_gal );
+        m_view->RecacheAllItems( true );
+    }
 
     wxSize size = GetClientSize();
     m_gal->ResizeScreen( size.GetX(), size.GetY() );
