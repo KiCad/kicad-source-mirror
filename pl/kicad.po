@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-09 06:19+0100\n"
-"PO-Revision-Date: 2013-05-09 06:26+0100\n"
+"POT-Creation-Date: 2013-05-11 13:06+0100\n"
+"PO-Revision-Date: 2013-05-11 13:10+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -153,7 +153,7 @@ msgstr ""
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
 #: eeschema/schframe.cpp:1015 pcbnew/moduleframe.cpp:602
-#: pcbnew/pcbframe.cpp:801 cvpcb/cvframe.cpp:717
+#: pcbnew/pcbframe.cpp:802 cvpcb/cvframe.cpp:717
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -1336,7 +1336,7 @@ msgstr "Symbol zasilania"
 #: eeschema/lib_pin.cpp:1842 eeschema/sch_text.cpp:796
 #: pcbnew/class_drawsegment.cpp:325 pcbnew/class_marker_pcb.cpp:98
 #: pcbnew/class_text_mod.cpp:367 pcbnew/class_track.cpp:1059
-#: pcbnew/class_zone.cpp:650 pcbnew/dialogs/dialog_layers_setup.cpp:290
+#: pcbnew/class_zone.cpp:651 pcbnew/dialogs/dialog_layers_setup.cpp:290
 #: gerbview/class_gerber_draw_item.cpp:547
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:167
@@ -3298,7 +3298,7 @@ msgstr "Dodaj symbol"
 msgid "Add power"
 msgstr "Dodaj port zasilania"
 
-#: eeschema/schframe.cpp:433 pcbnew/pcbframe.cpp:490
+#: eeschema/schframe.cpp:433 pcbnew/pcbframe.cpp:491
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -6344,7 +6344,7 @@ msgstr "Segment"
 #: pcbnew/class_drawsegment.cpp:356 pcbnew/class_module.cpp:474
 #: pcbnew/class_pad.cpp:527 pcbnew/class_pcb_layer_widget.cpp:201
 #: pcbnew/class_pcb_text.cpp:132 pcbnew/class_text_mod.cpp:377
-#: pcbnew/class_track.cpp:1131 pcbnew/class_zone.cpp:702
+#: pcbnew/class_track.cpp:1131 pcbnew/class_zone.cpp:703
 #: pcbnew/layer_widget.cpp:533 pcbnew/sel_layer.cpp:146
 #: gerbview/class_gerbview_layer_widget.cpp:87
 #: gerbview/dialogs/dialog_print_using_printer.cpp:145
@@ -6993,13 +6993,13 @@ msgstr "Ścieżka"
 msgid "Zone"
 msgstr "Strefa"
 
-#: pcbnew/class_track.cpp:1071 pcbnew/class_zone.cpp:685
+#: pcbnew/class_track.cpp:1071 pcbnew/class_zone.cpp:686
 #: pcbnew/zones_by_polygon_fill_functions.cpp:111
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:46
 msgid "NetName"
 msgstr "Nazwa sieci"
 
-#: pcbnew/class_track.cpp:1075 pcbnew/class_zone.cpp:690
+#: pcbnew/class_track.cpp:1075 pcbnew/class_zone.cpp:691
 msgid "NetCode"
 msgstr "Kod sieci"
 
@@ -7032,76 +7032,76 @@ msgstr "Nie znaleziono"
 msgid "Track %s, net [%s] (%d) on layer %s, length: %s"
 msgstr "Ścieżka %s, sieć [%s] (%d) na warstwie %s, długość: %s"
 
-#: pcbnew/class_zone.cpp:641
+#: pcbnew/class_zone.cpp:642
 msgid "Zone Outline"
 msgstr "Obrys strefy"
 
-#: pcbnew/class_zone.cpp:648 pcbnew/class_zone.cpp:922
+#: pcbnew/class_zone.cpp:649 pcbnew/class_zone.cpp:923
 msgid "(Cutout)"
 msgstr "(Obszar odcięty)"
 
-#: pcbnew/class_zone.cpp:657
+#: pcbnew/class_zone.cpp:658
 msgid "No via"
 msgstr "Bez przelotek"
 
-#: pcbnew/class_zone.cpp:660
+#: pcbnew/class_zone.cpp:661
 msgid "No track"
 msgstr "Bez ścieżek"
 
-#: pcbnew/class_zone.cpp:663
+#: pcbnew/class_zone.cpp:664
 msgid "No copper pour"
 msgstr "Bez stref wypełnień"
 
-#: pcbnew/class_zone.cpp:665
+#: pcbnew/class_zone.cpp:666
 msgid "Keepout"
 msgstr "Strefa chroniona"
 
-#: pcbnew/class_zone.cpp:682 pcbnew/class_zone.cpp:952
+#: pcbnew/class_zone.cpp:683 pcbnew/class_zone.cpp:953
 msgid "Not Found"
 msgstr "Nie znaleziono"
 
-#: pcbnew/class_zone.cpp:695
+#: pcbnew/class_zone.cpp:696
 msgid "Priority"
 msgstr "Priorytet"
 
-#: pcbnew/class_zone.cpp:699
+#: pcbnew/class_zone.cpp:700
 msgid "Non Copper Zone"
 msgstr "Strefa bez pola miedzi"
 
-#: pcbnew/class_zone.cpp:705
+#: pcbnew/class_zone.cpp:706
 msgid "Corners"
 msgstr "Narożniki"
 
-#: pcbnew/class_zone.cpp:708
+#: pcbnew/class_zone.cpp:709
 msgid "Segments"
 msgstr "Segmenty"
 
-#: pcbnew/class_zone.cpp:710
+#: pcbnew/class_zone.cpp:711
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:67
 msgid "Polygons"
 msgstr "Wielokąty"
 
-#: pcbnew/class_zone.cpp:712
+#: pcbnew/class_zone.cpp:713
 msgid "Fill mode"
 msgstr "Tryb wypełnienia"
 
-#: pcbnew/class_zone.cpp:716
+#: pcbnew/class_zone.cpp:717
 msgid "Hatch lines"
 msgstr "Linie kreskowe"
 
-#: pcbnew/class_zone.cpp:721
+#: pcbnew/class_zone.cpp:722
 msgid "Corners in DrawList"
 msgstr "Narożniki w liście rysunkowej"
 
-#: pcbnew/class_zone.cpp:925
+#: pcbnew/class_zone.cpp:926
 msgid "(Keepout)"
 msgstr "(Strefa chroniona)"
 
-#: pcbnew/class_zone.cpp:945
+#: pcbnew/class_zone.cpp:946
 msgid "** NO BOARD DEFINED **"
 msgstr "** NIE ZDEFINIOWANO PŁYTKI **"
 
-#: pcbnew/class_zone.cpp:956
+#: pcbnew/class_zone.cpp:957
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Obrys strefy %s na warstwie %s"
@@ -7356,7 +7356,7 @@ msgstr "Zapisz plik płytki GenCAD"
 
 #: pcbnew/export_gencad.cpp:139 pcbnew/gen_modules_placefile.cpp:225
 #: pcbnew/gen_modules_placefile.cpp:263 pcbnew/gen_modules_placefile.cpp:542
-#: pcbnew/pcbplot.cpp:292
+#: pcbnew/dialogs/dialog_plot.cpp:808
 #, c-format
 msgid "Unable to create <%s>"
 msgstr "Nie mogę utworzyć <%s>"
@@ -7492,26 +7492,26 @@ msgid "Insert footprint in board"
 msgstr "Wstaw footprint na płytkę"
 
 #: pcbnew/gen_modules_placefile.cpp:151 pcbnew/gen_modules_placefile.cpp:521
-#: pcbnew/dialogs/dialog_gendrill.cpp:279 pcbnew/dialogs/dialog_plot.cpp:316
-#: pcbnew/dialogs/dialog_SVG_print.cpp:179
+#: pcbnew/dialogs/dialog_gendrill.cpp:279 pcbnew/dialogs/dialog_plot.cpp:317
+#: pcbnew/dialogs/dialog_SVG_print.cpp:182
 msgid "Select Output Directory"
 msgstr "Wybierz folder wyjściowy"
 
 #: pcbnew/gen_modules_placefile.cpp:158 pcbnew/dialogs/dialog_gendrill.cpp:286
-#: pcbnew/dialogs/dialog_plot.cpp:323 pcbnew/dialogs/dialog_SVG_print.cpp:186
+#: pcbnew/dialogs/dialog_plot.cpp:324 pcbnew/dialogs/dialog_SVG_print.cpp:189
 msgid "Use a relative path? "
 msgstr "Użyć ścieżki względnej? "
 
 #: pcbnew/gen_modules_placefile.cpp:159 pcbnew/gen_modules_placefile.cpp:168
 #: pcbnew/dialogs/dialog_gendrill.cpp:287
-#: pcbnew/dialogs/dialog_gendrill.cpp:297 pcbnew/dialogs/dialog_plot.cpp:324
-#: pcbnew/dialogs/dialog_plot.cpp:334 pcbnew/dialogs/dialog_SVG_print.cpp:187
-#: pcbnew/dialogs/dialog_SVG_print.cpp:197
+#: pcbnew/dialogs/dialog_gendrill.cpp:297 pcbnew/dialogs/dialog_plot.cpp:325
+#: pcbnew/dialogs/dialog_plot.cpp:334 pcbnew/dialogs/dialog_SVG_print.cpp:190
+#: pcbnew/dialogs/dialog_SVG_print.cpp:199
 msgid "Plot Output Directory"
 msgstr "Folder docelowy"
 
 #: pcbnew/gen_modules_placefile.cpp:167 pcbnew/dialogs/dialog_gendrill.cpp:296
-#: pcbnew/dialogs/dialog_plot.cpp:333 pcbnew/dialogs/dialog_SVG_print.cpp:196
+#: pcbnew/dialogs/dialog_plot.cpp:333 pcbnew/dialogs/dialog_SVG_print.cpp:198
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
@@ -8962,7 +8962,7 @@ msgid "Library is not set, the module could not be saved."
 msgstr ""
 "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
-#: pcbnew/moduleframe.cpp:477 pcbnew/pcbframe.cpp:554
+#: pcbnew/moduleframe.cpp:477 pcbnew/pcbframe.cpp:555
 #: cvpcb/class_DisplayFootprintsFrame.cpp:440
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
@@ -9622,17 +9622,17 @@ msgstr "Przelotka %s, wiercenie %s"
 msgid "Delete Pad (module %s %s) "
 msgstr "Usuń pole lutownicze (footprint %s %s) "
 
-#: pcbnew/pcbframe.cpp:371 pcbnew/pcbframe.cpp:734
+#: pcbnew/pcbframe.cpp:372 pcbnew/pcbframe.cpp:735
 #: gerbview/events_called_functions.cpp:320 gerbview/gerbview_frame.cpp:140
 msgid "Visibles"
 msgstr "Widoczność"
 
-#: pcbnew/pcbframe.cpp:521
+#: pcbnew/pcbframe.cpp:522
 #, c-format
 msgid "The auto save file <%s> could not be removed!"
 msgstr "Plik automatycznej kopii zapasowej <%s> nie może zostac usunięty!"
 
-#: pcbnew/pcbframe.cpp:805
+#: pcbnew/pcbframe.cpp:806
 msgid " [new file]"
 msgstr " [nowy plik]"
 
@@ -9701,48 +9701,21 @@ msgstr "Zapisz plik makr"
 msgid "Read Macros File"
 msgstr "Odczytaj plik makr"
 
-#: pcbnew/pcbplot.cpp:157
+#: pcbnew/pcbplot.cpp:151
 #, c-format
-msgid "Cannot make <%s> absolute with respect to <%s>!"
-msgstr "Nie mogę utworzyć bezwzględnej ścieżki <%s> w stosunku do <%s>!"
+msgid "*** Error: cannot make path <%s> absolute with respect to <%s>! ***"
+msgstr ""
+"*** Błąd: Nie mogę utworzyć względnej ścieżki <%s> w stosunku do <%s>! ***"
 
-#: pcbnew/pcbplot.cpp:160 pcbnew/pcbplot.cpp:181
-#: pcbnew/dialogs/dialog_plot_base.cpp:366
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:106
-#: pcbnew/dialogs/dialog_plot_base.h:128
-msgid "Plot"
-msgstr "Rysuj"
-
-#: pcbnew/pcbplot.cpp:172
+#: pcbnew/pcbplot.cpp:168
 #, c-format
-msgid "Directory <%s> created.\n"
-msgstr "Folder <%s> został utworzony.\n"
+msgid "Output directory <%s> created.\n"
+msgstr "Folder wyjściowy <%s> został utworzony.\n"
 
-#: pcbnew/pcbplot.cpp:180
-msgid "Cannot create output directory!"
-msgstr "Nie można utwożyć folderu docelowego!"
-
-#: pcbnew/pcbplot.cpp:248 pcbnew/dialogs/dialog_print_using_printer.cpp:370
-#: gerbview/dialogs/dialog_print_using_printer.cpp:296
-msgid "Warning: Scale option set to a very small value"
-msgstr "Ostrzeżenie: skala została ustawiona na bardzo małą wartość"
-
-#: pcbnew/pcbplot.cpp:252 pcbnew/dialogs/dialog_print_using_printer.cpp:362
-#: gerbview/dialogs/dialog_print_using_printer.cpp:288
-msgid "Warning: Scale option set to a very large value"
-msgstr "Ostrzeżenie: Skala została ustawiona na bardzo dużą wartość"
-
-#: pcbnew/pcbplot.cpp:289
+#: pcbnew/pcbplot.cpp:177
 #, c-format
-msgid "Plot file <%s> created"
-msgstr "Plik rysunkowy \"%s\" został utworzony"
-
-#: pcbnew/pcbplot.cpp:302 pcbnew/dialogs/dialog_print_using_printer.cpp:436
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:474
-#: gerbview/dialogs/dialog_print_using_printer.cpp:356
-#: gerbview/dialogs/dialog_print_using_printer.cpp:386
-msgid "No layer selected"
-msgstr "Nie wybrano warstwy"
+msgid "*** Error: cannot create output directory <%s>! ***\n"
+msgstr "*** Błąd: Nie można utwożyć folderu docelowego <%s>! ***\n"
 
 #: pcbnew/pcb_parser.cpp:92
 #, c-format
@@ -12072,14 +12045,14 @@ msgstr "Użyj wartości z klas sieci"
 #: pcbnew/dialogs/dialog_gendrill.cpp:418
 #: pcbnew/dialogs/dialog_gendrill.cpp:523
 #: pcbnew/dialogs/dialog_gendrill.cpp:591
-#: pcbnew/dialogs/dialog_SVG_print.cpp:276
+#: pcbnew/dialogs/dialog_SVG_print.cpp:289
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Nie mogę utworzyć %s ** \n"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:425
 #: pcbnew/dialogs/dialog_gendrill.cpp:598
-#: pcbnew/dialogs/dialog_SVG_print.cpp:274
+#: pcbnew/dialogs/dialog_SVG_print.cpp:287
 #, c-format
 msgid "Plot: %s OK\n"
 msgstr "Rysunek: %s OK\n"
@@ -14035,27 +14008,27 @@ msgstr "Wyrównanie:"
 msgid "Orientation (0.1 deg):"
 msgstr "Orientacja (co 0.1 stopnia):"
 
-#: pcbnew/dialogs/dialog_plot.cpp:585
+#: pcbnew/dialogs/dialog_plot.cpp:588
 msgid "HPGL pen size constrained!\n"
 msgstr "Rozmiar pisaka HPGL ograniczony!\n"
 
-#: pcbnew/dialogs/dialog_plot.cpp:598
+#: pcbnew/dialogs/dialog_plot.cpp:601
 msgid "HPGL pen overlay constrained!\n"
 msgstr "Pokrycie pisaka HPGL ograniczone!\n"
 
-#: pcbnew/dialogs/dialog_plot.cpp:610
+#: pcbnew/dialogs/dialog_plot.cpp:613
 msgid "Default linewidth constrained!\n"
 msgstr "Domyślna szerokość linii ograniczona!\n"
 
-#: pcbnew/dialogs/dialog_plot.cpp:623
+#: pcbnew/dialogs/dialog_plot.cpp:626
 msgid "X scale constrained!\n"
 msgstr "Skala X ograniczona!\n"
 
-#: pcbnew/dialogs/dialog_plot.cpp:637
+#: pcbnew/dialogs/dialog_plot.cpp:640
 msgid "Y scale constrained!\n"
 msgstr "Skala Y ograniczona!'\n"
 
-#: pcbnew/dialogs/dialog_plot.cpp:651
+#: pcbnew/dialogs/dialog_plot.cpp:654
 #, c-format
 msgid ""
 "Width correction constrained!\n"
@@ -14065,6 +14038,36 @@ msgstr ""
 "Korekcja szerokości ograniczona!\n"
 "Prawidłowa wartość korekcji musi zawierać się w granicach\n"
 "[%+f; %+f] (%s) dla bieżących reguł projektowych!\n"
+
+#: pcbnew/dialogs/dialog_plot.cpp:712 pcbnew/dialogs/dialog_SVG_print.cpp:239
+#, c-format
+msgid "Could not write plot files to folder \"%s\"."
+msgstr "Nie mogę zapisać plików z rysunkami w folderze \"%s\"."
+
+#: pcbnew/dialogs/dialog_plot.cpp:764
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:370
+#: gerbview/dialogs/dialog_print_using_printer.cpp:296
+msgid "Warning: Scale option set to a very small value"
+msgstr "Ostrzeżenie: skala została ustawiona na bardzo małą wartość"
+
+#: pcbnew/dialogs/dialog_plot.cpp:768
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:362
+#: gerbview/dialogs/dialog_print_using_printer.cpp:288
+msgid "Warning: Scale option set to a very large value"
+msgstr "Ostrzeżenie: Skala została ustawiona na bardzo dużą wartość"
+
+#: pcbnew/dialogs/dialog_plot.cpp:805
+#, c-format
+msgid "Plot file <%s> created"
+msgstr "Plik rysunkowy \"%s\" został utworzony"
+
+#: pcbnew/dialogs/dialog_plot.cpp:818
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:436
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:474
+#: gerbview/dialogs/dialog_print_using_printer.cpp:356
+#: gerbview/dialogs/dialog_print_using_printer.cpp:386
+msgid "No layer selected"
+msgstr "Nie wybrano warstwy"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "Plot format:"
@@ -14292,6 +14295,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot_base.cpp:339
 msgid "Force A4 output"
 msgstr "Wymuś format A4"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:366
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:106
+#: pcbnew/dialogs/dialog_plot_base.h:128
+msgid "Plot"
+msgstr "Rysuj"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:370
 msgid "Generate Drill File"
