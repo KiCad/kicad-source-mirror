@@ -96,6 +96,7 @@ private:
     ///< Packed by 7 floats for each vertex: {X, Y, Z, R, G, B, A}
     GLfloat* m_vertices;
 
+    ///< Indices of vertices
     GLuint*  m_indices;
 
     ///< Offset and size of data in VBO.

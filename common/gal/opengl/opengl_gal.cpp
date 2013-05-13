@@ -651,28 +651,16 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
         VECTOR2D v3( aEndPoint.x - ( aWidth * cos( beta ) / 2.0 ),
                      aEndPoint.y + ( aWidth * sin( beta ) / 2.0 ) );
 
-        // First triangle
-        GLfloat newVertex1[] = { v0.x, v0.y, layerDepth,
-                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
-        GLfloat newVertex2[] = { v1.x, v1.y, layerDepth,
-                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
-        GLfloat newVertex3[] = { v2.x, v2.y, layerDepth,
-                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
-
-        // Second triangle
-        GLfloat newVertex4[] = { v0.x, v0.y, layerDepth,
-                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
-        GLfloat newVertex5[] = { v2.x, v2.y, layerDepth,
-                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
-        GLfloat newVertex6[] = { v3.x, v3.y, layerDepth,
-                                 strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a };
-
-        curVboItem->PushVertex( newVertex1 );
-        curVboItem->PushVertex( newVertex2 );
-        curVboItem->PushVertex( newVertex3 );
-        curVboItem->PushVertex( newVertex4 );
-        curVboItem->PushVertex( newVertex5 );
-        curVboItem->PushVertex( newVertex6 );
+        // Two triangles
+        GLfloat newVertices[] = {
+            v0.x, v0.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+            v1.x, v1.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+            v2.x, v2.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+            v0.x, v0.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+            v2.x, v2.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+            v3.x, v3.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a
+        };
+        curVboItem->PushVertices( newVertices, 6 );
     }
 
     if( isFillEnabled )
