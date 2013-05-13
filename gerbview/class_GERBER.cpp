@@ -50,8 +50,8 @@ extern int scaletoIU( double aCoord, bool isMetric );       // defined it rs274d
  *
  * D_CODES:
  *   D01 ... D9 = action codes:
- *   D01 = activating light (lower pen) when di ¿½ placement
- *   D02 = light extinction (lift pen) when di ¿½ placement
+ *   D01 = activating light (lower pen) when di placement
+ *   D02 = light extinction (lift pen) when di placement
  *   D03 Flash
  *   D09 = VAPE Flash
  *   D10 ... = Indentification Tool (Opening)

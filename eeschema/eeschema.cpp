@@ -111,10 +111,10 @@ bool EDA_APP::OnInit()
     }
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
-      {
-          if( !IsOK( NULL, _( "Eeschema is already running, Continue?" ) ) )
-              return false;
-      }
+    {
+        if( !IsOK( NULL, _( "Eeschema is already running, Continue?" ) ) )
+            return false;
+    }
 
     // Give a default colour for all layers
     // (actual color will beinitialized by config)
