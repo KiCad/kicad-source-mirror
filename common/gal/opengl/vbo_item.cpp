@@ -61,7 +61,7 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
     if( m_vertices )
     {
         // Copy all previous vertices data
-        memcpy( newVertices, m_vertices, ( m_size ) * VertSize );
+        memcpy( newVertices, m_vertices, m_size * VertSize );
         delete m_vertices;
     }
     m_vertices = newVertices;
@@ -73,7 +73,7 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
     if( m_indices )
     {
         // Copy all previous vertices data
-        memcpy( newIndices, m_indices, ( m_size ) * IndSize );
+        memcpy( newIndices, m_indices, m_size * IndSize );
         delete m_indices;
     }
     m_indices = newIndices;
@@ -88,7 +88,36 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
 
 void VBO_ITEM::PushVertices( const GLfloat* aVertex, GLuint aSize )
 {
-    // FIXME to be done
+    int newSize = m_size + aSize;
+    GLfloat* newVertices = new GLfloat[newSize * VertStride];
+    GLuint*  newIndices  = new GLuint[newSize * IndStride];
+
+    // Handle new vertices
+    if( m_vertices )
+    {
+        // Copy all previous vertices data
+        memcpy( newVertices, m_vertices, ( m_size ) * VertSize );
+        delete m_vertices;
+    }
+    m_vertices = newVertices;
+
+    // Add the new vertex
+    memcpy( &newVertices[m_size * VertStride], aVertex, aSize * VertSize );
+
+    // Handle new indices
+    if( m_indices )
+    {
+        // Copy all previous vertices data
+        memcpy( newIndices, m_indices, ( m_size ) * IndSize );
+        delete m_indices;
+    }
+    m_indices = newIndices;
+
+    // Add the new vertex
+    for( int i = m_size; i < newSize; ++i )
+        m_indices[i] = m_offset + i;
+
+    m_size += aSize;
     m_isDirty = true;
 }
 
