@@ -268,7 +268,7 @@ public:
      * accordint to the current selected unit and De Morgan selection
      * although it is stored without ? and part id.
      * @param aDC = the current device context
-     * @param aOffset = a draw offset. usually à,0 to draw on the screen, but
+     * @param aOffset = a draw offset. usually 0,0 to draw on the screen, but
      * can be set to page size / 2 to draw or print in SVG format.
      */
     void RedrawComponent( wxDC* aDC, wxPoint aOffset );

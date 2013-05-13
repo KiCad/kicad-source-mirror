@@ -321,7 +321,7 @@ void GERBVIEW_FRAME::CopyDCodesSizeToItems()
                 gerb_item->m_Shape = GBR_SPOT_RECT;
                 break;
 
-            case APT_POLYGON:                /* spot regular polyg 3 to 1é edges */
+            case APT_POLYGON:
                 gerb_item->m_Shape = GBR_SPOT_POLY;
                 break;
 
