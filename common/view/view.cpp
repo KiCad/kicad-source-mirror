@@ -469,8 +469,8 @@ struct VIEW::recacheItem
         if( immediately )
         {
             int group = gal->BeginGroup();
-            view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), layer );
             aItem->setGroup( layer, group );
+            view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), layer );
             gal->EndGroup();
         }
         else
@@ -603,9 +603,6 @@ void VIEW::RecacheAllItems( bool aImmediately )
 
     r.SetMaximum();
 
-    //if( aImmediately )
-        m_gal->BeginDrawing();
-
     wxLogDebug( wxT( "RecacheAllItems::immediately: %u" ), aImmediately );
 
     for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
@@ -614,7 +611,4 @@ void VIEW::RecacheAllItems( bool aImmediately )
         recacheItem visitor( this, m_gal, l->id, aImmediately );
         l->items->Query( r, visitor );
     }
-
-    //if( aImmediately )
-        m_gal->EndDrawing();
 }
