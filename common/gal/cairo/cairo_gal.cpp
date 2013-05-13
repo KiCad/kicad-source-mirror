@@ -40,7 +40,7 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     // Default values
     fillColor   = COLOR4D( 0, 0, 0, 1 );
     strokeColor = COLOR4D( 1, 1, 1, 1 );
-    screenSize  = VECTOR2D( 20, 20 );   // window will be soon resized
+    screenSize  = VECTOR2D( aParent->GetSize() );
 
     parentWindow  = aParent;
     mouseListener = aMouseListener;
@@ -101,7 +101,11 @@ CAIRO_GAL::~CAIRO_GAL()
     delete cursorPixels;
     delete cursorPixelsSaved;
 
-    // TODO Deleting of list contents like groups and paths
+    for( int i = groups.size() - 1; i >= 0; --i )
+    {
+        DeleteGroup( i );
+    }
+
     deleteBitmaps();
 }
 
@@ -133,7 +137,7 @@ void CAIRO_GAL::skipMouseEvent( wxMouseEvent& aEvent )
 }
 
 
-void CAIRO_GAL::BeginDrawing() throw( int )
+void CAIRO_GAL::initSurface()
 {
     // The size of the client area needs to be greater than zero
     clientRectangle = parentWindow->GetClientRect();
@@ -141,13 +145,15 @@ void CAIRO_GAL::BeginDrawing() throw( int )
     if( clientRectangle.width == 0 || clientRectangle.height == 0 )
         throw EXCEPTION_ZERO_CLIENT_RECTANGLE;
 
-    // clientDC = new wxClientDC( this );
-
-    // Create the CAIRO surface
+    // Create the Cairo surface
     cairoSurface = cairo_image_surface_create_for_data( (unsigned char*) bitmapBuffer,
                                                         CAIRO_FORMAT_RGB24, clientRectangle.width,
                                                         clientRectangle.height, stride );
-    cairoImage = cairo_create( cairoSurface );
+    cairoImage = cairo_create ( cairoSurface );
+#ifdef __WXDEBUG__
+    cairo_status_t status = cairo_status( cairoImage );
+    wxASSERT_MSG( status == CAIRO_STATUS_SUCCESS, "Cairo context creation error" );
+#endif /* __WXDEBUG__ */
 
     // -----------------------------------------------------------------
 
@@ -178,6 +184,20 @@ void CAIRO_GAL::BeginDrawing() throw( int )
     lineWidth = 0;
 
     isDeleteSavedPixels = true;
+}
+
+
+void CAIRO_GAL::deinitSurface()
+{
+    // Destroy Cairo objects
+    cairo_destroy( cairoImage );
+    cairo_surface_destroy( cairoSurface );
+}
+
+
+void CAIRO_GAL::BeginDrawing() throw( int )
+{
+    initSurface();
 
     cairo_push_group( cairoImage );
 }
@@ -211,9 +231,7 @@ void CAIRO_GAL::EndDrawing()
     wxBufferedDC dc;
     dc.Init( &client_dc, bmp );
 
-    // Destroy Cairo objects
-    cairo_destroy( cairoImage );
-    cairo_surface_destroy( cairoSurface );
+    deinitSurface();
 }
 
 
@@ -637,6 +655,8 @@ void CAIRO_GAL::Restore()
 
 int CAIRO_GAL::BeginGroup()
 {
+    initSurface();
+
     // If the grouping is started: the actual path is stored in the group, when
     // a attribute was changed or when grouping stops with the end group method.
     storePath();
@@ -651,6 +671,8 @@ void CAIRO_GAL::EndGroup()
 {
     storePath();
     isGrouping = false;
+
+    deinitSurface();
 }
 
 
@@ -659,12 +681,13 @@ void CAIRO_GAL::DeleteGroup( int aGroupNumber )
     storePath();
 
     // Delete the Cairo paths
-    for( std::deque<GroupElement>::iterator it = groups[aGroupNumber].begin();
-         it != groups[aGroupNumber].end(); ++it )
+    for( std::deque<GroupElement>::iterator it = groups[aGroupNumber].begin(), end = groups[aGroupNumber].end();
+         it != end; ++it )
     {
         if( it->command == CMD_FILL_PATH || it->command == CMD_STROKE_PATH )
         {
-            cairo_path_destroy( it->cairoPath );
+            if( it->cairoPath->status == CAIRO_STATUS_SUCCESS )
+                cairo_path_destroy( it->cairoPath );
         }
     }
 
@@ -817,7 +840,7 @@ void CAIRO_GAL::storePath()
             // add this command to the group list;
 
             cairo_path_t* path = cairo_copy_path( cairoImage );
-            pathList.push_back( path );
+            // pathList.push_back( path );  // FIXME: it's not used anywhere else?
 
             if( isStrokeEnabled )
             {
@@ -924,7 +947,7 @@ void CAIRO_GAL::DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
 
 void CAIRO_GAL::allocateBitmaps()
 {
-    // Create buffer, use the system independent CAIRO image back end
+    // Create buffer, use the system independent Cairo image backend
     stride     = cairo_format_stride_for_width( CAIRO_FORMAT_RGB24, screenSize.x );
     bufferSize = stride * screenSize.y;
 

@@ -1488,19 +1488,15 @@ void OPENGL_GAL::EndGroup()
 
 void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 {
-    if( aGroupNumber >= vboItems.size() )
-    {
-        // This should not happen
-        wxLogDebug( wxT( "Tried to delete not existing group" ) );
-        return;
-    }
+    wxASSERT_MSG( aGroupNumber < vboItems.size(),
+            "OPENGL_GAL: Tried to delete not existing group" );
 
     std::deque<VBO_ITEM*>::iterator it = vboItems.begin();
     std::advance( it, aGroupNumber );
 
     //vboSize -= it->GetSize(); // FIXME?
     delete *it;
-    //vboItems.erase( it );
+    //vboItems.erase( it ); // makes change to group numbers - that's veeery bad
 
     vboNeedsUpdate = true;
 }

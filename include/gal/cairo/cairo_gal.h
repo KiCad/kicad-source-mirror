@@ -359,14 +359,13 @@ private:
     unsigned int*       bitmapBuffer;           ///< Storage of the cairo image
     unsigned int*       bitmapBufferBackup;     ///< Backup storage of the cairo image
     int                 stride;                 ///< Stride value for Cairo
-    // wxClientDC*         clientDC;               ///< Pointer to the clientDC
 
     // Mapping between Cairo and GAL line attributes
     std::map<LineCap, cairo_line_cap_t>     lineCapMap;     ///< Line cap style mapping
     std::map<LineJoin, cairo_line_join_t>   lineJoinMap;    ///< Line join style mapping
 
     // Methods
-    void storePath(); ///< Store the actual path
+    void storePath();                           ///< Store the actual path
 
     // Event handlers
     /**
@@ -395,6 +394,12 @@ private:
 
     /// Allocate the bitmaps for drawing
     void deleteBitmaps();
+
+    /// Prepare Cairo surfaces for drawing
+    void initSurface();
+
+    // Destroy Cairo surfaces when are not needed anymore
+    void deinitSurface();
 };
 } // namespace KiGfx
 
