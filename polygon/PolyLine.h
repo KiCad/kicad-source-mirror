@@ -117,8 +117,10 @@ public:
 
     // vector <> methods
     void reserve( int aSize ) { m_cornersList.reserve( aSize ); }
-    void clear() { m_cornersList.clear(); }
-    CPolyPt& back() { return m_cornersList.back(); }
+
+
+    void RemoveAllContours( void ) { m_cornersList.clear(); }
+    CPolyPt& GetLastCorner() { return m_cornersList.back(); }
 
     unsigned GetCornersCount() const { return m_cornersList.size(); }
 
@@ -206,6 +208,7 @@ public:
 
     // constructors/destructor
     CPolyLine();
+    CPolyLine( const CPolyLine& aCPolyLine);
     ~CPolyLine();
 
     /**
@@ -296,9 +299,14 @@ public:
     CRect       GetBounds();
     CRect       GetCornerBounds();
     CRect       GetCornerBounds( int icont );
-    void        Copy( CPolyLine* src );
+    void        Copy( const CPolyLine* src );
     bool        TestPointInside( int x, int y );
-    bool        IsCutoutContour( int icont );
+
+    /**
+     * @return true if the corner aCornerIdx is on a hole inside the main outline
+     * and false if it is on the main outline
+     */
+    bool        IsCutoutContour( int aCornerIdx );
 
     /**
      * Function AppendArc.

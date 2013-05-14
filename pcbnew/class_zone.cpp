@@ -90,8 +90,8 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_PadConnection = aZone.m_PadConnection;
     m_ThermalReliefGap = aZone.m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
-    m_FilledPolysList = aZone.m_FilledPolysList;
-    m_FillSegmList = aZone.m_FillSegmList;
+    m_FilledPolysList.Append( aZone.m_FilledPolysList );
+    m_FillSegmList = aZone.m_FillSegmList;      // vector <> copy
 
     m_isKeepout = aZone.m_isKeepout;
     m_doNotAllowCopperPour = aZone.m_doNotAllowCopperPour;
@@ -123,7 +123,7 @@ bool ZONE_CONTAINER::UnFill()
     bool change = ( m_FilledPolysList.GetCornersCount() > 0 ) ||
                   ( m_FillSegmList.size() > 0 );
 
-    m_FilledPolysList.clear();
+    m_FilledPolysList.RemoveAllContours();
     m_FillSegmList.clear();
     m_IsFilled = false;
 
@@ -740,7 +740,7 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
     for( unsigned ic = 0; ic < m_FilledPolysList.GetCornersCount(); ic++ )
     {
         m_FilledPolysList.SetX( ic, m_FilledPolysList.GetX( ic ) + offset.x );
-        m_FilledPolysList.SetY( ic, m_FilledPolysList.GetX( ic ) + offset.y );
+        m_FilledPolysList.SetY( ic, m_FilledPolysList.GetY( ic ) + offset.y );
     }
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
@@ -863,8 +863,8 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_Poly->SetHatchStyle( src->m_Poly->GetHatchStyle() );
     m_Poly->SetHatchPitch( src->m_Poly->GetHatchPitch() );
     m_Poly->m_HatchLines = src->m_Poly->m_HatchLines;   // Copy vector <CSegment>
-    m_FilledPolysList.clear();
-    m_FilledPolysList = src->m_FilledPolysList;
+    m_FilledPolysList.RemoveAllContours();
+    m_FilledPolysList.Append( src->m_FilledPolysList );
     m_FillSegmList.clear();
     m_FillSegmList = src->m_FillSegmList;
 }

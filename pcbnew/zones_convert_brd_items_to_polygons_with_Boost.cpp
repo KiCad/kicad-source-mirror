@@ -188,7 +188,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
     // static to avoid unnecessary memory allocation when filling many zones.
     static CPOLYGONS_LIST cornerBufferPolysToSubstract;
-    cornerBufferPolysToSubstract.clear();
+    cornerBufferPolysToSubstract.RemoveAllContours();
 
     /* Use a dummy pad to calculate hole clerance when a pad is not on all copper layers
      * and this pad has a hole
@@ -423,7 +423,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
     // put solid areas in m_FilledPolysList:
-    m_FilledPolysList.clear();
+    m_FilledPolysList.RemoveAllContours();
     CopyPolygonsFromKiPolygonListToFilledPolysList( polyset_zone_solid_areas );
 
     // Remove insulated islands:
@@ -431,7 +431,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         TestForCopperIslandAndRemoveInsulatedIslands( aPcb );
 
     // Now we remove all unused thermal stubs.
-    cornerBufferPolysToSubstract.clear();
+    cornerBufferPolysToSubstract.RemoveAllContours();
 
     // Test thermal stubs connections and add polygons to remove unconnected stubs.
     // (this is a refinement for thermal relief shapes)
@@ -449,20 +449,20 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         polyset_zone_solid_areas -= polyset_holes;
 
         // put these areas in m_FilledPolysList
-        m_FilledPolysList.clear();
+        m_FilledPolysList.RemoveAllContours();
         CopyPolygonsFromKiPolygonListToFilledPolysList( polyset_zone_solid_areas );
 
         if( GetNet() > 0 )
             TestForCopperIslandAndRemoveInsulatedIslands( aPcb );
     }
 
-    cornerBufferPolysToSubstract.clear();
+    cornerBufferPolysToSubstract.RemoveAllContours();
 }
 
 
 void ZONE_CONTAINER::CopyPolygonsFromKiPolygonListToFilledPolysList( KI_POLYGON_SET& aKiPolyList )
 {
-    m_FilledPolysList.clear();
+    m_FilledPolysList.RemoveAllContours();
     m_FilledPolysList.ImportFrom( aKiPolyList );
 }
 

@@ -25,6 +25,12 @@ CPolyLine::CPolyLine()
     m_utility    = 0;
 }
 
+CPolyLine::CPolyLine( const CPolyLine& aCPolyLine)
+{
+    Copy( &aCPolyLine );
+    m_HatchLines    = aCPolyLine.m_HatchLines;     // vector <> copy
+}
+
 
 // destructor, removes display elements
 //
@@ -517,11 +523,11 @@ void CPolyLine::RemoveAllContours( void )
 
 /**
  * function RemoveAllContours
- * removes all corners from the lists.
- * Others params are not chnaged
+ * removes all corners from the list.
+ * Others params are not changed
  */
 {
-    m_CornersList.clear();
+    m_CornersList.RemoveAllContours();
 }
 
 
@@ -937,27 +943,25 @@ bool CPolyLine::TestPointInside( int px, int py )
 }
 
 
-// copy data from another poly, but don't draw it
-//
-void CPolyLine::Copy( CPolyLine* src )
+// copy data from another CPolyLine, but don't draw it
+void CPolyLine::Copy( const CPolyLine* src )
 {
     UnHatch();
+    m_layer         = src->m_layer;
     m_hatchStyle    = src->m_hatchStyle;
     m_hatchPitch    = src->m_hatchPitch;
-    // copy corners, using vector copy
-    m_CornersList = src->m_CornersList;
+    m_CornersList.RemoveAllContours();
+    m_CornersList.Append( src->m_CornersList );
 }
 
 
-/*******************************************/
-bool CPolyLine::IsCutoutContour( int icont )
-/*******************************************/
-
 /*
- * return true if the corner icont is inside the outline (i.e it is a hole)
+ * return true if the corner aCornerIdx is on a hole inside the main outline
+ * and false if it is on the main outline
  */
+bool CPolyLine::IsCutoutContour( int aCornerIdx )
 {
-    int ncont = GetContour( icont );
+    int ncont = GetContour( aCornerIdx );
 
     if( ncont == 0 ) // the first contour is the main outline, not an hole
         return false;
