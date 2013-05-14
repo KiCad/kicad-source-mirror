@@ -153,6 +153,9 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
     m_gal->SetScreenDPI( 106 );                                     // Display resolution setting
     m_gal->ComputeWorldScreenMatrix();
 
+    if( m_painter )
+        m_painter->SetGAL( m_gal );
+
     if( m_view )
     {
         m_view->SetGAL( m_gal );
