@@ -142,8 +142,18 @@ int VBO_ITEM::GetSize() const
 
 void VBO_ITEM::SetOffset( int aOffset )
 {
+    if( m_offset == aOffset )
+        return;
+
+    int delta = aOffset - m_offset;
+
+    // Change offset for all the stored indices
+    for( int i = 0; i < m_size; ++i )
+    {
+        m_indices += delta;
+    }
+
     m_offset = aOffset;
-    // TODO change offset for all the vertices?
 }
 
 
