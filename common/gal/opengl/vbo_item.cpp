@@ -86,7 +86,7 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
 }
 
 
-void VBO_ITEM::PushVertices( const GLfloat* aVertex, GLuint aSize )
+void VBO_ITEM::PushVertices( const GLfloat* aVertices, GLuint aSize )
 {
     int newSize = m_size + aSize;
     GLfloat* newVertices = new GLfloat[newSize * VertStride];
@@ -101,8 +101,8 @@ void VBO_ITEM::PushVertices( const GLfloat* aVertex, GLuint aSize )
     }
     m_vertices = newVertices;
 
-    // Add the new vertex
-    memcpy( &newVertices[m_size * VertStride], aVertex, aSize * VertSize );
+    // Add new vertices
+    memcpy( &newVertices[m_size * VertStride], aVertices, aSize * VertSize );
 
     // Handle new indices
     if( m_indices )
@@ -160,7 +160,7 @@ void SetVbo( int aVboId )
 }
 
 
-int GetVbo()
+int GetVbo() const
 {
 }
 */
