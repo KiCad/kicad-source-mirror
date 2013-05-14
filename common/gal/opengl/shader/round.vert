@@ -25,7 +25,7 @@
  
 #version 120
 
-varying float  aspect;
+varying float aspect;
 
 void main()
 {

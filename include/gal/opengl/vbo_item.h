@@ -43,9 +43,23 @@ public:
     VBO_ITEM();
     ~VBO_ITEM();
 
-    // TODO comments
+    /**
+     * Function PushVertex()
+     * Adds a single vertex to the VBO_ITEM. Vertex contains information about coordinates and
+     * colors and has to follow the specified format {X,Y,Z,R,G,B,A}.
+     * @param aVertex is a vertex to be added.
+     */
     void PushVertex( const GLfloat* aVertex );
-    void PushVertices( const GLfloat* aVertex, GLuint aSize );
+
+    /**
+     * Function PushVertices()
+     * Adds multiple vertices to the VBO_ITEM. This function is recommended over multiple calls to
+     * PushVertex, as it does less memory reallocations. Vertices contain information about
+     * coordinates and colors and has to follow the specified format {X,Y,Z,R,G,B,A}.
+     * @param aVertices are vertices to be added.
+     * @param aSize is an amount of vertices to be added.
+     */
+    void PushVertices( const GLfloat* aVertices, GLuint aSize );
 
     /**
      * Function GetVertices()
@@ -79,7 +93,7 @@ public:
 
     ///< Functions for getting VBO ids.
     //void SetVbo( int aVboId );
-    //int  GetVbo();
+    //int  GetVbo() const;
 
     ///< Data organization information for vertices.
     static const int VertStride  = 7;
@@ -94,21 +108,21 @@ private:
 
     ///< Contains vertices coordinates and colors.
     ///< Packed by 7 floats for each vertex: {X, Y, Z, R, G, B, A}
-    GLfloat* m_vertices;
+    GLfloat*    m_vertices;
 
     ///< Indices of vertices
-    GLuint*  m_indices;
+    GLuint*     m_indices;
 
     ///< Offset and size of data in VBO.
-    int      m_offset;
-    int      m_size;
+    int         m_offset;
+    int         m_size;
 
     ///< Shader data used for rendering.
-    int      m_shader;
-    int      m_shaderAttrib;
+    int         m_shader;
+    int         m_shaderAttrib;
 
     ///< Flag telling if the item should be recached in VBO or not.
-    bool     m_isDirty;
+    bool        m_isDirty;
 };
 } // namespace KiGfx
 

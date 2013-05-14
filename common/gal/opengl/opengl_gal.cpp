@@ -68,7 +68,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     isFrameBufferInitialized = false;
     isUseShader              = isUseShaders;
     isShaderInitialized      = false;
-    isGrouping           = false;
+    isGrouping               = false;
     shaderPath               = "../../common/gal/opengl/shader/";
     wxSize parentSize        = aParent->GetSize();
 
@@ -615,20 +615,35 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
     VECTOR2D perpendicularVector( -startEndVector.y * scale, startEndVector.x * scale );
 
     // Compute the edge points of the line
-    VECTOR2D point1 = aStartPoint + perpendicularVector;
-    VECTOR2D point2 = aStartPoint - perpendicularVector;
-    VECTOR2D point3 = aEndPoint + perpendicularVector;
-    VECTOR2D point4 = aEndPoint - perpendicularVector;
+    VECTOR2D v0 = aStartPoint + perpendicularVector;
+    VECTOR2D v1 = aStartPoint - perpendicularVector;
+    VECTOR2D v2 = aEndPoint + perpendicularVector;
+    VECTOR2D v3 = aEndPoint - perpendicularVector;
 
-    glBegin( GL_TRIANGLES );
-    glVertex3d( point1.x, point1.y, layerDepth );
-    glVertex3d( point2.x, point2.y, layerDepth );
-    glVertex3d( point4.x, point4.y, layerDepth );
+    if( isGrouping )
+    {
+        GLfloat newVertices[] = {
+            v0.x, v0.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+            v1.x, v1.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+            v3.x, v3.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+            v0.x, v0.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+            v3.x, v3.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+            v2.x, v2.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a
+        };
+        curVboItem->PushVertices( newVertices, 6 );
+    }
+    else
+    {
+        glBegin( GL_TRIANGLES );
+        glVertex3d( v0.x, v0.y, layerDepth );
+        glVertex3d( v1.x, v1.y, layerDepth );
+        glVertex3d( v3.x, v3.y, layerDepth );
 
-    glVertex3d( point1.x, point1.y, layerDepth );
-    glVertex3d( point4.x, point4.y, layerDepth );
-    glVertex3d( point3.x, point3.y, layerDepth );
-    glEnd();
+        glVertex3d( v0.x, v0.y, layerDepth );
+        glVertex3d( v3.x, v3.y, layerDepth );
+        glVertex3d( v2.x, v2.y, layerDepth );
+        glEnd();
+    }
 }
 
 
@@ -637,7 +652,7 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
     double   lineAngle      = atan2( startEndVector.y, startEndVector.x );
 
-    if ( isGrouping )
+    /*if ( isGrouping )
     {
         // Angle of a line perpendicular to the segment being drawn
         double beta = ( M_PI / 2.0 ) - lineAngle;
@@ -662,37 +677,40 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
         };
         curVboItem->PushVertices( newVertices, 6 );
     }
-
-    if( isFillEnabled )
+    else*/
     {
-        glColor4d( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+        if( isFillEnabled )
+        {
+            if( !isGrouping )
+                glColor4d( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
-        SetLineWidth( aWidth );
-        drawSemiCircle( aStartPoint, aWidth / 2, lineAngle + M_PI / 2, layerDepth );
-        drawSemiCircle( aEndPoint,   aWidth / 2, lineAngle - M_PI / 2, layerDepth );
-        drawLineQuad( aStartPoint, aEndPoint );
-    }
-    else
-    {
-        double lineLength = startEndVector.EuclideanNorm();
+            SetLineWidth( aWidth );
+            drawSemiCircle( aStartPoint, aWidth / 2, lineAngle + M_PI / 2, layerDepth );
+            drawSemiCircle( aEndPoint,   aWidth / 2, lineAngle - M_PI / 2, layerDepth );
+            drawLineQuad( aStartPoint, aEndPoint );
+        }
+        else
+        {
+            double lineLength = startEndVector.EuclideanNorm();
 
-        glColor4d( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+            glColor4d( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
-        glPushMatrix();
+            glPushMatrix();
 
-        glTranslated( aStartPoint.x, aStartPoint.y, 0.0 );
-        glRotated( lineAngle * ( 360 / ( 2 * M_PI ) ), 0, 0, 1 );
+            glTranslated( aStartPoint.x, aStartPoint.y, 0.0 );
+            glRotated( lineAngle * ( 360 / ( 2 * M_PI ) ), 0, 0, 1 );
 
-        drawLineQuad( VECTOR2D( 0.0,         aWidth / 2.0 ),
-                      VECTOR2D( lineLength,  aWidth / 2.0 ) );
+            drawLineQuad( VECTOR2D( 0.0,         aWidth / 2.0 ),
+                          VECTOR2D( lineLength,  aWidth / 2.0 ) );
 
-        drawLineQuad( VECTOR2D( 0.0,        -aWidth / 2.0 ),
-                      VECTOR2D( lineLength, -aWidth / 2.0 ) );
+            drawLineQuad( VECTOR2D( 0.0,        -aWidth / 2.0 ),
+                          VECTOR2D( lineLength, -aWidth / 2.0 ) );
 
-        DrawArc( VECTOR2D( 0.0, 0.0 ),        aWidth / 2.0, M_PI / 2.0, 3.0 * M_PI / 2.0 );
-        DrawArc( VECTOR2D( lineLength, 0.0 ), aWidth / 2.0, M_PI / 2.0, -M_PI / 2.0 );
+            DrawArc( VECTOR2D( 0.0, 0.0 ),        aWidth / 2.0, M_PI / 2.0, 3.0 * M_PI / 2.0 );
+            DrawArc( VECTOR2D( lineLength, 0.0 ), aWidth / 2.0, M_PI / 2.0, -M_PI / 2.0 );
 
-        glPopMatrix();
+            glPopMatrix();
+        }
     }
 }
 
