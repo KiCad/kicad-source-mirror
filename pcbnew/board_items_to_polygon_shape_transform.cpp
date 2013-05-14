@@ -139,7 +139,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
                     corner.y += GetPosition().y;
                     aCornerBuffer.Append( corner );
                 }
-                aCornerBuffer.back().end_contour = true;
+                aCornerBuffer.CloseLastContour();
                 break;
 
             default:
@@ -242,7 +242,7 @@ void TEXTE_PCB::TransformBoundingBoxWithClearanceToPolygon(
         aCornerBuffer.Append( corners[ii] );
     }
 
-    aCornerBuffer.back().end_contour = true;
+    aCornerBuffer.CloseLastContour();
 }
 
 
@@ -875,7 +875,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                     aCornerBuffer.Append( CPolyPt( cpos.x, cpos.y ) );
                 }
 
-                aCornerBuffer.back().end_contour = true;
+                aCornerBuffer.CloseLastContour();
                 angle = AddAngles( angle, 1800 ); // this is calculate hole 3
             }
 
@@ -900,7 +900,7 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
                     aCornerBuffer.Append( CPolyPt( cpos.x, cpos.y ) );
                 }
 
-                aCornerBuffer.back().end_contour = true;
+                aCornerBuffer.CloseLastContour();
                 angle = AddAngles( angle, 1800 );
             }
         }

@@ -496,9 +496,8 @@ bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 bool SCH_SCREEN::Save( FILE* aFile ) const
 {
     // Creates header
-    if( fprintf( aFile, "%s %s %d", EESCHEMA_FILE_STAMP,
-                 SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) < 0
-        || fprintf( aFile, "  date %s\n", TO_UTF8( DateAndTime() ) ) < 0 )
+    if( fprintf( aFile, "%s %s %d\n", EESCHEMA_FILE_STAMP,
+                 SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) < 0 )
         return false;
 
     BOOST_FOREACH( const CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
@@ -961,7 +960,7 @@ bool SCH_SCREEN::BreakSegmentsOnJunctions()
             if( BreakSegment( junction->GetPosition() ) )
                 brokenSegments = true;
         }
-        else 
+        else
         {
             SCH_BUS_ENTRY_BASE* busEntry = dynamic_cast<SCH_BUS_ENTRY_BASE*>( item );
             if( busEntry )

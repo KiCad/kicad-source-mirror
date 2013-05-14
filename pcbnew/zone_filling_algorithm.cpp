@@ -58,7 +58,7 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb,
                             CPOLYGONS_LIST* aCornerBuffer )
 {
     if( aCornerBuffer == NULL )
-        m_FilledPolysList.clear();
+        m_FilledPolysList.RemoveAllContours();
 
     /* convert outlines + holes to outlines without holes (adding extra segments if necessary)
      * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building
@@ -121,7 +121,7 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb,
             CopyPolygonsFromFilledPolysListToKiPolygonList( polyset_zone_solid_areas );
             polyset_zone_solid_areas -= margin;
             // put solid area in m_FilledPolysList:
-            m_FilledPolysList.clear();
+            m_FilledPolysList.RemoveAllContours();
             CopyPolygonsFromKiPolygonListToFilledPolysList( polyset_zone_solid_areas );
         }
         if ( m_FillMode )   // if fill mode uses segments, create them:

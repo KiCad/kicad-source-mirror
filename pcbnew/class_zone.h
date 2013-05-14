@@ -498,7 +498,7 @@ public:
      */
     void ClearFilledPolysList()
     {
-        m_FilledPolysList.clear();
+        m_FilledPolysList.RemoveAllContours();
     }
 
    /**
