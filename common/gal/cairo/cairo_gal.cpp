@@ -686,8 +686,7 @@ void CAIRO_GAL::DeleteGroup( int aGroupNumber )
     {
         if( it->command == CMD_FILL_PATH || it->command == CMD_STROKE_PATH )
         {
-            if( it->cairoPath->status == CAIRO_STATUS_SUCCESS )
-                cairo_path_destroy( it->cairoPath );
+            cairo_path_destroy( it->cairoPath );
         }
     }
 
@@ -839,13 +838,12 @@ void CAIRO_GAL::storePath()
             // then check, if the path needs to be stroked/filled and
             // add this command to the group list;
 
-            cairo_path_t* path = cairo_copy_path( cairoImage );
             // pathList.push_back( path );  // FIXME: it's not used anywhere else?
 
             if( isStrokeEnabled )
             {
                 GroupElement groupElement;
-                groupElement.cairoPath = path;
+                groupElement.cairoPath = cairo_copy_path( cairoImage );
                 groupElement.command   = CMD_STROKE_PATH;
                 groups.back().push_back( groupElement );
             }
@@ -853,7 +851,7 @@ void CAIRO_GAL::storePath()
             if( isFillEnabled )
             {
                 GroupElement groupElement;
-                groupElement.cairoPath = path;
+                groupElement.cairoPath = cairo_copy_path( cairoImage );
                 groupElement.command   = CMD_FILL_PATH;
                 groups.back().push_back( groupElement );
             }
