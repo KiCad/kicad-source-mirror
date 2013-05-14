@@ -205,9 +205,6 @@ void VIEW::SetGAL( GAL* aGal )
 {
     m_gal = aGal;
 
-    if( m_painter )
-        m_painter->SetGAL( m_gal );
-
     // clear group numbers, so everything is going to be recached
     if( m_useGroups )
         clearGroupCache();
