@@ -37,7 +37,8 @@ VBO_ITEM::VBO_ITEM() :
         m_indices( NULL ),
         m_offset( 0 ),
         m_size( 0 ),
-        m_isDirty( true )
+        m_isDirty( true ),
+        m_transform( NULL )
 {
 }
 
@@ -68,6 +69,17 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
 
     // Add the new vertex
     memcpy( &newVertices[m_size * VertStride], aVertex, VertSize );
+
+    if( m_transform != NULL )
+    {
+        // Apply transformations
+        //                    X,          Y,          Z coordinates
+        glm::vec4 origVertex( aVertex[0], aVertex[1], aVertex[2], 1.0f );
+        glm::vec4 transVertex = *m_transform * origVertex;
+
+        // Replace only coordinates, leave color as it is
+        memcpy( &newVertices[m_size * VertStride], &transVertex[0], 3 * sizeof(GLfloat) );
+    }
 
     // Handle a new index
     if( m_indices )
@@ -103,6 +115,25 @@ void VBO_ITEM::PushVertices( const GLfloat* aVertices, GLuint aSize )
 
     // Add new vertices
     memcpy( &newVertices[m_size * VertStride], aVertices, aSize * VertSize );
+
+    if( m_transform != NULL )
+    {
+        const GLfloat* vertexPtr = aVertices;
+
+        for( unsigned int i = 0; i < aSize; ++i )
+        {
+            // Apply transformations
+            //                    X,            Y,            Z coordinates
+            glm::vec4 origVertex( vertexPtr[0], vertexPtr[1], vertexPtr[2], 1.0f );
+            glm::vec4 transVertex = *m_transform * origVertex;
+
+            // Replace only coordinates, leave color as it is
+            memcpy( &newVertices[(m_size + i) * VertStride], &transVertex[0], 3 * sizeof(GLfloat) );
+
+            // Move on to the next vertex
+            vertexPtr += VertStride;
+        }
+    }
 
     // Handle new indices
     if( m_indices )
@@ -160,6 +191,38 @@ void VBO_ITEM::SetOffset( int aOffset )
 int VBO_ITEM::GetOffset() const
 {
     return m_offset;
+}
+
+
+void VBO_ITEM::SetTransformMatrix( const glm::mat4* aMatrix )
+{
+    m_transform = aMatrix;
+}
+
+
+void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
+{
+    // Point to color of vertices
+    GLfloat* vertexPtr = m_vertices + ColorOffset;
+    const GLfloat newColor[] = { aColor.r, aColor.g, aColor.b, aColor.a };
+
+    for( int i = 0; i < m_size; ++i )
+    {
+        memcpy( vertexPtr, newColor, ColorSize );
+
+        // Move on to the next vertex
+        vertexPtr += VertStride;
+    }
+}
+
+
+// TODO it is not used yet
+void VBO_ITEM::UseColor( const COLOR4D& aColor )
+{
+    m_color[0] = aColor.r;
+    m_color[1] = aColor.g;
+    m_color[2] = aColor.b;
+    m_color[3] = aColor.a;
 }
 
 

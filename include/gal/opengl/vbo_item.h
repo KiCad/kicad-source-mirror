@@ -33,6 +33,8 @@
 #define VBO_ITEM_H_
 
 #include <GL/gl.h>
+#include <gal/opengl/glm/glm.hpp>
+#include <gal/color4d.h>
 
 namespace KiGfx
 {
@@ -91,20 +93,50 @@ public:
      */
     int  GetOffset() const;
 
+    /**
+     * Function SetTransformMatrix()
+     * Sets transformation matrix for vertices that are added to VBO_ITEM. If you do not want to
+     * transform vertices at all, pass NULL as the argument.
+     * @param aMatrix is the new transform matrix or NULL if you do not want to use transformation
+     * matrix.
+     */
+    void SetTransformMatrix( const glm::mat4* aMatrix );
+
+    /**
+     * Function ChangeColor()
+     * Colors all vertices to the specified color.
+     * @param aColor is the new color for vertices.
+     */
+    void ChangeColor( const COLOR4D& aColor );
+
+    /**
+     * Function UseColor()
+     * Sets color used for all added vertices.
+     * @param aColor is the color used for added vertices.
+     */
+    void UseColor( const COLOR4D& aColor );
+
     ///< Functions for getting VBO ids.
     //void SetVbo( int aVboId );
     //int  GetVbo() const;
 
     ///< Data organization information for vertices.
-    static const int VertStride  = 7;
-    static const int VertSize    = VertStride * sizeof(GLfloat);
-    static const int IndStride   = 1;
-    static const int IndSize     = IndStride * sizeof(GLuint);
-    static const int ColorOffset = 3 * sizeof(GLfloat);
+    // Each vertex consists of 7 floats
+    static const int VertStride         = 7;
+    static const int VertSize           = VertStride * sizeof(GLfloat);
+
+    static const int IndStride          = 1;
+    static const int IndSize            = IndStride * sizeof(GLuint);
+
+    // Offset of color data from the beginning of vertex data
+    static const int ColorOffset        = 3;
+    static const int ColorByteOffset    = ColorOffset * sizeof(GLfloat);
+    static const int ColorStride        = 4;
+    static const int ColorSize          = ColorStride * sizeof(GLfloat);
 
 private:
     ///< VBO ids in which the item is stored.
-    //int      m_vboId; // not used yet
+    //int         m_vboId; // not used yet
 
     ///< Contains vertices coordinates and colors.
     ///< Packed by 7 floats for each vertex: {X, Y, Z, R, G, B, A}
@@ -121,8 +153,14 @@ private:
     int         m_shader;
     int         m_shaderAttrib;
 
+    ///< Color used for new vertices pushed.
+    GLfloat     m_color[4];
+
     ///< Flag telling if the item should be recached in VBO or not.
     bool        m_isDirty;
+
+    ///< Current transform matrix for every new vertex pushed.
+    const glm::mat4* m_transform;
 };
 } // namespace KiGfx
 

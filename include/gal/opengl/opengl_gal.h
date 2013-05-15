@@ -3,6 +3,8 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * Graphics Abstraction Layer (GAL) for OpenGL
  *
@@ -31,6 +33,10 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <GL/glew.h>
 
+// OpenGL mathematics library
+#define GLM_FORCE_RADIANS
+#include <gal/opengl/vbo_item.h>
+
 // wxWidgets imports
 #include <wx/wx.h>
 #include <wx/glcanvas.h>
@@ -45,12 +51,6 @@
 #include <iostream>
 #include <fstream>
 
-
-#if defined(DEBUG)
-#define D(x)    x
-#else
-#define D(x)
-#endif
 
 namespace KiGfx
 {
@@ -192,7 +192,8 @@ public:
     double       GetLineWidth();
 
     /// @copydoc GAL::SetLayerDepth()
-    virtual void SetLayerDepth( double aLayerDepth ){
+    virtual void SetLayerDepth( double aLayerDepth )
+    {
         super::SetLayerDepth( aLayerDepth );
     }
 
@@ -337,20 +338,25 @@ private:
 
     // Display lists
     GLuint                displayListsArcs;       ///< Arc display list
+    VBO_ITEM              verticesArc;
     GLuint                displayListCircle;      ///< Circle display list
+    VBO_ITEM              verticesCircle;
     GLuint                displayListSemiCircle;  ///< Semi circle display list
+    VBO_ITEM              verticesSemiCircle;
 
     // Vertex buffer objects related fields
     std::deque<VBO_ITEM*> vboItems;               ///< Stores informations about VBO objects
-    VBO_ITEM*             curVboItem;
-    GLuint                curVboVertId;
-    GLuint                curVboIndId;
+    VBO_ITEM*             curVboItem;             ///< Currently used VBO_ITEM (for grouping)
+    GLuint                curVboVertId;           ///< Currently used vertices VBO handle
+    GLuint                curVboIndId;            ///< Currently used indices VBO handle
+    int                   vboSize;                ///< Amount of vertices stored in VBO
+    bool                  vboNeedsUpdate;         ///< Flag indicating if VBO should be rebuilt
+    glm::mat4             transform;              ///< Current transformation matrix
+    std::stack<glm::mat4> transformStack;         ///< Stack of transformation matrices
 
-    int                   vboSize;
-    bool                  vboNeedsUpdate;
-
-    double                curvePoints[12];  ///< Coefficients for curves
-    std::deque<VECTOR2D>  unitCirclePoints; ///< List of the points on a unit circle
+    double                curvePoints[12];        ///< Coefficients for curves
+    // FIXME to be removed:
+    std::deque<VECTOR2D>  unitCirclePoints;       ///< List of the points on a unit circle
 
     // Polygon tesselation
     GLUtesselator*        tesselator;       ///< Pointer to the tesselator
@@ -404,7 +410,7 @@ private:
     void computeUnitSemiCircle();
 
     /// Compute the points of a unit arc.
-    void computeUnitArcs();
+    // void computeUnitArcs();  // TODO not used
 
     // Event handling
     /**
@@ -467,13 +473,20 @@ private:
      */
     void deleteFrameBuffer( GLuint* aFrameBuffer, GLuint* aDepthBuffer, GLuint* aTexture );
 
-    // TODO comment
+    /**
+     * @brief Initializes everything needed to use vertex buffer objects.
+     */
     void initVertexBufferObjects();
 
-    // TODO comment
+    /**
+     * @brief Deinitializes everything when vertex buffer objects are not used anymore.
+     */
     void deleteVertexBufferObjects();
 
-    // TODO comment
+    /**
+     * @brief Rebuilds vertex buffer object using stored VBO_ITEMS and sends it to
+     * the graphic card memory.
+     */
     void rebuildVbo();
 
     /**
@@ -493,6 +506,30 @@ private:
      */
     inline void drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
                              double aDepthOffset );
+
+    /**
+     * @brief Function that replaces glTranslate and behaves according to isGrouping variable.
+     * In case isGrouping==false, it is simply glTranslate, in other case it
+     * modifies transformation matrix.
+     *
+     * @param aX is translation in X axis direction.
+     * @param aY is translation in Y axis direction.
+     * @param aZ is translation in Z axis direction.
+     */
+    inline void translate3( double aX, double aY, double aZ );
+
+    /**
+     * @brief Function that replaces glColor and behaves according to isGrouping variable.
+     * In case isGrouping==false, it is simply glColor, in other case it
+     * modifies color used by current VBO_ITEM.
+     *
+     * @param aR is red component.
+     * @param aG is green component.
+     * @param aB is blue component.
+     * @param aA is alpha component.
+     */
+    inline void color4( double aRed, double aGreen, double aBlue, double aAlpha );
+    inline void color4( const COLOR4D& aColor );
 
     inline void selectShader( int aIndex );
 
