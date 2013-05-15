@@ -16,8 +16,6 @@ set(EESCHEMA_DLGS
     dialogs/dialog_annotate_base.cpp
     dialogs/dialog_lib_edit_text.cpp
     dialogs/dialog_lib_edit_text_base.cpp
-    dialogs/dialog_build_BOM.cpp
-    dialogs/dialog_build_BOM_base.cpp
     dialogs/dialog_edit_component_in_lib.cpp
     dialogs/dialog_edit_component_in_lib_base.cpp
     dialogs/dialog_edit_component_in_schematic_fbp.cpp
@@ -60,7 +58,6 @@ set(EESCHEMA_SRCS
     backanno.cpp
     block.cpp
     block_libedit.cpp
-    build_BOM.cpp
     busentry.cpp
     bus-wire-junction.cpp
     class_drc_erc_item.cpp
