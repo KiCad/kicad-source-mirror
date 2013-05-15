@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-11 13:06+0100\n"
-"PO-Revision-Date: 2013-05-11 13:10+0100\n"
+"POT-Creation-Date: 2013-05-15 20:48+0100\n"
+"PO-Revision-Date: 2013-05-15 20:49+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -551,67 +551,6 @@ msgstr "Opcje widoczności pól"
 #, c-format
 msgid "Failed to open component-footprint link file <%s>"
 msgstr "Nie udało się otworzyć pliku łącz symboli i footprintów <%s>"
-
-#: eeschema/build_BOM.cpp:214
-#, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = "
-"%d\n"
-msgstr ""
-"\n"
-"#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = Numer "
-"arkusza ) liczba = %d\n"
-
-#: eeschema/build_BOM.cpp:222
-#, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
-"\n"
-msgstr ""
-"\n"
-"#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = "
-"Alfabetyczny ) liczba = %d\n"
-"\n"
-
-#: eeschema/build_BOM.cpp:260
-#, c-format
-msgid "> %-28.28s PinSheet %-7.7s %s\n"
-msgstr "> %-28.28s PinSheet %-7.7s %s\n"
-
-#: eeschema/build_BOM.cpp:275
-msgid "#End labels\n"
-msgstr "#End labels\n"
-
-#: eeschema/build_BOM.cpp:352
-msgid "#Cmp ( order = Reference )"
-msgstr "#Cmp ( sort. wg = Oznaczenie )"
-
-#: eeschema/build_BOM.cpp:355 eeschema/build_BOM.cpp:669
-msgid " (with SubCmp)"
-msgstr " (z podelementem)"
-
-#: eeschema/build_BOM.cpp:488 eeschema/lib_field.cpp:72
-#: eeschema/lib_field.cpp:745 eeschema/template_fieldnames.cpp:25
-msgid "Field"
-msgstr "Pole"
-
-#: eeschema/build_BOM.cpp:492
-msgid "Item count"
-msgstr "Ilość elementów"
-
-#: eeschema/build_BOM.cpp:666
-msgid ""
-"\n"
-"#Cmp ( order = Value )"
-msgstr ""
-"\n"
-"#Cmp ( sort. wg = Wartość )"
-
-#: eeschema/build_BOM.cpp:715
-msgid "#End Cmp\n"
-msgstr "#Koniec Cmp\n"
 
 #: eeschema/class_drc_erc_item.cpp:40
 msgid "ERC err unspecified"
@@ -1937,6 +1876,11 @@ msgstr "<%s> - Eksport OK"
 #, c-format
 msgid "Error creating <%s>"
 msgstr "Błąd podczas tworzenia  <%s>"
+
+#: eeschema/lib_field.cpp:72 eeschema/lib_field.cpp:745
+#: eeschema/template_fieldnames.cpp:25
+msgid "Field"
+msgstr "Pole"
 
 #: eeschema/lib_field.cpp:563 eeschema/onrightclick.cpp:438
 #: eeschema/sch_component.cpp:1469 eeschema/template_fieldnames.cpp:14
@@ -3324,6 +3268,10 @@ msgstr "Nie pokazuj ukrytych pinów"
 #: eeschema/schframe.cpp:605 eeschema/tool_sch.cpp:298
 msgid "Show hidden pins"
 msgstr "Pokaż ukryte piny"
+
+#: eeschema/schframe.cpp:649
+msgid "BOM Howto"
+msgstr "BOM Jak wykonać"
 
 #: eeschema/schframe.cpp:714
 msgid "Schematic"
@@ -18291,3 +18239,48 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:294
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid ""
+#~ "\n"
+#~ "#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count "
+#~ "= %d\n"
+#~ msgstr ""
+#~ "\n"
+#~ "#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = Numer "
+#~ "arkusza ) liczba = %d\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = "
+#~ "%d\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = "
+#~ "Alfabetyczny ) liczba = %d\n"
+#~ "\n"
+
+#~ msgid "> %-28.28s PinSheet %-7.7s %s\n"
+#~ msgstr "> %-28.28s PinSheet %-7.7s %s\n"
+
+#~ msgid "#End labels\n"
+#~ msgstr "#End labels\n"
+
+#~ msgid "#Cmp ( order = Reference )"
+#~ msgstr "#Cmp ( sort. wg = Oznaczenie )"
+
+#~ msgid " (with SubCmp)"
+#~ msgstr " (z podelementem)"
+
+#~ msgid "Item count"
+#~ msgstr "Ilość elementów"
+
+#~ msgid ""
+#~ "\n"
+#~ "#Cmp ( order = Value )"
+#~ msgstr ""
+#~ "\n"
+#~ "#Cmp ( sort. wg = Wartość )"
+
+#~ msgid "#End Cmp\n"
+#~ msgstr "#Koniec Cmp\n"
