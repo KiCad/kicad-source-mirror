@@ -420,7 +420,8 @@ void VIEW::redrawRect( const BOX2I& aRect )
         {
             drawItem drawFunc( this, l->id );
 
-            m_gal->SetLayerDepth( (double) l->renderingOrder );
+            if( !m_useGroups )
+                m_gal->SetLayerDepth( (double) l->renderingOrder );
             l->items->Query( aRect, drawFunc );
             l->isDirty = false;
 
@@ -614,6 +615,7 @@ void VIEW::RecacheAllItems( bool aImmediately )
     for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = & ( ( *i ).second );
+        m_gal->SetLayerDepth( (double) l->renderingOrder );
         recacheItem visitor( this, m_gal, l->id, aImmediately );
         l->items->Query( r, visitor );
     }
