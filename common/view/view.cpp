@@ -407,10 +407,12 @@ void VIEW::redrawRect( const BOX2I& aRect )
 {
     int          totalItems = 0, totalCached = 0;
     uint64_t     totalDrawTime = 0;
+#ifdef __WXDEBUG__
     prof_counter totalCycles, totalRealTime;
 
     prof_start( &totalRealTime, false );
     prof_start( &totalCycles, true );
+#endif /* __WXDEBUG__ */
 
     BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
     {
@@ -428,6 +430,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
         }
     }
 
+#ifdef __WXDEBUG__
     prof_end( &totalCycles );
     prof_end( &totalRealTime );
 
@@ -435,6 +438,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
             totalItems, totalCached, (double) totalRealTime.value / 1000.0,
             1000000.0 / (double) totalRealTime.value,
             (double) totalDrawTime / (double) totalCycles.value * 100.0 );
+#endif /* __WXDEBUG__ */
 }
 
 
@@ -600,7 +604,12 @@ void VIEW::RecacheAllItems( bool aImmediately )
 
     r.SetMaximum();
 
+#ifdef __WXDEBUG__
     wxLogDebug( wxT( "RecacheAllItems::immediately: %u" ), aImmediately );
+
+    prof_counter totalRealTime;
+    prof_start( &totalRealTime, false );
+#endif /* __WXDEBUG__ */
 
     for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
     {
@@ -608,4 +617,10 @@ void VIEW::RecacheAllItems( bool aImmediately )
         recacheItem visitor( this, m_gal, l->id, aImmediately );
         l->items->Query( r, visitor );
     }
+
+#ifdef __WXDEBUG__
+    prof_end( &totalRealTime );
+
+    wxLogDebug( wxT( "RecacheAllItems::%.1f ms" ), (double) totalRealTime.value / 1000.0 );
+#endif /* __WXDEBUG__ */
 }
