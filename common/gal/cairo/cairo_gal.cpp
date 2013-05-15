@@ -46,8 +46,10 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     mouseListener = aMouseListener;
     paintListener = aPaintListener;
 
-    isGrouping = false;
-    zoomFactor = 1.0;
+    isGrouping          = false;
+    isInitialized       = false;
+    isDeleteSavedPixels = false;
+    zoomFactor          = 1.0;
 
     SetSize( aParent->GetSize() );
 
@@ -76,10 +78,6 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     lineJoinMap[LINE_JOIN_ROUND] = CAIRO_LINE_JOIN_ROUND;
     lineJoinMap[LINE_JOIN_MITER] = CAIRO_LINE_JOIN_MITER;
 
-    isDeleteSavedPixels = false;
-
-    isGrouping = false;
-
     // Initialize the cursor shape
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     initCursor( 21 );
@@ -91,13 +89,13 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     SetGridColor( COLOR4D( 0.5, 0.5, 0.5, 0.3 ) );
     SetCoarseGrid( 10 );
     SetGridLineWidth( 0.5 );
-
-    Refresh();
 }
 
 
 CAIRO_GAL::~CAIRO_GAL()
 {
+    deinitSurface();
+
     delete cursorPixels;
     delete cursorPixelsSaved;
 
@@ -139,6 +137,9 @@ void CAIRO_GAL::skipMouseEvent( wxMouseEvent& aEvent )
 
 void CAIRO_GAL::initSurface()
 {
+    if( isInitialized )
+        return;
+
     // The size of the client area needs to be greater than zero
     clientRectangle = parentWindow->GetClientRect();
 
@@ -184,14 +185,21 @@ void CAIRO_GAL::initSurface()
     lineWidth = 0;
 
     isDeleteSavedPixels = true;
+
+    isInitialized = true;
 }
 
 
 void CAIRO_GAL::deinitSurface()
 {
+    if( !isInitialized )
+        return;
+
     // Destroy Cairo objects
     cairo_destroy( cairoImage );
     cairo_surface_destroy( cairoSurface );
+
+    isInitialized = false;
 }
 
 
@@ -548,12 +556,15 @@ void CAIRO_GAL::SetLayerDepth( double aLayerDepth )
 {
     super::SetLayerDepth( aLayerDepth );
 
-    storePath();
+    if( isInitialized )
+    {
+        storePath();
 
-    cairo_pop_group_to_source( cairoImage );
-    cairo_paint_with_alpha( cairoImage, fillColor.a );
+        cairo_pop_group_to_source( cairoImage );
+        cairo_paint_with_alpha( cairoImage, fillColor.a );
 
-    cairo_push_group( cairoImage );
+        cairo_push_group( cairoImage );
+    }
 }
 
 

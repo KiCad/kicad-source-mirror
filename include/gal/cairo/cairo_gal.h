@@ -359,6 +359,7 @@ private:
     unsigned int*       bitmapBuffer;           ///< Storage of the cairo image
     unsigned int*       bitmapBufferBackup;     ///< Backup storage of the cairo image
     int                 stride;                 ///< Stride value for Cairo
+    bool                isInitialized;          ///< Are Cairo image & surface ready to use
 
     // Mapping between Cairo and GAL line attributes
     std::map<LineCap, cairo_line_cap_t>     lineCapMap;     ///< Line cap style mapping
