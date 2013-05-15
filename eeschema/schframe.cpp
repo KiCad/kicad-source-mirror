@@ -644,10 +644,10 @@ void SCH_EDIT_FRAME::OnCreateNetlist( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnCreateBillOfMaterials( wxCommandEvent& )
 {
-    DIALOG_BUILD_BOM* dlg = new DIALOG_BUILD_BOM( this );
-
-    dlg->ShowModal();
-    dlg->Destroy();
+    wxMessageDialog dlg( this,
+                        wxT( "https://answers.launchpad.net/kicad/+faq/2265" ),
+                        _( "BOM Howto" ) );
+    dlg.ShowModal();
 }
 
 
@@ -852,7 +852,7 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
     }
 }
 
-void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMask, bool aPrintMirrorMode, 
+void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMask, bool aPrintMirrorMode,
                                 void* aData )
 {
     GetScreen()->Draw( m_canvas, aDC, GR_DEFAULT_DRAWMODE );
