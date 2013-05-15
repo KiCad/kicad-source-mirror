@@ -134,6 +134,9 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 
 void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
 {
+    if( aGalType == m_currentGal && m_gal != NULL )
+        return;
+
     if( m_gal )
         delete m_gal;
 
@@ -164,4 +167,6 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
 
     wxSize size = GetClientSize();
     m_gal->ResizeScreen( size.GetX(), size.GetY() );
+
+    m_currentGal = aGalType;
 }

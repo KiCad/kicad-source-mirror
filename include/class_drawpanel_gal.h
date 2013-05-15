@@ -87,6 +87,7 @@ protected:
     KiGfx::PAINTER*          m_painter;          ///< Contains information about how to draw items
                                                  ///< using GAL
     KiGfx::WX_VIEW_CONTROLS* m_viewControls;     ///< Control for VIEW (moving, zooming, etc.)
+    GalType                  m_currentGal;       ///< Currently used GAL
 
     std::string              m_galShaderPath;    ///< Path to shader files, used in OpenGL mode
 };
