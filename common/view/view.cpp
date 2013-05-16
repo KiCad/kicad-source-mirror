@@ -33,7 +33,9 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <painter.h>
 
+#ifdef __WXDEBUG__
 #include <profile.h>
+#endif /* __WXDEBUG__ */
 
 using namespace KiGfx;
 
@@ -359,14 +361,12 @@ void VIEW::EnableTopLayer( bool aEnable )
 struct VIEW::drawItem
 {
     drawItem( VIEW* aView, int aCurrentLayer ) :
-        count( 0 ), countCached( 0 ), currentLayer( aCurrentLayer ), time( 0 ), view( aView )
+        currentLayer( aCurrentLayer ), view( aView )
     {
     }
 
     void operator()( VIEW_ITEM* aItem )
     {
-        BOX2I    tmp;
-        uint64_t ts  = rdtsc();
         GAL*     gal = view->GetGAL();
 
         if( view->m_useGroups )
@@ -376,7 +376,6 @@ struct VIEW::drawItem
             if( group >= 0 && aItem->ViewIsVisible() )
             {
                 gal->DrawGroup( group );
-                countCached++;
             }
             else
             {
@@ -390,30 +389,15 @@ struct VIEW::drawItem
         {
             view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), currentLayer );
         }
-
-        time += rdtsc() - ts;
-        count++;
     }
 
-    int      count;
-    int      countCached;
     int      currentLayer;
-    uint64_t time;
     VIEW*    view;
 };
 
 
 void VIEW::redrawRect( const BOX2I& aRect )
 {
-    int          totalItems = 0, totalCached = 0;
-    uint64_t     totalDrawTime = 0;
-#ifdef __WXDEBUG__
-    prof_counter totalCycles, totalRealTime;
-
-    prof_start( &totalRealTime, false );
-    prof_start( &totalCycles, true );
-#endif /* __WXDEBUG__ */
-
     BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
     {
         if( l->enabled )
@@ -421,25 +405,11 @@ void VIEW::redrawRect( const BOX2I& aRect )
             drawItem drawFunc( this, l->id );
 
             if( !m_useGroups )
-                m_gal->SetLayerDepth( (double) l->renderingOrder );
+                m_gal->SetLayerDepth( static_cast<double>( l->renderingOrder ) );
             l->items->Query( aRect, drawFunc );
             l->isDirty = false;
-
-            totalItems    += drawFunc.count;
-            totalDrawTime += drawFunc.time;
-            totalCached   += drawFunc.countCached;
         }
     }
-
-#ifdef __WXDEBUG__
-    prof_end( &totalCycles );
-    prof_end( &totalRealTime );
-
-    wxLogDebug( wxT( "Redraw::items %d (%d cached), %.1f ms/frame (%.0f FPS), draw/geometry ratio: %.1f%%" ),
-            totalItems, totalCached, (double) totalRealTime.value / 1000.0,
-            1000000.0 / (double) totalRealTime.value,
-            (double) totalDrawTime / (double) totalCycles.value * 100.0 );
-#endif /* __WXDEBUG__ */
 }
 
 
