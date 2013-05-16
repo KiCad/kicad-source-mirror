@@ -506,6 +506,26 @@ private:
     inline void drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
                              double aDepthOffset );
 
+    ///< OpenGL replacement functions (that are working both in immediate and VBO modes)
+    /**
+     * @brief Starts drawing in immediate mode or does nothing if an item's caching has started.
+     * @param aMode specifies the primitive or primitives that will be created.
+     */
+    inline void begin( GLenum aMode );
+
+    /**
+     * @brief Ends drawing in immediate mode or does nothing if an item's caching has started.
+     */
+    inline void end();
+
+    /**
+     * @brief Adds vertex to the current item or draws it in immediate mode.
+     * @param aX is X coordinate.
+     * @param aY is Y coordinate.
+     * @param aZ is Z coordinate.
+     */
+    inline void vertex3( double aX, double aY, double aZ );
+
     /**
      * @brief Function that replaces glTranslate and behaves according to isGrouping variable.
      * In case isGrouping==false, it is simply glTranslate, in other case it

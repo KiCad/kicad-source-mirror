@@ -130,14 +130,17 @@ public:
     static const int VertStride         = 7;
     static const int VertSize           = VertStride * sizeof(GLfloat);
 
-    static const int IndStride          = 1;
-    static const int IndSize            = IndStride * sizeof(GLuint);
+    static const int CoordStride        = 3;
+    static const int CoordSize          = CoordStride * sizeof(GLfloat);
 
     // Offset of color data from the beginning of each vertex data
     static const int ColorOffset        = 3;
     static const int ColorByteOffset    = ColorOffset * sizeof(GLfloat);
     static const int ColorStride        = 4;
     static const int ColorSize          = ColorStride * sizeof(GLfloat);
+
+    static const int IndStride          = 1;
+    static const int IndSize            = IndStride * sizeof(GLuint);
 
 private:
     ///< VBO ids in which the item is stored.

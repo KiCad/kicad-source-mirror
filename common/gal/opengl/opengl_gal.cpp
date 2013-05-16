@@ -625,31 +625,15 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
     VECTOR2D v2 = aEndPoint + perpendicularVector;
     VECTOR2D v3 = aEndPoint - perpendicularVector;
 
-    if( isGrouping )
-    {
-        const GLfloat newVertices[] =
-        {
-            v0.x, v0.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-            v1.x, v1.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-            v3.x, v3.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-            v0.x, v0.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-            v3.x, v3.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-            v2.x, v2.y, layerDepth, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a
-        };
-        curVboItem->PushVertices( newVertices, 6 );
-    }
-    else
-    {
-        glBegin( GL_TRIANGLES );
-        glVertex3d( v0.x, v0.y, layerDepth );
-        glVertex3d( v1.x, v1.y, layerDepth );
-        glVertex3d( v3.x, v3.y, layerDepth );
+    begin( GL_TRIANGLES );
+    vertex3( v0.x, v0.y, layerDepth );
+    vertex3( v1.x, v1.y, layerDepth );
+    vertex3( v3.x, v3.y, layerDepth );
 
-        glVertex3d( v0.x, v0.y, layerDepth );
-        glVertex3d( v3.x, v3.y, layerDepth );
-        glVertex3d( v2.x, v2.y, layerDepth );
-        glEnd();
-    }
+    vertex3( v0.x, v0.y, layerDepth );
+    vertex3( v3.x, v3.y, layerDepth );
+    vertex3( v2.x, v2.y, layerDepth );
+    end();
 }
 
 
@@ -721,6 +705,34 @@ inline void OPENGL_GAL::drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D
 }
 
 
+void OPENGL_GAL::begin( GLenum aMode )
+{
+    if( !isGrouping )
+        glBegin( aMode );
+}
+
+
+void OPENGL_GAL::end()
+{
+    if( !isGrouping )
+        glEnd();
+}
+
+
+void OPENGL_GAL::vertex3( double aX, double aY, double aZ )
+{
+    if( isGrouping )
+    {
+        const GLfloat vertex[] = { aX, aY, aZ };
+        curVboItem->PushVertex( vertex );
+    }
+    else
+    {
+        glVertex3d( aX, aY, aZ );
+    }
+}
+
+
 void OPENGL_GAL::translate3( double aX, double aY, double aZ )
 {
     if( isGrouping )
@@ -738,8 +750,7 @@ void OPENGL_GAL::color4( double aRed, double aGreen, double aBlue, double aAlpha
 {
     if( isGrouping )
     {
-// TODO not used - may be it is not useful at all, to be checked
-//        curVboItem->UseColor( COLOR4D( aRed, aGreen, aBlue, aAlpha ) );
+        curVboItem->UseColor( COLOR4D( aRed, aGreen, aBlue, aAlpha ) );
     }
     else
     {
@@ -752,8 +763,7 @@ void OPENGL_GAL::color4( const COLOR4D& aColor )
 {
     if( isGrouping )
     {
-// TODO not used - may be it is not useful at all, to be checked
-//        curVboItem->UseColor( aColor );
+        curVboItem->UseColor( aColor );
     }
     else
     {
@@ -871,54 +881,24 @@ void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
                     // Now draw the fan
                     SWAP( angle1, >, angle2 );
 
-                    if( !isGrouping )
-                        glBegin( GL_TRIANGLES );
+                    begin( GL_TRIANGLES );
 
                     for( double a = angle1; a < angle2; )
                     {
                         // Compute vertices
-                        double v0[] = { lastPoint.x, lastPoint.y };
-                        double v1[] = 
-                        {
-                            lastPoint.x + adjust * sin( a ),
-                            lastPoint.y - adjust * cos( a )
-                        };
+                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
+                        vertex3( lastPoint.x + adjust * sin( a ),
+                                 lastPoint.y - adjust * cos( a ), layerDepth );
 
                         a += M_PI / 32;
                         if(a > angle2)
                             a = angle2;
 
-                        double v2[] =
-                        {
-                            lastPoint.x + adjust * sin( a ),
-                            lastPoint.y - adjust * cos( a )
-                        };
-
-                        if( isGrouping )
-                        {
-                            const GLfloat newVertices[] =
-                            {
-                                v0[0], v0[1], layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                v1[0], v1[1], layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                v2[0], v2[1], layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-                            };
-                            curVboItem->PushVertices( newVertices, 3 );
-                        }
-                        else
-                        {
-                            glVertex3d( v0[0], v0[1], layerDepth );
-                            glVertex3d( v1[0], v1[1], layerDepth );
-                            glVertex3d( v2[0], v2[1], layerDepth );
-                        }
+                        vertex3( lastPoint.x + adjust * sin( a ),
+                                 lastPoint.y - adjust * cos( a ), layerDepth );
                     }
 
-                    if( !isGrouping )
-                        glEnd();
+                    end();
                     break;
                 }
 
@@ -942,29 +922,11 @@ void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
                     }
 
                     // Insert a triangle at the joint to close the gap
-                    if( isGrouping )
-                    {
-                        const GLfloat newVertices[] =
-                        {
-                            edgePoint1.x, edgePoint1.y, layerDepth,
-                            strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                            edgePoint2.x, edgePoint2.y, layerDepth,
-                            strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                            lastPoint.x, lastPoint.y, layerDepth,
-                            strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-                        };
-                        curVboItem->PushVertices( newVertices, 3 );
-                    }
-                    else
-                    {
-                        glBegin( GL_TRIANGLES );
-                        glVertex3d( edgePoint1.x, edgePoint1.y, layerDepth );
-                        glVertex3d( edgePoint2.x, edgePoint2.y, layerDepth );
-                        glVertex3d( lastPoint.x, lastPoint.y, layerDepth );
-                        glEnd();
-                    }
+                    begin( GL_TRIANGLES );
+                    vertex3( edgePoint1.x, edgePoint1.y, layerDepth );
+                    vertex3( edgePoint2.x, edgePoint2.y, layerDepth );
+                    vertex3( lastPoint.x, lastPoint.y, layerDepth );
+                    end();
 
                     break;
                 }
@@ -1002,95 +964,32 @@ void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
                         VECTOR2D mp1 = point1 + ( limit / lineLengthA ) * lastStartEndVector;
                         VECTOR2D mp2 = point3 - ( limit / lineLengthB ) * startEndVector;
 
-                        if( isGrouping )
-                        {
-                            const GLfloat newVertices[] =
-                            {
-                                lastPoint.x, lastPoint.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+                        begin( GL_TRIANGLES );
+                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
+                        vertex3( point1.x, point1.y, layerDepth );
+                        vertex3( mp1.x, mp1.y, layerDepth );
 
-                                point1.x, point1.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
+                        vertex3( mp1.x, mp1.y, layerDepth );
+                        vertex3( mp2.x, mp2.y, layerDepth );
 
-                                mp1.x, mp1.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                lastPoint.x, lastPoint.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                mp1.x, mp1.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                mp2.x, mp2.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                lastPoint.x, lastPoint.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                mp2.x, mp2.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                point3.x, point3.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a
-                            };
-                            curVboItem->PushVertices( newVertices, 9 );
-                        }
-                        else
-                        {
-                            glBegin( GL_TRIANGLES );
-                            glVertex3d( lastPoint.x, lastPoint.y, layerDepth );
-                            glVertex3d( point1.x, point1.y, layerDepth );
-                            glVertex3d( mp1.x, mp1.y, layerDepth );
-
-                            glVertex3d( lastPoint.x, lastPoint.y, layerDepth );
-                            glVertex3d( mp1.x, mp1.y, layerDepth );
-                            glVertex3d( mp2.x, mp2.y, layerDepth );
-
-                            glVertex3d( lastPoint.x, lastPoint.y, layerDepth );
-                            glVertex3d( mp2.x, mp2.y, layerDepth );
-                            glVertex3d( point3.x, point3.y, layerDepth );
-                            glEnd();
-                        }
+                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
+                        vertex3( mp2.x, mp2.y, layerDepth );
+                        vertex3( point3.x, point3.y, layerDepth );
+                        end();
                     }
                     else
                     {
-                        if( isGrouping )
-                        {
-                            const GLfloat newVertices[] =
-                            {
-                                lastPoint.x, lastPoint.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
+                        // Insert two triangles for the mitered edge
+                        begin( GL_TRIANGLES );
+                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
+                        vertex3( point1.x, point1.y, layerDepth );
+                        vertex3( miterPoint.x, miterPoint.y, layerDepth );
 
-                                point1.x, point1.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                miterPoint.x, miterPoint.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                lastPoint.x, lastPoint.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                miterPoint.x, miterPoint.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a,
-
-                                point3.x, point3.y, layerDepth,
-                                strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a
-                            };
-                            curVboItem->PushVertices( newVertices, 6 );
-                        }
-                        else
-                        {
-                            // Insert two triangles for the mitered edge
-                            glBegin( GL_TRIANGLES );
-                            glVertex3d( lastPoint.x, lastPoint.y, layerDepth );
-                            glVertex3d( point1.x, point1.y, layerDepth );
-                            glVertex3d( miterPoint.x, miterPoint.y, layerDepth );
-
-                            glVertex3d( lastPoint.x, lastPoint.y, layerDepth );
-                            glVertex3d( miterPoint.x, miterPoint.y, layerDepth );
-                            glVertex3d( point3.x, point3.y, layerDepth );
-                            glEnd();
-                        }
+                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
+                        vertex3( miterPoint.x, miterPoint.y, layerDepth );
+                        vertex3( point3.x, point3.y, layerDepth );
+                        end();
                     }
                     break;
                 }
@@ -1175,42 +1074,15 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
     {
         color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
-        if( isGrouping )
-        {
-            const GLfloat newVertices[] =
-            {
-                aStartPoint.x,    aStartPoint.y,    layerDepth,
-                fillColor.r,      fillColor.g,      fillColor.b,     fillColor.a,
+        begin( GL_TRIANGLES );
+        vertex3( aStartPoint.x, aStartPoint.y, layerDepth );
+        vertex3( diagonalPointA.x, diagonalPointA.y, layerDepth );
+        vertex3( aEndPoint.x, aEndPoint.y, layerDepth );
 
-                diagonalPointA.x, diagonalPointA.y, layerDepth,
-                fillColor.r,      fillColor.g,      fillColor.b,     fillColor.a,
-
-                aEndPoint.x,      aEndPoint.y,      layerDepth,
-                fillColor.r,      fillColor.g,      fillColor.b,     fillColor.a,
-
-                aStartPoint.x,    aStartPoint.y,    layerDepth,
-                fillColor.r,      fillColor.g,      fillColor.b,     fillColor.a,
-
-                aEndPoint.x,      aEndPoint.y,      layerDepth,
-                fillColor.r,      fillColor.g,      fillColor.b,     fillColor.a,
-
-                diagonalPointB.x, diagonalPointB.y, layerDepth,
-                fillColor.r,      fillColor.g,      fillColor.b,     fillColor.a
-            };
-            curVboItem->PushVertices( newVertices, 6 );
-        }
-        else
-        {
-            glBegin( GL_TRIANGLES );
-            glVertex3d( aStartPoint.x, aStartPoint.y, layerDepth );
-            glVertex3d( diagonalPointA.x, diagonalPointA.y, layerDepth );
-            glVertex3d( aEndPoint.x, aEndPoint.y, layerDepth );
-
-            glVertex3d( aStartPoint.x, aStartPoint.y, layerDepth );
-            glVertex3d( aEndPoint.x, aEndPoint.y, layerDepth );
-            glVertex3d( diagonalPointB.x, diagonalPointB.y, layerDepth );
-            glEnd();
-        }
+        vertex3( aStartPoint.x, aStartPoint.y, layerDepth );
+        vertex3( aEndPoint.x, aEndPoint.y, layerDepth );
+        vertex3( diagonalPointB.x, diagonalPointB.y, layerDepth );
+        end();
     }
 
     // Restore the stroke color
@@ -1257,8 +1129,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
             translate3( aCenterPoint.x, aCenterPoint.y, 0.0 );
             Scale( VECTOR2D( aRadius, aRadius ) );
 
-            if( !isGrouping )
-                glBegin( GL_TRIANGLES );
+            begin( GL_TRIANGLES );
 
             for( std::deque<VECTOR2D>::const_iterator it = unitCirclePoints.begin();
                     it != unitCirclePoints.end(); it++ )
@@ -1268,44 +1139,16 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
                 double v2[] = { ( it + 1 )->x * innerScale, ( it + 1 )->y * innerScale };
                 double v3[] = { ( it + 1 )->x * outerScale, ( it + 1 )->y * outerScale };
 
-                if( isGrouping )
-                {
-                    const GLfloat newVertices[] =
-                    {
-                        v0[0],         v0[1],         layerDepth,
-                        strokeColor.r, strokeColor.g, strokeColor.b,     strokeColor.a,
+                vertex3( v0[0], v0[1], layerDepth );
+                vertex3( v1[0], v1[1], layerDepth );
+                vertex3( v2[0], v2[1], layerDepth );
 
-                        v1[0],         v1[1],         layerDepth,
-                        strokeColor.r, strokeColor.g, strokeColor.b,     strokeColor.a,
-
-                        v2[0],         v2[1],         layerDepth,
-                        strokeColor.r, strokeColor.g, strokeColor.b,     strokeColor.a,
-
-                        v1[0],         v1[1],         layerDepth,
-                        strokeColor.r, strokeColor.g, strokeColor.b,     strokeColor.a,
-
-                        v3[0],         v3[1],         layerDepth,
-                        strokeColor.r, strokeColor.g, strokeColor.b,     strokeColor.a,
-
-                        v2[0],         v2[1],         layerDepth,
-                        strokeColor.r, strokeColor.g, strokeColor.b,     strokeColor.a
-                    };
-                    curVboItem->PushVertices( newVertices, 6 );
-                }
-                else
-                {
-                    glVertex3d( v0[0], v0[1], layerDepth );
-                    glVertex3d( v1[0], v1[1], layerDepth );
-                    glVertex3d( v2[0], v2[1], layerDepth );
-
-                    glVertex3d( v1[0], v1[1], layerDepth );
-                    glVertex3d( v3[0], v3[1], layerDepth );
-                    glVertex3d( v2[0], v2[1], layerDepth );
-                }
+                vertex3( v1[0], v1[1], layerDepth );
+                vertex3( v3[0], v3[1], layerDepth );
+                vertex3( v2[0], v2[1], layerDepth );
             }
 
-            if( !isGrouping )
-                glEnd();
+            end();
 
             Restore();
         }
@@ -1323,7 +1166,6 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 
         if( isGrouping )
         {
-            verticesCircle.ChangeColor( fillColor );
             curVboItem->PushVertices( verticesCircle.GetVertices(), verticesCircle.GetSize() );
         }
         else
@@ -1336,7 +1178,6 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 }
 
 
-// This method is used for round line caps
 void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle,
                                  double aDepthOffset )
 {
@@ -1347,8 +1188,6 @@ void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, d
 
     if( isGrouping )
     {
-        // Add vertices with a proper color
-        verticesSemiCircle.ChangeColor( strokeColor );
         curVboItem->PushVertices( verticesSemiCircle.GetVertices(), verticesSemiCircle.GetSize() );
     }
     else
@@ -1427,8 +1266,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
             double alphaIncrement = 2 * M_PI / CIRCLE_POINTS;
             color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
-            if( !isGrouping )
-                glBegin( GL_TRIANGLES );
+            begin( GL_TRIANGLES );
 
             for( double alpha = aStartAngle; alpha < aEndAngle; )
             {
@@ -1443,44 +1281,16 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
                 double v2[] = { cos( alpha ) * innerScale, sin( alpha ) * innerScale };
                 double v3[] = { cos( alpha ) * outerScale, sin( alpha ) * outerScale };
 
-                if( isGrouping )
-                {
-                    const GLfloat newVertices[] =
-                    {
-                        v0[0],         v0[1],                          0.0f,
-                        strokeColor.r, strokeColor.g, strokeColor.b,   strokeColor.a,
+                vertex3( v0[0], v0[1], 0.0 );
+                vertex3( v1[0], v1[1], 0.0 );
+                vertex3( v2[0], v2[1], 0.0 );
 
-                        v1[0],         v1[1],                          0.0f,
-                        strokeColor.r, strokeColor.g, strokeColor.b,   strokeColor.a,
-
-                        v2[0],         v2[1],                          0.0f,
-                        strokeColor.r, strokeColor.g, strokeColor.b,   strokeColor.a,
-
-                        v1[0],         v1[1],                          0.0f,
-                        strokeColor.r, strokeColor.g, strokeColor.b,   strokeColor.a,
-
-                        v3[0],         v3[1],                          0.0f,
-                        strokeColor.r, strokeColor.g, strokeColor.b,   strokeColor.a,
-
-                        v2[0],         v2[1],                          0.0f,
-                        strokeColor.r, strokeColor.g, strokeColor.b,   strokeColor.a
-                    };
-                    curVboItem->PushVertices( newVertices, 6 );
-                }
-                else
-                {
-                    glVertex2d( v0[0], v0[1] );
-                    glVertex2d( v1[0], v1[1] );
-                    glVertex2d( v2[0], v2[1] );
-
-                    glVertex2d( v1[0], v1[1] );
-                    glVertex2d( v3[0], v3[1] );
-                    glVertex2d( v2[0], v2[1] );
-                }
+                vertex3( v1[0], v1[1], 0.0 );
+                vertex3( v3[0], v3[1], 0.0 );
+                vertex3( v2[0], v2[1], 0.0 );
             }
 
-            if( !isGrouping )
-                glEnd();
+            end();
 
             if( lineCap == LINE_CAP_ROUND )
             {
@@ -1496,57 +1306,20 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         double alpha;
         color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
-        if( !isGrouping )
+        begin( GL_TRIANGLES );
+
+        for( alpha = aStartAngle; ( alpha + alphaIncrement ) < aEndAngle; )
         {
-            glBegin( GL_TRIANGLES );
-
-            for( alpha = aStartAngle; ( alpha + alphaIncrement ) < aEndAngle; )
-            {
-                glVertex2d( middlePoint.x, middlePoint.y );
-                glVertex2d( cos( alpha ), sin( alpha ) );
-                alpha += alphaIncrement;
-                glVertex2d( cos( alpha ), sin( alpha ) );
-            }
-
-            glVertex2d( middlePoint.x, middlePoint.y );
-            glVertex2d( cos( alpha ), sin( alpha ) );
-            glVertex2d( endPoint.x, endPoint.y );
-            glEnd();
+            vertex3( middlePoint.x, middlePoint.y,  0.0 );
+            vertex3( cos( alpha ),  sin( alpha ),   0.0 );
+            alpha += alphaIncrement;
+            vertex3( cos( alpha ),  sin( alpha ),   0.0 );
         }
-        else
-        {
-            for( alpha = aStartAngle; ( alpha + alphaIncrement ) < aEndAngle; )
-            {
-                const GLfloat v0[] =
-                {
-                    middlePoint.x, middlePoint.y, 0.0f, fillColor.r, fillColor.g, fillColor.b,
-                    fillColor.a
-                };
-                const GLfloat v1[] =
-                {
-                    cos( alpha ), sin( alpha ), 0.0f, fillColor.r, fillColor.g, fillColor.b,
-                    fillColor.a
-                };
-                alpha += alphaIncrement;
-                const GLfloat v2[] =
-                {
-                    cos( alpha ), sin( alpha ), 0.0f, fillColor.r, fillColor.g, fillColor.b,
-                    fillColor.a
-                };
 
-                curVboItem->PushVertex( v0 );
-                curVboItem->PushVertex( v1 );
-                curVboItem->PushVertex( v2 );
-            }
-
-            const GLfloat newVertices[] =
-            {
-                    middlePoint.x, middlePoint.y, 0.0f, fillColor.r, fillColor.g, fillColor.b, fillColor.a,
-                    cos( alpha ),  sin( alpha ),  0.0f, fillColor.r, fillColor.g, fillColor.b, fillColor.a,
-                    endPoint.x,    endPoint.y,    0.0f, fillColor.r, fillColor.g, fillColor.b, fillColor.a
-            };
-            curVboItem->PushVertices( newVertices, 3 );
-        }
+        vertex3( middlePoint.x, middlePoint.y,  0.0 );
+        vertex3( cos( alpha ),  sin( alpha ),   0.0 );
+        vertex3( endPoint.x,    endPoint.y,     0.0 );
+        end();
     }
 
     Restore();
@@ -1897,18 +1670,18 @@ void OPENGL_GAL::computeUnitCircle()
     // Insert in a display list and a vector
     for( int i = 0; i < CIRCLE_POINTS; i++ )
     {
-        GLfloat v0[] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-        GLfloat v1[] =
+        const GLfloat v0[] = { 0.0f, 0.0f, 0.0f };
+        const GLfloat v1[] =
         {
             cos( 2.0 * M_PI / CIRCLE_POINTS * i ),          // x
             sin( 2.0 * M_PI / CIRCLE_POINTS * i ),          // y
-            0.0f, 0.0f, 0.0f, 0.0f, 0.0f                    // z & color
+            0.0f                                            // z
         };
-        GLfloat v2[] =
+        const GLfloat v2[] =
         {
             cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // x
             sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // y
-            0.0f, 0.0f, 0.0f, 0.0f, 0.0f                    // z & color
+            0.0f                                            // z
         };                                                  
 
         glVertex2d( 0, 0 );
@@ -1938,18 +1711,18 @@ void OPENGL_GAL::computeUnitSemiCircle()
 
     for( int i = 0; i < CIRCLE_POINTS / 2; ++i )
     {
-        GLfloat v0[] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+        GLfloat v0[] = { 0.0f, 0.0f, 0.0f };
         GLfloat v1[] = 
         {
             cos( 2.0 * M_PI / CIRCLE_POINTS * i ),          // x
             sin( 2.0 * M_PI / CIRCLE_POINTS * i ),          // y
-            0.0f, 0.0f, 0.0f, 0.0f, 0.0f                    // z & color
+            0.0f                                            // z
         };
         GLfloat v2[] =
         {
             cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // x
             sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // y
-            0.0f, 0.0f, 0.0f, 0.0f, 0.0f                    // z & color
+            0.0f                                            // z
         };
 
         glVertex2d( 0, 0 );
