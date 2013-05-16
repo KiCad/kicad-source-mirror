@@ -63,6 +63,12 @@ void EDA_3D_FRAME::ReCreateHToolbar()
 #endif
 
     m_HToolBar->AddSeparator();
+
+    m_HToolBar->AddTool( ID_TOOL_SET_VISIBLE_ITEMS, wxEmptyString,
+                         KiBitmap( read_setup_xpm ),
+                         _( "Set display options, and some layers visibility" ) );
+    m_HToolBar->AddSeparator();
+
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ),
                          _( "Zoom in" ) );
 
@@ -132,13 +138,6 @@ void EDA_3D_FRAME::ReCreateVToolbar()
 
 void EDA_3D_FRAME::ReCreateMenuBar()
 {
-    bool full_options = true;
-
-    // If called from the display frame of CvPcb, only some options are relevant
-    if( Parent()->GetName() == wxT( "CmpFrame" ) ) {
-        full_options = false;
-    }
-
     wxMenuBar* menuBar   = new wxMenuBar;
     wxMenu*    fileMenu  = new wxMenu;
     wxMenu*    prefsMenu = new wxMenu;
@@ -153,6 +152,7 @@ void EDA_3D_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
     fileMenu->Append( ID_TOOL_SCREENCOPY_TOCLIBBOARD, _( "Copy 3D Image to Clipboard" ) );
 #endif
+
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, _( "&Exit" ) );
 
@@ -166,50 +166,53 @@ void EDA_3D_FRAME::ReCreateMenuBar()
             _( "Show 3D &Axis" ), KiBitmap( axis3d_front_xpm ), wxITEM_CHECK );
     item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_AXIS]);
 
+    // Creates grid menu
+    wxMenu * gridlistMenu = new wxMenu;
+    item = AddMenuItem( prefsMenu, gridlistMenu, ID_MENU3D_GRID,
+           _( "3D Grid" ), KiBitmap( grid_xpm ) );
+    gridlistMenu->Append( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), wxEmptyString, true );
+    gridlistMenu->Check( ID_MENU3D_GRID_NOGRID, true );
 
-    if( full_options )
-    {
-        item = AddMenuItem( prefsMenu, ID_MENU3D_USE_COPPER_THICKNESS,
-               _( "Show Copper Thickness" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
-        item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_COPPER_THICKNESS]);
+    gridlistMenu->Append( ID_MENU3D_GRID_10_MM, _( "3D Grid 10 mm" ), wxEmptyString, true );
+    gridlistMenu->Append( ID_MENU3D_GRID_5_MM, _( "3D Grid 5 mm" ), wxEmptyString, true );
+    gridlistMenu->Append( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5 mm" ), wxEmptyString, true );
+    gridlistMenu->Append( ID_MENU3D_GRID_1_MM, _( "3D Grid 1 mm" ), wxEmptyString, true );
 
-        item = AddMenuItem( prefsMenu, ID_MENU3D_MODULE_ONOFF,
-               _( "Show 3D F&ootprints" ), KiBitmap( shape_3d_xpm ), wxITEM_CHECK );
-        item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE]);
+    item = AddMenuItem( prefsMenu, ID_MENU3D_USE_COPPER_THICKNESS,
+           _( "Show Copper Thickness" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_COPPER_THICKNESS]);
 
-        item = AddMenuItem( prefsMenu, ID_MENU3D_ZONE_ONOFF,
-               _( "Show Zone &Filling" ), KiBitmap( add_zone_xpm ), wxITEM_CHECK );
-        item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE]);
+    item = AddMenuItem( prefsMenu, ID_MENU3D_MODULE_ONOFF,
+           _( "Show 3D F&ootprints" ), KiBitmap( shape_3d_xpm ), wxITEM_CHECK );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE]);
 
-        // Creates grid menu
-        wxMenu * gridlistMenu = new wxMenu;
-        item = AddMenuItem( prefsMenu, gridlistMenu, ID_MENU3D_GRID,
-               _( "3D Grid" ), KiBitmap( grid_xpm ) );
-        gridlistMenu->Append( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), wxEmptyString, true );
-        gridlistMenu->Check( ID_MENU3D_GRID_NOGRID, true );
+    item = AddMenuItem( prefsMenu, ID_MENU3D_ZONE_ONOFF,
+           _( "Show Zone &Filling" ), KiBitmap( add_zone_xpm ), wxITEM_CHECK );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE]);
 
-        gridlistMenu->Append( ID_MENU3D_GRID_10_MM, _( "3D Grid 10 mm" ), wxEmptyString, true );
-        gridlistMenu->Append( ID_MENU3D_GRID_5_MM, _( "3D Grid 5 mm" ), wxEmptyString, true );
-        gridlistMenu->Append( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5 mm" ), wxEmptyString, true );
-        gridlistMenu->Append( ID_MENU3D_GRID_1_MM, _( "3D Grid 1 mm" ), wxEmptyString, true );
+    item = AddMenuItem( prefsMenu, ID_MENU3D_ADHESIVE_ONOFF,
+           _( "Show &Adhesive Layers" ), KiBitmap( tools_xpm ), wxITEM_CHECK );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ADHESIVE]);
 
-        item = AddMenuItem( prefsMenu, ID_MENU3D_COMMENTS_ONOFF,
-               _( "Show &Comments Layer" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
-        item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_COMMENTS]);
+    item = AddMenuItem( prefsMenu, ID_MENU3D_SILKSCREEN_ONOFF,
+           _( "Show &Silkscreen Layer" ), KiBitmap( add_text_xpm ), wxITEM_CHECK );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SILKSCREEN]);
 
-        item = AddMenuItem( prefsMenu, ID_MENU3D_DRAWINGS_ONOFF,
-               _( "Show &Drawings Layer" ), KiBitmap( add_polygon_xpm ), wxITEM_CHECK );
-        item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_DRAWINGS]);
+    item = AddMenuItem( prefsMenu, ID_MENU3D_SOLDER_MASK_ONOFF,
+           _( "Show Solder &Mask Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERMASK]);
 
-        item = AddMenuItem( prefsMenu, ID_MENU3D_ECO1_ONOFF,
-               _( "Show Eco&1 Layer" ), KiBitmap( tools_xpm ), wxITEM_CHECK );
-        item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO1]);
+    item = AddMenuItem( prefsMenu, ID_MENU3D_SOLDER_PASTE_ONOFF,
+           _( "Show Solder &Paste Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERPASTE]);
 
-        item = AddMenuItem( prefsMenu, ID_MENU3D_ECO2_ONOFF,
-               _( "Show Eco&2 Layer" ), KiBitmap( tools_xpm ), wxITEM_CHECK );
-        item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO2]);
+    item = AddMenuItem( prefsMenu, ID_MENU3D_COMMENTS_ONOFF,
+           _( "Show &Comments and Drawings Layer" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_COMMENTS]);
 
-    }
+    item = AddMenuItem( prefsMenu, ID_MENU3D_ECO_ONOFF,
+           _( "Show &Eco Layers" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO]);
 
     SetMenuBar( menuBar );
 }

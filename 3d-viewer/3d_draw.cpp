@@ -768,20 +768,34 @@ bool Is3DLayerEnabled( LAYER_NUM aLayer )
     // check the flags
     switch( aLayer )
     {
-    case DRAW_N:
-        flg = g_Parm_3D_Visu.FL_DRAWINGS;
+    case ADHESIVE_N_BACK:
+    case ADHESIVE_N_FRONT:
+        flg = g_Parm_3D_Visu.FL_ADHESIVE;
         break;
 
+    case SOLDERPASTE_N_BACK:
+    case SOLDERPASTE_N_FRONT:
+        flg = g_Parm_3D_Visu.FL_SOLDERPASTE;
+        break;
+
+    case SILKSCREEN_N_BACK:
+    case SILKSCREEN_N_FRONT:
+        flg = g_Parm_3D_Visu.FL_SILKSCREEN;
+        break;
+
+    case SOLDERMASK_N_BACK:
+    case SOLDERMASK_N_FRONT:
+        flg = g_Parm_3D_Visu.FL_SOLDERMASK;
+        break;
+
+    case DRAW_N:
     case COMMENT_N:
         flg = g_Parm_3D_Visu.FL_COMMENTS;
         break;
 
     case ECO1_N:
-        flg = g_Parm_3D_Visu.FL_ECO1;
-        break;
-
     case ECO2_N:
-        flg = g_Parm_3D_Visu.FL_ECO2;
+        flg = g_Parm_3D_Visu.FL_ECO;
         break;
 
     default:

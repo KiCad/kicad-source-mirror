@@ -115,6 +115,7 @@ private:
     void On3DGridSelection( wxCommandEvent& event );
     void Process_Zoom( wxCommandEvent& event );
     void OnActivate( wxActivateEvent& event );
+    void Install_3D_ViewOptionDialog( wxCommandEvent& event );
 
     // initialisation
     void ReCreateMenuBar();
