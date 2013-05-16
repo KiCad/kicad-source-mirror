@@ -67,7 +67,7 @@ int LAYER_BOX_SELECTOR::GetChoice()
 // Get Current Layer
 LAYER_NUM LAYER_BOX_SELECTOR::GetLayerSelection() const
 {
-    return (LAYER_NUM)((unsigned long) GetClientData( GetSelection() ) );
+    return (LAYER_NUM)(intptr_t) GetClientData( GetSelection() );
 }
 
 
