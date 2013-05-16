@@ -72,9 +72,6 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
     if( m_spaceLeft == 0 )
         useNewBlock();
 
-    // Add the new vertex
-    memcpy( m_vertPtr, aVertex, VertSize );
-
     if( m_transform != NULL )
     {
         // Apply transformations
@@ -83,8 +80,16 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
         glm::vec4 transVertex = *m_transform * origVertex;
 
         // Replace only coordinates, leave color as it is
-        memcpy( m_vertPtr, &transVertex[0], 3 * sizeof(GLfloat) );
+        memcpy( m_vertPtr, &transVertex[0], CoordSize );
     }
+    else
+    {
+        // Add the new vertex
+        memcpy( m_vertPtr, aVertex, CoordSize );
+    }
+
+    // Apply currently used color
+    memcpy( m_vertPtr + ColorOffset, m_color, ColorSize );
 
     // Move to the next free space
     m_vertPtr += VertStride;
@@ -180,7 +185,6 @@ void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
 }
 
 
-// TODO it is not used yet
 void VBO_ITEM::UseColor( const COLOR4D& aColor )
 {
     m_color[0] = aColor.r;
