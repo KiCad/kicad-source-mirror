@@ -168,7 +168,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         // Load zones
         for( int i = 0; i < m_Pcb->GetAreaCount(); ++i )
         {
-            //view->Add( (KiGfx::VIEW_ITEM*) ( m_Pcb->GetArea( i ) ) );
+            view->Add( (KiGfx::VIEW_ITEM*) ( m_Pcb->GetArea( i ) ) );
         }
 
         // Load drawings

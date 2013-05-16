@@ -27,14 +27,14 @@
  * @brief Class to handle an item held in a Vertex Buffer Object.
  */
 
-// TODO comments
-
 #ifndef VBO_ITEM_H_
 #define VBO_ITEM_H_
 
 #include <GL/gl.h>
 #include <gal/opengl/glm/glm.hpp>
 #include <gal/color4d.h>
+
+#include <list>
 
 namespace KiGfx
 {
@@ -68,9 +68,14 @@ public:
      * Returns a pointer to the array containing all vertices.
      * @return Pointer to vertices packed in format {X, Y, Z, R, G, B, A}.
      */
-    GLfloat* GetVertices() const;
+    GLfloat* GetVertices();
 
-    GLuint* GetIndices() const;
+    /**
+     * Function GetIndices()
+     * Returns a pointer to the array containing all indices of vertices.
+     * @return Pointer to indices.
+     */
+    GLuint* GetIndices();
 
     /**
      * Function GetSize()
@@ -120,7 +125,7 @@ public:
     //void SetVbo( int aVboId );
     //int  GetVbo() const;
 
-    ///< Data organization information for vertices.
+    ///< Data organization information for vertices {X,Y,Z,R,G,B,A}.
     // Each vertex consists of 7 floats
     static const int VertStride         = 7;
     static const int VertSize           = VertStride * sizeof(GLfloat);
@@ -128,7 +133,7 @@ public:
     static const int IndStride          = 1;
     static const int IndSize            = IndStride * sizeof(GLuint);
 
-    // Offset of color data from the beginning of vertex data
+    // Offset of color data from the beginning of each vertex data
     static const int ColorOffset        = 3;
     static const int ColorByteOffset    = ColorOffset * sizeof(GLfloat);
     static const int ColorStride        = 4;
@@ -144,6 +149,21 @@ private:
 
     ///< Indices of vertices
     GLuint*     m_indices;
+
+    ///< Lists of blocks
+    std::list<GLfloat*> m_vertBlocks;
+    std::list<GLuint*>  m_indBlocks;
+    ///< Pointers to current blocks that can be used for storing data
+    GLfloat*            m_vertPtr;
+    GLuint*             m_indPtr;
+    ///< How many vertices can be stored in the current buffer
+    int                 m_spaceLeft;
+    ///< Number of vertices & indices stored in a single block
+    static const int    BLOCK_SIZE = 8;
+    ///< Creates a new block for storing vertices data
+    void                useNewBlock();
+    ///< Prepares a continuous block of data that can be copied to graphics card buffer.
+    void                prepareFinal();
 
     ///< Offset and size of data in VBO.
     int         m_offset;

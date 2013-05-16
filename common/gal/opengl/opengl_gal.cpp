@@ -511,6 +511,7 @@ void OPENGL_GAL::rebuildVbo()
     // Upload vertices coordinates and indices to GPU memory
     glBindBuffer( GL_ARRAY_BUFFER, curVboVertId );
     glBufferData( GL_ARRAY_BUFFER, vboSize * VBO_ITEM::VertSize, verticesBuffer, GL_DYNAMIC_DRAW );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, curVboIndId );
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboSize * VBO_ITEM::IndSize,

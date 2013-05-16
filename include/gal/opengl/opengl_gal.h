@@ -448,7 +448,6 @@ private:
      * @brief Blit the main texture to the screen.
      *
      * @param aIsClearFrameBuffer if true, the frame buffer is cleared as well.
-     *
      */
     void blitMainTexture( bool aIsClearFrameBuffer );
 
@@ -485,7 +484,7 @@ private:
 
     /**
      * @brief Rebuilds vertex buffer object using stored VBO_ITEMS and sends it to
-     * the graphic card memory.
+     * the graphics card memory.
      */
     void rebuildVbo();
 
@@ -529,6 +528,14 @@ private:
      * @param aA is alpha component.
      */
     inline void color4( double aRed, double aGreen, double aBlue, double aAlpha );
+
+    /**
+     * @brief Function that replaces glColor and behaves according to isGrouping variable.
+     * In case isGrouping==false, it is simply glColor, in other case it
+     * modifies color used by current VBO_ITEM.
+     *
+     * @param aColor is the new color.
+     */
     inline void color4( const COLOR4D& aColor );
 
     inline void selectShader( int aIndex );

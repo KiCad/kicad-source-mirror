@@ -40,11 +40,25 @@ VBO_ITEM::VBO_ITEM() :
         m_isDirty( true ),
         m_transform( NULL )
 {
+    // Prepare a block for storing vertices & indices
+    useNewBlock();
 }
 
 
 VBO_ITEM::~VBO_ITEM()
 {
+    if( m_isDirty )
+    {
+        // Data is still stored in blocks
+        std::list<GLfloat*>::const_iterator v_it, v_end;
+        for( v_it = m_vertBlocks.begin(), v_end = m_vertBlocks.end(); v_it != v_end; ++v_it )
+            delete[] *v_it;
+
+        std::list<GLuint*>::const_iterator i_it, i_end;
+        for( i_it = m_indBlocks.begin(), i_end = m_indBlocks.end(); i_it != i_end; ++i_it )
+            delete[] *i_it;
+    }
+
     if( m_vertices )
         delete m_vertices;
 
@@ -55,20 +69,11 @@ VBO_ITEM::~VBO_ITEM()
 
 void VBO_ITEM::PushVertex( const GLfloat* aVertex )
 {
-    GLfloat* newVertices = new GLfloat[( m_size + 1 ) * VertStride];
-    GLuint*  newIndices  = new GLuint[( m_size + 1 ) * IndStride];
-
-    // Handle a new vertex
-    if( m_vertices )
-    {
-        // Copy all previous vertices data
-        memcpy( newVertices, m_vertices, m_size * VertSize );
-        delete m_vertices;
-    }
-    m_vertices = newVertices;
+    if( m_spaceLeft == 0 )
+        useNewBlock();
 
     // Add the new vertex
-    memcpy( &newVertices[m_size * VertStride], aVertex, VertSize );
+    memcpy( m_vertPtr, aVertex, VertSize );
 
     if( m_transform != NULL )
     {
@@ -78,89 +83,45 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
         glm::vec4 transVertex = *m_transform * origVertex;
 
         // Replace only coordinates, leave color as it is
-        memcpy( &newVertices[m_size * VertStride], &transVertex[0], 3 * sizeof(GLfloat) );
+        memcpy( m_vertPtr, &transVertex[0], 3 * sizeof(GLfloat) );
     }
 
-    // Handle a new index
-    if( m_indices )
-    {
-        // Copy all previous vertices data
-        memcpy( newIndices, m_indices, m_size * IndSize );
-        delete m_indices;
-    }
-    m_indices = newIndices;
+    // Move to the next free space
+    m_vertPtr += VertStride;
 
-    // Add the new vertex
-    m_indices[m_size] = m_offset + m_size;
+    // Add the new index
+    *m_indPtr = m_offset + m_size;
+    m_indPtr++;
 
     m_size++;
     m_isDirty = true;
+    m_spaceLeft--;
 }
 
 
 void VBO_ITEM::PushVertices( const GLfloat* aVertices, GLuint aSize )
 {
-    int newSize = m_size + aSize;
-    GLfloat* newVertices = new GLfloat[newSize * VertStride];
-    GLuint*  newIndices  = new GLuint[newSize * IndStride];
-
-    // Handle new vertices
-    if( m_vertices )
+    for( unsigned int i = 0; i < aSize; ++i )
     {
-        // Copy all previous vertices data
-        memcpy( newVertices, m_vertices, ( m_size ) * VertSize );
-        delete m_vertices;
+        PushVertex( &aVertices[i * VertStride] );
     }
-    m_vertices = newVertices;
-
-    // Add new vertices
-    memcpy( &newVertices[m_size * VertStride], aVertices, aSize * VertSize );
-
-    if( m_transform != NULL )
-    {
-        const GLfloat* vertexPtr = aVertices;
-
-        for( unsigned int i = 0; i < aSize; ++i )
-        {
-            // Apply transformations
-            //                    X,            Y,            Z coordinates
-            glm::vec4 origVertex( vertexPtr[0], vertexPtr[1], vertexPtr[2], 1.0f );
-            glm::vec4 transVertex = *m_transform * origVertex;
-
-            // Replace only coordinates, leave color as it is
-            memcpy( &newVertices[(m_size + i) * VertStride], &transVertex[0], 3 * sizeof(GLfloat) );
-
-            // Move on to the next vertex
-            vertexPtr += VertStride;
-        }
-    }
-
-    // Handle new indices
-    if( m_indices )
-    {
-        // Copy all previous vertices data
-        memcpy( newIndices, m_indices, ( m_size ) * IndSize );
-        delete m_indices;
-    }
-    m_indices = newIndices;
-
-    // Add the new vertex
-    for( int i = m_size; i < newSize; ++i )
-        m_indices[i] = m_offset + i;
-
-    m_size += aSize;
-    m_isDirty = true;
 }
 
 
-GLfloat* VBO_ITEM::GetVertices() const
+GLfloat* VBO_ITEM::GetVertices()
 {
+    if( m_isDirty )
+        prepareFinal();
+
     return m_vertices;
 }
 
 
-GLuint* VBO_ITEM::GetIndices() const
+GLuint* VBO_ITEM::GetIndices()
 {
+    if( m_isDirty )
+        prepareFinal();
+
     return m_indices;
 }
 
@@ -202,6 +163,9 @@ void VBO_ITEM::SetTransformMatrix( const glm::mat4* aMatrix )
 
 void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
 {
+    if( m_isDirty )
+        prepareFinal();
+
     // Point to color of vertices
     GLfloat* vertexPtr = m_vertices + ColorOffset;
     const GLfloat newColor[] = { aColor.r, aColor.g, aColor.b, aColor.a };
@@ -237,3 +201,64 @@ int GetVbo() const
 {
 }
 */
+
+
+void VBO_ITEM::useNewBlock()
+{
+    GLfloat* newVertBlock = new GLfloat[BLOCK_SIZE * VertStride];
+    GLuint*  newIndBlock  = new GLuint[BLOCK_SIZE];
+
+    m_vertPtr = newVertBlock;
+    m_indPtr  = newIndBlock;
+
+    m_vertBlocks.push_back( newVertBlock );
+    m_indBlocks.push_back( newIndBlock );
+
+    m_spaceLeft = BLOCK_SIZE;
+}
+
+
+void VBO_ITEM::prepareFinal()
+{
+    if( m_vertices )
+        delete m_vertices;
+
+    // Allocate memory that would store all of vertices
+    m_vertices = new GLfloat[m_size * VertStride];
+    // Set the pointer that will move along the buffer
+    GLfloat* vertPtr = m_vertices;
+
+    // Copy blocks of vertices one after another to m_vertices
+    std::list<GLfloat*>::const_iterator v_it;
+    for( v_it = m_vertBlocks.begin(); *v_it != m_vertBlocks.back(); ++v_it )
+    {
+        memcpy( vertPtr, *v_it, BLOCK_SIZE * VertSize );
+        delete[] *v_it;
+        vertPtr += ( BLOCK_SIZE * VertStride );
+    }
+
+    // In the last block we need to copy only used vertices
+    memcpy( vertPtr, *v_it, ( BLOCK_SIZE - m_spaceLeft ) * VertSize );
+
+    if( m_indices )
+        delete m_indices;
+
+    // Allocate memory that would store all of indices
+    m_indices = new GLuint[m_size * IndStride];
+    // Set the pointer that will move along the buffer
+    GLuint* indPtr = m_indices;
+
+    // Copy blocks of indices one after another to m_indices
+    std::list<GLuint*>::const_iterator i_it;
+    for( i_it = m_indBlocks.begin(); *i_it != m_indBlocks.back(); ++i_it )
+    {
+        memcpy( indPtr, *i_it, BLOCK_SIZE * IndSize );
+        delete[] *i_it;
+        indPtr += ( BLOCK_SIZE * IndStride );
+    }
+
+    // In the last block we need to copy only used indices
+    memcpy( indPtr, *i_it, ( BLOCK_SIZE - m_spaceLeft ) * IndSize );
+
+    m_isDirty = false;
+}
