@@ -24,8 +24,7 @@
 
 /**
  * @file profile.h:
- * @brief Simple profiling functions for measuring code execution time. Currently only Linux is
- * supported.
+ * @brief Simple profiling functions for measuring code execution time.
  */
 
 #ifndef __PROFILE_H
@@ -91,20 +90,18 @@ static __inline__ unsigned long long rdtsc()
 // Fixme: OS X version
 /**
  * Function get_tics
- * Returns the number of milliseconds that have elapsed since the system was started.
- * @return uint64_t Number of milliseconds.
+ * Returns the number of microseconds that have elapsed since the system was started.
+ * @return uint64_t Number of microseconds.
  */
 static inline uint64_t get_tics()
 {
 #if defined(__linux__)
-    struct timezone tz = { 0, 0 };
     struct timeval tv;
-    gettimeofday( &tv, &tz );
+    gettimeofday( &tv, NULL );
 
     return (uint64_t) tv.tv_sec * 1000000ULL + (uint64_t) tv.tv_usec;
 #elif defined _WIN32 || defined _WIN64
-    // TODO to be tested
-    return GetTickCount();
+    return GetTickCount() * 1000;
 #else
     return 0;
 #endif
@@ -125,7 +122,8 @@ struct prof_counter
  * Begins code execution time counting for a given profiling counter.
  * @param cnt is the counter which should be started.
  * @param use_rdtsc tells if processor's time-stamp counter should be used for time counting.
- *      Otherwise is system tics method will be used.
+ *      Otherwise is system tics method will be used. IMPORTANT: time-stamp counter should not
+ *      be used on multicore machines executing threaded code.
  */
 static inline void prof_start( prof_counter* cnt, bool use_rdtsc )
 {
