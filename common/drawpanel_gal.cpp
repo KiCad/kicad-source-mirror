@@ -39,6 +39,10 @@
 #include <gal/opengl/opengl_gal.h>
 #include <gal/cairo/cairo_gal.h>
 
+#ifdef __WXDEBUG__
+#include <profile.h>
+#endif /* __WXDEBUG__ */
+
 #define METRIC_UNIT_LENGTH (1e9)
 
 
@@ -116,6 +120,12 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 {
+#ifdef __WXDEBUG__
+    prof_counter time;
+
+    prof_start( &time, false );
+#endif /* __WXDEBUG__ */
+
     m_gal->BeginDrawing();
     m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0, 0, 0, 1.0 ) );
     m_gal->ClearScreen();
@@ -129,6 +139,13 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
     m_view->Redraw();
 
     m_gal->EndDrawing();
+
+#ifdef __WXDEBUG__
+    prof_end( &time );
+
+    wxLogDebug( wxT( "EDA_DRAW_PANEL_GAL::Refresh: %.0f ms (%.0f fps)" ),
+        static_cast<double>( time.value ) / 1000.0, 1000000.0 / static_cast<double>( time.value ) );
+#endif /* __WXDEBUG__ */
 }
 
 
