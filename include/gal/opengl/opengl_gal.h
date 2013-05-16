@@ -353,6 +353,9 @@ private:
     bool                  vboNeedsUpdate;         ///< Flag indicating if VBO should be rebuilt
     glm::mat4             transform;              ///< Current transformation matrix
     std::stack<glm::mat4> transformStack;         ///< Stack of transformation matrices
+    std::list<VBO_ITEM*>  itemsToDraw;            ///< Stores items that are going to be
+                                                  ///< drawn in the current frame
+    int                   itemsToDrawSize;        ///< Number of indices to be drawn
 
     double                curvePoints[12];        ///< Coefficients for curves
     // FIXME to be removed:

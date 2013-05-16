@@ -126,8 +126,8 @@ public:
     //int  GetVbo() const;
 
     ///< Data organization information for vertices {X,Y,Z,R,G,B,A}.
-    // Each vertex consists of 7 floats
-    static const int VertStride         = 7;
+    // Each vertex consists of 7 floats, but it is padded to 8
+    static const int VertStride         = 8;
     static const int VertSize           = VertStride * sizeof(GLfloat);
 
     static const int CoordStride        = 3;

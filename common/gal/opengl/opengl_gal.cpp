@@ -411,6 +411,10 @@ void OPENGL_GAL::BeginDrawing()
     // If any of VBO items is dirty - recache everything
     if( vboNeedsUpdate )
         rebuildVbo();
+
+    // Clear indices buffer
+    itemsToDraw.clear();
+    itemsToDrawSize = 0;
 }
 
 
@@ -463,6 +467,41 @@ void OPENGL_GAL::blitMainTexture( bool aIsClearFrameBuffer )
 
 void OPENGL_GAL::EndDrawing()
 {
+    // TODO Checking if we are using right VBOs, in other case do the binding.
+    // Right now there is only one VBO, so there is no problem.
+
+    // Prepare buffers
+    glEnableClientState( GL_VERTEX_ARRAY );
+    glEnableClientState( GL_COLOR_ARRAY );
+
+    // Bind vertices data buffer and point to the data
+    glBindBuffer( GL_ARRAY_BUFFER, curVboVertId );
+    glVertexPointer( 3, GL_FLOAT, VBO_ITEM::VertSize, 0 );
+    glColorPointer( 4, GL_FLOAT, VBO_ITEM::VertSize, (GLvoid*) VBO_ITEM::ColorByteOffset );
+
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, curVboIndId );
+    GLuint* indicesPtr = static_cast<GLuint*>( glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY ) );
+
+    wxASSERT_MSG( indicesPtr != NULL, "OPENGL_GAL::EndDrawing: Could not map GPU memory" );
+
+    std::list<VBO_ITEM*>::const_iterator it, end;
+    for( it = itemsToDraw.begin(), end = itemsToDraw.end(); it != end; ++it )
+    {
+        memcpy( indicesPtr, (*it)->GetIndices(), (*it)->GetSize() * VBO_ITEM::IndSize );
+        indicesPtr += (*it)->GetSize() * VBO_ITEM::IndStride;
+    }
+
+    bool result = glUnmapBuffer( GL_ELEMENT_ARRAY_BUFFER );
+    wxASSERT_MSG( result == TRUE, "OPENGL_GAL::EndDrawing: Unmapping indices buffer failed" );
+
+    glDrawElements( GL_TRIANGLES, itemsToDrawSize, GL_UNSIGNED_INT, (GLvoid*) 0 );
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+
+    // Deactivate vertex array
+    glDisableClientState( GL_COLOR_ARRAY );
+    glDisableClientState( GL_VERTEX_ARRAY );
+
     // Draw the remaining contents, blit the main texture to the screen, swap the buffers
     glFlush();
     blitMainTexture( true );
@@ -487,13 +526,11 @@ void OPENGL_GAL::rebuildVbo()
     prof_start( &totalTime, false );
 #endif /* __WXDEBUG__ */
 
-    // Buffers for storing cached items data
+    // Buffer for storing cached items data
     GLfloat* verticesBuffer = new GLfloat[VBO_ITEM::VertStride * vboSize];
-    GLuint*  indicesBuffer  = new GLuint[vboSize];
 
-    // Pointers for easier usage with memcpy
+    // Pointer for easier usage with memcpy
     GLfloat* verticesBufferPtr = verticesBuffer;
-    GLuint*  indicesBufferPtr  = indicesBuffer;
 
     // Fill out buffers with data
     for( std::deque<VBO_ITEM*>::iterator vboItem = vboItems.begin();
@@ -503,9 +540,6 @@ void OPENGL_GAL::rebuildVbo()
 
         memcpy( verticesBufferPtr, (*vboItem)->GetVertices(), size * VBO_ITEM::VertSize );
         verticesBufferPtr += size * VBO_ITEM::VertStride;
-
-        memcpy( indicesBufferPtr, (*vboItem)->GetIndices(), size * VBO_ITEM::IndSize );
-        indicesBufferPtr += size * VBO_ITEM::IndStride;
     }
 
     // Upload vertices coordinates and indices to GPU memory
@@ -513,15 +547,12 @@ void OPENGL_GAL::rebuildVbo()
     glBufferData( GL_ARRAY_BUFFER, vboSize * VBO_ITEM::VertSize, verticesBuffer, GL_DYNAMIC_DRAW );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
 
+    // Allocate the biggest possible buffer for indices
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, curVboIndId );
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboSize * VBO_ITEM::IndSize,
-                  indicesBuffer, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboSize * VBO_ITEM::IndSize, NULL, GL_STREAM_DRAW );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
-    // Remove temporary buffers
     delete[] verticesBuffer;
-    delete[] indicesBuffer;
-
     vboNeedsUpdate = false;
 
 #ifdef __WXDEBUG__
@@ -1610,32 +1641,8 @@ void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 
 void OPENGL_GAL::DrawGroup( int aGroupNumber )
 {
-    std::deque<VBO_ITEM*>::iterator it = vboItems.begin();
-    std::advance( it, aGroupNumber );
-
-    // TODO Checking if we are using right VBOs, in other case do the binding.
-    // Right now there is only one VBO, so there is no problem.
-
-    glEnableClientState( GL_VERTEX_ARRAY );
-    glEnableClientState( GL_COLOR_ARRAY );
-
-    // Bind vertices data buffer and point to the data
-    glBindBuffer( GL_ARRAY_BUFFER, curVboVertId );
-    glVertexPointer( 3, GL_FLOAT, VBO_ITEM::VertSize, 0 );
-    glColorPointer( 4, GL_FLOAT, VBO_ITEM::VertSize, (GLvoid*) VBO_ITEM::ColorByteOffset );
-    glBindBuffer( GL_ARRAY_BUFFER, 0 );
-
-    // Bind indices data buffer
-    int size = (*it)->GetSize();
-    int offset = (*it)->GetOffset();
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, curVboIndId );
-    glDrawRangeElements( GL_TRIANGLES, 0, vboSize - 1, size,
-                         GL_UNSIGNED_INT, (GLvoid*) ( offset * VBO_ITEM::IndSize ) );
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
-
-    // Deactivate vertex array
-    glDisableClientState( GL_COLOR_ARRAY );
-    glDisableClientState( GL_VERTEX_ARRAY );
+    itemsToDraw.push_back( vboItems[aGroupNumber] );
+    itemsToDrawSize += vboItems[aGroupNumber]->GetSize();
 }
 
 
