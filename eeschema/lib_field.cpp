@@ -473,9 +473,33 @@ void LIB_FIELD::Rotate( const wxPoint& center, bool aRotateCCW )
 }
 
 
-void LIB_FIELD::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                       const TRANSFORM& aTransform )
 {
+    if( IsVoid() )
+        return;
+
+    /* Calculate the text orientation, according to the component
+     * orientation/mirror */
+    int orient = m_Orient;
+
+    if( aTransform.y1 )  // Rotate component 90 deg.
+    {
+        if( orient == TEXT_ORIENT_HORIZ )
+            orient = TEXT_ORIENT_VERT;
+        else
+            orient = TEXT_ORIENT_HORIZ;
+    }
+
+    EDA_RECT BoundaryBox = GetBoundingBox();
+    EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
+    EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
+    wxPoint textpos = aTransform.TransformCoordinate( BoundaryBox.Centre() )
+                      + aOffset;
+
+    aPlotter->Text( textpos, GetDefaultColor(), m_Text, orient, m_Size,
+                    hjustify, vjustify,
+                    GetPenSize(), m_Italic, m_Bold );
 }
 
 
