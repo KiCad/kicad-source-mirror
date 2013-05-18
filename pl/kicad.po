@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-15 20:48+0100\n"
-"PO-Revision-Date: 2013-05-15 20:49+0100\n"
+"POT-Creation-Date: 2013-05-18 08:17+0100\n"
+"PO-Revision-Date: 2013-05-18 08:26+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -359,7 +359,7 @@ msgstr "O programie Menedżer projektu KiCad"
 #: kicad/menubar.cpp:298 eeschema/menubar.cpp:542
 #: eeschema/menubar_libedit.cpp:293 pcbnew/menubar_modedit.cpp:289
 #: pcbnew/menubar_pcbframe.cpp:605 cvpcb/menubar.cpp:160
-#: gerbview/menubar.cpp:240 3d-viewer/3d_toolbar.cpp:146
+#: gerbview/menubar.cpp:240 3d-viewer/3d_toolbar.cpp:145
 msgid "&File"
 msgstr "&Plik"
 
@@ -3773,7 +3773,7 @@ msgstr "Pokaż następny element"
 
 #: eeschema/tool_viewlib.cpp:76 pcbnew/footprint_wizard_frame.cpp:748
 #: pcbnew/tool_modedit.cpp:129 pcbnew/tool_modview.cpp:76
-#: gerbview/toolbars_gerber.cpp:76 3d-viewer/3d_toolbar.cpp:67
+#: gerbview/toolbars_gerber.cpp:76 3d-viewer/3d_toolbar.cpp:73
 #: common/zoom.cpp:210 eeschema/help_common_strings.h:19
 #: pcbnew/help_common_strings.h:19
 msgid "Zoom in"
@@ -3781,7 +3781,7 @@ msgstr "Powiększ"
 
 #: eeschema/tool_viewlib.cpp:81 pcbnew/footprint_wizard_frame.cpp:753
 #: pcbnew/tool_modedit.cpp:132 pcbnew/tool_modview.cpp:81
-#: gerbview/toolbars_gerber.cpp:79 3d-viewer/3d_toolbar.cpp:70
+#: gerbview/toolbars_gerber.cpp:79 3d-viewer/3d_toolbar.cpp:76
 #: common/zoom.cpp:212 eeschema/help_common_strings.h:20
 #: pcbnew/help_common_strings.h:20
 msgid "Zoom out"
@@ -3789,7 +3789,7 @@ msgstr "Pomniejsz"
 
 #: eeschema/tool_viewlib.cpp:86 pcbnew/footprint_wizard_frame.cpp:758
 #: pcbnew/tool_modedit.cpp:135 pcbnew/tool_modview.cpp:86
-#: gerbview/toolbars_gerber.cpp:82 3d-viewer/3d_toolbar.cpp:74
+#: gerbview/toolbars_gerber.cpp:82 3d-viewer/3d_toolbar.cpp:80
 #: common/zoom.cpp:214
 msgid "Redraw view"
 msgstr "Odśwież widok"
@@ -10085,7 +10085,7 @@ msgstr "Pokaż połączenia wspomagające footprintów w trakcie przesuwania"
 msgid "Enable automatic track deletion"
 msgstr "Włącz automatyczne kasowanie starych ścieżek"
 
-#: pcbnew/tool_pcb.cpp:362
+#: pcbnew/tool_pcb.cpp:362 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:42
 msgid "Show filled areas in zones"
 msgstr "Pokaż wypełnione obszary w strefach"
 
@@ -15542,63 +15542,67 @@ msgstr "Nie mogę zapisać pliku"
 msgid "Reload board"
 msgstr "Przeładuj płytkę"
 
-#: 3d-viewer/3d_toolbar.cpp:62 3d-viewer/3d_toolbar.cpp:154
+#: 3d-viewer/3d_toolbar.cpp:62 3d-viewer/3d_toolbar.cpp:153
 msgid "Copy 3D Image to Clipboard"
 msgstr "Kopiuj obraz 3D do schowka"
 
-#: 3d-viewer/3d_toolbar.cpp:77
+#: 3d-viewer/3d_toolbar.cpp:69
+msgid "Set display options, and some layers visibility"
+msgstr "Ustawia opcje wyświetlania i widoczność poszczególnych grup warstw"
+
+#: 3d-viewer/3d_toolbar.cpp:83
 msgid "Fit in page"
 msgstr "Dopasuj do rozmiaru strony"
 
-#: 3d-viewer/3d_toolbar.cpp:82
+#: 3d-viewer/3d_toolbar.cpp:88
 msgid "Rotate X <-"
 msgstr "Obrót w osi X <-"
 
-#: 3d-viewer/3d_toolbar.cpp:86
+#: 3d-viewer/3d_toolbar.cpp:92
 msgid "Rotate X ->"
 msgstr "Obrót w osi X ->"
 
-#: 3d-viewer/3d_toolbar.cpp:91
+#: 3d-viewer/3d_toolbar.cpp:97
 msgid "Rotate Y <-"
 msgstr "Obrót w osi Y <-"
 
-#: 3d-viewer/3d_toolbar.cpp:95
+#: 3d-viewer/3d_toolbar.cpp:101
 msgid "Rotate Y ->"
 msgstr "Obrót w osi Y ->"
 
-#: 3d-viewer/3d_toolbar.cpp:100
+#: 3d-viewer/3d_toolbar.cpp:106
 msgid "Rotate Z <-"
 msgstr "Obrót w osi Z <-"
 
-#: 3d-viewer/3d_toolbar.cpp:104
+#: 3d-viewer/3d_toolbar.cpp:110
 msgid "Rotate Z ->"
 msgstr "Obrót w osi Z ->"
 
-#: 3d-viewer/3d_toolbar.cpp:108
+#: 3d-viewer/3d_toolbar.cpp:114
 msgid "Move left"
 msgstr "Przesuń w lewo"
 
-#: 3d-viewer/3d_toolbar.cpp:111
+#: 3d-viewer/3d_toolbar.cpp:117
 msgid "Move right"
 msgstr "Przesuń w prawo"
 
-#: 3d-viewer/3d_toolbar.cpp:114
+#: 3d-viewer/3d_toolbar.cpp:120
 msgid "Move up"
 msgstr "Przesuń w górę"
 
-#: 3d-viewer/3d_toolbar.cpp:117
+#: 3d-viewer/3d_toolbar.cpp:123
 msgid "Move down"
 msgstr "Przesuń w dół"
 
-#: 3d-viewer/3d_toolbar.cpp:121
+#: 3d-viewer/3d_toolbar.cpp:127
 msgid "Enable/Disable orthographic projection"
 msgstr "Włącz/Wyłącz projekcję perspektywiczną"
 
-#: 3d-viewer/3d_toolbar.cpp:148
+#: 3d-viewer/3d_toolbar.cpp:147
 msgid "Create Image (png format)"
 msgstr "Zapisz obraz w formacie PNG"
 
-#: 3d-viewer/3d_toolbar.cpp:149
+#: 3d-viewer/3d_toolbar.cpp:148
 msgid "Create Image (jpeg format)"
 msgstr "Zapisz obraz w formacie JPEG"
 
@@ -15614,57 +15618,105 @@ msgstr "Wybierz kolor tła"
 msgid "Show 3D &Axis"
 msgstr "Pok&aż osie 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:173
-msgid "Show Copper Thickness"
-msgstr "Pokazuj grubość warstwy miedzi"
-
-#: 3d-viewer/3d_toolbar.cpp:177
-msgid "Show 3D F&ootprints"
-msgstr "Pokaż &obudowy 3D"
-
-#: 3d-viewer/3d_toolbar.cpp:181
-msgid "Show Zone &Filling"
-msgstr "Pokaż stre&fy wypełnień"
-
-#: 3d-viewer/3d_toolbar.cpp:187
+#: 3d-viewer/3d_toolbar.cpp:172
 msgid "3D Grid"
 msgstr "Trójwymiarowa siatka"
 
-#: 3d-viewer/3d_toolbar.cpp:188
+#: 3d-viewer/3d_toolbar.cpp:173
 msgid "No 3D Grid"
 msgstr "Brak siatki"
 
-#: 3d-viewer/3d_toolbar.cpp:191
+#: 3d-viewer/3d_toolbar.cpp:176
 msgid "3D Grid 10 mm"
 msgstr "Siatka 10mm"
 
-#: 3d-viewer/3d_toolbar.cpp:192
+#: 3d-viewer/3d_toolbar.cpp:177
 msgid "3D Grid 5 mm"
 msgstr "Siatka 5mm"
 
-#: 3d-viewer/3d_toolbar.cpp:193
+#: 3d-viewer/3d_toolbar.cpp:178
 msgid "3D Grid 2.5 mm"
 msgstr "Siatka 2.5mm"
 
-#: 3d-viewer/3d_toolbar.cpp:194
+#: 3d-viewer/3d_toolbar.cpp:179
 msgid "3D Grid 1 mm"
 msgstr "Siatka 1mm"
 
-#: 3d-viewer/3d_toolbar.cpp:197
-msgid "Show &Comments Layer"
+#: 3d-viewer/3d_toolbar.cpp:182
+msgid "Show Copper Thickness"
+msgstr "Pokazuj grubość warstwy miedzi"
+
+#: 3d-viewer/3d_toolbar.cpp:186
+msgid "Show 3D F&ootprints"
+msgstr "Pokaż &obudowy 3D"
+
+#: 3d-viewer/3d_toolbar.cpp:190
+msgid "Show Zone &Filling"
+msgstr "Pokaż stre&fy wypełnień"
+
+#: 3d-viewer/3d_toolbar.cpp:194
+msgid "Show &Adhesive Layers"
+msgstr "Pokaż w&arstwy kleju"
+
+#: 3d-viewer/3d_toolbar.cpp:198
+msgid "Show &Silkscreen Layer"
+msgstr "Pokaż warstwy &opisowe"
+
+#: 3d-viewer/3d_toolbar.cpp:202
+msgid "Show Solder &Mask Layers"
+msgstr "Pokaż warstwy z solder&maską"
+
+#: 3d-viewer/3d_toolbar.cpp:206
+msgid "Show Solder &Paste Layers"
+msgstr "Pokaż warstwy do nakładania &pasty"
+
+#: 3d-viewer/3d_toolbar.cpp:210
+msgid "Show &Comments and Drawings Layer"
 msgstr "Pokaż warstwę &komentarzy"
 
-#: 3d-viewer/3d_toolbar.cpp:201
-msgid "Show &Drawings Layer"
-msgstr "Pokaż warstwę rysunkową"
+#: 3d-viewer/3d_toolbar.cpp:214
+msgid "Show &Eco Layers"
+msgstr "Pokaż warstwy &ECO"
 
-#: 3d-viewer/3d_toolbar.cpp:205
-msgid "Show Eco&1 Layer"
-msgstr "Pokaż warstwę ECO&1"
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:30
+msgid "Show copper thickness"
+msgstr "Pokaż grubość warstwy miedzi"
 
-#: 3d-viewer/3d_toolbar.cpp:209
-msgid "Show Eco&2 Layer"
-msgstr "Pokaż warstwę ECO&2"
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:36
+msgid "Show component 3D shapes"
+msgstr "Pokaż modele 3D"
+
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:48
+msgid "Show silkscreen layers"
+msgstr "Pokaż warstwy opisowe"
+
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:54
+msgid "Show solder mask layers"
+msgstr "Pokaż warstwy z soldermaską"
+
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:60
+msgid "Show solder paste layers"
+msgstr "Pokaż warstwy do nakładania pasty"
+
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:66
+msgid "Show adhesive layers"
+msgstr "Pokaż warstwy kleju"
+
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:72
+msgid "Show comments and drawings Layers"
+msgstr "Pokaż warstwę komentarzy i rysunkową"
+
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:78
+msgid "Show ECOs layers"
+msgstr "Pokaż warstwy ECO"
+
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:87
+msgid "Show All"
+msgstr "Pokazuj wszystkie"
+
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:90
+msgid "Show None"
+msgstr "Nie pokazuj żadnej"
 
 #: common/base_units.cpp:120
 msgid " mils"
@@ -18212,6 +18264,10 @@ msgstr "Granice strony"
 msgid "Gerbview Options"
 msgstr "Opcje GerbView"
 
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.h:77
+msgid "3D Display Options"
+msgstr "Opcje wyświetlania 3D"
+
 #: common/dialogs/dialog_hotkeys_editor_base.h:50
 msgid "Hotkeys Editor"
 msgstr "Edytor skrótów klawiszowych"
@@ -18239,6 +18295,9 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:294
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Show Eco&2 Layer"
+#~ msgstr "Pokaż warstwę ECO&2"
 
 #~ msgid ""
 #~ "\n"
