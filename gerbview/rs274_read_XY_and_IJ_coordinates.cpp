@@ -43,10 +43,10 @@ int scaletoIU( double aCoord, bool isMetric )
 {
     int ret;
 
-    if( isMetric )
-        ret = KiROUND( aCoord * IU_PER_MILS / 0.00254 );
-    else
-        ret = KiROUND( aCoord * IU_PER_MILS );
+    if( isMetric )  // gerber are units in mm
+        ret = KiROUND( aCoord * IU_PER_MM );
+    else            // gerber are units in inches
+        ret = KiROUND( aCoord * IU_PER_MILS * 1000.0);
 
     return ret;
 }
