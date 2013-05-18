@@ -383,18 +383,56 @@ void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
 {
     wxASSERT( aPlotter != NULL );
 
+    aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
+    bool fill = aPlotter->GetColorMode();
+
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
+        // Lib Fields not are plotted here, because this plot function
+        // is used to plot schematic items, which have they own fields
+        if( item.Type() == LIB_FIELD_T )
+            continue;
+
         if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
             continue;
 
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
-        bool fill = aPlotter->GetColorMode();
-
         item.Plot( aPlotter, aOffset, fill, aTransform );
+    }
+}
+
+void LIB_COMPONENT::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
+                                  const wxPoint& aOffset, const TRANSFORM& aTransform )
+{
+    wxASSERT( aPlotter != NULL );
+
+    aPlotter->SetColor( GetLayerColor( LAYER_FIELDS ) );
+    bool fill = aPlotter->GetColorMode();
+
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
+    {
+        if( item.Type() != LIB_FIELD_T )
+            continue;
+
+        if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
+            continue;
+
+        if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
+            continue;
+
+        // The reference is a special case: we shoud change the basic text
+        // to add '?' and the part id
+        LIB_FIELD& field = (LIB_FIELD&) item;
+        wxString tmp = field.GetText();
+        if( field.GetId() == REFERENCE )
+        {
+            wxString text = field.GetFullText( aUnit );
+            field.SetText( text );
+        }
+        item.Plot( aPlotter, aOffset, fill, aTransform );
+        field.SetText( tmp );
     }
 }
 

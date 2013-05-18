@@ -641,11 +641,11 @@ public:
                             bool aPrintMirrorMode, void* aData = NULL );
 
     /**
-     * Function SVG_Print_Component
+     * Function SVG_PlotComponent
      * Creates the SVG print file for the current edited component.
-     * @param aFullFileName = the full filename of the file
+     * @param aFullFileName = the full filename
      */
-    void SVG_Print_Component( const wxString& aFullFileName );
+    void SVG_PlotComponent( const wxString& aFullFileName );
 
 
     DECLARE_EVENT_TABLE()

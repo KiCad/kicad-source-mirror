@@ -404,7 +404,9 @@ public:
                bool aOnlySelected = false );
 
     /**
-     * Plot component to plotter.
+     * Plot lib component to plotter.
+     * Lib Fields not are plotted here, because this plot function
+     * is used to plot schematic items, which have they own fields
      *
      * @param aPlotter - Plotter object to plot to.
      * @param aUnit - Component part to plot.
@@ -413,7 +415,20 @@ public:
      * @param aTransform - Component plot transform matrix.
      */
     void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
-               const TRANSFORM& aTransform );
+                const TRANSFORM& aTransform );
+
+    /**
+     * Plot Lib Fields only of the component to plotter.
+     * is used to plot the full lib component, outside the schematic
+     *
+     * @param aPlotter - Plotter object to plot to.
+     * @param aUnit - Component part to plot.
+     * @param aConvert - Component alternate body style to plot.
+     * @param aOffset - Distance to shift the plot coordinates.
+     * @param aTransform - Component plot transform matrix.
+     */
+    void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
+                        const wxPoint& aOffset, const TRANSFORM& aTransform );
 
     /**
      * Add a new draw \a aItem to the draw object list.
