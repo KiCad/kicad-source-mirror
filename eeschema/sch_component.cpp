@@ -70,15 +70,6 @@ std::string toUTFTildaText( const wxString& txt )
     {
         if( (unsigned char) *it <= ' ' )
             *it = '~';
-
-/*
-#if defined(KICAD_GOST)
-        if( *it == ' ' )
-#else
-        if( (unsigned char) *it <= ' ' )
-#endif
-            *it = '~';
-*/
     }
     return ret;
 }

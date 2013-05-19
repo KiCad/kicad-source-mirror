@@ -54,21 +54,13 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                     const wxString &aSheetDesc,
                     const wxString &aFilename )
 {
-    static const int WSTEXTSIZE = 50; // Text size in mils
-
     int      iusPerMil = plotter->GetIUsPerDecimil() * 10;
     wxSize   pageSize = aPageInfo.GetSizeMils();  // in mils
     int      xg, yg;
 
-#if defined( KICAD_GOST )
-    int      refx, refy;
-#endif
-
     wxPoint  pos, end, ref;
     wxString msg;
     wxSize   text_size;
-
-    int      UpperLimit = VARIABLE_BLOCK_START_POSITION;
 
     EDA_COLOR_T      plotClr;
     plotClr = plotter->GetColorMode() ? RED : BLACK;
@@ -83,7 +75,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     yg    = ( pageSize.y - aPageInfo.GetBottomMarginMils() ) * iusPerMil;
 
 #if defined(KICAD_GOST)
-
+    int refx, refy;
     int lnMsg, ln;
     text_size.x = SIZETEXT * iusPerMil;
     text_size.y = SIZETEXT * iusPerMil;
@@ -110,6 +102,8 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     plotter->SetCurrentLineWidth( PLOTTER::DEFAULT_LINE_WIDTH );
 
 #else
+    const int WSTEXTSIZE = 50; // Text size in mils
+    int      UpperLimit = VARIABLE_BLOCK_START_POSITION;
 
     for( unsigned ii = 0; ii < 2; ii++ )
     {
