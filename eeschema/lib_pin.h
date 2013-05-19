@@ -32,18 +32,14 @@
 #include <lib_draw_item.h>
 
 
-#define TARGET_PIN_RADIUS   12  /* Circle diameter drawn at the active end of pins */
-#define PIN_LENGTH          300 /* Default Length of each pin to be drawn. */
+#define TARGET_PIN_RADIUS   12  // Circle diameter drawn at the active end of pins
+#define DEFAULT_PIN_LENGTH  300 // Default Length of a pin when it is created.
 
-#if defined(KICAD_GOST)
-#define INVERT_PIN_RADIUS   30  /* Radius of inverted pin circle. */
-#else
-#define INVERT_PIN_RADIUS   35  /* Radius of inverted pin circle. */
-#endif
-
-#define CLOCK_PIN_DIM       40  /* Dim of clock pin symbol. */
-#define IEEE_SYMBOL_PIN_DIM 40  /* Dim of special pin symbol. */
-#define NONLOGIC_PIN_DIM    30  /* Dim of nonlogic pin symbol (X). */
+// pins: special symbols sizes
+#define INVERT_PIN_RADIUS   30  // Radius of inverted pin circle.
+#define CLOCK_PIN_DIM       40  // Dim of clock pin symbol.
+#define IEEE_SYMBOL_PIN_DIM 40  // Dim of special pin symbol.
+#define NONLOGIC_PIN_DIM    30  // Dim of nonlogic pin symbol (X).
 
 /**
  * The component library pin object electrical types used in ERC tests.

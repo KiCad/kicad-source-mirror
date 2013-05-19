@@ -35,24 +35,16 @@
 #include <richio.h>
 #include <plot_common.h>
 
-#include <general.h>
-#include <protos.h>
 #include <sch_junction.h>
-#include <class_netlist_object.h>
 
+
+int SCH_JUNCTION::m_symbolSize = 50;    // Default diameter of the junction symbol
 
 SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_JUNCTION_T )
 {
-#if defined(KICAD_GOST)
-#define DRAWJUNCTION_DIAMETER 50   /* Diameter of junction symbol between wires by GOST*/
-#else
-#define DRAWJUNCTION_DIAMETER 32   /* Diameter of junction symbol between wires */
-#endif
     m_pos    = pos;
     m_Layer  = LAYER_JUNCTION;
-    m_size.x = m_size.y = DRAWJUNCTION_DIAMETER;
-#undef DRAWJUNCTION_DIAMETER
 }
 
 
@@ -82,7 +74,6 @@ void SCH_JUNCTION::SwapData( SCH_ITEM* aItem )
 
     SCH_JUNCTION* item = (SCH_JUNCTION*) aItem;
     EXCHG( m_pos, item->m_pos );
-    EXCHG( m_size, item->m_size );
 }
 
 
@@ -111,7 +102,7 @@ EDA_RECT SCH_JUNCTION::GetBoundingBox() const
     EDA_RECT rect;
 
     rect.SetOrigin( m_pos );
-    rect.Inflate( ( GetPenSize() + m_size.x ) / 2 );
+    rect.Inflate( ( GetPenSize() + GetSymbolSize() ) / 2 );
 
     return rect;
 }
@@ -130,7 +121,7 @@ void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
     GRSetDrawMode( aDC, aDrawMode );
 
     GRFilledCircle( aPanel->GetClipBox(), aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
-                    ( m_size.x / 2 ), 0, color, color );
+                    ( GetSymbolSize() / 2 ), 0, color, color );
 }
 
 
@@ -243,5 +234,5 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
     aPlotter->SetColor( GetLayerColor( GetLayer() ) );
-    aPlotter->Circle( m_pos, m_size.x, FILLED_SHAPE );
+    aPlotter->Circle( m_pos, GetSymbolSize(), FILLED_SHAPE );
 }
