@@ -25,10 +25,10 @@
 
 
 #include <wx/config.h>      // wxExpandEnvVars()
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
 
 #include <set>
-
-#include <io_mgr.h>
 
 #include <fp_lib_table_lexer.h>
 #include <fp_lib_table.h>
@@ -302,11 +302,53 @@ PLUGIN* FP_LIB_TABLE::PluginFind( const wxString& aLibraryNickName )
 }
 
 
-const wxString FP_LIB_TABLE::ExpandSubtitutions( const wxString aString )
+const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString aString )
 {
     // We reserve the right to do this another way, by providing our own member
     // function.
     return wxExpandEnvVars( aString );
+}
+
+
+void FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR )
+{
+    wxFileName fn = GetGlobalTableFileName();
+
+    wxLogDebug( wxT( "Loading global footprint table file: %s" ), GetChars( fn.GetFullPath() ) );
+
+    if( !fn.FileExists() )
+    {
+        /// @todo call some script to create initial global footprint table.
+    }
+    else
+    {
+        FILE_LINE_READER reader( fn.GetFullPath() );
+        FP_LIB_TABLE_LEXER lexer( &reader );
+
+        aTable.Parse( &lexer );
+    }
+}
+
+
+wxString FP_LIB_TABLE::GetGlobalTableFileName()
+{
+    wxFileName fn;
+
+    fn.SetPath( wxStandardPaths::Get().GetUserConfigDir() );
+
+#if defined( __WINDOWS__ )
+    fn.AppendDir( wxT( "kicad" ) );
+#endif
+
+    fn.SetName( GetFileName() );
+
+    return fn.GetFullPath();
+}
+
+
+wxString FP_LIB_TABLE::GetFileName()
+{
+    return wxString( wxT( ".fp-lib-table" ) );
 }
 
 

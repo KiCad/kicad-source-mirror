@@ -143,9 +143,11 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary( wxCommandEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
 {
-    wxString libname = m_libraryName + wxT( "." ) + LegacyFootprintLibPathExtension;
-    MODULE* oldmodule = GetBoard()->m_Modules;
-    MODULE * module = Load_Module_From_Library( libname, false );
+    PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
+    wxString        libname = m_libraryName + wxT( "." ) + LegacyFootprintLibPathExtension;
+    MODULE*         oldmodule = GetBoard()->m_Modules;
+    MODULE*         module = LoadModuleFromLibrary( libname, parent->GetFootprintLibraryTable(),
+                                                    false );
 
     if( module )
     {

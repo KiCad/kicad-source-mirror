@@ -45,6 +45,7 @@
 
 #include <wx/file.h>
 #include <wx/snglinst.h>
+#include <wx/dir.h>
 
 #include <pcbnew.h>
 #include <protos.h>
@@ -188,9 +189,28 @@ bool EDA_APP::OnInit()
     frame->LoadProjectSettings( fn.GetFullPath() );
 
     // Set the KISYSMOD environment variable for the current process if it is not already
-    // defined.  This is required to expand the global footprint library table paths.
+    // defined in the user's environment.  This is required to expand the global footprint
+    // library table paths.
     if( !wxGetEnv( wxT( "KISYSMOD" ), &msg ) && !GetLibraryPathList().IsEmpty() )
-        wxSetEnv( wxT( "KISYSMOD" ), GetLibraryPathList()[0] );
+    {
+        unsigned      modFileCount = 0;
+        wxString      bestPath;
+        wxArrayString tmp;
+
+        for( unsigned i = 0;  i < GetLibraryPathList().GetCount();  i++ )
+        {
+            unsigned cnt = wxDir::GetAllFiles( GetLibraryPathList()[i], &tmp, wxT( "*.mod" ) );
+
+            if( cnt > modFileCount )
+            {
+                modFileCount = cnt;
+                bestPath = GetLibraryPathList()[i];
+            }
+        }
+
+        wxLogDebug( wxT( "Setting $KISYSMOD=\"%s\"." ), GetChars( bestPath ) );
+        wxSetEnv( wxT( "KISYSMOD" ), bestPath );
+    }
 
     /* Load file specified in the command line. */
     if( fn.IsOk() )

@@ -234,9 +234,10 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_OPEN_MODULE_VIEWER:
         {
             FOOTPRINT_VIEWER_FRAME * viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
+
             if( viewer == NULL )
             {
-                viewer = new FOOTPRINT_VIEWER_FRAME( this, NULL );
+                viewer = new FOOTPRINT_VIEWER_FRAME( this, m_footprintLibTable, NULL );
                 viewer->Show( true );
                 viewer->Zoom_Automatique( false );
             }
@@ -459,6 +460,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_LOAD_MODULE:
         {
+            PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
             wxString libPath = getLibPath();    // might be empty
 
             wxLogDebug( wxT( "Loading module from library " ) + libPath );
@@ -467,7 +469,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             SetCurItem( NULL );
             Clear_Pcb( true );
             GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
-            Load_Module_From_Library( libPath, true );
+            LoadModuleFromLibrary( libPath, parent->GetFootprintLibraryTable(), true );
             redraw = true;
         }
 

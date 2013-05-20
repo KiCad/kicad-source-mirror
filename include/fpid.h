@@ -102,7 +102,7 @@ public:
      * Function GetFootprintName
      * returns the footprint name, i.e. footprintName.
      */
-    const std::string& GetFootprintName() const;
+    const std::string& GetFootprintName() const { return footprint; }
 
     /**
      * Function SetFootprintName
