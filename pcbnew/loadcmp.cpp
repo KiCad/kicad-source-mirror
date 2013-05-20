@@ -40,6 +40,8 @@
 #include <gr_basic.h>
 #include <macros.h>
 #include <pcbcommon.h>
+#include <fp_lib_table.h>
+#include <fpid.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -123,8 +125,8 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser( void )
     if( viewer )
         viewer->Destroy();
 
-    viewer = new FOOTPRINT_VIEWER_FRAME( this, &semaphore,
-                 KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+    viewer = new FOOTPRINT_VIEWER_FRAME( this, m_footprintLibTable, &semaphore,
+                                         KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
 
     // Show the library viewer frame until it is closed
     while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
@@ -147,9 +149,10 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser( void )
 }
 
 
-MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
-                                                  bool            aUseFootprintViewer,
-                                                  wxDC*           aDC )
+MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
+                                               FP_LIB_TABLE*   aTable,
+                                               bool            aUseFootprintViewer,
+                                               wxDC*           aDC )
 {
     MODULE*     module;
     wxPoint     curspos = GetScreen()->GetCrossHairPosition();
@@ -195,7 +198,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
     {
         allowWildSeach = false;
         keys = moduleName;
-        moduleName = SelectFootprint( this, libName, wxEmptyString, keys );
+        moduleName = SelectFootprint( this, libName, wxEmptyString, keys, aTable );
 
         if( moduleName.IsEmpty() )                 // Cancel command
         {
@@ -207,7 +210,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
            || moduleName.Contains( wxT( "*" ) ) )  // Selection wild card
     {
         allowWildSeach = false;
-        moduleName     = SelectFootprint( this, libName, moduleName, wxEmptyString );
+        moduleName     = SelectFootprint( this, libName, moduleName, wxEmptyString, aTable );
 
         if( moduleName.IsEmpty() )
         {
@@ -225,7 +228,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         wxString wildname = wxChar( '*' ) + moduleName + wxChar( '*' );
         moduleName = wildname;
 
-        moduleName = SelectFootprint( this, libName, moduleName, wxEmptyString );
+        moduleName = SelectFootprint( this, libName, moduleName, wxEmptyString, aTable );
 
         if( moduleName.IsEmpty() )
         {
@@ -390,38 +393,40 @@ MODULE* PCB_BASE_FRAME::loadFootprintFromLibraries(
 }
 
 
-MODULE* PCB_BASE_FRAME::loadFootprint( const wxString& aFootprintName )
+MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
     throw( IO_ERROR, PARSE_ERROR )
 {
-    wxString   libPath;
-    wxFileName fn;
-    MODULE*    footprint;
+    wxCHECK_MSG( m_footprintLibTable != NULL, NULL,
+                 wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
 
-    PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+    wxString   libName = FROM_UTF8( aFootprintId.GetLibNickname().c_str() );
 
-    for( unsigned ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
+    const FP_LIB_TABLE::ROW* row = m_footprintLibTable->FindRow( libName );
+
+    if( row == NULL )
     {
-        fn = wxFileName( wxEmptyString, g_LibraryNames[ii], LegacyFootprintLibPathExtension );
-
-        libPath = wxGetApp().FindLibraryPath( fn );
-
-        if( !libPath )
-            continue;
-
-        footprint = pi->FootprintLoad( libPath, aFootprintName );
-
-        if( footprint )
-            return footprint;
+        wxString msg;
+        msg.Printf( _( "No library named <%s> was found in the footprint library table." ),
+                    aFootprintId.GetLibNickname().c_str() );
+        THROW_IO_ERROR( msg );
     }
 
-    return NULL;
+    wxString   footprintName = FROM_UTF8( aFootprintId.GetFootprintName().c_str() );
+    wxString   libPath = row->GetFullURI();
+
+    libPath = FP_LIB_TABLE::ExpandSubstitutions( libPath );
+
+    PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::EnumFromStr( row->GetType() ) ) );
+
+    return pi->FootprintLoad( libPath, footprintName );
 }
 
 
 wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
                                           const wxString& aLibraryFullFilename,
                                           const wxString& aMask,
-                                          const wxString& aKeyWord )
+                                          const wxString& aKeyWord,
+                                          FP_LIB_TABLE*   aTable )
 {
     static wxString              OldName;    // Save the name of the last module loaded.
     wxString                     CmpName;
@@ -431,9 +436,26 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
 
 
     if( aLibraryFullFilename.IsEmpty() )
+    {
+#if !defined( USE_FP_LIB_TABLE )
         libraries = g_LibraryNames;
+#else
+        wxASSERT( aTable != NULL );
+
+        std::vector< wxString > libNames = aTable->GetLogicalLibs();
+
+        for( unsigned i = 0; i < libNames.size(); i++ )
+        {
+            wxString uri = aTable->FindRow( libNames[i] )->GetFullURI();
+            uri = FP_LIB_TABLE::ExpandSubstitutions( uri );
+            libraries.Add( uri );
+        }
+#endif
+    }
     else
+    {
         libraries.Add( aLibraryFullFilename );
+    }
 
     if( libraries.IsEmpty() )
     {

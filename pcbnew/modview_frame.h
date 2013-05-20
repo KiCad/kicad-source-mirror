@@ -35,6 +35,7 @@
 class wxSashLayoutWindow;
 class wxListBox;
 class wxSemaphore;
+class FP_LIB_TABLE;
 
 
 /**
@@ -64,8 +65,9 @@ protected:
                                                  // the selected footprint is here
 
 public:
-    FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* parent, wxSemaphore* semaphore = NULL,
-                            long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent, FP_LIB_TABLE* aTable,
+                            wxSemaphore* aSemaphore = NULL,
+                            long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~FOOTPRINT_VIEWER_FRAME();
 

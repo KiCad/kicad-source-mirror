@@ -463,9 +463,11 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 
 bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 {
-    wxString    libPath = getLibPath();
-    wxString    footprintName = PCB_BASE_FRAME::SelectFootprint( this, libPath,
-                                                                 wxEmptyString, wxEmptyString );
+    PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
+    wxString        libPath = getLibPath();
+    wxString        footprintName = PCB_BASE_FRAME::SelectFootprint( this, libPath,
+                                                                     wxEmptyString, wxEmptyString,
+                                                                     parent->GetFootprintLibraryTable() );
 
     if( !footprintName )
         return false;

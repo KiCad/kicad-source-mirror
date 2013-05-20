@@ -54,6 +54,8 @@ class GENERAL_COLLECTORS_GUIDE;
 class BOARD_DESIGN_SETTINGS;
 class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
+class FP_LIB_TABLE;
+class FPID;
 
 
 /**
@@ -83,9 +85,14 @@ protected:
     BOARD*              m_Pcb;
     GENERAL_COLLECTOR*  m_Collector;
 
+    /// The project footprint library table.  This is a combination of the project
+    /// footprint library table and the global footprint table.  This is the one to
+    /// use when finding a #MODULE.
+    FP_LIB_TABLE*       m_footprintLibTable;
+
     /// Auxiliary tool bar typically shown below the main tool bar at the top of the
     /// main window.
-    wxAuiToolBar* m_auxiliaryToolBar;
+    wxAuiToolBar*       m_auxiliaryToolBar;
 
     void updateGridSelectBox();
     void updateZoomSelectBox();
@@ -93,15 +100,15 @@ protected:
 
     /**
      * Function loadFootprint
-     * attempts to load \a aFootprintName from the list of libraries.
+     * attempts to load \a aFootprintId from the footprint library table.
      *
-     * @param aFootprintName is the name of component footprint to load.
-     * @return the #MODULE if found or NULL if \a aFootprintName not found in any of the
-     *         libraries.
+     * @param aFootprintId is the #FPID of component footprint to load.
+     * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
+     *         libraries in #m_footprintLibTable.
      * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
      *                 occurs while reading footprint library files.
      */
-    MODULE* loadFootprint( const wxString& aFootprintName )
+    MODULE* loadFootprint( const FPID& aFootprintId )
         throw( IO_ERROR, PARSE_ERROR );
 
 public:
@@ -442,27 +449,31 @@ public:
      *  @param aKeyWord = keyword list, to display a filtered list of module
      *                    having one (or more) of these keywords in their
      *                    keyword list ( aKeyWord = wxEmptyString if not used )
+     *  @param aTable is the #FP_LIB_TABLE to search.
      *
      *  @return wxEmptyString if abort or fails, or the selected module name if Ok
      */
     wxString SelectFootprint( EDA_DRAW_FRAME* aWindow,
                               const wxString& aLibraryFullFilename,
                               const wxString& aMask,
-                              const wxString& aKeyWord );
+                              const wxString& aKeyWord,
+                              FP_LIB_TABLE*   aTable );
 
     /**
-     * Function Load_Module_From_Library
+     * Function LoadModuleFromLibrary
      * opens a dialog to select a footprint, and loads it into current board.
      *
      * @param aLibrary = the library name to use, or empty string to search
      * in all loaded libraries
+     * @param aTable is the #FP_LIB_TABLE containing the avaiable footprint libraries.
      * @param aUseFootprintViewer = true to show the option
      * allowing the footprint selection by the footprint viewer
      * @param aDC (can be NULL ) = the current Device Context, to draw the new footprint
      */
-    MODULE* Load_Module_From_Library( const wxString& aLibrary,
-                                      bool aUseFootprintViewer = true,
-                                      wxDC* aDC = NULL );
+    MODULE* LoadModuleFromLibrary( const wxString& aLibrary,
+                                   FP_LIB_TABLE*   aTable,
+                                   bool            aUseFootprintViewer = true,
+                                   wxDC*           aDC = NULL );
 
     /**
      * SelectFootprintFromLibBrowser
@@ -470,6 +481,14 @@ public:
      * @return the selected footprint name
      */
     wxString SelectFootprintFromLibBrowser( void );
+
+    /**
+     * Function GetFootprintLibraryTable
+     * @return the project #FP_LIB_TABLE so programs can find footprints.
+     */
+    FP_LIB_TABLE* GetFootprintLibraryTable() { return m_footprintLibTable; }
+
+    void SetFootprintLibraryTable( FP_LIB_TABLE* aTable ) { m_footprintLibTable = aTable; }
 
     //  ratsnest functions
     /**

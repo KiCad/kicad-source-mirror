@@ -218,7 +218,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
         if( viewer == NULL )
         {
-            viewer = new FOOTPRINT_VIEWER_FRAME( this, NULL );
+            viewer = new FOOTPRINT_VIEWER_FRAME( this, m_footprintLibTable, NULL );
             viewer->Show( true );
             viewer->Zoom_Automatique( false );
         }

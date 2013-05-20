@@ -59,7 +59,6 @@ class wxHtmlHelpController;
  */
 class EDA_APP : public wxApp
 {
-
 protected:
     /// Used mainly to handle default paths libs m_Id = APP_EESCHEMA_T, APP_PCBNEW_T ...
     EDA_APP_T m_Id;
@@ -415,6 +414,7 @@ public:
      */
     bool LockFile( const wxString& fileName );
 };
+
 
 /*
  * Use wxGetApp() to access EDA_APP.  It is not necessary to keep copies

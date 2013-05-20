@@ -40,6 +40,7 @@
 #include <macros.h>
 #include <3d_viewer.h>
 #include <msgpanel.h>
+#include <fp_lib_table.h>
 
 #include <pcbnew.h>
 #include <protos.h>
@@ -55,6 +56,7 @@
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
 #include <convert_from_iu.h>
+
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -291,9 +293,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
     m_useCmpFileForFpNames = true;
+    m_footprintLibTable = NULL;
+    m_globalFootprintTable = NULL;
+
 #ifdef KICAD_SCRIPTING_WXPYTHON
     m_pythonPanel = NULL;
 #endif
+
     for ( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
 
@@ -424,7 +430,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     m_pythonPanel = CreatePythonShellWindow( this );
     m_auimgr.AddPane( m_pythonPanel,
-                          pythonAuiInfo.Name( wxT( "PythonPanel" ) ).Bottom().Layer(9) );
+                      pythonAuiInfo.Name( wxT( "PythonPanel" ) ).Bottom().Layer(9) );
 
     m_pythonPanelHidden = true;
 #endif
@@ -447,6 +453,7 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
         m_Macros[i].m_Record.clear();
 
     delete m_drc;
+    delete m_globalFootprintTable;
 }
 
 
