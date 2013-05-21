@@ -516,29 +516,35 @@ double SCH_EDIT_FRAME::BestZoom()
 }
 
 
+/* Build a filename that can be used in plot and print functions
+ * for the current sheet path.
+ * This filename is unique and must be used instead of the screen filename
+ * when one must creates file for each sheet in the hierarchy,
+ * because in complex hierarchies a sheet and a SCH_SCREEN is used more than once
+ */
 wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 {
     wxFileName fn = GetScreen()->GetFileName();
 
-#ifndef KICAD_GOST
-    wxString filename = fn.GetName();
-    if( ( filename.Len() + m_CurrentSheet->PathHumanReadable().Len() ) < 50 )
-#else
+    /* Name is <root sheet filename>-<sheet path> and has no extension.
+     * However if filename is too long name is <sheet filename>-<sheet number>
+     */
+
+    #define FN_LEN_MAX 100   // A reasonnable value for the full file name len
+
     fn.ClearExt();
     wxString filename = fn.GetFullPath();
-    if( ( filename.Len() + m_CurrentSheet->PathHumanReadable().Len() ) < 80 )
-#endif
-
+    if( ( filename.Len() + m_CurrentSheet->PathHumanReadable().Len() ) < FN_LEN_MAX )
     {
         filename += m_CurrentSheet->PathHumanReadable();
         filename.Replace( wxT( "/" ), wxT( "-" ) );
         filename.RemoveLast();
-#if defined(KICAD_GOST)
+        // To avoid issues on unix, ensure the filename does not start
+        // by '-', which has a special meaning in command lines
 #ifndef __WINDOWS__
         wxString newfn;
         if( filename.StartsWith( wxT( "-" ), &newfn ) )
             filename = newfn;
-#endif
 #endif
     }
     else

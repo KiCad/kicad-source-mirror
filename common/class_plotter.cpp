@@ -20,7 +20,6 @@
 #include <base_struct.h>
 #include <common.h>
 #include <plot_common.h>
-#include <worksheet.h>
 #include <macros.h>
 #include <class_base_screen.h>
 #include <drawtxt.h>
@@ -463,7 +462,7 @@ void PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
 }
 
 
-void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle, 
+void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
                         int radius, int width, EDA_DRAW_MODE_T tracemode )
 {
     switch( tracemode )
