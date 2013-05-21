@@ -186,14 +186,14 @@ const wxChar* MsgPinElectricType[] =
 LIB_PIN::LIB_PIN( LIB_COMPONENT* aParent ) :
     LIB_ITEM( LIB_PIN_T, aParent )
 {
-    m_length = 300;                             /* default Pin len */
-    m_orientation = PIN_RIGHT;                  /* Pin orient: Up, Down, Left, Right */
-    m_shape = NONE;                             /* Pin shape, bitwise. */
-    m_type = PIN_UNSPECIFIED;                   /* electrical type of pin */
-    m_attributes = 0;                           /* bit 0 != 0: pin invisible */
-    m_number = 0;                               /* pin number ( i.e. 4 codes ASCII ) */
-    m_numTextSize = 50;
-    m_nameTextSize = 50;                        /* Default size for pin name and num */
+    m_length = DEFAULT_PIN_LENGTH;              // default Pin len
+    m_orientation = PIN_RIGHT;                  // Pin orient: Up, Down, Left, Right
+    m_shape = NONE;                             // Pin shape, bitwise.
+    m_type = PIN_UNSPECIFIED;                   // electrical type of pin
+    m_attributes = 0;                           // bit 0 != 0: pin invisible
+    m_number = 0;                               // pin number (i.e. 4 ASCII chars)
+    m_numTextSize = DEFAULT_TEXT_SIZE;
+    m_nameTextSize = DEFAULT_TEXT_SIZE;         // Default size for pin name and num
     m_width = 0;
     m_typeName = _( "Pin" );
 }

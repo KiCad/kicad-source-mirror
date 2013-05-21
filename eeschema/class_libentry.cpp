@@ -60,6 +60,14 @@
 
 #define TRACE_DESTRUCTOR 0
 
+// the separator char between the subpart id and the reference
+// 0 (no separator) or '.' or some other character
+int LIB_COMPONENT::m_subpartIdSeparator = 0;
+// the ascii char value to calculate the subpart symbol id from the part number:
+// 'A' or '1' usually. (to print U1.A or U1.1)
+// if this a a digit, a number is used as id symbol
+int LIB_COMPONENT::m_subpartFirstId = 'A';
+
 
 LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent ):
     EDA_ITEM( LIB_ALIAS_T )
@@ -251,14 +259,18 @@ wxString LIB_COMPONENT::GetLibraryName()
 }
 
 
-wxString LIB_COMPONENT::ReturnSubReference( int aUnit )
+wxString LIB_COMPONENT::ReturnSubReference( int aUnit, bool aAddSeparator )
 {
     wxString subRef;
-#if defined(KICAD_GOST)
-    subRef.Printf( wxT(".%d" ), aUnit);
-#else
-    subRef.Append( wxChar(aUnit + 'A' - 1) );
-#endif
+
+    if( m_subpartIdSeparator != 0 && aAddSeparator )
+        subRef << wxChar( m_subpartIdSeparator );
+
+    if( m_subpartFirstId >= '0' && m_subpartFirstId <= '9' )
+        subRef << aUnit;
+    else
+        subRef << wxChar( m_subpartFirstId + aUnit - 1);
+
     return subRef;
 }
 

@@ -36,7 +36,6 @@
 #include <general.h>
 #include <libeditframe.h>
 #include <eeschema_config.h>
-#include <worksheet.h>
 #include <hotkeys.h>
 #include <sch_sheet.h>
 

@@ -32,11 +32,10 @@
 
 #include <sch_item_struct.h>
 
-
 class SCH_JUNCTION : public SCH_ITEM
 {
-    wxPoint m_pos;                  /* XY coordinates of connection. */
-    wxSize  m_size;
+    wxPoint m_pos;                  // Position of the junction.
+    static int m_symbolSize;        // diameter of the junction graphic symbol
 
 public:
     SCH_JUNCTION( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -49,6 +48,9 @@ public:
     {
         return wxT( "SCH_JUNCTION" );
     }
+
+    static int GetSymbolSize() { return m_symbolSize; }
+    static void SetSymbolSize( int aSize ) { m_symbolSize = aSize; }
 
     void SwapData( SCH_ITEM* aItem );
 
