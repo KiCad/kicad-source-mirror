@@ -38,6 +38,7 @@
 #include <class_board_item.h>
 #elif defined( EESCHEMA )
 #include <sch_item_struct.h>
+#elif defined( GERBVIEW )
 #else
 #error "Cannot resolve units formatting due to no definition of EESCHEMA or PCBNEW."
 #endif
@@ -325,10 +326,12 @@ bool EDA_TEXT::IsDefaultFormatting() const
            && ( m_MultilineAllowed == false ) );
 }
 
-
 void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
     throw( IO_ERROR )
 {
+#ifndef GERBVIEW        // Gerbview does not use EDA_TEXT::Format
+                        // and does not define FMT_IU, used here
+                        // however this function should exist
     if( !IsDefaultFormatting() )
     {
         aFormatter->Print( aNestLevel+1, "(effects" );
@@ -381,4 +384,5 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 
         aFormatter->Print( 0, ")\n" );
     }
+#endif
 }

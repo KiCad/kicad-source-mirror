@@ -27,7 +27,6 @@
 
 #include <fctsys.h>
 #include <plot_common.h>
-#include <worksheet.h>
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
 #include <base_units.h>
