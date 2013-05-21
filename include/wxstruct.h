@@ -703,23 +703,26 @@ public:
      * Function TraceWorkSheet is a core function for drawing of the page layout with
      * the frame and the basic inscriptions.
      * @param aDC The device context.
-     * @param aSz The size of the page layout.
-     * @param aLT The left top margin of the page layout.
-     * @param aRB The right bottom margin of the page layout.
-     * @param aType The paper size type (for basic inscriptions).
-     * @param aFlNm The file name (for basic inscriptions).
-     * @param aTb The block of titles (for basic inscriptions).
-     * @param aNScr The number of screens (for basic inscriptions).
-     * @param aScr The screen number (for basic inscriptions).
-     * @param aLnW The line width for drawing.
+     * @param aPageSize The size of the page layout.
+     * @param aLTmargin The left top margin of the page layout.
+     * @param aRBmargin The right bottom margin of the page layout.
+     * @param aPaperFormat The paper size type, for basic inscriptions.
+     * @param aFileName The file name, for basic inscriptions.
+     * @param aTitleBlock The sheet title block, for basic inscriptions.
+     * @param aSheetCount The number of sheets (for basic inscriptions).
+     * @param aSheetNumber The sheet number (for basic inscriptions).
+     * @param aPenWidth The line width for drawing.
      * @param aScalar Scalar to convert from mils to internal units.
-     * @param aClr1 The color for drawing.
-     * @param aClr2 The colr for inscriptions.
+     * @param aLineColor The color for drawing.
+     * @param aTextColor The color for inscriptions.
      */
-    void TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoint& aRB,
-                         wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
-                         int aNScr, int aScr, int aLnW, double aScalar,
-                         EDA_COLOR_T aClr1 = RED, EDA_COLOR_T aClr2 = RED );
+    void TraceWorkSheet( wxDC* aDC, wxSize& aPageSize,
+                         wxPoint& aLTmargin, wxPoint& aRBmargin,
+                         wxString& aPaperFormat, wxString& aFileName,
+                         TITLE_BLOCK& aTitleBlock,
+                         int aSheetCount, int aSheetNumber,
+                         int aPenWidth, double aScalar,
+                         EDA_COLOR_T aLineColor = RED, EDA_COLOR_T aTextColor = RED );
 
     /**
      * Function GetXYSheetReferences

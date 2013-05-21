@@ -45,7 +45,6 @@
 #include <wxstruct.h>
 #include <macros.h>
 #include <param_config.h>
-#include <worksheet.h>
 #include <id.h>
 #include <build_version.h>
 #include <hotkeys_basic.h>
