@@ -49,6 +49,16 @@ void DIALOG_EESCHEMA_OPTIONS::SetUnits( const wxArrayString& units, int select )
     m_choiceUnits->SetSelection( select );
 }
 
+void DIALOG_EESCHEMA_OPTIONS::SetRefIdSeparator( wxChar aSep, wxChar aFirstId)
+{
+    if( aSep == 0 )
+		m_textCtrlSeparatorRefId->SetValue( _("None") );
+    else
+		m_textCtrlSeparatorRefId->SetValue( aSep );
+
+	m_textCtrlPartFirstId->SetValue( aFirstId );
+
+}
 
 void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& grid_sizes, int grid_id )
 {

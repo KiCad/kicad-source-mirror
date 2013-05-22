@@ -358,7 +358,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     }
 
     if( m_PrintParams.PrintBorderAndTitleBlock() )
-        m_Parent->TraceWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
+        m_Parent->DrawWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
                                   IU_PER_MILS, m_Parent->GetScreenDesc() );
 
     m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );

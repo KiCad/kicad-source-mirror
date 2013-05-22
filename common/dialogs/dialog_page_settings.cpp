@@ -43,6 +43,7 @@
 #include <general.h>
 #endif
 
+#include <worksheet.h>
 #include <dialog_page_settings.h>
 
 
@@ -577,10 +578,6 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 
     if( m_page_bitmap->IsOk() )
     {
-        // Save current clip box and temporary expand it.
-        EDA_RECT save_clip_box = *m_Parent->GetCanvas()->GetClipBox();
-        m_Parent->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ),
-                                                     wxSize( INT_MAX / 2, INT_MAX / 2 ) ) );
         // Calculate layout preview scale.
         int appScale = m_Screen->MilsToIuScalar();
 
@@ -601,10 +598,6 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         pageDUMMY.SetWidthMils( clamped_layout_size.x );
         pageDUMMY.SetHeightMils( clamped_layout_size.y );
 
-        wxSize dummySize = pageDUMMY.GetSizeMils();
-        wxPoint pointLeftTop( pageDUMMY.GetLeftMarginMils(), pageDUMMY.GetTopMarginMils() );
-        wxPoint pointRightBottom( pageDUMMY.GetRightMarginMils(), pageDUMMY.GetBottomMarginMils() );
-
         // Get page type
         int idx = m_paperSizeComboBox->GetSelection();
 
@@ -615,17 +608,15 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 
         // Draw layout preview.
         wxString emptyString;
-        GRResetPenAndBrush( ( wxDC* ) &memDC );
+        GRResetPenAndBrush( &memDC );
 
-        m_Parent->TraceWorkSheet( (wxDC*) &memDC, dummySize, pointLeftTop, pointRightBottom,
-                                  paperType, emptyString, m_tb, m_Screen->m_NumberOfScreens,
-                                  m_Screen->m_ScreenNumber, 1, appScale, LIGHTGRAY, RED );
+        DrawPageLayout( &memDC, NULL, pageDUMMY,
+                        paperType, emptyString, emptyString,
+                        m_tb, m_Screen->m_NumberOfScreens,
+                        m_Screen->m_ScreenNumber, 1, appScale, DARKGRAY, RED );
 
         memDC.SelectObject( wxNullBitmap );
         m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );
-
-        // Restore current clip box.
-        m_Parent->GetCanvas()->SetClipBox( save_clip_box );
 
         // Refresh the dialog.
         Layout();

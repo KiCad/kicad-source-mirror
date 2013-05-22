@@ -696,33 +696,17 @@ public:
      */
     double GetZoom();
 
-    void TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
-                         double aScale, const wxString &aFilename );
-
     /**
-     * Function TraceWorkSheet is a core function for drawing of the page layout with
-     * the frame and the basic inscriptions.
+     * Function DrawWorkSheet
+     * Draws on screen the page layout with the frame and the basic inscriptions.
      * @param aDC The device context.
-     * @param aPageSize The size of the page layout.
-     * @param aLTmargin The left top margin of the page layout.
-     * @param aRBmargin The right bottom margin of the page layout.
-     * @param aPaperFormat The paper size type, for basic inscriptions.
-     * @param aFileName The file name, for basic inscriptions.
-     * @param aTitleBlock The sheet title block, for basic inscriptions.
-     * @param aSheetCount The number of sheets (for basic inscriptions).
-     * @param aSheetNumber The sheet number (for basic inscriptions).
-     * @param aPenWidth The line width for drawing.
-     * @param aScalar Scalar to convert from mils to internal units.
-     * @param aLineColor The color for drawing.
-     * @param aTextColor The color for inscriptions.
+     * @param aScreen screen to draw
+     * @param aLineWidth The pen width to use to draw the layout.
+     * @param aScale The mils to Iu conversion factor.
+     * @param aFilename The filename to display in basic inscriptions.
      */
-    void TraceWorkSheet( wxDC* aDC, wxSize& aPageSize,
-                         wxPoint& aLTmargin, wxPoint& aRBmargin,
-                         wxString& aPaperFormat, wxString& aFileName,
-                         TITLE_BLOCK& aTitleBlock,
-                         int aSheetCount, int aSheetNumber,
-                         int aPenWidth, double aScalar,
-                         EDA_COLOR_T aLineColor = RED, EDA_COLOR_T aTextColor = RED );
+    void DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
+                         double aScale, const wxString &aFilename );
 
     /**
      * Function GetXYSheetReferences

@@ -55,8 +55,84 @@
 #include "title_block_shapes.h"
 #endif
 
+void DrawPageLayout( wxDC* aDC, EDA_DRAW_PANEL * aCanvas,
+                     const PAGE_INFO& aPageInfo,
+                     const wxString& aPaperFormat,
+                     const wxString &aFullSheetName,
+                     const wxString& aFileName,
+                     TITLE_BLOCK& aTitleBlock,
+                     int aSheetCount, int aSheetNumber,
+                     int aPenWidth, double aScalar,
+                     EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor )
+{
+    GRSetDrawMode( aDC, GR_COPY );
+    WS_DRAW_ITEM_LIST drawList;
 
-void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
+    wxPoint LTmargin( aPageInfo.GetLeftMarginMils(), aPageInfo.GetTopMarginMils() );
+    wxPoint RBmargin( aPageInfo.GetRightMarginMils(), aPageInfo.GetBottomMarginMils() );
+    wxSize pagesize = aPageInfo.GetSizeMils();
+
+    drawList.SetMargins( LTmargin, RBmargin );
+    drawList.SetPenSize( aPenWidth );
+    drawList.SetMilsToIUfactor( aScalar );
+    drawList.SetPageSize( pagesize );
+
+    drawList.BuildWorkSheetGraphicList(
+                               aPaperFormat, aFullSheetName, aFileName,
+                               aTitleBlock, aSheetCount, aSheetNumber,
+                               aLineColor, aTextColor );
+
+    // Draw item list
+    for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item;
+         item = drawList.GetNext() )
+    {
+        switch( item->GetType() )
+        {
+        case WS_DRAW_ITEM_BASE::wsg_line:
+            {
+                WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
+                GRLine( aCanvas ? aCanvas->GetClipBox() : NULL, aDC,
+                        line->GetStart(), line->GetEnd(),
+                        line->GetPenWidth(), line->GetColor() );
+            }
+            break;
+
+        case WS_DRAW_ITEM_BASE::wsg_rect:
+            {
+                WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
+                GRRect( aCanvas ? aCanvas->GetClipBox() : NULL, aDC,
+                        rect->GetStart().x, rect->GetStart().y,
+                        rect->GetEnd().x, rect->GetEnd().y,
+                        rect->GetPenWidth(), rect->GetColor() );
+            }
+            break;
+
+        case WS_DRAW_ITEM_BASE::wsg_text:
+            {
+                WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
+                DrawGraphicText( aCanvas, aDC, text->GetTextPosition(),
+                                 text->GetColor(), text->GetText(),
+                                 text->GetOrientation(), text->GetSize(),
+                                 text->GetHorizJustify(), text->GetVertJustify(),
+                                 text->GetPenWidth(), text->IsItalic(), text->IsBold() );
+            }
+            break;
+
+        case WS_DRAW_ITEM_BASE::wsg_poly:
+            {
+                WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
+                GRPoly( aCanvas ? aCanvas->GetClipBox() : NULL, aDC,
+                        poly->m_Corners.size(), &poly->m_Corners[0],
+                        true, poly->GetPenWidth(),
+                        poly->GetColor(), poly->GetColor() );
+            }
+            break;
+        }
+    }
+}
+
+
+void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
                                      double aScalar, const wxString &aFilename )
 {
     if( !m_showBorderAndTitleBlock )
@@ -74,17 +150,14 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineW
                 g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
     }
 
-    wxPoint margin_left_top( pageInfo.GetLeftMarginMils(), pageInfo.GetTopMarginMils() );
-    wxPoint margin_right_bottom( pageInfo.GetRightMarginMils(), pageInfo.GetBottomMarginMils() );
     wxString paper = pageInfo.GetType();
-    wxString file = aFilename;
     TITLE_BLOCK t_block = GetTitleBlock();
-    int number_of_screens = aScreen->m_NumberOfScreens;
-    int screen_to_draw = aScreen->m_ScreenNumber;
+    EDA_COLOR_T color = RED;
 
-    TraceWorkSheet( aDC, pageSize, margin_left_top, margin_right_bottom,
-                    paper, file, t_block, number_of_screens, screen_to_draw,
-                    aLineWidth, aScalar );
+    DrawPageLayout( aDC, m_canvas, pageInfo,
+                    paper, aFilename, GetScreenDesc(), t_block,
+                    aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber,
+                    aLineWidth, aScalar, color, color );
 }
 
 
@@ -189,74 +262,5 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
                                aFormatter->Quotew( m_comment4 ).c_str() );
 
         aFormatter->Print( aNestLevel, ")\n\n" );
-    }
-}
-
-
-void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aPageSize,
-                                     wxPoint& aLTmargin, wxPoint& aRBmargin,
-                                     wxString& aPaperFormat,
-                                     wxString& aFileName,
-                                     TITLE_BLOCK& aTitleBlock,
-                                     int aSheetCount, int aSheetNumber,
-                                     int aPenWidth, double aScalar,
-                                     EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor )
-{
-    GRSetDrawMode( aDC, GR_COPY );
-    WS_DRAW_ITEM_LIST drawList;
-
-    drawList.BuildWorkSheetGraphicList( aPageSize, aLTmargin, aRBmargin,
-                               aPaperFormat, aFileName,
-                               GetScreenDesc(),
-                               aTitleBlock, aSheetCount, aSheetNumber,
-                               aPenWidth, aScalar, aLineColor, aTextColor );
-
-    // Draw item list
-    for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item;
-         item = drawList.GetNext() )
-    {
-        switch( item->GetType() )
-        {
-        case WS_DRAW_ITEM_BASE::wsg_line:
-            {
-                WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
-                GRLine( m_canvas->GetClipBox(), aDC,
-                        line->GetStart(), line->GetEnd(),
-                        line->GetPenWidth(), line->GetColor() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_rect:
-            {
-                WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
-                GRRect( m_canvas->GetClipBox(), aDC,
-                        rect->GetStart().x, rect->GetStart().y,
-                        rect->GetEnd().x, rect->GetEnd().y,
-                        rect->GetPenWidth(), rect->GetColor() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_text:
-            {
-                WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
-                DrawGraphicText( m_canvas, aDC, text->GetTextPosition(),
-                                 text->GetColor(),
-                                 text->GetText(),
-                                 text->GetOrientation(), text->GetSize(),
-                                 text->GetHorizJustify(), text->GetVertJustify(),
-                                 text->GetPenWidth(), text->IsItalic(), text->IsBold() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_poly:
-            {
-                WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
-                GRPoly( m_canvas->GetClipBox(), aDC,
-                        poly->m_Corners.size(), &poly->m_Corners[0],
-                        true, poly->GetPenWidth(),
-                        poly->GetColor(), poly->GetColor() );
-            }
-            break;
-        }
     }
 }
