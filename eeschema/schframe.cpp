@@ -530,27 +530,24 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
      * However if filename is too long name is <sheet filename>-<sheet number>
      */
 
-    #define FN_LEN_MAX 100   // A reasonnable value for the full file name len
+    #define FN_LEN_MAX 80   // A reasonable value for the short filename len
 
-    fn.ClearExt();
-    wxString filename = fn.GetFullPath();
-    if( ( filename.Len() + m_CurrentSheet->PathHumanReadable().Len() ) < FN_LEN_MAX )
-    {
-        filename += m_CurrentSheet->PathHumanReadable();
-        filename.Replace( wxT( "/" ), wxT( "-" ) );
-        filename.RemoveLast();
-        // To avoid issues on unix, ensure the filename does not start
-        // by '-', which has a special meaning in command lines
-#ifndef __WINDOWS__
-        wxString newfn;
-        if( filename.StartsWith( wxT( "-" ), &newfn ) )
-            filename = newfn;
-#endif
-    }
+    wxString filename = fn.GetName();
+    wxString sheetFullName =  m_CurrentSheet->PathHumanReadable();
+    sheetFullName.Trim( true );
+    sheetFullName.Trim( false );
+
+    // Remove the last '/' of the path human readable
+    // (and for the root sheet, make sheetFullName empty):
+    sheetFullName.RemoveLast();
+
+    // Convert path human readable separator to '-'
+    sheetFullName.Replace( wxT( "/" ), wxT( "-" ) );
+
+    if( ( filename.Len() + sheetFullName.Len() ) < FN_LEN_MAX )
+        filename += sheetFullName;
     else
-    {
         filename << wxT( "-" ) << GetScreen()->m_ScreenNumber;
-    }
 
     return filename;
 }
