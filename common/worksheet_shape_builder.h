@@ -120,8 +120,14 @@ public:
  */
 class WS_DRAW_ITEM_LIST
 {
-    std::vector <WS_DRAW_ITEM_BASE*> m_graphicList;
-    unsigned m_idx;
+    std::vector <WS_DRAW_ITEM_BASE*> m_graphicList;     // Items to draw/plot
+    unsigned m_idx;             // for GetFirst, GetNext functions
+    wxPoint  m_LTmargin;        // The left top margin in mils of the page layout.
+    wxPoint  m_RBmargin;        // The right bottom margin in mils of the page layout.
+    wxSize   m_pageSize;        // the page size in mils
+    double   m_milsToIu;        // the scalar to convert pages units ( mils)
+                                // to draw/plot units.
+    int      m_penSize;         // The line width for drawings.
 
 public:
     WS_DRAW_ITEM_LIST()
@@ -133,6 +139,45 @@ public:
     {
         for( unsigned ii = 0; ii < m_graphicList.size(); ii++ )
             delete m_graphicList[ii];
+    }
+
+    /* Function SetPenSize
+     * Set the defualt pen size to draw/plot lines and texts
+     * @param aPenSize the thickness of lines
+     */
+    void SetPenSize( int aPenSize )
+    {
+        m_penSize = aPenSize;
+    }
+
+    /* Function SetMilsToIUfactor
+     * Set the scalar to convert pages units ( mils) to draw/plot units
+     * @param aScale the conversion factor
+     */
+    void SetMilsToIUfactor( double aScale )
+    {
+        m_milsToIu = aScale;
+    }
+
+    /* Function SetPageSize
+     * Set the size of the page layout
+     * @param aPageSize size (in mils) of the page layout.
+     */
+    void SetPageSize( const wxSize& aPageSize )
+    {
+        m_pageSize = aPageSize;
+    }
+
+    /* Function SetMargins
+     *  Set the The left top margin and the right bottom margin
+     * of the page layout
+     * @param aLTmargin The left top margin of the page layout.
+     * @param aRBmargin The right bottom margin of the page layout.
+     */
+    void SetMargins( const wxPoint& aLTmargin, const wxPoint& aRBmargin )
+    {
+        m_LTmargin = aLTmargin;
+        m_RBmargin = aRBmargin;
     }
 
     void Append( WS_DRAW_ITEM_BASE* aItem )
@@ -167,27 +212,19 @@ public:
      * It fills the list of basic graphic items to draw or plot.
      * currently lines, rect, polygons and texts
      *
-     * @param aPageSize The size of the page layout.
-     * @param aLTmargin The left top margin of the page layout.
-     * @param aRBmargin The right bottom margin of the page layout.
      * @param aPaperFormat The paper size type, for basic inscriptions.
      * @param aFileName The file name, for basic inscriptions.
      * @param aTitleBlock The sheet title block, for basic inscriptions.
      * @param aSheetCount The number of sheets (for basic inscriptions).
      * @param aSheetNumber The sheet number (for basic inscriptions).
-     * @param aPenWidth The line width for drawing.
-     * @param aScalar Scalar to convert from mils to internal units.
      * @param aLineColor The color for drawing.
      * @param aTextColor The color for inscriptions.
      */
-    void BuildWorkSheetGraphicList( wxSize& aPageSize,
-                                    wxPoint& aLTmargin, wxPoint& aRBmargin,
-                                    const wxString& aPaperFormat,
+    void BuildWorkSheetGraphicList( const wxString& aPaperFormat,
                                     const wxString& aFileName,
                                     const wxString& aSheetPathHumanReadable,
                                     const TITLE_BLOCK& aTitleBlock,
                                     int aSheetCount, int aSheetNumber,
-                                    int aPenWidth, double aScalar,
                                     EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor );
 };
 

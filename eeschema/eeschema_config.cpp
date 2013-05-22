@@ -38,6 +38,7 @@
 #include <eeschema_config.h>
 #include <hotkeys.h>
 #include <sch_sheet.h>
+#include <class_libentry.h>
 
 #include <dialog_hotkeys_editor.h>
 
@@ -271,6 +272,9 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetRepeatVertical( g_RepeatStep.y );
     dlg.SetRepeatLabel( g_RepeatDeltaLabel );
     dlg.SetAutoSaveInterval( GetAutoSaveInterval() / 60 );
+    dlg.SetRefIdSeparator( LIB_COMPONENT::GetSubpartIdSeparator( ),
+                           LIB_COMPONENT::GetSubpartFirstId() );
+
     dlg.SetShowGrid( IsGridVisible() );
     dlg.SetShowHiddenPins( m_showAllPins );
     dlg.SetEnableMiddleButtonPan( m_canvas->GetEnableMiddleButtonPan() );

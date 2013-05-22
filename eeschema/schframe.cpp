@@ -862,8 +862,8 @@ void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMask, bool aPrintMirr
                                 void* aData )
 {
     GetScreen()->Draw( m_canvas, aDC, GR_DEFAULT_DRAWMODE );
-    TraceWorkSheet( aDC, GetScreen(), GetDefaultLineThickness(), IU_PER_MILS,
-                    GetScreen()->GetFileName() );
+    DrawWorkSheet( aDC, GetScreen(), GetDefaultLineThickness(), IU_PER_MILS,
+                   GetScreen()->GetFileName() );
 }
 
 

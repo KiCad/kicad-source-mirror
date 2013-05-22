@@ -963,14 +963,12 @@ Ki_WorkSheetData    WS_DopTop_Line6 =
 
 #include <worksheet_shape_builder.h>
 
-void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
-                           wxPoint& aLTmargin, wxPoint& aRBmargin,
+void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                            const wxString& aPaperFormat,
                            const wxString& aFileName,
                            const wxString& aSheetPathHumanReadable,
                            const TITLE_BLOCK& aTitleBlock,
                            int aSheetCount, int aSheetNumber,
-                           int aPenWidth, double aScalar,
                            EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor )
 {
     wxPoint             pos;
@@ -978,48 +976,48 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
     int                 refx, refy;
     wxString            Line;
     Ki_WorkSheetData*   WsItem;
-    wxSize              size( SIZETEXT * aScalar, SIZETEXT * aScalar );
-    wxSize              size_ref( SIZETEXT_REF * aScalar, SIZETEXT_REF * aScalar );
+    wxSize              size( SIZETEXT * m_milsToIu, SIZETEXT * m_milsToIu );
+    wxSize              size_ref( SIZETEXT_REF * m_milsToIu, SIZETEXT_REF * m_milsToIu );
     wxString            msg;
     WS_DRAW_ITEM_TEXT*  gtext;
 
     // Upper left corner
-    refx    = aLTmargin.x;
-    refy    = aLTmargin.y;
+    refx    = m_LTmargin.x;
+    refy    = m_LTmargin.y;
 
     // lower right corner
     int xg, yg;
-    xg  = aPageSize.x - aRBmargin.x;
-    yg  = aPageSize.y - aRBmargin.y;
+    xg  = m_pageSize.x - m_RBmargin.x;
+    yg  = m_pageSize.y - m_RBmargin.y;
 
     int     lnMsg, ln;
-    int     lnWosn  = aPenWidth * 2;
-    int     lnWtonk = aPenWidth;
+    int     lnWosn  = m_penSize * 2;
+    int     lnWtonk = m_penSize;
     wxSize  sz;
-    wxSize  size0_8( SIZETEXT * aScalar * 0.8, SIZETEXT * aScalar * 1 );
-    wxSize  size1_5( SIZETEXT * aScalar * 1.5, SIZETEXT * aScalar * 1.5 );
-    wxSize  size2( SIZETEXT * aScalar * 2, SIZETEXT * aScalar * 2 );
-    wxSize  size3( SIZETEXT * aScalar * 3, SIZETEXT * aScalar * 3 );
+    wxSize  size0_8( SIZETEXT * m_milsToIu * 0.8, SIZETEXT * m_milsToIu * 1 );
+    wxSize  size1_5( SIZETEXT * m_milsToIu * 1.5, SIZETEXT * m_milsToIu * 1.5 );
+    wxSize  size2( SIZETEXT * m_milsToIu * 2, SIZETEXT * m_milsToIu * 2 );
+    wxSize  size3( SIZETEXT * m_milsToIu * 3, SIZETEXT * m_milsToIu * 3 );
 
     // Draw the border.
     Append( new WS_DRAW_ITEM_RECT(
-                wxPoint( refx * aScalar, refy * aScalar ),
-                wxPoint( xg * aScalar, yg * aScalar ),
+                wxPoint( refx * m_milsToIu, refy * m_milsToIu ),
+                wxPoint( xg * m_milsToIu, yg * m_milsToIu ),
                 lnWosn, aLineColor ) );
 
     // Center - right bottom corner
-    refx    = aPageSize.x - aRBmargin.x;
-    refy    = aPageSize.y - aRBmargin.y;
+    refx    = m_pageSize.x - m_RBmargin.x;
+    refy    = m_pageSize.y - m_RBmargin.y;
 
     // First page
     if( aSheetNumber == 1 )
     {
         for( WsItem = &WS_Osn1_Line1; WsItem != NULL; WsItem = WsItem->Pnext )
         {
-            pos.x   = (refx - WsItem->m_Posx) * aScalar;
-            pos.y   = (refy - WsItem->m_Posy) * aScalar;
-            end.x   = (refx - WsItem->m_Endx) * aScalar;
-            end.y   = (refy - WsItem->m_Endy) * aScalar;
+            pos.x   = (refx - WsItem->m_Posx) * m_milsToIu;
+            pos.y   = (refy - WsItem->m_Posy) * m_milsToIu;
+            end.x   = (refx - WsItem->m_Endx) * m_milsToIu;
+            end.y   = (refy - WsItem->m_Endy) * m_milsToIu;
             msg     = WsItem->m_Legende;
 
             switch( WsItem->m_Type )
@@ -1040,11 +1038,11 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
                 {
                     if( WsItem == &WS_Osn1_Text1 )
                         Append( new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                       size0_8, aPenWidth,
+                                                       size0_8, m_penSize,
                                                        aLineColor ) );
                     else
                         Append( new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                       size, aPenWidth, aLineColor ) );
+                                                       size, m_penSize, aLineColor ) );
                 }
 
                 break;
@@ -1054,7 +1052,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
                 if( !msg.IsEmpty() )
                 {
                     Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                           size, aPenWidth, aLineColor ) );
+                                                           size, m_penSize, aLineColor ) );
                     gtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
                 }
 
@@ -1065,21 +1063,21 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
         // Sheet number
         if( aSheetCount > 1 )
         {
-            pos.x   = ( refx - Mm2mils( 36 ) ) * aScalar;
-            pos.y   = ( refy - Mm2mils( 17.5 ) ) * aScalar;
+            pos.x   = ( refx - Mm2mils( 36 ) ) * m_milsToIu;
+            pos.y   = ( refy - Mm2mils( 17.5 ) ) * m_milsToIu;
             msg.Empty();
             msg << aSheetNumber;
             Append( new WS_DRAW_ITEM_TEXT( msg, pos,
-                                           size, aPenWidth, aLineColor ) );
+                                           size, m_penSize, aLineColor ) );
         }
 
         // Count of sheets
-        pos.x   = ( refx - Mm2mils( 10 ) ) * aScalar;
-        pos.y   = ( refy - Mm2mils( 17.5 ) ) * aScalar;
+        pos.x   = ( refx - Mm2mils( 10 ) ) * m_milsToIu;
+        pos.y   = ( refy - Mm2mils( 17.5 ) ) * m_milsToIu;
         msg.Empty();
         msg << aSheetCount;
         Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos,
-                                               size, aPenWidth, aLineColor ) );
+                                               size, m_penSize, aLineColor ) );
         gtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
 
         // Company name
@@ -1088,16 +1086,16 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
         if( !msg.IsEmpty() )
         {
             sz      = size1_5;
-            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / m_milsToIu;
             ln      = Mm2mils( 49 );
 
             if( lnMsg > ln )
                 sz.x *= float(ln) / lnMsg;
 
-            pos.x   = ( refx - Mm2mils( 25 ) ) * aScalar;
-            pos.y   = ( refy - Mm2mils( 7.5 ) ) * aScalar;
+            pos.x   = ( refx - Mm2mils( 25 ) ) * m_milsToIu;
+            pos.y   = ( refy - Mm2mils( 7.5 ) ) * m_milsToIu;
             Append( new WS_DRAW_ITEM_TEXT( msg, pos,
-                                           sz, aPenWidth, aLineColor ) );
+                                           sz, m_penSize, aLineColor ) );
         }
 
         // Title
@@ -1108,7 +1106,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
             sz = size1_5;
             wxArrayString   lines;
             int             titleWidth          = 0;
-            int             titleHeight         = (sz.y + sz.y * 0.5) / aScalar;
+            int             titleHeight         = (sz.y + sz.y * 0.5) / m_milsToIu;
             int             titleFieldWidth     = Mm2mils( 69 );
             int             titleFieldHeight    = Mm2mils( 24 );
             int             index   = 0;
@@ -1118,7 +1116,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
             {
                 do  // Wrap the title
                 {
-                    titleWidth = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+                    titleWidth = ReturnGraphicTextWidth( msg, sz.x, false, false ) / m_milsToIu;
 
                     if( titleWidth > titleFieldWidth )
                     {
@@ -1132,14 +1130,14 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
                             {
                                 lines.Clear();
                                 msg     = fullMsg;
-                                sz.x    -= aScalar;
+                                sz.x    -= m_milsToIu;
                                 break;
                             }
                             else
                             {
                                 index++;
                                 titleWidth =
-                                    ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+                                    ReturnGraphicTextWidth( msg, sz.x, false, false ) / m_milsToIu;
 
                                 wxString ch = wxString( msg.Last() );
 
@@ -1186,8 +1184,8 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
 
                 if( titleFieldHeight < (int) ( titleHeight * lines.Count() ) )
                 {
-                    sz.y    -= aScalar;
-                    sz.x    -= aScalar;
+                    sz.y    -= m_milsToIu;
+                    sz.x    -= m_milsToIu;
                     msg     = fullMsg;
                     lines.Clear();
                 }
@@ -1195,16 +1193,16 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
                     break;
             } while( 1 );
 
-            pos.x   = ( refx - Mm2mils( 85 ) ) * aScalar;
+            pos.x   = ( refx - Mm2mils( 85 ) ) * m_milsToIu;
             pos.y   =
-                ( refy - Mm2mils( 27.5 ) - (titleHeight * (lines.Count() - 1) / 2) ) * aScalar;
+                ( refy - Mm2mils( 27.5 ) - (titleHeight * (lines.Count() - 1) / 2) ) * m_milsToIu;
 
             for( unsigned curLn = 0; curLn < lines.Count(); curLn++ )
             {
                 msg = lines[curLn];
                 Append( new WS_DRAW_ITEM_TEXT( msg, pos,
-                                               sz, aPenWidth, aTextColor ) );
-                pos.y += titleHeight * aScalar;
+                                               sz, m_penSize, aTextColor ) );
+                pos.y += titleHeight * m_milsToIu;
             }
         }
 
@@ -1214,16 +1212,16 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
         if( !msg.IsEmpty() )
         {
             sz      = size3;
-            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / m_milsToIu;
             ln      = Mm2mils( 119 );
 
             if( lnMsg > ln )
                 sz.x *= float(ln) / lnMsg;
 
-            pos.x   = ( refx - Mm2mils( 60 ) ) * aScalar;
-            pos.y   = ( refy - Mm2mils( 47.5 ) ) * aScalar;
+            pos.x   = ( refx - Mm2mils( 60 ) ) * m_milsToIu;
+            pos.y   = ( refy - Mm2mils( 47.5 ) ) * m_milsToIu;
             Append( new WS_DRAW_ITEM_TEXT( msg, pos,
-                                           sz, aPenWidth, aTextColor ) );
+                                           sz, m_penSize, aTextColor ) );
         }
 
         // Developer
@@ -1232,16 +1230,16 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
         if( !msg.IsEmpty() )
         {
             sz      = size;
-            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / m_milsToIu;
             ln      = Mm2mils( 22 );
 
             if( lnMsg > ln )
                 sz.x *= float(ln) / lnMsg;
 
-            pos.x   = ( refx - Mm2mils( 167.5 ) ) * aScalar;
-            pos.y   = ( refy - Mm2mils( 27.5 ) ) * aScalar;
+            pos.x   = ( refx - Mm2mils( 167.5 ) ) * m_milsToIu;
+            pos.y   = ( refy - Mm2mils( 27.5 ) ) * m_milsToIu;
             Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                   sz, aPenWidth, aTextColor ) );
+                                                   sz, m_penSize, aTextColor ) );
             gtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         }
 
@@ -1251,16 +1249,16 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
         if( !msg.IsEmpty() )
         {
             sz      = size;
-            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / m_milsToIu;
             ln      = Mm2mils( 22 );
 
             if( lnMsg > ln )
                 sz.x *= float(ln) / lnMsg;
 
-            pos.x   = ( refx - Mm2mils( 167 ) ) * aScalar;
-            pos.y   = ( refy - Mm2mils( 22.5 ) ) * aScalar;
+            pos.x   = ( refx - Mm2mils( 167 ) ) * m_milsToIu;
+            pos.y   = ( refy - Mm2mils( 22.5 ) ) * m_milsToIu;
             Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                   sz, aPenWidth, aTextColor ) );
+                                                   sz, m_penSize, aTextColor ) );
             gtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         }
 
@@ -1270,16 +1268,16 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
         if( !msg.IsEmpty() )
         {
             sz      = size;
-            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / m_milsToIu;
             ln      = Mm2mils( 22 );
 
             if( lnMsg > ln )
                 sz.x *= float(ln) / lnMsg;
 
-            pos.x   = ( refx - Mm2mils( 167 ) ) * aScalar;
-            pos.y   = ( refy - Mm2mils( 2.5 ) ) * aScalar;
+            pos.x   = ( refx - Mm2mils( 167 ) ) * m_milsToIu;
+            pos.y   = ( refy - Mm2mils( 2.5 ) ) * m_milsToIu;
             Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                   sz, aPenWidth, aTextColor ) );
+                                                   sz, m_penSize, aTextColor ) );
             gtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         }
     }
@@ -1287,10 +1285,10 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
     {
         for( WsItem = &WS_Osn2a_Line1; WsItem != NULL; WsItem = WsItem->Pnext )
         {
-            pos.x   = (refx - WsItem->m_Posx) * aScalar;
-            pos.y   = (refy - WsItem->m_Posy) * aScalar;
-            end.x   = (refx - WsItem->m_Endx) * aScalar;
-            end.y   = (refy - WsItem->m_Endy) * aScalar;
+            pos.x   = (refx - WsItem->m_Posx) * m_milsToIu;
+            pos.y   = (refy - WsItem->m_Posy) * m_milsToIu;
+            end.x   = (refx - WsItem->m_Endx) * m_milsToIu;
+            end.y   = (refy - WsItem->m_Endy) * m_milsToIu;
             msg     = WsItem->m_Legende;
 
             switch( WsItem->m_Type )
@@ -1311,11 +1309,11 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
                 {
                     if( WsItem == &WS_Osn2a_Text1 )
                         Append( new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                       size0_8, aPenWidth,
+                                                       size0_8, m_penSize,
                                                        aLineColor ) );
                     else
                         Append( new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                       size, aPenWidth, aLineColor ) );
+                                                       size, m_penSize, aLineColor ) );
                 }
 
                 break;
@@ -1325,7 +1323,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
                 if( !msg.IsEmpty() )
                 {
                     Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                           size, aPenWidth,
+                                                           size, m_penSize,
                                                            aLineColor ) );
                     gtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
                 }
@@ -1335,12 +1333,12 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
         }
 
         // Sheet number
-        pos.x   = ( refx - Mm2mils( 5 ) ) * aScalar;
-        pos.y   = ( refy - Mm2mils( 4 ) ) * aScalar;
+        pos.x   = ( refx - Mm2mils( 5 ) ) * m_milsToIu;
+        pos.y   = ( refy - Mm2mils( 4 ) ) * m_milsToIu;
         msg.Empty();
         msg << aSheetNumber;
         Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos,
-                                               size, aPenWidth, aLineColor ) );
+                                               size, m_penSize, aLineColor ) );
 
         // Decimal number
         msg = aTitleBlock.GetComment1();
@@ -1348,41 +1346,41 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
         if( !msg.IsEmpty() )
         {
             sz      = size3;
-            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / m_milsToIu;
             ln      = Mm2mils( 109 );
 
             if( lnMsg > ln )
                 sz.x *= float(ln) / lnMsg;
 
-            pos.x   = ( refx - Mm2mils( 65 ) ) * aScalar;
-            pos.y   = ( refy - Mm2mils( 7.5 ) ) * aScalar;
+            pos.x   = ( refx - Mm2mils( 65 ) ) * m_milsToIu;
+            pos.y   = ( refy - Mm2mils( 7.5 ) ) * m_milsToIu;
             Append( new WS_DRAW_ITEM_TEXT( msg, pos,
-                                           sz, aPenWidth, aTextColor ) );
+                                           sz, m_penSize, aTextColor ) );
         }
     }
 
     // Format
-    pos.x   = ( refx - Mm2mils( 23 ) ) * aScalar;
-    pos.y   = ( refy + Mm2mils( 2.5 ) ) * aScalar;
+    pos.x   = ( refx - Mm2mils( 23 ) ) * m_milsToIu;
+    pos.y   = ( refy + Mm2mils( 2.5 ) ) * m_milsToIu;
     msg.Empty();
     msg << aPaperFormat;
     Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos,
-                                           size, aPenWidth, aLineColor ) );
+                                           size, m_penSize, aLineColor ) );
     gtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
 
     // Center - left bottom corner
-    refx    = aLTmargin.x;
-    refy    = aPageSize.y - aRBmargin.y;
+    refx    = m_LTmargin.x;
+    refy    = m_pageSize.y - m_RBmargin.y;
 
     for( WsItem = &WS_DopLeft_Line1; WsItem != NULL; WsItem = WsItem->Pnext )
     {
         if( aSheetNumber > 1 && WsItem == &WS_DopLeft_Line9 ) // Some fields for first page only
             break;
 
-        pos.x   = (refx - WsItem->m_Posx) * aScalar;
-        pos.y   = (refy - WsItem->m_Posy) * aScalar;
-        end.x   = (refx - WsItem->m_Endx) * aScalar;
-        end.y   = (refy - WsItem->m_Endy) * aScalar;
+        pos.x   = (refx - WsItem->m_Posx) * m_milsToIu;
+        pos.y   = (refy - WsItem->m_Posy) * m_milsToIu;
+        end.x   = (refx - WsItem->m_Endx) * m_milsToIu;
+        end.y   = (refy - WsItem->m_Endy) * m_milsToIu;
         msg     = WsItem->m_Legende;
 
         switch( WsItem->m_Type )
@@ -1397,7 +1395,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
             if( !msg.IsEmpty() )
             {
                 Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                       size, aPenWidth, aLineColor ) );
+                                                       size, m_penSize, aLineColor ) );
                 gtext->SetOrientation( TEXT_ORIENT_VERT );
             }
 
@@ -1405,21 +1403,21 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
         }
     }
 
-    if( aPaperFormat == PAGE_INFO::A4 || aPageSize.x > aPageSize.y )    // A4 or Landscape
+    if( aPaperFormat == PAGE_INFO::A4 || m_pageSize.x > m_pageSize.y )    // A4 or Landscape
     {
         // Center - left top corner
-        refx    = aLTmargin.x;
-        refy    = aLTmargin.y;
+        refx    = m_LTmargin.x;
+        refy    = m_LTmargin.y;
 
         for( WsItem = &WS_DopTop_Line1; WsItem != NULL; WsItem = WsItem->Pnext )
         {
             if( aSheetNumber > 1 && WsItem == &WS_DopTop_Line3 ) // Some fields for first page only
                 break;
 
-            pos.x   = (refx + WsItem->m_Posx) * aScalar;
-            pos.y   = (refy + WsItem->m_Posy) * aScalar;
-            end.x   = (refx + WsItem->m_Endx) * aScalar;
-            end.y   = (refy + WsItem->m_Endy) * aScalar;
+            pos.x   = (refx + WsItem->m_Posx) * m_milsToIu;
+            pos.y   = (refy + WsItem->m_Posy) * m_milsToIu;
+            end.x   = (refx + WsItem->m_Endx) * m_milsToIu;
+            end.y   = (refy + WsItem->m_Endy) * m_milsToIu;
             msg     = WsItem->m_Legende;
 
             switch( WsItem->m_Type )
@@ -1442,16 +1440,16 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
         if( !msg.IsEmpty() )
         {
             sz      = size2;
-            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / m_milsToIu;
             ln      = Mm2mils( 69 );
 
             if( lnMsg > ln )
                 sz.x *= float(ln) / lnMsg;
 
-            pos.x   = ( refx + Mm2mils( 35 ) ) * aScalar;
-            pos.y   = ( refy + Mm2mils( 7 ) ) * aScalar;
+            pos.x   = ( refx + Mm2mils( 35 ) ) * m_milsToIu;
+            pos.y   = ( refy + Mm2mils( 7 ) ) * m_milsToIu;
             Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                   sz, aPenWidth, aTextColor ) );
+                                                   sz, m_penSize, aTextColor ) );
             gtext->SetOrientation( 1800.0 );
         }
     }
@@ -1459,18 +1457,18 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
     {
         // Center - right top corner
         // Lines are used from the upper left corner by the change of coordinates
-        refx    = aPageSize.x - aRBmargin.x;
-        refy    = aLTmargin.y;
+        refx    = m_pageSize.x - m_RBmargin.x;
+        refy    = m_LTmargin.y;
 
         for( WsItem = &WS_DopTop_Line1; WsItem != NULL; WsItem = WsItem->Pnext )
         {
             if( aSheetNumber > 1 && WsItem == &WS_DopTop_Line3 ) // Some fields for first page only
                 break;
 
-            pos.x   = (refx - WsItem->m_Posy) * aScalar;
-            pos.y   = (refy + WsItem->m_Posx) * aScalar;
-            end.x   = (refx - WsItem->m_Endy) * aScalar;
-            end.y   = (refy + WsItem->m_Endx) * aScalar;
+            pos.x   = (refx - WsItem->m_Posy) * m_milsToIu;
+            pos.y   = (refy + WsItem->m_Posx) * m_milsToIu;
+            end.x   = (refx - WsItem->m_Endy) * m_milsToIu;
+            end.y   = (refy + WsItem->m_Endx) * m_milsToIu;
             msg     = WsItem->m_Legende;
 
             switch( WsItem->m_Type )
@@ -1493,16 +1491,16 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( wxSize& aPageSize,
         if( !msg.IsEmpty() )
         {
             sz      = size2;
-            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / aScalar;
+            lnMsg   = ReturnGraphicTextWidth( msg, sz.x, false, false ) / m_milsToIu;
             ln      = Mm2mils( 69 );
 
             if( lnMsg > ln )
                 sz.x *= float(ln) / lnMsg;
 
-            pos.x   = ( refx - Mm2mils( 7 ) ) * aScalar;
-            pos.y   = ( refy + Mm2mils( 35 ) ) * aScalar;
+            pos.x   = ( refx - Mm2mils( 7 ) ) * m_milsToIu;
+            pos.y   = ( refy + Mm2mils( 35 ) ) * m_milsToIu;
             Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos,
-                                                   sz, aPenWidth, aTextColor ) );
+                                                   sz, m_penSize, aTextColor ) );
             gtext->SetOrientation( TEXT_ORIENT_VERT );
         }
     }
