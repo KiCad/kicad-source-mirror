@@ -133,6 +133,8 @@ public:
     WS_DRAW_ITEM_LIST()
     {
         m_idx = 0;
+        m_milsToIu = 1.0;
+        m_penSize = 1;
     }
 
     ~WS_DRAW_ITEM_LIST()
