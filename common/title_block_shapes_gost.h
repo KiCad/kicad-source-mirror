@@ -35,8 +35,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#define SIZETEXT        100             // worksheet text size
-#define SIZETEXT_REF    50              // worksheet frame reference text size
+#define TEXTSIZE        100             // worksheet text size
 #define PAS_REF         2000            // reference markings on worksheet frame
                                         // used in worksheet.cpp
 
@@ -974,10 +973,8 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
     wxPoint             pos;
     wxPoint             end;
     int                 refx, refy;
-    wxString            Line;
     Ki_WorkSheetData*   WsItem;
-    wxSize              size( SIZETEXT * m_milsToIu, SIZETEXT * m_milsToIu );
-    wxSize              size_ref( SIZETEXT_REF * m_milsToIu, SIZETEXT_REF * m_milsToIu );
+    wxSize              size( TEXTSIZE * m_milsToIu, TEXTSIZE * m_milsToIu );
     wxString            msg;
     WS_DRAW_ITEM_TEXT*  gtext;
 
@@ -994,10 +991,10 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
     int     lnWosn  = m_penSize * 2;
     int     lnWtonk = m_penSize;
     wxSize  sz;
-    wxSize  size0_8( SIZETEXT * m_milsToIu * 0.8, SIZETEXT * m_milsToIu * 1 );
-    wxSize  size1_5( SIZETEXT * m_milsToIu * 1.5, SIZETEXT * m_milsToIu * 1.5 );
-    wxSize  size2( SIZETEXT * m_milsToIu * 2, SIZETEXT * m_milsToIu * 2 );
-    wxSize  size3( SIZETEXT * m_milsToIu * 3, SIZETEXT * m_milsToIu * 3 );
+    wxSize  size0_8( TEXTSIZE * m_milsToIu * 0.8, TEXTSIZE * m_milsToIu * 1 );
+    wxSize  size1_5( TEXTSIZE * m_milsToIu * 1.5, TEXTSIZE * m_milsToIu * 1.5 );
+    wxSize  size2( TEXTSIZE * m_milsToIu * 2, TEXTSIZE * m_milsToIu * 2 );
+    wxSize  size3( TEXTSIZE * m_milsToIu * 3, TEXTSIZE * m_milsToIu * 3 );
 
     // Draw the border.
     Append( new WS_DRAW_ITEM_RECT(
@@ -1112,9 +1109,9 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
             int             index   = 0;
             wxString        fullMsg = msg;
 
-            do      // Reduce the height of wrapped title until the fit
+            while( 1 )      // Reduce the height of wrapped title until the fit
             {
-                do  // Wrap the title
+                 while( 1 ) // Wrap the title
                 {
                     titleWidth = ReturnGraphicTextWidth( msg, sz.x, false, false ) / m_milsToIu;
 
@@ -1122,7 +1119,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                     {
                         index = 0;
 
-                        do
+                        while( 1 )
                         {
                             msg = msg.Left( msg.Length() - 1 );
 
@@ -1163,7 +1160,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                                     }
                                 }
                             }
-                        } while( 1 );
+                        }
                     }
                     else
                     {
@@ -1180,7 +1177,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
 
                         break;
                     }
-                } while( 1 );
+                }
 
                 if( titleFieldHeight < (int) ( titleHeight * lines.Count() ) )
                 {
@@ -1191,7 +1188,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                 }
                 else
                     break;
-            } while( 1 );
+            }
 
             pos.x   = ( refx - Mm2mils( 85 ) ) * m_milsToIu;
             pos.y   =
