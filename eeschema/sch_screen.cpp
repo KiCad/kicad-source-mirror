@@ -153,7 +153,6 @@ void SCH_SCREEN::Clear()
     m_ScreenNumber = m_NumberOfScreens = 1;
 
     m_titles.Clear();
-    m_titles.SetDate();
 }
 
 
@@ -1452,17 +1451,6 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
     }
 
     return count;
-}
-
-
-void SCH_SCREENS::SetDate( const wxString& aDate )
-{
-    for( size_t i = 0;  i < m_screens.size();  i++ )
-    {
-        TITLE_BLOCK tb = m_screens[i]->GetTitleBlock();
-        tb.SetDate( aDate );
-        m_screens[i]->SetTitleBlock( tb );
-    }
 }
 
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -29,6 +31,8 @@
 #include <wx/statbmp.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
+#include <wx/datectrl.h>
+#include <wx/dateevt.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,17 +44,21 @@
 #define ID_PAGE_LAYOUT_EXAMPLE_SIZER 1004
 #define ID_TEXTCTRL_REVISION 1005
 #define ID_CHECKBOX_REVISION 1006
-#define ID_TEXTCTRL_TITLE 1007
-#define ID_TEXTCTRL_COMPANY 1008
-#define ID_CHECKBOX_COMPANY 1009
-#define ID_TEXTCTRL_COMMENT1 1010
-#define ID_CHECKBOX_COMMENT1 1011
-#define ID_TEXTCTRL_COMMENT2 1012
-#define ID_CHECKBOX_COMMENT2 1013
-#define ID_TEXTCTRL_COMMENT3 1014
-#define ID_CHECKBOX_COMMENT3 1015
-#define ID_TEXTCTRL_COMMENT4 1016
-#define ID_CHECKBOX_COMMENT4 1017
+#define ID_TEXTCTRL_DATE 1007
+#define ID_BTN_APPLY_DATE 1008
+#define ID_PICKER_DATE 1009
+#define ID_CHECKBOX_DATE 1010
+#define ID_TEXTCTRL_TITLE 1011
+#define ID_TEXTCTRL_COMPANY 1012
+#define ID_CHECKBOX_COMPANY 1013
+#define ID_TEXTCTRL_COMMENT1 1014
+#define ID_CHECKBOX_COMMENT1 1015
+#define ID_TEXTCTRL_COMMENT2 1016
+#define ID_CHECKBOX_COMMENT2 1017
+#define ID_TEXTCTRL_COMMENT3 1018
+#define ID_CHECKBOX_COMMENT3 1019
+#define ID_TEXTCTRL_COMMENT4 1020
+#define ID_CHECKBOX_COMMENT4 1021
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_PAGES_SETTINGS_BASE
@@ -71,6 +79,10 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_TextSheetNumber;
 		wxTextCtrl* m_TextRevision;
 		wxCheckBox* m_RevisionExport;
+		wxTextCtrl* m_TextDate;
+		wxButton* m_ApplyDate;
+		wxDatePickerCtrl* m_PickDate;
+		wxCheckBox* m_DateExport;
 		wxTextCtrl* m_TextTitle;
 		wxCheckBox* m_TitleExport;
 		wxTextCtrl* m_TextCompany;
@@ -94,6 +106,8 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		virtual void OnUserPageSizeXTextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUserPageSizeYTextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRevisionTextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDateTextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDateApplyClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTitleTextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckboxTitleClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCompanyTextUpdated( wxCommandEvent& event ) { event.Skip(); }

@@ -738,9 +738,6 @@ void PCB_BASE_FRAME::OnModify()
 {
     GetScreen()->SetModify();
     GetScreen()->SetSave();
-
-    wxASSERT( m_Pcb );
-    m_Pcb->GetTitleBlock().SetDate();
 }
 
 

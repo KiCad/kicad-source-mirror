@@ -491,15 +491,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         }
     }
 
-    // If changes are made, update the board date
-    if( GetScreen()->IsModify() )
-    {
-        TITLE_BLOCK tb = GetTitleBlock();
-
-        tb.SetDate();
-        SetTitleBlock( tb );
-    }
-
     if( !IsWritable( pcbFileName ) )
         return false;
 

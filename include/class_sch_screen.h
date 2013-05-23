@@ -547,14 +547,6 @@ public:
     int ReplaceDuplicateTimeStamps();
 
     /**
-     * Function SetDate
-     * sets the date string for every screen to \a aDate.
-     * @see GetDate()
-     * @param aDate The date string to set for each screen.
-     */
-    void SetDate( const wxString& aDate = GenDate() );
-
-    /**
      * Function DeleteAllMarkers
      * deletes all electronic rules check markers of \a aMarkerType from all the screens in
      * the list.

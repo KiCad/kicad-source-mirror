@@ -352,10 +352,6 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     g_RootSheet->GetScreen()->SetFileName( m_DefaultSchematicFileName );
 
-    TITLE_BLOCK tb = g_RootSheet->GetScreen()->GetTitleBlock();
-    tb.SetDate();
-    g_RootSheet->GetScreen()->SetTitleBlock( tb );
-
     m_CurrentSheet->Clear();
     m_CurrentSheet->Push( g_RootSheet );
 
@@ -560,15 +556,6 @@ void SCH_EDIT_FRAME::OnModify()
 
     if( m_dlgFindReplace == NULL )
         m_foundItems.SetForceSearch();
-
-    SCH_SCREENS s_list;
-
-    // Set the date for each sheet
-    // There are 2 possibilities:
-    // >> change only the current sheet
-    // >> change all sheets.
-    // I believe all sheets in a project must have the same date
-    s_list.SetDate();
 }
 
 

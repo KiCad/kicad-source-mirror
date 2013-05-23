@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -129,7 +129,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	RightColumnSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	wxStaticBoxSizer* BasicInscriptionsSizer;
-	BasicInscriptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Basic Inscriptions") ), wxVERTICAL );
+	BasicInscriptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Title Block Parameters") ), wxVERTICAL );
 	
 	BasicInscriptionsSizer->SetMinSize( wxSize( -1,452 ) ); 
 	wxBoxSizer* SheetInfoSizer;
@@ -153,26 +153,49 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	RevisionSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Revision") ), wxHORIZONTAL );
 	
 	m_TextRevision = new wxTextCtrl( this, ID_TEXTCTRL_REVISION, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextRevision->SetMaxLength( 0 ); 
 	m_TextRevision->SetMinSize( wxSize( 100,-1 ) );
 	
-	RevisionSizer->Add( m_TextRevision, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	RevisionSizer->Add( m_TextRevision, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_RevisionExport = new wxCheckBox( this, ID_CHECKBOX_REVISION, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	RevisionSizer->Add( m_RevisionExport, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	RevisionSizer->Add( m_RevisionExport, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	BasicInscriptionsSizer->Add( RevisionSizer, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* DateSizer;
+	DateSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Issue Date") ), wxHORIZONTAL );
+	
+	m_TextDate = new wxTextCtrl( this, ID_TEXTCTRL_DATE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextDate->SetMaxLength( 0 ); 
+	m_TextDate->SetMinSize( wxSize( 100,-1 ) );
+	
+	DateSizer->Add( m_TextDate, 3, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	
+	m_ApplyDate = new wxButton( this, ID_BTN_APPLY_DATE, _("<-"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	DateSizer->Add( m_ApplyDate, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	
+	m_PickDate = new wxDatePickerCtrl( this, ID_PICKER_DATE, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxDP_DEFAULT );
+	DateSizer->Add( m_PickDate, 2, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	
+	m_DateExport = new wxCheckBox( this, ID_CHECKBOX_DATE, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	DateSizer->Add( m_DateExport, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	
+	
+	BasicInscriptionsSizer->Add( DateSizer, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* TitleSizer;
 	TitleSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Title") ), wxHORIZONTAL );
 	
 	m_TextTitle = new wxTextCtrl( this, ID_TEXTCTRL_TITLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextTitle->SetMaxLength( 0 ); 
 	m_TextTitle->SetMinSize( wxSize( 360,-1 ) );
 	
-	TitleSizer->Add( m_TextTitle, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	TitleSizer->Add( m_TextTitle, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_TitleExport = new wxCheckBox( this, wxID_ANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	TitleSizer->Add( m_TitleExport, 0, wxALL, 5 );
+	TitleSizer->Add( m_TitleExport, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	BasicInscriptionsSizer->Add( TitleSizer, 1, wxEXPAND, 5 );
@@ -181,12 +204,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	CompanySizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Company") ), wxHORIZONTAL );
 	
 	m_TextCompany = new wxTextCtrl( this, ID_TEXTCTRL_COMPANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextCompany->SetMaxLength( 0 ); 
 	m_TextCompany->SetMinSize( wxSize( 360,-1 ) );
 	
-	CompanySizer->Add( m_TextCompany, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	CompanySizer->Add( m_TextCompany, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_CompanyExport = new wxCheckBox( this, ID_CHECKBOX_COMPANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	CompanySizer->Add( m_CompanyExport, 0, wxALL, 5 );
+	CompanySizer->Add( m_CompanyExport, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	BasicInscriptionsSizer->Add( CompanySizer, 1, wxEXPAND, 5 );
@@ -195,12 +219,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	Comment1Sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Comment1") ), wxHORIZONTAL );
 	
 	m_TextComment1 = new wxTextCtrl( this, ID_TEXTCTRL_COMMENT1, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextComment1->SetMaxLength( 0 ); 
 	m_TextComment1->SetMinSize( wxSize( 360,-1 ) );
 	
-	Comment1Sizer->Add( m_TextComment1, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	Comment1Sizer->Add( m_TextComment1, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_Comment1Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT1, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	Comment1Sizer->Add( m_Comment1Export, 0, wxALL, 5 );
+	Comment1Sizer->Add( m_Comment1Export, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	BasicInscriptionsSizer->Add( Comment1Sizer, 1, wxEXPAND, 5 );
@@ -209,12 +234,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	Comment2Sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Comment2") ), wxHORIZONTAL );
 	
 	m_TextComment2 = new wxTextCtrl( this, ID_TEXTCTRL_COMMENT2, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextComment2->SetMaxLength( 0 ); 
 	m_TextComment2->SetMinSize( wxSize( 360,-1 ) );
 	
-	Comment2Sizer->Add( m_TextComment2, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	Comment2Sizer->Add( m_TextComment2, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_Comment2Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT2, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	Comment2Sizer->Add( m_Comment2Export, 0, wxALL, 5 );
+	Comment2Sizer->Add( m_Comment2Export, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	BasicInscriptionsSizer->Add( Comment2Sizer, 1, wxEXPAND, 5 );
@@ -223,12 +249,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	Comment3Sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Comment3") ), wxHORIZONTAL );
 	
 	m_TextComment3 = new wxTextCtrl( this, ID_TEXTCTRL_COMMENT3, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextComment3->SetMaxLength( 0 ); 
 	m_TextComment3->SetMinSize( wxSize( 360,-1 ) );
 	
-	Comment3Sizer->Add( m_TextComment3, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	Comment3Sizer->Add( m_TextComment3, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_Comment3Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT3, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	Comment3Sizer->Add( m_Comment3Export, 0, wxALL, 5 );
+	Comment3Sizer->Add( m_Comment3Export, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	BasicInscriptionsSizer->Add( Comment3Sizer, 1, wxEXPAND, 5 );
@@ -237,12 +264,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	Comment4Sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Comment4") ), wxHORIZONTAL );
 	
 	m_TextComment4 = new wxTextCtrl( this, ID_TEXTCTRL_COMMENT4, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextComment4->SetMaxLength( 0 ); 
 	m_TextComment4->SetMinSize( wxSize( 360,-1 ) );
 	
-	Comment4Sizer->Add( m_TextComment4, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	Comment4Sizer->Add( m_TextComment4, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_Comment4Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT4, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	Comment4Sizer->Add( m_Comment4Export, 0, wxALL, 5 );
+	Comment4Sizer->Add( m_Comment4Export, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	BasicInscriptionsSizer->Add( Comment4Sizer, 1, wxEXPAND, 5 );
@@ -276,6 +304,8 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_TextUserSizeX->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnUserPageSizeXTextUpdated ), NULL, this );
 	m_TextUserSizeY->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnUserPageSizeYTextUpdated ), NULL, this );
 	m_TextRevision->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnRevisionTextUpdated ), NULL, this );
+	m_TextDate->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnDateTextUpdated ), NULL, this );
+	m_ApplyDate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnDateApplyClick ), NULL, this );
 	m_TextTitle->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnTitleTextUpdated ), NULL, this );
 	m_TitleExport->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCheckboxTitleClick ), NULL, this );
 	m_TextCompany->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCompanyTextUpdated ), NULL, this );
@@ -296,6 +326,8 @@ DIALOG_PAGES_SETTINGS_BASE::~DIALOG_PAGES_SETTINGS_BASE()
 	m_TextUserSizeX->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnUserPageSizeXTextUpdated ), NULL, this );
 	m_TextUserSizeY->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnUserPageSizeYTextUpdated ), NULL, this );
 	m_TextRevision->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnRevisionTextUpdated ), NULL, this );
+	m_TextDate->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnDateTextUpdated ), NULL, this );
+	m_ApplyDate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnDateApplyClick ), NULL, this );
 	m_TextTitle->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnTitleTextUpdated ), NULL, this );
 	m_TitleExport->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCheckboxTitleClick ), NULL, this );
 	m_TextCompany->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCompanyTextUpdated ), NULL, this );
