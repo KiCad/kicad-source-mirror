@@ -36,8 +36,6 @@
  */
 
 #define TEXTSIZE        100             // worksheet text size
-#define PAS_REF         2000            // reference markings on worksheet frame
-                                        // used in worksheet.cpp
 
 // Work sheet structure type definitions.
 enum TypeKi_WorkSheetData {

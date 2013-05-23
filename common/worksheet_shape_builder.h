@@ -66,18 +66,21 @@ public:
 class WS_DRAW_ITEM_POLYGON : public WS_DRAW_ITEM_BASE
 {
     int m_penWidth;
+    bool m_fill;
+
 public:
     std::vector <wxPoint> m_Corners;
 public:
-    WS_DRAW_ITEM_POLYGON( wxPoint aStart, wxPoint aEnd,
-                          int aPenWidth, EDA_COLOR_T aColor ) :
+    WS_DRAW_ITEM_POLYGON( bool aFill, int aPenWidth, EDA_COLOR_T aColor ) :
         WS_DRAW_ITEM_BASE( wsg_poly, aColor )
     {
         m_penWidth = aPenWidth;
+        m_fill = aFill;
     }
 
     // Accessors:
     int GetPenWidth() { return m_penWidth; }
+    bool IsFilled() { return m_fill; }
 };
 
 // This class draws a not filled rectangle with thick segment
@@ -171,7 +174,7 @@ public:
     }
 
     /* Function SetMargins
-     *  Set the The left top margin and the right bottom margin
+     * Set the left top margin and the right bottom margin
      * of the page layout
      * @param aLTmargin The left top margin of the page layout.
      * @param aRBmargin The right bottom margin of the page layout.
@@ -219,8 +222,8 @@ public:
      * @param aTitleBlock The sheet title block, for basic inscriptions.
      * @param aSheetCount The number of sheets (for basic inscriptions).
      * @param aSheetNumber The sheet number (for basic inscriptions).
-     * @param aLineColor The color for drawing.
-     * @param aTextColor The color for inscriptions.
+     * @param aLineColor The color for drawing and fixed text.
+     * @param aTextColor The color for user inscriptions.
      */
     void BuildWorkSheetGraphicList( const wxString& aPaperFormat,
                                     const wxString& aFileName,
