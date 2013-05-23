@@ -222,21 +222,19 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
     throw( IO_ERROR )
 {
     // Don't write the title block information if there is nothing to write.
-    if(  !m_title.IsEmpty() || /* !m_date.IsEmpty() || */ !m_revision.IsEmpty()
+    if(  !m_title.IsEmpty() || !m_date.IsEmpty() || !m_revision.IsEmpty()
       || !m_company.IsEmpty() || !m_comment1.IsEmpty() || !m_comment2.IsEmpty()
       || !m_comment3.IsEmpty() || !m_comment4.IsEmpty()  )
     {
-        aFormatter->Print( aNestLevel, "(title_block \n" );
+        aFormatter->Print( aNestLevel, "(title_block\n" );
 
         if( !m_title.IsEmpty() )
             aFormatter->Print( aNestLevel+1, "(title %s)\n",
                                aFormatter->Quotew( m_title ).c_str() );
 
-        /* version control users were complaining, see mailing list.
         if( !m_date.IsEmpty() )
             aFormatter->Print( aNestLevel+1, "(date %s)\n",
                                aFormatter->Quotew( m_date ).c_str() );
-        */
 
         if( !m_revision.IsEmpty() )
             aFormatter->Print( aNestLevel+1, "(rev %s)\n",

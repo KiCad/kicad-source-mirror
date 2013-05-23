@@ -71,9 +71,6 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     if( aResetAnnotation )
         DeleteAnnotation( !aAnnotateSchematic );
 
-    // Update the screen date.
-    screens.SetDate( GenDate() );
-
     // Set sheet number and number of sheets.
     SetSheetNumberAndCount();
 

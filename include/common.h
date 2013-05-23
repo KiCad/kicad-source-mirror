@@ -621,18 +621,20 @@ double RoundTo0( double x, double precision );
 wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter );
 
 /**
- * Function GenDate
- * @return A wxString object containing the date in the format "day month year" like
- *         "23 jun 2005".
- */
-wxString GenDate();
-
-/**
  * Function GetRunningMicroSecs
  * returns an ever increasing indication of elapsed microseconds.  Use this
  * by computing differences between two calls.
  * @author Dick Hollenbeck
  */
 unsigned GetRunningMicroSecs();
+
+/** 
+ * Formats a wxDateTime using the long date format (on wx 2.9) or
+ * an hardcoded format in wx 2.8; the idea is to avoid like the plague
+ * the numeric-only date formats: it's difficult to discriminate between
+ * dd/mm/yyyy and mm/dd/yyyy. The output is meant for user consumption
+ * so no attempt to parse it should be done 
+ */
+wxString FormatDateLong( const wxDateTime &aDate );
 
 #endif  // INCLUDE__COMMON_H_
