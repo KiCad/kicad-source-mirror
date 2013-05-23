@@ -12,6 +12,7 @@ class EDA_DRAW_PANEL;
 class TITLE_BLOCK;
 class PAGE_INFO;
 
+#define PAS_REF  2000    // Pitch (in mils) of reference locations in worksheet
 
 struct Ki_WorkSheetData
 {

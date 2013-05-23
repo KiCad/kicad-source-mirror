@@ -39,7 +39,6 @@
 #define GRID_REF_W                      70      // height of the band reference grid
 #define TEXTSIZE                        60      // worksheet text size
 #define FRMREF_TXTSIZE                  50      // worksheet frame reference text size
-#define PAS_REF                         2000    // reference markings on worksheet frame
 #define VARIABLE_BLOCK_START_POSITION   (TEXTSIZE * 10)
 
 // The coordinates below are relative to the bottom right corner of page and
@@ -323,7 +322,8 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
 
     // lower right corner
     wxPoint currpos;
-    currpos  = m_pageSize - m_RBmargin;
+    currpos.x  = m_pageSize.x - m_RBmargin.x;
+    currpos.y  = m_pageSize.y - m_RBmargin.y;
 
     // Draw the border.
     int ii, jj, ipas, gxpas, gypas;

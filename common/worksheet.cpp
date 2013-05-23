@@ -123,7 +123,8 @@ void DrawPageLayout( wxDC* aDC, EDA_DRAW_PANEL * aCanvas,
                 WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
                 GRPoly( aCanvas ? aCanvas->GetClipBox() : NULL, aDC,
                         poly->m_Corners.size(), &poly->m_Corners[0],
-                        true, poly->GetPenWidth(),
+                        poly->IsFilled() ? FILLED_SHAPE : NO_FILL,
+                        poly->GetPenWidth(),
                         poly->GetColor(), poly->GetColor() );
             }
             break;
