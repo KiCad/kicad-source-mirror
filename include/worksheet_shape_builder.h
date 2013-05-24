@@ -46,6 +46,7 @@ class WS_DRAW_ITEM_LINE : public WS_DRAW_ITEM_BASE
     wxPoint m_start;    // start point of line/rect
     wxPoint m_end;      // end point
     int     m_penWidth;
+
 public:
     WS_DRAW_ITEM_LINE( wxPoint aStart, wxPoint aEnd,
                        int aPenWidth, EDA_COLOR_T aColor ) :
@@ -118,8 +119,10 @@ public:
 };
 
 /*
- * this class stores the list of graphic items to draw/plot
- * the title block and frame references
+ * this class stores the list of graphic items:
+ * rect, lines, polygons and texts to draw/plot
+ * the title block and frame references, and parameters to
+ * draw/plot them
  */
 class WS_DRAW_ITEM_LIST
 {
@@ -131,6 +134,9 @@ class WS_DRAW_ITEM_LIST
     double   m_milsToIu;        // the scalar to convert pages units ( mils)
                                 // to draw/plot units.
     int      m_penSize;         // The line width for drawings.
+    int      m_sheetNumber;     // the value of the sheet number, for basic inscriptions
+    int      m_sheetCount;      // the value of the number of sheets, in schematic
+                                // for basic inscriptions, in schematic
 
 public:
     WS_DRAW_ITEM_LIST()
@@ -138,6 +144,8 @@ public:
         m_idx = 0;
         m_milsToIu = 1.0;
         m_penSize = 1;
+        m_sheetNumber = 1;
+        m_sheetCount = 1;
     }
 
     ~WS_DRAW_ITEM_LIST()
@@ -171,6 +179,26 @@ public:
     void SetPageSize( const wxSize& aPageSize )
     {
         m_pageSize = aPageSize;
+    }
+
+    /**
+     * Function SetSheetNumber
+     * Set the value of the sheet number, for basic inscriptions
+     * @param aSheetNumber the number to display.
+     */
+    void SetSheetNumber( int aSheetNumber )
+    {
+        m_sheetNumber = aSheetNumber;
+    }
+
+    /**
+     * Function SetSheetCount
+     * Set the value of the count of sheets, for basic inscriptions
+     * @param aSheetCount the number of esheets to display.
+     */
+    void SetSheetCount( int aSheetCount )
+    {
+        m_sheetCount = aSheetCount;
     }
 
     /* Function SetMargins
@@ -220,8 +248,6 @@ public:
      * @param aPaperFormat The paper size type, for basic inscriptions.
      * @param aFileName The file name, for basic inscriptions.
      * @param aTitleBlock The sheet title block, for basic inscriptions.
-     * @param aSheetCount The number of sheets (for basic inscriptions).
-     * @param aSheetNumber The sheet number (for basic inscriptions).
      * @param aLineColor The color for drawing and fixed text.
      * @param aTextColor The color for user inscriptions.
      */
@@ -229,7 +255,6 @@ public:
                                     const wxString& aFileName,
                                     const wxString& aSheetPathHumanReadable,
                                     const TITLE_BLOCK& aTitleBlock,
-                                    int aSheetCount, int aSheetNumber,
                                     EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor );
 };
 

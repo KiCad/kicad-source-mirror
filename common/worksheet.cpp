@@ -33,27 +33,14 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <common.h>
-#include <macros.h>
 #include <class_drawpanel.h>
 #include <class_base_screen.h>
 #include <drawtxt.h>
-#include <confirm.h>
 #include <wxstruct.h>
-#include <appl_wxstruct.h>
-#include <kicad_string.h>
 #include <worksheet.h>
 #include <class_title_block.h>
-#include <build_version.h>
 
-// include data which defines the shape of a title block
-// and frame references
 #include <worksheet_shape_builder.h>
-
-#if defined(KICAD_GOST)
-#include "title_block_shapes_gost.h"
-#else
-#include "title_block_shapes.h"
-#endif
 
 void DrawPageLayout( wxDC* aDC, EDA_DRAW_PANEL * aCanvas,
                      const PAGE_INFO& aPageInfo,
@@ -76,11 +63,12 @@ void DrawPageLayout( wxDC* aDC, EDA_DRAW_PANEL * aCanvas,
     drawList.SetPenSize( aPenWidth );
     drawList.SetMilsToIUfactor( aScalar );
     drawList.SetPageSize( pagesize );
+    drawList.SetSheetNumber( aSheetNumber );
+    drawList.SetSheetCount( aSheetCount );
 
     drawList.BuildWorkSheetGraphicList(
                                aPaperFormat, aFullSheetName, aFileName,
-                               aTitleBlock, aSheetCount, aSheetNumber,
-                               aLineColor, aTextColor );
+                               aTitleBlock, aLineColor, aTextColor );
 
     // Draw item list
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item;

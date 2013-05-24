@@ -38,7 +38,7 @@
 #include <sch_junction.h>
 
 
-int SCH_JUNCTION::m_symbolSize = 50;    // Default diameter of the junction symbol
+int SCH_JUNCTION::m_symbolSize = 40;    // Default diameter of the junction symbol
 
 SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_JUNCTION_T )
