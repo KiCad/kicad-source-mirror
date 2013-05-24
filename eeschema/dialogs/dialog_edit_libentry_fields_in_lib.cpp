@@ -1,6 +1,28 @@
-/*******************************************************************************/
-/*	library editor: edition of fields of lib entries (components in libraries) */
-/*******************************************************************************/
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2011-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 
 #include <algorithm>
 
@@ -29,31 +51,29 @@ static int s_SelectedRow;
 #define COLUMN_FIELD_NAME   0
 #define COLUMN_TEXT         1
 
-/*****************************************************************************************/
 class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB : public DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
-/*****************************************************************************************/
 {
-private:
-    LIB_EDIT_FRAME*    m_parent;
-    LIB_COMPONENT*     m_libEntry;
-    bool               m_skipCopyFromPanel;
-
-    /// a copy of the edited component's LIB_FIELDs
-    std::vector <LIB_FIELD> m_FieldsBuf;
-
 public:
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( LIB_EDIT_FRAME* aParent, LIB_COMPONENT* aLibEntry );
-    ~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB();
+    //~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB() {}
 
 private:
-
     // Events handlers:
     void OnInitDialog( wxInitDialogEvent& event );
 
     void OnListItemDeselected( wxListEvent& event );
     void OnListItemSelected( wxListEvent& event );
     void addFieldButtonHandler( wxCommandEvent& event );
+
+    /**
+     * Function deleteFieldButtonHandler
+     * deletes a field.
+     * MANDATORY_FIELDS cannot be deleted.
+     * If a field is empty, it is removed.
+     * if not empty, the text is removed.
+     */
     void deleteFieldButtonHandler( wxCommandEvent& event );
+
     void moveUpButtonHandler( wxCommandEvent& event );
     void OnCancelButtonClick( wxCommandEvent& event );
     void OnOKButtonClick( wxCommandEvent& event );
@@ -102,6 +122,13 @@ private:
         for( unsigned ii = MANDATORY_FIELDS;  ii<m_FieldsBuf.size(); ii++ )
             setRowItem( ii, m_FieldsBuf[ii] );
     }
+
+    LIB_EDIT_FRAME*    m_parent;
+    LIB_COMPONENT*     m_libEntry;
+    bool               m_skipCopyFromPanel;
+
+    /// a copy of the edited component's LIB_FIELDs
+    std::vector <LIB_FIELD> m_FieldsBuf;
 };
 
 
@@ -126,12 +153,10 @@ void LIB_EDIT_FRAME::InstallFieldsEditorDialog( wxCommandEvent& event )
 }
 
 
-/***********************************************************************/
 DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB(
     LIB_EDIT_FRAME* aParent,
     LIB_COMPONENT*  aLibEntry ) :
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE( aParent )
-/***********************************************************************/
 {
     m_parent   = aParent;
     m_libEntry = aLibEntry;
@@ -141,16 +166,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB(
 }
 
 
-/***********************************************************************/
-DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB()
-/***********************************************************************/
-{
-}
-
-
-/**********************************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnInitDialog( wxInitDialogEvent& event )
-/**********************************************************************************/
 {
     m_skipCopyFromPanel = false;
     wxListItem columnLabel;
@@ -174,9 +190,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnInitDialog( wxInitDialogEvent& event 
 }
 
 
-/**********************************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnListItemDeselected( wxListEvent& event )
-/**********************************************************************************/
 {
     if( !m_skipCopyFromPanel )
     {
@@ -186,9 +200,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnListItemDeselected( wxListEvent& even
 }
 
 
-/**********************************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnListItemSelected( wxListEvent& event )
-/**********************************************************************************/
 {
     // remember the selected row, statically
     s_SelectedRow = event.GetIndex();
@@ -197,23 +209,19 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnListItemSelected( wxListEvent& event 
 }
 
 
-/***********************************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnCancelButtonClick( wxCommandEvent& event )
-/***********************************************************************************/
 {
     EndModal( 1 );
 }
 
 
-/**********************************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event )
-/**********************************************************************************/
 {
     if( !copyPanelToSelectedField() )
         return;
 
     // test if reference prefix is acceptable
-    if( ! SCH_COMPONENT::IsReferenceStringValid( m_FieldsBuf[REFERENCE].GetText() ) )
+    if( !SCH_COMPONENT::IsReferenceStringValid( m_FieldsBuf[REFERENCE].GetText() ) )
     {
         DisplayError( NULL, _( "Illegal reference prefix. A reference must start by a letter" ) );
         return;
@@ -230,16 +238,18 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
 
     if( m_libEntry->HasAlias( newvalue ) && !m_libEntry->GetAlias( newvalue )->IsRoot() )
     {
-        wxString msg;
-        msg.Printf( _( "A new name is entered for this component\n\
-An alias %s already exists!\nCannot update this component" ),
-                    GetChars( newvalue ) );
+        wxString msg = wxString::Format(
+            _( "A new name is entered for this component\n"
+               "An alias %s already exists!\n"
+               "Cannot update this component" ),
+            GetChars( newvalue )
+            );
         DisplayError( this, msg );
         return;
     }
     /* End unused code */
 
-    /* save old cmp in undo list */
+    // save old cmp in undo list
     m_parent->SaveCopyInUndoList( m_libEntry, IS_CHANGED );
 
     // delete any fields with no name or no value before we copy all of m_FieldsBuf
@@ -298,14 +308,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::addFieldButtonHandler( wxCommandEvent& 
 }
 
 
-/*****************************************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::deleteFieldButtonHandler( wxCommandEvent& event )
-/*****************************************************************************************/
-/* Delete a field.
- * MANDATORY_FIELDS cannot be deleted.
- * If a field is empty, it is removed.
- * if not empty, the text is removed.
- */
 {
     unsigned fieldNdx = getSelectedFieldNdx();
 
@@ -342,9 +345,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::deleteFieldButtonHandler( wxCommandEven
 }
 
 
-/*************************************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& event )
-/*************************************************************************************/
 {
     unsigned fieldNdx = getSelectedFieldNdx();
 
@@ -378,13 +379,11 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& e
 }
 
 
-/****************************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setSelectedFieldNdx( int aFieldNdx )
-/****************************************************************************/
 {
-    /* deselect old selection, but I think this is done by single selection flag within fieldListCtrl
-     *  fieldListCtrl->SetItemState( s_SelectedRow, 0, wxLIST_STATE_SELECTED|wxLIST_STATE_FOCUSED);
-     */
+    // deselect old selection, but I think this is done by single selection
+    // flag within fieldListCtrl
+    // fieldListCtrl->SetItemState( s_SelectedRow, 0, wxLIST_STATE_SELECTED|wxLIST_STATE_FOCUSED);
 
     if( aFieldNdx >= (int) m_FieldsBuf.size() )
         aFieldNdx = m_FieldsBuf.size() - 1;
@@ -552,9 +551,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
 }
 
 
-/***********************************************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setRowItem( int aFieldNdx, const LIB_FIELD& aField )
-/***********************************************************************************************/
 {
     wxASSERT( aFieldNdx >= 0 );
 
@@ -577,9 +574,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setRowItem( int aFieldNdx, const LIB_FI
 }
 
 
-/****************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
-/****************************************************************/
 {
     unsigned fieldNdx = getSelectedFieldNdx();
 
@@ -682,9 +677,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 }
 
 
-/*****************************************************************/
 bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
-/*****************************************************************/
 {
     unsigned fieldNdx = getSelectedFieldNdx();
 

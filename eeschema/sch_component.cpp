@@ -62,7 +62,7 @@ static LIB_COMPONENT* DummyCmp;
  * convert a wxString to UTF8 and replace any control characters with a ~,
  * where a control character is one of the first ASCII values up to ' ' 32d.
  */
-std::string toUTFTildaText( const wxString& txt )
+static std::string toUTFTildaText( const wxString& txt )
 {
     std::string ret = TO_UTF8( txt );
 
@@ -957,8 +957,8 @@ bool SCH_COMPONENT::Save( FILE* f ) const
 
     static wxString delimiters( wxT( " " ) );
 
-    //this is redundant with the AR entries below, but it makes the
-    //files backwards-compatible.
+    // this is redundant with the AR entries below, but it makes the
+    // files backwards-compatible.
     if( m_PathsAndReferences.GetCount() > 0 )
     {
         reference_fields = wxStringTokenize( m_PathsAndReferences[0], delimiters );
@@ -1031,9 +1031,8 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     }
 
     // Fixed fields:
-    // Save fixed fields even they are non blank,
-    // because the visibility, size and orientation are set from libaries
-    // mainly for footprint names, for those who do not use CvPcb
+    // Save mandatory fields even if they are blank,
+    // because the visibility, size and orientation are set from libary editor.
     for( unsigned i = 0;  i<MANDATORY_FIELDS;  ++i )
     {
         SCH_FIELD* fld = GetField( i );
@@ -1085,10 +1084,8 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         newfmt = 1;
 
-        if( !aLine.ReadLine() )
+        if( !(line = aLine.ReadLine()) )
             return true;
-
-        line = aLine.Line();
     }
 
     if( sscanf( &line[1], "%s %s", name1, name2 ) != 2 )
@@ -1178,10 +1175,8 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
      */
     for( ; ; )
     {
-        if( !aLine.ReadLine() )
+        if( !(line = aLine.ReadLine()) )
             return false;
-
-        line = aLine.Line();
 
         if( line[0] == 'U' )
         {
@@ -1354,8 +1349,8 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         return false;
     }
 
-    if( !aLine.ReadLine() ||
-        sscanf( ((char*)aLine), "%d %d %d %d",
+    if( !(line = aLine.ReadLine()) ||
+        sscanf( line, "%d %d %d %d",
                 &m_transform.x1,
                 &m_transform.y1,
                 &m_transform.x2,
@@ -1368,10 +1363,8 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( newfmt )
     {
-        if( !aLine.ReadLine() )
+        if( !(line = aLine.ReadLine()) )
             return false;
-
-        line = aLine.Line();
 
         if( strnicmp( "$End", line, 4 ) != 0 )
         {

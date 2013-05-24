@@ -623,7 +623,7 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
     LIB_FIELDS fields;
     GetFields( fields );
 
-    // Fixed fields:
+    // Mandatory fields:
     // may have their own save policy so there is a separate loop for them.
     // Empty fields are saved, because the user may have set visibility,
     // size and orientation
