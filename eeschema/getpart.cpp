@@ -76,20 +76,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
     return cmpname;
 }
 
-/*
- * Function SelectComponentFromLib
- * Calls the library viewer to select component to import into schematic.
- * if the library viewer is currently running, it is closed and reopened
- * in modal mode.
- * param aLibname = the lib name or an empty string.
- *     if aLibname is empty, the full list of libraries is used
- * param aList = list of previously loaded components
- * param aUseLibBrowser = bool to call the library viewer to select the component
- * param aUnit = a point to int to return the selected unit (if any)
- * param aConvert = a point to int to return the selected De Morgan shape (if any)
- *
- * return the component name
- */
+
 wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
                                                      wxArrayString&  aHistoryList,
                                                      bool            aUseLibBrowser,
@@ -205,11 +192,6 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
 }
 
 
-/*
- * load from a library and place a component
- *  if libname != "", search in lib "libname"
- *  else search in all loaded libs
- */
 SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
                                                const wxString& aLibname,
                                                wxArrayString&  aHistoryList,
@@ -260,8 +242,10 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
     component->GetField( VALUE )->SetText( Name );
 
     MSG_PANEL_ITEMS items;
+
     component->SetCurrentSheetPath( &GetCurrentSheet() );
     component->GetMsgPanelInfo( items );
+
     SetMsgPanel( items );
     component->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     component->SetFlags( IS_NEW );
@@ -271,9 +255,6 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
 }
 
 
-/*
- * Routine to rotate and mirror a component.
- */
 void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 {
     SCH_SCREEN* screen = GetScreen();

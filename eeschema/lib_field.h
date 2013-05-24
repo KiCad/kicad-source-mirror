@@ -47,7 +47,7 @@
  *  0 = REFERENCE
  *  1 = VALUE
  *  2 = FOOTPRINT (default Footprint)
- *  3 = DOCUMENTATION (user doc link)
+ *  3 = DATASHEET (user doc link)
  *
  *  others = free fields
  * </p>
