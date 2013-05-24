@@ -80,7 +80,7 @@
  * %% = replaced by %
  * %K = Kicad version
  * %Z = paper format name (A4, USLetter)
- * %N = company name
+ * %Y = company name
  * %D = date
  * %R = revision
  * %S = sheet number
@@ -223,7 +223,7 @@ Ki_WorkSheetData        WS_Company =
     &WS_FullSheetName,
     BLOCK_COMMENT_X,BLOCK_COMPANY_Y,
     0,                             0,
-    wxT("%N"),          // Company name
+    wxT("%Y"),          // Company name
     USE_BOLD | SET_UPPER_LIMIT | USE_TEXT_COLOR
 };
 
@@ -524,14 +524,14 @@ wxString BuildFullText( const wxString& aTextbase,
      * %% = replaced by %
      * %K = Kicad version
      * %Z = paper format name (A4, USLetter)
-     * %N = company name
+     * %Y = company name
      * %D = date
      * %R = revision
      * %S = sheet number
      * %N = number of sheets
      * %Cx = comment (x = 0 to 9 to identify the comment)
      * %F = filename
-     * %P = sheet path or sheet full name
+     * %P = sheet path (sheet full name)
      * %T = title
      */
 
@@ -546,7 +546,7 @@ wxString BuildFullText( const wxString& aTextbase,
         if( ii >= aTextbase.Len() )
             break;
 
-        wxChar format = aTextbase[ii++];
+        wxChar format = aTextbase[ii];
         switch( format )
         {
             case '%':
@@ -570,9 +570,12 @@ wxString BuildFullText( const wxString& aTextbase,
                 msg += aPaperFormat;
                 break;
 
-
             case 'S':
                 msg << aSheetNumber;
+                break;
+
+            case 'N':
+                msg << aSheetCount;
                 break;
 
             case 'F':
@@ -586,7 +589,7 @@ wxString BuildFullText( const wxString& aTextbase,
                 msg += aSheetPathHumanReadable;
                 break;
 
-            case 'N':
+            case 'Y':
                 msg = aTitleBlock.GetCompany();
                 break;
 
@@ -595,7 +598,7 @@ wxString BuildFullText( const wxString& aTextbase,
                 break;
 
             case 'C':
-                format = aTextbase[ii++];
+                format = aTextbase[++ii];
                 switch( format )
                 {
                 case '1':
