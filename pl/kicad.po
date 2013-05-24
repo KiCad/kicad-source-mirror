@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-22 19:50+0100\n"
-"PO-Revision-Date: 2013-05-22 19:55+0100\n"
+"POT-Creation-Date: 2013-05-24 20:02+0100\n"
+"PO-Revision-Date: 2013-05-24 20:04+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -152,7 +152,7 @@ msgstr ""
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1018 pcbnew/moduleframe.cpp:602
+#: eeschema/schframe.cpp:1005 pcbnew/moduleframe.cpp:602
 #: pcbnew/pcbframe.cpp:809 cvpcb/cvframe.cpp:717
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
@@ -3238,7 +3238,7 @@ msgstr "Dodaj symbol"
 msgid "Add power"
 msgstr "Dodaj port zasilania"
 
-#: eeschema/schframe.cpp:433 pcbnew/pcbframe.cpp:498
+#: eeschema/schframe.cpp:429 pcbnew/pcbframe.cpp:498
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -3249,35 +3249,35 @@ msgstr ""
 "<%s>\n"
 "przed zamknięciem?"
 
-#: eeschema/schframe.cpp:597
+#: eeschema/schframe.cpp:584
 msgid "Draw wires and buses in any direction"
 msgstr "Rysowanie połączeń i magistral w dowolnym kierunku"
 
-#: eeschema/schframe.cpp:598
+#: eeschema/schframe.cpp:585
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Rysowanie połączeń i magistral tylko w pionie i poziomie"
 
-#: eeschema/schframe.cpp:607
+#: eeschema/schframe.cpp:594
 msgid "Do not show hidden pins"
 msgstr "Nie pokazuj ukrytych pinów"
 
-#: eeschema/schframe.cpp:608 eeschema/tool_sch.cpp:298
+#: eeschema/schframe.cpp:595 eeschema/tool_sch.cpp:298
 msgid "Show hidden pins"
 msgstr "Pokaż ukryte piny"
 
-#: eeschema/schframe.cpp:652
+#: eeschema/schframe.cpp:639
 msgid "BOM Howto"
 msgstr "BOM Jak wykonać"
 
-#: eeschema/schframe.cpp:717
+#: eeschema/schframe.cpp:704
 msgid "Schematic"
 msgstr "Schemat"
 
-#: eeschema/schframe.cpp:787
+#: eeschema/schframe.cpp:774
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1021 cvpcb/cvframe.cpp:722
+#: eeschema/schframe.cpp:1008 cvpcb/cvframe.cpp:722
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -5427,7 +5427,7 @@ msgstr "Szerokość:"
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:52
 #: common/common.cpp:195 common/common.cpp:245 common/drawframe.cpp:451
-#: common/dialogs/dialog_page_settings.cpp:407
+#: common/dialogs/dialog_page_settings.cpp:424
 #: pcb_calculator/UnitSelector.cpp:14
 msgid "mm"
 msgstr "mm"
@@ -6101,19 +6101,19 @@ msgstr "Pokaż pola lutownicze jako zarys"
 msgid "Show pads in fill mode"
 msgstr "Pokaż pola lutownicze jako pełne"
 
-#: pcbnew/basepcbframe.cpp:759
+#: pcbnew/basepcbframe.cpp:756
 msgid "Grid:"
 msgstr "Siatka:"
 
-#: pcbnew/basepcbframe.cpp:786 common/zoom.cpp:259
+#: pcbnew/basepcbframe.cpp:783 common/zoom.cpp:259
 msgid "User Grid"
 msgstr "Siatka użytkownika"
 
-#: pcbnew/basepcbframe.cpp:803 pcbnew/dialogs/dialog_plot_base.cpp:151
+#: pcbnew/basepcbframe.cpp:800 pcbnew/dialogs/dialog_plot_base.cpp:151
 msgid "Auto"
 msgstr "Dopasuj powiększenie"
 
-#: pcbnew/basepcbframe.cpp:808
+#: pcbnew/basepcbframe.cpp:805
 msgid "Zoom "
 msgstr "Powiększenie "
 
@@ -7370,11 +7370,11 @@ msgstr "Plik bez nazwy"
 msgid "Save Board File As"
 msgstr "Zapisz plik PCB jako"
 
-#: pcbnew/files.cpp:523
+#: pcbnew/files.cpp:514
 msgid "Warning: unable to create backup file "
 msgstr "Ostrzeżenie: Nie można utworzyć pliku kopii zapasowej "
 
-#: pcbnew/files.cpp:556
+#: pcbnew/files.cpp:547
 #, c-format
 msgid ""
 "Error saving board.\n"
@@ -7383,19 +7383,19 @@ msgstr ""
 "Błąd podczas zapisywania płytki.\n"
 "%s"
 
-#: pcbnew/files.cpp:558
+#: pcbnew/files.cpp:549
 msgid "Save Board File"
 msgstr "Zapisz plik PCB"
 
-#: pcbnew/files.cpp:587
+#: pcbnew/files.cpp:578
 msgid "Backup file: "
 msgstr "Plik kopii zapasowej: "
 
-#: pcbnew/files.cpp:591
+#: pcbnew/files.cpp:582
 msgid "Wrote board file: "
 msgstr "Zapisano plik płytki: "
 
-#: pcbnew/files.cpp:593
+#: pcbnew/files.cpp:584
 msgid "Failed to create "
 msgstr "Błąd przy tworzeniu "
 
@@ -15888,7 +15888,7 @@ msgstr "Znacznik"
 msgid "\""
 msgstr "\""
 
-#: common/common.cpp:218 common/dialogs/dialog_page_settings.cpp:407
+#: common/common.cpp:218 common/dialogs/dialog_page_settings.cpp:424
 msgid "inches"
 msgstr "cale"
 
@@ -16478,13 +16478,13 @@ msgstr "USLedger 11x17in"
 msgid "User (Custom)"
 msgstr "Użytkownika"
 
-#: common/dialogs/dialog_page_settings.cpp:258
-#: common/dialogs/dialog_page_settings.cpp:645
+#: common/dialogs/dialog_page_settings.cpp:260
+#: common/dialogs/dialog_page_settings.cpp:666
 #: common/dialogs/dialog_page_settings_base.cpp:47
 msgid "Portrait"
 msgstr "Pionowo"
 
-#: common/dialogs/dialog_page_settings.cpp:403
+#: common/dialogs/dialog_page_settings.cpp:420
 #, c-format
 msgid ""
 "Selected custom paper size\n"
@@ -16497,11 +16497,11 @@ msgstr ""
 "%.1f - %.1f %s!\n"
 "Chcesz wybrać inny rozmiar papieru?"
 
-#: common/dialogs/dialog_page_settings.cpp:409
+#: common/dialogs/dialog_page_settings.cpp:426
 msgid "Warning!"
 msgstr "Ostrzeżenie!"
 
-#: common/dialogs/dialog_page_settings.cpp:647
+#: common/dialogs/dialog_page_settings.cpp:668
 #: common/dialogs/dialog_page_settings_base.cpp:47
 msgid "Landscape"
 msgstr "Poziomo"
@@ -16535,8 +16535,8 @@ msgid "Layout Preview"
 msgstr "Podgląd"
 
 #: common/dialogs/dialog_page_settings_base.cpp:132
-msgid "Basic Inscriptions"
-msgstr "Opis"
+msgid "Title Block Parameters"
+msgstr "Parametry tabliczki tytułowej"
 
 #: common/dialogs/dialog_page_settings_base.cpp:138
 #, c-format
@@ -16552,37 +16552,46 @@ msgstr "Numer arkusza: %d"
 msgid "Revision"
 msgstr "Rewizja"
 
-#: common/dialogs/dialog_page_settings_base.cpp:160
-#: common/dialogs/dialog_page_settings_base.cpp:174
-#: common/dialogs/dialog_page_settings_base.cpp:188
-#: common/dialogs/dialog_page_settings_base.cpp:202
-#: common/dialogs/dialog_page_settings_base.cpp:216
-#: common/dialogs/dialog_page_settings_base.cpp:230
-#: common/dialogs/dialog_page_settings_base.cpp:244
+#: common/dialogs/dialog_page_settings_base.cpp:161
+#: common/dialogs/dialog_page_settings_base.cpp:182
+#: common/dialogs/dialog_page_settings_base.cpp:197
+#: common/dialogs/dialog_page_settings_base.cpp:212
+#: common/dialogs/dialog_page_settings_base.cpp:227
+#: common/dialogs/dialog_page_settings_base.cpp:242
+#: common/dialogs/dialog_page_settings_base.cpp:257
+#: common/dialogs/dialog_page_settings_base.cpp:272
 msgid "Export to other sheets"
 msgstr "Przenieś na inne arkusze"
 
-#: common/dialogs/dialog_page_settings_base.cpp:167
+#: common/dialogs/dialog_page_settings_base.cpp:168
+msgid "Issue Date"
+msgstr "Data wydania"
+
+#: common/dialogs/dialog_page_settings_base.cpp:176
+msgid "<-"
+msgstr "<-"
+
+#: common/dialogs/dialog_page_settings_base.cpp:189
 msgid "Title"
 msgstr "Tytuł"
 
-#: common/dialogs/dialog_page_settings_base.cpp:181
+#: common/dialogs/dialog_page_settings_base.cpp:204
 msgid "Company"
 msgstr "Firma"
 
-#: common/dialogs/dialog_page_settings_base.cpp:195
+#: common/dialogs/dialog_page_settings_base.cpp:219
 msgid "Comment1"
 msgstr "Komentarz 1"
 
-#: common/dialogs/dialog_page_settings_base.cpp:209
+#: common/dialogs/dialog_page_settings_base.cpp:234
 msgid "Comment2"
 msgstr "Komentarz 2"
 
-#: common/dialogs/dialog_page_settings_base.cpp:223
+#: common/dialogs/dialog_page_settings_base.cpp:249
 msgid "Comment3"
 msgstr "Komentarz 3"
 
-#: common/dialogs/dialog_page_settings_base.cpp:237
+#: common/dialogs/dialog_page_settings_base.cpp:264
 msgid "Comment4"
 msgstr "Komentarz 4"
 
@@ -18314,7 +18323,7 @@ msgstr "Edytor skrótów klawiszowych"
 msgid "Image Editor"
 msgstr "Edytor obrazów"
 
-#: common/dialogs/dialog_page_settings_base.h:110
+#: common/dialogs/dialog_page_settings_base.h:124
 msgid "Page Settings"
 msgstr "Ustawienia strony"
 
@@ -18333,6 +18342,9 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:294
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Basic Inscriptions"
+#~ msgstr "Opis"
 
 #~ msgid "Show Eco&2 Layer"
 #~ msgstr "Pokaż warstwę ECO&2"
