@@ -26,6 +26,12 @@ set(COMMON_ABOUT_DLG_SRCS
     dialogs/dialog_page_settings_base.cpp
     )
 
+if(KICAD_GOST)
+    set( TITLE_BLOCK_SHAPES title_block_shapes_gost )
+else()
+    set( TITLE_BLOCK_SHAPES title_block_shapes )
+endif()
+
 set(COMMON_SRCS
     ${COMMON_ABOUT_DLG_SRCS}
     base_struct.cpp
@@ -76,6 +82,7 @@ set(COMMON_SRCS
     richio.cpp
     selcolor.cpp
     string.cpp
+    ${TITLE_BLOCK_SHAPES}.cpp
     trigo.cpp
     wildcards_and_files_ext.cpp
     worksheet.cpp

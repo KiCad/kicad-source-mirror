@@ -90,17 +90,16 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     plotter->SetCurrentLineWidth( PLOTTER::DEFAULT_LINE_WIDTH );
     WS_DRAW_ITEM_LIST drawList;
 
-    // Initialize plot parameters
+    // Prepare plot parameters
     drawList.SetMargins( LTmargin, RBmargin);
     drawList.SetPenSize(PLOTTER::DEFAULT_LINE_WIDTH );
     drawList.SetMilsToIUfactor( iusPerMil );
     drawList.SetPageSize( pageSize );
+    drawList.SetSheetNumber( aSheetNumber );
+    drawList.SetSheetCount( aNumberOfSheets );
 
-    drawList.BuildWorkSheetGraphicList(
-                               aPageInfo.GetType(), aFilename,
-                               aSheetDesc,
-                               aTitleBlock, aNumberOfSheets, aSheetNumber,
-                               plotColor, plotColor );
+    drawList.BuildWorkSheetGraphicList( aPageInfo.GetType(), aFilename,
+                               aSheetDesc, aTitleBlock, plotColor, plotColor );
 
     // Draw item list
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item;

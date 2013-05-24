@@ -21,8 +21,8 @@ public:
     Ki_WorkSheetData* Pnext;
     int               m_Posx, m_Posy;
     int               m_Endx, m_Endy;
-    const wxChar*     m_Legende;
-    const wxChar*     m_Text;
+    const wxChar*     m_TextBase;
+    int               m_Flags;
 };
 
 /**
