@@ -77,7 +77,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
 
             if( !filename.FileExists() )
             {
-                m_filesNotFound << filename.GetFullName() << wxT( "\n" );
+                m_filesNotFound << aFootprintsLibNames[ii] << wxT( "\n" );
                 continue;
             }
 
