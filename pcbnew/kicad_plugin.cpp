@@ -1090,7 +1090,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     wxPoint shapeoffset = aPad->GetOffset();
 
     if( (sz.GetWidth() > 0) || (sz.GetHeight() > 0) ||
-        (shapeoffset.x > 0) || (shapeoffset.y > 0) )
+        (shapeoffset.x != 0) || (shapeoffset.y != 0) )
     {
         m_out->Print( 0, " (drill" );
 

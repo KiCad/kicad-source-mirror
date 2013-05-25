@@ -417,8 +417,12 @@ public:
      *
      * @throw IO_ERROR if a the #LINE_READER IO error occurs.
      * @throw PARSE_ERROR if an error occurs while parsing the file.
+     * @return true if OK, false if a component reference found in the
+     * .cmp file is not found in netlist, which means the .cmp file
+     * is not updated. This is an usual case, in CvPcb, but can be used to
+     * print a warning in Pcbnew.
      */
-    void Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR );
+    bool Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR );
 };
 
 
