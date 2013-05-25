@@ -616,23 +616,27 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         // Get logical page size and margins.
         PAGE_INFO pageDUMMY;
 
-        pageDUMMY.SetWidthMils( clamped_layout_size.x );
-        pageDUMMY.SetHeightMils( clamped_layout_size.y );
-
         // Get page type
         int idx = m_paperSizeComboBox->GetSelection();
 
         if( idx < 0 )
             idx = 0;
 
-        wxString paperType = m_pageFmt[idx].Left( m_pageFmt[idx].Index( wxT( " " ) ) );
+        wxString pageFmtName = m_pageFmt[idx].BeforeFirst( ' ' );
+        bool portrait = clamped_layout_size.x < clamped_layout_size.y;
+        pageDUMMY.SetType( pageFmtName, portrait );
+        if( m_customFmt )
+        {
+            pageDUMMY.SetWidthMils( clamped_layout_size.x );
+            pageDUMMY.SetHeightMils( clamped_layout_size.y );
+        }
 
         // Draw layout preview.
         wxString emptyString;
         GRResetPenAndBrush( &memDC );
 
         DrawPageLayout( &memDC, NULL, pageDUMMY,
-                        paperType, emptyString, emptyString,
+                        emptyString, emptyString,
                         m_tb, m_Screen->m_NumberOfScreens,
                         m_Screen->m_ScreenNumber, 1, appScale, DARKGRAY, RED );
 
@@ -684,7 +688,6 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
             &PAGE_INFO::C,
             &PAGE_INFO::D,
             &PAGE_INFO::E,
-            //&PAGE_INFO::GERBER,
             &PAGE_INFO::USLetter,
             &PAGE_INFO::USLegal,
             &PAGE_INFO::USLedger,

@@ -31,6 +31,7 @@
 
 
 #include <fctsys.h>
+#include <appl_wxstruct.h>
 #include <gr_basic.h>
 #include <common.h>
 #include <class_drawpanel.h>
@@ -39,12 +40,12 @@
 #include <wxstruct.h>
 #include <worksheet.h>
 #include <class_title_block.h>
+#include <build_version.h>
 
 #include <worksheet_shape_builder.h>
 
 void DrawPageLayout( wxDC* aDC, EDA_DRAW_PANEL * aCanvas,
                      const PAGE_INFO& aPageInfo,
-                     const wxString& aPaperFormat,
                      const wxString &aFullSheetName,
                      const wxString& aFileName,
                      TITLE_BLOCK& aTitleBlock,
@@ -67,7 +68,7 @@ void DrawPageLayout( wxDC* aDC, EDA_DRAW_PANEL * aCanvas,
     drawList.SetSheetCount( aSheetCount );
 
     drawList.BuildWorkSheetGraphicList(
-                               aPaperFormat, aFullSheetName, aFileName,
+                               aPageInfo.GetType(), aFullSheetName, aFileName,
                                aTitleBlock, aLineColor, aTextColor );
 
     // Draw item list
@@ -139,12 +140,11 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
                 g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
     }
 
-    wxString paper = pageInfo.GetType();
     TITLE_BLOCK t_block = GetTitleBlock();
     EDA_COLOR_T color = RED;
 
     DrawPageLayout( aDC, m_canvas, pageInfo,
-                    paper, aFilename, GetScreenDesc(), t_block,
+                    aFilename, GetScreenDesc(), t_block,
                     aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber,
                     aLineWidth, aScalar, color, color );
 }
@@ -202,6 +202,121 @@ wxString EDA_DRAW_FRAME::GetScreenDesc()
 
     msg << GetScreen()->m_ScreenNumber << wxT( "/" )
         << GetScreen()->m_NumberOfScreens;
+    return msg;
+}
+
+// returns the full text corresponding to the aTextbase,
+// after replacing format symbols by the corresponding value
+wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
+{
+    wxString msg;
+
+    /* Known formats
+     * %% = replaced by %
+     * %K = Kicad version
+     * %Z = paper format name (A4, USLetter)
+     * %Y = company name
+     * %D = date
+     * %R = revision
+     * %S = sheet number
+     * %N = number of sheets
+     * %Cx = comment (x = 0 to 9 to identify the comment)
+     * %F = filename
+     * %P = sheet path (sheet full name)
+     * %T = title
+     */
+
+    for( unsigned ii = 0; ii < aTextbase.Len(); ii++ )
+    {
+        if( aTextbase[ii] != '%' )
+        {
+            msg << aTextbase[ii];
+            continue;
+        }
+        ii++;
+        if( ii >= aTextbase.Len() )
+            break;
+
+        wxChar format = aTextbase[ii];
+        switch( format )
+        {
+            case '%':
+                msg += '%';
+                break;
+
+            case 'D':
+                msg += m_titleBlock->GetDate();
+                break;
+
+            case 'R':
+                msg += m_titleBlock->GetRevision();
+                break;
+
+            case 'K':
+                msg += g_ProductName + wxGetApp().GetAppName();
+                msg += wxT( " " ) + GetBuildVersion();
+                break;
+
+            case 'Z':
+                msg += *m_paperFormat;
+                break;
+
+            case 'S':
+                msg << m_sheetNumber;
+                break;
+
+            case 'N':
+                msg << m_sheetCount;
+                break;
+
+            case 'F':
+                {
+                    wxFileName fn( *m_fileName );
+                    msg += fn.GetFullName();
+                }
+                break;
+
+            case 'P':
+                msg += *m_sheetFullName;
+                break;
+
+            case 'Y':
+                msg = m_titleBlock->GetCompany();
+                break;
+
+            case 'T':
+                msg += m_titleBlock->GetTitle();
+                break;
+
+            case 'C':
+                format = aTextbase[++ii];
+                switch( format )
+                {
+                case '1':
+                    msg += m_titleBlock->GetComment1();
+                    break;
+
+                case '2':
+                    msg += m_titleBlock->GetComment2();
+                    break;
+
+                case '3':
+                    msg += m_titleBlock->GetComment3();
+                    break;
+
+                case '4':
+                    msg += m_titleBlock->GetComment4();
+                    break;
+
+                default:
+                    break;
+                }
+
+            default:
+                break;
+        }
+    }
+
     return msg;
 }
 

@@ -118,7 +118,9 @@ private:
     void Install_3D_ViewOptionDialog( wxCommandEvent& event );
 
     // initialisation
-    void ReCreateMenuBar();
+    void CreateMenuBar();
+    void SetMenuBarOptionsState();  // Set the state of toggle menus according
+                                    // to the current display options
     void ReCreateHToolbar();
     void ReCreateVToolbar();
     void SetToolbars();

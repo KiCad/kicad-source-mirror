@@ -136,7 +136,7 @@ void EDA_3D_FRAME::ReCreateVToolbar()
 }
 
 
-void EDA_3D_FRAME::ReCreateMenuBar()
+void EDA_3D_FRAME::CreateMenuBar()
 {
     wxMenuBar* menuBar   = new wxMenuBar;
     wxMenu*    fileMenu  = new wxMenu;
@@ -180,15 +180,12 @@ void EDA_3D_FRAME::ReCreateMenuBar()
 
     item = AddMenuItem( prefsMenu, ID_MENU3D_USE_COPPER_THICKNESS,
            _( "Show Copper Thickness" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_COPPER_THICKNESS]);
 
     item = AddMenuItem( prefsMenu, ID_MENU3D_MODULE_ONOFF,
            _( "Show 3D F&ootprints" ), KiBitmap( shape_3d_xpm ), wxITEM_CHECK );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE]);
 
     item = AddMenuItem( prefsMenu, ID_MENU3D_ZONE_ONOFF,
            _( "Show Zone &Filling" ), KiBitmap( add_zone_xpm ), wxITEM_CHECK );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE]);
 
     item = AddMenuItem( prefsMenu, ID_MENU3D_ADHESIVE_ONOFF,
            _( "Show &Adhesive Layers" ), KiBitmap( tools_xpm ), wxITEM_CHECK );
@@ -196,27 +193,59 @@ void EDA_3D_FRAME::ReCreateMenuBar()
 
     item = AddMenuItem( prefsMenu, ID_MENU3D_SILKSCREEN_ONOFF,
            _( "Show &Silkscreen Layer" ), KiBitmap( add_text_xpm ), wxITEM_CHECK );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SILKSCREEN]);
 
     item = AddMenuItem( prefsMenu, ID_MENU3D_SOLDER_MASK_ONOFF,
            _( "Show Solder &Mask Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERMASK]);
 
     item = AddMenuItem( prefsMenu, ID_MENU3D_SOLDER_PASTE_ONOFF,
            _( "Show Solder &Paste Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERPASTE]);
 
     item = AddMenuItem( prefsMenu, ID_MENU3D_COMMENTS_ONOFF,
            _( "Show &Comments and Drawings Layer" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_COMMENTS]);
 
     item = AddMenuItem( prefsMenu, ID_MENU3D_ECO_ONOFF,
            _( "Show &Eco Layers" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO]);
 
+    SetMenuBarOptionsState();
     SetMenuBar( menuBar );
 }
 
+void EDA_3D_FRAME::SetMenuBarOptionsState()
+{
+    wxMenuBar* menuBar = GetMenuBar();
+
+    if( menuBar == NULL )
+        return;
+
+    wxMenuItem* item;
+    // Set the state of toggle menus according to the current display options
+    item = menuBar->FindItem( ID_MENU3D_USE_COPPER_THICKNESS );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_COPPER_THICKNESS]);
+
+    item = menuBar->FindItem( ID_MENU3D_MODULE_ONOFF );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE]);
+
+    item = menuBar->FindItem( ID_MENU3D_ZONE_ONOFF );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE]);
+
+    item = menuBar->FindItem( ID_MENU3D_ADHESIVE_ONOFF );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ADHESIVE]);
+
+    item = menuBar->FindItem( ID_MENU3D_SILKSCREEN_ONOFF );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SILKSCREEN]);
+
+    item = menuBar->FindItem( ID_MENU3D_SOLDER_MASK_ONOFF );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERMASK]);
+
+    item = menuBar->FindItem( ID_MENU3D_SOLDER_PASTE_ONOFF );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERPASTE]);
+
+    item = menuBar->FindItem( ID_MENU3D_COMMENTS_ONOFF );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_COMMENTS]);
+
+    item = menuBar->FindItem( ID_MENU3D_ECO_ONOFF );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO]);
+}
 
 void EDA_3D_FRAME::SetToolbars()
 {

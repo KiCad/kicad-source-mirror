@@ -227,13 +227,13 @@ void DRAG_LIST::fillList( CONNECTIONS& aConnections )
             if( pad->HitTest( track->GetStart() ) )
             {
                 track->start = pad;
-                track->SetState( START_ON_PAD, false );
+                track->SetState( START_ON_PAD, true );
             }
 
             if( pad->HitTest( track->GetEnd() ) )
             {
                 track->end = pad;
-                track->SetState( END_ON_PAD, false );
+                track->SetState( END_ON_PAD, true );
             }
 
             DRAG_SEGM_PICKER wrapper( track );
