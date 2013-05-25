@@ -22,7 +22,11 @@ private:
 void EDA_3D_FRAME::Install_3D_ViewOptionDialog( wxCommandEvent& event )
 {
     DIALOG_3D_VIEW_OPTIONS dlg( this );
-    dlg.ShowModal();
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        SetMenuBarOptionsState();
+        NewDisplay();
+    }
 }
 
 
@@ -121,5 +125,4 @@ void DIALOG_3D_VIEW_OPTIONS::OnOKClick( wxCommandEvent& event )
         m_checkBoxECO->GetValue();
 
     EndModal( wxID_OK );
-    m_parent->NewDisplay();
 }

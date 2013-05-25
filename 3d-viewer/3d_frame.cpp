@@ -100,7 +100,7 @@ END_EVENT_TABLE() EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME*   parent,
     CreateStatusBar( 5 );
     SetStatusWidths( 5, dims );
 
-    ReCreateMenuBar();
+    CreateMenuBar();
     ReCreateHToolbar();
 
     // ReCreateAuxiliaryToolbar();

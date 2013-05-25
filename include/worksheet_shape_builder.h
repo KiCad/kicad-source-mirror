@@ -137,6 +137,11 @@ class WS_DRAW_ITEM_LIST
     int      m_sheetNumber;     // the value of the sheet number, for basic inscriptions
     int      m_sheetCount;      // the value of the number of sheets, in schematic
                                 // for basic inscriptions, in schematic
+    const TITLE_BLOCK* m_titleBlock;    // for basic inscriptions
+    const wxString* m_paperFormat;      // for basic inscriptions
+    const wxString* m_fileName;         // for basic inscriptions
+    const wxString* m_sheetFullName;    // for basic inscriptions
+
 
 public:
     WS_DRAW_ITEM_LIST()
@@ -146,6 +151,10 @@ public:
         m_penSize = 1;
         m_sheetNumber = 1;
         m_sheetCount = 1;
+        m_titleBlock = NULL;
+        m_paperFormat = NULL;
+        m_fileName = NULL;
+        m_sheetFullName = NULL;
     }
 
     ~WS_DRAW_ITEM_LIST()
@@ -256,6 +265,35 @@ public:
                                     const wxString& aSheetPathHumanReadable,
                                     const TITLE_BLOCK& aTitleBlock,
                                     EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor );
+    /**
+     * Function BuildFullText
+     * returns the full text corresponding to the aTextbase,
+     * after replacing format symbols by the corresponding value
+     *
+     * Basic texts in Ki_WorkSheetData struct use format notation
+     * like "Title %T" to identify at run time the full text
+     * to display.
+     * Currently format identifier is % followed by a letter or 2 letters
+     *
+     * %% = replaced by %
+     * %K = Kicad version
+     * %Z = paper format name (A4, USLetter)
+     * %Y = company name
+     * %D = date
+     * %R = revision
+     * %S = sheet number
+     * %N = number of sheets
+     * %Cx = comment (x = 0 to 9 to identify the comment)
+     * %F = filename
+     * %P = sheet path or sheet full name
+     * %T = title
+     * Other fields like Developer, Verifier, Approver could use %Cx
+     * and are seen as comments for format
+     *
+     * @param aTextbase = the text with format symbols
+     * @return the text, after replacing the format symbols by the actual value
+     */
+    wxString BuildFullText( const wxString& aTextbase );
 };
 
 

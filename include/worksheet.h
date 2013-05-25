@@ -31,8 +31,7 @@ public:
  * @param aDC The device context.
  * @param aCanvas The EDA_DRAW_PANEL to draw into, or NULL if the page
  *  layout is not drawn into the main panel.
- * @param aPageInfo for margins and page siez (in mils).
- * @param aPaperFormat The paper size type, for basic inscriptions.
+ * @param aPageInfo for margins and page size (in mils).
  * @param aFullSheetName The sheetpath (full sheet name), for basic inscriptions.
  * @param aFileName The file name, for basic inscriptions.
  * @param aTitleBlock The sheet title block, for basic inscriptions.
@@ -50,7 +49,6 @@ public:
  */
 void DrawPageLayout( wxDC* aDC, EDA_DRAW_PANEL * aCanvas,
                      const PAGE_INFO& aPageInfo,
-                     const wxString& aPaperFormat,
                      const wxString &aFullSheetName,
                      const wxString& aFileName,
                      TITLE_BLOCK& aTitleBlock,

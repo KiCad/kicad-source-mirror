@@ -35,10 +35,8 @@
 
 #include <fctsys.h>
 #include <drawtxt.h>
-#include <appl_wxstruct.h>
 #include <worksheet.h>
 #include <class_title_block.h>
-#include <build_version.h>
 #include <worksheet_shape_builder.h>
 
 #define GRID_REF_W                      Mm2mils( 1.8 )  // height of the band reference grid
@@ -72,26 +70,6 @@
 #define BLOCK_COMMENT3_Y        (TEXTSIZE * 17)
 #define BLOCK_COMMENT4_Y        (TEXTSIZE * 19)
 
-/*
- * Basic texts in Ki_WorkSheetData struct use format "C" type to
- * identify the user text which should be shown, at runtime.
- * Currently formats are % and a letter , or 2 letters
- *
- * %% = replaced by %
- * %K = Kicad version
- * %Z = paper format name (A4, USLetter)
- * %Y = company name
- * %D = date
- * %R = revision
- * %S = sheet number
- * %N = number of sheets
- * %Cx = comment (x = 0 to 9 to identify the comment)
- * %F = filename
- * %P = sheet path or sheet full name
- * %T = title
- * Other fields like Developer, Verifier, Approver could use %Cx
- * and are seen as comments for format
- */
 
 // Text attributes set in m_Flags (ORed bits)
  #define USE_BOLD 1             // has meaning for texts
@@ -321,15 +299,6 @@ Ki_WorkSheetData WS_Segm7 =
 
 #include <worksheet_shape_builder.h>
 
-// Helper function which returns the text corresponding to the aIdent identifier
-static wxString BuildFullText( const wxString& aTextbase,
-                          const TITLE_BLOCK& aTitleBlock,
-                          const wxString& aPaperFormat,
-                          const wxString& aFileName,
-                          const wxString& aSheetPathHumanReadable,
-                          int aSheetCount, int aSheetNumber );
-
-
 void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                        const wxString& aPaperFormat,
                        const wxString& aFileName,
@@ -341,6 +310,12 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
     wxSize              size_ref( FRMREF_TXTSIZE * m_milsToIu,
                                   FRMREF_TXTSIZE * m_milsToIu );
     wxString            msg;
+
+    m_titleBlock = &aTitleBlock,
+    m_paperFormat = &aPaperFormat,
+    m_fileName = &aFileName,
+    m_sheetFullName = &aSheetPathHumanReadable;
+
 
     // Left top corner position
     wxPoint lt_corner;
@@ -460,8 +435,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
         msg.Empty();
 
         if( WsItem->m_Type == WS_TEXT && WsItem->m_TextBase )
-            msg = BuildFullText( WsItem->m_TextBase, aTitleBlock, aPaperFormat, aFileName,
-                             aSheetPathHumanReadable, m_sheetCount, m_sheetNumber );
+            msg = BuildFullText( WsItem->m_TextBase );
 
         switch( WsItem->m_Type )
         {
@@ -507,124 +481,4 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
             break;
         }
     }
-}
-
-// returns the full text corresponding to the aTextbase,
-// after replacing format symbols by the corresponding value
-wxString BuildFullText( const wxString& aTextbase,
-                        const TITLE_BLOCK& aTitleBlock,
-                        const wxString& aPaperFormat,
-                        const wxString& aFileName,
-                        const wxString& aSheetPathHumanReadable,
-                        int aSheetCount, int aSheetNumber )
-{
-    wxString msg;
-
-    /* Known formats
-     * %% = replaced by %
-     * %K = Kicad version
-     * %Z = paper format name (A4, USLetter)
-     * %Y = company name
-     * %D = date
-     * %R = revision
-     * %S = sheet number
-     * %N = number of sheets
-     * %Cx = comment (x = 0 to 9 to identify the comment)
-     * %F = filename
-     * %P = sheet path (sheet full name)
-     * %T = title
-     */
-
-    for( unsigned ii = 0; ii < aTextbase.Len(); ii++ )
-    {
-        if( aTextbase[ii] != '%' )
-        {
-            msg << aTextbase[ii];
-            continue;
-        }
-        ii++;
-        if( ii >= aTextbase.Len() )
-            break;
-
-        wxChar format = aTextbase[ii];
-        switch( format )
-        {
-            case '%':
-                msg += '%';
-                break;
-
-            case 'D':
-                msg += aTitleBlock.GetDate();
-                break;
-
-            case 'R':
-                msg += aTitleBlock.GetRevision();
-                break;
-
-            case 'K':
-                msg += g_ProductName + wxGetApp().GetAppName();
-                msg += wxT( " " ) + GetBuildVersion();
-                break;
-
-            case 'Z':
-                msg += aPaperFormat;
-                break;
-
-            case 'S':
-                msg << aSheetNumber;
-                break;
-
-            case 'N':
-                msg << aSheetCount;
-                break;
-
-            case 'F':
-                {
-                    wxFileName fn( aFileName );
-                    msg += fn.GetFullName();
-                }
-                break;
-
-            case 'P':
-                msg += aSheetPathHumanReadable;
-                break;
-
-            case 'Y':
-                msg = aTitleBlock.GetCompany();
-                break;
-
-            case 'T':
-                msg += aTitleBlock.GetTitle();
-                break;
-
-            case 'C':
-                format = aTextbase[++ii];
-                switch( format )
-                {
-                case '1':
-                    msg += aTitleBlock.GetComment1();
-                    break;
-
-                case '2':
-                    msg += aTitleBlock.GetComment2();
-                    break;
-
-                case '3':
-                    msg += aTitleBlock.GetComment3();
-                    break;
-
-                case '4':
-                    msg += aTitleBlock.GetComment4();
-                    break;
-
-                default:
-                    break;
-                }
-
-            default:
-                break;
-        }
-    }
-
-    return msg;
 }
