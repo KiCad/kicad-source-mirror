@@ -370,9 +370,9 @@ NETLIST_READER* NETLIST_READER::GetNetlistReader( NETLIST*        aNetlist,
 }
 
 
-void CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
+bool CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
 {
-    wxCHECK_RET( aNetlist != NULL, wxT( "No netlist passed to CMP_READER::Load()" ) );
+    wxCHECK_MSG( aNetlist != NULL,true, wxT( "No netlist passed to CMP_READER::Load()" ) );
 
     wxString reference;    // Stores value read from line like Reference = BUS1;
     wxString timestamp;    // Stores value read from line like TimeStamp = /32307DE2/AA450F67;
@@ -380,6 +380,7 @@ void CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
     wxString buffer;
     wxString value;
 
+    bool ok = true;
 
     while( m_lineReader->ReadLine() )
     {
@@ -434,5 +435,9 @@ void CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
         // This is an usual case during the life of a design
         if( component )
             component->SetFootprintName( footprint );
+        else
+            ok = false;     // can be used to display a warning in Pcbnew.
     }
+
+    return ok;
 }

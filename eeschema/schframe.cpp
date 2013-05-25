@@ -530,12 +530,13 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 
     wxString filename = fn.GetName();
     wxString sheetFullName =  m_CurrentSheet->PathHumanReadable();
-    sheetFullName.Trim( true );
-    sheetFullName.Trim( false );
 
     // Remove the last '/' of the path human readable
     // (and for the root sheet, make sheetFullName empty):
     sheetFullName.RemoveLast();
+
+    sheetFullName.Trim( true );
+    sheetFullName.Trim( false );
 
     // Convert path human readable separator to '-'
     sheetFullName.Replace( wxT( "/" ), wxT( "-" ) );
