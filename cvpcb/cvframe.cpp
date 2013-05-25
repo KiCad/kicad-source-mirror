@@ -773,8 +773,13 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
         netlistReader = NETLIST_READER::GetNetlistReader( &m_netlist,
                                                           m_NetlistFileName.GetFullPath(),
                                                           compFootprintLinkFileName );
-        std::auto_ptr< NETLIST_READER > nlr( netlistReader );
-        netlistReader->LoadNetlist();
+        if( netlistReader != NULL )
+        {
+            std::auto_ptr< NETLIST_READER > nlr( netlistReader );
+            netlistReader->LoadNetlist();
+        }
+        else
+            wxMessageBox( _( "Unknown netlist format" ), wxEmptyString, wxOK | wxICON_ERROR );
     }
     catch( IO_ERROR& ioe )
     {

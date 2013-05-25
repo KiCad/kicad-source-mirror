@@ -159,14 +159,11 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText ) throw( PARSE_ERRO
     value = FROM_UTF8( text );
 
     // Read component name (fifth word) {Lib=C}
-    if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
+    // This is an optional field (a comment), which does not always exists
+    if( ( text = strtok( NULL, " ()\t\n" ) ) != NULL )
     {
-        msg = _( "Cannot parse name comment in component section of netlist." );
-        THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), aText, m_lineReader->LineNumber(),
-                           m_lineReader->Length() );
+        name = FROM_UTF8( text ).AfterFirst( wxChar( '=' ) ).BeforeLast( wxChar( '}' ) );
     }
-
-    name = FROM_UTF8( text ).AfterFirst( wxChar( '=' ) ).BeforeLast( wxChar( '}' ) );
 
     COMPONENT* component = new COMPONENT( footprintName, reference, value, timeStamp );
     component->SetName( name );
@@ -213,7 +210,7 @@ void LEGACY_NETLIST_READER::loadFootprintFilters() throw( IO_ERROR, PARSE_ERROR 
     wxArrayString filters;
     wxString      cmpRef;
     char*         line;
-    COMPONENT*    component;
+    COMPONENT*    component = NULL;     // Suppress compil warning
 
     while( ( line = m_lineReader->ReadLine() ) != NULL )
     {

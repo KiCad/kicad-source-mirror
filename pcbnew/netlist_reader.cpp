@@ -293,10 +293,14 @@ NETLIST_READER::~NETLIST_READER()
 
 NETLIST_READER::NETLIST_FILE_T NETLIST_READER::GuessNetlistFileType( LINE_READER* aLineReader )
 {
-    wxRegEx reOrcad( wxT( "(?i)[ ]*\\({EESchema[ \t]+Netlist[ \t]+" ), wxRE_ADVANCED );
+    // Orcad Pcb2 netlist format starts by "( {", followed by an unknown comment,
+    // depending on the tool which created the file
+    wxRegEx reOrcad( wxT( "(?i)[ ]*\\([ \t]+{+" ), wxRE_ADVANCED );
     wxASSERT( reOrcad.IsValid() );
+    // Our legacy netlist format starts by "# EESchema Netlist "
     wxRegEx reLegacy( wxT( "(?i)#[ \t]+EESchema[ \t]+Netlist[ \t]+" ), wxRE_ADVANCED );
     wxASSERT( reLegacy.IsValid() );
+    // Our new netlist format starts by "(export (version "
     wxRegEx reKicad( wxT( "[ ]*\\(export[ ]+" ), wxRE_ADVANCED );
     wxASSERT( reKicad.IsValid() );
 
@@ -306,12 +310,12 @@ NETLIST_READER::NETLIST_FILE_T NETLIST_READER::GuessNetlistFileType( LINE_READER
     {
         line = FROM_UTF8( aLineReader->Line() );
 
-        if( reOrcad.Matches( line ) )
-            return ORCAD;
-        else if( reLegacy.Matches( line ) )
+        if( reLegacy.Matches( line ) )
             return LEGACY;
         else if( reKicad.Matches( line ) )
             return KICAD;
+        else if( reOrcad.Matches( line ) )
+            return ORCAD;
     }
 
     return UNKNOWN;
