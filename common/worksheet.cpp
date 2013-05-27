@@ -198,11 +198,9 @@ const wxString EDA_DRAW_FRAME::GetXYSheetReferences( const wxPoint& aPosition ) 
 
 wxString EDA_DRAW_FRAME::GetScreenDesc()
 {
-    wxString msg;
-
-    msg << GetScreen()->m_ScreenNumber << wxT( "/" )
-        << GetScreen()->m_NumberOfScreens;
-    return msg;
+    // Virtual function, in basic function, returns
+    // an empty string.
+    return wxEmptyString;
 }
 
 // returns the full text corresponding to the aTextbase,

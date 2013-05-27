@@ -163,10 +163,15 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
 
     wxBusyCursor  dummy;
 
-#ifdef PCBNEW
-    boardBoundingBox =((PCB_BASE_FRAME*) m_Parent)->GetBoard()->ComputeBoundingBox();
-#else
+#if defined (PCBNEW)
+    BOARD * brd = ((PCB_BASE_FRAME*) m_Parent)->GetBoard();
+    boardBoundingBox = brd->ComputeBoundingBox();
+    wxString titleblockFilename = brd->GetFileName();
+#elif defined (GERBVIEW)
     boardBoundingBox = ((GERBVIEW_FRAME*) m_Parent)->GetLayoutBoundingBox();
+    wxString titleblockFilename;    // TODO see if we uses the gerber file name
+#else
+    #error BOARD_PRINTOUT_CONTROLLER::DrawPage() works only for PCBNEW or GERBVIEW
 #endif
 
     // Use the page size as the drawing area when the board is shown or the user scale
@@ -359,7 +364,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
 
     if( m_PrintParams.PrintBorderAndTitleBlock() )
         m_Parent->DrawWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
-                                  IU_PER_MILS, m_Parent->GetScreenDesc() );
+                                  IU_PER_MILS, titleblockFilename );
 
     m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
 

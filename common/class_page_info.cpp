@@ -328,8 +328,8 @@ void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aContro
     // Internally, the page size is in mils
     if( GetType() == PAGE_INFO::Custom )
         aFormatter->Print( 0, " %g %g",
-                           GetCustomWidthMils() * 25.4 / 1000.0,
-                           GetCustomHeightMils() * 25.4 / 1000.0 );
+                           GetWidthMils() * 25.4 / 1000.0,
+                           GetHeightMils() * 25.4 / 1000.0 );
 
     if( !IsCustom() && IsPortrait() )
         aFormatter->Print( 0, " portrait" );
