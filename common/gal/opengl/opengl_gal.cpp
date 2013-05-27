@@ -1404,10 +1404,19 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 
     glNormal3d( 0.0, 0.0, 1.0 );
-    glColor4d( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+    color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
     glShadeModel( GL_FLAT );
-    gluTessBeginPolygon( tesselator, NULL );
+    if( isGrouping )
+    {
+        // Store polygon triangles' coordinates to the current VBO item
+        gluTessBeginPolygon( tesselator, curVboItem );
+    }
+    else
+    {
+        // Display polygons directly
+        gluTessBeginPolygon( tesselator, NULL );
+    }
     gluTessBeginContour( tesselator );
 
     // use operator=( const POINTS& )
@@ -1781,11 +1790,20 @@ void OPENGL_GAL::ComputeWorldScreenMatrix()
 // Compare Redbook Chapter 11
 
 
-void CALLBACK VertexCallback( GLvoid* aVertexPtr )
+void CALLBACK VertexCallback( GLvoid* aVertexPtr, void* aData )
 {
-    GLdouble* vertex = (GLdouble*) aVertexPtr;
+    GLdouble* vertex = static_cast<GLdouble*>( aVertexPtr );
 
-    glVertex3dv( vertex );
+    if( aData )
+    {
+        VBO_ITEM* vboItem = static_cast<VBO_ITEM*>( aData );
+        const GLfloat newVertex[] = { vertex[0], vertex[1], vertex[2] };
+        vboItem->PushVertex( newVertex );
+    }
+    else
+    {
+        glVertex3dv( vertex );
+    }
 }
 
 
@@ -1801,15 +1819,24 @@ void CALLBACK CombineCallback( GLdouble coords[3],
 }
 
 
-void CALLBACK BeginCallback( GLenum aWhich )
+void CALLBACK EdgeCallback(void)
 {
-    glBegin( aWhich );
+    // This callback is needed to force GLU tesselator to use triangles only
+    return;
 }
 
 
-void CALLBACK EndCallback()
+void CALLBACK BeginCallback( GLenum aWhich, void* aData )
 {
-    glEnd();
+    if( !aData )
+        glBegin( aWhich );
+}
+
+
+void CALLBACK EndCallback( void* aData )
+{
+    if( !aData )
+        glEnd();
 }
 
 
@@ -1824,11 +1851,12 @@ void CALLBACK ErrorCallback( GLenum aErrorCode )
 
 void InitTesselatorCallbacks( GLUtesselator* aTesselator )
 {
-    gluTessCallback( aTesselator, GLU_TESS_VERTEX,  ( void (CALLBACK*)() )VertexCallback );
-    gluTessCallback( aTesselator, GLU_TESS_COMBINE, ( void (CALLBACK*)() )CombineCallback );
-    gluTessCallback( aTesselator, GLU_TESS_BEGIN,   ( void (CALLBACK*)() )BeginCallback );
-    gluTessCallback( aTesselator, GLU_TESS_END,     ( void (CALLBACK*)() )EndCallback );
-    gluTessCallback( aTesselator, GLU_TESS_ERROR,   ( void (CALLBACK*)() )ErrorCallback );
+    gluTessCallback( aTesselator, GLU_TESS_VERTEX_DATA,  ( void (CALLBACK*)() )VertexCallback );
+    gluTessCallback( aTesselator, GLU_TESS_COMBINE,      ( void (CALLBACK*)() )CombineCallback );
+    gluTessCallback( aTesselator, GLU_TESS_EDGE_FLAG,    ( void (CALLBACK*)() )EdgeCallback );
+    gluTessCallback( aTesselator, GLU_TESS_BEGIN_DATA,   ( void (CALLBACK*)() )BeginCallback );
+    gluTessCallback( aTesselator, GLU_TESS_END_DATA,     ( void (CALLBACK*)() )EndCallback );
+    gluTessCallback( aTesselator, GLU_TESS_ERROR_DATA,   ( void (CALLBACK*)() )ErrorCallback );
 }
 
 
