@@ -98,8 +98,8 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     drawList.SetSheetNumber( aSheetNumber );
     drawList.SetSheetCount( aNumberOfSheets );
 
-    drawList.BuildWorkSheetGraphicList( aPageInfo.GetType(), aFilename,
-                               aSheetDesc, aTitleBlock, plotColor, plotColor );
+    drawList.BuildWorkSheetGraphicList( aPageInfo.GetType(), aSheetDesc,
+                               aFilename, aTitleBlock, plotColor, plotColor );
 
     // Draw item list
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item;
