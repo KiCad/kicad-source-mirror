@@ -475,18 +475,22 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     }
 
     fn.SetExt( fileExt );
-    wxString fullfilname = fn.GetFullName();
+
+    if( fn.GetPath().IsEmpty() )
+       fn.SetPath( wxGetCwd() );
+
+    wxString fullfilename = fn.GetFullPath();
 
     if( !GetUseDefaultNetlistName() || currPage->m_IdNetType >= NET_TYPE_CUSTOM1 )
     {
         wxFileDialog dlg( this, title, fn.GetPath(),
-                          fullfilname, fileWildcard,
+                          fullfilename, fileWildcard,
                           wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
-        fullfilname = dlg.GetPath();
+        fullfilename = dlg.GetPath();
     }
 
     m_Parent->ClearMsgPanel();
@@ -496,7 +500,7 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     else
         m_Parent->SetNetListerCommand( wxEmptyString );
 
-    m_Parent->CreateNetlist( currPage->m_IdNetType, fullfilname, netlist_opt );
+    m_Parent->CreateNetlist( currPage->m_IdNetType, fullfilename, netlist_opt );
 
     WriteCurrentNetlistSetup();
 
