@@ -1,5 +1,5 @@
 /**
- * @file pcbnew/netlist_reader_kicad.cpp
+ * @file kicad_netlist_reader.cpp
  */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.

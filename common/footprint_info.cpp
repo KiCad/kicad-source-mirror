@@ -38,6 +38,7 @@
 #include <wildcards_and_files_ext.h>
 #include <footprint_info.h>
 #include <io_mgr.h>
+#include <fp_lib_table.h>
 
 #include <class_module.h>
 
@@ -119,6 +120,61 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
         return false;
     }
     */
+
+    m_List.sort();
+
+    return true;
+}
+
+
+bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
+{
+    // Clear data before reading files
+    m_filesNotFound.Empty();
+    m_filesInvalid.Empty();
+    m_List.clear();
+
+    std::vector< wxString > libNickNames = aTable.GetLogicalLibs();
+
+    // Parse Libraries Listed
+    for( unsigned ii = 0; ii < libNickNames.size(); ii++ )
+    {
+        const FP_LIB_TABLE::ROW* row = aTable.FindRow( libNickNames[ii] );
+
+        wxCHECK2_MSG( row != NULL, continue,
+                      wxString::Format( wxT( "No library name <%s> found in footprint library "
+                                             "table." ), GetChars( libNickNames[ii] ) ) );
+        try
+        {
+            PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::EnumFromStr( row->GetType() ) ) );
+
+            wxString      path = FP_LIB_TABLE::ExpandSubstitutions( row->GetFullURI() );
+            wxArrayString fpnames = pi->FootprintEnumerate( path );
+
+            for( unsigned i=0;  i<fpnames.GetCount();  ++i )
+            {
+                std::auto_ptr<MODULE> m( pi->FootprintLoad( path, fpnames[i] ) );
+
+                // we're loading what we enumerated, all must be there.
+                wxASSERT( m.get() );
+
+                FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO();
+
+                fpinfo->SetLibraryName( libNickNames[ii] );
+                fpinfo->SetLibraryPath( path );
+                fpinfo->m_Module   = fpnames[i];
+                fpinfo->m_padCount = m->GetPadCount();
+                fpinfo->m_KeyWord  = m->GetKeywords();
+                fpinfo->m_Doc      = m->GetDescription();
+
+                AddItem( fpinfo );
+            }
+        }
+        catch( IO_ERROR ioe )
+        {
+            m_filesInvalid << ioe.errorText << wxT( "\n" );
+        }
+    }
 
     m_List.sort();
 

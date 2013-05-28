@@ -538,22 +538,6 @@ void PCB_EDIT_FRAME::ReadMacros()
 
 void PCB_EDIT_FRAME::loadFootprintLibTable()
 {
-    if( m_globalFootprintTable == NULL )
-    {
-        try
-        {
-            m_globalFootprintTable = new FP_LIB_TABLE();
-            FP_LIB_TABLE::LoadGlobalTable( *m_globalFootprintTable );
-        }
-        catch( IO_ERROR ioe )
-        {
-            wxString msg;
-            msg.Printf( _( "An error occurred attempting to load the global footprint library "
-                           "table:\n\n%s" ), GetChars( ioe.errorText ) );
-            DisplayError( this, msg );
-        }
-    }
-
     delete m_footprintLibTable;
 
     wxFileName fn = GetBoard()->GetFileName();

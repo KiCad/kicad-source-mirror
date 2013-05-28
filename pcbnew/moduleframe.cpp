@@ -156,7 +156,7 @@ END_EVENT_TABLE()
 
 #define FOOTPRINT_EDIT_FRAME_NAME wxT( "ModEditFrame" )
 
-FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent ) :
+FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent, FP_LIB_TABLE* aTable ) :
     PCB_BASE_FRAME( aParent, MODULE_EDITOR_FRAME_TYPE, wxEmptyString,
                     wxDefaultPosition, wxDefaultSize,
                     KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
@@ -166,6 +166,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent ) :
     m_showAxis = true;                   // true to show X and Y axis on screen
     m_showGridAxis = true;               // show the grid origin axis
     m_HotkeysZoomAndGridList = g_Module_Editor_Hokeys_Descr;
+    m_footprintLibTable = aTable;
 
     // Give an icon
     wxIcon icon;
@@ -258,19 +259,21 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
     m_Pcb = 0;
 }
 
+
 const wxChar* FOOTPRINT_EDIT_FRAME::GetFootprintEditorFrameName()
 {
     return FOOTPRINT_EDIT_FRAME_NAME;
 }
+
 
 /* return a reference to the current opened Footprint editor
  * or NULL if no Footprint editor currently opened
  */
 FOOTPRINT_EDIT_FRAME* FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor()
 {
-    return (FOOTPRINT_EDIT_FRAME*)
-            wxWindow::FindWindowByName(GetFootprintEditorFrameName());
+    return (FOOTPRINT_EDIT_FRAME*) wxWindow::FindWindowByName( GetFootprintEditorFrameName() );
 }
+
 
 BOARD_DESIGN_SETTINGS& FOOTPRINT_EDIT_FRAME::GetDesignSettings() const
 {
@@ -337,7 +340,7 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             // at case ID_MODEDIT_SAVE_LIBMODULE
             if( GetBoard()->m_Modules && getLibPath() != wxEmptyString )
             {
-                if( Save_Module_In_Library( getLibPath(), GetBoard()->m_Modules, true, true ))
+                if( Save_Module_In_Library( getLibPath(), GetBoard()->m_Modules, true, true ) )
                 {
                     // save was correct
                     GetScreen()->ClrModify();
@@ -489,6 +492,7 @@ void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
     // for next cursor position
     // ( shift or ctrl key down are PAN command with mouse wheel)
     bool snapToGrid = true;
+
     if( !aHotKey && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_CONTROL ) )
         snapToGrid = false;
 
@@ -612,4 +616,3 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
 
     SetTitle( title );
 }
-

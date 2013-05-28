@@ -193,7 +193,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
         if( editorFrame == NULL )
         {
-            editorFrame = new FOOTPRINT_EDIT_FRAME( this );
+            editorFrame = new FOOTPRINT_EDIT_FRAME( this, m_footprintLibTable );
             editorFrame->Show( true );
             editorFrame->Zoom_Automatique( false );
         }
@@ -809,10 +809,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             OnModify();
         }
         {
-            FOOTPRINT_EDIT_FRAME * editorFrame =
-                    FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+            FOOTPRINT_EDIT_FRAME * editorFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+
+
             if( editorFrame == NULL )
-                editorFrame = new FOOTPRINT_EDIT_FRAME( this );
+                editorFrame = new FOOTPRINT_EDIT_FRAME( this, m_footprintLibTable );
 
             editorFrame->Load_Module_From_BOARD( (MODULE*)GetCurItem() );
             SetCurItem( NULL ); // the current module could be deleted by

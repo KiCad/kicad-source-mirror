@@ -34,6 +34,10 @@
 
 #include <kicad_string.h>
 
+
+class FP_LIB_TABLE;
+
+
 /*
  * Class FOOTPRINT_INFO
  * is a helper class to handle the list of footprints available in libraries. It stores
@@ -136,7 +140,9 @@ public:
      *
      * @param aFootprintsLibNames = an array string giving the list of libraries to load
      */
-    bool ReadFootprintFiles( wxArrayString & aFootprintsLibNames );
+    bool ReadFootprintFiles( wxArrayString& aFootprintsLibNames );
+
+    bool ReadFootprintFiles( FP_LIB_TABLE& aTable );
 };
 
 /// FOOTPRINT object list sort function.

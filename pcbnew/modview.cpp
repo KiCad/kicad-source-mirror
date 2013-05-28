@@ -205,7 +205,11 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         SetCurItem( NULL );
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
-        GetModuleLibrary( GetSelectedLibraryFullName(), m_footprintName, true );
+        MODULE* footprint = GetModuleLibrary( GetSelectedLibraryFullName(), m_footprintName, true );
+
+        if( footprint )
+            GetBoard()->Add( footprint, ADD_APPEND );
+
         Update3D_Frame();
     }
 

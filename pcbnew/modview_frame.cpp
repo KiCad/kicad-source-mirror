@@ -204,8 +204,11 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
     if( !m_libraryName.IsEmpty() && !m_footprintName.IsEmpty() )
     {
 #if !defined( USE_FP_LIB_TABLE )
-        GetModuleLibrary( m_libraryName + wxT(".") + LegacyFootprintLibPathExtension,
-                          m_footprintName, false );
+        MODULE* footprint = GetModuleLibrary( m_libraryName + wxT( "." ) +  LegacyFootprintLibPathExtension,
+                                              m_footprintName, false );
+
+        if( footprint )
+            GetBoard()->Add( footprint, ADD_APPEND );
 #else
         FPID id;
         id.SetLibNickname( TO_UTF8( m_libraryName ) );
@@ -496,8 +499,11 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
 #if !defined( USE_FP_LIB_TABLE )
-        GetModuleLibrary( m_libraryName + wxT(".") + LegacyFootprintLibPathExtension,
-                          m_footprintName, true );
+        MODULE* footprint = GetModuleLibrary( m_libraryName + wxT( "." ) + LegacyFootprintLibPathExtension,
+                                              m_footprintName, true );
+
+        if( footprint )
+            GetBoard()->Add( footprint, ADD_APPEND );
 #else
         FPID id;
         id.SetLibNickname( TO_UTF8( m_libraryName ) );
