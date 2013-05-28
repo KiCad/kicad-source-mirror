@@ -20,6 +20,7 @@ class DIALOG_SHIM;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
 #include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
@@ -28,12 +29,10 @@ class DIALOG_SHIM;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/datectrl.h>
 #include <wx/dateevt.h>
 #include <wx/checkbox.h>
-#include <wx/statbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -69,6 +68,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_staticTextPaper;
+		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticTextSize;
 		wxChoice* m_paperSizeComboBox;
 		wxStaticText* m_staticTextOrient;
@@ -82,8 +82,10 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticBitmap* m_PageLayoutExampleBitmap;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticTexttbprm;
+		wxStaticLine* m_staticline3;
 		wxStaticText* m_TextSheetCount;
 		wxStaticText* m_TextSheetNumber;
+		wxStaticText* m_staticTextDate;
 		wxTextCtrl* m_TextDate;
 		wxButton* m_ApplyDate;
 		wxDatePickerCtrl* m_PickDate;
@@ -91,16 +93,22 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextRev;
 		wxTextCtrl* m_TextRevision;
 		wxCheckBox* m_RevisionExport;
+		wxStaticText* m_staticTextTitle;
 		wxTextCtrl* m_TextTitle;
 		wxCheckBox* m_TitleExport;
+		wxStaticText* m_staticText13;
 		wxTextCtrl* m_TextCompany;
 		wxCheckBox* m_CompanyExport;
+		wxStaticText* m_staticTextComment1;
 		wxTextCtrl* m_TextComment1;
 		wxCheckBox* m_Comment1Export;
+		wxStaticText* m_staticTextComment2;
 		wxTextCtrl* m_TextComment2;
 		wxCheckBox* m_Comment2Export;
+		wxStaticText* m_staticTextComment3;
 		wxTextCtrl* m_TextComment3;
 		wxCheckBox* m_Comment3Export;
+		wxStaticText* m_staticTextComment4;
 		wxTextCtrl* m_TextComment4;
 		wxCheckBox* m_Comment4Export;
 		wxStdDialogButtonSizer* m_sdbSizer1;
@@ -129,7 +137,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 748,495 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 748,464 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PAGES_SETTINGS_BASE();
 	
 };
