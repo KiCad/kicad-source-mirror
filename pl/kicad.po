@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-24 20:02+0100\n"
-"PO-Revision-Date: 2013-05-24 20:04+0100\n"
+"POT-Creation-Date: 2013-05-28 17:33+0100\n"
+"PO-Revision-Date: 2013-05-28 17:34+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -152,7 +152,7 @@ msgstr ""
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1005 pcbnew/moduleframe.cpp:602
+#: eeschema/schframe.cpp:1006 pcbnew/moduleframe.cpp:602
 #: pcbnew/pcbframe.cpp:809 cvpcb/cvframe.cpp:717
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
@@ -724,12 +724,12 @@ msgid "No components found matching"
 msgstr "Nie znaleziono pasujących symboli"
 
 #: eeschema/database.cpp:117 eeschema/libedit.cpp:486
-#: eeschema/sch_component.cpp:1472 eeschema/dialogs/dialog_color_config.cpp:63
+#: eeschema/sch_component.cpp:1465 eeschema/dialogs/dialog_color_config.cpp:63
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
 msgid "Component"
 msgstr "Symbol"
 
-#: eeschema/database.cpp:118 eeschema/sch_component.cpp:1477
+#: eeschema/database.cpp:118 eeschema/sch_component.cpp:1470
 #: pcbnew/librairi.cpp:75 pcbnew/loadcmp.cpp:529
 msgid "Library"
 msgstr "Biblioteka"
@@ -1090,12 +1090,12 @@ msgstr "Symbol %s nie został znaleziony"
 msgid "No item found matching %s."
 msgstr "Nie znaleziono elementu pasującego do %s"
 
-#: eeschema/getpart.cpp:121
+#: eeschema/getpart.cpp:108
 #, c-format
 msgid "Component selection (%d items loaded):"
 msgstr "Wybór symbolu (wczytano %d elementów):"
 
-#: eeschema/getpart.cpp:198 eeschema/getpart.cpp:245
+#: eeschema/getpart.cpp:185 eeschema/getpart.cpp:227
 #, c-format
 msgid "Failed to find part <%s> in library"
 msgstr "Nie można znaleźć elementu <%s> w bibliotece"
@@ -1108,7 +1108,7 @@ msgstr "Nawigator"
 msgid "Root"
 msgstr "Główny"
 
-#: eeschema/hotkeys.cpp:653
+#: eeschema/hotkeys.cpp:642
 msgid "Add Pin"
 msgstr "Dodaj pin"
 
@@ -1283,7 +1283,7 @@ msgstr "Symbol zasilania"
 msgid "Type"
 msgstr "Typ"
 
-#: eeschema/libedit.cpp:489 eeschema/sch_component.cpp:1487
+#: eeschema/libedit.cpp:489 eeschema/sch_component.cpp:1480
 #: eeschema/viewlibs.cpp:306
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:160
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:37
@@ -1292,12 +1292,12 @@ msgstr "Typ"
 msgid "Description"
 msgstr "Opis"
 
-#: eeschema/libedit.cpp:490 eeschema/sch_component.cpp:1488
+#: eeschema/libedit.cpp:490 eeschema/sch_component.cpp:1481
 #: eeschema/viewlibs.cpp:307
 msgid "Key words"
 msgstr "Słowa kluczowe"
 
-#: eeschema/libedit.cpp:491 eeschema/lib_field.cpp:608
+#: eeschema/libedit.cpp:491 eeschema/lib_field.cpp:613
 #: eeschema/template_fieldnames.cpp:17
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:76
 msgid "Datasheet"
@@ -1873,13 +1873,13 @@ msgstr "<%s> - Eksport OK"
 msgid "Error creating <%s>"
 msgstr "Błąd podczas tworzenia  <%s>"
 
-#: eeschema/lib_field.cpp:72 eeschema/lib_field.cpp:769
+#: eeschema/lib_field.cpp:72 eeschema/lib_field.cpp:774
 #: eeschema/template_fieldnames.cpp:25
 msgid "Field"
 msgstr "Pole"
 
-#: eeschema/lib_field.cpp:587 eeschema/onrightclick.cpp:438
-#: eeschema/sch_component.cpp:1460 eeschema/template_fieldnames.cpp:14
+#: eeschema/lib_field.cpp:592 eeschema/onrightclick.cpp:438
+#: eeschema/sch_component.cpp:1453 eeschema/template_fieldnames.cpp:14
 #: eeschema/dialogs/dialog_color_config.cpp:38
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
@@ -1887,11 +1887,11 @@ msgstr "Pole"
 msgid "Reference"
 msgstr "Oznaczenie"
 
-#: eeschema/lib_field.cpp:594 eeschema/lib_field.cpp:772
+#: eeschema/lib_field.cpp:599 eeschema/lib_field.cpp:777
 #: eeschema/onrightclick.cpp:433 eeschema/template_fieldnames.cpp:15
 #: eeschema/dialogs/dialog_color_config.cpp:39
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:102
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:163
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:179
 #: pcbnew/class_edge_mod.cpp:251 pcbnew/class_text_mod.cpp:357
 #: pcbnew/footprint_wizard_frame.cpp:204
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
@@ -1900,36 +1900,36 @@ msgstr "Oznaczenie"
 msgid "Value"
 msgstr "Wartość"
 
-#: eeschema/lib_field.cpp:601 eeschema/onrightclick.cpp:443
-#: eeschema/sch_component.cpp:1484 eeschema/template_fieldnames.cpp:16
+#: eeschema/lib_field.cpp:606 eeschema/onrightclick.cpp:443
+#: eeschema/sch_component.cpp:1477 eeschema/template_fieldnames.cpp:16
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:79
 msgid "Footprint"
 msgstr "Footprint"
 
-#: eeschema/lib_field.cpp:617
+#: eeschema/lib_field.cpp:622
 #, c-format
 msgid "Field%d"
 msgstr "Pole%d"
 
-#: eeschema/lib_field.cpp:680
+#: eeschema/lib_field.cpp:685
 #, c-format
 msgid "Field %s %s"
 msgstr "Pole %s %s"
 
-#: eeschema/lib_field.cpp:759 eeschema/lib_pin.cpp:1846
+#: eeschema/lib_field.cpp:764 eeschema/lib_pin.cpp:1846
 #: eeschema/sch_text.cpp:778
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:100
 msgid "Style"
 msgstr "Styl"
 
-#: eeschema/lib_field.cpp:762 pcbnew/class_pcb_text.cpp:146
+#: eeschema/lib_field.cpp:767 pcbnew/class_pcb_text.cpp:146
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:34
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:39
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:41
 msgid "Size X"
 msgstr "Rozmiar X"
 
-#: eeschema/lib_field.cpp:765 pcbnew/class_pcb_text.cpp:149
+#: eeschema/lib_field.cpp:770 pcbnew/class_pcb_text.cpp:149
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:41
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:46
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:76
@@ -2070,9 +2070,9 @@ msgstr "Nie podłączony"
 msgid "Pin"
 msgstr "Pin"
 
-#: eeschema/lib_pin.cpp:1833 eeschema/sch_component.cpp:1467
+#: eeschema/lib_pin.cpp:1833 eeschema/sch_component.cpp:1460
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:99
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:160
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:176
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:36
 #: pcbnew/dialogs/dialog_layers_setup.cpp:286
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
@@ -3249,35 +3249,35 @@ msgstr ""
 "<%s>\n"
 "przed zamknięciem?"
 
-#: eeschema/schframe.cpp:584
+#: eeschema/schframe.cpp:585
 msgid "Draw wires and buses in any direction"
 msgstr "Rysowanie połączeń i magistral w dowolnym kierunku"
 
-#: eeschema/schframe.cpp:585
+#: eeschema/schframe.cpp:586
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Rysowanie połączeń i magistral tylko w pionie i poziomie"
 
-#: eeschema/schframe.cpp:594
+#: eeschema/schframe.cpp:595
 msgid "Do not show hidden pins"
 msgstr "Nie pokazuj ukrytych pinów"
 
-#: eeschema/schframe.cpp:595 eeschema/tool_sch.cpp:298
+#: eeschema/schframe.cpp:596 eeschema/tool_sch.cpp:298
 msgid "Show hidden pins"
 msgstr "Pokaż ukryte piny"
 
-#: eeschema/schframe.cpp:639
+#: eeschema/schframe.cpp:640
 msgid "BOM Howto"
 msgstr "BOM Jak wykonać"
 
-#: eeschema/schframe.cpp:704
+#: eeschema/schframe.cpp:705
 msgid "Schematic"
 msgstr "Schemat"
 
-#: eeschema/schframe.cpp:774
+#: eeschema/schframe.cpp:775
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1008 cvpcb/cvframe.cpp:722
+#: eeschema/schframe.cpp:1009 cvpcb/cvframe.cpp:722
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -3304,19 +3304,19 @@ msgstr "Element %s został znaleziony w arkuszu %s"
 msgid "U"
 msgstr "U"
 
-#: eeschema/sch_component.cpp:1465
+#: eeschema/sch_component.cpp:1458
 msgid "Power symbol"
 msgstr "Symbol zasilania"
 
-#: eeschema/sch_component.cpp:1475
+#: eeschema/sch_component.cpp:1468
 msgid "Alias of"
 msgstr "Alias "
 
-#: eeschema/sch_component.cpp:1483
+#: eeschema/sch_component.cpp:1476
 msgid "<Unknown>"
 msgstr "<Nieznany>"
 
-#: eeschema/sch_component.cpp:1653
+#: eeschema/sch_component.cpp:1646
 #, c-format
 msgid "Component %s, %s"
 msgstr "Symbol %s, %s"
@@ -4715,7 +4715,7 @@ msgstr ""
 "jeśli istnieje"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:63
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:629
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:624
 msgid "Chip Name"
 msgstr "Nazwa elementu"
 
@@ -4979,12 +4979,12 @@ msgstr "Styl"
 msgid "S&hape"
 msgstr "Kształt"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:218
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:226
 msgid "Illegal reference prefix. A reference must start by a letter"
 msgstr ""
 "Niepoprawny przedrostek oznaczenia. Oznaczenie musi rozpoczynać sie literą"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:234
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:242
 #, c-format
 msgid ""
 "A new name is entered for this component\n"
@@ -5675,15 +5675,15 @@ msgstr "Zapisz pliki z listą sieci"
 msgid "%s Export"
 msgstr "%s Eksportuj"
 
-#: eeschema/dialogs/dialog_netlist.cpp:527
+#: eeschema/dialogs/dialog_netlist.cpp:531
 msgid "SPICE netlist file (.cir)|*.cir"
 msgstr "Lista sieci programu SPICE (.cir)|*cir"
 
-#: eeschema/dialogs/dialog_netlist.cpp:532
+#: eeschema/dialogs/dialog_netlist.cpp:536
 msgid "CadStar netlist file (.frp)|*.frp"
 msgstr "Lista sieci programu CadStar (.frp)|*.frp"
 
-#: eeschema/dialogs/dialog_netlist.cpp:573
+#: eeschema/dialogs/dialog_netlist.cpp:577
 msgid ""
 "Some items are not annotated\n"
 "Do you want to annotate schematic?"
@@ -5691,27 +5691,27 @@ msgstr ""
 "Niektóre elementy nie są ponumerowane\n"
 "Czy chcesz ponumerować schemat?"
 
-#: eeschema/dialogs/dialog_netlist.cpp:588
+#: eeschema/dialogs/dialog_netlist.cpp:592
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Błąd: Zdublowane nazwy arkuszy. Kontunować?"
 
-#: eeschema/dialogs/dialog_netlist.cpp:737
+#: eeschema/dialogs/dialog_netlist.cpp:741
 msgid "This plugin already exists. Abort"
 msgstr "Ta wtyczka już istnieje. Przerwano."
 
-#: eeschema/dialogs/dialog_netlist.cpp:767
+#: eeschema/dialogs/dialog_netlist.cpp:771
 msgid "Error. You must provide a command String"
 msgstr "Błąd. Musisz wypełnić pole \"Polecenie netlisty\""
 
-#: eeschema/dialogs/dialog_netlist.cpp:773
+#: eeschema/dialogs/dialog_netlist.cpp:777
 msgid "Error. You must provide a Title"
 msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
 
-#: eeschema/dialogs/dialog_netlist.cpp:794
+#: eeschema/dialogs/dialog_netlist.cpp:798
 msgid "Plugin files:"
 msgstr "Pliki wtyczek:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:825
+#: eeschema/dialogs/dialog_netlist.cpp:829
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
@@ -6444,7 +6444,7 @@ msgstr "Elementy graficzne"
 
 #: pcbnew/class_edge_mod.cpp:250 pcbnew/class_module.cpp:522
 #: pcbnew/class_pad.cpp:511 pcbnew/class_text_mod.cpp:361
-#: pcbnew/loadcmp.cpp:528 pcbnew/loadcmp.cpp:593 cvpcb/cvframe.cpp:857
+#: pcbnew/loadcmp.cpp:528 pcbnew/loadcmp.cpp:593 cvpcb/cvframe.cpp:862
 msgid "Module"
 msgstr "Footprint"
 
@@ -7727,20 +7727,15 @@ msgstr "Nie mogę przetworzyć odnośnika w sekcji komponentów listy sieci."
 msgid "Cannot parse value in component section of netlist."
 msgstr "Nie mogę przetworzyć wartości w sekcji komponentów listy sieci."
 
-#: pcbnew/legacy_netlist_reader.cpp:164
-msgid "Cannot parse name comment in component section of netlist."
-msgstr ""
-"Nie mogę przetworzyć komentarza nazwy w sekcji komponentów listy sieci."
-
-#: pcbnew/legacy_netlist_reader.cpp:188
+#: pcbnew/legacy_netlist_reader.cpp:185
 msgid "Cannot parse pin name in component net section of netlist."
 msgstr "Nie mogę przetworzyć nazwy pinu w seckcji komponentów listy sieci."
 
-#: pcbnew/legacy_netlist_reader.cpp:197
+#: pcbnew/legacy_netlist_reader.cpp:194
 msgid "Cannot parse net name in component net section of netlist."
 msgstr "Nie mogę przetworzyć nazwy sieci w sekcji komponentów listy sieci."
 
-#: pcbnew/legacy_netlist_reader.cpp:245
+#: pcbnew/legacy_netlist_reader.cpp:242
 #, c-format
 msgid "Cannot find component '%s' in footprint filter section of netlist."
 msgstr ""
@@ -9095,7 +9090,7 @@ msgstr "Nie można otworzyć pliku listy sieci \"%s\"."
 msgid "Netlist Load Error."
 msgstr "Błąd odczytu listy sieci."
 
-#: pcbnew/netlist.cpp:76 cvpcb/cvframe.cpp:781
+#: pcbnew/netlist.cpp:76 cvpcb/cvframe.cpp:786
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -9105,7 +9100,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/netlist.cpp:77 pcbnew/dialogs/dialog_netlist.cpp:406
-#: cvpcb/cvframe.cpp:782
+#: cvpcb/cvframe.cpp:787
 msgid "Netlist Load Error"
 msgstr "Błąd odczytu listy sieci"
 
@@ -9135,15 +9130,10 @@ msgstr ""
 "*** OSTRZEŻENIE: Komponent `%s`, footprint <%s> nie został znaleziony w "
 "żadnej z bibliotek. *** \n"
 
-#: pcbnew/netlist_reader.cpp:333
+#: pcbnew/netlist_reader.cpp:337
 #, c-format
 msgid "Cannot open file %s for reading."
 msgstr "Nie mogę otworzyć pliku %s do odczytu."
-
-#: pcbnew/netlist_reader.cpp:431
-#, c-format
-msgid "Cannot find component '%s' in footprint assignment file."
-msgstr "Nie mogę odnaleźć komponentu '%s; w pliku łącz footprintów."
 
 #: pcbnew/onleftclick.cpp:248
 msgid "Graphic not allowed on Copper layers"
@@ -12683,12 +12673,12 @@ msgid "Current Text Dimensions"
 msgstr "Bieżacy rozmiar tekstu"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:65
-#: common/dialogs/dialog_page_settings_base.cpp:63
+#: common/dialogs/dialog_page_settings_base.cpp:78
 msgid "Width:"
 msgstr "Szerokość:"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:77
-#: common/dialogs/dialog_page_settings_base.cpp:78
+#: common/dialogs/dialog_page_settings_base.cpp:62
 msgid "Height:"
 msgstr "Wysokość:"
 
@@ -13599,7 +13589,7 @@ msgstr "Zła wartość orientacji footprintów"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:22
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:131
-#: common/dialogs/dialog_page_settings_base.cpp:43
+#: common/dialogs/dialog_page_settings_base.cpp:42
 msgid "Orientation:"
 msgstr "Orientacja:"
 
@@ -14753,6 +14743,10 @@ msgstr "Pewne pliki nie zostały znalezione!"
 msgid "Some files are invalid!"
 msgstr "Niektóre pliki są niepoprawne!"
 
+#: cvpcb/cvframe.cpp:782
+msgid "Unknown netlist format"
+msgstr "Nieznany format listy sieci"
+
 #: cvpcb/cvpcb.cpp:30
 msgid "KiCad footprint alias files (*.equ)|*.equ"
 msgstr "Pliki aliasów footprintów programu KiCad (*.equ)|*.equ"
@@ -15684,35 +15678,35 @@ msgstr "Siatka 1mm"
 msgid "Show Copper Thickness"
 msgstr "Pokazuj grubość warstwy miedzi"
 
-#: 3d-viewer/3d_toolbar.cpp:186
+#: 3d-viewer/3d_toolbar.cpp:185
 msgid "Show 3D F&ootprints"
 msgstr "Pokaż &obudowy 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:190
+#: 3d-viewer/3d_toolbar.cpp:188
 msgid "Show Zone &Filling"
 msgstr "Pokaż stre&fy wypełnień"
 
-#: 3d-viewer/3d_toolbar.cpp:194
+#: 3d-viewer/3d_toolbar.cpp:191
 msgid "Show &Adhesive Layers"
 msgstr "Pokaż w&arstwy kleju"
 
-#: 3d-viewer/3d_toolbar.cpp:198
+#: 3d-viewer/3d_toolbar.cpp:195
 msgid "Show &Silkscreen Layer"
 msgstr "Pokaż warstwy &opisowe"
 
-#: 3d-viewer/3d_toolbar.cpp:202
+#: 3d-viewer/3d_toolbar.cpp:198
 msgid "Show Solder &Mask Layers"
 msgstr "Pokaż warstwy z solder&maską"
 
-#: 3d-viewer/3d_toolbar.cpp:206
+#: 3d-viewer/3d_toolbar.cpp:201
 msgid "Show Solder &Paste Layers"
 msgstr "Pokaż warstwy do nakładania &pasty"
 
-#: 3d-viewer/3d_toolbar.cpp:210
+#: 3d-viewer/3d_toolbar.cpp:204
 msgid "Show &Comments and Drawings Layer"
 msgstr "Pokaż warstwę &komentarzy"
 
-#: 3d-viewer/3d_toolbar.cpp:214
+#: 3d-viewer/3d_toolbar.cpp:207
 msgid "Show &Eco Layers"
 msgstr "Pokaż warstwy &ECO"
 
@@ -16479,8 +16473,8 @@ msgid "User (Custom)"
 msgstr "Użytkownika"
 
 #: common/dialogs/dialog_page_settings.cpp:260
-#: common/dialogs/dialog_page_settings.cpp:666
-#: common/dialogs/dialog_page_settings_base.cpp:47
+#: common/dialogs/dialog_page_settings.cpp:670
+#: common/dialogs/dialog_page_settings_base.cpp:46
 msgid "Portrait"
 msgstr "Pionowo"
 
@@ -16501,97 +16495,97 @@ msgstr ""
 msgid "Warning!"
 msgstr "Ostrzeżenie!"
 
-#: common/dialogs/dialog_page_settings.cpp:668
-#: common/dialogs/dialog_page_settings_base.cpp:47
+#: common/dialogs/dialog_page_settings.cpp:672
+#: common/dialogs/dialog_page_settings_base.cpp:46
 msgid "Landscape"
 msgstr "Poziomo"
 
-#: common/dialogs/dialog_page_settings_base.cpp:31
+#: common/dialogs/dialog_page_settings_base.cpp:25
 msgid "Paper"
 msgstr "Papier"
 
-#: common/dialogs/dialog_page_settings_base.cpp:33
+#: common/dialogs/dialog_page_settings_base.cpp:32
 msgid "Size:"
 msgstr "Rozmiar:"
 
-#: common/dialogs/dialog_page_settings_base.cpp:37
+#: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
 msgstr "pusty tekst"
 
-#: common/dialogs/dialog_page_settings_base.cpp:57
-msgid "Custom Size"
-msgstr "Własny rozmiar"
+#: common/dialogs/dialog_page_settings_base.cpp:52
+msgid "Custom Size:"
+msgstr "Rozmiar użytkownika:"
 
-#: common/dialogs/dialog_page_settings_base.cpp:67
-msgid "Custom paper width."
-msgstr "Szerokość papieru użytkownika."
-
-#: common/dialogs/dialog_page_settings_base.cpp:82
+#: common/dialogs/dialog_page_settings_base.cpp:68
 msgid "Custom paper height."
 msgstr "Wysokość papieru użytkownika."
 
-#: common/dialogs/dialog_page_settings_base.cpp:99
+#: common/dialogs/dialog_page_settings_base.cpp:84
+msgid "Custom paper width."
+msgstr "Szerokość papieru użytkownika."
+
+#: common/dialogs/dialog_page_settings_base.cpp:94
 msgid "Layout Preview"
 msgstr "Podgląd"
 
-#: common/dialogs/dialog_page_settings_base.cpp:132
+#: common/dialogs/dialog_page_settings_base.cpp:113
 msgid "Title Block Parameters"
 msgstr "Parametry tabliczki tytułowej"
 
-#: common/dialogs/dialog_page_settings_base.cpp:138
+#: common/dialogs/dialog_page_settings_base.cpp:123
 #, c-format
 msgid "Number of sheets: %d"
 msgstr "Liczba arkuszy: %d"
 
-#: common/dialogs/dialog_page_settings_base.cpp:145
+#: common/dialogs/dialog_page_settings_base.cpp:130
 #, c-format
 msgid "Sheet number: %d"
 msgstr "Numer arkusza: %d"
 
-#: common/dialogs/dialog_page_settings_base.cpp:153
-msgid "Revision"
-msgstr "Rewizja"
-
-#: common/dialogs/dialog_page_settings_base.cpp:161
-#: common/dialogs/dialog_page_settings_base.cpp:182
-#: common/dialogs/dialog_page_settings_base.cpp:197
-#: common/dialogs/dialog_page_settings_base.cpp:212
-#: common/dialogs/dialog_page_settings_base.cpp:227
-#: common/dialogs/dialog_page_settings_base.cpp:242
-#: common/dialogs/dialog_page_settings_base.cpp:257
-#: common/dialogs/dialog_page_settings_base.cpp:272
-msgid "Export to other sheets"
-msgstr "Przenieś na inne arkusze"
-
-#: common/dialogs/dialog_page_settings_base.cpp:168
+#: common/dialogs/dialog_page_settings_base.cpp:140
 msgid "Issue Date"
 msgstr "Data wydania"
 
-#: common/dialogs/dialog_page_settings_base.cpp:176
+#: common/dialogs/dialog_page_settings_base.cpp:153
 msgid "<-"
 msgstr "<-"
 
-#: common/dialogs/dialog_page_settings_base.cpp:189
+#: common/dialogs/dialog_page_settings_base.cpp:159
+#: common/dialogs/dialog_page_settings_base.cpp:184
+#: common/dialogs/dialog_page_settings_base.cpp:209
+#: common/dialogs/dialog_page_settings_base.cpp:234
+#: common/dialogs/dialog_page_settings_base.cpp:259
+#: common/dialogs/dialog_page_settings_base.cpp:284
+#: common/dialogs/dialog_page_settings_base.cpp:309
+#: common/dialogs/dialog_page_settings_base.cpp:334
+msgid "Export to other sheets"
+msgstr "Przenieś na inne arkusze"
+
+#: common/dialogs/dialog_page_settings_base.cpp:171
+msgid "Revision"
+msgstr "Rewizja"
+
+#: common/dialogs/dialog_page_settings_base.cpp:196
 msgid "Title"
 msgstr "Tytuł"
 
-#: common/dialogs/dialog_page_settings_base.cpp:204
+#: common/dialogs/dialog_page_settings_base.cpp:221
 msgid "Company"
 msgstr "Firma"
 
-#: common/dialogs/dialog_page_settings_base.cpp:219
+#: common/dialogs/dialog_page_settings_base.cpp:246
 msgid "Comment1"
 msgstr "Komentarz 1"
 
-#: common/dialogs/dialog_page_settings_base.cpp:234
+#: common/dialogs/dialog_page_settings_base.cpp:271
 msgid "Comment2"
 msgstr "Komentarz 2"
 
-#: common/dialogs/dialog_page_settings_base.cpp:249
+#: common/dialogs/dialog_page_settings_base.cpp:296
 msgid "Comment3"
 msgstr "Komentarz 3"
 
-#: common/dialogs/dialog_page_settings_base.cpp:264
+#: common/dialogs/dialog_page_settings_base.cpp:321
 msgid "Comment4"
 msgstr "Komentarz 4"
 
@@ -18323,7 +18317,7 @@ msgstr "Edytor skrótów klawiszowych"
 msgid "Image Editor"
 msgstr "Edytor obrazów"
 
-#: common/dialogs/dialog_page_settings_base.h:124
+#: common/dialogs/dialog_page_settings_base.h:140
 msgid "Page Settings"
 msgstr "Ustawienia strony"
 
@@ -18342,6 +18336,13 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:294
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Cannot parse name comment in component section of netlist."
+#~ msgstr ""
+#~ "Nie mogę przetworzyć komentarza nazwy w sekcji komponentów listy sieci."
+
+#~ msgid "Cannot find component '%s' in footprint assignment file."
+#~ msgstr "Nie mogę odnaleźć komponentu '%s; w pliku łącz footprintów."
 
 #~ msgid "Basic Inscriptions"
 #~ msgstr "Opis"
