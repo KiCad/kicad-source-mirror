@@ -359,7 +359,7 @@ public:
      * Function IsEmpty
      * @return true if the footprint library table is empty.
      */
-    bool IsEmpty() const { return rows.empty(); }
+    bool IsEmpty() const;
 
     /**
      * Function ExpandEnvSubsitutions

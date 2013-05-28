@@ -1,5 +1,5 @@
 /**
- * @file title_block_shape.cpp
+ * @file title_block_shapes.cpp
  * @brief description of graphic items and texts to build a title block
  */
 

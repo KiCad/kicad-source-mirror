@@ -310,6 +310,15 @@ const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString aString )
 }
 
 
+bool FP_LIB_TABLE::IsEmpty() const
+{
+    if( fallBack == NULL )
+        return rows.empty();
+
+    return fallBack->IsEmpty() && rows.empty();
+}
+
+
 void FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR )
 {
     wxFileName fn = GetGlobalTableFileName();

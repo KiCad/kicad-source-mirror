@@ -256,6 +256,7 @@ public:
      *
      * @param aPaperFormat The paper size type, for basic inscriptions.
      * @param aFileName The file name, for basic inscriptions.
+     * @param aSheetPathHumanReadable The human readable sheet path.
      * @param aTitleBlock The sheet title block, for basic inscriptions.
      * @param aLineColor The color for drawing and fixed text.
      * @param aTextColor The color for user inscriptions.

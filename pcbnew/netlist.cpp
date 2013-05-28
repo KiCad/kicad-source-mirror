@@ -34,6 +34,8 @@
 #include <netlist_reader.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
+#include <fpid.h>
+#include <fp_lib_table.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -157,6 +159,8 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
 }
 
 
+#if !defined( USE_FP_LIB_TABLE )
+
 void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     throw( IO_ERROR, PARSE_ERROR )
 {
@@ -252,3 +256,92 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             component->SetModule( module );
     }
 }
+
+#else
+
+void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
+    throw( IO_ERROR, PARSE_ERROR )
+{
+    bool       loadFootprint;
+    wxString   msg;
+    wxString   lastFootprintLibName;
+    COMPONENT* component;
+    MODULE*    module = 0;
+    MODULE*    fpOnBoard;
+
+    if( aNetlist.IsEmpty() || m_footprintLibTable->IsEmpty() )
+        return;
+
+    aNetlist.SortByFootprintName();
+
+    for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
+    {
+        component = aNetlist.GetComponent( ii );
+
+        // Check if component footprint is already on BOARD and only load the footprint from
+        // the library if it's needed.
+        if( aNetlist.IsFindByTimeStamp() )
+            fpOnBoard = m_Pcb->FindModule( aNetlist.GetComponent( ii )->GetTimeStamp(), true );
+        else
+            fpOnBoard = m_Pcb->FindModule( aNetlist.GetComponent( ii )->GetReference() );
+
+        loadFootprint = (fpOnBoard == NULL) ||
+                        (fpOnBoard->GetPath() != component->GetFootprintName());
+
+        if( loadFootprint && (component->GetFootprintName() != lastFootprintLibName) )
+        {
+            module = NULL;
+
+            FPID fpid;
+
+            if( fpid.Parse( TO_UTF8( component->GetFootprintName() ) ) >= 0 )
+            {
+                if( aReporter )
+                {
+                    msg.Printf( _( "*** Warning: Component \"%s\" footprint ID <%s> is not "
+                                   "valid. ***\n" ),
+                                GetChars( component->GetReference() ),
+                                GetChars( component->GetFootprintName() ) );
+                    aReporter->Report( msg );
+                }
+
+                continue;
+            }
+
+            module = PCB_BASE_FRAME::loadFootprint( fpid );
+
+            if( module )
+            {
+                lastFootprintLibName = component->GetFootprintName();
+            }
+
+            if( module == NULL )
+            {
+                if( aReporter )
+                {
+                    wxString msg;
+                    msg.Printf( _( "*** Warning: component `%s` footprint <%s> was not found in "
+                                   "any libraries in the footprint library table. ***\n" ),
+                                GetChars( component->GetReference() ),
+                                GetChars( component->GetFootprintName() ) );
+                    aReporter->Report( msg );
+                }
+
+                continue;
+            }
+        }
+        else
+        {
+            // Footprint already loaded from a library, duplicate it (faster)
+            if( module == NULL )
+                continue;            // Module does not exist in any library.
+
+            module = new MODULE( *module );
+        }
+
+        if( loadFootprint && module != NULL )
+            component->SetModule( module );
+    }
+}
+
+#endif

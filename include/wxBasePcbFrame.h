@@ -402,12 +402,11 @@ public:
      *      if it is a short name, the file is searched in all library valid paths
      * @param aFootprintName is the footprint to load
      * @param aDisplayError = true to display an error message if any.
-     * @param aAddToBoard Set to true to add the footprint to the board if found.
      *
      * @return MODULE* - new module, or NULL
      */
     MODULE* loadFootprintFromLibrary( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                      bool aDisplayError, bool aAddToBoard = true );
+                                      bool aDisplayError );
 
     /**
      * Function loadFootprintFromLibraries

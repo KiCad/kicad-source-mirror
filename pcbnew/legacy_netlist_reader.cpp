@@ -1,5 +1,5 @@
 /**
- * @file pcbnew/netlist_reader_firstformat.cpp
+ * @file pcbnew/legacy_netlist_reader.cpp
  */
 
 /*
