@@ -273,11 +273,13 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     {
         int unit = ((LIB_EDIT_FRAME*)aPanel->GetParent())->GetUnit();
         wxString text = ((LIB_FIELD*)item)->GetFullText( unit );
-        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), UNSPECIFIED_COLOR, g_XorMode, &text,
+        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ),
+                    UNSPECIFIED_COLOR, g_XorMode, &text,
                     DefaultTransform );
     }
     else
-        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), UNSPECIFIED_COLOR, g_XorMode, NULL,
+        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ),
+                    UNSPECIFIED_COLOR, g_XorMode, NULL,
                     DefaultTransform );
 }
 

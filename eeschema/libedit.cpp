@@ -257,13 +257,13 @@ void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
         // display reference like in schematic (a reference U is shown U? or U?A)
         // although it is stored without ? and part id.
         // So temporary change the reference by a schematic like reference
-        LIB_FIELD* Field = m_component->GetField( REFERENCE );
-        wxString fieldText = Field->GetText();
-        wxString fieldfullText = Field->GetFullText( m_unit );
-        Field->SetText( fieldfullText );
+        LIB_FIELD* field = m_component->GetField( REFERENCE );
+        wxString fieldText = field->GetText();
+        wxString fieldfullText = field->GetFullText( m_unit );
+        field->EDA_TEXT::SetText( fieldfullText );  // change the field text string only
         m_component->Draw( m_canvas, aDC, aOffset, m_unit,
                            m_convert, GR_DEFAULT_DRAWMODE );
-        Field->SetText( fieldText );
+        field->EDA_TEXT::SetText( fieldText );      // restore the field text string
     }
 }
 
