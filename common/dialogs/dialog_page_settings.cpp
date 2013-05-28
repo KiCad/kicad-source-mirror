@@ -606,7 +606,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         double scaleH = (double) lyHeight / clamped_layout_size.y / appScale;
 
         // Prepare DC.
-        wxSize example_size( lyWidth, lyHeight );
+        wxSize example_size( lyWidth + 1, lyHeight + 1 );
         wxMemoryDC memDC;
         memDC.SelectObject( *m_page_bitmap );
         memDC.SetClippingRegion( wxPoint( 0, 0 ), example_size );
