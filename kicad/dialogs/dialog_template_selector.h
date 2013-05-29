@@ -60,13 +60,16 @@ class TEMPLATE_SELECTION_PANEL : public TEMPLATE_SELECTION_PANEL_BASE
 {
 protected:
     wxWindow* parent;
+    wxString  m_templatesPath;
 
 public:
     /**
      * @param aParent The window creating the dialog
      */
-    TEMPLATE_SELECTION_PANEL( wxWindow* aParent );
+    TEMPLATE_SELECTION_PANEL( wxWindow* aParent, const wxString& aPath );
     ~TEMPLATE_SELECTION_PANEL();
+
+    const wxString& GetPath() { return m_templatesPath; }
 };
 
 class DIALOG_TEMPLATE_SELECTOR : public DIALOG_TEMPLATE_SELECTOR_BASE
@@ -81,15 +84,15 @@ public:
     ~DIALOG_TEMPLATE_SELECTOR();
 
     /**
-     * Add a new page with \a aTitle, populated with templates from \a aPath - All directories
-     * directories under the path are treated as templates
+     * Add a new page with \a aTitle, populated with templates from \a aPath
+     * - All directories under the path are treated as templates
      */
     void AddPage( const wxString& aTitle, wxFileName& aPath );
     void SetHtml( wxFileName aFilename );
     TEMPLATE_WIDGET* GetWidget();
     void SetWidget( TEMPLATE_WIDGET* aWidget );
-    void onNotebookResize(wxSizeEvent& event);
-
+    void onNotebookResize( wxSizeEvent& event );
+	void OnPageChange( wxNotebookEvent& event );
 };
 
 #endif
