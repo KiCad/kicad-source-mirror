@@ -132,7 +132,8 @@ void DIALOG_TEMPLATE_SELECTOR::onNotebookResize(wxSizeEvent& event)
 void DIALOG_TEMPLATE_SELECTOR::OnPageChange( wxNotebookEvent& event )
 {
     int page = m_notebook->GetSelection();
-    if( page != wxNOT_FOUND )
+
+    if( page != wxNOT_FOUND && (unsigned)page < m_panels.size() )
         m_textCtrlTemplatePath->SetValue( m_panels[page]->GetPath() );
 }
 
