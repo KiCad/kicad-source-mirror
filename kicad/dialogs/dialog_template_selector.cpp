@@ -28,10 +28,12 @@
 #include <wx/settings.h>
 
 
-TEMPLATE_SELECTION_PANEL::TEMPLATE_SELECTION_PANEL( wxWindow* aParent ) :
+TEMPLATE_SELECTION_PANEL::TEMPLATE_SELECTION_PANEL( wxWindow* aParent,
+                                                    const wxString& aPath ) :
     TEMPLATE_SELECTION_PANEL_BASE( aParent )
 {
     parent = aParent;
+    m_templatesPath = aPath;
 }
 
 
@@ -127,6 +129,13 @@ void DIALOG_TEMPLATE_SELECTOR::onNotebookResize(wxSizeEvent& event)
     event.Skip();
 }
 
+void DIALOG_TEMPLATE_SELECTOR::OnPageChange( wxNotebookEvent& event )
+{
+    int page = m_notebook->GetSelection();
+    if( page != wxNOT_FOUND )
+        m_textCtrlTemplatePath->SetValue( m_panels[page]->GetPath() );
+}
+
 
 DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent ) :
     DIALOG_TEMPLATE_SELECTOR_BASE( aParent )
@@ -186,14 +195,18 @@ void DIALOG_TEMPLATE_SELECTOR::AddPage( const wxString& aTitle, wxFileName& aPat
     wxNotebookPage* newPage = new wxNotebookPage( m_notebook, wxID_ANY );
     m_notebook->AddPage( newPage, aTitle );
 
-    TEMPLATE_SELECTION_PANEL* p = new TEMPLATE_SELECTION_PANEL( newPage );
-    m_panels.push_back( p );
+    wxString path = aPath.GetFullPath();    // caller ensures this ends with file separator.
+
+    TEMPLATE_SELECTION_PANEL* tpanel = new TEMPLATE_SELECTION_PANEL( newPage, path );
+    m_panels.push_back( tpanel );
+
+    if( m_notebook->GetPageCount() == 1 )
+        m_textCtrlTemplatePath->SetValue( path );
+
 
     // Get a list of files under the template path to include as choices...
     wxArrayString   files;
     wxDir           dir;
-
-    wxString path = aPath.GetFullPath();    // caller ensures this ends with file separator.
 
     if( dir.Open( path ) )
     {
