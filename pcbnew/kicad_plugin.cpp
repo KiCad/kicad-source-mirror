@@ -62,6 +62,30 @@ using namespace std;
  */
 static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
 
+// Helper function to print a float number without using scientific notation
+// and no trailing 0
+// For many reasons, S-expr does not accept scientific notation
+// for floating numbers, so we cannot use the %g format to print a fp number
+// and %f leaves trailing 0.
+// this helper function uses the %f format, and then removes trailing 0
+std::string double2str( double aValue )
+{
+    char buf[50];
+    int len = sprintf( buf, "%.16f", aValue );
+
+    while( --len > 0 && buf[len] == '0' )
+        buf[len] = '\0';
+
+    // Remove useless separator:
+    if( buf[len] == '.' )
+        buf[len] = '\0';
+    else
+        ++len;
+
+    return std::string( buf, len );
+}
+
+
 
 /**
  * Class FP_CACHE_ITEM
@@ -549,8 +573,8 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                       FMTIU( aBoard->GetDesignSettings().m_SolderPasteMargin ).c_str() );
 
     if( aBoard->GetDesignSettings().m_SolderPasteMarginRatio != 0 )
-        m_out->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %g)\n",
-                      aBoard->GetDesignSettings().m_SolderPasteMarginRatio );
+        m_out->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %s)\n",
+                      double2str( aBoard->GetDesignSettings().m_SolderPasteMarginRatio ).c_str() );
 
     m_out->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
                   FMTIU( aBoard->GetOriginAxisPosition().x ).c_str(),
@@ -896,8 +920,8 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
                       FMT_IU( aModule->GetLocalSolderPasteMargin() ).c_str() );
 
     if( aModule->GetLocalSolderPasteMarginRatio() != 0 )
-        m_out->Print( aNestLevel+1, "(solder_paste_ratio %g)\n",
-                      aModule->GetLocalSolderPasteMarginRatio() );
+        m_out->Print( aNestLevel+1, "(solder_paste_ratio %s)\n",
+                      double2str( aModule->GetLocalSolderPasteMarginRatio() ).c_str() );
 
     if( aModule->GetLocalClearance() != 0 )
         m_out->Print( aNestLevel+1, "(clearance %s)\n",
@@ -947,20 +971,20 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
             m_out->Print( aNestLevel+1, "(model %s\n",
                           m_out->Quotew( t3D->m_Shape3DName ).c_str() );
 
-            m_out->Print( aNestLevel+2, "(at (xyz %.16g %.16g %.16g))\n",
-                          t3D->m_MatPosition.x,
-                          t3D->m_MatPosition.y,
-                          t3D->m_MatPosition.z );
+            m_out->Print( aNestLevel+2, "(at (xyz %s %s %s))\n",
+                          double2str( t3D->m_MatPosition.x ).c_str(),
+                          double2str( t3D->m_MatPosition.y ).c_str(),
+                          double2str( t3D->m_MatPosition.z ).c_str() );
 
-            m_out->Print( aNestLevel+2, "(scale (xyz %.16g %.16g %.16g))\n",
-                          t3D->m_MatScale.x,
-                          t3D->m_MatScale.y,
-                          t3D->m_MatScale.z );
+            m_out->Print( aNestLevel+2, "(scale (xyz %s %s %s))\n",
+                          double2str( t3D->m_MatScale.x ).c_str(),
+                          double2str( t3D->m_MatScale.y ).c_str(),
+                          double2str( t3D->m_MatScale.z ).c_str() );
 
-            m_out->Print( aNestLevel+2, "(rotate (xyz %.16g %.16g %.16g))\n",
-                          t3D->m_MatRotation.x,
-                          t3D->m_MatRotation.y,
-                          t3D->m_MatRotation.z );
+            m_out->Print( aNestLevel+2, "(rotate (xyz %s %s %s))\n",
+                          double2str( t3D->m_MatRotation.x ).c_str(),
+                          double2str( t3D->m_MatRotation.y ).c_str(),
+                          double2str( t3D->m_MatRotation.z ).c_str() );
 
             m_out->Print( aNestLevel+1, ")\n" );
         }
@@ -1133,8 +1157,8 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                       FMT_IU( aPad->GetLocalSolderPasteMargin() ).c_str() );
 
     if( aPad->GetLocalSolderPasteMarginRatio() != 0 )
-        m_out->Print( aNestLevel+1, "(solder_paste_margin_ratio %g)\n",
-                      aPad->GetLocalSolderPasteMarginRatio() );
+        m_out->Print( aNestLevel+1, "(solder_paste_margin_ratio %s)\n",
+                      double2str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
 
     if( aPad->GetLocalClearance() != 0 )
         m_out->Print( aNestLevel+1, "(clearance %s)\n",

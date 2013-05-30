@@ -44,6 +44,9 @@
 
 #include <worksheet_shape_builder.h>
 
+static const wxString productName = wxT( "KiCad E.D.A.  " );
+
+
 void DrawPageLayout( wxDC* aDC, EDA_DRAW_PANEL * aCanvas,
                      const PAGE_INFO& aPageInfo,
                      const wxString &aFullSheetName,
@@ -251,7 +254,7 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 break;
 
             case 'K':
-                msg += g_ProductName + wxGetApp().GetAppName();
+                msg += productName + wxGetApp().GetAppName();
                 msg += wxT( " " ) + GetBuildVersion();
                 break;
 
