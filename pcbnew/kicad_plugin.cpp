@@ -64,27 +64,62 @@ static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
 
 // Helper function to print a float number without using scientific notation
 // and no trailing 0
-// For many reasons, S-expr does not accept scientific notation
-// for floating numbers, so we cannot use the %g format to print a fp number
-// and %f leaves trailing 0.
-// this helper function uses the %f format, and then removes trailing 0
+
+#if 0
+// Does not work for aValue < 0.0001 and > 0.
+// Will need to support exponents in DSNLEXER if we get exponents > 16, i.e. the "precision".
 std::string double2str( double aValue )
 {
-    char buf[50];
-    int len = sprintf( buf, "%.16f", aValue );
+    char    buf[50];
+    int     len;
 
-    while( --len > 0 && buf[len] == '0' )
-        buf[len] = '\0';
+    if( aValue != 0.0 && fabs( aValue ) <= 0.0001 )
+    {
+        len = sprintf( buf, "%.10f", aValue );
 
-    // Remove useless separator:
-    if( buf[len] == '.' )
-        buf[len] = '\0';
-    else
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        if( buf[len] == '.' )
+            buf[len--] = '\0';
+
         ++len;
+    }
+    else
+    {
+        len = sprintf( buf, "%.10g", mm );
+    }
 
     return std::string( buf, len );
 }
 
+#else
+// this one handles 0.00001 ok, and 1.222222222222222 ok, previous did not.
+std::string double2str( double aValue )
+{
+    char    buf[50];
+    int     len;
+
+    if( aValue != 0.0 && fabs( aValue ) <= 0.0001 )
+    {
+        len = sprintf( buf,  "%.16f", aValue );
+
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        if( buf[len] == '.' )
+            buf[len] = '\0';
+        else
+            ++len;
+    }
+    else
+    {
+        len = sprintf( buf, "%.16g", aValue );
+    }
+
+    return std::string( buf, len );;
+}
+#endif
 
 
 /**
