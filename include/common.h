@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -447,9 +447,6 @@ private:
     void    setMargins();
 };
 
-
-extern wxString     g_ProductName;
-
 /// Default user lib path can be left void, if the standard lib path is used
 extern wxString     g_UserLibDirBuffer;
 
@@ -460,8 +457,6 @@ extern EDA_UNITS_T  g_UserUnit;     ///< display units
 /// Draw color for moving objects.
 extern EDA_COLOR_T  g_GhostColor;
 
-
-// COMMON.CPP
 
 /**
  * Function SetLocaleTo_C_standard
@@ -628,12 +623,12 @@ wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter );
  */
 unsigned GetRunningMicroSecs();
 
-/** 
+/**
  * Formats a wxDateTime using the long date format (on wx 2.9) or
  * an hardcoded format in wx 2.8; the idea is to avoid like the plague
  * the numeric-only date formats: it's difficult to discriminate between
  * dd/mm/yyyy and mm/dd/yyyy. The output is meant for user consumption
- * so no attempt to parse it should be done 
+ * so no attempt to parse it should be done
  */
 wxString FormatDateLong( const wxDateTime &aDate );
 

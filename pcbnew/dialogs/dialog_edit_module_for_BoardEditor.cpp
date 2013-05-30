@@ -148,7 +148,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 
     // Add solder paste margin ration in per cent
     // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
-    msg.Printf( wxT( "%.1f" ),
+    msg.Printf( wxT( "%f" ),
                     m_CurrentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
 
     if( m_CurrentModule->GetLocalSolderPasteMarginRatio() == 0.0 &&

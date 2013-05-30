@@ -182,15 +182,15 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
         m_SolderPasteMarginCtrl->SetValue( wxT("-") + m_SolderPasteMarginCtrl->GetValue() );
 
     if( m_currentModule->GetLocalSolderPasteMarginRatio() == 0.0 )
-        msg.Printf( wxT( "-%.1f" ), m_currentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
+        msg.Printf( wxT( "-%f" ), m_currentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
     else
-        msg.Printf( wxT( "%.1f" ), m_currentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
+        msg.Printf( wxT( "%f" ), m_currentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
 
     m_SolderPasteMarginRatioCtrl->SetValue( msg );
 
     // Add solder paste margin ration in per cent
     // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
-    msg.Printf( wxT( "%.1f" ),
+    msg.Printf( wxT( "%f" ),
                     m_currentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
 
     if( m_currentModule->GetLocalSolderPasteMarginRatio() == 0.0 &&
