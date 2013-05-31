@@ -394,6 +394,93 @@ static bool isSpace( int cc )
 }
 
 
+/**
+ * Function isNumber
+ * return true if the next sequence of s-expression text is a number:
+ * either an integer, fixed point, or float with exponent.
+ *
+ * @param cp is the start of the current token.
+ * @param limit is the end of the current line of text.
+ * @param next is where to put a pointer to the start of the token after this one, but is only
+ *    updated if the return value is true.
+ * @return bool - true if this is a number, else false.
+ */
+static bool isNumber( const char* cp, const char* limit, const char** next )
+{
+#if 1   // no exponents supported
+
+    if( strchr( "+-.0123456789", *cp ) )
+    {
+        ++cp;
+        while( cp<limit && strchr( ".0123456789", *cp )  )
+            ++cp;
+
+        if( (cp<limit && isSpace(*cp)) || *cp==')' || *cp=='(' || cp==limit )
+        {
+            *next = cp;
+            return true;
+        }
+    }
+
+    return false;
+
+#else   // support numbers with exponents.
+
+    // regex for a float: "^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?" i.e. any number
+    // is traversed, coded manually here:
+
+    bool sawNumber = false;
+
+    if( cp < limit && strchr( "-+", *cp ) )
+        ++cp;
+
+    while( cp < limit && strchr( "0123456789", *cp ) )
+    {
+        ++cp;
+        sawNumber = true;
+    }
+
+    {
+        if( cp < limit && *cp == '.' )
+            ++cp;
+
+        while( cp < limit && strchr( "0123456789", *cp ) )
+        {
+            sawNumber = true;
+            ++cp;
+        }
+
+        if( cp < limit && strchr( "Ee", *cp ) )
+        {
+            ++cp;
+
+            sawNumber = false;  // exponent mandates at least one digit thereafter.
+
+            if( cp < limit && strchr( "-+", *cp ) )
+                ++cp;
+
+            while( cp < limit && strchr( "0123456789", *cp ) )
+            {
+                ++cp;
+                sawNumber = true;
+            }
+        }
+    }
+
+    if( sawNumber )
+    {
+        if( ( cp<limit && isSpace(*cp) ) || *cp==')' || *cp=='(' || cp==limit )
+        {
+            *next = cp;
+            return true;
+        }
+    }
+
+    return false;
+#endif
+}
+
+
 int DSNLEXER::NextTok() throw( IO_ERROR )
 {
     const char*   cur  = next;
@@ -507,22 +594,13 @@ L_read:
             goto exit;
         }
 
-        // handle DSN_NUMBER
-        if( strchr( "+-.0123456789", *cur ) )
+        if( isNumber( cur, limit, &head ) )
         {
-            head = cur+1;
-            while( head<limit && strchr( ".0123456789", *head )  )
-                ++head;
-
-            if( (head<limit && isSpace(*head)) || *head==')' || *head=='(' || head==limit )
-            {
-                curText.clear();
-                curText.append( cur, head );
-                curTok = DSN_NUMBER;
-                goto exit;
-            }
-
-            // else it was something like +5V, fall through below
+            // handle DSN_NUMBER
+            curText.clear();
+            curText.append( cur, head );
+            curTok = DSN_NUMBER;
+            goto exit;
         }
 
         // a quoted string, will return DSN_STRING
