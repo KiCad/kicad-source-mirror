@@ -34,6 +34,7 @@ set(CVPCB_SRCS
     class_components_listbox.cpp
     class_DisplayFootprintsFrame.cpp
     class_footprints_listbox.cpp
+    class_library_listbox.cpp
     cvframe.cpp
     cvpcb.cpp
     listboxes.cpp

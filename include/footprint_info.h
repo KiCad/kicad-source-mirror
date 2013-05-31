@@ -45,10 +45,9 @@ class FP_LIB_TABLE;
  */
 class FOOTPRINT_INFO
 {
+public:
     wxString  m_libName;    ///< Name of the library containing this module excluding path and ext.
     wxString  m_libPath;    ///< The full library name and path associated the footprint.
-
-public:
     wxString  m_Module;     ///< Module name.
     int       m_Num;        ///< Order number in the display list.
     wxString  m_Doc;        ///< Footprint description.

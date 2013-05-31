@@ -85,6 +85,8 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
+    EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST,
+              CVPCB_MAINFRAME::OnSelectFilteringFootprint )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST,
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
 
@@ -97,6 +99,7 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
     EVT_LIST_ITEM_SELECTED( ID_CVPCB_FOOTPRINT_LIST, CVPCB_MAINFRAME::OnLeftClick )
     EVT_LIST_ITEM_ACTIVATED( ID_CVPCB_FOOTPRINT_LIST, CVPCB_MAINFRAME::OnLeftDClick )
     EVT_LIST_ITEM_SELECTED( ID_CVPCB_COMPONENT_LIST, CVPCB_MAINFRAME::OnSelectComponent )
+    EVT_LIST_ITEM_SELECTED( ID_CVPCB_LIBRARY_LIST, CVPCB_MAINFRAME::OnSelectComponent )
 
     EVT_UPDATE_UI( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE, CVPCB_MAINFRAME::OnUpdateKeepOpenOnSave )
 END_EVENT_TABLE()
@@ -112,6 +115,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
 
     m_ListCmp = NULL;
     m_FootprintList = NULL;
+    m_LibraryList = NULL;
     m_DisplayFootprintFrame = NULL;
     m_mainToolBar = NULL;
     m_modified = false;
@@ -160,6 +164,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
     // Create list of available modules and components of the schematic
     BuildCmpListBox();
     BuildFOOTPRINTS_LISTBOX();
+    BuildLIBRARY_LISTBOX();
 
     m_auimgr.SetManagedWindow( this );
 
@@ -179,10 +184,15 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
         m_auimgr.AddPane( m_ListCmp,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_ListCmp" ) ).CentrePane() );
 
+    if( m_LibraryList)
+        m_auimgr.AddPane( m_LibraryList,
+                          wxAuiPaneInfo( info ).Name( wxT( "m_LibraryList" ) ).
+                          Left().BestSize( (int) ( m_FrameSize.x * 0.20 ), m_FrameSize.y ) );
+
     if( m_FootprintList )
         m_auimgr.AddPane( m_FootprintList,
                           wxAuiPaneInfo( info ).Name( wxT( "m_FootprintList" ) ).
-                          Right().BestSize( (int) ( m_FrameSize.x * 0.36 ), m_FrameSize.y ) );
+                          Right().BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
 
     m_auimgr.Update();
 }
@@ -523,9 +533,11 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     #define REDRAW_LIST true
     #define SELECT_FULL_LIST true
     int selection = -1;
+    wxString SelectedLibrary;
 
     if( !m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST )
         && !m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST )
+        && !m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST )
         )
         m_FootprintList->SetActiveFootprintList( SELECT_FULL_LIST, REDRAW_LIST );
 
@@ -546,6 +558,12 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
                 {
                     m_FootprintList->SetFootprintFilteredByPinCount( m_netlist.GetComponent( selection ),
                                                                      m_footprints );
+                }
+                else
+                if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST ) )
+                {
+                    SelectedLibrary=m_LibraryList->GetSelectedLibrary();
+                    m_FootprintList->SetFootprintFilteredByLibraryList( m_footprints, SelectedLibrary );
                 }
                 else
                 {
@@ -610,14 +628,23 @@ void CVPCB_MAINFRAME::OnSelectFilteringFootprint( wxCommandEvent& event )
     case ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST:
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, false );
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, false );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST, false );
         break;
 
     case ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST:
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, false );
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, false );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST, false );
         break;
 
     case ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST:
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, false );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, false );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST, false );
+        break;
+
+    case ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST:
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, false );
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, false );
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, false );
         break;
