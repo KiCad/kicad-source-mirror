@@ -60,10 +60,13 @@ endif(APPLE)
 # auto-generate pcb_calculator_datafile.h and pcb_calculator_datafile_keywords.cpp
 # for the storage data file format.
 make_lexer(
-   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile.keywords
-   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_lexer.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
-   PCBCALC_DATA_T
+    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile.keywords
+    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
+    PCBCALC_DATA_T
+
+    # Pass header file with dependency on *_lexer.h as extra_arg
+    datafile_read_write.h
    )
 
 

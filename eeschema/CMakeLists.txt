@@ -198,6 +198,9 @@ make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.cpp
     TFIELD_T
+
+    # Pass header file with dependency on *_lexer.h as extra_arg
+    template_fieldnames.h
     )
 
 add_executable(eeschema WIN32 MACOSX_BUNDLE
