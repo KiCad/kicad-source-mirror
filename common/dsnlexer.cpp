@@ -407,7 +407,7 @@ static bool isSpace( int cc )
  */
 static bool isNumber( const char* cp, const char* limit, const char** next )
 {
-#if 1   // no exponents supported
+#if 0   // no exponents supported
 
     if( strchr( "+-.0123456789", *cp ) )
     {
@@ -440,16 +440,19 @@ static bool isNumber( const char* cp, const char* limit, const char** next )
         sawNumber = true;
     }
 
+    if( cp < limit && *cp == '.' )
     {
-        if( cp < limit && *cp == '.' )
-            ++cp;
+        ++cp;
 
         while( cp < limit && strchr( "0123456789", *cp ) )
         {
-            sawNumber = true;
             ++cp;
+            sawNumber = true;
         }
+    }
 
+    if( sawNumber )
+    {
         if( cp < limit && strchr( "Ee", *cp ) )
         {
             ++cp;
@@ -469,6 +472,7 @@ static bool isNumber( const char* cp, const char* limit, const char** next )
 
     if( sawNumber )
     {
+        // token can only be a number if not adjoined with other non-number token text
         if( cp==limit || isSpace( *cp ) || *cp==')' || *cp=='(' )
         {
             *next = cp;
