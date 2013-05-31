@@ -1,13 +1,7 @@
 project(kicad)
 
-# The minimum CMake version requirement could be different under unix, OSX,  or Windows
-if(WIN32)
-    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)   # win32 and win64
-elseif(APPLE)
-    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)   # OSX
-else()
-    cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)   # Linux, Unix, and everything else.
-endif()
+cmake_minimum_required(VERSION 2.8.4 FATAL_ERROR)
+# because of http://public.kitware.com/Bug/view.php?id=10395
 
 # Path to local CMake modules.
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
@@ -359,9 +353,9 @@ set(INC_AFTER
 # 'CMakeLists.txt' files to process
 #================================================
 
-############
-# Binaries #
-############
+############################
+# Binaries (CMake targets) #
+############################
 
 add_subdirectory(bitmaps_png)
 add_subdirectory(common)
@@ -378,6 +372,18 @@ add_subdirectory(bitmap2component)
 add_subdirectory(pcb_calculator)
 add_subdirectory(tools)
 #add_subdirectory(new)
+
+
+# Make all libs and executables depend on ExternalProject_Add( boost ),
+# except perhaps bitmap lib
+add_dependencies( pcbnew boost )
+add_dependencies( eeschema boost )
+add_dependencies( cvpcb boost )
+add_dependencies( common boost )
+add_dependencies( pcbcommon boost )
+add_dependencies( 3d-viewer boost )
+add_dependencies( pcad2kicadpcb boost )
+add_dependencies( polygon boost )
 
 
 #############

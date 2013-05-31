@@ -150,13 +150,15 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
 
 add_library(pcbcommon STATIC ${PCB_COMMON_SRCS})
 
-
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
 make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/netlist.keywords
     ${PROJECT_SOURCE_DIR}/include/netlist_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/netlist_keywords.cpp
     NL_T
+
+    # Pass header file with dependency on *_lexer.h as extra_arg
+    ${CMAKE_PROJECT_SOURCE_DIR}/pcbnew/netlist_reader.h
     )
 
 # auto-generate pcb_plot_params_lexer.h and pcb_plot_params_keywords.cpp
@@ -165,21 +167,29 @@ make_lexer(
     ${PROJECT_SOURCE_DIR}/include/pcb_plot_params_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
     PCBPLOTPARAMS_T
+
+    # Pass header file with dependency on *_lexer.h as extra_arg
+    ${PROJECT_SOURCE_DIR}/pcbnew/pcb_plot_params.h
     )
 
 # auto-generate pcbnew_sexpr.h and pcbnew_sexpr.cpp
-make_lexer( ${CMAKE_CURRENT_SOURCE_DIR}/pcb.keywords
-            ${PROJECT_SOURCE_DIR}/include/pcb_lexer.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/pcb_keywords.cpp
-            PCB_KEYS_T
-          )
+make_lexer(
+    ${CMAKE_CURRENT_SOURCE_DIR}/pcb.keywords
+    ${PROJECT_SOURCE_DIR}/include/pcb_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_keywords.cpp
+    PCB_KEYS_T
+
+    # Pass header file with dependency on *_lexer.h as extra_arg
+    ${PROJECT_SOURCE_DIR}/pcbnew/pcb_parser.h
+    )
 
 # auto-generate pcbnew s-expression footprint library table code.
-make_lexer( ${CMAKE_CURRENT_SOURCE_DIR}/fp_lib_table.keywords
-            ${PROJECT_SOURCE_DIR}/include/fp_lib_table_lexer.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/fp_lib_table_keywords.cpp
-            FP_LIB_TABLE_T
-          )
+make_lexer(
+    ${CMAKE_CURRENT_SOURCE_DIR}/fp_lib_table.keywords
+    ${PROJECT_SOURCE_DIR}/include/fp_lib_table_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/fp_lib_table_keywords.cpp
+    FP_LIB_TABLE_T
+    )
 
 # The dsntest may not build properly using MS Visual Studio.
 if(NOT MSVC)
