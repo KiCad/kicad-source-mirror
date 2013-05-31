@@ -415,7 +415,7 @@ static bool isNumber( const char* cp, const char* limit, const char** next )
         while( cp<limit && strchr( ".0123456789", *cp )  )
             ++cp;
 
-        if( (cp<limit && isSpace(*cp)) || *cp==')' || *cp=='(' || cp==limit )
+        if( cp==limit || isSpace( *cp ) || *cp==')' || *cp=='(' )
         {
             *next = cp;
             return true;
@@ -469,7 +469,7 @@ static bool isNumber( const char* cp, const char* limit, const char** next )
 
     if( sawNumber )
     {
-        if( ( cp<limit && isSpace(*cp) ) || *cp==')' || *cp=='(' || cp==limit )
+        if( cp==limit || isSpace( *cp ) || *cp==')' || *cp=='(' )
         {
             *next = cp;
             return true;
