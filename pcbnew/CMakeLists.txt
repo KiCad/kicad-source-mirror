@@ -385,6 +385,9 @@ make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/specctra_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/specctra_keywords.cpp
     DSN
+
+    # Pass header file with dependency on *_lexer.h as extra_arg
+    specctra.h
     )
 
 

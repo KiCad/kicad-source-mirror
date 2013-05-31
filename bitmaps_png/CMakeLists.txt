@@ -753,4 +753,3 @@ endforeach()
 
 #add_library( bitmaps SHARED ${CPP_LIST} )
 add_library( bitmaps STATIC ${CPP_LIST} )
-
