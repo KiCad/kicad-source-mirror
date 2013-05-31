@@ -124,6 +124,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
     LoadProjectFile( m_NetlistFileName.GetFullPath() );
     LoadFootprintFiles();
     BuildFOOTPRINTS_LISTBOX();
+    BuildLIBRARY_LISTBOX();
 
     m_ListCmp->Clear();
     m_undefinedComponentCnt = 0;

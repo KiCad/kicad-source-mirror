@@ -100,8 +100,6 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
         m_ListCmp = new COMPONENTS_LISTBOX( this, ID_CVPCB_COMPONENT_LIST,
                                             wxDefaultPosition, size,
                                             0, NULL );
-        m_ListCmp->SetBackgroundColour( wxColour( 225, 255, 255 ) );
-        m_ListCmp->SetForegroundColour( wxColour( 0, 0, 0 ) );
         m_ListCmp->SetFont( wxFont( guiFont.GetPointSize(),
                                     wxFONTFAMILY_MODERN,
                                     wxFONTSTYLE_NORMAL,
@@ -140,8 +138,6 @@ void CVPCB_MAINFRAME::BuildFOOTPRINTS_LISTBOX()
         m_FootprintList = new FOOTPRINTS_LISTBOX( this, ID_CVPCB_FOOTPRINT_LIST,
                                                   wxDefaultPosition, size,
                                                   0, NULL );
-        m_FootprintList->SetBackgroundColour( wxColour( 225, 255, 225 ) );
-        m_FootprintList->SetForegroundColour( wxColour( 0, 0, 0 ) );
         m_FootprintList->SetFont( wxFont( guiFont.GetPointSize(),
                                           wxFONTFAMILY_MODERN,
                                           wxFONTSTYLE_NORMAL,
@@ -150,4 +146,27 @@ void CVPCB_MAINFRAME::BuildFOOTPRINTS_LISTBOX()
 
     m_FootprintList->SetFootprintFullList( m_footprints );
     DisplayStatus();
+}
+
+/*
+ * Create or update the library list.
+ */
+void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
+{
+    wxString msg;
+    wxSize   size( 10, 10 );
+    wxFont   guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+
+    if( m_LibraryList == NULL )
+    {
+        m_LibraryList = new LIBRARY_LISTBOX( this, ID_CVPCB_LIBRARY_LIST,
+                                             wxDefaultPosition, size,
+                                             0 , NULL );
+        m_LibraryList->SetFont( wxFont( guiFont.GetPointSize(),
+                                        wxFONTFAMILY_MODERN,
+                                        wxFONTSTYLE_NORMAL,
+                                        wxFONTWEIGHT_NORMAL ) );
+    }
+
+    m_LibraryList->SetLibraryList( m_ModuleLibNames );
 }
