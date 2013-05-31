@@ -1,3 +1,5 @@
+include/boost
+downloads-by-cmake
 common/netlist_keywords.*
 common/netlist_lexer.h
 common/pcb_plot_params_lexer.h
@@ -12,7 +14,6 @@ pcbnew/dialogs/dialog_freeroute_exchange_help_html.h
 pcbnew/pcb_plot_params_keywords.cpp
 pcbnew/pcb_plot_params_lexer.h
 Makefile
-CMakeFiles
 CMakeCache.txt
 auto_renamed_to_cpp
 Testing
@@ -20,7 +21,6 @@ version.h
 config.h
 install_manifest.txt
 Documentation/doxygen
-*.cmake
 *.bak
 common/pcb_plot_params_keywords.cpp
 include/pcb_plot_params_lexer.h

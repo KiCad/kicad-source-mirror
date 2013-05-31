@@ -243,6 +243,12 @@ mark_as_advanced(KICAD_BIN
 
 include(Functions)
 
+include( ExternalProject )
+
+# All CMake downloads go here, up in the source tree, not in the build dir where they
+# would have to be downloaded over and over again.
+set( DOWNLOAD_DIR ${PROJECT_SOURCE_DIR}/downloads-by-cmake )
+
 #================================================
 # Find libraries that are needed to build KiCad.
 #================================================
@@ -254,14 +260,11 @@ include(CheckFindPackageResult)
 find_package(OpenGL QUIET)
 check_find_package_result(OPENGL_FOUND "OpenGL")
 
-######################
-# Find Boost library #
-######################
-# kicad now includes needed boost files.
-# the two next lines can be uncommented to use the native boost lib.
-# but this is not a good idea
-#find_package(Boost 1.36 QUIET)
-#check_find_package_result(Boost_FOUND "Boost")
+##########################
+# Download Boost library #
+##########################
+include( download_boost )
+
 
 ##########################
 # Find wxWidgets library #
