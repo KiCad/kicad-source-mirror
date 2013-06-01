@@ -31,6 +31,15 @@ set( BOOST_MD5 a00d22605d5dbcfb4c9936a9b35bc4c2 ) # re-calc this on every RELEAS
 string( REGEX REPLACE "\\." "_" BOOST_VERS "${BOOST_RELEASE}" )
 set( PREFIX ${DOWNLOAD_DIR}/boost_${BOOST_VERS} )
 
+# <SOURCE_DIR> = ${PREFIX}/src/boost
+# There is a Bazaar 'boost scratch repo' in <SOURCE_DIR>/boost and after committing pristine
+# download, the patch is applied.  This lets you regenerate a new patch at any time
+# easily, simply by editing the working tree in <SOURCE_DIR> and doing "bzr diff" in there.
+
+# include only the headers in the repo.
+# repo = "${headers}/../.bzr" = "<SOURCE_DIR>/.bzr"
+set( headers ${PREFIX}/src/boost/boost )
+
 
 ExternalProject_Add( boost
     PREFIX          ${PREFIX}
@@ -45,15 +54,8 @@ ExternalProject_Add( boost
 
     # remove then re-copy into the include/boost directory during next two steps:
     BUILD_COMMAND   ${CMAKE_COMMAND} -E remove_directory ${PROJECT_SOURCE_DIR}/include/boost
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/boost ${PROJECT_SOURCE_DIR}/include/boost
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory ${headers} ${PROJECT_SOURCE_DIR}/include/boost
     )
-
-
-# <SOURCE_DIR> = ${PREFIX}/src/boost
-# Add extra steps, so that we can easily regenerate any boost patch needed for the above.
-# There is a Bazaar 'boost scratch repo' in <SOURCE_DIR> and after committing pristine
-# download, the patch is applied.  This lets you regenerate a new patch at any time
-# easily, simply by editing the working tree in <SOURCE_DIR> and doing "bzr diff" in there.
 
 
 ExternalProject_Add_Step( boost bzr_commit_boost
@@ -64,7 +66,8 @@ ExternalProject_Add_Step( boost bzr_commit_boost
 
 
 ExternalProject_Add_Step( boost bzr_add_boost
-    COMMAND bzr add -q <SOURCE_DIR>
+    # add only the headers to the scratch repo, repo = "../.bzr" from ${headers}
+    COMMAND bzr add -q ${headers}
     COMMENT "adding pristine boost files to 'boost scratch repo'"
     DEPENDERS bzr_commit_boost
     )
