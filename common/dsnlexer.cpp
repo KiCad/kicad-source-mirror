@@ -374,11 +374,11 @@ int DSNLEXER::NeedNUMBER( const char* aExpectation ) throw( IO_ERROR )
  * i.e. no bytes with MSB on can be considered whitespace, since they are likely part
  * of a multibyte UTF8 character.
  */
-static bool isSpace( int cc )
+static bool isSpace( char cc )
 {
-    // cc was signed extended from signed char, so it is often negative.
+    // cc is signed, so it is often negative.
     // Treat negative as large positive to exclude rapidly.
-    if( unsigned( cc ) <= ' ' )
+    if( (unsigned char) cc <= ' ' )
     {
         switch( cc )
         {
@@ -394,47 +394,41 @@ static bool isSpace( int cc )
 }
 
 
+inline bool isDigit( char cc )
+{
+    return '0' <= cc && cc <= '9';
+}
+
+
+/// return true if @a cc is an s-expression separator character
+inline bool isSep( char cc )
+{
+    return isSpace( cc ) || cc=='(' || cc==')';
+}
+
+
 /**
  * Function isNumber
- * return true if the next sequence of s-expression text is a number:
- * either an integer, fixed point, or float with exponent.
+ * returns true if the next sequence of text is a number:
+ * either an integer, fixed point, or float with exponent.  Stops scanning
+ * at the first non-number character, even if it is not whitespace.
  *
  * @param cp is the start of the current token.
  * @param limit is the end of the current line of text.
- * @param next is where to put a pointer to the start of the token after this one, but is only
- *    updated if the return value is true.
- * @return bool - true if this is a number, else false.
+ * @return const char* - pointer to the start of the token after this one, but if
+ *    this token is a number, else NULL
  */
-static bool isNumber( const char* cp, const char* limit, const char** next )
+static const char* isNumber( const char* cp, const char* limit )
 {
-#if 0   // no exponents supported
-
-    if( strchr( "+-.0123456789", *cp ) )
-    {
-        ++cp;
-        while( cp<limit && strchr( ".0123456789", *cp )  )
-            ++cp;
-
-        if( cp==limit || isSpace( *cp ) || *cp==')' || *cp=='(' )
-        {
-            *next = cp;
-            return true;
-        }
-    }
-
-    return false;
-
-#else   // support numbers with exponents.
-
-    // regex for a float: "^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?" i.e. any number
-    // is traversed, coded manually here:
+    // regex for a float: "^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?" i.e. any number,
+    // code traversal manually here:
 
     bool sawNumber = false;
 
-    if( cp < limit && strchr( "-+", *cp ) )
+    if( cp < limit && ( *cp=='-' || *cp=='+' ) )
         ++cp;
 
-    while( cp < limit && strchr( "0123456789", *cp ) )
+    while( cp < limit && isDigit( *cp ) )
     {
         ++cp;
         sawNumber = true;
@@ -444,7 +438,7 @@ static bool isNumber( const char* cp, const char* limit, const char** next )
     {
         ++cp;
 
-        while( cp < limit && strchr( "0123456789", *cp ) )
+        while( cp < limit && isDigit( *cp ) )
         {
             ++cp;
             sawNumber = true;
@@ -453,16 +447,16 @@ static bool isNumber( const char* cp, const char* limit, const char** next )
 
     if( sawNumber )
     {
-        if( cp < limit && strchr( "Ee", *cp ) )
+        if( cp < limit && ( *cp=='E' || *cp=='e' ) )
         {
             ++cp;
 
             sawNumber = false;  // exponent mandates at least one digit thereafter.
 
-            if( cp < limit && strchr( "-+", *cp ) )
+            if( cp < limit && ( *cp=='-' || *cp=='+' )  )
                 ++cp;
 
-            while( cp < limit && strchr( "0123456789", *cp ) )
+            while( cp < limit && isDigit( *cp ) )
             {
                 ++cp;
                 sawNumber = true;
@@ -470,18 +464,7 @@ static bool isNumber( const char* cp, const char* limit, const char** next )
         }
     }
 
-    if( sawNumber )
-    {
-        // token can only be a number if not adjoined with other non-number token text
-        if( cp==limit || isSpace( *cp ) || *cp==')' || *cp=='(' )
-        {
-            *next = cp;
-            return true;
-        }
-    }
-
-    return false;
-#endif
+    return sawNumber ? cp : NULL;
 }
 
 
@@ -510,7 +493,7 @@ L_read:
             cur = start;    // after readLine() since start can change.
 
             // skip leading whitespace
-            while( cur<limit && isSpace(*cur) )
+            while( cur<limit && isSpace( *cur ) )
                 ++cur;
 
             // If the first non-blank character is #, this line is a comment.
@@ -534,7 +517,7 @@ L_read:
         else
         {
             // skip leading whitespace
-            while( cur<limit && isSpace(*cur) )
+            while( cur<limit && isSpace( *cur ) )
                 ++cur;
         }
 
@@ -577,7 +560,7 @@ L_read:
 
             head = cur+1;
 
-            if( head<limit && *head!=')' && *head!='(' && !isSpace(*head) )
+            if( head<limit && !isSep( *head ) )
             {
                 THROW_PARSE_ERROR( errtxt, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
@@ -598,9 +581,10 @@ L_read:
             goto exit;
         }
 
-        if( isNumber( cur, limit, &head ) )
+        if( ( head = isNumber( cur, limit ) ) != NULL &&
+            // token can only be a number if trailing text is a separator or line end
+            ( head==limit || isSep( *head ) ) )
         {
-            // handle DSN_NUMBER
             curText.clear();
             curText.append( cur, head );
             curTok = DSN_NUMBER;
@@ -693,7 +677,7 @@ L_read:
                 }   // while
 
                 // L_unterminated:
-                wxString errtxt(_("Un-terminated delimited string") );
+                wxString errtxt( _( "Un-terminated delimited string" ) );
                 THROW_PARSE_ERROR( errtxt, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
 
@@ -708,7 +692,7 @@ L_read:
 
                 if( head >= limit )
                 {
-                    wxString errtxt(_("Un-terminated delimited string") );
+                    wxString errtxt( _( "Un-terminated delimited string" ) );
                     THROW_PARSE_ERROR( errtxt, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
                 }
 
@@ -726,7 +710,7 @@ L_read:
         // If not, then call it a DSN_SYMBOL.
         {
             head = cur+1;
-            while( head<limit && !isSpace( *head ) && *head!=')' && *head!='(' )
+            while( head<limit && !isSep( *head ) )
                 ++head;
 
             curText.clear();
