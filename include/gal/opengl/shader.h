@@ -80,8 +80,9 @@ public:
 
     /**
      * Link the shaders.
+     * @return true in case of success, false otherwise.
      */
-    void Link();
+    bool Link();
 
     /**
      * Use the shader.
@@ -121,6 +122,14 @@ public:
      * @param aValue is the value of the parameter.
      */
     void SetParameter( int aParameterNumber, float aValue );
+
+    /**
+     * @brief Gets an attribute location.
+     *
+     * @param aAttributeName is the name of the attribute.
+     * @return the location.
+     */
+    int GetAttribute( std::string aAttributeName );
 
 private:
 

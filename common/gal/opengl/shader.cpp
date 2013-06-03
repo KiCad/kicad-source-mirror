@@ -168,23 +168,30 @@ void SHADER::ConfigureGeometryShader( GLuint maxVertices, GLuint geometryInputTy
 }
 
 
-void SHADER::Link()
+bool SHADER::Link()
 {
     // Shader linking
     glLinkProgram( programNumber );
     ProgramInfo( programNumber );
 
     // Check the Link state
-    GLint linkStatus = 0;
-    glGetObjectParameterivARB( programNumber, GL_OBJECT_LINK_STATUS_ARB, &linkStatus );
+    glGetObjectParameterivARB( programNumber, GL_OBJECT_LINK_STATUS_ARB, (GLint*) &isShaderLinked );
 
-    if( !linkStatus )
+#ifdef __WXDEBUG__
+    if( !isShaderLinked )
     {
-        wxLogError( wxString::FromUTF8( "Can't link the shaders!" ) );
-        exit( 1 );
+        int maxLength;
+        glGetProgramiv( programNumber, GL_INFO_LOG_LENGTH, &maxLength );
+        maxLength = maxLength + 1;
+        char *linkInfoLog = new char[maxLength];
+        glGetProgramInfoLog( programNumber, maxLength, &maxLength, linkInfoLog );
+        std::cerr << "Shader linking error:" << std::endl;
+        std::cerr << linkInfoLog;
+        delete[] linkInfoLog;
     }
+#endif /* __WXDEBUG__ */
 
-    isShaderLinked = true;
+    return isShaderLinked;
 }
 
 
@@ -214,4 +221,10 @@ void SHADER::AddParameter( std::string aParameterName )
 void SHADER::SetParameter( int parameterNumber, float value )
 {
     glUniform1f( parameterLocation[parameterNumber], value );
+}
+
+
+int SHADER::GetAttribute( std::string aAttributeName )
+{
+    return glGetAttribLocation( programNumber, aAttributeName.c_str() );
 }
