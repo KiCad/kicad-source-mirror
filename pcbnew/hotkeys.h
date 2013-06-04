@@ -85,6 +85,7 @@ enum hotkey_id_commnand {
 #ifdef KICAD_GAL
     HK_CANVAS_DEFAULT,
     HK_CANVAS_OPENGL,
+    HK_CANVAS_OPENGL_SHADERS,
     HK_CANVAS_CAIRO,
 #endif
 };
