@@ -157,9 +157,10 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, PCB_EDIT_FRAME::Show3D_Frame )
 
     // Switching canvases
-    EVT_MENU( ID_MENU_CANVAS_DEFAULT, PCB_EDIT_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_CAIRO,   PCB_EDIT_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL,  PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_DEFAULT,           PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_CAIRO,             PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL,            PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL_SHADERS,    PCB_EDIT_FRAME::SwitchCanvas )
 
     // Menu Get Design Rules Editor
     EVT_MENU( ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG, PCB_EDIT_FRAME::ShowDesignRulesEditor )
@@ -587,6 +588,11 @@ void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
         break;
 
     case ID_MENU_CANVAS_OPENGL:
+        m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL, false );
+        UseGalCanvas( true );
+        break;
+
+    case ID_MENU_CANVAS_OPENGL_SHADERS:
         m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL, true );
         UseGalCanvas( true );
         break;

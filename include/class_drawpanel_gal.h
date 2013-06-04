@@ -88,6 +88,7 @@ protected:
                                                  ///< using GAL
     KiGfx::WX_VIEW_CONTROLS* m_viewControls;     ///< Control for VIEW (moving, zooming, etc.)
     GalType                  m_currentGal;       ///< Currently used GAL
+    bool                     m_useShaders;       ///< Are shaders used? (only for OpenGL GAL)
 
     std::string              m_galShaderPath;    ///< Path to shader files, used in OpenGL mode
 };

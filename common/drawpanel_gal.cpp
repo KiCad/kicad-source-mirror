@@ -58,7 +58,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     wxStandardPaths paths;
     wxFileName executableFile( paths.GetExecutablePath() );
     m_galShaderPath = std::string( ( executableFile.GetPath() +
-                                   wxT( "/../../common/gal/opengl/" ) ).mb_str() );
+                                   wxT( "/../../common/gal/opengl" ) ).mb_str() );
 
     SwitchBackend( aGalType, true );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
@@ -151,7 +151,11 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 
 void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
 {
-    if( aGalType == m_currentGal && m_gal != NULL )
+    wxLogDebug( wxT( "EDA_DRAW_PANEL_GAL::SwitchBackend: using shaders: %s" ),
+            aUseShaders ? "true" : "false" );
+
+    // Do not do anything if the currently used GAL is correct
+    if( aGalType == m_currentGal && aUseShaders == m_useShaders && m_gal != NULL )
         return;
 
     if( m_gal )
@@ -186,4 +190,5 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
     m_gal->ResizeScreen( size.GetX(), size.GetY() );
 
     m_currentGal = aGalType;
+    m_useShaders = aUseShaders;
 }

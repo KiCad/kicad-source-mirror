@@ -365,6 +365,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
                  text, _( "Switch the canvas implementation to OpenGL" ),
                 KiBitmap( tools_xpm ) );
+                
+    text = AddHotkeyName( _( "&Switch canvas to OpenGL (shaders)" ), g_Pcbnew_Editor_Hokeys_Descr,
+            HK_CANVAS_OPENGL_SHADERS, IS_ACCELERATOR );
+
+    AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL_SHADERS,
+                 text, _( "Switch the canvas implementation to OpenGL that uses shaders" ),
+                KiBitmap( tools_xpm ) );
 
     text = AddHotkeyName( _( "&Switch canvas to Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
             HK_CANVAS_CAIRO, IS_ACCELERATOR );
