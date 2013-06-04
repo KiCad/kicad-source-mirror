@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * Vertex shader
  *
@@ -24,12 +24,42 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-// This shader requires GLSL 1.2
 #version 120
+
+// Shader types
+const float SHADER_LINE                 = 1.0;
+const float SHADER_FILLED_CIRCLE        = 2.0;
+const float SHADER_STROKED_CIRCLE       = 3.0;
+
+attribute   vec4 attrShaderParams;
+varying out vec4 shaderParams;
 
 void main()
 {
-    // Simple pass-through
-    gl_Position   = gl_Vertex;
+    // Pass attributes to the fragment shader
+    shaderParams = attrShaderParams;
+    
+    if( shaderParams[0] == SHADER_LINE )
+    {
+        float lineWidth = shaderParams[3];
+        float worldScale = gl_ModelViewMatrix[0][0];
+        float scale;
+     
+        // Make lines appear to be at least 1 pixel width
+        if( worldScale * lineWidth < 1.0 )
+            scale = 1.0 / ( worldScale * lineWidth );
+        else
+            scale = 1.0;
+        
+        gl_Position = gl_ModelViewProjectionMatrix * 
+            ( gl_Vertex + vec4( shaderParams.yz * scale, 0.0, 0.0 ) );
+    }
+    else
+    {
+        // Pass through the coordinates like in the fixed pipeline
+        gl_Position = ftransform();
+    }
+    
     gl_FrontColor = gl_Color;
 }
+

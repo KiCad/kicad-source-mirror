@@ -34,10 +34,31 @@
 #include <gal/opengl/glm/glm.hpp>
 #include <gal/color4d.h>
 
+#include <cstddef>
+
 #include <list>
 
 namespace KiGfx
 {
+typedef struct VBO_VERTEX_DATA
+{
+    GLfloat x, y, z;        // Coordinates
+    GLfloat r, g, b, a;     // Color
+    GLfloat shader[4];      // Shader type & params
+} VBO_VERTEX_DATA;
+
+typedef struct VBO_VERTEX_STRUCT
+{
+    GLfloat coord[3];       // Coordinates
+    GLfloat color[4];       // Color
+    GLfloat shader[4];      // Shader type & params
+} VBO_VERTEX_STRUCT;
+
+typedef union VBO_VERTEX
+{
+    VBO_VERTEX_DATA     data;
+    VBO_VERTEX_STRUCT   struc;
+} VBO_VERTEX;
 
 class VBO_ITEM
 {
@@ -50,6 +71,7 @@ public:
      * Adds a single vertex to the VBO_ITEM. Vertex contains information about coordinates and
      * colors and has to follow the specified format {X,Y,Z,R,G,B,A}.
      * @param aVertex is a vertex to be added.
+     * @param aShader is an attribute for shader.
      */
     void PushVertex( const GLfloat* aVertex );
 
@@ -60,6 +82,7 @@ public:
      * coordinates and colors and has to follow the specified format {X,Y,Z,R,G,B,A}.
      * @param aVertices are vertices to be added.
      * @param aSize is an amount of vertices to be added.
+     * @param aShader is an attribute for shader.
      */
     void PushVertices( const GLfloat* aVertices, GLuint aSize );
 
@@ -121,26 +144,38 @@ public:
      */
     void UseColor( const COLOR4D& aColor );
 
+    /**
+     * Function UseShader()
+     * Sets shader and its parameters used for all added vertices.
+     * @param aShader is the array that contains shader number followed by its parameters.
+     */
+    void UseShader( const GLfloat* aShader );
+
     ///< Functions for getting VBO ids.
     //void SetVbo( int aVboId );
     //int  GetVbo() const;
 
-    ///< Data organization information for vertices {X,Y,Z,R,G,B,A}.
-    // Each vertex consists of 7 floats, but it is padded to 8
-    static const int VertStride         = 8;
-    static const int VertSize           = VertStride * sizeof(GLfloat);
+    ///< Data organization information for vertices {X,Y,Z,R,G,B,A} (@see VBO_VERTEX).
+    static const int VertByteSize       = sizeof(VBO_VERTEX);
+    static const int VertStride         = VertByteSize / sizeof(GLfloat);
 
-    static const int CoordStride        = 3;
-    static const int CoordSize          = CoordStride * sizeof(GLfloat);
+    static const int CoordStride        = sizeof(VBO_VERTEX_STRUCT().coord) / sizeof(GLfloat);
+    static const int CoordByteSize      = sizeof(VBO_VERTEX_STRUCT().coord);
 
     // Offset of color data from the beginning of each vertex data
-    static const int ColorOffset        = 3;
-    static const int ColorByteOffset    = ColorOffset * sizeof(GLfloat);
-    static const int ColorStride        = 4;
-    static const int ColorSize          = ColorStride * sizeof(GLfloat);
+    static const int ColorByteOffset    = offsetof( VBO_VERTEX_STRUCT, color );
+    static const int ColorOffset        = ColorByteOffset / sizeof(GLfloat);
+    static const int ColorStride        = sizeof(VBO_VERTEX_STRUCT().color) / sizeof(GLfloat);
+    static const int ColorByteSize      = sizeof(VBO_VERTEX_STRUCT().color);
+
+    // Shader attributes
+    static const int ShaderByteOffset   = offsetof( VBO_VERTEX_STRUCT, shader );
+    static const int ShaderOffset       = ShaderByteOffset / sizeof(GLfloat);
+    static const int ShaderStride       = sizeof(VBO_VERTEX_STRUCT().shader) / sizeof(GLfloat);
+    static const int ShaderByteSize     = sizeof(VBO_VERTEX_STRUCT().shader);
 
     static const int IndStride          = 1;
-    static const int IndSize            = IndStride * sizeof(GLuint);
+    static const int IndByteSize        = IndStride * sizeof(GLuint);
 
 private:
     ///< VBO ids in which the item is stored.
@@ -153,31 +188,30 @@ private:
     ///< Indices of vertices
     GLuint*     m_indices;
 
-    ///< Lists of blocks
-    std::list<GLfloat*> m_vertBlocks;
-    std::list<GLuint*>  m_indBlocks;
-    ///< Pointers to current blocks that can be used for storing data
-    GLfloat*            m_vertPtr;
-    GLuint*             m_indPtr;
+    ///< Lists of data blocks storing vertices
+    std::list<VBO_VERTEX*>  m_vertBlocks;
+    std::list<GLuint*>      m_indBlocks;
+    ///< Pointers to current blocks that should be used for storing data
+    VBO_VERTEX*             m_vertPtr;
+    GLuint*                 m_indPtr;
     ///< How many vertices can be stored in the current buffer
-    int                 m_spaceLeft;
+    int                     m_spaceLeft;
     ///< Number of vertices & indices stored in a single block
-    static const int    BLOCK_SIZE = 8;
+    static const int        BLOCK_SIZE = 256;
     ///< Creates a new block for storing vertices data
-    void                useNewBlock();
+    void                    useNewBlock();
     ///< Prepares a continuous block of data that can be copied to graphics card buffer.
-    void                prepareFinal();
+    void                    prepareFinal();
 
     ///< Offset and size of data in VBO.
     int         m_offset;
     int         m_size;
 
-    ///< Shader data used for rendering.
-    int         m_shader;
-    int         m_shaderAttrib;
-
     ///< Color used for new vertices pushed.
-    GLfloat     m_color[4];
+    GLfloat     m_color[ColorStride];
+
+    ///< Shader and its parameters used for new vertices pushed
+    GLfloat     m_shader[ShaderStride];
 
     ///< Flag telling if the item should be recached in VBO or not.
     bool        m_isDirty;

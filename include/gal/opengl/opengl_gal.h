@@ -36,6 +36,7 @@
 // OpenGL mathematics library
 #define GLM_FORCE_RADIANS
 #include <gal/opengl/vbo_item.h>
+#include <gal/opengl/shader.h>
 
 // wxWidgets imports
 #include <wx/wx.h>
@@ -323,7 +324,6 @@ private:
 
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
-    static const int    SHADER_NUMBER   = 2;    ///< Number of the used shaders
     static const double MITER_LIMIT     = 1.5;  ///< Limit for mitered edges ( * lineWidth )
 
     /// This factor is used to for correct merging of antialiased edges,
@@ -365,7 +365,18 @@ private:
     GLUtesselator*        tesselator;       ///< Pointer to the tesselator
 
     // Shader
-    std::deque<SHADER>    shaderList;       ///< List of the shaders
+    // Possible types of shaders
+    typedef enum
+    {
+        SHADER_NONE             = 0,
+        SHADER_LINE,
+        SHADER_FILLED_CIRCLE,
+        SHADER_STROKED_CIRCLE,
+    } SHADER_TYPE;
+
+    SHADER                shader;           ///< There is only one shader used for different objects
+    int                   shaderAttrib;     ///< Location of shader attributes (for glVertexAttribPointer)
+    std::string           shaderPath;       ///< Location of shader files
 
     // Cursor
     int             cursorSize;             ///< Size of the cursor in pixels
@@ -391,8 +402,6 @@ private:
     bool            isShaderEnabled;            ///< Are the shaders enabled?
     bool            isUseShader;                ///< Should the shaders be used?
     bool            isGrouping;                 ///< Was a group started?
-    int             currentShader;              ///< ID of the shader currently in use
-    std::string     shaderPath;
 
     /**
      * @brief Draw a semi circle (used for line caps).
@@ -400,11 +409,9 @@ private:
      * @param aCenterPoint is the center point.
      * @param aRadius is the radius of the semi-circle.
      * @param aAngle is the angle of the semi-circle.
-     * @param ADepthOffset is the relative depth of the semi-circle.
      *
      */
-    void drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle,
-                         double aDepthOffset );
+    void drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
     /// Compute the points of a unit circle.
     void computeUnitCircle();
@@ -506,8 +513,7 @@ private:
      * @param aEndPoint is the end point of the line.
      * @param aDepthOffset is the relative depth of the line cap.
      */
-    inline void drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
-                             double aDepthOffset );
+    inline void drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     ///< OpenGL replacement functions (that are working both in immediate and VBO modes)
     /**
@@ -561,13 +567,23 @@ private:
      */
     inline void color4( const COLOR4D& aColor );
 
-    inline void selectShader( int aIndex );
+    /**
+     * @brief Function that sets shader and its parameters for the currently used VBO_ITEM.
+     * It should be used before adding any vertices that have to be shaded.
+     * @param aShader is the type of shader used for vertices.
+     * @param aParam[1..3] are shader's parameters. Their meaning depends on the type of used shader.
+     * For more information you may check shaders' source code.
+     */
+    inline void setShader( SHADER_TYPE aShader, GLfloat aParam1 = 0.0f,
+                           GLfloat aParam2 = 0.0f, GLfloat aParam3 = 0.0f )
+    {
+        if( isUseShader && isGrouping )
+        {
+            const GLfloat shader[] = { aShader, aParam1, aParam2, aParam3 };
 
-    /// @copydoc GAL::DrawRoundedSegment()
-    void drawRoundedSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth,
-                             bool aStroke = false, bool aGlBegin = false );
-
-
+            curVboItem->UseShader( shader );
+        }
+    }
 };
 } // namespace KiGfx
 
