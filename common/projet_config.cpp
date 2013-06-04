@@ -19,8 +19,20 @@
 #include <boost/foreach.hpp>
 
 
-#define CONFIG_VERSION 1
-#define FORCE_LOCAL_CONFIG true
+#define CONFIG_VERSION      1
+#define FORCE_LOCAL_CONFIG  true
+
+
+void ConfigBaseWriteDouble( wxConfigBase* aConfig, const wxString& aKey, double aValue )
+{
+    // Use a single strategy, regardless of wx version.
+    // Want C locale float string.
+
+    LOCALE_IO   toggle;
+    wxString    tnumber = wxString::Format( wxT( "%.16g" ), aValue );
+
+    aConfig->Write( aKey, tnumber );
+}
 
 
 bool EDA_APP::ReCreatePrjConfig( const wxString& fileName,
