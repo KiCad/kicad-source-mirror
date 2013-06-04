@@ -415,8 +415,8 @@ inline bool isSep( char cc )
  *
  * @param cp is the start of the current token.
  * @param limit is the end of the current line of text.
- * @return const char* - pointer to the start of the token after this one, but if
- *    this token is a number, else NULL
+ * @return const char* - if initial text was a number, then pointer to the text
+ *         after this number, else NULL if initial text was not a number.
  */
 static const char* isNumber( const char* cp, const char* limit )
 {
