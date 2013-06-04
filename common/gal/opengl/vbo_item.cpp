@@ -40,6 +40,9 @@ VBO_ITEM::VBO_ITEM() :
         m_isDirty( true ),
         m_transform( NULL )
 {
+    // By default no shader is used
+    m_shader[0] = 0;
+
     // Prepare a block for storing vertices & indices
     useNewBlock();
 }
@@ -50,7 +53,7 @@ VBO_ITEM::~VBO_ITEM()
     if( m_isDirty )
     {
         // Data is still stored in blocks
-        std::list<GLfloat*>::const_iterator v_it, v_end;
+        std::list<VBO_VERTEX*>::const_iterator v_it, v_end;
         for( v_it = m_vertBlocks.begin(), v_end = m_vertBlocks.end(); v_it != v_end; ++v_it )
             delete[] *v_it;
 
@@ -75,24 +78,27 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
     if( m_transform != NULL )
     {
         // Apply transformations
-        //                    X,          Y,          Z coordinates
-        glm::vec4 origVertex( aVertex[0], aVertex[1], aVertex[2], 1.0f );
-        glm::vec4 transVertex = *m_transform * origVertex;
+        //                X,          Y,          Z coordinates
+        glm::vec4 vertex( aVertex[0], aVertex[1], aVertex[2], 1.0f );
+        vertex = *m_transform * vertex;
 
         // Replace only coordinates, leave color as it is
-        memcpy( m_vertPtr, &transVertex[0], CoordSize );
+        memcpy( &m_vertPtr->struc.coord, &vertex[0], CoordByteSize );
     }
     else
     {
         // Add the new vertex
-        memcpy( m_vertPtr, aVertex, CoordSize );
+        memcpy( &m_vertPtr->struc.coord, aVertex, CoordByteSize );
     }
 
     // Apply currently used color
-    memcpy( m_vertPtr + ColorOffset, m_color, ColorSize );
+    memcpy( &m_vertPtr->struc.color, m_color, ColorByteSize );
+
+    // Apply currently used shader
+    memcpy( &m_vertPtr->struc.shader, m_shader, ShaderByteSize );
 
     // Move to the next free space
-    m_vertPtr += VertStride;
+    m_vertPtr++;
 
     // Add the new index
     *m_indPtr = m_offset + m_size;
@@ -177,10 +183,10 @@ void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
 
     for( int i = 0; i < m_size; ++i )
     {
-        memcpy( vertexPtr, newColor, ColorSize );
+        memcpy( vertexPtr, newColor, ColorByteSize );
 
         // Move on to the next vertex
-        vertexPtr += VertStride;
+        vertexPtr++;
     }
 }
 
@@ -191,6 +197,12 @@ void VBO_ITEM::UseColor( const COLOR4D& aColor )
     m_color[1] = aColor.g;
     m_color[2] = aColor.b;
     m_color[3] = aColor.a;
+}
+
+
+void VBO_ITEM::UseShader( const GLfloat* aShader )
+{
+    memcpy( m_shader, aShader, ShaderByteSize );
 }
 
 
@@ -209,8 +221,8 @@ int GetVbo() const
 
 void VBO_ITEM::useNewBlock()
 {
-    GLfloat* newVertBlock = new GLfloat[BLOCK_SIZE * VertStride];
-    GLuint*  newIndBlock  = new GLuint[BLOCK_SIZE];
+    VBO_VERTEX* newVertBlock = new VBO_VERTEX[BLOCK_SIZE];
+    GLuint*     newIndBlock  = new GLuint[BLOCK_SIZE];
 
     m_vertPtr = newVertBlock;
     m_indPtr  = newIndBlock;
@@ -233,16 +245,16 @@ void VBO_ITEM::prepareFinal()
     GLfloat* vertPtr = m_vertices;
 
     // Copy blocks of vertices one after another to m_vertices
-    std::list<GLfloat*>::const_iterator v_it;
+    std::list<VBO_VERTEX*>::const_iterator v_it;
     for( v_it = m_vertBlocks.begin(); *v_it != m_vertBlocks.back(); ++v_it )
     {
-        memcpy( vertPtr, *v_it, BLOCK_SIZE * VertSize );
+        memcpy( vertPtr, *v_it, BLOCK_SIZE * VertByteSize );
         delete[] *v_it;
         vertPtr += ( BLOCK_SIZE * VertStride );
     }
 
     // In the last block we need to copy only used vertices
-    memcpy( vertPtr, *v_it, ( BLOCK_SIZE - m_spaceLeft ) * VertSize );
+    memcpy( vertPtr, *v_it, ( BLOCK_SIZE - m_spaceLeft ) * VertByteSize );
 
     if( m_indices )
         delete m_indices;
@@ -256,13 +268,13 @@ void VBO_ITEM::prepareFinal()
     std::list<GLuint*>::const_iterator i_it;
     for( i_it = m_indBlocks.begin(); *i_it != m_indBlocks.back(); ++i_it )
     {
-        memcpy( indPtr, *i_it, BLOCK_SIZE * IndSize );
+        memcpy( indPtr, *i_it, BLOCK_SIZE * IndByteSize );
         delete[] *i_it;
         indPtr += ( BLOCK_SIZE * IndStride );
     }
 
     // In the last block we need to copy only used indices
-    memcpy( indPtr, *i_it, ( BLOCK_SIZE - m_spaceLeft ) * IndSize );
+    memcpy( indPtr, *i_it, ( BLOCK_SIZE - m_spaceLeft ) * IndByteSize );
 
     m_isDirty = false;
 }

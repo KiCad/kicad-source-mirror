@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2013 Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2013 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * Fragment shader
  *
@@ -24,18 +25,48 @@
  */
 
 #version 120
+//#pragma debug(on)
 
-varying float aspect;
+// Shader types
+const float SHADER_LINE                 = 1.0;
+const float SHADER_FILLED_CIRCLE        = 2.0;
+const float SHADER_STROKED_CIRCLE       = 3.0;
 
-void main()
+varying in vec4 shaderParams;
+
+void filledCircle( vec2 aCoord )
 {
-    vec2 v = abs( gl_TexCoord[0].xy - vec2( 0.5, 0.5 ) ) * 2.0 - vec2( aspect, 0.0 );
-    vec2 d = vec2( v.x / ( 1.0 - aspect ), v.y );
-
-    if( v.x <= 0.0 || (dot( d, d ) < 1.0 ) )
+    if( dot( aCoord, aCoord ) < 1.0 )
         gl_FragColor = gl_Color;
     else
         discard;
-
-    // gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
 }
+
+
+void strokedCircle( vec2 aCoord, float aWidth )
+{
+    if( ( dot( aCoord, aCoord ) < 1.0 ) && 
+        ( dot( aCoord, aCoord ) > aWidth * aWidth ) )
+        gl_FragColor = gl_Color;
+    else
+        discard;
+}
+
+
+void main()
+{
+    if( shaderParams[0] == SHADER_FILLED_CIRCLE )
+    {
+        filledCircle( vec2( shaderParams[1], shaderParams[2] ) );
+    }
+    else if( shaderParams[0] == SHADER_STROKED_CIRCLE )
+    {
+        strokedCircle( vec2( shaderParams[1], shaderParams[2] ), shaderParams[3] );
+    }
+    else
+    {
+        // Simple pass-through
+        gl_FragColor = gl_Color;
+    }
+}
+

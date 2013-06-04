@@ -582,12 +582,12 @@ void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
         break;
 
     case ID_MENU_CANVAS_CAIRO:
-        m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO, false );
+        m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
         UseGalCanvas( true );
         break;
 
     case ID_MENU_CANVAS_OPENGL:
-        m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL, false );
+        m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL, true );
         UseGalCanvas( true );
         break;
     }

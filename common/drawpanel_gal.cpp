@@ -58,9 +58,9 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     wxStandardPaths paths;
     wxFileName executableFile( paths.GetExecutablePath() );
     m_galShaderPath = std::string( ( executableFile.GetPath() +
-                                   wxT( "/../../common/gal/opengl/shader/" ) ).mb_str() );
+                                   wxT( "/../../common/gal/opengl/" ) ).mb_str() );
 
-    SwitchBackend( aGalType, false );
+    SwitchBackend( aGalType, true );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
     // Initial display settings
