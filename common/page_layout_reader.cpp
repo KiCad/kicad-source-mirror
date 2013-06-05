@@ -36,10 +36,6 @@
 #include <vector2d.h>
 #include <page_layout_reader_lexer.h>
 
-// defaultPageLayout is the default page layout description
-// using the S expr.
-// see page_layout_default_shape.cpp
-extern const wxString defaultPageLayout;
 
 using namespace TB_READER_T;
 
@@ -448,7 +444,7 @@ double PAGE_LAYOUT_READER_PARSER::parseDouble()
 
 void WORKSHEET_LAYOUT::SetDefaultLayout()
 {
-    PAGE_LAYOUT_READER_PARSER lp_parser( defaultPageLayout, "default page" );
+    PAGE_LAYOUT_READER_PARSER lp_parser( defaultPageLayout, wxT( "default page" ) );
 
     try
     {

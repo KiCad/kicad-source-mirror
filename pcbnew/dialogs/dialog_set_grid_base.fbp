@@ -209,7 +209,7 @@
                                     <object class="wxFlexGridSizer" expanded="1">
                                         <property name="cols">2</property>
                                         <property name="flexible_direction">wxBOTH</property>
-                                        <property name="growablecols"></property>
+                                        <property name="growablecols">1</property>
                                         <property name="growablerows"></property>
                                         <property name="hgap">0</property>
                                         <property name="minimum_size"></property>

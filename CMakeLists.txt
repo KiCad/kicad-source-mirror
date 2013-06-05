@@ -74,6 +74,13 @@ else()
     message("Build testing (unstable) version of KiCad")
 endif()
 
+# All CMake downloads go here.  Suggested is up in the source tree, not in the build dir where they
+# would have to be downloaded over and over again.  The default is to choose a directory that is
+# hidden on linux (starts with a '.') because there is a way to exclude this directory when grepping
+# the source tree.
+set( DOWNLOAD_DIR ${PROJECT_SOURCE_DIR}/.downloads-by-cmake
+    CACHE PATH "Location of KiCad downloads, suggested is a dir common to all builds, i.e. global." )
+
 
 #================================================
 # Set flags for GCC.
@@ -147,6 +154,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         # Set default flags for Debug build.
         set(CMAKE_C_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -Wall  -g3 -ggdb3 -DDEBUG")
         set(CMAKE_CXX_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -Wall -g3 -ggdb3 -DDEBUG")
+    endif()
+
+    # quiet GCC 4.8.1 while in boost
+    if( GCC_VERSION VERSION_GREATER 4.8 OR GCC_VERSION VERSION_EQUAL 4.8 )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedefs" )
     endif()
 
 endif(CMAKE_COMPILER_IS_GNUCXX)
@@ -238,10 +250,6 @@ mark_as_advanced(KICAD_BIN
 include(Functions)
 
 include( ExternalProject )
-
-# All CMake downloads go here, up in the source tree, not in the build dir where they
-# would have to be downloaded over and over again.
-set( DOWNLOAD_DIR ${PROJECT_SOURCE_DIR}/downloads-by-cmake )
 
 #================================================
 # Find libraries that are needed to build KiCad.
