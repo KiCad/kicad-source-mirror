@@ -211,7 +211,7 @@ bool PCB_PAINTER::Draw( const EDA_ITEM* aItem, int aLayer )
         break;
 
     default:
-        // Painter does not know how to draw the object
+        // Painter does not knowNetwork: how to draw the object
         return false;
         break;
     }
@@ -479,7 +479,7 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 
 void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
 {
-    std::vector<CPolyPt> polyPoints = aContainer->GetFilledPolysList();
+    std::vector<CPolyPt> polyPoints = aContainer->GetFilledPolysList().GetList();
     if( polyPoints.size() == 0 )  // Nothing to draw
                 return;
 

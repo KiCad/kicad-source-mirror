@@ -247,7 +247,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
     wxStaticText* text = new wxStaticText( m_matrixPanel, -1, wxT( "W" ), pos );
     int text_height   = text->GetRect().GetHeight();
     bitmap_size.y = std::max( bitmap_size.y, text_height );
-    SAFE_DELETE( text );
+    delete text;
 
     // compute the Y pos interval:
     pos.y = text_height;

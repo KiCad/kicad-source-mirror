@@ -33,6 +33,8 @@
 
 #include <class_board_item.h>
 #include <PolyLine.h>
+#include <math_for_graphics.h>
+#include <trigo.h>
 
 
 class LINE_READER;
@@ -134,7 +136,7 @@ public:
      */
     int GetRadius() const
     {
-        double radius = hypot( (double) (m_End.x - m_Start.x), (double) (m_End.y - m_Start.y) );
+        double radius = GetLineLength( m_Start, m_End );
         return KiROUND( radius );
     }
 
@@ -184,9 +186,7 @@ public:
      */
     double  GetLength() const
     {
-        wxPoint delta = GetEnd() - GetStart();
-
-        return hypot( double( delta.x ), double( delta.y ) );
+        return GetLineLength( GetStart(), GetEnd() );
     }
 
     virtual void Move( const wxPoint& aMoveVector )
@@ -211,10 +211,10 @@ public:
      * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
-    void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
-                                               int                    aClearanceValue,
-                                               int                    aCircleToSegmentsCount,
-                                               double                 aCorrectionFactor );
+    void TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+                                               int             aClearanceValue,
+                                               int             aCircleToSegmentsCount,
+                                               double          aCorrectionFactor ) const;
 
     virtual wxString GetSelectMenuText() const;
 
@@ -223,7 +223,7 @@ public:
     virtual EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // overload
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
 };
 

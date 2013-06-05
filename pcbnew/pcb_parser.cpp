@@ -612,39 +612,39 @@ void PCB_PARSER::parseTITLE_BLOCK() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_comment:
+        {
+            int commentNumber = parseInt( "comment" );
+
+            switch( commentNumber )
             {
-                int commentNumber = parseInt( "comment" );
-
-                switch( commentNumber )
-                {
-                case 1:
-                    NextTok();
-                    titleBlock.SetComment1( FromUTF8() );
-                    break;
-
-                case 2:
-                    NextTok();
-                    titleBlock.SetComment2( FromUTF8() );
-                    break;
-
-                case 3:
-                    NextTok();
-                    titleBlock.SetComment3( FromUTF8() );
-                    break;
-
-                case 4:
-                    NextTok();
-                    titleBlock.SetComment4( FromUTF8() );
-                    break;
-
-                default:
-                    wxString err;
-                    err.Printf( wxT( "%d is not a valid title block comment number" ), commentNumber );
-                    THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
-                }
-
+            case 1:
+                NextTok();
+                titleBlock.SetComment1( FromUTF8() );
                 break;
+
+            case 2:
+                NextTok();
+                titleBlock.SetComment2( FromUTF8() );
+                break;
+
+            case 3:
+                NextTok();
+                titleBlock.SetComment3( FromUTF8() );
+                break;
+
+            case 4:
+                NextTok();
+                titleBlock.SetComment4( FromUTF8() );
+                break;
+
+            default:
+                wxString err;
+                err.Printf( wxT( "%d is not a valid title block comment number" ), commentNumber );
+                THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
+
+            break;
+        }
 
         default:
             Expecting( "title, date, rev, company, or comment" );
@@ -744,7 +744,7 @@ T PCB_PARSER::lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR )
 
     if( it == aMap.end() )
     {
-#if 1 && defined(DEBUG)
+#if 0 && defined(DEBUG)
         // dump the whole darn table, there's something wrong with it.
         for( it = aMap.begin();  it != aMap.end();  ++it )
         {
@@ -2371,7 +2371,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
     T       token;
 
     // bigger scope since each filled_polygon is concatenated in here
-    std::vector< CPolyPt > pts;
+    CPOLYGONS_LIST pts;
 
     auto_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
 
@@ -2614,11 +2614,11 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
-                pts.push_back( CPolyPt( parseXY() ) );
+                pts.Append( CPolyPt( parseXY() ) );
             }
 
             NeedRIGHT();
-            pts.back().end_contour = true;
+            pts.CloseLastContour();
         }
 
             break;
@@ -2665,7 +2665,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
         zone->Outline()->SetHatch( hatchStyle, hatchPitch, true );
     }
 
-    if( pts.size() )
+    if( pts.GetCornersCount() )
         zone->AddFilledPolysList( pts );
 
     // Ensure keepout does not have a net (which have no sense for a keepout zone)

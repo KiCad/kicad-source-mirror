@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,23 +39,96 @@
 #include <pcbnew.h>
 #include <zones.h>
 
+ /* Function TransformOutlinesShapeWithClearanceToPolygon
+  * Convert the zone filled areas polygons to polygons
+  * inflated (optional) by max( aClearanceValue, the zone clearance)
+  * and copy them in aCornerBuffer
+  * param aClearanceValue = the clearance around polygons
+  * param aAddClearance = true to add a clearance area to the polygon
+  *                      false to create the outline polygon.
+  */
+void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
+            CPOLYGONS_LIST& aCornerBuffer,
+            int aClearanceValue, bool aAddClearance )
+{
+    // Creates the zone outlines polygon (with linked holes if any)
+    CPOLYGONS_LIST zoneOutines;
+    BuildFilledSolidAreasPolygons( NULL, &zoneOutines );
+
+    // add clearance to outline
+    int clearance = 0;
+    if( aAddClearance )
+    {
+        clearance = GetClearance();
+        if( aClearanceValue > clearance )
+            clearance = aClearanceValue;
+    }
+    // Calculate the polygon with clearance
+    // holes are linked to the main outline, so only one polygon should be created.
+    KI_POLYGON_SET polyset_zone_solid_areas;
+    std::vector<KI_POLY_POINT> cornerslist;
+    unsigned ic = 0;
+    unsigned corners_count = zoneOutines.GetCornersCount();
+    while( ic < corners_count )
+    {
+        cornerslist.clear();
+        KI_POLYGON poly;
+        {
+            for( ; ic < corners_count; ic++ )
+            {
+                CPolyPt* corner = &zoneOutines[ic];
+                cornerslist.push_back( KI_POLY_POINT( corner->x, corner->y ) );
+                if( corner->end_contour )
+                {
+                    ic++;
+                    break;
+                }
+            }
+
+            bpl::set_points( poly, cornerslist.begin(), cornerslist.end() );
+            polyset_zone_solid_areas.push_back( poly );
+        }
+    }
+
+    polyset_zone_solid_areas += clearance;
+
+    // Put the resulting polygon in aCornerBuffer corners list
+    for( unsigned ii = 0; ii < polyset_zone_solid_areas.size(); ii++ )
+    {
+        KI_POLYGON& poly = polyset_zone_solid_areas[ii];
+        CPolyPt   corner( 0, 0, false );
+
+        for( unsigned jj = 0; jj < poly.size(); jj++ )
+        {
+            KI_POLY_POINT point = *(poly.begin() + jj);
+            corner.x = point.x();
+            corner.y = point.y();
+            corner.end_contour = false;
+            aCornerBuffer.Append( corner );
+        }
+
+        aCornerBuffer.CloseLastContour();
+    }
+}
+
+
 
 /**
  * Function BuildUnconnectedThermalStubsPolygonList
  * Creates a set of polygons corresponding to stubs created by thermal shapes on pads
  * which are not connected to a zone (dangling bridges)
- * @param aCornerBuffer = a std::vector<CPolyPt> where to store polygons
+ * @param aCornerBuffer = a CPOLYGONS_LIST where to store polygons
  * @param aPcb = the board.
  * @param aZone = a pointer to the ZONE_CONTAINER  to examine.
  * @param aArcCorrection = a pointer to the ZONE_CONTAINER  to examine.
  * @param aRoundPadThermalRotation = the rotation in 1.0 degree for thermal stubs in round pads
  */
 
-void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffer,
+void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
                                               BOARD*                aPcb,
                                               ZONE_CONTAINER*       aZone,
                                               double                aArcCorrection,
-                                              int                   aRoundPadThermalRotation )
+                                              double                aRoundPadThermalRotation )
 {
     std::vector<wxPoint> corners_buffer;    // a local polygon buffer to store one stub
     corners_buffer.reserve( 4 );
@@ -128,7 +201,7 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
                 copperThickness = 0;
 
             // Leave a small extra size to the copper area inside to pad
-            copperThickness += (int)(IU_PER_MM * 0.04);
+            copperThickness += KiROUND( IU_PER_MM * 0.04 );
 
             startpoint.x = std::min( pad->GetSize().x, copperThickness );
             startpoint.y = std::min( pad->GetSize().y, copperThickness );
@@ -138,10 +211,10 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
 
             // This is a CIRCLE pad tweak
             // for circle pads, the thermal stubs orientation is 45 deg
-            int fAngle = pad->GetOrientation();
+            double fAngle = pad->GetOrientation();
             if( pad->GetShape() == PAD_CIRCLE )
             {
-                endpoint.x     = (int) ( endpoint.x * aArcCorrection );
+                endpoint.x     = KiROUND( endpoint.x * aArcCorrection );
                 endpoint.y     = endpoint.x;
                 fAngle = aRoundPadThermalRotation;
             }
@@ -211,8 +284,8 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
                     CPolyPt corner;
                     corner.x = cpos.x;
                     corner.y = cpos.y;
-                    corner.end_contour = ( ic < (corners_buffer.size() - 1) ) ? 0 : 1;
-                    aCornerBuffer.push_back( corner );
+                    corner.end_contour = ( ic < (corners_buffer.size() - 1) ) ? false : true;
+                    aCornerBuffer.Append( corner );
                 }
             }
         }

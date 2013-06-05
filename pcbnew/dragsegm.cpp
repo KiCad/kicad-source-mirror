@@ -34,6 +34,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <wxBasePcbFrame.h>
+#include <macros.h>
 
 #include <drag.h>
 #include <pcbnew.h>
@@ -226,13 +227,13 @@ void DRAG_LIST::fillList( CONNECTIONS& aConnections )
             if( pad->HitTest( track->GetStart() ) )
             {
                 track->start = pad;
-                track->SetState( START_ON_PAD, false );
+                track->SetState( START_ON_PAD, true );
             }
 
             if( pad->HitTest( track->GetEnd() ) )
             {
                 track->end = pad;
-                track->SetState( END_ON_PAD, false );
+                track->SetState( END_ON_PAD, true );
             }
 
             DRAG_SEGM_PICKER wrapper( track );
@@ -359,7 +360,7 @@ void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LAYER_MSK
 
             if( std::abs( delta.x ) <= maxdist && std::abs( delta.y ) <= maxdist )
             {
-                int dist = (int) hypot( (double) delta.x, (double) delta.y );
+                int dist = KiROUND( EuclideanNorm( delta ) );
 
                 if( dist <= maxdist )
                 {
@@ -377,7 +378,7 @@ void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LAYER_MSK
 
             if( std::abs( delta.x ) <= maxdist && std::abs( delta.y ) <= maxdist )
             {
-                int dist = (int) hypot( (double) delta.x, (double) delta.y );
+                int dist = KiROUND( EuclideanNorm( delta ) );
 
                 if( dist <= maxdist )
                     flag |= ENDPOINT;

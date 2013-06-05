@@ -208,7 +208,7 @@ TEXTE_PCB* PCB_EDIT_FRAME::CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText )
 
         // Set the mirrored option for layers on the BACK side of the board
         if( layer == LAYER_N_BACK || layer == SILKSCREEN_N_BACK ||
-            layer == SOLDERPASTE_N_BACK || layer == SOLDERMASK_N_FRONT ||
+            layer == SOLDERPASTE_N_BACK || layer == SOLDERMASK_N_BACK ||
             layer == ADHESIVE_N_BACK
             )
             textePcb->SetMirrored( true );
@@ -241,12 +241,12 @@ void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     if( TextePcb == NULL )
         return;
 
-    /* Erase previous text. */
+    // Erase previous text:
     TextePcb->Draw( m_canvas, DC, GR_XOR );
 
     TextePcb->SetOrientation( TextePcb->GetOrientation() + angle );
 
-    /* Redraw text in new position. */
+    // Redraw text in new position:
     TextePcb->Draw( m_canvas, DC, GR_XOR );
     SetMsgPanel( TextePcb );
 
@@ -276,7 +276,7 @@ void PCB_EDIT_FRAME::FlipTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC )
 
     if( aTextePcb->GetFlags() == 0 )    // i.e. not edited, or moved
         SaveCopyInUndoList( aTextePcb, UR_FLIPPED, aTextePcb->GetTextPosition() );
-    else                 // set flag edit, to show it was a complex command
+    else                 // set edit flag, for the current command
         aTextePcb->SetFlags( IN_EDIT );
 
     OnModify();

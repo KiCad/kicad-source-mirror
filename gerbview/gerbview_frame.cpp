@@ -32,6 +32,7 @@
 #include <class_drawpanel.h>
 #include <build_version.h>
 #include <macros.h>
+#include <trigo.h>
 #include <base_units.h>
 #include <colors_selection.h>
 #include <class_gbr_layer_box_selector.h>
@@ -417,8 +418,8 @@ void GERBVIEW_FRAME::Liste_D_Codes()
             Line.Printf( wxT( "tool %2.2d:   D%2.2d  V %2.4f  H %2.4f  %s" ),
                          jj,
                          pt_D_code->m_Num_Dcode,
-                         (float) pt_D_code->m_Size.y / scale,
-                         (float) pt_D_code->m_Size.x / scale,
+                         pt_D_code->m_Size.y / scale,
+                         pt_D_code->m_Size.x / scale,
                          D_CODE::ShowApertureType( pt_D_code->m_Shape )
                          );
 
@@ -802,14 +803,10 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
         dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
 
-        if( dx==0 && dy==0 )
-            theta = 0.0;
-        else
-            theta = atan2( (double) -dy, (double) dx );
+        // atan2 in the 0,0 case returns 0
+        theta = RAD2DEG( atan2( -dy, dx ) );
 
-        theta = theta * 180.0 / M_PI;
-
-        ro = sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
+        ro = hypot( dx, dy );
         wxString formatter;
         switch( g_UserUnit )
         {
@@ -868,7 +865,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         dYpos = To_User_Unit( g_UserUnit, dy );
 
         // We already decided the formatter above
-        line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
+        line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
         SetStatusText( line, 3 );
     }
 }

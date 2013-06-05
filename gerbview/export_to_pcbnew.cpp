@@ -233,6 +233,8 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LA
     #define SEG_SHAPE   0
     #define ARC_SHAPE   2
     int     shape   = SEG_SHAPE;
+    
+    // please note: the old PCB format only has integer support for angles
     int     angle   = 0;
     wxPoint seg_start, seg_end;
 
@@ -247,7 +249,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LA
                            (double) ( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
 
         shape       = ARC_SHAPE;
-        angle       = KiROUND( (a - b) / M_PI * 1800.0 );
+        angle       = KiROUND( RAD2DECIDEG(a - b) );
         seg_start   = aGbrItem->m_ArcCentre;
 
         if( angle < 0 )
@@ -332,7 +334,8 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
     {
         seg_start = curr_start;
         wxPoint curr_end = start;
-        RotatePoint( &curr_end, aGbrItem->m_ArcCentre, -(int) (DELTA_ANGLE * ii * 1800 / M_PI) );
+        RotatePoint( &curr_end, aGbrItem->m_ArcCentre,
+                     -RAD2DECIDEG( DELTA_ANGLE * ii ) );
         seg_end = curr_end;
         // Reverse Y axis:
         NEGATE( seg_start.y );

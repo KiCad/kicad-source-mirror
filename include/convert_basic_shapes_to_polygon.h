@@ -45,7 +45,7 @@
  * Note: the polygon is inside the circle, so if you want to have the polygon
  * outside the circle, you should give aRadius calculated with a correction factor
  */
-void TransformCircleToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+void TransformCircleToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                            wxPoint aCenter, int aRadius,
                                            int aCircleToSegmentsCount );
 
@@ -61,7 +61,7 @@ void TransformCircleToPolygon( std::vector <CPolyPt>& aCornerBuffer,
  * Note: the polygon is inside the arc ends, so if you want to have the polygon
  * outside the circle, you should give aStart and aEnd calculated with a correction factor
  */
-void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                            wxPoint aStart, wxPoint aEnd,
                                            int aCircleToSegmentsCount,
                                            int aWidth );
@@ -78,8 +78,22 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
  * @param aWidth = width (thickness) of the line
  */
-void TransformArcToPolygon( std::vector <CPolyPt>& aCornerBuffer,
-                            wxPoint aCentre, wxPoint aStart, int aArcAngle,
+void TransformArcToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+                            wxPoint aCentre, wxPoint aStart, double aArcAngle,
+                            int aCircleToSegmentsCount, int aWidth );
+
+/**
+ * Function TransformRingToPolygon
+ * Creates a polygon from a ring
+ * Convert arcs to multiple straight segments
+ * @param aCornerBuffer = a buffer to store the polygon
+ * @param aCentre = centre of the arc or circle
+ * @param aRadius = radius of the circle
+ * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+ * @param aWidth = width (thickness) of the ring
+ */
+void TransformRingToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+                            wxPoint aCentre, int aRadius,
                             int aCircleToSegmentsCount, int aWidth );
 
 #endif     // CONVERT_BASIC_SHAPES_TO_POLYGON_H

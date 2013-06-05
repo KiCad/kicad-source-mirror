@@ -9,6 +9,7 @@
 #include <class_drawpanel.h>
 #include <colors_selection.h>
 #include <wxBasePcbFrame.h>
+#include <macros.h>
 
 #include <class_board.h>
 #include <class_module.h>

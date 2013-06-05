@@ -476,6 +476,8 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
         return false;
     }
 
+    m_Parent->GetBoard()->Add( NewModule, ADD_APPEND );
+
     if( Module == m_CurrentModule )
         m_CurrentModule = NewModule;
 
@@ -489,16 +491,6 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
 }
 
 
-/**
- * Function Exchange_Module
- * Replaces OldModule by NewModule, using OldModule settings:
- * position, orientation, pad netnames ...)
- * OldModule is deleted or put in undo list.
- * @param aOldModule = footprint to replace
- * @param aNewModule = footprint to put
- * @param aUndoPickList = the undo list used to save  OldModule. If null,
- * OldModule is deleted
- */
 void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
                                       MODULE*            aNewModule,
                                       PICKED_ITEMS_LIST* aUndoPickList )
@@ -589,21 +581,14 @@ void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
 {
     wxString newname;
 
-    newname = m_Parent->Select_1_Module_From_List( m_Parent,
-                                                   wxEmptyString,
-                                                   wxEmptyString,
-                                                   wxEmptyString );
+    newname = m_Parent->SelectFootprint( m_Parent, wxEmptyString, wxEmptyString, wxEmptyString,
+                                         m_Parent->GetFootprintLibraryTable() );
+
     if( newname != wxEmptyString )
         m_NewModule->SetValue( newname );
 }
 
 
-/**
- * Function RecreateBOMFileFromBoard
- * Recreates a .cmp file from the current loaded board
- * this is the same as created by CvPcb.
- * can be used if this file is lost
- */
 void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
 {
     wxFileName  fn;

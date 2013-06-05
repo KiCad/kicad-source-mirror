@@ -186,16 +186,16 @@ public:
     void SetDrillShape( PAD_SHAPE_T aDrillShape ) { m_DrillShape = aDrillShape; }
     PAD_SHAPE_T GetDrillShape() const           { return m_DrillShape; }
 
-    void SetLayerMask( LAYER_MSK aLayerMask )         { m_layerMask = aLayerMask; }
-    LAYER_MSK GetLayerMask() const                    { return m_layerMask; }
+    void SetLayerMask( LAYER_MSK aLayerMask )   { m_layerMask = aLayerMask; }
+    LAYER_MSK GetLayerMask() const              { return m_layerMask; }
 
     void SetAttribute( PAD_ATTR_T aAttribute );
     PAD_ATTR_T GetAttribute() const             { return m_Attribute; }
 
-    void SetPadToDieLength( int aLength )      { m_LengthPadToDie = aLength; }
-    int GetPadToDieLength() const              { return m_LengthPadToDie; }
+    void SetPadToDieLength( int aLength )       { m_LengthPadToDie = aLength; }
+    int GetPadToDieLength() const               { return m_LengthPadToDie; }
 
-    int GetLocalSolderMaskMargin() const        { return m_LocalSolderMaskMargin; }
+    int GetLocalSolderMaskMargin() const            { return m_LocalSolderMaskMargin; }
     void SetLocalSolderMaskMargin( int aMargin ) { m_LocalSolderMaskMargin = aMargin; }
 
     int GetLocalClearance() const               { return m_LocalClearance; }
@@ -220,10 +220,10 @@ public:
      * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
     */
-    void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+    void TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                                int aClearanceValue,
                                                int aCircleToSegmentsCount,
-                                               double aCorrectionFactor );
+                                               double aCorrectionFactor ) const;;
 
      /**
      * Function GetClearance
@@ -274,8 +274,6 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
-    void Draw3D( EDA_3D_CANVAS* glcanvas );
-
     /**
      * Function DrawShape
      * basic function to draw a pad.
@@ -298,7 +296,44 @@ public:
      *                        inflate, < 0 deflate
      * @param aRotation = full rotation of the polygon
      */
-    void BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const;
+    void BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, double aRotation ) const;
+
+    /**
+     * Function BuildPadShapePolygon
+     * Build the Corner list of the polygonal shape,
+     * depending on shape, extra size (clearance ...) pad and orientation
+     * This function is similar to TransformShapeWithClearanceToPolygon,
+     * but the difference is BuildPadShapePolygon creates a polygon shape exactly
+     * similar to pad shape, which a size inflated by aInflateValue
+     * and TransformShapeWithClearanceToPolygon creates a more complex shape (for instance
+     * a rectangular pad is converted in a rectangulr shape with ronded corners)
+     * @param aCornerBuffer = a buffer to fill.
+     * @param aInflateValue = the clearance or margin value.
+     *              value > 0: inflate, < 0 deflate, = 0 : no change
+     *              the clearance can have different values for x and y directions
+     *              (relative to the pad)
+     * @param aSegmentsPerCircle = number of segments to approximate a circle
+     *              (used for round and oblong shapes only (16 to 32 is a good value)
+     * @param aCorrectionFactor = the correction to apply to circles radius to keep
+     *        the pad size when the circle is approximated by segments
+     */
+    void BuildPadShapePolygon( CPOLYGONS_LIST& aCornerBuffer,
+                               wxSize aInflateValue, int aSegmentsPerCircle,
+                               double aCorrectionFactor ) const;
+
+    /**
+     * Function BuildPadDrillShapePolygon
+     * Build the Corner list of the polygonal drill shape,
+     * depending on shape pad hole and orientation
+     * @param aCornerBuffer = a buffer to fill.
+     * @param aInflateValue = the clearance or margin value.
+     *              value > 0: inflate, < 0 deflate, = 0 : no change
+     * @param aSegmentsPerCircle = number of segments to approximate a circle
+     *              (used for round and oblong shapes only(16 to 32 is a good value)
+     * @return false if the pad has no hole, true otherwise
+     */
+    bool BuildPadDrillShapePolygon( CPOLYGONS_LIST& aCornerBuffer,
+                                    int aInflateValue, int aSegmentsPerCircle ) const;
 
     /**
      * Function BuildSegmentFromOvalShape
@@ -312,7 +347,7 @@ public:
      * @param aRotation = full rotation of the segment
      * @return the width of the segment
      */
-    int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation ) const;
+    int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd, double aRotation ) const;
 
     void ReturnStringPadName( wxString& text ) const; // Return pad name as string in a buffer
 
@@ -411,7 +446,7 @@ public:
     void CopyNetlistSettings( D_PAD* aPad );
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // overload
+    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
 #endif
 
 

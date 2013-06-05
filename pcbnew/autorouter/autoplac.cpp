@@ -942,8 +942,8 @@ double PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
         // the penalty is max for 45 degrees ratsnests,
         // and 0 for horizontal or vertical ratsnests.
         // For Horizontal and Vertical ratsnests, dy = 0;
-        icout  = hypot( (double) dx, (double) dy * 2.0 );
-        cout  += icout; /* Total cost = sum of costs of each connection. */
+        icout  = hypot( dx, dy * 2.0 );
+        cout  += icout; // Total cost = sum of costs of each connection
     }
 
     return cout;

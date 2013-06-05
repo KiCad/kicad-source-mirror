@@ -253,7 +253,6 @@ public:
 
     void SetOutline( CPolyLine* aOutline ) { m_Poly = aOutline; }
 
-    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
     virtual bool HitTest( const wxPoint& aPosition );
 
     /**
@@ -264,19 +263,40 @@ public:
      */
     bool HitTestFilledArea( const wxPoint& aRefPos ) const;
 
-    /**
-     * Function BuildFilledPolysListData
-     * Build m_FilledPolysList data from real outlines (m_Poly)
-     * in order to have drawable (and plottable) filled polygons
-     * drawable filled polygons are polygons without hole
-     * @param aPcb: the current board (can be NULL for non copper zones)
-     * @param aCornerBuffer: A reference to a buffer to put polygon corners, or NULL
-     * if NULL (default), uses m_FilledPolysList and fill current zone.
-     * @return number of polygons
-     * This function does not add holes for pads and tracks but calls
-     * AddClearanceAreasPolygonsToPolysList() to do that for copper layers
+     /**
+     * Function TransformSolidAreasShapesToPolygonSet
+     * Convert solid areas full shapes to polygon set
+     * (the full shape is the polygon area with a thick outline)
+     * Used in 3D view
+     * Arcs (ends of segments) are approximated by segments
+     * @param aCornerBuffer = a buffer to store the polygons
+     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+     * @param aCorrectionFactor = the correction to apply to arcs radius to roughly
+     * keep arc radius when approximated by segments
      */
-    int BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>* aCornerBuffer = NULL );
+    void TransformSolidAreasShapesToPolygonSet( CPOLYGONS_LIST& aCornerBuffer,
+                                                int                    aCircleToSegmentsCount,
+                                                double                 aCorrectionFactor );
+    /**
+     * Function BuildFilledSolidAreasPolygons
+     * Build the filled solid areas data from real outlines (stored in m_Poly)
+     * The solid areas can be more thna one on copper layers, and do not have holes
+      ( holes are linked by overlapping segments to the main outline)
+     * in order to have drawable (and plottable) filled polygons
+     * @param aPcb: the current board (can be NULL for non copper zones)
+     * @param aCornerBuffer: A reference to a buffer to store polygon corners, or NULL
+     * if NULL (default:
+     * - m_FilledPolysList is used to store solid areas polygons.
+     * - on copper layers, tracks and other items shapes of other nets are
+     * removed from solid areas
+     * if not null:
+     * Only the zone outline (with holes, if any) are stored in aCornerBuffer
+     * with holes linked. Therfore only one polygon is created
+     * @return true if OK, false if the solid areas cannot be calculated
+     * This function calls AddClearanceAreasPolygonsToPolysList()
+     * to add holes for pads and tracks and other items not in net.
+     */
+    bool BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST* aCornerBuffer = NULL );
 
     /**
      * Function CopyPolygonsFromKiPolygonListToFilledPolysList
@@ -297,15 +317,31 @@ public:
      * Function AddClearanceAreasPolygonsToPolysList
      * Add non copper areas polygons (pads and tracks with clearance)
      * to a filled copper area
-     * used in BuildFilledPolysListData when calculating filled areas in a zone
+     * used in BuildFilledSolidAreasPolygons when calculating filled areas in a zone
      * Non copper areas are pads and track and their clearance area
      * The filled copper area must be computed before
-     * BuildFilledPolysListData() call this function just after creating the
+     * BuildFilledSolidAreasPolygons() call this function just after creating the
      *  filled copper area polygon (without clearance areas
      * @param aPcb: the current board
      */
     void AddClearanceAreasPolygonsToPolysList( BOARD* aPcb );
 
+
+     /**
+     * Function TransformOutlinesShapeWithClearanceToPolygon
+     * Convert the outlines shape to a polygon with no holes
+     * inflated (optional) by max( aClearanceValue, the zone clearance)
+     * (holes are linked to external outline by overlapping segments)
+     * Used in filling zones calculations
+     * Circles (vias) and arcs (ends of tracks) are approximated by segments
+     * @param aCornerBuffer = a buffer to store the polygon
+     * @param aClearanceValue = the clearance around the pad
+     * @param aAddClearance = true to add a clearance area to the polygon
+     *                      false to create the outline polygon.
+     */
+    void TransformOutlinesShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+                                               int                    aClearanceValue,
+                                               bool                   aAddClearance );
     /**
      * Function HitTestForCorner
      * tests if the given wxPoint near a corner
@@ -324,7 +360,6 @@ public:
      */
     bool HitTestForEdge( const wxPoint& refPos );
 
-    /** @copydoc EDA_ITEM::HitTest(const EDA_RECT&)const */
     virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
@@ -414,7 +449,7 @@ public:
 
     int GetNumCorners( void ) const
     {
-        return m_Poly->GetNumCorners();
+        return m_Poly->GetCornersCount();
     }
 
     void RemoveAllContours( void )
@@ -448,26 +483,7 @@ public:
         m_Poly->SetHatchStyle( aStyle );
     }
 
-     /**
-     * Function TransformShapeWithClearanceToPolygon
-     * Convert the track shape to a closed polygon
-     * Used in filling zones calculations
-     * Circles (vias) and arcs (ends of tracks) are approximated by segments
-     * @param aCornerBuffer = a buffer to store the polygon
-     * @param aClearanceValue = the clearance around the pad
-     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
-     * @param aCorrectionFactor = the correction to apply to circles radius to keep
-     * @param aAddClearance = true to add a clearance area to the polygon
-     *                      false to create the outline polygon.
-     * clearance when the circle is approximated by segment bigger or equal
-     * to the real clearance value (usually near from 1.0)
-     */
-    void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
-                                               int                    aClearanceValue,
-                                               int                    aCircleToSegmentsCount,
-                                               double                 aCorrectionFactor,
-                                               bool                   aAddClearance );
-   /**
+    /**
      * Function IsSame
      * tests if 2 zones are equivalent:
      * 2 zones are equivalent if they have same parameters and same outlines
@@ -482,7 +498,7 @@ public:
      */
     void ClearFilledPolysList()
     {
-        m_FilledPolysList.clear();
+        m_FilledPolysList.RemoveAllContours();
     }
 
    /**
@@ -490,7 +506,7 @@ public:
      * returns a reference to the list of filled polygons.
      * @return Reference to the list of filled polygons.
      */
-    const std::vector<CPolyPt>& GetFilledPolysList() const
+    const CPOLYGONS_LIST& GetFilledPolysList() const
     {
         return m_FilledPolysList;
     }
@@ -499,7 +515,7 @@ public:
      * Function AddFilledPolysList
      * sets the list of filled polygons.
      */
-    void AddFilledPolysList( std::vector<CPolyPt>& aPolysList )
+    void AddFilledPolysList( CPOLYGONS_LIST& aPolysList )
     {
         m_FilledPolysList = aPolysList;
     }
@@ -533,9 +549,9 @@ public:
 
     void AddPolygon( std::vector< wxPoint >& aPolygon );
 
-    void AddFilledPolygon( std::vector< CPolyPt >& aPolygon )
+    void AddFilledPolygon( CPOLYGONS_LIST& aPolygon )
     {
-        m_FilledPolysList.insert( m_FilledPolysList.end(), aPolygon.begin(), aPolygon.end() );
+        m_FilledPolysList.Append( aPolygon );
     }
 
     void AddFillSegments( std::vector< SEGMENT >& aSegments )
@@ -564,7 +580,7 @@ public:
 
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
 #endif
 
 
@@ -636,7 +652,7 @@ private:
      * connecting "holes" with external main outline.  In complex cases an outline
      * described by m_Poly can have many filled areas
      */
-    std::vector <CPolyPt> m_FilledPolysList;
+    CPOLYGONS_LIST m_FilledPolysList;
 };
 
 

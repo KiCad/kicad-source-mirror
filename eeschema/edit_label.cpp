@@ -110,7 +110,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
 
     if( textItem->GetText().IsEmpty() )
     {
-        SAFE_DELETE( textItem );
+        delete textItem;
         return NULL;
     }
 

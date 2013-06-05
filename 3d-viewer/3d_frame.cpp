@@ -51,10 +51,12 @@ static const wxString   keyShowAxis( wxT( "ShowAxis" ) );
 static const wxString   keyShowZones( wxT( "ShowZones" ) );
 static const wxString   keyShowFootprints( wxT( "ShowFootprints" ) );
 static const wxString   keyShowCopperThickness( wxT( "ShowCopperThickness" ) );
-static const wxString   keyShowCommetsLayer( wxT( "ShowCommetsLayer" ) );
-static const wxString   keyShowDrawingsLayer( wxT( "ShowDrawingsLayer" ) );
-static const wxString   keyShowEco1Layer( wxT( "ShowEco1Layer" ) );
-static const wxString   keyShowEco2Layer( wxT( "ShowEco2Layer" ) );
+static const wxString   keyShowAdhesiveLayers( wxT( "ShowAdhesiveLayers" ) );
+static const wxString   keyShowSilkScreenLayers( wxT( "ShowSilkScreenLayers" ) );
+static const wxString   keyShowSolderMaskLayers( wxT( "ShowSolderMasLayers" ) );
+static const wxString   keyShowSolderPasteLayers( wxT( "ShowSolderPasteLayers" ) );
+static const wxString   keyShowCommentsLayer( wxT( "ShowCommentsLayers" ) );
+static const wxString   keyShowEcoLayers( wxT( "ShowEcoLayers" ) );
 
 BEGIN_EVENT_TABLE( EDA_3D_FRAME, wxFrame )
 EVT_ACTIVATE( EDA_3D_FRAME::OnActivate )
@@ -62,6 +64,7 @@ EVT_ACTIVATE( EDA_3D_FRAME::OnActivate )
 EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, EDA_3D_FRAME::Process_Zoom )
 EVT_TOOL_RANGE( ID_START_COMMAND_3D, ID_END_COMMAND_3D,
                 EDA_3D_FRAME::Process_Special_Functions )
+EVT_TOOL( ID_TOOL_SET_VISIBLE_ITEMS, EDA_3D_FRAME::Process_Special_Functions )
 EVT_MENU( wxID_EXIT, EDA_3D_FRAME::Exit3DFrame )
 EVT_MENU( ID_MENU_SCREENCOPY_PNG, EDA_3D_FRAME::Process_Special_Functions )
 EVT_MENU( ID_MENU_SCREENCOPY_JPEG, EDA_3D_FRAME::Process_Special_Functions )
@@ -97,7 +100,7 @@ END_EVENT_TABLE() EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME*   parent,
     CreateStatusBar( 5 );
     SetStatusWidths( 5, dims );
 
-    ReCreateMenuBar();
+    CreateMenuBar();
     ReCreateHToolbar();
 
     // ReCreateAuxiliaryToolbar();
@@ -170,12 +173,13 @@ void EDA_3D_FRAME::GetSettings()
                       &prms.m_DrawFlags[prms.FL_USE_COPPER_THICKNESS],
                       false );
         config->Read( keyShowZones, &prms.m_DrawFlags[prms.FL_ZONE], true );
-        config->Read( keyShowCommetsLayer, &prms.m_DrawFlags[prms.FL_COMMENTS], true );
-        config->Read( keyShowDrawingsLayer, &prms.m_DrawFlags[prms.FL_DRAWINGS], true );
-        config->Read( keyShowEco1Layer, &prms.m_DrawFlags[prms.FL_ECO1], true );
-        config->Read( keyShowEco2Layer, &prms.m_DrawFlags[prms.FL_ECO2], true );
+        config->Read( keyShowAdhesiveLayers, &prms.m_DrawFlags[prms.FL_ADHESIVE], true );
+        config->Read( keyShowSilkScreenLayers, &prms.m_DrawFlags[prms.FL_SILKSCREEN], true );
+        config->Read( keyShowSolderMaskLayers, &prms.m_DrawFlags[prms.FL_SOLDERMASK], true );
+        config->Read( keyShowSolderPasteLayers, &prms.m_DrawFlags[prms.FL_SOLDERPASTE], true );
+        config->Read( keyShowCommentsLayer, &prms.m_DrawFlags[prms.FL_COMMENTS], true );
+        config->Read( keyShowEcoLayers, &prms.m_DrawFlags[prms.FL_ECO], true );
     }
-
 }
 
 
@@ -195,10 +199,12 @@ void EDA_3D_FRAME::SaveSettings()
     config->Write( keyShowFootprints, prms.m_DrawFlags[prms.FL_MODULE] );
     config->Write( keyShowCopperThickness, prms.m_DrawFlags[prms.FL_USE_COPPER_THICKNESS] );
     config->Write( keyShowZones, prms.m_DrawFlags[prms.FL_ZONE] );
-    config->Write( keyShowCommetsLayer, prms.m_DrawFlags[prms.FL_COMMENTS] );
-    config->Write( keyShowDrawingsLayer, prms.m_DrawFlags[prms.FL_DRAWINGS] );
-    config->Write( keyShowEco1Layer, prms.m_DrawFlags[prms.FL_ECO1] );
-    config->Write( keyShowEco2Layer, prms.m_DrawFlags[prms.FL_ECO2] );
+    config->Write( keyShowAdhesiveLayers, prms.m_DrawFlags[prms.FL_ADHESIVE] );
+    config->Write( keyShowSilkScreenLayers, prms.m_DrawFlags[prms.FL_SILKSCREEN] );
+    config->Write( keyShowSolderMaskLayers, prms.m_DrawFlags[prms.FL_SOLDERMASK] );
+    config->Write( keyShowSolderPasteLayers, prms.m_DrawFlags[prms.FL_SOLDERPASTE] );
+    config->Write( keyShowCommentsLayer, prms.m_DrawFlags[prms.FL_COMMENTS] );
+    config->Write( keyShowEcoLayers, prms.m_DrawFlags[prms.FL_ECO] );
 
     if( IsIconized() )
         return;
@@ -286,6 +292,10 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )
     {
+    case ID_TOOL_SET_VISIBLE_ITEMS:
+        Install_3D_ViewOptionDialog( event );
+        break;
+
     case ID_RELOAD3D_BOARD:
         NewDisplay();
         return;
@@ -365,23 +375,33 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         NewDisplay();
         return;
 
+    case ID_MENU3D_ADHESIVE_ONOFF:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ADHESIVE] = isChecked;
+        NewDisplay();
+        return;
+
+    case ID_MENU3D_SILKSCREEN_ONOFF:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SILKSCREEN] = isChecked;
+        NewDisplay();
+        return;
+
+    case ID_MENU3D_SOLDER_MASK_ONOFF:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERMASK] = isChecked;
+        NewDisplay();
+        return;
+
+    case ID_MENU3D_SOLDER_PASTE_ONOFF:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERPASTE] = isChecked;
+        NewDisplay();
+        return;
+
     case ID_MENU3D_COMMENTS_ONOFF:
         g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_COMMENTS] = isChecked;
         NewDisplay();
         return;
 
-    case ID_MENU3D_DRAWINGS_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_DRAWINGS] = isChecked;
-        NewDisplay();
-        return;
-
-    case ID_MENU3D_ECO1_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO1] = isChecked;
-        NewDisplay();
-        return;
-
-    case ID_MENU3D_ECO2_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO2] = isChecked;
+    case ID_MENU3D_ECO_ONOFF:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO] = isChecked;
         NewDisplay();
         return;
 

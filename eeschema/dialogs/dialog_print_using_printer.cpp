@@ -402,8 +402,8 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     aScreen->Draw( panel, dc, GR_DEFAULT_DRAWMODE );
 
     if( printReference )
-        parent->TraceWorkSheet( dc, aScreen, GetDefaultLineThickness(),
-                IU_PER_MILS, parent->GetScreenDesc() );
+        parent->DrawWorkSheet( dc, aScreen, GetDefaultLineThickness(),
+                IU_PER_MILS, aScreen->GetFileName() );
 
     g_DrawBgColor = bg_color;
     aScreen->m_IsPrinting = false;

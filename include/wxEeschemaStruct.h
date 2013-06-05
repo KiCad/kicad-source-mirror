@@ -975,7 +975,12 @@ public:
 
 private:
 
-    // Component
+    /**
+     * Function Load_Component
+     * loads from a library and places a component.
+     * if libname != "", search in lib "libname"
+     * else search in all loaded libs
+     */
     SCH_COMPONENT* Load_Component( wxDC*           DC,
                                    const wxString& libname,
                                    wxArrayString&  List,
@@ -990,6 +995,11 @@ private:
     void EditComponent( SCH_COMPONENT* aComponent );
 
 public:
+
+    /**
+     * Function OrientComponent
+     * rotates and mirrors a component.
+     */
     void OrientComponent( COMPONENT_ORIENTATION_T aOrientation = CMP_NORMAL );
 
 private:
@@ -1201,9 +1211,11 @@ public:
      * creates a library file with the name of the root document plus the '-cache' suffix,
      * That file will contain all components used in the current schematic.
      *
-     * @return True if the file was written successfully.
+     * @param aUseCurrentSheetFilename = false to use the root shhet filename
+     * (default) or true to use the currently opened sheet.
+     * @return true if the file was written successfully.
      */
-    bool CreateArchiveLibraryCacheFile( void );
+    bool CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilename = false );
 
     /**
      * Function CreateArchiveLibrary

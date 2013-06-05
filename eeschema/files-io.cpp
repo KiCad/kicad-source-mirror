@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,11 +55,11 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName, bo
     if( aScreen == NULL )
         aScreen = GetScreen();
 
-    /* If no name exists in the window yet - save as new. */
+    // If no name exists in the window yet - save as new.
     if( aScreen->GetFileName().IsEmpty() )
         aSaveUnderNewName = true;
 
-    /* Construct the name of the file to be saved */
+    // Construct the name of the file to be saved
     schematicFileName = aScreen->GetFileName();
 
     if( aSaveUnderNewName )
@@ -79,9 +79,10 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName, bo
     else
     {
         // Sheet file names are relative to the root sheet path which is the current
-        // working directory.  The IsWritable funtion expects the path to be set.
+        // working directory.  The IsWritable function expects the path to be set.
         if( schematicFileName.GetPath().IsEmpty() )
-            schematicFileName.Assign( wxFileName::GetCwd(), schematicFileName.GetFullName() );
+            schematicFileName.Assign( wxFileName::GetCwd(),
+                                      schematicFileName.GetFullName() );
     }
 
     if( !IsWritable( schematicFileName ) )
@@ -167,7 +168,7 @@ void SCH_EDIT_FRAME::Save_File( wxCommandEvent& event )
     case ID_SAVE_ONE_SHEET_UNDER_NEW_NAME:
         if( SaveEEFile( NULL, true ) )
         {
-            CreateArchiveLibraryCacheFile();
+            CreateArchiveLibraryCacheFile( true );
         }
         break;
     }
@@ -293,7 +294,8 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
     // Clear the screen before open a new file
     if( g_RootSheet )
     {
-        SAFE_DELETE( g_RootSheet );
+        delete g_RootSheet;
+        g_RootSheet = NULL;
     }
 
     CreateScreens();
@@ -467,7 +469,13 @@ void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
     SCH_SCREENS ScreenList;
 
     fn = g_RootSheet->GetFileName();
-    tmp.AssignDir( fn.GetPath() );
+
+    // Ensure a path exists. if no path, assume the cwd is used
+    // The IsWritable function expects the path to be set
+    if( !fn.GetPath().IsEmpty() )
+        tmp.AssignDir( fn.GetPath() );
+    else
+        tmp.AssignDir( wxGetCwd() );
 
     if( !IsWritable( tmp ) )
         return;

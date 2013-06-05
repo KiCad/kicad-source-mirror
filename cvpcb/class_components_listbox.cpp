@@ -113,13 +113,16 @@ void COMPONENTS_LISTBOX::OnChar( wxKeyEvent& event )
     {
         case WXK_HOME:
         case WXK_END:
-         case WXK_UP:
+        case WXK_UP:
         case WXK_DOWN:
         case WXK_PAGEUP:
         case WXK_PAGEDOWN:
+            event.Skip();
+            return;
+
         case WXK_LEFT:
         case WXK_NUMPAD_LEFT:
-            event.Skip();
+            GetParent()->m_LibraryList->SetFocus();
             return;
 
         case WXK_RIGHT:

@@ -20,7 +20,6 @@
 #include <base_struct.h>
 #include <common.h>
 #include <plot_common.h>
-#include <worksheet.h>
 #include <macros.h>
 #include <class_base_screen.h>
 #include <drawtxt.h>
@@ -111,33 +110,29 @@ double PLOTTER::userToDeviceSize( double size )
 /**
  * Generic fallback: arc rendered as a polyline
  */
-void PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int radius,
+void PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
                    FILL_T fill, int width )
 {
     wxPoint   start, end;
     const int delta = 50;   // increment (in 0.1 degrees) to draw circles
-    double    alpha;
 
     if( StAngle > EndAngle )
         EXCHG( StAngle, EndAngle );
 
     SetCurrentLineWidth( width );
     /* Please NOTE the different sign due to Y-axis flip */
-    alpha   = DEG2RAD( StAngle / 10.0 );
-    start.x = centre.x + (int) ( radius * cos( -alpha ) );
-    start.y = centre.y + (int) ( radius * sin( -alpha ) );
+    start.x = centre.x + KiROUND( cosdecideg( radius, -StAngle ) );
+    start.y = centre.y + KiROUND( sindecideg( radius, -StAngle ) );
     MoveTo( start );
     for( int ii = StAngle + delta; ii < EndAngle; ii += delta )
     {
-        alpha = DEG2RAD( ii / 10.0 );
-        end.x = centre.x + (int) ( radius * cos( -alpha ) );
-        end.y = centre.y + (int) ( radius * sin( -alpha ) );
+        end.x = centre.x + KiROUND( cosdecideg( radius, -ii ) );
+        end.y = centre.y + KiROUND( sindecideg( radius, -ii ) );
         LineTo( end );
     }
 
-    alpha = DEG2RAD( EndAngle / 10.0 );
-    end.x = centre.x + (int) ( radius * cos( -alpha ) );
-    end.y = centre.y + (int) ( radius * sin( -alpha ) );
+    end.x = centre.x + KiROUND( cosdecideg( radius, -EndAngle ) );
+    end.y = centre.y + KiROUND( sindecideg( radius, -EndAngle ) );
     FinishTo( end );
 }
 
@@ -380,24 +375,23 @@ void PLOTTER::segmentAsOval( const wxPoint& start, const wxPoint& end, int width
 {
     wxPoint center( (start.x + end.x) / 2, (start.y + end.y) / 2 );
     wxSize  size( end.x - start.x, end.y - start.y );
-    int     orient;
+    double  orient;
 
     if( size.y == 0 )
         orient = 0;
     else if( size.x == 0 )
         orient = 900;
     else
-        orient = -(int) ( RAD2DEG( atan2( (double)size.y, (double)size.x ) ) * 10.0 );
+        orient = -ArcTangente( size.y, size.x );
 
-    size.x = (int) sqrt( ( (double) size.x * size.x )
-                       + ( (double) size.y * size.y ) ) + width;
+    size.x = KiROUND( EuclideanNorm( size ) ) + width;
     size.y = width;
 
     FlashPadOval( center, size, orient, tracemode );
 }
 
 
-void PLOTTER::sketchOval( const wxPoint& pos, const wxSize& aSize, int orient,
+void PLOTTER::sketchOval( const wxPoint& pos, const wxSize& aSize, double orient,
                           int width )
 {
     SetCurrentLineWidth( width );
@@ -408,9 +402,7 @@ void PLOTTER::sketchOval( const wxPoint& pos, const wxSize& aSize, int orient,
     if( size.x > size.y )
     {
         EXCHG( size.x, size.y );
-        orient += 900;
-        if( orient >= 3600 )
-            orient -= 3600;
+        orient = AddAngles( orient, 900 );
     }
 
     deltaxy = size.y - size.x;       /* distance between centers of the oval */
@@ -470,8 +462,8 @@ void PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
 }
 
 
-void PLOTTER::ThickArc( const wxPoint& centre, int StAngle, int EndAngle, int radius,
-                        int width, EDA_DRAW_MODE_T tracemode )
+void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
+                        int radius, int width, EDA_DRAW_MODE_T tracemode )
 {
     switch( tracemode )
     {

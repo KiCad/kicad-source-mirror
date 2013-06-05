@@ -1,3 +1,5 @@
+#ifndef MATH_FOR_GRAPHICS_H
+#define MATH_FOR_GRAPHICS_H
 // math stuff for graphics, from FreePCB
 
 /* Function FindLineSegmentIntersection
@@ -58,6 +60,12 @@ double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int 
  * if b > DBL_MAX/10, assume vertical line at x = a
  * returns closest point on line in xpp, ypp
  */
-double GetPointToLineDistance( double a, double b, int x, int y, double * xp=NULL, double * yp=NULL );
+double GetPointToLineDistance( double a, double b, int x, int y, 
+                               double * xp=NULL, double * yp=NULL );
 
-double Distance( double x1, double y1, double x2, double y2 );
+inline double Distance( double x1, double y1, double x2, double y2 )
+{
+    return hypot( x1 - x2, y1 - y2 );
+}
+
+#endif

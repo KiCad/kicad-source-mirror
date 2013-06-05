@@ -32,17 +32,18 @@
 #include <wx/listctrl.h>
 #include <wx/filename.h>
 #include <netlist_reader.h>
+#include <footprint_info.h>
 
 #include <wxBasePcbFrame.h>
 #include <param_config.h>
 #include <cvpcb.h>
-#include <footprint_info.h>
 
 
 /*  Forward declarations of all top-level window classes. */
 class wxAuiToolBar;
 class FOOTPRINTS_LISTBOX;
 class COMPONENTS_LISTBOX;
+class LIBRARY_LISTBOX;
 class DISPLAY_FOOTPRINTS_FRAME;
 
 
@@ -55,6 +56,7 @@ public:
 
     bool                      m_KeepCvpcbOpen;
     FOOTPRINTS_LISTBOX*       m_FootprintList;
+    LIBRARY_LISTBOX*          m_LibraryList;
     COMPONENTS_LISTBOX*       m_ListCmp;
     DISPLAY_FOOTPRINTS_FRAME* m_DisplayFootprintFrame;
     wxAuiToolBar*             m_mainToolBar;
@@ -156,6 +158,12 @@ public:
     void             SetNewPkg( const wxString& aFootprintName );
     void             BuildCmpListBox();
     void             BuildFOOTPRINTS_LISTBOX();
+    void             BuildLIBRARY_LISTBOX();
+
+    /**
+     * Create or Update the frame showing the current highlighted footprint
+     * and (if showed) the 3D display frame
+     */
     void             CreateScreenCmp();
 
     /**

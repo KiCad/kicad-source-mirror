@@ -63,6 +63,7 @@ class NETLIST;
 class REPORTER;
 class PARSE_ERROR;
 class IO_ERROR;
+class FP_LIB_TABLE;
 
 
 /**
@@ -83,6 +84,9 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     wxAuiToolBar* m_microWaveToolBar;
+
+    /// The global footprint library table.
+    FP_LIB_TABLE* m_globalFootprintTable;
 
     /**
      * Function loadFootprints
@@ -197,6 +201,12 @@ protected:
      * @param aZone is the zone to duplicate
      */
     void duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone );
+
+    /**
+     * Function loadFootprintLibTable
+     * deletes the existing #FP_LIB_TABLE and creates a new one when a new project is loaded.
+     */
+    void loadFootprintLibTable();
 
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
@@ -1489,7 +1499,7 @@ public:
      * @param include_fixe = true to orient locked footprints
      * @return true if some footprints modified, false if no change
      */
-    bool ReOrientModules( const wxString& ModuleMask, int Orient, bool include_fixe );
+    bool ReOrientModules( const wxString& ModuleMask, double Orient, bool include_fixe );
     void LockModule( MODULE* aModule, bool aLocked );
     void AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );
 
@@ -1666,11 +1676,10 @@ public:
      */
     void UpdateTitle();
 
+
     DECLARE_EVENT_TABLE()
 };
 
-
-class FP_LIB_TABLE;
 
 /**
  * Function InvokePcbLibTableEditor

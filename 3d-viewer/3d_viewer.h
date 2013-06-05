@@ -31,8 +31,6 @@
 #define __3D_VIEWER_H__
 
 #include <wxBasePcbFrame.h>         // for m_auimanager member.
-#include <layers_id_colors_and_visibility.h>    // Layers id definitions
-#include <PolyLine.h>               // fot CPolyPt
 
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
@@ -117,9 +115,12 @@ private:
     void On3DGridSelection( wxCommandEvent& event );
     void Process_Zoom( wxCommandEvent& event );
     void OnActivate( wxActivateEvent& event );
+    void Install_3D_ViewOptionDialog( wxCommandEvent& event );
 
     // initialisation
-    void ReCreateMenuBar();
+    void CreateMenuBar();
+    void SetMenuBarOptionsState();  // Set the state of toggle menus according
+                                    // to the current display options
     void ReCreateHToolbar();
     void ReCreateVToolbar();
     void SetToolbars();

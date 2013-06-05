@@ -156,6 +156,7 @@ void DIALOG_CVPCB_CONFIG::OnOkClick( wxCommandEvent& event )
 
         m_Parent->LoadFootprintFiles();
         m_Parent->BuildFOOTPRINTS_LISTBOX();
+        m_Parent->BuildLIBRARY_LISTBOX();
     }
 
     wxCommandEvent evt( ID_SAVE_PROJECT );

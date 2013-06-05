@@ -48,22 +48,20 @@
  *       application class.
  */
 
-wxString       g_ProductName    = wxT( "KiCad E.D.A.  " );
 bool           g_ShowPageLimits = true;
 wxString       g_UserLibDirBuffer;
 
 EDA_UNITS_T    g_UserUnit;
 EDA_COLOR_T    g_GhostColor;
 
-#if defined(KICAD_GOST)
-static const bool s_gost = true;
-#else
-static const bool s_gost = false;
-#endif
 
 bool IsGOST()
 {
-    return s_gost;
+#if defined(KICAD_GOST)
+    return true;
+#else
+    return false;
+#endif
 }
 
 
@@ -289,31 +287,6 @@ wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter )
 }
 
 
-/*
- * Return the string date "day month year" like "23 jun 2005"
- */
-wxString GenDate()
-{
-    static const wxString mois[12] =
-    {
-        wxT( "jan" ), wxT( "feb" ), wxT( "mar" ), wxT( "apr" ), wxT( "may" ), wxT( "jun" ),
-        wxT( "jul" ), wxT( "aug" ), wxT( "sep" ), wxT( "oct" ), wxT( "nov" ), wxT( "dec" )
-    };
-
-    time_t     buftime;
-    struct tm* Date;
-    wxString   string_date;
-
-    time( &buftime );
-
-    Date = gmtime( &buftime );
-    string_date.Printf( wxT( "%d %s %d" ), Date->tm_mday,
-                        GetChars( mois[Date->tm_mon] ),
-                        Date->tm_year + 1900 );
-    return string_date;
-}
-
-
 int ProcessExecute( const wxString& aCommandLine, int aFlags, wxProcess *callback )
 {
     return wxExecute( aCommandLine, aFlags, callback );
@@ -357,3 +330,15 @@ double RoundTo0( double x, double precision )
 
     return (double) ix / precision;
 }
+
+wxString FormatDateLong( const wxDateTime &aDate )
+{
+    /* GetInfo was introduced only on wx 2.9; for portability reason an
+     * hardcoded format is used on wx 2.8 */
+#if wxCHECK_VERSION( 2, 9, 0 )
+    return aDate.Format( wxLocale::GetInfo( wxLOCALE_LONG_DATE_FMT ) );
+#else
+    return aDate.Format( wxT("%d %b %Y") );
+#endif
+}
+

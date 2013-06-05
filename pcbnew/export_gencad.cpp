@@ -498,7 +498,6 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
     MODULE*     module;
     D_PAD*      pad;
     const char* layer;
-    int         orient;
     wxString    pinname;
     const char* mirror = "0";
 
@@ -531,7 +530,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
             if( pinname.IsEmpty() )
                 pinname = wxT( "none" );
 
-            orient = pad->GetOrientation() - module->GetOrientation();
+            double orient = pad->GetOrientation() - module->GetOrientation();
             NORMALIZE_ANGLE_POS( orient );
 
             // Bottom side modules use the flipped padstack
@@ -563,7 +562,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         TEXTE_MODULE* textmod;
         const char*   mirror;
         const char*   flip;
-        int           orient = module->GetOrientation();
+        double        orient = module->GetOrientation();
 
         if( module->GetFlag() )
         {
@@ -598,7 +597,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
         for( int ii = 0; ii < 2; ii++ )
         {
-            int      orient = textmod->GetOrientation();
+            double   orient = textmod->GetOrientation();
             wxString layer  = GenCADLayerName[(module->GetFlag()) ?
                                               SILKSCREEN_N_BACK : SILKSCREEN_N_FRONT];
 
@@ -1058,9 +1057,8 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
 
                 case S_CIRCLE:
                 {
-                    int radius = (int) hypot(
-                        (double) ( PtEdge->m_End0.x - PtEdge->m_Start0.x ),
-                        (double) ( PtEdge->m_End0.y - PtEdge->m_Start0.y ) );
+                    int radius = KiROUND( GetLineLength( PtEdge->m_End0,
+                                                         PtEdge->m_Start0 ) );
                     fprintf( aFile, "CIRCLE %g %g %g\n",
                              PtEdge->m_Start0.x / SCALE_FACTOR,
                              Yaxis_sign * PtEdge->m_Start0.y / SCALE_FACTOR,

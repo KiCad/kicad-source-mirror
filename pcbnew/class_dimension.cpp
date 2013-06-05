@@ -238,12 +238,9 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     deltay  = m_featureLineDO.y - m_featureLineGO.y;
 
     // Calculate dimension value
-    measure = KiROUND( hypot( (double) deltax, (double) deltay ) );
+    measure = KiROUND( hypot( deltax, deltay ) );
 
-    if( deltax || deltay )
-        angle = atan2( (double) deltay, (double) deltax );
-    else
-        angle = 0.0;
+    angle = atan2( deltay, deltax );
 
     // Calculation of parameters X and Y dimensions of the arrows and lines.
     hx = hy = ii;
@@ -251,8 +248,8 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     // Taking into account the slope of the side lines.
     if( measure )
     {
-        hx  = (abs) ( (int) ( ( (double) deltay * hx ) / measure ) );
-        hy  = (abs) ( (int) ( ( (double) deltax * hy ) / measure ) );
+        hx  = abs( KiROUND( ( (double) deltay * hx ) / measure ) );
+        hy  = abs( KiROUND( ( (double) deltax * hy ) / measure ) );
 
         if( m_featureLineGO.x > m_crossBarO.x )
             hx = -hx;
@@ -266,12 +263,12 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
         if( m_featureLineGO.y == m_crossBarO.y )
             hy = 0;
 
-        angle_f     = angle + (M_PI * 27.5 / 180);
-        arrow_up_X  = (int) ( arrowz * cos( angle_f ) );
-        arrow_up_Y  = (int) ( arrowz * sin( angle_f ) );
-        angle_f     = angle - (M_PI * 27.5 / 180);
-        arrow_dw_X  = (int) ( arrowz * cos( angle_f ) );
-        arrow_dw_Y  = (int) ( arrowz * sin( angle_f ) );
+        angle_f     = angle + DEG2RAD( 27.5 );
+        arrow_up_X  = wxRound( arrowz * cos( angle_f ) );
+        arrow_up_Y  = wxRound( arrowz * sin( angle_f ) );
+        angle_f     = angle - DEG2RAD( 27.5 );
+        arrow_dw_X  = wxRound( arrowz * cos( angle_f ) );
+        arrow_dw_Y  = wxRound( arrowz * sin( angle_f ) );
     }
 
     m_arrowG1O.x    = m_crossBarO.x;
@@ -310,13 +307,9 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     textPos.y  = (m_crossBarF.y + m_featureLineGF.y) / 2;
     m_Text.SetTextPosition( textPos );
 
-    double newAngle = -(angle * 1800 / M_PI);
+    double newAngle = -RAD2DECIDEG( angle );
 
-    if( newAngle < 0 )
-        newAngle += 3600;
-
-    if( newAngle >= 3600 )
-        newAngle -= 3600;
+    NORMALIZE_ANGLE_POS( newAngle );
 
     if( newAngle > 900  &&  newAngle < 2700 )
         newAngle -= 1800;

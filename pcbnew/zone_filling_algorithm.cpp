@@ -38,11 +38,27 @@
 #include <pcbnew.h>
 #include <zones.h>
 
+/* Build the filled solid areas data from real outlines (stored in m_Poly)
+ * The solid areas can be more than one on copper layers, and do not have holes
+  ( holes are linked by overlapping segments to the main outline)
+ * aPcb: the current board (can be NULL for non copper zones)
+ * aCornerBuffer: A reference to a buffer to store polygon corners, or NULL
+ * if NULL:
+ * - m_FilledPolysList is used to store solid areas polygons.
+ * - on copper layers, tracks and other items shapes of other nets are
+ * removed from solid areas
+ * if not null:
+ * Only the zone outline (with holes, if any) are stored in aCornerBuffer
+ * with holes linked. Therfore only one polygon is created
+ * This function calls AddClearanceAreasPolygonsToPolysList()
+ * to add holes for pads and tracks and other items not in net.
+ */
 
-int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>* aCornerBuffer )
+bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb,
+                            CPOLYGONS_LIST* aCornerBuffer )
 {
     if( aCornerBuffer == NULL )
-        m_FilledPolysList.clear();
+        m_FilledPolysList.RemoveAllContours();
 
     /* convert outlines + holes to outlines without holes (adding extra segments if necessary)
      * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building
@@ -105,7 +121,7 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>
             CopyPolygonsFromFilledPolysListToKiPolygonList( polyset_zone_solid_areas );
             polyset_zone_solid_areas -= margin;
             // put solid area in m_FilledPolysList:
-            m_FilledPolysList.clear();
+            m_FilledPolysList.RemoveAllContours();
             CopyPolygonsFromKiPolygonListToFilledPolysList( polyset_zone_solid_areas );
         }
         if ( m_FillMode )   // if fill mode uses segments, create them:
@@ -141,7 +157,7 @@ int ZONE_CONTAINER::FillZoneAreasWithSegments()
     // Read all filled areas in m_FilledPolysList
     m_FillSegmList.clear();
     istart = 0;
-    int end_list =  m_FilledPolysList.size()-1;
+    int end_list =  m_FilledPolysList.GetCornersCount()-1;
 
     for( int ic = 0; ic <= end_list; ic++ )
     {

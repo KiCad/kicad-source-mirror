@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,6 @@
 
 
 class LINE_READER;
-class EDA_3D_CANVAS;
 class MSG_PANEL_ITEM;
 
 
@@ -67,15 +66,11 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset );
 
-    void Draw3D( EDA_3D_CANVAS* glcanvas );
-
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     wxString GetClass() const
     {
         return wxT( "MGRAPHIC" );
-
-        // return wxT( "EDGE" );  ?
     }
 
     wxString GetSelectMenuText() const;
@@ -85,7 +80,7 @@ public:
     EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // overload
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
 
 //protected:  @todo: is it just me?

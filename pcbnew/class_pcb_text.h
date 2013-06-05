@@ -82,21 +82,36 @@ public:
     }
 
     /**
-     * Function TransformShapeWithClearanceToPolygon
-     * Convert the track shape to a closed polygon
+     * Function TransformBoundingBoxWithClearanceToPolygon
+     * Convert the text bounding box to a rectangular polygon
+     * depending on the text orientation, the bounding box
+     * is not always horizontal or vertical
      * Used in filling zones calculations
      * Circles and arcs are approximated by segments
      * @param aCornerBuffer = a buffer to store the polygon
-     * @param aClearanceValue = the clearance around the pad
+     * @param aClearanceValue = the clearance around the text bounding box
+     * to the real clearance value (usually near from 1.0)
+     */
+    void TransformBoundingBoxWithClearanceToPolygon(
+                    CPOLYGONS_LIST& aCornerBuffer,
+                    int                    aClearanceValue ) const;
+
+    /**
+     * Function TransformShapeWithClearanceToPolygonSet
+     * Convert the text shape to a set of polygons (one by segment)
+     * Used in 3D viewer
+     * Circles and arcs are approximated by segments
+     * @param aCornerBuffer = a buffer to store the polygon
+     * @param aClearanceValue = the clearance around the text
      * @param aCircleToSegmentsCount = the number of segments to approximate a circle
      * @param aCorrectionFactor = the correction to apply to circles radius to keep
      * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
-    void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
-                                               int                    aClearanceValue,
-                                               int                    aCircleToSegmentsCount,
-                                               double                 aCorrectionFactor );
+    void TransformShapeWithClearanceToPolygonSet( CPOLYGONS_LIST& aCornerBuffer,
+                                               int                aClearanceValue,
+                                               int                aCircleToSegmentsCount,
+                                               double             aCorrectionFactor ) const;
 
     wxString GetSelectMenuText() const;
 
@@ -107,7 +122,7 @@ public:
     EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;
+    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
 #endif
 };
 

@@ -164,7 +164,7 @@ static EDA_HOTKEY HkMirrorX( wxT( "Mirror X Component" ), HK_MIRROR_X_COMPONENT,
 static EDA_HOTKEY HkOrientNormalComponent( wxT( "Orient Normal Component" ),
                                            HK_ORIENT_NORMAL_COMPONENT, 'N', ID_SCH_ORIENT_NORMAL );
 static EDA_HOTKEY HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R', ID_SCH_ROTATE_CLOCKWISE );
-static EDA_HOTKEY HkEdit( wxT( "Edit Schematic Item" ), HK_EDIT, 'E', ID_SCH_EDIT_ITEM );
+static EDA_HOTKEY HkEdit( wxT( "Edit Item" ), HK_EDIT, 'E', ID_SCH_EDIT_ITEM );
 static EDA_HOTKEY HkEditComponentValue( wxT( "Edit Component Value" ),
                                         HK_EDIT_COMPONENT_VALUE, 'V',
                                         ID_SCH_EDIT_COMPONENT_VALUE );
@@ -182,7 +182,7 @@ static EDA_HOTKEY HkCopyComponentOrText( wxT( "Copy Component or Label" ),
                                          HK_COPY_COMPONENT_OR_LABEL, 'C',
                                          ID_POPUP_SCH_COPY_ITEM );
 
-static EDA_HOTKEY HkDrag( wxT( "Drag Schematic Item" ), HK_DRAG, 'G', ID_SCH_DRAG_ITEM );
+static EDA_HOTKEY HkDrag( wxT( "Drag Item" ), HK_DRAG, 'G', ID_SCH_DRAG_ITEM );
 static EDA_HOTKEY HkSaveBlock( wxT( "Save Block" ), HK_SAVE_BLOCK, 'C' + GR_KB_CTRL );
 static EDA_HOTKEY HkMove2Drag( wxT( "Move Block -> Drag Block" ),
                                HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
@@ -215,6 +215,10 @@ EDA_HOTKEY* s_Common_Hotkey_List[] =
     &HkZoomCenter,
     &HkZoomAuto,
     &HkResetLocalCoord,
+    &HkEdit,
+    &HkDelete,
+    &HkRotate,
+    &HkDrag,
     &HkUndo,
     &HkRedo,
     NULL
@@ -228,20 +232,16 @@ EDA_HOTKEY* s_Schematic_Hotkey_List[] =
     &HkFindItem,
     &HkFindNextItem,
     &HkFindNextDrcMarker,
-    &HkDelete,
     &HkInsert,
     &HkMove2Drag,
     &HkSaveBlock,
     &HkMove,
     &HkCopyComponentOrText,
-    &HkDrag,
     &HkAddComponent,
     &HkAddPower,
-    &HkRotate,
     &HkMirrorX,
     &HkMirrorY,
     &HkOrientNormalComponent,
-    &HkEdit,
     &HkEditComponentValue,
     &HkEditComponentReference,
     &HkEditComponentFootprint,
@@ -267,11 +267,7 @@ EDA_HOTKEY* s_LibEdit_Hotkey_List[] =
     &HkSaveLib,
     &HkCreatePin,
     &HkInsertPin,
-    &HkEdit,
     &HkMoveLibItem,
-    &HkDelete,
-    &HkRotate,
-    &HkDrag,
     NULL
 };
 
@@ -579,17 +575,10 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_UNDO:
-        if( !itemInEdit )
-        {
-            cmd.SetId( wxID_UNDO );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-        break;
-
     case HK_REDO:
         if( !itemInEdit )
         {
-            cmd.SetId( wxID_REDO );
+            cmd.SetId( hotKey->m_IdMenuEvent );
             GetEventHandler()->ProcessEvent( cmd );
         }
         break;

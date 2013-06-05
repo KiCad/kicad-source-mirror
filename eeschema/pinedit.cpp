@@ -59,9 +59,9 @@ static wxPoint PinPreviousPos;
 static int     LastPinType          = PIN_INPUT;
 static int     LastPinOrient        = PIN_RIGHT;
 static int     LastPinShape         = NONE;
-static int     LastPinLength        = 300;
-static int     LastPinNameSize      = 50;
-static int     LastPinNumSize       = 50;
+static int     LastPinLength        = DEFAULT_PIN_LENGTH;
+static int     LastPinNameSize      = DEFAULT_TEXT_SIZE;
+static int     LastPinNumSize       = DEFAULT_TEXT_SIZE;
 static bool    LastPinCommonConvert = false;
 static bool    LastPinCommonUnit    = false;
 static bool    LastPinVisible       = true;
@@ -653,12 +653,12 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
                     GetChars( stringCurrPinNum ),
                     GetChars( curr_pin->GetName() ),
-                    (float) curr_pin->GetPosition().x / 1000.0,
-                    (float) -curr_pin->GetPosition().y / 1000.0,
+                    curr_pin->GetPosition().x / 1000.0,
+                    -curr_pin->GetPosition().y / 1000.0,
                     GetChars( stringPinNum ),
                     GetChars( Pin->GetName() ),
-                    (float) Pin->GetPosition().x / 1000.0,
-                    (float) -Pin->GetPosition().y / 1000.0 );
+                    Pin->GetPosition().x / 1000.0,
+                    -Pin->GetPosition().y / 1000.0 );
 
         if( m_component->GetPartCount() > 1 )
         {
@@ -696,8 +696,8 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
         msg.Printf( _( "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>" ),
                     GetChars( stringPinNum ),
                     GetChars( Pin->GetName() ),
-                    (float) Pin->GetPosition().x / 1000.0,
-                    (float) -Pin->GetPosition().y / 1000.0 );
+                    Pin->GetPosition().x / 1000.0,
+                    -Pin->GetPosition().y / 1000.0 );
 
         if( m_component->GetPartCount() > 1 )
         {

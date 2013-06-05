@@ -28,7 +28,8 @@
 
 #ifndef TRIGO_H
 #define TRIGO_H
-
+#include <math.h>
+#include <wx/gdicmn.h> // For wxPoint
 
 /*
  * Calculate the new point of coord coord pX, pY,
@@ -46,7 +47,7 @@ void RotatePoint( int *pX, int *pY, int cx, int cy, double angle );
  * Calculates the new coord point point
  * for a rotation angle in (1 / 10 degree)
  */
-static inline void RotatePoint( wxPoint* point, double angle )
+inline void RotatePoint( wxPoint* point, double angle )
 {
     RotatePoint( &point->x, &point->y, angle );
 }
@@ -64,34 +65,75 @@ void RotatePoint( double *pX, double *pY, double cx, double cy, double angle );
 /* Return the arc tangent of 0.1 degrees coord vector dx, dy
  * between -1800 and 1800
  * Equivalent to atan2 (but faster for calculations if
- * the angle is 0 to -1800, or + - 900
+ * the angle is 0 to -1800, or + - 900)
+ * Lorenzo: In fact usually atan2 already has to do these optimizations
+ * (due to the discontinuity in tan) but this function also returns
+ * in decidegrees instead of radians, so it's handier
  */
-int ArcTangente( int dy, int dx );
+double ArcTangente( int dy, int dx );
+
+//! @brief Euclidean norm of a 2D vector
+//! @param vector Two-dimensional vector
+//! @return Euclidean norm of the vector
+inline double EuclideanNorm( const wxPoint &vector )
+{
+    // this is working with doubles
+    return hypot( vector.x, vector.y );
+}
+
+inline double EuclideanNorm( const wxSize &vector )
+{
+    // this is working with doubles, too
+    return hypot( vector.x, vector.y );
+}
 
 //! @brief Compute the distance between a line and a reference point
 //! Reference: http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
 //! @param linePointA Point on line
 //! @param linePointB Point on line
 //! @param referencePoint Reference point
-double DistanceLinePoint( wxPoint linePointA, wxPoint linePointB, wxPoint referencePoint );
-
-//! @brief Euclidean norm of a 2D vector
-//! @param vector Two-dimensional vector
-//! @return Euclidean norm of the vector
-double EuclideanNorm( wxPoint vector );
+inline double DistanceLinePoint( const wxPoint &linePointA, 
+                                 const wxPoint &linePointB, 
+                                 const wxPoint &referencePoint )
+{
+    // Some of the multiple double casts are redundant. However in the previous
+    // definition the cast was (implicitly) done too late, just before
+    // the division (EuclideanNorm gives a double so from int it would
+    // be promoted); that means that the whole expression were
+    // vulnerable to overflow during int multiplications
+    return fabs( ( double(linePointB.x - linePointA.x) * 
+                   double(linePointA.y - referencePoint.y) -
+                   double(linePointA.x - referencePoint.x ) * 
+                   double(linePointB.y - linePointA.y) )
+            / EuclideanNorm( linePointB - linePointA ) );
+}
 
 //! @brief Test, if two points are near each other
 //! @param pointA First point
 //! @param pointB Second point
 //! @param threshold The maximum distance
 //! @return True or false
-bool HitTestPoints( wxPoint pointA, wxPoint pointB, double threshold );
+inline bool HitTestPoints( const wxPoint &pointA, const wxPoint &pointB, 
+                           double threshold )
+{
+    wxPoint vectorAB = pointB - pointA;
+
+    // Compare the distances squared. The double is needed to avoid
+    // overflow during int multiplication
+    double sqdistance = (double)vectorAB.x * vectorAB.x +
+                        (double)vectorAB.y * vectorAB.y;
+
+    return sqdistance < threshold * threshold;
+}
 
 //! @brief Determine the cross product
 //! @param vectorA Two-dimensional vector
 //! @param vectorB Two-dimensional vector
-double CrossProduct( wxPoint vectorA, wxPoint vectorB );
-
+inline double CrossProduct( const wxPoint &vectorA, const wxPoint &vectorB )
+{
+    // As before the cast is to avoid int overflow
+    return (double)vectorA.x * vectorB.y - (double)vectorA.y * vectorB.x;
+}
 
 /**
  * Function TestSegmentHit
@@ -102,13 +144,105 @@ double CrossProduct( wxPoint vectorA, wxPoint vectorB );
  * @param aEnd is the second end-point of the line segment
  * @param aDist = maximum distance for hit
 */
-bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist );
+bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, 
+                     wxPoint aEnd, int aDist );
 
 /**
  * Function GetLineLength
  * returns the length of a line segment defined by \a aPointA and \a aPointB.
- * @return Length of a line.
+ * See also EuclideanNorm and Distance for the single vector or four
+ * scalar versions
+ * @return Length of a line (as double)
  */
-double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB );
+inline double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB )
+{
+    // Implicitly casted to double
+    return hypot( aPointA.x - aPointB.x,
+                  aPointA.y - aPointB.y );
+}
+
+// These are the usual degrees <-> radians conversion routines
+inline double DEG2RAD( double deg ) { return deg * M_PI / 180.0; }
+inline double RAD2DEG( double rad ) { return rad * 180.0 / M_PI; }
+
+// These are the same *but* work with the internal 'decidegrees' unit
+inline double DECIDEG2RAD( double deg ) { return deg * M_PI / 1800.0; }
+inline double RAD2DECIDEG( double rad ) { return rad * 1800.0 / M_PI; }
+
+/* These are templated over T (and not simply double) because eeschema
+   is still using int for angles in some place */
+
+/// Normalize angle to be in the -360.0 .. 360.0:
+template <class T> inline void NORMALIZE_ANGLE_360( T &Angle )
+{
+    while( Angle < -3600 )
+        Angle += 3600;
+    while( Angle > 3600 )
+        Angle -= 3600; 
+}
+
+/// Normalize angle to be in the 0.0 .. 360.0 range: 
+template <class T> inline void NORMALIZE_ANGLE_POS( T &Angle )
+{
+    while( Angle < 0 )
+        Angle += 3600;
+    while( Angle >= 3600 )
+        Angle -= 3600;
+}
+
+/// Add two angles (keeping the result normalized). T2 is here
+// because most of the time it's an int (and templates don't promote in
+// that way)
+template <class T, class T2> inline T AddAngles( T a1, T2 a2 )
+{
+    a1 += a2;
+    NORMALIZE_ANGLE_POS( a1 );
+    return a1;
+}
+
+template <class T> inline void NEGATE_AND_NORMALIZE_ANGLE_POS( T &Angle )
+{
+    Angle = -Angle;
+    while( Angle < 0 )
+        Angle += 3600;
+    while( Angle >= 3600 )
+        Angle -= 3600;
+}
+
+/// Normalize angle to be in the -90.0 .. 90.0 range
+template <class T> inline void NORMALIZE_ANGLE_90( T &Angle )
+{
+    while( Angle < -900 )
+        Angle += 1800;
+    while( Angle > 900 )
+        Angle -= 1800;
+}
+
+/// Normalize angle to be in the -180.0 .. 180.0 range
+template <class T> inline void NORMALIZE_ANGLE_180( T &Angle )
+{
+    while( Angle <= -1800 )
+        Angle += 3600;
+    while( Angle > 1800 )
+        Angle -= 3600;
+}
+
+/**
+ * Circle generation utility: computes r * sin(a)
+ * Where a is in decidegrees, not in radians.
+ */
+inline double sindecideg( double r, double a )
+{
+    return r * sin( DECIDEG2RAD( a ) );
+}
+
+/**
+ * Circle generation utility: computes r * cos(a)
+ * Where a is in decidegrees, not in radians.
+ */
+inline double cosdecideg( double r, double a )
+{
+    return r * cos( DECIDEG2RAD( a ) );
+}
 
 #endif

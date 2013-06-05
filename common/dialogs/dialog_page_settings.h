@@ -79,6 +79,9 @@ private:
     /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_REVISION
     void OnRevisionTextUpdated( wxCommandEvent& event );
 
+    /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_DATE
+    void OnDateTextUpdated( wxCommandEvent& event );
+
     /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_TITLE
     void OnTitleTextUpdated( wxCommandEvent& event );
 
@@ -96,6 +99,9 @@ private:
 
     /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_COMMENT4
     void OnComment4TextUpdated( wxCommandEvent& event );
+
+    /// Handle button click for setting the date from the picker
+    virtual void OnDateApplyClick( wxCommandEvent& event );
 
     void SetCurrentPageSizeSelection( const wxString& aPaperSize );
 

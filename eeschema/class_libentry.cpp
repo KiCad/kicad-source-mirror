@@ -60,6 +60,14 @@
 
 #define TRACE_DESTRUCTOR 0
 
+// the separator char between the subpart id and the reference
+// 0 (no separator) or '.' or some other character
+int LIB_COMPONENT::m_subpartIdSeparator = 0;
+// the ascii char value to calculate the subpart symbol id from the part number:
+// 'A' or '1' usually. (to print U1.A or U1.1)
+// if this a a digit, a number is used as id symbol
+int LIB_COMPONENT::m_subpartFirstId = 'A';
+
 
 LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent ):
     EDA_ITEM( LIB_ALIAS_T )
@@ -251,14 +259,18 @@ wxString LIB_COMPONENT::GetLibraryName()
 }
 
 
-wxString LIB_COMPONENT::ReturnSubReference( int aUnit )
+wxString LIB_COMPONENT::ReturnSubReference( int aUnit, bool aAddSeparator )
 {
     wxString subRef;
-#if defined(KICAD_GOST)
-    subRef.Printf( wxT(".%d" ), aUnit);
-#else
-    subRef.Append( wxChar(aUnit + 'A' - 1) );
-#endif
+
+    if( m_subpartIdSeparator != 0 && aAddSeparator )
+        subRef << wxChar( m_subpartIdSeparator );
+
+    if( m_subpartFirstId >= '0' && m_subpartFirstId <= '9' )
+        subRef << aUnit;
+    else
+        subRef << wxChar( m_subpartFirstId + aUnit - 1);
+
     return subRef;
 }
 
@@ -383,18 +395,56 @@ void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
 {
     wxASSERT( aPlotter != NULL );
 
+    aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
+    bool fill = aPlotter->GetColorMode();
+
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
+        // Lib Fields not are plotted here, because this plot function
+        // is used to plot schematic items, which have they own fields
+        if( item.Type() == LIB_FIELD_T )
+            continue;
+
         if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
             continue;
 
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
-        bool fill = aPlotter->GetColorMode();
-
         item.Plot( aPlotter, aOffset, fill, aTransform );
+    }
+}
+
+void LIB_COMPONENT::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
+                                  const wxPoint& aOffset, const TRANSFORM& aTransform )
+{
+    wxASSERT( aPlotter != NULL );
+
+    aPlotter->SetColor( GetLayerColor( LAYER_FIELDS ) );
+    bool fill = aPlotter->GetColorMode();
+
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
+    {
+        if( item.Type() != LIB_FIELD_T )
+            continue;
+
+        if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
+            continue;
+
+        if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
+            continue;
+
+        // The reference is a special case: we shoud change the basic text
+        // to add '?' and the part id
+        LIB_FIELD& field = (LIB_FIELD&) item;
+        wxString tmp = field.GetText();
+        if( field.GetId() == REFERENCE )
+        {
+            wxString text = field.GetFullText( aUnit );
+            field.SetText( text );
+        }
+        item.Plot( aPlotter, aOffset, fill, aTransform );
+        field.SetText( tmp );
     }
 }
 
@@ -531,7 +581,6 @@ LIB_PIN* LIB_COMPONENT::GetPin( const wxString& aNumber, int aUnit, int aConvert
 
 bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
 {
-    size_t      i;
     LIB_FIELD&  value = GetValueField();
 
     // First line: it s a comment (component name for readers)
@@ -539,6 +588,14 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
 
     // Save data
     aFormatter.Print( 0, "DEF" );
+
+#if defined(DEBUG)
+    if( value.GetText() == wxT( "R" ) )
+    {
+        int breakhere = 1;
+        (void) breakhere;
+    }
+#endif
 
     if( value.IsVisible() )
     {
@@ -573,11 +630,11 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
     LIB_FIELDS fields;
     GetFields( fields );
 
-    // Fixed fields:
+    // Mandatory fields:
     // may have their own save policy so there is a separate loop for them.
     // Empty fields are saved, because the user may have set visibility,
     // size and orientation
-    for( i = 0;  i < MANDATORY_FIELDS;  ++i )
+    for( int i = 0;  i < MANDATORY_FIELDS;  ++i )
     {
         if( !fields[i].Save( aFormatter ) )
             return false;
@@ -588,7 +645,7 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
 
     int fieldId = MANDATORY_FIELDS;     // really wish this would go away.
 
-    for( i = MANDATORY_FIELDS; i < fields.size(); ++i )
+    for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
     {
         // There is no need to save empty fields, i.e. no reason to preserve field
         // names now that fields names come in dynamically through the template
@@ -609,7 +666,7 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
     {
         aFormatter.Print( 0, "ALIAS" );
 
-        for( i = 1; i < m_aliases.size(); i++ )
+        for( unsigned i = 1; i < m_aliases.size(); i++ )
         {
             aFormatter.Print( 0, " %s", TO_UTF8( m_aliases[i]->GetName() ) );
         }
@@ -622,7 +679,7 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
     {
         aFormatter.Print( 0, "$FPLIST\n" );
 
-        for( i = 0; i < m_FootprintList.GetCount(); i++ )
+        for( unsigned i = 0; i < m_FootprintList.GetCount(); i++ )
         {
             aFormatter.Print( 0, " %s\n", TO_UTF8( m_FootprintList[i] ) );
         }
@@ -665,7 +722,7 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     char*    prefix = NULL;
     char*    line;
 
-    bool     Res;
+    bool     result;
     wxString Msg;
 
     line = aLineReader.Line();
@@ -699,10 +756,8 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
         aErrorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ),
                           aLineReader.LineNumber() );
 
-        while( aLineReader.ReadLine() )
+        while( (line = aLineReader.ReadLine()) != NULL )
         {
-            line = aLineReader.Line();
-
             p = strtok( line, " \t\n" );
 
             if( stricmp( p, "ENDDEF" ) == 0 )
@@ -758,36 +813,34 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
         m_options = ENTRY_POWER;
 
     // Read next lines, until "ENDDEF" is found
-    while( aLineReader.ReadLine() )
+    while( ( line = aLineReader.ReadLine() ) != NULL )
     {
-        line = aLineReader.Line();
-
         p = strtok( line, " \t\r\n" );
 
-        // This is the error flag ( if an error occurs, Res = false)
-        Res = true;
+        // This is the error flag ( if an error occurs, result = false)
+        result = true;
 
         if( *line == '#' )      // a comment
             continue;
 
-        if( (*line == 'T') && (*(line + 1) == 'i') )
-            Res = LoadDateAndTime( aLineReader );
+        if( line[0] == 'T'  &&  line[1] == 'i' )
+            result = LoadDateAndTime( aLineReader );
         else if( *line == 'F' )
-            Res = LoadField( aLineReader, Msg );
+            result = LoadField( aLineReader, Msg );
         else if( strcmp( p, "ENDDEF" ) == 0 )   // End of component description
-            break;
+            goto ok;
         else if( strcmp( p, "DRAW" ) == 0 )
-            Res = LoadDrawEntries( aLineReader, Msg );
+            result = LoadDrawEntries( aLineReader, Msg );
         else if( strncmp( p, "ALIAS", 5 ) == 0 )
         {
             p = strtok( NULL, "\r\n" );
-            Res = LoadAliases( p, aErrorMsg );
+            result = LoadAliases( p, aErrorMsg );
         }
         else if( strncmp( p, "$FPLIST", 5 ) == 0 )
-            Res = LoadFootprints( aLineReader, Msg );
+            result = LoadFootprints( aLineReader, Msg );
 
         // End line or block analysis: test for an error
-        if( !Res )
+        if( !result )
         {
             if( Msg.IsEmpty() )
                 aErrorMsg.Printf( wxT( "error occurred at line %d " ), aLineReader.LineNumber() );
@@ -799,6 +852,9 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
         }
     }
 
+    return false;
+
+ok:
     // If we are here, this part is O.k. - put it in:
     drawings.sort();
 
@@ -813,13 +869,11 @@ bool LIB_COMPONENT::LoadDrawEntries( LINE_READER& aLineReader, wxString& aErrorM
 
     while( true )
     {
-        if( !aLineReader.ReadLine() )
+        if( !( line = aLineReader.ReadLine() ) )
         {
             aErrorMsg = wxT( "file ended prematurely loading component draw element" );
             return false;
         }
-
-        line = aLineReader.Line();
 
         if( strncmp( line, "ENDDRAW", 7 ) == 0 )
             break;
@@ -868,15 +922,15 @@ bool LIB_COMPONENT::LoadDrawEntries( LINE_READER& aLineReader, wxString& aErrorM
         {
             aErrorMsg.Printf( wxT( "error <%s> in DRAW command %c" ),
                               GetChars( aErrorMsg ), line[0] );
-            SAFE_DELETE( newEntry );
+            delete newEntry;
 
             // Flush till end of draw section
             do
             {
                 if( !aLineReader.ReadLine() )
                 {
-                    aErrorMsg = wxT( "file ended prematurely while attempting \
-to flush to end of drawing section." );
+                    aErrorMsg = wxT( "file ended prematurely while attempting "
+                                     "to flush to end of drawing section." );
                     return false;
                 }
             } while( strncmp( line, "ENDDRAW", 7 ) != 0 );
@@ -913,7 +967,7 @@ bool LIB_COMPONENT::LoadField( LINE_READER& aLineReader, wxString& aErrorMsg )
 
     if( !field->Load( aLineReader, aErrorMsg ) )
     {
-        SAFE_DELETE( field );
+        delete field;
         return false;
     }
 
@@ -931,7 +985,7 @@ bool LIB_COMPONENT::LoadField( LINE_READER& aLineReader, wxString& aErrorMsg )
         if( field->GetId() == VALUE )
             m_name = field->GetText();
 
-        SAFE_DELETE( field );
+        delete field;
     }
     else
     {
@@ -949,13 +1003,12 @@ bool LIB_COMPONENT::LoadFootprints( LINE_READER& aLineReader, wxString& aErrorMs
 
     while( true )
     {
-        if( !aLineReader.ReadLine() )
+        if( !( line = aLineReader.ReadLine() ) )
         {
             aErrorMsg = wxT( "file ended prematurely while loading footprints" );
             return false;
         }
 
-        line = aLineReader.Line();
         p = strtok( line, " \t\r\n" );
 
         if( stricmp( p, "$ENDFPLIST" ) == 0 )
@@ -1409,7 +1462,7 @@ LIB_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
 
     item = LocateDrawItem( aUnit, aConvert, aType, aPoint );
 
-    //Restore matrix
+    // Restore matrix
     DefaultTransform = transform;
 
     return item;

@@ -6,7 +6,7 @@
 #include <gr_basic.h>
 #include <common.h>
 #include <class_drawpanel.h>
-
+#include <macros.h>
 #include <pcbnew.h>
 
 #include <class_board.h>

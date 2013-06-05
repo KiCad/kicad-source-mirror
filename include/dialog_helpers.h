@@ -78,7 +78,15 @@ public:
 
     void     Append( const wxArrayString& aItemStr );
     void     InsertItems( const std::vector<wxArrayString>& aItemList, int aPosition = 0 );
-    wxString GetTextSelection();
+
+    /**
+     * Function GetTextSelection
+     * return the selected text from \a aColumn in the wxListCtrl in the dialog.
+     *
+     * @param aColumn is the column to return the text from.
+     * @return a wxString object containing the selected text from \a aColumn.
+     */
+    wxString GetTextSelection( int aColumn = 0 );
 
 private:
     void     onClose( wxCloseEvent& event );

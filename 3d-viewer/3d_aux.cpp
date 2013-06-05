@@ -60,15 +60,15 @@ void S3D_MASTER::Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices )
         aVertices[ii].y *= m_MatScale.y;
         aVertices[ii].z *= m_MatScale.z;
 
-        /* adjust rotation */
+        // adjust rotation 
         if( m_MatRotation.x )
-            RotatePoint( &aVertices[ii].y, &aVertices[ii].z, (int) (m_MatRotation.x * 10) );
+            RotatePoint( &aVertices[ii].y, &aVertices[ii].z, m_MatRotation.x * 10 );
 
         if( m_MatRotation.y )
-            RotatePoint( &aVertices[ii].z, &aVertices[ii].x, (int) (m_MatRotation.y * 10) );
+            RotatePoint( &aVertices[ii].z, &aVertices[ii].x, m_MatRotation.y * 10 );
 
         if( m_MatRotation.z )
-            RotatePoint( &aVertices[ii].x, &aVertices[ii].y, (int) (m_MatRotation.z * 10) );
+            RotatePoint( &aVertices[ii].x, &aVertices[ii].y, m_MatRotation.z * 10 );
 
         /* adjust offset position (offset is given in UNIT 3D (0.1 inch) */
 #define SCALE_3D_CONV ((IU_PER_MILS * 1000) / UNITS3D_TO_UNITSPCB)

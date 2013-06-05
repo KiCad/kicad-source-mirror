@@ -140,7 +140,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
 
     wxPoint curPos = aShapePos;
     D_CODE* tool   = aParent->GetDcodeDescr();
-    int rotation;
+    double rotation;
     if( mapExposure( aParent ) == false )
     {
         EXCHG(aColor, aAltColor);
@@ -176,8 +176,8 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = KiROUND( params[6].GetValue( tool ) * 10.0 );
-        if( rotation )
+        rotation = params[6].GetValue( tool ) * 10.0;
+        if( rotation != 0)
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
                 RotatePoint( &polybuffer[ii], -rotation );
@@ -205,8 +205,8 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = KiROUND( params[5].GetValue( tool ) * 10.0 );
-        if( rotation )
+        rotation = params[5].GetValue( tool ) * 10.0;
+        if( rotation != 0 )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
                 RotatePoint( &polybuffer[ii], -rotation );
@@ -234,8 +234,8 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = KiROUND( params[5].GetValue( tool ) * 10.0 );
-        if( rotation )
+        rotation = params[5].GetValue( tool ) * 10.0;
+        if( rotation != 0)
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
                 RotatePoint( &polybuffer[ii], -rotation );
@@ -264,7 +264,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = KiROUND( params[5].GetValue( tool ) * 10.0 );
+        rotation = params[5].GetValue( tool ) * 10.0;
 
         // Because a thermal shape has 4 identical sub-shapes, only one is created in polybuffer.
         // We must draw 4 sub-shapes rotated by 90 deg
@@ -272,7 +272,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         for( int ii = 0; ii < 4; ii++ )
         {
             subshape_poly = polybuffer;
-            int sub_rotation = rotation + 900 * ii;
+            double sub_rotation = rotation + 900 * ii;
             for( unsigned jj = 0; jj < subshape_poly.size(); jj++ )
                 RotatePoint( &subshape_poly[jj], -sub_rotation );
 
@@ -329,7 +329,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         // Draw the cross:
         ConvertShapeToPolygon( aParent, polybuffer );
 
-        rotation = KiROUND( params[8].GetValue( tool ) * 10.0 );
+        rotation = params[8].GetValue( tool ) * 10.0;
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
             // shape rotation:
@@ -352,7 +352,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
          * type is not stored in parameters list, so the first parameter is exposure
          */
         int numPoints = (int) params[1].GetValue( tool );
-        rotation  = KiROUND( params[numPoints * 2 + 4].GetValue( tool ) * 10.0 );
+        rotation  = params[numPoints * 2 + 4].GetValue( tool ) * 10.0;
         wxPoint pos;
         // Read points. numPoints does not include the starting point, so add 1.
         for( int i = 0; i<numPoints + 1; ++i )
@@ -392,7 +392,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // rotate polygon and move it to the actual position
-        rotation  = KiROUND( params[5].GetValue( tool ) * 10.0 );
+        rotation  = params[5].GetValue( tool ) * 10.0;
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
             RotatePoint( &polybuffer[ii], -rotation );
@@ -444,7 +444,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         wxPoint end = mapPt( params[4].GetValue( tool ),
                              params[5].GetValue( tool ), m_GerbMetric );
         wxPoint delta = end - start;
-        int     len   = KiROUND( hypot( delta.x, delta.y ) );
+        int     len   = KiROUND( EuclideanNorm( delta ) );
 
         // To build the polygon, we must create a horizonta polygon starting to "start"
         // and rotate it to have it end point to "end"
@@ -459,7 +459,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         aBuffer.push_back( currpt );
 
         // Rotate rectangle and move it to the actual start point
-        int angle = KiROUND( atan2( (double) delta.y, (double) delta.x ) * 1800.0 / M_PI );
+        double angle = ArcTangente( delta.y, delta.x );
 
         for( unsigned ii = 0; ii < 4; ii++ )
         {
@@ -512,17 +512,15 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         int outerRadius   = scaletoIU( params[2].GetValue( tool ), m_GerbMetric ) / 2;
         int innerRadius   = scaletoIU( params[3].GetValue( tool ), m_GerbMetric ) / 2;
         int halfthickness = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;
-        int angle_start   = KiROUND( asin(
-                                         (double) halfthickness / innerRadius ) * 1800 / M_PI );
+        double angle_start = RAD2DECIDEG( asin( (double) halfthickness / innerRadius ) );
 
         // Draw shape in the first cadrant (X and Y > 0)
         wxPoint pos, startpos;
 
         // Inner arc
         startpos.x = innerRadius;
-        int angle_end = 900 - angle_start;
-        int angle;
-        for( angle = angle_start; angle < angle_end; angle += 100 )
+        double angle_end = 900 - angle_start;
+        for( double angle = angle_start; angle < angle_end; angle += 100 )
         {
             pos = startpos;
             RotatePoint( &pos, angle );
@@ -537,11 +535,11 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         // outer arc
         startpos.x  = outerRadius;
         startpos.y  = 0;
-        angle_start = KiROUND( asin( (double) halfthickness / outerRadius ) * 1800 / M_PI );
+        angle_start = RAD2DECIDEG( asin( (double) halfthickness / outerRadius ) );
         angle_end   = 900 - angle_start;
 
         // First point, near Y axis, outer arc
-        for( angle = angle_end; angle > angle_start; angle -= 100 )
+        for( double angle = angle_end; angle > angle_start; angle -= 100 )
         {
             pos = startpos;
             RotatePoint( &pos, angle );

@@ -88,11 +88,9 @@ wxString BOARD_ITEM::GetLayerName() const
 
 std::string BOARD_ITEM::FormatInternalUnits( int aValue )
 {
-    char buf[50];
-
-    double  mm = aValue / IU_PER_MM;
-
+    char    buf[50];
     int     len;
+    double  mm = aValue / IU_PER_MM;
 
     if( mm != 0.0 && fabs( mm ) <= 0.0001 )
     {
@@ -101,7 +99,10 @@ std::string BOARD_ITEM::FormatInternalUnits( int aValue )
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
 
-        ++len;
+        if( buf[len] == '.' )
+            buf[len] = '\0';
+        else
+            ++len;
     }
     else
     {

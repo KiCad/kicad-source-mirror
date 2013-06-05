@@ -77,10 +77,8 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, M
             // distance from end of aTrack.
             position = track->GetStart();
 
-            double dToEnd = hypot( endPos.x - aTrack->GetEnd().x,
-                                   endPos.y - aTrack->GetEnd().y );
-            double dToStart = hypot( position.x - aTrack->GetEnd().x,
-                                     position.y - aTrack->GetEnd().y );
+            double dToEnd = GetLineLength( endPos, aTrack->GetEnd() );
+            double dToStart = GetLineLength( position, aTrack->GetEnd() );
 
             if( dToEnd < dToStart )
                 position = endPos;

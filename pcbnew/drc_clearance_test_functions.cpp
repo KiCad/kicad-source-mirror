@@ -354,15 +354,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // If the reference segment is a via, we test it here
         if( aRefSeg->Type() == PCB_VIA_T )
         {
-            int angle = 0;  // angle du segment a tester;
-
             delta = track->GetEnd() - track->GetStart();
             segStartPoint = aRefSeg->GetStart() - track->GetStart();
 
             if( track->Type() == PCB_VIA_T )
             {
                 // Test distance between two vias, i.e. two circles, trivial case
-                if( (int) hypot( segStartPoint.x, segStartPoint.y ) < w_dist )
+                if( EuclideanNorm( segStartPoint ) < w_dist )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
                                                   DRCE_VIA_NEAR_VIA, m_currentMarker );
@@ -371,8 +369,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             }
             else    // test via to segment
             {
-                // Compute l'angle
-                angle = ArcTangente( delta.y, delta.x );
+                // Compute l'angle du segment a tester;
+                double angle = ArcTangente( delta.y, delta.x );
 
                 // Compute new coordinates ( the segment become horizontal)
                 RotatePoint( &delta, angle );
@@ -527,8 +525,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                     segEndPoint   = track->GetEnd();
                     delta = segEndPoint - segStartPoint;
 
-                    /* Compute the segment orientation (angle) en 0,1 degre */
-                    int angle = ArcTangente( delta.y, delta.x );
+                    // Compute the segment orientation (angle) en 0,1 degre
+                    double angle = ArcTangente( delta.y, delta.x );
 
                     // Compute the segment lenght: delta.x = lenght after rotation
                     RotatePoint( &delta, angle );
@@ -572,7 +570,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 {
     int     dist;
 
-    int     pad_angle;
+    double  pad_angle;
 
     // Get the clerance between the 2 pads. this is the min distance between aRefPad and aPad
     int     dist_min = aRefPad->GetClearance( aPad );
@@ -580,7 +578,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     // relativePadPos is the aPad shape position relative to the aRefPad shape position
     wxPoint relativePadPos = aPad->ReturnShapePos() - aRefPad->ReturnShapePos();
 
-    dist = (int) hypot( relativePadPos.x, relativePadPos.y );
+    dist = KiROUND( EuclideanNorm( relativePadPos ) );
 
     // Quick test: Clearance is OK if the bounding circles are further away than "dist_min"
     if( (dist - aRefPad->GetBoundingRadius() - aPad->GetBoundingRadius()) >= dist_min )
@@ -804,7 +802,6 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist )
 {
     wxSize  padHalfsize;        // half the dimension of the pad
-    int     orient;
     wxPoint startPoint, endPoint;
     int     seuil;
     int     deltay;
@@ -843,7 +840,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
     startPoint.x = startPoint.y = 0;
     endPoint     = m_segmEnd;
 
-    orient = aPad->GetOrientation();
+    double orient = aPad->GetOrientation();
 
     RotatePoint( &startPoint, m_padToTestPos, -orient );
     RotatePoint( &endPoint, m_padToTestPos, -orient );
@@ -868,10 +865,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         if( padHalfsize.x > padHalfsize.y )
         {
             EXCHG( padHalfsize.x, padHalfsize.y );
-            orient += 900;
-
-            if( orient >= 3600 )
-                orient -= 3600;
+            orient = AddAngles( orient, 900 );
         }
 
         deltay = padHalfsize.y - padHalfsize.x;
@@ -1017,7 +1011,7 @@ bool DRC::checkMarginToCircle( wxPoint aCentre, int aRadius, int aLength )
         if( aCentre.x > aLength )   // aCentre is after the ending point
             aCentre.x -= aLength;   // move aCentre to the starting point of the segment
 
-        if( hypot( aCentre.x, aCentre.y ) < aRadius )
+        if( EuclideanNorm( aCentre ) < aRadius )
             // distance between aCentre and the starting point or the ending point is < aRadius
             return false;
     }
@@ -1031,7 +1025,7 @@ static inline int USCALE( unsigned arg, unsigned num, unsigned den )
 {
     int ii;
 
-    ii = (int) ( ( (double) arg * num ) / den );
+    ii = KiROUND( ( (double) arg * num ) / den );
     return ii;
 }
 

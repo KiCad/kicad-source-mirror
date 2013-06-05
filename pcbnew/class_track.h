@@ -34,6 +34,7 @@
 #include <class_board_item.h>
 #include <class_board_connected_item.h>
 #include <PolyLine.h>
+#include <trigo.h>
 
 
 class TRACK;
@@ -155,10 +156,7 @@ public:
      */
     double GetLength() const
     {
-        double dx = m_Start.x - m_End.x;
-        double dy = m_Start.y - m_End.y;
-
-        return hypot( dx, dy );
+        return GetLineLength( m_Start, m_End );
     }
 
     /* Display on screen: */
@@ -177,10 +175,10 @@ public:
      * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
-    void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
-                                               int                    aClearanceValue,
-                                               int                    aCircleToSegmentsCount,
-                                               double                 aCorrectionFactor );
+    void TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+                                               int             aClearanceValue,
+                                               int             aCircleToSegmentsCount,
+                                               double          aCorrectionFactor ) const;
     /**
      * Function SetDrill
      * sets the drill value for vias.
@@ -331,8 +329,7 @@ public:
     virtual EDA_ITEM* Clone() const;
 
 #if defined (DEBUG)
-
-    void Show( int nestLevel, std::ostream& os ) const;     // overload
+    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
 
     /**
      * Function ShowState
@@ -419,7 +416,7 @@ public:
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
 
 #if defined (DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // overload
+    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
 #endif
 };
 

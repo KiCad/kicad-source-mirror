@@ -183,7 +183,7 @@ void GERBER_PLOTTER::selectAperture( const wxSize&           size,
        || ( currentAperture->Type != type )
        || ( currentAperture->Size != size ) )
     {
-        /* Pick an existing aperture or create a new one */
+        // Pick an existing aperture or create a new one
         currentAperture = getAperture( size, type );
         fprintf( outputFile, "G54D%d*\n", currentAperture->DCode );
     }
@@ -198,32 +198,39 @@ void GERBER_PLOTTER::writeApertureList()
     wxASSERT( outputFile );
     char cbuf[1024];
 
-    /* Init : */
+    // Init
     for( std::vector<APERTURE>::iterator tool = apertures.begin();
          tool != apertures.end(); tool++ )
     {
         const double fscale = 0.0001f * plotScale
-				* iuPerDeviceUnit ; // For 3.4 format
+				* iuPerDeviceUnit ;
         char* text = cbuf + sprintf( cbuf, "%%ADD%d", tool->DCode );
+
+        /* Please note: the Gerber specs for mass parameters say that
+           exponential syntax is *not* allowed and the decimal point should
+           also be always inserted. So the %g format is ruled out, but %f is fine
+           (the # modifier forces the decimal point). Sadly the %f formatter
+           can't remove trailing zeros but thats not a problem, since nothing
+           forbid it (the file is only slightly longer) */
 
         switch( tool->Type )
         {
         case APERTURE::Circle:
-            sprintf( text, "C,%g*%%\n", tool->Size.x * fscale );
+            sprintf( text, "C,%#f*%%\n", tool->Size.x * fscale );
             break;
 
         case APERTURE::Rect:
-            sprintf( text, "R,%gX%g*%%\n",
+            sprintf( text, "R,%#fX%#f*%%\n",
 	             tool->Size.x * fscale,
                      tool->Size.y * fscale );
             break;
 
         case APERTURE::Plotting:
-            sprintf( text, "C,%g*%%\n", tool->Size.x * fscale );
+            sprintf( text, "C,%#f*%%\n", tool->Size.x * fscale );
             break;
 
         case APERTURE::Oval:
-            sprintf( text, "O,%gX%g*%%\n",
+            sprintf( text, "O,%#fX%#f*%%\n",
 	            tool->Size.x * fscale,
 		    tool->Size.y * fscale );
             break;
@@ -282,17 +289,17 @@ void GERBER_PLOTTER::Circle( const wxPoint& aCenter, int aDiameter, FILL_T aFill
 }
 
 
-void GERBER_PLOTTER::Arc( const wxPoint& aCenter, int aStAngle, int aEndAngle,
+void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
                           int aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( outputFile );
     wxPoint start, end;
-    start.x = aCenter.x + KiROUND( aRadius*cos( DEG2RAD( aStAngle/10.0 ) ) );
-    start.y = aCenter.y - KiROUND( aRadius*sin( DEG2RAD( aStAngle/10.0 ) ) );
+    start.x = aCenter.x + KiROUND( cosdecideg( aRadius, aStAngle ) );
+    start.y = aCenter.y - KiROUND( sindecideg( aRadius, aStAngle ) );
     SetCurrentLineWidth( aWidth );
     MoveTo( start );
-    end.x = aCenter.x + KiROUND( aRadius*cos( DEG2RAD( aEndAngle/10.0 ) ) );
-    end.y = aCenter.y - KiROUND( aRadius*sin( DEG2RAD( aEndAngle/10.0 ) ) );
+    end.x = aCenter.x + KiROUND( cosdecideg( aRadius, aEndAngle ) );
+    end.y = aCenter.y - KiROUND( sindecideg( aRadius, aEndAngle ) );
     DPOINT devEnd = userToDeviceCoordinates( end );
     DPOINT devCenter = userToDeviceCoordinates( aCenter )
         - userToDeviceCoordinates( start );
@@ -370,7 +377,7 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 /**
  * Filled oval flashes are handled as aperture in the 90 degree positions only
  */
-void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int orient,
+void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
                                    EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( outputFile );
@@ -427,17 +434,17 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int 
  * Filled rect flashes are handled as aperture in the 90 degree positions only
  */
 void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
-                                   int orient, EDA_DRAW_MODE_T trace_mode )
+                                   double orient, EDA_DRAW_MODE_T trace_mode )
 
 {
     wxASSERT( outputFile );
     wxSize size( aSize );
 
-    /* Plot as flashed. */
-    switch( orient )
+    // Plot as an aperture flash
+    switch( int( orient ) )
     {
     case 900:
-    case 2700:        /* rotation of 90 degrees or 270 swaps dimensions */
+    case 2700:        // rotation of 90 degrees or 270 swaps sizes
 	EXCHG( size.x, size.y );
 
 	// Pass through
@@ -494,7 +501,7 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
  * they require aperture macros
  */
 void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCorners,
-                                     int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
+                                     double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 
 {
     // XXX to do: use an aperture macro to declare the pad

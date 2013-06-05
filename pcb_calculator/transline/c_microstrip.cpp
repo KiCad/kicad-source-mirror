@@ -869,7 +869,7 @@ void C_MICROSTRIP::show_results()
     setResult( 4, atten_dielectric_e, "dB" );
     setResult( 5, atten_dielectric_o, "dB" );
 
-    setResult( 6, skindepth / UNIT_MICRON, "µm" );
+    setResult( 6, skindepth / UNIT_MICRON, "Âµm" );
 }
 
 

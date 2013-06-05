@@ -1,8 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -151,7 +153,6 @@ void SCH_SCREEN::Clear()
     m_ScreenNumber = m_NumberOfScreens = 1;
 
     m_titles.Clear();
-    m_titles.SetDate();
 }
 
 
@@ -496,9 +497,8 @@ bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 bool SCH_SCREEN::Save( FILE* aFile ) const
 {
     // Creates header
-    if( fprintf( aFile, "%s %s %d", EESCHEMA_FILE_STAMP,
-                 SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) < 0
-        || fprintf( aFile, "  date %s\n", TO_UTF8( DateAndTime() ) ) < 0 )
+    if( fprintf( aFile, "%s %s %d\n", EESCHEMA_FILE_STAMP,
+                 SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) < 0 )
         return false;
 
     BOOST_FOREACH( const CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
@@ -550,9 +550,10 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     return true;
 }
 
-// note: SCH_SCREEN::Draw is useful only for schematic.
-// library editor and library viewer do not use a draw list, and therefore
-// SCH_SCREEN::Draw draws nothing
+/* note: SCH_SCREEN::Draw is useful only for schematic.
+ * library editor and library viewer do not use a draw list, and therefore
+ * SCH_SCREEN::Draw draws nothing
+ */
 void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
     for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
@@ -569,6 +570,10 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
 }
 
 
+/* note: SCH_SCREEN::Plot is useful only for schematic.
+ * library editor and library viewer do not use a draw list, and therefore
+ * SCH_SCREEN::Plot plots nothing
+ */
 void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 {
     for( SCH_ITEM* item = m_drawList.begin();  item;  item = item->Next() )
@@ -961,7 +966,7 @@ bool SCH_SCREEN::BreakSegmentsOnJunctions()
             if( BreakSegment( junction->GetPosition() ) )
                 brokenSegments = true;
         }
-        else 
+        else
         {
             SCH_BUS_ENTRY_BASE* busEntry = dynamic_cast<SCH_BUS_ENTRY_BASE*>( item );
             if( busEntry )
@@ -1446,17 +1451,6 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
     }
 
     return count;
-}
-
-
-void SCH_SCREENS::SetDate( const wxString& aDate )
-{
-    for( size_t i = 0;  i < m_screens.size();  i++ )
-    {
-        TITLE_BLOCK tb = m_screens[i]->GetTitleBlock();
-        tb.SetDate( aDate );
-        m_screens[i]->SetTitleBlock( tb );
-    }
 }
 
 

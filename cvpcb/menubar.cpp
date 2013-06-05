@@ -95,7 +95,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Save as the .cmp file
     AddMenuItem( filesMenu,
                  wxID_SAVEAS,
-                 _( "Save &As..." ), SAVE_AS_HLP_MSG, KiBitmap( save_xpm ) );
+                 _( "Save &As...\tCtrl+Shift+S" ), SAVE_AS_HLP_MSG, KiBitmap( save_xpm ) );
 
     // Separator
     filesMenu->AppendSeparator();

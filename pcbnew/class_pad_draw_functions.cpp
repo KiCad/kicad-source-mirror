@@ -311,7 +311,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 {
     wxPoint coord[4];
     int     delta_cx, delta_cy;
-    int     angle = m_Orient;
+    double  angle = m_Orient;
     int     seg_width;
 
     GRSetDrawMode( aDC, aDrawInfo.m_DrawMode );
@@ -482,7 +482,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             GRLine( aClipBox, aDC, holepos.x - dx0, holepos.y - dx0,
                     holepos.x + dx0, holepos.y + dx0, 0, nc_color );
 
-        if( m_layerMask & LAYER_BACK )     // Draw / 
+        if( m_layerMask & LAYER_BACK )     // Draw /
             GRLine( aClipBox, aDC, holepos.x + dx0, holepos.y - dx0,
                     holepos.x - dx0, holepos.y + dx0, 0, nc_color );
     }
@@ -527,8 +527,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     // area of the pad
     RotatePoint( &tpos, shape_pos, angle );
 
-    /* Draw text with an angle between -90 deg and + 90 deg */
-    int t_angle = angle;
+    // Draw text with an angle between -90 deg and + 90 deg
+    double t_angle = angle;
     NORMALIZE_ANGLE_90( t_angle );
 
     /* Note: in next calculations, texte size is calculated for 3 or more
@@ -552,8 +552,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         {
             // tsize reserve room for marges and segments thickness
             tsize = ( tsize * 7 ) / 10;
-            DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos, 
-                                 aDrawInfo.m_Color, BLACK, WHITE, 
+            DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos,
+                                 aDrawInfo.m_Color, BLACK, WHITE,
                                  buffer, t_angle,
                                  wxSize( tsize , tsize ), GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
@@ -579,8 +579,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
         // tsize reserve room for marges and segments thickness
         tsize = ( tsize * 7 ) / 10;
-        DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos, 
-                             aDrawInfo.m_Color, BLACK, WHITE, 
+        DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos,
+                             aDrawInfo.m_Color, BLACK, WHITE,
                              m_ShortNetname, t_angle,
                              wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,
                              GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
@@ -595,7 +595,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
  * aSegStart and aSegEnd are the ending points of the equivalent segment of the shape
  * aRotation is the asked rotation of the segment (usually m_Orient)
  */
-int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation) const
+int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd,
+                                     double aRotation) const
 {
     int width;
 
@@ -628,48 +629,51 @@ int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int a
 }
 
 
-void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const
+void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue,
+                             double aRotation ) const
 {
-    if( (GetShape() != PAD_RECT) && (GetShape() != PAD_TRAPEZOID) )
-        return;
-
     wxSize delta;
     wxSize halfsize;
 
     halfsize.x = m_Size.x >> 1;
     halfsize.y = m_Size.y >> 1;
 
-    // For rectangular shapes, inflate is easy
-    if( GetShape() == PAD_RECT )
+    switch( GetShape() )
     {
-        halfsize += aInflateValue;
+        case PAD_RECT:
+            // For rectangular shapes, inflate is easy
+            halfsize += aInflateValue;
 
-        // Verify if do not deflate more than than size
-        // Only possible for inflate negative values.
-        if( halfsize.x < 0 )
-            halfsize.x = 0;
+            // Verify if do not deflate more than than size
+            // Only possible for inflate negative values.
+            if( halfsize.x < 0 )
+                halfsize.x = 0;
 
-        if( halfsize.y < 0 )
-            halfsize.y = 0;
-    }
-    else
-    {
-        // Trapezoidal pad: verify delta values
-        delta.x = ( m_DeltaSize.x >> 1 );
-        delta.y = ( m_DeltaSize.y >> 1 );
+            if( halfsize.y < 0 )
+                halfsize.y = 0;
+            break;
 
-        // be sure delta values are not to large
-        if( (delta.x < 0) && (delta.x <= -halfsize.y) )
-            delta.x = -halfsize.y + 1;
+        case PAD_TRAPEZOID:
+            // Trapezoidal pad: verify delta values
+            delta.x = ( m_DeltaSize.x >> 1 );
+            delta.y = ( m_DeltaSize.y >> 1 );
 
-        if( (delta.x > 0) && (delta.x >= halfsize.y) )
-            delta.x = halfsize.y - 1;
+            // be sure delta values are not to large
+            if( (delta.x < 0) && (delta.x <= -halfsize.y) )
+                delta.x = -halfsize.y + 1;
 
-        if( (delta.y < 0) && (delta.y <= -halfsize.x) )
-            delta.y = -halfsize.x + 1;
+            if( (delta.x > 0) && (delta.x >= halfsize.y) )
+                delta.x = halfsize.y - 1;
 
-        if( (delta.y > 0) && (delta.y >= halfsize.x) )
-            delta.y = halfsize.x - 1;
+            if( (delta.y < 0) && (delta.y <= -halfsize.x) )
+                delta.y = -halfsize.x + 1;
+
+            if( (delta.y > 0) && (delta.y >= halfsize.x) )
+                delta.y = halfsize.x - 1;
+        break;
+
+        default:    // is used only for rect and trap. pads
+            return;
     }
 
     // Build the basic rectangular or trapezoid shape
@@ -696,7 +700,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
         if( delta.y )    // lower and upper segment is horizontal
         {
             // Calculate angle of left (or right) segment with vertical axis
-            angle = atan2( double( m_DeltaSize.y ), double( m_Size.y ) );
+            angle = atan2( m_DeltaSize.y, m_Size.y );
 
             // left and right sides are moved by aInflateValue.x in their perpendicular direction
             // We must calculate the corresponding displacement on the horizontal axis
@@ -712,7 +716,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
         else if( delta.x )          // left and right segment is vertical
         {
             // Calculate angle of lower (or upper) segment with horizontal axis
-            angle = atan2( double( m_DeltaSize.x ), double( m_Size.x ) );
+            angle = atan2( m_DeltaSize.x, m_Size.x );
 
             // lower and upper sides are moved by aInflateValue.x in their perpendicular direction
             // We must calculate the corresponding displacement on the vertical axis

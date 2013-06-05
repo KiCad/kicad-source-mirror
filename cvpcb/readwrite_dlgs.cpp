@@ -71,16 +71,16 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 
         // Check to see if the component has already a footprint set.
 
-        hasFootprint = !(component->GetFootprintLibName().IsEmpty());
+        hasFootprint = !(component->GetFootprintName().IsEmpty());
 
-        component->SetFootprintLibName( aFootprintName );
+        component->SetFootprintName( aFootprintName );
 
         // create the new component description
 
         description.Printf( CMP_FORMAT, componentIndex + 1,
                             GetChars( component->GetReference() ),
                             GetChars( component->GetValue() ),
-                            GetChars( component->GetFootprintLibName() ) );
+                            GetChars( component->GetFootprintName() ) );
 
         // If the component hasn't had a footprint associated with it
         // it now has, so we decrement the count of components without
@@ -124,6 +124,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
     LoadProjectFile( m_NetlistFileName.GetFullPath() );
     LoadFootprintFiles();
     BuildFOOTPRINTS_LISTBOX();
+    BuildLIBRARY_LISTBOX();
 
     m_ListCmp->Clear();
     m_undefinedComponentCnt = 0;
@@ -135,10 +136,10 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
         msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
                     GetChars( component->GetReference() ),
                     GetChars( component->GetValue() ),
-                    GetChars( component->GetFootprintLibName() ) );
+                    GetChars( component->GetFootprintName() ) );
         m_ListCmp->AppendLine( msg );
 
-        if( component->GetFootprintLibName().IsEmpty() )
+        if( component->GetFootprintName().IsEmpty() )
             m_undefinedComponentCnt += 1;
     }
 
@@ -166,8 +167,8 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
     }
     else
     {
-        wxFileDialog dlg( this, _( "Save Component Footprint Link File" ), wxGetCwd(),
-                          wxEmptyString, ComponentFileWildcard, wxFD_SAVE );
+        wxFileDialog dlg( this, _( "Save Component Footprint Link File" ), wxEmptyString,
+                          _( "Unnamed file" ), ComponentFileWildcard, wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return -1;

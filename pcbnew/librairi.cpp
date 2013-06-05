@@ -36,10 +36,10 @@
 #include <gestfich.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
-#include <richio.h>
 #include <filter_reader.h>
 #include <pcbcommon.h>
 #include <macros.h>
+#include <fp_lib_table.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -93,7 +93,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 {
     // use the clipboard for this in the future?
 
-    // Some day it might be useful save the last library type selected aong with the path.
+    // Some day it might be useful save the last library type selected along with the path.
     static int lastFilterIndex = 0;
     wxString   lastOpenedPathForLoading;
     wxConfig*  config = wxGetApp().GetSettings();
@@ -298,7 +298,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     }
 
     wxFileDialog dlg( this, FMT_EXPORT_MODULE, fn.GetPath(), fn.GetFullName(),
-                        wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -463,9 +463,11 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 
 bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 {
-    wxString    libPath = getLibPath();
-    wxString    footprintName = Select_1_Module_From_List( this, libPath,
-                        wxEmptyString, wxEmptyString );
+    PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
+    wxString        libPath = getLibPath();
+    wxString        footprintName = PCB_BASE_FRAME::SelectFootprint( this, libPath,
+                                                                     wxEmptyString, wxEmptyString,
+                                                                     parent->GetFootprintLibraryTable() );
 
     if( !footprintName )
         return false;
@@ -653,7 +655,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibPath,
             if( aDisplayDialog )
             {
                 wxString msg = wxString::Format( FMT_MOD_EXISTS,
-                    footprintName.GetData(), aLibPath.GetData() );
+                                                 footprintName.GetData(), aLibPath.GetData() );
 
                 SetStatusText( msg );
             }
@@ -746,16 +748,18 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
 }
 
 
+#if !defined( USE_FP_LIB_TABLE )
+
 void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
 {
     if( g_LibraryNames.GetCount() == 0 )
         return;
 
     wxArrayString headers;
-    headers.Add( wxT("Library") );
-    
+    headers.Add( _( "Library" ) );
+
     std::vector<wxArrayString> itemsToDisplay;
-    
+
     // Conversion from wxArrayString to vector of ArrayString
     for( unsigned i = 0; i < g_LibraryNames.GetCount(); i++ )
     {
@@ -763,6 +767,7 @@ void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
         item.Add( g_LibraryNames[i] );
         itemsToDisplay.push_back( item );
     }
+
     EDA_LIST_DIALOG dlg( this, FMT_SELECT_LIB, headers, itemsToDisplay, getLibNickName() );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -791,3 +796,50 @@ void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
     updateTitle();
 }
 
+#else
+
+void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
+{
+    if( m_footprintLibTable->IsEmpty() )
+        return;
+
+    wxArrayString headers;
+    headers.Add( _( "Library" ) );
+
+    std::vector< wxArrayString > itemsToDisplay;
+    std::vector< wxString >      libNames = m_footprintLibTable->GetLogicalLibs();
+
+    for( unsigned i = 0; i < libNames.size(); i++ )
+    {
+        wxArrayString item;
+        item.Add( libNames[i] );
+        itemsToDisplay.push_back( item );
+    }
+
+    EDA_LIST_DIALOG dlg( this, FMT_SELECT_LIB, headers, itemsToDisplay, getLibNickName() );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    setLibNickName( dlg.GetTextSelection() );
+    wxString uri = m_footprintLibTable->FindRow( dlg.GetTextSelection() )->GetFullURI();
+    wxFileName fileName = FP_LIB_TABLE::ExpandSubstitutions( uri );
+
+    if( fileName.IsOk() && fileName.FileExists() )
+    {
+        setLibPath( fileName.GetFullPath() );
+    }
+    else
+    {
+        wxString msg = wxString::Format( FMT_BAD_PATHS, GetChars( dlg.GetTextSelection() ) );
+
+        DisplayError( this, msg );
+
+        setLibNickName( wxEmptyString );
+        setLibPath( wxEmptyString );
+    }
+
+    updateTitle();
+}
+
+#endif

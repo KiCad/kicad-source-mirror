@@ -388,6 +388,7 @@ static void export_vrml_line( LAYER_NUM layer, double startx, double starty, //{
 
     alpha = angle + PI2;
     fan.add( endx + r * cos( alpha ), endy + r * sin( alpha ) );
+
     // The 'start' side cap
     for( alpha = angle + PI2; alpha < angle + 3 * PI2; alpha += PI2 / divisions )
         fan.add( startx + r * cos( alpha ), starty + r * sin( alpha ) );
@@ -405,7 +406,7 @@ static void export_vrml_circle( LAYER_NUM layer, double startx, double starty, /
     double   hole, radius;
     FLAT_RING ring;
 
-    radius = hypot( startx - endx, starty - endy ) + ( width / 2);
+    radius = Distance( startx, starty, endx, endy ) + ( width / 2);
     hole  = radius - width;
 
     for( double alpha = 0; alpha < M_PI * 2; alpha += INC_ANGLE )
@@ -420,7 +421,7 @@ static void export_vrml_circle( LAYER_NUM layer, double startx, double starty, /
 
 static void export_vrml_slot( TRIANGLEBAG& triangles, //{{{
                               LAYER_NUM top_layer, LAYER_NUM bottom_layer, double xc, double yc,
-                              double dx, double dy, int orient )
+                              double dx, double dy, double orient )
 {
     double capx, capy; // Cap center
     VLoop  loop;
@@ -428,7 +429,7 @@ static void export_vrml_slot( TRIANGLEBAG& triangles, //{{{
 
     loop.z_top    = layer_z[top_layer];
     loop.z_bottom = layer_z[bottom_layer];
-    double angle = orient / 1800.0 * M_PI;
+    double angle  = DECIDEG2RAD( orient );
 
     if( dy > dx )
     {
@@ -479,14 +480,14 @@ static void export_vrml_hole( TRIANGLEBAG& triangles,
 
 
 static void export_vrml_oval_pad( LAYER_NUM layer, double xc, double yc,
-                                  double dx, double dy, int orient )
+                                  double dx, double dy, double orient )
 {
     double  capx, capy; // Cap center
     FLAT_FAN fan;
 
     fan.c.x = xc;
     fan.c.y = yc;
-    double angle = orient / 1800.0 * M_PI;
+    double angle = DECIDEG2RAD( orient );
     int divisions = SEGM_COUNT_PER_360 / 2;
 
     if( dy > dx )
@@ -538,7 +539,7 @@ static void export_vrml_arc( LAYER_NUM layer, double centerx, double centery,
 
     double divisions = arc_angle*M_PI/180.0 / count;
 
-    double outer_radius = hypot( arc_starty - centery, arc_startx - centerx )
+    double outer_radius = Distance( arc_startx, arc_starty, centerx, centery ) 
                           + ( width / 2);
     double inner_radius  = outer_radius - width;
 
@@ -568,7 +569,7 @@ static void export_vrml_varc( TRIANGLEBAG& triangles,
     loop.z_bottom = layer_z[bottom_layer];
 
     double start_angle = atan2( arc_starty - centery, arc_startx - centerx );
-    double radius = hypot( arc_starty - centery, arc_startx - centerx );
+    double radius = Distance( arc_startx, arc_starty, centerx, centery );
 
     int count = KiROUND( arc_angle / 360.0 * SEGM_COUNT_PER_360 );
 
@@ -617,7 +618,7 @@ static void export_vrml_drawsegment( DRAWSEGMENT* drawseg ) //{{{
         case S_CIRCLE:
             export_vrml_hole( layer_triangles[layer],
                               FIRST_COPPER_LAYER, LAST_COPPER_LAYER, x, y,
-                              hypot( xf - x, yf - y ) / 2 );
+                              Distance( xf, yf, x, y ) / 2 );
             break;
 
         default:
@@ -905,7 +906,8 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* aPad ) //{{{
             // Oblong hole (slot)
             export_vrml_slot( layer_triangles[EDGE_N],
                               FIRST_COPPER_LAYER, LAST_COPPER_LAYER,
-                              hole_x, hole_y, hole_drill_w, hole_drill_h, aPad->GetOrientation() );
+                              hole_x, hole_y, hole_drill_w, hole_drill_h,
+                              aPad->GetOrientation() );
         }
         else
         {
@@ -1109,15 +1111,15 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
 
         // Do some quaternion munching
         double q1[4], q2[4], rot[4];
-        build_quat( 1, 0, 0, rotx / 180.0 * M_PI, q1 );
-        build_quat( 0, 1, 0, roty / 180.0 * M_PI, q2 );
+        build_quat( 1, 0, 0, DEG2RAD( rotx ), q1 );
+        build_quat( 0, 1, 0, DEG2RAD( roty ), q2 );
         compose_quat( q1, q2, q1 );
-        build_quat( 0, 0, 1, rotz / 180.0 * M_PI, q2 );
+        build_quat( 0, 0, 1, DEG2RAD( rotz ), q2 );
         compose_quat( q1, q2, q1 );
 
         // Note here aModule->GetOrientation() is in 0.1 degrees,
-        // so module rotation is aModule->GetOrientation() / 1800.0
-        build_quat( 0, 0, 1, aModule->GetOrientation() / 1800.0 * M_PI, q2 );
+        // so module rotation has to be converted to radians
+        build_quat( 0, 0, 1, DECIDEG2RAD( aModule->GetOrientation() ), q2 );
         compose_quat( q1, q2, q1 );
         from_quat( q1, rot );
 
@@ -1140,7 +1142,7 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         else    // In normal mode, Y axis is reversed in Pcbnew.
             NEGATE(offsety);
 
-        RotatePoint(&offsetx, &offsety, aModule->GetOrientation());
+        RotatePoint( &offsetx, &offsety, aModule->GetOrientation() );
 
         fprintf( aOutputFile, "  translation %g %g %g\n",
                  (offsetx + aModule->GetPosition().x) * boardIU2WRML,

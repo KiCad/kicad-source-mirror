@@ -24,7 +24,7 @@
  */
 
 /**
- * @file PCBPolygon.h
+ * @file pcb_polygon.h
  */
 
 #ifndef PCB_POLYGON_H_

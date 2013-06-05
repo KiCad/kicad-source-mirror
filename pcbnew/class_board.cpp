@@ -61,7 +61,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 BOARD::BOARD() :
     BOARD_ITEM( (BOARD_ITEM*) NULL, PCB_T ),
     m_NetInfo( this ),
-    m_paper( IsGOST() ? PAGE_INFO::A4 : PAGE_INFO::A3, IsGOST() ),
+    m_paper( PAGE_INFO::A4, IsGOST() ),
     m_NetClasses( this )
 {
     // we have not loaded a board yet, assume latest until then.
@@ -2373,7 +2373,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
             msg.Printf( _( "Checking netlist component footprint \"%s:%s:%s\".\n" ),
                         GetChars( component->GetReference() ),
                         GetChars( component->GetTimeStamp() ),
-                        GetChars( component->GetFootprintLibName() ) );
+                        GetChars( component->GetFootprintName() ) );
             aReporter->Report( msg );
         }
 
@@ -2386,23 +2386,25 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
-                            GetChars( component->GetReference() ),
-                            GetChars( component->GetTimeStamp() ),
-                            GetChars( component->GetFootprintLibName() ) );
+                if( component->GetModule() != NULL )
+                    msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
+                                GetChars( component->GetReference() ),
+                                GetChars( component->GetTimeStamp() ),
+                                GetChars( component->GetFootprintName() ) );
+                else
+                    msg.Printf( _( "Cannot add new component \"%s:%s\" due to missing "
+                                   "footprint \"%s\".\n" ),
+                                GetChars( component->GetReference() ),
+                                GetChars( component->GetTimeStamp() ),
+                                GetChars( component->GetFootprintName() ) );
+
                 aReporter->Report( msg );
             }
 
-            // Owned by NETLIST, can only copy and read it.
-            footprint = component->GetModule();
-
-            wxCHECK2_MSG( footprint != NULL, continue,
-                          wxString::Format( wxT( "No footprint loaded for component \"%s\"." ),
-                                            GetChars( component->GetReference() ) ) );
-
-            if( !aNetlist.IsDryRun() )
+            if( !aNetlist.IsDryRun() && (component->GetModule() != NULL) )
             {
-                footprint = new MODULE( *footprint );
+                // Owned by NETLIST, can only copy it.
+                footprint = new MODULE( *component->GetModule() );
                 footprint->SetParent( this );
                 footprint->SetPosition( bestPosition );
                 footprint->SetTimeStamp( GetNewTimeStamp() );
@@ -2412,22 +2414,31 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
         else                           // An existing footprint.
         {
             // Test for footprint change.
-            if( !component->GetFootprintLibName().IsEmpty() &&
-                footprint->GetLibRef() != component->GetFootprintLibName() )
+            if( !component->GetFootprintName().IsEmpty() &&
+                footprint->GetLibRef() != component->GetFootprintName() )
             {
                 if( aNetlist.GetReplaceFootprints() )
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n" ),
-                                    GetChars( footprint->GetReference() ),
-                                    GetChars( footprint->GetPath() ),
-                                    GetChars( footprint->GetLibRef() ),
-                                    GetChars( component->GetFootprintLibName() ) );
+                        if( component->GetModule() != NULL )
+                            msg.Printf( _( "Replacing component \"%s:%s\" footprint \"%s\" with "
+                                           "\"%s\".\n" ),
+                                        GetChars( footprint->GetReference() ),
+                                        GetChars( footprint->GetPath() ),
+                                        GetChars( footprint->GetLibRef() ),
+                                        GetChars( component->GetFootprintName() ) );
+                        else
+                            msg.Printf( _( "Cannot replace component \"%s:%s\" due to missing "
+                                           "footprint \"%s\".\n" ),
+                                        GetChars( footprint->GetReference() ),
+                                        GetChars( footprint->GetPath() ),
+                                        GetChars( component->GetFootprintName() ) );
+
                         aReporter->Report( msg );
                     }
 
-                    if( !aNetlist.IsDryRun() )
+                    if( !aNetlist.IsDryRun() && (component->GetModule() != NULL) )
                     {
                         wxASSERT( footprint != NULL );
                         MODULE* newFootprint = new MODULE( *component->GetModule() );
@@ -2495,7 +2506,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
             }
         }
 
-        wxASSERT( component != NULL );
+        if( footprint == NULL )
+            continue;
 
         // At this point, the component footprint is updated.  Now update the nets.
         for( pad = footprint->Pads();  pad;  pad = pad->Next() )
@@ -2576,55 +2588,3 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
     }
 }
 
-
-#if defined(DEBUG)
-
-void BOARD::Show( int nestLevel, std::ostream& os ) const
-{
-    BOARD_ITEM* p;
-
-    // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
-
-    // specialization of the output:
-    NestedSpace( nestLevel + 1, os ) << "<modules>\n";
-    p = m_Modules;
-    for( ; p; p = p->Next() )
-        p->Show( nestLevel + 2, os );
-    NestedSpace( nestLevel + 1, os ) << "</modules>\n";
-
-    NestedSpace( nestLevel + 1, os ) << "<pdrawings>\n";
-    p = m_Drawings;
-    for( ; p; p = p->Next() )
-        p->Show( nestLevel + 2, os );
-    NestedSpace( nestLevel + 1, os ) << "</pdrawings>\n";
-
-    NestedSpace( nestLevel + 1, os ) << "<tracks>\n";
-    p = m_Track;
-    for( ; p; p = p->Next() )
-        p->Show( nestLevel + 2, os );
-    NestedSpace( nestLevel + 1, os ) << "</tracks>\n";
-
-    NestedSpace( nestLevel + 1, os ) << "<zones>\n";
-    p = m_Zone;
-    for( ; p; p = p->Next() )
-        p->Show( nestLevel + 2, os );
-    NestedSpace( nestLevel + 1, os ) << "</zones>\n";
-
-    NestedSpace( nestLevel+1, os ) << "<zone_containers>\n";
-    for( ZONE_CONTAINERS::const_iterator it = m_ZoneDescriptorList.begin();
-                it != m_ZoneDescriptorList.end();  ++it )
-        (*it)->Show( nestLevel+2, os );
-
-    NestedSpace( nestLevel+1, os ) << "</zone_containers>\n";
-
-    p = (BOARD_ITEM*) m_Son;
-    for( ; p; p = p->Next() )
-    {
-        p->Show( nestLevel + 1, os );
-    }
-
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
-}
-
-#endif

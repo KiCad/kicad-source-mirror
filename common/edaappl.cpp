@@ -45,7 +45,6 @@
 #include <wxstruct.h>
 #include <macros.h>
 #include <param_config.h>
-#include <worksheet.h>
 #include <id.h>
 #include <build_version.h>
 #include <hotkeys_basic.h>
@@ -68,6 +67,10 @@ static const wxChar* CommonConfigPath = wxT( "kicad_common" );
 // Default font size
 #define FONT_DEFAULT_SIZE 10    // Default font size.
 
+// some key strings used to store parameters in config
+static wxString backgroundColorKey( wxT( "BackgroundColor" ) );
+static wxString showPageLimitsKey( wxT( "ShowPageLimits" ) );
+static wxString workingDirKey( wxT( "WorkingDir" ) ) ;
 static wxString languageCfgKey( wxT( "LanguageID" ) );
 
 
@@ -322,7 +325,7 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
     {
         m_KicadEnv.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
-        if( m_KicadEnv.Last() != '/' )
+        if( !m_KicadEnv.IsEmpty() && m_KicadEnv.Last() != '/' )
             m_KicadEnv += UNIX_STRING_DIR_SEP;
     }
 
@@ -649,22 +652,23 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
 
     m_fileHistory.Load( *m_settings );
 
-    m_settings->Read( wxT( "ShowPageLimits" ), &g_ShowPageLimits );
+    m_settings->Read( showPageLimitsKey, &g_ShowPageLimits );
 
     if( aReopenLastUsedDirectory )
     {
-        if( m_settings->Read( wxT( "WorkingDir" ), &Line ) && wxDirExists( Line ) )
+        if( m_settings->Read( workingDirKey, &Line ) && wxDirExists( Line ) )
         {
             wxSetWorkingDirectory( Line );
         }
     }
 
-    int draw_bg_color;
-
     // FIXME OSX Mountain Lion (10.8)
     // Seems that Read doesn't found anything and ColorFromInt Asserts - I'm unable to reproduce on 10.7
-    // In general terms i think is better have a failsafe BLACK default than an uninit variable
-    m_settings->Read( wxT( "BgColor" ), &draw_bg_color , BLACK );
+    // In general terms i think is better have a failsafe default than an uninit variable
+    int draw_bg_color = (int)BLACK;      // Default for all apps but Eeschema
+    if( m_Id == APP_EESCHEMA_T )
+        draw_bg_color = (int)WHITE;      // Default for Eeschema
+    m_settings->Read( backgroundColorKey, &draw_bg_color );
     g_DrawBgColor = ColorFromInt( draw_bg_color );
 
     // Load per-user search paths from settings file
@@ -689,9 +693,9 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
 void EDA_APP::SaveSettings()
 {
     wxASSERT( m_settings != NULL );
-    m_settings->Write( wxT( "ShowPageLimits" ), g_ShowPageLimits );
-    m_settings->Write( wxT( "WorkingDir" ), wxGetCwd() );
-    m_settings->Write( wxT( "BgColor" ), (long) g_DrawBgColor );
+    m_settings->Write( showPageLimitsKey, g_ShowPageLimits );
+    m_settings->Write( workingDirKey, wxGetCwd() );
+    m_settings->Write( backgroundColorKey, (long) g_DrawBgColor );
 
     // Save the file history list
     m_fileHistory.Save( *m_settings );

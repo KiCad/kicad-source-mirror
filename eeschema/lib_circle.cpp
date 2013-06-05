@@ -105,10 +105,7 @@ bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
     if( aThreshold < 0 )
         aThreshold = GetPenSize() / 2;
 
-    wxPoint relpos = aPosRef - aTransform.TransformCoordinate( m_Pos );
-
-    int dist = KiROUND( sqrt( ( (double) relpos.x * relpos.x ) +
-                              ( (double) relpos.y * relpos.y ) ) );
+    int dist = KiROUND( GetLineLength( aPosRef, aTransform.TransformCoordinate( m_Pos ) ) ); 
 
     if( abs( dist - m_Radius ) <= aThreshold )
         return true;
@@ -346,9 +343,7 @@ void LIB_CIRCLE::calcEdit( const wxPoint& aPosition )
         if( m_Flags == IS_NEW )
             SetEraseLastDrawItem();
 
-        int dx = m_Pos.x - aPosition.x;
-        int dy = m_Pos.y - aPosition.y;
-        m_Radius = KiROUND( sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) ) );
+        m_Radius = KiROUND( GetLineLength( m_Pos, aPosition ) );
     }
     else
     {

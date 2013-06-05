@@ -1,3 +1,4 @@
+
 /**
  * @file pcbnew/dialogs/dialog_netlist.cpp
  */
@@ -97,6 +98,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
     GetSizer()->SetSizeHints( this );
 }
 
+
 void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
 {
     wxString lastPath = wxFileName::GetCwd();
@@ -140,7 +142,8 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
     }
 
     // Give the user a chance to bail out when making changes from a netlist.
-    if( !m_parent->GetBoard()->IsEmpty()
+    if( !m_checkDryRun->GetValue()
+      && !m_parent->GetBoard()->IsEmpty()
       && !IsOK( NULL, _( "The changes made by reading the netlist cannot be undone.  Are you "
                          "sure you want to read the netlist?" ) ) )
         return;

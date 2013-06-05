@@ -268,7 +268,7 @@ public:
      * accordint to the current selected unit and De Morgan selection
      * although it is stored without ? and part id.
      * @param aDC = the current device context
-     * @param aOffset = a draw offset. usually à,0 to draw on the screen, but
+     * @param aOffset = a draw offset. usually 0,0 to draw on the screen, but
      * can be set to page size / 2 to draw or print in SVG format.
      */
     void RedrawComponent( wxDC* aDC, wxPoint aOffset );
@@ -641,11 +641,11 @@ public:
                             bool aPrintMirrorMode, void* aData = NULL );
 
     /**
-     * Function SVG_Print_Component
+     * Function SVG_PlotComponent
      * Creates the SVG print file for the current edited component.
-     * @param aFullFileName = the full filename of the file
+     * @param aFullFileName = the full filename
      */
-    void SVG_Print_Component( const wxString& aFullFileName );
+    void SVG_PlotComponent( const wxString& aFullFileName );
 
 
     DECLARE_EVENT_TABLE()

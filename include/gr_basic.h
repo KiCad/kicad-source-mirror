@@ -203,10 +203,10 @@ void GRFilledCircle( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int r, int width
 void GRFilledCircle( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius, EDA_COLOR_T aColor );
 void GRCircle( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius, int aWidth, EDA_COLOR_T aColor );
 
-void GRArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int StAngle,
-            int EndAngle, int r, EDA_COLOR_T Color );
-void GRArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int StAngle,
-            int EndAngle, int r, int width, EDA_COLOR_T Color );
+void GRArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle,
+            double EndAngle, int r, EDA_COLOR_T Color );
+void GRArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle,
+            double EndAngle, int r, int width, EDA_COLOR_T Color );
 void GRArc1( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
              int xc, int yc, EDA_COLOR_T Color );
 void GRArc1( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
@@ -214,9 +214,9 @@ void GRArc1( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 void GRArc1( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd,
              wxPoint aCenter, int aWidth, EDA_COLOR_T aColor );
 void GRFilledArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y,
-                  int StAngle, int EndAngle, int r, EDA_COLOR_T Color, EDA_COLOR_T BgColor );
-void GRFilledArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int StAngle,
-                  int EndAngle, int r, int width, EDA_COLOR_T Color, EDA_COLOR_T BgColor );
+                  double StAngle, double EndAngle, int r, EDA_COLOR_T Color, EDA_COLOR_T BgColor );
+void GRFilledArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle,
+                  double EndAngle, int r, int width, EDA_COLOR_T Color, EDA_COLOR_T BgColor );
 void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width, EDA_COLOR_T Color );
 
 void GRFillCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
