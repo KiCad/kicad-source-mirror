@@ -83,19 +83,19 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
         vertex = *m_transform * vertex;
 
         // Replace only coordinates, leave color as it is
-        memcpy( &m_vertPtr->struc.coord, &vertex[0], CoordByteSize );
+        memcpy( &m_vertPtr->x, &vertex[0], CoordByteSize );
     }
     else
     {
         // Add the new vertex
-        memcpy( &m_vertPtr->struc.coord, aVertex, CoordByteSize );
+        memcpy( &m_vertPtr->x, aVertex, CoordByteSize );
     }
 
     // Apply currently used color
-    memcpy( &m_vertPtr->struc.color, m_color, ColorByteSize );
+    memcpy( &m_vertPtr->r, m_color, ColorByteSize );
 
     // Apply currently used shader
-    memcpy( &m_vertPtr->struc.shader, m_shader, ShaderByteSize );
+    memcpy( &m_vertPtr->shader, m_shader, ShaderByteSize );
 
     // Move to the next free space
     m_vertPtr++;
@@ -204,19 +204,6 @@ void VBO_ITEM::UseShader( const GLfloat* aShader )
 {
     memcpy( m_shader, aShader, ShaderByteSize );
 }
-
-
-/*
-// TODO
-void SetVbo( int aVboId )
-{
-}
-
-
-int GetVbo() const
-{
-}
-*/
 
 
 void VBO_ITEM::useNewBlock()

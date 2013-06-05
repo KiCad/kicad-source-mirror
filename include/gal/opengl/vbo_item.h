@@ -40,25 +40,13 @@
 
 namespace KiGfx
 {
-typedef struct VBO_VERTEX_DATA
+typedef struct VBO_VERTEX
 {
     GLfloat x, y, z;        // Coordinates
     GLfloat r, g, b, a;     // Color
     GLfloat shader[4];      // Shader type & params
 } VBO_VERTEX_DATA;
 
-typedef struct VBO_VERTEX_STRUCT
-{
-    GLfloat coord[3];       // Coordinates
-    GLfloat color[4];       // Color
-    GLfloat shader[4];      // Shader type & params
-} VBO_VERTEX_STRUCT;
-
-typedef union VBO_VERTEX
-{
-    VBO_VERTEX_DATA     data;
-    VBO_VERTEX_STRUCT   struc;
-} VBO_VERTEX;
 
 class VBO_ITEM
 {
@@ -159,34 +147,33 @@ public:
     static const int VertByteSize       = sizeof(VBO_VERTEX);
     static const int VertStride         = VertByteSize / sizeof(GLfloat);
 
-    static const int CoordStride        = sizeof(VBO_VERTEX_STRUCT().coord) / sizeof(GLfloat);
-    static const int CoordByteSize      = sizeof(VBO_VERTEX_STRUCT().coord);
+    static const int CoordByteSize      = sizeof(VBO_VERTEX().x) + sizeof(VBO_VERTEX().y) +
+                                            sizeof(VBO_VERTEX().z);
+    static const int CoordStride        = CoordByteSize / sizeof(GLfloat);
 
     // Offset of color data from the beginning of each vertex data
-    static const int ColorByteOffset    = offsetof( VBO_VERTEX_STRUCT, color );
+    static const int ColorByteOffset    = offsetof(VBO_VERTEX, r);
     static const int ColorOffset        = ColorByteOffset / sizeof(GLfloat);
-    static const int ColorStride        = sizeof(VBO_VERTEX_STRUCT().color) / sizeof(GLfloat);
-    static const int ColorByteSize      = sizeof(VBO_VERTEX_STRUCT().color);
+    static const int ColorByteSize      = sizeof(VBO_VERTEX().r) + sizeof(VBO_VERTEX().g) +
+                                            sizeof(VBO_VERTEX().b) + sizeof(VBO_VERTEX().a);
+    static const int ColorStride        = ColorByteSize / sizeof(GLfloat);
 
     // Shader attributes
-    static const int ShaderByteOffset   = offsetof( VBO_VERTEX_STRUCT, shader );
+    static const int ShaderByteOffset   = offsetof(VBO_VERTEX, shader);
     static const int ShaderOffset       = ShaderByteOffset / sizeof(GLfloat);
-    static const int ShaderStride       = sizeof(VBO_VERTEX_STRUCT().shader) / sizeof(GLfloat);
-    static const int ShaderByteSize     = sizeof(VBO_VERTEX_STRUCT().shader);
+    static const int ShaderByteSize     = sizeof(VBO_VERTEX().shader);
+    static const int ShaderStride       = ShaderByteSize / sizeof(GLfloat);
 
     static const int IndStride          = 1;
     static const int IndByteSize        = IndStride * sizeof(GLuint);
 
 private:
-    ///< VBO ids in which the item is stored.
-    //int         m_vboId; // not used yet
-
     ///< Contains vertices coordinates and colors.
     ///< Packed by 7 floats for each vertex: {X, Y, Z, R, G, B, A}
-    GLfloat*    m_vertices;
+    GLfloat*                m_vertices;
 
     ///< Indices of vertices
-    GLuint*     m_indices;
+    GLuint*                 m_indices;
 
     ///< Lists of data blocks storing vertices
     std::list<VBO_VERTEX*>  m_vertBlocks;
@@ -204,20 +191,20 @@ private:
     void                    prepareFinal();
 
     ///< Offset and size of data in VBO.
-    int         m_offset;
-    int         m_size;
+    int                     m_offset;
+    int                     m_size;
 
     ///< Color used for new vertices pushed.
-    GLfloat     m_color[ColorStride];
+    GLfloat                 m_color[ColorStride];
 
     ///< Shader and its parameters used for new vertices pushed
-    GLfloat     m_shader[ShaderStride];
+    GLfloat                 m_shader[ShaderStride];
 
     ///< Flag telling if the item should be recached in VBO or not.
-    bool        m_isDirty;
+    bool                    m_isDirty;
 
-    ///< Current transform matrix for every new vertex pushed.
-    const glm::mat4* m_transform;
+    ///< Current transform matrix applied for every new vertex pushed.
+    const glm::mat4*        m_transform;
 };
 } // namespace KiGfx
 
