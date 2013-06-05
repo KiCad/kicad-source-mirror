@@ -29,16 +29,93 @@
 
 #include <fctsys.h>
 
+/* keyword used in page layout description are (see page_layout_reader.keywords)
+ *  page_layout
+ *  setup
+ *  linewidth
+ *  textlinewidth
+ *  textsize
+ *  comment
+ *  line
+ *  rect
+ *  polygon
+ *  tbtext
+ *  ltcorner
+ *  lbcorner
+ *  rbcorner
+ *  rtcorner
+ *  name
+ *  pos
+ *  start
+ *  end
+ *  maxlen
+ *  maxheight
+ *  font
+ *  bold
+ *  italic
+ *  size
+ *  justify
+ *  left
+ *  center
+ *  right
+ *  top
+ *  bottom
+ *  rotate
+ *  repeat
+ *  incrx
+ *  incry
+ *  incrlabel
+ */
+/*
+ *  Items use coordinates.
+ *  A coordinate is defined relative to a page corner
+ *  A coordinate is the X pos, the Y pos, and the corner which is the coordinate origin
+ *  the default is the bottom right corner
+ *  example: (start 10 0 ltcorner) or (start 20 10)
+ *  The direction depends on the corner: a positive coordinate define a point
+ *  from the corner origin, to the opposite corner.
+ *
+ *  Items are defined by a name, coordinates in mm and some attributes,
+ *  and can be repeated.
+ *  for instance (repeat 2) (incrx 2) (incry 2) repeat the item 2 times,
+ *  and coordinates are incremented by 2 on X direction, and 2 on Y direction
+ *  Comments are allowed. they are inside (), and start by the keyword comment
+ *  example:
+ *  (comment rect around the title block)
+ *
+ *  Lines and rect are defined by 2 coordinates start and end, and attributes.
+ *  Attributes are linewidth and repeat parameters.
+ *  example:
+ *  (line (start 50 2 ltcorner) (end 50 0 ltcorner) (repeat 30) (incrx 50) )
+ *  (rect (comment rect around the title block) (linewidth 0.15) (start 110 34) (end 2 2) )
+ *
+ *  Texts are defined by the text (between quotes), the position, and attributes
+ *  example
+ *  "(tbtext \"1\" (pos 25 1 lbcorner) (font (size 1.3 1.3)) (repeat 100) (incrx 50) )"
+ *  the text can be rotated by (rotation <value>) with value = rot angle in degrees
+ *  (font (size 1.3 1.3) bold italic) defines a specific size,
+ *    with bold and italic options
+ *  (justify <justif keyword>) controls the text justification (the default is left)
+ *  justif keyword is center, left, right, top and bottom
+ *  (justify center top) is a text centered on X axis and top aligned on vertical axis
+ *  The text size can be constrained:
+ *  (maxlen <value>) and (maxheight <value>) force the actual text x and/or y size to be
+ *  reduced to limit the text height to the maxheight value,
+ *  and the full text x size to the maxlen value.
+ *  If the actual text size is smaller than limits, its size is not modified.
+ *
+ */
+
 // height of the band reference grid  2.0 mm
 // worksheet frame reference text size 1.3 mm
 // default text size 1.5 mm
 // default line width 0.15 mm
 // frame ref pitch 50 mm
 
-extern const wxString defaultPageLayout;
+extern const wxString   defaultPageLayout;
 
 // Default page layout (sizes are in mm)
-const wxString defaultPageLayout( wxT( "( page_layout\n"
+const wxString          defaultPageLayout( wxT( "( page_layout\n"
 "(setup (textsize 1.5 1.5) (linewidth 0.15) (textlinewidth 0.15) )"
 "(rect (comment rect around the title block) (linewidth 0.15) (start 110 34) (end 2 2) )\n"
 "(rect (start 0 0 ltcorner) (end 0 0 rbcorner) (repeat 2) (incrx 2) (incry 2) )\n"
@@ -69,4 +146,4 @@ const wxString defaultPageLayout( wxT( "( page_layout\n"
 "(tbtext \"%C3\" (comment Comment 0) (pos 108 32) )\n"
 "(line (start 90 8.5) end 90 5.5) )\n"
 "(line (start 26 8.5) end 26 2) )\n"
-")\n") );
+")\n" ) );
