@@ -33,6 +33,7 @@
 #include <base_struct.h>
 #include <drawtxt.h>
 #include <trigo.h>
+#include <macros.h>
 #include <wxBasePcbFrame.h>
 #include <pcbcommon.h>
 
@@ -208,7 +209,8 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, EDA_COLOR_T aColo
 {
     wxSize  size;
     wxPoint pos;
-    int     orient, thickness;
+    double  orient;
+    int     thickness;
 
     if( aColor == WHITE )
         aColor = LIGHTGRAY;
@@ -388,15 +390,13 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
         break;
 
     case S_CIRCLE:
-        radius = (int) hypot( (double) ( end.x - pos.x ),
-                              (double) ( end.y - pos.y ) );
+        radius = KiROUND( GetLineLength( end, pos ) );
         m_plotter->ThickCircle( pos, radius * 2, thickness, GetMode() );
         break;
 
     case S_ARC:
     {
-        radius = (int) hypot( (double) ( end.x - pos.x ),
-                                  (double) ( end.y - pos.y ) );
+        radius = KiROUND( GetLineLength( end, pos ) );
 
         double startAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
 
@@ -448,7 +448,8 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
 // Plot a PCB Text, i;e. a text found on a copper or technical layer
 void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 {
-    int     orient, thickness;
+    double  orient;
+    int     thickness;
     wxPoint pos;
     wxSize  size;
 
@@ -507,8 +508,8 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
  */
 void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
 {
-    std::vector<CPolyPt> polysList = aZone->GetFilledPolysList();
-    unsigned imax = polysList.size();
+    const CPOLYGONS_LIST& polysList = aZone->GetFilledPolysList();
+    unsigned imax = polysList.GetCornersCount();
 
     if( imax == 0 )  // Nothing to draw
         return;
@@ -527,10 +528,10 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
      */
     for( unsigned ic = 0; ic < imax; ic++ )
     {
-        CPolyPt* corner = &polysList[ic];
-        cornerList.push_back( wxPoint( corner->x, corner->y) );
+        wxPoint pos = polysList.GetPos( ic );
+        cornerList.push_back( pos );
 
-        if( corner->end_contour )   // Plot the current filled area outline
+        if(  polysList.IsEndContour( ic ) )   // Plot the current filled area outline
         {
             // First, close the outline
             if( cornerList[0] != cornerList[cornerList.size() - 1] )
@@ -587,7 +588,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
 void BRDITEMS_PLOTTER::PlotDrawSegment(  DRAWSEGMENT* aSeg )
 {
     int     thickness;
-    int     radius = 0, StAngle = 0, EndAngle = 0;
+    int     radius = 0;
+    double  StAngle = 0, EndAngle = 0;
 
     if( (GetLayerMask( aSeg->GetLayer() ) & m_layerMask) == 0 )
         return;
@@ -607,14 +609,12 @@ void BRDITEMS_PLOTTER::PlotDrawSegment(  DRAWSEGMENT* aSeg )
     switch( aSeg->GetShape() )
     {
     case S_CIRCLE:
-        radius = (int) hypot( (double) ( end.x - start.x ),
-                              (double) ( end.y - start.y ) );
+        radius = KiROUND( GetLineLength( end, start ) );
         m_plotter->ThickCircle( start, radius * 2, thickness, GetMode() );
         break;
 
     case S_ARC:
-        radius = (int) hypot( (double) ( end.x - start.x ),
-                              (double) ( end.y - start.y ) );
+        radius = KiROUND( GetLineLength( end, start ) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
         EndAngle = StAngle + aSeg->GetAngle();
         m_plotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, GetMode() );

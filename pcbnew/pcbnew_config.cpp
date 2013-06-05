@@ -41,12 +41,10 @@
 #include <plot_common.h>
 #include <worksheet.h>
 #include <dialog_hotkeys_editor.h>
-
-#include <class_board.h>
 #include <fp_lib_table.h>
-
 #include <fp_lib_table_lexer.h>
 
+#include <class_board.h>
 #include <pcbplot.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -84,73 +82,28 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_PCB_LIB_TABLE_EDIT:
+    {
+        int r = InvokePcbLibTableEditor( this, m_globalFootprintTable, m_footprintLibTable );
+
+        if( r & 1 )
         {
-            // scaffolding: dummy up some data into tables, until actual load/save are in place.
-            FP_LIB_TABLE    gbl;
-            FP_LIB_TABLE    prj;
+            FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
+            m_globalFootprintTable->Format( &sf, 0 );
 
-            FP_LIB_TABLE_LEXER  glex(
-                "(fp_lib_table\n"
-                "   (lib (name passives)(descr \"R/C Lib\")(type KiCad)(uri ${KISYSMODS}/passives.pretty))\n"
-                "   (lib (name micros)(descr \"Small stuff\")(type Legacy)(uri ${KISYSMODS}/passives.mod)(options \"op1=2\"))\n"
-                "   (lib (name chips)(descr \"Potatoe chips\")(type Eagle)(uri /opt/eagle-6.2.0/lbr/con-amp-micromatch.lbr))\n"
-                ")", wxT( "gbl" ) );
-
-            FP_LIB_TABLE_LEXER  plex(
-                "(fp_lib_table\n"
-                "   (lib (name passives)(descr \"Demo Lib\")(type KiCad)(uri ${KIUSRMODS}/passives.pretty))\n"
-                "   (lib (name micros)(descr \"Small stuff\")(type Legacy)(uri ${KIUSRMODS}/micros.mod)(options \"op1=2\"))\n"
-                "   (lib (name chips)(descr \"Potatoe chips\")(type Eagle)(uri /opt/eagle-6.2.0/lbr/con-amp-micromatch.lbr))\n"
-                ")", wxT( "prj" ) );
-
-            try
-            {
-                gbl.Parse( &glex );
-                prj.Parse( &plex );
-            }
-            /* PARSE_ERROR is an IO_ERROR, handle them the same for now.
-            catch( PARSE_ERROR pe )
-            {
-                DisplayError( this, pe.errorText );
-                break;
-            }
-            */
-            catch( IO_ERROR ioe )
-            {
-                DisplayError( this, ioe.errorText );
-                break;
-            }
-
-            int r = InvokePcbLibTableEditor( this, &gbl, &prj );
-
-            if( r & 1 )
-            {
-#if defined(DEBUG)
-                printf( "changed global:\n" );
-
-                STRING_FORMATTER sf;
-
-                gbl.Format( &sf, 0 );
-
-                printf( "%s\n", sf.GetString().c_str() );
-#endif
-                // save global table to disk and apply it
-            }
-
-            if( r & 2 )
-            {
-#if defined(DEBUG)
-                printf( "changed project:\n" );
-
-                STRING_FORMATTER sf;
-
-                prj.Format( &sf, 0 );
-
-                printf( "%s\n", sf.GetString().c_str() );
-#endif
-                // save project table to disk and apply it
-            }
         }
+
+        if( r & 2 )
+        {
+            wxFileName fn = GetBoard()->GetFileName();
+            fn.SetName( FP_LIB_TABLE::GetFileName() );
+            fn.SetExt( wxEmptyString );
+
+            FILE_OUTPUTFORMATTER sf( fn.GetFullPath() );
+            m_footprintLibTable->Format( &sf, 0 );
+
+        }
+    }
+
         break;
 
     case ID_PCB_MASK_CLEARANCE:
@@ -267,6 +220,8 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     SetElementVisibility( GRID_VISIBLE, showGrid );
     SetElementVisibility( RATSNEST_VISIBLE, showRats );
 #endif
+
+    loadFootprintLibTable();
 
     return true;
 }
@@ -577,5 +532,34 @@ void PCB_EDIT_FRAME::ReadMacros()
         }
 
         macrosNode = (XNODE*) macrosNode->GetNext();
+    }
+}
+
+
+void PCB_EDIT_FRAME::loadFootprintLibTable()
+{
+    delete m_footprintLibTable;
+
+    wxFileName fn = GetBoard()->GetFileName();
+    fn.SetName( FP_LIB_TABLE::GetFileName() );
+    fn.SetExt( wxEmptyString );
+
+    // Check if a project footprint table is defined and load it.  If no project footprint
+    // table is defined, then the global library table is the footprint library table.
+
+    m_footprintLibTable = new FP_LIB_TABLE( m_globalFootprintTable );
+
+    if( fn.FileExists() )
+    {
+        try
+        {
+            FILE_LINE_READER reader( fn.GetFullPath() );
+            FP_LIB_TABLE_LEXER lexer( &reader );
+            m_footprintLibTable->Parse( &lexer );
+        }
+        catch( IO_ERROR ioe )
+        {
+            DisplayError( this, ioe.errorText );
+        }
     }
 }

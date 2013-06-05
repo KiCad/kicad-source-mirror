@@ -187,6 +187,9 @@ extern int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2
  */
 class LIB_COMPONENT : public EDA_ITEM
 {
+    friend class CMP_LIBRARY;
+    friend class LIB_ALIAS;
+
     wxString           m_name;
     int                m_pinNameOffset;  ///< The offset in mils to draw the pin name.  Set to 0
                                          ///< to draw the pin name above the pin.
@@ -203,11 +206,14 @@ class LIB_COMPONENT : public EDA_ITEM
     LIB_ALIASES        m_aliases;        ///< List of alias object pointers associated with the
                                          ///< component.
     CMP_LIBRARY*       m_library;        ///< Library the component belongs to if any.
+    static int         m_subpartIdSeparator;  ///< the separator char between
+                                         ///< the subpart id and the reference
+                                         ///< like U1A ( m_subpartIdSeparator = 0 ) or U1.A or U1-A
+    static int         m_subpartFirstId; ///< the ascii char value to calculate the subpart symbol id
+                                         ///< from the part number: only 'A', 'a' or '1' can be used,
+                                         ///< other values have no sense.
 
     void deleteAllFields();
-
-    friend class CMP_LIBRARY;
-    friend class LIB_ALIAS;
 
 public:
     LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary = NULL );
@@ -404,7 +410,9 @@ public:
                bool aOnlySelected = false );
 
     /**
-     * Plot component to plotter.
+     * Plot lib component to plotter.
+     * Lib Fields not are plotted here, because this plot function
+     * is used to plot schematic items, which have they own fields
      *
      * @param aPlotter - Plotter object to plot to.
      * @param aUnit - Component part to plot.
@@ -413,7 +421,20 @@ public:
      * @param aTransform - Component plot transform matrix.
      */
     void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
-               const TRANSFORM& aTransform );
+                const TRANSFORM& aTransform );
+
+    /**
+     * Plot Lib Fields only of the component to plotter.
+     * is used to plot the full lib component, outside the schematic
+     *
+     * @param aPlotter - Plotter object to plot to.
+     * @param aUnit - Component part to plot.
+     * @param aConvert - Component alternate body style to plot.
+     * @param aOffset - Distance to shift the plot coordinates.
+     * @param aTransform - Component plot transform matrix.
+     */
+    void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
+                        const wxPoint& aOffset, const TRANSFORM& aTransform );
 
     /**
      * Add a new draw \a aItem to the draw object list.
@@ -630,9 +651,17 @@ public:
      * @return the sub reference for component having multiple parts per package.
      * The sub reference identify the part (or unit)
      * @param aUnit = the part identifier ( 1 to max count)
+     * @param aAddSeparator = true (default) to prpebd the sub ref
+     *    by the separator symbol (if any)
      * Note: this is a static function.
      */
-    static wxString ReturnSubReference( int aUnit );
+    static wxString ReturnSubReference( int aUnit, bool aAddSeparator = true );
+
+    // Accessors to sub ref parameters
+    static int GetSubpartIdSeparator() { return m_subpartIdSeparator; }
+    static void SetSubpartIdSeparator( int aSep ) { m_subpartIdSeparator = aSep; }
+    static int GetSubpartFirstId() { return m_subpartFirstId; }
+    static void SetSubpartFirstId( int aFirstId ) { m_subpartFirstId = aFirstId; }
 
     /**
      * Set or clear the alternate body style (DeMorgan) for the component.

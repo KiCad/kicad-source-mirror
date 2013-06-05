@@ -68,7 +68,7 @@ void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     GRSetDrawMode( DC, GR_COPY );
 
     m_canvas->DrawBackGround( DC );
-    TraceWorkSheet( DC, screen, 0, IU_PER_MILS, wxEmptyString );
+   DrawWorkSheet( DC, screen, 0, IU_PER_MILS, wxEmptyString );
 
     // Redraw the footprints
     for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
@@ -108,7 +108,7 @@ void PCB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     m_canvas->DrawBackGround( DC );
 
-    TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness,
+    DrawWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness,
                     IU_PER_MILS, GetBoard()->GetFileName() );
 
     GetBoard()->Draw( m_canvas, DC, GR_OR | GR_ALLOW_HIGHCONTRAST );

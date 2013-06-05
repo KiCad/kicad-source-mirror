@@ -54,7 +54,7 @@ wxPoint        MoveVector;              // Move vector for move edge, exported
                                         // to dialog_edit mod_text.cpp
 static wxPoint TextInitialPosition;     // Mouse cursor initial position for
                                         // undo/abort move command
-static int     TextInitialOrientation;  // module text initial orientation for
+static double  TextInitialOrientation;  // module text initial orientation for
                                         // undo/abort move+rot command+rot
 
 
@@ -233,7 +233,7 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
         if( Module )
         {
             // Prepare undo command (a rotation can be made while moving)
-            int tmp = Text->GetOrientation();
+            double tmp = Text->GetOrientation();
             Text->SetOrientation( TextInitialOrientation );
 
             if( IsType( PCB_FRAME_TYPE ) )

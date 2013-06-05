@@ -51,11 +51,6 @@
 #include <wx/overlay.h>
 #endif
 
-// C++ guarantees that operator delete checks its argument for null-ness
-#ifndef SAFE_DELETE
-#define SAFE_DELETE( p ) delete (p); (p) = NULL;
-#endif
-
 // Option for dialog boxes
 #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER
 
@@ -706,30 +701,17 @@ public:
      */
     double GetZoom();
 
-    void TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
-                         double aScale, const wxString &aFilename );
-
     /**
-     * Function TraceWorkSheet is a core function for drawing of the page layout with
-     * the frame and the basic inscriptions.
+     * Function DrawWorkSheet
+     * Draws on screen the page layout with the frame and the basic inscriptions.
      * @param aDC The device context.
-     * @param aSz The size of the page layout.
-     * @param aLT The left top margin of the page layout.
-     * @param aRB The right bottom margin of the page layout.
-     * @param aType The paper size type (for basic inscriptions).
-     * @param aFlNm The file name (for basic inscriptions).
-     * @param aTb The block of titles (for basic inscriptions).
-     * @param aNScr The number of screens (for basic inscriptions).
-     * @param aScr The screen number (for basic inscriptions).
-     * @param aLnW The line width for drawing.
-     * @param aScalar Scalar to convert from mils to internal units.
-     * @param aClr1 The color for drawing.
-     * @param aClr2 The colr for inscriptions.
+     * @param aScreen screen to draw
+     * @param aLineWidth The pen width to use to draw the layout.
+     * @param aScale The mils to Iu conversion factor.
+     * @param aFilename The filename to display in basic inscriptions.
      */
-    void TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoint& aRB,
-                         wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
-                         int aNScr, int aScr, int aLnW, double aScalar,
-                         EDA_COLOR_T aClr1 = RED, EDA_COLOR_T aClr2 = RED );
+    void DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
+                         double aScale, const wxString &aFilename );
 
     /**
      * Function GetXYSheetReferences

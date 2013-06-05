@@ -62,7 +62,8 @@ const wxString PAGE_INFO::Custom( wxT( "User" ) );
 // local readability macro for millimeter wxSize
 #define MMsize( x, y )  wxSize( Mm2mils( x ), Mm2mils( y ) )
 
-// All MUST be defined as landscape.  If IsGOST() is true, A4 is dynamically rotated later.
+// All MUST be defined as landscape.
+// If IsGOST() is true, A4 is dynamically rotated later.
 const PAGE_INFO  PAGE_INFO::pageA4(     MMsize( 297,   210 ),   wxT( "A4" ),    wxPAPER_A4 );
 const PAGE_INFO  PAGE_INFO::pageA3(     MMsize( 420,   297 ),   wxT( "A3" ),    wxPAPER_A3 );
 const PAGE_INFO  PAGE_INFO::pageA2(     MMsize( 594,   420 ),   wxT( "A2" ),    wxPAPER_A2 );
@@ -139,7 +140,7 @@ void PAGE_INFO::setMargins()
         m_left_margin   =
         m_right_margin  =
         m_top_margin    =
-        m_bottom_margin = 400;              // Units = mils
+        m_bottom_margin = Mm2mils( 10 );
     }
 }
 
@@ -327,8 +328,8 @@ void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aContro
     // Internally, the page size is in mils
     if( GetType() == PAGE_INFO::Custom )
         aFormatter->Print( 0, " %g %g",
-                           GetCustomWidthMils() * 25.4 / 1000.0,
-                           GetCustomHeightMils() * 25.4 / 1000.0 );
+                           GetWidthMils() * 25.4 / 1000.0,
+                           GetHeightMils() * 25.4 / 1000.0 );
 
     if( !IsCustom() && IsPortrait() )
         aFormatter->Print( 0, " portrait" );

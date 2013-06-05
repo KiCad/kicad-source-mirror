@@ -30,9 +30,6 @@ class OUTPUTFORMATTER;
 struct IO_ERROR;
 
 
-extern wxString GenDate();
-
-
 /**
  * Class TITLE_BLOCK
  * holds the information shown in the lower right corner of a plot, printout, or
@@ -54,7 +51,7 @@ public:
      * Function SetDate
      * sets the date field, and defaults to the current time and date.
      */
-    void SetDate( const wxString& aDate = GenDate() )   { m_date = aDate; }
+    void SetDate( const wxString& aDate )               { m_date = aDate; }
     const wxString& GetDate() const                     { return m_date; }
 
     void SetRevision( const wxString& aRevision )       { m_revision = aRevision; }

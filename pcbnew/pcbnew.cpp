@@ -45,6 +45,7 @@
 
 #include <wx/file.h>
 #include <wx/snglinst.h>
+#include <wx/dir.h>
 
 #include <pcbnew.h>
 #include <protos.h>
@@ -62,7 +63,7 @@ bool           g_Show_Module_Ratsnest;
 bool           g_Raccord_45_Auto = true;
 bool 	       g_Alternate_Track_Posture = false;
 bool           g_Track_45_Only_Allowed = true;  // True to allow horiz, vert. and 45deg only tracks
-bool           g_Segments_45_Only;                // True to allow horiz, vert. and 45deg only graphic segments
+bool           g_Segments_45_Only;              // True to allow horiz, vert. and 45deg only graphic segments
 bool           g_TwoSegmentTrackBuild = true;
 
 LAYER_NUM      g_Route_Layer_TOP;
@@ -78,7 +79,7 @@ wxPoint        g_Offset_Module;     /* Distance to offset module trace when movi
  * this is of the responsibility to users to create this file
  * if they want to have a list of footprints
  */
-wxString g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
+wxString      g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
 
 wxArrayString g_LibraryNames;
 
@@ -101,11 +102,12 @@ void EDA_APP::MacOpenFile( const wxString& fileName )
     frame->LoadOnePcbFile( fileName, false );
 }
 
+
 bool EDA_APP::OnInit()
 {
     wxFileName      fn;
     PCB_EDIT_FRAME* frame = NULL;
-    wxString msg;
+    wxString        msg;
 
 #ifdef KICAD_SCRIPTING
     if ( !pcbnewInitPythonScripting() )
@@ -130,9 +132,10 @@ bool EDA_APP::OnInit()
 
         if( fn.GetExt() != PcbFileExtension && fn.GetExt() != LegacyPcbFileExtension )
         {
-            msg.Printf( _( "Pcbnew file <%s> has a wrong extension.\n\
-Changing extension to .%s." ), GetChars( fn.GetFullPath() ),
-                               GetChars( PcbFileExtension ) );
+            msg.Printf( _( "Pcbnew file <%s> has a wrong extension.\n"
+                           "Changing extension to .%s." ),
+                        GetChars( fn.GetFullPath() ),
+                        GetChars( PcbFileExtension ) );
             fn.SetExt( PcbFileExtension );
             wxMessageBox( msg );
         }
@@ -185,6 +188,30 @@ Changing extension to .%s." ), GetChars( fn.GetFullPath() ),
     // Some will be overwritten after loading the board file
     frame->LoadProjectSettings( fn.GetFullPath() );
 
+    // Set the KISYSMOD environment variable for the current process if it is not already
+    // defined in the user's environment.  This is required to expand the global footprint
+    // library table paths.
+    if( !wxGetEnv( wxT( "KISYSMOD" ), &msg ) && !GetLibraryPathList().IsEmpty() )
+    {
+        unsigned      modFileCount = 0;
+        wxString      bestPath;
+        wxArrayString tmp;
+
+        for( unsigned i = 0;  i < GetLibraryPathList().GetCount();  i++ )
+        {
+            unsigned cnt = wxDir::GetAllFiles( GetLibraryPathList()[i], &tmp, wxT( "*.mod" ) );
+
+            if( cnt > modFileCount )
+            {
+                modFileCount = cnt;
+                bestPath = GetLibraryPathList()[i];
+            }
+        }
+
+        wxLogDebug( wxT( "Setting $KISYSMOD=\"%s\"." ), GetChars( bestPath ) );
+        wxSetEnv( wxT( "KISYSMOD" ), bestPath );
+    }
+
     /* Load file specified in the command line. */
     if( fn.IsOk() )
     {
@@ -210,13 +237,16 @@ Changing extension to .%s." ), GetChars( fn.GetFullPath() ),
             // Try to find a legacy file with the same name:
             wxFileName fn_legacy = fn;
             fn_legacy.SetExt( LegacyPcbFileExtension );
+
             if( fn_legacy.FileExists() )
             {
-                msg.Printf( _( "File <%s> does not exist.\n\
-However a legacy file <%s> exists.\nDo you want to load it?\n\
-It will be saved under the new file format" ),
+                msg.Printf( _( "File <%s> does not exist.\n"
+                               "However a legacy file <%s> exists.\n"
+                               "Do you want to load it?\n"
+                               "It will be saved under the new file format." ),
                             GetChars( fn.GetFullPath() ),
                             GetChars( fn_legacy.GetFullPath() ) );
+
                 if( IsOK( frame, msg ) )
                 {
                     file_exists = true;
@@ -225,7 +255,7 @@ It will be saved under the new file format" ),
                     filename.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
                     frame->GetBoard()->SetFileName( filename );
                     frame->UpdateTitle();
-                    frame->OnModify();  // Ready to save theboard inder the new fmt
+                    frame->OnModify();  // Ready to save the board under the new format
                 }
             }
         }
@@ -234,6 +264,7 @@ It will be saved under the new file format" ),
         {   // File does not exists: prepare an empty board
             if( ! fn.GetPath().IsEmpty() )
                 wxSetWorkingDirectory( fn.GetPath() );
+
             frame->GetBoard()->SetFileName( fn.GetFullPath( wxPATH_UNIX ) );
             frame->UpdateTitle();
             frame->UpdateFileHistory( frame->GetBoard()->GetFileName() );
@@ -267,12 +298,14 @@ It will be saved under the new file format" ),
     return true;
 }
 
+
 #if 0
 // for some reason KiCad classes do not implement OnExit
 // if I add it in the declaration, I need to fix it in every application
 // so for now make a note TODO TODO
 // we need to clean up python when the application exits
-int EDA_APP::OnExit() {
+int EDA_APP::OnExit()
+{
     // Restore the thread state and tell Python to cleanup after itself.
     // wxPython will do its own cleanup as part of that process.  This is done
     // in OnExit instead of ~MyApp because OnExit is only called if OnInit is
@@ -284,5 +317,3 @@ int EDA_APP::OnExit() {
 }
 
 #endif
-
-

@@ -27,21 +27,19 @@ set(CVPCB_DIALOGS
 
 set(CVPCB_SRCS
     ../common/base_units.cpp
+    ../pcbnew/board_items_to_polygon_shape_transform.cpp
     ../pcbnew/class_drc_item.cpp
     autosel.cpp
     cfg.cpp
     class_components_listbox.cpp
     class_DisplayFootprintsFrame.cpp
     class_footprints_listbox.cpp
+    class_library_listbox.cpp
     cvframe.cpp
     cvpcb.cpp
     listboxes.cpp
-    loadcmp.cpp
     menubar.cpp
-    readschematicnetlist.cpp
-    read_write_cmpfile.cpp
     readwrite_dlgs.cpp
-    setvisu.cpp
     tool_cvpcb.cpp
     )
 

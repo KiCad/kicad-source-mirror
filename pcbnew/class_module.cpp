@@ -495,7 +495,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Stat" ), msg, MAGENTA ) );
 
-    msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
+    msg.Printf( wxT( "%.1f" ), m_Orient / 10.0 );
     aList.push_back( MSG_PANEL_ITEM( _( "Orient" ), msg, BROWN ) );
 
     // Controls on right side of the dialog
@@ -1000,51 +1000,3 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
-
-#if defined(DEBUG)
-
-void MODULE::Show( int nestLevel, std::ostream& os ) const
-{
-    // for now, make it look like XML, expand on this later.
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " ref=\"" << m_Reference->GetText().mb_str() << '"' <<
-    " value=\"" << m_Value->GetText().mb_str() << '"' <<
-    " layer=\"" << GetLayerName().mb_str() << '"' <<
-    ">\n";
-
-    NestedSpace( nestLevel + 1, os ) << "<boundingBox" << m_BoundaryBox.GetPosition()
-                                     << m_BoundaryBox.GetSize() << "/>\n";
-
-    NestedSpace( nestLevel + 1, os ) << "<orientation tenths=\"" << m_Orient
-                                     << "\"/>\n";
-
-    EDA_ITEM* p;
-
-    NestedSpace( nestLevel + 1, os ) << "<mpads>\n";
-    p = m_Pads;
-
-    for( ; p; p = p->Next() )
-        p->Show( nestLevel + 2, os );
-
-    NestedSpace( nestLevel + 1, os ) << "</mpads>\n";
-
-    NestedSpace( nestLevel + 1, os ) << "<mdrawings>\n";
-    p = m_Drawings;
-
-    for( ; p; p = p->Next() )
-        p->Show( nestLevel + 2, os );
-
-    NestedSpace( nestLevel + 1, os ) << "</mdrawings>\n";
-
-    p = m_Son;
-
-    for( ; p;  p = p->Next() )
-    {
-        p->Show( nestLevel + 1, os );
-    }
-
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str()
-                                 << ">\n";
-}
-
-#endif

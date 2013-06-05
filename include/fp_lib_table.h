@@ -105,7 +105,7 @@ public:
         }
 
         ROW( const wxString& aNick, const wxString& aURI, const wxString& aType,
-                const wxString& aOptions, const wxString& aDescr = wxEmptyString ) :
+             const wxString& aOptions, const wxString& aDescr = wxEmptyString ) :
             nickName( aNick ),
             uri( aURI ),
             options( aOptions ),
@@ -355,6 +355,11 @@ public:
      */
     const ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
 
+    /**
+     * Function IsEmpty
+     * @return true if the footprint library table is empty.
+     */
+    bool IsEmpty() const;
 
     /**
      * Function ExpandEnvSubsitutions
@@ -363,7 +368,31 @@ public:
      * This enables (fp_lib_table)s to have platform dependent environment
      * variables in them, allowing for a uniform table across platforms.
      */
-    static const wxString ExpandSubtitutions( const wxString aString );
+    static const wxString ExpandSubstitutions( const wxString aString );
+
+    /**
+     * Function LoadGlobalTable
+     * loads the global footprint library table into \a aTable.
+     *
+     * This probably should be move into the application object when KiCad is changed
+     * to a single process application.  This is the least painful solution for the
+     * time being.
+     *
+     * @param aTable the #FP_LIB_TABLE object to load.
+     */
+    static void LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR );
+
+    /**
+     * Function GetGlobalTableFileName
+     * @return the platform specific global footprint library path and file name.
+     */
+    static wxString GetGlobalTableFileName();
+
+    /**
+     * Function GetFootprintTableFileName
+     * @return the footprint library file name.
+     */
+    static wxString GetFileName();
 
 protected:
 

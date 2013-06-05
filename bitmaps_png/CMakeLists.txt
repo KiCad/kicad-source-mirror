@@ -359,6 +359,7 @@ set( BMAPS_MID
     module_full_list
     module_options
     module_pin_filtered_list
+    module_library_list
     module_ratsnest
     module
     modview_icon
@@ -752,4 +753,3 @@ endforeach()
 
 #add_library( bitmaps SHARED ${CPP_LIST} )
 add_library( bitmaps STATIC ${CPP_LIST} )
-

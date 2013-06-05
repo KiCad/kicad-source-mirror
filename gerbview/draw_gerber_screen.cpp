@@ -106,7 +106,7 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( IsElementVisible( DCODES_VISIBLE ) )
         DrawItemsDCodeID( DC, GR_COPY );
 
-    TraceWorkSheet( DC, screen, 0, IU_PER_MILS, wxEmptyString );
+    DrawWorkSheet( DC, screen, 0, IU_PER_MILS, wxEmptyString );
 
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
@@ -160,7 +160,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     if( (aDrawMode == GR_COPY) || ( aDrawMode == GR_OR ) )
         useBufferBitmap = true;
 #endif
-    
+
     // these parameters are saved here, because they are modified
     // and restored later
     EDA_RECT drawBox = *aPanel->GetClipBox();
@@ -353,7 +353,8 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, GR_DRAWMODE aDrawMode )
 {
     wxPoint     pos;
-    int         width, orient;
+    int         width;
+    double      orient;
     wxString    Line;
 
     GRSetDrawMode( aDC, aDrawMode );

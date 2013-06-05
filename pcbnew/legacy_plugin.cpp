@@ -2346,7 +2346,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "$POLYSCORNERS" ) )
         {
             // Read the PolysList (polygons used for fill areas in the zone)
-            std::vector<CPolyPt> polysList;
+            CPOLYGONS_LIST polysList;
 
             while( ( line = READLINE( m_reader ) ) != NULL )
             {
@@ -2360,7 +2360,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 bool    end_contour = intParse( data, &data );  // end_countour was a bool when file saved, so '0' or '1' here
                 int     cornerUtilityFlg  = intParse( data );
 
-               polysList.push_back( CPolyPt( x, y, end_contour, cornerUtilityFlg ) );
+               polysList.Append( CPolyPt( x, y, end_contour, cornerUtilityFlg ) );
             }
             zc->AddFilledPolysList( polysList );
         }
@@ -3690,30 +3690,28 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
                     me->GetCornerSmoothingType(),
                     fmtBIU( me->GetCornerRadius() ).c_str() );
 
-    typedef std::vector< CPolyPt >    CPOLY_PTS;
-
     // Save the corner list
-    const CPOLY_PTS& cv = me->Outline()->m_CornersList;
+    const CPOLYGONS_LIST& cv = me->Outline()->m_CornersList;
 
-    for( CPOLY_PTS::const_iterator it = cv.begin();  it != cv.end();  ++it )
+    for( unsigned it = 0; it < cv.GetCornersCount(); ++it )
     {
         fprintf( m_fp,  "ZCorner %s %d\n",
-                        fmtBIUPair( it->x, it->y ).c_str(),
-                        it->end_contour );
+                        fmtBIUPair( cv.GetX( it ), cv.GetY( it ) ).c_str(),
+                        cv.IsEndContour( it ) );
     }
 
     // Save the PolysList
-    const CPOLY_PTS& fv = me->GetFilledPolysList();
-    if( fv.size() )
+    const CPOLYGONS_LIST& fv = me->GetFilledPolysList();
+    if( fv.GetCornersCount() )
     {
         fprintf( m_fp, "$POLYSCORNERS\n" );
 
-        for( CPOLY_PTS::const_iterator it = fv.begin(); it != fv.end(); ++it )
+        for( unsigned it = 0; it < fv.GetCornersCount(); ++it )
         {
             fprintf( m_fp, "%s %d %d\n",
-                           fmtBIUPair( it->x, it->y ).c_str(),
-                           it->end_contour,
-                           it->m_utility );
+                           fmtBIUPair( fv.GetX( it ), fv.GetY( it ) ).c_str(),
+                           fv.IsEndContour( it ),
+                           fv.GetUtility( it )  );
         }
 
         fprintf( m_fp, "$endPOLYSCORNERS\n" );

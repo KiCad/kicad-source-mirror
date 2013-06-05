@@ -43,6 +43,7 @@
 #include <general.h>
 #endif
 
+#include <worksheet.h>
 #include <dialog_page_settings.h>
 
 
@@ -181,6 +182,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     }
 
     m_TextRevision->SetValue( m_tb.GetRevision() );
+    m_TextDate->SetValue( m_tb.GetDate() );
     m_TextTitle->SetValue( m_tb.GetTitle() );
     m_TextCompany->SetValue( m_tb.GetCompany() );
     m_TextComment1->SetValue( m_tb.GetComment1() );
@@ -190,6 +192,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
 #ifndef EESCHEMA
     m_RevisionExport->Show( false );
+    m_DateExport->Show( false );
     m_TitleExport->Show( false );
     m_CompanyExport->Show( false );
     m_Comment1Export->Show( false );
@@ -309,6 +312,17 @@ void DIALOG_PAGES_SETTINGS::OnRevisionTextUpdated( wxCommandEvent& event )
 }
 
 
+void DIALOG_PAGES_SETTINGS::OnDateTextUpdated( wxCommandEvent& event )
+{
+    if( m_initialized && m_TextDate->IsModified() )
+    {
+        GetPageLayoutInfoFromDialog();
+        m_tb.SetDate( m_TextDate->GetValue() );
+        UpdatePageLayoutExample();
+    }
+}
+
+
 void DIALOG_PAGES_SETTINGS::OnTitleTextUpdated( wxCommandEvent& event )
 {
     if( m_initialized && m_TextTitle->IsModified() )
@@ -374,6 +388,10 @@ void DIALOG_PAGES_SETTINGS::OnComment4TextUpdated( wxCommandEvent& event )
     }
 }
 
+void DIALOG_PAGES_SETTINGS::OnDateApplyClick( wxCommandEvent& event )
+{
+    m_TextDate->SetValue( FormatDateLong( m_PickDate->GetValue() ) );
+}
 
 void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
 {
@@ -470,6 +488,7 @@ limits\n%.1f - %.1f %s!\nSelect another custom paper size?" ),
     m_Parent->SetPageSettings( m_pageInfo );
 
     m_tb.SetRevision( m_TextRevision->GetValue() );
+    m_tb.SetDate(     m_TextDate->GetValue() );
     m_tb.SetCompany(  m_TextCompany->GetValue() );
     m_tb.SetTitle(    m_TextTitle->GetValue() );
     m_tb.SetComment1( m_TextComment1->GetValue() );
@@ -496,6 +515,9 @@ limits\n%.1f - %.1f %s!\nSelect another custom paper size?" ),
 
         if( m_RevisionExport->IsChecked() )
             tb2.SetRevision( m_tb.GetRevision() );
+
+        if( m_DateExport->IsChecked() )
+            tb2.SetDate( m_tb.GetDate() );
 
         if( m_TitleExport->IsChecked() )
             tb2.SetTitle( m_tb.GetTitle() );
@@ -577,10 +599,6 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 
     if( m_page_bitmap->IsOk() )
     {
-        // Save current clip box and temporary expand it.
-        EDA_RECT save_clip_box = *m_Parent->GetCanvas()->GetClipBox();
-        m_Parent->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ),
-                                                     wxSize( INT_MAX / 2, INT_MAX / 2 ) ) );
         // Calculate layout preview scale.
         int appScale = m_Screen->MilsToIuScalar();
 
@@ -588,7 +606,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         double scaleH = (double) lyHeight / clamped_layout_size.y / appScale;
 
         // Prepare DC.
-        wxSize example_size( lyWidth, lyHeight );
+        wxSize example_size( lyWidth + 1, lyHeight + 1 );
         wxMemoryDC memDC;
         memDC.SelectObject( *m_page_bitmap );
         memDC.SetClippingRegion( wxPoint( 0, 0 ), example_size );
@@ -598,34 +616,32 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         // Get logical page size and margins.
         PAGE_INFO pageDUMMY;
 
-        pageDUMMY.SetWidthMils( clamped_layout_size.x );
-        pageDUMMY.SetHeightMils( clamped_layout_size.y );
-
-        wxSize dummySize = pageDUMMY.GetSizeMils();
-        wxPoint pointLeftTop( pageDUMMY.GetLeftMarginMils(), pageDUMMY.GetTopMarginMils() );
-        wxPoint pointRightBottom( pageDUMMY.GetRightMarginMils(), pageDUMMY.GetBottomMarginMils() );
-
         // Get page type
         int idx = m_paperSizeComboBox->GetSelection();
 
         if( idx < 0 )
             idx = 0;
 
-        wxString paperType = m_pageFmt[idx].Left( m_pageFmt[idx].Index( wxT( " " ) ) );
+        wxString pageFmtName = m_pageFmt[idx].BeforeFirst( ' ' );
+        bool portrait = clamped_layout_size.x < clamped_layout_size.y;
+        pageDUMMY.SetType( pageFmtName, portrait );
+        if( m_customFmt )
+        {
+            pageDUMMY.SetWidthMils( clamped_layout_size.x );
+            pageDUMMY.SetHeightMils( clamped_layout_size.y );
+        }
 
         // Draw layout preview.
         wxString emptyString;
-        GRResetPenAndBrush( ( wxDC* ) &memDC );
+        GRResetPenAndBrush( &memDC );
 
-        m_Parent->TraceWorkSheet( (wxDC*) &memDC, dummySize, pointLeftTop, pointRightBottom,
-                                  paperType, emptyString, m_tb, m_Screen->m_NumberOfScreens,
-                                  m_Screen->m_ScreenNumber, 1, appScale, LIGHTGRAY, RED );
+        DrawPageLayout( &memDC, NULL, pageDUMMY,
+                        emptyString, emptyString,
+                        m_tb, m_Screen->m_NumberOfScreens,
+                        m_Screen->m_ScreenNumber, 1, appScale, DARKGRAY, RED );
 
         memDC.SelectObject( wxNullBitmap );
         m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );
-
-        // Restore current clip box.
-        m_Parent->GetCanvas()->SetClipBox( save_clip_box );
 
         // Refresh the dialog.
         Layout();
@@ -672,7 +688,6 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
             &PAGE_INFO::C,
             &PAGE_INFO::D,
             &PAGE_INFO::E,
-            //&PAGE_INFO::GERBER,
             &PAGE_INFO::USLetter,
             &PAGE_INFO::USLegal,
             &PAGE_INFO::USLedger,

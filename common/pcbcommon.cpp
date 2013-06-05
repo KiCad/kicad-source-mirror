@@ -55,6 +55,7 @@ LAYER_MSK g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
 
 DISPLAY_OPTIONS DisplayOpt;      // Display options for board items
 
+// This will be always be 450 or 900 (by UI design) at the moment
 int    g_RotationAngle;
 
 int    g_AnchorColor        = BLUE;

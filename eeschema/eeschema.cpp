@@ -38,6 +38,8 @@
 #include <eda_text.h>
 
 #include <general.h>
+#include <class_libentry.h>
+#include <sch_junction.h>
 #include <protos.h>
 #include <hotkeys.h>
 #include <dialogs/dialog_color_config.h>
@@ -111,15 +113,30 @@ bool EDA_APP::OnInit()
     }
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
-      {
-          if( !IsOK( NULL, _( "Eeschema is already running, Continue?" ) ) )
-              return false;
-      }
+    {
+        if( !IsOK( NULL, _( "Eeschema is already running, Continue?" ) ) )
+            return false;
+    }
 
     // Give a default colour for all layers
-    // (actual color will beinitialized by config)
+    // (actual color will be initialized by config)
     for( int ii = 0; ii < NB_SCH_LAYERS; ii++ )
         SetLayerColor( DARKGRAY, ii );
+
+#ifdef KICAD_GOST
+    // These options will be user configurable in the future,
+    // and not specific to GOST users
+    // the separator char between the subpart id and the reference
+    // 0 (no separator) or '.' or some other character
+    LIB_COMPONENT::SetSubpartIdSeparator( '.' );
+    // the ascii char value to calculate the subpart symbol id from the part number:
+    // 'A' or '1' usually. (to print U1.A or U1.1)
+    // if this is a digit, a number is used as id symbol
+    LIB_COMPONENT::SetSubpartFirstId( '1' );
+
+    // Default diameter of the junction symbol
+    SCH_JUNCTION::SetSymbolSize( 32 );
+#endif
 
     // read current setup and reopen last directory if no filename to open in
     // command line

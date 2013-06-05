@@ -37,6 +37,7 @@
 
 #include <pcbnew.h>
 #include <protos.h>
+#include <macros.h>
 
 #include <class_board.h>
 #include <class_drawsegment.h>

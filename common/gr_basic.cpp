@@ -746,7 +746,7 @@ void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
         }
         else
         {
-            int delta_angle = ArcTangente( dy, dx );
+            double delta_angle = ArcTangente( dy, dx );
             dwx = 0;
             dwy = width;
             RotatePoint( &dwx, &dwy, -delta_angle );
@@ -1075,7 +1075,7 @@ void GRArc1( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
         y0 = ClipBox->GetY();
         xm = ClipBox->GetRight();
         ym = ClipBox->GetBottom();
-        r  = (int) hypot( x1 - xc, y1 - yc );
+        r  = KiROUND( Distance( x1, y1, xc, yc ) );
         if( xc < ( x0 - r ) )
             return;
         if( yc < ( y0 - r ) )
@@ -1107,8 +1107,8 @@ void GRFilledArc( EDA_RECT* ClipBox,
                   wxDC*     DC,
                   int       x,
                   int       y,
-                  int       StAngle,
-                  int       EndAngle,
+                  double    StAngle,
+                  double    EndAngle,
                   int       r,
                   int       width,
                   EDA_COLOR_T       Color,
@@ -1153,7 +1153,8 @@ void GRFilledArc( EDA_RECT* ClipBox,
 
 
 void GRFilledArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y,
-                  int StAngle, int EndAngle, int r, EDA_COLOR_T Color, EDA_COLOR_T BgColor )
+                  double StAngle, double EndAngle, int r, 
+                  EDA_COLOR_T Color, EDA_COLOR_T BgColor )
 {
     GRFilledArc( ClipBox, DC, x, y, StAngle, EndAngle, r, 0, Color, BgColor );
 }
@@ -1162,8 +1163,8 @@ void GRFilledArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y,
 /*
  * Draw an arc in drawing space.
  */
-void GRArc( EDA_RECT* ClipBox, wxDC* DC, int xc, int yc, int StAngle,
-            int EndAngle, int r, EDA_COLOR_T Color )
+void GRArc( EDA_RECT* ClipBox, wxDC* DC, int xc, int yc, double StAngle,
+            double EndAngle, int r, EDA_COLOR_T Color )
 {
     int x1, y1, x2, y2;
 
@@ -1210,8 +1211,8 @@ void GRArc( EDA_RECT* ClipBox,
             wxDC*     DC,
             int       x,
             int       y,
-            int       StAngle,
-            int       EndAngle,
+            double    StAngle,
+            double    EndAngle,
             int       r,
             int       width,
             EDA_COLOR_T       Color )

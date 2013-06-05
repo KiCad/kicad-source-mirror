@@ -40,6 +40,7 @@
 
 #include <pcbnew_id.h>
 #include <class_track.h>
+#include <macros.h>
 
 #include <dialog_design_rules.h>
 #include <wx/generic/gridctrl.h>

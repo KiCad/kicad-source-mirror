@@ -292,7 +292,7 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
     if( item->IsNew() )
     {
-        SAFE_DELETE( item );
+        delete item;
     }
     else if( item->IsMoving() || item->IsResized() )
     {

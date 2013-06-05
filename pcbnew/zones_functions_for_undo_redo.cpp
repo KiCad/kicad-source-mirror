@@ -115,7 +115,8 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     wxASSERT( m_Poly );                                      // m_Poly == NULL Should never happen
     wxASSERT( aZoneToCompare.Outline() );
 
-    if( Outline()->m_CornersList != aZoneToCompare.Outline()->m_CornersList )    // Compare vector
+    if( Outline()->m_CornersList.GetList() !=
+        aZoneToCompare.Outline()->m_CornersList.GetList() )    // Compare vector
         return false;
 
     return true;

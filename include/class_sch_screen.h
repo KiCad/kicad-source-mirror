@@ -184,6 +184,9 @@ public:
     /**
      * Function Draw
      * draws all the items in the screen to \a aCanvas.
+     * note: this function is useful only for schematic.
+     * library editor and library viewer do not use a draw list, and therefore
+     * draws nothing
      * @param aCanvas The canvas item to draw on.
      * @param aDC The device context to draw on.
      * @param aDrawMode The drawing mode.
@@ -195,6 +198,9 @@ public:
     /**
      * Function Plot
      * plots all the schematic objects to \a aPlotter.
+     * note: this function is useful only for schematic.
+     * library editor and library viewer do not use a draw list, and therefore
+     * plots nothing
      *
      * @param aPlotter The plotter object to plot to.
      */
@@ -539,14 +545,6 @@ public:
      * @return The number of duplicate time stamps replaced.
      */
     int ReplaceDuplicateTimeStamps();
-
-    /**
-     * Function SetDate
-     * sets the date string for every screen to \a aDate.
-     * @see GetDate()
-     * @param aDate The date string to set for each screen.
-     */
-    void SetDate( const wxString& aDate = GenDate() );
 
     /**
      * Function DeleteAllMarkers

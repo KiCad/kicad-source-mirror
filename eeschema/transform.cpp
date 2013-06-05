@@ -1,6 +1,8 @@
 
 #include <macros.h>
+#include <trigo.h>
 #include <transform.h>
+#include <common.h>
 
 
 TRANSFORM& TRANSFORM::operator=( const TRANSFORM& aTransform )
@@ -72,26 +74,26 @@ bool TRANSFORM::MapAngles( int* aAngle1, int* aAngle2 ) const
         *aAngle2 += 1;
     }
 
-    x = cos( *aAngle1 * M_PI / 1800.0 );
-    y = sin( *aAngle1 * M_PI / 1800.0 );
+    x = cos( DECIDEG2RAD( *aAngle1 ) );
+    y = sin( DECIDEG2RAD( *aAngle1 ) );
     t = x * x1 + y * y1;
     y = x * x2 + y * y2;
     x = t;
-    *aAngle1 = (int) ( atan2( y, x ) * 1800.0 / M_PI + 0.5 );
+    *aAngle1 = KiROUND( RAD2DECIDEG( atan2( y, x ) ) );
 
-    x = cos( *aAngle2 * M_PI / 1800.0 );
-    y = sin( *aAngle2 * M_PI / 1800.0 );
+    x = cos( DECIDEG2RAD( *aAngle2 ) );
+    y = sin( DECIDEG2RAD( *aAngle2 ) );
     t = x * x1 + y * y1;
     y = x * x2 + y * y2;
     x = t;
-    *aAngle2 = (int) ( atan2( y, x ) * 1800.0 / M_PI + 0.5 );
+    *aAngle2 = KiROUND( RAD2DECIDEG( atan2( y, x ) ) );
 
     NORMALIZE_ANGLE_POS( *aAngle1 );
     NORMALIZE_ANGLE_POS( *aAngle2 );
     if( *aAngle2 < *aAngle1 )
         *aAngle2 += 3600;
 
-    if( *aAngle2 - *aAngle1 > 1800 ) /* Need to swap the two angles. */
+    if( *aAngle2 - *aAngle1 > 1800 ) // Need to swap the two angles
     {
         Angle   = (*aAngle1);
         *aAngle1 = (*aAngle2);

@@ -23,7 +23,10 @@
 
 
 # Function make_lexer
-# is a standard way to invoke TokenList2DsnLexer.cmake
+# is a standard way to invoke TokenList2DsnLexer.cmake.
+# Extra arguments are treated as source files which depend on the generated
+# outHeaderFile
+
 function( make_lexer inputFile outHeaderFile outCppFile enum )
     add_custom_command(
         OUTPUT  ${outHeaderFile}
@@ -41,5 +44,14 @@ function( make_lexer inputFile outHeaderFile outCppFile enum )
            ${outCppFile} from
            ${inputFile}"
         )
+
+    # extra_args, if any, are treated as source files (typically headers) which
+    # are known to depend on the generated outHeader.
+    foreach( extra_arg ${ARGN} )
+        set_source_files_properties( ${extra_arg}
+            PROPERTIES OBJECT_DEPENDS ${outHeaderFile}
+            )
+    endforeach()
+
 endfunction()
 

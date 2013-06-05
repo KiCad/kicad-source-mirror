@@ -348,7 +348,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
             // We have a good candidate: calculate the actual distance
             // between ends, which should be <= dist max.
             wxPoint delta = tracks_candidates[ii]->GetPoint() - position;
-            int dist = (int) hypot( (double) delta.x, (double) delta.y );
+            int dist = KiROUND( EuclideanNorm( delta ) );
 
             if( dist > dist_max )
                 continue;

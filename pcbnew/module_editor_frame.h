@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file module_editor_frame.h
  * @brief Definition of class FOOTPRINT_EDIT_FRAME.
@@ -9,10 +32,14 @@
 #include <wxBasePcbFrame.h>
 #include <io_mgr.h>
 
+
+class FP_LIB_TABLE;
+
+
 class FOOTPRINT_EDIT_FRAME : public PCB_BASE_FRAME
 {
 public:
-    FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent );
+    FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent, FP_LIB_TABLE* aTable );
 
     ~FOOTPRINT_EDIT_FRAME();
 
@@ -87,7 +114,7 @@ public:
      * Function OnSaveLibraryAs
      * saves the current library to a new name and/or library type.
      *
-     * @note Saving as a new library type requires the plug-in to support saving libraris.
+     * @note Saving as a new library type requires the plug-in to support saving libraries
      * @see PLUGIN::FootprintSave and PLUGIN::FootprintLibCreate
      */
     void OnSaveLibraryAs( wxCommandEvent& aEvent );
@@ -285,12 +312,12 @@ public:
     bool Load_Module_From_BOARD( MODULE* Module );
 
     /**
-     * Function Select_1_Module_From_BOARD
+     * Function SelectFootprint
      * Display the list of modules currently existing on the BOARD
      * @return a pointer to a module if this module is selected or NULL otherwise
      * @param aPcb = the board from modules can be loaded
      */
-    MODULE* Select_1_Module_From_BOARD( BOARD* aPcb );
+    MODULE* SelectFootprint( BOARD* aPcb );
 
     // functions to edit footprint edges
 
@@ -360,7 +387,7 @@ public:
 
     /**
      * Function DlgGlobalChange_PadSettings
-     * changes pad caracteristics for the given footprint
+     * changes pad characteristics for the given footprint
      * or all footprints which look like the given footprint.
      * Options are set by the opened dialog.
      * @param aPad is the pattern. The given footprint is the parent of this pad
@@ -380,7 +407,7 @@ public:
     DECLARE_EVENT_TABLE()
 
 protected:
-    static BOARD*   s_Pcb;      ///< retain board accross invocations of module editor
+    static BOARD*   s_Pcb;      ///< retain board across invocations of module editor
 
     /**
      * Function GetComponentFromUndoList

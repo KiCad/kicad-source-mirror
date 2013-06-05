@@ -5,19 +5,13 @@
 #include <cmath>
 #include <float.h>
 #include <limits.h>
-
+#include <common.h>
 #include <fctsys.h>
 
 #include <PolyLine.h>
 #include <math_for_graphics.h>
 
 static bool InRange( double x, double xi, double xf );
-
-double Distance( double x1, double y1, double x2, double y2 )
-{
-    return hypot( x1 - x2, y1 - y2 );
-}
-
 
 /* Function FindSegmentIntersections
  * find intersections between line segment (xi,yi) to (xf,yf)
@@ -203,10 +197,10 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
             if( InRange( y1, y1i, y1f ) && InRange( x1, x2i, x2f ) && InRange( y1, y2i, y2f ) )
             {
                 if( x )
-                    *x = (int) x1;
+                    *x = KiROUND( x1 ); 
 
                 if( y )
-                    *y = (int) y1;
+                    *y = KiROUND( y1 );
 
                 if( d )
                     *d = 0.0;
@@ -231,10 +225,10 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
             if( InRange( x1, x1i, x1f ) && InRange( x1, x2i, x2f ) && InRange( y1, y2i, y2f ) )
             {
                 if( x )
-                    *x = (int) x1;
+                    *x = KiROUND( x1 );
 
                 if( y )
-                    *y = (int) y1;
+                    *y = KiROUND( y1 );
 
                 if( d )
                     *d = 0.0;
@@ -259,10 +253,10 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
             if( InRange( x1, x1i, x1f ) &&  InRange( y1, y1i, y1f ) && InRange( y1, y2i, y2f ) )
             {
                 if( x )
-                    *x = (int) x1;
+                    *x = KiROUND( x1 );
 
                 if( y )
-                    *y = (int) y1;
+                    *y = KiROUND( y1 );
 
                 if( d )
                     *d = 0.0;
@@ -287,10 +281,10 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
             if( InRange( x1, x1i, x1f ) && InRange( y1, y1i, y1f ) )
             {
                 if( x )
-                    *x = (int) x1;
+                    *x = KiROUND( x1 );
 
                 if( y )
-                    *y = (int) y1;
+                    *y = KiROUND( y1 );
 
                 if( d )
                     *d = 0.0;
@@ -318,10 +312,10 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
                 if( InRange( x1, x1i, x1f ) && InRange( y1, y1i, y1f ) )
                 {
                     if( x )
-                        *x = (int) x1;
+                        *x = KiROUND( x1 );
 
                     if( y )
-                        *y = (int) y1;
+                        *y = KiROUND( y1 );
 
                     if( d )
                         *d = 0.0;
@@ -365,10 +359,10 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
     }
 
     if( x )
-        *x = (int) xx;
+        *x = KiROUND( xx );
 
     if( y )
-        *y = (int) yy;
+        *y = KiROUND( yy );
 
     if( d )
         *d = dist;
@@ -405,7 +399,7 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int w1,
     double  dist;
     TestForIntersectionOfStraightLineSegments( x1i, y1i, x1f, y1f,
                                                x2i, y2i, x2f, y2f, &xx, &yy, &dist );
-    int d = (int) dist - ( (w1 + w2) / 2 );
+    int d = KiROUND( dist - (w1 + w2) / 2 );
     if( d < 0 )
         d = 0;
 

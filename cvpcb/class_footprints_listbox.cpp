@@ -30,6 +30,8 @@
 #include <fctsys.h>
 #include <wxstruct.h>
 #include <macros.h>
+#include <appl_wxstruct.h>
+#include <wildcards_and_files_ext.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
@@ -233,7 +235,49 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredByPinCount( COMPONENT*      aCompon
     Refresh();
 }
 
+void FOOTPRINTS_LISTBOX::SetFootprintFilteredByLibraryList( FOOTPRINT_LIST& list,
+                                                            wxString SelectedLibrary ) {
+    wxString msg;
+    int      oldSelection = GetSelection();
+    bool     hasItem = false;
 
+    wxFileName filename = SelectedLibrary;
+    filename.SetExt( LegacyFootprintLibPathExtension );
+    wxString FullLibraryName = wxGetApp().FindLibraryPath( filename );
+
+    m_FilteredFootprintList.Clear();
+
+    for( unsigned ii = 0; ii < list.GetCount(); ii++ )
+    {
+        FOOTPRINT_INFO& footprint = list.GetItem(ii);
+        wxString LibName = footprint.m_libPath;
+        if( LibName.Matches( FullLibraryName ) )
+        {
+            msg.Printf( wxT( "%3d %s" ), m_FilteredFootprintList.GetCount() + 1,
+                     footprint.m_Module.GetData() );
+            m_FilteredFootprintList.Add( msg );
+            hasItem = true;
+        }
+    }
+
+    if( hasItem )
+        SetActiveFootprintList( false );
+    else
+        SetActiveFootprintList( true );
+
+    if( ( GetCount() == 0 ) || ( oldSelection >= GetCount() ) )
+        SetSelection( 0, true );
+
+    Refresh();
+}
+
+/** Set the footprint list. We can have 2 footprint list:
+ *  The full footprint list
+ *  The filtered footprint list (if the current selected component has a
+ * filter for footprints)
+ *  @param FullList true = full footprint list, false = filtered footprint list
+ *  @param Redraw = true to redraw the window
+ */
 void FOOTPRINTS_LISTBOX::SetActiveFootprintList( bool FullList, bool Redraw )
 {
     bool old_selection = m_UseFootprintFullList;

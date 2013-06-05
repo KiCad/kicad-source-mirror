@@ -66,7 +66,7 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
     {
         for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
             if( m_ZoneDescriptorList[ia]->GetLayer() == layer )
-                m_ZoneDescriptorList[ia]->BuildFilledPolysListData( this );
+                m_ZoneDescriptorList[ia]->BuildFilledSolidAreasPolygons( this );
     }
 
     // Test for bad areas: all zones must have more than 2 corners:
@@ -257,7 +257,7 @@ bool BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area
 
     // If a contour is inside an other contour, no segments intersects, but the zones
     // can be combined if a corner is inside an outline (only one corner is enought)
-    for( int ic2 = 0; ic2 < poly2->GetNumCorners(); ic2++ )
+    for( int ic2 = 0; ic2 < poly2->GetCornersCount(); ic2++ )
     {
         int x = poly2->GetX( ic2 );
         int y = poly2->GetY( ic2 );
@@ -268,7 +268,7 @@ bool BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area
         }
     }
 
-    for( int ic1 = 0; ic1 < poly1->GetNumCorners(); ic1++ )
+    for( int ic1 = 0; ic1 < poly1->GetCornersCount(); ic1++ )
     {
         int x = poly1->GetX( ic1 );
         int y = poly1->GetY( ic1 );
@@ -295,8 +295,8 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
     // polygons intersect, combine them
     KI_POLYGON_WITH_HOLES areaRefPoly;
     KI_POLYGON_WITH_HOLES areaToMergePoly;
-    CopyPolysListToKiPolygonWithHole( area_ref->Outline()->m_CornersList, areaRefPoly );
-    CopyPolysListToKiPolygonWithHole( area_to_combine->Outline()->m_CornersList, areaToMergePoly );
+    area_ref->Outline()->m_CornersList.ExportTo( areaRefPoly );
+    area_to_combine->Outline()->m_CornersList.ExportTo(  areaToMergePoly );
 
     KI_POLYGON_WITH_HOLES_SET mergedOutlines;
     mergedOutlines.push_back( areaRefPoly );
@@ -414,7 +414,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                 zone2zoneClearance = 1;
 
             // test for some corners of Area_Ref inside area_to_test
-            for( int ic = 0; ic < refSmoothedPoly->GetNumCorners(); ic++ )
+            for( int ic = 0; ic < refSmoothedPoly->GetCornersCount(); ic++ )
             {
                 int x = refSmoothedPoly->GetX( ic );
                 int y = refSmoothedPoly->GetY( ic );
@@ -438,7 +438,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
             }
 
             // test for some corners of area_to_test inside Area_Ref
-            for( int ic2 = 0; ic2 < testSmoothedPoly->GetNumCorners(); ic2++ )
+            for( int ic2 = 0; ic2 < testSmoothedPoly->GetCornersCount(); ic2++ )
             {
                 int x = testSmoothedPoly->GetX( ic2 );
                 int y = testSmoothedPoly->GetY( ic2 );

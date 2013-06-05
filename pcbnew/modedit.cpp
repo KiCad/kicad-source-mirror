@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file modedit.cpp
  */
@@ -232,101 +255,100 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_OPEN_MODULE_VIEWER:
+    {
+        FOOTPRINT_VIEWER_FRAME * viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
+
+        if( viewer == NULL )
         {
-            FOOTPRINT_VIEWER_FRAME * viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
-            if( viewer == NULL )
-            {
-                viewer = new FOOTPRINT_VIEWER_FRAME( this, NULL );
-                viewer->Show( true );
-                viewer->Zoom_Automatique( false );
-            }
-            else
-            {
-                if( viewer->IsIconized() )
-                     viewer->Iconize( false );
-
-                viewer->Raise();
-
-                // Raising the window does not set the focus on Linux.  This should work on
-                // any platform.
-                if( wxWindow::FindFocus() != viewer )
-                    viewer->SetFocus();
-            }
+            viewer = new FOOTPRINT_VIEWER_FRAME( this, m_footprintLibTable, NULL );
+            viewer->Show( true );
+            viewer->Zoom_Automatique( false );
         }
-        break;
+        else
+        {
+            if( viewer->IsIconized() )
+                viewer->Iconize( false );
+
+            viewer->Raise();
+
+            // Raising the window does not set the focus on Linux.  This should work on
+            // any platform.
+            if( wxWindow::FindFocus() != viewer )
+                viewer->SetFocus();
+        }
+    }
+    break;
 
     case ID_MODEDIT_DELETE_PART:
         DeleteModuleFromCurrentLibrary();
         break;
 
     case ID_MODEDIT_NEW_MODULE:
+    {
+        Clear_Pcb( true );
+        GetScreen()->ClearUndoRedoList();
+        SetCurItem( NULL );
+        GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
+
+        MODULE* module = Create_1_Module( wxEmptyString );
+
+        if( module )        // i.e. if create module command not aborted
         {
-            Clear_Pcb( true );
-            GetScreen()->ClearUndoRedoList();
-            SetCurItem( NULL );
-            GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
+            // Initialize data relative to nets and netclasses (for a new
+            // module the defaults are used)
+            // This is mandatory to handle and draw pads
+            GetBoard()->BuildListOfNets();
+            redraw = true;
+            module->SetPosition( wxPoint( 0, 0 ) );
 
-            MODULE* module = Create_1_Module( wxEmptyString );
+            if( GetBoard()->m_Modules )
+                GetBoard()->m_Modules->ClearFlags();
 
-            if( module )        // i.e. if create module command not aborted
-            {
-                // Initialize data relative to nets and netclasses (for a new
-                // module the defaults are used)
-                // This is mandatory to handle and draw pads
-                GetBoard()->BuildListOfNets();
-                redraw = true;
-                module->SetPosition( wxPoint( 0, 0 ) );
-
-                if( GetBoard()->m_Modules )
-                    GetBoard()->m_Modules->ClearFlags();
-
-                Zoom_Automatique( false );
-            }
+            Zoom_Automatique( false );
         }
-        break;
+    }
+    break;
 
     case ID_MODEDIT_NEW_MODULE_FROM_WIZARD:
+    {
+        Clear_Pcb( true );
+        GetScreen()->ClearUndoRedoList();
+        SetCurItem( NULL );
+        GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
+
+        wxSemaphore semaphore( 0, 1 );
+        FOOTPRINT_WIZARD_FRAME *wizard = new FOOTPRINT_WIZARD_FRAME( this, &semaphore,
+                                                                     KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+        wizard->Show( true );
+        wizard->Zoom_Automatique( false );
+
+        while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
         {
-            Clear_Pcb( true );
-            GetScreen()->ClearUndoRedoList();
-            SetCurItem( NULL );
-            GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
-
-            wxSemaphore semaphore( 0, 1 );
-            FOOTPRINT_WIZARD_FRAME *wizard = new FOOTPRINT_WIZARD_FRAME( this, &semaphore,
-                                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
-            wizard->Show( true );
-            wizard->Zoom_Automatique( false );
-
-            while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
-            {
-                wxYield();
-                wxMilliSleep( 50 );
-            }
-
-            MODULE* module = wizard->GetBuiltFootprint();
-
-            if( module )        // i.e. if create module command not aborted
-            {
-                /* Here we should make a copy of the object before adding to board*/
-                module->SetParent( (EDA_ITEM*)GetBoard() );
-                GetBoard()->m_Modules.Append( module );
-
-                // Initialize data relative to nets and netclasses (for a new
-                // module the defaults are used)
-                // This is mandatory to handle and draw pads
-                GetBoard()->BuildListOfNets();
-                redraw = true;
-                module->SetPosition( wxPoint( 0, 0 ) );
-
-                if( GetBoard()->m_Modules )
-                    GetBoard()->m_Modules->ClearFlags();
-
-
-            }
-
-            wizard->Destroy();
+            wxYield();
+            wxMilliSleep( 50 );
         }
+
+        MODULE* module = wizard->GetBuiltFootprint();
+
+        if( module )        // i.e. if create module command not aborted
+        {
+            /* Here we should make a copy of the object before adding to board*/
+            module->SetParent( (EDA_ITEM*)GetBoard() );
+            GetBoard()->m_Modules.Append( module );
+
+            // Initialize data relative to nets and netclasses (for a new
+            // module the defaults are used)
+            // This is mandatory to handle and draw pads
+            GetBoard()->BuildListOfNets();
+            redraw = true;
+            module->SetPosition( wxPoint( 0, 0 ) );
+
+            if( GetBoard()->m_Modules )
+                GetBoard()->m_Modules->ClearFlags();
+        }
+
+        wizard->Destroy();
+    }
         break;
 
     case ID_MODEDIT_SAVE_LIBMODULE:
@@ -339,84 +361,84 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_INSERT_MODULE_IN_BOARD:
     case ID_MODEDIT_UPDATE_MODULE_IN_BOARD:
+    {
+        // update module in the current board,
+        // not just add it to the board with total disregard for the netlist...
+        PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) GetParent();
+        BOARD*          mainpcb  = pcbframe->GetBoard();
+        MODULE*         source_module  = NULL;
+        MODULE*         module_in_edit = GetBoard()->m_Modules;
+
+        // Search the old module (source) if exists
+        // Because this source could be deleted when editing the main board...
+        if( module_in_edit->GetLink() )        // this is not a new module ...
         {
-            // update module in the current board,
-            // not just add it to the board with total disregard for the netlist...
-            PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) GetParent();
-            BOARD*          mainpcb  = pcbframe->GetBoard();
-            MODULE*         source_module  = NULL;
-            MODULE*         module_in_edit = GetBoard()->m_Modules;
+            source_module = mainpcb->m_Modules;
 
-            // Search the old module (source) if exists
-            // Because this source could be deleted when editing the main board...
-            if( module_in_edit->GetLink() )        // this is not a new module ...
+            for( ; source_module != NULL; source_module = (MODULE*) source_module->Next() )
             {
-                source_module = mainpcb->m_Modules;
-
-                for( ; source_module != NULL; source_module = (MODULE*) source_module->Next() )
-                {
-                    if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
-                        break;
-                }
+                if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
+                    break;
             }
-
-            if( ( source_module == NULL )
-                && ( id == ID_MODEDIT_UPDATE_MODULE_IN_BOARD ) ) // source not found
-            {
-                wxString msg;
-                msg.Printf( _( "Unable to find the footprint source on the main board" ) );
-                msg << _( "\nCannot update the footprint" );
-                DisplayError( this, msg );
-                break;
-            }
-
-            if( ( source_module != NULL )
-                && ( id == ID_MODEDIT_INSERT_MODULE_IN_BOARD ) ) // source not found
-            {
-                wxString msg;
-                msg.Printf( _( "A footprint source was found on the main board" ) );
-                msg << _( "\nCannot insert this footprint" );
-                DisplayError( this, msg );
-                break;
-            }
-
-            // Create the "new" module
-            MODULE* newmodule = new MODULE( *module_in_edit );
-            newmodule->SetParent( mainpcb );
-            newmodule->SetLink( 0 );
-
-            // Put the footprint in the main pcb linked list.
-            mainpcb->Add( newmodule );
-
-            if( source_module )         // this is an update command
-            {
-                // In the main board,
-                // the new module replace the old module (pos, orient, ref, value
-                // and connexions are kept)
-                // and the source_module (old module) is deleted
-                PICKED_ITEMS_LIST pickList;
-                pcbframe->Exchange_Module( source_module, newmodule, &pickList );
-                newmodule->SetTimeStamp( module_in_edit->GetLink() );
-
-                if( pickList.GetCount() )
-                    pcbframe->SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
-            }
-            else        // This is an insert command
-            {
-                wxPoint cursor_pos = pcbframe->GetScreen()->GetCrossHairPosition();
-                pcbframe->GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
-                pcbframe->PlaceModule( newmodule, NULL );
-                pcbframe->GetScreen()->SetCrossHairPosition( cursor_pos );
-                newmodule->SetTimeStamp( GetNewTimeStamp() );
-                pcbframe->SaveCopyInUndoList( newmodule, UR_NEW );
-            }
-
-            newmodule->ClearFlags();
-            GetScreen()->ClrModify();
-            pcbframe->SetCurItem( NULL );
-            mainpcb->m_Status_Pcb = 0;
         }
-        break;
+
+        if( ( source_module == NULL )
+          && ( id == ID_MODEDIT_UPDATE_MODULE_IN_BOARD ) ) // source not found
+        {
+            wxString msg;
+            msg.Printf( _( "Unable to find the footprint source on the main board" ) );
+            msg << _( "\nCannot update the footprint" );
+            DisplayError( this, msg );
+            break;
+        }
+
+        if( ( source_module != NULL )
+          && ( id == ID_MODEDIT_INSERT_MODULE_IN_BOARD ) ) // source not found
+        {
+            wxString msg;
+            msg.Printf( _( "A footprint source was found on the main board" ) );
+            msg << _( "\nCannot insert this footprint" );
+            DisplayError( this, msg );
+            break;
+        }
+
+        // Create the "new" module
+        MODULE* newmodule = new MODULE( *module_in_edit );
+        newmodule->SetParent( mainpcb );
+        newmodule->SetLink( 0 );
+
+        // Put the footprint in the main pcb linked list.
+        mainpcb->Add( newmodule );
+
+        if( source_module )         // this is an update command
+        {
+            // In the main board,
+            // the new module replace the old module (pos, orient, ref, value
+            // and connexions are kept)
+            // and the source_module (old module) is deleted
+            PICKED_ITEMS_LIST pickList;
+            pcbframe->Exchange_Module( source_module, newmodule, &pickList );
+            newmodule->SetTimeStamp( module_in_edit->GetLink() );
+
+            if( pickList.GetCount() )
+                pcbframe->SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
+        }
+        else        // This is an insert command
+        {
+            wxPoint cursor_pos = pcbframe->GetScreen()->GetCrossHairPosition();
+            pcbframe->GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
+            pcbframe->PlaceModule( newmodule, NULL );
+            pcbframe->GetScreen()->SetCrossHairPosition( cursor_pos );
+            newmodule->SetTimeStamp( GetNewTimeStamp() );
+            pcbframe->SaveCopyInUndoList( newmodule, UR_NEW );
+        }
+
+        newmodule->ClearFlags();
+        GetScreen()->ClrModify();
+        pcbframe->SetCurItem( NULL );
+        mainpcb->m_Status_Pcb = 0;
+    }
+    break;
 
     case ID_MODEDIT_IMPORT_PART:
         if( ! Clear_Pcb( true ) )
@@ -458,21 +480,22 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_LOAD_MODULE:
-        {
-            wxString libPath = getLibPath();    // might be empty
+        wxLogDebug( wxT( "Loading module from library " ) + getLibPath() );
 
-            wxLogDebug( wxT( "Loading module from library " ) + libPath );
+        GetScreen()->ClearUndoRedoList();
+        SetCurItem( NULL );
+        Clear_Pcb( true );
+        GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-            GetScreen()->ClearUndoRedoList();
-            SetCurItem( NULL );
-            Clear_Pcb( true );
-            GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
-            Load_Module_From_Library( libPath, true );
-            redraw = true;
-        }
+#if !defined( USE_FP_LIB_TABLE )
+        LoadModuleFromLibrary( getLibPath(), m_footprintLibTable, true );
+#else
+        LoadModuleFromLibrary( getLibNickName(), m_footprintLibTable, true );
+#endif
+        redraw = true;
 
         if( GetBoard()->m_Modules )
-            GetBoard()->m_Modules->ClearFlags();
+             GetBoard()->m_Modules->ClearFlags();
 
         // if either m_Reference or m_Value are gone, reinstall them -
         // otherwise you cannot see what you are doing on board
@@ -878,6 +901,7 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
         SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
     }
 }
+
 
 EDA_COLOR_T FOOTPRINT_EDIT_FRAME::GetGridColor() const
 {

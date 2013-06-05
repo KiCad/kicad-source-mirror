@@ -40,6 +40,7 @@
 #include <macros.h>
 #include <3d_viewer.h>
 #include <msgpanel.h>
+#include <fp_lib_table.h>
 
 #include <pcbnew.h>
 #include <protos.h>
@@ -53,7 +54,9 @@
 #include <module_editor_frame.h>
 #include <dialog_SVG_print.h>
 #include <dialog_helpers.h>
+#include <dialog_plot.h>
 #include <convert_from_iu.h>
+
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -300,9 +303,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
     m_useCmpFileForFpNames = true;
+    m_footprintLibTable = NULL;
+    m_globalFootprintTable = NULL;
+
 #ifdef KICAD_SCRIPTING_WXPYTHON
     m_pythonPanel = NULL;
 #endif
+
     for ( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
 
@@ -437,7 +444,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     m_pythonPanel = CreatePythonShellWindow( this );
     m_auimgr.AddPane( m_pythonPanel,
-                          pythonAuiInfo.Name( wxT( "PythonPanel" ) ).Bottom().Layer(9) );
+                      pythonAuiInfo.Name( wxT( "PythonPanel" ) ).Bottom().Layer(9) );
 
     m_pythonPanelHidden = true;
 #endif
@@ -449,6 +456,23 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     syncLayerWidgetLayer();
 
     m_auimgr.Update();
+
+    if( m_globalFootprintTable == NULL )
+    {
+        try
+        {
+            m_globalFootprintTable = new FP_LIB_TABLE();
+            FP_LIB_TABLE::LoadGlobalTable( *m_globalFootprintTable );
+        }
+        catch( IO_ERROR ioe )
+        {
+            wxString msg;
+            msg.Printf( _( "An error occurred attempting to load the global footprint library "
+                           "table:\n\n%s" ), GetChars( ioe.errorText ) );
+            DisplayError( this, msg );
+        }
+    }
+
 }
 
 
@@ -460,6 +484,7 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
         m_Macros[i].m_Record.clear();
 
     delete m_drc;
+    delete m_globalFootprintTable;
 }
 
 
@@ -897,3 +922,9 @@ void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )
         }
 }
 
+
+void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
+{
+    DIALOG_PLOT dlg( this );
+    dlg.ShowModal();
+}

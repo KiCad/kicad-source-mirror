@@ -280,7 +280,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
             m_staticModuleSideValue->SetLabel( _( "Back side (footprint is mirrored)" ) );
         }
 
-        msg.Printf( wxT( "%.1f" ), (double) module->GetOrientation() / 10 );
+        msg.Printf( wxT( "%.1f" ), module->GetOrientation() / 10.0 );
         m_staticModuleRotValue->SetLabel( msg );
     }
 
@@ -359,7 +359,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     if( m_dummyPad->GetLocalSolderPasteMargin() == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) + m_SolderPasteMarginCtrl->GetValue() );
 
-    msg.Printf( wxT( "%.1f" ), m_dummyPad->GetLocalSolderPasteMarginRatio() * 100.0 );
+    msg.Printf( wxT( "%f" ), m_dummyPad->GetLocalSolderPasteMarginRatio() * 100.0 );
 
     if( m_dummyPad->GetLocalSolderPasteMarginRatio() == 0.0 && msg[0] == '0' )
         // Sometimes Printf adds a sign if the value is small

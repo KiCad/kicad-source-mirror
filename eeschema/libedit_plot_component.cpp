@@ -41,6 +41,8 @@
 #include <class_library.h>
 #include <dialogs/dialog_plot_schematic.h>
 
+#include <boost/foreach.hpp>
+
 
 void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
 {
@@ -103,7 +105,7 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
             pageTemp.SetHeightMils( int( componentSize.y * 1.2 ) );
 
             GetScreen()->SetPageSettings( pageTemp );
-            SVG_Print_Component( FullFileName );
+            SVG_PlotComponent( FullFileName );
             GetScreen()->SetPageSettings( pageSave );
         }
         break;
@@ -136,12 +138,49 @@ void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_j
 }
 
 
-void LIB_EDIT_FRAME::SVG_Print_Component( const wxString& FullFileName )
+void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 {
-    bool plotBW = false;
-    bool plotFrameRef = false;
-    DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( this, FullFileName, GetScreen(),
-                                            plotBW, plotFrameRef );
+    const bool plotBW = false;
+    const PAGE_INFO& pageInfo = GetScreen()->GetPageSettings();
+
+    SVG_PLOTTER* plotter = new SVG_PLOTTER();
+    plotter->SetPageSettings( pageInfo );
+    plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
+    plotter->SetColorMode( plotBW );
+
+    wxPoint plot_offset;
+    const double scale = 1.0;
+    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, false );
+
+    // Init :
+    plotter->SetCreator( wxT( "Eeschema-SVG" ) );
+
+    if( ! plotter->OpenFile( aFullFileName ) )
+    {
+        delete plotter;
+        return;
+    }
+
+    LOCALE_IO   toggle;
+
+    plotter->StartPlot();
+
+    if( m_component )
+    {
+        TRANSFORM temp;     // Uses default transform
+        wxPoint plotPos;
+        plotPos.x = pageInfo.GetWidthIU() /2;
+        plotPos.y = pageInfo.GetHeightIU()/2;
+
+        m_component->Plot( plotter, GetUnit(), GetConvert(), plotPos, temp );
+
+        // Plot lib fields, not plotted by m_component->Plot():
+        m_component->PlotLibFields( plotter, GetUnit(), GetConvert(),
+                                    plotPos, temp );
+    }
+
+    plotter->EndPlot();
+    delete plotter;
 }
 
 void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMask, bool aPrintMirrorMode, void* aData)

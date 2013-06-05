@@ -432,7 +432,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
  * If DC == NULL, the component does not redraw.
  * Otherwise, it erases and redraws turns
  */
-void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, int angle, bool incremental )
+void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool incremental )
 {
     if( module == NULL )
         return;

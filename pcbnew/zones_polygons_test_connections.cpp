@@ -51,7 +51,8 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );
 bool sort_areas( const ZONE_CONTAINER* ref, const ZONE_CONTAINER* tst )
 {
     if( ref->GetNet() == tst->GetNet() )
-        return ref->GetFilledPolysList().size() < tst->GetFilledPolysList().size();
+        return ref->GetFilledPolysList().GetCornersCount() <
+               tst->GetFilledPolysList().GetCornersCount();
     else
         return ref->GetNet() < tst->GetNet();
 }
@@ -94,7 +95,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
             continue;
         if( (aNetcode >= 0) && ( aNetcode != curr_zone->GetNet() ) )
             continue;
-        if( curr_zone->GetFilledPolysList().size() == 0 )
+        if( curr_zone->GetFilledPolysList().GetCornersCount() == 0 )
             continue;
         zones_candidates.push_back(curr_zone);
     }
@@ -143,11 +144,11 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 
         // test if a candidate is inside a filled area of this zone
         unsigned indexstart = 0, indexend;
-        std::vector<CPolyPt> polysList = curr_zone->GetFilledPolysList();
-        for( indexend = 0; indexend < polysList.size(); indexend++ )
+        const CPOLYGONS_LIST& polysList = curr_zone->GetFilledPolysList();
+        for( indexend = 0; indexend < polysList.GetCornersCount(); indexend++ )
         {
             // end of a filled sub-area found
-            if( polysList[indexend].end_contour )
+            if( polysList.IsEndContour( indexend ) )
             {
                 subnet++;
                 EDA_RECT bbox = curr_zone->CalculateSubAreaBoundaryBox( indexstart, indexend );

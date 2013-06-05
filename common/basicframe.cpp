@@ -388,7 +388,7 @@ void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
     wildcard += wxT( ".exe" );
 #endif
 
-    wildcard.Printf( _( "Executable file (%s)|%s" ), 
+    wildcard.Printf( _( "Executable file (%s)|%s" ),
                      GetChars( wildcard ), GetChars( wildcard ) );
 
     wxFileDialog dlg( this, _( "Select Preferred Editor" ), fn.GetPath(),

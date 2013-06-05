@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file displlst.cpp
  */
@@ -25,22 +49,21 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
         column.SetId( i );
         column.SetText( aItemHeaders.Item( i ) );
         column.SetWidth( 300 / aItemHeaders.Count() );
-        EDA_LIST_DIALOG_BASE::m_listBox->InsertColumn( i, column );
+        m_listBox->InsertColumn( i, column );
     }
-    
+
     InsertItems( aItemList, 0 );
-    
-    if( m_sortList )
-        sortList();
 
     if( !aRefText.IsEmpty() )    // try to select the item matching aRefText
     {
         for( unsigned ii = 0; ii < aItemList.size(); ii++ )
+        {
             if( aItemList[ii][0] == aRefText )
             {
                 m_listBox->SetItemState( ii, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
                 break;
             }
+        }
     }
 
     if( m_callBackFct == NULL )
@@ -85,12 +108,25 @@ void EDA_LIST_DIALOG::textChangeInFilterBox( wxCommandEvent& event )
         sortList();
 }
 
-wxString EDA_LIST_DIALOG::GetTextSelection()
+
+wxString EDA_LIST_DIALOG::GetTextSelection( int aColumn )
 {
-    long item = -1;
+    wxCHECK_MSG( aColumn < m_listBox->GetColumnCount(), wxEmptyString,
+                 wxT( "Invalid list control column." ) );
+
+    wxListItem info;
+    wxString   text;
+    long       item = -1;
     item = m_listBox->GetNextItem( item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
-    wxString text = m_listBox->GetItemText( item );
-    return text;
+
+    info.m_mask = wxLIST_MASK_TEXT;
+    info.m_itemId = item;
+    info.m_col = aColumn;
+
+    if( !m_listBox->GetItem( info ) )
+        return wxEmptyString;
+
+    return info.m_text;
 }
 
 
@@ -99,7 +135,7 @@ void EDA_LIST_DIALOG::Append( const wxArrayString& itemList )
     long itemIndex = m_listBox->InsertItem( m_listBox->GetItemCount(), itemList[0] );
 
     m_listBox->SetItemData( itemIndex, (long) &(itemList[0]) );
-    
+
     // Adding the next columns content
     for( unsigned i = 1; i < itemList.size(); i++ )
     {
@@ -107,18 +143,26 @@ void EDA_LIST_DIALOG::Append( const wxArrayString& itemList )
     }
 }
 
-void EDA_LIST_DIALOG::InsertItems( const std::vector<wxArrayString>& itemList,
-                                   int position )
+
+void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList, int position )
 {
-    for( unsigned i = 0; i < itemList.size(); i++ )
+    for( unsigned row = 0; row < itemList.size(); row++ )
     {
-        long itemIndex = m_listBox->InsertItem( position+i, itemList[i].Item( 0 ) );
-        m_listBox->SetItemData( itemIndex, (long) &( itemList[i].Item( 0 ) ) );
-        
-        // Adding the next columns content
-        for( unsigned j = 1; j < itemList[i].GetCount(); j++ )
+        wxASSERT( (int) itemList[row].GetCount() == m_listBox->GetColumnCount() );
+
+        for( unsigned col = 0; col < itemList[row].GetCount(); col++ )
         {
-            m_listBox->SetItem( itemIndex, j, itemList[i].Item( j ) );
+            long itemIndex;
+
+            if( col == 0 )
+            {
+                itemIndex = m_listBox->InsertItem( row+position, itemList[row].Item( col ) );
+                m_listBox->SetItemData( itemIndex, (long) &itemList[row].Item( col ) );
+            }
+            else
+            {
+                m_listBox->SetItem( itemIndex, col, itemList[row].Item( col ) );
+            }
         }
     }
 
@@ -135,7 +179,7 @@ void EDA_LIST_DIALOG::onCancelClick( wxCommandEvent& event )
 
 void EDA_LIST_DIALOG::onListItemSelected( wxListEvent& event )
 {
-    
+
     if( m_callBackFct )
     {
         m_messages->Clear();
@@ -167,12 +211,13 @@ void EDA_LIST_DIALOG::onClose( wxCloseEvent& event )
 /* Sort alphabetically, case insensitive.
  */
 static int wxCALLBACK MyCompareFunction( long aItem1, long aItem2, long aSortData )
-{  
+{
     wxString* component1Name = (wxString*) aItem1;
     wxString* component2Name = (wxString*) aItem2;
-    
-    return StrNumCmp( *component1Name, *component2Name, INT_MAX, true ); 
+
+    return StrNumCmp( *component1Name, *component2Name, INT_MAX, true );
 }
+
 
 void EDA_LIST_DIALOG::sortList()
 {

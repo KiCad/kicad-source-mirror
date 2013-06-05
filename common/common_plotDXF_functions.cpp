@@ -389,7 +389,7 @@ void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int 
 /** Plot an arc in DXF format
  * Filling is not supported
  */
-void DXF_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int radius,
+void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
                        FILL_T fill, int width )
 {
     wxASSERT( outputFile );
@@ -412,7 +412,7 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int rad
 /**
  * DXF oval pad: always done in sketch mode
  */
-void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int orient,
+void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
                                 EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( outputFile );
@@ -423,9 +423,7 @@ void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int ori
     if( size.x > size.y )
     {
         EXCHG( size.x, size.y );
-        orient += 900;
-        if( orient >= 3600 )
-            orient -= 3600;
+        orient = AddAngles( orient, 900 );
     }
     sketchOval( pos, size, orient, -1 );
 }
@@ -447,7 +445,7 @@ void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
  * DXF rectangular pad: alwayd done in sketch mode
  */
 void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
-                                int orient, EDA_DRAW_MODE_T trace_mode )
+                                double orient, EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( outputFile );
     wxSize size;
@@ -515,7 +513,7 @@ void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
  * DXF trapezoidal pad: only sketch mode is supported
  */
 void DXF_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                  int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
+                                  double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 {
     wxASSERT( outputFile );
     wxPoint coord[4];       /* coord actual corners of a trapezoidal trace */
@@ -557,7 +555,7 @@ bool containsNonAsciiChars( const wxString& string )
 void DXF_PLOTTER::Text( const wxPoint&              aPos,
                         enum EDA_COLOR_T            aColor,
                         const wxString&             aText,
-                        int                         aOrient,
+                        double                      aOrient,
                         const wxSize&               aSize,
                         enum EDA_TEXT_HJUSTIFY_T    aH_justify,
                         enum EDA_TEXT_VJUSTIFY_T    aV_justify,

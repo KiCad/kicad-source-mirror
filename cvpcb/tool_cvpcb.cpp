@@ -104,6 +104,12 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             _( "Display the filtered footprint list by pin count for the current component" ),
                             wxEmptyString );
 
+    m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST,
+                            KiBitmap( module_library_list_xpm ),
+                            wxNullBitmap, true, NULL,
+                            _( "Display the footprint list from selected library" ),
+                            wxEmptyString );
+
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST,
                             KiBitmap( module_full_list_xpm ),
                             wxNullBitmap, true, NULL,
@@ -114,6 +120,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     {
         wxString key = wxT( FILTERFOOTPRINTKEY );
         int      opt = config->Read( key, (long) 1 );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST, opt == 3 );
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, opt == 2 );
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, opt == 1 );
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, opt == 0 );

@@ -274,10 +274,14 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
     SetScreen( NULL );
-    SAFE_DELETE( m_CurrentSheet );     // a SCH_SHEET_PATH, on the heap.
-    SAFE_DELETE( m_undoItem );
-    SAFE_DELETE( g_RootSheet );
-    SAFE_DELETE( m_findReplaceData );
+    delete m_CurrentSheet;     // a SCH_SHEET_PATH, on the heap.
+    delete m_undoItem;
+    delete g_RootSheet;
+    delete m_findReplaceData;
+    m_CurrentSheet = NULL;
+    m_undoItem = NULL;
+    g_RootSheet = NULL;
+    m_findReplaceData = NULL;
     CMP_LIBRARY::RemoveAllLibraries();
 }
 
@@ -347,10 +351,6 @@ void SCH_EDIT_FRAME::CreateScreens()
     }
 
     g_RootSheet->GetScreen()->SetFileName( m_DefaultSchematicFileName );
-
-    TITLE_BLOCK tb = g_RootSheet->GetScreen()->GetTitleBlock();
-    tb.SetDate();
-    g_RootSheet->GetScreen()->SetTitleBlock( tb );
 
     m_CurrentSheet->Clear();
     m_CurrentSheet->Push( g_RootSheet );
@@ -512,35 +512,39 @@ double SCH_EDIT_FRAME::BestZoom()
 }
 
 
+/* Build a filename that can be used in plot and print functions
+ * for the current sheet path.
+ * This filename is unique and must be used instead of the screen filename
+ * when one must creates file for each sheet in the hierarchy,
+ * because in complex hierarchies a sheet and a SCH_SCREEN is used more than once
+ */
 wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 {
     wxFileName fn = GetScreen()->GetFileName();
 
-#ifndef KICAD_GOST
-    wxString filename = fn.GetName();
-    if( ( filename.Len() + m_CurrentSheet->PathHumanReadable().Len() ) < 50 )
-#else
-    fn.ClearExt();
-    wxString filename = fn.GetFullPath();
-    if( ( filename.Len() + m_CurrentSheet->PathHumanReadable().Len() ) < 80 )
-#endif
+    /* Name is <root sheet filename>-<sheet path> and has no extension.
+     * However if filename is too long name is <sheet filename>-<sheet number>
+     */
 
-    {
-        filename += m_CurrentSheet->PathHumanReadable();
-        filename.Replace( wxT( "/" ), wxT( "-" ) );
-        filename.RemoveLast();
-#if defined(KICAD_GOST)
-#ifndef __WINDOWS__
-        wxString newfn;
-        if( filename.StartsWith( wxT( "-" ), &newfn ) )
-            filename = newfn;
-#endif
-#endif
-    }
+    #define FN_LEN_MAX 80   // A reasonable value for the short filename len
+
+    wxString filename = fn.GetName();
+    wxString sheetFullName =  m_CurrentSheet->PathHumanReadable();
+
+    // Remove the last '/' of the path human readable
+    // (and for the root sheet, make sheetFullName empty):
+    sheetFullName.RemoveLast();
+
+    sheetFullName.Trim( true );
+    sheetFullName.Trim( false );
+
+    // Convert path human readable separator to '-'
+    sheetFullName.Replace( wxT( "/" ), wxT( "-" ) );
+
+    if( ( filename.Len() + sheetFullName.Len() ) < FN_LEN_MAX )
+        filename += sheetFullName;
     else
-    {
         filename << wxT( "-" ) << GetScreen()->m_ScreenNumber;
-    }
 
     return filename;
 }
@@ -553,15 +557,6 @@ void SCH_EDIT_FRAME::OnModify()
 
     if( m_dlgFindReplace == NULL )
         m_foundItems.SetForceSearch();
-
-    SCH_SCREENS s_list;
-
-    // Set the date for each sheet
-    // There are 2 possibilities:
-    // >> change only the current sheet
-    // >> change all sheets.
-    // I believe all sheets in a project must have the same date
-    s_list.SetDate();
 }
 
 
@@ -640,10 +635,10 @@ void SCH_EDIT_FRAME::OnCreateNetlist( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnCreateBillOfMaterials( wxCommandEvent& )
 {
-    DIALOG_BUILD_BOM* dlg = new DIALOG_BUILD_BOM( this );
-
-    dlg->ShowModal();
-    dlg->Destroy();
+    wxMessageDialog dlg( this,
+                        wxT( "https://answers.launchpad.net/kicad/+faq/2265" ),
+                        _( "BOM Howto" ) );
+    dlg.ShowModal();
 }
 
 
@@ -848,12 +843,12 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
     }
 }
 
-void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMask, bool aPrintMirrorMode, 
+void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMask, bool aPrintMirrorMode,
                                 void* aData )
 {
     GetScreen()->Draw( m_canvas, aDC, GR_DEFAULT_DRAWMODE );
-    TraceWorkSheet( aDC, GetScreen(), GetDefaultLineThickness(), IU_PER_MILS,
-                    GetScreen()->GetFileName() );
+    DrawWorkSheet( aDC, GetScreen(), GetDefaultLineThickness(), IU_PER_MILS,
+                   GetScreen()->GetFileName() );
 }
 
 

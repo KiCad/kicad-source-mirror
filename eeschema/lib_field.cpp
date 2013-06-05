@@ -100,8 +100,14 @@ bool LIB_FIELD::Save( OUTPUTFORMATTER& aFormatter )
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
         vjustify = 'T';
 
+    /*  Dick 24-May-2013:
+        What the hell is this?.  There was no comment here.
+        Hell no.  You don't want this in the *.lib files, it is crap.  Fields get read
+        back in and they have a tilda in them.
+
     if( text.IsEmpty() )
         text = wxT( "~" );
+    */
 
     aFormatter.Print( 0, "F%d %s %d %d %d %c %c %c %c%c%c",
                       m_id,
@@ -131,12 +137,14 @@ bool LIB_FIELD::Save( OUTPUTFORMATTER& aFormatter )
 
 bool LIB_FIELD::Load( LINE_READER& aLineReader, wxString& errorMsg )
 {
-    int   cnt;
-    char  textOrient;
-    char  textVisible;
-    char  textHJustify;
-    char  textVJustify[256];
-    char* line = (char*) aLineReader;
+    int     cnt;
+    char    textOrient;
+    char    textVisible;
+    char    textHJustify;
+    char    textVJustify[256];
+
+    char*   line = (char*) aLineReader;
+    char*   limit = line + aLineReader.Length();
 
     if( sscanf( line + 1, "%d", &m_id ) != 1 || m_id < 0 )
     {
@@ -144,23 +152,20 @@ bool LIB_FIELD::Load( LINE_READER& aLineReader, wxString& errorMsg )
         return false;
     }
 
-    /* Search the beginning of the data. */
-    while( *line != 0 )
+    // Caller did a strtok(), which inserts a nul, so next few bytes are ugly:
+    // digit(s), a nul, some whitespace, then a double quote.
+    while( line < limit && *line != '"' )
         line++;
 
-    while( *line == 0 )
-        line++;
-
-    while( *line && (*line != '"') )
-        line++;
-
-    if( *line == 0 )
+    if( line == limit )
         return false;
 
     line += ReadDelimitedText( &m_Text, line );
 
-    if( *line == 0 )
-        return false;
+    // Doctor the *.lib file field which has a "~" in blank fields.  New saves will
+    // not save like this, and eventually these two lines can be removed.
+    if( m_Text.size()==1  &&  m_Text[0]==wxChar( '~' ) )
+        m_Text.clear();
 
     memset( textVJustify, 0, sizeof( textVJustify ) );
 
@@ -473,9 +478,33 @@ void LIB_FIELD::Rotate( const wxPoint& center, bool aRotateCCW )
 }
 
 
-void LIB_FIELD::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                       const TRANSFORM& aTransform )
 {
+    if( IsVoid() )
+        return;
+
+    /* Calculate the text orientation, according to the component
+     * orientation/mirror */
+    int orient = m_Orient;
+
+    if( aTransform.y1 )  // Rotate component 90 deg.
+    {
+        if( orient == TEXT_ORIENT_HORIZ )
+            orient = TEXT_ORIENT_VERT;
+        else
+            orient = TEXT_ORIENT_HORIZ;
+    }
+
+    EDA_RECT BoundaryBox = GetBoundingBox();
+    EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
+    EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
+    wxPoint textpos = aTransform.TransformCoordinate( BoundaryBox.Centre() )
+                      + aOffset;
+
+    aPlotter->Text( textpos, GetDefaultColor(), m_Text, orient, m_Size,
+                    hjustify, vjustify,
+                    GetPenSize(), m_Italic, m_Bold );
 }
 
 

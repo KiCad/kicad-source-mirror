@@ -21,8 +21,8 @@
 #include <dialog_print_using_printer_base.h>
 
 
-#define PEN_WIDTH_MAX_VALUE ( (int)(5 * IU_PER_MM) )
-#define PEN_WIDTH_MIN_VALUE ( (int)(0.005 * IU_PER_MM) )
+#define PEN_WIDTH_MAX_VALUE ( KiROUND( 5 * IU_PER_MM ) )
+#define PEN_WIDTH_MIN_VALUE ( KiROUND( 0.005 * IU_PER_MM ) )
 
 
 extern int g_DrawDefaultLineThickness;

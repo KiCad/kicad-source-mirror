@@ -34,6 +34,7 @@
 /*  Forward declarations of all top-level window classes. */
 class CVPCB_MAINFRAME;
 class COMPONENT;
+class FOOTPRINT_LIST;
 
 
 /*********************************************************************/
@@ -82,6 +83,8 @@ public:
                                        FOOTPRINT_LIST& aList );
     void     SetFootprintFilteredByPinCount( COMPONENT*      aComponent,
                                              FOOTPRINT_LIST& aList );
+    void     SetFootprintFilteredByLibraryList( FOOTPRINT_LIST& list,
+                                                wxString SelectedLibrary  );
 
     /**
      * Set the footprint list. We can have 2 footprint list:
@@ -99,19 +102,39 @@ public:
     // Events functions:
     void     OnLeftClick( wxListEvent& event );
     void     OnLeftDClick( wxListEvent& event );
+    void     OnChar( wxKeyEvent& event );
 
-    /**
-     * Function OnChar
-     * called on a key pressed
-     * Call default handler for some special keys,
-     * and for "ascii" keys, select the first footprint
-     * that the name starts by the letter.
-     * This is the default behavior of a listbox, but because we use
-     * virtual lists, the listbox does not know anything to what is displayed,
-     * we must handle this behavior here.
-     * Furthermore the footprint name is not at the beginning of
-     * displayed lines (the first word is the line number)
-     */
+    DECLARE_EVENT_TABLE()
+};
+
+/******************************************/
+/* ListBox showing the list of library */
+/******************************************/
+
+class LIBRARY_LISTBOX : public ITEMS_LISTBOX_BASE
+{
+//private:
+
+public:
+    wxArrayString  m_LibraryList;
+
+public:
+    LIBRARY_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,
+                     const wxPoint& loc, const wxSize& size,
+                     int nbitems, wxString choice[] );
+    ~LIBRARY_LISTBOX();
+
+    int      GetCount();
+    void     SetSelection( unsigned index, bool State = true );
+    void     SetString( unsigned linecount, const wxString& text );
+    void     AppendLine( const wxString& text );
+    void     SetLibraryList( wxArrayString list );
+
+    wxString GetSelectedLibrary();
+    wxString OnGetItemText( long item, long column ) const;
+
+    // Events functions:
+    void     OnLeftClick( wxListEvent& event );
     void     OnChar( wxKeyEvent& event );
 
     DECLARE_EVENT_TABLE()

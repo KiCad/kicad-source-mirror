@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -36,6 +36,7 @@
 #include <confirm.h>            // DisplayError()
 #include <gestfich.h>           // EDA_FileSelector()
 #include <wxPcbStruct.h>
+#include <macros.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -94,7 +95,6 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
         return;
 
     SPECCTRA_DB     db;
-
     LOCALE_IO       toggle;
 
     try
@@ -118,7 +118,7 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 
     /* At this point we should call Compile_Ratsnest()
      * but this could be time consumming.
-     * So if incorrect number of Connecred and No connected pads is accepted
+     * So if incorrect number of Connected and No connected pads is accepted
      * until Compile_Ratsnest() is called (when track tool selected for instance)
      * leave the next line commented
      * Otherwise uncomment this line
@@ -224,7 +224,7 @@ static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
 
 TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IO_ERROR )
 {
-    LAYER_NUM layerNdx = findLayerName( aPath->layer_id );
+    int layerNdx = findLayerName( aPath->layer_id );
 
     if( layerNdx == -1 )
     {
@@ -319,8 +319,9 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
     }
     else    // VIA_MICROVIA or VIA_BLIND_BURIED
     {
-        LAYER_NUM topLayerNdx = UNDEFINED_LAYER;
-        LAYER_NUM botLayerNdx = 7000;
+        int topLayerNdx = -1;           // session layer detectors
+        int botLayerNdx = INT_MAX;
+
         int viaDiam = -1;
 
         for( int i=0; i<shapeCount;  ++i )
@@ -333,8 +334,8 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
             CIRCLE* circle = (CIRCLE*) shape->shape;
 
-            LAYER_NUM layerNdx = findLayerName( circle->layer_id );
-            if( layerNdx == UNDEFINED_LAYER )
+            int layerNdx = findLayerName( circle->layer_id );
+            if( layerNdx == -1 )
             {
                 wxString layerName = FROM_UTF8( circle->layer_id.c_str() );
                 ThrowIOError( _("Session file uses invalid layer id \"%s\""),
@@ -363,10 +364,10 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
         via->SetWidth( viaDiam );
 
-        topLayerNdx = pcbLayer2kicad[topLayerNdx];
-        botLayerNdx = pcbLayer2kicad[botLayerNdx];
+        LAYER_NUM topLayer = pcbLayer2kicad[topLayerNdx];
+        LAYER_NUM botLayer = pcbLayer2kicad[botLayerNdx];
 
-        via->SetLayerPair( topLayerNdx, botLayerNdx );
+        via->SetLayerPair( topLayer, botLayer );
     }
 
     if( via )
@@ -374,7 +375,6 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
     return via;
 }
-
 
 
 // no UI code in this function, throw exception to report problems to the
@@ -439,7 +439,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                 if( place->side == T_front )
                 {
                     // convert from degrees to tenths of degrees used in KiCad.
-                    int orientation = (int) (place->rotation * 10.0);
+                    int orientation = KiROUND( place->rotation * 10.0 );
 
                     if( module->GetLayer() != LAYER_N_FRONT )
                     {
@@ -451,7 +451,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                 }
                 else if( place->side == T_back )
                 {
-                    int orientation = (int) ((place->rotation + 180.0) * 10.0);
+                    int orientation = KiROUND( (place->rotation + 180.0) * 10.0 );
 
                     if( module->GetLayer() != LAYER_N_BACK )
                     {

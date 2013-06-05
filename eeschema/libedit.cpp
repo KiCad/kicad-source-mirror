@@ -143,7 +143,8 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     // Delete previous library component, if any
     if( m_component )
     {
-        SAFE_DELETE( m_component );
+        delete m_component;
+        m_component = NULL;
         m_aliasName.Empty();
     }
 
@@ -212,7 +213,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLib
 
     if( m_component )
     {
-        SAFE_DELETE( m_component );
+        delete m_component;
         m_aliasName.Empty();
     }
 
@@ -256,13 +257,13 @@ void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
         // display reference like in schematic (a reference U is shown U? or U?A)
         // although it is stored without ? and part id.
         // So temporary change the reference by a schematic like reference
-        LIB_FIELD* Field = m_component->GetField( REFERENCE );
-        wxString fieldText = Field->GetText();
-        wxString fieldfullText = Field->GetFullText( m_unit );
-        Field->SetText( fieldfullText );
+        LIB_FIELD* field = m_component->GetField( REFERENCE );
+        wxString fieldText = field->GetText();
+        wxString fieldfullText = field->GetFullText( m_unit );
+        field->EDA_TEXT::SetText( fieldfullText );  // change the field text string only
         m_component->Draw( m_canvas, aDC, aOffset, m_unit,
                            m_convert, GR_DEFAULT_DRAWMODE );
-        Field->SetText( fieldText );
+        field->EDA_TEXT::SetText( fieldText );      // restore the field text string
     }
 }
 
@@ -337,7 +338,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     {
         fn = wxFileName( m_library->GetFullFileName() );
 
-        msg.Printf( _( "Modify library file <%s> ?" ), 
+        msg.Printf( _( "Modify library file <%s> ?" ),
                     GetChars( fn.GetFullPath() ) );
 
         if( !IsOK( this, msg ) )
@@ -385,7 +386,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     catch( ... /* IO_ERROR ioe */ )
     {
         libFileName.MakeAbsolute();
-        msg.Printf( _( "Failed to create component library file <%s>" ), 
+        msg.Printf( _( "Failed to create component library file <%s>" ),
                     GetChars( libFileName.GetFullPath() ) );
         DisplayError( this, msg );
         return false;
@@ -574,7 +575,8 @@ All changes will be lost. Discard changes?" ) ) )
     }
     else
     {
-        SAFE_DELETE( m_component );
+        delete m_component;
+        m_component = NULL;
         m_aliasName.Empty();
     }
 
@@ -660,7 +662,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
 
     if( m_component )
     {
-        SAFE_DELETE( m_component );
+        delete m_component;
         m_aliasName.Empty();
     }
 
@@ -684,7 +686,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
 void LIB_EDIT_FRAME::SaveOnePartInMemory()
 {
     LIB_COMPONENT* oldComponent;
-    LIB_COMPONENT* Component;
+    LIB_COMPONENT* component;
     wxString       msg;
 
     if( m_component == NULL )
@@ -718,15 +720,15 @@ void LIB_EDIT_FRAME::SaveOnePartInMemory()
     m_drawItem = m_lastDrawItem = NULL;
 
     if( oldComponent != NULL )
-        Component = m_library->ReplaceComponent( oldComponent, m_component );
+        component = m_library->ReplaceComponent( oldComponent, m_component );
     else
-        Component = m_library->AddComponent( m_component );
+        component = m_library->AddComponent( m_component );
 
-    if( Component == NULL )
+    if( component == NULL )
         return;
 
     msg.Printf( _( "Component %s saved in library %s" ),
-                GetChars( Component->GetName() ),
+                GetChars( component->GetName() ),
                 GetChars( m_library->GetName() ) );
     SetStatusText( msg );
 }

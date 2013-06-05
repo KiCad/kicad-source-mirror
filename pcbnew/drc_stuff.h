@@ -179,7 +179,7 @@ private:
      * so we store the ref segment length (the end point relative to these axis)
      * and the segment orientation (used to rotate other coordinates)
      */
-    int m_segmAngle;        // Ref segm orientation in 0,1 degre
+    double m_segmAngle;     // Ref segm orientation in 0,1 degre
     int m_segmLength;       // length of the reference segment
 
     /* variables used in checkLine to test DRC segm to segm:

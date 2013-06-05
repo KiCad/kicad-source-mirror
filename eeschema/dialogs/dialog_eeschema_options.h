@@ -75,6 +75,8 @@ public:
     void SetAutoSaveInterval( int aInterval ) { m_spinAutoSaveInterval->SetValue( aInterval ); }
     int GetAutoSaveInterval() const { return m_spinAutoSaveInterval->GetValue(); }
 
+    void SetRefIdSeparator( wxChar aSep, wxChar aFirstId);
+
     void SetShowGrid( bool show ) { m_checkShowGrid->SetValue( show ); }
     bool GetShowGrid( void ) { return m_checkShowGrid->GetValue(); }
 

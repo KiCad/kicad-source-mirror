@@ -460,7 +460,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
                     // creates a lock point if not exists
         {
              // Creates a lock point, if not already exists:
-            wxPoint hp = g_CurrentTrackSegment->GetEnd(); 
+            wxPoint hp = g_CurrentTrackSegment->GetEnd();
             LockPoint = GetBoard()->CreateLockPoint( hp, (TRACK*) LockPoint, &s_ItemsListPicker );
             g_CurrentTrackSegment->SetEnd(hp);
         }
@@ -652,7 +652,7 @@ static void PushTrack( EDA_DRAW_PANEL* panel )
 }
 
 
-//Helpre function: Draws Via circle and Via Clearence circle.
+//Helper function: Draws Via circle and Via Clearance circle.
 inline void DrawViaCirclesWhenEditingNewTrack( EDA_RECT* aPanelClipBox,
                                                wxDC* aDC, const wxPoint& aPos,
                                                int aViaRadius,

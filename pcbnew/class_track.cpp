@@ -33,6 +33,7 @@
 #include <gr_basic.h>
 #include <common.h>
 #include <trigo.h>
+#include <macros.h>
 #include <class_drawpanel.h>
 #include <class_pcb_screen.h>
 #include <drawtxt.h>
@@ -162,8 +163,6 @@ wxString SEGZONE::GetSelectMenuText() const
     NETINFO_ITEM* net;
     BOARD* board = GetBoard();
 
-    text << _( "Zone" ) << wxT( " " ) << wxString::Format( wxT( "(%08lX)" ), m_TimeStamp );
-
     if( board )
     {
         net = board->FindNet( GetNet() );
@@ -285,35 +284,24 @@ STATUS_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
     if( min_dist < 0 )
         min_dist = m_Width / 2;
 
-    int dx = m_Start.x - point.x;
-    int dy = m_Start.y - point.y;
-
     if( min_dist == 0 )
     {
-        if( (dx == 0) && (dy == 0 ) )
+        if( m_Start == point  )
             result |= STARTPOINT;
-    }
-    else
-    {
-        double dist = hypot( (double)dx, (double) dy );
 
-        if( min_dist >= (int) dist )
-            result |= STARTPOINT;
-    }
-
-    dx = m_End.x - point.x;
-    dy = m_End.y - point.y;
-
-    if( min_dist == 0 )
-    {
-        if( (dx == 0) && (dy == 0 ) )
+        if( m_End == point )
             result |= ENDPOINT;
     }
     else
     {
-        double dist = hypot( (double) dx, (double) dy );
+        double dist = GetLineLength( m_Start, point );
 
-        if( min_dist >= (int) dist )
+        if( min_dist >= KiROUND( dist ) )
+            result |= STARTPOINT;
+
+        dist = GetLineLength( m_End, point );
+
+        if( min_dist >= KiROUND( dist ) )
             result |= ENDPOINT;
     }
 
@@ -620,8 +608,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     if( m_Shape == S_CIRCLE )
     {
-        radius = (int) hypot( (double) ( m_End.x - m_Start.x ),
-                              (double) ( m_End.y - m_Start.y ) );
+        radius = KiROUND( GetLineLength( m_Start, m_End ) );
 
         if( aDC->LogicalToDeviceXRel( l_trace ) <= MIN_DRAW_WIDTH )
         {
@@ -693,7 +680,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     #define THRESHOLD 10
 
-    int len = int( hypot( (m_End.x - m_Start.x), (m_End.y - m_Start.y) ) );
+    int len = KiROUND( GetLineLength( m_Start, m_End ) );
 
     if( len < THRESHOLD * m_Width )
         return;
@@ -724,7 +711,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
         // Calculate angle: if the track segment is vertical, angle = 90 degrees
         // If horizontal 0 degrees, otherwise compute it
-        int angle;                              // angle is in 0.1 degree
+        double angle;                              // angle is in 0.1 degree
 
         if( dy == 0 )        // Horizontal segment
         {
@@ -738,9 +725,9 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
             }
             else
             {
-                /* atan2 is *not* the solution here, since can give upside
+                /* atan2 is *not* the solution here, since it can give upside
                    down text. We want to work only in the first and fourth quadrant */
-                angle = 10 * RAD2DEG( -atan( double( dy )/ double( dx ) ) );
+                angle = RAD2DECIDEG( -atan( double( dy ) / double( dx ) ) );
             }
         }
 
@@ -923,8 +910,8 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         ( (SEGVIA*) this )->ReturnLayerPair( &layer_top, &layer_bottom );
 
         // lines for the top layer
-        RotatePoint( &ax, &ay, layer_top * 3600 / brd->GetCopperLayerCount( ) );
-        RotatePoint( &bx, &by, layer_top * 3600 / brd->GetCopperLayerCount( ) );
+        RotatePoint( &ax, &ay, layer_top * 3600.0 / brd->GetCopperLayerCount( ) );
+        RotatePoint( &bx, &by, layer_top * 3600.0 / brd->GetCopperLayerCount( ) );
         GRLine( panel->GetClipBox(), aDC, m_Start.x + aOffset.x - ax,
                 m_Start.y + aOffset.y - ay,
                 m_Start.x + aOffset.x - bx,
@@ -932,8 +919,8 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
         // lines for the bottom layer 
         ax = 0; ay = radius; bx = 0; by = drill_radius;
-        RotatePoint( &ax, &ay, layer_bottom * 3600 / brd->GetCopperLayerCount( ) );
-        RotatePoint( &bx, &by, layer_bottom * 3600 / brd->GetCopperLayerCount( ) );
+        RotatePoint( &ax, &ay, layer_bottom * 3600.0 / brd->GetCopperLayerCount( ) );
+        RotatePoint( &bx, &by, layer_bottom * 3600.0 / brd->GetCopperLayerCount( ) );
         GRLine( panel->GetClipBox(), aDC, m_Start.x + aOffset.x - ax,
                 m_Start.y + aOffset.y - ay,
                 m_Start.x + aOffset.x - bx,
@@ -1173,7 +1160,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
         // Display drill value
         int drill_value = GetDrillValue();
 
-        msg = ::CoordinateToString( (unsigned) drill_value );
+        msg = ::CoordinateToString( drill_value );
 
         wxString title = _( "Drill" );
         title += wxT( " " );
@@ -1574,73 +1561,6 @@ wxString TRACK::GetSelectMenuText() const
 
 
 #if defined(DEBUG)
-
-void TRACK::Show( int nestLevel, std::ostream& os ) const
-{
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-
-//        " shape=\""     << m_Shape      << '"' <<
-    " addr=\"" << std::hex << this << std::dec << '"' <<
-    " layer=\"" << m_Layer << '"' <<
-    " width=\"" << m_Width << '"' <<
-    " flags=\"" << m_Flags << '"' <<
-    " status=\"" << GetStatus( ) << '"' <<
-
-//        " drill=\""     << GetDrillValue()   << '"' <<
-    " netcode=\"" << GetNet() << "\">" <<
-    "<start" << m_Start << "/>" <<
-    "<end" << m_End << "/>";
-
-    os << "</" << GetClass().Lower().mb_str() << ">\n";
-}
-
-
-void SEGVIA::Show( int nestLevel, std::ostream& os ) const
-{
-    const char* cp;
-
-    switch( GetShape() )
-    {
-    case VIA_THROUGH:
-        cp = "through";
-        break;
-
-    case VIA_BLIND_BURIED:
-        cp = "blind/buried";
-        break;
-
-    case VIA_MICROVIA:
-        cp = "micro via";
-        break;
-
-    default:
-    case VIA_NOT_DEFINED:
-        cp = "undefined";
-        break;
-    }
-
-    LAYER_NUM topLayer;
-    LAYER_NUM botLayer;
-    BOARD* board = (BOARD*) m_Parent;
-
-
-    ReturnLayerPair( &topLayer, &botLayer );
-
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " type=\"" << cp << '"';
-
-    if( board )
-        os << " layers=\"" << board->GetLayerName( topLayer ).mb_str() << ","
-           << board->GetLayerName( botLayer ).mb_str() << '"';
-
-    os << " width=\"" << m_Width << '"'
-       << " drill=\"" << GetDrillValue() << '"'
-       << " netcode=\"" << GetNet() << "\">"
-       << "<pos" << m_Start << "/>";
-
-    os << "</" << GetClass().Lower().mb_str() << ">\n";
-}
-
 
 wxString TRACK::ShowState( int stateBits )
 {

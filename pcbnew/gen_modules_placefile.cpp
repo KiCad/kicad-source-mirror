@@ -485,7 +485,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
         sprintf( text, " %9.4f  %9.4f  %8.1f    ",
                  module_pos.x * conv_unit,
                  -module_pos.y * conv_unit,
-                 double(list[ii].m_Module->GetOrientation()) / 10 );
+                 list[ii].m_Module->GetOrientation() / 10.0 );
 
         LAYER_NUM layer = list[ii].m_Module->GetLayer();
 
@@ -640,7 +640,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
                      module_pos.y * conv_unit );
             fputs( line, rptfile );
 
-            sprintf( line, "orientation  %.2f\n", (double) Module->GetOrientation() / 10 );
+            sprintf( line, "orientation  %.2f\n", Module->GetOrientation() / 10.0 );
 
             if( Module->GetLayer() == LAYER_N_FRONT )
                 strcat( line, "layer component\n" );
@@ -675,7 +675,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
                 fputs( line, rptfile );
 
                 sprintf( line, "orientation  %.2f\n",
-                         double(pad->GetOrientation() - Module->GetOrientation()) / 10 );
+                         (pad->GetOrientation() - Module->GetOrientation()) / 10.0 );
                 fputs( line, rptfile );
 
                 static const char* shape_name[6] = { "???", "Circ", "Rect", "Oval", "Trap", "Spec" };
@@ -751,7 +751,7 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile, double aCon
     switch( PtDrawSegment->GetShape() )
     {
     case S_CIRCLE:
-        radius = hypot( dx - ux0, dy - uy0 );
+        radius = Distance( ux0, uy0, dx, dy );
         fprintf( rptfile, "$CIRCLE \n" );
         fprintf( rptfile, "centre %.6lf %.6lf\n", ux0, uy0 );
         fprintf( rptfile, "radius %.6lf\n", radius );
@@ -764,7 +764,7 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile, double aCon
             int endx = PtDrawSegment->GetEnd().x;
             int endy = PtDrawSegment->GetEnd().y;
 
-            radius = hypot( dx - ux0, dy - uy0 );
+            radius = Distance( ux0, uy0, dx, dy );
             RotatePoint( &endx,
                          &endy,
                          PtDrawSegment->GetStart().x,

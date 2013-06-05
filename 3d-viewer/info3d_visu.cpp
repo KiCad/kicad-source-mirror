@@ -39,9 +39,9 @@
 
 // Thickness of copper
 // TODO: define the actual copper thickness by user
-#define COPPER_THICKNESS (int)(0.035 * IU_PER_MM)   // for 35 u
-#define TECH_LAYER_THICKNESS (int)(0.04 * IU_PER_MM)
-#define EPOXY_THICKNESS (int)(1.6 * IU_PER_MM)   // for 1.6 mm
+#define COPPER_THICKNESS KiROUND( 0.035 * IU_PER_MM )   // for 35 µm
+#define TECH_LAYER_THICKNESS KiROUND( 0.04 * IU_PER_MM )
+#define EPOXY_THICKNESS KiROUND( 1.6 * IU_PER_MM )   // for 1.6 mm
 
 
 /* INFO3D_VISU in an helper class to store parameters like scaling factors,

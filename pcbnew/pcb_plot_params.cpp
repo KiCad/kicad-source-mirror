@@ -2,7 +2,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,8 +31,9 @@
 #include <convert_to_biu.h>
 
 
-#define PLOT_LINEWIDTH_MIN        0
-#define PLOT_LINEWIDTH_MAX        (200*IU_PER_MILS)
+#define PLOT_LINEWIDTH_MIN        (0.02*IU_PER_MM)  // min value for default line thickness
+#define PLOT_LINEWIDTH_MAX        (2*IU_PER_MM)     // max value for default line thickness
+#define PLOT_LINEWIDTH_DEFAULT    (0.15*IU_PER_MM)  // def. value for default line thickness
 #define HPGL_PEN_DIAMETER_MIN     0
 #define HPGL_PEN_DIAMETER_MAX     100       // Unit = mil
 #define HPGL_PEN_SPEED_MIN        1         // this param is always in cm/s
@@ -40,15 +41,14 @@
 #define HPGL_PEN_NUMBER_MIN       1
 #define HPGL_PEN_NUMBER_MAX       16
 #define HPGL_PEN_OVERLAP_MIN      0
-#define HPGL_PEN_OVERLAP_MAX      50       // Unit = mil
+#define HPGL_PEN_OVERLAP_MAX      50        // Unit = mil
 
 
 /**
- * Default line thickness in PCnew units used to draw or plot items having a
- * default thickness line value (Frame references) (i.e. = 0 ).
- * 0 = single pixel line width.
+ * Default line thickness in internal units used to draw or plot items using a
+ * default thickness line value (Frame references)
  */
-int g_DrawDefaultLineThickness = 6*IU_PER_MILS;
+int g_DrawDefaultLineThickness = PLOT_LINEWIDTH_DEFAULT;
 
 
 using namespace PCBPLOTPARAMS_T;
@@ -114,7 +114,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_textMode             = PLOTTEXTMODE_DEFAULT;
 
     // This parameter controls if the NPTH pads will be plotted or not
-    // it is are "local" parameters
+    // it is a "local" parameter
     m_skipNPTH_Pads        = false;
 }
 
@@ -133,8 +133,8 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_useGerberExtensions ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_excludeedgelayer ),
                        m_excludeEdgeLayer ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_linewidth ),
-                       m_lineWidth );
+    aFormatter->Print( aNestLevel+1, "(%s %f)\n", getTokenName( T_linewidth ),
+                       m_lineWidth / IU_PER_MM );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotframeref ),
                        m_plotFrameRef ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_viasonmask ),
@@ -333,83 +333,89 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             aPcbPlotParams->m_layerSelection = atol( CurText() );
             break;
         case T_usegerberextensions:
-            aPcbPlotParams->m_useGerberExtensions = ParseBool();
+            aPcbPlotParams->m_useGerberExtensions = parseBool();
             break;
         case T_psa4output:
-            aPcbPlotParams->m_A4Output = ParseBool();
+            aPcbPlotParams->m_A4Output = parseBool();
             break;
         case T_excludeedgelayer:
-            aPcbPlotParams->m_excludeEdgeLayer = ParseBool();
+            aPcbPlotParams->m_excludeEdgeLayer = parseBool();
             break;
         case T_linewidth:
-            aPcbPlotParams->m_lineWidth = ParseInt( PLOT_LINEWIDTH_MIN,
-                                                    PLOT_LINEWIDTH_MAX );
+        {
+            // Due to a bug, this (minor) parameter was saved in biu
+            // and now is saved in mm
+            // If the read value is outside bounds, force a default value
+            double tmp = parseDouble();
+            if( !aPcbPlotParams->SetLineWidth( KiROUND( tmp * IU_PER_MM ) ) )
+                aPcbPlotParams->SetLineWidth( PLOT_LINEWIDTH_DEFAULT );
+        }
             break;
         case T_plotframeref:
-            aPcbPlotParams->m_plotFrameRef = ParseBool();
+            aPcbPlotParams->m_plotFrameRef = parseBool();
             break;
         case T_viasonmask:
-            aPcbPlotParams->m_plotViaOnMaskLayer = ParseBool();
+            aPcbPlotParams->m_plotViaOnMaskLayer = parseBool();
             break;
         case T_mode:
-            aPcbPlotParams->m_mode = static_cast<EDA_DRAW_MODE_T>( ParseInt( 0, 2 ) );
+            aPcbPlotParams->m_mode = static_cast<EDA_DRAW_MODE_T>( parseInt( 0, 2 ) );
             break;
         case T_useauxorigin:
-            aPcbPlotParams->m_useAuxOrigin = ParseBool();
+            aPcbPlotParams->m_useAuxOrigin = parseBool();
             break;
         case T_hpglpennumber:
-            aPcbPlotParams->m_HPGLPenNum = ParseInt( HPGL_PEN_NUMBER_MIN,
+            aPcbPlotParams->m_HPGLPenNum = parseInt( HPGL_PEN_NUMBER_MIN,
                                                      HPGL_PEN_NUMBER_MAX );
             break;
         case T_hpglpenspeed:
-            aPcbPlotParams->m_HPGLPenSpeed = ParseInt( HPGL_PEN_SPEED_MIN,
+            aPcbPlotParams->m_HPGLPenSpeed = parseInt( HPGL_PEN_SPEED_MIN,
                                                        HPGL_PEN_SPEED_MAX );
             break;
         case T_hpglpendiameter:
-            aPcbPlotParams->m_HPGLPenDiam = ParseInt( HPGL_PEN_DIAMETER_MIN,
+            aPcbPlotParams->m_HPGLPenDiam = parseInt( HPGL_PEN_DIAMETER_MIN,
                                                       HPGL_PEN_DIAMETER_MAX );
             break;
         case T_hpglpenoverlay:
-            aPcbPlotParams->m_HPGLPenOvr = ParseInt( HPGL_PEN_OVERLAP_MIN,
+            aPcbPlotParams->m_HPGLPenOvr = parseInt( HPGL_PEN_OVERLAP_MIN,
                                                      HPGL_PEN_OVERLAP_MAX );
             break;
         case T_pscolor:
             NeedSYMBOL(); // This actually was never used...
             break;
         case T_psnegative:
-            aPcbPlotParams->m_negative = ParseBool();
+            aPcbPlotParams->m_negative = parseBool();
             break;
         case T_plotreference:
-            aPcbPlotParams->m_plotReference = ParseBool();
+            aPcbPlotParams->m_plotReference = parseBool();
             break;
         case T_plotvalue:
-            aPcbPlotParams->m_plotValue = ParseBool();
+            aPcbPlotParams->m_plotValue = parseBool();
             break;
         case T_plotothertext:
-            aPcbPlotParams->m_plotOtherText = ParseBool();
+            aPcbPlotParams->m_plotOtherText = parseBool();
             break;
         case T_plotinvisibletext:
-            aPcbPlotParams->m_plotInvisibleText = ParseBool();
+            aPcbPlotParams->m_plotInvisibleText = parseBool();
             break;
         case T_padsonsilk:
-            aPcbPlotParams->m_plotPadsOnSilkLayer= ParseBool();
+            aPcbPlotParams->m_plotPadsOnSilkLayer= parseBool();
             break;
         case T_subtractmaskfromsilk:
-            aPcbPlotParams->m_subtractMaskFromSilk = ParseBool();
+            aPcbPlotParams->m_subtractMaskFromSilk = parseBool();
             break;
         case T_outputformat:
             aPcbPlotParams->m_format = static_cast<PlotFormat>(
-                                    ParseInt( PLOT_FIRST_FORMAT, PLOT_LAST_FORMAT ) );
+                                    parseInt( PLOT_FIRST_FORMAT, PLOT_LAST_FORMAT ) );
             break;
         case T_mirror:
-            aPcbPlotParams->m_mirror = ParseBool();
+            aPcbPlotParams->m_mirror = parseBool();
             break;
         case T_drillshape:
             aPcbPlotParams->m_drillMarks = static_cast<PCB_PLOT_PARAMS::DrillMarksType>
-                                            ( ParseInt( 0, 2 ) );
+                                            ( parseInt( 0, 2 ) );
             break;
         case T_scaleselection:
-            aPcbPlotParams->m_scaleSelection = ParseInt( 0, 4 );
+            aPcbPlotParams->m_scaleSelection = parseInt( 0, 4 );
             break;
         case T_outputdirectory:
             NeedSYMBOL();
@@ -424,7 +430,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 }
 
 
-bool PCB_PLOT_PARAMS_PARSER::ParseBool()
+bool PCB_PLOT_PARAMS_PARSER::parseBool()
 {
     T token = NeedSYMBOL();
 
@@ -435,7 +441,7 @@ bool PCB_PLOT_PARAMS_PARSER::ParseBool()
 }
 
 
-int PCB_PLOT_PARAMS_PARSER::ParseInt( int aMin, int aMax )
+int PCB_PLOT_PARAMS_PARSER::parseInt( int aMin, int aMax )
 {
     T token = NextTok();
 
@@ -448,6 +454,19 @@ int PCB_PLOT_PARAMS_PARSER::ParseInt( int aMin, int aMax )
         val = aMin;
     else if( val > aMax )
         val = aMax;
+
+    return val;
+}
+
+
+double PCB_PLOT_PARAMS_PARSER::parseDouble()
+{
+    T token = NextTok();
+
+    if( token != T_NUMBER )
+        Expecting( T_NUMBER );
+
+    double val = strtod( CurText(), NULL );
 
     return val;
 }

@@ -64,7 +64,7 @@ void PSLIKE_PLOTTER::SetColor( EDA_COLOR_T color )
 }
 
 
-void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int orient,
+void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
                                    EDA_DRAW_MODE_T modetrace )
 {
     wxASSERT( outputFile );
@@ -75,9 +75,7 @@ void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int 
     if( size.x > size.y )
     {
         EXCHG( size.x, size.y );
-        orient += 900;
-        if( orient >= 3600 )
-            orient -= 3600;
+        orient = AddAngles( orient, 900 );
     }
 
     delta = size.y - size.x;
@@ -117,7 +115,7 @@ void PSLIKE_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 
 
 void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
-                                   int orient, EDA_DRAW_MODE_T trace_mode )
+                                   double orient, EDA_DRAW_MODE_T trace_mode )
 {
     static std::vector< wxPoint > cornerList;
     wxSize size( aSize );
@@ -161,7 +159,7 @@ void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
 
 
 void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                     int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
+                                     double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 {
     static std::vector< wxPoint > cornerList;
     cornerList.clear();
@@ -345,11 +343,6 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
                                             double                   *ctm_f,
                                             double                   *heightFactor )
 {
-    // These are for the rotation matrix
-    double alpha = DEG2RAD( aOrient / 10.0 );
-    double sinalpha = sin( alpha );
-    double cosalpha = cos( alpha );
-
     // Compute the starting position (compensated for alignment)
     wxPoint start_pos = aPos;
 
@@ -399,6 +392,10 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
     *wideningFactor = sz_dev.y / sz_dev.x;
 
     // The CTM transformation matrix
+    double alpha = DECIDEG2RAD( aOrient );
+    double sinalpha = sin( alpha );
+    double cosalpha = cos( alpha );
+
     *ctm_a = cosalpha;
     *ctm_b = sinalpha;
     *ctm_c = -sinalpha;
@@ -474,8 +471,8 @@ void PS_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int widt
 }
 
 
-void PS_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int radius,
-                      FILL_T fill, int width )
+void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
+                      int radius, FILL_T fill, int width )
 {
     wxASSERT( outputFile );
     if( radius <= 0 )
@@ -808,7 +805,7 @@ bool PS_PLOTTER::EndPlot()
 void PS_PLOTTER::Text( const wxPoint&              aPos,
 		       enum EDA_COLOR_T            aColor,
 		       const wxString&             aText,
-		       int                         aOrient,
+		       double                      aOrient,
 		       const wxSize&               aSize,
 		       enum EDA_TEXT_HJUSTIFY_T    aH_justify,
 		       enum EDA_TEXT_VJUSTIFY_T    aV_justify,

@@ -10,7 +10,7 @@
 
 #define UNIT_MM 1e-3            // mm to meter
 #define UNIT_CM 1e-2            // cm to meter
-#define UNIT_MICRON 1e-6        // µm to meter
+#define UNIT_MICRON 1e-6        // um to meter
 #define UNIT_INCH (1e-2*2.54)   // inch to meter
 #define UNIT_MIL (1e-5*2.54)    // mil (or thou) to meter
 
