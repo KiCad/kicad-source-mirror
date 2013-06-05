@@ -293,20 +293,17 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 format = aTextbase[++ii];
                 switch( format )
                 {
+                case '0':
                 case '1':
-                    msg += m_titleBlock->GetComment1();
-                    break;
-
                 case '2':
-                    msg += m_titleBlock->GetComment2();
-                    break;
-
                 case '3':
-                    msg += m_titleBlock->GetComment3();
-                    break;
-
                 case '4':
-                    msg += m_titleBlock->GetComment4();
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    msg += m_titleBlock->GetComment( format - '0');
                     break;
 
                 default:
@@ -326,43 +323,42 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
     throw( IO_ERROR )
 {
     // Don't write the title block information if there is nothing to write.
-    if(  !m_title.IsEmpty() || !m_date.IsEmpty() || !m_revision.IsEmpty()
-      || !m_company.IsEmpty() || !m_comment1.IsEmpty() || !m_comment2.IsEmpty()
-      || !m_comment3.IsEmpty() || !m_comment4.IsEmpty()  )
+    bool isempty = true;
+    for( unsigned idx = 0; idx < m_tbTexts.GetCount(); idx++ )
+    {
+        if( ! m_tbTexts[idx].IsEmpty() )
+        {
+            isempty = false;
+            break;
+        }
+    }
+
+    if( !isempty  )
     {
         aFormatter->Print( aNestLevel, "(title_block\n" );
 
-        if( !m_title.IsEmpty() )
+        if( !GetTitle().IsEmpty() )
             aFormatter->Print( aNestLevel+1, "(title %s)\n",
-                               aFormatter->Quotew( m_title ).c_str() );
+                               aFormatter->Quotew( GetTitle() ).c_str() );
 
-        if( !m_date.IsEmpty() )
+        if( !GetDate().IsEmpty() )
             aFormatter->Print( aNestLevel+1, "(date %s)\n",
-                               aFormatter->Quotew( m_date ).c_str() );
+                               aFormatter->Quotew( GetDate() ).c_str() );
 
-        if( !m_revision.IsEmpty() )
+        if( !GetRevision().IsEmpty() )
             aFormatter->Print( aNestLevel+1, "(rev %s)\n",
-                               aFormatter->Quotew( m_revision ).c_str() );
+                               aFormatter->Quotew( GetRevision() ).c_str() );
 
-        if( !m_company.IsEmpty() )
+        if( !GetCompany().IsEmpty() )
             aFormatter->Print( aNestLevel+1, "(company %s)\n",
-                               aFormatter->Quotew( m_company ).c_str() );
+                               aFormatter->Quotew( GetCompany() ).c_str() );
 
-        if( !m_comment1.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(comment 1 %s)\n",
-                               aFormatter->Quotew( m_comment1 ).c_str() );
-
-        if( !m_comment2.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(comment 2 %s)\n",
-                               aFormatter->Quotew( m_comment2 ).c_str() );
-
-        if( !m_comment3.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(comment 3 %s)\n",
-                               aFormatter->Quotew( m_comment3 ).c_str() );
-
-        if( !m_comment4.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "(comment 4 %s)\n",
-                               aFormatter->Quotew( m_comment4 ).c_str() );
+        for( int ii = 0; ii < 3; ii++ )
+        {
+            if( !GetComment(ii).IsEmpty() )
+                aFormatter->Print( aNestLevel+1, "(comment %d %s)\n", ii+1,
+                                  aFormatter->Quotew( GetComment(1) ).c_str() );
+        }
 
         aFormatter->Print( aNestLevel, ")\n\n" );
     }

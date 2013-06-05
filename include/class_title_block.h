@@ -39,49 +39,94 @@ struct IO_ERROR;
  */
 class TITLE_BLOCK
 {
+    // Texts are stored in wxArraystring.
+    // textsIdx gives the index of known texts in
+    // this array
+    enum textsIdx
+    {
+        titleIdx = 0,
+        dateIdx,
+        revisionIdx,
+        companyIdx,
+        m_commentIdx
+    };
+
 public:
-    // TITLE_BLOCK();
+
+    TITLE_BLOCK() {};
     virtual ~TITLE_BLOCK() {};      // a virtual dtor seems needed to build
                                     // python lib without warning
 
-    void SetTitle( const wxString& aTitle )             { m_title = aTitle; }
-    const wxString& GetTitle() const                    { return m_title; }
+    void SetTitle( const wxString& aTitle )
+    {
+        setTbText( titleIdx, aTitle );
+    }
+
+    const wxString& GetTitle() const
+    {
+        return getTbText( titleIdx );;
+    }
 
     /**
      * Function SetDate
      * sets the date field, and defaults to the current time and date.
      */
-    void SetDate( const wxString& aDate )               { m_date = aDate; }
-    const wxString& GetDate() const                     { return m_date; }
+    void SetDate( const wxString& aDate )
+    {
+        setTbText( dateIdx, aDate );
+    }
 
-    void SetRevision( const wxString& aRevision )       { m_revision = aRevision; }
-    const wxString& GetRevision() const                 { return m_revision; }
+    const wxString& GetDate() const
+    {
+        return getTbText( dateIdx );
+    }
 
-    void SetCompany( const wxString& aCompany )         { m_company = aCompany; }
-    const wxString& GetCompany() const                  { return m_company; }
+    void SetRevision( const wxString& aRevision )
+    {
+        setTbText( revisionIdx, aRevision );
+    }
 
-    void SetComment1( const wxString& aComment )        { m_comment1 = aComment; }
-    const wxString& GetComment1() const                 { return m_comment1; }
+    const wxString& GetRevision() const
+    {
+        return getTbText( revisionIdx );
+    }
 
-    void SetComment2( const wxString& aComment )        { m_comment2 = aComment; }
-    const wxString& GetComment2() const                 { return m_comment2; }
+    void SetCompany( const wxString& aCompany )
+    {
+        setTbText( companyIdx, aCompany );
+    }
 
-    void SetComment3( const wxString& aComment )        { m_comment3 = aComment; }
-    const wxString& GetComment3() const                 { return m_comment3; }
+    const wxString& GetCompany() const
+    {
+        return getTbText( companyIdx );
+    }
 
-    void SetComment4( const wxString& aComment )        { m_comment4 = aComment; }
-    const wxString& GetComment4() const                 { return m_comment4; }
+    void SetComment(  int aIdx, const wxString& aComment )
+    {
+        aIdx += m_commentIdx;
+        return setTbText( aIdx, aComment );
+    }
+
+    const wxString& GetComment( int aIdx ) const
+    {
+        aIdx += m_commentIdx;
+        return getTbText( aIdx );
+    }
+
+    // Only for old code compatibility. Will be removed later
+    void SetComment1( const wxString& aComment ) { SetComment( 0, aComment ); }
+    void SetComment2( const wxString& aComment ) { SetComment( 1, aComment ); }
+    void SetComment3( const wxString& aComment ) { SetComment( 2, aComment ); }
+    void SetComment4( const wxString& aComment ) { SetComment( 3, aComment ); }
+    const wxString& GetComment1( ) const { return GetComment( 0 ); }
+    const wxString& GetComment2( ) const { return GetComment( 1 ); }
+    const wxString& GetComment3( ) const { return GetComment( 2 ); }
+    const wxString& GetComment4( ) const { return GetComment( 3 ); }
+
 
     void Clear()
     {
-        m_title.clear();
-        m_date.clear();
-        m_revision.clear();
-        m_company.clear();
-        m_comment1.clear();
-        m_comment2.clear();
-        m_comment3.clear();
-        m_comment4.clear();
+        m_tbTexts.Clear();
     }
 
     /**
@@ -97,14 +142,24 @@ public:
         throw( IO_ERROR );
 
 private:
-    wxString    m_title;
-    wxString    m_date;
-    wxString    m_revision;
-    wxString    m_company;
-    wxString    m_comment1;
-    wxString    m_comment2;
-    wxString    m_comment3;
-    wxString    m_comment4;
+    wxArrayString m_tbTexts;
+
+    void setTbText( int aIdx, const wxString& aText )
+    {
+        if( (int)m_tbTexts.GetCount() <= aIdx )
+            m_tbTexts.Add( wxEmptyString, aIdx + 1 - m_tbTexts.GetCount() );
+        m_tbTexts[aIdx] = aText;
+    }
+
+    const wxString& getTbText( int aIdx ) const
+    {
+        static const wxString m_emptytext;
+
+        if( (int)m_tbTexts.GetCount() > aIdx )
+            return m_tbTexts[aIdx];
+        else
+            return m_emptytext;
+    }
 };
 
 #endif // TITLE_BLOCK_H_

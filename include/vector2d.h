@@ -27,7 +27,7 @@
 #define VECTOR2D_H_
 
 #include <cmath>
-#include <wx/gdicmn.h>
+#include <wx/gdicmn.h>      // For wxPoint definition
 
 
 /// Forward declaration for template friends

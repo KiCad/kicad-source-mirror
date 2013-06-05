@@ -28,16 +28,22 @@ development libaries.
 After a fresh install you need the following packages to compile and run
 KiCad from source.
 
-CMake   - Cross-platform make
-GLUT    - The OpenGL Utility Library
-wxGTK or wxWidgets  - The wxWidgets GUI toolkit with GTK+ bindings
+* bzr     - Bazaar version control system
+* CMake   - Cross-platform make
+* GLUT    - The OpenGL Utility Library
+* wxGTK or wxWidgets  - The wxWidgets GUI toolkit with GTK+ bindings
 
-Boost   - Collection of portable C++ source libraries
-Because boost is in the repository of kicad you don't need to install them.
+* Boost   - Collection of portable C++ source libraries
+boost will be automagically downloaded and copied in kicad sources tree,
+the first time you compile kicad.
 
 Useful, but not required:
-Doxygen - Documentation system for several programming languages
+* Doxygen - Documentation system for several programming languages
 
+KiCad uses the Bazaar version control system to track source code changes,
+and download the boost libraries needed by Kicad.
+Be sure you bzr install also includes bzrtools.
+boost libraries will be downloaded the first time you build Kicad.
 
 Compiler and basic development tools
 -------------
