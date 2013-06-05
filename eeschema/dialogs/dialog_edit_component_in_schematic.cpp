@@ -40,12 +40,95 @@
 #include <class_library.h>
 #include <sch_component.h>
 #include <dialog_helpers.h>
+#include <dialog_edit_component_in_schematic_fbp.h>
 
-#include <dialog_edit_component_in_schematic.h>
+
+/**
+ * class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC
+ * is hand coded and implements DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP which
+ * is maintained by wxFormBuilder.  Do not auto-generate this class or file,
+ * it is hand coded.
+ */
+class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP
+{
+public:
+    /** Constructor */
+    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow* parent );
+
+    /**
+     * Function InitBuffers
+     * sets up to edit the given component.
+     * @param aComponent The component to edit.
+     */
+    void InitBuffers( SCH_COMPONENT* aComponent );
+
+private:
+
+    friend class SCH_EDIT_FRAME;
+
+    SCH_EDIT_FRAME* m_Parent;
+    SCH_COMPONENT*  m_Cmp;
+    LIB_COMPONENT*  m_LibEntry;
+    bool            m_skipCopyFromPanel;
+
+    static int      s_SelectedRow;
+
+    /// a copy of the edited component's SCH_FIELDs
+    SCH_FIELDS      m_FieldsBuf;
+
+    void setSelectedFieldNdx( int aFieldNdx );
+
+    int getSelectedFieldNdx();
+
+    /**
+     * Function copySelectedFieldToPanel
+     * sets the values displayed on the panel according to
+     * the currently selected field row
+     */
+    void copySelectedFieldToPanel();
+
+
+    /**
+     * Function copyPanelToSelectedField
+     * copies the values displayed on the panel fields to the currently
+     * selected field
+     * @return bool - true if all fields are OK, else false if the user has put
+     *   bad data into a field, and this value can be used to deny a row change.
+     */
+    bool copyPanelToSelectedField();
+
+    void copyOptionsToPanel();
+
+    void copyPanelToOptions();
+
+    void setRowItem( int aFieldNdx, const SCH_FIELD& aField );
+
+    // event handlers
+    void OnListItemDeselected( wxListEvent& event );
+    void OnListItemSelected( wxListEvent& event );
+    void OnCancelButtonClick( wxCommandEvent& event );
+    void OnOKButtonClick( wxCommandEvent& event );
+    void SetInitCmp( wxCommandEvent& event );
+    void addFieldButtonHandler( wxCommandEvent& event );
+    void deleteFieldButtonHandler( wxCommandEvent& event );
+    void moveUpButtonHandler( wxCommandEvent& event );
+
+    SCH_FIELD* findField( const wxString& aFieldName );
+
+    /**
+     * Function updateDisplay
+     * update the listbox showing fields, according to the fields texts
+     * must be called after a text change in fields, if this change is not an edition
+     */
+    void updateDisplay( )
+    {
+        for( unsigned ii = FIELD1;  ii<m_FieldsBuf.size(); ii++ )
+            setRowItem( ii, m_FieldsBuf[ii] );
+    }
+};
 
 
 int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_SelectedRow;
-wxSize DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = wxDefaultSize;
 
 
 void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
@@ -59,24 +142,10 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
 
     dlg->InitBuffers( aComponent );
 
-    wxSize sizeNow = dlg->GetSize();
-
-    // this relies on wxDefaultSize being -1,-1, be careful here.
-    if( sizeNow.GetWidth() < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetWidth()
-        || sizeNow.GetHeight() < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetHeight() )
-    {
-        dlg->SetSize( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize );
-    }
-
     // make sure the chipnameTextCtrl is wide enough to hold any unusually long chip names:
     EnsureTextCtrlWidth( dlg->chipnameTextCtrl );
 
     dlg->ShowModal();
-
-    // Some of the field values are long and are not always fully visible because the
-    // window comes up too narrow.  Remember user's manual window resizing efforts here
-    // so it comes up wide enough next time.
-    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = dlg->GetSize();
 
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
