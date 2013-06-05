@@ -1,3 +1,17 @@
+Bazaar
+------
+KiCad uses the Bazaar version control system to track source code changes,
+and download the boost libraries needed by Kicad.
+The easiest way to get a copy of the KiCad source is to use Bazaar.
+Bazaar can be download from http://wiki.bazaar.canonical.com.
+Your best bet is to use the stand alone version of Bazaar
+(which includes bzrtools, needed by Kicad) rather than one of
+the Python specific versions.
+Be sure bzrtools is also installed.
+boost libraries will be downloaded the first time you build Kicad.
+
+CMake
+-----
 KiCad uses CMake to generate the build files specific for the target platform
 specified by the developer.  This document attempts to define some of the more
 common CMake and KiCad build configuration settings.  You can use CMake either

@@ -1,5 +1,5 @@
 /**
- * @file title_block_shapes_gost.cpp
+ * @file title_block_shape_gost.h
  * @brief description of graphic items and texts to build a title block
  * using GOST standard
  */
@@ -42,6 +42,17 @@
 #include <worksheet_shape_builder.h>
 
 #define TEXTSIZE        100             // worksheet text size
+
+struct Ki_WorkSheetData
+{
+public:
+    int               m_Type;
+    Ki_WorkSheetData* Pnext;
+    int               m_Posx, m_Posy;
+    int               m_Endx, m_Endy;
+    const wxChar*     m_TextBase;
+    int               m_Flags;
+};
 
 // Work sheet structure type definitions.
 enum TypeKi_WorkSheetData {
