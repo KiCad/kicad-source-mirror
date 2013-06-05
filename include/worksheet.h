@@ -47,4 +47,9 @@ void DrawPageLayout( wxDC* aDC, EDA_DRAW_PANEL * aCanvas,
                      int aPenWidth, double aScalar,
                      EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor );
 
+// defaultPageLayout is the default page layout description
+// using the S expr.
+// see page_layout_default_shape.cpp
+extern const char defaultPageLayout[];
+
 #endif // WORKSHEET_H_

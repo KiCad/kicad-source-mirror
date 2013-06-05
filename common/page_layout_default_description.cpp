@@ -106,16 +106,18 @@
  *
  */
 
+#include <worksheet.h>      // defaultPageLayout
+
+
 // height of the band reference grid  2.0 mm
 // worksheet frame reference text size 1.3 mm
 // default text size 1.5 mm
 // default line width 0.15 mm
 // frame ref pitch 50 mm
 
-extern const wxString   defaultPageLayout;
 
 // Default page layout (sizes are in mm)
-const wxString          defaultPageLayout( wxT( "( page_layout\n"
+const char defaultPageLayout[] = "( page_layout\n"
 "(setup (textsize 1.5 1.5) (linewidth 0.15) (textlinewidth 0.15) )"
 "(rect (comment rect around the title block) (linewidth 0.15) (start 110 34) (end 2 2) )\n"
 "(rect (start 0 0 ltcorner) (end 0 0 rbcorner) (repeat 2) (incrx 2) (incry 2) )\n"
@@ -146,4 +148,5 @@ const wxString          defaultPageLayout( wxT( "( page_layout\n"
 "(tbtext \"%C3\" (comment Comment 0) (pos 108 32) )\n"
 "(line (start 90 8.5) end 90 5.5) )\n"
 "(line (start 26 8.5) end 26 2) )\n"
-")\n" ) );
+")\n"
+;
