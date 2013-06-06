@@ -34,7 +34,6 @@ using namespace KiGfx;
 
 VBO_ITEM::VBO_ITEM() :
         m_vertices( NULL ),
-        m_indices( NULL ),
         m_offset( 0 ),
         m_size( 0 ),
         m_isDirty( true ),
@@ -56,17 +55,10 @@ VBO_ITEM::~VBO_ITEM()
         std::list<VBO_VERTEX*>::const_iterator v_it, v_end;
         for( v_it = m_vertBlocks.begin(), v_end = m_vertBlocks.end(); v_it != v_end; ++v_it )
             delete[] *v_it;
-
-        std::list<GLuint*>::const_iterator i_it, i_end;
-        for( i_it = m_indBlocks.begin(), i_end = m_indBlocks.end(); i_it != i_end; ++i_it )
-            delete[] *i_it;
     }
 
     if( m_vertices )
         delete m_vertices;
-
-    if( m_indices )
-        delete m_indices;
 }
 
 
@@ -100,10 +92,6 @@ void VBO_ITEM::PushVertex( const GLfloat* aVertex )
     // Move to the next free space
     m_vertPtr++;
 
-    // Add the new index
-    *m_indPtr = m_offset + m_size;
-    m_indPtr++;
-
     m_size++;
     m_isDirty = true;
     m_spaceLeft--;
@@ -128,50 +116,6 @@ GLfloat* VBO_ITEM::GetVertices()
 }
 
 
-GLuint* VBO_ITEM::GetIndices()
-{
-    if( m_isDirty )
-        prepareFinal();
-
-    return m_indices;
-}
-
-
-int VBO_ITEM::GetSize() const
-{
-    return m_size;
-}
-
-
-void VBO_ITEM::SetOffset( int aOffset )
-{
-    if( m_offset == aOffset )
-        return;
-
-    int delta = aOffset - m_offset;
-
-    // Change offset for all the stored indices
-    for( int i = 0; i < m_size; ++i )
-    {
-        m_indices += delta;
-    }
-
-    m_offset = aOffset;
-}
-
-
-int VBO_ITEM::GetOffset() const
-{
-    return m_offset;
-}
-
-
-void VBO_ITEM::SetTransformMatrix( const glm::mat4* aMatrix )
-{
-    m_transform = aMatrix;
-}
-
-
 void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
 {
     if( m_isDirty )
@@ -191,31 +135,12 @@ void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
 }
 
 
-void VBO_ITEM::UseColor( const COLOR4D& aColor )
-{
-    m_color[0] = aColor.r;
-    m_color[1] = aColor.g;
-    m_color[2] = aColor.b;
-    m_color[3] = aColor.a;
-}
-
-
-void VBO_ITEM::UseShader( const GLfloat* aShader )
-{
-    memcpy( m_shader, aShader, ShaderByteSize );
-}
-
-
 void VBO_ITEM::useNewBlock()
 {
     VBO_VERTEX* newVertBlock = new VBO_VERTEX[BLOCK_SIZE];
-    GLuint*     newIndBlock  = new GLuint[BLOCK_SIZE];
 
     m_vertPtr = newVertBlock;
-    m_indPtr  = newIndBlock;
-
     m_vertBlocks.push_back( newVertBlock );
-    m_indBlocks.push_back( newIndBlock );
 
     m_spaceLeft = BLOCK_SIZE;
 }
@@ -242,26 +167,6 @@ void VBO_ITEM::prepareFinal()
 
     // In the last block we need to copy only used vertices
     memcpy( vertPtr, *v_it, ( BLOCK_SIZE - m_spaceLeft ) * VertByteSize );
-
-    if( m_indices )
-        delete m_indices;
-
-    // Allocate memory that would store all of indices
-    m_indices = new GLuint[m_size * IndStride];
-    // Set the pointer that will move along the buffer
-    GLuint* indPtr = m_indices;
-
-    // Copy blocks of indices one after another to m_indices
-    std::list<GLuint*>::const_iterator i_it;
-    for( i_it = m_indBlocks.begin(); *i_it != m_indBlocks.back(); ++i_it )
-    {
-        memcpy( indPtr, *i_it, BLOCK_SIZE * IndByteSize );
-        delete[] *i_it;
-        indPtr += ( BLOCK_SIZE * IndStride );
-    }
-
-    // In the last block we need to copy only used indices
-    memcpy( indPtr, *i_it, ( BLOCK_SIZE - m_spaceLeft ) * IndByteSize );
 
     m_isDirty = false;
 }

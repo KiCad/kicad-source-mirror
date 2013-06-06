@@ -45,8 +45,7 @@ typedef struct VBO_VERTEX
     GLfloat x, y, z;        // Coordinates
     GLfloat r, g, b, a;     // Color
     GLfloat shader[4];      // Shader type & params
-} VBO_VERTEX_DATA;
-
+} VBO_VERTEX;
 
 class VBO_ITEM
 {
@@ -81,33 +80,36 @@ public:
      */
     GLfloat* GetVertices();
 
-    /**
-     * Function GetIndices()
-     * Returns a pointer to the array containing all indices of vertices.
-     * @return Pointer to indices.
-     */
-    GLuint* GetIndices();
 
     /**
      * Function GetSize()
      * Returns information about number of vertices stored.
      * @param Amount of vertices.
      */
-    int  GetSize() const;
+    inline int GetSize() const
+    {
+        return m_size;
+    }
 
     /**
      * Function SetOffset()
      * Sets data offset in the VBO.
      * @param aOffset is the offset expressed as a number of vertices.
      */
-    void SetOffset( int aOffset );
+    void SetOffset( int aOffset )
+    {
+        m_offset = aOffset;
+    }
 
     /**
      * Function GetOffset()
      * Returns data offset in the VBO.
      * @return Data offset expressed as a number of vertices.
      */
-    int  GetOffset() const;
+    inline int GetOffset() const
+    {
+        return m_offset;
+    }
 
     /**
      * Function SetTransformMatrix()
@@ -116,7 +118,10 @@ public:
      * @param aMatrix is the new transform matrix or NULL if you do not want to use transformation
      * matrix.
      */
-    void SetTransformMatrix( const glm::mat4* aMatrix );
+    void SetTransformMatrix( const glm::mat4* aMatrix )
+    {
+        m_transform = aMatrix;
+    }
 
     /**
      * Function ChangeColor()
@@ -130,18 +135,37 @@ public:
      * Sets color used for all added vertices.
      * @param aColor is the color used for added vertices.
      */
-    void UseColor( const COLOR4D& aColor );
+    void UseColor( const COLOR4D& aColor )
+    {
+        m_color[0] = aColor.r;
+        m_color[1] = aColor.g;
+        m_color[2] = aColor.b;
+        m_color[3] = aColor.a;
+    }
 
     /**
      * Function UseShader()
      * Sets shader and its parameters used for all added vertices.
      * @param aShader is the array that contains shader number followed by its parameters.
      */
-    void UseShader( const GLfloat* aShader );
+    inline void UseShader( const GLfloat* aShader )
+    {
+        for( int i = 0; i < ShaderStride; ++i )
+        {
+            m_shader[i] = aShader[i];
+        }
+    }
 
-    ///< Functions for getting VBO ids.
-    //void SetVbo( int aVboId );
-    //int  GetVbo() const;
+
+    inline void FreeVerticesData()
+    {
+        if( m_vertices && !m_isDirty )
+        {
+            delete[] m_vertices;
+            m_vertices = NULL;
+        }
+    }
+
 
     ///< Data organization information for vertices {X,Y,Z,R,G,B,A} (@see VBO_VERTEX).
     static const int VertByteSize       = sizeof(VBO_VERTEX);
@@ -164,26 +188,22 @@ public:
     static const int ShaderByteSize     = sizeof(VBO_VERTEX().shader);
     static const int ShaderStride       = ShaderByteSize / sizeof(GLfloat);
 
-    static const int IndStride          = 1;
-    static const int IndByteSize        = IndStride * sizeof(GLuint);
+    static const int IndByteSize        = sizeof(GLuint);
 
 private:
     ///< Contains vertices coordinates and colors.
     ///< Packed by 7 floats for each vertex: {X, Y, Z, R, G, B, A}
     GLfloat*                m_vertices;
 
-    ///< Indices of vertices
-    GLuint*                 m_indices;
-
     ///< Lists of data blocks storing vertices
     std::list<VBO_VERTEX*>  m_vertBlocks;
-    std::list<GLuint*>      m_indBlocks;
+
     ///< Pointers to current blocks that should be used for storing data
     VBO_VERTEX*             m_vertPtr;
-    GLuint*                 m_indPtr;
+
     ///< How many vertices can be stored in the current buffer
     int                     m_spaceLeft;
-    ///< Number of vertices & indices stored in a single block
+    ///< Number of vertices stored in a single block
     static const int        BLOCK_SIZE = 256;
     ///< Creates a new block for storing vertices data
     void                    useNewBlock();
