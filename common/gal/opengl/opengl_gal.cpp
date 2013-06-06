@@ -414,9 +414,19 @@ void OPENGL_GAL::BeginDrawing()
     if( vboNeedsUpdate )
         rebuildVbo();
 
-    // Clear indices buffer
-    itemsToDraw.clear();
-    itemsToDrawSize = 0;
+    // Number of vertices to be drawn
+    indicesSize = 0;
+
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, curVboIndId );
+    // Discard old buffer, so we can use it again
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboSize * VBO_ITEM::IndByteSize, NULL, GL_STREAM_DRAW );
+
+    // Map the GPU memory, so we can store indices that are going to be drawn
+    indicesPtr = static_cast<GLuint*>( glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY ) );
+    if( indicesPtr == NULL )
+    {
+        wxLogError( wxT( "Could not map GPU memory" ) );
+    }
 }
 
 
@@ -473,6 +483,11 @@ void OPENGL_GAL::EndDrawing()
     // TODO Checking if we are using right VBOs, in other case do the binding.
     // Right now there is only one VBO, so there is no problem.
 
+    if( !glUnmapBuffer( GL_ELEMENT_ARRAY_BUFFER ) )
+    {
+        wxLogError( wxT( "Unmapping indices buffer failed" ) );
+    }
+
     // Prepare buffers
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_COLOR_ARRAY );
@@ -492,28 +507,7 @@ void OPENGL_GAL::EndDrawing()
                                VBO_ITEM::VertByteSize, (GLvoid*) VBO_ITEM::ShaderByteOffset );
     }
 
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, curVboIndId );
-    GLuint* indicesPtr = static_cast<GLuint*>( glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY ) );
-
-    if( indicesPtr == NULL )
-    {
-        wxLogError( wxT( "Could not map GPU memory" ) );
-    }
-
-    // Copy indices of items that should be drawn to GPU memory
-    std::list<VBO_ITEM*>::const_iterator it, end;
-    for( it = itemsToDraw.begin(), end = itemsToDraw.end(); it != end; ++it )
-    {
-        memcpy( indicesPtr, (*it)->GetIndices(), (*it)->GetSize() * VBO_ITEM::IndByteSize );
-        indicesPtr += (*it)->GetSize() * VBO_ITEM::IndStride;
-    }
-
-    if( !glUnmapBuffer( GL_ELEMENT_ARRAY_BUFFER ) )
-    {
-        wxLogError( wxT( "Unmapping indices buffer failed" ) );
-    }
-
-    glDrawElements( GL_TRIANGLES, itemsToDrawSize, GL_UNSIGNED_INT, (GLvoid*) 0 );
+    glDrawElements( GL_TRIANGLES, indicesSize, GL_UNSIGNED_INT, (GLvoid*) 0 );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
 
@@ -1704,8 +1698,13 @@ void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 
 void OPENGL_GAL::DrawGroup( int aGroupNumber )
 {
-    itemsToDraw.push_back( vboItems[aGroupNumber] );
-    itemsToDrawSize += vboItems[aGroupNumber]->GetSize();
+    int size = vboItems[aGroupNumber]->GetSize();
+    int offset = vboItems[aGroupNumber]->GetOffset();
+
+    // Copy indices of items that should be drawn to GPU memory
+    for( int i = offset; i < offset + size; *indicesPtr++ = i++ );
+
+    indicesSize += size;
 }
 
 
