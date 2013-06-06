@@ -225,8 +225,6 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
 
     WS_DRAW_ITEM_TEXT* gtext;
     int pensize;
-    bool bold;
-    bool italic = false;
     EDA_COLOR_T color;
 
     for( unsigned ii = 0; ; ii++ )
@@ -245,7 +243,6 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
             if( wsText->m_FullText.IsEmpty() )
                 break;
 
-            bold = false;
             pensize = wsText->GetPenSizeUi();
 
             if( pensize == 0 )
@@ -264,11 +261,8 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
             textsize.y = KiROUND( wsText->m_ConstrainedTextSize.y
                                   * WORKSHEET_DATAITEM::m_WSunits2Iu );
 
-            if( wsText->m_Flags & USE_BOLD )
-            {
-                bold = true;
+            if( wsText->IsBold())
                 pensize = GetPenSizeForBold( std::min( textsize.x, textsize.y ) );
-            }
 
             for( int jj = 0; jj < wsText->m_RepeatCount; )
             {
@@ -277,7 +271,9 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                 Append( gtext = new WS_DRAW_ITEM_TEXT( wsText->m_FullText,
                                                        wsText->GetStartPosUi( jj ),
                                                        textsize,
-                                                       pensize, color, italic, bold ) );
+                                                       pensize, color,
+                                                       wsText->IsItalic(),
+                                                       wsText->IsBold() ) );
                 wsText->TransfertSetupToGraphicText( gtext );
 
                 jj++;

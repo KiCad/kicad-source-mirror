@@ -104,6 +104,27 @@
  *  and the full text x size to the maxlen value.
  *  If the actual text size is smaller than limits, its size is not modified.
  *
+ * Texts can include a format symbol, a la printf.
+ * At run time these format symbols will be replaced by their actual value.
+ *
+ * format symbols are:
+ *
+ * %% = replaced by %
+ * %K = Kicad version
+ * %Z = paper format name (A4, USLetter ...)
+ * %Y = company name
+ * %D = date
+ * %R = revision
+ * %S = sheet number
+ * %N = number of sheets
+ * %Cx = comment (x = 0 to 9 to identify the comment)
+ * %F = filename
+ * %P = sheet path (sheet full name)
+ * %T = title
+ *
+ * example:
+ * (tbtext \"Size: %Z\" ...) displays "Size A4" or Size USLetter"
+ *
  */
 
 #include <worksheet.h>      // defaultPageLayout
@@ -133,11 +154,11 @@ const char defaultPageLayout[] = "( page_layout\n"
 "(line (start 110 5.5) end 2 5.5) )\n"
 "(tbtext \"%K\" (pos 109 4.1) (comment Kicad version ) )\n"
 "(line (start 110 8.5) end 2 8.5) )\n"
-"(tbtext \"Rev: %R\" (pos 24 6.9)(font bold italic)(justify left) )\n"
+"(tbtext \"Rev: %R\" (pos 24 6.9)(font bold)(justify left) )\n"
 "(tbtext \"Size: %Z\" (comment Paper format name)(pos 109 6.9) )\n"
 "(tbtext \"Id: %S/%N\" (comment Sheet id)(pos 24 4.1) )\n"
 "(line (start 110 12.5) end 2 12.5) )\n"
-"(tbtext \"Title: %T\" (pos 109 10.7)(font bold (size 2 2)) )\n"
+"(tbtext \"Title: %T\" (pos 109 10.7)(font bold italic (size 2 2)) )\n"
 "(tbtext \"File: %F\" (pos 109 14.3) )\n"
 "(line (start 110 18.5) end 2 18.5) )\n"
 "(tbtext \"Sheet: %P\" (pos 109 17) )\n"
