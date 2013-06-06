@@ -156,6 +156,16 @@ public:
      * the corresponding text size is not constrained
      */
     void SetConstrainedTextSize();
+
+    /**
+     * @return true is a bold font should be selected
+     */
+    bool IsBold() { return (m_Flags & USE_BOLD) != 0; }
+
+    /**
+     * @return true is an italic font should be selected
+     */
+    bool IsItalic() { return (m_Flags & USE_ITALIC) != 0; }
 };
 
 /*

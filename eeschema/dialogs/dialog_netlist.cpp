@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras@wanadoo.fr
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -656,7 +656,8 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup( void )
 
     m_config->Write( NETLIST_USE_DEFAULT_NETNAME, GetUseDefaultNetlistName() );
 
-    // Update the new titles
+    // Update existing custom pages
+    int jj = 0;
     for( int ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
     {
         NETLIST_PAGE_DIALOG* currPage = m_PanelNetType[ii + PANELCUSTOMBASE];
@@ -664,29 +665,32 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup( void )
         if( currPage == NULL )
             break;
 
-        msg = wxT( "Custom" );
-        msg << ii + 1;
+        wxString title = currPage->m_TitleStringCtrl->GetValue();
 
-        if( currPage->m_TitleStringCtrl )
-        {
-            wxString title = currPage->m_TitleStringCtrl->GetValue();
-            currPage->SetPageNetFmtName( title );
+        if( title.IsEmpty() )
+            continue;
 
-            if( msg != title ) // Title has changed, Update config
-            {
-                msg = CUSTOM_NETLIST_TITLE;
-                msg << ii + 1;
-                m_config->Write( msg, title );
-            }
-        }
+        msg = CUSTOM_NETLIST_TITLE;
+        msg << jj + 1;
+        m_config->Write( msg, title );
 
-        if( currPage->m_CommandStringCtrl )
-        {
-            Command = currPage->m_CommandStringCtrl->GetValue();
-            msg     = CUSTOM_NETLIST_COMMAND;
-            msg << ii + 1;
-            m_config->Write( msg, Command );
-        }
+        Command = currPage->m_CommandStringCtrl->GetValue();
+        msg     = CUSTOM_NETLIST_COMMAND;
+        msg << jj + 1;
+        m_config->Write( msg, Command );
+        jj++;
+    }
+
+    // Ensure all other pages are void
+    for(; jj < CUSTOMPANEL_COUNTMAX; jj++ )
+    {
+        msg = CUSTOM_NETLIST_TITLE;
+        msg << jj + 1;
+        m_config->Write( msg, wxEmptyString );
+
+        msg     = CUSTOM_NETLIST_COMMAND;
+        msg << jj + 1;
+        m_config->Write( msg, wxEmptyString );
     }
 }
 
@@ -807,8 +811,9 @@ void NETLIST_DIALOG_ADD_PLUGIN::OnBrowsePlugins( wxCommandEvent& event )
     if( FullFileName.IsEmpty() )
         return;
 
-    // Creates a default command line, suitable for external tool xslproc:
+    // Creates a default command line, suitable for external tool xslproc or python
     // try to build a default command line depending on plugin extension
+    // "xsl" or "exe" or "py"
     wxString cmdLine;
     wxFileName fn( FullFileName );
     wxString ext = fn.GetExt();
@@ -817,6 +822,8 @@ void NETLIST_DIALOG_ADD_PLUGIN::OnBrowsePlugins( wxCommandEvent& event )
         cmdLine.Printf(wxT("xsltproc -o \"%%O\" \"%s\" \"%%I\""), GetChars(FullFileName) );
     else if( ext == wxT("exe" ) || ext.IsEmpty() )
         cmdLine.Printf(wxT("\"%s\" > \"%%O\" < \"%%I\""), GetChars(FullFileName) );
+    else if( ext == wxT("py" ) || ext.IsEmpty() )
+        cmdLine.Printf(wxT("python \"%s\" \"%%I\" \"%%O\""), GetChars(FullFileName) );
     else
         cmdLine.Printf(wxT("\"%s\""), GetChars(FullFileName) );
 
