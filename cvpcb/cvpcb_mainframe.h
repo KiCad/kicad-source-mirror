@@ -45,6 +45,7 @@ class FOOTPRINTS_LISTBOX;
 class COMPONENTS_LISTBOX;
 class LIBRARY_LISTBOX;
 class DISPLAY_FOOTPRINTS_FRAME;
+class COMPONENT;
 
 
 /**
@@ -52,8 +53,9 @@ class DISPLAY_FOOTPRINTS_FRAME;
  */
 class CVPCB_MAINFRAME : public EDA_BASE_FRAME
 {
-public:
+    wxArrayString             m_footprintListEntries;
 
+public:
     bool                      m_KeepCvpcbOpen;
     FOOTPRINTS_LISTBOX*       m_FootprintList;
     LIBRARY_LISTBOX*          m_LibraryList;
@@ -80,9 +82,6 @@ protected:
 public:
     CVPCB_MAINFRAME( const wxString& title, long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
     ~CVPCB_MAINFRAME();
-
-    void             OnLeftClick( wxListEvent& event );
-    void             OnLeftDClick( wxListEvent& event );
 
     /**
      * Function OnSelectComponent
@@ -274,6 +273,8 @@ public:
      * $PART: "reference"   put cursor on component anchor
      */
     void SendMessageToEESCHEMA();
+
+    COMPONENT* GetSelectedComponent();
 
     DECLARE_EVENT_TABLE()
 };
