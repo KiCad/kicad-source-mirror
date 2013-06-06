@@ -588,13 +588,6 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
     double   lineLength     = startEndVector.EuclideanNorm();
     double   scale          = 0.5 * lineWidth / lineLength;
 
-#ifdef __WXDEBUG__
-    if( lineLength > 0.0 )
-    {
-        wxLogDebug( wxT( "Tried to draw line with length <= 0" ) );
-    }
-#endif /* __WXDEBUG__ */
-
     if( lineLength <= 0.0 )
         return;
 
@@ -1098,13 +1091,6 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
 
 void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 {
-#ifdef __WXDEBUG__
-    if( aRadius > 0.0 )
-    {
-        wxLogDebug( wxT( "Tried to draw circle with radius <= 0" ) );
-    }
-#endif /* __WXDEBUG__ */
-
     if( isUseShader )
     {
         if( isFillEnabled )
@@ -1663,13 +1649,6 @@ int OPENGL_GAL::BeginGroup()
 
 void OPENGL_GAL::EndGroup()
 {
-#ifdef __WXDEBUG__
-    if( curVboItem->GetSize() != 0 )
-    {
-        wxLogDebug( wxT( "Tried to add group that contains nothing" ) );
-    }
-#endif /* __WXDEBUG__ */
-
     vboSize   += curVboItem->GetSize();
     curVboItem = NULL;
     isGrouping = false;
