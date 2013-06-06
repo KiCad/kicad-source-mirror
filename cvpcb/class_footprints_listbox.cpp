@@ -36,21 +36,14 @@
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
 #include <cvstruct.h>
+#include <cvpcb_id.h>
 
-
-/***************************************/
-/* ListBox handling the footprint list */
-/***************************************/
 
 FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent,
                                         wxWindowID id, const wxPoint& loc,
-                                        const wxSize& size,
-                                        int nbitems, wxString choice[] ) :
+                                        const wxSize& size ) :
     ITEMS_LISTBOX_BASE( parent, id, loc, size )
 {
-    m_UseFootprintFullList = true;
-    m_ActiveFootprintList  = NULL;
-    SetActiveFootprintList( true );
 }
 
 
@@ -59,24 +52,19 @@ FOOTPRINTS_LISTBOX::~FOOTPRINTS_LISTBOX()
 }
 
 
-/*
- * Return number of items
- */
 int FOOTPRINTS_LISTBOX::GetCount()
 {
-    return m_ActiveFootprintList->Count();
+    return m_footprintList.Count();
 }
 
 
-/*
- * Change an item text
- */
 void FOOTPRINTS_LISTBOX::SetString( unsigned linecount, const wxString& text )
 {
-    if( linecount >= m_ActiveFootprintList->Count() )
-        linecount = m_ActiveFootprintList->Count() - 1;
+    if( linecount >= m_footprintList.Count() )
+        linecount = m_footprintList.Count() - 1;
+
     if( linecount >= 0 )
-        (*m_ActiveFootprintList)[linecount] = text;
+        m_footprintList[linecount] = text;
 }
 
 
@@ -87,7 +75,7 @@ wxString FOOTPRINTS_LISTBOX::GetSelectedFootprint()
 
     if( ii >= 0 )
     {
-        wxString msg = (*m_ActiveFootprintList)[ii];
+        wxString msg = m_footprintList[ii];
         msg.Trim( true );
         msg.Trim( false );
         footprintName = msg.AfterFirst( wxChar( ' ' ) );
@@ -99,24 +87,20 @@ wxString FOOTPRINTS_LISTBOX::GetSelectedFootprint()
 
 void FOOTPRINTS_LISTBOX::AppendLine( const wxString& text )
 {
-    m_ActiveFootprintList->Add( text );
-    SetItemCount( m_ActiveFootprintList->Count() );
+    m_footprintList.Add( text );
+    SetItemCount( m_footprintList.Count() );
 }
 
 
-/*
- * Overlaid function: MUST be provided in wxLC_VIRTUAL mode
- * because real data is not handled by ITEMS_LISTBOX_BASE
- */
 wxString FOOTPRINTS_LISTBOX::OnGetItemText( long item, long column ) const
 {
-    return m_ActiveFootprintList->Item( item );
+    if( item < 0 || item >= (long)m_footprintList.GetCount() )
+        return wxEmptyString;
+
+    return m_footprintList.Item( item );
 }
 
 
-/*
- * Enable or disable an item
- */
 void FOOTPRINTS_LISTBOX::SetSelection( unsigned index, bool State )
 {
     if( (int) index >= GetCount() )
@@ -127,7 +111,9 @@ void FOOTPRINTS_LISTBOX::SetSelection( unsigned index, bool State )
 #ifndef __WXMAC__
         Select( index, State );
 #endif
+
         EnsureVisible( index );
+
 #ifdef __WXMAC__
         Refresh();
 #endif
@@ -135,216 +121,79 @@ void FOOTPRINTS_LISTBOX::SetSelection( unsigned index, bool State )
 }
 
 
-void FOOTPRINTS_LISTBOX::SetFootprintFullList( FOOTPRINT_LIST& list )
+void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& aLibName,
+                                        COMPONENT* aComponent, int aFilterType )
 {
-    wxString msg;
-    int      oldSelection = GetSelection();
+    wxArrayString   newList;
+    wxString        msg;
+    wxString        oldSelection;
 
-    m_FullFootprintList.Clear();
+    if( GetSelection() >= 0 && GetSelection() < (int)m_footprintList.GetCount() )
+        oldSelection = m_footprintList[ GetSelection() ];
 
-    for( unsigned ii = 0; ii < list.GetCount(); ii++ )
+    for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
     {
-        FOOTPRINT_INFO & footprint = list.GetItem(ii);
-        msg.Printf( wxT( "%3zu %s" ), m_FullFootprintList.GetCount() + 1,
-                   GetChars(footprint.m_Module) );
-        m_FullFootprintList.Add( msg );
+        if( aFilterType == UNFILTERED )
+        {
+            msg.Printf( wxT( "%3zu %s" ), newList.GetCount() + 1,
+                        GetChars( aList.GetItem( ii ).m_Module ) );
+            newList.Add( msg );
+            continue;
+        }
+
+        if( (aFilterType & BY_LIBRARY) && !aLibName.IsEmpty()
+          && (aList.GetItem( ii ).m_libName != aLibName) )
+            continue;
+
+        if( (aFilterType & BY_COMPONENT) && (aComponent != NULL)
+          && !aComponent->MatchesFootprintFilters( aList.GetItem( ii ).m_Module ) )
+            continue;
+
+        if( (aFilterType & BY_PIN_COUNT) && (aComponent!= NULL)
+          && (aComponent->GetNetCount() != aList.GetItem( ii ).m_padCount) )
+            continue;
+
+        msg.Printf( wxT( "%3zu %s" ), newList.GetCount() + 1,
+                    aList.GetItem( ii ).m_Module.GetData() );
+        newList.Add( msg );
     }
 
-    SetActiveFootprintList( true );
+    if( newList == m_footprintList )
+        return;
 
-    if(  GetCount() == 0 || oldSelection < 0 || oldSelection >= GetCount() )
-        SetSelection( 0, true );
+    m_footprintList = newList;
+
+    int selection = m_footprintList.Index( oldSelection );
+
+    if( selection == wxNOT_FOUND )
+        selection = 0;
+
+    DeleteAllItems();
+    SetItemCount( m_footprintList.GetCount() );
+    SetSelection( selection, true );
     Refresh();
 }
 
-
-void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT*      aComponent,
-                                                   FOOTPRINT_LIST& list )
-{
-    wxString msg;
-    unsigned jj;
-    int      OldSelection = GetSelection();
-    bool     hasItem = false;
-
-    m_FilteredFootprintList.Clear();
-
-    for( unsigned ii = 0; ii < list.GetCount(); ii++ )
-    {
-        FOOTPRINT_INFO& footprint = list.GetItem(ii);
-        // Search for matching footprints
-        // The search is case insensitive
-        wxString module = footprint.m_Module.Upper();
-        wxString candidate;
-
-        for( jj = 0; jj < aComponent->GetFootprintFilters().GetCount(); jj++ )
-        {
-            candidate = aComponent->GetFootprintFilters()[jj].Upper();
-
-            if( !module.Matches( candidate ) )
-                continue;
-
-            msg.Printf( wxT( "%3zu %s" ), m_FilteredFootprintList.GetCount() + 1,
-                        footprint.m_Module.GetData() );
-            m_FilteredFootprintList.Add( msg );
-            hasItem = true;
-        }
-    }
-
-    if( hasItem )
-        SetActiveFootprintList( false );
-    else
-        SetActiveFootprintList( true );
-
-    if( ( GetCount() == 0 ) || ( OldSelection >= GetCount() ) )
-        SetSelection( 0, true );
-
-    Refresh();
-}
-
-
-void FOOTPRINTS_LISTBOX::SetFootprintFilteredByPinCount( COMPONENT*      aComponent,
-                                                         FOOTPRINT_LIST& list )
-{
-    wxString msg;
-    int      oldSelection = GetSelection();
-    bool     hasItem = false;
-
-    m_FilteredFootprintList.Clear();
-
-    for( unsigned ii = 0; ii < list.GetCount(); ii++ )
-    {
-        FOOTPRINT_INFO& footprint = list.GetItem(ii);
-
-        if( aComponent->GetNetCount() == footprint.m_padCount )
-        {
-            msg.Printf( wxT( "%3zu %s" ), m_FilteredFootprintList.GetCount() + 1,
-                        footprint.m_Module.GetData() );
-            m_FilteredFootprintList.Add( msg );
-            hasItem = true;
-        }
-    }
-
-    if( hasItem )
-        SetActiveFootprintList( false );
-    else
-        SetActiveFootprintList( true );
-
-    if( ( GetCount() == 0 ) || ( oldSelection >= GetCount() ) )
-        SetSelection( 0, true );
-
-    Refresh();
-}
-
-void FOOTPRINTS_LISTBOX::SetFootprintFilteredByLibraryList( FOOTPRINT_LIST& list,
-                                                            wxString SelectedLibrary ) {
-    wxString msg;
-    int      oldSelection = GetSelection();
-    bool     hasItem = false;
-
-    wxFileName filename = SelectedLibrary;
-    filename.SetExt( LegacyFootprintLibPathExtension );
-    wxString FullLibraryName = wxGetApp().FindLibraryPath( filename );
-
-    m_FilteredFootprintList.Clear();
-
-    for( unsigned ii = 0; ii < list.GetCount(); ii++ )
-    {
-        FOOTPRINT_INFO& footprint = list.GetItem(ii);
-        wxString LibName = footprint.m_libPath;
-        if( LibName.Matches( FullLibraryName ) )
-        {
-            msg.Printf( wxT( "%3d %s" ), m_FilteredFootprintList.GetCount() + 1,
-                     footprint.m_Module.GetData() );
-            m_FilteredFootprintList.Add( msg );
-            hasItem = true;
-        }
-    }
-
-    if( hasItem )
-        SetActiveFootprintList( false );
-    else
-        SetActiveFootprintList( true );
-
-    if( ( GetCount() == 0 ) || ( oldSelection >= GetCount() ) )
-        SetSelection( 0, true );
-
-    Refresh();
-}
-
-/** Set the footprint list. We can have 2 footprint list:
- *  The full footprint list
- *  The filtered footprint list (if the current selected component has a
- * filter for footprints)
- *  @param FullList true = full footprint list, false = filtered footprint list
- *  @param Redraw = true to redraw the window
- */
-void FOOTPRINTS_LISTBOX::SetActiveFootprintList( bool FullList, bool Redraw )
-{
-    bool old_selection = m_UseFootprintFullList;
-
-#ifdef __WINDOWS__
-
-    /* Workaround for a curious bug in wxWidgets:
-     * if we switch from a long list of footprints to a short list (a
-     * filtered footprint list), and if the selected item is near the end
-     * of the long list,  the new list is not displayed from the top of
-     * the list box
-     */
-    if( m_ActiveFootprintList )
-    {
-        bool new_selection;
-
-        if( FullList )
-            new_selection = true;
-        else
-            new_selection = false;
-
-        if( new_selection != old_selection )
-            SetSelection( 0, true );
-    }
-#endif
-    if( FullList )
-    {
-        m_UseFootprintFullList = true;
-        m_ActiveFootprintList  = &m_FullFootprintList;
-        SetItemCount( m_FullFootprintList.GetCount() );
-    }
-    else
-    {
-        m_UseFootprintFullList = false;
-        m_ActiveFootprintList  = &m_FilteredFootprintList;
-        SetItemCount( m_FilteredFootprintList.GetCount() );
-    }
-
-    if( Redraw )
-    {
-        if( !m_UseFootprintFullList || ( m_UseFootprintFullList != old_selection ) )
-        {
-            Refresh();
-        }
-    }
-
-    GetParent()->DisplayStatus();
-}
-
-
-/**************************************/
-/* Event table for the footprint list */
-/**************************************/
 
 BEGIN_EVENT_TABLE( FOOTPRINTS_LISTBOX, ITEMS_LISTBOX_BASE )
     EVT_SIZE( ITEMS_LISTBOX_BASE::OnSize )
     EVT_CHAR( FOOTPRINTS_LISTBOX::OnChar )
+    EVT_LIST_ITEM_SELECTED( ID_CVPCB_FOOTPRINT_LIST, FOOTPRINTS_LISTBOX::OnLeftClick )
+    EVT_LIST_ITEM_ACTIVATED( ID_CVPCB_FOOTPRINT_LIST, FOOTPRINTS_LISTBOX::OnLeftDClick )
 END_EVENT_TABLE()
 
 
 void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
 {
+    if( m_footprintList.IsEmpty() )
+        return;
+
     FOOTPRINT_INFO* Module;
-    wxString   footprintName = GetSelectedFootprint();
+    wxString        footprintName = GetSelectedFootprint();
 
     Module = GetParent()->m_footprints.GetModuleInfo( footprintName );
-    wxASSERT(Module);
+    wxASSERT( Module );
+
     if( GetParent()->m_DisplayFootprintFrame )
     {
         // Refresh current selected footprint view:
@@ -354,11 +203,10 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
     if( Module )
     {
         wxString msg;
-        msg = Module->m_Doc;
+        msg = _( "Description: " ) + Module->m_Doc;
         GetParent()->SetStatusText( msg, 0 );
 
-        msg  = wxT( "KeyW: " );
-        msg += Module->m_KeyWord;
+        msg  = _( "Key words: " ) + Module->m_KeyWord;
         GetParent()->SetStatusText( msg, 1 );
     }
 }
@@ -378,37 +226,39 @@ void FOOTPRINTS_LISTBOX::OnChar( wxKeyEvent& event )
 
     switch( key )
     {
-        case WXK_LEFT:
-        case WXK_NUMPAD_LEFT:
-            GetParent()->m_ListCmp->SetFocus();
-            return;
+    case WXK_TAB:
+    case WXK_RIGHT:
+    case WXK_NUMPAD_RIGHT:
+        GetParent()->m_LibraryList->SetFocus();
+        return;
 
-        case WXK_HOME:
-        case WXK_END:
-        case WXK_UP:
-        case WXK_DOWN:
-        case WXK_PAGEUP:
-        case WXK_PAGEDOWN:
-        case WXK_RIGHT:
-        case WXK_NUMPAD_RIGHT:
-            event.Skip();
-            return;
+    case WXK_LEFT:
+    case WXK_NUMPAD_LEFT:
+        GetParent()->m_ListCmp->SetFocus();
+        return;
 
-        default:
-            break;
+    case WXK_HOME:
+    case WXK_END:
+    case WXK_UP:
+    case WXK_DOWN:
+    case WXK_PAGEUP:
+    case WXK_PAGEDOWN:
+        event.Skip();
+        return;
+
+    default:
+        break;
     }
 
     // Search for an item name starting by the key code:
-    key = toupper(key);
+    key = toupper( key );
 
-    for( unsigned ii = 0; ii < m_ActiveFootprintList->GetCount(); ii++ )
+    for( unsigned ii = 0; ii < m_footprintList.GetCount(); ii++ )
     {
-        wxString text = m_ActiveFootprintList->Item(ii);
+        wxString text = m_footprintList.Item( ii );
 
-        /* search for the start char of the footprint name.
-         * we must skip the line number
-         */
-        text.Trim(false);      // Remove leading spaces in line
+        // Search for the start char of the footprint name. Skip the line number.
+        text.Trim( false );      // Remove leading spaces in line
         unsigned jj = 0;
 
         for( ; jj < text.Len(); jj++ )
