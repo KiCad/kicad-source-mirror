@@ -507,6 +507,13 @@ public:
      * Fills the list with the default layout shape
      */
     void SetDefaultLayout();
+
+    /**
+     * Fills the list with a custom layout, or
+     * the default layout, if no custom layout available
+     */
+    void SetLayout();
+
 };
 
 #endif      // WORKSHEET_SHAPE_BUILDER_H

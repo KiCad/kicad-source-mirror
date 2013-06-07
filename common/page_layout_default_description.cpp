@@ -27,8 +27,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-
 /* keyword used in page layout description are (see page_layout_reader.keywords)
  *  page_layout
  *  setup
@@ -136,6 +134,8 @@
 // default line width 0.15 mm
 // frame ref pitch 50 mm
 
+// export defaultPageLayout:
+extern const char defaultPageLayout[];
 
 // Default page layout (sizes are in mm)
 const char defaultPageLayout[] = "( page_layout\n"
