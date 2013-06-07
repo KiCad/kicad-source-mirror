@@ -142,7 +142,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
         }
 
         if( (aFilterType & BY_LIBRARY) && !aLibName.IsEmpty()
-          && (aList.GetItem( ii ).m_libName != aLibName) )
+          && !aList.GetItem( ii ).InLibrary( aLibName ) )
             continue;
 
         if( (aFilterType & BY_COMPONENT) && (aComponent != NULL)

@@ -180,3 +180,26 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
 
     return true;
 }
+
+
+bool FOOTPRINT_INFO::InLibrary( const wxString& aLibrary ) const
+{
+    if( aLibrary.IsEmpty() )
+        return false;
+
+    if( aLibrary == m_libName || aLibrary == m_libPath )
+        return true;
+
+    wxFileName filename = aLibrary;
+
+    if( filename.GetExt().IsEmpty() )
+        filename.SetExt( LegacyFootprintLibPathExtension );
+
+    if( filename.GetFullPath() == m_libPath )
+        return true;
+
+    if( filename.GetPath().IsEmpty() )
+        filename = wxGetApp().FindLibraryPath( filename.GetFullName() );
+
+    return filename.GetFullPath() == m_libPath;
+}
