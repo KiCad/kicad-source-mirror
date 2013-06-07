@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -109,7 +109,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelBasic->SetSizer( bSizerBasicPanel );
 	m_PanelBasic->Layout();
 	bSizerBasicPanel->Fit( m_PanelBasic );
-	m_NoteBook->AddPage( m_PanelBasic, _("Options"), false );
+	m_NoteBook->AddPage( m_PanelBasic, _("Options"), true );
 	m_PanelDoc = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* m_PanelDocBoxSizer;
 	m_PanelDocBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -121,6 +121,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelDocBoxSizer->Add( m_staticTextDescription, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_DocCtrl = new wxTextCtrl( m_PanelDoc, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_DocCtrl->SetMaxLength( 0 ); 
 	m_PanelDocBoxSizer->Add( m_DocCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTextKeywords = new wxStaticText( m_PanelDoc, wxID_ANY, _("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -130,6 +131,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelDocBoxSizer->Add( m_staticTextKeywords, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_KeywordsCtrl = new wxTextCtrl( m_PanelDoc, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_KeywordsCtrl->SetMaxLength( 0 ); 
 	m_PanelDocBoxSizer->Add( m_KeywordsCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTextDocFileName = new wxStaticText( m_PanelDoc, wxID_ANY, _("DocFileName:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -139,6 +141,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelDocBoxSizer->Add( m_staticTextDocFileName, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_DocfileCtrl = new wxTextCtrl( m_PanelDoc, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 400,-1 ), 0 );
+	m_DocfileCtrl->SetMaxLength( 0 ); 
 	m_PanelDocBoxSizer->Add( m_DocfileCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizerPaneldocbutts;
@@ -157,7 +160,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelDoc->SetSizer( m_PanelDocBoxSizer );
 	m_PanelDoc->Layout();
 	m_PanelDocBoxSizer->Fit( m_PanelDoc );
-	m_NoteBook->AddPage( m_PanelDoc, _("Description"), true );
+	m_NoteBook->AddPage( m_PanelDoc, _("Description"), false );
 	m_PanelAlias = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerMainPanelAlias;
 	bSizerMainPanelAlias = new wxBoxSizer( wxHORIZONTAL );
