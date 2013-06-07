@@ -16,7 +16,35 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 
-#include <dialog_print_using_printer.h>
+#include <invoke_a_dialog.h>
+#include <dialog_print_using_printer_base.h>
+
+
+
+/**
+ * Class DIALOG_PRINT_USING_PRINTER
+ * offers to print a schematic dialog.
+ *
+ * Derived from DIALOG_PRINT_USING_PRINTER_base created by wxFormBuilder
+ */
+class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
+{
+public:
+    DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent );
+
+    SCH_EDIT_FRAME* GetParent() const;
+
+private:
+    void OnCloseWindow( wxCloseEvent& event );
+    void OnInitDialog( wxInitDialogEvent& event );
+    void OnPageSetup( wxCommandEvent& event );
+    void OnPrintPreview( wxCommandEvent& event );
+    void OnPrintButtonClick( wxCommandEvent& event );
+    void OnButtonCancelClick( wxCommandEvent& event ){ Close(); }
+
+    void GetPrintOptions();
+};
+
 
 
 /**
@@ -414,4 +442,12 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     aScreen->m_StartVisu = tmp_startvisu;
     aScreen->m_DrawOrg   = old_org;
     aScreen->SetZoom( oldZoom );
+}
+
+
+int InvokeDialogPrintUsingPrinter( SCH_EDIT_FRAME* aCaller )
+{
+    DIALOG_PRINT_USING_PRINTER dlg( aCaller );
+
+    return dlg.ShowModal();
 }

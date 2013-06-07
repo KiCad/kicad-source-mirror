@@ -12,7 +12,7 @@ include_directories(
 
 set(EESCHEMA_DLGS
     dialogs/dialog_color_config.cpp
-    dialogs/annotate_dialog.cpp
+    dialogs/dialog_annotate.cpp
     dialogs/dialog_annotate_base.cpp
     dialogs/dialog_lib_edit_text.cpp
     dialogs/dialog_lib_edit_text_base.cpp

@@ -50,7 +50,6 @@
 #include <sch_sheet.h>
 #include <dialog_helpers.h>
 #include <dialog_netlist.h>
-#include <dialogs/annotate_dialog.h>
 #include <wildcards_and_files_ext.h>
 #include <wildcards_and_files_ext.h>
 

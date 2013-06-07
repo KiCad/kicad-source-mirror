@@ -51,10 +51,7 @@
 #include <eeschema_config.h>
 #include <sch_sheet.h>
 
-#include <dialogs/annotate_dialog.h>
-#include <dialogs/dialog_build_BOM.h>
-#include <dialogs/dialog_erc.h>
-#include <dialogs/dialog_print_using_printer.h>
+#include <invoke_a_dialog.h>
 #include <dialogs/dialog_schematic_find.h>
 
 #include <wx/display.h>
@@ -200,6 +197,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
     m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
     m_undoItem = NULL;
     m_hasAutoSave = true;
+
     SetForceHVLines( true );
     SetDefaultLabelSize( DEFAULT_SIZE_TEXT );
 
@@ -243,8 +241,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
 
     EDA_PANEINFO mesg;
     mesg.MessageToolbarPane();
-
-
 
     if( m_mainToolBar )
         m_auimgr.AddPane( m_mainToolBar,
@@ -602,19 +598,19 @@ void SCH_EDIT_FRAME::OnUpdateHiddenPins( wxUpdateUIEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnAnnotate( wxCommandEvent& event )
 {
-    DIALOG_ANNOTATE* dlg = new DIALOG_ANNOTATE( this );
-
-    dlg->ShowModal();
-    dlg->Destroy();
+    InvokeDialogAnnotate( this );
 }
 
 
 void SCH_EDIT_FRAME::OnErc( wxCommandEvent& event )
 {
-    DIALOG_ERC* dlg = new DIALOG_ERC( this );
+    // See if its already open...
+    wxWindow* erc = FindWindowById( ID_DIALOG_ERC, this );
 
-    dlg->Show( true );
-//    dlg->Destroy();
+    if( erc )
+        erc->Raise();       // bring it to the top if already open.
+    else
+        InvokeDialogERC( this );
 }
 
 
@@ -827,9 +823,8 @@ void SCH_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
 {
     wxFileName fn;
-    DIALOG_PRINT_USING_PRINTER dlg( this );
 
-    dlg.ShowModal();
+    InvokeDialogPrintUsingPrinter( this );
 
     fn = g_RootSheet->GetScreen()->GetFileName();
 
