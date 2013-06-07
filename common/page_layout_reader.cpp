@@ -441,9 +441,14 @@ double PAGE_LAYOUT_READER_PARSER::parseDouble()
     return val;
 }
 
+// defaultPageLayout is the default page layout description
+// using the S expr.
+// see page_layout_default_shape.cpp
+extern const char defaultPageLayout[];
 
 void WORKSHEET_LAYOUT::SetDefaultLayout()
 {
+    ClearList();
     PAGE_LAYOUT_READER_PARSER lp_parser( defaultPageLayout, wxT( "default page" ) );
 
     try
@@ -454,4 +459,61 @@ void WORKSHEET_LAYOUT::SetDefaultLayout()
     {
         wxLogMessage( ioe.errorText );
     }
+}
+
+#include <wx/file.h>
+
+// SetLayout() try to load a custom layout file,
+// currently defined by the environment variable KICAD_WKSFILE
+// (a *.kicad_wks file).
+// if does not exists, loads the default page layout.
+void WORKSHEET_LAYOUT::SetLayout()
+{
+    wxString fullFileName;
+    wxGetEnv( wxT( "KICAD_WKSFILE" ), &fullFileName );
+
+    if( fullFileName.IsEmpty() || !wxFileExists( fullFileName ) )
+    {
+        #ifdef DEBUG
+        if( !wxFileExists( fullFileName ) )
+        {
+            wxLogMessage( wxT("Page layout file <%s> not found"),
+                          fullFileName.GetData() );
+        }
+        #endif
+        SetDefaultLayout();
+        return;
+    }
+
+    wxFile wksFile( fullFileName );
+
+    if( ! wksFile.IsOpened() )
+    {
+        SetDefaultLayout();
+        return;
+    }
+
+    int filelen = wksFile.Length();
+    char * buffer = new char[filelen+10];
+
+    if( wksFile.Read( buffer, filelen ) != filelen )
+        wxLogMessage( _("The file <%s> was not fully read"),
+            fullFileName.GetData() );
+    else
+    {
+        buffer[filelen]=0;
+        ClearList();
+        PAGE_LAYOUT_READER_PARSER lp_parser( buffer, fullFileName );
+
+        try
+        {
+            lp_parser.Parse( this );
+        }
+        catch( IO_ERROR ioe )
+        {
+            wxLogMessage( ioe.errorText );
+        }
+    }
+
+    delete[] buffer;
 }

@@ -4,11 +4,6 @@
  */
 
 /*
- * This file creates a lot of structures which define the shape of a title block
- * and frame references
- */
-
-/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
@@ -33,13 +28,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+
+/*
+ * the class WORKSHEET_DATAITEM (and WORKSHEET_DATAITEM_TEXT) defines
+ * a basic shape of a page layout ( frame references and title block )
+ * Basic shapes are line, rect and texts
+ * the WORKSHEET_DATAITEM coordinates units is the mm, and are relative to
+ * one of 4 page corners.
+ *
+ * These items cannot be drawn or plot "as this". they should be converted
+ * to a "draw list" (WS_DRAW_ITEM_BASE and derived items)
+
+ * The list of these items is stored in a WORKSHEET_LAYOUT instance.
+ *
+ * When building the draw list:
+ * the WORKSHEET_LAYOUT is used to create a WS_DRAW_ITEM_LIST
+ *  coordinates are converted to draw/plot coordinates.
+ *  texts are expanded if they contain format symbols.
+ *  Items with m_RepeatCount > 1 are created m_RepeatCount times
+ *
+ * the WORKSHEET_LAYOUT is created only once.
+ * the WS_DRAW_ITEM_LIST is created each time the page layout is plot/drawn
+ *
+ * the WORKSHEET_LAYOUT instance is created from a S expression which
+ * describes the page layout (can be the default page layout or a custom file).
+ */
+
 #include <fctsys.h>
 #include <drawtxt.h>
 #include <worksheet.h>
 #include <class_title_block.h>
 #include <worksheet_shape_builder.h>
-
-extern void SetDataList( WORKSHEET_LAYOUT& aDataList );
 
 
 WORKSHEET_DATAITEM_TEXT::WORKSHEET_DATAITEM_TEXT( const wxChar* aTextBase ) :
@@ -207,7 +226,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
 
     // Build the basic layout shape, if the layout list is empty
     if( dataList.GetCount() == 0 )
-        dataList.SetDefaultLayout();
+        dataList.SetLayout();
 
     WORKSHEET_DATAITEM::m_WSunits2Iu = m_milsToIu / milsTomm;
 
