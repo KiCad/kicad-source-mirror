@@ -603,6 +603,25 @@ D_PAD* MODULE::GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask )
 }
 
 
+unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
+{
+    if( aIncludeNPTH )
+        return m_Pads.GetCount();
+
+    unsigned cnt = 0;
+
+    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+    {
+        if( pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
+            continue;
+
+        cnt++;
+    }
+
+    return cnt;
+}
+
+
 void MODULE::Add3DModel( S3D_MASTER* a3DModel )
 {
     a3DModel->SetParent( this );

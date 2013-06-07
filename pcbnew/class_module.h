@@ -384,11 +384,21 @@ public:
      */
     D_PAD* GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask = ALL_LAYERS );
 
+    enum INCLUDE_NPTH_T
+    {
+        DO_NOT_INCLUDE_NPTH = false,
+        INCLUDE_NPTH = true
+    };
+
     /**
      * GetPadCount
      * returns the number of pads.
+     *
+     * @param aIncludeNPTH includes non-plated through holes when true.  Does not include
+     *                     non-plated through holes when false.
+     * @return the number of pads according to \a aIncludeNPTH.
      */
-    unsigned GetPadCount() const            { return m_Pads.GetCount() ; }
+    unsigned GetPadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH ) const;
 
     double GetArea() const                  { return m_Surface; }
 
