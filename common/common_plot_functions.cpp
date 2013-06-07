@@ -98,8 +98,12 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     drawList.SetSheetNumber( aSheetNumber );
     drawList.SetSheetCount( aNumberOfSheets );
 
-    drawList.BuildWorkSheetGraphicList( aPageInfo.GetType(), aSheetDesc,
-                               aFilename, aTitleBlock, plotColor, plotColor );
+    // Print only a short filename, if aFilename is the full filename
+
+    wxFileName fn( aFilename );
+
+    drawList.BuildWorkSheetGraphicList( aPageInfo.GetType(), fn.GetFullName(),
+                               aSheetDesc, aTitleBlock, plotColor, plotColor );
 
     // Draw item list
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item;
