@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-26 20:57+0100\n"
-"PO-Revision-Date: 2013-05-27 00:39+0100\n"
+"PO-Revision-Date: 2013-06-07 19:10+0100\n"
 "Last-Translator: Massimo Cioce <ciocemax@alice.it>\n"
 "Language-Team: Ciocemax <ciocemax@alice.it>\n"
 "Language: Italiano\n"
@@ -565,7 +565,7 @@ msgstr "Nessun modulo!"
 
 #: pcbnew/build_BOM_from_board.cpp:70
 msgid "Save Bill of Materials"
-msgstr "Salva Elenco materiali"
+msgstr "Salva Distinta materiali"
 
 #: pcbnew/build_BOM_from_board.cpp:83 pcbnew/xchgmod.cpp:641
 msgid "Unable to create file "
@@ -1416,11 +1416,11 @@ msgstr "TBD"
 
 #: pcbnew/class_pcb_layer_widget.cpp:305
 msgid "Board's perimeter definition"
-msgstr "Definizione del perimetro della scheda"
+msgstr "Definizione del contorno della scheda"
 
 #: pcbnew/class_pcb_text.cpp:127
 msgid "DIMENSION"
-msgstr "DIMENSIONI"
+msgstr "Quotatura"
 
 #: pcbnew/class_pcb_text.cpp:129
 msgid "PCB Text"
@@ -3071,7 +3071,7 @@ msgstr "(Ri)crea file (*.cmp) per CvPcb"
 
 #: pcbnew/menubar_pcbframe.cpp:152
 msgid "&BOM File"
-msgstr "&Elenco materiali"
+msgstr "&Distinta materiali"
 
 #: pcbnew/menubar_pcbframe.cpp:153
 msgid "Create a bill of materials from schematic"
@@ -3905,7 +3905,7 @@ msgstr "Errore nella lista collegamenti:"
 
 #: pcbnew/netlist.cpp:178
 msgid "Ok to delete not locked footprints not found in netlist?"
-msgstr "Cancellare impronte non bloccate assenti nella Lista componenti?"
+msgstr "Cancellare le impronte non bloccate assenti nella Lista componenti?"
 
 #: pcbnew/netlist.cpp:210
 msgid "No Modules"
@@ -3987,19 +3987,19 @@ msgstr "Sbroglia modulo"
 
 #: pcbnew/onrightclick.cpp:192 eeschema/onrightclick.cpp:272
 msgid "End Drawing"
-msgstr "Termina oggetto grafico"
+msgstr "Termina elemento grafico"
 
 #: pcbnew/onrightclick.cpp:197
 msgid "Move Drawing"
-msgstr "Muovi oggetto grafico"
+msgstr "Muovi elemento grafico"
 
 #: pcbnew/onrightclick.cpp:201
 msgid "Edit Drawing"
-msgstr "Modifica oggetto grafico"
+msgstr "Modifica elemento grafico"
 
 #: pcbnew/onrightclick.cpp:204 eeschema/onrightclick.cpp:275
 msgid "Delete Drawing"
-msgstr "Cancella oggetto grafico"
+msgstr "Cancella elemento grafico"
 
 #: pcbnew/onrightclick.cpp:208
 msgid "Delete All Drawing on Layer"
@@ -4023,7 +4023,7 @@ msgstr "Modifica dimensioni"
 
 #: pcbnew/onrightclick.cpp:253
 msgid "Move Dimension Text"
-msgstr "Sposta Quotatura"
+msgstr "Sposta quotatura"
 
 #: pcbnew/onrightclick.cpp:257
 msgid "Delete Dimension"
@@ -4123,7 +4123,7 @@ msgstr "Seleziona le coppie di strati"
 
 #: pcbnew/onrightclick.cpp:406
 msgid "Autoroute All Modules"
-msgstr "Sbroglia tutti modulo"
+msgstr "Sbroglia tutti  i moduli"
 
 #: pcbnew/onrightclick.cpp:408
 msgid "Reset Unrouted"
@@ -4274,7 +4274,7 @@ msgstr "Organizza zona"
 
 #: pcbnew/onrightclick.cpp:629
 msgid "Keepout Area"
-msgstr "Area esclusione"
+msgstr "Area vuota"
 
 #: pcbnew/onrightclick.cpp:629
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
@@ -4556,10 +4556,10 @@ msgid ""
 "Do you want to load it?\n"
 "It will be saved under the new file format"
 msgstr ""
-"Il file <%s> non esiste.\n"
-"Comunque esiste il file correlato <%s> .\n"
-"Si desidera caricarlo?\n"
-"Questo verrà salvato nel nuovo formato"
+"Il file <%s> non è ancora sato creato.\n"
+"Il file <%s> che si sta aprendo è in un precedente formato .\n"
+"Si desidera comunque caricarlo?\n"
+"Al salvataggio, verrà salvato nel nuovo formato."
 
 #: pcbnew/pcbnew.cpp:242
 #, c-format
@@ -5155,7 +5155,7 @@ msgstr "Zona: Errore del contorno nella Verifica regole "
 
 #: pcbnew/zones_by_polygon.cpp:525
 msgid "Error: a keepout area is allowed only on copper layers"
-msgstr "Errore: le arre vuote sono consentite solo sugli strati in rame"
+msgstr "Errore: le aree vuote sono consentite solo sugli strati in rame"
 
 #: pcbnew/zones_by_polygon.cpp:671
 msgid "DRC error: this start point is inside or too close an other area"
@@ -5760,7 +5760,7 @@ msgstr "32"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:227
 msgid "Outline slope:"
-msgstr "Opzioni del perimetro:"
+msgstr "Orientamento contorno:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
 msgid "Arbitrary"
@@ -5768,19 +5768,19 @@ msgstr "Arbitrario"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
 msgid "H, V, and 45 deg only"
-msgstr "Orizzontale,verticale e 45°"
+msgstr "Orizzontale, verticale, 45°"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:237
 msgid "Outline style:"
-msgstr "Opzioni del perimetro:"
+msgstr "Stile contorno:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
 msgid "Hatched"
-msgstr "Zona tratteggiata"
+msgstr "Tratteggiato"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
 msgid "Fully hatched"
-msgstr "Zona completamente tratteggiata"
+msgstr "Completamente tratteggiato"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:256
 msgid "Export Settings to Other Zones"
@@ -8145,11 +8145,11 @@ msgstr "Strato non valido selezionato per questo elemento."
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:210
 msgid "Tracks, vias and pads are allowed. The keepout is useless"
 msgstr ""
-"Piste, Via e piazzole sono consentite. L'arera vuota non verrà considerata."
+"Piste, Via e piazzole sono consentite. L'area vuota non verrà considerata."
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:43
 msgid "Properties:"
-msgstr "Proprietà:"
+msgstr "Proprietà contorno:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:47
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:46
@@ -8159,31 +8159,31 @@ msgstr "Qualsiasi"
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:47
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:46
 msgid "H, V and 45 deg"
-msgstr "Orizzontale,verticale e 45°"
+msgstr "Orizzontale, verticale, 45°"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:49
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:48
 msgid "Zone Edges Orient"
-msgstr "Orientamento contorno zona:"
+msgstr "Orientamento:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 msgid "Hatched Outline"
-msgstr "Contorno tratteggiato"
+msgstr "Tratteggiato"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 msgid "Full Hatched"
-msgstr "Zona completamente tratteggiata"
+msgstr "Completamente tratteggiato"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:54
 msgid "Outlines Appearence"
-msgstr "Aspetto del contorno"
+msgstr "Aspetto contorno:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:60
 msgid "Keepout Options:"
-msgstr "Opzioni zone vuote"
+msgstr "Opzioni:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:62
 msgid "No Tracks"
@@ -8581,7 +8581,7 @@ msgstr "Se si desidera uno strato con l'ingombro della scheda"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:733
 msgid "Board contour"
-msgstr "Perimetro scheda"
+msgstr "Contorno scheda"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:737
 msgid "Eco1_later"
@@ -8806,16 +8806,16 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
 msgid "Extra Footprints"
-msgstr "Impronte aggiunte"
+msgstr "Impronte eccedenti"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:67
 msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
 msgstr ""
-"Mantiene o cancella le impronte trovate nella scheda ma non nella Lista "
+"Mantiene o cancella le impronte presenti nella scheda ma non nella Lista "
 "componenti.\n"
-"Verranno rimosse soltanto le impronte non bloccate."
+"Soltanto le impronte non bloccate verranno cancellate."
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:77
 msgid "Browse Netlist Files"
@@ -8858,7 +8858,7 @@ msgstr "Selezione strato"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
 msgid "Outlines Options:"
-msgstr "Opzioni del perimetro:"
+msgstr "Opzioni del contorno:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 msgid "Zone min thickness value"
@@ -9067,7 +9067,7 @@ msgstr "Orientamento trapezio:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:211 eeschema/sch_line.cpp:484
 msgid "Horiz."
-msgstr " Orrizontale"
+msgstr "Orrizontale"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:211 eeschema/sch_line.cpp:482
 msgid "Vert."
@@ -10643,7 +10643,7 @@ msgstr "Personalizzato"
 #: common/dialogs/dialog_page_settings.cpp:650
 #: common/dialogs/dialog_page_settings_base.cpp:47
 msgid "Portrait"
-msgstr "Orrizontale"
+msgstr "Verticale"
 
 #: common/dialogs/dialog_page_settings.cpp:406
 #, c-format
@@ -11928,7 +11928,7 @@ msgstr "Cancella rettangolo"
 
 #: eeschema/libedit_onrightclick.cpp:186 eeschema/onrightclick.cpp:585
 msgid "Move Text"
-msgstr "Muovi testo"
+msgstr "Sposta testo"
 
 #: eeschema/libedit_onrightclick.cpp:192 eeschema/onrightclick.cpp:101
 #: eeschema/onrightclick.cpp:595
@@ -12431,7 +12431,7 @@ msgstr "Genera Lista dei collegamenti dei componenti"
 
 #: eeschema/menubar.cpp:493
 msgid "Generate Bill of &Materials"
-msgstr "Crea& Elenco materiali"
+msgstr "Crea& Distinta materiali"
 
 #: eeschema/menubar.cpp:503
 msgid "A&ssign Component Footprints"
@@ -13335,7 +13335,7 @@ msgstr "Cancella componente dalla libreria corrente"
 
 #: eeschema/tool_lib.cpp:127
 msgid "Create a new component"
-msgstr "Editore librerie"
+msgstr "Nuovo componente"
 
 #: eeschema/tool_lib.cpp:131
 msgid "Load component to edit from the current library"
@@ -14954,7 +14954,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:26
 msgid "List items:"
-msgstr "Voci Elenco materiali"
+msgstr "Voci Distinta materiali"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:28
 msgid "Components by reference"
@@ -14978,7 +14978,7 @@ msgstr "Piedini gerarchici per foglio  "
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:46
 msgid "List"
-msgstr "Elenco materiali"
+msgstr "Distinta materiali"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:46
 msgid "List for spreadsheet import (by ref)"
@@ -18097,7 +18097,7 @@ msgstr "Esplora libreria"
 
 #: eeschema/help_common_strings.h:55
 msgid "Generate bill of materials and/or cross references"
-msgstr "Elenco materiali"
+msgstr "Distinta materiali"
 
 #: eeschema/help_common_strings.h:57
 msgid ""
@@ -18198,7 +18198,7 @@ msgstr "Annota schema"
 
 #: eeschema/dialogs/dialog_build_BOM_base.h:78
 msgid "List of Materials"
-msgstr "Elenco materiali"
+msgstr "Distinta materiali"
 
 #: eeschema/dialogs/dialog_color_config.h:61
 msgid "EESchema Colors"
