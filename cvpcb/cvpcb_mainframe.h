@@ -95,9 +95,10 @@ public:
     void             OnQuit( wxCommandEvent& event );
     void             OnCloseWindow( wxCloseEvent& Event );
     void             OnSize( wxSizeEvent& SizeEvent );
-    void             OnChar( wxKeyEvent& event );
     void             ReCreateHToolbar();
     virtual void     ReCreateMenuBar();
+
+    void             ChangeFocus( bool aMoveRight );
 
     /**
      * Function SetLanguage
@@ -223,7 +224,15 @@ public:
 
     /**
      * Function DisplayStatus
-     * displays info to the status line at bottom of the main frame.
+     * updates the information displayed on the status bar at bottom of the main frame.
+     *
+     * When the library or component list controls have the focus, the footprint assignment
+     * status of the components is displayed in the first status bar pane and the list of
+     * filters for the selected component is displayed in the second status bar pane.  When
+     * the footprint list control has the focus, the description of the selected footprint is
+     * displayed in the first status bar pane and the key words for the selected footprint are
+     * displayed in the second status bar pane.  The third status bar pane always displays the
+     * current footprint list filtering.
      */
     void             DisplayStatus();
 
