@@ -144,12 +144,12 @@ void LIBRARY_LISTBOX::OnChar( wxKeyEvent& event )
     case WXK_TAB:
     case WXK_RIGHT:
     case WXK_NUMPAD_RIGHT:
-        GetParent()->m_ListCmp->SetFocus();
+        GetParent()->ChangeFocus( true );
         return;
 
     case WXK_LEFT:
     case WXK_NUMPAD_LEFT:
-        GetParent()->m_FootprintList->SetFocus();
+        GetParent()->ChangeFocus( false );
         return;
 
     case WXK_HOME:
@@ -193,7 +193,6 @@ void LIBRARY_LISTBOX::OnChar( wxKeyEvent& event )
 
         if( key == start_char )
         {
-            Focus( ii );
             SetSelection( ii, true );   // Ensure visible
             break;
         }

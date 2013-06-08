@@ -188,27 +188,11 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
     if( m_footprintList.IsEmpty() )
         return;
 
-    FOOTPRINT_INFO* Module;
-    wxString        footprintName = GetSelectedFootprint();
-
-    Module = GetParent()->m_footprints.GetModuleInfo( footprintName );
-    wxASSERT( Module );
-
+    // If the footprint view window is displayed, update the footprint.
     if( GetParent()->m_DisplayFootprintFrame )
-    {
-        // Refresh current selected footprint view:
         GetParent()->CreateScreenCmp();
-    }
 
-    if( Module )
-    {
-        wxString msg;
-        msg = _( "Description: " ) + Module->m_Doc;
-        GetParent()->SetStatusText( msg, 0 );
-
-        msg  = _( "Key words: " ) + Module->m_KeyWord;
-        GetParent()->SetStatusText( msg, 1 );
-    }
+    GetParent()->DisplayStatus();
 }
 
 
@@ -229,12 +213,12 @@ void FOOTPRINTS_LISTBOX::OnChar( wxKeyEvent& event )
     case WXK_TAB:
     case WXK_RIGHT:
     case WXK_NUMPAD_RIGHT:
-        GetParent()->m_LibraryList->SetFocus();
+        GetParent()->ChangeFocus( true );
         return;
 
     case WXK_LEFT:
     case WXK_NUMPAD_LEFT:
-        GetParent()->m_ListCmp->SetFocus();
+        GetParent()->ChangeFocus( false );
         return;
 
     case WXK_HOME:
@@ -278,7 +262,6 @@ void FOOTPRINTS_LISTBOX::OnChar( wxKeyEvent& event )
 
         if( key == start_char )
         {
-            Focus( ii );
             SetSelection( ii, true );   // Ensure visible
             break;
         }
