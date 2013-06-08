@@ -16,6 +16,8 @@ name
 pos
 start
 end
+pts
+xy
 maxlen
 maxheight
 font
