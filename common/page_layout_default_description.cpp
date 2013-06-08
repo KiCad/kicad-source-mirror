@@ -46,6 +46,8 @@
  *  pos
  *  start
  *  end
+ *  pts
+ *  xy
  *  maxlen
  *  maxheight
  *  font
@@ -123,6 +125,29 @@
  * example:
  * (tbtext \"Size: %Z\" ...) displays "Size A4" or Size USLetter"
  *
+ *  Poly Polygons
+ *  Set of filled polygons are supported.
+ *
+ *  The main purpose is to allow logos, or complex shapes
+ *  They support the repeat and rotation options
+ *  They are defined by
+ *  (polygon (position ..) <rotation>  <linewidth>
+ *  the parameter linewidth defines the pen size used to draw/plot
+ *  the polygon outlines (default = 0)
+ *  example:
+ *  (polygon (pos 134 18 rbcorner) (rotate 20)  (linewidth 0.00254)
+ *
+ *  and a list of corners like
+ *  (pts (xy 20.574 8.382) (xy 19.9009 8.382) (xy 19.9009 6.26364) (xy 19.7485 5.98932)
+ *  .... )
+ *
+ *  each sequence like
+ *  (pts (xy 20.574 8.382) (xy 19.9009 8.382) (xy 19.9009 6.26364) (xy 19.7485 5.98932)
+ *  .... )
+ *  defines a polygon.
+ *  Each coordinate is relative to the polygon position.
+ *  Therefore a "polygon" is in fact a set of polygons, of a poly polygon
+ *
  */
 
 #include <worksheet.h>      // defaultPageLayout
@@ -135,39 +160,39 @@
 // frame ref pitch 50 mm
 
 // export defaultPageLayout:
-extern const char defaultPageLayout[];
+extern const char   defaultPageLayout[];
 
 // Default page layout (sizes are in mm)
-const char defaultPageLayout[] = "( page_layout\n"
-"(setup (textsize 1.5 1.5) (linewidth 0.15) (textlinewidth 0.15) )"
-"(rect (comment rect around the title block) (linewidth 0.15) (start 110 34) (end 2 2) )\n"
-"(rect (start 0 0 ltcorner) (end 0 0 rbcorner) (repeat 2) (incrx 2) (incry 2) )\n"
-"(line (start 50 2 ltcorner) (end 50 0 ltcorner) (repeat 30) (incrx 50) )\n"
-"(tbtext \"1\" (pos 25 1 ltcorner) (font (size 1.3 1.3))(repeat 100) (incrx 50) )\n"
-"(line (start 50 2 lbcorner) (end 50 0 lbcorner) (repeat 30) (incrx 50) )\n"
-"(tbtext \"1\" (pos 25 1 lbcorner) (font (size 1.3 1.3)) (repeat 100) (incrx 50) )\n"
-"(line (start 0 50 ltcorner) (end 2 50 ltcorner) (repeat 30) (incry 50) )\n"
-"(tbtext \"A\" (pos 1 25 ltcorner) (font (size 1.3 1.3)) (justify center)(repeat 100) (incry 50) )\n"
-"(line (start 0 50 rtcorner) (end 2 50 rtcorner) (repeat 30) (incry 50) )\n"
-"(tbtext \"A\" (pos 1 25 rtcorner) (font (size 1.3 1.3)) (justify center) (repeat 100) (incry 50) )\n"
-"(tbtext \"Date: %D\" (pos 87 6.9) )\n"
-"(line (start 110 5.5) end 2 5.5) )\n"
-"(tbtext \"%K\" (pos 109 4.1) (comment Kicad version ) )\n"
-"(line (start 110 8.5) end 2 8.5) )\n"
-"(tbtext \"Rev: %R\" (pos 24 6.9)(font bold)(justify left) )\n"
-"(tbtext \"Size: %Z\" (comment Paper format name)(pos 109 6.9) )\n"
-"(tbtext \"Id: %S/%N\" (comment Sheet id)(pos 24 4.1) )\n"
-"(line (start 110 12.5) end 2 12.5) )\n"
-"(tbtext \"Title: %T\" (pos 109 10.7)(font bold italic (size 2 2)) )\n"
-"(tbtext \"File: %F\" (pos 109 14.3) )\n"
-"(line (start 110 18.5) end 2 18.5) )\n"
-"(tbtext \"Sheet: %P\" (pos 109 17) )\n"
-"(tbtext \"%Y\" (comment Company name) (pos 109 20)(font bold) )\n"
-"(tbtext \"%C0\" (comment Comment 0) (pos 109 23) )\n"
-"(tbtext \"%C1\" (comment Comment 0) (pos 109 26) )\n"
-"(tbtext \"%C2\" (comment Comment 0) (pos 109 29) )\n"
-"(tbtext \"%C3\" (comment Comment 0) (pos 109 32) )\n"
-"(line (start 90 8.5) end 90 5.5) )\n"
-"(line (start 26 8.5) end 26 2) )\n"
-")\n"
+const char          defaultPageLayout[] = "( page_layout\n"
+                                          "(setup (textsize 1.5 1.5) (linewidth 0.15) (textlinewidth 0.15) )"
+                                          "(rect (comment rect around the title block) (linewidth 0.15) (start 110 34) (end 2 2) )\n"
+                                          "(rect (start 0 0 ltcorner) (end 0 0 rbcorner) (repeat 2) (incrx 2) (incry 2) )\n"
+                                          "(line (start 50 2 ltcorner) (end 50 0 ltcorner) (repeat 30) (incrx 50) )\n"
+                                          "(tbtext \"1\" (pos 25 1 ltcorner) (font (size 1.3 1.3))(repeat 100) (incrx 50) )\n"
+                                          "(line (start 50 2 lbcorner) (end 50 0 lbcorner) (repeat 30) (incrx 50) )\n"
+                                          "(tbtext \"1\" (pos 25 1 lbcorner) (font (size 1.3 1.3)) (repeat 100) (incrx 50) )\n"
+                                          "(line (start 0 50 ltcorner) (end 2 50 ltcorner) (repeat 30) (incry 50) )\n"
+                                          "(tbtext \"A\" (pos 1 25 ltcorner) (font (size 1.3 1.3)) (justify center)(repeat 100) (incry 50) )\n"
+                                          "(line (start 0 50 rtcorner) (end 2 50 rtcorner) (repeat 30) (incry 50) )\n"
+                                          "(tbtext \"A\" (pos 1 25 rtcorner) (font (size 1.3 1.3)) (justify center) (repeat 100) (incry 50) )\n"
+                                          "(tbtext \"Date: %D\" (pos 87 6.9) )\n"
+                                          "(line (start 110 5.5) end 2 5.5) )\n"
+                                          "(tbtext \"%K\" (pos 109 4.1) (comment Kicad version ) )\n"
+                                          "(line (start 110 8.5) end 2 8.5) )\n"
+                                          "(tbtext \"Rev: %R\" (pos 24 6.9)(font bold)(justify left) )\n"
+                                          "(tbtext \"Size: %Z\" (comment Paper format name)(pos 109 6.9) )\n"
+                                          "(tbtext \"Id: %S/%N\" (comment Sheet id)(pos 24 4.1) )\n"
+                                          "(line (start 110 12.5) end 2 12.5) )\n"
+                                          "(tbtext \"Title: %T\" (pos 109 10.7)(font bold italic (size 2 2)) )\n"
+                                          "(tbtext \"File: %F\" (pos 109 14.3) )\n"
+                                          "(line (start 110 18.5) end 2 18.5) )\n"
+                                          "(tbtext \"Sheet: %P\" (pos 109 17) )\n"
+                                          "(tbtext \"%Y\" (comment Company name) (pos 109 20)(font bold) )\n"
+                                          "(tbtext \"%C0\" (comment Comment 0) (pos 109 23) )\n"
+                                          "(tbtext \"%C1\" (comment Comment 0) (pos 109 26) )\n"
+                                          "(tbtext \"%C2\" (comment Comment 0) (pos 109 29) )\n"
+                                          "(tbtext \"%C3\" (comment Comment 0) (pos 109 32) )\n"
+                                          "(line (start 90 8.5) end 90 5.5) )\n"
+                                          "(line (start 26 8.5) end 26 2) )\n"
+                                          ")\n"
 ;

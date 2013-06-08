@@ -76,6 +76,10 @@ private:
     void parseSetup() throw( IO_ERROR, PARSE_ERROR );
     void parseGraphic( WORKSHEET_DATAITEM * aItem ) throw( IO_ERROR, PARSE_ERROR );
     void parseText( WORKSHEET_DATAITEM_TEXT * aItem ) throw( IO_ERROR, PARSE_ERROR );
+    void parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
+        throw( IO_ERROR, PARSE_ERROR );
+    void parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
+        throw( IO_ERROR, PARSE_ERROR );
     void parseCoordinate( POINT_COORD& aCoord) throw( IO_ERROR, PARSE_ERROR );
 };
 
@@ -127,6 +131,12 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WORKSHEET_LAYOUT* aLayout )
             aLayout->Append( item );
             break;
 
+        case T_polygon:
+            item = new WORKSHEET_DATAITEM_POLYPOLYGON();
+            parsePolygon(  (WORKSHEET_DATAITEM_POLYPOLYGON*) item );
+            aLayout->Append( item );
+            break;
+
         case T_tbtext:
             NeedSYMBOLorNUMBER();
             item = new WORKSHEET_DATAITEM_TEXT( FromUTF8() );
@@ -167,6 +177,100 @@ void PAGE_LAYOUT_READER_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
 
         case T_textlinewidth:
             m_defaulTextLineWidth = parseDouble();
+            NeedRIGHT();
+            break;
+
+        default:
+            Unexpected( CurText() );
+            break;
+        }
+    }
+}
+
+void PAGE_LAYOUT_READER_PARSER::parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
+    throw( IO_ERROR, PARSE_ERROR )
+{
+    aItem->m_LineWidth = 0;
+
+    T token;
+
+    while( ( token = NextTok() ) != T_RIGHT )
+    {
+        if( token == T_EOF)
+           break;
+
+        if( token == T_LEFT )
+            token = NextTok();
+
+        switch( token )
+        {
+        case T_comment: // Comment, search the closing ')'
+            while( ( token = NextTok() ) != T_RIGHT && token != T_EOF );
+            break;
+
+        case T_pos:
+            parseCoordinate( aItem->m_Pos );
+            break;
+
+        case T_pts:
+            parsePolyOutline( aItem );
+            aItem->CloseContour();
+            break;
+
+        case T_rotate:
+            aItem->m_Orient = parseDouble();
+            NeedRIGHT();
+            break;
+
+        case T_repeat:
+            aItem->m_RepeatCount = parseInt( -1, 100 );
+            NeedRIGHT();
+            break;
+
+        case T_incrx:
+            aItem->m_IncrementVector.x = parseDouble();
+            NeedRIGHT();
+            break;
+
+        case T_incry:
+            aItem->m_IncrementVector.y = parseDouble();
+            NeedRIGHT();
+            break;
+
+        case T_linewidth:
+            aItem->m_LineWidth = parseDouble();
+            NeedRIGHT();
+            break;
+
+        default:
+            Unexpected( CurText() );
+            break;
+        }
+    }
+
+    aItem->SetBoundingBox();
+}
+
+void PAGE_LAYOUT_READER_PARSER::parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
+    throw( IO_ERROR, PARSE_ERROR )
+{
+    DPOINT corner;
+    T token;
+
+    while( ( token = NextTok() ) != T_RIGHT )
+    {
+        if( token == T_EOF)
+           break;
+
+        if( token == T_LEFT )
+            token = NextTok();
+
+        switch( token )
+        {
+        case T_xy:
+            corner.x = parseDouble();
+            corner.y = parseDouble();
+            aItem->AppendCorner( corner );
             NeedRIGHT();
             break;
 

@@ -52,13 +52,20 @@ public:
 
 
 // Work sheet structure type definitions.
+// Basic items are:
+// * segment and rect (defined by 2 points)
+// * text (defined by a coordinate), the text and its justifications
+// * poly polygon defined by a coordinate, and a set of list of corners
+//   ( because we use it for logos, there are more than one polygon
+//   in this description
 class WORKSHEET_DATAITEM
 {
 public:
     enum WS_ItemType {
         WS_TEXT,
         WS_SEGMENT,
-        WS_RECT
+        WS_RECT,
+        WS_POLYPOLYGON
     };
     WS_ItemType       m_Type;
     POINT_COORD       m_Pos;
@@ -87,6 +94,8 @@ public:
         m_LineWidth = 0.0;
     }
 
+    virtual ~WORKSHEET_DATAITEM() {}
+
     void SetStart( double aPosx, double aPosy, enum corner_anchor aAnchor = RB_CORNER )
     {
         m_Pos.m_Pos.x = aPosx;
@@ -105,8 +114,92 @@ public:
     const wxPoint GetEndPosUi( int ii = 0 ) const;
     const DPOINT GetStartPos( int ii = 0 ) const;
     const DPOINT GetEndPos( int ii = 0 ) const;
-    bool IsInsidePage( int ii ) const;
     int GetPenSizeUi() {return KiROUND( m_LineWidth * m_WSunits2Iu ); }
+
+    /**
+     * @return true if the item is inside the rectangle defined by the
+     * 4 corners, false otherwise.
+     */
+    virtual bool IsInsidePage( int ii ) const;
+};
+
+class WORKSHEET_DATAITEM_POLYPOLYGON : public WORKSHEET_DATAITEM
+{
+public:
+    double            m_Orient;             //  Orientation in degrees
+    std::vector<DPOINT> m_Corners;          // corner list
+
+private:
+    std::vector<unsigned> m_polyIndexEnd;   // index of the last point of each polygon
+    DPOINT            m_minCoord;           // min coord of corners, relative to m_Pos
+    DPOINT            m_maxCoord;           // max coord of corners, relative to m_Pos
+
+public:
+    WORKSHEET_DATAITEM_POLYPOLYGON( );
+
+    /**
+     * add a corner in corner list
+     * @param aCorner: the item to append
+     */
+    void AppendCorner( const DPOINT& aCorner )
+    {
+        m_Corners.push_back( aCorner );
+    }
+
+    /**
+     * Closes the current contour, by storing the index of the last corner
+     * of the current polygon in m_polyIndexEnd.
+     */
+    void CloseContour()
+    {
+        m_polyIndexEnd.push_back( m_Corners.size() -1 );
+    }
+
+    /**
+     * @return the count of contours in the poly polygon
+     */
+    int GetPolyCount() const { return (int) m_polyIndexEnd.size(); }
+
+    /**
+     * @return the index of the first corner of the contour aCountour
+     * @param aContour = the index of the contour
+     */
+    unsigned GetPolyIndexStart( unsigned aContour) const
+    {
+        if( aContour == 0 )
+            return 0;
+        else
+            return m_polyIndexEnd[aContour-1] + 1;
+    }
+
+    /**
+     * @return the index of the last corner of the contour aCountour
+     * @param aContour = the index of the contour
+     */
+    unsigned GetPolyIndexEnd( unsigned aContour) const
+    {
+        return m_polyIndexEnd[aContour];
+    }
+
+    /**
+     * @return the coordinate (in mm) of the corner aIdx,
+     * for the repeated item aRepeat
+     */
+    const DPOINT GetCornerPosition( unsigned aIdx, int aRepeat = 0 ) const;
+
+    /**
+     * @return the coordinate (in draw/plot units) of the corner aIdx,
+     * for the repeated item aRepeat
+     */
+    const wxPoint GetCornerPositionUi( unsigned aIdx, int aRepeat = 0 ) const;
+
+    /**
+     * calculate the bounding box of the set  polygons
+     */
+    void SetBoundingBox();
+
+
+    bool IsInsidePage( int ii ) const;
 };
 
 class WORKSHEET_DATAITEM_TEXT : public WORKSHEET_DATAITEM
@@ -233,6 +326,7 @@ class WS_DRAW_ITEM_POLYGON : public WS_DRAW_ITEM_BASE
 
 public:
     std::vector <wxPoint> m_Corners;
+
 public:
     WS_DRAW_ITEM_POLYGON( bool aFill, int aPenWidth, EDA_COLOR_T aColor ) :
         WS_DRAW_ITEM_BASE( wsg_poly, aColor )

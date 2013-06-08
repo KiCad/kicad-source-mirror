@@ -60,6 +60,80 @@
 #include <class_title_block.h>
 #include <worksheet_shape_builder.h>
 
+WORKSHEET_DATAITEM_POLYPOLYGON::WORKSHEET_DATAITEM_POLYPOLYGON() :
+    WORKSHEET_DATAITEM( WS_POLYPOLYGON )
+{
+    m_Orient = 0.0;
+}
+
+const DPOINT WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPosition( unsigned aIdx,
+                                                         int aRepeat ) const
+{
+    DPOINT pos = m_Corners[aIdx];
+
+    // Rotation:
+    RotatePoint( &pos.x, &pos.y, m_Orient * 10 );
+    pos += GetStartPos( aRepeat );
+    return pos;
+}
+
+void WORKSHEET_DATAITEM_POLYPOLYGON::SetBoundingBox()
+{
+    if( m_Corners.size() == 0 )
+    {
+        m_minCoord.x = m_maxCoord.x = 0.0;
+        m_minCoord.y = m_maxCoord.y = 0.0;
+        return;
+    }
+
+    DPOINT pos;
+    pos = m_Corners[0];
+    RotatePoint( &pos.x, &pos.y, m_Orient * 10 );
+    m_minCoord = m_maxCoord = pos;
+
+    for( unsigned ii = 1; ii < m_Corners.size(); ii++ )
+    {
+        pos = m_Corners[ii];
+        RotatePoint( &pos.x, &pos.y, m_Orient * 10 );
+
+        if( m_minCoord.x > pos.x )
+            m_minCoord.x = pos.x;
+
+        if( m_minCoord.y > pos.y )
+            m_minCoord.y = pos.y;
+
+        if( m_maxCoord.x < pos.x )
+            m_maxCoord.x = pos.x;
+
+        if( m_maxCoord.y < pos.y )
+            m_maxCoord.y = pos.y;
+    }
+}
+
+bool WORKSHEET_DATAITEM_POLYPOLYGON::IsInsidePage( int ii ) const
+{
+    DPOINT pos = GetStartPos( ii );
+    pos += m_minCoord;  // left top pos of bounding box
+
+    if( m_LT_Corner.x > pos.x || m_LT_Corner.y > pos.y )
+        return false;
+
+    pos = GetStartPos( ii );
+    pos += m_maxCoord;  // rignt bottom pos of bounding box
+
+    if( m_RB_Corner.x < pos.x || m_RB_Corner.y < pos.y )
+        return false;
+
+    return true;
+}
+
+const wxPoint WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPositionUi( unsigned aIdx,
+                                                            int aRepeat ) const
+{
+    DPOINT pos = GetCornerPosition( aIdx, aRepeat );
+    pos = pos * m_WSunits2Iu;
+    return wxPoint( int(pos.x), int(pos.y) );
+}
 
 WORKSHEET_DATAITEM_TEXT::WORKSHEET_DATAITEM_TEXT( const wxChar* aTextBase ) :
     WORKSHEET_DATAITEM( WS_TEXT )
@@ -253,6 +327,8 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
         if( wsItem == NULL )
             break;
 
+        pensize = wsItem->GetPenSizeUi();
+
         switch( wsItem->m_Type )
         {
         case WORKSHEET_DATAITEM::WS_TEXT:
@@ -261,8 +337,6 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
             wsText->m_FullText = BuildFullText( wsText->m_TextBase );
             if( wsText->m_FullText.IsEmpty() )
                 break;
-
-            pensize = wsText->GetPenSizeUi();
 
             if( pensize == 0 )
                 pensize = m_penSize;
@@ -283,10 +357,11 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
             if( wsText->IsBold())
                 pensize = GetPenSizeForBold( std::min( textsize.x, textsize.y ) );
 
-            for( int jj = 0; jj < wsText->m_RepeatCount; )
+            for( int jj = 0; jj < wsText->m_RepeatCount; jj++)
             {
                 if( ! wsText->IsInsidePage( jj ) )
-                    break;
+                    continue;
+
                 Append( gtext = new WS_DRAW_ITEM_TEXT( wsText->m_FullText,
                                                        wsText->GetStartPosUi( jj ),
                                                        textsize,
@@ -295,23 +370,21 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                                                        wsText->IsBold() ) );
                 wsText->TransfertSetupToGraphicText( gtext );
 
-                jj++;
-                if( wsText->m_RepeatCount > 1 )     // Try to increment label
-                    wsText->IncrementLabel( jj );
+                // Increment label for the next text
+                if( wsText->m_RepeatCount > 1 )
+                    wsText->IncrementLabel( jj+1 );
             }
         }
             break;
 
         case WORKSHEET_DATAITEM::WS_SEGMENT:
-            pensize = wsItem->GetPenSizeUi();
-
             if( pensize == 0 )
                 pensize = m_penSize;
 
             for( int jj = 0; jj < wsItem->m_RepeatCount; jj++ )
             {
                 if( ! wsItem->IsInsidePage( jj ) )
-                    break;
+                    continue;
                 Append( new WS_DRAW_ITEM_LINE( wsItem->GetStartPosUi( jj ),
                                                wsItem->GetEndPosUi( jj ),
                                                pensize, aLineColor ) );
@@ -319,8 +392,6 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
             break;
 
         case WORKSHEET_DATAITEM::WS_RECT:
-            pensize = wsItem->GetPenSizeUi();
-
             if( pensize == 0 )
                 pensize = m_penSize;
 
@@ -333,6 +404,34 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                                                wsItem->GetEndPosUi( jj ),
                                                pensize, aLineColor ) );
             }
+            break;
+
+        case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
+        {
+            WORKSHEET_DATAITEM_POLYPOLYGON * wspoly =
+                (WORKSHEET_DATAITEM_POLYPOLYGON*) wsItem;
+            for( int jj = 0; jj < wsItem->m_RepeatCount; jj++ )
+            {
+                if( ! wsItem->IsInsidePage( jj ) )
+                    continue;
+
+                for( int kk = 0; kk < wspoly->GetPolyCount(); kk++ )
+                {
+                    const bool fill = true;
+                    WS_DRAW_ITEM_POLYGON* poly = new WS_DRAW_ITEM_POLYGON( fill,
+                                                   pensize, aLineColor );
+                    Append( poly );
+
+                    // Create polygon outline
+                    unsigned ist = wspoly->GetPolyIndexStart( kk );
+                    unsigned iend = wspoly->GetPolyIndexEnd( kk );
+                    while( ist <= iend )
+                        poly->m_Corners.push_back(
+                            wspoly->GetCornerPositionUi( ist++, jj ) );
+
+                }
+            }
+        }
             break;
         }
     }
