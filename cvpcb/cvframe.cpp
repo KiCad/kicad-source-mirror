@@ -332,60 +332,50 @@ void CVPCB_MAINFRAME::ChangeFocus( bool aMoveRight )
 
 void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
 {
-    int ii = 0;
-    int selection;
-
     if( m_netlist.IsEmpty() )
         return;
 
-    selection = m_ListCmp->GetSelection();
+    long selection = m_ListCmp->GetFirstSelected();
 
     if( selection < 0 )
-        selection = 0;
+        selection = -1;     // We will start to 0 for the first search , if no item selected
 
-    for( unsigned jj = 0;  jj < m_netlist.GetCount();  jj++ )
+    for( unsigned jj = selection+1; jj < m_netlist.GetCount(); jj++ )
     {
-        if( m_netlist.GetComponent( jj )->GetFootprintName().IsEmpty() && ii > selection )
+        if( m_netlist.GetComponent( jj )->GetFootprintName().IsEmpty() )
         {
-            m_ListCmp->SetSelection( ii );
+            m_ListCmp->SetSelection( wxNOT_FOUND, false );  // Remove all selections
+            m_ListCmp->SetSelection( jj );
             SendMessageToEESCHEMA();
             return;
         }
-
-        ii++;
     }
-
-    m_ListCmp->SetSelection( selection );
 }
 
 
 void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
 {
-    int ii;
-    int selection;
-
     if( m_netlist.IsEmpty() )
         return;
 
-    ii = m_ListCmp->GetCount() - 1;
-    selection = m_ListCmp->GetSelection();
+    int selection = m_ListCmp->GetFirstSelected();
 
     if( selection < 0 )
-        selection = m_ListCmp->GetCount() - 1;
+        selection = m_ListCmp->GetCount();
+    else
+        while( m_ListCmp->GetNextSelected( selection ) >= 0 )
+            selection =  m_ListCmp->GetNextSelected( selection );
 
-    for( unsigned kk = m_netlist.GetCount() - 1;  kk >= 0;  kk-- )
+    for( int kk = selection-1; kk >= 0; kk-- )
     {
-        if( m_netlist.GetComponent( kk )->GetFootprintName().IsEmpty() && ii < selection )
+        if( m_netlist.GetComponent( kk )->GetFootprintName().IsEmpty() )
         {
-            m_ListCmp->SetSelection( ii );
+            m_ListCmp->SetSelection( wxNOT_FOUND, false );  // Remove all selections
+            m_ListCmp->SetSelection( kk );
             SendMessageToEESCHEMA();
             return;
         }
-
-        ii--;
     }
-
-    m_ListCmp->SetSelection( selection );
 }
 
 
@@ -618,9 +608,8 @@ void CVPCB_MAINFRAME::DisplayStatus()
     {
         wxString        footprintName = m_FootprintList->GetSelectedFootprint();
         FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( footprintName );
-        wxASSERT( module );
 
-        if( module )
+        if( module )    // can be NULL if no netlist loaded
         {
             msg = _( "Description: " ) + module->m_Doc;
             SetStatusText( msg, 0 );
