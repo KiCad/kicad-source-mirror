@@ -830,11 +830,11 @@ void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
     if( !m_enableAutoPan || !m_requestAutoPan || m_ignoreMouseEvents )
         return;
 
-    // Auto pan if mouse is leave working area:
+    // Auto pan if mouse has left the client window
     wxSize size = GetClientSize();
 
-    if( ( size.x < event.GetX() ) || ( size.y < event.GetY() )
-       || ( event.GetX() <= 0) || ( event.GetY() <= 0 ) )
+    if( size.x <= event.GetX() || event.GetX() < 0 ||
+        size.y <= event.GetY() || event.GetY() < 0 )
     {
         wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_POPUP_ZOOM_CENTER );
         cmd.SetEventObject( this );
