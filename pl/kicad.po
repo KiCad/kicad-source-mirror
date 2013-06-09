@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-07 23:05+0100\n"
-"PO-Revision-Date: 2013-06-07 23:09+0100\n"
+"POT-Creation-Date: 2013-06-09 11:35+0100\n"
+"PO-Revision-Date: 2013-06-09 11:47+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -153,7 +153,7 @@ msgstr ""
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
 #: eeschema/schframe.cpp:1001 pcbnew/moduleframe.cpp:606
-#: pcbnew/pcbframe.cpp:826 cvpcb/cvframe.cpp:695
+#: pcbnew/pcbframe.cpp:826 cvpcb/cvframe.cpp:717
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -3276,7 +3276,7 @@ msgstr "Schemat"
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1004 cvpcb/cvframe.cpp:700
+#: eeschema/schframe.cpp:1004 cvpcb/cvframe.cpp:722
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -5578,7 +5578,7 @@ msgstr "Pliki wtyczek:"
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
-#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:436
+#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:439
 #: eeschema/dialogs/dialog_netlist_base.h:76
 #: pcbnew/dialogs/dialog_netlist_fbp.h:80
 msgid "Netlist"
@@ -6307,7 +6307,7 @@ msgstr "Elementy graficzne"
 
 #: pcbnew/class_edge_mod.cpp:250 pcbnew/class_module.cpp:522
 #: pcbnew/class_pad.cpp:511 pcbnew/class_text_mod.cpp:361
-#: pcbnew/loadcmp.cpp:576 pcbnew/loadcmp.cpp:641 cvpcb/cvframe.cpp:839
+#: pcbnew/loadcmp.cpp:576 pcbnew/loadcmp.cpp:641 cvpcb/cvframe.cpp:861
 msgid "Module"
 msgstr "Footprint"
 
@@ -7885,7 +7885,7 @@ msgstr "Footprinty [%d pozycji]"
 msgid "No footprint found."
 msgstr "Nie znaleziono footprintów."
 
-#: pcbnew/loadcmp.cpp:620 cvpcb/class_footprints_listbox.cpp:206
+#: pcbnew/loadcmp.cpp:620 cvpcb/cvframe.cpp:625
 msgid "Description: "
 msgstr "Opis:"
 
@@ -8953,7 +8953,7 @@ msgstr "Nie można otworzyć pliku listy sieci \"%s\"."
 msgid "Netlist Load Error."
 msgstr "Błąd odczytu listy sieci."
 
-#: pcbnew/netlist.cpp:78 cvpcb/cvframe.cpp:764
+#: pcbnew/netlist.cpp:78 cvpcb/cvframe.cpp:786
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -8963,7 +8963,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/netlist.cpp:79 pcbnew/dialogs/dialog_netlist.cpp:406
-#: cvpcb/cvframe.cpp:765
+#: cvpcb/cvframe.cpp:787
 msgid "Netlist Load Error"
 msgstr "Błąd odczytu listy sieci"
 
@@ -13349,7 +13349,7 @@ msgstr "Z oddzielnego pliku .cmp"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
 msgid "Module Name Source"
-msgstr "Nazwa źródła footprintu"
+msgstr "Źródło footprintu"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:37
 msgid ""
@@ -13441,7 +13441,7 @@ msgstr "Zapisz wiadomości do pliku"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:111
 msgid "Only report changes in message panel"
-msgstr "Raportuj wyłącznie zmiany w oknie wiadomości"
+msgstr "Tylko raportuj zmiany w oknie wiadomości (nie modyfikuj płytki)"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:123
 msgid "Netlist File:"
@@ -14569,11 +14569,7 @@ msgstr "Footprint: %s"
 msgid "Lib: %s"
 msgstr "Biblioteka: %s"
 
-#: cvpcb/class_footprints_listbox.cpp:209
-msgid "Key words: "
-msgstr "Słowa kluczowe:"
-
-#: cvpcb/cvframe.cpp:254
+#: cvpcb/cvframe.cpp:253
 msgid ""
 "Component to Footprint links modified.\n"
 "Save before exit ?"
@@ -14581,69 +14577,73 @@ msgstr ""
 "Linki pomiędzy komponentami a footprintami zostały zmienione.\n"
 "Zapisać przed zakończeniem?"
 
-#: cvpcb/cvframe.cpp:276
+#: cvpcb/cvframe.cpp:275
 msgid "Problem when saving file, exit anyway ?"
 msgstr "Problem podczas zapisu pliku, zakończyć mimo to?"
 
-#: cvpcb/cvframe.cpp:408
+#: cvpcb/cvframe.cpp:411
 msgid "Delete selections"
 msgstr "Usuń zaznaczone"
 
-#: cvpcb/cvframe.cpp:440
+#: cvpcb/cvframe.cpp:443
 msgid "Open Net List"
 msgstr "Otwórz plik netlisty"
 
-#: cvpcb/cvframe.cpp:589
+#: cvpcb/cvframe.cpp:594
 #, c-format
 msgid "Components: %d, unassigned: %d"
 msgstr "Komponenty: %d, nieprzydzielone: %d"
 
-#: cvpcb/cvframe.cpp:607
+#: cvpcb/cvframe.cpp:612
 msgid "Filter list: "
 msgstr "Filtruj listę wg: "
 
-#: cvpcb/cvframe.cpp:617
+#: cvpcb/cvframe.cpp:628
+msgid "Key words: "
+msgstr "Słowa kluczowe:"
+
+#: cvpcb/cvframe.cpp:639
 msgid "key words"
 msgstr "słów kluczowych"
 
-#: cvpcb/cvframe.cpp:624
+#: cvpcb/cvframe.cpp:646
 msgid "pin count"
 msgstr "ilości wyprowadzeń"
 
-#: cvpcb/cvframe.cpp:632
+#: cvpcb/cvframe.cpp:654
 msgid "library"
 msgstr "bibliotek"
 
-#: cvpcb/cvframe.cpp:636
+#: cvpcb/cvframe.cpp:658
 msgid "No filtering"
 msgstr "Bez filtracji"
 
-#: cvpcb/cvframe.cpp:638
+#: cvpcb/cvframe.cpp:660
 msgid "Filtered by "
 msgstr "Filtrowane według "
 
-#: cvpcb/cvframe.cpp:652
+#: cvpcb/cvframe.cpp:674
 msgid "No PCB footprint libraries are listed in the current project file."
 msgstr ""
 "Brak wyszczególnionych bibliotek footprintów w bieżącym pliku projektu."
 
-#: cvpcb/cvframe.cpp:653
+#: cvpcb/cvframe.cpp:675
 msgid "Project File Error"
 msgstr "Błąd pliku"
 
-#: cvpcb/cvframe.cpp:662
+#: cvpcb/cvframe.cpp:684
 msgid "Load Error"
 msgstr "Błąd wczytywania"
 
-#: cvpcb/cvframe.cpp:666
+#: cvpcb/cvframe.cpp:688
 msgid "Some files could not be found!"
 msgstr "Pewne pliki nie zostały znalezione!"
 
-#: cvpcb/cvframe.cpp:674
+#: cvpcb/cvframe.cpp:696
 msgid "Some files are invalid!"
 msgstr "Niektóre pliki są niepoprawne!"
 
-#: cvpcb/cvframe.cpp:760
+#: cvpcb/cvframe.cpp:782
 msgid "Unknown netlist format"
 msgstr "Nieznany format listy sieci"
 
@@ -16042,7 +16042,7 @@ msgstr "Polecenie"
 msgid "Hotkey"
 msgstr "Skróty klawiszowe"
 
-#: common/page_layout_reader.cpp:500
+#: common/page_layout_reader.cpp:604
 #, c-format
 msgid "The file <%s> was not fully read"
 msgstr "Plik <%s> nie został w pełni odczytany"
