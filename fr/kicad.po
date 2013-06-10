@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-07 19:42+0100\n"
-"PO-Revision-Date: 2013-06-07 19:51+0100\n"
+"POT-Creation-Date: 2013-06-10 20:55+0100\n"
+"PO-Revision-Date: 2013-06-10 20:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "Language: fr_FR\n"
@@ -183,7 +183,7 @@ msgstr "Changiement valeur empreinte \"%s:%s\" de \"%s\" en \"%s\".\n"
 #: pcbnew/class_board.cpp:2497
 #, c-format
 msgid "Changing footprint path \"%s:%s\" to \"%s\".\n"
-msgstr ""
+msgstr "Change le chemin des empreintes \"%s:%s\" en \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2523
 #, c-format
@@ -415,7 +415,7 @@ msgstr "Elément Graphique"
 
 #: pcbnew/class_edge_mod.cpp:250 pcbnew/class_module.cpp:522
 #: pcbnew/class_pad.cpp:511 pcbnew/class_text_mod.cpp:361
-#: pcbnew/loadcmp.cpp:576 pcbnew/loadcmp.cpp:641 cvpcb/cvframe.cpp:839
+#: pcbnew/loadcmp.cpp:576 pcbnew/loadcmp.cpp:641 cvpcb/cvframe.cpp:850
 msgid "Module"
 msgstr "Module"
 
@@ -2148,7 +2148,7 @@ msgstr "Modules [%d éléments]"
 msgid "No footprint found."
 msgstr "Aucun module trouvé."
 
-#: pcbnew/loadcmp.cpp:620 cvpcb/class_footprints_listbox.cpp:206
+#: pcbnew/loadcmp.cpp:620 cvpcb/cvframe.cpp:614
 msgid "Description: "
 msgstr "Description:"
 
@@ -3311,7 +3311,7 @@ msgid "Module Editor (active library: "
 msgstr "Editeur de modules (librairie active: "
 
 #: pcbnew/moduleframe.cpp:606 pcbnew/pcbframe.cpp:826 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1006 cvpcb/cvframe.cpp:695 kicad/kicad.cpp:74
+#: eeschema/schframe.cpp:1002 cvpcb/cvframe.cpp:706 kicad/kicad.cpp:74
 #: kicad/prjconfig.cpp:270
 msgid " [Read Only]"
 msgstr " [Lecture Seule]"
@@ -3482,7 +3482,7 @@ msgstr "Ne peut pas ouvrir le fichiernetliste \"%s\"."
 msgid "Netlist Load Error."
 msgstr "Erreur chargement Netliste."
 
-#: pcbnew/netlist.cpp:78 cvpcb/cvframe.cpp:764
+#: pcbnew/netlist.cpp:78 cvpcb/cvframe.cpp:775
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -3492,7 +3492,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/netlist.cpp:79 pcbnew/dialogs/dialog_netlist.cpp:406
-#: cvpcb/cvframe.cpp:765
+#: cvpcb/cvframe.cpp:776
 msgid "Netlist Load Error"
 msgstr "Erreur Chargement Netliste"
 
@@ -4054,7 +4054,7 @@ msgstr ""
 "Une erreur s'est produite lors de la sauvegarde de la librairie de "
 "composants <%s>."
 
-#: pcbnew/pcbframe.cpp:515 eeschema/schframe.cpp:429
+#: pcbnew/pcbframe.cpp:515 eeschema/schframe.cpp:425
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -4145,9 +4145,10 @@ msgid "Read Macros File"
 msgstr "Lire Fichier Macros"
 
 #: pcbnew/pcbplot.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "*** Error: cannot make path <%s> absolute with respect to <%s>! ***"
-msgstr "Ne peut faire <%s> un chemein absolu à partir de <%s>!"
+msgstr ""
+"*** Erreur: impossible de faire <%s> un chemin absolu à partir de <%s>! ***"
 
 #: pcbnew/pcbplot.cpp:168
 #, c-format
@@ -5832,8 +5833,7 @@ msgstr "Sauver Fichier Rapport DRC:"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:23
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:80
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:23
-#: eeschema/dialogs/dialog_netlist.cpp:147
+#: eeschema/dialogs/dialog_netlist.cpp:146
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:75
 msgid "Options:"
 msgstr "Options :"
@@ -6530,7 +6530,7 @@ msgstr "Chercher Marqueur"
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:51
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:135
-#: eeschema/dialogs/dialog_print_using_printer.cpp:215
+#: eeschema/dialogs/dialog_print_using_printer.cpp:243
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:47
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:100
 msgid "Preview"
@@ -8358,7 +8358,7 @@ msgstr "Sauver Messages dans un Fichier"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:111
 msgid "Only report changes in message panel"
-msgstr ""
+msgstr "Uniquement lister les chnagements dans la zone des messages"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:123
 msgid "Netlist File:"
@@ -10300,7 +10300,6 @@ msgstr "Mots clé"
 
 #: eeschema/libedit.cpp:491 eeschema/lib_field.cpp:613
 #: eeschema/template_fieldnames.cpp:17
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:76
 msgid "Datasheet"
 msgstr "Documentation"
 
@@ -10788,7 +10787,6 @@ msgstr "Champ"
 
 #: eeschema/lib_field.cpp:606 eeschema/onrightclick.cpp:443
 #: eeschema/sch_component.cpp:1477 eeschema/template_fieldnames.cpp:16
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:79
 msgid "Footprint"
 msgstr "Empreinte"
 
@@ -11858,35 +11856,35 @@ msgstr "Ajout composant"
 msgid "Add power"
 msgstr "Ajouter symboles d'alims"
 
-#: eeschema/schframe.cpp:585
+#: eeschema/schframe.cpp:581
 msgid "Draw wires and buses in any direction"
 msgstr "Tracer les fils et bus avec direction quelconque"
 
-#: eeschema/schframe.cpp:586
+#: eeschema/schframe.cpp:582
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Autoriser fils et bus verticaux et horizontaux seulement"
 
-#: eeschema/schframe.cpp:595
+#: eeschema/schframe.cpp:591
 msgid "Do not show hidden pins"
 msgstr "Ne pas affichager les pins invisibles"
 
-#: eeschema/schframe.cpp:596 eeschema/tool_sch.cpp:298
+#: eeschema/schframe.cpp:592 eeschema/tool_sch.cpp:298
 msgid "Show hidden pins"
 msgstr "Force affichage des pins invisibles"
 
-#: eeschema/schframe.cpp:640
+#: eeschema/schframe.cpp:637
 msgid "BOM Howto"
 msgstr ""
 
-#: eeschema/schframe.cpp:705
+#: eeschema/schframe.cpp:702
 msgid "Schematic"
 msgstr "Schématique"
 
-#: eeschema/schframe.cpp:775
+#: eeschema/schframe.cpp:772
 msgid "Error: not a component or no component"
 msgstr "Erreur: ce n'est pas un composant, ou pas de composant"
 
-#: eeschema/schframe.cpp:1009 cvpcb/cvframe.cpp:700
+#: eeschema/schframe.cpp:1005 cvpcb/cvframe.cpp:711
 msgid " [no file]"
 msgstr " [pas de fichier]"
 
@@ -12340,29 +12338,29 @@ msgstr "Placer composant en schématique"
 msgid "Part %c"
 msgstr "Composant %c"
 
-#: eeschema/dialogs/annotate_dialog.cpp:136
+#: eeschema/dialogs/dialog_annotate.cpp:191
 msgid "Clear and annotate all of the components on the entire schematic?"
 msgstr ""
 "Reinitialisation et réannotation de tous les composants de la schématic "
 "complète?"
 
-#: eeschema/dialogs/annotate_dialog.cpp:138
+#: eeschema/dialogs/dialog_annotate.cpp:193
 msgid "Clear and annotate all of the components on the current sheet?"
 msgstr ""
 "Reinitialisation et réannotation de tous les composants de la feuille "
 "courante?"
 
-#: eeschema/dialogs/annotate_dialog.cpp:144
+#: eeschema/dialogs/dialog_annotate.cpp:199
 msgid "Annotate only the unannotated components on the entire schematic?"
 msgstr ""
 "Annoter seulement les composants non déjà annotés de la schématique entière?"
 
-#: eeschema/dialogs/annotate_dialog.cpp:146
+#: eeschema/dialogs/dialog_annotate.cpp:201
 msgid "Annotate only the unannotated components on the current sheet?"
 msgstr ""
 "Annoter seulement les composants non déjà annotés de la feuille courante ?"
 
-#: eeschema/dialogs/annotate_dialog.cpp:149
+#: eeschema/dialogs/dialog_annotate.cpp:204
 msgid ""
 "\n"
 "\n"
@@ -12372,15 +12370,15 @@ msgstr ""
 "\n"
 "Cette opération changera l'annotation actuelle et ne pourra être annulée."
 
-#: eeschema/dialogs/annotate_dialog.cpp:187
+#: eeschema/dialogs/dialog_annotate.cpp:240
 msgid "Clear the existing annotation for the entire schematic?"
 msgstr "Supprimer l'annotation existante pour la schématique entière ?"
 
-#: eeschema/dialogs/annotate_dialog.cpp:189
+#: eeschema/dialogs/dialog_annotate.cpp:242
 msgid "Clear the existing annotation for the current sheet?"
 msgstr "Supprimer l'annotation existante pour la feuille courante?"
 
-#: eeschema/dialogs/annotate_dialog.cpp:191
+#: eeschema/dialogs/dialog_annotate.cpp:244
 msgid ""
 "\n"
 "\n"
@@ -12457,141 +12455,6 @@ msgstr "Suppression Annotation"
 #: eeschema/dialogs/dialog_annotate_base.cpp:208
 msgid "Annotation"
 msgstr "Annotation"
-
-#: eeschema/dialogs/dialog_build_BOM.cpp:366
-msgid "Bill of Materials"
-msgstr "Liste du Matériel"
-
-#: eeschema/dialogs/dialog_build_BOM.cpp:475
-#: eeschema/dialogs/dialog_build_BOM.cpp:512
-#: eeschema/dialogs/dialog_build_BOM.cpp:555
-#, c-format
-msgid "Failed to open file <%s>"
-msgstr "Erreur ouverture fichier <%s>"
-
-#: eeschema/dialogs/dialog_build_BOM.cpp:588
-msgid ""
-"\n"
-"#End List\n"
-msgstr ""
-"\n"
-"#End List\n"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:26
-msgid "List items:"
-msgstr " Liste éléments: "
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:28
-msgid "Components by reference"
-msgstr "Composants par référence"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:31
-msgid "Sub components (i.e. U2A, U2B ...)"
-msgstr "Sous composants (i.e U2A, U2B...)"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:34
-msgid "Components by value"
-msgstr "Composants par valeur"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:37
-msgid "Hierarchical pins by name"
-msgstr "Pins de hiérarchie par nom"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:40
-msgid "Hierarchical pins by sheet"
-msgstr "Pins de hiérarchie par feuille"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:46
-msgid "List"
-msgstr "Liste"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:46
-msgid "List for spreadsheet import (by ref)"
-msgstr "Liste pour import dans tableur (par ref)"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:46
-msgid "List for spreadsheet import (by grouped ref)"
-msgstr "Liste pour import dans tableur (par ref groupées)"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:46
-msgid "List for spreadsheet import (by value)"
-msgstr "Liste pour import dans tableur (par valeur)"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:48
-msgid "Output format:"
-msgstr "Format de sortie"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:52
-msgid "Tab"
-msgstr "Tab"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:52
-msgid ";"
-msgstr ";"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:52
-msgid ","
-msgstr ","
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:54
-msgid "Field separator for spreadsheet import:"
-msgstr "Séparateur de champ pour import dans tableur:"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:58
-msgid "Launch list browser"
-msgstr "Lancer le visualisateur de liste"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:68
-msgid "Add to list:"
-msgstr "Ajout en liste:"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:70
-msgid "Component location"
-msgstr "Position composant"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:74
-msgid "System Fields:"
-msgstr "Champs Système:"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:86
-msgid "Users fields:"
-msgstr "Champs utilisateurs:"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:88
-msgid "Field 1"
-msgstr "Champ 1"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:91
-msgid "Field 2"
-msgstr "Champ 2"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:94
-msgid "Field 3"
-msgstr "Champ 3"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:97
-msgid "Field 4"
-msgstr "Champ 4"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:100
-msgid "Field 5"
-msgstr "Champ 5"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:103
-msgid "Field 6"
-msgstr "Champ 6"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:106
-msgid "Field 7"
-msgstr "Champ 7"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:109
-msgid "Field 8"
-msgstr "Champ 8"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:115
-msgid "All existing user fields"
-msgstr "Tous les champs utilisateur existants"
 
 #: eeschema/dialogs/dialog_color_config.cpp:21
 msgid "Wire"
@@ -13489,19 +13352,19 @@ msgstr "Champ utilisateur 8"
 msgid "Template Field Names"
 msgstr "Noms des Champs Modèles"
 
-#: eeschema/dialogs/dialog_erc.cpp:188
+#: eeschema/dialogs/dialog_erc.cpp:193
 msgid "Marker not found"
 msgstr "Marqueur non trouvé"
 
-#: eeschema/dialogs/dialog_erc.cpp:435
+#: eeschema/dialogs/dialog_erc.cpp:440
 msgid "Annotation required!"
 msgstr "Numérotation requise!"
 
-#: eeschema/dialogs/dialog_erc.cpp:553
+#: eeschema/dialogs/dialog_erc.cpp:558
 msgid "ERC File"
 msgstr "Fichier ERC"
 
-#: eeschema/dialogs/dialog_erc.cpp:554
+#: eeschema/dialogs/dialog_erc.cpp:559
 msgid "Electronic rule check file (.erc)|*.erc"
 msgstr "Fichier Contrôle des règles électroniques (.erc)|*.erc"
 
@@ -13775,61 +13638,61 @@ msgstr "Afficher le N&om de Pin"
 msgid "Pin name &inside"
 msgstr "Nom de pin à l'&intérieur"
 
-#: eeschema/dialogs/dialog_netlist.cpp:151
+#: eeschema/dialogs/dialog_netlist.cpp:150
 msgid "Default format"
 msgstr "Format par défaut"
 
-#: eeschema/dialogs/dialog_netlist.cpp:157
+#: eeschema/dialogs/dialog_netlist.cpp:156
 msgid "Legacy Format"
 msgstr "Format Ancien"
 
-#: eeschema/dialogs/dialog_netlist.cpp:157
+#: eeschema/dialogs/dialog_netlist.cpp:156
 msgid "Advanced Format"
 msgstr "Format Avancé"
 
-#: eeschema/dialogs/dialog_netlist.cpp:158
+#: eeschema/dialogs/dialog_netlist.cpp:157
 msgid "Netlist Options:"
 msgstr "Options de Netliste:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:264
+#: eeschema/dialogs/dialog_netlist.cpp:263
 msgid "Prefix references 'U' and 'IC' with 'X'"
 msgstr "Prefixe references 'U' et 'IC' avec 'X'"
 
-#: eeschema/dialogs/dialog_netlist.cpp:268
+#: eeschema/dialogs/dialog_netlist.cpp:267
 msgid "Simulator command:"
 msgstr "Simulateur commande:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:281
+#: eeschema/dialogs/dialog_netlist.cpp:280
 msgid "&Run Simulator"
 msgstr "&Lancer Simulateur"
 
-#: eeschema/dialogs/dialog_netlist.cpp:322
+#: eeschema/dialogs/dialog_netlist.cpp:321
 #: eeschema/dialogs/dialog_netlist_base.cpp:104
 msgid "Netlist command:"
 msgstr "Commande netliste:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:335
+#: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "Title:"
 msgstr "Titre:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:440
+#: eeschema/dialogs/dialog_netlist.cpp:439
 msgid "Save Netlist File"
 msgstr "Sauver Fichier Netliste"
 
-#: eeschema/dialogs/dialog_netlist.cpp:474
+#: eeschema/dialogs/dialog_netlist.cpp:473
 #, c-format
 msgid "%s Export"
 msgstr "Export %s"
 
-#: eeschema/dialogs/dialog_netlist.cpp:531
+#: eeschema/dialogs/dialog_netlist.cpp:530
 msgid "SPICE netlist file (.cir)|*.cir"
 msgstr "Fichier netliste SPICE (.cir)|*.cir"
 
-#: eeschema/dialogs/dialog_netlist.cpp:536
+#: eeschema/dialogs/dialog_netlist.cpp:535
 msgid "CadStar netlist file (.frp)|*.frp"
 msgstr "Fichier netliste CadStar (.frp)|*.frp"
 
-#: eeschema/dialogs/dialog_netlist.cpp:577
+#: eeschema/dialogs/dialog_netlist.cpp:576
 msgid ""
 "Some items are not annotated\n"
 "Do you want to annotate schematic?"
@@ -13837,32 +13700,32 @@ msgstr ""
 "Quelques composants ne sont pas numérotés\n"
 "Voulez vous numéroter la schématique?"
 
-#: eeschema/dialogs/dialog_netlist.cpp:592
+#: eeschema/dialogs/dialog_netlist.cpp:591
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Erreur: nom de feuille dupliqué dans une feuille donnée. Continuer?"
 
-#: eeschema/dialogs/dialog_netlist.cpp:745
+#: eeschema/dialogs/dialog_netlist.cpp:744
 msgid "This plugin already exists. Abort"
 msgstr "Ce plugin existe déjà. Abandon"
 
-#: eeschema/dialogs/dialog_netlist.cpp:775
+#: eeschema/dialogs/dialog_netlist.cpp:774
 msgid "Error. You must provide a command String"
 msgstr "Erreur. Vous devez entrer une ligne de commande"
 
-#: eeschema/dialogs/dialog_netlist.cpp:781
+#: eeschema/dialogs/dialog_netlist.cpp:780
 msgid "Error. You must provide a Title"
 msgstr "Erreur. Vous devez entrer un titre"
 
-#: eeschema/dialogs/dialog_netlist.cpp:802
+#: eeschema/dialogs/dialog_netlist.cpp:801
 msgid "Plugin files:"
 msgstr "Fichiers Plugins:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:836
+#: eeschema/dialogs/dialog_netlist.cpp:835
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr ""
 "Ne pas oublier de choisir un titre pour cette page de contrôle de netliste"
 
-#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:436
+#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:429
 #: pcbnew/dialogs/dialog_netlist_fbp.h:80
 #: eeschema/dialogs/dialog_netlist_base.h:76
 msgid "Netlist"
@@ -13994,19 +13857,19 @@ msgstr "Tracer Page Courante"
 msgid "Plot All Pages"
 msgstr "Tracer Toutes les Pages"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:253
+#: eeschema/dialogs/dialog_print_using_printer.cpp:281
 msgid "Print Schematic"
 msgstr "Impression Schématique"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:258
+#: eeschema/dialogs/dialog_print_using_printer.cpp:286
 msgid "An error occurred attempting to print the schematic."
 msgstr "Une erreur s'est produite lors de l'impression."
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:259
+#: eeschema/dialogs/dialog_print_using_printer.cpp:287
 msgid "Printing"
 msgstr "Impression"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:272
+#: eeschema/dialogs/dialog_print_using_printer.cpp:300
 #, c-format
 msgid "Print page %d"
 msgstr "Imprimer page %d"
@@ -14235,11 +14098,7 @@ msgstr "Module: %s"
 msgid "Lib: %s"
 msgstr "Lib: %s"
 
-#: cvpcb/class_footprints_listbox.cpp:209
-msgid "Key words: "
-msgstr "Mots clé: "
-
-#: cvpcb/cvframe.cpp:254
+#: cvpcb/cvframe.cpp:253
 msgid ""
 "Component to Footprint links modified.\n"
 "Save before exit ?"
@@ -14247,68 +14106,72 @@ msgstr ""
 "Fichier de lien composants / empreintes modifié,\n"
 "Sauver avant de quitter ?"
 
-#: cvpcb/cvframe.cpp:276
+#: cvpcb/cvframe.cpp:275
 msgid "Problem when saving file, exit anyway ?"
 msgstr "Problème en sauvant le fichier, quitter quand même"
 
-#: cvpcb/cvframe.cpp:408
+#: cvpcb/cvframe.cpp:401
 msgid "Delete selections"
 msgstr "Effacement des associations existantes"
 
-#: cvpcb/cvframe.cpp:440
+#: cvpcb/cvframe.cpp:433
 msgid "Open Net List"
 msgstr "Ouvrir Fichier Netliste"
 
-#: cvpcb/cvframe.cpp:589
+#: cvpcb/cvframe.cpp:584
 #, c-format
 msgid "Components: %d, unassigned: %d"
 msgstr "Composants: %d, non assignés: %d"
 
-#: cvpcb/cvframe.cpp:607
+#: cvpcb/cvframe.cpp:602
 msgid "Filter list: "
 msgstr "Liste filtrée:"
 
 #: cvpcb/cvframe.cpp:617
+msgid "Key words: "
+msgstr "Mots clé: "
+
+#: cvpcb/cvframe.cpp:628
 msgid "key words"
 msgstr "mots clé"
 
-#: cvpcb/cvframe.cpp:624
+#: cvpcb/cvframe.cpp:635
 msgid "pin count"
 msgstr "nombre de pins"
 
-#: cvpcb/cvframe.cpp:632
+#: cvpcb/cvframe.cpp:643
 msgid "library"
 msgstr "librairie"
 
-#: cvpcb/cvframe.cpp:636
+#: cvpcb/cvframe.cpp:647
 msgid "No filtering"
 msgstr "Pas de filtrage"
 
-#: cvpcb/cvframe.cpp:638
+#: cvpcb/cvframe.cpp:649
 msgid "Filtered by "
 msgstr "Filtré par "
 
-#: cvpcb/cvframe.cpp:652
+#: cvpcb/cvframe.cpp:663
 msgid "No PCB footprint libraries are listed in the current project file."
 msgstr "Aucune librairie de modules PCB listée dans le fichier projet courant."
 
-#: cvpcb/cvframe.cpp:653
+#: cvpcb/cvframe.cpp:664
 msgid "Project File Error"
 msgstr "Erreur en Fichier Projet"
 
-#: cvpcb/cvframe.cpp:662
+#: cvpcb/cvframe.cpp:673
 msgid "Load Error"
 msgstr "Erreur de Chargement"
 
-#: cvpcb/cvframe.cpp:666
+#: cvpcb/cvframe.cpp:677
 msgid "Some files could not be found!"
 msgstr "Certains fichiers n'ont pas pu être trouvés!"
 
-#: cvpcb/cvframe.cpp:674
+#: cvpcb/cvframe.cpp:685
 msgid "Some files are invalid!"
 msgstr "Certains fichiers sont invalides!"
 
-#: cvpcb/cvframe.cpp:760
+#: cvpcb/cvframe.cpp:771
 msgid "Unknown netlist format"
 msgstr "Format netliste inconnu"
 
@@ -15921,7 +15784,7 @@ msgstr "Commande"
 msgid "Hotkey"
 msgstr "Hotkey"
 
-#: common/page_layout_reader.cpp:500
+#: common/page_layout_reader.cpp:604
 #, c-format
 msgid "The file <%s> was not fully read"
 msgstr "Le fichier <%s> n'a pas été complètement  lu"
@@ -17072,10 +16935,6 @@ msgstr "Non Connection"
 msgid "Annotate Schematic"
 msgstr "Annotation de la Schématique"
 
-#: eeschema/dialogs/dialog_build_BOM_base.h:78
-msgid "List of Materials"
-msgstr "Liste du Matériel"
-
 #: eeschema/dialogs/dialog_color_config.h:61
 msgid "EESchema Colors"
 msgstr "Couleurs dans EESchema"
@@ -17186,6 +17045,109 @@ msgstr "Options d'Affichage 3D"
 #: bitmap2component/bitmap2cmp_gui_base.h:77
 msgid "Bitmap to Component Converter"
 msgstr "Convertisseur Bitmap en Composant"
+
+#~ msgid "Bill of Materials"
+#~ msgstr "Liste du Matériel"
+
+#~ msgid "Failed to open file <%s>"
+#~ msgstr "Erreur ouverture fichier <%s>"
+
+#~ msgid ""
+#~ "\n"
+#~ "#End List\n"
+#~ msgstr ""
+#~ "\n"
+#~ "#End List\n"
+
+#~ msgid "List items:"
+#~ msgstr " Liste éléments: "
+
+#~ msgid "Components by reference"
+#~ msgstr "Composants par référence"
+
+#~ msgid "Sub components (i.e. U2A, U2B ...)"
+#~ msgstr "Sous composants (i.e U2A, U2B...)"
+
+#~ msgid "Components by value"
+#~ msgstr "Composants par valeur"
+
+#~ msgid "Hierarchical pins by name"
+#~ msgstr "Pins de hiérarchie par nom"
+
+#~ msgid "Hierarchical pins by sheet"
+#~ msgstr "Pins de hiérarchie par feuille"
+
+#~ msgid "List"
+#~ msgstr "Liste"
+
+#~ msgid "List for spreadsheet import (by ref)"
+#~ msgstr "Liste pour import dans tableur (par ref)"
+
+#~ msgid "List for spreadsheet import (by grouped ref)"
+#~ msgstr "Liste pour import dans tableur (par ref groupées)"
+
+#~ msgid "List for spreadsheet import (by value)"
+#~ msgstr "Liste pour import dans tableur (par valeur)"
+
+#~ msgid "Output format:"
+#~ msgstr "Format de sortie"
+
+#~ msgid "Tab"
+#~ msgstr "Tab"
+
+#~ msgid ";"
+#~ msgstr ";"
+
+#~ msgid ","
+#~ msgstr ","
+
+#~ msgid "Field separator for spreadsheet import:"
+#~ msgstr "Séparateur de champ pour import dans tableur:"
+
+#~ msgid "Launch list browser"
+#~ msgstr "Lancer le visualisateur de liste"
+
+#~ msgid "Add to list:"
+#~ msgstr "Ajout en liste:"
+
+#~ msgid "Component location"
+#~ msgstr "Position composant"
+
+#~ msgid "System Fields:"
+#~ msgstr "Champs Système:"
+
+#~ msgid "Users fields:"
+#~ msgstr "Champs utilisateurs:"
+
+#~ msgid "Field 1"
+#~ msgstr "Champ 1"
+
+#~ msgid "Field 2"
+#~ msgstr "Champ 2"
+
+#~ msgid "Field 3"
+#~ msgstr "Champ 3"
+
+#~ msgid "Field 4"
+#~ msgstr "Champ 4"
+
+#~ msgid "Field 5"
+#~ msgstr "Champ 5"
+
+#~ msgid "Field 6"
+#~ msgstr "Champ 6"
+
+#~ msgid "Field 7"
+#~ msgstr "Champ 7"
+
+#~ msgid "Field 8"
+#~ msgstr "Champ 8"
+
+#~ msgid "All existing user fields"
+#~ msgstr "Tous les champs utilisateur existants"
+
+#~ msgid "List of Materials"
+#~ msgstr "Liste du Matériel"
 
 #~ msgid "Footprints (All): %d"
 #~ msgstr "Modules (Tous): %d"
