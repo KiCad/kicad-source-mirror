@@ -35,7 +35,7 @@
 #include <appl_wxstruct.h>
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
-#include <invoke_a_dialog.h>
+#include <invoke_sch_dialog.h>
 
 #include <general.h>
 #include <netlist.h>

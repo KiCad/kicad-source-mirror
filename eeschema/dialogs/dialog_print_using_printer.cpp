@@ -16,7 +16,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 
-#include <invoke_a_dialog.h>
+#include <invoke_sch_dialog.h>
 #include <dialog_print_using_printer_base.h>
 
 

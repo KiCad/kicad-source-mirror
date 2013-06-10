@@ -51,7 +51,7 @@
 #include <eeschema_config.h>
 #include <sch_sheet.h>
 
-#include <invoke_a_dialog.h>
+#include <invoke_sch_dialog.h>
 #include <dialogs/dialog_schematic_find.h>
 
 #include <wx/display.h>

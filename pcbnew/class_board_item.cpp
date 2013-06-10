@@ -33,7 +33,7 @@
 #include <pcbnew.h>
 
 #include <class_board.h>
-
+#include <string>
 
 wxString BOARD_ITEM::ShowShape( STROKE_T aShape )
 {
@@ -88,6 +88,8 @@ wxString BOARD_ITEM::GetLayerName() const
 
 std::string BOARD_ITEM::FormatInternalUnits( int aValue )
 {
+#if 1   // !defined( USE_PCBNEW_NANOMETRES )
+
     char    buf[50];
     int     len;
     double  mm = aValue / IU_PER_MM;
@@ -110,6 +112,58 @@ std::string BOARD_ITEM::FormatInternalUnits( int aValue )
     }
 
     return std::string( buf, len );
+
+#else
+
+    // Assume aValue is in nanometers, and that we want the result in millimeters,
+    // and that int is 32 bit wide.  Then perform an alternative algorithm.
+    // Can be used to verify that the above algorithm is correctly generating text.
+    // Convert aValue into an integer string, then insert a decimal point manually.
+    // Results are the same as above general purpose algorithm.
+
+    wxASSERT( sizeof(int) == 4 );
+
+    if( aValue == 0 )
+        return std::string( 1, '0' );
+    else
+    {
+        char    buf[50];
+        int     len = sprintf( buf, aValue > 0 ? "%06d" : "%07d", aValue );
+
+        std::string ret( buf, len );
+
+        std::string::iterator it = ret.end() - 1;           // last byte
+
+        // insert '.' at 6 positions from end, divides by 10e6 (a million), nm => mm
+        std::string::iterator decpoint = ret.end() - 6;
+
+        // truncate trailing zeros, up to decimal point position
+        for(  ; *it=='0' && it >= decpoint;  --it )
+            ret.erase( it );    // does not invalidate iterators it or decpoint
+
+        if( it >= decpoint )
+        {
+            ret.insert( decpoint, '.' );
+
+            // decpoint is invalidated here, after insert()
+
+#if 1       // want leading a zero when decimal point is in first position?
+            if( ret[0] == '.' )
+            {
+                // insert leading zero ahead of decimal.
+                ret.insert( ret.begin(), '0' );
+            }
+            else if( ret[0]=='-' && ret[1]=='.' )
+            {
+                ret.insert( ret.begin() + 1, '0' );
+            }
+#endif
+        }
+
+        return ret;
+    }
+
+#endif
 }
 
 
