@@ -15,7 +15,7 @@ Contribute to KiCad (under Linux)
     cd ~/
     bzr branch lp:kicad kicad_john
 
-4) Read coding_style_policy.pdt, in <kicad_sources>/Documentation,
+4) Read coding_style_policy.pdf, in <kicad_sources>/Documentation,
     and other docs.
 
 5) Modify/add source code.

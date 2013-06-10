@@ -830,16 +830,26 @@ void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
     if( !m_enableAutoPan || !m_requestAutoPan || m_ignoreMouseEvents )
         return;
 
-    // Auto pan if mouse has left the client window
+    // Auto pan when mouse has left the client window
+    // Ensure the cross_hair position is updated,
+    // because it will be used to center the screen.
+    // We use a position inside the client window
     wxSize size = GetClientSize();
+    wxPoint cross_hair_pos = event.GetPosition();
+    cross_hair_pos.x = std::min( cross_hair_pos.x, size.x );
+    cross_hair_pos.y = std::min( cross_hair_pos.y, size.x );
+    cross_hair_pos.x = std::max( cross_hair_pos.x, 0 );
+    cross_hair_pos.y = std::max( cross_hair_pos.y, 0 );
 
-    if( size.x <= event.GetX() || event.GetX() < 0 ||
-        size.y <= event.GetY() || event.GetY() < 0 )
-    {
-        wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_POPUP_ZOOM_CENTER );
-        cmd.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( cmd );
-    }
+    INSTALL_UNBUFFERED_DC( dc, this );
+    cross_hair_pos.x = dc.DeviceToLogicalX( cross_hair_pos.x );
+    cross_hair_pos.y = dc.DeviceToLogicalY( cross_hair_pos.y );
+
+    GetScreen()->SetCrossHairPosition( cross_hair_pos );
+
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_POPUP_ZOOM_CENTER );
+    cmd.SetEventObject( this );
+    GetEventHandler()->ProcessEvent( cmd );
 
     event.Skip();
 }
