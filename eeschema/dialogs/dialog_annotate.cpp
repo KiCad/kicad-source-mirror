@@ -33,7 +33,7 @@
 #include <wxEeschemaStruct.h>
 #include <class_drawpanel.h>
 
-#include <invoke_a_dialog.h>
+#include <invoke_sch_dialog.h>
 #include <dialog_annotate_base.h>
 
 
