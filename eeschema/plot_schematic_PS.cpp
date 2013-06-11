@@ -132,11 +132,6 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
                                             double              aScale,
                                             bool                aPlotFrameRef )
 {
-    FILE*       output_file = wxFopen( aFileName, wxT( "wt" ) );
-
-    if( output_file == NULL )
-        return false;
-
     PS_PLOTTER* plotter = new PS_PLOTTER();
     plotter->SetPageSettings( aPageInfo );
     plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
