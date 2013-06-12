@@ -106,15 +106,19 @@ public:
 
     wxString GetAttribute( const wxString& attrName, const wxString& defaultVal ) const
     {
-        return GetPropVal(attrName, defaultVal);
+        return GetPropVal( attrName, defaultVal );
     }
     bool GetAttribute( const wxString& attrName, wxString *value ) const
     {
-        return GetPropVal(attrName, value);
+        return GetPropVal( attrName, value );
     }
     void AddAttribute( const wxString& attrName, const wxString& value )
     {
-        AddProperty(attrName, value);
+        AddProperty( attrName, value );
+    }
+    bool DeleteAttribute( const wxString& attrName )
+    {
+        DeleteProperty( attrName );
     }
     wxXmlProperty* GetAttributes() const
     {

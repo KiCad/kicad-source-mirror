@@ -76,10 +76,7 @@ void PCB_TEXT::Parse( XNODE*        aNode,
         m_rotation = StrToInt1Units( str );
     }
 
-    lNode = FindNode( aNode, wxT( "value" ) );
-
-    if( lNode )
-        m_name.text = lNode->GetNodeContent();
+    aNode->GetAttribute( wxT( "Name" ), &m_name.text );
 
     str = FindNodeGetContent( aNode, wxT( "isFlipped" ) );
 

@@ -713,14 +713,14 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
               && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF )  )
             {
                 msg.Printf( _( "Item not annotated: %s%s (unit %d)\n" ),
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ),
                             componentFlatList[ii].m_Unit );
             }
             else
             {
                 msg.Printf( _( "Item not annotated: %s%s\n" ),
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ) );
             }
 
@@ -782,15 +782,15 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             if( ( componentFlatList[ii].m_Unit > 0 )
              && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF ) )
             {
-                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ), 
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ),
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ),
                             componentFlatList[ii].m_Unit );
             }
             else
             {
                 msg.Printf( _( "Multiple item %s%s\n" ),
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ) );
             }
 
@@ -814,15 +814,15 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             if( ( componentFlatList[ii].m_Unit > 0 )
              && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF ) )
             {
-                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ), 
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ),
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ),
                             componentFlatList[ii].m_Unit );
             }
             else
             {
                 msg.Printf( _( "Multiple item %s%s\n" ),
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ) );
             }
 
@@ -837,27 +837,17 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
 
         if( componentFlatList[ii].CompareValue( componentFlatList[next] ) != 0 )
         {
-#if defined(KICAD_GOST)
-            msg.Printf( _( "Different values for %s%d.%d (%s) and %s%d.%d (%s)" ),
+            msg.Printf( _( "Different values for %s%d%s (%s) and %s%d%s (%s)" ),
                         GetChars( componentFlatList[ii].GetRef() ),
                         componentFlatList[ii].m_NumRef,
-                        componentFlatList[ii].m_Unit,
+                        GetChars( LIB_COMPONENT::ReturnSubReference(
+                                  componentFlatList[ii].m_Unit ) ),
                         GetChars( componentFlatList[ii].m_Value->GetText() ),
                         GetChars( componentFlatList[next].GetRef() ),
                         componentFlatList[next].m_NumRef,
-                        componentFlatList[next].m_Unit,
-                        componentFlatList[next].m_Value->GetText().GetData() );
-#else
-            msg.Printf( _( "Different values for %s%d%c (%s) and %s%d%c (%s)" ),
-                        GetChars( componentFlatList[ii].GetRef() ),
-                        componentFlatList[ii].m_NumRef,
-                        componentFlatList[ii].m_Unit + 'A' - 1,
-                        GetChars( componentFlatList[ii].m_Value->GetText() ),
-                        GetChars( componentFlatList[next].GetRef() ),
-                        componentFlatList[next].m_NumRef,
-                        componentFlatList[next].m_Unit + 'A' - 1,
+                        GetChars( LIB_COMPONENT::ReturnSubReference(
+                                  componentFlatList[next].m_Unit ) ),
                         GetChars( componentFlatList[next].m_Value->GetText() ) );
-#endif
 
             if( aMessageList )
                 aMessageList->Add( msg + wxT( "\n" ));
