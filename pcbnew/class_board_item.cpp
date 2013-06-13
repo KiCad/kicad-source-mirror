@@ -116,7 +116,7 @@ std::string BOARD_ITEM::FormatInternalUnits( int aValue )
 #else
 
     // Assume aValue is in nanometers, and that we want the result in millimeters,
-    // and that int is 32 bit wide.  Then perform an alternative algorithm.
+    // and that int is 32 bits wide.  Then perform an alternative algorithm.
     // Can be used to verify that the above algorithm is correctly generating text.
     // Convert aValue into an integer string, then insert a decimal point manually.
     // Results are the same as above general purpose algorithm.
@@ -128,13 +128,13 @@ std::string BOARD_ITEM::FormatInternalUnits( int aValue )
     else
     {
         char    buf[50];
-        int     len = sprintf( buf, aValue > 0 ? "%06d" : "%07d", aValue );
+        int     len = sprintf( buf, aValue > 0 ? "%06d" : "%07d", aValue );     // optionally pad w/leading zeros
 
         std::string ret( buf, len );
 
         std::string::iterator it = ret.end() - 1;           // last byte
 
-        // insert '.' at 6 positions from end, divides by 10e6 (a million), nm => mm
+        // insert '.' at 6 positions from end, dividing by 10e6 (a million), nm => mm
         std::string::iterator decpoint = ret.end() - 6;
 
         // truncate trailing zeros, up to decimal point position
@@ -147,10 +147,10 @@ std::string BOARD_ITEM::FormatInternalUnits( int aValue )
 
             // decpoint is invalidated here, after insert()
 
-#if 1       // want leading a zero when decimal point is in first position?
+#if 1       // want a leading zero when decimal point is in first position?
             if( ret[0] == '.' )
             {
-                // insert leading zero ahead of decimal.
+                // insert leading zero ahead of decimal point.
                 ret.insert( ret.begin(), '0' );
             }
             else if( ret[0]=='-' && ret[1]=='.' )
