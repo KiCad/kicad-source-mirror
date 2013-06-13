@@ -59,7 +59,7 @@
         ~~~~~~~~~~~~~~
 
         /info.html  - Contains html formatted information about the template which is used by the
-                      user to determine if the template is what they are after. The <title> tag
+                      user to determine if the template is what they are after. The &lt;title&gt; tag
                       determines the actual name of the template that is exposed to the user for
                       template selection. Using html to format this document means that images can
                       be in-lined without having to invent a new scheme. Only HTML supported by
