@@ -1165,7 +1165,9 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             // sscanf( PtLine, " %s %d %d %d %d %d", BufCar, &m_Size.x, &m_Size.y, &m_DeltaSize.x, &m_DeltaSize.y, &m_Orient );
             while( isSpace( *data ) )
                 ++data;
-            int     padshape = *data++;
+
+            unsigned char   padchar = (unsigned char) *data++;
+            int             padshape;
 
             BIU     size_x   = biuParse( data, &data );
             BIU     size_y   = biuParse( data, &data );
@@ -1173,7 +1175,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             BIU     delta_y  = biuParse( data, &data );
             double  orient   = degParse( data );
 
-            switch( padshape )
+            switch( padchar )
             {
             case 'C':   padshape = PAD_CIRCLE;      break;
             case 'R':   padshape = PAD_RECT;        break;
@@ -1181,8 +1183,8 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             case 'T':   padshape = PAD_TRAPEZOID;   break;
             default:
                 m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line:%d of module:'%s'" ),
-                    (unsigned char) padshape,
-                    (unsigned char) padshape,
+                    padchar,
+                    padchar,
                     m_reader->LineNumber(),
                     GetChars( aModule->GetLibRef() )
                     );
