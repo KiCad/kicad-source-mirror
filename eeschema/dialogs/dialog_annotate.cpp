@@ -1,5 +1,5 @@
 /**
- * @file annotate_dialog.cpp
+ * @file dialog_annotate.cpp
  * @brief Annotation dialog functions.
  */
 

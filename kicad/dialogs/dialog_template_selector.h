@@ -25,17 +25,18 @@
 #ifndef PROJECT_TEMPLATE_SELECTOR_H
 #define PROJECT_TEMPLATE_SELECTOR_H
 
-#include "dialogs/dialog_template_selector_base.h"
+#include <dialogs/dialog_template_selector_base.h>
 #include "project_template.h"
+
 
 class TEMPLATE_WIDGET : public TEMPLATE_WIDGET_BASE
 {
 protected:
-    wxDialog* dialog;
-    wxWindow* parent;
-    wxPanel* panel;
+    wxDialog*   dialog;
+    wxWindow*   parent;
+    wxPanel*    panel;
+    bool        selected;
 
-    bool selected;
     PROJECT_TEMPLATE* templ;
 
     void OnKillFocus( wxFocusEvent& event );
@@ -56,6 +57,7 @@ public:
     bool IsSelected();
 };
 
+
 class TEMPLATE_SELECTION_PANEL : public TEMPLATE_SELECTION_PANEL_BASE
 {
 protected:
@@ -65,12 +67,14 @@ protected:
 public:
     /**
      * @param aParent The window creating the dialog
+     * @param aPath the path
      */
     TEMPLATE_SELECTION_PANEL( wxWindow* aParent, const wxString& aPath );
     ~TEMPLATE_SELECTION_PANEL();
 
     const wxString& GetPath() { return m_templatesPath; }
 };
+
 
 class DIALOG_TEMPLATE_SELECTOR : public DIALOG_TEMPLATE_SELECTOR_BASE
 {
@@ -92,7 +96,7 @@ public:
     TEMPLATE_WIDGET* GetWidget();
     void SetWidget( TEMPLATE_WIDGET* aWidget );
     void onNotebookResize( wxSizeEvent& event );
-	void OnPageChange( wxNotebookEvent& event );
+    void OnPageChange( wxNotebookEvent& event );
 };
 
 #endif

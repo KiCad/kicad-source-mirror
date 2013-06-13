@@ -44,8 +44,8 @@ class wxTextCtrl;
  * The purpose of the REPORTER object is to offer a way for a procedural function
  * to report multiple errors without having to:
  * <ul>
- * <li> a) know too much about the caller's UI, i.e. wx. </li>
- * <li> b) stop after the first error </li>
+ * <li> know too much about the caller's UI, i.e. wx. </li>
+ * <li> stop after the first error </li>
  * </ul>
  */
 class REPORTER

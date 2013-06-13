@@ -106,7 +106,7 @@ public:
     void SetReader( LINE_READER* aReader )      { m_reader = aReader; }
     void SetFilePtr( FILE* aFile )              { m_fp = aFile; }
 
-    MODULE* LoadMODULE();
+    void    LoadMODULE( MODULE* aModule );
     void    SaveMODULE( const MODULE* aModule ) const;
     void    SaveModule3D( const MODULE* aModule ) const;
     void    SaveBOARD( const BOARD* aBoard ) const;
