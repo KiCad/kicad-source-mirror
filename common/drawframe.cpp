@@ -698,13 +698,13 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
         break;
 
     default:
-    {
-        wxString msg;
-        msg << wxT( "EDA_DRAW_FRAME::HandleBlockBegin() error: Unknown command " ) <<
-        Block->GetCommand();
-        DisplayError( this, msg );
-    }
-    break;
+        {
+            wxString msg;
+            msg << wxT( "EDA_DRAW_FRAME::HandleBlockBegin() error: Unknown command " ) <<
+            Block->GetCommand();
+            DisplayError( this, msg );
+        }
+        break;
     }
 
     Block->SetMessageBlock( this );

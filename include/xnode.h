@@ -118,7 +118,7 @@ public:
     }
     bool DeleteAttribute( const wxString& attrName )
     {
-        DeleteProperty( attrName );
+        return DeleteProperty( attrName );
     }
     wxXmlProperty* GetAttributes() const
     {
