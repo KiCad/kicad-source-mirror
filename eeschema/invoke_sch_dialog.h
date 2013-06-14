@@ -37,8 +37,8 @@
 // DIALOG_<class>.cpp file.
 
 
-#ifndef INVOKE_A_DIALOG_H_
-#define INVOKE_A_DIALOG_H_
+#ifndef INVOKE_SCH_DIALOG_H_
+#define INVOKE_SCH_DIALOG_H_
 
 
 class wxFrame;
@@ -61,6 +61,9 @@ wxDialog* InvokeDialogERC( SCH_EDIT_FRAME* aCaller );
 /// DIALOG_PRINT_USING_PRINTER::ShowModal() returns.
 int InvokeDialogPrintUsingPrinter( SCH_EDIT_FRAME* aCaller );
 
+/// Create and show DIALOG_BOM and return whatever
+/// DIALOG_BOM::ShowModal() returns.
+int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller );
 
 
-#endif  // INVOKE_A_DIALOG_H_
+#endif  // INVOKE_SCH_DIALOG_H_
