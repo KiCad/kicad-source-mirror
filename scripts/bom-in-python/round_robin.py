@@ -5,12 +5,12 @@
 #
 
 # Import the KiCad python helper module and the csv formatter
-import ky
+import ky_generic_netlist_reader
 import sys
 
 # Generate an instance of a generic netlist, and load the netlist tree from
 # the command line option. If the file doesn't exist, execution will stop
-net = ky.netlist(sys.argv[1])
+net = ky_generic_netlist_reader.netlist(sys.argv[1])
 
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
