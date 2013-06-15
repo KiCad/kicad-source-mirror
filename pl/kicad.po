@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-09 11:35+0100\n"
-"PO-Revision-Date: 2013-06-09 11:47+0100\n"
+"POT-Creation-Date: 2013-06-13 18:27+0100\n"
+"PO-Revision-Date: 2013-06-13 18:28+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -152,8 +152,8 @@ msgstr ""
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1001 pcbnew/moduleframe.cpp:606
-#: pcbnew/pcbframe.cpp:826 cvpcb/cvframe.cpp:717
+#: eeschema/schframe.cpp:1002 pcbnew/moduleframe.cpp:606
+#: pcbnew/pcbframe.cpp:826 cvpcb/cvframe.cpp:706
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -681,17 +681,12 @@ msgstr "Element wielokrotny %s%s (część %d)\n"
 msgid "Multiple item %s%s\n"
 msgstr "Element wielokrotny %s%s\n"
 
-#: eeschema/component_references_lister.cpp:841
+#: eeschema/component_references_lister.cpp:840
 #, c-format
-msgid "Different values for %s%d.%d (%s) and %s%d.%d (%s)"
-msgstr "Różnica wartości dla %s%d.%d (%s) i %s%d.%d (%s)"
+msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
+msgstr "Różne wartości dla %s%d%s (%s) i %s%d%s (%s)"
 
-#: eeschema/component_references_lister.cpp:851
-#, c-format
-msgid "Different values for %s%d%c (%s) and %s%d%c (%s)"
-msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
-
-#: eeschema/component_references_lister.cpp:885
+#: eeschema/component_references_lister.cpp:875
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Zdublowany odcisk czasowy (%s) dla %s%d i %s%d"
@@ -3264,19 +3259,19 @@ msgstr "Nie pokazuj ukrytych pinów"
 msgid "Show hidden pins"
 msgstr "Pokaż ukryte piny"
 
-#: eeschema/schframe.cpp:636
+#: eeschema/schframe.cpp:637
 msgid "BOM Howto"
 msgstr "BOM Jak wykonać"
 
-#: eeschema/schframe.cpp:701
+#: eeschema/schframe.cpp:702
 msgid "Schematic"
 msgstr "Schemat"
 
-#: eeschema/schframe.cpp:771
+#: eeschema/schframe.cpp:772
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1004 cvpcb/cvframe.cpp:722
+#: eeschema/schframe.cpp:1005 cvpcb/cvframe.cpp:711
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -5578,7 +5573,7 @@ msgstr "Pliki wtyczek:"
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
-#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:439
+#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:429
 #: eeschema/dialogs/dialog_netlist_base.h:76
 #: pcbnew/dialogs/dialog_netlist_fbp.h:80
 msgid "Netlist"
@@ -6307,7 +6302,7 @@ msgstr "Elementy graficzne"
 
 #: pcbnew/class_edge_mod.cpp:250 pcbnew/class_module.cpp:522
 #: pcbnew/class_pad.cpp:511 pcbnew/class_text_mod.cpp:361
-#: pcbnew/loadcmp.cpp:576 pcbnew/loadcmp.cpp:641 cvpcb/cvframe.cpp:861
+#: pcbnew/loadcmp.cpp:576 pcbnew/loadcmp.cpp:641 cvpcb/cvframe.cpp:850
 msgid "Module"
 msgstr "Footprint"
 
@@ -7391,7 +7386,7 @@ msgid "footprint library path <%s> does not exist"
 msgstr "ścieżka do biblioteki <%s> nie istnieje"
 
 #: pcbnew/gpcb_plugin.cpp:281 pcbnew/kicad_plugin.cpp:289
-#: pcbnew/legacy_plugin.cpp:4323
+#: pcbnew/legacy_plugin.cpp:4356
 #, c-format
 msgid "library <%s> has no footprint '%s' to delete"
 msgstr "biblioteka <%s> nie posiada footprintu '%s' by go usunąć"
@@ -7408,8 +7403,8 @@ msgid "Element token contains %d parameters."
 msgstr "Token \"Element\" zawiera %d parametrów."
 
 #: pcbnew/gpcb_plugin.cpp:881 pcbnew/kicad_plugin.cpp:1674
-#: pcbnew/kicad_plugin.cpp:1736 pcbnew/legacy_plugin.cpp:4269
-#: pcbnew/legacy_plugin.cpp:4313
+#: pcbnew/kicad_plugin.cpp:1736 pcbnew/legacy_plugin.cpp:4302
+#: pcbnew/legacy_plugin.cpp:4346
 #, c-format
 msgid "Library <%s> is read only"
 msgstr "Biblioteka <%s> jest oznaczona jako 'Tylko do odczytu'"
@@ -7620,28 +7615,29 @@ msgstr ""
 msgid "unknown graphic type: %d"
 msgstr "nieznany typ grafiki: %d"
 
-#: pcbnew/legacy_plugin.cpp:413
+#: pcbnew/legacy_plugin.cpp:414
 msgid "May not load millimeter *.brd file into 'Pcbnew compiled for deci-mils'"
 msgstr ""
 "Nie mogę załadować pliku *.brd z jednostkami w milimetrach przez 'Pcbnew "
 "skompilowanym z opcją deci-mils'"
 
-#: pcbnew/legacy_plugin.cpp:529
+#: pcbnew/legacy_plugin.cpp:530
 #, c-format
 msgid "Unknown sheet type '%s' on line:%d"
 msgstr "Nieznany typ arkusza '%s' w lini:%d"
 
-#: pcbnew/legacy_plugin.cpp:1178
+#: pcbnew/legacy_plugin.cpp:1185
 #, c-format
-msgid "Unknown padshape '%s' on line:%d"
-msgstr "Nieznany kształt pola lutowniczego '%s' n lini:%d"
+msgid "Unknown padshape '%c=0x%02x' on line:%d of module:'%s'"
+msgstr ""
+"Nieznany kształt pola lutowniczego '%c=0x%02x' n lini: %d footprintu: '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2147
+#: pcbnew/legacy_plugin.cpp:2162
 #, c-format
 msgid "duplicate NETCLASS name '%s'"
 msgstr "zduplikowana nazwa Klasy Sieci '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2742 pcbnew/legacy_plugin.cpp:2779
+#: pcbnew/legacy_plugin.cpp:2757 pcbnew/legacy_plugin.cpp:2794
 #, c-format
 msgid ""
 "invalid float number in file: <%s>\n"
@@ -7650,7 +7646,7 @@ msgstr ""
 "niepoprawna liczba typu float w pliku: <%s>\n"
 "linia: %d, przesunięcie: %d"
 
-#: pcbnew/legacy_plugin.cpp:2751 pcbnew/legacy_plugin.cpp:2787
+#: pcbnew/legacy_plugin.cpp:2766 pcbnew/legacy_plugin.cpp:2802
 #, c-format
 msgid ""
 "missing float number in file: <%s>\n"
@@ -7659,17 +7655,17 @@ msgstr ""
 "brak liczby typu float w pliku: <%s>\n"
 "linia: %d, przesunięcie: %d"
 
-#: pcbnew/legacy_plugin.cpp:2835
+#: pcbnew/legacy_plugin.cpp:2850
 #, c-format
 msgid "Unable to open file <%s>"
 msgstr "Nie mogę otworzyć pliku <%s>"
 
-#: pcbnew/legacy_plugin.cpp:2872
+#: pcbnew/legacy_plugin.cpp:2887
 #, c-format
 msgid "error writing to file <%s>"
 msgstr "błąd zapisu do pliku <%s>"
 
-#: pcbnew/legacy_plugin.cpp:3984
+#: pcbnew/legacy_plugin.cpp:3999
 msgid ""
 "May not load millimeter legacy library file into 'Pcbnew compiled for deci-"
 "mils'"
@@ -7677,34 +7673,34 @@ msgstr ""
 "Nie mogę załadować pliku biblioteki starszego typu z jednostkami w "
 "milimetrach przez 'Pcbnew skompilowany z opcją deci-mils'"
 
-#: pcbnew/legacy_plugin.cpp:3994
+#: pcbnew/legacy_plugin.cpp:4009
 #, c-format
 msgid "File <%s> is empty or is not a legacy library"
 msgstr "Plik <%s> jest pusty lub nie jest plikiem biblioteki starszego typu"
 
-#: pcbnew/legacy_plugin.cpp:4107
+#: pcbnew/legacy_plugin.cpp:4140
 #, c-format
 msgid "Legacy library file <%s> is read only"
 msgstr ""
 "Plik biblioteki starszego typu <%s> jest oznaczony jako 'Tylko do odczytu'."
 
-#: pcbnew/legacy_plugin.cpp:4127
+#: pcbnew/legacy_plugin.cpp:4160
 #, c-format
 msgid "Unable to open or create legacy library file <%s>"
 msgstr "Nie mogę otworzyć ani utworzyć biblioteki starszego typu <%s>"
 
-#: pcbnew/legacy_plugin.cpp:4153
+#: pcbnew/legacy_plugin.cpp:4186
 #, c-format
 msgid "Unable to rename tempfile <%s> to library file <%s>"
 msgstr ""
 "Nie mogę zmienić nazwy pliku tymczasowego <%s> na nazwę pliku biblioteki <%s>"
 
-#: pcbnew/legacy_plugin.cpp:4336
+#: pcbnew/legacy_plugin.cpp:4369
 #, c-format
 msgid "library <%s> already exists, will not create a new"
 msgstr "biblioteka <%s> już istnieje, nie można stworzyć nowej"
 
-#: pcbnew/legacy_plugin.cpp:4363
+#: pcbnew/legacy_plugin.cpp:4396
 #, c-format
 msgid "library <%s> cannot be deleted"
 msgstr "biblioteka <%s> nie może zostać usunięta"
@@ -7885,7 +7881,7 @@ msgstr "Footprinty [%d pozycji]"
 msgid "No footprint found."
 msgstr "Nie znaleziono footprintów."
 
-#: pcbnew/loadcmp.cpp:620 cvpcb/cvframe.cpp:625
+#: pcbnew/loadcmp.cpp:620 cvpcb/cvframe.cpp:614
 msgid "Description: "
 msgstr "Opis:"
 
@@ -8953,7 +8949,7 @@ msgstr "Nie można otworzyć pliku listy sieci \"%s\"."
 msgid "Netlist Load Error."
 msgstr "Błąd odczytu listy sieci."
 
-#: pcbnew/netlist.cpp:78 cvpcb/cvframe.cpp:786
+#: pcbnew/netlist.cpp:78 cvpcb/cvframe.cpp:775
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -8963,7 +8959,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/netlist.cpp:79 pcbnew/dialogs/dialog_netlist.cpp:406
-#: cvpcb/cvframe.cpp:787
+#: cvpcb/cvframe.cpp:776
 msgid "Netlist Load Error"
 msgstr "Błąd odczytu listy sieci"
 
@@ -14581,69 +14577,69 @@ msgstr ""
 msgid "Problem when saving file, exit anyway ?"
 msgstr "Problem podczas zapisu pliku, zakończyć mimo to?"
 
-#: cvpcb/cvframe.cpp:411
+#: cvpcb/cvframe.cpp:401
 msgid "Delete selections"
 msgstr "Usuń zaznaczone"
 
-#: cvpcb/cvframe.cpp:443
+#: cvpcb/cvframe.cpp:433
 msgid "Open Net List"
 msgstr "Otwórz plik netlisty"
 
-#: cvpcb/cvframe.cpp:594
+#: cvpcb/cvframe.cpp:584
 #, c-format
 msgid "Components: %d, unassigned: %d"
 msgstr "Komponenty: %d, nieprzydzielone: %d"
 
-#: cvpcb/cvframe.cpp:612
+#: cvpcb/cvframe.cpp:602
 msgid "Filter list: "
 msgstr "Filtruj listę wg: "
 
-#: cvpcb/cvframe.cpp:628
+#: cvpcb/cvframe.cpp:617
 msgid "Key words: "
 msgstr "Słowa kluczowe:"
 
-#: cvpcb/cvframe.cpp:639
+#: cvpcb/cvframe.cpp:628
 msgid "key words"
 msgstr "słów kluczowych"
 
-#: cvpcb/cvframe.cpp:646
+#: cvpcb/cvframe.cpp:635
 msgid "pin count"
 msgstr "ilości wyprowadzeń"
 
-#: cvpcb/cvframe.cpp:654
+#: cvpcb/cvframe.cpp:643
 msgid "library"
 msgstr "bibliotek"
 
-#: cvpcb/cvframe.cpp:658
+#: cvpcb/cvframe.cpp:647
 msgid "No filtering"
 msgstr "Bez filtracji"
 
-#: cvpcb/cvframe.cpp:660
+#: cvpcb/cvframe.cpp:649
 msgid "Filtered by "
 msgstr "Filtrowane według "
 
-#: cvpcb/cvframe.cpp:674
+#: cvpcb/cvframe.cpp:663
 msgid "No PCB footprint libraries are listed in the current project file."
 msgstr ""
 "Brak wyszczególnionych bibliotek footprintów w bieżącym pliku projektu."
 
-#: cvpcb/cvframe.cpp:675
+#: cvpcb/cvframe.cpp:664
 msgid "Project File Error"
 msgstr "Błąd pliku"
 
-#: cvpcb/cvframe.cpp:684
+#: cvpcb/cvframe.cpp:673
 msgid "Load Error"
 msgstr "Błąd wczytywania"
 
-#: cvpcb/cvframe.cpp:688
+#: cvpcb/cvframe.cpp:677
 msgid "Some files could not be found!"
 msgstr "Pewne pliki nie zostały znalezione!"
 
-#: cvpcb/cvframe.cpp:696
+#: cvpcb/cvframe.cpp:685
 msgid "Some files are invalid!"
 msgstr "Niektóre pliki są niepoprawne!"
 
-#: cvpcb/cvframe.cpp:782
+#: cvpcb/cvframe.cpp:771
 msgid "Unknown netlist format"
 msgstr "Nieznany format listy sieci"
 
@@ -16123,8 +16119,8 @@ msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
 msgstr "Pliki PCB programu Eagle v6.x XML (*.brd)|*.brd"
 
 #: common/wildcards_and_files_ext.cpp:75
-msgid "P-Cad 2002/2004 ASCII PCB files (*.pcb)|*.pcb"
-msgstr "Pliki ASCII PCB programu P-Cad 2002/2004 (*.pcb)|*.pcb"
+msgid "P-Cad 200x ASCII PCB files (*.pcb)|*.pcb"
+msgstr "Pliki ASCII PCB programu P-Cad 200x (*.pcb)|*.pcb"
 
 #: common/wildcards_and_files_ext.cpp:76
 msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
@@ -18236,3 +18232,6 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:294
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Different values for %s%d.%d (%s) and %s%d.%d (%s)"
+#~ msgstr "Różnica wartości dla %s%d.%d (%s) i %s%d.%d (%s)"
