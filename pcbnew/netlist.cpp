@@ -185,6 +185,18 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     {
         component = aNetlist.GetComponent( ii );
 
+        if( component->GetFootprintName().IsEmpty() )
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "No footprint defined for component `%s`.\n" ),
+                            GetChars( component->GetReference() ) );
+                aReporter->Report( msg );
+            }
+
+            continue;
+        }
+
         // Check if component footprint is already on BOARD and only load the footprint from
         // the library if it's needed.
         if( aNetlist.IsFindByTimeStamp() )
@@ -277,6 +289,18 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
     {
         component = aNetlist.GetComponent( ii );
+
+        if( component->GetFootprintName().IsEmpty() )
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "No footprint defined for component `%s`.\n" ),
+                            GetChars( component->GetReference() ) );
+                aReporter->Report( msg );
+            }
+
+            continue;
+        }
 
         // Check if component footprint is already on BOARD and only load the footprint from
         // the library if it's needed.
