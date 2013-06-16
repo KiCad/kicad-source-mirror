@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-13 18:27+0100\n"
-"PO-Revision-Date: 2013-06-13 18:28+0100\n"
+"POT-Creation-Date: 2013-06-15 20:13+0100\n"
+"PO-Revision-Date: 2013-06-16 10:06+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -152,7 +152,7 @@ msgstr ""
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1002 pcbnew/moduleframe.cpp:606
+#: eeschema/schframe.cpp:999 pcbnew/moduleframe.cpp:606
 #: pcbnew/pcbframe.cpp:826 cvpcb/cvframe.cpp:706
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
@@ -654,39 +654,39 @@ msgstr "Plik dokumentacji biblioteki <%s> jest pusty."
 msgid "File <%s> is not a valid component library document file."
 msgstr "Plik <%s> nie jest poprawnym plikiem dokumentacji biblioteki."
 
-#: eeschema/component_references_lister.cpp:715
+#: eeschema/component_references_lister.cpp:467
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
 msgstr "Element nie ma numeracji: %s%s (część %d)\n"
 
-#: eeschema/component_references_lister.cpp:722
+#: eeschema/component_references_lister.cpp:474
 #, c-format
 msgid "Item not annotated: %s%s\n"
 msgstr "Element nie ma numeracji: %s%s\n"
 
-#: eeschema/component_references_lister.cpp:745
+#: eeschema/component_references_lister.cpp:497
 #, c-format
 msgid "Error item %s%s unit %d and no more than %d parts\n"
 msgstr "Błąd Element %s%s część %d nie może mieć więcej niż %d elementów\n"
 
-#: eeschema/component_references_lister.cpp:785
-#: eeschema/component_references_lister.cpp:817
+#: eeschema/component_references_lister.cpp:537
+#: eeschema/component_references_lister.cpp:569
 #, c-format
 msgid "Multiple item %s%s (unit %d)\n"
 msgstr "Element wielokrotny %s%s (część %d)\n"
 
-#: eeschema/component_references_lister.cpp:792
-#: eeschema/component_references_lister.cpp:824
+#: eeschema/component_references_lister.cpp:544
+#: eeschema/component_references_lister.cpp:576
 #, c-format
 msgid "Multiple item %s%s\n"
 msgstr "Element wielokrotny %s%s\n"
 
-#: eeschema/component_references_lister.cpp:840
+#: eeschema/component_references_lister.cpp:592
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Różne wartości dla %s%d%s (%s) i %s%d%s (%s)"
 
-#: eeschema/component_references_lister.cpp:875
+#: eeschema/component_references_lister.cpp:627
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Zdublowany odcisk czasowy (%s) dla %s%d i %s%d"
@@ -3259,19 +3259,15 @@ msgstr "Nie pokazuj ukrytych pinów"
 msgid "Show hidden pins"
 msgstr "Pokaż ukryte piny"
 
-#: eeschema/schframe.cpp:637
-msgid "BOM Howto"
-msgstr "BOM Jak wykonać"
-
-#: eeschema/schframe.cpp:702
+#: eeschema/schframe.cpp:699
 msgid "Schematic"
 msgstr "Schemat"
 
-#: eeschema/schframe.cpp:772
+#: eeschema/schframe.cpp:769
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1005 cvpcb/cvframe.cpp:711
+#: eeschema/schframe.cpp:1002 cvpcb/cvframe.cpp:711
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -3913,6 +3909,7 @@ msgid "Silent mode"
 msgstr "Nie potwierdzaj"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:202
+#: eeschema/dialogs/dialog_bom_base.cpp:63
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:107
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:53
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
@@ -3938,6 +3935,73 @@ msgstr "Usuń numerację"
 #: eeschema/dialogs/dialog_annotate_base.cpp:208
 msgid "Annotation"
 msgstr "Numeruj"
+
+#: eeschema/dialogs/dialog_bom.cpp:299 eeschema/dialogs/dialog_netlist.cpp:439
+msgid "Save Netlist File"
+msgstr "Zapisz pliki z listą sieci"
+
+#: eeschema/dialogs/dialog_bom.cpp:354
+msgid "Plugin"
+msgstr "Wtyczka"
+
+#: eeschema/dialogs/dialog_bom.cpp:364 eeschema/dialogs/dialog_netlist.cpp:744
+msgid "This plugin already exists. Abort"
+msgstr "Ta wtyczka już istnieje. Przerwano."
+
+#: eeschema/dialogs/dialog_bom.cpp:385 eeschema/dialogs/dialog_netlist.cpp:801
+msgid "Plugin files:"
+msgstr "Pliki wtyczek:"
+
+#: eeschema/dialogs/dialog_bom.cpp:458
+msgid "No text editor selected in KiCad. Please choose it"
+msgstr "Edytor tekstu nie został zdefiniowany. Proszę wybrać."
+
+#: eeschema/dialogs/dialog_bom.cpp:464
+msgid "Bom generation Help"
+msgstr "Tworzenie list materiałowych - Pomoc"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:38
+msgid "Plugins"
+msgstr "Dostępne wtyczki:"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:45
+#: eeschema/dialogs/dialog_netlist_base.cpp:113
+#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:28
+#: pcbnew/librairi.cpp:607 pcbnew/modules.cpp:68
+#: common/dialogs/dialog_get_component_base.cpp:22
+msgid "Name:"
+msgstr "Nazwa:"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:59
+msgid "Generate"
+msgstr "Generuj BOM"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:66
+#: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:97
+msgid "Help"
+msgstr "Pomo&c"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:72
+#: eeschema/dialogs/dialog_netlist_base.cpp:52
+msgid "Add Plugin"
+msgstr "Dodaj wtyczkę"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:75
+msgid "Set Plugin Cmd"
+msgstr "Przeglądaj..."
+
+#: eeschema/dialogs/dialog_bom_base.cpp:78
+#: eeschema/dialogs/dialog_netlist_base.cpp:55
+msgid "Remove Plugin"
+msgstr "Usuń wtyczkę"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:81
+msgid "Edit Plugin File"
+msgstr "Edytuj plik wtyczki"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:93
+msgid "Command line:"
+msgstr "Polecenie:"
 
 #: eeschema/dialogs/dialog_color_config.cpp:21
 msgid "Wire"
@@ -5524,10 +5588,6 @@ msgstr "Polecenie listy sieci:"
 msgid "Title:"
 msgstr "Tytuł:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:439
-msgid "Save Netlist File"
-msgstr "Zapisz pliki z listą sieci"
-
 #: eeschema/dialogs/dialog_netlist.cpp:473
 #, c-format
 msgid "%s Export"
@@ -5553,10 +5613,6 @@ msgstr ""
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Błąd: Zdublowane nazwy arkuszy. Kontunować?"
 
-#: eeschema/dialogs/dialog_netlist.cpp:744
-msgid "This plugin already exists. Abort"
-msgstr "Ta wtyczka już istnieje. Przerwano."
-
 #: eeschema/dialogs/dialog_netlist.cpp:774
 msgid "Error. You must provide a command String"
 msgstr "Błąd. Musisz wypełnić pole \"Polecenie netlisty\""
@@ -5564,10 +5620,6 @@ msgstr "Błąd. Musisz wypełnić pole \"Polecenie netlisty\""
 #: eeschema/dialogs/dialog_netlist.cpp:780
 msgid "Error. You must provide a Title"
 msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
-
-#: eeschema/dialogs/dialog_netlist.cpp:801
-msgid "Plugin files:"
-msgstr "Pliki wtyczek:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:835
 msgid "Do not forget to choose a title for this netlist control page"
@@ -5579,14 +5631,6 @@ msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 msgid "Netlist"
 msgstr "Lista sieci"
 
-#: eeschema/dialogs/dialog_netlist_base.cpp:52
-msgid "Add Plugin"
-msgstr "Dodaj wtyczkę"
-
-#: eeschema/dialogs/dialog_netlist_base.cpp:55
-msgid "Remove Plugin"
-msgstr "Usuń wtyczkę"
-
 #: eeschema/dialogs/dialog_netlist_base.cpp:61
 msgid "Use default netname"
 msgstr "Użyj domyślnej nazwy sieci"
@@ -5594,13 +5638,6 @@ msgstr "Użyj domyślnej nazwy sieci"
 #: eeschema/dialogs/dialog_netlist_base.cpp:70
 msgid "Default Netlist Filename:"
 msgstr "Domyślna nazwa pliku listy sieci:"
-
-#: eeschema/dialogs/dialog_netlist_base.cpp:113
-#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:28
-#: pcbnew/librairi.cpp:607 pcbnew/modules.cpp:68
-#: common/dialogs/dialog_get_component_base.cpp:22
-msgid "Name:"
-msgstr "Nazwa:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:133
 msgid "Browse Plugins"
@@ -8971,7 +9008,12 @@ msgstr "Brak footprintów"
 msgid "Components"
 msgstr "Komponenty"
 
-#: pcbnew/netlist.cpp:213
+#: pcbnew/netlist.cpp:192 pcbnew/netlist.cpp:297
+#, c-format
+msgid "No footprint defined for component `%s`.\n"
+msgstr "Dla komponentu '%s' nie został zdefiniowany footprint.\n"
+
+#: pcbnew/netlist.cpp:225
 #, c-format
 msgid ""
 "*** Warning: Cannot find footprint library file \"%s\" in any of the "
@@ -8980,7 +9022,7 @@ msgstr ""
 "*** OSTRZEŻENIE: Nie mogę odnaleźć pliku biblioteki \"%s\" w żadnej ze "
 "standardowych ścieżek wyszukiwania bibliotek. ***\n"
 
-#: pcbnew/netlist.cpp:236
+#: pcbnew/netlist.cpp:248
 #, c-format
 msgid ""
 "*** Warning: component `%s` footprint <%s> was not found in any libraries. "
@@ -8989,14 +9031,14 @@ msgstr ""
 "*** OSTRZEŻENIE: Komponent \"%s\", footprint <%s> nie został znaleziony w "
 "żadnej z bibliotek. *** \n"
 
-#: pcbnew/netlist.cpp:301
+#: pcbnew/netlist.cpp:325
 #, c-format
 msgid "*** Warning: Component \"%s\" footprint ID <%s> is not valid. ***\n"
 msgstr ""
 "*** OSTRZEŻENIE: Komponent \"%s\", identyfikator footprintu <%s> nie jest "
 "prawidłowy. *** \n"
 
-#: pcbnew/netlist.cpp:323
+#: pcbnew/netlist.cpp:347
 #, c-format
 msgid ""
 "*** Warning: component `%s` footprint <%s> was not found in any libraries in "
@@ -11886,10 +11928,6 @@ msgstr "URL FreeRouting.net"
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:93
 msgid "The URL of the FreeRouting.net website"
 msgstr "URL strony domowej FreeRouting.net"
-
-#: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:97
-msgid "Help"
-msgstr "Pomo&c"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:128
 #: pcbnew/dialogs/dialog_gendrill.cpp:129
@@ -17994,6 +18032,10 @@ msgstr "Niepołączone"
 msgid "Annotate Schematic"
 msgstr "Numeruj schemat"
 
+#: eeschema/dialogs/dialog_bom_base.h:95
+msgid "Bill of Material"
+msgstr "Lista materiałowa"
+
 #: eeschema/dialogs/dialog_color_config.h:61
 msgid "EESchema Colors"
 msgstr "Kolory Eeschema"
@@ -18232,6 +18274,9 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:294
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "BOM Howto"
+#~ msgstr "BOM Jak wykonać"
 
 #~ msgid "Different values for %s%d.%d (%s) and %s%d.%d (%s)"
 #~ msgstr "Różnica wartości dla %s%d.%d (%s) i %s%d.%d (%s)"
