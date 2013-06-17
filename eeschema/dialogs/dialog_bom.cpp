@@ -204,8 +204,6 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
 
 DIALOG_BOM::~DIALOG_BOM()
 {
-    wxString list;
-
     // Save the plugin descriptions in config.
     // the config stores only one string.
     // plugins are saved inside a S expr:
@@ -215,16 +213,16 @@ DIALOG_BOM::~DIALOG_BOM()
     // )
 
     STRING_FORMATTER writer;
-    list << wxT("(plugins");
+    writer.Print( 0, "(plugins" );
     for( unsigned ii = 0; ii < m_plugins.GetCount(); ii += 2 )
     {
         writer.Print( 1, "(plugin %s (cmd %s))",
                       writer.Quotew( m_plugins[ii] ).c_str(),
                       writer.Quotew( m_plugins[ii+1] ).c_str() );
     }
+    writer.Print( 0, ")" );
 
-    list << writer.GetString();
-    list << wxT(")");
+    wxString list( FROM_UTF8( writer.GetString().c_str() ) );
 
     m_config->Write( BOM_PLUGINS_KEY, list );
 
@@ -238,13 +236,14 @@ DIALOG_BOM::~DIALOG_BOM()
  */
 void DIALOG_BOM::installPluginsList()
 {
-    wxString list, text, active_plugin_name;
+    wxString list, active_plugin_name;
     m_config->Read( BOM_PLUGINS_KEY, &list );
     m_config->Read( BOM_PLUGIN_SELECTED_KEY, &active_plugin_name );
 
     if( !list.IsEmpty() )
     {
-        BOM_CFG_READER_PARSER cfg_parser( &m_plugins, list.c_str(), wxT( "plugins" ) );
+        BOM_CFG_READER_PARSER cfg_parser( &m_plugins, TO_UTF8( list ),
+                                          wxT( "plugins" ) );
         try
         {
             cfg_parser.Parse();
