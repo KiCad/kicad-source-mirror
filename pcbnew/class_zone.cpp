@@ -954,8 +954,9 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
         }
     }
 
-    text.Printf( _( "Zone Outline %s on %s" ), GetChars( text ),
+    wxString msg;
+    msg.Printf( _( "Zone Outline %s on %s" ), GetChars( text ),
                  GetChars( GetLayerName() ) );
 
-    return text;
+    return msg;
 }
