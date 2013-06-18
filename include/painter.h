@@ -41,6 +41,7 @@ namespace KiGfx
 {
 class GAL;
 class STROKE_FONT;
+class VIEW_ITEM;
 
 /**
  * Class RENDER_SETTINGS
@@ -205,7 +206,7 @@ public:
      * may know what to draw (eg. for pads there are separate layers for holes, because they
      * have other dimensions then the pad itself.
      */
-    virtual bool Draw( const EDA_ITEM* aItem, int aLayer ) = 0;
+    virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) = 0;
 
 protected:
 

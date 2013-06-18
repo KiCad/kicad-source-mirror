@@ -115,7 +115,7 @@ public:
     PCB_PAINTER( GAL* aGal );
 
     /// @copydoc PAINTER::Draw()
-    virtual bool Draw( const EDA_ITEM*, int );
+    virtual bool Draw( const VIEW_ITEM*, int );
 
     /// @copydoc PAINTER::ApplySettings()
     virtual void ApplySettings( RENDER_SETTINGS* aSettings )
