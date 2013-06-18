@@ -50,6 +50,7 @@ class EDA_DRAW_PANEL_GAL : public wxWindow
 {
 public:
     enum GalType {
+        GAL_TYPE_NONE,      ///< Not used
         GAL_TYPE_OPENGL,    ///< OpenGL implementation
         GAL_TYPE_CAIRO,     ///< Cairo implementation
     };

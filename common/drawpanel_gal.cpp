@@ -51,9 +51,10 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
                                         GalType aGalType ) :
     wxWindow( aParentWindow, aWindowId, aPosition, aSize )
 {
-    m_gal     = NULL;
-    m_view    = NULL;
-    m_painter = NULL;
+    m_gal        = NULL;
+    m_currentGal = GAL_TYPE_NONE;
+    m_view       = NULL;
+    m_painter    = NULL;
 
     wxStandardPaths paths;
     wxFileName executableFile( paths.GetExecutablePath() );
@@ -158,8 +159,7 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
     if( aGalType == m_currentGal && aUseShaders == m_useShaders && m_gal != NULL )
         return;
 
-    if( m_gal )
-        delete m_gal;
+    delete m_gal;
 
     switch( aGalType )
     {
@@ -171,6 +171,9 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
     case GAL_TYPE_CAIRO:
         m_gal = new KiGfx::CAIRO_GAL( this, this, this );
         break;
+
+    case GAL_TYPE_NONE:
+        return;
     }
 
     m_gal->SetWorldUnitLength( 1.0 / METRIC_UNIT_LENGTH * 2.54 );   // 1 inch in nanometers
