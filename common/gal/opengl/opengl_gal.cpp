@@ -1641,17 +1641,17 @@ void OPENGL_GAL::computeUnitCircle()
     // Insert in a display list and a vector
     for( int i = 0; i < CIRCLE_POINTS; i++ )
     {
-        VBO_VERTEX v0( 0.0f, 0.0f, 0.0f );
-        VBO_VERTEX v1(
+        VBO_VERTEX v0 = { 0.0f, 0.0f, 0.0f };
+        VBO_VERTEX v1 = {
             cos( 2.0 * M_PI / CIRCLE_POINTS * i ),          // x
             sin( 2.0 * M_PI / CIRCLE_POINTS * i ),          // y
             0.0f                                            // z
-        );
-        VBO_VERTEX v2(
+        };
+        VBO_VERTEX v2 = {
             cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // x
             sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // y
             0.0f                                            // z
-        );
+        };
 
         glVertex2d( 0, 0 );
         verticesCircle->PushVertex( &v0 );
@@ -1680,17 +1680,17 @@ void OPENGL_GAL::computeUnitSemiCircle()
 
     for( int i = 0; i < CIRCLE_POINTS / 2; ++i )
     {
-        VBO_VERTEX v0( 0.0f, 0.0f, 0.0f );
-        VBO_VERTEX v1(
+        VBO_VERTEX v0 = { 0.0f, 0.0f, 0.0f };
+        VBO_VERTEX v1 = {
             cos( 2.0 * M_PI / CIRCLE_POINTS * i ),          // x
             sin( 2.0 * M_PI / CIRCLE_POINTS * i ),          // y
             0.0f                                            // z
-        );
-        VBO_VERTEX v2(
+        };
+        VBO_VERTEX v2 = {
             cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // x
             sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // y
             0.0f                                            // z
-        );
+        };
 
         glVertex2d( 0, 0 );
         verticesSemiCircle->PushVertex( &v0 );
@@ -1749,7 +1749,7 @@ void CALLBACK VertexCallback( GLvoid* aVertexPtr, void* aData )
 
     if( vboItem )
     {
-        VBO_VERTEX newVertex( vertex[0], vertex[1], vertex[2] );
+        VBO_VERTEX newVertex = { vertex[0], vertex[1], vertex[2] };
         vboItem->PushVertex( &newVertex );
     }
     else

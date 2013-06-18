@@ -44,22 +44,6 @@ typedef struct VBO_VERTEX
     GLfloat r, g, b, a;     // Color
     GLfloat shader[4];      // Shader type & params
     GLfloat _padding;
-
-    VBO_VERTEX()
-    {}
-
-    VBO_VERTEX( const GLfloat aX, const GLfloat aY, const GLfloat aZ ) :
-        x( aX ), y( aY ), z( aZ )
-    {}
-
-    VBO_VERTEX( const GLfloat *aData ) :
-        x( aData[0] ), y( aData[1] ), z( aData[2] )
-    {}
-
-    operator GLfloat*()
-    {
-        return &x;
-    }
 } VBO_VERTEX;
 
 class VBO_CONTAINER;

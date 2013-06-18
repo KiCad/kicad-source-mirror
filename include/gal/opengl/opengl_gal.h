@@ -557,7 +557,7 @@ private:
         if( isGrouping )
         {
             // New vertex coordinates for VBO
-            VBO_VERTEX vertex( aX, aY, aZ );
+            VBO_VERTEX vertex = { aX, aY, aZ };
             curVboItem->PushVertex( &vertex );
         }
         else
