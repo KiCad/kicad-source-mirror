@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __bitmap2cmp_gui_base__
-#define __bitmap2cmp_gui_base__
+#ifndef __BITMAP2CMP_GUI_BASE_H__
+#define __BITMAP2CMP_GUI_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/scrolwin.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -56,8 +57,8 @@ class BM2CMP_FRAME_BASE : public wxFrame
 		wxStaticText* m_BPPValue;
 		wxStaticText* m_BPPunits;
 		wxButton* m_buttonLoad;
-		wxButton* m_buttonExportEeschema;
-		wxButton* m_buttonExportPcbnew;
+		wxButton* m_buttonExport;
+		wxRadioBox* m_radioBoxFormat;
 		wxRadioBox* m_rbOptions;
 		wxStaticText* m_ThresholdText;
 		wxSlider* m_sliderThreshold;
@@ -66,17 +67,17 @@ class BM2CMP_FRAME_BASE : public wxFrame
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPaint( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnLoadFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnExportEeschema( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnExportPcbnew( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOptionsSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnThresholdChange( wxScrollEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bitmap to Component Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,419 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
+		BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bitmap to Component Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 527,470 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
+		
 		~BM2CMP_FRAME_BASE();
 	
 };
 
-#endif //__bitmap2cmp_gui_base__
+#endif //__BITMAP2CMP_GUI_BASE_H__

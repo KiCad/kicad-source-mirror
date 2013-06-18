@@ -46,6 +46,7 @@
 #define KEYWORD_FRAME_SIZEY wxT( "Bmconverter_Size_y" )
 #define KEYWORD_LAST_INPUT_FILE wxT( "Last_input" )
 #define KEYWORD_LAST_OUTPUT_FILE wxT( "Last_output" )
+#define KEYWORD_LAST_FORMAT wxT( "Last_format" )
 #define KEYWORD_BINARY_THRESHOLD wxT( "Threshold" )
 #define KEYWORD_BW_NEGATIVE wxT( "Negative_choice" )
 
@@ -79,8 +80,32 @@ private:
     void OnPaint( wxPaintEvent& event );
     void OnLoadFile( wxCommandEvent& event );
     bool LoadFile( wxString& aFullFileName );
-    void OnExportEeschema( wxCommandEvent& event );
-    void OnExportPcbnew( wxCommandEvent& event );
+    void OnExport( wxCommandEvent& event );
+
+    /**
+     * Generate a schematic library which comtains one component:
+     * the logo
+     */
+    void OnExportEeschema();
+
+    /**
+     * Depending on the option:
+     * Legacy format: generate a module library which comtains one component
+     * New kicad_mod format: generate a module in S expr format
+     */
+    void OnExportPcbnew( bool aLegacyFormat );
+
+    /**
+     * Generate a postscript file
+     */
+    void OnExportPostScript();
+
+    /**
+     * Generate a file suitable to be copied into a page layout
+     * description file (.kicad_wks file
+     */
+    void OnExportLogo();
+
     void Binarize( double aThreshold );     // aThreshold = 0.0 (black level) to 1.0 (white level)
     void OnOptionsSelection( wxCommandEvent& event );
     void OnThresholdChange( wxScrollEvent& event );
@@ -104,6 +129,9 @@ BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
     if( m_Config->Read( KEYWORD_BW_NEGATIVE, &tmp ) )
         m_rbOptions->SetSelection( tmp  ? 1 : 0 );
 
+    m_Config->Read( KEYWORD_LAST_FORMAT, &tmp );
+    m_radioBoxFormat->SetSelection( tmp );
+
 
     // Give an icon
     wxIcon icon;
@@ -114,8 +142,7 @@ BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    m_buttonExportEeschema->Enable( false );
-    m_buttonExportPcbnew->Enable( false );
+    m_buttonExport->Enable( false );
 
     if ( m_FramePos == wxDefaultPosition )
         Centre();
@@ -138,6 +165,7 @@ BM2CMP_FRAME::~BM2CMP_FRAME()
     m_Config->Write( KEYWORD_LAST_OUTPUT_FILE, m_ConvertedFileName );
     m_Config->Write( KEYWORD_BINARY_THRESHOLD, m_sliderThreshold->GetValue() );
     m_Config->Write( KEYWORD_BW_NEGATIVE, m_rbOptions->GetSelection() );
+    m_Config->Write( KEYWORD_LAST_FORMAT,  m_radioBoxFormat->GetSelection() );
 
     delete m_Config;
 
@@ -198,8 +226,7 @@ void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
     if( ! LoadFile( fullFilename ) )
         return;
 
-    m_buttonExportEeschema->Enable( true );
-    m_buttonExportPcbnew->Enable( true );
+    m_buttonExport->Enable( true );
     SetStatusText( fullFilename );
     Refresh();
 }
@@ -300,8 +327,103 @@ void BM2CMP_FRAME::OnThresholdChange( wxScrollEvent& event )
     Refresh();
 }
 
+void BM2CMP_FRAME::OnExport( wxCommandEvent& event )
+{
+    int sel = m_radioBoxFormat->GetSelection();
 
-void BM2CMP_FRAME::OnExportEeschema( wxCommandEvent& event )
+    switch( sel )
+    {
+        case 0:
+            OnExportEeschema();
+            break;
+
+        case 1:
+            OnExportPcbnew( true );
+            break;
+
+        case 2:
+            OnExportPcbnew( false );
+            break;
+
+        case 3:
+            OnExportPostScript();
+            break;
+
+        case 4:
+            OnExportLogo();
+            break;
+    }
+}
+
+void BM2CMP_FRAME::OnExportLogo()
+{
+    wxFileName fn(m_ConvertedFileName);
+    wxString path = fn.GetPath();
+
+    if( path.IsEmpty() || !wxDirExists(path) )
+        path = ::wxGetCwd();
+
+    wxString     msg = _( "Logo file (*.kicad_wks)|*.kicad_wks" );
+    wxFileDialog FileDlg( this, _( "Create a logo file" ), path, wxEmptyString,
+                          msg,
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    int          diag = FileDlg.ShowModal();
+
+    if( diag != wxID_OK )
+        return;
+
+    m_ConvertedFileName = FileDlg.GetPath();
+
+    FILE*    outfile;
+    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
+
+    if( outfile == NULL )
+    {
+        wxString msg;
+        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
+        wxMessageBox( msg );
+        return;
+    }
+
+    ExportFile( outfile, 4 );
+    fclose( outfile );
+}
+
+void BM2CMP_FRAME::OnExportPostScript()
+{
+    wxFileName fn(m_ConvertedFileName);
+    wxString path = fn.GetPath();
+
+    if( path.IsEmpty() || !wxDirExists(path) )
+        path = ::wxGetCwd();
+
+    wxString     msg = _( "Postscript file (*.ps)|*.ps" );
+    wxFileDialog FileDlg( this, _( "Create a Postscript file" ), path, wxEmptyString,
+                          msg,
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    int          diag = FileDlg.ShowModal();
+
+    if( diag != wxID_OK )
+        return;
+
+    m_ConvertedFileName = FileDlg.GetPath();
+
+    FILE*    outfile;
+    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
+
+    if( outfile == NULL )
+    {
+        wxString msg;
+        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
+        wxMessageBox( msg );
+        return;
+    }
+
+    ExportFile( outfile, 3 );
+    fclose( outfile );
+}
+
+void BM2CMP_FRAME::OnExportEeschema()
 {
     wxFileName fn(m_ConvertedFileName);
     wxString path = fn.GetPath();
@@ -331,12 +453,12 @@ void BM2CMP_FRAME::OnExportEeschema( wxCommandEvent& event )
         return;
     }
 
-    ExportFile( outfile, 1 );
+    ExportFile( outfile, 2 );
     fclose( outfile );
 }
 
 
-void BM2CMP_FRAME::OnExportPcbnew( wxCommandEvent& event )
+void BM2CMP_FRAME::OnExportPcbnew( bool aLegacyFormat )
 {
     wxFileName fn(m_ConvertedFileName);
     wxString path = fn.GetPath();
@@ -344,7 +466,9 @@ void BM2CMP_FRAME::OnExportPcbnew( wxCommandEvent& event )
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
 
-    wxString     msg = _( "Footprint file (*.mod;*.emp)|*.mod;*.emp" );
+    wxString msg = aLegacyFormat ?
+                _( "Footprint file (*.emp)|*.emp" ) :
+                _( "Footprint file (*.kicad_mod)|*.kicad_mod" );
     wxFileDialog FileDlg( this, _( "Create a footprint file for PcbNew" ),
                           path, wxEmptyString,
                           msg,
@@ -368,7 +492,7 @@ void BM2CMP_FRAME::OnExportPcbnew( wxCommandEvent& event )
         return;
     }
 
-    ExportFile( outfile, 0 );
+    ExportFile( outfile, aLegacyFormat ? 0 : 1 );
     fclose( outfile );
 }
 
