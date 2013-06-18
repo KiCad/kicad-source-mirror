@@ -1,0 +1,369 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2013 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file vbo_container.cpp
+ * @brief Class to store VBO_ITEMs.
+ */
+
+#include <gal/opengl/vbo_container.h>
+#include <gal/opengl/vbo_item.h>
+#include <cstring>
+#include <wx/log.h>
+#ifdef __WXDEBUG__
+#include <profile.h>
+#endif /* __WXDEBUG__ */
+
+#define CONTAINER_TEST 1
+
+using namespace KiGfx;
+
+VBO_CONTAINER::VBO_CONTAINER( int aSize ) :
+        m_freeSpace( aSize ), m_currentSize( aSize ), itemStarted( false )
+{
+    m_vertices = new VBO_VERTEX[aSize];
+
+    // In the beginning there is only free space
+    m_freeChunks.insert( Chunk( aSize, 0 ) );
+}
+
+
+VBO_CONTAINER::~VBO_CONTAINER()
+{
+    delete[] m_vertices;
+}
+
+
+void VBO_CONTAINER::StartItem( VBO_ITEM* aVboItem )
+{
+    itemStarted = true;
+    item = aVboItem;
+    itemSize = 0;
+
+    // Reserve minimal sensible chunk size (at least to store a single triangle)
+    itemChunkSize = 3;
+    allocate( aVboItem, itemChunkSize );
+}
+
+
+void VBO_CONTAINER::EndItem()
+{
+    if( itemSize < itemChunkSize )
+    {
+        // There is some memory left, so we should return it to the pool
+        int itemChunkOffset = item->GetOffset();
+
+        m_reservedChunks.erase( item );
+        m_reservedChunks.insert( ReservedChunk( item, Chunk( itemSize, itemChunkOffset ) ) );
+
+        m_freeChunks.insert( Chunk( itemChunkSize - itemSize, itemChunkOffset + itemSize ) );
+        m_freeSpace += ( itemChunkSize - itemSize );
+    }
+
+    itemStarted = false;
+}
+
+
+void VBO_CONTAINER::Add( VBO_ITEM* aVboItem, const VBO_VERTEX* aVertex, unsigned int aSize )
+{
+    unsigned int offset;
+
+    if( itemStarted )   // There is an item being created with an unknown size..
+    {
+        unsigned int itemChunkOffset;
+
+        // ..and unfortunately does not fit into currently reserved chunk
+        if( itemSize + aSize > itemChunkSize )
+        {
+            // Find the previous chunk for the item, save it, so it can be removed later
+            ReservedChunkMap::iterator it = m_reservedChunks.find( item );
+
+            // Reserve bigger memory for the current item
+            int newSize = ( 2 * itemSize ) + aSize;
+            itemChunkOffset = allocate( aVboItem, newSize );
+
+            // Check if there was no error
+            if( itemChunkOffset > m_currentSize )
+                return;
+
+            // Save previous chunk's offset for copying data
+            int oldItemChunkOffset = getChunkOffset( *it );
+
+            // Copy all the old data
+            memcpy( &m_vertices[itemChunkOffset], &m_vertices[oldItemChunkOffset],
+                    itemSize * VBO_ITEM::VertByteSize );
+
+            // Return memory used by the previous chunk
+            free( it );
+
+            itemChunkSize = newSize;
+        }
+        else
+        {
+            itemChunkOffset = item->GetOffset();
+        }
+
+        // Store new vertices in the chunk reserved for the unknown-sized item
+        offset = itemChunkOffset + itemSize;
+        itemSize += aSize;
+    }
+    else
+    {
+        // Add vertices to previously already finished item
+        wxASSERT_MSG( false, wxT( "Warning: not tested yet" ) );
+
+        ReservedChunkMap::iterator it = m_reservedChunks.find( aVboItem );
+        unsigned int chunkSize = getChunkSize( *it );
+        unsigned int itemSize = aVboItem->GetSize();
+
+        if( chunkSize < itemSize + aSize )
+        {
+            resizeChunk( aVboItem, itemSize + aSize );
+            it = m_reservedChunks.find( aVboItem );
+        }
+
+        offset = getChunkOffset( *it ) + itemSize;
+    }
+
+    memcpy( &m_vertices[offset], aVertex, aSize * VBO_ITEM::VertByteSize );
+}
+
+
+VBO_VERTEX* VBO_CONTAINER::GetAllVertices() const
+{
+    return m_vertices;
+}
+
+
+VBO_VERTEX* VBO_CONTAINER::GetVertices( const VBO_ITEM* aVboItem ) const
+{
+    int offset = aVboItem->GetOffset();
+
+    return &m_vertices[offset];
+}
+
+
+unsigned int VBO_CONTAINER::allocate( VBO_ITEM* aVboItem, unsigned int aSize )
+{
+    // Is there enough space to store vertices?
+    if( m_freeSpace < aSize )
+    {
+        bool result;
+
+        // Would it be enough to double the current space?
+        if( aSize < m_freeSpace + m_currentSize )
+        {
+            // Yes: exponential growing
+            result = resizeContainer( m_currentSize * 2 );
+        }
+        else
+        {
+            // No: grow to the nearest bigger power of 2
+            result = resizeContainer( getPowerOf2( m_currentSize * 2 + aSize ) );
+        }
+
+        // An error has occurred
+        if( !result )
+            return UINT_MAX;
+    }
+
+    // Look for the space with at least given size
+    FreeChunkMap::iterator it = m_freeChunks.lower_bound( aSize );
+
+    if( it == m_freeChunks.end() )
+    {
+        // This means that there is enough space for
+        // storing vertices, but the space is not continous
+        if( !defragment() )
+            return false;
+
+        // We can take the first free chunk, as there is only one after defragmentation
+        // and we can be sure that it provides enough space to store the object
+        it = m_freeChunks.begin();
+    }
+
+    unsigned int chunkSize = it->first;
+    unsigned int chunkOffset = it->second;
+    m_freeChunks.erase( it );
+
+    wxASSERT( chunkSize >= aSize );
+
+    // If there is some space left, return it to the pool - add an entry for it
+    if( chunkSize > aSize )
+    {
+        m_freeChunks.insert( Chunk( chunkSize - aSize, chunkOffset + aSize ) );
+    }
+    m_freeSpace -= aSize;
+    m_reservedChunks.insert( ReservedChunk( aVboItem, Chunk( aSize, chunkOffset ) ) );
+
+    aVboItem->SetOffset( chunkOffset );
+
+    return chunkOffset;
+}
+
+
+void VBO_CONTAINER::free( const ReservedChunkMap::iterator& aChunk )
+{
+    // Remove the chunk from the reserved chunks map and add to the free chunks map
+    int size = getChunkSize( *aChunk );
+    int offset = getChunkOffset( *aChunk );
+
+    m_reservedChunks.erase( aChunk );
+    m_freeChunks.insert( Chunk( size, offset ) );
+    m_freeSpace += size;
+}
+
+
+bool VBO_CONTAINER::defragment( VBO_VERTEX* aTarget )
+{
+    if( m_freeChunks.size() <= 1 )
+    {
+        // There is no point in defragmenting, as there is only one or no free chunks
+        return true;
+    }
+
+    if( aTarget == NULL )
+    {
+        // No target was specified, so we have to allocate our own space
+        aTarget = new (std::nothrow) VBO_VERTEX[m_currentSize];
+        if( aTarget == NULL )
+        {
+            wxLogError( wxT( "Run out of memory" ) );
+            return false;
+        }
+    }
+
+    int newOffset = 0;
+    ReservedChunkMap::iterator it, it_end;
+    for( it = m_reservedChunks.begin(), it_end = m_reservedChunks.end(); it != it_end; ++it )
+    {
+        VBO_ITEM* vboItem = getChunkVboItem( *it );
+        int itemOffset = getChunkOffset( *it );
+        int itemSize = getChunkSize( *it );
+
+        // Move an item to the new container
+        memcpy( &aTarget[newOffset], &m_vertices[itemOffset], itemSize * VBO_ITEM::VertByteSize );
+
+        // Update new offset
+        vboItem->SetOffset( newOffset );
+        setChunkOffset( *it, newOffset );
+
+        // Move to the next free space
+        newOffset += itemSize;
+    }
+
+    delete[] m_vertices;
+    m_vertices = aTarget;
+
+    // Now there is only one big chunk of free memory
+    m_freeChunks.clear();
+    m_freeChunks.insert( Chunk( m_freeSpace, m_currentSize - m_freeSpace ) );
+
+    return true;
+}
+
+
+void VBO_CONTAINER::resizeChunk( VBO_ITEM* aVboItem, int aNewSize )
+{
+    wxASSERT_MSG( false, wxT( "Warning: not tested yet" ) );
+
+    // TODO ESPECIALLY test the case of shrinking chunk
+    ReservedChunkMap::iterator it = m_reservedChunks.find( aVboItem );
+    int size = getChunkSize( *it );
+    int offset = getChunkOffset( *it );
+
+    int newOffset = allocate( aVboItem, aNewSize );
+    memcpy( &m_vertices[newOffset], &m_vertices[offset], size * VBO_ITEM::VertByteSize );
+
+    // Remove the chunk from the reserved chunks map and add to the free chunks map
+    m_reservedChunks.erase( it );
+    m_freeChunks.insert( Chunk( size, offset ) );
+    m_freeSpace += size;
+}
+
+
+bool VBO_CONTAINER::resizeContainer( unsigned int aNewSize )
+{
+    unsigned int copySize;
+    if( aNewSize < m_currentSize )
+    {
+        // Sanity check, no shrinking if we cannot fit all the data
+        if( ( m_currentSize - m_freeSpace ) > aNewSize )
+            return false;
+
+        defragment();
+        copySize = ( m_currentSize - m_freeSpace );
+    }
+    else
+    {
+        copySize = m_currentSize;
+    }
+
+    VBO_VERTEX* newContainer = new (std::nothrow) VBO_VERTEX[aNewSize];
+    if( newContainer == NULL )
+    {
+        wxLogError( wxT( "Run out of memory" ) );
+        return false;
+    }
+
+    memcpy( newContainer, m_vertices, copySize * VBO_ITEM::VertByteSize );
+    delete[] m_vertices;
+    m_vertices = newContainer;
+
+    // Update variables
+    unsigned int lastFreeSize = 0;
+    unsigned int lastFreeOffset = 0;
+
+    // Search for the last free chunk *at the end of the container* (not the last chunk in general)
+    FreeChunkMap::reverse_iterator lastFree, freeEnd;
+    for( lastFree = m_freeChunks.rbegin(), freeEnd = m_freeChunks.rend();
+            lastFree != freeEnd && lastFreeSize + lastFreeOffset != m_currentSize; ++lastFree )
+    {
+        lastFreeSize = getChunkSize( *lastFree );
+        lastFreeOffset = getChunkOffset( *lastFree );
+    }
+
+    if( lastFreeSize + lastFreeOffset == m_currentSize )
+    {
+        // We found a chunk at the end of the container
+        m_freeChunks.erase( lastFree.base() );
+        // so we can merge it with the new free chunk
+        m_freeChunks.insert( Chunk( aNewSize - m_currentSize + lastFreeSize,    // size
+                                    m_currentSize - lastFreeSize ) );           // offset
+    }
+    else
+    {
+        // As there is no free chunk at the end of container - simply add a new entry
+        if( aNewSize > m_currentSize )  // only in the case of enlargement
+        {
+            m_freeChunks.insert( Chunk( aNewSize - m_currentSize,               // size
+                                        m_currentSize ) );                      // offset
+        }
+    }
+
+    m_freeSpace += ( aNewSize - m_currentSize );
+    m_currentSize = aNewSize;
+
+    return true;
+}

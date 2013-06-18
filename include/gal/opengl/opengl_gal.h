@@ -35,6 +35,8 @@
 
 // OpenGL mathematics library
 #define GLM_FORCE_RADIANS
+#include <gal/opengl/glm/gtc/matrix_transform.hpp>
+
 #include <gal/opengl/vbo_item.h>
 #include <gal/opengl/shader.h>
 
@@ -56,7 +58,7 @@
 namespace KiGfx
 {
 class SHADER;
-class VBO_ITEM;
+class VBO_CONTAINER;
 
 /**
  * @brief Class OpenGL_GAL is the OpenGL implementation of the Graphics Abstraction Layer.
@@ -236,6 +238,9 @@ public:
     /// @copydoc GAL::DeleteGroup()
     virtual void DeleteGroup( int aGroupNumber );
 
+    /// @copydoc GAL::ClearCache()
+    virtual void ClearCache();
+
     // --------------------------------------------------------
     // Handling the world <-> screen transformation
     // --------------------------------------------------------
@@ -315,6 +320,13 @@ public:
         shaderPath = aPath;
     }
 
+    ///< Parameters passed to the GLU tesselator
+    typedef struct
+    {
+        VBO_ITEM* vboItem;                        ///< VBO_ITEM for storing new vertices
+        std::vector<GLdouble*>& intersectPoints;  ///< Intersect points, that have to be freed
+    } TessParams;
+
 protected:
     virtual void DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
@@ -336,20 +348,19 @@ private:
     wxEvtHandler*   mouseListener;
     wxEvtHandler*   paintListener;
 
-    // Display lists
-    GLuint                displayListsArcs;       ///< Arc display list
-    VBO_ITEM              verticesArc;
+    // Display lists (used in shaderless mode)
+    VBO_CONTAINER*        precomputedContainer;   ///< Container for storing display lists
     GLuint                displayListCircle;      ///< Circle display list
-    VBO_ITEM              verticesCircle;
+    VBO_ITEM*             verticesCircle;
     GLuint                displayListSemiCircle;  ///< Semi circle display list
-    VBO_ITEM              verticesSemiCircle;
+    VBO_ITEM*             verticesSemiCircle;
 
     // Vertex buffer objects related fields
     std::deque<VBO_ITEM*> vboItems;               ///< Stores informations about VBO objects
     VBO_ITEM*             curVboItem;             ///< Currently used VBO_ITEM (for grouping)
-    GLuint                curVboVertId;           ///< Currently used vertices VBO handle
-    GLuint                curVboIndId;            ///< Currently used indices VBO handle
-    int                   vboSize;                ///< Amount of vertices stored in VBO
+    VBO_CONTAINER*        vboContainer;           ///< Container for storing VBO_ITEMs
+    GLuint                vboVertices;            ///< Currently used vertices VBO handle
+    GLuint                vboIndices;             ///< Currently used indices VBO handle
     bool                  vboNeedsUpdate;         ///< Flag indicating if VBO should be rebuilt
     glm::mat4             transform;              ///< Current transformation matrix
     std::stack<glm::mat4> transformStack;         ///< Stack of transformation matrices
@@ -361,7 +372,8 @@ private:
     std::deque<VECTOR2D>  unitCirclePoints;       ///< List of the points on a unit circle
 
     // Polygon tesselation
-    GLUtesselator*        tesselator;       ///< Pointer to the tesselator
+    GLUtesselator*        tesselator;             ///< Pointer to the tesselator
+    std::vector<GLdouble*> tessIntersects;        ///< Storage of intersecting points
 
     // Shader
     // Possible types of shaders
@@ -519,12 +531,20 @@ private:
      * @brief Starts drawing in immediate mode or does nothing if an item's caching has started.
      * @param aMode specifies the primitive or primitives that will be created.
      */
-    inline void begin( GLenum aMode );
+    inline void begin( GLenum aMode )
+    {
+        if( !isGrouping )
+            glBegin( aMode );
+    }
 
     /**
      * @brief Ends drawing in immediate mode or does nothing if an item's caching has started.
      */
-    inline void end();
+    inline void end()
+    {
+        if( !isGrouping )
+            glEnd();
+    }
 
     /**
      * @brief Adds vertex to the current item or draws it in immediate mode.
@@ -532,7 +552,19 @@ private:
      * @param aY is Y coordinate.
      * @param aZ is Z coordinate.
      */
-    inline void vertex3( double aX, double aY, double aZ );
+    inline void vertex3( double aX, double aY, double aZ )
+    {
+        if( isGrouping )
+        {
+            // New vertex coordinates for VBO
+            VBO_VERTEX vertex( aX, aY, aZ );
+            curVboItem->PushVertex( &vertex );
+        }
+        else
+        {
+            glVertex3d( aX, aY, aZ );
+        }
+    }
 
     /**
      * @brief Function that replaces glTranslate and behaves according to isGrouping variable.
@@ -543,7 +575,17 @@ private:
      * @param aY is translation in Y axis direction.
      * @param aZ is translation in Z axis direction.
      */
-    inline void translate3( double aX, double aY, double aZ );
+    inline void translate3( double aX, double aY, double aZ )
+    {
+        if( isGrouping )
+        {
+            transform = glm::translate( transform, glm::vec3( aX, aY, aZ ) );
+        }
+        else
+        {
+            glTranslated( aX, aY, aZ );
+        }
+    }
 
     /**
      * @brief Function that replaces glColor and behaves according to isGrouping variable.
@@ -555,7 +597,17 @@ private:
      * @param aB is blue component.
      * @param aA is alpha component.
      */
-    inline void color4( double aRed, double aGreen, double aBlue, double aAlpha );
+    inline void color4( double aRed, double aGreen, double aBlue, double aAlpha )
+    {
+        if( isGrouping )
+        {
+            curVboItem->UseColor( COLOR4D( aRed, aGreen, aBlue, aAlpha ) );
+        }
+        else
+        {
+            glColor4d( aRed, aGreen, aBlue, aAlpha );
+        }
+    }
 
     /**
      * @brief Function that replaces glColor and behaves according to isGrouping variable.
@@ -564,7 +616,17 @@ private:
      *
      * @param aColor is the new color.
      */
-    inline void color4( const COLOR4D& aColor );
+    inline void color4( const COLOR4D& aColor )
+    {
+        if( isGrouping )
+        {
+            curVboItem->UseColor( aColor );
+        }
+        else
+        {
+            glColor4d( aColor.r, aColor.g, aColor.b, aColor.a);
+        }
+    }
 
     /**
      * @brief Function that sets shader and its parameters for the currently used VBO_ITEM.

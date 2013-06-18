@@ -99,10 +99,7 @@ CAIRO_GAL::~CAIRO_GAL()
     delete cursorPixels;
     delete cursorPixelsSaved;
 
-    for( int i = groups.size() - 1; i >= 0; --i )
-    {
-        DeleteGroup( i );
-    }
+    ClearCache();
 
     deleteBitmaps();
 }
@@ -687,13 +684,22 @@ void CAIRO_GAL::EndGroup()
 }
 
 
+void CAIRO_GAL::ClearCache()
+{
+    for( int i = groups.size() - 1; i >= 0; --i )
+    {
+        DeleteGroup( i );
+    }
+}
+
+
 void CAIRO_GAL::DeleteGroup( int aGroupNumber )
 {
     storePath();
 
     // Delete the Cairo paths
-    for( std::deque<GroupElement>::iterator it = groups[aGroupNumber].begin(), end = groups[aGroupNumber].end();
-         it != end; ++it )
+    std::deque<GroupElement>::iterator it, end;
+    for( it = groups[aGroupNumber].begin(), end = groups[aGroupNumber].end(); it != end; ++it )
     {
         if( it->command == CMD_FILL_PATH || it->command == CMD_STROKE_PATH )
         {

@@ -27,107 +27,98 @@
  * @brief Class to handle an item held in a Vertex Buffer Object.
  */
 
+#include <gal/opengl/vbo_container.h>
 #include <gal/opengl/vbo_item.h>
 #include <cstring>
 
 using namespace KiGfx;
 
-VBO_ITEM::VBO_ITEM() :
-        m_vertices( NULL ),
+VBO_ITEM::VBO_ITEM( VBO_CONTAINER* aContainer ) :
         m_offset( 0 ),
         m_size( 0 ),
+        m_container( aContainer ),
         m_isDirty( true ),
         m_transform( NULL )
 {
     // By default no shader is used
     m_shader[0] = 0;
 
-    // Prepare a block for storing vertices & indices
-    useNewBlock();
+    // The item's size is not known yet, so we just start an item in the container
+    aContainer->StartItem( this );
 }
 
 
 VBO_ITEM::~VBO_ITEM()
 {
-    if( m_isDirty )
-    {
-        // Data is still stored in blocks
-        std::list<VBO_VERTEX*>::const_iterator v_it, v_end;
-        for( v_it = m_vertBlocks.begin(), v_end = m_vertBlocks.end(); v_it != v_end; ++v_it )
-            delete[] *v_it;
-    }
-
-    if( m_vertices )
-        delete m_vertices;
+    m_container->Free( this );
 }
 
 
-void VBO_ITEM::PushVertex( const GLfloat* aVertex )
+void VBO_ITEM::PushVertex( VBO_VERTEX* aVertex )
 {
-    if( m_spaceLeft == 0 )
-        useNewBlock();
-
     if( m_transform != NULL )
     {
         // Apply transformations
-        //                X,          Y,          Z coordinates
-        glm::vec4 vertex( aVertex[0], aVertex[1], aVertex[2], 1.0f );
+        glm::vec4 vertex( aVertex->x, aVertex->y, aVertex->z, 1.0f );
         vertex = *m_transform * vertex;
 
         // Replace only coordinates, leave color as it is
-        memcpy( &m_vertPtr->x, &vertex[0], CoordByteSize );
-    }
-    else
-    {
-        // Add the new vertex
-        memcpy( &m_vertPtr->x, aVertex, CoordByteSize );
+        aVertex->x = vertex.x;
+        aVertex->y = vertex.y;
+        aVertex->z = vertex.z;
     }
 
     // Apply currently used color
-    memcpy( &m_vertPtr->r, m_color, ColorByteSize );
+    aVertex->r = m_color[0];
+    aVertex->g = m_color[1];
+    aVertex->b = m_color[2];
+    aVertex->a = m_color[3];
 
     // Apply currently used shader
-    memcpy( &m_vertPtr->shader, m_shader, ShaderByteSize );
+    for( int i = 0; i < ShaderStride; ++i )
+    {
+        aVertex->shader[i] = m_shader[i];
+    }
 
-    // Move to the next free space
-    m_vertPtr++;
+    m_container->Add( this, aVertex );
 
     m_size++;
     m_isDirty = true;
-    m_spaceLeft--;
 }
 
 
-void VBO_ITEM::PushVertices( const GLfloat* aVertices, GLuint aSize )
+void VBO_ITEM::PushVertices( VBO_VERTEX* aVertices, GLuint aSize )
 {
     for( unsigned int i = 0; i < aSize; ++i )
     {
-        PushVertex( &aVertices[i * VertStride] );
+        PushVertex( &aVertices[i] );
     }
 }
 
 
-GLfloat* VBO_ITEM::GetVertices()
+VBO_VERTEX* VBO_ITEM::GetVertices()
 {
     if( m_isDirty )
-        prepareFinal();
+        Finish();
 
-    return m_vertices;
+    return m_container->GetVertices( this );
 }
 
 
 void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
 {
+    wxASSERT_MSG( false, wxT( "This was not tested yet" ) );
+
     if( m_isDirty )
-        prepareFinal();
+        Finish();
 
     // Point to color of vertices
-    GLfloat* vertexPtr = m_vertices + ColorOffset;
+    VBO_VERTEX* vertexPtr = GetVertices();
     const GLfloat newColor[] = { aColor.r, aColor.g, aColor.b, aColor.a };
 
-    for( int i = 0; i < m_size; ++i )
+    for( unsigned int i = 0; i < m_size; ++i )
     {
-        memcpy( vertexPtr, newColor, ColorByteSize );
+        memcpy( &vertexPtr->r, newColor, ColorByteSize );
 
         // Move on to the next vertex
         vertexPtr++;
@@ -135,38 +126,10 @@ void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
 }
 
 
-void VBO_ITEM::useNewBlock()
+void VBO_ITEM::Finish()
 {
-    VBO_VERTEX* newVertBlock = new VBO_VERTEX[BLOCK_SIZE];
-
-    m_vertPtr = newVertBlock;
-    m_vertBlocks.push_back( newVertBlock );
-
-    m_spaceLeft = BLOCK_SIZE;
-}
-
-
-void VBO_ITEM::prepareFinal()
-{
-    if( m_vertices )
-        delete m_vertices;
-
-    // Allocate memory that would store all of vertices
-    m_vertices = new GLfloat[m_size * VertStride];
-    // Set the pointer that will move along the buffer
-    GLfloat* vertPtr = m_vertices;
-
-    // Copy blocks of vertices one after another to m_vertices
-    std::list<VBO_VERTEX*>::const_iterator v_it;
-    for( v_it = m_vertBlocks.begin(); *v_it != m_vertBlocks.back(); ++v_it )
-    {
-        memcpy( vertPtr, *v_it, BLOCK_SIZE * VertByteSize );
-        delete[] *v_it;
-        vertPtr += ( BLOCK_SIZE * VertStride );
-    }
-
-    // In the last block we need to copy only used vertices
-    memcpy( vertPtr, *v_it, ( BLOCK_SIZE - m_spaceLeft ) * VertByteSize );
+    // The unknown-sized item has just ended, so we need to inform the container about it
+    m_container->EndItem();
 
     m_isDirty = false;
 }

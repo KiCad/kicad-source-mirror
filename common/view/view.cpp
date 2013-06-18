@@ -473,6 +473,11 @@ void VIEW::Clear()
 
         l->items->RemoveAll();
     }
+
+    if( m_useGroups )
+    {
+        m_gal->ClearCache();
+    }
 }
 
 

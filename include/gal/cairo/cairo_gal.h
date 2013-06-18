@@ -212,6 +212,9 @@ public:
     /// @copydoc GAL::DeleteGroup()
     virtual void DeleteGroup( int aGroupNumber );
 
+    /// @copydoc GAL::ClearCache()
+    virtual void ClearCache();
+
     // --------------------------------------------------------
     // Handling the world <-> screen transformation
     // --------------------------------------------------------
