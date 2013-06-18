@@ -199,7 +199,7 @@ double VIEW::ToScreen( double aCoord, bool aAbsolute ) const
 
 void VIEW::CopySettings( const VIEW* aOtherView )
 {
-    // FIXME
+    wxASSERT_MSG( false, wxT( "This is not implemented" ) );
 }
 
 
@@ -249,7 +249,7 @@ void VIEW::SetViewport( const BOX2D& aViewport, bool aKeepAspect )
 
 void VIEW::SetMirror( bool aMirrorX, bool aMirrorY )
 {
-    // FIXME
+    wxASSERT_MSG( false, wxT( "This is not implemented" ) );
 }
 
 
@@ -381,13 +381,13 @@ struct VIEW::drawItem
             {
                 group = gal->BeginGroup();
                 aItem->setGroup( currentLayer, group );
-                view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), currentLayer );
+                view->m_painter->Draw( aItem, currentLayer );
                 gal->EndGroup();
             }
         }
         else if( aItem->ViewIsVisible() )
         {
-            view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), currentLayer );
+            view->m_painter->Draw( aItem, currentLayer );
         }
     }
 

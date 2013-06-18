@@ -167,7 +167,7 @@ const COLOR4D& PCB_PAINTER::getItemColor( int aItemType, int aNetCode ) const
 }
 
 
-bool PCB_PAINTER::Draw( const EDA_ITEM* aItem, int aLayer )
+bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
     // the "cast" applied in here clarifies which overloaded draw() is called
     switch( aItem->Type() )
