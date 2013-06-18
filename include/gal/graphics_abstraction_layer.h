@@ -370,6 +370,11 @@ public:
      */
     virtual void DeleteGroup( int aGroupNumber ) = 0;
 
+    /**
+     * @brief Delete all data created during caching of graphic items.
+     */
+    virtual void ClearCache() = 0;
+
     // --------------------------------------------------------
     // Handling the world <-> screen transformation
     // --------------------------------------------------------

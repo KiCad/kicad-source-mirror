@@ -21,6 +21,7 @@ set(GAL_SRCS
     gal/opengl/opengl_gal.cpp
     gal/opengl/shader.cpp
     gal/opengl/vbo_item.cpp
+    gal/opengl/vbo_container.cpp
     gal/cairo/cairo_gal.cpp
     view/wx_view_controls.cpp
     )

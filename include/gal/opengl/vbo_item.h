@@ -36,8 +36,6 @@
 
 #include <cstddef>
 
-#include <list>
-
 namespace KiGfx
 {
 typedef struct VBO_VERTEX
@@ -45,12 +43,31 @@ typedef struct VBO_VERTEX
     GLfloat x, y, z;        // Coordinates
     GLfloat r, g, b, a;     // Color
     GLfloat shader[4];      // Shader type & params
+    GLfloat _padding;
+
+    VBO_VERTEX()
+    {}
+
+    VBO_VERTEX( const GLfloat aX, const GLfloat aY, const GLfloat aZ ) :
+        x( aX ), y( aY ), z( aZ )
+    {}
+
+    VBO_VERTEX( const GLfloat *aData ) :
+        x( aData[0] ), y( aData[1] ), z( aData[2] )
+    {}
+
+    operator GLfloat*()
+    {
+        return &x;
+    }
 } VBO_VERTEX;
+
+class VBO_CONTAINER;
 
 class VBO_ITEM
 {
 public:
-    VBO_ITEM();
+    VBO_ITEM( VBO_CONTAINER* aContainer );
     ~VBO_ITEM();
 
     /**
@@ -60,7 +77,7 @@ public:
      * @param aVertex is a vertex to be added.
      * @param aShader is an attribute for shader.
      */
-    void PushVertex( const GLfloat* aVertex );
+    void PushVertex( VBO_VERTEX* aVertex );
 
     /**
      * Function PushVertices()
@@ -71,14 +88,14 @@ public:
      * @param aSize is an amount of vertices to be added.
      * @param aShader is an attribute for shader.
      */
-    void PushVertices( const GLfloat* aVertices, GLuint aSize );
+    void PushVertices( VBO_VERTEX* aVertices, GLuint aSize );
 
     /**
      * Function GetVertices()
      * Returns a pointer to the array containing all vertices.
      * @return Pointer to vertices packed in format {X, Y, Z, R, G, B, A}.
      */
-    GLfloat* GetVertices();
+    VBO_VERTEX* GetVertices();
 
 
     /**
@@ -86,7 +103,7 @@ public:
      * Returns information about number of vertices stored.
      * @param Amount of vertices.
      */
-    inline int GetSize() const
+    inline unsigned int GetSize() const
     {
         return m_size;
     }
@@ -96,7 +113,7 @@ public:
      * Sets data offset in the VBO.
      * @param aOffset is the offset expressed as a number of vertices.
      */
-    void SetOffset( int aOffset )
+    void SetOffset( unsigned int aOffset )
     {
         m_offset = aOffset;
     }
@@ -106,7 +123,7 @@ public:
      * Returns data offset in the VBO.
      * @return Data offset expressed as a number of vertices.
      */
-    inline int GetOffset() const
+    inline unsigned int GetOffset() const
     {
         return m_offset;
     }
@@ -156,16 +173,8 @@ public:
         }
     }
 
-
-    inline void FreeVerticesData()
-    {
-        if( m_vertices && !m_isDirty )
-        {
-            delete[] m_vertices;
-            m_vertices = NULL;
-        }
-    }
-
+    ///< Informs the container that there will be no more vertices for the current VBO_ITEM
+    void Finish();
 
     ///< Data organization information for vertices {X,Y,Z,R,G,B,A} (@see VBO_VERTEX).
     static const int VertByteSize       = sizeof(VBO_VERTEX);
@@ -191,40 +200,24 @@ public:
     static const int IndByteSize        = sizeof(GLuint);
 
 private:
-    ///< Contains vertices coordinates and colors.
-    ///< Packed by 7 floats for each vertex: {X, Y, Z, R, G, B, A}
-    GLfloat*                m_vertices;
+    ///< Offset and size of data stored in the VBO_CONTAINER.
+    unsigned int        m_offset;
+    unsigned int        m_size;
 
-    ///< Lists of data blocks storing vertices
-    std::list<VBO_VERTEX*>  m_vertBlocks;
-
-    ///< Pointers to current blocks that should be used for storing data
-    VBO_VERTEX*             m_vertPtr;
-
-    ///< How many vertices can be stored in the current buffer
-    int                     m_spaceLeft;
-    ///< Number of vertices stored in a single block
-    static const int        BLOCK_SIZE = 256;
-    ///< Creates a new block for storing vertices data
-    void                    useNewBlock();
-    ///< Prepares a continuous block of data that can be copied to graphics card buffer.
-    void                    prepareFinal();
-
-    ///< Offset and size of data in VBO.
-    int                     m_offset;
-    int                     m_size;
+    ///< Storage for vertices.
+    VBO_CONTAINER*      m_container;
 
     ///< Color used for new vertices pushed.
-    GLfloat                 m_color[ColorStride];
+    GLfloat             m_color[ColorStride];
 
     ///< Shader and its parameters used for new vertices pushed
-    GLfloat                 m_shader[ShaderStride];
+    GLfloat             m_shader[ShaderStride];
 
     ///< Flag telling if the item should be recached in VBO or not.
-    bool                    m_isDirty;
+    bool                m_isDirty;
 
     ///< Current transform matrix applied for every new vertex pushed.
-    const glm::mat4*        m_transform;
+    const glm::mat4*    m_transform;
 };
 } // namespace KiGfx
 

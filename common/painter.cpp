@@ -79,6 +79,7 @@ PAINTER::PAINTER( GAL* aGal ) :
 PAINTER::~PAINTER()
 {
     delete m_stroke_font;
+    delete m_settings;
 }
 
 

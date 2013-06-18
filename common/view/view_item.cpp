@@ -111,7 +111,7 @@ void VIEW_ITEM::setGroup( int aLayer, int aId )
     if( m_groupsSize > 0 )
     {
         std::copy( m_groups, m_groups + m_groupsSize, newGroups );
-        delete m_groups;
+        delete[] m_groups;
     }
 
     m_groups = newGroups;
@@ -123,7 +123,7 @@ void VIEW_ITEM::deleteGroups()
 {
     if( m_groupsSize > 0 )
     {
-        delete m_groups;
+        delete[] m_groups;
         m_groupsSize = 0;
     }
 }

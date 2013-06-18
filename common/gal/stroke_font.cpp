@@ -66,8 +66,8 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
         while( aNewStrokeFont[j][i] )
         {
-            VECTOR2D    point;
-            char        coordinate[2];
+            VECTOR2D    point( 0.0, 0.0 );
+            char        coordinate[2] = { 0, };
 
             for( int k = 0; k < 2; k++ )
             {
