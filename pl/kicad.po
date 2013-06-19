@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-15 20:13+0100\n"
-"PO-Revision-Date: 2013-06-16 10:06+0100\n"
+"POT-Creation-Date: 2013-06-19 17:16+0100\n"
+"PO-Revision-Date: 2013-06-19 17:42+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -734,16 +734,16 @@ msgstr "Biblioteka"
 msgid "Select Component"
 msgstr "Wybierz symbol"
 
-#: eeschema/edit_bitmap.cpp:103 bitmap2component/bitmap2cmp_gui.cpp:188
+#: eeschema/edit_bitmap.cpp:103 bitmap2component/bitmap2cmp_gui.cpp:216
 msgid "Choose Image"
 msgstr "Wybierz obraz"
 
-#: eeschema/edit_bitmap.cpp:104 bitmap2component/bitmap2cmp_gui.cpp:189
+#: eeschema/edit_bitmap.cpp:104 bitmap2component/bitmap2cmp_gui.cpp:217
 msgid "Image Files "
 msgstr "Pliki obrazów"
 
 #: eeschema/edit_bitmap.cpp:115 eeschema/edit_bitmap.cpp:125
-#: bitmap2component/bitmap2cmp_gui.cpp:214
+#: bitmap2component/bitmap2cmp_gui.cpp:241
 #, c-format
 msgid "Couldn't load image from <%s>"
 msgstr "Nie mogę załadować obrazu z <%s>"
@@ -1255,7 +1255,7 @@ msgstr "Skonwertowany"
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:98
 #: gerbview/class_GERBER.cpp:344 gerbview/class_GERBER.cpp:348
 #: gerbview/class_GERBER.cpp:351 common/eda_text.cpp:305
-#: bitmap2component/bitmap2cmp_gui_base.cpp:101
+#: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Normal"
 msgstr "Normalny"
 
@@ -1430,7 +1430,7 @@ msgstr "Ustaw pozycję zakotwiczenia"
 msgid "Import"
 msgstr "Importuj"
 
-#: eeschema/libeditframe.cpp:1084
+#: eeschema/libeditframe.cpp:1084 bitmap2component/bitmap2cmp_gui_base.cpp:93
 msgid "Export"
 msgstr "Eksportuj"
 
@@ -3936,27 +3936,27 @@ msgstr "Usuń numerację"
 msgid "Annotation"
 msgstr "Numeruj"
 
-#: eeschema/dialogs/dialog_bom.cpp:299 eeschema/dialogs/dialog_netlist.cpp:439
+#: eeschema/dialogs/dialog_bom.cpp:298 eeschema/dialogs/dialog_netlist.cpp:439
 msgid "Save Netlist File"
 msgstr "Zapisz pliki z listą sieci"
 
-#: eeschema/dialogs/dialog_bom.cpp:354
+#: eeschema/dialogs/dialog_bom.cpp:353
 msgid "Plugin"
 msgstr "Wtyczka"
 
-#: eeschema/dialogs/dialog_bom.cpp:364 eeschema/dialogs/dialog_netlist.cpp:744
+#: eeschema/dialogs/dialog_bom.cpp:363 eeschema/dialogs/dialog_netlist.cpp:744
 msgid "This plugin already exists. Abort"
 msgstr "Ta wtyczka już istnieje. Przerwano."
 
-#: eeschema/dialogs/dialog_bom.cpp:385 eeschema/dialogs/dialog_netlist.cpp:801
+#: eeschema/dialogs/dialog_bom.cpp:384 eeschema/dialogs/dialog_netlist.cpp:801
 msgid "Plugin files:"
 msgstr "Pliki wtyczek:"
 
-#: eeschema/dialogs/dialog_bom.cpp:458
+#: eeschema/dialogs/dialog_bom.cpp:457
 msgid "No text editor selected in KiCad. Please choose it"
 msgstr "Edytor tekstu nie został zdefiniowany. Proszę wybrać."
 
-#: eeschema/dialogs/dialog_bom.cpp:464
+#: eeschema/dialogs/dialog_bom.cpp:463
 msgid "Bom generation Help"
 msgstr "Tworzenie list materiałowych - Pomoc"
 
@@ -4318,7 +4318,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:207
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:94
 #: pcbnew/dialogs/dialog_plot_base.cpp:83
-#: bitmap2component/bitmap2cmp_gui_base.cpp:103
+#: bitmap2component/bitmap2cmp_gui_base.cpp:106
 msgid "Options"
 msgstr "Opcje"
 
@@ -5729,6 +5729,7 @@ msgstr "Grubość pisaka"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
 msgid "Postscript"
 msgstr "Postscript"
 
@@ -5756,6 +5757,7 @@ msgid "HPGL"
 msgstr "HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:63
+#: bitmap2component/bitmap2cmp_gui_base.cpp:100
 msgid "Format"
 msgstr "Format"
 
@@ -6953,7 +6955,7 @@ msgstr "(Strefa chroniona)"
 msgid "** NO BOARD DEFINED **"
 msgstr "** NIE ZDEFINIOWANO PŁYTKI **"
 
-#: pcbnew/class_zone.cpp:957
+#: pcbnew/class_zone.cpp:958
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Obrys strefy %s na warstwie %s"
@@ -14847,7 +14849,7 @@ msgstr "Warstwa grafiki"
 msgid "Img Rot."
 msgstr "Obróć obraz"
 
-#: gerbview/class_GERBER.cpp:344 bitmap2component/bitmap2cmp_gui_base.cpp:101
+#: gerbview/class_GERBER.cpp:344 bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Negative"
 msgstr "Negatyw"
 
@@ -16619,25 +16621,47 @@ msgstr "Informacja o kompilacji"
 msgid "Lib Version Info"
 msgstr "Informacja o wersji biblioteki"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:312
-msgid "Schematic lib file (*.lib)|*.lib"
-msgstr "Pliki bibliotek elementów (*.lib)|*.lib"
-
-#: bitmap2component/bitmap2cmp_gui.cpp:313
-msgid "Create a lib file for Eeschema"
-msgstr "Utwórz bibliotekę dla EEschema"
-
-#: bitmap2component/bitmap2cmp_gui.cpp:329
 #: bitmap2component/bitmap2cmp_gui.cpp:366
+msgid "Logo file (*.kicad_wks)|*.kicad_wks"
+msgstr "Pliki logotypu (*.kicad_wks)|*.kicad_wks"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:367
+msgid "Create a logo file"
+msgstr "Utwórz plik logotypu"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:383
+#: bitmap2component/bitmap2cmp_gui.cpp:417
+#: bitmap2component/bitmap2cmp_gui.cpp:451
+#: bitmap2component/bitmap2cmp_gui.cpp:490
 #, c-format
 msgid "File %s could not be created"
 msgstr "Plik %s nie może zostać utworzony."
 
-#: bitmap2component/bitmap2cmp_gui.cpp:347
-msgid "Footprint file (*.mod;*.emp)|*.mod;*.emp"
-msgstr "Plik biblioteki footprintów (*.mod;*.emp)|*.mod;*.emp"
+#: bitmap2component/bitmap2cmp_gui.cpp:400
+msgid "Postscript file (*.ps)|*.ps"
+msgstr "Pliki PostScript (.ps)|*.ps"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:348
+#: bitmap2component/bitmap2cmp_gui.cpp:401
+msgid "Create a Postscript file"
+msgstr "Utwórz plik Postscipt"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:434
+msgid "Schematic lib file (*.lib)|*.lib"
+msgstr "Pliki bibliotek elementów (*.lib)|*.lib"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:435
+msgid "Create a lib file for Eeschema"
+msgstr "Utwórz bibliotekę dla EEschema"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:470
+msgid "Footprint file (*.emp)|*.emp"
+msgstr "Starsze pliki footprintów (*.emp)|*.emp"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:471
+msgid "Footprint file (*.kicad_mod)|*.kicad_mod"
+msgstr "Pliki footprintów S-expression (*.kicad_mod)|*.kicad_mod"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:472
 msgid "Create a footprint file for PcbNew"
 msgstr "Utwórz plik footprintów dla Pcbnew"
 
@@ -16676,15 +16700,11 @@ msgstr "Bitów:"
 msgid "bits"
 msgstr "bitów"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:88
+#: bitmap2component/bitmap2cmp_gui_base.cpp:90
 msgid "Load Bitmap"
 msgstr "Załaduj obraz"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:91
-msgid "Export to Eeschema"
-msgstr "Eksportuj do Eeschema"
-
-#: bitmap2component/bitmap2cmp_gui_base.cpp:92
+#: bitmap2component/bitmap2cmp_gui_base.cpp:94
 msgid ""
 "Create a library file for Eeschema\n"
 "This library contains only one component: logo"
@@ -16692,23 +16712,27 @@ msgstr ""
 "Tworzy plik biblioteki dla Eeschema\n"
 "Biblioteka będzie zawierać tylko jeden sybmol: LOGO"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:96
-msgid "Export to Pcbnew"
-msgstr "Eksportuj do Pcbnew"
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Eeschema"
+msgstr "Symbol Eeschema (.lib)"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:97
-msgid ""
-"Create a footprint file for PcbNew\n"
-"This footprint contains only one footprint: logo"
-msgstr ""
-"Tworzy plik biblioteki dla Pcbnew\n"
-"Biblioteka będzie zawierać tylko jeden element: logo"
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Pcbnew old fmt (.emp)"
+msgstr "Format starszy Pcbnew (.emp)"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:107
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Pcbnew kicad_mod"
+msgstr "Format S-expression Pcbnew (.kicad_mod)"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Logo for title block"
+msgstr "Logotyp dla tabliczki tytułowej"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:110
 msgid "Threshold Value:"
 msgstr "Poziom odcięcia:"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:112
+#: bitmap2component/bitmap2cmp_gui_base.cpp:115
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
@@ -18274,6 +18298,19 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:294
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Export to Eeschema"
+#~ msgstr "Eksportuj do Eeschema"
+
+#~ msgid "Export to Pcbnew"
+#~ msgstr "Eksportuj do Pcbnew"
+
+#~ msgid ""
+#~ "Create a footprint file for PcbNew\n"
+#~ "This footprint contains only one footprint: logo"
+#~ msgstr ""
+#~ "Tworzy plik biblioteki dla Pcbnew\n"
+#~ "Biblioteka będzie zawierać tylko jeden element: logo"
 
 #~ msgid "BOM Howto"
 #~ msgstr "BOM Jak wykonać"
