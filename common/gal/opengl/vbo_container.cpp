@@ -28,7 +28,6 @@
  */
 
 #include <gal/opengl/vbo_container.h>
-#include <gal/opengl/vbo_item.h>
 #include <cstring>
 #include <wx/log.h>
 #ifdef __WXDEBUG__
@@ -40,8 +39,11 @@
 using namespace KiGfx;
 
 VBO_CONTAINER::VBO_CONTAINER( int aSize ) :
-        m_freeSpace( aSize ), m_currentSize( aSize ), itemStarted( false )
+        m_freeSpace( aSize ), m_currentSize( aSize ), itemStarted( false ), m_transform( NULL )
 {
+    // By default no shader is used
+    m_shader[0] = 0;
+
     m_vertices = new VBO_VERTEX[aSize];
 
     // In the beginning there is only free space
@@ -88,6 +90,7 @@ void VBO_CONTAINER::EndItem()
 void VBO_CONTAINER::Add( VBO_ITEM* aVboItem, const VBO_VERTEX* aVertex, unsigned int aSize )
 {
     unsigned int offset;
+    VBO_VERTEX* vertexPtr;
 
     if( itemStarted )   // There is an item being created with an unknown size..
     {
@@ -146,7 +149,44 @@ void VBO_CONTAINER::Add( VBO_ITEM* aVboItem, const VBO_VERTEX* aVertex, unsigned
         offset = getChunkOffset( *it ) + itemSize;
     }
 
-    memcpy( &m_vertices[offset], aVertex, aSize * VBO_ITEM::VertByteSize );
+    for( unsigned int i = 0; i < aSize; ++i )
+    {
+        // Pointer to the vertex that we are currently adding
+        vertexPtr = &m_vertices[offset + i];
+
+        // Modify the vertex according to the currently used transformations
+        if( m_transform != NULL )
+        {
+            // Apply transformations
+            glm::vec4 vertex( aVertex[i].x, aVertex[i].y, aVertex[i].z, 1.0f );
+            vertex = *m_transform * vertex;
+
+            // Replace only coordinates, leave color as it is
+            vertexPtr->x = vertex.x;
+            vertexPtr->y = vertex.y;
+            vertexPtr->z = vertex.z;
+        }
+        else
+        {
+            // Simply copy coordinates
+            vertexPtr->x = aVertex[i].x;
+            vertexPtr->y = aVertex[i].y;
+            vertexPtr->z = aVertex[i].z;
+        }
+
+        // Apply currently used color
+        vertexPtr->r = m_color[0];
+        vertexPtr->g = m_color[1];
+        vertexPtr->b = m_color[2];
+        vertexPtr->a = m_color[3];
+
+        // Apply currently used shader
+        for( unsigned int i = 0; i < VBO_ITEM::ShaderStride; ++i )
+        {
+            vertexPtr->shader[i] = m_shader[i];
+        }
+    }
+
 }
 
 

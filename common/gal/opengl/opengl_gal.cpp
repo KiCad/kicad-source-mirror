@@ -1543,7 +1543,7 @@ void OPENGL_GAL::Save()
     if( isGrouping )
     {
         transformStack.push( transform );
-        curVboItem->SetTransformMatrix( &transform );
+        vboContainer->SetTransformMatrix( &transform );
     }
     else
     {
@@ -1562,7 +1562,7 @@ void OPENGL_GAL::Restore()
         if( transformStack.empty() )
         {
             // Disable transforming, as the selected matrix is identity
-            curVboItem->SetTransformMatrix( NULL );
+            vboContainer->SetTransformMatrix( NULL );
         }
     }
     else
