@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-10 20:55+0100\n"
-"PO-Revision-Date: 2013-06-10 20:58+0100\n"
+"POT-Creation-Date: 2013-06-19 18:25+0100\n"
+"PO-Revision-Date: 2013-06-19 18:33+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "Language: fr_FR\n"
@@ -502,7 +502,7 @@ msgstr "Orient"
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80
 #: gerbview/class_GERBER.cpp:344 gerbview/class_GERBER.cpp:348
 #: gerbview/class_GERBER.cpp:351 common/eda_text.cpp:305
-#: bitmap2component/bitmap2cmp_gui_base.cpp:101
+#: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Normal"
 msgstr "Normal"
 
@@ -1133,7 +1133,7 @@ msgstr "(Zone Interdite)"
 msgid "** NO BOARD DEFINED **"
 msgstr "**  PAS de PCB DEFINI **"
 
-#: pcbnew/class_zone.cpp:957
+#: pcbnew/class_zone.cpp:958
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Contour de Zone %s sur %s"
@@ -1645,7 +1645,7 @@ msgid "footprint library path <%s> does not exist"
 msgstr "le chemin de librairie d'empreintes <%s> n'existe pas"
 
 #: pcbnew/gpcb_plugin.cpp:281 pcbnew/kicad_plugin.cpp:289
-#: pcbnew/legacy_plugin.cpp:4323
+#: pcbnew/legacy_plugin.cpp:4356
 #, c-format
 msgid "library <%s> has no footprint '%s' to delete"
 msgstr "La libraire <%s> n'a pas d'empreinte '%s' à supprimer"
@@ -1662,8 +1662,8 @@ msgid "Element token contains %d parameters."
 msgstr "Element token contains %d parameters."
 
 #: pcbnew/gpcb_plugin.cpp:881 pcbnew/kicad_plugin.cpp:1674
-#: pcbnew/kicad_plugin.cpp:1736 pcbnew/legacy_plugin.cpp:4269
-#: pcbnew/legacy_plugin.cpp:4313
+#: pcbnew/kicad_plugin.cpp:1736 pcbnew/legacy_plugin.cpp:4302
+#: pcbnew/legacy_plugin.cpp:4346
 #, c-format
 msgid "Library <%s> is read only"
 msgstr "Librairie <%s> est en lecture seule"
@@ -1875,28 +1875,28 @@ msgstr ""
 msgid "unknown graphic type: %d"
 msgstr "type graphique inconnu : %d"
 
-#: pcbnew/legacy_plugin.cpp:413
+#: pcbnew/legacy_plugin.cpp:414
 msgid "May not load millimeter *.brd file into 'Pcbnew compiled for deci-mils'"
 msgstr ""
 "Ne peut pas charger le fichier  *.brd en millimètres dans  'Pcbnew compilé "
 "pour deci-mils'"
 
-#: pcbnew/legacy_plugin.cpp:529
+#: pcbnew/legacy_plugin.cpp:530
 #, c-format
 msgid "Unknown sheet type '%s' on line:%d"
 msgstr "Type de feuille inconnue '%s' ligne: %d"
 
-#: pcbnew/legacy_plugin.cpp:1178
+#: pcbnew/legacy_plugin.cpp:1185
 #, c-format
-msgid "Unknown padshape '%s' on line:%d"
-msgstr "Forme pad inconnue '%s' ligne: %d"
+msgid "Unknown padshape '%c=0x%02x' on line:%d of module:'%s'"
+msgstr "Forme de pad '%c=0x%02x' inconnue ligne:%d, module:'%s'"
 
-#: pcbnew/legacy_plugin.cpp:2147
+#: pcbnew/legacy_plugin.cpp:2162
 #, c-format
 msgid "duplicate NETCLASS name '%s'"
 msgstr "Nom NETCLASS '%s' dupliqué"
 
-#: pcbnew/legacy_plugin.cpp:2742 pcbnew/legacy_plugin.cpp:2779
+#: pcbnew/legacy_plugin.cpp:2757 pcbnew/legacy_plugin.cpp:2794
 #, c-format
 msgid ""
 "invalid float number in file: <%s>\n"
@@ -1905,7 +1905,7 @@ msgstr ""
 "Nombre flottant invalide dans le fichier: <%s>\n"
 "ligne: %d, offset: %d"
 
-#: pcbnew/legacy_plugin.cpp:2751 pcbnew/legacy_plugin.cpp:2787
+#: pcbnew/legacy_plugin.cpp:2766 pcbnew/legacy_plugin.cpp:2802
 #, c-format
 msgid ""
 "missing float number in file: <%s>\n"
@@ -1914,17 +1914,17 @@ msgstr ""
 "Nombre flottant manquant dans le fichier: '%s'\n"
 "ligne: %d, offset: %d"
 
-#: pcbnew/legacy_plugin.cpp:2835
+#: pcbnew/legacy_plugin.cpp:2850
 #, c-format
 msgid "Unable to open file <%s>"
 msgstr "Ne peut pas ouvrir le fichier <%s>"
 
-#: pcbnew/legacy_plugin.cpp:2872
+#: pcbnew/legacy_plugin.cpp:2887
 #, c-format
 msgid "error writing to file <%s>"
 msgstr "Erreur lors de l'écriture du fichier <%s>"
 
-#: pcbnew/legacy_plugin.cpp:3984
+#: pcbnew/legacy_plugin.cpp:3999
 msgid ""
 "May not load millimeter legacy library file into 'Pcbnew compiled for deci-"
 "mils'"
@@ -1932,33 +1932,33 @@ msgstr ""
 "Ne peut pas charger le fichier  librairie en millimètres dans  'Pcbnew "
 "compilé pour deci-mils'"
 
-#: pcbnew/legacy_plugin.cpp:3994
+#: pcbnew/legacy_plugin.cpp:4009
 #, c-format
 msgid "File <%s> is empty or is not a legacy library"
 msgstr "Le fichier <%s> est vide ou n'est pas une librairie à l'ancien format"
 
-#: pcbnew/legacy_plugin.cpp:4107
+#: pcbnew/legacy_plugin.cpp:4140
 #, c-format
 msgid "Legacy library file <%s> is read only"
 msgstr "Le fichier librairie ancien format <%s> est en lecture seule."
 
-#: pcbnew/legacy_plugin.cpp:4127
+#: pcbnew/legacy_plugin.cpp:4160
 #, c-format
 msgid "Unable to open or create legacy library file <%s>"
 msgstr "Impossible d'ouvrir ou de créer la librairie ancienn format <%s>"
 
-#: pcbnew/legacy_plugin.cpp:4153
+#: pcbnew/legacy_plugin.cpp:4186
 #, c-format
 msgid "Unable to rename tempfile <%s> to library file <%s>"
 msgstr ""
 "Incapable de renommer le fichier temporaire <%s> en fichier librairie <%s>"
 
-#: pcbnew/legacy_plugin.cpp:4336
+#: pcbnew/legacy_plugin.cpp:4369
 #, c-format
 msgid "library <%s> already exists, will not create a new"
 msgstr "La librairie <%s> existe déjà, on ne peut en créer une nouvelle"
 
-#: pcbnew/legacy_plugin.cpp:4363
+#: pcbnew/legacy_plugin.cpp:4396
 #, c-format
 msgid "library <%s> cannot be deleted"
 msgstr "la librairie <%s> ne peut pas être supprimée"
@@ -2073,6 +2073,7 @@ msgid "GPcb foot print files (*)|*"
 msgstr "Fichiers empreintes GPcb (*)|*"
 
 #: pcbnew/librairi.cpp:607 pcbnew/modules.cpp:68
+#: eeschema/dialogs/dialog_bom_base.cpp:45
 #: eeschema/dialogs/dialog_netlist_base.cpp:113
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:28
 #: common/dialogs/dialog_get_component_base.cpp:22
@@ -2124,6 +2125,8 @@ msgstr "Empreinte %s trouvée dans aucune librairie"
 #, c-format
 msgid "No library named <%s> was found in the footprint library table."
 msgstr ""
+"Aucune librairie nommée <%s> n'a été trouvée dans la table des librairies "
+"d'empreintes."
 
 #: pcbnew/loadcmp.cpp:484 pcbnew/loadcmp.cpp:510
 msgid "No footprint libraries were specified."
@@ -2844,9 +2847,8 @@ msgid "Li&brary Tables"
 msgstr "Tables Li&brairies"
 
 #: pcbnew/menubar_pcbframe.cpp:430
-#, fuzzy
 msgid "Setup footprint libraries"
-msgstr "Fichiers librairies modules"
+msgstr "Init librairies empreintes"
 
 #: pcbnew/menubar_pcbframe.cpp:437
 msgid "Hide La&yers Manager"
@@ -3311,7 +3313,7 @@ msgid "Module Editor (active library: "
 msgstr "Editeur de modules (librairie active: "
 
 #: pcbnew/moduleframe.cpp:606 pcbnew/pcbframe.cpp:826 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1002 cvpcb/cvframe.cpp:706 kicad/kicad.cpp:74
+#: eeschema/schframe.cpp:999 cvpcb/cvframe.cpp:706 kicad/kicad.cpp:74
 #: kicad/prjconfig.cpp:270
 msgid " [Read Only]"
 msgstr " [Lecture Seule]"
@@ -3473,12 +3475,12 @@ msgstr "Ajout de stub (arc)"
 msgid "Add Polynomial Shape"
 msgstr "Ajout Forme polynomiale"
 
-#: pcbnew/netlist.cpp:66 pcbnew/dialogs/dialog_netlist.cpp:395
+#: pcbnew/netlist.cpp:66 pcbnew/dialogs/dialog_netlist.cpp:403
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
 msgstr "Ne peut pas ouvrir le fichiernetliste \"%s\"."
 
-#: pcbnew/netlist.cpp:67 pcbnew/dialogs/dialog_netlist.cpp:396
+#: pcbnew/netlist.cpp:67 pcbnew/dialogs/dialog_netlist.cpp:404
 msgid "Netlist Load Error."
 msgstr "Erreur chargement Netliste."
 
@@ -3491,7 +3493,7 @@ msgstr ""
 "Erreurr lors du chargement de la netliste.\n"
 "%s"
 
-#: pcbnew/netlist.cpp:79 pcbnew/dialogs/dialog_netlist.cpp:406
+#: pcbnew/netlist.cpp:79 pcbnew/dialogs/dialog_netlist.cpp:414
 #: cvpcb/cvframe.cpp:776
 msgid "Netlist Load Error"
 msgstr "Erreur Chargement Netliste"
@@ -3504,7 +3506,12 @@ msgstr "Pas de Modules"
 msgid "Components"
 msgstr "Composants"
 
-#: pcbnew/netlist.cpp:213
+#: pcbnew/netlist.cpp:192 pcbnew/netlist.cpp:297
+#, c-format
+msgid "No footprint defined for component `%s`.\n"
+msgstr ""
+
+#: pcbnew/netlist.cpp:225
 #, c-format
 msgid ""
 "*** Warning: Cannot find footprint library file \"%s\" in any of the "
@@ -3513,7 +3520,7 @@ msgstr ""
 "*** Attention: Impossible de trouver le fichier librairie d'empreintes \"%s"
 "\" dans les chemins de recherche standards de kiCad. **\n"
 
-#: pcbnew/netlist.cpp:236
+#: pcbnew/netlist.cpp:248
 #, c-format
 msgid ""
 "*** Warning: component `%s` footprint <%s> was not found in any libraries. "
@@ -3522,12 +3529,12 @@ msgstr ""
 "*** Attention: composant '%s' empreinte <%s> non trouvée dans les "
 "librairies. ***\n"
 
-#: pcbnew/netlist.cpp:301
+#: pcbnew/netlist.cpp:325
 #, c-format
 msgid "*** Warning: Component \"%s\" footprint ID <%s> is not valid. ***\n"
 msgstr "*** Attention: composant \"%s\" empreinte <%s> non valide. ***\n"
 
-#: pcbnew/netlist.cpp:323
+#: pcbnew/netlist.cpp:347
 #, c-format
 msgid ""
 "*** Warning: component `%s` footprint <%s> was not found in any libraries in "
@@ -3789,8 +3796,8 @@ msgstr "Change Largeur Piste"
 
 #: pcbnew/onrightclick.cpp:558 pcbnew/onrightclick.cpp:781
 #: pcbnew/onrightclick.cpp:844 pcbnew/onrightclick.cpp:896
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:189
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
 msgid "Delete"
@@ -4045,14 +4052,16 @@ msgid "Visibles"
 msgstr "Visibles"
 
 #: pcbnew/pcbframe.cpp:456
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
 "\n"
 "%s"
 msgstr ""
-"Une erreur s'est produite lors de la sauvegarde de la librairie de "
-"composants <%s>."
+"Une erreur s'est produite lors du chragement de la table globale des "
+"librairie d'empreintes:\n"
+"\n"
+"%s"
 
 #: pcbnew/pcbframe.cpp:515 eeschema/schframe.cpp:425
 #, c-format
@@ -4087,7 +4096,7 @@ msgstr ""
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew est en cours d'exécution. Continuer?"
 
-#: pcbnew/pcbnew.cpp:243
+#: pcbnew/pcbnew.cpp:251
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -4100,7 +4109,7 @@ msgstr ""
 "Voulez vous le charger ?\n"
 "Il sera sauvé sous le nouveau format de fichier."
 
-#: pcbnew/pcbnew.cpp:273
+#: pcbnew/pcbnew.cpp:281
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -4848,7 +4857,7 @@ msgstr "Arrêter le routage?"
 #: pcbnew/dialogs/dialog_plot_base.cpp:83
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
 #: eeschema/dialogs/dialog_erc_base.cpp:133
-#: bitmap2component/bitmap2cmp_gui_base.cpp:103
+#: bitmap2component/bitmap2cmp_gui_base.cpp:106
 msgid "Options"
 msgstr "Options"
 
@@ -5614,7 +5623,7 @@ msgstr "Règles Générales"
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:82
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:187
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:78
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:131
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:150
 #: pcbnew/dialogs/dialog_plot_base.cpp:352
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:118
 #: eeschema/dialogs/dialog_erc_base.cpp:76
@@ -6004,7 +6013,7 @@ msgstr "Type de chemin"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:25 eeschema/lib_field.cpp:592
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:31 eeschema/lib_field.cpp:592
 #: eeschema/onrightclick.cpp:438 eeschema/sch_component.cpp:1453
 #: eeschema/template_fieldnames.cpp:14
 #: eeschema/dialogs/dialog_color_config.cpp:38
@@ -6425,13 +6434,14 @@ msgstr "Liste modules"
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:70
 #: pcbnew/dialogs/dialog_find_base.cpp:45
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:177
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:99
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:114
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:373
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:109
 #: eeschema/dialogs/dialog_annotate_base.cpp:202
+#: eeschema/dialogs/dialog_bom_base.cpp:63
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:107
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:53
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
@@ -6719,6 +6729,7 @@ msgid "The URL of the FreeRouting.net website"
 msgstr "L' URL du site FreeRouting.net"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:97
+#: eeschema/dialogs/dialog_bom_base.cpp:66
 msgid "Help"
 msgstr "Aide"
 
@@ -8145,87 +8156,87 @@ msgstr ""
 "La marge finale est la somme de cette valeur et du rapport de marge\n"
 "Une valeur négative signifie que le masque est plus petit que le pad."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:80
+#: pcbnew/dialogs/dialog_netlist.cpp:81
 msgid "The project configuration has changed.  Do you want to save it?"
 msgstr "La configuration de projet a changé. Voulez vous la sauver?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:121
+#: pcbnew/dialogs/dialog_netlist.cpp:129
 msgid "Select Netlist"
 msgstr "Sélection Netliste"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:147
+#: pcbnew/dialogs/dialog_netlist.cpp:155
 msgid ""
 "The changes made by reading the netlist cannot be undone.  Are you sure you "
 "want to read the netlist?"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_netlist.cpp:154
+#: pcbnew/dialogs/dialog_netlist.cpp:162
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
 msgstr "Lecture Netliste <%s>\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:159
+#: pcbnew/dialogs/dialog_netlist.cpp:167
 #, c-format
 msgid "Using component footprint link file \"%s\".\n"
 msgstr "Utilisation du fichier lien composant/empreinte <%s>.\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:165
+#: pcbnew/dialogs/dialog_netlist.cpp:173
 #, c-format
 msgid "Using time stamps to select footprints in file \"%s\".\n"
 msgstr ""
 "Utilisation des signatures temporelles pour sélectionner les empreintes dans "
 "le fichier <%s>.\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:185
+#: pcbnew/dialogs/dialog_netlist.cpp:193
 msgid "No modules"
 msgstr "Pas de Modules"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:217
+#: pcbnew/dialogs/dialog_netlist.cpp:225
 msgid "No duplicate."
 msgstr "Pas de doublon."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:220
+#: pcbnew/dialogs/dialog_netlist.cpp:228
 msgid "Duplicates:"
 msgstr "Doubles:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:244
+#: pcbnew/dialogs/dialog_netlist.cpp:252
 msgid "No missing modules."
 msgstr "Pas de modules manquants."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:247
+#: pcbnew/dialogs/dialog_netlist.cpp:255
 msgid "Missing:"
 msgstr "Manquant:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:263
+#: pcbnew/dialogs/dialog_netlist.cpp:271
 msgid "No extra modules."
 msgstr "Pas de modules supplémentaires."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:266
+#: pcbnew/dialogs/dialog_netlist.cpp:274
 msgid "Not in Netlist:"
 msgstr "Pas en Netliste:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:291
+#: pcbnew/dialogs/dialog_netlist.cpp:299
 msgid "Too many errors: some are skipped"
 msgstr "rop d'erreurs: certaines sont omises"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:295
+#: pcbnew/dialogs/dialog_netlist.cpp:303
 msgid "Check Modules"
 msgstr "Contrôle Modules"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:335
+#: pcbnew/dialogs/dialog_netlist.cpp:343
 msgid "Save contents of message window"
 msgstr "Sauver le contenu de la fenètre de messages"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:352
+#: pcbnew/dialogs/dialog_netlist.cpp:360
 #, c-format
 msgid "Cannot write message contents to file \"%s\"."
 msgstr "Ne peut pas écrire les messages dans le fichier \"%s\"."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:354
+#: pcbnew/dialogs/dialog_netlist.cpp:362
 msgid "File Write Error"
 msgstr "Erreur Ecriture  Fichier"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:405
+#: pcbnew/dialogs/dialog_netlist.cpp:413
 #, c-format
 msgid ""
 "Error loading netlist file:\n"
@@ -8234,15 +8245,15 @@ msgstr ""
 "Erreur en chargement du fichier netliste:\n"
 "%s "
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:25
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:31
 msgid "Timestamp"
 msgstr "Timestamp"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:27
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
 msgid "Module Selection"
 msgstr "Sélection Module"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:29
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
 msgid ""
 "Select how footprints are recognized:\n"
 "by their reference (U1, R3...) (normal setting)\n"
@@ -8253,19 +8264,19 @@ msgstr ""
 "ou leur signature temporelle (réglage spécial après une réannotation "
 "complète de la schématique)"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:39
 msgid "From netlist"
 msgstr "De la netliste"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:39
 msgid "From separate .cmp file"
 msgstr "Du fichier séparé .cmp"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
 msgid "Module Name Source"
 msgstr "Source du Nom des Modules"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:37
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
 msgid ""
 "Source of footprints names for component:\n"
 "- the netlist (if you have filled the footprint field of each component  in "
@@ -8277,21 +8288,21 @@ msgstr ""
 "la schématique)\n"
 "- le fichier .cmp créé par CvPcb"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:47
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
 msgid "Keep"
 msgstr "Garder"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:47
 msgid "Change"
 msgstr "Changer"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:49
 msgid "Exchange Module"
 msgstr "Echange Module"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:45
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:51
 msgid ""
 "Keep or change an existing footprint when the netlist gives a different "
 "footprint"
@@ -8299,20 +8310,20 @@ msgstr ""
 "Garder ou changer une empreinte existante quand la netliste donne une "
 "empreinte différente"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:57
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
 msgid "Unconnected Tracks"
 msgstr "Pistes non Connectées"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:59
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
 msgid "Keep or delete bad tracks after a netlist change"
 msgstr ""
 "Garder ou supprimer les mauvaises pistes après un changement de netliste"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:71
 msgid "Extra Footprints"
 msgstr "Empreintes Supplémentaires"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:67
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:73
 msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
@@ -8320,47 +8331,72 @@ msgstr ""
 "Supprimer les empreintes trouvées sur le C.I. mais non en netliste\n"
 "Note: seules les empreintes non verrouillées seront supprimées"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:77
-msgid "Open Netlist File"
-msgstr "Ouvrir Fichier Netliste"
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:86
+msgid "Dry run. Only report changes in message panel"
+msgstr "A vide: Lister uniquement les changements dans la zone des messages"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:80
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:87
+msgid ""
+"Dry Run:\n"
+"The netlist is read, but no change is actually made on board.\n"
+"Changes are only reported in message panel, for info"
+msgstr ""
+"A vide:\n"
+"La netliste est lue, mais aucun changement n'est fait sur le circuit "
+"imprimé.\n"
+"Les changements sont seulement rapportés dans la fenètre des messages, pour "
+"info"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:91
+#: eeschema/dialogs/dialog_annotate_base.cpp:181
+msgid "Silent mode"
+msgstr "Mode silencieux"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:92
+msgid ""
+"Silent mode:\n"
+"Do not show the warning message before reading the netlist"
+msgstr ""
+"Mode silence:\n"
+"Ne pad montrer le message d'avertissement avant de lire la netliste"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:105
+msgid "Browse Netlist Files"
+msgstr "Examen Fichiers Netlistes"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:108
 msgid "Read Current Netlist"
 msgstr "Lire Netliste Courante"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:82
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:110
 msgid "Read the current netlist and update connections and connectivity info"
 msgstr "Lire la netliste courante et mettre à jour les infos de connection"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:86
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:117
 msgid "Test Footprints"
 msgstr "Test des Modules"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:87
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:118
 msgid "Read the current neltist file and list missing and extra footprints"
 msgstr ""
 "Lire la netliste courante et lister les empreintes manquantes et "
 "supplémentaires"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:91
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:122
 msgid "Rebuild Board Connectivity"
 msgstr "Recalculer les connexions du C.I."
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:92
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:123
 msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
 msgstr ""
 "Recalculer le chevelu complet ( utile après une édition manuelle de nom de "
 "net sur pad)"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:96
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:127
 msgid "Save Messages to File"
 msgstr "Sauver Messages dans un Fichier"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:111
-msgid "Only report changes in message panel"
-msgstr "Uniquement lister les chnagements dans la zone des messages"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:123
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:142
 msgid "Netlist File:"
 msgstr "Fichier Netliste:"
 
@@ -9004,6 +9040,7 @@ msgstr "Format du tracé:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
 msgid "Postscript"
 msgstr "Postscript"
 
@@ -9734,44 +9771,39 @@ msgstr "Fichier document de composants <%s> vide."
 msgid "File <%s> is not a valid component library document file."
 msgstr "<%s> n'est pas un fichier documentation de composant valide."
 
-#: eeschema/component_references_lister.cpp:715
+#: eeschema/component_references_lister.cpp:467
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
 msgstr "Item non numéroté: %s%s (unit %d)\n"
 
-#: eeschema/component_references_lister.cpp:722
+#: eeschema/component_references_lister.cpp:474
 #, c-format
 msgid "Item not annotated: %s%s\n"
 msgstr "Item non numéroté: %s%s\n"
 
-#: eeschema/component_references_lister.cpp:745
+#: eeschema/component_references_lister.cpp:497
 #, c-format
 msgid "Error item %s%s unit %d and no more than %d parts\n"
 msgstr " Erreur item %s%s unité %d et pas plus que %d parts\n"
 
-#: eeschema/component_references_lister.cpp:785
-#: eeschema/component_references_lister.cpp:817
+#: eeschema/component_references_lister.cpp:537
+#: eeschema/component_references_lister.cpp:569
 #, c-format
 msgid "Multiple item %s%s (unit %d)\n"
 msgstr "Multiple élément %s%s (unité %d]\n"
 
-#: eeschema/component_references_lister.cpp:792
-#: eeschema/component_references_lister.cpp:824
+#: eeschema/component_references_lister.cpp:544
+#: eeschema/component_references_lister.cpp:576
 #, c-format
 msgid "Multiple item %s%s\n"
 msgstr "Multiple élément %s%s\n"
 
-#: eeschema/component_references_lister.cpp:841
+#: eeschema/component_references_lister.cpp:592
 #, c-format
-msgid "Different values for %s%d.%d (%s) and %s%d.%d (%s)"
-msgstr "Valeurs différentes pour %s%d%d (%s) et %s%d%d (%s)"
+msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
+msgstr "Valeurs différentes pour %s%d%s (%s) et %s%d%s (%s)"
 
-#: eeschema/component_references_lister.cpp:851
-#, c-format
-msgid "Different values for %s%d%c (%s) and %s%d%c (%s)"
-msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
-
-#: eeschema/component_references_lister.cpp:885
+#: eeschema/component_references_lister.cpp:627
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Signature temporelle dupliquée (%s) pour %s%d et %s%d"
@@ -9816,16 +9848,16 @@ msgstr "Composant"
 msgid "Select Component"
 msgstr "Sélection Composant"
 
-#: eeschema/edit_bitmap.cpp:103 bitmap2component/bitmap2cmp_gui.cpp:188
+#: eeschema/edit_bitmap.cpp:103 bitmap2component/bitmap2cmp_gui.cpp:216
 msgid "Choose Image"
 msgstr "Sélection Image"
 
-#: eeschema/edit_bitmap.cpp:104 bitmap2component/bitmap2cmp_gui.cpp:189
+#: eeschema/edit_bitmap.cpp:104 bitmap2component/bitmap2cmp_gui.cpp:217
 msgid "Image Files "
 msgstr "Fichiers Image "
 
 #: eeschema/edit_bitmap.cpp:115 eeschema/edit_bitmap.cpp:125
-#: bitmap2component/bitmap2cmp_gui.cpp:214
+#: bitmap2component/bitmap2cmp_gui.cpp:241
 #, c-format
 msgid "Couldn't load image from <%s>"
 msgstr "Impossible de charger l'mage from <%s>"
@@ -10418,7 +10450,7 @@ msgstr "Ajuster Position Ancre"
 msgid "Import"
 msgstr "Importer"
 
-#: eeschema/libeditframe.cpp:1084
+#: eeschema/libeditframe.cpp:1084 bitmap2component/bitmap2cmp_gui_base.cpp:93
 msgid "Export"
 msgstr "Exporter"
 
@@ -11872,19 +11904,15 @@ msgstr "Ne pas affichager les pins invisibles"
 msgid "Show hidden pins"
 msgstr "Force affichage des pins invisibles"
 
-#: eeschema/schframe.cpp:637
-msgid "BOM Howto"
-msgstr ""
-
-#: eeschema/schframe.cpp:702
+#: eeschema/schframe.cpp:699
 msgid "Schematic"
 msgstr "Schématique"
 
-#: eeschema/schframe.cpp:772
+#: eeschema/schframe.cpp:769
 msgid "Error: not a component or no component"
 msgstr "Erreur: ce n'est pas un composant, ou pas de composant"
 
-#: eeschema/schframe.cpp:1005 cvpcb/cvframe.cpp:711
+#: eeschema/schframe.cpp:1002 cvpcb/cvframe.cpp:711
 msgid " [no file]"
 msgstr " [pas de fichier]"
 
@@ -12444,10 +12472,6 @@ msgstr "Dialogue"
 msgid "Automatically close this dialog"
 msgstr "Fermer automatiquement ce dialogue"
 
-#: eeschema/dialogs/dialog_annotate_base.cpp:181
-msgid "Silent mode"
-msgstr "Mode silencieux"
-
 #: eeschema/dialogs/dialog_annotate_base.cpp:205
 msgid "Clear Annotation"
 msgstr "Suppression Annotation"
@@ -12455,6 +12479,60 @@ msgstr "Suppression Annotation"
 #: eeschema/dialogs/dialog_annotate_base.cpp:208
 msgid "Annotation"
 msgstr "Annotation"
+
+#: eeschema/dialogs/dialog_bom.cpp:298 eeschema/dialogs/dialog_netlist.cpp:439
+msgid "Save Netlist File"
+msgstr "Sauver Fichier Netliste"
+
+#: eeschema/dialogs/dialog_bom.cpp:353
+msgid "Plugin"
+msgstr "Plugin"
+
+#: eeschema/dialogs/dialog_bom.cpp:363 eeschema/dialogs/dialog_netlist.cpp:744
+msgid "This plugin already exists. Abort"
+msgstr "Ce plugin existe déjà. Abandon"
+
+#: eeschema/dialogs/dialog_bom.cpp:384 eeschema/dialogs/dialog_netlist.cpp:801
+msgid "Plugin files:"
+msgstr "Fichiers Plugins:"
+
+#: eeschema/dialogs/dialog_bom.cpp:457
+msgid "No text editor selected in KiCad. Please choose it"
+msgstr "Pas d'éditeur défini dans KiCad. SVP, sélectionnez en un"
+
+#: eeschema/dialogs/dialog_bom.cpp:462
+msgid "Bom Generation Help"
+msgstr "Aide de la Génération des Listes"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:38
+msgid "Plugins"
+msgstr "Plugins"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:59
+msgid "Generate"
+msgstr "Générerl "
+
+#: eeschema/dialogs/dialog_bom_base.cpp:72
+#: eeschema/dialogs/dialog_netlist_base.cpp:52
+msgid "Add Plugin"
+msgstr "Ajouter Plugin"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:75
+msgid "Set Plugin Cmd"
+msgstr "Init Plugin Cmd"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:78
+#: eeschema/dialogs/dialog_netlist_base.cpp:55
+msgid "Remove Plugin"
+msgstr "Supprimer Plugin"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:81
+msgid "Edit Plugin File"
+msgstr "Editer Fichier Plugin"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:93
+msgid "Command line:"
+msgstr "Ligne de commande:"
 
 #: eeschema/dialogs/dialog_color_config.cpp:21
 msgid "Wire"
@@ -13675,10 +13753,6 @@ msgstr "Commande netliste:"
 msgid "Title:"
 msgstr "Titre:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:439
-msgid "Save Netlist File"
-msgstr "Sauver Fichier Netliste"
-
 #: eeschema/dialogs/dialog_netlist.cpp:473
 #, c-format
 msgid "%s Export"
@@ -13704,10 +13778,6 @@ msgstr ""
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Erreur: nom de feuille dupliqué dans une feuille donnée. Continuer?"
 
-#: eeschema/dialogs/dialog_netlist.cpp:744
-msgid "This plugin already exists. Abort"
-msgstr "Ce plugin existe déjà. Abandon"
-
 #: eeschema/dialogs/dialog_netlist.cpp:774
 msgid "Error. You must provide a command String"
 msgstr "Erreur. Vous devez entrer une ligne de commande"
@@ -13716,28 +13786,16 @@ msgstr "Erreur. Vous devez entrer une ligne de commande"
 msgid "Error. You must provide a Title"
 msgstr "Erreur. Vous devez entrer un titre"
 
-#: eeschema/dialogs/dialog_netlist.cpp:801
-msgid "Plugin files:"
-msgstr "Fichiers Plugins:"
-
 #: eeschema/dialogs/dialog_netlist.cpp:835
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr ""
 "Ne pas oublier de choisir un titre pour cette page de contrôle de netliste"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:429
-#: pcbnew/dialogs/dialog_netlist_fbp.h:80
+#: pcbnew/dialogs/dialog_netlist_fbp.h:82
 #: eeschema/dialogs/dialog_netlist_base.h:76
 msgid "Netlist"
 msgstr "Netliste"
-
-#: eeschema/dialogs/dialog_netlist_base.cpp:52
-msgid "Add Plugin"
-msgstr "Ajouter Plugin"
-
-#: eeschema/dialogs/dialog_netlist_base.cpp:55
-msgid "Remove Plugin"
-msgstr "Supprimer Plugin"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:61
 msgid "Use default netname"
@@ -13826,6 +13884,7 @@ msgid "Pen width"
 msgstr "Diamètre plume"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:63
+#: bitmap2component/bitmap2cmp_gui_base.cpp:100
 msgid "Format"
 msgstr "Format"
 
@@ -14785,7 +14844,7 @@ msgstr "Couche graphique"
 msgid "Img Rot."
 msgstr "Rot. Img."
 
-#: gerbview/class_GERBER.cpp:344 bitmap2component/bitmap2cmp_gui_base.cpp:101
+#: gerbview/class_GERBER.cpp:344 bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Negative"
 msgstr "Négatif"
 
@@ -15865,8 +15924,8 @@ msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
 msgstr "Eagle ver. 6.x fichiers  PCB  XML (*.brd)|*.brd"
 
 #: common/wildcards_and_files_ext.cpp:75
-msgid "P-Cad 2002/2004 ASCII PCB files (*.pcb)|*.pcb"
-msgstr "Fichiers ASCII P-Cad 2002/2004 ASCII (*.pcb)|*.pcb"
+msgid "P-Cad 200x ASCII PCB files (*.pcb)|*.pcb"
+msgstr "Fichiers ASCII P-Cad 200x ASCII (*.pcb)|*.pcb"
 
 #: common/wildcards_and_files_ext.cpp:76
 msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
@@ -16563,25 +16622,47 @@ msgstr "Tout Afficher"
 msgid "Show None"
 msgstr "Rien Afficher"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:312
-msgid "Schematic lib file (*.lib)|*.lib"
-msgstr "Fichier librairie de composant (*.lib)|*.lib"
-
-#: bitmap2component/bitmap2cmp_gui.cpp:313
-msgid "Create a lib file for Eeschema"
-msgstr "Créer un fichier librairie pour Eeschema"
-
-#: bitmap2component/bitmap2cmp_gui.cpp:329
 #: bitmap2component/bitmap2cmp_gui.cpp:366
+msgid "Logo file (*.kicad_wks)|*.kicad_wks"
+msgstr "Fichier logo  (*.kicad_wks)|*.kicad_wks"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:367
+msgid "Create a logo file"
+msgstr "Création fichier logo"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:383
+#: bitmap2component/bitmap2cmp_gui.cpp:417
+#: bitmap2component/bitmap2cmp_gui.cpp:451
+#: bitmap2component/bitmap2cmp_gui.cpp:490
 #, c-format
 msgid "File %s could not be created"
 msgstr "Le fichier %s n'a pas pu être créé."
 
-#: bitmap2component/bitmap2cmp_gui.cpp:347
-msgid "Footprint file (*.mod;*.emp)|*.mod;*.emp"
-msgstr "Fichiers Modules  (*.mod;*.emp)|*.mod;*.emp"
+#: bitmap2component/bitmap2cmp_gui.cpp:400
+msgid "Postscript file (*.ps)|*.ps"
+msgstr "Fichier PostScript (.ps)|*.ps"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:348
+#: bitmap2component/bitmap2cmp_gui.cpp:401
+msgid "Create a Postscript file"
+msgstr "Création fichier Postscript"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:434
+msgid "Schematic lib file (*.lib)|*.lib"
+msgstr "Fichier librairie de composant (*.lib)|*.lib"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:435
+msgid "Create a lib file for Eeschema"
+msgstr "Créer un fichier librairie pour Eeschema"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:470
+msgid "Footprint file (*.emp)|*.emp"
+msgstr "Fichiers Module  (*.emp)|*.emp"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:471
+msgid "Footprint file (*.kicad_mod)|*.kicad_mod"
+msgstr "Fichier empreinte (*.kicad_mod)|*.kicad_mod"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:472
 msgid "Create a footprint file for PcbNew"
 msgstr "Créer un fichier d'empreinte pour PcbNew"
 
@@ -16620,15 +16701,11 @@ msgstr "BPP:"
 msgid "bits"
 msgstr "bits"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:88
+#: bitmap2component/bitmap2cmp_gui_base.cpp:90
 msgid "Load Bitmap"
 msgstr "Charger Image Bitmap"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:91
-msgid "Export to Eeschema"
-msgstr "Exporter vers eeschema"
-
-#: bitmap2component/bitmap2cmp_gui_base.cpp:92
+#: bitmap2component/bitmap2cmp_gui_base.cpp:94
 msgid ""
 "Create a library file for Eeschema\n"
 "This library contains only one component: logo"
@@ -16636,23 +16713,27 @@ msgstr ""
 "Créer un fichier librairie pour Eeschema\n"
 "Ce fichier contient seulement un composant: logo"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:96
-msgid "Export to Pcbnew"
-msgstr "Exporter vers Pcbnew"
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Eeschema"
+msgstr "Eeschema"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:97
-msgid ""
-"Create a footprint file for PcbNew\n"
-"This footprint contains only one footprint: logo"
-msgstr ""
-"Créer un fichier d'empreintes pour Pcbnew\n"
-"Ce fichier contient seulement une empreinte: logo"
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Pcbnew old fmt (.emp)"
+msgstr "Pcbnew ancien fmt (.emp)"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:107
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Pcbnew kicad_mod"
+msgstr "Pcbnew kicad_mod"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Logo for title block"
+msgstr "Logo pour cartouche"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:110
 msgid "Threshold Value:"
 msgstr "Valeur du Seuil:"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:112
+#: bitmap2component/bitmap2cmp_gui_base.cpp:115
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
@@ -16935,6 +17016,10 @@ msgstr "Non Connection"
 msgid "Annotate Schematic"
 msgstr "Annotation de la Schématique"
 
+#: eeschema/dialogs/dialog_bom_base.h:95
+msgid "Bill of Material"
+msgstr "Liste du Matériel"
+
 #: eeschema/dialogs/dialog_color_config.h:61
 msgid "EESchema Colors"
 msgstr "Couleurs dans EESchema"
@@ -17046,8 +17131,24 @@ msgstr "Options d'Affichage 3D"
 msgid "Bitmap to Component Converter"
 msgstr "Convertisseur Bitmap en Composant"
 
-#~ msgid "Bill of Materials"
-#~ msgstr "Liste du Matériel"
+#~ msgid "Open Netlist File"
+#~ msgstr "Ouvrir Fichier Netliste"
+
+#~ msgid "Export to Eeschema"
+#~ msgstr "Exporter vers eeschema"
+
+#~ msgid "Export to Pcbnew"
+#~ msgstr "Exporter vers Pcbnew"
+
+#~ msgid ""
+#~ "Create a footprint file for PcbNew\n"
+#~ "This footprint contains only one footprint: logo"
+#~ msgstr ""
+#~ "Créer un fichier d'empreintes pour Pcbnew\n"
+#~ "Ce fichier contient seulement une empreinte: logo"
+
+#~ msgid "Different values for %s%d.%d (%s) and %s%d.%d (%s)"
+#~ msgstr "Valeurs différentes pour %s%d%d (%s) et %s%d%d (%s)"
 
 #~ msgid "Failed to open file <%s>"
 #~ msgstr "Erreur ouverture fichier <%s>"
@@ -17279,9 +17380,6 @@ msgstr "Convertisseur Bitmap en Composant"
 
 #~ msgid "Bad Tracks Deletion:"
 #~ msgstr "Supp. Pistes Mauvaises:"
-
-#~ msgid "Browse Netlist Files"
-#~ msgstr "Examen Fichiers Netlistes"
 
 #~ msgid "Footprints Test"
 #~ msgstr "Test Empreintes"
@@ -17752,9 +17850,6 @@ msgstr "Convertisseur Bitmap en Composant"
 
 #~ msgid "Quit"
 #~ msgstr "Quitter"
-
-#~ msgid "Create Plot File"
-#~ msgstr "Création Fichier de Tracé "
 
 #~ msgid "Pan"
 #~ msgstr "Pan"
