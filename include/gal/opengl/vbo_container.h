@@ -31,6 +31,9 @@
 #define VBO_CONTAINER_H_
 
 #include <GL/gl.h>
+#include <gal/opengl/glm/glm.hpp>
+#include <gal/opengl/vbo_item.h>
+#include <gal/color4d.h>
 #include <map>
 #include <wx/log.h>
 
@@ -116,6 +119,73 @@ public:
     inline int GetSize() const
     {
         return m_currentSize;
+    }
+
+    /**
+     * Function SetTransformMatrix()
+     * Sets transformation matrix for vertices that are added to VBO_ITEM. If you do not want to
+     * transform vertices at all, pass NULL as the argument.
+     * @param aMatrix is the new transform matrix or NULL if you do not want to use transformation
+     * matrix.
+     */
+    inline void SetTransformMatrix( const glm::mat4* aMatrix )
+    {
+        m_transform = aMatrix;
+    }
+
+    /**
+     * Function UseColor()
+     * Sets color used for all added vertices.
+     * @param aColor is the color used for added vertices.
+     */
+    inline void UseColor( const COLOR4D& aColor )
+    {
+        m_color[0] = aColor.r;
+        m_color[1] = aColor.g;
+        m_color[2] = aColor.b;
+        m_color[3] = aColor.a;
+    }
+
+    /**
+     * Function UseColor()
+     * Sets color used for all added vertices.
+     * @param aColor is the color used for added vertices.
+     */
+    inline void UseColor( const GLfloat aColor[VBO_ITEM::ColorStride] )
+    {
+        for( unsigned int i = 0; i < VBO_ITEM::ColorStride; ++i )
+        {
+            m_color[i] = aColor[i];
+        }
+    }
+
+    /**
+     * Function UseColor()
+     * Sets color used for all added vertices.
+     * @param aR is the red component of the color.
+     * @param aG is the green component of the color.
+     * @param aB is the blue component of the color.
+     * @param aA is the alpha component of the color.
+     */
+    inline void UseColor( GLfloat aR, GLfloat aG, GLfloat aB, GLfloat aA )
+    {
+        m_color[0] = aR;
+        m_color[1] = aG;
+        m_color[2] = aB;
+        m_color[3] = aA;
+    }
+
+    /**
+     * Function UseShader()
+     * Sets shader and its parameters used for all added vertices.
+     * @param aShader is the array that contains shader number followed by its parameters.
+     */
+    inline void UseShader( const GLfloat aShader[VBO_ITEM::ShaderStride] )
+    {
+        for( unsigned int i = 0; i < VBO_ITEM::ShaderStride; ++i )
+        {
+            m_shader[i] = aShader[i];
+        }
     }
 
 private:
@@ -221,27 +291,37 @@ private:
     void free( const ReservedChunkMap::iterator& aChunk );
 
     ///< How many vertices we can store in the container
-    unsigned int m_freeSpace;
+    unsigned int    m_freeSpace;
 
     ///< How big is the current container, expressed in vertices
-    unsigned int m_currentSize;
+    unsigned int    m_currentSize;
 
     ///< Actual storage memory
-    VBO_VERTEX* m_vertices;
+    VBO_VERTEX*     m_vertices;
 
     ///< A flag saying if there is the item with an unknown size being added
-    bool itemStarted;
+    bool            itemStarted;
 
     ///< Variables holding the state of the item currently being added
-    unsigned int itemSize, itemChunkSize;
-    VBO_ITEM* item;
+    unsigned int    itemSize;
+    unsigned int    itemChunkSize;
+    VBO_ITEM*       item;
+
+    ///< Color used for new vertices pushed.
+    GLfloat         m_color[VBO_ITEM::ColorStride];
+
+    ///< Shader and its parameters used for new vertices pushed
+    GLfloat         m_shader[VBO_ITEM::ShaderStride];
+
+    ///< Current transform matrix applied for every new vertex pushed.
+    const glm::mat4*    m_transform;
 
     /**
      * Function getPowerOf2()
      * Returns the nearest power of 2, bigger than aNumber.
      * @param aNumber is the number for which we look for a bigger power of 2.
      */
-    unsigned int getPowerOf2( unsigned int aNumber )
+    unsigned int getPowerOf2( unsigned int aNumber ) const
     {
         unsigned int power = 1;
 

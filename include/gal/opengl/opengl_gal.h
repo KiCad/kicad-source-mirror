@@ -37,7 +37,7 @@
 #define GLM_FORCE_RADIANS
 #include <gal/opengl/glm/gtc/matrix_transform.hpp>
 
-#include <gal/opengl/vbo_item.h>
+#include <gal/opengl/vbo_container.h>
 #include <gal/opengl/shader.h>
 
 // wxWidgets imports
@@ -58,7 +58,6 @@
 namespace KiGfx
 {
 class SHADER;
-class VBO_CONTAINER;
 
 /**
  * @brief Class OpenGL_GAL is the OpenGL implementation of the Graphics Abstraction Layer.
@@ -601,7 +600,7 @@ private:
     {
         if( isGrouping )
         {
-            curVboItem->UseColor( COLOR4D( aRed, aGreen, aBlue, aAlpha ) );
+            vboContainer->UseColor( aRed, aGreen, aBlue, aAlpha );
         }
         else
         {
@@ -620,7 +619,7 @@ private:
     {
         if( isGrouping )
         {
-            curVboItem->UseColor( aColor );
+            vboContainer->UseColor( aColor );
         }
         else
         {
@@ -642,7 +641,7 @@ private:
         {
             const GLfloat shader[] = { aShader, aParam1, aParam2, aParam3 };
 
-            curVboItem->UseShader( shader );
+            vboContainer->UseShader( shader );
         }
     }
 };

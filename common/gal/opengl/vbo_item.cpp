@@ -37,12 +37,8 @@ VBO_ITEM::VBO_ITEM( VBO_CONTAINER* aContainer ) :
         m_offset( 0 ),
         m_size( 0 ),
         m_container( aContainer ),
-        m_isDirty( true ),
-        m_transform( NULL )
+        m_isDirty( true )
 {
-    // By default no shader is used
-    m_shader[0] = 0;
-
     // The item's size is not known yet, so we just start an item in the container
     aContainer->StartItem( this );
 }
@@ -54,32 +50,8 @@ VBO_ITEM::~VBO_ITEM()
 }
 
 
-void VBO_ITEM::PushVertex( VBO_VERTEX* aVertex )
+void VBO_ITEM::PushVertex( const VBO_VERTEX* aVertex )
 {
-    if( m_transform != NULL )
-    {
-        // Apply transformations
-        glm::vec4 vertex( aVertex->x, aVertex->y, aVertex->z, 1.0f );
-        vertex = *m_transform * vertex;
-
-        // Replace only coordinates, leave color as it is
-        aVertex->x = vertex.x;
-        aVertex->y = vertex.y;
-        aVertex->z = vertex.z;
-    }
-
-    // Apply currently used color
-    aVertex->r = m_color[0];
-    aVertex->g = m_color[1];
-    aVertex->b = m_color[2];
-    aVertex->a = m_color[3];
-
-    // Apply currently used shader
-    for( int i = 0; i < ShaderStride; ++i )
-    {
-        aVertex->shader[i] = m_shader[i];
-    }
-
     m_container->Add( this, aVertex );
 
     m_size++;
@@ -87,7 +59,7 @@ void VBO_ITEM::PushVertex( VBO_VERTEX* aVertex )
 }
 
 
-void VBO_ITEM::PushVertices( VBO_VERTEX* aVertices, GLuint aSize )
+void VBO_ITEM::PushVertices( const VBO_VERTEX* aVertices, GLuint aSize )
 {
     for( unsigned int i = 0; i < aSize; ++i )
     {
