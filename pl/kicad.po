@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-19 17:16+0100\n"
-"PO-Revision-Date: 2013-06-19 17:42+0100\n"
+"POT-Creation-Date: 2013-06-19 18:13+0100\n"
+"PO-Revision-Date: 2013-06-19 18:19+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1878,7 +1878,7 @@ msgstr "Pole"
 #: eeschema/dialogs/dialog_color_config.cpp:38
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:25
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:31
 msgid "Reference"
 msgstr "Oznaczenie"
 
@@ -3905,6 +3905,7 @@ msgid "Automatically close this dialog"
 msgstr "Automatycznie zamknij"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:181
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:91
 msgid "Silent mode"
 msgstr "Nie potwierdzaj"
 
@@ -3916,7 +3917,7 @@ msgstr "Nie potwierdzaj"
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:70
 #: pcbnew/dialogs/dialog_find_base.cpp:45
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:177
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:99
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:114
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:373
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
@@ -3956,8 +3957,8 @@ msgstr "Pliki wtyczek:"
 msgid "No text editor selected in KiCad. Please choose it"
 msgstr "Edytor tekstu nie został zdefiniowany. Proszę wybrać."
 
-#: eeschema/dialogs/dialog_bom.cpp:463
-msgid "Bom generation Help"
+#: eeschema/dialogs/dialog_bom.cpp:462
+msgid "Bom Generation Help"
 msgstr "Tworzenie list materiałowych - Pomoc"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:38
@@ -4398,8 +4399,8 @@ msgstr "Dodaj"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
 #: pcbnew/onrightclick.cpp:558 pcbnew/onrightclick.cpp:781
 #: pcbnew/onrightclick.cpp:844 pcbnew/onrightclick.cpp:896
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
 msgid "Delete"
 msgstr "Usuń"
 
@@ -5267,7 +5268,7 @@ msgstr "Utwórz plik raportu"
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:82
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:187
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:78
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:131
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:150
 #: pcbnew/dialogs/dialog_plot_base.cpp:352
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:118
 #: common/dialogs/dialog_list_selector_base.cpp:37
@@ -5627,7 +5628,7 @@ msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:429
 #: eeschema/dialogs/dialog_netlist_base.h:76
-#: pcbnew/dialogs/dialog_netlist_fbp.h:80
+#: pcbnew/dialogs/dialog_netlist_fbp.h:82
 msgid "Netlist"
 msgstr "Lista sieci"
 
@@ -8979,12 +8980,12 @@ msgstr "Dodaj wycinek łuku"
 msgid "Add Polynomial Shape"
 msgstr "Dodaj wielokątny kształt"
 
-#: pcbnew/netlist.cpp:66 pcbnew/dialogs/dialog_netlist.cpp:395
+#: pcbnew/netlist.cpp:66 pcbnew/dialogs/dialog_netlist.cpp:403
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
 msgstr "Nie można otworzyć pliku listy sieci \"%s\"."
 
-#: pcbnew/netlist.cpp:67 pcbnew/dialogs/dialog_netlist.cpp:396
+#: pcbnew/netlist.cpp:67 pcbnew/dialogs/dialog_netlist.cpp:404
 msgid "Netlist Load Error."
 msgstr "Błąd odczytu listy sieci."
 
@@ -8997,7 +8998,7 @@ msgstr ""
 "Błąd podczas odczytywania listy sieci.\n"
 "%s"
 
-#: pcbnew/netlist.cpp:79 pcbnew/dialogs/dialog_netlist.cpp:406
+#: pcbnew/netlist.cpp:79 pcbnew/dialogs/dialog_netlist.cpp:414
 #: cvpcb/cvframe.cpp:776
 msgid "Netlist Load Error"
 msgstr "Błąd odczytu listy sieci"
@@ -13266,15 +13267,15 @@ msgstr ""
 "lutowniczego.\n"
 "Ostateczna wartość prześwitu jest sumą tej wartości i wartością prześwitu"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:80
+#: pcbnew/dialogs/dialog_netlist.cpp:81
 msgid "The project configuration has changed.  Do you want to save it?"
 msgstr "Konfiguracja projektu została zmieniona. Zapisać ją ?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:121
+#: pcbnew/dialogs/dialog_netlist.cpp:129
 msgid "Select Netlist"
 msgstr "Wybierz listę sieci"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:147
+#: pcbnew/dialogs/dialog_netlist.cpp:155
 msgid ""
 "The changes made by reading the netlist cannot be undone.  Are you sure you "
 "want to read the netlist?"
@@ -13282,72 +13283,72 @@ msgstr ""
 "Zmiany wprowadzone podczas odczytania lisy sieci nie mogą zostać cofnięte. "
 "Czy chcesz odczytać listę sieci?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:154
+#: pcbnew/dialogs/dialog_netlist.cpp:162
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
 msgstr "Wczytuję listę sieci \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:159
+#: pcbnew/dialogs/dialog_netlist.cpp:167
 #, c-format
 msgid "Using component footprint link file \"%s\".\n"
 msgstr "Użyty zostanie plik połączeń komponentów z footprintami \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:165
+#: pcbnew/dialogs/dialog_netlist.cpp:173
 #, c-format
 msgid "Using time stamps to select footprints in file \"%s\".\n"
 msgstr ""
 "Użyte zostaną odciski czasowe przy wybieraniu footprintów z pliku \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:185
+#: pcbnew/dialogs/dialog_netlist.cpp:193
 msgid "No modules"
 msgstr "Brak footprintów"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:217
+#: pcbnew/dialogs/dialog_netlist.cpp:225
 msgid "No duplicate."
 msgstr "Brak duplikatów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:220
+#: pcbnew/dialogs/dialog_netlist.cpp:228
 msgid "Duplicates:"
 msgstr "Duplikaty:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:244
+#: pcbnew/dialogs/dialog_netlist.cpp:252
 msgid "No missing modules."
 msgstr "Brak brakujących footprintów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:247
+#: pcbnew/dialogs/dialog_netlist.cpp:255
 msgid "Missing:"
 msgstr "Brakujące:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:263
+#: pcbnew/dialogs/dialog_netlist.cpp:271
 msgid "No extra modules."
 msgstr "Brak dodatkowych footprintów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:266
+#: pcbnew/dialogs/dialog_netlist.cpp:274
 msgid "Not in Netlist:"
 msgstr "Brak na liście sieci:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:291
+#: pcbnew/dialogs/dialog_netlist.cpp:299
 msgid "Too many errors: some are skipped"
 msgstr "Zbyt dużo błędów: niektóre zostały pominięte"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:295
+#: pcbnew/dialogs/dialog_netlist.cpp:303
 msgid "Check Modules"
 msgstr "Sprawdź footprinty"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:335
+#: pcbnew/dialogs/dialog_netlist.cpp:343
 msgid "Save contents of message window"
 msgstr "Zapisz zawartość okna z wiadomościami"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:352
+#: pcbnew/dialogs/dialog_netlist.cpp:360
 #, c-format
 msgid "Cannot write message contents to file \"%s\"."
 msgstr "Nie można zapisać zawartości okna wiadomości do pliku \"%s\"."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:354
+#: pcbnew/dialogs/dialog_netlist.cpp:362
 msgid "File Write Error"
 msgstr "Błąd zapisu pliku"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:405
+#: pcbnew/dialogs/dialog_netlist.cpp:413
 #, c-format
 msgid ""
 "Error loading netlist file:\n"
@@ -13356,15 +13357,15 @@ msgstr ""
 "Błąd podczas wczytywania listy sieci:\n"
 "%s"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:25
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:31
 msgid "Timestamp"
 msgstr "Znacznik czasowy"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:27
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
 msgid "Module Selection"
 msgstr "Wybór footprintu"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:29
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
 msgid ""
 "Select how footprints are recognized:\n"
 "by their reference (U1, R3...) (normal setting)\n"
@@ -13375,19 +13376,19 @@ msgstr ""
 "- poprzez znacznik czasowy (ustawienie specjalne po ponownym pełnym "
 "numerowaniu schematu)"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:39
 msgid "From netlist"
 msgstr "Z listy sieci"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:39
 msgid "From separate .cmp file"
 msgstr "Z oddzielnego pliku .cmp"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
 msgid "Module Name Source"
 msgstr "Źródło footprintu"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:37
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
 msgid ""
 "Source of footprints names for component:\n"
 "- the netlist (if you have filled the footprint field of each component  in "
@@ -13399,21 +13400,21 @@ msgstr ""
 "scheacie),\n"
 "- plik .cmp tworzony przez CvPcb."
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:47
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
 msgid "Keep"
 msgstr "Pozostaw"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:47
 msgid "Change"
 msgstr "Zmień"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:49
 msgid "Exchange Module"
 msgstr "Zamiana footprintów"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:45
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:51
 msgid ""
 "Keep or change an existing footprint when the netlist gives a different "
 "footprint"
@@ -13421,19 +13422,19 @@ msgstr ""
 "Zachowaj lub zmień istniejącą footprint, gdy lista sieci wskazuje inny "
 "footprint"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:57
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
 msgid "Unconnected Tracks"
 msgstr "Niepołączone ścieżki"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:59
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
 msgid "Keep or delete bad tracks after a netlist change"
 msgstr "Zachowaj lub usuń błędne ścieżki po zmianach w liście sieci"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:71
 msgid "Extra Footprints"
 msgstr "Usuwanie dodatkowych footprintów:"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:67
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:73
 msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
@@ -13441,45 +13442,66 @@ msgstr ""
 "Usuń footprinty znalezione na płytce nie będące na liście sieci\n"
 "Uwaga: tylko nie zablokowane footprinty zostaną usunięte"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:77
-msgid "Open Netlist File"
-msgstr "Otwórz plik listy sieci"
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:86
+msgid "Dry run. Only report changes in message panel"
+msgstr ""
+"Tryb bezpieczny (Pokaż tylko raport w oknie wiadomości nie modyfikując "
+"płytki)"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:80
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:87
+msgid ""
+"Dry Run:\n"
+"The netlist is read, but no change is actually made on board.\n"
+"Changes are only reported in message panel, for info"
+msgstr ""
+"Tryb bezpieczny:\n"
+"Lista sieci jest czytana, ale żadna zmiana na płytce nie zostanie wykonana.\n"
+"Zmiany sa wyłącznie wyświetlane w oknie wiadomości w celu wcześniejszej "
+"analizy"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:92
+msgid ""
+"Silent mode:\n"
+"Do not show the warning message before reading the netlist"
+msgstr ""
+"Tryb cichy:\n"
+"Nie pokazuj ostrzeżenia przed odczytaniem listy sieci"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:105
+msgid "Browse Netlist Files"
+msgstr "Przeglądaj pliki list sieci"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:108
 msgid "Read Current Netlist"
 msgstr "Wczytaj bieżącą listę sieci"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:82
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:110
 msgid "Read the current netlist and update connections and connectivity info"
 msgstr ""
 "Wczytaj bieżącą listę sieci i uaktualnij brakujące lub dodatkowe footprinty"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:86
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:117
 msgid "Test Footprints"
 msgstr "Testuj footprinty"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:87
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:118
 msgid "Read the current neltist file and list missing and extra footprints"
 msgstr "Wczytaj bieżącą netlistę i wypisz brakujące lub dodatkowe footprinty"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:91
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:122
 msgid "Rebuild Board Connectivity"
 msgstr "Odbuduj połączenia płytki"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:92
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:123
 msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
 msgstr ""
 "Odbuduj pełne połączenia (użyteczne po ręcznej zmianie nazwy sieci pola lut.)"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:96
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:127
 msgid "Save Messages to File"
 msgstr "Zapisz wiadomości do pliku"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:111
-msgid "Only report changes in message panel"
-msgstr "Tylko raportuj zmiany w oknie wiadomości (nie modyfikuj płytki)"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:123
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:142
 msgid "Netlist File:"
 msgstr "Plik listy sieci:"
 
@@ -18298,6 +18320,9 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:294
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Open Netlist File"
+#~ msgstr "Otwórz plik listy sieci"
 
 #~ msgid "Export to Eeschema"
 #~ msgstr "Eksportuj do Eeschema"
