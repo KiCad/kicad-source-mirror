@@ -21,8 +21,8 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/checkbox.h>
+#include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
@@ -51,13 +51,14 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		wxRadioBox* m_ChangeExistingFootprintCtrl;
 		wxRadioBox* m_DeleteBadTracks;
 		wxRadioBox* m_RemoveExtraFootprintsCtrl;
+		wxCheckBox* m_checkDryRun;
+		wxCheckBox* m_checkBoxSilentMode;
 		wxButton* m_buttonBrowse;
 		wxButton* m_buttonRead;
+		wxButton* m_buttonClose;
 		wxButton* m_buttonFPTest;
 		wxButton* m_buttonRebild;
 		wxButton* m_buttonSaveMessages;
-		wxButton* m_buttonClose;
-		wxCheckBox* m_checkDryRun;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticTextNetfilename;
 		wxTextCtrl* m_NetlistFilenameCtrl;
@@ -65,14 +66,15 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		wxTextCtrl* m_MessageWindow;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnClickSilentMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOpenNetlistClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReadNetlistFileClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUIValidNetlistFile( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTestFootprintsClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCompileRatsnestClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveMessagesToFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUISaveMessagesToFile( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
