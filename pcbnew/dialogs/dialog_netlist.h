@@ -40,10 +40,12 @@ class DIALOG_NETLIST : public DIALOG_NETLIST_FBP
 private:
     PCB_EDIT_FRAME* m_parent;
     wxDC*           m_dc;
+    bool            m_silentMode;
+    wxConfig*       m_config;
 
 public:
     DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC* aDC, const wxString & aNetlistFullFilename );
-    ~DIALOG_NETLIST() {};
+    ~DIALOG_NETLIST();
 
     // return true if the user choice is to use the .cmp file
     // created by CvPcb to know footprint names associated to components
@@ -90,6 +92,10 @@ private:
     void OnCompileRatsnestClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
     void OnSaveMessagesToFile( wxCommandEvent& aEvent );
+    void OnClickSilentMode( wxCommandEvent& event )
+    {
+        m_silentMode = m_checkBoxSilentMode->GetValue();
+    }
 
     void OnUpdateUISaveMessagesToFile( wxUpdateUIEvent& aEvent );
     void OnUpdateUIValidNetlistFile( wxUpdateUIEvent& aEvent );

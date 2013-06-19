@@ -39,7 +39,7 @@
 #include <invoke_sch_dialog.h>
 #include <dialog_helpers.h>
 #include <dialog_bom_base.h>
-#include <../common/dialogs/dialog_display_info_HTML_base.h>
+#include <html_messagebox.h>
 
 #define BOM_PLUGINS_KEY wxT("bom_plugins")
 #define BOM_PLUGIN_SELECTED_KEY wxT("bom_plugin_selected")
@@ -459,8 +459,8 @@ void DIALOG_BOM::OnEditPlugin( wxCommandEvent& event )
 
 void DIALOG_BOM::OnHelp( wxCommandEvent& event )
 {
-    DIALOG_DISPLAY_HTML_TEXT_BASE help_Dlg( this, wxID_ANY,
-        _("Bom generation Help"),wxDefaultPosition, wxSize( 750,550 ) );
+    HTML_MESSAGE_BOX help_Dlg( this, _("Bom Generation Help"),
+                               wxDefaultPosition, wxSize( 750,550 ) );
 
     wxString msg = FROM_UTF8(s_bomHelpInfo);
     help_Dlg.m_htmlWindow->AppendToPage( msg );
