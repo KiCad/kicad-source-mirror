@@ -1101,7 +1101,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 
             Save();
 
-            translate3( aCenterPoint.x, aCenterPoint.y, 0.0 );
+            translate3( aCenterPoint.x, aCenterPoint.y, layerDepth );
             Scale( VECTOR2D( aRadius, aRadius ) );
 
             begin( GL_TRIANGLES );
@@ -1114,13 +1114,13 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
                 double v2[] = { ( it + 1 )->x * innerScale, ( it + 1 )->y * innerScale };
                 double v3[] = { ( it + 1 )->x * outerScale, ( it + 1 )->y * outerScale };
 
-                vertex3( v0[0], v0[1], layerDepth );
-                vertex3( v1[0], v1[1], layerDepth );
-                vertex3( v2[0], v2[1], layerDepth );
+                vertex3( v0[0], v0[1], 0.0 );
+                vertex3( v1[0], v1[1], 0.0 );
+                vertex3( v2[0], v2[1], 0.0 );
 
-                vertex3( v1[0], v1[1], layerDepth );
-                vertex3( v3[0], v3[1], layerDepth );
-                vertex3( v2[0], v2[1], layerDepth );
+                vertex3( v1[0], v1[1], 0.0 );
+                vertex3( v3[0], v3[1], 0.0 );
+                vertex3( v2[0], v2[1], 0.0 );
             }
 
             end();
@@ -1135,12 +1135,12 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
         color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
         Save();
-
         translate3( aCenterPoint.x, aCenterPoint.y, layerDepth );
         Scale( VECTOR2D( aRadius, aRadius ) );
 
         if( isGrouping )
         {
+            // Multiplied by 3, as this is the number of vertices in a single triangle
             VBO_VERTEX* circle = new VBO_VERTEX[CIRCLE_POINTS * 3];
 
             memcpy( circle, verticesCircle->GetVertices(),
@@ -1197,11 +1197,12 @@ void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, d
 
         if( isGrouping )
         {
-            VBO_VERTEX* semiCircle = new VBO_VERTEX[CIRCLE_POINTS * 3];
+            // Multiplied by 3, as this is the number of vertices in a single triangle
+            VBO_VERTEX* semiCircle = new VBO_VERTEX[CIRCLE_POINTS / 2 * 3];
 
             memcpy( semiCircle, verticesSemiCircle->GetVertices(),
-                    VBO_ITEM::VertByteSize * CIRCLE_POINTS * 3 );
-            curVboItem->PushVertices( semiCircle, CIRCLE_POINTS * 3 );
+                    VBO_ITEM::VertByteSize * CIRCLE_POINTS / 2 * 3 );
+            curVboItem->PushVertices( semiCircle, CIRCLE_POINTS / 2 * 3 );
 
             delete[] semiCircle;
         }
@@ -1233,7 +1234,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
     VECTOR2D middlePoint   = 0.5 * startEndPoint;
 
     Save();
-    translate3( aCenterPoint.x, aCenterPoint.y, 0.0 );
+    translate3( aCenterPoint.x, aCenterPoint.y, layerDepth );
 
     if( isStrokeEnabled )
     {
@@ -1243,15 +1244,20 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
             color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
             VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
-            for( double alpha = aStartAngle; alpha < aEndAngle; alpha += alphaIncrement )
+            double alpha;
+            for( alpha = aStartAngle + alphaIncrement; alpha < aEndAngle; alpha += alphaIncrement )
             {
-                if( alpha > aEndAngle )
-                    alpha = aEndAngle;
-
                 VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
                 DrawLine( p, p_next );
 
                 p = p_next;
+            }
+
+            // Draw the last missing part
+            if( alpha != aEndAngle )
+            {
+                VECTOR2D p_last( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
+                DrawLine( p, p_last );
             }
         }
         else
@@ -1282,13 +1288,13 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
                 double v2[] = { cos( alpha ) * innerScale, sin( alpha ) * innerScale };
                 double v3[] = { cos( alpha ) * outerScale, sin( alpha ) * outerScale };
 
-                vertex3( v0[0], v0[1], layerDepth );
-                vertex3( v1[0], v1[1], layerDepth );
-                vertex3( v2[0], v2[1], layerDepth );
+                vertex3( v0[0], v0[1], 0.0 );
+                vertex3( v1[0], v1[1], 0.0 );
+                vertex3( v2[0], v2[1], 0.0 );
 
-                vertex3( v1[0], v1[1], layerDepth );
-                vertex3( v3[0], v3[1], layerDepth );
-                vertex3( v2[0], v2[1], layerDepth );
+                vertex3( v1[0], v1[1], 0.0 );
+                vertex3( v3[0], v3[1], 0.0 );
+                vertex3( v2[0], v2[1], 0.0 );
             }
 
             end();
@@ -1311,15 +1317,15 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
 
         for( alpha = aStartAngle; ( alpha + alphaIncrement ) < aEndAngle; )
         {
-            vertex3( middlePoint.x, middlePoint.y,  layerDepth );
-            vertex3( cos( alpha ),  sin( alpha ),   layerDepth );
+            vertex3( middlePoint.x, middlePoint.y,  0.0 );
+            vertex3( cos( alpha ),  sin( alpha ),   0.0 );
             alpha += alphaIncrement;
-            vertex3( cos( alpha ),  sin( alpha ),   layerDepth );
+            vertex3( cos( alpha ),  sin( alpha ),   0.0 );
         }
 
-        vertex3( middlePoint.x, middlePoint.y,  layerDepth );
-        vertex3( cos( alpha ),  sin( alpha ),   layerDepth );
-        vertex3( endPoint.x,    endPoint.y,     layerDepth );
+        vertex3( middlePoint.x, middlePoint.y,  0.0 );
+        vertex3( cos( alpha ),  sin( alpha ),   0.0 );
+        vertex3( endPoint.x,    endPoint.y,     0.0 );
         end();
     }
 

@@ -34,8 +34,6 @@
 #include <profile.h>
 #endif /* __WXDEBUG__ */
 
-#define CONTAINER_TEST 1
-
 using namespace KiGfx;
 
 VBO_CONTAINER::VBO_CONTAINER( int aSize ) :
@@ -181,9 +179,9 @@ void VBO_CONTAINER::Add( VBO_ITEM* aVboItem, const VBO_VERTEX* aVertex, unsigned
         vertexPtr->a = m_color[3];
 
         // Apply currently used shader
-        for( unsigned int i = 0; i < VBO_ITEM::ShaderStride; ++i )
+        for( unsigned int j = 0; j < VBO_ITEM::ShaderStride; ++j )
         {
-            vertexPtr->shader[i] = m_shader[i];
+            vertexPtr->shader[j] = m_shader[j];
         }
     }
 
