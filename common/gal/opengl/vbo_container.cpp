@@ -225,7 +225,9 @@ unsigned int VBO_CONTAINER::allocate( VBO_ITEM* aVboItem, unsigned int aSize )
 
         // An error has occurred
         if( !result )
+        {
             return UINT_MAX;
+        }
     }
 
     // Look for the space with at least given size
@@ -236,7 +238,9 @@ unsigned int VBO_CONTAINER::allocate( VBO_ITEM* aVboItem, unsigned int aSize )
         // This means that there is enough space for
         // storing vertices, but the space is not continous
         if( !defragment() )
-            return false;
+        {
+            return UINT_MAX;
+        }
 
         // We can take the first free chunk, as there is only one after defragmentation
         // and we can be sure that it provides enough space to store the object
@@ -245,6 +249,7 @@ unsigned int VBO_CONTAINER::allocate( VBO_ITEM* aVboItem, unsigned int aSize )
 
     unsigned int chunkSize = it->first;
     unsigned int chunkOffset = it->second;
+
     m_freeChunks.erase( it );
 
     wxASSERT( chunkSize >= aSize );

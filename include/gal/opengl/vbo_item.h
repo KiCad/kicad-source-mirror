@@ -41,7 +41,6 @@ typedef struct VBO_VERTEX
     GLfloat x, y, z;        // Coordinates
     GLfloat r, g, b, a;     // Color
     GLfloat shader[4];      // Shader type & params
-    GLfloat _padding;
 } VBO_VERTEX;
 
 class VBO_CONTAINER;
