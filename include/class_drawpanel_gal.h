@@ -79,7 +79,7 @@ public:
     virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
 
 protected:
-    void onPaint( wxPaintEvent& aEvent );
+    void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
 
     KiGfx::GAL*              m_gal;              ///< Interface for drawing objects on a 2D-surface
@@ -90,6 +90,7 @@ protected:
     KiGfx::WX_VIEW_CONTROLS* m_viewControls;     ///< Control for VIEW (moving, zooming, etc.)
     GalType                  m_currentGal;       ///< Currently used GAL
     bool                     m_useShaders;       ///< Are shaders used? (only for OpenGL GAL)
+    wxLongLong               m_timeStamp;
 
     std::string              m_galShaderPath;    ///< Path to shader files, used in OpenGL mode
 };
