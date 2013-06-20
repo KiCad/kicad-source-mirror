@@ -88,6 +88,8 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
+
+    m_timeStamp = 0;
 }
 
 
@@ -107,7 +109,7 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 }
 
 
-void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& aEvent )
+void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
     Refresh();
 }
@@ -121,6 +123,14 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 {
+    const unsigned int FPS_LIMIT = 50;
+
+    // Framerate limiter
+    wxLongLong currentTimeStamp = wxGetLocalTimeMillis();
+    if( currentTimeStamp - m_timeStamp < ( 1 / FPS_LIMIT ) )
+        return;
+    m_timeStamp = currentTimeStamp;
+
 #ifdef __WXDEBUG__
     prof_counter time;
 
