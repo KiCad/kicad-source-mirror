@@ -540,7 +540,7 @@ void PCB_MODULE::AddToBoard()
     TEXTE_MODULE* val_text = &module->Value();
 
     val_text->SetText( m_value.text );
-    val_text->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );
+    val_text->SetType( TEXTE_MODULE::TEXT_is_VALUE );
 
     val_text->SetPos0( wxPoint( m_value.correctedPositionX, m_value.correctedPositionY ) );
     val_text->SetSize( wxSize( KiROUND( m_value.textHeight / 2 ),
