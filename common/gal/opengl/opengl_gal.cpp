@@ -755,8 +755,6 @@ void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoin
 
 void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
 {
-    bool isFirstPoint = true;
-
     if( isUseShader )
     {
         // This method reduces amount of triangles used for drawing
@@ -771,6 +769,7 @@ void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
         return;
     }
 
+    bool isFirstPoint = true;
     LineCap savedLineCap = lineCap;
     bool isFirstLine = true;
     VECTOR2D startEndVector;

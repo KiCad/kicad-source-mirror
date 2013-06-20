@@ -127,7 +127,7 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 
     // Framerate limiter
     wxLongLong currentTimeStamp = wxGetLocalTimeMillis();
-    if( currentTimeStamp - m_timeStamp < ( 1 / FPS_LIMIT ) )
+    if( currentTimeStamp - m_timeStamp < ( 1000 / FPS_LIMIT ) )
         return;
     m_timeStamp = currentTimeStamp;
 
