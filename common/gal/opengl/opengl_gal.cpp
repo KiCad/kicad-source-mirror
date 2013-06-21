@@ -665,7 +665,7 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
                               double aWidth )
 {
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
-    double   lineAngle      = atan2( startEndVector.y, startEndVector.x );
+    double   lineAngle      = startEndVector.Angle();
 
     if( isFillEnabled )
     {
@@ -707,7 +707,7 @@ inline void OPENGL_GAL::drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D
 {
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
     // double   lineLength     = startEndVector.EuclideanNorm();
-    double   lineAngle      = atan2( startEndVector.y, startEndVector.x );
+    double   lineAngle      = startEndVector.Angle();
 
     switch( lineCap )
     {
