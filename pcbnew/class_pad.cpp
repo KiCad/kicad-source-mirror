@@ -764,8 +764,27 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     }
     else
     {
-        // Multi layer pad with hole - pad is shown on one common layer, hole on the other
-        aLayers[0] = ITEM_GAL_LAYER( PADS_VISIBLE );
+        if( IsOnLayer( LAYER_N_FRONT ) && IsOnLayer( LAYER_N_BACK ) )
+        {
+            // Multi layer pad
+            aLayers[0] = ITEM_GAL_LAYER( PADS_VISIBLE );
+        }
+        else if( IsOnLayer( LAYER_N_FRONT ) )
+        {
+            aLayers[0] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
+        }
+        else if( IsOnLayer( LAYER_N_BACK ) )
+        {
+            aLayers[0] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
+        }
+#ifdef __WXDEBUG__
+        else    // Should not occur
+        {
+            wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD on layer different than FRONT/BACK") );
+        }
+#endif
+
+        // Draw a hole
         aLayers[1] = ITEM_GAL_LAYER( PAD_HOLES_VISIBLE );
 
         aCount = 2;
