@@ -328,11 +328,16 @@ S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR )
 
 BOARD_ITEM* PCB_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
 {
-    T token;
-    BOARD_ITEM* item;
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+    T               token;
+    BOARD_ITEM*     item;
+    LOCALE_IO       toggle;
 
-    token = NextTok();
+    // MODULEs can be prefixed with an initial block of single line comments and these
+    // are kept for Format() so they round trip in s-expression form.  BOARDs might
+    // eventually do the same, but currently do not.
+    std::auto_ptr<wxArrayString> initial_comments( ReadCommentLines() );
+
+    token = CurTok();
 
     if( token != T_LEFT )
         Expecting( T_LEFT );
@@ -347,7 +352,7 @@ BOARD_ITEM* PCB_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
         break;
 
     case T_module:
-        item = (BOARD_ITEM*) parseMODULE();
+        item = (BOARD_ITEM*) parseMODULE( initial_comments.release() );
         break;
 
     default:
@@ -1514,7 +1519,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
+MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERROR, PARSE_ERROR )
 {
     wxCHECK_MSG( CurTok() == T_module, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as MODULE." ) );
@@ -1523,6 +1528,8 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
     T       token;
 
     auto_ptr< MODULE > module( new MODULE( m_board ) );
+
+    module->SetInitialComments( aInitialComments );
 
     NeedSYMBOLorNUMBER();
     module->SetLibRef( FromUTF8() );

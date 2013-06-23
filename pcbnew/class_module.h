@@ -473,6 +473,30 @@ public:
      */
     static const wxChar* ReturnStringLibNameInvalidChars( bool aUserReadable );
 
+    /**
+     * Function SetInitialComments
+     * takes ownership of caller's heap allocated aInitialComments block.  The comments
+     * are single line strings already containing the s-expression comments with
+     * optional leading whitespace and then a '#' character followed by optional
+     * single line text (text with no line endings, not even one).
+     * This block of single line comments will be output upfront of any generated
+     * s-expression text in the PCBIO::Format() function.
+     * <p>
+     * Note that a block of single line comments constitutes a multiline block of
+     * single line comments.  That is, the block is made of consecutive single line
+     * comments.
+     * @param aInitialComments is a heap allocated wxArrayString or NULL, which the caller
+     *  gives up ownership of over to this MODULE.
+     */
+    void SetInitialComments( wxArrayString* aInitialComments )
+    {
+        delete m_initial_comments;
+        m_initial_comments = aInitialComments;
+    }
+
+    /// Return the initial comments block or NULL if none, without transfer of ownership.
+    const wxArrayString* GetInitialComments()   { return m_initial_comments; }
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
 #endif
@@ -512,6 +536,9 @@ private:
     int               m_LocalSolderPasteMargin;   ///< Solder paste margin absolute value
     double            m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio
                                                        ///< value of pad size
+
+    wxArrayString*    m_initial_comments;   ///< leading s-expression comments in the module,
+                                            ///< lazily allocated only if needed for speed
 };
 
 #endif     // MODULE_H_

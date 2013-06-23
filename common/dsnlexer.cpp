@@ -50,7 +50,7 @@ static int compare( const void* a1, const void* a2 )
 
 //-----<DSNLEXER>-------------------------------------------------------------
 
-void DSNLEXER::init()
+inline void DSNLEXER::init()
 {
     curTok  = DSN_NONE;
     prevTok = DSN_NONE;
@@ -502,10 +502,16 @@ L_read:
             {
                 if( commentsAreTokens )
                 {
-                    // save the entire line, including new line as the current token.
-                    // the '#' character may not be at offset zero.
-                    curText = start;      // entire line is the token
-                    cur     = start;      // ensure a good curOffset below
+                    // Grab the entire current line [excluding end of line char(s)] as the
+                    // current token.  The '#' character may not be at offset zero.
+
+                    while( limit[-1] == '\n' || limit[-1] == '\r' )
+                        --limit;
+
+                    curText.clear();
+                    curText.append( start, limit );
+
+                    cur     = start;        // ensure a good curOffset below
                     curTok  = DSN_COMMENT;
                     head    = limit;        // do a readLine() on next call in here.
                     goto exit;
@@ -739,3 +745,23 @@ exit:   // single point of exit, no returns elsewhere please.
     return curTok;
 }
 
+
+wxArrayString* DSNLEXER::ReadCommentLines() throw( IO_ERROR )
+{
+    wxArrayString*  ret = 0;
+    bool            cmt_setting = SetCommentsAreTokens( true );
+    int             tok = NextTok();
+
+    if( tok == DSN_COMMENT )
+    {
+        ret = new wxArrayString();
+
+        do
+            ret->Add( FromUTF8() );
+        while( ( tok = NextTok() ) == DSN_COMMENT );
+    }
+
+    SetCommentsAreTokens( cmt_setting );
+
+    return ret;
+}
