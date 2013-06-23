@@ -101,12 +101,12 @@ protected:
 
     bool                commentsAreTokens;      ///< true if should return comments as tokens
 
-    int                 prevTok;        ///< curTok from previous NextTok() call.
-    int                 curOffset;      ///< offset within current line of the current token
+    int                 prevTok;                ///< curTok from previous NextTok() call.
+    int                 curOffset;              ///< offset within current line of the current token
 
-    int                 curTok;         ///< the current token obtained on last NextTok()
-    std::string         curText;        ///< the text of the current token
-    std::string         lowercase;      ///< a scratch buf holding token in lowercase
+    int                 curTok;                 ///< the current token obtained on last NextTok()
+    std::string         curText;                ///< the text of the current token
+    std::string         lowercase;              ///< a scratch buf holding token in lowercase
 
     const KEYWORD*      keywords;
     unsigned            keywordCount;
@@ -367,6 +367,19 @@ public:
         commentsAreTokens = val;
         return old;
     }
+
+    /**
+     * Function ReadCommentLines
+     * checks the next sequence of tokens and reads them into a wxArrayString
+     * if they are comments.  Reading continues until a non-comment token is
+     * encountered, and such last read token remains as CurTok() and as CurText().
+     * No push back or "un get" mechanism is used for this support.  Upon return
+     * you simply avoid calling NextTok() for the next token, but rather CurTok().
+     *
+     * @return wxArrayString* - heap allocated block of comments, or NULL if none;
+     *   caller owns the allocation and must delete if not NULL.
+     */
+    wxArrayString* ReadCommentLines() throw( IO_ERROR );
 
     /**
      * Function IsSymbol

@@ -881,6 +881,14 @@ void PCB_IO::format( PCB_TARGET* aTarget, int aNestLevel ) const
 void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     throw( IO_ERROR )
 {
+    const wxArrayString* initial_comments = aModule->GetInitialComments();
+
+    if( initial_comments )
+    {
+        for( unsigned i=0; i<initial_comments->GetCount();  ++i )
+            m_out->Print( aNestLevel, "%s\n",  TO_UTF8( (*initial_comments)[i] ) );
+    }
+
     m_out->Print( aNestLevel, "(module %s", m_out->Quotew( aModule->GetLibRef() ).c_str() );
 
     if( aModule->IsLocked() )

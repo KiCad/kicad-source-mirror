@@ -53,7 +53,8 @@
 
 
 MODULE::MODULE( BOARD* parent ) :
-    BOARD_ITEM( (BOARD_ITEM*) parent, PCB_MODULE_T )
+    BOARD_ITEM( (BOARD_ITEM*) parent, PCB_MODULE_T ),
+    m_initial_comments( 0 )
 {
     m_Attributs    = MOD_DEFAULT;
     m_Layer        = LAYER_N_FRONT;
@@ -82,7 +83,8 @@ MODULE::MODULE( BOARD* parent ) :
 
 
 MODULE::MODULE( const MODULE& aModule ) :
-    BOARD_ITEM( aModule )
+    BOARD_ITEM( aModule ),
+    m_initial_comments( 0 )
 {
     m_Pos = aModule.m_Pos;
     m_LibRef = aModule.m_LibRef;
@@ -171,6 +173,7 @@ MODULE::~MODULE()
 {
     delete m_Reference;
     delete m_Value;
+    delete m_initial_comments;
 }
 
 
@@ -185,7 +188,7 @@ void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 
     if( GetBoard()->IsElementVisible( ANCHOR_VISIBLE ) )
     {
-        GRDrawAnchor( panel->GetClipBox(), DC, m_Pos.x, m_Pos.y, 
+        GRDrawAnchor( panel->GetClipBox(), DC, m_Pos.x, m_Pos.y,
                       dim_ancre,
                       g_ColorsSettings.GetItemColor( ANCHOR_VISIBLE ) );
     }
