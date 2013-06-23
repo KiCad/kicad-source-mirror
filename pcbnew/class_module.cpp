@@ -83,8 +83,7 @@ MODULE::MODULE( BOARD* parent ) :
 
 
 MODULE::MODULE( const MODULE& aModule ) :
-    BOARD_ITEM( aModule ),
-    m_initial_comments( 0 )
+    BOARD_ITEM( aModule )
 {
     m_Pos = aModule.m_Pos;
     m_LibRef = aModule.m_LibRef;
@@ -166,6 +165,9 @@ MODULE::MODULE( const MODULE& aModule ) :
 
     // Ensure auxiliary data is up to date
     CalculateBoundingBox();
+
+    m_initial_comments = aModule.m_initial_comments ?
+                            new wxArrayString( *aModule.m_initial_comments ) : 0;
 }
 
 
