@@ -28,6 +28,15 @@
 
 using namespace KiGfx;
 
+COLOR4D::COLOR4D( EDA_COLOR_T aColor )
+{
+    r = g_ColorRefs[aColor].m_Red;
+    g = g_ColorRefs[aColor].m_Green;
+    b = g_ColorRefs[aColor].m_Blue;
+    a = 1.0;
+}
+
+
 const bool COLOR4D::operator==( const COLOR4D& aColor )
 {
     return a == aColor.a && r == aColor.r && g == aColor.g && b == aColor.b;
