@@ -1909,10 +1909,12 @@ void OPENGL_GAL::DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
 
     if( aStartPoint.x == aEndPoint.x )
     {
+        // Vertical grid line
         perpendicularVector = VECTOR2D( 0.5 * lineWidth, 0 );
     }
     else
     {
+        // Horizontal grid line
         perpendicularVector = VECTOR2D( 0, 0.5 * lineWidth );
     }
 
