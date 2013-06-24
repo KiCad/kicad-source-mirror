@@ -236,7 +236,15 @@ void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
 void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {
     SetGridVisibility( !IsGridVisible() );
-    m_canvas->Refresh();
+#ifdef KICAD_GAL
+    if( m_galCanvasActive )
+    {
+        m_galCanvas->GetGAL()->SetGridVisibility( IsGridVisible() );
+        m_galCanvas->Refresh();
+    }
+    else
+#endif /* KICAD_GAL */
+        m_canvas->Refresh();
 }
 
 
@@ -388,6 +396,14 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     m_LastGridSizeId = id - ID_POPUP_GRID_LEVEL_1000;
     screen->SetGrid( id );
     screen->SetCrossHairPosition( screen->RefPos( true ) );
+#ifdef KICAD_GAL
+    if( m_galCanvasActive )
+    {
+        KiGfx::GAL* gal = m_galCanvas->GetGAL();
+        gal->SetGridSize( VECTOR2D( screen->GetGrid().m_Size ) );
+    }
+#endif /* KICAD_GAL */
+
     Refresh();
 }
 
@@ -945,32 +961,44 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     KiGfx::VIEW* view = m_galCanvas->GetView();
     KiGfx::GAL* gal = m_galCanvas->GetGAL();
 
-    if( aEnable && m_galCanvasActive )
-    {
-        // When we switch between GAL based canvases, all we need is a refresh
-        m_galCanvas->Refresh();
-    }
-
-    if( !( aEnable ^ m_galCanvasActive ) )
-        return;
-
     double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
 
     // Display the same view after canvas switching
     if( aEnable )
     {
-        double zoom =  1 / ( zoomFactor * m_canvas->GetZoom() );
-        view->SetScale( zoom );
+        BASE_SCREEN* screen = GetScreen();
 
-        view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+        // Switch to GAL rendering
+        if( !m_galCanvasActive )
+        {
+            // Change view settings only if GAL was not active previously
+            double zoom = 1.0 / ( zoomFactor * m_canvas->GetZoom() );
+            view->SetScale( zoom );
+            view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+        }
+
+        // Set up grid settings
+        gal->SetGridVisibility( IsGridVisible() );
+        // Default grid color - dark cyan does not look good
+        //gal->SetGridColor( KiGfx::COLOR4D( GetGridColor() ) );
+        gal->SetGridColor( KiGfx::COLOR4D( 0.1, 0.1, 0.1, 1.0 ) );
+        gal->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
+        gal->SetGridOrigin( VECTOR2D( screen->GetGridOrigin() ) );
+        gal->SetGridOriginMarkerSize( 15 );
+        gal->SetGridDrawThreshold( 10 );
     }
     else
     {
-        double zoom = 1 / ( zoomFactor * view->GetScale() );
-        m_canvas->SetZoom( zoom );
+        // Switch to standard rendering
+        if( m_galCanvasActive )
+        {
+            // Change view settings only if GAL was active previously
+            double zoom = 1.0 / ( zoomFactor * view->GetScale() );
+            m_canvas->SetZoom( zoom );
 
-        VECTOR2D center = view->GetCenter();
-        RedrawScreen( wxPoint( center.x, center.y ), false );
+            VECTOR2D center = view->GetCenter();
+            RedrawScreen( wxPoint( center.x, center.y ), false );
+        }
     }
 
     m_canvas->SetEvtHandlerEnabled( !aEnable );

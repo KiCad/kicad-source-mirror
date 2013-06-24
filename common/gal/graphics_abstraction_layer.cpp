@@ -44,6 +44,7 @@ GAL::GAL()
     SetZoomFactor( 1.0 );
     SetFillColor( COLOR4D( 0.0, 0.0, 0.0, 0.0 ) );
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
+    SetGridVisibility( true );
     SetGridColor( COLOR4D( 1, 1, 1, 0.1 ) );
     SetCoarseGrid( 5 );
     SetLineWidth( 1.0 );
@@ -58,6 +59,9 @@ GAL::~GAL()
 
 void GAL::DrawGrid()
 {
+    if( !gridVisibility )
+        return;
+
     // The grid consists of lines
     // For the drawing the start points, end points and increments have to be calculated in world coordinates
     VECTOR2D    screenStartPoint( 0, 0 );
@@ -98,6 +102,7 @@ void GAL::DrawGrid()
 
     double origSize = (double) gridOriginMarkerSize / worldScale;
 
+    // Draw the origin marker
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     SetIsFill( false );
     DrawLine( gridOrigin + VECTOR2D( -origSize, -origSize ), gridOrigin + VECTOR2D( origSize, origSize ) );
@@ -109,6 +114,7 @@ void GAL::DrawGrid()
     if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) < gridDrawThreshold )
         return;
 
+    SetLayerDepth( 0.0 );
     // Now draw the grid, every coarse grid line gets the double width
     for( int j = gridStartY; j < gridEndY; j += 1 )
     {

@@ -525,6 +525,16 @@ public:
     // -------------
 
     /**
+     * @brief Sets the visibility setting of the grid.
+     *
+     * @param aVisibility is the new visibility setting of the grid.
+     */
+    inline void SetGridVisibility( bool aVisibility )
+    {
+        gridVisibility = aVisibility;
+    }
+
+    /**
      * @brief Set the origin point for the grid.
      *
      * @param aGridOrigin is a vector containing the grid origin point, in world coordinates.
@@ -698,13 +708,15 @@ protected:
     double             layerDepth;             ///< The actual layer depth
     VECTOR2D           depthRange;             ///< Range of the depth
 
+    // Grid settings
+    bool               gridVisibility;         ///< Should the grid be shown
     VECTOR2D           gridSize;               ///< The grid size
     VECTOR2D           gridOrigin;             ///< The grid origin
     COLOR4D            gridColor;              ///< Color of the grid
     int                gridTick;               ///< Every tick line gets the double width
     double             gridLineWidth;          ///< Line width of the grid
     int                gridDrawThreshold;      ///< Minimum screen size of the grid (pixels)
-                                                ///< below which the grid is not drawn
+                                               ///< below which the grid is not drawn
     int                gridOriginMarkerSize;   ///< Grid origin indicator size (pixels)
 
     bool               isCursorEnabled;        ///< Is the cursor enabled?

@@ -140,11 +140,6 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
     m_gal->BeginDrawing();
     m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0, 0, 0, 1.0 ) );
     m_gal->ClearScreen();
-    m_gal->SetGridOrigin( VECTOR2D( 0, 0 ) );
-    m_gal->SetGridOriginMarkerSize( 15 );
-    m_gal->SetGridSize( VECTOR2D( METRIC_UNIT_LENGTH / 10000.0, METRIC_UNIT_LENGTH / 10000.0 ) );
-    m_gal->SetGridDrawThreshold( 10 );
-    m_gal->SetLayerDepth( 0 );
 
     m_gal->DrawGrid();
     m_view->Redraw();
