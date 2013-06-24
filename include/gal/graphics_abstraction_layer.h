@@ -219,7 +219,7 @@ public:
      *
      * @param aColor is the color for filling.
      */
-    inline virtual void SetFillColor( COLOR4D aColor )
+    inline virtual void SetFillColor( const COLOR4D& aColor )
     {
         fillColor = aColor;
     }
@@ -229,7 +229,7 @@ public:
      *
      * @param aColor is the color for stroking the outline.
      */
-    inline virtual void SetStrokeColor( COLOR4D aColor )
+    inline virtual void SetStrokeColor( const COLOR4D& aColor )
     {
         strokeColor = aColor;
     }
@@ -249,7 +249,7 @@ public:
      *
      * @param aColor is the color for background filling.
      */
-    virtual void SetBackgroundColor( COLOR4D aColor ) = 0;
+    virtual void SetBackgroundColor( const COLOR4D& aColor ) = 0;
 
     /**
      * @brief Set the style of the line caps.
@@ -569,7 +569,7 @@ public:
      *
      * @param aGridColor is the grid color, it should have a low alpha value for the best effect.
      */
-    inline void SetGridColor( COLOR4D aGridColor )
+    inline void SetGridColor( const COLOR4D& aGridColor )
     {
         gridColor = aGridColor;
     }
@@ -637,7 +637,7 @@ public:
      *
      * @param aCursorColor is the color of the cursor.
      */
-    inline void SetCursorColor( COLOR4D aCursorColor )
+    inline void SetCursorColor( const COLOR4D& aCursorColor )
     {
         cursorColor = aCursorColor;
     }

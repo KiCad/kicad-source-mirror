@@ -1440,7 +1440,7 @@ void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aContro
 }
 
 
-void OPENGL_GAL::SetStrokeColor( COLOR4D aColor )
+void OPENGL_GAL::SetStrokeColor( const COLOR4D& aColor )
 {
     isSetAttributes = true;
     strokeColor     = aColor;
@@ -1450,14 +1450,14 @@ void OPENGL_GAL::SetStrokeColor( COLOR4D aColor )
 }
 
 
-void OPENGL_GAL::SetFillColor( COLOR4D aColor )
+void OPENGL_GAL::SetFillColor( const COLOR4D& aColor )
 {
     isSetAttributes = true;
     fillColor = aColor;
 }
 
 
-void OPENGL_GAL::SetBackgroundColor( COLOR4D aColor )
+void OPENGL_GAL::SetBackgroundColor( const COLOR4D& aColor )
 {
     isSetAttributes = true;
     backgroundColor = aColor;

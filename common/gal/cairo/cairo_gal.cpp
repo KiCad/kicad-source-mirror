@@ -413,7 +413,7 @@ void CAIRO_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControl
 }
 
 
-void CAIRO_GAL::SetBackgroundColor( COLOR4D aColor )
+void CAIRO_GAL::SetBackgroundColor( const COLOR4D& aColor )
 {
     backgroundColor = aColor;
 }
@@ -449,7 +449,7 @@ void CAIRO_GAL::SetIsStroke( bool aIsStrokeEnabled )
 }
 
 
-void CAIRO_GAL::SetStrokeColor( COLOR4D aColor )
+void CAIRO_GAL::SetStrokeColor( const COLOR4D& aColor )
 {
     storePath();
 
@@ -468,7 +468,7 @@ void CAIRO_GAL::SetStrokeColor( COLOR4D aColor )
 }
 
 
-void CAIRO_GAL::SetFillColor( COLOR4D aColor )
+void CAIRO_GAL::SetFillColor( const COLOR4D& aColor )
 {
     storePath();
     fillColor = aColor;
