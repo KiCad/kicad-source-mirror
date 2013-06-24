@@ -76,23 +76,42 @@ public:
      * @param aShaderSourceName is the shader source file name.
      * @param aShaderType is the type of the shader.
      */
-    void AddSource( std::string aShaderSourceName, ShaderType aShaderType );
+    void AddSource( const std::string& aShaderSourceName, ShaderType aShaderType );
 
     /**
-     * Link the shaders.
+     * @brief Link the shaders.
+     *
      * @return true in case of success, false otherwise.
      */
     bool Link();
 
     /**
-     * Use the shader.
+     * @brief Use the shader.
      */
-    void Use();
+    inline void Use()
+    {
+        glUseProgram( programNumber );
+        active = true;
+    }
 
     /**
      * @brief Deactivate the shader and use the default OpenGL program.
      */
-    void Deactivate();
+    inline void Deactivate()
+    {
+        glUseProgram( 0 );
+        active = false;
+    }
+
+    /**
+     * @brief Returns the current state of the shader.
+     *
+     * @return True if any of shaders is enabled.
+     */
+    inline bool IsActive() const
+    {
+        return active;
+    }
 
     /**
      * @brief Configure the geometry shader - has to be done before linking!
@@ -113,7 +132,7 @@ public:
      *
      * @param aParameterName is the name of the parameter.
      */
-    void AddParameter( std::string aParameterName );
+    void AddParameter( const std::string& aParameterName );
 
     /**
      * @brief Set a parameter of the shader.
@@ -129,7 +148,7 @@ public:
      * @param aAttributeName is the name of the attribute.
      * @return the location.
      */
-    int GetAttribute( std::string aAttributeName );
+    int GetAttribute( std::string aAttributeName ) const;
 
 private:
 
@@ -152,6 +171,7 @@ private:
     GLuint              programNumber;      ///< Shader program number
     bool                isProgramCreated;   ///< Flag for program creation
     bool                isShaderLinked;     ///< Is the shader linked?
+    bool                active;             ///< Is any of shaders used?
     GLuint              maximumVertices;    ///< The maximum of vertices to be generated
     GLuint              geomInputType;      ///< Input type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]
     GLuint              geomOutputType;     ///< Output type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]

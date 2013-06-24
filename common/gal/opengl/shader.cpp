@@ -35,13 +35,14 @@
 
 using namespace KiGfx;
 
-SHADER::SHADER()
+SHADER::SHADER() :
+        isProgramCreated( false ),
+        isShaderLinked( false ),
+        maximumVertices( 4 ),
+        active( false ),
+        geomInputType( GL_LINES ),
+        geomOutputType( GL_LINES )
 {
-    isProgramCreated    = false;
-    isShaderLinked      = false;
-    maximumVertices     = 4;
-    geomInputType       = GL_LINES;
-    geomOutputType      = GL_LINES;
 }
 
 
@@ -108,7 +109,7 @@ std::string SHADER::ReadSource( std::string aShaderSourceName )
 }
 
 
-void SHADER::AddSource( std::string aShaderSourceName, ShaderType aShaderType )
+void SHADER::AddSource( const std::string& aShaderSourceName, ShaderType aShaderType )
 {
     if( isShaderLinked )
     {
@@ -195,19 +196,7 @@ bool SHADER::Link()
 }
 
 
-void SHADER::Use()
-{
-    glUseProgram( programNumber );
-}
-
-
-void SHADER::Deactivate()
-{
-    glUseProgram( 0 );
-}
-
-
-void SHADER::AddParameter( std::string aParameterName )
+void SHADER::AddParameter( const std::string& aParameterName )
 {
     GLint location = glGetUniformLocation( programNumber, aParameterName.c_str() );
 
@@ -224,7 +213,7 @@ void SHADER::SetParameter( int parameterNumber, float value )
 }
 
 
-int SHADER::GetAttribute( std::string aAttributeName )
+int SHADER::GetAttribute( std::string aAttributeName ) const
 {
     return glGetAttribLocation( programNumber, aAttributeName.c_str() );
 }
