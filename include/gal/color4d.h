@@ -27,6 +27,8 @@
 #ifndef COLOR4D_H_
 #define COLOR4D_H_
 
+#include <colors.h>
+
 namespace KiGfx
 {
 /**
@@ -54,6 +56,14 @@ public:
         r( aRed ), g( aGreen ), b( aBlue ), a( aAlpha )
     {
     }
+
+    /**
+     * @brief Constructor
+     *
+     * @param aColor is one of KiCad's palette colors.
+     * @see EDA_COLOR_T
+     */
+    COLOR4D( EDA_COLOR_T aColor );
 
     /**
      * Function Highlight
