@@ -37,6 +37,17 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
 }
 
 
+#ifdef WX_COMPATIBILITY
+    COLOR4D::COLOR4D( const wxColour& aColor )
+    {
+        r = aColor.Red();
+        g = aColor.Green();
+        b = aColor.Blue();
+        a = aColor.Alpha();
+    }
+#endif
+
+
 const bool COLOR4D::operator==( const COLOR4D& aColor )
 {
     return a == aColor.a && r == aColor.r && g == aColor.g && b == aColor.b;

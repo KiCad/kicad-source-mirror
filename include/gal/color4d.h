@@ -65,6 +65,15 @@ public:
      */
     COLOR4D( EDA_COLOR_T aColor );
 
+#ifdef WX_COMPATIBILITY
+    /**
+     * @brief Constructor
+     *
+     * @param aColor is the color type used by wxWidgets.
+     */
+    COLOR4D( const wxColour& aColor );
+#endif /* WX_COMPATIBLITY */
+
     /**
      * Function Highlight
      * Makes the color brighter by a given factor.
