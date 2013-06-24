@@ -97,13 +97,12 @@ void GAL::DrawGrid()
     double  width = gridLineWidth / worldScale;
     double  doubleWidth = 2 * width;
 
-    // Set line width & color
-    SetLineWidth( width );
-
-    double origSize = (double) gridOriginMarkerSize / worldScale;
+    SetLayerDepth( 0.0 );
 
     // Draw the origin marker
+    double origSize = (double) gridOriginMarkerSize / worldScale;
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
+    SetLineWidth( width );
     SetIsFill( false );
     DrawLine( gridOrigin + VECTOR2D( -origSize, -origSize ), gridOrigin + VECTOR2D( origSize, origSize ) );
     DrawLine( gridOrigin + VECTOR2D( -origSize, origSize ),  gridOrigin + VECTOR2D( origSize, -origSize ) );

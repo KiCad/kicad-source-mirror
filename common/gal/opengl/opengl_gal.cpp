@@ -113,20 +113,18 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     InitTesselatorCallbacks( tesselator );
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 
-    if( !isUseShader )
-    {
-        // (3 vertices per triangle) * (2 items [circle&semicircle]) * (number of points per item)
-        precomputedContainer = new VBO_CONTAINER( 3 * 2 * CIRCLE_POINTS );
+    // Buffered semicircle & circle vertices
+    // (3 vertices per triangle) * (2 items [circle&semicircle]) * (number of points per item)
+    precomputedContainer = new VBO_CONTAINER( 3 * 2 * CIRCLE_POINTS );
 
-        // Compute the unit circles, used for speed up of the circle drawing
-        verticesCircle = new VBO_ITEM( precomputedContainer );
-        computeUnitCircle();
-        verticesCircle->Finish();
+    // Compute the unit circles, used for speed up of the circle drawing
+    verticesCircle = new VBO_ITEM( precomputedContainer );
+    computeUnitCircle();
+    verticesCircle->Finish();
 
-        verticesSemiCircle = new VBO_ITEM( precomputedContainer );
-        computeUnitSemiCircle();
-        verticesSemiCircle->Finish();
-    }
+    verticesSemiCircle = new VBO_ITEM( precomputedContainer );
+    computeUnitSemiCircle();
+    verticesSemiCircle->Finish();
 }
 
 
@@ -134,12 +132,9 @@ OPENGL_GAL::~OPENGL_GAL()
 {
     glFlush();
 
-    if( !isUseShader )
-    {
-        delete verticesCircle;
-        delete verticesSemiCircle;
-        delete precomputedContainer;
-    }
+    delete verticesCircle;
+    delete verticesSemiCircle;
+    delete precomputedContainer;
 
     // Delete the buffers
     if( isFrameBufferInitialized )
@@ -449,8 +444,6 @@ void OPENGL_GAL::BeginDrawing()
 
 void OPENGL_GAL::blitMainTexture( bool aIsClearFrameBuffer )
 {
-    shader.Deactivate();
-
     // Don't use blending for the final blitting
     glDisable( GL_BLEND );
 
@@ -606,7 +599,7 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
 
     begin( GL_TRIANGLES );
 
-    if( isUseShader )
+    if( isUseShader && isGrouping )
     {
         glm::vec4 vector( perpendicularVector.x, perpendicularVector.y, 0.0, 0.0 );
 
@@ -1026,7 +1019,7 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
 
 void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 {
-    if( isUseShader )
+    if( isUseShader && isGrouping )
     {
         if( isFillEnabled )
         {
@@ -1161,7 +1154,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 
 void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle )
 {
-    if( isUseShader )
+    if( isUseShader && isGrouping )
     {
         Save();
         Translate( aCenterPoint );
@@ -1923,9 +1916,6 @@ void OPENGL_GAL::DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
     VECTOR2D point2 = aStartPoint - perpendicularVector;
     VECTOR2D point3 = aEndPoint + perpendicularVector;
     VECTOR2D point4 = aEndPoint - perpendicularVector;
-
-    if( isUseShader )
-        shader.Deactivate();
 
     // Set color
     glColor4d( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
