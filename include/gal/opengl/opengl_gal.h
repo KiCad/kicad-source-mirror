@@ -409,7 +409,6 @@ private:
     bool            isFrameBufferInitialized;   ///< Are the frame buffers initialized?
     bool            isVboInitialized;
     bool            isShaderInitialized;        ///< Was the shader initialized?
-    bool            isShaderEnabled;            ///< Are the shaders enabled?
     bool            isUseShader;                ///< Should the shaders be used?
     bool            isGrouping;                 ///< Was a group started?
 
