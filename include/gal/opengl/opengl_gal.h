@@ -164,16 +164,16 @@ public:
     }
 
     /// @copydoc GAL::SetFillColor()
-    virtual void SetFillColor( COLOR4D aColor );
+    virtual void SetFillColor( const COLOR4D& aColor );
 
     /// @copydoc GAL::SetStrokeColor()
-    virtual void SetStrokeColor( COLOR4D aColor );
+    virtual void SetStrokeColor( const COLOR4D& aColor );
 
     /// @copydoc GAL::GetStrokeColor()
     COLOR4D      GetStrokeColor();
 
     /// @copydoc GAL::SetBackgroundColor()
-    virtual void SetBackgroundColor( COLOR4D aColor );
+    virtual void SetBackgroundColor( const COLOR4D& aColor );
 
     /// @copydoc GAL::SetLineCap()
     virtual void SetLineCap( LineCap aLineCap )
