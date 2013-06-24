@@ -331,7 +331,9 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProper
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-    m_board = aBoard;
+    init( aProperties );
+
+    m_board = aBoard;       // after init()
 
     FILE_OUTPUTFORMATTER    formatter( aFileName );
 
@@ -881,12 +883,17 @@ void PCB_IO::format( PCB_TARGET* aTarget, int aNestLevel ) const
 void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     throw( IO_ERROR )
 {
-    const wxArrayString* initial_comments = aModule->GetInitialComments();
-
-    if( initial_comments )
+    if( !( m_ctl & CTL_OMIT_INITIAL_COMMENTS ) )
     {
-        for( unsigned i=0; i<initial_comments->GetCount();  ++i )
-            m_out->Print( aNestLevel, "%s\n",  TO_UTF8( (*initial_comments)[i] ) );
+        const wxArrayString* initial_comments = aModule->GetInitialComments();
+
+        if( initial_comments )
+        {
+            for( unsigned i=0;  i<initial_comments->GetCount();  ++i )
+                m_out->Print( aNestLevel, "%s\n",  TO_UTF8( (*initial_comments)[i] ) );
+
+            m_out->Print( 0, "\n" );    // improve readability?
+        }
     }
 
     m_out->Print( aNestLevel, "(module %s", m_out->Quotew( aModule->GetLibRef() ).c_str() );
@@ -1073,7 +1080,7 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
     {
         if( aLayerMask & GetLayerMask( layer ) )
         {
-            if( m_board && !(m_ctl & CTL_STD_LAYER_NAMES) )
+            if( m_board && !( m_ctl & CTL_STD_LAYER_NAMES ) )
                 layerName = m_board->GetLayerName( layer );
 
             else    // I am being called from FootprintSave()
@@ -1558,7 +1565,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
 PCB_IO::PCB_IO() :
     m_cache( 0 ),
-    m_ctl( 0 ),
+    m_ctl( CTL_FOR_BOARD ),         // expecting to OUTPUTFORMAT into BOARD files.
     m_parser( new PCB_PARSER() )
 {
     init( 0 );
@@ -1586,6 +1593,8 @@ PCB_IO::~PCB_IO()
 BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties )
 {
     FILE_LINE_READER    reader( aFileName );
+
+    init( aProperties );
 
     m_parser->SetLineReader( &reader );
     m_parser->SetBoard( aAppendToMe );
