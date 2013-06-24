@@ -37,12 +37,11 @@ class PCB_PARSER;
 /// Current s-expression file format version.  2 was the last legacy format version.
 #define SEXPR_BOARD_FILE_VERSION    3
 
-/// Use English Standard layer names
-#define CTL_STD_LAYER_NAMES         (1 << 0)
 
+#define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)
-
 #define CTL_OMIT_TSTAMPS            (1 << 2)
+#define CTL_OMIT_INITIAL_COMMENTS   (1 << 3)    ///< omit MODULE initial comments
 
 // common combinations of the above:
 
@@ -51,6 +50,10 @@ class PCB_PARSER;
 
 /// Format output for a footprint library instead of clipboard or BOARD
 #define CTL_FOR_LIBRARY             (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS|CTL_OMIT_TSTAMPS)
+
+/// The zero arg constructor when PCB_IO is used for PLUGIN::Load() and PLUGIN::Save()ing
+/// a BOARD file underneath IO_MGR.
+#define CTL_FOR_BOARD               (CTL_OMIT_INITIAL_COMMENTS)
 
 /**
  * Class PCB_IO
