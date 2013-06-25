@@ -33,6 +33,9 @@
 #include <fctsys.h>
 #include <id.h>
 #include <class_drawpanel.h>
+#include <class_drawpanel_gal.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <view/view.h>
 #include <class_base_screen.h>
 #include <wxstruct.h>
 #include <kicad_device_context.h>
@@ -81,10 +84,10 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
     if( screen->m_FirstRedraw )
         screen->SetCrossHairPosition( screen->GetScrollCenterPosition() );
 
+#ifdef KICAD_GAL
     if( !m_galCanvasActive )
+#endif /* KICAD_GAL */
         RedrawScreen( screen->GetScrollCenterPosition(), aWarpPointer );
-    else
-        m_canvas->Hide();
 }
 
 
@@ -191,6 +194,20 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         }
         if( screen->SetZoom( screen->m_ZoomList[i] ) )
             RedrawScreen( center, true );
+    }
+
+    if( m_galCanvasActive )
+    {
+        // Apply computed view settings to GAL
+        KiGfx::VIEW* view = m_galCanvas->GetView();
+        KiGfx::GAL* gal = m_galCanvas->GetGAL();
+
+        double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+        double zoom = 1.0 / ( zoomFactor * GetZoom() );
+
+        view->SetScale( zoom );
+        view->SetCenter( VECTOR2D( center ) );
+        m_galCanvas->Refresh();
     }
 
     UpdateStatusBar();
