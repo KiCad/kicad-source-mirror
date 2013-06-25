@@ -801,6 +801,24 @@ void CAIRO_GAL::DrawGroup( int aGroupNumber )
 }
 
 
+void CAIRO_GAL::ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor )
+{
+    storePath();
+
+    for( Group::iterator it = groups[aGroupNumber].begin();
+         it != groups[aGroupNumber].end(); ++it )
+    {
+        if( it->command == CMD_SET_FILLCOLOR || it->command == CMD_SET_STROKECOLOR )
+        {
+            it->arguments[0] = aNewColor.r;
+            it->arguments[1] = aNewColor.g;
+            it->arguments[2] = aNewColor.b;
+            it->arguments[3] = aNewColor.a;
+        }
+    }
+}
+
+
 void CAIRO_GAL::Flush()
 {
     storePath();

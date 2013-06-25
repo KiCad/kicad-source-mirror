@@ -79,18 +79,17 @@ VBO_VERTEX* VBO_ITEM::GetVertices()
 
 void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
 {
-    wxASSERT_MSG( false, wxT( "This was not tested yet" ) );
-
     if( m_isDirty )
         Finish();
 
-    // Point to color of vertices
     VBO_VERTEX* vertexPtr = GetVertices();
-    const GLfloat newColor[] = { aColor.r, aColor.g, aColor.b, aColor.a };
 
     for( unsigned int i = 0; i < m_size; ++i )
     {
-        memcpy( &vertexPtr->r, newColor, ColorByteSize );
+        vertexPtr->r = aColor.r;
+        vertexPtr->g = aColor.g;
+        vertexPtr->b = aColor.b;
+        vertexPtr->a = aColor.a;
 
         // Move on to the next vertex
         vertexPtr++;

@@ -82,7 +82,7 @@ public:
      * (eg. highlighted, so it differs from other layers).
      * @param aLayerId is a layer number that should be displayed in a specific mode.
      */
-    void SetActiveLayer( int aLayerId )
+    inline void SetActiveLayer( int aLayerId )
     {
         m_activeLayer = aLayerId;
     }
@@ -94,7 +94,7 @@ public:
      * @param aNetCode is optional and if specified, turns on higlighting only for the net with
      * number given as the parameter.
      */
-    void SetHighlight( bool aEnabled, int aNetcode = -1 )
+    inline void SetHighlight( bool aEnabled, int aNetcode = -1 )
     {
         m_highlightEnabled = aEnabled;
 
@@ -107,7 +107,7 @@ public:
      * Turns on/off high contrast display mode.
      * @param aEnabled determines if high contrast display mode should be enabled or not.
      */
-    void SetHighContrast( bool aEnabled )
+    inline void SetHighContrast( bool aEnabled )
     {
         m_hiContrastEnabled = aEnabled;
     }
@@ -200,7 +200,7 @@ public:
 
     /**
      * Function Draw
-     * Takes an instance of EDA_ITEM and passes it to a function that know how to draw the item.
+     * Takes an instance of VIEW_ITEM and passes it to a function that know how to draw the item.
      * @param aItem is an item to be drawn.
      * @param aLayer tells which layer is currently rendered so that draw functions
      * may know what to draw (eg. for pads there are separate layers for holes, because they
@@ -208,8 +208,17 @@ public:
      */
     virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) = 0;
 
-protected:
+    /**
+     * Function GetColor
+     * Returns the color that should be used to draw the specific VIEW_ITEM on the specific layer
+     * using currently used render settings.
+     * @param aItem is the VIEW_ITEM.
+     * @param aLayer is the layer.
+     * @return The color.
+     */
+    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) = 0;
 
+protected:
     /**
      * Function getLayerColor
      * is used for obtaining color that should be used for specific layer/net

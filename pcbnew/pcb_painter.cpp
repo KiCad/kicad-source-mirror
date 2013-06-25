@@ -117,6 +117,19 @@ PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
 }
 
 
+const COLOR4D& PCB_PAINTER::GetColor( const VIEW_ITEM* aItem, int aLayer )
+{
+    int netCode = 0;
+
+    // Try to obtain the netcode for the item
+    const BOARD_CONNECTED_ITEM* item = dynamic_cast<const BOARD_CONNECTED_ITEM*>( aItem );
+    if( item )
+        netCode = item->GetNet();
+
+    return getLayerColor( aLayer, netCode );
+}
+
+
 const COLOR4D& PCB_PAINTER::getLayerColor( int aLayer, int aNetCode ) const
 {
     if( m_pcbSettings->m_hiContrastEnabled && m_pcbSettings->m_activeLayer != aLayer )
@@ -211,7 +224,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     default:
-        // Painter does not knowNetwork: how to draw the object
+        // Painter does not know how to draw the object
         return false;
         break;
     }
