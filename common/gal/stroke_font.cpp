@@ -56,8 +56,8 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
     for( int j = 0; j < aNewStrokeFontSize; j++ )
     {
         Glyph    glyph;
-        double   glyphStartX;
-        double   glyphEndX;
+        double   glyphStartX = 0.0;
+        double   glyphEndX = 0.0;
         VECTOR2D glyphBoundingX;
 
         std::deque<VECTOR2D> pointList;
