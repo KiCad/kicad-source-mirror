@@ -34,9 +34,11 @@
 namespace PCAD2KICAD {
 
 static KEYWORD empty_keywords[1] = {};
+static const char ACCEL_ASCII_KEYWORD[] = "ACCEL_ASCII";
 
 void LoadInputFile( wxString aFileName, wxXmlDocument* aXmlDoc )
 {
+    char      line[sizeof( ACCEL_ASCII_KEYWORD )];
     int       tok;
     XNODE*    iNode = NULL, *cNode = NULL;
     wxString  str, propValue, content;
@@ -46,6 +48,14 @@ void LoadInputFile( wxString aFileName, wxXmlDocument* aXmlDoc )
 
     if( !fp )
         THROW_IO_ERROR( wxT( "Unable to open file: " ) + aFileName );
+
+    // check file format
+    if( !fgets( line, sizeof( line ), fp )
+        || strcmp( line, ACCEL_ASCII_KEYWORD ) )
+        THROW_IO_ERROR( "Unknown file type" );
+
+    // rewind the file
+    fseek( fp, 0, SEEK_SET );
 
     // lexer now owns fp, will close on exception or return
     DSNLEXER lexer( empty_keywords, 0, fp,  aFileName );
