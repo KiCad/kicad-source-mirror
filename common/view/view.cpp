@@ -307,6 +307,55 @@ void VIEW::SetLayerOrder( int aLayer, int aRenderingOrder )
 }
 
 
+struct VIEW::updateItemsColor
+{
+    updateItemsColor( int aLayer, PAINTER* aPainter, GAL* aGal ) :
+        layer( aLayer ), painter( aPainter), gal( aGal )
+    {
+    }
+
+    void operator()( VIEW_ITEM* aItem )
+    {
+        // Obtain the color that should be used for coloring the item
+        const COLOR4D color = painter->GetColor( aItem, layer );
+        int group = aItem->getGroup( layer );
+
+        gal->ChangeGroupColor( group, color );
+    }
+
+    int layer;
+    PAINTER* painter;
+    GAL* gal;
+};
+
+
+void VIEW::UpdateLayerColor( int aLayer )
+{
+    BOX2I r;
+
+    r.SetMaximum();
+
+    updateItemsColor visitor( aLayer, m_painter, m_gal );
+    m_layers[aLayer].items->Query( r, visitor );
+}
+
+
+void VIEW::UpdateAllLayersColor()
+{
+    BOX2I r;
+
+    r.SetMaximum();
+
+    for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
+    {
+        VIEW_LAYER* l = &( ( *i ).second );
+        updateItemsColor visitor( l->id, m_painter, m_gal );
+
+        l->items->Query( r, visitor );
+    }
+}
+
+
 void VIEW::SetTopLayer( int aLayer )
 {
     // Restore previous order
@@ -561,13 +610,13 @@ void VIEW::clearGroupCache()
     BOX2I r;
 
     r.SetMaximum();
+    clearItemCache visitor( this );
 
     for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = & ( ( *i ).second );
-        clearItemCache visitor( this );
         l->items->Query( r, visitor );
-    };
+    }
 }
 
 

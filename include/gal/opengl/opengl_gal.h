@@ -234,6 +234,9 @@ public:
     /// @copydoc GAL::DrawGroup()
     virtual void DrawGroup( int aGroupNumber );
 
+    /// @copydoc GAL::ChangeGroupColor()
+    virtual void ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor );
+
     /// @copydoc GAL::DeleteGroup()
     virtual void DeleteGroup( int aGroupNumber );
 

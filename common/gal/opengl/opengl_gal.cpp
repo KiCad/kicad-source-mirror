@@ -1628,6 +1628,13 @@ void OPENGL_GAL::DrawGroup( int aGroupNumber )
 }
 
 
+void OPENGL_GAL::ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor )
+{
+    vboItems[aGroupNumber]->ChangeColor( aNewColor );
+    vboNeedsUpdate = true;
+}
+
+
 void OPENGL_GAL::computeUnitCircle()
 {
     displayListCircle = glGenLists( 1 );

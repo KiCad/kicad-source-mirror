@@ -61,8 +61,8 @@ public:
 
     /**
      * Constructor.
-     * @param aIsDynamic: decides whether we are creating a static or a dynamic VIEW.
-     * @param aUseGroups: fixme
+     * @param aIsDynamic decides whether we are creating a static or a dynamic VIEW.
+     * @param aUseGroups tells if items added to the VIEW should be stored in groups.
      */
     VIEW( bool aIsDynamic = true, bool aUseGroups = false );
 
@@ -116,7 +116,7 @@ public:
      * Returns the GAL this view is using to draw graphical primitives.
      * @return Pointer to the currently used GAL instance.
      */
-    GAL* GetGAL() const { return m_gal; }
+    GAL*    GetGAL() const { return m_gal; }
 
     /**
      * Function SetPainter()
@@ -265,6 +265,21 @@ public:
     void    SetLayerOrder( int aLayer, int aRenderingOrder );
 
     /**
+     * Function UpdateLayerColor()
+     * Applies the new coloring scheme held by RENDER_SETTINGS in case that it has changed.
+     * @param aLayer is a number of the layer to be updated.
+     * @see RENDER_SETTINGS
+     */
+    void    UpdateLayerColor( int aLayer );
+
+    /**
+     * Function UpdateAllLayersColor()
+     * Applies the new coloring scheme to all layers. The used scheme is held by RENDER_SETTINGS.
+     * @see RENDER_SETTINGS
+     */
+    void    UpdateAllLayersColor();
+
+    /**
      * Function SetTopLayer()
      * Sets given layer to be displayed on the top or sets back the default order of layers.
      * @param aLayer: the layer or -1 in case when no particular layer should
@@ -313,7 +328,6 @@ public:
     static const int          TOP_LAYER;         ///* layer number for displaying items on the top
 
 private:
-
     struct VIEW_LAYER
     {
         bool                    enabled;         ///* is the layer to be rendered?
@@ -338,6 +352,7 @@ private:
     struct unlinkItem;
     struct recacheItem;
     struct drawItem;
+    struct updateItemsColor;
 
     ///* Saves current top layer settings in order to restore it when it's not top anymore
     VIEW_LAYER m_topLayer;
@@ -346,18 +361,18 @@ private:
     bool m_enableTopLayer;
 
     ///* Redraws contents within rect aRect
-    void    redrawRect( const BOX2I& aRect );
+    void redrawRect( const BOX2I& aRect );
 
     ///* Manages dirty flags & redraw queueing when updating an item. Called internally
     ///  via VIEW_ITEM::ViewUpdate()
-    void    invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags );
+    void invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags );
 
     ///* Sorts m_orderedLayers when layer rendering order has changed
-    void    sortLayers();
+    void sortLayers();
 
     ///* Clears cached GAL group numbers (*ONLY* numbers stored in VIEW_ITEMs, not group objects
     ///* used by GAL)
-    void    clearGroupCache();
+    void clearGroupCache();
 
     /// Determines rendering order of layers. Used in display order sorting function.
     static bool compareRenderingOrder( VIEW_LAYER* i, VIEW_LAYER* j )

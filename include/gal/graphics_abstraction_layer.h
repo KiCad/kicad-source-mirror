@@ -364,6 +364,14 @@ public:
     virtual void DrawGroup( int aGroupNumber ) = 0;
 
     /**
+     * @brief Changes the color used to draw the group.
+     *
+     * @param aGroupNumber is the group number.
+     * @param aNewColor is the new color.
+     */
+    virtual void ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor ) = 0;
+
+    /**
      * @brief Delete the group from the memory.
      *
      * @param aGroupNumber is the group number.

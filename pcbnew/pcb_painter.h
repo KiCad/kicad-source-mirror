@@ -126,8 +126,10 @@ public:
         m_pcbSettings = dynamic_cast<PCB_RENDER_SETTINGS*> ( aSettings );
     }
 
-protected:
+    /// @copydoc PAINTER::GetColor()
+    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer );
 
+protected:
     PCB_RENDER_SETTINGS* m_pcbSettings;
 
     /// @copydoc PAINTER::getLayerColor()
