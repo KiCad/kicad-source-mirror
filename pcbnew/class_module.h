@@ -495,7 +495,7 @@ public:
     }
 
     /// Return the initial comments block or NULL if none, without transfer of ownership.
-    const wxArrayString* GetInitialComments()   { return m_initial_comments; }
+    const wxArrayString* GetInitialComments() const { return m_initial_comments; }
 
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
