@@ -819,6 +819,13 @@ void CAIRO_GAL::ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor )
 }
 
 
+void CAIRO_GAL::ChangeGroupDepth( int aGroupNumber, int aDepth )
+{
+    // Cairo does not have any possibilities to change the depth coordinate of stored items,
+    // it depends only on the order of drawing
+}
+
+
 void CAIRO_GAL::Flush()
 {
     storePath();

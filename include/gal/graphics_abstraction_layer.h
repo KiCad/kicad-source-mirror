@@ -372,6 +372,14 @@ public:
     virtual void ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor ) = 0;
 
     /**
+     * @brief Changes the depth (Z-axis position) of the group.
+     *
+     * @param aGroupNumber is the group number.
+     * @param aDepth is the new depth.
+     */
+    virtual void ChangeGroupDepth( int aGroupNumber, int aDepth ) = 0;
+
+    /**
      * @brief Delete the group from the memory.
      *
      * @param aGroupNumber is the group number.

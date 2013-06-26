@@ -40,8 +40,9 @@
 using namespace KiGfx;
 
 // Static constants
-const unsigned int VIEW::VIEW_MAX_LAYERS = 64;
-const int          VIEW::TOP_LAYER       = -1;
+const int VIEW::VIEW_MAX_LAYERS = 64;
+// Top layer depth
+const int VIEW::TOP_LAYER       = -1;
 
 void VIEW::AddLayer( int aLayer, bool aDisplayOnly )
 {
@@ -303,6 +304,7 @@ void VIEW::sortLayers()
 void VIEW::SetLayerOrder( int aLayer, int aRenderingOrder )
 {
     m_layers[aLayer].renderingOrder = aRenderingOrder;
+
     sortLayers();
 }
 
@@ -319,6 +321,7 @@ struct VIEW::updateItemsColor
         // Obtain the color that should be used for coloring the item
         const COLOR4D color = painter->GetColor( aItem, layer );
         int group = aItem->getGroup( layer );
+        wxASSERT( group >= 0 );
 
         gal->ChangeGroupColor( group, color );
     }
@@ -356,11 +359,45 @@ void VIEW::UpdateAllLayersColor()
 }
 
 
+struct VIEW::changeItemsDepth
+{
+    changeItemsDepth( int aLayer, int aDepth, GAL* aGal ) :
+        layer( aLayer ), depth( aDepth ), gal( aGal )
+    {
+    }
+
+    void operator()( VIEW_ITEM* aItem )
+    {
+        int group = aItem->getGroup( layer );
+
+        if( group >= 0 )
+            gal->ChangeGroupDepth( group, depth );
+    }
+
+    int layer, depth;
+    GAL* gal;
+};
+
+
+void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
+{
+    BOX2I r;
+
+    r.SetMaximum();
+
+    changeItemsDepth visitor( aLayer, aDepth, m_gal );
+    m_layers[aLayer].items->Query( r, visitor );
+}
+
+
 void VIEW::SetTopLayer( int aLayer )
 {
     // Restore previous order
     if( m_topLayer.enabled )
+    {
         m_layers[m_topLayer.id].renderingOrder = m_topLayer.renderingOrder;
+        ChangeLayerDepth( m_topLayer.id, m_topLayer.renderingOrder );
+    }
 
     if( aLayer >= 0 && aLayer < VIEW_MAX_LAYERS )
     {
@@ -370,7 +407,10 @@ void VIEW::SetTopLayer( int aLayer )
 
         // Apply new settings only if the option is enabled
         if( m_enableTopLayer )
+        {
             m_layers[aLayer].renderingOrder = TOP_LAYER;
+            ChangeLayerDepth( aLayer, TOP_LAYER );
+        }
 
         // Set the flag saying that settings stored in m_topLayer are valid
         m_topLayer.enabled = true;
@@ -396,12 +436,15 @@ void VIEW::EnableTopLayer( bool aEnable )
         if( aEnable )
         {
             m_layers[m_topLayer.id].renderingOrder = TOP_LAYER;
+            ChangeLayerDepth( m_topLayer.id, TOP_LAYER );
         }
         else
         {
             m_layers[m_topLayer.id].renderingOrder = m_topLayer.renderingOrder;
+            ChangeLayerDepth( m_topLayer.id, m_topLayer.renderingOrder );
         }
     }
+    sortLayers();
 
     m_enableTopLayer = aEnable;
 }
@@ -416,7 +459,7 @@ struct VIEW::drawItem
 
     void operator()( VIEW_ITEM* aItem )
     {
-        GAL*     gal = view->GetGAL();
+        GAL* gal = view->GetGAL();
 
         if( view->m_useGroups )
         {

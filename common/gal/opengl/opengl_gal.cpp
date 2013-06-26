@@ -1635,6 +1635,13 @@ void OPENGL_GAL::ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor )
 }
 
 
+void OPENGL_GAL::ChangeGroupDepth( int aGroupNumber, int aDepth )
+{
+    vboItems[aGroupNumber]->ChangeDepth( aDepth );
+    vboNeedsUpdate = true;
+}
+
+
 void OPENGL_GAL::computeUnitCircle()
 {
     displayListCircle = glGenLists( 1 );
