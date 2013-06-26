@@ -212,6 +212,9 @@ public:
     /// @copydoc GAL::ChangeGroupColor()
     virtual void ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor );
 
+    /// @copydoc GAL::ChangeGroupDepth()
+    virtual void ChangeGroupDepth( int aGroupNumber, int aDepth );
+
     /// @copydoc GAL::DeleteGroup()
     virtual void DeleteGroup( int aGroupNumber );
 

@@ -94,6 +94,20 @@ void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
 }
 
 
+void VBO_ITEM::ChangeDepth( int aDepth )
+{
+    VBO_VERTEX* vertexPtr = GetVertices();
+
+    for( unsigned int i = 0; i < m_size; ++i )
+    {
+        vertexPtr->z = aDepth;
+
+        // Move on to the next vertex
+        vertexPtr++;
+    }
+}
+
+
 void VBO_ITEM::Finish()
 {
     // The unknown-sized item has just ended, so we need to inform the container about it

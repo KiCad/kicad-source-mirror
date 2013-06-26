@@ -116,6 +116,13 @@ public:
      */
     void ChangeColor( const COLOR4D& aColor );
 
+    /**
+     * Function ChangeDepth()
+     * Moves all vertices to the specified depth.
+     * @param aDepth is the new depth for vertices.
+     */
+    void ChangeDepth( int aDepth );
+
     ///< Informs the container that there will be no more vertices for the current VBO_ITEM
     void Finish();
 

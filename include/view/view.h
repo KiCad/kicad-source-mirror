@@ -215,7 +215,6 @@ public:
      */
     double   ToScreen( double aCoord, bool aAbsolute = true ) const;
 
-
     /**
      * Function GetScreenPixelSize()
      * Returns the size of the our rendering area, in pixels.
@@ -231,7 +230,6 @@ public:
      * Objects belonging to this layer are not taken into account by Query() method.
      */
     void    AddLayer( int aLayer, bool aDisplayOnly = false );
-
 
     /**
      * Function ClearLayer()
@@ -280,6 +278,14 @@ public:
     void    UpdateAllLayersColor();
 
     /**
+     * Function ChangeLayerDepth()
+     * Changes the depth of items on the given layer.
+     * @param aLayer is a number of the layer to be updated.
+     * @param aDepth is the new depth.
+     */
+    void    ChangeLayerDepth( int aLayer, int aDepth );
+
+    /**
      * Function SetTopLayer()
      * Sets given layer to be displayed on the top or sets back the default order of layers.
      * @param aLayer: the layer or -1 in case when no particular layer should
@@ -324,8 +330,8 @@ public:
      */
     bool IsDynamic() const { return m_dynamic; }
 
-    static const unsigned int VIEW_MAX_LAYERS;   ///* maximum number of layers that may be shown
-    static const int          TOP_LAYER;         ///* layer number for displaying items on the top
+    static const int VIEW_MAX_LAYERS;            ///* maximum number of layers that may be shown
+    static const int TOP_LAYER;                  ///* layer number for displaying items on the top
 
 private:
     struct VIEW_LAYER
@@ -353,6 +359,7 @@ private:
     struct recacheItem;
     struct drawItem;
     struct updateItemsColor;
+    struct changeItemsDepth;
 
     ///* Saves current top layer settings in order to restore it when it's not top anymore
     VIEW_LAYER m_topLayer;

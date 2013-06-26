@@ -361,6 +361,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
     // Set display settings for high contrast mode
     KiGfx::VIEW* view = myframe->GetGalCanvas()->GetView();
     view->GetPainter()->GetSettings()->SetActiveLayer( aLayer );
+    view->UpdateAllLayersColor();
     view->SetTopLayer( aLayer );
 #endif /* KICAD_GAL */
 
