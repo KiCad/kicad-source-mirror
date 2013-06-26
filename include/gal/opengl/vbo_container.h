@@ -113,6 +113,16 @@ public:
     VBO_VERTEX* GetVertices( const VBO_ITEM* aVboItem ) const;
 
     /**
+     * Function GetVertices()
+     * Returns vertices stored at the specific offset.
+     * @aOffest is the specific offset.
+     */
+    inline VBO_VERTEX* GetVertices( unsigned int aOffset ) const
+    {
+        return &m_vertices[aOffset];
+    }
+
+    /**
      * Function GetSize()
      * Returns amount of vertices currently stored in the container.
      */
