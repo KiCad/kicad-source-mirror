@@ -73,15 +73,12 @@ VBO_VERTEX* VBO_ITEM::GetVertices()
     if( m_isDirty )
         Finish();
 
-    return m_container->GetVertices( this );
+    return m_container->GetVertices( m_offset );
 }
 
 
 void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
 {
-    if( m_isDirty )
-        Finish();
-
     VBO_VERTEX* vertexPtr = GetVertices();
 
     for( unsigned int i = 0; i < m_size; ++i )
