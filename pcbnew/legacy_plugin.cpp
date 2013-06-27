@@ -277,6 +277,9 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
         if( TESTLINE( "$MODULE" ) )
         {
             auto_ptr<MODULE>    module( new MODULE( m_board ) );
+
+            module->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "$MODULE" ) ) ) );
+
             LoadMODULE( module.get() );
             m_board->Add( module.release(), ADD_APPEND );
         }
@@ -998,12 +1001,14 @@ void LEGACY_PLUGIN::LoadMODULE( MODULE* aModule )
             aModule->SetLastEditTime( edittime );
         }
 
+        /* footprint name set earlier, immediately after MODULE construction
         else if( TESTLINE( "Li" ) )         // Library name of footprint
         {
             // There can be whitespace in the footprint name on some old libraries.
             // Grab everything after "Li" up to end of line:
             //aModule->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
         }
+        */
 
         else if( TESTLINE( "Sc" ) )         // timestamp
         {
