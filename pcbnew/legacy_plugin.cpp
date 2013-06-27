@@ -1002,7 +1002,7 @@ void LEGACY_PLUGIN::LoadMODULE( MODULE* aModule )
         {
             // There can be whitespace in the footprint name on some old libraries.
             // Grab everything after "Li" up to end of line:
-            // aModule->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
+            aModule->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
         }
 
         else if( TESTLINE( "Sc" ) )         // timestamp
