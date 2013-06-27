@@ -166,6 +166,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
             static_cast<KiGfx::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
     KiGfx::PCB_RENDER_SETTINGS* settings =
             static_cast<KiGfx::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    bool recache = false;
 #endif /* KICAD_GAL */
 
     switch( id )
@@ -216,18 +217,26 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
         m_DisplayViaFill = DisplayOpt.DisplayViaFill = !state;
-        m_canvas->Refresh();
+#ifdef KICAD_GAL
+        recache = true;
+        if( !IsGalCanvasActive() )
+#endif /* KICAD_GAL */
+            m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = !state;
-        m_canvas->Refresh();
+#ifdef KICAD_GAL
+        recache = true;
+        if( !IsGalCanvasActive() )
+#endif /* KICAD_GAL */
+            m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         DisplayOpt.ContrastModeDisplay = state;
 #ifdef KICAD_GAL
-        // Apply new display options to the GAL canvas
+        // Apply new display options to the GAL canvas (this is faster than recaching)
         settings->LoadDisplayOptions( DisplayOpt );
         m_galCanvas->GetView()->EnableTopLayer( state );
         m_galCanvas->GetView()->UpdateAllLayersColor();
@@ -261,6 +270,13 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     }
 
 #ifdef KICAD_GAL
+    if( recache )
+    {
+        // Apply new display options to the GAL canvas
+        settings->LoadDisplayOptions( DisplayOpt );
+        m_galCanvas->GetView()->RecacheAllItems( true );
+    }
+
     if( IsGalCanvasActive() )
         m_galCanvas->Refresh();
 #endif /* KICAD_GAL */
