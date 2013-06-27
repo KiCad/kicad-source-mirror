@@ -118,17 +118,13 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 
     // Buffered semicircle & circle vertices
-    // (3 vertices per triangle) * (2 items [circle&semicircle]) * (number of points per item)
-    precomputedContainer = new VBO_CONTAINER( 3 * 2 * CIRCLE_POINTS );
+    // (3 vertices per triangle) * (number of points to draw a circle)
+    precomputedContainer = new VBO_CONTAINER( 3 * CIRCLE_POINTS );
 
     // Compute the unit circles, used for speed up of the circle drawing
     verticesCircle = new VBO_ITEM( precomputedContainer );
     computeUnitCircle();
     verticesCircle->Finish();
-
-    verticesSemiCircle = new VBO_ITEM( precomputedContainer );
-    computeUnitSemiCircle();
-    verticesSemiCircle->Finish();
 }
 
 
@@ -137,7 +133,6 @@ OPENGL_GAL::~OPENGL_GAL()
     glFlush();
 
     delete verticesCircle;
-    delete verticesSemiCircle;
     delete precomputedContainer;
 
     // Delete the buffers
@@ -1108,30 +1103,45 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
         if( innerScale < outerScale )
         {
             // Draw the outline
+            VBO_VERTEX* circle = verticesCircle->GetVertices();
+            int next;
+
             color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
             Save();
 
-            translate3( aCenterPoint.x, aCenterPoint.y, layerDepth );
+            translate3( aCenterPoint.x, aCenterPoint.y, 0.0 );
             Scale( VECTOR2D( aRadius, aRadius ) );
 
             begin( GL_TRIANGLES );
 
-            for( std::deque<VECTOR2D>::const_iterator it = unitCirclePoints.begin();
-                    it != unitCirclePoints.end(); it++ )
+            for( int i = 0; i < 3 * CIRCLE_POINTS; ++i )
             {
-                double v0[] = { it->x * innerScale, it->y * innerScale };
-                double v1[] = { it->x * outerScale, it->y * outerScale };
-                double v2[] = { ( it + 1 )->x * innerScale, ( it + 1 )->y * innerScale };
-                double v3[] = { ( it + 1 )->x * outerScale, ( it + 1 )->y * outerScale };
+                // verticesCircle contains precomputed circle points interleaved with vertex
+                // (0,0,0), so filled circles can be drawn as consecutive triangles, ie:
+                // { 0,a,b, 0,c,d, 0,e,f, 0,g,h, ... }
+                // where letters stand for consecutive circle points and 0 for (0,0,0) vertex.
 
-                vertex3( v0[0], v0[1], 0.0 );
-                vertex3( v1[0], v1[1], 0.0 );
-                vertex3( v2[0], v2[1], 0.0 );
+                // We have to skip all (0,0,0) vertices (every third vertex)
+                if( i % 3 == 0)
+                {
+                    i++;
+                    // Depending on the vertex, next circle point may be stored in the next vertex..
+                    next = i + 1;
+                }
+                else
+                {
+                    // ..or 2 vertices away (in case it is preceded by (0,0,0) vertex)
+                    next = i + 2;
+                }
 
-                vertex3( v1[0], v1[1], 0.0 );
-                vertex3( v3[0], v3[1], 0.0 );
-                vertex3( v2[0], v2[1], 0.0 );
+                vertex3( circle[i].x * innerScale, circle[i].y * innerScale, layerDepth );
+                vertex3( circle[i].x * outerScale, circle[i].y * outerScale, layerDepth );
+                vertex3( circle[next].x * innerScale, circle[next].y * innerScale, layerDepth );
+
+                vertex3( circle[i].x * outerScale, circle[i].y * outerScale, layerDepth );
+                vertex3( circle[next].x * outerScale, circle[next].y * outerScale, layerDepth );
+                vertex3( circle[next].x * innerScale, circle[next].y * innerScale, layerDepth );
             }
 
             end();
@@ -1151,14 +1161,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 
         if( isGrouping )
         {
-            // Multiplied by 3, as this is the number of vertices in a single triangle
-            VBO_VERTEX* circle = new VBO_VERTEX[CIRCLE_POINTS * 3];
-
-            memcpy( circle, verticesCircle->GetVertices(),
-                    VBO_ITEM::VertByteSize * CIRCLE_POINTS * 3 );
-            currentGroup->PushVertices( circle, CIRCLE_POINTS * 3 );
-
-            delete[] circle;
+            currentGroup->PushVertices( verticesCircle->GetVertices(), CIRCLE_POINTS * 3 );
         }
         else
         {
@@ -1208,14 +1211,8 @@ void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, d
 
         if( isGrouping )
         {
-            // Multiplied by 3, as this is the number of vertices in a single triangle
-            VBO_VERTEX* semiCircle = new VBO_VERTEX[CIRCLE_POINTS / 2 * 3];
-
-            memcpy( semiCircle, verticesSemiCircle->GetVertices(),
-                    VBO_ITEM::VertByteSize * CIRCLE_POINTS / 2 * 3 );
-            currentGroup->PushVertices( semiCircle, CIRCLE_POINTS / 2 * 3 );
-
-            delete[] semiCircle;
+            // It is enough just to push just a half of the circle vertices to make a semicircle
+            currentGroup->PushVertices( verticesCircle->GetVertices(), CIRCLE_POINTS / 2 * 3 );
         }
         else
         {
@@ -1668,15 +1665,16 @@ void OPENGL_GAL::computeUnitCircle()
 
     // Compute the circle points for a given number of segments
     // Insert in a display list and a vector
+    const VBO_VERTEX v0 = { 0.0f, 0.0f, 0.0f };
+
     for( int i = 0; i < CIRCLE_POINTS; i++ )
     {
-        VBO_VERTEX v0 = { 0.0f, 0.0f, 0.0f };
-        VBO_VERTEX v1 = {
+        const VBO_VERTEX v1 = {
             cos( 2.0 * M_PI / CIRCLE_POINTS * i ),          // x
             sin( 2.0 * M_PI / CIRCLE_POINTS * i ),          // y
             0.0f                                            // z
         };
-        VBO_VERTEX v2 = {
+        const VBO_VERTEX v2 = {
             cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // x
             sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // y
             0.0f                                            // z
@@ -1687,11 +1685,9 @@ void OPENGL_GAL::computeUnitCircle()
 
         glVertex2d( v1.x, v1.y );
         verticesCircle->PushVertex( &v1 );
-        unitCirclePoints.push_back( VECTOR2D( v1.x, v1.y ) ); // TODO remove
 
         glVertex2d( v2.x, v2.y );
         verticesCircle->PushVertex( &v2 );
-        unitCirclePoints.push_back( VECTOR2D( v2.x, v2.y ) ); // TODO remove
     }
 
     glEnd();
@@ -1709,26 +1705,11 @@ void OPENGL_GAL::computeUnitSemiCircle()
 
     for( int i = 0; i < CIRCLE_POINTS / 2; ++i )
     {
-        VBO_VERTEX v0 = { 0.0f, 0.0f, 0.0f };
-        VBO_VERTEX v1 = {
-            cos( 2.0 * M_PI / CIRCLE_POINTS * i ),          // x
-            sin( 2.0 * M_PI / CIRCLE_POINTS * i ),          // y
-            0.0f                                            // z
-        };
-        VBO_VERTEX v2 = {
-            cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // x
-            sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // y
-            0.0f                                            // z
-        };
-
-        glVertex2d( 0, 0 );
-        verticesSemiCircle->PushVertex( &v0 );
-
-        glVertex2d( v1.x, v1.y );
-        verticesSemiCircle->PushVertex( &v1 );
-
-        glVertex2d( v2.x, v2.y );
-        verticesSemiCircle->PushVertex( &v2 );
+        glVertex2d( 0.0, 0.0 );
+        glVertex2d( cos( 2.0 * M_PI / CIRCLE_POINTS * i ),
+                    sin( 2.0 * M_PI / CIRCLE_POINTS * i ) );
+        glVertex2d( cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),
+                    sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ) );
     }
 
     glEnd();

@@ -358,7 +358,6 @@ private:
     GLuint                displayListCircle;      ///< Circle display list
     VBO_ITEM*             verticesCircle;
     GLuint                displayListSemiCircle;  ///< Semi circle display list
-    VBO_ITEM*             verticesSemiCircle;
 
     // Vertex buffer objects related fields
     std::map<unsigned int, VBO_ITEM*> groups;     ///< Stores informations about VBO objects (groups)
@@ -373,10 +372,6 @@ private:
     std::stack<glm::mat4> transformStack;         ///< Stack of transformation matrices
     int                   indicesSize;            ///< Number of indices to be drawn
     GLuint*               indicesPtr;             ///< Pointer to mapped GPU memory
-
-    double                curvePoints[12];        ///< Coefficients for curves
-    // FIXME to be removed:
-    std::deque<VECTOR2D>  unitCirclePoints;       ///< List of the points on a unit circle
 
     // Polygon tesselation
     GLUtesselator*        tesselator;             ///< Pointer to the tesselator
