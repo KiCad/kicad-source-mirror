@@ -38,6 +38,8 @@
 #include <profile.h>
 #endif /* __WXDEBUG__ */
 
+#include <limits>
+
 #ifndef CALLBACK
 #define CALLBACK
 #endif
@@ -77,8 +79,10 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     isVboInitialized         = false;
     vboNeedsUpdate           = false;
-    curVboItem               = NULL;
+    currentGroup             = NULL;
+    groupCounter             = 0;
     transform                = glm::mat4( 1.0f );   // Identity matrix
+
 
     SetSize( parentSize );
 
@@ -723,6 +727,20 @@ inline void OPENGL_GAL::drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D
 }
 
 
+unsigned int OPENGL_GAL::getGroupNumber()
+{
+    wxASSERT_MSG( groups.size() < std::numeric_limits<unsigned int>::max(),
+            wxT( "There are no free slots to store a group" ) );
+
+    while( groups.find( groupCounter ) != groups.end() )
+    {
+        groupCounter++;
+    }
+
+    return groupCounter++;
+}
+
+
 void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     if( isFillEnabled )
@@ -1138,7 +1156,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 
             memcpy( circle, verticesCircle->GetVertices(),
                     VBO_ITEM::VertByteSize * CIRCLE_POINTS * 3 );
-            curVboItem->PushVertices( circle, CIRCLE_POINTS * 3 );
+            currentGroup->PushVertices( circle, CIRCLE_POINTS * 3 );
 
             delete[] circle;
         }
@@ -1195,7 +1213,7 @@ void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, d
 
             memcpy( semiCircle, verticesSemiCircle->GetVertices(),
                     VBO_ITEM::VertByteSize * CIRCLE_POINTS / 2 * 3 );
-            curVboItem->PushVertices( semiCircle, CIRCLE_POINTS / 2 * 3 );
+            currentGroup->PushVertices( semiCircle, CIRCLE_POINTS / 2 * 3 );
 
             delete[] semiCircle;
         }
@@ -1373,7 +1391,7 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 
     glShadeModel( GL_FLAT );
 
-    TessParams params = { curVboItem, tessIntersects };
+    TessParams params = { currentGroup, tessIntersects };
     gluTessBeginPolygon( tesselator, &params );
     gluTessBeginContour( tesselator );
 
@@ -1578,39 +1596,38 @@ int OPENGL_GAL::BeginGroup()
     vboNeedsUpdate = true;
 
     // Save the pointer for caching the current item
-    curVboItem = new VBO_ITEM( vboContainer );
-    vboItems.push_back( curVboItem );
+    currentGroup = new VBO_ITEM( vboContainer );
+    int groupNumber = getGroupNumber();
+    groups.insert( std::make_pair( groupNumber, currentGroup ) );
 
-    return vboItems.size() - 1;
+    return groupNumber;
 }
 
 
 void OPENGL_GAL::EndGroup()
 {
-    curVboItem->Finish();
-    curVboItem = NULL;
+    currentGroup->Finish();
+
     isGrouping = false;
 }
 
 
 void OPENGL_GAL::ClearCache()
 {
-    std::deque<VBO_ITEM*>::iterator it, end;
-    for( it = vboItems.begin(), end = vboItems.end(); it != end; it++ )
+    std::map<unsigned int, VBO_ITEM*>::iterator it, end;
+    for( it = groups.begin(), end = groups.end(); it != end; it++ )
     {
-        delete *it;
+        delete it->second;
     }
 
-    vboItems.clear();
+    groups.clear();
 }
 
 
 void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 {
-    VBO_ITEM* item = vboItems[aGroupNumber];
-
-    vboItems[aGroupNumber] = NULL;
-    delete item;
+    delete groups[aGroupNumber];
+    groups.erase( aGroupNumber );
 
     vboNeedsUpdate = true;
 }
@@ -1618,8 +1635,8 @@ void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 
 void OPENGL_GAL::DrawGroup( int aGroupNumber )
 {
-    int size = vboItems[aGroupNumber]->GetSize();
-    int offset = vboItems[aGroupNumber]->GetOffset();
+    int size = groups[aGroupNumber]->GetSize();
+    int offset = groups[aGroupNumber]->GetOffset();
 
     // Copy indices of items that should be drawn to GPU memory
     for( int i = offset; i < offset + size; *indicesPtr++ = i++ );
@@ -1630,14 +1647,14 @@ void OPENGL_GAL::DrawGroup( int aGroupNumber )
 
 void OPENGL_GAL::ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor )
 {
-    vboItems[aGroupNumber]->ChangeColor( aNewColor );
+    groups[aGroupNumber]->ChangeColor( aNewColor );
     vboNeedsUpdate = true;
 }
 
 
 void OPENGL_GAL::ChangeGroupDepth( int aGroupNumber, int aDepth )
 {
-    vboItems[aGroupNumber]->ChangeDepth( aDepth );
+    groups[aGroupNumber]->ChangeDepth( aDepth );
     vboNeedsUpdate = true;
 }
 

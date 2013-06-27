@@ -31,6 +31,8 @@
 #include <gal/cairo/cairo_gal.h>
 #include <gal/definitions.h>
 
+#include <limits>
+
 using namespace KiGfx;
 
 CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
@@ -50,6 +52,7 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     isInitialized       = false;
     isDeleteSavedPixels = false;
     zoomFactor          = 1.0;
+    groupCounter        = 0;
 
     SetSize( aParent->GetSize() );
 
@@ -197,6 +200,20 @@ void CAIRO_GAL::deinitSurface()
     cairo_surface_destroy( cairoSurface );
 
     isInitialized = false;
+}
+
+
+unsigned int CAIRO_GAL::getGroupNumber()
+{
+    wxASSERT_MSG( groups.size() < std::numeric_limits<unsigned int>::max(),
+            wxT( "There are no free slots to store a group" ) );
+
+    while( groups.find( groupCounter ) != groups.end() )
+    {
+        groupCounter++;
+    }
+
+    return groupCounter++;
 }
 
 
@@ -429,7 +446,7 @@ void CAIRO_GAL::SetIsFill( bool aIsFillEnabled )
         GroupElement groupElement;
         groupElement.command = CMD_SET_FILL;
         groupElement.boolArgument = aIsFillEnabled;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -444,7 +461,7 @@ void CAIRO_GAL::SetIsStroke( bool aIsStrokeEnabled )
         GroupElement groupElement;
         groupElement.command = CMD_SET_STROKE;
         groupElement.boolArgument = aIsStrokeEnabled;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -463,7 +480,7 @@ void CAIRO_GAL::SetStrokeColor( const COLOR4D& aColor )
         groupElement.arguments[1] = strokeColor.g;
         groupElement.arguments[2] = strokeColor.b;
         groupElement.arguments[3] = strokeColor.a;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -481,7 +498,7 @@ void CAIRO_GAL::SetFillColor( const COLOR4D& aColor )
         groupElement.arguments[1] = fillColor.g;
         groupElement.arguments[2] = fillColor.b;
         groupElement.arguments[3] = fillColor.a;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -498,7 +515,7 @@ void CAIRO_GAL::SetLineWidth( double aLineWidth )
         GroupElement groupElement;
         groupElement.command = CMD_SET_LINE_WIDTH;
         groupElement.arguments[0] = aLineWidth;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -516,7 +533,7 @@ void CAIRO_GAL::SetLineCap( LineCap aLineCap )
         GroupElement groupElement;
         groupElement.command     = CMD_SET_LINE_CAP;
         groupElement.intArgument = (int) aLineCap;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -534,7 +551,7 @@ void CAIRO_GAL::SetLineJoin( LineJoin aLineJoin )
         GroupElement groupElement;
         groupElement.command     = CMD_SET_LINE_JOIN;
         groupElement.intArgument = (int) aLineJoin;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -592,7 +609,7 @@ void CAIRO_GAL::Rotate( double aAngle )
         GroupElement groupElement;
         groupElement.command = CMD_ROTATE;
         groupElement.arguments[0] = aAngle;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -609,7 +626,7 @@ void CAIRO_GAL::Translate( const VECTOR2D& aTranslation )
         groupElement.command = CMD_TRANSLATE;
         groupElement.arguments[0] = aTranslation.x;
         groupElement.arguments[1] = aTranslation.y;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -626,7 +643,7 @@ void CAIRO_GAL::Scale( const VECTOR2D& aScale )
         groupElement.command = CMD_SCALE;
         groupElement.arguments[0] = aScale.x;
         groupElement.arguments[1] = aScale.y;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -641,7 +658,7 @@ void CAIRO_GAL::Save()
     {
         GroupElement groupElement;
         groupElement.command = CMD_SAVE;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -656,7 +673,7 @@ void CAIRO_GAL::Restore()
     {
         GroupElement groupElement;
         groupElement.command = CMD_RESTORE;
-        groups.back().push_back( groupElement );
+        currentGroup->push_back( groupElement );
     }
 }
 
@@ -668,10 +685,14 @@ int CAIRO_GAL::BeginGroup()
     // If the grouping is started: the actual path is stored in the group, when
     // a attribute was changed or when grouping stops with the end group method.
     storePath();
+
     Group group;
-    groups.push_back( group );
+    int groupNumber = getGroupNumber();
+    groups.insert( std::make_pair( groupNumber, group ) );
+    currentGroup = &groups[groupNumber];
     isGrouping = true;
-    return groups.size() - 1;
+
+    return groupNumber;
 }
 
 
@@ -708,7 +729,7 @@ void CAIRO_GAL::DeleteGroup( int aGroupNumber )
     }
 
     // Delete the group
-    groups.erase( groups.begin() + aGroupNumber );
+    groups.erase( aGroupNumber );
 }
 
 
@@ -879,15 +900,12 @@ void CAIRO_GAL::storePath()
             // Copy the actual path, append it to the global path list
             // then check, if the path needs to be stroked/filled and
             // add this command to the group list;
-
-            // pathList.push_back( path );  // FIXME: it's not used anywhere else?
-
             if( isStrokeEnabled )
             {
                 GroupElement groupElement;
                 groupElement.cairoPath = cairo_copy_path( cairoImage );
                 groupElement.command   = CMD_STROKE_PATH;
-                groups.back().push_back( groupElement );
+                currentGroup->push_back( groupElement );
             }
 
             if( isFillEnabled )
@@ -895,7 +913,7 @@ void CAIRO_GAL::storePath()
                 GroupElement groupElement;
                 groupElement.cairoPath = cairo_copy_path( cairoImage );
                 groupElement.command   = CMD_FILL_PATH;
-                groups.back().push_back( groupElement );
+                currentGroup->push_back( groupElement );
             }
         }
 
