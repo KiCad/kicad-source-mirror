@@ -65,5 +65,15 @@ int InvokeDialogPrintUsingPrinter( SCH_EDIT_FRAME* aCaller );
 /// DIALOG_BOM::ShowModal() returns.
 int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller );
 
+/**
+ * Function InvokeDialogNetList
+ * creates and shows NETLIST_DIALOG and returns whatever
+ * NETLIST_DIALOG::ShowModal() returns.
+ * @param int - NET_PLUGIN_CHANGE means user added or deleted a plugin,
+ *              wxID_OK, or wxID_CANCEL.
+*/
+#define NET_PLUGIN_CHANGE   1
+int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller );
+
 
 #endif  // INVOKE_SCH_DIALOG_H_

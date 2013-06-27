@@ -37,7 +37,6 @@
 
 #include <general.h>
 #include <netlist.h>
-#include <dialog_netlist.h>
 #include <class_library.h>
 #include <lib_pin.h>
 #include <sch_component.h>
