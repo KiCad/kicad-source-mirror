@@ -39,6 +39,29 @@
 #include <sch_component.h>
 
 
+/// netlist types
+enum  NETLIST_TYPE_ID {
+    NET_TYPE_UNINIT = 0,
+    NET_TYPE_PCBNEW,
+    NET_TYPE_ORCADPCB2,
+    NET_TYPE_CADSTAR,
+    NET_TYPE_SPICE,
+    NET_TYPE_CUSTOM1,   /* NET_TYPE_CUSTOM1
+                         * is the first id for user netlist format
+                         * NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1
+                         * is the last id for user netlist format
+                         */
+    //NET_TYPE_CUSTOM_MAX = NET_TYPE_CUSTOM1 + CUSTOMPANEL_COUNTMAX - 1
+};
+
+
+/// Options for Spice netlist generation (OR'ed bits
+enum netlistOptions {
+    NET_USE_X_PREFIX = 2,           // for Spice netlist : change "U" and "IC" reference prefix to "X"
+    NET_PCBNEW_USE_NEW_FORMAT = 1,  // For Pcbnew use the new format (S expression and SWEET)
+};
+
+
 class SCH_COMPONENT;
 class SCH_REFERENC_LIST;
 
@@ -46,7 +69,7 @@ class SCH_REFERENC_LIST;
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
 
 // Max pin number per component and footprint
-#define MAXPIN 5000
+#define MAXPIN      5000
 
 
 /**

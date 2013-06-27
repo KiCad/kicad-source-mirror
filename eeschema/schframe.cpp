@@ -44,7 +44,6 @@
 #include <sch_component.h>
 
 #include <dialog_helpers.h>
-#include <dialog_netlist.h>
 #include <libeditframe.h>
 #include <viewlib_frame.h>
 #include <hotkeys.h>
@@ -617,16 +616,15 @@ void SCH_EDIT_FRAME::OnErc( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnCreateNetlist( wxCommandEvent& event )
 {
-    int i;
+    int result;
 
     do
     {
-        NETLIST_DIALOG* dlg = new NETLIST_DIALOG( this );
-        i = dlg->ShowModal();
-        dlg->Destroy();
-    } while( i == NET_PLUGIN_CHANGE );
+        result = InvokeDialogNetList( this );
 
-    // If a plugin is removed or added, rebuild and reopen the new dialog
+        // If a plugin is removed or added, rebuild and reopen the new dialog
+
+    } while( result == NET_PLUGIN_CHANGE );
 }
 
 
