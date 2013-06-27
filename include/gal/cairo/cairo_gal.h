@@ -322,7 +322,6 @@ private:
     int                         actualGroupIndex;   ///< The index of the actual group
     bool                        isGrouping;         ///< Is grouping enabled ?
     bool                        isElementAdded;     ///< Was an graphic element added ?
-    std::deque<cairo_path_t*>   pathList;           ///< List of stored paths
 
     /// Maximum number of arguments for one command
     static const int MAX_CAIRO_ARGUMENTS = 6;
@@ -359,7 +358,9 @@ private:
     } GroupElement;
 
     typedef std::deque<GroupElement> Group;         ///< A graphic group type definition
-    std::deque<Group> groups;                       ///< List of graphic groups
+    std::map<int, Group> groups;                    ///< List of graphic groups
+    unsigned int groupCounter;                      ///< Counter used for generating keys for groups
+    Group* currentGroup;                            ///< Currently used group
 
     // Variables related to Cairo <-> wxWidgets
     cairo_matrix_t      cairoWorldScreenMatrix; ///< Cairo world to screen transformation matrix
@@ -410,6 +411,13 @@ private:
 
     // Destroy Cairo surfaces when are not needed anymore
     void deinitSurface();
+
+    /**
+     * @brief Returns a valid key that can be used as a group number.
+     *
+     * @return An unique group number that is not used by any other group.
+     */
+    unsigned int getGroupNumber();
 };
 } // namespace KiGfx
 

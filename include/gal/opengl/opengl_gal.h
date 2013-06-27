@@ -361,12 +361,14 @@ private:
     VBO_ITEM*             verticesSemiCircle;
 
     // Vertex buffer objects related fields
-    std::deque<VBO_ITEM*> vboItems;               ///< Stores informations about VBO objects
-    VBO_ITEM*             curVboItem;             ///< Currently used VBO_ITEM (for grouping)
+    std::map<unsigned int, VBO_ITEM*> groups;     ///< Stores informations about VBO objects (groups)
+    unsigned int          groupCounter;           ///< Counter used for generating keys for groups
+    VBO_ITEM*             currentGroup;           ///< Currently used VBO_ITEM (for grouping)
     VBO_CONTAINER*        vboContainer;           ///< Container for storing VBO_ITEMs
     GLuint                vboVertices;            ///< Currently used vertices VBO handle
     GLuint                vboIndices;             ///< Currently used indices VBO handle
     bool                  vboNeedsUpdate;         ///< Flag indicating if VBO should be rebuilt
+
     glm::mat4             transform;              ///< Current transformation matrix
     std::stack<glm::mat4> transformStack;         ///< Stack of transformation matrices
     int                   indicesSize;            ///< Number of indices to be drawn
@@ -530,6 +532,13 @@ private:
      */
     inline void drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
+    /**
+     * @brief Returns a valid key that can be used as a group number.
+     *
+     * @return An unique group number that is not used by any other group.
+     */
+    unsigned int getGroupNumber();
+
     ///< OpenGL replacement functions (that are working both in immediate and VBO modes)
     /**
      * @brief Starts drawing in immediate mode or does nothing if an item's caching has started.
@@ -562,7 +571,7 @@ private:
         {
             // New vertex coordinates for VBO
             VBO_VERTEX vertex = { aX, aY, aZ };
-            curVboItem->PushVertex( &vertex );
+            currentGroup->PushVertex( &vertex );
         }
         else
         {
