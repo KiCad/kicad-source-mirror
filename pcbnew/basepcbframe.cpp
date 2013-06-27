@@ -506,6 +506,7 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
     KiGfx::PCB_RENDER_SETTINGS* settings =
             static_cast<KiGfx::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
     settings->LoadDisplayOptions( DisplayOpt );
+    m_galCanvas->GetView()->RecacheAllItems( true );
 
     if( IsGalCanvasActive() )
         m_galCanvas->Refresh();
