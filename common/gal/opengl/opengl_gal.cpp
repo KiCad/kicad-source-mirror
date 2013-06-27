@@ -540,14 +540,6 @@ void OPENGL_GAL::EndDrawing()
 
 void OPENGL_GAL::rebuildVbo()
 {
-    /* FIXME should be done less naively, maybe sth like:
-    float *ptr = (float*)glMapBufferARB(GL_ARRAY_BUFFER_ARB, GL_READ_WRITE_ARB);
-    if(ptr)
-    {
-        updateVertices(....);
-        glUnmapBufferARB(GL_ARRAY_BUFFER_ARB); // release pointer to mapping buffer
-    }*/
-
 #ifdef __WXDEBUG__
     prof_counter totalTime;
     prof_start( &totalTime, false );
@@ -607,10 +599,6 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
         if( !transformStack.empty() )
         {
             vector = transform * vector;
-        }
-        else
-        {
-            glm::vec4 vector( perpendicularVector.x, perpendicularVector.y, 0.0, 0.0 );
         }
 
         // Line width is maintained by the vertex shader

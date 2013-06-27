@@ -128,7 +128,6 @@ protected:
     float   m_highlightFactor;      /// Factor used for computing hightlight color
 
     COLOR4D m_selectionBorderColor; /// Color of selection box border
-    COLOR4D m_netLabelColor;        /// Color of net labels
 
     float   m_selectFactor;         /// Specifies how color of selected items is changed
     float   m_layerOpacity;         /// Determines opacity of all layers, so every can be seen

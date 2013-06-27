@@ -34,7 +34,6 @@ RENDER_SETTINGS::RENDER_SETTINGS()
 {
     // Set the default initial values
     m_selectionBorderColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 );
-    m_netLabelColor = COLOR4D( 1.0, 1.0, 1.0, 0.7 );
 
     m_highlightFactor   = 0.5;
     m_selectFactor      = 0.5;
