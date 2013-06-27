@@ -345,9 +345,12 @@ public:
      *                    position.
      * @param aSegEnd = the ending point of the equivalent segment, relative to the shape position
      * @param aRotation = full rotation of the segment
+     * @param aRotation = full rotation of the segment
+     * @param aMargin = a margin around the shape (for instance mask margin)
      * @return the width of the segment
      */
-    int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd, double aRotation ) const;
+    int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd,
+                                   double aRotation, const wxSize& aMargin ) const;
 
     void ReturnStringPadName( wxString& text ) const; // Return pad name as string in a buffer
 
