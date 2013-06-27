@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 <Jean-Pierre Charras>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2013 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -308,7 +308,7 @@ void GERBER_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
             move_vector.y = scaletoIU( jj * GetLayerParams().m_StepForRepeat.y,
                                    GetLayerParams().m_StepForRepeatMetric );
             dupItem->MoveXY( move_vector );
-            m_Parent->GetLayout()->m_Drawings.Append( dupItem );
+            m_Parent->GetGerberLayout()->m_Drawings.Append( dupItem );
         }
     }
 }

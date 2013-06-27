@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jpierre.charras at wanadoo
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
     m_canvas->SetPrintMirrored( aPrintMirrorMode );
 
     // XXX -1 as drawmode?
-    GetLayout()->Draw( m_canvas, aDC, UNSPECIFIED_DRAWMODE, wxPoint( 0, 0 ) );
+    GetGerberLayout()->Draw( m_canvas, aDC, UNSPECIFIED_DRAWMODE, wxPoint( 0, 0 ) );
 
     m_canvas->SetPrintMirrored( false );
 
@@ -73,7 +73,7 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     GBR_SCREEN* screen = (GBR_SCREEN*) GetScreen();
 
-    if( !GetLayout() )
+    if( !GetGerberLayout() )
         return;
 
     wxBusyCursor dummy;
@@ -96,7 +96,7 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     }
 
     // Draw according to the current setting.  This needs to be GR_COPY or GR_OR.
-    GetLayout()->Draw( m_canvas, DC, drawMode, wxPoint( 0, 0 ) );
+    GetGerberLayout()->Draw( m_canvas, DC, drawMode, wxPoint( 0, 0 ) );
 
     // Draw the "background" now, i.e. grid and axis after gerber layers
     // because most of time the actual background is erased by successive drawings of each gerber
