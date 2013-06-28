@@ -88,7 +88,7 @@ public:
     inline void Free( VBO_ITEM* aVboItem )
     {
         ReservedChunkMap::iterator it = m_reservedChunks.find( aVboItem );
-        free( it );
+        freeChunk( it );
 
         // Dynamic memory freeing, there is no point in holding
         // a large amount of memory when there is no use for it
@@ -294,11 +294,11 @@ private:
     bool resizeContainer( unsigned int aNewSize );
 
     /**
-     * Function free()
+     * Function freeChunk()
      * Frees the space described in aChunk and returns it to the free space pool.
      * @param aChunk is a space to be freed.
      */
-    void free( const ReservedChunkMap::iterator& aChunk );
+    void freeChunk( const ReservedChunkMap::iterator& aChunk );
 
     ///< How many vertices we can store in the container
     unsigned int    m_freeSpace;
