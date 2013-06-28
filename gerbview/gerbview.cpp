@@ -26,12 +26,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
- #include <fctsys.h>
+#include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
-//#include <gr_basic.h>
 
 #include <gerbview.h>
 #include <gerbview_id.h>

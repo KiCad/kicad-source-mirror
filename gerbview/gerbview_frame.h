@@ -379,14 +379,14 @@ public:
     /**
      * Function ReFillLayerWidget
      * changes out all the layers in m_Layers and may be called upon
-     * loading a new BOARD.
+     * loading new gerber files.
      */
     void    ReFillLayerWidget();
 
     /**
      * Function setActiveLayer
      * will change the currently active layer to \a aLayer and also
-     * update the PCB_LAYER_WIDGET.
+     * update the GERBER_LAYER_WIDGET.
      */
     void    setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
 
@@ -412,7 +412,7 @@ public:
 
     /**
      * Function syncLayerWidget
-     * updates the currently "selected" layer within the PCB_LAYER_WIDGET.
+     * updates the currently "selected" layer within the GERBER_LAYER_WIDGET.
      * The currently active layer is defined by the return value of getActiveLayer().
      * <p>
      * This function cannot be inline without including layer_widget.h in
@@ -453,10 +453,11 @@ public:
     /**
      * Load applications settings specific to the Pcbnew.
      *
-     * This overrides the base class PCB_BASE_FRAME::LoadSettings() to
+     * This overrides the base class EDA_DRAW_FRAME::LoadSettings() to
      * handle settings specific common to the PCB layout application.  It
-     * calls down to the base class to load settings common to all PCB type
-     * drawing frames.  Please put your application settings for Pcbnew here
+     * calls down to the base class to load settings common to all
+     * EDA_DRAW_FRAME type drawing frames.
+     * Please put your application settings for Pcbnew here
      * to avoid having application settings loaded all over the place.
      */
     virtual void        LoadSettings();
@@ -464,10 +465,10 @@ public:
     /**
      * Save applications settings common to PCB draw frame objects.
      *
-     * This overrides the base class PCB_BASE_FRAME::SaveSettings() to
-     * save settings specific to the PCB layout application main window.  It
-     * calls down to the base class to save settings common to all PCB type
-     * drawing frames.  Please put your application settings for Pcbnew here
+     * This overrides the base class EDA_DRAW_FRAME::SaveSettings() to
+     * save settings specific to the gerbview application main window.  It
+     * calls down to the base class to save settings common to all
+     * drawing frames.  Please put your application settings for Gerbview here
      * to avoid having application settings saved all over the place.
      */
     virtual void        SaveSettings();
@@ -637,42 +638,6 @@ public:
     bool                Read_EXCELLON_File( const wxString& aFullFileName );
 
     void                GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
-
-    /**
-     * Read a DCode file (not used with RX274X files , just with RS274D old files).
-     * Note: there is no standard for DCode file.
-     * Just read a file format created by early versions of Pcbnew.
-     * @return false if file not read (cancellation)
-     *          true if OK
-     * @ aparm aFullFileName = name of file to load.
-     *  if empty, or if the file does not exist, a file dialog is opened
-     */
-    bool                LoadDCodeFile( const wxString& aFullFileName );
-
-    /**
-     * Function ReadDCodeDefinitionFile
-     * reads in a dcode file assuming ALSPCB file format with ';' indicating
-     * comments.
-     * <p>
-     * Format is like CSV but with optional ';' delineated comments:<br>
-     * tool,     Horiz,       Vert,   drill, vitesse, acc. ,Type ; [DCODE (commentaire)]<br>
-     * ex:     1,         12,       12,     0,        0,     0,   3 ; D10
-     * <p>
-     * Format:<br>
-     * Ver,  Hor, Type, Tool [,Drill]<br>
-     * example: 0.012, 0.012,  L   , D10<br>
-     *
-     * Load all found dcodes into a table of D_CODE instantiations.
-     * @param D_Code_FullFileName The name of the file to read from.
-     * @return int - <br>
-     *                 -1 = file not found<br>
-     *                 -2 = parsing problem<br>
-     *                  0 = the \a D_Code_FullFileName is empty, no reading
-     *                      is done but an empty GERBER is put into
-     *                      g_GERBER_List[]<br>
-     *                  1 = read OK<br>
-     */
-    int                 ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName );
 
     /**
      * Set Size Items (Lines, Flashes) from DCodes List

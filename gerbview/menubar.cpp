@@ -71,12 +71,6 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
                  _( "Load excellon drill file" ),
                  KiBitmap( gerbview_drill_file_xpm ) );
 
-    // Dcodes
-    AddMenuItem( fileMenu, ID_GERBVIEW_LOAD_DCODE_FILE,
-                 _( "Load &DCodes" ),
-                 _( "Load D-Codes definition file" ),
-                 KiBitmap( gerber_open_dcode_file_xpm ) );
-
     // Recent gerber files
     static wxMenu* openRecentGbrMenu;
 
