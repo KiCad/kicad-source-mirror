@@ -1,6 +1,30 @@
-/********************/
-/**** rs274d.cpp ****/
-/********************/
+/**
+ * @file rs274d.cpp
+ * @brief functions to read the rs274d commands from a rs274d/rs274x file
+ */
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <fctsys.h>
 #include <common.h>
@@ -511,9 +535,9 @@ bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_command )
         break;
 
     case GC_TURN_OFF_POLY_FILL:
-        if( m_Exposure && m_Parent->GetLayout()->m_Drawings )    // End of polygon
+        if( m_Exposure && m_Parent->GetGerberLayout()->m_Drawings )    // End of polygon
         {
-            GERBER_DRAW_ITEM * gbritem = m_Parent->GetLayout()->m_Drawings.GetLast();
+            GERBER_DRAW_ITEM * gbritem = m_Parent->GetGerberLayout()->m_Drawings.GetLast();
             StepAndRepeatItem( *gbritem );
         }
         m_Exposure = false;
@@ -542,7 +566,7 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 
     APERTURE_T        aperture = APT_CIRCLE;
     GERBER_DRAW_ITEM* gbritem;
-    GBR_LAYOUT*       layout = m_Parent->GetLayout();
+    GBR_LAYOUT*       layout = m_Parent->GetGerberLayout();
 
     LAYER_NUM activeLayer = m_Parent->getActiveLayer();
 

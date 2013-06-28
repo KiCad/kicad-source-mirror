@@ -82,26 +82,26 @@ public:
 
 class GERBVIEW_FRAME : public EDA_DRAW_FRAME    // PCB_BASE_FRAME
 {
-    GBR_LAYOUT*         m_Layout;
+    GBR_LAYOUT*         m_gerberLayout;
 public:
     GBR_DISPLAY_OPTIONS m_DisplayOptions;
 
     /**
      * Function SetLayout
-     * sets the m_Layout member in such as way as to ensure deleting any previous
+     * sets the m_gerberLayout member in such as way as to ensure deleting any previous
      * GBR_LAYOUT.
      * @param aLayout The GBR_LAYOUT to put into the frame.
      */
     void SetLayout( GBR_LAYOUT* aLayout )
     {
-        delete m_Layout;
-        m_Layout = aLayout;
+        delete m_gerberLayout;
+        m_gerberLayout = aLayout;
     }
 
-    GBR_LAYOUT* GetLayout() const
+    GBR_LAYOUT* GetGerberLayout() const
     {
-        wxASSERT( m_Layout );
-        return m_Layout;
+        wxASSERT( m_gerberLayout );
+        return m_gerberLayout;
     }
 
     /**
@@ -110,17 +110,17 @@ public:
      */
     GERBER_DRAW_ITEM* GetItemsList()
     {
-        GERBER_DRAW_ITEM* item = GetLayout()->m_Drawings;
+        GERBER_DRAW_ITEM* item = GetGerberLayout()->m_Drawings;
 
         return (GERBER_DRAW_ITEM*) item;
     }
 
     /**
-     * Function GetLayoutBoundingBox
+     * Function GetGerberLayoutBoundingBox
      * calculates the bounding box containing all gerber items.
      * @return EDA_RECT - the items bounding box
      */
-    EDA_RECT            GetLayoutBoundingBox();
+    EDA_RECT            GetGerberLayoutBoundingBox();
 
     void                SetPageSettings( const PAGE_INFO& aPageSettings );  // overload
     const PAGE_INFO&    GetPageSettings() const;                            // overload

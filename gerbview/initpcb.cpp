@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 {
     LAYER_NUM layer;
 
-    if( GetLayout() == NULL )
+    if( GetGerberLayout() == NULL )
         return false;
 
     if( query && GetScreen()->IsModify() )
@@ -50,7 +50,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
             return false;
     }
 
-    GetLayout()->m_Drawings.DeleteAll();
+    GetGerberLayout()->m_Drawings.DeleteAll();
 
     for( layer = FIRST_LAYER; layer < NB_GERBER_LAYERS; ++layer )
     {
@@ -61,7 +61,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
         }
     }
 
-    GetLayout()->SetBoundingBox( EDA_RECT() );
+    GetGerberLayout()->SetBoundingBox( EDA_RECT() );
 
     SetScreen( new GBR_SCREEN( GetPageSettings().GetSizeIU() ) );
 
@@ -84,7 +84,7 @@ void GERBVIEW_FRAME::Erase_Current_Layer( bool query )
 
     SetCurItem( NULL );
 
-    GERBER_DRAW_ITEM* item = GetLayout()->m_Drawings;
+    GERBER_DRAW_ITEM* item = GetGerberLayout()->m_Drawings;
     GERBER_DRAW_ITEM * next;
 
     for( ; item; item = next )

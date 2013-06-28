@@ -9,7 +9,6 @@
 
 #include <dlist.h>
 
-// #include <layers_id_colors_and_visibility.h>
 #include <class_colors_design_settings.h>
 #include <common.h>                         // PAGE_INFO
 #include <class_title_block.h>

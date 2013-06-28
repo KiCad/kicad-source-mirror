@@ -70,7 +70,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
                     aStyle, GERBVIEW_FRAME_NAME )
 {
     m_colorsSettings = &g_ColorsSettings;
-    m_Layout = NULL;
+    m_gerberLayout = NULL;
 
     m_FrameName = GERBVIEW_FRAME_NAME;
     m_show_layer_manager_tools = true;
@@ -95,7 +95,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
 
     SetVisibleLayers( FULL_LAYERS );     // All 32 layers visible.
 
-    SetScreen( new GBR_SCREEN( GetLayout()->GetPageSettings().GetSizeIU() ) );
+    SetScreen( new GBR_SCREEN( GetGerberLayout()->GetPageSettings().GetSizeIU() ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetLayout():
     wxFont  font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -112,10 +112,10 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
     LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    if( m_LastGridSizeId < ID_POPUP_GRID_LEVEL_1000 )
-        m_LastGridSizeId = m_LastGridSizeId;
-    if( m_LastGridSizeId > ID_POPUP_GRID_LEVEL_0_0_1MM )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_0_0_1MM;
+    if( m_LastGridSizeId < 0 )
+        m_LastGridSizeId = 0;
+    if( m_LastGridSizeId > ID_POPUP_GRID_LEVEL_0_0_1MM-ID_POPUP_GRID_LEVEL_1000 )
+        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_0_0_1MM-ID_POPUP_GRID_LEVEL_1000;
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     ReCreateMenuBar();
@@ -184,13 +184,13 @@ void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 double GERBVIEW_FRAME::BestZoom()
 {
-    GERBER_DRAW_ITEM* item = GetLayout()->m_Drawings;
+    GERBER_DRAW_ITEM* item = GetGerberLayout()->m_Drawings;
 
     // gives a minimal value to zoom, if no item in list
     if( item == NULL  )
         return ZOOM_FACTOR( 350.0 );
 
-    EDA_RECT bbox = GetLayout()->ComputeBoundingBox();
+    EDA_RECT bbox = GetGerberLayout()->ComputeBoundingBox();
 
     wxSize  size = m_canvas->GetClientSize();
 
@@ -552,7 +552,7 @@ LAYER_MSK GERBVIEW_FRAME::GetVisibleLayers() const
  */
 void GERBVIEW_FRAME::SetVisibleLayers( LAYER_MSK aLayerMask )
 {
-    GetLayout()->SetVisibleLayers( aLayerMask );
+    GetGerberLayout()->SetVisibleLayers( aLayerMask );
 }
 
 
@@ -567,7 +567,7 @@ bool GERBVIEW_FRAME::IsLayerVisible( LAYER_NUM aLayer ) const
     if( ! m_DisplayOptions.m_IsPrinting )
         return m_LayersManager->IsLayerVisible( aLayer );
     else
-        return GetLayout()->IsLayerVisible( aLayer );
+        return GetGerberLayout()->IsLayerVisible( aLayer );
 }
 
 
@@ -693,8 +693,8 @@ void GERBVIEW_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate 
 
 void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
-    wxASSERT( m_Layout );
-    m_Layout->SetPageSettings( aPageSettings );
+    wxASSERT( m_gerberLayout );
+    m_gerberLayout->SetPageSettings( aPageSettings );
 
     if( GetScreen() )
         GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
@@ -703,47 +703,47 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
 const PAGE_INFO& GERBVIEW_FRAME::GetPageSettings() const
 {
-    wxASSERT( m_Layout );
-    return m_Layout->GetPageSettings();
+    wxASSERT( m_gerberLayout );
+    return m_gerberLayout->GetPageSettings();
 }
 
 
 const wxSize GERBVIEW_FRAME::GetPageSizeIU() const
 {
-    wxASSERT( m_Layout );
+    wxASSERT( m_gerberLayout );
 
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
     // into an application specific source file.
-    return m_Layout->GetPageSettings().GetSizeIU();
+    return m_gerberLayout->GetPageSettings().GetSizeIU();
 }
 
 
 const TITLE_BLOCK& GERBVIEW_FRAME::GetTitleBlock() const
 {
-    wxASSERT( m_Layout );
-    return m_Layout->GetTitleBlock();
+    wxASSERT( m_gerberLayout );
+    return m_gerberLayout->GetTitleBlock();
 }
 
 
 void GERBVIEW_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 {
-    wxASSERT( m_Layout );
-    m_Layout->SetTitleBlock( aTitleBlock );
+    wxASSERT( m_gerberLayout );
+    m_gerberLayout->SetTitleBlock( aTitleBlock );
 }
 
 
 const wxPoint& GERBVIEW_FRAME::GetOriginAxisPosition() const
 {
-    wxASSERT( m_Layout );
-    return m_Layout->GetOriginAxisPosition();
+    wxASSERT( m_gerberLayout );
+    return m_gerberLayout->GetOriginAxisPosition();
 }
 
 
 void GERBVIEW_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
 {
-    wxASSERT( m_Layout );
-    m_Layout->SetOriginAxisPosition( aPosition );
+    wxASSERT( m_gerberLayout );
+    m_gerberLayout->SetOriginAxisPosition( aPosition );
 }
 
 
@@ -768,13 +768,13 @@ void GERBVIEW_FRAME::SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo )
 
 
 /*
- * Function GetLayoutBoundingBox
+ * Function GetGerberLayoutBoundingBox
  * returns the bounding box containing all gerber items.
  */
-EDA_RECT GERBVIEW_FRAME::GetLayoutBoundingBox()
+EDA_RECT GERBVIEW_FRAME::GetGerberLayoutBoundingBox()
 {
-    GetLayout()->ComputeBoundingBox();
-    return GetLayout()->GetBoundingBox();
+    GetGerberLayout()->ComputeBoundingBox();
+    return GetGerberLayout()->GetBoundingBox();
 }
 
 /*

@@ -340,8 +340,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             GRCircle( aClipBox,
                       aDC, shape_pos.x, shape_pos.y,
                       halfsize.x + aDrawInfo.m_PadClearance,
-                      0,
-                      aDrawInfo.m_Color );
+                      0, aDrawInfo.m_Color );
         }
 
         break;
@@ -349,7 +348,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     case PAD_OVAL:
     {
         wxPoint segStart, segEnd;
-        seg_width = BuildSegmentFromOvalShape(segStart, segEnd, angle);
+        seg_width = BuildSegmentFromOvalShape(segStart, segEnd, angle,
+                                              aDrawInfo.m_Mask_margin);
         segStart += shape_pos;
         segEnd += shape_pos;
 
@@ -596,27 +596,27 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
  * aRotation is the asked rotation of the segment (usually m_Orient)
  */
 int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd,
-                                     double aRotation) const
+                                     double aRotation, const wxSize& aMargin) const
 {
     int width;
 
     if( m_Size.y < m_Size.x )     // Build an horizontal equiv segment
     {
         int delta   = ( m_Size.x - m_Size.y ) / 2;
-        aSegStart.x = -delta;
+        aSegStart.x = -delta - aMargin.x;
         aSegStart.y = 0;
-        aSegEnd.x = delta;
+        aSegEnd.x = delta + aMargin.x;
         aSegEnd.y = 0;
-        width = m_Size.y;
+        width = m_Size.y + ( aMargin.y * 2 );
     }
     else        // Vertical oval: build a vertical equiv segment
     {
         int delta   = ( m_Size.y -m_Size.x ) / 2;
         aSegStart.x = 0;
-        aSegStart.y = -delta;
+        aSegStart.y = -delta - aMargin.y;
         aSegEnd.x = 0;
-        aSegEnd.y = delta;
-        width = m_Size.x;
+        aSegEnd.y = delta + aMargin.y;
+        width = m_Size.x + ( aMargin.x * 2 );
     }
 
     if( aRotation )

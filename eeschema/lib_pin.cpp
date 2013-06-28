@@ -311,7 +311,8 @@ void LIB_PIN::SetOrientation( int orientation )
 
     for( size_t i = 0; i < pinList.size(); i++ )
     {
-        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0 || pinList[i]->m_orientation == orientation )
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0 ||
+              pinList[i]->m_orientation == orientation )
             continue;
 
         pinList[i]->m_orientation = orientation;
@@ -349,6 +350,12 @@ void LIB_PIN::SetShape( int aShape )
 
 void LIB_PIN::SetType( int aType )
 {
+    if( aType < 0 )
+        aType = 0;
+
+    if( aType >= (int)PIN_ELECTRICAL_TYPE_CNT )
+        aType = PIN_ELECTRICAL_TYPE_CNT - 1;
+
     if( m_type != aType )
     {
         m_type = aType;
