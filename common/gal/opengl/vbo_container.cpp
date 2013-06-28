@@ -29,6 +29,7 @@
 
 #include <gal/opengl/vbo_container.h>
 #include <cstring>
+#include <cstdlib>
 #include <wx/log.h>
 #ifdef __WXDEBUG__
 #include <profile.h>
@@ -42,7 +43,7 @@ VBO_CONTAINER::VBO_CONTAINER( int aSize ) :
     // By default no shader is used
     m_shader[0] = 0;
 
-    m_vertices = new VBO_VERTEX[aSize];
+    m_vertices = static_cast<VBO_VERTEX*>( malloc( aSize * sizeof( VBO_VERTEX ) ) );
 
     // In the beginning there is only free space
     m_freeChunks.insert( Chunk( aSize, 0 ) );
@@ -51,7 +52,7 @@ VBO_CONTAINER::VBO_CONTAINER( int aSize ) :
 
 VBO_CONTAINER::~VBO_CONTAINER()
 {
-    delete[] m_vertices;
+    free( m_vertices );
 }
 
 
@@ -116,7 +117,7 @@ void VBO_CONTAINER::Add( VBO_ITEM* aVboItem, const VBO_VERTEX* aVertex, unsigned
                     itemSize * VBO_ITEM::VertByteSize );
 
             // Return memory used by the previous chunk
-            free( it );
+            freeChunk( it );
 
             itemChunkSize = newSize;
         }
@@ -266,7 +267,7 @@ unsigned int VBO_CONTAINER::allocate( VBO_ITEM* aVboItem, unsigned int aSize )
 }
 
 
-void VBO_CONTAINER::free( const ReservedChunkMap::iterator& aChunk )
+void VBO_CONTAINER::freeChunk( const ReservedChunkMap::iterator& aChunk )
 {
     // Remove the chunk from the reserved chunks map and add to the free chunks map
     int size = getChunkSize( *aChunk );
@@ -289,7 +290,7 @@ bool VBO_CONTAINER::defragment( VBO_VERTEX* aTarget )
     if( aTarget == NULL )
     {
         // No target was specified, so we have to allocate our own space
-        aTarget = new (std::nothrow) VBO_VERTEX[m_currentSize];
+        aTarget = static_cast<VBO_VERTEX*>( malloc( m_currentSize * sizeof( VBO_VERTEX ) ) );
         if( aTarget == NULL )
         {
             wxLogError( wxT( "Run out of memory" ) );
@@ -316,7 +317,7 @@ bool VBO_CONTAINER::defragment( VBO_VERTEX* aTarget )
         newOffset += itemSize;
     }
 
-    delete[] m_vertices;
+    free( m_vertices );
     m_vertices = aTarget;
 
     // Now there is only one big chunk of free memory
@@ -363,15 +364,13 @@ bool VBO_CONTAINER::resizeContainer( unsigned int aNewSize )
         copySize = m_currentSize;
     }
 
-    VBO_VERTEX* newContainer = new (std::nothrow) VBO_VERTEX[aNewSize];
+    VBO_VERTEX* newContainer = static_cast<VBO_VERTEX*>( realloc( m_vertices, aNewSize * sizeof( VBO_VERTEX ) ) );
     if( newContainer == NULL )
     {
         wxLogError( wxT( "Run out of memory" ) );
         return false;
     }
 
-    memcpy( newContainer, m_vertices, copySize * VBO_ITEM::VertByteSize );
-    delete[] m_vertices;
     m_vertices = newContainer;
 
     // Update variables
@@ -391,7 +390,7 @@ bool VBO_CONTAINER::resizeContainer( unsigned int aNewSize )
     {
         // We found a chunk at the end of the container
         m_freeChunks.erase( lastFree.base() );
-        // so we can merge it with the new free chunk
+        // so we can merge it with the new freeChunk chunk
         m_freeChunks.insert( Chunk( aNewSize - m_currentSize + lastFreeSize,    // size
                                     m_currentSize - lastFreeSize ) );           // offset
     }
