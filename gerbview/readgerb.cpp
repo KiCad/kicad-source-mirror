@@ -162,13 +162,15 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
         dlg.ShowModal();
     }
 
-    /* Init DCodes list and perhaps read a DCODES file,
-     * if the gerber file is only a RS274D file
-     * (i.e. without any aperture information)
+    /* if the gerber file is only a RS274D file
+     * (i.e. without any aperture information), wran the user:
      */
     if( !gerber->m_Has_DCode )
     {
-        return LoadDCodeFile( D_Code_FullFileName );
+        msg = _("Warning: this file has no D-Code definition\n"
+                "It is perhaps an old RS274D file\n"
+                "Therefore the size of items is undefined");
+        wxMessageBox( msg );
     }
 
     return true;

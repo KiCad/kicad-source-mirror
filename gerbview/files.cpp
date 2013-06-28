@@ -90,11 +90,6 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
         m_canvas->Refresh();
         break;
 
-    case ID_GERBVIEW_LOAD_DCODE_FILE:
-        LoadDCodeFile( wxEmptyString );
-        m_canvas->Refresh();
-        break;
-
     default:
         wxFAIL_MSG( wxT( "File_io: unexpected command id" ) );
         break;
@@ -288,31 +283,5 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
 
-    return true;
-}
-
-
-bool GERBVIEW_FRAME::LoadDCodeFile( const wxString& aFullFileName )
-{
-    wxString   wildcard;
-    wxFileName fn = aFullFileName;
-
-    if( !fn.IsOk() )
-    {
-        wildcard = _( "Gerber DCODE files" );
-        wildcard += wxT(" ") + AllFilesWildcard;
-        fn = m_lastFileName;
-        wxFileDialog dlg( this, _( "Load GERBER DCODE File" ),
-                          fn.GetPath(), fn.GetFullName(), wildcard,
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return false;
-
-        fn = dlg.GetPath();
-    }
-
-    ReadDCodeDefinitionFile( fn.GetFullPath() );
-    CopyDCodesSizeToItems();
     return true;
 }
