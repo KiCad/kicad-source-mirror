@@ -539,6 +539,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     wxString buffer;
 
     int      tsize;
+    EDA_RECT* clipBox = aDrawInfo.m_DrawPanel?
+                        aDrawInfo.m_DrawPanel->GetClipBox() : NULL;
 
     if( aDrawInfo.m_Display_padnum )
     {
@@ -552,7 +554,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         {
             // tsize reserve room for marges and segments thickness
             tsize = ( tsize * 7 ) / 10;
-            DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos,
+            DrawGraphicHaloText( clipBox, aDC, tpos,
                                  aDrawInfo.m_Color, BLACK, WHITE,
                                  buffer, t_angle,
                                  wxSize( tsize , tsize ), GR_TEXT_HJUSTIFY_CENTER,
@@ -579,7 +581,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
         // tsize reserve room for marges and segments thickness
         tsize = ( tsize * 7 ) / 10;
-        DrawGraphicHaloText( aDrawInfo.m_DrawPanel, aDC, tpos,
+        DrawGraphicHaloText( clipBox, aDC, tpos,
                              aDrawInfo.m_Color, BLACK, WHITE,
                              m_ShortNetname, t_angle,
                              wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,

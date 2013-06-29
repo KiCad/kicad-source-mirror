@@ -233,7 +233,7 @@ EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                          const wxPoint& offset )
 {
-    MODULE* module = (MODULE*) m_Parent;   
+    MODULE* module = (MODULE*) m_Parent;
 
     /* parent must *not* be NULL (a module text without a footprint
        parent has no sense) */
@@ -281,14 +281,14 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         width = -width;
 
     GRSetDrawMode( DC, draw_mode );
-    wxPoint pos( m_Pos.x - offset.x, 
+    wxPoint pos( m_Pos.x - offset.x,
                  m_Pos.y - offset.y);
 
     // Draw the text anchor point
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
     {
         EDA_COLOR_T anchor_color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
-        GRDrawAnchor( panel->GetClipBox(), DC, pos.x, pos.y, 
+        GRDrawAnchor( panel->GetClipBox(), DC, pos.x, pos.y,
                       DIM_ANCRE_TEXTE, anchor_color );
     }
 
@@ -300,7 +300,8 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( m_Mirror )
         size.x = -size.x;
 
-    DrawGraphicText( panel, DC, pos, color, m_Text, orient,
+    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
+    DrawGraphicText( clipbox, DC, pos, color, m_Text, orient,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 

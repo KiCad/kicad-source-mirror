@@ -70,7 +70,7 @@ int OverbarPositionY( int size_v );
 /**
  * Function DrawGraphicText
  * Draw a graphic text (like module texts)
- *  @param aPanel = the current DrawPanel. NULL if draw within a 3D GL Canvas
+ *  @param aClipBox = the clipping rect, or NULL if no clipping
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)
  *  @param aColor (enum EDA_COLOR_T) = text color
@@ -89,7 +89,7 @@ int OverbarPositionY( int size_v );
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                  the text. NULL to draw this text.
  */
-void DrawGraphicText( EDA_DRAW_PANEL * aPanel,
+void DrawGraphicText( EDA_RECT* aClipBox,
                       wxDC * aDC,
                       const wxPoint &aPos,
                       enum EDA_COLOR_T aColor,
@@ -111,7 +111,7 @@ void DrawGraphicText( EDA_DRAW_PANEL * aPanel,
  * If aBgColor is a dark color text is drawn in aColor2 with aColor1
  * border; otherwise colors are swapped.
  */
-void DrawGraphicHaloText( EDA_DRAW_PANEL * aPanel,
+void DrawGraphicHaloText( EDA_RECT* aClipBox,
                           wxDC * aDC,
                           const wxPoint &aPos,
                           enum EDA_COLOR_T aBgColor,

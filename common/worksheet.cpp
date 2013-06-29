@@ -46,15 +46,68 @@
 
 static const wxString productName = wxT( "KiCad E.D.A.  " );
 
+/* Draws the item list crated by BuildWorkSheetGraphicList
+ * aClipBox = the clipping rect, or NULL if no clipping
+ * aDC = the current Device Context
+ */
+void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
+{
+    for( WS_DRAW_ITEM_BASE* item = GetFirst(); item; item = GetNext() )
+    {
+        switch( item->GetType() )
+        {
+        case WS_DRAW_ITEM_BASE::wsg_line:
+            {
+                WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
+                GRLine( aClipBox, aDC,
+                        line->GetStart(), line->GetEnd(),
+                        line->GetPenWidth(), line->GetColor() );
+            }
+            break;
 
-void DrawPageLayout( wxDC* aDC, EDA_DRAW_PANEL * aCanvas,
+        case WS_DRAW_ITEM_BASE::wsg_rect:
+            {
+                WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
+                GRRect( aClipBox, aDC,
+                        rect->GetStart().x, rect->GetStart().y,
+                        rect->GetEnd().x, rect->GetEnd().y,
+                        rect->GetPenWidth(), rect->GetColor() );
+            }
+            break;
+
+        case WS_DRAW_ITEM_BASE::wsg_text:
+            {
+                WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
+                DrawGraphicText( aClipBox, aDC, text->GetTextPosition(),
+                                 text->GetColor(), text->GetText(),
+                                 text->GetOrientation(), text->GetSize(),
+                                 text->GetHorizJustify(), text->GetVertJustify(),
+                                 text->GetPenWidth(), text->IsItalic(), text->IsBold() );
+            }
+            break;
+
+        case WS_DRAW_ITEM_BASE::wsg_poly:
+            {
+                WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
+                GRPoly( aClipBox, aDC,
+                        poly->m_Corners.size(), &poly->m_Corners[0],
+                        poly->IsFilled() ? FILLED_SHAPE : NO_FILL,
+                        poly->GetPenWidth(),
+                        poly->GetColor(), poly->GetColor() );
+            }
+            break;
+        }
+    }
+}
+
+void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
                      const PAGE_INFO& aPageInfo,
                      const wxString &aFullSheetName,
                      const wxString& aFileName,
                      TITLE_BLOCK& aTitleBlock,
                      int aSheetCount, int aSheetNumber,
                      int aPenWidth, double aScalar,
-                     EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor )
+                     EDA_COLOR_T aColor, EDA_COLOR_T aAltColor )
 {
     GRSetDrawMode( aDC, GR_COPY );
     WS_DRAW_ITEM_LIST drawList;
@@ -72,56 +125,10 @@ void DrawPageLayout( wxDC* aDC, EDA_DRAW_PANEL * aCanvas,
 
     drawList.BuildWorkSheetGraphicList(
                                aPageInfo.GetType(), aFullSheetName, aFileName,
-                               aTitleBlock, aLineColor, aTextColor );
+                               aTitleBlock, aColor, aAltColor );
 
     // Draw item list
-    for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item;
-         item = drawList.GetNext() )
-    {
-        switch( item->GetType() )
-        {
-        case WS_DRAW_ITEM_BASE::wsg_line:
-            {
-                WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
-                GRLine( aCanvas ? aCanvas->GetClipBox() : NULL, aDC,
-                        line->GetStart(), line->GetEnd(),
-                        line->GetPenWidth(), line->GetColor() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_rect:
-            {
-                WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
-                GRRect( aCanvas ? aCanvas->GetClipBox() : NULL, aDC,
-                        rect->GetStart().x, rect->GetStart().y,
-                        rect->GetEnd().x, rect->GetEnd().y,
-                        rect->GetPenWidth(), rect->GetColor() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_text:
-            {
-                WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
-                DrawGraphicText( aCanvas, aDC, text->GetTextPosition(),
-                                 text->GetColor(), text->GetText(),
-                                 text->GetOrientation(), text->GetSize(),
-                                 text->GetHorizJustify(), text->GetVertJustify(),
-                                 text->GetPenWidth(), text->IsItalic(), text->IsBold() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_poly:
-            {
-                WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
-                GRPoly( aCanvas ? aCanvas->GetClipBox() : NULL, aDC,
-                        poly->m_Corners.size(), &poly->m_Corners[0],
-                        poly->IsFilled() ? FILLED_SHAPE : NO_FILL,
-                        poly->GetPenWidth(),
-                        poly->GetColor(), poly->GetColor() );
-            }
-            break;
-        }
-    }
+    drawList.Draw( aClipBox, aDC );
 }
 
 
@@ -146,56 +153,10 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
     TITLE_BLOCK t_block = GetTitleBlock();
     EDA_COLOR_T color = RED;
 
-    DrawPageLayout( aDC, m_canvas, pageInfo,
+    DrawPageLayout( aDC, m_canvas->GetClipBox(), pageInfo,
                     aFilename, GetScreenDesc(), t_block,
                     aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber,
                     aLineWidth, aScalar, color, color );
-}
-
-
-const wxString EDA_DRAW_FRAME::GetXYSheetReferences( const wxPoint& aPosition ) const
-{
-    const PAGE_INFO& pageInfo = GetPageSettings();
-
-    int         ii;
-    int         xg, yg;
-    int         ipas;
-    int         gxpas, gypas;
-    int         refx, refy;
-    wxString    msg;
-
-    // Upper left corner
-    refx = pageInfo.GetLeftMarginMils();
-    refy = pageInfo.GetTopMarginMils();
-
-    // lower right corner
-    xg   = pageInfo.GetSizeMils().x - pageInfo.GetRightMarginMils();
-    yg   = pageInfo.GetSizeMils().y - pageInfo.GetBottomMarginMils();
-
-    // Get the Y axis identifier (A symbol A ... Z)
-    if( aPosition.y < refy || aPosition.y > yg )  // Outside of Y limits
-        msg << wxT( "?" );
-    else
-    {
-        ipas  = ( yg - refy ) / PAS_REF;        // ipas = Y count sections
-        gypas = ( yg - refy ) / ipas;           // gypas = Y section size
-        ii    = ( aPosition.y - refy ) / gypas;
-        msg.Printf( wxT( "%c" ), 'A' + ii );
-    }
-
-    // Get the X axis identifier (A number 1 ... n)
-    if( aPosition.x < refx || aPosition.x > xg )  // Outside of X limits
-        msg << wxT( "?" );
-    else
-    {
-        ipas  = ( xg - refx ) / PAS_REF;        // ipas = X count sections
-        gxpas = ( xg - refx ) / ipas;           // gxpas = X section size
-
-        ii = ( aPosition.x - refx ) / gxpas;
-        msg << ii + 1;
-    }
-
-    return msg;
 }
 
 
