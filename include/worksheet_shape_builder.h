@@ -505,6 +505,13 @@ public:
     }
 
     /**
+     * Draws the item list crated by BuildWorkSheetGraphicList
+     * @param aClipBox = the clipping rect, or NULL if no clipping
+     * @param aDC = the current Device Context
+     */
+    void Draw( EDA_RECT* aClipBox, wxDC* aDC );
+
+    /**
      * Function BuildWorkSheetGraphicList is a core function for
      * drawing or plotting the page layout with
      * the frame and the basic inscriptions.
@@ -515,14 +522,14 @@ public:
      * @param aFileName The file name, for basic inscriptions.
      * @param aSheetPathHumanReadable The human readable sheet path.
      * @param aTitleBlock The sheet title block, for basic inscriptions.
-     * @param aLineColor The color for drawing and fixed text.
-     * @param aTextColor The color for user inscriptions.
+     * @param aColor The color for drawing.
+     * @param aAltColor The color for items which need to be "hightlighted".
      */
     void BuildWorkSheetGraphicList( const wxString& aPaperFormat,
                                     const wxString& aFileName,
                                     const wxString& aSheetPathHumanReadable,
                                     const TITLE_BLOCK& aTitleBlock,
-                                    EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor );
+                                    EDA_COLOR_T aColor, EDA_COLOR_T aAltColor );
     /**
      * Function BuildFullText
      * returns the full text corresponding to the aTextbase,

@@ -242,7 +242,7 @@ static void DrawGraphicTextPline( EDA_RECT* aClipBox,
 /**
  * Function DrawGraphicText
  * Draw a graphic text (like module texts)
- *  @param aPanel = the current m_canvas. NULL if draw within a 3D GL Canvas
+ *  @param aClipBox = the clipping rect, or NULL if no clipping
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)
  *  @param aColor (enum EDA_COLOR_T) = text color
@@ -261,7 +261,7 @@ static void DrawGraphicTextPline( EDA_RECT* aClipBox,
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                  the text. NULL to draw this text.
  */
-void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
+void DrawGraphicText( EDA_RECT* aClipBox,
                       wxDC* aDC,
                       const wxPoint& aPos,
                       EDA_COLOR_T aColor,
@@ -284,9 +284,6 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
     wxPoint     current_char_pos;           // Draw coordinates for the current char
     wxPoint     overbar_pos;                // Start point for the current overbar
     int         overbar_italic_comp;        // Italic compensation for overbar
-    EDA_RECT*   clipBox;                    // Clip box used in basic draw functions
-
-    clipBox = aPanel ? aPanel->GetClipBox() : NULL;
     #define        BUF_SIZE 100
     wxPoint coord[BUF_SIZE + 1];                // Buffer coordinate used to draw polylines (one char shape)
     bool    sketch_mode     = false;
@@ -322,7 +319,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
     dy  = size_v;
 
     /* Do not draw the text if out of draw area! */
-    if( aPanel )
+    if( aClipBox )
     {
         int xm, ym, ll, xc, yc;
         ll = std::abs( dx );
@@ -330,10 +327,10 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
         xc  = current_char_pos.x;
         yc  = current_char_pos.y;
 
-        x0  = aPanel->GetClipBox()->GetX() - ll;
-        y0  = aPanel->GetClipBox()->GetY() - ll;
-        xm  = aPanel->GetClipBox()->GetRight() + ll;
-        ym  = aPanel->GetClipBox()->GetBottom() + ll;
+        x0  = aClipBox->GetX() - ll;
+        y0  = aClipBox->GetY() - ll;
+        xm  = aClipBox->GetRight() + ll;
+        ym  = aClipBox->GetBottom() + ll;
 
         if( xc < x0 )
             return;
@@ -407,7 +404,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
             aCallback( current_char_pos.x, current_char_pos.y, end.x, end.y );
         }
         else
-            GRLine( clipBox, aDC,
+            GRLine( aClipBox, aDC,
                     current_char_pos.x, current_char_pos.y, end.x, end.y, aWidth, aColor );
 
         return;
@@ -461,7 +458,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
                     RotatePoint( &overbar_pos, aPos, aOrient );
                     coord[1] = overbar_pos;
                     // Plot the overbar segment
-                    DrawGraphicTextPline( clipBox, aDC, aColor, aWidth,
+                    DrawGraphicTextPline( aClipBox, aDC, aColor, aWidth,
                                           sketch_mode, 2, coord, aCallback, aPlotter );
                 }
 
@@ -508,7 +505,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
                     if( aWidth <= 1 )
                         aWidth = 0;
 
-                    DrawGraphicTextPline( clipBox, aDC, aColor, aWidth,
+                    DrawGraphicTextPline( aClipBox, aDC, aColor, aWidth,
                                           sketch_mode, point_count, coord,
                                           aCallback, aPlotter );
                 }
@@ -554,13 +551,12 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
         coord[1] = overbar_pos;
 
         // Plot the overbar segment
-        DrawGraphicTextPline( clipBox, aDC, aColor, aWidth,
+        DrawGraphicTextPline( aClipBox, aDC, aColor, aWidth,
                               sketch_mode, 2, coord, aCallback, aPlotter );
     }
 }
 
-void DrawGraphicHaloText( EDA_DRAW_PANEL * aPanel,
-                          wxDC * aDC,
+void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
                           const wxPoint &aPos,
                           enum EDA_COLOR_T aBgColor,
                           enum EDA_COLOR_T aColor1,
@@ -570,24 +566,23 @@ void DrawGraphicHaloText( EDA_DRAW_PANEL * aPanel,
                           const wxSize &aSize,
                           enum EDA_TEXT_HJUSTIFY_T aH_justify,
                           enum EDA_TEXT_VJUSTIFY_T aV_justify,
-                          int aWidth,
-                          bool aItalic,
-                          bool aBold,
+                          int aWidth, bool aItalic, bool aBold,
                           void (*aCallback)( int x0, int y0, int xf, int yf ),
                           PLOTTER * aPlotter )
 {
     // Swap color if contrast would be better
-    if( ColorIsLight( aBgColor ) ) {
+    if( ColorIsLight( aBgColor ) )
+    {
         EDA_COLOR_T c = aColor1;
         aColor1 = aColor2;
         aColor2 = c;
     }
 
-    DrawGraphicText( aPanel, aDC, aPos, aColor1, aText, aOrient, aSize,
+    DrawGraphicText( aClipBox, aDC, aPos, aColor1, aText, aOrient, aSize,
                      aH_justify, aV_justify, aWidth, aItalic, aBold,
                      aCallback, aPlotter );
 
-    DrawGraphicText( aPanel, aDC, aPos, aColor2, aText, aOrient, aSize,
+    DrawGraphicText( aClipBox, aDC, aPos, aColor2, aText, aOrient, aSize,
                      aH_justify, aV_justify, aWidth / 4, aItalic, aBold,
                      aCallback, aPlotter );
 }

@@ -103,7 +103,8 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
         anchor_color = brd->GetVisibleElementColor( ANCHOR_VISIBLE );
 
-    EDA_TEXT::Draw( panel, DC, offset, color,
+    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
+    EDA_TEXT::Draw( clipbox, DC, offset, color,
                     DrawMode, fillmode, anchor_color );
 }
 

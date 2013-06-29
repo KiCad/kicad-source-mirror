@@ -407,7 +407,7 @@ void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, GR_DRAWMODE aDrawMode )
 
         int color = GetVisibleElementColor( DCODES_VISIBLE );
 
-        DrawGraphicText( m_canvas, aDC, pos, (EDA_COLOR_T) color, Line,
+        DrawGraphicText( m_canvas->GetClipBox(), aDC, pos, (EDA_COLOR_T) color, Line,
                          orient, wxSize( width, width ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                          0, false, false );

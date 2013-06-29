@@ -399,7 +399,8 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
     // Calculate pos accordint to mirror/rotation.
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
-    DrawGraphicText( aPanel, aDC, txtpos, (EDA_COLOR_T) color, m_Text, orient, m_Size,
+    EDA_RECT* clipbox = aPanel? aPanel->GetClipBox() : NULL;
+    DrawGraphicText( clipbox, aDC, txtpos, (EDA_COLOR_T) color, m_Text, orient, m_Size,
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, GetPenSize(),
                      m_Italic, m_Bold );
 
@@ -412,7 +413,7 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
     grBox.SetOrigin( aTransform.TransformCoordinate( bBox.GetOrigin() ) );
     grBox.SetEnd( aTransform.TransformCoordinate( bBox.GetEnd() ) );
     grBox.Move( aOffset );
-    GRRect( aPanel->GetClipBox(), aDC, grBox, 0, LIGHTMAGENTA );
+    GRRect( clipbox, aDC, grBox, 0, LIGHTMAGENTA );
 #endif
 }
 
