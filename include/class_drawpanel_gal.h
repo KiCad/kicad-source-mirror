@@ -91,8 +91,6 @@ protected:
     GalType                  m_currentGal;       ///< Currently used GAL
     bool                     m_useShaders;       ///< Are shaders used? (only for OpenGL GAL)
     wxLongLong               m_timeStamp;
-
-    std::string              m_galShaderPath;    ///< Path to shader files, used in OpenGL mode
 };
 
 #endif

@@ -12,6 +12,20 @@ include_directories(
     )
 
 if(KICAD_GAL)
+# Generate files containing shader programs
+add_custom_command (
+    OUTPUT gal/opengl/shader_src.h
+    DEPENDS gal/opengl/make_shader_src_h.sh
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/common/gal/opengl
+    COMMAND ${SHELL}
+    ARGS ${PROJECT_SOURCE_DIR}/common/gal/opengl/make_shader_src_h.sh
+)
+
+add_custom_target (
+    ShaderHeader ALL
+    DEPENDS gal/opengl/shader_src.h
+)
+
 set(GAL_SRCS
     drawpanel_gal.cpp
     painter.cpp
@@ -27,6 +41,7 @@ set(GAL_SRCS
     )
 
 add_library(gal STATIC ${GAL_SRCS})
+add_dependencies(gal ShaderHeader)
 
 if(WIN32)
 add_definitions(-DGLEW_STATIC)

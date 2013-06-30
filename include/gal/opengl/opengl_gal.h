@@ -320,11 +320,6 @@ public:
         paintListener = aPaintListener;
     }
 
-    void SetShaderPath( const std::string& aPath )
-    {
-        shaderPath = aPath;
-    }
-
     ///< Parameters passed to the GLU tesselator
     typedef struct
     {
@@ -389,7 +384,6 @@ private:
 
     SHADER                shader;           ///< There is only one shader used for different objects
     int                   shaderAttrib;     ///< Location of shader attributes (for glVertexAttribPointer)
-    std::string           shaderPath;       ///< Location of shader files
 
     // Cursor
     int             cursorSize;             ///< Size of the cursor in pixels
