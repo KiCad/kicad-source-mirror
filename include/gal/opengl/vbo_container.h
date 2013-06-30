@@ -150,10 +150,10 @@ public:
      */
     inline void UseColor( const COLOR4D& aColor )
     {
-        m_color[0] = aColor.r;
-        m_color[1] = aColor.g;
-        m_color[2] = aColor.b;
-        m_color[3] = aColor.a;
+        m_color[0] = aColor.r * 255;
+        m_color[1] = aColor.g * 255;
+        m_color[2] = aColor.b * 255;
+        m_color[3] = aColor.a * 255;
     }
 
     /**
@@ -165,7 +165,7 @@ public:
     {
         for( unsigned int i = 0; i < VBO_ITEM::ColorStride; ++i )
         {
-            m_color[i] = aColor[i];
+            m_color[i] = aColor[i] * 255;
         }
     }
 
@@ -179,10 +179,10 @@ public:
      */
     inline void UseColor( GLfloat aR, GLfloat aG, GLfloat aB, GLfloat aA )
     {
-        m_color[0] = aR;
-        m_color[1] = aG;
-        m_color[2] = aB;
-        m_color[3] = aA;
+        m_color[0] = aR * 255;
+        m_color[1] = aG * 255;
+        m_color[2] = aB * 255;
+        m_color[3] = aA * 255;
     }
 
     /**
@@ -318,7 +318,7 @@ private:
     VBO_ITEM*       item;
 
     ///< Color used for new vertices pushed.
-    GLfloat         m_color[VBO_ITEM::ColorStride];
+    GLubyte         m_color[VBO_ITEM::ColorStride];
 
     ///< Shader and its parameters used for new vertices pushed
     GLfloat         m_shader[VBO_ITEM::ShaderStride];

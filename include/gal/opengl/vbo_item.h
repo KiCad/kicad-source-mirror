@@ -39,7 +39,7 @@ namespace KiGfx
 typedef struct VBO_VERTEX
 {
     GLfloat x, y, z;        // Coordinates
-    GLfloat r, g, b, a;     // Color
+    GLubyte r, g, b, a;     // Color
     GLfloat shader[4];      // Shader type & params
 } VBO_VERTEX;
 
@@ -136,10 +136,10 @@ public:
 
     // Offset of color data from the beginning of each vertex data
     static const unsigned int ColorByteOffset    = offsetof(VBO_VERTEX, r);
-    static const unsigned int ColorOffset        = ColorByteOffset / sizeof(GLfloat);
+    static const unsigned int ColorOffset        = ColorByteOffset / sizeof(GLubyte);
     static const unsigned int ColorByteSize      = sizeof(VBO_VERTEX().r) + sizeof(VBO_VERTEX().g) +
                                                    sizeof(VBO_VERTEX().b) + sizeof(VBO_VERTEX().a);
-    static const unsigned int ColorStride        = ColorByteSize / sizeof(GLfloat);
+    static const unsigned int ColorStride        = ColorByteSize / sizeof(GLubyte);
 
     // Shader attributes
     static const unsigned int ShaderByteOffset   = offsetof(VBO_VERTEX, shader);

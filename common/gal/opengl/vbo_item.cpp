@@ -83,10 +83,10 @@ void VBO_ITEM::ChangeColor( const COLOR4D& aColor )
 
     for( unsigned int i = 0; i < m_size; ++i )
     {
-        vertexPtr->r = aColor.r;
-        vertexPtr->g = aColor.g;
-        vertexPtr->b = aColor.b;
-        vertexPtr->a = aColor.a;
+        vertexPtr->r = aColor.r * 255;
+        vertexPtr->g = aColor.g * 255;
+        vertexPtr->b = aColor.b * 255;
+        vertexPtr->a = aColor.a * 255;
 
         // Move on to the next vertex
         vertexPtr++;
