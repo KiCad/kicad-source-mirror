@@ -76,7 +76,7 @@ public:
      * @param aShaderSourceName is the shader source file name.
      * @param aShaderType is the type of the shader.
      */
-    void AddSource( const std::string& aShaderSourceName, ShaderType aShaderType );
+    bool AddSource( const std::string& aShaderSourceName, ShaderType aShaderType );
 
     /**
      * @brief Link the shaders.
@@ -158,6 +158,13 @@ private:
      * @param aProgram is the program number.
      */
     void ProgramInfo( GLuint aProgram );
+
+    /**
+	 * @brief Get the shader information.
+	 *
+	 * @param aShader is the shader number.
+	 */
+	void ShaderInfo( GLuint aShader );
 
     /**
      * @brief Read the shader source file

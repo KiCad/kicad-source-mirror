@@ -83,6 +83,27 @@ void SHADER::ProgramInfo( GLuint aProgram )
 }
 
 
+void SHADER::ShaderInfo( GLuint aShader )
+{
+    GLint glInfoLogLength = 0;
+    GLint writtenChars    = 0;
+
+    // Get the length of the info string
+    glGetShaderiv( aShader, GL_INFO_LOG_LENGTH, &glInfoLogLength );
+
+    // Print the information
+    if( glInfoLogLength > 2 )
+    {
+        GLchar* glInfoLog = new GLchar[glInfoLogLength];
+        glGetShaderInfoLog( aShader, glInfoLogLength, &writtenChars, glInfoLog );
+
+        wxLogInfo( wxString::FromUTF8( (char*) glInfoLog ) );
+
+        delete glInfoLog;
+    }
+}
+
+
 std::string SHADER::ReadSource( std::string aShaderSourceName )
 {
     // Open the shader source for reading
@@ -109,7 +130,7 @@ std::string SHADER::ReadSource( std::string aShaderSourceName )
 }
 
 
-void SHADER::AddSource( const std::string& aShaderSourceName, ShaderType aShaderType )
+bool SHADER::AddSource( const std::string& aShaderSourceName, ShaderType aShaderType )
 {
     if( isShaderLinked )
     {
@@ -144,6 +165,17 @@ void SHADER::AddSource( const std::string& aShaderSourceName, ShaderType aShader
 
     // Compile and attach shader to the program
     glCompileShader( shaderNumber );
+    GLint status;
+    glGetShaderiv( shaderNumber, GL_COMPILE_STATUS, &status );
+    if( status != GL_TRUE )
+    {
+    	wxLogError( wxT( "Shader compilation error" ) );
+
+    	ShaderInfo( shaderNumber );
+
+    	return false;
+    }
+
     glAttachShader( programNumber, shaderNumber );
     ProgramInfo( programNumber );
 
@@ -157,6 +189,8 @@ void SHADER::AddSource( const std::string& aShaderSourceName, ShaderType aShader
 
     // Delete the allocated char array
     delete[] source;
+
+    return true;
 }
 
 
