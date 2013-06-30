@@ -511,7 +511,7 @@ void OPENGL_GAL::EndDrawing()
     // Bind vertices data buffers
     glBindBuffer( GL_ARRAY_BUFFER, vboVertices );
     glVertexPointer( VBO_ITEM::CoordStride, GL_FLOAT, VBO_ITEM::VertByteSize, 0 );
-    glColorPointer( VBO_ITEM::ColorStride, GL_FLOAT, VBO_ITEM::VertByteSize,
+    glColorPointer( VBO_ITEM::ColorStride, GL_UNSIGNED_BYTE, VBO_ITEM::VertByteSize,
                     (GLvoid*) VBO_ITEM::ColorByteOffset );
 
     // Shader parameters
