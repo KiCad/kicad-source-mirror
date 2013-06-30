@@ -27,7 +27,6 @@
 #include <wx/window.h>
 #include <wx/event.h>
 #include <wx/colour.h>
-#include <wx/stdpaths.h>
 #include <wx/filename.h>
 
 #include <class_drawpanel_gal.h>
@@ -55,11 +54,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_currentGal = GAL_TYPE_NONE;
     m_view       = NULL;
     m_painter    = NULL;
-
-    wxStandardPaths paths;
-    wxFileName executableFile( paths.GetExecutablePath() );
-    m_galShaderPath = std::string( ( executableFile.GetPath() +
-                                   wxT( "/../../common/gal/opengl" ) ).mb_str() );
 
     SwitchBackend( aGalType, true );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
@@ -170,7 +164,6 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
     {
     case GAL_TYPE_OPENGL:
         m_gal = new KiGfx::OPENGL_GAL( this, this, this, aUseShaders );
-        static_cast<KiGfx::OPENGL_GAL*> (m_gal)->SetShaderPath( m_galShaderPath );
         break;
 
     case GAL_TYPE_CAIRO:

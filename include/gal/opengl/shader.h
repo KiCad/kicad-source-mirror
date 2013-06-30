@@ -71,12 +71,22 @@ public:
     virtual ~SHADER();
 
     /**
-     * @brief Add a shader and compile the shader sources.
+     * @brief Loads one of the built-in shaders and compiles it.
+     *
+     * @param aShaderNumber is the shader number (indexing from 0).
+     * @param aShaderType is the type of the shader.
+     * @return True in case of success, false otherwise.
+     */
+    bool LoadBuiltinShader( unsigned int aShaderNumber, ShaderType aShaderType );
+
+    /**
+     * @brief Loads one of the built-in shaders and compiles it.
      *
      * @param aShaderSourceName is the shader source file name.
      * @param aShaderType is the type of the shader.
+     * @return True in case of success, false otherwise.
      */
-    bool AddSource( const std::string& aShaderSourceName, ShaderType aShaderType );
+    bool LoadShaderFromFile( const std::string& aShaderSourceName, ShaderType aShaderType );
 
     /**
      * @brief Link the shaders.
@@ -157,14 +167,14 @@ private:
      *
      * @param aProgram is the program number.
      */
-    void ProgramInfo( GLuint aProgram );
+    void programInfo( GLuint aProgram );
 
     /**
 	 * @brief Get the shader information.
 	 *
 	 * @param aShader is the shader number.
 	 */
-	void ShaderInfo( GLuint aShader );
+	void shaderInfo( GLuint aShader );
 
     /**
      * @brief Read the shader source file
@@ -172,7 +182,16 @@ private:
      * @param aShaderSourceName is the shader source file name.
      * @return the source as string
      */
-    std::string ReadSource( std::string aShaderSourceName );
+    std::string readSource( std::string aShaderSourceName );
+
+    /**
+     * @brief Add a shader and compile the shader sources.
+     *
+     * @param aShaderSource is the shader source content.
+     * @param aShaderType is the type of the shader.
+     * @return True in case of success, false otherwise.
+     */
+    bool addSource( const std::string& aShaderSource, ShaderType aShaderType );
 
     std::deque<GLuint>  shaderNumbers;      ///< Shader number list
     GLuint              programNumber;      ///< Shader program number

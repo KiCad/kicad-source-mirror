@@ -74,7 +74,6 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     isUseShader              = isUseShaders;
     isShaderInitialized      = false;
     isGrouping               = false;
-    shaderPath               = "../../common/gal/opengl";
     wxSize parentSize        = aParent->GetSize();
 
     isVboInitialized         = false;
@@ -359,12 +358,12 @@ void OPENGL_GAL::BeginDrawing()
     // Compile the shaders
     if( !isShaderInitialized && isUseShader )
     {
-        if( !shader.AddSource( shaderPath + std::string( "/shader.vert" ), SHADER_TYPE_VERTEX ) )
+        if( !shader.LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
         {
         	wxLogFatalError( wxT( "Cannot compile vertex shader!" ) );
         }
 
-        if( !shader.AddSource( shaderPath + std::string( "/shader.frag" ), SHADER_TYPE_FRAGMENT ) )
+        if( !shader.LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
         {
         	wxLogFatalError( wxT( "Cannot compile fragment shader!" ) );
         }

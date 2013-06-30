@@ -32,14 +32,15 @@
 #include <wx/log.h>
 
 #include <gal/opengl/shader.h>
+#include "shader_src.h"
 
 using namespace KiGfx;
 
 SHADER::SHADER() :
         isProgramCreated( false ),
         isShaderLinked( false ),
-        maximumVertices( 4 ),
         active( false ),
+        maximumVertices( 4 ),
         geomInputType( GL_LINES ),
         geomOutputType( GL_LINES )
 {
@@ -62,135 +63,21 @@ SHADER::~SHADER()
 }
 
 
-void SHADER::ProgramInfo( GLuint aProgram )
+bool SHADER::LoadBuiltinShader( unsigned int aShaderNumber, ShaderType aShaderType )
 {
-    GLint glInfoLogLength = 0;
-    GLint writtenChars    = 0;
+    if( aShaderNumber >= shaders_number )
+        return false;
 
-    // Get the length of the info string
-    glGetProgramiv( aProgram, GL_INFO_LOG_LENGTH, &glInfoLogLength );
-
-    // Print the information
-    if( glInfoLogLength > 2 )
-    {
-        GLchar* glInfoLog = new GLchar[glInfoLogLength];
-        glGetProgramInfoLog( aProgram, glInfoLogLength, &writtenChars, glInfoLog );
-
-        wxLogInfo( wxString::FromUTF8( (char*) glInfoLog ) );
-
-        delete glInfoLog;
-    }
+    return addSource( std::string( shaders_src[aShaderNumber] ), aShaderType );
 }
 
 
-void SHADER::ShaderInfo( GLuint aShader )
+bool SHADER::LoadShaderFromFile( const std::string& aShaderSourceName, ShaderType aShaderType )
 {
-    GLint glInfoLogLength = 0;
-    GLint writtenChars    = 0;
-
-    // Get the length of the info string
-    glGetShaderiv( aShader, GL_INFO_LOG_LENGTH, &glInfoLogLength );
-
-    // Print the information
-    if( glInfoLogLength > 2 )
-    {
-        GLchar* glInfoLog = new GLchar[glInfoLogLength];
-        glGetShaderInfoLog( aShader, glInfoLogLength, &writtenChars, glInfoLog );
-
-        wxLogInfo( wxString::FromUTF8( (char*) glInfoLog ) );
-
-        delete glInfoLog;
-    }
-}
-
-
-std::string SHADER::ReadSource( std::string aShaderSourceName )
-{
-    // Open the shader source for reading
-    std::ifstream inputFile( aShaderSourceName.c_str(), std::ifstream::in );
-    std::string   shaderSource;
-
-    if( !inputFile )
-    {
-        wxLogError( wxString::FromUTF8( "Can't read the shader source: " ) +
-                    wxString( aShaderSourceName.c_str(), wxConvUTF8 ) );
-        exit( 1 );
-    }
-
-    std::string shaderSourceLine;
-
-    // Read all lines from the text file
-    while( getline( inputFile, shaderSourceLine ) )
-    {
-        shaderSource += shaderSourceLine;
-        shaderSource += "\n";
-    }
-
-    return shaderSource;
-}
-
-
-bool SHADER::AddSource( const std::string& aShaderSourceName, ShaderType aShaderType )
-{
-    if( isShaderLinked )
-    {
-        wxLogError( wxString::FromUTF8( "Shader is already linked!" ) );
-    }
-
-    // Create the program
-    if( !isProgramCreated )
-    {
-        programNumber    = glCreateProgram();
-        isProgramCreated = true;
-    }
-
     // Load shader sources
-    std::string shaderSource = ReadSource( aShaderSourceName );
+    const std::string shaderSource = readSource( aShaderSourceName );
 
-    // Create a shader
-    GLuint shaderNumber = glCreateShader( aShaderType );
-    shaderNumbers.push_back( shaderNumber );
-
-    // Get the program info
-    ProgramInfo( programNumber );
-
-    // Copy to char array
-    char* source = new char[shaderSource.size() + 1];
-    strcpy( source, shaderSource.c_str() );
-    const char** source_ = (const char**) ( &source );
-
-    // Attach the source
-    glShaderSource( shaderNumber, 1, source_, NULL );
-    ProgramInfo( programNumber );
-
-    // Compile and attach shader to the program
-    glCompileShader( shaderNumber );
-    GLint status;
-    glGetShaderiv( shaderNumber, GL_COMPILE_STATUS, &status );
-    if( status != GL_TRUE )
-    {
-    	wxLogError( wxT( "Shader compilation error" ) );
-
-    	ShaderInfo( shaderNumber );
-
-    	return false;
-    }
-
-    glAttachShader( programNumber, shaderNumber );
-    ProgramInfo( programNumber );
-
-    // Special handling for the geometry shader
-    if( aShaderType == SHADER_TYPE_GEOMETRY )
-    {
-        glProgramParameteriEXT( programNumber, GL_GEOMETRY_VERTICES_OUT_EXT, maximumVertices );
-        glProgramParameteriEXT( programNumber, GL_GEOMETRY_INPUT_TYPE_EXT, geomInputType );
-        glProgramParameteriEXT( programNumber, GL_GEOMETRY_OUTPUT_TYPE_EXT, geomOutputType );
-    }
-
-    // Delete the allocated char array
-    delete[] source;
-
-    return true;
+    return addSource( shaderSource, aShaderType );
 }
 
 
@@ -207,7 +94,7 @@ bool SHADER::Link()
 {
     // Shader linking
     glLinkProgram( programNumber );
-    ProgramInfo( programNumber );
+    programInfo( programNumber );
 
     // Check the Link state
     glGetObjectParameterivARB( programNumber, GL_OBJECT_LINK_STATUS_ARB, (GLint*) &isShaderLinked );
@@ -251,3 +138,133 @@ int SHADER::GetAttribute( std::string aAttributeName ) const
 {
     return glGetAttribLocation( programNumber, aAttributeName.c_str() );
 }
+
+
+void SHADER::programInfo( GLuint aProgram )
+{
+    GLint glInfoLogLength = 0;
+    GLint writtenChars    = 0;
+
+    // Get the length of the info string
+    glGetProgramiv( aProgram, GL_INFO_LOG_LENGTH, &glInfoLogLength );
+
+    // Print the information
+    if( glInfoLogLength > 2 )
+    {
+        GLchar* glInfoLog = new GLchar[glInfoLogLength];
+        glGetProgramInfoLog( aProgram, glInfoLogLength, &writtenChars, glInfoLog );
+
+        wxLogInfo( wxString::FromUTF8( (char*) glInfoLog ) );
+
+        delete glInfoLog;
+    }
+}
+
+
+void SHADER::shaderInfo( GLuint aShader )
+{
+    GLint glInfoLogLength = 0;
+    GLint writtenChars    = 0;
+
+    // Get the length of the info string
+    glGetShaderiv( aShader, GL_INFO_LOG_LENGTH, &glInfoLogLength );
+
+    // Print the information
+    if( glInfoLogLength > 2 )
+    {
+        GLchar* glInfoLog = new GLchar[glInfoLogLength];
+        glGetShaderInfoLog( aShader, glInfoLogLength, &writtenChars, glInfoLog );
+
+        wxLogInfo( wxString::FromUTF8( (char*) glInfoLog ) );
+
+        delete glInfoLog;
+    }
+}
+
+
+std::string SHADER::readSource( std::string aShaderSourceName )
+{
+    // Open the shader source for reading
+    std::ifstream inputFile( aShaderSourceName.c_str(), std::ifstream::in );
+    std::string   shaderSource;
+
+    if( !inputFile )
+    {
+        wxLogError( wxString::FromUTF8( "Can't read the shader source: " ) +
+                    wxString( aShaderSourceName.c_str(), wxConvUTF8 ) );
+        exit( 1 );
+    }
+
+    std::string shaderSourceLine;
+
+    // Read all lines from the text file
+    while( getline( inputFile, shaderSourceLine ) )
+    {
+        shaderSource += shaderSourceLine;
+        shaderSource += "\n";
+    }
+
+    return shaderSource;
+}
+
+
+bool SHADER::addSource( const std::string& aShaderSource, ShaderType aShaderType )
+{
+    if( isShaderLinked )
+    {
+        wxLogError( wxString::FromUTF8( "Shader is already linked!" ) );
+    }
+
+    // Create the program
+    if( !isProgramCreated )
+    {
+        programNumber    = glCreateProgram();
+        isProgramCreated = true;
+    }
+
+    // Create a shader
+    GLuint shaderNumber = glCreateShader( aShaderType );
+    shaderNumbers.push_back( shaderNumber );
+
+    // Get the program info
+    programInfo( programNumber );
+
+    // Copy to char array
+    char* source = new char[aShaderSource.size() + 1];
+    strcpy( source, aShaderSource.c_str() );
+    const char** source_ = (const char**) ( &source );
+
+    // Attach the source
+    glShaderSource( shaderNumber, 1, source_, NULL );
+    programInfo( programNumber );
+
+    // Compile and attach shader to the program
+    glCompileShader( shaderNumber );
+    GLint status;
+    glGetShaderiv( shaderNumber, GL_COMPILE_STATUS, &status );
+    if( status != GL_TRUE )
+    {
+        wxLogError( wxT( "Shader compilation error" ) );
+
+        shaderInfo( shaderNumber );
+
+        return false;
+    }
+
+    glAttachShader( programNumber, shaderNumber );
+    programInfo( programNumber );
+
+    // Special handling for the geometry shader
+    if( aShaderType == SHADER_TYPE_GEOMETRY )
+    {
+        glProgramParameteriEXT( programNumber, GL_GEOMETRY_VERTICES_OUT_EXT, maximumVertices );
+        glProgramParameteriEXT( programNumber, GL_GEOMETRY_INPUT_TYPE_EXT, geomInputType );
+        glProgramParameteriEXT( programNumber, GL_GEOMETRY_OUTPUT_TYPE_EXT, geomOutputType );
+    }
+
+    // Delete the allocated char array
+    delete[] source;
+
+    return true;
+}
+
