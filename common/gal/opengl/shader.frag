@@ -25,14 +25,13 @@
  */
 
 #version 120
-//#pragma debug(on)
 
 // Shader types
 const float SHADER_LINE                 = 1.0;
 const float SHADER_FILLED_CIRCLE        = 2.0;
 const float SHADER_STROKED_CIRCLE       = 3.0;
 
-varying in vec4 shaderParams;
+varying vec4 shaderParams;
 
 void filledCircle( vec2 aCoord )
 {

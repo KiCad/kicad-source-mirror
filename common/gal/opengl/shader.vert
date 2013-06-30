@@ -31,8 +31,8 @@ const float SHADER_LINE                 = 1.0;
 const float SHADER_FILLED_CIRCLE        = 2.0;
 const float SHADER_STROKED_CIRCLE       = 3.0;
 
-attribute   vec4 attrShaderParams;
-varying out vec4 shaderParams;
+attribute vec4 attrShaderParams;
+varying vec4 shaderParams;
 
 void main()
 {
