@@ -359,8 +359,16 @@ void OPENGL_GAL::BeginDrawing()
     // Compile the shaders
     if( !isShaderInitialized && isUseShader )
     {
-        shader.AddSource( shaderPath + std::string( "/shader.vert" ), SHADER_TYPE_VERTEX );
-        shader.AddSource( shaderPath + std::string( "/shader.frag" ), SHADER_TYPE_FRAGMENT );
+        if( !shader.AddSource( shaderPath + std::string( "/shader.vert" ), SHADER_TYPE_VERTEX ) )
+        {
+        	wxLogFatalError( wxT( "Cannot compile vertex shader!" ) );
+        }
+
+        if( !shader.AddSource( shaderPath + std::string( "/shader.frag" ), SHADER_TYPE_FRAGMENT ) )
+        {
+        	wxLogFatalError( wxT( "Cannot compile fragment shader!" ) );
+        }
+
         if( !shader.Link() )
         {
             wxLogFatalError( wxT( "Cannot link the shaders!" ) );
