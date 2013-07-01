@@ -233,8 +233,6 @@ void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRo
 
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
-    m_gal->SetLineCap( LINE_CAP_ROUND );
-    m_gal->SetLineJoin( LINE_JOIN_ROUND );
 
     if( m_bold )
     {

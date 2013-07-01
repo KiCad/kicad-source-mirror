@@ -38,27 +38,6 @@
 
 namespace KiGfx
 {
-
-/**
- * LineCap: Type definition of the line end point style
- */
-enum LineCap
-{
-    LINE_CAP_BUTT,      ///< Stop line at the end point
-    LINE_CAP_ROUND,     ///< Draw a circle at the end point
-    LINE_CAP_SQUARED    ///< Draw a square at the end point
-};
-
-/**
- * LineJoin: Type definition of the line joint style
- */
-enum LineJoin
-{
-    LINE_JOIN_MITER,    ///< Use sharp corners
-    LINE_JOIN_ROUND,    ///< Insert a circle at the joints
-    LINE_JOIN_BEVEL     ///< Diagonal corner
-};
-
 /**
  * GridStyle: Type definition of the grid style
  */
@@ -250,26 +229,6 @@ public:
      * @param aColor is the color for background filling.
      */
     virtual void SetBackgroundColor( const COLOR4D& aColor ) = 0;
-
-    /**
-     * @brief Set the style of the line caps.
-     *
-     * @param aLineCap is the line cap style.
-     */
-    inline virtual void SetLineCap( LineCap aLineCap )
-    {
-        lineCap = aLineCap;
-    }
-
-    /**
-     * @brief Set the line join style.
-     *
-     * @param aLineJoin is the line join style.
-     */
-    inline virtual void SetLineJoin( LineJoin aLineJoin )
-    {
-        lineJoin = aLineJoin;
-    }
 
     /**
      * @brief Set the line width.
@@ -710,8 +669,6 @@ protected:
     double             worldScale;             ///< The scale factor world->screen
 
     double             lineWidth;              ///< The line width
-    LineCap            lineCap;                ///< Line end style
-    LineJoin           lineJoin;               ///< Style of the line joints
 
     bool               isFillEnabled;          ///< Is filling of graphic objects enabled ?
     bool               isStrokeEnabled;        ///< Are the outlines stroked ?

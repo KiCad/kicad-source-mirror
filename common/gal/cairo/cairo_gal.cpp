@@ -72,15 +72,6 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
 #endif
 
-    // Initialize line attributes map
-    lineCapMap[LINE_CAP_BUTT]    = CAIRO_LINE_CAP_BUTT;
-    lineCapMap[LINE_CAP_ROUND]   = CAIRO_LINE_CAP_ROUND;
-    lineCapMap[LINE_CAP_SQUARED] = CAIRO_LINE_CAP_SQUARE;
-
-    lineJoinMap[LINE_JOIN_BEVEL] = CAIRO_LINE_JOIN_BEVEL;
-    lineJoinMap[LINE_JOIN_ROUND] = CAIRO_LINE_JOIN_ROUND;
-    lineJoinMap[LINE_JOIN_MITER] = CAIRO_LINE_JOIN_MITER;
-
     // Initialize the cursor shape
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     initCursor( 21 );
@@ -179,8 +170,8 @@ void CAIRO_GAL::initSurface()
     cairo_new_path( cairoImage );
     isElementAdded = true;
 
-    cairo_set_line_join( cairoImage, lineJoinMap[lineJoin] );
-    cairo_set_line_cap( cairoImage, lineCapMap[lineCap] );
+    cairo_set_line_join( cairoImage, CAIRO_LINE_JOIN_ROUND );
+    cairo_set_line_cap( cairoImage, CAIRO_LINE_CAP_ROUND );
 
     lineWidth = 0;
 
@@ -298,9 +289,6 @@ void CAIRO_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint
 
 void CAIRO_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth )
 {
-    cairo_set_line_cap( cairoImage, CAIRO_LINE_CAP_ROUND );
-    cairo_set_line_join( cairoImage, CAIRO_LINE_JOIN_ROUND );
-
     if( isFillEnabled )
     {
         SetLineWidth( aWidth );
@@ -520,42 +508,6 @@ void CAIRO_GAL::SetLineWidth( double aLineWidth )
 }
 
 
-void CAIRO_GAL::SetLineCap( LineCap aLineCap )
-{
-    storePath();
-
-    lineCap = aLineCap;
-
-    cairo_set_line_cap( cairoImage, lineCapMap[aLineCap] );
-
-    if( isGrouping )
-    {
-        GroupElement groupElement;
-        groupElement.command     = CMD_SET_LINE_CAP;
-        groupElement.intArgument = (int) aLineCap;
-        currentGroup->push_back( groupElement );
-    }
-}
-
-
-void CAIRO_GAL::SetLineJoin( LineJoin aLineJoin )
-{
-    storePath();
-
-    lineJoin = aLineJoin;
-
-    cairo_set_line_join( cairoImage, lineJoinMap[aLineJoin] );
-
-    if( isGrouping )
-    {
-        GroupElement groupElement;
-        groupElement.command     = CMD_SET_LINE_JOIN;
-        groupElement.intArgument = (int) aLineJoin;
-        currentGroup->push_back( groupElement );
-    }
-}
-
-
 void CAIRO_GAL::ClearScreen()
 {
     // Clear screen
@@ -765,14 +717,6 @@ void CAIRO_GAL::DrawGroup( int aGroupNumber )
 
         case CMD_SET_LINE_WIDTH:
             cairo_set_line_width( cairoImage, it->arguments[0] );
-            break;
-
-        case CMD_SET_LINE_JOIN:
-            cairo_set_line_join( cairoImage, lineJoinMap[(LineJoin) ( it->intArgument )] );
-            break;
-
-        case CMD_SET_LINE_CAP:
-            cairo_set_line_cap( cairoImage, lineCapMap[(LineCap) ( it->intArgument )] );
             break;
 
         case CMD_STROKE_PATH:

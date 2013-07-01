@@ -38,8 +38,6 @@ GAL::GAL()
     // Set the default values for the internal variables
     SetIsFill( false );
     SetIsStroke( true );
-    SetLineJoin( LINE_JOIN_ROUND );
-    SetLineCap( LINE_CAP_ROUND );
     SetIsCursorEnabled( false );
     SetZoomFactor( 1.0 );
     SetFillColor( COLOR4D( 0.0, 0.0, 0.0, 0.0 ) );
