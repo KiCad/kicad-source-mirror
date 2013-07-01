@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <hashtables.h>
 
 #include <richio.h>
 
@@ -106,10 +107,10 @@ protected:
 
     int                 curTok;                 ///< the current token obtained on last NextTok()
     std::string         curText;                ///< the text of the current token
-    std::string         lowercase;              ///< a scratch buf holding token in lowercase
 
-    const KEYWORD*      keywords;
-    unsigned            keywordCount;
+    const KEYWORD*      keywords;               ///< table sorted by CMake for bsearch()
+    unsigned            keywordCount;           ///< count of keywords table
+    KEYWORD_MAP         keyword_hash;           ///< fast, specialized "C string" hashtable
 
     void init();
 

@@ -33,24 +33,13 @@
 #include <fctsys.h>
 #include <dsnlexer.h>
 
-//#include "fctsys.h"
-//#include "pcbnew.h"
 
 //#define STANDALONE  1       // enable this for stand alone testing.
-
-static int compare( const void* a1, const void* a2 )
-{
-    const KEYWORD* k1 = (const KEYWORD*) a1;
-    const KEYWORD* k2 = (const KEYWORD*) a2;
-
-    int ret = strcmp( k1->name, k2->name );
-    return ret;
-}
 
 
 //-----<DSNLEXER>-------------------------------------------------------------
 
-inline void DSNLEXER::init()
+void DSNLEXER::init()
 {
     curTok  = DSN_NONE;
     prevTok = DSN_NONE;
@@ -61,6 +50,23 @@ inline void DSNLEXER::init()
     space_in_quoted_tokens = false;
 
     commentsAreTokens = false;
+
+#if 1
+    if( keywordCount > 11 )
+    {
+        // resize the hashtable bucket count
+        keyword_hash.reserve( keywordCount );
+    }
+
+    // fill the specialized "C string" hashtable from keywords[]
+    const KEYWORD*  it  = keywords;
+    const KEYWORD*  end = it + keywordCount;
+
+    for( ; it < end; ++it )
+    {
+        keyword_hash[it->name] = it->token;
+    }
+#endif
 }
 
 
@@ -168,21 +174,21 @@ LINE_READER* DSNLEXER::PopReader()
 }
 
 
+#if 0
+static int compare( const void* a1, const void* a2 )
+{
+    const KEYWORD* k1 = (const KEYWORD*) a1;
+    const KEYWORD* k2 = (const KEYWORD*) a2;
+
+    int ret = strcmp( k1->name, k2->name );
+    return ret;
+}
+
 int DSNLEXER::findToken( const std::string& tok )
 {
-    // convert to lower case once, this should be faster than using strcasecmp()
-    // for each test in compare().
-    lowercase.clear();
-
-    for( std::string::const_iterator iter = tok.begin();  iter!=tok.end();  ++iter )
-        lowercase += (char) tolower( *iter );
-
     KEYWORD search;
 
-    search.name = lowercase.c_str();
-
-    // a boost hashtable might be a few percent faster, depending on
-    // hashtable size and quality of the hash function.
+    search.name = tok.c_str();
 
     const KEYWORD* findings = (const KEYWORD*) bsearch( &search,
                                    keywords, keywordCount,
@@ -192,6 +198,19 @@ int DSNLEXER::findToken( const std::string& tok )
     else
         return -1;
 }
+
+#else
+
+int DSNLEXER::findToken( const std::string& tok )
+{
+
+    KEYWORD_MAP::const_iterator it = keyword_hash.find( tok.c_str() );
+    if( it == keyword_hash.end() )
+        return -1;
+
+    return it->second;
+}
+#endif
 
 
 const char* DSNLEXER::Syntax( int aTok )
