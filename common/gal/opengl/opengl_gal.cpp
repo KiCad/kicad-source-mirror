@@ -26,8 +26,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <cmath>
-
 #include <gal/opengl/opengl_gal.h>
 #include <gal/opengl/vbo_container.h>
 #include <gal/definitions.h>
@@ -39,6 +37,7 @@
 #endif /* __WXDEBUG__ */
 
 #include <limits>
+#include <boost/foreach.hpp>
 
 #ifndef CALLBACK
 #define CALLBACK
@@ -81,7 +80,6 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     currentGroup             = NULL;
     groupCounter             = 0;
     transform                = glm::mat4( 1.0f );   // Identity matrix
-
 
     SetSize( parentSize );
 
@@ -1606,10 +1604,9 @@ void OPENGL_GAL::EndGroup()
 
 void OPENGL_GAL::ClearCache()
 {
-    std::map<unsigned int, VBO_ITEM*>::iterator it, end;
-    for( it = groups.begin(), end = groups.end(); it != end; it++ )
+    BOOST_FOREACH( GroupsMap::value_type it, groups )
     {
-        delete it->second;
+        delete it.second;
     }
 
     groups.clear();

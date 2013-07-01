@@ -30,6 +30,7 @@
 #include <gal/opengl/vbo_container.h>
 #include <cstring>
 #include <cstdlib>
+#include <boost/foreach.hpp>
 #include <wx/log.h>
 #ifdef __WXDEBUG__
 #include <profile.h>
@@ -38,7 +39,8 @@
 using namespace KiGfx;
 
 VBO_CONTAINER::VBO_CONTAINER( int aSize ) :
-        m_freeSpace( aSize ), m_currentSize( aSize ), itemStarted( false ), m_transform( NULL )
+        m_freeSpace( aSize ), m_currentSize( aSize ), itemStarted( false ), m_transform( NULL ),
+        m_failed( false )
 {
     // By default no shader is used
     m_shader[0] = 0;
@@ -82,6 +84,7 @@ void VBO_CONTAINER::EndItem()
         m_freeSpace += ( itemChunkSize - itemSize );
     }
 
+    item = NULL;
     itemStarted = false;
 }
 
@@ -91,6 +94,9 @@ void VBO_CONTAINER::Add( VBO_ITEM* aVboItem, const VBO_VERTEX* aVertex, unsigned
     unsigned int offset;
     VBO_VERTEX* vertexPtr;
 
+    if( m_failed )
+        return;
+
     if( itemStarted )   // There is an item being created with an unknown size..
     {
         unsigned int itemChunkOffset;
@@ -98,26 +104,33 @@ void VBO_CONTAINER::Add( VBO_ITEM* aVboItem, const VBO_VERTEX* aVertex, unsigned
         // ..and unfortunately does not fit into currently reserved chunk
         if( itemSize + aSize > itemChunkSize )
         {
-            // Find the previous chunk for the item, save it, so it can be removed later
+            // Find the previous chunk for the item and change mark it as NULL
+            // so it will not be removed during a possible defragmentation
             ReservedChunkMap::iterator it = m_reservedChunks.find( item );
+            m_reservedChunks.insert( ReservedChunk( static_cast<VBO_ITEM*>( NULL ), it->second ) );
+            m_reservedChunks.erase( it );
 
-            // Reserve bigger memory for the current item
+            // Reserve bigger memory fo r the current item
             int newSize = ( 2 * itemSize ) + aSize;
             itemChunkOffset = allocate( aVboItem, newSize );
+            aVboItem->SetOffset( itemChunkOffset );
 
             // Check if there was no error
             if( itemChunkOffset > m_currentSize )
+            {
+                m_failed = true;
                 return;
+            }
 
-            // Save previous chunk's offset for copying data
+            it = m_reservedChunks.find( static_cast<VBO_ITEM*>( NULL ) );
+            // Check if the chunk was not reallocated after defragmentation
             int oldItemChunkOffset = getChunkOffset( *it );
+            // Free the space previously used by the chunk
+            freeChunk( it );
 
             // Copy all the old data
             memcpy( &m_vertices[itemChunkOffset], &m_vertices[oldItemChunkOffset],
                     itemSize * VBO_ITEM::VertByteSize );
-
-            // Return memory used by the previous chunk
-            freeChunk( it );
 
             itemChunkSize = newSize;
         }
@@ -310,7 +323,8 @@ bool VBO_CONTAINER::defragment( VBO_VERTEX* aTarget )
         memcpy( &aTarget[newOffset], &m_vertices[itemOffset], itemSize * VBO_ITEM::VertByteSize );
 
         // Update new offset
-        vboItem->SetOffset( newOffset );
+        if( vboItem )
+            vboItem->SetOffset( newOffset );
         setChunkOffset( *it, newOffset );
 
         // Move to the next free space
@@ -349,26 +363,32 @@ void VBO_CONTAINER::resizeChunk( VBO_ITEM* aVboItem, int aNewSize )
 
 bool VBO_CONTAINER::resizeContainer( unsigned int aNewSize )
 {
-    unsigned int copySize;
+    VBO_VERTEX* newContainer;
+
     if( aNewSize < m_currentSize )
     {
         // Sanity check, no shrinking if we cannot fit all the data
         if( ( m_currentSize - m_freeSpace ) > aNewSize )
             return false;
 
-        defragment();
-        copySize = ( m_currentSize - m_freeSpace );
+        newContainer = static_cast<VBO_VERTEX*>( malloc( aNewSize * sizeof( VBO_VERTEX ) ) );
+        if( newContainer == NULL )
+        {
+            wxLogError( wxT( "Run out of memory" ) );
+            return false;
+        }
+
+        // Defragment directly to the new, smaller container
+        defragment( newContainer );
     }
     else
     {
-        copySize = m_currentSize;
-    }
-
-    VBO_VERTEX* newContainer = static_cast<VBO_VERTEX*>( realloc( m_vertices, aNewSize * sizeof( VBO_VERTEX ) ) );
-    if( newContainer == NULL )
-    {
-        wxLogError( wxT( "Run out of memory" ) );
-        return false;
+        newContainer = static_cast<VBO_VERTEX*>( realloc( m_vertices, aNewSize * sizeof( VBO_VERTEX ) ) );
+        if( newContainer == NULL )
+        {
+            wxLogError( wxT( "Run out of memory" ) );
+            return false;
+        }
     }
 
     m_vertices = newContainer;

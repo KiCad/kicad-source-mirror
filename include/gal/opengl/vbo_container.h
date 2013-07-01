@@ -35,6 +35,7 @@
 #include <gal/opengl/vbo_item.h>
 #include <gal/color4d.h>
 #include <map>
+#include <boost/unordered_map.hpp>
 #include <wx/log.h>
 
 namespace KiGfx
@@ -52,9 +53,9 @@ public:
     typedef std::pair<const unsigned int, unsigned int> Chunk;
     typedef std::multimap<const unsigned int, unsigned int> FreeChunkMap;
 
-    ///< Maps size of reserved memory chunks to their owners (VBO_ITEMs)
+    ///< Maps VBO_ITEMs to reserved memory chunks offsets & sizes
     typedef std::pair<VBO_ITEM* const, Chunk> ReservedChunk;
-    typedef std::multimap<VBO_ITEM* const, Chunk> ReservedChunkMap;
+    typedef boost::unordered_map<VBO_ITEM* const, Chunk> ReservedChunkMap;
 
     /**
      * Function StartItem()
@@ -115,7 +116,7 @@ public:
     /**
      * Function GetVertices()
      * Returns vertices stored at the specific offset.
-     * @aOffest is the specific offset.
+     * @aOffset is the specific offset.
      */
     inline VBO_VERTEX* GetVertices( unsigned int aOffset ) const
     {
@@ -325,6 +326,9 @@ private:
 
     ///< Current transform matrix applied for every new vertex pushed.
     const glm::mat4*    m_transform;
+
+    ///< Failure flag
+    bool m_failed;
 
     /**
      * Function getPowerOf2()
