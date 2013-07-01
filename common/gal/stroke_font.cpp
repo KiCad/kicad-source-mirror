@@ -183,10 +183,13 @@ void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRo
         break;
 
     case GR_TEXT_HJUSTIFY_RIGHT:
-        m_gal->Translate( VECTOR2D( -textsize.x, 0 ) );
+        if( !m_mirrored )
+            m_gal->Translate( VECTOR2D( -textsize.x, 0 ) );
         break;
 
     case GR_TEXT_HJUSTIFY_LEFT:
+        if( m_mirrored )
+            m_gal->Translate( VECTOR2D( -textsize.x, 0 ) );
         break;
 
     default:
