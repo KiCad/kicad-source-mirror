@@ -134,19 +134,6 @@ protected:
         return 0;
     }
 
-
-    /**
-     * Function readLineOrCmt
-     * reads a line from the LINE_READER and returns either:
-     * <ol>
-     * <li> a positive line length (a +1 if empty line)
-     * <li> zero of end of file.
-     * <li> DSN_COMMENT if the line is a comment
-     * </ol>
-     */
-    int readLineOrCmt();
-
-
     /**
      * Function findToken
      * takes a string and looks up the string in the list of expected
@@ -154,7 +141,8 @@ protected:
      *
      * @param tok A string holding the token text to lookup, in an
      *   unpredictable case: uppercase or lowercase
-     * @return int - DSN_T or -1 if argument string is not a recognized token.
+     * @return int - DSN_T matching the keyword text, or DSN_SYMBOL if argument
+     *   string is not a recognized token.
      */
     int findToken( const std::string& tok );
 
@@ -168,6 +156,8 @@ protected:
 
         return false;
     }
+
+
 #endif
 
 public:
