@@ -50,6 +50,9 @@
 #include <class_board.h>
 #include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
 
+//#define     USE_INSTRUMENTATION     true
+#define     USE_INSTRUMENTATION     false
+
 
 static const wxString backupFileExtensionSuffix( wxT( "-bak" ) );
 static const wxString autosaveFilePrefix( wxT( "_autosave-" ) );
@@ -283,7 +286,7 @@ bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
         props["page_width"]  = wxString::Format( wxT( "%d" ), GetPageSizeIU().x );
         props["page_height"] = wxString::Format( wxT( "%d" ), GetPageSizeIU().y );
 
-#if 0
+#if USE_INSTRUMENTATION
         // measure the time to load a BOARD.
         unsigned startTime = GetRunningMicroSecs();
 #endif
@@ -291,7 +294,7 @@ bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
         // load or append either:
         loadedBoard = pi->Load( GetBoard()->GetFileName(), aAppend ? GetBoard() : NULL, &props );
 
-#if 0
+#if USE_INSTRUMENTATION
         unsigned stopTime = GetRunningMicroSecs();
         printf( "PLUGIN::Load(): %u usecs\n", stopTime - startTime );
 #endif
