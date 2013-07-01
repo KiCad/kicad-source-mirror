@@ -49,6 +49,7 @@
 #include <iterator>
 #include <vector>
 #include <algorithm>
+#include <boost/unordered_map.hpp>
 
 #include <stdlib.h>
 #include <iostream>
@@ -355,7 +356,8 @@ private:
     GLuint                displayListSemiCircle;  ///< Semi circle display list
 
     // Vertex buffer objects related fields
-    std::map<unsigned int, VBO_ITEM*> groups;     ///< Stores informations about VBO objects (groups)
+    typedef boost::unordered_map<unsigned int, VBO_ITEM*> GroupsMap;
+    GroupsMap             groups;                 ///< Stores informations about VBO objects (groups)
     unsigned int          groupCounter;           ///< Counter used for generating keys for groups
     VBO_ITEM*             currentGroup;           ///< Currently used VBO_ITEM (for grouping)
     VBO_CONTAINER*        vboContainer;           ///< Container for storing VBO_ITEMs
@@ -559,7 +561,7 @@ private:
         if( isGrouping )
         {
             // New vertex coordinates for VBO
-            VBO_VERTEX vertex = { aX, aY, aZ };
+            const VBO_VERTEX vertex = { aX, aY, aZ };
             currentGroup->PushVertex( &vertex );
         }
         else
