@@ -8,6 +8,20 @@ SHADER_SRC=( "shader.vert" "shader.frag" )
 # Number of shaders
 SHADERS_NUMBER=${#SHADER_SRC[@]}
 OUTPUT="shader_src.h"
+UPDATE=false
+
+# Check if it is necessary to regenerate headers
+for filename in "${SHADER_SRC[@]}"
+do
+	if [[ $filename -nt $OUTPUT ]]; then
+	    UPDATE=true
+	fi
+done
+
+if [[ $UPDATE == false ]]; then
+    echo "Headers are up-to-date."
+    exit
+fi
 
 # Prepare GLSL source to be included in C array
 function processSrc {
