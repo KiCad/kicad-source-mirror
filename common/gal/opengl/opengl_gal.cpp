@@ -658,9 +658,11 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
         color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
         SetLineWidth( aWidth );
-        drawSemiCircle( aStartPoint, aWidth / 2, lineAngle + M_PI / 2 );
-        drawSemiCircle( aEndPoint,   aWidth / 2, lineAngle - M_PI / 2 );
         drawLineQuad( aStartPoint, aEndPoint );
+
+        // Draw line caps
+        drawFilledSemiCircle( aStartPoint, aWidth / 2, lineAngle + M_PI / 2 );
+        drawFilledSemiCircle( aEndPoint,   aWidth / 2, lineAngle - M_PI / 2 );
     }
     else
     {
@@ -680,37 +682,11 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
         drawLineQuad( VECTOR2D( 0.0,        -aWidth / 2.0 ),
                       VECTOR2D( lineLength, -aWidth / 2.0 ) );
 
-        drawSemiCircle( VECTOR2D( 0.0, 0.0 ),        aWidth / 2, M_PI / 2 );
-        drawSemiCircle( VECTOR2D( lineLength, 0.0 ), aWidth / 2, -M_PI / 2 );
+        // Draw line caps
+        drawStrokedSemiCircle( VECTOR2D( 0.0, 0.0 ),        ( aWidth + lineWidth ) / 2, M_PI / 2 );
+        drawStrokedSemiCircle( VECTOR2D( lineLength, 0.0 ), ( aWidth + lineWidth ) / 2, -M_PI / 2 );
 
         Restore();
-    }
-}
-
-
-inline void OPENGL_GAL::drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
-{
-    VECTOR2D startEndVector = aEndPoint - aStartPoint;
-    // double   lineLength     = startEndVector.EuclideanNorm();
-    double   lineAngle      = startEndVector.Angle();
-
-    switch( lineCap )
-    {
-    case LINE_CAP_BUTT:
-        // TODO
-        break;
-
-    case LINE_CAP_ROUND:
-        // Add a semicircle at the line end
-        drawSemiCircle( aStartPoint, lineWidth / 2, lineAngle + M_PI / 2 );
-        break;
-
-    case LINE_CAP_SQUARED:
-        // FIXME? VECTOR2D offset;
-        // offset = startEndVector * ( lineWidth / lineLength / 2.0 );
-        // aStartPoint = aStartPoint - offset;
-        // aEndPoint = aEndPoint + offset;
-        break;
     }
 }
 
@@ -731,256 +707,26 @@ unsigned int OPENGL_GAL::getGroupNumber()
 
 void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
-    if( isFillEnabled )
-    {
-        color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+    const VECTOR2D startEndVector = aEndPoint - aStartPoint;
+    double lineAngle = startEndVector.Angle();
 
-        drawLineCap( aStartPoint, aEndPoint );
-        drawLineCap( aEndPoint, aStartPoint );
-        drawLineQuad( aStartPoint, aEndPoint );
-    }
+    drawLineQuad( aStartPoint, aEndPoint );
 
-    if( isStrokeEnabled )
-    {
-        // TODO outline mode
-        color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-
-        drawLineCap( aStartPoint, aEndPoint );
-        drawLineCap( aEndPoint, aStartPoint );
-        drawLineQuad( aStartPoint, aEndPoint );
-    }
+    // Line caps
+    drawFilledSemiCircle( aStartPoint, lineWidth / 2, lineAngle + M_PI / 2 );
+    drawFilledSemiCircle( aEndPoint, lineWidth / 2, lineAngle + M_PI / 2 );
 }
 
 
 void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
 {
-    if( isUseShader )
+    std::deque<VECTOR2D>::const_iterator it = aPointList.begin();
+
+    // Start from the second point
+    for( it++; it != aPointList.end(); it++ )
     {
-        // This method reduces amount of triangles used for drawing
-        std::deque<VECTOR2D>::const_iterator it = aPointList.begin();
-        
-        // Start from the second point
-        for( it++; it != aPointList.end(); it++ )
-        {
-            DrawLine( *( it - 1 ), *it );
-        }
-
-        return;
+        DrawLine( *( it - 1 ), *it );
     }
-
-    bool isFirstPoint = true;
-    LineCap savedLineCap = lineCap;
-    bool isFirstLine = true;
-    VECTOR2D startEndVector;
-    VECTOR2D lastStartEndVector;
-    VECTOR2D lastPoint;
-
-    unsigned int i = 0;
-
-    // Draw for each segment a line
-    for( std::deque<VECTOR2D>::const_iterator it = aPointList.begin();
-            it != aPointList.end(); it++ )
-    {
-        // First point
-        if( it == aPointList.begin() )
-        {
-            isFirstPoint = false;
-            lastPoint    = *it;
-        }
-        else
-        {
-            VECTOR2D actualPoint = *it;
-            startEndVector = actualPoint - lastPoint;
-
-            if( isFirstLine )
-            {
-                drawLineCap( lastPoint, actualPoint );
-                isFirstLine = false;
-            }
-            else
-            {
-                // Compute some variables for the joints
-                double lineLengthA = lastStartEndVector.EuclideanNorm();
-                double scale = 0.5 * lineWidth / lineLengthA;
-                VECTOR2D perpendicularVector1( -lastStartEndVector.y * scale,
-                                               lastStartEndVector.x * scale );
-                double lineLengthB = startEndVector.EuclideanNorm();
-                scale = 0.5 * lineWidth / lineLengthB;
-                VECTOR2D perpendicularVector2( -startEndVector.y * scale,
-                                               startEndVector.x * scale );
-
-                switch( lineJoin )
-                {
-                case LINE_JOIN_ROUND:
-                {
-                    // Insert a triangle fan at the line joint
-                    // Compute the start and end angle for the triangle fan
-                    double angle1 = startEndVector.Angle();
-                    double angle2 = lastStartEndVector.Angle();
-                    double angleDiff = angle1 - angle2;
-                    // Determines the side of the triangle fan
-                    double adjust = angleDiff < 0 ? -0.5 * lineWidth : 0.5 * lineWidth;
-
-                    // Angle correction for some special cases
-                    if( angleDiff < -M_PI )
-                    {
-                        if( angle1 < 0 )
-                        {
-                            angle1 += 2 * M_PI;
-                        }
-
-                        if( angle2 < 0 )
-                        {
-                            angle2 += 2 * M_PI;
-                        }
-                        adjust = -adjust;
-                    }
-                    else if( angleDiff > M_PI )
-                    {
-                        if( angle1 > 0 )
-                        {
-                            angle1 -= 2 * M_PI;
-                        }
-
-                        if( angle2 > 0 )
-                        {
-                            angle2 -= 2 * M_PI;
-                        }
-                        adjust = -adjust;
-                    }
-
-                    // Now draw the fan
-                    SWAP( angle1, >, angle2 );
-
-                    begin( GL_TRIANGLES );
-
-                    for( double a = angle1; a < angle2; )
-                    {
-                        // Compute vertices
-                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
-                        vertex3( lastPoint.x + adjust * sin( a ),
-                                 lastPoint.y - adjust * cos( a ), layerDepth );
-
-                        a += M_PI / 32;
-                        if(a > angle2)
-                            a = angle2;
-
-                        vertex3( lastPoint.x + adjust * sin( a ),
-                                 lastPoint.y - adjust * cos( a ), layerDepth );
-                    }
-
-                    end();
-                    break;
-                }
-
-                case LINE_JOIN_BEVEL:
-                {
-                    // We compute the edge points of the line segments at the joint
-                    VECTOR2D edgePoint1;
-                    VECTOR2D edgePoint2;
-                    // Determine the correct side
-                    if( lastStartEndVector.x * startEndVector.y
-                        - lastStartEndVector.y * startEndVector.x
-                        < 0 )
-                    {
-                        edgePoint1 = lastPoint + perpendicularVector1;
-                        edgePoint2 = lastPoint + perpendicularVector2;
-                    }
-                    else
-                    {
-                        edgePoint1 = lastPoint - perpendicularVector1;
-                        edgePoint2 = lastPoint - perpendicularVector2;
-                    }
-
-                    // Insert a triangle at the joint to close the gap
-                    begin( GL_TRIANGLES );
-                    vertex3( edgePoint1.x, edgePoint1.y, layerDepth );
-                    vertex3( edgePoint2.x, edgePoint2.y, layerDepth );
-                    vertex3( lastPoint.x, lastPoint.y, layerDepth );
-                    end();
-
-                    break;
-                }
-
-                case LINE_JOIN_MITER:
-                {
-                    // Compute points of the outer edges
-                    VECTOR2D point1 = lastPoint - perpendicularVector1;
-                    VECTOR2D point3 = lastPoint - perpendicularVector2;
-                    if( lastStartEndVector.x * startEndVector.y
-                        - lastStartEndVector.y * startEndVector.x < 0 )
-                    {
-                        point1 = lastPoint + perpendicularVector1;
-                        point3 = lastPoint + perpendicularVector2;
-                    }
-
-                    VECTOR2D point2 = point1 - lastStartEndVector;
-                    VECTOR2D point4 = point3 + startEndVector;
-
-                    // Now compute the intersection point of the edges
-                    double c1 = point1.Cross( point2 );
-                    double c2 = point3.Cross( point4 );
-                    double quot = startEndVector.Cross( lastStartEndVector );
-
-                    VECTOR2D miterPoint( -c1 * startEndVector.x - c2 * lastStartEndVector.x,
-                                        -c1 * startEndVector.y - c2 * lastStartEndVector.y );
-
-                    miterPoint = ( 1 / quot ) * miterPoint;
-
-                    // Check if the point is outside the limit
-                    if( ( lastPoint - miterPoint ).EuclideanNorm() > 2 * lineWidth )
-                    {
-                        // if it's outside cut the edge and insert three triangles
-                        double limit = MITER_LIMIT * lineWidth;
-                        VECTOR2D mp1 = point1 + ( limit / lineLengthA ) * lastStartEndVector;
-                        VECTOR2D mp2 = point3 - ( limit / lineLengthB ) * startEndVector;
-
-                        begin( GL_TRIANGLES );
-                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
-                        vertex3( point1.x, point1.y, layerDepth );
-                        vertex3( mp1.x, mp1.y, layerDepth );
-
-                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
-                        vertex3( mp1.x, mp1.y, layerDepth );
-                        vertex3( mp2.x, mp2.y, layerDepth );
-
-                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
-                        vertex3( mp2.x, mp2.y, layerDepth );
-                        vertex3( point3.x, point3.y, layerDepth );
-                        end();
-                    }
-                    else
-                    {
-                        // Insert two triangles for the mitered edge
-                        begin( GL_TRIANGLES );
-                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
-                        vertex3( point1.x, point1.y, layerDepth );
-                        vertex3( miterPoint.x, miterPoint.y, layerDepth );
-
-                        vertex3( lastPoint.x, lastPoint.y, layerDepth );
-                        vertex3( miterPoint.x, miterPoint.y, layerDepth );
-                        vertex3( point3.x, point3.y, layerDepth );
-                        end();
-                    }
-                    break;
-                }
-                }
-            }
-
-            if( it == aPointList.end() - 1 )
-            {
-                drawLineCap( actualPoint, lastPoint );
-            }
-
-            drawLineQuad( lastPoint, *it );
-            lastPoint = *it;
-            lastStartEndVector = startEndVector;
-        }
-
-        i++;
-    }
-
-    lineCap = savedLineCap;
 }
 
 
@@ -1058,7 +804,8 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
             /* Draw a triangle that contains the circle, then shade it leaving only the circle.
                Parameters given to setShader are relative coordinates of the triangle's vertices
                and the line width. Shader uses this coordinates to determine if fragments are inside
-               the circle or not. Width parameter has to be passed as a relative value.
+               the circle or not. Width parameter has to be passed as a ratio of inner radius
+               to outer radius.
                     v2
                     /\
                    //\\
@@ -1084,15 +831,14 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
         return;
     }
 
-    // Draw the middle of the circle (not anti-aliased)
-    // Compute the factors for the unit circle
-    double outerScale = lineWidth / aRadius / 2;
-    double innerScale = -outerScale;
-    outerScale += 1.0;
-    innerScale += 1.0;
-
     if( isStrokeEnabled )
     {
+        // Compute the factors for the unit circle
+        double outerScale = lineWidth / aRadius / 2;
+        double innerScale = -outerScale;
+        outerScale += 1.0;
+        innerScale += 1.0;
+
         if( innerScale < outerScale )
         {
             // Draw the outline
@@ -1168,29 +914,43 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 
 void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle )
 {
+        if( isFillEnabled )
+        {
+            color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+            drawFilledSemiCircle( aCenterPoint, aRadius, aAngle );
+        }
+
+        if( isStrokeEnabled )
+        {
+            color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+            drawStrokedSemiCircle( aCenterPoint, aRadius, aAngle );
+        }
+}
+
+
+void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle )
+{
     if( isUseShader && isGrouping )
     {
         Save();
         Translate( aCenterPoint );
         Rotate( aAngle );
 
-        color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-
         /* Draw a triangle that contains the semicircle, then shade it to leave only the semicircle.
-           Parameters given to setShader are relative coordinates of the triangle's vertices.
-           Shader uses this coordinates to determine if fragments are inside the semicircle or not.
-                v2
-                /\
-               /__\
-           v0 //__\\ v1
-        */
-        setShader( SHADER_FILLED_CIRCLE, -3.0f / sqrt( 3.0f ), 0.0f, lineWidth );
+                       Parameters given to setShader are relative coordinates of the triangle's vertices.
+                       Shader uses this coordinates to determine if fragments are inside the semicircle or not.
+                            v2
+                            /\
+                           /__\
+                       v0 //__\\ v1
+         */
+        setShader( SHADER_FILLED_CIRCLE, -3.0f / sqrt( 3.0f ), 0.0f );
         vertex3( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
 
-        setShader( SHADER_FILLED_CIRCLE, 3.0f / sqrt( 3.0f ), 0.0f, lineWidth );
+        setShader( SHADER_FILLED_CIRCLE, 3.0f / sqrt( 3.0f ), 0.0f );
         vertex3( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
 
-        setShader( SHADER_FILLED_CIRCLE, 0.0f, 2.0f, lineWidth );
+        setShader( SHADER_FILLED_CIRCLE, 0.0f, 2.0f );
         vertex3( 0.0f, aRadius * 2.0f, layerDepth );                                // v2
 
         Restore();
@@ -1213,6 +973,96 @@ void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, d
         }
 
         Restore();
+    }
+}
+
+
+void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle )
+{
+    if( isUseShader && isGrouping )
+    {
+        Save();
+        Translate( aCenterPoint );
+        Rotate( aAngle );
+
+        /* Draw a triangle that contains the semicircle, then shade it to leave only the semicircle.
+                   Parameters given to setShader are relative coordinates of the triangle's vertices
+                   and the line width. Shader uses this coordinates to determine if fragments are inside
+                   the semicircle or not. Width parameter has to be passed as a ratio of inner radius
+                   to outer radius.
+                        v2
+                        /\
+                       /__\
+                   v0 //__\\ v1
+         */
+        float outerRadius = aRadius;
+        float innerRadius = aRadius - lineWidth;
+        float relWidth = innerRadius / outerRadius;
+
+        setShader( SHADER_STROKED_CIRCLE, -3.0f / sqrt( 3.0f ), 0.0f, relWidth );
+        vertex3( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
+
+        setShader( SHADER_STROKED_CIRCLE, 3.0f / sqrt( 3.0f ), 0.0f, relWidth );
+        vertex3( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
+
+        setShader( SHADER_STROKED_CIRCLE, 0.0f, 2.0f, relWidth );
+        vertex3( 0.0f, aRadius * 2.0f, layerDepth );                                // v2
+
+        Restore();
+    }
+    else
+    {
+        // Compute the factors for the unit circle
+        double outerScale = lineWidth / aRadius / 2;
+        double innerScale = -outerScale;
+        outerScale += 1.0;
+        innerScale += 1.0;
+
+        if( innerScale < outerScale )
+        {
+            Save();
+            Translate( aCenterPoint );
+            Rotate( aAngle );
+
+            // Draw the outline
+            VBO_VERTEX* circle = verticesCircle->GetVertices();
+            int next;
+
+            begin( GL_TRIANGLES );
+
+            for( int i = 0; i < ( 3 * CIRCLE_POINTS ) / 2; ++i )
+            {
+                // verticesCircle contains precomputed circle points interleaved with vertex
+                // (0,0,0), so filled circles can be drawn as consecutive triangles, ie:
+                // { 0,a,b, 0,c,d, 0,e,f, 0,g,h, ... }
+                // where letters stand for consecutive circle points and 0 for (0,0,0) vertex.
+
+                // We have to skip all (0,0,0) vertices (every third vertex)
+                if( i % 3 == 0 )
+                {
+                    i++;
+                    // Depending on the vertex, next circle point may be stored in the next vertex..
+                    next = i + 1;
+                }
+                else
+                {
+                    // ..or 2 vertices away (in case it is preceded by (0,0,0) vertex)
+                    next = i + 2;
+                }
+
+                vertex3( circle[i].x * innerScale, circle[i].y * innerScale, layerDepth );
+                vertex3( circle[i].x * outerScale, circle[i].y * outerScale, layerDepth );
+                vertex3( circle[next].x * innerScale, circle[next].y * innerScale, layerDepth );
+
+                vertex3( circle[i].x * outerScale, circle[i].y * outerScale, layerDepth );
+                vertex3( circle[next].x * outerScale, circle[next].y * outerScale, layerDepth );
+                vertex3( circle[next].x * innerScale, circle[next].y * innerScale, layerDepth );
+            }
+
+            end();
+
+            Restore();
+        }
     }
 }
 
@@ -1300,11 +1150,9 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
 
             end();
 
-            if( lineCap == LINE_CAP_ROUND )
-            {
-                drawSemiCircle( startPoint, lineWidth / aRadius / 2.0, aStartAngle + M_PI );
-                drawSemiCircle( endPoint, lineWidth / aRadius / 2.0, aEndAngle );
-            }
+            // Draw line caps
+            drawFilledSemiCircle( startPoint, lineWidth / aRadius / 2.0, aStartAngle + M_PI );
+            drawFilledSemiCircle( endPoint, lineWidth / aRadius / 2.0, aEndAngle );
         }
     }
 

@@ -314,8 +314,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         // Outline mode
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
-        m_gal->SetLineCap( LINE_CAP_ROUND );
-        m_gal->SetLineJoin( LINE_JOIN_MITER );
         m_gal->SetLineWidth( m_pcbSettings->m_outlineWidth );
         m_gal->SetStrokeColor( color );
     }
@@ -420,8 +418,6 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetLineWidth( aSegment->GetWidth() );
-    m_gal->SetLineCap( LINE_CAP_ROUND );
-    m_gal->SetLineJoin( LINE_JOIN_ROUND );
 
     switch( aSegment->GetShape() )
     {
@@ -430,9 +426,8 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
         break;
 
     case S_RECT:
-        m_gal->SetLineCap( LINE_CAP_SQUARED );
-        m_gal->SetLineJoin( LINE_JOIN_BEVEL );
-        m_gal->DrawLine( VECTOR2D( aSegment->GetStart() ), VECTOR2D( aSegment->GetEnd() ) );
+        wxASSERT_MSG( false, wxT( "Not tested yet" ) );
+        m_gal->DrawRectangle( VECTOR2D( aSegment->GetStart() ), VECTOR2D( aSegment->GetEnd() ) );
         break;
 
     case S_ARC:
@@ -506,8 +501,6 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
     m_gal->SetIsFill( !fillMode );
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( aContainer->GetThermalReliefCopperBridge() / 2.0 );
-    m_gal->SetLineCap( LINE_CAP_ROUND );
-    m_gal->SetLineJoin( LINE_JOIN_ROUND );
 
     // FIXME implement hatch mode
 

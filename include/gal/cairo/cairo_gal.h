@@ -159,12 +159,6 @@ public:
     /// @copydoc GAL::SetBackgroundColor()
     virtual void SetBackgroundColor( const COLOR4D& aColor );
 
-    /// @copydoc GAL::SetLineCap()
-    virtual void SetLineCap( LineCap aLineCap );
-
-    /// @copydoc GAL::SetLineJoin()
-    virtual void SetLineJoin( LineJoin aLineJoin );
-
     /// @copydoc GAL::SetLineWidth()
     virtual void SetLineWidth( double aLineWidth );
 
@@ -334,8 +328,6 @@ private:
         CMD_SET_FILLCOLOR,                          ///< Set the fill color
         CMD_SET_STROKECOLOR,                        ///< Set the stroke color
         CMD_SET_LINE_WIDTH,                         ///< Set the line width
-        CMD_SET_LINE_CAP,                           ///< Set the line cap style
-        CMD_SET_LINE_JOIN,                          ///< Set the line join style
         CMD_STROKE_PATH,                            ///< Set the stroke path
         CMD_FILL_PATH,                              ///< Set the fill path
         CMD_TRANSFORM,                              ///< Transform the actual context
@@ -370,10 +362,6 @@ private:
     unsigned int*       bitmapBufferBackup;     ///< Backup storage of the cairo image
     int                 stride;                 ///< Stride value for Cairo
     bool                isInitialized;          ///< Are Cairo image & surface ready to use
-
-    // Mapping between Cairo and GAL line attributes
-    std::map<LineCap, cairo_line_cap_t>     lineCapMap;     ///< Line cap style mapping
-    std::map<LineJoin, cairo_line_join_t>   lineJoinMap;    ///< Line join style mapping
 
     // Methods
     void storePath();                           ///< Store the actual path

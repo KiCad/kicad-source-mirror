@@ -176,18 +176,6 @@ public:
     /// @copydoc GAL::SetBackgroundColor()
     virtual void SetBackgroundColor( const COLOR4D& aColor );
 
-    /// @copydoc GAL::SetLineCap()
-    virtual void SetLineCap( LineCap aLineCap )
-    {
-        lineCap = aLineCap;
-    }
-
-    /// @copydoc GAL::SetLineJoin()
-    virtual void SetLineJoin( LineJoin aLineJoin )
-    {
-        lineJoin = aLineJoin;
-    }
-
     /// @copydoc GAL::SetLineWidth()
     virtual void SetLineWidth( double aLineWidth );
 
@@ -421,6 +409,9 @@ private:
      */
     void drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
+    void drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
+    void drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
+
     /// Compute the points of a unit circle.
     void computeUnitCircle();
 
@@ -513,15 +504,6 @@ private:
      * @param aEndPoint is the end point of the line.
      */
     inline void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
-
-    /**
-     * @brief Draw the line cap
-     *
-     * @param aStartPoint is the start point of the line.
-     * @param aEndPoint is the end point of the line.
-     * @param aDepthOffset is the relative depth of the line cap.
-     */
-    inline void drawLineCap( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /**
      * @brief Returns a valid key that can be used as a group number.
