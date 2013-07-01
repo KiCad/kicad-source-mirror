@@ -480,7 +480,7 @@ static bool isNumber( const char* cp, const char* limit )
         }
     }
 
-    return sawNumber;
+    return sawNumber && cp==limit;
 }
 
 
