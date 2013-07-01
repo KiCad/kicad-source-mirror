@@ -714,7 +714,7 @@ void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoin
 
     // Line caps
     drawFilledSemiCircle( aStartPoint, lineWidth / 2, lineAngle + M_PI / 2 );
-    drawFilledSemiCircle( aEndPoint, lineWidth / 2, lineAngle + M_PI / 2 );
+    drawFilledSemiCircle( aEndPoint, lineWidth / 2, lineAngle - M_PI / 2 );
 }
 
 
@@ -725,8 +725,19 @@ void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
     // Start from the second point
     for( it++; it != aPointList.end(); it++ )
     {
-        DrawLine( *( it - 1 ), *it );
+        const VECTOR2D startEndVector = ( *it - *( it - 1 ) );
+        double lineAngle = startEndVector.Angle();
+
+        drawLineQuad( *( it - 1 ), *it );
+
+        // There is no need to draw line caps on both ends of polyline's segments
+        drawFilledSemiCircle( *( it - 1 ), lineWidth / 2, lineAngle + M_PI / 2 );
     }
+
+    // ..and now - draw the ending cap
+    const VECTOR2D startEndVector = ( *( it - 1 ) - *( it - 2 ) );
+    double lineAngle = startEndVector.Angle();
+    drawFilledSemiCircle( *( it - 1 ), lineWidth / 2, lineAngle - M_PI / 2 );
 }
 
 
