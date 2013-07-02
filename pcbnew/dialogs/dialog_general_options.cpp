@@ -202,17 +202,29 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_ZONES:
         DisplayOpt.DisplayZonesMode = 0;
-        m_canvas->Refresh();
+#ifdef KICAD_GAL
+        recache = true;
+        if( !IsGalCanvasActive() )
+#endif /* KICAD_GAL */
+            m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
         DisplayOpt.DisplayZonesMode = 1;
-        m_canvas->Refresh();
+#ifdef KICAD_GAL
+        recache = true;
+        if( !IsGalCanvasActive() )
+#endif /* KICAD_GAL */
+            m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
         DisplayOpt.DisplayZonesMode = 2;
-        m_canvas->Refresh();
+#ifdef KICAD_GAL
+        recache = true;
+        if( !IsGalCanvasActive() )
+#endif /* KICAD_GAL */
+            m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
