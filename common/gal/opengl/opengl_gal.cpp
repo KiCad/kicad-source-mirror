@@ -1027,7 +1027,7 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
         double innerScale = 1.0 - lineWidth / aRadius;
 
         Save();
-        Translate( aCenterPoint );
+        translate3( aCenterPoint.x, aCenterPoint.y, layerDepth );
         Scale( VECTOR2D( aRadius, aRadius ) );
         Rotate( aAngle );
 
@@ -1057,13 +1057,13 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
                 next = i + 2;
             }
 
-            vertex3( circle[i].x * innerScale,      circle[i].y * innerScale,       layerDepth );
-            vertex3( circle[i].x,                   circle[i].y,                    layerDepth );
-            vertex3( circle[next].x * innerScale,   circle[next].y * innerScale,    layerDepth );
+            vertex3( circle[i].x * innerScale,      circle[i].y * innerScale,       0.0 );
+            vertex3( circle[i].x,                   circle[i].y,                    0.0 );
+            vertex3( circle[next].x * innerScale,   circle[next].y * innerScale,    0.0 );
 
-            vertex3( circle[i].x,                   circle[i].y,                    layerDepth );
-            vertex3( circle[next].x,                circle[next].y,                 layerDepth );
-            vertex3( circle[next].x * innerScale,   circle[next].y * innerScale,    layerDepth );
+            vertex3( circle[i].x,                   circle[i].y,                    0.0 );
+            vertex3( circle[next].x,                circle[next].y,                 0.0 );
+            vertex3( circle[next].x * innerScale,   circle[next].y * innerScale,    0.0 );
         }
 
         end();
