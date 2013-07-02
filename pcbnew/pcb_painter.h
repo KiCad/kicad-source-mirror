@@ -61,13 +61,18 @@ class STROKE_FONT;
 class PCB_RENDER_SETTINGS : public RENDER_SETTINGS
 {
 public:
-
     friend class PCB_PAINTER;
 
     enum ClearanceMode {
         CL_VIAS     = 0x1,
         CL_PADS     = 0x2,
         CL_TRACKS   = 0x4
+    };
+
+    enum DisplayZonesMode {
+        DZ_HIDE_FILLED = 0,
+        DZ_SHOW_FILLED,
+        DZ_SHOW_OUTLINED
     };
 
     PCB_RENDER_SETTINGS();
@@ -87,7 +92,6 @@ public:
     void LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions );
 
 protected:
-
     /// Colors for all layers (including special, highlighted & darkened versions)
     COLOR4D m_layerColors    [NB_LAYERS];
     COLOR4D m_layerColorsHi  [NB_LAYERS];
@@ -101,6 +105,8 @@ protected:
     bool    m_sketchModeSelect[END_PCB_VISIBLE_LIST];
     bool    m_visibleLayers   [NB_LAYERS];
     bool    m_visibleItems    [END_PCB_VISIBLE_LIST];
+
+    DisplayZonesMode m_displayZoneMode;
 };
 
 

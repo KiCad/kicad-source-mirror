@@ -84,6 +84,21 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions )
     m_sketchModeSelect[PADS_VISIBLE]   = !aOptions.DisplayPadFill;
     m_sketchModeSelect[VIAS_VISIBLE]   = !aOptions.DisplayViaFill;
     m_sketchModeSelect[TRACKS_VISIBLE] = !aOptions.DisplayPcbTrackFill;
+
+    switch( aOptions.DisplayZonesMode )
+    {
+    case 0:
+        m_displayZoneMode = DZ_SHOW_FILLED;
+        break;
+
+    case 1:
+        m_displayZoneMode = DZ_HIDE_FILLED;
+        break;
+
+    case 2:
+        m_displayZoneMode = DZ_SHOW_OUTLINED;
+        break;
+    }
 }
 
 
@@ -487,25 +502,60 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 
 void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
 {
-    std::vector<CPolyPt> polyPoints = aContainer->GetFilledPolysList().GetList();
-    if( polyPoints.size() == 0 )  // Nothing to draw
-                return;
-
-    COLOR4D fillColor = getLayerColor( aContainer->GetLayer(), aContainer->GetNet() );
-    std::vector<CPolyPt>::iterator polyIterator;
+    COLOR4D color = getLayerColor( aContainer->GetLayer(), aContainer->GetNet() );
     std::deque<VECTOR2D> corners;
-    int fillMode = aContainer->GetFillMode();
+    PCB_RENDER_SETTINGS::DisplayZonesMode displayMode = m_pcbSettings->m_displayZoneMode;
 
-    m_gal->SetFillColor( fillColor );
-    m_gal->SetStrokeColor( fillColor );
-    m_gal->SetIsFill( !fillMode );
+    // Draw the outline
+    m_gal->SetStrokeColor( color );
+    m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( aContainer->GetThermalReliefCopperBridge() / 2.0 );
+    m_gal->SetLineWidth( m_pcbSettings->m_outlineWidth );
 
-    // FIXME implement hatch mode
-
-    if( fillMode == 0 )
+    const CPolyLine* outline = aContainer->Outline();
+    for( int i = 0; i < outline->GetCornersCount(); ++i )
     {
+        corners.push_back( VECTOR2D( outline->GetPos( i ) ) );
+    }
+    // The last point for closing the polyline
+    corners.push_back( VECTOR2D( outline->GetPos( 0 ) ) );
+    m_gal->DrawPolyline( corners );
+    corners.clear();
+
+    // Draw the outline's hatch lines
+    std::vector<CSegment>::const_iterator hatch, hatch_end;
+    for( hatch = outline->m_HatchLines.begin(), hatch_end = outline->m_HatchLines.end();
+            hatch != hatch_end; ++hatch )
+    {
+        const VECTOR2D start = VECTOR2D( hatch->m_Start );
+        const VECTOR2D end = VECTOR2D( hatch->m_End );
+
+        m_gal->DrawLine( start, end );
+    }
+
+    // Draw the filling
+    if( displayMode != PCB_RENDER_SETTINGS::DZ_HIDE_FILLED )
+    {
+        const std::vector<CPolyPt> polyPoints = aContainer->GetFilledPolysList().GetList();
+        if( polyPoints.size() == 0 )  // Nothing to draw
+            return;
+
+        // Set up drawing options
+        m_gal->SetFillColor( color );
+        m_gal->SetLineWidth( aContainer->GetThermalReliefCopperBridge() / 2.0 );
+
+        if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_FILLED )
+        {
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( true );
+        }
+        else if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_OUTLINED )
+        {
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+        }
+
+        std::vector<CPolyPt>::const_iterator polyIterator;
         for( polyIterator = polyPoints.begin(); polyIterator != polyPoints.end(); polyIterator++ )
         {
             // Find out all of polygons and then draw them
@@ -513,8 +563,16 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
 
             if( polyIterator->end_contour )
             {
-                m_gal->DrawPolygon( corners );
-                m_gal->DrawPolyline( corners );
+                if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_FILLED )
+                {
+                    m_gal->DrawPolygon( corners );
+                    m_gal->DrawPolyline( corners );
+                }
+                else if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_OUTLINED )
+                {
+                    m_gal->DrawPolyline( corners );
+                }
+
                 corners.clear();
             }
         }
