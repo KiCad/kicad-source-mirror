@@ -1024,56 +1024,51 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
     else
     {
         // Compute the factors for the unit circle
-        double outerScale = lineWidth / aRadius / 2;
-        double innerScale = -outerScale;
-        outerScale += 1.0;
-        innerScale += 1.0;
+        double innerScale = 1.0 - lineWidth / aRadius;
 
-        if( innerScale < outerScale )
+        Save();
+        Translate( aCenterPoint );
+        Scale( VECTOR2D( aRadius, aRadius ) );
+        Rotate( aAngle );
+
+        // Draw the outline
+        VBO_VERTEX* circle = verticesCircle->GetVertices();
+        int next;
+
+        begin( GL_TRIANGLES );
+
+        for( int i = 0; i < ( 3 * CIRCLE_POINTS ) / 2; ++i )
         {
-            Save();
-            Translate( aCenterPoint );
-            Rotate( aAngle );
+            // verticesCircle contains precomputed circle points interleaved with vertex
+            // (0,0,0), so filled circles can be drawn as consecutive triangles, ie:
+            // { 0,a,b, 0,c,d, 0,e,f, 0,g,h, ... }
+            // where letters stand for consecutive circle points and 0 for (0,0,0) vertex.
 
-            // Draw the outline
-            VBO_VERTEX* circle = verticesCircle->GetVertices();
-            int next;
-
-            begin( GL_TRIANGLES );
-
-            for( int i = 0; i < ( 3 * CIRCLE_POINTS ) / 2; ++i )
+            // We have to skip all (0,0,0) vertices (every third vertex)
+            if( i % 3 == 0 )
             {
-                // verticesCircle contains precomputed circle points interleaved with vertex
-                // (0,0,0), so filled circles can be drawn as consecutive triangles, ie:
-                // { 0,a,b, 0,c,d, 0,e,f, 0,g,h, ... }
-                // where letters stand for consecutive circle points and 0 for (0,0,0) vertex.
-
-                // We have to skip all (0,0,0) vertices (every third vertex)
-                if( i % 3 == 0 )
-                {
-                    i++;
-                    // Depending on the vertex, next circle point may be stored in the next vertex..
-                    next = i + 1;
-                }
-                else
-                {
-                    // ..or 2 vertices away (in case it is preceded by (0,0,0) vertex)
-                    next = i + 2;
-                }
-
-                vertex3( circle[i].x * innerScale, circle[i].y * innerScale, layerDepth );
-                vertex3( circle[i].x * outerScale, circle[i].y * outerScale, layerDepth );
-                vertex3( circle[next].x * innerScale, circle[next].y * innerScale, layerDepth );
-
-                vertex3( circle[i].x * outerScale, circle[i].y * outerScale, layerDepth );
-                vertex3( circle[next].x * outerScale, circle[next].y * outerScale, layerDepth );
-                vertex3( circle[next].x * innerScale, circle[next].y * innerScale, layerDepth );
+                i++;
+                // Depending on the vertex, next circle point may be stored in the next vertex..
+                next = i + 1;
+            }
+            else
+            {
+                // ..or 2 vertices away (in case it is preceded by (0,0,0) vertex)
+                next = i + 2;
             }
 
-            end();
+            vertex3( circle[i].x * innerScale,      circle[i].y * innerScale,       layerDepth );
+            vertex3( circle[i].x,                   circle[i].y,                    layerDepth );
+            vertex3( circle[next].x * innerScale,   circle[next].y * innerScale,    layerDepth );
 
-            Restore();
+            vertex3( circle[i].x,                   circle[i].y,                    layerDepth );
+            vertex3( circle[next].x,                circle[next].y,                 layerDepth );
+            vertex3( circle[next].x * innerScale,   circle[next].y * innerScale,    layerDepth );
         }
+
+        end();
+
+        Restore();
     }
 }
 
