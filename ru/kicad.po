@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-10 20:38+0300\n"
-"PO-Revision-Date: 2013-06-10 21:02+0300\n"
+"POT-Creation-Date: 2013-07-03 22:44+0300\n"
+"PO-Revision-Date: 2013-07-03 22:59+0300\n"
 "Last-Translator: faa <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: \n"
@@ -71,15 +71,15 @@ msgstr "BPP"
 msgid "bits"
 msgstr "бит"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:88
+#: bitmap2component/bitmap2cmp_gui_base.cpp:90
 msgid "Load Bitmap"
 msgstr "Загрузить Bitmap"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:91
-msgid "Export to Eeschema"
-msgstr "Экспорт в Eeschema"
+#: bitmap2component/bitmap2cmp_gui_base.cpp:93
+msgid "Export"
+msgstr "Экспорт"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:92
+#: bitmap2component/bitmap2cmp_gui_base.cpp:94
 msgid ""
 "Create a library file for Eeschema\n"
 "This library contains only one component: logo"
@@ -87,70 +87,104 @@ msgstr ""
 "Создание файла библиотеки для Eeschema\n"
 "Содержит только один компонент: логотип"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:96
-msgid "Export to Pcbnew"
-msgstr "Экспорт в Pcbnew"
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Eeschema"
+msgstr "Eeschema"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:97
-msgid ""
-"Create a footprint file for PcbNew\n"
-"This footprint contains only one footprint: logo"
-msgstr ""
-"Создание файла посадочного места для PcbNew\n"
-"Собержит только одно посадочное место: логотип"
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Pcbnew old fmt (.emp)"
+msgstr "Pcbnew старый формат (.emp)"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:101
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Pcbnew kicad_mod"
+msgstr "Pcbnew kicad_mod"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Postscript"
+msgstr "Postscript"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:98
+msgid "Logo for title block"
+msgstr "Логотип для штампа"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:100
+msgid "Format"
+msgstr "Формат"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Normal"
 msgstr "Нормально"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:101
+#: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Negative"
 msgstr "Негативно"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:103
+#: bitmap2component/bitmap2cmp_gui_base.cpp:106
 msgid "Options"
 msgstr "Параметры"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:107
+#: bitmap2component/bitmap2cmp_gui_base.cpp:110
 msgid "Threshold Value:"
 msgstr "Пороговое значение:"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:112
+#: bitmap2component/bitmap2cmp_gui_base.cpp:115
 msgid "Adjust the level to convert the greyscale picture to a black and white picture."
 msgstr "Подстройка уровня для преобразования в черно-белое изображение"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:188
+#: bitmap2component/bitmap2cmp_gui.cpp:216
 msgid "Choose Image"
 msgstr "Выбор изображения"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:189
+#: bitmap2component/bitmap2cmp_gui.cpp:217
 msgid "Image Files "
 msgstr "Файлы изображений"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:214
+#: bitmap2component/bitmap2cmp_gui.cpp:241
 #, c-format
 msgid "Couldn't load image from <%s>"
 msgstr "Не удалось загрузить изображение из <%s>"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:312
-msgid "Schematic lib file (*.lib)|*.lib"
-msgstr "Файлы библиотеки для eeschema (*.lib)|*.lib"
-
-#: bitmap2component/bitmap2cmp_gui.cpp:313
-msgid "Create a lib file for Eeschema"
-msgstr "Создать файл библиотеки для Eeschema"
-
-#: bitmap2component/bitmap2cmp_gui.cpp:329
 #: bitmap2component/bitmap2cmp_gui.cpp:366
+msgid "Logo file (*.kicad_wks)|*.kicad_wks"
+msgstr "Файл логотипа (*.kicad_wks)|*.kicad_wks"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:367
+msgid "Create a logo file"
+msgstr "Создать файл логотипа"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:383
+#: bitmap2component/bitmap2cmp_gui.cpp:417
+#: bitmap2component/bitmap2cmp_gui.cpp:451
+#: bitmap2component/bitmap2cmp_gui.cpp:490
 #, c-format
 msgid "File %s could not be created"
 msgstr "Не удалось создать файл %s"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:347
-msgid "Footprint file (*.mod;*.emp)|*.mod;*.emp"
-msgstr "Файлы посадочных мест (*.mod;*.emp)|*.mod;*.emp"
+#: bitmap2component/bitmap2cmp_gui.cpp:400
+msgid "Postscript file (*.ps)|*.ps"
+msgstr "Файлы Postscript (.ps)|*.ps"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:348
+#: bitmap2component/bitmap2cmp_gui.cpp:401
+msgid "Create a Postscript file"
+msgstr "Создать Postscript файл"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:434
+msgid "Schematic lib file (*.lib)|*.lib"
+msgstr "Файлы библиотеки для eeschema (*.lib)|*.lib"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:435
+msgid "Create a lib file for Eeschema"
+msgstr "Создать файл библиотеки для Eeschema"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:470
+msgid "Footprint file (*.emp)|*.emp"
+msgstr "Файлы посадочных мест (*.emp)|*.emp"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:471
+msgid "Footprint file (*.kicad_mod)|*.kicad_mod"
+msgstr "Файлы посадочных мест (*.kicad_mod)|*.kicad_mod"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:472
 msgid "Create a footprint file for PcbNew"
 msgstr "Создать файл посадочных мест для PcbNew"
 
@@ -359,46 +393,46 @@ msgid "Can't save file <%s>"
 msgstr "Не удалось сохранить файл <%s>"
 
 #: eeschema/lib_field.cpp:72
-#: eeschema/lib_field.cpp:774
+#: eeschema/lib_field.cpp:775
 msgid "Field"
 msgstr "Поле"
 
-#: eeschema/lib_field.cpp:592
+#: eeschema/lib_field.cpp:593
 msgid "Reference"
 msgstr "Обозначение"
 
-#: eeschema/lib_field.cpp:599
-#: eeschema/lib_field.cpp:777
+#: eeschema/lib_field.cpp:600
+#: eeschema/lib_field.cpp:778
 msgid "Value"
 msgstr "Значение"
 
-#: eeschema/lib_field.cpp:606
+#: eeschema/lib_field.cpp:607
 msgid "Footprint"
 msgstr "Посадочное место"
 
-#: eeschema/lib_field.cpp:613
+#: eeschema/lib_field.cpp:614
 msgid "Datasheet"
 msgstr "Документация"
 
-#: eeschema/lib_field.cpp:622
+#: eeschema/lib_field.cpp:623
 #, c-format
 msgid "Field%d"
 msgstr "Поле%d"
 
-#: eeschema/lib_field.cpp:685
+#: eeschema/lib_field.cpp:686
 #, c-format
 msgid "Field %s %s"
 msgstr "Поле %s %s"
 
-#: eeschema/lib_field.cpp:764
+#: eeschema/lib_field.cpp:765
 msgid "Style"
 msgstr "Стиль"
 
-#: eeschema/lib_field.cpp:767
+#: eeschema/lib_field.cpp:768
 msgid "Size X"
 msgstr "Размер X"
 
-#: eeschema/lib_field.cpp:770
+#: eeschema/lib_field.cpp:771
 msgid "Size Y"
 msgstr "Размер Y"
 
@@ -472,19 +506,19 @@ msgstr "Файл <%s> документации компонента пуст."
 msgid "File <%s> is not a valid component library document file."
 msgstr "Файл <%s> не является файлом документации компонента."
 
-#: eeschema/sch_sheet.cpp:826
+#: eeschema/sch_sheet.cpp:827
 msgid "Sheet name"
 msgstr "Имя листа"
 
-#: eeschema/sch_sheet.cpp:827
+#: eeschema/sch_sheet.cpp:828
 msgid "File name"
 msgstr "Имя файла"
 
-#: eeschema/sch_sheet.cpp:832
+#: eeschema/sch_sheet.cpp:833
 msgid "Time Stamp"
 msgstr "Временная метка"
 
-#: eeschema/sch_sheet.cpp:1041
+#: eeschema/sch_sheet.cpp:1042
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "Иерархический лист %s"
@@ -587,7 +621,7 @@ msgstr "Файл не найден"
 msgid "The following libraries could not be found:"
 msgstr "Следующие библиотеки не найдены:"
 
-#: eeschema/netform.cpp:380
+#: eeschema/netform.cpp:379
 #, c-format
 msgid "Failed to create file <%s>"
 msgstr "Не удалось создать файл <%s>"
@@ -680,7 +714,7 @@ msgstr "Показать скрытые выводы"
 msgid "HV orientation for wires and bus"
 msgstr "Горизонтальная/Вертикальная ориентация для цепей и шин"
 
-#: eeschema/annotate.cpp:65
+#: eeschema/annotate.cpp:87
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d дубликаты временных меток и найдены и заменены."
@@ -944,10 +978,6 @@ msgstr "Установить позиция привязки"
 msgid "Import"
 msgstr "Импорт"
 
-#: eeschema/libeditframe.cpp:1084
-msgid "Export"
-msgstr "Экспорт"
-
 #: eeschema/libeditframe.cpp:1096
 msgid "Delete item"
 msgstr "Удалить элемент"
@@ -1150,7 +1180,7 @@ msgstr "Текст"
 msgid "Text only had %d parameters of the required 8"
 msgstr "Текст имеет только %d параметров из требуемых 8"
 
-#: eeschema/lib_text.cpp:493
+#: eeschema/lib_text.cpp:494
 #, c-format
 msgid "Graphic Text %s"
 msgstr "Графический текст %s"
@@ -1165,7 +1195,7 @@ msgstr "Ошибка при создании файла <%s>\n"
 msgid "File <%s> OK\n"
 msgstr "Файл <%s> OK\n"
 
-#: eeschema/schframe.cpp:425
+#: eeschema/schframe.cpp:424
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -1176,31 +1206,27 @@ msgstr ""
 "<%s>\n"
 "перед закрытием?"
 
-#: eeschema/schframe.cpp:581
+#: eeschema/schframe.cpp:580
 msgid "Draw wires and buses in any direction"
 msgstr "Цепи и шины в любом направлении"
 
-#: eeschema/schframe.cpp:582
+#: eeschema/schframe.cpp:581
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Цепи и шины только вертикально и горизонтально"
 
-#: eeschema/schframe.cpp:591
+#: eeschema/schframe.cpp:590
 msgid "Do not show hidden pins"
 msgstr "Не показывать скрытые выводы"
 
-#: eeschema/schframe.cpp:637
-msgid "BOM Howto"
-msgstr "Руководство по созданию перечня"
-
-#: eeschema/schframe.cpp:702
+#: eeschema/schframe.cpp:697
 msgid "Schematic"
 msgstr "Схема"
 
-#: eeschema/schframe.cpp:772
+#: eeschema/schframe.cpp:767
 msgid "Error: not a component or no component"
 msgstr "Ошибка: не компонент или нет компонента"
 
-#: eeschema/schframe.cpp:1005
+#: eeschema/schframe.cpp:1000
 msgid " [no file]"
 msgstr " [нет файла]"
 
@@ -1731,7 +1757,7 @@ msgid "Power symbol"
 msgstr "Символ питания"
 
 #: eeschema/sch_component.cpp:1460
-#: eeschema/lib_pin.cpp:1833
+#: eeschema/lib_pin.cpp:1841
 msgid "Name"
 msgstr "Имя"
 
@@ -1862,17 +1888,17 @@ msgid "NonLogic"
 msgstr "Не логический"
 
 #: eeschema/lib_pin.cpp:135
-#: eeschema/sch_text.cpp:788
+#: eeschema/sch_text.cpp:789
 msgid "Input"
 msgstr "Вход"
 
 #: eeschema/lib_pin.cpp:136
-#: eeschema/sch_text.cpp:789
+#: eeschema/sch_text.cpp:790
 msgid "Output"
 msgstr "Выход"
 
 #: eeschema/lib_pin.cpp:137
-#: eeschema/sch_text.cpp:790
+#: eeschema/sch_text.cpp:791
 msgid "Bidirectional"
 msgstr "Двунаправленный"
 
@@ -1881,7 +1907,7 @@ msgid "Tri-state"
 msgstr "Трёхстабильный"
 
 #: eeschema/lib_pin.cpp:139
-#: eeschema/sch_text.cpp:792
+#: eeschema/sch_text.cpp:793
 msgid "Passive"
 msgstr "Пассивный"
 
@@ -1913,32 +1939,32 @@ msgstr "Не подсоединён"
 msgid "Pin"
 msgstr "Вывод"
 
-#: eeschema/lib_pin.cpp:1840
+#: eeschema/lib_pin.cpp:1848
 msgid "Number"
 msgstr "Номер"
 
-#: eeschema/lib_pin.cpp:1849
+#: eeschema/lib_pin.cpp:1857
 msgid "Yes"
 msgstr "Да"
 
-#: eeschema/lib_pin.cpp:1851
+#: eeschema/lib_pin.cpp:1859
 msgid "No"
 msgstr "Нет"
 
-#: eeschema/lib_pin.cpp:1853
+#: eeschema/lib_pin.cpp:1861
 msgid "Visible"
 msgstr "Видимый"
 
-#: eeschema/lib_pin.cpp:1857
+#: eeschema/lib_pin.cpp:1865
 msgid "Length"
 msgstr "Длина"
 
-#: eeschema/lib_pin.cpp:1860
-#: eeschema/sch_text.cpp:767
+#: eeschema/lib_pin.cpp:1868
+#: eeschema/sch_text.cpp:768
 msgid "Orientation"
 msgstr "Ориентация"
 
-#: eeschema/lib_pin.cpp:2112
+#: eeschema/lib_pin.cpp:2120
 #, c-format
 msgid "Pin %s, %s, %s"
 msgstr "Вывод %s, %s, %s"
@@ -1967,73 +1993,73 @@ msgstr "Точка %d кривой Безье — координата X не з
 msgid "Bezier point %d Y position not defined"
 msgstr "Точка %d кривой Безье — координата Y не задана"
 
-#: eeschema/sch_text.cpp:719
+#: eeschema/sch_text.cpp:720
 msgid "Graphic text"
 msgstr "Графический текст"
 
-#: eeschema/sch_text.cpp:723
+#: eeschema/sch_text.cpp:724
 msgid "Label"
 msgstr "Метка"
 
-#: eeschema/sch_text.cpp:727
+#: eeschema/sch_text.cpp:728
 msgid "Global label"
 msgstr "Глобальная метка"
 
-#: eeschema/sch_text.cpp:731
+#: eeschema/sch_text.cpp:732
 msgid "Hierarchical label"
 msgstr "Иерарх.метка"
 
-#: eeschema/sch_text.cpp:735
+#: eeschema/sch_text.cpp:736
 msgid "Hierarchical Sheet Pin"
 msgstr "Иерархический вывод листа"
 
-#: eeschema/sch_text.cpp:747
+#: eeschema/sch_text.cpp:748
 msgid "Horizontal"
 msgstr "Горизонтально"
 
-#: eeschema/sch_text.cpp:751
+#: eeschema/sch_text.cpp:752
 msgid "Vertical up"
 msgstr "Вертикально вверх"
 
-#: eeschema/sch_text.cpp:755
+#: eeschema/sch_text.cpp:756
 msgid "Horizontal invert"
 msgstr "Горизонтально перевернуто"
 
-#: eeschema/sch_text.cpp:759
+#: eeschema/sch_text.cpp:760
 msgid "Vertical down"
 msgstr "Вертикально вниз"
 
-#: eeschema/sch_text.cpp:769
+#: eeschema/sch_text.cpp:770
 msgid "Italic"
 msgstr "Курсив"
 
-#: eeschema/sch_text.cpp:769
+#: eeschema/sch_text.cpp:770
 msgid "Bold"
 msgstr "Полужирный"
 
-#: eeschema/sch_text.cpp:769
+#: eeschema/sch_text.cpp:770
 msgid "Bold Italic"
 msgstr "Полужирный курсив"
 
-#: eeschema/sch_text.cpp:791
+#: eeschema/sch_text.cpp:792
 msgid "Tri-State"
 msgstr "Трёхстабильный"
 
-#: eeschema/sch_text.cpp:801
+#: eeschema/sch_text.cpp:802
 msgid "Size"
 msgstr "Размер"
 
-#: eeschema/sch_text.cpp:1024
+#: eeschema/sch_text.cpp:1025
 #, c-format
 msgid "Label %s"
 msgstr "Метка %s"
 
-#: eeschema/sch_text.cpp:1454
+#: eeschema/sch_text.cpp:1456
 #, c-format
 msgid "Global Label %s"
 msgstr "Глобальная метка %s"
 
-#: eeschema/sch_text.cpp:1799
+#: eeschema/sch_text.cpp:1803
 #, c-format
 msgid "Hierarchical Label %s"
 msgstr "Иерархическая метка %s"
@@ -2136,7 +2162,7 @@ msgstr "нет имени"
 msgid "An attempt was made to remove the %s field from component %s in library %s."
 msgstr "Была сделана попытка удалить поле %s у компонента %s в библиотеке %s."
 
-#: eeschema/sch_field.cpp:470
+#: eeschema/sch_field.cpp:471
 #, c-format
 msgid "Field %s"
 msgstr "Поле %s"
@@ -2963,44 +2989,39 @@ msgstr "Обзор библиотеки"
 msgid "Electronics rule check error"
 msgstr "Ошибка проверки электрических правил"
 
-#: eeschema/component_references_lister.cpp:715
+#: eeschema/component_references_lister.cpp:467
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
 msgstr "Элемент не обозначен: %s%s (элемент %d)\n"
 
-#: eeschema/component_references_lister.cpp:722
+#: eeschema/component_references_lister.cpp:474
 #, c-format
 msgid "Item not annotated: %s%s\n"
 msgstr "Элемент не обозначен: %s%s\n"
 
-#: eeschema/component_references_lister.cpp:745
+#: eeschema/component_references_lister.cpp:497
 #, c-format
 msgid "Error item %s%s unit %d and no more than %d parts\n"
 msgstr "Ошибка компонента %s%s элемент %d и больше, чем %d частей\n"
 
-#: eeschema/component_references_lister.cpp:785
-#: eeschema/component_references_lister.cpp:817
+#: eeschema/component_references_lister.cpp:537
+#: eeschema/component_references_lister.cpp:569
 #, c-format
 msgid "Multiple item %s%s (unit %d)\n"
 msgstr "Множественный элемент %s%s (часть %d)\n"
 
-#: eeschema/component_references_lister.cpp:792
-#: eeschema/component_references_lister.cpp:824
+#: eeschema/component_references_lister.cpp:544
+#: eeschema/component_references_lister.cpp:576
 #, c-format
 msgid "Multiple item %s%s\n"
 msgstr "Множественный элемент %s%s\n"
 
-#: eeschema/component_references_lister.cpp:841
+#: eeschema/component_references_lister.cpp:592
 #, c-format
-msgid "Different values for %s%d.%d (%s) and %s%d.%d (%s)"
-msgstr "Различаются значения для %s%d.%d (%s) и %s%d.%d (%s)"
+msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
+msgstr "Различаются значения для %s%d%s (%s) и %s%d%s (%s)"
 
-#: eeschema/component_references_lister.cpp:851
-#, c-format
-msgid "Different values for %s%d%c (%s) and %s%d%c (%s)"
-msgstr "Различаются значения для %s%d%c (%s) и %s%d%c (%s)"
-
-#: eeschema/component_references_lister.cpp:885
+#: eeschema/component_references_lister.cpp:627
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Дубликат временной метки (%s) для %s%d и %s%d"
@@ -3255,9 +3276,9 @@ msgstr "Размер:"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:55
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:44
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:65
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:120
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:131
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:142
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:125
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:137
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:149
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:45
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:56
 msgid "units"
@@ -3478,63 +3499,63 @@ msgstr "ERC"
 msgid "Reset"
 msgstr "Сброс"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:31
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:33
 msgid "Pin &name:"
 msgstr "Имя вывода:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:38
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:41
 msgid "Pin n&umber:"
 msgstr "Номер вывода:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:40
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:43
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
 msgstr "Номер вывода: от 1 до 4 букв и/или цифр"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:47
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:51
 msgid "&Orientation:"
 msgstr "Ориентация:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:54
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:58
 msgid "&Electrical type:"
 msgstr "Электр.тип:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:56
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:60
 msgid "Used by the ERC."
 msgstr "Используется при проверке электрических правил схемы (ERC)."
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:63
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:67
 msgid "Graphic &Style:"
 msgstr "Обозначение:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:77
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:81
 msgid "Sharing"
 msgstr "Общие выводы"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:79
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:83
 msgid "Shared by all &parts in component"
 msgstr "Общий для всех частей компонента"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:82
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:86
 msgid "Shared by all body &styles (DeMorgan)"
 msgstr "Общий для всех стилей (по де Моргану)"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:89
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:93
 msgid "Schematic Properties"
 msgstr "Свойства схемы"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:91
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:95
 msgid "&Visible"
 msgstr "Видимый"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:113
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:117
 msgid "N&ame text size:"
 msgstr "Размер шрифта имени:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:124
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:129
 msgid "Number te&xt size:"
 msgstr "Размер шрифта номера:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:135
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:141
 msgid "&Length:"
 msgstr "Длина:"
 
@@ -4126,60 +4147,60 @@ msgstr "Поле с именем <%s> не имеет значения и не �
 msgid "Remove Fields"
 msgstr "Удалить поля"
 
-#: eeschema/dialogs/dialog_netlist.cpp:146
+#: eeschema/dialogs/dialog_netlist.cpp:311
 msgid "Options:"
 msgstr "Параметры:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:150
+#: eeschema/dialogs/dialog_netlist.cpp:315
 msgid "Default format"
 msgstr "Формат по умолчанию"
 
-#: eeschema/dialogs/dialog_netlist.cpp:156
+#: eeschema/dialogs/dialog_netlist.cpp:321
 msgid "Legacy Format"
 msgstr "Старый формат"
 
-#: eeschema/dialogs/dialog_netlist.cpp:156
+#: eeschema/dialogs/dialog_netlist.cpp:321
 msgid "Advanced Format"
 msgstr "Улучшенный формат"
 
-#: eeschema/dialogs/dialog_netlist.cpp:157
+#: eeschema/dialogs/dialog_netlist.cpp:322
 msgid "Netlist Options:"
 msgstr "Параметры списка цепей:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:263
+#: eeschema/dialogs/dialog_netlist.cpp:422
 msgid "Prefix references 'U' and 'IC' with 'X'"
 msgstr "Префикс обозначений 'U' и 'IC' с 'X'"
 
-#: eeschema/dialogs/dialog_netlist.cpp:267
+#: eeschema/dialogs/dialog_netlist.cpp:426
 msgid "Simulator command:"
 msgstr "Команда симулятора:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:280
+#: eeschema/dialogs/dialog_netlist.cpp:439
 msgid "&Run Simulator"
 msgstr "Запустить симулятор"
 
-#: eeschema/dialogs/dialog_netlist.cpp:334
+#: eeschema/dialogs/dialog_netlist.cpp:492
 msgid "Title:"
 msgstr "Наименование:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:439
+#: eeschema/dialogs/dialog_netlist.cpp:584
 msgid "Save Netlist File"
 msgstr "Сохранить файл списка цепей"
 
-#: eeschema/dialogs/dialog_netlist.cpp:473
+#: eeschema/dialogs/dialog_netlist.cpp:618
 #, c-format
 msgid "%s Export"
 msgstr "%s экспорт"
 
-#: eeschema/dialogs/dialog_netlist.cpp:530
+#: eeschema/dialogs/dialog_netlist.cpp:669
 msgid "SPICE netlist file (.cir)|*.cir"
 msgstr "Файл цепей SPICE (.cir)|*.cir"
 
-#: eeschema/dialogs/dialog_netlist.cpp:535
+#: eeschema/dialogs/dialog_netlist.cpp:674
 msgid "CadStar netlist file (.frp)|*.frp"
 msgstr "Файл цепей CadStar (.frp)|*.frp"
 
-#: eeschema/dialogs/dialog_netlist.cpp:576
+#: eeschema/dialogs/dialog_netlist.cpp:707
 msgid ""
 "Some items are not annotated\n"
 "Do you want to annotate schematic?"
@@ -4187,27 +4208,27 @@ msgstr ""
 "Некоторые элементы не обозначены\n"
 "Не желаете обозначить элементы на схеме?"
 
-#: eeschema/dialogs/dialog_netlist.cpp:591
+#: eeschema/dialogs/dialog_netlist.cpp:722
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Ошибка: дубликат имени листа. Продолжить?"
 
-#: eeschema/dialogs/dialog_netlist.cpp:744
+#: eeschema/dialogs/dialog_netlist.cpp:864
 msgid "This plugin already exists. Abort"
 msgstr "Этот плагин уже есть. Прервано"
 
-#: eeschema/dialogs/dialog_netlist.cpp:774
+#: eeschema/dialogs/dialog_netlist.cpp:891
 msgid "Error. You must provide a command String"
 msgstr "Ошибка. Не задана командная строка"
 
-#: eeschema/dialogs/dialog_netlist.cpp:780
+#: eeschema/dialogs/dialog_netlist.cpp:897
 msgid "Error. You must provide a Title"
 msgstr "Ошибка. Не задан заголовок"
 
-#: eeschema/dialogs/dialog_netlist.cpp:801
+#: eeschema/dialogs/dialog_netlist.cpp:917
 msgid "Plugin files:"
 msgstr "Файлы плагинов:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:835
+#: eeschema/dialogs/dialog_netlist.cpp:951
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Не забудьте выбрать заголовок для этой закладки управления списком цепей"
 
@@ -4391,10 +4412,6 @@ msgid "Pen width"
 msgstr "Толщина пера"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
-msgid "Postscript"
-msgstr "Postscript"
-
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 msgid "PDF"
 msgstr "PDF"
 
@@ -4409,10 +4426,6 @@ msgstr "DXF"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 msgid "HPGL"
 msgstr "HPGL"
-
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:63
-msgid "Format"
-msgstr "Формат"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:70
 msgid "Default line thickness"
@@ -4642,6 +4655,30 @@ msgstr "Размер текста выбранных полей на схеме"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:228
 msgid "The X coordinate of the text relative to the component"
 msgstr "Координата X текста относительно компонента"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:38
+msgid "Plugins"
+msgstr "Плагины"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:59
+msgid "Generate"
+msgstr "Сформировать"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:66
+msgid "Help"
+msgstr "Справка"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:75
+msgid "Set Plugin Cmd"
+msgstr "Задание команды плагина"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:81
+msgid "Edit Plugin File"
+msgstr "Править файл плагина"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:93
+msgid "Command line:"
+msgstr "Команда строка:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:28
 msgid "General :"
@@ -4962,6 +4999,18 @@ msgstr "Найти"
 #: eeschema/dialogs/dialog_schematic_find.cpp:48
 msgid "Find and Replace"
 msgstr "Поиск и замена"
+
+#: eeschema/dialogs/dialog_bom.cpp:353
+msgid "Plugin"
+msgstr "Плагин"
+
+#: eeschema/dialogs/dialog_bom.cpp:457
+msgid "No text editor selected in KiCad. Please choose it"
+msgstr "Не выбран редактор. Нужно выбрать"
+
+#: eeschema/dialogs/dialog_bom.cpp:462
+msgid "Bom Generation Help"
+msgstr "Помощь в формировании ПЭ"
 
 #: eeschema/dialogs/dialog_color_config.cpp:21
 msgid "Wire"
@@ -5327,7 +5376,6 @@ msgid "Open a recent opened netlist document"
 msgstr "Открыть недавние списки цепей"
 
 #: cvpcb/menubar.cpp:93
-#: kicad/menubar.cpp:164
 msgid "&Save\tCtrl+S"
 msgstr "Сохранить\t(CTRL+S)"
 
@@ -5384,7 +5432,6 @@ msgid "About CvPcb footprint selector"
 msgstr "О CvPcb - селекторе посадочных мест"
 
 #: cvpcb/menubar.cpp:161
-#: kicad/menubar.cpp:300
 msgid "&Preferences"
 msgstr "Настройки"
 
@@ -5967,24 +6014,24 @@ msgstr "Полярность"
 msgid "AB axis"
 msgstr "AB оси"
 
-#: gerbview/events_called_functions.cpp:267
+#: gerbview/events_called_functions.cpp:266
 msgid "No editor defined. Please select one"
 msgstr "Не выбран редактор. Выберите один"
 
-#: gerbview/events_called_functions.cpp:273
+#: gerbview/events_called_functions.cpp:272
 #, c-format
 msgid "No file loaded on the active layer %d"
 msgstr "Не загружен файл на активном слое %d"
 
-#: gerbview/events_called_functions.cpp:320
+#: gerbview/events_called_functions.cpp:319
 msgid "Visibles"
 msgstr "Видимость"
 
-#: gerbview/events_called_functions.cpp:384
+#: gerbview/events_called_functions.cpp:383
 msgid "Hide &Layers Manager"
 msgstr "Скрыть менеджер слоев"
 
-#: gerbview/events_called_functions.cpp:384
+#: gerbview/events_called_functions.cpp:383
 msgid "Show &Layers Manager"
 msgstr "Показать менеджер слоев"
 
@@ -6096,6 +6143,16 @@ msgstr "Файл <%s> не найден"
 msgid "Errors"
 msgstr "Ошибки"
 
+#: gerbview/readgerb.cpp:170
+msgid ""
+"Warning: this file has no D-Code definition\n"
+"It is perhaps an old RS274D file\n"
+"Therefore the size of items is undefined"
+msgstr ""
+"Предупреждение: файл не содержит определений D-кодов\n"
+"Возможно старый файл RS274D\n"
+"Поэтому размеры элементов не определены"
+
 #: gerbview/initpcb.cpp:49
 msgid "Current data will be lost?"
 msgstr "Текущие данные будут утеряны?"
@@ -6153,7 +6210,7 @@ msgstr "Скрыть все слои"
 msgid "Delete Block (ctrl + drag mouse)"
 msgstr "Удалить блок (CTRL + протягивание мышью)"
 
-#: gerbview/gerbview.cpp:92
+#: gerbview/gerbview.cpp:91
 msgid "GerbView is already running. Continue?"
 msgstr "GerbView уже запущен. Продолжить?"
 
@@ -6252,73 +6309,65 @@ msgstr "Gerber файлы"
 msgid "Drill files"
 msgstr "Файл сверловки"
 
-#: gerbview/files.cpp:122
+#: gerbview/files.cpp:117
 msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Файлы Gerber (.g* .lgr .pho)"
 
-#: gerbview/files.cpp:128
+#: gerbview/files.cpp:123
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
 msgstr "Верхний слой (*.GTL)|*.GTL;*.gtl|"
 
-#: gerbview/files.cpp:129
+#: gerbview/files.cpp:124
 msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
 msgstr "Нижний слой (*.GBL)|*.GBL;*.gbl|"
 
-#: gerbview/files.cpp:130
+#: gerbview/files.cpp:125
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
 msgstr "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
 
-#: gerbview/files.cpp:131
+#: gerbview/files.cpp:126
 msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
 msgstr "Top solder resist (*.GTS)|*.GTS;*.gts|"
 
-#: gerbview/files.cpp:132
+#: gerbview/files.cpp:127
 msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
 msgstr "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
 
-#: gerbview/files.cpp:133
+#: gerbview/files.cpp:128
 msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
 msgstr "Top overlay (*.GTO)|*.GTO;*.gto|"
 
-#: gerbview/files.cpp:134
+#: gerbview/files.cpp:129
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
 msgstr "Паяльная паста нижнего слоя (*.GBP)|*.GBP;*.gbp|"
 
-#: gerbview/files.cpp:135
+#: gerbview/files.cpp:130
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
 msgstr "Паяльная паста верхнего слоя (*.GTP)|*.GTP;*.gtp|"
 
-#: gerbview/files.cpp:136
+#: gerbview/files.cpp:131
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
 msgstr "Слой запретных зон (*.GKO)|*.GKO;*.gko|"
 
-#: gerbview/files.cpp:137
+#: gerbview/files.cpp:132
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 msgstr "Механические слои (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
-#: gerbview/files.cpp:138
+#: gerbview/files.cpp:133
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
 msgstr "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
 
-#: gerbview/files.cpp:139
+#: gerbview/files.cpp:134
 msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 
-#: gerbview/files.cpp:151
+#: gerbview/files.cpp:146
 msgid "Open Gerber File"
 msgstr "Открыть файл Gerber"
 
-#: gerbview/files.cpp:232
+#: gerbview/files.cpp:227
 msgid "Open Drill File"
 msgstr "Открыть файл сверловки"
-
-#: gerbview/files.cpp:302
-msgid "Gerber DCODE files"
-msgstr "Файлы Gerber DCODE"
-
-#: gerbview/files.cpp:305
-msgid "Load GERBER DCODE File"
-msgstr "Загрузить файл D-кодов"
 
 #: gerbview/menubar.cpp:63
 msgid "Load &Gerber File"
@@ -6332,103 +6381,95 @@ msgstr "Загрузить файл сверловки EXCELLON"
 msgid "Load excellon drill file"
 msgstr "Загрузить файл сверловки EXCELLON"
 
-#: gerbview/menubar.cpp:76
-msgid "Load &DCodes"
-msgstr "Загрузить D-коды"
-
-#: gerbview/menubar.cpp:77
-msgid "Load D-Codes definition file"
-msgstr "Загрузить файл определений D-кодов"
-
-#: gerbview/menubar.cpp:93
+#: gerbview/menubar.cpp:87
 msgid "Open &Recent Gerber File"
 msgstr "Открыть недавний файл Gerber"
 
-#: gerbview/menubar.cpp:94
+#: gerbview/menubar.cpp:88
 msgid "Open a recent opened Gerber file"
 msgstr "Отрыть недавно открытые Gerber файлы"
 
-#: gerbview/menubar.cpp:108
+#: gerbview/menubar.cpp:102
 msgid "Open Recent Dri&ll File"
 msgstr "Открыть недавние файлы сверловки"
 
-#: gerbview/menubar.cpp:109
+#: gerbview/menubar.cpp:103
 msgid "Open a recent opened drill file"
 msgstr "Отрыть недавно открытые файлы сверловки"
 
-#: gerbview/menubar.cpp:118
+#: gerbview/menubar.cpp:112
 msgid "&Clear All"
 msgstr "Очистить все"
 
-#: gerbview/menubar.cpp:119
+#: gerbview/menubar.cpp:113
 msgid "Clear all layers. All data will be deleted"
 msgstr "Очистить все слои. Все данные будут удалены"
 
-#: gerbview/menubar.cpp:128
+#: gerbview/menubar.cpp:122
 msgid "E&xport to Pcbnew"
 msgstr "Экспорт в Pcbnew"
 
-#: gerbview/menubar.cpp:129
+#: gerbview/menubar.cpp:123
 msgid "Export data in Pcbnew format"
 msgstr "Экспорт данных в формате Pcbnew"
 
-#: gerbview/menubar.cpp:138
+#: gerbview/menubar.cpp:132
 msgid "&Print"
 msgstr "Печать"
 
-#: gerbview/menubar.cpp:139
+#: gerbview/menubar.cpp:133
 msgid "Print gerber"
 msgstr "Печать Gerber"
 
-#: gerbview/menubar.cpp:148
+#: gerbview/menubar.cpp:142
 msgid "E&xit"
 msgstr "Выход"
 
-#: gerbview/menubar.cpp:149
+#: gerbview/menubar.cpp:143
 msgid "Quit GerbView"
 msgstr "Выход из GerbView"
 
-#: gerbview/menubar.cpp:171
+#: gerbview/menubar.cpp:165
 msgid "Set options to draw items"
 msgstr "Установка параметров для отображения"
 
-#: gerbview/menubar.cpp:188
+#: gerbview/menubar.cpp:182
 msgid "&List DCodes"
 msgstr "Список D-кодов"
 
-#: gerbview/menubar.cpp:189
+#: gerbview/menubar.cpp:183
 msgid "List and edit D-codes"
 msgstr "Показать и редактировать D-коды"
 
-#: gerbview/menubar.cpp:195
+#: gerbview/menubar.cpp:189
 msgid "&Show Source"
 msgstr "Показать содержимое файла"
 
-#: gerbview/menubar.cpp:196
+#: gerbview/menubar.cpp:190
 msgid "Show source file for the current layer"
 msgstr "Показать содержимое файла для текущего слоя"
 
-#: gerbview/menubar.cpp:205
+#: gerbview/menubar.cpp:199
 msgid "&Clear Layer"
 msgstr "Очистить слой"
 
-#: gerbview/menubar.cpp:206
+#: gerbview/menubar.cpp:200
 msgid "Clear current layer"
 msgstr "Очистить текущий слой"
 
-#: gerbview/menubar.cpp:229
+#: gerbview/menubar.cpp:223
 msgid "Open the GerbView handbook"
 msgstr "Открыть руководство по GerbView"
 
-#: gerbview/menubar.cpp:235
+#: gerbview/menubar.cpp:229
 msgid "&About GerbView"
 msgstr "О программе GerbView"
 
-#: gerbview/menubar.cpp:236
+#: gerbview/menubar.cpp:230
 msgid "About GerbView gerber and drill viewer"
 msgstr "О программе GerbView - просмотр фотошаблонов и листа сверловки"
 
-#: gerbview/menubar.cpp:242
+#: gerbview/menubar.cpp:236
 msgid "&Miscellaneous"
 msgstr "Разное"
 
@@ -6746,8 +6787,8 @@ msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
 msgstr "Eagle ver. 6.x XML PCB файлы (*.brd)|*.brd"
 
 #: common/wildcards_and_files_ext.cpp:75
-msgid "P-Cad 2002/2004 ASCII PCB files (*.pcb)|*.pcb"
-msgstr "P-Cad 2002/2004 ASCII PCB файлы (*.pcb)|*.pcb"
+msgid "P-Cad 200x ASCII PCB files (*.pcb)|*.pcb"
+msgstr "P-Cad 200х ASCII PCB файлы (*.pcb)|*.pcb"
 
 #: common/wildcards_and_files_ext.cpp:76
 msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
@@ -6821,7 +6862,7 @@ msgstr "Vrml и x3d файлы (*.wrl *.x3d)|*.wrl;*.x3d"
 msgid "Text files (*.txt)|*.txt"
 msgstr "Текстовые файлы (*.txt)|*.txt"
 
-#: common/eda_text.cpp:308
+#: common/eda_text.cpp:300
 msgid "Bold+Italic"
 msgstr "Полужирный курсив"
 
@@ -7036,19 +7077,19 @@ msgstr "Выбор сетки"
 msgid "User Grid"
 msgstr "Сетка пользователя"
 
-#: common/common.cpp:189
+#: common/common.cpp:203
 msgid "\""
 msgstr "\""
 
-#: common/common.cpp:216
+#: common/common.cpp:230
 msgid "inches"
 msgstr "дюймы"
 
-#: common/common.cpp:220
+#: common/common.cpp:234
 msgid "millimeters"
 msgstr "миллиметры"
 
-#: common/common.cpp:239
+#: common/common.cpp:253
 msgid "in"
 msgstr "в"
 
@@ -7068,40 +7109,40 @@ msgstr "неправильный символ найден в ревизии"
 msgid "Colors"
 msgstr "Цвета"
 
-#: common/dsnlexer.cpp:86
+#: common/dsnlexer.cpp:92
 msgid "clipboard"
 msgstr "буфер обмена"
 
-#: common/dsnlexer.cpp:285
-#: common/dsnlexer.cpp:293
+#: common/dsnlexer.cpp:303
+#: common/dsnlexer.cpp:311
 #, c-format
 msgid "Expecting '%s'"
 msgstr "Expecting '%s'"
 
-#: common/dsnlexer.cpp:302
-#: common/dsnlexer.cpp:318
+#: common/dsnlexer.cpp:319
+#: common/dsnlexer.cpp:335
 #, c-format
 msgid "Unexpected '%s'"
 msgstr "Unexpected '%s'"
 
-#: common/dsnlexer.cpp:310
+#: common/dsnlexer.cpp:327
 #, c-format
 msgid "%s is a duplicate"
 msgstr "%s является дубликатом"
 
-#: common/dsnlexer.cpp:364
+#: common/dsnlexer.cpp:380
 #, c-format
 msgid "need a NUMBER for '%s'"
 msgstr "нужно ЧИСЛО для '%s'"
 
-#: common/dsnlexer.cpp:546
-msgid "String delimiter must be a single character of ', \", or $"
-msgstr "String delimiter must be a single character of ', \", or $"
-
-#: common/dsnlexer.cpp:680
-#: common/dsnlexer.cpp:695
+#: common/dsnlexer.cpp:652
+#: common/dsnlexer.cpp:712
 msgid "Un-terminated delimited string"
 msgstr "Un-terminated delimited string"
+
+#: common/dsnlexer.cpp:674
+msgid "String delimiter must be a single character of ', \", or $"
+msgstr "String delimiter must be a single character of ', \", or $"
 
 #: common/fp_lib_table.cpp:171
 #, c-format
@@ -7897,49 +7938,49 @@ msgstr "Показать все слои"
 msgid "Show None"
 msgstr "Не показывать слои"
 
-#: pcbnew/class_text_mod.cpp:357
+#: pcbnew/class_text_mod.cpp:358
 msgid "Ref."
 msgstr "Поз."
 
-#: pcbnew/class_text_mod.cpp:374
+#: pcbnew/class_text_mod.cpp:375
 msgid "Display"
 msgstr "Показать"
 
-#: pcbnew/class_text_mod.cpp:380
+#: pcbnew/class_text_mod.cpp:381
 msgid " Yes"
 msgstr "Да"
 
-#: pcbnew/class_text_mod.cpp:382
+#: pcbnew/class_text_mod.cpp:383
 msgid " No"
 msgstr "Нет"
 
-#: pcbnew/class_text_mod.cpp:387
+#: pcbnew/class_text_mod.cpp:388
 msgid "Orient"
 msgstr "Поворот"
 
-#: pcbnew/class_text_mod.cpp:390
+#: pcbnew/class_text_mod.cpp:391
 msgid "Thickness"
 msgstr "Толщина"
 
-#: pcbnew/class_text_mod.cpp:393
+#: pcbnew/class_text_mod.cpp:394
 msgid "H Size"
 msgstr "Гориз.размер"
 
-#: pcbnew/class_text_mod.cpp:396
+#: pcbnew/class_text_mod.cpp:397
 msgid "V Size"
 msgstr "Верт.размер"
 
-#: pcbnew/class_text_mod.cpp:407
+#: pcbnew/class_text_mod.cpp:408
 #, c-format
 msgid "Reference %s"
 msgstr "Обозначение %s"
 
-#: pcbnew/class_text_mod.cpp:411
+#: pcbnew/class_text_mod.cpp:412
 #, c-format
 msgid "Value %s of %s"
 msgstr "Значение %s от %s"
 
-#: pcbnew/class_text_mod.cpp:416
+#: pcbnew/class_text_mod.cpp:417
 #, c-format
 msgid "Text \"%s\" on %s of %s"
 msgstr "Текст \"%s\" на %s от %s"
@@ -8556,7 +8597,7 @@ msgstr "(Область запрета)"
 msgid "** NO BOARD DEFINED **"
 msgstr "** ПЛАТА НЕ ОПРЕДЕЛЕНА **"
 
-#: pcbnew/class_zone.cpp:957
+#: pcbnew/class_zone.cpp:958
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Контур зоны %s на %s"
@@ -8795,83 +8836,83 @@ msgstr "Микро ПО %s, цепь [%s] (%d) на слоях %s/%s"
 msgid "Via %s net [%s] (%d) on layers %s/%s"
 msgstr "ПО %s цепь [%s] (%d) на слоях %s/%s"
 
-#: pcbnew/class_track.cpp:981
+#: pcbnew/class_track.cpp:983
 msgid "Track Len"
 msgstr "Длина"
 
-#: pcbnew/class_track.cpp:986
+#: pcbnew/class_track.cpp:988
 msgid "Full Len"
 msgstr "Полная длина"
 
-#: pcbnew/class_track.cpp:989
+#: pcbnew/class_track.cpp:991
 msgid "In Package"
 msgstr "В корпусе"
 
-#: pcbnew/class_track.cpp:997
+#: pcbnew/class_track.cpp:999
 msgid "NC Name"
 msgstr "Имя КЦ"
 
-#: pcbnew/class_track.cpp:998
+#: pcbnew/class_track.cpp:1000
 msgid "NC Clearance"
 msgstr "Зазор КЦ"
 
-#: pcbnew/class_track.cpp:1001
+#: pcbnew/class_track.cpp:1003
 msgid "NC Width"
 msgstr "Ширина КЦ"
 
-#: pcbnew/class_track.cpp:1004
+#: pcbnew/class_track.cpp:1006
 msgid "NC Via Size"
 msgstr "Размер прех.отв. КЦ"
 
-#: pcbnew/class_track.cpp:1007
+#: pcbnew/class_track.cpp:1009
 msgid "NC Via Drill"
 msgstr "Сверло перех.отв. КЦ"
 
-#: pcbnew/class_track.cpp:1030
+#: pcbnew/class_track.cpp:1032
 msgid "Micro Via"
 msgstr "Микроперех.отв."
 
-#: pcbnew/class_track.cpp:1035
+#: pcbnew/class_track.cpp:1037
 msgid "Blind/Buried Via"
 msgstr "Слепые/глухие перех.отв."
 
-#: pcbnew/class_track.cpp:1040
+#: pcbnew/class_track.cpp:1042
 msgid "Through Via"
 msgstr "Сквозное перех.отв."
 
-#: pcbnew/class_track.cpp:1047
+#: pcbnew/class_track.cpp:1049
 msgid "Track"
 msgstr "Дорожка"
 
-#: pcbnew/class_track.cpp:1051
+#: pcbnew/class_track.cpp:1053
 msgid "Zone"
 msgstr "Зона"
 
-#: pcbnew/class_track.cpp:1114
+#: pcbnew/class_track.cpp:1116
 msgid "Status"
 msgstr "Статус"
 
-#: pcbnew/class_track.cpp:1139
+#: pcbnew/class_track.cpp:1141
 msgid "Diam"
 msgstr "Диам."
 
-#: pcbnew/class_track.cpp:1150
+#: pcbnew/class_track.cpp:1152
 msgid "(Specific)"
 msgstr "(Особый)"
 
-#: pcbnew/class_track.cpp:1152
+#: pcbnew/class_track.cpp:1154
 msgid "(Default)"
 msgstr "(По умолчанию)"
 
-#: pcbnew/class_track.cpp:1165
+#: pcbnew/class_track.cpp:1167
 msgid "Segment Length"
 msgstr "Длина сегмента"
 
-#: pcbnew/class_track.cpp:1527
+#: pcbnew/class_track.cpp:1529
 msgid "Not found"
 msgstr "Не найдено"
 
-#: pcbnew/class_track.cpp:1535
+#: pcbnew/class_track.cpp:1537
 #, c-format
 msgid "Track %s, net [%s] (%d) on layer %s, length: %s"
 msgstr "Дорожка %s, цепь [%s] (%d) на слое %s, длина: %s"
@@ -9897,76 +9938,76 @@ msgstr "Путь библиотека посадочных мест <%s> не с
 msgid "library <%s> has no footprint '%s' to delete"
 msgstr "в библиотеке <%s> нет посадочного места '%s' для удаления"
 
-#: pcbnew/kicad_plugin.cpp:1095
+#: pcbnew/kicad_plugin.cpp:1110
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "неизвестный тип контактной площадки; %d"
 
-#: pcbnew/kicad_plugin.cpp:1108
+#: pcbnew/kicad_plugin.cpp:1123
 #, c-format
 msgid "unknown pad attribute: %d"
 msgstr "неизвестный тип атрибута контактной площадки: %d"
 
-#: pcbnew/kicad_plugin.cpp:1292
+#: pcbnew/kicad_plugin.cpp:1307
 #, c-format
 msgid "unknown via type %d"
 msgstr "неизвестный тип контактной площадки %d"
 
-#: pcbnew/kicad_plugin.cpp:1423
+#: pcbnew/kicad_plugin.cpp:1438
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "неизвестный тип скругления углов зоны %d"
 
-#: pcbnew/kicad_plugin.cpp:1674
-#: pcbnew/kicad_plugin.cpp:1736
+#: pcbnew/kicad_plugin.cpp:1691
+#: pcbnew/kicad_plugin.cpp:1753
 #, c-format
 msgid "Library <%s> is read only"
 msgstr "Библиотека <%s> доступна только для чтения"
 
-#: pcbnew/kicad_plugin.cpp:1687
+#: pcbnew/kicad_plugin.cpp:1704
 #, c-format
 msgid "Footprint file name <%s> is not valid."
 msgstr "Неправильное имя файла посадочных мест <%s>."
 
-#: pcbnew/kicad_plugin.cpp:1693
+#: pcbnew/kicad_plugin.cpp:1710
 #, c-format
 msgid "user does not have write permission to delete file <%s> "
 msgstr "У Вас нет прав запись и удаление файла <%s>"
 
-#: pcbnew/kicad_plugin.cpp:1748
+#: pcbnew/kicad_plugin.cpp:1765
 #, c-format
 msgid "cannot overwrite library path <%s>"
 msgstr "не удалось переписать путь библиотеки <%s>"
 
-#: pcbnew/kicad_plugin.cpp:1773
+#: pcbnew/kicad_plugin.cpp:1790
 #, c-format
 msgid "user does not have permission to delete directory <%s>"
 msgstr "У Вас нет прав на удаление директории <%s>"
 
-#: pcbnew/kicad_plugin.cpp:1781
+#: pcbnew/kicad_plugin.cpp:1798
 #, c-format
 msgid "library directory <%s> has unexpected sub-directories"
 msgstr "директория библиотеки <%s> содержит неожиданные поддиректории"
 
-#: pcbnew/kicad_plugin.cpp:1800
+#: pcbnew/kicad_plugin.cpp:1817
 #, c-format
 msgid "unexpected file <%s> was found in library path '%s'"
 msgstr "неизвестный файл <%s> найден по пути библиотеки '%s'"
 
-#: pcbnew/kicad_plugin.cpp:1818
+#: pcbnew/kicad_plugin.cpp:1835
 #, c-format
 msgid "footprint library <%s> cannot be deleted"
 msgstr "библиотеку посадочных мест <%s> не удалось удалить"
 
-#: pcbnew/class_pcb_text.cpp:128
+#: pcbnew/class_pcb_text.cpp:129
 msgid "Dimension"
 msgstr "Размер"
 
-#: pcbnew/class_pcb_text.cpp:130
+#: pcbnew/class_pcb_text.cpp:131
 msgid "PCB Text"
 msgstr "Текст платы"
 
-#: pcbnew/class_pcb_text.cpp:178
+#: pcbnew/class_pcb_text.cpp:179
 #, c-format
 msgid "Pcb Text \"%s\" on %s"
 msgstr "Pcb текст \"%s\" на %s"
@@ -10079,22 +10120,28 @@ msgstr "Нет модулей"
 msgid "Components"
 msgstr "Компоненты"
 
-#: pcbnew/netlist.cpp:213
+#: pcbnew/netlist.cpp:192
+#: pcbnew/netlist.cpp:297
+#, c-format
+msgid "No footprint defined for component `%s`.\n"
+msgstr "Не задано посадочное место для компонента `%s`.\n"
+
+#: pcbnew/netlist.cpp:225
 #, c-format
 msgid "*** Warning: Cannot find footprint library file \"%s\" in any of the standard KiCad library search paths. ***\n"
 msgstr "*** Предупреждение: Не удалось найти файл библиотеки посадочных мест \"%s\" по всем стандартным путям поиска библиотек KiCad. ***\n"
 
-#: pcbnew/netlist.cpp:236
+#: pcbnew/netlist.cpp:248
 #, c-format
 msgid "*** Warning: component `%s` footprint <%s> was not found in any libraries. ***\n"
 msgstr "*** Предупреждение: компонент `%s` с посадочным местом <%s> не найден в библиотеках. ***\n"
 
-#: pcbnew/netlist.cpp:301
+#: pcbnew/netlist.cpp:325
 #, c-format
 msgid "*** Warning: Component \"%s\" footprint ID <%s> is not valid. ***\n"
 msgstr "*** Предупреждение: компонент \"%s\" с посадочным местом <%s> не найден. ***\n"
 
-#: pcbnew/netlist.cpp:323
+#: pcbnew/netlist.cpp:347
 #, c-format
 msgid "*** Warning: component `%s` footprint <%s> was not found in any libraries in the footprint library table. ***\n"
 msgstr "*** Предупреждение: компонент `%s` с посадочным местом <%s> не найден в библиотеках из таблицы библиотек. ***\n"
@@ -10795,27 +10842,27 @@ msgstr ""
 msgid "unknown graphic type: %d"
 msgstr "неизвестный тип графики: %d"
 
-#: pcbnew/legacy_plugin.cpp:413
+#: pcbnew/legacy_plugin.cpp:417
 msgid "May not load millimeter *.brd file into 'Pcbnew compiled for deci-mils'"
 msgstr "Невозможно загрузить *.brd файл в миллиметровом формате - Pcbnew собрана с deci-mils"
 
-#: pcbnew/legacy_plugin.cpp:529
+#: pcbnew/legacy_plugin.cpp:533
 #, c-format
 msgid "Unknown sheet type '%s' on line:%d"
 msgstr "Неизвестный тип листа '%s' в строке:%d"
 
-#: pcbnew/legacy_plugin.cpp:1178
+#: pcbnew/legacy_plugin.cpp:1190
 #, c-format
-msgid "Unknown padshape '%s' on line:%d"
-msgstr "Неизвестная форма контактной площадки '%s' в строке:%d"
+msgid "Unknown padshape '%c=0x%02x' on line:%d of module:'%s'"
+msgstr "Неизвестная форма контактной площадки '%c=0x%02x' в строке:%d модуль:'%s'"
 
-#: pcbnew/legacy_plugin.cpp:2147
+#: pcbnew/legacy_plugin.cpp:2167
 #, c-format
 msgid "duplicate NETCLASS name '%s'"
 msgstr "дубликат имена класса цепи '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2742
-#: pcbnew/legacy_plugin.cpp:2779
+#: pcbnew/legacy_plugin.cpp:2762
+#: pcbnew/legacy_plugin.cpp:2799
 #, c-format
 msgid ""
 "invalid float number in file: <%s>\n"
@@ -10824,8 +10871,8 @@ msgstr ""
 "неверное число с плавающей точкой в файле: <%s>\n"
 "строка: %d, смещение: %d"
 
-#: pcbnew/legacy_plugin.cpp:2751
-#: pcbnew/legacy_plugin.cpp:2787
+#: pcbnew/legacy_plugin.cpp:2771
+#: pcbnew/legacy_plugin.cpp:2807
 #, c-format
 msgid ""
 "missing float number in file: <%s>\n"
@@ -10834,46 +10881,46 @@ msgstr ""
 "отсутствует число с плавающей точкой в файле: <%s>\n"
 "строка: %d, смещение: %d"
 
-#: pcbnew/legacy_plugin.cpp:2835
+#: pcbnew/legacy_plugin.cpp:2855
 #, c-format
 msgid "Unable to open file <%s>"
 msgstr "Не удалось открыть файл <%s>"
 
-#: pcbnew/legacy_plugin.cpp:2872
+#: pcbnew/legacy_plugin.cpp:2892
 #, c-format
 msgid "error writing to file <%s>"
 msgstr "ошибка записи в файл <%s>"
 
-#: pcbnew/legacy_plugin.cpp:3984
+#: pcbnew/legacy_plugin.cpp:4004
 msgid "May not load millimeter legacy library file into 'Pcbnew compiled for deci-mils'"
 msgstr "Невозможно загрузить в миллиметрах библиотечный файл - 'Pcbnew собрана с deci-mils'"
 
-#: pcbnew/legacy_plugin.cpp:3994
+#: pcbnew/legacy_plugin.cpp:4014
 #, c-format
 msgid "File <%s> is empty or is not a legacy library"
 msgstr "Файл <%s> пустой или не является библиотекой"
 
-#: pcbnew/legacy_plugin.cpp:4107
+#: pcbnew/legacy_plugin.cpp:4145
 #, c-format
 msgid "Legacy library file <%s> is read only"
 msgstr "Файл библиотеки <%s> доступен только для чтения"
 
-#: pcbnew/legacy_plugin.cpp:4127
+#: pcbnew/legacy_plugin.cpp:4165
 #, c-format
 msgid "Unable to open or create legacy library file <%s>"
 msgstr "Не удалось открыть или создать библиотечный файл <%s>"
 
-#: pcbnew/legacy_plugin.cpp:4153
+#: pcbnew/legacy_plugin.cpp:4191
 #, c-format
 msgid "Unable to rename tempfile <%s> to library file <%s>"
 msgstr "Не удалось переименовать временный файл <%s> в библиотечный файл <%s>"
 
-#: pcbnew/legacy_plugin.cpp:4336
+#: pcbnew/legacy_plugin.cpp:4374
 #, c-format
 msgid "library <%s> already exists, will not create a new"
 msgstr "библиотека <%s> уже существует, не удалось создать заново"
 
-#: pcbnew/legacy_plugin.cpp:4363
+#: pcbnew/legacy_plugin.cpp:4401
 #, c-format
 msgid "library <%s> cannot be deleted"
 msgstr "библиотеку <%s> не удалось удалить"
@@ -11275,45 +11322,45 @@ msgstr "Маркер @(%d,%d)"
 msgid "Delete Pad (module %s %s) "
 msgstr "Удалить контактную площадку (модуль %s %s) "
 
-#: pcbnew/class_module.cpp:469
+#: pcbnew/class_module.cpp:474
 msgid "Last Change"
 msgstr "Последнее изменение"
 
-#: pcbnew/class_module.cpp:473
+#: pcbnew/class_module.cpp:478
 msgid "Netlist path"
 msgstr "Путь списка цепей"
 
-#: pcbnew/class_module.cpp:496
+#: pcbnew/class_module.cpp:501
 msgid "Stat"
 msgstr "Стат."
 
-#: pcbnew/class_module.cpp:513
+#: pcbnew/class_module.cpp:518
 msgid "Virtual"
 msgstr "Виртуально"
 
-#: pcbnew/class_module.cpp:521
+#: pcbnew/class_module.cpp:526
 msgid "Attrib"
 msgstr "Атрибуты"
 
-#: pcbnew/class_module.cpp:524
+#: pcbnew/class_module.cpp:529
 msgid "No 3D shape"
 msgstr "Нет 3D формы"
 
-#: pcbnew/class_module.cpp:535
+#: pcbnew/class_module.cpp:540
 msgid "3D-Shape"
 msgstr "3D-форма"
 
-#: pcbnew/class_module.cpp:538
+#: pcbnew/class_module.cpp:543
 #, c-format
 msgid "Doc: %s"
 msgstr "Документация: %s"
 
-#: pcbnew/class_module.cpp:539
+#: pcbnew/class_module.cpp:544
 #, c-format
 msgid "KeyW: %s"
 msgstr "Ключевое слово: %s"
 
-#: pcbnew/class_module.cpp:718
+#: pcbnew/class_module.cpp:723
 #, c-format
 msgid "Footprint %s on %s"
 msgstr "Посадочное место %s на %s"
@@ -11379,8 +11426,6 @@ msgid "footprint library path <%s> does not exist"
 msgstr "путь библиотек посадочных мест <%s> не существует"
 
 #: pcbnew/gpcb_plugin.cpp:356
-#: pcbnew/pcb_parser.cpp:355
-#: pcbnew/pcb_parser.cpp:444
 #, c-format
 msgid "unknown token \"%s\""
 msgstr "неизвестная лексема \"%s\""
@@ -11460,7 +11505,6 @@ msgstr ""
 "Ошибка %s."
 
 #: pcbnew/modedit.cpp:117
-#: pcbnew/controle.cpp:204
 msgid "Selection Clarification"
 msgstr "Уточнение выбора"
 
@@ -11526,27 +11570,27 @@ msgstr ""
 "строка: %d\n"
 "смещение: %d"
 
-#: pcbnew/pcb_parser.cpp:535
+#: pcbnew/pcb_parser.cpp:540
 #, c-format
 msgid "page type \"%s\" is not valid "
 msgstr "тип страницы \"%s\" недопустим"
 
-#: pcbnew/pcb_parser.cpp:728
+#: pcbnew/pcb_parser.cpp:733
 #, c-format
 msgid "%d is not a valid layer count"
 msgstr "%d недопустимый номер слоя"
 
-#: pcbnew/pcb_parser.cpp:757
+#: pcbnew/pcb_parser.cpp:762
 #, c-format
 msgid "Layer '%s' in file <%s> at line %d, position %d, was not defined in the layers section"
 msgstr "Слой '%s' в файле <%s> в строке %d, позиция %d, не определен в секции слоев"
 
-#: pcbnew/pcb_parser.cpp:1131
+#: pcbnew/pcb_parser.cpp:1136
 #, c-format
 msgid "duplicate NETCLASS name '%s' in file <%s> at line %d, offset %d"
 msgstr "дубликат имени класса цепи '%s' в файле <%s> в строке %d, смещение %d"
 
-#: pcbnew/pcb_parser.cpp:1758
+#: pcbnew/pcb_parser.cpp:1765
 #, c-format
 msgid "cannot handle module text type %s"
 msgstr "не удалось обработать текст модуля типа %s"
@@ -11569,7 +11613,7 @@ msgstr ""
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew уже запущен. Продолжить?"
 
-#: pcbnew/pcbnew.cpp:243
+#: pcbnew/pcbnew.cpp:244
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -11582,7 +11626,7 @@ msgstr ""
 "Хотите его загрузить?\n"
 "Он будет сохранен в новом формате."
 
-#: pcbnew/pcbnew.cpp:273
+#: pcbnew/pcbnew.cpp:274
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -11606,21 +11650,21 @@ msgstr "Расширение типа '%s' не найдено."
 msgid "Unknown PCB_FILE_T value: %d"
 msgstr "Неизвестное PCB_FILE_T значение: %d"
 
-#: pcbnew/files.cpp:61
+#: pcbnew/files.cpp:64
 msgid "Printed circuit board"
 msgstr "Печатная плата"
 
-#: pcbnew/files.cpp:108
+#: pcbnew/files.cpp:111
 #, c-format
 msgid "Recovery file <%s> not found."
 msgstr "Файл восстановления <%s> не найден."
 
-#: pcbnew/files.cpp:114
+#: pcbnew/files.cpp:117
 #, c-format
 msgid "OK to load recovery or backup file <%s>"
 msgstr "OK для загрузки файла восстановления <%s>"
 
-#: pcbnew/files.cpp:165
+#: pcbnew/files.cpp:168
 msgid ""
 "The current board has been modified.\n"
 "Do you wish to discard the changes?"
@@ -11628,12 +11672,12 @@ msgstr ""
 "Текущая плата была изменена.\n"
 " Желаете отменить изменения?"
 
-#: pcbnew/files.cpp:218
-#: pcbnew/files.cpp:310
+#: pcbnew/files.cpp:221
+#: pcbnew/files.cpp:323
 msgid "Open Board File"
 msgstr "Открыть файл платы"
 
-#: pcbnew/files.cpp:299
+#: pcbnew/files.cpp:312
 msgid ""
 "This file was created by an older version of Pcbnew.\n"
 "It will be stored in the new file format when you save this file again."
@@ -11641,7 +11685,7 @@ msgstr ""
 "Этот файл создан старой версией Pcbnew.\n"
 "При сохранении файла он будет записан в новом формате."
 
-#: pcbnew/files.cpp:308
+#: pcbnew/files.cpp:321
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -11650,15 +11694,15 @@ msgstr ""
 "Ошибка загрузки платы.\n"
 "%s"
 
-#: pcbnew/files.cpp:457
+#: pcbnew/files.cpp:470
 msgid "Save Board File As"
 msgstr "Сохранить файл платы как"
 
-#: pcbnew/files.cpp:514
+#: pcbnew/files.cpp:527
 msgid "Warning: unable to create backup file "
 msgstr "Предупреждение: не удалось создать файл резервной копии"
 
-#: pcbnew/files.cpp:547
+#: pcbnew/files.cpp:560
 #, c-format
 msgid ""
 "Error saving board.\n"
@@ -11667,19 +11711,19 @@ msgstr ""
 "Ошибка сохранения платы.\n"
 "%s"
 
-#: pcbnew/files.cpp:549
+#: pcbnew/files.cpp:562
 msgid "Save Board File"
 msgstr "Сохранить файл платы"
 
-#: pcbnew/files.cpp:578
+#: pcbnew/files.cpp:591
 msgid "Backup file: "
 msgstr "Файл резервной копии: "
 
-#: pcbnew/files.cpp:582
+#: pcbnew/files.cpp:595
 msgid "Wrote board file: "
 msgstr "Записан файл платы: "
 
-#: pcbnew/files.cpp:584
+#: pcbnew/files.cpp:597
 msgid "Failed to create "
 msgstr "Не удалось создать "
 
@@ -12042,7 +12086,6 @@ msgid "Browse..."
 msgstr "Обзор..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:71
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:315
 msgid "Layers"
 msgstr "Слои"
 
@@ -12165,7 +12208,6 @@ msgid "Solder mask current settings:"
 msgstr "Текущие значения паяльной маски:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:196
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:413
 msgid "Solder mask clearance:"
 msgstr "Зазор маски:"
 
@@ -13283,6 +13325,7 @@ msgid "merge aligned track segments, and remove null segments"
 msgstr "Объединение ровных сегментов и удаление нулевых сегментов дорожек"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:32
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:113
 msgid "Delete unconnected tracks"
 msgstr "Удаление не подсоединенных дорожек"
 
@@ -13700,7 +13743,6 @@ msgid "Print SVG options:"
 msgstr "Параметры вывода SVG:"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:61
-#: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:98
 msgid "Default pen size"
 msgstr "Размер пера по умолчанию"
 
@@ -13886,83 +13928,83 @@ msgstr "Фильтр по слоям"
 msgid "Current layer:"
 msgstr "Текущий слой:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:80
+#: pcbnew/dialogs/dialog_netlist.cpp:81
 msgid "The project configuration has changed.  Do you want to save it?"
 msgstr "Конфигурация проекта изменена. Сохранить ее?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:121
+#: pcbnew/dialogs/dialog_netlist.cpp:129
 msgid "Select Netlist"
 msgstr "Выбор файла списка цепей"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:147
+#: pcbnew/dialogs/dialog_netlist.cpp:155
 msgid "The changes made by reading the netlist cannot be undone.  Are you sure you want to read the netlist?"
 msgstr "Изменения, совершенные при чтении списка цепей, не удастся отменить. Уверены, что необходимо перечитать список цепей?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:154
+#: pcbnew/dialogs/dialog_netlist.cpp:162
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
 msgstr "Прочитать файл списка цепей \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:159
+#: pcbnew/dialogs/dialog_netlist.cpp:167
 #, c-format
 msgid "Using component footprint link file \"%s\".\n"
 msgstr "Использовать файл связей компонент-посадочное место \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:165
+#: pcbnew/dialogs/dialog_netlist.cpp:173
 #, c-format
 msgid "Using time stamps to select footprints in file \"%s\".\n"
 msgstr "Использовать штамп времени для выбора посадочных мест в файле \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:185
+#: pcbnew/dialogs/dialog_netlist.cpp:193
 msgid "No modules"
 msgstr "Нет модулей"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:217
+#: pcbnew/dialogs/dialog_netlist.cpp:225
 msgid "No duplicate."
 msgstr "Дубликатов нет."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:220
+#: pcbnew/dialogs/dialog_netlist.cpp:228
 msgid "Duplicates:"
 msgstr "Дубликаты:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:244
+#: pcbnew/dialogs/dialog_netlist.cpp:252
 msgid "No missing modules."
 msgstr "Все модули найдены."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:247
+#: pcbnew/dialogs/dialog_netlist.cpp:255
 msgid "Missing:"
 msgstr "Отсутствуют:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:263
+#: pcbnew/dialogs/dialog_netlist.cpp:271
 msgid "No extra modules."
 msgstr "Все модули в списке цепей."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:266
+#: pcbnew/dialogs/dialog_netlist.cpp:274
 msgid "Not in Netlist:"
 msgstr "Нет в списке цепей:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:291
+#: pcbnew/dialogs/dialog_netlist.cpp:299
 msgid "Too many errors: some are skipped"
 msgstr "Слишком много ошибок: некоторые пропущены"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:295
+#: pcbnew/dialogs/dialog_netlist.cpp:303
 msgid "Check Modules"
 msgstr "Проверка модулей"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:335
+#: pcbnew/dialogs/dialog_netlist.cpp:343
 msgid "Save contents of message window"
 msgstr "Сохранить содержимое окна сообщения"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:352
+#: pcbnew/dialogs/dialog_netlist.cpp:360
 #, c-format
 msgid "Cannot write message contents to file \"%s\"."
 msgstr "Не удалось записать содержание сообщений в файл \"%s\"."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:354
+#: pcbnew/dialogs/dialog_netlist.cpp:362
 msgid "File Write Error"
 msgstr "Ошибка записи файла"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:405
+#: pcbnew/dialogs/dialog_netlist.cpp:413
 #, c-format
 msgid ""
 "Error loading netlist file:\n"
@@ -14436,15 +14478,15 @@ msgstr "Без ПО"
 msgid "No Copper Pour"
 msgstr "Без меди"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:25
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:31
 msgid "Timestamp"
 msgstr "Временная метка"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:27
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
 msgid "Module Selection"
 msgstr "Выбор модуля"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:29
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
 msgid ""
 "Select how footprints are recognized:\n"
 "by their reference (U1, R3...) (normal setting)\n"
@@ -14454,19 +14496,19 @@ msgstr ""
 "по обозначениям (DD1, R3...) (нормальная установка)\n"
 "или по врем.штампу (спец. установка после полного переобозначения схемы)"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:39
 msgid "From netlist"
 msgstr "Из список цепей"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:39
 msgid "From separate .cmp file"
 msgstr "Из отдельного .cmp файла"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
 msgid "Module Name Source"
 msgstr "Источник имени модуля"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:37
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
 msgid ""
 "Source of footprints names for component:\n"
 "- the netlist (if you have filled the footprint field of each component  in schematic)\n"
@@ -14476,37 +14518,37 @@ msgstr ""
 "- список цепей (если для каждого компонента схемы есть поле посадочного места)\n"
 "- .cmp файл, созданный CvPcb"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:47
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
 msgid "Keep"
 msgstr "Оставить"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:47
 msgid "Change"
 msgstr "Изменить"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:49
 msgid "Exchange Module"
 msgstr "Замена модуля"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:45
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:51
 msgid "Keep or change an existing footprint when the netlist gives a different footprint"
 msgstr "Оставлять или изменять существующие посад.места, когда список цепей содержит другое посад.место"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:57
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
 msgid "Unconnected Tracks"
 msgstr "Неподлюченные дорожки"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:59
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
 msgid "Keep or delete bad tracks after a netlist change"
 msgstr "Оставлять или удалять плохие дорожки после изменения списка цепей"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:71
 msgid "Extra Footprints"
 msgstr "Экстра посадочное место"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:67
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:73
 msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
@@ -14514,43 +14556,61 @@ msgstr ""
 "Удалять посад.места с платы при отсутствии их в списке цепей\n"
 "Прим: удаляются только не заблокированные посад.места"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:77
-msgid "Open Netlist File"
-msgstr "Открыть файл списка цепей"
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:86
+msgid "Dry run. Only report changes in message panel"
+msgstr "Тест. Только отчет об изменениях в панели сообщений"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:80
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:87
+msgid ""
+"Dry Run:\n"
+"The netlist is read, but no change is actually made on board.\n"
+"Changes are only reported in message panel, for info"
+msgstr ""
+"Тест:\n"
+"Чтение списка цепей без изменений в печатной плате.\n"
+"Только информация о возможных изменениях"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:92
+msgid ""
+"Silent mode:\n"
+"Do not show the warning message before reading the netlist"
+msgstr ""
+"Тихий режим:\n"
+"Не показывать предупреждения при чтении списка цепей"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:105
+msgid "Browse Netlist Files"
+msgstr "Просмотр файлов списков цепей"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:108
 msgid "Read Current Netlist"
 msgstr "Прочитать текущий список цепей"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:82
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:110
 msgid "Read the current netlist and update connections and connectivity info"
 msgstr "Прочитать текущий список цепей и изменить информацию о связях и соединениях"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:86
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:117
 msgid "Test Footprints"
 msgstr "Тест посадочных мест"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:87
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:118
 msgid "Read the current neltist file and list missing and extra footprints"
 msgstr "Прочитать текущий список цепей и список недостающих и дополнительных посад.мест"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:91
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:122
 msgid "Rebuild Board Connectivity"
 msgstr "Перестроить все связи"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:92
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:123
 msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
 msgstr "Перестроить все связи (полезно при ручном редактировании имени цепи конт.пл.)"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:96
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:127
 msgid "Save Messages to File"
 msgstr "Сохранить сообщения в файл"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:111
-msgid "Only report changes in message panel"
-msgstr "Только отчет об изменениях в панели сообщений"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:123
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:142
 msgid "Netlist File:"
 msgstr "Файл списка цепей:"
 
@@ -15273,10 +15333,6 @@ msgstr "FreeRouting.net URL"
 msgid "The URL of the FreeRouting.net website"
 msgstr "URL сайта FreeRouting.net"
 
-#: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:97
-msgid "Help"
-msgstr "Справка"
-
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:50
 msgid "Net:"
 msgstr "Цепь:"
@@ -15666,14 +15722,10 @@ msgid "Degree"
 msgstr "Градус"
 
 #: pcb_calculator/UnitSelector.cpp:100
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:377
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:453
 msgid "Ohm"
 msgstr "Ом"
 
 #: pcb_calculator/UnitSelector.cpp:101
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:96
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:111
 msgid "KOhm"
 msgstr "кОм"
 
@@ -15705,7 +15757,6 @@ msgid "This regulator is already in list. Aborted"
 msgstr "Этот стабилизатор уже есть в списке. Прервано"
 
 #: pcb_calculator/regulators_funct.cpp:321
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:228
 msgid "Remove Regulator"
 msgstr "Удалить стабилизатор"
 
@@ -15726,7 +15777,6 @@ msgid "Data file error."
 msgstr "Ошибка файла."
 
 #: pcb_calculator/transline_ident.cpp:113
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:623
 msgid "Er"
 msgstr "Er"
 
@@ -15735,7 +15785,6 @@ msgid "Epsilon R: substrate relative dielectric constant"
 msgstr "Epsilon R: относительная диэлектрическая проницаемость подложки"
 
 #: pcb_calculator/transline_ident.cpp:116
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:634
 msgid "TanD"
 msgstr "TanD"
 
@@ -15744,7 +15793,6 @@ msgid "Tangent delta: dielectric loss factor."
 msgstr "Тангенс угла потерь в диэлектрике."
 
 #: pcb_calculator/transline_ident.cpp:121
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:645
 msgid "Rho"
 msgstr "Rho"
 
@@ -15753,7 +15801,6 @@ msgid "Electrical resistivity or specific electrical resistance of conductor (Oh
 msgstr "Электрическое сопротивление или погонное сопротивление проводника (Ом*метр)"
 
 #: pcb_calculator/transline_ident.cpp:128
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:751
 msgid "Frequency"
 msgstr "Частота"
 
@@ -15810,13 +15857,11 @@ msgstr "Глубина проникновения"
 #: pcb_calculator/transline_ident.cpp:211
 #: pcb_calculator/transline_ident.cpp:312
 #: pcb_calculator/transline_ident.cpp:348
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:658
 msgid "H"
 msgstr "H"
 
 #: pcb_calculator/transline_ident.cpp:144
 #: pcb_calculator/transline_ident.cpp:314
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:671
 msgid "H_t"
 msgstr "H_t"
 
@@ -15830,7 +15875,6 @@ msgstr "Высота до экрана"
 #: pcb_calculator/transline_ident.cpp:213
 #: pcb_calculator/transline_ident.cpp:316
 #: pcb_calculator/transline_ident.cpp:353
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:684
 msgid "T"
 msgstr "T"
 
@@ -15844,7 +15888,6 @@ msgstr "Толщина полоска"
 
 #: pcb_calculator/transline_ident.cpp:148
 #: pcb_calculator/transline_ident.cpp:318
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:697
 msgid "Rough"
 msgstr "Rough"
 
@@ -15856,7 +15899,6 @@ msgstr "Шероховатость проводника"
 #: pcb_calculator/transline_ident.cpp:150
 #: pcb_calculator/transline_ident.cpp:246
 #: pcb_calculator/transline_ident.cpp:279
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:710
 msgid "Mur"
 msgstr "Mur"
 
@@ -15872,7 +15914,6 @@ msgstr "Относительная проницаемость подложки"
 #: pcb_calculator/transline_ident.cpp:320
 #: pcb_calculator/transline_ident.cpp:355
 #: pcb_calculator/transline_ident.cpp:383
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:723
 msgid "MurC"
 msgstr "MurC"
 
@@ -16885,13 +16926,17 @@ msgstr "EESchema цвета"
 msgid "EESchema Erc"
 msgstr "EESchema ERC"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.h:96
+#: eeschema/dialogs/dialog_lib_edit_pin_base.h:98
 msgid "Pin Properties"
 msgstr "Свойства вывода"
 
 #: eeschema/dialogs/dialog_libedit_dimensions_base.h:84
 msgid "Library Editor Options"
 msgstr "Параметры редактора библиотек"
+
+#: eeschema/dialogs/dialog_bom_base.h:95
+msgid "Bill of Material"
+msgstr "Перечень элементов"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:92
 #: eeschema/dialogs/dialog_lib_new_component_base.h:61
@@ -17031,6 +17076,7 @@ msgid "PCB Library Tables"
 msgstr "Таблицы PCB библиотек"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.h:112
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.h:131
 msgid "Module Properties"
 msgstr "Параметры модуля"
 
@@ -17109,6 +17155,40 @@ msgstr "Параметры стабилизатора"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:294
 msgid "Pcb Calculator"
 msgstr "Калькулятор для печатных плат"
+
+#~ msgid "Export to Eeschema"
+#~ msgstr "Экспорт в Eeschema"
+
+#~ msgid "Export to Pcbnew"
+#~ msgstr "Экспорт в Pcbnew"
+
+#~ msgid ""
+#~ "Create a footprint file for PcbNew\n"
+#~ "This footprint contains only one footprint: logo"
+#~ msgstr ""
+#~ "Создание файла посадочного места для PcbNew\n"
+#~ "Собержит только одно посадочное место: логотип"
+
+#~ msgid "BOM Howto"
+#~ msgstr "Руководство по созданию перечня"
+
+#~ msgid "Different values for %s%d.%d (%s) and %s%d.%d (%s)"
+#~ msgstr "Различаются значения для %s%d.%d (%s) и %s%d.%d (%s)"
+
+#~ msgid "Gerber DCODE files"
+#~ msgstr "Файлы Gerber DCODE"
+
+#~ msgid "Load GERBER DCODE File"
+#~ msgstr "Загрузить файл D-кодов"
+
+#~ msgid "Load &DCodes"
+#~ msgstr "Загрузить D-коды"
+
+#~ msgid "Load D-Codes definition file"
+#~ msgstr "Загрузить файл определений D-кодов"
+
+#~ msgid "Open Netlist File"
+#~ msgstr "Открыть файл списка цепей"
 
 #~ msgid ""
 #~ "\n"
@@ -17241,9 +17321,6 @@ msgstr "Калькулятор для печатных плат"
 
 #~ msgid "All existing user fields"
 #~ msgstr "Все поля пользователя"
-
-#~ msgid "Bill of Materials"
-#~ msgstr "Перечень элементов"
 
 #~ msgid "Failed to open file <%s>"
 #~ msgstr "Не удалось открыть файл  <%s>"
@@ -17530,9 +17607,6 @@ msgstr "Калькулятор для печатных плат"
 
 #~ msgid "Bad Tracks Deletion:"
 #~ msgstr "Удаление плохих дорожек:"
-
-#~ msgid "Browse Netlist Files"
-#~ msgstr "Просмотр файлов списков цепей"
 
 #~ msgid "Footprints Test"
 #~ msgstr "Тест посад.мест"
@@ -17884,9 +17958,6 @@ msgstr "Калькулятор для печатных плат"
 
 #~ msgid "Current Design Settings:"
 #~ msgstr "Текущие установки:"
-
-#~ msgid "Create Plot File"
-#~ msgstr "Создать файл чертежа"
 
 #~ msgid "General settings"
 #~ msgstr "Общие настройки"
