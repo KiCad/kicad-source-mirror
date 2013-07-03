@@ -117,7 +117,7 @@ bool SHADER::Link()
 }
 
 
-void SHADER::AddParameter( const std::string& aParameterName )
+int SHADER::AddParameter( const std::string& aParameterName )
 {
     GLint location = glGetUniformLocation( programNumber, aParameterName.c_str() );
 
@@ -125,12 +125,20 @@ void SHADER::AddParameter( const std::string& aParameterName )
     {
         parameterLocation.push_back( location );
     }
+
+    return location;
 }
 
 
-void SHADER::SetParameter( int parameterNumber, float value )
+void SHADER::SetParameter( int parameterNumber, float value ) const
 {
     glUniform1f( parameterLocation[parameterNumber], value );
+}
+
+
+void SHADER::SetParameter( int parameterNumber, int value ) const
+{
+    glUniform1i( parameterLocation[parameterNumber], value );
 }
 
 

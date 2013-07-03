@@ -141,8 +141,9 @@ public:
      * method using the queue position.
      *
      * @param aParameterName is the name of the parameter.
+     * @return the added parameter location.
      */
-    void AddParameter( const std::string& aParameterName );
+    int AddParameter( const std::string& aParameterName );
 
     /**
      * @brief Set a parameter of the shader.
@@ -150,7 +151,8 @@ public:
      * @param aParameterNumber is the number of the parameter.
      * @param aValue is the value of the parameter.
      */
-    void SetParameter( int aParameterNumber, float aValue );
+    void SetParameter( int aParameterNumber, float aValue ) const;
+    void SetParameter( int aParameterNumber, int aValue ) const;
 
     /**
      * @brief Gets an attribute location.
