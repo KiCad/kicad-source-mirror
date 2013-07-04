@@ -285,6 +285,42 @@ public:
      */
     virtual void SetTextAttributes( const EDA_TEXT* aText );
 
+    /// @copydoc STROKE_FONT::SetGlyphSize()
+    inline void SetGlyphSize( const VECTOR2D aGlyphSize )
+    {
+        strokeFont.SetGlyphSize( aGlyphSize );
+    }
+
+    /// @copydoc STROKE_FONT::SetBold()
+    inline void SetBold( const bool aBold )
+    {
+        strokeFont.SetBold( aBold );
+    }
+
+    /// @copydoc STROKE_FONT::SetItalic()
+    inline void SetItalic( const bool aItalic )
+    {
+        strokeFont.SetItalic( aItalic );
+    }
+
+    /// @copydoc STROKE_FONT::SetMirrored()
+    inline void SetMirrored( const bool aMirrored )
+    {
+        strokeFont.SetMirrored( aMirrored );
+    }
+
+    /// @copydoc STROKE_FONT::SetHorizontalJustify()
+    inline void SetHorizontalJustify( const EDA_TEXT_HJUSTIFY_T aHorizontalJustify )
+    {
+        strokeFont.SetHorizontalJustify( aHorizontalJustify );
+    }
+
+    /// @copydoc STROKE_FONT::SetVerticalJustify()
+    inline void SetVerticalJustify( const EDA_TEXT_VJUSTIFY_T aVerticalJustify )
+    {
+        strokeFont.SetVerticalJustify( aVerticalJustify );
+    }
+
     // --------------
     // Transformation
     // --------------
