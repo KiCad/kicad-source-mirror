@@ -65,7 +65,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     m_painter = new KiGfx::PCB_PAINTER( m_gal );
 
-    m_view = new KiGfx::VIEW( true, true );
+    m_view = new KiGfx::VIEW( true );
     m_view->SetPainter( m_painter );
     m_view->SetGAL( m_gal );
 

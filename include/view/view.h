@@ -64,7 +64,7 @@ public:
      * @param aIsDynamic decides whether we are creating a static or a dynamic VIEW.
      * @param aUseGroups tells if items added to the VIEW should be stored in groups.
      */
-    VIEW( bool aIsDynamic = true, bool aUseGroups = false );
+    VIEW( bool aIsDynamic = true );
 
     ~VIEW();
 
@@ -251,7 +251,21 @@ public:
      * visibility is updated
      * @param aVisible: the obivous
      */
-    void    SetLayerVisible( int aLayer, bool aVisible = true );
+    inline void SetLayerVisible( int aLayer, bool aVisible = true )
+    {
+        m_layers[aLayer].enabled = aVisible;
+    }
+
+    /**
+     * Function SetLayerDynamic()
+     * Turns on or off the dynamic parameter of a particular layer.
+     * @param aLayer: the layer
+     * @param aDynamic: the parameter
+     */
+    inline void SetLayerCached( int aLayer, bool aCached = true )
+    {
+        m_layers[aLayer].cached = aCached;
+    }
 
     /**
      * Function SetLayerOrder()
@@ -339,6 +353,8 @@ private:
         bool                    enabled;         ///* is the layer to be rendered?
         bool                    isDirty;         ///* does it contain any dirty items (updated since last redraw)
         bool                    displayOnly;     ///* is the layer display only?
+        bool                    cached;          ///* items on non-cached layers are displayed in
+                                                 ///* immediate mode
         VIEW_RTREE*             items;           ///* R-tree indexing all items on this layer.
         std::vector<VIEW_ITEM*> dirtyItems;      ///* set of dirty items collected since last redraw
         int                     renderingOrder;  ///* rendering order of this layer
@@ -354,10 +370,10 @@ private:
     typedef std::vector<VIEW_LAYER*>::iterator      LayerOrderIter;
 
     // Function objects that need to access VIEW/VIEW_ITEM private/protected members
-    struct clearItemCache;
-    struct unlinkItem;
-    struct recacheItem;
+    struct clearLayerCache;
+    struct recacheLayer;
     struct drawItem;
+    struct unlinkItem;
     struct updateItemsColor;
     struct changeItemsDepth;
 
@@ -408,9 +424,6 @@ private:
     /// Dynamic VIEW (eg. display PCB in window) allows changes once it is built,
     /// static (eg. image/PDF) - does not.
     bool        m_dynamic;
-
-    /// Determines whether to use cached groups of objects for displaying.
-    bool        m_useGroups;
 };
 } // namespace KiGfx
 

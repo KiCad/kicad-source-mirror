@@ -205,7 +205,6 @@ public:
      * @param aLayers[]: output layer index array
      * @param aCount: number of layer indices in aLayers[]
      */
-
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const = 0;
 
     /**
@@ -215,7 +214,6 @@ public:
      * @param aIsVisible: whether the item is visible (on all layers), or not.
      */
     void ViewSetVisible( bool aIsVisible = true );
-
 
     /**
      * Function ViewIsVisible()
