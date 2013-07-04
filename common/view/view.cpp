@@ -53,6 +53,7 @@ void VIEW::AddLayer( int aLayer, bool aDisplayOnly )
         m_layers[aLayer].items  = new VIEW_RTREE();
         m_layers[aLayer].renderingOrder = aLayer;
         m_layers[aLayer].enabled        = true;
+        m_layers[aLayer].cached         = true;
         m_layers[aLayer].isDirty        = false;
         m_layers[aLayer].displayOnly    = aDisplayOnly;
     }
@@ -138,13 +139,12 @@ int VIEW::Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult )
 }
 
 
-VIEW::VIEW( bool aIsDynamic, bool aUseGroups ) :
+VIEW::VIEW( bool aIsDynamic ) :
     m_enableTopLayer( false ),
     m_scale ( 1.0 ),
     m_painter( NULL ),
     m_gal( NULL ),
-    m_dynamic( aIsDynamic ),
-    m_useGroups( aUseGroups )
+    m_dynamic( aIsDynamic )
 {
     // By default there is no layer on the top
     m_topLayer.enabled = false;
@@ -209,8 +209,7 @@ void VIEW::SetGAL( GAL* aGal )
     m_gal = aGal;
 
     // clear group numbers, so everything is going to be recached
-    if( m_useGroups )
-        clearGroupCache();
+    clearGroupCache();
 
     // force the new GAL to display the current viewport.
     SetCenter( m_center );
@@ -279,12 +278,6 @@ void VIEW::SetCenter( const VECTOR2D& aCenter )
     m_center = aCenter;
     m_gal->SetLookAtPoint( m_center );
     m_gal->ComputeWorldScreenMatrix();
-}
-
-
-void VIEW::SetLayerVisible( int aLayer, bool aVisible )
-{
-    m_layers[aLayer].enabled = aVisible;
 }
 
 
@@ -452,7 +445,7 @@ void VIEW::EnableTopLayer( bool aEnable )
 
 struct VIEW::drawItem
 {
-    drawItem( VIEW* aView, int aCurrentLayer ) :
+    drawItem( VIEW* aView, const VIEW_LAYER* aCurrentLayer ) :
         currentLayer( aCurrentLayer ), view( aView )
     {
     }
@@ -461,9 +454,10 @@ struct VIEW::drawItem
     {
         GAL* gal = view->GetGAL();
 
-        if( view->m_useGroups )
+        if( currentLayer->cached )
         {
-            int group = aItem->getGroup( currentLayer );
+            // Draw using cached information or create one
+            int group = aItem->getGroup( currentLayer->id );
 
             if( group >= 0 && aItem->ViewIsVisible() )
             {
@@ -472,19 +466,20 @@ struct VIEW::drawItem
             else
             {
                 group = gal->BeginGroup();
-                aItem->setGroup( currentLayer, group );
-                view->m_painter->Draw( aItem, currentLayer );
+                aItem->setGroup( currentLayer->id, group );
+                view->m_painter->Draw( aItem, currentLayer->id );
                 gal->EndGroup();
             }
         }
         else if( aItem->ViewIsVisible() )
         {
-            view->m_painter->Draw( aItem, currentLayer );
+            // Immediate mode
+            view->m_painter->Draw( aItem, currentLayer->id );
         }
     }
 
-    int      currentLayer;
-    VIEW*    view;
+    const VIEW_LAYER* currentLayer;
+    VIEW* view;
 };
 
 
@@ -494,10 +489,9 @@ void VIEW::redrawRect( const BOX2I& aRect )
     {
         if( l->enabled )
         {
-            drawItem drawFunc( this, l->id );
+            drawItem drawFunc( this, l );
 
-            if( !m_useGroups )
-                m_gal->SetLayerDepth( static_cast<double>( l->renderingOrder ) );
+            m_gal->SetLayerDepth( static_cast<double>( l->renderingOrder ) );
             l->items->Query( aRect, drawFunc );
             l->isDirty = false;
         }
@@ -514,9 +508,9 @@ struct VIEW::unlinkItem
 };
 
 
-struct VIEW::recacheItem
+struct VIEW::recacheLayer
 {
-    recacheItem( VIEW* aView, GAL* aGal, int aLayer, bool aImmediately ) :
+    recacheLayer( VIEW* aView, GAL* aGal, int aLayer, bool aImmediately ) :
         view( aView ), gal( aGal ), layer( aLayer ), immediately( aImmediately )
     {
     }
@@ -566,10 +560,7 @@ void VIEW::Clear()
         l->items->RemoveAll();
     }
 
-    if( m_useGroups )
-    {
-        m_gal->ClearCache();
-    }
+    m_gal->ClearCache();
 }
 
 
@@ -608,12 +599,11 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
             l->items->Remove( aItem );
             l->items->Insert( aItem );    /* reinsert */
 
-            if( m_useGroups )
-                aItem->deleteGroups();
+            aItem->deleteGroups();
         }
     }
 
-    if( m_useGroups && aItem->storesGroups() )
+    if( aItem->storesGroups() )
     {
         std::vector<int> groups = aItem->getAllGroups();
         for(std::vector<int>::iterator i = groups.begin(); i != groups.end(); i++ )
@@ -626,9 +616,9 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 }
 
 
-struct VIEW::clearItemCache
+struct VIEW::clearLayerCache
 {
-    clearItemCache( VIEW* aView ) :
+    clearLayerCache( VIEW* aView ) :
         view( aView )
     {
     }
@@ -647,13 +637,10 @@ struct VIEW::clearItemCache
 
 void VIEW::clearGroupCache()
 {
-    if( !m_useGroups )
-            return;
-
     BOX2I r;
 
     r.SetMaximum();
-    clearItemCache visitor( this );
+    clearLayerCache visitor( this );
 
     for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
     {
@@ -665,9 +652,6 @@ void VIEW::clearGroupCache()
 
 void VIEW::RecacheAllItems( bool aImmediately )
 {
-    if( !m_useGroups )
-        return;
-
     BOX2I r;
 
     r.SetMaximum();
@@ -682,9 +666,13 @@ void VIEW::RecacheAllItems( bool aImmediately )
     for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = & ( ( *i ).second );
-        m_gal->SetLayerDepth( (double) l->renderingOrder );
-        recacheItem visitor( this, m_gal, l->id, aImmediately );
-        l->items->Query( r, visitor );
+
+        if( l->cached )
+        {
+            m_gal->SetLayerDepth( (double) l->renderingOrder );
+            recacheLayer visitor( this, m_gal, l->id, aImmediately );
+            l->items->Query( r, visitor );
+        }
     }
 
 #ifdef __WXDEBUG__
