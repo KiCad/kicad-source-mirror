@@ -337,10 +337,10 @@ private:
     wxEvtHandler*   mouseListener;
     wxEvtHandler*   paintListener;
 
-    // Display lists (used in shaderless mode)
+    // VBO buffers & display lists (used in immediate mode)
     VBO_CONTAINER*        precomputedContainer;   ///< Container for storing display lists
+    VBO_ITEM*             verticesCircle;         ///< Buffer for circle & semicircle vertices
     GLuint                displayListCircle;      ///< Circle display list
-    VBO_ITEM*             verticesCircle;
     GLuint                displayListSemiCircle;  ///< Semi circle display list
 
     // Vertex buffer objects related fields
@@ -372,8 +372,8 @@ private:
         SHADER_STROKED_CIRCLE,
     } SHADER_TYPE;
 
-    SHADER                shader;           ///< There is only one shader used for different objects
-    int                   shaderAttrib;     ///< Location of shader attributes (for glVertexAttribPointer)
+    SHADER          shader;                 ///< There is only one shader used for different objects
+    int             shaderAttrib;           ///< Location of shader attributes (for glVertexAttribPointer)
 
     // Cursor
     int             cursorSize;             ///< Size of the cursor in pixels
@@ -391,7 +391,6 @@ private:
     GLuint          textureBackup;          ///< Backup texture handle
 
     // Internal flags
-    bool            isCreated;
     bool            isGlewInitialized;          ///< Is GLEW initialized?
     bool            isFrameBufferInitialized;   ///< Are the frame buffers initialized?
     bool            isVboInitialized;
@@ -412,14 +411,12 @@ private:
     void drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
     void drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
-    /// Compute the points of a unit circle.
-    void computeUnitCircle();
+    /// Compute the points of an unit circle & semicircle and store them in VBO.
+    void computeCircleVbo();
 
-    /// Compute the points of a unit semi circle.
-    void computeUnitSemiCircle();
-
-    /// Compute the points of a unit arc.
-    // void computeUnitArcs();  // TODO not used
+    /// Compute the points of an unit circle & semicircle and store them in display lists
+    /// for drawing in immediate mode.
+    void computeCircleDisplayLists();
 
     // Event handling
     /**

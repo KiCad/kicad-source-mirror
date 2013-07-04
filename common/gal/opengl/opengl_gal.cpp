@@ -66,7 +66,6 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
 
     // Initialize the flags
-    isCreated                = false;
     isDeleteSavedPixels      = true;
     isGlewInitialized        = false;
     isFrameBufferInitialized = false;
@@ -114,20 +113,19 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     InitTesselatorCallbacks( tesselator );
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 
-    // Buffered semicircle & circle vertices
-    // (3 vertices per triangle) * (number of points to draw a circle)
-    precomputedContainer = new VBO_CONTAINER( 3 * CIRCLE_POINTS );
-
-    // Compute the unit circles, used for speed up of the circle drawing
-    verticesCircle = new VBO_ITEM( precomputedContainer );
-    computeUnitCircle();
-    verticesCircle->Finish();
+    // Compute unit semicircle & circle vertices and store them in a buffer for faster drawing
+    computeCircleVbo();
 }
 
 
 OPENGL_GAL::~OPENGL_GAL()
 {
     glFlush();
+
+    if( glIsList( displayListSemiCircle ) )
+        glDeleteLists( displayListSemiCircle, 1 );
+    if( glIsList( displayListCircle ) )
+        glDeleteLists( displayListCircle, 1 );
 
     delete verticesCircle;
     delete precomputedContainer;
@@ -331,6 +329,7 @@ void OPENGL_GAL::initGlew()
     }
 
     initVertexBufferObjects();
+    computeCircleDisplayLists();
 
     isGlewInitialized = true;
 }
@@ -1502,12 +1501,11 @@ void OPENGL_GAL::ChangeGroupDepth( int aGroupNumber, int aDepth )
 }
 
 
-void OPENGL_GAL::computeUnitCircle()
+void OPENGL_GAL::computeCircleVbo()
 {
-    displayListCircle = glGenLists( 1 );
-    glNewList( displayListCircle, GL_COMPILE );
-
-    glBegin( GL_TRIANGLES );
+    // (3 vertices per triangle) * (number of points to draw a circle)
+    precomputedContainer = new VBO_CONTAINER( 3 * CIRCLE_POINTS );
+    verticesCircle = new VBO_ITEM( precomputedContainer );
 
     // Compute the circle points for a given number of segments
     // Insert in a display list and a vector
@@ -1526,29 +1524,38 @@ void OPENGL_GAL::computeUnitCircle()
             0.0f                                            // z
         };
 
-        glVertex2d( 0, 0 );
         verticesCircle->PushVertex( &v0 );
-
-        glVertex2d( v1.x, v1.y );
         verticesCircle->PushVertex( &v1 );
-
-        glVertex2d( v2.x, v2.y );
         verticesCircle->PushVertex( &v2 );
     }
 
-    glEnd();
-
-    glEndList();
+    verticesCircle->Finish();
 }
 
 
-void OPENGL_GAL::computeUnitSemiCircle()
+void OPENGL_GAL::computeCircleDisplayLists()
 {
+    // Circle display list
+    displayListCircle = glGenLists( 1 );
+    glNewList( displayListCircle, GL_COMPILE );
+
+    glBegin( GL_TRIANGLES );
+    for( int i = 0; i < CIRCLE_POINTS; ++i )
+    {
+        glVertex2d( 0.0, 0.0 );
+        glVertex2d( cos( 2.0 * M_PI / CIRCLE_POINTS * i ),
+                    sin( 2.0 * M_PI / CIRCLE_POINTS * i ) );
+        glVertex2d( cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),
+                    sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ) );
+    }
+    glEnd();
+    glEndList();
+
+    // Semicircle display list
     displayListSemiCircle = glGenLists( 1 );
     glNewList( displayListSemiCircle, GL_COMPILE );
 
     glBegin( GL_TRIANGLES );
-
     for( int i = 0; i < CIRCLE_POINTS / 2; ++i )
     {
         glVertex2d( 0.0, 0.0 );
@@ -1557,9 +1564,7 @@ void OPENGL_GAL::computeUnitSemiCircle()
         glVertex2d( cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),
                     sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ) );
     }
-
     glEnd();
-
     glEndList();
 }
 
