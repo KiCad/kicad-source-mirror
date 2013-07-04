@@ -40,7 +40,6 @@ class COLORS_DESIGN_SETTINGS;
 namespace KiGfx
 {
 class GAL;
-class STROKE_FONT;
 class VIEW_ITEM;
 
 /**
@@ -230,10 +229,6 @@ protected:
     /// Instance of graphic abstraction layer that gives an interface to call
     /// commands used to draw (eg. DrawLine, DrawCircle, etc.)
     GAL*                m_gal;
-
-    /// Instance of object that stores information about how to draw texts (including different
-    /// font display modes [bold/italic/mirror]).
-    STROKE_FONT*        m_stroke_font;
 
     /// Colors and display modes settings that are going to be used when drawing items.
     RENDER_SETTINGS*    m_settings;

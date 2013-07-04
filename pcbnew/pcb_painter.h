@@ -52,7 +52,6 @@ class PCB_TARGET;
 namespace KiGfx
 {
 class GAL;
-class STROKE_FONT;
 
 /**
  * Class PCB_RENDER_SETTINGS

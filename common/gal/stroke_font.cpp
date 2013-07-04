@@ -114,17 +114,6 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 }
 
 
-void STROKE_FONT::LoadAttributes( const EDA_TEXT* aText )
-{
-    SetGlyphSize( VECTOR2D( aText->GetSize() ) );
-    SetHorizontalJustify( aText->GetHorizJustify() );
-    SetVerticalJustify( aText->GetVertJustify() );
-    SetBold( aText->IsBold() );
-    SetItalic( aText->IsItalic() );
-    SetMirrored( aText->IsMirrored() );
-}
-
-
 BOX2D STROKE_FONT::computeBoundingBox( const Glyph& aGlyph, const VECTOR2D& aGlyphBoundingX ) const
 {
     BOX2D boundingBox;

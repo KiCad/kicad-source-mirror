@@ -67,13 +67,6 @@ public:
     bool LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNewStrokeFontSize );
 
     /**
-     * @brief Load attributes of a given text, in order to be used during drawing.
-     *
-     * @param aText is the text string.
-     */
-    void LoadAttributes( const EDA_TEXT* aText );
-
-    /**
      * @brief Draw a string.
      *
      * @param aText is the text to be drawn.

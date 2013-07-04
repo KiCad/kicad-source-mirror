@@ -33,8 +33,10 @@
 #include <wx/event.h>
 
 #include <math/matrix3x3.h>
-#include <gal/color4d.h>
 
+#include <gal/color4d.h>
+#include <gal/stroke_font.h>
+#include <newstroke_font.h>
 
 namespace KiGfx
 {
@@ -259,6 +261,29 @@ public:
     {
         layerDepth = aLayerDepth;
     }
+
+    // ----
+    // Text
+    // ----
+    /**
+     * @brief Draws a vector type text using preloaded Newstroke font.
+     *
+     * @param aText is the text to be drawn.
+     * @param aPosition is the text position in world coordinates.
+     * @param aRotationAngle is the text rotation angle.
+     */
+    inline virtual void StrokeText( const std::string& aText, const VECTOR2D& aPosition,
+                                    double aRotationAngle )
+    {
+        strokeFont.Draw( aText, aPosition, aRotationAngle );
+    }
+
+    /**
+     * @brief Loads attributes of the given text (bold/italic/underline/mirrored and so on).
+     *
+     * @param aText is the text item.
+     */
+    virtual void SetTextAttributes( const EDA_TEXT* aText );
 
     // --------------
     // Transformation
@@ -695,6 +720,9 @@ protected:
     bool               isCursorEnabled;        ///< Is the cursor enabled?
     VECTOR2D           cursorPosition;         ///< The cursor position
     COLOR4D            cursorColor;            ///< Cursor color
+
+    /// Instance of object that stores information about how to draw texts
+    STROKE_FONT        strokeFont;
 
     /// Compute the scaling factor for the world->screen matrix
     inline void ComputeWorldScale()

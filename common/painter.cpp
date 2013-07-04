@@ -25,8 +25,6 @@
  */
 
 #include <painter.h>
-#include <gal/stroke_font.h>
-#include <newstroke_font.h>
 
 using namespace KiGfx;
 
@@ -70,14 +68,11 @@ void RENDER_SETTINGS::Update()
 PAINTER::PAINTER( GAL* aGal ) :
     m_gal( aGal ), m_settings( NULL )
 {
-    m_stroke_font = new STROKE_FONT( aGal );
-    m_stroke_font->LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize );
 }
 
 
 PAINTER::~PAINTER()
 {
-    delete m_stroke_font;
     delete m_settings;
 }
 
@@ -85,5 +80,4 @@ PAINTER::~PAINTER()
 void PAINTER::SetGAL( GAL* aGal )
 {
     m_gal = aGal;
-    m_stroke_font->SetGAL( aGal );
 }

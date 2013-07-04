@@ -38,8 +38,6 @@
 #include <view/view.h>
 #include <pcb_painter.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <gal/stroke_font.h>
-#include <newstroke_font.h>
 
 using namespace KiGfx;
 
@@ -482,8 +480,8 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText )
 
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetLineWidth( aText->GetThickness() );
-    m_stroke_font->LoadAttributes( aText );
-    m_stroke_font->Draw( std::string( aText->GetText().mb_str() ), position, orientation );
+    m_gal->SetTextAttributes( aText );
+    m_gal->StrokeText( std::string( aText->GetText().mb_str() ), position, orientation );
 }
 
 
@@ -495,8 +493,8 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetLineWidth( aText->GetThickness() );
-    m_stroke_font->LoadAttributes( aText );
-    m_stroke_font->Draw( std::string( aText->GetText().mb_str() ), position, orientation );
+    m_gal->SetTextAttributes( aText );
+    m_gal->StrokeText( std::string( aText->GetText().mb_str() ), position, orientation );
 }
 
 
