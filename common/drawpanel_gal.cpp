@@ -117,7 +117,7 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 {
-    const unsigned int FPS_LIMIT = 50;
+    const unsigned int FPS_LIMIT = 40;
 
     // Framerate limiter
     wxLongLong currentTimeStamp = wxGetLocalTimeMillis();
