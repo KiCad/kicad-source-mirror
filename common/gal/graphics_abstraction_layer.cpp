@@ -28,12 +28,12 @@
 
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/definitions.h>
-#include <gal/color4d.h>
 
 
 using namespace KiGfx;
 
-GAL::GAL()
+GAL::GAL() :
+        strokeFont( this )
 {
     // Set the default values for the internal variables
     SetIsFill( false );
@@ -47,6 +47,8 @@ GAL::GAL()
     SetCoarseGrid( 5 );
     SetLineWidth( 1.0 );
     SetDepthRange( VECTOR2D( -2048, 2047 ) );
+
+    strokeFont.LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize );
 }
 
 
@@ -156,3 +158,13 @@ void GAL::DrawGrid()
     SetStrokeColor( savedColor );
 }
 
+
+void GAL::SetTextAttributes( const EDA_TEXT* aText )
+{
+    strokeFont.SetGlyphSize( VECTOR2D( aText->GetSize() ) );
+    strokeFont.SetHorizontalJustify( aText->GetHorizJustify() );
+    strokeFont.SetVerticalJustify( aText->GetVertJustify() );
+    strokeFont.SetBold( aText->IsBold() );
+    strokeFont.SetItalic( aText->IsItalic() );
+    strokeFont.SetMirrored( aText->IsMirrored() );
+}
