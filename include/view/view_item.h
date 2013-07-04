@@ -228,6 +228,17 @@ public:
     }
 
     /**
+     * Function ViewGetLOD()
+     * Returns the level of detail of the item. A level of detail is the minimal VIEW scale that
+     * is sufficient for an item to be shown on a given layer.
+     */
+    virtual unsigned int ViewGetLOD( int aLayer ) const
+    {
+        // By default always show the item
+        return 0;
+    }
+
+    /**
      * Function ViewUpdate()
      * For dynamic VIEWs, informs the associated VIEW that the graphical representation of
      * this item has changed. For static views calling has no effect.

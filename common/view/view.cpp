@@ -459,7 +459,8 @@ struct VIEW::drawItem
             // Draw using cached information or create one
             int group = aItem->getGroup( currentLayer->id );
 
-            if( group >= 0 && aItem->ViewIsVisible() )
+            if( group >= 0 && aItem->ViewIsVisible() &&
+                aItem->ViewGetLOD( currentLayer->id ) < view->m_scale )
             {
                 gal->DrawGroup( group );
             }
@@ -471,7 +472,8 @@ struct VIEW::drawItem
                 gal->EndGroup();
             }
         }
-        else if( aItem->ViewIsVisible() )
+        else if( aItem->ViewIsVisible() &&
+                 aItem->ViewGetLOD( currentLayer->id ) < view->m_scale )
         {
             // Immediate mode
             view->m_painter->Draw( aItem, currentLayer->id );
