@@ -38,7 +38,7 @@
 
 using namespace KiGfx;
 
-VBO_CONTAINER::VBO_CONTAINER( int aSize ) :
+VBO_CONTAINER::VBO_CONTAINER( unsigned int aSize ) :
         m_freeSpace( aSize ), m_currentSize( aSize ), itemStarted( false ), m_transform( NULL ),
         m_failed( false )
 {
@@ -199,6 +199,30 @@ void VBO_CONTAINER::Add( VBO_ITEM* aVboItem, const VBO_VERTEX* aVertex, unsigned
         }
     }
 
+}
+
+
+void VBO_CONTAINER::Clear()
+{
+    // Change size to the default one
+    m_vertices = static_cast<VBO_VERTEX*>( realloc( m_vertices,
+                                           defaultInitSize * sizeof( VBO_VERTEX ) ) );
+
+    // Reset state variables
+    m_freeSpace = defaultInitSize;
+    m_currentSize = defaultInitSize;
+    itemStarted = false;
+    m_transform = NULL;
+    m_failed = false;
+
+    // By default no shader is used
+    m_shader[0] = 0;
+
+    m_freeChunks.clear();
+    m_reservedChunks.clear();
+
+    // In the beginning there is only free space
+    m_freeChunks.insert( Chunk( m_freeSpace, 0 ) );
 }
 
 

@@ -46,7 +46,7 @@ typedef struct VBO_VERTEX VBO_VERTEX;
 class VBO_CONTAINER
 {
 public:
-    VBO_CONTAINER( int aSize = 1048576 );
+    VBO_CONTAINER( unsigned int aSize = defaultInitSize );
     ~VBO_CONTAINER();
 
     ///< Maps size of free memory chunks to their offsets
@@ -98,6 +98,12 @@ public:
             resizeContainer( m_currentSize / 2 );
         }
     }
+
+    /**
+     * Function Clear()
+     * Removes all the data stored in the container.
+     */
+    void Clear();
 
     /**
      * Function GetAllVertices()
@@ -344,6 +350,9 @@ private:
 
         return power;
     }
+
+    ///< Default initial size of a container (expressed in vertices)
+    static const unsigned int defaultInitSize = 1048576;
 };
 } // namespace KiGfx
 

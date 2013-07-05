@@ -76,9 +76,10 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     isVboInitialized         = false;
     vboNeedsUpdate           = false;
-    currentGroup             = NULL;
+    currentItem              = NULL;
     groupCounter             = 0;
     transform                = glm::mat4( 1.0f );   // Identity matrix
+    nonCachedItem            = NULL;
 
     SetSize( parentSize );
 
@@ -120,10 +121,7 @@ OPENGL_GAL::~OPENGL_GAL()
 {
     glFlush();
 
-    if( glIsList( displayListSemiCircle ) )
-        glDeleteLists( displayListSemiCircle, 1 );
-    if( glIsList( displayListCircle ) )
-        glDeleteLists( displayListCircle, 1 );
+    delete nonCachedItem;
 
     // Delete the buffers
     if( isFrameBufferInitialized )
@@ -241,8 +239,8 @@ void OPENGL_GAL::initFrameBuffers()
 void OPENGL_GAL::initVertexBufferObjects()
 {
     // Generate buffers for vertices and indices
-    glGenBuffers( 1, &vboVertices );
-    glGenBuffers( 1, &vboIndices );
+    glGenBuffers( 1, &cachedVerts );
+    glGenBuffers( 1, &cachedInds );
 
     isVboInitialized = true;
 }
@@ -253,8 +251,8 @@ void OPENGL_GAL::deleteVertexBufferObjects()
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
-    glDeleteBuffers( 1, &vboVertices );
-    glDeleteBuffers( 1, &vboIndices );
+    glDeleteBuffers( 1, &cachedVerts );
+    glDeleteBuffers( 1, &cachedInds );
 
     isVboInitialized = false;
 }
@@ -323,7 +321,6 @@ void OPENGL_GAL::initGlew()
     }
 
     initVertexBufferObjects();
-    computeCircleDisplayLists();
 
     isGlewInitialized = true;
 }
@@ -425,9 +422,9 @@ void OPENGL_GAL::BeginDrawing()
     // Number of vertices to be drawn
     indicesSize = 0;
 
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, vboIndices );
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, cachedInds );
     // Discard old buffer, so we can use it again
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboContainer.GetSize() * VBO_ITEM::IndByteSize,
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, cachedVbo.GetSize() * VBO_ITEM::IndByteSize,
                   NULL, GL_STREAM_DRAW );
 
     // Map the GPU memory, so we can store indices that are going to be drawn
@@ -436,6 +433,14 @@ void OPENGL_GAL::BeginDrawing()
     {
         wxLogError( wxT( "Could not map GPU memory" ) );
     }
+
+    // Prepare buffer for non-cached items
+    delete nonCachedItem;
+    nonCachedItem = new VBO_ITEM( &nonCachedVbo );
+
+    // By default we draw non-cached objects, it changes on BeginGroup()/EndGroup()
+    currentContainer = &nonCachedVbo;
+    currentItem = nonCachedItem;
 }
 
 
@@ -487,9 +492,6 @@ void OPENGL_GAL::blitMainTexture( bool aIsClearFrameBuffer )
 
 void OPENGL_GAL::EndDrawing()
 {
-    // TODO Checking if we are using right VBOs, in other case do the binding.
-    // Right now there is only one VBO, so there is no problem.
-
     if( !glUnmapBuffer( GL_ELEMENT_ARRAY_BUFFER ) )
     {
         wxLogError( wxT( "Unmapping indices buffer failed" ) );
@@ -500,7 +502,7 @@ void OPENGL_GAL::EndDrawing()
     glEnableClientState( GL_COLOR_ARRAY );
 
     // Bind vertices data buffers
-    glBindBuffer( GL_ARRAY_BUFFER, vboVertices );
+    glBindBuffer( GL_ARRAY_BUFFER, cachedVerts );
     glVertexPointer( VBO_ITEM::CoordStride, GL_FLOAT, VBO_ITEM::VertByteSize, 0 );
     glColorPointer( VBO_ITEM::ColorStride, GL_UNSIGNED_BYTE, VBO_ITEM::VertByteSize,
                     (GLvoid*) VBO_ITEM::ColorByteOffset );
@@ -517,6 +519,20 @@ void OPENGL_GAL::EndDrawing()
     glDrawElements( GL_TRIANGLES, indicesSize, GL_UNSIGNED_INT, (GLvoid*) 0 );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
+
+    // Draw non-cached items
+    GLfloat* vertices = (GLfloat*)( nonCachedVbo.GetAllVertices() );
+    GLubyte* colors   = (GLubyte*)( nonCachedVbo.GetAllVertices() ) + VBO_ITEM::ColorOffset;
+    GLfloat* shaders  = (GLfloat*)( nonCachedVbo.GetAllVertices() ) + VBO_ITEM::ShaderOffset;
+
+    glVertexPointer( VBO_ITEM::CoordStride, GL_FLOAT, VBO_ITEM::VertByteSize, vertices );
+    glColorPointer( VBO_ITEM::ColorStride, GL_UNSIGNED_BYTE, VBO_ITEM::VertByteSize, colors );
+    if( isUseShader )
+    {
+        glVertexAttribPointer( shaderAttrib, VBO_ITEM::ShaderStride, GL_FLOAT, GL_FALSE,
+                               VBO_ITEM::VertByteSize, shaders );
+    }
+    glDrawArrays( GL_TRIANGLES, nonCachedItem->GetOffset(), nonCachedItem->GetSize() );
 
     // Deactivate vertex array
     glDisableClientState( GL_COLOR_ARRAY );
@@ -543,17 +559,17 @@ void OPENGL_GAL::rebuildVbo()
     prof_start( &totalTime, false );
 #endif /* __WXDEBUG__ */
 
-    GLfloat* data = (GLfloat*) vboContainer.GetAllVertices();
+    GLfloat* data = (GLfloat*) cachedVbo.GetAllVertices();
 
     // Upload vertices coordinates and shader types to GPU memory
-    glBindBuffer( GL_ARRAY_BUFFER, vboVertices );
-    glBufferData( GL_ARRAY_BUFFER, vboContainer.GetSize() * VBO_ITEM::VertByteSize,
+    glBindBuffer( GL_ARRAY_BUFFER, cachedVerts );
+    glBufferData( GL_ARRAY_BUFFER, cachedVbo.GetSize() * VBO_ITEM::VertByteSize,
                   data, GL_DYNAMIC_DRAW );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
 
     // Allocate the biggest possible buffer for indices
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, vboIndices );
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboContainer.GetSize() * VBO_ITEM::IndByteSize,
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, cachedInds );
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, cachedVbo.GetSize() * VBO_ITEM::IndByteSize,
                   NULL, GL_STREAM_DRAW );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
@@ -563,7 +579,7 @@ void OPENGL_GAL::rebuildVbo()
     prof_end( &totalTime );
 
     wxLogDebug( wxT( "Rebuilding VBO::%d vertices / %.1f ms" ),
-            vboContainer.GetSize(), (double) totalTime.value / 1000.0 );
+            cachedVbo.GetSize(), (double) totalTime.value / 1000.0 );
 #endif /* __WXDEBUG__ */
 }
 
@@ -577,27 +593,16 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
     if( lineLength <= 0.0 )
         return;
 
-    if( lineWidth * worldScale < 1.0002 && !isGrouping && !isUseShader )
-    {
-        // Limit the width of the line to a minimum of one pixel
-        // this looks best without anti-aliasing
-        scale = 0.5001 / worldScale / lineLength;
-    }
-
     VECTOR2D perpendicularVector( -startEndVector.y * scale, startEndVector.x * scale );
 
-    begin( GL_TRIANGLES );
-
-    if( isUseShader && isGrouping )
+    if( isUseShader )
     {
         glm::vec4 vector( perpendicularVector.x, perpendicularVector.y, 0.0, 0.0 );
 
         // If transform stack is not empty, then it means that
         // there is a transformation matrix that has to be applied
         if( !transformStack.empty() )
-        {
             vector = transform * vector;
-        }
 
         // Line width is maintained by the vertex shader
         setShader( SHADER_LINE, vector.x, vector.y, lineWidth );
@@ -634,8 +639,6 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
         vertex3( v3.x, v3.y, layerDepth );
         vertex3( v2.x, v2.y, layerDepth );
     }
-
-    end();
 }
 
 
@@ -760,7 +763,6 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
         setShader( SHADER_NONE );
         color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
-        begin( GL_TRIANGLES );
         vertex3( aStartPoint.x, aStartPoint.y, layerDepth );
         vertex3( diagonalPointA.x, diagonalPointA.y, layerDepth );
         vertex3( aEndPoint.x, aEndPoint.y, layerDepth );
@@ -768,14 +770,13 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
         vertex3( aStartPoint.x, aStartPoint.y, layerDepth );
         vertex3( aEndPoint.x, aEndPoint.y, layerDepth );
         vertex3( diagonalPointB.x, diagonalPointB.y, layerDepth );
-        end();
     }
 }
 
 
 void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 {
-    if( isUseShader && isGrouping )
+    if( isUseShader )
     {
         if( isFillEnabled )
         {
@@ -856,8 +857,6 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
             translate3( aCenterPoint.x, aCenterPoint.y, 0.0 );
             Scale( VECTOR2D( aRadius, aRadius ) );
 
-            begin( GL_TRIANGLES );
-
             for( int i = 0; i < 3 * CIRCLE_POINTS; ++i )
             {
                 // verticesCircle contains precomputed circle points interleaved with vertex
@@ -887,8 +886,6 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
                 vertex3( circle[next].x * innerScale, circle[next].y * innerScale, layerDepth );
             }
 
-            end();
-
             Restore();
         }
     }
@@ -902,14 +899,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
         translate3( aCenterPoint.x, aCenterPoint.y, layerDepth );
         Scale( VECTOR2D( aRadius, aRadius ) );
 
-        if( isGrouping )
-        {
-            currentGroup->PushVertices( verticesCircle.GetVertices(), CIRCLE_POINTS * 3 );
-        }
-        else
-        {
-            glCallList( displayListCircle );
-        }
+        currentItem->PushVertices( verticesCircle.GetVertices(), CIRCLE_POINTS * 3 );
 
         Restore();
     }
@@ -934,7 +924,7 @@ void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, d
 
 void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle )
 {
-    if( isUseShader && isGrouping )
+    if( isUseShader )
     {
         Save();
         Translate( aCenterPoint );
@@ -966,15 +956,8 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
         Scale( VECTOR2D( aRadius, aRadius ) );
         Rotate( aAngle );
 
-        if( isGrouping )
-        {
-            // It is enough just to push just a half of the circle vertices to make a semicircle
-            currentGroup->PushVertices( verticesCircle.GetVertices(), CIRCLE_POINTS / 2 * 3 );
-        }
-        else
-        {
-            glCallList( displayListSemiCircle );
-        }
+        // It is enough just to push just a half of the circle vertices to make a semicircle
+        currentItem->PushVertices( verticesCircle.GetVertices(), CIRCLE_POINTS / 2 * 3 );
 
         Restore();
     }
@@ -983,7 +966,7 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
 
 void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle )
 {
-    if( isUseShader && isGrouping )
+    if( isUseShader )
     {
         Save();
         Translate( aCenterPoint );
@@ -1028,8 +1011,6 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
         VBO_VERTEX* circle = verticesCircle.GetVertices();
         int next;
 
-        begin( GL_TRIANGLES );
-
         for( int i = 0; i < ( 3 * CIRCLE_POINTS ) / 2; ++i )
         {
             // verticesCircle contains precomputed circle points interleaved with vertex
@@ -1058,8 +1039,6 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
             vertex3( circle[next].x,                circle[next].y,                 0.0 );
             vertex3( circle[next].x * innerScale,   circle[next].y * innerScale,    0.0 );
         }
-
-        end();
 
         Restore();
     }
@@ -1123,8 +1102,6 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
             double alphaIncrement = 2 * M_PI / CIRCLE_POINTS;
             color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
-            begin( GL_TRIANGLES );
-
             for( double alpha = aStartAngle; alpha < aEndAngle; )
             {
                 double v0[] = { cos( alpha ) * innerScale, sin( alpha ) * innerScale };
@@ -1147,8 +1124,6 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
                 vertex3( v2[0], v2[1], 0.0 );
             }
 
-            end();
-
             // Draw line caps
             drawFilledSemiCircle( startPoint, lineWidth / aRadius / 2.0, aStartAngle + M_PI );
             drawFilledSemiCircle( endPoint, lineWidth / aRadius / 2.0, aEndAngle );
@@ -1161,8 +1136,6 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         double alpha;
         color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
-        begin( GL_TRIANGLES );
-
         for( alpha = aStartAngle; ( alpha + alphaIncrement ) < aEndAngle; )
         {
             vertex3( middlePoint.x, middlePoint.y,  0.0 );
@@ -1174,7 +1147,6 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         vertex3( middlePoint.x, middlePoint.y,  0.0 );
         vertex3( cos( alpha ),  sin( alpha ),   0.0 );
         vertex3( endPoint.x,    endPoint.y,     0.0 );
-        end();
     }
 
     Restore();
@@ -1228,7 +1200,7 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 
     glShadeModel( GL_FLAT );
 
-    TessParams params = { currentGroup, tessIntersects };
+    TessParams params = { currentItem, tessIntersects };
     gluTessBeginPolygon( tesselator, &params );
     gluTessBeginContour( tesselator );
 
@@ -1348,40 +1320,19 @@ void OPENGL_GAL::Transform( MATRIX3x3D aTransformation )
 
 void OPENGL_GAL::Rotate( double aAngle )
 {
-    if( isGrouping )
-    {
-        transform = glm::rotate( transform, (float) aAngle, glm::vec3( 0, 0, 1 ) );
-    }
-    else
-    {
-        glRotated( aAngle * ( 360 / ( 2 * M_PI ) ), 0, 0, 1 );
-    }
+    transform = glm::rotate( transform, (float) aAngle, glm::vec3( 0, 0, 1 ) );
 }
 
 
 void OPENGL_GAL::Translate( const VECTOR2D& aVector )
 {
-    if( isGrouping )
-    {
-        transform = glm::translate( transform, glm::vec3( aVector.x, aVector.y, 0 ) );
-    }
-    else
-    {
-        glTranslated( aVector.x, aVector.y, 0 );
-    }
+    transform = glm::translate( transform, glm::vec3( aVector.x, aVector.y, 0 ) );
 }
 
 
 void OPENGL_GAL::Scale( const VECTOR2D& aScale )
 {
-    if( isGrouping )
-    {
-        transform = glm::scale( transform, glm::vec3( aScale.x, aScale.y, 0 ) );
-    }
-    else
-    {
-        glScaled( aScale.x, aScale.y, 0 );
-    }
+    transform = glm::scale( transform, glm::vec3( aScale.x, aScale.y, 0 ) );
 }
 
 
@@ -1393,34 +1344,20 @@ void OPENGL_GAL::Flush()
 
 void OPENGL_GAL::Save()
 {
-    if( isGrouping )
-    {
-        transformStack.push( transform );
-        vboContainer.SetTransformMatrix( &transform );
-    }
-    else
-    {
-        glPushMatrix();
-    }
+    transformStack.push( transform );
+    currentContainer->SetTransformMatrix( &transform );
 }
 
 
 void OPENGL_GAL::Restore()
 {
-    if( isGrouping )
-    {
-        transform = transformStack.top();
-        transformStack.pop();
+    transform = transformStack.top();
+    transformStack.pop();
 
-        if( transformStack.empty() )
-        {
-            // Disable transforming, as the selected matrix is identity
-            vboContainer.SetTransformMatrix( NULL );
-        }
-    }
-    else
+    if( transformStack.empty() )
     {
-        glPopMatrix();
+        // Disable transforming, as the selected matrix is identity
+        currentContainer->SetTransformMatrix( NULL );
     }
 }
 
@@ -1433,9 +1370,10 @@ int OPENGL_GAL::BeginGroup()
     vboNeedsUpdate = true;
 
     // Save the pointer for caching the current item
-    currentGroup = new VBO_ITEM( &vboContainer );
+    currentItem = new VBO_ITEM( &cachedVbo );
+    currentContainer = &cachedVbo;
     int groupNumber = getGroupNumber();
-    groups.insert( std::make_pair( groupNumber, currentGroup ) );
+    groups.insert( std::make_pair( groupNumber, currentItem ) );
 
     return groupNumber;
 }
@@ -1443,7 +1381,9 @@ int OPENGL_GAL::BeginGroup()
 
 void OPENGL_GAL::EndGroup()
 {
-    currentGroup->Finish();
+    currentItem->Finish();
+    currentItem = nonCachedItem;
+    currentContainer = &nonCachedVbo;
 
     isGrouping = false;
 }
@@ -1523,42 +1463,6 @@ void OPENGL_GAL::computeCircleVbo()
 }
 
 
-void OPENGL_GAL::computeCircleDisplayLists()
-{
-    // Circle display list
-    displayListCircle = glGenLists( 1 );
-    glNewList( displayListCircle, GL_COMPILE );
-
-    glBegin( GL_TRIANGLES );
-    for( int i = 0; i < CIRCLE_POINTS; ++i )
-    {
-        glVertex2d( 0.0, 0.0 );
-        glVertex2d( cos( 2.0 * M_PI / CIRCLE_POINTS * i ),
-                    sin( 2.0 * M_PI / CIRCLE_POINTS * i ) );
-        glVertex2d( cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),
-                    sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ) );
-    }
-    glEnd();
-    glEndList();
-
-    // Semicircle display list
-    displayListSemiCircle = glGenLists( 1 );
-    glNewList( displayListSemiCircle, GL_COMPILE );
-
-    glBegin( GL_TRIANGLES );
-    for( int i = 0; i < CIRCLE_POINTS / 2; ++i )
-    {
-        glVertex2d( 0.0, 0.0 );
-        glVertex2d( cos( 2.0 * M_PI / CIRCLE_POINTS * i ),
-                    sin( 2.0 * M_PI / CIRCLE_POINTS * i ) );
-        glVertex2d( cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),
-                    sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ) );
-    }
-    glEnd();
-    glEndList();
-}
-
-
 void OPENGL_GAL::ComputeWorldScreenMatrix()
 {
     ComputeWorldScale();
@@ -1603,10 +1507,6 @@ void CALLBACK VertexCallback( GLvoid* aVertexPtr, void* aData )
         VBO_VERTEX newVertex = { vertex[0], vertex[1], vertex[2] };
         vboItem->PushVertex( &newVertex );
     }
-    else
-    {
-        glVertex3dv( vertex );
-    }
 }
 
 
@@ -1633,20 +1533,6 @@ void CALLBACK EdgeCallback(void)
 }
 
 
-void CALLBACK BeginCallback( GLenum aWhich, void* aData )
-{
-    if( !aData )
-        glBegin( aWhich );
-}
-
-
-void CALLBACK EndCallback( void* aData )
-{
-    if( !aData )
-        glEnd();
-}
-
-
 void CALLBACK ErrorCallback( GLenum aErrorCode )
 {
     const GLubyte* estring;
@@ -1661,8 +1547,6 @@ void InitTesselatorCallbacks( GLUtesselator* aTesselator )
     gluTessCallback( aTesselator, GLU_TESS_VERTEX_DATA,  ( void (CALLBACK*)() )VertexCallback );
     gluTessCallback( aTesselator, GLU_TESS_COMBINE_DATA, ( void (CALLBACK*)() )CombineCallback );
     gluTessCallback( aTesselator, GLU_TESS_EDGE_FLAG,    ( void (CALLBACK*)() )EdgeCallback );
-    gluTessCallback( aTesselator, GLU_TESS_BEGIN_DATA,   ( void (CALLBACK*)() )BeginCallback );
-    gluTessCallback( aTesselator, GLU_TESS_END_DATA,     ( void (CALLBACK*)() )EndCallback );
     gluTessCallback( aTesselator, GLU_TESS_ERROR_DATA,   ( void (CALLBACK*)() )ErrorCallback );
 }
 
@@ -1771,19 +1655,19 @@ void OPENGL_GAL::DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
     VECTOR2D point4 = aEndPoint - perpendicularVector;
 
     // Set color
-    glColor4d( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
+    color4( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
+
+    setShader( SHADER_NONE );
 
     // Draw the quad for the grid line
-    glBegin( GL_TRIANGLES );
     double gridDepth = depthRange.y * 0.75;
-    glVertex3d( point1.x, point1.y, gridDepth );
-    glVertex3d( point2.x, point2.y, gridDepth );
-    glVertex3d( point4.x, point4.y, gridDepth );
+    vertex3( point1.x, point1.y, gridDepth );
+    vertex3( point2.x, point2.y, gridDepth );
+    vertex3( point4.x, point4.y, gridDepth );
 
-    glVertex3d( point1.x, point1.y, gridDepth );
-    glVertex3d( point4.x, point4.y, gridDepth );
-    glVertex3d( point3.x, point3.y, gridDepth );
-    glEnd();
+    vertex3( point1.x, point1.y, gridDepth );
+    vertex3( point4.x, point4.y, gridDepth );
+    vertex3( point3.x, point3.y, gridDepth );
 }
 
 

@@ -337,21 +337,22 @@ private:
     wxEvtHandler*   mouseListener;
     wxEvtHandler*   paintListener;
 
-    // VBO buffers & display lists (used in immediate mode)
+    // VBO buffered vertices for faster circle & semicircle drawing
     VBO_CONTAINER         precomputedContainer;   ///< Container for storing display lists
     VBO_ITEM              verticesCircle;         ///< Buffer for circle & semicircle vertices
-    GLuint                displayListCircle;      ///< Circle display list
-    GLuint                displayListSemiCircle;  ///< Semi circle display list
 
     // Vertex buffer objects related fields
     typedef boost::unordered_map<unsigned int, VBO_ITEM*> GroupsMap;
     GroupsMap             groups;                 ///< Stores informations about VBO objects (groups)
     unsigned int          groupCounter;           ///< Counter used for generating keys for groups
-    VBO_ITEM*             currentGroup;           ///< Currently used VBO_ITEM (for grouping)
-    VBO_CONTAINER         vboContainer;           ///< Container for storing VBO_ITEMs
-    GLuint                vboVertices;            ///< Currently used vertices VBO handle
-    GLuint                vboIndices;             ///< Currently used indices VBO handle
+    VBO_ITEM*             currentItem;            ///< Currently used VBO_ITEM (for grouping)
+    VBO_CONTAINER*        currentContainer;       ///< Currently used VBO_CONTAINER (for storing VBO_ITEMs)
+    VBO_CONTAINER         cachedVbo;              ///< Container for storing VBO_ITEMs
+    GLuint                cachedVerts;            ///< Currently used vertices VBO handle
+    GLuint                cachedInds;             ///< Currently used indices VBO handle
     bool                  vboNeedsUpdate;         ///< Flag indicating if VBO should be rebuilt
+    VBO_CONTAINER         nonCachedVbo;           ///< Container for storing non-cached VBO_ITEMs
+    VBO_ITEM*             nonCachedItem;          ///< Item that is gathering non-cached vertices
 
     glm::mat4             transform;              ///< Current transformation matrix
     std::stack<glm::mat4> transformStack;         ///< Stack of transformation matrices
@@ -431,10 +432,6 @@ private:
 
     /// Compute the points of an unit circle & semicircle and store them in VBO.
     void computeCircleVbo();
-
-    /// Compute the points of an unit circle & semicircle and store them in display lists
-    /// for drawing in immediate mode.
-    void computeCircleDisplayLists();
 
     // Event handling
     /**
@@ -527,26 +524,6 @@ private:
      */
     unsigned int getGroupNumber();
 
-    ///< OpenGL replacement functions (that are working both in immediate and VBO modes)
-    /**
-     * @brief Starts drawing in immediate mode or does nothing if an item's caching has started.
-     * @param aMode specifies the primitive or primitives that will be created.
-     */
-    inline void begin( GLenum aMode )
-    {
-        if( !isGrouping )
-            glBegin( aMode );
-    }
-
-    /**
-     * @brief Ends drawing in immediate mode or does nothing if an item's caching has started.
-     */
-    inline void end()
-    {
-        if( !isGrouping )
-            glEnd();
-    }
-
     /**
      * @brief Adds vertex to the current item or draws it in immediate mode.
      * @param aX is X coordinate.
@@ -555,22 +532,13 @@ private:
      */
     inline void vertex3( double aX, double aY, double aZ )
     {
-        if( isGrouping )
-        {
-            // New vertex coordinates for VBO
-            const VBO_VERTEX vertex = { aX, aY, aZ };
-            currentGroup->PushVertex( &vertex );
-        }
-        else
-        {
-            glVertex3d( aX, aY, aZ );
-        }
+        // New vertex coordinates for VBO
+        const VBO_VERTEX vertex = { aX, aY, aZ };
+        currentItem->PushVertex( &vertex );
     }
 
     /**
-     * @brief Function that replaces glTranslate and behaves according to isGrouping variable.
-     * In case isGrouping==false, it is simply glTranslate, in other case it
-     * modifies transformation matrix.
+     * @brief Function that replaces glTranslate. It modifies transformation matrix.
      *
      * @param aX is translation in X axis direction.
      * @param aY is translation in Y axis direction.
@@ -578,20 +546,11 @@ private:
      */
     inline void translate3( double aX, double aY, double aZ )
     {
-        if( isGrouping )
-        {
-            transform = glm::translate( transform, glm::vec3( aX, aY, aZ ) );
-        }
-        else
-        {
-            glTranslated( aX, aY, aZ );
-        }
+        transform = glm::translate( transform, glm::vec3( aX, aY, aZ ) );
     }
 
     /**
-     * @brief Function that replaces glColor and behaves according to isGrouping variable.
-     * In case isGrouping==false, it is simply glColor, in other case it
-     * modifies color used by current VBO_ITEM.
+     * @brief Function that replaces glColor. It modifies color used by current VBO_ITEM.
      *
      * @param aR is red component.
      * @param aG is green component.
@@ -600,33 +559,17 @@ private:
      */
     inline void color4( double aRed, double aGreen, double aBlue, double aAlpha )
     {
-        if( isGrouping )
-        {
-            vboContainer.UseColor( aRed, aGreen, aBlue, aAlpha );
-        }
-        else
-        {
-            glColor4d( aRed, aGreen, aBlue, aAlpha );
-        }
+        currentContainer->UseColor( aRed, aGreen, aBlue, aAlpha );
     }
 
     /**
-     * @brief Function that replaces glColor and behaves according to isGrouping variable.
-     * In case isGrouping==false, it is simply glColor, in other case it
-     * modifies color used by current VBO_ITEM.
+     * @brief Function that replaces glColor. It modifies color used by current VBO_ITEM.
      *
      * @param aColor is the new color.
      */
     inline void color4( const COLOR4D& aColor )
     {
-        if( isGrouping )
-        {
-            vboContainer.UseColor( aColor );
-        }
-        else
-        {
-            glColor4d( aColor.r, aColor.g, aColor.b, aColor.a);
-        }
+        currentContainer->UseColor( aColor );
     }
 
     /**
@@ -639,11 +582,10 @@ private:
     inline void setShader( SHADER_TYPE aShader, GLfloat aParam1 = 0.0f,
                            GLfloat aParam2 = 0.0f, GLfloat aParam3 = 0.0f )
     {
-        if( isUseShader && isGrouping )
+        if( isUseShader )
         {
             const GLfloat shader[] = { aShader, aParam1, aParam2, aParam3 };
-
-            vboContainer.UseShader( shader );
+            currentContainer->UseShader( shader );
         }
     }
 };
