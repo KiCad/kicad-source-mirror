@@ -114,6 +114,9 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     // Compute unit semicircle & circle vertices and store them in a buffer for faster drawing
     computeCircleVbo();
+
+    // By default we draw non-cached objects, it changes on BeginGroup()/EndGroup()
+    currentContainer = &nonCachedVbo;
 }
 
 
@@ -437,9 +440,6 @@ void OPENGL_GAL::BeginDrawing()
     // Prepare buffer for non-cached items
     delete nonCachedItem;
     nonCachedItem = new VBO_ITEM( &nonCachedVbo );
-
-    // By default we draw non-cached objects, it changes on BeginGroup()/EndGroup()
-    currentContainer = &nonCachedVbo;
     currentItem = nonCachedItem;
 }
 
