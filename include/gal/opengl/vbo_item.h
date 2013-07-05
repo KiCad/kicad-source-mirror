@@ -126,7 +126,7 @@ public:
     ///< Informs the container that there will be no more vertices for the current VBO_ITEM
     void Finish();
 
-    ///< Data organization information for vertices {X,Y,Z,R,G,B,A} (@see VBO_VERTEX).
+    ///< Data structure for vertices {X,Y,Z,R,G,B,A,shader&param} (@see VBO_VERTEX).
     static const unsigned int VertByteSize       = sizeof(VBO_VERTEX);
     static const unsigned int VertStride         = VertByteSize / sizeof(GLfloat);
 
