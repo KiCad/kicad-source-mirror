@@ -27,7 +27,6 @@
  */
 
 #include <gal/opengl/opengl_gal.h>
-#include <gal/opengl/vbo_container.h>
 #include <gal/definitions.h>
 
 #include <wx/log.h>
@@ -53,7 +52,8 @@ const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 1
 OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                         wxEvtHandler* aPaintListener, bool isUseShaders, const wxString& aName ) :
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
-                wxEXPAND, aName )
+                wxEXPAND, aName ),
+    verticesCircle( &precomputedContainer )
 {
     // Create the OpenGL-Context
     glContext       = new wxGLContext( this );
@@ -106,8 +106,6 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
 
-    vboContainer = new VBO_CONTAINER;
-
     // Tesselator initialization
     tesselator = gluNewTess();
     InitTesselatorCallbacks( tesselator );
@@ -127,9 +125,6 @@ OPENGL_GAL::~OPENGL_GAL()
     if( glIsList( displayListCircle ) )
         glDeleteLists( displayListCircle, 1 );
 
-    delete verticesCircle;
-    delete precomputedContainer;
-
     // Delete the buffers
     if( isFrameBufferInitialized )
     {
@@ -143,7 +138,6 @@ OPENGL_GAL::~OPENGL_GAL()
     {
         ClearCache();
         deleteVertexBufferObjects();
-        delete vboContainer;
     }
 
     delete glContext;
@@ -433,7 +427,7 @@ void OPENGL_GAL::BeginDrawing()
 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, vboIndices );
     // Discard old buffer, so we can use it again
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboContainer->GetSize() * VBO_ITEM::IndByteSize,
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboContainer.GetSize() * VBO_ITEM::IndByteSize,
                   NULL, GL_STREAM_DRAW );
 
     // Map the GPU memory, so we can store indices that are going to be drawn
@@ -549,17 +543,17 @@ void OPENGL_GAL::rebuildVbo()
     prof_start( &totalTime, false );
 #endif /* __WXDEBUG__ */
 
-    GLfloat* data = (GLfloat*) vboContainer->GetAllVertices();
+    GLfloat* data = (GLfloat*) vboContainer.GetAllVertices();
 
     // Upload vertices coordinates and shader types to GPU memory
     glBindBuffer( GL_ARRAY_BUFFER, vboVertices );
-    glBufferData( GL_ARRAY_BUFFER, vboContainer->GetSize() * VBO_ITEM::VertByteSize,
+    glBufferData( GL_ARRAY_BUFFER, vboContainer.GetSize() * VBO_ITEM::VertByteSize,
                   data, GL_DYNAMIC_DRAW );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
 
     // Allocate the biggest possible buffer for indices
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, vboIndices );
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboContainer->GetSize() * VBO_ITEM::IndByteSize,
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, vboContainer.GetSize() * VBO_ITEM::IndByteSize,
                   NULL, GL_STREAM_DRAW );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
@@ -569,7 +563,7 @@ void OPENGL_GAL::rebuildVbo()
     prof_end( &totalTime );
 
     wxLogDebug( wxT( "Rebuilding VBO::%d vertices / %.1f ms" ),
-            vboContainer->GetSize(), (double) totalTime.value / 1000.0 );
+            vboContainer.GetSize(), (double) totalTime.value / 1000.0 );
 #endif /* __WXDEBUG__ */
 }
 
@@ -852,7 +846,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
         if( innerScale < outerScale )
         {
             // Draw the outline
-            VBO_VERTEX* circle = verticesCircle->GetVertices();
+            VBO_VERTEX* circle = verticesCircle.GetVertices();
             int next;
 
             color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
@@ -910,7 +904,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 
         if( isGrouping )
         {
-            currentGroup->PushVertices( verticesCircle->GetVertices(), CIRCLE_POINTS * 3 );
+            currentGroup->PushVertices( verticesCircle.GetVertices(), CIRCLE_POINTS * 3 );
         }
         else
         {
@@ -975,7 +969,7 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
         if( isGrouping )
         {
             // It is enough just to push just a half of the circle vertices to make a semicircle
-            currentGroup->PushVertices( verticesCircle->GetVertices(), CIRCLE_POINTS / 2 * 3 );
+            currentGroup->PushVertices( verticesCircle.GetVertices(), CIRCLE_POINTS / 2 * 3 );
         }
         else
         {
@@ -1031,7 +1025,7 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
         Rotate( aAngle );
 
         // Draw the outline
-        VBO_VERTEX* circle = verticesCircle->GetVertices();
+        VBO_VERTEX* circle = verticesCircle.GetVertices();
         int next;
 
         begin( GL_TRIANGLES );
@@ -1402,7 +1396,7 @@ void OPENGL_GAL::Save()
     if( isGrouping )
     {
         transformStack.push( transform );
-        vboContainer->SetTransformMatrix( &transform );
+        vboContainer.SetTransformMatrix( &transform );
     }
     else
     {
@@ -1421,7 +1415,7 @@ void OPENGL_GAL::Restore()
         if( transformStack.empty() )
         {
             // Disable transforming, as the selected matrix is identity
-            vboContainer->SetTransformMatrix( NULL );
+            vboContainer.SetTransformMatrix( NULL );
         }
     }
     else
@@ -1439,7 +1433,7 @@ int OPENGL_GAL::BeginGroup()
     vboNeedsUpdate = true;
 
     // Save the pointer for caching the current item
-    currentGroup = new VBO_ITEM( vboContainer );
+    currentGroup = new VBO_ITEM( &vboContainer );
     int groupNumber = getGroupNumber();
     groups.insert( std::make_pair( groupNumber, currentGroup ) );
 
@@ -1503,10 +1497,6 @@ void OPENGL_GAL::ChangeGroupDepth( int aGroupNumber, int aDepth )
 
 void OPENGL_GAL::computeCircleVbo()
 {
-    // (3 vertices per triangle) * (number of points to draw a circle)
-    precomputedContainer = new VBO_CONTAINER( 3 * CIRCLE_POINTS );
-    verticesCircle = new VBO_ITEM( precomputedContainer );
-
     // Compute the circle points for a given number of segments
     // Insert in a display list and a vector
     const VBO_VERTEX v0 = { 0.0f, 0.0f, 0.0f };
@@ -1524,12 +1514,12 @@ void OPENGL_GAL::computeCircleVbo()
             0.0f                                            // z
         };
 
-        verticesCircle->PushVertex( &v0 );
-        verticesCircle->PushVertex( &v1 );
-        verticesCircle->PushVertex( &v2 );
+        verticesCircle.PushVertex( &v0 );
+        verticesCircle.PushVertex( &v1 );
+        verticesCircle.PushVertex( &v2 );
     }
 
-    verticesCircle->Finish();
+    verticesCircle.Finish();
 }
 
 
