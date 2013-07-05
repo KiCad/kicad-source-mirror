@@ -249,6 +249,11 @@ void SCH_COMPONENT::SetUnit( int aUnit )
     }
 }
 
+void SCH_COMPONENT::UpdateUnit( int aUnit )
+{
+    m_unit = aUnit;
+}
+
 
 void SCH_COMPONENT::SetConvert( int aConvert )
 {

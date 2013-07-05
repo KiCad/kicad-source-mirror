@@ -234,7 +234,7 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) t;
             component->GetField( REFERENCE )->SetText( component->GetRef( this ) );
-            component->SetUnit( component->GetUnitSelection( this ) );
+            component->UpdateUnit( component->GetUnitSelection( this ) );
         }
 
         t = t->Next();
