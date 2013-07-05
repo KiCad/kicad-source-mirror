@@ -338,8 +338,8 @@ private:
     wxEvtHandler*   paintListener;
 
     // VBO buffers & display lists (used in immediate mode)
-    VBO_CONTAINER*        precomputedContainer;   ///< Container for storing display lists
-    VBO_ITEM*             verticesCircle;         ///< Buffer for circle & semicircle vertices
+    VBO_CONTAINER         precomputedContainer;   ///< Container for storing display lists
+    VBO_ITEM              verticesCircle;         ///< Buffer for circle & semicircle vertices
     GLuint                displayListCircle;      ///< Circle display list
     GLuint                displayListSemiCircle;  ///< Semi circle display list
 
@@ -348,7 +348,7 @@ private:
     GroupsMap             groups;                 ///< Stores informations about VBO objects (groups)
     unsigned int          groupCounter;           ///< Counter used for generating keys for groups
     VBO_ITEM*             currentGroup;           ///< Currently used VBO_ITEM (for grouping)
-    VBO_CONTAINER*        vboContainer;           ///< Container for storing VBO_ITEMs
+    VBO_CONTAINER         vboContainer;           ///< Container for storing VBO_ITEMs
     GLuint                vboVertices;            ///< Currently used vertices VBO handle
     GLuint                vboIndices;             ///< Currently used indices VBO handle
     bool                  vboNeedsUpdate;         ///< Flag indicating if VBO should be rebuilt
@@ -399,7 +399,8 @@ private:
     bool            isGrouping;                 ///< Was a group started?
 
     /**
-     * @brief Draw a semi circle (used for line caps).
+     * @brief Draw a semi circle. Depending on settings (isStrokeEnabled & isFilledEnabled) it runs
+     * the proper function (drawStrokedSemiCircle or drawFilledSemiCircle).
      *
      * @param aCenterPoint is the center point.
      * @param aRadius is the radius of the semi-circle.
@@ -408,7 +409,24 @@ private:
      */
     void drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
+    /**
+     * @brief Draw a filled semi circle.
+     *
+     * @param aCenterPoint is the center point.
+     * @param aRadius is the radius of the semi-circle.
+     * @param aAngle is the angle of the semi-circle.
+     *
+     */
     void drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
+
+    /**
+     * @brief Draw a stroked semi circle.
+     *
+     * @param aCenterPoint is the center point.
+     * @param aRadius is the radius of the semi-circle.
+     * @param aAngle is the angle of the semi-circle.
+     *
+     */
     void drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
     /// Compute the points of an unit circle & semicircle and store them in VBO.
@@ -584,7 +602,7 @@ private:
     {
         if( isGrouping )
         {
-            vboContainer->UseColor( aRed, aGreen, aBlue, aAlpha );
+            vboContainer.UseColor( aRed, aGreen, aBlue, aAlpha );
         }
         else
         {
@@ -603,7 +621,7 @@ private:
     {
         if( isGrouping )
         {
-            vboContainer->UseColor( aColor );
+            vboContainer.UseColor( aColor );
         }
         else
         {
@@ -625,7 +643,7 @@ private:
         {
             const GLfloat shader[] = { aShader, aParam1, aParam2, aParam3 };
 
-            vboContainer->UseShader( shader );
+            vboContainer.UseShader( shader );
         }
     }
 };
