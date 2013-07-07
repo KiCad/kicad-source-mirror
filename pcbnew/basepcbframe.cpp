@@ -52,9 +52,7 @@
 #include <view/view.h>
 #include <math/vector2d.h>
 #include <trigo.h>
-#ifdef KICAD_GAL
 #include <pcb_painter.h>
-#endif
 
 
 // Configuration entry names.
@@ -132,10 +130,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
     m_FastGrid1           = 0;
     m_FastGrid2           = 0;
 
-#ifdef KICAD_GAL
     m_galCanvas           = new EDA_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                               EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-#endif /* KICAD_GAL */
 
     m_auxiliaryToolBar    = NULL;
 }
@@ -146,9 +142,7 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
     delete m_Collector;
 
     delete m_Pcb;       // is already NULL for FOOTPRINT_EDIT_FRAME
-#ifdef KICAD_GAL
     delete m_galCanvas;
-#endif /* KICAD_GAL */
 }
 
 
@@ -157,7 +151,6 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
     delete m_Pcb;
     m_Pcb = aBoard;
 
-#ifdef KICAD_GAL
     if( m_galCanvas )
     {
         KiGfx::VIEW* view = m_galCanvas->GetView();
@@ -249,7 +242,6 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
             m_galCanvas->Refresh();
         }
     }
-#endif
 }
 
 
@@ -499,7 +491,6 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 {
     m_DisplayPadFill = DisplayOpt.DisplayPadFill = !m_DisplayPadFill;
 
-#ifdef KICAD_GAL
     // Apply new display options to the GAL canvas
     KiGfx::PCB_PAINTER* painter =
             static_cast<KiGfx::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
@@ -511,7 +502,6 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
     if( IsGalCanvasActive() )
         m_galCanvas->Refresh();
     else
-#endif
         m_canvas->Refresh();
 }
 

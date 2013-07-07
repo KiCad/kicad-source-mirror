@@ -298,11 +298,7 @@ typedef unsigned STATUS_FLAGS;
  * is a base class for most all the KiCad significant classes, used in
  * schematics and boards.
  */
-#ifdef KICAD_GAL
 class EDA_ITEM : public KiGfx::VIEW_ITEM
-#else
-class EDA_ITEM
-#endif
 {
 private:
 

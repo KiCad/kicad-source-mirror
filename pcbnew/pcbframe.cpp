@@ -62,9 +62,7 @@
 #include <python_scripting.h>
 #endif
 
-#if defined(KICAD_GAL)
 #include <class_drawpanel_gal.h>
-#endif
 
 // Keys used in read/write config
 #define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth_mm" )
@@ -598,7 +596,6 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
 {
-#ifdef KICAD_GAL
     int id = aEvent.GetId();
 
     switch( id )
@@ -622,7 +619,6 @@ void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
         UseGalCanvas( true );
         break;
     }
-#endif
 }
 
 

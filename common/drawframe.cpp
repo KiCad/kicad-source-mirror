@@ -46,10 +46,8 @@
 #include <math/box2.h>
 
 #include <wx/fontdlg.h>
-#ifdef KICAD_GAL
 #include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
-#endif /* KICAD_GAL */
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -236,14 +234,12 @@ void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
 void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {
     SetGridVisibility( !IsGridVisible() );
-#ifdef KICAD_GAL
     if( m_galCanvasActive )
     {
         m_galCanvas->GetGAL()->SetGridVisibility( IsGridVisible() );
         m_galCanvas->Refresh();
     }
     else
-#endif /* KICAD_GAL */
         m_canvas->Refresh();
 }
 
@@ -396,13 +392,12 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     m_LastGridSizeId = id - ID_POPUP_GRID_LEVEL_1000;
     screen->SetGrid( id );
     screen->SetCrossHairPosition( screen->RefPos( true ) );
-#ifdef KICAD_GAL
+
     if( m_galCanvasActive )
     {
         KiGfx::GAL* gal = m_galCanvas->GetGAL();
         gal->SetGridSize( VECTOR2D( screen->GetGrid().m_Size ) );
     }
-#endif /* KICAD_GAL */
 
     Refresh();
 }
@@ -957,7 +952,6 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
 void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 {
-#ifdef KICAD_GAL
     KiGfx::VIEW* view = m_galCanvas->GetView();
     KiGfx::GAL* gal = m_galCanvas->GetGAL();
 
@@ -1010,5 +1004,4 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     m_auimgr.Update();
 
     m_galCanvasActive = aEnable;
-#endif /* KICAD_GAL */
 }

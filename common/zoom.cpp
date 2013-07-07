@@ -84,9 +84,7 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
     if( screen->m_FirstRedraw )
         screen->SetCrossHairPosition( screen->GetScrollCenterPosition() );
 
-#ifdef KICAD_GAL
     if( !m_galCanvasActive )
-#endif /* KICAD_GAL */
         RedrawScreen( screen->GetScrollCenterPosition(), aWarpPointer );
 }
 

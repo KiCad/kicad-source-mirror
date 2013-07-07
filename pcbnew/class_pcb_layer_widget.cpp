@@ -31,11 +31,10 @@
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <class_drawpanel.h>
-#ifdef KICAD_GAL
 #include <class_drawpanel_gal.h>
 #include <view/view.h>
 #include <painter.h>
-#endif
+
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <pcbstruct.h>      // enum PCB_VISIBLE
@@ -357,23 +356,19 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
     // false from this function.
     myframe->setActiveLayer( aLayer, false );
 
-#ifdef KICAD_GAL
     // Set display settings for high contrast mode
     KiGfx::VIEW* view = myframe->GetGalCanvas()->GetView();
     view->GetPainter()->GetSettings()->SetActiveLayer( aLayer );
     view->UpdateAllLayersColor();
     view->SetTopLayer( aLayer );
-#endif /* KICAD_GAL */
 
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();
     else if(DisplayOpt.ContrastModeDisplay)
     {
-#ifdef KICAD_GAL
         if( myframe->IsGalCanvasActive() )
             myframe->GetGalCanvas()->Refresh();
         else
-#endif /* KICAD_GAL */
             myframe->GetCanvas()->Refresh();
     }
 
@@ -409,22 +404,18 @@ void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool is
 
     brd->SetVisibleLayers( visibleLayers );
 
-#ifdef KICAD_GAL
     EDA_DRAW_PANEL_GAL *galCanvas = myframe->GetGalCanvas();
     if( galCanvas )
     {
         KiGfx::VIEW* view = galCanvas->GetView();
         view->SetLayerVisible( aLayer, isVisible );
     }
-#endif /* KICAD_GAL */
 
     if( isFinal )
     {
-#ifdef KICAD_GAL
         if( myframe->IsGalCanvasActive() )
             galCanvas->Refresh();
         else
-#endif /* KICAD_GAL */
             myframe->GetCanvas()->Refresh();
     }
 }
@@ -440,7 +431,6 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     BOARD*  brd = myframe->GetBoard();
     brd->SetElementVisibility( aId, isEnabled );
 
-#ifdef KICAD_GAL
     EDA_DRAW_PANEL_GAL *galCanvas = myframe->GetGalCanvas();
     if( galCanvas )
     {
@@ -451,7 +441,6 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     if( myframe->IsGalCanvasActive() )
         galCanvas->Refresh();
     else
-#endif /* KICAD_GAL */
         myframe->GetCanvas()->Refresh();
 }
 
