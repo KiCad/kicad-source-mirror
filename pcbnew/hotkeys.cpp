@@ -237,9 +237,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkRecordMacros6,          &HkCallMacros6,    &HkRecordMacros7,          &HkCallMacros7,
     &HkRecordMacros8,          &HkCallMacros8,    &HkRecordMacros9,          &HkCallMacros9,
     &HkSwitchHighContrastMode,
-#ifdef KICAD_GAL
     &HkCanvasDefault, &HkCanvasCairo, &HkCanvasOpenGL, &HkCanvasOpenGLShaders,
-#endif
     NULL
 };
 
