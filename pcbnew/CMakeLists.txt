@@ -426,7 +426,6 @@ target_link_libraries(pcbnew
     ${PCBNEW_EXTRA_LIBS}
     )
 
-if(KICAD_GAL)
 target_link_libraries(pcbnew
 	gal
 	${GLEW_LIBRARIES}
@@ -443,7 +442,6 @@ target_link_libraries(pcbnew
 	bz2
 	)
 endif(WIN32)
-endif(KICAD_GAL)
 
 ###
 # Add pcbnew as install target

@@ -51,10 +51,6 @@ option(KICAD_SCRIPTING_WXPYTHON
     "set this option ON to build wxpython implementation for wx interface building in python and py.shell"
     )
     
-option(KICAD_GAL
-    "set this option ON to build KICAD using Graphics Abstraction Layer as a rendering backend"
-    )
-
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -187,10 +183,6 @@ if(USE_WX_GRAPHICS_CONTEXT)
     add_definitions(-DUSE_WX_GRAPHICS_CONTEXT)
 endif()
 
-if(KICAD_GAL)
-    add_definitions(-DKICAD_GAL)
-endif()
-
 # Allow user to override the default settings for adding images to menu items.  By default
 # images in menu items are enabled on all platforms except OSX.  This can be over ridden by
 # defining -DUSE_IMAGES_IN_MENUS=ON/OFF to force the preferred behavior.
@@ -265,7 +257,6 @@ add_definitions(-DWX_COMPATIBILITY)
 find_package(OpenGL QUIET)
 check_find_package_result(OPENGL_FOUND "OpenGL")
 
-if(KICAD_GAL)
 #####################
 # Find GLEW library #
 #####################
@@ -277,7 +268,6 @@ check_find_package_result(GLEW_FOUND "GLEW")
 ######################
 find_package(Cairo 1.8.1 QUIET)
 check_find_package_result(CAIRO_FOUND "Cairo")
-endif(KICAD_GAL)
 
 ##########################
 # Download Boost library #

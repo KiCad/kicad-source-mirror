@@ -82,7 +82,6 @@ static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
                                      HK_RESET_LOCAL_COORD, ' ' );
 static EDA_HOTKEY HkSwitchHighContrastMode( wxT("Switch Highcontrast mode"),
 					    HK_SWITCH_HIGHCONTRAST_MODE,'H');
-#ifdef KICAD_GAL
 static EDA_HOTKEY HkCanvasDefault( wxT( "Switch to default canvas" ),
                                    HK_CANVAS_DEFAULT, GR_KB_ALT + WXK_F9 );
 static EDA_HOTKEY HkCanvasOpenGL( wxT( "Switch to OpenGL canvas" ),
@@ -91,7 +90,7 @@ static EDA_HOTKEY HkCanvasOpenGLShaders( wxT( "Switch to OpenGL canvas with shad
                                          HK_CANVAS_OPENGL_SHADERS, GR_KB_ALT + WXK_F11 );
 static EDA_HOTKEY HkCanvasCairo( wxT( "Switch to Cairo canvas" ),
                                  HK_CANVAS_CAIRO, GR_KB_ALT + WXK_F12 );
-#endif
+
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );

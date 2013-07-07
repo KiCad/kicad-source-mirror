@@ -348,7 +348,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "&List Nets" ), _( "View a list of nets with names and id's" ),
                  KiBitmap( tools_xpm ) );
 
-#ifdef KICAD_GAL
     // Switching GAL-based canvas on/off
     viewMenu->AppendSeparator();
 
@@ -379,7 +378,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
                  text, _( "Switch the canvas implementation to Cairo" ),
                 KiBitmap( tools_xpm ) );
-#endif
 
     /** Create Place Menu **/
     wxMenu* placeMenu = new wxMenu;

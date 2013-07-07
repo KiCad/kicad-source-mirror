@@ -42,11 +42,9 @@
 #include <class_board.h>
 
 #include <dialog_general_options.h>
-#ifdef KICAD_GAL
 #include <class_drawpanel_gal.h>
 #include <view/view.h>
 #include <pcb_painter.h>
-#endif /* KICAD_GAL */
 
 DIALOG_GENERALOPTIONS::DIALOG_GENERALOPTIONS( PCB_EDIT_FRAME* parent ) :
     DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( parent )
@@ -161,13 +159,11 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
     bool state = event.IsChecked();
-#ifdef KICAD_GAL
     KiGfx::PCB_PAINTER* painter =
             static_cast<KiGfx::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
     KiGfx::PCB_RENDER_SETTINGS* settings =
             static_cast<KiGfx::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
     bool recache = false;
-#endif /* KICAD_GAL */
 
     switch( id )
     {
@@ -229,32 +225,27 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
         m_DisplayViaFill = DisplayOpt.DisplayViaFill = !state;
-#ifdef KICAD_GAL
         recache = true;
         if( !IsGalCanvasActive() )
-#endif /* KICAD_GAL */
             m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = !state;
-#ifdef KICAD_GAL
         recache = true;
         if( !IsGalCanvasActive() )
-#endif /* KICAD_GAL */
             m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         DisplayOpt.ContrastModeDisplay = state;
-#ifdef KICAD_GAL
+
         // Apply new display options to the GAL canvas (this is faster than recaching)
         settings->LoadDisplayOptions( DisplayOpt );
         m_galCanvas->GetView()->EnableTopLayer( state );
         m_galCanvas->GetView()->UpdateAllLayersColor();
 
         if( !IsGalCanvasActive() )
-#endif /* KICAD_GAL */
             m_canvas->Refresh();
         break;
 
@@ -281,7 +272,6 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
     }
 
-#ifdef KICAD_GAL
     if( recache )
     {
         // Apply new display options to the GAL canvas
@@ -291,5 +281,4 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     if( IsGalCanvasActive() )
         m_galCanvas->Refresh();
-#endif /* KICAD_GAL */
 }

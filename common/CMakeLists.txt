@@ -11,7 +11,6 @@ include_directories(
     ${INC_AFTER}
     )
 
-if(KICAD_GAL)
 # Generate files containing shader programs
 add_custom_command (
     OUTPUT gal/opengl/shader_src.h
@@ -46,7 +45,6 @@ add_dependencies(gal ShaderHeader)
 if(WIN32)
 add_definitions(-DGLEW_STATIC)
 endif(WIN32)
-endif(KICAD_GAL)
 
 set(COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp
@@ -129,13 +127,11 @@ set(COMMON_SRCS
     zoom.cpp
     )
 
-if(KICAD_GAL)
 set(COMMON_SRCS
 	${COMMON_SRCS}
 	view/view.cpp
 	view/view_item.cpp
     )
-endif(KICAD_GAL)
 
 add_library(common STATIC ${COMMON_SRCS})
 
@@ -188,12 +184,10 @@ set(PCB_COMMON_SRCS
     fp_lib_table.cpp
 )
 
-if(KICAD_GAL)
 set(PCB_COMMON_SRCS
     ${PCB_COMMON_SRCS} 
     ../pcbnew/pcb_painter.cpp
     )
-endif(KICAD_GAL)
 
 # add -DPCBNEW to compilation of these PCBNEW sources
 set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
