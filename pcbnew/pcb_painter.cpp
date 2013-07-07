@@ -520,17 +520,6 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
     m_gal->DrawPolyline( corners );
     corners.clear();
 
-    // Draw the outline's hatch lines
-    std::vector<CSegment>::const_iterator hatch, hatch_end;
-    for( hatch = outline->m_HatchLines.begin(), hatch_end = outline->m_HatchLines.end();
-            hatch != hatch_end; ++hatch )
-    {
-        const VECTOR2D start = VECTOR2D( hatch->m_Start );
-        const VECTOR2D end = VECTOR2D( hatch->m_End );
-
-        m_gal->DrawLine( start, end );
-    }
-
     // Draw the filling
     if( displayMode != PCB_RENDER_SETTINGS::DZ_HIDE_FILLED )
     {
