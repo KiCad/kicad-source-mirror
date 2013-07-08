@@ -214,14 +214,34 @@ enum PCB_VISIBLE
     MOD_REFERENCES_VISIBLE,     ///< show modules references (when texts are visibles)
 
     TRACKS_VISIBLE,
-    TRACKS_NETNAMES_VISIBLE,
     PADS_VISIBLE,
-    PADS_NETNAMES_VISIBLE,
     PADS_HOLES_VISIBLE,
     VIAS_HOLES_VISIBLE,
 
+    // Netname layers
+    LAYER_1_NETNAMES_VISIBLE,   // Bottom layer
+    LAYER_2_NETNAMES_VISIBLE,
+    LAYER_3_NETNAMES_VISIBLE,
+    LAYER_4_NETNAMES_VISIBLE,
+    LAYER_5_NETNAMES_VISIBLE,
+    LAYER_6_NETNAMES_VISIBLE,
+    LAYER_7_NETNAMES_VISIBLE,
+    LAYER_8_NETNAMES_VISIBLE,
+    LAYER_9_NETNAMES_VISIBLE,
+    LAYER_10_NETNAMES_VISIBLE,
+    LAYER_11_NETNAMES_VISIBLE,
+    LAYER_12_NETNAMES_VISIBLE,
+    LAYER_13_NETNAMES_VISIBLE,
+    LAYER_14_NETNAMES_VISIBLE,
+    LAYER_15_NETNAMES_VISIBLE,
+    LAYER_16_NETNAMES_VISIBLE,  // Top layer
+    PADS_NETNAMES_VISIBLE,
+
     END_PCB_VISIBLE_LIST  // sentinel
 };
+
+#define FIRST_NETNAME_LAYER     ITEM_GAL_LAYER( LAYER_1_NETNAMES_VISIBLE )
+#define LAST_NETNAME_LAYER      ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE )
 
 /// macro for obtaining layer number for specific item (eg. pad or text)
 #define ITEM_GAL_LAYER(layer)	(NB_LAYERS + layer)
@@ -337,5 +357,33 @@ LAYER_NUM ExtractLayer( LAYER_MSK aMask );
  * The BOARD is needed because layer names are (somewhat) customizable
  */
 wxString LayerMaskDescribe( const BOARD *aBoard, LAYER_MSK aMask );
+
+/**
+ * Returns a netname layer corresponding to the given layer.
+ */
+inline LAYER_NUM GetNetnameLayer( LAYER_NUM aLayer )
+{
+    if( IsCopperLayer( aLayer ) )
+    {
+        // Compute the offset in description layers
+        return FIRST_NETNAME_LAYER + ( aLayer - FIRST_COPPER_LAYER );
+    }
+    else if( aLayer == ITEM_GAL_LAYER( PADS_VISIBLE ) )
+        return ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE );
+
+    // Fallback
+    return COMMENT_N;
+}
+
+/**
+ * Function IsCopperLayer
+ * tests whether a layer is a netname layer
+ * @param aLayer = Layer to test
+ * @return true if aLayer is a valid netname layer
+ */
+inline bool IsNetnameLayer( LAYER_NUM aLayer )
+{
+    return aLayer >= FIRST_NETNAME_LAYER && aLayer <= LAST_NETNAME_LAYER;
+}
 
 #endif // _LAYERS_ID_AND_VISIBILITY_H_
