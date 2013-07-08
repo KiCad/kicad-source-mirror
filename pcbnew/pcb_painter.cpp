@@ -73,7 +73,13 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
     m_itemColors[VIAS_VISIBLE]              = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
     m_itemColors[PADS_VISIBLE]              = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
     m_itemColors[PADS_NETNAMES_VISIBLE]     = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
-    m_itemColors[TRACKS_NETNAMES_VISIBLE]   = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    // Netnames for copper layers
+    for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
+    {
+        // Quick, dirty hack, netnames layers should be stored in usual layers
+        m_itemColors[GetNetnameLayer( layer ) - NB_LAYERS] = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    }
+
 
     Update();
 }
@@ -261,7 +267,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
 
     m_gal->SetStrokeColor( color );
 
-    if( aLayer == ITEM_GAL_LAYER( TRACKS_NETNAMES_VISIBLE) )
+    if( IsNetnameLayer( aLayer ) )
     {
         // If there is a net name - display it on the track
         if( netNumber != 0 )
@@ -289,7 +295,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             m_gal->StrokeText( netName, textPosition, textOrientation );
         }
     }
-    else
+    else if( IsCopperLayer( aLayer ))
     {
         // Draw a regular track
         m_gal->SetIsStroke( true );

@@ -754,7 +754,7 @@ void TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     // Show the track and its netname on different layers
     aLayers[0] = GetLayer();
-    aLayers[1] = ITEM_GAL_LAYER( TRACKS_NETNAMES_VISIBLE );
+    aLayers[1] = GetNetnameLayer( aLayers[0] );
     aCount = 2;
 }
 
@@ -770,7 +770,7 @@ void TRACK::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
 unsigned int TRACK::ViewGetLOD( int aLayer ) const
 {
     // Netnames will be shown only if zoom is appropriate
-    if( aLayer == ITEM_GAL_LAYER( TRACKS_NETNAMES_VISIBLE ) )
+    if( aLayer == GetNetnameLayer( GetLayer() ) )
     {
         return ( 20000000 / m_Width );
     }
