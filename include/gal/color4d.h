@@ -132,6 +132,17 @@ public:
                         a );
     }
 
+    /**
+     * Function GetBrightness
+     * Returns the brightness value of the color ranged from 0.0 to 1.0.
+     * @return The brightness value.
+     */
+    double GetBrightness() const
+    {
+        // Weighted W3C formula
+        return ( r * 0.299 + g * 0.587 + b * 0.117 );
+    }
+
     /// @brief Equality operator, are two colors equal
     const bool operator==( const COLOR4D& aColor );
 

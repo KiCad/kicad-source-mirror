@@ -263,9 +263,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     VECTOR2D end( aTrack->GetEnd() );
     int      width = aTrack->GetWidth();
     int      netNumber = aTrack->GetNet();
-    COLOR4D  color = getLayerColor( aLayer, netNumber );
-
-    m_gal->SetStrokeColor( color );
+    COLOR4D  color;
 
     if( IsNetnameLayer( aLayer ) )
     {
@@ -285,6 +283,13 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             double textOrientation = -atan( line.y / line.x );
             double textSize = std::min( static_cast<double>( width ), length / netName.length() );
 
+            // Set a proper color for the label
+            color = getLayerColor( aTrack->GetLayer(), aTrack->GetNet() );
+            if( color.GetBrightness() > 0.5 )
+                m_gal->SetStrokeColor( color.Darkened( 0.8 ) );
+            else
+                m_gal->SetStrokeColor( color.Highlighted( 0.8 ) );
+
             m_gal->SetLineWidth( width / 10.0 );
             m_gal->SetBold( false );
             m_gal->SetItalic( false );
@@ -298,6 +303,8 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     else if( IsCopperLayer( aLayer ))
     {
         // Draw a regular track
+        color = getLayerColor( aLayer, netNumber );
+        m_gal->SetStrokeColor( color );
         m_gal->SetIsStroke( true );
 
         if( m_pcbSettings->m_sketchModeSelect[TRACKS_VISIBLE] )
@@ -368,8 +375,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     NORMALIZE_ANGLE_90( orientation );  // do not display descriptions upside down
     orientation = orientation * M_PI / 1800.0;
 
-    color = getLayerColor( aLayer, aPad->GetNet() );
-
     // Draw description layer
     if( aLayer == ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ) )
     {
@@ -409,7 +414,13 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         m_gal->SetBold( false );
         m_gal->SetItalic( false );
         m_gal->SetMirrored( false );
-        m_gal->SetStrokeColor( color );
+
+        // Set a proper color for the label
+        color = getLayerColor( aPad->GetParent()->GetLayer(), aPad->GetNet() );
+        if( color.GetBrightness() > 0.5 )
+            m_gal->SetStrokeColor( color.Darkened( 0.8 ) );
+        else
+            m_gal->SetStrokeColor( color.Highlighted( 0.8 ) );
 
         // Let's make some space for a netname too, if there's one to display
         if( !aPad->GetNetname().empty() )
@@ -435,6 +446,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         return;
     }
 
+    color = getLayerColor( aLayer, aPad->GetNet() );
     if( m_pcbSettings->m_sketchModeSelect[PADS_VISIBLE] )
     {
         // Outline mode
