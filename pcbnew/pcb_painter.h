@@ -149,7 +149,7 @@ protected:
     const COLOR4D& getItemColor( int aItemType, int aNetCode ) const;
 
     // Drawing functions for various types of PCB-specific items
-    void draw( const TRACK* );
+    void draw( const TRACK*, int );
     void draw( const SEGVIA*, int );
     void draw( const D_PAD*, int );
     void draw( const DRAWSEGMENT* );

@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <class_board.h>
 #include <class_track.h>
 #include <class_module.h>
 #include <class_pad.h>
@@ -33,6 +34,7 @@
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
 #include <class_mire.h>
+#include <class_netinfo.h>
 #include <pcbstruct.h>
 
 #include <view/view.h>
@@ -65,10 +67,12 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
         m_itemColors[i] = m_legacyColorMap[aSettings->GetItemColor( i )];
     }
 
-    m_itemColors[VIA_HOLES_VISIBLE] = COLOR4D( 0.5, 0.4, 0.0, 1.0 );
-    m_itemColors[PAD_HOLES_VISIBLE] = COLOR4D( 0.0, 0.5, 0.5, 1.0 );
-    m_itemColors[VIAS_VISIBLE]      = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
-    m_itemColors[PADS_VISIBLE]      = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
+    // Default colors for specific layers
+    m_itemColors[VIA_HOLES_VISIBLE]         = COLOR4D( 0.5, 0.4, 0.0, 1.0 );
+    m_itemColors[PAD_HOLES_VISIBLE]         = COLOR4D( 0.0, 0.5, 0.5, 1.0 );
+    m_itemColors[VIAS_VISIBLE]              = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
+    m_itemColors[PADS_VISIBLE]              = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
+    m_itemColors[TRACKS_NETNAMES_VISIBLE]   = COLOR4D( 0.9, 0.9, 0.9, 1.0 );
 
     Update();
 }
@@ -200,7 +204,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     {
     case PCB_ZONE_T:
     case PCB_TRACE_T:
-        draw( (TRACK*) aItem );
+        draw( (TRACK*) aItem, aLayer );
         break;
 
     case PCB_VIA_T:
@@ -246,30 +250,63 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const TRACK* aTrack )
+void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
 {
     VECTOR2D start( aTrack->GetStart() );
     VECTOR2D end( aTrack->GetEnd() );
     int      width = aTrack->GetWidth();
-    COLOR4D  color = getLayerColor( aTrack->GetLayer(), aTrack->GetNet() );
+    int      netNumber = aTrack->GetNet();
+    COLOR4D  color = getLayerColor( aLayer, netNumber );
 
     m_gal->SetStrokeColor( color );
-    m_gal->SetIsStroke( true );
 
-    if( m_pcbSettings->m_sketchModeSelect[TRACKS_VISIBLE] )
+    if( aLayer == ITEM_GAL_LAYER( TRACKS_NETNAMES_VISIBLE) )
     {
-        // Outline mode
-        m_gal->SetLineWidth( m_pcbSettings->m_outlineWidth );
-        m_gal->SetIsFill( false );
+        // If there is a net name - display it on the track
+        if( netNumber != 0 )
+        {
+            VECTOR2D line = ( end - start );
+            double length = line.EuclideanNorm();
+
+            // Check if the track is long enough to have a netname displayed
+            if( length < 10 * width )
+                return;
+
+            NETINFO_ITEM* net = ( (BOARD*) aTrack->GetParent() )->FindNet( netNumber );
+            std::string netName = std::string( net->GetShortNetname().mb_str() );
+            VECTOR2D textPosition = start + line / 2.0;     // center of the track
+            double textOrientation = -atan( line.y / line.x );
+            double textSize = std::min( static_cast<double>( width ), length / netName.length() );
+
+            m_gal->SetLineWidth( width / 10.0 );
+            m_gal->SetBold( false );
+            m_gal->SetItalic( false );
+            m_gal->SetMirrored( false );
+            m_gal->SetGlyphSize( VECTOR2D( textSize * 0.7, textSize * 0.7 ) );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_gal->StrokeText( netName, textPosition, textOrientation );
+        }
     }
     else
     {
-        // Filled mode
-        m_gal->SetFillColor( color );
-        m_gal->SetIsFill( true );
-    }
+        // Draw a regular track
+        m_gal->SetIsStroke( true );
 
-    m_gal->DrawSegment( start, end, width );
+        if( m_pcbSettings->m_sketchModeSelect[TRACKS_VISIBLE] )
+        {
+            // Outline mode
+            m_gal->SetLineWidth( m_pcbSettings->m_outlineWidth );
+            m_gal->SetIsFill( false );
+        }
+        else
+        {
+            // Filled mode
+            m_gal->SetFillColor( color );
+            m_gal->SetIsFill( true );
+        }
+        m_gal->DrawSegment( start, end, width );
+    }
 }
 
 
