@@ -433,6 +433,12 @@ public:
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
 
+    /// @copydoc VIEW_ITEM::ViewGetRequiredLayers()
+    virtual void ViewGetRequiredLayers( int aLayers[], int& aCount ) const;
+
+    /// @copydoc VIEW_ITEM::ViewGetLOD()
+    virtual unsigned int ViewGetLOD( int aLayer ) const;
+
     /**
      * Function CopyNetlistSettings
      * copies the netlist settings to \a aPad.
