@@ -314,9 +314,9 @@ struct VIEW::updateItemsColor
         // Obtain the color that should be used for coloring the item
         const COLOR4D color = painter->GetColor( aItem, layer );
         int group = aItem->getGroup( layer );
-        wxASSERT( group >= 0 );
 
-        gal->ChangeGroupColor( group, color );
+        if( group > 0)
+            gal->ChangeGroupColor( group, color );
     }
 
     int layer;
@@ -327,6 +327,10 @@ struct VIEW::updateItemsColor
 
 void VIEW::UpdateLayerColor( int aLayer )
 {
+    // There is no point in updating non-cached layers
+    if( !m_layers[aLayer].cached )
+        return;
+
     BOX2I r;
 
     r.SetMaximum();
@@ -345,8 +349,12 @@ void VIEW::UpdateAllLayersColor()
     for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = &( ( *i ).second );
-        updateItemsColor visitor( l->id, m_painter, m_gal );
 
+        // There is no point in updating non-cached layers
+        if( !m_layers[l->id].cached )
+            continue;
+
+        updateItemsColor visitor( l->id, m_painter, m_gal );
         l->items->Query( r, visitor );
     }
 }
@@ -374,6 +382,10 @@ struct VIEW::changeItemsDepth
 
 void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
 {
+    // There is no point in updating non-cached layers
+    if( !m_layers[aLayer].cached )
+        return;
+
     BOX2I r;
 
     r.SetMaximum();
