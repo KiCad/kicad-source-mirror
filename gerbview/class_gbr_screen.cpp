@@ -7,13 +7,7 @@
 #include <macros.h>
 #include <class_gbr_screen.h>
 #include <base_units.h>
-
-#include <pcbnew.h>
-#include <class_board_design_settings.h>
-#include <layers_id_colors_and_visibility.h>
-
-#include <pcbnew_id.h>
-
+#include <gerbview_id.h>
 
 #define DMIL_GRID( x ) wxRealPoint( x * IU_PER_DECIMILS,\
                                     x * IU_PER_DECIMILS )
@@ -23,7 +17,6 @@
 
 /**
     Default GerbView zoom values.
-    Limited to 19 values to keep a decent size to menus.
     Roughly a 1.5 progression.
 */
 static const double gbrZoomList[] =

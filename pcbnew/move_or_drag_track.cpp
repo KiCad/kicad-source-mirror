@@ -107,7 +107,7 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
 {
     wxPoint      moveVector;
     BASE_SCREEN* screen = aPanel->GetScreen();
-    int          track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
+    int          tmp = DisplayOpt.DisplayPcbTrackFill;
     GR_DRAWMODE  draw_mode = GR_XOR | GR_HIGHLIGHT;
 
     DisplayOpt.DisplayPcbTrackFill = false;
@@ -145,7 +145,7 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
         track->Draw( aPanel, aDC, draw_mode );
     }
 
-    DisplayOpt.DisplayPcbTrackFill = track_fill_copy;
+    DisplayOpt.DisplayPcbTrackFill = tmp;
 
     // Display track length
     if( track )

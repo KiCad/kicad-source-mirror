@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,7 @@
 
 #include <dialog_netlist.h>
 
+#define NETLIST_SILENTMODE_KEY wxT("SilentMode")
 
 void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 {
@@ -92,12 +93,19 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
 {
     m_parent = aParent;
     m_dc = aDC;
+    m_config = wxGetApp().GetSettings();
+    m_silentMode = m_config->Read( NETLIST_SILENTMODE_KEY, 0l );
     m_NetlistFilenameCtrl->SetValue( aNetlistFullFilename );
     m_cmpNameSourceOpt->SetSelection( m_parent->GetUseCmpFileForFpNames() ? 1 : 0 );
+    m_checkBoxSilentMode->SetValue( m_silentMode );
 
     GetSizer()->SetSizeHints( this );
 }
 
+DIALOG_NETLIST::~DIALOG_NETLIST()
+{
+    m_config->Write( NETLIST_SILENTMODE_KEY, (long) m_silentMode );
+}
 
 void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
 {
@@ -142,7 +150,7 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
     }
 
     // Give the user a chance to bail out when making changes from a netlist.
-    if( !m_checkDryRun->GetValue()
+    if( !m_checkDryRun->GetValue() && !m_silentMode
       && !m_parent->GetBoard()->IsEmpty()
       && !IsOK( NULL, _( "The changes made by reading the netlist cannot be undone.  Are you "
                          "sure you want to read the netlist?" ) ) )

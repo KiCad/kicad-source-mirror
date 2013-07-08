@@ -5,12 +5,8 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <common.h>
-//#include "gestfich.h"
-//#include "appl_wxstruct.h"
 
 #include <gerbview.h>
-//#include "pcbplot.h"
-//#include "kicad_device_context.h"
 #include <gerbview_id.h>
 #include <class_GERBER.h>
 #include <dialog_helpers.h>

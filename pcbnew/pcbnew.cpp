@@ -199,7 +199,8 @@ bool EDA_APP::OnInit()
 
         for( unsigned i = 0;  i < GetLibraryPathList().GetCount();  i++ )
         {
-            unsigned cnt = wxDir::GetAllFiles( GetLibraryPathList()[i], &tmp, wxT( "*.mod" ) );
+            unsigned cnt = wxDir::GetAllFiles( GetLibraryPathList()[i], &tmp,
+                                wxT( "*.mod" ), wxDIR_DEFAULT & ~wxDIR_HIDDEN );
 
             if( cnt > modFileCount )
             {

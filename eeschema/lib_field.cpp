@@ -304,7 +304,8 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
         text = m_Text;
 
     GRSetDrawMode( aDC, aDrawMode );
-    DrawGraphicText( aPanel, aDC, text_pos, (EDA_COLOR_T) color, text, m_Orient, m_Size,
+    EDA_RECT* clipbox = aPanel? aPanel->GetClipBox() : NULL;
+    DrawGraphicText( clipbox, aDC, text_pos, (EDA_COLOR_T) color, text, m_Orient, m_Size,
                      m_HJustify, m_VJustify, linewidth, m_Italic, m_Bold );
 
     /* Set to one (1) to draw bounding box around field text to validate
@@ -315,7 +316,7 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     grBox.SetOrigin( aTransform.TransformCoordinate( bBox.GetOrigin() ) );
     grBox.SetEnd( aTransform.TransformCoordinate( bBox.GetEnd() ) );
     grBox.Move( aOffset );
-    GRRect( aPanel->GetClipBox(), aDC, grBox, 0, LIGHTMAGENTA );
+    GRRect( clipbox, aDC, grBox, 0, LIGHTMAGENTA );
 #endif
 }
 

@@ -161,10 +161,12 @@ bool EDA_APP::OnInit()
 
     frame->Zoom_Automatique( true );
 
-    /* Load file specified in the command line. */
+    // Load file specified in the command line:
     if( fileReady )
     {
-        wxSetWorkingDirectory( filename.GetPath() );
+        if( !filename.GetPath().IsEmpty() )
+            // wxSetWorkingDirectory does not like empty paths
+            wxSetWorkingDirectory( filename.GetPath() );
 
         if( frame->LoadOneEEProject( filename.GetFullPath(), false ) )
             frame->GetCanvas()->Refresh( true );

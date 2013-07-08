@@ -519,6 +519,7 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
         if( file )
         {
             fputs( TO_UTF8( msg ), file );
+            fclose( file );
         }
         else
         {

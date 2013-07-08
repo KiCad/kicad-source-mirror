@@ -1,5 +1,5 @@
 /**
- * @file set_grid.cpp
+ * @file dialog_set_grid.cpp
  * @brief Manage user grid.
  */
 /*
@@ -40,7 +40,7 @@ class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
 {
 public:
     DIALOG_SET_GRID( wxWindow* parent, const wxPoint& pos );
-    ~DIALOG_SET_GRID() { }
+
     void        SetGridSize( const wxRealPoint& grid );
     wxRealPoint GetGridSize();
     void        SetGridUnits( int units );
@@ -55,6 +55,7 @@ private:
     void        OnCancelClick( wxCommandEvent& event );
     void        OnOkClick( wxCommandEvent& event );
 };
+
 
 void PCB_BASE_FRAME::InstallGridFrame( const wxPoint& pos )
 {
@@ -90,8 +91,6 @@ void PCB_BASE_FRAME::InstallGridFrame( const wxPoint& pos )
 DIALOG_SET_GRID::DIALOG_SET_GRID( wxWindow* parent, const wxPoint& pos ) :
     DIALOG_SET_GRID_BASE( parent )
 {
-    SetFocus();
-
     m_TextPosXUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_TextPosYUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
@@ -105,9 +104,10 @@ void DIALOG_SET_GRID::SetGridSize( const wxRealPoint& grid )
 {
     wxString msg;
 
-    msg.Printf( wxT( "%.6f" ), grid.x );
+    msg.Printf( wxT( "%.10g" ), grid.x );
     m_OptGridSizeX->SetValue( msg );
-    msg.Printf( wxT( "%.6f" ), grid.y );
+
+    msg.Printf( wxT( "%.10g" ), grid.y );
     m_OptGridSizeY->SetValue( msg );
 }
 
@@ -158,6 +158,7 @@ void DIALOG_SET_GRID::SetGridOrigin( const wxPoint& grid )
     PutValueInLocalUnits( *m_GridOriginYCtrl, grid.y );
 }
 
+
 void DIALOG_SET_GRID::SetGridForFastSwitching( wxArrayString aGrids, int aGrid1, int aGrid2  )
 {
     m_comboBoxGrid1->Append( aGrids );
@@ -166,6 +167,7 @@ void DIALOG_SET_GRID::SetGridForFastSwitching( wxArrayString aGrids, int aGrid1,
     m_comboBoxGrid1->SetSelection( aGrid1 );
     m_comboBoxGrid2->SetSelection( aGrid2 );
 }
+
 
 void DIALOG_SET_GRID::GetGridForFastSwitching( int& aGrid1, int& aGrid2 )
 {
@@ -180,17 +182,13 @@ void DIALOG_SET_GRID::OnResetGridOrgClick( wxCommandEvent& event )
 }
 
 
-/*****************************************************************/
 void DIALOG_SET_GRID::OnCancelClick( wxCommandEvent& event )
-/*****************************************************************/
 {
     EndModal( wxID_CANCEL );
 }
 
 
-/*************************************************************************/
 void DIALOG_SET_GRID::OnOkClick( wxCommandEvent& event )
-/*************************************************************************/
 {
     EndModal( wxID_OK );
 }

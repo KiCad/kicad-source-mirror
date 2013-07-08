@@ -99,7 +99,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
                     fpinfo->SetLibraryName( filename.GetName() );
                     fpinfo->SetLibraryPath( filename.GetFullPath() );
                     fpinfo->m_Module   = fpnames[i];
-                    fpinfo->m_padCount = m->GetPadCount();
+                    fpinfo->m_padCount = m->GetPadCount( MODULE::DO_NOT_INCLUDE_NPTH );
                     fpinfo->m_KeyWord  = m->GetKeywords();
                     fpinfo->m_Doc      = m->GetDescription();
 
@@ -163,7 +163,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
                 fpinfo->SetLibraryName( libNickNames[ii] );
                 fpinfo->SetLibraryPath( path );
                 fpinfo->m_Module   = fpnames[i];
-                fpinfo->m_padCount = m->GetPadCount();
+                fpinfo->m_padCount = m->GetPadCount( MODULE::DO_NOT_INCLUDE_NPTH );
                 fpinfo->m_KeyWord  = m->GetKeywords();
                 fpinfo->m_Doc      = m->GetDescription();
 
@@ -179,4 +179,27 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
     m_List.sort();
 
     return true;
+}
+
+
+bool FOOTPRINT_INFO::InLibrary( const wxString& aLibrary ) const
+{
+    if( aLibrary.IsEmpty() )
+        return false;
+
+    if( aLibrary == m_libName || aLibrary == m_libPath )
+        return true;
+
+    wxFileName filename = aLibrary;
+
+    if( filename.GetExt().IsEmpty() )
+        filename.SetExt( LegacyFootprintLibPathExtension );
+
+    if( filename.GetFullPath() == m_libPath )
+        return true;
+
+    if( filename.GetPath().IsEmpty() )
+        filename = wxGetApp().FindLibraryPath( filename.GetFullName() );
+
+    return filename.GetFullPath() == m_libPath;
 }

@@ -1,8 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_edit_component_in_lib.cpp
-// Author:      jean-pierre Charras
-// Licence:     GPL
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file dialog_edit_component_in_lib.cpp
+ */
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <fctsys.h>
 #include <common.h>
@@ -11,12 +32,12 @@
 #include <appl_wxstruct.h>
 
 #include <general.h>
-#include <protos.h>
 #include <libeditframe.h>
 #include <class_library.h>
 
 #include <dialog_edit_component_in_lib.h>
 
+int DIALOG_EDIT_COMPONENT_IN_LIBRARY::m_lastOpenedPage = 0;
 
 DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRAME* aParent ):
     DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( aParent )
@@ -33,6 +54,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
 
 DIALOG_EDIT_COMPONENT_IN_LIBRARY::~DIALOG_EDIT_COMPONENT_IN_LIBRARY()
 {
+    m_lastOpenedPage = m_NoteBook->GetSelection( );
 }
 
 /* Initialize state of check boxes and texts
@@ -85,6 +107,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::initDlg()
         m_ButtonDeleteAllFootprintFilter->Enable( false );
         m_ButtonDeleteOneFootprintFilter->Enable( false );
     }
+
+    m_NoteBook->SetSelection( m_lastOpenedPage );
 
     m_stdSizerButtonOK->SetDefault();
 }
@@ -156,7 +180,6 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 {
-
     /* Update the doc, keyword and doc filename strings */
     int index;
     LIB_ALIAS* alias;

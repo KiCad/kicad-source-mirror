@@ -1,15 +1,19 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_display_info_HTML_base__
-#define __dialog_display_info_HTML_base__
+#ifndef __DIALOG_DISPLAY_INFO_HTML_BASE_H__
+#define __DIALOG_DISPLAY_INFO_HTML_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 
+#include "dialog_shim.h"
 #include <wx/html/htmlwin.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -26,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_DISPLAY_HTML_TEXT_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_DISPLAY_HTML_TEXT_BASE : public wxDialog 
+class DIALOG_DISPLAY_HTML_TEXT_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -34,15 +38,16 @@ class DIALOG_DISPLAY_HTML_TEXT_BASE : public wxDialog
 		wxButton* m_buttonClose;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnHTMLLinkClicked( wxHtmlLinkEvent& event ){ event.Skip(); }
-		virtual void OnCloseButtonClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnHTMLLinkClicked( wxHtmlLinkEvent& event ) { event.Skip(); }
+		virtual void OnCloseButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		wxHtmlWindow* m_htmlWindow;
-		DIALOG_DISPLAY_HTML_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 431,120 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_DISPLAY_HTML_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 431,120 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_DISPLAY_HTML_TEXT_BASE();
 	
 };
 
-#endif //__dialog_display_info_HTML_base__
+#endif //__DIALOG_DISPLAY_INFO_HTML_BASE_H__

@@ -713,15 +713,6 @@ public:
     void DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
                          double aScale, const wxString &aFilename );
 
-    /**
-     * Function GetXYSheetReferences
-     * returns the X,Y sheet references where the point position is located
-     * @param aPosition = position to identify by YX ref
-     * @return a wxString containing the message locator like A3 or B6
-     *         (or ?? if out of page limits)
-     */
-    const wxString GetXYSheetReferences( const wxPoint& aPosition ) const;
-
     void DisplayToolMsg( const wxString& msg );
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
     virtual void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) = 0;

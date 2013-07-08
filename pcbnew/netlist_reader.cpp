@@ -92,6 +92,24 @@ const COMPONENT_NET& COMPONENT::GetNet( const wxString& aPinName )
 }
 
 
+bool COMPONENT::MatchesFootprintFilters( const wxString& aFootprintName ) const
+{
+    if( m_footprintFilters.GetCount() == 0 )
+        return true;
+
+    // The matching is case insensitive
+    wxString name = aFootprintName.Upper();
+
+    for( unsigned ii = 0; ii < m_footprintFilters.GetCount(); ii++ )
+    {
+        if( name.Matches( m_footprintFilters[ii].Upper() ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 #if defined(DEBUG)
 void COMPONENT::Show( int aNestLevel, REPORTER& aReporter )
 {

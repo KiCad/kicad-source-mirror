@@ -44,17 +44,13 @@
 #include <sch_component.h>
 
 #include <dialog_helpers.h>
-#include <dialog_netlist.h>
 #include <libeditframe.h>
 #include <viewlib_frame.h>
 #include <hotkeys.h>
 #include <eeschema_config.h>
 #include <sch_sheet.h>
 
-#include <dialogs/annotate_dialog.h>
-#include <dialogs/dialog_build_BOM.h>
-#include <dialogs/dialog_erc.h>
-#include <dialogs/dialog_print_using_printer.h>
+#include <invoke_sch_dialog.h>
 #include <dialogs/dialog_schematic_find.h>
 
 #include <wx/display.h>
@@ -200,6 +196,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
     m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
     m_undoItem = NULL;
     m_hasAutoSave = true;
+
     SetForceHVLines( true );
     SetDefaultLabelSize( DEFAULT_SIZE_TEXT );
 
@@ -243,8 +240,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
 
     EDA_PANEINFO mesg;
     mesg.MessageToolbarPane();
-
-
 
     if( m_mainToolBar )
         m_auimgr.AddPane( m_mainToolBar,
@@ -602,43 +597,40 @@ void SCH_EDIT_FRAME::OnUpdateHiddenPins( wxUpdateUIEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnAnnotate( wxCommandEvent& event )
 {
-    DIALOG_ANNOTATE* dlg = new DIALOG_ANNOTATE( this );
-
-    dlg->ShowModal();
-    dlg->Destroy();
+    InvokeDialogAnnotate( this );
 }
 
 
 void SCH_EDIT_FRAME::OnErc( wxCommandEvent& event )
 {
-    DIALOG_ERC* dlg = new DIALOG_ERC( this );
+    // See if it's already open...
+    wxWindow* erc = FindWindowById( ID_DIALOG_ERC, this );
 
-    dlg->Show( true );
-//    dlg->Destroy();
+    if( erc )
+        // Bring it to the top if already open.  Dual monitor users need this.
+        erc->Raise();
+    else
+        InvokeDialogERC( this );
 }
 
 
 void SCH_EDIT_FRAME::OnCreateNetlist( wxCommandEvent& event )
 {
-    int i;
+    int result;
 
     do
     {
-        NETLIST_DIALOG* dlg = new NETLIST_DIALOG( this );
-        i = dlg->ShowModal();
-        dlg->Destroy();
-    } while( i == NET_PLUGIN_CHANGE );
+        result = InvokeDialogNetList( this );
 
-    // If a plugin is removed or added, rebuild and reopen the new dialog
+        // If a plugin is removed or added, rebuild and reopen the new dialog
+
+    } while( result == NET_PLUGIN_CHANGE );
 }
 
 
 void SCH_EDIT_FRAME::OnCreateBillOfMaterials( wxCommandEvent& )
 {
-    wxMessageDialog dlg( this,
-                        wxT( "https://answers.launchpad.net/kicad/+faq/2265" ),
-                        _( "BOM Howto" ) );
-    dlg.ShowModal();
+    InvokeDialogCreateBOM( this );
 }
 
 
@@ -827,9 +819,8 @@ void SCH_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
 {
     wxFileName fn;
-    DIALOG_PRINT_USING_PRINTER dlg( this );
 
-    dlg.ShowModal();
+    InvokeDialogPrintUsingPrinter( this );
 
     fn = g_RootSheet->GetScreen()->GetFileName();
 

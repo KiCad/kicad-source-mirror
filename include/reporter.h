@@ -39,11 +39,14 @@ class wxTextCtrl;
 
 /**
  * Class REPORTER
- * is a pure virtual class used to derive REPORTOR objects from.
+ * is a pure virtual class used to derive REPORTER objects from.
  *
- * The purpose of the REPORTER object is to hide an object that take a string as an input
- * from other objects.  This prevents objects such as wxWidgets UI control internals from
- * being exposed to low level KiCad objects dervice from #BOARD_ITEM and #SCH_ITEM.
+ * The purpose of the REPORTER object is to offer a way for a procedural function
+ * to report multiple errors without having to:
+ * <ul>
+ * <li> know too much about the caller's UI, i.e. wx. </li>
+ * <li> stop after the first error </li>
+ * </ul>
  */
 class REPORTER
 {
@@ -56,7 +59,7 @@ public:
      */
     virtual REPORTER& Report( const wxString& aText ) = 0;
 
-    REPORTER& Report( const char *aText );
+    REPORTER& Report( const char* aText );
 
     REPORTER& operator <<( const wxString& aText ) { return Report( aText ); }
 

@@ -131,7 +131,8 @@ double StrToDoublePrecisionUnits( wxString aStr, char aAxe, wxString aActualConv
         {
             ls.ToDouble( &i );
 #ifdef PCAD2KICAD_SCALE_SCH_TO_INCH_GRID
-            if( aActualConversion == wxT( "SCH" ) )
+            if( aActualConversion == wxT( "SCH" )
+                || aActualConversion == wxT( "SCHLIB" ) )
                 i = i * (0.0254 / 0.025);
 #endif
             i = Millimeter2iu( i );

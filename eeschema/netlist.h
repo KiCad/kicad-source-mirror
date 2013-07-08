@@ -39,6 +39,29 @@
 #include <sch_component.h>
 
 
+/// netlist types
+enum  NETLIST_TYPE_ID {
+    NET_TYPE_UNINIT = 0,
+    NET_TYPE_PCBNEW,
+    NET_TYPE_ORCADPCB2,
+    NET_TYPE_CADSTAR,
+    NET_TYPE_SPICE,
+    NET_TYPE_CUSTOM1,   /* NET_TYPE_CUSTOM1
+                         * is the first id for user netlist format
+                         * NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1
+                         * is the last id for user netlist format
+                         */
+    //NET_TYPE_CUSTOM_MAX = NET_TYPE_CUSTOM1 + CUSTOMPANEL_COUNTMAX - 1
+};
+
+
+/// Options for Spice netlist generation (OR'ed bits
+enum netlistOptions {
+    NET_USE_X_PREFIX = 2,           // for Spice netlist : change "U" and "IC" reference prefix to "X"
+    NET_PCBNEW_USE_NEW_FORMAT = 1,  // For Pcbnew use the new format (S expression and SWEET)
+};
+
+
 class SCH_COMPONENT;
 class SCH_REFERENC_LIST;
 
@@ -46,7 +69,7 @@ class SCH_REFERENC_LIST;
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
 
 // Max pin number per component and footprint
-#define MAXPIN 5000
+#define MAXPIN      5000
 
 
 /**
@@ -375,26 +398,6 @@ public:
     }
 
     /**
-     * Function SortByValueAndRef
-     * sorts the list of references by value.
-     * <p>
-     * Components are sorted in the following order:
-     * <ul>
-     * <li>Value of component.</li>
-     * <li>Numeric value of reference designator.</li>
-     * <li>Unit number when component has multiple parts.</li>
-     * <li>Sheet number.</li>
-     * <li>X coordinate position.</li>
-     * <li>Y coordinate position.</li>
-     * </ul>
-     * </p>
-     */
-    void SortByValueAndRef()
-    {
-        sort( componentFlatList.begin(), componentFlatList.end(), sortByValueAndRef );
-    }
-
-    /**
      * Function SortByReferenceOnly
      * sorts the list of references by reference.
      * <p>
@@ -408,25 +411,6 @@ public:
     void SortByReferenceOnly()
     {
         sort( componentFlatList.begin(), componentFlatList.end(), sortByReferenceOnly );
-    }
-
-    /**
-     * Function SortByValueOnly
-     * sort the list of references by value.
-     * <p>
-     * Components are grouped by type and are sorted in the following order:
-     * <ul>
-     * <li>Value of component.</li>
-     * <li>Numeric value of reference designator.</li>
-     * <li>Unit number when component has multiple parts.</li>
-     * </ul>
-     * </p>
-     * groups are made by the first letter of reference
-     * or the 2 first letters when existing
-     */
-    void SortByValueOnly()
-    {
-        sort( componentFlatList.begin(), componentFlatList.end(), sortByValueOnly );
     }
 
     /**
@@ -474,15 +458,11 @@ private:
 
     static bool sortByRefAndValue( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
-    static bool sortByValueAndRef( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
-
     static bool sortByXPosition( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
     static bool sortByYPosition( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
     static bool sortByTimeStamp( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
-
-    static bool sortByValueOnly( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
     static bool sortByReferenceOnly( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 

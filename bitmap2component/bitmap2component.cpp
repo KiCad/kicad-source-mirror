@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 jean-pierre.charras
- * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2013 jean-pierre.charras
+ * Copyright (C) 1992-2013 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <cmath>
+#include <algorithm>    // std::max
 
-// For some unknown reasons, polygon.hpp shoul be included first
+// For some unknown reasons, polygon.hpp should be included first
 #include <boost/polygon/polygon.hpp>
 
 #include <wx/wx.h>
@@ -38,13 +39,6 @@
 #include <auxiliary.h>
 
 
-#ifndef max
-    #define max( a, b ) ( ( (a) > (b) ) ? (a) : (b) )
-#endif
-#ifndef min
-    #define min( a, b ) ( ( (a) < (b) ) ? (a) : (b) )
-#endif
-
 // Define some types used here from boost::polygon
 namespace bpl = boost::polygon;         // bpl = boost polygon library
 using namespace bpl::operators;         // +, -, =, ...
@@ -58,9 +52,12 @@ typedef bpl::point_data<coordinate_type>   KPolyPoint;      // define a corner o
 
 enum output_format {
     POSTSCRIPT_FMT = 1,
-    PCBNEW_FMT,
-    EESCHEMA_FMT
+    PCBNEW_LEGACY_EMP,
+    PCBNEW_KICAD_MOD,
+    EESCHEMA_FMT,
+    KICAD_LOGO
 };
+
 /* free a potrace bitmap */
 static void bm_free( potrace_bitmap_t* bm )
 {
@@ -172,22 +169,37 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile, int aFo
 
     switch( aFormat )
     {
-    case 2:
+    case 4:
+        info.m_Format = KICAD_LOGO;
+        info.m_ScaleX = 1e3 * 25.4 / 300;       // the conversion scale from PPI to micro
+        info.m_ScaleY = info.m_ScaleX;          // Y axis is top to bottom
+        info.CreateOutputFile();
+        break;
+
+    case 3:
         info.m_Format = POSTSCRIPT_FMT;
-        info.m_ScaleX = info.m_ScaleY = 1.0;        // the conversion scale
+        info.m_ScaleX = 1.0;                // the conversion scale
+        info.m_ScaleY = info.m_ScaleX;
         // output vector data, e.g. as a rudimentary EPS file (mainly for tests)
         info.CreateOutputFile();
         break;
 
-    case 1:
+    case 2:
         info.m_Format = EESCHEMA_FMT;
-        info.m_ScaleX = 1000.0 / 300;       // the conversion scale
+        info.m_ScaleX = 1000.0 / 300;       // the conversion scale from PPI to UI
         info.m_ScaleY = -info.m_ScaleX;     // Y axis is bottom to Top for components in libs
         info.CreateOutputFile();
         break;
 
+    case 1:
+        info.m_Format = PCBNEW_KICAD_MOD;
+        info.m_ScaleX = 1e6 * 25.4 / 300;       // the conversion scale from PPI to UI
+        info.m_ScaleY = info.m_ScaleX;          // Y axis is top to bottom in modedit
+        info.CreateOutputFile();
+        break;
+
     case 0:
-        info.m_Format = PCBNEW_FMT;
+        info.m_Format = PCBNEW_LEGACY_EMP;
         info.m_ScaleX = 10000.0 / 300;          // the conversion scale
         info.m_ScaleY = info.m_ScaleX;          // Y axis is top to bottom in modedit
         info.CreateOutputFile();
@@ -221,7 +233,7 @@ void BITMAPCONV_INFO::OuputFileHeader()
         fprintf( m_Outfile, "gsave\n" );
         break;
 
-    case PCBNEW_FMT:
+    case PCBNEW_LEGACY_EMP:
         #define FIELD_LAYER 21
         fieldSize = 600;             // fields text size = 60 mils
         Ypos += fieldSize / 2;
@@ -238,6 +250,22 @@ void BITMAPCONV_INFO::OuputFileHeader()
                  Ypos, fieldSize, fieldSize, fieldSize / 5, FIELD_LAYER );
         fprintf( m_Outfile, "T1 0 %d %d %d 0 %d N I %d \"%s\"\n",
                  -Ypos, fieldSize, fieldSize, fieldSize / 5, FIELD_LAYER, m_CmpName );
+        break;
+
+    case PCBNEW_KICAD_MOD:
+        // fields text size = 1.5 mm
+        // fields text thickness = 1.5 / 5 = 0.3mm
+        fprintf( m_Outfile, "(module %s (layer F.Cu)\n  (at 0 0)\n",
+                 m_CmpName );
+        fprintf( m_Outfile, " (fp_text reference \"G***\" (at 0 0) (layer F.SilkS) hide\n"
+                            "  (effects (font (thickness 0.3)))\n  )\n" );
+        fprintf( m_Outfile, "  (fp_text value \"%s\" (at 0.75 0) (layer F.SilkS) hide\n"
+                            "  (effects (font (thickness 0.3)))\n  )\n",
+                 m_CmpName );
+        break;
+
+    case KICAD_LOGO:
+        fprintf( m_Outfile, "(polygon (pos 0 0 rbcorner) (rotate 0) (linewidth 0.01)\n" );
         break;
 
     case EESCHEMA_FMT:
@@ -267,9 +295,17 @@ void BITMAPCONV_INFO::OuputFileEnd()
         fprintf( m_Outfile, "%%EOF\n" );
         break;
 
-    case PCBNEW_FMT:
+    case PCBNEW_LEGACY_EMP:
         fprintf( m_Outfile, "$EndMODULE %s\n", m_CmpName );
         fprintf( m_Outfile, "$EndLIBRARY\n" );
+        break;
+
+    case PCBNEW_KICAD_MOD:
+        fprintf( m_Outfile, ")\n" );
+        break;
+
+    case KICAD_LOGO:
+        fprintf( m_Outfile, ")\n" );
         break;
 
     case EESCHEMA_FMT:
@@ -282,11 +318,11 @@ void BITMAPCONV_INFO::OuputFileEnd()
 /**
  * Function OuputOnePolygon
  * write one polygon to output file.
- * Polygon coordinates are expected scaled by the polugon extraction function
+ * Polygon coordinates are expected scaled by the polygon extraction function
  */
 void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
 {
-    unsigned ii;
+    unsigned ii, jj;
     KPolyPoint currpoint;
 
     int   offsetX = (int)( m_PixmapWidth / 2 * m_ScaleX );
@@ -297,19 +333,27 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
     switch( m_Format )
     {
     case POSTSCRIPT_FMT:
-        fprintf( m_Outfile, "%d %d moveto\n",
-                 startpoint.x(), startpoint.y() );
+        offsetY = (int)( m_PixmapHeight * m_ScaleY );
+        fprintf( m_Outfile, "newpath\n%d %d moveto\n",
+                 startpoint.x(), offsetY - startpoint.y() );
+        jj = 0;
         for( ii = 1; ii < aPolygon.size(); ii++ )
         {
             currpoint = *(aPolygon.begin() + ii);
-            fprintf( m_Outfile, "%d %d lineto\n",
-                     currpoint.x(), currpoint.y() );
+            fprintf( m_Outfile, " %d %d lineto",
+                     currpoint.x(), offsetY - currpoint.y() );
+
+            if( jj++ > 6 )
+            {
+                jj = 0;
+                fprintf( m_Outfile, ("\n") );
+            }
         }
 
-        fprintf( m_Outfile, "0 setgray fill\n" );
+        fprintf( m_Outfile, "\nclosepath fill\n" );
         break;
 
-    case PCBNEW_FMT:
+    case PCBNEW_LEGACY_EMP:
     {
         LAYER_NUM layer = SILKSCREEN_N_FRONT;
         int width = 1;
@@ -329,6 +373,54 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
                  startpoint.x() - offsetX, startpoint.y() - offsetY );
     }
     break;
+
+    case PCBNEW_KICAD_MOD:
+    {
+        double width = 0.1;
+        fprintf( m_Outfile, "  (fp_poly (pts" );
+
+        jj = 0;
+        for( ii = 0; ii < aPolygon.size(); ii++ )
+        {
+            currpoint = *( aPolygon.begin() + ii );
+            fprintf( m_Outfile, " (xy %f %f)",
+                    (currpoint.x() - offsetX) / 1e6,
+                    (currpoint.y() - offsetY) / 1e6 );
+
+            if( jj++ > 6 )
+            {
+                jj = 0;
+                fprintf( m_Outfile, ("\n    ") );
+            }
+        }
+        // Close polygon
+        fprintf( m_Outfile, " (xy %f %f) )",
+                (startpoint.x() - offsetX) / 1e6, (startpoint.y() - offsetY) / 1e6 );
+        fprintf( m_Outfile, "(layer F.SilkS) (width  %f)\n  )\n", width );
+    }
+    break;
+
+    case KICAD_LOGO:
+        fprintf( m_Outfile, "  (pts" );
+        // Internal units = micron, file unit = mm
+        jj = 0;
+        for( ii = 0; ii < aPolygon.size(); ii++ )
+        {
+            currpoint = *( aPolygon.begin() + ii );
+            fprintf( m_Outfile, " (xy %.3f %.3f)",
+                    (currpoint.x() - offsetX) / 1e3,
+                    (currpoint.y() - offsetY) / 1e3 );
+
+            if( jj++ > 4 )
+            {
+                jj = 0;
+                fprintf( m_Outfile, ("\n    ") );
+            }
+        }
+        // Close polygon
+        fprintf( m_Outfile, " (xy %.3f %.3f) )\n",
+                (startpoint.x() - offsetX) / 1e3, (startpoint.y() - offsetY) / 1e3 );
+        break;
 
     case EESCHEMA_FMT:
         fprintf( m_Outfile, "P %d 0 0 1", (int) aPolygon.size() + 1 );
@@ -363,6 +455,9 @@ void BITMAPCONV_INFO::CreateOutputFile()
     KPolygonSet polyset_holes;
 
     potrace_dpoint_t( *c )[3];
+
+    setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C
+
     OuputFileHeader();
 
     bool main_outline = true;
@@ -451,6 +546,8 @@ void BITMAPCONV_INFO::CreateOutputFile()
     }
 
     OuputFileEnd();
+
+    setlocale( LC_NUMERIC, "" );      // revert to the current locale
 }
 
 

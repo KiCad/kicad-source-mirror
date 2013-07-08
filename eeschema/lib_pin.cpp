@@ -311,7 +311,8 @@ void LIB_PIN::SetOrientation( int orientation )
 
     for( size_t i = 0; i < pinList.size(); i++ )
     {
-        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0 || pinList[i]->m_orientation == orientation )
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0 ||
+              pinList[i]->m_orientation == orientation )
             continue;
 
         pinList[i]->m_orientation = orientation;
@@ -349,6 +350,12 @@ void LIB_PIN::SetShape( int aShape )
 
 void LIB_PIN::SetType( int aType )
 {
+    if( aType < 0 )
+        aType = 0;
+
+    if( aType >= (int)PIN_ELECTRICAL_TYPE_CNT )
+        aType = PIN_ELECTRICAL_TYPE_CNT - 1;
+
     if( m_type != aType )
     {
         m_type = aType;
@@ -1084,6 +1091,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
     numLineWidth = Clamp_Text_PenSize( numLineWidth, m_numTextSize, false );
 
     GRSetDrawMode( DC, DrawMode );
+    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
 
     /* Get the num and name colors */
     if( (Color < 0) && IsSelected() )
@@ -1132,7 +1140,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                 if( orient == PIN_RIGHT )
                 {
                     x = x1 + TextInside;
-                    DrawGraphicText( panel, DC, wxPoint( x, y1 ), NameColor,
+                    DrawGraphicText( clipbox, DC, wxPoint( x, y1 ), NameColor,
                                      m_name,
                                      TEXT_ORIENT_HORIZ,
                                      PinNameSize,
@@ -1143,7 +1151,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                 else    // Orient == PIN_LEFT
                 {
                     x = x1 - TextInside;
-                    DrawGraphicText( panel, DC, wxPoint( x, y1 ), NameColor,
+                    DrawGraphicText( clipbox, DC, wxPoint( x, y1 ), NameColor,
                                      m_name,
                                      TEXT_ORIENT_HORIZ,
                                      PinNameSize,
@@ -1155,7 +1163,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
 
             if( DrawPinNum )
             {
-                DrawGraphicText( panel, DC,
+                DrawGraphicText( clipbox, DC,
                                  wxPoint( (x1 + pin_pos.x) / 2,
                                          y1 - TXTMARGE ), NumColor,
                                  StringPinNum,
@@ -1173,7 +1181,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                 y = y1 + TextInside;
 
                 if( DrawPinName )
-                    DrawGraphicText( panel, DC, wxPoint( x1, y ), NameColor,
+                    DrawGraphicText( clipbox, DC, wxPoint( x1, y ), NameColor,
                                      m_name,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_RIGHT,
@@ -1181,7 +1189,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                                      false, false );
 
                 if( DrawPinNum )
-                    DrawGraphicText( panel, DC,
+                    DrawGraphicText( clipbox, DC,
                                      wxPoint( x1 - TXTMARGE,
                                               (y1 + pin_pos.y) / 2 ), NumColor,
                                      StringPinNum,
@@ -1195,7 +1203,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                 y = y1 - TextInside;
 
                 if( DrawPinName )
-                    DrawGraphicText( panel, DC, wxPoint( x1, y ), NameColor,
+                    DrawGraphicText( clipbox, DC, wxPoint( x1, y ), NameColor,
                                      m_name,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_LEFT,
@@ -1203,7 +1211,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                                      false, false );
 
                 if( DrawPinNum )
-                    DrawGraphicText( panel, DC,
+                    DrawGraphicText( clipbox, DC,
                                      wxPoint( x1 - TXTMARGE,
                                               (y1 + pin_pos.y) / 2 ), NumColor,
                                      StringPinNum,
@@ -1222,7 +1230,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
             if( DrawPinName )
             {
                 x = (x1 + pin_pos.x) / 2;
-                DrawGraphicText( panel, DC, wxPoint( x, y1 - TXTMARGE ),
+                DrawGraphicText( clipbox, DC, wxPoint( x, y1 - TXTMARGE ),
                                  NameColor, m_name,
                                  TEXT_ORIENT_HORIZ, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
@@ -1232,7 +1240,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
             if( DrawPinNum )
             {
                 x = (x1 + pin_pos.x) / 2;
-                DrawGraphicText( panel, DC, wxPoint( x, y1 + TXTMARGE ),
+                DrawGraphicText( clipbox, DC, wxPoint( x, y1 + TXTMARGE ),
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
@@ -1245,7 +1253,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
             if( DrawPinName )
             {
                 y = (y1 + pin_pos.y) / 2;
-                DrawGraphicText( panel, DC, wxPoint( x1 - TXTMARGE, y ),
+                DrawGraphicText( clipbox, DC, wxPoint( x1 - TXTMARGE, y ),
                                  NameColor, m_name,
                                  TEXT_ORIENT_VERT, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
@@ -1255,7 +1263,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
 
             if( DrawPinNum )
             {
-                DrawGraphicText( panel, DC,
+                DrawGraphicText( clipbox, DC,
                                  wxPoint( x1 + TXTMARGE, (y1 + pin_pos.y) / 2 ),
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_VERT, PinNumSize,

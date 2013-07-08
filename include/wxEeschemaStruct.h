@@ -115,52 +115,52 @@ enum SCH_SEARCH_T {
 class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 {
 private:
-    SCH_SHEET_PATH*       m_CurrentSheet;    ///< which sheet we are presently working on.
-    wxString              m_DefaultSchematicFileName;
-    int m_TextFieldSize;
-    PARAM_CFG_ARRAY       m_projectFileParams;
-    PARAM_CFG_ARRAY       m_configSettings;
-    wxPageSetupDialogData m_pageSetupData;
-    wxFindReplaceData*    m_findReplaceData;
-    wxPoint               m_previewPosition;
-    wxSize                m_previewSize;
-    wxPoint               m_printDialogPosition;
-    wxSize                m_printDialogSize;
-    bool                  m_printMonochrome;     ///< Print monochrome instead of grey scale.
-    bool                  m_printSheetReference;
-    DIALOG_SCH_FIND*      m_dlgFindReplace;
-    wxPoint               m_findDialogPosition;
-    wxSize                m_findDialogSize;
-    wxArrayString         m_findStringHistoryList;
-    wxArrayString         m_replaceStringHistoryList;
-    BLOCK_SELECTOR        m_blockItems;         ///< List of selected items.
-    SCH_ITEM*             m_itemToRepeat;       ///< Last item to insert by the repeat command.
-    int                   m_repeatLabelDelta;   ///< Repeat label number increment step.
-    SCH_COLLECTOR         m_collectedItems;     ///< List of collected items.
-    SCH_FIND_COLLECTOR    m_foundItems;         ///< List of find/replace items.
-    SCH_ITEM*             m_undoItem;           ///< Copy of the current item being edited.
-    wxString              m_simulatorCommand;   ///< Command line used to call the circuit
-                                                ///< simulator (gnucap, spice, ...)
-    wxString              m_netListerCommand;   ///< Command line to call a custom net list
-                                                ///< generator.
+    SCH_SHEET_PATH*         m_CurrentSheet;    ///< which sheet we are presently working on.
+    wxString                m_DefaultSchematicFileName;
+    int                     m_TextFieldSize;
+    PARAM_CFG_ARRAY         m_projectFileParams;
+    PARAM_CFG_ARRAY         m_configSettings;
+    wxPageSetupDialogData   m_pageSetupData;
+    wxFindReplaceData*      m_findReplaceData;
+    wxPoint                 m_previewPosition;
+    wxSize                  m_previewSize;
+    wxPoint                 m_printDialogPosition;
+    wxSize                  m_printDialogSize;
+    bool                    m_printMonochrome;     ///< Print monochrome instead of grey scale.
+    bool                    m_printSheetReference;
+    DIALOG_SCH_FIND*        m_dlgFindReplace;
+    wxPoint                 m_findDialogPosition;
+    wxSize                  m_findDialogSize;
+    wxArrayString           m_findStringHistoryList;
+    wxArrayString           m_replaceStringHistoryList;
+    BLOCK_SELECTOR          m_blockItems;         ///< List of selected items.
+    SCH_ITEM*               m_itemToRepeat;       ///< Last item to insert by the repeat command.
+    int                     m_repeatLabelDelta;   ///< Repeat label number increment step.
+    SCH_COLLECTOR           m_collectedItems;     ///< List of collected items.
+    SCH_FIND_COLLECTOR      m_foundItems;         ///< List of find/replace items.
+    SCH_ITEM*               m_undoItem;           ///< Copy of the current item being edited.
+    wxString                m_simulatorCommand;   ///< Command line used to call the circuit
+                                                  ///< simulator (gnucap, spice, ...)
+    wxString                m_netListerCommand;   ///< Command line to call a custom net list
+                                                  ///< generator.
 
-    bool                  m_forceHVLines;       ///< force H or V directions for wires, bus, line
-    int                   m_defaultLabelSize;   ///< size of a new label
+    bool                    m_forceHVLines;       ///< force H or V directions for wires, bus, line
+    int                     m_defaultLabelSize;   ///< size of a new label
 
 
     /// An index to the last find item in the found items list #m_foundItems.
-    int m_foundItemIndex;
+    int         m_foundItemIndex;
 
     /// Flag to indicate show hidden pins.
-    bool m_showAllPins;
+    bool        m_showAllPins;
 
     /// The name of the format to use when generating a net list.
-    wxString m_netListFormat;
+    wxString    m_netListFormat;
 
     /// Add X prefix to componen referencess when generating spice net lists.
-    bool m_addReferencPrefix;
+    bool        m_addReferencPrefix;
 
-    wxString m_userLibraryPath;
+    wxString    m_userLibraryPath;
 
     wxArrayString m_componentLibFiles;
 

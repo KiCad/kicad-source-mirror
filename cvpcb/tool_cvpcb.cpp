@@ -94,36 +94,30 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             KiBitmap( module_filtered_list_xpm ),
                             wxNullBitmap,
                             true, NULL,
-                            _( "Display the filtered footprint list for the current component" ),
+                            _( "Filter the footprint list for the current component key words" ),
                             wxEmptyString );
 
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,
                             KiBitmap( module_pin_filtered_list_xpm ),
                             wxNullBitmap,
                             true, NULL,
-                            _( "Display the filtered footprint list by pin count for the current component" ),
+                            _( "Filter the footprint list by pin count for the current component" ),
                             wxEmptyString );
 
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST,
                             KiBitmap( module_library_list_xpm ),
                             wxNullBitmap, true, NULL,
-                            _( "Display the footprint list from selected library" ),
-                            wxEmptyString );
-
-    m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST,
-                            KiBitmap( module_full_list_xpm ),
-                            wxNullBitmap, true, NULL,
-                            _( "Display the full footprint list (without filtering)" ),
+                            _( "Filter the footprint list by the selected library" ),
                             wxEmptyString );
 
     if( config )
     {
         wxString key = wxT( FILTERFOOTPRINTKEY );
         int      opt = config->Read( key, (long) 1 );
-        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST, opt == 3 );
-        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, opt == 2 );
-        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, opt == 1 );
-        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, opt == 0 );
+
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST, opt & 4 );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, opt & 2 );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, opt & 1 );
     }
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes

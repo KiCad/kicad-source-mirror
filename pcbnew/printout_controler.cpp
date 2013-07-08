@@ -168,7 +168,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     boardBoundingBox = brd->ComputeBoundingBox();
     wxString titleblockFilename = brd->GetFileName();
 #elif defined (GERBVIEW)
-    boardBoundingBox = ((GERBVIEW_FRAME*) m_Parent)->GetLayoutBoundingBox();
+    boardBoundingBox = ((GERBVIEW_FRAME*) m_Parent)->GetGerberLayoutBoundingBox();
     wxString titleblockFilename;    // TODO see if we uses the gerber file name
 #else
     #error BOARD_PRINTOUT_CONTROLLER::DrawPage() works only for PCBNEW or GERBVIEW

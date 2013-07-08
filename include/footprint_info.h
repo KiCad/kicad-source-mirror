@@ -29,6 +29,7 @@
 #ifndef FOOTPRINT_INFO_H_
 #define FOOTPRINT_INFO_H_
 
+
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
 
@@ -46,13 +47,13 @@ class FP_LIB_TABLE;
 class FOOTPRINT_INFO
 {
 public:
-    wxString  m_libName;    ///< Name of the library containing this module excluding path and ext.
-    wxString  m_libPath;    ///< The full library name and path associated the footprint.
-    wxString  m_Module;     ///< Module name.
-    int       m_Num;        ///< Order number in the display list.
-    wxString  m_Doc;        ///< Footprint description.
-    wxString  m_KeyWord;    ///< Footprint key words.
-    unsigned  m_padCount;   ///< Number of pads
+    wxString   m_libName;    ///< Name of the library containing this module excluding path and ext.
+    wxString   m_libPath;    ///< The full library name and path associated the footprint.
+    wxString   m_Module;     ///< Module name.
+    int        m_Num;        ///< Order number in the display list.
+    wxString   m_Doc;        ///< Footprint description.
+    wxString   m_KeyWord;    ///< Footprint key words.
+    unsigned   m_padCount;   ///< Number of pads
 
     FOOTPRINT_INFO()
     {
@@ -67,6 +68,17 @@ public:
 
     void SetLibraryPath( const wxString& aLibPath ) { m_libPath = aLibPath; }
     const wxString& GetLibraryPath() const { return m_libPath; }
+
+    /**
+     * Function InLibrary
+     * tests if the #FOOTPRINT_INFO object was loaded from \a aLibrary.
+     *
+     * @param aLibrary is the file name or the fully qualified path and file name
+     *                 to test.
+     * @return true if the #FOOTPRINT_INFO object was loaded from \a aLibrary.  Otherwise
+     *         false.
+     */
+    bool InLibrary( const wxString& aLibrary ) const;
 };
 
 

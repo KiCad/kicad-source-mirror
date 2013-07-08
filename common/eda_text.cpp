@@ -35,10 +35,13 @@
 
 // Conversion to application internal units defined at build time.
 #if defined( PCBNEW )
-#include <class_board_item.h>
+    #include <class_board_item.h>
 #elif defined( EESCHEMA )
-#include <sch_item_struct.h>
+    #include <sch_item_struct.h>
 #elif defined( GERBVIEW )
+#elif defined( PL_EDITOR )
+    #include <base_units.h>
+    #define FMT_IU Double2Str
 #else
 #error "Cannot resolve units formatting due to no definition of EESCHEMA or PCBNEW."
 #endif
@@ -212,7 +215,7 @@ bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
 }
 
 
-void EDA_TEXT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
                      EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode,
                      EDA_DRAW_MODE_T aFillMode, EDA_COLOR_T aAnchor_color )
 {
@@ -229,34 +232,23 @@ void EDA_TEXT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
         for( unsigned i = 0; i<list->Count(); i++ )
         {
             wxString txt = list->Item( i );
-            DrawOneLineOfText( aPanel,
-                               aDC,
-                               aOffset,
-                               aColor,
-                               aDrawMode,
-                               aFillMode,
+            drawOneLineOfText( aClipBox, aDC, aOffset, aColor,
+                               aDrawMode, aFillMode,
                                i ?  UNSPECIFIED_COLOR : aAnchor_color,
-                               txt,
-                               pos );
+                               txt, pos );
             pos += offset;
         }
 
         delete (list);
     }
     else
-        DrawOneLineOfText( aPanel,
-                           aDC,
-                           aOffset,
-                           aColor,
-                           aDrawMode,
-                           aFillMode,
-                           aAnchor_color,
-                           m_Text,
-                           m_Pos );
+        drawOneLineOfText( aClipBox, aDC, aOffset, aColor,
+                           aDrawMode, aFillMode,
+                           aAnchor_color, m_Text, m_Pos );
 }
 
 
-void EDA_TEXT::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
                                   const wxPoint& aOffset, EDA_COLOR_T aColor,
                                   GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
                                   EDA_COLOR_T aAnchor_color,
@@ -273,7 +265,7 @@ void EDA_TEXT::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     // Draw text anchor, if requested
     if( aAnchor_color != UNSPECIFIED_COLOR )
     {
-        GRDrawAnchor( aPanel->GetClipBox(), aDC,
+        GRDrawAnchor( aClipBox, aDC,
                       aPos.x + aOffset.x, aPos.y + aOffset.y,
                       DIM_ANCRE_TEXTE, aAnchor_color );
     }
@@ -286,7 +278,7 @@ void EDA_TEXT::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     if( m_Mirror )
         size.x = -size.x;
 
-    DrawGraphicText( aPanel, aDC, aOffset + aPos, aColor, aText, m_Orient, size,
+    DrawGraphicText( aClipBox, aDC, aOffset + aPos, aColor, aText, m_Orient, size,
                      m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 

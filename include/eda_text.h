@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jpe.charras at wanadoo.fr
+ * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -183,7 +183,7 @@ public:
 
     /**
      * Function Draw
-     * @param aPanel = the current DrawPanel
+     * @param aClipBox = the clipping rect, or NULL if no clipping
      * @param aDC = the current Device Context
      * @param aOffset = draw offset (usually (0,0))
      * @param aColor = text color
@@ -191,7 +191,7 @@ public:
      * @param aDisplay_mode = LINE, FILLED or SKETCH
      * @param aAnchor_color = anchor color ( UNSPECIFIED = do not draw anchor ).
      */
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+    void Draw( EDA_RECT* aClipBox, wxDC* aDC,
                const wxPoint& aOffset, EDA_COLOR_T aColor,
                GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = LINE,
                EDA_COLOR_T aAnchor_color = UNSPECIFIED_COLOR );
@@ -277,10 +277,10 @@ public:
 private:
 
     /**
-     * Function DrawOneLineOfText
+     * Function drawOneLineOfText
      * Draw a single text line.
      * Used to draw each line of this EDA_TEXT, that can be multiline
-     * @param aPanel = the current DrawPanel
+     * @param aClipBox = the clipping rect, or NULL if no clipping
      * @param aDC = the current Device Context
      * @param aOffset = draw offset (usually (0,0))
      * @param aColor = text color
@@ -290,7 +290,7 @@ private:
      * @param aText = the single line of text to draw.
      * @param aPos = the position of this line ).
      */
-    void DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+    void drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
                             const wxPoint& aOffset, EDA_COLOR_T aColor,
                             GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
                             EDA_COLOR_T aAnchor_color, wxString& aText,
