@@ -396,7 +396,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     if( m_galCanvasActive )
     {
         KiGfx::GAL* gal = m_galCanvas->GetGAL();
-        gal->SetGridSize( VECTOR2D( screen->GetGrid().m_Size ) );
+        gal->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x, screen->GetGrid().m_Size.y ) );
     }
 
     Refresh();
@@ -990,7 +990,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         // Default grid color - dark cyan does not look good
         //gal->SetGridColor( KiGfx::COLOR4D( GetGridColor() ) );
         gal->SetGridColor( KiGfx::COLOR4D( 0.1, 0.1, 0.1, 1.0 ) );
-        gal->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
+        gal->SetGridSize( VECTOR2D( screen->GetGridSize().x, screen->GetGridSize().y ) );
         gal->SetGridOrigin( VECTOR2D( screen->GetGridOrigin() ) );
         gal->SetGridOriginMarkerSize( 15 );
         gal->SetGridDrawThreshold( 10 );
