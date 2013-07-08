@@ -105,7 +105,7 @@ protected:
     bool    m_visibleLayers   [NB_LAYERS];
     bool    m_visibleItems    [END_PCB_VISIBLE_LIST];
 
-    static const double MAX_FONT_SIZE = 1500000;
+    static const double MAX_FONT_SIZE = 100000000;
 
     DisplayZonesMode m_displayZoneMode;
 };

@@ -374,12 +374,14 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     if( aLayer == ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ) )
     {
         size = VECTOR2D( aPad->GetSize() / 2 );
+        double scale = m_gal->GetZoomFactor();
+        double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE / scale;
 
         // Font size limits
-        if( size.x > PCB_RENDER_SETTINGS::MAX_FONT_SIZE )
-            size.x = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
-        if( size.y > PCB_RENDER_SETTINGS::MAX_FONT_SIZE )
-            size.y = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
+        if( size.x > maxSize )
+            size.x = maxSize;
+        if( size.y > maxSize )
+            size.y = maxSize;
 
         // Keep the size ratio for the font, but make it smaller
         if( size.x < size.y )
