@@ -48,6 +48,13 @@ void VIEW_ITEM::ViewSetVisible( bool aIsVisible )
 }
 
 
+void VIEW_ITEM::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
+{
+    // By default there is no layer required
+    aCount = 0;
+}
+
+
 void VIEW_ITEM::ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw )
 {
     m_view->invalidateItem( this, aUpdateFlags );

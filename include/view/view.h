@@ -403,6 +403,9 @@ private:
         return i->renderingOrder > j->renderingOrder;
     }
 
+    /// Checks if every layer stored in aLayers array is enabled.
+    bool isEveryLayerEnabled( const int aLayers[], int aCount ) const;
+
     /// Contains set of possible displayed layers and its properties
     LayerMap    m_layers;
 
