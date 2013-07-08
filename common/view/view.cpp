@@ -454,13 +454,21 @@ struct VIEW::drawItem
     {
         GAL* gal = view->GetGAL();
 
+        aItem->ViewGetRequiredLayers( layers, layersCount );
+
+        // Conditions that have te be fulfilled for an item to be drawn
+        bool drawCondition = aItem->ViewIsVisible() &&
+                             aItem->ViewGetLOD( currentLayer->id ) < view->m_scale &&
+                             view->isEveryLayerEnabled( layers, layersCount );
+        if( !drawCondition )
+            return;
+
         if( currentLayer->cached )
         {
             // Draw using cached information or create one
             int group = aItem->getGroup( currentLayer->id );
 
-            if( group >= 0 && aItem->ViewIsVisible() &&
-                aItem->ViewGetLOD( currentLayer->id ) < view->m_scale )
+            if( group >= 0 )
             {
                 gal->DrawGroup( group );
             }
@@ -472,8 +480,7 @@ struct VIEW::drawItem
                 gal->EndGroup();
             }
         }
-        else if( aItem->ViewIsVisible() &&
-                 aItem->ViewGetLOD( currentLayer->id ) < view->m_scale )
+        else
         {
             // Immediate mode
             view->m_painter->Draw( aItem, currentLayer->id );
@@ -482,6 +489,7 @@ struct VIEW::drawItem
 
     const VIEW_LAYER* currentLayer;
     VIEW* view;
+    int layersCount, layers[VIEW_MAX_LAYERS];
 };
 
 
@@ -649,6 +657,18 @@ void VIEW::clearGroupCache()
         VIEW_LAYER* l = & ( ( *i ).second );
         l->items->Query( r, visitor );
     }
+}
+
+
+bool VIEW::isEveryLayerEnabled( const int aLayers[], int aCount ) const
+{
+    for( int i = 0; i < aCount; ++i )
+    {
+        if( !m_layers.at( aLayers[i] ).enabled )
+            return false;
+    }
+
+    return true;
 }
 
 
