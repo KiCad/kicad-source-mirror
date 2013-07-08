@@ -1001,6 +1001,14 @@ void SEGVIA::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
+void SEGVIA::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
+{
+    // The only required layer is via itself, holes are optional
+    aLayers[0] = ITEM_GAL_LAYER( VIAS_VISIBLE );
+    aCount = 1;
+}
+
+
 // see class_track.h
 void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {

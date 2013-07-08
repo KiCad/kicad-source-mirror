@@ -424,6 +424,9 @@ public:
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
 
+    /// @copydoc VIEW_ITEM::ViewGetRequiredLayers()
+    virtual void ViewGetRequiredLayers( int aLayers[], int& aCount ) const;
+
 #if defined (DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
 #endif
