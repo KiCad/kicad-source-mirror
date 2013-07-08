@@ -326,6 +326,9 @@ if (KICAD_SCRIPTING_MODULES)
         pcad2kicadpcb
         polygon
         bitmaps
+        gal
+    	${GLEW_LIBRARIES}
+    	${CAIRO_LIBRARIES}
         ${wxWidgets_LIBRARIES}
         ${OPENGL_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
