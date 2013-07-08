@@ -746,36 +746,36 @@ EDA_ITEM* D_PAD::Clone() const
 
 void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    if( m_Attribute == PAD_SMD || m_Attribute == PAD_CONN)
+    aCount = 0;
+
+    if( m_Attribute == PAD_SMD || m_Attribute == PAD_CONN )
     {
         // Single layer pad (smd) without hole
         if( IsOnLayer( LAYER_N_FRONT ) )
-            aLayers[0] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
+            aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
         else if( IsOnLayer( LAYER_N_BACK ) )
-            aLayers[0] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
+            aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
 #ifdef __WXDEBUG__
         else    // Should not occur
         {
             wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD on layer different than FRONT/BACK") );
         }
 #endif
-
-        aCount = 1;
     }
     else
     {
         if( IsOnLayer( LAYER_N_FRONT ) && IsOnLayer( LAYER_N_BACK ) )
         {
             // Multi layer pad
-            aLayers[0] = ITEM_GAL_LAYER( PADS_VISIBLE );
+            aLayers[aCount++] = ITEM_GAL_LAYER( PADS_VISIBLE );
         }
         else if( IsOnLayer( LAYER_N_FRONT ) )
         {
-            aLayers[0] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
+            aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
         }
         else if( IsOnLayer( LAYER_N_BACK ) )
         {
-            aLayers[0] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
+            aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
         }
 #ifdef __WXDEBUG__
         else    // Should not occur
@@ -785,9 +785,31 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 #endif
 
         // Draw a hole
-        aLayers[1] = ITEM_GAL_LAYER( PAD_HOLES_VISIBLE );
-
-        aCount = 2;
+        aLayers[aCount++] = ITEM_GAL_LAYER( PADS_HOLES_VISIBLE );
     }
+
+    // Pad description layer (number & net)
+    aLayers[aCount++] = ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE );
 }
 
+
+void D_PAD::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
+{
+    ViewGetLayers( aLayers, aCount );
+
+    // Remove pad description layer from the required layers group
+    aCount--;
+}
+
+
+unsigned int D_PAD::ViewGetLOD( int aLayer ) const
+{
+    // Netnames will be shown only if zoom is appropriate
+    if( aLayer == ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ) )
+    {
+        return ( 100000000 / std::max( m_Size.x, m_Size.y ) );
+    }
+
+    // Other layers are shown without any conditions
+    return 0;
+}

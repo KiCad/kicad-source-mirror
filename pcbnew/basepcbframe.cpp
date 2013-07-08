@@ -94,7 +94,8 @@ const int m_galLayerOrder[] =
 		ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE), ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ),
 		SILKSCREEN_N_FRONT, SOLDERPASTE_N_FRONT, ADHESIVE_N_FRONT, SOLDERMASK_N_FRONT,
 
-		ITEM_GAL_LAYER( VIA_HOLES_VISIBLE ), ITEM_GAL_LAYER( PAD_HOLES_VISIBLE ),
+		ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+		ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ),
 		ITEM_GAL_LAYER( VIAS_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
 
 		ITEM_GAL_LAYER( TRACKS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ),
@@ -227,6 +228,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         // Netnames are drawn only when scale is sufficient (level of details)
         // so there is no point in caching them
         view->SetLayerCached( ITEM_GAL_LAYER( TRACKS_NETNAMES_VISIBLE ), false );
+        view->SetLayerCached( ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ), false );
 
         // Load layer & elements visibility settings
         for( unsigned int i = 0; i < NB_LAYERS; ++i )
