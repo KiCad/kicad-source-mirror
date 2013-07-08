@@ -97,9 +97,10 @@ const int m_galLayerOrder[] =
 		ITEM_GAL_LAYER( VIA_HOLES_VISIBLE ), ITEM_GAL_LAYER( PAD_HOLES_VISIBLE ),
 		ITEM_GAL_LAYER( VIAS_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
 
-		ITEM_GAL_LAYER( PAD_FR_VISIBLE ), LAYER_N_FRONT, LAYER_N_15, LAYER_N_14, LAYER_N_13,
+		ITEM_GAL_LAYER( TRACKS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ),
+		LAYER_N_FRONT, LAYER_N_15, LAYER_N_14, LAYER_N_13,
 		LAYER_N_12, LAYER_N_11, LAYER_N_10, LAYER_N_9, LAYER_N_8, LAYER_N_7, LAYER_N_6,
-		LAYER_N_5, LAYER_N_4, LAYER_N_3, LAYER_N_2, ITEM_GAL_LAYER( PAD_BK_VISIBLE ), LAYER_N_BACK,
+		LAYER_N_5, LAYER_N_4, LAYER_N_3, LAYER_N_2, LAYER_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ),
 
 		SOLDERMASK_N_BACK, ADHESIVE_N_BACK, SOLDERPASTE_N_BACK,	SILKSCREEN_N_BACK,
 		ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE )
@@ -222,6 +223,10 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         {
             view->SetLayerOrder( m_galLayerOrder[i], i );
         }
+
+        // Netnames are drawn only when scale is sufficient (level of details)
+        // so there is no point in caching them
+        view->SetLayerCached( ITEM_GAL_LAYER( TRACKS_NETNAMES_VISIBLE ), false );
 
         // Load layer & elements visibility settings
         for( unsigned int i = 0; i < NB_LAYERS; ++i )

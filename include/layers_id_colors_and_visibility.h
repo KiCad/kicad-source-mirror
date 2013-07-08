@@ -214,6 +214,7 @@ enum PCB_VISIBLE
     MOD_REFERENCES_VISIBLE,     ///< show modules references (when texts are visibles)
 
     TRACKS_VISIBLE,
+    TRACKS_NETNAMES_VISIBLE,
     PADS_VISIBLE,
     VIA_HOLES_VISIBLE,
     PAD_HOLES_VISIBLE,

@@ -749,6 +749,36 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 }
 
 
+void TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    // Show the track and its netname on different layers
+    aLayers[0] = GetLayer();
+    aLayers[1] = ITEM_GAL_LAYER( TRACKS_NETNAMES_VISIBLE );
+    aCount = 2;
+}
+
+
+void TRACK::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
+{
+    // The only required layer is the track layer itself
+    aLayers[0] = GetLayer();
+    aCount = 1;
+}
+
+
+unsigned int TRACK::ViewGetLOD( int aLayer ) const
+{
+    // Netnames will be shown only if zoom is appropriate
+    if( aLayer == ITEM_GAL_LAYER( TRACKS_NETNAMES_VISIBLE ) )
+    {
+        return ( 20000000 / m_Width );
+    }
+
+    // Other layers are shown without any conditions
+    return 0;
+}
+
+
 void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                    const wxPoint& aOffset )
 {
@@ -964,16 +994,6 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
 void SEGVIA::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    /*int top_layer, bottom_layer;
-    ReturnLayerPair( &top_layer, &bottom_layer );
-
-    // We can add vias to all layers they belong, but then they are drawn this many times
-    aCount = 0;
-    for( int i = bottom_layer; i <= top_layer; ++i )
-    {
-        aLayers[aCount++] = i;
-    }*/
-
     // Just show it on common via & via holes layers
     aLayers[0] = ITEM_GAL_LAYER( VIAS_VISIBLE );
     aLayers[1] = ITEM_GAL_LAYER( VIA_HOLES_VISIBLE );
