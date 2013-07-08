@@ -68,11 +68,12 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
     }
 
     // Default colors for specific layers
-    m_itemColors[VIAS_HOLES_VISIBLE]         = COLOR4D( 0.5, 0.4, 0.0, 1.0 );
-    m_itemColors[PADS_HOLES_VISIBLE]         = COLOR4D( 0.0, 0.5, 0.5, 1.0 );
+    m_itemColors[VIAS_HOLES_VISIBLE]        = COLOR4D( 0.5, 0.4, 0.0, 1.0 );
+    m_itemColors[PADS_HOLES_VISIBLE]        = COLOR4D( 0.0, 0.5, 0.5, 1.0 );
     m_itemColors[VIAS_VISIBLE]              = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
     m_itemColors[PADS_VISIBLE]              = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
-    m_itemColors[TRACKS_NETNAMES_VISIBLE]   = COLOR4D( 0.9, 0.9, 0.9, 1.0 );
+    m_itemColors[PADS_NETNAMES_VISIBLE]     = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    m_itemColors[TRACKS_NETNAMES_VISIBLE]   = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
 
     Update();
 }
@@ -379,6 +380,11 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         {
             orientation -= M_PI / 2;
             size.y = size.x * 4.0 / 3.0;
+        }
+        else if( size.x == size.y )
+        {
+            // If the text is displayed on a symmetrical pad, do not rotate it
+            orientation = 0.0;
         }
         else
         {
