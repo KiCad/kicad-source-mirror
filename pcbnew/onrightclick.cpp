@@ -1,9 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 2007-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2007-2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -467,7 +468,9 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         if( Track->Type() == PCB_VIA_T )
         {
-            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE, _( "Drag Via" ),
+            msg = AddHotkeyName( _( "Drag Via" ), g_Board_Editor_Hokeys_Descr,
+                                 HK_DRAG_ITEM );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE, msg,
                          KiBitmap( move_xpm ) );
         }
         else

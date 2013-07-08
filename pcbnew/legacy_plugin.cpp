@@ -276,8 +276,12 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         if( TESTLINE( "$MODULE" ) )
         {
-            MODULE* m = LoadMODULE();
-            m_board->Add( m, ADD_APPEND );
+            auto_ptr<MODULE>    module( new MODULE( m_board ) );
+
+            module->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "$MODULE" ) ) ) );
+
+            LoadMODULE( module.get() );
+            m_board->Add( module.release(), ADD_APPEND );
         }
 
         else if( TESTLINE( "$DRAWSEGMENT" ) )
@@ -918,9 +922,8 @@ void LEGACY_PLUGIN::loadSETUP()
 }
 
 
-MODULE* LEGACY_PLUGIN::LoadMODULE()
+void LEGACY_PLUGIN::LoadMODULE( MODULE* aModule )
 {
-    auto_ptr<MODULE>    module( new MODULE( m_board ) );
     char*               line;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
@@ -929,14 +932,14 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
 
         // most frequently encountered ones at the top
 
-        if( TESTSUBSTR( "D" ) )          // read a drawing item, e.g. "DS"
+        if( TESTSUBSTR( "D" ) && strchr( "SCAP", line[1] ) )  // read a drawing item, e.g. "DS"
         {
-            loadMODULE_EDGE( module.get() );
+            loadMODULE_EDGE( aModule );
         }
 
         else if( TESTLINE( "$PAD" ) )
         {
-            loadPAD( module.get() );
+            loadPAD( aModule );
         }
 
         // Read a footprint text description (ref, value, or drawing)
@@ -951,17 +954,17 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             switch( tnum )
             {
             case TEXTE_MODULE::TEXT_is_REFERENCE:
-                textm = &module->Reference();
+                textm = &aModule->Reference();
                 break;
 
             case TEXTE_MODULE::TEXT_is_VALUE:
-                textm = &module->Value();
+                textm = &aModule->Value();
                 break;
 
             default:
                 // text is a drawing
-                textm = new TEXTE_MODULE( module.get() );
-                module->GraphicalItems().PushBack( textm );
+                textm = new TEXTE_MODULE( aModule );
+                aModule->GraphicalItems().PushBack( textm );
             }
 
             loadMODULE_TEXT( textm );
@@ -986,29 +989,31 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             // data is now a two character long string
             // Note: some old files do not have this field
             if( data && data[0] == 'F' )
-                module->SetLocked( true );
+                aModule->SetLocked( true );
 
             if( data && data[1] == 'P' )
-                module->SetIsPlaced( true );
+                aModule->SetIsPlaced( true );
 
-            module->SetPosition( wxPoint( pos_x, pos_y ) );
-            module->SetLayer( layer );
-            module->SetOrientation( orient );
-            module->SetTimeStamp( timestamp );
-            module->SetLastEditTime( edittime );
+            aModule->SetPosition( wxPoint( pos_x, pos_y ) );
+            aModule->SetLayer( layer );
+            aModule->SetOrientation( orient );
+            aModule->SetTimeStamp( timestamp );
+            aModule->SetLastEditTime( edittime );
         }
 
+        /* footprint name set earlier, immediately after MODULE construction
         else if( TESTLINE( "Li" ) )         // Library name of footprint
         {
             // There can be whitespace in the footprint name on some old libraries.
             // Grab everything after "Li" up to end of line:
-            module->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
+            //aModule->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
         }
+        */
 
         else if( TESTLINE( "Sc" ) )         // timestamp
         {
             time_t timestamp = hexParse( line + SZ( "Sc" ) );
-            module->SetTimeStamp( timestamp );
+            aModule->SetTimeStamp( timestamp );
         }
 
         else if( TESTLINE( "Op" ) )         // (Op)tions for auto placement
@@ -1020,7 +1025,7 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             if( cntRot180 > 10 )
                 cntRot180 = 10;
 
-            module->SetPlacementCost180( cntRot180 );
+            aModule->SetPlacementCost180( cntRot180 );
 
             int cntRot90  = itmp1 & 0x0F;
             if( cntRot90 > 10 )
@@ -1030,7 +1035,7 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             if( itmp1 > 10 )
                 itmp1 = 0;
 
-            module->SetPlacementCost90( (itmp1 << 4) | cntRot90 );
+            aModule->SetPlacementCost90( (itmp1 << 4) | cntRot90 );
         }
 
         else if( TESTLINE( "At" ) )         // (At)tributes of module
@@ -1045,30 +1050,31 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             if( strstr( data, "VIRTUAL" ) )
                 attrs |= MOD_VIRTUAL;
 
-            module->SetAttributes( attrs );
+            aModule->SetAttributes( attrs );
         }
 
         else if( TESTLINE( "AR" ) )         // Alternate Reference
         {
             // e.g. "AR /47BA2624/45525076"
             data = strtok( line + SZ( "AR" ), delims );
-            module->SetPath( FROM_UTF8( data ) );
+            if( data )
+                aModule->SetPath( FROM_UTF8( data ) );
         }
 
         else if( TESTLINE( "$SHAPE3D" ) )
         {
-            load3D( module.get() );
+            load3D( aModule );
         }
 
         else if( TESTLINE( "Cd" ) )
         {
             // e.g. "Cd Double rangee de contacts 2 x 4 pins\r\n"
-            module->SetDescription( FROM_UTF8( StrPurge( line + SZ( "Cd" ) ) ) );
+            aModule->SetDescription( FROM_UTF8( StrPurge( line + SZ( "Cd" ) ) ) );
         }
 
         else if( TESTLINE( "Kw" ) )         // Key words
         {
-            module->SetKeywords( FROM_UTF8( StrPurge( line + SZ( "Kw" ) ) ) );
+            aModule->SetKeywords( FROM_UTF8( StrPurge( line + SZ( "Kw" ) ) ) );
         }
 
         else if( TESTLINE( ".SolderPasteRatio" ) )
@@ -1082,54 +1088,58 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
                 tmp = -0.50;
             if( tmp > 0.0 )
                 tmp = 0.0;
-            module->SetLocalSolderPasteMarginRatio( tmp );
+            aModule->SetLocalSolderPasteMarginRatio( tmp );
         }
 
         else if( TESTLINE( ".SolderPaste" ) )
         {
             BIU tmp = biuParse( line + SZ( ".SolderPaste" ) );
-            module->SetLocalSolderPasteMargin( tmp );
+            aModule->SetLocalSolderPasteMargin( tmp );
         }
 
         else if( TESTLINE( ".SolderMask" ) )
         {
             BIU tmp = biuParse( line + SZ( ".SolderMask" ) );
-            module->SetLocalSolderMaskMargin( tmp );
+            aModule->SetLocalSolderMaskMargin( tmp );
         }
 
         else if( TESTLINE( ".LocalClearance" ) )
         {
             BIU tmp = biuParse( line + SZ( ".LocalClearance" ) );
-            module->SetLocalClearance( tmp );
+            aModule->SetLocalClearance( tmp );
         }
 
         else if( TESTLINE( ".ZoneConnection" ) )
         {
             int tmp = intParse( line + SZ( ".ZoneConnection" ) );
-            module->SetZoneConnection( (ZoneConnection)tmp );
+            aModule->SetZoneConnection( (ZoneConnection)tmp );
         }
 
         else if( TESTLINE( ".ThermalWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( ".ThermalWidth" ) );
-            module->SetThermalWidth( tmp );
+            aModule->SetThermalWidth( tmp );
         }
 
         else if( TESTLINE( ".ThermalGap" ) )
         {
             BIU tmp = biuParse( line + SZ( ".ThermalGap" ) );
-            module->SetThermalGap( tmp );
+            aModule->SetThermalGap( tmp );
         }
 
         else if( TESTLINE( "$EndMODULE" ) )
         {
-            module->CalculateBoundingBox();
+            aModule->CalculateBoundingBox();
 
-            return module.release();     // preferred exit
+            return;     // preferred exit
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndMODULE'" );
+    wxString msg = wxString::Format(
+                        wxT( "Missing '$EndMODULE' for MODULE '%s'" ),
+                        GetChars( aModule->GetLibRef() ) );
+
+    THROW_IO_ERROR( msg );
 }
 
 
@@ -1160,7 +1170,9 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             // sscanf( PtLine, " %s %d %d %d %d %d", BufCar, &m_Size.x, &m_Size.y, &m_DeltaSize.x, &m_DeltaSize.y, &m_Orient );
             while( isSpace( *data ) )
                 ++data;
-            int     padshape = *data++;
+
+            unsigned char   padchar = (unsigned char) *data++;
+            int             padshape;
 
             BIU     size_x   = biuParse( data, &data );
             BIU     size_y   = biuParse( data, &data );
@@ -1168,15 +1180,19 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             BIU     delta_y  = biuParse( data, &data );
             double  orient   = degParse( data );
 
-            switch( padshape )
+            switch( padchar )
             {
             case 'C':   padshape = PAD_CIRCLE;      break;
             case 'R':   padshape = PAD_RECT;        break;
             case 'O':   padshape = PAD_OVAL;        break;
             case 'T':   padshape = PAD_TRAPEZOID;   break;
             default:
-                m_error.Printf( _( "Unknown padshape '%s' on line:%d" ),
-                    FROM_UTF8( line ).GetData(), m_reader->LineNumber() );
+                m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line:%d of module:'%s'" ),
+                    padchar,
+                    padchar,
+                    m_reader->LineNumber(),
+                    GetChars( aModule->GetLibRef() )
+                    );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -1372,8 +1388,12 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
     case 'A':   shape = S_ARC;       break;
     case 'P':   shape = S_POLYGON;   break;
     default:
-        m_error.Printf( wxT( "Unknown EDGE_MODULE type '%s' line %d" ),
-                        FROM_UTF8( line ).GetData(), m_reader->LineNumber() );
+        m_error.Printf( wxT( "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of module:'%s'" ),
+                        (unsigned char) line[1],
+                        (unsigned char) line[1],
+                        m_reader->LineNumber(),
+                        GetChars( aModule->GetLibRef() )
+                        );
         THROW_IO_ERROR( m_error );
     }
 
@@ -4036,9 +4056,27 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
         // test first for the $MODULE, even before reading because of INDEX bug.
         if( TESTLINE( "$MODULE" ) )
         {
-            MODULE* m = m_owner->LoadMODULE();
+            auto_ptr<MODULE>    module( new MODULE( m_owner->m_board ) );
 
-            std::string footprintName = TO_UTF8( m->GetLibRef() );
+            std::string         footprintName = StrPurge( line + SZ( "$MODULE" ) );
+
+            // set the footprint name first thing, so exceptions can use name.
+            module->SetLibRef( FROM_UTF8( footprintName.c_str() ) );
+
+#if 0 && defined( DEBUG )
+            printf( "%s\n", footprintName.c_str() );
+            if( footprintName == "QFN40" )
+            {
+                int breakhere = 1;
+                (void) breakhere;
+            }
+#endif
+
+            m_owner->LoadMODULE( module.get() );
+
+            MODULE* m = module.release();   // exceptions after this are not expected.
+
+            wxASSERT( footprintName == TO_UTF8( m->GetLibRef() ) );
 
             /*
 

@@ -26,10 +26,12 @@ languages.  Only C is installed by default and C++ is required to build KiCad.
 
 Bazaar
 ------
-KiCad uses the Bazaar version control system to track source code changes.
+KiCad uses the Bazaar version control system to track source code changes,
+and download the boost libraries needed by Kicad.
 The easiest way to get a copy of the KiCad source is to use Bazaar.  Bazaar
-can be download from http://http://wiki.bazaar.canonical.com/WindowsDownloads.
-Your best bet is to use the stand alone version of Bazaar rather than one of
+can be download from http://wiki.bazaar.canonical.com/WindowsDownloads.
+Your best bet is to use the stand alone version of Bazaar
+(which includes bzrtools, needed Kicad) rather than one of
 the Python specific versions.
 
 CMake
@@ -87,7 +89,7 @@ MinGW linker.
 Build and Install the wxWidgets Library
 ---------------------------------------
 The wxWidgets library is the base that KiCad is built upon.  Version 2.9.4
-or later of wxWidgets should be used on Windows.  You may be able to build
+or later of wxWidgets *should be* used on Windows.  You may be able to build
 KiCad with older versions of wxWidgets but it is not recommended.  wxWidgets
 can be downloaded from http://http://www.wxwidgets.org/downloads/
 
@@ -107,16 +109,10 @@ install the wxWidgets library into MinGW then enter the following commands:
 If you want to install wxWidgets in MinGW then enter the following commands:
 #mkdir Release
 #cd Release
-#../configure --prefix=/mingw --with-opengl
+#../configure --prefix=/mingw --enable-monolithic=no --disable-shared --with-opengl
 #make && make install
-#move /mingw/lib/wxmsw*.dll /mingw/bin
 
-The last command is critical so that the libraries are in the MinGW PATH
-and can be found at run time.  If you want to build a full debugging version
-of wxWidgets, add --enable-debug to the configure command.  If you are going
-to use the GNU debugger, you may also want to build the debugging libraries
-with the extra GDB debugging information by adding --enable-debug_gdb to the
-configure command.
+wxWidgets will be statically linked to Kicad, which avoid issus with wxWidgets dlls
 
 Download the KiCad Source Code
 ------------------------------
@@ -229,5 +225,5 @@ To build the HTML developer documentation, run the following commands:
 #cd <kicadSource>/build/debug
 #make doxygen-docs
 
-The documentation will be created in the <kicadSouce>/Documenation/html
+The documentation will be created in the <kicadSouce>/Documentation/html
 directory.

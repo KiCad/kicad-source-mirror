@@ -34,20 +34,28 @@
 namespace PCAD2KICAD {
 
 static KEYWORD empty_keywords[1] = {};
+static const char ACCEL_ASCII_KEYWORD[] = "ACCEL_ASCII";
 
 void LoadInputFile( wxString aFileName, wxXmlDocument* aXmlDoc )
 {
+    char      line[sizeof( ACCEL_ASCII_KEYWORD )];
     int       tok;
     XNODE*    iNode = NULL, *cNode = NULL;
-    wxString  str;
-    bool      growing = false;
-    bool      attr = false;
+    wxString  str, propValue, content;
     wxCSConv  conv( wxT( "windows-1251" ) );
 
     FILE* fp = wxFopen( aFileName, wxT( "rt" ) );
 
     if( !fp )
         THROW_IO_ERROR( wxT( "Unable to open file: " ) + aFileName );
+
+    // check file format
+    if( !fgets( line, sizeof( line ), fp )
+        || strcmp( line, ACCEL_ASCII_KEYWORD ) )
+        THROW_IO_ERROR( "Unknown file type" );
+
+    // rewind the file
+    fseek( fp, 0, SEEK_SET );
 
     // lexer now owns fp, will close on exception or return
     DSNLEXER lexer( empty_keywords, 0, fp,  aFileName );
@@ -56,21 +64,6 @@ void LoadInputFile( wxString aFileName, wxXmlDocument* aXmlDoc )
 
     while( ( tok = lexer.NextTok() ) != DSN_EOF )
     {
-        if( growing && ( tok == DSN_LEFT || tok == DSN_RIGHT ) )
-        {
-            if( attr )
-            {
-                cNode->AddAttribute( wxT( "Name" ), str.Trim( false ) );
-            }
-            else if( str != wxEmptyString )
-            {
-                cNode->AddChild( new XNODE( wxXML_TEXT_NODE, wxEmptyString, str ) );
-            }
-
-            growing = false;
-            attr = false;
-        }
-
         if( tok == DSN_RIGHT )
         {
             iNode = iNode->GetParent();
@@ -82,14 +75,33 @@ void LoadInputFile( wxString aFileName, wxXmlDocument* aXmlDoc )
             cNode = new XNODE( wxXML_ELEMENT_NODE, wxString( lexer.CurText(), conv ) );
             iNode->AddChild( cNode );
             iNode = cNode;
-            growing = true;
         }
-        else
+        else if( cNode )
         {
-            str += wxT( ' ' );
-            str += wxString( lexer.CurText(), conv );
+            str = wxString( lexer.CurText(), conv );
             if( tok == DSN_STRING )
-                attr = true;
+            {
+                // update attribute
+                if( iNode->GetAttribute( wxT( "Name" ), &propValue ) )
+                {
+                    iNode->DeleteAttribute( wxT( "Name" ) );
+                    iNode->AddAttribute( wxT( "Name" ), propValue + wxT( ' ' ) + str );
+                }
+                else
+                    iNode->AddAttribute( wxT( "Name" ), str );
+            }
+            else if( str != wxEmptyString )
+            {
+                // update node content
+                content = cNode->GetNodeContent() + wxT( ' ' ) + str;
+
+                if( cNode->GetChildren() )
+                    cNode->GetChildren()->SetContent( content );
+                else
+                    cNode->AddChild( new wxXmlNode( wxXML_TEXT_NODE,
+                                                    wxEmptyString,
+                                                    content ) );
+            }
         }
     }
 

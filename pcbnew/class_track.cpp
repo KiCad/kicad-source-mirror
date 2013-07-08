@@ -176,7 +176,7 @@ wxString SEGZONE::GetSelectMenuText() const
         nettxt = wxT( "???" );
     }
 
-    text.Printf( _( "Zone (%08lX) [%s] on %s" ), 
+    text.Printf( _( "Zone (%08lX) [%s] on %s" ),
                  m_TimeStamp, GetChars( nettxt ), GetChars( GetLayerName() ) );
 
     return text;
@@ -738,10 +738,11 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                 GRSetDrawMode( aDC, GR_COPY );
 
             tsize = (tsize * 7) / 10;       // small reduction to give a better look
-            DrawGraphicHaloText( panel, aDC, tpos,
-                                    color, BLACK, WHITE, net->GetShortNetname(), angle, 
+            EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
+            DrawGraphicHaloText( clipbox, aDC, tpos,
+                                    color, BLACK, WHITE, net->GetShortNetname(), angle,
                                     wxSize( tsize, tsize ),
-                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, 
+                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                     tsize / 7,
                                     false, false );
         }
@@ -947,7 +948,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                 m_Start.x + aOffset.x - bx,
                 m_Start.y + aOffset.y - by, 0, color );
 
-        // lines for the bottom layer 
+        // lines for the bottom layer
         ax = 0; ay = radius; bx = 0; by = drill_radius;
         RotatePoint( &ax, &ay, layer_bottom * 3600.0 / brd->GetCopperLayerCount( ) );
         RotatePoint( &bx, &by, layer_bottom * 3600.0 / brd->GetCopperLayerCount( ) );
@@ -982,10 +983,11 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
             if( (aDrawMode & GR_XOR) == 0 )
                 GRSetDrawMode( aDC, GR_COPY );
 
-            DrawGraphicHaloText( panel, aDC, m_Start,
-                                 color, WHITE, BLACK, net->GetShortNetname(), 0, 
+            EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
+            DrawGraphicHaloText( clipbox, aDC, m_Start,
+                                 color, WHITE, BLACK, net->GetShortNetname(), 0,
                                  wxSize( tsize, tsize ),
-                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, 
+                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                  tsize / 7, false, false );
         }
     }

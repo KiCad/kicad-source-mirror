@@ -82,18 +82,26 @@ class PCB_PARSER : public PCB_LEXER
     void parseSetup() throw( IO_ERROR, PARSE_ERROR );
     void parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR );
     void parseNETCLASS() throw( IO_ERROR, PARSE_ERROR );
-    DRAWSEGMENT* parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR );
-    TEXTE_PCB* parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR );
-    DIMENSION* parseDIMENSION() throw( IO_ERROR, PARSE_ERROR );
-    MODULE* parseMODULE() throw( IO_ERROR, PARSE_ERROR );
-    TEXTE_MODULE* parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR );
-    EDGE_MODULE* parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR );
-    D_PAD* parseD_PAD() throw( IO_ERROR, PARSE_ERROR );
-    TRACK* parseTRACK() throw( IO_ERROR, PARSE_ERROR );
-    SEGVIA* parseSEGVIA() throw( IO_ERROR, PARSE_ERROR );
+
+    DRAWSEGMENT*    parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR );
+    TEXTE_PCB*      parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR );
+    DIMENSION*      parseDIMENSION() throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * Function parseModule
+     * @param aInitialComments may be a pointer to a heap allocated initial comment block
+     *   or NULL.  If not NULL, then caller has given ownership of a wxArrayString to
+     *   this function and care must be taken to delete it even on exception.
+     */
+    MODULE*         parseMODULE( wxArrayString* aInitialComments = 0 ) throw( IO_ERROR, PARSE_ERROR );
+    TEXTE_MODULE*   parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR );
+    EDGE_MODULE*    parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR );
+    D_PAD*          parseD_PAD() throw( IO_ERROR, PARSE_ERROR );
+    TRACK*          parseTRACK() throw( IO_ERROR, PARSE_ERROR );
+    SEGVIA*         parseSEGVIA() throw( IO_ERROR, PARSE_ERROR );
     ZONE_CONTAINER* parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR );
-    PCB_TARGET* parsePCB_TARGET() throw( IO_ERROR, PARSE_ERROR );
-    BOARD* parseBOARD() throw( IO_ERROR, PARSE_ERROR );
+    PCB_TARGET*     parsePCB_TARGET() throw( IO_ERROR, PARSE_ERROR );
+    BOARD*          parseBOARD() throw( IO_ERROR, PARSE_ERROR );
 
 
     /**

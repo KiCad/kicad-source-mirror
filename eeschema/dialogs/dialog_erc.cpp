@@ -35,6 +35,7 @@
 #include <appl_wxstruct.h>
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
+#include <invoke_sch_dialog.h>
 
 #include <general.h>
 #include <netlist.h>
@@ -45,6 +46,7 @@
 #include <dialog_erc.h>
 #include <dialog_erc_listbox.h>
 #include <erc.h>
+#include <id.h>
 
 
 bool DIALOG_ERC::m_writeErcFile = false;
@@ -57,7 +59,10 @@ END_EVENT_TABLE()
 
 
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
-    DIALOG_ERC_BASE( parent )
+    DIALOG_ERC_BASE(
+        parent,
+        ID_DIALOG_ERC       // parent looks for this ID explicitly
+        )
 {
     m_parent = parent;
     Init();
@@ -563,4 +568,15 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
             ExecuteFile( this, wxGetApp().GetEditorName(), QuoteFullPath( fn ) );
         }
     }
+}
+
+
+wxDialog* InvokeDialogERC( SCH_EDIT_FRAME* aCaller )
+{
+    // This is a modeless dialog, so new it rather than instantiating on stack.
+    DIALOG_ERC* dlg = new DIALOG_ERC( aCaller );
+
+    dlg->Show( true );
+
+    return dlg;     // wxDialog is information hiding about DIALOG_ERC.
 }

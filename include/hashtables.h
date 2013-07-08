@@ -59,28 +59,73 @@ typedef std::unordered_map< std::string, EDA_RECT >  RECT_MAP;
 /// Map a std::string to a wxString, used in PLUGINs.
 typedef boost::unordered_map< std::string, wxString >  PROPERTIES;
 
-/// Map a std::string to an integer.  Used in DSNLEXER.
-typedef boost::unordered_map< std::string, int >       KEYWORD_MAP;
+
+/// Equality test for "const char*" type used in very specialized KEYWORD_MAP below
+struct iequal_to : std::binary_function< const char*, const char*, bool >
+{
+    bool operator()( const char* x, const char* y ) const
+    {
+        return !strcmp( x, y );
+    }
+};
+
+
+/// Very fast and efficient hash function for "const char*" type, used in specialized
+/// KEYWORD_MAP below.
+/// taken from: http://www.boost.org/doc/libs/1_53_0/libs/unordered/examples/fnv1.hpp
+struct fnv_1a
+{
+    /* not used, std::string is too slow:
+    std::size_t operator()( std::string const& text ) const
+    {
+        std::size_t hash = 2166136261u;
+
+        for( std::string::const_iterator it = text.begin(), end = text.end();
+                it != end;  ++it )
+        {
+            hash ^= *it;
+            hash *= 16777619;
+        }
+        return hash;
+    }
+    */
+
+    std::size_t operator()( const char* it ) const
+    {
+        std::size_t hash = 2166136261u;
+
+        for( ; *it;  ++it )
+        {
+            hash ^= *it;
+            hash *= 16777619;
+        }
+        return hash;
+    }
+};
+
+
+/**
+ * Type KEYWORD_MAP
+ * is a hashtable made of a const char* and an int.  Note that use of this
+ * type outside very specific circumstances is foolish since there is no storage
+ * provided for the actual C string itself.  This type assumes use with type KEYWORD
+ * that is created by CMake and that table creates *constant* storage for C strings
+ * (and pointers to those C strings).  Here we are only interested in the C strings
+ * themselves and only the pointers are duplicated within the hashtable.
+ * If the strings were not constant and fixed, this type would not work.
+ * Also note that normally a hashtable (i.e. unordered_map) using a const char* key
+ * would simply compare the 32 bit or 64 bit pointers themselves, rather than
+ * the C strings which they are known to point to in this context.
+ * I force the latter behavior by supplying both "hash" and "equality" overloads
+ * to the hashtable (unordered_map) template.
+ * @author Dick Hollenbeck
+ */
+typedef boost::unordered_map< const char*, int, fnv_1a, iequal_to >     KEYWORD_MAP;
+
 
 /// Map a std::string to an EDA_RECT.
 /// The key is the classname of the derived wxformbuilder dialog.
 typedef boost::unordered_map< std::string, EDA_RECT >  RECT_MAP;
-
-
-#elif 0     // wx is inconsistent across platforms, will soon switch to boost
-
-// http://docs.wxwidgets.org/trunk/classwx_hash_map.html
-#include <wx/hashmap.h>
-
-/// Map a C string to a wxString, used in PLUGINs.
-WX_DECLARE_HASH_MAP( char*, wxString, wxStringHash, wxStringEqual, PROPERTIES );
-
-/// Map a C string to an integer.  Used in DSNLEXER.
-WX_DECLARE_HASH_MAP( char*, int, wxStringHash, wxStringEqual, KEYWORD_MAP );
-
-/// Map a C string to an EDA_RECT.
-/// The key is the classname of the derived wxformbuilder dialog.
-WX_DECLARE_HASH_MAP( char*, EDA_RECT, wxStringHash, wxStringEqual, RECT_MAP );
 
 #endif
 

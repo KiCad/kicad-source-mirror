@@ -130,7 +130,22 @@ public:
 
     int GetUnit() const { return m_unit; }
 
+    /**
+     * change the unit id to aUnit
+     * has maening only for multiple parts per package
+     * Also set the modified flag bit
+     * @param aUnit = the new unit Id
+     */
     void SetUnit( int aUnit );
+
+    /**
+     * change the unit id to aUnit
+     * has maening only for multiple parts per package
+     * Do not change the modified flag bit, and should be used when
+     * change is not due to an edition command
+     * @param aUnit = the new unit Id
+     */
+    void UpdateUnit( int aUnit );
 
     int GetConvert() const { return m_convert; }
 

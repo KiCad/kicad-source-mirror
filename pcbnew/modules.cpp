@@ -180,6 +180,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
                 pt_segm = g_DragSegmentList[ii].m_Track;
                 pt_segm->Draw( Panel, DC, GR_XOR );
                 pt_segm->SetState( IN_EDIT, false );
+                pt_segm->ClearFlags();
                 g_DragSegmentList[ii].RestoreInitialValues();
                 pt_segm->Draw( Panel, DC, GR_OR );
             }
@@ -405,6 +406,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
     {
         TRACK * track = g_DragSegmentList[ii].m_Track;
         track->SetState( IN_EDIT, false );
+        track->ClearFlags();
 
         if( aDC )
             track->Draw( m_canvas, aDC, GR_OR );

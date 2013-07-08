@@ -67,7 +67,6 @@ bool SCH_REFERENCE_LIST::sortByXPosition( const SCH_REFERENCE& item1,
     return ii < 0;
 }
 
-
 bool SCH_REFERENCE_LIST::sortByYPosition( const SCH_REFERENCE& item1,
                                           const SCH_REFERENCE& item2 )
 {
@@ -106,252 +105,6 @@ bool SCH_REFERENCE_LIST::sortByRefAndValue( const SCH_REFERENCE& item1,
     return ii < 0;
 }
 
-bool SCH_REFERENCE_LIST::sortByValueAndRef( const SCH_REFERENCE& item1,
-                                            const SCH_REFERENCE& item2 )
-{
-    int ii = item1.CompareValue( item2 );
-
-    if( ii == 0 )
-        ii = RefDesStringCompare( item1.GetRef(), item2.GetRef() );
-
-    if( ii == 0 )
-        ii = item1.m_Unit - item2.m_Unit;
-
-    if( ii == 0 )
-        ii = item1.m_SheetNum - item2.m_SheetNum;
-
-    if( ii == 0 )
-        ii = item1.m_CmpPos.x - item2.m_CmpPos.x;
-
-    if( ii == 0 )
-        ii = item1.m_CmpPos.y - item2.m_CmpPos.y;
-
-    if( ii == 0 )
-        ii = item1.m_TimeStamp - item2.m_TimeStamp;
-
-    return ii < 0;
-}
-
-/*
- * Helper function to calculate in a component value string
- * the value, depending on multiplier symbol:
- * pico
- * nano
- * micro (u)
- * milli (m)
- * kilo (k ou K)
- * Mega
- * Giga
- * Tera
- *
- * with notations like 1K; 1.5K; 1,5K; 1k5
- * returns true if the string is a value, false if not
- * (a value is a string starting by a number)
- */
-
-static bool engStrToDouble( wxString aStr, double* aDouble )
-{
-    // A trick to take care of strings without a multiplier
-    aStr.Append( wxT( "R" ) );
-
-    // Regular expression for a value string, e.g., 47k2
-#if defined(KICAD_GOST)
-    static wxRegEx valueRegEx( wxT( "^([0-9]+)(мк|[pnumRkKMGT.,кнМГ])([0-9]*)(мк*|[pnumRkKMGTкнМГ]*)" ) );
-#else
-    static wxRegEx valueRegEx( wxT( "^([0-9]+)([pnumRkKMGT.,])([0-9]*)([pnumRkKMGT]*)" ) );
-#endif
-
-    if( !valueRegEx.Matches( aStr ) )
-        return false;
-
-    wxString valueStr = wxString( valueRegEx.GetMatch( aStr, 1 )
-                                  + wxT( "." )
-                                  + valueRegEx.GetMatch( aStr, 3 ) );
-    wxString multiplierString = valueRegEx.GetMatch( aStr, 2 );
-#if defined(KICAD_GOST)
-    if ( multiplierString == wxT( "мк" ) )
-        multiplierString = wxT( "u" );
-    else if ( multiplierString == wxT( "к" ) )
-        multiplierString = wxT( "k" );
-    else if ( multiplierString == wxT( "н" ) )
-        multiplierString = wxT( "n" );
-    else if ( multiplierString == wxT( "М" ) )
-        multiplierString = wxT( "M" );
-    else if ( multiplierString == wxT( "Г" ) )
-        multiplierString = wxT( "G" );
-#endif
-    wxString post_multiplierString = valueRegEx.GetMatch( aStr, 4 );
-#if defined(KICAD_GOST)
-    if ( post_multiplierString == wxT( "мк" ) )
-        multiplierString = wxT( "u" );
-    else if ( post_multiplierString == wxT( "к" ) )
-        multiplierString = wxT( "k" );
-    else if ( post_multiplierString == wxT( "н" ) )
-        multiplierString = wxT( "n" );
-    else if ( post_multiplierString == wxT( "М" ) )
-        multiplierString = wxT( "M" );
-    else if ( post_multiplierString == wxT( "Г" ) )
-        multiplierString = wxT( "G" );
-#endif
-    double multiplier;
-
-    switch( (wxChar)multiplierString[0] )
-    {
-    case 'p':
-        multiplier = 1e-12;
-        break;
-    case 'n':
-        multiplier = 1e-9;
-        break;
-    case 'u':
-        multiplier = 1e-6;
-        break;
-    case 'm':
-        multiplier = 1e-3;
-        break;
-    case 'k':
-    case 'K':
-        multiplier = 1e3;
-        break;
-    case 'M':
-        multiplier = 1e6;
-        break;
-    case 'G':
-        multiplier = 1e9;
-        break;
-    case 'T':
-        multiplier = 1e12;
-        break;
-    case 'R':
-    case '.':       // floating point separator
-    case ',':       // floating point separator (some languages)
-    default:
-        multiplier = 1;
-        break;
-    }
-
-    switch( (wxChar)post_multiplierString[0] )
-    {
-    case 'p':
-        multiplier = 1e-12;
-        break;
-    case 'n':
-        multiplier = 1e-9;
-        break;
-    case 'u':
-        multiplier = 1e-6;
-        break;
-    case 'm':
-        multiplier = 1e-3;
-        break;
-    case 'k':
-    case 'K':
-        multiplier = 1e3;
-        break;
-    case 'M':
-        multiplier = 1e6;
-        break;
-    case 'G':
-        multiplier = 1e9;
-        break;
-    case 'T':
-        multiplier = 1e12;
-        break;
-    case 'R':
-    default:
-        break;
-    }
-
-    LOCALE_IO dummy;    // set to C floating point standard
-    valueStr.ToDouble( aDouble );
-    *aDouble *= multiplier;
-
-    return true;
-}
-
-
-static bool splitRefStr( const wxString& aRef, wxString* aStr, int* aNumber )
-{
-    static wxRegEx refRegEx( wxT( "^([a-zA-Z]+)([0-9]+)" ) );
-
-    if( !refRegEx.Matches( aRef ) )
-        return false;
-
-    *aStr = refRegEx.GetMatch( aRef, 1 );
-    *aNumber = wxAtoi( refRegEx.GetMatch( aRef, 2 ) );
-    return true;
-}
-
-/* sort the list of references by value.
- * Components are grouped by type and are sorted by value:
- * The value of a component accept multiplier symbols (p, n, K ..)
- * groups are made by first letter of reference
- */
-bool SCH_REFERENCE_LIST::sortByValueOnly( const SCH_REFERENCE& item1,
-                                          const SCH_REFERENCE& item2 )
-{
-    // First, group by type according to reference text part (R, C, etc.)
-    wxString text1 = item1.GetComponent()->GetField( REFERENCE )->GetText();
-    wxString text2 = item2.GetComponent()->GetField( REFERENCE )->GetText();
-    wxString refNameStr1, refNameStr2;
-    int refNumber1, refNumber2;
-
-    if( !splitRefStr( text1, &refNameStr1, &refNumber1 ) )
-        return false;
-
-    if( !splitRefStr( text2, &refNameStr2, &refNumber2 ) )
-        return false;
-
-    int ii = refNameStr1.CmpNoCase( refNameStr2 );
-
-    if( ii != 0 )
-        return ii < 0;
-
-    // We can compare here 2 values relative to components of the same type
-    // assuming references are correctly chosen
-    text1 = item1.GetComponent()->GetField( VALUE )->GetText();
-    text2 = item2.GetComponent()->GetField( VALUE )->GetText();
-
-    double value1, value2;
-
-    // Try to convert value to double (4k7 -> 4700 etc.)
-    bool match1 = engStrToDouble( text1, &value1 );
-    bool match2 = engStrToDouble( text2, &value2 );
-
-    // Values come before other strings
-    if( match1 && !match2 )
-        return true;
-
-    // Values come before other strings
-    if( !match1 && match2 )
-        return false;
-
-    if( match1 && match2 && (value1 != value2) )
-        return value1 < value2;
-
-    // Inside a group of components of same value, it could be good to group per footprints
-    text1 = item1.GetComponent()->GetField( FOOTPRINT )->GetText();
-    text2 = item2.GetComponent()->GetField( FOOTPRINT )->GetText();
-    ii = text1.CmpNoCase( text2 );
-
-    if( ii != 0 )
-        return ii < 0;
-
-    if( refNumber1 != refNumber2 )
-        return refNumber1 < refNumber2;
-
-    // Fall back to normal string compare
-    ii = text1.CmpNoCase( text2 );
-
-    if( ii == 0 )
-        ii = RefDesStringCompare( item1.GetRef(), item2.GetRef() );
-
-    if( ii == 0 )
-        ii = item1.m_Unit - item2.m_Unit;
-
-    return ii < 0;
-}
-
 
 bool SCH_REFERENCE_LIST::sortByReferenceOnly( const SCH_REFERENCE& item1,
                                               const SCH_REFERENCE& item2 )
@@ -384,7 +137,6 @@ bool SCH_REFERENCE_LIST::sortByTimeStamp( const SCH_REFERENCE& item1,
 
     return ii < 0;
 }
-
 
 int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit )
 {
@@ -713,14 +465,14 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
               && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF )  )
             {
                 msg.Printf( _( "Item not annotated: %s%s (unit %d)\n" ),
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ),
                             componentFlatList[ii].m_Unit );
             }
             else
             {
                 msg.Printf( _( "Item not annotated: %s%s\n" ),
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ) );
             }
 
@@ -782,15 +534,15 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             if( ( componentFlatList[ii].m_Unit > 0 )
              && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF ) )
             {
-                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ), 
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ),
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ),
                             componentFlatList[ii].m_Unit );
             }
             else
             {
                 msg.Printf( _( "Multiple item %s%s\n" ),
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ) );
             }
 
@@ -814,15 +566,15 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             if( ( componentFlatList[ii].m_Unit > 0 )
              && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF ) )
             {
-                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ), 
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ),
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ),
                             componentFlatList[ii].m_Unit );
             }
             else
             {
                 msg.Printf( _( "Multiple item %s%s\n" ),
-                            GetChars( componentFlatList[ii].GetRef() ), 
+                            GetChars( componentFlatList[ii].GetRef() ),
                             GetChars( tmp ) );
             }
 
@@ -837,27 +589,17 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
 
         if( componentFlatList[ii].CompareValue( componentFlatList[next] ) != 0 )
         {
-#if defined(KICAD_GOST)
-            msg.Printf( _( "Different values for %s%d.%d (%s) and %s%d.%d (%s)" ),
+            msg.Printf( _( "Different values for %s%d%s (%s) and %s%d%s (%s)" ),
                         GetChars( componentFlatList[ii].GetRef() ),
                         componentFlatList[ii].m_NumRef,
-                        componentFlatList[ii].m_Unit,
+                        GetChars( LIB_COMPONENT::ReturnSubReference(
+                                  componentFlatList[ii].m_Unit ) ),
                         GetChars( componentFlatList[ii].m_Value->GetText() ),
                         GetChars( componentFlatList[next].GetRef() ),
                         componentFlatList[next].m_NumRef,
-                        componentFlatList[next].m_Unit,
-                        componentFlatList[next].m_Value->GetText().GetData() );
-#else
-            msg.Printf( _( "Different values for %s%d%c (%s) and %s%d%c (%s)" ),
-                        GetChars( componentFlatList[ii].GetRef() ),
-                        componentFlatList[ii].m_NumRef,
-                        componentFlatList[ii].m_Unit + 'A' - 1,
-                        GetChars( componentFlatList[ii].m_Value->GetText() ),
-                        GetChars( componentFlatList[next].GetRef() ),
-                        componentFlatList[next].m_NumRef,
-                        componentFlatList[next].m_Unit + 'A' - 1,
+                        GetChars( LIB_COMPONENT::ReturnSubReference(
+                                  componentFlatList[next].m_Unit ) ),
                         GetChars( componentFlatList[next].m_Value->GetText() ) );
-#endif
 
             if( aMessageList )
                 aMessageList->Add( msg + wxT( "\n" ));

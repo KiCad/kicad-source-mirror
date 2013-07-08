@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <hashtables.h>
 
 #include <richio.h>
 
@@ -101,15 +102,15 @@ protected:
 
     bool                commentsAreTokens;      ///< true if should return comments as tokens
 
-    int                 prevTok;        ///< curTok from previous NextTok() call.
-    int                 curOffset;      ///< offset within current line of the current token
+    int                 prevTok;                ///< curTok from previous NextTok() call.
+    int                 curOffset;              ///< offset within current line of the current token
 
-    int                 curTok;         ///< the current token obtained on last NextTok()
-    std::string         curText;        ///< the text of the current token
-    std::string         lowercase;      ///< a scratch buf holding token in lowercase
+    int                 curTok;                 ///< the current token obtained on last NextTok()
+    std::string         curText;                ///< the text of the current token
 
-    const KEYWORD*      keywords;
-    unsigned            keywordCount;
+    const KEYWORD*      keywords;               ///< table sorted by CMake for bsearch()
+    unsigned            keywordCount;           ///< count of keywords table
+    KEYWORD_MAP         keyword_hash;           ///< fast, specialized "C string" hashtable
 
     void init();
 
@@ -133,19 +134,6 @@ protected:
         return 0;
     }
 
-
-    /**
-     * Function readLineOrCmt
-     * reads a line from the LINE_READER and returns either:
-     * <ol>
-     * <li> a positive line length (a +1 if empty line)
-     * <li> zero of end of file.
-     * <li> DSN_COMMENT if the line is a comment
-     * </ol>
-     */
-    int readLineOrCmt();
-
-
     /**
      * Function findToken
      * takes a string and looks up the string in the list of expected
@@ -153,7 +141,8 @@ protected:
      *
      * @param tok A string holding the token text to lookup, in an
      *   unpredictable case: uppercase or lowercase
-     * @return int - DSN_T or -1 if argument string is not a recognized token.
+     * @return int - DSN_T matching the keyword text, or DSN_SYMBOL if argument
+     *   string is not a recognized token.
      */
     int findToken( const std::string& tok );
 
@@ -167,6 +156,8 @@ protected:
 
         return false;
     }
+
+
 #endif
 
 public:
@@ -367,6 +358,19 @@ public:
         commentsAreTokens = val;
         return old;
     }
+
+    /**
+     * Function ReadCommentLines
+     * checks the next sequence of tokens and reads them into a wxArrayString
+     * if they are comments.  Reading continues until a non-comment token is
+     * encountered, and such last read token remains as CurTok() and as CurText().
+     * No push back or "un get" mechanism is used for this support.  Upon return
+     * you simply avoid calling NextTok() for the next token, but rather CurTok().
+     *
+     * @return wxArrayString* - heap allocated block of comments, or NULL if none;
+     *   caller owns the allocation and must delete if not NULL.
+     */
+    wxArrayString* ReadCommentLines() throw( IO_ERROR );
 
     /**
      * Function IsSymbol

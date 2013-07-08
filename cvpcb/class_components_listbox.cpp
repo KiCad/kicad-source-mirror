@@ -1,6 +1,29 @@
-/*************************************************************************/
-/* listboxes.cpp: class for displaying footprint list and component list */
-/*************************************************************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file class_components_listbox.h
+ */
 
 #include <fctsys.h>
 #include <wxstruct.h>
@@ -8,15 +31,11 @@
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
 #include <cvstruct.h>
+#include <cvpcb_id.h>
 
-
-/**************************************************/
-/* ListBox handling the schematic components list */
-/**************************************************/
 
 COMPONENTS_LISTBOX::COMPONENTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,
-                                        const wxPoint& loc, const wxSize& size,
-                                        int nbitems, wxString choice[] ) :
+                                        const wxPoint& loc, const wxSize& size ) :
     ITEMS_LISTBOX_BASE( parent, id, loc, size, LISTB_STYLE & ~wxLC_SINGLE_SEL )
 {
 }
@@ -27,12 +46,10 @@ COMPONENTS_LISTBOX::~COMPONENTS_LISTBOX()
 }
 
 
-/* Build the events table for the schematic components list box
- */
-
 BEGIN_EVENT_TABLE( COMPONENTS_LISTBOX, ITEMS_LISTBOX_BASE )
     EVT_SIZE( ITEMS_LISTBOX_BASE::OnSize )
     EVT_CHAR( COMPONENTS_LISTBOX::OnChar )
+    EVT_LIST_ITEM_SELECTED( ID_CVPCB_COMPONENT_LIST, COMPONENTS_LISTBOX::OnSelectComponent )
 END_EVENT_TABLE()
 
 
@@ -53,6 +70,7 @@ void COMPONENTS_LISTBOX::SetString( unsigned linecount, const wxString& text )
 {
     if( linecount >= m_ComponentList.Count() )
         linecount = m_ComponentList.Count() - 1;
+
     if( linecount >= 0 )
         m_ComponentList[linecount] = text;
 }
@@ -65,19 +83,12 @@ void COMPONENTS_LISTBOX::AppendLine( const wxString& text )
 }
 
 
-/*
- * Overlaid function: MUST be provided in wxLC_VIRTUAL mode
- * because real data are not handled by ITEMS_LISTBOX_BASE
- */
 wxString COMPONENTS_LISTBOX::OnGetItemText( long item, long column ) const
 {
     return m_ComponentList.Item( item );
 }
 
 
-/*
- * Enable or disable an item
- */
 void COMPONENTS_LISTBOX::SetSelection( unsigned index, bool State )
 {
     if( (int) index >= GetCount() )
@@ -87,6 +98,7 @@ void COMPONENTS_LISTBOX::SetSelection( unsigned index, bool State )
     {
         Select( index, State );
         EnsureVisible( index );
+
 #ifdef __WXMAC__
         Update();
 #endif
@@ -94,73 +106,73 @@ void COMPONENTS_LISTBOX::SetSelection( unsigned index, bool State )
 }
 
 
-/**
- * Function OnChar
- * called on a key pressed
- * Call default handler for some special keys,
- * and for "ascii" keys, select the first component
- * that the name starts by the letter.
- * This is the defaut behaviour of a listbox, but because we use
- * virtual lists, the listbox does not know anything to what is displayed,
- * we must handle this behaviour here.
- * Furthermore the reference of components is not at the beginning of
- * displayed lines (the first word is the line number)
- */
 void COMPONENTS_LISTBOX::OnChar( wxKeyEvent& event )
 {
     int key = event.GetKeyCode();
+
     switch( key )
     {
-        case WXK_HOME:
-        case WXK_END:
-        case WXK_UP:
-        case WXK_DOWN:
-        case WXK_PAGEUP:
-        case WXK_PAGEDOWN:
-            event.Skip();
-            return;
+    case WXK_TAB:
+    case WXK_RIGHT:
+    case WXK_NUMPAD_RIGHT:
+        GetParent()->ChangeFocus( true );
+        return;
 
-        case WXK_LEFT:
-        case WXK_NUMPAD_LEFT:
-            GetParent()->m_LibraryList->SetFocus();
-            return;
+    case WXK_LEFT:
+    case WXK_NUMPAD_LEFT:
+        GetParent()->ChangeFocus( false );
+        return;
 
-        case WXK_RIGHT:
-        case WXK_NUMPAD_RIGHT:
-            GetParent()->m_FootprintList->SetFocus();
-            return;
+    case WXK_HOME:
+    case WXK_END:
+    case WXK_UP:
+    case WXK_DOWN:
+    case WXK_PAGEUP:
+    case WXK_PAGEDOWN:
+        event.Skip();
+        return;
 
-        default:
-             break;
+
+    default:
+        break;
     }
 
     // Search for an item name starting by the key code:
-    key = toupper(key);
+    key = toupper( key );
+
     for( unsigned ii = 0; ii < m_ComponentList.GetCount(); ii++ )
     {
-        wxString text = m_ComponentList.Item(ii);
-        /* search for the start char of the footprint name.
-         * we must skip the line number
-        */
-        text.Trim(false);      // Remove leading spaces in line
+        wxString text = m_ComponentList.Item( ii );
+
+        // Search for the start char of the footprint name.  Skip the line number.
+        text.Trim( false );      // Remove leading spaces in line
         unsigned jj = 0;
+
         for( ; jj < text.Len(); jj++ )
         {   // skip line number
             if( text[jj] == ' ' )
                 break;
         }
+
         for( ; jj < text.Len(); jj++ )
         {   // skip blanks
             if( text[jj] != ' ' )
                 break;
         }
-        int start_char = toupper(text[jj]);
-        if ( key == start_char )
+
+        int start_char = toupper( text[jj] );
+
+        if( key == start_char )
         {
-            Focus( ii );
             SetSelection( ii, true );   // Ensure visible
             break;
         }
     }
+}
 
+
+void COMPONENTS_LISTBOX::OnSelectComponent( wxListEvent& event )
+{
+    SetFocus();
+    GetParent()->OnSelectComponent( event );
 }

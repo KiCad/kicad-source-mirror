@@ -12,8 +12,11 @@ include_directories(
 
 set(EESCHEMA_DLGS
     dialogs/dialog_color_config.cpp
-    dialogs/annotate_dialog.cpp
+    dialogs/dialog_annotate.cpp
     dialogs/dialog_annotate_base.cpp
+    dialogs/dialog_bom.cpp
+    dialogs/dialog_bom_base.cpp
+    dialogs/dialog_bom_cfg_keywords.cpp
     dialogs/dialog_lib_edit_text.cpp
     dialogs/dialog_lib_edit_text_base.cpp
     dialogs/dialog_edit_component_in_lib.cpp
@@ -201,6 +204,33 @@ make_lexer(
 
     # Pass header file with dependency on *_lexer.h as extra_arg
     template_fieldnames.h
+    )
+
+make_lexer(
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_cfg.keywords
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_cfg_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_cfg_keywords.cpp
+    T_BOMCFG_T
+
+    # Pass header file with dependency on *_lexer.h as extra_arg
+    /dialogs/dialog_bom_cfg.h
+    )
+
+# Create a C++ compilable string initializer containing html text into a *.h file:
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
+    COMMAND ${CMAKE_COMMAND}
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.html
+        -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
+        -P ${CMAKE_MODULE_PATH}/Html2C.cmake
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.html
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
+       from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.html"
+    )
+
+set_source_files_properties( dialogs/dialog_bom.cpp
+    PROPERTIES
+        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
     )
 
 add_executable(eeschema WIN32 MACOSX_BUNDLE

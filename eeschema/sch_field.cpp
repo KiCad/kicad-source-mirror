@@ -194,7 +194,8 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
             color = GetLayerColor( LAYER_FIELDS );
     }
 
-    DrawGraphicText( panel, DC, textpos, color, GetFullyQualifiedText(), orient, m_Size,
+    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
+    DrawGraphicText( clipbox, DC, textpos, color, GetFullyQualifiedText(), orient, m_Size,
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                      LineWidth, m_Italic, m_Bold );
 
@@ -214,9 +215,9 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     textpos  = parentComponent->GetScreenCoord( textpos );
     textpos += parentComponent->GetPosition();
     const int len = 10;
-    GRLine( panel->GetClipBox(), DC,
+    GRLine( clipbox, DC,
             textpos.x - len, textpos.y, textpos.x + len, textpos.y, 0, BLUE );
-    GRLine( panel->GetClipBox(), DC,
+    GRLine( clipbox, DC,
             textpos.x, textpos.y - len, textpos.x, textpos.y + len, 0, BLUE );
 #endif
 }

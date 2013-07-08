@@ -42,16 +42,6 @@
 #include <convert_to_biu.h>
 #include <colors.h>
 
-#if !wxUSE_PRINTING_ARCHITECTURE && !SWIG
-#   error "You must use '--enable-printarch' in your wx library configuration."
-#endif
-
-#if defined( __WXGTK__ )
-#   if !wxUSE_LIBGNOMEPRINT && !wxUSE_GTKPRINT && !SWIG
-#       error "You must use '--with-gnomeprint' or '--with-gtkprint' in your wx library configuration."
-#   endif
-#endif
-
 
 class wxAboutDialogInfo;
 

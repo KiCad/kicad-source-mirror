@@ -1,11 +1,6 @@
 /**
- * @file title_block_shapes.cpp
+ * @file title_block_shape.cpp
  * @brief description of graphic items and texts to build a title block
- */
-
-/*
- * This file creates a lot of structures which define the shape of a title block
- * and frame references
  */
 
 /*
@@ -33,271 +28,261 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+
+/*
+ * the class WORKSHEET_DATAITEM (and WORKSHEET_DATAITEM_TEXT) defines
+ * a basic shape of a page layout ( frame references and title block )
+ * Basic shapes are line, rect and texts
+ * the WORKSHEET_DATAITEM coordinates units is the mm, and are relative to
+ * one of 4 page corners.
+ *
+ * These items cannot be drawn or plot "as this". they should be converted
+ * to a "draw list" (WS_DRAW_ITEM_BASE and derived items)
+
+ * The list of these items is stored in a WORKSHEET_LAYOUT instance.
+ *
+ * When building the draw list:
+ * the WORKSHEET_LAYOUT is used to create a WS_DRAW_ITEM_LIST
+ *  coordinates are converted to draw/plot coordinates.
+ *  texts are expanded if they contain format symbols.
+ *  Items with m_RepeatCount > 1 are created m_RepeatCount times
+ *
+ * the WORKSHEET_LAYOUT is created only once.
+ * the WS_DRAW_ITEM_LIST is created each time the page layout is plot/drawn
+ *
+ * the WORKSHEET_LAYOUT instance is created from a S expression which
+ * describes the page layout (can be the default page layout or a custom file).
+ */
+
 #include <fctsys.h>
 #include <drawtxt.h>
 #include <worksheet.h>
 #include <class_title_block.h>
 #include <worksheet_shape_builder.h>
 
-#define GRID_REF_W                      Mm2mils( 1.8 )  // height of the band reference grid
-#define TEXTSIZE                        Mm2mils( 1.5 )  // worksheet text size
-#define FRMREF_TXTSIZE                  Mm2mils( 1.3 )  // worksheet frame reference text size
-#define VARIABLE_BLOCK_START_POSITION   (TEXTSIZE * 10)
-
-// The coordinates below are relative to the bottom right corner of page and
-// will be subtracted from this origin.
-#define BLOCK_OX                Mm2mils( 106 )
-#define BLOCK_KICAD_VERSION_X   BLOCK_OX - TEXTSIZE
-#define BLOCK_KICAD_VERSION_Y   TEXTSIZE
-#define BLOCK_REV_X             Mm2mils( 22 )
-#define BLOCK_REV_Y             (TEXTSIZE * 3)
-#define BLOCK_DATE_X            BLOCK_OX - (TEXTSIZE * 15)
-#define BLOCK_DATE_Y            (TEXTSIZE * 3)
-#define BLOCK_ID_SHEET_X        Mm2mils( 22 )
-#define BLOCK_ID_SHEET_Y        TEXTSIZE
-#define BLOCK_SIZE_SHEET_X      BLOCK_OX - TEXTSIZE
-#define BLOCK_SIZE_SHEET_Y      (TEXTSIZE * 3)
-#define BLOCK_TITLE_X           BLOCK_OX - TEXTSIZE
-#define BLOCK_TITLE_Y           (TEXTSIZE * 5)
-#define BLOCK_FULLSHEETNAME_X   BLOCK_OX - TEXTSIZE
-#define BLOCK_FULLSHEETNAME_Y   (TEXTSIZE * 7)
-#define BLOCK_FILENAME_X        BLOCK_OX - TEXTSIZE
-#define BLOCK_FILENAME_Y        (TEXTSIZE * 9)
-#define BLOCK_COMMENT_X         BLOCK_OX - TEXTSIZE
-#define BLOCK_COMPANY_Y         (TEXTSIZE * 11)
-#define BLOCK_COMMENT1_Y        (TEXTSIZE * 13)
-#define BLOCK_COMMENT2_Y        (TEXTSIZE * 15)
-#define BLOCK_COMMENT3_Y        (TEXTSIZE * 17)
-#define BLOCK_COMMENT4_Y        (TEXTSIZE * 19)
-
-
-// Text attributes set in m_Flags (ORed bits)
- #define USE_BOLD 1             // has meaning for texts
- #define USE_THICK_LINE 1       // equivalent to bold for lines
- #define USE_ITALIC 2           // has meaning for texts
- #define USE_TEXT_COLOR 4
- #define SET_UPPER_LIMIT 8      // Flag used to calculate variable position items
-
-// Work sheet structure type definitions.
-enum TypeKi_WorkSheetData {
-    WS_TEXT,
-    WS_SEGMENT,
-    WS_UPPER_SEGMENT,
-    WS_LEFT_SEGMENT
-};
-
-
-// superior horizontal segment: should be after comments
-// to know the exact position
-Ki_WorkSheetData WS_MostUpperLine =
+WORKSHEET_DATAITEM_POLYPOLYGON::WORKSHEET_DATAITEM_POLYPOLYGON() :
+    WORKSHEET_DATAITEM( WS_POLYPOLYGON )
 {
-    WS_UPPER_SEGMENT,
-    NULL,
-    BLOCK_OX,        TEXTSIZE * 16,
-    0,               TEXTSIZE * 16,
-    NULL
-};
+    m_Orient = 0.0;
+}
 
-// Left vertical segment: should be after comments
-// to know the exact position
-Ki_WorkSheetData WS_MostLeftLine =
+const DPOINT WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPosition( unsigned aIdx,
+                                                         int aRepeat ) const
 {
-    WS_LEFT_SEGMENT,
-    &WS_MostUpperLine,
-    BLOCK_OX,         TEXTSIZE * 16,
-    BLOCK_OX,             0,
-    NULL
-};
+    DPOINT pos = m_Corners[aIdx];
 
-// horizontal segment between filename and comments
-Ki_WorkSheetData WS_SeparatorLine =
+    // Rotation:
+    RotatePoint( &pos.x, &pos.y, m_Orient * 10 );
+    pos += GetStartPos( aRepeat );
+    return pos;
+}
+
+void WORKSHEET_DATAITEM_POLYPOLYGON::SetBoundingBox()
 {
-    WS_SEGMENT,
-    &WS_MostLeftLine,
-    BLOCK_OX,         VARIABLE_BLOCK_START_POSITION,
-    0,                VARIABLE_BLOCK_START_POSITION,
-    NULL
-};
+    if( m_Corners.size() == 0 )
+    {
+        m_minCoord.x = m_maxCoord.x = 0.0;
+        m_minCoord.y = m_maxCoord.y = 0.0;
+        return;
+    }
 
-Ki_WorkSheetData        WS_Date =
+    DPOINT pos;
+    pos = m_Corners[0];
+    RotatePoint( &pos.x, &pos.y, m_Orient * 10 );
+    m_minCoord = m_maxCoord = pos;
+
+    for( unsigned ii = 1; ii < m_Corners.size(); ii++ )
+    {
+        pos = m_Corners[ii];
+        RotatePoint( &pos.x, &pos.y, m_Orient * 10 );
+
+        if( m_minCoord.x > pos.x )
+            m_minCoord.x = pos.x;
+
+        if( m_minCoord.y > pos.y )
+            m_minCoord.y = pos.y;
+
+        if( m_maxCoord.x < pos.x )
+            m_maxCoord.x = pos.x;
+
+        if( m_maxCoord.y < pos.y )
+            m_maxCoord.y = pos.y;
+    }
+}
+
+bool WORKSHEET_DATAITEM_POLYPOLYGON::IsInsidePage( int ii ) const
 {
-    WS_TEXT,
-    &WS_SeparatorLine,
-    BLOCK_DATE_X,   BLOCK_DATE_Y,
-    0,                          0,
-    wxT( "Date: %D" )
-};
+    DPOINT pos = GetStartPos( ii );
+    pos += m_minCoord;  // left top pos of bounding box
 
-Ki_WorkSheetData        WS_Licence =
+    if( m_LT_Corner.x > pos.x || m_LT_Corner.y > pos.y )
+        return false;
+
+    pos = GetStartPos( ii );
+    pos += m_maxCoord;  // rignt bottom pos of bounding box
+
+    if( m_RB_Corner.x < pos.x || m_RB_Corner.y < pos.y )
+        return false;
+
+    return true;
+}
+
+const wxPoint WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPositionUi( unsigned aIdx,
+                                                            int aRepeat ) const
 {
-    WS_TEXT,
-    &WS_Date,
-    BLOCK_KICAD_VERSION_X,BLOCK_KICAD_VERSION_Y,
-    0,
-    0,
-    wxT("%K")       // Kicad version
-};
+    DPOINT pos = GetCornerPosition( aIdx, aRepeat );
+    pos = pos * m_WSunits2Iu;
+    return wxPoint( int(pos.x), int(pos.y) );
+}
 
-Ki_WorkSheetData        WS_Revision =
+WORKSHEET_DATAITEM_TEXT::WORKSHEET_DATAITEM_TEXT( const wxChar* aTextBase ) :
+    WORKSHEET_DATAITEM( WS_TEXT )
 {
-    WS_TEXT,
-    &WS_Licence,
-    BLOCK_REV_X,   BLOCK_REV_Y,
-    0,                      0,
-    wxT( "Rev: %R" ),
-    USE_BOLD
-};
+    m_TextBase = aTextBase;
+    m_IncrementLabel = 1;
+    m_Hjustify = GR_TEXT_HJUSTIFY_LEFT;
+    m_Vjustify = GR_TEXT_VJUSTIFY_CENTER;
+    m_Orient = 0.0;
+    m_TextSize.x = m_TextSize.y = TB_DEFAULT_TEXTSIZE;
+}
 
-Ki_WorkSheetData        WS_SizeSheet =
+void WORKSHEET_DATAITEM_TEXT::TransfertSetupToGraphicText( WS_DRAW_ITEM_TEXT* aGText )
 {
-    WS_TEXT,
-    &WS_Revision,
-    BLOCK_SIZE_SHEET_X,BLOCK_SIZE_SHEET_Y,
-    0,                                   0,
-    wxT( "Size: %Z" )   // Paper format name
-};
+    aGText->SetHorizJustify( m_Hjustify ) ;
+    aGText->SetVertJustify( m_Vjustify );
+    aGText->SetOrientation( m_Orient * 10 );    // graphic text orient unit = 0.1 degree
+}
 
-Ki_WorkSheetData        WS_IdentSheet =
+void WORKSHEET_DATAITEM_TEXT::IncrementLabel( int aIncr )
 {
-    WS_TEXT,
-    &WS_SizeSheet,
-    BLOCK_ID_SHEET_X,BLOCK_ID_SHEET_Y,
-    0,                               0,
-    wxT( "Id: %S/%N" )
-};
+    wxChar lbchar = m_TextBase[0];
+    if( lbchar >= '0' &&  lbchar <= '9' )
+        // A number is expected:
+        m_FullText.Printf( wxT("%d"), aIncr + lbchar - '0' );
+    else
+        m_FullText.Printf( wxT("%c"), aIncr + lbchar );
+}
 
-Ki_WorkSheetData        WS_Title =
+void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
 {
-    WS_TEXT,
-    &WS_IdentSheet,
-    BLOCK_TITLE_X,    BLOCK_TITLE_Y,
-    0,                         0,
-    wxT( "Title: %T" ),
-    USE_BOLD
-};
+    m_ConstrainedTextSize = m_TextSize;
 
-Ki_WorkSheetData        WS_SheetFilename =
+    if( m_BoundingBoxSize.x )
+    {
+        bool italic = (m_Flags & USE_ITALIC) != 0;
+        int linewidth = 0;
+        int lenMsg   = ReturnGraphicTextWidth( m_FullText, m_TextSize.x, italic, linewidth );
+        if( lenMsg > m_BoundingBoxSize.x )
+            m_ConstrainedTextSize.x = m_TextSize.x * m_BoundingBoxSize.x / lenMsg;
+    }
+
+    if( m_BoundingBoxSize.y )
+    {
+        if( m_ConstrainedTextSize.y > m_BoundingBoxSize.y )
+            m_ConstrainedTextSize.y = m_BoundingBoxSize.y;
+    }
+}
+
+const DPOINT WORKSHEET_DATAITEM::GetStartPos( int ii ) const
 {
-    WS_TEXT,
-    &WS_Title,
-    BLOCK_FILENAME_X, BLOCK_FILENAME_Y,
-    0,                               0,
-    wxT( "File: %F" )
-};
+    DPOINT pos;
+    pos.x = m_Pos.m_Pos.x + ( m_IncrementVector.x * ii );
+    pos.y = m_Pos.m_Pos.y + ( m_IncrementVector.y * ii );
 
-Ki_WorkSheetData        WS_FullSheetName =
+    switch( m_Pos.m_Anchor )
+    {
+        case RB_CORNER:      // right bottom corner
+            pos = m_RB_Corner - pos;
+            break;
+
+        case RT_CORNER:      // right top corner
+            pos.x = m_RB_Corner.x - pos.x;
+            pos.y = m_LT_Corner.y + pos.y;
+            break;
+
+        case LB_CORNER:      // left bottom corner
+            pos.x = m_LT_Corner.x + pos.x;
+            pos.y = m_RB_Corner.y - pos.y;
+            break;
+
+        case LT_CORNER:      // left top corner
+            pos = m_LT_Corner + pos;
+            break;
+    }
+
+    return pos;
+}
+
+const wxPoint WORKSHEET_DATAITEM::GetStartPosUi( int ii ) const
 {
-    WS_TEXT,
-    &WS_SheetFilename,
-    BLOCK_FULLSHEETNAME_X,BLOCK_FULLSHEETNAME_Y,
-    0,
-    0,
-    wxT( "Sheet: %P" )  // Full sheet name (sheet path)
-};
+    DPOINT pos = GetStartPos( ii );
+    pos = pos * m_WSunits2Iu;
+    return wxPoint( int(pos.x), int(pos.y) );
+}
 
-Ki_WorkSheetData        WS_Company =
+const DPOINT WORKSHEET_DATAITEM::GetEndPos( int ii ) const
 {
-    WS_TEXT,
-    &WS_FullSheetName,
-    BLOCK_COMMENT_X,BLOCK_COMPANY_Y,
-    0,                             0,
-    wxT("%Y"),          // Company name
-    USE_BOLD | SET_UPPER_LIMIT | USE_TEXT_COLOR
-};
+    DPOINT pos;
+    pos.x = m_End.m_Pos.x + ( m_IncrementVector.x * ii );
+    pos.y = m_End.m_Pos.y + ( m_IncrementVector.y * ii );
+    switch( m_End.m_Anchor )
+    {
+        case RB_CORNER:      // right bottom corner
+            pos = m_RB_Corner - pos;
+            break;
 
-Ki_WorkSheetData        WS_Comment1 =
+        case RT_CORNER:      // right top corner
+            pos.x = m_RB_Corner.x - pos.x;
+            pos.y = m_LT_Corner.y + pos.y;
+            break;
+
+        case LB_CORNER:      // left bottom corner
+            pos.x = m_LT_Corner.x + pos.x;
+            pos.y = m_RB_Corner.y - pos.y;
+            break;
+
+        case LT_CORNER:      // left top corner
+            pos = m_LT_Corner + pos;
+            break;
+    }
+
+    return pos;
+}
+
+const wxPoint WORKSHEET_DATAITEM::GetEndPosUi( int ii ) const
 {
-    WS_TEXT,
-    &WS_Company,
-    BLOCK_COMMENT_X,BLOCK_COMMENT1_Y,
-    0,                              0,
-    wxT("%C1"),           // Comment 1
-    SET_UPPER_LIMIT | USE_TEXT_COLOR
-};
+    DPOINT pos = GetEndPos( ii );
+    pos = pos * m_WSunits2Iu;
+    return wxPoint( int(pos.x), int(pos.y) );
+}
 
-Ki_WorkSheetData        WS_Comment2 =
+
+bool WORKSHEET_DATAITEM::IsInsidePage( int ii ) const
 {
-    WS_TEXT,
-    &WS_Comment1,
-    BLOCK_COMMENT_X,BLOCK_COMMENT2_Y,
-    0,                              0,
-    wxT("%C2"),           // Comment 2
-    SET_UPPER_LIMIT | USE_TEXT_COLOR
-};
+    DPOINT pos = GetStartPos( ii );
 
-Ki_WorkSheetData        WS_Comment3 =
-{
-    WS_TEXT,
-    &WS_Comment2,
-    BLOCK_COMMENT_X,BLOCK_COMMENT3_Y,
-    0,                              0,
-    wxT("%C3"),           // Comment 3
-    SET_UPPER_LIMIT | USE_TEXT_COLOR
-};
+    if( m_RB_Corner.x < pos.x || m_LT_Corner.x > pos.x )
+        return false;
 
-Ki_WorkSheetData        WS_Comment4 =
-{
-    WS_TEXT,
-    &WS_Comment3,
-    BLOCK_COMMENT_X, BLOCK_COMMENT4_Y,
-    0,                              0,
-    wxT("%C4"),           // Comment 4
-    SET_UPPER_LIMIT | USE_TEXT_COLOR
-};
+    if( m_RB_Corner.y < pos.y || m_LT_Corner.y > pos.y )
+        return false;
 
+    pos = GetEndPos( ii );
 
-// horizontal segment above COMPANY NAME
-Ki_WorkSheetData WS_Segm3 =
-{
-    WS_SEGMENT,
-    &WS_Comment4,
-    BLOCK_OX,  TEXTSIZE * 6,
-    0,         TEXTSIZE * 6,
-    NULL
-};
+    if( m_RB_Corner.x < pos.x || m_LT_Corner.x > pos.x )
+        return false;
 
+    if( m_RB_Corner.y < pos.y || m_LT_Corner.y > pos.y )
+        return false;
 
-// vertical segment of the left REV and SHEET
-Ki_WorkSheetData WS_Segm4 =
-{
-    WS_SEGMENT,
-    &WS_Segm3,
-    BLOCK_REV_X + TEXTSIZE,TEXTSIZE * 4,
-    BLOCK_REV_X + TEXTSIZE,            0,
-    NULL
-};
+    return true;
+}
 
+double WORKSHEET_DATAITEM::m_WSunits2Iu = 1.0;
+DPOINT WORKSHEET_DATAITEM::m_RB_Corner;
+DPOINT WORKSHEET_DATAITEM::m_LT_Corner;
 
-Ki_WorkSheetData WS_Segm5 =
-{
-    WS_SEGMENT,
-    &WS_Segm4,
-    BLOCK_OX,  TEXTSIZE * 2,
-    0,         TEXTSIZE * 2,
-    NULL
-};
-
-
-Ki_WorkSheetData WS_Segm6 =
-{
-    WS_SEGMENT,
-    &WS_Segm5,
-    BLOCK_OX,  TEXTSIZE * 4,
-    0,         TEXTSIZE * 4,
-    NULL
-};
-
-
-Ki_WorkSheetData WS_Segm7 =
-{
-    WS_SEGMENT,
-    &WS_Segm6,
-    BLOCK_OX - (TEXTSIZE * 11),TEXTSIZE * 4,
-    BLOCK_OX - (TEXTSIZE * 11),TEXTSIZE * 2,
-    NULL
-};
-
-#include <worksheet_shape_builder.h>
+WORKSHEET_LAYOUT dataList;  // The layout shape
 
 void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                        const wxString& aPaperFormat,
@@ -306,178 +291,147 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                        const TITLE_BLOCK& aTitleBlock,
                        EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor )
 {
-    wxSize              textsize( TEXTSIZE * m_milsToIu, TEXTSIZE * m_milsToIu );
-    wxSize              size_ref( FRMREF_TXTSIZE * m_milsToIu,
-                                  FRMREF_TXTSIZE * m_milsToIu );
-    wxString            msg;
+    #define milsTomm (25.4/1000)
 
     m_titleBlock = &aTitleBlock,
     m_paperFormat = &aPaperFormat,
     m_fileName = &aFileName,
     m_sheetFullName = &aSheetPathHumanReadable;
 
+    // Build the basic layout shape, if the layout list is empty
+    if( dataList.GetCount() == 0 )
+        dataList.SetLayout();
+
+    WORKSHEET_DATAITEM::m_WSunits2Iu = m_milsToIu / milsTomm;
 
     // Left top corner position
-    wxPoint lt_corner;
+    DPOINT lt_corner;
     lt_corner.x = m_LTmargin.x;
     lt_corner.y = m_LTmargin.y;
+    WORKSHEET_DATAITEM::m_LT_Corner = lt_corner * milsTomm;
 
     // Right bottom corner position
-    wxPoint rb_corner;
+    DPOINT rb_corner;
     rb_corner.x = m_pageSize.x - m_RBmargin.x;
     rb_corner.y = m_pageSize.y - m_RBmargin.y;
-
-    // Draw the border.
-    int ii, jj, ipas, gxpas, gypas;
-
-    wxPoint pos = lt_corner;
-    wxPoint end = rb_corner;
-    for( ii = 0; ii < 2; ii++ )
-    {
-        Append( new WS_DRAW_ITEM_RECT(
-                    wxPoint( pos.x * m_milsToIu, pos.y * m_milsToIu ),
-                    wxPoint( end.x * m_milsToIu, end.y * m_milsToIu ),
-                    m_penSize, aLineColor ) );
-
-        pos.x += GRID_REF_W;
-        pos.y += GRID_REF_W;
-        end.x -= GRID_REF_W;
-        end.y -= GRID_REF_W;
-    }
-
-    ipas    = ( rb_corner.x - lt_corner.x ) / PAS_REF;
-    gxpas   = ( rb_corner.x - lt_corner.x ) / ipas;
-
-    for( ii = lt_corner.x + gxpas, jj = 1; ipas > 0; ii += gxpas, jj++, ipas-- )
-    {
-        msg.Printf( wxT( "%d" ), jj );
-
-        if( ii < rb_corner.x - PAS_REF / 2 )
-        {
-            Append( new WS_DRAW_ITEM_LINE(
-                        wxPoint( ii * m_milsToIu, lt_corner.y * m_milsToIu ),
-                        wxPoint( ii * m_milsToIu, ( lt_corner.y + GRID_REF_W ) * m_milsToIu ),
-                        m_penSize, aLineColor ) );
-        }
-
-        Append( new WS_DRAW_ITEM_TEXT( msg,
-                                       wxPoint( ( ii - gxpas / 2 ) * m_milsToIu,
-                                                ( lt_corner.y + GRID_REF_W / 2 ) * m_milsToIu ),
-                                       size_ref, m_penSize, aLineColor ) );
-
-        if( ii < rb_corner.x - PAS_REF / 2 )
-        {
-            Append( new WS_DRAW_ITEM_LINE(
-                        wxPoint( ii * m_milsToIu, rb_corner.y * m_milsToIu ),
-                        wxPoint( ii * m_milsToIu, (rb_corner.y - GRID_REF_W ) * m_milsToIu ),
-                        m_penSize, aLineColor ) );
-        }
-
-        Append( new WS_DRAW_ITEM_TEXT( msg,
-                                       wxPoint( ( ii - gxpas / 2 ) * m_milsToIu,
-                                                ( rb_corner.y - GRID_REF_W / 2) * m_milsToIu ),
-                                       size_ref, m_penSize, aLineColor ) );
-    }
-
-    ipas    = ( rb_corner.y - lt_corner.y ) / PAS_REF;
-    gypas   = ( rb_corner.y - lt_corner.y ) / ipas;
-
-    for( ii = lt_corner.y + gypas, jj = 0; ipas > 0; ii += gypas, jj++, ipas-- )
-    {
-        if( jj < 26 )
-            msg.Printf( wxT( "%c" ), jj + 'A' );
-        else // I hope 52 identifiers are enough...
-            msg.Printf( wxT( "%c" ), 'a' + jj - 26 );
-
-        if( ii < rb_corner.y - PAS_REF / 2 )
-        {
-            Append( new WS_DRAW_ITEM_LINE(
-                        wxPoint( lt_corner.x * m_milsToIu, ii * m_milsToIu ),
-                        wxPoint( ( lt_corner.x + GRID_REF_W ) * m_milsToIu, ii * m_milsToIu ),
-                        m_penSize, aLineColor ) );
-        }
-
-        Append( new WS_DRAW_ITEM_TEXT( msg,
-                                       wxPoint( ( lt_corner.x + GRID_REF_W / 2 ) * m_milsToIu,
-                                                ( ii - gypas / 2 ) * m_milsToIu ),
-                                       size_ref, m_penSize, aLineColor ) );
-
-        if( ii < rb_corner.y - PAS_REF / 2 )
-        {
-            Append( new WS_DRAW_ITEM_LINE(
-                        wxPoint( rb_corner.x * m_milsToIu, ii * m_milsToIu ),
-                        wxPoint( ( rb_corner.x - GRID_REF_W ) * m_milsToIu, ii * m_milsToIu ),
-                        m_penSize, aLineColor ) );
-        }
-
-        Append( new WS_DRAW_ITEM_TEXT( msg,
-                                       wxPoint( ( rb_corner.x - GRID_REF_W / 2 ) * m_milsToIu,
-                                                ( ii - gxpas / 2 ) * m_milsToIu ),
-                                       size_ref, m_penSize, aLineColor ) );
-    }
-
-    int upperLimit = VARIABLE_BLOCK_START_POSITION;
-    rb_corner.x -= GRID_REF_W;
-    rb_corner.y -= GRID_REF_W;
+    WORKSHEET_DATAITEM::m_RB_Corner = rb_corner * milsTomm;
 
     WS_DRAW_ITEM_TEXT* gtext;
-    Ki_WorkSheetData*  WsItem;
     int pensize;
-    bool bold;
-    bool italic = false;
     EDA_COLOR_T color;
 
-    for( WsItem = &WS_Segm7; WsItem != NULL; WsItem = WsItem->Pnext )
+    for( unsigned ii = 0; ; ii++ )
     {
-        pos.x   = (rb_corner.x - WsItem->m_Posx) * m_milsToIu;
-        pos.y   = (rb_corner.y - WsItem->m_Posy) * m_milsToIu;
+        WORKSHEET_DATAITEM*  wsItem = dataList.GetItem( ii );
 
-        msg.Empty();
-
-        if( WsItem->m_Type == WS_TEXT && WsItem->m_TextBase )
-            msg = BuildFullText( WsItem->m_TextBase );
-
-        switch( WsItem->m_Type )
-        {
-        case WS_TEXT:
-            if( msg.IsEmpty() )
-                break;
-            bold = false;
-            pensize = m_penSize;
-            color = aLineColor;
-            if( WsItem->m_Flags & USE_TEXT_COLOR )
-                color = aTextColor;
-
-            if( WsItem->m_Flags & USE_BOLD )
-            {
-                bold = true;
-                pensize = GetPenSizeForBold( std::min( textsize.x, textsize.y ) );
-            }
-            Append( gtext = new WS_DRAW_ITEM_TEXT( msg, pos, textsize,
-                                                   pensize, color, italic, bold ) );
-            gtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-
-            if( WsItem->m_Flags & SET_UPPER_LIMIT )
-                upperLimit = std::max( upperLimit, WsItem->m_Posy + TEXTSIZE );
+        if( wsItem == NULL )
             break;
 
-        case WS_UPPER_SEGMENT:
+        pensize = wsItem->GetPenSizeUi();
 
-            if( upperLimit == 0 )
+        switch( wsItem->m_Type )
+        {
+        case WORKSHEET_DATAITEM::WS_TEXT:
+        {
+            WORKSHEET_DATAITEM_TEXT * wsText = (WORKSHEET_DATAITEM_TEXT*)wsItem;
+            wsText->m_FullText = BuildFullText( wsText->m_TextBase );
+            if( wsText->m_FullText.IsEmpty() )
                 break;
 
-        case WS_LEFT_SEGMENT:
-            WS_MostUpperLine.m_Posy = upperLimit;
-            WS_MostUpperLine.m_Endy = upperLimit;
-            WS_MostLeftLine.m_Posy  = upperLimit;
-            pos.y = (rb_corner.y - WsItem->m_Posy) * m_milsToIu;
+            if( pensize == 0 )
+                pensize = m_penSize;
 
-        case WS_SEGMENT:
-            end.x  = rb_corner.x - WsItem->m_Endx;
-            end.y  = rb_corner.y - WsItem->m_Endy;
-            Append( new WS_DRAW_ITEM_LINE( pos,
-                                           wxPoint( end.x * m_milsToIu, end.y * m_milsToIu ),
-                                           m_penSize, aLineColor ) );
+            color = aLineColor;
+
+            if( wsText->m_Flags & USE_TEXT_COLOR )
+                color = aTextColor;
+
+            wsText->SetConstrainedTextSize();
+            wxSize textsize;
+
+            textsize.x = KiROUND( wsText->m_ConstrainedTextSize.x
+                                  * WORKSHEET_DATAITEM::m_WSunits2Iu );
+            textsize.y = KiROUND( wsText->m_ConstrainedTextSize.y
+                                  * WORKSHEET_DATAITEM::m_WSunits2Iu );
+
+            if( wsText->IsBold())
+                pensize = GetPenSizeForBold( std::min( textsize.x, textsize.y ) );
+
+            for( int jj = 0; jj < wsText->m_RepeatCount; jj++)
+            {
+                if( ! wsText->IsInsidePage( jj ) )
+                    continue;
+
+                Append( gtext = new WS_DRAW_ITEM_TEXT( wsText->m_FullText,
+                                                       wsText->GetStartPosUi( jj ),
+                                                       textsize,
+                                                       pensize, color,
+                                                       wsText->IsItalic(),
+                                                       wsText->IsBold() ) );
+                wsText->TransfertSetupToGraphicText( gtext );
+
+                // Increment label for the next text
+                if( wsText->m_RepeatCount > 1 )
+                    wsText->IncrementLabel( jj+1 );
+            }
+        }
+            break;
+
+        case WORKSHEET_DATAITEM::WS_SEGMENT:
+            if( pensize == 0 )
+                pensize = m_penSize;
+
+            for( int jj = 0; jj < wsItem->m_RepeatCount; jj++ )
+            {
+                if( ! wsItem->IsInsidePage( jj ) )
+                    continue;
+                Append( new WS_DRAW_ITEM_LINE( wsItem->GetStartPosUi( jj ),
+                                               wsItem->GetEndPosUi( jj ),
+                                               pensize, aLineColor ) );
+            }
+            break;
+
+        case WORKSHEET_DATAITEM::WS_RECT:
+            if( pensize == 0 )
+                pensize = m_penSize;
+
+            for( int jj = 0; jj < wsItem->m_RepeatCount; jj++ )
+            {
+                if( ! wsItem->IsInsidePage( jj ) )
+                    break;
+
+                Append( new WS_DRAW_ITEM_RECT( wsItem->GetStartPosUi( jj ),
+                                               wsItem->GetEndPosUi( jj ),
+                                               pensize, aLineColor ) );
+            }
+            break;
+
+        case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
+        {
+            WORKSHEET_DATAITEM_POLYPOLYGON * wspoly =
+                (WORKSHEET_DATAITEM_POLYPOLYGON*) wsItem;
+            for( int jj = 0; jj < wsItem->m_RepeatCount; jj++ )
+            {
+                if( ! wsItem->IsInsidePage( jj ) )
+                    continue;
+
+                for( int kk = 0; kk < wspoly->GetPolyCount(); kk++ )
+                {
+                    const bool fill = true;
+                    WS_DRAW_ITEM_POLYGON* poly = new WS_DRAW_ITEM_POLYGON( fill,
+                                                   pensize, aLineColor );
+                    Append( poly );
+
+                    // Create polygon outline
+                    unsigned ist = wspoly->GetPolyIndexStart( kk );
+                    unsigned iend = wspoly->GetPolyIndexEnd( kk );
+                    while( ist <= iend )
+                        poly->m_Corners.push_back(
+                            wspoly->GetCornerPositionUi( ist++, jj ) );
+
+                }
+            }
+        }
             break;
         }
     }

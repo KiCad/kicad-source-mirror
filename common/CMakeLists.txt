@@ -112,6 +112,9 @@ set(COMMON_SRCS
     msgpanel.cpp
     netlist_keywords.cpp
     newstroke_font.cpp
+    page_layout_default_description.cpp
+    page_layout_reader_keywords.cpp
+    page_layout_reader.cpp
     projet_config.cpp
     ptree.cpp
     reporter.cpp
@@ -235,6 +238,15 @@ make_lexer(
     ${PROJECT_SOURCE_DIR}/include/fp_lib_table_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/fp_lib_table_keywords.cpp
     FP_LIB_TABLE_T
+    )
+
+# auto-generate page layout reader s-expression page_layout_reader_lexer.h
+# and title_block_reader_keywords.cpp.
+make_lexer(
+    ${CMAKE_CURRENT_SOURCE_DIR}/page_layout_reader.keywords
+    ${PROJECT_SOURCE_DIR}/include/page_layout_reader_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/page_layout_reader_keywords.cpp
+    TB_READER_T
     )
 
 # The dsntest may not build properly using MS Visual Studio.

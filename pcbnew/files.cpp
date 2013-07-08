@@ -50,6 +50,9 @@
 #include <class_board.h>
 #include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
 
+//#define     USE_INSTRUMENTATION     true
+#define     USE_INSTRUMENTATION     false
+
 
 static const wxString backupFileExtensionSuffix( wxT( "-bak" ) );
 static const wxString autosaveFilePrefix( wxT( "_autosave-" ) );
@@ -283,8 +286,18 @@ bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
         props["page_width"]  = wxString::Format( wxT( "%d" ), GetPageSizeIU().x );
         props["page_height"] = wxString::Format( wxT( "%d" ), GetPageSizeIU().y );
 
+#if USE_INSTRUMENTATION
+        // measure the time to load a BOARD.
+        unsigned startTime = GetRunningMicroSecs();
+#endif
+
         // load or append either:
         loadedBoard = pi->Load( GetBoard()->GetFileName(), aAppend ? GetBoard() : NULL, &props );
+
+#if USE_INSTRUMENTATION
+        unsigned stopTime = GetRunningMicroSecs();
+        printf( "PLUGIN::Load(): %u usecs\n", stopTime - startTime );
+#endif
 
         // the Load plugin method makes a 'fresh' board, so we need to
         // set its own name
@@ -296,8 +309,8 @@ bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
                 loadedBoard->GetFileFormatVersionAtLoad() < LEGACY_BOARD_FILE_VERSION )
             {
                 DisplayInfoMessage( this,
-                                    _( "This file was created by an older version of Pcbnew.\
-\nIt will be stored in the new file format when you save this file again." ) );
+                    _(  "This file was created by an older version of Pcbnew.\n"
+                        "It will be stored in the new file format when you save this file again." ) );
             }
 
             SetBoard( loadedBoard );

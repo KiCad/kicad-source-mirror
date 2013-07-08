@@ -343,6 +343,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
 {
     EDA_COLOR_T color;
     int         linewidth = ( m_Thickness == 0 ) ? GetDefaultLineThickness() : m_Thickness;
+    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
@@ -355,7 +356,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
 
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
-    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
+    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     if( m_isDangling )
@@ -365,7 +366,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
 #if 0
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
+        GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }
@@ -1285,11 +1286,12 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     int linewidth = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
-    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
+    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
+    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + aOffset );
-    GRPoly( panel->GetClipBox(), DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
+    GRPoly( clipbox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
     if( m_isDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
@@ -1298,7 +1300,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
 #if 0
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
+        GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }
@@ -1604,7 +1606,9 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 {
     static std::vector <wxPoint> Poly;
     EDA_COLOR_T color;
-    int         linewidth = ( m_Thickness == 0 ) ? GetDefaultLineThickness() : m_Thickness;
+    int         linewidth = m_Thickness == 0 ?
+                            GetDefaultLineThickness() : m_Thickness;
+    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
@@ -1617,11 +1621,11 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
     wxPoint text_offset = offset + GetSchematicTextOffset();
-    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
+    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + offset );
-    GRPoly( panel->GetClipBox(), DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
+    GRPoly( clipbox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
     if( m_isDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
@@ -1630,7 +1634,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 #if 0
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
+        GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }

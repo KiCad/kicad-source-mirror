@@ -97,6 +97,7 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_mask_clearance_base.cpp
     dialogs/dialog_SVG_print.cpp
     dialogs/dialog_SVG_print_base.cpp
+    dialogs/dialog_set_grid.cpp
     dialogs/dialog_set_grid_base.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
@@ -192,7 +193,6 @@ set(PCBNEW_CLASS_SRCS
     print_board_functions.cpp
     printout_controler.cpp
     ratsnest.cpp
-    set_grid.cpp
     specctra.cpp
     specctra_export.cpp
     specctra_import.cpp

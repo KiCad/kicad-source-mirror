@@ -1,5 +1,5 @@
 /**
- * @file annotate_dialog.cpp
+ * @file dialog_annotate.cpp
  * @brief Annotation dialog functions.
  */
 
@@ -33,75 +33,132 @@
 #include <wxEeschemaStruct.h>
 #include <class_drawpanel.h>
 
-#include <annotate_dialog.h>
+#include <invoke_sch_dialog.h>
+#include <dialog_annotate_base.h>
 
-#define KEY_ANNOTATE_SORT_OPTION wxT("AnnotateSortOption")
-#define KEY_ANNOTATE_ALGO_OPTION wxT("AnnotateAlgoOption")
-#define KEY_ANNOTATE_AUTOCLOSE_OPTION wxT("AnnotateAutoCloseOption")
-#define KEY_ANNOTATE_USE_SILENTMODE wxT("AnnotateSilentMode")
+
+#define KEY_ANNOTATE_SORT_OPTION wxT( "AnnotateSortOption" )
+#define KEY_ANNOTATE_ALGO_OPTION wxT( "AnnotateAlgoOption" )
+#define KEY_ANNOTATE_AUTOCLOSE_OPTION wxT( "AnnotateAutoCloseOption" )
+#define KEY_ANNOTATE_USE_SILENTMODE wxT( "AnnotateSilentMode" )
+
+
+class wxConfig;
+
+
+/**
+ * Class DIALOG_ANNOTATE
+ */
+class DIALOG_ANNOTATE: public DIALOG_ANNOTATE_BASE
+{
+public:
+    DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent );
+
+
+private:
+    SCH_EDIT_FRAME* m_Parent;
+    wxConfig*       m_Config;
+
+    /// Initialises member variables
+    void InitValues();
+    void OnCancelClick( wxCommandEvent& event );
+    void OnClearAnnotationCmpClick( wxCommandEvent& event );
+    void OnApplyClick( wxCommandEvent& event );
+
+    // User functions:
+    bool GetLevel();
+    bool GetResetItems();
+
+    /**
+     * Function GetSortOrder
+     * @return 0 if annotation by X position,
+     *         1 if annotation by Y position,
+     *         2 if annotation by value
+     */
+    int GetSortOrder();
+
+    /**
+     * Function GetAnnotateAlgo
+     * @return 0 if annotation using first not used Id value
+     *         1 if annotation using first not used Id value inside sheet num * 100 to  sheet num * 100 + 99
+     *         2 if annotation using first nhot used Id value inside sheet num * 1000 to  sheet num * 1000 + 999
+     */
+    int GetAnnotateAlgo();
+
+    bool GetAnnotateAutoCloseOpt()
+    {
+        return m_cbAutoCloseDlg->GetValue();
+    }
+
+    bool GetAnnotateSilentMode()
+    {
+        return m_cbUseSilentMode->GetValue();
+    }
+};
+
 
 
 DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent )
     : DIALOG_ANNOTATE_BASE( parent )
 {
     m_Parent = parent;
+
     InitValues();
     Layout();
-    GetSizer()->SetSizeHints(this);
+    GetSizer()->SetSizeHints( this );
     Centre();
 }
 
 
-/*********************************/
 void DIALOG_ANNOTATE::InitValues()
-/*********************************/
 {
     m_Config = wxGetApp().GetSettings();
-    SetFocus();	// needed to close dialog by escape key
+
     if( m_Config )
     {
         long option;
-        m_Config->Read(KEY_ANNOTATE_SORT_OPTION, &option, 0l);
+
+        m_Config->Read( KEY_ANNOTATE_SORT_OPTION, &option, 0l );
         switch( option )
         {
-            default:
-            case 0:
-                m_rbSortBy_X_Position->SetValue(1);
-                break;
+        default:
+        case 0:
+            m_rbSortBy_X_Position->SetValue( 1 );
+            break;
 
-            case 1:
-                m_rbSortBy_Y_Position->SetValue(1);
-                break;
+        case 1:
+            m_rbSortBy_Y_Position->SetValue( 1 );
+            break;
 
-            case 2:
-                m_rbUseIncremental->SetValue(1);
-                break;
-            }
-
-        m_Config->Read(KEY_ANNOTATE_ALGO_OPTION, &option, 0l);
-        switch( option )
-        {
-            default:
-            case 0:
-                m_rbUseIncremental->SetValue(1);
-                break;
-
-            case 1:
-                m_rbUseSheetNum->SetValue(1);
-                break;
-
-            case 2:
-                m_rbStartSheetNumLarge->SetValue(1);
-                break;
+        case 2:
+            m_rbUseIncremental->SetValue( 1 );
+            break;
         }
 
-        m_Config->Read(KEY_ANNOTATE_AUTOCLOSE_OPTION, &option, 0l);
-        if( option )
-            m_cbAutoCloseDlg->SetValue(1);
+        m_Config->Read( KEY_ANNOTATE_ALGO_OPTION, &option, 0l );
+        switch( option )
+        {
+        default:
+        case 0:
+            m_rbUseIncremental->SetValue( 1 );
+            break;
 
-        m_Config->Read(KEY_ANNOTATE_USE_SILENTMODE, &option, 0l);
+        case 1:
+            m_rbUseSheetNum->SetValue( 1 );
+            break;
+
+        case 2:
+            m_rbStartSheetNumLarge->SetValue( 1 );
+            break;
+        }
+
+        m_Config->Read( KEY_ANNOTATE_AUTOCLOSE_OPTION, &option, 0l );
         if( option )
-            m_cbUseSilentMode->SetValue(1);
+            m_cbAutoCloseDlg->SetValue( 1 );
+
+        m_Config->Read( KEY_ANNOTATE_USE_SILENTMODE, &option, 0l );
+        if( option )
+            m_cbUseSilentMode->SetValue( 1 );
     }
 
     annotate_down_right_bitmap->SetBitmap( KiBitmap( annotate_down_right_xpm ) );
@@ -111,19 +168,17 @@ void DIALOG_ANNOTATE::InitValues()
 }
 
 
-/*********************************************************/
 void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
-/*********************************************************/
 {
-    int response;
-    wxString message;
+    int         response;
+    wxString    message;
 
     if( m_Config )
     {
-        m_Config->Write(KEY_ANNOTATE_SORT_OPTION, GetSortOrder());
-        m_Config->Write(KEY_ANNOTATE_ALGO_OPTION, GetAnnotateAlgo());
-        m_Config->Write(KEY_ANNOTATE_AUTOCLOSE_OPTION, GetAnnotateAutoCloseOpt());
-        m_Config->Write(KEY_ANNOTATE_USE_SILENTMODE, GetAnnotateSilentMode());
+        m_Config->Write( KEY_ANNOTATE_SORT_OPTION, GetSortOrder() );
+        m_Config->Write( KEY_ANNOTATE_ALGO_OPTION, GetAnnotateAlgo() );
+        m_Config->Write( KEY_ANNOTATE_AUTOCLOSE_OPTION, GetAnnotateAutoCloseOpt() );
+        m_Config->Write( KEY_ANNOTATE_USE_SILENTMODE, GetAnnotateSilentMode() );
     }
 
     // Display a message info in verbose mode,
@@ -152,7 +207,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     {
         response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
 
-        if (response == wxCANCEL)
+        if( response == wxCANCEL )
             return;
     }
 
@@ -176,13 +231,11 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 }
 
 
-/************************************************************************/
 void DIALOG_ANNOTATE::OnClearAnnotationCmpClick( wxCommandEvent& event )
-/************************************************************************/
 {
-    int response;
+    int         response;
+    wxString    message;
 
-    wxString message;
     if( GetLevel() )
         message = _( "Clear the existing annotation for the entire schematic?" );
     else
@@ -191,19 +244,17 @@ void DIALOG_ANNOTATE::OnClearAnnotationCmpClick( wxCommandEvent& event )
     message += _( "\n\nThis operation will clear the existing annotation and cannot be undone." );
     response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
 
-    if (response == wxCANCEL)
+    if( response == wxCANCEL )
         return;
 
     m_Parent->DeleteAnnotation( GetLevel() ? false : true );
     m_Parent->GetCanvas()->Refresh();
 
-    m_btnClear->Enable(false);
+    m_btnClear->Enable( false );
 }
 
 
-/************************************************************/
 void DIALOG_ANNOTATE::OnCancelClick( wxCommandEvent& event )
-/************************************************************/
 {
     if( IsModal() )
         EndModal( wxID_CANCEL );
@@ -215,44 +266,46 @@ void DIALOG_ANNOTATE::OnCancelClick( wxCommandEvent& event )
 }
 
 
-/**************************************/
-bool DIALOG_ANNOTATE::GetLevel( void )
-/**************************************/
+bool DIALOG_ANNOTATE::GetLevel()
 {
     return m_rbEntireSchematic->GetValue();
 }
 
-/******************************************/
-bool DIALOG_ANNOTATE::GetResetItems( void )
-/******************************************/
+
+bool DIALOG_ANNOTATE::GetResetItems()
 {
     return m_rbResetAnnotation->GetValue();
 }
 
-int DIALOG_ANNOTATE::GetSortOrder( void )
-/**
- * @return 0 if annotation by X position,
- *         1 if annotation by Y position,
- *         2 if annotation by value
- */
+
+int DIALOG_ANNOTATE::GetSortOrder()
 {
-    if ( m_rbSortBy_X_Position->GetValue() )
+    if( m_rbSortBy_X_Position->GetValue() )
         return 0;
-    if ( m_rbSortBy_Y_Position->GetValue() )
+
+    if( m_rbSortBy_Y_Position->GetValue() )
         return 1;
+
     return 2;
 }
 
-int DIALOG_ANNOTATE::GetAnnotateAlgo( void )
-/**
- * @return 0 if annotation using first not used Id value
- *         1 if annotation using first not used Id value inside sheet num * 100 to  sheet num * 100 + 99
- *         2 if annotation using first nhot used Id value inside sheet num * 1000 to  sheet num * 1000 + 999
- */
+
+int DIALOG_ANNOTATE::GetAnnotateAlgo()
 {
-    if ( m_rbUseIncremental->GetValue() )
+    if( m_rbUseIncremental->GetValue() )
         return 0;
-    if ( m_rbUseSheetNum->GetValue() )
+
+    if( m_rbUseSheetNum->GetValue() )
         return 1;
+
     return 2;
 }
+
+
+int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller )
+{
+    DIALOG_ANNOTATE dlg( aCaller );
+
+    return dlg.ShowModal();
+}
+

@@ -241,10 +241,12 @@ enum main_id
     ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
     ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
     ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-    
+
     // zoom commands for non center zooming
     ID_OFFCENTER_ZOOM_IN,
     ID_OFFCENTER_ZOOM_OUT,
+
+    ID_DIALOG_ERC,      ///< eeschema ERC modeless dialog ID
 
     ID_END_LIST
 };

@@ -40,6 +40,20 @@
 
 #include <wx/process.h>
 
+
+// Fail build if wxWidgets printing was not configured.
+#if !wxUSE_PRINTING_ARCHITECTURE && !SWIG
+#   error "You must use '--enable-printarch' in your wx library configuration."
+#endif
+
+// Show warning if wxWidgets Gnome or GTK printing was not configured.
+#if defined( __WXGTK__ )
+#   if !wxUSE_LIBGNOMEPRINT && !wxUSE_GTKPRINT && !SWIG
+#       warning "You must use '--with-gnomeprint' or '--with-gtkprint' in your wx library configuration for full print capabilities."
+#   endif
+#endif
+
+
 /**
  * Global variables definitions.
  *

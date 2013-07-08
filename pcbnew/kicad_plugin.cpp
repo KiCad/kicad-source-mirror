@@ -64,10 +64,12 @@ static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
 
 // Helper function to print a float number without using scientific notation
 // and no trailing 0
+// We want to avoid scientific notation in S-expr files (not easy to read)
+// for floating numbers.
+// So we cannot always just use the %g or the %f format to print a fp number
+// this helper function uses the %f format when needed, or %g when %f is
+// not well working and then removes trailing 0
 
-#if 0
-// Does not work for aValue < 0.0001 and > 0.
-// Will need to support exponents in DSNLEXER if we get exponents > 16, i.e. the "precision".
 std::string double2str( double aValue )
 {
     char    buf[50];
@@ -75,33 +77,8 @@ std::string double2str( double aValue )
 
     if( aValue != 0.0 && fabs( aValue ) <= 0.0001 )
     {
-        len = sprintf( buf, "%.10f", aValue );
-
-        while( --len > 0 && buf[len] == '0' )
-            buf[len] = '\0';
-
-        if( buf[len] == '.' )
-            buf[len--] = '\0';
-
-        ++len;
-    }
-    else
-    {
-        len = sprintf( buf, "%.10g", mm );
-    }
-
-    return std::string( buf, len );
-}
-
-#else
-// this one handles 0.00001 ok, and 1.222222222222222 ok, previous did not.
-std::string double2str( double aValue )
-{
-    char    buf[50];
-    int     len;
-
-    if( aValue != 0.0 && fabs( aValue ) <= 0.0001 )
-    {
+        // For these small values, %f works fine,
+        // and %g gives an exponent
         len = sprintf( buf,  "%.16f", aValue );
 
         while( --len > 0 && buf[len] == '0' )
@@ -114,12 +91,13 @@ std::string double2str( double aValue )
     }
     else
     {
+        // For these values, %g works fine, and sometimes %f
+        // gives a bad value (try aValue = 1.222222222222, with %.16f format!)
         len = sprintf( buf, "%.16g", aValue );
     }
 
     return std::string( buf, len );;
 }
-#endif
 
 
 /**
@@ -353,7 +331,9 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProper
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-    m_board = aBoard;
+    init( aProperties );
+
+    m_board = aBoard;       // after init()
 
     FILE_OUTPUTFORMATTER    formatter( aFileName );
 
@@ -903,6 +883,19 @@ void PCB_IO::format( PCB_TARGET* aTarget, int aNestLevel ) const
 void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     throw( IO_ERROR )
 {
+    if( !( m_ctl & CTL_OMIT_INITIAL_COMMENTS ) )
+    {
+        const wxArrayString* initial_comments = aModule->GetInitialComments();
+
+        if( initial_comments )
+        {
+            for( unsigned i=0;  i<initial_comments->GetCount();  ++i )
+                m_out->Print( aNestLevel, "%s\n",  TO_UTF8( (*initial_comments)[i] ) );
+
+            m_out->Print( 0, "\n" );    // improve readability?
+        }
+    }
+
     m_out->Print( aNestLevel, "(module %s", m_out->Quotew( aModule->GetLibRef() ).c_str() );
 
     if( aModule->IsLocked() )
@@ -1087,7 +1080,7 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
     {
         if( aLayerMask & GetLayerMask( layer ) )
         {
-            if( m_board && !(m_ctl & CTL_STD_LAYER_NAMES) )
+            if( m_board && !( m_ctl & CTL_STD_LAYER_NAMES ) )
                 layerName = m_board->GetLayerName( layer );
 
             else    // I am being called from FootprintSave()
@@ -1572,7 +1565,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
 PCB_IO::PCB_IO() :
     m_cache( 0 ),
-    m_ctl( 0 ),
+    m_ctl( CTL_FOR_BOARD ),         // expecting to OUTPUTFORMAT into BOARD files.
     m_parser( new PCB_PARSER() )
 {
     init( 0 );
@@ -1600,6 +1593,8 @@ PCB_IO::~PCB_IO()
 BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties )
 {
     FILE_LINE_READER    reader( aFileName );
+
+    init( aProperties );
 
     m_parser->SetLineReader( &reader );
     m_parser->SetBoard( aAppendToMe );

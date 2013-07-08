@@ -53,7 +53,8 @@
 
 
 MODULE::MODULE( BOARD* parent ) :
-    BOARD_ITEM( (BOARD_ITEM*) parent, PCB_MODULE_T )
+    BOARD_ITEM( (BOARD_ITEM*) parent, PCB_MODULE_T ),
+    m_initial_comments( 0 )
 {
     m_Attributs    = MOD_DEFAULT;
     m_Layer        = LAYER_N_FRONT;
@@ -164,6 +165,9 @@ MODULE::MODULE( const MODULE& aModule ) :
 
     // Ensure auxiliary data is up to date
     CalculateBoundingBox();
+
+    m_initial_comments = aModule.m_initial_comments ?
+                            new wxArrayString( *aModule.m_initial_comments ) : 0;
 }
 
 
@@ -171,6 +175,7 @@ MODULE::~MODULE()
 {
     delete m_Reference;
     delete m_Value;
+    delete m_initial_comments;
 }
 
 
@@ -185,7 +190,7 @@ void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 
     if( GetBoard()->IsElementVisible( ANCHOR_VISIBLE ) )
     {
-        GRDrawAnchor( panel->GetClipBox(), DC, m_Pos.x, m_Pos.y, 
+        GRDrawAnchor( panel->GetClipBox(), DC, m_Pos.x, m_Pos.y,
                       dim_ancre,
                       g_ColorsSettings.GetItemColor( ANCHOR_VISIBLE ) );
     }
@@ -600,6 +605,25 @@ D_PAD* MODULE::GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask )
     }
 
     return NULL;
+}
+
+
+unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
+{
+    if( aIncludeNPTH )
+        return m_Pads.GetCount();
+
+    unsigned cnt = 0;
+
+    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+    {
+        if( pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
+            continue;
+
+        cnt++;
+    }
+
+    return cnt;
 }
 
 

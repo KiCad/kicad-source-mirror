@@ -44,11 +44,12 @@ static void Abort_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
     // Pad move in progress: restore origin of dragged tracks, if any.
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
-        TRACK* Track = g_DragSegmentList[ii].m_Track;
-        Track->Draw( Panel, DC, GR_XOR );
-        Track->SetState( IN_EDIT, false );
+        TRACK* track = g_DragSegmentList[ii].m_Track;
+        track->Draw( Panel, DC, GR_XOR );
+        track->SetState( IN_EDIT, false );
+        track->ClearFlags();
         g_DragSegmentList[ii].RestoreInitialValues();
-        Track->Draw( Panel, DC, GR_OR );
+        track->Draw( Panel, DC, GR_OR );
     }
 
     EraseDragList();
@@ -122,7 +123,7 @@ void PCB_BASE_FRAME::StartMovePad( D_PAD* aPad, wxDC* aDC, bool aDragConnectedTr
 void PCB_BASE_FRAME::PlacePad( D_PAD* aPad, wxDC* DC )
 {
     int     dX, dY;
-    TRACK*  Track;
+    TRACK*  track;
 
     if( aPad == NULL )
         return;
@@ -135,16 +136,16 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* aPad, wxDC* DC )
     // Save dragged track segments in undo list
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
-        Track = g_DragSegmentList[ii].m_Track;
+        track = g_DragSegmentList[ii].m_Track;
 
         // Set the old state
         if( g_DragSegmentList[ii].m_Pad_Start )
-            Track->SetStart( Pad_OldPos );
+            track->SetStart( Pad_OldPos );
 
         if( g_DragSegmentList[ii].m_Pad_End )
-            Track->SetEnd( Pad_OldPos );
+            track->SetEnd( Pad_OldPos );
 
-        picker.SetItem( Track );
+        picker.SetItem( track );
         pickList.PushItem( picker );
     }
 
@@ -169,19 +170,23 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* aPad, wxDC* DC )
     // Redraw dragged track segments
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
-        Track = g_DragSegmentList[ii].m_Track;
+        track = g_DragSegmentList[ii].m_Track;
 
         // Set the new state
         if( g_DragSegmentList[ii].m_Pad_Start )
-            Track->SetStart( aPad->GetPosition() );
+            track->SetStart( aPad->GetPosition() );
 
         if( g_DragSegmentList[ii].m_Pad_End )
-            Track->SetEnd( aPad->GetPosition() );
-
-        Track->SetState( IN_EDIT, false );
+            track->SetEnd( aPad->GetPosition() );
 
         if( DC )
-            Track->Draw( m_canvas, DC, GR_OR );
+            track->Draw( m_canvas, DC, GR_XOR );
+
+        track->SetState( IN_EDIT, false );
+        track->ClearFlags();
+
+        if( DC )
+            track->Draw( m_canvas, DC, GR_OR );
     }
 
     // Compute local coordinates (i.e refer to module position and for module orient = 0)

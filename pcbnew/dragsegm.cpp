@@ -409,6 +409,7 @@ void UndrawAndMarkSegmentsToDrag( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 
         track->Draw( aCanvas, aDC, GR_XOR );
         track->SetState( IN_EDIT, false );
+        track->SetFlags( IS_DRAGGED );
 
         if( g_DragSegmentList[ii].m_Flag & STARTPOINT )
             track->SetFlags( STARTPOINT );
