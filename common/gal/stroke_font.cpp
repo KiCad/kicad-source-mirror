@@ -140,21 +140,6 @@ BOX2D STROKE_FONT::computeBoundingBox( const Glyph& aGlyph, const VECTOR2D& aGly
 
 void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRotationAngle )
 {
-    // Split multiline strings into separate ones and draw line by line
-    size_t newlinePos = aText.find( '\n' );
-
-    if( newlinePos != std::string::npos )
-    {
-        VECTOR2D nextlinePosition( aPosition );
-        nextlinePosition += VECTOR2D( 0.0, m_glyphSize.y * 1.6 );   // FIXME remove magic number
-
-        Draw( aText.substr( newlinePos + 1 ), nextlinePosition, aRotationAngle );
-        aText = aText.substr( 0, newlinePos );
-    }
-
-    // Compute the text size
-    VECTOR2D textsize = computeTextSize( aText );
-
     // By default overbar is turned off
     m_overbar = false;
 
@@ -163,6 +148,20 @@ void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRo
 
     m_gal->Translate( aPosition );
     m_gal->Rotate( -aRotationAngle );
+
+    // Split multiline strings into separate ones and draw them line by line
+    size_t newlinePos = aText.find( '\n' );
+
+    if( newlinePos != std::string::npos )
+    {
+        VECTOR2D nextlinePosition = VECTOR2D( 0.0, m_glyphSize.y * LINE_HEIGHT_RATIO );
+
+        Draw( aText.substr( newlinePos + 1 ), nextlinePosition, 0.0 );
+        aText = aText.substr( 0, newlinePos );
+    }
+
+    // Compute the text size
+    VECTOR2D textsize = computeTextSize( aText );
 
     // Adjust the text position to the given alignment
     switch( m_horizontalJustify )

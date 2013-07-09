@@ -599,6 +599,9 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
 
 void PCB_PAINTER::draw( const TEXTE_PCB* aText )
 {
+    if( aText->GetText().Length() == 0 )
+        return;
+
     COLOR4D  strokeColor = getLayerColor( aText->GetLayer(), 0 );
     VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
     double   orientation = aText->GetOrientation() * M_PI / 1800.0;
@@ -612,6 +615,9 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText )
 
 void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 {
+    if( aText->GetLength() == 0 )
+        return;
+
     COLOR4D  strokeColor = getLayerColor( aLayer, 0 );
     VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y);
     double   orientation = aText->GetDrawRotation() * M_PI / 1800.0;
