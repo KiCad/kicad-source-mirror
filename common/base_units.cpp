@@ -226,7 +226,6 @@ double From_User_Unit( EDA_UNITS_T aUnit, double aValue )
 
     default:
     case UNSCALED_UNITS:
-
         value = aValue;
     }
 
@@ -243,8 +242,9 @@ int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
 
     // Acquire the 'right' decimal point separator
     const struct lconv* lc = localeconv();
-    wxChar decimal_point = lc->decimal_point[0];
-    wxString            buf( aTextValue.Strip( wxString::both ) );
+
+    wxChar      decimal_point = lc->decimal_point[0];
+    wxString    buf( aTextValue.Strip( wxString::both ) );
 
     // Convert the period in decimal point
     buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
@@ -270,7 +270,9 @@ int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
     }
 
     // Extract the numeric part
-    buf.Left( brk_point ).ToDouble( &dtmp );
+    buf.Left( brk_point );
+
+    buf.ToDouble( &dtmp );
 
     // Check the optional unit designator (2 ch significant)
     wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );

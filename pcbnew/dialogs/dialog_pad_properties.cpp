@@ -85,7 +85,7 @@ static const LAYER_MSK Std_Pad_Layers[] = {
  * class DIALOG_PAD_PROPERTIES, derived from DIALOG_PAD_PROPERTIES_BASE,
  * created by wxFormBuilder
  */
- class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
+class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
 {
 public:
     DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad );
