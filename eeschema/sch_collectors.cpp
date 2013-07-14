@@ -516,7 +516,7 @@ SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestDat
 void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
                                   SCH_SHEET_PATH* aSheetPath )
 {
-    if( !m_findReplaceData.ChangesSearch( aFindReplaceData ) && !m_List.empty() && !m_forceSearch )
+    if( !IsSearchRequired( aFindReplaceData ) && !m_List.empty() && !m_forceSearch )
         return;
 
     m_findReplaceData = aFindReplaceData;
