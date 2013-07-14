@@ -296,7 +296,8 @@ public:
      */
     bool IsSearchRequired( SCH_FIND_REPLACE_DATA& aFindReplaceData )
     {
-        return m_findReplaceData.ChangesSearch( aFindReplaceData ) || m_forceSearch;
+        return m_findReplaceData.ChangesCompare( aFindReplaceData ) || m_forceSearch ||
+               (m_findReplaceData.IsWrapping() != aFindReplaceData.IsWrapping());
     }
 
     /**
