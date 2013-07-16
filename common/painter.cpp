@@ -40,7 +40,7 @@ RENDER_SETTINGS::RENDER_SETTINGS()
     m_hiContrastEnabled = false;
     m_hiContrastFactor  = 0.2;
     m_activeLayer       = 0;
-    m_outlineWidth      = 60000;
+    m_outlineWidth      = 1;
 
     // Store the predefined colors used in KiCad in format used by GAL
     for( int i = 0; i < NBCOLORS; i++ )
