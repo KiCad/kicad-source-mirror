@@ -196,8 +196,10 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         }
 
         // Set rendering order of layers
-        for( unsigned int i = 0; i < sizeof( GalLayerOrder ) / sizeof( int ); ++i )
+        for( LAYER_NUM i = 0; i < sizeof(GalLayerOrder) / sizeof(LAYER_NUM); ++i )
         {
+            wxASSERT( i < KiGfx::VIEW::VIEW_MAX_LAYERS );
+
             view->SetLayerOrder( GalLayerOrder[i], i );
         }
 
@@ -205,16 +207,16 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         // so there is no point in caching them
         for( LAYER_NUM layer = FIRST_NETNAME_LAYER; layer <= LAST_NETNAME_LAYER; ++layer )
         {
-            view->SetLayerCached( layer, false );
+             view->SetLayerCached( layer, false );
         }
 
         // Load layer & elements visibility settings
-        for( unsigned int i = 0; i < NB_LAYERS; ++i )
+        for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
         {
             view->SetLayerVisible( i, m_Pcb->IsLayerVisible( i ) );
         }
 
-        for( unsigned int i = 0; i < END_PCB_VISIBLE_LIST; ++i )
+        for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )
         {
             view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( i ) );
         }
