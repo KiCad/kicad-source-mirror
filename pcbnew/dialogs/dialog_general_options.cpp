@@ -199,35 +199,35 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     case ID_TB_OPTIONS_SHOW_ZONES:
         DisplayOpt.DisplayZonesMode = 0;
         recache = true;
-        if( !IsGalCanvasActive() )
+        if( !m_galCanvasActive )
             m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
         DisplayOpt.DisplayZonesMode = 1;
         recache = true;
-        if( !IsGalCanvasActive() )
+        if( !m_galCanvasActive )
             m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
         DisplayOpt.DisplayZonesMode = 2;
         recache = true;
-        if( !IsGalCanvasActive() )
+        if( !m_galCanvasActive )
             m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
         m_DisplayViaFill = DisplayOpt.DisplayViaFill = !state;
         recache = true;
-        if( !IsGalCanvasActive() )
+        if( !m_galCanvasActive )
             m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = !state;
         recache = true;
-        if( !IsGalCanvasActive() )
+        if( !m_galCanvasActive )
             m_canvas->Refresh();
         break;
 
@@ -238,19 +238,12 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         // Apply new display options to the GAL canvas (this is faster than recaching)
         settings->LoadDisplayOptions( DisplayOpt );
 
-        KiGfx::VIEW* view = m_galCanvas->GetView();
-        LAYER_NUM layer = getActiveLayer();
+        setHighContrastLayer( getActiveLayer() );
+        m_galCanvas->GetView()->EnableTopLayer( state );
 
-        view->GetPainter()->GetSettings()->SetActiveLayer( layer );
-        view->UpdateAllLayersColor();
+        if( m_galCanvasActive )
+            m_galCanvas->Refresh();
 
-        view->EnableTopLayer( state );
-        view->ClearTopLayers();
-        view->SetTopLayer( layer );
-        view->UpdateAllLayersOrder();
-
-        if( !IsGalCanvasActive() )
-            m_canvas->Refresh();
         break;
     }
 

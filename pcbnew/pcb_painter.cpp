@@ -73,6 +73,8 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
     m_itemColors[VIAS_VISIBLE]              = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
     m_itemColors[PADS_VISIBLE]              = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
     m_itemColors[PADS_NETNAMES_VISIBLE]     = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    m_itemColors[PAD_FR_NETNAMES_VISIBLE]   = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    m_itemColors[PAD_BK_NETNAMES_VISIBLE]   = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
     // Netnames for copper layers
     for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
     {
@@ -156,7 +158,7 @@ const COLOR4D& PCB_PAINTER::GetColor( const VIEW_ITEM* aItem, int aLayer )
 
 const COLOR4D& PCB_PAINTER::getLayerColor( int aLayer, int aNetCode ) const
 {
-    if( m_pcbSettings->m_hiContrastEnabled && m_pcbSettings->m_activeLayer != aLayer )
+    if( m_pcbSettings->m_hiContrastEnabled && m_pcbSettings->m_activeLayers.count( aLayer ) == 0 )
     {
         return m_pcbSettings->m_hiContrastColor;
     }
@@ -376,7 +378,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     orientation = orientation * M_PI / 1800.0;
 
     // Draw description layer
-    if( aLayer == ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ) )
+    if( IsNetnameLayer( aLayer ) )
     {
         size = VECTOR2D( aPad->GetSize() / 2 );
         double scale = m_gal->GetZoomFactor();

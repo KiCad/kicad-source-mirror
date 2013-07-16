@@ -431,6 +431,9 @@ void VIEW::EnableTopLayer( bool aEnable )
         for( it = m_topLayers.begin(); it != m_topLayers.end(); ++it )
             m_layers[*it].renderingOrder -= TOP_LAYER_MODIFIER;
     }
+
+    UpdateAllLayersOrder();
+    UpdateAllLayersColor();
 }
 
 

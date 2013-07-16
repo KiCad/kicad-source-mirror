@@ -743,28 +743,57 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 }
 
 
-void PCB_EDIT_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
+void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
 {
-    ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
-
     // Set display settings for high contrast mode
     KiGfx::VIEW* view = m_galCanvas->GetView();
+    KiGfx::RENDER_SETTINGS* rSettings = view->GetPainter()->GetSettings();
 
     if( DisplayOpt.ContrastModeDisplay )
     {
-        view->GetPainter()->GetSettings()->SetActiveLayer( aLayer );
-        view->UpdateAllLayersColor();
-
         view->ClearTopLayers();
         view->SetTopLayer( aLayer );
+
+        rSettings->ClearActiveLayers();
+        rSettings->SetActiveLayer( aLayer );
+
+        if( IsCopperLayer( aLayer ) )
+        {
+            // Bring some other layers to the front in case of copper layers and make them colored
+            LAYER_NUM layers[] = {
+                    GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
+                    ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
+                    ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE )
+            };
+
+            for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
+            {
+                view->SetTopLayer( layers[i] );
+                rSettings->SetActiveLayer( layers[i] );
+            }
+
+            // Pads should be shown too
+            if( aLayer == FIRST_COPPER_LAYER )
+            {
+                view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+                view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
+                rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+                rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
+            }
+            else if( aLayer == LAST_COPPER_LAYER )
+            {
+                view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+                view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
+                rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+                rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
+            }
+        }
         view->UpdateAllLayersOrder();
+        view->UpdateAllLayersColor();
 
         if( m_galCanvasActive )
             m_galCanvas->Refresh();
     }
-
-    if( doLayerWidgetUpdate )
-        syncLayerWidgetLayer();
 }
 
 

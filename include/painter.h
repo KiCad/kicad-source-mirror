@@ -27,8 +27,8 @@
 #ifndef __CLASS_PAINTER_H
 #define __CLASS_PAINTER_H
 
-#include <vector>
 #include <map>
+#include <set>
 
 #include <gal/color4d.h>
 #include <colors.h>
@@ -51,8 +51,6 @@ class VIEW_ITEM;
  * - drawing quality control (sketch/outline mode)
  * The class acts as an interface between the PAINTER object and the GUI (i.e. Layers/Items
  * widget or display options dialog).
- *
- * Todo: properties/introspection
  */
 class RENDER_SETTINGS
 {
@@ -81,9 +79,21 @@ public:
      * (eg. highlighted, so it differs from other layers).
      * @param aLayerId is a layer number that should be displayed in a specific mode.
      */
-    inline void SetActiveLayer( int aLayerId )
+    inline void SetActiveLayer( int aLayerId, bool aEnabled = true )
     {
-        m_activeLayer = aLayerId;
+        if( aEnabled )
+            m_activeLayers.insert( aLayerId );
+        else
+            m_activeLayers.erase( aLayerId );
+    }
+
+    /**
+     * Function ClearActiveLayers
+     * Clears the list of active layers.
+     */
+    inline void ClearActiveLayers()
+    {
+        m_activeLayers.clear();
     }
 
     /**
@@ -112,8 +122,7 @@ public:
     }
 
 protected:
-
-    int     m_activeLayer;          /// Stores active layer number
+    std::set<unsigned int> m_activeLayers; /// Stores active layers number
 
     /// Parameters for display modes
     bool    m_hiContrastEnabled;    /// High contrast display mode on/off

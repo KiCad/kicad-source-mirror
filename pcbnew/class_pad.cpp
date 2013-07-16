@@ -748,48 +748,32 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 0;
 
-    if( m_Attribute == PAD_SMD || m_Attribute == PAD_CONN )
+    if( IsOnLayer( LAYER_N_FRONT ) && IsOnLayer( LAYER_N_BACK ) )
     {
-        // Single layer pad (smd) without hole
-        if( IsOnLayer( LAYER_N_FRONT ) )
-            aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
-        else if( IsOnLayer( LAYER_N_BACK ) )
-            aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
-#ifdef __WXDEBUG__
-        else    // Should not occur
-        {
-            wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD on layer different than FRONT/BACK") );
-        }
-#endif
+        // Multi layer pad
+        aLayers[aCount++] = ITEM_GAL_LAYER( PADS_VISIBLE );
+        aLayers[aCount++] = ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE );
     }
-    else
+    else if( IsOnLayer( LAYER_N_FRONT ) )
     {
-        if( IsOnLayer( LAYER_N_FRONT ) && IsOnLayer( LAYER_N_BACK ) )
-        {
-            // Multi layer pad
-            aLayers[aCount++] = ITEM_GAL_LAYER( PADS_VISIBLE );
-        }
-        else if( IsOnLayer( LAYER_N_FRONT ) )
-        {
-            aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
-        }
-        else if( IsOnLayer( LAYER_N_BACK ) )
-        {
-            aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
-        }
+        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
+        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
+    }
+    else if( IsOnLayer( LAYER_N_BACK ) )
+    {
+        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
+        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
+    }
 #ifdef __WXDEBUG__
-        else    // Should not occur
-        {
-            wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD on layer different than FRONT/BACK") );
-        }
+    else    // Should not occur
+    {
+        wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD on layer different than FRONT/BACK") );
+    }
 #endif
 
-        // Draw a hole
+    // These types of pads contain a hole
+    if( m_Attribute == PAD_STANDARD || m_Attribute == PAD_HOLE_NOT_PLATED )
         aLayers[aCount++] = ITEM_GAL_LAYER( PADS_HOLES_VISIBLE );
-    }
-
-    // Pad description layer (number & net)
-    aLayers[aCount++] = ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE );
 }
 
 
@@ -805,7 +789,7 @@ void D_PAD::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
 unsigned int D_PAD::ViewGetLOD( int aLayer ) const
 {
     // Netnames will be shown only if zoom is appropriate
-    if( aLayer == ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ) )
+    if( IsNetnameLayer( aLayer ) )
     {
         return ( 100000000 / std::max( m_Size.x, m_Size.y ) );
     }
