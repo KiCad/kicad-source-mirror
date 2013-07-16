@@ -39,11 +39,6 @@
 
 using namespace KiGfx;
 
-// Static constants
-const int VIEW::VIEW_MAX_LAYERS = 64;
-// Top layer depth
-const int VIEW::TOP_LAYER       = -1;
-
 void VIEW::AddLayer( int aLayer, bool aDisplayOnly )
 {
     if( m_layers.find( aLayer ) == m_layers.end() )
@@ -140,14 +135,12 @@ int VIEW::Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult )
 
 
 VIEW::VIEW( bool aIsDynamic ) :
-    m_enableTopLayer( false ),
+    m_enableOrderModifier( false ),
     m_scale ( 1.0 ),
     m_painter( NULL ),
     m_gal( NULL ),
     m_dynamic( aIsDynamic )
 {
-    // By default there is no layer on the top
-    m_topLayer.enabled = false;
 }
 
 
@@ -395,63 +388,75 @@ void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
 }
 
 
-void VIEW::SetTopLayer( int aLayer )
+void VIEW::SetTopLayer( int aLayer, bool aEnabled )
 {
-    // Restore previous order
-    if( m_topLayer.enabled )
+    if( aEnabled )
     {
-        m_layers[m_topLayer.id].renderingOrder = m_topLayer.renderingOrder;
-        ChangeLayerDepth( m_topLayer.id, m_topLayer.renderingOrder );
-    }
+        if( m_topLayers.count( aLayer ) == 1 )
+            return;
 
-    if( aLayer >= 0 && aLayer < VIEW_MAX_LAYERS )
-    {
-        // Save settings, so it can be restored later
-        m_topLayer.renderingOrder = m_layers[aLayer].renderingOrder;
-        m_topLayer.id = m_layers[aLayer].id;
+        m_topLayers.insert( aLayer );
 
-        // Apply new settings only if the option is enabled
-        if( m_enableTopLayer )
-        {
-            m_layers[aLayer].renderingOrder = TOP_LAYER;
-            ChangeLayerDepth( aLayer, TOP_LAYER );
-        }
-
-        // Set the flag saying that settings stored in m_topLayer are valid
-        m_topLayer.enabled = true;
+        // Move the layer closer to front
+        if( m_enableOrderModifier )
+            m_layers[aLayer].renderingOrder += TOP_LAYER_MODIFIER;
     }
     else
     {
-        // There are no valid settings in m_topLayer
-        m_topLayer.enabled = false;
-    }
+        if( m_topLayers.count( aLayer ) == 0 )
+            return;
 
-    sortLayers();
+        m_topLayers.erase( aLayer );
+
+        // Restore the previous rendering order
+        if( m_enableOrderModifier )
+            m_layers[aLayer].renderingOrder -= TOP_LAYER_MODIFIER;
+    }
 }
 
 
 void VIEW::EnableTopLayer( bool aEnable )
 {
-    if( aEnable == m_enableTopLayer ) return;
+    if( aEnable == m_enableOrderModifier ) return;
+    m_enableOrderModifier = aEnable;
 
-    // Use stored settings only if applicable
-    // (topLayer.enabled == false means there are no valid settings stored)
-    if( m_topLayer.enabled )
+    std::set<unsigned int>::iterator it;
+    if( aEnable )
     {
-        if( aEnable )
-        {
-            m_layers[m_topLayer.id].renderingOrder = TOP_LAYER;
-            ChangeLayerDepth( m_topLayer.id, TOP_LAYER );
-        }
-        else
-        {
-            m_layers[m_topLayer.id].renderingOrder = m_topLayer.renderingOrder;
-            ChangeLayerDepth( m_topLayer.id, m_topLayer.renderingOrder );
-        }
+        for( it = m_topLayers.begin(); it != m_topLayers.end(); ++it )
+            m_layers[*it].renderingOrder += TOP_LAYER_MODIFIER;
     }
+    else
+    {
+        for( it = m_topLayers.begin(); it != m_topLayers.end(); ++it )
+            m_layers[*it].renderingOrder -= TOP_LAYER_MODIFIER;
+    }
+}
+
+
+void VIEW::ClearTopLayers()
+{
+    std::set<unsigned int>::iterator it;
+
+    if( m_enableOrderModifier )
+    {
+        // Restore the previous rendering order for layers that were marked as top
+        for( it = m_topLayers.begin(); it != m_topLayers.end(); ++it )
+            m_layers[*it].renderingOrder -= TOP_LAYER_MODIFIER;
+    }
+
+    m_topLayers.clear();
+}
+
+
+void VIEW::UpdateAllLayersOrder()
+{
     sortLayers();
 
-    m_enableTopLayer = aEnable;
+    BOOST_FOREACH( LayerMap::value_type& l, m_layers )
+    {
+        ChangeLayerDepth( l.first, l.second.renderingOrder );
+    }
 }
 
 
@@ -513,7 +518,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
         {
             drawItem drawFunc( this, l );
 
-            m_gal->SetLayerDepth( static_cast<double>( l->renderingOrder ) );
+            m_gal->SetLayerDepth( l->renderingOrder );
             l->items->Query( aRect, drawFunc );
             l->isDirty = false;
         }
@@ -703,7 +708,7 @@ void VIEW::RecacheAllItems( bool aImmediately )
 
         if( l->cached )
         {
-            m_gal->SetLayerDepth( (double) l->renderingOrder );
+            m_gal->SetLayerDepth( l->renderingOrder );
             recacheLayer visitor( this, m_gal, l->id, aImmediately );
             l->items->Query( r, visitor );
         }
