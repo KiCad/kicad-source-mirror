@@ -32,20 +32,25 @@ const float SHADER_FILLED_CIRCLE        = 2.0;
 const float SHADER_STROKED_CIRCLE       = 3.0;
 
 varying vec4 shaderParams;
+varying vec2 circleCoords;
 
 void filledCircle( vec2 aCoord )
 {
-    if( dot( aCoord, aCoord ) < 1.0 )
+    if( dot( aCoord, aCoord ) < 1.0f )
         gl_FragColor = gl_Color;
     else
         discard;
 }
 
 
-void strokedCircle( vec2 aCoord, float aWidth )
+void strokedCircle( vec2 aCoord, float aRadius, float aWidth )
 {
+    float outerRadius = aRadius;
+    float innerRadius = aRadius - aWidth;
+    float relWidth = innerRadius / outerRadius;
+
     if( ( dot( aCoord, aCoord ) < 1.0 ) && 
-        ( dot( aCoord, aCoord ) > aWidth * aWidth ) )
+        ( dot( aCoord, aCoord ) > relWidth * relWidth ) )
         gl_FragColor = gl_Color;
     else
         discard;
@@ -56,11 +61,11 @@ void main()
 {
     if( shaderParams[0] == SHADER_FILLED_CIRCLE )
     {
-        filledCircle( vec2( shaderParams[1], shaderParams[2] ) );
+        filledCircle( circleCoords );
     }
     else if( shaderParams[0] == SHADER_STROKED_CIRCLE )
     {
-        strokedCircle( vec2( shaderParams[1], shaderParams[2] ), shaderParams[3] );
+        strokedCircle( circleCoords, shaderParams[2], shaderParams[3] );
     }
     else
     {
