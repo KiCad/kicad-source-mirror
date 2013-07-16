@@ -496,7 +496,12 @@ void CAIRO_GAL::SetLineWidth( double aLineWidth )
     storePath();
 
     lineWidth = aLineWidth;
-    cairo_set_line_width( cairoImage, aLineWidth );
+
+    // Make lines appear at least 1 pixel wide, no matter of zoom
+    double x = 1.0, y = 1.0;
+    cairo_device_to_user_distance( cairoImage, &x, &y );
+    double minWidth = std::min( fabs( x ), fabs( y ) );
+    cairo_set_line_width( cairoImage, std::max( aLineWidth, minWidth ) );
 
     if( isGrouping )
     {
@@ -716,8 +721,15 @@ void CAIRO_GAL::DrawGroup( int aGroupNumber )
             break;
 
         case CMD_SET_LINE_WIDTH:
-            cairo_set_line_width( cairoImage, it->arguments[0] );
+            {
+                // Make lines appear at least 1 pixel wide, no matter of zoom
+                double x = 1.0, y = 1.0;
+                cairo_device_to_user_distance( cairoImage, &x, &y );
+                double minWidth = std::min( fabs( x ), fabs( y ) );
+                cairo_set_line_width( cairoImage, std::max( it->arguments[0], minWidth ) );
+            }
             break;
+
 
         case CMD_STROKE_PATH:
             cairo_set_source_rgb( cairoImage, strokeColor.r, strokeColor.g, strokeColor.b );
