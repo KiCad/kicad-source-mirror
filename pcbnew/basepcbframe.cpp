@@ -84,44 +84,6 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
 END_EVENT_TABLE()
 
 
-/// Rendering order of layers on GAL-based canvas (lower index in the array
-/// means that layer is displayed closer to the user, ie. on the top).
-const int m_galLayerOrder[] =
-{
-		DRAW_N,	COMMENT_N, ECO1_N, ECO2_N, EDGE_N,
-		UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31,
-		ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ),
-		ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE), ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ),
-		SILKSCREEN_N_FRONT, SOLDERPASTE_N_FRONT, ADHESIVE_N_FRONT, SOLDERMASK_N_FRONT,
-
-		ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
-		ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ),
-		ITEM_GAL_LAYER( VIAS_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
-
-		ITEM_GAL_LAYER( PAD_FR_VISIBLE ),
-		ITEM_GAL_LAYER( LAYER_16_NETNAMES_VISIBLE ), LAYER_N_FRONT,
-		ITEM_GAL_LAYER( LAYER_15_NETNAMES_VISIBLE ), LAYER_N_15,
-		ITEM_GAL_LAYER( LAYER_14_NETNAMES_VISIBLE ), LAYER_N_14,
-		ITEM_GAL_LAYER( LAYER_13_NETNAMES_VISIBLE ), LAYER_N_13,
-		ITEM_GAL_LAYER( LAYER_12_NETNAMES_VISIBLE ), LAYER_N_12,
-		ITEM_GAL_LAYER( LAYER_11_NETNAMES_VISIBLE ), LAYER_N_11,
-		ITEM_GAL_LAYER( LAYER_10_NETNAMES_VISIBLE ), LAYER_N_10,
-		ITEM_GAL_LAYER( LAYER_9_NETNAMES_VISIBLE ), LAYER_N_9,
-		ITEM_GAL_LAYER( LAYER_8_NETNAMES_VISIBLE ), LAYER_N_8,
-		ITEM_GAL_LAYER( LAYER_7_NETNAMES_VISIBLE ), LAYER_N_7,
-		ITEM_GAL_LAYER( LAYER_6_NETNAMES_VISIBLE ), LAYER_N_6,
-		ITEM_GAL_LAYER( LAYER_5_NETNAMES_VISIBLE ), LAYER_N_5,
-		ITEM_GAL_LAYER( LAYER_4_NETNAMES_VISIBLE ), LAYER_N_4,
-		ITEM_GAL_LAYER( LAYER_3_NETNAMES_VISIBLE ), LAYER_N_3,
-		ITEM_GAL_LAYER( LAYER_2_NETNAMES_VISIBLE ), LAYER_N_2,
-		ITEM_GAL_LAYER( LAYER_1_NETNAMES_VISIBLE ), LAYER_N_BACK,
-		ITEM_GAL_LAYER( PAD_BK_VISIBLE ),
-
-		SOLDERMASK_N_BACK, ADHESIVE_N_BACK, SOLDERPASTE_N_BACK,	SILKSCREEN_N_BACK,
-		ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE )
-};
-
-
 PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
                                 const wxString& aTitle,
                                 const wxPoint& aPos, const wxSize& aSize,
@@ -233,10 +195,10 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
             settings->LoadDisplayOptions( DisplayOpt );
         }
 
-        // Set rendering order of layers (check m_galLayerOrder to see the order)
-        for( unsigned int i = 0; i < sizeof( m_galLayerOrder ) / sizeof( int ); ++i )
+        // Set rendering order of layers
+        for( unsigned int i = 0; i < sizeof( GalLayerOrder ) / sizeof( int ); ++i )
         {
-            view->SetLayerOrder( m_galLayerOrder[i], i );
+            view->SetLayerOrder( GalLayerOrder[i], i );
         }
 
         // Netnames are drawn only when scale is sufficient (level of details)
