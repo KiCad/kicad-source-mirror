@@ -203,11 +203,10 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 
         // Netnames are drawn only when scale is sufficient (level of details)
         // so there is no point in caching them
-        for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
+        for( LAYER_NUM layer = FIRST_NETNAME_LAYER; layer <= LAST_NETNAME_LAYER; ++layer )
         {
-            view->SetLayerCached( GetNetnameLayer( layer ), false );
+            view->SetLayerCached( layer, false );
         }
-        view->SetLayerCached( ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ), false );
 
         // Load layer & elements visibility settings
         for( unsigned int i = 0; i < NB_LAYERS; ++i )
