@@ -258,13 +258,9 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
             view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( i ) );
         }
 
-        view->SetTopLayer( m_Pcb->GetLayer() );
-
         view->RecacheAllItems( true );
         if( m_galCanvasActive )
-        {
             m_galCanvas->Refresh();
-        }
     }
 }
 

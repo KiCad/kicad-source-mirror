@@ -356,21 +356,10 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
     // false from this function.
     myframe->setActiveLayer( aLayer, false );
 
-    // Set display settings for high contrast mode
-    KiGfx::VIEW* view = myframe->GetGalCanvas()->GetView();
-    view->GetPainter()->GetSettings()->SetActiveLayer( aLayer );
-    view->UpdateAllLayersColor();
-    view->SetTopLayer( aLayer );
-
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();
-    else if(DisplayOpt.ContrastModeDisplay)
-    {
-        if( myframe->IsGalCanvasActive() )
-            myframe->GetGalCanvas()->Refresh();
-        else
-            myframe->GetCanvas()->Refresh();
-    }
+    else if( DisplayOpt.ContrastModeDisplay )
+        myframe->GetCanvas()->Refresh();
 
     return true;
 }

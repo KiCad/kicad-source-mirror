@@ -232,16 +232,27 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
+    {
         DisplayOpt.ContrastModeDisplay = state;
 
         // Apply new display options to the GAL canvas (this is faster than recaching)
         settings->LoadDisplayOptions( DisplayOpt );
-        m_galCanvas->GetView()->EnableTopLayer( state );
-        m_galCanvas->GetView()->UpdateAllLayersColor();
+
+        KiGfx::VIEW* view = m_galCanvas->GetView();
+        LAYER_NUM layer = getActiveLayer();
+
+        view->GetPainter()->GetSettings()->SetActiveLayer( layer );
+        view->UpdateAllLayersColor();
+
+        view->EnableTopLayer( state );
+        view->ClearTopLayers();
+        view->SetTopLayer( layer );
+        view->UpdateAllLayersOrder();
 
         if( !IsGalCanvasActive() )
             m_canvas->Refresh();
         break;
+    }
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
         m_show_microwave_tools = state;

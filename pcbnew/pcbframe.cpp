@@ -56,6 +56,8 @@
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
 #include <convert_from_iu.h>
+#include <view/view.h>
+#include <painter.h>
 
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
@@ -738,6 +740,31 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
         return true;
 
     return false;
+}
+
+
+void PCB_EDIT_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
+{
+    ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
+
+    // Set display settings for high contrast mode
+    KiGfx::VIEW* view = m_galCanvas->GetView();
+
+    if( DisplayOpt.ContrastModeDisplay )
+    {
+        view->GetPainter()->GetSettings()->SetActiveLayer( aLayer );
+        view->UpdateAllLayersColor();
+
+        view->ClearTopLayers();
+        view->SetTopLayer( aLayer );
+        view->UpdateAllLayersOrder();
+
+        if( m_galCanvasActive )
+            m_galCanvas->Refresh();
+    }
+
+    if( doLayerWidgetUpdate )
+        syncLayerWidgetLayer();
 }
 
 

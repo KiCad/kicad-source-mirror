@@ -26,6 +26,7 @@
 #define __VIEW_H
 
 #include <vector>
+#include <set>
 #include <boost/unordered/unordered_map.hpp>
 
 #include <math/box2.h>
@@ -305,7 +306,7 @@ public:
      * @param aLayer: the layer or -1 in case when no particular layer should
      * be displayed on the top.
      */
-    void    SetTopLayer( int aLayer );
+    void    SetTopLayer( int aLayer, bool aEnabled = true );
 
     /**
      * Function EnableTopLayer()
@@ -315,6 +316,20 @@ public:
      * @param aEnabled: whether to enable or disable display of the top layer.
      */
     void    EnableTopLayer( bool aEnable );
+
+    /**
+     * Function ClearTopLayers()
+     * Removes all layers from the on-the-top set (they are no longer displayed over the rest of
+     * layers).
+     */
+    void    ClearTopLayers();
+
+    /**
+     * Function UpdateLayerOrder()
+     * Does everything that is needed to apply the rendering order of layers. It has to be called
+     * after modification of renderingOrder field of LAYER.
+     */
+    void    UpdateAllLayersOrder();
 
     /**
      * Function Redraw()
@@ -344,8 +359,7 @@ public:
      */
     bool IsDynamic() const { return m_dynamic; }
 
-    static const int VIEW_MAX_LAYERS;            ///* maximum number of layers that may be shown
-    static const int TOP_LAYER;                  ///* layer number for displaying items on the top
+    static const int VIEW_MAX_LAYERS = 64;       ///* maximum number of layers that may be shown
 
 private:
     struct VIEW_LAYER
@@ -377,11 +391,8 @@ private:
     struct updateItemsColor;
     struct changeItemsDepth;
 
-    ///* Saves current top layer settings in order to restore it when it's not top anymore
-    VIEW_LAYER m_topLayer;
-
-    ///* Whether to use top layer settings or not
-    bool m_enableTopLayer;
+    ///* Whether to use rendering order modifier or not
+    bool m_enableOrderModifier;
 
     ///* Redraws contents within rect aRect
     void redrawRect( const BOX2I& aRect );
@@ -412,6 +423,9 @@ private:
     /// Sorted list of pointers to members of m_layers.
     LayerOrder  m_orderedLayers;
 
+    /// Stores set of layers that are displayed on the top
+    std::set<unsigned int> m_topLayers;
+
     /// Center point of the VIEW (the point at which we are looking at)
     VECTOR2D    m_center;
 
@@ -427,6 +441,9 @@ private:
     /// Dynamic VIEW (eg. display PCB in window) allows changes once it is built,
     /// static (eg. image/PDF) - does not.
     bool        m_dynamic;
+
+    /// Rendering order modifier for layers that are marked as top layers
+    static const int TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
 };
 } // namespace KiGfx
 
