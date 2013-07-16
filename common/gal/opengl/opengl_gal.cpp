@@ -501,25 +501,6 @@ void OPENGL_GAL::EndDrawing()
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_COLOR_ARRAY );
 
-    // Bind vertices data buffers
-    glBindBuffer( GL_ARRAY_BUFFER, cachedVerts );
-    glVertexPointer( VBO_ITEM::CoordStride, GL_FLOAT, VBO_ITEM::VertByteSize, 0 );
-    glColorPointer( VBO_ITEM::ColorStride, GL_UNSIGNED_BYTE, VBO_ITEM::VertByteSize,
-                    (GLvoid*) VBO_ITEM::ColorByteOffset );
-
-    // Shader parameters
-    if( isUseShader )
-    {
-        shader.Use();
-        glEnableVertexAttribArray( shaderAttrib );
-        glVertexAttribPointer( shaderAttrib, VBO_ITEM::ShaderStride, GL_FLOAT, GL_FALSE,
-                               VBO_ITEM::VertByteSize, (GLvoid*) VBO_ITEM::ShaderByteOffset );
-    }
-
-    glDrawElements( GL_TRIANGLES, indicesSize, GL_UNSIGNED_INT, (GLvoid*) 0 );
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
-    glBindBuffer( GL_ARRAY_BUFFER, 0 );
-
     // Draw non-cached items
     GLfloat* vertices = (GLfloat*)( nonCachedVbo.GetAllVertices() );
     GLubyte* colors   = (GLubyte*)( nonCachedVbo.GetAllVertices() ) + VBO_ITEM::ColorOffset;
@@ -529,10 +510,28 @@ void OPENGL_GAL::EndDrawing()
     glColorPointer( VBO_ITEM::ColorStride, GL_UNSIGNED_BYTE, VBO_ITEM::VertByteSize, colors );
     if( isUseShader )
     {
+        shader.Use();
+        glEnableVertexAttribArray( shaderAttrib );
         glVertexAttribPointer( shaderAttrib, VBO_ITEM::ShaderStride, GL_FLOAT, GL_FALSE,
                                VBO_ITEM::VertByteSize, shaders );
     }
     glDrawArrays( GL_TRIANGLES, nonCachedItem->GetOffset(), nonCachedItem->GetSize() );
+
+    // Draw cached items
+    glBindBuffer( GL_ARRAY_BUFFER, cachedVerts );
+    glVertexPointer( VBO_ITEM::CoordStride, GL_FLOAT, VBO_ITEM::VertByteSize, 0 );
+    glColorPointer( VBO_ITEM::ColorStride, GL_UNSIGNED_BYTE, VBO_ITEM::VertByteSize,
+                    (GLvoid*) VBO_ITEM::ColorByteOffset );
+    if( isUseShader )
+    {
+        glVertexAttribPointer( shaderAttrib, VBO_ITEM::ShaderStride, GL_FLOAT, GL_FALSE,
+                               VBO_ITEM::VertByteSize, (GLvoid*) VBO_ITEM::ShaderByteOffset );
+    }
+
+
+    glDrawElements( GL_TRIANGLES, indicesSize, GL_UNSIGNED_INT, (GLvoid*) 0 );
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
 
     // Deactivate vertex array
     glDisableClientState( GL_COLOR_ARRAY );
