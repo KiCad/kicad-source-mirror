@@ -783,23 +783,24 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
             color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
             /* Draw a triangle that contains the circle, then shade it leaving only the circle.
-               Parameters given to setShader are relative coordinates of the triangle's vertices.
+               Parameters given to setShader are indices of the triangle's vertices
+               (if you want to understand more, check the vertex shader source [shader.vert]).
                Shader uses this coordinates to determine if fragments are inside the circle or not.
                     v2
                     /\
                    //\\
                v0 /_\/_\ v1
             */
-            setShader( SHADER_FILLED_CIRCLE, -sqrt( 3.0f ), -1.0f );
-            vertex3( aCenterPoint.x - aRadius * sqrt( 3.0f ),                           // v0
-                     aCenterPoint.y - aRadius, layerDepth );
+            setShader( SHADER_FILLED_CIRCLE, 1.0 );
+            vertex3( aCenterPoint.x - aRadius * sqrt( 3.0f ),
+                     aCenterPoint.y - aRadius, layerDepth );                        // v0
 
-            setShader( SHADER_FILLED_CIRCLE, sqrt( 3.0f ), -1.0f );
-            vertex3( aCenterPoint.x + aRadius * sqrt( 3.0f ),                           // v1
-                     aCenterPoint.y - aRadius, layerDepth );
+            setShader( SHADER_FILLED_CIRCLE, 2.0 );
+            vertex3( aCenterPoint.x + aRadius * sqrt( 3.0f ),
+                     aCenterPoint.y - aRadius, layerDepth );                        // v1
 
-            setShader( SHADER_FILLED_CIRCLE, 0.0f, 2.0f );
-            vertex3( aCenterPoint.x, aCenterPoint.y + aRadius * 2.0f, layerDepth );     // v2
+            setShader( SHADER_FILLED_CIRCLE, 3.0 );
+            vertex3( aCenterPoint.x, aCenterPoint.y + aRadius * 2.0f, layerDepth ); // v2
         }
 
         if( isStrokeEnabled )
@@ -807,30 +808,25 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
             color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
             /* Draw a triangle that contains the circle, then shade it leaving only the circle.
-               Parameters given to setShader are relative coordinates of the triangle's vertices
+               Parameters given to setShader are indices of the triangle's vertices
+               (if you want to understand more, check the vertex shader source [shader.vert]).
                and the line width. Shader uses this coordinates to determine if fragments are inside
-               the circle or not. Width parameter has to be passed as a ratio of inner radius
-               to outer radius.
+               the circle or not.
                     v2
                     /\
                    //\\
                v0 /_\/_\ v1
             */
-            float outerRadius = aRadius + ( lineWidth / 2.0f );
-            float innerRadius = aRadius - ( lineWidth / 2.0f );
-            float relWidth = innerRadius / outerRadius;
+            setShader( SHADER_STROKED_CIRCLE, 1.0, aRadius, lineWidth );
+            vertex3( aCenterPoint.x - aRadius * sqrt( 3.0f ),
+                     aCenterPoint.y - aRadius, layerDepth );                        // v0
 
-            setShader( SHADER_STROKED_CIRCLE, -sqrt( 3.0f ), -1.0f, relWidth );
-            vertex3( aCenterPoint.x - outerRadius * sqrt( 3.0f ),                           // v0
-                     aCenterPoint.y - outerRadius, layerDepth );
+            setShader( SHADER_STROKED_CIRCLE, 2.0, aRadius, lineWidth );
+            vertex3( aCenterPoint.x + aRadius * sqrt( 3.0f ),
+                     aCenterPoint.y - aRadius, layerDepth );                        // v1
 
-            setShader( SHADER_STROKED_CIRCLE, sqrt( 3.0f ), -1.0f, relWidth );
-            vertex3( aCenterPoint.x + outerRadius * sqrt( 3.0f ),                           // v1
-                     aCenterPoint.y - outerRadius, layerDepth );
-
-            setShader( SHADER_STROKED_CIRCLE, 0.0f, 2.0f, relWidth );
-            vertex3( aCenterPoint.x,                                                        // v2
-                     aCenterPoint.y + outerRadius * 2.0f, layerDepth );
+            setShader( SHADER_STROKED_CIRCLE, 3.0, aRadius, lineWidth );
+            vertex3( aCenterPoint.x, aCenterPoint.y + aRadius * 2.0f, layerDepth ); // v2
         }
 
         return;
@@ -931,20 +927,21 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
         Rotate( aAngle );
 
         /* Draw a triangle that contains the semicircle, then shade it to leave only the semicircle.
-                       Parameters given to setShader are relative coordinates of the triangle's vertices.
-                       Shader uses this coordinates to determine if fragments are inside the semicircle or not.
-                            v2
-                            /\
-                           /__\
-                       v0 //__\\ v1
+           Parameters given to setShader are indices of the triangle's vertices
+           (if you want to understand more, check the vertex shader source [shader.vert]).
+           Shader uses this coordinates to determine if fragments are inside the semicircle or not.
+                v2
+                /\
+               /__\
+           v0 //__\\ v1
          */
-        setShader( SHADER_FILLED_CIRCLE, -3.0f / sqrt( 3.0f ), 0.0f );
+        setShader( SHADER_FILLED_CIRCLE, 4.0f );
         vertex3( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
 
-        setShader( SHADER_FILLED_CIRCLE, 3.0f / sqrt( 3.0f ), 0.0f );
+        setShader( SHADER_FILLED_CIRCLE, 5.0f );
         vertex3( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
 
-        setShader( SHADER_FILLED_CIRCLE, 0.0f, 2.0f );
+        setShader( SHADER_FILLED_CIRCLE, 6.0f );
         vertex3( 0.0f, aRadius * 2.0f, layerDepth );                                // v2
 
         Restore();
@@ -973,26 +970,22 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
         Rotate( aAngle );
 
         /* Draw a triangle that contains the semicircle, then shade it to leave only the semicircle.
-                   Parameters given to setShader are relative coordinates of the triangle's vertices
-                   and the line width. Shader uses this coordinates to determine if fragments are inside
-                   the semicircle or not. Width parameter has to be passed as a ratio of inner radius
-                   to outer radius.
-                        v2
-                        /\
-                       /__\
-                   v0 //__\\ v1
+           Parameters given to setShader are indices of the triangle's vertices
+           (if you want to understand more, check the vertex shader source [shader.vert]), the
+           radius and the line width. Shader uses this coordinates to determine if fragments are
+           inside the semicircle or not.
+                v2
+                /\
+               /__\
+           v0 //__\\ v1
          */
-        float outerRadius = aRadius;
-        float innerRadius = aRadius - lineWidth;
-        float relWidth = innerRadius / outerRadius;
-
-        setShader( SHADER_STROKED_CIRCLE, -3.0f / sqrt( 3.0f ), 0.0f, relWidth );
+        setShader( SHADER_STROKED_CIRCLE, 4.0f, aRadius, lineWidth );
         vertex3( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
 
-        setShader( SHADER_STROKED_CIRCLE, 3.0f / sqrt( 3.0f ), 0.0f, relWidth );
+        setShader( SHADER_STROKED_CIRCLE, 5.0f, aRadius, lineWidth );
         vertex3( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
 
-        setShader( SHADER_STROKED_CIRCLE, 0.0f, 2.0f, relWidth );
+        setShader( SHADER_STROKED_CIRCLE, 6.0f, aRadius, lineWidth );
         vertex3( 0.0f, aRadius * 2.0f, layerDepth );                                // v2
 
         Restore();
