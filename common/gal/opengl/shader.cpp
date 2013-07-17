@@ -164,7 +164,7 @@ void SHADER::programInfo( GLuint aProgram )
 
         wxLogInfo( wxString::FromUTF8( (char*) glInfoLog ) );
 
-        delete glInfoLog;
+        delete[] glInfoLog;
     }
 }
 
@@ -185,7 +185,7 @@ void SHADER::shaderInfo( GLuint aShader )
 
         wxLogInfo( wxString::FromUTF8( (char*) glInfoLog ) );
 
-        delete glInfoLog;
+        delete[] glInfoLog;
     }
 }
 
@@ -246,6 +246,9 @@ bool SHADER::addSource( const std::string& aShaderSource, ShaderType aShaderType
     glShaderSource( shaderNumber, 1, source_, NULL );
     programInfo( programNumber );
 
+    // Delete the allocated char array
+    delete[] source;
+
     // Compile and attach shader to the program
     glCompileShader( shaderNumber );
     GLint status;
@@ -269,9 +272,6 @@ bool SHADER::addSource( const std::string& aShaderSource, ShaderType aShaderType
         glProgramParameteriEXT( programNumber, GL_GEOMETRY_INPUT_TYPE_EXT, geomInputType );
         glProgramParameteriEXT( programNumber, GL_GEOMETRY_OUTPUT_TYPE_EXT, geomOutputType );
     }
-
-    // Delete the allocated char array
-    delete[] source;
 
     return true;
 }
