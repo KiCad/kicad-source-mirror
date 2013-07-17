@@ -27,9 +27,9 @@
 #version 120
 
 // Shader types
-const float SHADER_LINE                 = 1.0;
-const float SHADER_FILLED_CIRCLE        = 2.0;
-const float SHADER_STROKED_CIRCLE       = 3.0;
+const float SHADER_LINE                 = 1.0f;
+const float SHADER_FILLED_CIRCLE        = 2.0f;
+const float SHADER_STROKED_CIRCLE       = 3.0f;
 
 varying vec4 shaderParams;
 varying vec2 circleCoords;
@@ -45,11 +45,11 @@ void filledCircle( vec2 aCoord )
 
 void strokedCircle( vec2 aCoord, float aRadius, float aWidth )
 {
-    float outerRadius = aRadius;
-    float innerRadius = aRadius - aWidth;
+    float outerRadius = aRadius + ( aWidth / 2 );
+    float innerRadius = aRadius - ( aWidth / 2 );
     float relWidth = innerRadius / outerRadius;
 
-    if( ( dot( aCoord, aCoord ) < 1.0 ) && 
+    if( ( dot( aCoord, aCoord ) < 1.0f ) && 
         ( dot( aCoord, aCoord ) > relWidth * relWidth ) )
         gl_FragColor = gl_Color;
     else

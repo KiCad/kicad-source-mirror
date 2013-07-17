@@ -795,7 +795,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
                      aCenterPoint.y - aRadius, layerDepth );                        // v0
 
             setShader( SHADER_FILLED_CIRCLE, 2.0 );
-            vertex3( aCenterPoint.x + aRadius * sqrt( 3.0f ),
+            vertex3( aCenterPoint.x + aRadius* sqrt( 3.0f ),
                      aCenterPoint.y - aRadius, layerDepth );                        // v1
 
             setShader( SHADER_FILLED_CIRCLE, 3.0 );
@@ -816,16 +816,17 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
                    //\\
                v0 /_\/_\ v1
             */
+            double outerRadius = aRadius + ( lineWidth / 2 );
             setShader( SHADER_STROKED_CIRCLE, 1.0, aRadius, lineWidth );
-            vertex3( aCenterPoint.x - aRadius * sqrt( 3.0f ),
-                     aCenterPoint.y - aRadius, layerDepth );                        // v0
+            vertex3( aCenterPoint.x - outerRadius * sqrt( 3.0f ),
+                     aCenterPoint.y - outerRadius, layerDepth );                        // v0
 
             setShader( SHADER_STROKED_CIRCLE, 2.0, aRadius, lineWidth );
-            vertex3( aCenterPoint.x + aRadius * sqrt( 3.0f ),
-                     aCenterPoint.y - aRadius, layerDepth );                        // v1
+            vertex3( aCenterPoint.x + outerRadius * sqrt( 3.0f ),
+                     aCenterPoint.y - outerRadius, layerDepth );                        // v1
 
             setShader( SHADER_STROKED_CIRCLE, 3.0, aRadius, lineWidth );
-            vertex3( aCenterPoint.x, aCenterPoint.y + aRadius * 2.0f, layerDepth ); // v2
+            vertex3( aCenterPoint.x, aCenterPoint.y + outerRadius * 2.0f, layerDepth ); // v2
         }
 
         return;
@@ -964,6 +965,8 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
 {
     if( isUseShader )
     {
+        double outerRadius = aRadius + ( lineWidth / 2 );
+
         Save();
         Translate( aCenterPoint );
         Rotate( aAngle );
@@ -979,13 +982,13 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
            v0 //__\\ v1
          */
         setShader( SHADER_STROKED_CIRCLE, 4.0f, aRadius, lineWidth );
-        vertex3( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
+        vertex3( -outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
 
         setShader( SHADER_STROKED_CIRCLE, 5.0f, aRadius, lineWidth );
-        vertex3( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
+        vertex3( outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
 
         setShader( SHADER_STROKED_CIRCLE, 6.0f, aRadius, lineWidth );
-        vertex3( 0.0f, aRadius * 2.0f, layerDepth );                                // v2
+        vertex3( 0.0f, outerRadius * 2.0f, layerDepth );                                // v2
 
         Restore();
     }
