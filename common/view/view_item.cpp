@@ -33,12 +33,12 @@ void VIEW_ITEM::ViewSetVisible( bool aIsVisible )
 {
     bool update = false;
 
-    if( m_viewVisible != aIsVisible )
+    if( m_visible != aIsVisible )
     {
         update = true;
     }
 
-    m_viewVisible = aIsVisible;
+    m_visible = aIsVisible;
 
     // update only if the visibility has really changed
     if( update )
