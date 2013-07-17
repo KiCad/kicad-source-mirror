@@ -82,9 +82,9 @@ public:
      */
     COLOR4D& Highlight( double aFactor )
     {
-        r = (double) r * (1.0 - aFactor) + aFactor;
-        g = (double) g * (1.0 - aFactor) + aFactor;
-        b = (double) b * (1.0 - aFactor) + aFactor;
+        r = r * ( 1.0 - aFactor ) + aFactor;
+        g = g * ( 1.0 - aFactor ) + aFactor;
+        b = b * ( 1.0 - aFactor ) + aFactor;
 
         return *this;
     }
@@ -97,9 +97,23 @@ public:
      */
     COLOR4D& Darken( double aFactor )
     {
-        r = (double) r * (1.0 - aFactor);
-        g = (double) g * (1.0 - aFactor);
-        b = (double) b * (1.0 - aFactor);
+        r = r * ( 1.0 - aFactor );
+        g = g * ( 1.0 - aFactor );
+        b = b * ( 1.0 - aFactor );
+
+        return *this;
+    }
+
+    /**
+     * Function Invert
+     * Makes the color inverted, alpha remains the same.
+     * @return COLOR4D& Inverted color.
+     */
+    COLOR4D& Invert()
+    {
+        r = ( 1.0 - r );
+        g = ( 1.0 - g );
+        b = ( 1.0 - b );
 
         return *this;
     }
@@ -112,9 +126,9 @@ public:
      */
     COLOR4D Highlighted( double aFactor ) const
     {
-        return COLOR4D( r * (1.0 - aFactor) + aFactor,
-                        g * (1.0 - aFactor) + aFactor,
-                        b * (1.0 - aFactor) + aFactor,
+        return COLOR4D( r * ( 1.0 - aFactor ) + aFactor,
+                        g * ( 1.0 - aFactor ) + aFactor,
+                        b * ( 1.0 - aFactor ) + aFactor,
                         a );
     }
 
@@ -126,10 +140,20 @@ public:
      */
     COLOR4D Darkened( double aFactor ) const
     {
-        return COLOR4D( r * (1.0 - aFactor),
-                        g * (1.0 - aFactor),
-                        b * (1.0 - aFactor),
+        return COLOR4D( r * ( 1.0 - aFactor ),
+                        g * ( 1.0 - aFactor ),
+                        b * ( 1.0 - aFactor ),
                         a );
+    }
+
+    /**
+     * Function Inverted
+     * Returns an inverted color, alpha remains the same.
+     * @return COLOR4D& Inverted color.
+     */
+    COLOR4D Inverted() const
+    {
+        return COLOR4D( 1.0 - r, 1.0 - g, 1.0 - b, a );
     }
 
     /**
