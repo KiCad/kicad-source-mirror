@@ -11,17 +11,20 @@ include_directories(
     ${INC_AFTER}
     )
 
-# Generate files containing shader programs
-add_custom_command (
+# Generate header files containing shader programs
+# Order of input files is significant
+add_custom_command(
     OUTPUT gal/opengl/shader_src.h
-    DEPENDS gal/opengl/make_shader_src_h.sh
+    COMMAND ${CMAKE_COMMAND}
+        -DinputFiles="${PROJECT_SOURCE_DIR}/common/gal/opengl/shader.vert\\;${PROJECT_SOURCE_DIR}/common/gal/opengl/shader.frag"
+        -DoutputFile="shader_src.h"
+        -P ${CMAKE_MODULE_PATH}/Shaders.cmake
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/common/gal/opengl
-    COMMAND ${SHELL}
-    ARGS ${PROJECT_SOURCE_DIR}/common/gal/opengl/make_shader_src_h.sh
+    COMMENT "Generating headers containing GLSL source code"
 )
 
-add_custom_target (
-    ShaderHeader ALL
+add_custom_target(
+    shader_headers ALL
     DEPENDS gal/opengl/shader_src.h
 )
 
@@ -40,7 +43,7 @@ set(GAL_SRCS
     )
 
 add_library(gal STATIC ${GAL_SRCS})
-add_dependencies(gal ShaderHeader)
+add_dependencies(gal shader_headers)
 
 if(WIN32)
 add_definitions(-DGLEW_STATIC)
