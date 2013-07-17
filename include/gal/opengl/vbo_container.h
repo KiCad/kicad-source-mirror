@@ -35,8 +35,7 @@
 #include <gal/opengl/vbo_item.h>
 #include <gal/color4d.h>
 #include <map>
-#include <boost/unordered_map.hpp>
-#include <wx/log.h>
+#include <set>
 
 namespace KiGfx
 {
@@ -47,23 +46,22 @@ class VBO_CONTAINER
 {
 public:
     VBO_CONTAINER( unsigned int aSize = defaultInitSize );
-    ~VBO_CONTAINER();
+    virtual ~VBO_CONTAINER();
 
     ///< Maps size of free memory chunks to their offsets
     typedef std::pair<const unsigned int, unsigned int> Chunk;
     typedef std::multimap<const unsigned int, unsigned int> FreeChunkMap;
 
-    ///< Maps VBO_ITEMs to reserved memory chunks offsets & sizes
-    typedef std::pair<VBO_ITEM* const, Chunk> ReservedChunk;
-    typedef boost::unordered_map<VBO_ITEM* const, Chunk> ReservedChunkMap;
+    /// List of all the stored items
+    typedef std::set<VBO_ITEM*> Items;
 
     /**
      * Function StartItem()
-     * Starts an unknown sized item. After calling the function it is possible to add vertices
-     * using function Add().
-     * @param aVboItem is the item that is going to store vertices in the container.
+     * Sets an item to start its modifications. After calling the function it is possible to add
+     * vertices using function Add().
+     * @param aItem is the item that is going to store vertices in the container.
      */
-    void StartItem( VBO_ITEM* aVboItem );
+    void StartItem( VBO_ITEM* aItem );
 
     /**
      * Function EndItem()
@@ -74,30 +72,20 @@ public:
 
     /**
      * Function Add()
-     * Stores given number of vertices in the container for the specific VBO_ITEM.
-     * @param aVboItem is the owner of the vertices.
+     * Stores given number of vertices in the container for the specific VBO_ITEM (started by
+     * StartItem() function).
+     * @param aItem is the owner of the vertices.
      * @param aVertex are vertices data to be stored.
      * @param aSize is the number of vertices to be added.
      */
-    void Add( VBO_ITEM* aVboItem, const VBO_VERTEX* aVertex, unsigned int aSize = 1 );
+    void Add( const VBO_VERTEX* aVertex, unsigned int aSize = 1 );
 
     /**
      * Function Free()
-     * Frees the chunk reserved by the aVboItem.
-     * @param aVboItem is the owner of the chunk to be freed.
+     * Frees the chunk reserved by the aItem.
+     * @param aItem is the owner of the chunk to be freed.
      */
-    inline void Free( VBO_ITEM* aVboItem )
-    {
-        ReservedChunkMap::iterator it = m_reservedChunks.find( aVboItem );
-        freeChunk( it );
-
-        // Dynamic memory freeing, there is no point in holding
-        // a large amount of memory when there is no use for it
-        if( m_freeSpace > ( m_currentSize / 2 ) )
-        {
-            resizeContainer( m_currentSize / 2 );
-        }
-    }
+    void Free( VBO_ITEM* aItem );
 
     /**
      * Function Clear()
@@ -115,9 +103,9 @@ public:
     /**
      * Function GetVertices()
      * Returns vertices stored by the specific item.
-     * @aVboItem is the specific item.
+     * @aItem is the specific item.
      */
-    VBO_VERTEX* GetVertices( const VBO_ITEM* aVboItem ) const;
+    VBO_VERTEX* GetVertices( const VBO_ITEM* aItem ) const;
 
     /**
      * Function GetVertices()
@@ -208,51 +196,50 @@ public:
 private:
     ///< Stores size & offset of free chunks.
     FreeChunkMap        m_freeChunks;
-    ///< Stores owners (VBO_ITEM*) of reserved chunks and their size & offset.
-    ReservedChunkMap    m_reservedChunks;
+    ///< Stored VERTEX_ITEMs
+    Items               m_items;
 
     /**
-    * Function allocate()
-    * Finds an offset where the number of vertices can be stored in a continous space. If there is
-    * no such chunk, appropriate amount of memory is allocated first.
-    * @param aVboItem is the owner of vertices to be stored.
+     * Function allocate()
+     * Allocates the given amount of memory for the current VBO_ITEM (set by StartItem() function).
+     * @param aSize is the number of vertices that are requested to be allocated.
+     * @return Pointer to the allocated space.
+     */
+    VBO_VERTEX* allocate( unsigned int aSize );
+
+    /**
+    * Function reallocate()
+    * Resizes the chunk that stores the current item to the given size.
     * @param aSize is the number of vertices to be stored.
+    * @return Offset of the new chunk.
     */
-    unsigned int allocate( VBO_ITEM* aVboItem, unsigned int aSize );
+    unsigned int reallocate( unsigned int aSize );
 
     /**
      * Function getChunkSize()
-     * Returns size of the given chunk (works both for reserved and free chunks).
+     * Returns size of the given chunk.
      * @param aChunk is the chunk.
+     * @return Size of the chunk.
      */
-    inline int getChunkSize( const Chunk& aChunk ) const
+    inline unsigned int getChunkSize( const Chunk& aChunk ) const
     {
         return aChunk.first;
     }
 
-    inline int getChunkSize( const ReservedChunk& aChunk ) const
-    {
-        return aChunk.second.first;
-    }
-
     /**
      * Function getChunkOffset()
-     * Returns offset of the given chunk (works both for reserved and free chunks).
+     * Returns offset of the given chunk.
      * @param aChunk is the chunk.
+     * @return Offset of the chunk.
      */
     inline unsigned int getChunkOffset( const Chunk& aChunk ) const
     {
         return aChunk.second;
     }
 
-    inline unsigned int getChunkOffset( const ReservedChunk& aChunk ) const
-    {
-        return aChunk.second.second;
-    }
-
     /**
-     * Function getChunkOffset()
-     * Upadtes offset of the given chunk (works both for reserved and free chunks).
+     * Function setChunkOffset()
+     * Updates offset of the given chunk.
      * !! IMPORTANT: it does not reallocate the chunk, it just changes its properties.
      * @param aChunk is the chunk.
      */
@@ -261,51 +248,45 @@ private:
         aChunk.second = aOffset;
     }
 
-    inline void setChunkOffset( ReservedChunk& aChunk, unsigned int aOffset ) const
-    {
-        aChunk.second.second = aOffset;
-    }
-
-    /**
-     * Function getChunkVboItem()
-     * Returns owner of the given reserved chunk.
-     * @param aChunk is the chunk.
-     */
-    inline VBO_ITEM* getChunkVboItem( const ReservedChunk& aChunk ) const
-    {
-        return aChunk.first;
-    }
-
     /**
      * Function defragment()
      * Removes empty spaces between chunks, so after that there is a long continous space
      * for storing vertices at the and of the container.
-     * @return false in case of failure (eg. memory shortage)
+     * @return false in case of failure (eg. memory shortage).
      */
     bool defragment( VBO_VERTEX* aTarget = NULL );
 
     /**
-     * Function resizeChunk()
-     * Changes size of the chunk that stores vertices of aVboItem.
-     * @param aVboItem is the item for which reserved space size should be changed.
-     * @param aNewSize is the new size for the aVboItem, expressed in vertices number.
+     * Function mergeFreeChunks()
+     * Looks for consecutive free memory chunks and merges them, decreasing fragmentation of
+     * memory.
      */
-    void resizeChunk( VBO_ITEM* aVboItem, int aNewSize );
+    void mergeFreeChunks();
 
     /**
      * Function resizeContainer()
      * Prepares a bigger container of a given size.
      * @param aNewSize is the new size of container, expressed in vertices
-     * @return false in case of failure (eg. memory shortage)
+     * @return false in case of failure (eg. memory shortage).
      */
     bool resizeContainer( unsigned int aNewSize );
 
     /**
-     * Function freeChunk()
-     * Frees the space described in aChunk and returns it to the free space pool.
-     * @param aChunk is a space to be freed.
+     * Function freeItem()
+     * Frees the space occupied by the item and returns it to the free space pool.
+     * @param aItem is the item to be freed.
      */
-    void freeChunk( const ReservedChunkMap::iterator& aChunk );
+    void freeItem( VBO_ITEM* aItem );
+
+    /**
+     * Function reservedSpace()
+     * Returns size of the reserved memory space.
+     * @return Size of the reserved memory space (expressed as a number of vertices).
+     */
+    unsigned int reservedSpace()
+    {
+        return m_currentSize - m_freeSpace;
+    }
 
     ///< How many vertices we can store in the container
     unsigned int    m_freeSpace;
@@ -316,25 +297,26 @@ private:
     ///< Actual storage memory
     VBO_VERTEX*     m_vertices;
 
-    ///< A flag saying if there is the item with an unknown size being added
-    bool            itemStarted;
+    ///< Initial size, used on clearing the container
+    unsigned int    m_initialSize;
 
-    ///< Variables holding the state of the item currently being added
-    unsigned int    itemSize;
-    unsigned int    itemChunkSize;
-    VBO_ITEM*       item;
+    ///< Variables holding the state of the item currently being modified
+    unsigned int    m_itemSize;
+    unsigned int    m_chunkSize;
+    unsigned int    m_chunkOffset;
+    VBO_ITEM*       m_item;
 
-    ///< Color used for new vertices pushed.
+    ///< Color used for the new vertices pushed.
     GLubyte         m_color[VBO_ITEM::ColorStride];
 
     ///< Shader and its parameters used for new vertices pushed
     GLfloat         m_shader[VBO_ITEM::ShaderStride];
 
     ///< Current transform matrix applied for every new vertex pushed.
-    const glm::mat4*    m_transform;
+    const glm::mat4* m_transform;
 
     ///< Failure flag
-    bool m_failed;
+    bool            m_failed;
 
     /**
      * Function getPowerOf2()
@@ -353,6 +335,9 @@ private:
 
     ///< Default initial size of a container (expressed in vertices)
     static const unsigned int defaultInitSize = 1048576;
+
+    ///< Basic tests for the container, use only for debugging.
+    void test() const;
 };
 } // namespace KiGfx
 

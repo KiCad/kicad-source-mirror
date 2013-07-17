@@ -47,6 +47,8 @@ class VBO_CONTAINER;
 
 class VBO_ITEM
 {
+friend class VBO_CONTAINER;
+
 public:
     VBO_ITEM( VBO_CONTAINER* aContainer );
     ~VBO_ITEM();
@@ -87,16 +89,6 @@ public:
     inline unsigned int GetSize() const
     {
         return m_size;
-    }
-
-    /**
-     * Function SetOffset()
-     * Sets data offset in the VBO.
-     * @param aOffset is the offset expressed as a number of vertices.
-     */
-    inline void SetOffset( unsigned int aOffset )
-    {
-        m_offset = aOffset;
     }
 
     /**
@@ -149,7 +141,7 @@ public:
 
     static const unsigned int IndByteSize        = sizeof(GLuint);
 
-private:
+protected:
     ///< Offset and size of data stored in the VBO_CONTAINER.
     unsigned int    m_offset;
     unsigned int    m_size;
@@ -159,6 +151,26 @@ private:
 
     ///< Flag telling if the item should be recached in VBO or not.
     bool            m_isDirty;
+
+    /**
+     * Function setSize()
+     * Sets data size in the VBO.
+     * @param aSize is the size expressed as a number of vertices.
+     */
+    void setSize( unsigned int aSize )
+    {
+        m_size = aSize;
+    }
+
+    /**
+     * Function setOffset()
+     * Sets data offset in the VBO.
+     * @param aOffset is the offset expressed as a number of vertices.
+     */
+    inline void setOffset( unsigned int aOffset )
+    {
+        m_offset = aOffset;
+    }
 };
 } // namespace KiGfx
 

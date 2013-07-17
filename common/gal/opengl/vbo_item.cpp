@@ -52,9 +52,8 @@ VBO_ITEM::~VBO_ITEM()
 
 void VBO_ITEM::PushVertex( const VBO_VERTEX* aVertex )
 {
-    m_container->Add( this, aVertex );
+    m_container->Add( aVertex );
 
-    m_size++;
     m_isDirty = true;
 }
 
