@@ -232,8 +232,9 @@ protected:
      * combination using stored color settings.
      * @param aLayer is the layer number that is being drawn.
      * @param aNetCode is a number of the net that is being drawn.
+     * @param aHighlighted says if the item is marked as highlighted.
      */
-    virtual const COLOR4D& getLayerColor( int aLayer, int aNetCode ) const = 0;
+    virtual const COLOR4D& getLayerColor( int aLayer, int aNetCode, bool aHighlighted ) const = 0;
 
     /// Instance of graphic abstraction layer that gives an interface to call
     /// commands used to draw (eg. DrawLine, DrawCircle, etc.)

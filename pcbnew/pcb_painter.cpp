@@ -152,57 +152,54 @@ const COLOR4D& PCB_PAINTER::GetColor( const VIEW_ITEM* aItem, int aLayer )
     if( item )
         netCode = item->GetNet();
 
-    return getLayerColor( aLayer, netCode );
+    return getLayerColor( aLayer, netCode, aItem->ViewIsHighlighted() );
 }
 
 
-const COLOR4D& PCB_PAINTER::getLayerColor( int aLayer, int aNetCode ) const
+const COLOR4D& PCB_PAINTER::getLayerColor( int aLayer, int aNetCode, bool aHighlighted ) const
 {
+    // Return grayish color for non-highlightezd layers in the high contrast mode
     if( m_pcbSettings->m_hiContrastEnabled && m_pcbSettings->m_activeLayers.count( aLayer ) == 0 )
-    {
         return m_pcbSettings->m_hiContrastColor;
-    }
-    else if( m_pcbSettings->m_highlightEnabled )
-    {
-        if( aNetCode == m_pcbSettings->m_highlightNetcode )
-        {
-            return m_pcbSettings->m_layerColorsHi[aLayer];
-        }
-        else
-        {
-            return m_pcbSettings->m_layerColorsDark[aLayer];
-        }
-    }
-    else
-    {
-        // For item layers (vias, texts, and so on)
-        if( aLayer >= NB_LAYERS )
-            return getItemColor( aLayer - NB_LAYERS, aNetCode );
 
-        return m_pcbSettings->m_layerColors[aLayer];
-    }
-}
+    // For item layers (vias, texts, and so on)
+    if( aLayer >= NB_LAYERS )
+        return getItemColor( aLayer - NB_LAYERS, aNetCode, aHighlighted );
 
+    // Highlight per item basis
+    if( aHighlighted )
+        return m_pcbSettings->m_layerColorsHi[aLayer];
 
-const COLOR4D& PCB_PAINTER::getItemColor( int aItemType, int aNetCode ) const
-{
-    // if(aNetCode == m_settings->m_hiContrastEnabled)
-    //  return m_settings->m_itemColorsHi[ aItemType ];
+    // Single net highlight mode
     if( m_pcbSettings->m_highlightEnabled )
     {
         if( aNetCode == m_pcbSettings->m_highlightNetcode )
-        {
-            return m_pcbSettings->m_itemColorsHi[aItemType];
-        }
+            return m_pcbSettings->m_layerColorsHi[aLayer];
         else
-        {
-            return m_pcbSettings->m_itemColorsDark[aItemType];
-        }
+            return m_pcbSettings->m_layerColorsDark[aLayer];
     }
-    else
+
+    // No special modificators enabled
+    return m_pcbSettings->m_layerColors[aLayer];
+}
+
+
+const COLOR4D& PCB_PAINTER::getItemColor( int aItemType, int aNetCode, bool aHighlighted ) const
+{
+    // Highlight per item basis
+    if( aHighlighted )
+        return m_pcbSettings->m_itemColorsHi[aItemType];
+
+    if( m_pcbSettings->m_highlightEnabled )
     {
-        return m_pcbSettings->m_itemColors[aItemType];
+        if( aNetCode == m_pcbSettings->m_highlightNetcode )
+            return m_pcbSettings->m_itemColorsHi[aItemType];
+        else
+            return m_pcbSettings->m_itemColorsDark[aItemType];
     }
+
+    // No special modificators enabled
+    return m_pcbSettings->m_itemColors[aItemType];
 }
 
 
@@ -286,7 +283,8 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             double textSize = std::min( static_cast<double>( width ), length / netName.length() );
 
             // Set a proper color for the label
-            color = getLayerColor( aTrack->GetLayer(), aTrack->GetNet() );
+            color = getLayerColor( aTrack->GetLayer(), aTrack->GetNet(),
+                                   aTrack->ViewIsHighlighted() );
             if( color.GetBrightness() > 0.5 )
                 m_gal->SetStrokeColor( color.Darkened( 0.8 ) );
             else
@@ -305,7 +303,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     else if( IsCopperLayer( aLayer ))
     {
         // Draw a regular track
-        color = getLayerColor( aLayer, netNumber );
+        color = getLayerColor( aLayer, netNumber, aTrack->ViewIsHighlighted() );
         m_gal->SetStrokeColor( color );
         m_gal->SetIsStroke( true );
 
@@ -344,7 +342,7 @@ void PCB_PAINTER::draw( const SEGVIA* aVia, int aLayer )
     else
         return;
 
-    color = getLayerColor( aLayer, aVia->GetNet() );
+    color = getLayerColor( aLayer, aVia->GetNet(), aVia->ViewIsHighlighted() );
 
     if( m_pcbSettings->m_sketchModeSelect[VIAS_VISIBLE] )
     {
@@ -418,7 +416,9 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         m_gal->SetMirrored( false );
 
         // Set a proper color for the label
-        color = getLayerColor( aPad->GetParent()->GetLayer(), aPad->GetNet() );
+        color = getLayerColor( aPad->GetParent()->GetLayer(), aPad->GetNet(),
+                               aPad->ViewIsHighlighted() );
+
         if( color.GetBrightness() > 0.5 )
             m_gal->SetStrokeColor( color.Darkened( 0.8 ) );
         else
@@ -448,7 +448,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         return;
     }
 
-    color = getLayerColor( aLayer, aPad->GetNet() );
+    color = getLayerColor( aLayer, aPad->GetNet(), aPad->ViewIsHighlighted() );
     if( m_pcbSettings->m_sketchModeSelect[PADS_VISIBLE] )
     {
         // Outline mode
@@ -467,7 +467,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
     m_gal->Save();
     m_gal->Translate( VECTOR2D( aPad->GetPosition() ) );
-    m_gal->Rotate( -aPad->GetOrientation() * M_PI / 1800.0 );    // orientation is in tenths of degree
+    m_gal->Rotate( -aPad->GetOrientation() * M_PI / 1800.0 );
 
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
     if( aLayer == ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ) )
@@ -551,7 +551,8 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
 void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
 {
-    COLOR4D              strokeColor = getLayerColor( aSegment->GetLayer(), 0 );
+    COLOR4D              strokeColor = getLayerColor( aSegment->GetLayer(), 0,
+                                                      aSegment->ViewIsHighlighted() );
     std::deque<VECTOR2D> pointsList;
 
     m_gal->SetIsFill( false );
@@ -604,7 +605,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText )
     if( aText->GetText().Length() == 0 )
         return;
 
-    COLOR4D  strokeColor = getLayerColor( aText->GetLayer(), 0 );
+    COLOR4D  strokeColor = getLayerColor( aText->GetLayer(), 0, aText->ViewIsHighlighted() );
     VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
     double   orientation = aText->GetOrientation() * M_PI / 1800.0;
 
@@ -620,7 +621,7 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     if( aText->GetLength() == 0 )
         return;
 
-    COLOR4D  strokeColor = getLayerColor( aLayer, 0 );
+    COLOR4D  strokeColor = getLayerColor( aLayer, 0, aText->ViewIsHighlighted() );
     VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y);
     double   orientation = aText->GetDrawRotation() * M_PI / 1800.0;
 
@@ -631,9 +632,10 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
+void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
 {
-    COLOR4D color = getLayerColor( aContainer->GetLayer(), aContainer->GetNet() );
+    COLOR4D color = getLayerColor( aZone->GetLayer(), aZone->GetNet(),
+                                   aZone->ViewIsHighlighted() );
     std::deque<VECTOR2D> corners;
     PCB_RENDER_SETTINGS::DisplayZonesMode displayMode = m_pcbSettings->m_displayZoneMode;
 
@@ -643,7 +645,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( m_pcbSettings->m_outlineWidth );
 
-    const CPolyLine* outline = aContainer->Outline();
+    const CPolyLine* outline = aZone->Outline();
     for( int i = 0; i < outline->GetCornersCount(); ++i )
     {
         corners.push_back( VECTOR2D( outline->GetPos( i ) ) );
@@ -656,13 +658,13 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
     // Draw the filling
     if( displayMode != PCB_RENDER_SETTINGS::DZ_HIDE_FILLED )
     {
-        const std::vector<CPolyPt> polyPoints = aContainer->GetFilledPolysList().GetList();
+        const std::vector<CPolyPt> polyPoints = aZone->GetFilledPolysList().GetList();
         if( polyPoints.size() == 0 )  // Nothing to draw
             return;
 
         // Set up drawing options
         m_gal->SetFillColor( color );
-        m_gal->SetLineWidth( aContainer->GetThermalReliefCopperBridge() / 2.0 );
+        m_gal->SetLineWidth( aZone->GetThermalReliefCopperBridge() / 2.0 );
 
         if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_FILLED )
         {
@@ -702,7 +704,8 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
 
 void PCB_PAINTER::draw( const DIMENSION* aDimension )
 {
-    COLOR4D strokeColor = getLayerColor( aDimension->GetLayer(), 0 );
+    COLOR4D strokeColor = getLayerColor( aDimension->GetLayer(), 0,
+                                         aDimension->ViewIsHighlighted() );
 
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetIsFill( false );
@@ -725,7 +728,7 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension )
 
 void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 {
-    COLOR4D  strokeColor = getLayerColor( aTarget->GetLayer(), 0 );
+    COLOR4D  strokeColor = getLayerColor( aTarget->GetLayer(), 0, aTarget->ViewIsHighlighted() );
     VECTOR2D position( aTarget->GetPosition() );
     double   size, radius;
 

@@ -160,7 +160,8 @@ public:
         ALL = 0xff
     };
 
-    VIEW_ITEM() : m_view( NULL ), m_viewVisible( true ), m_groups( NULL ), m_groupsSize( 0 ) {}
+    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_highlighted( false ),
+            m_groups( NULL ), m_groupsSize( 0 ) {}
 
     /**
      * Destructor. For dynamic views, removes the item from the view.
@@ -234,7 +235,26 @@ public:
      */
     bool ViewIsVisible() const
     {
-        return m_viewVisible;
+        return m_visible;
+    }
+
+    /**
+     * Function ViewSetHighlighted()
+     * Sets the item highlight.
+     *
+     * @param aIsHighlighted: whether the item is highlighted (on all layers), or not.
+     */
+    void ViewSetHighlighted( bool aIsHighlighted = true );
+
+    /**
+     * Function ViewIsHighlighted()
+     * Returns if the item is highlighted (or not).
+     *
+     * @return when true, the item should be displayed as highlighted.
+     */
+    bool ViewIsHighlighted() const
+    {
+        return m_highlighted;
     }
 
     /**
@@ -287,7 +307,8 @@ protected:
     }
 
     VIEW*   m_view;         ///* Current dynamic view the item is assigned to.
-    bool    m_viewVisible;  ///* Are we visible in the current dynamic VIEW.
+    bool    m_visible;      ///* Are we visible in the current dynamic VIEW.
+    bool    m_highlighted;  ///* Should item be drawn as highlighted
 
 private:
     ///* Helper for storing cached items group ids

@@ -140,7 +140,7 @@ protected:
     PCB_RENDER_SETTINGS* m_pcbSettings;
 
     /// @copydoc PAINTER::getLayerColor()
-    const COLOR4D& getLayerColor( int aLayer, int aNetCode ) const;
+    const COLOR4D& getLayerColor( int aLayer, int aNetCode, bool aHighlighted ) const;
 
     /**
      * Function getItemColor
@@ -148,7 +148,7 @@ protected:
      * @param aItemType Layer number of the item to be drawn.
      * @param aNetCode Net number of the item to be drawn.
      */
-    const COLOR4D& getItemColor( int aItemType, int aNetCode ) const;
+    const COLOR4D& getItemColor( int aItemType, int aNetCode, bool aHighlighted ) const;
 
     // Drawing functions for various types of PCB-specific items
     void draw( const TRACK*, int );
