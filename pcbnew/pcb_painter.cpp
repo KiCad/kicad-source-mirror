@@ -90,11 +90,35 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
 void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions )
 {
     m_hiContrastEnabled = aOptions.ContrastModeDisplay;
+    m_padNumbers        = aOptions.DisplayPadNum;
 
     // Whether to draw tracks, vias & pads filled or as outlines
     m_sketchModeSelect[PADS_VISIBLE]   = !aOptions.DisplayPadFill;
     m_sketchModeSelect[VIAS_VISIBLE]   = !aOptions.DisplayViaFill;
     m_sketchModeSelect[TRACKS_VISIBLE] = !aOptions.DisplayPcbTrackFill;
+
+    switch( aOptions.DisplayNetNamesMode )
+    {
+    case 0:
+        m_netNamesOnPads = false;
+        m_netNamesOnTracks = false;
+        break;
+
+    case 1:
+        m_netNamesOnPads = true;
+        m_netNamesOnTracks = false;
+        break;
+
+    case 2:
+        m_netNamesOnPads = false;
+        m_netNamesOnTracks = true;
+        break;
+
+    case 3:
+        m_netNamesOnPads = true;
+        m_netNamesOnTracks = true;
+        break;
+    }
 
     switch( aOptions.DisplayZonesMode )
     {
@@ -264,7 +288,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     int      netNumber = aTrack->GetNet();
     COLOR4D  color;
 
-    if( IsNetnameLayer( aLayer ) )
+    if( m_pcbSettings->m_netNamesOnTracks && IsNetnameLayer( aLayer ) )
     {
         // If there is a net name - display it on the track
         if( netNumber != 0 )
@@ -378,73 +402,92 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )
     {
-        size = VECTOR2D( aPad->GetSize() / 2 );
-        double scale = m_gal->GetZoomFactor();
-        double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE / scale;
-
-        // Font size limits
-        if( size.x > maxSize )
-            size.x = maxSize;
-        if( size.y > maxSize )
-            size.y = maxSize;
-
-        // Keep the size ratio for the font, but make it smaller
-        if( size.x < size.y )
+        // Is anything that we can display enabled?
+        if( m_pcbSettings->m_netNamesOnPads || m_pcbSettings->m_padNumbers )
         {
-            orientation -= M_PI / 2;
-            size.y = size.x * 4.0 / 3.0;
+            bool displayNetname = ( m_pcbSettings->m_netNamesOnPads &&
+                                    !aPad->GetNetname().empty() );
+            size = VECTOR2D( aPad->GetSize() / 2 );
+            double scale = m_gal->GetZoomFactor();
+            double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE / scale;
+
+            // Font size limits
+            if( size.x > maxSize )
+                size.x = maxSize;
+            if( size.y > maxSize )
+                size.y = maxSize;
+
+            // Keep the size ratio for the font, but make it smaller
+            if( size.x < size.y )
+            {
+                orientation -= M_PI / 2.0;
+                size.y = size.x * 4.0 / 3.0;
+            }
+            else if( size.x == size.y )
+            {
+                // If the text is displayed on a symmetrical pad, do not rotate it
+                orientation = 0.0;
+            }
+            else
+            {
+                size.x = size.y * 3.0 / 4.0;
+            }
+
+            m_gal->Save();
+            m_gal->Translate( position );
+            m_gal->Rotate( -orientation );
+
+            // Default font settings
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_gal->SetBold( false );
+            m_gal->SetItalic( false );
+            m_gal->SetMirrored( false );
+
+            // Set a proper color for the label
+            color = getLayerColor( aPad->GetParent()->GetLayer(), aPad->GetNet(),
+                                   aPad->ViewIsHighlighted() );
+
+            if( color.GetBrightness() > 0.5 )
+                m_gal->SetStrokeColor( color.Darkened( 0.8 ) );
+            else
+                m_gal->SetStrokeColor( color.Highlighted( 0.8 ) );
+
+            if( displayNetname && m_pcbSettings->m_padNumbers )
+            {
+                // Divide the space, when both pad numbers and netnames are enabled
+                size = size / 2.0;
+                m_gal->SetGlyphSize( size );
+                m_gal->SetLineWidth( size.y / 8.0 );
+
+                m_gal->StrokeText( std::string( aPad->GetNetname().mb_str() ),
+                                   VECTOR2D( 0.0, size.y ), 0.0 );
+
+                m_gal->StrokeText( std::string( aPad->GetPadName().mb_str() ),
+                                   VECTOR2D( 0.0, -size.y / 2.0 ), 0.0 );
+            }
+            else
+            {
+                // There is only one thing to display
+                if( displayNetname )
+                {
+                    m_gal->SetGlyphSize( size / 2.0 );
+                    m_gal->SetLineWidth( size.y / 12.0 );
+                    m_gal->StrokeText( std::string( aPad->GetNetname().mb_str() ),
+                                       VECTOR2D( 0.0, 0.0 ), 0.0 );
+                }
+
+                if( m_pcbSettings->m_padNumbers )
+                {
+                    m_gal->SetGlyphSize( size );
+                    m_gal->SetLineWidth( size.y / 10.0 );
+                    m_gal->StrokeText( std::string( aPad->GetPadName().mb_str() ),
+                                       VECTOR2D( 0.0, 0.0 ), 0.0 );
+                }
+            }
+
+            m_gal->Restore();
         }
-        else if( size.x == size.y )
-        {
-            // If the text is displayed on a symmetrical pad, do not rotate it
-            orientation = 0.0;
-        }
-        else
-        {
-            size.x = size.y * 3.0 / 4.0;
-        }
-
-        m_gal->Save();
-        m_gal->Translate( position );
-        m_gal->Rotate( -orientation );
-
-        // Default font settings
-        m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
-        m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-        m_gal->SetBold( false );
-        m_gal->SetItalic( false );
-        m_gal->SetMirrored( false );
-
-        // Set a proper color for the label
-        color = getLayerColor( aPad->GetParent()->GetLayer(), aPad->GetNet(),
-                               aPad->ViewIsHighlighted() );
-
-        if( color.GetBrightness() > 0.5 )
-            m_gal->SetStrokeColor( color.Darkened( 0.8 ) );
-        else
-            m_gal->SetStrokeColor( color.Highlighted( 0.8 ) );
-
-        // Let's make some space for a netname too, if there's one to display
-        if( !aPad->GetNetname().empty() )
-        {
-            size = size / 2.0;
-            m_gal->SetGlyphSize( size );
-            m_gal->SetLineWidth( size.y / 10.0 );
-
-            m_gal->StrokeText( std::string( aPad->GetNetname().mb_str() ),
-                                 VECTOR2D( 0, size.y ), 0.0 );
-            m_gal->Translate( VECTOR2D( 0.0, -size.y / 2.0 ) );
-        }
-        else
-        {
-            // In case when there's no netname assigned
-            m_gal->SetGlyphSize( size );
-            m_gal->SetLineWidth( size.y / 10.0 );
-        }
-
-        m_gal->StrokeText( std::string( aPad->GetPadName().mb_str() ), VECTOR2D( 0, 0 ), 0.0 );
-
-        m_gal->Restore();
         return;
     }
 

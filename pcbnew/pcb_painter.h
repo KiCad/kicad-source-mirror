@@ -102,8 +102,9 @@ protected:
     COLOR4D m_itemColorsDark [END_PCB_VISIBLE_LIST];
 
     bool    m_sketchModeSelect[END_PCB_VISIBLE_LIST];
-    bool    m_visibleLayers   [NB_LAYERS];
-    bool    m_visibleItems    [END_PCB_VISIBLE_LIST];
+    bool    m_padNumbers;
+    bool    m_netNamesOnPads;
+    bool    m_netNamesOnTracks;
 
     static const double MAX_FONT_SIZE = 100000000;
 
