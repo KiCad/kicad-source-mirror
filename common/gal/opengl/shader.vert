@@ -27,12 +27,12 @@
 #version 120
 
 // Shader types
-const float SHADER_LINE                 = 1.0;
-const float SHADER_FILLED_CIRCLE        = 2.0;
-const float SHADER_STROKED_CIRCLE       = 3.0;
+const float SHADER_LINE                 = 1.0f;
+const float SHADER_FILLED_CIRCLE        = 2.0f;
+const float SHADER_STROKED_CIRCLE       = 3.0f;
 
 // Minimum line width
-const float MIN_WIDTH = 1.0;
+const float MIN_WIDTH = 1.0f;
 
 attribute vec4 attrShaderParams;
 varying vec4 shaderParams;
@@ -51,9 +51,9 @@ void main()
      
         // Make lines appear to be at least 1 pixel wide
         if( worldScale * lineWidth < MIN_WIDTH )
-            scale = 1.0 / ( worldScale * lineWidth );
+            scale = 1.0f / ( worldScale * lineWidth );
         else
-            scale = 1.0;
+            scale = 1.0f;
         
         gl_Position = gl_ModelViewProjectionMatrix * 
             ( gl_Vertex + vec4( shaderParams.yz * scale, 0.0, 0.0 ) );
@@ -81,7 +81,6 @@ void main()
         // Make the line appear to be at least 1 pixel wide
         float lineWidth = shaderParams[3];
         float worldScale = gl_ModelViewMatrix[0][0];
-        float scale;
      
         // Make lines appear to be at least 1 pixel width
         if( worldScale * lineWidth < MIN_WIDTH )
