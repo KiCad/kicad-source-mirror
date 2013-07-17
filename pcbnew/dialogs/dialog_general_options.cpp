@@ -243,6 +243,8 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
         if( m_galCanvasActive )
             m_galCanvas->Refresh();
+        else
+            m_canvas->Refresh();
 
         break;
     }
