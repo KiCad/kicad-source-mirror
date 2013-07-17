@@ -309,10 +309,12 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             // Set a proper color for the label
             color = getLayerColor( aTrack->GetLayer(), aTrack->GetNet(),
                                    aTrack->ViewIsHighlighted() );
+            COLOR4D labelColor = getLayerColor( aLayer, 0, aTrack->ViewIsHighlighted() );
+
             if( color.GetBrightness() > 0.5 )
-                m_gal->SetStrokeColor( color.Darkened( 0.8 ) );
+                m_gal->SetStrokeColor( labelColor.Inverted() );
             else
-                m_gal->SetStrokeColor( color.Highlighted( 0.8 ) );
+                m_gal->SetStrokeColor( labelColor );
 
             m_gal->SetLineWidth( width / 10.0 );
             m_gal->SetBold( false );
@@ -447,11 +449,12 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             // Set a proper color for the label
             color = getLayerColor( aPad->GetParent()->GetLayer(), aPad->GetNet(),
                                    aPad->ViewIsHighlighted() );
+            COLOR4D labelColor = getLayerColor( aLayer, 0, aPad->ViewIsHighlighted() );
 
             if( color.GetBrightness() > 0.5 )
-                m_gal->SetStrokeColor( color.Darkened( 0.8 ) );
+                m_gal->SetStrokeColor( labelColor.Inverted() );
             else
-                m_gal->SetStrokeColor( color.Highlighted( 0.8 ) );
+                m_gal->SetStrokeColor( labelColor );
 
             if( displayNetname && m_pcbSettings->m_padNumbers )
             {
