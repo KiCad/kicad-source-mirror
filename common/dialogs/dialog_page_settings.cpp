@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2013 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,11 +28,13 @@
 #include <fctsys.h>
 #include <macros.h>              // DIM()
 #include <common.h>
+#include <confirm.h>
 #include <gr_basic.h>
 #include <base_struct.h>
 #include <class_drawpanel.h>
 #include <class_title_block.h>
 #include <wxstruct.h>
+#include <worksheet_shape_builder.h>
 #include <class_base_screen.h>
 
 #include <wx/valgen.h>
@@ -72,8 +74,9 @@ static const wxString pageFmts[] =
 
 void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 {
-    DIALOG_PAGES_SETTINGS frame( this );
-    int diag = frame.ShowModal();
+    DIALOG_PAGES_SETTINGS dlg( this );
+    dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
+    int diag = dlg.ShowModal();
 
     if( m_canvas && diag )
         m_canvas->Refresh();
@@ -84,12 +87,12 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent ) :
     DIALOG_PAGES_SETTINGS_BASE( parent ),
     m_initialized( false )
 {
-    m_Parent   = parent;
-    m_Screen   = m_Parent->GetScreen();
-    m_modified = false;
+    m_parent   = parent;
+    m_screen   = m_parent->GetScreen();
     m_page_bitmap = NULL;
-    m_tb = m_Parent->GetTitleBlock();
+    m_tb = m_parent->GetTitleBlock();
     m_customFmt = false;
+    m_localPrjConfigChanged = false;
 
     initDialog();
 
@@ -121,22 +124,26 @@ void DIALOG_PAGES_SETTINGS::initDialog()
         m_paperSizeComboBox->Append( wxGetTranslation( pageFmts[ii] ) );
     }
 
+    // initialize the page layout descr filename
+    m_plDescrFileName = BASE_SCREEN::m_PageLayoutDescrFileName;
+    m_filePicker->SetPath( m_plDescrFileName );
+
 
 #ifdef EESCHEMA
     // Init display value for schematic sub-sheet number
     wxString format = m_TextSheetCount->GetLabel();
-    msg.Printf( format, m_Screen->m_NumberOfScreens );
+    msg.Printf( format, m_screen->m_NumberOfScreens );
     m_TextSheetCount->SetLabel( msg );
 
     format = m_TextSheetNumber->GetLabel();
-    msg.Printf( format, m_Screen->m_ScreenNumber );
+    msg.Printf( format, m_screen->m_ScreenNumber );
     m_TextSheetNumber->SetLabel( msg );
 #else
     m_TextSheetCount->Show( false );
     m_TextSheetNumber->Show( false );
 #endif
 
-    m_pageInfo = m_Parent->GetPageSettings();
+    m_pageInfo = m_parent->GetPageSettings();
     SetCurrentPageSizeSelection( m_pageInfo.GetType() );
     m_orientationComboBox->SetSelection( m_pageInfo.IsPortrait() );
 
@@ -210,28 +217,24 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 }
 
 
-void DIALOG_PAGES_SETTINGS::OnCloseWindow( wxCloseEvent& event )
-{
-    EndModal( m_modified );
-}
-
-
 void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
 {
-    m_save_flag = false;
-    SavePageSettings( event );
-
-    if( m_save_flag )
+    if( SavePageSettings() )
     {
-        m_modified = true;
-        Close( true );
+        m_screen->SetModify();
+        m_parent->GetCanvas()->Refresh();
+
+        if( m_localPrjConfigChanged )
+            m_parent->SaveProjectSettings( true );
+
+        EndModal( true );
     }
 }
 
 
 void DIALOG_PAGES_SETTINGS::OnCancelClick( wxCommandEvent& event )
 {
-    Close( true );
+    EndModal( false );
 }
 
 
@@ -393,11 +396,50 @@ void DIALOG_PAGES_SETTINGS::OnDateApplyClick( wxCommandEvent& event )
     m_TextDate->SetValue( FormatDateLong( m_PickDate->GetValue() ) );
 }
 
-void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
+
+bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 {
     bool retSuccess = false;
 
-    m_save_flag = true;
+    m_plDescrFileName = m_filePicker->GetPath();
+
+    if( m_plDescrFileName != BASE_SCREEN::m_PageLayoutDescrFileName )
+    {
+        if( !m_plDescrFileName.IsEmpty() )
+        {
+            wxString fullFileName = WORKSHEET_LAYOUT::MakeFullFileName( m_plDescrFileName );
+            if( !wxFileExists( fullFileName ) )
+            {
+                wxString msg;
+                msg.Printf( _("Page layout description file <%s> not found. Abort"),
+                            GetChars( fullFileName ) );
+                wxMessageBox( msg );
+                return false;
+            }
+        }
+
+        // Try to remove the path, if the path is the current working dir,
+        // or the dir of kicad.pro (template)
+        wxString shortFileName = WORKSHEET_LAYOUT::MakeShortFileName( m_plDescrFileName );
+        wxFileName fn = shortFileName;
+
+        // For Win/Linux/macOS compatibility, a relative path is a good idea
+        if( fn.IsAbsolute() )
+        {
+            fn.MakeRelativeTo( wxGetCwd() );
+            wxString msg;
+            msg.Printf( _( "The page layout descr filename has changed\n"
+                           "Do you want to use the relative path:\n%s"),
+                           fn.GetFullPath().GetData() );
+            if( IsOK( this, msg ) )
+                shortFileName = fn.GetFullPath();
+        }
+
+        BASE_SCREEN::m_PageLayoutDescrFileName = shortFileName;
+        WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+        pglayout.SetPageLayout( shortFileName );
+        m_localPrjConfigChanged = true;
+    }
 
     int idx = m_paperSizeComboBox->GetSelection();
 
@@ -425,8 +467,7 @@ limits\n%.1f - %.1f %s!\nSelect another custom paper size?" ),
 
                 if( wxMessageBox( msg, _( "Warning!" ), wxYES_NO | wxICON_EXCLAMATION, this ) == wxYES )
                 {
-                    m_save_flag = false;
-                    return;
+                    return false;
                 }
 
                 m_layout_size.x = Clamp( MIN_PAGE_SIZE, m_layout_size.x, MAX_PAGE_SIZE );
@@ -485,7 +526,7 @@ limits\n%.1f - %.1f %s!\nSelect another custom paper size?" ),
         m_pageInfo.SetType( PAGE_INFO::A4 );
     }
 
-    m_Parent->SetPageSettings( m_pageInfo );
+    m_parent->SetPageSettings( m_pageInfo );
 
     m_tb.SetRevision( m_TextRevision->GetValue() );
     m_tb.SetDate(     m_TextDate->GetValue() );
@@ -496,7 +537,8 @@ limits\n%.1f - %.1f %s!\nSelect another custom paper size?" ),
     m_tb.SetComment3( m_TextComment3->GetValue() );
     m_tb.SetComment4( m_TextComment4->GetValue() );
 
-    m_Parent->SetTitleBlock( m_tb );
+    m_parent->SetTitleBlock( m_tb );
+
 
 #ifdef EESCHEMA
     // Exports settings to other sheets if requested:
@@ -508,7 +550,7 @@ limits\n%.1f - %.1f %s!\nSelect another custom paper size?" ),
     // Update title blocks for all screens
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
-        if( screen == m_Screen )
+        if( screen == m_screen )
             continue;
 
         TITLE_BLOCK tb2 = screen->GetTitleBlock();
@@ -542,8 +584,7 @@ limits\n%.1f - %.1f %s!\nSelect another custom paper size?" ),
 
 #endif
 
-    m_Screen->SetModify();
-    m_Parent->GetCanvas()->Refresh();
+    return true;
 }
 
 
@@ -600,7 +641,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
     if( m_page_bitmap->IsOk() )
     {
         // Calculate layout preview scale.
-        int appScale = m_Screen->MilsToIuScalar();
+        int appScale = m_screen->MilsToIuScalar();
 
         double scaleW = (double) lyWidth  / clamped_layout_size.x / appScale;
         double scaleH = (double) lyHeight / clamped_layout_size.y / appScale;
@@ -637,8 +678,8 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 
         DrawPageLayout( &memDC, NULL, pageDUMMY,
                         emptyString, emptyString,
-                        m_tb, m_Screen->m_NumberOfScreens,
-                        m_Screen->m_ScreenNumber, 1, appScale, DARKGRAY, RED );
+                        m_tb, m_screen->m_NumberOfScreens,
+                        m_screen->m_ScreenNumber, 1, appScale, DARKGRAY, RED );
 
         memDC.SelectObject( wxNullBitmap );
         m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );
@@ -749,4 +790,10 @@ void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
     customSizeX = Clamp( double( INT_MIN ), customSizeX, double( INT_MAX ) );
     customSizeY = Clamp( double( INT_MIN ), customSizeY, double( INT_MAX ) );
     m_layout_size = wxSize( KiROUND( customSizeX ), KiROUND( customSizeY ) );
+}
+
+// Called on .kicad_wks file description selection change
+void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxFileDirPickerEvent& event )
+{
+    // Currently: Nothing to do.
 }

@@ -46,60 +46,6 @@
 
 static const wxString productName = wxT( "KiCad E.D.A.  " );
 
-/* Draws the item list crated by BuildWorkSheetGraphicList
- * aClipBox = the clipping rect, or NULL if no clipping
- * aDC = the current Device Context
- */
-void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
-{
-    for( WS_DRAW_ITEM_BASE* item = GetFirst(); item; item = GetNext() )
-    {
-        switch( item->GetType() )
-        {
-        case WS_DRAW_ITEM_BASE::wsg_line:
-            {
-                WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
-                GRLine( aClipBox, aDC,
-                        line->GetStart(), line->GetEnd(),
-                        line->GetPenWidth(), line->GetColor() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_rect:
-            {
-                WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
-                GRRect( aClipBox, aDC,
-                        rect->GetStart().x, rect->GetStart().y,
-                        rect->GetEnd().x, rect->GetEnd().y,
-                        rect->GetPenWidth(), rect->GetColor() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_text:
-            {
-                WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
-                DrawGraphicText( aClipBox, aDC, text->GetTextPosition(),
-                                 text->GetColor(), text->GetText(),
-                                 text->GetOrientation(), text->GetSize(),
-                                 text->GetHorizJustify(), text->GetVertJustify(),
-                                 text->GetPenWidth(), text->IsItalic(), text->IsBold() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_poly:
-            {
-                WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
-                GRPoly( aClipBox, aDC,
-                        poly->m_Corners.size(), &poly->m_Corners[0],
-                        poly->IsFilled() ? FILLED_SHAPE : NO_FILL,
-                        poly->GetPenWidth(),
-                        poly->GetColor(), poly->GetColor() );
-            }
-            break;
-        }
-    }
-}
-
 void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
                      const PAGE_INFO& aPageInfo,
                      const wxString &aFullSheetName,
@@ -112,19 +58,14 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
     GRSetDrawMode( aDC, GR_COPY );
     WS_DRAW_ITEM_LIST drawList;
 
-    wxPoint LTmargin( aPageInfo.GetLeftMarginMils(), aPageInfo.GetTopMarginMils() );
-    wxPoint RBmargin( aPageInfo.GetRightMarginMils(), aPageInfo.GetBottomMarginMils() );
-    wxSize pagesize = aPageInfo.GetSizeMils();
-
-    drawList.SetMargins( LTmargin, RBmargin );
     drawList.SetPenSize( aPenWidth );
     drawList.SetMilsToIUfactor( aScalar );
-    drawList.SetPageSize( pagesize );
     drawList.SetSheetNumber( aSheetNumber );
     drawList.SetSheetCount( aSheetCount );
+    drawList.SetFileName( aFileName );
+    drawList.SetSheetName( aFullSheetName );
 
-    drawList.BuildWorkSheetGraphicList(
-                               aPageInfo.GetType(), aFullSheetName, aFileName,
+    drawList.BuildWorkSheetGraphicList( aPageInfo,
                                aTitleBlock, aColor, aAltColor );
 
     // Draw item list
@@ -154,7 +95,7 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
     EDA_COLOR_T color = RED;
 
     DrawPageLayout( aDC, m_canvas->GetClipBox(), pageInfo,
-                    aFilename, GetScreenDesc(), t_block,
+                    GetScreenDesc(), aFilename, t_block,
                     aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber,
                     aLineWidth, aScalar, color, color );
 }
@@ -162,7 +103,7 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
 
 wxString EDA_DRAW_FRAME::GetScreenDesc()
 {
-    // Virtual function, in basic function, returns
+    // Virtual function. In basic class, returns
     // an empty string.
     return wxEmptyString;
 }

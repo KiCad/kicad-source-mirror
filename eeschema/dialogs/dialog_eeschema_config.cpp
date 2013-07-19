@@ -33,7 +33,6 @@
 #include <wxEeschemaStruct.h>
 
 #include <general.h>
-//#include <protos.h>
 #include <netlist.h>
 #include <libeditframe.h>
 #include <viewlib_frame.h>
@@ -221,7 +220,8 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
         LIB_EDIT_FRAME::EnsureActiveLibExists();
     }
 
-    m_Parent->SaveProjectFile();
+    m_Parent->SaveProjectSettings( false );
+
     EndModal( wxID_OK );
 }
 

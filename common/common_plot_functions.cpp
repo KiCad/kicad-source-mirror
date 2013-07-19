@@ -92,6 +92,9 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     plotter->SetCurrentLineWidth( PLOTTER::DEFAULT_LINE_WIDTH );
     WS_DRAW_ITEM_LIST drawList;
 
+    // Print only a short filename, if aFilename is the full filename
+    wxFileName fn( aFilename );
+
     // Prepare plot parameters
     drawList.SetMargins( LTmargin, RBmargin);
     drawList.SetPenSize(PLOTTER::DEFAULT_LINE_WIDTH );
@@ -99,13 +102,12 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     drawList.SetPageSize( pageSize );
     drawList.SetSheetNumber( aSheetNumber );
     drawList.SetSheetCount( aNumberOfSheets );
+    drawList.SetFileName( fn.GetFullName() );   // Print only the short filename
+    drawList.SetSheetName( aSheetDesc );
 
-    // Print only a short filename, if aFilename is the full filename
 
-    wxFileName fn( aFilename );
-
-    drawList.BuildWorkSheetGraphicList( aPageInfo.GetType(), fn.GetFullName(),
-                               aSheetDesc, aTitleBlock, plotColor, plotColor );
+    drawList.BuildWorkSheetGraphicList( aPageInfo,
+                            aTitleBlock, plotColor, plotColor );
 
     // Draw item list
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item;

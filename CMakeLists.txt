@@ -375,6 +375,7 @@ add_subdirectory(kicad)
 add_subdirectory(pcbnew)
 add_subdirectory(pcbnew/pcad2kicadpcb_plugin)
 add_subdirectory(polygon)
+add_subdirectory(pagelayout_editor)
 add_subdirectory(potrace)
 add_subdirectory(bitmap2component)
 add_subdirectory(pcb_calculator)
@@ -392,6 +393,7 @@ add_dependencies( pcbcommon boost )
 add_dependencies( 3d-viewer boost )
 add_dependencies( pcad2kicadpcb boost )
 add_dependencies( polygon boost )
+add_dependencies( pl_editor boost )
 
 
 #############

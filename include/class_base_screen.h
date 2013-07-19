@@ -95,10 +95,12 @@ private:
 
 
 public:
+    static  wxString m_PageLayoutDescrFileName; ///< the name of the page layout descr file,
+                                                ///< or emty to used the default pagelayout
     wxPoint m_DrawOrg;          ///< offsets for drawing the circuit on the screen
 
-    wxPoint m_O_Curseur;        /* Relative Screen cursor coordinate (on grid)
-                                 * in user units. (coordinates from last reset position)*/
+    wxPoint m_O_Curseur;        ///< Relative Screen cursor coordinate (on grid)
+                                ///< in user units. (coordinates from last reset position)
 
     // Scrollbars management:
     int     m_ScrollPixelsPerUnitX; ///< Pixels per scroll unit in the horizontal direction.

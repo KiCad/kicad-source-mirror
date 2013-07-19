@@ -139,7 +139,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	m_staticTextDate = new wxStaticText( this, wxID_ANY, _("Issue Date"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDate->Wrap( -1 );
-	bSizerDate->Add( m_staticTextDate, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerDate->Add( m_staticTextDate, 0, wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizerissuedate;
 	bSizerissuedate = new wxBoxSizer( wxHORIZONTAL );
@@ -195,7 +195,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	m_staticTextTitle = new wxStaticText( this, wxID_ANY, _("Title"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTitle->Wrap( -1 );
-	bSizerTitle->Add( m_staticTextTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerTitle->Add( m_staticTextTitle, 0, wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
@@ -220,7 +220,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	m_staticText13 = new wxStaticText( this, wxID_ANY, _("Company"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13->Wrap( -1 );
-	bSizerCompany->Add( m_staticText13, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerCompany->Add( m_staticText13, 0, wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
@@ -245,7 +245,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	m_staticTextComment1 = new wxStaticText( this, wxID_ANY, _("Comment1"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextComment1->Wrap( -1 );
-	bSizerComment1->Add( m_staticTextComment1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerComment1->Add( m_staticTextComment1, 0, wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizercmt1;
 	bSizercmt1 = new wxBoxSizer( wxHORIZONTAL );
@@ -270,7 +270,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	m_staticTextComment2 = new wxStaticText( this, wxID_ANY, _("Comment2"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextComment2->Wrap( -1 );
-	bSizerComment2->Add( m_staticTextComment2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerComment2->Add( m_staticTextComment2, 0, wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizercmt2;
 	bSizercmt2 = new wxBoxSizer( wxHORIZONTAL );
@@ -295,7 +295,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	m_staticTextComment3 = new wxStaticText( this, wxID_ANY, _("Comment3"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextComment3->Wrap( -1 );
-	bSizerComment12->Add( m_staticTextComment3, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerComment12->Add( m_staticTextComment3, 0, wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizercmt3;
 	bSizercmt3 = new wxBoxSizer( wxHORIZONTAL );
@@ -320,7 +320,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	m_staticTextComment4 = new wxStaticText( this, wxID_ANY, _("Comment4"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextComment4->Wrap( -1 );
-	bSizerComment4->Add( m_staticTextComment4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerComment4->Add( m_staticTextComment4, 0, wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizercmt4;
 	bSizercmt4 = new wxBoxSizer( wxHORIZONTAL );
@@ -339,6 +339,25 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	
 	bSizerRight->Add( bSizerComment4, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizerFilename;
+	bSizerFilename = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextfilename = new wxStaticText( this, wxID_ANY, _("Page layout file description"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextfilename->Wrap( -1 );
+	bSizerFilename->Add( m_staticTextfilename, 0, wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizerfileSelection;
+	bSizerfileSelection = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_filePicker = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, _("Select a file"), wxT("*.kicad_wks"), wxDefaultPosition, wxDefaultSize, wxFLP_OPEN|wxFLP_USE_TEXTCTRL );
+	bSizerfileSelection->Add( m_filePicker, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	
+	bSizerFilename->Add( bSizerfileSelection, 1, wxEXPAND, 5 );
+	
+	
+	bSizerRight->Add( bSizerFilename, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bUpperSizerH->Add( bSizerRight, 1, wxEXPAND, 5 );
@@ -360,7 +379,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	this->Layout();
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCloseWindow ) );
 	m_paperSizeComboBox->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnPaperSizeChoice ), NULL, this );
 	m_orientationComboBox->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnPageOrientationChoice ), NULL, this );
 	m_TextUserSizeY->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnUserPageSizeYTextUpdated ), NULL, this );
@@ -375,6 +393,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_TextComment2->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnComment2TextUpdated ), NULL, this );
 	m_TextComment3->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnComment3TextUpdated ), NULL, this );
 	m_TextComment4->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnComment4TextUpdated ), NULL, this );
+	m_filePicker->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnWksFileSelection ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnOkClick ), NULL, this );
 }
@@ -382,7 +401,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 DIALOG_PAGES_SETTINGS_BASE::~DIALOG_PAGES_SETTINGS_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCloseWindow ) );
 	m_paperSizeComboBox->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnPaperSizeChoice ), NULL, this );
 	m_orientationComboBox->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnPageOrientationChoice ), NULL, this );
 	m_TextUserSizeY->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnUserPageSizeYTextUpdated ), NULL, this );
@@ -397,6 +415,7 @@ DIALOG_PAGES_SETTINGS_BASE::~DIALOG_PAGES_SETTINGS_BASE()
 	m_TextComment2->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnComment2TextUpdated ), NULL, this );
 	m_TextComment3->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnComment3TextUpdated ), NULL, this );
 	m_TextComment4->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnComment4TextUpdated ), NULL, this );
+	m_filePicker->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnWksFileSelection ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnOkClick ), NULL, this );
 	

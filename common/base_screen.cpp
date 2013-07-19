@@ -36,6 +36,8 @@
 #include <id.h>
 #include <base_units.h>
 
+wxString BASE_SCREEN::m_PageLayoutDescrFileName;   // the name of the page layout descr file.
+
 BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) :
     EDA_ITEM( aType )
 {

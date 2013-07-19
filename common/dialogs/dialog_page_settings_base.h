@@ -33,6 +33,7 @@ class DIALOG_SHIM;
 #include <wx/datectrl.h>
 #include <wx/dateevt.h>
 #include <wx/checkbox.h>
+#include <wx/filepicker.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -111,12 +112,13 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextComment4;
 		wxTextCtrl* m_TextComment4;
 		wxCheckBox* m_Comment4Export;
+		wxStaticText* m_staticTextfilename;
+		wxFilePickerCtrl* m_filePicker;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnPaperSizeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageOrientationChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUserPageSizeYTextUpdated( wxCommandEvent& event ) { event.Skip(); }
@@ -131,13 +133,14 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		virtual void OnComment2TextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnComment3TextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnComment4TextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnWksFileSelection( wxFileDirPickerEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 748,464 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 748,470 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PAGES_SETTINGS_BASE();
 	
 };

@@ -83,6 +83,7 @@ enum pseudokeys {
 #define GERBVIEW_EXE        wxT( "gerbview.exe" )
 #define BITMAPCONVERTER_EXE wxT( "bitmap2component.exe" )
 #define PCB_CALCULATOR_EXE  wxT( "pcb_calculator.exe" )
+#define PL_EDITOR_EXE       wxT( "pl_editor.exe" )
 #else
 #ifndef __WXMAC__
 #define CVPCB_EXE           wxT( "cvpcb" )
@@ -91,6 +92,7 @@ enum pseudokeys {
 #define GERBVIEW_EXE        wxT( "gerbview" )
 #define BITMAPCONVERTER_EXE wxT( "bitmap2component" )
 #define PCB_CALCULATOR_EXE  wxT( "pcb_calculator" )
+#define PL_EDITOR_EXE       wxT( "pl_editor" )
 #else
 #define CVPCB_EXE           wxT( "cvpcb.app/Contents/MacOS/cvpcb" )
 #define PCBNEW_EXE          wxT( "pcbnew.app/Contents/MacOS/pcbnew" )
@@ -98,6 +100,7 @@ enum pseudokeys {
 #define GERBVIEW_EXE        wxT( "gerbview.app/Contents/MacOS/gerbview" )
 #define BITMAPCONVERTER_EXE wxT( "bitmap2component.app/Contents/MacOS/bitmap2component" )
 #define PCB_CALCULATOR_EXE  wxT( "pcb_calculator.app/Contents/MacOS/pcb_calculator" )
+#define PL_EDITOR_EXE  wxT( "pcb_calculator.app/Contents/MacOS/pl_editor" )
 # endif
 #endif
 
@@ -167,7 +170,14 @@ inline int Mils2mm( double x ) { return KiROUND( x * 25.4 / 1000. ); }
 
 
 /// Return whether GOST is in play
-bool IsGOST();
+inline bool IsGOST()
+{
+#if defined(KICAD_GOST)
+    return true;
+#else
+    return false;
+#endif
+}
 
 
 enum EDA_UNITS_T {
@@ -286,7 +296,7 @@ public:
 
     // Accessors returning "Internal Units (IU)".  IUs are mils in EESCHEMA,
     // and either deci-mils or nanometers in PCBNew.
-#if defined(PCBNEW) || defined(EESCHEMA) || defined(GERBVIEW)
+#if defined(PCBNEW) || defined(EESCHEMA) || defined(GERBVIEW) || defined(PL_EDITOR)
     int GetWidthIU() const  { return IU_PER_MILS * GetWidthMils();  }
     int GetHeightIU() const { return IU_PER_MILS * GetHeightMils(); }
     const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }

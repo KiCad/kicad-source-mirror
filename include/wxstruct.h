@@ -96,7 +96,8 @@ enum ID_DRAWFRAME_TYPE
     GERBER_FRAME_TYPE,
     TEXT_EDITOR_FRAME_TYPE,
     DISPLAY3D_FRAME_TYPE,
-    KICAD_MAIN_FRAME_TYPE
+    KICAD_MAIN_FRAME_TYPE,
+    PL_EDITOR_FRAME_TYPE
 };
 
 
@@ -221,6 +222,15 @@ public:
      * remember their positions and sizes.
      */
     virtual void SaveSettings();
+
+    /**
+     * Function SaveProjectSettings
+     * saves changes to the project settings to the project (.pro) file.
+     * The method is virtual so you can override it to call the suitable save method.
+     * The base method do nothing
+     * @param aAskForSave = true to open a dialog before saving the settings
+     */
+    virtual void SaveProjectSettings( bool aAskForSave ) {};
 
     /**
      * Function OnSelectPreferredEditor
