@@ -258,10 +258,10 @@ public:
     }
 
     /**
-     * Function SetLayerDynamic()
-     * Turns on or off the dynamic parameter of a particular layer.
+     * Function SetLayerCached()
+     * Turns on or off the cached parameter of a particular layer.
      * @param aLayer: the layer
-     * @param aDynamic: the parameter
+     * @param aCached: the new parameter value
      */
     inline void SetLayerCached( int aLayer, bool aCached = true )
     {
