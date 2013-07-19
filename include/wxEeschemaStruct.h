@@ -157,7 +157,7 @@ private:
     /// The name of the format to use when generating a net list.
     wxString    m_netListFormat;
 
-    /// Add X prefix to componen referencess when generating spice net lists.
+    /// Add X prefix to component references when generating spice net lists.
     bool        m_addReferencPrefix;
 
     wxString    m_userLibraryPath;
@@ -239,7 +239,7 @@ public:
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
-     * Function GetProjectFileParameters
+     * Function GetProjectFileParametersList
      * returns the project file parameter list for Eeschema.
      *
      *<p?
@@ -250,13 +250,14 @@ public:
      * compile time required global variable definitions.
      * </p>
      */
-    PARAM_CFG_ARRAY& GetProjectFileParameters( void );
+    PARAM_CFG_ARRAY& GetProjectFileParametersList( void );
 
     /**
-     * Function SaveProjectFile
+     * Function SaveProjectSettings
      * saves changes to the project settings to the project (.pro) file.
+     * @param aAskForSave = true to open a dialog before saving the settings
      */
-    void SaveProjectFile();
+    void SaveProjectSettings( bool aAskForSave );
 
     /**
      * Function LoadProjectFile

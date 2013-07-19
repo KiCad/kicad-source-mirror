@@ -10,256 +10,10 @@
 #include <vector2d.h>
 #include <eda_text.h>
 
-class WS_DRAW_ITEM_TEXT;        // Forward declaration
+class WORKSHEET_DATAITEM;        // Forward declaration
+class TITLE_BLOCK;
 
 #define TB_DEFAULT_TEXTSIZE             1.5  // default worksheet text size in mm
-
-// Text attributes set in m_Flags (ORed bits)
- #define USE_BOLD 1             // has meaning for texts
- #define USE_THICK_LINE 1       // equivalent to bold for lines
- #define USE_ITALIC 2           // has meaning for texts
- #define USE_TEXT_COLOR 4
- #define SET_UPPER_LIMIT 8      // Flag used to calculate variable position items
-
-// A coordinate is relative to a page corner.
-// Any of the 4 corners can be a reference.
-// The default is the right bottom corner
-enum corner_anchor
-{
-    RB_CORNER,      // right bottom corner
-    RT_CORNER,      // right top corner
-    LB_CORNER,      // left bottom corner
-    LT_CORNER,      // left top corner
-};
-
-// a coordinate point
-// The position is always relative to the corner anchor
-// Note the coordinate is from the anchor point
-// to the opposite corner.
-class POINT_COORD
-{
-public:
-    DPOINT            m_Pos;
-    int               m_Anchor;
-public:
-    POINT_COORD() { m_Anchor = RB_CORNER; }
-    POINT_COORD( DPOINT aPos, enum corner_anchor aAnchor = RB_CORNER )
-    {
-        m_Pos = aPos;
-        m_Anchor = aAnchor;
-    }
-};
-
-
-// Work sheet structure type definitions.
-// Basic items are:
-// * segment and rect (defined by 2 points)
-// * text (defined by a coordinate), the text and its justifications
-// * poly polygon defined by a coordinate, and a set of list of corners
-//   ( because we use it for logos, there are more than one polygon
-//   in this description
-class WORKSHEET_DATAITEM
-{
-public:
-    enum WS_ItemType {
-        WS_TEXT,
-        WS_SEGMENT,
-        WS_RECT,
-        WS_POLYPOLYGON
-    };
-    WS_ItemType       m_Type;
-    POINT_COORD       m_Pos;
-    POINT_COORD       m_End;
-    double            m_LineWidth;
-    int               m_Flags;
-    int               m_RepeatCount;        // repeat count for duplicate items
-    DPOINT            m_IncrementVector;    // For duplicate items: move vector
-                                            // for position increment
-    int               m_IncrementLabel;
-
-    static double     m_WSunits2Iu;         // conversion factor between
-                                            // ws units (mils) and draw/plot units
-    static DPOINT     m_RB_Corner;          // cordinates of the right bottom corner
-                                            // (ws units)
-    static DPOINT     m_LT_Corner;          // cordinates of the left top corner
-                                            // (ws units)
-
-public:
-    WORKSHEET_DATAITEM( WS_ItemType aType )
-    {
-        m_Type = aType;
-        m_Flags = 0;
-        m_RepeatCount = 1;
-        m_IncrementLabel = 0;
-        m_LineWidth = 0.0;
-    }
-
-    virtual ~WORKSHEET_DATAITEM() {}
-
-    void SetStart( double aPosx, double aPosy, enum corner_anchor aAnchor = RB_CORNER )
-    {
-        m_Pos.m_Pos.x = aPosx;
-        m_Pos.m_Pos.y = aPosy;
-        m_Pos.m_Anchor = aAnchor;
-    }
-
-    void SetEnd( double aPosx, double aPosy, enum corner_anchor aAnchor = RB_CORNER )
-    {
-        m_End.m_Pos.x = aPosx;
-        m_End.m_Pos.y = aPosy;
-        m_End.m_Anchor = aAnchor;
-    }
-
-    const wxPoint GetStartPosUi( int ii = 0 ) const;
-    const wxPoint GetEndPosUi( int ii = 0 ) const;
-    const DPOINT GetStartPos( int ii = 0 ) const;
-    const DPOINT GetEndPos( int ii = 0 ) const;
-    int GetPenSizeUi() {return KiROUND( m_LineWidth * m_WSunits2Iu ); }
-
-    /**
-     * @return true if the item is inside the rectangle defined by the
-     * 4 corners, false otherwise.
-     */
-    virtual bool IsInsidePage( int ii ) const;
-};
-
-class WORKSHEET_DATAITEM_POLYPOLYGON : public WORKSHEET_DATAITEM
-{
-public:
-    double            m_Orient;             //  Orientation in degrees
-    std::vector<DPOINT> m_Corners;          // corner list
-
-private:
-    std::vector<unsigned> m_polyIndexEnd;   // index of the last point of each polygon
-    DPOINT            m_minCoord;           // min coord of corners, relative to m_Pos
-    DPOINT            m_maxCoord;           // max coord of corners, relative to m_Pos
-
-public:
-    WORKSHEET_DATAITEM_POLYPOLYGON( );
-
-    /**
-     * add a corner in corner list
-     * @param aCorner: the item to append
-     */
-    void AppendCorner( const DPOINT& aCorner )
-    {
-        m_Corners.push_back( aCorner );
-    }
-
-    /**
-     * Closes the current contour, by storing the index of the last corner
-     * of the current polygon in m_polyIndexEnd.
-     */
-    void CloseContour()
-    {
-        m_polyIndexEnd.push_back( m_Corners.size() -1 );
-    }
-
-    /**
-     * @return the count of contours in the poly polygon
-     */
-    int GetPolyCount() const { return (int) m_polyIndexEnd.size(); }
-
-    /**
-     * @return the index of the first corner of the contour aCountour
-     * @param aContour = the index of the contour
-     */
-    unsigned GetPolyIndexStart( unsigned aContour) const
-    {
-        if( aContour == 0 )
-            return 0;
-        else
-            return m_polyIndexEnd[aContour-1] + 1;
-    }
-
-    /**
-     * @return the index of the last corner of the contour aCountour
-     * @param aContour = the index of the contour
-     */
-    unsigned GetPolyIndexEnd( unsigned aContour) const
-    {
-        return m_polyIndexEnd[aContour];
-    }
-
-    /**
-     * @return the coordinate (in mm) of the corner aIdx,
-     * for the repeated item aRepeat
-     */
-    const DPOINT GetCornerPosition( unsigned aIdx, int aRepeat = 0 ) const;
-
-    /**
-     * @return the coordinate (in draw/plot units) of the corner aIdx,
-     * for the repeated item aRepeat
-     */
-    const wxPoint GetCornerPositionUi( unsigned aIdx, int aRepeat = 0 ) const;
-
-    /**
-     * calculate the bounding box of the set  polygons
-     */
-    void SetBoundingBox();
-
-
-    bool IsInsidePage( int ii ) const;
-};
-
-class WORKSHEET_DATAITEM_TEXT : public WORKSHEET_DATAITEM
-{
-public:
-    wxString          m_TextBase;           // The basic text, with format symbols
-    wxString          m_FullText;           // The expanded text, shown on screen
-    int               m_IncrementLabel;
-    double            m_Orient;             //  Orientation in degrees
-    enum EDA_TEXT_HJUSTIFY_T m_Hjustify;
-    enum EDA_TEXT_VJUSTIFY_T m_Vjustify;
-    DSIZE             m_TextSize;
-    DSIZE             m_BoundingBoxSize;    // When not null, this is the max
-                                            // size of the full text.
-                                            // the text size will be modified
-                                            // to keep the full text insite this
-                                            // bound.
-    DSIZE             m_ConstrainedTextSize;// Actual text size, if constrained by
-                                            // the m_BoundingBoxSize constraint
-
-public:
-    WORKSHEET_DATAITEM_TEXT( const wxChar* aTextBase );
-
-    /**
-     * transfert the text justification and orientation
-     * to aGText
-     */
-    void TransfertSetupToGraphicText(  WS_DRAW_ITEM_TEXT* aGText );
-
-    /**
-     * Try to build text wihich is an increment of m_TextBase
-     * has meaning only if m_TextBase is a basic text (one char)
-     * If the basic char is a digit, build a number
-     * If the basic char is a letter, use the letter with ascii code
-     * aIncr + (basic char ascc code)
-     * @param aIncr = the increment value
-     * return the incremented label in m_FullText
-     */
-    void IncrementLabel( int aIncr );
-
-    /**
-     * Calculates m_ConstrainedTextSize from m_TextSize
-     * to keep the X size and the full Y size of the text
-     * smaller than m_BoundingBoxSize
-     * if m_BoundingBoxSize.x or m_BoundingBoxSize.y > 0
-     * if m_BoundingBoxSize.x or m_BoundingBoxSize.y == 0
-     * the corresponding text size is not constrained
-     */
-    void SetConstrainedTextSize();
-
-    /**
-     * @return true is a bold font should be selected
-     */
-    bool IsBold() { return (m_Flags & USE_BOLD) != 0; }
-
-    /**
-     * @return true is an italic font should be selected
-     */
-    bool IsItalic() { return (m_Flags & USE_ITALIC) != 0; }
-};
 
 /*
  * Helper classes to handle basic graphic items used to raw/plot
@@ -275,16 +29,24 @@ public:
     enum WS_DRAW_TYPE {
         wsg_line, wsg_rect, wsg_poly, wsg_text
     };
+    int m_Flags;                    // temporary flgs used in page layout editor
+                                    // to locate the item;
 
 protected:
     WS_DRAW_TYPE    m_type; // wsg_line, wsg_rect, wsg_poly, wsg_text
     EDA_COLOR_T     m_color;
+    WORKSHEET_DATAITEM*  m_parent;  // an unique identifier, used as link
+                                    // to the parent WORKSHEET_DATAITEM item,
+                                    // in page layout editor
 
 protected:
-    WS_DRAW_ITEM_BASE( WS_DRAW_TYPE aType, EDA_COLOR_T aColor )
+    WS_DRAW_ITEM_BASE( WORKSHEET_DATAITEM*  aParent,
+                       WS_DRAW_TYPE aType, EDA_COLOR_T aColor )
     {
         m_type  = aType;
         m_color = aColor;
+        m_parent = aParent;
+        m_Flags = 0;
     }
 
 public:
@@ -293,6 +55,35 @@ public:
     // Accessors:
     EDA_COLOR_T GetColor() { return m_color; }
     WS_DRAW_TYPE GetType() { return m_type; };
+
+    WORKSHEET_DATAITEM* GetParent() { return m_parent; }
+
+    /**
+     * Abstract function: should exist for derived items
+     * return true if the point aPosition is on the item
+     */
+    virtual bool HitTest( const wxPoint& aPosition) = 0;
+
+    /**
+     * Abstract function: should exist for derived items
+     * return true if the point aPosition is near the starting point of this item,
+     * for items defined by 2 points (segments, rect)
+     * or the position of the item, for items having only one point
+     * (texts or polygons)
+     * the maxi dist is WORKSHEET_DATAITEM::GetMarkerSizeUi()/2
+     */
+    virtual bool HitTestStartPoint( const wxPoint& aPosition) = 0;
+
+    /**
+     * return true if the point aPosition is near the ending point of this item
+     * This is avirtual function which should be overriden for items defien by
+     * 2 points
+     * the maxi dist is WORKSHEET_DATAITEM::GetMarkerSizeUi()/2
+     */
+    virtual bool HitTestEndPoint( const wxPoint& aPosition)
+    {
+        return false;
+    }
 };
 
 // This class draws a thick segment
@@ -303,9 +94,10 @@ class WS_DRAW_ITEM_LINE : public WS_DRAW_ITEM_BASE
     int     m_penWidth;
 
 public:
-    WS_DRAW_ITEM_LINE( wxPoint aStart, wxPoint aEnd,
+    WS_DRAW_ITEM_LINE( WORKSHEET_DATAITEM* aParent,
+                       wxPoint aStart, wxPoint aEnd,
                        int aPenWidth, EDA_COLOR_T aColor ) :
-        WS_DRAW_ITEM_BASE( wsg_line, aColor )
+        WS_DRAW_ITEM_BASE( aParent, wsg_line, aColor )
     {
         m_start     = aStart;
         m_end       = aEnd;
@@ -316,11 +108,32 @@ public:
     int GetPenWidth() { return m_penWidth; }
     const wxPoint&  GetStart() { return m_start; }
     const wxPoint&  GetEnd() { return m_end; }
+
+    /**
+     * Virtual function
+     * return true if the point aPosition is on the line
+     */
+    virtual bool HitTest( const wxPoint& aPosition);
+
+    /**
+     * return true if the point aPosition is on the starting point of this item.
+     */
+    virtual bool HitTestStartPoint( const wxPoint& aPosition);
+
+    /**
+     * return true if the point aPosition is on the ending point of this item
+     * This is avirtual function which should be overriden for items defien by
+     * 2 points
+     */
+    virtual bool HitTestEndPoint( const wxPoint& aPosition);
 };
 
 // This class draws a polygon
 class WS_DRAW_ITEM_POLYGON : public WS_DRAW_ITEM_BASE
 {
+    wxPoint m_pos;      // position of reference point, from the
+                        // WORKSHEET_DATAITEM_POLYPOLYGON parent
+                        // (used only in page layout editor to draw anchors)
     int m_penWidth;
     bool m_fill;
 
@@ -328,28 +141,61 @@ public:
     std::vector <wxPoint> m_Corners;
 
 public:
-    WS_DRAW_ITEM_POLYGON( bool aFill, int aPenWidth, EDA_COLOR_T aColor ) :
-        WS_DRAW_ITEM_BASE( wsg_poly, aColor )
+    WS_DRAW_ITEM_POLYGON( WORKSHEET_DATAITEM* aParent, wxPoint aPos,
+                          bool aFill, int aPenWidth, EDA_COLOR_T aColor ) :
+        WS_DRAW_ITEM_BASE( aParent, wsg_poly, aColor )
     {
         m_penWidth = aPenWidth;
         m_fill = aFill;
+        m_pos = aPos;
     }
 
     // Accessors:
     int GetPenWidth() { return m_penWidth; }
     bool IsFilled() { return m_fill; }
+    const wxPoint& GetPosition() { return m_pos; }
+
+    /**
+     * Virtual function
+     * return true if the point aPosition is inside one polygon
+     */
+    virtual bool HitTest( const wxPoint& aPosition);
+
+    /**
+     * return true if the point aPosition is on the starting point of this item.
+     */
+    virtual bool HitTestStartPoint( const wxPoint& aPosition);
 };
 
 // This class draws a not filled rectangle with thick segment
 class WS_DRAW_ITEM_RECT : public WS_DRAW_ITEM_LINE
 {
 public:
-    WS_DRAW_ITEM_RECT( wxPoint aStart, wxPoint aEnd,
+    WS_DRAW_ITEM_RECT( WORKSHEET_DATAITEM* aParent,
+                       wxPoint aStart, wxPoint aEnd,
                        int aPenWidth, EDA_COLOR_T aColor ) :
-        WS_DRAW_ITEM_LINE( aStart, aEnd, aPenWidth, aColor )
+        WS_DRAW_ITEM_LINE( aParent, aStart, aEnd, aPenWidth, aColor )
     {
         m_type = wsg_rect;
     }
+
+    /**
+     * Virtual function
+     * return true if the point aPosition is on one edge of the rectangle
+     */
+    virtual bool HitTest( const wxPoint& aPosition);
+
+    /**
+     * return true if the point aPosition is on the starting point of this item.
+     */
+    virtual bool HitTestStartPoint( const wxPoint& aPosition);
+
+    /**
+     * return true if the point aPosition is on the ending point of this item
+     * This is avirtual function which should be overriden for items defien by
+     * 2 points
+     */
+    virtual bool HitTestEndPoint( const wxPoint& aPosition);
 };
 
 // This class draws a graphic text.
@@ -358,10 +204,11 @@ public:
 class WS_DRAW_ITEM_TEXT : public WS_DRAW_ITEM_BASE, public EDA_TEXT
 {
 public:
-    WS_DRAW_ITEM_TEXT( wxString& aText, wxPoint aPos, wxSize aSize,
+    WS_DRAW_ITEM_TEXT( WORKSHEET_DATAITEM* aParent,
+                       wxString& aText, wxPoint aPos, wxSize aSize,
                        int aPenWidth, EDA_COLOR_T aColor,
                        bool aItalic = false, bool aBold = false ) :
-        WS_DRAW_ITEM_BASE( wsg_text, aColor ), EDA_TEXT( aText )
+        WS_DRAW_ITEM_BASE( aParent, wsg_text, aColor ), EDA_TEXT( aText )
     {
         SetTextPosition( aPos );
         SetSize( aSize );
@@ -372,6 +219,17 @@ public:
 
     // Accessors:
     int GetPenWidth() { return GetThickness(); }
+
+    /**
+     * Virtual function
+     * return true if the point aPosition is on the text
+     */
+    virtual bool HitTest( const wxPoint& aPosition);
+
+    /**
+     * return true if the point aPosition is on the starting point of this item.
+     */
+    virtual bool HitTestStartPoint( const wxPoint& aPosition);
 };
 
 /*
@@ -420,8 +278,26 @@ public:
             delete m_graphicList[ii];
     }
 
-    /* Function SetPenSize
-     * Set the defualt pen size to draw/plot lines and texts
+    /**
+     * Set the filename to draw/plot
+     * @param aFileName = the text to display by the "filename" format
+     */
+    void SetFileName( const wxString & aFileName )
+    {
+        m_fileName = &aFileName;
+    }
+
+    /**
+     * Set the sheet name to draw/plot
+     * @param aSheetName = the text to draw/plot by the "sheetname" format
+     */
+    void SetSheetName( const wxString & aSheetName )
+    {
+        m_sheetFullName = &aSheetName;
+    }
+
+    /** Function SetPenSize
+     * Set the default pen size to draw/plot lines and texts
      * @param aPenSize the thickness of lines
      */
     void SetPenSize( int aPenSize )
@@ -429,7 +305,7 @@ public:
         m_penSize = aPenSize;
     }
 
-    /* Function SetMilsToIUfactor
+    /** Function SetMilsToIUfactor
      * Set the scalar to convert pages units ( mils) to draw/plot units
      * @param aScale the conversion factor
      */
@@ -438,7 +314,7 @@ public:
         m_milsToIu = aScale;
     }
 
-    /* Function SetPageSize
+    /** Function SetPageSize
      * Set the size of the page layout
      * @param aPageSize size (in mils) of the page layout.
      */
@@ -467,7 +343,7 @@ public:
         m_sheetCount = aSheetCount;
     }
 
-    /* Function SetMargins
+    /** Function SetMargins
      * Set the left top margin and the right bottom margin
      * of the page layout
      * @param aLTmargin The left top margin of the page layout.
@@ -505,7 +381,7 @@ public:
     }
 
     /**
-     * Draws the item list crated by BuildWorkSheetGraphicList
+     * Draws the item list created by BuildWorkSheetGraphicList
      * @param aClipBox = the clipping rect, or NULL if no clipping
      * @param aDC = the current Device Context
      */
@@ -515,19 +391,23 @@ public:
      * Function BuildWorkSheetGraphicList is a core function for
      * drawing or plotting the page layout with
      * the frame and the basic inscriptions.
-     * It fills the list of basic graphic items to draw or plot.
+     * It populates the list of basic graphic items to draw or plot.
      * currently lines, rect, polygons and texts
+     * before calling this function, some parameters should be initialized:
+     * by calling:
+     *   SetPenSize( aPenWidth );
+     *   SetMilsToIUfactor( aScalar );
+     *   SetSheetNumber( aSheetNumber );
+     *   SetSheetCount( aSheetCount );
+     *   SetFileName( aFileName );
+     *   SetSheetName( aFullSheetName );
      *
-     * @param aPaperFormat The paper size type, for basic inscriptions.
-     * @param aFileName The file name, for basic inscriptions.
-     * @param aSheetPathHumanReadable The human readable sheet path.
+     * @param aPageInfo The PAGE_INFO, for page size, margins...
      * @param aTitleBlock The sheet title block, for basic inscriptions.
      * @param aColor The color for drawing.
      * @param aAltColor The color for items which need to be "hightlighted".
      */
-    void BuildWorkSheetGraphicList( const wxString& aPaperFormat,
-                                    const wxString& aFileName,
-                                    const wxString& aSheetPathHumanReadable,
+    void BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
                                     const TITLE_BLOCK& aTitleBlock,
                                     EDA_COLOR_T aColor, EDA_COLOR_T aAltColor );
     /**
@@ -559,26 +439,67 @@ public:
      * @return the text, after replacing the format symbols by the actual value
      */
     wxString BuildFullText( const wxString& aTextbase );
+
+    /**
+     * Locate graphic items in m_graphicList at location aPosition
+     * @param aList = the list of items found
+     * @param aPosition the position (in user units) to locate items
+     */
+    void Locate(std::vector <WS_DRAW_ITEM_BASE*>& aList, const wxPoint& aPosition);
 };
 
 
 /**
- * WORKSHEET_LAYOUT handles the grpahic items list to draw/plot
+ * WORKSHEET_LAYOUT handles the graphic items list to draw/plot
  * the title block and other items (page references ...
  */
 class WORKSHEET_LAYOUT
 {
     std::vector <WORKSHEET_DATAITEM*> m_list;
+    bool m_allowVoidList;   // If false, the default page layout
+                            // will be loaded the first time
+                            // WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList
+                            // is run (useful mainly for page layout editor)
 
 public:
-    WORKSHEET_LAYOUT() {};
+    WORKSHEET_LAYOUT() { m_allowVoidList = false; }
     ~WORKSHEET_LAYOUT() {ClearList(); }
 
-    void ClearList()
+    /**
+     * static function: returns the instance of WORKSHEET_LAYOUT
+     * used in the application
+     */
+    static WORKSHEET_LAYOUT& GetTheInstance()
     {
-        for( unsigned ii = 0; ii < m_list.size(); ii++ )
-            delete m_list[ii];
+        extern WORKSHEET_LAYOUT wksTheInstance;
+        return wksTheInstance;
     }
+
+    /**
+     * In Kicad applications, a page layout description is needed
+     * So if the list is empty, a default description is loaded,
+     * the first time a page layout is drawn.
+     * However, in page layout editor, an empty list is acceptable.
+     * AllowVoidList allows or not the empty list
+     */
+    void AllowVoidList( bool Allow ) { m_allowVoidList = Allow; }
+
+    /**
+     * @return true if an empty list is allowed
+     * (mainly allowed for page layout editor).
+     */
+    bool VoidListAllowed() { return m_allowVoidList; }
+
+    /**
+     * erase the list of items
+     */
+    void ClearList();
+
+    /**
+     * Function Save:
+     * @param aFullFileName the filename of the file to created
+     */
+    void Save( const wxString& aFullFileName );
 
     /**
      * Add an item to the list of items
@@ -589,15 +510,29 @@ public:
     }
 
     /**
+     *Insert an item to the list of items at position aIdx
+     */
+    void Insert( WORKSHEET_DATAITEM* aItem, unsigned aIdx );
+
+    /**
+     *Remove the item to the list of items at position aIdx
+     */
+    bool  Remove( unsigned aIdx );
+
+    /**
+     *Remove the item to the list of items at position aIdx
+     */
+    bool  Remove( WORKSHEET_DATAITEM* aItem );
+
+    /**
+     * @return the index of aItem, or -1 if does not exist
+     */
+    int GetItemIndex( WORKSHEET_DATAITEM* aItem ) const;
+
+    /**
      * @return the item from its index aIdx, or NULL if does not exist
      */
-    WORKSHEET_DATAITEM* GetItem( unsigned aIdx ) const
-    {
-        if( aIdx < m_list.size() )
-            return m_list[aIdx];
-        else
-            return NULL;
-    }
+    WORKSHEET_DATAITEM* GetItem( unsigned aIdx ) const;
 
     /**
      * @return the item count
@@ -610,11 +545,32 @@ public:
     void SetDefaultLayout();
 
     /**
-     * Fills the list with a custom layout, or
+     * Populates the list with a custom layout, or
      * the default layout, if no custom layout available
+     * @param aFullFileName = the custom page layout description file.
+     * if empty, loads the file defined by KICAD_WKSFILE
+     * and if its is not defined, uses the default internal description
+     * @param Append = if true: do not delete old layout, and load only
+       aFullFileName.
      */
-    void SetLayout();
+    void SetPageLayout( const wxString& aFullFileName = wxEmptyString,
+                        bool Append = false );
 
+    /**
+     * @return a short filename  from a full filename:
+     * if the path is the current path, or if the path
+     * is the same as kicad.pro (in template), returns the shortname
+     * else do nothing and returns a full filename
+     */
+    static const wxString MakeShortFileName( const wxString& aFullFileName );
+
+    /**
+     * @return a full filename from a short filename,
+     * if the short filename path is void
+     * In this case the path is the same as kicad.pro (in template)
+     * else return the short filename (which have an absolute os relative path
+      */
+    static const wxString MakeFullFileName( const wxString& aShortFileName );
 };
 
 #endif      // WORKSHEET_SHAPE_BUILDER_H

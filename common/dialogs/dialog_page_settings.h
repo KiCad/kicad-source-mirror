@@ -35,86 +35,90 @@
 class DIALOG_PAGES_SETTINGS: public DIALOG_PAGES_SETTINGS_BASE
 {
 private:
-    EDA_DRAW_FRAME* m_Parent;
-    BASE_SCREEN*    m_Screen;
+    EDA_DRAW_FRAME* m_parent;
+    BASE_SCREEN*    m_screen;
     wxArrayString   m_pageFmt;          /// list of page sizes (not translated)
     bool            m_initialized;
-    bool            m_modified;
-    bool            m_save_flag;
+    bool            m_localPrjConfigChanged;    /// the page layuout filename was changed
     wxBitmap*       m_page_bitmap;      /// Temporary bitmap for the page layout example.
     wxSize          m_layout_size;      /// Logical page layout size.
     PAGE_INFO       m_pageInfo;         /// Temporary page info.
     bool            m_customFmt;        /// true if the page selection is custom
     TITLE_BLOCK     m_tb;               /// Temporary title block (basic inscriptions).
+    wxString        m_plDescrFileName;  /// Temporary BASE_SCREEN::m_PageLayoutDescrFileName copy
+
+
 
 public:
     DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent );
     ~DIALOG_PAGES_SETTINGS();
 
+    const wxString GetWksFileName()
+    {
+        return m_filePicker->GetPath();
+    }
+
+    void SetWksFileName(const wxString& aFilename )
+    {
+         m_filePicker->SetPath( aFilename );
+    }
+
+    void EnableWksFileNamePicker( bool aEnable )
+    {
+         m_filePicker->Enable( aEnable );
+    }
+
 private:
-    /// Initialises member variables
-    void initDialog();
+    void initDialog();  // Initialisation of member variables
 
-    /// wxEVT_CLOSE_WINDOW event handler for ID_DIALOG
-    void OnCloseWindow( wxCloseEvent& event );
+//    void OnCloseWindow( wxCloseEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
+    // event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
+    // event handler for wxID_CANCEL
     void OnCancelClick( wxCommandEvent& event );
 
-    /// exEVT_COMMAND_CHOICE_SELECTED event handler for ID_CHICE_PAGE_SIZE
+    // event handlers for page size choice
     void OnPaperSizeChoice( wxCommandEvent& event );
-
-    /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_USER_PAGE_SIZE_X
     void OnUserPageSizeXTextUpdated( wxCommandEvent& event );
-
-    /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_USER_PAGE_SIZE_Y
     void OnUserPageSizeYTextUpdated( wxCommandEvent& event );
-
-    /// exEVT_COMMAND_CHOICE_SELECTED event handler for ID_CHOICE_PAGE_ORIENTATION
     void OnPageOrientationChoice( wxCommandEvent& event );
 
-    /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_REVISION
+    // event handler for texts in title block
     void OnRevisionTextUpdated( wxCommandEvent& event );
-
-    /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_DATE
     void OnDateTextUpdated( wxCommandEvent& event );
-
-    /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_TITLE
     void OnTitleTextUpdated( wxCommandEvent& event );
-
-    /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_COMPANY
     void OnCompanyTextUpdated( wxCommandEvent& event );
-
-    /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_COMMENT1
     void OnComment1TextUpdated( wxCommandEvent& event );
-
-    /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_COMMENT2
     void OnComment2TextUpdated( wxCommandEvent& event );
-
-    /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_COMMENT3
     void OnComment3TextUpdated( wxCommandEvent& event );
-
-    /// exEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL_COMMENT4
     void OnComment4TextUpdated( wxCommandEvent& event );
 
-    /// Handle button click for setting the date from the picker
-    virtual void OnDateApplyClick( wxCommandEvent& event );
+    // Handle button click for setting the date from the picker
+    void OnDateApplyClick( wxCommandEvent& event );
+
+    // .kicad_wks file description selection
+	void OnWksFileSelection( wxFileDirPickerEvent& event );
+
+    // Save in the current title block the new page settings
+    // return true if changes are made, or false if not
+    bool SavePageSettings();
 
     void SetCurrentPageSizeSelection( const wxString& aPaperSize );
 
-    void SavePageSettings( wxCommandEvent& event );
-
-    /// Update page layout example
+    // Update page layout example
     void UpdatePageLayoutExample();
 
-    /// Get page layout info from selected dialog items
+    // Get page layout info from selected dialog items
     void GetPageLayoutInfoFromDialog();
 
-    /// Get custom page size in mils from dialog
+    // Get custom page size in mils from dialog
     void GetCustomSizeMilsFromDialog();
+
+    /// @return true if the local prj config is chande
+    /// i.e. if the page layout descr file has chnaged
+    bool LocalPrjConfigChanged() { return m_localPrjConfigChanged; }
 };
 
 #endif  // _DIALOG_PAGES_SETTINGS_H_

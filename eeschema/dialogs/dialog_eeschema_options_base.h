@@ -22,7 +22,6 @@ class DIALOG_SHIM;
 #include <wx/settings.h>
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
-#include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/checkbox.h>
@@ -30,6 +29,7 @@ class DIALOG_SHIM;
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/textctrl.h>
 #include <wx/notebook.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -84,9 +84,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_spinAutoSaveInterval;
 		wxStaticText* m_staticText23;
 		wxStaticText* m_staticText26;
-		wxTextCtrl* m_textCtrlSeparatorRefId;
-		wxStaticText* m_staticText27;
-		wxTextCtrl* m_textCtrlPartFirstId;
+		wxChoice* m_choiceSeparatorRefId;
 		wxStaticLine* m_staticline1;
 		wxCheckBox* m_checkShowGrid;
 		wxCheckBox* m_checkShowHiddenPins;
@@ -125,7 +123,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Schematic Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 432,560 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Schematic Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 508,560 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EESCHEMA_OPTIONS_BASE();
 	
 };

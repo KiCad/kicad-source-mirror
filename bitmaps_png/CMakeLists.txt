@@ -43,9 +43,6 @@
 #
 # 1) inkscape - command line mode is used, must be on your PATH
 # 2) pngcrush - this program must be on your PATH
-# 3) Under Windows only:
-#           dos2unix - to convert End Of Lines to unix EOL (CRLF to LF)
-#           this program must be on your PATH
 #
 
 # lower case is used for local variables, uppercase for global variables
@@ -71,21 +68,8 @@ option( MAINTAIN_PNGS
         "Set to true if you are a PNG maintainer and have the required tools given in the bitmaps_png/CMakeLists.txt file (default OFF)."
         OFF)
 
-
 # Used Only to maintain PNG files (and therefore to recreate .cpp files)
 # The png2cpp creates files with native End of Line format.
-# To avoid mixed EOF formats in these .cpp files, it is good to
-# convert them in Unix EOL format (LF)
-# Under Windows, the well known dos2unix.exe does the conversion
-# It is installed with MinGW and MSYS.
-# It is very easy to install (just an executable to copy in a known path) if it is missing
-
-if( WIN32 )
-    set( CONVERT_EOL true )
-    set( eol2unix_converter dos2unix )
-else()
-    set( CONVERT_EOL false )
-endif( WIN32 )
 
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
@@ -431,6 +415,12 @@ set( BMAPS_MID
     pad
     pad_dimensions
     pads_mask_layers
+    pagelayout_load
+    pagelayout_load_default
+    pagelayout_new
+    pagelayout_recent
+    pagelayout_normal_view_mode
+    pagelayout_special_view_mode
     palette
     part_properties
     paste
@@ -555,6 +545,7 @@ set( BMAPS_BIG
     icon_pcbcalculator
     libedit_icon
     viewlibs_icon
+    icon_pagelayout_editor
     )
 
 
@@ -596,25 +587,6 @@ endfunction()
 
 # Function png2cpp
 # converts a single *.png to *.cpp
-if( CONVERT_EOL )
-function( png2cpp inputFile outFile )
-    add_custom_command(
-        OUTPUT  ${outFile}
-
-        COMMAND rm -f ${outFile}.tmp
-        COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile} -DoutCppFile=${outFile}
-            -P ${CMAKE_MODULE_PATH}/PNG2cpp.cmake
-
-        DEPENDS ${inputFile} ${CMAKE_MODULE_PATH}/PNG2cpp.cmake
-
-        POST_BUILD
-        COMMAND ${eol2unix_EXECUTABLE} ${outFile}
-
-        COMMENT "Creating (with unix eol) ${outFile}"
-    )
-endfunction()
-
-else( CONVERT_EOL )
 function( png2cpp inputFile outFile )
     add_custom_command(
         OUTPUT  ${outFile}
@@ -626,8 +598,6 @@ function( png2cpp inputFile outFile )
         COMMENT "Creating ${outFile}"
         )
 endfunction()
-
-endif(CONVERT_EOL)
 
 
 # Function bitmap_dir

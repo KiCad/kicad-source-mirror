@@ -35,7 +35,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 11, 3, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 10, 3, 0, 0 );
 	fgSizer1->AddGrowableCol( 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->AddGrowableCol( 2 );
@@ -143,22 +143,15 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticText23->Wrap( -1 );
 	fgSizer1->Add( m_staticText23, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
-	m_staticText26 = new wxStaticText( m_panel1, wxID_ANY, _("Separator ref/part id:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26 = new wxStaticText( m_panel1, wxID_ANY, _("part id notation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText26->Wrap( -1 );
 	fgSizer1->Add( m_staticText26, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrlSeparatorRefId = new wxTextCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer1->Add( m_textCtrlSeparatorRefId, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
-	
-	
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	m_staticText27 = new wxStaticText( m_panel1, wxID_ANY, _("Part first Id:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText27->Wrap( -1 );
-	fgSizer1->Add( m_staticText27, 0, wxALL, 5 );
-	
-	m_textCtrlPartFirstId = new wxTextCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer1->Add( m_textCtrlPartFirstId, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
+	wxString m_choiceSeparatorRefIdChoices[] = { _("A"), _(".A"), _("-A"), _("_A"), _(".1"), _("-1"), _("_1") };
+	int m_choiceSeparatorRefIdNChoices = sizeof( m_choiceSeparatorRefIdChoices ) / sizeof( wxString );
+	m_choiceSeparatorRefId = new wxChoice( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceSeparatorRefIdNChoices, m_choiceSeparatorRefIdChoices, 0 );
+	m_choiceSeparatorRefId->SetSelection( 0 );
+	fgSizer1->Add( m_choiceSeparatorRefId, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );

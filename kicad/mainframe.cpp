@@ -234,6 +234,11 @@ void KICAD_MANAGER_FRAME::OnRunPcbCalculator( wxCommandEvent& event )
     Execute( this, PCB_CALCULATOR_EXE );
 }
 
+void KICAD_MANAGER_FRAME::OnRunPageLayoutEditor( wxCommandEvent& event )
+{
+    Execute( this, PL_EDITOR_EXE );
+}
+
 
 void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
 {
