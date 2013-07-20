@@ -338,7 +338,7 @@ bool SCH_COLLECTOR::IsDraggableJunction() const
 }
 
 
-bool SCH_FIND_COLLECTOR::atEnd() const
+bool SCH_FIND_COLLECTOR::PassedEnd() const
 {
     bool retv = false;
 
@@ -351,12 +351,12 @@ bool SCH_FIND_COLLECTOR::atEnd() const
     {
         if( flags & wxFR_DOWN )
         {
-            if( m_foundIndex >= (GetCount() - 1) )
+            if( m_foundIndex >= GetCount() )
                 retv = true;
         }
         else
         {
-            if( m_foundIndex == 0 )
+            if( m_foundIndex < 0 )
                 retv = true;
         }
     }
@@ -390,21 +390,15 @@ void SCH_FIND_COLLECTOR::UpdateIndex()
 
     if( flags & wxFR_DOWN )
     {
-        if( !(flags & FR_SEARCH_WRAP) && (m_foundIndex == (GetCount() - 1)) )
-            return;
-
-        m_foundIndex += 1;
-
+        if( m_foundIndex < GetCount() )
+            m_foundIndex += 1;
         if( (m_foundIndex >= GetCount()) && (flags & FR_SEARCH_WRAP) )
             m_foundIndex = 0;
     }
     else
     {
-        if( !(flags & FR_SEARCH_WRAP) && (m_foundIndex == 0) )
-            return;
-
-        m_foundIndex -= 1;
-
+        if( m_foundIndex >= 0 )
+            m_foundIndex -= 1;
         if( (m_foundIndex < 0) && (flags & FR_SEARCH_WRAP) )
             m_foundIndex = GetCount() - 1;
     }
@@ -452,7 +446,7 @@ wxString SCH_FIND_COLLECTOR::GetText()
 
 EDA_ITEM* SCH_FIND_COLLECTOR::GetItem( SCH_FIND_COLLECTOR_DATA& aData )
 {
-    if( atEnd() )
+    if( PassedEnd() )
         return NULL;
 
     aData = m_data[ m_foundIndex ];
@@ -462,7 +456,7 @@ EDA_ITEM* SCH_FIND_COLLECTOR::GetItem( SCH_FIND_COLLECTOR_DATA& aData )
 
 bool SCH_FIND_COLLECTOR::ReplaceItem()
 {
-    if( atEnd() )
+    if( PassedEnd() )
         return false;
 
     wxCHECK_MSG( IsValidIndex( m_foundIndex ), false,
