@@ -464,11 +464,22 @@ void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
 
 void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
 {
+
     GetScreen()-> m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
+
+    if( aEraseBg )
+        m_canvas->EraseScreen( aDC );
+
     m_canvas->DrawBackGround( aDC );
 
     const WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
     WORKSHEET_DATAITEM* selecteditem = GetSelectedItem();
+
+    // the color to draw selected items
+    if( g_DrawBgColor == WHITE )
+        WORKSHEET_DATAITEM::m_SelectedColor = DARKCYAN;
+    else
+        WORKSHEET_DATAITEM::m_SelectedColor = YELLOW;
 
     for( unsigned ii = 0; ; ii++ )
     {
@@ -633,4 +644,15 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
         item->SetFlags( LOCATE_ENDPOINT );
 
     return item;
+}
+
+/* Must be called to initialize parameters when a new page layout
+ * description is loaded
+ */
+void PL_EDITOR_FRAME::OnNewPageLayout()
+{
+    GetScreen()->ClrModify();
+    m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
+    RebuildDesignTree();
+    m_canvas->Refresh();
 }

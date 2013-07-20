@@ -36,6 +36,7 @@
 #include <pl_editor_frame.h>
 #include <hotkeys.h>
 #include <dialog_hotkeys_editor.h>
+#include <pl_editor_id.h>
 
 
 #define GROUP wxT("/pl_editor")
@@ -49,6 +50,25 @@ void PL_EDITOR_FRAME::Process_Config( wxCommandEvent& event )
 
     switch( id )
     {
+    case wxID_PREFERENCES:
+        break;
+
+    // Standard basic hotkey IDs
+    case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
+        InstallHotkeyFrame( this, s_PlEditor_Hokeys_Descr );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
+        ExportHotkeyConfigToFile( s_PlEditor_Hokeys_Descr );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
+        ImportHotkeyConfigFromFile( s_PlEditor_Hokeys_Descr );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
+        DisplayHotkeyList( this, s_PlEditor_Hokeys_Descr );
+        break;
 
     default:
         wxMessageBox( wxT( "PL_EDITOR_FRAME::Process_Config error" ) );

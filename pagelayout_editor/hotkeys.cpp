@@ -1,6 +1,29 @@
 /**
  * @file gerbview/hotkeys.cpp
  */
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <fctsys.h>
 #include <common.h>
@@ -13,18 +36,16 @@
 
 
 /* How to add a new hotkey:
- *  add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION.
- *  add a new EDA_HOTKEY entry like:
- *  static EDA_HOTKEY HkMyNewEntry(wxT("Command Label"), MY_NEW_ID_FUNCTION, default key value);
- *      "Command Label" is the name used in hotkey list display, and the identifier in the
- *      hotkey list file MY_NEW_ID_FUNCTION is an equivalent id function used in the switch
- *      in OnHotKey() function.   default key value is the default hotkey for this command.
- *      Can be overrided by the user hotkey list file add the HkMyNewEntry pointer in the
- *      s_board_edit_Hotkey_List list ( or/and the s_module_edit_Hotkey_List list)  Add the
- *      new code in the switch in OnHotKey() function.   when the variable PopupOn is true,
- *      an item is currently edited.  This can be usefull if the new function cannot be
- *      executed while an item is currently being edited
- *  ( For example, one cannot start a new wire when a component is moving.)
+ * add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION.
+ * add a new EDA_HOTKEY entry like:
+ * static EDA_HOTKEY HkMyNewEntry(wxT("Command Label"), MY_NEW_ID_FUNCTION, default key value);
+ * 'Command Label' is the name used in hotkey list display, and the identifier in the
+ * hotkey list file
+ * 'MY_NEW_ID_FUNCTION' is the id event function used in the switch in OnHotKey() function.
+ * 'Default key value' is the default hotkey for this command.
+ * Can be overrided by the user hotkey list
+ * Add the 'HkMyNewEntry' pointer in the  s_PlEditor_Hotkey_List list
+ * Add the new code in the switch in OnHotKey() function.
  *
  *  Note: If an hotkey is a special key, be sure the corresponding wxWidget keycode (WXK_XXXX)
  *  is handled in the hotkey_name_descr s_Hotkey_Name_List list (see hotkeys_basic.cpp)
@@ -41,13 +62,12 @@ static EDA_HOTKEY    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 
 static EDA_HOTKEY    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 static EDA_HOTKEY    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
 static EDA_HOTKEY    HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
-static EDA_HOTKEY    HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
 
 // List of common hotkey descriptors
 EDA_HOTKEY* s_PlEditor_Hotkey_List[] = {
     &HkHelp,
     &HkZoomIn,    &HkZoomOut,      &HkZoomRedraw, &HkZoomCenter,
-    &HkZoomAuto,  &HkSwitchUnits,  &HkResetLocalCoord,
+    &HkZoomAuto,  &HkResetLocalCoord,
     NULL
 };
 
@@ -61,16 +81,16 @@ struct EDA_HOTKEY_CONFIG s_PlEditor_Hokeys_Descr[] =
 };
 
 
-/*
- * Function OnHotKey.
+/* OnHotKey.
  *  ** Commands are case insensitive **
- *  Some commands are relatives to the item under the mouse cursor
+ *  Some commands are relative to the item under the mouse cursor
  * aDC = current device context
  * aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
  * aPosition The cursor position in logical (drawing) units.
  * aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
  */
-void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem )
+void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
+                                const wxPoint& aPosition, EDA_ITEM* aItem )
 {
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );

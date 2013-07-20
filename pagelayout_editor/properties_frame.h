@@ -50,6 +50,12 @@ public:
 	void OnAcceptPrms( wxCommandEvent& event );
 
 
+    // Data transfert from general properties to widgets
+    void CopyPrmsFromGeneralToPanel();
+
+    // Data transfert from widgets to general properties
+    bool CopyPrmsFromPanelToGeneral();
+
     // Data transfert from item to widgets in properties frame
     void CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem );
 

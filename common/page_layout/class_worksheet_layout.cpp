@@ -61,6 +61,36 @@
 // It is accessible by WORKSHEET_LAYOUT::GetTheInstance()
 WORKSHEET_LAYOUT wksTheInstance;
 
+WORKSHEET_LAYOUT::WORKSHEET_LAYOUT()
+{
+    m_allowVoidList = false;
+    m_leftMargin = 10.0;    // the left page margin in mm
+    m_rightMargin = 10.0;   // the right page margin in mm
+    m_topMargin = 10.0;     // the top page margin in mm
+    m_bottomMargin = 10.0;  // the bottom page margin in mm
+}
+
+void WORKSHEET_LAYOUT::SetLeftMargin( double aMargin )
+{
+    m_leftMargin = aMargin;    // the left page margin in mm
+}
+
+void WORKSHEET_LAYOUT::SetRightMargin( double aMargin )
+{
+    m_rightMargin = aMargin;   // the right page margin in mm
+}
+
+void WORKSHEET_LAYOUT::SetTopMargin( double aMargin )
+{
+    m_topMargin = aMargin;     // the top page margin in mm
+}
+
+void WORKSHEET_LAYOUT::SetBottomMargin( double aMargin )
+{
+    m_bottomMargin = aMargin;  // the bottom page margin in mm
+}
+
+
 void WORKSHEET_LAYOUT::ClearList()
 {
     for( unsigned ii = 0; ii < m_list.size(); ii++ )

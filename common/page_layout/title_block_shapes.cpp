@@ -67,16 +67,20 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                        EDA_COLOR_T aColor, EDA_COLOR_T aAltColor )
 {
     #define milsTomm (25.4/1000)
+    #define mmTomils (1000/25.4)
 
     m_titleBlock = &aTitleBlock;
     m_paperFormat = &aPageInfo.GetType();
 
-    wxPoint LTmargin( aPageInfo.GetLeftMarginMils(), aPageInfo.GetTopMarginMils() );
-    wxPoint RBmargin( aPageInfo.GetRightMarginMils(), aPageInfo.GetBottomMarginMils() );
+    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+
+    wxPoint LTmargin( Mm2mils( pglayout.GetLeftMargin() ),
+                      Mm2mils( pglayout.GetTopMargin() ) );
+    wxPoint RBmargin( Mm2mils( pglayout.GetRightMargin() ),
+                      Mm2mils( pglayout.GetBottomMargin() ) );
+
     SetMargins( LTmargin, RBmargin );
     SetPageSize( aPageInfo.GetSizeMils() );
-
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
 
     // Build the basic layout shape, if the layout list is empty
     if( pglayout.GetCount() == 0 && !pglayout.VoidListAllowed() )

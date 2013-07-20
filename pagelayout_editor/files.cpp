@@ -35,6 +35,7 @@
 #include <worksheet_shape_builder.h>
 
 #include <pl_editor_frame.h>
+#include <properties_frame.h>
 #include <pl_editor_id.h>
 #include <wildcards_and_files_ext.h>
 
@@ -59,8 +60,8 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
             msg.Printf( _("File <%s> loaded"), GetChars( filename ) );
             SetStatusText( msg );
         }
-        RebuildDesignTree();
-        m_canvas->Refresh();
+
+        OnNewPageLayout();
     }
 }
 
@@ -95,18 +96,14 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     {
     case ID_LOAD_DEFAULT_PAGE_LAYOUT:
         pglayout.SetPageLayout();
-        RebuildDesignTree();
-        m_canvas->Refresh();
-        GetScreen()->ClrModify();
+        OnNewPageLayout();
         break;
 
     case wxID_NEW:
         pglayout.AllowVoidList( true );
         SetCurrFileName( wxEmptyString );
         pglayout.ClearList();
-        RebuildDesignTree();
-        m_canvas->Refresh();
-        GetScreen()->ClrModify();
+        OnNewPageLayout();
         break;
 
     case ID_OPEN_POLYGON_DESCR_FILE:
@@ -153,8 +150,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         }
         else
         {
-            RebuildDesignTree();
-            m_canvas->Refresh();
+            OnNewPageLayout();
             msg.Printf( _("File <%s> loaded"), GetChars( filename ) );
             SetStatusText( msg );
         }

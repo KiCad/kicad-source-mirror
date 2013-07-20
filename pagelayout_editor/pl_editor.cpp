@@ -64,7 +64,7 @@ bool EDA_APP::OnInit()
 {
     wxFileName          fn;
 
-    InitEDA_Appl( wxT( "pl_editor" ), APP_GERBVIEW_T );
+    InitEDA_Appl( wxT( "pl_editor" ), APP_PL_EDITOR_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
@@ -87,7 +87,7 @@ bool EDA_APP::OnInit()
 
     PL_EDITOR_FRAME * frame = new PL_EDITOR_FRAME( NULL, wxT( "PlEditorFrame" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 
-    //ainframe title:
+    // frame title:
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
 
     SetTopWindow( frame );
@@ -96,6 +96,7 @@ bool EDA_APP::OnInit()
     frame->GetScreen()->m_FirstRedraw = false;
 
 
+    bool descrLoaded = false;
     if( argc > 1 )
     {
         fn = argv[1];
@@ -111,10 +112,16 @@ bool EDA_APP::OnInit()
                             fn.GetFullPath().GetData() );
                 wxMessageBox( msg );
             }
+            else
+                descrLoaded = true;
         }
     }
 
-    frame->RebuildDesignTree();
+    if( !descrLoaded )
+    {
+        WORKSHEET_LAYOUT::GetTheInstance().SetPageLayout();
+        frame->OnNewPageLayout();
+    }
 
     return true;
 }

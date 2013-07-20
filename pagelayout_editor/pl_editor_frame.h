@@ -103,6 +103,12 @@ public:
     void UpdateStatusBar();                                     // overload EDA_DRAW_FRAME
 
     /**
+     * Must be called to initialize parameters when a new page layout
+     * description is loaded
+     */
+    void OnNewPageLayout();
+
+    /**
      * creates or updates the right vertical toolbar.
      * @note This is currently not used.
      */

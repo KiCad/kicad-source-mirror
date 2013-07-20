@@ -991,8 +991,8 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
     wxString            paperFormat = aPageInfo.GetType();
     WS_DRAW_ITEM_TEXT*  gtext;
 
-    wxPoint LTmargin( aPageInfo.GetLeftMarginMils(), aPageInfo.GetTopMarginMils() );
-    wxPoint RBmargin( aPageInfo.GetRightMarginMils(), aPageInfo.GetBottomMarginMils() );
+    wxPoint LTmargin( Mm2mils( 20 ), Mm2mils( 5 ) );
+    wxPoint RBmargin( Mm2mils( 5 ), Mm2mils( 5 ) );
     SetMargins( LTmargin, RBmargin );
     SetPageSize( aPageInfo.GetSizeMils() );
 

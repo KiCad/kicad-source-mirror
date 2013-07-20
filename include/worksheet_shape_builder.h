@@ -460,9 +460,13 @@ class WORKSHEET_LAYOUT
                             // will be loaded the first time
                             // WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList
                             // is run (useful mainly for page layout editor)
+    double m_leftMargin;    // the left page margin in mm
+    double m_rightMargin;   // the right page margin in mm
+    double m_topMargin;     // the top page margin in mm
+    double m_bottomMargin;  // the bottom page margin in mm
 
 public:
-    WORKSHEET_LAYOUT() { m_allowVoidList = false; }
+    WORKSHEET_LAYOUT();
     ~WORKSHEET_LAYOUT() {ClearList(); }
 
     /**
@@ -474,6 +478,17 @@ public:
         extern WORKSHEET_LAYOUT wksTheInstance;
         return wksTheInstance;
     }
+
+    // Accessors:
+    double GetLeftMargin() { return m_leftMargin; }
+    double GetRightMargin() { return m_rightMargin; }
+    double GetTopMargin() { return m_topMargin; }
+    double GetBottomMargin() { return m_bottomMargin; }
+
+    void SetLeftMargin( double aMargin );
+    void SetRightMargin( double aMargin );
+    void SetTopMargin( double aMargin );
+    void SetBottomMargin( double aMargin );
 
     /**
      * In Kicad applications, a page layout description is needed

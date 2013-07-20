@@ -1,5 +1,9 @@
 page_layout
 setup
+left_margin
+right_margin
+top_margin
+bottom_margin
 linewidth
 textlinewidth
 textsize

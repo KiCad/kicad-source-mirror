@@ -69,7 +69,7 @@ private:
      */
     double parseDouble();
 
-    void parseSetup() throw( IO_ERROR, PARSE_ERROR );
+    void parseSetup( WORKSHEET_LAYOUT* aLayout ) throw( IO_ERROR, PARSE_ERROR );
     void parseGraphic( WORKSHEET_DATAITEM * aItem ) throw( IO_ERROR, PARSE_ERROR );
     void parseText( WORKSHEET_DATAITEM_TEXT * aItem ) throw( IO_ERROR, PARSE_ERROR );
     void parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
@@ -110,7 +110,7 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WORKSHEET_LAYOUT* aLayout )
         switch( token )
         {
         case T_setup:   // Defines default values for graphic items
-            parseSetup();
+            parseSetup( aLayout );
             break;
 
         case T_line:
@@ -145,7 +145,8 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WORKSHEET_LAYOUT* aLayout )
     }
 }
 
-void PAGE_LAYOUT_READER_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
+void PAGE_LAYOUT_READER_PARSER::parseSetup( WORKSHEET_LAYOUT* aLayout )
+    throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
     while( ( token = NextTok() ) != T_RIGHT )
@@ -171,6 +172,26 @@ void PAGE_LAYOUT_READER_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
 
         case T_textlinewidth:
             WORKSHEET_DATAITEM::m_DefaultTextThickness = parseDouble();
+            NeedRIGHT();
+            break;
+
+        case T_left_margin:
+            aLayout->SetLeftMargin( parseDouble() );
+            NeedRIGHT();
+            break;
+
+        case T_right_margin:
+            aLayout->SetRightMargin( parseDouble() );
+            NeedRIGHT();
+            break;
+
+        case T_top_margin:
+            aLayout->SetTopMargin( parseDouble() );
+            NeedRIGHT();
+            break;
+
+        case T_bottom_margin:
+            aLayout->SetBottomMargin( parseDouble() );
             NeedRIGHT();
             break;
 

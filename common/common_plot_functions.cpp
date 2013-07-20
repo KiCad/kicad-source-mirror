@@ -77,15 +77,6 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     /* Note: Page sizes values are given in mils
      */
     double   iusPerMil = plotter->GetIUsPerDecimil() * 10.0;
-    wxSize   pageSize = aPageInfo.GetSizeMils();  // in mils
-
-    wxPoint LTmargin;
-    LTmargin.x = aPageInfo.GetLeftMarginMils() * iusPerMil;
-    LTmargin.y = aPageInfo.GetTopMarginMils()  * iusPerMil;
-
-    wxPoint RBmargin;
-    RBmargin.x = aPageInfo.GetRightMarginMils() * iusPerMil;
-    RBmargin.y = aPageInfo.GetBottomMarginMils()  * iusPerMil;
 
     EDA_COLOR_T plotColor = plotter->GetColorMode() ? RED : BLACK;
     plotter->SetColor( plotColor );
@@ -96,10 +87,8 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     wxFileName fn( aFilename );
 
     // Prepare plot parameters
-    drawList.SetMargins( LTmargin, RBmargin);
     drawList.SetPenSize(PLOTTER::DEFAULT_LINE_WIDTH );
     drawList.SetMilsToIUfactor( iusPerMil );
-    drawList.SetPageSize( pageSize );
     drawList.SetSheetNumber( aSheetNumber );
     drawList.SetSheetCount( aNumberOfSheets );
     drawList.SetFileName( fn.GetFullName() );   // Print only the short filename
