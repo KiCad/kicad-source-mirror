@@ -63,12 +63,15 @@ public:
  */
 class PLEDITOR_PREVIEW_FRAME : public wxPreviewFrame
 {
+    PL_EDITOR_FRAME* m_parent;
+
 public:
     PLEDITOR_PREVIEW_FRAME( wxPrintPreview* aPreview, PL_EDITOR_FRAME* aParent,
                        const wxString& aTitle, const wxPoint& aPos = wxDefaultPosition,
                        const wxSize& aSize = wxDefaultSize ) :
         wxPreviewFrame( aPreview, aParent, aTitle, aPos, aSize )
     {
+        m_parent = aParent;
     }
 
     bool Show( bool show )      // overload
@@ -79,10 +82,20 @@ public:
         // If showing, use previous position and size.
         if( show )
         {
-            ret = wxPreviewFrame::Show( show );
+            bool centre = false;
+            if( s_size.x == 0 || s_size.y == 0 )
+            {
+                s_size = (m_parent->GetSize() * 3) / 4;
+                s_pos = wxDefaultPosition;
+                centre = true;
+            }
 
-            if( s_size.x != 0 && s_size.y != 0 )
-                SetSize( s_pos.x, s_pos.y, s_size.x, s_size.y, 0 );
+            SetSize( s_pos.x, s_pos.y, s_size.x, s_size.y, 0 );
+
+            if( centre )
+                Center();
+
+            ret = wxPreviewFrame::Show( show );
         }
         else
         {
@@ -191,7 +204,6 @@ void PLEDITOR_PRINTOUT::DrawPage( int aPageNum )
 int InvokeDialogPrint( PL_EDITOR_FRAME* aCaller, wxPrintData* aPrintData,
                        wxPageSetupDialogData* aPageSetupData )
 {
-    PLEDITOR_PRINTOUT dlg( aCaller, _("Print Page Layout") );
     int pageCount = 2;
 
     wxPrintDialogData printDialogData( *aPrintData );
@@ -224,12 +236,11 @@ int InvokeDialogPrintPreview( PL_EDITOR_FRAME* aCaller, wxPrintData* aPrintData 
                                                   new PLEDITOR_PRINTOUT( aCaller, title ),
                                                   aPrintData );
 
-    preview->SetZoom( 100 );
+    preview->SetZoom( 70 );
 
     PLEDITOR_PREVIEW_FRAME* frame = new PLEDITOR_PREVIEW_FRAME( preview, aCaller, title );
 
     frame->Initialize();
-    frame->Center();
     frame->Show( true );
 
     return 1;

@@ -49,12 +49,10 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     // menu Preferences
     EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
                     PL_EDITOR_FRAME::Process_Config )
-
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, EDA_DRAW_FRAME::SetLanguage )
-
-    // menu Postprocess
     EVT_MENU( ID_MENU_PL_EDITOR_SELECT_PREFERED_EDITOR,
               EDA_BASE_FRAME::OnSelectPreferredEditor )
+    EVT_MENU( wxID_PREFERENCES, PL_EDITOR_FRAME::Process_Config )
 
     // Menu Help
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )

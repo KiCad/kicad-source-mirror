@@ -179,12 +179,24 @@ void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_LAYOUT* aPageLayout ) const
 
     // Setup
     int nestLevel = 1;
+    // Write default values:
     m_out->Print( nestLevel, "(%s", getTokenName( T_setup ) );
     m_out->Print( 0, "(textsize %s %s)",
                   double2Str( TB_DEFAULT_TEXTSIZE ).c_str(),
                   double2Str( TB_DEFAULT_TEXTSIZE ).c_str() );
     m_out->Print( 0, "(linewidth %s)", double2Str( 0.15 ).c_str() );
     m_out->Print( 0, "(textlinewidth %s)", double2Str( 0.15 ).c_str() );
+    m_out->Print( 0, "\n" );
+
+    // Write margin values
+    m_out->Print( nestLevel, "(%s %s)", getTokenName( T_left_margin ),
+                  double2Str( aPageLayout->GetLeftMargin() ).c_str() );
+    m_out->Print( 0, "(%s %s)", getTokenName( T_right_margin ),
+                  double2Str( aPageLayout->GetRightMargin() ).c_str() );
+    m_out->Print( 0, "(%s %s)", getTokenName( T_top_margin ),
+                  double2Str( aPageLayout->GetTopMargin() ).c_str() );
+    m_out->Print( 0, "(%s %s)", getTokenName( T_bottom_margin ),
+                  double2Str( aPageLayout->GetBottomMargin() ).c_str() );
     m_out->Print( 0, ")\n" );
 
     // Save the graphical items on the page layout

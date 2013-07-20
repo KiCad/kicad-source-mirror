@@ -109,39 +109,33 @@ void PL_EDITOR_FRAME::ReCreateMenuBar( void )
                  _( "Quit Pl_Editor" ),
                  KiBitmap( exit_xpm ) );
 
-    // Menu for configuration and preferences
-    wxMenu* configMenu = new wxMenu;
+    // Menu for preferences
+    wxMenu* preferencesMenu = new wxMenu;
 
     // Options (Preferences on WXMAC)
 #ifdef __WXMAC__
-    configMenu->Append(wxID_PREFERENCES);
+    preferencesMenu->Append(wxID_PREFERENCES);
 #else
-    AddMenuItem( configMenu,
+    AddMenuItem( preferencesMenu,
                  wxID_PREFERENCES,
                  _( "&Options" ),
-                 _( "Set options to draw items" ),
+                 wxEmptyString,
                  KiBitmap( preference_xpm ) );
 #endif // __WXMAC__
 
 
-    // Language submenu
-    wxGetApp().AddMenuLanguageList( configMenu );
-
-    // Hotkey submenu
-    AddHotkeyConfigMenu( configMenu );
-
-    // Menu miscellaneous
-    wxMenu* miscellaneousMenu = new wxMenu;
-
-    // Separator
-    miscellaneousMenu->AppendSeparator();
-
-    // Text editor
-    AddMenuItem( miscellaneousMenu,
+    // Text editor selection
+    AddMenuItem( preferencesMenu,
                  ID_MENU_PL_EDITOR_SELECT_PREFERED_EDITOR,
                  _( "&Text Editor" ),
                  _( "Select your preferred text editor" ),
                  KiBitmap( editor_xpm ) );
+
+    // Language submenu
+    wxGetApp().AddMenuLanguageList( preferencesMenu );
+
+    // Hotkey submenu
+    AddHotkeyConfigMenu( preferencesMenu );
 
     // Menu Help
     wxMenu* helpMenu = new wxMenu;
@@ -165,8 +159,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar( void )
 
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );
-    menuBar->Append( configMenu, _( "&Preferences" ) );
-    menuBar->Append( miscellaneousMenu, _( "&Miscellaneous" ) );
+    menuBar->Append( preferencesMenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     menuBar->Thaw();

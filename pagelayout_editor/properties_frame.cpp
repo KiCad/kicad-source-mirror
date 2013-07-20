@@ -49,22 +49,84 @@ wxSize PROPERTIES_FRAME::GetMinSize() const
     return wxSize( 150, -1 );
 }
 
-// Data transfert from item to widgets in properties frame
-void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
+
+// Data transfert from general properties to widgets
+void PROPERTIES_FRAME::CopyPrmsFromGeneralToPanel()
 {
     wxString msg;
 
     // Set default parameters
-    msg.Printf( wxT("%.3f"), aItem->m_DefaultLineWidth );
+    msg.Printf( wxT("%.3f"),  WORKSHEET_DATAITEM::m_DefaultLineWidth );
     m_textCtrlDefaultLineWidth->SetValue( msg );
 
-    msg.Printf( wxT("%.3f"), aItem->m_DefaultTextSize.x );
+    msg.Printf( wxT("%.3f"), WORKSHEET_DATAITEM::m_DefaultTextSize.x );
     m_textCtrlDefaultTextSizeX->SetValue( msg );
-    msg.Printf( wxT("%.3f"), aItem->m_DefaultTextSize.y );
+    msg.Printf( wxT("%.3f"),  WORKSHEET_DATAITEM::m_DefaultTextSize.y );
     m_textCtrlDefaultTextSizeY->SetValue( msg );
 
-    msg.Printf( wxT("%.3f"), aItem->m_DefaultTextThickness );
+    msg.Printf( wxT("%.3f"),  WORKSHEET_DATAITEM::m_DefaultTextThickness );
     m_textCtrlDefaultTextThickness->SetValue( msg );
+
+    // Set page margins values
+    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    msg.Printf( wxT("%.3f"),  pglayout.GetRightMargin() );
+    m_textCtrlRightMargin->SetValue( msg );
+    msg.Printf( wxT("%.3f"),  pglayout.GetBottomMargin() );
+    m_textCtrlDefaultBottomMargin->SetValue( msg );
+
+    msg.Printf( wxT("%.3f"),  pglayout.GetLeftMargin() );
+    m_textCtrlLeftMargin->SetValue( msg );
+    msg.Printf( wxT("%.3f"),  pglayout.GetTopMargin() );
+    m_textCtrlTopMargin->SetValue( msg );
+}
+
+// Data transfert from widgets to general properties
+bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
+{
+    double dtmp;
+    wxString msg;
+
+    // Import default parameters from widgets
+    msg = m_textCtrlDefaultLineWidth->GetValue();
+    msg.ToDouble( &dtmp );
+    WORKSHEET_DATAITEM::m_DefaultLineWidth = dtmp;
+
+    msg = m_textCtrlDefaultTextSizeX->GetValue();
+    msg.ToDouble( &dtmp );
+    WORKSHEET_DATAITEM::m_DefaultTextSize.x  = dtmp;
+    msg = m_textCtrlDefaultTextSizeY->GetValue();
+    msg.ToDouble( &dtmp );
+    WORKSHEET_DATAITEM::m_DefaultTextSize.y  = dtmp;
+
+    msg = m_textCtrlDefaultTextThickness->GetValue();
+    msg.ToDouble( &dtmp );
+    WORKSHEET_DATAITEM::m_DefaultTextThickness = dtmp;
+
+    // Get page margins values
+    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+
+    msg = m_textCtrlRightMargin->GetValue();
+    msg.ToDouble( &dtmp );
+    pglayout.SetRightMargin( dtmp );
+    msg = m_textCtrlDefaultBottomMargin->GetValue();
+    msg.ToDouble( &dtmp );
+    pglayout.SetBottomMargin( dtmp );
+
+    // cordinates of the left top corner are the left and top margins
+    msg = m_textCtrlLeftMargin->GetValue();
+    msg.ToDouble( &dtmp );
+    pglayout.SetLeftMargin( dtmp );
+    msg = m_textCtrlTopMargin->GetValue();
+    msg.ToDouble( &dtmp );
+    pglayout.SetTopMargin( dtmp );
+
+    return true;
+}
+
+// Data transfert from item to widgets in properties frame
+void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
+{
+    wxString msg;
 
     // Set parameters common to all WORKSHEET_DATAITEM types
     m_textCtrlType->SetValue( aItem->GetClassName() );
@@ -210,8 +272,8 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
     m_textCtrlStepY->SetValue( msg );
 
     // The number of widgets was modified
-    Layout();
-    Refresh();
+    m_swItemProperties->Layout();
+    m_swItemProperties->Refresh();
 }
 
 // Event function called by clicking on the OK button
@@ -220,6 +282,8 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
     WORKSHEET_DATAITEM* item = m_parent->GetSelectedItem();
     if( item )
         CopyPrmsFromPanelToItem( item );
+
+    CopyPrmsFromPanelToGeneral();
 
     m_parent->OnModify();
     m_parent->GetCanvas()->Refresh();
@@ -233,22 +297,6 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
 
     double dtmp;
     wxString msg;
-
-    // Import default parameters
-    msg = m_textCtrlDefaultLineWidth->GetValue();
-    msg.ToDouble( &dtmp );
-    aItem->m_DefaultLineWidth = dtmp;
-
-    msg = m_textCtrlDefaultTextSizeX->GetValue();
-    msg.ToDouble( &dtmp );
-    aItem->m_DefaultTextSize.x  = dtmp;
-    msg = m_textCtrlDefaultTextSizeY->GetValue();
-    msg.ToDouble( &dtmp );
-    aItem->m_DefaultTextSize.y  = dtmp;
-
-    msg = m_textCtrlDefaultTextThickness->GetValue();
-    msg.ToDouble( &dtmp );
-    aItem->m_DefaultTextThickness = dtmp;
 
     // Import common parameters:
     aItem->m_Info = m_textCtrlComment->GetValue();

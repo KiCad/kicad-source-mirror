@@ -303,54 +303,6 @@ public:
 #endif
 
     /**
-     * Function GetLeftMarginMils.
-     * @return int - logical page left margin in mils.
-     */
-    int GetLeftMarginMils() const           { return m_left_margin; }
-
-    /**
-     * Function GetLeftMarginMils.
-     * @return int - logical page right margin in mils.
-     */
-    int GetRightMarginMils() const          { return m_right_margin; }
-
-    /**
-     * Function GetLeftMarginMils.
-     * @return int - logical page top margin in mils.
-     */
-    int GetTopMarginMils() const            { return m_top_margin; }
-
-    /**
-     * Function GetBottomMarginMils.
-     * @return int - logical page bottom margin in mils.
-     */
-    int GetBottomMarginMils() const         { return m_bottom_margin; }
-
-    /**
-     * Function SetLeftMarginMils
-     * sets left page margin to @a aMargin in mils.
-     */
-    void SetLeftMarginMils( int aMargin )   { m_left_margin = aMargin; }
-
-    /**
-     * Function SetRightMarginMils
-     * sets right page margin to @a aMargin in mils.
-     */
-    void SetRightMarginMils( int aMargin )  { m_right_margin = aMargin; }
-
-    /**
-     * Function SetTopMarginMils
-     * sets top page margin to @a aMargin in mils.
-     */
-    void SetTopMarginMils( int aMargin )    { m_top_margin = aMargin; }
-
-    /**
-     * Function SetBottomMarginMils
-     * sets bottom page margin to @a aMargin in mils.
-     */
-    void SetBottomMarginMils( int aMargin ) { m_bottom_margin = aMargin; }
-
-    /**
      * Function SetCustomWidthMils
      * sets the width of Custom page in mils, for any custom page
      * constructed or made via SetType() after making this call.
@@ -428,12 +380,6 @@ private:
 /// Min and max page sizes for clamping.
 #define MIN_PAGE_SIZE   4000
 #define MAX_PAGE_SIZE   48000
-
-
-    int         m_left_margin;
-    int         m_right_margin;
-    int         m_top_margin;
-    int         m_bottom_margin;
 
     bool        m_portrait;         ///< true if portrait, false if landscape
 

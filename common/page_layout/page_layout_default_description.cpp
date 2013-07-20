@@ -167,7 +167,8 @@ extern const char   defaultPageLayout[];
 
 // Default page layout (sizes are in mm)
 const char          defaultPageLayout[] = "( page_layout\n"
-                                          "(setup (textsize 1.5 1.5) (linewidth 0.15) (textlinewidth 0.15) )"
+                                          "(setup (textsize 1.5 1.5) (linewidth 0.15) (textlinewidth 0.15)\n"
+                                          "(left_margin 10)(right_margin 10)(top_margin 10)(bottom_margin 10))\n"
                                           "(rect (comment \"rect around the title block\") (linewidth 0.15) (start 110 34) (end 2 2) )\n"
                                           "(rect (start 0 0 ltcorner) (end 0 0 rbcorner) (repeat 2) (incrx 2) (incry 2) )\n"
                                           "(line (start 50 2 ltcorner) (end 50 0 ltcorner) (repeat 30) (incrx 50) )\n"

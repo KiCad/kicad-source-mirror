@@ -19,12 +19,16 @@
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
-#include <wx/button.h>
 #include <wx/choice.h>
+#include <wx/statline.h>
 #include <wx/checkbox.h>
+#include <wx/button.h>
 #include <wx/combobox.h>
 #include <wx/scrolwin.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/notebook.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -37,19 +41,8 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 	private:
 	
 	protected:
-		wxScrolledWindow* m_scrolledLeftWindow;
-		wxStaticText* m_staticTextDefVal;
-		wxStaticText* m_staticTextDefTsX;
-		wxTextCtrl* m_textCtrlDefaultTextSizeX;
-		wxStaticText* m_staticTextDefTsY;
-		wxTextCtrl* m_textCtrlDefaultTextSizeY;
-		wxStaticText* m_staticTextDefLineW;
-		wxTextCtrl* m_textCtrlDefaultLineWidth;
-		wxStaticText* m_staticText22;
-		wxTextCtrl* m_textCtrlDefaultTextThickness;
-		wxStaticLine* m_staticline7;
-		wxButton* m_buttonOK;
-		wxStaticLine* m_staticline8;
+		wxNotebook* m_notebook;
+		wxScrolledWindow* m_swItemProperties;
 		wxStaticText* m_staticTextType;
 		wxTextCtrl* m_textCtrlType;
 		wxStaticText* m_staticTextPageOpt;
@@ -74,6 +67,8 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_staticTextConstraintY;
 		wxTextCtrl* m_textCtrlConstraintY;
 		wxStaticLine* m_staticline6;
+		wxButton* m_buttonOK;
+		wxStaticLine* m_staticline8;
 		wxStaticText* m_staticTextComment;
 		wxTextCtrl* m_textCtrlComment;
 		wxStaticLine* m_staticline2;
@@ -108,7 +103,28 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxTextCtrl* m_textCtrlStepX;
 		wxStaticText* m_staticTextStepY;
 		wxTextCtrl* m_textCtrlStepY;
-		wxStaticLine* m_staticline3;
+		wxScrolledWindow* m_swGeneralOpts;
+		wxStaticText* m_staticTextDefVal;
+		wxStaticText* m_staticTextDefTsX;
+		wxTextCtrl* m_textCtrlDefaultTextSizeX;
+		wxStaticText* m_staticTextDefTsY;
+		wxTextCtrl* m_textCtrlDefaultTextSizeY;
+		wxStaticText* m_staticTextDefLineW;
+		wxTextCtrl* m_textCtrlDefaultLineWidth;
+		wxStaticText* m_staticText22;
+		wxTextCtrl* m_textCtrlDefaultTextThickness;
+		wxStaticLine* m_staticline9;
+		wxStaticText* m_staticTextMargins;
+		wxStaticText* m_staticTextLeftMargin;
+		wxTextCtrl* m_textCtrlLeftMargin;
+		wxStaticText* m_staticTextDefRightMargin;
+		wxTextCtrl* m_textCtrlRightMargin;
+		wxStaticText* m_staticTextTopMargin;
+		wxTextCtrl* m_textCtrlTopMargin;
+		wxStaticText* m_staticTextBottomMargin;
+		wxTextCtrl* m_textCtrlDefaultBottomMargin;
+		wxStaticLine* m_staticline10;
+		wxButton* m_buttonGeneralOptsOK;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnAcceptPrms( wxCommandEvent& event ) { event.Skip(); }
@@ -116,7 +132,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 	
 	public:
 		
-		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 315,756 ), long style = wxTAB_TRAVERSAL ); 
+		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 315,739 ), long style = wxTAB_TRAVERSAL ); 
 		~PANEL_PROPERTIES_BASE();
 	
 };
