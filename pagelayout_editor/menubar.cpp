@@ -112,17 +112,16 @@ void PL_EDITOR_FRAME::ReCreateMenuBar( void )
     // Menu for preferences
     wxMenu* preferencesMenu = new wxMenu;
 
-    // Options (Preferences on WXMAC)
-#ifdef __WXMAC__
-    preferencesMenu->Append(wxID_PREFERENCES);
-#else
     AddMenuItem( preferencesMenu,
-                 wxID_PREFERENCES,
-                 _( "&Options" ),
-                 wxEmptyString,
-                 KiBitmap( preference_xpm ) );
-#endif // __WXMAC__
+                 ID_MENU_SWITCH_BGCOLOR,
+                 g_DrawBgColor == WHITE ?
+                 _( "&BackGround Black" ) : _( "&BackGround White" ),
+                 wxEmptyString, KiBitmap( palette_xpm ) );
 
+    AddMenuItem( preferencesMenu,
+                 ID_MENU_GRID_ONOFF,
+                 IsGridVisible() ? _( "Hide &Grid" ) :  _( "Show &Grid" ),
+                 wxEmptyString, KiBitmap( grid_xpm ) );
 
     // Text editor selection
     AddMenuItem( preferencesMenu,
