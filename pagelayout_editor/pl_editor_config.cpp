@@ -50,7 +50,25 @@ void PL_EDITOR_FRAME::Process_Config( wxCommandEvent& event )
 
     switch( id )
     {
-    case wxID_PREFERENCES:
+    case ID_MENU_SWITCH_BGCOLOR:
+        if( g_DrawBgColor == WHITE )
+            g_DrawBgColor = BLACK;
+        else
+            g_DrawBgColor = WHITE;
+
+        GetMenuBar()->SetLabel( ID_MENU_SWITCH_BGCOLOR,
+                                g_DrawBgColor == WHITE ?
+                                _( "&BackGround Black" ) :
+                                _( "&BackGround White" ) );
+        m_canvas->Refresh();
+        break;
+
+    case ID_MENU_GRID_ONOFF:
+        SetGridVisibility( ! IsGridVisible() );
+        GetMenuBar()->SetLabel( ID_MENU_GRID_ONOFF,
+                                IsGridVisible() ? _( "Hide &Grid" ) :
+                                _( "Show &Grid" ) );
+        m_canvas->Refresh();
         break;
 
     // Standard basic hotkey IDs
