@@ -24,7 +24,7 @@
  * Initializes the Python engine inside pcbnew
  */
 
-bool        pcbnewInitPythonScripting();
+bool        pcbnewInitPythonScripting( const char * aUserPluginsPath );
 void        pcbnewFinishPythonScripting();
 
 

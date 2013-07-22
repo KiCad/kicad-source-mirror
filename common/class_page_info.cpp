@@ -126,33 +126,12 @@ inline void PAGE_INFO::updatePortrait()
 }
 
 
-void PAGE_INFO::setMargins()
-{
-    if( IsGOST() )
-    {
-        m_left_margin   = Mm2mils( 20 );    // 20mm
-        m_right_margin  =                   // 5mm
-        m_top_margin    =                   // 5mm
-        m_bottom_margin = Mm2mils( 5 );     // 5mm
-    }
-    else
-    {
-        m_left_margin   =
-        m_right_margin  =
-        m_top_margin    =
-        m_bottom_margin = Mm2mils( 10 );
-    }
-}
-
-
 PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType, wxPaperSize aPaperId ) :
     m_type( aType ),
     m_size( aSizeMils ),
     m_paper_id( aPaperId )
 {
     updatePortrait();
-
-    setMargins();
 
     // This constructor is protected, and only used by const PAGE_INFO's known
     // only to class implementation, so no further changes to "this" object are
@@ -221,8 +200,6 @@ bool PAGE_INFO::SetType( const wxString& aType, bool IsPortrait )
         m_size = wxSize( m_size.y, m_size.x );
         updatePortrait();
     }
-
-    setMargins();
 
     return rc;
 }

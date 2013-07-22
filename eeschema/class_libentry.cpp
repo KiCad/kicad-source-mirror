@@ -1710,3 +1710,25 @@ void LIB_COMPONENT::AddAlias( const wxString& aName )
 
     m_aliases.push_back( new LIB_ALIAS( aName, this ) );
 }
+
+
+/** Set the separator char between the subpart id and the reference
+ * 0 (no separator) or '.' , '-' and '_'
+ * and the ascii char value to calculate the subpart symbol id from the part number:
+ * 'A' or '1' only are allowed. (to print U1.A or U1.1)
+ * if this is a digit, a number is used as id symbol
+ * Note also if the subpart symbol is a digit, the separator cannot be null.
+ * @param aSep = the separator symbol (0 (no separator) or '.' , '-' and '_')
+ * @param aFirstId = the Id of the first part ('A' or '1')
+ */
+void LIB_COMPONENT::SetSubpartIdNotation( int aSep, int aFirstId )
+{
+    m_subpartFirstId = 'A';
+    m_subpartIdSeparator = 0;
+
+    if( aSep == '.' || aSep == '-' || aSep == '_' )
+        m_subpartIdSeparator = aSep;
+
+    if( aFirstId == '1' && aSep != 0 )
+        m_subpartFirstId = aFirstId;
+}

@@ -51,14 +51,55 @@ void DIALOG_EESCHEMA_OPTIONS::SetUnits( const wxArrayString& units, int select )
 
 void DIALOG_EESCHEMA_OPTIONS::SetRefIdSeparator( wxChar aSep, wxChar aFirstId)
 {
-    if( aSep == 0 )
-		m_textCtrlSeparatorRefId->SetValue( _("None") );
-    else
-		m_textCtrlSeparatorRefId->SetValue( aSep );
+    // m_choiceSeparatorRefId displays one of
+    // "A" ".A" "-A" "_A" ".1" "-1" "_1" option
 
-	m_textCtrlPartFirstId->SetValue( aFirstId );
+    int sel = 0;
+    switch( aSep )
+    {
+        default:
+        case 0:
+            aFirstId = 'A';     // cannot use a number without separator
+            break;
 
+        case '.':
+            sel = 1;
+            break;
+
+        case '-':
+            sel = 2;
+            break;
+
+        case '_':
+            sel = 3;
+            break;
+    }
+
+    if( aFirstId == '1' )
+        sel = 4;
+
+    m_choiceSeparatorRefId->SetSelection( sel );
 }
+
+void DIALOG_EESCHEMA_OPTIONS::GetRefIdSeparator( int& aSep, int& aFirstId)
+{
+    // m_choiceSeparatorRefId displays one of
+    // "A" ".A" "-A" "_A" ".1" "-1" "_1" option
+
+    aFirstId = 'A';
+    switch(  m_choiceSeparatorRefId->GetSelection() )
+    {
+        default:
+        case 0: aSep = 0; break;
+        case 1: aSep = '.'; break;
+        case 2: aSep = '-'; break;
+        case 3: aSep = '_'; break;
+        case 4: aFirstId = '1'; aSep = '.'; break;
+        case 5: aFirstId = '1'; aSep = '-'; break;
+        case 6: aFirstId = '1'; aSep = '_'; break;
+    }
+}
+
 
 void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& grid_sizes, int grid_id )
 {

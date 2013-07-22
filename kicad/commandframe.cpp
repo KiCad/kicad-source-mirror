@@ -109,6 +109,9 @@ Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W 
 
     btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, KiBitmap( icon_pcbcalculator_xpm ) );
     btn->SetToolTip( _( "Pcb calculator, the Swiss army knife..." ) );
+
+    btn = AddBitmapButton( ID_TO_PL_EDITOR, KiBitmap( icon_pagelayout_editor_xpm ) );
+    btn->SetToolTip( _( "pl_editor, the page layout and title block shape editor" ) );
 }
 
 

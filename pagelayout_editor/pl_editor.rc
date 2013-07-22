@@ -1,0 +1,3 @@
+icon_pagelayout_editor ICON "../bitmaps_png/icons/icon_pagelayout_editor.ico"
+
+#include "wx/msw/wx.rc"

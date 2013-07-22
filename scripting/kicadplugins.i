@@ -67,13 +67,15 @@ def ReloadPlugins():
             ReloadPlugin(k)
 
 
-def LoadPlugins():
+def LoadPlugins( plugpath ):
     import os
     import sys
 
-
     kicad_path = os.environ.get('KICAD_PATH')
     plugin_directories=[]
+
+    if plugpath and os.path.isdir( plugpath ):
+        plugin_directories.append( plugpath )
 
     if kicad_path and os.path.isdir(kicad_path):
         plugin_directories.append(os.path.join(kicad_path, 'scripting', 'plugins'))

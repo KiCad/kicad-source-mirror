@@ -17,6 +17,7 @@ ICON_FILES="icon_3d.svg
             icon_kicad.svg
             icon_bitmap2component.svg
             icon_pcbcalculator.svg
+            icon_pl_editor.svg
             icon_cvpcb.svg
             icon_pcbnew.svg
             icon_eeschema.svg"

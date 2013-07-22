@@ -100,8 +100,7 @@ static GRID_TYPE SchematicGridList[] = {
 #define SCHEMATIC_GRID_LIST_CNT ( sizeof( SchematicGridList ) / sizeof( GRID_TYPE ) )
 
 
-SCH_SCREEN::SCH_SCREEN() :
-    BASE_SCREEN( SCH_SCREEN_T ),
+SCH_SCREEN::SCH_SCREEN() : BASE_SCREEN( SCH_SCREEN_T ),
     m_paper( wxT( "A4" ), IsGOST() )
 {
     size_t i;

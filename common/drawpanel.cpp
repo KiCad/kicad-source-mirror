@@ -563,13 +563,14 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
         g_GhostColor = WHITE;
     }
 
+    GRResetPenAndBrush( DC );
+
+    DC->SetBackground( g_DrawBgColor == BLACK ? *wxBLACK_BRUSH : *wxWHITE_BRUSH );
+    DC->SetBackgroundMode( wxSOLID );
+
     if( erasebg )
         EraseScreen( DC );
 
-    GRResetPenAndBrush( DC );
-
-    DC->SetBackground( *wxBLACK_BRUSH );
-    DC->SetBackgroundMode( wxSOLID );
     GetParent()->RedrawActiveWindow( DC, erasebg );
 
     // Verfies that the clipping is working correctly.  If these two sets of numbers are

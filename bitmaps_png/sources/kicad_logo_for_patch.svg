@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="400"
+   height="200"
+   id="svg3509"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="kicad_logo_final.svg"
+   inkscape:export-filename="/home/fabrizio/Desktop/kicad_logo2.png"
+   inkscape:export-xdpi="130.52866"
+   inkscape:export-ydpi="130.52866">
+  <defs
+     id="defs3511" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="319.71301"
+     inkscape:cy="107.41472"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1280"
+     inkscape:window-height="941"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:snap-grids="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-to-guides="false" />
+  <metadata
+     id="metadata3514">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-852.36218)">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.16592622000000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3001"
+       width="335.33405"
+       height="136.76265"
+       x="40.547253"
+       y="883.62366"
+       rx="0.79142594"
+       ry="0.68401301"
+       inkscape:export-filename="/home/fabrizio/Desktop/kicad_logo_final.png"
+       inkscape:export-xdpi="130.52866"
+       inkscape:export-ydpi="130.52866" />
+    <rect
+       style="fill:#314cb0;fill-opacity:1;fill-rule:nonzero;stroke:#1d2d68;stroke-width:4.85048628;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3438-4-1-6-9-8-4"
+       width="116.24297"
+       height="111.73183"
+       x="50.753147"
+       y="901.97614"
+       rx="0.92550105"
+       ry="0.96813995"
+       inkscape:export-filename="/home/fabrizio/Desktop/kicad_logo_final.png"
+       inkscape:export-xdpi="130.52866"
+       inkscape:export-ydpi="130.52866" />
+    <text
+       xml:space="preserve"
+       style="font-size:120.79350281px;font-style:normal;font-weight:normal;line-height:122.00000286%;letter-spacing:0px;word-spacing:0px;fill:#1b2b63;fill-opacity:1;stroke:none;font-family:Sans"
+       x="47.593891"
+       y="1002.9949"
+       id="text3428-5-7-3-3-5-7"
+       sodipodi:linespacing="122%"
+       inkscape:export-filename="/home/fabrizio/Desktop/kicad_logo_final.png"
+       inkscape:export-xdpi="130.52866"
+       inkscape:export-ydpi="130.52866"><tspan
+         sodipodi:role="line"
+         id="tspan3430-1-1-1-0-9-6"
+         x="47.593891"
+         y="1002.9949"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:122.00000286%;letter-spacing:0px;fill:#1b2b63;fill-opacity:1;font-family:Tiresias LPfont;-inkscape-font-specification:Tiresias LPfont Bold"><tspan
+           id="tspan4498-9-7-2-7-3"
+           style="line-height:122.00000286%;letter-spacing:0px;fill:#ffffff;fill-opacity:1">Ki</tspan><tspan
+           id="tspan3647"
+           style="letter-spacing:-6.5999999px">Cad</tspan></tspan></text>
+    <rect
+       style="fill:#314cb0;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="rect4352-5-1"
+       width="28.315174"
+       height="27.030817"
+       x="135.29004"
+       y="906.65179"
+       rx="0"
+       ry="0"
+       inkscape:export-filename="/home/fabrizio/Desktop/kicad_logo_final.png"
+       inkscape:export-xdpi="130.52866"
+       inkscape:export-ydpi="130.52866" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ff7700;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="path3552-6-3-7"
+       sodipodi:cx="504.82373"
+       sodipodi:cy="2430.9678"
+       sodipodi:rx="23.486046"
+       sodipodi:ry="14.142136"
+       d="m 528.30978,2430.9678 c 0,7.8105 -10.51506,14.1421 -23.48605,14.1421 -12.97098,0 -23.48605,-6.3316 -23.48605,-14.1421 0,-7.8105 10.51507,-14.1422 23.48605,-14.1422 12.97099,0 23.48605,6.3317 23.48605,14.1422 z"
+       transform="matrix(0.51052206,0,0,0.84532838,-108.54549,-1152.961)"
+       inkscape:export-filename="/home/fabrizio/Desktop/kicad_logo_final.png"
+       inkscape:export-xdpi="130.52866"
+       inkscape:export-ydpi="130.52866" />
+  </g>
+</svg>
