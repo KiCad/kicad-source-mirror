@@ -425,8 +425,8 @@ void OPENGL_GAL::blitMainTexture( bool aIsClearFrameBuffer )
 
 void OPENGL_GAL::EndDrawing()
 {
-    cachedManager.EndDrawing();
     nonCachedManager.EndDrawing();
+    cachedManager.EndDrawing();
 
     // Draw the remaining contents, blit the main texture to the screen, swap the buffers
     glFlush();
