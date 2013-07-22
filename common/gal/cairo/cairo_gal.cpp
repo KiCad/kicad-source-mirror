@@ -37,7 +37,7 @@ using namespace KiGfx;
 
 CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                       wxEvtHandler* aPaintListener, const wxString& aName ) :
-                      wxWindow( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxEXPAND, aName )
+    wxWindow( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxEXPAND, aName )
 {
     // Default values
     fillColor   = COLOR4D( 0, 0, 0, 1 );
@@ -141,7 +141,7 @@ void CAIRO_GAL::initSurface()
     cairoSurface = cairo_image_surface_create_for_data( (unsigned char*) bitmapBuffer,
                                                         CAIRO_FORMAT_RGB24, clientRectangle.width,
                                                         clientRectangle.height, stride );
-    cairoImage = cairo_create ( cairoSurface );
+    cairoImage = cairo_create( cairoSurface );
 #ifdef __WXDEBUG__
     cairo_status_t status = cairo_status( cairoImage );
     wxASSERT_MSG( status == CAIRO_STATUS_SUCCESS, "Cairo context creation error" );
@@ -194,10 +194,10 @@ void CAIRO_GAL::deinitSurface()
 }
 
 
-unsigned int CAIRO_GAL::getGroupNumber()
+unsigned int CAIRO_GAL::getNewGroupNumber()
 {
     wxASSERT_MSG( groups.size() < std::numeric_limits<unsigned int>::max(),
-            wxT( "There are no free slots to store a group" ) );
+                  wxT( "There are no free slots to store a group" ) );
 
     while( groups.find( groupCounter ) != groups.end() )
     {
@@ -230,6 +230,7 @@ void CAIRO_GAL::EndDrawing()
     // Now translate the raw image data from the format stored
     // by cairo into a format understood by wxImage.
     unsigned char* wxOutputPtr = wxOutput;
+
     for( size_t count = 0; count < bufferSize; count++ )
     {
         unsigned int value = bitmapBuffer[count];
@@ -287,7 +288,8 @@ void CAIRO_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint
 }
 
 
-void CAIRO_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth )
+void CAIRO_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
+                             double aWidth )
 {
     if( isFillEnabled )
     {
@@ -317,7 +319,6 @@ void CAIRO_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPo
         cairo_line_to( cairoImage, lineLength, -aWidth / 2.0 );
 
         cairo_restore( cairoImage );
-
     }
 
     isElementAdded = true;
@@ -351,7 +352,8 @@ void CAIRO_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
     bool isFirstPoint = true;
 
     // Iterate over the point list and draw the segments
-    for( std::deque<VECTOR2D>::const_iterator it = aPointList.begin(); it != aPointList.end(); ++it )
+    std::deque<VECTOR2D>::const_iterator it;
+    for( it = aPointList.begin(); it != aPointList.end(); ++it )
     {
         if( isFirstPoint )
         {
@@ -373,7 +375,8 @@ void CAIRO_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
     bool isFirstPoint = true;
 
     // Iterate over the point list and draw the polygon
-    for( std::deque<VECTOR2D>::const_iterator it = aPointList.begin(); it != aPointList.end(); ++it )
+    std::deque<VECTOR2D>::const_iterator it;
+    for( it = aPointList.begin(); it != aPointList.end(); ++it )
     {
         if( isFirstPoint )
         {
@@ -644,10 +647,10 @@ int CAIRO_GAL::BeginGroup()
     storePath();
 
     Group group;
-    int groupNumber = getGroupNumber();
+    int groupNumber = getNewGroupNumber();
     groups.insert( std::make_pair( groupNumber, group ) );
     currentGroup = &groups[groupNumber];
-    isGrouping = true;
+    isGrouping   = true;
 
     return groupNumber;
 }
@@ -677,6 +680,7 @@ void CAIRO_GAL::DeleteGroup( int aGroupNumber )
 
     // Delete the Cairo paths
     std::deque<GroupElement>::iterator it, end;
+
     for( it = groups[aGroupNumber].begin(), end = groups[aGroupNumber].end(); it != end; ++it )
     {
         if( it->command == CMD_FILL_PATH || it->command == CMD_STROKE_PATH )

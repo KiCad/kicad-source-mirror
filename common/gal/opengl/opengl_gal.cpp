@@ -53,7 +53,8 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                         wxEvtHandler* aPaintListener, bool isUseShaders, const wxString& aName ) :
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
-    verticesCircle( &precomputedContainer )
+    cachedManager( true ),
+    nonCachedManager( false )
 {
     // Create the OpenGL-Context
     glContext       = new wxGLContext( this );
@@ -73,13 +74,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     isShaderInitialized      = false;
     isGrouping               = false;
     wxSize parentSize        = aParent->GetSize();
-
-    isVboInitialized         = false;
-    vboNeedsUpdate           = false;
-    currentItem              = NULL;
     groupCounter             = 0;
-    transform                = glm::mat4( 1.0f );   // Identity matrix
-    nonCachedItem            = NULL;
 
     SetSize( parentSize );
 
@@ -112,19 +107,17 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     InitTesselatorCallbacks( tesselator );
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 
-    // Compute unit semicircle & circle vertices and store them in a buffer for faster drawing
-    computeCircleVbo();
+    // Compute the unit circle vertices and store them in a buffer for faster drawing
+    computeCircle();
 
     // By default we draw non-cached objects, it changes on BeginGroup()/EndGroup()
-    currentContainer = &nonCachedVbo;
+    currentManager = &nonCachedManager;
 }
 
 
 OPENGL_GAL::~OPENGL_GAL()
 {
     glFlush();
-
-    delete nonCachedItem;
 
     // Delete the buffers
     if( isFrameBufferInitialized )
@@ -134,12 +127,7 @@ OPENGL_GAL::~OPENGL_GAL()
     }
 
     gluDeleteTess( tesselator );
-
-    if( isVboInitialized )
-    {
-        ClearCache();
-        deleteVertexBufferObjects();
-    }
+    ClearCache();
 
     delete glContext;
 }
@@ -239,28 +227,6 @@ void OPENGL_GAL::initFrameBuffers()
 }
 
 
-void OPENGL_GAL::initVertexBufferObjects()
-{
-    // Generate buffers for vertices and indices
-    glGenBuffers( 1, &cachedVerts );
-    glGenBuffers( 1, &cachedInds );
-
-    isVboInitialized = true;
-}
-
-
-void OPENGL_GAL::deleteVertexBufferObjects()
-{
-    glBindBuffer( GL_ARRAY_BUFFER, 0 );
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
-
-    glDeleteBuffers( 1, &cachedVerts );
-    glDeleteBuffers( 1, &cachedInds );
-
-    isVboInitialized = false;
-}
-
-
 void OPENGL_GAL::SaveScreen()
 {
     glBindFramebuffer( GL_DRAW_FRAMEBUFFER, frameBufferBackup );
@@ -323,8 +289,6 @@ void OPENGL_GAL::initGlew()
         exit( 1 );
     }
 
-    initVertexBufferObjects();
-
     isGlewInitialized = true;
 }
 
@@ -337,38 +301,26 @@ void OPENGL_GAL::BeginDrawing()
 
     // Initialize GLEW, FBOs & VBOs
     if( !isGlewInitialized )
-    {
         initGlew();
-    }
 
     if( !isFrameBufferInitialized )
-    {
         initFrameBuffers();
-    }
 
     // Compile the shaders
     if( !isShaderInitialized && isUseShader )
     {
         if( !shader.LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
-        {
-        	wxLogFatalError( wxT( "Cannot compile vertex shader!" ) );
-        }
+            wxLogFatalError( wxT( "Cannot compile vertex shader!" ) );
 
         if( !shader.LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
-        {
-        	wxLogFatalError( wxT( "Cannot compile fragment shader!" ) );
-        }
+            wxLogFatalError( wxT( "Cannot compile fragment shader!" ) );
 
         if( !shader.Link() )
-        {
             wxLogFatalError( wxT( "Cannot link the shaders!" ) );
-        }
 
-        shaderAttrib = shader.GetAttribute( "attrShaderParams" );
-        if( shaderAttrib == -1 )
-        {
-            wxLogFatalError( wxT( "Could not get the shader attribute location" ) );
-        }
+        // Make VBOs use shaders
+        cachedManager.SetShader( shader );
+        nonCachedManager.SetShader( shader );
 
         isShaderInitialized = true;
     }
@@ -418,29 +370,10 @@ void OPENGL_GAL::BeginDrawing()
     SetStrokeColor( strokeColor );
     isDeleteSavedPixels = true;
 
-    // If any of VBO items is dirty - recache everything
-    if( vboNeedsUpdate )
-        rebuildVbo();
+    nonCachedManager.Clear();
 
-    // Number of vertices to be drawn
-    indicesSize = 0;
-
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, cachedInds );
-    // Discard old buffer, so we can use it again
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, cachedVbo.GetSize() * VBO_ITEM::IndByteSize,
-                  NULL, GL_STREAM_DRAW );
-
-    // Map the GPU memory, so we can store indices that are going to be drawn
-    indicesPtr = static_cast<GLuint*>( glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY ) );
-    if( indicesPtr == NULL )
-    {
-        wxLogError( wxT( "Could not map GPU memory" ) );
-    }
-
-    // Prepare buffer for non-cached items
-    delete nonCachedItem;
-    nonCachedItem = new VBO_ITEM( &nonCachedVbo );
-    currentItem = nonCachedItem;
+    cachedManager.BeginDrawing();
+    nonCachedManager.BeginDrawing();
 }
 
 
@@ -492,55 +425,8 @@ void OPENGL_GAL::blitMainTexture( bool aIsClearFrameBuffer )
 
 void OPENGL_GAL::EndDrawing()
 {
-    if( !glUnmapBuffer( GL_ELEMENT_ARRAY_BUFFER ) )
-    {
-        wxLogError( wxT( "Unmapping indices buffer failed" ) );
-    }
-
-    // Prepare buffers
-    glEnableClientState( GL_VERTEX_ARRAY );
-    glEnableClientState( GL_COLOR_ARRAY );
-
-    // Draw non-cached items
-    GLfloat* vertices = (GLfloat*)( nonCachedVbo.GetAllVertices() );
-    GLubyte* colors   = (GLubyte*)( nonCachedVbo.GetAllVertices() ) + VBO_ITEM::ColorOffset;
-    GLfloat* shaders  = (GLfloat*)( nonCachedVbo.GetAllVertices() ) + VBO_ITEM::ShaderOffset;
-
-    glVertexPointer( VBO_ITEM::CoordStride, GL_FLOAT, VBO_ITEM::VertByteSize, vertices );
-    glColorPointer( VBO_ITEM::ColorStride, GL_UNSIGNED_BYTE, VBO_ITEM::VertByteSize, colors );
-    if( isUseShader )
-    {
-        shader.Use();
-        glEnableVertexAttribArray( shaderAttrib );
-        glVertexAttribPointer( shaderAttrib, VBO_ITEM::ShaderStride, GL_FLOAT, GL_FALSE,
-                               VBO_ITEM::VertByteSize, shaders );
-    }
-    glDrawArrays( GL_TRIANGLES, nonCachedItem->GetOffset(), nonCachedItem->GetSize() );
-
-    // Draw cached items
-    glBindBuffer( GL_ARRAY_BUFFER, cachedVerts );
-    glVertexPointer( VBO_ITEM::CoordStride, GL_FLOAT, VBO_ITEM::VertByteSize, 0 );
-    glColorPointer( VBO_ITEM::ColorStride, GL_UNSIGNED_BYTE, VBO_ITEM::VertByteSize,
-                    (GLvoid*) VBO_ITEM::ColorByteOffset );
-    if( isUseShader )
-    {
-        glVertexAttribPointer( shaderAttrib, VBO_ITEM::ShaderStride, GL_FLOAT, GL_FALSE,
-                               VBO_ITEM::VertByteSize, (GLvoid*) VBO_ITEM::ShaderByteOffset );
-    }
-
-
-    glDrawElements( GL_TRIANGLES, indicesSize, GL_UNSIGNED_INT, (GLvoid*) 0 );
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
-    glBindBuffer( GL_ARRAY_BUFFER, 0 );
-
-    // Deactivate vertex array
-    glDisableClientState( GL_COLOR_ARRAY );
-    glDisableClientState( GL_VERTEX_ARRAY );
-    if( isUseShader )
-    {
-        glDisableVertexAttribArray( shaderAttrib );
-        shader.Deactivate();
-    }
+    cachedManager.EndDrawing();
+    nonCachedManager.EndDrawing();
 
     // Draw the remaining contents, blit the main texture to the screen, swap the buffers
     glFlush();
@@ -548,38 +434,6 @@ void OPENGL_GAL::EndDrawing()
     SwapBuffers();
 
     delete clientDC;
-}
-
-
-void OPENGL_GAL::rebuildVbo()
-{
-#ifdef __WXDEBUG__
-    prof_counter totalTime;
-    prof_start( &totalTime, false );
-#endif /* __WXDEBUG__ */
-
-    GLfloat* data = (GLfloat*) cachedVbo.GetAllVertices();
-
-    // Upload vertices coordinates and shader types to GPU memory
-    glBindBuffer( GL_ARRAY_BUFFER, cachedVerts );
-    glBufferData( GL_ARRAY_BUFFER, cachedVbo.GetSize() * VBO_ITEM::VertByteSize,
-                  data, GL_DYNAMIC_DRAW );
-    glBindBuffer( GL_ARRAY_BUFFER, 0 );
-
-    // Allocate the biggest possible buffer for indices
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, cachedInds );
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, cachedVbo.GetSize() * VBO_ITEM::IndByteSize,
-                  NULL, GL_STREAM_DRAW );
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
-
-    vboNeedsUpdate = false;
-
-#ifdef __WXDEBUG__
-    prof_end( &totalTime );
-
-    wxLogDebug( wxT( "Rebuilding VBO::%d vertices / %.1f ms" ),
-            cachedVbo.GetSize(), (double) totalTime.value / 1000.0 );
-#endif /* __WXDEBUG__ */
 }
 
 
@@ -598,29 +452,27 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
     {
         glm::vec4 vector( perpendicularVector.x, perpendicularVector.y, 0.0, 0.0 );
 
-        // If transform stack is not empty, then it means that
-        // there is a transformation matrix that has to be applied
-        if( !transformStack.empty() )
-            vector = transform * vector;
+        // The perpendicular vector also needs transformations
+        vector = currentManager->GetTransformation() * vector;
 
         // Line width is maintained by the vertex shader
-        setShader( SHADER_LINE, vector.x, vector.y, lineWidth );
-        vertex3( aStartPoint.x, aStartPoint.y, layerDepth );    // v0
+        currentManager->Shader( SHADER_LINE, vector.x, vector.y, lineWidth );
+        currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );    // v0
 
-        setShader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
-        vertex3( aStartPoint.x, aStartPoint.y, layerDepth );    // v1
+        currentManager->Shader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
+        currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );    // v1
 
-        setShader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
-        vertex3( aEndPoint.x, aEndPoint.y, layerDepth );        // v3
+        currentManager->Shader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
+        currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );        // v3
 
-        setShader( SHADER_LINE, vector.x, vector.y, lineWidth );
-        vertex3( aStartPoint.x, aStartPoint.y, layerDepth );    // v0
+        currentManager->Shader( SHADER_LINE, vector.x, vector.y, lineWidth );
+        currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );    // v0
 
-        setShader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
-        vertex3( aEndPoint.x, aEndPoint.y, layerDepth );        // v3
+        currentManager->Shader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
+        currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );        // v3
 
-        setShader( SHADER_LINE, vector.x, vector.y, lineWidth );
-        vertex3( aEndPoint.x, aEndPoint.y, layerDepth );        // v2
+        currentManager->Shader( SHADER_LINE, vector.x, vector.y, lineWidth );
+        currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );        // v2
     }
     else
     {
@@ -630,13 +482,13 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
         VECTOR2D v2 = aEndPoint + perpendicularVector;
         VECTOR2D v3 = aEndPoint - perpendicularVector;
 
-        vertex3( v0.x, v0.y, layerDepth );
-        vertex3( v1.x, v1.y, layerDepth );
-        vertex3( v3.x, v3.y, layerDepth );
+        currentManager->Vertex( v0.x, v0.y, layerDepth );
+        currentManager->Vertex( v1.x, v1.y, layerDepth );
+        currentManager->Vertex( v3.x, v3.y, layerDepth );
 
-        vertex3( v0.x, v0.y, layerDepth );
-        vertex3( v3.x, v3.y, layerDepth );
-        vertex3( v2.x, v2.y, layerDepth );
+        currentManager->Vertex( v0.x, v0.y, layerDepth );
+        currentManager->Vertex( v3.x, v3.y, layerDepth );
+        currentManager->Vertex( v2.x, v2.y, layerDepth );
     }
 }
 
@@ -650,7 +502,7 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
     if( isFillEnabled )
     {
         // Filled tracks
-        color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+        currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
         SetLineWidth( aWidth );
         drawLineQuad( aStartPoint, aEndPoint );
@@ -664,12 +516,12 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
         // Outlined tracks
         double lineLength = startEndVector.EuclideanNorm();
 
-        color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+        currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
         Save();
 
-        translate3( aStartPoint.x, aStartPoint.y, 0.0 );
-        Rotate( lineAngle );
+        currentManager->Translate( aStartPoint.x, aStartPoint.y, 0.0 );
+        currentManager->Rotate( lineAngle, 0.0f, 0.0f, 1.0f );
 
         drawLineQuad( VECTOR2D( 0.0,         aWidth / 2.0 ),
                       VECTOR2D( lineLength,  aWidth / 2.0 ) );
@@ -686,7 +538,7 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
 }
 
 
-unsigned int OPENGL_GAL::getGroupNumber()
+unsigned int OPENGL_GAL::getNewGroupNumber()
 {
     wxASSERT_MSG( groups.size() < std::numeric_limits<unsigned int>::max(),
             wxT( "There are no free slots to store a group" ) );
@@ -745,7 +597,7 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
     // Stroke the outline
     if( isStrokeEnabled )
     {
-        color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+        currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
         std::deque<VECTOR2D> pointList;
         pointList.push_back( aStartPoint );
@@ -759,16 +611,16 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
     // Fill the rectangle
     if( isFillEnabled )
     {
-        setShader( SHADER_NONE );
-        color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+        currentManager->Shader( SHADER_NONE );
+        currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
-        vertex3( aStartPoint.x, aStartPoint.y, layerDepth );
-        vertex3( diagonalPointA.x, diagonalPointA.y, layerDepth );
-        vertex3( aEndPoint.x, aEndPoint.y, layerDepth );
+        currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );
+        currentManager->Vertex( diagonalPointA.x, diagonalPointA.y, layerDepth );
+        currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );
 
-        vertex3( aStartPoint.x, aStartPoint.y, layerDepth );
-        vertex3( aEndPoint.x, aEndPoint.y, layerDepth );
-        vertex3( diagonalPointB.x, diagonalPointB.y, layerDepth );
+        currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );
+        currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );
+        currentManager->Vertex( diagonalPointB.x, diagonalPointB.y, layerDepth );
     }
 }
 
@@ -779,7 +631,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
     {
         if( isFillEnabled )
         {
-            color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+            currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
             /* Draw a triangle that contains the circle, then shade it leaving only the circle.
                Parameters given to setShader are indices of the triangle's vertices
@@ -790,21 +642,21 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
                    //\\
                v0 /_\/_\ v1
             */
-            setShader( SHADER_FILLED_CIRCLE, 1.0 );
-            vertex3( aCenterPoint.x - aRadius * sqrt( 3.0f ),
-                     aCenterPoint.y - aRadius, layerDepth );                        // v0
+            currentManager->Shader( SHADER_FILLED_CIRCLE, 1.0 );
+            currentManager->Vertex( aCenterPoint.x - aRadius * sqrt( 3.0f ),
+                     aCenterPoint.y - aRadius, layerDepth );                                        // v0
 
-            setShader( SHADER_FILLED_CIRCLE, 2.0 );
-            vertex3( aCenterPoint.x + aRadius* sqrt( 3.0f ),
-                     aCenterPoint.y - aRadius, layerDepth );                        // v1
+            currentManager->Shader( SHADER_FILLED_CIRCLE, 2.0 );
+            currentManager->Vertex( aCenterPoint.x + aRadius* sqrt( 3.0f ),
+                     aCenterPoint.y - aRadius, layerDepth );                                        // v1
 
-            setShader( SHADER_FILLED_CIRCLE, 3.0 );
-            vertex3( aCenterPoint.x, aCenterPoint.y + aRadius * 2.0f, layerDepth ); // v2
+            currentManager->Shader( SHADER_FILLED_CIRCLE, 3.0 );
+            currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + aRadius * 2.0f, layerDepth );  // v2
         }
 
         if( isStrokeEnabled )
         {
-            color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+            currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
             /* Draw a triangle that contains the circle, then shade it leaving only the circle.
                Parameters given to setShader are indices of the triangle's vertices
@@ -817,114 +669,126 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
                v0 /_\/_\ v1
             */
             double outerRadius = aRadius + ( lineWidth / 2 );
-            setShader( SHADER_STROKED_CIRCLE, 1.0, aRadius, lineWidth );
-            vertex3( aCenterPoint.x - outerRadius * sqrt( 3.0f ),
-                     aCenterPoint.y - outerRadius, layerDepth );                        // v0
+            currentManager->Shader( SHADER_STROKED_CIRCLE, 1.0, aRadius, lineWidth );
+            currentManager->Vertex( aCenterPoint.x - outerRadius * sqrt( 3.0f ),
+                     aCenterPoint.y - outerRadius, layerDepth );                                        // v0
 
-            setShader( SHADER_STROKED_CIRCLE, 2.0, aRadius, lineWidth );
-            vertex3( aCenterPoint.x + outerRadius * sqrt( 3.0f ),
-                     aCenterPoint.y - outerRadius, layerDepth );                        // v1
+            currentManager->Shader( SHADER_STROKED_CIRCLE, 2.0, aRadius, lineWidth );
+            currentManager->Vertex( aCenterPoint.x + outerRadius * sqrt( 3.0f ),
+                     aCenterPoint.y - outerRadius, layerDepth );                                        // v1
 
-            setShader( SHADER_STROKED_CIRCLE, 3.0, aRadius, lineWidth );
-            vertex3( aCenterPoint.x, aCenterPoint.y + outerRadius * 2.0f, layerDepth ); // v2
+            currentManager->Shader( SHADER_STROKED_CIRCLE, 3.0, aRadius, lineWidth );
+            currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + outerRadius * 2.0f, layerDepth );  // v2
+        }
+    }
+    else
+    {
+        if( isStrokeEnabled )
+        {
+            // Compute the factors for the unit circle
+            double outerScale = lineWidth / aRadius / 2;
+            double innerScale = -outerScale;
+            outerScale += 1.0;
+            innerScale += 1.0;
+
+            if( innerScale < outerScale )
+            {
+                // Draw the outline
+                VERTEX* circle = circleContainer.GetAllVertices();
+                int     next;
+
+                currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b,
+                                       strokeColor.a );
+
+                Save();
+
+                currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
+                currentManager->Scale( aRadius, aRadius, 0.0f );
+
+                for( int i = 0; i < 3 * CIRCLE_POINTS; ++i )
+                {
+                    // verticesCircle contains precomputed circle points interleaved with vertex
+                    // (0,0,0), so filled circles can be drawn as consecutive triangles, ie:
+                    // { 0,a,b, 0,c,d, 0,e,f, 0,g,h, ... }
+                    // where letters stand for consecutive circle points and 0 for (0,0,0) vertex.
+
+                    // We have to skip all (0,0,0) vertices (every third vertex)
+                    if( i % 3 == 0 )
+                    {
+                        i++;
+                        // Depending on the vertex, next circle point may be stored in the next vertex..
+                        next = i + 1;
+                    }
+                    else
+                    {
+                        // ..or 2 vertices away (in case it is preceded by (0,0,0) vertex)
+                        next = i + 2;
+                    }
+
+                    currentManager->Vertex( circle[i].x * innerScale,
+                                            circle[i].y * innerScale,
+                                            layerDepth );
+                    currentManager->Vertex( circle[i].x * outerScale,
+                                            circle[i].y * outerScale,
+                                            layerDepth );
+                    currentManager->Vertex( circle[next].x * innerScale,
+                                            circle[next].y * innerScale,
+                                            layerDepth );
+
+                    currentManager->Vertex( circle[i].x * outerScale,
+                                            circle[i].y * outerScale,
+                                            layerDepth );
+                    currentManager->Vertex( circle[next].x * outerScale,
+                                            circle[next].y * outerScale,
+                                            layerDepth );
+                    currentManager->Vertex( circle[next].x * innerScale,
+                                            circle[next].y * innerScale,
+                                            layerDepth );
+                }
+
+                Restore();
+            }
         }
 
-        return;
-    }
-
-    if( isStrokeEnabled )
-    {
-        // Compute the factors for the unit circle
-        double outerScale = lineWidth / aRadius / 2;
-        double innerScale = -outerScale;
-        outerScale += 1.0;
-        innerScale += 1.0;
-
-        if( innerScale < outerScale )
+        // Filled circles are easy to draw by using the stored vertices list, scaling and translating
+        if( isFillEnabled )
         {
-            // Draw the outline
-            VBO_VERTEX* circle = verticesCircle.GetVertices();
-            int next;
-
-            color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+            currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
             Save();
-
-            translate3( aCenterPoint.x, aCenterPoint.y, 0.0 );
-            Scale( VECTOR2D( aRadius, aRadius ) );
-
-            for( int i = 0; i < 3 * CIRCLE_POINTS; ++i )
-            {
-                // verticesCircle contains precomputed circle points interleaved with vertex
-                // (0,0,0), so filled circles can be drawn as consecutive triangles, ie:
-                // { 0,a,b, 0,c,d, 0,e,f, 0,g,h, ... }
-                // where letters stand for consecutive circle points and 0 for (0,0,0) vertex.
-
-                // We have to skip all (0,0,0) vertices (every third vertex)
-                if( i % 3 == 0)
-                {
-                    i++;
-                    // Depending on the vertex, next circle point may be stored in the next vertex..
-                    next = i + 1;
-                }
-                else
-                {
-                    // ..or 2 vertices away (in case it is preceded by (0,0,0) vertex)
-                    next = i + 2;
-                }
-
-                vertex3( circle[i].x * innerScale, circle[i].y * innerScale, layerDepth );
-                vertex3( circle[i].x * outerScale, circle[i].y * outerScale, layerDepth );
-                vertex3( circle[next].x * innerScale, circle[next].y * innerScale, layerDepth );
-
-                vertex3( circle[i].x * outerScale, circle[i].y * outerScale, layerDepth );
-                vertex3( circle[next].x * outerScale, circle[next].y * outerScale, layerDepth );
-                vertex3( circle[next].x * innerScale, circle[next].y * innerScale, layerDepth );
-            }
-
+            currentManager->Translate( aCenterPoint.x, aCenterPoint.y, layerDepth );
+            currentManager->Scale( aRadius, aRadius, 0.0f );
+            currentManager->Vertices( circleContainer.GetAllVertices(), CIRCLE_POINTS * 3 );
             Restore();
         }
-    }
-
-    // Filled circles are easy to draw by using the stored display list, scaling and translating
-    if( isFillEnabled )
-    {
-        color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
-
-        Save();
-        translate3( aCenterPoint.x, aCenterPoint.y, layerDepth );
-        Scale( VECTOR2D( aRadius, aRadius ) );
-
-        currentItem->PushVertices( verticesCircle.GetVertices(), CIRCLE_POINTS * 3 );
-
-        Restore();
     }
 }
 
 
 void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle )
 {
-        if( isFillEnabled )
-        {
-            color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
-            drawFilledSemiCircle( aCenterPoint, aRadius, aAngle );
-        }
+    if( isFillEnabled )
+    {
+        currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+        drawFilledSemiCircle( aCenterPoint, aRadius, aAngle );
+    }
 
-        if( isStrokeEnabled )
-        {
-            color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-            drawStrokedSemiCircle( aCenterPoint, aRadius, aAngle );
-        }
+    if( isStrokeEnabled )
+    {
+        currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+        drawStrokedSemiCircle( aCenterPoint, aRadius, aAngle );
+    }
 }
 
 
-void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle )
+void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius,
+                                       double aAngle )
 {
     if( isUseShader )
     {
         Save();
-        Translate( aCenterPoint );
-        Rotate( aAngle );
+        currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0f );
+        currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 
         /* Draw a triangle that contains the semicircle, then shade it to leave only the semicircle.
            Parameters given to setShader are indices of the triangle's vertices
@@ -935,41 +799,42 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
                /__\
            v0 //__\\ v1
          */
-        setShader( SHADER_FILLED_CIRCLE, 4.0f );
-        vertex3( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
+        currentManager->Shader( SHADER_FILLED_CIRCLE, 4.0f );
+        currentManager->Vertex( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
 
-        setShader( SHADER_FILLED_CIRCLE, 5.0f );
-        vertex3( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
+        currentManager->Shader( SHADER_FILLED_CIRCLE, 5.0f );
+        currentManager->Vertex( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
 
-        setShader( SHADER_FILLED_CIRCLE, 6.0f );
-        vertex3( 0.0f, aRadius * 2.0f, layerDepth );                                // v2
+        currentManager->Shader( SHADER_FILLED_CIRCLE, 6.0f );
+        currentManager->Vertex( 0.0f, aRadius * 2.0f, layerDepth );                                // v2
 
         Restore();
     }
     else
     {
         Save();
-        translate3( aCenterPoint.x, aCenterPoint.y, layerDepth );
-        Scale( VECTOR2D( aRadius, aRadius ) );
-        Rotate( aAngle );
+        currentManager->Translate( aCenterPoint.x, aCenterPoint.y, layerDepth );
+        currentManager->Scale( aRadius, aRadius, 0.0f );
+        currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 
-        // It is enough just to push just a half of the circle vertices to make a semicircle
-        currentItem->PushVertices( verticesCircle.GetVertices(), CIRCLE_POINTS / 2 * 3 );
+        // It is enough just to draw a half of the circle vertices to make a semicircle
+        currentManager->Vertices( circleContainer.GetAllVertices(), ( CIRCLE_POINTS * 3 ) / 2 );
 
         Restore();
     }
 }
 
 
-void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle )
+void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius,
+                                        double aAngle )
 {
     if( isUseShader )
     {
         double outerRadius = aRadius + ( lineWidth / 2 );
 
         Save();
-        Translate( aCenterPoint );
-        Rotate( aAngle );
+        currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0f );
+        currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 
         /* Draw a triangle that contains the semicircle, then shade it to leave only the semicircle.
            Parameters given to setShader are indices of the triangle's vertices
@@ -981,14 +846,14 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
                /__\
            v0 //__\\ v1
          */
-        setShader( SHADER_STROKED_CIRCLE, 4.0f, aRadius, lineWidth );
-        vertex3( -outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
+        currentManager->Shader( SHADER_STROKED_CIRCLE, 4.0f, aRadius, lineWidth );
+        currentManager->Vertex( -outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
 
-        setShader( SHADER_STROKED_CIRCLE, 5.0f, aRadius, lineWidth );
-        vertex3( outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
+        currentManager->Shader( SHADER_STROKED_CIRCLE, 5.0f, aRadius, lineWidth );
+        currentManager->Vertex( outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
 
-        setShader( SHADER_STROKED_CIRCLE, 6.0f, aRadius, lineWidth );
-        vertex3( 0.0f, outerRadius * 2.0f, layerDepth );                                // v2
+        currentManager->Shader( SHADER_STROKED_CIRCLE, 6.0f, aRadius, lineWidth );
+        currentManager->Vertex( 0.0f, outerRadius * 2.0f, layerDepth );                                // v2
 
         Restore();
     }
@@ -998,13 +863,13 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
         double innerScale = 1.0 - lineWidth / aRadius;
 
         Save();
-        translate3( aCenterPoint.x, aCenterPoint.y, layerDepth );
-        Scale( VECTOR2D( aRadius, aRadius ) );
-        Rotate( aAngle );
+        currentManager->Translate( aCenterPoint.x, aCenterPoint.y, layerDepth );
+        currentManager->Scale( aRadius, aRadius, 0.0f );
+        currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 
         // Draw the outline
-        VBO_VERTEX* circle = verticesCircle.GetVertices();
-        int next;
+        VERTEX* circle = circleContainer.GetAllVertices();
+        int     next;
 
         for( int i = 0; i < ( 3 * CIRCLE_POINTS ) / 2; ++i )
         {
@@ -1026,13 +891,13 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
                 next = i + 2;
             }
 
-            vertex3( circle[i].x * innerScale,      circle[i].y * innerScale,       0.0 );
-            vertex3( circle[i].x,                   circle[i].y,                    0.0 );
-            vertex3( circle[next].x * innerScale,   circle[next].y * innerScale,    0.0 );
+            currentManager->Vertex( circle[i].x * innerScale,    circle[i].y * innerScale,    0.0 );
+            currentManager->Vertex( circle[i].x,                 circle[i].y,                 0.0 );
+            currentManager->Vertex( circle[next].x * innerScale, circle[next].y * innerScale, 0.0 );
 
-            vertex3( circle[i].x,                   circle[i].y,                    0.0 );
-            vertex3( circle[next].x,                circle[next].y,                 0.0 );
-            vertex3( circle[next].x * innerScale,   circle[next].y * innerScale,    0.0 );
+            currentManager->Vertex( circle[i].x,                 circle[i].y,                 0.0 );
+            currentManager->Vertex( circle[next].x,              circle[next].y,              0.0 );
+            currentManager->Vertex( circle[next].x * innerScale, circle[next].y * innerScale, 0.0 );
         }
 
         Restore();
@@ -1045,9 +910,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
                           double aEndAngle )
 {
     if( aRadius <= 0 )
-    {
         return;
-    }
 
     // Swap the angles, if start angle is greater than end angle
     SWAP( aStartAngle, >, aEndAngle );
@@ -1058,17 +921,17 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
     VECTOR2D middlePoint   = 0.5 * startEndPoint;
 
     Save();
-    translate3( aCenterPoint.x, aCenterPoint.y, layerDepth );
+    currentManager->Translate( aCenterPoint.x, aCenterPoint.y, layerDepth );
 
     if( isStrokeEnabled )
     {
         if( isUseShader )
         {
             double alphaIncrement = 2.0 * M_PI / CIRCLE_POINTS;
-            color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+            currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
             VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
-            double alpha;
+            double   alpha;
             for( alpha = aStartAngle + alphaIncrement; alpha < aEndAngle; alpha += alphaIncrement )
             {
                 VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
@@ -1095,7 +958,8 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
             innerScale += 1.0;
 
             double alphaIncrement = 2 * M_PI / CIRCLE_POINTS;
-            color4( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+            currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
 
             for( double alpha = aStartAngle; alpha < aEndAngle; )
             {
@@ -1110,13 +974,13 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
                 double v2[] = { cos( alpha ) * innerScale, sin( alpha ) * innerScale };
                 double v3[] = { cos( alpha ) * outerScale, sin( alpha ) * outerScale };
 
-                vertex3( v0[0], v0[1], 0.0 );
-                vertex3( v1[0], v1[1], 0.0 );
-                vertex3( v2[0], v2[1], 0.0 );
+                currentManager->Vertex( v0[0], v0[1], 0.0 );
+                currentManager->Vertex( v1[0], v1[1], 0.0 );
+                currentManager->Vertex( v2[0], v2[1], 0.0 );
 
-                vertex3( v1[0], v1[1], 0.0 );
-                vertex3( v3[0], v3[1], 0.0 );
-                vertex3( v2[0], v2[1], 0.0 );
+                currentManager->Vertex( v1[0], v1[1], 0.0 );
+                currentManager->Vertex( v3[0], v3[1], 0.0 );
+                currentManager->Vertex( v2[0], v2[1], 0.0 );
             }
 
             // Draw line caps
@@ -1129,19 +993,19 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
     {
         double alphaIncrement = 2 * M_PI / CIRCLE_POINTS;
         double alpha;
-        color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+        currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
         for( alpha = aStartAngle; ( alpha + alphaIncrement ) < aEndAngle; )
         {
-            vertex3( middlePoint.x, middlePoint.y,  0.0 );
-            vertex3( cos( alpha ),  sin( alpha ),   0.0 );
+            currentManager->Vertex( middlePoint.x, middlePoint.y,  0.0 );
+            currentManager->Vertex( cos( alpha ),  sin( alpha ),   0.0 );
             alpha += alphaIncrement;
-            vertex3( cos( alpha ),  sin( alpha ),   0.0 );
+            currentManager->Vertex( cos( alpha ),  sin( alpha ),   0.0 );
         }
 
-        vertex3( middlePoint.x, middlePoint.y,  0.0 );
-        vertex3( cos( alpha ),  sin( alpha ),   0.0 );
-        vertex3( endPoint.x,    endPoint.y,     0.0 );
+        currentManager->Vertex( middlePoint.x, middlePoint.y,  0.0 );
+        currentManager->Vertex( cos( alpha ),  sin( alpha ),   0.0 );
+        currentManager->Vertex( endPoint.x,    endPoint.y,     0.0 );
     }
 
     Restore();
@@ -1181,8 +1045,7 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 {
     // Any non convex polygon needs to be tesselated
     // for this purpose the GLU standard functions are used
-
-    setShader( SHADER_NONE );
+    currentManager->Shader( SHADER_NONE );
 
     typedef std::vector<OGLPOINT> OGLPOINTS;
 
@@ -1191,11 +1054,11 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
     OGLPOINTS vertexList( aPointList.size(), OGLPOINT( "fastest" ) );
 
     glNormal3d( 0.0, 0.0, 1.0 );
-    color4( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+    currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
     glShadeModel( GL_FLAT );
 
-    TessParams params = { currentItem, tessIntersects };
+    TessParams params = { currentManager, tessIntersects };
     gluTessBeginPolygon( tesselator, &params );
     gluTessBeginContour( tesselator );
 
@@ -1213,10 +1076,12 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 
     // Free allocated intersecting points
     std::vector<GLdouble*>::iterator it, it_end;
+
     for( it = tessIntersects.begin(), it_end = tessIntersects.end(); it < it_end; ++it )
     {
         delete[] *it;
     }
+
     tessIntersects.clear();
 
     // vertexList destroyed here
@@ -1261,7 +1126,7 @@ void OPENGL_GAL::SetStrokeColor( const COLOR4D& aColor )
     strokeColor     = aColor;
 
     // This is the default drawing color
-    color4( aColor.r, aColor.g, aColor.b, aColor.a );
+    currentManager->Color( aColor.r, aColor.g, aColor.b, aColor.a );
 }
 
 
@@ -1315,19 +1180,19 @@ void OPENGL_GAL::Transform( MATRIX3x3D aTransformation )
 
 void OPENGL_GAL::Rotate( double aAngle )
 {
-    transform = glm::rotate( transform, (float) aAngle, glm::vec3( 0, 0, 1 ) );
+    currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 }
 
 
 void OPENGL_GAL::Translate( const VECTOR2D& aVector )
 {
-    transform = glm::translate( transform, glm::vec3( aVector.x, aVector.y, 0 ) );
+    currentManager->Translate( aVector.x, aVector.y, 0.0f );
 }
 
 
 void OPENGL_GAL::Scale( const VECTOR2D& aScale )
 {
-    transform = glm::scale( transform, glm::vec3( aScale.x, aScale.y, 0 ) );
+    currentManager->Scale( aScale.x, aScale.y, 0.0f );
 }
 
 
@@ -1339,21 +1204,13 @@ void OPENGL_GAL::Flush()
 
 void OPENGL_GAL::Save()
 {
-    transformStack.push( transform );
-    currentContainer->SetTransformMatrix( &transform );
+    currentManager->PushMatrix();
 }
 
 
 void OPENGL_GAL::Restore()
 {
-    transform = transformStack.top();
-    transformStack.pop();
-
-    if( transformStack.empty() )
-    {
-        // Disable transforming, as the selected matrix is identity
-        currentContainer->SetTransformMatrix( NULL );
-    }
+    currentManager->PopMatrix();
 }
 
 
@@ -1361,14 +1218,10 @@ int OPENGL_GAL::BeginGroup()
 {
     isGrouping = true;
 
-    // There is a new group that is not in VBO yet
-    vboNeedsUpdate = true;
-
-    // Save the pointer for caching the current item
-    currentItem = new VBO_ITEM( &cachedVbo );
-    currentContainer = &cachedVbo;
-    int groupNumber = getGroupNumber();
-    groups.insert( std::make_pair( groupNumber, currentItem ) );
+    boost::shared_ptr<VERTEX_ITEM> newItem( new VERTEX_ITEM( cachedManager ) );
+    currentManager = &cachedManager;
+    int groupNumber = getNewGroupNumber();
+    groups.insert( std::make_pair( groupNumber, newItem ) );
 
     return groupNumber;
 }
@@ -1376,9 +1229,7 @@ int OPENGL_GAL::BeginGroup()
 
 void OPENGL_GAL::EndGroup()
 {
-    currentItem->Finish();
-    currentItem = nonCachedItem;
-    currentContainer = &nonCachedVbo;
+    currentManager = &nonCachedManager;
 
     isGrouping = false;
 }
@@ -1386,75 +1237,57 @@ void OPENGL_GAL::EndGroup()
 
 void OPENGL_GAL::ClearCache()
 {
-    BOOST_FOREACH( GroupsMap::value_type it, groups )
-    {
-        delete it.second;
-    }
-
     groups.clear();
+    cachedManager.Clear();
 }
 
 
 void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 {
-    delete groups[aGroupNumber];
     groups.erase( aGroupNumber );
-
-    vboNeedsUpdate = true;
 }
 
 
 void OPENGL_GAL::DrawGroup( int aGroupNumber )
 {
-    int size = groups[aGroupNumber]->GetSize();
-    int offset = groups[aGroupNumber]->GetOffset();
-
-    // Copy indices of items that should be drawn to GPU memory
-    for( int i = offset; i < offset + size; *indicesPtr++ = i++ );
-
-    indicesSize += size;
+    cachedManager.DrawItem( *groups[aGroupNumber] );
 }
 
 
 void OPENGL_GAL::ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor )
 {
-    groups[aGroupNumber]->ChangeColor( aNewColor );
-    vboNeedsUpdate = true;
+    cachedManager.ChangeItemColor( *groups[aGroupNumber], aNewColor );
 }
 
 
 void OPENGL_GAL::ChangeGroupDepth( int aGroupNumber, int aDepth )
 {
-    groups[aGroupNumber]->ChangeDepth( aDepth );
-    vboNeedsUpdate = true;
+    cachedManager.ChangeItemDepth( *groups[aGroupNumber], aDepth );
 }
 
 
-void OPENGL_GAL::computeCircleVbo()
+void OPENGL_GAL::computeCircle()
 {
+    VERTEX* vertex = circleContainer.Allocate( CIRCLE_POINTS );
+
     // Compute the circle points for a given number of segments
-    // Insert in a display list and a vector
-    const VBO_VERTEX v0 = { 0.0f, 0.0f, 0.0f };
-
-    for( int i = 0; i < CIRCLE_POINTS; i++ )
+    for( int i = 0; i < CIRCLE_POINTS; ++i )
     {
-        const VBO_VERTEX v1 = {
-            cos( 2.0 * M_PI / CIRCLE_POINTS * i ),          // x
-            sin( 2.0 * M_PI / CIRCLE_POINTS * i ),          // y
-            0.0f                                            // z
-        };
-        const VBO_VERTEX v2 = {
-            cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // x
-            sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) ),  // y
-            0.0f                                            // z
-        };
+        vertex->x = 0.0f;
+        vertex->y = 0.0f;
+        vertex->z = 0.0f;
+        vertex++;
 
-        verticesCircle.PushVertex( &v0 );
-        verticesCircle.PushVertex( &v1 );
-        verticesCircle.PushVertex( &v2 );
+        vertex->x = cos( 2.0 * M_PI / CIRCLE_POINTS * i );
+        vertex->y = sin( 2.0 * M_PI / CIRCLE_POINTS * i );
+        vertex->z = 0.0f;
+        vertex++;
+
+        vertex->x = cos( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) );
+        vertex->y = sin( 2.0 * M_PI / CIRCLE_POINTS * ( i + 1 ) );
+        vertex->z = 0.0f;
+        vertex++;
     }
-
-    verticesCircle.Finish();
 }
 
 
@@ -1495,13 +1328,10 @@ void CALLBACK VertexCallback( GLvoid* aVertexPtr, void* aData )
 {
     GLdouble* vertex = static_cast<GLdouble*>( aVertexPtr );
     OPENGL_GAL::TessParams* param = static_cast<OPENGL_GAL::TessParams*>( aData );
-    VBO_ITEM* vboItem = param->vboItem;
+    VERTEX_MANAGER* vboManager = param->vboManager;
 
-    if( vboItem )
-    {
-        VBO_VERTEX newVertex = { vertex[0], vertex[1], vertex[2] };
-        vboItem->PushVertex( &newVertex );
-    }
+    if( vboManager )
+        vboManager->Vertex( vertex[0], vertex[1], vertex[2] );
 }
 
 
@@ -1524,7 +1354,6 @@ void CALLBACK CombineCallback( GLdouble coords[3],
 void CALLBACK EdgeCallback(void)
 {
     // This callback is needed to force GLU tesselator to use triangles only
-    return;
 }
 
 
@@ -1650,19 +1479,19 @@ void OPENGL_GAL::DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
     VECTOR2D point4 = aEndPoint - perpendicularVector;
 
     // Set color
-    color4( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
+    currentManager->Color( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
 
-    setShader( SHADER_NONE );
+    currentManager->Shader( SHADER_NONE );
 
     // Draw the quad for the grid line
     double gridDepth = depthRange.y * 0.75;
-    vertex3( point1.x, point1.y, gridDepth );
-    vertex3( point2.x, point2.y, gridDepth );
-    vertex3( point4.x, point4.y, gridDepth );
+    currentManager->Vertex( point1.x, point1.y, gridDepth );
+    currentManager->Vertex( point2.x, point2.y, gridDepth );
+    currentManager->Vertex( point4.x, point4.y, gridDepth );
 
-    vertex3( point1.x, point1.y, gridDepth );
-    vertex3( point4.x, point4.y, gridDepth );
-    vertex3( point3.x, point3.y, gridDepth );
+    currentManager->Vertex( point1.x, point1.y, gridDepth );
+    currentManager->Vertex( point4.x, point4.y, gridDepth );
+    currentManager->Vertex( point3.x, point3.y, gridDepth );
 }
 
 

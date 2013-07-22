@@ -132,7 +132,7 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 #endif /* __WXDEBUG__ */
 
     m_gal->BeginDrawing();
-    m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0, 0, 0, 1.0 ) );
+    m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
     m_gal->ClearScreen();
 
     m_gal->DrawGrid();
