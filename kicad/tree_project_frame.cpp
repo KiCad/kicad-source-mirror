@@ -66,6 +66,7 @@ static const wxChar* s_allowedExtensionsToList[] =
     wxT( "^.*\\.pdf$" ),
     wxT( "^[^$].*\\.brd$" ),        // Legacy Pcbnew files
     wxT( "^[^$].*\\.kicad_pcb$" ),  // S format Pcbnew files
+    wxT( "^[^$].*\\.kicad_wks$" ),  // S format kicad page layout descr files
     wxT( "^.*\\.net$" ),
     wxT( "^.*\\.txt$" ),
     wxT( "^.*\\.pho$" ),            // Gerber file (Kicad extension)
@@ -292,6 +293,10 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
         ext = SVGFileExtension;
         break;
 
+    case TREE_PAGE_LAYOUT_DESCR:
+        ext = PageLayoutDescrFileExtension;
+        break;
+
     default:                       /* Eliminates unnecessary GCC warning. */
         break;
     }
@@ -356,6 +361,10 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
 
     case TREE_SVG:
         ext = SVGFileWildcard;
+        break;
+
+    case TREE_PAGE_LAYOUT_DESCR:
+        ext = PageLayoutDescrFileWildcard;
         break;
 
     default:                       /* Eliminates unnecessary GCC warning. */

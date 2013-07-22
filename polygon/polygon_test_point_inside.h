@@ -10,6 +10,8 @@ public:
     int x, y;
 };
 #endif
+class CPOLYGONS_LIST;
+
 /**
  * Function TestPointInsidePolygon
  * test if a point is inside or outside a polygon.

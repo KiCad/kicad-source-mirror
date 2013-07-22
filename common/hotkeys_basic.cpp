@@ -682,7 +682,7 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( struct EDA_HOTKEY_CONFIG* aDesc
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
     wxString path = wxGetCwd();
-    wxString filename;
+    wxString filename = wxGetApp().GetAppName() + wxT( "." ) + ext;
 
     filename = EDA_FileSelector( _( "Read Hotkey Configuration File:" ),
                                  path,
@@ -710,7 +710,7 @@ void EDA_BASE_FRAME::ExportHotkeyConfigToFile( struct EDA_HOTKEY_CONFIG* aDescLi
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
     wxString path = wxGetCwd();
-    wxString filename;
+    wxString filename = wxGetApp().GetAppName() + wxT( "." ) + ext;
 
     filename = EDA_FileSelector( _( "Write Hotkey Configuration File:" ),
                                  path,

@@ -152,7 +152,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnOkClick( wxCommandEvent& event )
             g_LibraryNames.Add( m_ListLibr->GetString(ii) );
     }
 
-    GetParent()->SaveProjectSettings();
+    GetParent()->SaveProjectSettings( true );
     EndModal( wxID_OK );
 }
 

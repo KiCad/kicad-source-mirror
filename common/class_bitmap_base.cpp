@@ -116,9 +116,6 @@ bool BITMAP_BASE::SaveData( FILE* aFile ) const
             if( fprintf( aFile, "%2.2X ", *begin & 0xFF ) == EOF )
                 return false;
         }
-
-        if( fprintf( aFile, "$EndBitmap" ) == EOF )
-            return false;
     }
 
     return true;

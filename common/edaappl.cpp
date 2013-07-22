@@ -885,7 +885,6 @@ wxString EDA_APP::FindFileInSearchPaths( const wxString&      filename,
     for( i = 0; i < m_searchPaths.GetCount(); i++ )
     {
         fn = wxFileName( m_searchPaths[i], wxEmptyString );
-
         if( subdirs )
         {
             for( j = 0; j < subdirs->GetCount(); j++ )

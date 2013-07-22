@@ -233,6 +233,10 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
             break;
         }
 
+    case TREE_PAGE_LAYOUT_DESCR:
+        mainFrame->Execute( m_parent, PL_EDITOR_EXE, FullFileName );
+        break;
+
     default:
         OpenFile( FullFileName );
         break;
