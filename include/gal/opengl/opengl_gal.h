@@ -31,25 +31,21 @@
 
 // GAL imports
 #include <gal/graphics_abstraction_layer.h>
-#include <GL/glew.h>
-
-// OpenGL mathematics library
-#define GLM_FORCE_RADIANS
-#include <gal/opengl/glm/gtc/matrix_transform.hpp>
-
-#include <gal/opengl/vbo_container.h>
 #include <gal/opengl/shader.h>
+#include <gal/opengl/vertex_manager.h>
+#include <gal/opengl/vertex_item.h>
+#include <gal/opengl/noncached_container.h>
 
-// wxWidgets imports
 #include <wx/wx.h>
 #include <wx/glcanvas.h>
 
-// STL imports
 #include <cmath>
 #include <iterator>
 #include <vector>
 #include <algorithm>
-#include <boost/unordered_map.hpp>
+#include <memory>
+#include <map>
+#include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <stdlib.h>
 #include <iostream>
@@ -312,7 +308,7 @@ public:
     ///< Parameters passed to the GLU tesselator
     typedef struct
     {
-        VBO_ITEM* vboItem;                        ///< VBO_ITEM for storing new vertices
+        VERTEX_MANAGER* vboManager;               ///< VERTEX_ITEM for storing new vertices
         std::vector<GLdouble*>& intersectPoints;  ///< Intersect points, that have to be freed
     } TessParams;
 
@@ -325,11 +321,6 @@ private:
 
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
-    static const double MITER_LIMIT     = 1.5;  ///< Limit for mitered edges ( * lineWidth )
-
-    /// This factor is used to for correct merging of antialiased edges,
-    /// a very small value is required
-    static const double DEPTH_ADJUST_FACTOR = ( 1.0 / (1 << 23) );
 
     wxClientDC*     clientDC;               ///< Drawing context
     wxGLContext*    glContext;              ///< OpenGL context of wxWidgets
@@ -338,43 +329,22 @@ private:
     wxEvtHandler*   paintListener;
 
     // VBO buffered vertices for faster circle & semicircle drawing
-    VBO_CONTAINER         precomputedContainer;   ///< Container for storing display lists
-    VBO_ITEM              verticesCircle;         ///< Buffer for circle & semicircle vertices
+    NONCACHED_CONTAINER   circleContainer;   ///< Container for storing circle vertices
 
     // Vertex buffer objects related fields
-    typedef boost::unordered_map<unsigned int, VBO_ITEM*> GroupsMap;
+    typedef std::map< unsigned int, boost::shared_ptr<VERTEX_ITEM> > GroupsMap;
     GroupsMap             groups;                 ///< Stores informations about VBO objects (groups)
     unsigned int          groupCounter;           ///< Counter used for generating keys for groups
-    VBO_ITEM*             currentItem;            ///< Currently used VBO_ITEM (for grouping)
-    VBO_CONTAINER*        currentContainer;       ///< Currently used VBO_CONTAINER (for storing VBO_ITEMs)
-    VBO_CONTAINER         cachedVbo;              ///< Container for storing VBO_ITEMs
-    GLuint                cachedVerts;            ///< Currently used vertices VBO handle
-    GLuint                cachedInds;             ///< Currently used indices VBO handle
-    bool                  vboNeedsUpdate;         ///< Flag indicating if VBO should be rebuilt
-    VBO_CONTAINER         nonCachedVbo;           ///< Container for storing non-cached VBO_ITEMs
-    VBO_ITEM*             nonCachedItem;          ///< Item that is gathering non-cached vertices
-
-    glm::mat4             transform;              ///< Current transformation matrix
-    std::stack<glm::mat4> transformStack;         ///< Stack of transformation matrices
-    int                   indicesSize;            ///< Number of indices to be drawn
-    GLuint*               indicesPtr;             ///< Pointer to mapped GPU memory
+    VERTEX_MANAGER*       currentManager;         ///< Currently used VERTEX_MANAGER (for storing VERTEX_ITEMs)
+    VERTEX_MANAGER        cachedManager;          ///< Container for storing cached VERTEX_ITEMs
+    VERTEX_MANAGER        nonCachedManager;       ///< Container for storing non-cached VERTEX_ITEMs
 
     // Polygon tesselation
-    GLUtesselator*        tesselator;             ///< Pointer to the tesselator
+    GLUtesselator*         tesselator;            ///< Pointer to the tesselator
     std::vector<GLdouble*> tessIntersects;        ///< Storage of intersecting points
 
     // Shader
-    // Possible types of shaders
-    typedef enum
-    {
-        SHADER_NONE             = 0,
-        SHADER_LINE,
-        SHADER_FILLED_CIRCLE,
-        SHADER_STROKED_CIRCLE,
-    } SHADER_TYPE;
-
     SHADER          shader;                 ///< There is only one shader used for different objects
-    int             shaderAttrib;           ///< Location of shader attributes (for glVertexAttribPointer)
 
     // Cursor
     int             cursorSize;             ///< Size of the cursor in pixels
@@ -394,7 +364,6 @@ private:
     // Internal flags
     bool            isGlewInitialized;          ///< Is GLEW initialized?
     bool            isFrameBufferInitialized;   ///< Are the frame buffers initialized?
-    bool            isVboInitialized;
     bool            isShaderInitialized;        ///< Was the shader initialized?
     bool            isUseShader;                ///< Should the shaders be used?
     bool            isGrouping;                 ///< Was a group started?
@@ -430,8 +399,8 @@ private:
      */
     void drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
-    /// Compute the points of an unit circle & semicircle and store them in VBO.
-    void computeCircleVbo();
+    /// Compute the points of the unit circle and store them in VBO.
+    void computeCircle();
 
     // Event handling
     /**
@@ -494,22 +463,6 @@ private:
     void deleteFrameBuffer( GLuint* aFrameBuffer, GLuint* aDepthBuffer, GLuint* aTexture );
 
     /**
-     * @brief Initializes everything needed to use vertex buffer objects.
-     */
-    void initVertexBufferObjects();
-
-    /**
-     * @brief Deinitializes everything when vertex buffer objects are not used anymore.
-     */
-    void deleteVertexBufferObjects();
-
-    /**
-     * @brief Rebuilds vertex buffer object using stored VBO_ITEMS and sends it to
-     * the graphics card memory.
-     */
-    void rebuildVbo();
-
-    /**
      * @brief Draw a quad for the line.
      *
      * @param aStartPoint is the start point of the line.
@@ -518,76 +471,11 @@ private:
     inline void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /**
-     * @brief Returns a valid key that can be used as a group number.
+     * @brief Returns a valid key that can be used as a new group number.
      *
      * @return An unique group number that is not used by any other group.
      */
-    unsigned int getGroupNumber();
-
-    /**
-     * @brief Adds vertex to the current item or draws it in immediate mode.
-     * @param aX is X coordinate.
-     * @param aY is Y coordinate.
-     * @param aZ is Z coordinate.
-     */
-    inline void vertex3( double aX, double aY, double aZ )
-    {
-        // New vertex coordinates for VBO
-        const VBO_VERTEX vertex = { aX, aY, aZ };
-        currentItem->PushVertex( &vertex );
-    }
-
-    /**
-     * @brief Function that replaces glTranslate. It modifies transformation matrix.
-     *
-     * @param aX is translation in X axis direction.
-     * @param aY is translation in Y axis direction.
-     * @param aZ is translation in Z axis direction.
-     */
-    inline void translate3( double aX, double aY, double aZ )
-    {
-        transform = glm::translate( transform, glm::vec3( aX, aY, aZ ) );
-    }
-
-    /**
-     * @brief Function that replaces glColor. It modifies color used by current VBO_ITEM.
-     *
-     * @param aR is red component.
-     * @param aG is green component.
-     * @param aB is blue component.
-     * @param aA is alpha component.
-     */
-    inline void color4( double aRed, double aGreen, double aBlue, double aAlpha )
-    {
-        currentContainer->UseColor( aRed, aGreen, aBlue, aAlpha );
-    }
-
-    /**
-     * @brief Function that replaces glColor. It modifies color used by current VBO_ITEM.
-     *
-     * @param aColor is the new color.
-     */
-    inline void color4( const COLOR4D& aColor )
-    {
-        currentContainer->UseColor( aColor );
-    }
-
-    /**
-     * @brief Function that sets shader and its parameters for the currently used VBO_ITEM.
-     * It should be used before adding any vertices that have to be shaded.
-     * @param aShader is the type of shader used for vertices.
-     * @param aParam[1..3] are shader's parameters. Their meaning depends on the type of used shader.
-     * For more information you may check shaders' source code.
-     */
-    inline void setShader( SHADER_TYPE aShader, GLfloat aParam1 = 0.0f,
-                           GLfloat aParam2 = 0.0f, GLfloat aParam3 = 0.0f )
-    {
-        if( isUseShader )
-        {
-            const GLfloat shader[] = { aShader, aParam1, aParam2, aParam3 };
-            currentContainer->UseShader( shader );
-        }
-    }
+    unsigned int getNewGroupNumber();
 };
 } // namespace KiGfx
 

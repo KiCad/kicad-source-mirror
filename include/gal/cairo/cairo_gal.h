@@ -401,11 +401,11 @@ private:
     void deinitSurface();
 
     /**
-     * @brief Returns a valid key that can be used as a group number.
+     * @brief Returns a valid key that can be used as a new group number.
      *
      * @return An unique group number that is not used by any other group.
      */
-    unsigned int getGroupNumber();
+    unsigned int getNewGroupNumber();
 };
 } // namespace KiGfx
 
