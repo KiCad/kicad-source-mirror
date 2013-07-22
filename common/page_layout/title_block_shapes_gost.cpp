@@ -977,7 +977,16 @@ Ki_WorkSheetData    WS_DopTop_Line6 =
 
 #include <worksheet_shape_builder.h>
 
-void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
+class WS_DRAW_ITEM_LIST_GOST : public WS_DRAW_ITEM_LIST
+{
+public:
+    void BuildWorkSheetGraphicListGOST(
+                           const PAGE_INFO& aPageInfo,
+                           const TITLE_BLOCK& aTitleBlock,
+                           EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor );
+};
+
+void WS_DRAW_ITEM_LIST_GOST::BuildWorkSheetGraphicListGOST(
                            const PAGE_INFO& aPageInfo,
                            const TITLE_BLOCK& aTitleBlock,
                            EDA_COLOR_T aLineColor, EDA_COLOR_T aTextColor )

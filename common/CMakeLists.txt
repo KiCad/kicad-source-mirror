@@ -26,14 +26,8 @@ set(COMMON_ABOUT_DLG_SRCS
     dialogs/dialog_page_settings_base.cpp
     )
 
-if(KICAD_GOST)
-    set( TITLE_BLOCK_SHAPES title_block_shapes_gost )
-else()
-    set( TITLE_BLOCK_SHAPES title_block_shapes )
-endif()
-
 set(COMMON_PAGE_LAYOUT_SRCS
-    page_layout/${TITLE_BLOCK_SHAPES}.cpp
+    page_layout/title_block_shapes.cpp
     page_layout/class_worksheet_dataitem.cpp
     page_layout/class_worksheet_layout.cpp
     page_layout/page_layout_default_description.cpp

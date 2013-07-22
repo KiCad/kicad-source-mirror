@@ -143,7 +143,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticText23->Wrap( -1 );
 	fgSizer1->Add( m_staticText23, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
-	m_staticText26 = new wxStaticText( m_panel1, wxID_ANY, _("part id notation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26 = new wxStaticText( m_panel1, wxID_ANY, _("Part id notation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText26->Wrap( -1 );
 	fgSizer1->Add( m_staticText26, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
