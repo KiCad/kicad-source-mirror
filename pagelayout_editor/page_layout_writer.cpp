@@ -182,10 +182,10 @@ void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_LAYOUT* aPageLayout ) const
     // Write default values:
     m_out->Print( nestLevel, "(%s", getTokenName( T_setup ) );
     m_out->Print( 0, "(textsize %s %s)",
-                  double2Str( TB_DEFAULT_TEXTSIZE ).c_str(),
-                  double2Str( TB_DEFAULT_TEXTSIZE ).c_str() );
-    m_out->Print( 0, "(linewidth %s)", double2Str( 0.15 ).c_str() );
-    m_out->Print( 0, "(textlinewidth %s)", double2Str( 0.15 ).c_str() );
+                  double2Str( WORKSHEET_DATAITEM::m_DefaultTextSize.x ).c_str(),
+                  double2Str( WORKSHEET_DATAITEM::m_DefaultTextSize.y ).c_str() );
+    m_out->Print( 0, "(linewidth %s)", double2Str( WORKSHEET_DATAITEM::m_DefaultLineWidth ).c_str() );
+    m_out->Print( 0, "(textlinewidth %s)", double2Str( WORKSHEET_DATAITEM::m_DefaultTextThickness ).c_str() );
     m_out->Print( 0, "\n" );
 
     // Write margin values

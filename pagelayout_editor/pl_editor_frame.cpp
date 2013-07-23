@@ -505,14 +505,35 @@ void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
 void PL_EDITOR_FRAME::RebuildDesignTree()
 {
     const WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    int rectId = 0;
+    int lineId = 0;
+    int textId = 0;
+    int polyId = 0;
 
     for( unsigned ii = 0; ii < pglayout.GetCount(); ii++ )
     {
         WORKSHEET_DATAITEM* item = pglayout.GetItem( ii );
-        if( item->m_Name.IsEmpty() )
+        switch( item->GetType() )
         {
-            item->m_Name = wxString::Format( wxT("item%d:%s"), ii+1,
-                                             GetChars(item->GetClassName()) );
+            case WORKSHEET_DATAITEM::WS_TEXT:
+                item->m_Name = wxString::Format( wxT("text%d:%s"), ++textId,
+                                                 GetChars(item->GetClassName()) );
+                break;
+
+            case WORKSHEET_DATAITEM:: WS_SEGMENT:
+                item->m_Name = wxString::Format( wxT("segm%d:%s"), ++lineId,
+                                                 GetChars(item->GetClassName()) );
+                break;
+
+            case WORKSHEET_DATAITEM::WS_RECT:
+                item->m_Name = wxString::Format( wxT("rect%d:%s"), ++rectId,
+                                                 GetChars(item->GetClassName()) );
+                break;
+
+            case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
+                item->m_Name = wxString::Format( wxT("poly%d:%s"), ++polyId,
+                                                 GetChars(item->GetClassName()) );
+                break;
         }
     }
 
