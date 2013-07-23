@@ -505,15 +505,14 @@ void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
 void PL_EDITOR_FRAME::RebuildDesignTree()
 {
     const WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    wxString name;
 
     for( unsigned ii = 0; ii < pglayout.GetCount(); ii++ )
     {
         WORKSHEET_DATAITEM* item = pglayout.GetItem( ii );
         if( item->m_Name.IsEmpty() )
         {
-            name.Printf( wxT("item%d:%s"), ii+1, item->GetClassName());
-            item->m_Name = name;
+            item->m_Name = wxString::Format( wxT("item%d:%s"), ii+1,
+                                             GetChars(item->GetClassName()) );
         }
     }
 

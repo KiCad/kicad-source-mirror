@@ -26,6 +26,7 @@
  * @file design_tree_frame.cpp
  */
 
+#include <wx/imaglist.h>
 #include <fctsys.h>
 #include <worksheet_shape_builder.h>
 #include <class_worksheet_dataitem.h>
