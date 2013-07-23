@@ -43,14 +43,14 @@ void VIEW::AddLayer( int aLayer, bool aDisplayOnly )
 {
     if( m_layers.find( aLayer ) == m_layers.end() )
     {
-        m_layers[aLayer] = VIEW_LAYER();
-        m_layers[aLayer].id     = aLayer;
-        m_layers[aLayer].items  = new VIEW_RTREE();
+        m_layers[aLayer]                = VIEW_LAYER();
+        m_layers[aLayer].id             = aLayer;
+        m_layers[aLayer].items          = new VIEW_RTREE();
         m_layers[aLayer].renderingOrder = aLayer;
         m_layers[aLayer].enabled        = true;
-        m_layers[aLayer].cached         = true;
         m_layers[aLayer].isDirty        = false;
         m_layers[aLayer].displayOnly    = aDisplayOnly;
+        m_layers[aLayer].target         = TARGET_CACHED;
     }
 
     sortLayers();
@@ -136,7 +136,7 @@ int VIEW::Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult )
 
 VIEW::VIEW( bool aIsDynamic ) :
     m_enableOrderModifier( false ),
-    m_scale ( 1.0 ),
+    m_scale( 1.0 ),
     m_painter( NULL ),
     m_gal( NULL ),
     m_dynamic( aIsDynamic )
@@ -321,7 +321,7 @@ struct VIEW::updateItemsColor
 void VIEW::UpdateLayerColor( int aLayer )
 {
     // There is no point in updating non-cached layers
-    if( !m_layers[aLayer].cached )
+    if( m_layers[aLayer].target != TARGET_CACHED )
         return;
 
     BOX2I r;
@@ -344,7 +344,7 @@ void VIEW::UpdateAllLayersColor()
         VIEW_LAYER* l = &( ( *i ).second );
 
         // There is no point in updating non-cached layers
-        if( !m_layers[l->id].cached )
+        if( l->target != TARGET_CACHED )
             continue;
 
         updateItemsColor visitor( l->id, m_painter, m_gal );
@@ -376,7 +376,7 @@ struct VIEW::changeItemsDepth
 void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
 {
     // There is no point in updating non-cached layers
-    if( !m_layers[aLayer].cached )
+    if( m_layers[aLayer].target != TARGET_CACHED )
         return;
 
     BOX2I r;
@@ -483,7 +483,7 @@ struct VIEW::drawItem
         if( !drawCondition )
             return;
 
-        if( currentLayer->cached )
+        if( currentLayer->target == TARGET_CACHED )
         {
             // Draw using cached information or create one
             int group = aItem->getGroup( currentLayer->id );
@@ -521,6 +521,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
         {
             drawItem drawFunc( this, l );
 
+            m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
             l->items->Query( aRect, drawFunc );
             l->isDirty = false;
@@ -709,8 +710,10 @@ void VIEW::RecacheAllItems( bool aImmediately )
     {
         VIEW_LAYER* l = & ( ( *i ).second );
 
-        if( l->cached )
+        // Obviously, there is only one cached target that has to be recomputed
+        if( l->target == TARGET_CACHED )
         {
+            m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
             recacheLayer visitor( this, m_gal, l->id, aImmediately );
             l->items->Query( r, visitor );

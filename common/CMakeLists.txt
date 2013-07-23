@@ -29,11 +29,15 @@ add_custom_target(
 )
 
 set(GAL_SRCS
+    # Common part
     drawpanel_gal.cpp
     painter.cpp
     gal/graphics_abstraction_layer.cpp
     gal/stroke_font.cpp
     gal/color4d.cpp
+    view/wx_view_controls.cpp
+
+    # OpenGL GAL
     gal/opengl/opengl_gal.cpp
     gal/opengl/shader.cpp
     gal/opengl/vertex_item.cpp
@@ -42,8 +46,10 @@ set(GAL_SRCS
     gal/opengl/noncached_container.cpp
     gal/opengl/vertex_manager.cpp
     gal/opengl/gpu_manager.cpp
+    gal/opengl/opengl_compositor.cpp
+
+    # Cairo GAL
     gal/cairo/cairo_gal.cpp
-    view/wx_view_controls.cpp
     )
 
 add_library(gal STATIC ${GAL_SRCS})

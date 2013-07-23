@@ -34,7 +34,6 @@
 
 namespace KiGfx
 {
-class VERTEX;
 class VERTEX_ITEM;
 class SHADER;
 

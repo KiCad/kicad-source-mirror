@@ -207,7 +207,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         // so there is no point in caching them
         for( LAYER_NUM layer = FIRST_NETNAME_LAYER; layer <= LAST_NETNAME_LAYER; ++layer )
         {
-             view->SetLayerCached( layer, false );
+             view->SetLayerTarget( layer, KiGfx::TARGET_NONCACHED );
         }
 
         // Load layer & elements visibility settings

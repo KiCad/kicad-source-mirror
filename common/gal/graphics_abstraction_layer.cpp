@@ -62,6 +62,8 @@ void GAL::DrawGrid()
     if( !gridVisibility )
         return;
 
+    SetTarget( TARGET_NONCACHED );
+
     // The grid consists of lines
     // For the drawing the start points, end points and increments have to be calculated in world coordinates
     VECTOR2D    screenStartPoint( 0, 0 );

@@ -77,9 +77,11 @@ void GPU_MANAGER::SetShader( SHADER& aShader )
 
 // Cached manager
 GPU_CACHED_MANAGER::GPU_CACHED_MANAGER( VERTEX_CONTAINER* aContainer ) :
-    GPU_MANAGER( aContainer ), m_buffersInitialized( false ), m_indicesPtr( NULL ),
+    GPU_MANAGER( aContainer ), m_buffersInitialized( false ),
     m_indicesSize( 0 )
 {
+    // Allocate the biggest possible buffer for indices
+    m_indices.reset( new GLuint[aContainer->GetSize()] );
 }
 
 
@@ -252,7 +254,6 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
     VERTEX*  vertices       = m_container->GetAllVertices();
     GLfloat* coordinates    = (GLfloat*) ( vertices );
     GLubyte* colors         = (GLubyte*) ( vertices ) + ColorOffset;
-    GLfloat* shaders        = (GLfloat*) ( vertices ) + ShaderOffset / sizeof(GLfloat);
 
     // Prepare buffers
     glEnableClientState( GL_VERTEX_ARRAY );
@@ -263,6 +264,8 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
 
     if( m_shader != NULL )    // Use shader if applicable
     {
+        GLfloat* shaders = (GLfloat*) ( vertices ) + ShaderOffset / sizeof(GLfloat);
+
         m_shader->Use();
         glEnableVertexAttribArray( m_shaderAttrib );
         glVertexAttribPointer( m_shaderAttrib, ShaderStride, GL_FLOAT, GL_FALSE,

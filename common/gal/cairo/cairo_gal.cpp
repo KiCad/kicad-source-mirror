@@ -280,6 +280,12 @@ void CAIRO_GAL::RestoreScreen()
 }
 
 
+void CAIRO_GAL::SetTarget( RenderTarget aTarget )
+{
+    wxASSERT_MSG( false, wxT( "Not implemented yet" ) );
+}
+
+
 void CAIRO_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     cairo_move_to( cairoImage, aStartPoint.x, aStartPoint.y );

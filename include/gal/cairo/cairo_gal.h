@@ -252,6 +252,9 @@ public:
     /// @copydoc GAL::RestoreScreen()
     virtual void RestoreScreen();
 
+    /// @copydoc GAL::SetTarget()
+    virtual void SetTarget( RenderTarget aTarget );
+
     // -------
     // Cursor
     // -------

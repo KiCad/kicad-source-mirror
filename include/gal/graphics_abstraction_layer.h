@@ -35,6 +35,7 @@
 #include <math/matrix3x3.h>
 
 #include <gal/color4d.h>
+#include <gal/definitions.h>
 #include <gal/stroke_font.h>
 #include <newstroke_font.h>
 
@@ -546,15 +547,26 @@ public:
         return worldScale;
     }
 
+    // ---------------------------
+    // Buffer manipulation methods
+    // ---------------------------
+
     /**
      * @brief Save the screen contents.
      */
     virtual void SaveScreen() = 0;
 
     /**
-     * @brief Save the screen contents.
+     * @brief Restore the screen contents.
      */
     virtual void RestoreScreen() = 0;
+
+    /**
+     * @brief Sets the target for rendering.
+     *
+     * @param aTarget is the new target for rendering.
+     */
+    virtual void SetTarget( RenderTarget aTarget ) = 0;
 
     // -------------
     // Grid methods
