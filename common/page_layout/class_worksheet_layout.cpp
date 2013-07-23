@@ -192,8 +192,7 @@ const wxString WORKSHEET_LAYOUT::MakeFullFileName( const wxString& aShortFileNam
 {
     wxFileName fn = aShortFileName;
     wxString fullFileName = aShortFileName;
-
-    if( fn.GetPath().IsEmpty() )
+    if( fn.GetPath().IsEmpty() && !fn.GetFullName().IsEmpty() )
     {
         wxString name = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
         if( !name.IsEmpty() )
