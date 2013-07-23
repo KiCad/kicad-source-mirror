@@ -322,6 +322,7 @@ public:
 
     /**
      * Initialize a move item command
+     * @param aItem is the item to move
      */
     void MoveItem( WORKSHEET_DATAITEM* aItem );
 

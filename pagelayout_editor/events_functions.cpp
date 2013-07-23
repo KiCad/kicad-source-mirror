@@ -199,9 +199,20 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ITEM_MOVE_START_POINT:
+        item = m_treePagelayout->GetPageLayoutSelectedItem();
+        item->ClearFlags( LOCATE_ENDPOINT );
+        MoveItem( item );
+        break;
+
     case ID_POPUP_ITEM_MOVE_END_POINT:
+        item = m_treePagelayout->GetPageLayoutSelectedItem();
+        item->ClearFlags( LOCATE_STARTPOINT );
+        MoveItem( item );
+        break;
+
     case ID_POPUP_ITEM_MOVE:
         item = m_treePagelayout->GetPageLayoutSelectedItem();
+        item->ClearFlags( LOCATE_ENDPOINT|LOCATE_STARTPOINT );
         MoveItem( item );
         break;
 
