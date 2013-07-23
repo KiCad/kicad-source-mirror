@@ -43,7 +43,7 @@ enum SHADER_TYPE
     SHADER_STROKED_CIRCLE,
 };
 
-typedef struct VERTEX
+typedef struct
 {
     GLfloat x, y, z;        // Coordinates
     GLubyte r, g, b, a;     // Color

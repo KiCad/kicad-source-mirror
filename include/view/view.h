@@ -30,6 +30,7 @@
 #include <boost/unordered/unordered_map.hpp>
 
 #include <math/box2.h>
+#include <gal/definitions.h>
 
 namespace KiGfx
 {
@@ -258,14 +259,14 @@ public:
     }
 
     /**
-     * Function SetLayerCached()
-     * Turns on or off the cached parameter of a particular layer.
-     * @param aLayer: the layer
-     * @param aCached: the new parameter value
+     * Function SetLayerTarget()
+     * Changes the rendering target for a particular layer.
+     * @param aLayer is the layer.
+     * @param aTarget is the rendering target.
      */
-    inline void SetLayerCached( int aLayer, bool aCached = true )
+    inline void SetLayerTarget( int aLayer, RenderTarget aTarget )
     {
-        m_layers[aLayer].cached = aCached;
+        m_layers[aLayer].target = aTarget;
     }
 
     /**
@@ -367,14 +368,13 @@ private:
         bool                    enabled;         ///* is the layer to be rendered?
         bool                    isDirty;         ///* does it contain any dirty items (updated since last redraw)
         bool                    displayOnly;     ///* is the layer display only?
-        bool                    cached;          ///* items on non-cached layers are displayed in
-                                                 ///* immediate mode
         VIEW_RTREE*             items;           ///* R-tree indexing all items on this layer.
         std::vector<VIEW_ITEM*> dirtyItems;      ///* set of dirty items collected since last redraw
         int                     renderingOrder;  ///* rendering order of this layer
         int                     id;              ///* layer ID
         BOX2I                   extents;         ///* sum of bboxes of all items on the layer
         BOX2I                   dirtyExtents;    ///* sum of bboxes of all dirty items on the layer
+        RenderTarget            target;          ///* where the layer should be rendered
     };
 
     // Convenience typedefs

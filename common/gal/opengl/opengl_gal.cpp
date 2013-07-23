@@ -54,7 +54,8 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
     cachedManager( true ),
-    nonCachedManager( false )
+    nonCachedManager( false ),
+    overlayManager( false )
 {
     // Create the OpenGL-Context
     glContext       = new wxGLContext( this );
@@ -67,9 +68,8 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
 
     // Initialize the flags
-    isDeleteSavedPixels      = true;
     isGlewInitialized        = false;
-    isFrameBufferInitialized = false;
+    isFramebufferInitialized = false;
     isUseShader              = isUseShaders;
     isShaderInitialized      = false;
     isGrouping               = false;
@@ -109,22 +109,12 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     // Compute the unit circle vertices and store them in a buffer for faster drawing
     computeCircle();
-
-    // By default we draw non-cached objects, it changes on BeginGroup()/EndGroup()
-    currentManager = &nonCachedManager;
 }
 
 
 OPENGL_GAL::~OPENGL_GAL()
 {
     glFlush();
-
-    // Delete the buffers
-    if( isFrameBufferInitialized )
-    {
-        deleteFrameBuffer( &frameBuffer, &depthBuffer, &texture );
-        deleteFrameBuffer( &frameBufferBackup, &depthBufferBackup, &textureBackup );
-    }
 
     gluDeleteTess( tesselator );
     ClearCache();
@@ -143,15 +133,9 @@ void OPENGL_GAL::ResizeScreen( int aWidth, int aHeight )
 {
     screenSize = VECTOR2D( aWidth, aHeight );
 
-    // Delete old buffers for resizing
-    if( isFrameBufferInitialized )
-    {
-        deleteFrameBuffer( &frameBuffer, &depthBuffer, &texture );
-        deleteFrameBuffer( &frameBufferBackup, &depthBufferBackup, &textureBackup );
-
-        // This flag is used for recreating the buffers
-        isFrameBufferInitialized = false;
-    }
+    // Resize framebuffers
+    compositor.Resize( aWidth, aHeight );
+    isFramebufferInitialized = false;
 
     wxGLCanvas::SetSize( aWidth, aHeight );
 }
@@ -165,86 +149,35 @@ void OPENGL_GAL::skipMouseEvent( wxMouseEvent& aEvent )
 }
 
 
-void OPENGL_GAL::generateFrameBuffer( GLuint* aFrameBuffer, GLuint* aDepthBuffer,
-                                      GLuint* aTexture )
-{
-    // We need frame buffer objects for drawing the screen contents
-
-    // Generate frame buffer and a depth buffer
-    glGenFramebuffersEXT( 1, aFrameBuffer );
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, *aFrameBuffer );
-
-    // Allocate memory for the depth buffer
-    // Attach the depth buffer to the frame buffer
-    glGenRenderbuffersEXT( 1, aDepthBuffer );
-    glBindRenderbufferEXT( GL_RENDERBUFFER_EXT, *aDepthBuffer );
-
-    // Use here a size of 24 bits for the depth buffer, 8 bits for the stencil buffer
-    // this is required later for anti-aliasing
-    glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_STENCIL_EXT, screenSize.x,
-                              screenSize.y );
-    glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT,
-                                  *aDepthBuffer );
-    glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
-                                  GL_RENDERBUFFER_EXT, *aDepthBuffer );
-
-    // Generate the texture for the pixel storage
-    // Attach the texture to the frame buffer
-    glGenTextures( 1, aTexture );
-    glBindTexture( GL_TEXTURE_2D, *aTexture );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, screenSize.x, screenSize.y, 0, GL_RGBA,
-                  GL_UNSIGNED_BYTE, NULL );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D,
-                               *aTexture, 0 );
-
-    // Check the status, exit if the frame buffer can't be created
-    GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );
-
-    if( status != GL_FRAMEBUFFER_COMPLETE_EXT )
-    {
-        wxLogError( wxT( "Can't create the frame buffer." ) );
-        exit( 1 );
-    }
-
-    isFrameBufferInitialized = true;
-}
-
-
-void OPENGL_GAL::deleteFrameBuffer( GLuint* aFrameBuffer, GLuint* aDepthBuffer, GLuint* aTexture )
-{
-    glDeleteFramebuffers( 1, aFrameBuffer );
-    glDeleteRenderbuffers( 1, aDepthBuffer );
-    glDeleteTextures( 1, aTexture );
-}
-
-
-void OPENGL_GAL::initFrameBuffers()
-{
-    generateFrameBuffer( &frameBuffer, &depthBuffer, &texture );
-    generateFrameBuffer( &frameBufferBackup, &depthBufferBackup, &textureBackup );
-}
-
-
 void OPENGL_GAL::SaveScreen()
 {
-    glBindFramebuffer( GL_DRAW_FRAMEBUFFER, frameBufferBackup );
-    glBindFramebuffer( GL_READ_FRAMEBUFFER, frameBuffer );
-    glBlitFramebuffer( 0, 0, screenSize.x, screenSize.y, 0, 0, screenSize.x, screenSize.y,
-                       GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT,
-                       GL_NEAREST );
-    glBindFramebuffer( GL_DRAW_FRAMEBUFFER, frameBuffer );
+    wxASSERT_MSG( false, wxT( "Not implemented yet" ) );
 }
 
 
 void OPENGL_GAL::RestoreScreen()
 {
-    glBindFramebuffer( GL_DRAW_FRAMEBUFFER, frameBuffer );
-    glBindFramebuffer( GL_READ_FRAMEBUFFER, frameBufferBackup );
-    glBlitFramebuffer( 0, 0, screenSize.x, screenSize.y, 0, 0, screenSize.x, screenSize.y,
-                       GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT,
-                       GL_NEAREST );
+    wxASSERT_MSG( false, wxT( "Not implemented yet" ) );
+}
+
+
+void OPENGL_GAL::SetTarget( RenderTarget aTarget )
+{
+    switch( aTarget )
+    {
+    default:
+    case TARGET_CACHED:
+        currentManager = &cachedManager;
+        break;
+
+    case TARGET_NONCACHED:
+        currentManager = &nonCachedManager;
+        break;
+
+    case TARGET_OVERLAY:
+        currentManager = &overlayManager;
+        break;
+    }
 }
 
 
@@ -275,7 +208,7 @@ void OPENGL_GAL::initGlew()
         exit( 1 );
     }
 
-    // Frame buffers have to be supported
+    // Framebuffers have to be supported
     if( !GLEW_ARB_framebuffer_object )
     {
         wxLogError( wxT( "Framebuffer objects are not supported!" ) );
@@ -303,8 +236,23 @@ void OPENGL_GAL::BeginDrawing()
     if( !isGlewInitialized )
         initGlew();
 
-    if( !isFrameBufferInitialized )
-        initFrameBuffers();
+    if( !isFramebufferInitialized )
+    {
+        // Set up the view port
+        glMatrixMode( GL_PROJECTION );
+        glLoadIdentity();
+        glViewport( 0, 0, (GLsizei) screenSize.x, (GLsizei) screenSize.y );
+
+        // Create the screen transformation
+        glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y, -depthRange.x, -depthRange.y );
+
+        // Prepare rendering target buffers
+        compositor.Initialize();
+        mainBuffer = compositor.GetBuffer();
+        overlayBuffer = compositor.GetBuffer();
+
+        isFramebufferInitialized = true;
+    }
 
     // Compile the shaders
     if( !isShaderInitialized && isUseShader )
@@ -321,12 +269,10 @@ void OPENGL_GAL::BeginDrawing()
         // Make VBOs use shaders
         cachedManager.SetShader( shader );
         nonCachedManager.SetShader( shader );
+        overlayManager.SetShader( shader );
 
         isShaderInitialized = true;
     }
-
-    // Bind the main frame buffer object - all contents are drawn there
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, frameBuffer );
 
     // Disable 2D Textures
     glDisable( GL_TEXTURE_2D );
@@ -334,20 +280,13 @@ void OPENGL_GAL::BeginDrawing()
     // Enable the depth buffer
     glEnable( GL_DEPTH_TEST );
     glDepthFunc( GL_LESS );
+
     // Setup blending, required for transparent objects
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
     // Enable smooth lines
     glEnable( GL_LINE_SMOOTH );
-
-    // Set up the view port
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-    glViewport( 0, 0, (GLsizei) screenSize.x, (GLsizei) screenSize.y );
-
-    // Create the screen transformation
-    glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y, -depthRange.x, -depthRange.y );
 
     glMatrixMode( GL_MODELVIEW );
 
@@ -368,69 +307,34 @@ void OPENGL_GAL::BeginDrawing()
     // Set defaults
     SetFillColor( fillColor );
     SetStrokeColor( strokeColor );
-    isDeleteSavedPixels = true;
 
+    // Prepare buffers for drawing
     nonCachedManager.Clear();
+    overlayManager.Clear();
 
     cachedManager.BeginDrawing();
     nonCachedManager.BeginDrawing();
-}
-
-
-void OPENGL_GAL::blitMainTexture( bool aIsClearFrameBuffer )
-{
-    // Don't use blending for the final blitting
-    glDisable( GL_BLEND );
-
-    glColor4d( 1.0, 1.0, 1.0, 1.0 );
-
-    // Switch to the main frame buffer and blit the scene
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
-
-    if( aIsClearFrameBuffer )
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
-
-    // Enable texturing and bind the main texture
-    glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, texture );
-
-    // Draw a full screen quad with the texture
-    glMatrixMode( GL_MODELVIEW );
-    glPushMatrix();
-    glLoadIdentity();
-    glMatrixMode( GL_PROJECTION );
-    glPushMatrix();
-    glLoadIdentity();
-
-    glBegin( GL_TRIANGLES );
-    glTexCoord2i( 0, 1 );
-    glVertex3i( -1, -1, 0 );
-    glTexCoord2i( 1, 1 );
-    glVertex3i( 1, -1, 0 );
-    glTexCoord2i( 1, 0 );
-    glVertex3i( 1, 1, 0 );
-
-    glTexCoord2i( 0, 1 );
-    glVertex3i( -1, -1, 0 );
-    glTexCoord2i( 1, 0 );
-    glVertex3i( 1, 1, 0 );
-    glTexCoord2i( 0, 0 );
-    glVertex3i( -1, 1, 0 );
-    glEnd();
-    glPopMatrix();
-    glMatrixMode( GL_MODELVIEW );
-    glPopMatrix();
+    overlayManager.BeginDrawing();
 }
 
 
 void OPENGL_GAL::EndDrawing()
 {
+    // Cached & non-cached containers are rendered to the same buffer
+    compositor.SetBuffer( mainBuffer );
+    compositor.ClearBuffer();
     nonCachedManager.EndDrawing();
     cachedManager.EndDrawing();
 
-    // Draw the remaining contents, blit the main texture to the screen, swap the buffers
+    // Overlay container is rendered to a different buffer
+    compositor.SetBuffer( overlayBuffer );
+    compositor.ClearBuffer();
+    overlayManager.EndDrawing();
+
+    // Draw the remaining contents, blit the rendering targets to the screen, swap the buffers
     glFlush();
-    blitMainTexture( true );
+    compositor.DrawBuffer( mainBuffer, -1.0 );
+    compositor.DrawBuffer( overlayBuffer, 0.0 );
     SwapBuffers();
 
     delete clientDC;
@@ -530,8 +434,10 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
                       VECTOR2D( lineLength, -aWidth / 2.0 ) );
 
         // Draw line caps
-        drawStrokedSemiCircle( VECTOR2D( 0.0, 0.0 ),        ( aWidth + lineWidth ) / 2, M_PI / 2 );
-        drawStrokedSemiCircle( VECTOR2D( lineLength, 0.0 ), ( aWidth + lineWidth ) / 2, -M_PI / 2 );
+        drawStrokedSemiCircle( VECTOR2D( 0.0, 0.0 ),
+                               ( aWidth + lineWidth ) / 2, M_PI / 2 );
+        drawStrokedSemiCircle( VECTOR2D( lineLength, 0.0 ),
+                               ( aWidth + lineWidth ) / 2, -M_PI / 2 );
 
         Restore();
     }
@@ -643,15 +549,16 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
                v0 /_\/_\ v1
             */
             currentManager->Shader( SHADER_FILLED_CIRCLE, 1.0 );
-            currentManager->Vertex( aCenterPoint.x - aRadius * sqrt( 3.0f ),
-                     aCenterPoint.y - aRadius, layerDepth );                                        // v0
+            currentManager->Vertex( aCenterPoint.x - aRadius * sqrt( 3.0f ),            // v0
+                     aCenterPoint.y - aRadius, layerDepth );
 
             currentManager->Shader( SHADER_FILLED_CIRCLE, 2.0 );
-            currentManager->Vertex( aCenterPoint.x + aRadius* sqrt( 3.0f ),
-                     aCenterPoint.y - aRadius, layerDepth );                                        // v1
+            currentManager->Vertex( aCenterPoint.x + aRadius* sqrt( 3.0f ),             // v1
+                     aCenterPoint.y - aRadius, layerDepth );
 
             currentManager->Shader( SHADER_FILLED_CIRCLE, 3.0 );
-            currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + aRadius * 2.0f, layerDepth );  // v2
+            currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + aRadius * 2.0f,    // v2
+                                    layerDepth );
         }
 
         if( isStrokeEnabled )
@@ -661,8 +568,8 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
             /* Draw a triangle that contains the circle, then shade it leaving only the circle.
                Parameters given to setShader are indices of the triangle's vertices
                (if you want to understand more, check the vertex shader source [shader.vert]).
-               and the line width. Shader uses this coordinates to determine if fragments are inside
-               the circle or not.
+               and the line width. Shader uses this coordinates to determine if fragments are
+               inside the circle or not.
                     v2
                     /\
                    //\\
@@ -670,15 +577,16 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
             */
             double outerRadius = aRadius + ( lineWidth / 2 );
             currentManager->Shader( SHADER_STROKED_CIRCLE, 1.0, aRadius, lineWidth );
-            currentManager->Vertex( aCenterPoint.x - outerRadius * sqrt( 3.0f ),
-                     aCenterPoint.y - outerRadius, layerDepth );                                        // v0
+            currentManager->Vertex( aCenterPoint.x - outerRadius * sqrt( 3.0f ),            // v0
+                     aCenterPoint.y - outerRadius, layerDepth );
 
             currentManager->Shader( SHADER_STROKED_CIRCLE, 2.0, aRadius, lineWidth );
-            currentManager->Vertex( aCenterPoint.x + outerRadius * sqrt( 3.0f ),
-                     aCenterPoint.y - outerRadius, layerDepth );                                        // v1
+            currentManager->Vertex( aCenterPoint.x + outerRadius * sqrt( 3.0f ),            // v1
+                     aCenterPoint.y - outerRadius, layerDepth );
 
             currentManager->Shader( SHADER_STROKED_CIRCLE, 3.0, aRadius, lineWidth );
-            currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + outerRadius * 2.0f, layerDepth );  // v2
+            currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + outerRadius * 2.0f,    // v2
+                                    layerDepth );
         }
     }
     else
@@ -716,7 +624,8 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
                     if( i % 3 == 0 )
                     {
                         i++;
-                        // Depending on the vertex, next circle point may be stored in the next vertex..
+                        // Depending on the vertex, next circle point
+                        // may be stored in the next vertex..
                         next = i + 1;
                     }
                     else
@@ -750,7 +659,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
             }
         }
 
-        // Filled circles are easy to draw by using the stored vertices list, scaling and translating
+        // Filled circles are easy to draw by using the stored vertices list
         if( isFillEnabled )
         {
             currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
@@ -790,8 +699,8 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
         currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0f );
         currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 
-        /* Draw a triangle that contains the semicircle, then shade it to leave only the semicircle.
-           Parameters given to setShader are indices of the triangle's vertices
+        /* Draw a triangle that contains the semicircle, then shade it to leave only
+         * the semicircle. Parameters given to setShader are indices of the triangle's vertices
            (if you want to understand more, check the vertex shader source [shader.vert]).
            Shader uses this coordinates to determine if fragments are inside the semicircle or not.
                 v2
@@ -800,13 +709,13 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
            v0 //__\\ v1
          */
         currentManager->Shader( SHADER_FILLED_CIRCLE, 4.0f );
-        currentManager->Vertex( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
+        currentManager->Vertex( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );     // v0
 
         currentManager->Shader( SHADER_FILLED_CIRCLE, 5.0f );
-        currentManager->Vertex( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
+        currentManager->Vertex( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );      // v1
 
         currentManager->Shader( SHADER_FILLED_CIRCLE, 6.0f );
-        currentManager->Vertex( 0.0f, aRadius * 2.0f, layerDepth );                                // v2
+        currentManager->Vertex( 0.0f, aRadius * 2.0f, layerDepth );                     // v2
 
         Restore();
     }
@@ -836,8 +745,8 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
         currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0f );
         currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 
-        /* Draw a triangle that contains the semicircle, then shade it to leave only the semicircle.
-           Parameters given to setShader are indices of the triangle's vertices
+        /* Draw a triangle that contains the semicircle, then shade it to leave only
+         * the semicircle. Parameters given to setShader are indices of the triangle's vertices
            (if you want to understand more, check the vertex shader source [shader.vert]), the
            radius and the line width. Shader uses this coordinates to determine if fragments are
            inside the semicircle or not.
@@ -847,13 +756,13 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
            v0 //__\\ v1
          */
         currentManager->Shader( SHADER_STROKED_CIRCLE, 4.0f, aRadius, lineWidth );
-        currentManager->Vertex( -outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                // v0
+        currentManager->Vertex( -outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );     // v0
 
         currentManager->Shader( SHADER_STROKED_CIRCLE, 5.0f, aRadius, lineWidth );
-        currentManager->Vertex( outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );                 // v1
+        currentManager->Vertex( outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );      // v1
 
         currentManager->Shader( SHADER_STROKED_CIRCLE, 6.0f, aRadius, lineWidth );
-        currentManager->Vertex( 0.0f, outerRadius * 2.0f, layerDepth );                                // v2
+        currentManager->Vertex( 0.0f, outerRadius * 2.0f, layerDepth );                     // v2
 
         Restore();
     }
@@ -957,9 +866,8 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
             outerScale += 1.0;
             innerScale += 1.0;
 
-            double alphaIncrement = 2 * M_PI / CIRCLE_POINTS;
+            double alphaIncrement = 2.0 * M_PI / CIRCLE_POINTS;
             currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-
 
             for( double alpha = aStartAngle; alpha < aEndAngle; )
             {
@@ -1155,8 +1063,7 @@ void OPENGL_GAL::ClearScreen()
 {
     // Clear screen
     glClearColor( backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a );
-
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 
@@ -1219,7 +1126,6 @@ int OPENGL_GAL::BeginGroup()
     isGrouping = true;
 
     boost::shared_ptr<VERTEX_ITEM> newItem( new VERTEX_ITEM( cachedManager ) );
-    currentManager = &cachedManager;
     int groupNumber = getNewGroupNumber();
     groups.insert( std::make_pair( groupNumber, newItem ) );
 
@@ -1229,8 +1135,6 @@ int OPENGL_GAL::BeginGroup()
 
 void OPENGL_GAL::EndGroup()
 {
-    currentManager = &nonCachedManager;
-
     isGrouping = false;
 }
 
@@ -1399,6 +1303,8 @@ VECTOR2D OPENGL_GAL::ComputeCursorToWorld( const VECTOR2D& aCursorPosition )
 
 void OPENGL_GAL::DrawCursor( VECTOR2D aCursorPosition )
 {
+    wxLogWarning( wxT( "Not tested ") );
+
     SetCurrent( *glContext );
 
     // Draw the cursor on the surface
@@ -1409,13 +1315,11 @@ void OPENGL_GAL::DrawCursor( VECTOR2D aCursorPosition )
 
     aCursorPosition = worldScreenMatrix * cursorPositionWorld;
 
-    // Switch to the main frame buffer and blit the scene
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    // Switch to the main framebuffer and blit the scene
+    //glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    //glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     glLoadIdentity();
-
-    blitMainTexture( false );
 
     glDisable( GL_TEXTURE_2D );
     glColor4d( cursorColor.r, cursorColor.g, cursorColor.b, cursorColor.a );

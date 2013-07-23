@@ -35,6 +35,7 @@
 #include <gal/opengl/vertex_manager.h>
 #include <gal/opengl/vertex_item.h>
 #include <gal/opengl/noncached_container.h>
+#include <gal/opengl/opengl_compositor.h>
 
 #include <wx/wx.h>
 #include <wx/glcanvas.h>
@@ -268,6 +269,9 @@ public:
     /// @copydoc GAL::RestoreScreen()
     virtual void RestoreScreen();
 
+    /// @copydoc GAL::SetTarget()
+    virtual void SetTarget( RenderTarget aTarget );
+
     // -------
     // Cursor
     // -------
@@ -328,8 +332,8 @@ private:
     wxEvtHandler*   mouseListener;
     wxEvtHandler*   paintListener;
 
-    // VBO buffered vertices for faster circle & semicircle drawing
-    NONCACHED_CONTAINER   circleContainer;   ///< Container for storing circle vertices
+    // Precomputed vertices for faster circle & semicircle drawing
+    NONCACHED_CONTAINER   circleContainer;        ///< Container for storing circle vertices
 
     // Vertex buffer objects related fields
     typedef std::map< unsigned int, boost::shared_ptr<VERTEX_ITEM> > GroupsMap;
@@ -338,6 +342,12 @@ private:
     VERTEX_MANAGER*       currentManager;         ///< Currently used VERTEX_MANAGER (for storing VERTEX_ITEMs)
     VERTEX_MANAGER        cachedManager;          ///< Container for storing cached VERTEX_ITEMs
     VERTEX_MANAGER        nonCachedManager;       ///< Container for storing non-cached VERTEX_ITEMs
+    VERTEX_MANAGER        overlayManager;         ///< Container for storing overlaid VERTEX_ITEMs
+
+    // Framebuffer & compositing
+    OPENGL_COMPOSITOR     compositor;             ///< Handles multiple rendering targets
+    unsigned int          mainBuffer;             ///< Main rendering target
+    unsigned int          overlayBuffer;          ///< Auxiliary rendering target (for menus etc.)
 
     // Polygon tesselation
     GLUtesselator*         tesselator;            ///< Pointer to the tesselator
@@ -350,20 +360,11 @@ private:
     int             cursorSize;             ///< Size of the cursor in pixels
     GLubyte*        cursorShape;            ///< Cursor pixel storage
     GLubyte*        cursorSave;             ///< Saved cursor pixels
-    bool            isDeleteSavedPixels;    ///< Flag for deleting saved pixels
     VECTOR2D        savedCursorPosition;    ///< Last saved cursor position
-
-    // Frame buffer
-    GLuint          frameBuffer;            ///< Main FBO handle
-    GLuint          depthBuffer;            ///< Depth buffer handle
-    GLuint          texture;                ///< Main texture handle
-    GLuint          frameBufferBackup;      ///< Backup FBO handle
-    GLuint          depthBufferBackup;      ///< Backup depth buffer handle
-    GLuint          textureBackup;          ///< Backup texture handle
 
     // Internal flags
     bool            isGlewInitialized;          ///< Is GLEW initialized?
-    bool            isFrameBufferInitialized;   ///< Are the frame buffers initialized?
+    bool            isFramebufferInitialized;   ///< Are the framebuffers initialized?
     bool            isShaderInitialized;        ///< Was the shader initialized?
     bool            isUseShader;                ///< Should the shaders be used?
     bool            isGrouping;                 ///< Was a group started?
@@ -433,34 +434,6 @@ private:
      * @param aCursorSize is the cursor size in pixels (screen coordinates).
      */
     void initCursor( int aCursorSize );
-
-    /**
-     * @brief Blit the main texture to the screen.
-     *
-     * @param aIsClearFrameBuffer if true, the frame buffer is cleared as well.
-     */
-    void blitMainTexture( bool aIsClearFrameBuffer );
-
-    /// @brief Initialize the frame buffers for main contents and backup storage.
-    void initFrameBuffers();
-
-    /**
-     * @brief Generate a frame buffer for the screen contents.
-     *
-     * @param aFrameBuffer is the pointer to the frame buffer handle.
-     * @param aDepthBuffer is the pointer to the depth buffer handle.
-     * @param aTexture is the pointer to the texture handle.
-     */
-    void generateFrameBuffer( GLuint* aFrameBuffer, GLuint* aDepthBuffer, GLuint* aTexture );
-
-    /**
-     * @brief Delete the frame buffer for the screen contents.
-     *
-     * @param aFrameBuffer is the pointer to the frame buffer handle.
-     * @param aDepthBuffer is the pointer to the depth buffer handle.
-     * @param aTexture is the pointer to the texture handle.
-     */
-    void deleteFrameBuffer( GLuint* aFrameBuffer, GLuint* aDepthBuffer, GLuint* aTexture );
 
     /**
      * @brief Draw a quad for the line.

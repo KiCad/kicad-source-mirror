@@ -31,4 +31,17 @@
 #define SWAP( varA, condition, varB ) if( varA condition varB ) { double tmp = varA; varA = varB; \
                                                                   varB = tmp; }
 
+namespace KiGfx
+{
+    /**
+     * RenderTarget: Possible rendering targets
+     */
+    enum RenderTarget
+    {
+        TARGET_CACHED,      ///< Main rendering target (cached)
+        TARGET_NONCACHED,   ///< Auxiliary rendering target (noncached)
+        TARGET_OVERLAY      ///< Items that may change while the view stays the same (noncached)
+    };
+}
+
 #endif /* DEFINITIONS_H_ */
