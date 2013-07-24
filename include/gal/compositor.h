@@ -81,21 +81,12 @@ public:
     virtual void ClearBuffer() = 0;
 
     /**
-     * Function BlitBuffer()
-     * pastes the content of the buffer to the current buffer (set by SetBuffer() function).
-     *
-     * @param aBufferHandle is the handle to the buffer that is going to be pasted.
-     */
-   virtual void BlitBuffer( unsigned int aBufferHandle ) = 0;
-
-    /**
      * Function DrawBuffer()
      * draws the selected buffer on the screen.
      *
      * @param aBufferHandle is the handle of the buffer to be drawn.
-     * @param aDepth is the depth on which the buffer should be drawn. // TODO mention if higher depth value means close to the screen or is it opposite
      */
-    virtual void DrawBuffer( unsigned int aBufferHandle, double aDepth ) = 0;
+    virtual void DrawBuffer( unsigned int aBufferHandle ) = 0;
 
 protected:
     unsigned int m_width;           ///< Width of the buffer (in pixels)

@@ -33,7 +33,7 @@
 
 #include <gal/compositor.h>
 #include <GL/glew.h>
-#include <vector>
+#include <deque>
 
 namespace KiGfx
 {
@@ -44,41 +44,40 @@ public:
     OPENGL_COMPOSITOR();
     virtual ~OPENGL_COMPOSITOR();
 
-    ///< @copydoc COMPOSITOR::Initialize()
+    /// @copydoc COMPOSITOR::Initialize()
     virtual void Initialize();
 
-    ///< @copydoc COMPOSITOR::Resize()
+    /// @copydoc COMPOSITOR::Resize()
     virtual void Resize( unsigned int aWidth, unsigned int aHeight );
 
-    ///< @copydoc COMPOSITOR::GetBuffer()
+    /// @copydoc COMPOSITOR::GetBuffer()
     virtual unsigned int GetBuffer();
 
-    ///< @copydoc COMPOSITOR::SetBuffer()
+    /// @copydoc COMPOSITOR::SetBuffer()
     virtual void SetBuffer( unsigned int aBufferHandle );
 
-    ///< @copydoc COMPOSITOR::ClearBuffer()
+    /// @copydoc COMPOSITOR::ClearBuffer()
     virtual void ClearBuffer();
 
-    ///< @copydoc COMPOSITOR::BlitBuffer()
-    virtual void BlitBuffer( unsigned int aBufferHandle );
-
-    ///< @copydoc COMPOSITOR::DrawBuffer()
-    virtual void DrawBuffer( unsigned int aBufferHandle, double aDepth );
+    /// @copydoc COMPOSITOR::DrawBuffer()
+    virtual void DrawBuffer( unsigned int aBufferHandle );
 
 protected:
     typedef struct
     {
         GLuint textureTarget;                ///< Main texture handle
-        GLuint attachmentPoint;
-    } BUFFER_ITEM;
+        GLuint attachmentPoint;              ///< Point to which an image from texture is attached
+    } OPENGL_BUFFER;
 
-    bool                        m_initialized;
-    unsigned int                m_current;
+    bool                        m_initialized;            ///< Initialization status flag
+    unsigned int                m_current;                ///< Currently used buffer handle
     GLuint                      m_framebuffer;            ///< Main FBO handle
     GLuint                      m_depthBuffer;            ///< Depth buffer handle
     unsigned int                m_maxBuffers;             ///< Maximal amount of buffers
-    typedef std::vector<BUFFER_ITEM> Buffers;
-    Buffers                     m_buffers;
+    typedef std::deque<OPENGL_BUFFER> OPENGL_BUFFERS;
+
+    /// Stores information about initialized buffers
+    OPENGL_BUFFERS              m_buffers;
 
     /// Store the currently used FBO name in case there was more than one compositor used
     static GLuint               m_currentFbo;
@@ -89,7 +88,7 @@ protected:
      */
     void clean();
 
-    ///< Returns number of used buffers
+    /// Returns number of used buffers
     unsigned int usedBuffers()
     {
         return m_buffers.size();
