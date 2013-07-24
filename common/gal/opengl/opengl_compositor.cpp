@@ -1,4 +1,4 @@
-/*i
+/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
@@ -103,58 +103,56 @@ unsigned int OPENGL_COMPOSITOR::GetBuffer()
 {
     wxASSERT( m_initialized );
 
-    if( m_buffers.size() < m_maxBuffers )
-    {
-        // GL_COLOR_ATTACHMENTn are consecutive integers
-        GLuint attachmentPoint = GL_COLOR_ATTACHMENT0 + usedBuffers();
-        GLuint textureTarget;
+    if( m_buffers.size() >= m_maxBuffers )
+        return 0;       // Unfortunately we have no more free buffers left
 
-        // Generate the texture for the pixel storage
-        glGenTextures( 1, &textureTarget );
-        glBindTexture( GL_TEXTURE_2D, textureTarget );
+    // GL_COLOR_ATTACHMENTn are consecutive integers
+    GLuint attachmentPoint = GL_COLOR_ATTACHMENT0 + usedBuffers();
+    GLuint textureTarget;
 
-        // Set texture parameters
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA,
-                      GL_UNSIGNED_BYTE, NULL );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    // Generate the texture for the pixel storage
+    glGenTextures( 1, &textureTarget );
+    glBindTexture( GL_TEXTURE_2D, textureTarget );
 
-        // Bind the texture to the specific attachment point, clear and rebind the screen
-        glBindFramebuffer( GL_FRAMEBUFFER, m_framebuffer );
-        m_currentFbo = m_framebuffer;
-        glFramebufferTexture2D( GL_FRAMEBUFFER, attachmentPoint, GL_TEXTURE_2D, textureTarget, 0 );
-        ClearBuffer();
-        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-        m_currentFbo = 0;
+    // Set texture parameters
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA,
+                  GL_UNSIGNED_BYTE, NULL );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 
-        // Store the new buffer
-        BUFFER_ITEM buffer = { textureTarget, attachmentPoint };
-        m_buffers.push_back( buffer );
+    // Bind the texture to the specific attachment point, clear and rebind the screen
+    glBindFramebuffer( GL_FRAMEBUFFER, m_framebuffer );
+    m_currentFbo = m_framebuffer;
+    glFramebufferTexture2D( GL_FRAMEBUFFER, attachmentPoint, GL_TEXTURE_2D, textureTarget, 0 );
+    ClearBuffer();
+    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    m_currentFbo = 0;
 
-        return usedBuffers();
-    }
+    // Store the new buffer
+    OPENGL_BUFFER buffer = { textureTarget, attachmentPoint };
+    m_buffers.push_back( buffer );
 
-    // Unfortunately we have no more buffers left
-    return 0;
+    return usedBuffers();
 }
 
 
 void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 {
-    if( aBufferHandle <= usedBuffers() )
-    {
-        // Change the rendering destination to the selected attachment point
-        if( m_currentFbo != m_framebuffer )
-        {
-            glBindFramebuffer( GL_FRAMEBUFFER, m_framebuffer );
-            m_currentFbo = m_framebuffer;
-        }
+    if( aBufferHandle > usedBuffers() )
+        return;
 
-        if( m_current != aBufferHandle - 1 )
-        {
-            glDrawBuffer( m_buffers[m_current].attachmentPoint );
-            m_current = aBufferHandle - 1;
-        }
+    // Change the rendering destination to the selected attachment point
+    if( m_currentFbo != m_framebuffer )
+    {
+        glBindFramebuffer( GL_FRAMEBUFFER, m_framebuffer );
+        m_currentFbo = m_framebuffer;
+    }
+
+    if( m_current != aBufferHandle - 1 )
+    {
+        m_current = aBufferHandle - 1;
+        glDrawBuffer( m_buffers[m_current].attachmentPoint );
     }
 }
 
@@ -168,15 +166,7 @@ void OPENGL_COMPOSITOR::ClearBuffer()
 }
 
 
-void OPENGL_COMPOSITOR::BlitBuffer( unsigned int aBufferHandle )
-{
-    wxASSERT( m_initialized );
-
-    wxASSERT_MSG( false, wxT( "Not implemented yet" ) );
-}
-
-
-void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle, double aDepth )
+void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 {
     wxASSERT( m_initialized );
 
@@ -202,18 +192,18 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle, double aDepth )
 
     glBegin( GL_TRIANGLES );
     glTexCoord2f( 0.0f,  1.0f );
-    glVertex3f(  -1.0f, -1.0f, aDepth );
+    glVertex2f(  -1.0f, -1.0f );
     glTexCoord2f( 1.0f,  1.0f );
-    glVertex3f(   1.0f, -1.0f, aDepth );
+    glVertex2f(   1.0f, -1.0f );
     glTexCoord2f( 1.0f,  0.0f );
-    glVertex3f(   1.0f,  1.0f, aDepth );
+    glVertex2f(   1.0f,  1.0f );
 
     glTexCoord2f( 0.0f,  1.0f );
-    glVertex3f(  -1.0f, -1.0f, aDepth );
+    glVertex2f(  -1.0f, -1.0f );
     glTexCoord2f( 1.0f,  0.0f );
-    glVertex3f(   1.0f,  1.0f, aDepth );
+    glVertex2f(   1.0f,  1.0f );
     glTexCoord2f( 0.0f,  0.0f );
-    glVertex3f(  -1.0f,  1.0f, aDepth );
+    glVertex2f(  -1.0f,  1.0f );
     glEnd();
 
     glPopMatrix();
@@ -229,7 +219,7 @@ void OPENGL_COMPOSITOR::clean()
     glDeleteFramebuffers( 1, &m_framebuffer );
     glDeleteRenderbuffers( 1, &m_depthBuffer );
 
-    Buffers::const_iterator it;
+    OPENGL_BUFFERS::const_iterator it;
     for( it = m_buffers.begin(); it != m_buffers.end(); ++it )
     {
         glDeleteTextures( 1, &it->textureTarget );

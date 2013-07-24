@@ -333,8 +333,8 @@ void OPENGL_GAL::EndDrawing()
 
     // Draw the remaining contents, blit the rendering targets to the screen, swap the buffers
     glFlush();
-    compositor.DrawBuffer( mainBuffer, -1.0 );
-    compositor.DrawBuffer( overlayBuffer, 0.0 );
+    compositor.DrawBuffer( mainBuffer );
+    compositor.DrawBuffer( overlayBuffer );
     SwapBuffers();
 
     delete clientDC;
