@@ -293,19 +293,16 @@ bool WORKSHEET_DATAITEM::IsInsidePage( int ii ) const
 {
     DPOINT pos = GetStartPos( ii );
 
-    if( m_RB_Corner.x < pos.x || m_LT_Corner.x > pos.x )
-        return false;
+    for( int kk = 0; kk < 1; kk++ )
+    {
+        if( m_RB_Corner.x < pos.x || m_LT_Corner.x > pos.x )
+            return false;
 
-    if( m_RB_Corner.y < pos.y || m_LT_Corner.y > pos.y )
-        return false;
+        if( m_RB_Corner.y < pos.y || m_LT_Corner.y > pos.y )
+            return false;
 
-    pos = GetEndPos( ii );
-
-    if( m_RB_Corner.x < pos.x || m_LT_Corner.x > pos.x )
-        return false;
-
-    if( m_RB_Corner.y < pos.y || m_LT_Corner.y > pos.y )
-        return false;
+        pos = GetEndPos( ii );
+    }
 
     return true;
 }

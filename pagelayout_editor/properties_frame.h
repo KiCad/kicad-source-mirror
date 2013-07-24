@@ -47,7 +47,9 @@ public:
     PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent );
     ~PROPERTIES_FRAME();
 
+    // Event functions
 	void OnAcceptPrms( wxCommandEvent& event );
+	void OnSetDefaultValues( wxCommandEvent& event );
 
 
     // Data transfert from general properties to widgets

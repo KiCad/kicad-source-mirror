@@ -1,5 +1,5 @@
 /**
- * @file class_worksheet_data_item.h
+ * @file class_worksheet_dataitem.h
  * @brief description of graphic items and texts to build a title block
  */
 
@@ -9,14 +9,14 @@
 #include <vector2d.h>
 #include <eda_text.h>
 
-class WS_DRAW_ITEM_TEXT;        // Forward declaration
+class WS_DRAW_ITEM_TEXT;            // Forward declaration
 
-#define TB_DEFAULT_TEXTSIZE             1.5  // default worksheet text size in mm
+#define TB_DEFAULT_TEXTSIZE 1.5     // default worksheet text size in mm
 
 // Text attributes set in m_flags (ORed bits)
-#define USE_BOLD 1              // has meaning for texts
-#define USE_THICK_LINE 1        // equivalent to bold for lines
-#define USE_ITALIC (1<<1)       // has meaning for texts
+#define USE_BOLD 1                  // has meaning for texts
+#define USE_THICK_LINE 1            // equivalent to bold for lines
+#define USE_ITALIC (1<<1)           // has meaning for texts
 #define USE_ALT_COLOR (1<<2)
 #define SELECTED_STATE (1<<3)       // When set, use the hight light color to draw item
 #define LOCATE_STARTPOINT (1<<4)    // Used in locate function:set by locate function
@@ -142,6 +142,12 @@ public:
     int GetFlags() const { return m_flags; }
     void SetFlags( int aMask ) { m_flags |= aMask; }
     void ClearFlags( int aMask ) { m_flags &= ~aMask; }
+
+    /**
+     * @return true if the item has a end point (segment; rect)
+     * of false (text, polugon)
+     */
+    virtual bool HasEndPoint() { return true; }
 
     /**
      * @return 0 if the item has no specific option for page 1
@@ -276,6 +282,11 @@ public:
         return KiROUND( m_LineWidth * m_WSunits2Iu );
     }
 
+   /**
+     * @return false  (no end point)
+     */
+    virtual bool HasEndPoint() { return false; };
+
     /**
      * add a corner in corner list
      * @param aCorner: the item to append
@@ -359,6 +370,11 @@ public:
 
 public:
     WORKSHEET_DATAITEM_TEXT( const wxChar* aTextBase );
+
+    /**
+     * @return false  (no end point)
+     */
+    virtual bool HasEndPoint() { return false; };
 
     virtual int GetPenSizeUi()
     {

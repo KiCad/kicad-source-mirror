@@ -27,48 +27,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/* keyword used in page layout description are (see page_layout_reader.keywords)
- *  page_layout
- *  setup
- *  linewidth
- *  textlinewidth
- *  textsize
- *  comment
- *  option
- *  page1only
- *  notonpage1
- *  line
- *  rect
- *  polygon
- *  tbtext
- *  ltcorner
- *  lbcorner
- *  rbcorner
- *  rtcorner
- *  name
- *  pos
- *  start
- *  end
- *  pts
- *  xy
- *  maxlen
- *  maxheight
- *  font
- *  bold
- *  italic
- *  size
- *  justify
- *  left
- *  center
- *  right
- *  top
- *  bottom
- *  rotate
- *  repeat
- *  incrx
- *  incry
- *  incrlabel
+/* keyword used in page layout description are listed
+ * in page_layout_reader.keywords file
  */
+
 /*
  *  Items use coordinates.
  *  A coordinate is defined relative to a page corner

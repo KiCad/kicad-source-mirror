@@ -125,9 +125,11 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxTextCtrl* m_textCtrlDefaultBottomMargin;
 		wxStaticLine* m_staticline10;
 		wxButton* m_buttonGeneralOptsOK;
+		wxButton* m_buttonDefault;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnAcceptPrms( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSetDefaultValues( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
