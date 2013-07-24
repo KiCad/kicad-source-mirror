@@ -408,6 +408,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     double dXpos = To_User_Unit( g_UserUnit, coord.x*Xsign );
     double dYpos = To_User_Unit( g_UserUnit, coord.y*Ysign );
 
+    wxString pagesizeformatter;
     wxString absformatter;
     wxString locformatter;
 
@@ -415,23 +416,36 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     {
     case INCHES:        // Should not be used in page layout editor
         SetStatusText( _("inches"), 5 );
+        pagesizeformatter = wxT( "Page size: width %.4g height %.4g" );
         absformatter = wxT( "X %.4g  Y %.4g" );
         locformatter = wxT( "dx %.4g  dy %.4g" );
         break;
 
     case MILLIMETRES:
         SetStatusText( _("mm"), 5 );
+        pagesizeformatter = wxT( "Page size: width %.3g height %.3g" );
         absformatter = wxT( "X %.3g  Y %.3g" );
         locformatter = wxT( "dx %.3g  dy %.3g" );
         break;
 
     case UNSCALED_UNITS:
+        SetStatusText( wxEmptyString, 5 );
+        pagesizeformatter = wxT( "Page size: width %g height %g" );
         absformatter = wxT( "X %g  Y %g" );
         locformatter = wxT( "dx %g  dy %g" );
         break;
     }
 
     wxString line;
+
+    // Display page size
+    #define milsTomm (25.4/1000)
+    DSIZE size = GetPageSettings().GetSizeMils();
+    size = size * milsTomm;
+    line.Printf( pagesizeformatter, size.x, size.y );
+    SetStatusText( line, 0 );
+
+    // Display abs coordinates
     line.Printf( absformatter, dXpos, dYpos );
     SetStatusText( line, 2 );
 
@@ -620,6 +634,7 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
     {
 		wxArrayString choices;
         wxString text;
+        wxPoint cursPos = screen->GetCrossHairPosition();
 
         for( unsigned ii = 0; ii < list.size(); ++ii )
         {
@@ -650,6 +665,7 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
         if( selection < 0 )
             return NULL;
 
+        screen->SetCrossHairPosition( cursPos );
         m_canvas->MoveCursorToCrossHair();
         drawitem = list[selection];
     }

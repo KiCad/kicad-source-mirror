@@ -289,6 +289,19 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
     m_parent->GetCanvas()->Refresh();
 }
 
+void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
+{
+    WORKSHEET_DATAITEM::m_DefaultTextSize =
+            DSIZE( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
+    // default thickness in mm
+    WORKSHEET_DATAITEM::m_DefaultLineWidth = 0.15;
+    WORKSHEET_DATAITEM::m_DefaultTextThickness = 0.15;
+
+    CopyPrmsFromGeneralToPanel();
+    m_parent->GetCanvas()->Refresh();
+}
+
+
 // Data transfert from  properties frame to item parameters
 bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
 {

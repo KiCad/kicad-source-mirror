@@ -200,13 +200,17 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_ITEM_MOVE_START_POINT:
         item = m_treePagelayout->GetPageLayoutSelectedItem();
+        // Ensure flags are properly set
         item->ClearFlags( LOCATE_ENDPOINT );
+        item->SetFlags( LOCATE_STARTPOINT );
         MoveItem( item );
         break;
 
     case ID_POPUP_ITEM_MOVE_END_POINT:
         item = m_treePagelayout->GetPageLayoutSelectedItem();
+        // Ensure flags are properly set
         item->ClearFlags( LOCATE_STARTPOINT );
+        item->SetFlags( LOCATE_ENDPOINT );
         MoveItem( item );
         break;
 
@@ -292,9 +296,16 @@ void PL_EDITOR_FRAME::MoveItem( WORKSHEET_DATAITEM* aItem )
     if( aItem->GetFlags() & (LOCATE_STARTPOINT|LOCATE_ENDPOINT) )
     {
         GetScreen()->SetCrossHairPosition( initialPositionUi, false );
-        m_canvas->MoveCursorToCrossHair();
         initialCursorPosition = GetScreen()->GetCrossHairPosition();
-        m_canvas->Refresh();
+        if( m_canvas->IsPointOnDisplay( initialCursorPosition ) )
+        {
+            m_canvas->MoveCursorToCrossHair();
+            m_canvas->Refresh();
+        }
+        else
+        {
+            RedrawScreen( initialCursorPosition, true );
+        }
     }
 
     m_canvas->SetMouseCapture( moveItem, abortMoveItem );

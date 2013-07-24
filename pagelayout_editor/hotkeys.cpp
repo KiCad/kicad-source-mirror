@@ -32,7 +32,10 @@
 
 #include <class_drawpanel.h>
 #include <pl_editor_frame.h>
+#include <design_tree_frame.h>
+#include <class_worksheet_dataitem.h>
 #include <hotkeys.h>
+#include <pl_editor_id.h>
 
 
 /* How to add a new hotkey:
@@ -56,28 +59,49 @@
 /* Hotkey list: */
 static EDA_HOTKEY    HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
                                         HK_RESET_LOCAL_COORD, ' ' );
-static EDA_HOTKEY    HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
-static EDA_HOTKEY    HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
-static EDA_HOTKEY    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
-static EDA_HOTKEY    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
-static EDA_HOTKEY    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+static EDA_HOTKEY    HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME, ID_ZOOM_PAGE );
+static EDA_HOTKEY    HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4,
+                                   ID_POPUP_ZOOM_CENTER );
+static EDA_HOTKEY    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3, ID_ZOOM_REDRAW );
+static EDA_HOTKEY    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2, ID_POPUP_ZOOM_OUT );
+static EDA_HOTKEY    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1, ID_POPUP_ZOOM_IN );
 static EDA_HOTKEY    HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
+static EDA_HOTKEY    HkMoveItem( wxT( "Move Item" ), HK_MOVE_ITEM, 'M', ID_POPUP_ITEM_MOVE );
+static EDA_HOTKEY    HkMoveStartPoint( wxT( "Move Start Point" ), HK_MOVE_START_POINT, 'S',
+                                       ID_POPUP_ITEM_MOVE_START_POINT );
+static EDA_HOTKEY    HkMoveEndPoint( wxT( "Move End Point" ), HK_MOVE_END_POINT, 'E',
+                                     ID_POPUP_ITEM_MOVE_END_POINT );
+static EDA_HOTKEY    HkDeleteItem( wxT( "Move Item" ), HK_DELETE_ITEM, WXK_DELETE,
+                                   ID_POPUP_ITEM_DELETE );
+
+// Undo Redo
+//static EDA_HOTKEY HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
+//static EDA_HOTKEY HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
 
 // List of common hotkey descriptors
-EDA_HOTKEY* s_PlEditor_Hotkey_List[] = {
+EDA_HOTKEY* s_Common_Hotkey_List[] =
+{
     &HkHelp,
     &HkZoomIn,    &HkZoomOut,      &HkZoomRedraw, &HkZoomCenter,
     &HkZoomAuto,  &HkResetLocalCoord,
     NULL
 };
 
+EDA_HOTKEY* s_PlEditor_Hotkey_List[] =
+{
+    &HkMoveItem,    &HkMoveStartPoint,
+    &HkMoveEndPoint, &HkDeleteItem
+};
 
-// list of sections and corresponding hotkey list for GerbView (used to create an hotkey
-// config file)
+// list of sections and corresponding hotkey list for Pl_Editor
+// (used to create an hotkey config file)
+wxString s_PlEditorSectionTag( wxT( "[pl_editor]" ) );
+
 struct EDA_HOTKEY_CONFIG s_PlEditor_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag, s_PlEditor_Hotkey_List, NULL  },
-    { NULL,                NULL,                   NULL  }
+    { &g_CommonSectionTag,    s_Common_Hotkey_List,     L"Common keys"    },
+    { &s_PlEditorSectionTag,  s_PlEditor_Hotkey_List,   L"pl_editor keys" },
+    { NULL,                   NULL,                     NULL              }
 };
 
 
@@ -92,6 +116,7 @@ struct EDA_HOTKEY_CONFIG s_PlEditor_Hokeys_Descr[] =
 void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
                                 const wxPoint& aPosition, EDA_ITEM* aItem )
 {
+    bool busy = GetScreen()->GetCurItem() != NULL;
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
@@ -103,11 +128,15 @@ void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
     EDA_HOTKEY * HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, s_PlEditor_Hotkey_List );
 
     if( HK_Descr == NULL )
+        HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, s_Common_Hotkey_List );
+
+    if( HK_Descr == NULL )
         return;
+
+    WORKSHEET_DATAITEM* item;
 
     switch( HK_Descr->m_Idcommand )
     {
-    default:
     case HK_NOT_FOUND:
         return;
 
@@ -140,13 +169,33 @@ void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
-    case HK_RESET_LOCAL_COORD:         /*Reset the relative coord  */
+    case HK_RESET_LOCAL_COORD:      // Reset the relative coord
         GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
         break;
 
-    case HK_SWITCH_UNITS:
-        g_UserUnit = (g_UserUnit == INCHES ) ? MILLIMETRES : INCHES;
+    case HK_MOVE_ITEM:
+    case HK_MOVE_START_POINT:
+    case HK_MOVE_END_POINT:
+    case HK_DELETE_ITEM:
+        if( busy )
+            break;
+
+        if( (item = Locate( aPosition )) == NULL )
+            break;
+
+        // Only rect and lines have a end point.
+        if( HK_Descr->m_Idcommand == HK_MOVE_END_POINT && !item->HasEndPoint() )
+            break;
+
+        if( m_treePagelayout->GetPageLayoutSelectedItem() != item )
+            m_treePagelayout->SelectCell( item );
+
+        cmd.SetId( HK_Descr->m_IdMenuEvent );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
+    default:
+        wxMessageBox( wxT("Unknown hotkey") );
+        return;
     }
 }

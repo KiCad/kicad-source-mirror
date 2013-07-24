@@ -108,15 +108,15 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
 
     // Left top corner position
     DPOINT lt_corner;
-    lt_corner.x = m_LTmargin.x;
-    lt_corner.y = m_LTmargin.y;
-    WORKSHEET_DATAITEM::m_LT_Corner = lt_corner * milsTomm;
+    lt_corner.x = pglayout.GetLeftMargin();
+    lt_corner.y = pglayout.GetTopMargin();
+    WORKSHEET_DATAITEM::m_LT_Corner = lt_corner;
 
     // Right bottom corner position
     DPOINT rb_corner;
-    rb_corner.x = m_pageSize.x - m_RBmargin.x;
-    rb_corner.y = m_pageSize.y - m_RBmargin.y;
-    WORKSHEET_DATAITEM::m_RB_Corner = rb_corner * milsTomm;
+    rb_corner.x = (m_pageSize.x*milsTomm) - pglayout.GetRightMargin();
+    rb_corner.y = (m_pageSize.y*milsTomm) - pglayout.GetBottomMargin();
+    WORKSHEET_DATAITEM::m_RB_Corner = rb_corner;
 
     WS_DRAW_ITEM_TEXT* gtext;
     int pensize;
