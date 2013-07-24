@@ -416,14 +416,14 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     {
     case INCHES:        // Should not be used in page layout editor
         SetStatusText( _("inches"), 5 );
-        pagesizeformatter = wxT( "Page size: width %.4g height %.4g" );
+        pagesizeformatter = wxT( "Page size: width %4g height %4g" );
         absformatter = wxT( "X %.4g  Y %.4g" );
         locformatter = wxT( "dx %.4g  dy %.4g" );
         break;
 
     case MILLIMETRES:
         SetStatusText( _("mm"), 5 );
-        pagesizeformatter = wxT( "Page size: width %.3g height %.3g" );
+        pagesizeformatter = wxT( "Page size: width %3g height %3g" );
         absformatter = wxT( "X %.3g  Y %.3g" );
         locformatter = wxT( "dx %.3g  dy %.3g" );
         break;
