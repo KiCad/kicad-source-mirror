@@ -111,13 +111,23 @@ public:
      * returns information about container cache state. Clears the flag after calling the function.
      * @return true in case the vertices have to be reuploaded.
      */
-    inline bool isDirty()
+    inline bool IsDirty()
     {
         bool state = m_dirty;
 
         m_dirty = false;
 
         return state;
+    }
+
+    /**
+     * Function SetDirty()
+     * sets the dirty flag, so vertices in the container are going to be reuploaded to the GPU on
+     * the next frame.
+     */
+    inline void SetDirty()
+    {
+        m_dirty = true;
     }
 
 protected:

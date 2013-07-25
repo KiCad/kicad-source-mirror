@@ -472,7 +472,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
             DisplayError( this, msg );
         }
     }
-
 }
 
 
@@ -813,6 +812,18 @@ void PCB_EDIT_FRAME::syncRenderStates()
 void PCB_EDIT_FRAME::syncLayerVisibilities()
 {
     m_Layers->SyncLayerVisibilities();
+
+    KiGfx::VIEW* view = m_galCanvas->GetView();
+    // Load layer & elements visibility settings
+    for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
+    {
+        view->SetLayerVisible( i, m_Pcb->IsLayerVisible( i ) );
+    }
+
+    for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )
+    {
+        view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( i ) );
+    }
 }
 
 

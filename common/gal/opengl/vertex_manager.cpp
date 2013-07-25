@@ -101,12 +101,14 @@ void VERTEX_MANAGER::ChangeItemColor( const VERTEX_ITEM& aItem, const COLOR4D& a
     VERTEX* vertex = m_container->GetVertices( offset );
     for( unsigned int i = 0; i < size; ++i )
     {
-        vertex->r = aColor.r;
-        vertex->g = aColor.g;
-        vertex->b = aColor.b;
-        vertex->a = aColor.a;
+        vertex->r = aColor.r * 255.0;
+        vertex->g = aColor.g * 255.0;
+        vertex->b = aColor.b * 255.0;
+        vertex->a = aColor.a * 255.0;
         vertex++;
     }
+
+    m_container->SetDirty();
 }
 
 
@@ -121,6 +123,8 @@ void VERTEX_MANAGER::ChangeItemDepth( const VERTEX_ITEM& aItem, GLfloat aDepth )
         vertex->z = aDepth;
         vertex++;
     }
+
+    m_container->SetDirty();
 }
 
 

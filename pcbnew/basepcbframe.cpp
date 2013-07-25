@@ -182,45 +182,6 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
             view->Add( zone );
         }
 
-        // Apply layer coloring scheme & display options
-        if( view->GetPainter() )
-        {
-            KiGfx::PCB_RENDER_SETTINGS* settings = new KiGfx::PCB_RENDER_SETTINGS();
-
-            // Load layers' colors from PCB data
-            settings->ImportLegacyColors( m_Pcb->GetColorsSettings() );
-            view->GetPainter()->ApplySettings( settings );
-
-            // Load display options (such as filled/outline display of items)
-            settings->LoadDisplayOptions( DisplayOpt );
-        }
-
-        // Set rendering order of layers
-        for( LAYER_NUM i = 0; i < sizeof(GalLayerOrder) / sizeof(LAYER_NUM); ++i )
-        {
-            wxASSERT( i < KiGfx::VIEW::VIEW_MAX_LAYERS );
-
-            view->SetLayerOrder( GalLayerOrder[i], i );
-        }
-
-        // Netnames are drawn only when scale is sufficient (level of details)
-        // so there is no point in caching them
-        for( LAYER_NUM layer = FIRST_NETNAME_LAYER; layer <= LAST_NETNAME_LAYER; ++layer )
-        {
-             view->SetLayerTarget( layer, KiGfx::TARGET_NONCACHED );
-        }
-
-        // Load layer & elements visibility settings
-        for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
-        {
-            view->SetLayerVisible( i, m_Pcb->IsLayerVisible( i ) );
-        }
-
-        for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )
-        {
-            view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( i ) );
-        }
-
         view->RecacheAllItems( true );
         if( m_galCanvasActive )
             m_galCanvas->Refresh();
@@ -826,6 +787,36 @@ void PCB_BASE_FRAME::LoadSettings()
 
     if( m_DisplayModText < LINE || m_DisplayModText > SKETCH )
         m_DisplayModText = FILLED;
+
+    // Apply display settings for GAL
+    KiGfx::VIEW* view = m_galCanvas->GetView();
+    // Set rendering order of layers
+    for( LAYER_NUM i = 0; i < sizeof(GalLayerOrder) / sizeof(LAYER_NUM); ++i )
+    {
+        wxASSERT( i < KiGfx::VIEW::VIEW_MAX_LAYERS );
+
+        view->SetLayerOrder( GalLayerOrder[i], i );
+    }
+
+    // Netnames are drawn only when scale is sufficient (level of details)
+    // so there is no point in caching them
+    for( LAYER_NUM layer = FIRST_NETNAME_LAYER; layer <= LAST_NETNAME_LAYER; ++layer )
+    {
+         view->SetLayerTarget( layer, KiGfx::TARGET_NONCACHED );
+    }
+
+    // Apply layer coloring scheme & display options
+    if( view->GetPainter() )
+    {
+        KiGfx::PCB_RENDER_SETTINGS* settings = new KiGfx::PCB_RENDER_SETTINGS();
+
+        // Load layers' colors from PCB data
+        settings->ImportLegacyColors( m_Pcb->GetColorsSettings() );
+        view->GetPainter()->ApplySettings( settings );
+
+        // Load display options (such as filled/outline display of items)
+        settings->LoadDisplayOptions( DisplayOpt );
+    }
 
     // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
     // when reading doubles in config,
