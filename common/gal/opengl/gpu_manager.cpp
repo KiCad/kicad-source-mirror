@@ -111,7 +111,7 @@ void GPU_CACHED_MANAGER::BeginDrawing()
 {
     wxASSERT( !m_isDrawing );
 
-    if( m_container->isDirty() )
+    if( m_container->IsDirty() )
         uploadToGpu();
 
     // Number of vertices to be drawn in the EndDrawing()
