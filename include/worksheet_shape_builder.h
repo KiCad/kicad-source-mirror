@@ -58,6 +58,10 @@ public:
 
     WORKSHEET_DATAITEM* GetParent() { return m_parent; }
 
+    /** The function to draw a WS_DRAW_ITEM
+     */
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC ) = 0;
+
     /**
      * Abstract function: should exist for derived items
      * return true if the point aPosition is on the item
@@ -109,6 +113,10 @@ public:
     const wxPoint&  GetStart() { return m_start; }
     const wxPoint&  GetEnd() { return m_end; }
 
+    /** The function to draw a WS_DRAW_ITEM_LINE
+     */
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC );
+
     /**
      * Virtual function
      * return true if the point aPosition is on the line
@@ -155,6 +163,10 @@ public:
     bool IsFilled() { return m_fill; }
     const wxPoint& GetPosition() { return m_pos; }
 
+    /** The function to draw a WS_DRAW_ITEM_POLYGON
+     */
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC );
+
     /**
      * Virtual function
      * return true if the point aPosition is inside one polygon
@@ -178,6 +190,10 @@ public:
     {
         m_type = wsg_rect;
     }
+
+    /** The function to draw a WS_DRAW_ITEM_RECT
+     */
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC );
 
     /**
      * Virtual function
@@ -207,15 +223,11 @@ public:
     WS_DRAW_ITEM_TEXT( WORKSHEET_DATAITEM* aParent,
                        wxString& aText, wxPoint aPos, wxSize aSize,
                        int aPenWidth, EDA_COLOR_T aColor,
-                       bool aItalic = false, bool aBold = false ) :
-        WS_DRAW_ITEM_BASE( aParent, wsg_text, aColor ), EDA_TEXT( aText )
-    {
-        SetTextPosition( aPos );
-        SetSize( aSize );
-        SetThickness( aPenWidth );
-        SetItalic( aItalic );
-        SetBold( aBold );
-    }
+                       bool aItalic = false, bool aBold = false );
+
+    /** The function to draw a WS_DRAW_ITEM_TEXT
+     */
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC );
 
     // Accessors:
     int GetPenWidth() { return GetThickness(); }

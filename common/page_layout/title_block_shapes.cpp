@@ -85,7 +85,6 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
 #endif
 
     #define milsTomm (25.4/1000)
-    #define mmTomils (1000/25.4)
 
     m_titleBlock = &aTitleBlock;
     m_paperFormat = &aPageInfo.GetType();
@@ -146,11 +145,16 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
         case WORKSHEET_DATAITEM::WS_TEXT:
         {
             WORKSHEET_DATAITEM_TEXT * wsText = (WORKSHEET_DATAITEM_TEXT*)wsItem;
+            bool multilines = false;
 
             if( wsText->m_SpecialMode )
                 wsText->m_FullText = wsText->m_TextBase;
             else
+            {
                 wsText->m_FullText = BuildFullText( wsText->m_TextBase );
+                if( wsText->m_FullText.Replace( wxT("\\n" ), wxT("\n") ) > 0 )
+                    multilines = true;
+            }
 
             if( wsText->m_FullText.IsEmpty() )
                 break;
@@ -180,10 +184,12 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                                                        pensize, color,
                                                        wsText->IsItalic(),
                                                        wsText->IsBold() ) );
+                gtext->SetMultilineAllowed( multilines );
                 wsText->TransfertSetupToGraphicText( gtext );
 
                 // Increment label for the next text
-                if( wsText->m_RepeatCount > 1 )
+                // (has no meaning for multiline texts)
+                if( wsText->m_RepeatCount > 1 && !multilines )
                     wsText->IncrementLabel( (jj+1)*wsText->m_IncrementLabel);
             }
         }
