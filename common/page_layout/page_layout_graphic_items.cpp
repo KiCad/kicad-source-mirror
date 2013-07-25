@@ -96,49 +96,7 @@ void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
         if( item->GetParent() && item->GetParent()->IsSelected() )
             continue;
 
-        switch( item->GetType() )
-        {
-        case WS_DRAW_ITEM_BASE::wsg_line:
-            {
-                WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
-                GRLine( aClipBox, aDC,
-                        line->GetStart(), line->GetEnd(),
-                        line->GetPenWidth(), line->GetColor() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_rect:
-            {
-                WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
-                GRRect( aClipBox, aDC,
-                        rect->GetStart().x, rect->GetStart().y,
-                        rect->GetEnd().x, rect->GetEnd().y,
-                        rect->GetPenWidth(), rect->GetColor() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_text:
-            {
-                WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
-                DrawGraphicText( aClipBox, aDC, text->GetTextPosition(),
-                                 text->GetColor(), text->GetText(),
-                                 text->GetOrientation(), text->GetSize(),
-                                 text->GetHorizJustify(), text->GetVertJustify(),
-                                 text->GetPenWidth(), text->IsItalic(), text->IsBold() );
-            }
-            break;
-
-        case WS_DRAW_ITEM_BASE::wsg_poly:
-            {
-                WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
-                GRPoly( aClipBox, aDC,
-                        poly->m_Corners.size(), &poly->m_Corners[0],
-                        poly->IsFilled() ? FILLED_SHAPE : NO_FILL,
-                        poly->GetPenWidth(),
-                        poly->GetColor(), poly->GetColor() );
-            }
-            break;
-        }
+        item->DrawWsItem( aClipBox, aDC );
     }
 
     // The selected items are drawn after (usually 0 or 1)
@@ -149,14 +107,13 @@ void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
         if( !item->GetParent() || !item->GetParent()->IsSelected() )
             continue;
 
+        item->DrawWsItem( aClipBox, aDC );
+
         switch( item->GetType() )
         {
         case WS_DRAW_ITEM_BASE::wsg_line:
             {
                 WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
-                GRLine( aClipBox, aDC,
-                        line->GetStart(), line->GetEnd(),
-                        line->GetPenWidth(), line->GetColor() );
 
                 if( markerSize )
                 {
@@ -169,10 +126,6 @@ void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
         case WS_DRAW_ITEM_BASE::wsg_rect:
             {
                 WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
-                GRRect( aClipBox, aDC,
-                        rect->GetStart().x, rect->GetStart().y,
-                        rect->GetEnd().x, rect->GetEnd().y,
-                        rect->GetPenWidth(), rect->GetColor() );
 
                 if( markerSize )
                 {
@@ -185,11 +138,6 @@ void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
         case WS_DRAW_ITEM_BASE::wsg_text:
             {
                 WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
-                DrawGraphicText( aClipBox, aDC, text->GetTextPosition(),
-                                 text->GetColor(), text->GetText(),
-                                 text->GetOrientation(), text->GetSize(),
-                                 text->GetHorizJustify(), text->GetVertJustify(),
-                                 text->GetPenWidth(), text->IsItalic(), text->IsBold() );
 
                 if( markerSize )
                     drawMarker( aClipBox, aDC, text->GetTextPosition(),
@@ -200,11 +148,6 @@ void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
         case WS_DRAW_ITEM_BASE::wsg_poly:
             {
                 WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
-                GRPoly( aClipBox, aDC,
-                        poly->m_Corners.size(), &poly->m_Corners[0],
-                        poly->IsFilled() ? FILLED_SHAPE : NO_FILL,
-                        poly->GetPenWidth(),
-                        poly->GetColor(), poly->GetColor() );
 
                 if( markerSize )
                 {
@@ -215,6 +158,25 @@ void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
             break;
         }
     }
+}
+
+WS_DRAW_ITEM_TEXT::WS_DRAW_ITEM_TEXT( WORKSHEET_DATAITEM* aParent,
+                   wxString& aText, wxPoint aPos, wxSize aSize,
+                   int aPenWidth, EDA_COLOR_T aColor,
+                   bool aItalic, bool aBold ) :
+    WS_DRAW_ITEM_BASE( aParent, wsg_text, aColor ), EDA_TEXT( aText )
+{
+    SetTextPosition( aPos );
+    SetSize( aSize );
+    SetThickness( aPenWidth );
+    SetItalic( aItalic );
+    SetBold( aBold );
+}
+
+void WS_DRAW_ITEM_TEXT::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC )
+{
+    Draw( aClipBox, aDC, wxPoint(0,0),
+          GetColor(), UNSPECIFIED_DRAWMODE, FILLED, UNSPECIFIED_COLOR );
 }
 
 // return true if the point aPosition is on the text
@@ -236,6 +198,15 @@ bool WS_DRAW_ITEM_TEXT::HitTestStartPoint( const wxPoint& aPosition)
     return false;
 }
 
+void WS_DRAW_ITEM_POLYGON::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC )
+{
+    GRPoly( aClipBox, aDC,
+            m_Corners.size(), &m_Corners[0],
+            IsFilled() ? FILLED_SHAPE : NO_FILL,
+            GetPenWidth(),
+            GetColor(), GetColor() );
+}
+
 // return true if the point aPosition is inside one of polygons
 #include <polygon_test_point_inside.h>
 bool WS_DRAW_ITEM_POLYGON::HitTest( const wxPoint& aPosition)
@@ -255,6 +226,14 @@ bool WS_DRAW_ITEM_POLYGON::HitTestStartPoint( const wxPoint& aPosition)
         return true;
 
     return false;
+}
+
+void WS_DRAW_ITEM_RECT::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC )
+{
+    GRRect( aClipBox, aDC,
+            GetStart().x, GetStart().y,
+            GetEnd().x, GetEnd().y,
+            GetPenWidth(), GetColor() );
 }
 
 // return true if the point aPosition is on the rect outline
@@ -316,6 +295,12 @@ bool WS_DRAW_ITEM_RECT::HitTestEndPoint( const wxPoint& aPosition)
         return true;
 
     return false;
+}
+
+void WS_DRAW_ITEM_LINE::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC )
+{
+    GRLine( aClipBox, aDC, GetStart(), GetEnd(),
+            GetPenWidth(), GetColor() );
 }
 
 // return true if the point aPosition is on the text

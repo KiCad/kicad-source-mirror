@@ -437,7 +437,7 @@ WORKSHEET_DATAITEM_TEXT::WORKSHEET_DATAITEM_TEXT( const wxChar* aTextBase ) :
     m_Hjustify = GR_TEXT_HJUSTIFY_LEFT;
     m_Vjustify = GR_TEXT_VJUSTIFY_CENTER;
     m_Orient = 0.0;
-    m_LineWidth = 0.0;      // 0.0 means use Dd
+    m_LineWidth = 0.0;      // 0.0 means use default value
 }
 
 void WORKSHEET_DATAITEM_TEXT::TransfertSetupToGraphicText( WS_DRAW_ITEM_TEXT* aGText )

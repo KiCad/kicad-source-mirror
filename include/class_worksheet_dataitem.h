@@ -368,6 +368,7 @@ public:
     DSIZE             m_ConstrainedTextSize;// Actual text size, if constrained by
                                             // the m_BoundingBoxSize constraint
 
+
 public:
     WORKSHEET_DATAITEM_TEXT( const wxChar* aTextBase );
 
