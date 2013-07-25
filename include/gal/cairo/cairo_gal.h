@@ -33,7 +33,7 @@
 #include <cairo.h>
 
 #include <gal/graphics_abstraction_layer.h>
-
+#include <boost/smart_ptr/shared_ptr.hpp>
 
 #if defined(__WXMSW__)
 #define SCREEN_DEPTH 24
@@ -62,6 +62,8 @@
  */
 namespace KiGfx
 {
+class CAIRO_COMPOSITOR;
+
 class CAIRO_GAL : public GAL, public wxWindow
 {
 public:
@@ -81,7 +83,7 @@ public:
      * @param aName is the name of this window for use by wxWindow::FindWindowByName()
      */
     CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener = NULL,
-               wxEvtHandler* aPaintListener = NULL, const wxString& aName = wxT("CairoCanvas") );
+               wxEvtHandler* aPaintListener = NULL, const wxString& aName = wxT( "CairoCanvas" ) );
 
     virtual ~CAIRO_GAL();
 
@@ -299,11 +301,15 @@ private:
     /// Super class definition
     typedef GAL super;
 
+    // Compositing variables
+    boost::shared_ptr<CAIRO_COMPOSITOR> compositor; ///< Object for layers compositing
+    unsigned int mainBuffer;                        ///< Handle to the main buffer
+    unsigned int overlayBuffer;                     ///< Handle to the overlay buffer
+
     // Variables related to wxWidgets
     wxWindow*                   parentWindow;       ///< Parent window
     wxEvtHandler*               mouseListener;      ///< Mouse listener
     wxEvtHandler*               paintListener;      ///< Paint listener
-    wxRect                      clientRectangle;    ///< Area definition of the surface
     unsigned int                bufferSize;         ///< Size of buffers cairoOutput, bitmapBuffers
     unsigned char*              wxOutput;           ///< wxImage comaptible buffer
 
@@ -314,11 +320,6 @@ private:
     wxBitmap*                   cursorPixels;           ///< Cursor pixels
     wxBitmap*                   cursorPixelsSaved;      ///< Saved cursor pixels
     int                         cursorSize;             ///< Cursor size
-
-    // Variables for the grouping function
-    int                         actualGroupIndex;   ///< The index of the actual group
-    bool                        isGrouping;         ///< Is grouping enabled ?
-    bool                        isElementAdded;     ///< Was an graphic element added ?
 
     /// Maximum number of arguments for one command
     static const int MAX_CAIRO_ARGUMENTS = 6;
@@ -352,15 +353,19 @@ private:
         cairo_path_t* cairoPath;                    ///< Pointer to a Cairo path
     } GroupElement;
 
+    // Variables for the grouping function
+    bool                        isGrouping;         ///< Is grouping enabled ?
+    bool                        isElementAdded;     ///< Was an graphic element added ?
     typedef std::deque<GroupElement> Group;         ///< A graphic group type definition
-    std::map<int, Group> groups;                    ///< List of graphic groups
-    unsigned int groupCounter;                      ///< Counter used for generating keys for groups
-    Group* currentGroup;                            ///< Currently used group
+    std::map<int, Group>        groups;             ///< List of graphic groups
+    unsigned int                groupCounter;       ///< Counter used for generating keys for groups
+    Group*                      currentGroup;       ///< Currently used group
 
     // Variables related to Cairo <-> wxWidgets
     cairo_matrix_t      cairoWorldScreenMatrix; ///< Cairo world to screen transformation matrix
-    cairo_t*            cairoImage;             ///< Cairo image
-    cairo_surface_t*    cairoSurface;           ///< Cairo surface
+    cairo_t*            currentContext;         ///< Currently used Cairo context for drawing
+    cairo_t*            context;                ///< Cairo image
+    cairo_surface_t*    surface;                ///< Cairo surface
     unsigned int*       bitmapBuffer;           ///< Storage of the cairo image
     unsigned int*       bitmapBufferBackup;     ///< Backup storage of the cairo image
     int                 stride;                 ///< Stride value for Cairo
@@ -400,8 +405,11 @@ private:
     /// Prepare Cairo surfaces for drawing
     void initSurface();
 
-    // Destroy Cairo surfaces when are not needed anymore
+    /// Destroy Cairo surfaces when are not needed anymore
     void deinitSurface();
+
+    /// Prepare the compositor
+    void setCompositor();
 
     /**
      * @brief Returns a valid key that can be used as a new group number.
@@ -409,6 +417,9 @@ private:
      * @return An unique group number that is not used by any other group.
      */
     unsigned int getNewGroupNumber();
+
+    /// Format used to store pixels
+    static const cairo_format_t GAL_FORMAT = CAIRO_FORMAT_RGB24;
 };
 } // namespace KiGfx
 
