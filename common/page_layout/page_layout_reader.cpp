@@ -638,6 +638,28 @@ void WORKSHEET_LAYOUT::SetDefaultLayout()
     }
 }
 
+/**
+ * Populates the list from a S expr description stored in a string
+ * @param aPageLayout = the S expr string
+ */
+void WORKSHEET_LAYOUT::SetPageLayout( const char* aPageLayout, bool Append )
+{
+    if( ! Append )
+        ClearList();
+
+    PAGE_LAYOUT_READER_PARSER lp_parser( aPageLayout, wxT( "Sexpr_string" ) );
+
+    try
+    {
+        lp_parser.Parse( this );
+        SetDefaultDescrFlag( true );
+    }
+    catch( IO_ERROR ioe )
+    {
+        wxLogMessage( ioe.errorText );
+    }
+}
+
 #include <wx/file.h>
 
 // SetLayout() try to load a custom layout file,

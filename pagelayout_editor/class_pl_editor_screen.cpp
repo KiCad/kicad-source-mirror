@@ -86,9 +86,27 @@ int PL_EDITOR_SCREEN::MilsToIuScalar()
 
 /* Virtual function needed by classes derived from BASE_SCREEN
  * this is a virtual pure function in BASE_SCREEN
- * do nothing in GerbView
- * could be removed later
  */
-void PL_EDITOR_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
+void PL_EDITOR_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList,
+                                            int aItemCount )
 {
+    if( aItemCount == 0 )
+        return;
+
+    unsigned icnt = aList.m_CommandsList.size();
+
+    if( aItemCount > 0 )
+        icnt = aItemCount;
+
+    for( unsigned ii = 0; ii < icnt; ii++ )
+    {
+        if( aList.m_CommandsList.size() == 0 )
+            break;
+
+        PICKED_ITEMS_LIST* curr_cmd = aList.m_CommandsList[0];
+        aList.m_CommandsList.erase( aList.m_CommandsList.begin() );
+
+        curr_cmd->ClearListAndDeleteItems();
+        delete curr_cmd;    // Delete command
+    }
 }

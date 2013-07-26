@@ -531,10 +531,16 @@ public:
     void ClearList();
 
     /**
-     * Function Save:
+     * Save the description in a file
      * @param aFullFileName the filename of the file to created
      */
     void Save( const wxString& aFullFileName );
+
+    /**
+     * Save the description in a buffer
+     * @param aOutputString = a wxString to store the S expr string
+     */
+    void SaveInString( wxString& aOutputString );
 
     /**
      * Add an item to the list of items
@@ -590,6 +596,12 @@ public:
      */
     void SetPageLayout( const wxString& aFullFileName = wxEmptyString,
                         bool Append = false );
+
+    /**
+     * Populates the list from a S expr description stored in a string
+     * @param aPageLayout = the S expr string
+     */
+    void SetPageLayout( const char* aPageLayout, bool Append = false );
 
     /**
      * @return a short filename  from a full filename:

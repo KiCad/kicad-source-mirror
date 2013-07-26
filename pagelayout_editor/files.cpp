@@ -233,6 +233,7 @@ bool PL_EDITOR_FRAME::InsertPageLayoutDescrFile( const wxString& aFullFileName )
     if( wxFileExists( aFullFileName ) )
     {
         const bool append = true;
+        SaveCopyInUndoList();
         WORKSHEET_LAYOUT::GetTheInstance().SetPageLayout( aFullFileName, append );
         return true;
     }

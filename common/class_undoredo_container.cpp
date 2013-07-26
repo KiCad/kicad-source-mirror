@@ -102,7 +102,7 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
         {
         case UR_UNSPECIFIED:
             if( show_error_message )
-                wxMessageBox( wxT( "ClearUndoORRedoList() error: UR_UNSPECIFIED command type" ) );
+                wxMessageBox( wxT( "ClearListAndDeleteItems() error: UR_UNSPECIFIED command type" ) );
 
             show_error_message = false;
             break;

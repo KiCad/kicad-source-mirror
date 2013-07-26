@@ -113,6 +113,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxTextCtrl* m_textCtrlDefaultLineWidth;
 		wxStaticText* m_staticText22;
 		wxTextCtrl* m_textCtrlDefaultTextThickness;
+		wxButton* m_buttonDefault;
 		wxStaticLine* m_staticline9;
 		wxStaticText* m_staticTextMargins;
 		wxStaticText* m_staticTextLeftMargin;
@@ -123,9 +124,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxTextCtrl* m_textCtrlTopMargin;
 		wxStaticText* m_staticTextBottomMargin;
 		wxTextCtrl* m_textCtrlDefaultBottomMargin;
-		wxStaticLine* m_staticline10;
 		wxButton* m_buttonGeneralOptsOK;
-		wxButton* m_buttonDefault;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnAcceptPrms( wxCommandEvent& event ) { event.Skip(); }
@@ -134,7 +133,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 	
 	public:
 		
-		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 315,739 ), long style = wxTAB_TRAVERSAL ); 
+		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 315,782 ), long style = wxTAB_TRAVERSAL ); 
 		~PANEL_PROPERTIES_BASE();
 	
 };

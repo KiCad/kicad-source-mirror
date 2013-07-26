@@ -134,6 +134,11 @@ enum KICAD_T {
      */
     TYPE_GERBER_DRAW_ITEM,
 
+    /*
+     * for Pl_Editor, in undo/redo commands
+     */
+    TYPE_PL_EDITOR_LAYOUT,
+
     // End value
     MAX_STRUCT_TYPE_ID
 };

@@ -27,6 +27,7 @@
  */
 
 #include <wx/imaglist.h>
+#include <wx/wupdlock.h>
 #include <fctsys.h>
 #include <worksheet_shape_builder.h>
 #include <class_worksheet_dataitem.h>
@@ -172,6 +173,8 @@ wxSize DESIGN_TREE_FRAME::GetMinSize() const
 
 void DESIGN_TREE_FRAME::ReCreateDesignTree()
 {
+    wxWindowUpdateLocker dummy(this);   // Avoid flicker when rebuilding the tree
+
     DeleteAllItems();
 
     const WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();

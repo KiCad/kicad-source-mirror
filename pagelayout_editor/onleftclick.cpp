@@ -49,9 +49,8 @@ void PL_EDITOR_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     if( item )     // An item is currently in edit: place it
     {
+        PlaceItem( item );
         m_propertiesPagelayout->CopyPrmsFromItemToPanel( item );
-        m_canvas->SetMouseCapture( NULL, NULL );
-        GetScreen()->SetCurItem( NULL );
         m_canvas->Refresh();
         return;
     }
