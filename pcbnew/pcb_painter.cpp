@@ -522,6 +522,14 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         size  = VECTOR2D( aPad->GetDrillSize() ) / 2.0;
         shape = aPad->GetDrillShape();
     }
+    else if( aLayer == SOLDERMASK_N_FRONT || aLayer == SOLDERMASK_N_BACK )
+    {
+        // Drawing soldermask
+        m_gal->Translate( VECTOR2D( aPad->GetOffset() ) );
+        size  = VECTOR2D( aPad->GetSize().x / 2.0 + aPad->GetSolderMaskMargin(),
+                          aPad->GetSize().y / 2.0 + aPad->GetSolderMaskMargin() );
+        shape = aPad->GetShape();
+    }
     else
     {
         // Drawing every kind of pad

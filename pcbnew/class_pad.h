@@ -247,7 +247,7 @@ public:
      * 2 - if null, the parent footprint value
      * 1 - if null, the global value
      */
-    int GetSolderMaskMargin();
+    int GetSolderMaskMargin() const;
 
     /**
      * Function GetSolderPasteMargin
@@ -441,6 +441,9 @@ public:
 
     /// @copydoc VIEW_ITEM::ViewGetLOD()
     virtual unsigned int ViewGetLOD( int aLayer ) const;
+
+    /// @copydoc VIEW_ITEM::ViewBBox()
+    virtual const BOX2I ViewBBox() const;
 
     /**
      * Function CopyNetlistSettings
