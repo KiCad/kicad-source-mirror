@@ -175,7 +175,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     KiGfx::PCB_RENDER_SETTINGS* settings =
             static_cast<KiGfx::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
     settings->LoadDisplayOptions( DisplayOpt );
-    view->RecacheAllItems();
+    view->RecacheAllItems( true );
 
     if( m_Parent->IsGalCanvasActive() )
         m_Parent->GetGalCanvas()->Refresh();
