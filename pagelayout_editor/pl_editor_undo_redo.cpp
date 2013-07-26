@@ -52,6 +52,11 @@ public:
 
 public:
     PL_ITEM_LAYOUT() : EDA_ITEM( TYPE_PL_EDITOR_LAYOUT ) {}
+
+    // Required to keep compiler happy on debug builds.
+#if defined(DEBUG)
+    virtual void Show( int nestLevel, std::ostream& os ) const {}
+#endif
 };
 
 void PL_EDITOR_FRAME::SaveCopyInUndoList()
