@@ -215,14 +215,26 @@ public:
     /// Vector addition operator
     VECTOR2<T> operator+( const VECTOR2<T>& aVector ) const;
 
+    /// Scalar addition operator
+    VECTOR2<T> operator+( const T& aScalar ) const;
+
     /// Compound assignment operator
     VECTOR2<T>& operator+=( const VECTOR2<T>& aVector );
+
+    /// Compound assignment operator
+    VECTOR2<T>& operator+=( const T& aScalar );
 
     /// Vector subtraction operator
     VECTOR2<T> operator-( const VECTOR2<T>& aVector ) const;
 
+    /// Scalar subtraction operator
+    VECTOR2<T> operator-( const T& aScalar ) const;
+
     /// Compound assignment operator
     VECTOR2<T>& operator-=( const VECTOR2<T>& aVector );
+
+    /// Compound assignment operator
+    VECTOR2<T>& operator-=( const T& aScalar );
 
     /// Negate Vector operator
     VECTOR2<T> operator-();
@@ -331,10 +343,28 @@ VECTOR2<T>& VECTOR2<T>::operator+=( const VECTOR2<T>& aVector )
 
 
 template <class T>
+VECTOR2<T>& VECTOR2<T>::operator+=( const T& aScalar )
+{
+    x   += aScalar;
+    y   += aScalar;
+    return *this;
+}
+
+
+template <class T>
 VECTOR2<T>& VECTOR2<T>::operator-=( const VECTOR2<T>& aVector )
 {
     x   -= aVector.x;
     y   -= aVector.y;
+    return *this;
+}
+
+
+template <class T>
+VECTOR2<T>& VECTOR2<T>::operator-=( const T& aScalar )
+{
+    x   -= aScalar;
+    y   -= aScalar;
     return *this;
 }
 
@@ -464,9 +494,23 @@ VECTOR2<T> VECTOR2<T>::operator+( const VECTOR2<T>& aVector ) const
 
 
 template <class T>
+VECTOR2<T> VECTOR2<T>::operator+( const T& aScalar ) const
+{
+    return VECTOR2<T> ( x + aScalar, y + aScalar );
+}
+
+
+template <class T>
 VECTOR2<T> VECTOR2<T>::operator-( const VECTOR2<T>& aVector ) const
 {
     return VECTOR2<T> ( x - aVector.x, y - aVector.y );
+}
+
+
+template <class T>
+VECTOR2<T> VECTOR2<T>::operator-( const T& aScalar ) const
+{
+    return VECTOR2<T> ( x - aScalar, y - aScalar );
 }
 
 
