@@ -30,10 +30,7 @@
 #ifndef __PROFILE_H
 #define __PROFILE_H
 
-#ifdef __linux__
-    #include <sys/time.h>
-#endif
-
+#include <sys/time.h>
 #include <stdint.h>
 
 /**
@@ -95,15 +92,10 @@ static __inline__ unsigned long long rdtsc()
  */
 static inline uint64_t get_tics()
 {
-#if defined(__linux__)
     struct timeval tv;
     gettimeofday( &tv, NULL );
 
     return (uint64_t) tv.tv_sec * 1000000ULL + (uint64_t) tv.tv_usec;
-#elif defined _WIN32 || defined _WIN64
-    return GetTickCount() * 1000;
-#else
-    return 0;
 #endif
 }
 
@@ -152,6 +144,3 @@ static inline void prof_end( prof_counter* cnt )
     else
         cnt->value = get_tics() - cnt->value;
 }
-
-
-#endif
