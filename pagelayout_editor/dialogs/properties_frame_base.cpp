@@ -68,8 +68,8 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_staticTextText->Wrap( -1 );
 	m_SizerTextOptions->Add( m_staticTextText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_textCtrlText = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SizerTextOptions->Add( m_textCtrlText, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_textCtrlText = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	m_SizerTextOptions->Add( m_textCtrlText, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerFontOpt;
 	bSizerFontOpt = new wxBoxSizer( wxVERTICAL );
@@ -515,6 +515,9 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	bSizerGeneralOpts->Add( bSizerGeneralOpts1, 0, 0, 5 );
 	
+	m_buttonDefault = new wxButton( m_swGeneralOpts, wxID_ANY, _("Set to Default"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerGeneralOpts->Add( m_buttonDefault, 0, wxALL|wxEXPAND, 5 );
+	
 	m_staticline9 = new wxStaticLine( m_swGeneralOpts, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerGeneralOpts->Add( m_staticline9, 0, wxEXPAND | wxALL, 5 );
 	
@@ -592,15 +595,9 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	bSizerGeneralOpts->Add( bSizerGeneraMargins, 0, 0, 5 );
 	
-	m_staticline10 = new wxStaticLine( m_swGeneralOpts, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerGeneralOpts->Add( m_staticline10, 0, wxEXPAND | wxALL, 5 );
-	
 	m_buttonGeneralOptsOK = new wxButton( m_swGeneralOpts, wxID_ANY, _("Accept"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonGeneralOptsOK->SetDefault(); 
 	bSizerGeneralOpts->Add( m_buttonGeneralOptsOK, 0, wxALL|wxEXPAND, 5 );
-	
-	m_buttonDefault = new wxButton( m_swGeneralOpts, wxID_ANY, _("Set to Default"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerGeneralOpts->Add( m_buttonDefault, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	m_swGeneralOpts->SetSizer( bSizerGeneralOpts );
@@ -616,15 +613,15 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	// Connect Events
 	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
-	m_buttonGeneralOptsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
 	m_buttonDefault->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnSetDefaultValues ), NULL, this );
+	m_buttonGeneralOptsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
 }
 
 PANEL_PROPERTIES_BASE::~PANEL_PROPERTIES_BASE()
 {
 	// Disconnect Events
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
-	m_buttonGeneralOptsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
 	m_buttonDefault->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnSetDefaultValues ), NULL, this );
+	m_buttonGeneralOptsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
 	
 }

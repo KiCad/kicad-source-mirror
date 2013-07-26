@@ -137,12 +137,20 @@ public:
     }
 };
 
-/**
- * Function Save: aFullFileName = the filename of the file to created
+/*
+ * Save the description in a file
  */
 void WORKSHEET_LAYOUT::Save( const wxString& aFullFileName )
 {
     WORKSHEET_LAYOUT_FILEIO writer( aFullFileName );
+    writer.Format( this );
+}
+
+/* Save the description in a buffer
+ */
+void WORKSHEET_LAYOUT::SaveInString( wxString& aOutputString )
+{
+    WORKSHEET_LAYOUT_STRINGIO writer( aOutputString );
     writer.Format( this );
 }
 

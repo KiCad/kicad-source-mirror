@@ -327,6 +327,12 @@ public:
     void MoveItem( WORKSHEET_DATAITEM* aItem );
 
     /**
+     * Save in Undo list the layout, and place an item being moved.
+     * @param aItem is the item moved
+     */
+    void PlaceItem( WORKSHEET_DATAITEM* aItem );
+
+    /**
      * Must be called after a change
      * in order to set the "modify" flag of the current screen
      */
@@ -335,6 +341,29 @@ public:
         GetScreen()->SetModify();
     }
 
+    /**
+     * Save a copy of the description (in a S expr string)
+     * for Undo/redo commands
+     */
+    void SaveCopyInUndoList();
+
+    /** Redo the last edition:
+     * - Place the current edited layout in undo list
+     * - Get the previous version of the current edited layput
+     */
+    void GetLayoutFromRedoList( wxCommandEvent& event );
+
+    /** Undo the last edition:
+     * - Place the current layout in Redo list
+     * - Get the previous version of the current edited layout
+     */
+    void GetLayoutFromUndoList( wxCommandEvent& event );
+
+    /**
+     * Remove the last command in Undo List.
+     * Used to clean the Undo stack after a cancel command
+     */
+    void RemoveLastCommandInUndoList();
 
     DECLARE_EVENT_TABLE()
 };

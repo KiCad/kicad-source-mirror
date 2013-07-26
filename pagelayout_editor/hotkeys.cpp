@@ -75,8 +75,8 @@ static EDA_HOTKEY    HkDeleteItem( wxT( "Move Item" ), HK_DELETE_ITEM, WXK_DELET
                                    ID_POPUP_ITEM_DELETE );
 
 // Undo Redo
-//static EDA_HOTKEY HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
-//static EDA_HOTKEY HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
+static EDA_HOTKEY HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
+static EDA_HOTKEY HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
 
 // List of common hotkey descriptors
 EDA_HOTKEY* s_Common_Hotkey_List[] =
@@ -84,13 +84,15 @@ EDA_HOTKEY* s_Common_Hotkey_List[] =
     &HkHelp,
     &HkZoomIn,    &HkZoomOut,      &HkZoomRedraw, &HkZoomCenter,
     &HkZoomAuto,  &HkResetLocalCoord,
+    &HkUndo, &HkRedo,
     NULL
 };
 
 EDA_HOTKEY* s_PlEditor_Hotkey_List[] =
 {
     &HkMoveItem,    &HkMoveStartPoint,
-    &HkMoveEndPoint, &HkDeleteItem
+    &HkMoveEndPoint, &HkDeleteItem,
+    NULL
 };
 
 // list of sections and corresponding hotkey list for Pl_Editor
@@ -142,6 +144,14 @@ void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, s_PlEditor_Hokeys_Descr );
+        break;
+
+    case HK_UNDO:
+    case HK_REDO:
+        if( busy )
+            break;
+        cmd.SetId( HK_Descr->m_IdMenuEvent );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_IN:

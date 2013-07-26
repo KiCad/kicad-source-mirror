@@ -61,8 +61,8 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
 
     EVT_TOOL( wxID_CUT, PL_EDITOR_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_UNDO, PL_EDITOR_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_REDO, PL_EDITOR_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_UNDO, PL_EDITOR_FRAME::GetLayoutFromUndoList )
+    EVT_TOOL( wxID_REDO, PL_EDITOR_FRAME::GetLayoutFromRedoList )
     EVT_TOOL( wxID_PRINT, PL_EDITOR_FRAME::ToPrinter )
     EVT_TOOL( wxID_PREVIEW, PL_EDITOR_FRAME::ToPrinter )
     EVT_TOOL( ID_SHEET_SET, PL_EDITOR_FRAME::Process_Special_Functions )
@@ -99,7 +99,6 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
     case ID_NO_TOOL_SELECTED:
         SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
-        break;
 
     case ID_SELECT_PAGE_NUMBER:
         m_canvas->Refresh();
@@ -129,6 +128,7 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( item == NULL )
             break;
 
+        SaveCopyInUndoList();
         idx = pglayout.GetItemIndex( item );
         pglayout.Remove( item );
         RebuildDesignTree();
@@ -147,10 +147,12 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ITEM_ADD_LINE:
+        SaveCopyInUndoList();
         idx =  m_treePagelayout->GetSelectedItemIndex();
         item = AddPageLayoutItem( WORKSHEET_DATAITEM::WS_SEGMENT, idx );
         if( InvokeDialogNewItem( this, item ) == wxID_CANCEL )
         {
+            RemoveLastCommandInUndoList();
             pglayout.Remove( item );
             RebuildDesignTree();
             item = NULL;
@@ -159,10 +161,12 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ITEM_ADD_RECT:
+        SaveCopyInUndoList();
         idx =  m_treePagelayout->GetSelectedItemIndex();
         item = AddPageLayoutItem( WORKSHEET_DATAITEM::WS_RECT, idx );
         if( InvokeDialogNewItem( this, item ) == wxID_CANCEL )
         {
+            RemoveLastCommandInUndoList();
             pglayout.Remove( item );
             RebuildDesignTree();
             item = NULL;
@@ -171,10 +175,12 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ITEM_ADD_TEXT:
+        SaveCopyInUndoList();
         idx =  m_treePagelayout->GetSelectedItemIndex();
         item = AddPageLayoutItem( WORKSHEET_DATAITEM::WS_TEXT, idx );
         if( InvokeDialogNewItem( this, item ) == wxID_CANCEL )
         {
+            RemoveLastCommandInUndoList();
             pglayout.Remove( item );
             RebuildDesignTree();
             item = NULL;
@@ -189,8 +195,7 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_ITEM_PLACE:
         item = GetScreen()->GetCurItem();
-        m_canvas->SetMouseCapture( NULL, NULL );
-        GetScreen()->SetCurItem( NULL );
+        PlaceItem( item );
         break;
 
     case ID_POPUP_ITEM_PLACE_CANCEL:
@@ -245,19 +250,19 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
     WORKSHEET_DATAITEM *item = screen->GetCurItem();
 
     wxCHECK_RET( (item != NULL), wxT( "Cannot move NULL item." ) );
-
-    wxPoint newpos = screen->GetCrossHairPosition()
+    wxPoint position = screen->GetCrossHairPosition()
                       - ( initialCursorPosition - initialPositionUi );
 
     if( (item->GetFlags() & LOCATE_STARTPOINT) )
-        item->MoveStartPointToUi( newpos );
+        item->MoveStartPointToUi( position );
     else if( (item->GetFlags() & LOCATE_ENDPOINT) )
-        item->MoveEndPointToUi( newpos );
+        item->MoveEndPointToUi( position );
     else
-        item->MoveToUi( newpos );
+        item->MoveToUi( position );
 
     // Draw the item item at it's new position.
-    aPanel->Refresh();
+    if( aPanel )
+        aPanel->Refresh();
 }
 
 static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
@@ -311,6 +316,38 @@ void PL_EDITOR_FRAME::MoveItem( WORKSHEET_DATAITEM* aItem )
     m_canvas->SetMouseCapture( moveItem, abortMoveItem );
     GetScreen()->SetCurItem( aItem );
 }
+
+/**
+* Save in Undo list the layout, and place an item being moved.
+* @param aItem is the item moved
+*/
+void PL_EDITOR_FRAME::PlaceItem( WORKSHEET_DATAITEM* aItem )
+{
+    DPOINT currStartPos = aItem->GetStartPos();
+    DPOINT currEndPos = aItem->GetEndPos();
+
+    // Save the curren layout before changes
+    if( (aItem->GetFlags() & LOCATE_STARTPOINT) )
+    {
+        aItem->MoveStartPointTo( initialPosition );
+    }
+    else if( (aItem->GetFlags() & LOCATE_ENDPOINT) )
+    {
+        aItem->MoveEndPointTo( initialPosition );
+    }
+    else
+        aItem->MoveTo( initialPosition );
+
+    SaveCopyInUndoList();
+
+    // Re-place the item
+    aItem->MoveStartPointTo( currStartPos );
+    aItem->MoveEndPointTo( currEndPos );
+
+    m_canvas->SetMouseCapture( NULL, NULL );
+    GetScreen()->SetCurItem( NULL );
+}
+
 
 /* called when the user select one of the 4 page corner as corner
  * reference (or the left top paper corner)

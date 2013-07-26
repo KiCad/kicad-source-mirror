@@ -33,6 +33,7 @@ set(PL_EDITOR_SRCS
     pl_editor.cpp
     pl_editor_config.cpp
     pl_editor_frame.cpp
+    pl_editor_undo_redo.cpp
     properties_frame.cpp
     hotkeys.cpp
     menubar.cpp
