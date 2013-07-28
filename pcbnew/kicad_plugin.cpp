@@ -120,9 +120,9 @@ class FP_CACHE
 public:
     FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath );
 
-    wxString GetPath() const { return m_lib_path.GetPath(); }
-    wxDateTime GetLastModificationTime() const { return m_mod_time; }
-    bool IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
+    wxString    GetPath() const { return m_lib_path.GetPath(); }
+    wxDateTime  GetLastModificationTime() const { return m_mod_time; }
+    bool        IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
     MODULE_MAP& GetModules() { return m_modules; }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
@@ -181,8 +181,7 @@ void FP_CACHE::Save()
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
-            wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ),
-                        GetChars( tempFileName ) );
+            // wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ), GetChars( tempFileName ) );
 
             FILE_OUTPUTFORMATTER formatter( tempFileName );
 
@@ -218,26 +217,28 @@ void FP_CACHE::Load()
     wxString fpFileName;
     wxString wildcard = wxT( "*." ) + KiCadFootprintFileExtension;
 
-    if( !dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
-        return;
-
-    do
+    if( dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
     {
-        // reader now owns fp, will close on exception or return
-        FILE_LINE_READER    reader( fpFileName );
+        do
+        {
+            // prepend the libpath into fullPath
+            wxFileName fullPath( m_lib_path.GetPath(), fpFileName );
 
-        m_owner->m_parser->SetLineReader( &reader );
+            FILE_LINE_READER    reader( fullPath.GetFullPath() );
 
-        std::string name = TO_UTF8( fpFileName );
+            m_owner->m_parser->SetLineReader( &reader );
 
-        m_modules.insert( name, new FP_CACHE_ITEM( (MODULE*) m_owner->m_parser->Parse(), fpFileName ) );
+            std::string name = TO_UTF8( fpFileName );
 
-    } while( dir.GetNext( &fpFileName ) );
+            m_modules.insert( name, new FP_CACHE_ITEM( (MODULE*) m_owner->m_parser->Parse(), fpFileName ) );
 
-    // Remember the file modification time of library file when the
-    // cache snapshot was made, so that in a networked environment we will
-    // reload the cache as needed.
-    m_mod_time = GetLibModificationTime();
+        } while( dir.GetNext( &fpFileName ) );
+
+        // Remember the file modification time of library file when the
+        // cache snapshot was made, so that in a networked environment we will
+        // reload the cache as needed.
+        m_mod_time = GetLibModificationTime();
+    }
 }
 
 
