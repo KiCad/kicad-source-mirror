@@ -29,17 +29,17 @@ Igor Plyatov <plyatov[at]gmail.com>
 Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com>
 
 == Translators
-Czech (CZ) Martin Kratoška <martin[at]ok1rr-dot-com>
+Czech (CZ) Martin KratoÅ¡ka <martin[at]ok1rr-dot-com>
 Dutch (NL) Jerry Jacobs <xor.gate.engineering[at]gmail-dot-com>
 Finnish (FI) Vesa Solonen <vesa.solonen[at]hut-dot-fi>
 French (FR) Jean-Pierre Charras <jean-pierre.charras[at]inpg-dot-fr>
-Polish (PL) Mateusz Skowro�ski <skowri[at]gmail-dot-com>
+Polish (PL) Mateusz Skowro¿ski <skowri[at]gmail-dot-com>
 Polish (PL) Kerusey Karyu <keruseykaryu@o2.pl>
 Portuguese (PT) Renie Marquet <reniemarquet[at]uol-dot-com-dot-br>"
 Russian (RU) Igor Plyatov <plyatov[at]gmail-dot-com>
 Russian (RU) Andrey Fedorushkov <andrf@mail.ru>
 Spanish (ES) Pedro Martin del Valle <pkicad[at]yahoo-dot-es>
-Spanish (ES) I�igo Zuluaga <inigo_zuluaga[at]yahoo-dot-es>
+Spanish (ES) Iñigo Zuluaga <inigo_zuluaga[at]yahoo-dot-es>
 German (DE) Rafael Sokolowski <Rafael.Sokolowski[at]web-dot-de
 Japanese (JA) Kenta Yonekura <midpika@hotmail.com>
 Japanese (JA) yoneken <midpika@hotmail.com>
@@ -47,7 +47,7 @@ Japanese (JA) yoneken <midpika@hotmail.com>
 Remy Halvick, David Briscoe, Dominique Laigle, Paul Burke
 
 == Programm credits for icons and others
-Icons by I�igo Zuluagaz <inigo_zuluaga[at]yahoo-dot-es>
+Icons by Iñigo Zuluagaz <inigo_zuluaga[at]yahoo-dot-es>
 New Icons by Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com>
 3D modules by Renie Marquet <reniemarquet[at]uol.com-dot-br>
 3D modules by Christophe Boschat <nox454[at]hotmail-dot-fr>
