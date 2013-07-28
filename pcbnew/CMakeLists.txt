@@ -267,23 +267,19 @@ if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 
     get_directory_property( DirDefs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} COMPILE_DEFINITIONS )
     foreach( d ${DirDefs} )
-        set(SWIG_FLAGS ${SWIG_FLAGS} -D${d} )
+        set( SWIG_FLAGS ${SWIG_FLAGS} -D${d} )
     endforeach()
 
-    # check if we have IO_MGR and KICAD_PLUGIN available
-    if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
-        set(SWIG_FLAGS ${SWIG_FLAGS} -DBUILD_WITH_PLUGIN)
-    endif(USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE)
-
-    if ( USE_PCBNEW_NANOMETRES )
-        set(SWIG_FLAGS ${SWIG_FLAGS} -DUSE_PCBNEW_NANOMETRES)
+    if( USE_PCBNEW_NANOMETRES )
+        set( SWIG_FLAGS ${SWIG_FLAGS} -DUSE_PCBNEW_NANOMETRES )
     endif( USE_PCBNEW_NANOMETRES )
 
 endif(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 
+
 if (KICAD_SCRIPTING)
 
-    set(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
+    set( SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
     add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
         DEPENDS pcbcommon
@@ -315,6 +311,8 @@ endif()
 
 
 if (KICAD_SCRIPTING_MODULES)
+
+    #message( "building pcbnew scripting" )
 
     set(CMAKE_SWIG_FLAGS ${SWIG_FLAGS})
     set_source_files_properties(scripting/pcbnew.i PROPERTIES CPLUSPLUS ON)
