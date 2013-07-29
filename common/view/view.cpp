@@ -474,6 +474,8 @@ struct VIEW::drawItem
     {
         GAL* gal = view->GetGAL();
 
+        // Obtain layers that are required to be enabled for drawing an item
+        // (eg. there is no point in drawing track labels, if the track is not visible)
         aItem->ViewGetRequiredLayers( layers, layersCount );
 
         // Conditions that have te be fulfilled for an item to be drawn

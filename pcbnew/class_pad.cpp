@@ -793,7 +793,7 @@ void D_PAD::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
     }
     else
     {
-        // Resto of pads have one soldermask layer and one description layer
+        // Rest of pads have one soldermask layer and one description layer
         aCount -= 2;
     }
 }
