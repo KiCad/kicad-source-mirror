@@ -360,7 +360,7 @@ public:
      */
     bool IsDynamic() const { return m_dynamic; }
 
-    static const int VIEW_MAX_LAYERS = 64;       ///* maximum number of layers that may be shown
+    static const int VIEW_MAX_LAYERS = 128;       ///* maximum number of layers that may be shown
 
 private:
     struct VIEW_LAYER

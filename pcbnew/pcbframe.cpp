@@ -824,6 +824,14 @@ void PCB_EDIT_FRAME::syncLayerVisibilities()
     {
         view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( i ) );
     }
+
+    // Enable some layers that are GAL specific
+    for( LAYER_NUM i = FIRST_NETNAME_LAYER; i < LAST_NETNAME_LAYER; ++i )
+    {
+        view->SetLayerVisible( i, true );
+    }
+    view->SetLayerVisible( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), true );
+    view->SetLayerVisible( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), true );
 }
 
 
