@@ -50,7 +50,7 @@ void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
 
 OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
-                        wxEvtHandler* aPaintListener, bool isUseShaders, const wxString& aName ) :
+                        wxEvtHandler* aPaintListener, const wxString& aName ) :
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
     cachedManager( true ),
@@ -70,7 +70,6 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     // Initialize the flags
     isGlewInitialized        = false;
     isFramebufferInitialized = false;
-    isUseShader              = isUseShaders;
     isShaderInitialized      = false;
     isGrouping               = false;
     wxSize parentSize        = aParent->GetSize();
@@ -255,7 +254,7 @@ void OPENGL_GAL::BeginDrawing()
     }
 
     // Compile the shaders
-    if( !isShaderInitialized && isUseShader )
+    if( !isShaderInitialized )
     {
         if( !shader.LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
             wxLogFatalError( wxT( "Cannot compile vertex shader!" ) );
@@ -351,49 +350,29 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
         return;
 
     VECTOR2D perpendicularVector( -startEndVector.y * scale, startEndVector.x * scale );
+    glm::vec4 vector( perpendicularVector.x, perpendicularVector.y, 0.0, 0.0 );
 
-    if( isUseShader )
-    {
-        glm::vec4 vector( perpendicularVector.x, perpendicularVector.y, 0.0, 0.0 );
+    // The perpendicular vector also needs transformations
+    vector = currentManager->GetTransformation() * vector;
 
-        // The perpendicular vector also needs transformations
-        vector = currentManager->GetTransformation() * vector;
+    // Line width is maintained by the vertex shader
+    currentManager->Shader( SHADER_LINE, vector.x, vector.y, lineWidth );
+    currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );    // v0
 
-        // Line width is maintained by the vertex shader
-        currentManager->Shader( SHADER_LINE, vector.x, vector.y, lineWidth );
-        currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );    // v0
+    currentManager->Shader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
+    currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );    // v1
 
-        currentManager->Shader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
-        currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );    // v1
+    currentManager->Shader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
+    currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );        // v3
 
-        currentManager->Shader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
-        currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );        // v3
+    currentManager->Shader( SHADER_LINE, vector.x, vector.y, lineWidth );
+    currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );    // v0
 
-        currentManager->Shader( SHADER_LINE, vector.x, vector.y, lineWidth );
-        currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );    // v0
+    currentManager->Shader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
+    currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );        // v3
 
-        currentManager->Shader( SHADER_LINE, -vector.x, -vector.y, lineWidth );
-        currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );        // v3
-
-        currentManager->Shader( SHADER_LINE, vector.x, vector.y, lineWidth );
-        currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );        // v2
-    }
-    else
-    {
-        // Compute the edge points of the line
-        VECTOR2D v0 = aStartPoint + perpendicularVector;
-        VECTOR2D v1 = aStartPoint - perpendicularVector;
-        VECTOR2D v2 = aEndPoint + perpendicularVector;
-        VECTOR2D v3 = aEndPoint - perpendicularVector;
-
-        currentManager->Vertex( v0.x, v0.y, layerDepth );
-        currentManager->Vertex( v1.x, v1.y, layerDepth );
-        currentManager->Vertex( v3.x, v3.y, layerDepth );
-
-        currentManager->Vertex( v0.x, v0.y, layerDepth );
-        currentManager->Vertex( v3.x, v3.y, layerDepth );
-        currentManager->Vertex( v2.x, v2.y, layerDepth );
-    }
+    currentManager->Shader( SHADER_LINE, vector.x, vector.y, lineWidth );
+    currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );        // v2
 }
 
 
@@ -533,143 +512,58 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
 
 void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 {
-    if( isUseShader )
+    if( isFillEnabled )
     {
-        if( isFillEnabled )
-        {
-            currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+        currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
-            /* Draw a triangle that contains the circle, then shade it leaving only the circle.
-               Parameters given to setShader are indices of the triangle's vertices
-               (if you want to understand more, check the vertex shader source [shader.vert]).
-               Shader uses this coordinates to determine if fragments are inside the circle or not.
-                    v2
-                    /\
-                   //\\
-               v0 /_\/_\ v1
-            */
-            currentManager->Shader( SHADER_FILLED_CIRCLE, 1.0 );
-            currentManager->Vertex( aCenterPoint.x - aRadius * sqrt( 3.0f ),            // v0
-                     aCenterPoint.y - aRadius, layerDepth );
+        /* Draw a triangle that contains the circle, then shade it leaving only the circle.
+           Parameters given to setShader are indices of the triangle's vertices
+           (if you want to understand more, check the vertex shader source [shader.vert]).
+           Shader uses this coordinates to determine if fragments are inside the circle or not.
+                v2
+                /\
+               //\\
+           v0 /_\/_\ v1
+        */
+        currentManager->Shader( SHADER_FILLED_CIRCLE, 1.0 );
+        currentManager->Vertex( aCenterPoint.x - aRadius * sqrt( 3.0f ),            // v0
+                 aCenterPoint.y - aRadius, layerDepth );
 
-            currentManager->Shader( SHADER_FILLED_CIRCLE, 2.0 );
-            currentManager->Vertex( aCenterPoint.x + aRadius* sqrt( 3.0f ),             // v1
-                     aCenterPoint.y - aRadius, layerDepth );
+        currentManager->Shader( SHADER_FILLED_CIRCLE, 2.0 );
+        currentManager->Vertex( aCenterPoint.x + aRadius* sqrt( 3.0f ),             // v1
+                 aCenterPoint.y - aRadius, layerDepth );
 
-            currentManager->Shader( SHADER_FILLED_CIRCLE, 3.0 );
-            currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + aRadius * 2.0f,    // v2
-                                    layerDepth );
-        }
-
-        if( isStrokeEnabled )
-        {
-            currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-
-            /* Draw a triangle that contains the circle, then shade it leaving only the circle.
-               Parameters given to setShader are indices of the triangle's vertices
-               (if you want to understand more, check the vertex shader source [shader.vert]).
-               and the line width. Shader uses this coordinates to determine if fragments are
-               inside the circle or not.
-                    v2
-                    /\
-                   //\\
-               v0 /_\/_\ v1
-            */
-            double outerRadius = aRadius + ( lineWidth / 2 );
-            currentManager->Shader( SHADER_STROKED_CIRCLE, 1.0, aRadius, lineWidth );
-            currentManager->Vertex( aCenterPoint.x - outerRadius * sqrt( 3.0f ),            // v0
-                     aCenterPoint.y - outerRadius, layerDepth );
-
-            currentManager->Shader( SHADER_STROKED_CIRCLE, 2.0, aRadius, lineWidth );
-            currentManager->Vertex( aCenterPoint.x + outerRadius * sqrt( 3.0f ),            // v1
-                     aCenterPoint.y - outerRadius, layerDepth );
-
-            currentManager->Shader( SHADER_STROKED_CIRCLE, 3.0, aRadius, lineWidth );
-            currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + outerRadius * 2.0f,    // v2
-                                    layerDepth );
-        }
+        currentManager->Shader( SHADER_FILLED_CIRCLE, 3.0 );
+        currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + aRadius * 2.0f,    // v2
+                                layerDepth );
     }
-    else
+
+    if( isStrokeEnabled )
     {
-        if( isStrokeEnabled )
-        {
-            // Compute the factors for the unit circle
-            double outerScale = lineWidth / aRadius / 2;
-            double innerScale = -outerScale;
-            outerScale += 1.0;
-            innerScale += 1.0;
+        currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
-            if( innerScale < outerScale )
-            {
-                // Draw the outline
-                VERTEX* circle = circleContainer.GetAllVertices();
-                int     next;
+        /* Draw a triangle that contains the circle, then shade it leaving only the circle.
+           Parameters given to setShader are indices of the triangle's vertices
+           (if you want to understand more, check the vertex shader source [shader.vert]).
+           and the line width. Shader uses this coordinates to determine if fragments are
+           inside the circle or not.
+                v2
+                /\
+               //\\
+           v0 /_\/_\ v1
+        */
+        double outerRadius = aRadius + ( lineWidth / 2 );
+        currentManager->Shader( SHADER_STROKED_CIRCLE, 1.0, aRadius, lineWidth );
+        currentManager->Vertex( aCenterPoint.x - outerRadius * sqrt( 3.0f ),            // v0
+                 aCenterPoint.y - outerRadius, layerDepth );
 
-                currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b,
-                                       strokeColor.a );
+        currentManager->Shader( SHADER_STROKED_CIRCLE, 2.0, aRadius, lineWidth );
+        currentManager->Vertex( aCenterPoint.x + outerRadius * sqrt( 3.0f ),            // v1
+                 aCenterPoint.y - outerRadius, layerDepth );
 
-                Save();
-
-                currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
-                currentManager->Scale( aRadius, aRadius, 0.0f );
-
-                for( int i = 0; i < 3 * CIRCLE_POINTS; ++i )
-                {
-                    // verticesCircle contains precomputed circle points interleaved with vertex
-                    // (0,0,0), so filled circles can be drawn as consecutive triangles, ie:
-                    // { 0,a,b, 0,c,d, 0,e,f, 0,g,h, ... }
-                    // where letters stand for consecutive circle points and 0 for (0,0,0) vertex.
-
-                    // We have to skip all (0,0,0) vertices (every third vertex)
-                    if( i % 3 == 0 )
-                    {
-                        i++;
-                        // Depending on the vertex, next circle point
-                        // may be stored in the next vertex..
-                        next = i + 1;
-                    }
-                    else
-                    {
-                        // ..or 2 vertices away (in case it is preceded by (0,0,0) vertex)
-                        next = i + 2;
-                    }
-
-                    currentManager->Vertex( circle[i].x * innerScale,
-                                            circle[i].y * innerScale,
-                                            layerDepth );
-                    currentManager->Vertex( circle[i].x * outerScale,
-                                            circle[i].y * outerScale,
-                                            layerDepth );
-                    currentManager->Vertex( circle[next].x * innerScale,
-                                            circle[next].y * innerScale,
-                                            layerDepth );
-
-                    currentManager->Vertex( circle[i].x * outerScale,
-                                            circle[i].y * outerScale,
-                                            layerDepth );
-                    currentManager->Vertex( circle[next].x * outerScale,
-                                            circle[next].y * outerScale,
-                                            layerDepth );
-                    currentManager->Vertex( circle[next].x * innerScale,
-                                            circle[next].y * innerScale,
-                                            layerDepth );
-                }
-
-                Restore();
-            }
-        }
-
-        // Filled circles are easy to draw by using the stored vertices list
-        if( isFillEnabled )
-        {
-            currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
-
-            Save();
-            currentManager->Translate( aCenterPoint.x, aCenterPoint.y, layerDepth );
-            currentManager->Scale( aRadius, aRadius, 0.0f );
-            currentManager->Vertices( circleContainer.GetAllVertices(), CIRCLE_POINTS * 3 );
-            Restore();
-        }
+        currentManager->Shader( SHADER_STROKED_CIRCLE, 3.0, aRadius, lineWidth );
+        currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + outerRadius * 2.0f,    // v2
+                                layerDepth );
     }
 }
 
@@ -693,124 +587,61 @@ void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, d
 void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius,
                                        double aAngle )
 {
-    if( isUseShader )
-    {
-        Save();
-        currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0f );
-        currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
+    Save();
+    currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0f );
+    currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 
-        /* Draw a triangle that contains the semicircle, then shade it to leave only
-         * the semicircle. Parameters given to setShader are indices of the triangle's vertices
-           (if you want to understand more, check the vertex shader source [shader.vert]).
-           Shader uses this coordinates to determine if fragments are inside the semicircle or not.
-                v2
-                /\
-               /__\
-           v0 //__\\ v1
-         */
-        currentManager->Shader( SHADER_FILLED_CIRCLE, 4.0f );
-        currentManager->Vertex( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );     // v0
+    /* Draw a triangle that contains the semicircle, then shade it to leave only
+     * the semicircle. Parameters given to setShader are indices of the triangle's vertices
+       (if you want to understand more, check the vertex shader source [shader.vert]).
+       Shader uses this coordinates to determine if fragments are inside the semicircle or not.
+            v2
+            /\
+           /__\
+       v0 //__\\ v1
+     */
+    currentManager->Shader( SHADER_FILLED_CIRCLE, 4.0f );
+    currentManager->Vertex( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );     // v0
 
-        currentManager->Shader( SHADER_FILLED_CIRCLE, 5.0f );
-        currentManager->Vertex( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );      // v1
+    currentManager->Shader( SHADER_FILLED_CIRCLE, 5.0f );
+    currentManager->Vertex( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );      // v1
 
-        currentManager->Shader( SHADER_FILLED_CIRCLE, 6.0f );
-        currentManager->Vertex( 0.0f, aRadius * 2.0f, layerDepth );                     // v2
+    currentManager->Shader( SHADER_FILLED_CIRCLE, 6.0f );
+    currentManager->Vertex( 0.0f, aRadius * 2.0f, layerDepth );                     // v2
 
-        Restore();
-    }
-    else
-    {
-        Save();
-        currentManager->Translate( aCenterPoint.x, aCenterPoint.y, layerDepth );
-        currentManager->Scale( aRadius, aRadius, 0.0f );
-        currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
-
-        // It is enough just to draw a half of the circle vertices to make a semicircle
-        currentManager->Vertices( circleContainer.GetAllVertices(), ( CIRCLE_POINTS * 3 ) / 2 );
-
-        Restore();
-    }
+    Restore();
 }
 
 
 void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius,
                                         double aAngle )
 {
-    if( isUseShader )
-    {
-        double outerRadius = aRadius + ( lineWidth / 2 );
+    double outerRadius = aRadius + ( lineWidth / 2 );
 
-        Save();
-        currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0f );
-        currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
+    Save();
+    currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0f );
+    currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 
-        /* Draw a triangle that contains the semicircle, then shade it to leave only
-         * the semicircle. Parameters given to setShader are indices of the triangle's vertices
-           (if you want to understand more, check the vertex shader source [shader.vert]), the
-           radius and the line width. Shader uses this coordinates to determine if fragments are
-           inside the semicircle or not.
-                v2
-                /\
-               /__\
-           v0 //__\\ v1
-         */
-        currentManager->Shader( SHADER_STROKED_CIRCLE, 4.0f, aRadius, lineWidth );
-        currentManager->Vertex( -outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );     // v0
+    /* Draw a triangle that contains the semicircle, then shade it to leave only
+     * the semicircle. Parameters given to setShader are indices of the triangle's vertices
+       (if you want to understand more, check the vertex shader source [shader.vert]), the
+       radius and the line width. Shader uses this coordinates to determine if fragments are
+       inside the semicircle or not.
+            v2
+            /\
+           /__\
+       v0 //__\\ v1
+     */
+    currentManager->Shader( SHADER_STROKED_CIRCLE, 4.0f, aRadius, lineWidth );
+    currentManager->Vertex( -outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );     // v0
 
-        currentManager->Shader( SHADER_STROKED_CIRCLE, 5.0f, aRadius, lineWidth );
-        currentManager->Vertex( outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );      // v1
+    currentManager->Shader( SHADER_STROKED_CIRCLE, 5.0f, aRadius, lineWidth );
+    currentManager->Vertex( outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );      // v1
 
-        currentManager->Shader( SHADER_STROKED_CIRCLE, 6.0f, aRadius, lineWidth );
-        currentManager->Vertex( 0.0f, outerRadius * 2.0f, layerDepth );                     // v2
+    currentManager->Shader( SHADER_STROKED_CIRCLE, 6.0f, aRadius, lineWidth );
+    currentManager->Vertex( 0.0f, outerRadius * 2.0f, layerDepth );                     // v2
 
-        Restore();
-    }
-    else
-    {
-        // Compute the factors for the unit circle
-        double innerScale = 1.0 - lineWidth / aRadius;
-
-        Save();
-        currentManager->Translate( aCenterPoint.x, aCenterPoint.y, layerDepth );
-        currentManager->Scale( aRadius, aRadius, 0.0f );
-        currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
-
-        // Draw the outline
-        VERTEX* circle = circleContainer.GetAllVertices();
-        int     next;
-
-        for( int i = 0; i < ( 3 * CIRCLE_POINTS ) / 2; ++i )
-        {
-            // verticesCircle contains precomputed circle points interleaved with vertex
-            // (0,0,0), so filled circles can be drawn as consecutive triangles, ie:
-            // { 0,a,b, 0,c,d, 0,e,f, 0,g,h, ... }
-            // where letters stand for consecutive circle points and 0 for (0,0,0) vertex.
-
-            // We have to skip all (0,0,0) vertices (every third vertex)
-            if( i % 3 == 0 )
-            {
-                i++;
-                // Depending on the vertex, next circle point may be stored in the next vertex..
-                next = i + 1;
-            }
-            else
-            {
-                // ..or 2 vertices away (in case it is preceded by (0,0,0) vertex)
-                next = i + 2;
-            }
-
-            currentManager->Vertex( circle[i].x * innerScale,    circle[i].y * innerScale,    0.0 );
-            currentManager->Vertex( circle[i].x,                 circle[i].y,                 0.0 );
-            currentManager->Vertex( circle[next].x * innerScale, circle[next].y * innerScale, 0.0 );
-
-            currentManager->Vertex( circle[i].x,                 circle[i].y,                 0.0 );
-            currentManager->Vertex( circle[next].x,              circle[next].y,              0.0 );
-            currentManager->Vertex( circle[next].x * innerScale, circle[next].y * innerScale, 0.0 );
-        }
-
-        Restore();
-    }
+    Restore();
 }
 
 
@@ -834,66 +665,24 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
 
     if( isStrokeEnabled )
     {
-        if( isUseShader )
+        double alphaIncrement = 2.0 * M_PI / CIRCLE_POINTS;
+        currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
+        VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
+        double   alpha;
+        for( alpha = aStartAngle + alphaIncrement; alpha < aEndAngle; alpha += alphaIncrement )
         {
-            double alphaIncrement = 2.0 * M_PI / CIRCLE_POINTS;
-            currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+            VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
+            DrawLine( p, p_next );
 
-            VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
-            double   alpha;
-            for( alpha = aStartAngle + alphaIncrement; alpha < aEndAngle; alpha += alphaIncrement )
-            {
-                VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
-                DrawLine( p, p_next );
-
-                p = p_next;
-            }
-
-            // Draw the last missing part
-            if( alpha != aEndAngle )
-            {
-                VECTOR2D p_last( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
-                DrawLine( p, p_last );
-            }
+            p = p_next;
         }
-        else
+
+        // Draw the last missing part
+        if( alpha != aEndAngle )
         {
-            Scale( VECTOR2D( aRadius, aRadius ) );
-
-            double outerScale = lineWidth / aRadius / 2;
-            double innerScale = -outerScale;
-
-            outerScale += 1.0;
-            innerScale += 1.0;
-
-            double alphaIncrement = 2.0 * M_PI / CIRCLE_POINTS;
-            currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-
-            for( double alpha = aStartAngle; alpha < aEndAngle; )
-            {
-                double v0[] = { cos( alpha ) * innerScale, sin( alpha ) * innerScale };
-                double v1[] = { cos( alpha ) * outerScale, sin( alpha ) * outerScale };
-
-                alpha += alphaIncrement;
-
-                if( alpha > aEndAngle )
-                    alpha = aEndAngle;
-
-                double v2[] = { cos( alpha ) * innerScale, sin( alpha ) * innerScale };
-                double v3[] = { cos( alpha ) * outerScale, sin( alpha ) * outerScale };
-
-                currentManager->Vertex( v0[0], v0[1], 0.0 );
-                currentManager->Vertex( v1[0], v1[1], 0.0 );
-                currentManager->Vertex( v2[0], v2[1], 0.0 );
-
-                currentManager->Vertex( v1[0], v1[1], 0.0 );
-                currentManager->Vertex( v3[0], v3[1], 0.0 );
-                currentManager->Vertex( v2[0], v2[1], 0.0 );
-            }
-
-            // Draw line caps
-            drawFilledSemiCircle( startPoint, lineWidth / aRadius / 2.0, aStartAngle + M_PI );
-            drawFilledSemiCircle( endPoint, lineWidth / aRadius / 2.0, aEndAngle );
+            VECTOR2D p_last( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
+            DrawLine( p, p_last );
         }
     }
 
@@ -1362,6 +1151,7 @@ void OPENGL_GAL::DrawCursor( VECTOR2D aCursorPosition )
 
 void OPENGL_GAL::DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
+    // TODO change to simple drawline
     // We check, if we got a horizontal or a vertical grid line and compute the offset
     VECTOR2D perpendicularVector;
 
@@ -1382,9 +1172,7 @@ void OPENGL_GAL::DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
     VECTOR2D point3 = aEndPoint + perpendicularVector;
     VECTOR2D point4 = aEndPoint - perpendicularVector;
 
-    // Set color
     currentManager->Color( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
-
     currentManager->Shader( SHADER_NONE );
 
     // Draw the quad for the grid line

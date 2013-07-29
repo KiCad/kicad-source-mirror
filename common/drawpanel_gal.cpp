@@ -55,7 +55,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_view       = NULL;
     m_painter    = NULL;
 
-    SwitchBackend( aGalType, true );
+    SwitchBackend( aGalType );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
     // Initial display settings
@@ -149,13 +149,10 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 }
 
 
-void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
+void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 {
-    wxLogDebug( wxT( "EDA_DRAW_PANEL_GAL::SwitchBackend: using shaders: %s" ),
-            aUseShaders ? "true" : "false" );
-
     // Do not do anything if the currently used GAL is correct
-    if( aGalType == m_currentGal && aUseShaders == m_useShaders && m_gal != NULL )
+    if( aGalType == m_currentGal && m_gal != NULL )
         return;
 
     delete m_gal;
@@ -163,7 +160,7 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
     switch( aGalType )
     {
     case GAL_TYPE_OPENGL:
-        m_gal = new KiGfx::OPENGL_GAL( this, this, this, aUseShaders );
+        m_gal = new KiGfx::OPENGL_GAL( this, this, this );
         break;
 
     case GAL_TYPE_CAIRO:
@@ -191,5 +188,4 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
     m_gal->ResizeScreen( size.GetX(), size.GetY() );
 
     m_currentGal = aGalType;
-    m_useShaders = aUseShaders;
 }

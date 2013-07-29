@@ -82,14 +82,9 @@ public:
      *  a wxCommandEvent holding EVT_GAL_REDRAW, as sent by PostPaint().
      *
      * @param aName is the name of this window for use by wxWindow::FindWindowByName()
-     *
-     * @param isUseShaders is a flag, that  indicates, if shaders should be used
-     *        for higher quality rendering.
-     *
      */
     OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener = NULL,
-                wxEvtHandler* aPaintListener = NULL, bool isUseShaders = false,
-                const wxString& aName = wxT( "GLCanvas" ) );
+                wxEvtHandler* aPaintListener = NULL, const wxString& aName = wxT( "GLCanvas" ) );
 
     virtual ~OPENGL_GAL();
 
@@ -366,7 +361,6 @@ private:
     bool            isGlewInitialized;          ///< Is GLEW initialized?
     bool            isFramebufferInitialized;   ///< Are the framebuffers initialized?
     bool            isShaderInitialized;        ///< Was the shader initialized?
-    bool            isUseShader;                ///< Should the shaders be used?
     bool            isGrouping;                 ///< Was a group started?
 
     /**
