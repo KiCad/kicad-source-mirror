@@ -47,7 +47,6 @@ public:
 
     virtual ~GPU_MANAGER();
 
-    // TODO docs
     /**
      * @brief Initializes everything needed to use vertex buffer objects (should be called when
      * there is an OpenGL context available).

@@ -167,7 +167,7 @@ void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRo
     switch( m_horizontalJustify )
     {
     case GR_TEXT_HJUSTIFY_CENTER:
-        m_gal->Translate( VECTOR2D( -textsize.x / 2, 0 ) );
+        m_gal->Translate( VECTOR2D( -textsize.x / 2.0, 0 ) );
         break;
 
     case GR_TEXT_HJUSTIFY_RIGHT:
@@ -187,7 +187,7 @@ void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRo
     switch( m_verticalJustify )
     {
     case GR_TEXT_VJUSTIFY_CENTER:
-        m_gal->Translate( VECTOR2D( 0, textsize.y / 2 ) );
+        m_gal->Translate( VECTOR2D( 0, textsize.y / 2.0 ) );
         break;
 
     case GR_TEXT_VJUSTIFY_TOP:
