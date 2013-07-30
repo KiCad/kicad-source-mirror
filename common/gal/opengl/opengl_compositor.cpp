@@ -143,13 +143,18 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
         return;
 
     // Change the rendering destination to the selected attachment point
-    if( m_currentFbo != m_framebuffer )
+    if( aBufferHandle == 0 )
+    {
+        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+        m_currentFbo = 0;
+    }
+    else if( m_currentFbo != m_framebuffer )
     {
         glBindFramebuffer( GL_FRAMEBUFFER, m_framebuffer );
         m_currentFbo = m_framebuffer;
     }
 
-    if( m_current != aBufferHandle - 1 )
+    if( m_currentFbo != 0 && m_current != aBufferHandle - 1 )
     {
         m_current = aBufferHandle - 1;
         glDrawBuffer( m_buffers[m_current].attachmentPoint );

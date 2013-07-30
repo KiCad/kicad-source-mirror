@@ -63,29 +63,14 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     mouseListener   = aMouseListener;
     paintListener   = aPaintListener;
 
-    // Set the cursor size
-    initCursor( 20 );
-    SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
-
     // Initialize the flags
     isGlewInitialized        = false;
     isFramebufferInitialized = false;
     isShaderInitialized      = false;
     isGrouping               = false;
-    wxSize parentSize        = aParent->GetSize();
     groupCounter             = 0;
 
-    SetSize( parentSize );
-
-    screenSize.x = parentSize.x;
-    screenSize.y = parentSize.y;
-
-    // Set grid defaults
-    SetGridColor( COLOR4D( 0.3, 0.3, 0.3, 0.3 ) );
-    SetCoarseGrid( 10 );
-    SetGridLineWidth( 1.0 );
-
-    // Connecting the event handlers.
+    // Connecting the event handlers
     Connect( wxEVT_PAINT, wxPaintEventHandler( OPENGL_GAL::onPaint ) );
 
     // Mouse events are skipped to the parent
@@ -100,6 +85,10 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 #if defined _WIN32 || defined _WIN64
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
+
+    SetSize( aParent->GetSize() );
+    screenSize = VECTOR2D( aParent->GetSize() );
+    initCursor( 20 );
 
     // Tesselator initialization
     tesselator = gluNewTess();
@@ -308,6 +297,12 @@ void OPENGL_GAL::BeginDrawing()
     SetStrokeColor( strokeColor );
 
     // Prepare buffers for drawing
+    compositor.SetBuffer( mainBuffer );
+    compositor.ClearBuffer();
+    compositor.SetBuffer( overlayBuffer );
+    compositor.ClearBuffer();
+    compositor.SetBuffer( 0 );  // Unbind buffers
+
     nonCachedManager.Clear();
     overlayManager.Clear();
 
@@ -321,13 +316,11 @@ void OPENGL_GAL::EndDrawing()
 {
     // Cached & non-cached containers are rendered to the same buffer
     compositor.SetBuffer( mainBuffer );
-    compositor.ClearBuffer();
     nonCachedManager.EndDrawing();
     cachedManager.EndDrawing();
 
     // Overlay container is rendered to a different buffer
     compositor.SetBuffer( overlayBuffer );
-    compositor.ClearBuffer();
     overlayManager.EndDrawing();
 
     // Draw the remaining contents, blit the rendering targets to the screen, swap the buffers
@@ -349,11 +342,9 @@ inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2
     if( lineLength <= 0.0 )
         return;
 
-    VECTOR2D perpendicularVector( -startEndVector.y * scale, startEndVector.x * scale );
-    glm::vec4 vector( perpendicularVector.x, perpendicularVector.y, 0.0, 0.0 );
-
     // The perpendicular vector also needs transformations
-    vector = currentManager->GetTransformation() * vector;
+    glm::vec4 vector = currentManager->GetTransformation() *
+            glm::vec4( -startEndVector.y * scale, startEndVector.x * scale, 0.0, 0.0 );
 
     // Line width is maintained by the vertex shader
     currentManager->Shader( SHADER_LINE, vector.x, vector.y, lineWidth );
@@ -1151,39 +1142,26 @@ void OPENGL_GAL::DrawCursor( VECTOR2D aCursorPosition )
 
 void OPENGL_GAL::DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
-    // TODO change to simple drawline
-    // We check, if we got a horizontal or a vertical grid line and compute the offset
-    VECTOR2D perpendicularVector;
+    compositor.SetBuffer( mainBuffer );
 
-    if( aStartPoint.x == aEndPoint.x )
+    // We do not need a very precise comparison here (the lineWidth is set by GAL::DrawGrid())
+    if( fabs( lineWidth - 2.0 * gridLineWidth / worldScale ) < 0.1 )
     {
-        // Vertical grid line
-        perpendicularVector = VECTOR2D( 0.5 * lineWidth, 0 );
+        glLineWidth( 1.0 );
     }
     else
     {
-        // Horizontal grid line
-        perpendicularVector = VECTOR2D( 0, 0.5 * lineWidth );
+        glLineWidth( 2.0 );
     }
 
-    // Now we compute the edge points of the quad
-    VECTOR2D point1 = aStartPoint + perpendicularVector;
-    VECTOR2D point2 = aStartPoint - perpendicularVector;
-    VECTOR2D point3 = aEndPoint + perpendicularVector;
-    VECTOR2D point4 = aEndPoint - perpendicularVector;
+    glColor4d( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
 
-    currentManager->Color( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
-    currentManager->Shader( SHADER_NONE );
+    glBegin( GL_LINES );
+    glVertex3d( aStartPoint.x, aStartPoint.y, layerDepth );
+    glVertex3d( aEndPoint.x, aEndPoint.y, layerDepth );
+    glEnd();
 
-    // Draw the quad for the grid line
-    double gridDepth = depthRange.y * 0.75;
-    currentManager->Vertex( point1.x, point1.y, gridDepth );
-    currentManager->Vertex( point2.x, point2.y, gridDepth );
-    currentManager->Vertex( point4.x, point4.y, gridDepth );
-
-    currentManager->Vertex( point1.x, point1.y, gridDepth );
-    currentManager->Vertex( point4.x, point4.y, gridDepth );
-    currentManager->Vertex( point3.x, point3.y, gridDepth );
+    glColor4d( 1.0, 1.0, 1.0, 1.0 );
 }
 
 

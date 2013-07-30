@@ -389,12 +389,8 @@ private:
      */
     void skipMouseEvent( wxMouseEvent& aEvent );
 
-    /**
-     * @brief Initialize the cursor.
-     *
-     * @param aCursorSize is the size of the cursor.
-     */
-    void initCursor( int aCursorSize );
+    /// @copydoc GAL::initCursor()
+    virtual void initCursor( int aCursorSize );
 
     /// Allocate the bitmaps for drawing
     void allocateBitmaps();
