@@ -34,7 +34,7 @@
 using namespace KiGfx;
 
 CAIRO_COMPOSITOR::CAIRO_COMPOSITOR( cairo_t** aMainContext ) :
-     m_current( 0 ), m_currentContext( aMainContext ), m_mainContext( *aMainContext )
+    m_current( 0 ), m_currentContext( aMainContext ), m_mainContext( *aMainContext )
 {
     // Obtain the transformation matrix used in the main context
     cairo_get_matrix( m_mainContext, &m_matrix );
@@ -69,6 +69,7 @@ unsigned int CAIRO_COMPOSITOR::GetBuffer()
 {
     // Pixel storage
     BitmapPtr bitmap( new unsigned int[m_bufferSize] );
+
     memset( bitmap.get(), 0x00, m_bufferSize * sizeof(int) );
 
     // Create the Cairo surface
@@ -105,6 +106,7 @@ void CAIRO_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
         m_current = aBufferHandle - 1;
         *m_currentContext = m_buffers[m_current].context;
     }
+
 #ifdef __WXDEBUG__
     else
         wxLogDebug( wxT( "Tried to use a not existing buffer" ) );
@@ -141,6 +143,7 @@ void CAIRO_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
         // Restore the transformation matrix
         cairo_set_matrix( m_mainContext, &m_matrix );
     }
+
 #ifdef __WXDEBUG__
     else
         wxLogDebug( wxT( "Tried to use a not existing buffer" ) );

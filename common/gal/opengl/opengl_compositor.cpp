@@ -104,7 +104,7 @@ unsigned int OPENGL_COMPOSITOR::GetBuffer()
     wxASSERT( m_initialized );
 
     if( m_buffers.size() >= m_maxBuffers )
-        return 0;       // Unfortunately we have no more free buffers left
+        return 0; // Unfortunately we have no more free buffers left
 
     // GL_COLOR_ATTACHMENTn are consecutive integers
     GLuint attachmentPoint = GL_COLOR_ATTACHMENT0 + usedBuffers();
@@ -229,9 +229,11 @@ void OPENGL_COMPOSITOR::clean()
     {
         glDeleteTextures( 1, &it->textureTarget );
     }
+
     m_buffers.clear();
 
     m_initialized = false;
 }
+
 
 GLuint OPENGL_COMPOSITOR::m_currentFbo = 0;

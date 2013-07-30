@@ -37,7 +37,6 @@
 
 namespace KiGfx
 {
-
 class OPENGL_COMPOSITOR : public COMPOSITOR
 {
 public:
@@ -94,7 +93,6 @@ protected:
         return m_buffers.size();
     }
 };
-
 } // namespace KiGfx
 
 #endif /* COMPOSITOR_H_ */

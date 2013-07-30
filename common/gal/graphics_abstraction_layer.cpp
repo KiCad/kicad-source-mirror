@@ -63,6 +63,33 @@ GAL::~GAL()
 }
 
 
+void GAL::ComputeWorldScreenMatrix()
+{
+    ComputeWorldScale();
+
+    worldScreenMatrix.SetIdentity();
+
+    MATRIX3x3D translation;
+    translation.SetIdentity();
+    translation.SetTranslation( 0.5 * screenSize );
+
+    MATRIX3x3D scale;
+    scale.SetIdentity();
+    scale.SetScale( VECTOR2D( worldScale, worldScale ) );
+
+    MATRIX3x3D flip;
+    flip.SetIdentity();
+    flip.SetScale( VECTOR2D( 1.0, 1.0 ) );
+
+    MATRIX3x3D lookat;
+    lookat.SetIdentity();
+    lookat.SetTranslation( -lookAtPoint );
+
+    worldScreenMatrix = translation * flip * scale * lookat * worldScreenMatrix;
+}
+
+
+
 void GAL::DrawGrid()
 {
     if( !gridVisibility )
@@ -136,7 +163,7 @@ void GAL::DrawGrid()
             if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
                 || gridScreenSizeDense > gridDrawThreshold )
             {
-                DrawGridLine( VECTOR2D( gridStartX * gridSize.x, j * gridSize.y ),
+                drawGridLine( VECTOR2D( gridStartX * gridSize.x, j * gridSize.y ),
                               VECTOR2D( gridEndX * gridSize.x,   j * gridSize.y ) );
             }
         }
@@ -155,7 +182,7 @@ void GAL::DrawGrid()
             if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
                 || gridScreenSizeDense > gridDrawThreshold )
             {
-                DrawGridLine( VECTOR2D( i * gridSize.x, gridStartY * gridSize.y ),
+                drawGridLine( VECTOR2D( i * gridSize.x, gridStartY * gridSize.y ),
                               VECTOR2D( i * gridSize.x, gridEndY * gridSize.y ) );
             }
         }

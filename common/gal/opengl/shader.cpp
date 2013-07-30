@@ -37,12 +37,12 @@
 using namespace KiGfx;
 
 SHADER::SHADER() :
-        isProgramCreated( false ),
-        isShaderLinked( false ),
-        active( false ),
-        maximumVertices( 4 ),
-        geomInputType( GL_LINES ),
-        geomOutputType( GL_LINES )
+    isProgramCreated( false ),
+    isShaderLinked( false ),
+    active( false ),
+    maximumVertices( 4 ),
+    geomInputType( GL_LINES ),
+    geomOutputType( GL_LINES )
 {
 }
 
@@ -97,7 +97,8 @@ bool SHADER::Link()
     programInfo( programNumber );
 
     // Check the Link state
-    glGetObjectParameterivARB( programNumber, GL_OBJECT_LINK_STATUS_ARB, (GLint*) &isShaderLinked );
+    glGetObjectParameterivARB( programNumber, GL_OBJECT_LINK_STATUS_ARB,
+                               (GLint*) &isShaderLinked );
 
 #ifdef __WXDEBUG__
     if( !isShaderLinked )
@@ -253,6 +254,7 @@ bool SHADER::addSource( const std::string& aShaderSource, ShaderType aShaderType
     glCompileShader( shaderNumber );
     GLint status;
     glGetShaderiv( shaderNumber, GL_COMPILE_STATUS, &status );
+
     if( status != GL_TRUE )
     {
         wxLogError( wxT( "Shader compilation error" ) );
@@ -275,4 +277,3 @@ bool SHADER::addSource( const std::string& aShaderSource, ShaderType aShaderType
 
     return true;
 }
-

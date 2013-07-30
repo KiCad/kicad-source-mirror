@@ -45,9 +45,6 @@
 #endif
 #endif
 
-#define EXCEPTION_ZERO_CLIENT_RECTANGLE 0
-#define EXCEPTION_ZERO_CONTEXT          1
-
 /**
  * @brief Class CAIRO_GAL is the cairo implementation of the graphics abstraction layer.
  *
@@ -92,7 +89,7 @@ public:
     // ---------------
 
     /// @copydoc GAL::BeginDrawing()
-    virtual void BeginDrawing() throw (int);
+    virtual void BeginDrawing();
 
     /// @copydoc GAL::EndDrawing()
     virtual void EndDrawing();
@@ -103,18 +100,18 @@ public:
     /// @copydoc GAL::DrawSegment()
     virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth );
 
-    /// @copydoc GAL::DrawPolyline()
-    virtual void DrawPolyline( std::deque<VECTOR2D>& aPointList );
-
     /// @copydoc GAL::DrawCircle()
     virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius );
 
     /// @copydoc GAL::DrawArc()
-    virtual void
-    DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle );
+    virtual void DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
+                          double aStartAngle, double aEndAngle );
 
     /// @copydoc GAL::DrawRectangle()
     virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+
+    /// @copydoc GAL::DrawPolyline()
+    virtual void DrawPolyline( std::deque<VECTOR2D>& aPointList );
 
     /// @copydoc GAL::DrawPolygon()
     virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList );
@@ -149,23 +146,14 @@ public:
     /// @copydoc GAL::SetIsStroke()
     virtual void SetIsStroke( bool aIsStrokeEnabled );
 
-    /// @copydoc GAL::SetFillColor()
-    virtual void SetFillColor( const COLOR4D& aColor );
-
     /// @copydoc GAL::SetStrokeColor()
     virtual void SetStrokeColor( const COLOR4D& aColor );
 
-    /// @copydoc GAL::GetStrokeColor()
-    COLOR4D      GetStrokeColor();
-
-    /// @copydoc GAL::SetBackgroundColor()
-    virtual void SetBackgroundColor( const COLOR4D& aColor );
+    /// @copydoc GAL::SetFillColor()
+    virtual void SetFillColor( const COLOR4D& aColor );
 
     /// @copydoc GAL::SetLineWidth()
     virtual void SetLineWidth( double aLineWidth );
-
-    /// @copydoc GAL::GetLineWidth()
-    double       GetLineWidth();
 
     /// @copydoc GAL::SetLayerDepth()
     virtual void SetLayerDepth( double aLayerDepth );
@@ -221,33 +209,6 @@ public:
     // Handling the world <-> screen transformation
     // --------------------------------------------------------
 
-    /// @copydoc GAL::ComputeWorldScreenMatrix()
-    virtual void ComputeWorldScreenMatrix();
-
-    /// @copydoc GAL::GetWorldScreenMatrix()
-    MATRIX3x3D GetWorldScreenMatrix();
-
-    /// @copydoc GAL::SetWorldScreenMatrix()
-    void SetWorldScreenMatrix( MATRIX3x3D aMatrix );
-
-    /// @copydoc GAL::SetWorldUnitLength()
-    void SetWorldUnitLength( double aWorldUnitLength );
-
-    /// @copydoc GAL::SetScreenDPI()
-    void SetScreenDPI( double aScreenDPI );
-
-    /// @copydoc GAL::SetLookAtPoint()
-    void SetLookAtPoint( const VECTOR2D& aPoint );
-
-    /// @copydoc GAL::GetLookAtPoint()
-    VECTOR2D GetLookAtPoint();
-
-    /// @copydoc GAL::SetZoomFactor()
-    void SetZoomFactor( double aZoomFactor );
-
-    /// @copydoc GAL::GetZoomFactor()
-    double GetZoomFactor();
-
     /// @copydoc GAL::SaveScreen()
     virtual void SaveScreen();
 
@@ -263,9 +224,6 @@ public:
 
     /// @copydoc GAL::ComputeCursorToWorld()
     virtual VECTOR2D ComputeCursorToWorld( const VECTOR2D& aCursorPosition );
-
-    /// @copydoc GAL::SetIsCursorEnabled()
-    void SetIsCursorEnabled( bool aIsCursorEnabled );
 
     /// @copydoc GAL::DrawCursor()
     virtual void DrawCursor( VECTOR2D aCursorPosition );
@@ -295,7 +253,7 @@ public:
     }
 
 protected:
-    virtual void DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+    virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
 private:
     /// Super class definition
@@ -303,30 +261,29 @@ private:
 
     // Compositing variables
     boost::shared_ptr<CAIRO_COMPOSITOR> compositor; ///< Object for layers compositing
-    unsigned int mainBuffer;                        ///< Handle to the main buffer
-    unsigned int overlayBuffer;                     ///< Handle to the overlay buffer
+    unsigned int            mainBuffer;             ///< Handle to the main buffer
+    unsigned int            overlayBuffer;          ///< Handle to the overlay buffer
 
     // Variables related to wxWidgets
-    wxWindow*                   parentWindow;       ///< Parent window
-    wxEvtHandler*               mouseListener;      ///< Mouse listener
-    wxEvtHandler*               paintListener;      ///< Paint listener
-    unsigned int                bufferSize;         ///< Size of buffers cairoOutput, bitmapBuffers
-    unsigned char*              wxOutput;           ///< wxImage comaptible buffer
+    wxWindow*               parentWindow;           ///< Parent window
+    wxEvtHandler*           mouseListener;          ///< Mouse listener
+    wxEvtHandler*           paintListener;          ///< Paint listener
+    unsigned int            bufferSize;             ///< Size of buffers cairoOutput, bitmapBuffers
+    unsigned char*          wxOutput;               ///< wxImage comaptible buffer
 
     // Cursor variables
-    std::deque<wxColour>        savedCursorPixels;      ///< Saved pixels of the cursor
-    bool                        isDeleteSavedPixels;    ///< True, if the saved pixels can be discarded
-    wxPoint                     savedCursorPosition;    ///< The last cursor position
-    wxBitmap*                   cursorPixels;           ///< Cursor pixels
-    wxBitmap*                   cursorPixelsSaved;      ///< Saved cursor pixels
-    int                         cursorSize;             ///< Cursor size
+    std::deque<wxColour>    savedCursorPixels;      ///< Saved pixels of the cursor
+    bool                    isDeleteSavedPixels;    ///< True, if the saved pixels can be discarded
+    wxPoint                 savedCursorPosition;    ///< The last cursor position
+    wxBitmap*               cursorPixels;           ///< Cursor pixels
+    wxBitmap*               cursorPixelsSaved;      ///< Saved cursor pixels
+    int cursorSize;                                 ///< Cursor size
 
     /// Maximum number of arguments for one command
     static const int MAX_CAIRO_ARGUMENTS = 6;
 
     /// Definitions for the command recorder
-    enum GraphicsCommand
-    {
+    enum GraphicsCommand {
         CMD_SET_FILL,                               ///< Enable/disable filling
         CMD_SET_STROKE,                             ///< Enable/disable stroking
         CMD_SET_FILLCOLOR,                          ///< Set the fill color
@@ -392,17 +349,17 @@ private:
     /// @copydoc GAL::initCursor()
     virtual void initCursor( int aCursorSize );
 
-    /// Allocate the bitmaps for drawing
-    void allocateBitmaps();
-
-    /// Allocate the bitmaps for drawing
-    void deleteBitmaps();
-
     /// Prepare Cairo surfaces for drawing
     void initSurface();
 
     /// Destroy Cairo surfaces when are not needed anymore
     void deinitSurface();
+
+    /// Allocate the bitmaps for drawing
+    void allocateBitmaps();
+
+    /// Allocate the bitmaps for drawing
+    void deleteBitmaps();
 
     /// Prepare the compositor
     void setCompositor();

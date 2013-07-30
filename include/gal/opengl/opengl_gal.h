@@ -104,18 +104,18 @@ public:
     /// @copydoc GAL::DrawSegment()
     virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth );
 
-    /// @copydoc GAL::DrawPolyline()
-    virtual void DrawPolyline( std::deque<VECTOR2D>& aPointList );
-
     /// @copydoc GAL::DrawCircle()
     virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius );
 
     /// @copydoc GAL::DrawArc()
-    virtual void
-    DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle );
+    virtual void DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
+                          double aStartAngle, double aEndAngle );
 
     /// @copydoc GAL::DrawRectangle()
     virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+
+    /// @copydoc GAL::DrawPolyline()
+    virtual void DrawPolyline( std::deque<VECTOR2D>& aPointList );
 
     /// @copydoc GAL::DrawPolygon()
     virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList );
@@ -129,7 +129,7 @@ public:
     // --------------
 
     /// @brief Resizes the canvas.
-    virtual void ResizeScreen ( int aWidth, int aHeight );
+    virtual void ResizeScreen( int aWidth, int aHeight );
 
     /// @brief Shows/hides the GAL canvas
     virtual bool Show( bool aShow );
@@ -144,41 +144,8 @@ public:
     // Attribute setting
     // -----------------
 
-    /// @copydoc GAL::SetIsFill()
-    virtual void SetIsFill( bool aIsFillEnabled )
-    {
-        isFillEnabled = aIsFillEnabled;
-    }
-
-    /// @copydoc GAL::SetIsStroke()
-    virtual void SetIsStroke( bool aIsStrokeEnabled )
-    {
-        isStrokeEnabled = aIsStrokeEnabled;
-    }
-
-    /// @copydoc GAL::SetFillColor()
-    virtual void SetFillColor( const COLOR4D& aColor );
-
     /// @copydoc GAL::SetStrokeColor()
     virtual void SetStrokeColor( const COLOR4D& aColor );
-
-    /// @copydoc GAL::GetStrokeColor()
-    COLOR4D      GetStrokeColor();
-
-    /// @copydoc GAL::SetBackgroundColor()
-    virtual void SetBackgroundColor( const COLOR4D& aColor );
-
-    /// @copydoc GAL::SetLineWidth()
-    virtual void SetLineWidth( double aLineWidth );
-
-    /// @copydoc GAL::GetLineWidth()
-    double       GetLineWidth();
-
-    /// @copydoc GAL::SetLayerDepth()
-    virtual void SetLayerDepth( double aLayerDepth )
-    {
-        super::SetLayerDepth( aLayerDepth );
-    }
 
     // --------------
     // Transformation
@@ -231,33 +198,6 @@ public:
     // Handling the world <-> screen transformation
     // --------------------------------------------------------
 
-    /// @copydoc GAL::ComputeWorldScreenMatrix()
-    virtual void ComputeWorldScreenMatrix();
-
-    /// @copydoc GAL::GetWorldScreenMatrix()
-    MATRIX3x3D GetWorldScreenMatrix();
-
-    /// @copydoc GAL::SetWorldScreenMatrix()
-    void SetWorldScreenMatrix( MATRIX3x3D aMatrix );
-
-    /// @copydoc GAL::SetWorldUnitLength()
-    void SetWorldUnitLength( double aWorldUnitLength );
-
-    /// @copydoc GAL::SetScreenDPI()
-    void SetScreenDPI( double aScreenDPI );
-
-    /// @copydoc GAL::SetLookAtPoint()
-    void SetLookAtPoint( const VECTOR2D& aPoint );
-
-    /// @copydoc GAL::GetLookAtPoint()
-    VECTOR2D GetLookAtPoint();
-
-    /// @copydoc GAL::SetZoomFactor()
-    void SetZoomFactor( double aZoomFactor );
-
-    /// @copydoc GAL::GetZoomFactor()
-    double GetZoomFactor();
-
     /// @copydoc GAL::SaveScreen()
     virtual void SaveScreen();
 
@@ -273,9 +213,6 @@ public:
 
     /// @copydoc GAL::ComputeCursorToWorld()
     virtual VECTOR2D ComputeCursorToWorld( const VECTOR2D& aCursorPosition );
-
-    /// @copydoc GAL::SetIsCursorEnabled()
-    void SetIsCursorEnabled( bool aIsCursorEnabled );
 
     /// @copydoc GAL::DrawCursor()
     virtual void DrawCursor( VECTOR2D aCursorPosition );
@@ -312,7 +249,7 @@ public:
     } TessParams;
 
 protected:
-    virtual void DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+    virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
 private:
     /// Super class definition
@@ -321,90 +258,114 @@ private:
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
 
-    wxClientDC*     clientDC;               ///< Drawing context
-    wxGLContext*    glContext;              ///< OpenGL context of wxWidgets
-    wxWindow*       parentWindow;           ///< Parent window
-    wxEvtHandler*   mouseListener;
-    wxEvtHandler*   paintListener;
-
-    // Precomputed vertices for faster circle & semicircle drawing
-    NONCACHED_CONTAINER   circleContainer;        ///< Container for storing circle vertices
+    wxClientDC*         clientDC;               ///< Drawing context
+    wxGLContext*        glContext;              ///< OpenGL context of wxWidgets
+    wxWindow*           parentWindow;           ///< Parent window
+    wxEvtHandler*       mouseListener;
+    wxEvtHandler*       paintListener;
 
     // Vertex buffer objects related fields
     typedef std::map< unsigned int, boost::shared_ptr<VERTEX_ITEM> > GroupsMap;
-    GroupsMap             groups;                 ///< Stores informations about VBO objects (groups)
-    unsigned int          groupCounter;           ///< Counter used for generating keys for groups
-    VERTEX_MANAGER*       currentManager;         ///< Currently used VERTEX_MANAGER (for storing VERTEX_ITEMs)
-    VERTEX_MANAGER        cachedManager;          ///< Container for storing cached VERTEX_ITEMs
-    VERTEX_MANAGER        nonCachedManager;       ///< Container for storing non-cached VERTEX_ITEMs
-    VERTEX_MANAGER        overlayManager;         ///< Container for storing overlaid VERTEX_ITEMs
+    GroupsMap               groups;                 ///< Stores informations about VBO objects (groups)
+    unsigned int            groupCounter;           ///< Counter used for generating keys for groups
+    VERTEX_MANAGER*         currentManager;         ///< Currently used VERTEX_MANAGER (for storing VERTEX_ITEMs)
+    VERTEX_MANAGER          cachedManager;          ///< Container for storing cached VERTEX_ITEMs
+    VERTEX_MANAGER          nonCachedManager;       ///< Container for storing non-cached VERTEX_ITEMs
+    VERTEX_MANAGER          overlayManager;         ///< Container for storing overlaid VERTEX_ITEMs
 
     // Framebuffer & compositing
-    OPENGL_COMPOSITOR     compositor;             ///< Handles multiple rendering targets
-    unsigned int          mainBuffer;             ///< Main rendering target
-    unsigned int          overlayBuffer;          ///< Auxiliary rendering target (for menus etc.)
-
-    // Polygon tesselation
-    GLUtesselator*         tesselator;            ///< Pointer to the tesselator
-    std::vector<GLdouble*> tessIntersects;        ///< Storage of intersecting points
+    OPENGL_COMPOSITOR       compositor;             ///< Handles multiple rendering targets
+    unsigned int            mainBuffer;             ///< Main rendering target
+    unsigned int            overlayBuffer;          ///< Auxiliary rendering target (for menus etc.)
 
     // Shader
-    SHADER          shader;                 ///< There is only one shader used for different objects
+    SHADER                  shader;         ///< There is only one shader used for different objects
 
     // Cursor
-    int             cursorSize;             ///< Size of the cursor in pixels
-    GLubyte*        cursorShape;            ///< Cursor pixel storage
-    GLubyte*        cursorSave;             ///< Saved cursor pixels
-    VECTOR2D        savedCursorPosition;    ///< Last saved cursor position
+    int                     cursorSize;             ///< Size of the cursor in pixels
+    GLubyte*                cursorShape;            ///< Cursor pixel storage
+    GLubyte*                cursorSave;             ///< Saved cursor pixels
+    VECTOR2D                savedCursorPosition;    ///< Last saved cursor position
 
     // Internal flags
-    bool            isGlewInitialized;          ///< Is GLEW initialized?
-    bool            isFramebufferInitialized;   ///< Are the framebuffers initialized?
-    bool            isShaderInitialized;        ///< Was the shader initialized?
-    bool            isGrouping;                 ///< Was a group started?
+    bool                    isGlewInitialized;          ///< Is GLEW initialized?
+    bool                    isFramebufferInitialized;   ///< Are the framebuffers initialized?
+    bool                    isShaderInitialized;        ///< Was the shader initialized?
+    bool                    isGrouping;                 ///< Was a group started?
+
+    // Polygon tesselation
+    GLUtesselator*          tesselator;             ///< Pointer to the tesselator
+    std::vector<GLdouble*>  tessIntersects;         ///< Storage of intersecting points
+
+    // Structure used for tesselation of polygons
+    struct OGLPOINT
+    {
+        OGLPOINT() :
+            x( 0.0 ), y( 0.0 ), z( 0.0 )
+        {}
+
+        OGLPOINT( const char* fastest )
+        {
+            // do nothing for fastest speed, and keep inline
+        }
+
+        OGLPOINT( const VECTOR2D& aPoint ) :
+            x( aPoint.x ), y( aPoint.y ), z( 0.0 )
+        {}
+
+        OGLPOINT& operator=( const VECTOR2D& aPoint )
+        {
+            x = aPoint.x;
+            y = aPoint.y;
+            z = 0.0;
+            return *this;
+        }
+
+        GLdouble x;
+        GLdouble y;
+        GLdouble z;
+    };
 
     /**
-     * @brief Draw a semi circle. Depending on settings (isStrokeEnabled & isFilledEnabled) it runs
+     * @brief Draw a quad for the line.
+     *
+     * @param aStartPoint is the start point of the line.
+     * @param aEndPoint is the end point of the line.
+     */
+    inline void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+
+    /**
+     * @brief Draw a semicircle. Depending on settings (isStrokeEnabled & isFilledEnabled) it runs
      * the proper function (drawStrokedSemiCircle or drawFilledSemiCircle).
      *
      * @param aCenterPoint is the center point.
-     * @param aRadius is the radius of the semi-circle.
-     * @param aAngle is the angle of the semi-circle.
+     * @param aRadius is the radius of the semicircle.
+     * @param aAngle is the angle of the semicircle.
      *
      */
     void drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
     /**
-     * @brief Draw a filled semi circle.
+     * @brief Draw a filled semicircle.
      *
      * @param aCenterPoint is the center point.
-     * @param aRadius is the radius of the semi-circle.
-     * @param aAngle is the angle of the semi-circle.
+     * @param aRadius is the radius of the semicircle.
+     * @param aAngle is the angle of the semicircle.
      *
      */
     void drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
     /**
-     * @brief Draw a stroked semi circle.
+     * @brief Draw a stroked semicircle.
      *
      * @param aCenterPoint is the center point.
-     * @param aRadius is the radius of the semi-circle.
-     * @param aAngle is the angle of the semi-circle.
+     * @param aRadius is the radius of the semicircle.
+     * @param aAngle is the angle of the semicircle.
      *
      */
     void drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
-    /// Compute the points of the unit circle and store them in VBO.
-    void computeCircle();
-
     // Event handling
-    /**
-     * @brief This is the window creation event handler.
-     *
-     * @param aEvent is the window creation event.
-     */
-    void onCreate( wxWindowCreateEvent& aEvent );
-
     /**
      * @brief This is the OnPaint event handler.
      *
@@ -419,19 +380,11 @@ private:
      */
     void skipMouseEvent( wxMouseEvent& aEvent );
 
-    /// Initialize GLEW.
+    /// Initialize GLEW
     void initGlew();
 
     /// @copydoc GAL::initCursor()
     virtual void initCursor( int aCursorSize );
-
-    /**
-     * @brief Draw a quad for the line.
-     *
-     * @param aStartPoint is the start point of the line.
-     * @param aEndPoint is the end point of the line.
-     */
-    inline void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /**
      * @brief Returns a valid key that can be used as a new group number.
