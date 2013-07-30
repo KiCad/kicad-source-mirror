@@ -1,4 +1,4 @@
-/*i
+/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
@@ -69,6 +69,7 @@ unsigned int CAIRO_COMPOSITOR::GetBuffer()
 {
     // Pixel storage
     BitmapPtr bitmap( new unsigned int[m_bufferSize] );
+    memset( bitmap.get(), 0x00, m_bufferSize * sizeof(int) );
 
     // Create the Cairo surface
     cairo_surface_t* surface = cairo_image_surface_create_for_data(
