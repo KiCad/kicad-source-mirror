@@ -94,12 +94,12 @@ protected:
     unsigned int        m_itemSize;
 
     /**
-    * Function reallocate()
-    * resizes the chunk that stores the current item to the given size.
-    *
-    * @param aSize is the number of vertices to be stored.
-    * @return offset of the new chunk.
-    */
+     * Function reallocate()
+     * resizes the chunk that stores the current item to the given size.
+     *
+     * @param aSize is the number of vertices to be stored.
+     * @return offset of the new chunk.
+     */
     virtual unsigned int reallocate( unsigned int aSize );
 
     /**
