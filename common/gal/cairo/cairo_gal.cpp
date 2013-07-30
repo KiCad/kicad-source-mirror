@@ -40,22 +40,15 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                       wxEvtHandler* aPaintListener, const wxString& aName ) :
     wxWindow( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxEXPAND, aName )
 {
-    // Default values
-    fillColor   = COLOR4D( 0, 0, 0, 1 );
-    strokeColor = COLOR4D( 1, 1, 1, 1 );
-    screenSize  = VECTOR2D( aParent->GetSize() );
-
     parentWindow  = aParent;
     mouseListener = aMouseListener;
     paintListener = aPaintListener;
 
+    // Initialize the flags
     isGrouping          = false;
     isInitialized       = false;
     isDeleteSavedPixels = false;
-    zoomFactor          = 1.0;
     groupCounter        = 0;
-
-    SetSize( aParent->GetSize() );
 
     // Connecting the event handlers
     Connect( wxEVT_PAINT, wxPaintEventHandler( CAIRO_GAL::onPaint ) );
@@ -73,17 +66,12 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
 #endif
 
-    // Initialize the cursor shape
-    SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
-    initCursor( 21 );
+    SetSize( aParent->GetSize() );
+    screenSize = VECTOR2D( aParent->GetSize() );
+    initCursor( 20 );
 
-    // Allocate memory
+    // Allocate memory for pixel storage
     allocateBitmaps();
-
-    // Set grid defaults
-    SetGridColor( COLOR4D( 0.5, 0.5, 0.5, 0.3 ) );
-    SetCoarseGrid( 10 );
-    SetGridLineWidth( 0.5 );
 }
 
 
@@ -107,7 +95,7 @@ void CAIRO_GAL::onPaint( wxPaintEvent& aEvent )
 
 void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
 {
-    screenSize  = VECTOR2D( aWidth, aHeight );
+    screenSize = VECTOR2D( aWidth, aHeight );
 
     // Recreate the bitmaps
     deleteBitmaps();
@@ -557,10 +545,10 @@ void CAIRO_GAL::SetLayerDepth( double aLayerDepth )
     {
         storePath();
 
-//        cairo_pop_group_to_source( currentContext );
-//        cairo_paint_with_alpha( currentContext, fillColor.a );
-//
-//        cairo_push_group( currentContext );
+        cairo_pop_group_to_source( currentContext );
+        cairo_paint_with_alpha( currentContext, fillColor.a );
+
+        cairo_push_group( currentContext );
     }
 }
 

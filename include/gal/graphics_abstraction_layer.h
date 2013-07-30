@@ -785,6 +785,13 @@ protected:
      * @param aEndPoint is the end point of the line.
      */
     virtual void DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
+
+    /**
+     * @brief Initialize the cursor.
+     *
+     * @param aCursorSize is the size of the cursor.
+     */
+    virtual void initCursor( int aCursorSize ) = 0;
 };
 } // namespace KiGfx
 

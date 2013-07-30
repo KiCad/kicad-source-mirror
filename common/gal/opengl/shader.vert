@@ -51,7 +51,7 @@ void main()
      
         // Make lines appear to be at least 1 pixel wide
         if( worldScale * lineWidth < MIN_WIDTH )
-            scale = 1.0f / ( worldScale * lineWidth );
+            scale = MIN_WIDTH / ( worldScale * lineWidth );
         else
             scale = 1.0f;
         

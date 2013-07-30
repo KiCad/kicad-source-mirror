@@ -422,12 +422,8 @@ private:
     /// Initialize GLEW.
     void initGlew();
 
-    /**
-     * @brief Initialize the cursor.
-     *
-     * @param aCursorSize is the cursor size in pixels (screen coordinates).
-     */
-    void initCursor( int aCursorSize );
+    /// @copydoc GAL::initCursor()
+    virtual void initCursor( int aCursorSize );
 
     /**
      * @brief Draw a quad for the line.
