@@ -605,13 +605,11 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
 void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
 {
-    COLOR4D              strokeColor = getLayerColor( aSegment->GetLayer(), 0,
-                                                      aSegment->ViewIsHighlighted() );
-    std::deque<VECTOR2D> pointsList;
+    COLOR4D color = getLayerColor( aSegment->GetLayer(), 0, aSegment->ViewIsHighlighted() );
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetStrokeColor( strokeColor );
+    m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( aSegment->GetWidth() );
 
     switch( aSegment->GetShape() )
@@ -636,10 +634,29 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
         break;
 
     case S_POLYGON:
+    {
+        std::deque<VECTOR2D> pointsList;
+
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetFillColor( color );
+
+        m_gal->Save();
+        m_gal->Translate( VECTOR2D( aSegment->GetPosition() ) );
+
+        MODULE* module = aSegment->GetParentModule();
+        if( module )
+        {
+            m_gal->Rotate( -module->GetOrientation() * M_PI / 1800.0 );
+        }
+
         std::copy( aSegment->GetPolyPoints().begin(), aSegment->GetPolyPoints().end(),
                    std::back_inserter( pointsList ) );
         m_gal->DrawPolygon( pointsList );
+
+        m_gal->Restore();
         break;
+    }
 
     case S_CURVE:
         m_gal->DrawCurve( VECTOR2D( aSegment->GetStart() ),
