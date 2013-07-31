@@ -525,9 +525,21 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     else if( aLayer == SOLDERMASK_N_FRONT || aLayer == SOLDERMASK_N_BACK )
     {
         // Drawing soldermask
+        int soldermaskMargin = aPad->GetSolderMaskMargin();
+
         m_gal->Translate( VECTOR2D( aPad->GetOffset() ) );
-        size  = VECTOR2D( aPad->GetSize().x / 2.0 + aPad->GetSolderMaskMargin(),
-                          aPad->GetSize().y / 2.0 + aPad->GetSolderMaskMargin() );
+        size  = VECTOR2D( aPad->GetSize().x / 2.0 + soldermaskMargin,
+                          aPad->GetSize().y / 2.0 + soldermaskMargin );
+        shape = aPad->GetShape();
+    }
+    else if( aLayer == SOLDERPASTE_N_FRONT || aLayer == SOLDERPASTE_N_BACK )
+    {
+        // Drawing solderpaste
+        int solderpasteMargin = aPad->GetLocalSolderPasteMargin();
+
+        m_gal->Translate( VECTOR2D( aPad->GetOffset() ) );
+        size  = VECTOR2D( aPad->GetSize().x / 2.0 + solderpasteMargin,
+                          aPad->GetSize().y / 2.0 + solderpasteMargin );
         shape = aPad->GetShape();
     }
     else

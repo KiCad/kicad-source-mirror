@@ -259,7 +259,7 @@ public:
      * 2 - if null, the parent footprint value
      * 1 - if null, the global value
      */
-    wxSize GetSolderPasteMargin();
+    wxSize GetSolderPasteMargin() const;
 
     void SetZoneConnection( ZoneConnection aType ) { m_ZoneConnection = aType; }
     ZoneConnection GetZoneConnection() const;
