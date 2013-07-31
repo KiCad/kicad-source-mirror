@@ -652,6 +652,9 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
 
         std::copy( aSegment->GetPolyPoints().begin(), aSegment->GetPolyPoints().end(),
                    std::back_inserter( pointsList ) );
+
+        m_gal->SetLineWidth( aSegment->GetWidth() );
+        m_gal->DrawPolyline( pointsList );
         m_gal->DrawPolygon( pointsList );
 
         m_gal->Restore();
