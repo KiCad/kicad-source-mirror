@@ -44,7 +44,7 @@ namespace KiGfx
 /**
  * GridStyle: Type definition of the grid style
  */
-enum GridStyle
+enum GRID_STYLE
 {
     GRID_STYLE_LINES,   ///< Use lines for the grid
     GRID_STYLE_DOTS     ///< Use dots for the grid
@@ -668,8 +668,15 @@ public:
     /// @brief Draw the grid
     void DrawGrid();
 
-    // TODO Not yet implemented
-    // virtual void SetGridStyle(GridStyle gridStyle);
+    /**
+     * @brief Change the grid display style.
+     *
+     * @param aGridStyle is the new style for grid.
+     */
+    inline virtual void SetGridStyle( GRID_STYLE aGridStyle )
+    {
+        gridStyle = aGridStyle;
+    }
 
     // -------
     // Cursor
@@ -758,6 +765,7 @@ protected:
 
     // Grid settings
     bool               gridVisibility;         ///< Should the grid be shown
+    GRID_STYLE         gridStyle;              ///< Grid display style
     VECTOR2D           gridSize;               ///< The grid size
     VECTOR2D           gridOrigin;             ///< The grid origin
     COLOR4D            gridColor;              ///< Color of the grid
