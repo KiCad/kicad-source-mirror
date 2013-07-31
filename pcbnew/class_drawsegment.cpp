@@ -56,9 +56,11 @@
 DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype )
 {
-    m_Width = m_Type = m_Angle = 0;
+    m_Type  = 0;
+    m_Angle = 0;
     m_Flags = 0;
     m_Shape = S_SEGMENT;
+    m_Width = Millimeter2iu( 0.15 );    // Gives a decent width
 }
 
 

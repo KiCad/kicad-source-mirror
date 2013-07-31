@@ -124,7 +124,7 @@ TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition,
 TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
-    m_Width = 0;
+    m_Width = Millimeter2iu( 0.2 );
     m_Shape = S_SEGMENT;
     start   = end = NULL;
     SetDrillDefault();
@@ -187,6 +187,7 @@ SEGVIA::SEGVIA( BOARD_ITEM* aParent ) :
     TRACK( aParent, PCB_VIA_T )
 {
     SetShape( VIA_THROUGH );
+    m_Width = Millimeter2iu( 0.5 );
 }
 
 
