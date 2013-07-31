@@ -75,7 +75,13 @@ void DIALOG_NEW_DATAITEM::OnCancelClick( wxCommandEvent& event )
 void DIALOG_NEW_DATAITEM::OnOKClick( wxCommandEvent& event )
 {
     if( m_item->GetType() == WORKSHEET_DATAITEM::WS_TEXT )
-        ((WORKSHEET_DATAITEM_TEXT*)m_item)->m_TextBase = m_textCtrlText->GetValue();
+    {
+        WORKSHEET_DATAITEM_TEXT* text = ((WORKSHEET_DATAITEM_TEXT*)m_item);
+        text->m_TextBase = m_textCtrlText->GetValue();
+        // For multiline texts, replace the '\n' char by the "\\n" sequence",
+        // in internal string
+        text->m_TextBase.Replace( wxT("\n"), wxT("\\n") );
+    }
 
     wxString msg;
 

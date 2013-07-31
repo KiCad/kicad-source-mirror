@@ -110,18 +110,20 @@ DIALOG_NEW_DATAITEM_BASE::DIALOG_NEW_DATAITEM_BASE( wxWindow* parent, wxWindowID
 	
 	m_SizerText = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText10 = new wxStaticText( this, wxID_ANY, _("Text"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText10->Wrap( -1 );
-	m_SizerText->Add( m_staticText10, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticTextTitle = new wxStaticText( this, wxID_ANY, _("Text"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTitle->Wrap( -1 );
+	m_SizerText->Add( m_staticTextTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_textCtrlText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SizerText->Add( m_textCtrlText, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_textCtrlText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	m_textCtrlText->SetMinSize( wxSize( 300,-1 ) );
+	
+	m_SizerText->Add( m_textCtrlText, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_SizerText->Add( m_staticline3, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerUpper->Add( m_SizerText, 0, wxEXPAND, 5 );
+	bSizerUpper->Add( m_SizerText, 1, wxEXPAND, 5 );
 	
 	
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );

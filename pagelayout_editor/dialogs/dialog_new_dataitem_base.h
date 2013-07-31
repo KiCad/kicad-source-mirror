@@ -54,7 +54,7 @@ class DIALOG_NEW_DATAITEM_BASE : public DIALOG_SHIM
 		wxChoice* m_choiceCornerEnd;
 		wxStaticLine* m_staticlineEndXY;
 		wxBoxSizer* m_SizerText;
-		wxStaticText* m_staticText10;
+		wxStaticText* m_staticTextTitle;
 		wxTextCtrl* m_textCtrlText;
 		wxStaticLine* m_staticline3;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
@@ -68,7 +68,7 @@ class DIALOG_NEW_DATAITEM_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_NEW_DATAITEM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("New Item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 328,290 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_NEW_DATAITEM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("New Item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 328,335 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_NEW_DATAITEM_BASE();
 	
 };

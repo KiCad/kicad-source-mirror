@@ -472,23 +472,32 @@ void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
     if( m_ConstrainedTextSize.y == 0 )
         m_ConstrainedTextSize.y = m_DefaultTextSize.y;
 
-    if( m_BoundingBoxSize.x )
+    if( m_BoundingBoxSize.x || m_BoundingBoxSize.y )
     {
         int linewidth = 0;
-        // to know the X size of the line, we should use
-        // ReturnGraphicTextWidth
+        // to know the X and Y size of the line, we should use
+        // EDA_TEXT::GetTextBox()
         // but this function uses integers
         // So, to avoid truncations with our unit in mm, use microns.
-        int sizex_micron = KiROUND( m_ConstrainedTextSize.x * 1000.0 );
-        double lenMsg = ReturnGraphicTextWidth( m_FullText, sizex_micron,
-                                             IsItalic(), linewidth ) / 1000.0;
-        if( lenMsg > m_BoundingBoxSize.x )
-            m_ConstrainedTextSize.x *= m_BoundingBoxSize.x / lenMsg;
-    }
+        wxSize size_micron;
+        size_micron.x = KiROUND( m_ConstrainedTextSize.x * 1000.0 );
+        size_micron.y = KiROUND( m_ConstrainedTextSize.y * 1000.0 );
+        WS_DRAW_ITEM_TEXT dummy( WS_DRAW_ITEM_TEXT( this, this->m_FullText,
+                                               wxPoint(0,0),
+                                               size_micron,
+                                               linewidth, BLACK,
+                                               IsItalic(), IsBold() ) );
+        dummy.SetMultilineAllowed( true );
+        TransfertSetupToGraphicText( &dummy );
+        EDA_RECT rect = dummy.GetTextBox();
+        DSIZE size;
+        size.x = rect.GetWidth() / 1000.0;
+        size.y = rect.GetHeight() / 1000.0;
 
-    if( m_BoundingBoxSize.y )
-    {
-        if( m_ConstrainedTextSize.y > m_BoundingBoxSize.y )
-            m_ConstrainedTextSize.y = m_BoundingBoxSize.y;
+        if( m_BoundingBoxSize.x && size.x > m_BoundingBoxSize.x )
+            m_ConstrainedTextSize.x *= m_BoundingBoxSize.x / size.x;
+
+        if( m_BoundingBoxSize.y &&  size.y > m_BoundingBoxSize.y )
+            m_ConstrainedTextSize.y *= m_BoundingBoxSize.y / size.y;
     }
 }
