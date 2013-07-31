@@ -424,7 +424,7 @@ int D_PAD::GetSolderMaskMargin() const
 }
 
 
-wxSize D_PAD::GetSolderPasteMargin()
+wxSize D_PAD::GetSolderPasteMargin() const
 {
     int     margin = m_LocalSolderPasteMargin;
     double  mratio = m_LocalSolderPasteMarginRatio;
@@ -759,18 +759,22 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         aLayers[aCount++] = ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE );
         aLayers[aCount++] = SOLDERMASK_N_FRONT;
         aLayers[aCount++] = SOLDERMASK_N_BACK;
+        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
+        aLayers[aCount++] = SOLDERPASTE_N_BACK;
     }
     else if( IsOnLayer( LAYER_N_FRONT ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
         aLayers[aCount++] = SOLDERMASK_N_FRONT;
+        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
     }
     else if( IsOnLayer( LAYER_N_BACK ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
         aLayers[aCount++] = SOLDERMASK_N_BACK;
+        aLayers[aCount++] = SOLDERPASTE_N_BACK;
     }
 #ifdef __WXDEBUG__
     else    // Should not occur
@@ -788,13 +792,16 @@ void D_PAD::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
     // Remove pad description layer & soldermask from the required layers group
     if( IsOnLayer( LAYER_N_FRONT ) && IsOnLayer( LAYER_N_BACK ) )
     {
-        // Multilayer pads have 2 soldermask layers and one description layer
-        aCount -= 3;
+        // Multilayer pads have 2 soldermask layers (front and back), 2 solder paste layer
+        // (front and back) and one description layer that do not have to be enabled in order to
+        // display a pad.
+        aCount -= 5;
     }
     else
     {
-        // Rest of pads have one soldermask layer and one description layer
-        aCount -= 2;
+        // Rest of pads have one soldermask layer, one solder paste layer and one description layer
+        // that are not necessary for pad to be displayed.
+        aCount -= 3;
     }
 }
 
@@ -815,9 +822,14 @@ unsigned int D_PAD::ViewGetLOD( int aLayer ) const
 const BOX2I D_PAD::ViewBBox() const
 {
     // Bounding box includes soldermask too
-    int solderMaskMargin = GetSolderMaskMargin();
-    EDA_RECT bbox        = GetBoundingBox();
+    int solderMaskMargin       = GetSolderMaskMargin();
+    VECTOR2I solderPasteMargin = VECTOR2D( GetSolderPasteMargin() );
+    EDA_RECT bbox              = GetBoundingBox();
 
-    return BOX2I( VECTOR2I( bbox.GetOrigin() ) - solderMaskMargin,
-                  VECTOR2I( bbox.GetSize() ) + 2 * solderMaskMargin );
+    // Look for the biggest possible bounding box
+    int xMargin = std::max( solderMaskMargin, solderPasteMargin.x );
+    int yMargin = std::max( solderMaskMargin, solderPasteMargin.y );
+
+    return BOX2I( VECTOR2I( bbox.GetOrigin() ) - VECTOR2I( xMargin, yMargin ),
+                  VECTOR2I( bbox.GetSize() ) + VECTOR2I( 2 * xMargin, 2 * yMargin ) );
 }
