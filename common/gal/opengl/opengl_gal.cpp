@@ -167,9 +167,6 @@ void OPENGL_GAL::BeginDrawing()
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-    // Enable smooth lines
-    glEnable( GL_LINE_SMOOTH );
-
     glMatrixMode( GL_MODELVIEW );
 
     // Set up the world <-> screen transformation
