@@ -250,7 +250,7 @@ enum PCB_VISIBLE
 #define ITEM_GAL_LAYER(layer)	(NB_LAYERS + layer)
 
 /// number of *all* layers including PCB and item layers
-#define TOTAL_LAYER_COUNT	    (NB_LAYERS + END_PCB_VISIBLE_LIST)
+#define TOTAL_LAYER_COUNT	    128 //(NB_LAYERS + END_PCB_VISIBLE_LIST)
 
 /// Rendering order of layers on GAL-based canvas (lower index in the array
 /// means that layer is displayed closer to the user, ie. on the top).
