@@ -390,7 +390,8 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
     bool match;
     wxString text = GetFullyQualifiedText();
 
-    if( ((m_id > VALUE) && !(aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS))
+    // User defined fields have an ID of -1.
+    if( ((m_id > VALUE || m_id < REFERENCE) && !(aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS))
         || ((m_id == REFERENCE) && !(aSearchData.GetFlags() & FR_REPLACE_REFERENCES)) )
         return false;
 

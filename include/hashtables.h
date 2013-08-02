@@ -96,7 +96,7 @@ struct fnv_1a
 
         for( ; *it;  ++it )
         {
-            hash ^= *it;
+            hash ^= (unsigned char) *it;
             hash *= 16777619;
         }
         return hash;

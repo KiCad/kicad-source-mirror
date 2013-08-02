@@ -452,17 +452,16 @@ bool EDA_APP::SetBinDir()
     m_BinDir = FROM_UTF8( native_str );
     delete[] native_str;
 
-    // Linux and Unix
-#elif defined(__UNIX__)
+#elif defined(__UNIX__)     // Linux and non-Apple Unix
     m_BinDir = wxStandardPaths::Get().GetExecutablePath();
+
 #else
     m_BinDir = argv[0];
-#endif // __UNIX__
+#endif
 
-    /* Use unix notation for paths. I am not sure this is a good idea,
-     * but it simplify compatibility between Windows and Unices
-     * However it is a potential problem in path handling under Windows
-     */
+    // Use unix notation for paths. I am not sure this is a good idea,
+    // but it simplify compatibility between Windows and Unices
+    // However it is a potential problem in path handling under Windows
     m_BinDir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
     // Remove file name form command line:
@@ -886,7 +885,6 @@ wxString EDA_APP::FindFileInSearchPaths( const wxString&      filename,
     for( i = 0; i < m_searchPaths.GetCount(); i++ )
     {
         fn = wxFileName( m_searchPaths[i], wxEmptyString );
-
         if( subdirs )
         {
             for( j = 0; j < subdirs->GetCount(); j++ )
@@ -1133,11 +1131,13 @@ void EDA_APP::InsertLibraryPath( const wxString& aPaths, size_t aIndex )
     }
 }
 
+
 bool EDA_APP::LockFile( const wxString& fileName )
 {
     // first make absolute and normalize, to avoid that different lock files
     // for the same file can be created
     wxFileName fn = fileName;
+
     fn.MakeAbsolute();
 
     // semaphore to protect the edition of the file by more than one instance
@@ -1146,11 +1146,16 @@ bool EDA_APP::LockFile( const wxString& fileName )
         // it means that we had an open file and we are opening a different one
         delete m_oneInstancePerFileChecker;
     }
+
     wxString lockFileName = fn.GetFullPath() + wxT( ".lock" );
+
     lockFileName.Replace( wxT( "/" ), wxT( "_" ) );
+
     // We can have filenames coming from Windows, so also convert Windows separator
     lockFileName.Replace( wxT( "\\" ), wxT( "_" ) );
+
     m_oneInstancePerFileChecker = new wxSingleInstanceChecker( lockFileName );
+
     if( m_oneInstancePerFileChecker &&
         m_oneInstancePerFileChecker->IsAnotherRunning() )
     {

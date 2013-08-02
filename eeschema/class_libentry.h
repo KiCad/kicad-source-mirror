@@ -206,13 +206,14 @@ class LIB_COMPONENT : public EDA_ITEM
     LIB_ALIASES        m_aliases;        ///< List of alias object pointers associated with the
                                          ///< component.
     CMP_LIBRARY*       m_library;        ///< Library the component belongs to if any.
-    static int         m_subpartIdSeparator;  ///< the separator char between
+
+    static int  m_subpartIdSeparator;    ///< the separator char between
                                          ///< the subpart id and the reference
                                          ///< like U1A ( m_subpartIdSeparator = 0 ) or U1.A or U1-A
-    static int         m_subpartFirstId; ///< the ascii char value to calculate the subpart symbol id
+    static int  m_subpartFirstId;        ///< the ascii char value to calculate the subpart symbol id
                                          ///< from the part number: only 'A', 'a' or '1' can be used,
                                          ///< other values have no sense.
-
+private:
     void deleteAllFields();
 
 public:
@@ -659,9 +660,28 @@ public:
 
     // Accessors to sub ref parameters
     static int GetSubpartIdSeparator() { return m_subpartIdSeparator; }
-    static void SetSubpartIdSeparator( int aSep ) { m_subpartIdSeparator = aSep; }
+
+    /** return a reference to m_subpartIdSeparator,
+     * only for read/save setting functions
+     */
+    static int* SubpartIdSeparatorPtr() { return &m_subpartIdSeparator; }
+
     static int GetSubpartFirstId() { return m_subpartFirstId; }
-    static void SetSubpartFirstId( int aFirstId ) { m_subpartFirstId = aFirstId; }
+
+    /** return a reference to m_subpartFirstId, only for read/save setting functions
+     */
+    static int* SubpartFirstIdPtr() { return &m_subpartFirstId; }
+
+    /** Set the separator char between the subpart id and the reference
+     * 0 (no separator) or '.' , '-' and '_'
+     * and the ascii char value to calculate the subpart symbol id from the part number:
+     * 'A' or '1' only are allowed. (to print U1.A or U1.1)
+     * if this is a digit, a number is used as id symbol
+     * Note also if the subpart symbol is a digit, the separator cannot be null.
+     * @param aSep = the separator symbol (0 (no separator) or '.' , '-' and '_')
+     * @param aFirstId = the Id of the first part ('A' or '1')
+     */
+    static void SetSubpartIdNotation( int aSep, int aFirstId );
 
     /**
      * Set or clear the alternate body style (DeMorgan) for the component.

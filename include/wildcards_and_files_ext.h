@@ -55,6 +55,7 @@ extern const wxString GerberFileExtension;
 extern const wxString LegacyPcbFileExtension;
 extern const wxString KiCadPcbFileExtension;
 #define PcbFileExtension    KiCadPcbFileExtension       // symlink choice
+extern const wxString PageLayoutDescrFileExtension;
 
 extern const wxString LegacyFootprintLibPathExtension;
 extern const wxString PdfFileExtension;
@@ -69,6 +70,7 @@ extern const wxString KiCadFootprintLibPathExtension;
 extern const wxString GedaPcbFootprintLibFileExtension;
 extern const wxString EagleFootprintLibPathExtension;
 extern const wxString ComponentFileExtensionWildcard;
+extern const wxString PageLayoutDescrFileWildcard;
 
 /// Proper wxFileDialog wild card definitions.
 extern const wxString SchematicSymbolFileWildcard;

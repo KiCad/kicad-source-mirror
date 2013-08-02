@@ -136,15 +136,13 @@ protected:
 
     /**
      * Function findToken
-     * takes a string and looks up the string in the list of expected
-     * tokens.
+     * takes aToken string and looks up the string in the keywords table.
      *
-     * @param tok A string holding the token text to lookup, in an
-     *   unpredictable case: uppercase or lowercase
-     * @return int - DSN_T matching the keyword text, or DSN_SYMBOL if argument
-     *   string is not a recognized token.
+     * @param aToken is a string to lookup in the keywords table.
+     * @return int - with a value from the enum DSN_T matching the keyword text,
+     *         or DSN_SYMBOL if @a aToken is not in the kewords table.
      */
-    int findToken( const std::string& tok );
+    int findToken( const std::string& aToken );
 
     bool isStringTerminator( char cc )
     {

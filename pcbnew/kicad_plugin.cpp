@@ -30,6 +30,7 @@
 #include <macros.h>
 #include <3d_struct.h>
 #include <wildcards_and_files_ext.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -61,43 +62,6 @@ using namespace std;
  * wxWidgets documentation on useing the WXTRACE environment variable.
  */
 static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
-
-// Helper function to print a float number without using scientific notation
-// and no trailing 0
-// We want to avoid scientific notation in S-expr files (not easy to read)
-// for floating numbers.
-// So we cannot always just use the %g or the %f format to print a fp number
-// this helper function uses the %f format when needed, or %g when %f is
-// not well working and then removes trailing 0
-
-std::string double2str( double aValue )
-{
-    char    buf[50];
-    int     len;
-
-    if( aValue != 0.0 && fabs( aValue ) <= 0.0001 )
-    {
-        // For these small values, %f works fine,
-        // and %g gives an exponent
-        len = sprintf( buf,  "%.16f", aValue );
-
-        while( --len > 0 && buf[len] == '0' )
-            buf[len] = '\0';
-
-        if( buf[len] == '.' )
-            buf[len] = '\0';
-        else
-            ++len;
-    }
-    else
-    {
-        // For these values, %g works fine, and sometimes %f
-        // gives a bad value (try aValue = 1.222222222222, with %.16f format!)
-        len = sprintf( buf, "%.16g", aValue );
-    }
-
-    return std::string( buf, len );;
-}
 
 
 /**
@@ -156,9 +120,9 @@ class FP_CACHE
 public:
     FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath );
 
-    wxString GetPath() const { return m_lib_path.GetPath(); }
-    wxDateTime GetLastModificationTime() const { return m_mod_time; }
-    bool IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
+    wxString    GetPath() const { return m_lib_path.GetPath(); }
+    wxDateTime  GetLastModificationTime() const { return m_mod_time; }
+    bool        IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
     MODULE_MAP& GetModules() { return m_modules; }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
@@ -217,8 +181,7 @@ void FP_CACHE::Save()
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
-            wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ),
-                        GetChars( tempFileName ) );
+            // wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ), GetChars( tempFileName ) );
 
             FILE_OUTPUTFORMATTER formatter( tempFileName );
 
@@ -254,26 +217,28 @@ void FP_CACHE::Load()
     wxString fpFileName;
     wxString wildcard = wxT( "*." ) + KiCadFootprintFileExtension;
 
-    if( !dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
-        return;
-
-    do
+    if( dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
     {
-        // reader now owns fp, will close on exception or return
-        FILE_LINE_READER    reader( fpFileName );
+        do
+        {
+            // prepend the libpath into fullPath
+            wxFileName fullPath( m_lib_path.GetPath(), fpFileName );
 
-        m_owner->m_parser->SetLineReader( &reader );
+            FILE_LINE_READER    reader( fullPath.GetFullPath() );
 
-        std::string name = TO_UTF8( fpFileName );
+            m_owner->m_parser->SetLineReader( &reader );
 
-        m_modules.insert( name, new FP_CACHE_ITEM( (MODULE*) m_owner->m_parser->Parse(), fpFileName ) );
+            std::string name = TO_UTF8( fpFileName );
 
-    } while( dir.GetNext( &fpFileName ) );
+            m_modules.insert( name, new FP_CACHE_ITEM( (MODULE*) m_owner->m_parser->Parse(), fpFileName ) );
 
-    // Remember the file modification time of library file when the
-    // cache snapshot was made, so that in a networked environment we will
-    // reload the cache as needed.
-    m_mod_time = GetLibModificationTime();
+        } while( dir.GetNext( &fpFileName ) );
+
+        // Remember the file modification time of library file when the
+        // cache snapshot was made, so that in a networked environment we will
+        // reload the cache as needed.
+        m_mod_time = GetLibModificationTime();
+    }
 }
 
 
@@ -589,7 +554,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     if( aBoard->GetDesignSettings().m_SolderPasteMarginRatio != 0 )
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %s)\n",
-                      double2str( aBoard->GetDesignSettings().m_SolderPasteMarginRatio ).c_str() );
+                      Double2Str( aBoard->GetDesignSettings().m_SolderPasteMarginRatio ).c_str() );
 
     m_out->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
                   FMTIU( aBoard->GetOriginAxisPosition().x ).c_str(),
@@ -949,7 +914,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 
     if( aModule->GetLocalSolderPasteMarginRatio() != 0 )
         m_out->Print( aNestLevel+1, "(solder_paste_ratio %s)\n",
-                      double2str( aModule->GetLocalSolderPasteMarginRatio() ).c_str() );
+                      Double2Str( aModule->GetLocalSolderPasteMarginRatio() ).c_str() );
 
     if( aModule->GetLocalClearance() != 0 )
         m_out->Print( aNestLevel+1, "(clearance %s)\n",
@@ -1000,19 +965,19 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
                           m_out->Quotew( t3D->m_Shape3DName ).c_str() );
 
             m_out->Print( aNestLevel+2, "(at (xyz %s %s %s))\n",
-                          double2str( t3D->m_MatPosition.x ).c_str(),
-                          double2str( t3D->m_MatPosition.y ).c_str(),
-                          double2str( t3D->m_MatPosition.z ).c_str() );
+                          Double2Str( t3D->m_MatPosition.x ).c_str(),
+                          Double2Str( t3D->m_MatPosition.y ).c_str(),
+                          Double2Str( t3D->m_MatPosition.z ).c_str() );
 
             m_out->Print( aNestLevel+2, "(scale (xyz %s %s %s))\n",
-                          double2str( t3D->m_MatScale.x ).c_str(),
-                          double2str( t3D->m_MatScale.y ).c_str(),
-                          double2str( t3D->m_MatScale.z ).c_str() );
+                          Double2Str( t3D->m_MatScale.x ).c_str(),
+                          Double2Str( t3D->m_MatScale.y ).c_str(),
+                          Double2Str( t3D->m_MatScale.z ).c_str() );
 
             m_out->Print( aNestLevel+2, "(rotate (xyz %s %s %s))\n",
-                          double2str( t3D->m_MatRotation.x ).c_str(),
-                          double2str( t3D->m_MatRotation.y ).c_str(),
-                          double2str( t3D->m_MatRotation.z ).c_str() );
+                          Double2Str( t3D->m_MatRotation.x ).c_str(),
+                          Double2Str( t3D->m_MatRotation.y ).c_str(),
+                          Double2Str( t3D->m_MatRotation.z ).c_str() );
 
             m_out->Print( aNestLevel+1, ")\n" );
         }
@@ -1186,7 +1151,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     if( aPad->GetLocalSolderPasteMarginRatio() != 0 )
         m_out->Print( aNestLevel+1, "(solder_paste_margin_ratio %s)\n",
-                      double2str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
+                      Double2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
 
     if( aPad->GetLocalClearance() != 0 )
         m_out->Print( aNestLevel+1, "(clearance %s)\n",
