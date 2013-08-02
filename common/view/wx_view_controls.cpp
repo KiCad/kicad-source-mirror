@@ -85,7 +85,6 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& event )
         else
             scrollSpeed = scrollVec.y;
 
-        VECTOR2D t = m_view->GetScreenPixelSize();
         VECTOR2D delta( event.ControlDown() ? -scrollSpeed : 0.0,
                         event.ShiftDown() ? -scrollSpeed : 0.0 );
 

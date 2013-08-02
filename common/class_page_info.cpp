@@ -63,7 +63,6 @@ const wxString PAGE_INFO::Custom( wxT( "User" ) );
 #define MMsize( x, y )  wxSize( Mm2mils( x ), Mm2mils( y ) )
 
 // All MUST be defined as landscape.
-// If IsGOST() is true, A4 is dynamically rotated later.
 const PAGE_INFO  PAGE_INFO::pageA4(     MMsize( 297,   210 ),   wxT( "A4" ),    wxPAPER_A4 );
 const PAGE_INFO  PAGE_INFO::pageA3(     MMsize( 420,   297 ),   wxT( "A3" ),    wxPAPER_A3 );
 const PAGE_INFO  PAGE_INFO::pageA2(     MMsize( 594,   420 ),   wxT( "A2" ),    wxPAPER_A2 );
@@ -126,38 +125,14 @@ inline void PAGE_INFO::updatePortrait()
 }
 
 
-void PAGE_INFO::setMargins()
-{
-    if( IsGOST() )
-    {
-        m_left_margin   = Mm2mils( 20 );    // 20mm
-        m_right_margin  =                   // 5mm
-        m_top_margin    =                   // 5mm
-        m_bottom_margin = Mm2mils( 5 );     // 5mm
-    }
-    else
-    {
-        m_left_margin   =
-        m_right_margin  =
-        m_top_margin    =
-        m_bottom_margin = Mm2mils( 10 );
-    }
-}
-
-
 PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType, wxPaperSize aPaperId ) :
-    m_type( aType ),
-    m_size( aSizeMils ),
-    m_paper_id( aPaperId )
+    m_type( aType ), m_size( aSizeMils ), m_paper_id( aPaperId )
 {
     updatePortrait();
 
-    setMargins();
-
     // This constructor is protected, and only used by const PAGE_INFO's known
     // only to class implementation, so no further changes to "this" object are
-    // expected.  Therefore we should also setMargin() again when copying this
-    // object in SetType() so that a runtime IsGOST() change does not break.
+    // expected.
 }
 
 
@@ -221,8 +196,6 @@ bool PAGE_INFO::SetType( const wxString& aType, bool IsPortrait )
         m_size = wxSize( m_size.y, m_size.x );
         updatePortrait();
     }
-
-    setMargins();
 
     return rc;
 }

@@ -43,6 +43,7 @@
 #include <dialog_hotkeys_editor.h>
 #include <fp_lib_table.h>
 #include <fp_lib_table_lexer.h>
+#include <worksheet_shape_builder.h>
 
 #include <class_board.h>
 #include <pcbplot.h>
@@ -125,7 +126,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_CONFIG_SAVE:
-        SaveProjectSettings();
+        SaveProjectSettings( true );
         break;
 
     case ID_CONFIG_READ:
@@ -221,26 +222,39 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     SetElementVisibility( RATSNEST_VISIBLE, showRats );
 #endif
 
+    // Load the page layout decr file, from the filename stored in
+    // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
+    // If empty, the default descr is loaded
+    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    pglayout.SetPageLayout(BASE_SCREEN::m_PageLayoutDescrFileName);
+
     loadFootprintLibTable();
 
     return true;
 }
 
 
-void PCB_EDIT_FRAME::SaveProjectSettings()
+void PCB_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 {
     wxFileName fn;
 
     fn = GetBoard()->GetFileName();
     fn.SetExt( ProjectFileExtension );
 
-    wxFileDialog dlg( this, _( "Save Project File" ), fn.GetPath(), fn.GetFullName(),
-                      ProjectFileWildcard, wxFD_SAVE | wxFD_CHANGE_DIR );
+    if( aAskForSave )
+    {
+        wxFileDialog dlg( this, _( "Save Project File" ),
+                          fn.GetPath(), fn.GetFullName(),
+                          ProjectFileWildcard, wxFD_SAVE | wxFD_CHANGE_DIR );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return;
 
-    wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP, GetProjectFileParameters() );
+        wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP, GetProjectFileParameters() );
+    }
+
+    else
+        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
 }
 
 
@@ -248,17 +262,19 @@ PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
 {
     PARAM_CFG_ARRAY         pca;
 
+    pca.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
+                                          &BASE_SCREEN::m_PageLayoutDescrFileName ) );
+
     pca.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),&g_UserLibDirBuffer,
-                                                           GROUPLIB ) );
+                                           GROUPLIB ) );
     pca.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
-                                                               &g_LibraryNames,
-                                                               GROUPLIB ) );
+                                               &g_LibraryNames,  GROUPLIB ) );
 
     pca.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ),
-                                                           &m_lastNetListRead ) );
+                                           &m_lastNetListRead ) );
 
     pca.push_back( new PARAM_CFG_BOOL( wxT( "UseCmpFile" ),
-                                            &m_useCmpFileForFpNames, true ) );
+                                       &m_useCmpFileForFpNames, true ) );
     GetBoard()->GetDesignSettings().AppendConfigs( &pca );
 
     return pca;

@@ -636,8 +636,6 @@ public:
     void SelectLayerPair();
     virtual void SwitchLayer( wxDC* DC, LAYER_NUM layer );
 
-    void InstallGridFrame( const wxPoint& pos );
-
     /**
      * Load applications settings common to PCB draw frame objects.
      *
@@ -649,6 +647,8 @@ public:
      * application settings loaded all over the place.
      */
     virtual void LoadSettings();
+
+    bool InvokeDialogGrid();
 
     /**
      * Save applications settings common to PCB draw frame objects.

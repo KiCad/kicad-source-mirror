@@ -1129,16 +1129,16 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_PCB_USER_GRID_SETUP:
-        InstallGridFrame( pos );
+        InvokeDialogGrid();
         break;
 
     case ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC:
-    {
-        wxConfig* cfg = wxGetApp().GetCommonSettings();
-        cfg->Read( wxT( "module_doc_file" ), g_DocModulesFileName );
-        GetAssociatedDocument( this, g_DocModulesFileName, &wxGetApp().GetLibraryPathList() );
-    }
-    break;
+        {
+            wxConfig* cfg = wxGetApp().GetCommonSettings();
+            cfg->Read( wxT( "module_doc_file" ), g_DocModulesFileName );
+            GetAssociatedDocument( this, g_DocModulesFileName, &wxGetApp().GetLibraryPathList() );
+        }
+        break;
 
     case ID_MENU_ARCHIVE_NEW_MODULES:
         ArchiveModulesOnBoard( wxEmptyString, true );
@@ -1201,15 +1201,14 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         break;
 
     case PCB_ZONE_AREA_T:
-    {
-        SetCurItem( NULL );
-        int netcode = ( (ZONE_CONTAINER*) Item )->GetNet();
-        Delete_Zone_Contour( DC, (ZONE_CONTAINER*) Item );
-        TestNetConnection( NULL, netcode );
-        SetMsgPanel( GetBoard() );
-    }
-
-    break;
+        {
+            SetCurItem( NULL );
+            int netcode = ( (ZONE_CONTAINER*) Item )->GetNet();
+            Delete_Zone_Contour( DC, (ZONE_CONTAINER*) Item );
+            TestNetConnection( NULL, netcode );
+            SetMsgPanel( GetBoard() );
+        }
+        break;
 
     case PCB_MARKER_T:
         if( Item == GetCurItem() )
@@ -1229,12 +1228,12 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
     case TYPE_NOT_INIT:
     case PCB_T:
     default:
-    {
-        wxString Line;
-        Line.Printf( wxT( "Remove: item type %d unknown." ), Item->Type() );
-        DisplayError( this, Line );
-    }
-    break;
+        {
+            wxString msg = wxString::Format(
+                wxT( "Remove: item type %d unknown." ), Item->Type() );
+            DisplayError( this, msg );
+        }
+        break;
     }
 }
 

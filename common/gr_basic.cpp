@@ -15,6 +15,7 @@
 #include <wx/graphics.h>
 
 static const bool FILLED = true;
+static const bool NOT_FILLED = false;
 
 /* Important Note:
  * These drawing functions  clip draw item before send these items to wxDC draw
@@ -50,11 +51,8 @@ GR_DRAWMODE g_XorMode = GR_NXOR;
 EDA_COLOR_T g_DrawBgColor = WHITE;
 
 
-#define USE_CLIP_FILLED_POLYGONS
-
-#ifdef USE_CLIP_FILLED_POLYGONS
-static void ClipAndDrawFilledPoly( EDA_RECT * ClipBox, wxDC * DC, wxPoint Points[], int n );
-#endif
+static void ClipAndDrawPoly( EDA_RECT * ClipBox, wxDC * DC, wxPoint Points[],
+                             int n );
 
 /* These functions are used by corresponding functions
  * ( GRSCircle is called by GRCircle for instance) after mapping coordinates
@@ -857,14 +855,9 @@ static bool IsGRSPolyDrawable( EDA_RECT* ClipBox, int n, wxPoint Points[] )
 /*
  * Draw a new polyline and fill it if Fill, in screen space.
  */
-static void GRSPoly( EDA_RECT* ClipBox,
-                     wxDC*     DC,
-                     int       n,
-                     wxPoint   Points[],
-                     bool      Fill,
-                     int       width,
-                     EDA_COLOR_T       Color,
-                     EDA_COLOR_T       BgColor )
+static void GRSPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[],
+                     bool      Fill, int width,
+                     EDA_COLOR_T Color, EDA_COLOR_T BgColor )
 {
     if( !IsGRSPolyDrawable( ClipBox, n, Points ) )
         return;
@@ -878,12 +871,9 @@ static void GRSPoly( EDA_RECT* ClipBox,
 
         /* clip before send the filled polygon to wxDC, because under linux
          * (GTK?) polygons having large coordinates are incorrectly drawn
+         * (integer overflow in coordinates, I am guessing)
          */
-#ifdef USE_CLIP_FILLED_POLYGONS
-        ClipAndDrawFilledPoly( ClipBox, DC, Points, n );
-#else
-        DC->DrawPolygon( n, Points );  // does not work very well under linux
-#endif
+        ClipAndDrawPoly( ClipBox, DC, Points, n );
     }
     else
     {
@@ -903,47 +893,36 @@ static void GRSPoly( EDA_RECT* ClipBox,
 /*
  * Draw a new closed polyline and fill it if Fill, in screen space.
  */
-static void GRSClosedPoly( EDA_RECT* ClipBox,
-                           wxDC*     DC,
-                           int       aPointCount,
-                           wxPoint   aPoints[],
-                           bool      Fill,
-                           int       width,
-                           EDA_COLOR_T       Color,
-                           EDA_COLOR_T       BgColor )
+static void GRSClosedPoly( EDA_RECT* aClipBox, wxDC* aDC,
+                           int       aPointCount, wxPoint aPoints[],
+                           bool      aFill, int aWidth,
+                           EDA_COLOR_T       aColor,
+                           EDA_COLOR_T       aBgColor )
 {
-    if( !IsGRSPolyDrawable( ClipBox, aPointCount, aPoints ) )
+    if( !IsGRSPolyDrawable( aClipBox, aPointCount, aPoints ) )
         return;
 
-    GRSetColorPen( DC, Color, width );
+    GRSetColorPen( aDC, aColor, aWidth );
 
-    if( Fill && ( aPointCount > 2 ) )
+    if( aFill && ( aPointCount > 2 ) )
     {
         GRLastMoveToX = aPoints[aPointCount - 1].x;
         GRLastMoveToY = aPoints[aPointCount - 1].y;
-        GRSetBrush( DC, BgColor, FILLED );
-#ifdef USE_CLIP_FILLED_POLYGONS
-        ClipAndDrawFilledPoly( ClipBox, DC, aPoints, aPointCount );
-#else
-        DC->DrawPolygon( aPointCount, aPoints );  // does not work very well under linux
-#endif
+        GRSetBrush( aDC, aBgColor, FILLED );
+        ClipAndDrawPoly( aClipBox, aDC, aPoints, aPointCount );
     }
     else
     {
-        GRSetBrush( DC, BgColor );
-        DC->DrawLines( aPointCount, aPoints );
+        GRSetBrush( aDC, aBgColor );
+        aDC->DrawLines( aPointCount, aPoints );
 
+        int lastpt = aPointCount - 1;
         /* Close the polygon. */
-        if( aPoints[aPointCount - 1] != aPoints[0] )
+        if( aPoints[lastpt] != aPoints[0] )
         {
-            GRLine( ClipBox,
-                    DC,
-                    aPoints[0].x,
-                    aPoints[0].y,
-                    aPoints[aPointCount - 1].x,
-                    aPoints[aPointCount - 1].y,
-                    width,
-                    Color );
+            GRLine( aClipBox, aDC, aPoints[0].x, aPoints[0].y,
+                    aPoints[lastpt].x, aPoints[lastpt].y,
+                    aWidth, aColor );
         }
     }
 }
@@ -1153,7 +1132,7 @@ void GRFilledArc( EDA_RECT* ClipBox,
 
 
 void GRFilledArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y,
-                  double StAngle, double EndAngle, int r, 
+                  double StAngle, double EndAngle, int r,
                   EDA_COLOR_T Color, EDA_COLOR_T BgColor )
 {
     GRFilledArc( ClipBox, DC, x, y, StAngle, EndAngle, r, 0, Color, BgColor );
@@ -1322,30 +1301,20 @@ void GRFilledRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 void GRSRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2,
               int aWidth, EDA_COLOR_T aColor, wxPenStyle aStyle )
 {
-
     wxPoint points[5];
     points[0] = wxPoint(x1, y1);
     points[1] = wxPoint(x1, y2);
     points[2] = wxPoint(x2, y2);
     points[3] = wxPoint(x2, y1);
     points[4] = points[0];
-    GRSetColorPen( aDC, aColor, aWidth, aStyle );
-    GRSetBrush( aDC, BLACK );
-    if( aClipBox )
-    {
-        EDA_RECT clipbox(*aClipBox);
-        clipbox.Inflate(aWidth);
-        ClipAndDrawFilledPoly(&clipbox, aDC, points, 5); // polygon approach is more accurate
-    }
-    else
-        ClipAndDrawFilledPoly(aClipBox, aDC, points, 5);
+    GRSClosedPoly( aClipBox, aDC, 5, points, NOT_FILLED, aWidth,
+                           aColor, aColor );
 }
 
 
 void GRSFilledRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2,
                     int aWidth, EDA_COLOR_T aColor, EDA_COLOR_T aBgColor )
 {
-
     wxPoint points[5];
     points[0] = wxPoint(x1, y1);
     points[1] = wxPoint(x1, y2);
@@ -1354,21 +1323,19 @@ void GRSFilledRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y
     points[4] = points[0];
     GRSetBrush( aDC, aBgColor, FILLED );
     GRSetColorPen( aDC, aBgColor, aWidth );
+
     if( aClipBox && (aWidth > 0) )
     {
         EDA_RECT clipbox(*aClipBox);
         clipbox.Inflate(aWidth);
-        ClipAndDrawFilledPoly(&clipbox, aDC, points, 5); // polygon approach is more accurate
+        ClipAndDrawPoly(&clipbox, aDC, points, 5); // polygon approach is more accurate
     }
     else
-        ClipAndDrawFilledPoly(aClipBox, aDC, points, 5);
+        ClipAndDrawPoly(aClipBox, aDC, points, 5 );
 }
 
-
-#ifdef USE_CLIP_FILLED_POLYGONS
-
 /**
- * Function ClipAndDrawFilledPoly
+ * Function ClipAndDrawPoly
  *  Used to clip a polygon and draw it as Filled Polygon
  *  uses the Sutherland and Hodgman algo to clip the given poly against a
  *  rectangle.  This rectangle is the drawing area this is useful under
@@ -1382,7 +1349,7 @@ void GRSFilledRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y
  */
 #include <SutherlandHodgmanClipPoly.h>
 
-void ClipAndDrawFilledPoly( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPoints[], int n )
+void ClipAndDrawPoly( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPoints[], int n )
 {
     if( aClipBox == NULL )
     {
@@ -1415,9 +1382,6 @@ void ClipAndDrawFilledPoly( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPoints[], in
     if( clippedPolygon.size() )
         aDC->DrawPolygon( clippedPolygon.size(), &clippedPolygon[0] );
 }
-
-
-#endif
 
 
 void GRBezier( EDA_RECT* ClipBox,
@@ -1561,7 +1525,7 @@ EDA_COLOR_T ColorFindNearest( const wxColour &aColor )
     return candidate;
 }
 
-void GRDrawAnchor( EDA_RECT *aClipBox, wxDC *aDC, int x, int y, 
+void GRDrawAnchor( EDA_RECT *aClipBox, wxDC *aDC, int x, int y,
                    int aSize, EDA_COLOR_T aColor )
 {
         int anchor_size = aDC->DeviceToLogicalXRel( aSize );

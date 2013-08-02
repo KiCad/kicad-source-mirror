@@ -259,7 +259,7 @@ void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
     if( aFillMode == LINE )
         width = 0;
 
-    if( aDrawMode != -1 )
+    if( aDrawMode != UNSPECIFIED_DRAWMODE )
         GRSetDrawMode( aDC, aDrawMode );
 
     // Draw text anchor, if requested

@@ -43,6 +43,10 @@
 
 class wxFrame;
 class wxDialog;
+class wxPoint;
+class wxSize;
+class wxRealPoint;
+
 
 // Often this is not used in the prototypes, since wxFrame is good enough and would
 // represent maximum information hiding.
@@ -63,7 +67,5 @@ wxDialog* InvokeDialogERC( SCH_EDIT_FRAME* aCaller );
 /// DIALOG_PRINT_USING_PRINTER::ShowModal() returns.
 int InvokeDialogPrintUsingPrinter( SCH_EDIT_FRAME* aCaller );
 */
-
-
 
 #endif  // INVOKE_A_DIALOG_H_

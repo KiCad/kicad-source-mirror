@@ -35,9 +35,8 @@
 namespace KiGfx
 {
 // Possible types of shaders
-enum SHADER_TYPE
-{
-    SHADER_NONE             = 0,
+enum SHADER_TYPE {
+    SHADER_NONE = 0,
     SHADER_LINE,
     SHADER_FILLED_CIRCLE,
     SHADER_STROKED_CIRCLE,
@@ -60,7 +59,7 @@ const unsigned int CoordStride  = CoordSize / sizeof(GLfloat);
 // Offset of color data from the beginning of each vertex data
 const unsigned int ColorOffset  = offsetof(VERTEX, r);
 const unsigned int ColorSize    = sizeof(VERTEX().r) + sizeof(VERTEX().g) +
-                                    sizeof(VERTEX().b) + sizeof(VERTEX().a);
+                                  sizeof(VERTEX().b) + sizeof(VERTEX().a);
 const unsigned int ColorStride  = ColorSize / sizeof(GLubyte);
 
 // Shader attributes

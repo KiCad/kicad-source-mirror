@@ -44,7 +44,7 @@ namespace KiGfx
 /**
  * GridStyle: Type definition of the grid style
  */
-enum GridStyle
+enum GRID_STYLE
 {
     GRID_STYLE_LINES,   ///< Use lines for the grid
     GRID_STYLE_DOTS     ///< Use dots for the grid
@@ -231,7 +231,10 @@ public:
      *
      * @param aColor is the color for background filling.
      */
-    virtual void SetBackgroundColor( const COLOR4D& aColor ) = 0;
+    inline virtual void SetBackgroundColor( const COLOR4D& aColor )
+    {
+        backgroundColor = aColor;
+    }
 
     /**
      * @brief Set the line width.
@@ -417,7 +420,7 @@ public:
     // --------------------------------------------------------
 
     /// @brief Compute the world <-> screen transformation matrix
-    virtual void ComputeWorldScreenMatrix() = 0;
+    virtual void ComputeWorldScreenMatrix();
 
     /**
      * @brief Get the world <-> screen transformation matrix.
@@ -665,8 +668,15 @@ public:
     /// @brief Draw the grid
     void DrawGrid();
 
-    // TODO Not yet implemented
-    // virtual void SetGridStyle(GridStyle gridStyle);
+    /**
+     * @brief Change the grid display style.
+     *
+     * @param aGridStyle is the new style for grid.
+     */
+    inline virtual void SetGridStyle( GRID_STYLE aGridStyle )
+    {
+        gridStyle = aGridStyle;
+    }
 
     // -------
     // Cursor
@@ -745,7 +755,6 @@ protected:
 
     bool               isFillEnabled;          ///< Is filling of graphic objects enabled ?
     bool               isStrokeEnabled;        ///< Are the outlines stroked ?
-    bool               isSetAttributes;        ///< True, if the attributes have been set
 
     COLOR4D            backgroundColor;        ///< The background color
     COLOR4D            fillColor;              ///< The fill color
@@ -756,6 +765,7 @@ protected:
 
     // Grid settings
     bool               gridVisibility;         ///< Should the grid be shown
+    GRID_STYLE         gridStyle;              ///< Grid display style
     VECTOR2D           gridSize;               ///< The grid size
     VECTOR2D           gridOrigin;             ///< The grid origin
     COLOR4D            gridColor;              ///< Color of the grid
@@ -784,7 +794,14 @@ protected:
      * @param aStartPoint is the start point of the line.
      * @param aEndPoint is the end point of the line.
      */
-    virtual void DrawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
+    virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
+
+    /**
+     * @brief Initialize the cursor.
+     *
+     * @param aCursorSize is the size of the cursor.
+     */
+    virtual void initCursor( int aCursorSize ) = 0;
 };
 } // namespace KiGfx
 

@@ -37,7 +37,7 @@
 using namespace KiGfx;
 
 VERTEX_MANAGER::VERTEX_MANAGER( bool aCached ) :
-        m_noTransform( true ), m_transform( 1.0f )
+    m_noTransform( true ), m_transform( 1.0f )
 {
     m_container.reset( VERTEX_CONTAINER::MakeContainer( aCached ) );
     m_gpu.reset( GPU_MANAGER::MakeManager( m_container.get() ) );
@@ -52,6 +52,7 @@ void VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ ) const
 {
     // Obtain the pointer to the vertex in the currently used container
     VERTEX* newVertex = m_container->Allocate( 1 );
+
     if( newVertex == NULL )
     {
         wxLogError( wxT( "Vertex allocation error" ) );
@@ -66,6 +67,7 @@ void VERTEX_MANAGER::Vertices( const VERTEX aVertices[], unsigned int aSize ) co
 {
     // Obtain pointer to the vertex in currently used container
     VERTEX* newVertex = m_container->Allocate( aSize );
+
     if( newVertex == NULL )
     {
         wxLogError( wxT( "Vertex allocation error" ) );
@@ -95,7 +97,7 @@ void VERTEX_MANAGER::FreeItem( VERTEX_ITEM& aItem ) const
 
 void VERTEX_MANAGER::ChangeItemColor( const VERTEX_ITEM& aItem, const COLOR4D& aColor ) const
 {
-    unsigned int size = aItem.GetSize();
+    unsigned int size   = aItem.GetSize();
     unsigned int offset = aItem.GetOffset();
 
     VERTEX* vertex = m_container->GetVertices( offset );
@@ -114,7 +116,7 @@ void VERTEX_MANAGER::ChangeItemColor( const VERTEX_ITEM& aItem, const COLOR4D& a
 
 void VERTEX_MANAGER::ChangeItemDepth( const VERTEX_ITEM& aItem, GLfloat aDepth ) const
 {
-    unsigned int size = aItem.GetSize();
+    unsigned int size   = aItem.GetSize();
     unsigned int offset = aItem.GetOffset();
 
     VERTEX* vertex = m_container->GetVertices( offset );
@@ -131,7 +133,7 @@ void VERTEX_MANAGER::ChangeItemDepth( const VERTEX_ITEM& aItem, GLfloat aDepth )
 VERTEX* VERTEX_MANAGER::GetVertices( const VERTEX_ITEM& aItem ) const
 {
     if( aItem.GetSize() == 0 )
-        return NULL;    // The item is not stored in the container
+        return NULL; // The item is not stored in the container
 
     return m_container->GetVertices( aItem.GetOffset() );
 }
@@ -158,6 +160,7 @@ void VERTEX_MANAGER::BeginDrawing() const
 void VERTEX_MANAGER::DrawItem( const VERTEX_ITEM& aItem ) const
 {
     int size = aItem.GetSize();
+
     if( size > 0 )
     {
         int offset = aItem.GetOffset();

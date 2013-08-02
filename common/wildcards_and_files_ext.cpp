@@ -46,6 +46,7 @@ const wxString GerberFileExtension( wxT( "pho" ) );
 
 const wxString LegacyPcbFileExtension( wxT( "brd" ) );
 const wxString KiCadPcbFileExtension( wxT( "kicad_pcb" ) );
+const wxString PageLayoutDescrFileExtension( wxT( "kicad_wks" ) );
 
 const wxString PdfFileExtension( wxT( "pdf" ) );
 const wxString MacrosFileExtension( wxT( "mcr" ) );
@@ -81,7 +82,7 @@ const wxString EagleFootprintLibPathWildcard( _( "Eagle ver. 6.x XML library fil
 const wxString GedaPcbFootprintLibFileWildcard( _( "Geda PCB footprint library file (*.fp)|*.fp" ) );
 const wxString MacrosFileWildcard( _( "KiCad recorded macros (*.mcr)|*.mcr" ) );
 const wxString ComponentFileExtensionWildcard( _( "Component-footprint link file (*.cmp)|*cmp" ) );
-
+const wxString PageLayoutDescrFileWildcard( _( "Page layout descr file (*.kicad_wks)|*kicad_wks" ) );
 // generic:
 const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 
