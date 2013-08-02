@@ -57,6 +57,9 @@ void VIEW_ITEM::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
 
 void VIEW_ITEM::ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw )
 {
+    if(!m_view)
+        return;
+
     m_view->invalidateItem( this, aUpdateFlags );
 
     if( aForceImmediateRedraw )
@@ -139,4 +142,10 @@ void VIEW_ITEM::deleteGroups()
 bool VIEW_ITEM::storesGroups() const
 {
     return ( m_groupsSize > 0 );
+}
+
+void VIEW_ITEM::ViewSetHighlighted( bool aIsHighlighted )
+{
+    m_highlighted = aIsHighlighted;
+    ViewUpdate(APPEARANCE | GEOMETRY);
 }

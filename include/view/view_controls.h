@@ -55,6 +55,7 @@ public:
         JUMP    = 2
     };
 
+
     VIEW_CONTROLS( VIEW* aView ) : m_view( aView ) {};
     virtual ~VIEW_CONTROLS() {};
 
@@ -74,7 +75,7 @@ public:
     virtual void SetGrabMouse( bool aEnabled ) {};
 
     /**
-     * Function SetGrabMouse
+     * Function SetAutoPan
      * Turns on/off auto panning (this feature is used when there is a tool active (eg. drawing a
      * track) and user moves mouse to the VIEW edge - then the view can be translated or not).
      * @param aEnabled tells if the autopanning should be active.
@@ -107,6 +108,11 @@ public:
      * // TODO
      */
     virtual void AnimatedZoom( const BOX2I& aExtents ) {};
+
+    virtual void WarpCursor (const VECTOR2D& aPosition ) {};
+
+    virtual void ShowCursor (bool aEnabled ) {};
+
 
 protected:
     /// Pointer to controlled VIEW.
