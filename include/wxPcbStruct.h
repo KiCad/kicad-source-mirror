@@ -117,6 +117,7 @@ protected:
     bool              m_useCmpFileForFpNames;   ///< is true, use the .cmp file from CvPcb, else use the netlist
                                                 // to know the footprint name of components.
 
+    void setupTools();
 	void onGenericCommand( wxCommandEvent& aEvent );
 		
     // we'll use lower case function names for private member functions.
