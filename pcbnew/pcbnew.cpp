@@ -109,15 +109,33 @@ bool EDA_APP::OnInit()
     PCB_EDIT_FRAME* frame = NULL;
     wxString        msg;
 
+    InitEDA_Appl( wxT( "Pcbnew" ), APP_PCBNEW_T );
+
 #ifdef KICAD_SCRIPTING
-    if ( !pcbnewInitPythonScripting() )
+    msg.Empty();
+#ifdef __WINDOWS__
+    // TODO: make this path definable by the user, and set more than one path
+    // (and remove the fixed paths from <src>/scripting/kicadplugins.i)
+
+    // wizard plugins are stored in kicad/bin/plugins.
+    // so add this path to python scripting defualt search paths
+    // which are ( [KICAD_PATH] is an environment variable to define)
+    // [KICAD_PATH]/scripting/plugins
+    // Add this default search path:
+    msg = wxGetApp().GetExecutablePath() + wxT("scripting/plugins");
+#else
+    // Add this default search path:
+    msg = wxT("/usr/local/kicad/bin/scripting/plugins");
+#endif
+    // On linux and osx, 2 others paths are
+    // [HOME]/.kicad_plugins/
+    // [HOME]/.kicad/scripting/plugins/
+    if ( !pcbnewInitPythonScripting( TO_UTF8(msg) ) )
     {
         wxMessageBox( wxT( "pcbnewInitPythonScripting() fails" ) );
         return false;
     }
 #endif
-
-    InitEDA_Appl( wxT( "Pcbnew" ), APP_PCBNEW_T );
 
     if( argc > 1 )
     {

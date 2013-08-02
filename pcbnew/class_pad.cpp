@@ -123,12 +123,77 @@ int D_PAD::boundingRadius() const
 EDA_RECT D_PAD::GetBoundingBox() const
 {
     EDA_RECT area;
+    wxPoint quadrant1, quadrant2, quadrant3, quadrant4;
+    int x, y, dx, dy;
 
-    // radius of pad area, enclosed in minimum sized circle
-    int radius = boundingRadius();
+    switch( GetShape() )
+    {
+    case PAD_CIRCLE:
+        area.SetOrigin( m_Pos );
+        area.Inflate( m_Size.x / 2 );
+        break;
 
-    area.SetOrigin( m_Pos );
-    area.Inflate( radius );
+    case PAD_OVAL:
+        //Use the maximal two most distant points and track their rotation
+        // (utilise symmetry to avoid four points)
+        quadrant1.x =  m_Size.x/2;
+        quadrant1.y =  0;
+        quadrant2.x =  0;
+        quadrant2.y =  m_Size.y/2;
+
+        RotatePoint( &quadrant1, m_Orient );
+        RotatePoint( &quadrant2, m_Orient );
+        dx = std::max( std::abs( quadrant1.x ) , std::abs( quadrant2.x )  );
+        dy = std::max( std::abs( quadrant1.y ) , std::abs( quadrant2.y )  );
+        area.SetOrigin( m_Pos.x-dx, m_Pos.y-dy );
+        area.SetSize( 2*dx, 2*dy );
+        break;
+        break;
+
+    case PAD_RECT:
+        //Use two corners and track their rotation
+        // (utilise symmetry to avoid four points)
+        quadrant1.x =  m_Size.x/2;
+        quadrant1.y =  m_Size.y/2;
+        quadrant2.x = -m_Size.x/2;
+        quadrant2.y =  m_Size.y/2;
+
+        RotatePoint( &quadrant1, m_Orient );
+        RotatePoint( &quadrant2, m_Orient );
+        dx = std::max( std::abs( quadrant1.x ) , std::abs( quadrant2.x )  );
+        dy = std::max( std::abs( quadrant1.y ) , std::abs( quadrant2.y )  );
+        area.SetOrigin( m_Pos.x-dx, m_Pos.y-dy );
+        area.SetSize( 2*dx, 2*dy );
+        break;
+
+    case PAD_TRAPEZOID:
+        //Use the four corners and track their rotation
+        // (Trapezoids will not be symmetric)
+        quadrant1.x =  (m_Size.x + m_DeltaSize.y)/2;
+        quadrant1.y =  (m_Size.y - m_DeltaSize.x)/2;
+        quadrant2.x = -(m_Size.x + m_DeltaSize.y)/2;
+        quadrant2.y =  (m_Size.y + m_DeltaSize.x)/2;
+        quadrant3.x = -(m_Size.x - m_DeltaSize.y)/2;
+        quadrant3.y = -(m_Size.y + m_DeltaSize.x)/2;
+        quadrant4.x =  (m_Size.x - m_DeltaSize.y)/2;
+        quadrant4.y = -(m_Size.y - m_DeltaSize.x)/2;
+
+        RotatePoint( &quadrant1, m_Orient );
+        RotatePoint( &quadrant2, m_Orient );
+        RotatePoint( &quadrant3, m_Orient );
+        RotatePoint( &quadrant4, m_Orient );
+
+        x  = std::min( quadrant1.x, std::min( quadrant2.x, std::min( quadrant3.x, quadrant4.x) ) );
+        y  = std::min( quadrant1.y, std::min( quadrant2.y, std::min( quadrant3.y, quadrant4.y) ) );
+        dx = std::max( quadrant1.x, std::max( quadrant2.x, std::max( quadrant3.x, quadrant4.x) ) );
+        dy = std::max( quadrant1.y, std::max( quadrant2.y, std::max( quadrant3.y, quadrant4.y) ) );
+        area.SetOrigin( m_Pos.x+x, m_Pos.y+y );
+        area.SetSize( dx-x, dy-y );
+        break;
+
+    default:
+        break;
+    }
 
     return area;
 }
@@ -417,14 +482,14 @@ int D_PAD::GetSolderMaskMargin() const
         int minsize = -std::min( m_Size.x, m_Size.y ) / 2;
 
         if( margin < minsize )
-            minsize = minsize;
+            margin = minsize;
     }
 
     return margin;
 }
 
 
-wxSize D_PAD::GetSolderPasteMargin()
+wxSize D_PAD::GetSolderPasteMargin() const
 {
     int     margin = m_LocalSolderPasteMargin;
     double  mratio = m_LocalSolderPasteMarginRatio;
@@ -759,18 +824,22 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         aLayers[aCount++] = ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE );
         aLayers[aCount++] = SOLDERMASK_N_FRONT;
         aLayers[aCount++] = SOLDERMASK_N_BACK;
+        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
+        aLayers[aCount++] = SOLDERPASTE_N_BACK;
     }
     else if( IsOnLayer( LAYER_N_FRONT ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
         aLayers[aCount++] = SOLDERMASK_N_FRONT;
+        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
     }
     else if( IsOnLayer( LAYER_N_BACK ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
         aLayers[aCount++] = SOLDERMASK_N_BACK;
+        aLayers[aCount++] = SOLDERPASTE_N_BACK;
     }
 #ifdef __WXDEBUG__
     else    // Should not occur
@@ -788,13 +857,16 @@ void D_PAD::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
     // Remove pad description layer & soldermask from the required layers group
     if( IsOnLayer( LAYER_N_FRONT ) && IsOnLayer( LAYER_N_BACK ) )
     {
-        // Multilayer pads have 2 soldermask layers and one description layer
-        aCount -= 3;
+        // Multilayer pads have 2 soldermask layers (front and back), 2 solder paste layer
+        // (front and back) and one description layer that do not have to be enabled in order to
+        // display a pad.
+        aCount -= 5;
     }
     else
     {
-        // Rest of pads have one soldermask layer and one description layer
-        aCount -= 2;
+        // Rest of pads have one soldermask layer, one solder paste layer and one description layer
+        // that are not necessary for pad to be displayed.
+        aCount -= 3;
     }
 }
 
@@ -815,9 +887,14 @@ unsigned int D_PAD::ViewGetLOD( int aLayer ) const
 const BOX2I D_PAD::ViewBBox() const
 {
     // Bounding box includes soldermask too
-    int solderMaskMargin = GetSolderMaskMargin();
-    EDA_RECT bbox        = GetBoundingBox();
+    int solderMaskMargin       = GetSolderMaskMargin();
+    VECTOR2I solderPasteMargin = VECTOR2D( GetSolderPasteMargin() );
+    EDA_RECT bbox              = GetBoundingBox();
 
-    return BOX2I( VECTOR2I( bbox.GetOrigin() ) - solderMaskMargin,
-                  VECTOR2I( bbox.GetSize() ) + 2 * solderMaskMargin );
+    // Look for the biggest possible bounding box
+    int xMargin = std::max( solderMaskMargin, solderPasteMargin.x );
+    int yMargin = std::max( solderMaskMargin, solderPasteMargin.y );
+
+    return BOX2I( VECTOR2I( bbox.GetOrigin() ) - VECTOR2I( xMargin, yMargin ),
+                  VECTOR2I( bbox.GetSize() ) + VECTOR2I( 2 * xMargin, 2 * yMargin ) );
 }

@@ -55,8 +55,25 @@ inline int DMils2iu( int dmils )
 #endif
 }
 
-#else            // Eeschema and anything else.
+#elif defined (PL_EDITOR)
+#define IU_PER_MM           1e3 // internal units in micron (should be enough)
+#define IU_PER_MILS       (IU_PER_MM * 0.0254)
+#define IU_PER_DECIMILS   (IU_PER_MM * 0.00254)
+/// Convert mils to page layout editor internal units (iu).
+inline int Mils2iu( int mils )
+{
+    double x = mils * IU_PER_MILS;
+    return int( x < 0 ? x - 0.5 : x + 0.5 );
+}
 
+/// Convert deci-mils to page layout editor internal units (iu).
+inline int DMils2iu( int dmils )
+{
+    double x = dmils * IU_PER_DECIMILS;
+    return int( x < 0 ? x - 0.5 : x + 0.5 );
+}
+
+#else            // Eeschema and anything else.
 #define IU_PER_DECIMILS     0.1
 #define IU_PER_MILS         1.0
 #define IU_PER_MM           (IU_PER_MILS / 0.0254)

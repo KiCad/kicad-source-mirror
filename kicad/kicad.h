@@ -62,20 +62,21 @@ class TREE_PROJECT_FRAME;
 
 enum TreeFileType {
     TREE_PROJECT = 1,
-    TREE_SCHEMA,        // Schematic file (.sch)
-    TREE_LEGACY_PCB,    // board file (.brd) legacy format
-    TREE_SEXP_PCB,      // board file (.kicad_brd) new s expression format
-    TREE_GERBER,        // Gerber  file (.pho, .g*)
-    TREE_PDF,           // PDF file (.pdf)
-    TREE_TXT,           // ascii text file (.txt)
-    TREE_NET,           // netlist file (.net)
+    TREE_SCHEMA,            // Schematic file (.sch)
+    TREE_LEGACY_PCB,        // board file (.brd) legacy format
+    TREE_SEXP_PCB,          // board file (.kicad_brd) new s expression format
+    TREE_GERBER,            // Gerber  file (.pho, .g*)
+    TREE_PDF,               // PDF file (.pdf)
+    TREE_TXT,               // ascii text file (.txt)
+    TREE_NET,               // netlist file (.net)
     TREE_UNKNOWN,
     TREE_DIRECTORY,
-    TREE_CMP_LINK,      // cmp/footprint link file (.cmp)
-    TREE_REPORT,        // report file (.rpt)
-    TREE_FP_PLACE,      // fooprints position (place) file (.pos)
-    TREE_DRILL,         // Excellon drill file (.drl)
-    TREE_SVG,           // SVG file (.svg)
+    TREE_CMP_LINK,          // cmp/footprint link file (.cmp)
+    TREE_REPORT,            // report file (.rpt)
+    TREE_FP_PLACE,          // fooprints position (place) file (.pos)
+    TREE_DRILL,             // Excellon drill file (.drl)
+    TREE_SVG,               // SVG file (.svg)
+    TREE_PAGE_LAYOUT_DESCR, // Page layout and title block descr file (.kicad_wks)
     TREE_MAX
 };
 
@@ -103,6 +104,7 @@ enum id_kicad_frm {
     ID_TO_GERBVIEW,
     ID_TO_BITMAP_CONVERTER,
     ID_TO_PCB_CALCULATOR,
+    ID_TO_PL_EDITOR,
     ID_BROWSE_AN_SELECT_FILE,
     ID_SELECT_PREFERED_EDITOR,
     ID_SELECT_PREFERED_PDF_BROWSER_NAME,
@@ -160,6 +162,7 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
     void OnRunGerbview( wxCommandEvent& event );
     void OnRunBitmapConverter( wxCommandEvent& event );
     void OnRunPcbCalculator( wxCommandEvent& event );
+    void OnRunPageLayoutEditor( wxCommandEvent& event );
 
     void OnOpenTextEditor( wxCommandEvent& event );
     void OnOpenFileInTextEditor( wxCommandEvent& event );

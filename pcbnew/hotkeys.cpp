@@ -85,9 +85,7 @@ static EDA_HOTKEY HkSwitchHighContrastMode( wxT("Switch Highcontrast mode"),
 static EDA_HOTKEY HkCanvasDefault( wxT( "Switch to default canvas" ),
                                    HK_CANVAS_DEFAULT, GR_KB_ALT + WXK_F9 );
 static EDA_HOTKEY HkCanvasOpenGL( wxT( "Switch to OpenGL canvas" ),
-                                  HK_CANVAS_OPENGL, GR_KB_ALT + WXK_F10 );
-static EDA_HOTKEY HkCanvasOpenGLShaders( wxT( "Switch to OpenGL canvas with shaders" ),
-                                         HK_CANVAS_OPENGL_SHADERS, GR_KB_ALT + WXK_F11 );
+                                  HK_CANVAS_OPENGL, GR_KB_ALT + WXK_F11 );
 static EDA_HOTKEY HkCanvasCairo( wxT( "Switch to Cairo canvas" ),
                                  HK_CANVAS_CAIRO, GR_KB_ALT + WXK_F12 );
 
@@ -237,7 +235,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkRecordMacros6,          &HkCallMacros6,    &HkRecordMacros7,          &HkCallMacros7,
     &HkRecordMacros8,          &HkCallMacros8,    &HkRecordMacros9,          &HkCallMacros9,
     &HkSwitchHighContrastMode,
-    &HkCanvasDefault, &HkCanvasCairo, &HkCanvasOpenGL, &HkCanvasOpenGLShaders,
+    &HkCanvasDefault,          &HkCanvasCairo,               &HkCanvasOpenGL,
     NULL
 };
 

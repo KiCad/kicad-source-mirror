@@ -26,81 +26,90 @@
  */
 
 #include <fctsys.h>
+#include <macros.h>
 #include <common.h>
-#include <class_drawpanel.h>
-#include <wxBasePcbFrame.h>
 #include <base_units.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <dialog_set_grid_base.h>
+#include <invoke_pcb_dialog.h>
 
 
 class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
 {
 public:
-    DIALOG_SET_GRID( wxWindow* parent, const wxPoint& pos );
 
-    void        SetGridSize( const wxRealPoint& grid );
-    wxRealPoint GetGridSize();
-    void        SetGridUnits( int units );
-    int         GetGridUnits();
-    void        SetGridOrigin( const wxPoint& grid );
-    wxPoint     GetGridOrigin();
-    void        SetGridForFastSwitching( wxArrayString aGrids, int aGrid1, int aGrid2 );
-    void        GetGridForFastSwitching( int& aGrid1, int& aGrid2 );
+    /// This has no dependencies on calling wxFrame derivative, such as PCB_BASE_FRAME.
+    DIALOG_SET_GRID( wxFrame* aCaller, EDA_UNITS_T* aGridUnits, EDA_UNITS_T aBoardUnits,
+        wxRealPoint* aUserSize, wxPoint* aOrigin,
+        int* aFastGrid1, int* aFastGrid2, const wxArrayString& aGridChoices );
 
 private:
-    void        OnResetGridOrgClick( wxCommandEvent& event );
-    void        OnCancelClick( wxCommandEvent& event );
-    void        OnOkClick( wxCommandEvent& event );
+    void            OnResetGridOrgClick( wxCommandEvent& event );
+    void            OnCancelClick( wxCommandEvent& event );
+    void            OnOkClick( wxCommandEvent& event );
+
+    EDA_UNITS_T&    m_callers_grid_units;
+    EDA_UNITS_T     m_callers_board_units;
+    wxRealPoint&    m_callers_user_size;
+    wxPoint&        m_callers_origin;
+    int&            m_callers_fast_grid1;
+    int&            m_callers_fast_grid2;
+
+    void            setGridUnits( EDA_UNITS_T units );
+    EDA_UNITS_T     getGridUnits();
+
+    void            setGridSize( const wxRealPoint& grid );
+    wxRealPoint     getGridSize();
+
+    void            setGridOrigin( const wxPoint& grid );
+    wxPoint         getGridOrigin();
+
+    void            setGridForFastSwitching( const wxArrayString& aGrids, int aGrid1, int aGrid2 );
+    void            getGridForFastSwitching( int& aGrid1, int& aGrid2 );
 };
 
 
-void PCB_BASE_FRAME::InstallGridFrame( const wxPoint& pos )
+DIALOG_SET_GRID::DIALOG_SET_GRID( wxFrame* aCaller, EDA_UNITS_T* aGridUnits, EDA_UNITS_T aBoardUnits,
+        wxRealPoint* aUserSize, wxPoint* aOrigin, int* aFastGrid1, int* aFastGrid2, const wxArrayString& aGridChoices ):
+    DIALOG_SET_GRID_BASE( aCaller ),
+    m_callers_grid_units( *aGridUnits ),
+    m_callers_board_units( aBoardUnits ),
+    m_callers_user_size( *aUserSize ),
+    m_callers_origin( *aOrigin ),
+    m_callers_fast_grid1( *aFastGrid1 ),
+    m_callers_fast_grid2( *aFastGrid2 )
 {
-    DIALOG_SET_GRID dlg( this, pos );
+    m_TextPosXUnits->SetLabel( GetUnitsLabel( m_callers_board_units ) );
+    m_TextPosYUnits->SetLabel( GetUnitsLabel( m_callers_board_units ) );
 
-    dlg.SetGridUnits( m_UserGridUnit );
-    dlg.SetGridSize( m_UserGridSize );
-    dlg.SetGridOrigin( GetScreen()->m_GridOrigin );
+    m_sdbSizer1OK->SetDefault();      // set OK button as default response to 'Enter' key
 
-    if( m_gridSelectBox )
-        dlg.SetGridForFastSwitching( m_gridSelectBox->GetStrings(), m_FastGrid1, m_FastGrid2 );
+    setGridUnits( m_callers_grid_units );
+    setGridSize( m_callers_user_size );
+    setGridOrigin( m_callers_origin );
+    setGridForFastSwitching( aGridChoices, m_callers_fast_grid1, m_callers_fast_grid2 );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    m_UserGridSize = dlg.GetGridSize();
-    m_UserGridUnit = (EDA_UNITS_T) dlg.GetGridUnits();
-    GetScreen()->m_GridOrigin = dlg.GetGridOrigin();
-
-    GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
-
-    dlg.GetGridForFastSwitching( m_FastGrid1, m_FastGrid2 );
-
-    // If the user grid is the current option, recall SetGrid()
-    // to force new values put in list as current grid value
-    if( GetScreen()->GetGridId() == ID_POPUP_GRID_USER )
-        GetScreen()->SetGrid( ID_POPUP_GRID_USER  );
-
-    m_canvas->Refresh();
-}
-
-
-DIALOG_SET_GRID::DIALOG_SET_GRID( wxWindow* parent, const wxPoint& pos ) :
-    DIALOG_SET_GRID_BASE( parent )
-{
-    m_TextPosXUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_TextPosYUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-
-    m_sdbSizer1OK->SetDefault();
     GetSizer()->SetSizeHints( this );
+    Fit();
     Centre();
 }
 
 
-void DIALOG_SET_GRID::SetGridSize( const wxRealPoint& grid )
+void DIALOG_SET_GRID::setGridUnits( EDA_UNITS_T aUnits )
+{
+    m_UnitGrid->SetSelection( aUnits != INCHES  );
+}
+
+
+EDA_UNITS_T DIALOG_SET_GRID::getGridUnits()
+{
+    return m_UnitGrid->GetSelection() == 0 ? INCHES : MILLIMETRES;
+}
+
+
+void DIALOG_SET_GRID::setGridSize( const wxRealPoint& grid )
 {
     wxString msg;
 
@@ -112,37 +121,26 @@ void DIALOG_SET_GRID::SetGridSize( const wxRealPoint& grid )
 }
 
 
-wxRealPoint DIALOG_SET_GRID::GetGridSize()
+wxRealPoint DIALOG_SET_GRID::getGridSize()
 {
     wxRealPoint grid;
 
+    // @todo: Some error checking here would be a good thing.
+    wxString    x = m_OptGridSizeX->GetValue();
+    wxString    y = m_OptGridSizeY->GetValue();
 
-    /* TODO: Some error checking here would be a good thing. */
-    m_OptGridSizeX->GetValue().ToDouble( &grid.x );
-    m_OptGridSizeY->GetValue().ToDouble( &grid.y );
+    x.ToDouble( &grid.x );
+    y.ToDouble( &grid.y );
 
     return grid;
 }
 
 
-void DIALOG_SET_GRID::SetGridUnits( int units )
-{
-    if( units != INCHES )
-        m_UnitGrid->SetSelection( 1 );
-}
-
-
-int DIALOG_SET_GRID::GetGridUnits()
-{
-    return m_UnitGrid->GetSelection();
-}
-
-
-wxPoint DIALOG_SET_GRID::GetGridOrigin()
+wxPoint DIALOG_SET_GRID::getGridOrigin()
 {
     wxPoint grid;
 
-    /* TODO: Some error checking here would be a good thing. */
+    // @todo Some error checking here would be a good thing.
     grid.x = ReturnValueFromTextCtrl( *m_GridOriginXCtrl );
     grid.y = ReturnValueFromTextCtrl( *m_GridOriginYCtrl );
 
@@ -150,16 +148,14 @@ wxPoint DIALOG_SET_GRID::GetGridOrigin()
 }
 
 
-void DIALOG_SET_GRID::SetGridOrigin( const wxPoint& grid )
+void DIALOG_SET_GRID::setGridOrigin( const wxPoint& grid )
 {
-    wxString msg;
-
     PutValueInLocalUnits( *m_GridOriginXCtrl, grid.x );
     PutValueInLocalUnits( *m_GridOriginYCtrl, grid.y );
 }
 
 
-void DIALOG_SET_GRID::SetGridForFastSwitching( wxArrayString aGrids, int aGrid1, int aGrid2  )
+void DIALOG_SET_GRID::setGridForFastSwitching( const wxArrayString& aGrids, int aGrid1, int aGrid2  )
 {
     m_comboBoxGrid1->Append( aGrids );
     m_comboBoxGrid2->Append( aGrids );
@@ -169,7 +165,7 @@ void DIALOG_SET_GRID::SetGridForFastSwitching( wxArrayString aGrids, int aGrid1,
 }
 
 
-void DIALOG_SET_GRID::GetGridForFastSwitching( int& aGrid1, int& aGrid2 )
+void DIALOG_SET_GRID::getGridForFastSwitching( int& aGrid1, int& aGrid2 )
 {
     aGrid1 = m_comboBoxGrid1->GetSelection();
     aGrid2 = m_comboBoxGrid2->GetSelection();
@@ -178,7 +174,7 @@ void DIALOG_SET_GRID::GetGridForFastSwitching( int& aGrid1, int& aGrid2 )
 
 void DIALOG_SET_GRID::OnResetGridOrgClick( wxCommandEvent& event )
 {
-    SetGridOrigin( wxPoint(0,0) );
+    setGridOrigin( wxPoint( 0, 0 ) );
 }
 
 
@@ -190,5 +186,40 @@ void DIALOG_SET_GRID::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_SET_GRID::OnOkClick( wxCommandEvent& event )
 {
+    m_callers_grid_units = getGridUnits();
+    m_callers_user_size  = getGridSize();
+    m_callers_origin     = getGridOrigin();
+
+    getGridForFastSwitching( m_callers_fast_grid1, m_callers_fast_grid2 );
+
     EndModal( wxID_OK );
+}
+
+
+#include <class_drawpanel.h>
+#include <wxBasePcbFrame.h>
+
+bool PCB_BASE_FRAME::InvokeDialogGrid()
+{
+    DIALOG_SET_GRID dlg( this, &m_UserGridUnit, g_UserUnit, &m_UserGridSize,
+        &GetScreen()->m_GridOrigin, &m_FastGrid1, &m_FastGrid2,
+        m_gridSelectBox->GetStrings() );
+
+    int ret = dlg.ShowModal();
+
+    if( ret == wxID_OK )
+    {
+        GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
+
+        // If the user grid is the current option, recall SetGrid()
+        // to force new values put in list as current grid value
+        if( GetScreen()->GetGridId() == ID_POPUP_GRID_USER )
+            GetScreen()->SetGrid( ID_POPUP_GRID_USER  );
+
+        m_canvas->Refresh();
+
+        return true;
+    }
+
+    return false;
 }

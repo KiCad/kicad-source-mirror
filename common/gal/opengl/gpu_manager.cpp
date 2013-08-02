@@ -52,7 +52,7 @@ GPU_MANAGER* GPU_MANAGER::MakeManager( VERTEX_CONTAINER* aContainer )
 
 
 GPU_MANAGER::GPU_MANAGER( VERTEX_CONTAINER* aContainer ) :
-        m_isDrawing( false ), m_container( aContainer ), m_shader( NULL )
+    m_isDrawing( false ), m_container( aContainer ), m_shader( NULL )
 {
 }
 

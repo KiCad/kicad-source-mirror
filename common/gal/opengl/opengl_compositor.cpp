@@ -73,14 +73,6 @@ void OPENGL_COMPOSITOR::Initialize()
     glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
                                GL_RENDERBUFFER, m_depthBuffer );
 
-    // Check the status, exit if the framebuffer can't be created
-    GLenum status = glCheckFramebufferStatus( GL_FRAMEBUFFER );
-
-    if( status != GL_FRAMEBUFFER_COMPLETE )
-    {
-        wxLogFatalError( wxT( "Cannot create the framebuffer." ) );
-    }
-
     // Unbind the framebuffer, so by default all the rendering goes directly to the display
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
     m_currentFbo = 0;
@@ -104,7 +96,7 @@ unsigned int OPENGL_COMPOSITOR::GetBuffer()
     wxASSERT( m_initialized );
 
     if( m_buffers.size() >= m_maxBuffers )
-        return 0;       // Unfortunately we have no more free buffers left
+        return 0; // Unfortunately we have no more free buffers left
 
     // GL_COLOR_ATTACHMENTn are consecutive integers
     GLuint attachmentPoint = GL_COLOR_ATTACHMENT0 + usedBuffers();
@@ -125,6 +117,57 @@ unsigned int OPENGL_COMPOSITOR::GetBuffer()
     glBindFramebuffer( GL_FRAMEBUFFER, m_framebuffer );
     m_currentFbo = m_framebuffer;
     glFramebufferTexture2D( GL_FRAMEBUFFER, attachmentPoint, GL_TEXTURE_2D, textureTarget, 0 );
+
+    // Check the status, exit if the framebuffer can't be created
+    GLenum status = glCheckFramebufferStatus( GL_FRAMEBUFFER );
+
+    if( status != GL_FRAMEBUFFER_COMPLETE )
+    {
+        switch( status )
+        {
+        case GL_FRAMEBUFFER_UNDEFINED:
+            wxLogFatalError( wxT( "Target is the default framebuffer, "
+                                  "but the default framebuffer does not exist." ) );
+            break;
+
+        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+            wxLogFatalError( wxT( "Cannot create the framebuffer." ) );
+            break;
+
+        case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+            wxLogFatalError( wxT( "The framebuffer attachment points are incomplete." ) );
+            break;
+
+        case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+            wxLogFatalError( wxT( "The framebuffer does not have at least "
+                                   "one image attached to it." ) );
+            break;
+
+        case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+            wxLogFatalError( wxT( "The framebuffer read buffer is incomplete." ) );
+            break;
+
+        case GL_FRAMEBUFFER_UNSUPPORTED:
+            wxLogFatalError( wxT( "The combination of internal formats of the attached images "
+                                  "violates an implementation-dependent set of restrictions." ) );
+            break;
+
+        case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+            wxLogFatalError( wxT( "GL_RENDERBUFFER_SAMPLES is not the same "
+                                  "for all attached renderbuffers" ) );
+            break;
+
+        case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+            wxLogFatalError( wxT( "Framebuffer incomplete layer targets errors." ) );
+            break;
+
+        default:
+            wxLogFatalError( wxT( "Cannot create the framebuffer." ) );
+            break;
+        }
+    }
+
+
     ClearBuffer();
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
     m_currentFbo = 0;
@@ -143,13 +186,18 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
         return;
 
     // Change the rendering destination to the selected attachment point
-    if( m_currentFbo != m_framebuffer )
+    if( aBufferHandle == 0 )
+    {
+        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+        m_currentFbo = 0;
+    }
+    else if( m_currentFbo != m_framebuffer )
     {
         glBindFramebuffer( GL_FRAMEBUFFER, m_framebuffer );
         m_currentFbo = m_framebuffer;
     }
 
-    if( m_current != aBufferHandle - 1 )
+    if( m_currentFbo != 0 && m_current != aBufferHandle - 1 )
     {
         m_current = aBufferHandle - 1;
         glDrawBuffer( m_buffers[m_current].attachmentPoint );
@@ -224,9 +272,11 @@ void OPENGL_COMPOSITOR::clean()
     {
         glDeleteTextures( 1, &it->textureTarget );
     }
+
     m_buffers.clear();
 
     m_initialized = false;
 }
+
 
 GLuint OPENGL_COMPOSITOR::m_currentFbo = 0;

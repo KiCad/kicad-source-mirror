@@ -238,13 +238,13 @@ class SCH_FIND_COLLECTOR : public COLLECTOR
     bool m_forceSearch;
 
     /**
-     * Function atEnd
-     * tests if #m_foundIndex is at the end of the list give the current find/replace
-     * criterial in #m_findReplaceData.
+     * Function PassedEnd
+     * tests if #m_foundIndex is beyond the end of the list give the current
+     * find/replace criterial in #m_findReplaceData.
      *
-     * @return True if #m_foundIndex is at the end of the found item list.
+     * @return True if #m_foundIndex has crossed the end of the found item list.
      */
-    bool atEnd() const;
+    bool PassedEnd() const;
 
     /**
      * Function dump
@@ -296,7 +296,8 @@ public:
      */
     bool IsSearchRequired( SCH_FIND_REPLACE_DATA& aFindReplaceData )
     {
-        return m_findReplaceData.ChangesSearch( aFindReplaceData ) || m_forceSearch;
+        return m_findReplaceData.ChangesCompare( aFindReplaceData ) || m_forceSearch ||
+               (m_findReplaceData.IsWrapping() != aFindReplaceData.IsWrapping());
     }
 
     /**

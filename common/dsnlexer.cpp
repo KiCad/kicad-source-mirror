@@ -396,7 +396,7 @@ static bool isSpace( char cc )
     // Treat negative as large positive to exclude rapidly.
     if( (unsigned char) cc <= ' ' )
     {
-        switch( cc )
+        switch( (unsigned char) cc )
         {
         case ' ':
         case '\n':

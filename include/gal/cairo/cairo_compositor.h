@@ -38,7 +38,6 @@
 
 namespace KiGfx
 {
-
 class CAIRO_COMPOSITOR : public COMPOSITOR
 {
 public:
@@ -67,25 +66,25 @@ protected:
     typedef boost::shared_array<unsigned int> BitmapPtr;
     typedef struct
     {
-        cairo_t* context;                   ///< Main texture handle
-        cairo_surface_t* surface;           ///< Point to which an image from texture is attached
-        BitmapPtr bitmap;                   ///< Pixel storage
+        cairo_t*            context;        ///< Main texture handle
+        cairo_surface_t*    surface;        ///< Point to which an image from texture is attached
+        BitmapPtr           bitmap;         ///< Pixel storage
     } CAIRO_BUFFER;
 
-    unsigned int                m_current;                ///< Currently used buffer handle
+    unsigned int            m_current;                ///< Currently used buffer handle
     typedef std::deque<CAIRO_BUFFER> CAIRO_BUFFERS;
 
     /// Pointer to the current context, so it can be changed
-    cairo_t**                   m_currentContext;
+    cairo_t**               m_currentContext;
 
     /// Rendering target used for compositing (the main display)
-    cairo_t*                    m_mainContext;
+    cairo_t*                m_mainContext;
 
     /// Transformation matrix
-    cairo_matrix_t              m_matrix;
+    cairo_matrix_t          m_matrix;
 
     /// Stores information about initialized buffers
-    CAIRO_BUFFERS               m_buffers;
+    CAIRO_BUFFERS           m_buffers;
 
     unsigned int m_stride;              ///< Stride to use given the desired format and width
     unsigned int m_bufferSize;          ///< Amount of memory needed to store a buffer
@@ -102,7 +101,6 @@ protected:
         return m_buffers.size();
     }
 };
-
 } // namespace KiGfx
 
 #endif /* COMPOSITOR_H_ */

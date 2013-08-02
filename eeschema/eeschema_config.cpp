@@ -39,6 +39,7 @@
 #include <hotkeys.h>
 #include <sch_sheet.h>
 #include <class_libentry.h>
+#include <worksheet_shape_builder.h>
 
 #include <dialog_hotkeys_editor.h>
 
@@ -139,7 +140,7 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     switch( id )
     {
     case ID_CONFIG_SAVE:
-        schFrame->SaveProjectFile();
+        schFrame->SaveProjectSettings( false );
         break;
 
     case ID_CONFIG_READ:
@@ -207,7 +208,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     switch( id )
     {
     case ID_CONFIG_SAVE:
-        SaveProjectFile();
+        SaveProjectSettings( false );
         break;
 
     case ID_CONFIG_READ:
@@ -303,6 +304,15 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     GetScreen()->SetGrid( grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
 
+    int sep, firstId;
+    dlg.GetRefIdSeparator( sep, firstId);
+    if( sep != (int)LIB_COMPONENT::GetSubpartIdSeparator() ||
+        firstId != (int)LIB_COMPONENT::GetSubpartFirstId() )
+    {
+        LIB_COMPONENT::SetSubpartIdNotation( sep, firstId );
+        SaveProjectSettings( true );
+    }
+
     SetDefaultBusThickness( dlg.GetBusWidth() );
     SetDefaultLineThickness( dlg.GetLineWidth() );
     SetDefaultLabelSize( dlg.GetTextSize() );
@@ -344,10 +354,20 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 }
 
 
-PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
+PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
 {
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
+
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
+                                        &BASE_SCREEN::m_PageLayoutDescrFileName ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
+                                        LIB_COMPONENT::SubpartIdSeparatorPtr(),
+                                        IsGOST() ? '.' : 0, 0, 126 ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartFirstId" ),
+                                        LIB_COMPONENT::SubpartFirstIdPtr(),
+                                        IsGOST() ? '1' : 'A', '1', 'z' ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),
                                                            &m_userLibraryPath ) );
@@ -395,13 +415,25 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& aFileName, bool aForceRere
     wxGetApp().RemoveLibraryPath( m_userLibraryPath );
 
     if( !wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP,
-                                       GetProjectFileParameters(),
+                                       GetProjectFileParametersList(),
                                        !aForceReread ) )
     {
         m_componentLibFiles = liblist_tmp;
         IsRead = false;
     }
 
+    // Verify some values, because the config file can be edited by hand,
+    // and have bad values:
+    LIB_COMPONENT::SetSubpartIdNotation( LIB_COMPONENT::GetSubpartIdSeparator(),
+                                         LIB_COMPONENT::GetSubpartFirstId() );
+
+    // Load the page layout decr file, from the filename stored in
+    // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
+    // If empty, the default descr is loaded
+    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    pglayout.SetPageLayout(BASE_SCREEN::m_PageLayoutDescrFileName);
+
+    // Load libraries.
     // User library path takes precedent over default library search paths.
     wxGetApp().InsertLibraryPath( m_userLibraryPath, 1 );
 
@@ -418,7 +450,7 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& aFileName, bool aForceRere
 }
 
 
-void SCH_EDIT_FRAME::SaveProjectFile()
+void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 {
     wxFileName fn;
 
@@ -428,7 +460,21 @@ void SCH_EDIT_FRAME::SaveProjectFile()
     if( !IsWritable( fn ) )
         return;
 
-    wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+    if( aAskForSave )
+    {
+        wxFileDialog dlg( this, _( "Save Project File" ),
+                          fn.GetPath(), fn.GetFullName(),
+                          ProjectFileWildcard, wxFD_SAVE | wxFD_CHANGE_DIR );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return;
+
+        wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP,
+                                       GetProjectFileParametersList() );
+    }
+    else
+        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP,
+                                       GetProjectFileParametersList() );
 }
 
 static const wxString DefaultBusWidthEntry( wxT( "DefaultBusWidth" ) );

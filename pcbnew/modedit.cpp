@@ -728,7 +728,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_PCB_USER_GRID_SETUP:
-        InstallGridFrame( pos );
+        InvokeDialogGrid();
         break;
 
     case ID_POPUP_PLACE_BLOCK:

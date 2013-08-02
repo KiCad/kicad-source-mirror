@@ -123,21 +123,6 @@ bool EDA_APP::OnInit()
     for( int ii = 0; ii < NB_SCH_LAYERS; ii++ )
         SetLayerColor( DARKGRAY, ii );
 
-#ifdef KICAD_GOST
-    // These options will be user configurable in the future,
-    // and not specific to GOST users
-    // the separator char between the subpart id and the reference
-    // 0 (no separator) or '.' or some other character
-    LIB_COMPONENT::SetSubpartIdSeparator( '.' );
-    // the ascii char value to calculate the subpart symbol id from the part number:
-    // 'A' or '1' usually. (to print U1.A or U1.1)
-    // if this is a digit, a number is used as id symbol
-    LIB_COMPONENT::SetSubpartFirstId( '1' );
-
-    // Default diameter of the junction symbol
-    SCH_JUNCTION::SetSymbolSize( 32 );
-#endif
-
     // read current setup and reopen last directory if no filename to open in
     // command line
     bool reopenLastUsedDirectory = argc == 1;

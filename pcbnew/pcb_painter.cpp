@@ -230,7 +230,7 @@ const COLOR4D& PCB_PAINTER::getItemColor( int aItemType, int aNetCode, bool aHig
 bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
     // the "cast" applied in here clarifies which overloaded draw() is called
-    switch( aItem->Type() )
+    switch( static_cast<const BOARD_ITEM*>( aItem )->Type() )
     {
     case PCB_ZONE_T:
     case PCB_TRACE_T:
@@ -526,9 +526,21 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     else if( aLayer == SOLDERMASK_N_FRONT || aLayer == SOLDERMASK_N_BACK )
     {
         // Drawing soldermask
+        int soldermaskMargin = aPad->GetSolderMaskMargin();
+
         m_gal->Translate( VECTOR2D( aPad->GetOffset() ) );
-        size  = VECTOR2D( aPad->GetSize().x / 2.0 + aPad->GetSolderMaskMargin(),
-                          aPad->GetSize().y / 2.0 + aPad->GetSolderMaskMargin() );
+        size  = VECTOR2D( aPad->GetSize().x / 2.0 + soldermaskMargin,
+                          aPad->GetSize().y / 2.0 + soldermaskMargin );
+        shape = aPad->GetShape();
+    }
+    else if( aLayer == SOLDERPASTE_N_FRONT || aLayer == SOLDERPASTE_N_BACK )
+    {
+        // Drawing solderpaste
+        int solderpasteMargin = aPad->GetLocalSolderPasteMargin();
+
+        m_gal->Translate( VECTOR2D( aPad->GetOffset() ) );
+        size  = VECTOR2D( aPad->GetSize().x / 2.0 + solderpasteMargin,
+                          aPad->GetSize().y / 2.0 + solderpasteMargin );
         shape = aPad->GetShape();
     }
     else
@@ -606,13 +618,11 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
 void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
 {
-    COLOR4D              strokeColor = getLayerColor( aSegment->GetLayer(), 0,
-                                                      aSegment->ViewIsHighlighted() );
-    std::deque<VECTOR2D> pointsList;
+    COLOR4D color = getLayerColor( aSegment->GetLayer(), 0, aSegment->ViewIsHighlighted() );
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetStrokeColor( strokeColor );
+    m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( aSegment->GetWidth() );
 
     switch( aSegment->GetShape() )
@@ -637,10 +647,32 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
         break;
 
     case S_POLYGON:
+    {
+        std::deque<VECTOR2D> pointsList;
+
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetFillColor( color );
+
+        m_gal->Save();
+        m_gal->Translate( VECTOR2D( aSegment->GetPosition() ) );
+
+        MODULE* module = aSegment->GetParentModule();
+        if( module )
+        {
+            m_gal->Rotate( -module->GetOrientation() * M_PI / 1800.0 );
+        }
+
         std::copy( aSegment->GetPolyPoints().begin(), aSegment->GetPolyPoints().end(),
                    std::back_inserter( pointsList ) );
+
+        m_gal->SetLineWidth( aSegment->GetWidth() );
+        m_gal->DrawPolyline( pointsList );
         m_gal->DrawPolygon( pointsList );
+
+        m_gal->Restore();
         break;
+    }
 
     case S_CURVE:
         m_gal->DrawCurve( VECTOR2D( aSegment->GetStart() ),

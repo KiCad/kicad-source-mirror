@@ -74,7 +74,8 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent ) :
     m_ImageList->Add( KiBitmap( tools_xpm ) );                  // TREE_REPORT
     m_ImageList->Add( KiBitmap( post_compo_xpm ) );             // TREE_POS
     m_ImageList->Add( KiBitmap( post_drill_xpm ) );             // TREE_DRILL
-    m_ImageList->Add( KiBitmap( svg_file_xpm ) );                   // TREE_SVG
+    m_ImageList->Add( KiBitmap( svg_file_xpm ) );               // TREE_SVG
+    m_ImageList->Add( KiBitmap( pagelayout_load_default_xpm ) );// TREE_PAGE_LAYOUT_DESCR
 
     SetImageList( m_ImageList );
 }

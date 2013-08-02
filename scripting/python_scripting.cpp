@@ -132,7 +132,7 @@ static void swigSwitchPythonBuiltin()
 
 PyThreadState* g_PythonMainTState;
 
-bool pcbnewInitPythonScripting()
+bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
 {
     swigAddBuiltin();           // add builtin functions
     swigAddModules();           // add our own modules
@@ -159,25 +159,23 @@ bool pcbnewInitPythonScripting()
 
     g_PythonMainTState = wxPyBeginAllowThreads();
 
-    // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
-
 #endif
-
+    // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
     {
+        char cmd[1024];
         PyLOCK lock;
-
-        PyRun_SimpleString( "import sys, traceback\n"
-                            "sys.path.append(\".\")\n"
-                            "import pcbnew\n"
-                            "pcbnew.LoadPlugins()"
-                            );
+        sprintf( cmd, "import sys, traceback\n"
+                      "sys.path.append(\".\")\n"
+                      "import pcbnew\n"
+                      "pcbnew.LoadPlugins(\"%s\")", aUserPluginsPath );
+        PyRun_SimpleString( cmd );
     }
 
     return true;
 }
 
 
-void pcbnewFinishPythonScripting()
+void pcbnewFinishPythonScripting( char )
 {
 #ifdef KICAD_SCRIPTING_WXPYTHON
     wxPyEndAllowThreads( g_PythonMainTState );
