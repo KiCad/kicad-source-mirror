@@ -54,6 +54,8 @@
 #include <trigo.h>
 #include <pcb_painter.h>
 
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
 
 // Configuration entry names.
 static const wxString UserGridSizeXEntry( wxT( "PcbUserGrid_X" ) );
@@ -79,7 +81,7 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnUpdatePadDrawMode )
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, PCB_BASE_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, PCB_BASE_FRAME::OnUpdateSelectZoom )
-
+    
     EVT_UPDATE_UI_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, PCB_BASE_FRAME::OnUpdateSelectZoom )
 END_EVENT_TABLE()
 
@@ -91,6 +93,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
     EDA_DRAW_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     m_Pcb                 = NULL;
+    m_toolManager          = NULL;
+    m_toolDispatcher = NULL;
 
     m_DisplayPadFill      = true;   // How to draw pads
     m_DisplayViaFill      = true;   // How to draw vias
@@ -110,6 +114,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
 
     m_galCanvas           = new EDA_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                               EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+
+    setupTools();
 
     m_auxiliaryToolBar    = NULL;
 }
@@ -185,6 +191,11 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         view->RecacheAllItems( true );
         if( m_galCanvasActive )
             m_galCanvas->Refresh();
+
+        // update the tool manager with the new board and its view.
+        if(m_toolManager)
+            m_toolManager->SetEnvironment( m_Pcb, view, m_galCanvas->GetViewControls(), this);
+        
     }
 }
 
@@ -796,6 +807,7 @@ void PCB_BASE_FRAME::LoadSettings()
         wxASSERT( i < KiGfx::VIEW::VIEW_MAX_LAYERS );
 
         view->SetLayerOrder( GalLayerOrder[i], i );
+        view->SetLayerTarget( i, KiGfx::TARGET_NONCACHED );
     }
 
     // Netnames are drawn only when scale is sufficient (level of details)

@@ -56,7 +56,8 @@ class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
 class FPID;
-
+class TOOL_MANAGER;
+class TOOL_DISPATCHER;
 
 /**
  * class PCB_BASE_FRAME
@@ -94,6 +95,10 @@ protected:
     /// main window.
     wxAuiToolBar*       m_auxiliaryToolBar;
 
+    TOOL_MANAGER *m_toolManager;
+    TOOL_DISPATCHER *m_toolDispatcher;
+    
+    void setupTools();
     void updateGridSelectBox();
     void updateZoomSelectBox();
     virtual void unitsChangeRefresh();

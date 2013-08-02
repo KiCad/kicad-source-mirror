@@ -59,6 +59,8 @@
 #include <view/view.h>
 #include <painter.h>
 
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -116,6 +118,12 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
 
     // menu Config
+	
+    /* Tom's hacks start */	
+	EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
+    EVT_TOOL ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
+    /* Tom's hacks end */
+		
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, PCB_EDIT_FRAME::OnConfigurePcbOptions )
     EVT_MENU( ID_CONFIG_REQ, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT, PCB_EDIT_FRAME::Process_Config )
@@ -472,8 +480,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
             DisplayError( this, msg );
         }
     }
+    
+    setupTools();
 }
-
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {

@@ -298,6 +298,12 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Reset text size and width of all module fields to current defaults" ),
                  KiBitmap( reset_text_xpm ) );
 
+    editMenu->AppendSeparator();
+
+    AddMenuItem( editMenu, ID_SELECTION_TOOL,
+                 _( "Select Tool" ),
+                 _( "Interactive selection and drag&drop tool." ) );
+
     /** Create View menu **/
     wxMenu* viewMenu = new wxMenu;
 

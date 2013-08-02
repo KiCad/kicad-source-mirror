@@ -36,12 +36,14 @@
 #include <math/vector2d.h>
 
 class BOARD;
+class TOOL_DISPATCHER;
 
 namespace KiGfx
 {
 class GAL;
 class VIEW;
 class WX_VIEW_CONTROLS;
+class VIEW_CONTROLS;
 class PAINTER;
 };
 
@@ -74,13 +76,21 @@ public:
     KiGfx::GAL* GetGAL() { return m_gal; }
 
     void SetView( KiGfx::VIEW* aView ) { m_view = aView; }
+    
     KiGfx::VIEW* GetView() const { return m_view; }
+    KiGfx::VIEW_CONTROLS* GetViewControls() const;
 
     virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
+
+    void SetEventDispatcher(TOOL_DISPATCHER *aEventDispatcher)
+    {
+        m_eventDispatcher = aEventDispatcher;
+    }
 
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
+	void onEvent( wxEvent& aEvent );
 
     KiGfx::GAL*              m_gal;              ///< Interface for drawing objects on a 2D-surface
     KiGfx::VIEW*             m_view;             ///< Stores view settings (scale, center, etc.)
@@ -91,6 +101,7 @@ protected:
     GalType                  m_currentGal;       ///< Currently used GAL
     bool                     m_useShaders;       ///< Are shaders used? (only for OpenGL GAL)
     wxLongLong               m_timeStamp;
+	TOOL_DISPATCHER*		 m_eventDispatcher;  
 };
 
 #endif

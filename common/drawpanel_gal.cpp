@@ -38,6 +38,9 @@
 #include <gal/opengl/opengl_gal.h>
 #include <gal/cairo/cairo_gal.h>
 
+#include <tool/tool_dispatcher.h>
+#include <tool/tool_manager.h>
+
 #ifdef __WXDEBUG__
 #include <profile.h>
 #endif /* __WXDEBUG__ */
@@ -54,6 +57,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_currentGal = GAL_TYPE_NONE;
     m_view       = NULL;
     m_painter    = NULL;
+    m_eventDispatcher = NULL;
 
     SwitchBackend( aGalType, true );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
@@ -83,6 +87,19 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
 
+    /* Generic events for the Tool Dispatcher */
+
+	Connect( wxEVT_MOTION, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+	Connect( wxEVT_LEFT_UP, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+	Connect( wxEVT_LEFT_DOWN, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+	Connect( wxEVT_RIGHT_UP, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+	Connect( wxEVT_RIGHT_DOWN, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+	Connect( wxEVT_MIDDLE_UP, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+	Connect( wxEVT_MIDDLE_DOWN, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+	Connect( wxEVT_MOUSEWHEEL, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+	Connect( wxEVT_KEY_UP, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+	Connect( wxEVT_KEY_DOWN, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+	
     m_timeStamp = 0;
 }
 
@@ -121,8 +138,8 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 
     // Framerate limiter
     wxLongLong currentTimeStamp = wxGetLocalTimeMillis();
-    if( currentTimeStamp - m_timeStamp < ( 1000 / FPS_LIMIT ) )
-        return;
+   // if( currentTimeStamp - m_timeStamp < ( 1000 / FPS_LIMIT ) )
+ //       return;
     m_timeStamp = currentTimeStamp;
 
 #ifdef __WXDEBUG__
@@ -130,6 +147,8 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 
     prof_start( &time, false );
 #endif /* __WXDEBUG__ */
+
+    printf("Refresh!\n");
 
     m_gal->BeginDrawing();
     m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
@@ -192,4 +211,21 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType, bool aUseShaders )
 
     m_currentGal = aGalType;
     m_useShaders = aUseShaders;
+}
+
+void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
+{
+	if(!m_eventDispatcher)
+	{
+		aEvent.Skip();
+		return;
+	} else {
+        printf("evType %d\n", aEvent.GetEventType());
+        m_eventDispatcher->DispatchWxEvent(aEvent);
+    }
+}
+
+KiGfx::VIEW_CONTROLS* EDA_DRAW_PANEL_GAL::GetViewControls() const
+{
+    return m_viewControls;
 }
