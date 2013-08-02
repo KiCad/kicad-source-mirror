@@ -216,6 +216,10 @@ set(PCBNEW_CLASS_SRCS
     zones_polygons_test_connections.cpp
     zones_test_and_combine_areas.cpp
     class_footprint_wizard.cpp
+    
+    tools/selection_tool.cpp
+    tools/selection_area.cpp
+    tools/pcb_tools.cpp
     )
 
 set(PCBNEW_SRCS ${PCBNEW_AUTOROUTER_SRCS} ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS})

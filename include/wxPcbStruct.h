@@ -65,7 +65,6 @@ class PARSE_ERROR;
 class IO_ERROR;
 class FP_LIB_TABLE;
 
-
 /**
  * class PCB_EDIT_FRAME
  * the main frame for Pcbnew
@@ -118,6 +117,8 @@ protected:
     bool              m_useCmpFileForFpNames;   ///< is true, use the .cmp file from CvPcb, else use the netlist
                                                 // to know the footprint name of components.
 
+	void onGenericCommand( wxCommandEvent& aEvent );
+		
     // we'll use lower case function names for private member functions.
     void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
     void createPopUpMenuForFootprints( MODULE* aModule, wxMenu* aPopMenu );
