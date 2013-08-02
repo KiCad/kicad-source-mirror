@@ -34,7 +34,7 @@
 #include <worksheet.h>
 #include <worksheet_shape_builder.h>
 #include <class_worksheet_dataitem.h>
-#include <vector2d.h>
+#include <math/vector2d.h>
 #include <page_layout_reader_lexer.h>
 #include <macros.h>
 #include <base_units.h>
