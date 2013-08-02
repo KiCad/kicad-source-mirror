@@ -302,7 +302,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( editMenu, ID_SELECTION_TOOL,
                  _( "Select Tool" ),
-                 _( "Interactive selection and drag&drop tool." ) );
+                 _( "Interactive selection and drag&drop tool." ),
+                 KiBitmap( tools_xpm ) );
 
     /** Create View menu **/
     wxMenu* viewMenu = new wxMenu;
