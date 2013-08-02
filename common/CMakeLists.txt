@@ -144,11 +144,23 @@ set(COMMON_SRCS
     zoom.cpp
     )
 
+enable_language(C CXX ASM)
+set_source_files_properties(system/fcontext.s PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp")
+
 set(COMMON_SRCS
 	${COMMON_SRCS}
 	view/view.cpp
 	view/view_item.cpp
-    )
+
+	system/fcontext.s
+	
+  tool/tool_base.cpp
+  tool/tool_manager.cpp
+  tool/tool_dispatcher.cpp
+  tool/tool_event.cpp
+  tool/tool_interactive.cpp
+  tool/context_menu.cpp
+  )
 
 add_library(common STATIC ${COMMON_SRCS})
 
