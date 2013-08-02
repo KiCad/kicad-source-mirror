@@ -47,11 +47,15 @@
 #include <memory>
 #include <map>
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/smart_ptr/shared_array.hpp>
 
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
 
+#ifndef CALLBACK
+#define CALLBACK
+#endif
 
 namespace KiGfx
 {
@@ -244,8 +248,10 @@ public:
     ///< Parameters passed to the GLU tesselator
     typedef struct
     {
-        VERTEX_MANAGER* vboManager;               ///< VERTEX_ITEM for storing new vertices
-        std::vector<GLdouble*>& intersectPoints;  ///< Intersect points, that have to be freed
+        /// Manager used for storing new vertices
+        VERTEX_MANAGER* vboManager;
+        /// Intersect points, that have to be freed after tessellation
+        std::deque< boost::shared_array<GLdouble> >& intersectPoints;
     } TessParams;
 
 protected:
@@ -258,11 +264,11 @@ private:
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
 
-    wxClientDC*         clientDC;               ///< Drawing context
-    wxGLContext*        glContext;              ///< OpenGL context of wxWidgets
-    wxWindow*           parentWindow;           ///< Parent window
-    wxEvtHandler*       mouseListener;
-    wxEvtHandler*       paintListener;
+    wxClientDC*             clientDC;               ///< Drawing context
+    wxGLContext*            glContext;              ///< OpenGL context of wxWidgets
+    wxWindow*               parentWindow;           ///< Parent window
+    wxEvtHandler*           mouseListener;
+    wxEvtHandler*           paintListener;
 
     // Vertex buffer objects related fields
     typedef std::map< unsigned int, boost::shared_ptr<VERTEX_ITEM> > GroupsMap;
@@ -294,37 +300,10 @@ private:
     bool                    isGrouping;                 ///< Was a group started?
 
     // Polygon tesselation
-    GLUtesselator*          tesselator;             ///< Pointer to the tesselator
-    std::vector<GLdouble*>  tessIntersects;         ///< Storage of intersecting points
-
-    // Structure used for tesselation of polygons
-    struct OGLPOINT
-    {
-        OGLPOINT() :
-            x( 0.0 ), y( 0.0 ), z( 0.0 )
-        {}
-
-        OGLPOINT( const char* fastest )
-        {
-            // do nothing for fastest speed, and keep inline
-        }
-
-        OGLPOINT( const VECTOR2D& aPoint ) :
-            x( aPoint.x ), y( aPoint.y ), z( 0.0 )
-        {}
-
-        OGLPOINT& operator=( const VECTOR2D& aPoint )
-        {
-            x = aPoint.x;
-            y = aPoint.y;
-            z = 0.0;
-            return *this;
-        }
-
-        GLdouble x;
-        GLdouble y;
-        GLdouble z;
-    };
+    /// The tessellator
+    GLUtesselator*          tesselator;
+    /// Storage for intersecting points
+    std::deque< boost::shared_array<GLdouble> > tessIntersects;
 
     /**
      * @brief Draw a quad for the line.

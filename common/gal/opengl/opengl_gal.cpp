@@ -37,10 +37,6 @@
 
 #include <limits>
 
-#ifndef CALLBACK
-#define CALLBACK
-#endif
-
 using namespace KiGfx;
 
 // Prototypes
@@ -92,6 +88,10 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     // Tesselator initialization
     tesselator = gluNewTess();
     InitTesselatorCallbacks( tesselator );
+    if( tesselator == NULL )
+    {
+        wxLogFatalError( wxT( "Could not create the tesselator" ) );
+    }
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 }
 
@@ -233,7 +233,7 @@ void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoin
 
     // Line caps
     drawFilledSemiCircle( aStartPoint, lineWidth / 2, lineAngle + M_PI / 2 );
-    drawFilledSemiCircle( aEndPoint, lineWidth / 2, lineAngle - M_PI / 2 );
+    drawFilledSemiCircle( aEndPoint,   lineWidth / 2, lineAngle - M_PI / 2 );
 }
 
 
@@ -471,41 +471,25 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
     // for this purpose the GLU standard functions are used
     currentManager->Shader( SHADER_NONE );
 
-    typedef std::vector<OGLPOINT> OGLPOINTS;
-
-    // Do only one heap allocation, can do because we know size in advance.
-    // std::vector is then fastest
-    OGLPOINTS vertexList( aPointList.size(), OGLPOINT( "fastest" ) );
-
-    glNormal3d( 0.0, 0.0, 1.0 );
-    currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
-
-    glShadeModel( GL_FLAT );
-
     TessParams params = { currentManager, tessIntersects };
     gluTessBeginPolygon( tesselator, &params );
     gluTessBeginContour( tesselator );
 
-    // use operator=( const POINTS& )
-    copy( aPointList.begin(), aPointList.end(), vertexList.begin() );
-
-    for( OGLPOINTS::iterator it = vertexList.begin(); it != vertexList.end(); it++ )
+    boost::shared_array<GLdouble> points( new GLdouble[3 * aPointList.size()] );
+    int v = 0;
+    for( std::deque<VECTOR2D>::const_iterator it = aPointList.begin(); it != aPointList.end(); it++ )
     {
-        it->z = layerDepth;
-        gluTessVertex( tesselator, &it->x, &it->x );
+        points[v]     = it->x;
+        points[v + 1] = it->y;
+        points[v + 2] = layerDepth;
+        gluTessVertex( tesselator, &points[v], &points[v] );
+        v += 3;
     }
 
     gluTessEndContour( tesselator );
     gluTessEndPolygon( tesselator );
 
     // Free allocated intersecting points
-    std::vector<GLdouble*>::iterator it, it_end;
-
-    for( it = tessIntersects.begin(), it_end = tessIntersects.end(); it < it_end; ++it )
-    {
-        delete[] *it;
-    }
-
     tessIntersects.clear();
 
     // vertexList destroyed here
@@ -1028,7 +1012,7 @@ void CALLBACK CombineCallback( GLdouble coords[3],
     OPENGL_GAL::TessParams* param = static_cast<OPENGL_GAL::TessParams*>( aData );
 
     // Save the pointer so we can delete it later
-    param->intersectPoints.push_back( vertex );
+    param->intersectPoints.push_back( boost::shared_array<GLdouble>( vertex ) );
 
     memcpy( vertex, coords, 3 * sizeof(GLdouble) );
 
@@ -1036,7 +1020,7 @@ void CALLBACK CombineCallback( GLdouble coords[3],
 }
 
 
-void CALLBACK EdgeCallback()
+void CALLBACK EdgeCallback( GLboolean aEdgeFlag )
 {
     // This callback is needed to force GLU tesselator to use triangles only
 }
@@ -1056,5 +1040,5 @@ void InitTesselatorCallbacks( GLUtesselator* aTesselator )
     gluTessCallback( aTesselator, GLU_TESS_VERTEX_DATA,  ( void (CALLBACK*)() )VertexCallback );
     gluTessCallback( aTesselator, GLU_TESS_COMBINE_DATA, ( void (CALLBACK*)() )CombineCallback );
     gluTessCallback( aTesselator, GLU_TESS_EDGE_FLAG,    ( void (CALLBACK*)() )EdgeCallback );
-    gluTessCallback( aTesselator, GLU_TESS_ERROR_DATA,   ( void (CALLBACK*)() )ErrorCallback );
+    gluTessCallback( aTesselator, GLU_TESS_ERROR,        ( void (CALLBACK*)() )ErrorCallback );
 }
