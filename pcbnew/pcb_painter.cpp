@@ -271,6 +271,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     default:
+        printf("painter: unknown item %p type %d\n", aItem, aItem->Type());
         // Painter does not know how to draw the object
         return false;
         break;
@@ -679,10 +680,30 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y);
     double   orientation = aText->GetDrawRotation() * M_PI / 1800.0;
 
+    m_gal->PushDepth();
+
+    if(aText->ViewIsHighlighted())
+    {
+        EDA_RECT bb (aText->GetBoundingBox());
+        VECTOR2D s (bb.GetOrigin());
+        VECTOR2D e (bb.GetEnd());
+        m_gal->SetFillColor( COLOR4D (1.0, 1.0, 1.0, 0.3) );
+        m_gal->SetStrokeColor( COLOR4D (1.0, 1.0, 1.0, 0.5) );
+        m_gal->SetIsFill(true);
+        m_gal->SetIsStroke(true);
+        m_gal->SetLineWidth(0);
+        m_gal->DrawRectangle(s, e);
+    }
+    
+    m_gal->AdvanceDepth();
+
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetLineWidth( aText->GetThickness() );
     m_gal->SetTextAttributes( aText );
     m_gal->StrokeText( std::string( aText->GetText().mb_str() ), position, orientation );
+
+    m_gal->PopDepth();
+
 }
 
 
