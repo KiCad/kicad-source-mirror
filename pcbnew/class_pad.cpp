@@ -123,12 +123,77 @@ int D_PAD::boundingRadius() const
 EDA_RECT D_PAD::GetBoundingBox() const
 {
     EDA_RECT area;
+    wxPoint quadrant1, quadrant2, quadrant3, quadrant4;
+    int x, y, dx, dy;
 
-    // radius of pad area, enclosed in minimum sized circle
-    int radius = boundingRadius();
+    switch( GetShape() )
+    {
+    case PAD_CIRCLE:
+        area.SetOrigin( m_Pos );
+        area.Inflate( m_Size.x / 2 );
+        break;
 
-    area.SetOrigin( m_Pos );
-    area.Inflate( radius );
+    case PAD_OVAL:
+        //Use the maximal two most distant points and track their rotation
+        // (utilise symmetry to avoid four points)
+        quadrant1.x =  m_Size.x/2;
+        quadrant1.y =  0;
+        quadrant2.x =  0;
+        quadrant2.y =  m_Size.y/2;
+
+        RotatePoint( &quadrant1, m_Orient );
+        RotatePoint( &quadrant2, m_Orient );
+        dx = std::max( std::abs( quadrant1.x ) , std::abs( quadrant2.x )  );
+        dy = std::max( std::abs( quadrant1.y ) , std::abs( quadrant2.y )  );
+        area.SetOrigin( m_Pos.x-dx, m_Pos.y-dy );
+        area.SetSize( 2*dx, 2*dy );
+        break;
+        break;
+
+    case PAD_RECT:
+        //Use two corners and track their rotation
+        // (utilise symmetry to avoid four points)
+        quadrant1.x =  m_Size.x/2;
+        quadrant1.y =  m_Size.y/2;
+        quadrant2.x = -m_Size.x/2;
+        quadrant2.y =  m_Size.y/2;
+
+        RotatePoint( &quadrant1, m_Orient );
+        RotatePoint( &quadrant2, m_Orient );
+        dx = std::max( std::abs( quadrant1.x ) , std::abs( quadrant2.x )  );
+        dy = std::max( std::abs( quadrant1.y ) , std::abs( quadrant2.y )  );
+        area.SetOrigin( m_Pos.x-dx, m_Pos.y-dy );
+        area.SetSize( 2*dx, 2*dy );
+        break;
+
+    case PAD_TRAPEZOID:
+        //Use the four corners and track their rotation
+        // (Trapezoids will not be symmetric)
+        quadrant1.x =  (m_Size.x + m_DeltaSize.y)/2;
+        quadrant1.y =  (m_Size.y - m_DeltaSize.x)/2;
+        quadrant2.x = -(m_Size.x + m_DeltaSize.y)/2;
+        quadrant2.y =  (m_Size.y + m_DeltaSize.x)/2;
+        quadrant3.x = -(m_Size.x - m_DeltaSize.y)/2;
+        quadrant3.y = -(m_Size.y + m_DeltaSize.x)/2;
+        quadrant4.x =  (m_Size.x - m_DeltaSize.y)/2;
+        quadrant4.y = -(m_Size.y - m_DeltaSize.x)/2;
+
+        RotatePoint( &quadrant1, m_Orient );
+        RotatePoint( &quadrant2, m_Orient );
+        RotatePoint( &quadrant3, m_Orient );
+        RotatePoint( &quadrant4, m_Orient );
+
+        x  = std::min( quadrant1.x, std::min( quadrant2.x, std::min( quadrant3.x, quadrant4.x) ) );
+        y  = std::min( quadrant1.y, std::min( quadrant2.y, std::min( quadrant3.y, quadrant4.y) ) );
+        dx = std::max( quadrant1.x, std::max( quadrant2.x, std::max( quadrant3.x, quadrant4.x) ) );
+        dy = std::max( quadrant1.y, std::max( quadrant2.y, std::max( quadrant3.y, quadrant4.y) ) );
+        area.SetOrigin( m_Pos.x+x, m_Pos.y+y );
+        area.SetSize( dx-x, dy-y );
+        break;
+
+    default:
+        break;
+    }
 
     return area;
 }
@@ -417,7 +482,7 @@ int D_PAD::GetSolderMaskMargin() const
         int minsize = -std::min( m_Size.x, m_Size.y ) / 2;
 
         if( margin < minsize )
-            minsize = minsize;
+            margin = minsize;
     }
 
     return margin;

@@ -13,7 +13,7 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Kmarq B 3100 2150 "Warning Pin power_in non pilotée (Net 2)" F=1
+Kmarq B 3100 2150 "Warning Pin power_in non pilotÃ©e (Net 2)" F=1
 Wire Wire Line
 	3700 7000 3700 6900
 Wire Wire Line

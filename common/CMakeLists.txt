@@ -76,14 +76,19 @@ set(COMMON_ABOUT_DLG_SRCS
     dialogs/dialog_page_settings_base.cpp
     )
 
-if(KICAD_GOST)
-    set( TITLE_BLOCK_SHAPES title_block_shapes_gost )
-else()
-    set( TITLE_BLOCK_SHAPES title_block_shapes )
-endif()
+set(COMMON_PAGE_LAYOUT_SRCS
+    page_layout/title_block_shapes.cpp
+    page_layout/class_worksheet_dataitem.cpp
+    page_layout/class_worksheet_layout.cpp
+    page_layout/page_layout_default_description.cpp
+    page_layout/page_layout_graphic_items.cpp
+    page_layout/page_layout_reader_keywords.cpp
+    page_layout/page_layout_reader.cpp
+    )
 
 set(COMMON_SRCS
     ${COMMON_ABOUT_DLG_SRCS}
+    ${COMMON_PAGE_LAYOUT_SRCS}
     base_struct.cpp
     basicframe.cpp
     bezier_curves.cpp
@@ -126,16 +131,12 @@ set(COMMON_SRCS
     msgpanel.cpp
     netlist_keywords.cpp
     newstroke_font.cpp
-    page_layout_default_description.cpp
-    page_layout_reader_keywords.cpp
-    page_layout_reader.cpp
     projet_config.cpp
     ptree.cpp
     reporter.cpp
     richio.cpp
     selcolor.cpp
     string.cpp
-    ${TITLE_BLOCK_SHAPES}.cpp
     trigo.cpp
     wildcards_and_files_ext.cpp
     worksheet.cpp
@@ -257,9 +258,9 @@ make_lexer(
 # auto-generate page layout reader s-expression page_layout_reader_lexer.h
 # and title_block_reader_keywords.cpp.
 make_lexer(
-    ${CMAKE_CURRENT_SOURCE_DIR}/page_layout_reader.keywords
+    ${CMAKE_CURRENT_SOURCE_DIR}/page_layout/page_layout_reader.keywords
     ${PROJECT_SOURCE_DIR}/include/page_layout_reader_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/page_layout_reader_keywords.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/page_layout/page_layout_reader_keywords.cpp
     TB_READER_T
     )
 

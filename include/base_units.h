@@ -37,6 +37,16 @@
 #include <common.h>
 #include <convert_to_biu.h>
 
+/** Helper function Double2Str to print a float number without
+ * using scientific notation and no trailing 0
+ * We want to avoid scientific notation in S-expr files (not easy to read)
+ * for floating numbers.
+ * So we cannot always just use the %g or the %f format to print a fp number
+ * this helper function uses the %f format when needed, or %g when %f is
+ * not well working and then removes trailing 0
+ */
+std::string Double2Str( double aValue );
+
 /**
  * Function StripTrailingZeros
  * Remove trailing 0 from a string containing a converted float number.

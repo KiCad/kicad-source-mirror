@@ -81,11 +81,11 @@ enum SchematicFindReplaceFlags
 
 
 /**
- * Definition FR_MASK_NON_SEARCH_FLAGS
+ * Definition FR_MASK_NON_COMPARE_FLAGS
  * is used to mask find/replace flag bits that do not effect the search results.
  */
-#define FR_MASK_NON_SEARCH_FLAGS  ~( wxFR_DOWN | FR_SEARCH_WRAP | FR_NO_WARP_CURSOR | \
-                                     FR_REPLACE_ITEM_FOUND )
+#define FR_MASK_NON_COMPARE_FLAGS  ~( wxFR_DOWN | FR_SEARCH_WRAP | FR_NO_WARP_CURSOR | \
+                                      FR_REPLACE_ITEM_FOUND )
 
 
 /**
@@ -122,29 +122,30 @@ public:
 
 
     /**
-     * Function ChangesSearch
-     * tests \a aFindReplaceData to see if it would result in a change in the search
-     * results.
+     * Function ChangesCompare
+     * tests \a aFindReplaceData to see if it would result in a change in the search string
+     * comparison results.
      *
      * @param aFindReplaceData A reference to a #SCH_FIND_REPLACE_DATA object to compare
      *                         against.
      * @return True if \a aFindReplaceData would result in a search and/or replace change,
      *         otherwise false.
      */
-    bool ChangesSearch( SCH_FIND_REPLACE_DATA& aFindReplaceData )
+    bool ChangesCompare( SCH_FIND_REPLACE_DATA& aFindReplaceData )
     {
         return ( (GetFindString() != aFindReplaceData.GetFindString())
-              || (GetSearchFlags() != aFindReplaceData.GetSearchFlags()) );
+              || (GetCompareFlags() != aFindReplaceData.GetCompareFlags()) );
     }
 
     bool IsReplacing() const { return (GetFlags() & FR_SEARCH_REPLACE) != 0; }
+    bool IsWrapping() const { return (GetFlags() & FR_SEARCH_WRAP) != 0; }
 
 private:
     /**
      * Function GetSearchFlags
      * @return The flags that only effect the search result.
      */
-    wxUint32 GetSearchFlags() const { return GetFlags() & FR_MASK_NON_SEARCH_FLAGS; }
+    wxUint32 GetCompareFlags() const { return GetFlags() & FR_MASK_NON_COMPARE_FLAGS; }
 };
 
 

@@ -830,7 +830,7 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
     if( fn.GetFullName() != default_name )
     {
         fn.SetExt( ProjectFileExtension );
-        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParametersList() );
     }
 }
 

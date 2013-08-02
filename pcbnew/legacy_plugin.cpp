@@ -4155,8 +4155,7 @@ void FPL_CACHE::Save()
         abs_lib_name.MakeAbsolute();
         tempFileName = wxFileName::CreateTempFileName( abs_lib_name.GetFullPath() );
 
-        wxLogDebug( wxT( "tempFileName:'%s'  m_lib_path:'%s'\n" ),
-                    TO_UTF8( tempFileName ), TO_UTF8( m_lib_path ) );
+        //wxLogDebug( wxT( "tempFileName:'%s'  m_lib_path:'%s'\n" ), TO_UTF8( tempFileName ), TO_UTF8( m_lib_path ) );
 
         FILE* fp = wxFopen( tempFileName, wxT( "w" ) );
         if( !fp )

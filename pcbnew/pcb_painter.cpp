@@ -230,7 +230,7 @@ const COLOR4D& PCB_PAINTER::getItemColor( int aItemType, int aNetCode, bool aHig
 bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
     // the "cast" applied in here clarifies which overloaded draw() is called
-    switch( aItem->Type() )
+    switch( static_cast<const BOARD_ITEM*>( aItem )->Type() )
     {
     case PCB_ZONE_T:
     case PCB_TRACE_T:

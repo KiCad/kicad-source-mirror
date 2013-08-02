@@ -187,9 +187,9 @@ F 1 "C_3X2.5MM2" H 2950 6850 40  0000 C C
 	1    0    0    -1  
 $EndComp
 Text Notes 4400 7650 0    60   ~
-Extérieur
+ExtÃ©rieur
 Text Notes 3800 6260 0    60   ~
-Prises pièces à vivre
+Prises piÃ¨ces Ã  vivre
 Text Notes 6860 5960 0    60   ~
 Cuisine & Lingerie
 Wire Notes Line
@@ -283,7 +283,7 @@ permanentes
 Text Notes 10350 2250 0    60   ~
 Servitudes
 Text Notes 6050 2150 0    60   ~
-Servitudes secourues protégées
+Servitudes secourues protÃ©gÃ©es
 Text Notes 6700 700  0    60   ~
 Servitudes secourues
 Wire Notes Line
@@ -811,7 +811,7 @@ U 1 1 4162F1F0
 P 2550 6950
 F 0 "ED71" H 2390 7070 40  0000 C C
 F 1 "D_10A" H 2450 6870 40  0000 C C
-F 2 "Abri pré Mouillière proche" H 4160 6980 40  0000 C C
+F 2 "Abri prÃ© MouilliÃ¨re proche" H 4160 6980 40  0000 C C
 	1    2550 6950
 	1    0    0    -1  
 $EndComp
@@ -821,7 +821,7 @@ U 1 1 4162F1CA
 P 2550 6600
 F 0 "ED70" H 2390 6720 40  0000 C C
 F 1 "D_10A" H 2450 6520 40  0000 C C
-F 2 "Abri coté route" H 3920 6600 40  0000 C C
+F 2 "Abri cotÃ© route" H 3920 6600 40  0000 C C
 	1    2550 6600
 	1    0    0    -1  
 $EndComp
@@ -831,7 +831,7 @@ U 1 1 4162F8B1
 P 2550 6100
 F 0 "ED55" H 2390 6220 40  0000 C C
 F 1 "D_16A" H 2450 6020 40  0000 C C
-F 2 "Entrée et salle de bain" H 4080 6100 40  0000 C C
+F 2 "EntrÃ©e et salle de bain" H 4080 6100 40  0000 C C
 	1    2550 6100
 	1    0    0    -1  
 $EndComp
@@ -841,7 +841,7 @@ U 1 1 4162F875
 P 2550 5750
 F 0 "ED54" H 2390 5870 40  0000 C C
 F 1 "D_16A" H 2450 5670 40  0000 C C
-F 2 "Séjour et sam" H 3860 5740 40  0000 C C
+F 2 "SÃ©jour et sam" H 3860 5740 40  0000 C C
 	1    2550 5750
 	1    0    0    -1  
 $EndComp
@@ -891,7 +891,7 @@ U 1 1 4162F875
 P 8550 6100
 F 0 "ED64" H 8390 6220 40  0000 C C
 F 1 "D_16A" H 8450 6020 40  0000 C C
-F 2 "Etage coté atelier" H 9940 6100 40  0000 C C
+F 2 "Etage cotÃ© atelier" H 9940 6100 40  0000 C C
 	1    8550 6100
 	1    0    0    -1  
 $EndComp
@@ -901,7 +901,7 @@ U 1 1 4162F862
 P 8550 5750
 F 0 "ED63" H 8390 5870 40  0000 C C
 F 1 "D_16A" H 8450 5670 40  0000 C C
-F 2 "Etage coté sellerie" H 9960 5740 40  0000 C C
+F 2 "Etage cotÃ© sellerie" H 9960 5740 40  0000 C C
 	1    8550 5750
 	1    0    0    -1  
 $EndComp
@@ -990,7 +990,7 @@ U 1 1 4162F75D
 P 5900 5450
 F 0 "ED46" H 5740 5570 40  0000 C C
 F 1 "D_16A" H 5800 5370 40  0000 C C
-F 2 "Séchoir" H 7060 5440 40  0000 C C
+F 2 "SÃ©choir" H 7060 5440 40  0000 C C
 	1    5900 5450
 	1    0    0    -1  
 $EndComp
@@ -1050,7 +1050,7 @@ U 1 1 4162F6F8
 P 5900 3350
 F 0 "ED40" H 5740 3470 40  0000 C C
 F 1 "D_32A" H 5800 3270 40  0000 C C
-F 2 "Plaque électrique" H 7260 3340 40  0000 C C
+F 2 "Plaque Ã©lectrique" H 7260 3340 40  0000 C C
 	1    5900 3350
 	1    0    0    -1  
 $EndComp
@@ -1152,7 +1152,7 @@ P 8550 1000
 F 0 "ED12" H 8390 1120 40  0000 C C
 F 1 "D_06A" H 8450 920 40  0000 C C
 F 2 "Eclairage chambre 1, chambre 2" H 10200 1040 40  0000 C C
-F 3 "couloir1, wc1, sdb, entrée" H 10180 980 40  0000 C C
+F 3 "couloir1, wc1, sdb, entrÃ©e" H 10180 980 40  0000 C C
 	1    8550 1000
 	1    0    0    -1  
 $EndComp
@@ -1162,7 +1162,7 @@ U 1 1 4162F2EE
 P 8550 1350
 F 0 "ED13" H 8390 1470 40  0000 C C
 F 1 "D_06A" H 8450 1270 40  0000 C C
-F 2 "Eclairage séjour, cuisine" H 10100 1380 40  0000 C C
+F 2 "Eclairage sÃ©jour, cuisine" H 10100 1380 40  0000 C C
 F 3 "sam, escalier, bureau" H 10100 1320 40  0000 C C
 	1    8550 1350
 	1    0    0    -1  
@@ -1184,7 +1184,7 @@ U 1 1 4162F22A
 P 5900 1900
 F 0 "ED25" H 5740 2020 40  0000 C C
 F 1 "D_10A" H 5800 1820 40  0000 C C
-F 2 "Matériel sensible" H 7260 1900 40  0000 C C
+F 2 "MatÃ©riel sensible" H 7260 1900 40  0000 C C
 	1    5900 1900
 	1    0    0    -1  
 $EndComp
@@ -1194,7 +1194,7 @@ U 1 1 4162F1F7
 P 5900 1500
 F 0 "ED22" H 5740 1620 40  0000 C C
 F 1 "D_10A" H 5800 1420 40  0000 C C
-F 2 "Réfrigérateur & congélateur" H 7480 1500 40  0000 C C
+F 2 "RÃ©frigÃ©rateur & congÃ©lateur" H 7480 1500 40  0000 C C
 	1    5900 1500
 	1    0    0    -1  
 $EndComp
@@ -1252,7 +1252,7 @@ F 0 "EO1" H 5300 2300 40  0000 C C
 F 1 "O_900VA" H 5050 2500 40  0000 C C
 F 2 "Onduleurs" H 5050 2200 30  0000 C C
 F 3 "autonomie" H 5050 2150 30  0000 C C
-F 4 "rallongée" H 5050 2100 30  0000 C C
+F 4 "rallongÃ©e" H 5050 2100 30  0000 C C
 	1    5050 2400
 	1    0    0    -1  
 $EndComp
@@ -1404,7 +1404,7 @@ P 1000 2150
 F 0 "EG1" H 1050 2300 40  0000 C C
 F 1 "G_TH_3KVA" H 1080 2380 40  0000 C C
 F 2 "Groupe" H 640 2260 30  0000 C C
-F 3 "électrogène" H 640 2200 30  0000 C C
+F 3 "Ã©lectrogÃ¨ne" H 640 2200 30  0000 C C
 F 4 "automatique" H 640 2140 30  0000 C C
 F 5 "diesel" H 640 2080 30  0000 C C
 	1    1000 2150

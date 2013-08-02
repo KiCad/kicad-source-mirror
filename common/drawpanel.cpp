@@ -564,13 +564,14 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
         g_GhostColor = WHITE;
     }
 
+    GRResetPenAndBrush( DC );
+
+    DC->SetBackground( g_DrawBgColor == BLACK ? *wxBLACK_BRUSH : *wxWHITE_BRUSH );
+    DC->SetBackgroundMode( wxSOLID );
+
     if( erasebg )
         EraseScreen( DC );
 
-    GRResetPenAndBrush( DC );
-
-    DC->SetBackground( *wxBLACK_BRUSH );
-    DC->SetBackgroundMode( wxSOLID );
     GetParent()->RedrawActiveWindow( DC, erasebg );
 
     // Verfies that the clipping is working correctly.  If these two sets of numbers are
@@ -881,6 +882,9 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
+    bool offCenterReq = event.ControlDown() && event.ShiftDown();
+    offCenterReq = offCenterReq || m_enableZoomNoCenter;
+
     // This is a zoom in or out command
     if( event.GetWheelRotation() > 0 )
     {
@@ -888,8 +892,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
             cmd.SetId( ID_PAN_UP );
         else if( event.ControlDown() && !event.ShiftDown() )
             cmd.SetId( ID_PAN_LEFT );
-        else if( (event.ControlDown() && event.ShiftDown() )
-                 || m_enableZoomNoCenter)
+        else if( offCenterReq )
             cmd.SetId( ID_OFFCENTER_ZOOM_IN );
         else
             cmd.SetId( ID_POPUP_ZOOM_IN );
@@ -900,7 +903,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
             cmd.SetId( ID_PAN_DOWN );
         else if( event.ControlDown() && !event.ShiftDown() )
             cmd.SetId( ID_PAN_RIGHT );
-        else if( event.AltDown() || m_enableZoomNoCenter)
+        else if( offCenterReq )
             cmd.SetId( ID_OFFCENTER_ZOOM_OUT );
         else
             cmd.SetId( ID_POPUP_ZOOM_OUT );

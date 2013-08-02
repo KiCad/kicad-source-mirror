@@ -77,35 +77,26 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     /* Note: Page sizes values are given in mils
      */
     double   iusPerMil = plotter->GetIUsPerDecimil() * 10.0;
-    wxSize   pageSize = aPageInfo.GetSizeMils();  // in mils
-
-    wxPoint LTmargin;
-    LTmargin.x = aPageInfo.GetLeftMarginMils() * iusPerMil;
-    LTmargin.y = aPageInfo.GetTopMarginMils()  * iusPerMil;
-
-    wxPoint RBmargin;
-    RBmargin.x = aPageInfo.GetRightMarginMils() * iusPerMil;
-    RBmargin.y = aPageInfo.GetBottomMarginMils()  * iusPerMil;
 
     EDA_COLOR_T plotColor = plotter->GetColorMode() ? RED : BLACK;
     plotter->SetColor( plotColor );
     plotter->SetCurrentLineWidth( PLOTTER::DEFAULT_LINE_WIDTH );
     WS_DRAW_ITEM_LIST drawList;
 
-    // Prepare plot parameters
-    drawList.SetMargins( LTmargin, RBmargin);
-    drawList.SetPenSize(PLOTTER::DEFAULT_LINE_WIDTH );
-    drawList.SetMilsToIUfactor( iusPerMil );
-    drawList.SetPageSize( pageSize );
-    drawList.SetSheetNumber( aSheetNumber );
-    drawList.SetSheetCount( aNumberOfSheets );
-
     // Print only a short filename, if aFilename is the full filename
-
     wxFileName fn( aFilename );
 
-    drawList.BuildWorkSheetGraphicList( aPageInfo.GetType(), fn.GetFullName(),
-                               aSheetDesc, aTitleBlock, plotColor, plotColor );
+    // Prepare plot parameters
+    drawList.SetPenSize(PLOTTER::DEFAULT_LINE_WIDTH );
+    drawList.SetMilsToIUfactor( iusPerMil );
+    drawList.SetSheetNumber( aSheetNumber );
+    drawList.SetSheetCount( aNumberOfSheets );
+    drawList.SetFileName( fn.GetFullName() );   // Print only the short filename
+    drawList.SetSheetName( aSheetDesc );
+
+
+    drawList.BuildWorkSheetGraphicList( aPageInfo,
+                            aTitleBlock, plotColor, plotColor );
 
     // Draw item list
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item;

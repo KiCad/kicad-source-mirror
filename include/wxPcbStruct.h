@@ -353,7 +353,12 @@ public:
      */
     PARAM_CFG_ARRAY GetProjectFileParameters();
 
-    void SaveProjectSettings();
+    /**
+     * Function SaveProjectSettings
+     * saves changes to the project settings to the project (.pro) file.
+     * @param aAskForSave = true to open a dialog before saving the settings
+     */
+    void SaveProjectSettings( bool aAskForSave );
 
     /**
      * Load the project file configuration settings.

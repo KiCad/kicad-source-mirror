@@ -44,7 +44,8 @@ enum EDA_APP_T {
     APP_PCBNEW_T,
     APP_CVPCB_T,
     APP_GERBVIEW_T,
-    APP_KICAD_T
+    APP_KICAD_T,
+    APP_PL_EDITOR_T
 };
 
 class wxConfigBase;

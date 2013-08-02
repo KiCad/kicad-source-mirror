@@ -1,4 +1,6 @@
-#!/usr/bin/python
+# This python script wizard creates a FPC connector
+# for Surface Mounted Technology
+
 
 from pcbnew import *
 
@@ -6,7 +8,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
     def __init__(self):
         FootprintWizardPlugin.__init__(self)
         self.name = "FPC"
-        self.description = "FPC Footprint Wizard"
+        self.description = "FPC (SMTechnology) Footprint Wizard"
         self.parameters = {
              "Pads":
                 {"*n":40,           # not internal units preceded by "*"
@@ -17,9 +19,9 @@ class FPCFootprintWizard(FootprintWizardPlugin):
                 {"shield_to_pad":   FromMM(1.6),
                  "from_top":        FromMM(1.3),
                  "width":           FromMM(1.5),
-                 "height":          FromMM(2)},
-
+                 "height":          FromMM(2)}
         }
+
         self.ClearErrors()
 
     # build a rectangular pad
@@ -75,48 +77,61 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         shl_to_pad      = p["Shield"]["shield_to_pad"]
         shl_from_top    = p["Shield"]["from_top"]
 
+        offsetX         = pad_pitch*(pads-1)/2
         size_pad = wxSize(pad_width,pad_height)
         size_shld = wxSize(shl_width,shl_height)
+        size_text = wxSize( FromMM( 0.8), FromMM( 0.7) )
+        textposy = pad_height/2 + FromMM(1)
 
         module.SetReference("FPC"+str(pads))   # give it a reference name
-        module.Reference().SetPos0(wxPointMM(-1,-2))
-        module.Reference().SetPosition(wxPointMM(-1,-2))
+        module.Reference().SetPos0(wxPoint(0, textposy))
+        module.Reference().SetTextPosition(module.Reference().GetPos0())
+        module.Reference().SetSize( size_text )
+
+        textposy = textposy + FromMM(1)
+        module.SetValue("Val***")           # give it a default value
+        module.Value().SetPos0( wxPoint(0, textposy) )
+        module.Value().SetTextPosition(module.Value().GetPos0())
+        module.Value().SetSize( size_text )
+
+        module.SetLibRef("FPC"+str(pads))   #the name in library
 
         # create a pad array and add it to the module
         for n in range (0,pads):
-            pad = self.smdRectPad(module,size_pad,wxPoint(pad_pitch*n,0),str(n+1))
+            xpos = pad_pitch*n - offsetX
+            pad = self.smdRectPad(module,size_pad,wxPoint(xpos,0),str(n+1))
             module.Add(pad)
 
 
-        pad_s0 = self.smdRectPad(module,
-                            size_shld,
-                            wxPoint(-shl_to_pad,shl_from_top),
-                            "0")
-        pad_s1 = self.smdRectPad(module,
-                            size_shld,
-                            wxPoint((pads-1)*pad_pitch+shl_to_pad,shl_from_top),
-                            "0")
+        xpos = -shl_to_pad-offsetX
+        pad_s0 = self.smdRectPad(module, size_shld, wxPoint(xpos,shl_from_top), "0")
+        xpos = (pads-1)*pad_pitch+shl_to_pad-offsetX
+        pad_s1 = self.smdRectPad(module, size_shld, wxPoint(xpos,shl_from_top), "0")
 
         module.Add(pad_s0)
         module.Add(pad_s1)
 
-        e = EDGE_MODULE(module)
-        e.SetStartEnd(wxPointMM(-1,0),wxPointMM(0,0))
-        e.SetWidth(FromMM(0.2))
-        e.SetLayer(EDGE_LAYER)
-        e.SetShape(S_SEGMENT)
-        module.Add(e)
+        #add outline
+        outline = EDGE_MODULE(module)
+        width = FromMM(0.2)
+        posy = -pad_height/2 - width/2 -FromMM(0.2)
+        outline.SetStartEnd(wxPoint(pad_pitch * pads - pad_pitch*0.5-offsetX, posy),
+                            wxPoint( - pad_pitch*0.5-offsetX, posy))
+        outline.SetWidth(width)
+        outline.SetLayer(SILKSCREEN_N_FRONT)    #default: not needed
+        outline.SetShape(S_SEGMENT)
+        module.Add(outline)
 
-        module.SetLibRef("FPC"+str(pads))
+        outline1 = EDGE_MODULE(module)
+        outline1.Copy(outline)                  #copy all settings from outline
+        posy = pad_height/2 + width/2 +FromMM(0.2)
+        outline1.SetStartEnd(wxPoint(pad_pitch * pads - pad_pitch*0.5-offsetX, posy),
+                            wxPoint( - pad_pitch*0.5-offsetX, posy))
+        module.Add(outline1)
 
 
-def register():
-    # create our footprint wizard
-    fpc_wizard = FPCFootprintWizard()
+# create our footprint wizard
+fpc_wizard = FPCFootprintWizard()
 
-    # register it into pcbnew
-    fpc_wizard.register()
-
-    return fpc_wizard
-
-
+# register it into pcbnew
+fpc_wizard.register()
