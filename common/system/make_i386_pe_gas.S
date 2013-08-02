@@ -4,12 +4,11 @@
            http://www.boost.org/LICENSE_1_0.txt)
 */
 
+.global _make_fcontext
 .text
-.globl make_fcontext
 .align 2
-.type make_fcontext,@function
 
-make_fcontext:
+_make_fcontext:
 	mov    0x4(%esp),%eax
 	lea    -0x34(%eax),%eax
 	and    $0xfffffff0,%eax
@@ -31,10 +30,10 @@ make_fcontext:
 	mov    %fs:0x18,%ecx
 	mov    (%ecx),%edx
 	inc    %edx
-	je     make_fcontext+0x4c // <_make_fcontext+0x4c>
+	je     _make_fcontext+0x4c // <_make_fcontext+0x4c>
 	dec    %edx
 	xchg   %edx,%ecx
-	jmp    make_fcontext+0x42 // <_make_fcontext+0x42>
+	jmp    _make_fcontext+0x42 // <_make_fcontext+0x42>
 	mov    0x4(%ecx),%ecx
 	mov    0x10(%eax),%edx
 	mov    %ecx,0x18(%edx)
@@ -45,10 +44,7 @@ make_fcontext:
 	ret    
 
 finish:
-  xor    %eax,%eax
-  mov    %eax,(%esp)
-  call   finish+0xa
-  hlt    
-
-.size make_fcontext,.-make_fcontext
-
+    xor    %eax,%eax
+    mov    %eax,(%esp)
+    call   finish+0xa
+    hlt

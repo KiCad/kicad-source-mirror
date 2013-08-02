@@ -5,16 +5,17 @@
 
 
 #if __i386__
- #include "jump_i386_sysv_elf_gas.S"
- #include "make_i386_sysv_elf_gas.S"
 
-	#ifdef __WIN32__
-	 #include "jump_i386_pe_gas.S"
-	 #include "make_i386_pe_gas.S"
-	#endif
+    #ifdef __WIN32__
+        #include "jump_i386_pe_gas.S"
+        #include "make_i386_pe_gas.S"
+    #else
+        #include "jump_i386_sysv_elf_gas.S"
+        #include "make_i386_sysv_elf_gas.S"
+    #endif
 
 #elif __x86_64__
- #include "jump_x86_64_sysv_elf_gas.S"
- #include "make_x86_64_sysv_elf_gas.S"
+    #include "jump_x86_64_sysv_elf_gas.S"
+    #include "make_x86_64_sysv_elf_gas.S"
 #endif
 
