@@ -498,14 +498,16 @@ struct VIEW::drawItem
             {
                 group = gal->BeginGroup();
                 aItem->setGroup( currentLayer->id, group );
-                view->m_painter->Draw( aItem, currentLayer->id );
+                if(!view->m_painter->Draw( aItem, currentLayer->id ))
+                    aItem->ViewDraw(currentLayer->id, gal, BOX2I());
                 gal->EndGroup();
             }
         }
         else
         {
             // Immediate mode
-            view->m_painter->Draw( aItem, currentLayer->id );
+            if(!view->m_painter->Draw( aItem, currentLayer->id ))
+                aItem->ViewDraw(currentLayer->id, gal, BOX2I());
         }
     }
 
@@ -526,11 +528,20 @@ void VIEW::redrawRect( const BOX2I& aRect )
             m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
             l->items->Query( aRect, drawFunc );
-            l->isDirty = false;
         }
+        l->isDirty = false;
     }
 }
 
+bool VIEW::IsDirty()
+{
+    BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
+    {
+        if(l->isDirty)   
+            return true;
+    }   
+    return false;
+}
 
 struct VIEW::unlinkItem
 {
@@ -622,18 +633,22 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 
     for( int i = 0; i < layer_count; i++ )
     {
-        VIEW_LAYER* l = &m_layers[layer_indices[i]];
-
-        l->dirtyExtents =
-            l->isDirty ? aItem->ViewBBox() : l->dirtyExtents.Merge( aItem->ViewBBox() );
-
-        if( aUpdateFlags & VIEW_ITEM::GEOMETRY )
+        if(m_layers.find(layer_indices[i]) != m_layers.end())
         {
-            l->items->Remove( aItem );
-            l->items->Insert( aItem );    /* reinsert */
+            VIEW_LAYER* l = &m_layers[layer_indices[i]];
 
-            aItem->deleteGroups();
-        }
+            l->dirtyExtents =
+                l->isDirty ? aItem->ViewBBox() : l->dirtyExtents.Merge( aItem->ViewBBox() );
+
+            l->isDirty = true;
+
+            if( aUpdateFlags & VIEW_ITEM::GEOMETRY )
+            {
+                l->items->Remove( aItem );
+                l->items->Insert( aItem );    /* reinsert */
+                aItem->deleteGroups();
+            }
+      }
     }
 
     if( aItem->storesGroups() )

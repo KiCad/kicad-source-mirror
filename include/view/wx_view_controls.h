@@ -37,6 +37,7 @@
 #include <view/view_controls.h>
 
 class EDA_DRAW_PANEL_GAL;
+class TOOL_DISPATCHER;
 
 namespace KiGfx
 {
@@ -55,6 +56,8 @@ public:
     void    onMotion( wxMouseEvent& event );
     void    onButton( wxMouseEvent& event );
     void    onEnter( wxMouseEvent& event );
+
+    void    SetEventDispatcher( TOOL_DISPATCHER *aEventDispatcher );
 
 private:
 
@@ -80,6 +83,7 @@ private:
 
     /// Used for determining time intervals between events.
     wxLongLong  m_timeStamp;
+    TOOL_DISPATCHER* m_eventDispatcher;
 };
 } // namespace KiGfx
 

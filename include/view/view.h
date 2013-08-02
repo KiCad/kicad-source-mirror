@@ -270,7 +270,7 @@ public:
     }
 
     /**
-     * Function SetLayerOrder()
+ * Function SetLayerOrder()
      * Sets rendering order of a particular layer.
      * @param aLayer: the layer
      * @param aRenderingOrder: arbitrary number denoting the rendering order.
@@ -359,6 +359,8 @@ public:
      * or static (that cannot be modified, eg. displaying image/PDF).
      */
     bool IsDynamic() const { return m_dynamic; }
+
+    bool IsDirty();
 
     static const int VIEW_MAX_LAYERS = 128;       ///* maximum number of layers that may be shown
 
