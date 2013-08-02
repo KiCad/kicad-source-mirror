@@ -271,7 +271,6 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     default:
-        printf("painter: unknown item %p type %d\n", aItem, aItem->Type());
         // Painter does not know how to draw the object
         return false;
         break;
