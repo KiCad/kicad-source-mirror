@@ -454,7 +454,7 @@ bool EDA_APP::SetBinDir()
 
     // Linux and Unix
 #elif defined(__UNIX__)
-    m_BinDir = wxStandardPaths().GetExecutablePath();
+    m_BinDir = wxStandardPaths::Get().GetExecutablePath();
 #else
     m_BinDir = argv[0];
 #endif // __UNIX__
