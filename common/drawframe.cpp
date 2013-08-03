@@ -930,55 +930,66 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
 wxPoint EDA_DRAW_FRAME::GetCrossHairPosition( bool aInvertY ) const
 {
-    return GetScreen()->getCrossHairPosition();
+    // subject to change, borrow from old BASE_SCREEN for now.
+
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->getCrossHairPosition();
 }
 
 
 void EDA_DRAW_FRAME::SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid )
 {
-    GetScreen()->setCrossHairPosition( aPosition, GetGridOrigin(), aSnapToGrid );
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    screen->setCrossHairPosition( aPosition, GetGridOrigin(), aSnapToGrid );
 }
 
 
 wxPoint EDA_DRAW_FRAME::GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize ) const
 {
-    return GetScreen()->getCursorPosition( aOnGrid, GetGridOrigin(), aGridSize );
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->getCursorPosition( aOnGrid, GetGridOrigin(), aGridSize );
 }
 
 
 wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize ) const
 {
-    return GetScreen()->getNearestGridPosition( aPosition, GetGridOrigin(), aGridSize );
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->getNearestGridPosition( aPosition, GetGridOrigin(), aGridSize );
 }
 
 
 wxPoint EDA_DRAW_FRAME::GetCrossHairScreenPosition() const
 {
-    return GetScreen()->getCrossHairScreenPosition();
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->getCrossHairScreenPosition();
 }
 
 
 void EDA_DRAW_FRAME::SetMousePosition( const wxPoint& aPosition )
 {
-    GetScreen()->setMousePosition( aPosition );
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    screen->setMousePosition( aPosition );
 }
 
 
 wxPoint EDA_DRAW_FRAME::RefPos( bool useMouse ) const
 {
-    return GetScreen()->refPos( useMouse );
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->refPos( useMouse );
 }
 
 
 const wxPoint& EDA_DRAW_FRAME::GetScrollCenterPosition() const
 {
-    return GetScreen()->getScrollCenterPosition();
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->getScrollCenterPosition();
 }
 
 
 void EDA_DRAW_FRAME::SetScrollCenterPosition( const wxPoint& aPoint )
 {
-    GetScreen()->setScrollCenterPosition( aPoint );
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    screen->setScrollCenterPosition( aPoint );
 }
 
 //-----</BASE_SCREEN API moved here >--------------------------------------------
