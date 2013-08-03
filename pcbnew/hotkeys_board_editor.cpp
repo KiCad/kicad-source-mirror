@@ -351,6 +351,12 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         m_canvas->Refresh();
         break;
 
+    case HK_RESET_GRID_ORIGIN:
+        SetGridOrigin( wxPoint(0,0) );
+        OnModify();     // because grid origin is saved in board, show as modified
+        m_canvas->Refresh();
+        break;
+
     case HK_SWITCH_UNITS:
         evt_type = (g_UserUnit == INCHES) ?
                     ID_TB_OPTIONS_SELECT_UNIT_MM : ID_TB_OPTIONS_SELECT_UNIT_INCH;

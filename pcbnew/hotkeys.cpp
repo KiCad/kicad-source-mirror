@@ -55,6 +55,7 @@ static EDA_HOTKEY HkSwitch2PreviousCopperLayer( wxT( "Switch to Previous Layer" 
 
 static EDA_HOTKEY HkSaveModule( wxT( "Save Module" ), HK_SAVE_MODULE, 'S' + GR_KB_CTRL );
 static EDA_HOTKEY HkSavefile( wxT( "Save board" ), HK_SAVE_BOARD, 'S' + GR_KB_CTRL );
+static EDA_HOTKEY HkSavefileAs( wxT( "Save board as" ), HK_SAVE_BOARD_AS, 'S' + GR_KB_CTRL + GR_KB_SHIFT );
 static EDA_HOTKEY HkLoadfile( wxT( "Load board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
 static EDA_HOTKEY HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
 static EDA_HOTKEY HkBackspace( wxT( "Delete track segment" ), HK_BACK_SPACE, WXK_BACK );
@@ -78,6 +79,7 @@ static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ), HK_RESET_
 static EDA_HOTKEY HkSwitchHighContrastMode( wxT("Switch Highcontrast mode"), HK_SWITCH_HIGHCONTRAST_MODE,'H');
 
 static EDA_HOTKEY HkSetGridOrigin( wxT("Set Grid Origin"), HK_SET_GRID_ORIGIN, 'S' );
+static EDA_HOTKEY HkResetGridOrigin( wxT("Reset Grid Origin"), HK_RESET_GRID_ORIGIN, 'Z' );
 
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
@@ -195,7 +197,7 @@ EDA_HOTKEY* common_Hotkey_List[] =
 {
     &HkHelp,        &HkZoomIn,          &HkZoomOut,
     &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,
-    &HkSwitchUnits, &HkResetLocalCoord, &HkSetGridOrigin,
+    &HkSwitchUnits, &HkResetLocalCoord, &HkSetGridOrigin, &HkResetGridOrigin,
     &HkUndo,        &HkRedo,
     NULL
 };
@@ -211,7 +213,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkPlaceItem,              &HkCopyItem,
     &HkEndTrack,               &HkMoveItem,                  &HkFlipItem,
     &HkRotateItem,             &HkDragFootprint,
-    &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile,
+    &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile, &HkSavefileAs,
     &HkLoadfile,               &HkFindItem,                  &HkEditBoardItem,
     &HkSwitch2CopperLayer,     &HkSwitch2InnerLayer1,
     &HkSwitch2InnerLayer2,     &HkSwitch2InnerLayer3,        &HkSwitch2InnerLayer4,
