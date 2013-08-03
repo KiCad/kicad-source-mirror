@@ -24,7 +24,7 @@
  *      This can be useful if the new function cannot be executed while an item is currently
  *      being edited ( For example, one cannot start a new wire when a component is moving.)
  *
- *  Note: If an hotkey is a special key, be sure the corresponding wxWidget keycode (WXK_XXXX)
+ *  Note: If a hotkey is a special key, be sure the corresponding wxWidget keycode (WXK_XXXX)
  *  is handled in the hotkey_name_descr s_Hotkey_Name_List list (see hotkeys_basic.cpp)
  *  and see this list for some ascii keys (space ...)
  */
@@ -60,10 +60,8 @@ static EDA_HOTKEY HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL
 static EDA_HOTKEY HkBackspace( wxT( "Delete track segment" ), HK_BACK_SPACE, WXK_BACK );
 static EDA_HOTKEY HkAddNewTrack( wxT( "Add new track" ), HK_ADD_NEW_TRACK, 'X' );
 static EDA_HOTKEY HkAddVia( wxT( "Add Via" ), HK_ADD_VIA, 'V' );
-static EDA_HOTKEY HkSwitchTrackPosture( wxT( "Switch Track Posture" ),
-                                        HK_SWITCH_TRACK_POSTURE, '/' );
-static EDA_HOTKEY HkDragTrackKeepSlope( wxT( "Drag track keep slope" ),
-                                        HK_DRAG_TRACK_KEEP_SLOPE, 'D' );
+static EDA_HOTKEY HkSwitchTrackPosture( wxT( "Switch Track Posture" ),  HK_SWITCH_TRACK_POSTURE, '/' );
+static EDA_HOTKEY HkDragTrackKeepSlope( wxT( "Drag track keep slope" ), HK_DRAG_TRACK_KEEP_SLOPE, 'D' );
 static EDA_HOTKEY HkPlaceItem( wxT( "Place Item" ), HK_PLACE_ITEM, 'P' );
 static EDA_HOTKEY HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V' + GR_KB_CTRL );
 static EDA_HOTKEY HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
@@ -73,15 +71,14 @@ static EDA_HOTKEY HkRotateItem( wxT( "Rotate Item" ), HK_ROTATE_ITEM, 'R' );
 static EDA_HOTKEY HkMoveItem( wxT( "Move Item" ), HK_MOVE_ITEM, 'M' );
 static EDA_HOTKEY HkCopyItem( wxT( "Copy Item" ), HK_COPY_ITEM, 'C' );
 static EDA_HOTKEY HkDragFootprint( wxT( "Drag Footprint" ), HK_DRAG_ITEM, 'G' );
-static EDA_HOTKEY HkGetAndMoveFootprint( wxT( "Get and Move Footprint" ),
-                                         HK_GET_AND_MOVE_FOOTPRINT, 'T' );
-static EDA_HOTKEY HkLock_Unlock_Footprint( wxT( "Lock/Unlock Footprint" ),
-                                           HK_LOCK_UNLOCK_FOOTPRINT, 'L' );
+static EDA_HOTKEY HkGetAndMoveFootprint( wxT( "Get and Move Footprint" ), HK_GET_AND_MOVE_FOOTPRINT, 'T' );
+static EDA_HOTKEY HkLock_Unlock_Footprint( wxT( "Lock/Unlock Footprint" ), HK_LOCK_UNLOCK_FOOTPRINT, 'L' );
 static EDA_HOTKEY HkDelete( wxT( "Delete Track or Footprint" ), HK_DELETE, WXK_DELETE );
-static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
-                                     HK_RESET_LOCAL_COORD, ' ' );
-static EDA_HOTKEY HkSwitchHighContrastMode( wxT("Switch Highcontrast mode"),
-					    HK_SWITCH_HIGHCONTRAST_MODE,'H');
+static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
+static EDA_HOTKEY HkSwitchHighContrastMode( wxT("Switch Highcontrast mode"), HK_SWITCH_HIGHCONTRAST_MODE,'H');
+
+static EDA_HOTKEY HkSetGridOrigin( wxT("Set Grid Origin"), HK_SET_GRID_ORIGIN, 'S' );
+
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
@@ -198,7 +195,7 @@ EDA_HOTKEY* common_Hotkey_List[] =
 {
     &HkHelp,        &HkZoomIn,          &HkZoomOut,
     &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,
-    &HkSwitchUnits, &HkResetLocalCoord,
+    &HkSwitchUnits, &HkResetLocalCoord, &HkSetGridOrigin,
     &HkUndo,        &HkRedo,
     NULL
 };

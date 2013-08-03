@@ -335,7 +335,7 @@ void LIB_VIEW_FRAME::OnSize( wxSizeEvent& SizeEv )
 
 void LIB_VIEW_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 {
-    GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+    GetScreen()->m_O_Curseur = GetCrossHairPosition();
     UpdateStatusBar();
 }
 
@@ -348,18 +348,16 @@ double LIB_VIEW_FRAME::BestZoom()
  * search for line static const int VIEWPORT_EXTENT = 1000;
  * and replace by static const int VIEWPORT_EXTENT = 10000;
  */
-    LIB_COMPONENT* component = NULL;
-    CMP_LIBRARY* lib;
-    double bestzoom = 16.0;      // default value for bestzoom
-
-    lib = CMP_LIBRARY::FindLibrary( m_libraryName );
+    LIB_COMPONENT*  component = NULL;
+    double          bestzoom = 16.0;      // default value for bestzoom
+    CMP_LIBRARY*    lib = CMP_LIBRARY::FindLibrary( m_libraryName );
 
     if( lib  )
         component = lib->FindComponent( m_entryName );
 
     if( component == NULL )
     {
-        GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
+        SetScrollCenterPosition( wxPoint( 0, 0 ) );
         return bestzoom;
     }
 
@@ -382,7 +380,7 @@ double LIB_VIEW_FRAME::BestZoom()
     if( bestzoom  < GetScreen()->m_ZoomList[0] )
         bestzoom  = GetScreen()->m_ZoomList[0];
 
-    GetScreen()->SetScrollCenterPosition( BoundaryBox.Centre() );
+    SetScrollCenterPosition( BoundaryBox.Centre() );
 
     return bestzoom;
 }

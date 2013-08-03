@@ -38,12 +38,12 @@ public:
     const PAGE_INFO&    GetPageSettings() const { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
 
-    const wxPoint&      GetOriginAxisPosition() const
+    const wxPoint&      GetAuxOrigin() const
     {
         return m_originAxisPosition;
     }
 
-    void SetOriginAxisPosition( const wxPoint& aPosition )
+    void SetAuxOrigin( const wxPoint& aPosition )
     {
         m_originAxisPosition = aPosition;
     }

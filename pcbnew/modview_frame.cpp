@@ -369,7 +369,7 @@ void FOOTPRINT_VIEWER_FRAME::OnSize( wxSizeEvent& SizeEv )
 
 void FOOTPRINT_VIEWER_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 {
-    GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+    GetScreen()->m_O_Curseur = GetCrossHairPosition();
     UpdateStatusBar();
 }
 
@@ -644,8 +644,8 @@ void FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    pos = screen->GetNearestGridPosition( pos );
-    oldpos = screen->GetCrossHairPosition();
+    pos = GetNearestGridPosition( pos );
+    oldpos = GetCrossHairPosition();
     gridSize = screen->GetGridSize();
 
     switch( aHotKey )
@@ -676,7 +676,7 @@ void FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
         break;
 
     case ' ':
-        screen->m_O_Curseur = screen->GetCrossHairPosition();
+        screen->m_O_Curseur = GetCrossHairPosition();
         break;
 
     case WXK_NUMPAD8:       /* cursor moved up */
@@ -704,14 +704,14 @@ void FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
         break;
     }
 
-    screen->SetCrossHairPosition( pos );
+    SetCrossHairPosition( pos );
 
-    if( oldpos != screen->GetCrossHairPosition() )
+    if( oldpos != GetCrossHairPosition() )
     {
-        pos = screen->GetCrossHairPosition();
-        screen->SetCrossHairPosition( oldpos );
+        pos = GetCrossHairPosition();
+        SetCrossHairPosition( oldpos );
         m_canvas->CrossHairOff( aDC );
-        screen->SetCrossHairPosition( pos );
+        SetCrossHairPosition( pos );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )

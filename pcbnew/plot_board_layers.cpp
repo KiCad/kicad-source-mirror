@@ -683,7 +683,7 @@ static void initializePlotter( PLOTTER *aPlotter, BOARD * aBoard,
     else
     {
         if( aPlotOpts->GetUseAuxOrigin() )
-            offset = aBoard->GetOriginAxisPosition();
+            offset = aBoard->GetAuxOrigin();
     }
 
     /* Configure the plotter object with all the stuff computed and

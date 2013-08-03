@@ -557,8 +557,12 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                       Double2Str( aBoard->GetDesignSettings().m_SolderPasteMarginRatio ).c_str() );
 
     m_out->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
-                  FMTIU( aBoard->GetOriginAxisPosition().x ).c_str(),
-                  FMTIU( aBoard->GetOriginAxisPosition().y ).c_str() );
+                  FMTIU( aBoard->GetAuxOrigin().x ).c_str(),
+                  FMTIU( aBoard->GetAuxOrigin().y ).c_str() );
+
+    m_out->Print( aNestLevel+1, "(grid_origin %s %s)\n",
+                  FMTIU( aBoard->GetGridOrigin().x ).c_str(),
+                  FMTIU( aBoard->GetGridOrigin().y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(visible_elements %X)\n",
                   aBoard->GetDesignSettings().GetVisibleElements() );

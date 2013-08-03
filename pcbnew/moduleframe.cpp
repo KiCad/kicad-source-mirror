@@ -497,9 +497,9 @@ void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
         snapToGrid = false;
 
     if( snapToGrid )
-        pos = GetScreen()->GetNearestGridPosition( pos );
+        pos = GetNearestGridPosition( pos );
 
-    oldpos = GetScreen()->GetCrossHairPosition();
+    oldpos = GetCrossHairPosition();
     gridSize = GetScreen()->GetGridSize();
 
     switch( aHotKey )
@@ -532,14 +532,14 @@ void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
         break;
     }
 
-    GetScreen()->SetCrossHairPosition( pos, snapToGrid );
+    SetCrossHairPosition( pos, snapToGrid );
 
-    if( oldpos != GetScreen()->GetCrossHairPosition() )
+    if( oldpos != GetCrossHairPosition() )
     {
-        pos = GetScreen()->GetCrossHairPosition();
-        GetScreen()->SetCrossHairPosition( oldpos, false );
+        pos = GetCrossHairPosition();
+        SetCrossHairPosition( oldpos, false );
         m_canvas->CrossHairOff( aDC );
-        GetScreen()->SetCrossHairPosition( pos, snapToGrid );
+        SetCrossHairPosition( pos, snapToGrid );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )

@@ -127,12 +127,14 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     {
         BLOCK_STATE_T   state   = GetScreen()->m_BlockLocate.GetState();
         BLOCK_COMMAND_T command = GetScreen()->m_BlockLocate.GetCommand();
+
         m_canvas->CallEndMouseCapture( DC );
         GetScreen()->m_BlockLocate.SetState( state );
         GetScreen()->m_BlockLocate.SetCommand( command );
         m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
-        GetScreen()->SetCrossHairPosition( wxPoint(  GetScreen()->m_BlockLocate.GetRight(),
-                                                     GetScreen()->m_BlockLocate.GetBottom() ) );
+
+        SetCrossHairPosition( wxPoint(  GetScreen()->m_BlockLocate.GetRight(),
+                                        GetScreen()->m_BlockLocate.GetBottom() ) );
         m_canvas->MoveCursorToCrossHair();
     }
 
@@ -142,9 +144,9 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
         break;
 
-    case BLOCK_DRAG:        /* Drag */
-    case BLOCK_MOVE:        /* Move */
-    case BLOCK_COPY:        /* Copy */
+    case BLOCK_DRAG:        // Drag
+    case BLOCK_MOVE:        // Move
+    case BLOCK_COPY:        // Copy
         itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
 
         if( itemsCount )
@@ -164,13 +166,13 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         break;
 
-    case BLOCK_PRESELECT_MOVE:     /* Move with preselection list*/
+    case BLOCK_PRESELECT_MOVE:     // Move with preselection list
         nextcmd = true;
         m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
         GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
         break;
 
-    case BLOCK_DELETE:     /* Delete */
+    case BLOCK_DELETE:     // Delete
         itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
 
         if( itemsCount )
@@ -179,7 +181,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         DeleteMarkedItems( currentModule );
         break;
 
-    case BLOCK_SAVE:     /* Save */
+    case BLOCK_SAVE:     // Save
     case BLOCK_PASTE:
         break;
 
@@ -195,7 +197,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:
-    case BLOCK_FLIP:     /* mirror */
+    case BLOCK_FLIP:     // mirror
         itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
 
         if( itemsCount )
@@ -204,7 +206,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         MirrorMarkedItems( currentModule, GetScreen()->m_BlockLocate.Centre() );
         break;
 
-    case BLOCK_ZOOM:     /* Window Zoom */
+    case BLOCK_ZOOM:     // Window Zoom
         Window_Zoom( GetScreen()->m_BlockLocate );
         break;
 
@@ -249,28 +251,28 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case  BLOCK_IDLE:
         break;
 
-    case BLOCK_DRAG:                /* Drag */
-    case BLOCK_MOVE:                /* Move */
-    case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
+    case BLOCK_DRAG:                // Drag
+    case BLOCK_MOVE:                // Move
+    case BLOCK_PRESELECT_MOVE:      // Move with preselection list
         GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( currentModule, UR_MODEDIT );
         MoveMarkedItems( currentModule, GetScreen()->m_BlockLocate.GetMoveVector() );
         m_canvas->Refresh( true );
         break;
 
-    case BLOCK_COPY:     /* Copy */
+    case BLOCK_COPY:     // Copy
         GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( currentModule, UR_MODEDIT );
         CopyMarkedItems( currentModule, GetScreen()->m_BlockLocate.GetMoveVector() );
         break;
 
-    case BLOCK_PASTE:     /* Paste */
+    case BLOCK_PASTE:     // Paste
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:
-    case BLOCK_FLIP:      /* Mirror by popup menu, from block move */
+    case BLOCK_FLIP:      // Mirror by popup menu, from block move
         SaveCopyInUndoList( currentModule, UR_MODEDIT );
         MirrorMarkedItems( currentModule, GetScreen()->m_BlockLocate.Centre() );
         break;
@@ -304,8 +306,8 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool aErase )
 {
-    BASE_SCREEN*     screen = aPanel->GetScreen();
-    FOOTPRINT_EDIT_FRAME * moduleEditFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+    BASE_SCREEN*            screen = aPanel->GetScreen();
+    FOOTPRINT_EDIT_FRAME*   moduleEditFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
 
     wxASSERT( moduleEditFrame );
     MODULE* currentModule = moduleEditFrame->GetBoard()->m_Modules;
@@ -319,7 +321,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
         if( currentModule )
         {
-            wxPoint move_offset = -block->GetMoveVector();
+            wxPoint     move_offset = -block->GetMoveVector();
             BOARD_ITEM* item = currentModule->GraphicalItems();
 
             for( ; item != NULL; item = item->Next() )
@@ -351,15 +353,15 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
         }
     }
 
-    /* Repaint new view. */
-    block->SetMoveVector( screen->GetCrossHairPosition() - block->GetLastCursorPosition() );
+    // Repaint new view.
+    block->SetMoveVector( moduleEditFrame->GetCrossHairPosition() - block->GetLastCursorPosition() );
 
     block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
 
     if( currentModule )
     {
         BOARD_ITEM* item = currentModule->GraphicalItems();
-        wxPoint move_offset = - block->GetMoveVector();
+        wxPoint     move_offset = - block->GetMoveVector();
 
         for( ; item != NULL; item = item->Next() )
         {

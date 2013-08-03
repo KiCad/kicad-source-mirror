@@ -106,7 +106,7 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
         break;
     }
 
-    /* Erase ratsnest if needed */
+    // Erase ratsnest if needed
     if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
         DrawGeneralRatsnest( &dc );
 
@@ -191,7 +191,7 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
         return;
     }
 
-    /* Confirmation */
+    // Confirmation
     if( !IsOK( this, _( "Move modules?" ) ) )
         return;
 
@@ -223,15 +223,15 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
      */
     if( PlaceModulesHorsPcb && edgesExist )
     {
-        if( GetScreen()->GetCrossHairPosition().y < (bbbox.GetBottom() + 2000) )
+        if( GetCrossHairPosition().y < (bbbox.GetBottom() + 2000) )
         {
-            wxPoint pos = GetScreen()->GetCrossHairPosition();
+            wxPoint pos = GetCrossHairPosition();
             pos.y = bbbox.GetBottom() + 2000;
-            GetScreen()->SetCrossHairPosition( pos );
+            SetCrossHairPosition( pos );
         }
     }
 
-    /* calculate the area needed by footprints */
+    // calculate the area needed by footprints
     surface = 0.0;
 
     for( unsigned ii = 0; ii < moduleList.size(); ii++ )
@@ -249,7 +249,7 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 
     Xsize_allowed = (int) ( sqrt( surface ) * 4.0 / 3.0 );
 
-    start     = current = GetScreen()->GetCrossHairPosition();
+    start     = current = GetCrossHairPosition();
     Ymax_size = 0;
 
     for( unsigned ii = 0; ii < moduleList.size(); ii++ )
@@ -276,8 +276,8 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
             Ymax_size  = 0;
         }
 
-        GetScreen()->SetCrossHairPosition( current + Module->GetPosition() -
-                                           Module->GetBoundingBox().GetPosition() );
+        SetCrossHairPosition( current + Module->GetPosition() -
+            Module->GetBoundingBox().GetPosition() );
 
         Ymax_size = std::max( Ymax_size, Module->GetBoundingBox().GetHeight() );
 

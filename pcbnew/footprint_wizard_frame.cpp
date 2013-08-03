@@ -53,16 +53,16 @@
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
-/* Window events */
+// Window events
 EVT_CLOSE( FOOTPRINT_WIZARD_FRAME::OnCloseWindow )
 EVT_SIZE( FOOTPRINT_WIZARD_FRAME::OnSize )
 EVT_ACTIVATE( FOOTPRINT_WIZARD_FRAME::OnActivate )
 
-/* Sash drag events */
+// Sash drag events
 EVT_SASH_DRAGGED( ID_FOOTPRINT_WIZARD_PAGES, FOOTPRINT_WIZARD_FRAME::OnSashDrag )
 EVT_SASH_DRAGGED( ID_FOOTPRINT_WIZARD_PARAMETERS, FOOTPRINT_WIZARD_FRAME::OnSashDrag )
 
-/* Toolbar events */
+// Toolbar events
 EVT_TOOL( ID_FOOTPRINT_WIZARD_SELECT_WIZARD,
           FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard )
 
@@ -78,7 +78,7 @@ EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE,
 EVT_TOOL( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW,
           FOOTPRINT_WIZARD_FRAME::Show3D_Frame )
 
-/* listbox events */
+// listbox events
 EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
 EVT_GRID_CMD_CELL_CHANGE( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
                           FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
@@ -374,7 +374,7 @@ void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
  */
 void FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 {
-    GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+    GetScreen()->m_O_Curseur = GetCrossHairPosition();
     UpdateStatusBar();
 }
 
@@ -587,8 +587,8 @@ void FOOTPRINT_WIZARD_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
 
     cmd.SetEventObject( this );
 
-    pos         = screen->GetNearestGridPosition( pos );
-    oldpos      = screen->GetCrossHairPosition();
+    pos         = GetNearestGridPosition( pos );
+    oldpos      = GetCrossHairPosition();
     gridSize    = screen->GetGridSize();
 
     switch( aHotKey )
@@ -619,42 +619,42 @@ void FOOTPRINT_WIZARD_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
         break;
 
     case ' ':
-        screen->m_O_Curseur = screen->GetCrossHairPosition();
+        screen->m_O_Curseur = GetCrossHairPosition();
         break;
 
-    case WXK_NUMPAD8:       /* cursor moved up */
+    case WXK_NUMPAD8:       // cursor moved up
     case WXK_UP:
         pos.y -= KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
-    case WXK_NUMPAD2:       /* cursor moved down */
+    case WXK_NUMPAD2:       // cursor moved down
     case WXK_DOWN:
         pos.y += KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
-    case WXK_NUMPAD4:       /*  cursor moved left */
+    case WXK_NUMPAD4:       // cursor moved left
     case WXK_LEFT:
         pos.x -= KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
         break;
 
-    case WXK_NUMPAD6:      /*  cursor moved right */
+    case WXK_NUMPAD6:       // cursor moved right
     case WXK_RIGHT:
         pos.x += KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
         break;
     }
 
-    screen->SetCrossHairPosition( pos );
+    SetCrossHairPosition( pos );
 
-    if( oldpos != screen->GetCrossHairPosition() )
+    if( oldpos != GetCrossHairPosition() )
     {
-        pos = screen->GetCrossHairPosition();
-        screen->SetCrossHairPosition( oldpos );
+        pos = GetCrossHairPosition();
+        SetCrossHairPosition( oldpos );
         m_canvas->CrossHairOff( aDC );
-        screen->SetCrossHairPosition( pos );
+        SetCrossHairPosition( pos );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )
@@ -663,7 +663,7 @@ void FOOTPRINT_WIZARD_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
         }
     }
 
-    UpdateStatusBar();    /* Display new cursor coordinates */
+    UpdateStatusBar();    // Display new cursor coordinates
 }
 
 

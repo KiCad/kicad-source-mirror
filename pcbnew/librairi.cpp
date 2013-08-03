@@ -725,7 +725,7 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
     GetBoard()->Add( module );
 
     // Update parameters: position, timestamp ...
-    newpos = GetScreen()->GetCrossHairPosition();
+    newpos = GetCrossHairPosition();
     module->SetPosition( newpos );
     module->SetLastEditTime();
 

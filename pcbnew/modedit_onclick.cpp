@@ -132,32 +132,31 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_MODEDIT_ANCHOR_TOOL:
-    {
-        MODULE* module = GetBoard()->m_Modules;
+        {
+            MODULE* module = GetBoard()->m_Modules;
 
-        if( module == NULL    // No module loaded
-            || (module->GetFlags() != 0) )
-            break;
+            if( module == NULL    // No module loaded
+                || (module->GetFlags() != 0) )
+                break;
 
-        SaveCopyInUndoList( module, UR_MODEDIT );
+            SaveCopyInUndoList( module, UR_MODEDIT );
 
-        // set the new relative internal local coordinates of footprint items
-        wxPoint moveVector = module->GetPosition() -
-                             GetScreen()->GetCrossHairPosition();
-        module->MoveAnchorPosition( moveVector );
+            // set the new relative internal local coordinates of footprint items
+            wxPoint moveVector = module->GetPosition() - GetCrossHairPosition();
+            module->MoveAnchorPosition( moveVector );
 
-        // Usually, we do not need to change twice the anchor position,
-        // so deselect the active tool
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
-        SetCurItem( NULL );
-        m_canvas->Refresh();
-    }
-    break;
+            // Usually, we do not need to change twice the anchor position,
+            // so deselect the active tool
+            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetCurItem( NULL );
+            m_canvas->Refresh();
+        }
+        break;
 
     case ID_MODEDIT_PLACE_GRID_COORD:
-        m_canvas->DrawGridAxis( DC, GR_XOR );
-        GetScreen()->m_GridOrigin = GetScreen()->GetCrossHairPosition();
-        m_canvas->DrawGridAxis( DC, GR_COPY );
+        m_canvas->DrawGridAxis( DC, GR_XOR, GetBoard()->GetGridOrigin() );
+        SetGridOrigin( GetCrossHairPosition() );
+        m_canvas->DrawGridAxis( DC, GR_COPY, GetBoard()->GetGridOrigin() );
         GetScreen()->SetModify();
         break;
 

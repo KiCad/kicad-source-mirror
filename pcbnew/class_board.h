@@ -215,6 +215,8 @@ private:
     ZONE_CONTAINERS         m_ZoneDescriptorList;
 
     LAYER                   m_Layer[NB_LAYERS];
+
+    wxPoint                 m_grid_origin;
                                                     // if true m_highLight_NetCode is used
     HIGH_LIGHT_INFO         m_highLight;                // current high light data
     HIGH_LIGHT_INFO         m_highLightPrevious;        // a previously stored high light data
@@ -230,9 +232,6 @@ private:
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;               ///< text in lower right of screen and plots
     PCB_PLOT_PARAMS         m_plotOptions;
-
-    /// Position of the origin axis, which is used in exports mostly
-    wxPoint                 m_originAxisPosition;
 
     /// Number of pads connected to the current net.
     int                     m_nodeCount;
@@ -386,6 +385,20 @@ public:
     {
         return (int) m_markers.size();
     }
+
+    /**
+     * Function SetAuxOrigin
+     * sets the origin point used for plotting.
+     */
+    void SetAuxOrigin( const wxPoint& aPoint )      { m_designSettings.m_AuxOrigin = aPoint; }
+    const wxPoint& GetAuxOrigin() const             { return m_designSettings.m_AuxOrigin; }
+
+    /**
+     * Function SetGridOrigin
+     * sets the origin point of the grid.
+     */
+    void SetGridOrigin( const wxPoint& aPoint )     { m_designSettings.m_GridOrigin = aPoint; }
+    const wxPoint& GetGridOrigin() const            { return m_designSettings.m_GridOrigin; }
 
     /**
      * Function ResetHighLight
@@ -593,9 +606,6 @@ public:
 
     const PCB_PLOT_PARAMS& GetPlotOptions() const           { return m_plotOptions; }
     void SetPlotOptions( const PCB_PLOT_PARAMS& aOptions )  { m_plotOptions = aOptions; }
-
-    const wxPoint& GetOriginAxisPosition() const            { return m_originAxisPosition; }
-    void SetOriginAxisPosition( const wxPoint& aPosition )  { m_originAxisPosition = aPosition; }
 
     TITLE_BLOCK& GetTitleBlock()                            { return m_titles; }
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }

@@ -663,8 +663,8 @@ void SCH_EDIT_FRAME::addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunct
 void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 {
     SCH_SCREEN* screen = frame->GetScreen();
-    wxPoint  pos    = screen->GetCrossHairPosition();
-    wxString msg;
+    wxPoint     pos    = frame->GetCrossHairPosition();
+    wxString    msg;
 
     if( Wire == NULL )
     {
@@ -691,9 +691,9 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
     AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
                  KiBitmap( delete_connection_xpm ) );
 
-    SCH_LINE* line = screen->GetWireOrBus( screen->GetCrossHairPosition() );
+    SCH_LINE* line = screen->GetWireOrBus( frame->GetCrossHairPosition() );
 
-    if( line && !line->IsEndPoint( screen->GetCrossHairPosition() ) )
+    if( line && !line->IsEndPoint( frame->GetCrossHairPosition() ) )
         AddMenuItem( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ),
                      KiBitmap( break_line_xpm ) );
 
@@ -713,8 +713,8 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 
 void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 {
-    wxPoint pos    = frame->GetScreen()->GetCrossHairPosition();
-    wxString msg;
+    wxPoint     pos = frame->GetCrossHairPosition();
+    wxString    msg;
 
     if( Bus == NULL )
     {

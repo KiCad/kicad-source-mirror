@@ -66,7 +66,7 @@ void FOOTPRINT_EDIT_FRAME::Start_Move_EdgeMod( EDGE_MODULE* aEdge, wxDC* DC )
     aEdge->Draw( m_canvas, DC, GR_XOR );
     aEdge->SetFlags( IS_MOVED );
     MoveVector.x   = MoveVector.y = 0;
-    CursorInitialPosition    = GetScreen()->GetCrossHairPosition();
+    CursorInitialPosition    = GetCrossHairPosition();
     m_canvas->SetMouseCapture( ShowCurrentOutlineWhileMoving, Abort_Move_ModuleOutline );
     SetCurItem( aEdge );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
@@ -115,7 +115,7 @@ static void ShowCurrentOutlineWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         edge->Draw( aPanel, aDC, GR_XOR, MoveVector );
     }
 
-    MoveVector = -(screen->GetCrossHairPosition() - CursorInitialPosition);
+    MoveVector = -(aPanel->GetParent()->GetCrossHairPosition() - CursorInitialPosition);
 
     edge->Draw( aPanel, aDC, GR_XOR, MoveVector );
 
@@ -142,7 +142,7 @@ static void ShowNewEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
         edge->Draw( aPanel, aDC, GR_XOR );
     }
 
-    edge->SetEnd( screen->GetCrossHairPosition() );
+    edge->SetEnd( aPanel->GetParent()->GetCrossHairPosition() );
 
     // Update relative coordinate.
     edge->SetEnd0( edge->GetEnd() - module->GetPosition() );
@@ -346,7 +346,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
             aEdge->SetLayer( SILKSCREEN_N_FRONT );
 
         // Initialize the starting point of the new segment or arc
-        aEdge->SetStart( GetScreen()->GetCrossHairPosition() );
+        aEdge->SetStart( GetCrossHairPosition() );
 
         // Initialize the ending point of the new segment or arc
         aEdge->SetEnd( aEdge->GetStart() );
@@ -383,7 +383,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
 
                 aEdge->SetFlags( IS_NEW );
                 aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
-                aEdge->SetStart( GetScreen()->GetCrossHairPosition() );
+                aEdge->SetStart( GetCrossHairPosition() );
                 aEdge->SetEnd( aEdge->GetStart() );
 
                 // Update relative coordinate.

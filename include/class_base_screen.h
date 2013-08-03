@@ -75,53 +75,134 @@ typedef std::vector< GRID_TYPE > GRIDS;
 class BASE_SCREEN : public EDA_ITEM
 {
 private:
-    GRIDS       m_grids;          ///< List of valid grid sizes.
-    bool        m_FlagModified;   ///< Indicates current drawing has been modified.
-    bool        m_FlagSave;       ///< Indicates automatic file save.
-    EDA_ITEM*   m_CurrentItem;    ///< Currently selected object
-    GRID_TYPE   m_Grid;           ///< Current grid selection.
-    wxPoint     m_scrollCenter;   ///< Current scroll center point in logical units.
-    wxPoint     m_MousePosition;  ///< Mouse cursor coordinate in logical units.
-
+    GRIDS       m_grids;            ///< List of valid grid sizes.
+    bool        m_FlagModified;     ///< Indicates current drawing has been modified.
+    bool        m_FlagSave;         ///< Indicates automatic file save.
+    EDA_ITEM*   m_CurrentItem;      ///< Currently selected object
+    GRID_TYPE   m_Grid;             ///< Current grid selection.
+    wxPoint     m_scrollCenter;     ///< Current scroll center point in logical units.
+    wxPoint     m_MousePosition;    ///< Mouse cursor coordinate in logical units.
 
     /**
      * The cross hair position in logical (drawing) units.  The cross hair is not the cursor
      * position.  It is an addition indicator typically drawn on grid to indicate to the
      * user where the current action will be performed.
      */
-    wxPoint m_crossHairPosition;
+    wxPoint     m_crossHairPosition;
 
-    double     m_Zoom;          ///< Current zoom coefficient.
+    double      m_Zoom;             ///< Current zoom coefficient.
+
+    //----< Old public API now is private, and migratory>------------------------
+    // called only from EDA_DRAW_FRAME
+    friend class EDA_DRAW_FRAME;
+
+    /**
+     * Function getCrossHairPosition
+     * return the current cross hair position in logical (drawing) coordinates.
+     * @param aInvertY Inverts the Y axis position.
+     * @return The cross hair position in drawing coordinates.
+     */
+    wxPoint getCrossHairPosition( bool aInvertY = false ) const
+    {
+        if( aInvertY )
+            return wxPoint( m_crossHairPosition.x, -m_crossHairPosition.y );
+
+        return wxPoint( m_crossHairPosition.x, m_crossHairPosition.y );
+    }
+
+    /**
+     * Function setCrossHairPosition
+     * sets the screen cross hair position to \a aPosition in logical (drawing) units.
+     * @param aPosition The new cross hair position.
+     * @param aGridOrigin Origin point of the snap grid.
+     * @param aSnapToGrid Sets the cross hair position to the nearest grid position to
+     *                    \a aPosition.
+     *
+     */
+    void setCrossHairPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin, bool aSnapToGrid = true );
+
+    /**
+     * Function getCursorScreenPosition
+     * returns the cross hair position in device (display) units.b
+     * @return The current cross hair position.
+     */
+    wxPoint getCrossHairScreenPosition() const;
+
+    /**
+     * Function getNearestGridPosition
+     * returns the nearest \a aGridSize location to \a aPosition.
+     * @param aPosition The position to check.
+     * @param aGridOrigin The origin point of the snap grid.
+     * @param aGridSize The grid size to locate to if provided.  If NULL then the current
+     *                  grid size is used.
+     * @return The nearst grid position.
+     */
+    wxPoint getNearestGridPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin,
+                                    wxRealPoint* aGridSize = NULL ) const;
+
+    /**
+     * Function getCursorPosition
+     * returns the current cursor position in logical (drawing) units.
+     * @param aOnGrid Returns the nearest grid position at the current cursor position.
+     * @param aGridOrigin Origin point of the snap grid.
+     * @param aGridSize Custom grid size instead of the current grid size.  Only valid
+     *        if \a aOnGrid is true.
+     * @return The current cursor position.
+     */
+    wxPoint getCursorPosition( bool aOnGrid, const wxPoint& aGridOrigin, wxRealPoint* aGridSize = NULL ) const;
+
+    void setMousePosition( const wxPoint& aPosition ) { m_MousePosition = aPosition; }
+
+    /**
+     * Function RefPos
+     * Return the reference position, coming from either the mouse position
+     * or the cursor position.
+     *
+     * @param useMouse If true, return mouse position, else cursor's.
+     *
+     * @return wxPoint - The reference point, either the mouse position or
+     *                   the cursor position.
+     */
+    wxPoint refPos( bool useMouse ) const
+    {
+        return useMouse ? m_MousePosition : m_crossHairPosition;
+    }
+
+    const wxPoint& getScrollCenterPosition() const          { return m_scrollCenter; }
+    void setScrollCenterPosition( const wxPoint& aPoint )   { m_scrollCenter = aPoint; }
+
+    //----</Old public API now is private, and migratory>------------------------
 
 
 public:
     static  wxString m_PageLayoutDescrFileName; ///< the name of the page layout descr file,
                                                 ///< or emty to used the default pagelayout
-    wxPoint m_DrawOrg;          ///< offsets for drawing the circuit on the screen
 
-    wxPoint m_O_Curseur;        ///< Relative Screen cursor coordinate (on grid)
-                                ///< in user units. (coordinates from last reset position)
+    wxPoint     m_DrawOrg;          ///< offsets for drawing the circuit on the screen
+
+    wxPoint     m_O_Curseur;        ///< Relative Screen cursor coordinate (on grid)
+                                    ///< in user units. (coordinates from last reset position)
 
     // Scrollbars management:
-    int     m_ScrollPixelsPerUnitX; ///< Pixels per scroll unit in the horizontal direction.
-    int     m_ScrollPixelsPerUnitY; ///< Pixels per scroll unit in the vertical direction.
+    int         m_ScrollPixelsPerUnitX; ///< Pixels per scroll unit in the horizontal direction.
+    int         m_ScrollPixelsPerUnitY; ///< Pixels per scroll unit in the vertical direction.
 
-    wxSize  m_ScrollbarNumber;      /* Current virtual draw area size in scroll units.
+    wxSize      m_ScrollbarNumber;  /**< Current virtual draw area size in scroll units.
                                      * m_ScrollbarNumber * m_ScrollPixelsPerUnit =
                                      * virtual draw area size in pixels */
 
-    wxPoint m_ScrollbarPos;     ///< Current scroll bar position in scroll units.
+    wxPoint     m_ScrollbarPos;     ///< Current scroll bar position in scroll units.
 
-    wxPoint m_StartVisu;        /* Coordinates in drawing units of the current
-                                 * view position (upper left corner of device)
-                                 */
+    wxPoint     m_StartVisu;        /**< Coordinates in drawing units of the current
+                                     * view position (upper left corner of device)
+                                     */
 
-    bool   m_Center;             /* Center on screen.  If true (0.0) is centered
-                                  * on screen coordinates can be < 0 and
-                                  * > 0 except for schematics.
-                                  * false: when coordinates can only be >= 0
-                                  * Schematic */
-    bool    m_FirstRedraw;
+    bool        m_Center;           /**< Center on screen.  If true (0.0) is centered
+                                     * on screen coordinates can be < 0 and
+                                     * > 0 except for schematics.
+                                     * false: when coordinates can only be >= 0
+                                     * Schematic */
+    bool        m_FirstRedraw;
 
     // Undo/redo list of commands
     UNDO_REDO_CONTAINER m_UndoList;         ///< Objects list for the undo command (old data)
@@ -133,8 +214,6 @@ public:
 
     int                 m_ScreenNumber;
     int                 m_NumberOfScreens;
-
-    wxPoint             m_GridOrigin;
 
     std::vector<double> m_ZoomList;         ///< standard zoom (i.e. scale) coefficients.
     bool                m_IsPrinting;
@@ -163,30 +242,6 @@ public:
      *       obsolete GetInternalUnits function.
      */
     virtual int MilsToIuScalar() { return 1; }
-
-    /**
-     * Function GetCrossHairPosition
-     * return the current cross hair position in logical (drawing) coordinates.
-     * @param aInvertY Inverts the Y axis position.
-     * @return The cross hair position in drawing coordinates.
-     */
-    wxPoint GetCrossHairPosition( bool aInvertY = false ) const
-    {
-        if( aInvertY )
-            return wxPoint( m_crossHairPosition.x, -m_crossHairPosition.y );
-
-        return wxPoint( m_crossHairPosition.x, m_crossHairPosition.y );
-    }
-
-    /**
-     * Function SetCrossHairPosition
-     * sets the screen cross hair position to \a aPosition in logical (drawing) units.
-     * @param aPosition The new cross hair position.
-     * @param aSnapToGrid Sets the cross hair position to the nearest grid position to
-     *                    \a aPosition.
-     *
-     */
-    void SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid = true );
 
     /* general Undo/Redo command control */
 
@@ -247,19 +302,17 @@ public:
         return m_UndoList.m_CommandsList.size();
     }
 
-
     int GetRedoCommandCount() const
     {
         return m_RedoList.m_CommandsList.size();
     }
 
-
-    void SetModify() { m_FlagModified = true; }
-    void ClrModify() { m_FlagModified = false;; }
-    void SetSave() { m_FlagSave = true; }
-    void ClrSave() { m_FlagSave = false; }
-    bool IsModify() const { return m_FlagModified;  }
-    bool IsSave() const { return m_FlagSave;  }
+    void SetModify()        { m_FlagModified = true; }
+    void ClrModify()        { m_FlagModified = false; }
+    void SetSave()          { m_FlagSave = true; }
+    void ClrSave()          { m_FlagSave = false; }
+    bool IsModify() const   { return m_FlagModified; }
+    bool IsSave() const     { return m_FlagSave; }
 
 
     //----<zoom stuff>---------------------------------------------------------
@@ -349,8 +402,6 @@ public:
      */
     const GRID_TYPE& GetGrid() const { return m_Grid; }
 
-    const wxPoint& GetGridOrigin() const { return m_GridOrigin; }
-
     void SetGrid( const wxRealPoint& size );
 
     /**
@@ -388,51 +439,6 @@ public:
      */
     void GetGrids( GRIDS& aList );
 
-    void SetMousePosition( const wxPoint& aPosition ) { m_MousePosition = aPosition; }
-
-    /**
-     * Function RefPos
-     * Return the reference position, coming from either the mouse position
-     * or the cursor position.
-     *
-     * @param useMouse If true, return mouse position, else cursor's.
-     *
-     * @return wxPoint - The reference point, either the mouse position or
-     *                   the cursor position.
-     */
-    wxPoint RefPos( bool useMouse ) const
-    {
-        return useMouse ? m_MousePosition : m_crossHairPosition;
-    }
-
-    /**
-     * Function GetCursorPosition
-     * returns the current cursor position in logical (drawing) units.
-     * @param aOnGrid Returns the nearest grid position at the current cursor position.
-     * @param aGridSize Custom grid size instead of the current grid size.  Only valid
-     *        if \a aOnGrid is true.
-     * @return The current cursor position.
-     */
-    wxPoint GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize = NULL ) const;
-
-    /**
-     * Function GetCursorScreenPosition
-     * returns the cross hair position in device (display) units.b
-     * @return The current cross hair position.
-     */
-    wxPoint GetCrossHairScreenPosition() const;
-
-    /**
-     * Function GetNearestGridPosition
-     * returns the nearest \a aGridSize location to \a aPosition.
-     * @param aPosition The position to check.
-     * @param aGridSize The grid size to locate to if provided.  If NULL then the current
-     *                  grid size is used.
-     * @return The nearst grid position.
-     */
-    wxPoint GetNearestGridPosition( const wxPoint& aPosition,
-                                    wxRealPoint* aGridSize = NULL ) const;
-
     /**
      * Function GetClass
      * returns the class name.
@@ -446,12 +452,6 @@ public:
     inline bool IsBlockActive() const { return !m_BlockLocate.IsIdle(); }
 
     void ClearBlockCommand() { m_BlockLocate.Clear(); }
-
-    const wxPoint& GetScrollCenterPosition() const { return m_scrollCenter; }
-    void SetScrollCenterPosition( const wxPoint& aCenterPosition )
-    {
-        m_scrollCenter = aCenterPosition;
-    }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload

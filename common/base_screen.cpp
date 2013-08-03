@@ -288,10 +288,10 @@ GRID_TYPE& BASE_SCREEN::GetGrid( size_t aIndex )
 }
 
 
-wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition,
-                                             wxRealPoint* aGridSize ) const
+wxPoint BASE_SCREEN::getNearestGridPosition( const wxPoint& aPosition,
+    const wxPoint& aGridOrigin, wxRealPoint* aGridSize ) const
 {
-    wxPoint pt;
+    wxPoint     pt;
     wxRealPoint gridSize;
 
     if( aGridSize )
@@ -299,13 +299,13 @@ wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition,
     else
         gridSize = GetGridSize();
 
-    wxPoint gridOrigin = m_GridOrigin;
-
-    double offset = fmod( gridOrigin.x, gridSize.x );
+    double  offset = fmod( aGridOrigin.x, gridSize.x );
     int x = KiROUND( (aPosition.x - offset) / gridSize.x );
+
     pt.x = KiROUND( x * gridSize.x + offset );
 
-    offset = fmod( gridOrigin.y, gridSize.y );
+    offset = fmod( aGridOrigin.y, gridSize.y );
+
     int y = KiROUND( (aPosition.y - offset) / gridSize.y );
     pt.y = KiROUND ( y * gridSize.y + offset );
 
@@ -313,19 +313,19 @@ wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition,
 }
 
 
-wxPoint BASE_SCREEN::GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize ) const
+wxPoint BASE_SCREEN::getCursorPosition( bool aOnGrid, const wxPoint& aGridOrigin, wxRealPoint* aGridSize ) const
 {
     if( aOnGrid )
-        return GetNearestGridPosition( m_crossHairPosition, aGridSize );
+        return getNearestGridPosition( m_crossHairPosition, aGridOrigin, aGridSize );
 
     return m_crossHairPosition;
 }
 
 
-wxPoint BASE_SCREEN::GetCrossHairScreenPosition() const
+wxPoint BASE_SCREEN::getCrossHairScreenPosition() const
 {
     wxPoint pos = m_crossHairPosition - m_DrawOrg;
-    double scalar = GetScalingFactor();
+    double  scalar = GetScalingFactor();
 
     pos.x = KiROUND( (double) pos.x * scalar );
     pos.y = KiROUND( (double) pos.y * scalar );
@@ -334,10 +334,10 @@ wxPoint BASE_SCREEN::GetCrossHairScreenPosition() const
 }
 
 
-void BASE_SCREEN::SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid )
+void BASE_SCREEN::setCrossHairPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin, bool aSnapToGrid )
 {
     if( aSnapToGrid )
-        m_crossHairPosition = GetNearestGridPosition( aPosition );
+        m_crossHairPosition = getNearestGridPosition( aPosition, aGridOrigin );
     else
         m_crossHairPosition = aPosition;
 }

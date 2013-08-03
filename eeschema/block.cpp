@@ -215,7 +215,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         block->SetState( state );
         block->SetCommand( command );
         m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
-        GetScreen()->SetCrossHairPosition( block->GetEnd() );
+        SetCrossHairPosition( block->GetEnd() );
 
         if( block->GetCommand() != BLOCK_ABORT )
             m_canvas->MoveCursorToCrossHair();
@@ -237,8 +237,8 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             {
                 // Compute the rotation center and put it on grid:
                 wxPoint rotationPoint = block->Centre();
-                rotationPoint = GetScreen()->GetNearestGridPosition( rotationPoint );
-                GetScreen()->SetCrossHairPosition( rotationPoint );
+                rotationPoint = GetNearestGridPosition( rotationPoint );
+                SetCrossHairPosition( rotationPoint );
                 SaveCopyInUndoList( block->GetItems(), UR_ROTATED, rotationPoint );
                 RotateListOfItems( block->GetItems(), rotationPoint );
                 OnModify();
@@ -433,8 +433,8 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         {
             /* Compute the rotation center and put it on grid */
             wxPoint rotationPoint = block->Centre();
-            rotationPoint = GetScreen()->GetNearestGridPosition( rotationPoint );
-            GetScreen()->SetCrossHairPosition( rotationPoint );
+            rotationPoint = GetNearestGridPosition( rotationPoint );
+            SetCrossHairPosition( rotationPoint );
             SaveCopyInUndoList( block->GetItems(), UR_ROTATED, rotationPoint );
             RotateListOfItems( block->GetItems(), rotationPoint );
             OnModify();
@@ -452,8 +452,8 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         {
             /* Compute the mirror center and put it on grid */
             wxPoint mirrorPoint = block->Centre();
-            mirrorPoint = GetScreen()->GetNearestGridPosition( mirrorPoint );
-            GetScreen()->SetCrossHairPosition( mirrorPoint );
+            mirrorPoint = GetNearestGridPosition( mirrorPoint );
+            SetCrossHairPosition( mirrorPoint );
             SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_X, mirrorPoint );
             MirrorX( block->GetItems(), mirrorPoint );
             OnModify();
@@ -471,8 +471,8 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         {
             /* Compute the mirror center and put it on grid */
             wxPoint mirrorPoint = block->Centre();
-            mirrorPoint = GetScreen()->GetNearestGridPosition( mirrorPoint );
-            GetScreen()->SetCrossHairPosition( mirrorPoint );
+            mirrorPoint = GetNearestGridPosition( mirrorPoint );
+            SetCrossHairPosition( mirrorPoint );
             SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_Y, mirrorPoint );
             MirrorY( block->GetItems(), mirrorPoint );
             OnModify();
@@ -519,7 +519,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     }
 
     /* Repaint new view. */
-    block->SetMoveVector( screen->GetCrossHairPosition() - block->GetLastCursorPosition() );
+    block->SetMoveVector( aPanel->GetParent()->GetCrossHairPosition() - block->GetLastCursorPosition() );
     block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
 
     for( unsigned ii = 0; ii < block->GetCount(); ii++ )

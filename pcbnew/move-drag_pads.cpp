@@ -63,7 +63,6 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
                            bool aErase )
 {
     TRACK*       Track;
-    BASE_SCREEN* screen = aPanel->GetScreen();
     D_PAD*       pad    = s_CurrentSelectedPad;
 
     if( pad == NULL )       // Should not occur
@@ -72,7 +71,7 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     if( aErase )
         pad->Draw( aPanel, aDC, GR_XOR );
 
-    pad->SetPosition( screen->GetCrossHairPosition() );
+    pad->SetPosition( aPanel->GetParent()->GetCrossHairPosition() );
     pad->Draw( aPanel, aDC, GR_XOR );
 
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
