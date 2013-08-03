@@ -218,6 +218,7 @@ enum common_hotkey_id_commnand {
     HK_NOT_FOUND = 0,
     HK_RESET_LOCAL_COORD,
     HK_SET_GRID_ORIGIN,
+    HK_RESET_GRID_ORIGIN,
     HK_HELP,
     HK_ZOOM_IN,
     HK_ZOOM_OUT,
