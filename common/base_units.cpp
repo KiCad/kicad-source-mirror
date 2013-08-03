@@ -209,8 +209,28 @@ wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymb
     StripTrailingZeros( stringValue, 3 );
 
 #else
-    std::string s = Double2Str( value_to_print );
-    wxString    stringValue = FROM_UTF8( s.c_str() );
+
+    char    buf[50];
+    int     len;
+
+    if( value_to_print != 0.0 && fabs( value_to_print ) <= 0.0001 )
+    {
+        len = sprintf( buf, "%.10f", value_to_print );
+
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        if( buf[len]=='.' || buf[len]==',' )
+            buf[len] = '\0';
+        else
+            ++len;
+    }
+    else
+    {
+        len = sprintf( buf, "%.10g", value_to_print );
+    }
+
+    wxString    stringValue( buf, wxConvUTF8 );
 
 #endif
 
