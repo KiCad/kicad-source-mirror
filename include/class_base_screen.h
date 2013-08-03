@@ -102,7 +102,7 @@ private:
      * @param aInvertY Inverts the Y axis position.
      * @return The cross hair position in drawing coordinates.
      */
-    wxPoint getCrossHairPosition( bool aInvertY = false ) const
+    wxPoint getCrossHairPosition( bool aInvertY ) const
     {
         if( aInvertY )
             return wxPoint( m_crossHairPosition.x, -m_crossHairPosition.y );
@@ -119,7 +119,7 @@ private:
      *                    \a aPosition.
      *
      */
-    void setCrossHairPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin, bool aSnapToGrid = true );
+    void setCrossHairPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin, bool aSnapToGrid );
 
     /**
      * Function getCursorScreenPosition
@@ -138,7 +138,7 @@ private:
      * @return The nearst grid position.
      */
     wxPoint getNearestGridPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin,
-                                    wxRealPoint* aGridSize = NULL ) const;
+                                    wxRealPoint* aGridSize ) const;
 
     /**
      * Function getCursorPosition
@@ -149,7 +149,7 @@ private:
      *        if \a aOnGrid is true.
      * @return The current cursor position.
      */
-    wxPoint getCursorPosition( bool aOnGrid, const wxPoint& aGridOrigin, wxRealPoint* aGridSize = NULL ) const;
+    wxPoint getCursorPosition( bool aOnGrid, const wxPoint& aGridOrigin, wxRealPoint* aGridSize ) const;
 
     void setMousePosition( const wxPoint& aPosition ) { m_MousePosition = aPosition; }
 

@@ -337,7 +337,7 @@ wxPoint BASE_SCREEN::getCrossHairScreenPosition() const
 void BASE_SCREEN::setCrossHairPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin, bool aSnapToGrid )
 {
     if( aSnapToGrid )
-        m_crossHairPosition = getNearestGridPosition( aPosition, aGridOrigin );
+        m_crossHairPosition = getNearestGridPosition( aPosition, aGridOrigin, NULL );
     else
         m_crossHairPosition = aPosition;
 }
