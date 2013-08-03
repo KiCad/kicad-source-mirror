@@ -720,11 +720,8 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 {
     BASE_SCREEN* screen = GetScreen();
 
-    if( screen == NULL || m_canvas == NULL )
+    if( !screen || !m_canvas )
         return;
-
-    // There are no safety limits on these calculations, so in NANOMETRES build it
-    // still blows up.  This is incomplete work.
 
     double scale = screen->GetScalingFactor();
 
@@ -933,7 +930,7 @@ wxPoint EDA_DRAW_FRAME::GetCrossHairPosition( bool aInvertY ) const
     // subject to change, borrow from old BASE_SCREEN for now.
 
     BASE_SCREEN* screen = GetScreen();  // virtual call
-    return screen->getCrossHairPosition();
+    return screen->getCrossHairPosition( aInvertY );
 }
 
 
