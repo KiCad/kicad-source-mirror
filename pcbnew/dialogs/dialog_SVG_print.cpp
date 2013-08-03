@@ -317,7 +317,7 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
     m_plotOpts.SetValueColor( color );
 
     PAGE_INFO pageInfo = m_board->GetPageSettings();
-    wxPoint axisorigin = m_board->GetOriginAxisPosition();
+    wxPoint axisorigin = m_board->GetAuxOrigin();
 
     if( PageIsBoardBoundarySize() )
     {
@@ -328,7 +328,7 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
         m_board->SetPageSettings( currpageInfo );
         m_plotOpts.SetUseAuxOrigin( true );
         wxPoint origin = bbox.GetOrigin();
-        m_board->SetOriginAxisPosition( origin );
+        m_board->SetAuxOrigin( origin );
     }
 
     LOCALE_IO    toggle;
@@ -344,7 +344,7 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
     }
 
     delete plotter;
-    m_board->SetOriginAxisPosition( axisorigin );
+    m_board->SetAuxOrigin( axisorigin );
     m_board->SetPageSettings( pageInfo );
 
     return true;

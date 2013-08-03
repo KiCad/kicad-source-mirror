@@ -649,7 +649,8 @@ void LEGACY_PLUGIN::loadSETUP()
             BIU gx = biuParse( line + SZ( "AuxiliaryAxisOrg" ), &data );
             BIU gy = biuParse( data );
 
-            m_board->SetOriginAxisPosition( wxPoint( gx, gy ) );
+            // m_board->SetAuxOrigin( wxPoint( gx, gy ) ); gets overwritten by SetDesignSettings() below
+            bds.m_AuxOrigin = wxPoint( gx, gy );
         }
 
         else if( TESTLINE( "Layers" ) )
@@ -851,13 +852,11 @@ void LEGACY_PLUGIN::loadSETUP()
 
         else if( TESTLINE( "GridOrigin" ) )
         {
-            /* @todo
-            BIU gx = biuParse( line + SZ( "GridOrigin" ), &data );
-            BIU gy = biuParse( data );
+            BIU x = biuParse( line + SZ( "GridOrigin" ), &data );
+            BIU y = biuParse( data );
 
-            GetScreen()->m_GridOrigin.x = Ox;
-            GetScreen()->m_GridOrigin.y = Oy;
-            */
+            // m_board->SetGridOrigin( wxPoint( x, y ) ); gets overwritten by SetDesignSettings() below
+            bds.m_GridOrigin = wxPoint( x, y );
         }
 
         else if( TESTLINE( "VisibleElements" ) )
@@ -3071,14 +3070,8 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
     if( bds.m_SolderPasteMarginRatio != 0 )
         fprintf( m_fp, "Pad2PasteClearanceRatio %g\n", bds.m_SolderPasteMarginRatio );
 
-    /* @todo no aFrame
-    if ( aFrame->GetScreen()->m_GridOrigin != wxPoint( 0, 0 ) )
-    {
-        fprintf( m_fp, "GridOrigin %s\n", fmtBIUPoint( aFrame->GetScreen()->m_GridOrigin ).c_str() );
-    }
-    */
-
-    fprintf( m_fp, "AuxiliaryAxisOrg %s\n", fmtBIUPoint( aBoard->GetOriginAxisPosition() ).c_str() );
+    fprintf( m_fp, "GridOrigin %s\n", fmtBIUPoint( aBoard->GetGridOrigin() ).c_str() );
+    fprintf( m_fp, "AuxiliaryAxisOrg %s\n", fmtBIUPoint( aBoard->GetAuxOrigin() ).c_str() );
 
     fprintf( m_fp, "VisibleElements %X\n", bds.GetVisibleElements() );
 

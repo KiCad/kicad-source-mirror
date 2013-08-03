@@ -33,7 +33,7 @@ public:
         m_paper = aPageSettings;
     }
 
-    const wxPoint&      GetOriginAxisPosition() const
+    const wxPoint&      GetAuxOrigin() const
     {
         static wxPoint zero( 0, 0 );
         return zero;

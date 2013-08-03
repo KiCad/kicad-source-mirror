@@ -143,7 +143,7 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
     Import_Pad_Settings( pad, false );
     pad->SetNetname( wxEmptyString );
 
-    pad->SetPosition( GetScreen()->GetCrossHairPosition() );
+    pad->SetPosition( GetCrossHairPosition() );
 
     // Set the relative pad position
     // ( pad position for module orient, 0, and relative to the module position)

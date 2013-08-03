@@ -30,7 +30,7 @@ void PCB_EDIT_FRAME::RecordMacros(wxDC* aDC, int aNumber)
     if( m_RecordingMacros < 0 )
     {
         m_RecordingMacros = aNumber;
-        m_Macros[aNumber].m_StartPosition = GetScreen()->GetCrossHairPosition( false );
+        m_Macros[aNumber].m_StartPosition = GetCrossHairPosition( false );
         m_Macros[aNumber].m_Record.clear();
 
         msg.Printf( _( "Recording macro %d" ), aNumber );
@@ -48,7 +48,6 @@ void PCB_EDIT_FRAME::RecordMacros(wxDC* aDC, int aNumber)
 
 void PCB_EDIT_FRAME::CallMacros( wxDC* aDC, const wxPoint& aPosition, int aNumber )
 {
-    PCB_SCREEN* screen = GetScreen();
     wxPoint tPosition;
 
     wxString msg;
@@ -59,19 +58,19 @@ void PCB_EDIT_FRAME::CallMacros( wxDC* aDC, const wxPoint& aPosition, int aNumbe
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    tPosition = screen->GetNearestGridPosition( aPosition );
+    tPosition = GetNearestGridPosition( aPosition );
 
     m_canvas->CrossHairOff( aDC );
-    screen->SetMousePosition( tPosition );
+    SetMousePosition( tPosition );
     GeneralControl( aDC, tPosition );
 
     for( std::list<MACROS_RECORD>::iterator i = m_Macros[aNumber].m_Record.begin();
          i != m_Macros[aNumber].m_Record.end();
          i++ )
     {
-        wxPoint tmpPos = screen->GetNearestGridPosition( tPosition + i->m_Position );
+        wxPoint tmpPos = GetNearestGridPosition( tPosition + i->m_Position );
 
-        screen->SetMousePosition( tmpPos );
+        SetMousePosition( tmpPos );
 
         GeneralControl( aDC, tmpPos, i->m_HotkeyCode );
     }
@@ -117,8 +116,8 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         MACROS_RECORD macros_record;
         macros_record.m_HotkeyCode = aHotkeyCode;
         macros_record.m_Idcommand = HK_Descr->m_Idcommand;
-        macros_record.m_Position = screen->GetNearestGridPosition( aPosition ) -
-                                   m_Macros[m_RecordingMacros].m_StartPosition;
+        macros_record.m_Position  = GetNearestGridPosition( aPosition ) -
+                                      m_Macros[m_RecordingMacros].m_StartPosition;
         m_Macros[m_RecordingMacros].m_Record.push_back( macros_record );
         wxString msg;
         msg.Printf( _( "Add key [%c] in macro %d" ), aHotkeyCode, m_RecordingMacros );
@@ -162,8 +161,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     case HK_CALL_MACROS_7:
     case HK_CALL_MACROS_8:
     case HK_CALL_MACROS_9:
-        CallMacros( aDC, screen->GetCrossHairPosition( false ),
-                    hk_id - HK_CALL_MACROS_0 );
+        CallMacros( aDC, GetCrossHairPosition( false ), hk_id - HK_CALL_MACROS_0 );
         break;
 
     case HK_SWITCH_TRACK_WIDTH_TO_NEXT:
@@ -222,7 +220,6 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
             OnSelectGrid( cmd );
         }
-
         break;
 
     case HK_SWITCH_GRID_TO_PREVIOUS:
@@ -344,8 +341,14 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
         break;
 
-    case HK_RESET_LOCAL_COORD: /*Reset the relative coord  */
-        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+    case HK_RESET_LOCAL_COORD:  // Set the relative coord
+        GetScreen()->m_O_Curseur = GetCrossHairPosition();
+        break;
+
+    case HK_SET_GRID_ORIGIN:
+        SetGridOrigin( GetCrossHairPosition() );
+        OnModify();     // because grid origin is saved in board, show as modified
+        m_canvas->Refresh();
         break;
 
     case HK_SWITCH_UNITS:
@@ -498,7 +501,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         // get any module, locked or not locked and toggle its locked status
         if( !itemCurrentlyEdited )
         {
-            wxPoint pos = screen->RefPos( true );
+            wxPoint pos = RefPos( true );
             module = GetBoard()->GetFootprint( pos, screen->m_Active_Layer, true );
         }
         else if( GetCurItem()->Type() == PCB_MODULE_T )
@@ -513,7 +516,6 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             OnModify();
             SetMsgPanel( module );
         }
-
         break;
 
     case HK_DRAG_ITEM:    // Start drag module or track segment
@@ -586,7 +588,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
     case ID_PCB_MODULE_BUTT:
         if( ItemFree )
         {
-            wxPoint pos = GetScreen()->RefPos( false );
+            wxPoint pos    = RefPos( false );
             MODULE* module = GetBoard()->GetFootprint( pos, UNDEFINED_LAYER, false );
 
             if( module == NULL )

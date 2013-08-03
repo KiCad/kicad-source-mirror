@@ -254,7 +254,7 @@ double PL_EDITOR_FRAME::BestZoom()
 
     double bestzoom = std::max( zx, zy );
 
-    GetScreen()->SetScrollCenterPosition( wxPoint( dx / 2, dy / 2 ) );
+    SetScrollCenterPosition( wxPoint( dx / 2, dy / 2 ) );
 
     return bestzoom;
 }
@@ -369,42 +369,44 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     wxPoint originCoord;
     int Xsign = 1;
     int Ysign = 1;
+
     WORKSHEET_DATAITEM dummy( WORKSHEET_DATAITEM::WS_SEGMENT );
+
     switch( m_originSelectChoice )
     {
-        default:
-        case 0: // Origin = paper Left Top corner
-            break;
+    default:
+    case 0: // Origin = paper Left Top corner
+        break;
 
-        case 1: // Origin = page Right Bottom corner
-            Xsign = -1;
-            Ysign = -1;
-            dummy.SetStart( 0, 0, RB_CORNER );
-            originCoord = dummy.GetStartPosUi();
-            break;
+    case 1: // Origin = page Right Bottom corner
+        Xsign = -1;
+        Ysign = -1;
+        dummy.SetStart( 0, 0, RB_CORNER );
+        originCoord = dummy.GetStartPosUi();
+        break;
 
-        case 2: // Origin = page Left Bottom corner
-            Ysign = -1;
-            dummy.SetStart( 0, 0, LB_CORNER );
-            originCoord = dummy.GetStartPosUi();
-            break;
+    case 2: // Origin = page Left Bottom corner
+        Ysign = -1;
+        dummy.SetStart( 0, 0, LB_CORNER );
+        originCoord = dummy.GetStartPosUi();
+        break;
 
-        case 3: // Origin = page Right Top corner
-            Xsign = -1;
-            dummy.SetStart( 0, 0, RT_CORNER );
-            originCoord = dummy.GetStartPosUi();
-            break;
+    case 3: // Origin = page Right Top corner
+        Xsign = -1;
+        dummy.SetStart( 0, 0, RT_CORNER );
+        originCoord = dummy.GetStartPosUi();
+        break;
 
-        case 4: // Origin = page Left Top corner
-            dummy.SetStart( 0, 0, LT_CORNER );
-            originCoord = dummy.GetStartPosUi();
-            break;
+    case 4: // Origin = page Left Top corner
+        dummy.SetStart( 0, 0, LT_CORNER );
+        originCoord = dummy.GetStartPosUi();
+        break;
     }
 
-    screen->m_GridOrigin = originCoord;
+    SetGridOrigin( originCoord );
 
     // Display absolute coordinates:
-    wxPoint coord = screen->GetCrossHairPosition() - originCoord;
+    wxPoint coord = GetCrossHairPosition() - originCoord;
     double dXpos = To_User_Unit( g_UserUnit, coord.x*Xsign );
     double dYpos = To_User_Unit( g_UserUnit, coord.y*Ysign );
 
@@ -441,8 +443,8 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     SetStatusText( line, 2 );
 
     // Display relative coordinates:
-    int dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
-    int dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+    int dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
+    int dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
     dXpos = To_User_Unit( g_UserUnit, dx * Xsign );
     dYpos = To_User_Unit( g_UserUnit, dy * Ysign );
     line.Printf( locformatter, dXpos, dYpos );
@@ -594,10 +596,11 @@ WORKSHEET_DATAITEM * PL_EDITOR_FRAME::GetSelectedItem()
  */
 WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
 {
-    const PAGE_INFO&  pageInfo = GetPageSettings();
-    TITLE_BLOCK t_block = GetTitleBlock();
-    EDA_COLOR_T color = RED;    // Needed, not used
-    PL_EDITOR_SCREEN* screen = (PL_EDITOR_SCREEN*) GetScreen();
+    const PAGE_INFO&    pageInfo = GetPageSettings();
+    TITLE_BLOCK         t_block = GetTitleBlock();
+    EDA_COLOR_T         color = RED;    // Needed, not used
+    PL_EDITOR_SCREEN*   screen = (PL_EDITOR_SCREEN*) GetScreen();
+
     screen-> m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
 
     WS_DRAW_ITEM_LIST drawList;
@@ -623,9 +626,9 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
     // Choose item in list if more than 1 item
     if( list.size() > 1 )
     {
-		wxArrayString choices;
+        wxArrayString choices;
         wxString text;
-        wxPoint cursPos = screen->GetCrossHairPosition();
+        wxPoint cursPos = GetCrossHairPosition();
 
         for( unsigned ii = 0; ii < list.size(); ++ii )
         {
@@ -656,7 +659,7 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
         if( selection < 0 )
             return NULL;
 
-        screen->SetCrossHairPosition( cursPos );
+        SetCrossHairPosition( cursPos );
         m_canvas->MoveCursorToCrossHair();
         drawitem = list[selection];
     }

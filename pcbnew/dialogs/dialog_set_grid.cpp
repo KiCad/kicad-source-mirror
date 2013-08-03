@@ -201,14 +201,18 @@ void DIALOG_SET_GRID::OnOkClick( wxCommandEvent& event )
 
 bool PCB_BASE_FRAME::InvokeDialogGrid()
 {
+    wxPoint grid_origin = GetGridOrigin();
+
     DIALOG_SET_GRID dlg( this, &m_UserGridUnit, g_UserUnit, &m_UserGridSize,
-        &GetScreen()->m_GridOrigin, &m_FastGrid1, &m_FastGrid2,
+        &grid_origin, &m_FastGrid1, &m_FastGrid2,
         m_gridSelectBox->GetStrings() );
 
     int ret = dlg.ShowModal();
 
     if( ret == wxID_OK )
     {
+        SetGridOrigin( grid_origin );
+
         GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
 
         // If the user grid is the current option, recall SetGrid()

@@ -51,12 +51,17 @@ void FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
         return;
         break;
 
-    case HK_HELP: // Display Current hotkey list
+    case HK_HELP:                   // Display Current hotkey list
         DisplayHotkeyList( this, g_Module_Editor_Hokeys_Descr );
         break;
 
-    case HK_RESET_LOCAL_COORD: /*Reset the relative coord  */
-        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+    case HK_RESET_LOCAL_COORD:      // set local (relative) coordinate origin
+        GetScreen()->m_O_Curseur = GetCrossHairPosition();
+        break;
+
+    case HK_SET_GRID_ORIGIN:
+        SetGridOrigin( GetCrossHairPosition() );
+        m_canvas->Refresh();
         break;
 
     case HK_SWITCH_UNITS:

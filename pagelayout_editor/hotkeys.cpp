@@ -180,7 +180,11 @@ void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
         break;
 
     case HK_RESET_LOCAL_COORD:      // Reset the relative coord
-        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+        GetScreen()->m_O_Curseur = GetCrossHairPosition();
+        break;
+
+    case HK_SET_GRID_ORIGIN:
+        SetGridOrigin( GetCrossHairPosition() );
         break;
 
     case HK_MOVE_ITEM:

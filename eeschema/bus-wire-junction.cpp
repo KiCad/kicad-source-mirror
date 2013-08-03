@@ -81,8 +81,9 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
         }
     }
 
-    wxPoint endpos = aPanel->GetScreen()->GetCrossHairPosition();
-    SCH_EDIT_FRAME * frame = ( SCH_EDIT_FRAME * ) aPanel->GetParent();
+    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
+
+    wxPoint endpos = frame->GetCrossHairPosition();
 
     if( frame->GetForceHVLines() ) /* Coerce the line to vertical or horizontal one: */
         ComputeBreakPoint( (SCH_LINE*) s_wires.GetLast()->Back(), endpos );
@@ -105,7 +106,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
 {
     SCH_LINE* segment;
     SCH_LINE* nextSegment;
-    wxPoint   cursorpos = GetScreen()->GetCrossHairPosition();
+    wxPoint   cursorpos = GetCrossHairPosition();
 
     // We should know if a segment is currently in progress
     segment = (SCH_LINE*) GetScreen()->GetCurItem();
@@ -426,8 +427,9 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
 
     if( m_itemToRepeat->Type() == SCH_COMPONENT_T ) // If repeat component then put in move mode
     {
-        wxPoint pos = GetScreen()->GetCrossHairPosition() -
+        wxPoint pos = GetCrossHairPosition() -
                       ( (SCH_COMPONENT*) m_itemToRepeat )->GetPosition();
+
         m_itemToRepeat->SetFlags( IS_NEW );
         ( (SCH_COMPONENT*) m_itemToRepeat )->SetTimeStamp( GetNewTimeStamp() );
         m_itemToRepeat->Move( pos );

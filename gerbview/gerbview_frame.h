@@ -82,7 +82,9 @@ public:
 
 class GERBVIEW_FRAME : public EDA_DRAW_FRAME    // PCB_BASE_FRAME
 {
-    GBR_LAYOUT*         m_gerberLayout;
+    GBR_LAYOUT*     m_gerberLayout;
+    wxPoint         m_grid_origin;
+
 public:
     GBR_DISPLAY_OPTIONS m_DisplayOptions;
 
@@ -126,8 +128,14 @@ public:
     const PAGE_INFO&    GetPageSettings() const;                            // overload
     const wxSize        GetPageSizeIU() const;                              // overload
 
-    const wxPoint&      GetOriginAxisPosition() const;                      // overload
-    void                SetOriginAxisPosition( const wxPoint& aPosition );  // overload
+    const wxPoint&      GetAuxOrigin() const;                               // overload
+    void                SetAuxOrigin( const wxPoint& aPoint );              // overload
+
+    const wxPoint&      GetGridOrigin() const  { return m_grid_origin; }    // overload
+    void                SetGridOrigin( const wxPoint& aPoint )              // overload
+    {
+        m_grid_origin = aPoint;
+    }
 
     const TITLE_BLOCK&  GetTitleBlock() const;                              // overload
     void                SetTitleBlock( const TITLE_BLOCK& aTitleBlock );    // overload

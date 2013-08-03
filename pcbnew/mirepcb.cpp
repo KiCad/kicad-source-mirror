@@ -16,14 +16,14 @@
 #include <protos.h>
 
 
-/* Routines Locales */
+// Routines Locales
 static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* aPanel,
                                              wxDC*           aDC,
                                              const wxPoint&  aPosition,
                                              bool            aErase );
 
-/* Local variables : */
+// Local variables :
 static int     MireDefaultSize = 5000;
 static PCB_TARGET s_TargetCopy( NULL ); /* Used to store "old" values of the
                                          * current item parameters before
@@ -93,7 +93,7 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME
     MainBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
     MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-    /* Create of the command buttons. */
+    // Create of the command buttons.
     Button = new wxButton( this, wxID_OK, _( "OK" ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
@@ -215,7 +215,7 @@ PCB_TARGET* PCB_EDIT_FRAME::CreateTarget( wxDC* DC )
     target->SetLayer( EDGE_N );
     target->SetWidth( GetDesignSettings().m_EdgeSegmentWidth );
     target->SetSize( MireDefaultSize );
-    target->SetPosition( m_canvas->GetScreen()->GetCrossHairPosition() );
+    target->SetPosition( GetCrossHairPosition() );
 
     PlaceTarget( target, DC );
 
@@ -273,7 +273,7 @@ void PCB_EDIT_FRAME::PlaceTarget( PCB_TARGET* aTarget, wxDC* DC )
 }
 
 
-/* Redraw the contour of the track while moving the mouse */
+// Redraw the contour of the track while moving the mouse
 static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                              const wxPoint& aPosition, bool aErase )
 {
@@ -286,7 +286,7 @@ static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     if( aErase )
         target->Draw( aPanel, aDC, GR_XOR );
 
-    target->SetPosition( screen->GetCrossHairPosition() );
+    target->SetPosition( aPanel->GetParent()->GetCrossHairPosition() );
 
     target->Draw( aPanel, aDC, GR_XOR );
 }

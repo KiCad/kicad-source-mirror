@@ -250,7 +250,7 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
     WORKSHEET_DATAITEM *item = screen->GetCurItem();
 
     wxCHECK_RET( (item != NULL), wxT( "Cannot move NULL item." ) );
-    wxPoint position = screen->GetCrossHairPosition()
+    wxPoint position = aPanel->GetParent()->GetCrossHairPosition()
                       - ( initialCursorPosition - initialPositionUi );
 
     if( (item->GetFlags() & LOCATE_STARTPOINT) )
@@ -285,12 +285,13 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     aPanel->Refresh();
 }
 
+
 void PL_EDITOR_FRAME::MoveItem( WORKSHEET_DATAITEM* aItem )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot move NULL item" ) );
     initialPosition = aItem->GetStartPos();
     initialPositionUi = aItem->GetStartPosUi();
-    initialCursorPosition = GetScreen()->GetCrossHairPosition();
+    initialCursorPosition = GetCrossHairPosition();
 
     if( (aItem->GetFlags() & LOCATE_ENDPOINT) )
     {
@@ -300,8 +301,8 @@ void PL_EDITOR_FRAME::MoveItem( WORKSHEET_DATAITEM* aItem )
 
     if( aItem->GetFlags() & (LOCATE_STARTPOINT|LOCATE_ENDPOINT) )
     {
-        GetScreen()->SetCrossHairPosition( initialPositionUi, false );
-        initialCursorPosition = GetScreen()->GetCrossHairPosition();
+        SetCrossHairPosition( initialPositionUi, false );
+        initialCursorPosition = GetCrossHairPosition();
         if( m_canvas->IsPointOnDisplay( initialCursorPosition ) )
         {
             m_canvas->MoveCursorToCrossHair();
@@ -316,6 +317,7 @@ void PL_EDITOR_FRAME::MoveItem( WORKSHEET_DATAITEM* aItem )
     m_canvas->SetMouseCapture( moveItem, abortMoveItem );
     GetScreen()->SetCurItem( aItem );
 }
+
 
 /**
 * Save in Undo list the layout, and place an item being moved.

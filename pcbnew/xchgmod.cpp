@@ -181,7 +181,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     if( old_name == new_name )
         return 0;
 
-    /* Build CMP file name by changing the extension of NetList filename */
+    // Build CMP file name by changing the extension of NetList filename
     fn = m_Parent->GetBoard()->GetFileName();
     fn.SetExt( ComponentFileExtension );
 
@@ -456,11 +456,11 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
 
     wxBusyCursor dummy;
 
-    /* Copy parameters from the old module. */
+    // Copy parameters from the old module.
     oldnamecmp = Module->GetLibRef();
     namecmp    = new_module;
 
-    /* Load module. */
+    // Load module.
     line.Printf( _( "Change module %s (from %s)  " ),
                  GetChars( Module->GetReference() ),
                  GetChars( oldnamecmp ) );
@@ -470,7 +470,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
     namecmp.Trim( false );
     NewModule = m_Parent->GetModuleLibrary( wxEmptyString, namecmp, ShowError );
 
-    if( NewModule == NULL )  /* New module not found, redraw the old one. */
+    if( NewModule == NULL )  // New module not found, redraw the old one.
     {
         m_WinMessages->AppendText( wxT( "No\n" ) );
         return false;
@@ -507,36 +507,36 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     aNewModule->SetParent( GetBoard() );
 
     GetBoard()->m_Status_Pcb = 0;
-    oldpos = GetScreen()->GetCrossHairPosition();
-    GetScreen()->SetCrossHairPosition( aOldModule->GetPosition(), false );
+    oldpos = GetCrossHairPosition();
+    SetCrossHairPosition( aOldModule->GetPosition(), false );
 
     /* place module without ratsnest refresh: this will be made later
      * when all modules are on board
      */
     PlaceModule( aNewModule, NULL, true );
-    GetScreen()->SetCrossHairPosition( oldpos, false );
+    SetCrossHairPosition( oldpos, false );
 
-    /* Flip footprint if needed */
+    // Flip footprint if needed
     if( aOldModule->GetLayer() != aNewModule->GetLayer() )
     {
         aNewModule->Flip( aNewModule->GetPosition() );
     }
 
-    /* Rotate footprint if needed */
+    // Rotate footprint if needed
     if( aOldModule->GetOrientation() != aNewModule->GetOrientation() )
     {
         Rotate_Module( NULL, aNewModule, aOldModule->GetOrientation(), false );
     }
 
-    /* Update reference and value */
+    // Update reference and value
     aNewModule->SetReference( aOldModule->GetReference() );
     aNewModule->SetValue( aOldModule->GetValue() );
 
-    /* Updating other parameters */
+    // Updating other parameters
     aNewModule->SetTimeStamp( aOldModule->GetTimeStamp() );
     aNewModule->SetPath( aOldModule->GetPath() );
 
-    /* Update pad netnames ( when possible) */
+    // Update pad netnames ( when possible)
     pad = aNewModule->Pads();
 
     for( ; pad != NULL; pad = pad->Next() )
@@ -604,7 +604,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         return;
     }
 
-    /* Calculation file name by changing the extension name to NetList */
+    // Calculation file name by changing the extension name to NetList
     fn = GetBoard()->GetFileName();
     fn.SetExt( ComponentFileExtension );
     wildcard = wxGetTranslation( ComponentFileWildcard );

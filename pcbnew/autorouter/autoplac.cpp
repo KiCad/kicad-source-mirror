@@ -62,20 +62,20 @@
  */
 static const double OrientPenality[11] =
 {
-    2.0f,       /* CntRot = 0 rotation prohibited */
-    1.9f,       /* CntRot = 1 */
-    1.8f,       /* CntRot = 2 */
-    1.7f,       /* CntRot = 3 */
-    1.6f,       /* CntRot = 4 */
-    1.5f,       /* CntRot = 5 */
-    1.4f,       /* CntRot = 5 */
-    1.3f,       /* CntRot = 7 */
-    1.2f,       /* CntRot = 8 */
-    1.1f,       /* CntRot = 9 */
-    1.0f        /* CntRot = 10 rotation authorized, no penalty */
+    2.0f,       // CntRot = 0 rotation prohibited
+    1.9f,       // CntRot = 1
+    1.8f,       // CntRot = 2
+    1.7f,       // CntRot = 3
+    1.6f,       // CntRot = 4
+    1.5f,       // CntRot = 5
+    1.4f,       // CntRot = 5
+    1.3f,       // CntRot = 7
+    1.2f,       // CntRot = 8
+    1.1f,       // CntRot = 9
+    1.0f        // CntRot = 10 rotation authorized, no penalty
 };
 
-/* Cell states. */
+// Cell states.
 #define OUT_OF_BOARD      -2
 #define OCCUPED_By_MODULE -1
 
@@ -149,7 +149,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     if( RoutingMatrix.m_GridRouting < 10*IU_PER_MILS )
         RoutingMatrix.m_GridRouting = 10*IU_PER_MILS;   // Min value = 1/1000 inch
 
-    /* Compute module parameters used in auto place */
+    // Compute module parameters used in auto place
     if( GenPlaceBoard() == 0 )
         return;
 
@@ -245,7 +245,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         msg.Printf( _("Place module %d of %d"), cnt, moduleCount );
         SetStatusText( msg );
 
-        /* Display fill area of interest, barriers, penalties. */
+        // Display fill area of interest, barriers, penalties.
         DrawInfoPlace( DC );
 
         error     = GetOptimalModulePlacement( Module, DC );
@@ -255,7 +255,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         if( error == ESC )
             goto end_of_tst;
 
-        /* Determine if the best orientation of a module is 180. */
+        // Determine if the best orientation of a module is 180.
         ii = Module->GetPlacementCost180() & 0x0F;
 
         if( ii != 0 )
@@ -266,7 +266,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             error    = GetOptimalModulePlacement( Module, DC );
             MinCout *= OrientPenality[ii];
 
-            if( BestScore > MinCout )   /* This orientation is best. */
+            if( BestScore > MinCout )   // This orientation is best.
             {
                 PosOK     = CurrPosition;
                 BestScore = MinCout;
@@ -281,7 +281,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
                 goto end_of_tst;
         }
 
-        /* Determine if the best orientation of a module is 90. */
+        // Determine if the best orientation of a module is 90.
         ii = Module->GetPlacementCost90() & 0x0F;
 
         if( ii != 0 )
@@ -291,7 +291,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             error    = GetOptimalModulePlacement( Module, DC );
             MinCout *= OrientPenality[ii];
 
-            if( BestScore > MinCout )   /* This orientation is best. */
+            if( BestScore > MinCout )   // This orientation is best.
             {
                 PosOK     = CurrPosition;
                 BestScore = MinCout;
@@ -306,7 +306,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
                 goto end_of_tst;
         }
 
-        /*  Determine if the best orientation of a module is 270. */
+        //  Determine if the best orientation of a module is 270.
         ii = (Module->GetPlacementCost90() >> 4 ) & 0x0F;
 
         if( ii != 0 )
@@ -316,7 +316,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             error    = GetOptimalModulePlacement( Module, DC );
             MinCout *= OrientPenality[ii];
 
-            if( BestScore > MinCout )   /* This orientation is best. */
+            if( BestScore > MinCout )   // This orientation is best.
             {
                 PosOK     = CurrPosition;
                 BestScore = MinCout;
@@ -336,11 +336,11 @@ end_of_tst:
         if( error == ESC )
             break;
 
-        /* Place module. */
-        CurrPosition = GetScreen()->GetCrossHairPosition();
-        GetScreen()->SetCrossHairPosition( PosOK );
+        // Place module.
+        CurrPosition = GetCrossHairPosition();
+        SetCrossHairPosition( PosOK );
         PlaceModule( Module, DC );
-        GetScreen()->SetCrossHairPosition( CurrPosition );
+        SetCrossHairPosition( CurrPosition );
 
         Module->CalculateBoundingBox();
 
@@ -393,14 +393,14 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
             if( top_state & CELL_is_ZONE )
                 color = BLUE;
 
-            /* obstacles */
+            // obstacles
             if( ( top_state & CELL_is_EDGE ) || ( bottom_state & CELL_is_EDGE ) )
                 color = WHITE;
             else if( top_state & ( HOLE | CELL_is_MODULE ) )
                 color = LIGHTRED;
             else if( bottom_state & (HOLE | CELL_is_MODULE) )
                 color = LIGHTGREEN;
-            else /* Display the filling and keep out regions. */
+            else // Display the filling and keep out regions.
             {
                 if( RoutingMatrix.GetDist( ii, jj, TOP ) ||
                     RoutingMatrix.GetDist( ii, jj, BOTTOM ) )
@@ -438,12 +438,12 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     msg.Printf( wxT( "%d" ), nbCells );
     m_messagePanel->SetMessage( 14, _( "Cells." ), msg, YELLOW );
 
-    /* Choose the number of board sides. */
+    // Choose the number of board sides.
     RoutingMatrix.m_RoutingLayersCount = 2;
 
     RoutingMatrix.InitRoutingMatrix();
 
-    /* Display memory usage. */
+    // Display memory usage.
     msg.Printf( wxT( "%d" ), RoutingMatrix.m_MemSize / 1024 );
     m_messagePanel->SetMessage( 24, wxT( "Mem(Kb)" ), msg, CYAN );
 
@@ -454,7 +454,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
 
     g_Route_Layer_TOP = LAYER_N_FRONT;
 
-    /* Place the edge layer segments */
+    // Place the edge layer segments
     TRACK TmpSegm( NULL );
 
     TmpSegm.SetLayer( UNDEFINED_LAYER );
@@ -561,7 +561,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     int trackWidth = GetBoard()->m_NetClasses.GetDefault()->GetTrackWidth();
     int clearance  = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
 
-    /* Trace pads and surface safely. */
+    // Trace pads and surface safely.
     marge = trackWidth + clearance;
 
     for( Pad = Module->Pads(); Pad != NULL; Pad = Pad->Next() )
@@ -569,7 +569,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
         ::PlacePad( Pad, CELL_is_MODULE, marge, WRITE_OR_CELL );
     }
 
-    /* Trace clearance. */
+    // Trace clearance.
     marge   = ( RoutingMatrix.m_GridRouting * Module->GetPadCount() ) / GAIN;
     CreateKeepOutRectangle( ox, oy, fx, fy, marge, KEEP_OUT_MARGIN, layerMask );
 }
@@ -578,7 +578,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
 {
     int     cx, cy;
-    int     ox, oy, fx, fy; /* occupying part of the module focuses on the cursor */
+    int     ox, oy, fx, fy; // occupying part of the module focuses on the cursor
     int     error = 1;
     int     showRat = 0;
     wxPoint LastPosOK;
@@ -604,7 +604,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     CurrPosition.x = RoutingMatrix.m_BrdBox.GetX() - ox;
     CurrPosition.y = RoutingMatrix.m_BrdBox.GetY() - oy;
 
-    /* Module placement on grid. */
+    // Module placement on grid.
     CurrPosition.x -= CurrPosition.x % RoutingMatrix.m_GridRouting;
     CurrPosition.y -= CurrPosition.y % RoutingMatrix.m_GridRouting;
 
@@ -664,7 +664,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         g_Offset_Module.x = cx - CurrPosition.x;
         CurrPosition.y    = RoutingMatrix.m_BrdBox.GetY() - oy;
 
-        /* Placement on grid. */
+        // Placement on grid.
         CurrPosition.y -= CurrPosition.y % RoutingMatrix.m_GridRouting;
 
         DrawModuleOutlines( m_canvas, aDC, aModule );
@@ -673,7 +673,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
              CurrPosition.y += RoutingMatrix.m_GridRouting )
         {
 #ifndef USE_WX_OVERLAY
-            /* Erase traces. */
+            // Erase traces.
             DrawModuleOutlines( m_canvas, aDC, aModule );
 
             if( showRat )
@@ -717,14 +717,14 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         }
     }
 
-    DrawModuleOutlines( m_canvas, aDC, aModule );  /* erasing the last traces */
+    DrawModuleOutlines( m_canvas, aDC, aModule );  // erasing the last traces
 
     g_Show_Module_Ratsnest = showRats;
 
     if( showRat )
         Compute_Ratsnest_PlaceModule( aDC );
 
-    /* Regeneration of the modified variable. */
+    // Regeneration of the modified variable.
     aModule->GetBoundingBox().SetX( ox + cx );
     aModule->GetBoundingBox().SetY( oy + cy );
     CurrPosition = LastPosOK;
@@ -926,7 +926,7 @@ double PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
             GRLine( m_canvas->GetClipBox(), DC, start, end, 0, color );
         }
 #endif
-        /* Cost of the ratsnest. */
+        // Cost of the ratsnest.
         dx = end.x - start.x;
         dy = end.y - start.y;
 
@@ -970,10 +970,10 @@ void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
     int      lgain, cgain;
 
     if( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) )
-        trace = 1;     /* Trace on bottom layer. */
+        trace = 1;     // Trace on bottom layer.
 
     if( ( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) ) && RoutingMatrix.m_RoutingLayersCount )
-        trace |= 2;    /* Trace on top layer. */
+        trace |= 2;    // Trace on top layer.
 
     if( trace == 0 )
         return;
@@ -991,7 +991,7 @@ void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
     if( pmarge < 1 )
         pmarge = 1;
 
-    /* Calculate the coordinate limits of the rectangle. */
+    // Calculate the coordinate limits of the rectangle.
     row_max = uy1 / RoutingMatrix.m_GridRouting;
     col_max = ux1 / RoutingMatrix.m_GridRouting;
     row_min = uy0 / RoutingMatrix.m_GridRouting;
@@ -1057,7 +1057,7 @@ void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
 }
 
 
-/* Sort routines */
+// Sort routines
 static bool Tri_PlaceModules( MODULE* ref, MODULE* compare )
 {
     double ff1, ff2;
@@ -1114,7 +1114,7 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
         pcbframe->SetMsgPanel( Module );
         pcbframe->build_ratsnest_module( Module );
 
-        /* Calculate external ratsnest. */
+        // Calculate external ratsnest.
         for( unsigned ii = 0; ii < pcbframe->GetBoard()->m_LocalRatsnest.size(); ii++ )
         {
             if( ( pcbframe->GetBoard()->m_LocalRatsnest[ii].m_Status &
@@ -1127,7 +1127,7 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 
     sort( moduleList.begin(), moduleList.end(), Tri_RatsModules );
 
-    /* Search for "best" module. */
+    // Search for "best" module.
     MODULE* bestModule = NULL;
     MODULE* altModule = NULL;
 
@@ -1199,7 +1199,7 @@ int propagate()
         {
             current_cell = RoutingMatrix.GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
 
-            if( current_cell == 0 )  /* a free cell is found */
+            if( current_cell == 0 )  // a free cell is found
             {
                 if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[col] & CELL_is_ZONE) )
                 {
@@ -1224,7 +1224,7 @@ int propagate()
         {
             current_cell = RoutingMatrix.GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
 
-            if( current_cell == 0 )  /* a free cell is found */
+            if( current_cell == 0 )  // a free cell is found
             {
                 if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[col] & CELL_is_ZONE) )
                 {
@@ -1249,7 +1249,7 @@ int propagate()
         {
             current_cell = RoutingMatrix.GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
 
-            if( current_cell == 0 )  /* a free cell is found */
+            if( current_cell == 0 )  // a free cell is found
             {
                 if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[row] & CELL_is_ZONE) )
                 {
@@ -1274,7 +1274,7 @@ int propagate()
         {
             current_cell = RoutingMatrix.GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
 
-            if( current_cell == 0 )  /* a free cell is found */
+            if( current_cell == 0 )  // a free cell is found
             {
                 if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[row] & CELL_is_ZONE) )
                 {
