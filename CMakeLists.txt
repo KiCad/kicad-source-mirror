@@ -323,7 +323,7 @@ if(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
     mark_as_advanced(PYTHON_DEST)
     message( STATUS "Python module install path: ${PYTHON_DEST}")
     find_package(PythonLibs)
-    include_directories(${PYTHON_INCLUDE_PATH}
+    include_directories(${PYTHON_INCLUDE_DIRS}
                         ./scripting)
 endif(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 
