@@ -48,13 +48,6 @@ void VIEW_ITEM::ViewSetVisible( bool aIsVisible )
 }
 
 
-void VIEW_ITEM::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
-{
-    // By default there is no layer required
-    aCount = 0;
-}
-
-
 void VIEW_ITEM::ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw )
 {
     if(!m_view)
@@ -144,8 +137,9 @@ bool VIEW_ITEM::storesGroups() const
     return ( m_groupsSize > 0 );
 }
 
+
 void VIEW_ITEM::ViewSetHighlighted( bool aIsHighlighted )
 {
     m_highlighted = aIsHighlighted;
-    ViewUpdate(APPEARANCE | GEOMETRY);
+    ViewUpdate( APPEARANCE | GEOMETRY );
 }

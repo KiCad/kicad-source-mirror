@@ -116,16 +116,6 @@ public:
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const = 0;
 
     /**
-     * Function ViewGetRequiredLayers()
-     * Returns the all the layers that are required for an item to be drawn. Eg. there is no point
-     * to draw netnames, when the track is not visible - so track layer should be marked as
-     * required.
-     * @param aLayers[]: output layer index array
-     * @param aCount: number of layer indices in aLayers[]
-     */
-    virtual void ViewGetRequiredLayers( int aLayers[], int& aCount ) const;
-
-    /**
      * Function ViewSetVisible()
      * Sets the item visibility.
      *
