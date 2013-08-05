@@ -106,7 +106,7 @@ protected:
     bool    m_netNamesOnPads;
     bool    m_netNamesOnTracks;
 
-    static const double MAX_FONT_SIZE = 100000000;
+    static const double MAX_FONT_SIZE;
 
     DisplayZonesMode m_displayZoneMode;
 };
