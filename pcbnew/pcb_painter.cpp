@@ -43,6 +43,10 @@
 
 using namespace KiGfx;
 
+
+const double PCB_RENDER_SETTINGS::MAX_FONT_SIZE = 100000000;
+
+
 PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 {
     // By default everything should be displayed as filled

@@ -182,7 +182,7 @@ private:
      */
     VECTOR2D computeTextSize( const std::string& aText ) const;
 
-    static const double LINE_HEIGHT_RATIO  = 1.6;
+    static const double LINE_HEIGHT_RATIO;
 };
 } // namespace KiGfx
 
