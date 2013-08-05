@@ -188,3 +188,38 @@ EDA_ITEM* TEXTE_PCB::Clone() const
     return new TEXTE_PCB( *this );
 }
 
+
+const BOX2I TEXTE_PCB::ViewBBox() const
+{
+    EDA_RECT rect = GetTextBox();
+
+    if( m_Orient != 0.0 )
+    {
+        // If the text is rotated, we need to take it into account
+        wxPoint p1 = rect.GetOrigin();
+        wxPoint p2 = wxPoint( p1.x + rect.GetWidth(), p1.y );
+        wxPoint p3 = rect.GetEnd();
+        wxPoint p4 = wxPoint( p1.x, p1.y + rect.GetHeight() );
+
+        // Transform all the corners of the bounding box according to the rotation angle
+        RotatePoint( &p1, m_Pos, -m_Orient );
+        RotatePoint( &p2, m_Pos, -m_Orient );
+        RotatePoint( &p3, m_Pos, -m_Orient );
+        RotatePoint( &p4, m_Pos, -m_Orient );
+
+        // Find the new bounding box origin and dimensions
+        int minX = std::min( std::min( p1.x, p2.x ), std::min( p3.x, p4.x ) );
+        int minY = std::min( std::min( p1.y, p2.y ), std::min( p3.y, p4.y ) );
+        int maxX = std::max( std::max( p1.x, p2.x ), std::max( p3.x, p4.x ) );
+        int maxY = std::max( std::max( p1.y, p2.y ), std::max( p3.y, p4.y ) );
+
+        int width = maxX - minX;
+        int height = maxY - minY;
+
+        return BOX2I( VECTOR2I( minX, minY ), VECTOR2I( width, height ) );
+    }
+    else
+    {
+        return BOX2I( rect.GetOrigin(), rect.GetSize() );
+    }
+}
