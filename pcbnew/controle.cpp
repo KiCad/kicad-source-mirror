@@ -54,8 +54,19 @@ extern bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool,
  */
 static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aCollector )
 {
+#if 0   // Dick: this is not consistent with name of this function, and does not
+        // work correctly using 'M' (move hotkey) when another module's (2nd module) reference
+        // is under a module (first module) and you want to move the reference.
+        // Another way to fix this would be to
+        // treat module text as copper layer content, and put the module text into
+        // the primary list.  I like the coded behavior best.  If it breaks something
+        // perhaps you need a different test before calling this function, which should
+        // do what its name says it does.
     int count = aCollector->GetPrimaryCount();     // try to use preferred layer
     if( 0 == count ) count = aCollector->GetCount();
+#else
+    int count = aCollector->GetCount();
+#endif
 
     for( int i = 0; i<count;  ++i )
     {

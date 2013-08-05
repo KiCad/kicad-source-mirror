@@ -158,14 +158,14 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     switch( item->Type() )
     {
     case PCB_PAD_T:
-    {
-        MODULE* m = (MODULE*) item->GetParent();
-
-        if( m->GetReference() == wxT( "Y2" ) )
         {
-            breakhere++;
+            MODULE* m = (MODULE*) item->GetParent();
+
+            if( m->GetReference() == wxT( "Y2" ) )
+            {
+                breakhere++;
+            }
         }
-    }
         break;
 
     case PCB_VIA_T:
@@ -193,25 +193,25 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         break;
 
     case PCB_MODULE_TEXT_T:
-    {
-        TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
-
-        if( tm->GetText() == wxT( "10uH" ) )
         {
-            breakhere++;
+            TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
+
+            if( tm->GetText() == wxT( "10uH" ) )
+            {
+                breakhere++;
+            }
         }
-    }
         break;
 
     case PCB_MODULE_T:
-    {
-        MODULE* m = (MODULE*) item;
-
-        if( m->GetReference() == wxT( "C98" ) )
         {
-            breakhere++;
+            MODULE* m = (MODULE*) item;
+
+            if( m->GetReference() == wxT( "C98" ) )
+            {
+                breakhere++;
+            }
         }
-    }
         break;
 
     case PCB_MARKER_T:
@@ -324,7 +324,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     // Pads are not sensitive to the layer visibility controls.
     // They all have their own separate visibility controls
     // skip them if not visible
-    if ( pad )
+    if( pad )
     {
         if( m_Guide->IgnorePads() )
             goto exit;
