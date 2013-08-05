@@ -311,11 +311,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_NEW_MODULE_FROM_WIZARD:
         {
-            Clear_Pcb( true );
-            GetScreen()->ClearUndoRedoList();
-            SetCurItem( NULL );
-            SetCrossHairPosition( wxPoint( 0, 0 ) );
-
             wxSemaphore semaphore( 0, 1 );
             FOOTPRINT_WIZARD_FRAME *wizard = new FOOTPRINT_WIZARD_FRAME( this, &semaphore,
                                                                          KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
@@ -328,11 +323,17 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 wxMilliSleep( 50 );
             }
 
+            // Creates the new footprint from python script wizard
             MODULE* module = wizard->GetBuiltFootprint();
 
             if( module )        // i.e. if create module command not aborted
             {
-                // Here we should make a copy of the object before adding to board
+                Clear_Pcb( true );
+                GetScreen()->ClearUndoRedoList();
+                SetCurItem( NULL );
+                SetCrossHairPosition( wxPoint( 0, 0 ) );
+
+                //  Add the new object to board
                 module->SetParent( (EDA_ITEM*)GetBoard() );
                 GetBoard()->m_Modules.Append( module );
 
@@ -342,9 +343,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 GetBoard()->BuildListOfNets();
                 redraw = true;
                 module->SetPosition( wxPoint( 0, 0 ) );
-
-                if( GetBoard()->m_Modules )
-                    GetBoard()->m_Modules->ClearFlags();
+                module->ClearFlags();
             }
 
             wizard->Destroy();
