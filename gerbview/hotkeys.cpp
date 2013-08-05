@@ -31,30 +31,28 @@
  *  and see this list for some ascii keys (space ...)
  */
 
-/* local variables */
-/* Hotkey list: */
-static EDA_HOTKEY    HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
-                                        HK_RESET_LOCAL_COORD, ' ' );
-static EDA_HOTKEY    HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
-static EDA_HOTKEY    HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
-static EDA_HOTKEY    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
-static EDA_HOTKEY    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
-static EDA_HOTKEY    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
-static EDA_HOTKEY    HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
-static EDA_HOTKEY    HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
-static EDA_HOTKEY    HkTrackDisplayMode( wxT( "Track Display Mode" ),
-                                         HK_SWITCH_GBR_ITEMS_DISPLAY_MODE, 'F' );
+// local variables
+// Hotkey list:
+static EDA_HOTKEY   HkResetLocalCoord( wxT( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
+static EDA_HOTKEY   HkSetGridOrigin( wxT("Set Grid Origin"), HK_SET_GRID_ORIGIN, 'S' );
 
-static EDA_HOTKEY    HkSwitch2NextCopperLayer( wxT( "Switch to Next Layer" ),
-                                               HK_SWITCH_LAYER_TO_NEXT, '+' );
-static EDA_HOTKEY    HkSwitch2PreviousCopperLayer( wxT( "Switch to Previous Layer" ),
-                                                   HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
+static EDA_HOTKEY   HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
+static EDA_HOTKEY   HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
+static EDA_HOTKEY   HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
+static EDA_HOTKEY   HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
+static EDA_HOTKEY   HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+static EDA_HOTKEY   HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
+static EDA_HOTKEY   HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
+static EDA_HOTKEY   HkTrackDisplayMode( wxT( "Track Display Mode" ), HK_SWITCH_GBR_ITEMS_DISPLAY_MODE, 'F' );
+
+static EDA_HOTKEY   HkSwitch2NextCopperLayer( wxT( "Switch to Next Layer" ), HK_SWITCH_LAYER_TO_NEXT, '+' );
+static EDA_HOTKEY   HkSwitch2PreviousCopperLayer( wxT( "Switch to Previous Layer" ), HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
 // List of common hotkey descriptors
 EDA_HOTKEY* s_Gerbview_Hotkey_List[] = {
     &HkHelp,
-    &HkZoomIn,                     &HkZoomOut,         &HkZoomRedraw, &HkZoomCenter,
-    &HkZoomAuto,  &HkSwitchUnits,  &HkResetLocalCoord,
+    &HkZoomIn,                      &HkZoomOut,         &HkZoomRedraw,  &HkZoomCenter,
+    &HkZoomAuto,    &HkSwitchUnits, &HkResetLocalCoord, &HkSetGridOrigin,
     &HkTrackDisplayMode,
     &HkSwitch2NextCopperLayer,
     &HkSwitch2PreviousCopperLayer,
@@ -130,8 +128,12 @@ void GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
-    case HK_RESET_LOCAL_COORD:         /*Reset the relative coord  */
-        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+    case HK_RESET_LOCAL_COORD:         // Reset the relative coord
+        GetScreen()->m_O_Curseur = GetCrossHairPosition();
+        break;
+
+    case HK_SET_GRID_ORIGIN:
+        SetGridOrigin( GetCrossHairPosition() );
         break;
 
     case HK_SWITCH_UNITS:

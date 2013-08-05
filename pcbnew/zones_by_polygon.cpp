@@ -272,7 +272,7 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
     aZone->SetSelectedCorner( corner_id );
     m_canvas->SetMouseCapture( Show_Zone_Corner_Or_Outline_While_Move_Mouse,
                                 Abort_Zone_Move_Corner_Or_Outlines );
-    s_CursorLastPosition     = s_CornerInitialPosition = GetScreen()->GetCrossHairPosition();
+    s_CursorLastPosition     = s_CornerInitialPosition = GetCrossHairPosition();
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
 
@@ -309,7 +309,7 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* aZone )
     aZone->SetFlags( IS_MOVED );
     m_canvas->SetMouseCapture( Show_Zone_Corner_Or_Outline_While_Move_Mouse,
                                 Abort_Zone_Move_Corner_Or_Outlines );
-    s_CursorLastPosition = s_CornerInitialPosition = GetScreen()->GetCrossHairPosition();
+    s_CursorLastPosition = s_CornerInitialPosition = GetCrossHairPosition();
     s_CornerIsNew = false;
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
@@ -470,7 +470,7 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC*
         zone->Draw( aPanel, aDC, GR_XOR );
     }
 
-    wxPoint pos = pcbframe->GetScreen()->GetCrossHairPosition();
+    wxPoint pos = pcbframe->GetCrossHairPosition();
 
     if( zone->IsMoving() )
     {
@@ -651,11 +651,11 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         zoneInfo.ExportSetting( *zone );
 
         zone->Outline()->Start( zoneInfo.m_CurrentZone_Layer,
-                                GetScreen()->GetCrossHairPosition().x,
-                                GetScreen()->GetCrossHairPosition().y,
+                                GetCrossHairPosition().x,
+                                GetCrossHairPosition().y,
                                 zone->GetHatchStyle() );
 
-        zone->AppendCorner( GetScreen()->GetCrossHairPosition() );
+        zone->AppendCorner( GetCrossHairPosition() );
 
         if( g_Drc_On && (m_drc->Drc( zone, 0 ) == BAD_DRC) && zone->IsOnCopperLayer() )
         {
@@ -687,7 +687,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                 // Ok, we can add a new corner
                 if( m_canvas->IsMouseCaptured() )
                     m_canvas->CallMouseCapture( DC, wxPoint(0,0), false );
-                zone->AppendCorner( GetScreen()->GetCrossHairPosition() );
+                zone->AppendCorner( GetCrossHairPosition() );
                 SetCurItem( zone );     // calls DisplayInfo().
                 if( m_canvas->IsMouseCaptured() )
                     m_canvas->CallMouseCapture( DC, wxPoint(0,0), false );
@@ -810,7 +810,7 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                             const wxPoint& aPosition, bool aErase )
 {
     PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) aPanel->GetParent();
-    wxPoint         c_pos    = pcbframe->GetScreen()->GetCrossHairPosition();
+    wxPoint         c_pos    = pcbframe->GetCrossHairPosition();
     ZONE_CONTAINER* zone = pcbframe->GetBoard()->m_CurrentZoneContour;
 
     if( !zone )

@@ -118,26 +118,18 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* aParent,
     m_snapToGrid          = true;
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
 
-
-    //#define ZOOM_DISPLAY_SIZE       60
-    //#define COORD_DISPLAY_SIZE      165
-    //#define DELTA_DISPLAY_SIZE      245
-    //#define UNITS_DISPLAY_SIZE      65
-    #define FUNCTION_DISPLAY_SIZE   110
-
     CreateStatusBar( 6 );
 
     // set the size of the status bar subwindows:
 
     wxWindow* stsbar = GetStatusBar();
 
-
     int dims[] = {
 
-        // balance of status bar on far left is set to a default or whatever is left over.
+        // remainder of status bar on far left is set to a default or whatever is left over.
         -1,
 
-        // When using GetTextSize() remember the width of '1' is not the same
+        // When using GetTextSize() remember the width of character '1' is not the same
         // as the width of '0' unless the font is fixed width, and it usually won't be.
 
         // zoom:
@@ -152,7 +144,9 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* aParent,
         // units display, Inches is bigger than mm
         GetTextSize( _( "Inches" ), stsbar ).x + 10,
 
-        FUNCTION_DISPLAY_SIZE,
+        // Size for the panel used as "Current tool in play": will take longest string from
+        // void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent ) in pcbnew/edit.cpp
+        GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x + 10,
     };
 
     SetStatusWidths( DIM( dims ), dims );
@@ -391,7 +385,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
      */
     m_LastGridSizeId = id - ID_POPUP_GRID_LEVEL_1000;
     screen->SetGrid( id );
-    screen->SetCrossHairPosition( screen->RefPos( true ) );
+    SetCrossHairPosition( RefPos( true ) );
 
     if( m_galCanvasActive )
     {
@@ -440,7 +434,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
             m_galCanvas->Refresh();
         }
         else
-            RedrawScreen( GetScreen()->GetScrollCenterPosition(), false );
+            RedrawScreen( GetScrollCenterPosition(), false );
     }
 }
 
@@ -526,7 +520,7 @@ wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
     wxPoint pos = aPosition;
 
     if( m_currentScreen != NULL && m_snapToGrid )
-        pos = m_currentScreen->GetNearestGridPosition( aPosition );
+        pos = GetNearestGridPosition( aPosition );
 
     return pos;
 }
@@ -757,11 +751,8 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 {
     BASE_SCREEN* screen = GetScreen();
 
-    if( screen == NULL || m_canvas == NULL )
+    if( !screen || !m_canvas )
         return;
-
-    // There are no safety limits on these calculations, so in NANOMETRES build it
-    // still blows up.  This is incomplete work.
 
     double scale = screen->GetScalingFactor();
 
@@ -909,7 +900,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
     // Calculate the scroll bar position in internal units to place the
     // center position at the center of client rectangle.
-    screen->SetScrollCenterPosition( centerPositionIU );
+    SetScrollCenterPosition( centerPositionIU );
 
     double posX = centerPositionIU.x - clientRectIU.GetWidth()  / 2.0 - screen->m_DrawOrg.x;
     double posY = centerPositionIU.y - clientRectIU.GetHeight() / 2.0 - screen->m_DrawOrg.y;
@@ -991,7 +982,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         //gal->SetGridColor( KiGfx::COLOR4D( GetGridColor() ) );
         gal->SetGridColor( KiGfx::COLOR4D( 0.1, 0.1, 0.1, 1.0 ) );
         gal->SetGridSize( VECTOR2D( screen->GetGridSize().x, screen->GetGridSize().y ) );
-        gal->SetGridOrigin( VECTOR2D( screen->GetGridOrigin() ) );
+        gal->SetGridOrigin( VECTOR2D( GetGridOrigin() ) );
         gal->SetGridOriginMarkerSize( 15 );
         gal->SetGridDrawThreshold( 10 );
     }
@@ -1019,3 +1010,71 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 
     m_galCanvasActive = aEnable;
 }
+
+//-----< BASE_SCREEN API moved here >--------------------------------------------
+
+wxPoint EDA_DRAW_FRAME::GetCrossHairPosition( bool aInvertY ) const
+{
+    // subject to change, borrow from old BASE_SCREEN for now.
+
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->getCrossHairPosition( aInvertY );
+}
+
+
+void EDA_DRAW_FRAME::SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid )
+{
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    screen->setCrossHairPosition( aPosition, GetGridOrigin(), aSnapToGrid );
+}
+
+
+wxPoint EDA_DRAW_FRAME::GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize ) const
+{
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->getCursorPosition( aOnGrid, GetGridOrigin(), aGridSize );
+}
+
+
+wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize ) const
+{
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->getNearestGridPosition( aPosition, GetGridOrigin(), aGridSize );
+}
+
+
+wxPoint EDA_DRAW_FRAME::GetCrossHairScreenPosition() const
+{
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->getCrossHairScreenPosition();
+}
+
+
+void EDA_DRAW_FRAME::SetMousePosition( const wxPoint& aPosition )
+{
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    screen->setMousePosition( aPosition );
+}
+
+
+wxPoint EDA_DRAW_FRAME::RefPos( bool useMouse ) const
+{
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->refPos( useMouse );
+}
+
+
+const wxPoint& EDA_DRAW_FRAME::GetScrollCenterPosition() const
+{
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    return screen->getScrollCenterPosition();
+}
+
+
+void EDA_DRAW_FRAME::SetScrollCenterPosition( const wxPoint& aPoint )
+{
+    BASE_SCREEN* screen = GetScreen();  // virtual call
+    screen->setScrollCenterPosition( aPoint );
+}
+
+//-----</BASE_SCREEN API moved here >--------------------------------------------

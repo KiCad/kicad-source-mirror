@@ -141,7 +141,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         }
     }
 
-    m_Collector->Collect( m_Pcb, scanList, GetScreen()->RefPos( true ), guide );
+    m_Collector->Collect( m_Pcb, scanList, RefPos( true ), guide );
 
 #if 0
     // debugging: print out the collected items, showing their priority order too.
@@ -161,7 +161,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         if( item->Type() != PCB_ZONE_T )
             continue;
 
-        /* Found a TYPE ZONE */
+        // Found a TYPE ZONE
         if( item->GetTimeStamp() == timestampzone )    // Remove it, redundant, zone already found
         {
             m_Collector->Remove( ii );
@@ -200,7 +200,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     {
         wxMenu itemMenu;
 
-        /* Give a title to the selection menu. This is also a cancel menu item */
+        // Give a title to the selection menu. This is also a cancel menu item
         wxMenuItem * item_title = new wxMenuItem( &itemMenu, -1, _( "Selection Clarification" ) );
 
 #ifdef __WINDOWS__
@@ -269,9 +269,9 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         snapToGrid = false;
 
     if( snapToGrid )
-        pos = GetScreen()->GetNearestGridPosition( pos );
+        pos = GetNearestGridPosition( pos );
 
-    oldpos = GetScreen()->GetCrossHairPosition();
+    oldpos = GetCrossHairPosition();
 
     gridSize = GetScreen()->GetGridSize();
 
@@ -306,7 +306,7 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     }
 
     // Put cursor in new position, according to the zoom keys (if any).
-    GetScreen()->SetCrossHairPosition( pos, snapToGrid );
+    SetCrossHairPosition( pos, snapToGrid );
 
     /* Put cursor on grid or a pad centre if requested. If the tool DELETE is active the
      * cursor is left off grid this is better to reach items to delete off grid,
@@ -326,7 +326,7 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     if( Magnetize( this, GetToolId(), igridsize, curs_pos, &pos ) )
     {
-        GetScreen()->SetCrossHairPosition( pos, false );
+        SetCrossHairPosition( pos, false );
     }
     else
     {
@@ -335,19 +335,19 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         if( !g_Drc_On || !g_CurrentTrackSegment ||
             (BOARD_ITEM*)g_CurrentTrackSegment != this->GetCurItem() ||
             !LocateIntrusion( m_Pcb->m_Track, g_CurrentTrackSegment,
-                              GetScreen()->m_Active_Layer, GetScreen()->RefPos( true ) ) )
+                              GetScreen()->m_Active_Layer, RefPos( true ) ) )
         {
-            GetScreen()->SetCrossHairPosition( curs_pos, snapToGrid );
+            SetCrossHairPosition( curs_pos, snapToGrid );
         }
     }
 
 
-    if( oldpos != GetScreen()->GetCrossHairPosition() )
+    if( oldpos != GetCrossHairPosition() )
     {
-        pos = GetScreen()->GetCrossHairPosition();
-        GetScreen()->SetCrossHairPosition( oldpos, false );
+        pos = GetCrossHairPosition();
+        SetCrossHairPosition( oldpos, false );
         m_canvas->CrossHairOff( aDC );
-        GetScreen()->SetCrossHairPosition( pos, false );
+        SetCrossHairPosition( pos, false );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )
@@ -373,5 +373,5 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         OnHotKey( aDC, aHotKey, aPosition );
     }
 
-    UpdateStatusBar();    /* Display new cursor coordinates */
+    UpdateStatusBar();    // Display new cursor coordinates
 }

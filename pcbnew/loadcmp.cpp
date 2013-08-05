@@ -93,7 +93,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     GetBoard()->BuildListOfNets();
 
-    GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
+    SetCrossHairPosition( wxPoint( 0, 0 ) );
     PlaceModule( aModule, NULL );
 
     // Put it on FRONT layer,
@@ -155,7 +155,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
                                                wxDC*           aDC )
 {
     MODULE*     module;
-    wxPoint     curspos = GetScreen()->GetCrossHairPosition();
+    wxPoint     curspos = GetCrossHairPosition();
     wxString    moduleName, keys;
     wxString    libName = aLibrary;
     bool        allowWildSeach = true;
@@ -277,7 +277,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         }
     }
 
-    GetScreen()->SetCrossHairPosition( curspos );
+    SetCrossHairPosition( curspos );
     m_canvas->MoveCursorToCrossHair();
 
     if( module )

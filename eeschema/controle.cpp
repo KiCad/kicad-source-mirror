@@ -56,7 +56,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
     wxString       msg;
     LIB_PIN*       Pin     = NULL;
     SCH_COMPONENT* LibItem = NULL;
-    wxPoint        gridPosition = GetScreen()->GetNearestGridPosition( aPosition );
+    wxPoint        gridPosition = GetNearestGridPosition( aPosition );
 
     // Check the on grid position first.  There is more likely to be multiple items on
     // grid than off grid.
@@ -222,9 +222,9 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         snapToGrid = true;
 
     if( snapToGrid )
-        pos = screen->GetNearestGridPosition( pos );
+        pos = GetNearestGridPosition( pos );
 
-    oldpos = screen->GetCrossHairPosition();
+    oldpos   = GetCrossHairPosition();
     gridSize = screen->GetGridSize();
 
     switch( aHotKey )
@@ -261,14 +261,14 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     }
 
     // Update cursor position.
-    screen->SetCrossHairPosition( pos, snapToGrid );
+    SetCrossHairPosition( pos, snapToGrid );
 
-    if( oldpos != screen->GetCrossHairPosition() )
+    if( oldpos != GetCrossHairPosition() )
     {
-        pos = screen->GetCrossHairPosition();
-        screen->SetCrossHairPosition( oldpos, false);
+        pos = GetCrossHairPosition();
+        SetCrossHairPosition( oldpos, false);
         m_canvas->CrossHairOff( aDC );
-        screen->SetCrossHairPosition( pos, snapToGrid );
+        SetCrossHairPosition( pos, snapToGrid );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )
@@ -304,7 +304,6 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
     wxRealPoint gridSize;
-    SCH_SCREEN* screen = GetScreen();
     wxPoint     oldpos;
     wxPoint     pos = aPosition;
 
@@ -320,10 +319,10 @@ void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         snapToGrid = true;
 
     if( snapToGrid )
-        pos = screen->GetNearestGridPosition( pos );
+        pos = GetNearestGridPosition( pos );
 
-    oldpos = screen->GetCrossHairPosition();
-    gridSize = screen->GetGridSize();
+    oldpos   = GetCrossHairPosition();
+    gridSize = GetScreen()->GetGridSize();
 
     switch( aHotKey )
     {
@@ -359,14 +358,14 @@ void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     }
 
     // Update the cursor position.
-    screen->SetCrossHairPosition( pos, snapToGrid );
+    SetCrossHairPosition( pos, snapToGrid );
 
-    if( oldpos != screen->GetCrossHairPosition() )
+    if( oldpos != GetCrossHairPosition() )
     {
-        pos = screen->GetCrossHairPosition();
-        screen->SetCrossHairPosition( oldpos, false );
+        pos = GetCrossHairPosition();
+        SetCrossHairPosition( oldpos, false );
         m_canvas->CrossHairOff( aDC );
-        screen->SetCrossHairPosition( pos, snapToGrid );
+        SetCrossHairPosition( pos, snapToGrid );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )
@@ -403,8 +402,8 @@ void LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     wxPoint     oldpos;
     wxPoint     pos = aPosition;
 
-    pos = screen->GetNearestGridPosition( pos );
-    oldpos = screen->GetCrossHairPosition();
+    pos    = GetNearestGridPosition( pos );
+    oldpos = GetCrossHairPosition();
     gridSize = screen->GetGridSize();
 
     switch( aHotKey )
@@ -441,14 +440,14 @@ void LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     }
 
     // Update cursor position.
-    screen->SetCrossHairPosition( pos );
+    SetCrossHairPosition( pos );
 
-    if( oldpos != screen->GetCrossHairPosition() )
+    if( oldpos != GetCrossHairPosition() )
     {
-        pos = screen->GetCrossHairPosition();
-        screen->SetCrossHairPosition( oldpos );
+        pos = GetCrossHairPosition();
+        SetCrossHairPosition( oldpos );
         m_canvas->CrossHairOff( aDC );
-        screen->SetCrossHairPosition( pos );
+        SetCrossHairPosition( pos );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )

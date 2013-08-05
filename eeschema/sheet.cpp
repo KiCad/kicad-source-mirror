@@ -244,8 +244,8 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
     if( sheet->IsResized() )
     {
-        int width = screen->GetCrossHairPosition().x - sheet->GetPosition().x;
-        int height = screen->GetCrossHairPosition().y - sheet->GetPosition().y;
+        int width  = aPanel->GetParent()->GetCrossHairPosition().x - sheet->GetPosition().x;
+        int height = aPanel->GetParent()->GetCrossHairPosition().y - sheet->GetPosition().y;
 
         // If the sheet doesn't have any pins, clamp the minimum size to the default values.
         width = ( width < MIN_SHEET_WIDTH ) ? MIN_SHEET_WIDTH : width;
@@ -263,12 +263,13 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
                     sheet->GetMinWidth() + gridSizeX : width;
         }
 
-        wxPoint grid = screen->GetNearestGridPosition( wxPoint( pos.x + width, pos.y + height ) );
+        wxPoint grid = aPanel->GetParent()->GetNearestGridPosition(
+                        wxPoint( pos.x + width, pos.y + height ) );
         sheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
     }
     else if( sheet->IsMoving() )
     {
-        moveVector = screen->GetCrossHairPosition() - pos;
+        moveVector = aPanel->GetParent()->GetCrossHairPosition() - pos;
         sheet->Move( moveVector );
     }
 
@@ -324,7 +325,7 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
 {
     m_itemToRepeat = NULL;
 
-    SCH_SHEET* sheet = new SCH_SHEET( GetScreen()->GetCrossHairPosition() );
+    SCH_SHEET* sheet = new SCH_SHEET( GetCrossHairPosition() );
 
     sheet->SetFlags( IS_NEW | IS_RESIZED );
     sheet->SetTimeStamp( GetNewTimeStamp() );
@@ -338,7 +339,9 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
     m_canvas->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
     m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
     m_canvas->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( sheet->GetResizePosition() );
+
+    SetCrossHairPosition( sheet->GetResizePosition() );
+
     m_canvas->MoveCursorToCrossHair();
     m_canvas->CrossHairOn( aDC );
 
@@ -356,7 +359,7 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
                                    GetChars( aSheet->GetClass() ) ) );
 
     m_canvas->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( aSheet->GetResizePosition() );
+    SetCrossHairPosition( aSheet->GetResizePosition() );
     m_canvas->MoveCursorToCrossHair();
     m_canvas->CrossHairOn( aDC );
 
@@ -377,7 +380,7 @@ void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
         return;
 
     m_canvas->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( aSheet->GetPosition() );
+    SetCrossHairPosition( aSheet->GetPosition() );
     m_canvas->MoveCursorToCrossHair();
 
     if( !aSheet->IsNew() )

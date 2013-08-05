@@ -56,6 +56,18 @@ macro(perform_feature_checks)
     #        mean won't fail somewhere down the line.
     check_include_file("iso646.h" HAVE_ISO646_H)
 
+    # The STDINT header file test is required because MinGW under Windows
+    # doesn't define HAVE_STDINT_H even though it does have it.
+    #
+    # We need to add it to the global compiler definitions as config.h is not
+    # included in pyport.h which is where the problem ocurrs without this
+    # fix.
+    check_include_file("stdint.h" HAVE_STDINT_H)
+    
+    if( HAVE_STDINT_H )
+        add_definitions( -DHAVE_STDINT_H )
+    endif()
+    
     # no place is this used, and "HAVE_STRINGS_H", if present in config.h then
     # conflicts with /usr/include/python2.6/Python.h.  Please rename the macro if
     # re-introduce this.

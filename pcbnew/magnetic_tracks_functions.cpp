@@ -116,7 +116,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
     TRACK*      currTrack = g_CurrentTrackSegment;
     BOARD_ITEM* currItem  = frame->GetCurItem();
     PCB_SCREEN* screen = frame->GetScreen();
-    wxPoint     pos = screen->RefPos( true );
+    wxPoint     pos = frame->RefPos( true );
 
     // D( printf( "currTrack=%p currItem=%p currTrack->Type()=%d currItem->Type()=%d\n",  currTrack, currItem, currTrack ? currTrack->Type() : 0, currItem ? currItem->Type() : 0 ); )
 
@@ -132,7 +132,6 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
     {
         currTrack = NULL;
     }
-
 
     if( g_MagneticPadOption == capture_always )
         doPad = true;

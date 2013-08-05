@@ -205,7 +205,7 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxCommandEvent& event )
     }
 
     m_lastMarkerFound = marker;
-    m_parent->GetScreen()->SetCrossHairPosition( marker->m_Pos );
+    m_parent->SetCrossHairPosition( marker->m_Pos );
     m_parent->RedrawScreen( marker->m_Pos, false);
 }
 
@@ -218,7 +218,7 @@ void DIALOG_ERC::OnLeftDblClickMarkersList( wxCommandEvent& event )
     // (NULL if not found)
     if( m_lastMarkerFound )
     {
-        m_parent->GetScreen()->SetCrossHairPosition( m_lastMarkerFound->m_Pos );
+        m_parent->SetCrossHairPosition( m_lastMarkerFound->m_Pos );
         m_parent->RedrawScreen( m_lastMarkerFound->m_Pos, true);
         // prevent a mouse left button release event in
         // coming from the ERC dialog double click
