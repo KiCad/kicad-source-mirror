@@ -119,7 +119,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
     case ID_HIERARCHY:
         InstallHierarchyFrame( &dc, pos );
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
         break;
 
     case wxID_CUT:
@@ -127,7 +127,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
 
         HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
         SetSheetNumberAndCount();
         break;
 
@@ -182,7 +182,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION );
         screen->SetCurItem( NULL );
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
         screen->TestDanglingEnds( m_canvas, &dc );
         m_canvas->Refresh();
         break;
@@ -222,7 +222,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         DeleteItem( item );
         screen->SetCurItem( NULL );
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
         screen->TestDanglingEnds( m_canvas, &dc );
         SetSheetNumberAndCount();
         OnModify();
@@ -375,7 +375,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     // End switch ( id )    (Command execution)
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
 }
 
 
@@ -445,7 +445,7 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
     }
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
 }
 
 
@@ -561,7 +561,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     default:
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
     }
 
     // Simulate left click event if we got here from a hot key.
@@ -695,7 +695,7 @@ void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot move invalid schematic item" ) );
 
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
 
     if( !aItem->IsNew() )
     {

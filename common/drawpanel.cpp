@@ -145,9 +145,11 @@ EDA_DRAW_PANEL::~EDA_DRAW_PANEL()
     wxGetApp().GetSettings()->Write( ENBL_AUTO_PAN_KEY, m_enableAutoPan );
 }
 
+
 EDA_DRAW_FRAME* EDA_DRAW_PANEL::GetParent()
 {
-    return ( EDA_DRAW_FRAME* ) wxWindow::GetParent();
+    wxWindow* mom = wxScrolledWindow::GetParent();
+    return (EDA_DRAW_FRAME*) mom;
 }
 
 

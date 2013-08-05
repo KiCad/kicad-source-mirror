@@ -45,7 +45,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     if( aSheet == NULL )
         return false;
 
-    /* Get the new texts */
+    // Get the new texts
     DIALOG_SCH_SHEET_PROPS dlg( this );
 
     wxString units = GetUnitsLabel( g_UserUnit );
@@ -277,11 +277,12 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 }
 
 
-/*  Complete sheet move.  */
+//  Complete sheet move.
 static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
     SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_ITEM*   item = screen->GetCurItem();
+
     SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
 
     if( (item == NULL) || (item->Type() != SCH_SHEET_T) || (parent == NULL) )
@@ -320,10 +321,10 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 }
 
 
-/* Create hierarchy sheet.  */
+// Create hierarchy sheet.
 SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
 {
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
 
     SCH_SHEET* sheet = new SCH_SHEET( GetCrossHairPosition() );
 

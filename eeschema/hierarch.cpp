@@ -268,7 +268,7 @@ void HIERARCHY_NAVIG_DLG::OnSelect( wxTreeEvent& event )
 
 void SCH_EDIT_FRAME::DisplayCurrentSheet()
 {
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
     ClearMsgPanel();
 
     SCH_SCREEN* screen = m_CurrentSheet->LastScreen();
