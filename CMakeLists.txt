@@ -35,10 +35,6 @@ option(KICAD_STABLE_VERSION
     "set this option to ON to build the stable version of KICAD. mainly used to set version ID (default OFF)"
     )
 
-option(KICAD_TESTING_VERSION
-    "set this option to ON to build the testing version of KICAD. mainly used to set version ID (default OFF)"
-    )
-
 option(KICAD_SCRIPTING
     "set this option ON to build the scripting support inside kicad binaries"
     )
@@ -62,16 +58,9 @@ option(USE_FP_LIB_TABLE "Use the new footprint library table implementation. (de
 
 #Set version option (stable or testing)
 
-if(KICAD_STABLE_VERSION AND KICAD_TESTING_VERSION )
-    message(FATAL_ERROR "Only one KiCad build version option KICAD_TESTING_VERSION or KICAD_STABLE_VERSION can be set to ON")
-elseif(NOT KICAD_STABLE_VERSION AND NOT KICAD_TESTING_VERSION)
-    message(FATAL_ERROR "Either KiCad build version option KICAD_TESTING_VERSION or KICAD_STABLE_VERSION must be set to ON")
-elseif(KICAD_STABLE_VERSION)
+if(KICAD_STABLE_VERSION)
     add_definitions(-DKICAD_STABLE_VERSION)
-    message( "Build stable version of KiCad")
-else()
-    add_definitions(-DKICAD_TESTING_VERSION)
-    message("Build testing (unstable) version of KiCad")
+    message( "Building stable version of KiCad")
 endif()
 
 # All CMake downloads go here.  Suggested is up in the source tree, not in the build dir where they
