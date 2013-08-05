@@ -10,15 +10,10 @@
 #endif
 
 
-#if defined KICAD_TESTING_VERSION
-#   define VERSION_STABILITY  "testing"
-#elif defined KICAD_STABLE_VERSION
+#if defined KICAD_STABLE_VERSION
 #   define VERSION_STABILITY  "stable"
 #else
-#   define VERSION_STABILITY  "unknown"
-#   warning "unknown version stability"
-#   warning "please: when running CMAKE, add -DKICAD_TESTING_VERSION=ON"
-#   warning "or -DKICAD_STABLE_VERSION=ON option"
+#   define VERSION_STABILITY  "product"
 #endif
 
 /**
@@ -27,8 +22,11 @@
  */
 wxString GetBuildVersion()
 {
-    static wxString msg;
-    msg.Printf( wxT("%s-%s"),
-        wxT( KICAD_BUILD_VERSION ), wxT( VERSION_STABILITY ));
+    wxString msg = wxString::Format(
+        wxT( "%s-%s" ),
+        wxT( KICAD_BUILD_VERSION ),
+        wxT( VERSION_STABILITY )
+        );
+
     return msg;
 }
