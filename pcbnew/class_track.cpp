@@ -760,14 +760,6 @@ void TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void TRACK::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
-{
-    // The only required layer is the track layer itself
-    aLayers[0] = GetLayer();
-    aCount = 1;
-}
-
-
 unsigned int TRACK::ViewGetLOD( int aLayer ) const
 {
     // Netnames will be shown only if zoom is appropriate
@@ -1001,14 +993,6 @@ void SEGVIA::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[0] = ITEM_GAL_LAYER( VIAS_VISIBLE );
     aLayers[1] = ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE );
     aCount = 2;
-}
-
-
-void SEGVIA::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
-{
-    // The only required layer is via itself, holes are optional
-    aLayers[0] = ITEM_GAL_LAYER( VIAS_VISIBLE );
-    aCount = 1;
 }
 
 

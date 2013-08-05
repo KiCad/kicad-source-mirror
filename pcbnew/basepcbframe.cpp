@@ -93,8 +93,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
     EDA_DRAW_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     m_Pcb                 = NULL;
-    m_toolManager          = NULL;
-    m_toolDispatcher = NULL;
+    m_toolManager         = NULL;
+    m_toolDispatcher      = NULL;
 
     m_DisplayPadFill      = true;   // How to draw pads
     m_DisplayViaFill      = true;   // How to draw vias
@@ -806,14 +806,26 @@ void PCB_BASE_FRAME::LoadSettings()
 
         view->SetLayerOrder( GalLayerOrder[i], i );
         view->SetLayerTarget( i, KiGfx::TARGET_NONCACHED );
+
+        if( IsCopperLayer( i ) )
+        {
+            // Copper layers are required for netname layers
+            view->SetRequired( GetNetnameLayer( i ), i );
+        }
+        else
+        if( IsNetnameLayer( i ) )
+        {
+            // Netnames are drawn only when scale is sufficient (level of details)
+            // so there is no point in caching them
+            view->SetLayerTarget( i, KiGfx::TARGET_NONCACHED );
+        }
     }
 
-    // Netnames are drawn only when scale is sufficient (level of details)
-    // so there is no point in caching them
-    for( LAYER_NUM layer = FIRST_NETNAME_LAYER; layer <= LAST_NETNAME_LAYER; ++layer )
-    {
-         view->SetLayerTarget( layer, KiGfx::TARGET_NONCACHED );
-    }
+    // Some more required layers settings
+    view->SetRequired( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( VIAS_VISIBLE ) );
+    view->SetRequired( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
+    view->SetRequired( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    view->SetRequired( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
 
     // Apply layer coloring scheme & display options
     if( view->GetPainter() )

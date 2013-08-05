@@ -850,27 +850,6 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void D_PAD::ViewGetRequiredLayers( int aLayers[], int& aCount ) const
-{
-    ViewGetLayers( aLayers, aCount );
-
-    // Remove pad description layer & soldermask from the required layers group
-    if( IsOnLayer( LAYER_N_FRONT ) && IsOnLayer( LAYER_N_BACK ) )
-    {
-        // Multilayer pads have 2 soldermask layers (front and back), 2 solder paste layer
-        // (front and back) and one description layer that do not have to be enabled in order to
-        // display a pad.
-        aCount -= 5;
-    }
-    else
-    {
-        // Rest of pads have one soldermask layer, one solder paste layer and one description layer
-        // that are not necessary for pad to be displayed.
-        aCount -= 3;
-    }
-}
-
-
 unsigned int D_PAD::ViewGetLOD( int aLayer ) const
 {
     // Netnames and soldermasks will be shown only if zoom is appropriate

@@ -84,7 +84,8 @@ public:
      */
     void    Remove( VIEW_ITEM* aItem );
 
-    /** Function Query()
+    /**
+     * Function Query()
      * Finds all visible items that touch or are within the rectangle aRect.
      * @param aRect area to search for items
      * @param aResult result of the search, containing VIEW_ITEMs associated with their layers.
@@ -92,6 +93,16 @@ public:
      * @return Number of found items.
      */
     int     Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult );
+
+    /**
+     * Function SetRequired()
+     * Marks the aRequiredId layer as required for the aLayerId layer. In order to display the
+     * layer, all of its required layers have to be enabled.
+     * @param aLayerId is the id of the layer for which we enable/disable the required layer.
+     * @param aRequiredId is the id of the required layer.
+     * @param aRequired tells if the required layer should be added or removed from the list.
+     */
+    void SetRequired( int aLayerId, int aRequiredId, bool aRequired = true );
 
     /**
      * Function CopySettings()
@@ -377,6 +388,7 @@ private:
         BOX2I                   extents;         ///* sum of bboxes of all items on the layer
         BOX2I                   dirtyExtents;    ///* sum of bboxes of all dirty items on the layer
         RenderTarget            target;          ///* where the layer should be rendered
+        std::set<int>           requiredLayers;  ///* layers that are required to be enabled to show the layer
     };
 
     // Convenience typedefs
@@ -416,8 +428,8 @@ private:
         return i->renderingOrder > j->renderingOrder;
     }
 
-    /// Checks if every layer stored in aLayers array is enabled.
-    bool isEveryLayerEnabled( const int aLayers[], int aCount ) const;
+    /// Checks if every layer required by the aLayerId layer is enabled.
+    bool areRequiredLayersEnabled( int aLayerId ) const;
 
     /// Contains set of possible displayed layers and its properties
     LayerMap    m_layers;

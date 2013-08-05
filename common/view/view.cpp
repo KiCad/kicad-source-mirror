@@ -89,6 +89,22 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 }
 
 
+void VIEW::SetRequired( int aLayerId, int aRequiredId, bool aRequired )
+{
+    wxASSERT( (unsigned) aLayerId < m_layers.size() );
+    wxASSERT( (unsigned) aRequiredId < m_layers.size() );
+
+    if( aRequired )
+    {
+        m_layers[aLayerId].requiredLayers.insert( aRequiredId );
+    }
+    else
+    {
+        m_layers[aLayerId].requiredLayers.erase( aRequired );
+    }
+}
+
+
 // stupid C++... python lamda would do this in one line
 template <class Container>
 struct queryVisitor
@@ -474,14 +490,9 @@ struct VIEW::drawItem
     {
         GAL* gal = view->GetGAL();
 
-        // Obtain layers that are required to be enabled for drawing an item
-        // (eg. there is no point in drawing track labels, if the track is not visible)
-        aItem->ViewGetRequiredLayers( layers, layersCount );
-
         // Conditions that have te be fulfilled for an item to be drawn
         bool drawCondition = aItem->ViewIsVisible() &&
-                             aItem->ViewGetLOD( currentLayer->id ) < view->m_scale &&
-                             view->isEveryLayerEnabled( layers, layersCount );
+                             aItem->ViewGetLOD( currentLayer->id ) < view->m_scale;
         if( !drawCondition )
             return;
 
@@ -521,7 +532,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
 {
     BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
     {
-        if( l->enabled )
+        if( l->enabled && areRequiredLayersEnabled( l->id ) )
         {
             drawItem drawFunc( this, l );
 
@@ -537,7 +548,7 @@ bool VIEW::IsDirty()
 {
     BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
     {
-        if(l->isDirty)   
+        if( l->isDirty )
             return true;
     }   
     return false;
@@ -698,11 +709,17 @@ void VIEW::clearGroupCache()
 }
 
 
-bool VIEW::isEveryLayerEnabled( const int aLayers[], int aCount ) const
+bool VIEW::areRequiredLayersEnabled( int aLayerId ) const
 {
-    for( int i = 0; i < aCount; ++i )
+    wxASSERT( (unsigned) aLayerId < m_layers.size() );
+
+    std::set<int>::iterator it, it_end;
+
+    for( it = m_layers.at( aLayerId ).requiredLayers.begin(), it_end = m_layers.at( aLayerId ).requiredLayers.end();
+            it != it_end; ++it )
     {
-        if( !m_layers.at( aLayers[i] ).enabled )
+        // That is enough if just one layer is not enabled
+        if( !m_layers.at( *it ).enabled )
             return false;
     }
 
