@@ -68,5 +68,10 @@ FOOTPRINT_WIZARD* DIALOG_FOOTPRINT_WIZARD_LIST::GetWizard()
 
 void DIALOG_FOOTPRINT_WIZARD_LIST::OnOpenButtonClick( wxCommandEvent& event )
 {
-    Close(true);
+    EndModal( wxID_OK );
+}
+
+void DIALOG_FOOTPRINT_WIZARD_LIST::OnCancelClick( wxCommandEvent& event )
+{
+    EndModal( wxID_CANCEL );
 }
