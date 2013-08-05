@@ -182,7 +182,7 @@ void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, EDA_COLOR_T aColor )
     if( m_cursorLevel != 0 || aDC == NULL || !m_showCrossHair )
         return;
 
-    wxPoint cursor = GetScreen()->GetCrossHairPosition();
+    wxPoint cursor = GetParent()->GetCrossHairPosition();
 
     GRSetDrawMode( aDC, GR_XOR );
 
@@ -298,7 +298,7 @@ wxPoint EDA_DRAW_PANEL::GetScreenCenterLogicalPosition()
 
 void EDA_DRAW_PANEL::MoveCursorToCrossHair()
 {
-    MoveCursor( GetScreen()->GetCrossHairPosition() );
+    MoveCursor( GetParent()->GetCrossHairPosition() );
 }
 
 
@@ -434,10 +434,10 @@ void EDA_DRAW_PANEL::OnScroll( wxScrollWinEvent& event )
 
     double scale = GetParent()->GetScreen()->GetScalingFactor();
 
-    wxPoint center = GetParent()->GetScreen()->GetScrollCenterPosition();
+    wxPoint center = GetParent()->GetScrollCenterPosition();
     center.x += KiROUND( (double) ( x - tmpX ) / scale );
     center.y += KiROUND( (double) ( y - tmpY ) / scale );
-    GetParent()->GetScreen()->SetScrollCenterPosition( center );
+    GetParent()->SetScrollCenterPosition( center );
 
     Scroll( x, y );
     event.Skip();
@@ -610,7 +610,7 @@ void EDA_DRAW_PANEL::DrawBackGround( wxDC* DC )
         DrawAuxiliaryAxis( DC, GR_COPY );
 
     if( GetParent()->m_showGridAxis )
-        DrawGridAxis( DC, GR_COPY );
+        DrawGridAxis( DC, GR_COPY, GetParent()->GetGridOrigin() );
 }
 
 
@@ -646,7 +646,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     if( screenGridSize.x < MIN_GRID_SIZE || screenGridSize.y < MIN_GRID_SIZE )
         return;
 
-    org = screen->GetNearestGridPosition( org, &gridSize );
+    org = GetParent()->GetNearestGridPosition( org, &gridSize );
 
     // Setting the nearest grid position can select grid points outside the clip box.
     // Incrementing the start point by one grid step should prevent drawing grid points
@@ -741,7 +741,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
 
 void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
 {
-    wxPoint origin = GetParent()->GetOriginAxisPosition();
+    wxPoint origin = GetParent()->GetAuxOrigin();
 
     if( origin == wxPoint( 0, 0 ) )
         return;
@@ -769,33 +769,30 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
 }
 
 
-void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
+void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aGridOrigin )
 {
-    BASE_SCREEN* screen = GetScreen();
-
-    if( !GetParent()->m_showGridAxis
-        || ( screen->m_GridOrigin.x == 0 && screen->m_GridOrigin.y == 0 ) )
+    if( !GetParent()->m_showGridAxis || ( !aGridOrigin.x && !aGridOrigin.y ) )
         return;
 
-    EDA_COLOR_T color = GetParent()->GetGridColor();
-    wxSize  pageSize = GetParent()->GetPageSizeIU();
+    EDA_COLOR_T color    = GetParent()->GetGridColor();
+    wxSize      pageSize = GetParent()->GetPageSizeIU();
 
     GRSetDrawMode( aDC, aDrawMode );
 
     // Draw the Y axis
     GRDashedLine( &m_ClipBox, aDC,
-                  screen->m_GridOrigin.x,
+                  aGridOrigin.x,
                   -pageSize.y,
-                  screen->m_GridOrigin.x,
+                  aGridOrigin.x,
                   pageSize.y,
                   0, color );
 
     // Draw the X axis
     GRDashedLine( &m_ClipBox, aDC,
                   -pageSize.x,
-                  screen->m_GridOrigin.y,
+                  aGridOrigin.y,
                   pageSize.x,
-                  screen->m_GridOrigin.y,
+                  aGridOrigin.y,
                   0, color );
 }
 
@@ -847,7 +844,7 @@ void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
     cross_hair_pos.x = dc.DeviceToLogicalX( cross_hair_pos.x );
     cross_hair_pos.y = dc.DeviceToLogicalY( cross_hair_pos.y );
 
-    GetScreen()->SetCrossHairPosition( cross_hair_pos );
+    GetParent()->SetCrossHairPosition( cross_hair_pos );
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_POPUP_ZOOM_CENTER );
     cmd.SetEventObject( this );
@@ -877,7 +874,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     }
 
     INSTALL_UNBUFFERED_DC( dc, this );
-    GetScreen()->SetCrossHairPosition( event.GetLogicalPosition( dc ) );
+    GetParent()->SetCrossHairPosition( event.GetLogicalPosition( dc ) );
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
@@ -971,7 +968,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     DC.SetBackground( *wxBLACK_BRUSH );
 
     // Compute the cursor position in drawing (logical) units.
-    screen->SetMousePosition( event.GetLogicalPosition( DC ) );
+    GetParent()->SetMousePosition( event.GetLogicalPosition( DC ) );
 
     int kbstat = 0;
 
@@ -987,7 +984,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     // Calling Double Click and Click functions :
     if( localbutt == (int) ( GR_M_LEFT_DOWN | GR_M_DCLICK ) )
     {
-        GetParent()->OnLeftDClick( &DC, screen->RefPos( true ) );
+        GetParent()->OnLeftDClick( &DC, GetParent()->RefPos( true ) );
 
         // inhibit a response to the mouse left button release,
         // because we have a double click, and we do not want a new
@@ -1004,7 +1001,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         m_ignoreNextLeftButtonRelease = false;
 
         if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK && !ignoreEvt )
-            GetParent()->OnLeftClick( &DC, screen->RefPos( true ) );
+            GetParent()->OnLeftClick( &DC, GetParent()->RefPos( true ) );
 
     }
     else if( !event.LeftIsDown() )
@@ -1028,7 +1025,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
             m_PanStartCenter.y *= ppuy;
         }
         else
-            m_PanStartCenter = GetParent()->GetScreen()->GetScrollCenterPosition();
+            m_PanStartCenter = GetParent()->GetScrollCenterPosition();
 
         m_PanStartEventPosition = event.GetPosition();
 
@@ -1102,10 +1099,10 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
             double scale = GetParent()->GetScreen()->GetScalingFactor();
 
-            wxPoint center = GetParent()->GetScreen()->GetScrollCenterPosition();
+            wxPoint center = GetParent()->GetScrollCenterPosition();
             center.x += KiROUND( (double) ( x - tmpX ) / scale ) / ppux;
             center.y += KiROUND( (double) ( y - tmpY ) / scale ) / ppuy;
-            GetParent()->GetScreen()->SetScrollCenterPosition( center );
+            GetParent()->SetScrollCenterPosition( center );
 
             Refresh();
             Update();
@@ -1165,7 +1162,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
          * (a filter creates a delay for the real block command start, and
          * we must remember this point)
          */
-        m_CursorStartPos = screen->GetCrossHairPosition();
+        m_CursorStartPos = GetParent()->GetCrossHairPosition();
     }
 
     if( m_enableBlockCommands && !(localbutt & GR_M_DCLICK) )
@@ -1324,17 +1321,14 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
     INSTALL_UNBUFFERED_DC( DC, this );
 
-    BASE_SCREEN* Screen = GetScreen();
-
     // Some key commands use the current mouse position: refresh it.
     pos = wxGetMousePosition() - GetScreenPosition();
 
     // Compute the cursor position in drawing units.  Also known as logical units to wxDC.
     pos = wxPoint( DC.DeviceToLogicalX( pos.x ), DC.DeviceToLogicalY( pos.y ) );
-    Screen->SetMousePosition( pos );
 
+    GetParent()->SetMousePosition( pos );
     GetParent()->GeneralControl( &DC, pos, localkey );
-
 }
 
 

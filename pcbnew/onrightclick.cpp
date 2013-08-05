@@ -101,12 +101,12 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         }
     }
 
-    /* Select a proper item */
+    // Select a proper item
 
-    wxPoint cursorPos = GetScreen()->GetCrossHairPosition();
+    wxPoint cursorPos = GetCrossHairPosition();
     wxPoint selectPos = m_Collector->GetRefPos();
 
-    selectPos = GetScreen()->GetNearestGridPosition( selectPos );
+    selectPos = GetNearestGridPosition( selectPos );
 
     /*  We can reselect another item only if there are no item being edited
      * because ALL moving functions use GetCurItem(), therefore GetCurItem()
@@ -312,7 +312,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                      msg, KiBitmap( move_module_xpm ) );
     }
 
-    /* Display context sensitive commands: */
+    // Display context sensitive commands:
     switch(  GetToolId() )
     {
     case ID_PCB_ZONES_BUTT:
@@ -455,7 +455,7 @@ void PCB_EDIT_FRAME::createPopUpBlockMenu( wxMenu* menu )
  */
 void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 {
-    wxPoint  cursorPosition = GetScreen()->GetCrossHairPosition();
+    wxPoint  cursorPosition = GetCrossHairPosition();
     wxString msg;
 
     GetBoard()->SetCurrentNetClass( Track->GetNetClassName() );
@@ -635,14 +635,14 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
                     edge_zone->GetIsKeepout() ? _("Keepout Area") : _( "Zones" ),
                     KiBitmap( add_zone_xpm ) );
 
-        if( edge_zone->HitTestForCorner( GetScreen()->RefPos( true ) ) )
+        if( edge_zone->HitTestForCorner( RefPos( true ) ) )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
                          _( "Move Corner" ), KiBitmap( move_xpm ) );
             AddMenuItem( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
                          _( "Delete Corner" ), KiBitmap( delete_xpm ) );
         }
-        else if( edge_zone->HitTestForEdge( GetScreen()->RefPos( true ) ) )
+        else if( edge_zone->HitTestForEdge( RefPos( true ) ) )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_ADD_ZONE_CORNER,
                          _( "Create Corner" ), KiBitmap( add_corner_xpm ) );
@@ -862,7 +862,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 }
 
 
-/* Create pop menu for pcb texts */
+// Create pop menu for pcb texts
 void PCB_EDIT_FRAME::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
 {
     wxMenu*  sub_menu_Text;

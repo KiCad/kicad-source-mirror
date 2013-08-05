@@ -73,8 +73,8 @@ private:
 
     TITLE_BLOCK m_titles;
 
-    /// Position of the origin axis, which is used in exports mostly, but not yet in EESCHEMA
-    wxPoint     m_originAxisPosition;
+    /// Origin of the auxilliary axis, which is used in exports mostly, but not yet in EESCHEMA
+    wxPoint     m_aux_origin;
 
     DLIST< SCH_ITEM > m_drawList;     ///< Object list for the screen.
                                       /// @todo use DLIST<SCH_ITEM> or superior container
@@ -108,12 +108,12 @@ public:
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
 
-    void SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
+    void SetFileName( const wxString& aFileName )           { m_fileName = aFileName; }
 
-    const wxString& GetFileName() const { return m_fileName; }
+    const wxString& GetFileName() const                     { return m_fileName; }
 
-    const wxPoint& GetOriginAxisPosition() const            { return m_originAxisPosition; }
-    void SetOriginAxisPosition( const wxPoint& aPosition )  { m_originAxisPosition = aPosition; }
+    const wxPoint& GetAuxOrigin() const                     { return m_aux_origin; }
+    void SetAuxOrigin( const wxPoint& aPosition )           { m_aux_origin = aPosition; }
 
     const TITLE_BLOCK& GetTitleBlock() const                { return m_titles; }
     //TITLE_BLOCK& GetTitleBlock() const                      { return (TITLE_BLOCK&) m_titles; }

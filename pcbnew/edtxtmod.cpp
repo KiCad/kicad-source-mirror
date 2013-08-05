@@ -68,7 +68,7 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
 
     Text = new TEXTE_MODULE( Module );
 
-    /* Add the new text object to the beginning of the draw item list. */
+    // Add the new text object to the beginning of the draw item list.
     if( Module )
         Module->GraphicalItems().PushFront( Text );
 
@@ -80,7 +80,7 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
                                                                 std::min( GetDesignSettings().m_ModuleTextSize.x, GetDesignSettings().m_ModuleTextSize.y ), true );
     Text->SetSize( GetDesignSettings().m_ModuleTextSize );
     Text->SetThickness( GetDesignSettings().m_ModuleTextWidth );
-    Text->SetTextPosition( GetScreen()->GetCrossHairPosition() );
+    Text->SetTextPosition( GetCrossHairPosition() );
     Text->SetLocalCoord();
 
     InstallTextModOptionsFrame( Text, NULL );
@@ -175,7 +175,7 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( Text->IsMoving() )
         Text->SetOrientation( TextInitialOrientation );
 
-    /* Redraw the text */
+    // Redraw the text
     Panel->RefreshDrawingRect( Text->GetBoundingBox() );
 
     // leave it at (0,0) so we can use it Rotate when not moving.
@@ -208,7 +208,7 @@ void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
     TextInitialOrientation = Text->GetOrientation();
 
     // Center cursor on initial position of text
-    GetScreen()->SetCrossHairPosition( TextInitialPosition );
+    SetCrossHairPosition( TextInitialPosition );
     m_canvas->MoveCursorToCrossHair();
 
     SetMsgPanel( Text );
@@ -227,7 +227,7 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
         m_canvas->RefreshDrawingRect( Text->GetBoundingBox() );
         Text->DrawUmbilical( m_canvas, DC, GR_XOR, -MoveVector );
 
-        /* Update the coordinates for anchor. */
+        // Update the coordinates for anchor.
         MODULE* Module = (MODULE*) Text->GetParent();
 
         if( Module )
@@ -244,7 +244,7 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             Text->SetOrientation( tmp );
 
             // Set the new position for text.
-            Text->SetTextPosition( GetScreen()->GetCrossHairPosition() );
+            Text->SetTextPosition( GetCrossHairPosition() );
             wxPoint textRelPos = Text->GetTextPosition() - Module->GetPosition();
             RotatePoint( &textRelPos, -Module->GetOrientation() );
             Text->SetPos0( textRelPos );
@@ -253,12 +253,12 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             Module->SetLastEditTime();
             OnModify();
 
-            /* Redraw text. */
+            // Redraw text.
             m_canvas->RefreshDrawingRect( Text->GetBoundingBox() );
         }
         else
         {
-            Text->SetTextPosition( GetScreen()->GetCrossHairPosition() );
+            Text->SetTextPosition( GetCrossHairPosition() );
         }
     }
 
@@ -285,7 +285,7 @@ static void Show_MoveTexte_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         Text->Draw( aPanel, aDC, GR_XOR, MoveVector );
     }
 
-    MoveVector = TextInitialPosition - screen->GetCrossHairPosition();
+    MoveVector = TextInitialPosition - aPanel->GetParent()->GetCrossHairPosition();
 
     // Draw umbilical if text moved
     if( MoveVector.x || MoveVector.y )

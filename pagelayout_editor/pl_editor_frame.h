@@ -58,6 +58,8 @@ class PL_EDITOR_FRAME : public EDA_DRAW_FRAME
                                     // usefull when there are some items which are
                                     // only on page 1, not on page 1
 
+    wxPoint     m_grid_origin;
+
 protected:
     /// The last filename chosen to be proposed to the user
     wxString                m_lastFileName;
@@ -90,12 +92,21 @@ public:
         return (PL_EDITOR_SCREEN*) m_canvas->GetScreen();
     }
 
-    const wxPoint& GetOriginAxisPosition() const                // overload EDA_DRAW_FRAME
+    const wxPoint& GetAuxOrigin() const                         // overload EDA_DRAW_FRAME
     {
-        static wxPoint dummy( 0,0 );
+        static wxPoint dummy;   // ( 0,0 );
         return dummy;
     }
-    void SetOriginAxisPosition( const wxPoint& aPosition ) {}   // overload EDA_DRAW_FRAME
+    void SetAuxOrigin( const wxPoint& aPosition ) {}            // overload EDA_DRAW_FRAME
+
+    const wxPoint& GetGridOrigin() const                        // overload EDA_DRAW_FRAME
+    {
+        return m_grid_origin;
+    }
+    void SetGridOrigin( const wxPoint& aPoint )                 // overload EDA_DRAW_FRAME
+    {
+        m_grid_origin = aPoint;
+    }
 
     const TITLE_BLOCK& GetTitleBlock() const;                   // overload EDA_DRAW_FRAME
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload EDA_DRAW_FRAME

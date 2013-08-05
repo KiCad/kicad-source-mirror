@@ -74,14 +74,14 @@
  */
 
 
-/* local variables */
-/* Hotkey list: */
+// local variables
+// Hotkey list:
 
 /**
  * Common commands
  */
 
-/* Fit on Screen */
+// Fit on Screen
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomAuto( wxT( "Fit on Screen" ), HK_ZOOM_AUTO, WXK_HOME, ID_ZOOM_PAGE );
 #else
@@ -92,7 +92,7 @@ static EDA_HOTKEY HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, GR_KB_CTRL + '0'
 static EDA_HOTKEY HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4,
                                 ID_POPUP_ZOOM_CENTER );
 
-/* Refresh Screen */
+// Refresh Screen
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3, ID_ZOOM_REDRAW );
 #else
@@ -100,14 +100,14 @@ static EDA_HOTKEY HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, GR_KB_CTRL
                                 ID_ZOOM_REDRAW );
 #endif
 
-/* Zoom In */
+// Zoom In
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1, ID_POPUP_ZOOM_IN );
 #else
 static EDA_HOTKEY HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, GR_KB_CTRL + '+', ID_POPUP_ZOOM_IN );
 #endif
 
-/* Zoom Out */
+// Zoom Out
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2, ID_POPUP_ZOOM_OUT );
 #else
@@ -115,13 +115,13 @@ static EDA_HOTKEY HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-', I
 #endif
 
 static EDA_HOTKEY HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
-static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
-                                     HK_RESET_LOCAL_COORD, ' ' );
+static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
 
-/* Undo */
+
+// Undo
 static EDA_HOTKEY HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
 
-/* Redo */
+// Redo
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
 #else
@@ -358,8 +358,8 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         DisplayHotkeyList( this, s_Schematic_Hokeys_Descr );
         break;
 
-    case HK_RESET_LOCAL_COORD:         /* Reset the relative coord */
-        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+    case HK_RESET_LOCAL_COORD:         // Reset the relative coord
+        GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
 
     case HK_ZOOM_IN:
@@ -561,8 +561,8 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         DisplayHotkeyList( this, s_Libedit_Hokeys_Descr );
         break;
 
-    case HK_RESET_LOCAL_COORD:         /* Reset the relative coord */
-        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+    case HK_RESET_LOCAL_COORD:         // Reset the relative coord
+        GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
 
     case HK_ZOOM_IN:

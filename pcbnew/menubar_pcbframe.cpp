@@ -105,8 +105,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( save_xpm ) );
 
     // Save As
-    AddMenuItem( filesMenu, ID_SAVE_BOARD_AS,
-                 _( "Sa&ve As...\tCtrl+Shift+S" ),
+    text = AddHotkeyName( _( "Sa&ve As..." ), g_Board_Editor_Hokeys_Descr, HK_SAVE_BOARD_AS );
+    AddMenuItem( filesMenu, ID_SAVE_BOARD_AS, text,
                  _( "Save the current board as..." ),
                  KiBitmap( save_as_xpm ) );
     filesMenu->AppendSeparator();

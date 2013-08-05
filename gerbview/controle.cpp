@@ -38,9 +38,9 @@ void GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     wxPoint     oldpos;
     wxPoint     pos = aPosition;
 
-    pos = GetScreen()->GetNearestGridPosition( pos );
+    pos = GetNearestGridPosition( pos );
 
-    oldpos = GetScreen()->GetCrossHairPosition();
+    oldpos   = GetCrossHairPosition();
     gridSize = GetScreen()->GetGridSize();
 
     switch( aHotKey )
@@ -73,14 +73,14 @@ void GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         break;
     }
 
-    GetScreen()->SetCrossHairPosition( pos );
+    SetCrossHairPosition( pos );
 
-    if( oldpos != GetScreen()->GetCrossHairPosition() )
+    if( oldpos != GetCrossHairPosition() )
     {
-        pos = GetScreen()->GetCrossHairPosition();
-        GetScreen()->SetCrossHairPosition( oldpos );
+        pos = GetCrossHairPosition();
+        SetCrossHairPosition( oldpos );
         m_canvas->CrossHairOff( aDC );
-        GetScreen()->SetCrossHairPosition( pos );
+        SetCrossHairPosition( pos );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )

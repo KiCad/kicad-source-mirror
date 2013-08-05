@@ -171,10 +171,11 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
     if( screen->m_BlockLocate.GetState() != STATE_BLOCK_STOP )
     {
-        screen->m_BlockLocate.SetMoveVector( wxPoint( screen->GetCrossHairPosition().x -
-                                                      screen->m_BlockLocate.GetRight(),
-                                                      screen->GetCrossHairPosition().y -
-                                                      screen->m_BlockLocate.GetBottom() ) );
+        const wxPoint& cross_hair = aPanel->GetParent()->GetCrossHairPosition();
+
+        screen->m_BlockLocate.SetMoveVector(
+            wxPoint( cross_hair.x - screen->m_BlockLocate.GetRight(),
+                     cross_hair.y - screen->m_BlockLocate.GetBottom() ) );
     }
 
     screen->m_BlockLocate.Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, Color );
@@ -195,10 +196,10 @@ void GERBVIEW_FRAME::Block_Move( wxDC* DC )
     wxPoint delta;
     wxPoint oldpos;
 
-    oldpos = GetScreen()->GetCrossHairPosition();
+    oldpos = GetCrossHairPosition();
     m_canvas->SetMouseCaptureCallback( NULL );
 
-    GetScreen()->SetCrossHairPosition( oldpos );
+    SetCrossHairPosition( oldpos );
     m_canvas->MoveCursorToCrossHair();
     GetScreen()->SetModify();
     GetScreen()->m_BlockLocate.Normalize();

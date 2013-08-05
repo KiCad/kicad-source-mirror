@@ -284,12 +284,12 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     {
         Zoom_Automatique( false );
         screen->m_FirstRedraw = false;
-        screen->SetCrossHairPosition( screen->GetScrollCenterPosition() );
+        SetCrossHairPosition( GetScrollCenterPosition() );
         m_canvas->MoveCursorToCrossHair();
     }
     else
     {
-        RedrawScreen( screen->GetScrollCenterPosition(), true );
+        RedrawScreen( GetScrollCenterPosition(), true );
     }
 
     // Now refresh m_canvas. Should be not necessary, but because screen has changed

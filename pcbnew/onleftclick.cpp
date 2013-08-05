@@ -394,7 +394,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_DELETE_ITEM_BUTT:
-        if( !DrawStruct || (DrawStruct->GetFlags() == 0) )
+        if( !DrawStruct || !DrawStruct->GetFlags() )
         {
             DrawStruct = PcbGeneralLocateAndDisplay();
 
@@ -409,15 +409,15 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     case ID_PCB_PLACE_OFFSET_COORD_BUTT:
         m_canvas->DrawAuxiliaryAxis( aDC, GR_XOR );
-        SetOriginAxisPosition( GetScreen()->GetCrossHairPosition() );
+        SetAuxOrigin( GetCrossHairPosition() );
         m_canvas->DrawAuxiliaryAxis( aDC, GR_COPY );
         OnModify();
         break;
 
     case ID_PCB_PLACE_GRID_COORD_BUTT:
-        m_canvas->DrawGridAxis( aDC, GR_XOR );
-        GetScreen()->m_GridOrigin = GetScreen()->GetCrossHairPosition();
-        m_canvas->DrawGridAxis( aDC, GR_COPY );
+        m_canvas->DrawGridAxis( aDC, GR_XOR, GetBoard()->GetGridOrigin() );
+        SetGridOrigin( GetCrossHairPosition() );
+        m_canvas->DrawGridAxis( aDC, GR_COPY, GetBoard()->GetGridOrigin() );
         break;
 
     default:

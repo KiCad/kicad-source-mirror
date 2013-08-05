@@ -59,7 +59,7 @@ void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
 {
     wxPoint dPos = posBefore - m_canvas->GetClientSize() / 2; // relative screen position to center before zoom
-    wxPoint newScreenPos = m_canvas->ToDeviceXY( GetScreen()->GetCrossHairPosition() ); // screen position of crosshair after zoom
+    wxPoint newScreenPos = m_canvas->ToDeviceXY( GetCrossHairPosition() ); // screen position of crosshair after zoom
     wxPoint newCenter = m_canvas->ToLogicalXY( newScreenPos - dPos );
 
     AdjustScrollBars( newCenter );
@@ -82,10 +82,10 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
     screen->SetScalingFactor( bestzoom );
 
     if( screen->m_FirstRedraw )
-        screen->SetCrossHairPosition( screen->GetScrollCenterPosition() );
+        SetCrossHairPosition( GetScrollCenterPosition() );
 
     if( !m_galCanvasActive )
-        RedrawScreen( screen->GetScrollCenterPosition(), aWarpPointer );
+        RedrawScreen( GetScrollCenterPosition(), aWarpPointer );
 }
 
 
@@ -123,19 +123,19 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     int          id = event.GetId();
     bool         zoom_at_cursor = false;
     BASE_SCREEN* screen = GetScreen();
-    wxPoint      center = screen->GetScrollCenterPosition();
+    wxPoint      center = GetScrollCenterPosition();
 
     switch( id )
     {
     case ID_OFFCENTER_ZOOM_IN:
-        center = m_canvas->ToDeviceXY( screen->GetCrossHairPosition() );
+        center = m_canvas->ToDeviceXY( GetCrossHairPosition() );
         if( screen->SetPreviousZoom() )
             RedrawScreen2( center );
         break;
 
     case ID_POPUP_ZOOM_IN:
         zoom_at_cursor = true;
-        center = screen->GetCrossHairPosition();
+        center = GetCrossHairPosition();
 
     // fall thru
     case ID_ZOOM_IN:
@@ -144,14 +144,14 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_OFFCENTER_ZOOM_OUT:
-        center = m_canvas->ToDeviceXY( screen->GetCrossHairPosition() );
+        center = m_canvas->ToDeviceXY( GetCrossHairPosition() );
         if( screen->SetNextZoom() )
             RedrawScreen2( center );
         break;
 
     case ID_POPUP_ZOOM_OUT:
         zoom_at_cursor = true;
-        center = screen->GetCrossHairPosition();
+        center = GetCrossHairPosition();
 
     // fall thru
     case ID_ZOOM_OUT:
@@ -164,7 +164,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ZOOM_CENTER:
-        center = screen->GetCrossHairPosition();
+        center = GetCrossHairPosition();
         RedrawScreen( center, true );
         break;
 

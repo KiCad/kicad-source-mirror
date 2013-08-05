@@ -73,17 +73,17 @@ const wxSize SCH_BASE_FRAME::GetPageSizeIU() const
 }
 
 
-const wxPoint& SCH_BASE_FRAME::GetOriginAxisPosition() const
+const wxPoint& SCH_BASE_FRAME::GetAuxOrigin() const
 {
     wxASSERT( GetScreen() );
-    return GetScreen()->GetOriginAxisPosition();
+    return GetScreen()->GetAuxOrigin();
 }
 
 
-void SCH_BASE_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
+void SCH_BASE_FRAME::SetAuxOrigin( const wxPoint& aPosition )
 {
     wxASSERT( GetScreen() );
-    GetScreen()->SetOriginAxisPosition( aPosition );
+    GetScreen()->SetAuxOrigin( aPosition );
 }
 
 
@@ -113,8 +113,8 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     EDA_DRAW_FRAME::UpdateStatusBar();
 
     // Display absolute coordinates:
-    double dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
-    double dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
+    double dXpos = To_User_Unit( g_UserUnit, GetCrossHairPosition().x );
+    double dYpos = To_User_Unit( g_UserUnit, GetCrossHairPosition().y );
 
     if ( g_UserUnit == MILLIMETRES )
     {
@@ -147,8 +147,9 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     SetStatusText( line, 2 );
 
     // Display relative coordinates:
-    dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
-    dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+    dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
+    dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
+
     dXpos = To_User_Unit( g_UserUnit, dx );
     dYpos = To_User_Unit( g_UserUnit, dy );
 

@@ -76,6 +76,7 @@ fp_poly
 fp_text
 full
 general
+grid_origin
 gr_arc
 gr_circle
 gr_curve
