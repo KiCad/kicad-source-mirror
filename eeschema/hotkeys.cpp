@@ -385,7 +385,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_REPEAT_LAST:
-        if( notBusy && m_itemToRepeat && ( m_itemToRepeat->GetFlags() == 0 ) )
+        if( notBusy && GetRepeatItem() && ( GetRepeatItem()->GetFlags() == 0 ) )
             RepeatDrawItem( aDC );
         break;
 

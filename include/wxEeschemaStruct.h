@@ -134,7 +134,7 @@ private:
     wxArrayString           m_findStringHistoryList;
     wxArrayString           m_replaceStringHistoryList;
     BLOCK_SELECTOR          m_blockItems;         ///< List of selected items.
-    SCH_ITEM*               m_itemToRepeat;       ///< Last item to insert by the repeat command.
+    SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
     int                     m_repeatLabelDelta;   ///< Repeat label number increment step.
     SCH_COLLECTOR           m_collectedItems;     ///< List of collected items.
     SCH_FIND_COLLECTOR      m_foundItems;         ///< List of find/replace items.
@@ -899,11 +899,12 @@ private:
     void EditImage( SCH_BITMAP* aItem );
 
     // Hierarchical Sheet & PinSheet
-    void InstallHierarchyFrame( wxDC* DC, wxPoint& pos );
-    SCH_SHEET* CreateSheet( wxDC* DC );
-    void ReSizeSheet( SCH_SHEET* Sheet, wxDC* DC );
-    // Loads the cache library associated to the aFileName
-    bool LoadCacheLibrary( const wxString& aFileName );
+    void        InstallHierarchyFrame( wxDC* DC, wxPoint& pos );
+    SCH_SHEET*  CreateSheet( wxDC* DC );
+    void        ReSizeSheet( SCH_SHEET* Sheet, wxDC* DC );
+
+    /// Loads the cache library associated to the aFileName
+    bool        LoadCacheLibrary( const wxString& aFileName );
 
 public:
     /**
@@ -1176,7 +1177,18 @@ public:
      */
     void RepeatDrawItem( wxDC* DC );
 
-    void SetRepeatItem( SCH_ITEM* aItem ) { m_itemToRepeat = aItem; }
+    /**
+     * Function SetRepeatItem
+     * clones aItem and owns that clone in this container.
+     */
+    void SetRepeatItem( SCH_ITEM* aItem );
+
+    /**
+     * Function GetRepeatItem
+     * returns the item which is to be repeated with the insert key.  Such object
+     * is owned by this container, and must be cloned.
+     */
+    SCH_ITEM* GetRepeatItem() const             { return m_item_to_repeat; }
 
     /**
      * Function SetUndoItem
