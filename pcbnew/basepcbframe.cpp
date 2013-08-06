@@ -618,7 +618,6 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
     switch( g_UserUnit )
     {
-#if defined( USE_PCBNEW_NANOMETRES )
     case INCHES:
         absformatter = wxT( "X %.6f  Y %.6f" );
         locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
@@ -628,19 +627,6 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         absformatter = wxT( "X %.6f  Y %.6f" );
         locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
         break;
-#else
-    case INCHES:
-        absformatter = wxT( "X %.4f  Y %.4f" );
-        locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
-        break;
-
-    case MILLIMETRES:
-        dXpos = RoundTo0( dXpos, 1000.0 );
-        dYpos = RoundTo0( dYpos, 1000.0 );
-        absformatter = wxT( "X %.3f  Y %.3f" );
-        locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
-        break;
-#endif
 
     case UNSCALED_UNITS:
         absformatter = wxT( "X %f  Y %f" );
@@ -658,14 +644,6 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
         dXpos = To_User_Unit( g_UserUnit, dx );
         dYpos = To_User_Unit( g_UserUnit, dy );
-
-#ifndef USE_PCBNEW_NANOMETRES
-        if ( g_UserUnit == MILLIMETRES )
-        {
-            dXpos = RoundTo0( dXpos, 1000.0 );
-            dYpos = RoundTo0( dYpos, 1000.0 );
-        }
-#endif
 
         // We already decided the formatter above
         line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );

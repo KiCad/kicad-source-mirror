@@ -31,11 +31,10 @@
 #ifndef _CONVERT_FROM_IU_
 #define _CONVERT_FROM_IU_
 
-#include <config.h>     // USE_PCBNEW_NANOMETRES is defined here
+#include <config.h>
 
 /// Convert from internal units to user units.
 #if defined(PCBNEW) || defined(CVPCB) || defined(GERBVIEW)
-    #if defined( USE_PCBNEW_NANOMETRES )
     #if defined(GERBVIEW)
         #define MM_PER_IU   1.0 / 1e5         // Gerbview uses 10 micrometer.
     #else
@@ -43,32 +42,19 @@
     #endif
     #define MILS_PER_IU ( MM_PER_IU * 0.0254 )
     #define DECIMILS_PER_IU (MM_PER_IU * 0.00254 )
-    #else                                     // Pcbnew in deci-mils.
-        #define DECIMILS_PER_IU  1
-        #define MILS_PER_IU   0.1
-        #define MM_PER_IU   (25.4 / 1e4)
-    #endif
 
 /// Convert PCBNEW internal units (iu) to mils.
 inline int Iu2Mils( int iu )
 {
-#if defined( USE_PCBNEW_NANOMETRES )
     double x = iu * MILS_PER_IU;
     return int( x < 0 ? x - 0.5 : x + 0.5 );
-#else
-    return iu * MILS_PER_IU;
-#endif
 }
 
 /// Convert PCBNEW internal units (iu) to deci-mils.
 inline int Iu2DMils( int iu )
 {
-#if defined( USE_PCBNEW_NANOMETRES )
     double x = iu * DECIMILS_PER_IU;
     return int( x < 0 ? x - 0.5 : x + 0.5 );
-#else
-    return iu;
-#endif
 }
 
 #else            // Eeschema and anything else.

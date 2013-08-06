@@ -14,9 +14,6 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 # reports.
 #
 
-option(USE_PCBNEW_NANOMETRES
-    "Use nanometers for Pcbnew internal units instead of deci-mils (default ON)." ON)
-
 # Russian GOST patch
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
 option(KICAD_GOST "enable/disable building using GOST notation for multiple gates per package (default OFF)")
