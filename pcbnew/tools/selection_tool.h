@@ -36,7 +36,7 @@ class GENERAL_COLLECTOR;
 
 
 /**
- * Class SELECTION_AREA
+ * Class SELECTION_TOOL
  *
  * Our sample selection tool: currently supports:
  * - pick single objects (click LMB)
@@ -48,24 +48,24 @@ class GENERAL_COLLECTOR;
 
 class SELECTION_TOOL : public TOOL_INTERACTIVE
 {
-    public:
-        SELECTION_TOOL ();
-        ~SELECTION_TOOL ();
+public:
+    SELECTION_TOOL ();
+    ~SELECTION_TOOL ();
 
-        void Reset();
-        int Main(TOOL_EVENT& aEvent);
+    void Reset();
+    int Main(TOOL_EVENT& aEvent);
 
-    private:
-        void selectSingle( const VECTOR2I &aWhere, bool aAdditive );
-        void selectMultiple ();
-        void handleHighlight( const VECTOR2D& aP );
-        BOARD_ITEM* disambiguationMenu ( GENERAL_COLLECTOR* aItems );
-        BOARD_ITEM* pickSmallestComponent( GENERAL_COLLECTOR* aCollector );
-        void toggleSelection ( BOARD_ITEM * aItem, bool aAdditive );
-        void clearSelection ();
-    
-        std::set<BOARD_ITEM *> m_selectedItems;
-        SELECTION_AREA *m_selArea;
+private:
+    void selectSingle( const VECTOR2I &aWhere, bool aAdditive );
+    void selectMultiple ();
+    void handleHighlight( const VECTOR2D& aP );
+    BOARD_ITEM* disambiguationMenu ( GENERAL_COLLECTOR* aItems );
+    BOARD_ITEM* pickSmallestComponent( GENERAL_COLLECTOR* aCollector );
+    void toggleSelection ( BOARD_ITEM * aItem, bool aAdditive );
+    void clearSelection ();
+
+    std::set<BOARD_ITEM*> m_selectedItems;
+    SELECTION_AREA* m_selArea;
 };
 
 #endif
