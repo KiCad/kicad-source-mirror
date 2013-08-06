@@ -572,6 +572,13 @@ public:
      */
     virtual void SetTarget( RenderTarget aTarget ) = 0;
 
+    /**
+     * @brief Gets the currently used target for rendering.
+     *
+     * @return The current rendering target.
+     */
+    virtual RenderTarget GetTarget() const = 0;
+
     // -------------
     // Grid methods
     // -------------

@@ -218,6 +218,9 @@ public:
     /// @copydoc GAL::SetTarget()
     virtual void SetTarget( RenderTarget aTarget );
 
+    /// @copydoc GAL::GetTarget()
+    virtual RenderTarget GetTarget() const;
+
     // -------
     // Cursor
     // -------
@@ -263,6 +266,7 @@ private:
     boost::shared_ptr<CAIRO_COMPOSITOR> compositor; ///< Object for layers compositing
     unsigned int            mainBuffer;             ///< Handle to the main buffer
     unsigned int            overlayBuffer;          ///< Handle to the overlay buffer
+    RenderTarget            currentTarget;          ///< Current rendering target
 
     // Variables related to wxWidgets
     wxWindow*               parentWindow;           ///< Parent window
