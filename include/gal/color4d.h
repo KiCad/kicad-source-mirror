@@ -75,12 +75,12 @@ public:
 #endif /* WX_COMPATIBLITY */
 
     /**
-     * Function Highlight
+     * Function Brighten
      * Makes the color brighter by a given factor.
      * @param aFactor Specifies how bright the color should become (valid values: 0.0 .. 1.0).
      * @return COLOR4D& Brightened color.
      */
-    COLOR4D& Highlight( double aFactor )
+    COLOR4D& Brighten( double aFactor )
     {
         r = r * ( 1.0 - aFactor ) + aFactor;
         g = g * ( 1.0 - aFactor ) + aFactor;
@@ -119,12 +119,12 @@ public:
     }
 
     /**
-     * Function Highlighted
+     * Function Brightened
      * Returns a color that is brighter by a given factor, without modifying object.
      * @param aFactor Specifies how bright the color should become (valid values: 0.0 .. 1.0).
      * @return COLOR4D Highlightedd color.
      */
-    COLOR4D Highlighted( double aFactor ) const
+    COLOR4D Brightened( double aFactor ) const
     {
         return COLOR4D( r * ( 1.0 - aFactor ) + aFactor,
                         g * ( 1.0 - aFactor ) + aFactor,

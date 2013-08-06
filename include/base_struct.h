@@ -387,6 +387,9 @@ public:
 #define END_ONPAD      (1 << 23)   ///< Pcbnew: flag set for track segment ending on a pad
 #define BUSY           (1 << 24)   ///< Pcbnew: flag indicating that the structure has
                                    ///< already been edited, in some functions
+#define HIGHLIGHTED    (1 << 25)   ///< item is drawn in normal colors, when the rest is darkened
+#define BRIGHTENED     (1 << 26)   ///< item is drawn with a bright contour
+
 #define EDA_ITEM_ALL_FLAGS -1
 
 typedef unsigned STATUS_FLAGS;
@@ -466,6 +469,16 @@ public:
     inline bool IsDragging() const { return m_Flags & IS_DRAGGED; }
     inline bool IsSelected() const { return m_Flags & SELECTED; }
     inline bool IsResized() const { return m_Flags & IS_RESIZED; }
+    inline bool IsHighlighted() const { return m_Flags & HIGHLIGHTED; }
+    inline bool IsBrightened() const { return m_Flags & BRIGHTENED; }
+
+    inline void SetBrightened() { SetFlags( BRIGHTENED ); ViewUpdate( APPEARANCE ); }
+    inline void SetSelected() { SetFlags( SELECTED ); ViewUpdate( APPEARANCE ); }
+    inline void SetHighlighted() { SetFlags( HIGHLIGHTED ); ViewUpdate( APPEARANCE | GEOMETRY ); }
+
+    inline void ClearSelected() { ClearFlags( SELECTED ); ViewUpdate( APPEARANCE ); }
+    inline void ClearHighlighted() { ClearFlags( HIGHLIGHTED ); ViewUpdate( APPEARANCE ); }
+    inline void ClearBrightened() { ClearFlags( BRIGHTENED ); ViewUpdate( APPEARANCE | GEOMETRY ); }
 
     void SetModified();
 

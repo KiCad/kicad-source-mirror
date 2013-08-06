@@ -67,8 +67,7 @@ public:
         ALL = 0xff
     };
 
-    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_highlighted( false ),
-            m_groups( NULL ), m_groupsSize( 0 ) {}
+    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_groups( NULL ), m_groupsSize( 0 ) {}
 
     /**
      * Destructor. For dynamic views, removes the item from the view.
@@ -136,25 +135,6 @@ public:
     }
 
     /**
-     * Function ViewSetHighlighted()
-     * Sets the item highlight.
-     *
-     * @param aIsHighlighted: whether the item is highlighted (on all layers), or not.
-     */
-    void ViewSetHighlighted( bool aIsHighlighted = true );
-
-    /**
-     * Function ViewIsHighlighted()
-     * Returns if the item is highlighted (or not).
-     *
-     * @return when true, the item should be displayed as highlighted.
-     */
-    bool ViewIsHighlighted() const
-    {
-        return m_highlighted;
-    }
-
-    /**
      * Function ViewGetLOD()
      * Returns the level of detail of the item. A level of detail is the minimal VIEW scale that
      * is sufficient for an item to be shown on a given layer.
@@ -191,7 +171,6 @@ protected:
      *
      * @param aView[]: dynamic VIEW instance the item is being added to.
      */
-
     void viewAssign( VIEW* aView )
     {
         // release the item from a previously assigned dynamic view (if there is any)
@@ -202,7 +181,6 @@ protected:
 
     VIEW*   m_view;         ///* Current dynamic view the item is assigned to.
     bool    m_visible;      ///* Are we visible in the current dynamic VIEW.
-    bool    m_highlighted;  ///* Should item be drawn as highlighted
 
 private:
     ///* Helper for storing cached items group ids

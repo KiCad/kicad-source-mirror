@@ -136,10 +136,3 @@ bool VIEW_ITEM::storesGroups() const
 {
     return ( m_groupsSize > 0 );
 }
-
-
-void VIEW_ITEM::ViewSetHighlighted( bool aIsHighlighted )
-{
-    m_highlighted = aIsHighlighted;
-    ViewUpdate( APPEARANCE | GEOMETRY );
-}
