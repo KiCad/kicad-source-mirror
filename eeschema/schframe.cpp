@@ -294,7 +294,12 @@ void SCH_EDIT_FRAME::SetRepeatItem( SCH_ITEM* aItem )
     if( cur != old )
     {
         if( cur )
+        {
             aItem = (SCH_ITEM*) cur->Clone();
+
+            // Clone() preserves the flags, we want 'em cleared.
+            aItem->ClearFlags();
+        }
 
         m_item_to_repeat = aItem;
 
@@ -891,7 +896,7 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
 {
     SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_ITEM*   item = screen->GetCurItem();
 
     wxCHECK_RET( item != NULL, wxT( "Cannot add current item to list." ) );
 

@@ -385,8 +385,11 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_REPEAT_LAST:
-        if( notBusy && GetRepeatItem() && ( GetRepeatItem()->GetFlags() == 0 ) )
-            RepeatDrawItem( aDC );
+        if( notBusy && GetRepeatItem() )
+        {
+            //if( GetRepeatItem()->GetFlags() == 0 )
+                RepeatDrawItem( aDC );
+        }
         break;
 
     case HK_END_CURR_LINEWIREBUS:
