@@ -52,8 +52,8 @@ static wxArrayString s_PowerNameList;
 
 void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
-    SCH_ITEM* item = GetScreen()->GetCurItem();
-    wxPoint gridPosition = GetGridPosition( aPosition );
+    SCH_ITEM*   item = GetScreen()->GetCurItem();
+    wxPoint     gridPosition = GetGridPosition( aPosition );
 
     if( ( GetToolId() == ID_NO_TOOL_SELECTED ) || ( item && item->GetFlags() ) )
     {
@@ -120,7 +120,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             m_CurrentSheet->Pop();
             DisplayCurrentSheet();
         }
-
         break;
 
     case ID_NOCONN_BUTT:
@@ -210,7 +209,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             addCurrentItemToList( aDC );
         }
-
         break;
 
     case ID_ADD_IMAGE_BUTT:
@@ -223,7 +221,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             addCurrentItemToList( aDC );
         }
-
         break;
 
     case ID_LABEL_BUTT:
@@ -236,7 +233,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             addCurrentItemToList( aDC );
         }
-
         break;
 
     case ID_GLABEL_BUTT:
@@ -255,7 +251,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             addCurrentItemToList( aDC );
         }
-
         break;
 
     case ID_SHEET_SYMBOL_BUTT:
@@ -273,7 +268,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             addCurrentItemToList( aDC );
         }
-
         break;
 
     case ID_IMPORT_HLABEL_BUTT:
@@ -295,7 +289,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             addCurrentItemToList( aDC );
         }
-
         break;
 
     case ID_SCH_PLACE_COMPONENT:
@@ -308,7 +301,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             addCurrentItemToList( aDC );
         }
-
         break;
 
     case ID_PLACE_POWER_BUTT:
@@ -322,7 +314,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             addCurrentItemToList( aDC );
         }
-
         break;
 
     default:

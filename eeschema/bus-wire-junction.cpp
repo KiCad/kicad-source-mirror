@@ -434,7 +434,6 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
     SCH_ITEM* my_clone = (SCH_ITEM*) repeater->Clone();
 
     // If cloning a component then put into 'move' mode.
-    /* please tell me where components are snapshotted via SetRepeatItem()
     if( my_clone->Type() == SCH_COMPONENT_T )
     {
         wxPoint pos = GetCrossHairPosition() -
@@ -447,7 +446,6 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         MoveItem( my_clone, DC );
     }
     else
-    */
     {
         my_clone->Move( wxPoint( g_RepeatStep.GetWidth(), g_RepeatStep.GetHeight() ) );
 
