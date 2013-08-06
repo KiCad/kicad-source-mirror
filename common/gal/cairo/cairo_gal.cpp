@@ -740,6 +740,14 @@ void CAIRO_GAL::SetTarget( RenderTarget aTarget )
     }
 
     cairo_push_group( currentContext );
+
+    currentTarget = aTarget;
+}
+
+
+RenderTarget CAIRO_GAL::GetTarget() const
+{
+    return currentTarget;
 }
 
 

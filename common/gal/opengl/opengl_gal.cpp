@@ -700,6 +700,14 @@ void OPENGL_GAL::SetTarget( RenderTarget aTarget )
         currentManager = &overlayManager;
         break;
     }
+
+    currentTarget = aTarget;
+}
+
+
+RenderTarget OPENGL_GAL::GetTarget() const
+{
+    return currentTarget;
 }
 
 

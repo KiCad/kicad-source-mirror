@@ -211,6 +211,9 @@ public:
     /// @copydoc GAL::SetTarget()
     virtual void SetTarget( RenderTarget aTarget );
 
+    /// @copydoc GAL::GetTarget()
+    virtual RenderTarget GetTarget() const;
+
     // -------
     // Cursor
     // -------
@@ -283,6 +286,7 @@ private:
     OPENGL_COMPOSITOR       compositor;             ///< Handles multiple rendering targets
     unsigned int            mainBuffer;             ///< Main rendering target
     unsigned int            overlayBuffer;          ///< Auxiliary rendering target (for menus etc.)
+    RenderTarget            currentTarget;          ///< Current rendering target
 
     // Shader
     SHADER                  shader;         ///< There is only one shader used for different objects
