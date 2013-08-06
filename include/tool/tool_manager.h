@@ -58,7 +58,7 @@ class TOOL_MANAGER
 		/**
 		 * Generates an unique ID from for a tool with given name.
 		 */
-		static TOOL_ID MakeToolId( const std::string &aToolName );
+		static TOOL_ID MakeToolId( const std::string& aToolName );
 
 		/**
     	 * Function RegisterTool()
@@ -66,46 +66,46 @@ class TOOL_MANAGER
 	     * each tool during application initialization.
      	 * @param aTool: tool to be added. Ownership is transferred.
      	 */
-		void RegisterTool(TOOL_BASE *aTool);
+		void RegisterTool( TOOL_BASE* aTool );
 
 		/**
 		 * Function InvokeTool()
 		 * Calls a tool by sending a tool activation event to tool of given ID or name.
 		 * An user-defined parameter object can be also passed 
 		 */	
-		void InvokeTool(TOOL_ID aToolId);
-		void InvokeTool(const std::string& name);
+		void InvokeTool( TOOL_ID aToolId );
+		void InvokeTool( const std::string& name );
 
 		template <class Parameters>
-			void InvokeTool( const std::string& name, const Parameters& aToolParams);
+			void InvokeTool( const std::string& name, const Parameters& aToolParams );
 
 
 		/**
 		 * Function FindTool()
 		 * Searches for a tool with given name or ID 
 		 */
-		TOOL_BASE *FindTool(int aId);
-		TOOL_BASE *FindTool(const std::string& aName);
+		TOOL_BASE *FindTool( int aId );
+		TOOL_BASE *FindTool( const std::string& aName );
 
 		/**
 		 * Resets the state of a given tool by clearing its wait and
 		 * transition lists and calling tool's internal Reset() method.
 		 */
-
 		void ResetTool( TOOL_BASE *aTool );
 
 		/**
 		 * Takes an event from the TOOL_DISPATCHER and propagates it to 
 		 * tools that requested events of matching type(s)
 		 */
-		bool ProcessEvent (TOOL_EVENT& aEvent);
+		bool ProcessEvent( TOOL_EVENT& aEvent );
 		
 		/**
 		 * Sets the work environment (model, view, view controls and the parent window).
 		 * These are made available to the tool. Called by the parent frame (PCB_EDIT_FRAME)
 		 * when the board is set up
 		 */
-		void SetEnvironment( EDA_ITEM *aModel, KiGfx::VIEW* aView, KiGfx::VIEW_CONTROLS *aViewControls, wxWindow *aFrame );
+		void SetEnvironment( EDA_ITEM* aModel, KiGfx::VIEW* aView,
+		                     KiGfx::VIEW_CONTROLS* aViewControls, wxWindow* aFrame );
 
 		/* Accessors for the environment objects (view, model, etc.) */
 		KiGfx::VIEW* GetView()
@@ -132,13 +132,16 @@ class TOOL_MANAGER
 		 * Defines a state transition - the events that cause a given handler method in the tool 
 		 * to be called. Called by TOOL_INTERACTIVE::Go(). May be called from a coroutine context.
 		 */
-		void ScheduleNextState( TOOL_BASE *aTool, TOOL_STATE_FUNC& aHandler, const TOOL_EVENT_LIST & aConditions );
+		void ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandler,
+		                        const TOOL_EVENT_LIST& aConditions );
 		
 		/**
-		 * Pauses execution of a given tool until one or more events matching aConditions arrives. The pause/resume
-		 * operation is done through COROUTINE object. Called only from coroutines.
+		 * Pauses execution of a given tool until one or more events matching aConditions arrives.
+		 * The pause/resume operation is done through COROUTINE object.
+		 * Called only from coroutines.
 		 */
-		boost::optional<TOOL_EVENT> ScheduleWait( TOOL_BASE *aTool, const TOOL_EVENT_LIST & aConditions );
+		boost::optional<TOOL_EVENT> ScheduleWait( TOOL_BASE* aTool,
+		                                          const TOOL_EVENT_LIST& aConditions );
 		
 		/**
 		 * Sets behaviour of the tool's context popup menu. 
@@ -149,10 +152,10 @@ class TOOL_MANAGER
 		 * CMENU_OFF: menu is disabled.
 		 * May be called from a coroutine context.
 		 */
-		void ScheduleContextMenu( TOOL_BASE *aTool, CONTEXT_MENU *aMenu, TOOL_ContextMenuTrigger aTrigger );
+		void ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
+		                          TOOL_ContextMenuTrigger aTrigger );
 
 	private:
-
 		void dispatchInternal ( TOOL_EVENT& aEvent );
 
 		struct ToolState;
@@ -162,13 +165,12 @@ class TOOL_MANAGER
 		std::map<std::string, ToolState*> m_toolNameIndex;
 		std::map<TOOL_ID, ToolState*> m_toolIdIndex;
 
-		EDA_ITEM *m_model;
-		KiGfx::VIEW *m_view;
-		KiGfx::VIEW_CONTROLS *m_viewControls;
-		wxWindow *m_editFrame;
+		EDA_ITEM* m_model;
+		KiGfx::VIEW* m_view;
+		KiGfx::VIEW_CONTROLS* m_viewControls;
+		wxWindow* m_editFrame;
 
-		ToolState *m_currentTool;
+		ToolState* m_currentTool;
 };
-
 
 #endif

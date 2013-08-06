@@ -56,13 +56,13 @@ public:
     int Main(TOOL_EVENT& aEvent);
 
 private:
-    void selectSingle( const VECTOR2I &aWhere, bool aAdditive );
-    void selectMultiple ();
+    void selectSingle( const VECTOR2I& aWhere, bool aAdditive );
+    void selectMultiple();
     void handleHighlight( const VECTOR2D& aP );
-    BOARD_ITEM* disambiguationMenu ( GENERAL_COLLECTOR* aItems );
+    BOARD_ITEM* disambiguationMenu( GENERAL_COLLECTOR* aItems );
     BOARD_ITEM* pickSmallestComponent( GENERAL_COLLECTOR* aCollector );
-    void toggleSelection ( BOARD_ITEM * aItem, bool aAdditive );
-    void clearSelection ();
+    void toggleSelection( BOARD_ITEM* aItem, bool aAdditive );
+    void clearSelection();
 
     std::set<BOARD_ITEM*> m_selectedItems;
     SELECTION_AREA* m_selArea;
