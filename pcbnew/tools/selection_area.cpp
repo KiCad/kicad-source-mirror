@@ -39,15 +39,17 @@ const BOX2I SELECTION_AREA::ViewBBox() const
 	return tmp;
 }
 
+
 void SELECTION_AREA::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aLayers[0] = SelectionLayer;
     aCount = 1;
 }
 
+
 void SELECTION_AREA::ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) const
 {
-    VECTOR2D width = m_view->ToWorld( VECTOR2D(1.0, 1.0), false ); // fixme: pixel-sized stroke width setting?
+    VECTOR2D width = m_view->ToWorld( VECTOR2D( 1.0, 1.0 ), false ); // fixme: pixel-sized stroke width setting?
     aGal->SetLineWidth( width.x );
     aGal->SetStrokeColor(COLOR4D(1.0, 1.0, 0.4, 1.0));
   	aGal->SetFillColor(COLOR4D(0.3, 0.3, 0.5, 0.3));
@@ -57,6 +59,8 @@ void SELECTION_AREA::ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea 
     aGal->DrawRectangle(m_origin, m_end);
 }
 
-SELECTION_AREA::SELECTION_AREA():
-	EDA_ITEM(NOT_USED) // this item is never added to a BOARD so it needs no type.
-	{}
+
+SELECTION_AREA::SELECTION_AREA() :
+	EDA_ITEM( NOT_USED ) // this item is never added to a BOARD so it needs no type.
+{
+}

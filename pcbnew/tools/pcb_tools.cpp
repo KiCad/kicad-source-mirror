@@ -41,15 +41,15 @@ void PCB_EDIT_FRAME::setupTools()
 	// create the manager and dispatcher. Route draw panel events to the dispatcher.
 	m_toolManager = new TOOL_MANAGER;
 	m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
-	m_galCanvas->SetEventDispatcher (m_toolDispatcher);
+	m_galCanvas->SetEventDispatcher( m_toolDispatcher );
 
 	// register our selection tool.
-	m_toolManager->RegisterTool(new SELECTION_TOOL);
-
+	m_toolManager->RegisterTool( new SELECTION_TOOL );
 }
 
-void PCB_EDIT_FRAME::onGenericCommand(wxCommandEvent &aEvent)
+
+void PCB_EDIT_FRAME::onGenericCommand( wxCommandEvent &aEvent )
 {
-	m_toolDispatcher->DispatchWxCommand(aEvent);
+	m_toolDispatcher->DispatchWxCommand( aEvent );
 }
 

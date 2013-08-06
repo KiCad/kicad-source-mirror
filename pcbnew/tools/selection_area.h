@@ -41,36 +41,33 @@
  */
 class SELECTION_AREA : public EDA_ITEM
 {
-	public:
-		static const int SelectionLayer = 126;		// fixme: define globally
+public:
+    static const int SelectionLayer = 126;		// fixme: define globally
 
-		SELECTION_AREA();
-		~SELECTION_AREA() {};
+    SELECTION_AREA();
+    ~SELECTION_AREA() {};
 
-	 	virtual const BOX2I ViewBBox() const;
+    virtual const BOX2I ViewBBox() const;
 
-		void ViewDraw( int aLayer, KiGfx::GAL* aGal, const BOX2I& aVisibleArea ) const;
-		void ViewGetLayers( int aLayers[], int& aCount ) const;
+    void ViewDraw( int aLayer, KiGfx::GAL* aGal, const BOX2I& aVisibleArea ) const;
+    void ViewGetLayers( int aLayers[], int& aCount ) const;
 
-		void SetOrigin ( VECTOR2I aOrigin )
-		{
-			m_origin = aOrigin;
-		}
+    void SetOrigin ( VECTOR2I aOrigin )
+    {
+        m_origin = aOrigin;
+    }
 
-		void SetEnd ( VECTOR2I aEnd )
-		{
-			m_end = aEnd;
-		}
+    void SetEnd ( VECTOR2I aEnd )
+    {
+        m_end = aEnd;
+    }
 
-		void Show(int x, std::ostream& st) const
-		{
+    void Show(int x, std::ostream& st) const
+    {
+    }
 
-		}
-
-	private:
-
-	
-		VECTOR2I m_origin, m_end;
+private:
+    VECTOR2I m_origin, m_end;
 };
 
 #endif

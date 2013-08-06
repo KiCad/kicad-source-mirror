@@ -64,11 +64,9 @@ void SELECTION_TOOL::Reset()
 
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
-
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-
         if( evt->IsCancel() )
             return 0;
 
@@ -87,7 +85,6 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aAdditive )
 {
-
     if( m_selectedItems.find( aItem ) != m_selectedItems.end() )
     {
         aItem->ClearSelected();
@@ -104,7 +101,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aAdditive )
 
 void SELECTION_TOOL::clearSelection()
 {
-    BOOST_FOREACH(BOARD_ITEM* item, m_selectedItems)
+    BOOST_FOREACH( BOARD_ITEM* item, m_selectedItems )
     {
         item->ClearSelected();
     }
@@ -113,17 +110,17 @@ void SELECTION_TOOL::clearSelection()
 }
 
 
-void SELECTION_TOOL::selectSingle( const VECTOR2I &aWhere, bool aAdditive )
+void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAdditive )
 {
-    BOARD *pcb = getModel<BOARD>( PCB_T );
-    BOARD_ITEM *item;
+    BOARD* pcb = getModel<BOARD>( PCB_T );
+    BOARD_ITEM* item;
     GENERAL_COLLECTORS_GUIDE guide = getEditFrame<PCB_EDIT_FRAME>()->GetCollectorsGuide();
     GENERAL_COLLECTOR collector;
 
     collector.Collect( pcb, GENERAL_COLLECTOR::AllBoardItems, wxPoint( aWhere.x, aWhere.y ),
             guide );
 
-    switch (collector.GetCount())
+    switch( collector.GetCount() )
     {
     case 0:
         if( !aAdditive )
@@ -161,7 +158,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 
     for( int i = 0; i < count; ++i )
     {
-        MODULE* module = (MODULE*) ( *aCollector )[i];
+        MODULE* module = (MODULE*)( *aCollector )[i];
 
         int lx = module->GetBoundingBox().GetWidth();
         int ly = module->GetBoundingBox().GetHeight();
@@ -175,7 +172,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
         }
     }
 
-    return ( *aCollector )[minNdx];
+    return (*aCollector)[minNdx];
 }
 
 
@@ -219,7 +216,7 @@ void SELECTION_TOOL::selectMultiple()
 }
 
 
-BOARD_ITEM *SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR *aCollector )
+BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR *aCollector )
 {
     CONTEXT_MENU cmenu;
     OPT_TOOL_EVENT evt;

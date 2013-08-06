@@ -50,40 +50,39 @@ namespace KiGfx {
 
 class TOOL_DISPATCHER
 {
-	public:
-		/** 
-		 * Constructor
-		 *
-		 * @param aToolMgr: tool manager instance the events will be sent to
-		 * @param aEditFrame: the frame wx events come from
-		 */
-		TOOL_DISPATCHER( TOOL_MANAGER *aToolMgr, PCB_BASE_FRAME *aEditFrame );
-		~TOOL_DISPATCHER();
-			
-		virtual void ResetState ();
-		virtual void DispatchWxEvent(wxEvent &aEvent);
-		virtual void DispatchWxCommand(wxCommandEvent &aEvent);
-	
-	private:
-	
-		static const int MouseButtonCount = 3;
-		static const int DragTimeThreshold = 300;
-		static const int DragDistanceThreshold = 8;
+public:
+    /**
+     * Constructor
+     *
+     * @param aToolMgr: tool manager instance the events will be sent to
+     * @param aEditFrame: the frame wx events come from
+     */
+    TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditFrame );
+    virtual ~TOOL_DISPATCHER();
 
-		bool handleMouseButton ( wxEvent& aEvent, int aIndex, bool aMotion );
-		bool handleKeys ( wxEvent& aEvent );
-		bool handlePopupMenu ( wxEvent& aEvent );
+    virtual void ResetState();
+    virtual void DispatchWxEvent( wxEvent& aEvent );
+    virtual void DispatchWxCommand( wxCommandEvent& aEvent );
 
-		int decodeModifiers( wxEvent& aEvent );
+private:
+    static const int MouseButtonCount = 3;
+    static const int DragTimeThreshold = 300;
+    static const int DragDistanceThreshold = 8;
 
-		KiGfx::VIEW *getView();
+    bool handleMouseButton ( wxEvent& aEvent, int aIndex, bool aMotion );
+    bool handleKeys ( wxEvent& aEvent );
+    bool handlePopupMenu ( wxEvent& aEvent );
 
-		struct ButtonState;
-		
-		TOOL_MANAGER *m_toolMgr;
-		PCB_BASE_FRAME *m_editFrame;
-		VECTOR2D m_lastMousePos;
-		std::vector<ButtonState*> m_buttons;
+    int decodeModifiers( wxEvent& aEvent );
+
+    KiGfx::VIEW* getView();
+
+    struct ButtonState;
+
+    TOOL_MANAGER* m_toolMgr;
+    PCB_BASE_FRAME* m_editFrame;
+    VECTOR2D m_lastMousePos;
+    std::vector<ButtonState*> m_buttons;
 
 };
 

@@ -29,6 +29,7 @@
 
 #include <deque>
 #include <stack>
+#include <limits>
 
 #include <wx/event.h>
 
@@ -717,9 +718,13 @@ public:
      */
     virtual void DrawCursor( VECTOR2D aCursorPosition ) = 0;
 
+    /**
+     * @brief Changes the current depth to deeper, so it is possible to draw objects right beneath
+     * other.
+     */
     inline void AdvanceDepth()
     {
-        layerDepth -= 0.1;    // fixme: there should be a minimum step
+        layerDepth -= std::numeric_limits<double>::epsilon();
     }
 
     /**
