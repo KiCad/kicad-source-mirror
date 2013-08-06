@@ -201,18 +201,12 @@ const KICAD_T SPECCTRA_DB::scanPADs[] = { PCB_PAD_T, EOT };
  */
 static inline double scale( int kicadDist )
 {
-#if defined(USE_PCBNEW_NANOMETRES)
 
     // nanometers to um
     return kicadDist / ( IU_PER_MM / 1000.0 );
 
     // nanometers to mils
     // return kicadDist/IU_PER_MILS;
-
-#else
-    // deci-mils to mils.
-    return kicadDist / 10.0;
-#endif
 }
 
 
@@ -1356,7 +1350,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
     //-----<unit_descriptor> & <resolution_descriptor>--------------------
     {
-#if defined(USE_PCBNEW_NANOMETRES)
+
         // tell freerouter to use "tenths of micrometers",
         // which is 100 nm resolution.  Possibly more resolution is possible
         // in freerouter, but it would need testing.
@@ -1365,18 +1359,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         pcb->resolution->units  = T_um;
         pcb->resolution->value  = 10;       // tenths of a um
         // pcb->resolution->value = 1000;   // "thousandths of a um" (i.e. "nm")
-
-#else
-        pcb->unit->units = T_mil;
-        pcb->resolution->units = T_mil;
-
-        // Kicad only supports 1/10th of mil internal coordinates.  So to avoid
-        // having the router give us back 1/100th of mil coordinates which we
-        // will have to round and thereby cause error, we declare our maximum
-        // resolution precisely at 1/10th for now.  For more on this, see:
-        // http://www.freerouting.net/usren/viewtopic.php?f=3&t=354
-        pcb->resolution->value = 10;
-#endif
     }
 
     //-----<boundary_descriptor>------------------------------------------

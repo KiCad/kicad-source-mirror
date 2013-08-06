@@ -111,10 +111,6 @@ This option is used to enable or disable building KiCad with images in menu
 items.  If this is not defined when CMake is used to create the build files,
 images will be included in menu items on all platforms except OSX.
 
-USE_PCBNEW_NANOMETRES (ON/OFF)
-This option is used to enable or disable the nano-meter internal units for
-Pcbnew.  The default is ON.
-
 KICAD_GOST (ON/OFF)
 -------------------
 This option is used to enable or disable the GOST notation for multiple gates

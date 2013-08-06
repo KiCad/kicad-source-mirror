@@ -755,7 +755,6 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     DBOX    clientRectIU( xIU, yIU, clientSizeIU.x, clientSizeIU.y );
     wxPoint centerPositionIU;
 
-#if 1 || defined( USE_PCBNEW_NANOMETRES )
     // put "int" limits on the clientRect
     if( clientRectIU.GetLeft() < VIRT_MIN )
         clientRectIU.MoveLeftTo( VIRT_MIN );
@@ -765,7 +764,6 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
         clientRectIU.MoveRightTo( VIRT_MAX );
     if( clientRectIU.GetBottom() > VIRT_MAX )
         clientRectIU.MoveBottomTo( VIRT_MAX );
-#endif
 
     centerPositionIU.x = KiROUND( clientRectIU.x + clientRectIU.width/2 );
     centerPositionIU.y = KiROUND( clientRectIU.y + clientRectIU.height/2 );
@@ -838,11 +836,9 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
         }
     }
 
-#if 1 || defined( USE_PCBNEW_NANOMETRES )
     // put "int" limits on the virtualSizeIU
     virtualSizeIU.x = std::min( virtualSizeIU.x, MAX_AXIS );
     virtualSizeIU.y = std::min( virtualSizeIU.y, MAX_AXIS );
-#endif
 
     if( screen->m_Center )
     {
