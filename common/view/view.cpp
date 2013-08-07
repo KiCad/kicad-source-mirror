@@ -324,7 +324,7 @@ struct VIEW::updateItemsColor
         const COLOR4D color = painter->GetColor( aItem, layer );
         int group = aItem->getGroup( layer );
 
-        if( group > 0)
+        if( group >= 0 )
             gal->ChangeGroupColor( group, color );
     }
 
@@ -539,8 +539,8 @@ void VIEW::redrawRect( const BOX2I& aRect )
             m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
             l->items->Query( aRect, drawFunc );
+            l->isDirty = false;
         }
-        l->isDirty = false;
     }
 }
 
@@ -638,49 +638,6 @@ VECTOR2D VIEW::GetScreenPixelSize() const
 }
 
 
-void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
-{
-    int layer_indices[VIEW_MAX_LAYERS], layer_count;
-
-    aItem->ViewGetLayers( layer_indices, layer_count );
-
-    for( int i = 0; i < layer_count; i++ )
-    {
-        // Iterate through the layers used by the item
-        if( m_layers.find( layer_indices[i] ) != m_layers.end() )
-        {
-            VIEW_LAYER* l = &m_layers[layer_indices[i]];
-
-            // Mark the area occupied by the item as dirty
-            l->dirtyExtents =
-                l->isDirty ? aItem->ViewBBox() : l->dirtyExtents.Merge( aItem->ViewBBox() );
-
-            l->isDirty = true;
-
-            // If geometry has to be updated, then we need to reinsert the item
-            if( aUpdateFlags & VIEW_ITEM::GEOMETRY )
-            {
-                l->items->Remove( aItem );
-                l->items->Insert( aItem );
-            }
-        }
-    }
-
-    // Remove all the groups, so the item will be recached
-    if( aItem->storesGroups() )
-    {
-        // Clear the cached groups stored in GAL
-        std::vector<int> groups = aItem->getAllGroups();
-        for( std::vector<int>::iterator i = groups.begin(); i != groups.end(); i++ )
-        {
-            m_gal->DeleteGroup( *i );
-        }
-
-        aItem->deleteGroups();
-    }
-}
-
-
 struct VIEW::clearLayerCache
 {
     clearLayerCache( VIEW* aView ) :
@@ -715,14 +672,67 @@ void VIEW::clearGroupCache()
 }
 
 
+void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
+{
+    int layers[VIEW_MAX_LAYERS], layers_count;
+    aItem->ViewGetLayers( layers, layers_count );
+
+    // Iterate through layers used by the item and recache it immediately
+    for( int i = 0; i < layers_count; i++ )
+    {
+        if( aUpdateFlags == VIEW_ITEM::APPEARANCE )
+        {
+            updateItemAppearance( aItem, layers[i] );
+        }
+        else if( aUpdateFlags == VIEW_ITEM::GEOMETRY )
+        {
+            updateItemGeometry( aItem, layers[i]);
+        }
+
+        // Mark those layers as dirty, so the VIEW will be refreshed
+        m_layers[layers[i]].isDirty = true;
+    }
+}
+
+
+void VIEW::updateItemAppearance( VIEW_ITEM* aItem, int aLayer )
+{
+    wxASSERT( (unsigned) aLayer < m_layers.size() );
+
+    // Obtain the color that should be used for coloring the item on the specific layerId
+    const COLOR4D color = m_painter->GetColor( aItem, aLayer );
+    int group = aItem->getGroup( aLayer );
+
+    // Change the color, only if it has group assigned
+    if( group >= 0 )
+        m_gal->ChangeGroupColor( group, color );
+}
+
+
+void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
+{
+    wxASSERT( (unsigned) aLayer < m_layers.size() );
+    VIEW_LAYER& l = m_layers.at( aLayer );
+
+    m_gal->SetTarget( l.target );
+    m_gal->SetLayerDepth( l.renderingOrder );
+
+    // Redraw the item from scratch
+    int group = m_gal->BeginGroup();
+    aItem->setGroup( aLayer, group );
+    m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), aLayer );
+    m_gal->EndGroup();
+}
+
+
 bool VIEW::areRequiredLayersEnabled( int aLayerId ) const
 {
     wxASSERT( (unsigned) aLayerId < m_layers.size() );
 
     std::set<int>::iterator it, it_end;
 
-    for( it = m_layers.at( aLayerId ).requiredLayers.begin(), it_end = m_layers.at( aLayerId ).requiredLayers.end();
-            it != it_end; ++it )
+    for( it = m_layers.at( aLayerId ).requiredLayers.begin(),
+            it_end = m_layers.at( aLayerId ).requiredLayers.end(); it != it_end; ++it )
     {
         // That is enough if just one layer is not enabled
         if( !m_layers.at( *it ).enabled )
