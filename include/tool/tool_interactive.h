@@ -32,9 +32,9 @@
 
 class CONTEXT_MENU;
 
-class TOOL_INTERACTIVE : public TOOL_BASE {
+class TOOL_INTERACTIVE : public TOOL_BASE
+{
 public:
-	
 	TOOL_INTERACTIVE( TOOL_ID aId, const std::string& aName );
 	
 	/**
@@ -87,20 +87,18 @@ public:
 		void Yield ( const T& returnValue );
 
 protected:
-
 	/* helper functions for constructing events for Wait() and Go() with
 	   less typing */
 	const TOOL_EVENT evActivate( std::string aToolName = "" );
 	const TOOL_EVENT evCommand( int aCommandId = -1 );
 	const TOOL_EVENT evCommand( std::string aCommandStr = "");
 	const TOOL_EVENT evMotion();
-	const TOOL_EVENT evClick(int aButton = MB_Any );
-	const TOOL_EVENT evDrag(int aButton = MB_Any );
+	const TOOL_EVENT evClick( int aButton = MB_Any );
+	const TOOL_EVENT evDrag( int aButton = MB_Any );
 	const TOOL_EVENT evButtonUp( int aButton = MB_Any );
 	const TOOL_EVENT evButtonDown(int aButton = MB_Any );
 
 private:
-
 	void goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIST& aConditions );
 };
 
@@ -108,7 +106,7 @@ private:
 template<class T>
 void TOOL_INTERACTIVE::Go( int (T::*aStateFunc)( TOOL_EVENT& ), const TOOL_EVENT_LIST& aConditions )
 {
-	TOOL_STATE_FUNC sptr (static_cast<T*>(this), aStateFunc);
+	TOOL_STATE_FUNC sptr (static_cast<T*>( this ), aStateFunc);
 	goInternal( sptr, aConditions );
 }
 

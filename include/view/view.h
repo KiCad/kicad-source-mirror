@@ -281,7 +281,7 @@ public:
     }
 
     /**
- * Function SetLayerOrder()
+     * Function SetLayerOrder()
      * Sets rendering order of a particular layer.
      * @param aLayer: the layer
      * @param aRenderingOrder: arbitrary number denoting the rendering order.
