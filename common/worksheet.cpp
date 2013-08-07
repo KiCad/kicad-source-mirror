@@ -174,7 +174,7 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 
             case 'F':
                 {
-                    wxFileName fn( *m_fileName );
+                    wxFileName fn( m_fileName );
                     msg += fn.GetFullName();
                 }
                 break;
