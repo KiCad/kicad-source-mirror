@@ -127,11 +127,12 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
     m_showAxis      = true;    // true to draw axis.
 
     // Give an icon
-
+#if 1
     // Disabled for now, it raises an assert error in wxwidgets
-    // wxIcon  icon;
-    // icon.CopyFromBitmap( KiBitmap( module_wizard_xpm) );
-    // SetIcon( icon );
+    wxIcon  icon;
+    icon.CopyFromBitmap( KiBitmap( module_wizard_xpm) );
+    SetIcon( icon );
+#endif
 
     m_HotkeysZoomAndGridList = g_Module_Viewer_Hokeys_Descr;
     m_PageList = NULL;
@@ -140,6 +141,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
     m_ParameterGridWindow = NULL;
     m_Semaphore = semaphore;
     m_wizardName.Empty();
+    m_exportRequest = false;
 
     if( m_Semaphore )
         SetModalMode( true );
@@ -199,11 +201,11 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
 
     // Columns
     m_ParameterGrid->AutoSizeColumns();
-    m_ParameterGrid->SetColLabelSize( 20 );
     m_ParameterGrid->SetColLabelValue( 0, _( "Parameter" ) );
     m_ParameterGrid->SetColLabelValue( 1, _( "Value" ) );
     m_ParameterGrid->SetColLabelValue( 2, _( "Units" ) );
     m_ParameterGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
+    m_ParameterGrid->AutoSizeColumns();
 
 
     ReCreatePageList();
@@ -294,14 +296,6 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
  */
 void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    wxCommandEvent fakeEvent;
-
-    ExportSelectedFootprint( fakeEvent );
-}
-
-
-void FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint( wxCommandEvent& aEvent )
-{
     SaveSettings();
 
     if( m_Semaphore )
@@ -315,6 +309,13 @@ void FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint( wxCommandEvent& aEvent )
     {
         Destroy();
     }
+}
+
+
+void FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint( wxCommandEvent& aEvent )
+{
+    m_exportRequest = true;
+    Close();
 }
 
 
@@ -450,10 +451,9 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     m_ParameterGrid->DeleteRows( 0, m_ParameterGrid->GetNumberRows() );
     m_ParameterGrid->AppendRows( fpList.size() );
 
+    wxString name, value, units;
     for( unsigned int i = 0; i<fpList.size(); i++ )
     {
-        wxString name, value, units;
-
         name    = fpList[i];
         value   = fvList[i];
 
@@ -482,7 +482,8 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
                 units = wxT( "mm" );
             }
 
-            value.Printf( wxT( "%lf" ), dValue );
+            std::string s = Double2Str( dValue );
+            value = FROM_UTF8( s.c_str() );
         }
         else if( ptList[i]==wxT( "UNITS" ) )    // 1,2,3,4,5 ... N
         {
@@ -733,11 +734,11 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
         m_mainToolBar->AddSeparator();
         m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_PREVIOUS, wxEmptyString,
                                 KiBitmap( lib_previous_xpm ),
-                                _( "Display previous page" ) );
+                                _( "Select previous editable item" ) );
 
         m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_NEXT, wxEmptyString,
                                 KiBitmap( lib_next_xpm ),
-                                _( "Display next page" ) );
+                                _( "Select next editable item" ) );
 
         m_mainToolBar->AddSeparator();
         m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW, wxEmptyString,
