@@ -544,7 +544,8 @@ void VIEW::redrawRect( const BOX2I& aRect )
     }
 }
 
-bool VIEW::IsDirty()
+
+bool VIEW::IsDirty() const
 {
     BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
     {
@@ -553,6 +554,7 @@ bool VIEW::IsDirty()
     }   
     return false;
 }
+
 
 struct VIEW::unlinkItem
 {
@@ -644,28 +646,32 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 
     for( int i = 0; i < layer_count; i++ )
     {
-        if(m_layers.find(layer_indices[i]) != m_layers.end())
+        // Iterate through the layers used by the item
+        if( m_layers.find( layer_indices[i] ) != m_layers.end() )
         {
             VIEW_LAYER* l = &m_layers[layer_indices[i]];
 
+            // Mark the area occupied by the item as dirty
             l->dirtyExtents =
                 l->isDirty ? aItem->ViewBBox() : l->dirtyExtents.Merge( aItem->ViewBBox() );
 
             l->isDirty = true;
 
+            // If geometry has to be updated, then we need to reinsert the item
             if( aUpdateFlags & VIEW_ITEM::GEOMETRY )
             {
                 l->items->Remove( aItem );
-                l->items->Insert( aItem );    /* reinsert */
-                aItem->deleteGroups();
+                l->items->Insert( aItem );
             }
-      }
+        }
     }
 
+    // Remove all the groups, so the item will be recached
     if( aItem->storesGroups() )
     {
+        // Clear the cached groups stored in GAL
         std::vector<int> groups = aItem->getAllGroups();
-        for(std::vector<int>::iterator i = groups.begin(); i != groups.end(); i++ )
+        for( std::vector<int>::iterator i = groups.begin(); i != groups.end(); i++ )
         {
             m_gal->DeleteGroup( *i );
         }

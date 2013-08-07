@@ -371,7 +371,12 @@ public:
      */
     bool IsDynamic() const { return m_dynamic; }
 
-    bool IsDirty();
+    /**
+     * Function IsDirty()
+     * Returns true if any of the VIEW layers needs to be refreshened.
+     * @return True in case if any of layers is marked as dirty.
+     */
+    bool IsDirty() const;
 
     static const int VIEW_MAX_LAYERS = 128;       ///* maximum number of layers that may be shown
 

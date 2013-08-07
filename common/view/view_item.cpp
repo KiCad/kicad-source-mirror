@@ -50,7 +50,7 @@ void VIEW_ITEM::ViewSetVisible( bool aIsVisible )
 
 void VIEW_ITEM::ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw )
 {
-    if(!m_view)
+    if( !m_view )
         return;
 
     m_view->invalidateItem( this, aUpdateFlags );
@@ -124,11 +124,8 @@ void VIEW_ITEM::setGroup( int aLayer, int aId )
 
 void VIEW_ITEM::deleteGroups()
 {
-    if( m_groupsSize > 0 )
-    {
-        delete[] m_groups;
-        m_groupsSize = 0;
-    }
+    delete[] m_groups;
+    m_groupsSize = 0;
 }
 
 

@@ -178,6 +178,9 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
             // Load module's texts (name and value)
             view->Add( &module->Reference() );
             view->Add( &module->Value() );
+
+            // Add the module itself
+            view->Add( module );
         }
 
         // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
@@ -191,8 +194,8 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
             m_galCanvas->Refresh();
 
         // update the tool manager with the new board and its view.
-        if(m_toolManager)
-            m_toolManager->SetEnvironment( m_Pcb, view, m_galCanvas->GetViewControls(), this);
+        if( m_toolManager )
+            m_toolManager->SetEnvironment( m_Pcb, view, m_galCanvas->GetViewControls(), this );
         
     }
 }
@@ -799,31 +802,33 @@ void PCB_BASE_FRAME::LoadSettings()
 
     // Apply display settings for GAL
     KiGfx::VIEW* view = m_galCanvas->GetView();
-    // Set rendering order of layers
-    for( LAYER_NUM i = 0; i < sizeof(GalLayerOrder) / sizeof(LAYER_NUM); ++i )
+
+    // Set rendering order and properties of layers
+    for( LAYER_NUM i = 0; (unsigned) i < sizeof(GalLayerOrder) / sizeof(LAYER_NUM); ++i )
     {
-        wxASSERT( i < KiGfx::VIEW::VIEW_MAX_LAYERS );
+        LAYER_NUM layer = GalLayerOrder[i];
+        wxASSERT( layer < KiGfx::VIEW::VIEW_MAX_LAYERS );
 
-        view->SetLayerOrder( GalLayerOrder[i], i );
-        view->SetLayerTarget( i, KiGfx::TARGET_NONCACHED );
+        view->SetLayerOrder( layer, i );
 
-        if( IsCopperLayer( i ) )
+        if( IsCopperLayer( layer ) )
         {
             // Copper layers are required for netname layers
-            view->SetRequired( GetNetnameLayer( i ), i );
+            view->SetRequired( GetNetnameLayer( layer ), layer );
+            view->SetLayerTarget( layer, KiGfx::TARGET_CACHED );
         }
-        else
-        if( IsNetnameLayer( i ) )
+        else if( IsNetnameLayer( layer ) )
         {
             // Netnames are drawn only when scale is sufficient (level of details)
             // so there is no point in caching them
-            view->SetLayerTarget( i, KiGfx::TARGET_NONCACHED );
+            view->SetLayerTarget( layer, KiGfx::TARGET_NONCACHED );
         }
     }
 
     // Some more required layers settings
     view->SetRequired( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( VIAS_VISIBLE ) );
     view->SetRequired( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
+    view->SetRequired( ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
     view->SetRequired( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
     view->SetRequired( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
 
