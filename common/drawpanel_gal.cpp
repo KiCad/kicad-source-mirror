@@ -99,8 +99,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 	Connect( wxEVT_MOUSEWHEEL, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_KEY_UP, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_KEY_DOWN, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	
-    m_timeStamp = 0;
 }
 
 
@@ -134,14 +132,6 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 {
-    const unsigned int FPS_LIMIT = 40;
-
-    // Framerate limiter
-    wxLongLong currentTimeStamp = wxGetLocalTimeMillis();
-   // if( currentTimeStamp - m_timeStamp < ( 1000 / FPS_LIMIT ) )
- //       return;
-    m_timeStamp = currentTimeStamp;
-
 #ifdef __WXDEBUG__
     prof_counter time;
 
@@ -209,17 +199,21 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
     m_currentGal = aGalType;
 }
 
+
 void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
 {
-	if(!m_eventDispatcher)
+	if( !m_eventDispatcher )
 	{
 		aEvent.Skip();
 		return;
-	} else {
-        printf("evType %d\n", aEvent.GetEventType());
-        m_eventDispatcher->DispatchWxEvent(aEvent);
+	}
+	else
+	{
+        printf( "evType %d\n", aEvent.GetEventType() );
+        m_eventDispatcher->DispatchWxEvent( aEvent );
     }
 }
+
 
 KiGfx::VIEW_CONTROLS* EDA_DRAW_PANEL_GAL::GetViewControls() const
 {
