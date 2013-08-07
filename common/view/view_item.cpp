@@ -125,6 +125,7 @@ void VIEW_ITEM::setGroup( int aLayer, int aId )
 void VIEW_ITEM::deleteGroups()
 {
     delete[] m_groups;
+    m_groups = NULL;
     m_groupsSize = 0;
 }
 

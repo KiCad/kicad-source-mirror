@@ -369,7 +369,7 @@ public:
      * Tells if the VIEW is dynamic (ie. can be changed, for example displaying PCBs in a window)
      * or static (that cannot be modified, eg. displaying image/PDF).
      */
-    bool IsDynamic() const { return m_dynamic; }
+    bool    IsDynamic() const { return m_dynamic; }
 
     /**
      * Function IsDirty()
@@ -426,6 +426,12 @@ private:
     ///* Clears cached GAL group numbers (*ONLY* numbers stored in VIEW_ITEMs, not group objects
     ///* used by GAL)
     void clearGroupCache();
+
+    /// Updates colors that are used for an item to be drawn
+    void updateItemAppearance( VIEW_ITEM* aItem, int aLayer );
+
+    /// Updates all informations needed to draw an item
+    void updateItemGeometry( VIEW_ITEM* aItem, int aLayer );
 
     /// Determines rendering order of layers. Used in display order sorting function.
     static bool compareRenderingOrder( VIEW_LAYER* i, VIEW_LAYER* j )
