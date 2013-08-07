@@ -212,6 +212,7 @@ TOOL_ID TOOL_MANAGER::MakeToolId( const std::string& aToolName )
 	return currentId++;
 }
 
+
 void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KiGfx::VIEW* aView,
                                    KiGfx::VIEW_CONTROLS* aViewControls, wxWindow* aFrame )
 {

@@ -99,8 +99,7 @@ protected:
                                                  ///< using GAL
     KiGfx::WX_VIEW_CONTROLS* m_viewControls;     ///< Control for VIEW (moving, zooming, etc.)
     GalType                  m_currentGal;       ///< Currently used GAL
-    wxLongLong               m_timeStamp;
-		TOOL_DISPATCHER*		 m_eventDispatcher;  
+    TOOL_DISPATCHER*         m_eventDispatcher;
 };
 
 #endif
