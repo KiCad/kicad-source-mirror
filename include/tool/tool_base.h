@@ -26,9 +26,7 @@
 #define __TOOL_BASE_H
 
 #include <cassert>
-
-// for KICAD_T.
-#include <base_struct.h>
+#include <base_struct.h>    // for KICAD_T
 
 #include <tool/tool_event.h>
 #include <tool/delegate.h>
@@ -36,15 +34,16 @@
 class EDA_ITEM;
 class TOOL_MANAGER;
 
-namespace KiGfx {
-	class VIEW;
-	class VIEW_CONTROLS;
+namespace KiGfx
+{
+class VIEW;
+class VIEW_CONTROLS;
 };
 
-
-enum TOOL_Type {
-		TOOL_Interactive = 0x1,
-		TOOL_Batch = 0x2
+enum TOOL_Type
+{
+    TOOL_Interactive = 0x1,
+    TOOL_Batch       = 0x2
 };
 
 typedef int TOOL_ID;
@@ -60,10 +59,10 @@ class TOOL_BASE
 {
 public:
 
-	TOOL_BASE(TOOL_Type aType, TOOL_ID aId, const std::string& aName = std::string("")) : 
-		m_type(aType), 
-		m_toolId(aId), 
-		m_toolName(aName) {};
+	TOOL_BASE( TOOL_Type aType, TOOL_ID aId, const std::string& aName = std::string( "" ) ) :
+		m_type( aType ),
+		m_toolId( aId ),
+		m_toolName( aName ) {};
 
 	virtual ~TOOL_BASE() {};
 
@@ -82,13 +81,12 @@ public:
 		return m_toolName;
 	}
 
-	TOOL_MANAGER *GetManager()
+	TOOL_MANAGER* GetManager()
 	{
 		return m_toolMgr;
 	}
 	
 protected:
-
 	friend class TOOL_MANAGER;
 
 	/**
@@ -99,8 +97,8 @@ protected:
 	 */
 	void attachManager( TOOL_MANAGER *aManager );
 
-	KiGfx::VIEW *getView();
-	KiGfx::VIEW_CONTROLS *getViewControls();
+	KiGfx::VIEW* getView();
+	KiGfx::VIEW_CONTROLS* getViewControls();
 	
 	/**
 	 * Function getEditFrame()
@@ -111,7 +109,7 @@ protected:
 	template<typename T>
 	T *getEditFrame()
 	{
-		return static_cast<T*> (getEditFrameInt());
+		return static_cast<T*>( getEditFrameInt() );
 	}
 
 	/**
@@ -124,24 +122,20 @@ protected:
 	{
 		EDA_ITEM *m = getModelInt();
 //		assert(modelType == m->Type());
-		return static_cast<T*> (m);
+		return static_cast<T*>( m );
 	}
 
 protected:
-
-
 	TOOL_Type m_type;
 	TOOL_ID m_toolId;
 	std::string m_toolName;
-	TOOL_MANAGER *m_toolMgr;
+	TOOL_MANAGER* m_toolMgr;
 
 private:
-
 	// hide the implementation to avoid spreading half of
 	// kicad and wxWidgets headers to the tools that may not need them at all!
-	EDA_ITEM *getModelInt();
-	wxWindow *getEditFrameInt();
+	EDA_ITEM* getModelInt();
+	wxWindow* getEditFrameInt();
 };
-
 
 #endif

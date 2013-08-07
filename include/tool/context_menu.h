@@ -41,8 +41,8 @@ class CONTEXT_MENU
 
 public:
 
-	CONTEXT_MENU  ( );
-	~CONTEXT_MENU ( );
+	CONTEXT_MENU();
+	~CONTEXT_MENU();
 
 	void SetTitle( const wxString& aTitle );
 	void Add ( const wxString& aItem, int aId );
@@ -52,27 +52,26 @@ public:
 	
 	void Clear();
 
-	wxMenu *GetMenu() const
+	wxMenu* GetMenu() const
 	{
 		return m_menu;
 	}
 
 private:
-
 	class CMEventHandler;
 	
 	friend class TOOL_INTERACTIVE;
 
-	void setTool ( TOOL_INTERACTIVE *aTool )
+	void setTool ( TOOL_INTERACTIVE* aTool )
 	{
 		m_tool = aTool;
 	}
 
 	bool m_titleSet;
 
-	wxMenu *m_menu;
-	CMEventHandler *m_handler;
-	TOOL_INTERACTIVE *m_tool;
+	wxMenu* m_menu;
+	CMEventHandler* m_handler;
+	TOOL_INTERACTIVE* m_tool;
 };
 
 #endif
