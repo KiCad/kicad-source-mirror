@@ -60,13 +60,6 @@ public:
     virtual ~RENDER_SETTINGS();
 
     /**
-     * Function Update
-     * Precalculates extra colors for layers (eg. highlighted, darkened and any needed version
-     * of base colors).
-     */
-    virtual void Update();
-
-    /**
      * Function ImportLegacyColors
      * Loads a list of color settings for layers.
      * @param aSettings is a list of color settings.
@@ -122,6 +115,13 @@ public:
     }
 
 protected:
+    /**
+     * Function update
+     * Precalculates extra colors for layers (eg. highlighted, darkened and any needed version
+     * of base colors).
+     */
+    virtual void update();
+
     std::set<unsigned int> m_activeLayers; /// Stores active layers number
 
     /// Parameters for display modes
@@ -138,8 +138,7 @@ protected:
     COLOR4D m_selectionBorderColor; /// Color of selection box border
 
     float   m_selectFactor;         /// Specifies how color of selected items is changed
-    float   m_layerOpacity;         /// Determines opacity of all layers, so every can be seen
-                                    /// at the same time
+    float   m_layerOpacity;         /// Determines opacity of all layers
     float   m_outlineWidth;         /// Line width used when drawing outlines
 
     /// Map of colors that were usually used for display
@@ -226,16 +225,6 @@ public:
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) = 0;
 
 protected:
-    /**
-     * Function getLayerColor
-     * is used for obtaining color that should be used for specific layer/net
-     * combination using stored color settings.
-     * @param aLayer is the layer number that is being drawn.
-     * @param aNetCode is a number of the net that is being drawn.
-     * @param aHighlighted says if the item is marked as highlighted.
-     */
-    virtual const COLOR4D& getLayerColor( int aLayer, int aNetCode, bool aHighlighted ) const = 0;
-
     /// Instance of graphic abstraction layer that gives an interface to call
     /// commands used to draw (eg. DrawLine, DrawCircle, etc.)
     GAL*                m_gal;

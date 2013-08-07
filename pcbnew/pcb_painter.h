@@ -27,9 +27,7 @@
 #define __CLASS_PCB_PAINTER_H
 
 #include <layers_id_colors_and_visibility.h>
-
 #include <painter.h>
-
 
 class EDA_ITEM;
 class COLORS_DESIGN_SETTINGS;
@@ -76,9 +74,6 @@ public:
 
     PCB_RENDER_SETTINGS();
 
-    /// @copydoc RENDER_SETTINGS::Update()
-    void Update();
-
     /// @copydoc RENDER_SETTINGS::ImportLegacyColors()
     void ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings );
 
@@ -91,23 +86,24 @@ public:
     void LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions );
 
 protected:
-    /// Colors for all layers (including special, highlighted & darkened versions)
-    COLOR4D m_layerColors    [NB_LAYERS];
-    COLOR4D m_layerColorsHi  [NB_LAYERS];
-    COLOR4D m_layerColorsSel [NB_LAYERS];
-    COLOR4D m_layerColorsDark[NB_LAYERS];
-    COLOR4D m_itemColors     [END_PCB_VISIBLE_LIST];
-    COLOR4D m_itemColorsHi   [END_PCB_VISIBLE_LIST];
-    COLOR4D m_itemColorsSel  [END_PCB_VISIBLE_LIST];
-    COLOR4D m_itemColorsDark [END_PCB_VISIBLE_LIST];
+    /// @copydoc RENDER_SETTINGS::Update()
+    void update();
 
-    bool    m_sketchModeSelect[END_PCB_VISIBLE_LIST];
+    /// Colors for all layers (including special, highlighted & darkened versions)
+    COLOR4D m_layerColors    [TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColorsHi  [TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColorsSel [TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColorsDark[TOTAL_LAYER_COUNT];
+
+    bool    m_sketchModeSelect[TOTAL_LAYER_COUNT];
     bool    m_padNumbers;
     bool    m_netNamesOnPads;
     bool    m_netNamesOnTracks;
 
+    /// Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE = 100000000;
 
+    /// Option for different display modes for zones
     DisplayZonesMode m_displayZoneMode;
 };
 
@@ -131,7 +127,7 @@ public:
         PAINTER::ApplySettings( aSettings );
 
         // Store PCB specific render settings
-        m_pcbSettings = dynamic_cast<PCB_RENDER_SETTINGS*> ( aSettings );
+        m_pcbSettings = dynamic_cast<PCB_RENDER_SETTINGS*>( aSettings );
     }
 
     /// @copydoc PAINTER::GetColor()
@@ -139,17 +135,6 @@ public:
 
 protected:
     PCB_RENDER_SETTINGS* m_pcbSettings;
-
-    /// @copydoc PAINTER::getLayerColor()
-    const COLOR4D& getLayerColor( int aLayer, int aNetCode, bool aHighlighted ) const;
-
-    /**
-     * Function getItemColor
-     * Returns color for a special layer (eg. vias/pads holes, texts on front/bottom layer, etc.)
-     * @param aItemType Layer number of the item to be drawn.
-     * @param aNetCode Net number of the item to be drawn.
-     */
-    const COLOR4D& getItemColor( int aItemType, int aNetCode, bool aHighlighted ) const;
 
     // Drawing functions for various types of PCB-specific items
     void draw( const TRACK*, int );
