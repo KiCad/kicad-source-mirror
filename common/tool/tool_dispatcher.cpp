@@ -229,7 +229,6 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent &aEvent )
 		m_toolMgr->ProcessEvent( *evt );
 
 	aEvent.Skip();
-
 }
 
 

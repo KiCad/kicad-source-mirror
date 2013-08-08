@@ -102,7 +102,7 @@ public:
      * @param aRequiredId is the id of the required layer.
      * @param aRequired tells if the required layer should be added or removed from the list.
      */
-    void SetRequired( int aLayerId, int aRequiredId, bool aRequired = true );
+    void    SetRequired( int aLayerId, int aRequiredId, bool aRequired = true );
 
     /**
      * Function CopySettings()
@@ -378,7 +378,7 @@ public:
      */
     bool IsDirty() const;
 
-    static const int VIEW_MAX_LAYERS = 128;       ///* maximum number of layers that may be shown
+    static const int VIEW_MAX_LAYERS = 128;      ///* maximum number of layers that may be shown
 
 private:
     struct VIEW_LAYER

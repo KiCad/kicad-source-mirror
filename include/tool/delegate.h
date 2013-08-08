@@ -46,14 +46,14 @@ template<class ReturnType, class Arg>
 	template<class T>
 		DELEGATE ( T* object, ReturnType (T::*ptr)( Arg ) )
 		{
-			m_ptr = reinterpret_cast<MemberPointer>(ptr);
-			m_object = reinterpret_cast<void *> (object);
+			m_ptr = reinterpret_cast<MemberPointer>( ptr );
+			m_object = reinterpret_cast<void *>( object );
 		};
 
 		
 		ReturnType operator()( Arg a ) const
 		{
-			DELEGATE<ReturnType, Arg> *casted = reinterpret_cast<DELEGATE<ReturnType, Arg> * >(m_object);
+			DELEGATE<ReturnType, Arg> *casted = reinterpret_cast<DELEGATE<ReturnType, Arg>*>( m_object );
 			return (casted->*m_ptr)(a);
 		}
 
@@ -69,8 +69,7 @@ private:
 template<class ReturnType>
 	class DELEGATE0 {
 	public:
-		typedef ReturnType (DELEGATE0<ReturnType>::*MemberPointer)( );
-
+		typedef ReturnType ( DELEGATE0<ReturnType>::*MemberPointer )();
 		typedef ReturnType _ReturnType;
 		
 		DELEGATE0 ()
@@ -80,15 +79,15 @@ template<class ReturnType>
 	template<class T>
 		DELEGATE0 ( T* object, ReturnType (T::*ptr)( ) )
 		{
-			m_ptr = reinterpret_cast<MemberPointer>(ptr);
-			m_object = reinterpret_cast<void *> (object);
+			m_ptr = reinterpret_cast<MemberPointer>( ptr );
+			m_object = reinterpret_cast<void*>( object );
 		};
 
 		
 		ReturnType operator()( ) const
 		{
-			DELEGATE0<ReturnType> *casted = reinterpret_cast<DELEGATE0<ReturnType> * >(m_object);
-			return (casted->*m_ptr)();
+			DELEGATE0<ReturnType>* casted = reinterpret_cast<DELEGATE0<ReturnType>*>( m_object );
+			return ( casted->*m_ptr )();
 		}
 
 private:		

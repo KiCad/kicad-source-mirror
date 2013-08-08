@@ -119,8 +119,8 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAdditive )
     GENERAL_COLLECTORS_GUIDE guide = getEditFrame<PCB_EDIT_FRAME>()->GetCollectorsGuide();
     GENERAL_COLLECTOR collector;
 
-    collector.Collect( pcb, GENERAL_COLLECTOR::AllBoardItems, wxPoint( aWhere.x, aWhere.y ),
-            guide );
+    collector.Collect( pcb, GENERAL_COLLECTOR::AllBoardItems,
+                       wxPoint( aWhere.x, aWhere.y ), guide );
 
     switch( collector.GetCount() )
     {
@@ -186,7 +186,7 @@ void SELECTION_TOOL::handleHighlight( const VECTOR2D& aP )
 void SELECTION_TOOL::selectMultiple()
 {
     OPT_TOOL_EVENT evt;
-    VIEW *v = getView();
+    VIEW* v = getView();
 
     v->Add( m_selArea );
 
@@ -217,7 +217,7 @@ void SELECTION_TOOL::selectMultiple()
 BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR *aCollector )
 {
     OPT_TOOL_EVENT evt;
-    BOARD_ITEM *current = NULL;
+    BOARD_ITEM* current = NULL;
 
     m_menu.reset( new CONTEXT_MENU() );
     m_menu->SetTitle( _( "Clarify selection" ) );
