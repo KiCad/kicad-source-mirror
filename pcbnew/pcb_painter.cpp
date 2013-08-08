@@ -219,6 +219,10 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( (DRAWSEGMENT*) aItem );
         break;
 
+    case PCB_MODULE_T:
+        draw( (MODULE*) aItem );
+        break;
+
     case PCB_TEXT_T:
         draw( (TEXTE_PCB*) aItem );
         break;
@@ -650,6 +654,21 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
 
     case S_LAST:
         break;
+    }
+}
+
+
+void PCB_PAINTER::draw( const MODULE* aModule )
+{
+    // For modules we have to draw a selection box if needed
+    if( aModule->IsSelected() )
+    {
+        BOX2I boundingBox = aModule->ViewBBox();
+
+        m_gal->SetIsStroke( false );
+        m_gal->SetIsFill( true );
+        m_gal->SetFillColor( COLOR4D( 1.0, 1.0, 1.0, 0.5 ) );
+        m_gal->DrawRectangle( boundingBox.GetOrigin(), boundingBox.GetEnd() );
     }
 }
 

@@ -1024,3 +1024,9 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
+
+void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount = 1;
+    aLayers[0] = ITEM_GAL_LAYER( GP_OVERLAY );     // Selection box
+}
