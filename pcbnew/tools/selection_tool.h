@@ -26,6 +26,7 @@
 #define __SELECTION_TOOL_H
 
 #include <set>
+#include <boost/shared_ptr.hpp>
 
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
@@ -66,6 +67,7 @@ private:
 
     std::set<BOARD_ITEM*> m_selectedItems;
     SELECTION_AREA* m_selArea;
+    boost::shared_ptr<CONTEXT_MENU> m_menu;
 };
 
 #endif

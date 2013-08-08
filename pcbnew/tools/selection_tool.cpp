@@ -216,11 +216,11 @@ void SELECTION_TOOL::selectMultiple()
 
 BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR *aCollector )
 {
-    CONTEXT_MENU cmenu;
     OPT_TOOL_EVENT evt;
     BOARD_ITEM *current = NULL;
 
-    cmenu.SetTitle( _( "Clarify selection" ) );
+    m_menu.reset( new CONTEXT_MENU() );
+    m_menu->SetTitle( _( "Clarify selection" ) );
 
     int limit = std::min( 10, aCollector->GetCount() );
 
@@ -229,10 +229,10 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR *aCollector )
         wxString text;
         BOARD_ITEM *item = ( *aCollector )[i];
         text = item->GetSelectMenuText();
-        cmenu.Add( text, i );
+        m_menu->Add( text, i );
     }
 
-    SetContextMenu( &cmenu, CMENU_NOW );
+    SetContextMenu( m_menu.get(), CMENU_NOW );
 
     while( evt = Wait() )
     {
