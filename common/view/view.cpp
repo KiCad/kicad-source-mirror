@@ -509,16 +509,21 @@ struct VIEW::drawItem
             {
                 group = gal->BeginGroup();
                 aItem->setGroup( currentLayer->id, group );
-                if(!view->m_painter->Draw( aItem, currentLayer->id ))
-                    aItem->ViewDraw(currentLayer->id, gal, BOX2I());
+                if( !view->m_painter->Draw( aItem, currentLayer->id ) )
+                    aItem->ViewDraw( currentLayer->id, gal, BOX2I() ); // Alternative drawing method
                 gal->EndGroup();
             }
         }
         else
         {
             // Immediate mode
-            if(!view->m_painter->Draw( aItem, currentLayer->id ))
-                aItem->ViewDraw(currentLayer->id, gal, BOX2I());
+            if( !view->m_painter->Draw( aItem, currentLayer->id ) )
+                aItem->ViewDraw( currentLayer->id, gal, BOX2I() );  // Alternative drawing method
+        }
+
+        if( static_cast<const EDA_ITEM*>( aItem )->IsBrightened() )
+        {
+            view->m_painter->DrawBrightened( aItem );
         }
     }
 

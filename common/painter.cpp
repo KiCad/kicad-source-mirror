@@ -25,14 +25,13 @@
  */
 
 #include <painter.h>
+#include <gal/graphics_abstraction_layer.h>
 
 using namespace KiGfx;
 
 RENDER_SETTINGS::RENDER_SETTINGS()
 {
     // Set the default initial values
-    m_selectionBorderColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 );
-
     m_highlightFactor   = 0.5;
     m_selectFactor      = 0.5;
     m_layerOpacity      = 0.8;
@@ -65,7 +64,7 @@ void RENDER_SETTINGS::update()
 
 
 PAINTER::PAINTER( GAL* aGal ) :
-    m_gal( aGal ), m_settings( NULL )
+    m_gal( aGal ), m_settings( NULL ), m_brightenedColor( 0.0, 1.0, 0.0, 0.9 )
 {
 }
 
@@ -79,4 +78,26 @@ PAINTER::~PAINTER()
 void PAINTER::SetGAL( GAL* aGal )
 {
     m_gal = aGal;
+}
+
+
+void PAINTER::DrawBrightened( const VIEW_ITEM* aItem )
+{
+    BOX2I box = aItem->ViewBBox();
+
+    RenderTarget oldTarget = m_gal->GetTarget();
+    m_gal->SetTarget( TARGET_OVERLAY );
+
+    m_gal->PushDepth();
+    m_gal->SetLayerDepth( -1.0 );
+
+    // Draw semitransparent box that marks items as brightened
+    m_gal->SetIsStroke( true );
+    m_gal->SetLineWidth( 100000.0 );
+    m_gal->SetStrokeColor( m_brightenedColor );
+
+    m_gal->DrawRectangle( box.GetOrigin(), box.GetOrigin() + box.GetSize() );
+    m_gal->PopDepth();
+
+    m_gal->SetTarget( oldTarget );
 }
