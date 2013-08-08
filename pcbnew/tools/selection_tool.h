@@ -54,7 +54,7 @@ public:
     ~SELECTION_TOOL ();
 
     void Reset();
-    int Main(TOOL_EVENT& aEvent);
+    int Main( TOOL_EVENT& aEvent );
 
 private:
     void selectSingle( const VECTOR2I& aWhere, bool aAdditive );

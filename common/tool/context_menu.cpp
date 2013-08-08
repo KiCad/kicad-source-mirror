@@ -35,7 +35,7 @@ class CONTEXT_MENU::CMEventHandler : public wxEvtHandler
 {
 public:
 	CMEventHandler( CONTEXT_MENU* aMenu ):
-		m_menu(aMenu) {};
+		m_menu( aMenu ) {};
 
 	void onEvent( wxEvent& aEvent )
 	{
