@@ -1107,10 +1107,11 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                 if( !graphic )
                 {
                     wxString error = wxString::Format(
-                        _( "Unable to find the next segment with an endpoint of (%d,%d).\n"
+                        _( "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
                            "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each." ),
-                        prevPt.x,
-                        prevPt.y );
+                        GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
+                        GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
+                        );
                     ThrowIOError( error );
                 }
             }
@@ -1223,10 +1224,10 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                     if( !graphic )
                     {
                         wxString error = wxString::Format(
-                            _( "Unable to find the next segment with an endpoint of (%d,%d).\n"
+                            _( "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
                                "Edit Edge.Cuts interior graphics, making them contiguous polygons each." ),
-                            prevPt.x,
-                            prevPt.y
+                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
+                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
                             );
 
                         ThrowIOError( error );
@@ -1239,9 +1240,9 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
     {
         // User has not defined a board perimeter yet...
 
-        EDA_RECT bbbox = aBoard->ComputeBoundingBox();
-
+        EDA_RECT    bbbox = aBoard->ComputeBoundingBox();
         RECTANGLE*  rect = new RECTANGLE( boundary );
+
         boundary->rectangle = rect;
 
         rect->layer_id = "pcb";
