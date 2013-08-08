@@ -33,8 +33,8 @@ using namespace KiGfx;
 const BOX2I SELECTION_AREA::ViewBBox() const
 {
 	BOX2I tmp;
-	tmp.SetOrigin(m_origin);
-	tmp.SetEnd(m_end);
+    tmp.SetOrigin( m_origin );
+    tmp.SetEnd( m_end );
 	tmp.Normalize();
 	return tmp;
 }
@@ -49,14 +49,12 @@ void SELECTION_AREA::ViewGetLayers( int aLayers[], int& aCount ) const
 
 void SELECTION_AREA::ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) const
 {
-    VECTOR2D width = m_view->ToWorld( VECTOR2D( 1.0, 1.0 ), false ); // fixme: pixel-sized stroke width setting?
-    aGal->SetLineWidth( width.x );
-    aGal->SetStrokeColor(COLOR4D(1.0, 1.0, 0.4, 1.0));
-  	aGal->SetFillColor(COLOR4D(0.3, 0.3, 0.5, 0.3));
-    aGal->SetIsStroke(true);
-    aGal->SetIsFill(true);
-    aGal->SetLayerDepth(100.0);
-    aGal->DrawRectangle(m_origin, m_end);
+    aGal->SetLineWidth( 1.0 );
+    aGal->SetStrokeColor( COLOR4D( 1.0, 1.0, 0.4, 1.0 ) );
+    aGal->SetFillColor( COLOR4D( 0.3, 0.3, 0.5, 0.3 ) );
+    aGal->SetIsStroke( true );
+    aGal->SetIsFill( true );
+    aGal->DrawRectangle( m_origin, m_end );
 }
 
 

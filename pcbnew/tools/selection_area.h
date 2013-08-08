@@ -33,6 +33,7 @@
 #include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <base_struct.h>
+#include <layers_id_colors_and_visibility.h>
 
 /**
  * Class SELECTION_AREA
@@ -42,7 +43,7 @@
 class SELECTION_AREA : public EDA_ITEM
 {
 public:
-    static const int SelectionLayer = 126;		// fixme: define globally
+    static const int SelectionLayer = ITEM_GAL_LAYER( GP_OVERLAY );
 
     SELECTION_AREA();
     ~SELECTION_AREA() {};
@@ -62,7 +63,7 @@ public:
         m_end = aEnd;
     }
 
-    void Show(int x, std::ostream& st) const
+    void Show( int x, std::ostream& st) const
     {
     }
 

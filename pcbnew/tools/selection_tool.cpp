@@ -199,10 +199,6 @@ void SELECTION_TOOL::selectMultiple()
             m_selArea->SetEnd( evt->Position() );
             m_selArea->ViewSetVisible( true );
             m_selArea->ViewUpdate( VIEW_ITEM::APPEARANCE | VIEW_ITEM::GEOMETRY );
-
-            v->SetLayerVisible( SELECTION_AREA::SelectionLayer );
-            v->SetLayerOrder( SELECTION_AREA::SelectionLayer, 1000 );
-            v->SetLayerTarget( SELECTION_AREA::SelectionLayer, TARGET_OVERLAY );
         }
 
         if( evt->IsMouseUp( MB_Left ) )
