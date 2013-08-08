@@ -89,10 +89,12 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aAdditive )
     {
         aItem->ClearSelected();
         m_selectedItems.erase( aItem );
-    } else
+    }
+    else
     {
         if( !aAdditive )
             clearSelection();
+
         aItem->SetSelected();
         m_selectedItems.insert( aItem );
     }
@@ -237,19 +239,20 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR *aCollector )
         if( evt->Action() == TA_ContextMenuUpdate )
         {
             if( current )
-                current->ClearSelected();
+                current->ClearBrightened();
 
             int id = *evt->GetCommandId();
+
             if( id >= 0 )
             {
                 current = ( *aCollector )[id];
-                current->SetSelected();
-            } else
+                current->SetBrightened();
+            }
+            else
                 current = NULL;
-
-        } else if( evt->Action() == TA_ContextMenuChoice )
+        }
+        else if( evt->Action() == TA_ContextMenuChoice )
         {
-
             optional<int> id = evt->GetCommandId();
 
             if( current )
@@ -261,9 +264,9 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR *aCollector )
                 current->SetSelected();
                 return current;
             }
+
             return NULL;
         }
-
     }
 
     return NULL;

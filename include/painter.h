@@ -55,7 +55,6 @@ class VIEW_ITEM;
 class RENDER_SETTINGS
 {
 public:
-
     RENDER_SETTINGS();
     virtual ~RENDER_SETTINGS();
 
@@ -125,21 +124,19 @@ protected:
     std::set<unsigned int> m_activeLayers; /// Stores active layers number
 
     /// Parameters for display modes
-    bool    m_hiContrastEnabled;    /// High contrast display mode on/off
-    COLOR4D m_hiContrastColor;      /// Color used for high contrast display mode
-    float   m_hiContrastFactor;     /// Factor used for computing high contrast color
+    bool    m_hiContrastEnabled;    ///< High contrast display mode on/off
+    COLOR4D m_hiContrastColor;      ///< Color used for high contrast display mode
+    float   m_hiContrastFactor;     ///< Factor used for computing high contrast color
 
-    bool    m_highlightEnabled;     /// Highlight display mode on/off
-    int     m_highlightNetcode;     /// Net number that is displayed in highlight
-                                    /// -1 means that there is no specific net, and whole active
-                                    /// layer is highlighted
-    float   m_highlightFactor;      /// Factor used for computing hightlight color
+    bool    m_highlightEnabled;     ///< Highlight display mode on/off
+    int     m_highlightNetcode;     ///< Net number that is displayed in highlight
+                                    ///< -1 means that there is no specific net, and whole active
+                                    ///< layer is highlighted
+    float   m_highlightFactor;      ///< Factor used for computing hightlight color
 
-    COLOR4D m_selectionBorderColor; /// Color of selection box border
-
-    float   m_selectFactor;         /// Specifies how color of selected items is changed
-    float   m_layerOpacity;         /// Determines opacity of all layers
-    float   m_outlineWidth;         /// Line width used when drawing outlines
+    float   m_selectFactor;         ///< Specifies how color of selected items is changed
+    float   m_layerOpacity;         ///< Determines opacity of all layers
+    float   m_outlineWidth;         ///< Line width used when drawing outlines
 
     /// Map of colors that were usually used for display
     std::map<EDA_COLOR_T, COLOR4D> m_legacyColorMap;
@@ -161,7 +158,6 @@ protected:
 class PAINTER
 {
 public:
-
     /*
      * Constructor PAINTER( GAL* )
      * initializes this object for painting on any of the polymorphic
@@ -215,6 +211,13 @@ public:
     virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) = 0;
 
     /**
+     * Function DrawBrightened
+     * Draws a special marking for the item.
+     * @param aItem is the item that is going to be marked.
+     */
+    virtual void DrawBrightened( const VIEW_ITEM* aItem );
+
+    /**
      * Function GetColor
      * Returns the color that should be used to draw the specific VIEW_ITEM on the specific layer
      * using currently used render settings.
@@ -231,6 +234,9 @@ protected:
 
     /// Colors and display modes settings that are going to be used when drawing items.
     RENDER_SETTINGS*    m_settings;
+
+    /// Color of brightened item frame
+    COLOR4D             m_brightenedColor;
 };
 } // namespace KiGfx
 

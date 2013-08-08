@@ -472,13 +472,13 @@ public:
     inline bool IsHighlighted() const { return m_Flags & HIGHLIGHTED; }
     inline bool IsBrightened() const { return m_Flags & BRIGHTENED; }
 
-    inline void SetBrightened() { SetFlags( BRIGHTENED ); ViewUpdate( APPEARANCE ); }
     inline void SetSelected() { SetFlags( SELECTED ); ViewUpdate( APPEARANCE ); }
-    inline void SetHighlighted() { SetFlags( HIGHLIGHTED ); ViewUpdate( APPEARANCE | GEOMETRY ); }
+    inline void SetHighlighted() { SetFlags( HIGHLIGHTED ); ViewUpdate( APPEARANCE ); }
+    inline void SetBrightened() { SetFlags( BRIGHTENED ); ViewUpdate( APPEARANCE ); }
 
     inline void ClearSelected() { ClearFlags( SELECTED ); ViewUpdate( APPEARANCE ); }
     inline void ClearHighlighted() { ClearFlags( HIGHLIGHTED ); ViewUpdate( APPEARANCE ); }
-    inline void ClearBrightened() { ClearFlags( BRIGHTENED ); ViewUpdate( APPEARANCE | GEOMETRY ); }
+    inline void ClearBrightened() { ClearFlags( BRIGHTENED ); ViewUpdate( APPEARANCE ); }
 
     void SetModified();
 
