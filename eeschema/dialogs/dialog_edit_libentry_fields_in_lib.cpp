@@ -77,6 +77,7 @@ private:
     void moveUpButtonHandler( wxCommandEvent& event );
     void OnCancelButtonClick( wxCommandEvent& event );
     void OnOKButtonClick( wxCommandEvent& event );
+    void showButtonHandler( wxCommandEvent& event );
 
     // internal functions:
     void setSelectedFieldNdx( int aFieldNdx );
@@ -379,6 +380,13 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& e
 }
 
 
+void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::showButtonHandler( wxCommandEvent& event )
+{
+    wxString datasheet_uri = fieldValueTextCtrl->GetValue();
+    ::wxLaunchDefaultBrowser( datasheet_uri );
+}
+
+
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setSelectedFieldNdx( int aFieldNdx )
 {
     // deselect old selection, but I think this is done by single selection
@@ -644,6 +652,8 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     fieldValueTextCtrl->SetValue( field.GetText() );
 
     textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetSize().x ) );
+
+    m_show_datasheet_button->Enable( fieldNdx == DATASHEET );
 
     wxPoint coord = field.GetTextPosition();
     wxPoint zero;
