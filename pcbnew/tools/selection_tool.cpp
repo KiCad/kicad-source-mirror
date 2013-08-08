@@ -197,6 +197,7 @@ void SELECTION_TOOL::selectMultiple()
 
         if( evt->IsDrag( MB_Left ) )
         {
+            // Start drawing a selection box
             m_selArea->SetOrigin( evt->DragOrigin() );
             m_selArea->SetEnd( evt->Position() );
             m_selArea->ViewSetVisible( true );
@@ -205,7 +206,27 @@ void SELECTION_TOOL::selectMultiple()
 
         if( evt->IsMouseUp( MB_Left ) )
         {
+            // End drawing a selection box
             m_selArea->ViewSetVisible( false );
+
+            // Mark items within a box as selected
+            std::vector<VIEW::LayerItemPair> selectedItems;
+            BOX2I selectionBox = m_selArea->ViewBBox();
+
+            v->Query( selectionBox, selectedItems );
+            std::vector<VIEW::LayerItemPair>::iterator it, it_end;
+            for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
+            {
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
+
+                // Add only those items which are fully within a selection box
+                if( selectionBox.Contains( item->ViewBBox() ) )
+                {
+                    item->SetSelected();
+                    m_selectedItems.insert( item );
+                }
+            }
+
             break;
         }
     }
