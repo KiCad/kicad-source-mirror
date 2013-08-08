@@ -156,7 +156,7 @@ class TOOL_MANAGER
 		                          TOOL_ContextMenuTrigger aTrigger );
 
 	private:
-		void dispatchInternal ( TOOL_EVENT& aEvent );
+		void dispatchInternal( TOOL_EVENT& aEvent );
 
 		struct ToolState;
 		typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> Transition;

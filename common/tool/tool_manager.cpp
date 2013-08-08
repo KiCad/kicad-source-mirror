@@ -68,7 +68,7 @@ TOOL_MANAGER::TOOL_MANAGER()
 {
 }
 
-void TOOL_MANAGER::RegisterTool ( TOOL_BASE *aTool )
+void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 {
 	ToolState* st = new ToolState;
 

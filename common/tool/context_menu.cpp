@@ -37,7 +37,7 @@ public:
 	CMEventHandler( CONTEXT_MENU* aMenu ):
 		m_menu(aMenu) {};
 
-	void onEvent( wxEvent & aEvent )
+	void onEvent( wxEvent& aEvent )
 	{
 		TOOL_EVENT evt;
 		wxEventType type = aEvent.GetEventType();

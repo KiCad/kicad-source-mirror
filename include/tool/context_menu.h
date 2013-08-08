@@ -40,7 +40,6 @@ class CONTEXT_MENU
 {
 
 public:
-
 	CONTEXT_MENU();
 	~CONTEXT_MENU();
 

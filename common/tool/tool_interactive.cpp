@@ -61,7 +61,7 @@ void TOOL_INTERACTIVE::Reset()
 }
 
 
-void TOOL_INTERACTIVE::SetContextMenu( CONTEXT_MENU *aMenu, TOOL_ContextMenuTrigger aTrigger )
+void TOOL_INTERACTIVE::SetContextMenu( CONTEXT_MENU* aMenu, TOOL_ContextMenuTrigger aTrigger )
 {
 	aMenu->setTool( this );
 	m_toolMgr->ScheduleContextMenu( this, aMenu, aTrigger );
