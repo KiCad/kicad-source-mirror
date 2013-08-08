@@ -52,12 +52,11 @@
   See coroutine_example.cpp for sample code.
  */
 
-template<class ReturnType, class ArgType >
-class COROUTINE {
-
+template<class ReturnType, class ArgType>
+class COROUTINE
+{
 public:
-
-	COROUTINE ( )
+	COROUTINE()
 	{
 		m_stackSize = c_defaultStackSize;
 		m_stack = NULL;		
@@ -68,34 +67,26 @@ public:
 	 * Constructor
 	 * Creates a coroutine from a member method of an object 
 	 */
-
 	template<class T>
-	COROUTINE ( T* object,  ReturnType (T::*ptr)( ArgType ) ) : 
-		m_func (object, ptr),
-		m_saved(NULL),
-		m_stack(NULL),
-		m_stackSize(c_defaultStackSize)
+	COROUTINE( T* object, ReturnType (T::*ptr)( ArgType ) ) :
+		m_func( object, ptr ), m_saved( NULL ), m_stack( NULL ), m_stackSize( c_defaultStackSize )
 	{
-		
 	}
 
 	/**
 	 * Constructor
 	 * Creates a coroutine from a delegate object
 	 */
-	COROUTINE( DELEGATE < ReturnType, ArgType > aEntry ) :
-		m_func(aEntry),
-		m_saved(NULL),
-		m_stack(NULL),
-		m_stackSize(c_defaultStackSize)
+	COROUTINE( DELEGATE<ReturnType, ArgType> aEntry ) :
+            m_func( aEntry ), m_saved( NULL ), m_stack( NULL ), m_stackSize( c_defaultStackSize )
 	{};
 
 	~COROUTINE()
 	{
-		if(m_saved)
-			delete m_saved;
-		if(m_stack)
-			free(m_stack);
+        if( m_saved )
+            delete m_saved;
+        if( m_stack )
+            free( m_stack );
 	}
 
 	/**
@@ -105,9 +96,9 @@ public:
 	 * After a yield, Call() or Resume() methods invoked by the caller will 
 	 * immediately return true, indicating that we are not done yet, just asleep.
 	 */
-	void Yield( )
+	void Yield()
 	{
-		jump_fcontext(m_self, m_saved, 0);
+		jump_fcontext( m_self, m_saved, 0 );
 	}
 
 	/**
@@ -119,7 +110,7 @@ public:
 	void Yield( ReturnType& retVal )
 	{
 		m_retVal = retVal;
-		jump_fcontext(m_self, m_saved, 0);
+		jump_fcontext( m_self, m_saved, 0 );
 	}
 
 	/**
@@ -127,7 +118,7 @@ public:
 	 * 
 	 * Defines the entry point for the coroutine, if not set in the constructor.
 	 */
-	void SetEntry ( DELEGATE < ReturnType, ArgType > aEntry )
+	void SetEntry( DELEGATE<ReturnType, ArgType> aEntry )
 	{
 		m_func = aEntry;
 	}
@@ -141,19 +132,19 @@ public:
 	bool Call( ArgType args )
 	{
 		// fixme: Clean up stack stuff. Add a guard 
-		m_stack = malloc(c_defaultStackSize);
+        m_stack = malloc( c_defaultStackSize );
 
-		// align to 16 bytes
-		void *sp = (void *) ((((ptrdiff_t) m_stack) + m_stackSize - 0xf) & 0xfffffff0);
+        // align to 16 bytes
+        void *sp = (void *) ( ( ( (ptrdiff_t) m_stack ) + m_stackSize - 0xf ) & 0xfffffff0 );
 
-		m_args = &args;
-		m_self = boost::context::make_fcontext(sp, m_stackSize, callerStub );
-		m_saved  = new boost::context::fcontext_t();
-		
-		m_running = true;
-		// off we go!
-		boost::context::jump_fcontext(m_saved, m_self, reinterpret_cast<intptr_t> (this));
-		return m_running;
+        m_args = &args;
+        m_self = boost::context::make_fcontext( sp, m_stackSize, callerStub );
+        m_saved = new boost::context::fcontext_t();
+
+        m_running = true;
+        // off we go!
+        boost::context::jump_fcontext( m_saved, m_self, reinterpret_cast<intptr_t>( this ) );
+        return m_running;
 	}
 
 	/**
@@ -163,10 +154,10 @@ public:
 	 * @return true, if the coroutine has yielded again and false if it has finished its
 	 * execution (returned).
 	 */
-	bool Resume( )
+	bool Resume()
 	{
-		jump_fcontext(m_saved, m_self, 0);	
-		return m_running;
+        jump_fcontext( m_saved, m_self, 0 );
+        return m_running;
 	}
 
 	/**
@@ -190,47 +181,47 @@ public:
 	}
 
 private:
-
 	static const int c_defaultStackSize = 2000000;
 
 	/* real entry point of the coroutine */
-	static void callerStub(intptr_t data)
+	static void callerStub( intptr_t data )
 	{
 		// get pointer to self 
-		COROUTINE<ReturnType, ArgType> *cor = reinterpret_cast<COROUTINE<ReturnType, ArgType> *> (data);
+		COROUTINE<ReturnType, ArgType>* cor = reinterpret_cast<COROUTINE<ReturnType, ArgType>*>( data );
 
 		// call the coroutine method
-		cor->m_retVal = cor->m_func(*cor->m_args);
+		cor->m_retVal = cor->m_func( *cor->m_args );
 		cor->m_running = false;		
 
 		// go back to wherever we came from.
-		boost::context::jump_fcontext(cor->m_self, cor->m_saved, 0); //reinterpret_cast<intptr_t> (this));
+		boost::context::jump_fcontext( cor->m_self, cor->m_saved, 0 ); //reinterpret_cast<intptr_t>( this ));
 	}
 
-	template <typename T> struct strip_ref {
-  		typedef  T result;
+	template <typename T> struct strip_ref
+	{
+  		typedef T result;
 	};
 
-	template <typename T> struct strip_ref<T&> {
-  		typedef  T result;
+	template <typename T> struct strip_ref<T&>
+	{
+  		typedef T result;
 	};
 
-
-	DELEGATE < ReturnType, ArgType > m_func;
+	DELEGATE<ReturnType, ArgType> m_func;
 	
 	///< pointer to coroutine entry arguments. Stripped of references
 	///< to avoid compiler errors.
-	typename strip_ref<ArgType>::result *m_args;
+	typename strip_ref<ArgType>::result* m_args;
 	ReturnType m_retVal;
 	
 	///< saved caller context
-	boost::context::fcontext_t *m_saved;
+	boost::context::fcontext_t* m_saved;
 	
 	///< saved coroutine context
-	boost::context::fcontext_t *m_self;
+	boost::context::fcontext_t* m_self;
 
 	///< coroutine stack
-	void *m_stack;
+	void* m_stack;
 
 	size_t m_stackSize;
 

@@ -50,127 +50,126 @@ class wxWindow;
  */
 class TOOL_MANAGER
 {
-	public:
-		
-		TOOL_MANAGER();
-		~TOOL_MANAGER();
+public:
+    TOOL_MANAGER();
+    ~TOOL_MANAGER();
 
-		/**
-		 * Generates an unique ID from for a tool with given name.
-		 */
-		static TOOL_ID MakeToolId( const std::string& aToolName );
+    /**
+     * Generates an unique ID from for a tool with given name.
+     */
+    static TOOL_ID MakeToolId( const std::string& aToolName );
 
-		/**
-    	 * Function RegisterTool()
-	     * Adds a tool to the manager set and sets it up. Called once for
-	     * each tool during application initialization.
-     	 * @param aTool: tool to be added. Ownership is transferred.
-     	 */
-		void RegisterTool( TOOL_BASE* aTool );
+    /**
+     * Function RegisterTool()
+     * Adds a tool to the manager set and sets it up. Called once for
+     * each tool during application initialization.
+     * @param aTool: tool to be added. Ownership is transferred.
+     */
+    void RegisterTool( TOOL_BASE* aTool );
 
-		/**
-		 * Function InvokeTool()
-		 * Calls a tool by sending a tool activation event to tool of given ID or name.
-		 * An user-defined parameter object can be also passed 
-		 */	
-		void InvokeTool( TOOL_ID aToolId );
-		void InvokeTool( const std::string& name );
+    /**
+     * Function InvokeTool()
+     * Calls a tool by sending a tool activation event to tool of given ID or name.
+     * An user-defined parameter object can be also passed
+     */
+    void InvokeTool( TOOL_ID aToolId );
+    void InvokeTool( const std::string& name );
 
-		template <class Parameters>
-			void InvokeTool( const std::string& name, const Parameters& aToolParams );
+    template <class Parameters>
+        void InvokeTool( const std::string& name, const Parameters& aToolParams );
 
 
-		/**
-		 * Function FindTool()
-		 * Searches for a tool with given name or ID 
-		 */
-		TOOL_BASE *FindTool( int aId );
-		TOOL_BASE *FindTool( const std::string& aName );
+    /**
+     * Function FindTool()
+     * Searches for a tool with given name or ID
+     */
+    TOOL_BASE *FindTool( int aId );
+    TOOL_BASE *FindTool( const std::string& aName );
 
-		/**
-		 * Resets the state of a given tool by clearing its wait and
-		 * transition lists and calling tool's internal Reset() method.
-		 */
-		void ResetTool( TOOL_BASE *aTool );
+    /**
+     * Resets the state of a given tool by clearing its wait and
+     * transition lists and calling tool's internal Reset() method.
+     */
+    void ResetTool( TOOL_BASE *aTool );
 
-		/**
-		 * Takes an event from the TOOL_DISPATCHER and propagates it to 
-		 * tools that requested events of matching type(s)
-		 */
-		bool ProcessEvent( TOOL_EVENT& aEvent );
-		
-		/**
-		 * Sets the work environment (model, view, view controls and the parent window).
-		 * These are made available to the tool. Called by the parent frame (PCB_EDIT_FRAME)
-		 * when the board is set up
-		 */
-		void SetEnvironment( EDA_ITEM* aModel, KiGfx::VIEW* aView,
-		                     KiGfx::VIEW_CONTROLS* aViewControls, wxWindow* aFrame );
+    /**
+     * Takes an event from the TOOL_DISPATCHER and propagates it to
+     * tools that requested events of matching type(s)
+     */
+    bool ProcessEvent( TOOL_EVENT& aEvent );
 
-		/* Accessors for the environment objects (view, model, etc.) */
-		KiGfx::VIEW* GetView()
-		{
-			return m_view;
-		}
+    /**
+     * Sets the work environment (model, view, view controls and the parent window).
+     * These are made available to the tool. Called by the parent frame (PCB_EDIT_FRAME)
+     * when the board is set up
+     */
+    void SetEnvironment( EDA_ITEM* aModel, KiGfx::VIEW* aView,
+                         KiGfx::VIEW_CONTROLS* aViewControls, wxWindow* aFrame );
 
-		KiGfx::VIEW_CONTROLS* GetViewControls()
-		{
-			return m_viewControls;
-		}
+    /* Accessors for the environment objects (view, model, etc.) */
+    KiGfx::VIEW* GetView()
+    {
+        return m_view;
+    }
 
-		EDA_ITEM* GetModel()
-		{
-			return m_model;
-		}
+    KiGfx::VIEW_CONTROLS* GetViewControls()
+    {
+        return m_viewControls;
+    }
 
-		wxWindow* GetEditFrame()
-		{
-			return m_editFrame;
-		}
+    EDA_ITEM* GetModel()
+    {
+        return m_model;
+    }
 
-		/**
-		 * Defines a state transition - the events that cause a given handler method in the tool 
-		 * to be called. Called by TOOL_INTERACTIVE::Go(). May be called from a coroutine context.
-		 */
-		void ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandler,
-		                        const TOOL_EVENT_LIST& aConditions );
-		
-		/**
-		 * Pauses execution of a given tool until one or more events matching aConditions arrives.
-		 * The pause/resume operation is done through COROUTINE object.
-		 * Called only from coroutines.
-		 */
-		boost::optional<TOOL_EVENT> ScheduleWait( TOOL_BASE* aTool,
-		                                          const TOOL_EVENT_LIST& aConditions );
-		
-		/**
-		 * Sets behaviour of the tool's context popup menu. 
-		 * @param aMenu - the menu structure, defined by the tool
-		 * @param aTrigger - when the menu is activated: 
-		 * CMENU_NOW: opens the menu right now
-		 * CMENU_BUTTON: opens the menu when RMB is pressed
-		 * CMENU_OFF: menu is disabled.
-		 * May be called from a coroutine context.
-		 */
-		void ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
-		                          TOOL_ContextMenuTrigger aTrigger );
+    wxWindow* GetEditFrame()
+    {
+        return m_editFrame;
+    }
 
-	private:
-		void dispatchInternal( TOOL_EVENT& aEvent );
+    /**
+     * Defines a state transition - the events that cause a given handler method in the tool
+     * to be called. Called by TOOL_INTERACTIVE::Go(). May be called from a coroutine context.
+     */
+    void ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandler,
+                            const TOOL_EVENT_LIST& aConditions );
 
-		struct ToolState;
-		typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> Transition;
+    /**
+     * Pauses execution of a given tool until one or more events matching aConditions arrives.
+     * The pause/resume operation is done through COROUTINE object.
+     * Called only from coroutines.
+     */
+    boost::optional<TOOL_EVENT> ScheduleWait( TOOL_BASE* aTool,
+                                              const TOOL_EVENT_LIST& aConditions );
 
-		std::map<TOOL_BASE*, ToolState*> m_toolState;
-		std::map<std::string, ToolState*> m_toolNameIndex;
-		std::map<TOOL_ID, ToolState*> m_toolIdIndex;
+    /**
+     * Sets behaviour of the tool's context popup menu.
+     * @param aMenu - the menu structure, defined by the tool
+     * @param aTrigger - when the menu is activated:
+     * CMENU_NOW: opens the menu right now
+     * CMENU_BUTTON: opens the menu when RMB is pressed
+     * CMENU_OFF: menu is disabled.
+     * May be called from a coroutine context.
+     */
+    void ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
+                              TOOL_ContextMenuTrigger aTrigger );
 
-		EDA_ITEM* m_model;
-		KiGfx::VIEW* m_view;
-		KiGfx::VIEW_CONTROLS* m_viewControls;
-		wxWindow* m_editFrame;
+private:
+    void dispatchInternal( TOOL_EVENT& aEvent );
 
-		ToolState* m_currentTool;
+    struct ToolState;
+    typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> Transition;
+
+    std::map<TOOL_BASE*, ToolState*> m_toolState;
+    std::map<std::string, ToolState*> m_toolNameIndex;
+    std::map<TOOL_ID, ToolState*> m_toolIdIndex;
+
+    EDA_ITEM* m_model;
+    KiGfx::VIEW* m_view;
+    KiGfx::VIEW_CONTROLS* m_viewControls;
+    wxWindow* m_editFrame;
+
+    ToolState* m_currentTool;
 };
 
 #endif

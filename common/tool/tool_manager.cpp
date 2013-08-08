@@ -64,9 +64,11 @@ struct TOOL_MANAGER::ToolState
 	std::vector<Transition> transitions;
 };
 
+
 TOOL_MANAGER::TOOL_MANAGER()
 {
 }
+
 
 void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 {
