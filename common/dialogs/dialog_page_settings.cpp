@@ -36,6 +36,7 @@
 #include <wxstruct.h>
 #include <worksheet_shape_builder.h>
 #include <class_base_screen.h>
+#include <wildcards_and_files_ext.h>
 
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>
@@ -125,8 +126,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     }
 
     // initialize the page layout descr filename
-    m_plDescrFileName = BASE_SCREEN::m_PageLayoutDescrFileName;
-    m_filePicker->SetPath( m_plDescrFileName );
+    SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
 
 
 #ifdef EESCHEMA
@@ -401,13 +401,13 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 {
     bool retSuccess = false;
 
-    m_plDescrFileName = m_filePicker->GetPath();
+    wxString fileName = GetWksFileName();
 
-    if( m_plDescrFileName != BASE_SCREEN::m_PageLayoutDescrFileName )
+    if( fileName != BASE_SCREEN::m_PageLayoutDescrFileName )
     {
-        if( !m_plDescrFileName.IsEmpty() )
+        if( !fileName.IsEmpty() )
         {
-            wxString fullFileName = WORKSHEET_LAYOUT::MakeFullFileName( m_plDescrFileName );
+            wxString fullFileName = WORKSHEET_LAYOUT::MakeFullFileName( fileName );
             if( !wxFileExists( fullFileName ) )
             {
                 wxString msg;
@@ -418,26 +418,9 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
             }
         }
 
-        // Try to remove the path, if the path is the current working dir,
-        // or the dir of kicad.pro (template)
-        wxString shortFileName = WORKSHEET_LAYOUT::MakeShortFileName( m_plDescrFileName );
-        wxFileName fn = shortFileName;
-
-        // For Win/Linux/macOS compatibility, a relative path is a good idea
-        if( fn.IsAbsolute() )
-        {
-            fn.MakeRelativeTo( wxGetCwd() );
-            wxString msg;
-            msg.Printf( _( "The page layout descr filename has changed\n"
-                           "Do you want to use the relative path:\n%s"),
-                           fn.GetFullPath().GetData() );
-            if( IsOK( this, msg ) )
-                shortFileName = fn.GetFullPath();
-        }
-
-        BASE_SCREEN::m_PageLayoutDescrFileName = shortFileName;
+        BASE_SCREEN::m_PageLayoutDescrFileName = fileName;
         WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-        pglayout.SetPageLayout( shortFileName );
+        pglayout.SetPageLayout( fileName );
         m_localPrjConfigChanged = true;
     }
 
@@ -793,7 +776,35 @@ void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
 }
 
 // Called on .kicad_wks file description selection change
-void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxFileDirPickerEvent& event )
+void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 {
-    // Currently: Nothing to do.
+    // Display a file picker dialog
+    wxFileDialog fileDialog( this, _( "Select Page Layout Descr File" ),
+                             wxGetCwd(), GetWksFileName(),
+                             PageLayoutDescrFileWildcard,
+                             wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
+
+    if( fileDialog.ShowModal() != wxID_OK )
+        return;
+
+    wxString fileName = fileDialog.GetPath();
+
+    // Try to remove the path, if the path is the current working dir,
+    // or the dir of kicad.pro (template)
+    wxString shortFileName = WORKSHEET_LAYOUT::MakeShortFileName( fileName );
+    wxFileName fn = shortFileName;
+
+    // For Win/Linux/macOS compatibility, a relative path is a good idea
+    if( fn.IsAbsolute() && fileName != GetWksFileName() )
+    {
+        fn.MakeRelativeTo( wxGetCwd() );
+        wxString msg;
+        msg.Printf( _( "The page layout descr filename has changed\n"
+                       "Do you want to use the relative path:\n%s"),
+                       fn.GetFullPath().GetData() );
+        if( IsOK( this, msg ) )
+            shortFileName = fn.GetFullPath();
+    }
+
+    SetWksFileName( shortFileName );
 }

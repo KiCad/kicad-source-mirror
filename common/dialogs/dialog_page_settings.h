@@ -45,9 +45,6 @@ private:
     PAGE_INFO       m_pageInfo;         /// Temporary page info.
     bool            m_customFmt;        /// true if the page selection is custom
     TITLE_BLOCK     m_tb;               /// Temporary title block (basic inscriptions).
-    wxString        m_plDescrFileName;  /// Temporary BASE_SCREEN::m_PageLayoutDescrFileName copy
-
-
 
 public:
     DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent );
@@ -55,23 +52,22 @@ public:
 
     const wxString GetWksFileName()
     {
-        return m_filePicker->GetPath();
+        return m_textCtrlFilePicker->GetValue();
     }
 
     void SetWksFileName(const wxString& aFilename )
     {
-         m_filePicker->SetPath( aFilename );
+         m_textCtrlFilePicker->SetValue( aFilename );
     }
 
     void EnableWksFileNamePicker( bool aEnable )
     {
-         m_filePicker->Enable( aEnable );
+         m_textCtrlFilePicker->Enable( aEnable );
+         m_buttonBrowse->Enable( aEnable );
     }
 
 private:
     void initDialog();  // Initialisation of member variables
-
-//    void OnCloseWindow( wxCloseEvent& event );
 
     // event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
@@ -99,7 +95,7 @@ private:
     void OnDateApplyClick( wxCommandEvent& event );
 
     // .kicad_wks file description selection
-	void OnWksFileSelection( wxFileDirPickerEvent& event );
+	void OnWksFileSelection( wxCommandEvent& event );
 
     // Save in the current title block the new page settings
     // return true if changes are made, or false if not
