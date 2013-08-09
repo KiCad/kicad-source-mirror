@@ -213,9 +213,3 @@ void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
         m_eventDispatcher->DispatchWxEvent( aEvent );
     }
 }
-
-
-KiGfx::VIEW_CONTROLS* EDA_DRAW_PANEL_GAL::GetViewControls() const
-{
-    return m_viewControls;
-}
