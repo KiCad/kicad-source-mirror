@@ -201,12 +201,8 @@ const KICAD_T SPECCTRA_DB::scanPADs[] = { PCB_PAD_T, EOT };
  */
 static inline double scale( int kicadDist )
 {
-
     // nanometers to um
     return kicadDist / ( IU_PER_MM / 1000.0 );
-
-    // nanometers to mils
-    // return kicadDist/IU_PER_MILS;
 }
 
 
@@ -1139,7 +1135,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
             }
             else
             {
-                wxPoint startPt = wxPoint( graphic->GetEnd() );
+                wxPoint startPt( graphic->GetEnd() );
                 prevPt = graphic->GetEnd();
                 poly_ko->AppendPoint( mapPt( prevPt ) );
 
@@ -1351,7 +1347,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
     //-----<unit_descriptor> & <resolution_descriptor>--------------------
     {
-
         // tell freerouter to use "tenths of micrometers",
         // which is 100 nm resolution.  Possibly more resolution is possible
         // in freerouter, but it would need testing.
@@ -1728,7 +1723,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
     }
 
 
-    //-----< output vias used in netclasses and as stock >---------------------
+    //-----< output vias used in netclasses >-----------------------------------
     {
         NETCLASSES& nclasses = aBoard->m_NetClasses;
 
@@ -1746,6 +1741,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         wxASSERT( pcb->library->vias.size() == 0 );
         pcb->library->AppendVia( via );
 
+#if 0
+        // Stock vias have drill diameter of zero, this is not sensible to freerouter
+        // User should use netclass based vias when going to freerouter.
+
         // output the stock vias, but preserve uniqueness in the via container by
         // using LookupVia().
         for( unsigned i = 0; i < aBoard->m_ViasDimensionsList.size(); ++i )
@@ -1762,6 +1761,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             if( registered != via )
                 delete via;
         }
+#endif
 
         // set the "spare via" index at the start of the
         // pcb->library->spareViaIndex = pcb->library->vias.size();
