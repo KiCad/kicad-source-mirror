@@ -67,12 +67,14 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        m_additive = evt->Modifier( MB_ModShift );
+
         if( evt->IsCancel() )
             return 0;
 
         // single click? Select single object
         if( evt->IsClick( MB_Left ) )
-            selectSingle( evt->Position(), evt->Modifier( MB_ModShift ) );
+            selectSingle( evt->Position() );
 
         // drag with LMB? Select multiple objects (or at least draw a selection box)
         if( evt->IsDrag( MB_Left ) )
@@ -83,7 +85,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aAdditive )
+void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 {
     if( m_selectedItems.find( aItem ) != m_selectedItems.end() )
     {
@@ -92,7 +94,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aAdditive )
     }
     else
     {
-        if( !aAdditive )
+        if( !m_additive )
             clearSelection();
 
         aItem->SetSelected();
@@ -112,7 +114,7 @@ void SELECTION_TOOL::clearSelection()
 }
 
 
-void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAdditive )
+void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
 {
     BOARD* pcb = getModel<BOARD>( PCB_T );
     BOARD_ITEM* item;
@@ -125,18 +127,18 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere, bool aAdditive )
     switch( collector.GetCount() )
     {
     case 0:
-        if( !aAdditive )
+        if( !m_additive )
             clearSelection();
         break;
 
     case 1:
-        toggleSelection( collector[0], aAdditive );
+        toggleSelection( collector[0] );
         break;
 
     default:
         item = disambiguationMenu( &collector );
         if( item )
-            toggleSelection( item, aAdditive );
+            toggleSelection( item );
         break;
     }
 }
@@ -197,6 +199,9 @@ void SELECTION_TOOL::selectMultiple()
 
         if( evt->IsDrag( MB_Left ) )
         {
+            if( !m_additive )
+                clearSelection();
+
             // Start drawing a selection box
             m_selArea->SetOrigin( evt->DragOrigin() );
             m_selArea->SetEnd( evt->Position() );
