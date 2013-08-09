@@ -182,18 +182,18 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	fieldValueLabel = new wxStaticText( this, wxID_ANY, _("Field Value"), wxDefaultPosition, wxDefaultSize, 0 );
 	fieldValueLabel->Wrap( -1 );
-	fieldNameBoxSizer->Add( fieldValueLabel, 0, wxTOP, 5 );
+	fieldNameBoxSizer->Add( fieldValueLabel, 0, wxALIGN_TOP|wxTOP, 5 );
 	
 	fieldValueTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fieldValueTextCtrl->SetMaxLength( 0 ); 
-	fieldValueTextCtrl->SetToolTip( _("The text (or value) of the currently selected field") );
+	fieldValueTextCtrl->SetToolTip( _("The name of the currently selected field\nSome fixed fields names are not editable") );
 	
 	fieldNameBoxSizer->Add( fieldValueTextCtrl, 0, wxEXPAND, 5 );
 	
-	m_show_datasheet_button = new wxButton( this, wxID_ANY, _("Show"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_show_datasheet_button = new wxButton( this, wxID_ANY, _("Show in Browser"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_show_datasheet_button->SetToolTip( _("If your datasheet is an http:// link or a complete file path, then it may show in your browser by pressing this button.") );
 	
-	fieldNameBoxSizer->Add( m_show_datasheet_button, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	fieldNameBoxSizer->Add( m_show_datasheet_button, 0, wxBOTTOM|wxEXPAND, 5 );
 	
 	
 	fieldEditBoxSizer->Add( fieldNameBoxSizer, 0, wxBOTTOM|wxEXPAND, 5 );
