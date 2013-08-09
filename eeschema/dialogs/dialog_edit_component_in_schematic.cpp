@@ -254,8 +254,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     if( m_Cmp->GetUnit() )
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
+        STATUS_FLAGS flags = m_Cmp->GetFlags();
         m_Cmp->SetUnitSelection( &m_Parent->GetCurrentSheet(), unit_selection );
         m_Cmp->SetUnit( unit_selection );
+        m_Cmp->ClearFlags();
+        m_Cmp->SetFlags( flags );   // Restore m_Flag modified by SetUnit()
     }
 
     switch( orientationRadioBox->GetSelection() )
