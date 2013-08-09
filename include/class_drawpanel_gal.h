@@ -69,20 +69,44 @@ public:
     void SwitchBackend( GalType aGalType );
 
     /**
-     * Function GetGAL
+     * Function GetGAL()
      * Returns a pointer to the GAL instance used in the panel.
-     * @return KiGfx::GAL* Instance of GAL.
+     * @return The instance of GAL.
      */
-    KiGfx::GAL* GetGAL() { return m_gal; }
+    KiGfx::GAL* GetGAL() const
+    {
+        return m_gal;
+    }
 
-    void SetView( KiGfx::VIEW* aView ) { m_view = aView; }
+    /**
+     * Function GetView()
+     * Returns a pointer to the VIEW instance used in the panel.
+     * @return The instance of VIEW.
+     */
+    KiGfx::VIEW* GetView() const
+    {
+        return m_view;
+    }
     
-    KiGfx::VIEW* GetView() const { return m_view; }
-    KiGfx::VIEW_CONTROLS* GetViewControls() const;
+    /**
+     * Function GetViewControls()
+     * Returns a pointer to the VIEW_CONTROLS instance used in the panel.
+     * @return The instance of VIEW_CONTROLS.
+     */
+    KiGfx::VIEW_CONTROLS* GetViewControls() const
+    {
+        return m_viewControls;
+    }
 
+    /// @copydoc wxWindow::Refresh()
     virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
 
-    void SetEventDispatcher(TOOL_DISPATCHER *aEventDispatcher)
+    /**
+     * Function SetEventDispatcher()
+     * Sets a dispatcher that processes events and forwards them to tools.
+     * @param aEventDispatcher is the object that will be used for dispatching events.
+     */
+    void SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
     {
         m_eventDispatcher = aEventDispatcher;
     }
@@ -99,7 +123,7 @@ protected:
                                                  ///< using GAL
     KiGfx::WX_VIEW_CONTROLS* m_viewControls;     ///< Control for VIEW (moving, zooming, etc.)
     GalType                  m_currentGal;       ///< Currently used GAL
-    TOOL_DISPATCHER*         m_eventDispatcher;
+    TOOL_DISPATCHER*         m_eventDispatcher;  ///< Processes and forwards events to tools
 };
 
 #endif
