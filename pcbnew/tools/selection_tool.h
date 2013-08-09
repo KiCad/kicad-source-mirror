@@ -57,17 +57,18 @@ public:
     int Main( TOOL_EVENT& aEvent );
 
 private:
-    void selectSingle( const VECTOR2I& aWhere, bool aAdditive );
+    void selectSingle( const VECTOR2I& aWhere );
     void selectMultiple();
     void handleHighlight( const VECTOR2D& aP );
     BOARD_ITEM* disambiguationMenu( GENERAL_COLLECTOR* aItems );
     BOARD_ITEM* pickSmallestComponent( GENERAL_COLLECTOR* aCollector );
-    void toggleSelection( BOARD_ITEM* aItem, bool aAdditive );
+    void toggleSelection( BOARD_ITEM* aItem );
     void clearSelection();
 
     std::set<BOARD_ITEM*> m_selectedItems;
     SELECTION_AREA* m_selArea;
     boost::shared_ptr<CONTEXT_MENU> m_menu;
+    bool m_additive;
 };
 
 #endif
