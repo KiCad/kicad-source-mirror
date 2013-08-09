@@ -121,7 +121,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	
 	fieldNameBoxSizer->Add( fieldValueTextCtrl, 0, wxBOTTOM|wxEXPAND, 5 );
 	
-	m_show_datasheet_button = new wxButton( this, wxID_ANY, _("Show"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_show_datasheet_button = new wxButton( this, wxID_ANY, _("Show in Browser"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_show_datasheet_button->SetToolTip( _("If your datasheet is given as an http:// link, then pressing this button should bring it up in your webbrowser.") );
 	
 	fieldNameBoxSizer->Add( m_show_datasheet_button, 0, wxBOTTOM|wxEXPAND, 5 );
