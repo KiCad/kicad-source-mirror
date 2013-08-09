@@ -456,5 +456,8 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
         break;
     }
 
-    aCount = 1;
+    // On the general purpose overlay there is a selection box displayed
+    aLayers[1] = ITEM_GAL_LAYER( GP_OVERLAY );
+
+    aCount = 2;
 }
