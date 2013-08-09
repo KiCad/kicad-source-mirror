@@ -121,12 +121,15 @@ public:
 
     EDA_ITEM* Clone() const;
 
+    /// @copydoc VIEW_ITEM::ViewBBox()
+    virtual const BOX2I ViewBBox() const;
+
+    /// @copydoc VIEW_ITEM::ViewGetLayers()
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
 #endif
-
-    /// @copydoc VIEW_ITEM::ViewBBox()
-    virtual const BOX2I ViewBBox() const;
 };
 
 #endif  // #define CLASS_PCB_TEXT_H

@@ -142,7 +142,6 @@ public:
         return wxT( "MTEXT" );
     }
 
-
     wxString GetSelectMenuText() const;
 
     BITMAP_DEF GetMenuImage() const { return  footprint_text_xpm; }

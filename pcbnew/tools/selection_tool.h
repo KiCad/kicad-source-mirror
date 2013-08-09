@@ -50,8 +50,8 @@ class GENERAL_COLLECTOR;
 class SELECTION_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    SELECTION_TOOL ();
-    ~SELECTION_TOOL ();
+    SELECTION_TOOL();
+    ~SELECTION_TOOL();
 
     void Reset();
     int Main( TOOL_EVENT& aEvent );

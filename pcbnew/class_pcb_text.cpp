@@ -223,3 +223,15 @@ const BOX2I TEXTE_PCB::ViewBBox() const
         return BOX2I( rect.GetOrigin(), rect.GetSize() );
     }
 }
+
+
+void TEXTE_PCB::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    // Layer that simply displays the text
+    aLayers[0] = m_Layer;
+
+    // On the general purpose overlay there is a selection box displayed
+    aLayers[1] = ITEM_GAL_LAYER( GP_OVERLAY );
+
+    aCount = 2;
+}

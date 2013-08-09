@@ -142,11 +142,14 @@ protected:
     void draw( const D_PAD*, int );
     void draw( const DRAWSEGMENT* );
     void draw( const MODULE* );
-    void draw( const TEXTE_PCB* );
+    void draw( const TEXTE_PCB*, int );
     void draw( const TEXTE_MODULE*, int );
     void draw( const ZONE_CONTAINER* );
     void draw( const DIMENSION* );
     void draw( const PCB_TARGET* );
+
+    /// Draws a white semitransparent box indicating an item as selected
+    void drawSelectionBox( const VIEW_ITEM* aItem ) const;
 };
 } // namespace KiGfx
 
