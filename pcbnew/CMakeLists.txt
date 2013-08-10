@@ -420,20 +420,18 @@ target_link_libraries(pcbnew
     pcad2kicadpcb
     polygon
     bitmaps
+    gal
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
     ${PCBNEW_EXTRA_LIBS}
-    )
-
-target_link_libraries(pcbnew
-	gal
 	${GLEW_LIBRARIES}
 	${CAIRO_LIBRARIES}
     )
-    
-if(WIN32)
+
+# Only for win32 cross compilation using MXE
+if(WIN32 AND MSYS)
 target_link_libraries(pcbnew
 	opengl32
 	glu32
@@ -442,7 +440,7 @@ target_link_libraries(pcbnew
 	freetype
 	bz2
 	)
-endif(WIN32)
+endif(WIN32 AND MSYS)
 
 ###
 # Add pcbnew as install target

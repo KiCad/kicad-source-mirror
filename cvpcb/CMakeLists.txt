@@ -94,18 +94,16 @@ target_link_libraries(cvpcb
     common
     bitmaps
     polygon
+    gal
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${CAIRO_LIBRARIES}
     )
 
-target_link_libraries(cvpcb
-	gal
-	${GLEW_LIBRARIES}
-	${CAIRO_LIBRARIES}
-    )
-    
-if(WIN32)
+# Only for win32 cross compilation using MXE
+if(WIN32 AND MSYS)
 target_link_libraries(cvpcb
 	opengl32
 	glu32
@@ -114,7 +112,7 @@ target_link_libraries(cvpcb
 	freetype
 	bz2
 	)
-endif(WIN32)
+endif(WIN32 AND MSYS)
 
 ###
 # Add cvpcb as install target
