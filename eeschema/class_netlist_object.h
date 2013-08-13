@@ -96,11 +96,7 @@ enum NET_CONNECTION_T {
  * @param aLabel A wxString object containing the label to test.
  * @return true if text is a bus notation format otherwise false is returned.
  */
-inline bool IsBusLabel( const wxString& aLabel )
-{
-    /* Search for  '[' because a bus label is like "busname[nn..mm]" */
-    return aLabel.Find( '[' ) != wxNOT_FOUND;
-}
+extern bool IsBusLabel( const wxString& aLabel );
 
 
 class NETLIST_OBJECT
