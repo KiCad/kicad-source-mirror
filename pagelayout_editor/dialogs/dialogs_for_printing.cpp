@@ -2,8 +2,11 @@
  * @file dialogs_for_printing.cpp
  */
 
-/* Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

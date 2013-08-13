@@ -250,6 +250,7 @@ void DIALOG_COPPER_ZONE::initDialog()
     int layerCount = board->GetCopperLayerCount();
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
+    int ctrlWidth = 0;  // Min width for m_LayerSelectionCtrl to show the layers names
     for( LAYER_NUM ii = FIRST_LAYER; ii < layerCount; ++ii )
     {
         LAYER_NUM layerNumber = LAYER_N_BACK;
@@ -268,9 +269,19 @@ void DIALOG_COPPER_ZONE::initDialog()
 
         if( m_settings.m_CurrentZone_Layer == layerNumber )
             m_LayerSelectionCtrl->Select( itemIndex );
+
+        wxSize tsize( GetTextSize( msg, m_LayerSelectionCtrl ) );
+        ctrlWidth = std::max( ctrlWidth, tsize.x );
     }
 
-    m_LayerSelectionCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE);
+    // The most easy way to ensure the right size is to use wxLIST_AUTOSIZE
+    // unfortunately this option does not work well both on
+    // wxWidgets 2.8 ( column witdth too small), and
+    // wxWidgets 2.9 ( column witdth too large)
+    ctrlWidth += LAYER_BITMAP_SIZE_X + 16;      // Add bitmap width + margin between bitmap and text
+    m_LayerSelectionCtrl->SetColumnWidth( 0, ctrlWidth );
+    ctrlWidth += 4;     // add small margin between text and window borders
+    m_LayerSelectionCtrl->SetMinSize( wxSize(ctrlWidth, -1));
 
     wxString netNameDoNotShowFilter = wxT( "N-*" );
     if( m_Config )
