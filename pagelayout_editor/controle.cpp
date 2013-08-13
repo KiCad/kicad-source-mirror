@@ -1,8 +1,12 @@
+/**
+ * @file pagelayout_editor/controle.cpp
+ */
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2013 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2013-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +24,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file pagelayout_editor/controle.cpp
  */
 
 #include <fctsys.h>

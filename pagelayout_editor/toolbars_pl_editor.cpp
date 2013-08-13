@@ -1,14 +1,14 @@
 
 /**
- * @file toolbars_gerber.cpp
+ * @file toolbars_pl_editor.cpp
  * @brief Build tool bars
  */
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,12 +90,14 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
 
     // Display mode switch
     m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_SHOW_REAL_MODE, wxEmptyString, KiBitmap( pagelayout_normal_view_mode_xpm ),
+    m_mainToolBar->AddTool( ID_SHOW_REAL_MODE, wxEmptyString,
+                            KiBitmap( pagelayout_normal_view_mode_xpm ),
                             _( "Show title block like it will be displayed in applications\n"
                                "texts with format are replaced by the full text"),
                             wxITEM_CHECK );
-    m_mainToolBar->AddTool( ID_SHOW_LPEDITOR_MODE, wxEmptyString, KiBitmap( pagelayout_special_view_mode_xpm ),
-                            _( "how title block in edit mode: texts are shown as is\n"
+    m_mainToolBar->AddTool( ID_SHOW_PL_EDITOR_MODE,
+                            wxEmptyString, KiBitmap( pagelayout_special_view_mode_xpm ),
+                            _( "Show title block in edit mode: texts are shown as is:\n"
                                "texts with format are displayed with no change"),
                             wxITEM_CHECK );
 

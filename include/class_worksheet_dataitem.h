@@ -19,15 +19,17 @@ class WS_DRAW_ITEM_TEXT;            // Forward declaration
 #define USE_ITALIC (1<<1)           // has meaning for texts
 #define USE_ALT_COLOR (1<<2)
 #define SELECTED_STATE (1<<3)       // When set, use the hight light color to draw item
-#define LOCATE_STARTPOINT (1<<4)    // Used in locate function:set by locate function
+#define NEW_ITEM (1<<4)             // Set for new items which can be deleted
+                                    // by an abort command
+#define LOCATE_STARTPOINT (1<<5)    // Used in locate function:set by locate function
                                     // if the start point is located
-#define LOCATE_ENDPOINT (1<<5)      // Used in locate function:set by locate function
+#define LOCATE_ENDPOINT (1<<6)      // Used in locate function:set by locate function
                                     // if the end point is located
-#define PAGE1OPTION (3<<6)          // flag to manage items drawn or not drawn only
+#define PAGE1OPTION (3<<7)          // flag to manage items drawn or not drawn only
                                     // on page 1: NONE = item on all pages
-#define PAGE1OPTION_NONE (0<<6)     //  NONE = item on all pages
-#define PAGE1OPTION_PAGE1ONLY   (1<<6)     //  = item only on page 1
-#define PAGE1OPTION_NOTONPAGE1  (2<<6)     //  = item on all pages but page 1
+#define PAGE1OPTION_NONE (0<<7)     //  NONE = item on all pages
+#define PAGE1OPTION_PAGE1ONLY   (1<<7)     //  = item only on page 1
+#define PAGE1OPTION_NOTONPAGE1  (2<<7)     //  = item on all pages but page 1
 
 // A coordinate is relative to a page corner.
 // Any of the 4 corners can be a reference.

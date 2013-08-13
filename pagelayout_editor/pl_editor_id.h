@@ -1,3 +1,31 @@
+/**
+ * @file pl_editor_id.h
+ */
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #ifndef _PL_EDITOR_ID_H_
 #define _PL_EDITOR_ID_H_
 
@@ -22,12 +50,12 @@ enum pl_editor_ids
     ID_DESIGN_TREE_FRAME,
 
     ID_SHOW_REAL_MODE,
-    ID_SHOW_LPEDITOR_MODE,
+    ID_SHOW_PL_EDITOR_MODE,
     ID_SELECT_COORDINATE_ORIGIN,
     ID_LOAD_DEFAULT_PAGE_LAYOUT,
     ID_SELECT_PAGE_NUMBER,
 
-    ID_OPEN_POLYGON_DESCR_FILE,
+    ID_APPEND_DESCR_FILE,
 
     ID_POPUP_START_RANGE,
     ID_POPUP_ITEM_DELETE,
@@ -35,7 +63,7 @@ enum pl_editor_ids
     ID_POPUP_ITEM_ADD_LINE,
     ID_POPUP_ITEM_ADD_RECT,
     ID_POPUP_ITEM_ADD_TEXT,
-    ID_POPUP_ITEM_ADD_POLY,
+    ID_POPUP_ITEM_APPEND_PAGE_LAYOUT,
     ID_POPUP_ITEM_MOVE,
     ID_POPUP_ITEM_PLACE,
     ID_POPUP_ITEM_MOVE_START_POINT,
