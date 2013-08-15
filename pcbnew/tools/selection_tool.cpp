@@ -57,6 +57,8 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 void SELECTION_TOOL::Reset()
 {
+    m_selectedItems.clear();
+
     // the tool launches upon reception of activate ("pcbnew.InteractiveSelection")
     Go( &SELECTION_TOOL::Main, TOOL_EVENT( TC_Command, TA_ActivateTool, GetName() ) ); //"pcbnew.InteractiveSelection"));
 }

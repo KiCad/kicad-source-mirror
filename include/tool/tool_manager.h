@@ -78,19 +78,18 @@ public:
     template <class Parameters>
         void InvokeTool( const std::string& name, const Parameters& aToolParams );
 
-
     /**
      * Function FindTool()
      * Searches for a tool with given name or ID
      */
-    TOOL_BASE *FindTool( int aId );
-    TOOL_BASE *FindTool( const std::string& aName );
+    TOOL_BASE* FindTool( int aId );
+    TOOL_BASE* FindTool( const std::string& aName );
 
     /**
      * Resets the state of a given tool by clearing its wait and
      * transition lists and calling tool's internal Reset() method.
      */
-    void ResetTool( TOOL_BASE *aTool );
+    void ResetTool( TOOL_BASE* aTool );
 
     /**
      * Takes an event from the TOOL_DISPATCHER and propagates it to

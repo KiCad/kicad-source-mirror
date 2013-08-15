@@ -145,7 +145,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 					{
 						st->transitions.clear();
 
-						if(!st->cofunc)
+						if( !st->cofunc )
 							st->cofunc = new COROUTINE<int, TOOL_EVENT&>( tr.second );
 						else 
 							st->cofunc->SetEntry( tr.second );
@@ -174,7 +174,7 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 		if( st->contextMenuTrigger == CMENU_NOW )
 		{
 			st->pendingWait = true;
-			st->waitEvents = TOOL_EVENT ( TC_Any, TA_Any ); 
+			st->waitEvents = TOOL_EVENT( TC_Any, TA_Any );
 			st->contextMenuTrigger = CMENU_OFF;
 			GetEditFrame()->PopupMenu( st->contextMenu->GetMenu() );
 
@@ -222,5 +222,11 @@ void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KiGfx::VIEW* aView,
 	m_view = aView;
 	m_viewControls = aViewControls;
 	m_editFrame = aFrame;
-	// fixme: reset tools after changing environment
+
+	// Reset state of the registered tools
+	BOOST_FOREACH( TOOL_BASE* tool, m_toolState | boost::adaptors::map_keys )
+	{
+	    if( tool->GetType() == TOOL_Interactive )
+	        static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
+	}
 }
