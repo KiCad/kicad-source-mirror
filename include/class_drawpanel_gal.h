@@ -95,7 +95,7 @@ public:
      */
     KiGfx::VIEW_CONTROLS* GetViewControls() const
     {
-        return m_viewControls;
+        return (KiGfx::VIEW_CONTROLS*)( m_viewControls );
     }
 
     /// @copydoc wxWindow::Refresh()
