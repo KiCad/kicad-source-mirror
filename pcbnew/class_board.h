@@ -614,7 +614,7 @@ public:
     void SetZoneSettings( const ZONE_SETTINGS& aSettings )  { m_zoneSettings = aSettings; }
 
     /**
-     * Function SetColorSettings
+     * Function GetColorSettings
      * @return the current COLORS_DESIGN_SETTINGS in use
      */
     COLORS_DESIGN_SETTINGS* GetColorsSettings() const { return m_colorsSettings; }
