@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-10 08:53+0100\n"
-"PO-Revision-Date: 2013-08-10 08:59+0100\n"
+"POT-Creation-Date: 2013-08-15 12:57+0100\n"
+"PO-Revision-Date: 2013-08-15 13:00+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -293,12 +293,12 @@ msgid "View, read or edit file with a text editor"
 msgstr "Przeglądaj lub edytuj plik w edytorze tekstu"
 
 #: kicad/menubar.cpp:217 gerbview/menubar.cpp:209
-#: pagelayout_editor/menubar.cpp:129
+#: pagelayout_editor/menubar.cpp:130
 msgid "&Text Editor"
 msgstr "Edytor &tekstu"
 
 #: kicad/menubar.cpp:218 gerbview/menubar.cpp:210
-#: pagelayout_editor/menubar.cpp:130
+#: pagelayout_editor/menubar.cpp:131
 msgid "Select your preferred text editor"
 msgstr "Wybierz preferowany edytor tekstu"
 
@@ -333,7 +333,7 @@ msgstr "Ustawienia przeglądarki PDF"
 #: kicad/menubar.cpp:278 eeschema/menubar.cpp:523
 #: eeschema/menubar_libedit.cpp:273 pcbnew/menubar_modedit.cpp:272
 #: pcbnew/menubar_pcbframe.cpp:586 cvpcb/menubar.cpp:149
-#: gerbview/menubar.cpp:222 pagelayout_editor/menubar.cpp:148
+#: gerbview/menubar.cpp:222 pagelayout_editor/menubar.cpp:149
 msgid "&Contents"
 msgstr "&Zawartość"
 
@@ -367,7 +367,7 @@ msgstr "O programie Menedżer projektu KiCad"
 #: eeschema/menubar_libedit.cpp:293 pcbnew/menubar_modedit.cpp:289
 #: pcbnew/menubar_pcbframe.cpp:605 cvpcb/menubar.cpp:160
 #: gerbview/menubar.cpp:234 3d-viewer/3d_toolbar.cpp:145
-#: pagelayout_editor/menubar.cpp:160
+#: pagelayout_editor/menubar.cpp:161
 msgid "&File"
 msgstr "&Plik"
 
@@ -376,14 +376,14 @@ msgid "&Browse"
 msgstr "P&odgląd"
 
 #: kicad/menubar.cpp:301 cvpcb/menubar.cpp:161 gerbview/menubar.cpp:235
-#: 3d-viewer/3d_toolbar.cpp:159 pagelayout_editor/menubar.cpp:161
+#: 3d-viewer/3d_toolbar.cpp:159 pagelayout_editor/menubar.cpp:162
 msgid "&Preferences"
 msgstr "&Ustawienia"
 
 #: kicad/menubar.cpp:302 eeschema/menubar.cpp:548
 #: eeschema/menubar_libedit.cpp:298 pcbnew/menubar_modedit.cpp:295
 #: pcbnew/menubar_pcbframe.cpp:613 cvpcb/menubar.cpp:162
-#: gerbview/menubar.cpp:237 pagelayout_editor/menubar.cpp:162
+#: gerbview/menubar.cpp:237 pagelayout_editor/menubar.cpp:163
 msgid "&Help"
 msgstr "Pomo&c"
 
@@ -1255,7 +1255,7 @@ msgstr "Skonwertowany"
 #: eeschema/sch_text.cpp:770
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:159
-#: eeschema/dialogs/dialog_edit_label_base.cpp:74
+#: eeschema/dialogs/dialog_edit_label_base.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80
 #: pcbnew/class_module.cpp:510 pcbnew/muonde.cpp:819
@@ -1417,8 +1417,6 @@ msgstr "Ustaw opcje pinu"
 
 #: eeschema/libeditframe.cpp:1054 eeschema/schedit.cpp:524
 #: pcbnew/edit.cpp:1392 pcbnew/modedit.cpp:870
-#: pagelayout_editor/events_functions.cpp:459
-#: pagelayout_editor/onrightclick.cpp:109
 msgid "Add text"
 msgstr "Dodaj tekst"
 
@@ -1435,8 +1433,6 @@ msgid "Add arc"
 msgstr "Dodaj łuk"
 
 #: eeschema/libeditframe.cpp:1070 pcbnew/modedit.cpp:858
-#: pagelayout_editor/events_functions.cpp:455
-#: pagelayout_editor/onrightclick.cpp:105
 msgid "Add line"
 msgstr "Dodaj linię"
 
@@ -1472,7 +1468,7 @@ msgstr "Usuń element"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:161
 #: common/selcolor.cpp:210 common/dialogs/dialog_exit_base.cpp:69
 #: common/dialogs/dialog_get_component_base.cpp:51
-#: pagelayout_editor/onrightclick.cpp:98
+#: pagelayout_editor/onrightclick.cpp:110
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -1951,7 +1947,7 @@ msgstr "Rozmiar Y"
 
 #: eeschema/lib_pin.cpp:58
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:125
-#: eeschema/dialogs/dialog_edit_label_base.cpp:68
+#: eeschema/dialogs/dialog_edit_label_base.cpp:73
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:104
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
@@ -1960,14 +1956,14 @@ msgstr "Prawo"
 
 #: eeschema/lib_pin.cpp:59
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:125
-#: eeschema/dialogs/dialog_edit_label_base.cpp:68
+#: eeschema/dialogs/dialog_edit_label_base.cpp:73
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:104
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 msgid "Left"
 msgstr "Lewo"
 
-#: eeschema/lib_pin.cpp:60 eeschema/dialogs/dialog_edit_label_base.cpp:68
+#: eeschema/lib_pin.cpp:60 eeschema/dialogs/dialog_edit_label_base.cpp:73
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:53
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:53
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:46
@@ -1975,7 +1971,7 @@ msgstr "Lewo"
 msgid "Up"
 msgstr "Góra"
 
-#: eeschema/lib_pin.cpp:61 eeschema/dialogs/dialog_edit_label_base.cpp:68
+#: eeschema/lib_pin.cpp:61 eeschema/dialogs/dialog_edit_label_base.cpp:73
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:56
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:56
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:49
@@ -2030,19 +2026,19 @@ msgid "NonLogic"
 msgstr "NieLogiczny"
 
 #: eeschema/lib_pin.cpp:135 eeschema/sch_text.cpp:789
-#: eeschema/dialogs/dialog_edit_label_base.cpp:80
+#: eeschema/dialogs/dialog_edit_label_base.cpp:85
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:6
 msgid "Input"
 msgstr "Wejście"
 
 #: eeschema/lib_pin.cpp:136 eeschema/sch_text.cpp:790
-#: eeschema/dialogs/dialog_edit_label_base.cpp:80
+#: eeschema/dialogs/dialog_edit_label_base.cpp:85
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:7
 msgid "Output"
 msgstr "Wyjście"
 
 #: eeschema/lib_pin.cpp:137 eeschema/sch_text.cpp:791
-#: eeschema/dialogs/dialog_edit_label_base.cpp:80
+#: eeschema/dialogs/dialog_edit_label_base.cpp:85
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:8
 msgid "Bidirectional"
 msgstr "Dwukierunkowy"
@@ -2052,7 +2048,7 @@ msgid "Tri-state"
 msgstr "Trójstanowy"
 
 #: eeschema/lib_pin.cpp:139 eeschema/sch_text.cpp:793
-#: eeschema/dialogs/dialog_edit_label_base.cpp:80
+#: eeschema/dialogs/dialog_edit_label_base.cpp:85
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:10
 msgid "Passive"
 msgstr "Pasywny"
@@ -3442,7 +3438,7 @@ msgstr "Pionowo w dół"
 
 #: eeschema/sch_text.cpp:770
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:159
-#: eeschema/dialogs/dialog_edit_label_base.cpp:74
+#: eeschema/dialogs/dialog_edit_label_base.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:98
@@ -3454,7 +3450,7 @@ msgstr "Kursywa"
 
 #: eeschema/sch_text.cpp:770
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:159
-#: eeschema/dialogs/dialog_edit_label_base.cpp:74
+#: eeschema/dialogs/dialog_edit_label_base.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80 common/eda_text.cpp:299
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:90
@@ -3463,13 +3459,13 @@ msgstr "Pogrubiony"
 
 #: eeschema/sch_text.cpp:770
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:159
-#: eeschema/dialogs/dialog_edit_label_base.cpp:74
+#: eeschema/dialogs/dialog_edit_label_base.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80
 msgid "Bold Italic"
 msgstr "Pogrubiona kursywa"
 
-#: eeschema/sch_text.cpp:792 eeschema/dialogs/dialog_edit_label_base.cpp:80
+#: eeschema/sch_text.cpp:792 eeschema/dialogs/dialog_edit_label_base.cpp:85
 msgid "Tri-State"
 msgstr "Trójstanowy"
 
@@ -4428,8 +4424,8 @@ msgstr "Dodaj"
 #: pcbnew/onrightclick.cpp:847 pcbnew/onrightclick.cpp:899
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
-#: pagelayout_editor/events_functions.cpp:465
-#: pagelayout_editor/onrightclick.cpp:88
+#: pagelayout_editor/events_functions.cpp:539
+#: pagelayout_editor/onrightclick.cpp:100
 msgid "Delete"
 msgstr "Usuń"
 
@@ -4870,33 +4866,33 @@ msgstr "Poz. Y"
 msgid "The Y coordinate of the text relative to the component"
 msgstr "Pozycja Y tekstu relatywnie do symbolu"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:120
+#: eeschema/dialogs/dialog_edit_label.cpp:126
 msgid "Global Label Properties"
 msgstr "Właściwości etykiety globalnej"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:124
+#: eeschema/dialogs/dialog_edit_label.cpp:130
 msgid "Hierarchical Label Properties"
 msgstr "Właściwości etykiety hierarchicznej"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:128
+#: eeschema/dialogs/dialog_edit_label.cpp:134
 msgid "Label Properties"
 msgstr "Właściwości etykiety"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:132
+#: eeschema/dialogs/dialog_edit_label.cpp:138
 msgid "Hierarchical Sheet Pin Properties."
 msgstr "Właściwości hierarchicznego arkusza pinów"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:136
+#: eeschema/dialogs/dialog_edit_label.cpp:142
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.h:72
 msgid "Text Properties"
 msgstr "Właściwości tekstu"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:197
+#: eeschema/dialogs/dialog_edit_label.cpp:203
 #, c-format
 msgid "H%s x W%s"
 msgstr "H%s x W%s"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:263
+#: eeschema/dialogs/dialog_edit_label.cpp:269
 msgid "Empty Text!"
 msgstr "Pusty tekst!"
 
@@ -4908,12 +4904,12 @@ msgstr "Tekst:"
 msgid "Enter the text to be used within the schematic"
 msgstr "Wpisz tekst, który zostanie użyty na schemacie"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:45
+#: eeschema/dialogs/dialog_edit_label_base.cpp:49
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:58
 msgid "&Size:"
 msgstr "Rozmiar:"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:55
+#: eeschema/dialogs/dialog_edit_label_base.cpp:60
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:125
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:137
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:149
@@ -4924,15 +4920,15 @@ msgstr "Rozmiar:"
 msgid "units"
 msgstr "jednostki"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:70
+#: eeschema/dialogs/dialog_edit_label_base.cpp:75
 msgid "O&rientation"
 msgstr "Orientacja"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:76
+#: eeschema/dialogs/dialog_edit_label_base.cpp:81
 msgid "St&yle"
 msgstr "Styl"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:82
+#: eeschema/dialogs/dialog_edit_label_base.cpp:87
 msgid "S&hape"
 msgstr "Kształt"
 
@@ -5915,7 +5911,7 @@ msgstr "Rysuj wszystkie strony"
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:51
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:135
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:100
-#: pagelayout_editor/dialogs/dialogs_for_printing.cpp:234
+#: pagelayout_editor/dialogs/dialogs_for_printing.cpp:237
 msgid "Preview"
 msgstr "Podgląd"
 
@@ -5928,7 +5924,7 @@ msgid "An error occurred attempting to print the schematic."
 msgstr "Wystąpił błąd podczas próby wydruku schematu."
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:287
-#: pagelayout_editor/dialogs/dialogs_for_printing.cpp:222
+#: pagelayout_editor/dialogs/dialogs_for_printing.cpp:225
 msgid "Printing"
 msgstr "Drukuj"
 
@@ -8095,7 +8091,7 @@ msgid "Save the current loaded module to a file"
 msgstr "Zapisz obecnie wczytany footprint do pliku"
 
 #: pcbnew/menubar_modedit.cpp:132 pcbnew/menubar_pcbframe.cpp:211
-#: gerbview/menubar.cpp:132 pagelayout_editor/menubar.cpp:98
+#: gerbview/menubar.cpp:132 pagelayout_editor/menubar.cpp:99
 msgid "&Print"
 msgstr "Drukuj"
 
@@ -9036,7 +9032,7 @@ msgstr "Odstęp"
 msgid "Create Microwave Gap"
 msgstr "Utwórz przerwę dla aplikacji mikrofalowej"
 
-#: pcbnew/muwave_command.cpp:42
+#: pcbnew/muwave_command.cpp:42 pagelayout_editor/onrightclick.cpp:45
 msgid "Add Line"
 msgstr "Dodaj linię"
 
@@ -10016,7 +10012,7 @@ msgstr "Sprawdź footprint"
 msgid "Add pads"
 msgstr "Dodaj pola lutownicze"
 
-#: pcbnew/tool_modedit.cpp:183
+#: pcbnew/tool_modedit.cpp:183 pagelayout_editor/onrightclick.cpp:49
 msgid "Add Text"
 msgstr "Dodaj tekst"
 
@@ -10393,31 +10389,31 @@ msgstr "Usuń niepołączone ścieżki"
 msgid "delete track segment having a dangling end"
 msgstr "Usuń segment ścieżki z dyndającą końcówką"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:388
+#: pcbnew/dialogs/dialog_copper_zones.cpp:399
 #, c-format
 msgid "Clearance must be smaller than %f\" / %f mm."
 msgstr "Prześwit musi być mniejszy niż %f\" / %f mm."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:400
+#: pcbnew/dialogs/dialog_copper_zones.cpp:411
 #, c-format
 msgid "Minimum width must be larger than %f\" / %f mm."
 msgstr "Minimalna szerokość musi być większa niż %f\" / %f mm."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:438
+#: pcbnew/dialogs/dialog_copper_zones.cpp:449
 msgid "Thermal relief spoke width is smaller than the minimum width."
 msgstr ""
 "Szerokość łącza połączenia termicznego jest mniejsza niż minimalna szerokość."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:451
+#: pcbnew/dialogs/dialog_copper_zones.cpp:462
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:219
 msgid "No layer selected."
 msgstr "Nie wybrano warstwy."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:462
+#: pcbnew/dialogs/dialog_copper_zones.cpp:473
 msgid "No net selected."
 msgstr "Nie wybrano sieci."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:469
+#: pcbnew/dialogs/dialog_copper_zones.cpp:480
 msgid ""
 "You have chosen the \"not connected\" option. This will create insulated "
 "copper islands. Are you sure ?"
@@ -10425,11 +10421,11 @@ msgstr ""
 "Użyłeś opcji \"Niepołączone\". To spowoduje utworzenie izolowanych obszarów "
 "na płytce. Kontynuować?"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:502
+#: pcbnew/dialogs/dialog_copper_zones.cpp:513
 msgid "Chamfer distance"
 msgstr "Długość ścięcia"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:508
+#: pcbnew/dialogs/dialog_copper_zones.cpp:519
 msgid "Fillet radius"
 msgstr "Promień zaokrąglenia"
 
@@ -14316,7 +14312,7 @@ msgstr "Odznacz wszystkie warstwy"
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:64
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:94
 #: gerbview/dialogs/dialog_print_using_printer.cpp:84
-#: pagelayout_editor/events_functions.cpp:407
+#: pagelayout_editor/events_functions.cpp:488
 msgid "Error Init Printer info"
 msgstr "Błąd inicjalizacji drukarki"
 
@@ -15222,7 +15218,7 @@ msgstr "Eksportuj dane w formacie Pcbnew"
 msgid "Print gerber"
 msgstr "Wydrukuj plik gerbera"
 
-#: gerbview/menubar.cpp:142 pagelayout_editor/menubar.cpp:108
+#: gerbview/menubar.cpp:142 pagelayout_editor/menubar.cpp:109
 msgid "E&xit"
 msgstr "&Zakończ"
 
@@ -15258,7 +15254,7 @@ msgstr "Wy&czyść Warstwę"
 msgid "Clear current layer"
 msgstr "Wyczyść bieżącą warstwę"
 
-#: gerbview/menubar.cpp:223 pagelayout_editor/menubar.cpp:149
+#: gerbview/menubar.cpp:223 pagelayout_editor/menubar.cpp:150
 msgid "Open the GerbView handbook"
 msgstr "Otwórz podręcznik GerbView"
 
@@ -16840,7 +16836,7 @@ msgstr "Format S-expression Pcbnew (.kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:98
 msgid "Logo for title block"
-msgstr "Grafika do tabliczki tytułowej"
+msgstr "Grafika do układu strony (.kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:110
 msgid "Threshold Value:"
@@ -18012,16 +18008,6 @@ msgstr "Pad nie cynowany: (D - owiert)"
 msgid "Board Classes"
 msgstr "Klasy płytek"
 
-#: pagelayout_editor/events_functions.cpp:457
-#: pagelayout_editor/onrightclick.cpp:107
-msgid "Add rect"
-msgstr "Dodaj prostokąt"
-
-#: pagelayout_editor/events_functions.cpp:461
-#: pagelayout_editor/onrightclick.cpp:111
-msgid "Import poly descr file"
-msgstr "Importuj plik z definicją linii łamanej"
-
 #: pagelayout_editor/files.cpp:46
 msgid "Page Layout Description File"
 msgstr "Plik definicji układu strony"
@@ -18039,9 +18025,9 @@ msgstr ""
 msgid "File <%s> loaded"
 msgstr "Plik <%s> został załadowany"
 
-#: pagelayout_editor/files.cpp:117
-msgid "Open polygon descr file"
-msgstr "Otwórz plik z definicją grafiki"
+#: pagelayout_editor/files.cpp:117 pagelayout_editor/onrightclick.cpp:52
+msgid "Append Page Layout Descr File"
+msgstr "Dołącz plik definicji układu strony"
 
 #: pagelayout_editor/files.cpp:128 pagelayout_editor/files.cpp:154
 #, c-format
@@ -18071,80 +18057,84 @@ msgstr "Plik <%s> został zapisany"
 msgid "Create file"
 msgstr "Utwórz plik"
 
-#: pagelayout_editor/menubar.cpp:61
+#: pagelayout_editor/menubar.cpp:62
 msgid "&New Page Layout Design"
 msgstr "Nowy projekt układu strony"
 
-#: pagelayout_editor/menubar.cpp:64
+#: pagelayout_editor/menubar.cpp:65
 msgid "Load &Page Layout File"
 msgstr "Wczytaj plik układu strony"
 
-#: pagelayout_editor/menubar.cpp:67
+#: pagelayout_editor/menubar.cpp:68
 msgid "Load &Default Page Layout"
 msgstr "Wczytaj domyślny układ strony"
 
-#: pagelayout_editor/menubar.cpp:82
+#: pagelayout_editor/menubar.cpp:83
 msgid "Open &Recent Page Layout File"
 msgstr "Często używane pliki"
 
-#: pagelayout_editor/menubar.cpp:88
+#: pagelayout_editor/menubar.cpp:89
 msgid "&Save Page Layout Design"
 msgstr "Zapisz projekt układu strony"
 
-#: pagelayout_editor/menubar.cpp:93
+#: pagelayout_editor/menubar.cpp:94
 msgid "Save Page Layout Design &As"
 msgstr "Zapisz projekt układu strony jako"
 
-#: pagelayout_editor/menubar.cpp:100
+#: pagelayout_editor/menubar.cpp:101
 msgid "Print Pre&view"
 msgstr "Podgląd wydruku"
 
-#: pagelayout_editor/menubar.cpp:109
+#: pagelayout_editor/menubar.cpp:110
 msgid "Quit Pl_Editor"
 msgstr "Zakończ"
 
-#: pagelayout_editor/menubar.cpp:118 pagelayout_editor/pl_editor_config.cpp:61
+#: pagelayout_editor/menubar.cpp:119 pagelayout_editor/pl_editor_config.cpp:61
 msgid "&BackGround Black"
 msgstr "Tło w kolorze czarnym"
 
-#: pagelayout_editor/menubar.cpp:118 pagelayout_editor/pl_editor_config.cpp:62
+#: pagelayout_editor/menubar.cpp:119 pagelayout_editor/pl_editor_config.cpp:62
 msgid "&BackGround White"
 msgstr "Tło w kolorze białym"
 
-#: pagelayout_editor/menubar.cpp:123 pagelayout_editor/pl_editor_config.cpp:69
+#: pagelayout_editor/menubar.cpp:124 pagelayout_editor/pl_editor_config.cpp:69
 msgid "Hide &Grid"
 msgstr "Ukryj siatkę"
 
-#: pagelayout_editor/menubar.cpp:123 pagelayout_editor/pl_editor_config.cpp:70
+#: pagelayout_editor/menubar.cpp:124 pagelayout_editor/pl_editor_config.cpp:70
 msgid "Show &Grid"
 msgstr "Pokaż siatkę"
 
-#: pagelayout_editor/menubar.cpp:155
+#: pagelayout_editor/menubar.cpp:156
 msgid "&About Pl_Editor"
 msgstr "O programie ..."
 
-#: pagelayout_editor/menubar.cpp:156
+#: pagelayout_editor/menubar.cpp:157
 msgid "About page layout description editor"
 msgstr "Pokazuje informacje o programie do edycji układu strony"
 
-#: pagelayout_editor/onrightclick.cpp:68
+#: pagelayout_editor/onrightclick.cpp:47
+msgid "Add Rectangle"
+msgstr "Dodaj prostokąt"
+
+#: pagelayout_editor/onrightclick.cpp:80
 msgid "Move Start Point"
 msgstr "Przesuń punkt początkowy"
 
-#: pagelayout_editor/onrightclick.cpp:76
+#: pagelayout_editor/onrightclick.cpp:88
 msgid "Move End Point"
 msgstr "Przesuń punkt końcowy"
 
-#: pagelayout_editor/onrightclick.cpp:82
+#: pagelayout_editor/onrightclick.cpp:94
 msgid "Move Item"
 msgstr "Przesuń element"
 
-#: pagelayout_editor/onrightclick.cpp:96
+#: pagelayout_editor/onrightclick.cpp:108
 msgid "Place"
 msgstr "Umieść"
 
-#: pagelayout_editor/page_layout_writer.cpp:102
-#: pagelayout_editor/page_layout_writer.cpp:129
+#: pagelayout_editor/page_layout_writer.cpp:101
+#: pagelayout_editor/page_layout_writer.cpp:128
 msgid "Write Page Layout Error"
 msgstr "Błąd zapisu"
 
@@ -18206,7 +18196,7 @@ msgstr "Drukuj układ strony"
 msgid "Delete selected item"
 msgstr "Usuń wybrany element"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:94
+#: pagelayout_editor/toolbars_pl_editor.cpp:95
 msgid ""
 "Show title block like it will be displayed in applications\n"
 "texts with format are replaced by the full text"
@@ -18214,47 +18204,47 @@ msgstr ""
 "Pokaż ramkę tytułową tak jak będzie wyświetlana w aplikacji.\n"
 "Formatowanie pól zostanie zastąpione pełnym tekstem"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:98
+#: pagelayout_editor/toolbars_pl_editor.cpp:100
 msgid ""
-"how title block in edit mode: texts are shown as is\n"
+"Show title block in edit mode: texts are shown as is:\n"
 "texts with format are displayed with no change"
 msgstr ""
 "Pokaż ramkę w trybie edycji. Teksty będą pokazywane jako\n"
 "teksty razem z formatowaniem pól"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:106
+#: pagelayout_editor/toolbars_pl_editor.cpp:108
 msgid "Left Top paper corner"
 msgstr "Lewy górny wierzchołek papieru"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:107
+#: pagelayout_editor/toolbars_pl_editor.cpp:109
 msgid "Right Bottom page corner"
 msgstr "Dolny prawy narożnik"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:108
+#: pagelayout_editor/toolbars_pl_editor.cpp:110
 msgid "Left Bottom page corner"
 msgstr "Dolny lewy narożnik"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:109
+#: pagelayout_editor/toolbars_pl_editor.cpp:111
 msgid "Right Top page corner"
 msgstr "Prawy górny wierzchołek"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:110
+#: pagelayout_editor/toolbars_pl_editor.cpp:112
 msgid "Left Top page corner"
 msgstr "Lewy górny wierzchołek"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:117
+#: pagelayout_editor/toolbars_pl_editor.cpp:119
 msgid " Origin of coordinates displayed to the status bar"
 msgstr " Początek współrzędnych wyświetlaj w linii statusu"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:130
+#: pagelayout_editor/toolbars_pl_editor.cpp:132
 msgid "Page 1"
 msgstr "Pierwsza strona"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:131
+#: pagelayout_editor/toolbars_pl_editor.cpp:133
 msgid "Other pages"
 msgstr "Pozostałe strony"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:138
+#: pagelayout_editor/toolbars_pl_editor.cpp:140
 msgid ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
@@ -18262,11 +18252,11 @@ msgstr ""
 "Symuluj stronę 1 lub dalsze strony by pokazać jak wyglądać będą\n"
 "elementy, które nie są składnikami wszystkich stron"
 
-#: pagelayout_editor/dialogs/dialogs_for_printing.cpp:216
+#: pagelayout_editor/dialogs/dialogs_for_printing.cpp:219
 msgid "Print Page Layout"
 msgstr "Wydruk układu strony"
 
-#: pagelayout_editor/dialogs/dialogs_for_printing.cpp:221
+#: pagelayout_editor/dialogs/dialogs_for_printing.cpp:224
 msgid "An error occurred attempting to print the page layout."
 msgstr "Wystąpił błąd podczas próby wydruku układu strony."
 
@@ -18612,7 +18602,7 @@ msgstr "Właściwości symbolu z biblioteki"
 msgid "Component Properties"
 msgstr "Właściwości symbolu"
 
-#: eeschema/dialogs/dialog_edit_label_base.h:66
+#: eeschema/dialogs/dialog_edit_label_base.h:70
 msgid "Text Editor"
 msgstr "Edytor tekstu"
 
@@ -18841,6 +18831,15 @@ msgstr "Kalkulator PCB"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nowy element"
+
+#~ msgid "Add rect"
+#~ msgstr "Dodaj prostokąt"
+
+#~ msgid "Import poly descr file"
+#~ msgstr "Importuj plik z definicją linii łamanej"
+
+#~ msgid "Open polygon descr file"
+#~ msgstr "Otwórz plik z definicją grafiki"
 
 #~ msgid "Display previous page"
 #~ msgstr "Pokaż poprzednią stronę"
