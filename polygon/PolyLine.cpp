@@ -448,6 +448,10 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
             double          radius  = aRadius;
             double          denom   = sqrt( 2.0 / ( 1 + cosine ) - 1 );
 
+            // Do nothing in case of parallel edges
+            if( isinf( denom ) )
+                continue;
+
             // Limit rounding distance to one half of an edge
             if( 0.5 * lena * denom < radius )
                 radius = 0.5 * lena * denom;
