@@ -17,6 +17,7 @@
 #include <math_for_graphics.h>
 #include <polygon_test_point_inside.h>
 
+
 CPolyLine::CPolyLine()
 {
     m_hatchStyle = NO_HATCH;
@@ -449,7 +450,7 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
             double          denom   = sqrt( 2.0 / ( 1 + cosine ) - 1 );
 
             // Do nothing in case of parallel edges
-            if( isinf( denom ) )
+            if( std::isinf( denom ) )
                 continue;
 
             // Limit rounding distance to one half of an edge
