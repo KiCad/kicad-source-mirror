@@ -731,7 +731,7 @@ bool CMP_LIBRARY::SaveDocs( OUTPUTFORMATTER& aFormatter )
 
     try
     {
-        aFormatter.Print( 0, "%s  Date: %s\n", DOCFILE_IDENT, TO_UTF8( DateAndTime() ) );
+        aFormatter.Print( 0, "%s\n", DOCFILE_IDENT );
 
         for( LIB_ALIAS_MAP::iterator it=aliases.begin();  it!=aliases.end();  it++ )
         {
@@ -752,8 +752,8 @@ bool CMP_LIBRARY::SaveDocs( OUTPUTFORMATTER& aFormatter )
 
 bool CMP_LIBRARY::SaveHeader( OUTPUTFORMATTER& aFormatter )
 {
-    aFormatter.Print( 0, "%s %d.%d  Date: %s\n", LIBFILE_IDENT,
-                      LIB_VERSION_MAJOR, LIB_VERSION_MINOR, TO_UTF8( DateAndTime() ) );
+    aFormatter.Print( 0, "%s %d.%d\n", LIBFILE_IDENT,
+                      LIB_VERSION_MAJOR, LIB_VERSION_MINOR );
 
     aFormatter.Print( 0, "#encoding utf-8\n");
 
