@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-13 20:48+0100\n"
-"PO-Revision-Date: 2013-08-13 20:50+0100\n"
+"POT-Creation-Date: 2013-08-18 14:58+0100\n"
+"PO-Revision-Date: 2013-08-18 14:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "Language: fr_FR\n"
@@ -284,7 +284,7 @@ msgid "Layer"
 msgstr "Couche"
 
 #: pcbnew/class_drawsegment.cpp:360 pcbnew/class_edge_mod.cpp:259
-#: pcbnew/class_track.cpp:1161 pcbnew/mirepcb.cpp:109
+#: pcbnew/class_track.cpp:1161 pcbnew/mirepcb.cpp:135
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:327
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:48
 msgid "Width"
@@ -499,7 +499,7 @@ msgstr "Orient"
 #: eeschema/sch_text.cpp:770
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:159
-#: eeschema/dialogs/dialog_edit_label_base.cpp:74
+#: eeschema/dialogs/dialog_edit_label_base.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80
 #: gerbview/class_GERBER.cpp:344 gerbview/class_GERBER.cpp:348
@@ -3026,11 +3026,11 @@ msgstr "&Outils"
 msgid "&Design Rules"
 msgstr "&Règles de Conception"
 
-#: pcbnew/mirepcb.cpp:78
+#: pcbnew/mirepcb.cpp:104
 msgid "Target Properties"
 msgstr "Propriétés de la Mire"
 
-#: pcbnew/mirepcb.cpp:97 pcbnew/muonde.cpp:807 pcbnew/sel_layer.cpp:161
+#: pcbnew/mirepcb.cpp:123 pcbnew/muonde.cpp:807 pcbnew/sel_layer.cpp:161
 #: pcbnew/sel_layer.cpp:314 pcbnew/dialogs/dialog_design_rules_base.cpp:378
 #: pcbnew/dialogs/dialog_display_options_base.cpp:140
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:107
@@ -3045,7 +3045,7 @@ msgstr "Propriétés de la Mire"
 msgid "OK"
 msgstr "OK"
 
-#: pcbnew/mirepcb.cpp:100 pcbnew/modedit_onclick.cpp:205
+#: pcbnew/mirepcb.cpp:126 pcbnew/modedit_onclick.cpp:205
 #: pcbnew/modedit_onclick.cpp:243 pcbnew/muonde.cpp:810
 #: pcbnew/onrightclick.cpp:83 pcbnew/onrightclick.cpp:99
 #: pcbnew/sel_layer.cpp:165 pcbnew/sel_layer.cpp:318
@@ -3065,22 +3065,22 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: pcbnew/mirepcb.cpp:104 pcbnew/muonde.cpp:829 eeschema/sch_text.cpp:802
+#: pcbnew/mirepcb.cpp:130 pcbnew/muonde.cpp:829 eeschema/sch_text.cpp:802
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:207
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:138
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:43
 msgid "Size"
 msgstr "Taille "
 
-#: pcbnew/mirepcb.cpp:114
+#: pcbnew/mirepcb.cpp:140
 msgid "shape +"
 msgstr "Forme +"
 
-#: pcbnew/mirepcb.cpp:114
+#: pcbnew/mirepcb.cpp:140
 msgid "shape X"
 msgstr "Forme X"
 
-#: pcbnew/mirepcb.cpp:116
+#: pcbnew/mirepcb.cpp:142
 msgid "Target Shape:"
 msgstr "Forme Mire:"
 
@@ -6173,7 +6173,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:238
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:181
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:43
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:40
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:413
 #: pcbnew/dialogs/dialog_plot_base.cpp:196
 msgid "Solder mask clearance:"
@@ -6194,7 +6194,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:252
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:195
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:80
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:77
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:427
 msgid "Solder paste clearance:"
 msgstr "Marge masque pâte à souder"
@@ -6218,7 +6218,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:266
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:209
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:94
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:91
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:441
 msgid "Solder paste ratio clearance:"
 msgstr "Coeff. marge masque pâte à souder:"
@@ -6245,7 +6245,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:276
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:219
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:104
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:101
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:451
 msgid "%"
 msgstr "%"
@@ -6323,9 +6323,9 @@ msgstr "Valeurs d'Isolation Locales"
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:168
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:205
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:53
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:67
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:90
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:50
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:64
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:87
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:91
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:103
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:115
@@ -6392,7 +6392,7 @@ msgstr "Invisible"
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:98
 #: eeschema/sch_text.cpp:770
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:159
-#: eeschema/dialogs/dialog_edit_label_base.cpp:74
+#: eeschema/dialogs/dialog_edit_label_base.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80 common/eda_text.cpp:298
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:109
@@ -8092,11 +8092,7 @@ msgstr "Drawings_réserve"
 msgid "If you want a layer for documentation drawings"
 msgstr "Si vous voulez une couche de dessins pour documentation."
 
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:28
-msgid "Dimensions:"
-msgstr "Dimensions:"
-
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:30
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:27
 msgid ""
 "Note: For clearance values:\n"
 "- a positive value means a mask bigger than a pad\n"
@@ -8106,7 +8102,7 @@ msgstr ""
 "- une valeur positive signifie un masque plus grand que le pad\n"
 "- une valeur négative signifie un masque plus petite que le pad\n"
 
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:45
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:42
 msgid ""
 "This is the global clearance between pads and the solder mask\n"
 "This value can be superseded by local values for a footprint or a pad."
@@ -8115,12 +8111,12 @@ msgstr ""
 "Cette valeur peut être remplacée par les valeurs locales de l'empreinte ou "
 "du pad"
 
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:57
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:206
 msgid "Solder mask min width:"
 msgstr "Largeur mini pour le vernis épargne:"
 
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:59
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:56
 msgid ""
 "Min dist between 2 pad areas.\n"
 "Two pad areas nearer than this value will be merged during plotting.\n"
@@ -8132,7 +8128,7 @@ msgstr ""
 "Ce paramètre est utilisé uniquement pour tracer les masques de vernis "
 "épargne."
 
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:82
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:79
 msgid ""
 "This is the global clearance between pads and the solder paste\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
@@ -8145,7 +8141,7 @@ msgstr ""
 "La valeur finale est la somme de cette valeur et de la valeur liée au "
 "coefficient"
 
-#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:96
+#: pcbnew/dialogs/dialog_mask_clearance_base.cpp:93
 msgid ""
 "This is the global clearance ratio in per cent between pads and the solder "
 "paste\n"
@@ -8874,7 +8870,7 @@ msgid "Unload the selected library"
 msgstr "Décharger la librairie sélectionnée"
 
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:53
-#: eeschema/lib_pin.cpp:60 eeschema/dialogs/dialog_edit_label_base.cpp:68
+#: eeschema/lib_pin.cpp:60 eeschema/dialogs/dialog_edit_label_base.cpp:73
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:53
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:46
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:85
@@ -8882,7 +8878,7 @@ msgid "Up"
 msgstr "Haut"
 
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:56
-#: eeschema/lib_pin.cpp:61 eeschema/dialogs/dialog_edit_label_base.cpp:68
+#: eeschema/lib_pin.cpp:61 eeschema/dialogs/dialog_edit_label_base.cpp:73
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:56
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:49
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:88
@@ -8952,7 +8948,7 @@ msgstr "Justification:"
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:104
 #: eeschema/lib_pin.cpp:59
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:125
-#: eeschema/dialogs/dialog_edit_label_base.cpp:68
+#: eeschema/dialogs/dialog_edit_label_base.cpp:73
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 msgid "Left"
@@ -8972,7 +8968,7 @@ msgstr "Centrer"
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:104
 #: eeschema/lib_pin.cpp:58
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:125
-#: eeschema/dialogs/dialog_edit_label_base.cpp:68
+#: eeschema/dialogs/dialog_edit_label_base.cpp:73
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 msgid "Right"
@@ -10874,19 +10870,19 @@ msgid "NonLogic"
 msgstr "Non Logique"
 
 #: eeschema/lib_pin.cpp:135 eeschema/sch_text.cpp:789
-#: eeschema/dialogs/dialog_edit_label_base.cpp:80
+#: eeschema/dialogs/dialog_edit_label_base.cpp:85
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:6
 msgid "Input"
 msgstr "Entrée"
 
 #: eeschema/lib_pin.cpp:136 eeschema/sch_text.cpp:790
-#: eeschema/dialogs/dialog_edit_label_base.cpp:80
+#: eeschema/dialogs/dialog_edit_label_base.cpp:85
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:7
 msgid "Output"
 msgstr "Sortie"
 
 #: eeschema/lib_pin.cpp:137 eeschema/sch_text.cpp:791
-#: eeschema/dialogs/dialog_edit_label_base.cpp:80
+#: eeschema/dialogs/dialog_edit_label_base.cpp:85
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:8
 msgid "Bidirectional"
 msgstr "Bidirectionnel"
@@ -10896,7 +10892,7 @@ msgid "Tri-state"
 msgstr "3 états"
 
 #: eeschema/lib_pin.cpp:139 eeschema/sch_text.cpp:793
-#: eeschema/dialogs/dialog_edit_label_base.cpp:80
+#: eeschema/dialogs/dialog_edit_label_base.cpp:85
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:10
 msgid "Passive"
 msgstr "Passive"
@@ -12065,7 +12061,7 @@ msgstr "Vertical descendant"
 
 #: eeschema/sch_text.cpp:770
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:159
-#: eeschema/dialogs/dialog_edit_label_base.cpp:74
+#: eeschema/dialogs/dialog_edit_label_base.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80 common/eda_text.cpp:299
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:90
@@ -12074,13 +12070,13 @@ msgstr "Gras"
 
 #: eeschema/sch_text.cpp:770
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:159
-#: eeschema/dialogs/dialog_edit_label_base.cpp:74
+#: eeschema/dialogs/dialog_edit_label_base.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80
 msgid "Bold Italic"
 msgstr "Gras Italique"
 
-#: eeschema/sch_text.cpp:792 eeschema/dialogs/dialog_edit_label_base.cpp:80
+#: eeschema/sch_text.cpp:792 eeschema/dialogs/dialog_edit_label_base.cpp:85
 msgid "Tri-State"
 msgstr "3 états"
 
@@ -13179,33 +13175,33 @@ msgstr "PosY"
 msgid "The Y coordinate of the text relative to the component"
 msgstr "La position Y du texte relativement au composant"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:120
+#: eeschema/dialogs/dialog_edit_label.cpp:126
 msgid "Global Label Properties"
 msgstr "Propriétés du Label Global"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:124
+#: eeschema/dialogs/dialog_edit_label.cpp:130
 msgid "Hierarchical Label Properties"
 msgstr "Propriétés de Label Hiérarchique"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:128
+#: eeschema/dialogs/dialog_edit_label.cpp:134
 msgid "Label Properties"
 msgstr "Propriétés du label"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:132
+#: eeschema/dialogs/dialog_edit_label.cpp:138
 msgid "Hierarchical Sheet Pin Properties."
 msgstr "Propriétés du Label Hiérarchique."
 
-#: eeschema/dialogs/dialog_edit_label.cpp:136
+#: eeschema/dialogs/dialog_edit_label.cpp:142
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.h:72
 msgid "Text Properties"
 msgstr "Propriétés du Texte"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:197
+#: eeschema/dialogs/dialog_edit_label.cpp:203
 #, c-format
 msgid "H%s x W%s"
 msgstr "H%s x L%s"
 
-#: eeschema/dialogs/dialog_edit_label.cpp:263
+#: eeschema/dialogs/dialog_edit_label.cpp:269
 msgid "Empty Text!"
 msgstr "Texte vide"
 
@@ -13217,12 +13213,12 @@ msgstr "&Texte:"
 msgid "Enter the text to be used within the schematic"
 msgstr "Enter le texte qui doit être utilisé dans la schématique"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:45
+#: eeschema/dialogs/dialog_edit_label_base.cpp:49
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:58
 msgid "&Size:"
 msgstr "T&aille:"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:55
+#: eeschema/dialogs/dialog_edit_label_base.cpp:60
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:125
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:137
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:149
@@ -13233,15 +13229,15 @@ msgstr "T&aille:"
 msgid "units"
 msgstr "unités"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:70
+#: eeschema/dialogs/dialog_edit_label_base.cpp:75
 msgid "O&rientation"
 msgstr "O&rientation"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:76
+#: eeschema/dialogs/dialog_edit_label_base.cpp:81
 msgid "St&yle"
 msgstr "St&yle"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:82
+#: eeschema/dialogs/dialog_edit_label_base.cpp:87
 msgid "S&hape"
 msgstr "&Forme"
 
@@ -16949,8 +16945,8 @@ msgstr "Placer"
 
 #: pagelayout_editor/page_layout_writer.cpp:101
 #: pagelayout_editor/page_layout_writer.cpp:128
-msgid "Write Page Layout Error"
-msgstr ""
+msgid "Error writing page layout descr file"
+msgstr "Erreur lors de l'écriture du fichier de descr de page"
 
 #: pagelayout_editor/pl_editor.cpp:71
 msgid "pl_editor is already running. Continue?"
@@ -17046,7 +17042,7 @@ msgstr "Coin Gauche Haut de la Page"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:119
 msgid " Origin of coordinates displayed to the status bar"
-msgstr ""
+msgstr "Oritgine des coordonnées affichées dans la baree d'état"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:132
 msgid "Page 1"
@@ -17340,7 +17336,7 @@ msgstr "Propriétés de la Zone Interdite"
 msgid "Layer Setup"
 msgstr "Options Couches"
 
-#: pcbnew/dialogs/dialog_mask_clearance_base.h:75
+#: pcbnew/dialogs/dialog_mask_clearance_base.h:74
 msgid "Pads Mask Clearance"
 msgstr "Marge Masque des Pads"
 
@@ -17535,7 +17531,7 @@ msgstr "Propriétés du composant librairie"
 msgid "Component Properties"
 msgstr "Propriétés du Composant"
 
-#: eeschema/dialogs/dialog_edit_label_base.h:66
+#: eeschema/dialogs/dialog_edit_label_base.h:70
 msgid "Text Editor"
 msgstr "Editeur de Texte"
 
@@ -17636,6 +17632,12 @@ msgstr "Convertisseur Bitmap en Composant"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nouveau Item"
+
+#~ msgid "Write Page Layout Error"
+#~ msgstr "Erreur en ecirure de la description de page"
+
+#~ msgid "Dimensions:"
+#~ msgstr "Dimensions:"
 
 #~ msgid "Add rect"
 #~ msgstr "Ajout rect"
