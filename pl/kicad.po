@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-15 12:57+0100\n"
-"PO-Revision-Date: 2013-08-15 13:00+0100\n"
+"POT-Creation-Date: 2013-08-18 12:52+0100\n"
+"PO-Revision-Date: 2013-08-18 12:56+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1456,7 +1456,7 @@ msgstr "Usuń element"
 #: eeschema/libedit_onrightclick.cpp:68 eeschema/onrightclick.cpp:158
 #: eeschema/onrightclick.cpp:191 eeschema/dialogs/dialog_color_config.cpp:225
 #: eeschema/dialogs/dialog_netlist_base.cpp:49
-#: eeschema/dialogs/dialog_netlist_base.cpp:130 pcbnew/mirepcb.cpp:100
+#: eeschema/dialogs/dialog_netlist_base.cpp:130 pcbnew/mirepcb.cpp:126
 #: pcbnew/modedit_onclick.cpp:205 pcbnew/modedit_onclick.cpp:243
 #: pcbnew/muonde.cpp:810 pcbnew/onrightclick.cpp:83 pcbnew/onrightclick.cpp:99
 #: pcbnew/sel_layer.cpp:165 pcbnew/sel_layer.cpp:318
@@ -3472,7 +3472,7 @@ msgstr "Trójstanowy"
 #: eeschema/sch_text.cpp:802
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:207
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:138
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:43 pcbnew/mirepcb.cpp:104
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:43 pcbnew/mirepcb.cpp:130
 #: pcbnew/muonde.cpp:829
 msgid "Size"
 msgstr "Rozmiar"
@@ -4119,7 +4119,7 @@ msgid "Background Color"
 msgstr "Kolor Tła"
 
 #: eeschema/dialogs/dialog_color_config.cpp:222
-#: eeschema/dialogs/dialog_netlist_base.cpp:126 pcbnew/mirepcb.cpp:97
+#: eeschema/dialogs/dialog_netlist_base.cpp:126 pcbnew/mirepcb.cpp:123
 #: pcbnew/muonde.cpp:807 pcbnew/sel_layer.cpp:161 pcbnew/sel_layer.cpp:314
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:378
 #: pcbnew/dialogs/dialog_display_options_base.cpp:140
@@ -6291,7 +6291,7 @@ msgid "Layer"
 msgstr "Warstwy sygnałowe"
 
 #: pcbnew/class_drawsegment.cpp:360 pcbnew/class_edge_mod.cpp:259
-#: pcbnew/class_track.cpp:1161 pcbnew/mirepcb.cpp:109
+#: pcbnew/class_track.cpp:1161 pcbnew/mirepcb.cpp:135
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:327
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:48
 msgid "Width"
@@ -8718,19 +8718,19 @@ msgstr "Wym&iary"
 msgid "&Design Rules"
 msgstr "Reguły projektowe"
 
-#: pcbnew/mirepcb.cpp:78
+#: pcbnew/mirepcb.cpp:104
 msgid "Target Properties"
 msgstr "Właściwości elementu pozycjonującego"
 
-#: pcbnew/mirepcb.cpp:114
+#: pcbnew/mirepcb.cpp:140
 msgid "shape +"
 msgstr "Kształt +"
 
-#: pcbnew/mirepcb.cpp:114
+#: pcbnew/mirepcb.cpp:140
 msgid "shape X"
 msgstr "Kształt X"
 
-#: pcbnew/mirepcb.cpp:116
+#: pcbnew/mirepcb.cpp:142
 msgid "Target Shape:"
 msgstr "Kształt elementu:"
 
@@ -16637,7 +16637,7 @@ msgstr "Komentarz 4"
 
 #: common/dialogs/dialog_page_settings_base.cpp:346
 msgid "Page layout file description"
-msgstr "Plik z układem strony"
+msgstr "Plik definicji układu strony"
 
 #: common/dialog_about/AboutDialog_main.cpp:131
 msgid ""
