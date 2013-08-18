@@ -98,7 +98,7 @@ public:
         }
         catch( IO_ERROR ioe )
         {
-            wxMessageBox( ioe.errorText, _("Write Page Layout Error" ) );
+            wxMessageBox( ioe.errorText, _("Error writing page layout descr file" ) );
         }
     }
 
@@ -125,7 +125,7 @@ public:
         }
         catch( IO_ERROR ioe )
         {
-            wxMessageBox( ioe.errorText, _("Write Page Layout Error" ) );
+            wxMessageBox( ioe.errorText, _("Error writing page layout descr file" ) );
         }
     }
 

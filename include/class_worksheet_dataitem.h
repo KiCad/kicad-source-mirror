@@ -420,6 +420,14 @@ public:
      */
     void SetConstrainedTextSize();
 
+
+    /** Replace the '\''n' sequence by EOL
+     * and the sequence  '\''\' by only one '\'
+     * inside m_FullText
+     * @return true if the EOL symbol is found or is inserted (multiline text)
+     */
+    bool ReplaceAntiSlashSequence();
+
     /**
      * @return true is a bold font should be selected
      */
