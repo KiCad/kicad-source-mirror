@@ -194,9 +194,10 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
         m_SizerTextIncrementLabel->Show( true );
 
         WORKSHEET_DATAITEM_TEXT* item = (WORKSHEET_DATAITEM_TEXT*) aItem;
-        wxString text = item->m_TextBase;
-        text.Replace(wxT("\\n"), wxT("\n") );
-        m_textCtrlText->SetValue( text );
+        item->m_FullText = item->m_TextBase;
+        // Replace our '\' 'n' sequence by the EOL char
+        item->ReplaceAntiSlashSequence();;
+        m_textCtrlText->SetValue( item->m_FullText );
 
         msg.Printf( wxT("%d"), item->m_IncrementLabel );
         m_textCtrlTextIncrement->SetValue( msg );
@@ -285,7 +286,12 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
 
     WORKSHEET_DATAITEM* item = m_parent->GetSelectedItem();
     if( item )
+    {
         CopyPrmsFromPanelToItem( item );
+        // Be sure what is displayed is waht is set for item
+        // (mainly, texts can be modified if they contain "\n")
+        CopyPrmsFromItemToPanel( item );
+    }
 
     CopyPrmsFromPanelToGeneral();
 
@@ -392,7 +398,6 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
         WORKSHEET_DATAITEM_TEXT* item = (WORKSHEET_DATAITEM_TEXT*) aItem;
 
         item->m_TextBase = m_textCtrlText->GetValue();
-        item->m_TextBase.Replace( wxT("\n"), wxT("\\n") );
 
         msg = m_textCtrlTextIncrement->GetValue();
         msg.ToLong( &itmp );

@@ -152,8 +152,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
             else
             {
                 wsText->m_FullText = BuildFullText( wsText->m_TextBase );
-                if( wsText->m_FullText.Replace( wxT("\\n" ), wxT("\n") ) > 0 )
-                    multilines = true;
+                multilines = wsText->ReplaceAntiSlashSequence();
             }
 
             if( wsText->m_FullText.IsEmpty() )
