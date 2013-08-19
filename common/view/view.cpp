@@ -89,6 +89,53 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 }
 
 
+void VIEW::Draw( VIEW_ITEM* aItem, int aLayer ) const
+{
+    if( isCached( aLayer ) )
+    {
+        // Draw using cached information or create one
+        int group = aItem->getGroup( aLayer );
+
+        if( group >= 0 )
+        {
+            m_gal->DrawGroup( group );
+        }
+        else
+        {
+            group = m_gal->BeginGroup();
+            aItem->setGroup( aLayer, group );
+            if( !m_painter->Draw( aItem, aLayer ) )
+                aItem->ViewDraw( aLayer, m_gal, BOX2I() ); // Alternative drawing method
+            m_gal->EndGroup();
+        }
+    }
+    else
+    {
+        // Immediate mode
+        if( !m_painter->Draw( aItem, aLayer ) )
+            aItem->ViewDraw( aLayer, m_gal, BOX2I() );  // Alternative drawing method
+    }
+
+    // Draws a bright contour around the item
+    if( static_cast<const EDA_ITEM*>( aItem )->IsBrightened() )
+    {
+        m_painter->DrawBrightened( aItem );
+    }
+}
+
+
+void VIEW::Draw( VIEW_ITEM* aItem ) const
+{
+    int layers[VIEW_MAX_LAYERS], layers_count;
+    aItem->ViewGetLayers( layers, layers_count );
+
+    for( int i = 0; i < layers_count; ++i )
+    {
+        Draw( aItem, layers[i] );
+    }
+}
+
+
 void VIEW::SetRequired( int aLayerId, int aRequiredId, bool aRequired )
 {
     wxASSERT( (unsigned) aLayerId < m_layers.size() );
@@ -337,7 +384,7 @@ struct VIEW::updateItemsColor
 void VIEW::UpdateLayerColor( int aLayer )
 {
     // There is no point in updating non-cached layers
-    if( m_layers[aLayer].target != TARGET_CACHED )
+    if( !isCached( aLayer ) )
         return;
 
     BOX2I r;
@@ -360,7 +407,7 @@ void VIEW::UpdateAllLayersColor()
         VIEW_LAYER* l = &( ( *i ).second );
 
         // There is no point in updating non-cached layers
-        if( l->target != TARGET_CACHED )
+        if( !isCached( l->id ) )
             continue;
 
         updateItemsColor visitor( l->id, m_painter, m_gal );
@@ -392,7 +439,7 @@ struct VIEW::changeItemsDepth
 void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
 {
     // There is no point in updating non-cached layers
-    if( m_layers[aLayer].target != TARGET_CACHED )
+    if( !isCached( aLayer ) )
         return;
 
     BOX2I r;
@@ -488,43 +535,13 @@ struct VIEW::drawItem
 
     void operator()( VIEW_ITEM* aItem )
     {
-        GAL* gal = view->GetGAL();
-
         // Conditions that have te be fulfilled for an item to be drawn
         bool drawCondition = aItem->ViewIsVisible() &&
                              aItem->ViewGetLOD( currentLayer->id ) < view->m_scale;
         if( !drawCondition )
             return;
 
-        if( currentLayer->target == TARGET_CACHED )
-        {
-            // Draw using cached information or create one
-            int group = aItem->getGroup( currentLayer->id );
-
-            if( group >= 0 )
-            {
-                gal->DrawGroup( group );
-            }
-            else
-            {
-                group = gal->BeginGroup();
-                aItem->setGroup( currentLayer->id, group );
-                if( !view->m_painter->Draw( aItem, currentLayer->id ) )
-                    aItem->ViewDraw( currentLayer->id, gal, BOX2I() ); // Alternative drawing method
-                gal->EndGroup();
-            }
-        }
-        else
-        {
-            // Immediate mode
-            if( !view->m_painter->Draw( aItem, currentLayer->id ) )
-                aItem->ViewDraw( currentLayer->id, gal, BOX2I() );  // Alternative drawing method
-        }
-
-        if( static_cast<const EDA_ITEM*>( aItem )->IsBrightened() )
-        {
-            view->m_painter->DrawBrightened( aItem );
-        }
+        view->Draw( aItem, currentLayer->id );
     }
 
     const VIEW_LAYER* currentLayer;
@@ -691,7 +708,10 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
         }
         else if( aUpdateFlags == VIEW_ITEM::GEOMETRY )
         {
-            updateItemGeometry( aItem, layers[i]);
+            // Reinsert item
+            Remove( aItem );
+            Add( aItem );
+            updateItemGeometry( aItem, layers[i]);      /// TODO is it still necessary?
         }
 
         // Mark those layers as dirty, so the VIEW will be refreshed
@@ -766,7 +786,7 @@ void VIEW::RecacheAllItems( bool aImmediately )
         VIEW_LAYER* l = & ( ( *i ).second );
 
         // Obviously, there is only one cached target that has to be recomputed
-        if( l->target == TARGET_CACHED )
+        if( isCached( l->id ) )
         {
             m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
