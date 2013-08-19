@@ -89,10 +89,24 @@ public:
      * Finds all visible items that touch or are within the rectangle aRect.
      * @param aRect area to search for items
      * @param aResult result of the search, containing VIEW_ITEMs associated with their layers.
-     *  Sorted according to the rendering order (items that are on top of the rendering stack as first).
+     *  Sorted according to the rendering order (items that are on top of the rendering stack as
+     *  first).
      * @return Number of found items.
      */
     int     Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult );
+
+    /**
+     * Function Draw()
+     * Draws an item, but on a specified layers. It has to be marked that some of drawing settings
+     * are based on the layer on which an item is drawn.
+     */
+    void   Draw( VIEW_ITEM* aItem, int aLayer ) const;
+
+    /**
+     * Function Draw()
+     * Draws an item on all layers that the item uses.
+     */
+    void   Draw( VIEW_ITEM* aItem ) const;
 
     /**
      * Function SetRequired()
@@ -441,6 +455,12 @@ private:
 
     /// Checks if every layer required by the aLayerId layer is enabled.
     bool areRequiredLayersEnabled( int aLayerId ) const;
+
+    /// Returns true if the layer is cached
+    inline bool isCached( int aLayer ) const
+    {
+        return ( m_layers.at( aLayer ).target == TARGET_CACHED );
+    }
 
     /// Contains set of possible displayed layers and its properties
     LayerMap    m_layers;
