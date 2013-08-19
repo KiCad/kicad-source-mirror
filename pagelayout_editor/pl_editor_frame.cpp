@@ -66,8 +66,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( wxWindow* aParent, const wxString& aTitle,
     m_HotkeysZoomAndGridList    = s_PlEditor_Hokeys_Descr;
     m_originSelectChoice = 0;
 
-    m_designTreeWidth = 100;
-    m_propertiesFrameWidth = 150;
+    m_designTreeWidth = 150;
+    m_propertiesFrameWidth = 200;
 
     if( m_canvas )
         m_canvas->SetEnableBlockCommands( false );
@@ -178,7 +178,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( wxWindow* aParent, const wxString& aTitle,
 
 PL_EDITOR_FRAME::~PL_EDITOR_FRAME()
 {
-    wxGetApp().SaveCurrentSetupValues( m_configSettings );
 }
 
 
@@ -230,8 +229,14 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     SaveSettings();
+    wxGetApp().SaveCurrentSetupValues( m_configSettings );
+
     // do not show the window because we do not want any paint event
     Show( false );
+
+    // On Linux, m_propertiesPagelayout must be destroyed
+    // before deleting the main frame to avoid a crash when closing
+    m_propertiesPagelayout->Destroy();
     Destroy();
 }
 
