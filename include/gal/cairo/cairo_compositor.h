@@ -50,8 +50,14 @@ public:
     /// @copydoc COMPOSITOR::Resize()
     virtual void Resize( unsigned int aWidth, unsigned int aHeight );
 
+    /// @copydoc COMPOSITOR::CreateBuffer()
+    virtual unsigned int CreateBuffer();
+
     /// @copydoc COMPOSITOR::GetBuffer()
-    virtual unsigned int GetBuffer();
+    inline virtual unsigned int GetBuffer() const
+    {
+        return m_current + 1;
+    }
 
     /// @copydoc COMPOSITOR::SetBuffer()
     virtual void SetBuffer( unsigned int aBufferHandle );
@@ -62,6 +68,21 @@ public:
     /// @copydoc COMPOSITOR::DrawBuffer()
     virtual void DrawBuffer( unsigned int aBufferHandle );
 
+    /**
+     * Function SetMainContext()
+     * Sets a context to be treated as the main context (ie. as a target of buffers rendering and
+     * as a source of settings for newly created buffers).
+     *
+     * @param aMainContext is the context that should be treated as the main one.
+     */
+    inline virtual void SetMainContext( cairo_t* aMainContext )
+    {
+        m_mainContext = aMainContext;
+
+        // Use the context's transformation matrix
+        cairo_get_matrix( m_mainContext, &m_matrix );
+    }
+
 protected:
     typedef boost::shared_array<unsigned int> BitmapPtr;
     typedef struct
@@ -71,7 +92,7 @@ protected:
         BitmapPtr           bitmap;         ///< Pixel storage
     } CAIRO_BUFFER;
 
-    unsigned int            m_current;                ///< Currently used buffer handle
+    unsigned int            m_current;      ///< Currently used buffer handle
     typedef std::deque<CAIRO_BUFFER> CAIRO_BUFFERS;
 
     /// Pointer to the current context, so it can be changed

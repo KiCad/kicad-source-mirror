@@ -39,6 +39,28 @@
 
 using namespace KiGfx;
 
+VIEW::VIEW( bool aIsDynamic ) :
+    m_enableOrderModifier( false ),
+    m_scale( 1.0 ),
+    m_painter( NULL ),
+    m_gal( NULL ),
+    m_dynamic( aIsDynamic )
+{
+    // Redraw everything at the beginning
+    for( int i = 0; i < TARGETS_NUMBER; ++i )
+        SetTargetDirty( i );
+}
+
+
+VIEW::~VIEW()
+{
+    BOOST_FOREACH( LayerMap::value_type& l, m_layers )
+    {
+        delete l.second.items;
+    }
+}
+
+
 void VIEW::AddLayer( int aLayer, bool aDisplayOnly )
 {
     if( m_layers.find( aLayer ) == m_layers.end() )
@@ -197,25 +219,6 @@ int VIEW::Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult )
 }
 
 
-VIEW::VIEW( bool aIsDynamic ) :
-    m_enableOrderModifier( false ),
-    m_scale( 1.0 ),
-    m_painter( NULL ),
-    m_gal( NULL ),
-    m_dynamic( aIsDynamic )
-{
-}
-
-
-VIEW::~VIEW()
-{
-    BOOST_FOREACH( LayerMap::value_type& l, m_layers )
-    {
-        delete l.second.items;
-    }
-}
-
-
 VECTOR2D VIEW::ToWorld( const VECTOR2D& aCoord, bool aAbsolute ) const
 {
     MATRIX3x3D matrix = m_gal->GetWorldScreenMatrix().Inverse();
@@ -266,6 +269,11 @@ void VIEW::SetGAL( GAL* aGal )
 
     // clear group numbers, so everything is going to be recached
     clearGroupCache();
+
+    // every target has to be refreshed
+    SetTargetDirty( TARGET_CACHED );
+    SetTargetDirty( TARGET_NONCACHED );
+    SetTargetDirty( TARGET_OVERLAY );
 
     // force the new GAL to display the current viewport.
     SetCenter( m_center );
@@ -326,6 +334,10 @@ void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
 
     SetCenter( m_center - delta );
     m_scale = aScale;
+
+    // Redraw everything after the viewport has changed
+    SetTargetDirty( TARGET_CACHED );
+    SetTargetDirty( TARGET_NONCACHED );
 }
 
 
@@ -334,6 +346,10 @@ void VIEW::SetCenter( const VECTOR2D& aCenter )
     m_center = aCenter;
     m_gal->SetLookAtPoint( m_center );
     m_gal->ComputeWorldScreenMatrix();
+
+    // Redraw everything after the viewport has changed
+    SetTargetDirty( TARGET_CACHED );
+    SetTargetDirty( TARGET_NONCACHED );
 }
 
 
@@ -347,6 +363,8 @@ void VIEW::sortLayers()
         m_orderedLayers[n++] = &i->second;
 
     sort( m_orderedLayers.begin(), m_orderedLayers.end(), compareRenderingOrder );
+
+    SetTargetDirty( TARGET_CACHED );
 }
 
 
@@ -554,15 +572,15 @@ void VIEW::redrawRect( const BOX2I& aRect )
 {
     BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
     {
-        if( l->enabled && areRequiredLayersEnabled( l->id ) )
+        if( l->enabled && isTargetDirty( l->target ) && areRequiredLayersEnabled( l->id ) )
         {
             drawItem drawFunc( this, l );
 
             m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
             l->items->Query( aRect, drawFunc );
-            l->isDirty = false;
         }
+        l->isDirty = false;
     }
 }
 
@@ -648,9 +666,27 @@ void VIEW::Redraw()
     VECTOR2D screenSize = m_gal->GetScreenPixelSize();
     BOX2I    rect( ToWorld( VECTOR2D( 0, 0 ) ),
                    ToWorld( screenSize ) - ToWorld( VECTOR2D( 0, 0 ) ) );
-
     rect.Normalize();
+
+    if( isTargetDirty( TARGET_CACHED ) || isTargetDirty( TARGET_NONCACHED ) )
+    {
+        // TARGET_CACHED and TARGET_NONCACHED have to be redrawn together, as they contain
+        // layers that rely on each other (eg. netnames are noncached, but tracks - are cached)
+        m_gal->ClearTarget( TARGET_NONCACHED );
+        m_gal->ClearTarget( TARGET_CACHED );
+
+        SetTargetDirty( TARGET_NONCACHED );
+        SetTargetDirty( TARGET_CACHED );
+
+        m_gal->DrawGrid();
+    }
+    m_gal->ClearTarget( TARGET_OVERLAY );
+
     redrawRect( rect );
+
+    // All targets were redrawn, so nothing is dirty
+    SetTargetDirty( TARGET_CACHED, false );
+    SetTargetDirty( TARGET_NONCACHED, false );
 }
 
 
@@ -800,4 +836,20 @@ void VIEW::RecacheAllItems( bool aImmediately )
 
     wxLogDebug( wxT( "RecacheAllItems::%.1f ms" ), (double) totalRealTime.value / 1000.0 );
 #endif /* __WXDEBUG__ */
+}
+
+
+bool VIEW::isTargetDirty( int aTarget ) const
+{
+    wxASSERT( aTarget < TARGETS_NUMBER );
+
+    // Check if any of layers belonging to the target is dirty
+    BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
+    {
+        if( l->target == aTarget && l->isDirty )
+            return true;
+    }
+
+    // If no layer is dirty, just check the target status itself
+    return m_dirtyTargets[aTarget];
 }

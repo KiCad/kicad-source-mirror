@@ -579,6 +579,13 @@ public:
      */
     virtual RenderTarget GetTarget() const = 0;
 
+    /**
+     * @brief Clears the target for rendering.
+     *
+     * @param aTarget is the target to be cleared.
+     */
+    virtual void ClearTarget( RenderTarget aTarget ) = 0;
+
     // -------------
     // Grid methods
     // -------------

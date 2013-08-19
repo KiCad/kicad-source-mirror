@@ -214,6 +214,9 @@ public:
     /// @copydoc GAL::GetTarget()
     virtual RenderTarget GetTarget() const;
 
+    /// @copydoc GAL::ClearTarget()
+    virtual void ClearTarget( RenderTarget aTarget );
+
     // -------
     // Cursor
     // -------

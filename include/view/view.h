@@ -392,6 +392,20 @@ public:
      */
     bool IsDirty() const;
 
+    /**
+     * Function SetTargetDirty()
+     * Sets or clears target 'dirty' flag.
+     * @param aTarget is the target to set.
+     * @param aState says if the flag should be set or cleared.
+     */
+    inline void SetTargetDirty( int aTarget, bool aState = true )
+    {
+        wxASSERT( aTarget < TARGETS_NUMBER );
+
+        m_dirtyTargets[aTarget] = aState;
+    }
+
+
     static const int VIEW_MAX_LAYERS = 128;      ///* maximum number of layers that may be shown
 
 private:
@@ -462,6 +476,14 @@ private:
         return ( m_layers.at( aLayer ).target == TARGET_CACHED );
     }
 
+    /**
+     * Function isTargetDirty()
+     * Returns true if any of layers belonging to the target or the target itself should be
+     * redrawn.
+     * @return True if the above condition is fulfilled.
+     */
+    bool isTargetDirty( int aTarget ) const;
+
     /// Contains set of possible displayed layers and its properties
     LayerMap    m_layers;
 
@@ -486,6 +508,9 @@ private:
     /// Dynamic VIEW (eg. display PCB in window) allows changes once it is built,
     /// static (eg. image/PDF) - does not.
     bool        m_dynamic;
+
+    /// Flags to mark targets as dirty, so they have to be redrawn on the next refresh event
+    bool        m_dirtyTargets[TARGETS_NUMBER];
 
     /// Rendering order modifier for layers that are marked as top layers
     static const int TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;

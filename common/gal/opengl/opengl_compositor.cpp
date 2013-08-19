@@ -74,7 +74,7 @@ void OPENGL_COMPOSITOR::Initialize()
                                GL_RENDERBUFFER, m_depthBuffer );
 
     // Unbind the framebuffer, so by default all the rendering goes directly to the display
-    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    glBindFramebuffer( GL_FRAMEBUFFER, DIRECT_RENDERING );
     m_currentFbo = 0;
 
     m_initialized = true;
@@ -91,7 +91,7 @@ void OPENGL_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
 }
 
 
-unsigned int OPENGL_COMPOSITOR::GetBuffer()
+unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 {
     wxASSERT( m_initialized );
 
@@ -169,8 +169,8 @@ unsigned int OPENGL_COMPOSITOR::GetBuffer()
 
 
     ClearBuffer();
-    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-    m_currentFbo = 0;
+    glBindFramebuffer( GL_FRAMEBUFFER, DIRECT_RENDERING );
+    m_currentFbo = DIRECT_RENDERING;
 
     // Store the new buffer
     OPENGL_BUFFER buffer = { textureTarget, attachmentPoint };
@@ -186,10 +186,10 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
         return;
 
     // Change the rendering destination to the selected attachment point
-    if( aBufferHandle == 0 )
+    if( aBufferHandle == DIRECT_RENDERING )
     {
-        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-        m_currentFbo = 0;
+        glBindFramebuffer( GL_FRAMEBUFFER, DIRECT_RENDERING );
+        m_currentFbo = DIRECT_RENDERING;
     }
     else if( m_currentFbo != m_framebuffer )
     {
@@ -197,7 +197,7 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
         m_currentFbo = m_framebuffer;
     }
 
-    if( m_currentFbo != 0 && m_current != aBufferHandle - 1 )
+    if( m_currentFbo != DIRECT_RENDERING )
     {
         m_current = aBufferHandle - 1;
         glDrawBuffer( m_buffers[m_current].attachmentPoint );
@@ -219,8 +219,8 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
     wxASSERT( m_initialized );
 
     // Switch to the main framebuffer and blit the scene
-    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-    m_currentFbo = 0;
+    glBindFramebuffer( GL_FRAMEBUFFER, DIRECT_RENDERING );
+    m_currentFbo = DIRECT_RENDERING;
 
     // Depth test has to be disabled to make transparency working
     glDisable( GL_DEPTH_TEST );
@@ -279,4 +279,4 @@ void OPENGL_COMPOSITOR::clean()
 }
 
 
-GLuint OPENGL_COMPOSITOR::m_currentFbo = 0;
+GLuint OPENGL_COMPOSITOR::m_currentFbo = DIRECT_RENDERING;
