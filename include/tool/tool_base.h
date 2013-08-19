@@ -58,7 +58,6 @@ typedef DELEGATE<int, TOOL_EVENT&> TOOL_STATE_FUNC;
 class TOOL_BASE 
 {
 public:
-
 	TOOL_BASE( TOOL_Type aType, TOOL_ID aId, const std::string& aName = std::string( "" ) ) :
 		m_type( aType ),
 		m_toolId( aId ),
@@ -95,7 +94,7 @@ protected:
 	 * Sets the TOOL_MANAGER the tool will belong to.
 	 * Called by TOOL_MANAGER::RegisterTool()
 	 */
-	void attachManager( TOOL_MANAGER *aManager );
+	void attachManager( TOOL_MANAGER* aManager );
 
 	KiGfx::VIEW* getView();
 	KiGfx::VIEW_CONTROLS* getViewControls();
@@ -107,7 +106,7 @@ protected:
 	 * run-time type check
 	 */
 	template<typename T>
-	T *getEditFrame()
+	T* getEditFrame()
 	{
 		return static_cast<T*>( getEditFrameInt() );
 	}
@@ -120,12 +119,11 @@ protected:
 	template<typename T> 
 	T* getModel( KICAD_T modelType ) 
 	{
-		EDA_ITEM *m = getModelInt();
+		EDA_ITEM* m = getModelInt();
 //		assert(modelType == m->Type());
 		return static_cast<T*>( m );
 	}
 
-protected:
 	TOOL_Type m_type;
 	TOOL_ID m_toolId;
 	std::string m_toolName;

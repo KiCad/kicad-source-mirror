@@ -100,10 +100,10 @@ void TOOL_MANAGER::ScheduleNextState( TOOL_BASE *aTool, TOOL_STATE_FUNC& aHandle
 }
 
 
-optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE *aTool,
+optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
                                                  const TOOL_EVENT_LIST& aConditions )
 {
-	ToolState *st = m_toolState[aTool];
+	ToolState* st = m_toolState[aTool];
 	
 	st->pendingWait = true;
 	st->waitEvents = aConditions;
