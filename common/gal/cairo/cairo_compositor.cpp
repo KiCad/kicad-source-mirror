@@ -36,8 +36,6 @@ using namespace KiGfx;
 CAIRO_COMPOSITOR::CAIRO_COMPOSITOR( cairo_t** aMainContext ) :
     m_current( 0 ), m_currentContext( aMainContext ), m_mainContext( *aMainContext )
 {
-    // Obtain the transformation matrix used in the main context
-    cairo_get_matrix( m_mainContext, &m_matrix );
 }
 
 
@@ -65,11 +63,10 @@ void CAIRO_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
 }
 
 
-unsigned int CAIRO_COMPOSITOR::GetBuffer()
+unsigned int CAIRO_COMPOSITOR::CreateBuffer()
 {
     // Pixel storage
     BitmapPtr bitmap( new unsigned int[m_bufferSize] );
-
     memset( bitmap.get(), 0x00, m_bufferSize * sizeof(int) );
 
     // Create the Cairo surface
@@ -78,10 +75,10 @@ unsigned int CAIRO_COMPOSITOR::GetBuffer()
                                                         CAIRO_FORMAT_ARGB32, m_width,
                                                         m_height, m_stride );
     cairo_t* context = cairo_create( surface );
-    #ifdef __WXDEBUG__
-        cairo_status_t status = cairo_status( context );
-        wxASSERT_MSG( status == CAIRO_STATUS_SUCCESS, "Cairo context creation error" );
-    #endif /* __WXDEBUG__ */
+#ifdef __WXDEBUG__
+    cairo_status_t status = cairo_status( context );
+    wxASSERT_MSG( status == CAIRO_STATUS_SUCCESS, "Cairo context creation error" );
+#endif /* __WXDEBUG__ */
 
     // Set default settings for the buffer
     cairo_set_antialias( context, CAIRO_ANTIALIAS_SUBPIXEL );
@@ -89,6 +86,7 @@ unsigned int CAIRO_COMPOSITOR::GetBuffer()
     cairo_set_line_cap( context, CAIRO_LINE_CAP_ROUND );
 
     // Use the same transformation matrix as the main context
+    cairo_get_matrix( m_mainContext, &m_matrix );
     cairo_set_matrix( context, &m_matrix );
 
     // Store the new buffer
@@ -101,53 +99,41 @@ unsigned int CAIRO_COMPOSITOR::GetBuffer()
 
 void CAIRO_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 {
-    if( aBufferHandle <= usedBuffers() )
-    {
-        m_current = aBufferHandle - 1;
-        *m_currentContext = m_buffers[m_current].context;
-    }
+    wxASSERT_MSG( aBufferHandle <= usedBuffers(), wxT( "Tried to use a not existing buffer" ) );
 
-#ifdef __WXDEBUG__
-    else
-        wxLogDebug( wxT( "Tried to use a not existing buffer" ) );
-#endif
+    // Get currently used transformation matrix, so it can be applied to the new buffer
+    cairo_get_matrix( *m_currentContext, &m_matrix );
+
+    m_current = aBufferHandle - 1;
+    *m_currentContext = m_buffers[m_current].context;
+
+    // Apply the current transformation matrix
+    cairo_set_matrix( *m_currentContext, &m_matrix );
 }
 
 
 void CAIRO_COMPOSITOR::ClearBuffer()
 {
-    // Reset the transformation matrix, so it is possible to composite images using
-    // screen coordinates instead of world coordinates
-    cairo_identity_matrix( m_buffers[m_current].context );
-
-    cairo_set_source_rgba( m_buffers[m_current].context, 0.0, 0.0, 0.0, 0.0 );
-    cairo_rectangle( m_buffers[m_current].context, 0.0, 0.0, m_width, m_height );
-    cairo_fill( m_buffers[m_current].context );
-
-    // Restore the transformation matrix
-    cairo_set_matrix( m_buffers[m_current].context, &m_matrix );
+    // Clear the pixel storage
+    memset( m_buffers[m_current].bitmap.get(), 0x00, m_bufferSize * sizeof(int) );
 }
 
 
 void CAIRO_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 {
-    if( aBufferHandle <= usedBuffers() )
-    {
-        // Reset the transformation matrix, so it is possible to composite images using
-        // screen coordinates instead of world coordinates
-        cairo_identity_matrix( m_mainContext );
+    wxASSERT_MSG( aBufferHandle <= usedBuffers(), wxT( "Tried to use a not existing buffer" ) );
 
-        cairo_set_source_surface( m_mainContext, m_buffers[aBufferHandle - 1].surface, 0.0, 0.0 );
-        cairo_paint( m_mainContext );
+    // Reset the transformation matrix, so it is possible to composite images using
+    // screen coordinates instead of world coordinates
+    cairo_get_matrix( m_mainContext, &m_matrix );
+    cairo_identity_matrix( m_mainContext );
 
-        // Restore the transformation matrix
-        cairo_set_matrix( m_mainContext, &m_matrix );
-    }
+    // Draw the selected buffer contents
+    cairo_set_source_surface( m_mainContext, m_buffers[aBufferHandle - 1].surface, 0.0, 0.0 );
+    cairo_paint( m_mainContext );
 
-#ifdef __WXDEBUG__
-    else
-        wxLogDebug( wxT( "Tried to use a not existing buffer" ) );
-#endif
+    // Restore the transformation matrix
+    cairo_set_matrix( m_mainContext, &m_matrix );
 }
 
 

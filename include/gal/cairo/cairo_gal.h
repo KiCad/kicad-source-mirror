@@ -221,6 +221,9 @@ public:
     /// @copydoc GAL::GetTarget()
     virtual RenderTarget GetTarget() const;
 
+    /// @copydoc GAL::ClearTarget()
+    virtual void ClearTarget( RenderTarget aTarget );
+
     // -------
     // Cursor
     // -------
@@ -267,6 +270,7 @@ private:
     unsigned int            mainBuffer;             ///< Handle to the main buffer
     unsigned int            overlayBuffer;          ///< Handle to the overlay buffer
     RenderTarget            currentTarget;          ///< Current rendering target
+    bool                    validCompositor;        ///< Compositor initialization flag
 
     // Variables related to wxWidgets
     wxWindow*               parentWindow;           ///< Parent window

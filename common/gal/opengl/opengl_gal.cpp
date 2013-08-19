@@ -130,8 +130,8 @@ void OPENGL_GAL::BeginDrawing()
 
         // Prepare rendering target buffers
         compositor.Initialize();
-        mainBuffer = compositor.GetBuffer();
-        overlayBuffer = compositor.GetBuffer();
+        mainBuffer = compositor.CreateBuffer();
+        overlayBuffer = compositor.CreateBuffer();
 
         isFramebufferInitialized = true;
     }
@@ -187,13 +187,10 @@ void OPENGL_GAL::BeginDrawing()
     SetFillColor( fillColor );
     SetStrokeColor( strokeColor );
 
-    // Prepare buffers for drawing
-    compositor.SetBuffer( mainBuffer );
-    compositor.ClearBuffer();
-    compositor.SetBuffer( overlayBuffer );
-    compositor.ClearBuffer();
-    compositor.SetBuffer( 0 );    // Unbind buffers
+    // Unbind buffers - set compositor for direct drawing
+    compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
+    // Remove all previously stored items
     nonCachedManager.Clear();
     overlayManager.Clear();
 
@@ -708,6 +705,31 @@ void OPENGL_GAL::SetTarget( RenderTarget aTarget )
 RenderTarget OPENGL_GAL::GetTarget() const
 {
     return currentTarget;
+}
+
+
+void OPENGL_GAL::ClearTarget( RenderTarget aTarget )
+{
+    // Save the current state
+    unsigned int oldTarget = compositor.GetBuffer();
+
+    switch( aTarget )
+    {
+    // Cached and noncached items are rendered to the same buffer
+    default:
+    case TARGET_CACHED:
+    case TARGET_NONCACHED:
+        compositor.SetBuffer( mainBuffer );
+        break;
+
+    case TARGET_OVERLAY:
+        compositor.SetBuffer( overlayBuffer );
+        break;
+    }
+    compositor.ClearBuffer();
+
+    // Restore the previous state
+    compositor.SetBuffer( oldTarget );
 }
 
 

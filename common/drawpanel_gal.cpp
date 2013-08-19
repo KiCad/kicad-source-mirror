@@ -127,6 +127,8 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 {
     m_gal->ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
+    m_view->SetTargetDirty( KiGfx::TARGET_CACHED );
+    m_view->SetTargetDirty( KiGfx::TARGET_NONCACHED );
 }
 
 
@@ -134,24 +136,19 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 {
 #ifdef __WXDEBUG__
     prof_counter time;
-
     prof_start( &time, false );
 #endif /* __WXDEBUG__ */
-
-    printf("Refresh!\n");
 
     m_gal->BeginDrawing();
     m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
     m_gal->ClearScreen();
 
-    m_gal->DrawGrid();
     m_view->Redraw();
 
     m_gal->EndDrawing();
 
 #ifdef __WXDEBUG__
     prof_end( &time );
-
     wxLogDebug( wxT( "EDA_DRAW_PANEL_GAL::Refresh: %.0f ms (%.0f fps)" ),
         static_cast<double>( time.value ) / 1000.0, 1000000.0 / static_cast<double>( time.value ) );
 #endif /* __WXDEBUG__ */
@@ -184,6 +181,9 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
     m_gal->SetScreenDPI( 106 );                                     // Display resolution setting
     m_gal->ComputeWorldScreenMatrix();
 
+    wxSize size = GetClientSize();
+    m_gal->ResizeScreen( size.GetX(), size.GetY() );
+
     if( m_painter )
         m_painter->SetGAL( m_gal );
 
@@ -192,9 +192,6 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
         m_view->SetGAL( m_gal );
         m_view->RecacheAllItems( true );
     }
-
-    wxSize size = GetClientSize();
-    m_gal->ResizeScreen( size.GetX(), size.GetY() );
 
     m_currentGal = aGalType;
 }

@@ -49,17 +49,29 @@ public:
     /// @copydoc COMPOSITOR::Resize()
     virtual void Resize( unsigned int aWidth, unsigned int aHeight );
 
-    /// @copydoc COMPOSITOR::GetBuffer()
-    virtual unsigned int GetBuffer();
+    /// @copydoc COMPOSITOR::CreateBuffer()
+    virtual unsigned int CreateBuffer();
 
     /// @copydoc COMPOSITOR::SetBuffer()
     virtual void SetBuffer( unsigned int aBufferHandle );
+
+    /// @copydoc COMPOSITOR::GetBuffer()
+    inline virtual unsigned int GetBuffer() const
+    {
+        if( m_currentFbo == DIRECT_RENDERING )
+            return DIRECT_RENDERING;
+
+        return m_current + 1;
+    }
 
     /// @copydoc COMPOSITOR::ClearBuffer()
     virtual void ClearBuffer();
 
     /// @copydoc COMPOSITOR::DrawBuffer()
     virtual void DrawBuffer( unsigned int aBufferHandle );
+
+    // Constant used by glBindFramebuffer to turn off rendering to framebuffers
+    static const unsigned int DIRECT_RENDERING = 0;
 
 protected:
     typedef struct

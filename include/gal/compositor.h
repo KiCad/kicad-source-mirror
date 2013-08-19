@@ -57,12 +57,20 @@ public:
     virtual void Resize( unsigned int aWidth, unsigned int aHeight ) = 0;
 
     /**
-     * Function GetBuffer()
+     * Function CreateBuffer()
      * prepares a new buffer that may be used as a rendering target.
      *
      * @return is the handle of the buffer. In case of failure 0 (zero) is returned as the handle.
      */
-    virtual unsigned int GetBuffer() = 0;
+    virtual unsigned int CreateBuffer() = 0;
+
+    /**
+     * Function GetBuffer()
+     * returns currently used buffer handle.
+     *
+     * @return Currently used buffer handle.
+     */
+    virtual unsigned int GetBuffer() const = 0;
 
     /**
      * Function SetBuffer()

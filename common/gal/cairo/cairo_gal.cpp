@@ -48,6 +48,7 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     isGrouping          = false;
     isInitialized       = false;
     isDeleteSavedPixels = false;
+    validCompositor     = false;
     groupCounter        = 0;
 
     // Connecting the event handlers
@@ -90,7 +91,11 @@ CAIRO_GAL::~CAIRO_GAL()
 void CAIRO_GAL::BeginDrawing()
 {
     initSurface();
-    setCompositor();
+    if( !validCompositor )
+        setCompositor();
+
+    compositor->SetMainContext( context );
+    compositor->SetBuffer( mainBuffer );
 
     // Cairo grouping prevents display of overlapping items on the same layer in the lighter color
     cairo_push_group( currentContext );
@@ -120,9 +125,9 @@ void CAIRO_GAL::EndDrawing()
     for( size_t count = 0; count < bufferSize; count++ )
     {
         unsigned int value = bitmapBuffer[count];
-        *wxOutputPtr++ = (value >> 16) & 0xff;  // Red pixel
-        *wxOutputPtr++ = (value >> 8) & 0xff;   // Green pixel
-        *wxOutputPtr++ = value & 0xff;          // Blue pixel
+        *wxOutputPtr++ = ( value >> 16 ) & 0xff;  // Red pixel
+        *wxOutputPtr++ = ( value >> 8 ) & 0xff;   // Green pixel
+        *wxOutputPtr++ = value & 0xff;            // Blue pixel
     }
 
     wxImage      img( (int) screenSize.x, (int) screenSize.y, (unsigned char*) wxOutput, true );
@@ -272,6 +277,10 @@ void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
     // Recreate the bitmaps
     deleteBitmaps();
     allocateBitmaps();
+
+    if( validCompositor )
+        compositor->Resize( aWidth, aHeight );
+    validCompositor = false;
 
     SetSize( wxSize( aWidth, aHeight ) );
 }
@@ -719,7 +728,7 @@ void CAIRO_GAL::SetTarget( RenderTarget aTarget )
 {
     // If the compositor is not set, that means that there is a recaching process going on
     // and we do not need the compositor now
-    if( !compositor )
+    if( !validCompositor )
         return;
 
     // Cairo grouping prevents display of overlapping items on the same layer in the lighter color
@@ -748,6 +757,31 @@ void CAIRO_GAL::SetTarget( RenderTarget aTarget )
 RenderTarget CAIRO_GAL::GetTarget() const
 {
     return currentTarget;
+}
+
+
+void CAIRO_GAL::ClearTarget( RenderTarget aTarget )
+{
+    // Save the current state
+    unsigned int currentBuffer = compositor->GetBuffer();
+
+    switch( aTarget )
+    {
+    // Cached and noncached items are rendered to the same buffer
+    default:
+    case TARGET_CACHED:
+    case TARGET_NONCACHED:
+        compositor->SetBuffer( mainBuffer );
+        break;
+
+    case TARGET_OVERLAY:
+        compositor->SetBuffer( overlayBuffer );
+        break;
+    }
+    compositor->ClearBuffer();
+
+    // Restore the previous state
+    compositor->SetBuffer( currentBuffer );
 }
 
 
@@ -972,8 +1006,10 @@ void CAIRO_GAL::setCompositor()
     compositor->Resize( screenSize.x, screenSize.y );
 
     // Prepare buffers
-    mainBuffer = compositor->GetBuffer();
-    overlayBuffer = compositor->GetBuffer();
+    mainBuffer = compositor->CreateBuffer();
+    overlayBuffer = compositor->CreateBuffer();
+
+    validCompositor = true;
 }
 
 
