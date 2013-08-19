@@ -73,17 +73,17 @@ public:
      * An user-defined parameter object can be also passed
      */
     void InvokeTool( TOOL_ID aToolId );
-    void InvokeTool( const std::string& name );
+    void InvokeTool( const std::string& aName );
 
     template <class Parameters>
-        void InvokeTool( const std::string& name, const Parameters& aToolParams );
+        void InvokeTool( const std::string& aName, const Parameters& aToolParams );
 
     /**
      * Function FindTool()
      * Searches for a tool with given name or ID
      */
-    TOOL_BASE* FindTool( int aId );
-    TOOL_BASE* FindTool( const std::string& aName );
+    TOOL_BASE* FindTool( int aId ) const;
+    TOOL_BASE* FindTool( const std::string& aName ) const;
 
     /**
      * Resets the state of a given tool by clearing its wait and

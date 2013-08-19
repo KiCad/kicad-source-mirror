@@ -98,7 +98,7 @@ enum TOOL_MouseButtons
 enum TOOL_ContextMenuTrigger
 {
 	CMENU_BUTTON = 0, // On the right button
-	CMENU_NOW, // Right now (after TOOL_INTERACTIVE::SetContxtMenu)
+	CMENU_NOW, // Right now (after TOOL_INTERACTIVE::SetContextMenu)
 	CMENU_OFF  // Never
 };
 
@@ -217,10 +217,10 @@ public:
 
     bool Matches( const TOOL_EVENT& aEvent ) const
     {
-        if( ! ( m_category & aEvent.m_category ) )
+        if( !( m_category & aEvent.m_category ) )
             return false;
 
-        if( ! ( m_actions & aEvent.m_actions ) )
+        if( !( m_actions & aEvent.m_actions ) )
             return false;
 
         if( m_category == TC_Command )

@@ -207,7 +207,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent &aEvent )
 
 	if( type == wxEVT_MOTION )
 	{
-		wxMouseEvent *me = static_cast<wxMouseEvent*>(&aEvent );
+		wxMouseEvent *me = static_cast<wxMouseEvent*>( &aEvent );
 		pos = getView()->ToWorld( VECTOR2D( me->GetX(), me->GetY() ) );
 		if( pos != m_lastMousePos )
 		{

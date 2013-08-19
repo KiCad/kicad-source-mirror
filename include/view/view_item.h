@@ -124,7 +124,7 @@ public:
 
     /**
      * Function ViewIsVisible()
-     * Returns if the item is visible (or not).
+     * Returns information if the item is visible (or not).
      *
      * @return when true, the item is visible (i.e. to be displayed, not visible in the
      * *current* viewport)
@@ -160,7 +160,7 @@ public:
      * Function ViewRelease()
      * Releases the item from an associated dynamic VIEW. For static views calling has no effect.
      */
-    void ViewRelease();
+    virtual void ViewRelease();
 
 protected:
     friend class VIEW;
@@ -171,7 +171,7 @@ protected:
      *
      * @param aView[]: dynamic VIEW instance the item is being added to.
      */
-    void viewAssign( VIEW* aView )
+    virtual void viewAssign( VIEW* aView )
     {
         // release the item from a previously assigned dynamic view (if there is any)
         ViewRelease();
@@ -182,7 +182,6 @@ protected:
     VIEW*   m_view;         ///* Current dynamic view the item is assigned to.
     bool    m_visible;      ///* Are we visible in the current dynamic VIEW.
 
-private:
     ///* Helper for storing cached items group ids
     typedef std::pair<int, int> GroupPair;
 
@@ -198,7 +197,7 @@ private:
      * @param aLayer is the layer number for which group id is queried.
      * @return group id or -1 in case there is no group id (ie. item is not cached).
      */
-    int getGroup( int aLayer ) const;
+    virtual int getGroup( int aLayer ) const;
 
     /**
      * Function getAllGroups()
@@ -206,7 +205,7 @@ private:
      *
      * @return vector of group ids.
      */
-    std::vector<int> getAllGroups() const;
+    virtual std::vector<int> getAllGroups() const;
 
     /**
      * Function setGroup()
@@ -215,13 +214,13 @@ private:
      * @param aLayer is the layer numbe.
      * @param aGroup is the group id.
      */
-    void setGroup( int aLayer, int aGroup );
+    virtual void setGroup( int aLayer, int aGroup );
 
     /**
      * Function deleteGroups()
      * Removes all of the stored group ids. Forces recaching of the item.
      */
-    void deleteGroups();
+    virtual void deleteGroups();
 
     /**
      * Function storesGroups()
@@ -229,7 +228,7 @@ private:
      *
      * @returns true in case it is cached at least for one layer.
      */
-    bool storesGroups() const;
+    virtual bool storesGroups() const;
 };
 } // namespace KiGfx
 
