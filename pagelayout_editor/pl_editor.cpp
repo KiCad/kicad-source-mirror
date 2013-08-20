@@ -103,7 +103,6 @@ bool EDA_APP::OnInit()
 
         if( fn.IsOk() )
         {
-            wxSetWorkingDirectory( fn.GetPath() );
             bool success = frame->LoadPageLayoutDescrFile( fn.GetFullPath() );
             if( !success )
             {
@@ -113,7 +112,10 @@ bool EDA_APP::OnInit()
                 wxMessageBox( msg );
             }
             else
+            {
                 descrLoaded = true;
+                frame->OnNewPageLayout();
+            }
         }
     }
 
