@@ -92,7 +92,47 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 }
 
 
-void TOOL_MANAGER::ScheduleNextState( TOOL_BASE *aTool, TOOL_STATE_FUNC& aHandler,
+void TOOL_MANAGER::InvokeTool( TOOL_ID aToolId )
+{
+    TOOL_BASE* tool = FindTool( aToolId );
+
+    if( tool && tool->GetType() == TOOL_Interactive )
+        static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
+}
+
+
+void TOOL_MANAGER::InvokeTool( const std::string& aName )
+{
+    TOOL_BASE* tool = FindTool( aName );
+
+    if( tool && tool->GetType() == TOOL_Interactive )
+        static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
+}
+
+
+TOOL_BASE* TOOL_MANAGER::FindTool( int aId ) const
+{
+    std::map<TOOL_ID, ToolState*>::const_iterator it = m_toolIdIndex.find( aId );
+
+    if( it != m_toolIdIndex.end() )
+        return it->second->theTool;
+
+    return NULL;
+}
+
+
+TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
+{
+    std::map<std::string, ToolState*>::const_iterator it = m_toolNameIndex.find( aName );
+
+    if( it != m_toolNameIndex.end() )
+        return it->second->theTool;
+
+    return NULL;
+}
+
+
+void TOOL_MANAGER::ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandler,
                                       const TOOL_EVENT_LIST& aConditions )
 {
 	ToolState* st = m_toolState[aTool];
