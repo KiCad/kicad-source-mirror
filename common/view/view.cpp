@@ -28,6 +28,7 @@
 #include <layers_id_colors_and_visibility.h>
 
 #include <view/view.h>
+#include <view/view_group.h>
 #include <view/view_rtree.h>
 #include <gal/definitions.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -48,7 +49,7 @@ VIEW::VIEW( bool aIsDynamic ) :
 {
     // Redraw everything at the beginning
     for( int i = 0; i < TARGETS_NUMBER; ++i )
-        SetTargetDirty( i );
+        MarkTargetDirty( i );
 }
 
 
@@ -107,53 +108,6 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     {
         VIEW_LAYER* l = & ( ( *i ).second );
         l->items->Remove( aItem );
-    }
-}
-
-
-void VIEW::Draw( VIEW_ITEM* aItem, int aLayer ) const
-{
-    if( isCached( aLayer ) )
-    {
-        // Draw using cached information or create one
-        int group = aItem->getGroup( aLayer );
-
-        if( group >= 0 )
-        {
-            m_gal->DrawGroup( group );
-        }
-        else
-        {
-            group = m_gal->BeginGroup();
-            aItem->setGroup( aLayer, group );
-            if( !m_painter->Draw( aItem, aLayer ) )
-                aItem->ViewDraw( aLayer, m_gal, BOX2I() ); // Alternative drawing method
-            m_gal->EndGroup();
-        }
-    }
-    else
-    {
-        // Immediate mode
-        if( !m_painter->Draw( aItem, aLayer ) )
-            aItem->ViewDraw( aLayer, m_gal, BOX2I() );  // Alternative drawing method
-    }
-
-    // Draws a bright contour around the item
-    if( static_cast<const EDA_ITEM*>( aItem )->IsBrightened() )
-    {
-        m_painter->DrawBrightened( aItem );
-    }
-}
-
-
-void VIEW::Draw( VIEW_ITEM* aItem ) const
-{
-    int layers[VIEW_MAX_LAYERS], layers_count;
-    aItem->ViewGetLayers( layers, layers_count );
-
-    for( int i = 0; i < layers_count; ++i )
-    {
-        Draw( aItem, layers[i] );
     }
 }
 
@@ -271,9 +225,9 @@ void VIEW::SetGAL( GAL* aGal )
     clearGroupCache();
 
     // every target has to be refreshed
-    SetTargetDirty( TARGET_CACHED );
-    SetTargetDirty( TARGET_NONCACHED );
-    SetTargetDirty( TARGET_OVERLAY );
+    MarkTargetDirty( TARGET_CACHED );
+    MarkTargetDirty( TARGET_NONCACHED );
+    MarkTargetDirty( TARGET_OVERLAY );
 
     // force the new GAL to display the current viewport.
     SetCenter( m_center );
@@ -336,8 +290,8 @@ void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
     m_scale = aScale;
 
     // Redraw everything after the viewport has changed
-    SetTargetDirty( TARGET_CACHED );
-    SetTargetDirty( TARGET_NONCACHED );
+    MarkTargetDirty( TARGET_CACHED );
+    MarkTargetDirty( TARGET_NONCACHED );
 }
 
 
@@ -348,23 +302,8 @@ void VIEW::SetCenter( const VECTOR2D& aCenter )
     m_gal->ComputeWorldScreenMatrix();
 
     // Redraw everything after the viewport has changed
-    SetTargetDirty( TARGET_CACHED );
-    SetTargetDirty( TARGET_NONCACHED );
-}
-
-
-void VIEW::sortLayers()
-{
-    int n = 0;
-
-    m_orderedLayers.resize( m_layers.size() );
-
-    for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
-        m_orderedLayers[n++] = &i->second;
-
-    sort( m_orderedLayers.begin(), m_orderedLayers.end(), compareRenderingOrder );
-
-    SetTargetDirty( TARGET_CACHED );
+    MarkTargetDirty( TARGET_CACHED );
+    MarkTargetDirty( TARGET_NONCACHED );
 }
 
 
@@ -373,6 +312,40 @@ void VIEW::SetLayerOrder( int aLayer, int aRenderingOrder )
     m_layers[aLayer].renderingOrder = aRenderingOrder;
 
     sortLayers();
+}
+
+
+int VIEW::GetLayerOrder( int aLayer ) const
+{
+    return m_layers.at(aLayer).renderingOrder;
+}
+
+
+void VIEW::SortLayers( int aLayers[], int& aCount ) const
+{
+    int maxLay, maxOrd, maxIdx;
+
+    for( int i = 0; i < aCount; ++i )
+    {
+        maxLay = aLayers[i];
+        maxOrd = GetLayerOrder( maxLay );
+        maxIdx = i;
+
+        // Look for the max element in the range (j..aCount)
+        for( int j = i; j < aCount; ++j )
+        {
+            if( maxOrd < GetLayerOrder( aLayers[j] ) )
+            {
+                maxLay = aLayers[j];
+                maxOrd = GetLayerOrder( maxLay );
+                maxIdx = j;
+            }
+        }
+
+        // Swap elements
+        aLayers[maxIdx] = aLayers[i];
+        aLayers[i] = maxLay;
+    }
 }
 
 
@@ -559,7 +532,7 @@ struct VIEW::drawItem
         if( !drawCondition )
             return;
 
-        view->Draw( aItem, currentLayer->id );
+        view->draw( aItem, currentLayer->id );
     }
 
     const VIEW_LAYER* currentLayer;
@@ -585,13 +558,73 @@ void VIEW::redrawRect( const BOX2I& aRect )
 }
 
 
+void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
+{
+    if( isCached( aLayer ) && !aImmediate )
+    {
+        // Draw using cached information or create one
+        int group = aItem->getGroup( aLayer );
+
+        if( group >= 0 )
+        {
+            m_gal->DrawGroup( group );
+        }
+        else
+        {
+            group = m_gal->BeginGroup();
+            aItem->setGroup( aLayer, group );
+            if( !m_painter->Draw( aItem, aLayer ) )
+                aItem->ViewDraw( aLayer, m_gal, BOX2I() ); // Alternative drawing method
+            m_gal->EndGroup();
+        }
+    }
+    else
+    {
+        // Immediate mode
+        if( !m_painter->Draw( aItem, aLayer ) )
+            aItem->ViewDraw( aLayer, m_gal, BOX2I() );  // Alternative drawing method
+    }
+
+    // Draws a bright contour around the item
+    if( static_cast<const EDA_ITEM*>( aItem )->IsBrightened() )
+    {
+        m_painter->DrawBrightened( aItem );
+    }
+}
+
+
+void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate ) const
+{
+    int layers[VIEW_MAX_LAYERS], layers_count;
+    aItem->ViewGetLayers( layers, layers_count );
+    SortLayers( layers, layers_count );
+
+    for( int i = 0; i < layers_count; ++i )
+    {
+        m_gal->SetLayerDepth( m_layers.at( i ).renderingOrder );
+        draw( aItem, layers[i], aImmediate );
+    }
+}
+
+
+void VIEW::draw( VIEW_GROUP* aGroup, bool aImmediate ) const
+{
+    std::set<VIEW_ITEM*>::const_iterator it;
+    for( it = aGroup->Begin(); it != aGroup->End(); ++it )
+    {
+        draw( *it, aImmediate );
+    }
+}
+
+
 bool VIEW::IsDirty() const
 {
-    BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
+    for( int i = 0; i < TARGETS_NUMBER; ++i )
     {
-        if( l->isDirty )
+        if( isTargetDirty( i ) )
             return true;
-    }   
+    }
+
     return false;
 }
 
@@ -675,18 +708,22 @@ void VIEW::Redraw()
         m_gal->ClearTarget( TARGET_NONCACHED );
         m_gal->ClearTarget( TARGET_CACHED );
 
-        SetTargetDirty( TARGET_NONCACHED );
-        SetTargetDirty( TARGET_CACHED );
+        MarkTargetDirty( TARGET_NONCACHED );
+        MarkTargetDirty( TARGET_CACHED );
 
         m_gal->DrawGrid();
     }
+
+    // Always refresh the overlay
+    MarkTargetDirty( TARGET_OVERLAY );
     m_gal->ClearTarget( TARGET_OVERLAY );
 
     redrawRect( rect );
 
     // All targets were redrawn, so nothing is dirty
-    SetTargetDirty( TARGET_CACHED, false );
-    SetTargetDirty( TARGET_NONCACHED, false );
+    clearTargetDirty( TARGET_CACHED );
+    clearTargetDirty( TARGET_NONCACHED );
+    clearTargetDirty( TARGET_OVERLAY );
 }
 
 
@@ -752,7 +789,23 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 
         // Mark those layers as dirty, so the VIEW will be refreshed
         m_layers[layers[i]].isDirty = true;
+        MarkTargetDirty( m_layers[layers[i]].target );   // TODO remove?
     }
+}
+
+
+void VIEW::sortLayers()
+{
+    int n = 0;
+
+    m_orderedLayers.resize( m_layers.size() );
+
+    for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
+        m_orderedLayers[n++] = &i->second;
+
+    sort( m_orderedLayers.begin(), m_orderedLayers.end(), compareRenderingOrder );
+
+    MarkTargetDirty( TARGET_CACHED );
 }
 
 
@@ -811,15 +864,13 @@ void VIEW::RecacheAllItems( bool aImmediately )
     r.SetMaximum();
 
 #ifdef __WXDEBUG__
-    wxLogDebug( wxT( "RecacheAllItems::immediately: %u" ), aImmediately );
-
     prof_counter totalRealTime;
     prof_start( &totalRealTime, false );
 #endif /* __WXDEBUG__ */
 
     for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
     {
-        VIEW_LAYER* l = & ( ( *i ).second );
+        VIEW_LAYER* l = &( ( *i ).second );
 
         // Obviously, there is only one cached target that has to be recomputed
         if( isCached( l->id ) )
@@ -834,7 +885,8 @@ void VIEW::RecacheAllItems( bool aImmediately )
 #ifdef __WXDEBUG__
     prof_end( &totalRealTime );
 
-    wxLogDebug( wxT( "RecacheAllItems::%.1f ms" ), (double) totalRealTime.value / 1000.0 );
+    wxLogDebug( wxT( "RecacheAllItems::immediately: %u %.1f ms" ),
+                aImmediately, (double) totalRealTime.value / 1000.0 );
 #endif /* __WXDEBUG__ */
 }
 
@@ -843,6 +895,10 @@ bool VIEW::isTargetDirty( int aTarget ) const
 {
     wxASSERT( aTarget < TARGETS_NUMBER );
 
+    // Check the target status
+    if( m_dirtyTargets[aTarget] )
+        return true;
+
     // Check if any of layers belonging to the target is dirty
     BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
     {
@@ -850,6 +906,5 @@ bool VIEW::isTargetDirty( int aTarget ) const
             return true;
     }
 
-    // If no layer is dirty, just check the target status itself
-    return m_dirtyTargets[aTarget];
+    return false;
 }

@@ -88,7 +88,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
 
     /* Generic events for the Tool Dispatcher */
-
 	Connect( wxEVT_MOTION, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_LEFT_UP, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_LEFT_DOWN, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
@@ -127,8 +126,8 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 {
     m_gal->ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
-    m_view->SetTargetDirty( KiGfx::TARGET_CACHED );
-    m_view->SetTargetDirty( KiGfx::TARGET_NONCACHED );
+    m_view->MarkTargetDirty( KiGfx::TARGET_CACHED );
+    m_view->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
 }
 
 

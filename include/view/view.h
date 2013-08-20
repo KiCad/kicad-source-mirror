@@ -37,6 +37,7 @@ namespace KiGfx
 class PAINTER;
 class GAL;
 class VIEW_ITEM;
+class VIEW_GROUP;
 class VIEW_RTREE;
 
 /**
@@ -94,19 +95,6 @@ public:
      * @return Number of found items.
      */
     int     Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult );
-
-    /**
-     * Function Draw()
-     * Draws an item, but on a specified layers. It has to be marked that some of drawing settings
-     * are based on the layer on which an item is drawn.
-     */
-    void   Draw( VIEW_ITEM* aItem, int aLayer ) const;
-
-    /**
-     * Function Draw()
-     * Draws an item on all layers that the item uses.
-     */
-    void   Draw( VIEW_ITEM* aItem ) const;
 
     /**
      * Function SetRequired()
@@ -296,12 +284,29 @@ public:
 
     /**
      * Function SetLayerOrder()
-     * Sets rendering order of a particular layer.
+     * Sets rendering order of a particular layer. Lower values are rendered first.
      * @param aLayer: the layer
      * @param aRenderingOrder: arbitrary number denoting the rendering order.
-     * Lower values are rendered first.
      */
     void    SetLayerOrder( int aLayer, int aRenderingOrder );
+
+    /**
+     * Function GetLayerOrder()
+     * Returns rendering order of a particular layer. Lower values are rendered first.
+     * @param aLayer: the layer
+     * @return Rendering order of a particular layer.
+     */
+    int     GetLayerOrder( int aLayer ) const;
+
+    /**
+     * Function SortLayers()
+     * Changes the order of given layer ids, so after sorting the order corresponds to layers
+     * rendering order (descending, ie. order in which layers should be drawn - from the bottom to
+     * the top).
+     * @param aLayers stores id of layers to be sorted.
+     * @param aCount stores the number of layers.
+     */
+    void    SortLayers( int aLayers[], int& aCount ) const;
 
     /**
      * Function UpdateLayerColor()
@@ -390,21 +395,19 @@ public:
      * Returns true if any of the VIEW layers needs to be refreshened.
      * @return True in case if any of layers is marked as dirty.
      */
-    bool IsDirty() const;
+    bool    IsDirty() const;
 
     /**
-     * Function SetTargetDirty()
+     * Function MarkTargetDirty()
      * Sets or clears target 'dirty' flag.
      * @param aTarget is the target to set.
-     * @param aState says if the flag should be set or cleared.
      */
-    inline void SetTargetDirty( int aTarget, bool aState = true )
+    inline void MarkTargetDirty( int aTarget )
     {
         wxASSERT( aTarget < TARGETS_NUMBER );
 
-        m_dirtyTargets[aTarget] = aState;
+        m_dirtyTargets[aTarget] = true;
     }
-
 
     static const int VIEW_MAX_LAYERS = 128;      ///* maximum number of layers that may be shown
 
@@ -438,11 +441,48 @@ private:
     struct updateItemsColor;
     struct changeItemsDepth;
 
-    ///* Whether to use rendering order modifier or not
-    bool m_enableOrderModifier;
-
     ///* Redraws contents within rect aRect
     void redrawRect( const BOX2I& aRect );
+
+    inline void clearTargetDirty( int aTarget )
+    {
+        wxASSERT( aTarget < TARGETS_NUMBER );
+
+        m_dirtyTargets[aTarget] = false;
+    }
+
+    /**
+     * Function draw()
+     * Draws an item, but on a specified layers. It has to be marked that some of drawing settings
+     * are based on the layer on which an item is drawn.
+     *
+     * @param aItem is the item to be drawn.
+     * @param aLayer is the layer which should be drawn.
+     * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
+     * for cached items.
+     */
+    void    draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate = false ) const;
+
+    /**
+     * Function draw()
+     * Draws an item on all layers that the item uses.
+     *
+     * @param aItem is the item to be drawn.
+     * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
+     * for cached items.
+     */
+    void    draw( VIEW_ITEM* aItem, bool aImmediate = false ) const;
+
+    /**
+     * Function draw()
+     * Draws a group of items on all layers that those items use.
+     *
+     * @param aItem is the group to be drawn.
+     * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
+     * for cached items.
+     */
+    void    draw( VIEW_GROUP* aGroup, bool aImmediate = false ) const;
+
 
     ///* Manages dirty flags & redraw queueing when updating an item. Called internally
     ///  via VIEW_ITEM::ViewUpdate()
@@ -484,10 +524,13 @@ private:
      */
     bool isTargetDirty( int aTarget ) const;
 
+    ///* Whether to use rendering order modifier or not
+    bool m_enableOrderModifier;
+
     /// Contains set of possible displayed layers and its properties
     LayerMap    m_layers;
 
-    /// Sorted list of pointers to members of m_layers.
+    /// Sorted list of pointers to members of m_layers
     LayerOrder  m_orderedLayers;
 
     /// Stores set of layers that are displayed on the top
