@@ -81,4 +81,8 @@
 /// Definition to compile with Pcbnew footprint library table implementation.
 #cmakedefine USE_FP_LIB_TABLE
 
+/// When defined, build the GITHUB_PLUGIN for pcbnew.
+#cmakedefine BUILD_GITHUB_PLUGIN
+
+
 #endif  // CONFIG_H_
