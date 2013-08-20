@@ -152,6 +152,7 @@ set(COMMON_SRCS
 	${COMMON_SRCS}
 	view/view.cpp
 	view/view_item.cpp
+	view/view_group.cpp
 
 	system/fcontext.s
 	
