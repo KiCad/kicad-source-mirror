@@ -2,7 +2,6 @@ add_definitions(-DKICAD)
 
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
-    ${Boost_INCLUDE_DIR}
     ${INC_AFTER}
     )
 

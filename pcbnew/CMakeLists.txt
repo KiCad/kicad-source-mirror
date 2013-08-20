@@ -1,33 +1,35 @@
-add_definitions(-DPCBNEW)
+add_definitions( -DPCBNEW )
 
-if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
-    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting)
-    find_package(SWIG REQUIRED)
-    include(${SWIG_USE_FILE})
-endif(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
+    file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting )
+    find_package( SWIG REQUIRED )
+    include( ${SWIG_USE_FILE} )
+
+    # Infrequently needed headers go at end of search paths, append to INC_AFTER
+    set( INC_AFTER ${INC_AFTER} ${CMAKE_CURRENT_SOURCE_DIR}/scripting )
+
+    #message( STATUS "pcbnew INC_AFTER:${INC_AFTER}" )
+endif()
 
 
 ###
 # Includes
 ###
-include_directories(BEFORE ${INC_BEFORE})
+include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
     ./autorouter
     ../3d-viewer
     ../common
-    ${Boost_INCLUDE_DIR}
     ../polygon
     ../common/dialogs
-    ./scripting
     ${INC_AFTER}
     )
-
 
 ###
 # Sources
 #
-set(PCBNEW_DIALOGS
+set( PCBNEW_DIALOGS
     dialogs/dialog_block_options_base.cpp
     dialogs/dialog_cleaning_options_base.cpp
     dialogs/dialog_cleaning_options.cpp
@@ -105,7 +107,7 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_footprint_wizard_list.cpp
     )
 
-set(PCBNEW_AUTOROUTER_SRCS
+set( PCBNEW_AUTOROUTER_SRCS
     autorouter/automove.cpp
     autorouter/autoplac.cpp
     autorouter/autorout.cpp
@@ -117,7 +119,7 @@ set(PCBNEW_AUTOROUTER_SRCS
     autorouter/work.cpp
     )
 
-set(PCBNEW_CLASS_SRCS
+set( PCBNEW_CLASS_SRCS
     tool_modview.cpp
     modview.cpp
     modview_frame.cpp
@@ -218,12 +220,12 @@ set(PCBNEW_CLASS_SRCS
     class_footprint_wizard.cpp
     )
 
-set(PCBNEW_SRCS ${PCBNEW_AUTOROUTER_SRCS} ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS})
+set( PCBNEW_SRCS ${PCBNEW_AUTOROUTER_SRCS} ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS} )
 
 ###
 # We need some extra sources from common
 ###
-set(PCBNEW_COMMON_SRCS
+set( PCBNEW_COMMON_SRCS
     ../common/dialogs/dialog_page_settings.cpp
     ../common/base_units.cpp
     )
@@ -231,36 +233,42 @@ set(PCBNEW_COMMON_SRCS
 ##
 # Scripting sources
 ##
-set(PCBNEW_SCRIPTING_DIALOGS
+set( PCBNEW_SCRIPTING_DIALOGS
     dialogs/dialog_scripting_base.cpp
     dialogs/dialog_scripting.cpp
     )
 
 
-set(PCBNEW_SCRIPTING_PYTHON_HELPERS
+set( PCBNEW_SCRIPTING_PYTHON_HELPERS
     ../scripting/wx_python_helpers.cpp
     ../scripting/python_scripting.cpp
     scripting/pcbnew_scripting_helpers.cpp
     scripting/pcbnew_footprint_wizards.cpp
     )
 
-if (KICAD_SCRIPTING)
-    set(PCBNEW_SCRIPTING_SRCS
+if( KICAD_SCRIPTING )
+    set( PCBNEW_SCRIPTING_SRCS
         ${PCBNEW_SCRIPTING_DIALOGS}
         pcbnew_wrap.cxx
         ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
     )
-endif(KICAD_SCRIPTING)
+endif()
 
 ##
 # Scripting build
 ##
 
-if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
-    set(SWIG_FLAGS -I${CMAKE_CURRENT_SOURCE_DIR}/../.. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../include -I${CMAKE_CURRENT_SOURCE_DIR}/../scripting )
-    if (DEBUG)
-        set(SWIG_FLAGS ${SWIG_FLAGS} -DDEBUG)
+    set( SWIG_FLAGS
+        -I${CMAKE_CURRENT_SOURCE_DIR}/../..
+        -I${CMAKE_CURRENT_SOURCE_DIR}
+        -I${CMAKE_CURRENT_SOURCE_DIR}/../include
+        -I${CMAKE_CURRENT_SOURCE_DIR}/../scripting
+        )
+
+    if( DEBUG )
+        set( SWIG_FLAGS ${SWIG_FLAGS} -DDEBUG )
     endif()
 
     # collect CFLAGS , and pass them to swig later
@@ -270,10 +278,10 @@ if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
         set( SWIG_FLAGS ${SWIG_FLAGS} -D${d} )
     endforeach()
 
-endif(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+endif()
 
 
-if (KICAD_SCRIPTING)
+if( KICAD_SCRIPTING )
 
     set( SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
@@ -295,25 +303,25 @@ if (KICAD_SCRIPTING)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
-endif(KICAD_SCRIPTING)
+endif()
 
 ###
 # _pcbnew DLL/DSO file creation
 ###
 
-if ((KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES) AND NOT WIN32 AND NOT APPLE)
+if( ( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES ) AND NOT WIN32 AND NOT APPLE )
     set ( PCBNEW_EXTRA_LIBS "rt" )
 endif()
 
 
-if (KICAD_SCRIPTING_MODULES)
+if( KICAD_SCRIPTING_MODULES )
 
     #message( "building pcbnew scripting" )
 
-    set(CMAKE_SWIG_FLAGS ${SWIG_FLAGS})
-    set_source_files_properties(scripting/pcbnew.i PROPERTIES CPLUSPLUS ON)
-    swig_add_module(pcbnew python scripting/pcbnew.i ${PCBNEW_SCRIPTING_PYTHON_HELPERS} ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS})
-    swig_link_libraries(pcbnew
+    set( CMAKE_SWIG_FLAGS ${SWIG_FLAGS} )
+    set_source_files_properties( scripting/pcbnew.i PROPERTIES CPLUSPLUS ON )
+    swig_add_module( pcbnew python scripting/pcbnew.i ${PCBNEW_SCRIPTING_PYTHON_HELPERS} ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS} )
+    swig_link_libraries( pcbnew
         3d-viewer
         pcbcommon
         common
@@ -327,33 +335,33 @@ if (KICAD_SCRIPTING_MODULES)
         ${PCBNEW_EXTRA_LIBS}
         )
 
-endif (KICAD_SCRIPTING_MODULES)
+endif()
 
 ###
 # Windows resource file
 ###
-if(WIN32)
-    if(MINGW)
+if( WIN32 )
+    if( MINGW )
         # PCBNEW_RESOURCES variable is set by the macro.
-        mingw_resource_compiler(pcbnew)
-    else(MINGW)
-        set(PCBNEW_RESOURCES pcbnew.rc)
-    endif(MINGW)
-endif(WIN32)
+        mingw_resource_compiler( pcbnew )
+    else()
+        set( PCBNEW_RESOURCES pcbnew.rc )
+    endif()
+endif()
 
 ###
 # Set properties for APPLE on pcbnew target
 ###
-if(APPLE)
-    set(PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns)
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns"
-                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/pcbnew_doc.icns"
-                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    set(MACOSX_BUNDLE_ICON_FILE pcbnew.icns)
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pcbnew)
-    set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
-endif(APPLE)
+if( APPLE )
+    set( PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns"
+                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources )
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew_doc.icns"
+                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources )
+    set( MACOSX_BUNDLE_ICON_FILE pcbnew.icns )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pcbnew )
+    set( MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist )
+endif()
 
 # Create a C++ compilable string initializer containing html text into a *.h file:
 add_custom_command(
@@ -386,9 +394,19 @@ make_lexer(
 
 
 ###
+# subcomponents of pcbnew
+###
+add_subdirectory( pcad2kicadpcb_plugin )
+if( BUILD_GITHUB_PLUGIN )
+    add_subdirectory( github )
+endif()
+
+
+
+###
 # Create the pcbnew executable
 ###
-add_executable(pcbnew WIN32 MACOSX_BUNDLE
+add_executable( pcbnew WIN32 MACOSX_BUNDLE
     ${PCBNEW_SRCS}
     ${PCBNEW_COMMON_SRCS}
     ${PCBNEW_SCRIPTING_SRCS}
@@ -398,15 +416,15 @@ add_executable(pcbnew WIN32 MACOSX_BUNDLE
 ###
 # Set properties for APPLE on pcbnew target
 ###
-if(APPLE)
-    set_target_properties(pcbnew PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
-endif(APPLE)
+if( APPLE )
+    set_target_properties( pcbnew PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist )
+endif()
 
 ###
 # Link executable target pcbnew with correct libraries
 ###
 
-target_link_libraries(pcbnew
+target_link_libraries( pcbnew
     3d-viewer
     pcbcommon
     common
@@ -423,48 +441,48 @@ target_link_libraries(pcbnew
 ###
 # Add pcbnew as install target
 ###
-install(TARGETS pcbnew
+install( TARGETS pcbnew
     DESTINATION ${KICAD_BIN}
-    COMPONENT binary)
+    COMPONENT binary )
 
 
-if(KICAD_SCRIPTING)
-    add_custom_target(FixSwigImportsScripting ALL
+if( KICAD_SCRIPTING )
+    add_custom_target( FixSwigImportsScripting ALL
         COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
         DEPENDS pcbnew
         COMMENT "Fixing swig_import_helper in Kicad scripting"
         )
 
-    install(FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST})
-endif(KICAD_SCRIPTING)
+    install( FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST} )
+endif()
 
-if (KICAD_SCRIPTING_MODULES)
-    add_custom_target(FixSwigImportsModuleScripting ALL
+if( KICAD_SCRIPTING_MODULES )
+    add_custom_target( FixSwigImportsModuleScripting ALL
         COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
         DEPENDS _pcbnew
         COMMENT "Fixing swig_import_helper in Kicad scripting modules"
         )
 
-    install(FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST})
+    install( FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST} )
 
-    if (WIN32)
-        install(FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.pyd DESTINATION ${PYTHON_DEST})
-    else(WIN32)
-        install(FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so DESTINATION ${PYTHON_DEST})
-    endif(WIN32)
-
-endif(KICAD_SCRIPTING_MODULES)
+    if( WIN32 )
+        install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.pyd DESTINATION ${PYTHON_DEST} )
+    else()
+        install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so DESTINATION ${PYTHON_DEST} )
+    endif()
+endif()
 
 
 # The specctra test fails to build properly using MS Visual Studio.
-if(NOT MSVC)
+if( NOT MSVC )
     # This one gets made only when testing.
-    add_executable(specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp)
-    target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES})
-endif(NOT MSVC)
+    add_executable( specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp )
+    target_link_libraries( specctra_test common ${wxWidgets_LIBRARIES} )
+endif()
 
 # This one gets made only when testing.
-add_executable(layer_widget_test WIN32 EXCLUDE_FROM_ALL
+add_executable( layer_widget_test WIN32 EXCLUDE_FROM_ALL
     layer_widget.cpp
     )
-target_link_libraries(layer_widget_test common ${wxWidgets_LIBRARIES})
+target_link_libraries( layer_widget_test common ${wxWidgets_LIBRARIES} )
+
