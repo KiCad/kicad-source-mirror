@@ -52,10 +52,10 @@ public:
     WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel );
     ~WX_VIEW_CONTROLS() {};
 
-    void    onWheel( wxMouseEvent& event );
-    void    onMotion( wxMouseEvent& event );
-    void    onButton( wxMouseEvent& event );
-    void    onEnter( wxMouseEvent& event );
+    void    onWheel( wxMouseEvent& aEvent );
+    void    onMotion( wxMouseEvent& aEvent );
+    void    onButton( wxMouseEvent& aEvent );
+    void    onEnter( wxMouseEvent& aEvent );
 
     void    SetEventDispatcher( TOOL_DISPATCHER *aEventDispatcher );
 

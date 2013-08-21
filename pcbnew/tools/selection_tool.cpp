@@ -69,7 +69,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        m_additive = evt->Modifier( MB_ModShift );
+        m_additive = evt->Modifier( MD_ModShift );
 
         if( evt->IsCancel() )
             return 0;

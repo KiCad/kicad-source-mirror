@@ -1334,7 +1334,6 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     Screen->SetMousePosition( pos );
 
     GetParent()->GeneralControl( &DC, pos, localkey );
-
 }
 
 

@@ -40,32 +40,39 @@ class TOOL_MANAGER;
  */
 enum TOOL_EventCategory
 {
-	TC_None = 0x0,
-	TC_Mouse = 0x1,
-	TC_Command = 0x2,
-	TC_Message = 0x4,
-	TC_View = 0x8,
-	TC_Any = 0xffffffff
+	TC_None     = 0x00,
+	TC_Mouse    = 0x01,
+	TC_Keyboard = 0x02,
+	TC_Command  = 0x04,
+	TC_Message  = 0x08,
+	TC_View     = 0x10,
+	TC_Any      = 0xffffffff
 };
 
 enum TOOL_Actions
 {
-	TA_None = 0x0,
-	TA_MouseClick = 0x1,
-	TA_MouseUp = 0x2,
-	TA_MouseDown = 0x4,
-	TA_MouseDrag = 0x8,
-	TA_MouseMotion = 0x10,
-	TA_MouseWheel = 0x20,
-	TA_Mouse = 0x3f,
-	TA_ViewRefresh = 0x40,
-	TA_ViewZoom = 0x80,
-	TA_ViewPan = 0x100,
-	TA_ViewDirty = 0x200,
-	TA_ChangeLayer = 0x1000,
+    // UI input events
+	TA_None         = 0x0000,
+	TA_MouseClick   = 0x0001,
+	TA_MouseUp      = 0x0002,
+	TA_MouseDown    = 0x0004,
+	TA_MouseDrag    = 0x0008,
+	TA_MouseMotion  = 0x0010,
+	TA_MouseWheel   = 0x0020,
+	TA_Mouse        = 0x003f,
+	TA_KeyUp        = 0x0040,
+    TA_KeyDown      = 0x0080,
+    TA_Keyboard     = TA_KeyUp | TA_KeyDown,
+
+    // View related events
+	TA_ViewRefresh  = 0x0100,
+	TA_ViewZoom     = 0x0200,
+	TA_ViewPan      = 0x0400,
+	TA_ViewDirty    = 0x0800,
+	TA_ChangeLayer  = 0x1000,
 
 	// Tool cancel event. Issued automagically when the user hits escape or selects End Tool from the context menu.
-	TA_CancelTool = 0x2000,
+	TA_CancelTool   = 0x2000,
 
 	// Tool activation event. Issued by the GUI upon pressing a button/menu selection.
 	TA_ActivateTool = 0x4000,
@@ -81,25 +88,28 @@ enum TOOL_Actions
 
 enum TOOL_MouseButtons
 {
-	MB_None = 0x0,
-	MB_Left = 0x1,
-	MB_Right = 0x2,
-	MB_Middle = 0x4,
-	MB_ButtonMask = MB_Left | MB_Right | MB_Middle,
-	MB_ModShift = 0x8,
-	MB_ModCtrl = 0x10,
-	MB_ModAlt = 0x20,
-	MB_ModifierMask = MB_ModShift | MB_ModCtrl | MB_ModAlt,
-	MB_Any = 0xffffffff
+	MB_None         = 0x0,
+	MB_Left         = 0x1,
+	MB_Right        = 0x2,
+	MB_Middle       = 0x4,
+	MB_ButtonMask   = MB_Left | MB_Right | MB_Middle,
+	MB_Any          = 0xffffffff
 };
 
+enum TOOL_Modifiers
+{
+    MD_ModShift     = 0x1000,
+    MD_ModCtrl      = 0x2000,
+    MD_ModAlt       = 0x4000,
+    MD_ModifierMask = MD_ModShift | MD_ModCtrl | MD_ModAlt,
+};
 
 // Defines when a context menu is opened.
 enum TOOL_ContextMenuTrigger
 {
-	CMENU_BUTTON = 0, // On the right button
-	CMENU_NOW, // Right now (after TOOL_INTERACTIVE::SetContextMenu)
-	CMENU_OFF  // Never
+	CMENU_BUTTON = 0,   // On the right button
+	CMENU_NOW,          // Right now (after TOOL_INTERACTIVE::SetContextMenu)
+	CMENU_OFF           // Never
 };
 
 /** 
@@ -112,22 +122,38 @@ class TOOL_EVENT
 public:
     const std::string Format() const;
 
-    TOOL_EVENT( TOOL_EventCategory aCategory = TC_None, TOOL_Actions aAction = TA_None ):
+    TOOL_EVENT( TOOL_EventCategory aCategory = TC_None, TOOL_Actions aAction = TA_None ) :
         m_category( aCategory ),
         m_actions( aAction ),
-        m_mouseButtons( 0 ) {}
+        m_mouseButtons( 0 ),
+        m_keyCode( 0 ),
+        m_modifiers( 0 ) {}
 
-    TOOL_EVENT( TOOL_EventCategory aCategory, TOOL_Actions aAction, int aExtraParam ):
+    TOOL_EVENT( TOOL_EventCategory aCategory, TOOL_Actions aAction, int aExtraParam ) :
         m_category( aCategory ),
         m_actions( aAction )
         {
             if( aCategory == TC_Mouse )
-                m_mouseButtons = aExtraParam;
+            {
+                m_mouseButtons = aExtraParam & MB_ButtonMask;
+            }
+            else if( aCategory == TC_Keyboard )
+            {
+                m_keyCode = aExtraParam & ~MD_ModifierMask;     // Filter out modifiers
+            }
             else if ( aCategory == TC_Command )
+            {
                 m_commandId = aExtraParam;
+            }
+
+            if( aCategory & ( TC_Mouse | TC_Keyboard ) )
+            {
+                m_modifiers = aExtraParam & MD_ModifierMask;
+            }
         }
 
-    TOOL_EVENT( TOOL_EventCategory aCategory, TOOL_Actions aAction, const std::string& aExtraParam ):
+    TOOL_EVENT( TOOL_EventCategory aCategory, TOOL_Actions aAction,
+                const std::string& aExtraParam ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_mouseButtons( 0 )
@@ -193,9 +219,14 @@ public:
         return m_actions == TA_CancelTool;
     }
 
-    bool Modifier( int aMask = MB_ModifierMask ) const
+    bool Modifier( int aMask = MD_ModifierMask ) const
     {
-        return ( m_mouseButtons & aMask );
+        return ( m_modifiers & aMask );
+    }
+
+    int KeyCode() const
+    {
+        return m_keyCode;
     }
 
     void Ignore();
@@ -250,6 +281,8 @@ private:
     VECTOR2D m_mouseDragOrigin;
 
     int m_mouseButtons;
+    int m_keyCode;
+    int m_modifiers;
     boost::optional<int> m_commandId;
     boost::optional<std::string> m_commandStr;
 };
@@ -299,12 +332,12 @@ public:
         return m_events.end();
     }
 
-    const_iterator cbegin()  const
+    const_iterator cbegin() const
     {
         return m_events.begin();
     }
 
-    const_iterator cend()  const
+    const_iterator cend() const
     {
         return m_events.end();
     }
@@ -354,7 +387,7 @@ private:
     std::deque<TOOL_EVENT> m_events;
 };
 
-inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& a, const TOOL_EVENT &b )
+inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& a, const TOOL_EVENT& b )
 {
 	TOOL_EVENT_LIST l;
 
@@ -364,7 +397,7 @@ inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& a, const TOOL_EVENT &
 	return l;
 }
 
-inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT & a, const TOOL_EVENT_LIST &b )
+inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& a, const TOOL_EVENT_LIST& b )
 {
 	TOOL_EVENT_LIST l( b );
 	

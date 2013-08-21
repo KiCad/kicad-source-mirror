@@ -44,7 +44,7 @@ using boost::optional;
 struct TOOL_DISPATCHER::ButtonState
 {
 	ButtonState( TOOL_MouseButtons aButton, const wxEventType& aDownEvent,
-	             const wxEventType & aUpEvent, bool aTriggerMenu = false) :
+	             const wxEventType& aUpEvent, bool aTriggerMenu = false ) :
 		button( aButton ),
 		downEvent( aDownEvent ),
 		upEvent( aUpEvent ),
@@ -63,7 +63,7 @@ struct TOOL_DISPATCHER::ButtonState
 	bool triggerContextMenu;
 	
 	wxLongLong downTimestamp;
-	
+
 	void Reset()
 	{
 		dragging = false;
@@ -72,8 +72,8 @@ struct TOOL_DISPATCHER::ButtonState
 };
 
 
-TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER *aToolMgr, PCB_BASE_FRAME *aEditFrame ) :
-	m_toolMgr(aToolMgr), m_editFrame(aEditFrame)
+TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditFrame ) :
+	m_toolMgr( aToolMgr ), m_editFrame( aEditFrame )
 {
     m_buttons.push_back( new ButtonState( MB_Left, wxEVT_LEFT_DOWN, wxEVT_LEFT_UP ) );
     m_buttons.push_back( new ButtonState( MB_Right, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_UP, true ) );
@@ -103,23 +103,22 @@ KiGfx::VIEW* TOOL_DISPATCHER::getView()
 }
 
 
-int TOOL_DISPATCHER::decodeModifiers( wxEvent& aEvent )
+int TOOL_DISPATCHER::decodeModifiers( const wxKeyboardState* aState ) const
 {
-    wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
     int mods = 0;
 
-    if( me->ControlDown() )
-        mods |= MB_ModCtrl;
-    if( me->AltDown() )
-        mods |= MB_ModAlt;
-    if( me->ShiftDown() )
-        mods |= MB_ModShift;
+    if( aState->ControlDown() )
+        mods |= MD_ModCtrl;
+    if( aState->AltDown() )
+        mods |= MD_ModAlt;
+    if( aState->ShiftDown() )
+        mods |= MD_ModShift;
 
-	return mods;
+    return mods;
 }
 
 
-bool TOOL_DISPATCHER::handleMouseButton ( wxEvent& aEvent, int aIndex, bool aMotion )
+bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion )
 {
 	ButtonState* st = m_buttons[aIndex];
 	wxEventType type = aEvent.GetEventType();
@@ -128,7 +127,7 @@ bool TOOL_DISPATCHER::handleMouseButton ( wxEvent& aEvent, int aIndex, bool aMot
 	bool up = type == st->upEvent;
 	bool down = type == st->downEvent;
 	
-	int mods = decodeModifiers( aEvent );
+	int mods = decodeModifiers( static_cast<wxMouseEvent*>( &aEvent ) );
 	int args = st->button | mods;
 
 	if( down )
@@ -139,7 +138,7 @@ bool TOOL_DISPATCHER::handleMouseButton ( wxEvent& aEvent, int aIndex, bool aMot
 		st->pressed = true;
 		evt = TOOL_EVENT( TC_Mouse, TA_MouseDown, args );
 	}
-	else if ( up )
+	else if( up )
 	{
 		bool isClick = false;
 		st->pressed = false;
@@ -148,7 +147,8 @@ bool TOOL_DISPATCHER::handleMouseButton ( wxEvent& aEvent, int aIndex, bool aMot
 		{
 			wxLongLong t = wxGetLocalTimeMillis();
 
-			if( t - st->downTimestamp < DragTimeThreshold && st->dragMaxDelta < DragDistanceThreshold )
+			if( t - st->downTimestamp < DragTimeThreshold &&
+			        st->dragMaxDelta < DragDistanceThreshold )
 				isClick = true;
 			else
 				evt = TOOL_EVENT( TC_Mouse, TA_MouseUp, args );
@@ -159,7 +159,7 @@ bool TOOL_DISPATCHER::handleMouseButton ( wxEvent& aEvent, int aIndex, bool aMot
 		
 		if( isClick )
 		{
-			if( st -> triggerContextMenu && !mods )
+			if( st->triggerContextMenu && !mods )
 			{}
 			//	evt = TOOL_EVENT( TC_Command, TA_ContextMenu );
 			else
@@ -197,7 +197,7 @@ bool TOOL_DISPATCHER::handleMouseButton ( wxEvent& aEvent, int aIndex, bool aMot
 }
 
 
-void TOOL_DISPATCHER::DispatchWxEvent( wxEvent &aEvent )
+void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
 	bool motion = false, buttonEvents = false;
 	VECTOR2D pos;
@@ -205,25 +205,42 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent &aEvent )
 	
 	int type = aEvent.GetEventType();
 
-	if( type == wxEVT_MOTION )
+	// Mouse handling
+	if( type == wxEVT_MOTION || type == wxEVT_MOUSEWHEEL ||
+	        type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
+	        type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
+	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP )
 	{
-		wxMouseEvent *me = static_cast<wxMouseEvent*>( &aEvent );
+		wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
 		pos = getView()->ToWorld( VECTOR2D( me->GetX(), me->GetY() ) );
 		if( pos != m_lastMousePos )
 		{
 			motion = true;
 			m_lastMousePos = pos;
 		}
+
+	    for( unsigned int i = 0; i < m_buttons.size(); i++ )
+	        buttonEvents |= handleMouseButton( aEvent, i, motion );
+
+	    if( !buttonEvents && motion )
+	    {
+	        evt = TOOL_EVENT( TC_Mouse, TA_MouseMotion );
+	        evt->SetMousePosition( pos );
+	    }
 	}
 
-	for( unsigned int i = 0; i < m_buttons.size(); i++ )
-		buttonEvents |= handleMouseButton( aEvent, i, motion );
+	// Keyboard handling
+	else if( type == wxEVT_KEY_UP || type == wxEVT_KEY_DOWN )
+    {
+        wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
+        int key = ke->GetKeyCode();
+        int mods = decodeModifiers( ke );
 
-	if( !buttonEvents && motion )
-	{
-		evt = TOOL_EVENT (TC_Mouse, TA_MouseMotion );
-		evt->SetMousePosition( pos );
-	}
+        if( type == wxEVT_KEY_UP )
+            evt = TOOL_EVENT( TC_Keyboard, TA_KeyUp, key | mods );
+        else
+            evt = TOOL_EVENT( TC_Keyboard, TA_KeyDown, key | mods );
+    }
 
 	if( evt )
 		m_toolMgr->ProcessEvent( *evt );
@@ -237,7 +254,7 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent &aEvent )
 	bool activateTool = false;
 	std::string toolName;
 	
-	switch ( aEvent.GetId() )
+	switch( aEvent.GetId() )
 	{
 		case ID_SELECTION_TOOL:
 			toolName = "pcbnew.InteractiveSelection";
@@ -247,7 +264,7 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent &aEvent )
 
 	if( activateTool )
 	{
-		TOOL_EVENT evt ( TC_Command, TA_ActivateTool, toolName );
+		TOOL_EVENT evt( TC_Command, TA_ActivateTool, toolName );
 		m_toolMgr->ProcessEvent( evt );
 	}
 }

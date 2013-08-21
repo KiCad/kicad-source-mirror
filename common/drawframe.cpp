@@ -1017,5 +1017,6 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show( aEnable );
     m_auimgr.Update();
 
+    m_galCanvas->SetFocus();
     m_galCanvasActive = aEnable;
 }
