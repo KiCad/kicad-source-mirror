@@ -53,11 +53,11 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
 }
 
 
-void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& event )
+void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
-    if( event.Dragging() && m_isDragPanning )
+    if( aEvent.Dragging() && m_isDragPanning )
     {
-        VECTOR2D mousePoint( event.GetX(), event.GetY() );
+        VECTOR2D mousePoint( aEvent.GetX(), aEvent.GetY() );
         VECTOR2D d     = m_dragStartPoint - mousePoint;
         VECTOR2D delta = m_view->ToWorld( d, false );
 
@@ -65,19 +65,19 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& event )
         m_parentPanel->Refresh();
     }
 
-    event.Skip();
+    aEvent.Skip();
 }
 
 
-void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& event )
+void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 {
     const double wheelPanSpeed = 0.001;
 
-    if( event.ControlDown() || event.ShiftDown() )
+    if( aEvent.ControlDown() || aEvent.ShiftDown() )
     {
         // Scrolling
         VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize() *
-                             ( (double) event.GetWheelRotation() * wheelPanSpeed ), false );
+                             ( (double) aEvent.GetWheelRotation() * wheelPanSpeed ), false );
         double   scrollSpeed;
 
         if( abs( scrollVec.x ) > abs( scrollVec.y ) )
@@ -85,8 +85,8 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& event )
         else
             scrollSpeed = scrollVec.y;
 
-        VECTOR2D delta( event.ControlDown() ? -scrollSpeed : 0.0,
-                        event.ShiftDown() ? -scrollSpeed : 0.0 );
+        VECTOR2D delta( aEvent.ControlDown() ? -scrollSpeed : 0.0,
+                        aEvent.ShiftDown() ? -scrollSpeed : 0.0 );
 
         m_view->SetCenter( m_view->GetCenter() + delta );
         m_parentPanel->Refresh();
@@ -103,41 +103,41 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& event )
         // Set scaling speed depending on scroll wheel event interval
         if( timeDiff < 500 && timeDiff > 0 )
         {
-            zoomScale = ( event.GetWheelRotation() > 0.0 ) ? 2.05 - timeDiff / 500 :
+            zoomScale = ( aEvent.GetWheelRotation() > 0.0 ) ? 2.05 - timeDiff / 500 :
                         1.0 / ( 2.05 - timeDiff / 500 );
         }
         else
         {
-            zoomScale = ( event.GetWheelRotation() > 0.0 ) ? 1.05 : 0.95;
+            zoomScale = ( aEvent.GetWheelRotation() > 0.0 ) ? 1.05 : 0.95;
         }
 
-        VECTOR2D anchor = m_view->ToWorld( VECTOR2D( event.GetX(), event.GetY() ) );
+        VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
         m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
         m_parentPanel->Refresh();
     }
 
-    event.Skip();
+    aEvent.Skip();
 }
 
 
-void WX_VIEW_CONTROLS::onButton( wxMouseEvent& event )
+void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
 {
-    if( event.MiddleDown() )
+    if( aEvent.MiddleDown() )
     {
         m_isDragPanning     = true;
-        m_dragStartPoint    = VECTOR2D( event.GetX(), event.GetY() );
+        m_dragStartPoint    = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
         m_lookStartPoint    = m_view->GetCenter();
     }
-    else if( event.MiddleUp() )
+    else if( aEvent.MiddleUp() )
     {
         m_isDragPanning = false;
     }
 
-    event.Skip();
+    aEvent.Skip();
 }
 
 
-void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& event )
+void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
 {
     m_parentPanel->SetFocus();
 }

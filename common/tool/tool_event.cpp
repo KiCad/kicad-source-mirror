@@ -44,9 +44,13 @@ struct FlagString
 static const std::string flag2string( int flag, const FlagString* exps )
 {
 	std::string rv;
-	for(int i = 0; exps[i].str.length(); i++)
-		if(exps[i].flag & flag)
-			rv+=exps[i].str+" ";
+
+	for( int i = 0; exps[i].str.length(); i++ )
+	{
+		if( exps[i].flag & flag )
+			rv += exps[i].str + " ";
+	}
+
 	return rv;
 }
 
@@ -57,6 +61,7 @@ const std::string TOOL_EVENT::Format() const
 
 	const FlagString categories[] = {
 		{ TC_Mouse, "mouse" },
+		{ TC_Keyboard, "keyboard" },
 		{ TC_Command, "command" },
 		{ TC_Message, "message" },
 		{ TC_View, "view" },
@@ -70,6 +75,8 @@ const std::string TOOL_EVENT::Format() const
 		{ TA_MouseDrag, "drag" },
 		{ TA_MouseMotion, "motion" },
 		{ TA_MouseWheel, "wheel" },
+		{ TA_KeyUp, "key-up" },
+		{ TA_KeyDown, "key-down" },
 		{ TA_ViewRefresh, "view-refresh" },
 		{ TA_ViewZoom, "view-zoom" },
 		{ TA_ViewPan, "view-pan" },
@@ -87,23 +94,40 @@ const std::string TOOL_EVENT::Format() const
 		{ MB_Left, "left" },
 		{ MB_Right, "right" },
 		{ MB_Middle, "middle" },
-		{ MB_ModShift, "shift" },
-		{ MB_ModCtrl, "ctrl" },
-		{ MB_ModAlt, "alt" },
 		{ 0, "" }
+	};
+
+	const FlagString modifiers[] = {
+        { MD_ModShift, "shift" },
+        { MD_ModCtrl, "ctrl" },
+        { MD_ModAlt, "alt" },
+        { 0, "" }
 	};
 
 	ev = "category: ";
 	ev += flag2string( m_category, categories );
-	ev +=" action: ";
+	ev += " action: ";
 	ev += flag2string( m_actions, actions );
 	
 	if( m_actions & TA_Mouse )
 	{
-		ev +=" btns: ";
+		ev += " btns: ";
 		ev += flag2string( m_mouseButtons, buttons );
-	};
+	}
+
+	if( m_actions & TA_Keyboard )
+	{
+        char tmp[128];
+        sprintf( tmp, "key: %d", m_keyCode );
+        ev += tmp;
+	}
 	
+	if( m_actions & ( TA_Mouse | TA_Keyboard ) )
+	{
+	    ev += " mods: ";
+	    ev += flag2string( m_modifiers, modifiers );
+	}
+
 	if( m_commandId )
 	{
 		char tmp[128];

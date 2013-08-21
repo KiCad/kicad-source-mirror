@@ -285,7 +285,7 @@ private:
     wxPoint                 savedCursorPosition;    ///< The last cursor position
     wxBitmap*               cursorPixels;           ///< Cursor pixels
     wxBitmap*               cursorPixelsSaved;      ///< Saved cursor pixels
-    int cursorSize;                                 ///< Cursor size
+    int                     cursorSize;             ///< Cursor size
 
     /// Maximum number of arguments for one command
     static const int MAX_CAIRO_ARGUMENTS = 6;

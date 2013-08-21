@@ -30,6 +30,7 @@
 #include <tool/tool_event.h>
 
 #include <wx/event.h>
+#include <wx/kbdstate.h>
 
 class TOOL_MANAGER;
 class PCB_BASE_FRAME;
@@ -69,21 +70,18 @@ private:
     static const int DragTimeThreshold = 300;
     static const int DragDistanceThreshold = 8;
 
-    bool handleMouseButton ( wxEvent& aEvent, int aIndex, bool aMotion );
-    bool handleKeys ( wxEvent& aEvent );
-    bool handlePopupMenu ( wxEvent& aEvent );
+    bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
+    bool handlePopupMenu( wxEvent& aEvent );
 
-    int decodeModifiers( wxEvent& aEvent );
-
-    KiGfx::VIEW* getView();
+    int decodeModifiers( const wxKeyboardState* aState ) const;
 
     struct ButtonState;
-
-    TOOL_MANAGER* m_toolMgr;
-    PCB_BASE_FRAME* m_editFrame;
     VECTOR2D m_lastMousePos;
     std::vector<ButtonState*> m_buttons;
 
+    KiGfx::VIEW* getView();
+    TOOL_MANAGER* m_toolMgr;
+    PCB_BASE_FRAME* m_editFrame;
 };
 
 #endif
