@@ -72,7 +72,12 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         m_additive = evt->Modifier( MD_ModShift );
 
         if( evt->IsCancel() )
-            return 0;
+        {
+            if( !m_selectedItems.empty() )
+                clearSelection();
+            else
+                return 0;
+        }
 
         // single click? Select single object
         if( evt->IsClick( MB_Left ) )
@@ -242,7 +247,7 @@ void SELECTION_TOOL::selectMultiple()
 }
 
 
-BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR *aCollector )
+BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 {
     OPT_TOOL_EVENT evt;
     BOARD_ITEM* current = NULL;
