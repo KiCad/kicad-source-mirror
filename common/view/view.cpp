@@ -108,6 +108,7 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     {
         VIEW_LAYER* l = & ( ( *i ).second );
         l->items->Remove( aItem );
+        l->isDirty = true;
     }
 }
 
