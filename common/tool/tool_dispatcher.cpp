@@ -237,9 +237,16 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         int mods = decodeModifiers( ke );
 
         if( type == wxEVT_KEY_UP )
-            evt = TOOL_EVENT( TC_Keyboard, TA_KeyUp, key | mods );
+        {
+            if( key == WXK_ESCAPE )
+                evt = TOOL_EVENT( TC_Command, TA_CancelTool );
+            else
+                evt = TOOL_EVENT( TC_Keyboard, TA_KeyUp, key | mods );
+        }
         else
+        {
             evt = TOOL_EVENT( TC_Keyboard, TA_KeyDown, key | mods );
+        }
     }
 
 	if( evt )
@@ -263,8 +270,5 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent &aEvent )
 	}
 
 	if( activateTool )
-	{
-		TOOL_EVENT evt( TC_Command, TA_ActivateTool, toolName );
-		m_toolMgr->ProcessEvent( evt );
-	}
+		m_toolMgr->InvokeTool( toolName );
 }

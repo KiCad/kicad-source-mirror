@@ -98,6 +98,9 @@ void TOOL_MANAGER::InvokeTool( TOOL_ID aToolId )
 
     if( tool && tool->GetType() == TOOL_Interactive )
         static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
+
+    TOOL_EVENT evt( TC_Command, TA_ActivateTool, tool->GetName() );
+    ProcessEvent( evt );
 }
 
 
@@ -105,8 +108,8 @@ void TOOL_MANAGER::InvokeTool( const std::string& aName )
 {
     TOOL_BASE* tool = FindTool( aName );
 
-    if( tool && tool->GetType() == TOOL_Interactive )
-        static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
+    if( tool )
+        InvokeTool( tool->GetId() );
 }
 
 
@@ -169,7 +172,10 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 				st->waitEvents.clear();
 				st->cofunc->Resume();
 				if( !st->cofunc->Running() )
+				{
 					delete st->cofunc;
+					st->cofunc = NULL;
+				}
 			}
 		}
 		else
@@ -194,7 +200,10 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 						st->cofunc->Call( aEvent );
 						
 						if( !st->cofunc->Running() )
+						{
 							delete st->cofunc;
+							st->cofunc = NULL;
+						}
 					}
 				}
 			}
@@ -218,7 +227,7 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 			st->contextMenuTrigger = CMENU_OFF;
 			GetEditFrame()->PopupMenu( st->contextMenu->GetMenu() );
 
-			TOOL_EVENT evt ( TC_Command, TA_ContextMenuChoice );
+			TOOL_EVENT evt( TC_Command, TA_ContextMenuChoice );
 			dispatchInternal( evt );
 
 			break;
