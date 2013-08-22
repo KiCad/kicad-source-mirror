@@ -52,27 +52,55 @@ public:
     WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel );
     ~WX_VIEW_CONTROLS() {};
 
+    /// Handler functions
     void    onWheel( wxMouseEvent& aEvent );
     void    onMotion( wxMouseEvent& aEvent );
     void    onButton( wxMouseEvent& aEvent );
     void    onEnter( wxMouseEvent& aEvent );
+    void    onTimer( wxTimerEvent& aEvent );
 
-    void    SetEventDispatcher( TOOL_DISPATCHER *aEventDispatcher );
+    /**
+     * Function SetGrabMouse()
+     * Enables/disables mouse cursor grabbing (limits the movement field only to the panel area).
+     *
+     * @param aEnabled says whether the option should enabled or disabled.
+     */
+    void    SetGrabMouse( bool aEnabled );
+
+    /**
+     * Function SetAutoPan()
+     * Enables/disables autopanning (panning when mouse cursor reaches the panel border).
+     *
+     * @param aEnabled says whether the option should enabled or disabled.
+     */
+    void    SetAutoPan( bool aEnabled )
+    {
+        m_autoPanEnabled = true;
+    }
 
 private:
+    enum State {
+        IDLE = 1,
+        DRAG_PANNING,
+        AUTO_PANNING,
+    };
+
+    void    handleAutoPanning( wxMouseEvent& aEvent );
+
+    /// Current state of VIEW_CONTROLS
+    State       m_state;
 
     /// Options for WX_VIEW_CONTROLS
-    bool        m_isDragPanning;
-    bool        m_isAutoPanning;
     bool        m_autoPanEnabled;
     bool        m_needRedraw;
+    bool        m_grabMouse;
 
     /// Distance from cursor to VIEW edge when panning is active.
-    double      m_autoPanMargin;
+    float       m_autoPanMargin;
     /// How fast is panning when in auto mode.
-    double      m_autoPanSpeed;
+    float       m_autoPanSpeed;
     /// TODO
-    double      m_autoPanCornerRatio;
+    float       m_autoPanAcceleration;
 
     /// Panel that is affected by VIEW_CONTROLS
     wxWindow*   m_parentPanel;
@@ -80,10 +108,11 @@ private:
     /// Stores information about point where event started.
     VECTOR2D    m_dragStartPoint;
     VECTOR2D    m_lookStartPoint;
+    VECTOR2D    m_panDirection;
 
     /// Used for determining time intervals between events.
     wxLongLong  m_timeStamp;
-    TOOL_DISPATCHER* m_eventDispatcher;
+    wxTimer     m_panTimer;
 };
 } // namespace KiGfx
 

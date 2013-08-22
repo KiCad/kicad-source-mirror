@@ -46,16 +46,6 @@ class VIEW;
 class VIEW_CONTROLS
 {
 public:
-    /**
-     * Possible modes for panning (JUMP means that view is updated less often, resulting in
-     * not so responsive user interface).
-     */
-    enum PanMode {
-        SMOOTH  = 1,
-        JUMP    = 2
-    };
-
-
     VIEW_CONTROLS( VIEW* aView ) : m_view( aView ) {};
     virtual ~VIEW_CONTROLS() {};
 
@@ -88,13 +78,6 @@ public:
      * @param aSpeed is a new speed for panning.
      */
     virtual void SetPanSpeed( float aSpeed ) {};
-
-    /**
-     * Function SetPanMode
-     * Enables specified mode for panning.
-     * @param aMode is a new mode used for VIEW panning.
-     */
-    virtual void SetPanMode( PanMode aMode ) {};
 
     /**
      * Function SetZoomSpeed

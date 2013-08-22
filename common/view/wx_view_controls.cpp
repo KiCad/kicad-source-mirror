@@ -24,7 +24,6 @@
  */
 
 #include <wx/wx.h>
-#include <wx/window.h>
 
 #include <view/view.h>
 #include <view/wx_view_controls.h>
@@ -33,9 +32,11 @@ using namespace KiGfx;
 
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     VIEW_CONTROLS( aView ),
+    m_state( IDLE ),
+    m_autoPanEnabled( false ),
+    m_grabMouse( false ),
     m_autoPanMargin( 0.1 ),
     m_autoPanSpeed( 0.15 ),
-    m_autoPanCornerRatio( 0.1 ),
     m_parentPanel( aParentPanel )
 {
     m_parentPanel->Connect( wxEVT_MOTION, wxMouseEventHandler(
@@ -50,22 +51,40 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     m_parentPanel->Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler(
                                 WX_VIEW_CONTROLS::onEnter ), NULL, this );
 #endif
+
+    m_panTimer.SetOwner( this );
+    this->Connect( wxEVT_TIMER, wxTimerEventHandler(
+                                WX_VIEW_CONTROLS::onTimer ), NULL, this );
 }
 
 
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
-    if( aEvent.Dragging() && m_isDragPanning )
-    {
-        VECTOR2D mousePoint( aEvent.GetX(), aEvent.GetY() );
-        VECTOR2D d     = m_dragStartPoint - mousePoint;
-        VECTOR2D delta = m_view->ToWorld( d, false );
+    VECTOR2D mousePoint( aEvent.GetX(), aEvent.GetY() );
 
-        m_view->SetCenter( m_lookStartPoint + delta );
-        m_parentPanel->Refresh();
+    if( aEvent.Dragging() )
+    {
+        if( m_state == DRAG_PANNING )
+        {
+            VECTOR2D   d = m_dragStartPoint - mousePoint;
+            VECTOR2D   delta = m_view->ToWorld( d, false );
+
+            m_view->SetCenter( m_lookStartPoint + delta );
+            m_parentPanel->Refresh();
+            aEvent.StopPropagation();
+        }
+        else
+        {
+            aEvent.Skip();
+        }
+    }
+    else
+    {
+        if( m_autoPanEnabled )
+            handleAutoPanning( aEvent );
     }
 
-    aEvent.Skip();
+//    DeletePendingEvents();
 }
 
 
@@ -122,16 +141,25 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
 {
-    if( aEvent.MiddleDown() )
+    switch( m_state )
     {
-        m_isDragPanning     = true;
-        m_dragStartPoint    = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
-        m_lookStartPoint    = m_view->GetCenter();
-    }
-    else if( aEvent.MiddleUp() )
-    {
-        m_isDragPanning = false;
-    }
+    case IDLE:
+    case AUTO_PANNING:
+        if( aEvent.MiddleDown() )
+        {
+            m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
+            m_lookStartPoint = m_view->GetCenter();
+            m_state = DRAG_PANNING;
+        }
+        break;
+
+    case DRAG_PANNING:
+        if( aEvent.MiddleUp() )
+        {
+            m_state = IDLE;
+        }
+        break;
+    };
 
     aEvent.Skip();
 }
@@ -140,4 +168,91 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
 void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
 {
     m_parentPanel->SetFocus();
+}
+
+
+void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
+{
+    switch( m_state )
+    {
+    case AUTO_PANNING:
+    {
+        double borderSize = std::min( m_autoPanMargin * m_view->GetScreenPixelSize().x,
+                                      m_autoPanMargin * m_view->GetScreenPixelSize().y );
+
+        VECTOR2D dir( m_panDirection );
+
+        if( dir.EuclideanNorm() > borderSize )
+            dir = dir.Resize( borderSize );
+
+        dir = m_view->ToWorld( dir, false );
+
+//        wxLogDebug( "AutoPanningTimer: dir %.4f %.4f sped %.4f", dir.x, dir.y, m_autoPanSpeed );
+
+        m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
+
+        wxPaintEvent redrawEvent;
+        wxPostEvent( m_parentPanel, redrawEvent );
+    }
+    break;
+    }
+
+    DeletePendingEvents();
+    m_panTimer.DeletePendingEvents();
+}
+
+
+void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
+{
+    m_grabMouse = aEnabled;
+
+    if( aEnabled )
+        m_parentPanel->CaptureMouse();
+    else
+        m_parentPanel->ReleaseMouse();
+}
+
+
+void WX_VIEW_CONTROLS::handleAutoPanning( wxMouseEvent& aEvent )
+{
+    VECTOR2D p( aEvent.GetX(), aEvent.GetY() );
+
+    // Compute areas where autopanning is active
+    double borderStart = std::min( m_autoPanMargin * m_view->GetScreenPixelSize().x,
+                                   m_autoPanMargin * m_view->GetScreenPixelSize().y );
+    double borderEndX = m_view->GetScreenPixelSize().x - borderStart;
+    double borderEndY = m_view->GetScreenPixelSize().y - borderStart;
+
+    m_panDirection = VECTOR2D();
+
+    if( p.x < borderStart )
+        m_panDirection.x = -( borderStart - p.x );
+    else if( p.x > borderEndX )
+        m_panDirection.x = ( p.x - borderEndX );
+
+    if( p.y < borderStart )
+        m_panDirection.y = -( borderStart - p.y );
+    else if( p.y > borderEndY )
+        m_panDirection.y = ( p.y - borderEndY );
+
+    bool borderHit = ( m_panDirection.x != 0 || m_panDirection.y != 0 );
+
+    switch( m_state )
+    {
+    case AUTO_PANNING:
+        if( !borderHit )
+        {
+            m_panTimer.Stop();
+            m_state = IDLE;
+        }
+        break;
+
+    case IDLE:
+        if( borderHit )
+        {
+            m_state = AUTO_PANNING;
+            m_panTimer.Start( (int) ( 1000.0 / 60.0 ) );
+        }
+        break;
+    }
 }
