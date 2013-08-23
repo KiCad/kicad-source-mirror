@@ -122,6 +122,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
     case ID_POPUP_PCB_MOVE_TRACK_NODE:
+    case ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST:
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE:
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:
     case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:
@@ -145,6 +146,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_EDIT_DRAWING:
     case ID_POPUP_PCB_GETINFO_MARKER:
     case ID_POPUP_PCB_MOVE_TEXT_DIMENSION_REQUEST:
+    case ID_POPUP_PCB_DRAG_MODULE_REQUEST:
+    case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
+    case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:
+    case ID_POPUP_PCB_MOVE_MIRE_REQUEST:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -284,11 +289,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_GET_NETLIST:
         InstallNetlistFrame( &dc );
-        break;
-
-    case ID_GET_TOOLS:
-
-        // InstalloolsFrame(this, wxPoint(-1,-1) );
         break;
 
     case ID_FIND_ITEMS:

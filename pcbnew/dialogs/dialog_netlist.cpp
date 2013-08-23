@@ -46,6 +46,7 @@
 #include <dialog_netlist.h>
 
 #define NETLIST_SILENTMODE_KEY wxT("SilentMode")
+#define NETLIST_FULLMESSAGES_KEY wxT("NetlistReportAllMsg")
 
 void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 {
@@ -95,9 +96,11 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
     m_dc = aDC;
     m_config = wxGetApp().GetSettings();
     m_silentMode = m_config->Read( NETLIST_SILENTMODE_KEY, 0l );
+    m_reportAll = m_config->Read( NETLIST_FULLMESSAGES_KEY, 1l );
     m_NetlistFilenameCtrl->SetValue( aNetlistFullFilename );
     m_cmpNameSourceOpt->SetSelection( m_parent->GetUseCmpFileForFpNames() ? 1 : 0 );
     m_checkBoxSilentMode->SetValue( m_silentMode );
+    m_checkBoxFullMessages->SetValue( m_reportAll );
 
     GetSizer()->SetSizeHints( this );
 }
@@ -105,6 +108,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
 DIALOG_NETLIST::~DIALOG_NETLIST()
 {
     m_config->Write( NETLIST_SILENTMODE_KEY, (long) m_silentMode );
+    m_config->Write( NETLIST_FULLMESSAGES_KEY, (long) m_reportAll );
 }
 
 void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
@@ -176,6 +180,7 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
     }
 
     WX_TEXT_CTRL_REPORTER reporter( m_MessageWindow );
+    reporter.SetReportAll( m_reportAll );
 
     m_parent->ReadPcbNetlist( netlistFileName, cmpFileName, &reporter,
                               m_ChangeExistingFootprintCtrl->GetSelection() == 1,

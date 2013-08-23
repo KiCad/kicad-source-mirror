@@ -72,7 +72,7 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	m_RemoveExtraFootprintsCtrl->SetSelection( 0 );
 	m_RemoveExtraFootprintsCtrl->SetToolTip( _("Remove footprints found on the Board but not in netlist\nNote: only not locked footprints will be removed") );
 	
-	bTracksSizer->Add( m_RemoveExtraFootprintsCtrl, 0, wxALL|wxEXPAND, 5 );
+	bTracksSizer->Add( m_RemoveExtraFootprintsCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bnetlistOptSizer->Add( bTracksSizer, 1, wxEXPAND, 5 );
@@ -80,30 +80,11 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	
 	bleftSizer->Add( bnetlistOptSizer, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* bCenterSizer;
-	bCenterSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_checkDryRun = new wxCheckBox( this, wxID_ANY, _("Dry run. Only report changes in message panel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkDryRun->SetToolTip( _("Dry Run:\nThe netlist is read, but no change is actually made on board.\nChanges are only reported in message panel, for info") );
-	
-	bCenterSizer->Add( m_checkDryRun, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	m_checkBoxSilentMode = new wxCheckBox( this, wxID_ANY, _("Silent mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxSilentMode->SetToolTip( _("Silent mode:\nDo not show the warning message before reading the netlist") );
-	
-	bCenterSizer->Add( m_checkBoxSilentMode, 0, wxRIGHT|wxLEFT, 5 );
-	
-	
-	bleftSizer->Add( bCenterSizer, 0, wxALL|wxEXPAND, 5 );
-	
 	
 	bUpperSizer->Add( bleftSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizerButtons;
 	bRightSizerButtons = new wxBoxSizer( wxVERTICAL );
-	
-	m_buttonBrowse = new wxButton( this, ID_OPEN_NELIST, _("Browse Netlist Files"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizerButtons->Add( m_buttonBrowse, 0, wxEXPAND|wxALL, 5 );
 	
 	m_buttonRead = new wxButton( this, ID_READ_NETLIST_FILE, _("Read Current Netlist"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonRead->SetDefault(); 
@@ -128,28 +109,62 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	bRightSizerButtons->Add( m_buttonSaveMessages, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bUpperSizer->Add( bRightSizerButtons, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bUpperSizer->Add( bRightSizerButtons, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	bMainSizer->Add( bUpperSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	wxBoxSizer* bLowerSizer;
-	bLowerSizer = new wxBoxSizer( wxVERTICAL );
+	m_staticline11 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMainSizer->Add( m_staticline11, 0, wxEXPAND | wxALL, 5 );
+	
+	wxBoxSizer* bCenterSizer;
+	bCenterSizer = new wxBoxSizer( wxVERTICAL );
+	
+	m_checkDryRun = new wxCheckBox( this, wxID_ANY, _("Dry run. Only report changes in message panel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkDryRun->SetToolTip( _("Dry Run:\nThe netlist is read, but no change is actually made on board.\nChanges are only reported in message panel, for info") );
+	
+	bCenterSizer->Add( m_checkDryRun, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_checkBoxSilentMode = new wxCheckBox( this, wxID_ANY, _("Silent mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxSilentMode->SetToolTip( _("Silent mode:\nDo not show the warning message before reading the netlist") );
+	
+	bCenterSizer->Add( m_checkBoxSilentMode, 0, wxRIGHT|wxLEFT, 5 );
+	
+	m_checkBoxFullMessages = new wxCheckBox( this, wxID_ANY, _("Display all messages"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxFullMessages->SetValue(true); 
+	m_checkBoxFullMessages->SetToolTip( _("Messages filter:\nIf checked: show all messages when reading the netlist\nIf not checked: show only warning or error messages") );
+	
+	bCenterSizer->Add( m_checkBoxFullMessages, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	
+	bMainSizer->Add( bCenterSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLowerSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	wxBoxSizer* bLowerSizer;
+	bLowerSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticTextNetfilename = new wxStaticText( this, wxID_ANY, _("Netlist File:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextNetfilename->Wrap( -1 );
 	bLowerSizer->Add( m_staticTextNetfilename, 0, wxRIGHT|wxLEFT, 5 );
 	
+	wxBoxSizer* bSizerNetlistFilename;
+	bSizerNetlistFilename = new wxBoxSizer( wxHORIZONTAL );
+	
 	m_NetlistFilenameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_NetlistFilenameCtrl->SetMaxLength( 0 ); 
-	bLowerSizer->Add( m_NetlistFilenameCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerNetlistFilename->Add( m_NetlistFilenameCtrl, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	m_buttonBrowse = new wxButton( this, ID_OPEN_NELIST, _("Browse"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	bSizerNetlistFilename->Add( m_buttonBrowse, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	
+	bLowerSizer->Add( bSizerNetlistFilename, 0, wxEXPAND, 5 );
 	
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	bLowerSizer->Add( m_staticText1, 0, wxRIGHT|wxLEFT, 5 );
+	bLowerSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_MessageWindow = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CHARWRAP|wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP );
 	m_MessageWindow->SetMaxLength( 0 ); 
@@ -166,8 +181,6 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	bMainSizer->Fit( this );
 	
 	// Connect Events
-	m_checkBoxSilentMode->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickSilentMode ), NULL, this );
-	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
 	m_buttonRead->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnReadNetlistFileClick ), NULL, this );
 	m_buttonRead->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUIValidNetlistFile ), NULL, this );
 	m_buttonClose->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCancelClick ), NULL, this );
@@ -177,13 +190,14 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	m_buttonRebild->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUIValidNetlistFile ), NULL, this );
 	m_buttonSaveMessages->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnSaveMessagesToFile ), NULL, this );
 	m_buttonSaveMessages->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUISaveMessagesToFile ), NULL, this );
+	m_checkBoxSilentMode->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickSilentMode ), NULL, this );
+	m_checkBoxFullMessages->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickFullMessages ), NULL, this );
+	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
 }
 
 DIALOG_NETLIST_FBP::~DIALOG_NETLIST_FBP()
 {
 	// Disconnect Events
-	m_checkBoxSilentMode->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickSilentMode ), NULL, this );
-	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
 	m_buttonRead->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnReadNetlistFileClick ), NULL, this );
 	m_buttonRead->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUIValidNetlistFile ), NULL, this );
 	m_buttonClose->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCancelClick ), NULL, this );
@@ -193,5 +207,8 @@ DIALOG_NETLIST_FBP::~DIALOG_NETLIST_FBP()
 	m_buttonRebild->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUIValidNetlistFile ), NULL, this );
 	m_buttonSaveMessages->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnSaveMessagesToFile ), NULL, this );
 	m_buttonSaveMessages->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUISaveMessagesToFile ), NULL, this );
+	m_checkBoxSilentMode->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickSilentMode ), NULL, this );
+	m_checkBoxFullMessages->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickFullMessages ), NULL, this );
+	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
 	
 }

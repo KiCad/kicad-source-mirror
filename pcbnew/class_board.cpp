@@ -2368,7 +2368,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
     {
         component = aNetlist.GetComponent( i );
 
-        if( aReporter )
+        if( aReporter && aReporter->ReportAll() )
         {
             msg.Printf( _( "Checking netlist component footprint \"%s:%s:%s\".\n" ),
                         GetChars( component->GetReference() ),
@@ -2387,18 +2387,26 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
             if( aReporter )
             {
                 if( component->GetModule() != NULL )
+                {
                     msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetTimeStamp() ),
                                 GetChars( component->GetFootprintName() ) );
+
+                    if( aReporter->ReportWarnings() )
+                        aReporter->Report( msg );
+                }
                 else
+                {
                     msg.Printf( _( "Cannot add new component \"%s:%s\" due to missing "
                                    "footprint \"%s\".\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetTimeStamp() ),
                                 GetChars( component->GetFootprintName() ) );
 
-                aReporter->Report( msg );
+                    if( aReporter->ReportErrors() )
+                        aReporter->Report( msg );
+                }
             }
 
             if( !aNetlist.IsDryRun() && (component->GetModule() != NULL) )
@@ -2422,20 +2430,28 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
                     if( aReporter )
                     {
                         if( component->GetModule() != NULL )
+                        {
                             msg.Printf( _( "Replacing component \"%s:%s\" footprint \"%s\" with "
                                            "\"%s\".\n" ),
                                         GetChars( footprint->GetReference() ),
                                         GetChars( footprint->GetPath() ),
                                         GetChars( footprint->GetLibRef() ),
                                         GetChars( component->GetFootprintName() ) );
+
+                            if( aReporter->ReportWarnings() )
+                                aReporter->Report( msg );
+                        }
                         else
+                        {
                             msg.Printf( _( "Cannot replace component \"%s:%s\" due to missing "
                                            "footprint \"%s\".\n" ),
                                         GetChars( footprint->GetReference() ),
                                         GetChars( footprint->GetPath() ),
                                         GetChars( component->GetFootprintName() ) );
 
-                        aReporter->Report( msg );
+                            if( aReporter->ReportErrors() )
+                                aReporter->Report( msg );
+                        }
                     }
 
                     if( !aNetlist.IsDryRun() && (component->GetModule() != NULL) )
@@ -2459,7 +2475,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
             // Test for reference designator field change.
             if( footprint->GetReference() != component->GetReference() )
             {
-                if( aReporter )
+                if( aReporter && aReporter->ReportWarnings())
                 {
                     msg.Printf( _( "Changing footprint \"%s:%s\" reference to \"%s\".\n" ),
                                 GetChars( footprint->GetReference() ),
@@ -2475,7 +2491,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
             // Test for value field change.
             if( footprint->GetValue() != component->GetValue() )
             {
-                if( aReporter )
+                if( aReporter && aReporter->ReportAll() )
                 {
                     msg.Printf( _( "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n" ),
                                 GetChars( footprint->GetReference() ),
@@ -2492,7 +2508,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
             // Test for time stamp change.
             if( footprint->GetPath() != component->GetTimeStamp() )
             {
-                if( aReporter )
+                if( aReporter && aReporter->ReportWarnings() )
                 {
                     msg.Printf( _( "Changing footprint path \"%s:%s\" to \"%s\".\n" ),
                                 GetChars( footprint->GetReference() ),
@@ -2518,7 +2534,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
             {
                 if( !pad->GetNetname().IsEmpty() )
                 {
-                    if( aReporter )
+                    if( aReporter && aReporter->ReportAll() )
                     {
                         msg.Printf( _( "Clearing component \"%s:%s\" pin \"%s\" net name.\n" ),
                                     GetChars( footprint->GetReference() ),
@@ -2535,7 +2551,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
             {
                 if( net.GetNetName() != pad->GetNetname() )
                 {
-                    if( aReporter )
+                    if( aReporter && aReporter->ReportAll() )
                     {
                         msg.Printf( _( "Changing component \"%s:%s\" pin \"%s\" net name from "
                                        "\"%s\" to \"%s\".\n" ),
@@ -2573,7 +2589,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
 
             if( component == NULL )
             {
-                if( aReporter )
+                if( aReporter && aReporter->ReportWarnings() )
                 {
                     msg.Printf( _( "Removing footprint \"%s:%s\".\n" ),
                                 GetChars( module->GetReference() ),
