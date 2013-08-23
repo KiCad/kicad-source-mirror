@@ -2339,7 +2339,6 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
     wxString       msg;
     D_PAD*         pad;
     MODULE*        footprint;
-    COMPONENT*     component;
     COMPONENT_NET  net;
 
     if( !IsEmpty() )
@@ -2350,7 +2349,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
         if( bbbox.GetWidth() || bbbox.GetHeight() )
         {
             bestPosition.x = bbbox.Centre().x;
-            bestPosition.y = bbbox.GetBottom() + DMils2iu( 5000 );
+            bestPosition.y = bbbox.GetBottom() + Millimeter2iu( 10 );
         }
     }
     else
@@ -2366,7 +2365,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
 
     for( i = 0;  i < aNetlist.GetCount();  i++ )
     {
-        component = aNetlist.GetComponent( i );
+        COMPONENT* component = aNetlist.GetComponent( i );
 
         if( aReporter && aReporter->ReportAll() )
         {
@@ -2574,6 +2573,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
     if( aNetlist.GetDeleteExtraFootprints() )
     {
         MODULE* nextModule;
+        const COMPONENT* component;
 
         for( MODULE* module = m_Modules;  module != NULL;  module = nextModule )
         {
@@ -2599,6 +2599,40 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
 
                 if( !aNetlist.IsDryRun() )
                     module->DeleteStructure();
+            }
+        }
+    }
+
+    // Last step: verify all pads found in netlist:
+    // They should exist in footprints, otherwise the footprint is wrong
+    // note also references or time stamps are updated, so we use only
+    // the reference to find a footprint
+    if( aReporter && aReporter->ReportErrors() )
+    {
+        wxString padname;
+        for( i = 0; i < aNetlist.GetCount(); i++ )
+        {
+            const COMPONENT* component = aNetlist.GetComponent( i );
+            MODULE* footprint = FindModuleByReference( component->GetReference() );
+
+            if( footprint == NULL )    // It can be missing in partial designs
+                continue;
+
+            // Explore all pins/pads in component
+            for( unsigned jj = 0; jj < component->GetNetCount(); jj++ )
+            {
+                net = component->GetNet( jj );
+                padname = net.GetPinName();
+
+                if( footprint->FindPadByName( padname ) )
+                    continue;   // OK, pad found
+
+                // not found: bad footprint, report error
+                msg.Printf( _( "** Error: Component \"%s\" pad <%s> not found in footprint \"%s\" **\n" ),
+                            GetChars( component->GetReference() ),
+                            GetChars( padname ),
+                            GetChars( footprint->GetLibRef() ) );
+                aReporter->Report( msg );
             }
         }
     }
