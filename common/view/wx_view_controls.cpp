@@ -33,8 +33,8 @@ using namespace KiGfx;
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     VIEW_CONTROLS( aView ),
     m_state( IDLE ),
-    m_autoPanEnabled( false ),
     m_grabMouse( false ),
+    m_autoPanEnabled( false ),
     m_autoPanMargin( 0.1 ),
     m_autoPanSpeed( 0.15 ),
     m_parentPanel( aParentPanel )
@@ -83,8 +83,6 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
         if( m_autoPanEnabled )
             handleAutoPanning( aEvent );
     }
-
-//    DeletePendingEvents();
 }
 
 
@@ -186,9 +184,6 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             dir = dir.Resize( borderSize );
 
         dir = m_view->ToWorld( dir, false );
-
-//        wxLogDebug( "AutoPanningTimer: dir %.4f %.4f sped %.4f", dir.x, dir.y, m_autoPanSpeed );
-
         m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
 
         wxPaintEvent redrawEvent;
@@ -196,9 +191,6 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
     }
     break;
     }
-
-    DeletePendingEvents();
-    m_panTimer.DeletePendingEvents();
 }
 
 

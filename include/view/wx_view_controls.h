@@ -37,7 +37,6 @@
 #include <view/view_controls.h>
 
 class EDA_DRAW_PANEL_GAL;
-class TOOL_DISPATCHER;
 
 namespace KiGfx
 {
@@ -48,7 +47,6 @@ namespace KiGfx
 class WX_VIEW_CONTROLS : public VIEW_CONTROLS, public wxEvtHandler
 {
 public:
-
     WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel );
     ~WX_VIEW_CONTROLS() {};
 
@@ -85,33 +83,38 @@ private:
         AUTO_PANNING,
     };
 
+    /// Computes new viewport settings while in autopanning mode
     void    handleAutoPanning( wxMouseEvent& aEvent );
 
     /// Current state of VIEW_CONTROLS
     State       m_state;
 
-    /// Options for WX_VIEW_CONTROLS
-    bool        m_autoPanEnabled;
-    bool        m_needRedraw;
+    /// Flag for grabbing the mouse cursor
     bool        m_grabMouse;
+    /// Flag for turning on autopanning
+    bool        m_autoPanEnabled;
 
-    /// Distance from cursor to VIEW edge when panning is active.
+    /// Distance from cursor to VIEW edge when panning is active
     float       m_autoPanMargin;
-    /// How fast is panning when in auto mode.
+    /// How fast is panning when in auto mode
     float       m_autoPanSpeed;
-    /// TODO
-    float       m_autoPanAcceleration;
 
     /// Panel that is affected by VIEW_CONTROLS
     wxWindow*   m_parentPanel;
 
-    /// Stores information about point where event started.
+    /// Stores information about point where dragging has started
     VECTOR2D    m_dragStartPoint;
+
+    /// Stores information about the center of viewport when dragging has started
     VECTOR2D    m_lookStartPoint;
+
+    /// Current direction of panning (only autopanning mode)
     VECTOR2D    m_panDirection;
 
-    /// Used for determining time intervals between events.
+    /// Used for determining time intervals between scroll & zoom events
     wxLongLong  m_timeStamp;
+
+    /// Timer repsonsible for handling autopanning
     wxTimer     m_panTimer;
 };
 } // namespace KiGfx
