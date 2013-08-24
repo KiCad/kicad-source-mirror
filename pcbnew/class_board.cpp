@@ -41,6 +41,7 @@
 #include <msgpanel.h>
 #include <netlist_reader.h>
 #include <reporter.h>
+#include <base_units.h>
 
 #include <pcbnew.h>
 #include <colors_selection.h>
@@ -2332,7 +2333,8 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
 }
 
 
-void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
+void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
+                            REPORTER* aReporter )
 {
     unsigned       i;
     wxPoint        bestPosition;
@@ -2603,7 +2605,53 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
         }
     }
 
-    // Last step: verify all pads found in netlist:
+    // If needed, remove the single pad nets:
+    if( aDeleteSinglePadNets && !aNetlist.IsDryRun() )
+    {
+        BuildListOfNets();
+        std::vector<D_PAD*> padlist = GetPads();
+        // padlist is the list of pads, sorted by netname.
+        int count = 0;
+        wxString netname;
+        D_PAD * pad = NULL;
+        D_PAD * previouspad = NULL;
+        for( unsigned ii = 0; ii < padlist.size(); ii++ )
+        {
+            pad = padlist[ii];
+
+            if( pad->GetNetname().IsEmpty() )
+                continue;
+
+            if( netname != pad->GetNetname() )  // End of net
+            {
+                if( previouspad && count == 1 )
+                {
+                    if( aReporter && aReporter->ReportAll() )
+                    {
+                        msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad <%s>\n" ),
+                                    GetChars( pad->GetNetname() ),
+                                    GetChars( pad->GetParent()->GetReference() ),
+                                    GetChars( previouspad->GetPadName() ) );
+                        aReporter->Report( msg );
+                    }
+                    previouspad->SetNetname( wxEmptyString );
+                }
+                netname = pad->GetNetname();
+                count = 1;
+            }
+            else
+                count++;
+
+            previouspad = pad;
+        }
+
+        // Examine last pad
+        if( pad && count == 1 )
+            pad->SetNetname( wxEmptyString );
+    }
+
+    // Last step: Some tests:
+    // verify all pads found in netlist:
     // They should exist in footprints, otherwise the footprint is wrong
     // note also references or time stamps are updated, so we use only
     // the reference to find a footprint
@@ -2634,6 +2682,31 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter )
                             GetChars( footprint->GetLibRef() ) );
                 aReporter->Report( msg );
             }
+        }
+    }
+
+    // Verify zone net names validity:
+    // After schematic changes, a zone can have a non existing net name.
+    // It should be reported
+    if( aReporter && aReporter->ReportErrors() )
+    {
+        //Loop through all copper zones
+        for( i = 0; i < m_ZoneDescriptorList.size(); i++ )
+        {
+            ZONE_CONTAINER* zone = m_ZoneDescriptorList[i];
+
+            if( zone->GetNet() >= 0 || !zone->IsOnCopperLayer() )
+                continue;
+
+            // Net name not valid, report error
+            wxString coord;
+            coord << zone->GetPosition();
+            msg.Printf( _( "** Error: Zone %s layer <%s>"
+                           " has non-existent net name \"%s\" **\n" ),
+                        GetChars( coord ),
+                        GetChars( zone->GetLayerName() ),
+                        GetChars( zone->GetNetName() ) );
+            aReporter->Report( msg );
         }
     }
 }

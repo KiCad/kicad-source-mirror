@@ -51,6 +51,7 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		wxRadioBox* m_ChangeExistingFootprintCtrl;
 		wxRadioBox* m_DeleteBadTracks;
 		wxRadioBox* m_RemoveExtraFootprintsCtrl;
+		wxRadioBox* m_rbSingleNets;
 		wxButton* m_buttonRead;
 		wxButton* m_buttonClose;
 		wxButton* m_buttonFPTest;

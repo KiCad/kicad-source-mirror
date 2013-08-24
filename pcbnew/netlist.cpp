@@ -50,6 +50,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
                                      bool            aDeleteUnconnectedTracks,
                                      bool            aDeleteExtraFootprints,
                                      bool            aSelectByTimeStamp,
+                                     bool            aDeleteSinglePadNets,
                                      bool            aIsDryRun )
 {
     wxString        msg;
@@ -90,7 +91,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
         GetScreen()->ClearUndoRedoList();
 
     netlist.SortByReference();
-    GetBoard()->ReplaceNetlist( netlist, aReporter );
+    GetBoard()->ReplaceNetlist( netlist, aDeleteSinglePadNets, aReporter );
 
     // If it was a dry run, nothing has changed so we're done.
     if( netlist.IsDryRun() )

@@ -74,6 +74,12 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	
 	bTracksSizer->Add( m_RemoveExtraFootprintsCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
+	wxString m_rbSingleNetsChoices[] = { _("Keep"), _("Delete") };
+	int m_rbSingleNetsNChoices = sizeof( m_rbSingleNetsChoices ) / sizeof( wxString );
+	m_rbSingleNets = new wxRadioBox( this, wxID_ANY, _("Single Pad Nets"), wxDefaultPosition, wxDefaultSize, m_rbSingleNetsNChoices, m_rbSingleNetsChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbSingleNets->SetSelection( 0 );
+	bTracksSizer->Add( m_rbSingleNets, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
 	
 	bnetlistOptSizer->Add( bTracksSizer, 1, wxEXPAND, 5 );
 	
