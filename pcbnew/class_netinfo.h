@@ -197,7 +197,7 @@ private:
     void clear();
 
     /**
-     * Function BuildListOfNets
+     * Function buildListOfNets
      * builds or rebuilds the list of NETINFO_ITEMs
      * The list is sorted by names.
      */

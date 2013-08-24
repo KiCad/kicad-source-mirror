@@ -47,6 +47,7 @@
 
 #define NETLIST_SILENTMODE_KEY wxT("SilentMode")
 #define NETLIST_FULLMESSAGES_KEY wxT("NetlistReportAllMsg")
+#define NETLIST_DELETESINGLEPADNETS_KEY wxT("NetlistDeleteSinglePadNets")
 
 void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 {
@@ -97,6 +98,8 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
     m_config = wxGetApp().GetSettings();
     m_silentMode = m_config->Read( NETLIST_SILENTMODE_KEY, 0l );
     m_reportAll = m_config->Read( NETLIST_FULLMESSAGES_KEY, 1l );
+    bool tmp = m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l );
+    m_rbSingleNets->SetSelection( tmp == 0 ? 0 : 1);
     m_NetlistFilenameCtrl->SetValue( aNetlistFullFilename );
     m_cmpNameSourceOpt->SetSelection( m_parent->GetUseCmpFileForFpNames() ? 1 : 0 );
     m_checkBoxSilentMode->SetValue( m_silentMode );
@@ -109,6 +112,8 @@ DIALOG_NETLIST::~DIALOG_NETLIST()
 {
     m_config->Write( NETLIST_SILENTMODE_KEY, (long) m_silentMode );
     m_config->Write( NETLIST_FULLMESSAGES_KEY, (long) m_reportAll );
+    m_config->Write( NETLIST_DELETESINGLEPADNETS_KEY,
+                    (long) m_rbSingleNets->GetSelection() );
 }
 
 void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
@@ -187,6 +192,7 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
                               m_DeleteBadTracks->GetSelection() == 1,
                               m_RemoveExtraFootprintsCtrl->GetSelection() == 1,
                               m_Select_By_Timestamp->GetSelection() == 1,
+                              m_rbSingleNets->GetSelection() == 1,
                               m_checkDryRun->GetValue() );
 }
 
