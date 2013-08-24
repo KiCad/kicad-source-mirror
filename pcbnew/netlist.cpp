@@ -4,8 +4,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2011 Jean-Pierre Charras.
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,9 +169,14 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
 {
     wxString   msg;
     wxString   lastFootprintLibName;
+    wxArrayString nofoundFootprints;    // A list of footprints used in netlist
+                                        // but not found in any library
+                                        // to avoid a full search in all libs
+                                        // each time a non existent footprint is needed
     COMPONENT* component;
     MODULE*    module = 0;
     MODULE*    fpOnBoard;
+
 
     if( aNetlist.IsEmpty() )
         return;
@@ -230,6 +237,23 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         {
             module = NULL;
 
+            // Speed up the search: a search for a non existent footprint
+            // is hightly costly in time becuse the full set of libs is read.
+            // So it should be made only once.
+            // Therefore search in not found list first:
+            bool alreadySearched = false;
+            for( unsigned ii = 0; ii < nofoundFootprints.GetCount(); ii++ )
+            {
+                if( component->GetFootprintName() == nofoundFootprints[ii] )
+                {
+                    alreadySearched = true;
+                    break;
+                }
+            }
+
+            if( alreadySearched )
+                continue;
+
             for( unsigned ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
             {
                 fn = wxFileName( wxEmptyString, g_LibraryNames[ii],
@@ -259,7 +283,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
                 }
             }
 
-            if( module == NULL )
+            if( module == NULL && !alreadySearched )
             {
                 if( aReporter )
                 {
@@ -269,6 +293,8 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
                                 GetChars( component->GetFootprintName() ) );
                     aReporter->Report( msg );
                 }
+
+                nofoundFootprints.Add( component->GetFootprintName() );
 
                 continue;
             }
