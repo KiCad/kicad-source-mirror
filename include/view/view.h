@@ -363,6 +363,12 @@ public:
     void    UpdateAllLayersOrder();
 
     /**
+     * Function PrepareTargets()
+     * Clears targets that are marked as dirty.
+     */
+    void    PrepareTargets();
+
+    /**
      * Function Redraw()
      * Immediately redraws the whole view.
      */
@@ -396,6 +402,14 @@ public:
      * @return True in case if any of layers is marked as dirty.
      */
     bool    IsDirty() const;
+
+    /**
+     * Function IsTargetDirty()
+     * Returns true if any of layers belonging to the target or the target itself should be
+     * redrawn.
+     * @return True if the above condition is fulfilled.
+     */
+    bool IsTargetDirty( int aTarget ) const;
 
     /**
      * Function MarkTargetDirty()
@@ -515,14 +529,6 @@ private:
     {
         return ( m_layers.at( aLayer ).target == TARGET_CACHED );
     }
-
-    /**
-     * Function isTargetDirty()
-     * Returns true if any of layers belonging to the target or the target itself should be
-     * redrawn.
-     * @return True if the above condition is fulfilled.
-     */
-    bool isTargetDirty( int aTarget ) const;
 
     ///* Whether to use rendering order modifier or not
     bool m_enableOrderModifier;
