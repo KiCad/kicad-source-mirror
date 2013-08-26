@@ -29,8 +29,13 @@
 
 #-----<configure>----------------------------------------------------------------
 
-set( BOOST_RELEASE 1.53.0 )
-set( BOOST_MD5 a00d22605d5dbcfb4c9936a9b35bc4c2 )   # re-calc this on every RELEASE change
+if( false )
+    set( BOOST_RELEASE 1.53.0 )
+    set( BOOST_MD5 a00d22605d5dbcfb4c9936a9b35bc4c2 )   # re-calc this on every RELEASE change
+else()
+    set( BOOST_RELEASE 1.54.0 )
+    set( BOOST_MD5 15cb8c0803064faef0c4ddf5bc5ca279 )   # re-calc this on every RELEASE change
+endif()
 
 # The boost headers [and static libs if built] go here, at the top of KiCad
 # source tree in boost_root.
@@ -40,13 +45,13 @@ set( BOOST_ROOT "${PROJECT_SOURCE_DIR}/boost_root" )
 if( BUILD_GITHUB_PLUGIN )
     # Space separated list which indicates the subset of boost libraries to compile.
     set( BOOST_LIBS_BUILT
-        filesystem
+        #filesystem
         system
-        regex
-        program_options
-        date_time
-        thread
-        exception
+        #regex
+        #program_options
+        #date_time
+        #thread
+        #exception
         unit_test_framework
         )
 endif()
@@ -69,21 +74,16 @@ set( headers_src "${PREFIX}/src/boost/boost" )
 
 
 # don't look at this:
-function( set_boost_lib_names libs )
-    foreach( lib IN LISTS ${libs} )
-        string( TOUPPER ${lib} LIB )
-        message( STATUS "LIB:${LIB} lib:${lib}" )
-        set( Boost_${LIB}_LIBRARY, "${BOOST_ROOT}/lib/libboost_${lib}.a" PARENT_SCOPE )
-        set( Boost_LIBRARIES ${Boost_LIBRARIES} ${Boost_${LIB}_LIBRARY} PARENT_SCOPE )
+function( set_boost_lib_names libs output )
+    foreach( lib ${libs} )
+        set( fullpath_lib, "${BOOST_ROOT}/lib/libboost_${lib}.a" )
+        message( STATUS "fullpath_lib:${fullpath_lib}" )
+        set( output ${output} ${fullpath_lib} )
     endforeach()
 endfunction()
 
 
 if( BUILD_GITHUB_PLUGIN )
-
-    message( FATAL_ERROR
-        "BUILD_GITHUB_PLUGIN not functional. With this commit we get merely a greenfield for better boost usage and building."
-        )
 
     # (BTW "test" yields "unit_test_framework" when passed to bootstrap.{sh,bat} ).
     message( STATUS "BOOST_LIBS_BUILT:${BOOST_LIBS_BUILT}" )
@@ -127,6 +127,11 @@ if( BUILD_GITHUB_PLUGIN )
         INSTALL_COMMAND ""
         )
 
+    file( GLOB boost_libs "${BOOST_ROOT}/lib/*" )
+    #message( STATUS BOOST_ROOT:${BOOST_ROOT}  boost_libs:${boost_libs} )
+    set( Boost_LIBRARIES    ${boost_libs}           CACHE FILEPATH "Boost libraries directory" )
+    set( Boost_INCLUDE_DIR  "${BOOST_ROOT}/include" CACHE FILEPATH "Boost include directory" )
+
 
 else( BUILD_GITHUB_PLUGIN )
 
@@ -154,7 +159,7 @@ else( BUILD_GITHUB_PLUGIN )
         )
 
     # Until my find_package() support is done for my boost.
-    set( Boost_INCLUDE_DIR  "${BOOST_ROOT}/include" CACHE FILEPATH "Boost library directory" )
+    set( Boost_INCLUDE_DIR  "${BOOST_ROOT}/include" CACHE FILEPATH "Boost include directory" )
 
 
 endif( BUILD_GITHUB_PLUGIN )
