@@ -546,7 +546,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
 {
     BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
     {
-        if( l->enabled && isTargetDirty( l->target ) && areRequiredLayersEnabled( l->id ) )
+        if( l->enabled && IsTargetDirty( l->target ) && areRequiredLayersEnabled( l->id ) )
         {
             drawItem drawFunc( this, l );
 
@@ -622,7 +622,7 @@ bool VIEW::IsDirty() const
 {
     for( int i = 0; i < TARGETS_NUMBER; ++i )
     {
-        if( isTargetDirty( i ) )
+        if( IsTargetDirty( i ) )
             return true;
     }
 
@@ -695,14 +695,9 @@ void VIEW::Clear()
 }
 
 
-void VIEW::Redraw()
+void VIEW::PrepareTargets()
 {
-    VECTOR2D screenSize = m_gal->GetScreenPixelSize();
-    BOX2I    rect( ToWorld( VECTOR2D( 0, 0 ) ),
-                   ToWorld( screenSize ) - ToWorld( VECTOR2D( 0, 0 ) ) );
-    rect.Normalize();
-
-    if( isTargetDirty( TARGET_CACHED ) || isTargetDirty( TARGET_NONCACHED ) )
+    if( IsTargetDirty( TARGET_CACHED ) || IsTargetDirty( TARGET_NONCACHED ) )
     {
         // TARGET_CACHED and TARGET_NONCACHED have to be redrawn together, as they contain
         // layers that rely on each other (eg. netnames are noncached, but tracks - are cached)
@@ -711,13 +706,21 @@ void VIEW::Redraw()
 
         MarkTargetDirty( TARGET_NONCACHED );
         MarkTargetDirty( TARGET_CACHED );
-
-        m_gal->DrawGrid();
     }
 
-    // Always refresh the overlay
-    MarkTargetDirty( TARGET_OVERLAY );
-    m_gal->ClearTarget( TARGET_OVERLAY );
+    if( IsTargetDirty( TARGET_OVERLAY ) )
+    {
+        m_gal->ClearTarget( TARGET_OVERLAY );
+    }
+}
+
+
+void VIEW::Redraw()
+{
+    VECTOR2D screenSize = m_gal->GetScreenPixelSize();
+    BOX2I    rect( ToWorld( VECTOR2D( 0, 0 ) ),
+                   ToWorld( screenSize ) - ToWorld( VECTOR2D( 0, 0 ) ) );
+    rect.Normalize();
 
     redrawRect( rect );
 
@@ -892,7 +895,7 @@ void VIEW::RecacheAllItems( bool aImmediately )
 }
 
 
-bool VIEW::isTargetDirty( int aTarget ) const
+bool VIEW::IsTargetDirty( int aTarget ) const
 {
     wxASSERT( aTarget < TARGETS_NUMBER );
 
