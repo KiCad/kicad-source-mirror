@@ -135,7 +135,7 @@ public:
         m_stack = malloc( c_defaultStackSize );
 
         // align to 16 bytes
-        void *sp = (void *) ( ( ( (ptrdiff_t) m_stack ) + m_stackSize - 0xf ) & 0xfffffff0 );
+        void *sp = (void *) ( ( ( (ptrdiff_t) m_stack ) + m_stackSize - 0xf ) & ( ~0x0f ) );
 
         m_args = &args;
         m_self = boost::context::make_fcontext( sp, m_stackSize, callerStub );
