@@ -268,7 +268,7 @@ void VIEW::SetViewport( const BOX2D& aViewport, bool aKeepAspect )
 
 void VIEW::SetMirror( bool aMirrorX, bool aMirrorY )
 {
-    wxASSERT_MSG( false, wxT( "This is not implemented" ) );
+    m_gal->SetFlip( aMirrorX, aMirrorY );
 }
 
 
@@ -292,7 +292,6 @@ void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
 
     // Redraw everything after the viewport has changed
     MarkTargetDirty( TARGET_CACHED );
-    MarkTargetDirty( TARGET_NONCACHED );
 }
 
 
@@ -304,7 +303,6 @@ void VIEW::SetCenter( const VECTOR2D& aCenter )
 
     // Redraw everything after the viewport has changed
     MarkTargetDirty( TARGET_CACHED );
-    MarkTargetDirty( TARGET_NONCACHED );
 }
 
 
@@ -706,6 +704,7 @@ void VIEW::PrepareTargets()
 
         MarkTargetDirty( TARGET_NONCACHED );
         MarkTargetDirty( TARGET_CACHED );
+        MarkTargetDirty( TARGET_OVERLAY );
     }
 
     if( IsTargetDirty( TARGET_OVERLAY ) )

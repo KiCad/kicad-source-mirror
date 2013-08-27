@@ -40,9 +40,9 @@ GAL::GAL() :
     SetIsStroke( true );
     SetFillColor( COLOR4D( 0.0, 0.0, 0.0, 0.0 ) );
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
-    SetIsCursorEnabled( false );
     SetZoomFactor( 1.0 );
     SetDepthRange( VECTOR2D( -2048, 2047 ) );
+    SetFlip( false, false );
     SetLineWidth( 1.0 );
 
     // Set grid defaults
@@ -54,6 +54,8 @@ GAL::GAL() :
 
     // Initialize the cursor shape
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
+    SetCursorSize( 20 );
+    SetCursorEnabled( true );
 
     strokeFont.LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize );
 }
@@ -61,6 +63,17 @@ GAL::GAL() :
 
 GAL::~GAL()
 {
+}
+
+
+void GAL::SetTextAttributes( const EDA_TEXT* aText )
+{
+    strokeFont.SetGlyphSize( VECTOR2D( aText->GetSize() ) );
+    strokeFont.SetHorizontalJustify( aText->GetHorizJustify() );
+    strokeFont.SetVerticalJustify( aText->GetVertJustify() );
+    strokeFont.SetBold( aText->IsBold() );
+    strokeFont.SetItalic( aText->IsItalic() );
+    strokeFont.SetMirrored( aText->IsMirrored() );
 }
 
 
@@ -80,15 +93,15 @@ void GAL::ComputeWorldScreenMatrix()
 
     MATRIX3x3D flip;
     flip.SetIdentity();
-    flip.SetScale( VECTOR2D( 1.0, 1.0 ) );
+    flip.SetScale( VECTOR2D( flipX, flipY ) );
 
     MATRIX3x3D lookat;
     lookat.SetIdentity();
     lookat.SetTranslation( -lookAtPoint );
 
     worldScreenMatrix = translation * flip * scale * lookat * worldScreenMatrix;
+    screenWorldMatrix = worldScreenMatrix.Inverse();
 }
-
 
 
 void GAL::DrawGrid()
@@ -114,9 +127,8 @@ void GAL::DrawGrid()
     // Draw the grid
     // For the drawing the start points, end points and increments have
     // to be calculated in world coordinates
-    MATRIX3x3D  inverseMatrix   = worldScreenMatrix.Inverse();
-    VECTOR2D    worldStartPoint = inverseMatrix * VECTOR2D( 0.0, 0.0 );
-    VECTOR2D    worldEndPoint   = inverseMatrix * screenSize;
+    VECTOR2D    worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
+    VECTOR2D    worldEndPoint   = screenWorldMatrix * screenSize;
 
     int gridScreenSizeDense  = round( gridSize.x * worldScale );
     int gridScreenSizeCoarse = round( gridSize.x * static_cast<double>( gridTick ) * worldScale );
@@ -217,15 +229,4 @@ void GAL::DrawGrid()
             }
         }
     }
-}
-
-
-void GAL::SetTextAttributes( const EDA_TEXT* aText )
-{
-    strokeFont.SetGlyphSize( VECTOR2D( aText->GetSize() ) );
-    strokeFont.SetHorizontalJustify( aText->GetHorizJustify() );
-    strokeFont.SetVerticalJustify( aText->GetVertJustify() );
-    strokeFont.SetBold( aText->IsBold() );
-    strokeFont.SetItalic( aText->IsItalic() );
-    strokeFont.SetMirrored( aText->IsMirrored() );
 }

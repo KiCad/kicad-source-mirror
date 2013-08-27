@@ -120,20 +120,6 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
-    Refresh();
-}
-
-
-void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
-{
-    m_gal->ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
-    m_view->MarkTargetDirty( KiGfx::TARGET_CACHED );
-    m_view->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
-}
-
-
-void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
-{
 #ifdef __WXDEBUG__
     prof_counter time;
     prof_start( &time, false );
@@ -148,6 +134,7 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
     if( m_view->IsTargetDirty( KiGfx::TARGET_NONCACHED ) )
         m_gal->DrawGrid();
     m_view->Redraw();
+    m_gal->DrawCursor( m_viewControls->GetMousePosition() );
 
     m_gal->EndDrawing();
 
@@ -156,6 +143,21 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
     wxLogDebug( wxT( "EDA_DRAW_PANEL_GAL::Refresh: %.0f ms (%.0f fps)" ),
         static_cast<double>( time.value ) / 1000.0, 1000000.0 / static_cast<double>( time.value ) );
 #endif /* __WXDEBUG__ */
+}
+
+
+void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
+{
+    m_gal->ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
+    m_view->MarkTargetDirty( KiGfx::TARGET_CACHED );
+    m_view->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
+}
+
+
+void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
+{
+    wxPaintEvent redrawEvent;
+    wxPostEvent( this, redrawEvent );
 }
 
 
@@ -213,6 +215,8 @@ void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
         printf( "evType %d\n", aEvent.GetEventType() );
         m_eventDispatcher->DispatchWxEvent( aEvent );
     }
+
+	Refresh();
 }
 
 

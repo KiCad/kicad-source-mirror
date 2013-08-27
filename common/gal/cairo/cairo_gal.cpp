@@ -24,7 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/dcbuffer.h>
 #include <wx/image.h>
 #include <wx/log.h>
 
@@ -134,6 +133,9 @@ void CAIRO_GAL::EndDrawing()
     wxClientDC   client_dc( this );
     wxBufferedDC dc;
     dc.Init( &client_dc, bmp );
+
+    // Now it is the time to blit the mouse cursor
+    blitCursor( dc );
 
     deinitSurface();
 }
@@ -784,50 +786,12 @@ void CAIRO_GAL::ClearTarget( RenderTarget aTarget )
 }
 
 
-VECTOR2D CAIRO_GAL::ComputeCursorToWorld( const VECTOR2D& aCursorPosition )
+void CAIRO_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
-    MATRIX3x3D inverseMatrix = worldScreenMatrix.Inverse();
-    VECTOR2D   cursorPositionWorld = inverseMatrix * aCursorPosition;
-
-    return cursorPositionWorld;
-}
-
-
-void CAIRO_GAL::DrawCursor( VECTOR2D aCursorPosition )
-{
-    if( !IsShownOnScreen() )
-        return;
-
-    wxClientDC clientDC( this );
-    wxMemoryDC cursorSave( *cursorPixelsSaved );
-    wxMemoryDC cursorShape( *cursorPixels );
-
-    // Snap to grid
-    VECTOR2D cursorPositionWorld = ComputeCursorToWorld( aCursorPosition );
-
-    cursorPositionWorld.x = round( cursorPositionWorld.x / gridSize.x ) * gridSize.x;
-    cursorPositionWorld.y = round( cursorPositionWorld.y / gridSize.y ) * gridSize.y;
-    aCursorPosition       = worldScreenMatrix * cursorPositionWorld;
-    aCursorPosition       = aCursorPosition - VECTOR2D( cursorSize / 2, cursorSize / 2 );
-
-    if( !isDeleteSavedPixels )
-    {
-        clientDC.Blit( savedCursorPosition.x, savedCursorPosition.y, cursorSize, cursorSize,
-                       &cursorSave, 0, 0 );
-    }
-    else
-    {
-        isDeleteSavedPixels = false;
-    }
-
-    cursorSave.Blit( 0, 0, cursorSize, cursorSize, &clientDC, aCursorPosition.x,
-                     aCursorPosition.y );
-
-    clientDC.Blit( aCursorPosition.x, aCursorPosition.y, cursorSize, cursorSize, &cursorShape, 0,
-                   0, wxOR );
-
-    savedCursorPosition.x = (wxCoord) aCursorPosition.x;
-    savedCursorPosition.y = (wxCoord) aCursorPosition.y;
+    // Now we should only store the position of the mouse cursor
+    // The real drawing routines are in EndDrawing()
+    cursorPosition = VECTOR2D( aCursorPosition.x - cursorSize / 2,
+                               aCursorPosition.y - cursorSize / 2 );
 }
 
 
@@ -888,7 +852,7 @@ void CAIRO_GAL::storePath()
 }
 
 
-void CAIRO_GAL::onPaint( wxPaintEvent& aEvent )
+void CAIRO_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
     PostPaint();
 }
@@ -919,6 +883,37 @@ void CAIRO_GAL::initCursor( int aCursorSize )
 
     cursorShape.DrawLine( 0, aCursorSize / 2, aCursorSize, aCursorSize / 2 );
     cursorShape.DrawLine( aCursorSize / 2, 0, aCursorSize / 2, aCursorSize );
+}
+
+
+void CAIRO_GAL::blitCursor( wxBufferedDC& clientDC )
+{
+    if( !isCursorEnabled )
+        return;
+
+    wxMemoryDC cursorSave( *cursorPixelsSaved );
+    wxMemoryDC cursorShape( *cursorPixels );
+
+    if( !isDeleteSavedPixels )
+    {
+        // Restore pixels that were overpainted by the previous cursor
+        clientDC.Blit( savedCursorPosition.x, savedCursorPosition.y,
+                       cursorSize, cursorSize, &cursorSave, 0, 0 );
+    }
+    else
+    {
+        isDeleteSavedPixels = false;
+    }
+
+    // Store pixels that are going to be overpainted
+    cursorSave.Blit( 0, 0, cursorSize, cursorSize, &clientDC, cursorPosition.x, cursorPosition.y );
+
+    // Draw the cursor
+    clientDC.Blit( cursorPosition.x, cursorPosition.y, cursorSize, cursorSize,
+                   &cursorShape, 0, 0, wxOR );
+
+    savedCursorPosition.x = (wxCoord) cursorPosition.x;
+    savedCursorPosition.y = (wxCoord) cursorPosition.y;
 }
 
 

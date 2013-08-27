@@ -221,11 +221,8 @@ public:
     // Cursor
     // -------
 
-    /// @copydoc GAL::ComputeCursorToWorld()
-    virtual VECTOR2D ComputeCursorToWorld( const VECTOR2D& aCursorPosition );
-
     /// @copydoc GAL::DrawCursor()
-    virtual void DrawCursor( VECTOR2D aCursorPosition );
+    virtual void DrawCursor( const VECTOR2D& aCursorPosition );
 
     /**
      * @brief Function PostPaint
@@ -293,12 +290,6 @@ private:
 
     // Shader
     SHADER                  shader;         ///< There is only one shader used for different objects
-
-    // Cursor
-    int                     cursorSize;             ///< Size of the cursor in pixels
-    GLubyte*                cursorShape;            ///< Cursor pixel storage
-    GLubyte*                cursorSave;             ///< Saved cursor pixels
-    VECTOR2D                savedCursorPosition;    ///< Last saved cursor position
 
     // Internal flags
     bool                    isGlewInitialized;          ///< Is GLEW initialized?
