@@ -63,6 +63,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
 		wxTextCtrl* fieldNameTextCtrl;
 		wxStaticText* fieldValueLabel;
 		wxTextCtrl* fieldValueTextCtrl;
+		wxButton* m_show_datasheet_button;
 		wxStaticText* textSizeLabel;
 		wxTextCtrl* textSizeTextCtrl;
 		wxStaticText* m_staticTextUnitSize;
@@ -83,13 +84,14 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
 		virtual void addFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void deleteFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveUpButtonHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void showButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 700,496 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP();
 	
 };

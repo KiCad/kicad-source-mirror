@@ -23,7 +23,6 @@ class DIALOG_SHIM;
 #include <wx/statline.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -72,7 +71,7 @@ class DIALOG_PADS_MASK_CLEARANCE_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pads Mask Clearance"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 361,292 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pads Mask Clearance"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 361,304 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PADS_MASK_CLEARANCE_BASE();
 	
 };

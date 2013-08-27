@@ -8,7 +8,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
     def __init__(self):
         FootprintWizardPlugin.__init__(self)
         self.name = "FPC"
-        self.description = "FPC (SMTechnology) Footprint Wizard"
+        self.description = "FPC (SMT connector) Footprint Wizard"
         self.parameters = {
              "Pads":
                 {"*n":40,           # not internal units preceded by "*"
@@ -113,18 +113,18 @@ class FPCFootprintWizard(FootprintWizardPlugin):
 
         #add outline
         outline = EDGE_MODULE(module)
-        width = FromMM(0.2)
-        posy = -pad_height/2 - width/2 -FromMM(0.2)
+        linewidth = FromMM(0.2)
+        posy = -pad_height/2 - linewidth/2 -FromMM(0.2)
         outline.SetStartEnd(wxPoint(pad_pitch * pads - pad_pitch*0.5-offsetX, posy),
                             wxPoint( - pad_pitch*0.5-offsetX, posy))
-        outline.SetWidth(width)
+        outline.SetWidth(linewidth)
         outline.SetLayer(SILKSCREEN_N_FRONT)    #default: not needed
         outline.SetShape(S_SEGMENT)
         module.Add(outline)
 
         outline1 = EDGE_MODULE(module)
         outline1.Copy(outline)                  #copy all settings from outline
-        posy = pad_height/2 + width/2 +FromMM(0.2)
+        posy = pad_height/2 + linewidth/2 +FromMM(0.2)
         outline1.SetStartEnd(wxPoint(pad_pitch * pads - pad_pitch*0.5-offsetX, posy),
                             wxPoint( - pad_pitch*0.5-offsetX, posy))
         module.Add(outline1)

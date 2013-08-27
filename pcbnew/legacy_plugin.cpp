@@ -411,11 +411,7 @@ void LEGACY_PLUGIN::loadGENERAL()
 
             if( !strcmp( data, "mm" ) )
             {
-#if defined( USE_PCBNEW_NANOMETRES )
                 diskToBiu = IU_PER_MM;
-#else
-                THROW_IO_ERROR( _( "May not load millimeter *.brd file into 'Pcbnew compiled for deci-mils'" ) );
-#endif
             }
         }
 
@@ -2822,11 +2818,7 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
     m_props = aProperties;
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.
-#if defined( USE_PCBNEW_NANOMETRES )
     biuToDisk = 1.0/IU_PER_MM;      // BIUs are nanometers & file is mm
-#else
-    biuToDisk = 1.0;                // BIUs are deci-mils
-#endif
 
     // Conversion factor for loading KICAD legacy file format into BIUs in RAM
     // Start by assuming the *.brd file is in deci-mils.
@@ -2835,8 +2827,7 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
     // mm to nanometers.  The deci-mil legacy files have no such "Units" marker
     // so we must assume the file is in deci-mils until told otherwise.
 
-    diskToBiu = IU_PER_DECIMILS;    // BIUs are nanometers if defined(USE_PCBNEW_NANOMETRES)
-                                    // else are deci-mils
+    diskToBiu = IU_PER_DECIMILS;    // BIUs are nanometers
 }
 
 
@@ -2918,11 +2909,7 @@ void LEGACY_PLUGIN::saveGENERAL( const BOARD* aBoard ) const
     fprintf( m_fp, "encoding utf-8\n" );
 
     // tell folks the units used within the file, as early as possible here.
-#if defined( USE_PCBNEW_NANOMETRES )
     fprintf( m_fp, "Units mm\n" );
-#else
-    fprintf( m_fp, "Units deci-mils\n" );
-#endif
 
     // Write copper layer count
     fprintf( m_fp, "LayerCount %d\n", aBoard->GetCopperLayerCount() );
@@ -3991,11 +3978,7 @@ void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
 
             if( !strcmp( units, "mm" ) )
             {
-#if defined( USE_PCBNEW_NANOMETRES )
                 m_owner->diskToBiu = IU_PER_MM;
-#else
-                THROW_IO_ERROR( _( "May not load millimeter legacy library file into 'Pcbnew compiled for deci-mils'" ) );
-#endif
             }
 
         }
@@ -4191,11 +4174,7 @@ void FPL_CACHE::SaveHeader( FILE* aFile )
 {
     fprintf( aFile, "%s  %s\n", FOOTPRINT_LIBRARY_HEADER, TO_UTF8( DateAndTime() ) );
     fprintf( aFile, "# encoding utf-8\n" );
-#if defined( USE_PCBNEW_NANOMETRES )
     fprintf( aFile, "Units mm\n" );
-#else
-    fprintf( aFile, "Units deci-mils\n" );
-#endif
 }
 
 

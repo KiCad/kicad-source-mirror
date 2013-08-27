@@ -147,8 +147,6 @@ static int scale( double distance, UNIT_RES* aResolution )
     double  resValue = aResolution->GetValue();
     double  factor;
 
-#if defined(USE_PCBNEW_NANOMETRES)
-
     switch( aResolution->GetEngUnits() )
     {
     default:
@@ -170,36 +168,6 @@ static int scale( double distance, UNIT_RES* aResolution )
     }
 
     int ret = KiROUND( factor * distance / resValue );
-
-#else
-
-    switch( aResolution->GetEngUnits() )
-    {
-    default:
-    case T_inch:
-        factor = 1000.0;
-        break;
-    case T_mil:
-        factor = 1.0;
-        break;
-    case T_cm:
-        factor = 1000.0/2.54;
-        break;
-    case T_mm:
-        factor = 1000.0/25.4;
-        break;
-    case T_um:
-        factor = 1.0/25.4;
-        break;
-    }
-
-    // the factor of 10.0 is used to convert mils to deci-mils, the units
-    // used within KiCad.
-    factor *= 10.0;
-
-    int ret = KiROUND( factor * distance / resValue );
-
-#endif
 
     return ret;
 }

@@ -88,7 +88,7 @@ wxString BOARD_ITEM::GetLayerName() const
 
 std::string BOARD_ITEM::FormatInternalUnits( int aValue )
 {
-#if 1   // !defined( USE_PCBNEW_NANOMETRES )
+#if 1
 
     char    buf[50];
     int     len;

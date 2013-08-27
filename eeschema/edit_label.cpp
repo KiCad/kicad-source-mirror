@@ -72,7 +72,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
 {
     SCH_TEXT* textItem = NULL;
 
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
 
     switch( aType )
     {
@@ -235,7 +235,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
         }
     }
 
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
     OnModify();
     newtext->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     m_canvas->CrossHairOn( &dc );    // redraw schematic cursor

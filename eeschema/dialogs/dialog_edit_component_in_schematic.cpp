@@ -26,6 +26,7 @@
  */
 
 #include <wx/tooltip.h>
+#include <wx/hyperlink.h>
 
 #include <fctsys.h>
 #include <appl_wxstruct.h>
@@ -112,6 +113,7 @@ private:
     void addFieldButtonHandler( wxCommandEvent& event );
     void deleteFieldButtonHandler( wxCommandEvent& event );
     void moveUpButtonHandler( wxCommandEvent& event );
+    void showButtonHandler( wxCommandEvent& event );
 
     SCH_FIELD* findField( const wxString& aFieldName );
 
@@ -252,8 +254,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     if( m_Cmp->GetUnit() )
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
+        STATUS_FLAGS flags = m_Cmp->GetFlags();
         m_Cmp->SetUnitSelection( &m_Parent->GetCurrentSheet(), unit_selection );
         m_Cmp->SetUnit( unit_selection );
+        m_Cmp->ClearFlags();
+        m_Cmp->SetFlags( flags );   // Restore m_Flag modified by SetUnit()
     }
 
     switch( orientationRadioBox->GetSelection() )
@@ -327,13 +332,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
                 && !m_Parent->GetTemplates().HasFieldName( m_FieldsBuf[i].GetName( false ) )
                 && !removeRemainingFields )
             {
-                wxString msg;
-
-                msg.Printf( _( "The field name <%s> does not have a value and is not defined in "
-                               "the field template list.  Empty field values are invalid an will "
-                               "be removed from the component.  Do you wish to remove this and "
-                               "all remaining undefined fields?" ),
-                            GetChars( m_FieldsBuf[i].GetName( false ) ) );
+                wxString msg = wxString::Format(
+                    _( "The field name <%s> does not have a value and is not defined in "
+                       "the field template list.  Empty field values are invalid an will "
+                       "be removed from the component.  Do you wish to remove this and "
+                       "all remaining undefined fields?" ),
+                    GetChars( m_FieldsBuf[i].GetName( false ) )
+                    );
 
                 wxMessageDialog dlg( this, msg, _( "Remove Fields" ), wxYES_NO | wxNO_DEFAULT );
 
@@ -425,6 +430,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEven
 
     setSelectedFieldNdx( fieldNdx );
     m_skipCopyFromPanel = false;
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& event )
+{
+    wxString datasheet_uri = fieldValueTextCtrl->GetValue();
+    ::wxLaunchDefaultBrowser( datasheet_uri );
 }
 
 
@@ -720,6 +732,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     deleteFieldButton->Enable( fieldNdx >= MANDATORY_FIELDS );
 
     fieldValueTextCtrl->SetValue( field.GetText() );
+
+    m_show_datasheet_button->Enable( fieldNdx == DATASHEET );
 
     // For power symbols, the value is NOR editable, because value and pin
     // name must be same and can be edited only in library editor

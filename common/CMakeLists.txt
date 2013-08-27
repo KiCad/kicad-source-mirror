@@ -3,7 +3,6 @@ include_directories(BEFORE ${INC_BEFORE})
 include_directories(
     ./dialogs
     ./dialog_about
-    ${Boost_INCLUDE_DIR}
     ${CAIRO_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIR}
     ../3d-viewer

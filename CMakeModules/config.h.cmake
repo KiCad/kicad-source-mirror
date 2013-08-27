@@ -75,17 +75,14 @@
 
 #cmakedefine USE_IMAGES_IN_MENUS 1
 
-/// Definitions to enable the s-expression file formats and nanometer units.
-#cmakedefine USE_PCBNEW_NANOMETRES
-
 /// The legacy file format revision of the *.brd file created by this build
-#if defined(USE_PCBNEW_NANOMETRES)
-#define LEGACY_BOARD_FILE_VERSION          2
-#else
-#define LEGACY_BOARD_FILE_VERSION          1
-#endif
+#define LEGACY_BOARD_FILE_VERSION 2
 
 /// Definition to compile with Pcbnew footprint library table implementation.
 #cmakedefine USE_FP_LIB_TABLE
+
+/// When defined, build the GITHUB_PLUGIN for pcbnew.
+#cmakedefine BUILD_GITHUB_PLUGIN
+
 
 #endif  // CONFIG_H_
