@@ -551,6 +551,25 @@ public:
         return worldScale;
     }
 
+    /**
+     * @brief Sets flipping of the screen.
+     *
+     * @param xAxis is the flip flag for the X axis.
+     * @param yAxis is the flip flag for the Y axis.
+     */
+    inline void SetFlip( bool xAxis, bool yAxis )
+    {
+        if( xAxis )
+            flipX = -1.0;   // flipped
+        else
+            flipX = 1.0;    // regular
+
+        if( yAxis )
+            flipY = -1.0;   // flipped
+        else
+            flipY = 1.0;    // regular
+    }
+
     // ---------------------------
     // Buffer manipulation methods
     // ---------------------------
@@ -693,26 +712,36 @@ public:
         gridStyle = aGridStyle;
     }
 
-    // -------
-    // Cursor
-    // -------
+    /**
+     * @brief Compute the point position in world coordinates from given screen coordinates.
+     *
+     * @param aPoint the pointposition in screen coordinates.
+     * @return the point position in world coordinates.
+     */
+    inline virtual VECTOR2D ToWorld( const VECTOR2D& aPoint ) const
+    {
+        return VECTOR2D( screenWorldMatrix * aPoint );
+    }
 
     /**
-     * @brief Compute the cursor position in world coordinates from given screen coordinates.
+     * @brief Compute the point position in screen coordinates from given world coordinates.
      *
-     * @param aCursorPosition is the cursor position in screen coordinates.
-     * @return the cursor position in world coordinates.
+     * @param aPoint the pointposition in world coordinates.
+     * @return the point position in screen coordinates.
      */
-    virtual VECTOR2D ComputeCursorToWorld( const VECTOR2D& aCursorPosition ) = 0;
+    inline virtual VECTOR2D ToScreen( const VECTOR2D& aPoint ) const
+    {
+        return VECTOR2D( worldScreenMatrix * aPoint );
+    }
 
     /**
      * @brief Enable/Disable cursor.
      *
      * @param aIsCursorEnabled is true if the cursor should be enabled, else false.
      */
-    inline void SetIsCursorEnabled( bool aIsCursorEnabled )
+    inline void SetCursorEnabled( bool aCursorEnabled )
     {
-        isCursorEnabled = aIsCursorEnabled;
+        isCursorEnabled = aCursorEnabled;
     }
 
     /**
@@ -726,11 +755,21 @@ public:
     }
 
     /**
+     * @brief Set the cursor size.
+     *
+     * @param aCursorSize is the size of the cursor.
+     */
+    inline void SetCursorSize( unsigned int aCursorSize )
+    {
+        cursorSize = aCursorSize;
+    }
+
+    /**
      * @brief Draw the cursor.
      *
      * @param aCursorPosition is the cursor position in screen coordinates.
      */
-    virtual void DrawCursor( VECTOR2D aCursorPosition ) = 0;
+    virtual void DrawCursor( const VECTOR2D& aCursorPosition ) = 0;
 
     /**
      * @brief Changes the current depth to deeper, so it is possible to draw objects right beneath
@@ -768,7 +807,10 @@ protected:
 
     double             zoomFactor;             ///< The zoom factor
     MATRIX3x3D         worldScreenMatrix;      ///< World transformation
+    MATRIX3x3D         screenWorldMatrix;      ///< Screen transformation
     double             worldScale;             ///< The scale factor world->screen
+    double             flipX;                  ///< Flag for X axis flipping
+    double             flipY;                  ///< Flag for Y axis flipping
 
     double             lineWidth;              ///< The line width
 
@@ -795,8 +837,8 @@ protected:
     int                gridOriginMarkerSize;   ///< Grid origin indicator size (pixels)
 
     bool               isCursorEnabled;        ///< Is the cursor enabled?
-    VECTOR2D           cursorPosition;         ///< The cursor position
     COLOR4D            cursorColor;            ///< Cursor color
+    int                cursorSize;             ///< Size of the cursor in pixels
 
     /// Instance of object that stores information about how to draw texts
     STROKE_FONT        strokeFont;

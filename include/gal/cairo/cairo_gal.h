@@ -34,6 +34,7 @@
 
 #include <gal/graphics_abstraction_layer.h>
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <wx/dcbuffer.h>
 
 #if defined(__WXMSW__)
 #define SCREEN_DEPTH 24
@@ -228,11 +229,8 @@ public:
     // Cursor
     // -------
 
-    /// @copydoc GAL::ComputeCursorToWorld()
-    virtual VECTOR2D ComputeCursorToWorld( const VECTOR2D& aCursorPosition );
-
     /// @copydoc GAL::DrawCursor()
-    virtual void DrawCursor( VECTOR2D aCursorPosition );
+    virtual void DrawCursor( const VECTOR2D& aCursorPosition );
 
     /**
      * Function PostPaint
@@ -286,6 +284,7 @@ private:
     wxBitmap*               cursorPixels;           ///< Cursor pixels
     wxBitmap*               cursorPixelsSaved;      ///< Saved cursor pixels
     int                     cursorSize;             ///< Cursor size
+    VECTOR2D                cursorPosition;         ///< Current cursor position
 
     /// Maximum number of arguments for one command
     static const int MAX_CAIRO_ARGUMENTS = 6;
@@ -356,6 +355,11 @@ private:
 
     /// @copydoc GAL::initCursor()
     virtual void initCursor( int aCursorSize );
+
+    /**
+     * @brief Blits cursor into current screen.
+     */
+    virtual void blitCursor( wxBufferedDC& clientDC );
 
     /// Prepare Cairo surfaces for drawing
     void initSurface();

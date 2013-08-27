@@ -732,73 +732,35 @@ void OPENGL_GAL::ClearTarget( RenderTarget aTarget )
 }
 
 
-VECTOR2D OPENGL_GAL::ComputeCursorToWorld( const VECTOR2D& aCursorPosition )
+void OPENGL_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
-    VECTOR2D cursorPosition = aCursorPosition;
-    cursorPosition.y = screenSize.y - aCursorPosition.y;
-    MATRIX3x3D inverseMatrix = worldScreenMatrix.Inverse();
-    VECTOR2D   cursorPositionWorld = inverseMatrix * cursorPosition;
+    if( !isCursorEnabled )
+        return;
 
-    return cursorPositionWorld;
-}
+    compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
+    // Invert y axis
+    VECTOR2D cursorPosition = VECTOR2D( aCursorPosition.x, screenSize.y - aCursorPosition.y );
 
-void OPENGL_GAL::DrawCursor( VECTOR2D aCursorPosition )
-{
-    wxLogWarning( wxT( "Not tested" ) );
+    VECTOR2D cursorBegin  = ToWorld( cursorPosition -
+                                     VECTOR2D( cursorSize / 2, cursorSize / 2 ) );
+    VECTOR2D cursorEnd    = ToWorld( cursorPosition +
+                                     VECTOR2D( cursorSize / 2, cursorSize / 2 ) );
+    VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2.0;
 
-    SetCurrent( *glContext );
-
-    // Draw the cursor on the surface
-    VECTOR2D cursorPositionWorld = ComputeCursorToWorld( aCursorPosition );
-
-    cursorPositionWorld.x = round( cursorPositionWorld.x / gridSize.x ) * gridSize.x;
-    cursorPositionWorld.y = round( cursorPositionWorld.y / gridSize.y ) * gridSize.y;
-
-    aCursorPosition = worldScreenMatrix * cursorPositionWorld;
-
-    // Switch to the main framebuffer and blit the scene
-    // glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-    // glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    glLoadIdentity();
-
-    glDisable( GL_TEXTURE_2D );
+    glLineWidth( 1.0 );
     glColor4d( cursorColor.r, cursorColor.g, cursorColor.b, cursorColor.a );
 
-    glBegin( GL_TRIANGLES );
+    glBegin( GL_LINES );
+    glVertex3f( cursorCenter.x, cursorBegin.y, GetMinDepth() );
+    glVertex3f( cursorCenter.x, cursorEnd.y, GetMinDepth() );
 
-    glVertex3f( (int) ( aCursorPosition.x - cursorSize / 2 ) + 1,
-                (int) ( aCursorPosition.y ), depthRange.x );
-    glVertex3f( (int) ( aCursorPosition.x + cursorSize / 2 ) + 1,
-                (int) ( aCursorPosition.y ), depthRange.x );
-    glVertex3f( (int) ( aCursorPosition.x + cursorSize / 2 ) + 1,
-                (int) ( aCursorPosition.y + 1 ), depthRange.x );
-
-    glVertex3f( (int) ( aCursorPosition.x - cursorSize / 2 ) + 1,
-                (int) ( aCursorPosition.y ), depthRange.x );
-    glVertex3f( (int) ( aCursorPosition.x - cursorSize / 2 ) + 1,
-                (int) ( aCursorPosition.y + 1), depthRange.x );
-    glVertex3f( (int) ( aCursorPosition.x + cursorSize / 2 ) + 1,
-                (int) ( aCursorPosition.y + 1 ), depthRange.x );
-
-    glVertex3f( (int) ( aCursorPosition.x ),
-                (int) ( aCursorPosition.y - cursorSize / 2 ) + 1, depthRange.x );
-    glVertex3f( (int) ( aCursorPosition.x  ),
-                (int) ( aCursorPosition.y + cursorSize / 2 ) + 1, depthRange.x );
-    glVertex3f( (int) ( aCursorPosition.x  ) + 1,
-                (int) ( aCursorPosition.y + cursorSize / 2 ) + 1, depthRange.x );
-
-    glVertex3f( (int) ( aCursorPosition.x ),
-                (int) ( aCursorPosition.y - cursorSize / 2 ) + 1, depthRange.x );
-    glVertex3f( (int) ( aCursorPosition.x ) + 1,
-                (int) ( aCursorPosition.y - cursorSize / 2 ) + 1, depthRange.x );
-    glVertex3f( (int) ( aCursorPosition.x  ) + 1,
-                (int) ( aCursorPosition.y + cursorSize / 2 ) + 1, depthRange.x );
+    glVertex3f( cursorBegin.x, cursorCenter.y, GetMinDepth() );
+    glVertex3f( cursorEnd.x, cursorCenter.y, GetMinDepth() );
     glEnd();
 
-    // Blit the current screen contents
-    SwapBuffers();
+    // Restore the default color, so textures will be drawn properly
+    glColor4d( 1.0, 1.0, 1.0, 1.0 );
 }
 
 
@@ -823,6 +785,7 @@ void OPENGL_GAL::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
     glVertex3d( aEndPoint.x, aEndPoint.y, layerDepth );
     glEnd();
 
+    // Restore the default color, so textures will be drawn properly
     glColor4d( 1.0, 1.0, 1.0, 1.0 );
 }
 
@@ -938,7 +901,7 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
 }
 
 
-void OPENGL_GAL::onPaint( wxPaintEvent& aEvent )
+void OPENGL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
     PostPaint();
 }

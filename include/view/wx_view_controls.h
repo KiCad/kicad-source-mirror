@@ -76,6 +76,17 @@ public:
         m_autoPanEnabled = true;
     }
 
+    /**
+     * Function GetMousePosition()
+     * Returns the current mouse cursor position in the screen coordinates.
+     *
+     * @return The current mouse cursor position.
+     */
+    const VECTOR2D& GetMousePosition() const
+    {
+        return m_mousePosition;
+    }
+
 private:
     enum State {
         IDLE = 1,
@@ -88,6 +99,9 @@ private:
 
     /// Current state of VIEW_CONTROLS
     State       m_state;
+
+    /// Current mouse position
+    VECTOR2D    m_mousePosition;
 
     /// Flag for grabbing the mouse cursor
     bool        m_grabMouse;

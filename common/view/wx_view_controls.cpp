@@ -60,17 +60,17 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
 
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
-    VECTOR2D mousePoint( aEvent.GetX(), aEvent.GetY() );
+    m_mousePosition.x = aEvent.GetX();
+    m_mousePosition.y = aEvent.GetY();
 
     if( aEvent.Dragging() )
     {
         if( m_state == DRAG_PANNING )
         {
-            VECTOR2D   d = m_dragStartPoint - mousePoint;
+            VECTOR2D   d = m_dragStartPoint - m_mousePosition;
             VECTOR2D   delta = m_view->ToWorld( d, false );
 
             m_view->SetCenter( m_lookStartPoint + delta );
-            m_parentPanel->Refresh();
             aEvent.StopPropagation();
         }
         else
@@ -106,7 +106,6 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
                         aEvent.ShiftDown() ? -scrollSpeed : 0.0 );
 
         m_view->SetCenter( m_view->GetCenter() + delta );
-        m_parentPanel->Refresh();
     }
     else
     {
@@ -130,7 +129,6 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 
         VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
         m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
-        m_parentPanel->Refresh();
     }
 
     aEvent.Skip();
