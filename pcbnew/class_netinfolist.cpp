@@ -72,7 +72,7 @@ static bool padlistSortByNetnames( const D_PAD* a, const D_PAD* b )
  * Be aware NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname )
  * when search a net by its net name does a binary search
  * and expects to have a nets list sorted by an alphabetic case sensitive sort
- * So do not change Build_Pads_Full_List() taht build a sorted list of pads
+ * So do not change Build_Pads_Full_List() which build a sorted list of pads
  */
 void NETINFO_LIST::buildListOfNets()
 {

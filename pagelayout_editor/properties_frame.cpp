@@ -1,8 +1,12 @@
+/**
+ * @file properties_frame.cpp
+ */
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +24,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file properties_frame.cpp
  */
 
 #include <fctsys.h>
@@ -194,9 +194,10 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
         m_SizerTextIncrementLabel->Show( true );
 
         WORKSHEET_DATAITEM_TEXT* item = (WORKSHEET_DATAITEM_TEXT*) aItem;
-        wxString text = item->m_TextBase;
-        text.Replace(wxT("\\n"), wxT("\n") );
-        m_textCtrlText->SetValue( text );
+        item->m_FullText = item->m_TextBase;
+        // Replace our '\' 'n' sequence by the EOL char
+        item->ReplaceAntiSlashSequence();;
+        m_textCtrlText->SetValue( item->m_FullText );
 
         msg.Printf( wxT("%d"), item->m_IncrementLabel );
         m_textCtrlTextIncrement->SetValue( msg );
@@ -285,7 +286,12 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
 
     WORKSHEET_DATAITEM* item = m_parent->GetSelectedItem();
     if( item )
+    {
         CopyPrmsFromPanelToItem( item );
+        // Be sure what is displayed is waht is set for item
+        // (mainly, texts can be modified if they contain "\n")
+        CopyPrmsFromItemToPanel( item );
+    }
 
     CopyPrmsFromPanelToGeneral();
 
@@ -392,7 +398,6 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
         WORKSHEET_DATAITEM_TEXT* item = (WORKSHEET_DATAITEM_TEXT*) aItem;
 
         item->m_TextBase = m_textCtrlText->GetValue();
-        item->m_TextBase.Replace( wxT("\n"), wxT("\\n") );
 
         msg = m_textCtrlTextIncrement->GetValue();
         msg.ToLong( &itmp );

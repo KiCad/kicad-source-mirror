@@ -1466,6 +1466,8 @@ public:
      * @param aSelectByTimestamp if true, use timestamp instead of reference to identify
      *                           footprints from components (use after reannotation of the
      *                           schematic)
+     * @param aDeleteSinglePadNets if true, remove nets counting only one pad
+     *                             and set net code to 0 for these pads
      * @param aIsDryRun performs a dry run without making any changes if true.
      */
     void ReadPcbNetlist( const wxString&  aNetlistFileName,
@@ -1475,6 +1477,7 @@ public:
                          bool             aDeleteBadTracks,
                          bool             aDeleteExtraFootprints,
                          bool             aSelectByTimestamp,
+                         bool             aDeleteSinglePadNets,
                          bool             aIsDryRun );
 
     /**

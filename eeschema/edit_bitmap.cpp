@@ -144,7 +144,7 @@ void SCH_EDIT_FRAME::MoveImage( SCH_BITMAP* aImageItem, wxDC* aDC )
 
     m_canvas->SetMouseCapture( moveBitmap, abortMoveBitmap );
     GetScreen()->SetCurItem( aImageItem );
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
 
     SetUndoItem( aImageItem );
 

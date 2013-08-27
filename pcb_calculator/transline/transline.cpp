@@ -25,8 +25,6 @@
 #include <transline.h>
 #include <units.h>
 
-using namespace std;
-
 
 #ifndef INFINITY
 #define INFINITY std::numeric_limits<double>::infinity()
@@ -35,13 +33,6 @@ using namespace std;
 
 #ifndef M_PI_2
 #define M_PI_2 (M_PI/2)
-#endif
-
-#ifndef HAVE_CMATH_ISINF
-inline bool isinf(double x)
-{
-    return x == INFINITY; // return true if x is infinity
-}
 #endif
 
 
@@ -148,7 +139,7 @@ void TRANSLINE::ellipke( double arg, double& k, double& e )
         k = INFINITY; // infinite
         e = 0;
     }
-    else if( isinf( arg ) && arg < 0 )
+    else if( std::isinf( arg ) && arg < 0 )
     {
         k = 0;
         e = INFINITY; // infinite

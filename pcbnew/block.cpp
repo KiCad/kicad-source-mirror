@@ -381,7 +381,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
 void PCB_EDIT_FRAME::Block_SelectItems()
 {
-    int layerMask;
+    LAYER_MSK layerMask;
 
     GetScreen()->m_BlockLocate.Normalize();
 

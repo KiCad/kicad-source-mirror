@@ -177,7 +177,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
                     const wxPoint& aPosition, const wxSize& aSize,
                     long aStyle ) :
     SCH_BASE_FRAME( aParent, SCHEMATIC_FRAME_TYPE, aTitle, aPosition, aSize,
-                    aStyle, SCH_EDIT_FRAME_NAME )
+                    aStyle, SCH_EDIT_FRAME_NAME ),
+    m_item_to_repeat( 0 )
 {
     m_FrameName = SCH_EDIT_FRAME_NAME;
     m_showAxis = false;                 // true to show axis
@@ -206,8 +207,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( icon_eeschema_xpm ) );
     SetIcon( icon );
-
-    m_itemToRepeat = NULL;
 
     /* Get config */
     LoadSettings();
@@ -268,8 +267,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
+    delete m_item_to_repeat;        // we own the cloned object, see this->SetRepeatItem()
+
     SetScreen( NULL );
-    delete m_CurrentSheet;     // a SCH_SHEET_PATH, on the heap.
+    delete m_CurrentSheet;          // a SCH_SHEET_PATH, on the heap.
     delete m_undoItem;
     delete g_RootSheet;
     delete m_findReplaceData;
@@ -278,6 +279,32 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     g_RootSheet = NULL;
     m_findReplaceData = NULL;
     CMP_LIBRARY::RemoveAllLibraries();
+}
+
+
+void SCH_EDIT_FRAME::SetRepeatItem( SCH_ITEM* aItem )
+{
+    // we cannot store a pointer to an item in the display list here since
+    // that item may be deleted, such as part of a line concatonation or other.
+    // So simply always keep a copy of the object which is to be repeated.
+
+    SCH_ITEM*   old = m_item_to_repeat;
+    SCH_ITEM*   cur = aItem;
+
+    if( cur != old )
+    {
+        if( cur )
+        {
+            aItem = (SCH_ITEM*) cur->Clone();
+
+            // Clone() preserves the flags, we want 'em cleared.
+            aItem->ClearFlags();
+        }
+
+        m_item_to_repeat = aItem;
+
+        delete old;
+    }
 }
 
 
@@ -869,7 +896,7 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
 {
     SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_ITEM*   item = screen->GetCurItem();
 
     wxCHECK_RET( item != NULL, wxT( "Cannot add current item to list." ) );
 

@@ -162,7 +162,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         }
 
         m_canvas->SetMouseCapture( DrawSegment, AbortCreateNewLine );
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
     }
     else    // A segment is in progress: terminates the current segment and add a new segment.
     {
@@ -239,7 +239,8 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
         return;
 
     // Get the last non-null wire (this is the last created segment).
-    m_itemToRepeat = segment = (SCH_LINE*) s_wires.GetLast();
+    SetRepeatItem( segment = (SCH_LINE*) s_wires.GetLast() );
+
     screen->SetCurItem( NULL );
     m_canvas->EndMouseCapture( -1, -1, wxEmptyString, false );
 
@@ -341,7 +342,7 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
 {
     SCH_SCREEN* screen = GetScreen();
 
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
 
     if( ( screen->GetCurItem() == NULL ) || !screen->GetCurItem()->IsNew() )
         return;
@@ -359,7 +360,7 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
 {
     SCH_JUNCTION* junction = new SCH_JUNCTION( aPosition );
 
-    m_itemToRepeat = junction;
+    SetRepeatItem( junction );
 
     m_canvas->CrossHairOff( aDC );     // Erase schematic cursor
     junction->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
@@ -378,19 +379,19 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
 
 SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( wxDC* aDC, const wxPoint& aPosition )
 {
-    SCH_NO_CONNECT* NewNoConnect;
+    SCH_NO_CONNECT* no_connect = new SCH_NO_CONNECT( aPosition );
 
-    NewNoConnect   = new SCH_NO_CONNECT( aPosition );
-    m_itemToRepeat = NewNoConnect;
+    SetRepeatItem( no_connect );
 
     m_canvas->CrossHairOff( aDC );     // Erase schematic cursor
-    NewNoConnect->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    no_connect->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+
     m_canvas->CrossHairOn( aDC );      // Display schematic cursor
 
-    GetScreen()->Append( NewNoConnect );
+    GetScreen()->Append( no_connect );
     OnModify();
-    SaveCopyInUndoList( NewNoConnect, UR_NEW );
-    return NewNoConnect;
+    SaveCopyInUndoList( no_connect, UR_NEW );
+    return no_connect;
 }
 
 
@@ -420,35 +421,44 @@ static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
 {
-    if( m_itemToRepeat == NULL )
+    SCH_ITEM*   repeater = GetRepeatItem();
+
+    if( !repeater )
         return;
 
-    m_itemToRepeat = (SCH_ITEM*) m_itemToRepeat->Clone();
+    //D( repeater>Show( 0, std::cout ); )
 
-    if( m_itemToRepeat->Type() == SCH_COMPONENT_T ) // If repeat component then put in move mode
+    // clone the repeater, move it, insert into display list, then save a copy
+    // via SetRepeatItem();
+
+    SCH_ITEM* my_clone = (SCH_ITEM*) repeater->Clone();
+
+    // If cloning a component then put into 'move' mode.
+    if( my_clone->Type() == SCH_COMPONENT_T )
     {
         wxPoint pos = GetCrossHairPosition() -
-                      ( (SCH_COMPONENT*) m_itemToRepeat )->GetPosition();
+                      ( (SCH_COMPONENT*) my_clone )->GetPosition();
 
-        m_itemToRepeat->SetFlags( IS_NEW );
-        ( (SCH_COMPONENT*) m_itemToRepeat )->SetTimeStamp( GetNewTimeStamp() );
-        m_itemToRepeat->Move( pos );
-        m_itemToRepeat->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
-        MoveItem( m_itemToRepeat, DC );
-        return;
+        my_clone->SetFlags( IS_NEW );
+        ( (SCH_COMPONENT*) my_clone )->SetTimeStamp( GetNewTimeStamp() );
+        my_clone->Move( pos );
+        my_clone->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
+        MoveItem( my_clone, DC );
     }
-
-    m_itemToRepeat->Move( wxPoint( g_RepeatStep.GetWidth(), g_RepeatStep.GetHeight() ) );
-
-    if( m_itemToRepeat->CanIncrementLabel() )
-        ( (SCH_TEXT*) m_itemToRepeat )->IncrementLabel();
-
-    if( m_itemToRepeat )
+    else
     {
-        GetScreen()->Append( m_itemToRepeat );
+        my_clone->Move( wxPoint( g_RepeatStep.GetWidth(), g_RepeatStep.GetHeight() ) );
+
+        if( my_clone->CanIncrementLabel() )
+            ( (SCH_TEXT*) my_clone )->IncrementLabel();
+
+        GetScreen()->Append( my_clone );
         GetScreen()->TestDanglingEnds();
-        m_itemToRepeat->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        SaveCopyInUndoList( m_itemToRepeat, UR_NEW );
-        m_itemToRepeat->ClearFlags();
+        my_clone->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        SaveCopyInUndoList( my_clone, UR_NEW );
+        my_clone->ClearFlags();
     }
+
+    // clone my_clone, now that it has been moved, thus saving new position.
+    SetRepeatItem( my_clone );
 }

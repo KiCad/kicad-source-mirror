@@ -28,7 +28,6 @@
 #include <macros.h>
 #include <reporter.h>
 
-
 REPORTER& REPORTER::Report( const char* aText )
 {
     Report( FROM_UTF8( aText ) );

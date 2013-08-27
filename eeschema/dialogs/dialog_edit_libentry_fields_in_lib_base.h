@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Apr 30 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -51,6 +51,7 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE : public wxDialog
 		wxTextCtrl* fieldNameTextCtrl;
 		wxStaticText* fieldValueLabel;
 		wxTextCtrl* fieldValueTextCtrl;
+		wxButton* m_show_datasheet_button;
 		wxStaticText* textSizeLabel;
 		wxTextCtrl* textSizeTextCtrl;
 		wxStaticText* m_staticTextUnitSize;
@@ -72,13 +73,14 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE : public wxDialog
 		virtual void addFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void deleteFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveUpButtonHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void showButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fields Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 615,456 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fields Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE();
 	
 };

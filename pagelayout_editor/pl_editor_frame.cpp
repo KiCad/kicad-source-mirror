@@ -1,8 +1,12 @@
+/**
+ * @file pl_editor_frame.cpp
+ */
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +24,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file pl_editor_frame.cpp
  */
 
 #include <fctsys.h>
@@ -66,8 +66,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( wxWindow* aParent, const wxString& aTitle,
     m_HotkeysZoomAndGridList    = s_PlEditor_Hokeys_Descr;
     m_originSelectChoice = 0;
 
-    m_designTreeWidth = 100;
-    m_propertiesFrameWidth = 150;
+    m_designTreeWidth = 150;
+    m_propertiesFrameWidth = 200;
 
     if( m_canvas )
         m_canvas->SetEnableBlockCommands( false );
@@ -178,7 +178,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( wxWindow* aParent, const wxString& aTitle,
 
 PL_EDITOR_FRAME::~PL_EDITOR_FRAME()
 {
-    wxGetApp().SaveCurrentSetupValues( m_configSettings );
 }
 
 
@@ -230,8 +229,14 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     SaveSettings();
+    wxGetApp().SaveCurrentSetupValues( m_configSettings );
+
     // do not show the window because we do not want any paint event
     Show( false );
+
+    // On Linux, m_propertiesPagelayout must be destroyed
+    // before deleting the main frame to avoid a crash when closing
+    m_propertiesPagelayout->Destroy();
     Destroy();
 }
 

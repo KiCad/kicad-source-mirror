@@ -770,7 +770,7 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 
     SetCurItem( item );
 
-    int evt_type = 0;       //Used to post a wxCommandEvent on demand
+    int evt_type = 0;       // Used to post a wxCommandEvent on demand
 
     switch( item->Type() )
     {
@@ -788,14 +788,14 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
         break;
 
     case PCB_MODULE_T:
-    {
-        if( aIdCommand == HK_MOVE_ITEM )
-            evt_type = ID_POPUP_PCB_MOVE_MODULE_REQUEST;
+        {
+            if( aIdCommand == HK_MOVE_ITEM )
+                evt_type = ID_POPUP_PCB_MOVE_MODULE_REQUEST;
 
-        if( aIdCommand == HK_DRAG_ITEM )
-            evt_type = ID_POPUP_PCB_DRAG_MODULE_REQUEST;
-    }
-    break;
+            if( aIdCommand == HK_DRAG_ITEM )
+                evt_type = ID_POPUP_PCB_DRAG_MODULE_REQUEST;
+        }
+        break;
 
     case PCB_PAD_T:
         // Post MODULE_REQUEST events here to prevent pads

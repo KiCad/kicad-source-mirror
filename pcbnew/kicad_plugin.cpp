@@ -869,10 +869,10 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     m_out->Print( aNestLevel, "(module %s", m_out->Quotew( aModule->GetLibRef() ).c_str() );
 
     if( aModule->IsLocked() )
-        m_out->Print( aNestLevel, " locked" );
+        m_out->Print( 0, " locked" );
 
     if( aModule->IsPlaced() )
-        m_out->Print( aNestLevel, " placed" );
+        m_out->Print( 0, " placed" );
 
     formatLayer( aModule );
 

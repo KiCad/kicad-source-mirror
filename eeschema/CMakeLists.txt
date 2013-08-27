@@ -6,7 +6,6 @@ include_directories(
     ./dialogs
     ../common
     ../common/dialogs
-    ${Boost_INCLUDE_DIR}
     ${INC_AFTER}
     )
 

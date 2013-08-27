@@ -614,7 +614,7 @@ public:
     void SetZoneSettings( const ZONE_SETTINGS& aSettings )  { m_zoneSettings = aSettings; }
 
     /**
-     * Function SetColorSettings
+     * Function GetColorSettings
      * @return the current COLORS_DESIGN_SETTINGS in use
      */
     COLORS_DESIGN_SETTINGS* GetColorsSettings() const { return m_colorsSettings; }
@@ -927,10 +927,13 @@ public:
      *   any extra unlock footprints are removed from the #BOARD.
      *
      * @param aNetlist is the new netlist to revise the contents of the #BOARD with.
+     * @param aDeleteSinglePadNets if true, remove nets counting only one pad
+     *                             and set net code to 0 for these pads
      * @param aReporter is a #REPORTER object to report the changes \a aNetlist makes to
      *                  the #BOARD.  If NULL, no change reporting occurs.
      */
-    void ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter = NULL );
+    void ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
+                         REPORTER* aReporter = NULL );
 
     /**
      * Function ReturnSortedNetnamesList

@@ -8,7 +8,6 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 CERN
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +39,19 @@
 #include <class_worksheet_dataitem.h>
 #include <hotkeys.h>
 
+// Helper function to add menuitems relative to items creation
+void AddNewItemsCommand( wxMenu* aMainMenu )
+{
+    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_LINE, _( "Add Line" ),
+                 KiBitmap( add_dashed_line_xpm ) );
+    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_RECT, _( "Add Rectangle" ),
+                 KiBitmap( add_rectangle_xpm ) );
+    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_TEXT, _( "Add Text" ),
+                 KiBitmap( add_text_xpm ) );
+    AddMenuItem( aMainMenu, ID_POPUP_ITEM_APPEND_PAGE_LAYOUT,
+                 _( "Append Page Layout Descr File" ),
+                 KiBitmap( import_xpm ) );
+}
 
 /* Prepare the right-click pullup menu.
  * The menu already has a list of zoom commands.
@@ -102,15 +114,7 @@ bool PL_EDITOR_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
 
     if( ! busy )
     {
-        AddMenuItem( aPopMenu, ID_POPUP_ITEM_ADD_LINE, _( "Add line" ),
-                     KiBitmap( add_dashed_line_xpm ) );
-        AddMenuItem( aPopMenu, ID_POPUP_ITEM_ADD_RECT, _( "Add rect" ),
-                     KiBitmap( add_rectangle_xpm ) );
-        AddMenuItem( aPopMenu, ID_POPUP_ITEM_ADD_TEXT, _( "Add text" ),
-                     KiBitmap( add_text_xpm ) );
-        AddMenuItem( aPopMenu, ID_POPUP_ITEM_ADD_POLY, _( "Import poly descr file" ),
-                     KiBitmap( add_polygon_xpm ) );
-
+        AddNewItemsCommand( aPopMenu );
         aPopMenu->AppendSeparator();
     }
 
