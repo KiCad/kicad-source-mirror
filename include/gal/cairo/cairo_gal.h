@@ -357,7 +357,7 @@ private:
     virtual void initCursor( int aCursorSize );
 
     /**
-     * @brief Blits cursor into current screen.
+     * @brief Blits cursor into the current screen.
      */
     virtual void blitCursor( wxBufferedDC& clientDC );
 
