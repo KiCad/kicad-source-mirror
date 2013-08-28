@@ -510,6 +510,8 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                       FMTIU( aBoard->m_ViasDimensionsList[ii].m_Drill ).c_str() );
 
     // for old versions compatibility:
+    if( aBoard->GetDesignSettings().m_BlindBuriedViaAllowed )
+        m_out->Print( aNestLevel+1, "(blind_buried_vias_allowed yes)\n" );
     m_out->Print( aNestLevel+1, "(uvia_size %s)\n",
                   FMTIU( aBoard->m_NetClasses.GetDefault()->GetuViaDiameter() ).c_str() );
     m_out->Print( aNestLevel+1, "(uvia_drill %s)\n",

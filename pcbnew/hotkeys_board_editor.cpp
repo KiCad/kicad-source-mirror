@@ -458,7 +458,14 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
         break;
 
-    case HK_ADD_VIA: // Switch to alternate layer and Place a via if a track is in progress
+    case HK_ADD_BLIND_BURIED_VIA:
+    case HK_ADD_THROUGH_VIA: // Switch to alternate layer and Place a via if a track is in progress
+        if( GetBoard()->GetDesignSettings().m_BlindBuriedViaAllowed &&
+            hk_id == HK_ADD_BLIND_BURIED_VIA )
+            GetBoard()->GetDesignSettings().m_CurrentViaType = VIA_BLIND_BURIED;
+        else
+            GetBoard()->GetDesignSettings().m_CurrentViaType = VIA_THROUGH;
+
         if( !itemCurrentlyEdited ) // no track in progress: switch layer only
         {
             Other_Layer_Route( NULL, aDC );
@@ -476,7 +483,8 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( !GetCurItem()->IsNew() )
             return;
 
-        evt_type = ID_POPUP_PCB_PLACE_VIA;
+        evt_type = hk_id == HK_ADD_BLIND_BURIED_VIA ?
+            ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA : ID_POPUP_PCB_PLACE_THROUGH_VIA;
         break;
 
     case HK_SWITCH_TRACK_POSTURE:
