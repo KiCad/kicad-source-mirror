@@ -60,11 +60,12 @@ static EDA_HOTKEY HkLoadfile( wxT( "Load board" ), HK_LOAD_BOARD, 'L' + GR_KB_CT
 static EDA_HOTKEY HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
 static EDA_HOTKEY HkBackspace( wxT( "Delete track segment" ), HK_BACK_SPACE, WXK_BACK );
 static EDA_HOTKEY HkAddNewTrack( wxT( "Add new track" ), HK_ADD_NEW_TRACK, 'X' );
-static EDA_HOTKEY HkAddVia( wxT( "Add Via" ), HK_ADD_VIA, 'V' );
+static EDA_HOTKEY HkAddThroughVia( wxT( "Add Through Via" ), HK_ADD_THROUGH_VIA, 'V' );
+static EDA_HOTKEY HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V' + GR_KB_CTRL );
+static EDA_HOTKEY HkAddBlindBuriedVia( wxT( "Add Blind/Buried Via" ), HK_ADD_BLIND_BURIED_VIA, 'V' + GR_KB_ALT );
 static EDA_HOTKEY HkSwitchTrackPosture( wxT( "Switch Track Posture" ),  HK_SWITCH_TRACK_POSTURE, '/' );
 static EDA_HOTKEY HkDragTrackKeepSlope( wxT( "Drag track keep slope" ), HK_DRAG_TRACK_KEEP_SLOPE, 'D' );
 static EDA_HOTKEY HkPlaceItem( wxT( "Place Item" ), HK_PLACE_ITEM, 'P' );
-static EDA_HOTKEY HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V' + GR_KB_CTRL );
 static EDA_HOTKEY HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
 static EDA_HOTKEY HkEditBoardItem( wxT( "Edit Item" ), HK_EDIT_ITEM, 'E' );
 static EDA_HOTKEY HkFlipItem( wxT( "Flip Item" ), HK_FLIP_ITEM, 'F' );
@@ -207,7 +208,8 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
 {
     &HkTrackDisplayMode,       &HkDelete,
     &HkBackspace,
-    &HkAddNewTrack,            &HkAddVia,                    &HkAddMicroVia,
+    &HkAddNewTrack,            &HkAddThroughVia, &HkAddBlindBuriedVia,
+    &HkAddMicroVia,
     &HkSwitchTrackPosture,
     &HkDragTrackKeepSlope,
     &HkPlaceItem,              &HkCopyItem,

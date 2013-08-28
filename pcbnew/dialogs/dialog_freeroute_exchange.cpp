@@ -134,6 +134,8 @@ void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
 
         // Find the Java web start application on Windows.
 #ifdef __WINDOWS__
+#if wxCHECK_VERSION( 2, 9, 0  )
+
         // If you thought the registry was brain dead before, now you have to deal with
         // accessing it in either 64 or 32 bit mode depending on the build version of
         // Windows and the build version of KiCad.
@@ -164,7 +166,10 @@ void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
         key.SetName( key.GetName() + wxT( "\\" ) + value );
         key.QueryValue( wxT( "Home" ), value );
         javaWebStartCommand = value + wxFileName::GetPathSeparator() + javaWebStartCommand;
-#endif
+#else
+    #warning Kicad needs wxWidgets >= 2.9.4. version 2.8 is only supported for testing purposes
+#endif  // wxCHECK_VERSION( 2, 9, 0  )
+#endif  //  __WINDOWS__
 
         // Wrap FullFileName in double quotes in case it has C:\Program Files in it.
         // The space is interpreted as an argument separator.

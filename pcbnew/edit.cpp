@@ -94,9 +94,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
     case ID_POPUP_PCB_BEGIN_TRACK:
     case ID_POPUP_PCB_END_TRACK:
-    case ID_POPUP_PCB_PLACE_VIA:
-    case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
+    case ID_POPUP_PCB_PLACE_THROUGH_VIA:
+    case ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA:
     case ID_POPUP_PCB_PLACE_MICROVIA:
+    case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
@@ -379,8 +380,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_PLACE_MICROVIA:
         if( !IsMicroViaAcceptable() )
             break;
-
-    case ID_POPUP_PCB_PLACE_VIA:
+        // fall through
+    case ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA:
+    case ID_POPUP_PCB_PLACE_THROUGH_VIA:
         m_canvas->MoveCursorToCrossHair();
 
         if( GetCurItem()->IsDragging() )
@@ -390,11 +392,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         else
         {
             int v_type = GetDesignSettings().m_CurrentViaType;
-
-             // place micro via and switch layer.
-            if( id == ID_POPUP_PCB_PLACE_MICROVIA )
+            if( id == ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA )
+                GetDesignSettings().m_CurrentViaType = VIA_BLIND_BURIED;
+            else if( id == ID_POPUP_PCB_PLACE_MICROVIA )
                 GetDesignSettings().m_CurrentViaType = VIA_MICROVIA;
+            else
+                GetDesignSettings().m_CurrentViaType = VIA_THROUGH;
 
+            // place via and switch layer.
             Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
             GetDesignSettings().m_CurrentViaType = v_type;
 

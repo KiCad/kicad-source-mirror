@@ -515,8 +515,14 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
             AddMenuItem( PopMenu, ID_POPUP_PCB_END_TRACK, msg, KiBitmap( apply_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Place Via" ), g_Board_Editor_Hokeys_Descr, HK_ADD_VIA );
-        AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_VIA, msg, KiBitmap( via_xpm ) );
+        msg = AddHotkeyName( _( "Place Through Via" ), g_Board_Editor_Hokeys_Descr, HK_ADD_THROUGH_VIA );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_THROUGH_VIA, msg, KiBitmap( via_xpm ) );
+
+        if( GetBoard()->GetDesignSettings().m_BlindBuriedViaAllowed )
+        {
+            msg = AddHotkeyName( _( "Place Blind/Buried Via" ), g_Board_Editor_Hokeys_Descr, HK_ADD_BLIND_BURIED_VIA );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA, msg, KiBitmap( via_xpm ) );
+        }
 
         msg = AddHotkeyName( _( "Switch Track Posture" ), g_Board_Editor_Hokeys_Descr,
                              HK_SWITCH_TRACK_POSTURE );

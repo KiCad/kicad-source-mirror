@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
+ * @author Wayne Stambaugh <stambaughw@verizon.net>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -903,6 +904,11 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
 
         case T_uvias_allowed:
             designSettings.m_MicroViasAllowed = parseBool();
+            NeedRIGHT();
+            break;
+
+        case T_blind_buried_vias_allowed:
+            designSettings.m_BlindBuriedViaAllowed = parseBool();
             NeedRIGHT();
             break;
 
