@@ -591,8 +591,11 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // Deflate: remove the extra margin, to create the actual shapes
     // Here I am using polygon:resize, because this function creates better shapes
     // than deflate algo.
-    // Use here deflate with arc creation and 16 segments per circle to create arcs
-    areas = resize( areas, -inflate , true, 16 );
+    // Use here deflate with arc creation and 18 segments per circle to create arcs
+    // In boost polygon (at least v 1.54 and previous) in very rare cases resize crashes
+    // with 16 segments (perhaps related to 45 degrees pads). So using 18 segments
+    // is a workaround to try to avoid these crashes
+    areas = resize( areas, -inflate , true, 18 );
 
     // Resize slightly changes shapes. So *ensure* initial shapes are kept
     areas |= initialAreas;

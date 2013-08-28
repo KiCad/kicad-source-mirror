@@ -151,18 +151,9 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_CostRot180Ctrl->SetValue( m_currentModule->GetPlacementCost180() );
 
     // Initialize 3D parameters
-
-    wxBoxSizer* BoxSizer = new wxBoxSizer( wxVERTICAL );
-    m_3D_Scale = new VERTEX_VALUE_CTRL( m_Panel3D, _( "Shape Scale:" ), BoxSizer );
-    m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
-
-    BoxSizer    = new wxBoxSizer( wxVERTICAL );
-    m_3D_Offset = new VERTEX_VALUE_CTRL( m_Panel3D, _( "Shape Offset (inch):" ), BoxSizer );
-    m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
-
-    BoxSizer = new wxBoxSizer( wxVERTICAL );
-    m_3D_Rotation = new VERTEX_VALUE_CTRL( m_Panel3D, _( "Shape Rotation (degrees):" ), BoxSizer );
-    m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
+    m_3D_Scale = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeScale );
+    m_3D_Offset = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeOffset );
+    m_3D_Rotation = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeRotation );
 
     // Initialize dialog relative to masks clearances
     m_NetClearanceUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );

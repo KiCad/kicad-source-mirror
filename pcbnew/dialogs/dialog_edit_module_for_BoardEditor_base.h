@@ -104,6 +104,12 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxPanel* m_Panel3D;
 		wxStaticText* m_staticText3Dname;
 		wxListBox* m_3D_ShapeNameListBox;
+		wxBoxSizer* m_bSizerShapeScale;
+		wxStaticText* m_staticTextShapeScale;
+		wxBoxSizer* m_bSizerShapeOffset;
+		wxStaticText* m_staticTextShapeOffset;
+		wxBoxSizer* m_bSizerShapeRotation;
+		wxStaticText* m_staticTextShapeRotation;
 		wxButton* m_buttonBrowse;
 		wxButton* m_buttonAdd;
 		wxButton* m_buttonRemove;
