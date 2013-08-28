@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
  */
 
 /**
- * @file mirepcb.cpp
+ * @file dialog_target_properties.cpp
  * @brief Functions to edit targets (class #PCB_TARGET).
  */
 
@@ -32,13 +32,15 @@
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
+#include <base_units.h>
 #include <gr_basic.h>
+#include <protos.h>
 
 #include <class_board.h>
 #include <class_mire.h>
 
 #include <pcbnew.h>
-#include <protos.h>
+#include <dialog_target_properties_base.h>
 
 
 // Routines Locales
@@ -61,16 +63,12 @@ static PCB_TARGET s_TargetCopy( NULL ); /* Used to store "old" values of the
 /* class TARGET_PROPERTIES_DIALOG_EDITOR */
 /*****************************************/
 
-class TARGET_PROPERTIES_DIALOG_EDITOR : public wxDialog
+class TARGET_PROPERTIES_DIALOG_EDITOR : public TARGET_PROPERTIES_DIALOG_EDITOR_BASE
 {
 private:
-
     PCB_EDIT_FRAME*   m_Parent;
     wxDC*             m_DC;
     PCB_TARGET*       m_Target;
-    EDA_VALUE_CTRL*   m_MireWidthCtrl;
-    EDA_VALUE_CTRL*   m_MireSizeCtrl;
-    wxRadioBox*       m_MireShape;
 
 public:
     TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME* parent, PCB_TARGET* Mire, wxDC* DC );
@@ -79,14 +77,7 @@ public:
 private:
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
-
-    DECLARE_EVENT_TABLE()
 };
-
-BEGIN_EVENT_TABLE( TARGET_PROPERTIES_DIALOG_EDITOR, wxDialog )
-    EVT_BUTTON( wxID_OK, TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick )
-END_EVENT_TABLE()
 
 
 void PCB_EDIT_FRAME::ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC )
@@ -101,52 +92,26 @@ void PCB_EDIT_FRAME::ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC )
 
 TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME* parent,
                                                                   PCB_TARGET* aTarget, wxDC* DC ) :
-    wxDialog( parent, wxID_ANY, wxString( _( "Target Properties" ) ) )
+    TARGET_PROPERTIES_DIALOG_EDITOR_BASE( parent )
 {
-    wxString  number;
-    wxButton* Button;
-
     m_Parent = parent;
     m_DC     = DC;
-    Centre();
-
     m_Target = aTarget;
 
-    wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-    SetSizer( MainBoxSizer );
-    wxBoxSizer* LeftBoxSizer  = new wxBoxSizer( wxVERTICAL );
-    wxBoxSizer* RightBoxSizer = new wxBoxSizer( wxVERTICAL );
-    MainBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
-    MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
-
-    // Create of the command buttons.
-    Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
     // Size:
-    m_MireSizeCtrl = new EDA_VALUE_CTRL( this, _( "Size" ),
-                                         m_Target->GetSize(),
-                                         g_UserUnit, LeftBoxSizer );
+    m_staticTextSizeUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_MireSizeCtrl->SetValue( ReturnStringFromValue( g_UserUnit, m_Target->GetSize() ) );
 
-    // Width:
-    m_MireWidthCtrl = new EDA_VALUE_CTRL( this, _( "Width" ),
-                                          m_Target->GetWidth(),
-                                          g_UserUnit, LeftBoxSizer );
+    // Thickness:
+    m_staticTextThicknessUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_MireWidthCtrl->SetValue( ReturnStringFromValue( g_UserUnit, m_Target->GetWidth() ) );
 
     // Shape
-    wxString shape_list[2] = { _( "shape +" ), _( "shape X" ) };
-    m_MireShape = new wxRadioBox( this, wxID_ANY,
-                                  _( "Target Shape:" ),
-                                  wxDefaultPosition, wxSize( -1, -1 ),
-                                  2, shape_list, 1 );
     m_MireShape->SetSelection( m_Target->GetShape() ? 1 : 0 );
-    LeftBoxSizer->Add( m_MireShape, 0, wxGROW | wxALL, 5 );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 
@@ -170,9 +135,12 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
         m_Target->SetFlags( IN_EDIT );      // set flag in edit to force
                                             // undo/redo/abort proper operation
 
-    m_Target->SetWidth( m_MireWidthCtrl->GetValue() );
-    MireDefaultSize  = m_MireSizeCtrl->GetValue();
-    m_Target->SetSize( m_MireSizeCtrl->GetValue() );
+    int tmp = ReturnValueFromString( g_UserUnit, m_MireWidthCtrl->GetValue() );
+    m_Target->SetWidth( tmp );
+
+    MireDefaultSize = ReturnValueFromString( g_UserUnit, m_MireSizeCtrl->GetValue() );
+    m_Target->SetSize( MireDefaultSize );
+
     m_Target->SetShape( m_MireShape->GetSelection() ? 1 : 0 );
 
     m_Target->Draw( m_Parent->GetCanvas(), m_DC, ( m_Target->IsMoving() ) ? GR_XOR : GR_OR );
