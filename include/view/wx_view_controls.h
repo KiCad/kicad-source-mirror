@@ -61,9 +61,20 @@ public:
      * Function SetGrabMouse()
      * Enables/disables mouse cursor grabbing (limits the movement field only to the panel area).
      *
-     * @param aEnabled says whether the option should enabled or disabled.
+     * @param aEnabled says whether the option should be enabled or disabled.
      */
     void    SetGrabMouse( bool aEnabled );
+
+    /**
+     * Function SetSnapping()
+     * Enables/disables snapping cursor to grid.
+     *
+     * @param aEnabled says whether the opion should be enabled or disabled.
+     */
+    void    SetSnapping( bool aEnabled )
+    {
+        m_snappingEnabled = aEnabled;
+    }
 
     /**
      * Function SetAutoPan()
@@ -73,19 +84,30 @@ public:
      */
     void    SetAutoPan( bool aEnabled )
     {
-        m_autoPanEnabled = true;
+        m_autoPanEnabled = aEnabled;
     }
 
     /**
      * Function GetMousePosition()
-     * Returns the current mouse cursor position in the screen coordinates.
+     * Returns the current mouse pointer position in the screen coordinates. Note, that it may be
+     * different from the cursor position if snapping is enabled (@see GetCursorPosition()).
      *
-     * @return The current mouse cursor position.
+     * @return The current mouse pointer position.
      */
     const VECTOR2D& GetMousePosition() const
     {
         return m_mousePosition;
     }
+
+
+    /**
+     * Function GetCursorPosition()
+     * Returns the current cursor position in the screen coordinates. Note, that it may be
+     * different from the mouse pointer position if snapping is enabled (@see GetMousePosition()).
+     *
+     * @return The current cursor position.
+     */
+    VECTOR2D GetCursorPosition() const;
 
 private:
     enum State {
@@ -95,7 +117,7 @@ private:
     };
 
     /// Computes new viewport settings while in autopanning mode
-    void    handleAutoPanning( wxMouseEvent& aEvent );
+    void    handleAutoPanning( const wxMouseEvent& aEvent );
 
     /// Current state of VIEW_CONTROLS
     State       m_state;
@@ -105,11 +127,16 @@ private:
 
     /// Flag for grabbing the mouse cursor
     bool        m_grabMouse;
+
     /// Flag for turning on autopanning
     bool        m_autoPanEnabled;
 
     /// Distance from cursor to VIEW edge when panning is active
     float       m_autoPanMargin;
+
+    /// Should the cursor snap to grid or move freely
+    bool        m_snappingEnabled;
+
     /// How fast is panning when in auto mode
     float       m_autoPanSpeed;
 

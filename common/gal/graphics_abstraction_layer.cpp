@@ -48,7 +48,6 @@ GAL::GAL() :
     // Set grid defaults
     SetGridVisibility( true );
     SetGridStyle( GRID_STYLE_LINES );
-    SetGridColor( COLOR4D( 0.4, 0.4, 0.4, 1.0 ) );
     SetCoarseGrid( 10 );
     SetGridLineWidth( 0.5 );
 
@@ -229,4 +228,15 @@ void GAL::DrawGrid()
             }
         }
     }
+}
+
+
+VECTOR2D GAL::GetGridPoint( VECTOR2D aPoint ) const
+{
+    VECTOR2D pointWorld = ToWorld( aPoint );
+
+    pointWorld.x = round( pointWorld.x / gridSize.x ) * gridSize.x;
+    pointWorld.y = round( pointWorld.y / gridSize.y ) * gridSize.y;
+
+    return ToScreen( pointWorld );
 }

@@ -134,7 +134,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     if( m_view->IsTargetDirty( KiGfx::TARGET_NONCACHED ) )
         m_gal->DrawGrid();
     m_view->Redraw();
-    m_gal->DrawCursor( m_viewControls->GetMousePosition() );
+    m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
 
     m_gal->EndDrawing();
 

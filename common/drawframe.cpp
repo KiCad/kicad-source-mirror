@@ -987,9 +987,6 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 
         // Set up grid settings
         gal->SetGridVisibility( IsGridVisible() );
-        // Default grid color - dark cyan does not look good
-        //gal->SetGridColor( KiGfx::COLOR4D( GetGridColor() ) );
-        gal->SetGridColor( KiGfx::COLOR4D( 0.1, 0.1, 0.1, 1.0 ) );
         gal->SetGridSize( VECTOR2D( screen->GetGridSize().x, screen->GetGridSize().y ) );
         gal->SetGridOrigin( VECTOR2D( screen->GetGridOrigin() ) );
         gal->SetGridOriginMarkerSize( 15 );
