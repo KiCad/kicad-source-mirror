@@ -60,7 +60,7 @@ void S3D_MASTER::Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices )
         aVertices[ii].y *= m_MatScale.y;
         aVertices[ii].z *= m_MatScale.z;
 
-        // adjust rotation 
+        // adjust rotation
         if( m_MatRotation.x )
             RotatePoint( &aVertices[ii].y, &aVertices[ii].z, m_MatRotation.x * 10 );
 
@@ -176,64 +176,39 @@ GLuint EDA_3D_CANVAS::DisplayCubeforTest()
     return gllist;
 }
 
-VERTEX_VALUE_CTRL::VERTEX_VALUE_CTRL( wxWindow* parent, const wxString& title,
-                                      wxBoxSizer* BoxSizer )
+VERTEX_VALUE_CTRL::VERTEX_VALUE_CTRL( wxWindow* aParent, wxBoxSizer* aBoxSizer )
 {
-    wxString      text;
-    wxStaticText* msgtitle;
+    wxString text;
 
-    if( title.IsEmpty() )
-        text = _( "Vertex " );
-    else
-        text = title;
+    wxFlexGridSizer* gridSizer = new wxFlexGridSizer( 0, 2, 0, 0 );
+	gridSizer->AddGrowableCol( 1 );
+	gridSizer->SetFlexibleDirection( wxHORIZONTAL );
+	gridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    msgtitle = new wxStaticText( parent, -1, text, wxDefaultPosition, wxSize( -1, -1 ), 0 );
+    aBoxSizer->Add( gridSizer, 0, wxEXPAND, 5 );
 
-    BoxSizer->Add( msgtitle, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM );
+    wxStaticText* msgtitle = new wxStaticText( aParent, wxID_ANY, wxT( "X:" ) );
+    gridSizer->Add( msgtitle, 0, wxALL , 5 );
 
-    wxFlexGridSizer* GridSizer = new wxFlexGridSizer( 3, 2, 0, 0 );
+    m_XValueCtrl = new wxTextCtrl( aParent, wxID_ANY, wxEmptyString,
+                                   wxDefaultPosition,wxDefaultSize, 0 );
+    gridSizer->Add( m_XValueCtrl, 0, wxALL|wxEXPAND, 5 );
 
-    BoxSizer->Add( GridSizer, 0, wxGROW | wxALL, 5 );
+    msgtitle = new wxStaticText( aParent, wxID_ANY, wxT( "Y:" ), wxDefaultPosition,
+                                 wxDefaultSize, 0 );
+    gridSizer->Add( msgtitle, 0, wxALL, 5 );
 
-    msgtitle = new wxStaticText( parent, -1, wxT( "X:" ) );
+    m_YValueCtrl = new wxTextCtrl( aParent, wxID_ANY, wxEmptyString,
+                                   wxDefaultPosition, wxDefaultSize, 0 );
+    gridSizer->Add( m_YValueCtrl, 0, wxALL|wxEXPAND, 5 );
 
-    GridSizer->Add( msgtitle, 0,
-                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT , 5 );
-    m_XValueCtrl = new wxTextCtrl( parent, -1, wxEmptyString,
-                                   wxDefaultPosition, wxSize( -1, -1 ), 0 );
+    msgtitle = new wxStaticText( aParent, wxID_ANY, wxT( "Z:" ), wxDefaultPosition,
+                                 wxDefaultSize, 0 );
+    gridSizer->Add( msgtitle, 0, wxALL, 5 );
 
-    GridSizer->Add( m_XValueCtrl,
-                    0,
-                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT, 5 );
-
-    msgtitle = new wxStaticText( parent, -1, wxT( "Y:" ), wxDefaultPosition,
-                                 wxSize( -1, -1 ), 0 );
-
-    GridSizer->Add( msgtitle,
-                    0,
-                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT, 5 );
-    m_YValueCtrl = new wxTextCtrl( parent, -1, wxEmptyString,
-                                   wxDefaultPosition, wxSize( -1, -1 ), 0 );
-
-    GridSizer->Add( m_YValueCtrl, 0,
-                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT, 5 );
-
-    msgtitle = new wxStaticText( parent, -1, wxT( "Z:" ), wxDefaultPosition,
-                                 wxSize( -1, -1 ), 0 );
-
-    GridSizer->Add( msgtitle, 0,
-                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT, 5 );
-    m_ZValueCtrl = new wxTextCtrl( parent, -1, wxEmptyString,
-                                   wxDefaultPosition, wxSize( -1, -1 ), 0 );
-
-    GridSizer->Add( m_ZValueCtrl, 0,
-                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT, 5 );
+    m_ZValueCtrl = new wxTextCtrl( aParent, wxID_ANY, wxEmptyString,
+                                   wxDefaultPosition, wxDefaultSize, 0 );
+    gridSizer->Add( m_ZValueCtrl, 0, wxALL|wxEXPAND, 5 );
 }
 
 

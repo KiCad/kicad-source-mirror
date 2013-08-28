@@ -307,6 +307,33 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	
 	m_Sizer3DValues = new wxStaticBoxSizer( new wxStaticBox( m_Panel3D, wxID_ANY, _("3D Scale and Position") ), wxVERTICAL );
 	
+	m_bSizerShapeScale = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextShapeScale = new wxStaticText( m_Panel3D, wxID_ANY, _("Shape Scale:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextShapeScale->Wrap( -1 );
+	m_bSizerShapeScale->Add( m_staticTextShapeScale, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	
+	m_Sizer3DValues->Add( m_bSizerShapeScale, 0, wxEXPAND, 5 );
+	
+	m_bSizerShapeOffset = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextShapeOffset = new wxStaticText( m_Panel3D, wxID_ANY, _("Shape Offset (inch):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextShapeOffset->Wrap( -1 );
+	m_bSizerShapeOffset->Add( m_staticTextShapeOffset, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	
+	m_Sizer3DValues->Add( m_bSizerShapeOffset, 0, wxEXPAND, 5 );
+	
+	m_bSizerShapeRotation = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextShapeRotation = new wxStaticText( m_Panel3D, wxID_ANY, _("Shape Rotation (degrees):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextShapeRotation->Wrap( -1 );
+	m_bSizerShapeRotation->Add( m_staticTextShapeRotation, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	
+	m_Sizer3DValues->Add( m_bSizerShapeRotation, 0, wxEXPAND, 5 );
+	
 	
 	bLowerSizer3D->Add( m_Sizer3DValues, 1, wxALL|wxEXPAND, 5 );
 	
