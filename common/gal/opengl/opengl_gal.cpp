@@ -214,9 +214,11 @@ void OPENGL_GAL::EndDrawing()
     overlayManager.EndDrawing();
 
     // Draw the remaining contents, blit the rendering targets to the screen, swap the buffers
-    glFlush();
     compositor.DrawBuffer( mainBuffer );
     compositor.DrawBuffer( overlayBuffer );
+    blitCursor();
+
+    glFlush();
     SwapBuffers();
 
     delete clientDC;
@@ -737,33 +739,10 @@ void OPENGL_GAL::ClearTarget( RenderTarget aTarget )
 
 void OPENGL_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
-    if( !isCursorEnabled )
-        return;
-
-    compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
-
-    // Invert y axis
-    VECTOR2D cursorPosition = VECTOR2D( aCursorPosition.x, screenSize.y - aCursorPosition.y );
-
-    VECTOR2D cursorBegin  = ToWorld( cursorPosition -
-                                     VECTOR2D( cursorSize / 2, cursorSize / 2 ) );
-    VECTOR2D cursorEnd    = ToWorld( cursorPosition +
-                                     VECTOR2D( cursorSize / 2, cursorSize / 2 ) );
-    VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2.0;
-
-    glLineWidth( 1.0 );
-    glColor4d( cursorColor.r, cursorColor.g, cursorColor.b, cursorColor.a );
-
-    glBegin( GL_LINES );
-    glVertex3f( cursorCenter.x, cursorBegin.y, GetMinDepth() );
-    glVertex3f( cursorCenter.x, cursorEnd.y, GetMinDepth() );
-
-    glVertex3f( cursorBegin.x, cursorCenter.y, GetMinDepth() );
-    glVertex3f( cursorEnd.x, cursorCenter.y, GetMinDepth() );
-    glEnd();
-
-    // Restore the default color, so textures will be drawn properly
-    glColor4d( 1.0, 1.0, 1.0, 1.0 );
+    // Now we should only store the position of the mouse cursor
+    // The real drawing routines are in blitCursor()
+    cursorPosition = VECTOR2D( aCursorPosition.x,
+                               screenSize.y - aCursorPosition.y ); // invert Y axis
 }
 
 
@@ -966,6 +945,36 @@ void OPENGL_GAL::initGlew()
 void OPENGL_GAL::initCursor( int aCursorSize )
 {
     cursorSize = aCursorSize;
+}
+
+
+void OPENGL_GAL::blitCursor()
+{
+    if( !isCursorEnabled )
+        return;
+
+    compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
+
+    VECTOR2D cursorBegin  = ToWorld( cursorPosition -
+                                     VECTOR2D( cursorSize / 2, cursorSize / 2 ) );
+    VECTOR2D cursorEnd    = ToWorld( cursorPosition +
+                                     VECTOR2D( cursorSize / 2, cursorSize / 2 ) );
+    VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2.0;
+
+    glDisable( GL_TEXTURE_2D );
+    glLineWidth( 1.0 );
+    glColor4d( cursorColor.r, cursorColor.g, cursorColor.b, cursorColor.a );
+
+    glBegin( GL_LINES );
+    glVertex2d( cursorCenter.x, cursorBegin.y );
+    glVertex2d( cursorCenter.x, cursorEnd.y );
+
+    glVertex2d( cursorBegin.x, cursorCenter.y );
+    glVertex2d( cursorEnd.x, cursorCenter.y );
+    glEnd();
+
+    // Restore the default color, so textures will be drawn properly
+    glColor4d( 1.0, 1.0, 1.0, 1.0 );
 }
 
 

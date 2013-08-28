@@ -792,7 +792,7 @@ void CAIRO_GAL::ClearTarget( RenderTarget aTarget )
 void CAIRO_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
     // Now we should only store the position of the mouse cursor
-    // The real drawing routines are in EndDrawing()
+    // The real drawing routines are in blitCursor()
     cursorPosition = VECTOR2D( aCursorPosition.x - cursorSize / 2,
                                aCursorPosition.y - cursorSize / 2 );
 }

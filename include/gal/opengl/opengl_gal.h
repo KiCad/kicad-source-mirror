@@ -297,6 +297,8 @@ private:
     bool                    isShaderInitialized;        ///< Was the shader initialized?
     bool                    isGrouping;                 ///< Was a group started?
 
+    VECTOR2D                cursorPosition;         ///< Current cursor position
+
     // Polygon tesselation
     /// The tessellator
     GLUtesselator*          tesselator;
@@ -362,6 +364,11 @@ private:
 
     /// @copydoc GAL::initCursor()
     virtual void initCursor( int aCursorSize );
+
+    /**
+     * @brief Blits cursor into the current screen.
+     */
+    void blitCursor();
 
     /**
      * @brief Returns a valid key that can be used as a new group number.
