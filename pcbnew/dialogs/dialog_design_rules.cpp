@@ -276,7 +276,7 @@ void DIALOG_DESIGN_RULES::InitGlobalRules()
     PutValueInLocalUnits( *m_SetViasMinSizeCtrl, m_BrdSettings.m_ViasMinSize );
     PutValueInLocalUnits( *m_SetViasMinDrillCtrl, m_BrdSettings.m_ViasMinDrill );
 
-    if(  m_BrdSettings.m_CurrentViaType != VIA_THROUGH )
+    if(  m_BrdSettings.m_BlindBuriedViaAllowed )
         m_OptViaType->SetSelection( 1 );
 
     m_AllowMicroViaCtrl->SetSelection(  m_BrdSettings.m_MicroViasAllowed ? 1 : 0 );
@@ -286,7 +286,7 @@ void DIALOG_DESIGN_RULES::InitGlobalRules()
 
     // Initialize Vias and Tracks sizes lists.
     // note we display only extra values, never the current netclass value.
-    // (the first value in histories list)
+    // (the first value in history list)
     m_TracksWidthList = m_Parent->GetBoard()->m_TrackWidthList;
     m_TracksWidthList.erase( m_TracksWidthList.begin() );       // remove the netclass value
     m_ViasDimensionsList = m_Parent->GetBoard()->m_ViasDimensionsList;
@@ -579,9 +579,7 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 void DIALOG_DESIGN_RULES::CopyGlobalRulesToBoard()
 /*************************************************/
 {
-    m_BrdSettings.m_CurrentViaType = VIA_THROUGH;
-    if( m_OptViaType->GetSelection() > 0 )
-        m_BrdSettings.m_CurrentViaType = VIA_BLIND_BURIED;
+    m_BrdSettings.m_BlindBuriedViaAllowed = m_OptViaType->GetSelection() > 0;
 
     // Update vias minimum values for DRC
     m_BrdSettings.m_ViasMinSize = ReturnValueFromTextCtrl( *m_SetViasMinSizeCtrl );

@@ -167,11 +167,11 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	wxStaticBoxSizer* sbViasOptionSizer;
 	sbViasOptionSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Via Options:") ), wxVERTICAL );
 	
-	wxString m_OptViaTypeChoices[] = { _("Through via"), _("Blind or buried via") };
+	wxString m_OptViaTypeChoices[] = { _("Do not allow blind/buried vias"), _("Allow blind/buried vias") };
 	int m_OptViaTypeNChoices = sizeof( m_OptViaTypeChoices ) / sizeof( wxString );
-	m_OptViaType = new wxRadioBox( m_panelGolbalDesignRules, wxID_ANY, _("Default Via Type:"), wxDefaultPosition, wxDefaultSize, m_OptViaTypeNChoices, m_OptViaTypeChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptViaType = new wxRadioBox( m_panelGolbalDesignRules, wxID_ANY, _("Blind/buried Vias:"), wxDefaultPosition, wxDefaultSize, m_OptViaTypeNChoices, m_OptViaTypeChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptViaType->SetSelection( 0 );
-	m_OptViaType->SetToolTip( _("Select the current via type.\nTrough via is the usual selection") );
+	m_OptViaType->SetToolTip( _("Allows or not blind/buried vias.\nDo not allow is the usual selection\nNote: micro vias are a special type of blind vias and are not managed here") );
 	
 	sbViasOptionSizer->Add( m_OptViaType, 0, wxALL|wxEXPAND, 5 );
 	
