@@ -69,6 +69,9 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     screenSize = VECTOR2D( aParent->GetSize() );
     initCursor( 20 );
 
+    // Grid color settings are different in Cairo and OpenGL
+    SetGridColor( COLOR4D( 0.1, 0.1, 0.1, 0.8 ) );
+
     // Allocate memory for pixel storage
     allocateBitmaps();
 }

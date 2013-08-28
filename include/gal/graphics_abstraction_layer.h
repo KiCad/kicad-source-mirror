@@ -652,11 +652,21 @@ public:
     /**
      * @brief Set the grid size.
      *
-     * @param aGridSize is a vector containing the grid size in x- and y direction.
+     * @param aGridSize is a vector containing the grid size in x and y direction.
      */
     inline void SetGridSize( const VECTOR2D& aGridSize )
     {
         gridSize = aGridSize;
+    }
+
+    /**
+     * @brief Returns the grid size.
+     *
+     * @return A vector containing the grid size in x and y direction.
+     */
+    inline const VECTOR2D& GetGridSize() const
+    {
+        return gridSize;
     }
 
     /**
@@ -701,6 +711,17 @@ public:
 
     /// @brief Draw the grid
     void DrawGrid();
+
+
+    /**
+     * Function GetGridPoint()
+     * For a given point it returns the nearest point belonging to the grid.
+     *
+     * @param aPoint is the point for which the grid point is searched.
+     * @return The nearest grid point.
+     */
+    VECTOR2D GetGridPoint( VECTOR2D aPoint ) const;
+
 
     /**
      * @brief Change the grid display style.

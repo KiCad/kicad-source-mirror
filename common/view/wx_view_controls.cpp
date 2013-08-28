@@ -27,6 +27,7 @@
 
 #include <view/view.h>
 #include <view/wx_view_controls.h>
+#include <gal/graphics_abstraction_layer.h>
 
 using namespace KiGfx;
 
@@ -37,6 +38,7 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     m_autoPanEnabled( false ),
     m_autoPanMargin( 0.1 ),
     m_autoPanSpeed( 0.15 ),
+    m_snappingEnabled( true ),
     m_parentPanel( aParentPanel )
 {
     m_parentPanel->Connect( wxEVT_MOTION, wxMouseEventHandler(
@@ -203,7 +205,16 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 }
 
 
-void WX_VIEW_CONTROLS::handleAutoPanning( wxMouseEvent& aEvent )
+VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
+{
+    if( m_snappingEnabled )
+        return m_view->GetGAL()->GetGridPoint( m_mousePosition );
+
+    return m_mousePosition;
+}
+
+
+void WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 {
     VECTOR2D p( aEvent.GetX(), aEvent.GetY() );
 
