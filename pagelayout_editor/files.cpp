@@ -185,6 +185,10 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
             return;
 
         filename = openFileDialog.GetPath();
+        // Ensure the file has the right extension:
+        wxFileName fn(filename);
+        fn.SetExt( PageLayoutDescrFileExtension );
+        filename = fn.GetFullPath();
         if( !SavePageLayoutDescrFile( filename ) )
         {
             wxString msg;

@@ -15,7 +15,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerpanel = new wxBoxSizer( wxVERTICAL );
 	
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_swItemProperties = new wxScrolledWindow( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_swItemProperties = new wxScrolledWindow( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 	m_swItemProperties->SetScrollRate( 5, 5 );
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
@@ -121,7 +121,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizerTsizeX;
 	bSizerTsizeX = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTexTsizeX = new wxStaticText( m_swItemProperties, wxID_ANY, _("Text Height (mm)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTexTsizeX = new wxStaticText( m_swItemProperties, wxID_ANY, _("Text Width (mm)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTexTsizeX->Wrap( -1 );
 	bSizerTsizeX->Add( m_staticTexTsizeX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -134,7 +134,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizerTsizeY;
 	bSizerTsizeY = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextTsizeY = new wxStaticText( m_swItemProperties, wxID_ANY, _("Text Width (mm)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTsizeY = new wxStaticText( m_swItemProperties, wxID_ANY, _("Text Height (mm)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTsizeY->Wrap( -1 );
 	bSizerTsizeY->Add( m_staticTextTsizeY, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -436,7 +436,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_swItemProperties->Layout();
 	bSizerMain->Fit( m_swItemProperties );
 	m_notebook->AddPage( m_swItemProperties, _("Item Properties"), true );
-	m_swGeneralOpts = new wxScrolledWindow( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_swGeneralOpts = new wxScrolledWindow( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 	m_swGeneralOpts->SetScrollRate( 5, 5 );
 	wxBoxSizer* bSizerGeneralOpts;
 	bSizerGeneralOpts = new wxBoxSizer( wxVERTICAL );
