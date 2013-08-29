@@ -214,7 +214,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 
 bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 {
-	printf( "process: %s\n", aEvent.Format().c_str() );
+	wxLogDebug( "event: %s", aEvent.Format().c_str() );
 
 	dispatchInternal( aEvent );
 	
