@@ -308,6 +308,10 @@ public:
     BOARD();
     ~BOARD();
 
+    virtual const wxPoint& GetPosition() const;
+
+    virtual void SetPosition( const wxPoint& aPos );
+
     bool IsEmpty() const
     {
         return m_Drawings.GetCount() == 0 && m_Modules.GetCount() == 0 &&

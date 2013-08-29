@@ -123,9 +123,22 @@ BOARD::~BOARD()
 }
 
 
+const wxPoint& BOARD::GetPosition() const
+{
+    wxLogWarning( wxT( "This should not be called on the BOARD object") );
+
+    return ZeroOffset;
+}
+
+void BOARD::SetPosition( const wxPoint& aPos )
+{
+    wxLogWarning( wxT( "This should not be called on the BOARD object") );
+}
+
+
 void BOARD::Move( const wxPoint& aMoveVector )        // overload
 {
-
+    wxLogWarning( wxT( "This should not be called on the BOARD object") );
 }
 
 

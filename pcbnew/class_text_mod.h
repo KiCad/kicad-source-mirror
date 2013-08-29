@@ -79,6 +79,16 @@ public:
 
     ~TEXTE_MODULE();
 
+    virtual const wxPoint& GetPosition() const
+    {
+        return m_Pos;
+    }
+
+    virtual void SetPosition( const wxPoint& aPos )
+    {
+        m_Pos = aPos;
+    }
+
     TEXTE_MODULE* Next() const { return (TEXTE_MODULE*) Pnext; }
 
     TEXTE_MODULE* Back() const { return (TEXTE_MODULE*) Pback; }
