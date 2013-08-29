@@ -212,7 +212,6 @@ void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
 	}
 	else
 	{
-        printf( "evType %d\n", aEvent.GetEventType() );
         m_eventDispatcher->DispatchWxEvent( aEvent );
     }
 
