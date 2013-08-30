@@ -35,10 +35,10 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     VIEW_CONTROLS( aView ),
     m_state( IDLE ),
     m_grabMouse( false ),
+    m_snappingEnabled( true ),
     m_autoPanEnabled( false ),
     m_autoPanMargin( 0.1 ),
     m_autoPanSpeed( 0.15 ),
-    m_snappingEnabled( true ),
     m_parentPanel( aParentPanel )
 {
     m_parentPanel->Connect( wxEVT_MOTION, wxMouseEventHandler(

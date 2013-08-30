@@ -128,14 +128,14 @@ private:
     /// Flag for grabbing the mouse cursor
     bool        m_grabMouse;
 
+    /// Should the cursor snap to grid or move freely
+    bool        m_snappingEnabled;
+
     /// Flag for turning on autopanning
     bool        m_autoPanEnabled;
 
     /// Distance from cursor to VIEW edge when panning is active
     float       m_autoPanMargin;
-
-    /// Should the cursor snap to grid or move freely
-    bool        m_snappingEnabled;
 
     /// How fast is panning when in auto mode
     float       m_autoPanSpeed;
