@@ -92,24 +92,40 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 }
 
 
-void TOOL_MANAGER::InvokeTool( TOOL_ID aToolId )
+bool TOOL_MANAGER::InvokeTool( TOOL_ID aToolId )
 {
     TOOL_BASE* tool = FindTool( aToolId );
 
     if( tool && tool->GetType() == TOOL_Interactive )
+    {
+        // If the tool is already active, do not invoke it again
+        if( m_toolIdIndex[aToolId]->idle == false )
+            return false;
+
+        m_toolIdIndex[aToolId]->idle = false;
         static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
 
-    TOOL_EVENT evt( TC_Command, TA_ActivateTool, tool->GetName() );
-    ProcessEvent( evt );
+        TOOL_EVENT evt( TC_Command, TA_ActivateTool, tool->GetName() );
+        ProcessEvent( evt );
+
+        // Save the tool on the front of the processing queue
+        m_activeTools.push_front( aToolId );
+
+        return true;
+    }
+
+    return false;
 }
 
 
-void TOOL_MANAGER::InvokeTool( const std::string& aName )
+bool TOOL_MANAGER::InvokeTool( const std::string& aName )
 {
     TOOL_BASE* tool = FindTool( aName );
 
     if( tool )
-        InvokeTool( tool->GetId() );
+        return InvokeTool( tool->GetId() );
+
+    return false;
 }
 
 
@@ -159,13 +175,18 @@ optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 {
 	// iterate over all registered tools
-	BOOST_FOREACH( ToolState* st, m_toolState | boost::adaptors::map_values )
-	{
+    BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
+    {
+        ToolState* st = m_toolIdIndex[toolId];
+
 		// the tool state handler is waiting for events (i.e. called Wait() method)
 		if( st->pendingWait )
 		{
 			if( st->waitEvents.Matches( aEvent ) )
 			{
+			    // By default, already processed events are not passed further
+			    m_passEvent = false;
+
 				// got matching event? clear wait list and wake up the coroutine
 				st->wakeupEvent = aEvent;
 				st->pendingWait = false;
@@ -173,16 +194,22 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 				st->cofunc->Resume();
 				if( !st->cofunc->Running() )
 				{
-					delete st->cofunc;
-					st->cofunc = NULL;
+				    finishTool( st );
 				}
+
+				// The tool requested to stop propagating event to other tools
+				if( !m_passEvent )
+				    break;
 			}
 		}
-		else
+    }
+
+    BOOST_FOREACH( ToolState* st, m_toolState | boost::adaptors::map_values )
+    {
+		if( !st->pendingWait )
 		{
 			// no state handler in progress - check if there are any transitions (defined by
 			// Go() method that match the event.
-
 			if( st->transitions.size() )
 			{
 				BOOST_FOREACH( Transition tr, st->transitions )
@@ -201,8 +228,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 						
 						if( !st->cofunc->Running() )
 						{
-							delete st->cofunc;
-							st->cofunc = NULL;
+						    finishTool( st );
 						}
 					}
 				}
@@ -212,14 +238,28 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 }
 
 
+void TOOL_MANAGER::finishTool( ToolState* aState )
+{
+    wxASSERT( m_activeTools.front() == aState->theTool->GetId() );
+
+    aState->idle = true;
+    m_activeTools.erase( m_activeTools.begin() );
+
+    delete aState->cofunc;
+    aState->cofunc = NULL;
+}
+
+
 bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 {
 	wxLogDebug( "event: %s", aEvent.Format().c_str() );
 
 	dispatchInternal( aEvent );
 	
-	BOOST_FOREACH( ToolState* st, m_toolState | boost::adaptors::map_values )
-	{
+    BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
+    {
+        ToolState* st = m_toolIdIndex[toolId];
+
 		if( st->contextMenuTrigger == CMENU_NOW )
 		{
 			st->pendingWait = true;
@@ -273,8 +313,10 @@ void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KiGfx::VIEW* aView,
 	m_editFrame = aFrame;
 
 	// Reset state of the registered tools
-	BOOST_FOREACH( TOOL_BASE* tool, m_toolState | boost::adaptors::map_keys )
+	BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
 	{
+	    TOOL_BASE* tool = m_toolIdIndex[toolId]->theTool;
+
 	    if( tool->GetType() == TOOL_Interactive )
 	        static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
 	}
