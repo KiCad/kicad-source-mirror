@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-28 20:58+0900\n"
-"PO-Revision-Date: 2013-08-28 20:59+0900\n"
-"Last-Translator: yoneken <midpika@hotmail.com>\n"
+"PO-Revision-Date: 2013-08-30 16:29+0900\n"
+"Last-Translator: yoneken <yoneken@kicad.jp>\n"
 "Language-Team: KiCad JP Localize <midpika@hotmail.com>\n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
@@ -12,6 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: ../../../testing\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SearchPath-0: kicad\n"
 "X-Poedit-SearchPath-1: pcbnew\n"
 "X-Poedit-SearchPath-2: eeschema\n"
@@ -477,6 +478,8 @@ msgid ""
 "Working dir: <%s>\n"
 "Project: <%s>\n"
 msgstr ""
+"作業ディレクトリ: <%s>\n"
+"プロジェクト: <%s>\n"
 
 #: kicad/tree_project_frame.cpp:224
 msgid "Create New Directory"
@@ -530,7 +533,7 @@ msgstr "ファイル名変更"
 
 #: kicad/dialogs/dialog_template_selector.cpp:144
 msgid "<html><h1>Template Selector</h1></html>"
-msgstr ""
+msgstr "<html><h1>テンプレート選択</h1></html>"
 
 #: pcbnew/basepcbframe.cpp:389
 msgid "Display rectangular coordinates"
@@ -666,6 +669,8 @@ msgstr "コンポーネント/フットプリントのリンクファイル \"%s
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
+"新規コンポーネント \"%s:%s\" を追加できません．フットプリント \"%s\" が見つか"
+"りません.\n"
 
 #: pcbnew/class_board.cpp:2435
 #, fuzzy, c-format
@@ -676,6 +681,8 @@ msgstr "コンポーネント/フットプリントのリンクファイル \"%s
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
+"コンポーネント \"%s:%s\" が置換できません．フットプリント \"%s\" が見つかりま"
+"せん．\n"
 
 #: pcbnew/class_board.cpp:2481
 #, fuzzy, c-format
@@ -685,12 +692,12 @@ msgstr "フットプリントの設定を表示"
 #: pcbnew/class_board.cpp:2497
 #, c-format
 msgid "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
-msgstr ""
+msgstr "フットプリント \"%s:%s\" の値を \"%s\" から \"%s\" に変更しました．\n"
 
 #: pcbnew/class_board.cpp:2514
 #, c-format
 msgid "Changing footprint path \"%s:%s\" to \"%s\".\n"
-msgstr ""
+msgstr "フットプリントのパスを \"%s:%s\" から \"%s\" に変更しました．\n"
 
 #: pcbnew/class_board.cpp:2540
 #, c-format
@@ -706,7 +713,7 @@ msgstr ""
 #: pcbnew/class_board.cpp:2596
 #, c-format
 msgid "Removing footprint \"%s:%s\".\n"
-msgstr ""
+msgstr "フットプリント \"%s:%s\" の削除．\n"
 
 #: pcbnew/class_board.cpp:2631
 #, c-format
@@ -928,15 +935,15 @@ msgstr "ネットクラス マイクロビア ドリル &lt; グローバル リ
 
 #: pcbnew/class_drc_item.cpp:106
 msgid "Via inside a keepout area"
-msgstr ""
+msgstr "ビアが配線禁止エリア内に入っています"
 
 #: pcbnew/class_drc_item.cpp:109
 msgid "Track inside a keepout area"
-msgstr ""
+msgstr "配線が配線禁止エリア内に入っています"
 
 #: pcbnew/class_drc_item.cpp:112
 msgid "Pad inside a keepout area"
-msgstr ""
+msgstr "パッドが配線禁止エリア内に入っています"
 
 #: pcbnew/class_edge_mod.cpp:249
 msgid "Graphic Item"
@@ -990,7 +997,7 @@ msgstr ""
 #: pcbnew/class_marker_pcb.cpp:135
 #, c-format
 msgid "Marker @(%d,%d)"
-msgstr ""
+msgstr "マーカー @(%d,%d)"
 
 #: pcbnew/class_mire.cpp:223
 #, fuzzy, c-format
@@ -1510,7 +1517,7 @@ msgstr "Pcb テキスト %s on %s"
 #: pcbnew/class_track.cpp:179
 #, c-format
 msgid "Zone (%08lX) [%s] on %s"
-msgstr ""
+msgstr "ゾーン (%08lX) [%s]  %s 内"
 
 #: pcbnew/class_track.cpp:210
 #, c-format
@@ -1617,7 +1624,7 @@ msgstr "(切り抜き)"
 
 #: pcbnew/class_zone.cpp:658
 msgid "No via"
-msgstr ""
+msgstr "ビアなし"
 
 #: pcbnew/class_zone.cpp:661
 #, fuzzy
@@ -1751,7 +1758,7 @@ msgstr "未接続パッド...\n"
 
 #: pcbnew/drc.cpp:255
 msgid "Keepout areas ...\n"
-msgstr ""
+msgstr "配線禁止エリア ...\n"
 
 #: pcbnew/drc.cpp:269
 msgid "Finished"
@@ -1802,7 +1809,7 @@ msgstr "配線のクリアランス"
 #: pcbnew/eagle_plugin.cpp:1600
 #, c-format
 msgid "<package> name:'%s' duplicated in eagle <library>:'%s'"
-msgstr ""
+msgstr "<package> の名前:'%s' が，Eagleの <library> 名と重複しています:'%s'"
 
 #: pcbnew/eagle_plugin.cpp:1657
 #, fuzzy, c-format
@@ -1927,7 +1934,7 @@ msgstr "このテキストはリファレンスです！"
 
 #: pcbnew/editmod.cpp:112
 msgid "Cannot delete VALUE!"
-msgstr ""
+msgstr "値は削除できません！"
 
 #: pcbnew/editrack.cpp:817
 #, fuzzy
@@ -2023,6 +2030,8 @@ msgid ""
 "Error saving board.\n"
 "%s"
 msgstr ""
+"ボード保存中のエラー.\n"
+"%s"
 
 #: pcbnew/files.cpp:562
 msgid "Save Board File"
@@ -2200,7 +2209,7 @@ msgstr "モジュール レポート"
 #: pcbnew/gpcb_plugin.cpp:88
 #, c-format
 msgid "Cannot convert \"%s\" to an integer"
-msgstr ""
+msgstr "\"%s\" を整数に変換できません"
 
 #: pcbnew/gpcb_plugin.cpp:235
 #, fuzzy, c-format
@@ -2217,7 +2226,7 @@ msgstr "ライブラリが選択されていません"
 #: pcbnew/pcb_parser.cpp:449
 #, c-format
 msgid "unknown token \"%s\""
-msgstr ""
+msgstr "未知のトークン \"%s\""
 
 #: pcbnew/gpcb_plugin.cpp:363
 #, c-format
@@ -2239,7 +2248,7 @@ msgstr "フォルダーへの書き込み権限がありません。 <%s>."
 #: pcbnew/gpcb_plugin.cpp:908 pcbnew/kicad_plugin.cpp:1768
 #, c-format
 msgid "library directory <%s> has unexpected sub-directories"
-msgstr ""
+msgstr "ライブラリのディレクトリ <%s> が不要なサブ・ディレクトリを含んでいます"
 
 #: pcbnew/gpcb_plugin.cpp:927 pcbnew/kicad_plugin.cpp:1787
 #, fuzzy, c-format
@@ -2281,7 +2290,7 @@ msgstr "マクロ呼び出し"
 #: pcbnew/hotkeys_board_editor.cpp:123
 #, c-format
 msgid "Add key [%c] in macro %d"
-msgstr ""
+msgstr "[%c] キーをマクロ %d に追加"
 
 #: pcbnew/initpcb.cpp:32
 msgid ""
@@ -2298,7 +2307,7 @@ msgstr ""
 #: pcbnew/io_mgr.cpp:35
 #, c-format
 msgid "Plugin '%s' does not implement the '%s' function."
-msgstr ""
+msgstr "'%s' プラグインには '%s' 機能はありません．"
 
 #: pcbnew/io_mgr.cpp:36
 #, fuzzy, c-format
@@ -2308,12 +2317,14 @@ msgstr "ヘルプ ファイル %s が見つかりません。"
 #: pcbnew/io_mgr.cpp:100
 #, c-format
 msgid "Unknown PCB_FILE_T value: %d"
-msgstr ""
+msgstr "未知の PCB_FILE_T の値: %d"
 
 #: pcbnew/kicad_netlist_reader.cpp:252
 #, c-format
 msgid "Cannot find component with reference \"%s\" in netlist."
 msgstr ""
+"ネットリスト中から， \"%s\" のリファレンスを持つコンポーネントが見つかりませ"
+"ん．"
 
 #: pcbnew/kicad_plugin.cpp:162
 #, fuzzy, c-format
@@ -2353,7 +2364,7 @@ msgstr "未知のパッド形状です"
 #: pcbnew/kicad_plugin.cpp:1408
 #, c-format
 msgid "unknown zone corner smoothing type %d"
-msgstr ""
+msgstr "未知のゾーンの角の平滑化タイプ %d "
 
 #: pcbnew/kicad_plugin.cpp:1674
 #, fuzzy, c-format
@@ -2438,7 +2449,7 @@ msgstr "未知のパッド形状です"
 #: pcbnew/legacy_plugin.cpp:2162
 #, c-format
 msgid "duplicate NETCLASS name '%s'"
-msgstr ""
+msgstr "重複したネットクラス名 '%s'"
 
 #: pcbnew/legacy_plugin.cpp:2757 pcbnew/legacy_plugin.cpp:2794
 #, c-format
@@ -3291,7 +3302,7 @@ msgstr "塗りつぶしゾーンの追加"
 
 #: pcbnew/menubar_pcbframe.cpp:372
 msgid "&Keepout Area"
-msgstr ""
+msgstr "配線禁止エリア(&K)"
 
 #: pcbnew/menubar_pcbframe.cpp:372 pcbnew/tool_pcb.cpp:444
 #, fuzzy
@@ -3486,11 +3497,11 @@ msgstr "上級なルータであるウェブベースの FreeROUTE への素早�
 
 #: pcbnew/menubar_pcbframe.cpp:558
 msgid "&Scripting Console"
-msgstr ""
+msgstr "スクリプト コンソール(&S)"
 
 #: pcbnew/menubar_pcbframe.cpp:559 pcbnew/tool_pcb.cpp:309
 msgid "Show/Hide the Scripting console"
-msgstr ""
+msgstr "スクリプト コンソールの表示切替"
 
 #: pcbnew/menubar_pcbframe.cpp:569
 msgid "Design Rules"
@@ -3796,7 +3807,7 @@ msgstr "線幅"
 
 #: pcbnew/moduleframe.cpp:330
 msgid "Save the changes in the module before closing?"
-msgstr ""
+msgstr "モジュールの変更を終了前に保存しますか？"
 
 #: pcbnew/moduleframe.cpp:352
 msgid "Library is not set, the module could not be saved."
@@ -4385,7 +4396,7 @@ msgstr "ゾーンの入力"
 
 #: pcbnew/onrightclick.cpp:635
 msgid "Keepout Area"
-msgstr ""
+msgstr "配線禁止エリア"
 
 #: pcbnew/onrightclick.cpp:635
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
