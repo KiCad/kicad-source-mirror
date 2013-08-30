@@ -236,7 +236,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_DIMENSION_T:
-        draw( (DIMENSION*) aItem );
+        draw( (DIMENSION*) aItem, aLayer );
         break;
 
     case PCB_TARGET_T:
@@ -784,29 +784,37 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
 }
 
 
-void PCB_PAINTER::draw( const DIMENSION* aDimension )
+void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
 {
-    int layer = aDimension->GetLayer();
-    COLOR4D strokeColor = GetColor( NULL, layer );
+    if( aLayer == ITEM_GAL_LAYER( GP_OVERLAY ) )
+    {
+        if( aDimension->IsSelected() )
+            drawSelectionBox( aDimension );
+    }
+    else
+    {
+        int layer = aDimension->GetLayer();
+        COLOR4D strokeColor = GetColor( NULL, layer );
 
-    m_gal->SetStrokeColor( strokeColor );
-    m_gal->SetIsFill( false );
-    m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( aDimension->GetWidth() );
+        m_gal->SetStrokeColor( strokeColor );
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( aDimension->GetWidth() );
 
-    // Draw an arrow
-    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarO ), VECTOR2D( aDimension->m_crossBarF ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineGO ),
-                     VECTOR2D( aDimension->m_featureLineGF ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineDO ),
-                     VECTOR2D( aDimension->m_featureLineDF ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD1O ), VECTOR2D( aDimension->m_arrowD1F ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD2O ), VECTOR2D( aDimension->m_arrowD2F ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG1O ), VECTOR2D( aDimension->m_arrowG1F ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG2O ), VECTOR2D( aDimension->m_arrowG2F ) );
+        // Draw an arrow
+        m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarO ), VECTOR2D( aDimension->m_crossBarF ) );
+        m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineGO ),
+                         VECTOR2D( aDimension->m_featureLineGF ) );
+        m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineDO ),
+                         VECTOR2D( aDimension->m_featureLineDF ) );
+        m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD1O ), VECTOR2D( aDimension->m_arrowD1F ) );
+        m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD2O ), VECTOR2D( aDimension->m_arrowD2F ) );
+        m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG1O ), VECTOR2D( aDimension->m_arrowG1F ) );
+        m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG2O ), VECTOR2D( aDimension->m_arrowG2F ) );
 
-    // Draw text
-    draw( &aDimension->Text(), layer );
+        // Draw text
+        draw( &aDimension->Text(), layer );
+    }
 }
 
 
