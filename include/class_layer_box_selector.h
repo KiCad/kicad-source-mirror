@@ -9,16 +9,47 @@
 class wxAuiToolBar;
 
 
-/* class to display a layer list.
- *
+/* Basic class to build a layer list.
+ * this is an basic abstract class to build a layer list selector.
+ * To display this list, you should therefore derive this class
  */
-
-class LAYER_BOX_SELECTOR : public wxBitmapComboBox
+class LAYER_SELECTOR
 {
 protected:
     bool m_layerhotkeys;
     bool m_layerorder;
 
+public:
+    // Hotkey Info
+    struct EDA_HOTKEY_CONFIG* m_hotkeys;
+
+public:
+    LAYER_SELECTOR();
+
+    // Returns a color index from the layer id
+    // Virtual function because GerbView uses its own functions in a derived class
+    virtual EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const = 0;
+
+    // Returns the name of the layer id
+    // Virtual pure function because GerbView uses its own functions in a derived class
+    virtual wxString GetLayerName( LAYER_NUM aLayer ) const = 0;
+
+    // Returns true if the layer id is enabled (i.e. is it should be displayed)
+    // Virtual function pure because GerbView uses its own functions in a derived class
+    virtual bool IsLayerEnabled( LAYER_NUM aLayer ) const = 0;
+
+    bool SetLayersOrdered(bool value);
+    bool SetLayersHotkeys(bool value);
+
+protected:
+   // Fills the layer bitmap aLayerbmp with the layer color
+    void SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer );
+};
+
+/* class to display a layer list in a wxBitmapComboBox.
+ */
+class LAYER_BOX_SELECTOR : public LAYER_SELECTOR, public wxBitmapComboBox
+{
 public:
     // Hotkey Info
     struct EDA_HOTKEY_CONFIG* m_hotkeys;
@@ -33,19 +64,7 @@ public:
                         const wxPoint& pos, const wxSize& size,
                         const wxArrayString& choices );
 
-    // Returns a color index from the layer id
-    // Virtual function because GerbView uses its own functions in a derived class
-    virtual EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const = 0;
-
-    // Returns the name of the layer id
-    // Virtual pure function because GerbView uses its own functions in a derived class
-    virtual wxString GetLayerName( LAYER_NUM aLayer ) const = 0;
-
-    // Returns true if the layer id is enabled (i.e. is it should be displayed)
-    // Virtual function pure because GerbView uses its own functions in a derived class
-    virtual bool IsLayerEnabled( LAYER_NUM aLayer ) const = 0;
-
-   // Get Current Item #
+    // Get Current Item #
     int GetChoice();
 
     // Get Current Layer
@@ -60,13 +79,6 @@ public:
 
     // Reload the Layers bitmaps colors
     void ResyncBitmapOnly();
-
-    bool SetLayersOrdered(bool value);
-    bool SetLayersHotkeys(bool value);
-
-protected:
-   // Fills the layer bitmap aLayerbmp with the layer color
-    void SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer );
 };
 
 #define DECLARE_LAYERS_HOTKEY(list) int list[NB_LAYERS] = \

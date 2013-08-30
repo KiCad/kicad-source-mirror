@@ -925,7 +925,15 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         itmp = SelectLayer( getActiveLayer(), UNDEFINED_LAYER, UNDEFINED_LAYER );
 
         if( itmp >= 0 )
+        {
+            // if user changed colors and we are in high contrast mode, then redraw
+            // because the PAD_SMD pads may change color.
+            if( DisplayOpt.ContrastModeDisplay && getActiveLayer() != itmp )
+            {
+                m_canvas->Refresh();
+            }
             setActiveLayer( itmp );
+        }
 
         m_canvas->MoveCursorToCrossHair();
         break;
