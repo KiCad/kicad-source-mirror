@@ -72,8 +72,8 @@ public:
      * Calls a tool by sending a tool activation event to tool of given ID or name.
      * An user-defined parameter object can be also passed
      */
-    void InvokeTool( TOOL_ID aToolId );
-    void InvokeTool( const std::string& aName );
+    bool InvokeTool( TOOL_ID aToolId );
+    bool InvokeTool( const std::string& aName );
 
     template <class Parameters>
         void InvokeTool( const std::string& aName, const Parameters& aToolParams );
@@ -153,20 +153,31 @@ public:
     void ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
                               TOOL_ContextMenuTrigger aTrigger );
 
-private:
-    void dispatchInternal( TOOL_EVENT& aEvent );
+    /**
+     * Allows a tool pass the already handled event to be passed to the next tool on the stack.
+     */
+    void PassEvent()
+    {
+        m_passEvent = true;
+    }
 
+private:
     struct ToolState;
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> Transition;
+
+    void dispatchInternal( TOOL_EVENT& aEvent );
+    void finishTool( ToolState* aState );
 
     std::map<TOOL_BASE*, ToolState*> m_toolState;
     std::map<std::string, ToolState*> m_toolNameIndex;
     std::map<TOOL_ID, ToolState*> m_toolIdIndex;
+    std::deque<TOOL_ID> m_activeTools;
 
     EDA_ITEM* m_model;
     KiGfx::VIEW* m_view;
     KiGfx::VIEW_CONTROLS* m_viewControls;
     wxWindow* m_editFrame;
+    bool m_passEvent;
 
     ToolState* m_currentTool;
 };

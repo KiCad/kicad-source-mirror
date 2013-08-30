@@ -56,11 +56,6 @@ void TOOL_INTERACTIVE::goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIS
 }
 
 
-void TOOL_INTERACTIVE::Reset()
-{
-}
-
-
 void TOOL_INTERACTIVE::SetContextMenu( CONTEXT_MENU* aMenu, TOOL_ContextMenuTrigger aTrigger )
 {
 	aMenu->setTool( this );
