@@ -55,6 +55,10 @@ public:
 
     void Reset();
     int Main( TOOL_EVENT& aEvent );
+    const std::set<BOARD_ITEM*>& GetSelection() const
+    {
+        return m_selectedItems;
+    }
 
 private:
     void selectSingle( const VECTOR2I& aWhere );
