@@ -145,7 +145,7 @@ protected:
     void draw( const TEXTE_PCB*, int );
     void draw( const TEXTE_MODULE*, int );
     void draw( const ZONE_CONTAINER* );
-    void draw( const DIMENSION* );
+    void draw( const DIMENSION*, int );
     void draw( const PCB_TARGET* );
 
     /// Draws a white semitransparent box indicating an item as selected

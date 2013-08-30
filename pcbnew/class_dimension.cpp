@@ -489,6 +489,18 @@ wxString DIMENSION::GetSelectMenuText() const
 }
 
 
+void DIMENSION::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    // Layer that simply displays the text
+    aLayers[0] = m_Layer;
+
+    // On the general purpose overlay there is a selection box displayed
+    aLayers[1] = ITEM_GAL_LAYER( GP_OVERLAY );
+
+    aCount = 2;
+}
+
+
 EDA_ITEM* DIMENSION::Clone() const
 {
     return new DIMENSION( *this );
