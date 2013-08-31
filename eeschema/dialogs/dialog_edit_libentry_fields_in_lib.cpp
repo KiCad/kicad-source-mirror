@@ -495,7 +495,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
         // add a new field unconditionally to the UI only for this template fieldname
 
         // field id must not be in range 0 - MANDATORY_FIELDS, set before saving to disk
-        LIB_FIELD   fld(-1);
+        LIB_FIELD fld( m_libEntry, -1 );
 
         // See if field by same name already exists in component.
         LIB_FIELD* libField = findfield( cmpFields, it->m_Name );
