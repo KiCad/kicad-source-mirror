@@ -44,6 +44,7 @@
 
 #include <pcbnew.h>
 #include <dialog_dimension_editor_base.h>
+#include <class_pcb_layer_box_selector.h>
 
 /* Local functions */
 static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
@@ -132,12 +133,12 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
     PutValueInLocalUnits( *m_textCtrlPosY, aDimension->Text().GetTextPosition().y );
     AddUnitSymbol( *m_staticTextPosY );
 
-    for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer < NB_PCB_LAYERS; ++layer )
-    {
-        m_SelLayerBox->Append( aParent->GetBoard()->GetLayerName( layer ) );
-    }
-
-    m_SelLayerBox->SetSelection( aDimension->GetLayer() - FIRST_NON_COPPER_LAYER );
+    // Configure the layers list selector
+    m_SelLayerBox->SetLayersHotkeys( false );
+    m_SelLayerBox->SetLayerMask( ALL_CU_LAYERS | EDGE_LAYER );
+    m_SelLayerBox->SetBoardFrame( m_Parent );
+    m_SelLayerBox->Resync();
+    m_SelLayerBox->SetLayerSelection( aDimension->GetLayer() );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -199,7 +200,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 
     CurrentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
 
-    CurrentDimension->SetLayer( FIRST_NON_COPPER_LAYER + m_SelLayerBox->GetCurrentSelection() );
+    CurrentDimension->SetLayer( m_SelLayerBox->GetLayerSelection() );
 
     if( m_DC )     // Display new text
     {
