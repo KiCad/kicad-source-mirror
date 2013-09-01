@@ -4,8 +4,10 @@
 # Example: Round value robin, XML to XML conversion with partial value monging
 #
 
+from __future__ import print_function
+
 # Import the KiCad python helper module and the csv formatter
-import ky_generic_netlist_reader
+import kicad_netlist_reader
 import sys
 
 def checkvalue(self):
@@ -51,21 +53,21 @@ def checkvalue(self):
 
 # Give components a new method for checking the values (this could easily be a
 # Company Part Number generator method instead)
-ky_generic_netlist_reader.component.checkvalue = checkvalue
+kicad_netlist_reader.comp.checkvalue = checkvalue
 
 # Generate an instance of a generic netlist, and load the netlist tree from
 # the command line option. If the file doesn't exist, execution will stop
-net = ky_generic_netlist_reader.netlist(sys.argv[1])
+net = kicad_netlist_reader.netlist(sys.argv[1])
 
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
 try:
     f = open(sys.argv[2], 'w')
 except IOError:
-    print >> sys.stderr, __file__, ":", e
+    print(__file__, ":", e, file=sys.stderr)
     f = stdout
 
 for c in net.components:
     c.checkvalue()
 
-print >> f, net.formatXML()
+print(net.formatXML(), file=f)
