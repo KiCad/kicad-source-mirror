@@ -150,6 +150,8 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
 
     try
     {
+
+
         GetBoard()->SynchronizeNetsAndNetClasses();
         db.FromBOARD( GetBoard() );
         db.ExportPCB(  fullFileName, true );
@@ -590,8 +592,6 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
                 polygon->AppendPoint( upperRight );
                 polygon->AppendPoint( lowerRight );
             }
-
-            D( printf( "m_DeltaSize: %d,%d\n", aPad->GetDelta().x, aPad->GetDelta().y ); )
 
             // this string _must_ be unique for a given physical shape
             snprintf( name, sizeof(name), "Trapz%sPad_%.6gx%.6g_%c%.6gx%c%.6g_um",
@@ -1727,13 +1727,32 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
     {
         NETCLASSES& nclasses = aBoard->m_NetClasses;
 
+        // Assume the netclass vias are all the same kind of thru, blind, or buried vias.
+        // This is in lieu of either having each netclass via have its own layer pair in
+        // the netclass dialog, or such control in the specctra export dialog.
+
+
+        // if( aBoard->GetDesignSettings().m_CurrentViaType == VIA_THROUGH )
+        {
+            m_top_via_layer = 0;       // first specctra cu layer is number zero.
+            m_bot_via_layer = aBoard->GetCopperLayerCount()-1;
+        }
+        /*
+        else
+        {
+            // again, should be in the BOARD:
+            topLayer = kicadLayer2pcb[ GetScreen()->m_Route_Layer_TOP ];
+            botLayer = kicadLayer2pcb[ GetScreen()->m_Route_Layer_BOTTOM ];
+        }
+        */
+
         // Add the via from the Default netclass first.  The via container
         // in pcb->library preserves the sequence of addition.
 
         NETCLASS*   netclass = nclasses.GetDefault();
 
         PADSTACK*   via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
-                                   FIRST_LAYER, aBoard->GetCopperLayerCount()-1 );
+                                   m_top_via_layer, m_bot_via_layer );
 
         // we AppendVia() this first one, there is no way it can be a duplicate,
         // the pcb->library via container is empty at this point.  After this,
@@ -1742,10 +1761,11 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         pcb->library->AppendVia( via );
 
 #if 0
-        // Stock vias have drill diameter of zero, this is not sensible to freerouter
+        // I've seen no way to make stock vias useable by freerouter.  Also the
+        // zero based diameter was leading to duplicates in the LookupVia() function.
         // User should use netclass based vias when going to freerouter.
 
-        // output the stock vias, but preserve uniqueness in the via container by
+        // Output the stock vias, but preserve uniqueness in the via container by
         // using LookupVia().
         for( unsigned i = 0; i < aBoard->m_ViasDimensionsList.size(); ++i )
         {
@@ -1753,7 +1773,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             int viaDrill    = aBoard->m_ViasDimensionsList[i].m_Drill;
 
             via = makeVia( viaSize, viaDrill,
-                           FIRST_LAYER, aBoard->GetCopperLayerCount()-1 );
+                           m_top_via_layer, m_bot_via_layer );
 
             // maybe add 'via' to the library, but only if unique.
             PADSTACK* registered = pcb->library->LookupVia( via );
@@ -1772,7 +1792,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             netclass = nc->second;
 
             via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
-                           FIRST_LAYER, aBoard->GetCopperLayerCount()-1 );
+                           m_top_via_layer, m_bot_via_layer );
 
             // maybe add 'via' to the library, but only if unique.
             PADSTACK* registered = pcb->library->LookupVia( via );
@@ -1854,8 +1874,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
     //-----<export the existing real BOARD instantiated vias>-----------------
     {
-        // export all of them for now, later we'll decide what controls we need
-        // on this.
+        // Export all vias, once per unique size and drill diameter combo.
         static const KICAD_T scanVIAs[] = { PCB_VIA_T, EOT };
 
         items.Collect( aBoard, scanVIAs );
@@ -1930,33 +1949,33 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
 void SPECCTRA_DB::exportNETCLASS( NETCLASS* aNetClass, BOARD* aBoard )
 {
-/*  From page 11 of specctra spec:
- *
- *   Routing and Placement Rule Hierarchies
- *
- *   Routing and placement rules can be defined at multiple levels of design
- *   specification. When a routing or placement rule is defined for an object at
- *   multiple levels, a predefined routing or placement precedence order
- *   automatically determines which rule to apply to the object. The routing rule
- *   precedence order is
- *
- *       pcb < layer < class < class layer < group_set < group_set layer < net <
- *       net layer < group < group layer < fromto < fromto layer < class_class <
- *       class_class layer < padstack < region < class region < net region <
- *       class_class region
- *
- *   A pcb rule (global rule for the PCB design) has the lowest precedence in the
- *   hierarchy. A class-to-class region rule has the highest precedence. Rules
- *   set at one level of the hierarchy override conflicting rules set at lower
- *   levels. The placement rule precedence order is
- *
- *       pcb < image_set < image < component < super cluster < room <
- *       room_image_set < family_family < image_image
- *
- *   A pcb rule (global rule for the PCB design) has the lowest precedence in the
- *   hierarchy. An image-to-image rule has the highest precedence. Rules set at
- *   one level of the hierarchy override conflicting rules set at lower levels.
- */
+    /*  From page 11 of specctra spec:
+     *
+     *   Routing and Placement Rule Hierarchies
+     *
+     *   Routing and placement rules can be defined at multiple levels of design
+     *   specification. When a routing or placement rule is defined for an object at
+     *   multiple levels, a predefined routing or placement precedence order
+     *   automatically determines which rule to apply to the object. The routing rule
+     *   precedence order is
+     *
+     *       pcb < layer < class < class layer < group_set < group_set layer < net <
+     *       net layer < group < group layer < fromto < fromto layer < class_class <
+     *       class_class layer < padstack < region < class region < net region <
+     *       class_class region
+     *
+     *   A pcb rule (global rule for the PCB design) has the lowest precedence in the
+     *   hierarchy. A class-to-class region rule has the highest precedence. Rules
+     *   set at one level of the hierarchy override conflicting rules set at lower
+     *   levels. The placement rule precedence order is
+     *
+     *       pcb < image_set < image < component < super cluster < room <
+     *       room_image_set < family_family < image_image
+     *
+     *   A pcb rule (global rule for the PCB design) has the lowest precedence in the
+     *   hierarchy. An image-to-image rule has the highest precedence. Rules set at
+     *   one level of the hierarchy override conflicting rules set at lower levels.
+     */
 
     char    text[256];
 
@@ -1995,7 +2014,7 @@ void SPECCTRA_DB::exportNETCLASS( NETCLASS* aNetClass, BOARD* aBoard )
     // this should never become a performance issue.
 
     PADSTACK* via = makeVia( aNetClass->GetViaDiameter(), aNetClass->GetViaDrill(),
-                             FIRST_LAYER, aBoard->GetCopperLayerCount()-1 );
+                             m_top_via_layer, m_bot_via_layer );
 
     snprintf( text, sizeof(text), "(use_via %s)", via->GetPadstackId().c_str() );
     clazz->circuit.push_back( text );
