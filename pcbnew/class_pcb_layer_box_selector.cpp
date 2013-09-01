@@ -38,11 +38,6 @@
 #include <class_board.h>
 #include <hotkeys.h>
 
-#include <wx/ownerdrw.h>
-#include <wx/menuitem.h>
-#include <wx/bmpcbox.h>
-#include <wx/wx.h>
-
 #include <class_pcb_layer_box_selector.h>
 
 /* class to display a layer list.
@@ -70,6 +65,9 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
         if( ! IsLayerEnabled( layerid ) )
             continue;
 
+        if( ( m_layerMaskDisable & GetLayerMask( layerid ) ) )
+            continue;
+
         SetBitmapLayer( layerbmp, layerid );
 
         layername = GetLayerName( layerid );
@@ -85,8 +83,8 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
 // Returns true if the layer id is enabled (i.e. is it should be displayed)
 bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( LAYER_NUM aLayer ) const
 {
-    PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
-    BOARD* board = pcbFrame->GetBoard();
+    wxASSERT( m_boardFrame != NULL );
+    BOARD* board = m_boardFrame->GetBoard();
     wxASSERT( board != NULL );
 
     return board->IsLayerEnabled( aLayer );
@@ -96,8 +94,8 @@ bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( LAYER_NUM aLayer ) const
 // Returns a color index from the layer id
 EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
 {
-    PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
-    BOARD* board = pcbFrame->GetBoard();
+    wxASSERT( m_boardFrame != NULL );
+    BOARD* board = m_boardFrame->GetBoard();
     wxASSERT( board != NULL );
 
     return board->GetLayerColor( aLayer );
@@ -107,8 +105,8 @@ EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
 // Returns the name of the layer id
 wxString PCB_LAYER_BOX_SELECTOR::GetLayerName( LAYER_NUM aLayer ) const
 {
-    PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
-    BOARD* board = pcbFrame->GetBoard();
+    wxASSERT( m_boardFrame != NULL );
+    BOARD* board = m_boardFrame->GetBoard();
     wxASSERT( board != NULL );
 
     return board->GetLayerName( aLayer );
