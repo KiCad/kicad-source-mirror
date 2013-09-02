@@ -32,6 +32,7 @@
 
 #include <wxPcbStruct.h>
 #include <collectors.h>
+#include <view/view_controls.h>
 
 #include <tool/context_menu.h>
 
@@ -59,13 +60,15 @@ void SELECTION_TOOL::Reset()
 {
     m_selectedItems.clear();
 
-    // the tool launches upon reception of activate ("pcbnew.InteractiveSelection")
-    Go( &SELECTION_TOOL::Main, TOOL_EVENT( TC_Command, TA_ActivateTool, GetName() ) ); //"pcbnew.InteractiveSelection"));
+    // The tool launches upon reception of activate ("pcbnew.InteractiveSelection")
+    Go( &SELECTION_TOOL::Main, TOOL_EVENT( TC_Command, TA_ActivateTool, GetName() ) );
 }
 
 
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
+    bool dragging = false;
+
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -76,17 +79,41 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             if( !m_selectedItems.empty() )
                 clearSelection();
             else
-                return 0;
+                break;  // Finish
         }
 
         // single click? Select single object
         if( evt->IsClick( MB_Left ) )
             selectSingle( evt->Position() );
 
-        // drag with LMB? Select multiple objects (or at least draw a selection box)
+        // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         if( evt->IsDrag( MB_Left ) )
-            selectMultiple();
+        {
+            dragging = true;
+            getViewControls()->SetAutoPan( true );
+
+            if( m_selectedItems.empty() || m_additive )
+            {
+                // If nothings has been selected or user wants to select more
+                // draw the selection box
+                selectMultiple();
+            }
+            else
+            {
+                // Now user wants to drag the selected items
+                m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
+            }
+
+        }
+        else if( dragging )
+        {
+            dragging = false;
+            getViewControls()->SetAutoPan( false );
+        }
     }
+
+    // Restore the default settings
+    getViewControls()->SetAutoPan( false );
 
     return 0;
 }
@@ -213,7 +240,7 @@ void SELECTION_TOOL::selectMultiple()
             m_selArea->SetOrigin( evt->DragOrigin() );
             m_selArea->SetEnd( evt->Position() );
             m_selArea->ViewSetVisible( true );
-            m_selArea->ViewUpdate( VIEW_ITEM::APPEARANCE | VIEW_ITEM::GEOMETRY );
+            m_selArea->ViewUpdate( VIEW_ITEM::GEOMETRY );
         }
 
         if( evt->IsMouseUp( MB_Left ) )
