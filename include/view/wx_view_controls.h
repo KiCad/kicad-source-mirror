@@ -85,6 +85,8 @@ public:
     void    SetAutoPan( bool aEnabled )
     {
         m_autoPanEnabled = aEnabled;
+        if( m_state == AUTO_PANNING )
+            m_state = IDLE;
     }
 
     /**
@@ -116,8 +118,15 @@ private:
         AUTO_PANNING,
     };
 
-    /// Computes new viewport settings while in autopanning mode
-    void    handleAutoPanning( const wxMouseEvent& aEvent );
+    /**
+     * Function handleAutoPanning()
+     * Computes new viewport settings while in autopanning mode.
+     *
+     * @param aEvent is an event to be processed and decide if autopanning should happen.
+     * @return true if it is currently autopanning (ie. autopanning is active and mouse cursor
+     * is in the area that causes autopanning to happen).
+     */
+    bool    handleAutoPanning( const wxMouseEvent& aEvent );
 
     /// Current state of VIEW_CONTROLS
     State       m_state;
