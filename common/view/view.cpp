@@ -50,6 +50,15 @@ VIEW::VIEW( bool aIsDynamic ) :
     // Redraw everything at the beginning
     for( int i = 0; i < TARGETS_NUMBER; ++i )
         MarkTargetDirty( i );
+
+    // View uses layers to display EDA_ITEMs (item may be displayed on several layers, for example
+    // pad may be shown on pad, pad hole and solder paste layers). There are usual copper layers
+    // (eg. F.Cu, B.Cu, internal and so on) and layers for displaying objects such as texts,
+    // silkscreen, pads, vias, etc.
+    for( int i = 0; i < VIEW_MAX_LAYERS; i++ )
+    {
+        AddLayer( i );
+    }
 }
 
 
@@ -85,6 +94,7 @@ void VIEW::Add( VIEW_ITEM* aItem )
     int layers[VIEW_MAX_LAYERS], layers_count;
 
     aItem->ViewGetLayers( layers, layers_count );
+    aItem->saveLayers( layers, layers_count );
 
     for( int i = 0; i < layers_count; i++ )
     {
@@ -103,12 +113,14 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     if( m_dynamic )
         aItem->m_view = NULL;
 
-// fixme: this is so sloooow!
-    for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
+    int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
+    aItem->getLayers( layers, layers_count );
+
+    for( int i = 0; i < layers_count; ++i )
     {
-        VIEW_LAYER* l = & ( ( *i ).second );
-        l->items->Remove( aItem );
-        l->isDirty = true;
+        VIEW_LAYER& l = m_layers[layers[i]];
+        l.items->Remove( aItem );
+        l.isDirty = true;
     }
 }
 
@@ -595,7 +607,9 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
 void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate ) const
 {
     int layers[VIEW_MAX_LAYERS], layers_count;
-    aItem->ViewGetLayers( layers, layers_count );
+
+    aItem->getLayers( layers, layers_count );
+    // Sorting is needed for drawing order dependent GALs (like Cairo)
     SortLayers( layers, layers_count );
 
     for( int i = 0; i < layers_count; ++i )
@@ -773,26 +787,30 @@ void VIEW::clearGroupCache()
 void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 {
     int layers[VIEW_MAX_LAYERS], layers_count;
-    aItem->ViewGetLayers( layers, layers_count );
+    aItem->getLayers( layers, layers_count );
 
     // Iterate through layers used by the item and recache it immediately
     for( int i = 0; i < layers_count; i++ )
     {
-        if( aUpdateFlags == VIEW_ITEM::APPEARANCE )
+        int layerId = layers[i];
+
+        if( aUpdateFlags & VIEW_ITEM::GEOMETRY )
         {
-            updateItemAppearance( aItem, layers[i] );
-        }
-        else if( aUpdateFlags == VIEW_ITEM::GEOMETRY )
-        {
-            // Reinsert item
+            // Reinsert item in order to update bounding box
             Remove( aItem );
             Add( aItem );
-            updateItemGeometry( aItem, layers[i]);      /// TODO is it still necessary?
+
+            if( isCached( layerId ) )
+                updateItemGeometry( aItem, layerId );      /// TODO is it still necessary?
+        }
+        else if( aUpdateFlags & VIEW_ITEM::COLOR )
+        {
+            updateItemColor( aItem, layerId );
         }
 
         // Mark those layers as dirty, so the VIEW will be refreshed
-        m_layers[layers[i]].isDirty = true;
-        MarkTargetDirty( m_layers[layers[i]].target );   // TODO remove?
+        m_layers[layerId].isDirty = true;
+        MarkTargetDirty( m_layers[layerId].target );   // TODO remove?
     }
 }
 
@@ -812,7 +830,7 @@ void VIEW::sortLayers()
 }
 
 
-void VIEW::updateItemAppearance( VIEW_ITEM* aItem, int aLayer )
+void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
 {
     wxASSERT( (unsigned) aLayer < m_layers.size() );
 
@@ -875,13 +893,13 @@ void VIEW::RecacheAllItems( bool aImmediately )
     {
         VIEW_LAYER* l = &( ( *i ).second );
 
-        // Obviously, there is only one cached target that has to be recomputed
         if( isCached( l->id ) )
         {
             m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
             recacheLayer visitor( this, m_gal, l->id, aImmediately );
             l->items->Query( r, visitor );
+            l->isDirty = false;
         }
     }
 

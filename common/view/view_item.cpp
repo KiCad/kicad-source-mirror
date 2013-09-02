@@ -71,6 +71,20 @@ void VIEW_ITEM::ViewRelease()
 }
 
 
+void VIEW_ITEM::getLayers( int* aLayers, int& aCount ) const
+{
+    int* layersPtr = aLayers;
+    for( int i = 0; i < m_layers.size(); ++i )
+    {
+        if( m_layers[i] )
+            *layersPtr++ = i;
+
+    }
+
+    aCount = m_layers.count();
+}
+
+
 int VIEW_ITEM::getGroup( int aLayer ) const
 {
     for( int i = 0; i < m_groupsSize; ++i )

@@ -31,14 +31,16 @@
 #define __VIEW_ITEM_H
 
 #include <vector>
+#include <bitset>
 #include <math/box2.h>
+#include <view/view.h>
+#include <gal/definitions.h>
 
 namespace KiGfx
 {
 // Forward declarations
 class GAL;
 class PAINTER;
-class VIEW;
 
 /**
  * Class VIEW_ITEM -
@@ -62,12 +64,14 @@ public:
      * - ALL: all flags above */
 
     enum ViewUpdateFlags {
-        APPEARANCE  = 0x1,
-        GEOMETRY    = 0x2,
-        ALL = 0xff
+        APPEARANCE  = 0x01,     /// Visibility flag has changed
+        COLOR       = 0x02,     /// Color has changed
+        GEOMETRY    = 0x04,     /// Position or shape has changed
+        ALL         = 0xff
     };
 
-    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_groups( NULL ), m_groupsSize( 0 ) {}
+    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_groups( NULL ),
+                  m_groupsSize( 0 ) {}
 
     /**
      * Destructor. For dynamic views, removes the item from the view.
@@ -166,6 +170,15 @@ protected:
     friend class VIEW;
 
     /**
+     * Function getLayers()
+     * Returns layer numbers used by the item.
+     *
+     * @param aLayers[]: output layer index array
+     * @param aCount: number of layer indices in aLayers[]
+     */
+    virtual void getLayers( int* aLayers, int& aCount ) const;
+
+    /**
      * Function viewAssign()
      * Assigns the item to a given dynamic VIEW. Called internally by the VIEW.
      *
@@ -229,6 +242,25 @@ protected:
      * @returns true in case it is cached at least for one layer.
      */
     virtual bool storesGroups() const;
+
+    /// Stores layer numbers used by the item.
+    std::bitset<VIEW::VIEW_MAX_LAYERS> m_layers;
+
+    /**
+     * Function saveLayers()
+     * Saves layers used by the item.
+     *
+     * @param aLayers is an array containing layer numbers to be saved.
+     * @param aCount is the size of the array.
+     */
+    virtual void saveLayers( int* aLayers, int aCount )
+    {
+        m_layers.reset();
+
+        for( int i = 0; i < aCount; ++i )
+            m_layers.set(aLayers[i]);
+    }
+
 };
 } // namespace KiGfx
 

@@ -73,15 +73,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_view->SetPainter( m_painter );
     m_view->SetGAL( m_gal );
 
-    // View uses layers to display EDA_ITEMs (item may be displayed on several layers, for example
-    // pad may be shown on pad, pad hole and solder paste layers). There are usual copper layers
-    // (eg. F.Cu, B.Cu, internal and so on) and layers for displaying objects such as texts,
-    // silkscreen, pads, vias, etc.
-    for( int i = 0; i < TOTAL_LAYER_COUNT; i++ )
-    {
-        m_view->AddLayer( i );
-    }
-
     m_viewControls = new KiGfx::WX_VIEW_CONTROLS( m_view, this );
 
     Connect( wxEVT_PAINT,       wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
