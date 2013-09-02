@@ -7,53 +7,70 @@
 #include <wx/wx.h>
 #include <wx/ownerdrw.h>
 #include <wx/menuitem.h>
-#include <wx/aui/aui.h>
 
 #include <class_layer_box_selector.h>
 
-/* class to display a layer list.
- *
- */
 
-LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxAuiToolBar* parent, wxWindowID id,
-                                        const wxPoint& pos, const wxSize& size,
-                                        int n, const wxString choices[] ) :
-    wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY )
+LAYER_SELECTOR::LAYER_SELECTOR()
 {
     m_layerorder   = true;
     m_layerhotkeys = true;
     m_hotkeys      = NULL;
-
-    if( choices != NULL )
-        ResyncBitmapOnly();
 }
 
 
-LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxAuiToolBar* parent, wxWindowID id,
-                                        const wxPoint& pos, const wxSize& size,
-                                        const wxArrayString& choices ) :
-    wxBitmapComboBox( parent, id, wxEmptyString, pos, size, choices, wxCB_READONLY )
-{
-    m_layerorder   = true;
-    m_layerhotkeys = true;
-    m_hotkeys      = NULL;
-
-    if( !choices.IsEmpty() )
-        ResyncBitmapOnly();
-}
-
-
-bool LAYER_BOX_SELECTOR::SetLayersOrdered( bool value )
+bool LAYER_SELECTOR::SetLayersOrdered( bool value )
 {
     m_layerorder = value;
     return m_layerorder;
 }
 
 
-bool LAYER_BOX_SELECTOR::SetLayersHotkeys( bool value )
+bool LAYER_SELECTOR::SetLayersHotkeys( bool value )
 {
     m_layerhotkeys = value;
     return m_layerhotkeys;
+}
+
+
+void LAYER_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer )
+{
+    wxMemoryDC bmpDC;
+    wxBrush    brush;
+
+    // Prepare Bitmap
+    bmpDC.SelectObject( aLayerbmp );
+    brush.SetColour( MakeColour( GetLayerColor( aLayer ) ) );
+    brush.SetStyle( wxSOLID );
+
+    bmpDC.SetBrush( brush );
+    bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
+    bmpDC.SetBrush( *wxTRANSPARENT_BRUSH );
+    bmpDC.SetPen( *wxBLACK_PEN );
+    bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
+}
+
+/* class to display a layer list in a wxBitmapComboBox.
+ */
+LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
+                                        const wxPoint& pos, const wxSize& size,
+                                        int n, const wxString choices[] ) :
+    wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY ),
+    LAYER_SELECTOR()
+{
+    if( choices != NULL )
+        ResyncBitmapOnly();
+}
+
+
+LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
+                                        const wxPoint& pos, const wxSize& size,
+                                        const wxArrayString& choices ) :
+    wxBitmapComboBox( parent, id, wxEmptyString, pos, size, choices, wxCB_READONLY ),
+    LAYER_SELECTOR()
+{
+    if( !choices.IsEmpty() )
+        ResyncBitmapOnly();
 }
 
 
@@ -103,22 +120,4 @@ void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
         wxBitmap layerbmp( 14, 14 );
         SetBitmapLayer( layerbmp, i );
     }
-}
-
-
-void LAYER_BOX_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer )
-{
-    wxMemoryDC bmpDC;
-    wxBrush    brush;
-
-    // Prepare Bitmap
-    bmpDC.SelectObject( aLayerbmp );
-    brush.SetColour( MakeColour( GetLayerColor( aLayer ) ) );
-    brush.SetStyle( wxSOLID );
-
-    bmpDC.SetBrush( brush );
-    bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
-    bmpDC.SetBrush( *wxTRANSPARENT_BRUSH );
-    bmpDC.SetPen( *wxBLACK_PEN );
-    bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
 }

@@ -277,9 +277,11 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
 
     if( m_SelLayerBox == NULL )
+    {
         m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
-
-    ReCreateLayerBox( m_mainToolBar );
+        m_SelLayerBox->SetBoardFrame( this );
+    }
+    ReCreateLayerBox( false );
     m_mainToolBar->AddControl( m_SelLayerBox );
 
     PrepareLayerIndicator();    // Initialize the bitmap with current
@@ -661,14 +663,19 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
 }
 
 
-PCB_LAYER_BOX_SELECTOR* PCB_EDIT_FRAME::ReCreateLayerBox( wxAuiToolBar* parent )
+void PCB_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
 {
-    if( m_SelLayerBox == NULL )
-        return NULL;
+    if( m_SelLayerBox == NULL || m_mainToolBar == NULL )
+        return;
 
+    m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
     m_SelLayerBox->m_hotkeys = g_Board_Editor_Hokeys_Descr;
     m_SelLayerBox->Resync();
-    m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
 
-    return m_SelLayerBox;
+    if( aForceResizeToolbar )
+    {
+        // the layer box can have its size changed
+        // Update the aui manager, to take in account the new size
+        m_auimgr.Update();
+    }
 }

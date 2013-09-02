@@ -76,6 +76,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_global_deletion_base.cpp
     dialogs/dialog_keepout_area_properties.cpp
     dialogs/dialog_keepout_area_properties_base.cpp
+    dialogs/dialog_layer_selection_base.cpp
     dialogs/dialog_layers_setup.cpp
     dialogs/dialog_layers_setup_base.cpp
     dialogs/dialog_netlist.cpp
