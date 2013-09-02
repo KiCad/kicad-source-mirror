@@ -269,6 +269,6 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent &aEvent )
 			break;
 	}
 
-	if( activateTool )
+	if( activateTool && m_editFrame->IsGalCanvasActive() )
 		m_toolMgr->InvokeTool( toolName );
 }
