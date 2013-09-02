@@ -560,7 +560,7 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
         }
 
         m_Parent->OnModify();
-        m_Parent->ReCreateLayerBox( NULL );
+        m_Parent->ReCreateLayerBox();
         m_Parent->ReFillLayerWidget();
 
         EndModal( wxID_OK );

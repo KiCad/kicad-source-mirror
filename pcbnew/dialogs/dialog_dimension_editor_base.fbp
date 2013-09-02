@@ -1389,7 +1389,7 @@
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style"></property>
-                                        <property name="subclass"></property>
+                                        <property name="subclass">PCB_LAYER_BOX_SELECTOR; class_pcb_layer_box_selector.h</property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
                                         <property name="validator_data_type"></property>

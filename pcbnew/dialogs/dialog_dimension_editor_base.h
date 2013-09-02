@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+class PCB_LAYER_BOX_SELECTOR;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -51,7 +54,7 @@ class DIALOG_DIMENSION_EDITOR_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textCtrlPosY;
 		wxRadioBox* m_rbMirror;
 		wxStaticText* m_staticTextLayer;
-		wxComboBox* m_SelLayerBox;
+		PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerBts;
 		wxButton* m_sdbSizerBtsOK;
