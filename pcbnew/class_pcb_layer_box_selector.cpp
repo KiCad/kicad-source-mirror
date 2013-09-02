@@ -51,10 +51,8 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
     static DECLARE_LAYERS_HOTKEY( layerhk );
 
     // Tray to fix a minimum width fot the BitmapComboBox
-    int minwidth, h;
+    int minwidth = 80, h;
     wxClientDC dc( GetParent() );   // The DC for "this" is not always initialized
-    wxString dummyText( wxT("XXXXXXXXXXXX") );
-    dc.GetTextExtent ( dummyText, &minwidth, &h );
 
     #define BM_SIZE 14
     for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
@@ -83,14 +81,11 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
         Append( layername, layerbmp, (void*)(intptr_t) layerid );
         int w;
         dc.GetTextExtent ( layername, &w, &h );
-
         minwidth = std::max( minwidth, w );
-        }
+    }
 
-    minwidth += BM_SIZE + 12;    // Take in account the bitmap size and margins
-wxLogMessage( "minw %d min %d", minwidth, GetMinClientSize().x );
-//    SetMinClientSize( wxSize( minwidth, -1 ) );
-    Layout();
+    minwidth += BM_SIZE + 35;    // Take in account the bitmap size and margins
+    SetMinClientSize( wxSize( minwidth, -1 ) );
 }
 
 

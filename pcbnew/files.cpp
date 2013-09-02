@@ -141,7 +141,7 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
             fn.SetExt( PcbFileExtension );
             GetBoard()->SetFileName( fn.GetFullPath() );
             UpdateTitle();
-            ReCreateLayerBox( NULL );
+            ReCreateLayerBox();
         }
         break;
 
@@ -396,8 +396,7 @@ bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
     // Update info shown by the horizontal toolbars
     GetBoard()->SetCurrentNetClass( NETCLASS::Default );
     ReFillLayerWidget();
-
-    ReCreateLayerBox( NULL );
+    ReCreateLayerBox();
 
     // upate the layer widget to match board visibility states, both layers and render columns.
     syncLayerVisibilities();
