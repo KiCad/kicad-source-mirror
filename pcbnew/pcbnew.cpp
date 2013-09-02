@@ -301,7 +301,7 @@ bool EDA_APP::OnInit()
         frame->Clear_Pcb( false );
 
     // update the layer names in the listbox
-    frame->ReCreateLayerBox( NULL );
+    frame->ReCreateLayerBox( false );
 
     /* For an obscure reason the focus is lost after loading a board file
      * when starting (i.e. only at this point)

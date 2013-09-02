@@ -589,7 +589,7 @@ void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
 
     if( returncode == wxID_OK )     // New rules, or others changes.
     {
-        ReCreateLayerBox( NULL );
+        ReCreateLayerBox();
         updateTraceWidthSelectBox();
         updateViaSizeSelectBox();
         OnModify();
