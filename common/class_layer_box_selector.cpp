@@ -50,15 +50,13 @@ void LAYER_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer )
     bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
 }
 
-/* class to display a layer list.
- *
+/* class to display a layer list in a wxBitmapComboBox.
  */
-
 LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
                                         const wxPoint& pos, const wxSize& size,
                                         int n, const wxString choices[] ) :
-    LAYER_SELECTOR(),
-    wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY )
+    wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY ),
+    LAYER_SELECTOR()
 {
     if( choices != NULL )
         ResyncBitmapOnly();
@@ -68,8 +66,8 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
 LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
                                         const wxPoint& pos, const wxSize& size,
                                         const wxArrayString& choices ) :
-    LAYER_SELECTOR(),
-    wxBitmapComboBox( parent, id, wxEmptyString, pos, size, choices, wxCB_READONLY )
+    wxBitmapComboBox( parent, id, wxEmptyString, pos, size, choices, wxCB_READONLY ),
+    LAYER_SELECTOR()
 {
     if( !choices.IsEmpty() )
         ResyncBitmapOnly();

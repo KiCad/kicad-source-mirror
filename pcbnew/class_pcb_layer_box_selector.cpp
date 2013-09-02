@@ -40,10 +40,7 @@
 
 #include <class_pcb_layer_box_selector.h>
 
-/* class to display a layer list.
- *
- */
-
+// class to display a layer list in a wxBitmapComboBox.
 
 // Reload the Layers
 void PCB_LAYER_BOX_SELECTOR::Resync()
@@ -53,9 +50,16 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
     static DECLARE_LAYERS_ORDER_LIST( layertranscode );
     static DECLARE_LAYERS_HOTKEY( layerhk );
 
+    // Tray to fix a minimum width fot the BitmapComboBox
+    int minwidth, h;
+    wxClientDC dc( GetParent() );   // The DC for "this" is not always initialized
+    wxString dummyText( wxT("XXXXXXXXXXXX") );
+    dc.GetTextExtent ( dummyText, &minwidth, &h );
+
+    #define BM_SIZE 14
     for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
     {
-        wxBitmap   layerbmp( 14, 14 );
+        wxBitmap   layerbmp( BM_SIZE, BM_SIZE );
         wxString   layername;
         LAYER_NUM  layerid = i;
 
@@ -73,10 +77,20 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
         layername = GetLayerName( layerid );
 
         if( m_layerhotkeys && m_hotkeys != NULL )
-            layername = AddHotkeyName( layername, m_hotkeys, layerhk[layerid], IS_COMMENT );
+            layername = AddHotkeyName( layername, m_hotkeys,
+                                       layerhk[layerid], IS_COMMENT );
 
         Append( layername, layerbmp, (void*)(intptr_t) layerid );
-    }
+        int w;
+        dc.GetTextExtent ( layername, &w, &h );
+
+        minwidth = std::max( minwidth, w );
+        }
+
+    minwidth += BM_SIZE + 12;    // Take in account the bitmap size and margins
+wxLogMessage( "minw %d min %d", minwidth, GetMinClientSize().x );
+//    SetMinClientSize( wxSize( minwidth, -1 ) );
+    Layout();
 }
 
 

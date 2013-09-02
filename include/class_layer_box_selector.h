@@ -46,7 +46,7 @@ protected:
 
 /* class to display a layer list in a wxBitmapComboBox.
  */
-class LAYER_BOX_SELECTOR : public LAYER_SELECTOR, public wxBitmapComboBox
+class LAYER_BOX_SELECTOR :public wxBitmapComboBox, public LAYER_SELECTOR
 {
 public:
     // Hotkey Info
