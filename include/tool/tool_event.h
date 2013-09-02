@@ -105,7 +105,7 @@ enum TOOL_Modifiers
 };
 
 // Defines when a context menu is opened.
-enum TOOL_ContextMenuTrigger
+enum CONTEXT_MENU_TRIGGER
 {
 	CMENU_BUTTON = 0,   // On the right button
 	CMENU_NOW,          // Right now (after TOOL_INTERACTIVE::SetContextMenu)
