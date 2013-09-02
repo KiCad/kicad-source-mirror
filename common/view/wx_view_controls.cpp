@@ -64,8 +64,14 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
     m_mousePosition.x = aEvent.GetX();
     m_mousePosition.y = aEvent.GetY();
+    bool isAutoPanning = false;
 
-    if( aEvent.Dragging() )
+    if( m_autoPanEnabled )
+    {
+        isAutoPanning = handleAutoPanning( aEvent );
+    }
+
+    if( !isAutoPanning && aEvent.Dragging() )
     {
         if( m_state == DRAG_PANNING )
         {
@@ -79,11 +85,6 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
         {
             aEvent.Skip();
         }
-    }
-    else
-    {
-        if( m_autoPanEnabled )
-            handleAutoPanning( aEvent );
     }
 }
 
@@ -157,7 +158,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             m_state = IDLE;
         }
         break;
-    };
+    }
 
     aEvent.Skip();
 }
@@ -190,6 +191,10 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         wxPostEvent( m_parentPanel, redrawEvent );
     }
     break;
+
+    case IDLE:  // Just remove unnecessary warnings
+    case DRAG_PANNING:
+        break;
     }
 }
 
@@ -214,7 +219,7 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
 }
 
 
-void WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
+bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 {
     VECTOR2D p( aEvent.GetX(), aEvent.GetY() );
 
@@ -245,7 +250,10 @@ void WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
         {
             m_panTimer.Stop();
             m_state = IDLE;
+
+            return false;
         }
+        return true;
         break;
 
     case IDLE:
@@ -253,7 +261,16 @@ void WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
         {
             m_state = AUTO_PANNING;
             m_panTimer.Start( (int) ( 1000.0 / 60.0 ) );
+
+            return true;
         }
+        return false;
         break;
+
+    case DRAG_PANNING:
+        return false;
     }
+
+    wxASSERT_MSG( false, wxT( "This line should never be reached" ) );
+    return false;   // Should not be reached, just avoid the compiler warnings..
 }
