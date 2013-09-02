@@ -510,7 +510,7 @@ private:
     void clearGroupCache();
 
     /// Updates colors that are used for an item to be drawn
-    void updateItemAppearance( VIEW_ITEM* aItem, int aLayer );
+    void updateItemColor( VIEW_ITEM* aItem, int aLayer );
 
     /// Updates all informations needed to draw an item
     void updateItemGeometry( VIEW_ITEM* aItem, int aLayer );
