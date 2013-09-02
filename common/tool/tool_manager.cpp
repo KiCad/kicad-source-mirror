@@ -45,23 +45,39 @@
 using boost::optional;
 using namespace std;
 
-struct TOOL_MANAGER::ToolState
+/// Struct describing the current state of a TOOL
+struct TOOL_MANAGER::TOOL_STATE
 {
+    /// The tool itself
 	TOOL_BASE* theTool;
 	
+	/// Is the tool active or idle at the moment
 	bool idle;
+
+	/// Flag defining if the tool is waiting for any event
 	bool pendingWait;
+
+	/// Is there a context menu to be displayed
 	bool pendingContextMenu;
 
+	/// Context menu used by the tool
 	CONTEXT_MENU* contextMenu;
-	TOOL_ContextMenuTrigger contextMenuTrigger;
 
+	/// Defines when a context menu is opened
+	CONTEXT_MENU_TRIGGER contextMenuTrigger;
+
+	/// Coroutine launched upon an event trigger
 	COROUTINE<int, TOOL_EVENT&>* cofunc;
 	
+	/// The event that triggered the coroutine
 	TOOL_EVENT wakeupEvent;
+
+	/// List of events that are triggering the coroutine
 	TOOL_EVENT_LIST waitEvents;
 
-	std::vector<Transition> transitions;
+	/// List of possible transitions (ie. association of events and functions that are executed
+	/// upon the event reception
+	std::vector<TRANSITION> transitions;
 };
 
 
@@ -72,7 +88,7 @@ TOOL_MANAGER::TOOL_MANAGER()
 
 void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 {
-	ToolState* st = new ToolState;
+	TOOL_STATE* st = new TOOL_STATE;
 
 	st->theTool = aTool;
 	st->idle = true;
@@ -131,7 +147,7 @@ bool TOOL_MANAGER::InvokeTool( const std::string& aName )
 
 TOOL_BASE* TOOL_MANAGER::FindTool( int aId ) const
 {
-    std::map<TOOL_ID, ToolState*>::const_iterator it = m_toolIdIndex.find( aId );
+    std::map<TOOL_ID, TOOL_STATE*>::const_iterator it = m_toolIdIndex.find( aId );
 
     if( it != m_toolIdIndex.end() )
         return it->second->theTool;
@@ -142,7 +158,7 @@ TOOL_BASE* TOOL_MANAGER::FindTool( int aId ) const
 
 TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
 {
-    std::map<std::string, ToolState*>::const_iterator it = m_toolNameIndex.find( aName );
+    std::map<std::string, TOOL_STATE*>::const_iterator it = m_toolNameIndex.find( aName );
 
     if( it != m_toolNameIndex.end() )
         return it->second->theTool;
@@ -154,15 +170,15 @@ TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
 void TOOL_MANAGER::ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandler,
                                       const TOOL_EVENT_LIST& aConditions )
 {
-	ToolState* st = m_toolState[aTool];
-	st->transitions.push_back( Transition( aConditions, aHandler ) );
+	TOOL_STATE* st = m_toolState[aTool];
+	st->transitions.push_back( TRANSITION( aConditions, aHandler ) );
 }
 
 
 optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
                                                  const TOOL_EVENT_LIST& aConditions )
 {
-	ToolState* st = m_toolState[aTool];
+	TOOL_STATE* st = m_toolState[aTool];
 	
 	st->pendingWait = true;
 	st->waitEvents = aConditions;
@@ -177,7 +193,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 	// iterate over all registered tools
     BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
     {
-        ToolState* st = m_toolIdIndex[toolId];
+        TOOL_STATE* st = m_toolIdIndex[toolId];
 
 		// the tool state handler is waiting for events (i.e. called Wait() method)
 		if( st->pendingWait )
@@ -204,7 +220,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 		}
     }
 
-    BOOST_FOREACH( ToolState* st, m_toolState | boost::adaptors::map_values )
+    BOOST_FOREACH( TOOL_STATE* st, m_toolState | boost::adaptors::map_values )
     {
 		if( !st->pendingWait )
 		{
@@ -212,7 +228,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 			// Go() method that match the event.
 			if( st->transitions.size() )
 			{
-				BOOST_FOREACH( Transition tr, st->transitions )
+				BOOST_FOREACH( TRANSITION tr, st->transitions )
 				{
 					if( tr.first.Matches( aEvent ) )
 					{
@@ -238,7 +254,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 }
 
 
-void TOOL_MANAGER::finishTool( ToolState* aState )
+void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
     wxASSERT( m_activeTools.front() == aState->theTool->GetId() );
 
@@ -252,13 +268,13 @@ void TOOL_MANAGER::finishTool( ToolState* aState )
 
 bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 {
-	wxLogDebug( "event: %s", aEvent.Format().c_str() );
+//	wxLogDebug( "event: %s", aEvent.Format().c_str() );
 
 	dispatchInternal( aEvent );
 	
     BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
     {
-        ToolState* st = m_toolIdIndex[toolId];
+        TOOL_STATE* st = m_toolIdIndex[toolId];
 
 		if( st->contextMenuTrigger == CMENU_NOW )
 		{
@@ -285,9 +301,9 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 
 
 void TOOL_MANAGER::ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
-                                        TOOL_ContextMenuTrigger aTrigger )
+                                        CONTEXT_MENU_TRIGGER aTrigger )
 {
-	ToolState* st = m_toolState[aTool];
+	TOOL_STATE* st = m_toolState[aTool];
 
 	st->contextMenu = aMenu;
 	st->contextMenuTrigger = aTrigger;

@@ -56,7 +56,7 @@ public:
 	 * 
 	 * Assigns a context menu and tells when it should be activated
 	 */
-	void SetContextMenu( CONTEXT_MENU* aMenu, TOOL_ContextMenuTrigger aTrigger = CMENU_BUTTON );
+	void SetContextMenu( CONTEXT_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger = CMENU_BUTTON );
 
 	/**
 	 * Function Go()

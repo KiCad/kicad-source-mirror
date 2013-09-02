@@ -151,7 +151,7 @@ public:
      * May be called from a coroutine context.
      */
     void ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
-                              TOOL_ContextMenuTrigger aTrigger );
+                              CONTEXT_MENU_TRIGGER aTrigger );
 
     /**
      * Allows a tool pass the already handled event to be passed to the next tool on the stack.
@@ -162,15 +162,15 @@ public:
     }
 
 private:
-    struct ToolState;
-    typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> Transition;
+    struct TOOL_STATE;
+    typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
 
     void dispatchInternal( TOOL_EVENT& aEvent );
-    void finishTool( ToolState* aState );
+    void finishTool( TOOL_STATE* aState );
 
-    std::map<TOOL_BASE*, ToolState*> m_toolState;
-    std::map<std::string, ToolState*> m_toolNameIndex;
-    std::map<TOOL_ID, ToolState*> m_toolIdIndex;
+    std::map<TOOL_BASE*, TOOL_STATE*> m_toolState;
+    std::map<std::string, TOOL_STATE*> m_toolNameIndex;
+    std::map<TOOL_ID, TOOL_STATE*> m_toolIdIndex;
     std::deque<TOOL_ID> m_activeTools;
 
     EDA_ITEM* m_model;
@@ -179,7 +179,7 @@ private:
     wxWindow* m_editFrame;
     bool m_passEvent;
 
-    ToolState* m_currentTool;
+    TOOL_STATE* m_currentTool;
 };
 
 #endif
