@@ -48,7 +48,7 @@ class DIALOG_LAYER_SELECTION_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Layer:"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 452,183 ), long style = wxCAPTION|wxCLOSE_BOX ); 
+		DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Layer:"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 337,183 ), long style = wxDEFAULT_DIALOG_STYLE ); 
 		~DIALOG_LAYER_SELECTION_BASE();
 	
 };
@@ -79,7 +79,7 @@ class DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Cpper Layer Pair:"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 332,175 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Copper Layer Pair:"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,175 ), long style = wxDEFAULT_DIALOG_STYLE ); 
 		~DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE();
 	
 };

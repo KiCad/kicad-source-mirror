@@ -85,7 +85,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	bUpperRightSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgUpperRightGridSizer;
-	fgUpperRightGridSizer = new wxFlexGridSizer( 3, 3, 0, 0 );
+	fgUpperRightGridSizer = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgUpperRightGridSizer->AddGrowableCol( 1 );
 	fgUpperRightGridSizer->SetFlexibleDirection( wxBOTH );
 	fgUpperRightGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -126,24 +126,18 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_DefaulThicknessTextUnit->Wrap( -1 );
 	fgUpperRightGridSizer->Add( m_DefaulThicknessTextUnit, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
-	
-	bUpperRightSizer->Add( fgUpperRightGridSizer, 0, wxEXPAND, 5 );
-	
-	wxFlexGridSizer* fgLowerRightSizer;
-	fgLowerRightSizer = new wxFlexGridSizer( 1, 2, 0, 0 );
-	fgLowerRightSizer->AddGrowableCol( 1 );
-	fgLowerRightSizer->SetFlexibleDirection( wxBOTH );
-	fgLowerRightSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
 	m_LayerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerLabel->Wrap( -1 );
-	fgLowerRightSizer->Add( m_LayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgUpperRightGridSizer->Add( m_LayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	fgLowerRightSizer->Add( m_LayerSelectionCtrl, 0, wxALL, 5 );
+	fgUpperRightGridSizer->Add( m_LayerSelectionCtrl, 0, wxALL, 5 );
 	
 	
-	bUpperRightSizer->Add( fgLowerRightSizer, 1, wxEXPAND, 5 );
+	fgUpperRightGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	
+	bUpperRightSizer->Add( fgUpperRightGridSizer, 0, wxEXPAND, 5 );
 	
 	
 	bUpperSizer->Add( bUpperRightSizer, 1, wxEXPAND, 5 );
