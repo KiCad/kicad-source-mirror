@@ -87,6 +87,22 @@ TEXTE_MODULE::~TEXTE_MODULE()
 }
 
 
+void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
+{
+    RotatePoint( &m_Pos, aRotCentre, aAngle );
+    m_Orient += aAngle;
+    NORMALIZE_ANGLE_360( m_Orient );
+}
+
+
+void TEXTE_MODULE::Flip(const wxPoint& aCentre )
+{
+    m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
+    SetLayer( FlipLayer( GetLayer() ) );
+    m_Mirror = !m_Mirror;
+}
+
+
 void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
 {
     if( source == NULL )
