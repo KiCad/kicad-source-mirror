@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "class_pcb_layer_box_selector.h"
 
 #include "dialog_graphic_item_properties_base.h"
 
@@ -30,6 +32,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	fgUpperLeftGridSizer->Add( m_StartPointXLabel, 0, wxALIGN_RIGHT|wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_Center_StartXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Center_StartXCtrl->SetMaxLength( 0 ); 
 	fgUpperLeftGridSizer->Add( m_Center_StartXCtrl, 0, wxEXPAND|wxALL, 5 );
 	
 	m_StartPointXUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -41,6 +44,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	fgUpperLeftGridSizer->Add( m_StartPointYLabel, 0, wxALIGN_RIGHT|wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_Center_StartYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Center_StartYCtrl->SetMaxLength( 0 ); 
 	fgUpperLeftGridSizer->Add( m_Center_StartYCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_StartPointYUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -52,6 +56,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	fgUpperLeftGridSizer->Add( m_EndPointXLabel, 0, wxALIGN_RIGHT|wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_EndX_Radius_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_EndX_Radius_Ctrl->SetMaxLength( 0 ); 
 	fgUpperLeftGridSizer->Add( m_EndX_Radius_Ctrl, 0, wxEXPAND|wxALL, 5 );
 	
 	m_EndPointXUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -63,6 +68,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	fgUpperLeftGridSizer->Add( m_EndPointYLabel, 0, wxALIGN_RIGHT|wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_EndY_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_EndY_Ctrl->SetMaxLength( 0 ); 
 	fgUpperLeftGridSizer->Add( m_EndY_Ctrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_EndPointYUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -89,6 +95,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	fgUpperRightGridSizer->Add( m_Angle_Text, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_Angle_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Angle_Ctrl->SetMaxLength( 0 ); 
 	fgUpperRightGridSizer->Add( m_Angle_Ctrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_AngleUnit = new wxStaticText( this, wxID_ANY, _("0.1 degree"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -100,6 +107,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	fgUpperRightGridSizer->Add( m_ThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThicknessCtrl->SetMaxLength( 0 ); 
 	fgUpperRightGridSizer->Add( m_ThicknessCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_ThicknessTextUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -111,6 +119,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	fgUpperRightGridSizer->Add( m_DefaultThicknessLabel, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_DefaultThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_DefaultThicknessCtrl->SetMaxLength( 0 ); 
 	fgUpperRightGridSizer->Add( m_DefaultThicknessCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_DefaulThicknessTextUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -130,12 +139,8 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_LayerLabel->Wrap( -1 );
 	fgLowerRightSizer->Add( m_LayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
-	wxArrayString m_LayerSelectionCtrlChoices;
-	m_LayerSelectionCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_LayerSelectionCtrlChoices, 0 );
-	m_LayerSelectionCtrl->SetSelection( 0 );
-	m_LayerSelectionCtrl->SetToolTip( _("Select the layer on which text should lay.") );
-	
-	fgLowerRightSizer->Add( m_LayerSelectionCtrl, 0, wxEXPAND|wxALL, 5 );
+	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	fgLowerRightSizer->Add( m_LayerSelectionCtrl, 0, wxALL, 5 );
 	
 	
 	bUpperRightSizer->Add( fgLowerRightSizer, 1, wxEXPAND, 5 );
