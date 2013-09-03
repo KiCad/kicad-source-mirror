@@ -89,6 +89,15 @@ public:
         m_Pos = aPos;
     }
 
+    void Move( const wxPoint& aMoveVector )
+    {
+        m_Pos += aMoveVector;
+    }
+
+    void Rotate( const wxPoint& aRotCentre, double aAngle );
+
+    void Flip( const wxPoint& aCentre );
+
     TEXTE_MODULE* Next() const { return (TEXTE_MODULE*) Pnext; }
 
     TEXTE_MODULE* Back() const { return (TEXTE_MODULE*) Pback; }
