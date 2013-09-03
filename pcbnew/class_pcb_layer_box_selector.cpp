@@ -85,7 +85,7 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
     }
 
     minwidth += BM_SIZE + 35;    // Take in account the bitmap size and margins
-    SetMinClientSize( wxSize( minwidth, -1 ) );
+    SetMinSize( wxSize( minwidth, -1 ) );
 }
 
 

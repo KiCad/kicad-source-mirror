@@ -83,6 +83,8 @@ class PCB_ONE_LAYER_SELECTOR : public PCB_LAYER_SELECTOR,
     LAYER_NUM m_layerSelected;
     LAYER_NUM m_minLayer;
     LAYER_NUM m_maxLayer;
+    std::vector<LAYER_NUM> m_layersIdLeftColumn;
+    std::vector<LAYER_NUM> m_layersIdRightColumn;
 
 public:
     PCB_ONE_LAYER_SELECTOR( wxWindow* aParent, BOARD * aBrd,
@@ -122,25 +124,17 @@ private:
 #define SELECT_COLNUM 0
 #define COLOR_COLNUM 1
 #define LAYERNAME_COLNUM 2
-#define LAYERID_COLNUM 3
 static DECLARE_LAYERS_ORDER_LIST( layertranscode );
 
 void PCB_ONE_LAYER_SELECTOR::BuildList()
 {
-    m_leftGridLayers->SetColFormatNumber( LAYERID_COLNUM );
-    m_rightGridLayers->SetColFormatNumber( LAYERID_COLNUM );
-    m_leftGridLayers->HideCol( LAYERID_COLNUM );
-    m_rightGridLayers->HideCol( LAYERID_COLNUM );
+    // Hide layerid column which is used only to know the layer id
+    // not to be shown in dialogs
     m_leftGridLayers->SetColSize( COLOR_COLNUM, 20 );
     m_rightGridLayers->SetColSize( COLOR_COLNUM, 20 );
 
-    // Select a not show cell, to avoid a wrong cell selection for user
-    m_leftGridLayers->GoToCell( 0, LAYERID_COLNUM );
-    m_rightGridLayers->GoToCell( 0, LAYERID_COLNUM );
-
     int left_row = 0;
     int right_row = 0;
-    wxString layernum;
     wxString   layername;
     for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
     {
@@ -160,7 +154,6 @@ void PCB_ONE_LAYER_SELECTOR::BuildList()
 
         wxColour color = MakeColour( GetLayerColor( layerid ) );
         layername = GetLayerName( layerid );
-        layernum.Printf( wxT("%d"), layerid );
 
         if( layerid <= LAST_COPPER_LAYER )
         {
@@ -171,8 +164,6 @@ void PCB_ONE_LAYER_SELECTOR::BuildList()
                                                         color );
             m_leftGridLayers->SetCellValue( left_row, LAYERNAME_COLNUM,
                                             layername );
-            m_leftGridLayers->SetCellValue( left_row, LAYERID_COLNUM,
-                                            layernum );
 
             if( m_layerSelected == layerid )
             {
@@ -180,8 +171,10 @@ void PCB_ONE_LAYER_SELECTOR::BuildList()
                                                 wxT("X") );
                 m_leftGridLayers->SetCellBackgroundColour ( left_row, SELECT_COLNUM,
                                                         color );
+                m_leftGridLayers->SetGridCursor( left_row, LAYERNAME_COLNUM );
             }
 
+            m_layersIdLeftColumn.push_back( layerid );
             left_row++;
         }
         else
@@ -193,8 +186,6 @@ void PCB_ONE_LAYER_SELECTOR::BuildList()
                                                          color );
             m_rightGridLayers->SetCellValue( right_row, LAYERNAME_COLNUM,
                                              layername );
-            m_rightGridLayers->SetCellValue( right_row, LAYERID_COLNUM,
-                                             layernum );
 
             if( m_layerSelected == layerid )
             {
@@ -202,8 +193,10 @@ void PCB_ONE_LAYER_SELECTOR::BuildList()
                                                  wxT("X") );
                 m_rightGridLayers->SetCellBackgroundColour ( right_row, SELECT_COLNUM,
                                                          color );
+                m_rightGridLayers->SetGridCursor( right_row, LAYERNAME_COLNUM );
             }
 
+            m_layersIdRightColumn.push_back( layerid );
             right_row++;
         }
     }
@@ -223,19 +216,13 @@ void PCB_ONE_LAYER_SELECTOR::BuildList()
 
 void PCB_ONE_LAYER_SELECTOR::OnLeftGridClick( wxGridEvent& event )
 {
-    wxString text = m_leftGridLayers->GetCellValue(event.GetRow(), LAYERID_COLNUM);
-    long layer;
-    text.ToLong( &layer );
-    m_layerSelected = layer;
+    m_layerSelected = m_layersIdLeftColumn[ event.GetRow() ];
     EndModal( 1 );
 }
 
 void PCB_ONE_LAYER_SELECTOR::OnRightGridClick( wxGridEvent& event )
 {
-    wxString text = m_rightGridLayers->GetCellValue(event.GetRow(), LAYERID_COLNUM);
-    long layer;
-    text.ToLong( &layer );
-    m_layerSelected = layer;
+    m_layerSelected = m_layersIdRightColumn[ event.GetRow() ];
     EndModal( 2 );
 }
 
@@ -283,6 +270,7 @@ private:
     LAYER_NUM m_backLayer;
     int m_leftRowSelected;
     int m_rightRowSelected;
+    std::vector<LAYER_NUM> m_layersId;
 
 public:
     SELECT_COPPER_LAYERS_PAIR_DIALOG( wxWindow* aParent, BOARD * aPcb,
@@ -354,20 +342,14 @@ SELECT_COPPER_LAYERS_PAIR_DIALOG::
 
 void SELECT_COPPER_LAYERS_PAIR_DIALOG::BuildList()
 {
-    m_leftGridLayers->SetColFormatNumber( LAYERID_COLNUM );
-    m_rightGridLayers->SetColFormatNumber( LAYERID_COLNUM );
-    m_leftGridLayers->HideCol( LAYERID_COLNUM );
-    m_rightGridLayers->HideCol( LAYERID_COLNUM );
     m_leftGridLayers->SetColSize( COLOR_COLNUM, 20 );
     m_rightGridLayers->SetColSize( COLOR_COLNUM, 20 );
 
     // Select a not show cell, to avoid a wrong cell selection for user
-    m_leftGridLayers->GoToCell( 0, LAYERID_COLNUM );
-    m_rightGridLayers->GoToCell( 0, LAYERID_COLNUM );
 
     int row = 0;
-    wxString layernum;
     wxString   layername;
+
     for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
     {
         LAYER_NUM  layerid = i;
@@ -383,16 +365,15 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::BuildList()
 
         wxColour color = MakeColour( GetLayerColor( layerid ) );
         layername = GetLayerName( layerid );
-        layernum.Printf( wxT("%d"), layerid );
 
         if( row )
             m_leftGridLayers->AppendRows( 1 );
+
         m_leftGridLayers->SetCellBackgroundColour ( row, COLOR_COLNUM,
                                                     color );
         m_leftGridLayers->SetCellValue( row, LAYERNAME_COLNUM,
                                         layername );
-        m_leftGridLayers->SetCellValue( row, LAYERID_COLNUM,
-                                        layernum );
+        m_layersId.push_back( layerid );
 
         if( m_frontLayer == layerid )
         {
@@ -401,6 +382,7 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::BuildList()
             m_leftGridLayers->SetCellBackgroundColour( row, SELECT_COLNUM,
                                                        color );
             m_leftRowSelected = row;
+            m_leftGridLayers->SetGridCursor( row, LAYERNAME_COLNUM );
         }
 
         if( row )
@@ -409,8 +391,6 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::BuildList()
                                                      color );
         m_rightGridLayers->SetCellValue( row, LAYERNAME_COLNUM,
                                          layername );
-        m_rightGridLayers->SetCellValue( row, LAYERID_COLNUM,
-                                         layernum );
 
         if( m_backLayer == layerid )
         {
@@ -419,6 +399,7 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::BuildList()
             m_rightGridLayers->SetCellBackgroundColour ( row, SELECT_COLNUM,
                                                      color );
             m_rightRowSelected = row;
+            m_rightGridLayers->SetGridCursor( row, LAYERNAME_COLNUM );
         }
 
         row++;
@@ -433,9 +414,7 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::BuildList()
 void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnLeftGridClick( wxGridEvent& event )
 {
     int row = event.GetRow();
-    wxString text = m_leftGridLayers->GetCellValue( row, LAYERID_COLNUM );
-    long layer;
-    text.ToLong( &layer );
+    LAYER_NUM layer = m_layersId[row];
 
     if( m_frontLayer == layer )
         return;
@@ -452,14 +431,13 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnLeftGridClick( wxGridEvent& event )
     m_leftGridLayers->SetCellBackgroundColour( row, SELECT_COLNUM,
                         MakeColour( GetLayerColor( layer ) ) );
 
+    m_leftGridLayers->SetGridCursor( row, LAYERNAME_COLNUM );
 }
 
 void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnRightGridClick( wxGridEvent& event )
 {
     int row = event.GetRow();
-    wxString text = m_rightGridLayers->GetCellValue( row, LAYERID_COLNUM );
-    long layer;
-    text.ToLong( &layer );
+    LAYER_NUM layer = m_layersId[row];
 
     if(  m_backLayer == layer )
         return;
@@ -475,4 +453,5 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnRightGridClick( wxGridEvent& event )
                                      wxT("X") );
     m_rightGridLayers->SetCellBackgroundColour ( row, SELECT_COLNUM,
                                 MakeColour( GetLayerColor( layer ) ) );
+    m_rightGridLayers->SetGridCursor( row, LAYERNAME_COLNUM );
 }

@@ -331,7 +331,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
 
             if( !flags )
             {
-                msg = AddHotkeyName( _("Move edge" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM );
+                msg = AddHotkeyName( _("Move Edge" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EDGE, msg, KiBitmap( move_line_xpm ) );
             }
 
@@ -339,21 +339,20 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                 AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_EDGE, _( "Place edge" ),
                              KiBitmap( apply_xpm ) );
 
-            wxMenu* edit_mnu = new wxMenu;
-            AddMenuItem( PopMenu, edit_mnu, ID_POPUP_MODEDIT_EDIT_EDGE, _( "Edit" ), KiBitmap( edit_xpm ) );
-            AddMenuItem( edit_mnu, ID_POPUP_MODEDIT_EDIT_BODY_ITEM,
-                         _( "Edit Body Item" ), KiBitmap( options_segment_xpm  ) );
-            AddMenuItem( edit_mnu, ID_POPUP_MODEDIT_EDIT_WIDTH_CURRENT_EDGE,
-                         _( "Change Body Item Width (Current)" ), KiBitmap( width_segment_xpm ) );
-            AddMenuItem( edit_mnu, ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE,
-                         _( "Change Body Items Width (All)" ), KiBitmap( width_segment_xpm ) );
-            AddMenuItem( edit_mnu, ID_POPUP_MODEDIT_EDIT_LAYER_CURRENT_EDGE,
-                         _( "Change Body Item Layer (Current)" ), KiBitmap( select_layer_pair_xpm ) );
-            AddMenuItem( edit_mnu, ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE,
-                         _( "Change Body Items Layer (All)" ), KiBitmap( select_layer_pair_xpm ) );
-            msg = AddHotkeyName( _("Delete edge" ), g_Module_Editor_Hokeys_Descr, HK_DELETE );
+            msg = AddHotkeyName( _("Edit" ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+            AddMenuItem( PopMenu, ID_POPUP_MODEDIT_EDIT_BODY_ITEM,
+                         msg, KiBitmap( options_segment_xpm  ) );
 
+            msg = AddHotkeyName( _("Delete Edge" ), g_Module_Editor_Hokeys_Descr, HK_DELETE );
             AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_EDGE, msg, KiBitmap( delete_xpm ) );
+
+            wxMenu* edit_global_mnu = new wxMenu;
+            AddMenuItem( PopMenu, edit_global_mnu, ID_POPUP_MODEDIT_GLOBAL_EDIT_EDGE,
+                         _( "Global Changes" ), KiBitmap( edit_xpm ) );
+            AddMenuItem( edit_global_mnu, ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE,
+                         _( "Change Body Items Width" ), KiBitmap( width_segment_xpm ) );
+            AddMenuItem( edit_global_mnu, ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE,
+                         _( "Change Body Items Layer" ), KiBitmap( select_layer_pair_xpm ) );
         }
         break;
 

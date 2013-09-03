@@ -166,6 +166,12 @@ bool FOOTPRINT_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 
         break;
 
+    case PCB_MODULE_EDGE_T:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_MODEDIT_EDIT_BODY_ITEM;
+
+        break;
+
     default:
         break;
     }

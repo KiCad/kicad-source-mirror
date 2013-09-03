@@ -22,7 +22,7 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	m_leftGridLayers = new wxGrid( this, ID_LEFT_LIST, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_leftGridLayers->CreateGrid( 1, 4 );
+	m_leftGridLayers->CreateGrid( 1, 3 );
 	m_leftGridLayers->EnableEditing( false );
 	m_leftGridLayers->EnableGridLines( true );
 	m_leftGridLayers->EnableDragGridSize( false );
@@ -45,12 +45,12 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	// Cell Defaults
 	m_leftGridLayers->SetDefaultCellBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 	m_leftGridLayers->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizerUpper->Add( m_leftGridLayers, 0, wxALL|wxEXPAND, 5 );
+	bSizerUpper->Add( m_leftGridLayers, 1, wxALL|wxEXPAND, 5 );
 	
 	m_rightGridLayers = new wxGrid( this, ID_RIGHT_LIST, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_rightGridLayers->CreateGrid( 1, 4 );
+	m_rightGridLayers->CreateGrid( 1, 3 );
 	m_rightGridLayers->EnableEditing( false );
 	m_rightGridLayers->EnableGridLines( true );
 	m_rightGridLayers->EnableDragGridSize( false );
@@ -72,7 +72,7 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	// Cell Defaults
 	m_rightGridLayers->SetDefaultCellBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 	m_rightGridLayers->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizerUpper->Add( m_rightGridLayers, 0, wxALL|wxEXPAND, 5 );
+	bSizerUpper->Add( m_rightGridLayers, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
@@ -121,7 +121,7 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	m_leftGridLayers = new wxGrid( this, ID_LEFT_LIST, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_leftGridLayers->CreateGrid( 1, 4 );
+	m_leftGridLayers->CreateGrid( 1, 3 );
 	m_leftGridLayers->EnableEditing( false );
 	m_leftGridLayers->EnableGridLines( true );
 	m_leftGridLayers->EnableDragGridSize( false );
@@ -159,7 +159,7 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	m_rightGridLayers = new wxGrid( this, ID_RIGHT_LIST, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_rightGridLayers->CreateGrid( 1, 4 );
+	m_rightGridLayers->CreateGrid( 1, 3 );
 	m_rightGridLayers->EnableEditing( false );
 	m_rightGridLayers->EnableGridLines( true );
 	m_rightGridLayers->EnableDragGridSize( false );
