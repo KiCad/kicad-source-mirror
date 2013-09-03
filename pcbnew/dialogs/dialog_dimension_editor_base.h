@@ -24,7 +24,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
-#include <wx/combobox.h>
+#include <wx/bmpcbox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -67,7 +67,7 @@ class DIALOG_DIMENSION_EDITOR_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_DIMENSION_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 378,328 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_DIMENSION_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 417,328 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_DIMENSION_EDITOR_BASE();
 	
 };

@@ -2124,11 +2124,11 @@
                                                 <event name="OnUpdateUI"></event>
                                             </object>
                                         </object>
-                                        <object class="sizeritem" expanded="0">
+                                        <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxEXPAND|wxALL</property>
+                                            <property name="flag">wxALL</property>
                                             <property name="proportion">0</property>
-                                            <object class="wxChoice" expanded="0">
+                                            <object class="wxBitmapComboBox" expanded="1">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
@@ -2172,22 +2172,23 @@
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="selection">0</property>
+                                                <property name="selection">-1</property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">PCB_LAYER_BOX_SELECTOR; class_pcb_layer_box_selector.h</property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Select the layer on which text should lay.</property>
+                                                <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
                                                 <property name="validator_variable"></property>
+                                                <property name="value"></property>
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
                                                 <event name="OnChar"></event>
-                                                <event name="OnChoice"></event>
+                                                <event name="OnCombobox"></event>
                                                 <event name="OnEnterWindow"></event>
                                                 <event name="OnEraseBackground"></event>
                                                 <event name="OnKeyDown"></event>
@@ -2209,6 +2210,8 @@
                                                 <event name="OnRightUp"></event>
                                                 <event name="OnSetFocus"></event>
                                                 <event name="OnSize"></event>
+                                                <event name="OnText"></event>
+                                                <event name="OnTextEnter"></event>
                                                 <event name="OnUpdateUI"></event>
                                             </object>
                                         </object>

@@ -41,6 +41,7 @@
 #include <vector>
 #include <wx/wx.h>
 #include <dialog_pcb_text_properties_base.h>
+#include <class_pcb_layer_box_selector.h>
 
 
 class PCB_EDIT_FRAME;
@@ -56,7 +57,6 @@ private:
     PCB_EDIT_FRAME*     m_Parent;
     wxDC*               m_DC;
     TEXTE_PCB*          m_SelectedPCBText;
-    std::vector<LAYER_NUM> layerList;
 
     void MyInit();
 
@@ -126,20 +126,13 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     PutValueInLocalUnits( *m_PositionXCtrl, m_SelectedPCBText->GetTextPosition().x );
     PutValueInLocalUnits( *m_PositionYCtrl, m_SelectedPCBText->GetTextPosition().y );
 
-    LAYER_MSK enabledLayers = m_Parent->GetBoard()->GetEnabledLayers();
-
-    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS;  ++layer )
-    {
-        if( enabledLayers & GetLayerMask( layer ) )
-        {
-            layerList.push_back( layer );
-            int itemIndex =
-                m_LayerSelectionCtrl->Append( m_Parent->GetBoard()->GetLayerName( layer ) );
-
-            if( m_SelectedPCBText->GetLayer() == layer )
-                m_LayerSelectionCtrl->SetSelection( itemIndex );
-        }
-    }
+    // Configure the layers list selector
+    m_LayerSelectionCtrl->SetLayersHotkeys( false );
+    // A text has no sense on edge cut layer
+    m_LayerSelectionCtrl->SetLayerMask( EDGE_LAYER );
+    m_LayerSelectionCtrl->SetBoardFrame( m_Parent );
+    m_LayerSelectionCtrl->Resync();
+    m_LayerSelectionCtrl->SetLayerSelection( m_SelectedPCBText->GetLayer() );
 
     wxString orientationStr;
     orientationStr << m_SelectedPCBText->GetOrientation();
@@ -245,7 +238,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     }
 
     // Set the layer on which the PCB text is laying
-    m_SelectedPCBText->SetLayer( layerList[m_LayerSelectionCtrl->GetSelection()] );
+    m_SelectedPCBText->SetLayer( m_LayerSelectionCtrl->GetLayerSelection() );
 
     // Set whether the PCB text is mirrored (faced down from layer face perspective)
     m_SelectedPCBText->SetMirrored( m_DisplayCtrl->GetSelection() == 1 );
