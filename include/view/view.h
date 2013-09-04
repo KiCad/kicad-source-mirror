@@ -423,6 +423,13 @@ public:
         m_dirtyTargets[aTarget] = true;
     }
 
+    /// Returns true if the layer is cached
+    inline bool IsCached( int aLayer ) const
+    {
+        return ( m_layers.at( aLayer ).target == TARGET_CACHED );
+    }
+
+
     static const int VIEW_MAX_LAYERS = 128;      ///* maximum number of layers that may be shown
 
 private:
@@ -432,11 +439,8 @@ private:
         bool                    isDirty;         ///* does it contain any dirty items (updated since last redraw)
         bool                    displayOnly;     ///* is the layer display only?
         VIEW_RTREE*             items;           ///* R-tree indexing all items on this layer.
-        std::vector<VIEW_ITEM*> dirtyItems;      ///* set of dirty items collected since last redraw
         int                     renderingOrder;  ///* rendering order of this layer
         int                     id;              ///* layer ID
-        BOX2I                   extents;         ///* sum of bboxes of all items on the layer
-        BOX2I                   dirtyExtents;    ///* sum of bboxes of all dirty items on the layer
         RenderTarget            target;          ///* where the layer should be rendered
         std::set<int>           requiredLayers;  ///* layers that are required to be enabled to show the layer
     };
@@ -515,6 +519,9 @@ private:
     /// Updates all informations needed to draw an item
     void updateItemGeometry( VIEW_ITEM* aItem, int aLayer );
 
+    /// Updates bounding box of an item
+    void updateBbox( VIEW_ITEM* aItem );
+
     /// Determines rendering order of layers. Used in display order sorting function.
     static bool compareRenderingOrder( VIEW_LAYER* i, VIEW_LAYER* j )
     {
@@ -523,12 +530,6 @@ private:
 
     /// Checks if every layer required by the aLayerId layer is enabled.
     bool areRequiredLayersEnabled( int aLayerId ) const;
-
-    /// Returns true if the layer is cached
-    inline bool isCached( int aLayer ) const
-    {
-        return ( m_layers.at( aLayer ).target == TARGET_CACHED );
-    }
 
     ///* Whether to use rendering order modifier or not
     bool m_enableOrderModifier;
