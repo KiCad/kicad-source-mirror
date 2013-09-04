@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-02 23:04+0100\n"
-"PO-Revision-Date: 2013-09-02 23:06+0100\n"
+"POT-Creation-Date: 2013-09-04 14:51+0100\n"
+"PO-Revision-Date: 2013-09-04 14:51+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -157,7 +157,7 @@ msgstr ""
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1024 pcbnew/moduleframe.cpp:606
+#: eeschema/schframe.cpp:1024 pcbnew/moduleframe.cpp:602
 #: pcbnew/pcbframe.cpp:826 cvpcb/cvframe.cpp:706
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
@@ -1236,12 +1236,12 @@ msgstr "Alias"
 #: eeschema/libedit.cpp:474 eeschema/lib_draw_item.cpp:72
 #: eeschema/onrightclick.cpp:471
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:25
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:35
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:46
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:57
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:68
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:105
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:116
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:38
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:50
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:62
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:74
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:113
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:125
 msgid "Unit"
 msgstr "Część"
 
@@ -1264,8 +1264,8 @@ msgstr "Skonwertowany"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:131
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:98
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:98
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:71
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:101
 #: gerbview/class_GERBER.cpp:344 gerbview/class_GERBER.cpp:348
 #: gerbview/class_GERBER.cpp:351 common/eda_text.cpp:297
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
@@ -1416,7 +1416,7 @@ msgid "Set pin options"
 msgstr "Ustaw opcje pinu"
 
 #: eeschema/libeditframe.cpp:1054 eeschema/schedit.cpp:524
-#: pcbnew/edit.cpp:1405 pcbnew/modedit.cpp:870
+#: pcbnew/edit.cpp:1405 pcbnew/modedit.cpp:856
 msgid "Add text"
 msgstr "Dodaj tekst"
 
@@ -1424,15 +1424,15 @@ msgstr "Dodaj tekst"
 msgid "Add rectangle"
 msgstr "Dodaj prostokąt"
 
-#: eeschema/libeditframe.cpp:1062 pcbnew/modedit.cpp:866
+#: eeschema/libeditframe.cpp:1062 pcbnew/modedit.cpp:852
 msgid "Add circle"
 msgstr "Dodaj okrąg"
 
-#: eeschema/libeditframe.cpp:1066 pcbnew/modedit.cpp:862
+#: eeschema/libeditframe.cpp:1066 pcbnew/modedit.cpp:848
 msgid "Add arc"
 msgstr "Dodaj łuk"
 
-#: eeschema/libeditframe.cpp:1070 pcbnew/modedit.cpp:858
+#: eeschema/libeditframe.cpp:1070 pcbnew/modedit.cpp:844
 msgid "Add line"
 msgstr "Dodaj linię"
 
@@ -1449,7 +1449,7 @@ msgid "Export"
 msgstr "Eksportuj"
 
 #: eeschema/libeditframe.cpp:1096 eeschema/schedit.cpp:560
-#: pcbnew/edit.cpp:1417 pcbnew/modedit.cpp:895
+#: pcbnew/edit.cpp:1417 pcbnew/modedit.cpp:881
 msgid "Delete item"
 msgstr "Usuń element"
 
@@ -1933,14 +1933,14 @@ msgstr "Styl"
 #: eeschema/lib_field.cpp:768 pcbnew/class_pcb_text.cpp:147
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:37
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:39
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:41
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:44
 msgid "Size X"
 msgstr "Rozmiar X"
 
 #: eeschema/lib_field.cpp:771 pcbnew/class_pcb_text.cpp:150
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:45
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:46
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:76
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:77
 msgid "Size Y"
 msgstr "Rozmiar Y"
 
@@ -1948,7 +1948,7 @@ msgstr "Rozmiar Y"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:125
 #: eeschema/dialogs/dialog_edit_label_base.cpp:73
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:104
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:107
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 msgid "Right"
 msgstr "Prawo"
@@ -1957,7 +1957,7 @@ msgstr "Prawo"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:125
 #: eeschema/dialogs/dialog_edit_label_base.cpp:73
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:104
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:107
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 msgid "Left"
 msgstr "Lewo"
@@ -2821,7 +2821,7 @@ msgstr "Kopiuj symbol"
 msgid "Doc"
 msgstr "Dokument"
 
-#: eeschema/onrightclick.cpp:428 pcbnew/modedit_onclick.cpp:343
+#: eeschema/onrightclick.cpp:428 pcbnew/modedit_onclick.cpp:342
 #: pcbnew/onrightclick.cpp:779 pcbnew/onrightclick.cpp:834
 #: pcbnew/onrightclick.cpp:897
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:37
@@ -3441,7 +3441,7 @@ msgstr "Pionowo w dół"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:98
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:98
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:101
 #: common/eda_text.cpp:298
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:109
 msgid "Italic"
@@ -4721,7 +4721,7 @@ msgstr "Przesuń zaznaczone pola dodatkowe o jedną pozycję w górę"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:131
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:104
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:107
 #: gerbview/class_GERBER.cpp:348 gerbview/class_GERBER.cpp:351
 #: common/zoom.cpp:208 pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
@@ -4783,7 +4783,7 @@ msgstr "Zaznacz jeśli chcesz aby tekst tego pola był obrócony o 90 stopni"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:161
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:94
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:84
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:85
 msgid "Style:"
 msgstr "Styl:"
 
@@ -4881,7 +4881,7 @@ msgid "Hierarchical Sheet Pin Properties."
 msgstr "Właściwości hierarchicznego arkusza pinów"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:142
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.h:72
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.h:76
 msgid "Text Properties"
 msgstr "Właściwości tekstu"
 
@@ -5505,7 +5505,7 @@ msgstr "Długość:"
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:21
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:141
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:22
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:24
 msgid "Text:"
 msgstr "Tekst:"
 
@@ -6844,7 +6844,7 @@ msgstr "Tekst PCB"
 
 #: pcbnew/class_pcb_text.cpp:144 pcbnew/class_text_mod.cpp:391
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:73
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:110
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:113
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:326
 msgid "Thickness"
 msgstr "Grubość"
@@ -7090,7 +7090,7 @@ msgid "Delete NET?"
 msgstr "Usunąć sieć?"
 
 #: pcbnew/dimension.cpp:194 pcbnew/dialogs/dialog_edit_module_text.cpp:228
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:243
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:236
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr ""
 "Grubość lini tekstu jest nieproporcjonalna do jego rozmiaru. Zostanie "
@@ -7187,7 +7187,7 @@ msgid "No '%s' package in library '%s'"
 msgstr "Nie ma obudowy '%s' w bibliotece '%s'"
 
 #: pcbnew/edgemod.cpp:210
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:207
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:190
 msgid ""
 "The graphic item will be on a copper layer. This is very dangerous. Are you "
 "sure?"
@@ -8194,7 +8194,7 @@ msgstr "Pokaż płytkę w przeglądarce 3D"
 msgid "&Pad"
 msgstr "&Pole lutownicze"
 
-#: pcbnew/menubar_modedit.cpp:230 pcbnew/modedit.cpp:884
+#: pcbnew/menubar_modedit.cpp:230 pcbnew/modedit.cpp:870
 msgid "Add pad"
 msgstr "Dodaj pole lutownicze"
 
@@ -8741,11 +8741,11 @@ msgstr ""
 "Bieżące zmiany w footprincie zostaną utracone i ta operacja nie może zostać "
 "cofnięta. Kontynuować?"
 
-#: pcbnew/modedit.cpp:388
+#: pcbnew/modedit.cpp:386
 msgid "Unable to find the footprint source on the main board"
 msgstr "Nie mogę znaleźć źródła footprintu na płycie głównej"
 
-#: pcbnew/modedit.cpp:389
+#: pcbnew/modedit.cpp:387
 msgid ""
 "\n"
 "Cannot update the footprint"
@@ -8753,11 +8753,11 @@ msgstr ""
 "\n"
 "Nie mogę uaktualnić footprintu"
 
-#: pcbnew/modedit.cpp:398
+#: pcbnew/modedit.cpp:396
 msgid "A footprint source was found on the main board"
 msgstr "Źródło footprintu nie zostało znalezione na płycie głównej"
 
-#: pcbnew/modedit.cpp:399
+#: pcbnew/modedit.cpp:397
 msgid ""
 "\n"
 "Cannot insert this footprint"
@@ -8765,15 +8765,15 @@ msgstr ""
 "\n"
 "Nie mogę wstawić tego footprintu"
 
-#: pcbnew/modedit.cpp:874
+#: pcbnew/modedit.cpp:860
 msgid "Place anchor"
 msgstr "Dodaj zakotwiczenie"
 
-#: pcbnew/modedit.cpp:878
+#: pcbnew/modedit.cpp:864
 msgid "Set grid origin"
 msgstr "Ustaw punkt bazowy siatki"
 
-#: pcbnew/modedit.cpp:888 pcbnew/tool_modedit.cpp:144
+#: pcbnew/modedit.cpp:874 pcbnew/tool_modedit.cpp:144
 msgid "Pad settings"
 msgstr "Właściwości pól lutowniczych"
 
@@ -8846,64 +8846,56 @@ msgid "End edge"
 msgstr "Zakończ krawędź"
 
 #: pcbnew/modedit_onclick.cpp:334
-msgid "Move edge"
+msgid "Move Edge"
 msgstr "Przesuń krawędź"
 
 #: pcbnew/modedit_onclick.cpp:339
 msgid "Place edge"
 msgstr "Dodaj krawędź"
 
-#: pcbnew/modedit_onclick.cpp:345
-msgid "Edit Body Item"
-msgstr "Edycja elementu"
-
-#: pcbnew/modedit_onclick.cpp:347
-msgid "Change Body Item Width (Current)"
-msgstr "Zmień szerokość elementu (Bieżąca)"
-
-#: pcbnew/modedit_onclick.cpp:349
-msgid "Change Body Items Width (All)"
-msgstr "Zmień szerokość elementu (Wszystkie)"
-
-#: pcbnew/modedit_onclick.cpp:351
-msgid "Change Body Item Layer (Current)"
-msgstr "Zmień warstwę (Bieżąca)"
-
-#: pcbnew/modedit_onclick.cpp:353
-msgid "Change Body Items Layer (All)"
-msgstr "Zmień warstwę (Wszystkie)"
-
-#: pcbnew/modedit_onclick.cpp:354
-msgid "Delete edge"
+#: pcbnew/modedit_onclick.cpp:346
+msgid "Delete Edge"
 msgstr "Usuń krawędź"
 
-#: pcbnew/modedit_onclick.cpp:394
+#: pcbnew/modedit_onclick.cpp:351
+msgid "Global Changes"
+msgstr "Zmiany Globalne"
+
+#: pcbnew/modedit_onclick.cpp:353
+msgid "Change Body Items Width"
+msgstr "Zmień szerokość elementów"
+
+#: pcbnew/modedit_onclick.cpp:355
+msgid "Change Body Items Layer"
+msgstr "Zmień warstwę elementów"
+
+#: pcbnew/modedit_onclick.cpp:393
 msgid "Set Line Width"
 msgstr "Ustaw szerokość linii"
 
-#: pcbnew/moduleframe.cpp:330
+#: pcbnew/moduleframe.cpp:326
 msgid "Save the changes in the module before closing?"
 msgstr "Zapisać zmiany w footprincie przed zamknięciem?"
 
-#: pcbnew/moduleframe.cpp:352
+#: pcbnew/moduleframe.cpp:348
 msgid "Library is not set, the module could not be saved."
 msgstr ""
 "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
-#: pcbnew/moduleframe.cpp:480 pcbnew/pcbframe.cpp:579
+#: pcbnew/moduleframe.cpp:476 pcbnew/pcbframe.cpp:579
 #: cvpcb/class_DisplayFootprintsFrame.cpp:440
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
-#: pcbnew/moduleframe.cpp:583
+#: pcbnew/moduleframe.cpp:579
 msgid "Module Editor "
 msgstr "Edytor Footprintów"
 
-#: pcbnew/moduleframe.cpp:589
+#: pcbnew/moduleframe.cpp:585
 msgid "(no active library)"
 msgstr " (brak aktywnej biblioteki)"
 
-#: pcbnew/moduleframe.cpp:603
+#: pcbnew/moduleframe.cpp:599
 msgid "Module Editor (active library: "
 msgstr "Edytor Footprintów (aktywna biblioteka: "
 
@@ -8991,7 +8983,7 @@ msgstr "Wczytaj opis kształtu z pliku..."
 msgid "Symmetrical"
 msgstr "Symetryczny"
 
-#: pcbnew/muonde.cpp:820 pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70
+#: pcbnew/muonde.cpp:820 pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:71
 msgid "Mirrored"
 msgstr "Odbity"
 
@@ -9752,7 +9744,7 @@ msgstr "nie mogę obsłużyć tekstu footprintu typu %s"
 msgid "Your BOARD has a bad layer number for module %s"
 msgstr "Twoja płytka posiada błędny numer warstwy w footprincie %s"
 
-#: pcbnew/sel_layer.cpp:333
+#: pcbnew/sel_layer.cpp:321
 msgid "Warning: The Top Layer and Bottom Layer are same."
 msgstr "Ostrzeżenie: Górna i dolna warstwa są takie same."
 
@@ -10414,7 +10406,7 @@ msgstr "Promień zaokrąglenia"
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:89
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:129
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:30
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:49
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:52
 msgid "Layer:"
 msgstr "Warstwa:"
 
@@ -10427,7 +10419,7 @@ msgid "Net Filtering"
 msgstr "Filtrowanie Sieci"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:63
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:53
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:56
 msgid "Display:"
 msgstr "Pokazuj:"
 
@@ -12751,80 +12743,87 @@ msgstr ""
 "pisaka.\n"
 "Używane do rysowania elementów w trybie szkicu."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:115
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:125
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:116
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:126
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:117
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:127
 msgid "Center X"
 msgstr "Pkt. centralny X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:116
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:126
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:117
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:127
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:118
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:128
 msgid "Center Y"
 msgstr "Pkt. centralny Y"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:117
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:118
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:119
 msgid "Point X"
 msgstr "Promień X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:118
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:119
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:120
 msgid "Point Y"
 msgstr "Promień Y"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:127
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:128
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:129
 msgid "Start Point X"
 msgstr "Pozycja początkowa X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:128
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:129
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:130
 msgid "Start Point Y"
 msgstr "Pozycja początkowa Y"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:28
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:170
+msgid ""
+"This item has an illegal layer id.\n"
+"Now, forced on the drawings layer. Please, fix it"
+msgstr ""
+"Ten element posiada niepoprawny identyfikator warstwy.\n"
+"Obecnie został przeniesiony na warstwę rysunkową. Proszę to naprawić."
+
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:30
 msgid "Start point X"
 msgstr "Pozycja początkowa X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:39
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:42
 msgid "Start point Y"
 msgstr "Pozycja początkowa Y"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:50
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:54
 msgid "End point X"
 msgstr "Pozycja końcowa X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:61
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:66
 msgid "End point Y"
 msgstr "Pozycja końcowa Y"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:87
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:93
 msgid "Arc angle:"
 msgstr "Kąt łuku:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:94
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:101
 msgid "0.1 degree"
 msgstr "0.1 stopni"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:98
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:105
 msgid "Item thickness:"
 msgstr "Grubość:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:109
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:117
 msgid "Default thickness:"
 msgstr "Domyślna grubość:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:136
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:66
-msgid "Select the layer on which text should lay."
-msgstr "Wybierz warstwę, na której ma znaleźć się tekst."
-
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:197
-msgid "No valid layer selected for this item. Please, select a layer"
-msgstr "Nie wybrano warstwy dla tego elementu. Proszę wybrać warstwę"
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:164
+msgid ""
+"This item has an illegal layer id.\n"
+"Now, forced on the front silk screen layer. Please, fix it"
+msgstr ""
+"Ten element posiada niepoprawny identyfikator warstwy.\n"
+"Obecnie został przeniesiony na górną warstwę opisową. Proszę to naprawić."
 
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:210
 msgid "Tracks, vias and pads are allowed. The keepout is useless"
@@ -13983,23 +13982,23 @@ msgstr "Plik dokumentacji footprintów"
 msgid "User defined search paths"
 msgstr "Ścieżki poszukiwań zdefiniowane przez użytkownika"
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:27
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:30
 msgid "Enter the text placed on selected layer."
 msgstr "Wpisz tekst jaki umieścić na wybranej warstwie."
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:45
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:48
 msgid "Position X"
 msgstr "Pozycja X"
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:80
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:81
 msgid "Position Y"
 msgstr "Pozycja Y"
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:88
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:89
 msgid "Justification:"
 msgstr "Wyrównanie:"
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:114
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:117
 msgid "Orientation (0.1 deg):"
 msgstr "Orientacja (co 0.1 stopnia):"
 
@@ -18752,7 +18751,7 @@ msgstr "Globalna edycja pól lutowniczych"
 msgid "Texts and Drawings"
 msgstr "Teksty i rysunki"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:76
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:79
 msgid "Graphic Item Properties"
 msgstr "Właściwości elementu graficznego"
 
@@ -18765,7 +18764,7 @@ msgid "Layer Setup"
 msgstr "Ustawienia warstwy"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:82
-msgid "Select Cpper Layer Pair:"
+msgid "Select Copper Layer Pair:"
 msgstr "Wybierz parę warstw sygnałowych:"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.h:74
@@ -18852,6 +18851,21 @@ msgstr "Kalkulator PCB"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nowy element"
+
+#~ msgid "Edit Body Item"
+#~ msgstr "Edycja elementu"
+
+#~ msgid "Change Body Item Width (Current)"
+#~ msgstr "Zmień szerokość elementu (Bieżąca)"
+
+#~ msgid "Change Body Item Layer (Current)"
+#~ msgstr "Zmień warstwę (Bieżąca)"
+
+#~ msgid "Select the layer on which text should lay."
+#~ msgstr "Wybierz warstwę, na której ma znaleźć się tekst."
+
+#~ msgid "No valid layer selected for this item. Please, select a layer"
+#~ msgstr "Nie wybrano warstwy dla tego elementu. Proszę wybrać warstwę"
 
 #~ msgid "Less than two copper layers are being used."
 #~ msgstr "Używane są mniej niż dwie warstwy ścieżek."
