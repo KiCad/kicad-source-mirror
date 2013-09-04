@@ -240,6 +240,7 @@ enum PCB_VISIBLE
     PAD_BK_NETNAMES_VISIBLE,
     PADS_NETNAMES_VISIBLE,
 
+    SELECTION,
     GP_OVERLAY,                 // General purpose overlay
 
     END_PCB_VISIBLE_LIST  // sentinel
@@ -258,7 +259,7 @@ enum PCB_VISIBLE
 /// means that layer is displayed closer to the user, ie. on the top).
 const LAYER_NUM GalLayerOrder[] =
 {
-    ITEM_GAL_LAYER( GP_OVERLAY ),
+    ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( SELECTION ),
     ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
     DRAW_N, COMMENT_N, ECO1_N, ECO2_N, EDGE_N,
     UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31,

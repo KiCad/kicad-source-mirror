@@ -231,7 +231,7 @@ void TEXTE_PCB::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[0] = m_Layer;
 
     // On the general purpose overlay there is a selection box displayed
-    aLayers[1] = ITEM_GAL_LAYER( GP_OVERLAY );
+    aLayers[1] = ITEM_GAL_LAYER( SELECTION );
 
     aCount = 2;
 }

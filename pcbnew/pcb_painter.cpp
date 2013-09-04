@@ -698,7 +698,7 @@ void PCB_PAINTER::draw( const MODULE* aModule )
 
 void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
 {
-    if( aLayer == ITEM_GAL_LAYER( GP_OVERLAY ) )
+    if( aLayer == ITEM_GAL_LAYER( SELECTION ) )
     {
         if( aText->IsSelected() )
             drawSelectionBox( aText );
@@ -722,7 +722,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
 
 void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 {
-    if( aLayer == ITEM_GAL_LAYER( GP_OVERLAY ) )
+    if( aLayer == ITEM_GAL_LAYER( SELECTION ) )
     {
         if( aText->IsSelected() )
             drawSelectionBox( aText );
@@ -816,7 +816,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
 
 void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
 {
-    if( aLayer == ITEM_GAL_LAYER( GP_OVERLAY ) )
+    if( aLayer == ITEM_GAL_LAYER( SELECTION ) )
     {
         if( aDimension->IsSelected() )
             drawSelectionBox( aDimension );

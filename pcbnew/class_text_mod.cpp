@@ -473,7 +473,7 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
     }
 
     // On the general purpose overlay there is a selection box displayed
-    aLayers[1] = ITEM_GAL_LAYER( GP_OVERLAY );
+    aLayers[1] = ITEM_GAL_LAYER( SELECTION );
 
     aCount = 2;
 }

@@ -831,6 +831,7 @@ void PCB_BASE_FRAME::LoadSettings()
     view->SetRequired( ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
     view->SetRequired( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
     view->SetRequired( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    view->SetLayerTarget( ITEM_GAL_LAYER( SELECTION ), KiGfx::TARGET_OVERLAY );
     view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KiGfx::TARGET_OVERLAY );
 
     // Apply layer coloring scheme & display options
