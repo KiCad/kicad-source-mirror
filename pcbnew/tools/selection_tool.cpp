@@ -28,6 +28,7 @@
 #include <class_drawpanel_gal.h>
 #include <class_board.h>
 #include <class_board_item.h>
+#include <class_track.h>
 #include <class_module.h>
 
 #include <wxPcbStruct.h>
@@ -68,6 +69,10 @@ void SELECTION_TOOL::Reset()
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
     bool dragging = false;
+    m_board = static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->GetBoard();
+
+    if( !m_board )
+        return 0;
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -131,8 +136,12 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
         if( !m_additive )
             clearSelection();
 
-        aItem->SetSelected();
-        m_selectedItems.insert( aItem );
+        // Prevent selection of invisible items
+        if( selectable( aItem ) )
+        {
+            aItem->SetSelected();
+            m_selectedItems.insert( aItem );
+        }
     }
 }
 
@@ -214,11 +223,6 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 }
 
 
-void SELECTION_TOOL::handleHighlight( const VECTOR2D& aP )
-{
-}
-
-
 void SELECTION_TOOL::selectMultiple()
 {
     OPT_TOOL_EVENT evt;
@@ -258,8 +262,8 @@ void SELECTION_TOOL::selectMultiple()
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
-                // Add only those items which are fully within a selection box
-                if( selectionBox.Contains( item->ViewBBox() ) )
+                // Add only those items which are visible and fully within the selection box
+                if( selectable( item ) && selectionBox.Contains( item->ViewBBox() ) )
                 {
                     item->SetSelected();
                     m_selectedItems.insert( item );
@@ -330,4 +334,41 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     }
 
     return NULL;
+}
+
+
+bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
+{
+    switch( aItem->Type() )
+    {
+    case PCB_VIA_T:
+    {
+        // For vias it is enough if only one of layers is visible
+        LAYER_NUM top, bottom;
+        static_cast<const SEGVIA*>( aItem )->ReturnLayerPair( &top, &bottom );
+
+        return ( m_board->IsLayerVisible( top ) ||
+                 m_board->IsLayerVisible( bottom ) );
+    }
+    break;
+
+    case PCB_PAD_T:
+        // Pads are supposed to be on top, bottom or both at the same time (THT)
+        if( aItem->IsOnLayer( LAYER_N_FRONT ) && m_board->IsLayerVisible( LAYER_N_FRONT ) )
+            return true;
+
+        if( aItem->IsOnLayer( LAYER_N_BACK ) && m_board->IsLayerVisible( LAYER_N_BACK ) )
+            return true;
+
+        return false;
+        break;
+
+    case PCB_MODULE_EDGE_T:
+        // These are not selectable, otherwise silkscreen drawings would be easily destroyed
+        return false;
+        break;
+    }
+
+    // All other items
+    return m_board->IsLayerVisible( aItem->GetLayer() );
 }
