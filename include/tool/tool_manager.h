@@ -154,7 +154,7 @@ public:
                               CONTEXT_MENU_TRIGGER aTrigger );
 
     /**
-     * Allows a tool pass the already handled event to be passed to the next tool on the stack.
+     * Allows a tool to pass the already handled event to the next tool on the stack.
      */
     void PassEvent()
     {
