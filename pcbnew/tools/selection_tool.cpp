@@ -69,9 +69,10 @@ void SELECTION_TOOL::Reset()
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
     bool dragging = false;
-    m_board = static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->GetBoard();
+    bool allowMultiple = true;
+    BOARD* board = getModel<BOARD>( PCB_T );
 
-    if( !m_board )
+    if( !board )
         return 0;
 
     // Main loop: keep receiving events
@@ -91,6 +92,10 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         if( evt->IsClick( MB_Left ) )
             selectSingle( evt->Position() );
 
+        // unlock the multiple selection box
+        if( evt->IsMouseUp( MB_Left ) )
+            allowMultiple = true;
+
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         if( evt->IsDrag( MB_Left ) )
         {
@@ -101,14 +106,14 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             {
                 // If nothings has been selected or user wants to select more
                 // draw the selection box
-                selectMultiple();
+                if( allowMultiple )
+                    allowMultiple = !selectMultiple();
             }
             else
             {
                 // Now user wants to drag the selected items
                 m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
             }
-
         }
         else if( dragging )
         {
@@ -223,17 +228,24 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 }
 
 
-void SELECTION_TOOL::selectMultiple()
+bool SELECTION_TOOL::selectMultiple()
 {
     OPT_TOOL_EVENT evt;
     VIEW* v = getView();
+    bool cancelled = false;
 
+    // Those 2 lines remove the blink-in-the-random-place effect
+    m_selArea->SetOrigin( VECTOR2I( 0, 0 ) );
+    m_selArea->SetEnd( VECTOR2I( 0, 0 ) );
     v->Add( m_selArea );
 
     while( evt = Wait() )
     {
         if( evt->IsCancel() )
+        {
+            cancelled = true;
             break;
+        }
 
         if( evt->IsDrag( MB_Left ) )
         {
@@ -269,12 +281,15 @@ void SELECTION_TOOL::selectMultiple()
                     m_selectedItems.insert( item );
                 }
             }
+            handleModules();
 
             break;
         }
     }
 
     v->Remove( m_selArea );
+
+    return cancelled;
 }
 
 
@@ -337,8 +352,10 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 }
 
 
-bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
+bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
 {
+    BOARD* board = getModel<BOARD>( PCB_T );
+
     switch( aItem->Type() )
     {
     case PCB_VIA_T:
@@ -347,17 +364,17 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         LAYER_NUM top, bottom;
         static_cast<const SEGVIA*>( aItem )->ReturnLayerPair( &top, &bottom );
 
-        return ( m_board->IsLayerVisible( top ) ||
-                 m_board->IsLayerVisible( bottom ) );
+        return ( board->IsLayerVisible( top ) ||
+                 board->IsLayerVisible( bottom ) );
     }
     break;
 
     case PCB_PAD_T:
         // Pads are supposed to be on top, bottom or both at the same time (THT)
-        if( aItem->IsOnLayer( LAYER_N_FRONT ) && m_board->IsLayerVisible( LAYER_N_FRONT ) )
+        if( aItem->IsOnLayer( LAYER_N_FRONT ) && board->IsLayerVisible( LAYER_N_FRONT ) )
             return true;
 
-        if( aItem->IsOnLayer( LAYER_N_BACK ) && m_board->IsLayerVisible( LAYER_N_BACK ) )
+        if( aItem->IsOnLayer( LAYER_N_BACK ) && board->IsLayerVisible( LAYER_N_BACK ) )
             return true;
 
         return false;
@@ -369,6 +386,28 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         break;
     }
 
-    // All other items
-    return m_board->IsLayerVisible( aItem->GetLayer() );
+    // All other items are selected only if the layer on which they exist is visible
+    return board->IsLayerVisible( aItem->GetLayer() );
+}
+
+
+void SELECTION_TOOL::handleModules()
+{
+    std::set<BOARD_ITEM*>::iterator it, it_end;
+
+    for( it = m_selectedItems.begin(), it_end = m_selectedItems.end(); it != it_end; )
+    {
+        BOARD_ITEM* parent = (*it)->GetParent();
+
+        // Do not allow to select MODULE and it's parts at the same time
+        if( parent != NULL && parent->IsSelected() )
+        {
+            (*it)->ClearSelected();
+            m_selectedItems.erase( it++ );
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
