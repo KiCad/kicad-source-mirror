@@ -87,7 +87,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 	Connect( wxEVT_MIDDLE_UP,   wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_MIDDLE_DOWN, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_MOUSEWHEEL,  wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	Connect( wxEVT_CHAR_HOOK,   wxEventHandler( EDA_DRAW_PANEL_GAL::skipEvent ), NULL, this );
 	Connect( wxEVT_KEY_UP,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_KEY_DOWN,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 }
@@ -207,11 +206,4 @@ void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
     }
 
 	Refresh();
-}
-
-
-void EDA_DRAW_PANEL_GAL::skipEvent( wxEvent& aEvent )
-{
-    // This is necessary for CHAR_HOOK event to generate KEY_UP and KEY_DOWN events
-    aEvent.Skip();
 }
