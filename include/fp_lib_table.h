@@ -379,8 +379,11 @@ public:
      * time being.
      *
      * @param aTable the #FP_LIB_TABLE object to load.
+     * @return true if the global library table exists and is loaded properly.
+     * @throw IO_ERROR if an error occurs attempting to load the footprint library
+     *                 table.
      */
-    static void LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR );
+    static bool LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR );
 
     /**
      * Function GetGlobalTableFileName
@@ -393,6 +396,18 @@ public:
      * @return the footprint library file name.
      */
     static wxString GetFileName();
+
+    /**
+     * Function Load
+     * loads the footprint library table using the path defined in \a aFileName with
+     * \a aFallBackTable.
+     *
+     * @param aFileName contains the path and possible the file name and extension.
+     * @param aFallBackTable the fall back footprint library table which can be NULL.
+     * @throw IO_ERROR if an error occurs attempting to load the footprint library
+     *                 table.
+     */
+    void Load( const wxFileName& aFileName, FP_LIB_TABLE* aFallBackTable ) throw( IO_ERROR );
 
 protected:
 

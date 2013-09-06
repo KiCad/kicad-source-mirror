@@ -293,8 +293,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
     m_useCmpFileForFpNames = true;
+
+#if defined( USE_FP_LIB_TABLE )
     m_footprintLibTable = NULL;
     m_globalFootprintTable = NULL;
+#endif
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
     m_pythonPanel = NULL;
@@ -443,12 +446,25 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     m_auimgr.Update();
 
+#if defined( USE_FP_LIB_TABLE )
     if( m_globalFootprintTable == NULL )
     {
         try
         {
             m_globalFootprintTable = new FP_LIB_TABLE();
-            FP_LIB_TABLE::LoadGlobalTable( *m_globalFootprintTable );
+
+            if( !FP_LIB_TABLE::LoadGlobalTable( *m_globalFootprintTable ) )
+            {
+                DisplayInfoMessage( this, wxT( "You have run Pcbnew for the first time using the "
+                                               "new footprint library table method for finding "
+                                               "footprints.  Pcbnew has either copied the default "
+                                               "table or created an empty table in your home "
+                                               "folder.  You must first configure the library "
+                                               "table to include all footprint libraries not "
+                                               "included with KiCad.  See the \"Footprint Library "
+                                               "Table\" section of the CvPcb documentation for "
+                                               "more information." ) );
+            }
         }
         catch( IO_ERROR ioe )
         {
@@ -458,6 +474,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
             DisplayError( this, msg );
         }
     }
+#endif
 
 }
 
@@ -470,6 +487,7 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
         m_Macros[i].m_Record.clear();
 
     delete m_drc;
+    delete m_footprintLibTable;
     delete m_globalFootprintTable;
 }
 

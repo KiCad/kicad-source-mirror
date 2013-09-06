@@ -173,6 +173,17 @@ public:
         return m_Pcb;
     }
 
+    /**
+     * Function SetFootprintLibTable
+     * set the footprint library table to \a aFootprintLibTable.
+     *
+     * @param aFootprintLibTable is a pointer to the #FP_LIB_TABLE object.
+     */
+    void SetFootprintLibTable( FP_LIB_TABLE* aFootprintLibTable )
+    {
+        m_footprintLibTable = aFootprintLibTable;
+    }
+
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }

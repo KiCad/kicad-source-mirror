@@ -206,30 +206,9 @@ bool EDA_APP::OnInit()
     // Some will be overwritten after loading the board file
     frame->LoadProjectSettings( fn.GetFullPath() );
 
-    // Set the KISYSMOD environment variable for the current process if it is not already
-    // defined in the user's environment.  This is required to expand the global footprint
-    // library table paths.
-    if( !wxGetEnv( wxT( "KISYSMOD" ), &msg ) && !GetLibraryPathList().IsEmpty() )
-    {
-        unsigned      modFileCount = 0;
-        wxString      bestPath;
-        wxArrayString tmp;
-
-        for( unsigned i = 0;  i < GetLibraryPathList().GetCount();  i++ )
-        {
-            unsigned cnt = wxDir::GetAllFiles( GetLibraryPathList()[i], &tmp,
-                                wxT( "*.mod" ), wxDIR_DEFAULT & ~wxDIR_HIDDEN );
-
-            if( cnt > modFileCount )
-            {
-                modFileCount = cnt;
-                bestPath = GetLibraryPathList()[i];
-            }
-        }
-
-        wxLogDebug( wxT( "Setting $KISYSMOD=\"%s\"." ), GetChars( bestPath ) );
-        wxSetEnv( wxT( "KISYSMOD" ), bestPath );
-    }
+#if defined( USE_FP_LIB_TABLE )
+    SetFootprintLibTablePath();
+#endif
 
     /* Load file specified in the command line. */
     if( fn.IsOk() )

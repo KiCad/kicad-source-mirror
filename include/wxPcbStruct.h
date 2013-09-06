@@ -202,12 +202,6 @@ protected:
      */
     void duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone );
 
-    /**
-     * Function loadFootprintLibTable
-     * deletes the existing #FP_LIB_TABLE and creates a new one when a new project is loaded.
-     */
-    void loadFootprintLibTable();
-
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
     wxComboBox* m_SelTrackWidthBox;     // a combo box to display and select current track width
