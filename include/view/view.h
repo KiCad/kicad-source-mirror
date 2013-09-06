@@ -267,7 +267,12 @@ public:
      */
     inline void SetLayerVisible( int aLayer, bool aVisible = true )
     {
-        m_layers[aLayer].enabled = aVisible;
+        if( m_layers[aLayer].enabled != aVisible )
+        {
+            // Target has to be redrawn after changing its visibility
+            MarkTargetDirty( m_layers[aLayer].target );
+            m_layers[aLayer].enabled = aVisible;
+        }
     }
 
     /**
