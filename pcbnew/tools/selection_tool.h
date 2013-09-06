@@ -87,8 +87,10 @@ private:
     /**
      * Function selectMultiple()
      * Handles drawing a selection box that allows to select many items at the same time.
+     *
+     * @return true if the function was cancelled (ie. CancelEvent was received).
      */
-    void selectMultiple();
+    bool selectMultiple();
 
     /**
      * Function disambiguationMenu()
@@ -127,10 +129,13 @@ private:
      *
      * @return True if the item fulfills conditions to be selected.
      */
-    bool selectable( const BOARD_ITEM* aItem ) const;
+    bool selectable( const BOARD_ITEM* aItem );
 
-    /// Currently used PCB
-    BOARD* m_board;
+    /**
+     * Prevents from selecting both MODULEs and it's parts at the same time. The right way is
+     * to select a MODULE *or* some of it's parts.
+     */
+    void handleModules();
 
     /// Container storing currently selected items
     std::set<BOARD_ITEM*> m_selectedItems;
