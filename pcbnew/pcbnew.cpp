@@ -314,6 +314,9 @@ bool EDA_APP::OnInit()
     frame->SetFocus();
     frame->GetCanvas()->SetFocus();
 
+    // Activate the GAL
+    frame->UseGalCanvas( true );
+
     return true;
 }
 
