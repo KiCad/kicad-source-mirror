@@ -790,11 +790,9 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
                 rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
             }
         }
+
         view->UpdateAllLayersOrder();
         view->UpdateAllLayersColor();
-
-        if( m_galCanvasActive )
-            m_galCanvas->Refresh();
     }
 }
 

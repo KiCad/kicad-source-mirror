@@ -185,7 +185,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         if( state && (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
             Compile_Ratsnest( NULL, true );
 
-        m_canvas->Refresh();
+        RefreshCanvas();
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
@@ -200,35 +200,35 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         DisplayOpt.DisplayZonesMode = 0;
         recache = true;
         if( !m_galCanvasActive )
-            m_canvas->Refresh();
+            RefreshCanvas();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
         DisplayOpt.DisplayZonesMode = 1;
         recache = true;
         if( !m_galCanvasActive )
-            m_canvas->Refresh();
+            RefreshCanvas();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
         DisplayOpt.DisplayZonesMode = 2;
         recache = true;
         if( !m_galCanvasActive )
-            m_canvas->Refresh();
+            RefreshCanvas();
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
         m_DisplayViaFill = DisplayOpt.DisplayViaFill = !state;
         recache = true;
         if( !m_galCanvasActive )
-            m_canvas->Refresh();
+            RefreshCanvas();
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = !state;
         recache = true;
         if( !m_galCanvasActive )
-            m_canvas->Refresh();
+            RefreshCanvas();
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
@@ -244,7 +244,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         if( m_galCanvasActive )
             m_galCanvas->Refresh();
         else
-            m_canvas->Refresh();
+            RefreshCanvas();
 
         break;
     }

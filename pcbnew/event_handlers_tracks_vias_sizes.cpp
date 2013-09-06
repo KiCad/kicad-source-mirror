@@ -118,5 +118,5 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     }*/
     //+hp
     //Refresh canvas, that we can see changes instantly. I use this because it dont,t throw  mouse up-left corner.
-    m_canvas->Refresh();
+    RefreshCanvas();
 }

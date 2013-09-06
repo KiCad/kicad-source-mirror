@@ -431,7 +431,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
     GetScreen()->m_Active_Layer = layer;
 
     if( DisplayOpt.ContrastModeDisplay )
-        m_canvas->Refresh();
+        RefreshCanvas();
 }
 
 
@@ -455,10 +455,7 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
     settings->LoadDisplayOptions( DisplayOpt );
     m_galCanvas->GetView()->RecacheAllItems( true );
 
-    if( IsGalCanvasActive() )
-        m_galCanvas->Refresh();
-    else
-        m_canvas->Refresh();
+    RefreshCanvas();
 }
 
 
@@ -625,8 +622,8 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
     // must do this after the tool has been set, otherwise pad::Draw() does
     // not show proper color when DisplayOpt.ContrastModeDisplay is true.
-    if( redraw && m_canvas)
-        m_canvas->Refresh();
+    if( redraw && m_canvas )
+        RefreshCanvas();
 }
 
 
