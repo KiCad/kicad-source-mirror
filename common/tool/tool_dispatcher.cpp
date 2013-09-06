@@ -155,7 +155,6 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 		}
 		else
 			isClick = true;
-
 		
 		if( isClick )
 		{
@@ -256,7 +255,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 }
 
 
-void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent &aEvent )
+void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
 {
 	bool activateTool = false;
 	std::string toolName;
