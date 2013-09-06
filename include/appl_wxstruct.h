@@ -344,8 +344,6 @@ public:
      */
     wxString GetHelpFile( void );
 
-    wxString GetLibraryFile( const wxString& filename );
-
     /**
      * Return the preferred editor name.
      */
@@ -414,6 +412,25 @@ public:
      * @return false if the file was already locked, true otherwise.
      */
     bool LockFile( const wxString& fileName );
+
+    /**
+     * Function SetFootprintLibTableEnv
+     * attempts set the KISYSMOD environment variable to the best possible path.
+     *
+     * The path is determined by attempting to find the path with the most footprint library
+     * files.  This may or may not be the best path but it provides the best solution for
+     * backwards compatibility with the previous library search path implementation.  If the
+     * KISYSMOD environment variable is already set, then it left as is to respect the wishes
+     * of the user.
+     *
+     * @note This must be called after #SetDefaultSearchPaths() is called.  Otherwise, the
+     *       list of library search paths will be empty and KISYSMOD will be undefined making
+     *       it impossible for the footprint libraries to be loaded from the footprint library
+     *       table.
+     *
+     * @return false if the KISYSMOD path is not valid.
+     */
+    bool SetFootprintLibTablePath();
 };
 
 

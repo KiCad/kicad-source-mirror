@@ -123,8 +123,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
     PCB_BASE_FRAME( aParent, MODULE_VIEWER_FRAME_TYPE, _( "Footprint Library Browser" ),
                     wxDefaultPosition, wxDefaultSize, aStyle, GetFootprintViewerFrameName() )
 {
-    wxASSERT( aTable != NULL );
-
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
     m_footprintLibTable = aTable;

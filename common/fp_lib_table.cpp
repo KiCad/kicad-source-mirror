@@ -30,6 +30,7 @@
 
 #include <set>
 
+#include <appl_wxstruct.h>
 #include <fp_lib_table_lexer.h>
 #include <fp_lib_table.h>
 
@@ -319,23 +320,38 @@ bool FP_LIB_TABLE::IsEmpty() const
 }
 
 
-void FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR )
+bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR )
 {
+    bool tableExists = true;
     wxFileName fn = GetGlobalTableFileName();
 
     wxLogDebug( wxT( "Loading global footprint table file: %s" ), GetChars( fn.GetFullPath() ) );
 
     if( !fn.FileExists() )
     {
-        /// @todo call some script to create initial global footprint table.
-    }
-    else
-    {
-        FILE_LINE_READER reader( fn.GetFullPath() );
-        FP_LIB_TABLE_LEXER lexer( &reader );
+        tableExists = false;
 
-        aTable.Parse( &lexer );
+        // Attempt to copy the default global file table from the KiCad template folder to
+        // the users home configuration path.
+        wxString fileName( wxT( "fp_global_table" ) );
+        fileName = wxGetApp().FindLibraryPath( fileName );
+
+        wxLogDebug( wxT( "Copying global footprint table from <%s>." ), GetChars( fileName ) );
+
+        // The fallback is to create an empty global footprint table for the user to populate.
+        if( fileName.IsEmpty() || !::wxCopyFile( fileName, fn.GetFullPath(), false ) )
+        {
+            FP_LIB_TABLE emptyTable;
+            FILE_OUTPUTFORMATTER sf( fn.GetFullPath() );
+            emptyTable.Format( &sf, 0 );
+        }
     }
+
+    FILE_LINE_READER reader( fn.GetFullPath() );
+    FP_LIB_TABLE_LEXER lexer( &reader );
+
+    aTable.Parse( &lexer );
+    return tableExists;
 }
 
 
@@ -357,7 +373,26 @@ wxString FP_LIB_TABLE::GetGlobalTableFileName()
 
 wxString FP_LIB_TABLE::GetFileName()
 {
-    return wxString( wxT( ".fp-lib-table" ) );
+    return wxString( wxT( "fp-lib-table" ) );
+}
+
+
+void FP_LIB_TABLE::Load( const wxFileName& aFileName, FP_LIB_TABLE* aFallBackTable )
+    throw( IO_ERROR )
+{
+    wxFileName fn = aFileName;
+
+    fallBack = aFallBackTable;
+
+    fn.SetName( FP_LIB_TABLE::GetFileName() );
+    fn.SetExt( wxEmptyString );
+
+    if( fn.FileExists() )
+    {
+        FILE_LINE_READER reader( fn.GetFullPath() );
+        FP_LIB_TABLE_LEXER lexer( &reader );
+        Parse( &lexer );
+    }
 }
 
 
