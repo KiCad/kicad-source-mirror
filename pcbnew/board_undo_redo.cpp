@@ -367,7 +367,7 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     if( aItem->Type() == PCB_MODULE_T )    
         if( ((MODULE*)aItem)->GetFlags() & MODULE_to_PLACE )
             break;
-        m_canvas->Refresh();
+        RefreshCanvas();
 #endif
     case UR_MOVED:
     case UR_FLIPPED:
@@ -622,7 +622,7 @@ void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
     GetScreen()->PushCommandToRedoList( List );
 
     OnModify();
-    m_canvas->Refresh();
+    RefreshCanvas();
 }
 
 
@@ -650,7 +650,7 @@ void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& event )
     GetScreen()->PushCommandToUndoList( List );
 
     OnModify();
-    m_canvas->Refresh();
+    RefreshCanvas();
 }
 
 

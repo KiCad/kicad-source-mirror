@@ -206,7 +206,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
     EndModal( 1 );
 
     if( change )
-        m_Parent->GetCanvas()->Refresh();
+        m_Parent->RefreshCanvas();
 }
 
 

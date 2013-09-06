@@ -243,7 +243,7 @@ void PCB_BASE_FRAME::SelectLayerPair()
     // because the PAD_SMD pads may change color.
     if( result >= 0  &&  DisplayOpt.ContrastModeDisplay )
     {
-        m_canvas->Refresh();
+        RefreshCanvas();
     }
 }
 

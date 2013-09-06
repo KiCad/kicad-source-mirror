@@ -182,7 +182,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
             m_Parent->Compile_Ratsnest( NULL, true );
     }
 
-    m_Parent->GetCanvas()->Refresh();
+    m_Parent->RefreshCanvas();
     m_Parent->OnModify();
 
     EndModal( 1 );

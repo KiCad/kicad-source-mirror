@@ -180,7 +180,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     if( m_Parent->IsGalCanvasActive() )
         m_Parent->GetGalCanvas()->Refresh();
     else
-        m_Parent->GetCanvas()->Refresh();
+        m_Parent->RefreshCanvas();
 
     EndModal( 1 );
 }

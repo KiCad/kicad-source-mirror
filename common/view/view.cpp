@@ -915,7 +915,7 @@ void VIEW::RecacheAllItems( bool aImmediately )
             m_gal->SetLayerDepth( l->renderingOrder );
             recacheLayer visitor( this, m_gal, l->id, aImmediately );
             l->items->Query( r, visitor );
-            l->isDirty = false;
+            l->isDirty = true;
         }
     }
 

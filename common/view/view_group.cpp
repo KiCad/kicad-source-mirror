@@ -82,15 +82,9 @@ unsigned int VIEW_GROUP::GetSize() const
 
 const BOX2I VIEW_GROUP::ViewBBox() const
 {
-    BOX2I box;
-
-    // Merge all bounding boxes, so the returned one contains all stored items
-    BOOST_FOREACH( VIEW_ITEM* item, m_items )
-    {
-        box.Merge( item->ViewBBox() );
-    }
-
-    return box;
+    BOX2I maxBox;
+    maxBox.SetMaximum();
+    return maxBox;
 }
 
 
@@ -107,31 +101,33 @@ void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) co
 
         for( int i = 0; i < layers_count; i++ )
         {
-            aGal->SetLayerDepth( m_view->GetLayerOrder( layers[i] ) );
+            if( m_view->IsCached( layers[i] ) && m_view->IsLayerVisible( layers[i] ) )
+            {
+                aGal->SetLayerDepth( m_view->GetLayerOrder( layers[i] ) );
 
-            if( !painter->Draw( item, layers[i] ) )
-                item->ViewDraw( layers[i], aGal, aVisibleArea );  // Alternative drawing method
+                if( !painter->Draw( item, layers[i] ) )
+                    item->ViewDraw( layers[i], aGal, aVisibleArea );  // Alternative drawing method
+            }
         }
-
-        /// m_view->Draw( item, true );
     }
 }
 
 
 void VIEW_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
 {
+    // Everything is displayed on a single layer
     aLayers[0] = m_layer;
     aCount = 1;
 }
 
 
-void VIEW_GROUP::ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw )
+/*void VIEW_GROUP::ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw )
 {
     BOOST_FOREACH( VIEW_ITEM* item, m_items )
     {
         item->ViewUpdate( aUpdateFlags, aForceImmediateRedraw );
     }
-}
+}*/
 
 
 void VIEW_GROUP::updateBbox()

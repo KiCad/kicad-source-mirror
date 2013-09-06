@@ -222,7 +222,7 @@ void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
     if( SavePageSettings() )
     {
         m_screen->SetModify();
-        m_parent->GetCanvas()->Refresh();
+        m_parent->RefreshCanvas();
 
         if( m_localPrjConfigChanged )
             m_parent->SaveProjectSettings( true );

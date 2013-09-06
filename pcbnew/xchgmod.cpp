@@ -281,7 +281,7 @@ void DIALOG_EXCHANGE_MODULE::Change_Current_Module()
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
 
-        m_Parent->GetCanvas()->Refresh();
+        m_Parent->RefreshCanvas();
     }
 
     if( pickList.GetCount() )
@@ -370,7 +370,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
 
-        m_Parent->GetCanvas()->Refresh();
+        m_Parent->RefreshCanvas();
     }
 
     if( pickList.GetCount() )
@@ -423,7 +423,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
 
-        m_Parent->GetCanvas()->Refresh();
+        m_Parent->RefreshCanvas();
     }
 
     if( pickList.GetCount() )

@@ -68,7 +68,7 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 #ifdef __WXMAC__
     // If something edited, push a refresh request
     if (retvalue == 0 || retvalue == 1)
-        m_canvas->Refresh();
+        RefreshCanvas();
 #endif
 
     if( retvalue == 2 )
@@ -120,7 +120,7 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
 
     case PCB_MODULE_EDGE_T:
         Delete_Edge_Module( (EDGE_MODULE*) Item );
-        m_canvas->Refresh();
+        RefreshCanvas();
         break;
 
     case PCB_MODULE_T:

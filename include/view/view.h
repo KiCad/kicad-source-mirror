@@ -262,13 +262,22 @@ public:
     /**
      * Function SetLayerVisible()
      * Controls the visibility of a particular layer.
-     * @param aLayer: the layer to show/hide. When ALL_LAYERS constant is given, all layers'
-     * visibility is updated
-     * @param aVisible: the obivous
+     * @param aLayer: the layer to show/hide
+     * @param aVisible: the obvious
      */
     inline void SetLayerVisible( int aLayer, bool aVisible = true )
     {
         m_layers[aLayer].enabled = aVisible;
+    }
+
+    /**
+     * Function IsLayerVisible()
+     * Returns information about visibility of a particular layer.
+     * @param aLayer: true if the layer is visible, false otherwise
+     */
+    inline bool IsLayerVisible( int aLayer ) const
+    {
+        return m_layers.at( aLayer ).enabled;
     }
 
     /**

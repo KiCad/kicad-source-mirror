@@ -235,12 +235,9 @@ void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {
     SetGridVisibility( !IsGridVisible() );
     if( m_galCanvasActive )
-    {
         m_galCanvas->GetGAL()->SetGridVisibility( IsGridVisible() );
-        m_galCanvas->Refresh();
-    }
-    else
-        m_canvas->Refresh();
+
+    RefreshCanvas();
 }
 
 

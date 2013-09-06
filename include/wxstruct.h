@@ -452,8 +452,6 @@ protected:
     wxOverlay m_overlay;
 #endif
 
-protected:
-
     void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
     /**
@@ -691,6 +689,12 @@ public:
      * @param posBefore screen position of the crosshair before zooming
      */
     void RedrawScreen2( const wxPoint& posBefore );
+
+    /**
+     * Function RefreshCanvas
+     * Depending on the current state of GAL - it refreshes the default canvas of the GAL canvas.
+     */
+    void RefreshCanvas();
 
     /**
      * Function Zoom_Automatique
