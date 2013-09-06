@@ -333,7 +333,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     if( screenHeight <= 900 )
         pointSize = (pointSize * 8) / 10;
 
-    m_Layers = new PCB_LAYER_WIDGET( this, m_canvas, pointSize );
+    m_Layers = new PCB_LAYER_WIDGET( this, m_galCanvas, pointSize );
 
     m_drc = new DRC( this );        // these 2 objects point to each other
 

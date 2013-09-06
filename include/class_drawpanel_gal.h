@@ -115,7 +115,6 @@ protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
 	void onEvent( wxEvent& aEvent );
-	void skipEvent( wxEvent& aEvent );
 
     KiGfx::GAL*              m_gal;              ///< Interface for drawing objects on a 2D-surface
     KiGfx::VIEW*             m_view;             ///< Stores view settings (scale, center, etc.)
