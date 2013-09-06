@@ -234,8 +234,12 @@ void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
 void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {
     SetGridVisibility( !IsGridVisible() );
+
     if( m_galCanvasActive )
+    {
         m_galCanvas->GetGAL()->SetGridVisibility( IsGridVisible() );
+        m_galCanvas->GetView()->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
+    }
 
     RefreshCanvas();
 }
@@ -392,11 +396,12 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     if( m_galCanvasActive )
     {
-        KiGfx::GAL* gal = m_galCanvas->GetGAL();
-        gal->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x, screen->GetGrid().m_Size.y ) );
+        m_galCanvas->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x,
+                                                      screen->GetGrid().m_Size.y ) );
+        m_galCanvas->GetView()->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
     }
 
-    Refresh();
+    RefreshCanvas();
 }
 
 
@@ -1011,6 +1016,8 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show( aEnable );
     m_auimgr.Update();
 
-    m_galCanvas->SetFocus();
     m_galCanvasActive = aEnable;
+
+    if( aEnable )
+        m_galCanvas->SetFocus();
 }

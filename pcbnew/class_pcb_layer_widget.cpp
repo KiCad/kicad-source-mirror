@@ -393,7 +393,7 @@ void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool is
 
     brd->SetVisibleLayers( visibleLayers );
 
-    EDA_DRAW_PANEL_GAL *galCanvas = myframe->GetGalCanvas();
+    EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
     if( galCanvas )
     {
         KiGfx::VIEW* view = galCanvas->GetView();
@@ -401,12 +401,7 @@ void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool is
     }
 
     if( isFinal )
-    {
-        if( myframe->IsGalCanvasActive() )
-            galCanvas->Refresh();
-        else
-            myframe->RefreshCanvas();
-    }
+        myframe->RefreshCanvas();
 }
 
 void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, EDA_COLOR_T aColor )
