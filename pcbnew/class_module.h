@@ -35,10 +35,12 @@
 #include <dlist.h>
 #include <layers_id_colors_and_visibility.h>       // ALL_LAYERS definition.
 #include <class_board_item.h>
+#include <fpid.h>
 
 #include <class_text_mod.h>
 #include <PolyLine.h>
 #include "zones.h"
+
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -117,8 +119,8 @@ public:
     void SetOrientation( double newangle );
     double GetOrientation() const { return m_Orient; }
 
-    const wxString& GetLibRef() const { return m_LibRef; }
-    void SetLibRef( const wxString& aLibRef ) { m_LibRef = aLibRef; }
+    const FPID& GetFPID() const { return m_fpid; }
+    void SetFPID( const FPID& aFPID ) { m_fpid = aFPID; }
 
     const wxString& GetDescription() const { return m_Doc; }
     void SetDescription( const wxString& aDoc ) { m_Doc = aDoc; }
@@ -509,7 +511,7 @@ private:
     wxPoint           m_Pos;            ///< Position of module on the board in internal units.
     TEXTE_MODULE*     m_Reference;      ///< Component reference designator value (U34, R18..)
     TEXTE_MODULE*     m_Value;          ///< Component value (74LS00, 22K..)
-    wxString          m_LibRef;         ///< Name of the module in the library.
+    FPID              m_fpid;           ///< The #FPID of the MODULE.
     int               m_Attributs;      ///< Flag bits ( see Mod_Attribut )
     int               m_ModuleStatus;   ///< For autoplace: flags (LOCKED, AUTOPLACED)
     EDA_RECT          m_BoundaryBox;    ///< Bounding box : coordinates on board, real orientation.

@@ -72,7 +72,7 @@ void COMPONENT::SetModule( MODULE* aModule )
 
     aModule->SetReference( m_reference );
     aModule->SetValue( m_value );
-    aModule->SetLibRef( m_footprintName );
+    aModule->SetFPID( m_fpid );
     aModule->SetPath( m_timeStamp );
 }
 
@@ -116,11 +116,11 @@ void COMPONENT::Show( int aNestLevel, REPORTER& aReporter )
     NestedSpace( aNestLevel, aReporter );
     aReporter.Report( wxT( "<component>\n" ) );
     NestedSpace( aNestLevel+1, aReporter );
-    aReporter.Report( wxString::Format( wxT( "<ref=%s value=%s name=%s library=%s footprint=%s "
-                                             "footprint-lib=%s timestamp=%s>\n" ),
+    aReporter.Report( wxString::Format( wxT( "<ref=%s value=%s name=%s library=%s fpid=%s "
+                                             " timestamp=%s>\n" ),
                                         GetChars( m_reference ), GetChars( m_value ),
                                         GetChars( m_name ), GetChars( m_library ),
-                                        GetChars( m_footprintName ), GetChars( m_footprintLib ),
+                                        m_fpid.Format().c_str(),
                                         GetChars( m_timeStamp ) ) );
 
     if( !m_footprintFilters.IsEmpty() )
@@ -198,18 +198,18 @@ COMPONENT* NETLIST::GetComponentByTimeStamp( const wxString& aTimeStamp )
 
 
 /**
- * Function ByFootprintName
+ * Function ByFPID
  * is a helper function used to sort the component list used by loadNewModules.
  */
-static bool ByFootprintName( const COMPONENT& ref, const COMPONENT& cmp )
+static bool ByFPID( const COMPONENT& ref, const COMPONENT& cmp )
 {
-    return ref.GetFootprintName().CmpNoCase( cmp.GetFootprintName() ) > 0;
+    return ref.GetFPID() > cmp.GetFPID();
 }
 
 
-void NETLIST::SortByFootprintName()
+void NETLIST::SortByFPID()
 {
-    m_components.sort( ByFootprintName );
+    m_components.sort( ByFPID );
 }
 
 
@@ -233,7 +233,7 @@ bool NETLIST::AnyFootprintsLinked() const
 {
     for( unsigned i = 0;  i < m_components.size();  i++ )
     {
-        if( !m_components[i].GetFootprintName().IsEmpty() )
+        if( !m_components[i].GetFPID().empty() )
             return true;
     }
 
@@ -245,7 +245,7 @@ bool NETLIST::AllFootprintsLinked() const
 {
     for( unsigned i = 0;  i < m_components.size();  i++ )
     {
-        if( m_components[i].GetFootprintName().IsEmpty() )
+        if( m_components[i].GetFPID().empty() )
             return false;
     }
 
@@ -452,7 +452,7 @@ bool CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
         // and still exists in footprint assignment list, before this list is updated
         // This is an usual case during the life of a design
         if( component )
-            component->SetFootprintName( footprint );
+            component->SetFPID( FPID( footprint ) );
         else
             ok = false;     // can be used to display a warning in Pcbnew.
     }

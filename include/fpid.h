@@ -70,6 +70,8 @@ public:
      */
     FPID( const std::string& aId ) throw( PARSE_ERROR );
 
+    FPID( const wxString& aId ) throw( PARSE_ERROR );
+
     /**
      * Function Parse
      * [re-]stuffs this FPID with the information from @a aId.
@@ -98,6 +100,8 @@ public:
      */
     int SetLibNickname( const std::string& aNickname );
 
+    int SetLibNickname( const wxString& aNickname );
+
     /**
      * Function GetFootprintName
      * returns the footprint name, i.e. footprintName.
@@ -109,6 +113,8 @@ public:
      * overrides the footprint name portion of the FPID to @a aFootprintName
      */
     int SetFootprintName( const std::string& aFootprintName );
+
+    int SetFootprintName( const wxString& aFootprintName );
 
     int SetRevision( const std::string& aRevision );
 
@@ -175,7 +181,9 @@ public:
     int compare( const FPID& aFPID ) const;
 
     bool operator <( const FPID& aFPID ) const { return this->compare( aFPID ) < 0; }
+    bool operator >( const FPID& aFPID ) const { return this->compare( aFPID ) > 0; }
     bool operator ==( const FPID& aFPID ) const { return this->compare( aFPID ) == 0; }
+    bool operator !=( const FPID& aFPID ) const { return !(*this == aFPID); }
 
 #if defined(DEBUG)
     static void Test();

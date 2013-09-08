@@ -33,6 +33,7 @@
 #include <dialog_helpers.h>
 #include <3d_viewer.h>
 #include <pcbcommon.h>
+#include <macros.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -160,7 +161,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
             delete oldmodule;
         }
 
-        m_footprintName = module->GetLibRef();
+        m_footprintName = FROM_UTF8( module->GetFPID().GetFootprintName().c_str() );
         module->ClearFlags();
         SetCurItem( NULL );
 

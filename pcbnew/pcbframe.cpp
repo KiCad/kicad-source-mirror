@@ -487,8 +487,11 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
         m_Macros[i].m_Record.clear();
 
     delete m_drc;
+
+#if defined( USE_FP_LIB_TABLE )
     delete m_footprintLibTable;
     delete m_globalFootprintTable;
+#endif
 }
 
 

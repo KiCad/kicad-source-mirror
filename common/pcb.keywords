@@ -72,6 +72,7 @@ font
 fp_arc
 fp_circle
 fp_curve
+fp_lib
 fp_line
 fp_poly
 fp_text
