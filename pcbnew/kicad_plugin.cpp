@@ -868,13 +868,18 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         }
     }
 
-    m_out->Print( aNestLevel, "(module %s", m_out->Quotew( aModule->GetLibRef() ).c_str() );
+    m_out->Print( aNestLevel, "(module %s",
+                  m_out->Quotes( aModule->GetFPID().GetFootprintName() ).c_str() );
 
     if( aModule->IsLocked() )
         m_out->Print( 0, " locked" );
 
     if( aModule->IsPlaced() )
         m_out->Print( 0, " placed" );
+
+    if( !aModule->GetFPID().IsLegacy() )
+        m_out->Print( 0, " (fp_lib %s)",
+                      m_out->Quotes( aModule->GetFPID().GetLibNickname() ).c_str() );
 
     formatLayer( aModule );
 
@@ -1664,12 +1669,13 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
                                           aLibraryPath.GetData() ) );
     }
 
-    std::string footprintName = TO_UTF8( aFootprint->GetLibRef() );
+    std::string footprintName = aFootprint->GetFPID().GetFootprintName();
 
     MODULE_MAP& mods = m_cache->GetModules();
 
     // Quietly overwrite module and delete module file from path for any by same name.
-    wxFileName fn( aLibraryPath, aFootprint->GetLibRef(), KiCadFootprintFileExtension );
+    wxFileName fn( aLibraryPath, FROM_UTF8( aFootprint->GetFPID().GetFootprintName().c_str() ),
+                   KiCadFootprintFileExtension );
 
     if( !fn.IsOk() )
     {

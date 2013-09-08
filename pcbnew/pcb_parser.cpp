@@ -1542,13 +1542,14 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
 
     wxPoint pt;
     T       token;
+    FPID    fpid;
 
     auto_ptr< MODULE > module( new MODULE( m_board ) );
 
     module->SetInitialComments( aInitialComments );
 
     NeedSYMBOLorNUMBER();
-    module->SetLibRef( FromUTF8() );
+    fpid.SetFootprintName( FromUTF8() );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -1563,6 +1564,11 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
 
         case T_placed:
             module->SetIsPlaced( true );
+            break;
+
+        case T_fp_lib:
+            fpid.SetLibNickname( FromUTF8() );
+            NeedRIGHT();
             break;
 
         case T_layer:
@@ -1747,6 +1753,7 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
         }
     }
 
+    module->SetFPID( fpid );
     module->CalculateBoundingBox();
 
     return module.release();

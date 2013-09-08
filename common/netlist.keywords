@@ -12,6 +12,7 @@ fields
 footprint
 footprints
 fp
+fp_lib
 lib
 libpart
 libparts

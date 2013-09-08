@@ -71,16 +71,16 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 
         // Check to see if the component has already a footprint set.
 
-        hasFootprint = !(component->GetFootprintName().IsEmpty());
+        hasFootprint = !component->GetFPID().empty();
 
-        component->SetFootprintName( aFootprintName );
+        component->SetFPID( FPID( aFootprintName ) );
 
         // create the new component description
 
         description.Printf( CMP_FORMAT, componentIndex + 1,
                             GetChars( component->GetReference() ),
                             GetChars( component->GetValue() ),
-                            GetChars( component->GetFootprintName() ) );
+                            GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
 
         // If the component hasn't had a footprint associated with it
         // it now has, so we decrement the count of components without
@@ -136,10 +136,10 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
         msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
                     GetChars( component->GetReference() ),
                     GetChars( component->GetValue() ),
-                    GetChars( component->GetFootprintName() ) );
+                    GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
         m_ListCmp->AppendLine( msg );
 
-        if( component->GetFootprintName().IsEmpty() )
+        if( component->GetFPID().empty() )
             m_undefinedComponentCnt += 1;
     }
 

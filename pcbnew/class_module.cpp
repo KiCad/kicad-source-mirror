@@ -86,7 +86,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     BOARD_ITEM( aModule )
 {
     m_Pos = aModule.m_Pos;
-    m_LibRef = aModule.m_LibRef;
+    m_fpid = aModule.m_fpid;
     m_Layer  = aModule.m_Layer;
     m_Attributs = aModule.m_Attributs;
     m_ModuleStatus = aModule.m_ModuleStatus;
@@ -201,7 +201,7 @@ void MODULE::Copy( MODULE* aModule )
 {
     m_Pos           = aModule->m_Pos;
     m_Layer         = aModule->m_Layer;
-    m_LibRef        = aModule->m_LibRef;
+    m_fpid          = aModule->m_fpid;
     m_Attributs     = aModule->m_Attributs;
     m_ModuleStatus  = aModule->m_ModuleStatus;
     m_Orient        = aModule->m_Orient;
@@ -524,7 +524,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Attrib" ), msg, BROWN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Module" ), m_LibRef, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Module" ), FROM_UTF8( m_fpid.Format().c_str() ), BLUE ) );
 
     msg = _( "No 3D shape" );
     // Search the first active 3D shape in list

@@ -627,7 +627,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
     IMAGE*  image = new IMAGE(0);
 
-    image->image_id = TO_UTF8( aModule->GetLibRef() );
+    image->image_id = aModule->GetFPID().Format().c_str();
 
     // from the pads, and make an IMAGE using collated padstacks.
     for( int p=0;  p<moduleItems.GetCount();  ++p )

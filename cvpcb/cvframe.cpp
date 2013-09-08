@@ -342,7 +342,7 @@ void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
 
     for( unsigned jj = selection+1; jj < m_netlist.GetCount(); jj++ )
     {
-        if( m_netlist.GetComponent( jj )->GetFootprintName().IsEmpty() )
+        if( m_netlist.GetComponent( jj )->GetFPID().empty() )
         {
             m_ListCmp->SetSelection( wxNOT_FOUND, false );  // Remove all selections
             m_ListCmp->SetSelection( jj );
@@ -368,7 +368,7 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
 
     for( int kk = selection-1; kk >= 0; kk-- )
     {
-        if( m_netlist.GetComponent( kk )->GetFootprintName().IsEmpty() )
+        if( m_netlist.GetComponent( kk )->GetFPID().empty() )
         {
             m_ListCmp->SetSelection( wxNOT_FOUND, false );  // Remove all selections
             m_ListCmp->SetSelection( kk );
@@ -405,7 +405,9 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
 
         for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
         {
-            m_netlist.GetComponent( i )->SetFootprintName( wxEmptyString );
+            FPID fpid;
+
+            m_netlist.GetComponent( i )->SetFPID( fpid );
             SetNewPkg( wxEmptyString );
         }
 
@@ -521,7 +523,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     // selected footprint.
     if( FindFocus() == m_ListCmp || FindFocus() == m_LibraryList )
     {
-        wxString module = component->GetFootprintName();
+        wxString module = FROM_UTF8( component->GetFPID().GetFootprintName().c_str() );
 
         bool found = false;
 
@@ -781,8 +783,8 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
     // not the actual name of the footprint.
     for( unsigned ii = 0; ii < m_netlist.GetCount(); ii++ )
     {
-        if( m_netlist.GetComponent( ii )->GetFootprintName() == wxT( "$noname" ) )
-            m_netlist.GetComponent( ii )->SetFootprintName( wxEmptyString );
+        if( m_netlist.GetComponent( ii )->GetFPID().GetFootprintName() == std::string( "$noname" ) )
+            m_netlist.GetComponent( ii )->SetFPID( FPID( wxEmptyString ) );
     }
 
     // Sort components by reference:
@@ -832,8 +834,7 @@ bool CVPCB_MAINFRAME::WriteComponentLinkFile( const wxString& aFullFileName )
         retval |= fprintf( outputFile, "TimeStamp = %s;\n", TO_UTF8( component->GetTimeStamp() ) );
         retval |= fprintf( outputFile, "Reference = %s;\n", TO_UTF8( component->GetReference() ) );
         retval |= fprintf( outputFile, "ValeurCmp = %s;\n", TO_UTF8( component->GetValue() ) );
-        retval |= fprintf( outputFile, "IdModule  = %s;\n",
-                           TO_UTF8( component->GetFootprintName() ) );
+        retval |= fprintf( outputFile, "IdModule  = %s;\n", component->GetFPID().Format().c_str() );
         retval |= fprintf( outputFile, "EndCmp\n" );
     }
 
@@ -908,7 +909,7 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
         msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
                     GetChars( component->GetReference() ),
                     GetChars( component->GetValue() ),
-                    GetChars( component->GetFootprintName() ) );
+                    GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
         m_ListCmp->m_ComponentList.Add( msg );
     }
 

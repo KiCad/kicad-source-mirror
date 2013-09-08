@@ -34,6 +34,7 @@
 
 #include <fctsys.h>
 #include <macros.h>
+#include <fpid.h>
 
 #include <netlist_lexer.h>    // netlist_lexer is common to Eeschema and Pcbnew
 
@@ -110,20 +111,12 @@ class COMPONENT
     wxString       m_name;
 
     /**
-     * The name of the component library where #m_name was found.  This will be set to
-     * wxEmptyString for legacy netlist files.
+     * The name of the component library where #m_name was found.
      */
     wxString       m_library;
 
-    /// The name of the footprint in the footprint library assigned to the component.
-    wxString       m_footprintName;
-
-    /**
-     * The name of the footprint library that #m_footprintName is located.  This will be
-     * set to wxEmptyString for legacy netlist formats indicating that all libraries need
-     * to be searched.
-     */
-    wxString       m_footprintLib;
+    /// The #FPID of the footprint assigned to the component.
+    FPID           m_fpid;
 
     /// The #MODULE loaded for #m_footprintName found in #m_footprintLib.
     std::auto_ptr< MODULE > m_footprint;
@@ -135,12 +128,12 @@ class COMPONENT
     static COMPONENT_NET    m_emptyNet;
 
 public:
-    COMPONENT( const wxString& aFootprintName,
+    COMPONENT( const FPID&     aFPID,
                const wxString& aReference,
                const wxString& aValue,
                const wxString& aTimeStamp )
     {
-        m_footprintName    = aFootprintName;
+        m_fpid             = aFPID;
         m_reference        = aReference;
         m_value            = aValue;
         m_timeStamp        = aTimeStamp;
@@ -172,21 +165,13 @@ public:
 
     const wxString& GetValue() const { return m_value; }
 
-    void SetFootprintName( const wxString& aFootprintName )
+    void SetFPID( const FPID& aFPID )
     {
-        m_footprintChanged = !m_footprintName.IsEmpty() && (m_footprintName != aFootprintName);
-        m_footprintName = aFootprintName;
+        m_footprintChanged = !m_fpid.empty() && (m_fpid != aFPID);
+        m_fpid = aFPID;
     }
 
-    const wxString& GetFootprintName() const { return m_footprintName; }
-
-    void SetFootprintLib( const wxString& aFootprintLib )
-    {
-        m_footprintChanged = !m_footprintLib.IsEmpty() && (m_footprintLib != aFootprintLib);
-        m_footprintLib = aFootprintLib;
-    }
-
-    const wxString& GetFootprintLib() const { return m_footprintLib; }
+    const FPID& GetFPID() const { return m_fpid; }
 
     const wxString& GetTimeStamp() const { return m_timeStamp; }
 
@@ -324,7 +309,7 @@ public:
      */
     COMPONENT* GetComponentByTimeStamp( const wxString& aTimeStamp );
 
-    void SortByFootprintName();
+    void SortByFPID();
 
     void SortByReference();
 

@@ -472,7 +472,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
         wxPoint  module_pos;
         const wxString& ref = list[ii].m_Reference;
         const wxString& val = list[ii].m_Value;
-        const wxString& pkg = list[ii].m_Module->GetLibRef();
+        const wxString& pkg = FROM_UTF8( list[ii].m_Module->GetFPID().Format().c_str() );
         sprintf( line, "%-8.8s %-16.16s %-16.16s",
                  TO_UTF8( ref ), TO_UTF8( val ), TO_UTF8( pkg ) );
 
@@ -614,7 +614,8 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
             fputs( line, rptfile );
             sprintf( line, "value %s\n", EscapedUTF8( Module->GetValue() ).c_str() );
             fputs( line, rptfile );
-            sprintf( line, "footprint %s\n", EscapedUTF8( Module->GetLibRef() ).c_str() );
+            sprintf( line, "footprint %s\n",
+                     EscapedUTF8( FROM_UTF8( Module->GetFPID().Format().c_str() ) ).c_str() );
             fputs( line, rptfile );
 
             msg = wxT( "attribut" );

@@ -209,8 +209,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
             GetBoard()->Add( footprint, ADD_APPEND );
 #else
         FPID id;
-        id.SetLibNickname( TO_UTF8( m_libraryName ) );
-        id.SetFootprintName( TO_UTF8( m_footprintName ) );
+        id.SetLibNickname( m_libraryName );
+        id.SetFootprintName( m_footprintName );
         GetBoard()->Add( loadFootprint( id ) );
 #endif
     }
@@ -504,8 +504,8 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
             GetBoard()->Add( footprint, ADD_APPEND );
 #else
         FPID id;
-        id.SetLibNickname( TO_UTF8( m_libraryName ) );
-        id.SetFootprintName( TO_UTF8( m_footprintName ) );
+        id.SetLibNickname( m_libraryName );
+        id.SetFootprintName( m_footprintName );
 
         try
         {

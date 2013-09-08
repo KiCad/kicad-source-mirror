@@ -33,6 +33,7 @@
 #include <wxBasePcbFrame.h>
 #include <base_units.h>
 #include <kicad_string.h>
+#include <macros.h>
 
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
@@ -156,7 +157,8 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
 
         if( ! aFilter.IsEmpty() )
         {
-            if( ! WildCompareString( aFilter, module->GetLibRef(), false ) )
+            if( ! WildCompareString( aFilter, FROM_UTF8( module->GetFPID().Format().c_str() ),
+                                     false ) )
                 continue;
         }
 

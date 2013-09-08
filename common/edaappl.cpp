@@ -619,7 +619,7 @@ void EDA_APP::SetDefaultSearchPaths( void )
         }
     }
 
-#if 1 && defined( DEBUG )
+#if 0 && defined( DEBUG )
     wxLogDebug( wxT( "Library search paths:" ) );
 
     for( unsigned i = 0;  i < m_libSearchPaths.GetCount();  i++ )
@@ -1188,7 +1188,7 @@ bool EDA_APP::SetFootprintLibTablePath()
         for( unsigned i = 0;  i < GetLibraryPathList().GetCount();  i++ )
         {
             unsigned cnt = wxDir::GetAllFiles( GetLibraryPathList()[i], &tmp, wxT( "*.mod" ),
-                                               wxDIR_DEFAULT & ~wxDIR_HIDDEN );
+                                               wxDIR_FILES );
 
             if( cnt > modFileCount )
             {

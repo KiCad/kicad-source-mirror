@@ -861,14 +861,17 @@ static void CreateDevicesSection( FILE* aFile, BOARD* aPcb )
     {
         fprintf( aFile, "DEVICE \"%s\"\n", TO_UTF8( module->GetReference() ) );
         fprintf( aFile, "PART \"%s\"\n", TO_UTF8( module->GetValue() ) );
-        fprintf( aFile, "PACKAGE \"%s\"\n", TO_UTF8( module->GetLibRef() ) );
+        fprintf( aFile, "PACKAGE \"%s\"\n", module->GetFPID().Format().c_str() );
 
         // The TYPE attribute is almost freeform
         const char* ty = "TH";
+
         if( module->GetAttributes() & MOD_CMS )
             ty = "SMD";
+
         if( module->GetAttributes() & MOD_VIRTUAL )
             ty = "VIRTUAL";
+
         fprintf( aFile, "TYPE %s\n", ty );
     }
 
@@ -895,8 +898,8 @@ static void CreateBoardSection( FILE* aFile, BOARD* aPcb )
             {
                 // XXX GenCAD supports arc boundaries but I've seen nothing that reads them
                 fprintf( aFile, "LINE %g %g %g %g\n",
-                        MapXTo( drawseg->GetStart().x ), MapYTo( drawseg->GetStart().y ),
-                        MapXTo( drawseg->GetEnd().x ), MapYTo( drawseg->GetEnd().y ) );
+                         MapXTo( drawseg->GetStart().x ), MapYTo( drawseg->GetStart().y ),
+                         MapXTo( drawseg->GetEnd().x ), MapYTo( drawseg->GetEnd().y ) );
             }
         }
     }
