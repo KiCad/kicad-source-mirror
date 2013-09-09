@@ -35,16 +35,18 @@
 #include <pcbnew_id.h>
 
 #include "selection_tool.h"
+#include "move_tool.h"
 
 void PCB_EDIT_FRAME::setupTools()
 {
-	// create the manager and dispatcher. Route draw panel events to the dispatcher.
+	// Create the manager and dispatcher. Route draw panel events to the dispatcher
 	m_toolManager = new TOOL_MANAGER;
 	m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
 	m_galCanvas->SetEventDispatcher( m_toolDispatcher );
 
-	// register our selection tool.
+	// Register tools
 	m_toolManager->RegisterTool( new SELECTION_TOOL );
+	m_toolManager->RegisterTool( new MOVE_TOOL );
 }
 
 

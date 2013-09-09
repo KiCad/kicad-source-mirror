@@ -120,9 +120,6 @@ public:
      */
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
 
-    /// @copydoc VIEW_ITEM::ViewUpdate()
-    virtual void ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw );
-
     /**
      * Function SetLayer()
      * Sets layer used to draw the group.
