@@ -87,9 +87,11 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 	Connect( wxEVT_MIDDLE_UP,   wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_MIDDLE_DOWN, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_MOUSEWHEEL,  wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	Connect( wxEVT_CHAR_HOOK,   wxEventHandler( EDA_DRAW_PANEL_GAL::skipEvent ), NULL, this );
+	Connect( wxEVT_CHAR_HOOK,   wxEventHandler( EDA_DRAW_PANEL_GAL::skipEvent ) );
 	Connect( wxEVT_KEY_UP,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_KEY_DOWN,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_ENTER_WINDOW, wxEventHandler (EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
+    this->SetFocus();
 }
 
 
@@ -101,7 +103,7 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
     if( m_viewControls )
         delete m_viewControls;
 
-    if( m_view )
+        if( m_view )
         delete m_view;
 
     if( m_gal )
@@ -209,6 +211,11 @@ void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
 	Refresh();
 }
 
+
+void EDA_DRAW_PANEL_GAL::onEnter ( wxEvent& aEvent )
+{
+    SetFocus();
+}
 
 void EDA_DRAW_PANEL_GAL::skipEvent( wxEvent& aEvent )
 {
