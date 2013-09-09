@@ -50,12 +50,12 @@ template<> int rescale( int numerator, int value, int denominator )
 
 template<> int64_t rescale( int64_t numerator, int64_t value, int64_t denominator )
 {
-    uint64_t r = 0;
+    int64_t r = 0;
     int64_t sign = ( ( numerator < 0) ? -1 : 1 ) * ( denominator < 0 ? - 1: 1 ) * (value < 0 ? - 1 : 1);
 
-    uint64_t a = abs( numerator );
-    uint64_t b = abs( value );
-    uint64_t c = abs( denominator );
+    int64_t a = std::abs( numerator );
+    int64_t b = std::abs( value );
+    int64_t c = std::abs( denominator );
 
     r = c / 2;
 
@@ -77,14 +77,14 @@ template<> int64_t rescale( int64_t numerator, int64_t value, int64_t denominato
         a0 = a0 * b0 + t1a;
         a1 = a1 * b1 + (t1 >> 32) + (a0 < t1a);
         a0 += r;
-        a1 += a0 < r;
+        a1 += ((uint64_t)a0) < r;
 
         for( i = 63; i >= 0; i-- )
         {
             a1  += a1 + ( (a0 >> i) & 1 );
             t1  += t1;
 
-            if( c <= a1 )
+            if( (uint64_t)c <= a1 )
             {
                 a1 -= c;
                 t1++;
