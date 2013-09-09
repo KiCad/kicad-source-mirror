@@ -44,6 +44,10 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
                                 WX_VIEW_CONTROLS::onButton ), NULL, this );
     m_parentPanel->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler(
                                 WX_VIEW_CONTROLS::onButton ), NULL, this );
+    m_parentPanel->Connect( wxEVT_LEFT_UP, wxMouseEventHandler(
+                                WX_VIEW_CONTROLS::onButton ), NULL, this );
+    m_parentPanel->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler(
+                                WX_VIEW_CONTROLS::onButton ), NULL, this );
 #if defined _WIN32 || defined _WIN64
     m_parentPanel->Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler(
                                 WX_VIEW_CONTROLS::onEnter ), NULL, this );
@@ -150,6 +154,11 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             m_lookStartPoint = m_view->GetCenter();
             m_state = DRAG_PANNING;
+        }
+
+        if( aEvent.LeftUp() )
+        {
+            m_state = IDLE;     // Stop autopanning when user release left mouse button
         }
         break;
 
