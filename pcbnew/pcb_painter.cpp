@@ -193,6 +193,10 @@ const COLOR4D& PCB_PAINTER::GetColor( const VIEW_ITEM* aItem, int aLayer )
     return m_pcbSettings->m_layerColors[aLayer];
 }
 
+const COLOR4D& PCB_RENDER_SETTINGS::GetLayerColor( int aLayer ) const
+{
+    return m_layerColors[aLayer];
+}
 
 bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
