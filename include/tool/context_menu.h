@@ -44,7 +44,7 @@ public:
 	~CONTEXT_MENU();
 
 	void SetTitle( const wxString& aTitle );
-	void Add ( const wxString& aItem, int aId );
+	void Add( const wxString& aItem, int aId );
 	
 	// fixme: unimplemented
 	// void Add ( const TOOL_ACTION& aAction, int aId = -1 );
@@ -61,7 +61,7 @@ private:
 	
 	friend class TOOL_INTERACTIVE;
 
-	void setTool ( TOOL_INTERACTIVE* aTool )
+	void setTool( TOOL_INTERACTIVE* aTool )
 	{
 		m_tool = aTool;
 	}
