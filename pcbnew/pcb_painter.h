@@ -85,6 +85,8 @@ public:
      */
     void LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions );
 
+    const COLOR4D& GetLayerColor ( int aLayer ) const;
+    
 protected:
     /// @copydoc RENDER_SETTINGS::Update()
     void update();
