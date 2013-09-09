@@ -26,6 +26,7 @@
 #include <class_module.h>
 #include <tool/tool_manager.h>
 #include <view/view_group.h>
+#include <view/view_controls.h>
 
 #include "selection_tool.h"
 #include "move_tool.h"
@@ -74,6 +75,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
     VIEW_GROUP items( view );
 
     view->Add( &items );
+    m_toolMgr->GetViewControls()->SetSnapping( true );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -164,6 +166,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
     m_itemsState.clear();
     items.Clear();
     view->Remove( &items );
+    m_toolMgr->GetViewControls()->SetSnapping( false );
 
     return 0;
 }
