@@ -31,6 +31,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <view/view.h>
+#include <view/view_controls.h>
 
 #include <class_drawpanel_gal.h>
 
@@ -199,7 +200,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
 	bool motion = false, buttonEvents = false;
-	VECTOR2D pos;
+	VECTOR2D pos, screenPos;
 	optional<TOOL_EVENT> evt;
 	
 	int type = aEvent.GetEventType();
@@ -210,8 +211,9 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 	        type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
 	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP )
 	{
-		wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
-		pos = getView()->ToWorld( VECTOR2D( me->GetX(), me->GetY() ) );
+		screenPos = m_toolMgr->GetViewControls()->GetCursorPosition();
+		pos = getView()->ToWorld( screenPos );
+
 		if( pos != m_lastMousePos )
 		{
 			motion = true;
@@ -271,3 +273,4 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
 	if( activateTool && m_editFrame->IsGalCanvasActive() )
 		m_toolMgr->InvokeTool( toolName );
 }
+
