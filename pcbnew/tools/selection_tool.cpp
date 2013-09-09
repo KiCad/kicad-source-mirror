@@ -44,7 +44,7 @@ using namespace KiGfx;
 using boost::optional;
 
 SELECTION_TOOL::SELECTION_TOOL() :
-        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" )
+        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_multiple( false )
 {
     m_selArea = new SELECTION_AREA;
 }
@@ -233,6 +233,7 @@ bool SELECTION_TOOL::selectMultiple()
     OPT_TOOL_EVENT evt;
     VIEW* v = getView();
     bool cancelled = false;
+    m_multiple = true;
 
     // Those 2 lines remove the blink-in-the-random-place effect
     m_selArea->SetOrigin( VECTOR2I( 0, 0 ) );
@@ -281,13 +282,12 @@ bool SELECTION_TOOL::selectMultiple()
                     m_selectedItems.insert( item );
                 }
             }
-            handleModules();
-
             break;
         }
     }
 
     v->Remove( m_selArea );
+    m_multiple = false;
 
     return cancelled;
 }
@@ -370,6 +370,11 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
     break;
 
     case PCB_PAD_T:
+    {
+        // Pads are not selectable in multiple selection mode
+        if( m_multiple )
+            return false;
+
         // Pads are supposed to be on top, bottom or both at the same time (THT)
         if( aItem->IsOnLayer( LAYER_N_FRONT ) && board->IsLayerVisible( LAYER_N_FRONT ) )
             return true;
@@ -378,6 +383,13 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
             return true;
 
         return false;
+    }
+    break;
+
+    case PCB_MODULE_TEXT_T:
+        // Module texts are not selectable in multiple selection mode
+        if( m_multiple )
+            return false;
         break;
 
     case PCB_MODULE_EDGE_T:
@@ -388,26 +400,4 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
 
     // All other items are selected only if the layer on which they exist is visible
     return board->IsLayerVisible( aItem->GetLayer() );
-}
-
-
-void SELECTION_TOOL::handleModules()
-{
-    std::set<BOARD_ITEM*>::iterator it, it_end;
-
-    for( it = m_selectedItems.begin(), it_end = m_selectedItems.end(); it != it_end; )
-    {
-        BOARD_ITEM* parent = (*it)->GetParent();
-
-        // Do not allow to select MODULE and it's parts at the same time
-        if( parent != NULL && parent->IsSelected() )
-        {
-            (*it)->ClearSelected();
-            m_selectedItems.erase( it++ );
-        }
-        else
-        {
-            ++it;
-        }
-    }
 }
