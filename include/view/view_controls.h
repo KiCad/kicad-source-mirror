@@ -46,23 +46,31 @@ class VIEW;
 class VIEW_CONTROLS
 {
 public:
-    VIEW_CONTROLS( VIEW* aView ) : m_view( aView ) {};
+    VIEW_CONTROLS( VIEW* aView ) : m_view( aView ), m_snappingEnabled( false ),
+        m_grabMouse( false ), m_autoPanEnabled( false ), m_autoPanMargin( 0.1 ),
+        m_autoPanSpeed( 0.15 ) {};
     virtual ~VIEW_CONTROLS() {};
 
     /**
-     * Function Activate
-     * Determines if all view related events (mouse wheel, right click panning, etc.), should be
-     * handled or not. If not - they can be processed by the legacy view.
-     * @param aEnabled tells if events should be handled.
+     * Function SetSnapping()
+     * Enables/disables snapping cursor to grid.
+     *
+     * @param aEnabled says whether the opion should be enabled or disabled.
      */
-    virtual void Activate( bool aEnabled ) {};
+    void SetSnapping( bool aEnabled )
+    {
+        m_snappingEnabled = aEnabled;
+    }
 
     /**
      * Function SetGrabMouse
      * Turns on/off mouse grabbing. When the mouse is grabbed, it cannot go outside the VIEW.
      * @param aEnabled tells if mouse should be grabbed or not.
      */
-    virtual void SetGrabMouse( bool aEnabled ) {};
+    virtual void SetGrabMouse( bool aEnabled )
+    {
+        m_grabMouse = aEnabled;
+    }
 
     /**
      * Function SetAutoPan
@@ -70,36 +78,90 @@ public:
      * track) and user moves mouse to the VIEW edge - then the view can be translated or not).
      * @param aEnabled tells if the autopanning should be active.
      */
-    virtual void SetAutoPan( bool aEnabled ) {}
+    virtual void SetAutoPan( bool aEnabled )
+    {
+        m_autoPanEnabled = aEnabled;
+    }
 
     /**
-     * Function SetPanSpeed
-     * Sets speed of panning.
-     * @param aSpeed is a new speed for panning.
+     * Function SetAutoPanSpeed()
+     * Sets speed of autopanning.
+     * @param aSpeed is a new speed for autopanning.
      */
-    virtual void SetPanSpeed( float aSpeed ) {};
+    virtual void SetAutoPanSpeed( float aSpeed )
+    {
+        m_autoPanSpeed = aSpeed;
+    }
 
     /**
-     * Function SetZoomSpeed
-     * Determines how much zoom factor should be affected on one zoom event (eg. mouse wheel).
-     * @param aSpeed is a new zooming speed.
+     * Function SetAutoPanMArgin()
+     * Sets margin for autopanning (ie. the area when autopanning becomes active).
+     * @param aSpeed is a new margin for autopanning.
      */
-    virtual void SetZoomSpeed( float aSpeed ) {};
+    virtual void SetAutoPanMargin( float aMargin )
+    {
+        m_autoPanMargin = aMargin;
+    };
 
     /**
-     * Function AnimatedZoom
-     * // TODO
+     * Function GetMousePosition()
+     * Returns the current mouse pointer position in the screen coordinates. Note, that it may be
+     * different from the cursor position if snapping is enabled (@see GetCursorPosition()).
+     *
+     * @return The current mouse pointer position.
      */
-    virtual void AnimatedZoom( const BOX2I& aExtents ) {};
+    virtual const VECTOR2D& GetMousePosition() const
+    {
+        return m_mousePosition;
+    }
 
-    virtual void WarpCursor (const VECTOR2D& aPosition ) {};
+    /**
+     * Function GetCursorPosition()
+     * Returns the current cursor position in the screen coordinates. Note, that it may be
+     * different from the mouse pointer position if snapping is enabled (@see GetMousePosition()).
+     *
+     * @return The current cursor position in screen coordinates.
+     */
+    virtual const VECTOR2D& GetCursorPosition() const
+    {
+        return m_cursorPosition;
+    }
 
-    virtual void ShowCursor (bool aEnabled ) {};
-
+    /**
+     * Function SetCursorPosition()
+     * Allows to move the cursor to a different location.
+     *
+     * @param aPosition is the new location expressed in screen coordinates.
+     */
+    virtual void SetCursorPosition( const VECTOR2D& aPosition )
+    {
+        m_cursorPosition = aPosition;
+    }
 
 protected:
     /// Pointer to controlled VIEW.
-    VIEW* m_view;
+    VIEW*       m_view;
+
+    /// Current mouse position
+    VECTOR2D    m_mousePosition;
+
+    /// Current cursor position
+    VECTOR2D    m_cursorPosition;
+
+    /// Should the cursor snap to grid or move freely
+    bool        m_snappingEnabled;
+
+    /// Flag for grabbing the mouse cursor
+    bool        m_grabMouse;
+
+    /// Flag for turning on autopanning
+    bool        m_autoPanEnabled;
+
+    /// Distance from cursor to VIEW edge when panning is active
+    float       m_autoPanMargin;
+
+    /// How fast is panning when in auto mode
+    float       m_autoPanSpeed;
 };
 } // namespace KiGfx
 

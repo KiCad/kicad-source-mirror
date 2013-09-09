@@ -34,11 +34,6 @@ using namespace KiGfx;
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     VIEW_CONTROLS( aView ),
     m_state( IDLE ),
-    m_grabMouse( false ),
-    m_snappingEnabled( true ),
-    m_autoPanEnabled( false ),
-    m_autoPanMargin( 0.1 ),
-    m_autoPanSpeed( 0.15 ),
     m_parentPanel( aParentPanel )
 {
     m_parentPanel->Connect( wxEVT_MOTION, wxMouseEventHandler(
@@ -64,6 +59,12 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
     m_mousePosition.x = aEvent.GetX();
     m_mousePosition.y = aEvent.GetY();
+
+    if( m_snappingEnabled )
+        m_cursorPosition = m_view->GetGAL()->GetGridPoint( m_mousePosition );
+    else
+        m_cursorPosition = m_mousePosition;
+
     bool isAutoPanning = false;
 
     if( m_autoPanEnabled )
@@ -207,15 +208,6 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
         m_parentPanel->CaptureMouse();
     else
         m_parentPanel->ReleaseMouse();
-}
-
-
-VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
-{
-    if( m_snappingEnabled )
-        return m_view->GetGAL()->GetGridPoint( m_mousePosition );
-
-    return m_mousePosition;
 }
 
 
