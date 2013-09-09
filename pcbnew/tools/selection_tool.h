@@ -131,12 +131,6 @@ private:
      */
     bool selectable( const BOARD_ITEM* aItem );
 
-    /**
-     * Prevents from selecting both MODULEs and it's parts at the same time. The right way is
-     * to select a MODULE *or* some of it's parts.
-     */
-    void handleModules();
-
     /// Container storing currently selected items
     std::set<BOARD_ITEM*> m_selectedItems;
 
@@ -148,6 +142,9 @@ private:
 
     /// Flag saying if items should be added to the current selection or rather replace it
     bool m_additive;
+
+    /// Flag saying if multiple selection mode is active
+    bool m_multiple;
 };
 
 #endif
