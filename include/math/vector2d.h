@@ -54,6 +54,8 @@ template <>
 struct VECTOR2_TRAITS<int>
 {
     typedef int64_t extended_type;
+	static const extended_type ECOORD_MAX = 0x7fffffffffffffffULL;
+    static const extended_type ECOORD_MIN = 0x8000000000000000ULL;
 };
 
 // Forward declarations for template friends
@@ -124,45 +126,20 @@ public:
     T EuclideanNorm() const;
 
     /**
+     * Function Squared Euclidean Norm
+     * computes the squared euclidean norm of the vector, which is defined as (x ** 2 + y ** 2).
+     * It is used to calculate the length of the vector.
+     * @return Scalar, the euclidean norm
+     */
+    extended_type       SquaredEuclideanNorm() const;
+
+
+    /**
      * Function Perpendicular
      * computes the perpendicular vector
      * @return Perpendicular vector
      */
     VECTOR2<T> Perpendicular() const;
-
-    /**
-     * Function LineProjection
-     * computes the perpendicular projection point of self on a line
-     * going through aA and aB points.
-     * @return Projected point
-     */
-    VECTOR2<T> LineProjection( const VECTOR2<T>& aA, const VECTOR2<T>& aB ) const;
-
-    /**
-     * Function LineSide
-     * determines on which side of directed line passing via points aEnd
-     * and a start aStart we are.
-     * @return: < 0: left, 0 : on the line, > 0 : right
-     */
-    int LineSide( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd ) const;
-
-    /**
-     * Function LineDistance
-     * returns the closest Euclidean distance to a line defined by points
-     * aStart and aEnd.
-     * @param aDetermineSide: when true, the sign of the returned value indicates
-     * the side of the line at which we are (negative = left)
-     * @return the distance
-     */
-    T LineDistance( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd,
-                    bool aDetermineSide = false ) const;
-
-    /**
-     * Function ClosestSegmentPoint
-     * returns the closest point on a line segment defined by aStart and aEnd.
-     * @return: our point
-     */
-    VECTOR2<T> ClosestSegmentPoint( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd ) const;
 
     /**
      * Function Resize
@@ -308,6 +285,13 @@ T VECTOR2<T>::EuclideanNorm() const
     return sqrt( (extended_type) x * x + (extended_type) y * y );
 }
 
+template <class T>
+typename VECTOR2<T>::extended_type VECTOR2<T>::SquaredEuclideanNorm() const
+{
+    return (extended_type)x * x + (extended_type) y * y ;
+}
+
+
 
 template <class T>
 double VECTOR2<T>::Angle() const
@@ -367,89 +351,6 @@ VECTOR2<T>& VECTOR2<T>::operator-=( const T& aScalar )
     y   -= aScalar;
     return *this;
 }
-
-
-template <class T>
-int VECTOR2<T>::LineSide( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd ) const
-{
-    VECTOR2<T>         d   = aEnd - aStart;
-    VECTOR2<T>         ap  = *this - aStart;
-
-    extended_type   det = (extended_type) d.x * (extended_type) ap.y
-                          - (extended_type) d.y * (extended_type) ap.x;
-
-    return det < 0 ? -1 : (det > 0 ? 1 : 0);
-}
-
-
-template <class T>
-VECTOR2<T> VECTOR2<T>::LineProjection( const VECTOR2<T>& aA, const VECTOR2<T>& aB ) const
-{
-    const VECTOR2<T> d = aB - aA;
-    extended_type    det     = (extended_type) d.x * d.x + d.y * (extended_type) d.y;
-    extended_type    dxdy    = (extended_type) d.x * d.y;
-    extended_type    qx      =
-        ( (extended_type) aA.x * d.y * d.y + (extended_type) d.x * d.x * x - dxdy *
-          (aA.y - y) ) / det;
-    extended_type    qy =
-        ( (extended_type) aA.y * d.x * d.x + (extended_type) d.y * d.y * y - dxdy *
-          (aA.x - x) ) / det;
-
-    return VECTOR2<T> ( (T) qx, (T) qy );
-}
-
-
-template <class T>
-T VECTOR2<T>::LineDistance( const VECTOR2<T>& aStart, const VECTOR2<T>& aEnd,
-                            bool aDetermineSide ) const
-{
-    extended_type   a   = aStart.y - aEnd.y;
-    extended_type   b   = aEnd.x - aStart.x;
-    extended_type   c   = -a * aStart.x - b * aStart.y;
-
-    T dist = ( a * x + b * y + c ) / sqrt( a * a + b * b );
-    return aDetermineSide ? dist : abs( dist );
-}
-
-
-template <class T>
-VECTOR2<T> VECTOR2<T>::ClosestSegmentPoint( const VECTOR2<T>&   aStart,
-                                            const VECTOR2<T>&   aEnd ) const
-{
-    VECTOR2<T>      d = (aEnd - aStart);
-    extended_type   l_squared = (extended_type) d.x * d.x + (extended_type) d.y * d.y;
-
-
-    if( l_squared == 0 )
-    {
-        return aStart;
-    }
-
-    extended_type t =
-        (extended_type) (x - aStart.x) * (extended_type) d.x +
-        (extended_type) (y - aStart.y) * (extended_type) d.y;
-
-    if( t < 0 )
-    {
-        return aStart;
-    }
-    else if( t > l_squared )
-    {
-        return aEnd;
-    }
-
-    double xp = (double) t * (double) d.x / (double) l_squared;
-    double yp = (double) t * (double) d.y / (double) l_squared;
-
-    /*VECTOR2<T> proj = aStart + VECTOR2<T> ( ( t * (extended_type) d.x / l_squared ),
-                                              ( t * ( extended_type) d.y / l_squared ) );*/
-
-    VECTOR2<T> proj = aStart + VECTOR2<T> ( (T) xp, (T) yp );
-
-    return proj;
-}
-
-
 template <class T>
 VECTOR2<T> VECTOR2<T>::Rotate( double aAngle ) const
 {
@@ -464,14 +365,15 @@ VECTOR2<T> VECTOR2<T>::Rotate( double aAngle ) const
 template <class T>
 VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
 {
-    if( x == 0 && y == 0 )
-        return VECTOR2<T> ( 0, 0 );
+  if(x == 0 && y == 0)
+    return VECTOR2<T> (0, 0);
 
-    T l = this->EuclideanNorm();
+  extended_type l_sq_current = (extended_type)this->x * this->x + (extended_type)this->y * this->y;
+  extended_type l_sq_new = (extended_type) aNewLength * aNewLength;
 
-    return VECTOR2<T> (
-        rescale( aNewLength, x, l ),
-        rescale( aNewLength, y, l ) );
+  return VECTOR2<T> (
+    (this->x < 0 ? -1 : 1 ) * sqrt(rescale(l_sq_new, (extended_type) x * x, l_sq_current)),
+    (this->y < 0 ? -1 : 1 ) * sqrt(rescale(l_sq_new, (extended_type) y * y, l_sq_current)));
 }
 
 
