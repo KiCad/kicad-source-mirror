@@ -56,21 +56,18 @@ VIEW_GROUP::~VIEW_GROUP()
 void VIEW_GROUP::Add( VIEW_ITEM* aItem )
 {
     m_items.insert( aItem );
-    updateBbox();
 }
 
 
 void VIEW_GROUP::Remove( VIEW_ITEM* aItem )
 {
     m_items.erase( aItem );
-    updateBbox();
 }
 
 
 void VIEW_GROUP::Clear()
 {
     m_items.clear();
-    updateBbox();
 }
 
 
@@ -119,15 +116,6 @@ void VIEW_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[0] = m_layer;
     aCount = 1;
 }
-
-
-/*void VIEW_GROUP::ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw )
-{
-    BOOST_FOREACH( VIEW_ITEM* item, m_items )
-    {
-        item->ViewUpdate( aUpdateFlags, aForceImmediateRedraw );
-    }
-}*/
 
 
 void VIEW_GROUP::updateBbox()
