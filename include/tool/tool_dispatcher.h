@@ -36,7 +36,7 @@ class TOOL_MANAGER;
 class PCB_BASE_FRAME;
 
 namespace KiGfx {
-	class VIEW ;
+	class VIEW;
 };
 
 /** 
