@@ -197,8 +197,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         dir = m_view->ToWorld( dir, false );
         m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
 
-        wxPaintEvent redrawEvent;
-        wxPostEvent( m_parentPanel, redrawEvent );
+        m_parentPanel->Refresh();
     }
     break;
 

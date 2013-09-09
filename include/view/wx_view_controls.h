@@ -54,8 +54,8 @@ public:
     void onWheel( wxMouseEvent& aEvent );
     void onMotion( wxMouseEvent& aEvent );
     void onButton( wxMouseEvent& aEvent );
-    void onEnter( wxMouseEvent& aEvent );
-    void onTimer( wxTimerEvent& aEvent );
+    void onEnter( wxMouseEvent& WXUNUSED( aEvent ) );
+    void onTimer( wxTimerEvent& WXUNUSED( aEvent ) );
 
     /**
      * Function SetGrabMouse()
