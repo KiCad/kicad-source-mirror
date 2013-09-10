@@ -48,12 +48,14 @@ GAL::GAL() :
     // Set grid defaults
     SetGridVisibility( true );
     SetGridStyle( GRID_STYLE_LINES );
+    SetGridOriginMarkerSize( 15 );
+    SetGridDrawThreshold( 10 );
     SetCoarseGrid( 10 );
     SetGridLineWidth( 0.5 );
 
     // Initialize the cursor shape
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
-    SetCursorSize( 20 );
+    SetCursorSize( 15 );
     SetCursorEnabled( true );
 
     strokeFont.LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize );
