@@ -2674,7 +2674,7 @@ LAYER_NUM EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         case 95:    kiLayer = ECO1_N;               break;
         case 96:    kiLayer = ECO2_N;               break;
         default:
-            D( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
+            DBG( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
             kiLayer = -1;       break;  // some layers do not map to KiCad
         }
     }

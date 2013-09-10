@@ -143,7 +143,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
                 break;
 
             default:
-                D( printf( "Error: Shape %d not implemented!\n",
+                DBG( printf( "Error: Shape %d not implemented!\n",
                         outline->GetShape() ); )
                 break;
             }

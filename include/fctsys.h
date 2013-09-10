@@ -21,9 +21,9 @@
 #define WIN_STRING_DIR_SEP  wxT( "\\" )
 
 #ifdef DEBUG
-#define D(x)        x
+#define DBG(x)        x
 #else
-#define D(x)        // nothing
+#define DBG(x)        // nothing
 #endif
 
 /**
