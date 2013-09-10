@@ -81,8 +81,11 @@ struct TOOL_MANAGER::TOOL_STATE
 };
 
 
-TOOL_MANAGER::TOOL_MANAGER()
+TOOL_MANAGER::TOOL_MANAGER() : 
+	m_model (NULL),
+	m_view (NULL)
 {
+	
 }
 
 
@@ -276,11 +279,17 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
     {
         TOOL_STATE* st = m_toolIdIndex[toolId];
 
-		if( st->contextMenuTrigger == CMENU_NOW )
+		if( st->contextMenuTrigger != CMENU_OFF )
 		{
+			if(st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( MB_Right ) )
+				break;
+			
 			st->pendingWait = true;
 			st->waitEvents = TOOL_EVENT( TC_Any, TA_Any );
-			st->contextMenuTrigger = CMENU_OFF;
+			
+			if(st->contextMenuTrigger == CMENU_NOW)
+				st->contextMenuTrigger = CMENU_OFF;
+			
 			GetEditFrame()->PopupMenu( st->contextMenu->GetMenu() );
 
 			TOOL_EVENT evt( TC_Command, TA_ContextMenuChoice );
