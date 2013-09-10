@@ -188,7 +188,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemDeselected( wxListEvent& event )
 {
-    D( printf( "OnListItemDeselected()\n" ); )
+    DBG( printf( "OnListItemDeselected()\n" ); )
 
     if( !m_skipCopyFromPanel )
     {
@@ -200,7 +200,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemDeselected( wxListEvent& even
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemSelected( wxListEvent& event )
 {
-    D( printf( "OnListItemSelected()\n" ); )
+    DBG( printf( "OnListItemSelected()\n" ); )
 
     // remember the selected row, statically
     s_SelectedRow = event.GetIndex();
@@ -448,7 +448,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::moveUpButtonHandler( wxCommandEvent& ev
     // and in the fieldListCtrl
     SCH_FIELD tmp = m_FieldsBuf[fieldNdx - 1];
 
-    D( printf( "tmp.m_Text=\"%s\" tmp.m_Name=\"%s\"\n",
+    DBG( printf( "tmp.m_Text=\"%s\" tmp.m_Name=\"%s\"\n",
                TO_UTF8( tmp.GetText() ), TO_UTF8( tmp.GetName( false ) ) ); )
 
     m_FieldsBuf[fieldNdx - 1] = m_FieldsBuf[fieldNdx];
@@ -866,12 +866,12 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     if( mirror == CMP_MIRROR_X )
     {
         mirrorRadioBox->SetSelection( 1 );
-        D( printf( "mirror=X,1\n" ); )
+        DBG( printf( "mirror=X,1\n" ); )
     }
     else if( mirror == CMP_MIRROR_Y )
     {
         mirrorRadioBox->SetSelection( 2 );
-        D( printf( "mirror=Y,2\n" ); )
+        DBG( printf( "mirror=Y,2\n" ); )
     }
     else
         mirrorRadioBox->SetSelection( 0 );
@@ -891,7 +891,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     // Show the "Parts Locked" option?
     if( !m_LibEntry || !m_LibEntry->UnitsLocked() )
     {
-        D( printf( "partsAreLocked->false\n" ); )
+        DBG( printf( "partsAreLocked->false\n" ); )
         partsAreLockedLabel->Show( false );
     }
 
