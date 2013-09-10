@@ -305,6 +305,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Interactive selection and drag&drop tool." ),
                  KiBitmap( tools_xpm ) );
 
+    AddMenuItem( editMenu, ID_PNS_ROUTER_TOOL,
+                 _( "Interactive router" ),
+                 _( "Interactive router drag&drop tool." ),
+                 KiBitmap( tools_xpm ) );
+
     /** Create View menu **/
     wxMenu* viewMenu = new wxMenu;
 

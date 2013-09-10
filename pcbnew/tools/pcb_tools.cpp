@@ -35,6 +35,7 @@
 #include <pcbnew_id.h>
 
 #include "selection_tool.h"
+#include <router/router_tool.h>
 
 void PCB_EDIT_FRAME::setupTools()
 {
@@ -45,6 +46,7 @@ void PCB_EDIT_FRAME::setupTools()
 
 	// register our selection tool.
 	m_toolManager->RegisterTool( new SELECTION_TOOL );
+	m_toolManager->RegisterTool( new ROUTER_TOOL );
 }
 
 
