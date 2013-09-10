@@ -269,6 +269,10 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent &aEvent )
 	
 	switch( aEvent.GetId() )
 	{
+		case ID_PNS_ROUTER_TOOL:
+			toolName = "pcbnew.InteractiveRouter";
+			activateTool = true;
+			break;
 		case ID_SELECTION_TOOL:
 			toolName = "pcbnew.InteractiveSelection";
 			activateTool = true;

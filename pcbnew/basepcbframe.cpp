@@ -815,7 +815,7 @@ void PCB_BASE_FRAME::LoadSettings()
         {
             // Copper layers are required for netname layers
             view->SetRequired( GetNetnameLayer( layer ), layer );
-            view->SetLayerTarget( layer, KiGfx::TARGET_CACHED );
+            view->SetLayerTarget( layer, KiGfx::TARGET_NONCACHED );
         }
         else if( IsNetnameLayer( layer ) )
         {
