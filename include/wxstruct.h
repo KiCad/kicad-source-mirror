@@ -903,7 +903,7 @@ public:
      * 
      * @param aEnable True for GAL-based canvas, false for standard canvas. 
      */
-    void UseGalCanvas( bool aEnable );
+    virtual void UseGalCanvas( bool aEnable );
     
     /**
      * Function IsNewCanvasActive
