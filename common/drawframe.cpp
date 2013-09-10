@@ -234,13 +234,14 @@ void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
 void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {
     SetGridVisibility( !IsGridVisible() );
+
     if( m_galCanvasActive )
     {
         m_galCanvas->GetGAL()->SetGridVisibility( IsGridVisible() );
-        m_galCanvas->Refresh();
+        m_galCanvas->GetView()->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
     }
-    else
-        m_canvas->Refresh();
+
+    RefreshCanvas();
 }
 
 
@@ -395,11 +396,12 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     if( m_galCanvasActive )
     {
-        KiGfx::GAL* gal = m_galCanvas->GetGAL();
-        gal->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x, screen->GetGrid().m_Size.y ) );
+        m_galCanvas->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x,
+                                                      screen->GetGrid().m_Size.y ) );
+        m_galCanvas->GetView()->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
     }
 
-    Refresh();
+    RefreshCanvas();
 }
 
 
@@ -979,18 +981,18 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         // Switch to GAL rendering
         if( !m_galCanvasActive )
         {
-            // Change view settings only if GAL was not active previously
+            // Set up grid settings
+            gal->SetGridVisibility( IsGridVisible() );
+            gal->SetGridSize( VECTOR2D( screen->GetGridSize().x, screen->GetGridSize().y ) );
+            gal->SetGridOrigin( VECTOR2D( screen->GetGridOrigin() ) );
+            gal->SetGridOriginMarkerSize( 15 );
+            gal->SetGridDrawThreshold( 10 );
+
+            // Set up viewport
             double zoom = 1.0 / ( zoomFactor * m_canvas->GetZoom() );
             view->SetScale( zoom );
             view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
         }
-
-        // Set up grid settings
-        gal->SetGridVisibility( IsGridVisible() );
-        gal->SetGridSize( VECTOR2D( screen->GetGridSize().x, screen->GetGridSize().y ) );
-        gal->SetGridOrigin( VECTOR2D( screen->GetGridOrigin() ) );
-        gal->SetGridOriginMarkerSize( 15 );
-        gal->SetGridDrawThreshold( 10 );
     }
     else
     {
@@ -1014,6 +1016,8 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show( aEnable );
     m_auimgr.Update();
 
-    m_galCanvas->SetFocus();
     m_galCanvasActive = aEnable;
+
+    if( aEnable )
+        m_galCanvas->SetFocus();
 }

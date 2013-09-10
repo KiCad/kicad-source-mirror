@@ -109,7 +109,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     // Rebuild the board connectivity:
     Compile_Ratsnest( NULL, true );
     SetMsgPanel( GetBoard() );
-    m_canvas->Refresh();
+    RefreshCanvas();
 }
 
 

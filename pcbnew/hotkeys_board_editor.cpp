@@ -357,7 +357,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         DisplayOpt.DisplayPcbTrackFill ^= 1;
         DisplayOpt.DisplayPcbTrackFill &= 1;
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-        m_canvas->Refresh();
+        RefreshCanvas();
         break;
 
     case HK_DELETE:
@@ -454,7 +454,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         {
             Other_Layer_Route( NULL, aDC );
             if( DisplayOpt.ContrastModeDisplay )
-                m_canvas->Refresh();
+                RefreshCanvas();
             break;
         }
 
@@ -538,7 +538,19 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
     case HK_SWITCH_HIGHCONTRAST_MODE: // switch to high contrast mode and refresh the canvas
         DisplayOpt.ContrastModeDisplay = !DisplayOpt.ContrastModeDisplay;
-        m_canvas->Refresh();
+        RefreshCanvas();
+        break;
+
+    case HK_CANVAS_CAIRO:
+        evt_type = ID_MENU_CANVAS_CAIRO;
+        break;
+
+    case HK_CANVAS_OPENGL:
+        evt_type = ID_MENU_CANVAS_OPENGL;
+        break;
+
+    case HK_CANVAS_DEFAULT:
+        evt_type = ID_MENU_CANVAS_DEFAULT;
         break;
     }
 

@@ -44,7 +44,7 @@ public:
 
 		if( type == wxEVT_MENU_HIGHLIGHT )
 			evt = TOOL_EVENT( TC_Command, TA_ContextMenuUpdate, aEvent.GetId() );
-		else if ( type == wxEVT_COMMAND_MENU_SELECTED )
+		else if( type == wxEVT_COMMAND_MENU_SELECTED )
 			evt = TOOL_EVENT( TC_Command, TA_ContextMenuChoice, aEvent.GetId() );
 		
 		m_menu->m_tool->GetManager()->ProcessEvent( evt );
@@ -60,8 +60,15 @@ CONTEXT_MENU::CONTEXT_MENU()
 	m_tool = NULL;
 	m_menu = new wxMenu();
 	m_handler = new CMEventHandler( this );
-	m_menu->Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CMEventHandler::onEvent ), NULL, m_handler );
-	m_menu->Connect( wxEVT_COMMAND_MENU_SELECTED, wxEventHandler( CMEventHandler::onEvent ), NULL, m_handler );
+	m_menu->Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CMEventHandler::onEvent ),
+	                 NULL, m_handler );
+	m_menu->Connect( wxEVT_COMMAND_MENU_SELECTED, wxEventHandler( CMEventHandler::onEvent ),
+	                 NULL, m_handler );
+
+	// Workaround for the case when mouse cursor never reaches menu (it hangs up tools using menu)
+	wxMenuEvent menuEvent( wxEVT_MENU_HIGHLIGHT, 0, m_menu );
+	m_menu->AddPendingEvent( menuEvent );
+
 	m_titleSet = false;
 }
 
@@ -75,6 +82,7 @@ CONTEXT_MENU::~CONTEXT_MENU()
 
 void CONTEXT_MENU::SetTitle( const wxString& aTitle )
 {
+    // Unfortunately wxMenu::SetTitle() does nothing..
 	if( m_titleSet )
 	{
         m_menu->Delete( m_menu->FindItemByPosition( 0 ) ); // fixme: this is LAME!
@@ -87,7 +95,7 @@ void CONTEXT_MENU::SetTitle( const wxString& aTitle )
 }
 
 
-void CONTEXT_MENU::Add ( const wxString& aItem, int aId )
+void CONTEXT_MENU::Add( const wxString& aItem, int aId )
 {
 	m_menu->Append( new wxMenuItem( m_menu, aId, aItem, wxEmptyString, wxITEM_NORMAL ) );
 }

@@ -411,7 +411,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
     ReCreateFootprintList();
     ReCreateHToolbar();
     DisplayLibInfos();
-    m_canvas->Refresh();
+    RefreshCanvas();
 }
 
 
@@ -477,7 +477,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& event )
 
     m_libraryName = name;
     ReCreateFootprintList();
-    m_canvas->Refresh();
+    RefreshCanvas();
     DisplayLibInfos();
     ReCreateHToolbar();
 }
@@ -525,7 +525,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
 
         DisplayLibInfos();
         Zoom_Automatique( false );
-        m_canvas->Refresh();
+        RefreshCanvas();
         Update3D_Frame();
     }
 }

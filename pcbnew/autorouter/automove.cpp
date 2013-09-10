@@ -293,7 +293,7 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     if( newList.GetCount() )
         SaveCopyInUndoList( newList, UR_CHANGED );
 
-    m_canvas->Refresh();
+    RefreshCanvas();
 }
 
 

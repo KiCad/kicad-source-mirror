@@ -39,7 +39,6 @@ protected:
                                     // to the parent WORKSHEET_DATAITEM item,
                                     // in page layout editor
 
-protected:
     WS_DRAW_ITEM_BASE( WORKSHEET_DATAITEM*  aParent,
                        WS_DRAW_TYPE aType, EDA_COLOR_T aColor )
     {
@@ -53,8 +52,8 @@ public:
     virtual ~WS_DRAW_ITEM_BASE() {}
 
     // Accessors:
-    EDA_COLOR_T GetColor() { return m_color; }
-    WS_DRAW_TYPE GetType() { return m_type; };
+    EDA_COLOR_T GetColor() const { return m_color; }
+    WS_DRAW_TYPE GetType() const { return m_type; };
 
     WORKSHEET_DATAITEM* GetParent() { return m_parent; }
 

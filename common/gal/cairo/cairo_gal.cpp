@@ -736,8 +736,13 @@ void CAIRO_GAL::SetTarget( RenderTarget aTarget )
         return;
 
     // Cairo grouping prevents display of overlapping items on the same layer in the lighter color
-    cairo_pop_group_to_source( currentContext );
-    cairo_paint_with_alpha( currentContext, fillColor.a );
+    if( isInitialized )
+    {
+        storePath();
+
+        cairo_pop_group_to_source( currentContext );
+        cairo_paint_with_alpha( currentContext, fillColor.a );
+    }
 
     switch( aTarget )
     {
@@ -752,7 +757,8 @@ void CAIRO_GAL::SetTarget( RenderTarget aTarget )
         break;
     }
 
-    cairo_push_group( currentContext );
+    if( isInitialized )
+        cairo_push_group( currentContext );
 
     currentTarget = aTarget;
 }

@@ -35,7 +35,6 @@ class SELECTION_AREA;
 class BOARD_ITEM;
 class GENERAL_COLLECTOR;
 
-
 /**
  * Class SELECTION_TOOL
  *
@@ -43,8 +42,6 @@ class GENERAL_COLLECTOR;
  * - pick single objects (click LMB)
  * - add objects to existing selection (Shift+LMB)
  * - draw selection box (drag LMB)
- *
- * WORK IN PROGRESS. CONSIDER AS A DEMO!
  */
 
 class SELECTION_TOOL : public TOOL_INTERACTIVE
@@ -53,26 +50,101 @@ public:
     SELECTION_TOOL();
     ~SELECTION_TOOL();
 
+    /**
+     * Function Reset()
+     *
+     * Initializes the selection tool.
+     */
     void Reset();
+
+    /**
+     * Function Main()
+     *
+     * The main loop.
+     */
     int Main( TOOL_EVENT& aEvent );
+
+    /**
+     * Function GetSelection()
+     *
+     * Returns the set of currently selected items.
+     */
     const std::set<BOARD_ITEM*>& GetSelection() const
     {
         return m_selectedItems;
     }
 
 private:
+    /**
+     * Function selectSingle()
+     * Selects an item pointed by the parameter aWhere. If there is more than one item at that
+     * place, there is a menu displayed that allows to choose the item.
+     *
+     * @param aWhere is the place where the item should be selected.
+     */
     void selectSingle( const VECTOR2I& aWhere );
-    void selectMultiple();
-    void handleHighlight( const VECTOR2D& aP );
+
+    /**
+     * Function selectMultiple()
+     * Handles drawing a selection box that allows to select many items at the same time.
+     *
+     * @return true if the function was cancelled (ie. CancelEvent was received).
+     */
+    bool selectMultiple();
+
+    /**
+     * Function disambiguationMenu()
+     * Handles the menu that allows to select one of many items in case there is more than one
+     * item at the selected point (@see selectSingle()).
+     *
+     * @param aItems contains list of items that are displayed to the user.
+     */
     BOARD_ITEM* disambiguationMenu( GENERAL_COLLECTOR* aItems );
+
+    /**
+     * Function pickSmallestComponent()
+     * Allows to find the smallest (in terms of bounding box area) item from the list.
+     *
+     * @param aCollector containes the list of items.
+     */
     BOARD_ITEM* pickSmallestComponent( GENERAL_COLLECTOR* aCollector );
+
+    /**
+     * Function toggleSelection()
+     * Changes selection status of a given item.
+     *
+     * @param aItem is the item to have selection status changed.
+     */
     void toggleSelection( BOARD_ITEM* aItem );
+
+    /**
+     * Function clearSelection()
+     * Clears selections of currently selected items.
+     */
     void clearSelection();
 
+    /**
+     * Function selectable()
+     * Checks conditions for an item to be selected.
+     *
+     * @return True if the item fulfills conditions to be selected.
+     */
+    bool selectable( const BOARD_ITEM* aItem );
+
+    /// Container storing currently selected items
     std::set<BOARD_ITEM*> m_selectedItems;
+
+    /// Visual representation of selection area
     SELECTION_AREA* m_selArea;
+
+    /// Menu shown in case of selection ambiguity
     boost::shared_ptr<CONTEXT_MENU> m_menu;
+
+    /// Flag saying if items should be added to the current selection or rather replace it
     bool m_additive;
+
+    /// Flag saying if multiple selection mode is active
+    bool m_multiple;
 };
 
 #endif

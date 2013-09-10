@@ -1028,5 +1028,5 @@ void MODULE::SetOrientation( double newangle )
 void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
-    aLayers[0] = ITEM_GAL_LAYER( GP_OVERLAY );     // Selection box
+    aLayers[0] = ITEM_GAL_LAYER( SELECTION );     // Selection box
 }

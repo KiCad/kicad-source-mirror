@@ -471,6 +471,7 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
     // Any non convex polygon needs to be tesselated
     // for this purpose the GLU standard functions are used
     currentManager->Shader( SHADER_NONE );
+    currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
     TessParams params = { currentManager, tessIntersects };
     gluTessBeginPolygon( tesselator, &params );
