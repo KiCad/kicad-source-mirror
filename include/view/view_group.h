@@ -121,7 +121,7 @@ public:
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
 
     /// @copydoc VIEW_ITEM::ViewUpdate()
-    virtual void ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw );
+    //virtual void ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw );
 
     /**
      * Function SetLayer()
@@ -132,6 +132,13 @@ public:
     inline virtual void SetLayer( int aLayer )
     {
         m_layer = aLayer;
+    }
+
+    void FreeItems();
+
+    KiGfx::VIEW *GetView() const
+    {
+        return m_view;
     }
 
 protected:

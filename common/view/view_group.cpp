@@ -73,6 +73,14 @@ void VIEW_GROUP::Clear()
     updateBbox();
 }
 
+void VIEW_GROUP::FreeItems()
+{
+    BOOST_FOREACH( VIEW_ITEM* item, m_items )
+    {
+        delete item;
+    }
+    m_items.clear();
+}
 
 unsigned int VIEW_GROUP::GetSize() const
 {
@@ -122,15 +130,6 @@ void VIEW_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aLayers[0] = m_layer;
     aCount = 1;
-}
-
-
-void VIEW_GROUP::ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw )
-{
-    BOOST_FOREACH( VIEW_ITEM* item, m_items )
-    {
-        item->ViewUpdate( aUpdateFlags, aForceImmediateRedraw );
-    }
 }
 
 
