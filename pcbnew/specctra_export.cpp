@@ -601,7 +601,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
                 polygon->AppendPoint( lowerRight );
             }
 
-            D( printf( "m_DeltaSize: %d,%d\n", aPad->GetDelta().x, aPad->GetDelta().y ); )
+            DBG( printf( "m_DeltaSize: %d,%d\n", aPad->GetDelta().x, aPad->GetDelta().y ); )
 
             // this string _must_ be unique for a given physical shape
             snprintf( name, sizeof(name), "Trapz%sPad_%.6gx%.6g_%c%.6gx%c%.6g_um",
@@ -793,7 +793,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         case S_RECT:
         case S_ARC:
         default:
-            D( printf( "makeIMAGE(): unsupported shape %s\n",
+            DBG( printf( "makeIMAGE(): unsupported shape %s\n",
                        TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ) ); )
             continue;
         }
@@ -908,7 +908,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
         }
         else    // remove graphics not on EDGE_N layer
         {
-            D( items[i]->Show( 0, std::cout );)
+            DBG( items[i]->Show( 0, std::cout );)
             ++i;
         }
     }

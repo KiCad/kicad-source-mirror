@@ -115,7 +115,7 @@ int VRML_MODEL_PARSER::readMaterial( FILE* file, int* LineNum )
             }
         }
 
-        D( printf( "ReadMaterial error: material not found\n" ) );
+        DBG( printf( "ReadMaterial error: material not found\n" ) );
         return 0;
     }
 
@@ -207,7 +207,7 @@ int VRML_MODEL_PARSER::readChildren( FILE* file, int* LineNum )
         }
         else
         {
-            D( printf( "ReadChildren error line %d <%s> \n", *LineNum, text ) );
+            DBG( printf( "ReadChildren error line %d <%s> \n", *LineNum, text ) );
             break;
         }
     }
@@ -241,7 +241,7 @@ int VRML_MODEL_PARSER::readShape( FILE* file, int* LineNum )
         }
         else
         {
-            D( printf( "ReadShape error line %d <%s> \n", *LineNum, text ) );
+            DBG( printf( "ReadShape error line %d <%s> \n", *LineNum, text ) );
             break;
         }
     }
@@ -271,7 +271,7 @@ int VRML_MODEL_PARSER::readAppearance( FILE* file, int* LineNum )
         }
         else
         {
-            D( printf( "ReadAppearance error line %d <%s> \n", *LineNum, text ) );
+            DBG( printf( "ReadAppearance error line %d <%s> \n", *LineNum, text ) );
             break;
         }
     }

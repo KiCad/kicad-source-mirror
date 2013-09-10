@@ -415,6 +415,6 @@ void CALLBACK tessErrorCB( GLenum errorCode )
     errorStr = gluErrorString( errorCode );
 
     // DEBUG //
-    D( printf( "Tess ERROR: %s\n", errorStr ); )
+    DBG( printf( "Tess ERROR: %s\n", errorStr ); )
 #endif
 }
