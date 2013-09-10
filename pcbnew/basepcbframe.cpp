@@ -136,68 +136,76 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
     if( m_galCanvas )
     {
         KiGfx::VIEW* view = m_galCanvas->GetView();
-        view->Clear();
 
-        // All of PCB drawing elements should be added to the VIEW
-        // in order to be displayed
-
-        // Load zones
-        for( int i = 0; i < m_Pcb->GetAreaCount(); ++i )
-        {
-            view->Add( (KiGfx::VIEW_ITEM*) ( m_Pcb->GetArea( i ) ) );
-        }
-
-        // Load drawings
-        for( BOARD_ITEM* drawing = m_Pcb->m_Drawings; drawing; drawing = drawing->Next() )
-        {
-            view->Add( drawing );
-        }
-
-        // Load tracks
-        for( TRACK* track = m_Pcb->m_Track; track; track = track->Next() )
-        {
-            view->Add( track );
-        }
-
-        // Load modules and its additional elements
-        for( MODULE* module = m_Pcb->m_Modules; module; module = module->Next() )
-        {
-            // Load module's pads
-            for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-            {
-                view->Add( pad );
-            }
-
-            // Load module's drawing (mostly silkscreen)
-            for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
-                 drawing = drawing->Next() )
-            {
-                view->Add( drawing );
-            }
-
-            // Load module's texts (name and value)
-            view->Add( &module->Reference() );
-            view->Add( &module->Value() );
-
-            // Add the module itself
-            view->Add( module );
-        }
-
-        // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
-        for( SEGZONE* zone = m_Pcb->m_Zone; zone; zone = zone->Next() )
-        {
-            view->Add( zone );
-        }
-
-        view->RecacheAllItems( true );
-        if( m_galCanvasActive )
-            m_galCanvas->Refresh();
+        ViewReloadBoard( m_Pcb );
 
         // update the tool manager with the new board and its view.
         if( m_toolManager )
             m_toolManager->SetEnvironment( m_Pcb, view, m_galCanvas->GetViewControls(), this );
-        
     }
+}
+
+
+void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
+{
+    KiGfx::VIEW* view = m_galCanvas->GetView();
+    view->Clear();
+
+    // All of PCB drawing elements should be added to the VIEW
+    // in order to be displayed
+
+    // Load zones
+    for( int i = 0; i < aBoard->GetAreaCount(); ++i )
+    {
+        view->Add( (KiGfx::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
+    }
+
+    // Load drawings
+    for( BOARD_ITEM* drawing = aBoard->m_Drawings; drawing; drawing = drawing->Next() )
+    {
+        view->Add( drawing );
+    }
+
+    // Load tracks
+    for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
+    {
+        view->Add( track );
+    }
+
+    // Load modules and its additional elements
+    for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
+    {
+        // Load module's pads
+        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        {
+            view->Add( pad );
+        }
+
+        // Load module's drawing (mostly silkscreen)
+        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
+             drawing = drawing->Next() )
+        {
+            view->Add( drawing );
+        }
+
+        // Load module's texts (name and value)
+        view->Add( &module->Reference() );
+        view->Add( &module->Value() );
+
+        // Add the module itself
+        view->Add( module );
+    }
+
+    // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
+    for( SEGZONE* zone = aBoard->m_Zone; zone; zone = zone->Next() )
+    {
+        view->Add( zone );
+    }
+
+    view->RecacheAllItems( true );
+
+    if( m_galCanvasActive )
+        m_galCanvas->Refresh();
 }
 
 
@@ -520,6 +528,14 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 
     if( current != m_zoomSelectBox->GetSelection() )
         m_zoomSelectBox->SetSelection( current );
+}
+
+
+void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
+{
+    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    ViewReloadBoard( m_Pcb );
 }
 
 

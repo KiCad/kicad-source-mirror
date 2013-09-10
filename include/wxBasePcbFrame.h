@@ -174,6 +174,8 @@ public:
         return m_Pcb;
     }
 
+    void ViewReloadBoard( const BOARD* aBoard ) const;
+
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
@@ -670,6 +672,8 @@ public:
     void OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
+
+    virtual void UseGalCanvas( bool aEnable );
 
     DECLARE_EVENT_TABLE()
 };

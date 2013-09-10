@@ -981,18 +981,18 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         // Switch to GAL rendering
         if( !m_galCanvasActive )
         {
-            // Change view settings only if GAL was not active previously
+            // Set up grid settings
+            gal->SetGridVisibility( IsGridVisible() );
+            gal->SetGridSize( VECTOR2D( screen->GetGridSize().x, screen->GetGridSize().y ) );
+            gal->SetGridOrigin( VECTOR2D( screen->GetGridOrigin() ) );
+            gal->SetGridOriginMarkerSize( 15 );
+            gal->SetGridDrawThreshold( 10 );
+
+            // Set up viewport
             double zoom = 1.0 / ( zoomFactor * m_canvas->GetZoom() );
             view->SetScale( zoom );
             view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
         }
-
-        // Set up grid settings
-        gal->SetGridVisibility( IsGridVisible() );
-        gal->SetGridSize( VECTOR2D( screen->GetGridSize().x, screen->GetGridSize().y ) );
-        gal->SetGridOrigin( VECTOR2D( screen->GetGridOrigin() ) );
-        gal->SetGridOriginMarkerSize( 15 );
-        gal->SetGridDrawThreshold( 10 );
     }
     else
     {
