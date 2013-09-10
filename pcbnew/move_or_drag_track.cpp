@@ -894,7 +894,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     if( current_net_code > 0 )
         TestNetConnection( DC, current_net_code );
 
-    m_canvas->Refresh();
+    RefreshCanvas();
 
     return true;
 }

@@ -28,6 +28,7 @@
 #include <class_drawpanel_gal.h>
 #include <class_board.h>
 #include <class_board_item.h>
+#include <class_track.h>
 #include <class_module.h>
 
 #include <wxPcbStruct.h>
@@ -43,7 +44,7 @@ using namespace KiGfx;
 using boost::optional;
 
 SELECTION_TOOL::SELECTION_TOOL() :
-        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" )
+        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_multiple( false )
 {
     m_selArea = new SELECTION_AREA;
 }
@@ -68,6 +69,11 @@ void SELECTION_TOOL::Reset()
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
     bool dragging = false;
+    bool allowMultiple = true;
+    BOARD* board = getModel<BOARD>( PCB_T );
+
+    if( !board )
+        return 0;
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -86,6 +92,10 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         if( evt->IsClick( MB_Left ) )
             selectSingle( evt->Position() );
 
+        // unlock the multiple selection box
+        if( evt->IsMouseUp( MB_Left ) )
+            allowMultiple = true;
+
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         if( evt->IsDrag( MB_Left ) )
         {
@@ -96,14 +106,14 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             {
                 // If nothings has been selected or user wants to select more
                 // draw the selection box
-                selectMultiple();
+                if( allowMultiple )
+                    allowMultiple = !selectMultiple();
             }
             else
             {
                 // Now user wants to drag the selected items
                 m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
             }
-
         }
         else if( dragging )
         {
@@ -131,8 +141,12 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
         if( !m_additive )
             clearSelection();
 
-        aItem->SetSelected();
-        m_selectedItems.insert( aItem );
+        // Prevent selection of invisible items
+        if( selectable( aItem ) )
+        {
+            aItem->SetSelected();
+            m_selectedItems.insert( aItem );
+        }
     }
 }
 
@@ -214,22 +228,25 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 }
 
 
-void SELECTION_TOOL::handleHighlight( const VECTOR2D& aP )
-{
-}
-
-
-void SELECTION_TOOL::selectMultiple()
+bool SELECTION_TOOL::selectMultiple()
 {
     OPT_TOOL_EVENT evt;
     VIEW* v = getView();
+    bool cancelled = false;
+    m_multiple = true;
 
+    // Those 2 lines remove the blink-in-the-random-place effect
+    m_selArea->SetOrigin( VECTOR2I( 0, 0 ) );
+    m_selArea->SetEnd( VECTOR2I( 0, 0 ) );
     v->Add( m_selArea );
 
     while( evt = Wait() )
     {
         if( evt->IsCancel() )
+        {
+            cancelled = true;
             break;
+        }
 
         if( evt->IsDrag( MB_Left ) )
         {
@@ -258,19 +275,21 @@ void SELECTION_TOOL::selectMultiple()
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
-                // Add only those items which are fully within a selection box
-                if( selectionBox.Contains( item->ViewBBox() ) )
+                // Add only those items which are visible and fully within the selection box
+                if( selectable( item ) && selectionBox.Contains( item->ViewBBox() ) )
                 {
                     item->SetSelected();
                     m_selectedItems.insert( item );
                 }
             }
-
             break;
         }
     }
 
     v->Remove( m_selArea );
+    m_multiple = false;
+
+    return cancelled;
 }
 
 
@@ -330,4 +349,55 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     }
 
     return NULL;
+}
+
+
+bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
+{
+    BOARD* board = getModel<BOARD>( PCB_T );
+
+    switch( aItem->Type() )
+    {
+    case PCB_VIA_T:
+    {
+        // For vias it is enough if only one of layers is visible
+        LAYER_NUM top, bottom;
+        static_cast<const SEGVIA*>( aItem )->ReturnLayerPair( &top, &bottom );
+
+        return ( board->IsLayerVisible( top ) ||
+                 board->IsLayerVisible( bottom ) );
+    }
+    break;
+
+    case PCB_PAD_T:
+    {
+        // Pads are not selectable in multiple selection mode
+        if( m_multiple )
+            return false;
+
+        // Pads are supposed to be on top, bottom or both at the same time (THT)
+        if( aItem->IsOnLayer( LAYER_N_FRONT ) && board->IsLayerVisible( LAYER_N_FRONT ) )
+            return true;
+
+        if( aItem->IsOnLayer( LAYER_N_BACK ) && board->IsLayerVisible( LAYER_N_BACK ) )
+            return true;
+
+        return false;
+    }
+    break;
+
+    case PCB_MODULE_TEXT_T:
+        // Module texts are not selectable in multiple selection mode
+        if( m_multiple )
+            return false;
+        break;
+
+    case PCB_MODULE_EDGE_T:
+        // These are not selectable, otherwise silkscreen drawings would be easily destroyed
+        return false;
+        break;
+    }
+
+    // All other items are selected only if the layer on which they exist is visible
+    return board->IsLayerVisible( aItem->GetLayer() );
 }

@@ -71,6 +71,8 @@ public:
      * Function InvokeTool()
      * Calls a tool by sending a tool activation event to tool of given ID or name.
      * An user-defined parameter object can be also passed
+     *
+     * @return True if the requested tool was invoked successfully.
      */
     bool InvokeTool( TOOL_ID aToolId );
     bool InvokeTool( const std::string& aName );
@@ -81,6 +83,8 @@ public:
     /**
      * Function FindTool()
      * Searches for a tool with given name or ID
+     *
+     * @return Pointer to the request tool of NULL in case of failure.
      */
     TOOL_BASE* FindTool( int aId ) const;
     TOOL_BASE* FindTool( const std::string& aName ) const;
@@ -100,7 +104,7 @@ public:
     /**
      * Sets the work environment (model, view, view controls and the parent window).
      * These are made available to the tool. Called by the parent frame (PCB_EDIT_FRAME)
-     * when the board is set up
+     * when the board is set up.
      */
     void SetEnvironment( EDA_ITEM* aModel, KiGfx::VIEW* aView,
                          KiGfx::VIEW_CONTROLS* aViewControls, wxWindow* aFrame );
@@ -154,7 +158,7 @@ public:
                               CONTEXT_MENU_TRIGGER aTrigger );
 
     /**
-     * Allows a tool pass the already handled event to be passed to the next tool on the stack.
+     * Allows a tool to pass the already handled event to the next tool on the stack.
      */
     void PassEvent()
     {

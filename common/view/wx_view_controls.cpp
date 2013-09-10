@@ -34,11 +34,6 @@ using namespace KiGfx;
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     VIEW_CONTROLS( aView ),
     m_state( IDLE ),
-    m_grabMouse( false ),
-    m_snappingEnabled( true ),
-    m_autoPanEnabled( false ),
-    m_autoPanMargin( 0.1 ),
-    m_autoPanSpeed( 0.15 ),
     m_parentPanel( aParentPanel )
 {
     m_parentPanel->Connect( wxEVT_MOTION, wxMouseEventHandler(
@@ -48,6 +43,10 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     m_parentPanel->Connect( wxEVT_MIDDLE_UP, wxMouseEventHandler(
                                 WX_VIEW_CONTROLS::onButton ), NULL, this );
     m_parentPanel->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler(
+                                WX_VIEW_CONTROLS::onButton ), NULL, this );
+    m_parentPanel->Connect( wxEVT_LEFT_UP, wxMouseEventHandler(
+                                WX_VIEW_CONTROLS::onButton ), NULL, this );
+    m_parentPanel->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler(
                                 WX_VIEW_CONTROLS::onButton ), NULL, this );
 #if defined _WIN32 || defined _WIN64
     m_parentPanel->Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler(
@@ -64,6 +63,12 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
     m_mousePosition.x = aEvent.GetX();
     m_mousePosition.y = aEvent.GetY();
+
+    if( m_snappingEnabled )
+        m_cursorPosition = m_view->GetGAL()->GetGridPoint( m_mousePosition );
+    else
+        m_cursorPosition = m_mousePosition;
+
     bool isAutoPanning = false;
 
     if( m_autoPanEnabled )
@@ -150,6 +155,11 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             m_lookStartPoint = m_view->GetCenter();
             m_state = DRAG_PANNING;
         }
+
+        if( aEvent.LeftUp() )
+        {
+            m_state = IDLE;     // Stop autopanning when user release left mouse button
+        }
         break;
 
     case DRAG_PANNING:
@@ -187,8 +197,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         dir = m_view->ToWorld( dir, false );
         m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
 
-        wxPaintEvent redrawEvent;
-        wxPostEvent( m_parentPanel, redrawEvent );
+        m_parentPanel->Refresh();
     }
     break;
 
@@ -207,15 +216,6 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
         m_parentPanel->CaptureMouse();
     else
         m_parentPanel->ReleaseMouse();
-}
-
-
-VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
-{
-    if( m_snappingEnabled )
-        return m_view->GetGAL()->GetGridPoint( m_mousePosition );
-
-    return m_mousePosition;
 }
 
 

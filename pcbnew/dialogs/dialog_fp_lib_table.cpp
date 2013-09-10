@@ -252,7 +252,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
         wxArrayInt  cols = m_cur_grid->GetSelectedCols();
         wxArrayInt  rows = m_cur_grid->GetSelectedRows();
 
-        D(printf("topLeft.Count():%zd botRight:Count():%zd\n", topLeft.Count(), botRight.Count() );)
+        DBG(printf("topLeft.Count():%zd botRight:Count():%zd\n", topLeft.Count(), botRight.Count() );)
 
         if( topLeft.Count() && botRight.Count() )
         {
@@ -284,7 +284,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
             selColCount = 0;
         }
 
-        // D(printf("selRowStart:%d selColStart:%d selRowCount:%d selColCount:%d\n", selRowStart, selColStart, selRowCount, selColCount );)
+        // DBG(printf("selRowStart:%d selColStart:%d selRowCount:%d selColCount:%d\n", selRowStart, selColStart, selRowCount, selColCount );)
     }
 
     void rightClickCellPopupMenu()
@@ -353,7 +353,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
             break;
 
         case ID_PASTE:
-            D(printf( "paste\n" );)
+            DBG(printf( "paste\n" );)
             // assume format came from a spreadsheet or us.
             if( wxTheClipboard->Open() )
             {
@@ -471,7 +471,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
             m_cur_grid->SetGridCursor( curRow, curCol );
         }
-        D(printf("%s\n", __func__);)
+        DBG(printf("%s\n", __func__);)
     }
 
     void onCancelButtonClick( wxCommandEvent& event )
@@ -522,7 +522,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
         m_cur_row = event.GetRow();
         m_cur_col = event.GetCol();
 
-        D(printf("change cursor(%d,%d)\n", m_cur_row, m_cur_col );)
+        DBG(printf("change cursor(%d,%d)\n", m_cur_row, m_cur_col );)
 
         // somebody else wants this
         event.Skip();

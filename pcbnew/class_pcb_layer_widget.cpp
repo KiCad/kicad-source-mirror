@@ -346,7 +346,7 @@ void PCB_LAYER_WIDGET::OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor 
 {
     myframe->GetBoard()->SetLayerColor( aLayer, aColor );
     myframe->ReCreateLayerBox( NULL );
-    myframe->GetCanvas()->Refresh();
+    myframe->RefreshCanvas();
 }
 
 
@@ -359,7 +359,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();
     else if( DisplayOpt.ContrastModeDisplay )
-        myframe->GetCanvas()->Refresh();
+        myframe->RefreshCanvas();
 
     return true;
 }
@@ -393,7 +393,7 @@ void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool is
 
     brd->SetVisibleLayers( visibleLayers );
 
-    EDA_DRAW_PANEL_GAL *galCanvas = myframe->GetGalCanvas();
+    EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
     if( galCanvas )
     {
         KiGfx::VIEW* view = galCanvas->GetView();
@@ -401,18 +401,13 @@ void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool is
     }
 
     if( isFinal )
-    {
-        if( myframe->IsGalCanvasActive() )
-            galCanvas->Refresh();
-        else
-            myframe->GetCanvas()->Refresh();
-    }
+        myframe->RefreshCanvas();
 }
 
 void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, EDA_COLOR_T aColor )
 {
     myframe->GetBoard()->SetVisibleElementColor( aId, aColor );
-    myframe->GetCanvas()->Refresh();
+    myframe->RefreshCanvas();
 }
 
 void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
@@ -430,7 +425,7 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     if( myframe->IsGalCanvasActive() )
         galCanvas->Refresh();
     else
-        myframe->GetCanvas()->Refresh();
+        myframe->RefreshCanvas();
 }
 
 //-----</LAYER_WIDGET callbacks>------------------------------------------

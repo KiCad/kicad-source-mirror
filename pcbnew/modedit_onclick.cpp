@@ -97,13 +97,13 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             {
                 End_Edge_Module( (EDGE_MODULE*) item );
                 SetCurItem( NULL );
-                m_canvas->Refresh();
+                RefreshCanvas();
             }
             else if( ( (EDGE_MODULE*) item )->GetShape() == S_ARC )
             {
                 End_Edge_Module( (EDGE_MODULE*) item );
                 SetCurItem( NULL );
-                m_canvas->Refresh();
+                RefreshCanvas();
             }
             else if( ( (EDGE_MODULE*) item )->GetShape() == S_SEGMENT )
             {
@@ -150,7 +150,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         // so deselect the active tool
         SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         SetCurItem( NULL );
-        m_canvas->Refresh();
+        RefreshCanvas();
     }
     break;
 
@@ -436,7 +436,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             m_canvas->MoveCursorToCrossHair();
 
             if( ret > 0 )
-                m_canvas->Refresh();
+                RefreshCanvas();
             }
             break;
 
@@ -448,7 +448,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         case  PCB_MODULE_EDGE_T :
             m_canvas->MoveCursorToCrossHair();
             InstallFootprintBodyItemPropertiesDlg( (EDGE_MODULE*) item );
-            m_canvas->Refresh();
+            RefreshCanvas();
             break;
 
         default:
@@ -463,7 +463,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         {
             End_Edge_Module( (EDGE_MODULE*) item );
             SetCurItem( NULL );
-            m_canvas->Refresh();
+            RefreshCanvas();
         }
 
         break;

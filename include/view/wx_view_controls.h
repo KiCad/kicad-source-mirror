@@ -51,11 +51,11 @@ public:
     ~WX_VIEW_CONTROLS() {};
 
     /// Handler functions
-    void    onWheel( wxMouseEvent& aEvent );
-    void    onMotion( wxMouseEvent& aEvent );
-    void    onButton( wxMouseEvent& aEvent );
-    void    onEnter( wxMouseEvent& aEvent );
-    void    onTimer( wxTimerEvent& aEvent );
+    void onWheel( wxMouseEvent& aEvent );
+    void onMotion( wxMouseEvent& aEvent );
+    void onButton( wxMouseEvent& aEvent );
+    void onEnter( wxMouseEvent& WXUNUSED( aEvent ) );
+    void onTimer( wxTimerEvent& WXUNUSED( aEvent ) );
 
     /**
      * Function SetGrabMouse()
@@ -63,18 +63,7 @@ public:
      *
      * @param aEnabled says whether the option should be enabled or disabled.
      */
-    void    SetGrabMouse( bool aEnabled );
-
-    /**
-     * Function SetSnapping()
-     * Enables/disables snapping cursor to grid.
-     *
-     * @param aEnabled says whether the opion should be enabled or disabled.
-     */
-    void    SetSnapping( bool aEnabled )
-    {
-        m_snappingEnabled = aEnabled;
-    }
+    void SetGrabMouse( bool aEnabled );
 
     /**
      * Function SetAutoPan()
@@ -82,36 +71,15 @@ public:
      *
      * @param aEnabled says whether the option should enabled or disabled.
      */
-    void    SetAutoPan( bool aEnabled )
+    void SetAutoPan( bool aEnabled )
     {
         m_autoPanEnabled = aEnabled;
         if( m_state == AUTO_PANNING )
             m_state = IDLE;
     }
 
-    /**
-     * Function GetMousePosition()
-     * Returns the current mouse pointer position in the screen coordinates. Note, that it may be
-     * different from the cursor position if snapping is enabled (@see GetCursorPosition()).
-     *
-     * @return The current mouse pointer position.
-     */
-    const VECTOR2D& GetMousePosition() const
-    {
-        return m_mousePosition;
-    }
-
-
-    /**
-     * Function GetCursorPosition()
-     * Returns the current cursor position in the screen coordinates. Note, that it may be
-     * different from the mouse pointer position if snapping is enabled (@see GetMousePosition()).
-     *
-     * @return The current cursor position.
-     */
-    VECTOR2D GetCursorPosition() const;
-
 private:
+    /// Possible states for WX_VIEW_CONTROLS
     enum State {
         IDLE = 1,
         DRAG_PANNING,
@@ -126,28 +94,10 @@ private:
      * @return true if it is currently autopanning (ie. autopanning is active and mouse cursor
      * is in the area that causes autopanning to happen).
      */
-    bool    handleAutoPanning( const wxMouseEvent& aEvent );
+    bool handleAutoPanning( const wxMouseEvent& aEvent );
 
     /// Current state of VIEW_CONTROLS
     State       m_state;
-
-    /// Current mouse position
-    VECTOR2D    m_mousePosition;
-
-    /// Flag for grabbing the mouse cursor
-    bool        m_grabMouse;
-
-    /// Should the cursor snap to grid or move freely
-    bool        m_snappingEnabled;
-
-    /// Flag for turning on autopanning
-    bool        m_autoPanEnabled;
-
-    /// Distance from cursor to VIEW edge when panning is active
-    float       m_autoPanMargin;
-
-    /// How fast is panning when in auto mode
-    float       m_autoPanSpeed;
 
     /// Panel that is affected by VIEW_CONTROLS
     wxWindow*   m_parentPanel;

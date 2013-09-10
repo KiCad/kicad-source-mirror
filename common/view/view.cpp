@@ -98,9 +98,9 @@ void VIEW::Add( VIEW_ITEM* aItem )
 
     for( int i = 0; i < layers_count; i++ )
     {
-        VIEW_LAYER* l = &m_layers[layers[i]];
-        l->items->Insert( aItem );
-        l->dirtyExtents.Merge( aItem->ViewBBox() );
+        VIEW_LAYER& l = m_layers[layers[i]];
+        l.items->Insert( aItem );
+        l.isDirty = true;
     }
 
     if( m_dynamic )
@@ -386,7 +386,7 @@ struct VIEW::updateItemsColor
 void VIEW::UpdateLayerColor( int aLayer )
 {
     // There is no point in updating non-cached layers
-    if( !isCached( aLayer ) )
+    if( !IsCached( aLayer ) )
         return;
 
     BOX2I r;
@@ -409,7 +409,7 @@ void VIEW::UpdateAllLayersColor()
         VIEW_LAYER* l = &( ( *i ).second );
 
         // There is no point in updating non-cached layers
-        if( !isCached( l->id ) )
+        if( !IsCached( l->id ) )
             continue;
 
         updateItemsColor visitor( l->id, m_painter, m_gal );
@@ -441,7 +441,7 @@ struct VIEW::changeItemsDepth
 void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
 {
     // There is no point in updating non-cached layers
-    if( !isCached( aLayer ) )
+    if( !IsCached( aLayer ) )
         return;
 
     BOX2I r;
@@ -564,6 +564,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
             m_gal->SetLayerDepth( l->renderingOrder );
             l->items->Query( aRect, drawFunc );
         }
+
         l->isDirty = false;
     }
 }
@@ -571,7 +572,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
 
 void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
 {
-    if( isCached( aLayer ) && !aImmediate )
+    if( IsCached( aLayer ) && !aImmediate )
     {
         // Draw using cached information or create one
         int group = aItem->getGroup( aLayer );
@@ -697,6 +698,7 @@ void VIEW::Clear()
     {
         VIEW_LAYER* l = &( ( *i ).second );
         unlinkItem v;
+
         if( m_dynamic )
             l->items->Query( r, v );
 
@@ -789,6 +791,9 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
     int layers[VIEW_MAX_LAYERS], layers_count;
     aItem->getLayers( layers, layers_count );
 
+    if( aUpdateFlags & VIEW_ITEM::GEOMETRY )
+        updateBbox( aItem );
+
     // Iterate through layers used by the item and recache it immediately
     for( int i = 0; i < layers_count; i++ )
     {
@@ -796,12 +801,8 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 
         if( aUpdateFlags & VIEW_ITEM::GEOMETRY )
         {
-            // Reinsert item in order to update bounding box
-            Remove( aItem );
-            Add( aItem );
-
-            if( isCached( layerId ) )
-                updateItemGeometry( aItem, layerId );      /// TODO is it still necessary?
+            if( IsCached( layerId ) )
+                updateItemGeometry( aItem, layerId );
         }
         else if( aUpdateFlags & VIEW_ITEM::COLOR )
         {
@@ -860,6 +861,21 @@ void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
 }
 
 
+void VIEW::updateBbox( VIEW_ITEM* aItem )
+{
+    int layers[VIEW_MAX_LAYERS], layers_count;
+    aItem->ViewGetLayers( layers, layers_count );
+
+    for( int i = 0; i < layers_count; i++ )
+    {
+        VIEW_LAYER& l = m_layers[layers[i]];
+        l.items->Remove( aItem );
+        l.items->Insert( aItem );
+        l.isDirty = true;
+    }
+}
+
+
 bool VIEW::areRequiredLayersEnabled( int aLayerId ) const
 {
     wxASSERT( (unsigned) aLayerId < m_layers.size() );
@@ -893,13 +909,13 @@ void VIEW::RecacheAllItems( bool aImmediately )
     {
         VIEW_LAYER* l = &( ( *i ).second );
 
-        if( isCached( l->id ) )
+        if( IsCached( l->id ) )
         {
             m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
             recacheLayer visitor( this, m_gal, l->id, aImmediately );
             l->items->Query( r, visitor );
-            l->isDirty = false;
+            l->isDirty = true;
         }
     }
 

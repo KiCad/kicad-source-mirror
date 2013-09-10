@@ -452,8 +452,6 @@ protected:
     wxOverlay m_overlay;
 #endif
 
-protected:
-
     void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
     /**
@@ -693,6 +691,12 @@ public:
     void RedrawScreen2( const wxPoint& posBefore );
 
     /**
+     * Function RefreshCanvas
+     * Depending on the current state of GAL - it refreshes the default canvas of the GAL canvas.
+     */
+    void RefreshCanvas();
+
+    /**
      * Function Zoom_Automatique
      * redraws the screen with best zoom level and the best centering
      * that shows all the page or the board
@@ -899,7 +903,7 @@ public:
      * 
      * @param aEnable True for GAL-based canvas, false for standard canvas. 
      */
-    void UseGalCanvas( bool aEnable );
+    virtual void UseGalCanvas( bool aEnable );
     
     /**
      * Function IsNewCanvasActive

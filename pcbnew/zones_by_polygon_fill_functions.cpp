@@ -80,7 +80,7 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, time_t aTimestamp )
     if( modify )
     {
         OnModify();
-        m_canvas->Refresh();
+        RefreshCanvas();
     }
 }
 

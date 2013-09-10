@@ -210,9 +210,9 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 				st->wakeupEvent = aEvent;
 				st->pendingWait = false;
 				st->waitEvents.clear();
-				st->cofunc->Resume();
-				if( !st->cofunc->Running() )
+				if( !st->cofunc->Resume() )
 				{
+				    // The couroutine has finished
 				    finishTool( st );
 				}
 
@@ -261,6 +261,7 @@ void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
     wxASSERT( m_activeTools.front() == aState->theTool->GetId() );
 
+    // Deactivate the most recent tool and remove it from the active tools queue
     aState->idle = true;
     m_activeTools.erase( m_activeTools.begin() );
 

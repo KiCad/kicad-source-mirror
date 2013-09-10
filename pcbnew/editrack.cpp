@@ -153,11 +153,11 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
                 GetBoard()->SetHighLightNet( zone->GetNet() );
         }
 
-        D( g_CurrentTrackList.VerifyListIntegrity() );
+        DBG( g_CurrentTrackList.VerifyListIntegrity() );
 
         BuildAirWiresTargetsList( LockPoint, wxPoint( 0, 0 ), true );
 
-        D( g_CurrentTrackList.VerifyListIntegrity() );
+        DBG( g_CurrentTrackList.VerifyListIntegrity() );
 
         GetBoard()->HighLightON();
         GetBoard()->DrawHighLight( m_canvas, aDC, GetBoard()->GetHighLightNetCode() );
@@ -191,7 +191,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             // Create 2nd segment
             g_CurrentTrackList.PushBack( (TRACK*)g_CurrentTrackSegment->Clone() );
 
-            D( g_CurrentTrackList.VerifyListIntegrity(); );
+            DBG( g_CurrentTrackList.VerifyListIntegrity(); );
 
             g_CurrentTrackSegment->start = g_FirstTrackSegment;
             g_FirstTrackSegment->end     = g_CurrentTrackSegment;
@@ -199,7 +199,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             g_FirstTrackSegment->SetState( BEGIN_ONPAD | END_ONPAD, false );
         }
 
-        D( g_CurrentTrackList.VerifyListIntegrity(); );
+        DBG( g_CurrentTrackList.VerifyListIntegrity(); );
 
         SetMsgPanel( g_CurrentTrackSegment );
         SetCurItem( g_CurrentTrackSegment, false );
@@ -246,11 +246,11 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         if( CanCreateNewSegment )
         {
             // Erase old track on screen
-            D( g_CurrentTrackList.VerifyListIntegrity(); );
+            DBG( g_CurrentTrackList.VerifyListIntegrity(); );
 
             ShowNewTrackWhenMovingCursor( m_canvas, aDC, wxDefaultPosition, false );
 
-            D( g_CurrentTrackList.VerifyListIntegrity(); );
+            DBG( g_CurrentTrackList.VerifyListIntegrity(); );
 
             if( g_Raccord_45_Auto )
                 Add45DegreeSegment( aDC );
@@ -273,7 +273,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
             newTrack->start = previousTrack->end;
 
-            D( g_CurrentTrackList.VerifyListIntegrity(); );
+            DBG( g_CurrentTrackList.VerifyListIntegrity(); );
 
             newTrack->SetStart( newTrack->GetEnd() );
 
@@ -282,7 +282,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             if( !GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth )
                 newTrack->SetWidth( GetBoard()->GetCurrentTrackWidth() );
 
-            D( g_CurrentTrackList.VerifyListIntegrity(); );
+            DBG( g_CurrentTrackList.VerifyListIntegrity(); );
 
             // Show the new position
             ShowNewTrackWhenMovingCursor( m_canvas, aDC, wxDefaultPosition, false );
@@ -422,7 +422,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
     // Saving the coordinate of end point of the trace
     wxPoint pos = g_CurrentTrackSegment->GetEnd();
 
-    D( g_CurrentTrackList.VerifyListIntegrity(); );
+    DBG( g_CurrentTrackList.VerifyListIntegrity(); );
 
     if( Begin_Route( aTrack, aDC ) == NULL )
         return false;
@@ -439,7 +439,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
      *  }
      */
 
-    D( g_CurrentTrackList.VerifyListIntegrity(); );
+    DBG( g_CurrentTrackList.VerifyListIntegrity(); );
 
 
     /* The track here is now chained to the list of track segments.
@@ -670,7 +670,7 @@ inline void DrawViaCirclesWhenEditingNewTrack( EDA_RECT* aPanelClipBox,
 void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                    bool aErase )
 {
-//    D( g_CurrentTrackList.VerifyListIntegrity(); );
+//    DBG( g_CurrentTrackList.VerifyListIntegrity(); );
 
     PCB_SCREEN*     screen = (PCB_SCREEN*) aPanel->GetScreen();
     PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
@@ -764,7 +764,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     }
 
     // Redraw the new track
-    D( g_CurrentTrackList.VerifyListIntegrity(); );
+    DBG( g_CurrentTrackList.VerifyListIntegrity(); );
     DrawTraces( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
 
     if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )

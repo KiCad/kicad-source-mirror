@@ -167,8 +167,9 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
         }
     }
 
-
     ClearBuffer();
+
+    // Return to direct rendering (we were asked only to create a buffer, not switch to one)
     glBindFramebuffer( GL_FRAMEBUFFER, DIRECT_RENDERING );
     m_currentFbo = DIRECT_RENDERING;
 
