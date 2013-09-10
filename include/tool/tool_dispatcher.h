@@ -73,6 +73,8 @@ private:
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
     bool handlePopupMenu( wxEvent& aEvent );
 
+    wxPoint getCurrentMousePos();
+
     int decodeModifiers( const wxKeyboardState* aState ) const;
 
     struct ButtonState;
