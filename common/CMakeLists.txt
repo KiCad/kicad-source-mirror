@@ -162,6 +162,10 @@ set(COMMON_SRCS
   tool/tool_event.cpp
   tool/tool_interactive.cpp
   tool/context_menu.cpp
+  
+  geometry/seg.cpp
+  geometry/shape_line_chain.cpp
+  geometry/shape_collisions.cpp
   )
 
 add_library(common STATIC ${COMMON_SRCS})

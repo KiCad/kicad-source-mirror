@@ -1,0 +1,141 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2013 CERN
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#ifndef __SHAPE_H
+#define __SHAPE_H
+
+#include <math/vector2d.h>
+#include <math/box2.h>
+
+#include <geometry/seg.h>
+
+/**
+ * Enum ShapeType
+ * Lists all supported shapes
+ */
+
+enum ShapeType {
+	SH_RECT = 0, 	///> axis-aligned rectangle
+	SH_SEGMENT,		///> line segment
+	SH_LINE_CHAIN,	///> line chain (polyline)
+	SH_CIRCLE		///> circle
+};
+
+/**
+ * Class SHAPE
+ * 
+ * Represents an abstract shape on 2D plane. All SHAPEs implement SHAPE interface.
+ */	
+class SHAPE {
+	protected:
+		typedef typename VECTOR2I::extended_type ecoord;
+
+	public:
+		/**
+		 * Constructor
+		 *
+		 * Creates an empty shape of type aType
+		 */
+
+		SHAPE ( ShapeType aType ): m_type( aType ) { };
+		
+		// Destructor
+		virtual ~SHAPE() {};
+
+		/**
+		 * Function Type()
+		 *
+		 * Returns the type of the shape.
+		 * @retval the type
+		 */
+		ShapeType Type() const { return m_type; }
+
+		/**
+		 * Function Clone()
+		 *
+		 * Returns a dynamically allocated copy of the shape
+		 * @retval copy of the shape
+		 */
+		virtual SHAPE* Clone() const { assert(false); };
+
+		/**
+		 * Function Collide()
+		 *
+		 * Checks if the boundary of shape (this) lies closer to the point aP than aClearance, indicating
+		 * a collision.
+		 * @return true, if there is a collision.
+		 */
+		virtual bool Collide ( const VECTOR2I& aP, int aClearance = 0 ) const
+		{
+			return Collide(SEG(aP, aP), aClearance);
+		}
+		
+		/**
+		 * Function Collide()
+		 *
+		 * Checks if the boundary of shape (this) lies closer to the shape aShape than aClearance, indicating
+		 * a collision.
+		 * @return true, if there is a collision.
+		 */
+		virtual bool Collide ( const SHAPE *aShape, int aClerance, VECTOR2I& aMTV ) const;
+		virtual bool Collide ( const SHAPE *aShape, int aClerance = 0 ) const;
+		/**
+		 * Function Collide()
+		 *
+		 * Checks if the boundary of shape (this) lies closer to the segment aSeg than aClearance, indicating
+		 * a collision.
+		 * @return true, if there is a collision.
+		 */
+		virtual bool Collide ( const SEG& aSeg, int aClearance = 0) const = 0;
+	
+		/**
+		 * Function Collide()
+		 *
+		 * Computes a bounding box of the shape, with a margin of aClearance
+		 * a collision.
+		 * @aClearance how much the bounding box is expanded wrs to the minimum enclosing rectangle for the shape.
+		 * @return the bounding box.
+		 */
+		virtual const BOX2I BBox ( int aClearance = 0 ) const = 0;
+
+		/**
+		 * Function Centre()
+		 *
+		 * Computes a center-of-mass of the shape
+		 * @return the center-of-mass point
+		 */
+		virtual VECTOR2I Centre() const
+		{
+			return BBox(0).Centre(); // if nothing better is available....
+		}
+
+	private:
+		///> type of our shape
+		ShapeType m_type;
+
+};
+
+bool CollideShapes ( const SHAPE *a, const SHAPE *b, int clearance, bool needMTV, VECTOR2I& aMTV );
+
+#endif // __SHAPE_H
