@@ -76,7 +76,7 @@ const BOX2I WORKSHEET_ITEM::ViewBBox() const
 }
 
 
-void WORKSHEET_ITEM::ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) const
+void WORKSHEET_ITEM::ViewDraw( int aLayer, GAL* aGal ) const
 {
     RENDER_SETTINGS* settings = m_view->GetPainter()->GetSettings();
     wxString fileName( m_fileName );
@@ -84,8 +84,8 @@ void WORKSHEET_ITEM::ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea 
     WS_DRAW_ITEM_LIST drawList;
 
     drawList.SetPenSize( settings->GetWorksheetLineWidth() );
-    // Sorry,but I don't get this multi #ifdef from include/convert_to_biu.h, so here goes a magic
-    // number. IU_PER_MILS should be 25400 (as in a different compiltion unit), but somehow
+    // Sorry, but I don't get this multi #ifdef from include/convert_to_biu.h, so here goes a magic
+    // number. IU_PER_MILS should be 25400 (as in a different compilation unit), but somehow
     // it equals 1 in this case..
     drawList.SetMilsToIUfactor( 25400 /* IU_PER_MILS */ );
     drawList.SetSheetNumber( m_sheetNumber );

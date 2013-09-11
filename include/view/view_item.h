@@ -101,11 +101,8 @@ public:
      *
      * @param aLayer: current drawing layer
      * @param aGal: pointer to the GAL device we are drawing on
-     * @param aVisibleArea: area (in world space coordinates) that is relevant for drawing. For
-     * example, when drawing a bitmap, one can clip the blitting area to aVisibleArea, reducing
-     * drawing time.
      */
-    virtual void ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) const { };
+    virtual void ViewDraw( int aLayer, GAL* aGal ) const {};
 
     /**
      * Function ViewGetLayers()
@@ -155,10 +152,8 @@ public:
      * this item has changed. For static views calling has no effect.
      *
      * @param aUpdateFlags: how much the object has changed
-     * @param aForceImmediateRedraw: when true, the VIEW is redrawn immediately,
-     *  otherwise, it will be redrawn upon next call of VIEW::Update()
      */
-    virtual void ViewUpdate( int aUpdateFlags = ALL, bool aForceImmediateRedraw = false );
+    virtual void ViewUpdate( int aUpdateFlags = ALL );
 
     /**
      * Function ViewRelease()

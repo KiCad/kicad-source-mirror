@@ -107,9 +107,8 @@ public:
      *
      * @param aLayer is the layer which should be drawn.
      * @param aGal is the GAL that should be used for drawing.
-     * @param aVisibleArea is limiting the drawing area.
      */
-    virtual void ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) const;
+    virtual void ViewDraw( int aLayer, GAL* aGal ) const;
 
     /**
      * Function ViewGetLayers()
