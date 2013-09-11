@@ -356,7 +356,7 @@ public:
      */
     void OnModify();
 
-    virtual wxString GetScreenDesc();
+    virtual wxString GetScreenDesc() const;
 
     void InstallConfigFrame( wxCommandEvent& event );
 

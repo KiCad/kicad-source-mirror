@@ -195,7 +195,7 @@ public:
      * Returns pointer to current settings that are going to be used when drawing items.
      * @return Current rendering settings.
      */
-    virtual RENDER_SETTINGS* GetSettings()
+    virtual RENDER_SETTINGS* GetSettings() const
     {
         return m_settings;
     }

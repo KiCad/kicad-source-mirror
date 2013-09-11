@@ -29,7 +29,6 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/definitions.h>
 
-
 using namespace KiGfx;
 
 GAL::GAL() :
@@ -41,7 +40,7 @@ GAL::GAL() :
     SetFillColor( COLOR4D( 0.0, 0.0, 0.0, 0.0 ) );
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     SetZoomFactor( 1.0 );
-    SetDepthRange( VECTOR2D( -2048, 2047 ) );
+    SetDepthRange( VECTOR2D( GAL::MIN_DEPTH, GAL::MAX_DEPTH ) );
     SetFlip( false, false );
     SetLineWidth( 1.0 );
 
@@ -114,7 +113,7 @@ void GAL::DrawGrid()
 
     // Draw the origin marker
     double origSize = static_cast<double>( gridOriginMarkerSize ) / worldScale;
-    SetLayerDepth( 0.0 );
+    SetLayerDepth( GAL::GRID_DEPTH );
     SetIsFill( false );
     SetIsStroke( true );
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );

@@ -63,7 +63,7 @@ public:
         m_end = aEnd;
     }
 
-    void Show( int x, std::ostream& st) const
+    void Show( int x, std::ostream& st ) const
     {
     }
 
