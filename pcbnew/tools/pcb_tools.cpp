@@ -50,6 +50,13 @@ void PCB_EDIT_FRAME::setupTools()
 }
 
 
+void PCB_EDIT_FRAME::destroyTools()
+{
+    delete m_toolDispatcher;
+    delete m_toolManager;
+}
+
+
 void PCB_EDIT_FRAME::onGenericCommand( wxCommandEvent &aEvent )
 {
 	m_toolDispatcher->DispatchWxCommand( aEvent );

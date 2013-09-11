@@ -118,6 +118,7 @@ protected:
                                                 // to know the footprint name of components.
 
     void setupTools();
+    void destroyTools();
 	void onGenericCommand( wxCommandEvent& aEvent );
 		
     // we'll use lower case function names for private member functions.

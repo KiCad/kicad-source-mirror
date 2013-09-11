@@ -86,6 +86,19 @@ TOOL_MANAGER::TOOL_MANAGER()
 }
 
 
+TOOL_MANAGER::~TOOL_MANAGER()
+{
+    std::map<TOOL_BASE*, TOOL_STATE*>::iterator it, it_end;
+
+    for( it = m_toolState.begin(), it_end = m_toolState.end(); it != it_end; ++it )
+    {
+        delete it->second->cofunc;  // delete cofunction
+        delete it->second;          // delete TOOL_STATE
+        delete it->first;           // delete the tool itself
+    }
+}
+
+
 void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 {
 	TOOL_STATE* st = new TOOL_STATE;
