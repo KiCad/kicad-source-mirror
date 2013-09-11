@@ -485,6 +485,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
+    destroyTools();
     m_RecordingMacros = -1;
 
     for( int i = 0; i < 10; i++ )
