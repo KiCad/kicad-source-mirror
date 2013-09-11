@@ -77,9 +77,6 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
 	
-	m_buttonClear = new wxButton( this, wxID_ANY, _("Clear Selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerMain->Add( m_buttonClear, 0, wxALL|wxALIGN_RIGHT, 5 );
-	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
@@ -87,17 +84,19 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	m_leftGridLayers->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftGridClick ), NULL, this );
-	m_rightGridLayers->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnRightGridClick ), NULL, this );
-	m_buttonClear->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LAYER_SELECTION_BASE::OnClearSelection ), NULL, this );
+	m_leftGridLayers->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftGridCellClick ), NULL, this );
+	m_leftGridLayers->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftButtonReleased ), NULL, this );
+	m_rightGridLayers->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnRightGridCellClick ), NULL, this );
+	m_rightGridLayers->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftButtonReleased ), NULL, this );
 }
 
 DIALOG_LAYER_SELECTION_BASE::~DIALOG_LAYER_SELECTION_BASE()
 {
 	// Disconnect Events
-	m_leftGridLayers->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftGridClick ), NULL, this );
-	m_rightGridLayers->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnRightGridClick ), NULL, this );
-	m_buttonClear->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LAYER_SELECTION_BASE::OnClearSelection ), NULL, this );
+	m_leftGridLayers->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftGridCellClick ), NULL, this );
+	m_leftGridLayers->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftButtonReleased ), NULL, this );
+	m_rightGridLayers->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnRightGridCellClick ), NULL, this );
+	m_rightGridLayers->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftButtonReleased ), NULL, this );
 	
 }
 

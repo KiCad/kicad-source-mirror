@@ -74,30 +74,25 @@ protected:
 };
 
 /*
- * This class display a pcb layers list in adialog,
+ * This class display a pcb layers list in a dialog,
  * to select one layer from this list
  */
 class PCB_ONE_LAYER_SELECTOR : public PCB_LAYER_SELECTOR,
                                public DIALOG_LAYER_SELECTION_BASE
 {
     LAYER_NUM m_layerSelected;
-    LAYER_NUM m_minLayer;
-    LAYER_NUM m_maxLayer;
+    LAYER_MSK m_notAllowedLayersMask;
     std::vector<LAYER_NUM> m_layersIdLeftColumn;
     std::vector<LAYER_NUM> m_layersIdRightColumn;
 
 public:
     PCB_ONE_LAYER_SELECTOR( wxWindow* aParent, BOARD * aBrd,
                         LAYER_NUM aDefaultLayer,
-                        LAYER_NUM aMinLayer = -1, LAYER_NUM aMaxLayer = -1,
-                        bool aClearTool = false )
+                        LAYER_MSK aNotAllowedLayersMask )
         :PCB_LAYER_SELECTOR( aBrd ), DIALOG_LAYER_SELECTION_BASE( aParent )
         {
             m_layerSelected = (int) aDefaultLayer;
-            // When not needed, remove the "Clear" button
-            m_buttonClear->Show( aClearTool );
-            m_minLayer = aMinLayer;
-            m_maxLayer = aMaxLayer;
+            m_notAllowedLayersMask = aNotAllowedLayersMask;
             BuildList();
             Layout();
             GetSizer()->SetSizeHints(this);
@@ -108,13 +103,8 @@ public:
 
 private:
     // Event handlers
-    void OnLeftGridClick( wxGridEvent& event );
-    void OnRightGridClick( wxGridEvent& event );
-	void OnClearSelection( wxCommandEvent& event )
-    {
-        m_layerSelected = NB_PCB_LAYERS;
-        EndModal( NB_PCB_LAYERS );
-    }
+    void OnLeftGridCellClick( wxGridEvent& event );
+    void OnRightGridCellClick( wxGridEvent& event );
 
     void BuildList();
 };
@@ -146,10 +136,7 @@ void PCB_ONE_LAYER_SELECTOR::BuildList()
         if( ! IsLayerEnabled( layerid ) )
             continue;
 
-        if( m_minLayer >= 0 && layerid < m_minLayer )
-            continue;
-
-        if( m_maxLayer >= 0 && layerid > m_maxLayer )
+        if( (m_notAllowedLayersMask & GetLayerMask( layerid )) != 0 )
             continue;
 
         wxColour color = MakeColour( GetLayerColor( layerid ) );
@@ -214,43 +201,31 @@ void PCB_ONE_LAYER_SELECTOR::BuildList()
     m_rightGridLayers->AutoSizeColumn(SELECT_COLNUM);
 }
 
-void PCB_ONE_LAYER_SELECTOR::OnLeftGridClick( wxGridEvent& event )
+void PCB_ONE_LAYER_SELECTOR::OnLeftGridCellClick( wxGridEvent& event )
 {
     m_layerSelected = m_layersIdLeftColumn[ event.GetRow() ];
+    m_leftGridLayers->SetGridCursor( event.GetRow(), LAYERNAME_COLNUM );
     EndModal( 1 );
 }
 
-void PCB_ONE_LAYER_SELECTOR::OnRightGridClick( wxGridEvent& event )
+void PCB_ONE_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
 {
     m_layerSelected = m_layersIdRightColumn[ event.GetRow() ];
+    m_rightGridLayers->SetGridCursor( event.GetRow(), LAYERNAME_COLNUM );
     EndModal( 2 );
 }
 
 /** Install the dialog box for layer selection
  * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
- * @param aMinlayer = min layer id value (-1 if no min value)
- * @param aMaxLayer = max layer id value (-1 if no max value)
- * @param aDeselectTool = display a "Clear" button when true
- * @return new layer value (NB_PCB_LAYERS when "(Deselect)" radiobutton selected),
- *                         or -1 if canceled
- *
- * Providing the option to also display a "Clear" button makes the
- * "Swap Layers" command more "user friendly",
- * by permitting any layer to be "deselected" immediately after its
- * corresponding radiobutton has been clicked on. (It would otherwise be
- * necessary to first cancel the "Select Layer:" dialog box (invoked after a
- * different radiobutton is clicked on) prior to then clicking on the
- * "Clear" button provided within the "Swap Layers:"
- * or "Layer selection:" dialog box).
+ * @param aNotAllowedLayers = a layer mask for not allowed layers
+ *                            (= 0 to show all layers in use)
+ * @return the selected layer id
  */
 LAYER_NUM PCB_BASE_FRAME::SelectLayer( LAYER_NUM  aDefaultLayer,
-                                       LAYER_NUM  aMinlayer,
-                                       LAYER_NUM  aMaxLayer,
-                                       bool aDeselectTool )
+                                       LAYER_MSK aNotAllowedLayersMask )
 {
     PCB_ONE_LAYER_SELECTOR dlg( this, GetBoard(),
-                                aDefaultLayer, aMinlayer, aMaxLayer,
-                                aDeselectTool );
+                                aDefaultLayer, aNotAllowedLayersMask );
     dlg.ShowModal();
     LAYER_NUM layer = dlg.GetLayerSelection();
     return layer;
@@ -283,8 +258,8 @@ public:
     }
 
 private:
-    void OnLeftGridClick( wxGridEvent& event );
-    void OnRightGridClick( wxGridEvent& event );
+    void OnLeftGridCellClick( wxGridEvent& event );
+    void OnRightGridCellClick( wxGridEvent& event );
 
     void OnOkClick( wxCommandEvent& event )
     {
@@ -300,10 +275,10 @@ private:
 
 };
 
-/* Display a list of two copper layers to choose a pair of layers
- * for auto-routing, vias ...
+/* Display a list of two copper layers to choose a pair of copper layers
+ * the layer pair is used to fast switch between copper layers when placing vias
  */
-void PCB_BASE_FRAME::SelectLayerPair()
+void PCB_BASE_FRAME::SelectCopperLayerPair()
 {
     PCB_SCREEN* screen = GetScreen();
     SELECT_COPPER_LAYERS_PAIR_DIALOG dlg( this, GetBoard(),
@@ -411,7 +386,7 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::BuildList()
     m_rightGridLayers->AutoSizeColumn(SELECT_COLNUM);
 }
 
-void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnLeftGridClick( wxGridEvent& event )
+void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnLeftGridCellClick( wxGridEvent& event )
 {
     int row = event.GetRow();
     LAYER_NUM layer = m_layersId[row];
@@ -434,7 +409,7 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnLeftGridClick( wxGridEvent& event )
     m_leftGridLayers->SetGridCursor( row, LAYERNAME_COLNUM );
 }
 
-void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnRightGridClick( wxGridEvent& event )
+void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnRightGridCellClick( wxGridEvent& event )
 {
     int row = event.GetRow();
     LAYER_NUM layer = m_layersId[row];
