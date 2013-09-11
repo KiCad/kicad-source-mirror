@@ -64,14 +64,13 @@ void RENDER_SETTINGS::update()
 
 
 PAINTER::PAINTER( GAL* aGal ) :
-    m_gal( aGal ), m_settings( NULL ), m_brightenedColor( 0.0, 1.0, 0.0, 0.9 )
+    m_gal( aGal ), m_brightenedColor( 0.0, 1.0, 0.0, 0.9 )
 {
 }
 
 
 PAINTER::~PAINTER()
 {
-    delete m_settings;
 }
 
 
@@ -91,7 +90,7 @@ void PAINTER::DrawBrightened( const VIEW_ITEM* aItem )
     m_gal->PushDepth();
     m_gal->SetLayerDepth( -1.0 );
 
-    // Draw semitransparent box that marks items as brightened
+    // Draw an outline that marks items as brightened
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( 100000.0 );
     m_gal->SetStrokeColor( m_brightenedColor );

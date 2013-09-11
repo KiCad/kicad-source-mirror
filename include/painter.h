@@ -32,7 +32,7 @@
 
 #include <gal/color4d.h>
 #include <colors.h>
-
+#include <boost/shared_ptr.hpp>
 
 class EDA_ITEM;
 class COLORS_DESIGN_SETTINGS;
@@ -187,10 +187,7 @@ public:
      */
     virtual void ApplySettings( RENDER_SETTINGS* aSettings )
     {
-        if( m_settings )
-            delete m_settings;
-
-        m_settings = aSettings;
+        m_settings.reset( aSettings );
     }
 
     /**
@@ -207,7 +204,7 @@ public:
      */
     virtual RENDER_SETTINGS* GetSettings() const
     {
-        return m_settings;
+        return m_settings.get();
     }
 
     /**
@@ -233,7 +230,7 @@ protected:
     GAL*                m_gal;
 
     /// Colors and display modes settings that are going to be used when drawing items.
-    RENDER_SETTINGS*    m_settings;
+    boost::shared_ptr<RENDER_SETTINGS> m_settings;
 
     /// Color of brightened item frame
     COLOR4D             m_brightenedColor;

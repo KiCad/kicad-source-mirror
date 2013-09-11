@@ -27,6 +27,7 @@
 #define __CLASS_PCB_PAINTER_H
 
 #include <layers_id_colors_and_visibility.h>
+#include <boost/shared_ptr.hpp>
 #include <painter.h>
 
 class EDA_ITEM;
@@ -130,10 +131,11 @@ public:
         PAINTER::ApplySettings( aSettings );
 
         // Store PCB specific render settings
-        m_pcbSettings = dynamic_cast<PCB_RENDER_SETTINGS*>( aSettings );
+        m_pcbSettings = (PCB_RENDER_SETTINGS*) m_settings.get(); //dynamic_cast<PCB_RENDER_SETTINGS*>( aSettings );
     }
 
 protected:
+    /// Just a properly casted pointer to settings
     PCB_RENDER_SETTINGS* m_pcbSettings;
 
     // Drawing functions for various types of PCB-specific items
