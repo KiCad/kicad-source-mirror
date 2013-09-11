@@ -586,7 +586,7 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
             group = m_gal->BeginGroup();
             aItem->setGroup( aLayer, group );
             if( !m_painter->Draw( aItem, aLayer ) )
-                aItem->ViewDraw( aLayer, m_gal, BOX2I() ); // Alternative drawing method
+                aItem->ViewDraw( aLayer, m_gal ); // Alternative drawing method
             m_gal->EndGroup();
         }
     }
@@ -594,7 +594,7 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
     {
         // Immediate mode
         if( !m_painter->Draw( aItem, aLayer ) )
-            aItem->ViewDraw( aLayer, m_gal, BOX2I() );  // Alternative drawing method
+            aItem->ViewDraw( aLayer, m_gal );  // Alternative drawing method
     }
 
     // Draws a bright contour around the item
@@ -673,7 +673,7 @@ struct VIEW::recacheLayer
             int group = gal->BeginGroup();
             aItem->setGroup( layer, group );
             if( !view->m_painter->Draw( aItem, layer ) )
-                aItem->ViewDraw( layer, gal, BOX2I() ); // Alternative drawing method
+                aItem->ViewDraw( layer, gal ); // Alternative drawing method
             gal->EndGroup();
         }
         else

@@ -120,7 +120,7 @@ public:
     const BOX2I ViewBBox() const;
 
     /// @copydoc VIEW_ITEM::ViewDraw()
-    void ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) const;
+    void ViewDraw( int aLayer, GAL* aGal ) const;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     void ViewGetLayers( int aLayers[], int& aCount ) const;
