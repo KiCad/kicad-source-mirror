@@ -32,6 +32,7 @@
 
 #include <gal/color4d.h>
 #include <colors.h>
+#include <worksheet_shape_builder.h>
 #include <boost/shared_ptr.hpp>
 
 class EDA_ITEM;
@@ -123,6 +124,11 @@ public:
      */
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const = 0;
 
+    float GetWorksheetLineWidth() const
+    {
+        return m_worksheetLineWidth;
+    }
+
 protected:
     /**
      * Function update
@@ -147,6 +153,7 @@ protected:
     float   m_selectFactor;         ///< Specifies how color of selected items is changed
     float   m_layerOpacity;         ///< Determines opacity of all layers
     float   m_outlineWidth;         ///< Line width used when drawing outlines
+    float   m_worksheetLineWidth;   ///< Line width used when drawing worksheet
 
     /// Map of colors that were usually used for display
     std::map<EDA_COLOR_T, COLOR4D> m_legacyColorMap;
