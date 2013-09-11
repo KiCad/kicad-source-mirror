@@ -85,6 +85,9 @@ public:
      */
     void LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions );
 
+    /// @copydoc RENDER_SETTINGS::GetColor()
+    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const;
+
 protected:
     /// @copydoc RENDER_SETTINGS::Update()
     void update();
@@ -129,9 +132,6 @@ public:
         // Store PCB specific render settings
         m_pcbSettings = dynamic_cast<PCB_RENDER_SETTINGS*>( aSettings );
     }
-
-    /// @copydoc PAINTER::GetColor()
-    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer );
 
 protected:
     PCB_RENDER_SETTINGS* m_pcbSettings;

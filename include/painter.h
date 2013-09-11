@@ -113,6 +113,16 @@ public:
         m_hiContrastEnabled = aEnabled;
     }
 
+    /**
+     * Function GetColor
+     * Returns the color that should be used to draw the specific VIEW_ITEM on the specific layer
+     * using currently used render settings.
+     * @param aItem is the VIEW_ITEM.
+     * @param aLayer is the layer.
+     * @return The color.
+     */
+    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const = 0;
+
 protected:
     /**
      * Function update
@@ -216,16 +226,6 @@ public:
      * @param aItem is the item that is going to be marked.
      */
     virtual void DrawBrightened( const VIEW_ITEM* aItem );
-
-    /**
-     * Function GetColor
-     * Returns the color that should be used to draw the specific VIEW_ITEM on the specific layer
-     * using currently used render settings.
-     * @param aItem is the VIEW_ITEM.
-     * @param aLayer is the layer.
-     * @return The color.
-     */
-    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) = 0;
 
 protected:
     /// Instance of graphic abstraction layer that gives an interface to call
