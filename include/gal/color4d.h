@@ -28,6 +28,7 @@
 #define COLOR4D_H_
 
 #include <colors.h>
+#include <cassert>
 
 namespace KiGfx
 {
@@ -55,6 +56,10 @@ public:
     COLOR4D( double aRed, double aGreen, double aBlue, double aAlpha ) :
         r( aRed ), g( aGreen ), b( aBlue ), a( aAlpha )
     {
+        assert( r >= 0.0 && r <= 1.0 );
+        assert( g >= 0.0 && g <= 1.0 );
+        assert( b >= 0.0 && b <= 1.0 );
+        assert( a >= 0.0 && a <= 1.0 );
     }
 
     /**
@@ -82,6 +87,8 @@ public:
      */
     COLOR4D& Brighten( double aFactor )
     {
+        assert( aFactor >= 0.0 && aFactor <= 1.0 );
+
         r = r * ( 1.0 - aFactor ) + aFactor;
         g = g * ( 1.0 - aFactor ) + aFactor;
         b = b * ( 1.0 - aFactor ) + aFactor;
@@ -97,6 +104,8 @@ public:
      */
     COLOR4D& Darken( double aFactor )
     {
+        assert( aFactor >= 0.0 && aFactor <= 1.0 );
+
         r = r * ( 1.0 - aFactor );
         g = g * ( 1.0 - aFactor );
         b = b * ( 1.0 - aFactor );
@@ -126,6 +135,8 @@ public:
      */
     COLOR4D Brightened( double aFactor ) const
     {
+        assert( aFactor >= 0.0 && aFactor <= 1.0 );
+
         return COLOR4D( r * ( 1.0 - aFactor ) + aFactor,
                         g * ( 1.0 - aFactor ) + aFactor,
                         b * ( 1.0 - aFactor ) + aFactor,
@@ -140,6 +151,8 @@ public:
      */
     COLOR4D Darkened( double aFactor ) const
     {
+        assert( aFactor >= 0.0 && aFactor <= 1.0 );
+
         return COLOR4D( r * ( 1.0 - aFactor ),
                         g * ( 1.0 - aFactor ),
                         b * ( 1.0 - aFactor ),

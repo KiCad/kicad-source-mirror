@@ -30,9 +30,9 @@ using namespace KiGfx;
 
 COLOR4D::COLOR4D( EDA_COLOR_T aColor )
 {
-    r = g_ColorRefs[aColor].m_Red;
-    g = g_ColorRefs[aColor].m_Green;
-    b = g_ColorRefs[aColor].m_Blue;
+    r = g_ColorRefs[aColor].m_Red / 255.0;
+    g = g_ColorRefs[aColor].m_Green / 255.0;
+    b = g_ColorRefs[aColor].m_Blue / 255.0;
     a = 1.0;
 }
 
