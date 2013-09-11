@@ -32,13 +32,14 @@ using namespace KiGfx;
 RENDER_SETTINGS::RENDER_SETTINGS()
 {
     // Set the default initial values
-    m_highlightFactor   = 0.5;
-    m_selectFactor      = 0.5;
-    m_layerOpacity      = 0.8;
-    m_highlightEnabled  = false;
-    m_hiContrastEnabled = false;
-    m_hiContrastFactor  = 0.2;
-    m_outlineWidth      = 1;
+    m_highlightFactor       = 0.5;
+    m_selectFactor          = 0.5;
+    m_layerOpacity          = 0.8;
+    m_highlightEnabled      = false;
+    m_hiContrastEnabled     = false;
+    m_hiContrastFactor      = 0.2;
+    m_outlineWidth          = 1;
+    m_worksheetLineWidth    = 100000;
 
     // Store the predefined colors used in KiCad in format used by GAL
     for( int i = 0; i < NBCOLORS; i++ )
