@@ -191,6 +191,8 @@ void PCB_RENDER_SETTINGS::update()
 PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
     PAINTER( aGal )
 {
+    m_settings.reset( new PCB_RENDER_SETTINGS() );
+    m_pcbSettings = (PCB_RENDER_SETTINGS*) m_settings.get();
 }
 
 
