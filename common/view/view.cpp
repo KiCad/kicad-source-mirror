@@ -370,7 +370,7 @@ struct VIEW::updateItemsColor
     void operator()( VIEW_ITEM* aItem )
     {
         // Obtain the color that should be used for coloring the item
-        const COLOR4D color = painter->GetColor( aItem, layer );
+        const COLOR4D color = painter->GetSettings()->GetColor( aItem, layer );
         int group = aItem->getGroup( layer );
 
         if( group >= 0 )
@@ -672,7 +672,8 @@ struct VIEW::recacheLayer
         {
             int group = gal->BeginGroup();
             aItem->setGroup( layer, group );
-            view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), layer );
+            if( !view->m_painter->Draw( aItem, layer ) )
+                aItem->ViewDraw( layer, gal, BOX2I() ); // Alternative drawing method
             gal->EndGroup();
         }
         else
@@ -836,7 +837,7 @@ void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
     wxASSERT( (unsigned) aLayer < m_layers.size() );
 
     // Obtain the color that should be used for coloring the item on the specific layerId
-    const COLOR4D color = m_painter->GetColor( aItem, aLayer );
+    const COLOR4D color = m_painter->GetSettings()->GetColor( aItem, aLayer );
     int group = aItem->getGroup( aLayer );
 
     // Change the color, only if it has group assigned
