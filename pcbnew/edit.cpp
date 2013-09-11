@@ -922,7 +922,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER:
-        itmp = SelectLayer( getActiveLayer(), UNDEFINED_LAYER, UNDEFINED_LAYER );
+        itmp = SelectLayer( getActiveLayer() );
 
         if( itmp >= 0 )
         {
@@ -939,11 +939,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
-        SelectLayerPair();
+        SelectCopperLayerPair();
         break;
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
-        itmp = SelectLayer( getActiveLayer(), FIRST_NON_COPPER_LAYER, UNDEFINED_LAYER );
+        itmp = SelectLayer( getActiveLayer(), ALL_CU_LAYERS );
 
         if( itmp >= 0 )
             setActiveLayer( itmp );
@@ -952,7 +952,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
-        itmp = SelectLayer( getActiveLayer(), UNDEFINED_LAYER, LAST_COPPER_LAYER );
+        itmp = SelectLayer( getActiveLayer(), ALL_NO_CU_LAYERS );
 
         if( itmp >= 0 )
             setActiveLayer( itmp );
@@ -960,7 +960,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
-        SelectLayerPair();
+        SelectCopperLayerPair();
         m_canvas->MoveCursorToCrossHair();
         break;
 

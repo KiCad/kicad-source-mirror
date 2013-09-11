@@ -165,6 +165,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
     m_LayerSelectionCtrl->SetLayerMask( ALL_CU_LAYERS );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
+
     if( m_LayerSelectionCtrl->SetLayerSelection( m_Item->GetLayer() ) < 0 )
     {
         wxMessageBox( _("This item has an illegal layer id.\n"

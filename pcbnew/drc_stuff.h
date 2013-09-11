@@ -44,11 +44,11 @@
 #define DRCE_TRACK_NEAR_VIA                    5    ///< track too close to via
 #define DRCE_VIA_NEAR_VIA                      6    ///< via too close to via
 #define DRCE_VIA_NEAR_TRACK                    7    ///< via too close to track
-#define DRCE_TRACK_ENDS1                       8    ///< @todo say what this problem is
-#define DRCE_TRACK_ENDS2                       9    ///< @todo say what this problem is
-#define DRCE_TRACK_ENDS3                       10   ///< @todo say what this problem is
-#define DRCE_TRACK_ENDS4                       11   ///< @todo say what this problem is
-#define DRCE_TRACK_UNKNOWN1                    12   ///< @todo check source code and change this comment
+#define DRCE_TRACK_ENDS1                       8    ///< 2 parallel track segments too close: fine start point test
+#define DRCE_TRACK_ENDS2                       9    ///< 2 parallel track segments too close: fine start point test
+#define DRCE_TRACK_ENDS3                       10   ///< 2 parallel track segments too close: fine end point test
+#define DRCE_TRACK_ENDS4                       11   ///< 2 parallel track segments too close: fine end point test
+#define DRCE_TRACK_SEGMENTS_TOO_CLOSE          12   ///< 2 parallel track segments too close: segm ends between segref ends
 #define DRCE_TRACKS_CROSSING                   13   ///< tracks are crossing
 #define DRCE_ENDS_PROBLEM1                     14   ///< track ends are too close
 #define DRCE_ENDS_PROBLEM2                     15   ///< track ends are too close
