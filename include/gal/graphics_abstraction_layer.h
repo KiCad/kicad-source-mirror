@@ -818,6 +818,9 @@ public:
         depthStack.pop();
     }
 
+    /// Depth level on which the grid is drawn
+    static const int GRID_DEPTH = 1024;
+
 protected:
     std::stack<double> depthStack;             ///< Stored depth values
     VECTOR2D           screenSize;             ///< Screen size in screen coordinates
@@ -884,6 +887,9 @@ protected:
      * @param aCursorSize is the size of the cursor.
      */
     virtual void initCursor( int aCursorSize ) = 0;
+
+    static const int MIN_DEPTH = -2048;
+    static const int MAX_DEPTH = 2047;
 };
 } // namespace KiGfx
 
