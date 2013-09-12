@@ -196,8 +196,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 
         dir = m_view->ToWorld( dir, false );
         m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
-
-        m_parentPanel->Refresh();
+        m_view->MakeDirty();
     }
     break;
 

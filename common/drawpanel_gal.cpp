@@ -91,6 +91,11 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 	Connect( wxEVT_KEY_UP,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_KEY_DOWN,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxEventHandler (EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
+    
+
+    m_refreshTimer.SetOwner( this );
+    Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
+
     this->SetFocus();
 }
 
@@ -113,6 +118,9 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
+    m_pendingRefresh = false;
+    m_lastRefresh = wxGetLocalTimeMillis();
+
 #ifdef __WXDEBUG__
     prof_counter time;
     prof_start( &time, false );
@@ -147,11 +155,31 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 }
 
 
-void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
+void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
 {
     wxPaintEvent redrawEvent;
     wxPostEvent( this, redrawEvent );
 }
+
+
+void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
+{
+    if(m_pendingRefresh)
+        return;
+
+    wxLongLong t = wxGetLocalTimeMillis();
+    wxLongLong delta = t - m_lastRefresh;
+
+    if(t >= MinRefreshPeriod)
+    {
+        wxPaintEvent redrawEvent;
+        wxPostEvent( this, redrawEvent );
+        m_pendingRefresh = true;
+    } else {
+        m_refreshTimer.Start ( (MinRefreshPeriod - t).ToLong(), true );
+        m_pendingRefresh = true;
+    }
+} 
 
 
 void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
@@ -208,7 +236,8 @@ void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
         m_eventDispatcher->DispatchWxEvent( aEvent );
     }
 
-	Refresh();
+	if(m_view->IsDirty())
+        Refresh();
 }
 
 
