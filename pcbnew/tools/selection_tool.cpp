@@ -151,7 +151,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 {
-    if( aItem->IsSelected() )
+    if( m_selectedItems.find( aItem ) != m_selectedItems.end() )
     {
         aItem->ClearSelected();
         m_selectedItems.erase( aItem );
@@ -204,9 +204,29 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         break;
 
     default:
-        item = disambiguationMenu( &collector );
-        if( item )
-            toggleSelection( item );
+        // Remove footprints, they have to be selected by clicking on area that does not
+        // contain anything but footprint
+        for( int i = 0; i < collector.GetCount(); ++i )
+        {
+            BOARD_ITEM* boardItem = ( collector )[i];
+            if( boardItem->Type() == PCB_MODULE_T )
+            {
+                wxLogDebug( wxT( "Removing %s" ), boardItem->GetSelectMenuText() );
+                collector.Remove( i );
+            }
+        }
+
+        // Let's see if there is still disambiguation in selection..
+        if( collector.GetCount() == 1 )
+        {
+            toggleSelection( collector[0] );
+        }
+        else
+        {
+            item = disambiguationMenu( &collector );
+            if( item )
+                toggleSelection( item );
+        }
         break;
     }
 }
@@ -326,7 +346,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     for( int i = 0; i < limit; ++i )
     {
         wxString text;
-        BOARD_ITEM *item = ( *aCollector )[i];
+        BOARD_ITEM* item = ( *aCollector )[i];
         text = item->GetSelectMenuText();
         m_menu->Add( text, i );
     }
