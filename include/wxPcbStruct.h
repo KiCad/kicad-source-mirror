@@ -136,21 +136,13 @@ protected:
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    void setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true )
-    {
-        ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
-
-        setHighContrastLayer( aLayer );
-
-        if( doLayerWidgetUpdate )
-            syncLayerWidgetLayer();
-    }
+    void setCurrentLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
 
     /**
      * Function getActiveLayer
      * returns the active layer
      */
-    LAYER_NUM getActiveLayer()
+    LAYER_NUM getCurrentLayer()
     {
         return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
     }
@@ -160,6 +152,12 @@ protected:
      * takes care of display settings for the given layer to be displayed in high contrast mode.
      */
     void setHighContrastLayer( LAYER_NUM aLayer );
+
+    /**
+     * Function setTopLayer
+     * moves the selected layer to the top, so it is displayed above all others.
+     */
+    void setTopLayer( LAYER_NUM aLayer );
 
     /**
      * Function syncLayerWidgetLayer

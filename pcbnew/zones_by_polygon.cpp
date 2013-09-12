@@ -518,7 +518,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
     if( !GetBoard()->m_CurrentZoneContour )
     {
         if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT &&
-            getActiveLayer() >= FIRST_NON_COPPER_LAYER )
+            getCurrentLayer() >= FIRST_NON_COPPER_LAYER )
         {
             DisplayError( this,
                           _( "Error: a keepout area is allowed only on copper layers" ) );
@@ -537,7 +537,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             ZONE_EDIT_T edited;
 
             // Init zone params to reasonable values
-            zone->SetLayer( getActiveLayer() );
+            zone->SetLayer( getCurrentLayer() );
 
             // Prompt user for parameters:
             m_canvas->SetIgnoreMouseEvents( true );
@@ -602,7 +602,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                 return 0;
 
             // Switch active layer to the selected zone layer
-            setActiveLayer( zoneInfo.m_CurrentZone_Layer );
+            setCurrentLayer( zoneInfo.m_CurrentZone_Layer );
 
             SetZoneSettings( zoneInfo );
         }
@@ -612,7 +612,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             // zone (add cutout or similar zone)
 
             zoneInfo.m_CurrentZone_Layer = s_CurrentZone->GetLayer();
-            setActiveLayer( s_CurrentZone->GetLayer() );
+            setCurrentLayer( s_CurrentZone->GetLayer() );
 
             zoneInfo << *s_CurrentZone;
 
