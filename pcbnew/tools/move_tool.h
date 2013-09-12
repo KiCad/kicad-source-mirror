@@ -89,7 +89,8 @@ private:
 
         void RestorePosition()
         {
-            item->SetPosition( wxPoint( position.x, position.y ) );
+            wxPoint curPosition = item->GetPosition();
+            item->Move( wxPoint( position.x - curPosition.x, position.y - curPosition.y ) );
         }
 
         void RestoreVisibility()
