@@ -137,9 +137,3 @@ void VIEW_ITEM::deleteGroups()
     m_groups = NULL;
     m_groupsSize = 0;
 }
-
-
-bool VIEW_ITEM::storesGroups() const
-{
-    return ( m_groupsSize > 0 );
-}

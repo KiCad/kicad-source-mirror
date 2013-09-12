@@ -638,6 +638,7 @@ int OPENGL_GAL::BeginGroup()
 
 void OPENGL_GAL::EndGroup()
 {
+    cachedManager.FinishItem();
     isGrouping = false;
 }
 
@@ -662,6 +663,7 @@ void OPENGL_GAL::ChangeGroupDepth( int aGroupNumber, int aDepth )
 
 void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 {
+    // Frees memory in the container as well
     groups.erase( aGroupNumber );
 }
 

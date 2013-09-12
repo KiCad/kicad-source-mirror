@@ -70,8 +70,7 @@ public:
         ALL         = 0xff
     };
 
-    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_groups( NULL ),
-                  m_groupsSize( 0 ) {}
+    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_groups( NULL ), m_groupsSize( 0 ) {}
 
     /**
      * Destructor. For dynamic views, removes the item from the view.
@@ -236,7 +235,10 @@ protected:
      *
      * @returns true in case it is cached at least for one layer.
      */
-    virtual bool storesGroups() const;
+    inline virtual bool storesGroups() const
+    {
+        return ( m_groupsSize > 0 );
+    }
 
     /// Stores layer numbers used by the item.
     std::bitset<VIEW::VIEW_MAX_LAYERS> m_layers;
@@ -253,7 +255,7 @@ protected:
         m_layers.reset();
 
         for( int i = 0; i < aCount; ++i )
-            m_layers.set(aLayers[i]);
+            m_layers.set( aLayers[i] );
     }
 
 };
