@@ -120,8 +120,10 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     // menu Config
 	
     /* Tom's hacks start */	
-	EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
+    EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_TOOL ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
+    EVT_MENU ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
+    EVT_TOOL ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     /* Tom's hacks end */
 		
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, PCB_EDIT_FRAME::OnConfigurePcbOptions )
@@ -752,7 +754,7 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
     KiGfx::VIEW* view = m_galCanvas->GetView();
     KiGfx::RENDER_SETTINGS* rSettings = view->GetPainter()->GetSettings();
 
-    if( DisplayOpt.ContrastModeDisplay )
+//    if( DisplayOpt.ContrastModeDisplay )
     {
         view->ClearTopLayers();
         view->SetTopLayer( aLayer );

@@ -189,6 +189,12 @@ void PCB_RENDER_SETTINGS::update()
 }
 
 
+const COLOR4D& PCB_RENDER_SETTINGS::GetLayerColor( int aLayer ) const
+{
+    return m_layerColors[aLayer];
+}
+
+
 PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
     PAINTER( aGal )
 {

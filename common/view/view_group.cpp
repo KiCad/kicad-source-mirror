@@ -71,6 +71,16 @@ void VIEW_GROUP::Clear()
 }
 
 
+void VIEW_GROUP::FreeItems()
+{
+    BOOST_FOREACH( VIEW_ITEM* item, m_items )
+    {
+        delete item;
+    }
+    m_items.clear();
+}
+
+
 unsigned int VIEW_GROUP::GetSize() const
 {
     return m_items.size();
