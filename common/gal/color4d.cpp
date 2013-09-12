@@ -58,3 +58,117 @@ const bool COLOR4D::operator!=( const COLOR4D& aColor )
 {
     return a != aColor.a || r != aColor.r || g != aColor.g || b != aColor.b;
 }
+
+
+void COLOR4D::ToHSV( double& aOutH, double& aOutS, double& aOutV ) const
+{
+    double min, max, delta;
+
+    min = r < g ? r : g;
+    min = min < b ? min : b;
+
+    max = r > g ? r : g;
+    max = max > b ? max : b;
+
+    aOutV = max;                                // v
+    delta = max - min;
+
+    if( max > 0.0 )
+    {
+        aOutS = ( delta / max );                  // s
+    }
+    else
+    {
+        // r = g = b = 0                        // s = 0, v is undefined
+        aOutS = 0.0;
+        aOutH = NAN;                            // its now undefined
+        return;
+    }
+
+    if( r >= max )                           // > is bogus, just keeps compiler happy
+        aOutH = ( g - b ) / delta;           // between yellow & magenta
+    else if( g >= max )
+        aOutH = 2.0 + ( b - r ) / delta;     // between cyan & yellow
+    else
+        aOutH = 4.0 + ( r - g ) / delta;     // between magenta & cyan
+
+    aOutH *= 60.0;                              // degrees
+
+    if( aOutH < 0.0 )
+        aOutH += 360.0;
+}
+
+
+void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
+{
+    double hh, p, q, t, ff;
+    long i;
+
+    if( aInS <= 0.0 )   // < is bogus, just shuts up warnings
+    {
+        r = aInV;
+        g = aInV;
+        b = aInV;
+        return;
+    }
+
+    hh = aInH;
+    if( hh >= 360.0 )
+        hh = 0.0;
+    hh /= 60.0;
+
+    i = (long) hh;
+    ff = hh - i;
+
+    p = aInV * ( 1.0 - aInS );
+    q = aInV * ( 1.0 - ( aInS * ff ) );
+    t = aInV * ( 1.0 - ( aInS * ( 1.0 - ff ) ) );
+
+    switch (i)
+    {
+    case 0:
+        r = aInV;
+        g = t;
+        b = p;
+        break;
+    case 1:
+        r = q;
+        g = aInV;
+        b = p;
+        break;
+    case 2:
+        r = p;
+        g = aInV;
+        b = t;
+        break;
+
+    case 3:
+        r = p;
+        g = q;
+        b = aInV;
+        break;
+    case 4:
+        r = t;
+        g = p;
+        b = aInV;
+        break;
+    case 5:
+    default:
+        r = aInV;
+        g = p;
+        b = q;
+        break;
+    }
+    
+}
+
+
+COLOR4D& COLOR4D::Saturate( double aFactor )
+{
+    double h, s, v;
+    ToHSV( h, s, v );
+    FromHSV( h, aFactor, 1.0 );
+    
+    return *this;
+}
+        

@@ -89,6 +89,8 @@ public:
     /// @copydoc RENDER_SETTINGS::GetColor()
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const;
 
+    const COLOR4D& GetLayerColor( int aLayer ) const;
+
 protected:
     /// @copydoc RENDER_SETTINGS::Update()
     void update();

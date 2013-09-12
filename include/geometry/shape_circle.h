@@ -22,45 +22,57 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
-#include <wx/event.h>
+#ifndef __SHAPE_CIRCLE_H
+#define __SHAPE_CIRCLE_H
 
-#include <wxPcbStruct.h>
-#include <wxBasePcbFrame.h>
+#include "shape.h"
 
-#include <tool/tool_manager.h>
-#include <tool/tool_dispatcher.h>
+class SHAPE_CIRCLE : public SHAPE {
 
-#include <class_drawpanel_gal.h>
-#include <pcbnew_id.h>
+public:
+	SHAPE_CIRCLE(): 
+		SHAPE( SH_CIRCLE ), m_radius (0) {};
+			
+	SHAPE_CIRCLE( const VECTOR2I& aCenter, int aRadius ): 
+		SHAPE( SH_CIRCLE ), m_radius (aRadius), m_center(aCenter) {};
 
-#include "selection_tool.h"
-#include "move_tool.h"
-#include <router/router_tool.h>
+	~SHAPE_CIRCLE() {};
 
-void PCB_EDIT_FRAME::setupTools()
-{
-	// Create the manager and dispatcher & route draw panel events to the dispatcher
-	m_toolManager = new TOOL_MANAGER;
-	m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
-	m_galCanvas->SetEventDispatcher( m_toolDispatcher );
-
-	// Register tools.
-	m_toolManager->RegisterTool( new SELECTION_TOOL );
-	m_toolManager->RegisterTool( new ROUTER_TOOL );
-	m_toolManager->RegisterTool( new MOVE_TOOL );
-}
+	const BOX2I BBox(int aClearance = 0) const
+	{
+		const VECTOR2I rc (m_radius + aClearance, m_radius + aClearance);
+		return BOX2I (m_center - rc, rc * 2);
+	}
 
 
-void PCB_EDIT_FRAME::destroyTools()
-{
-    delete m_toolDispatcher;
-    delete m_toolManager;
-}
+	bool Collide(const SEG& aSeg, int aClearance = 0) const
+	{
+		int rc = aClearance + m_radius;
+		return aSeg.Distance(m_center) <= rc;
+	}
 
+	void SetRadius(int aRadius)
+	{
+		m_radius = aRadius;
+	}
 
-void PCB_EDIT_FRAME::onGenericCommand( wxCommandEvent &aEvent )
-{
-	m_toolDispatcher->DispatchWxCommand( aEvent );
-}
+	void SetCenter (const VECTOR2I& aCenter)
+	{
+		m_center = aCenter;
+	}
 
+	int GetRadius() const 
+	{
+		return m_radius;
+	}
+
+	const VECTOR2I GetCenter() const
+	{
+		return m_center;
+	}
+private:
+	int m_radius;
+	VECTOR2I m_center;
+};
+
+#endif

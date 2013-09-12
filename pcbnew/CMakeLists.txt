@@ -1,4 +1,5 @@
 add_definitions(-DPCBNEW)
+add_subdirectory(router)
 
 if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting)
@@ -116,6 +117,7 @@ set(PCBNEW_AUTOROUTER_SRCS
     autorouter/graphpcb.cpp
     autorouter/work.cpp
     )
+
 
 set(PCBNEW_CLASS_SRCS
     tool_modview.cpp
@@ -325,6 +327,7 @@ if (KICAD_SCRIPTING_MODULES)
     swig_link_libraries(pcbnew
         3d-viewer
         pcbcommon
+        pnsrouter
         common
         pcad2kicadpcb
         polygon
@@ -421,6 +424,7 @@ endif(APPLE)
 target_link_libraries(pcbnew
     3d-viewer
     pcbcommon
+    pnsrouter
     common
     pcad2kicadpcb
     polygon

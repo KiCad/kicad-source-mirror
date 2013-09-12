@@ -443,6 +443,15 @@ public:
         return ( m_layers.at( aLayer ).target == TARGET_CACHED );
     }
 
+    /**
+     * Function MarkDirty()
+     * Forces redraw of view on the next rendering.
+     */
+    void MarkDirty()
+    {
+        for( int i = 0; i < TARGETS_NUMBER; ++i )
+            m_dirtyTargets[i] = true;
+    }
 
     static const int VIEW_MAX_LAYERS = 128;      ///* maximum number of layers that may be shown
 

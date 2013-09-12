@@ -31,7 +31,6 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <view/view.h>
-#include <view/view_controls.h>
 
 #include <class_drawpanel_gal.h>
 
@@ -56,6 +55,8 @@ struct TOOL_DISPATCHER::ButtonState
 	bool pressed;
 	
 	VECTOR2D dragOrigin;
+	VECTOR2D downPosition;
+
 	double dragMaxDelta;
 	
 	TOOL_MouseButtons button;
@@ -119,12 +120,22 @@ int TOOL_DISPATCHER::decodeModifiers( const wxKeyboardState* aState ) const
 }
 
 
+wxPoint TOOL_DISPATCHER::getCurrentMousePos() const
+{
+    wxPoint msp = wxGetMousePosition();
+    wxPoint winp = m_editFrame->GetGalCanvas()->GetScreenPosition();
+
+    return wxPoint( msp.x - winp.x, msp.y - winp.y );
+}
+
+
 bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion )
 {
 	ButtonState* st = m_buttons[aIndex];
 	wxEventType type = aEvent.GetEventType();
 	optional<TOOL_EVENT> evt;
-
+	bool isClick = false;
+		
 	bool up = type == st->upEvent;
 	bool down = type == st->downEvent;
 	
@@ -135,13 +146,13 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 	{
 		st->downTimestamp = wxGetLocalTimeMillis();
 		st->dragOrigin = m_lastMousePos;
+		st->downPosition = m_lastMousePos;
 		st->dragMaxDelta = 0;
 		st->pressed = true;
 		evt = TOOL_EVENT( TC_Mouse, TA_MouseDown, args );
 	}
 	else if( up )
 	{
-		bool isClick = false;
 		st->pressed = false;
 
 		if( st->dragging )
@@ -156,15 +167,10 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 		}
 		else
 			isClick = true;
+
 		
 		if( isClick )
-		{
-			if( st->triggerContextMenu && !mods )
-			{}
-			//	evt = TOOL_EVENT( TC_Command, TA_ContextMenu );
-			else
-				evt = TOOL_EVENT( TC_Mouse, TA_MouseClick, args );
-		}
+			evt = TOOL_EVENT( TC_Mouse, TA_MouseClick, args );
 
 		st->dragging = false;
 	}
@@ -187,7 +193,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 
 	if( evt )
 	{
-		evt->SetMousePosition( m_lastMousePos );
+		evt->SetMousePosition( isClick ? st->downPosition : m_lastMousePos );
 		m_toolMgr->ProcessEvent( *evt );
 
 		return true;
@@ -200,7 +206,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
 	bool motion = false, buttonEvents = false;
-	VECTOR2D pos, screenPos;
+	VECTOR2D pos;
 	optional<TOOL_EVENT> evt;
 	
 	int type = aEvent.GetEventType();
@@ -211,9 +217,9 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 	        type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
 	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP )
 	{
-		screenPos = m_toolMgr->GetViewControls()->GetCursorPosition();
-		pos = getView()->ToWorld( screenPos );
+		wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
 
+		pos = getView()->ToWorld ( getCurrentMousePos() );		
 		if( pos != m_lastMousePos )
 		{
 			motion = true;
@@ -264,6 +270,10 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
 	
 	switch( aEvent.GetId() )
 	{
+		case ID_PNS_ROUTER_TOOL:
+			toolName = "pcbnew.InteractiveRouter";
+			activateTool = true;
+			break;
 		case ID_SELECTION_TOOL:
 			toolName = "pcbnew.InteractiveSelection";
 			activateTool = true;
@@ -273,4 +283,3 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
 	if( activateTool && m_editFrame->IsGalCanvasActive() )
 		m_toolMgr->InvokeTool( toolName );
 }
-

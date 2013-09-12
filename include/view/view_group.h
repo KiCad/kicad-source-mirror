@@ -130,6 +130,23 @@ public:
         m_layer = aLayer;
     }
 
+    /**
+     * Function FreeItems()
+     * Frees all the items that were added to the group.
+     */
+    void FreeItems();
+
+    /**
+     * Function GetView()
+     * Returns pointer to the VIEW instance used by items.
+     *
+     * @return Pointer to the VIEW instance.
+     */
+    KiGfx::VIEW *GetView() const
+    {
+        return m_view;
+    }
+
 protected:
     /// These functions cannot be used with VIEW_GROUP as they are intended only to work with
     /// singular VIEW_ITEMs (there is only one-to-one relation between item/layer combination and

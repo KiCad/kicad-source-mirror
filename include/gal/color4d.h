@@ -128,6 +128,11 @@ public:
     }
 
     /**
+     * Saturates the color to a given factor (in HSV model)
+     */
+    COLOR4D& Saturate( double aFactor );
+    
+    /**
      * Function Brightened
      * Returns a color that is brighter by a given factor, without modifying object.
      * @param aFactor Specifies how bright the color should become (valid values: 0.0 .. 1.0).
@@ -179,6 +184,26 @@ public:
         // Weighted W3C formula
         return ( r * 0.299 + g * 0.587 + b * 0.117 );
     }
+
+    /**
+     * Function ToHSV()
+     * Converts current color (stored in RGB) to HSV format.
+     *
+     * @param aOutH is conversion result for hue component.
+     * @param aOutS is conversion result for saturation component.
+     * @param aOutV is conversion result for value component.
+     */
+    void ToHSV( double& aOutH, double& aOutS, double& aOutV ) const;
+
+    /**
+     * Function FromHSV()
+     * Changes currently used color to the one given by hue, saturation and value parameters.
+     *
+     * @param aOutH is hue component.
+     * @param aOutS is saturation component.
+     * @param aOutV is value component.
+     */
+    void FromHSV( double aInH, double aInS, double aInV );
 
     /// @brief Equality operator, are two colors equal
     const bool operator==( const COLOR4D& aColor );
