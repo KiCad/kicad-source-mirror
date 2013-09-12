@@ -116,7 +116,14 @@ protected:
     void onSize( wxSizeEvent& aEvent );
     void onEvent( wxEvent& aEvent );
     void onEnter( wxEvent& aEvent );
+    void onRefreshTimer ( wxTimerEvent& aEvent );
     void skipEvent( wxEvent& aEvent );
+
+    static const int MinRefreshPeriod = 17;             ///< 60 FPS.
+
+    wxLongLong               m_lastRefresh;      ///< Last time the panel was refreshed
+    bool                     m_pendingRefresh;
+    wxTimer                  m_refreshTimer;
 
     KiGfx::GAL*              m_gal;              ///< Interface for drawing objects on a 2D-surface
     KiGfx::VIEW*             m_view;             ///< Stores view settings (scale, center, etc.)
