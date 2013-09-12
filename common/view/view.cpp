@@ -41,7 +41,7 @@
 using namespace KiGfx;
 
 VIEW::VIEW( bool aIsDynamic ) :
-    m_enableOrderModifier( false ),
+    m_enableOrderModifier( true ),
     m_scale( 1.0 ),
     m_painter( NULL ),
     m_gal( NULL ),
@@ -415,6 +415,8 @@ void VIEW::UpdateAllLayersColor()
         updateItemsColor visitor( l->id, m_painter, m_gal );
         l->items->Query( r, visitor );
     }
+
+    MarkDirty();
 }
 
 
@@ -525,6 +527,8 @@ void VIEW::UpdateAllLayersOrder()
     {
         ChangeLayerDepth( l.first, l.second.renderingOrder );
     }
+
+    MarkDirty();
 }
 
 

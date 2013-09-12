@@ -217,8 +217,6 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 	        type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
 	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP )
 	{
-		wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
-
 		pos = getView()->ToWorld ( getCurrentMousePos() );		
 		if( pos != m_lastMousePos )
 		{
