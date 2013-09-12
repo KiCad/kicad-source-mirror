@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-28 20:58+0900\n"
-"PO-Revision-Date: 2013-08-30 18:54+0900\n"
-"Last-Translator: yoneken <yoneken@kicad.jp>\n"
+"PO-Revision-Date: 2013-09-12 09:21+0900\n"
+"Last-Translator: yoneken <midpika@hotmail.com>\n"
 "Language-Team: KiCad JP Localize <midpika@hotmail.com>\n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
@@ -4468,11 +4468,11 @@ msgstr "ドラッグ"
 
 #: pcbnew/onrightclick.cpp:721 eeschema/onrightclick.cpp:380
 msgid "Rotate +"
-msgstr "正回転"
+msgstr "左に回転"
 
 #: pcbnew/onrightclick.cpp:725 eeschema/onrightclick.cpp:383
 msgid "Rotate -"
-msgstr "逆回転"
+msgstr "右に回転"
 
 #: pcbnew/onrightclick.cpp:726 pcbnew/onrightclick.cpp:889
 msgid "Flip"
@@ -9653,7 +9653,7 @@ msgstr "警告: 拡大率が非常に大きく設定されています"
 #: pcbnew/dialogs/dialog_plot.cpp:805
 #, c-format
 msgid "Plot file <%s> created"
-msgstr "プロット ファイル <%s> が作成されました"
+msgstr "出力ファイル <%s> が作成されました"
 
 #: pcbnew/dialogs/dialog_plot.cpp:818
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:436
@@ -9665,7 +9665,7 @@ msgstr "レイヤーが選択されていません"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "Plot format:"
-msgstr "作画フォーマット:"
+msgstr "出力フォーマット:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
@@ -9675,11 +9675,11 @@ msgstr "PostScript"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:91
 msgid "Plot sheet reference on all layers"
-msgstr "全てのレイヤーにシートリファレンスを描画"
+msgstr "全てのレイヤーにシートリファレンスを出力"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Plot pads on silkscreen"
-msgstr "シルクスクリーンにパッドをプロット"
+msgstr "シルクスクリーンにパッドを出力"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:95
 msgid ""
@@ -9687,34 +9687,34 @@ msgid ""
 "When disable, pads are never potted on silkscreen layers\n"
 "When enable, pads are potted only if they appear on silkscreen layers"
 msgstr ""
-"シルクスクリーンレイヤー上のパッドの印刷/プロットを有効化/無効化\n"
-"無効化のとき、パッドはシルクスクリーンレイヤー上にプロットされません。\n"
-"有効化のとき、パッドはシルクスクリーン上にのみ現れます。"
+"シルクスクリーンレイヤー上のパッドの印刷/出力を有効化/無効化\n"
+"無効化のとき、パッドはシルクスクリーンレイヤー上に出力されません。\n"
+"有効化のとき、パッドはシルクスクリーン上にのみ出力されます。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Plot module value on silkscreen"
-msgstr "モジュールの値をシルク上に描画"
+msgstr "モジュールの値をシルク上にプロット出力"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:102
 msgid "Plot module reference on silkscreen"
-msgstr "モジュールのリファレンスをシルク上に描画"
+msgstr "モジュールのリファレンスをシルク上に出力"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:105
 msgid "Plot other module texts on silkscreen"
-msgstr "モジュールのその他のテキストをシルク上に描画"
+msgstr "モジュールのその他のテキストをシルク上に出力"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:106
 msgid "Enable/disable print/plot module field texts on silkscreen layers"
 msgstr ""
-"シルクスクリーンレイヤー上のモジュールのフィールド文字描画を有効化/無効化"
+"シルクスクリーンレイヤー上のモジュールのフィールド文字出力を有効化/無効化"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:110
 msgid "Plot invisible texts on silkscreen"
-msgstr "非表示テキストをシルク上に描画"
+msgstr "非表示テキストをシルク上に出力"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Force print/plot module invisible texts on silkscreen layers"
-msgstr "シルクスクリーンレイヤー上のモジュール非表示テキストを強制的に描画"
+msgstr "シルクスクリーンレイヤー上のモジュール非表示テキストを強制的に出力"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:115
 msgid "Do not tent vias"
@@ -9734,11 +9734,11 @@ msgstr "PCBエッジレイヤーの内容を他のレイヤーから除外"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:125
 msgid "Mirrored plot"
-msgstr "反転描画"
+msgstr "横軸に対して反転して出力"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:128
 msgid "Negative plot"
-msgstr "ネガ作画"
+msgstr "ネガ出力"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Drill marks:"
@@ -9775,7 +9775,7 @@ msgstr "3:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:157
 msgid "Plot mode:"
-msgstr "プロットモード:"
+msgstr "出力モード:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:167
 #, fuzzy
@@ -9820,7 +9820,7 @@ msgstr "正規のファイル拡張子を使用"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:225
 msgid "Use proper Gerber extensions - .GBL, .GTL, etc..."
-msgstr "正規のガーバー 拡張子を使用 - .GBL, .GTL, など..."
+msgstr "正規のガーバー 拡張子を使用 - .GBL, .GTL, など…"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:229
 msgid "Subtract soldermask from silkscreen"
@@ -9897,7 +9897,7 @@ msgstr "強制的にA4で出力"
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:106
 #: pcbnew/dialogs/dialog_plot_base.h:128
 msgid "Plot"
-msgstr "プロット"
+msgstr "製造ファイル出力"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:370
 msgid "Generate Drill File"
