@@ -119,6 +119,11 @@ public:
     }
 
     /**
+     * Saturates the color to a given factor (in HSV model)
+     */
+    COLOR4D& Saturate( double aFactor );
+    
+    /**
      * Function Brightened
      * Returns a color that is brighter by a given factor, without modifying object.
      * @param aFactor Specifies how bright the color should become (valid values: 0.0 .. 1.0).
@@ -166,6 +171,10 @@ public:
         // Weighted W3C formula
         return ( r * 0.299 + g * 0.587 + b * 0.117 );
     }
+
+    void ToHSV(double& out_h, double& out_s, double& out_v) const;
+    void FromHSV(double in_h, double in_s, double in_v);
+
 
     /// @brief Equality operator, are two colors equal
     const bool operator==( const COLOR4D& aColor );
