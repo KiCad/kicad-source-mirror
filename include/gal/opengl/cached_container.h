@@ -36,10 +36,8 @@
 #include <map>
 #include <set>
 
-#ifdef __WXDEBUG__
 // Debug messages verbosity level
-// #define CACHED_CONTAINER_TEST 2
-#endif
+//#define CACHED_CONTAINER_TEST 1
 
 namespace KiGfx
 {
@@ -54,11 +52,14 @@ public:
     ///< @copydoc VERTEX_CONTAINER::SetItem()
     virtual void SetItem( VERTEX_ITEM* aItem );
 
+    ///< @copydoc VERTEX_CONTAINER::FinishItem()
+    virtual void FinishItem();
+
     ///< @copydoc VERTEX_CONTAINER::Allocate()
     virtual VERTEX* Allocate( unsigned int aSize );
 
-    ///< @copydoc VERTEX_CONTAINER::Erase()
-    virtual void Erase();
+    ///< @copydoc VERTEX_CONTAINER::Delete()
+    virtual void Delete( VERTEX_ITEM* aItem );
 
     ///< @copydoc VERTEX_CONTAINER::Clear()
     virtual void Clear();
@@ -131,14 +132,6 @@ protected:
     virtual bool resizeContainer( unsigned int aNewSize );
 
     /**
-     * Function freeItem()
-     * frees the space occupied by the item and returns it to the free space pool.
-     *
-     * @param aItem is the item to be freed.
-     */
-    virtual void freeItem( VERTEX_ITEM* aItem );
-
-    /**
      * Function getPowerOf2()
      * returns the nearest power of 2, bigger than aNumber.
      *
@@ -170,7 +163,7 @@ private:
     }
 
     /// Debug & test functions
-#ifdef CACHED_CONTAINER_TEST
+#if CACHED_CONTAINER_TEST > 0
     void showFreeChunks();
     void showReservedChunks();
     void test();

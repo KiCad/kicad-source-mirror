@@ -55,6 +55,12 @@ public:
     virtual void SetItem( VERTEX_ITEM* aItem ) = 0;
 
     /**
+     * Function FinishItem()
+     * does the cleaning after adding an item.
+     */
+    virtual void FinishItem() {};
+
+    /**
      * Function Allocate()
      * returns allocated space (possibly resizing the reserved memory chunk or allocating a new
      * chunk if it was not stored before) for the given number of vertices associated with the
@@ -66,10 +72,12 @@ public:
     virtual VERTEX* Allocate( unsigned int aSize ) = 0;
 
     /**
-     * Function Erase()
-     * erases all vertices associated with the current item (set by SetItem()).
+     * Function Delete()
+     * erases the selected item.
+     *
+     * @param aItem is the item to be erased.
      */
-    virtual void Erase() = 0;
+    virtual void Delete( VERTEX_ITEM* aItem ) = 0;
 
     /**
      * Function Clear()

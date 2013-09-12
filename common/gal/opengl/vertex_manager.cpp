@@ -88,10 +88,15 @@ void VERTEX_MANAGER::SetItem( VERTEX_ITEM& aItem ) const
 }
 
 
+void VERTEX_MANAGER::FinishItem() const
+{
+    m_container->FinishItem();
+}
+
+
 void VERTEX_MANAGER::FreeItem( VERTEX_ITEM& aItem ) const
 {
-    m_container->SetItem( &aItem );
-    m_container->Erase();
+    m_container->Delete( &aItem );
 }
 
 
