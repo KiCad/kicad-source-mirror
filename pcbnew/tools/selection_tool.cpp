@@ -111,8 +111,28 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             }
             else
             {
-                // Now user wants to drag the selected items
-                m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
+                bool runTool = false;
+
+                // Check if dragging event started within the currently selected items bounding box
+                std::set<BOARD_ITEM*>::iterator it, it_end;
+                for( it = m_selectedItems.begin(), it_end = m_selectedItems.end(); it != it_end; ++it )
+                {
+                    BOX2I itemBox = (*it)->ViewBBox();
+                    itemBox.Inflate( 500000 );    // Give some margin for gripping an item
+
+                    if( itemBox.Contains( evt->Position() ) )
+                    {
+                        // Click event occurred within a selected item bounding box
+                        // -> user wants to drag selected items
+                        runTool = true;
+                        break;
+                    }
+                }
+
+                if( runTool )
+                    m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
+                else
+                    clearSelection();
             }
         }
         else if( dragging )
@@ -131,7 +151,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 {
-    if( m_selectedItems.find( aItem ) != m_selectedItems.end() )
+    if( aItem->IsSelected() )
     {
         aItem->ClearSelected();
         m_selectedItems.erase( aItem );
