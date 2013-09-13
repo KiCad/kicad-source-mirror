@@ -87,10 +87,12 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 	Connect( wxEVT_MIDDLE_UP,   wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_MIDDLE_DOWN, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_MOUSEWHEEL,  wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-//	Connect( wxEVT_CHAR_HOOK,   wxEventHandler( EDA_DRAW_PANEL_GAL::skipEvent ) );
+	Connect( wxEVT_CHAR_HOOK,   wxEventHandler( EDA_DRAW_PANEL_GAL::skipEvent ) );
 	Connect( wxEVT_KEY_UP,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_KEY_DOWN,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-//    Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
+    Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
+    Connect( TOOL_DISPATCHER::EVT_REFRESH_MOUSE, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ),
+             NULL, this );
     
     m_refreshTimer.SetOwner( this );
     Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
@@ -243,8 +245,9 @@ void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
 }
 
 
-void EDA_DRAW_PANEL_GAL::onEnter ( wxEvent& aEvent )
+void EDA_DRAW_PANEL_GAL::onEnter( wxEvent& aEvent )
 {
+    // Getting focus is necessary in order to receive key events properly
     SetFocus();
 }
 
