@@ -210,10 +210,7 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         {
             BOARD_ITEM* boardItem = ( collector )[i];
             if( boardItem->Type() == PCB_MODULE_T )
-            {
-                wxLogDebug( wxT( "Removing %s" ), boardItem->GetSelectMenuText() );
                 collector.Remove( i );
-            }
         }
 
         // Let's see if there is still disambiguation in selection..
