@@ -41,6 +41,8 @@
 
 using boost::optional;
 
+const wxEventType TOOL_DISPATCHER::EVT_REFRESH_MOUSE = wxNewEventType();
+
 struct TOOL_DISPATCHER::ButtonState
 {
 	ButtonState( TOOL_MouseButtons aButton, const wxEventType& aDownEvent,
@@ -215,10 +217,11 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 	if( type == wxEVT_MOTION || type == wxEVT_MOUSEWHEEL ||
 	        type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
 	        type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
-	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP )
+	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
+	        type == EVT_REFRESH_MOUSE )
 	{
 		pos = getView()->ToWorld ( getCurrentMousePos() );		
-		if( pos != m_lastMousePos )
+		if( pos != m_lastMousePos || type == EVT_REFRESH_MOUSE )
 		{
 			motion = true;
 			m_lastMousePos = pos;
