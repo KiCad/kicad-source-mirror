@@ -27,8 +27,8 @@
  * @brief Simple profiling functions for measuring code execution time.
  */
 
-#ifndef __PROFILE_H
-#define __PROFILE_H
+#ifndef __TPROFILE_H
+#define __TPROFILE_H
 
 #include <sys/time.h>
 #include <stdint.h>
@@ -96,7 +96,6 @@ static inline uint64_t get_tics()
     gettimeofday( &tv, NULL );
 
     return (uint64_t) tv.tv_sec * 1000000ULL + (uint64_t) tv.tv_usec;
-#endif
 }
 
 
@@ -144,3 +143,5 @@ static inline void prof_end( prof_counter* cnt )
     else
         cnt->value = get_tics() - cnt->value;
 }
+
+#endif
