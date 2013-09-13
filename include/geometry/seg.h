@@ -267,6 +267,12 @@ class SEG {
 		{
 			return (a - b).EuclideanNorm();
 		}
+		 
+		ecoord	SquaredLength() const
+		{
+			return (a - b).SquaredEuclideanNorm();
+		}
+
 
 		/**
 		 * Function Index()
