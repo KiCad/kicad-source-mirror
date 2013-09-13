@@ -141,6 +141,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Create a report of all modules on the current board" ),
                  KiBitmap( tools_xpm ) );
 
+    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_D356_FILE,
+		 _( "IPC-D-356 Netlist File" ),
+		 _( "Generate IPC-D-356 netlist file" ),
+                 KiBitmap( netlist_xpm ) );
+
     // Component File
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_CMP_FILE,
                  _( "&Component (.cmp) File" ),
