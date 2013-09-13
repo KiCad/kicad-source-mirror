@@ -54,7 +54,7 @@ template <>
 struct VECTOR2_TRAITS<int>
 {
     typedef int64_t extended_type;
-	static const extended_type ECOORD_MAX = 0x7fffffffffffffffULL;
+    static const extended_type ECOORD_MAX = 0x7fffffffffffffffULL;
     static const extended_type ECOORD_MIN = 0x8000000000000000ULL;
 };
 

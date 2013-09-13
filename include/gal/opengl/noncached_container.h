@@ -50,8 +50,8 @@ public:
     ///< @copydoc VERTEX_CONTAINER::Allocate()
     virtual VERTEX* Allocate( unsigned int aSize );
 
-    ///< @copydoc VERTEX_CONTAINER::Erase()
-    virtual void Erase();
+    ///< @copydoc VERTEX_CONTAINER::Delete()
+    void Delete( VERTEX_ITEM* aItem ) {};
 
     ///< @copydoc VERTEX_CONTAINER::Clear()
     virtual void Clear();

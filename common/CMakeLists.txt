@@ -32,6 +32,7 @@ set(GAL_SRCS
     # Common part
     drawpanel_gal.cpp
     painter.cpp
+    worksheet_item.cpp
     gal/graphics_abstraction_layer.cpp
     gal/stroke_font.cpp
     gal/color4d.cpp
@@ -156,17 +157,17 @@ set(COMMON_SRCS
 
 	system/fcontext.s
 	
-  tool/tool_base.cpp
-  tool/tool_manager.cpp
-  tool/tool_dispatcher.cpp
-  tool/tool_event.cpp
-  tool/tool_interactive.cpp
-  tool/context_menu.cpp
-  
-  geometry/seg.cpp
-  geometry/shape_line_chain.cpp
-  geometry/shape_collisions.cpp
-  )
+    tool/tool_base.cpp
+    tool/tool_manager.cpp
+    tool/tool_dispatcher.cpp
+    tool/tool_event.cpp
+    tool/tool_interactive.cpp
+    tool/context_menu.cpp
+
+	geometry/seg.cpp
+	geometry/shape_line_chain.cpp
+	geometry/shape_collisions.cpp
+)
 
 add_library(common STATIC ${COMMON_SRCS})
 

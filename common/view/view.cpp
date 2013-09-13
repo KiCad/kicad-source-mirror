@@ -41,7 +41,7 @@
 using namespace KiGfx;
 
 VIEW::VIEW( bool aIsDynamic ) :
-    m_enableOrderModifier( false ),
+    m_enableOrderModifier( true ),
     m_scale( 1.0 ),
     m_painter( NULL ),
     m_gal( NULL ),
@@ -80,7 +80,6 @@ void VIEW::AddLayer( int aLayer, bool aDisplayOnly )
         m_layers[aLayer].items          = new VIEW_RTREE();
         m_layers[aLayer].renderingOrder = aLayer;
         m_layers[aLayer].enabled        = true;
-        m_layers[aLayer].isDirty        = false;
         m_layers[aLayer].displayOnly    = aDisplayOnly;
         m_layers[aLayer].target         = TARGET_CACHED;
     }
@@ -100,7 +99,7 @@ void VIEW::Add( VIEW_ITEM* aItem )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Insert( aItem );
-        l.isDirty = true;
+        MarkTargetDirty( l.target );
     }
 
     if( m_dynamic )
@@ -120,7 +119,6 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
-        l.isDirty = true;
     }
 }
 
@@ -370,7 +368,7 @@ struct VIEW::updateItemsColor
     void operator()( VIEW_ITEM* aItem )
     {
         // Obtain the color that should be used for coloring the item
-        const COLOR4D color = painter->GetColor( aItem, layer );
+        const COLOR4D color = painter->GetSettings()->GetColor( aItem, layer );
         int group = aItem->getGroup( layer );
 
         if( group >= 0 )
@@ -415,6 +413,8 @@ void VIEW::UpdateAllLayersColor()
         updateItemsColor visitor( l->id, m_painter, m_gal );
         l->items->Query( r, visitor );
     }
+
+    MarkDirty();
 }
 
 
@@ -525,6 +525,8 @@ void VIEW::UpdateAllLayersOrder()
     {
         ChangeLayerDepth( l.first, l.second.renderingOrder );
     }
+
+    MarkDirty();
 }
 
 
@@ -564,8 +566,6 @@ void VIEW::redrawRect( const BOX2I& aRect )
             m_gal->SetLayerDepth( l->renderingOrder );
             l->items->Query( aRect, drawFunc );
         }
-
-        l->isDirty = false;
     }
 }
 
@@ -586,7 +586,7 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
             group = m_gal->BeginGroup();
             aItem->setGroup( aLayer, group );
             if( !m_painter->Draw( aItem, aLayer ) )
-                aItem->ViewDraw( aLayer, m_gal, BOX2I() ); // Alternative drawing method
+                aItem->ViewDraw( aLayer, m_gal ); // Alternative drawing method
             m_gal->EndGroup();
         }
     }
@@ -594,7 +594,7 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
     {
         // Immediate mode
         if( !m_painter->Draw( aItem, aLayer ) )
-            aItem->ViewDraw( aLayer, m_gal, BOX2I() );  // Alternative drawing method
+            aItem->ViewDraw( aLayer, m_gal );  // Alternative drawing method
     }
 
     // Draws a bright contour around the item
@@ -672,7 +672,8 @@ struct VIEW::recacheLayer
         {
             int group = gal->BeginGroup();
             aItem->setGroup( layer, group );
-            view->m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), layer );
+            if( !view->m_painter->Draw( aItem, layer ) )
+                aItem->ViewDraw( layer, gal ); // Alternative drawing method
             gal->EndGroup();
         }
         else
@@ -709,7 +710,7 @@ void VIEW::Clear()
 }
 
 
-void VIEW::PrepareTargets()
+void VIEW::ClearTargets()
 {
     if( IsTargetDirty( TARGET_CACHED ) || IsTargetDirty( TARGET_NONCACHED ) )
     {
@@ -810,8 +811,7 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
         }
 
         // Mark those layers as dirty, so the VIEW will be refreshed
-        m_layers[layerId].isDirty = true;
-        MarkTargetDirty( m_layers[layerId].target );   // TODO remove?
+        MarkTargetDirty( m_layers[layerId].target );
     }
 }
 
@@ -836,7 +836,7 @@ void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
     wxASSERT( (unsigned) aLayer < m_layers.size() );
 
     // Obtain the color that should be used for coloring the item on the specific layerId
-    const COLOR4D color = m_painter->GetColor( aItem, aLayer );
+    const COLOR4D color = m_painter->GetSettings()->GetColor( aItem, aLayer );
     int group = aItem->getGroup( aLayer );
 
     // Change the color, only if it has group assigned
@@ -871,7 +871,7 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
         l.items->Insert( aItem );
-        l.isDirty = true;
+        MarkTargetDirty( l.target );
     }
 }
 
@@ -915,7 +915,7 @@ void VIEW::RecacheAllItems( bool aImmediately )
             m_gal->SetLayerDepth( l->renderingOrder );
             recacheLayer visitor( this, m_gal, l->id, aImmediately );
             l->items->Query( r, visitor );
-            l->isDirty = true;
+            MarkTargetDirty( l->target );
         }
     }
 
@@ -935,13 +935,6 @@ bool VIEW::IsTargetDirty( int aTarget ) const
     // Check the target status
     if( m_dirtyTargets[aTarget] )
         return true;
-
-    // Check if any of layers belonging to the target is dirty
-    BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
-    {
-        if( l->target == aTarget && l->isDirty )
-            return true;
-    }
 
     return false;
 }

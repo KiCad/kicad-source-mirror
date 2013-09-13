@@ -229,6 +229,16 @@ public:
         return m_keyCode;
     }
 
+    bool IsKeyUp() const
+    {
+        return m_actions == TA_KeyUp;
+    }
+
+    bool IsKeyDown() const
+    {
+        return m_actions == TA_KeyDown;
+    }
+
     void Ignore();
 
     void SetMouseDragOrigin( const VECTOR2D &aP )

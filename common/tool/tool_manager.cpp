@@ -82,10 +82,22 @@ struct TOOL_MANAGER::TOOL_STATE
 
 
 TOOL_MANAGER::TOOL_MANAGER() : 
-	m_model (NULL),
-	m_view (NULL)
+	m_model( NULL ), m_view( NULL )
 {
 	
+}
+
+
+TOOL_MANAGER::~TOOL_MANAGER()
+{
+    std::map<TOOL_BASE*, TOOL_STATE*>::iterator it, it_end;
+
+    for( it = m_toolState.begin(), it_end = m_toolState.end(); it != it_end; ++it )
+    {
+        delete it->second->cofunc;  // delete cofunction
+        delete it->second;          // delete TOOL_STATE
+        delete it->first;           // delete the tool itself
+    }
 }
 
 
@@ -282,13 +294,13 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 
 		if( st->contextMenuTrigger != CMENU_OFF )
 		{
-			if(st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( MB_Right ) )
+			if( st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( MB_Right ) )
 				break;
 			
 			st->pendingWait = true;
 			st->waitEvents = TOOL_EVENT( TC_Any, TA_Any );
 			
-			if(st->contextMenuTrigger == CMENU_NOW)
+			if( st->contextMenuTrigger == CMENU_NOW )
 				st->contextMenuTrigger = CMENU_OFF;
 			
 			GetEditFrame()->PopupMenu( st->contextMenu->GetMenu() );

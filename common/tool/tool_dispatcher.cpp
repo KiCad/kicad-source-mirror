@@ -41,6 +41,8 @@
 
 using boost::optional;
 
+const wxEventType TOOL_DISPATCHER::EVT_REFRESH_MOUSE = wxNewEventType();
+
 struct TOOL_DISPATCHER::ButtonState
 {
 	ButtonState( TOOL_MouseButtons aButton, const wxEventType& aDownEvent,
@@ -119,13 +121,15 @@ int TOOL_DISPATCHER::decodeModifiers( const wxKeyboardState* aState ) const
     return mods;
 }
 
-wxPoint TOOL_DISPATCHER::getCurrentMousePos()
-{
-	wxPoint msp = wxGetMousePosition() ;
-	wxPoint winp = m_editFrame->GetGalCanvas()->GetScreenPosition();
 
-	return wxPoint(msp.x - winp.x, msp.y - winp.y);
+wxPoint TOOL_DISPATCHER::getCurrentMousePos() const
+{
+    wxPoint msp = wxGetMousePosition();
+    wxPoint winp = m_editFrame->GetGalCanvas()->GetScreenPosition();
+
+    return wxPoint( msp.x - winp.x, msp.y - winp.y );
 }
+
 
 bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion )
 {
@@ -157,7 +161,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 		{
 			wxLongLong t = wxGetLocalTimeMillis();
 
-			if( t - st->downTimestamp < DragTimeThreshold ||
+			if( t - st->downTimestamp < DragTimeThreshold &&
 			        st->dragMaxDelta < DragDistanceThreshold )
 				isClick = true;
 			else
@@ -181,7 +185,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 
 		wxLongLong t = wxGetLocalTimeMillis();
 
-		if( t - st->downTimestamp > DragTimeThreshold && st->dragMaxDelta > DragDistanceThreshold )
+		if( t - st->downTimestamp > DragTimeThreshold || st->dragMaxDelta > DragDistanceThreshold )
 		{			
 			evt = TOOL_EVENT( TC_Mouse, TA_MouseDrag, args );
 			evt->SetMouseDragOrigin( st->dragOrigin );
@@ -213,13 +217,11 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 	if( type == wxEVT_MOTION || type == wxEVT_MOUSEWHEEL ||
 	        type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
 	        type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
-	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP )
+	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
+	        type == EVT_REFRESH_MOUSE )
 	{
-		wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
-
-
 		pos = getView()->ToWorld ( getCurrentMousePos() );		
-		if( pos != m_lastMousePos )
+		if( pos != m_lastMousePos || type == EVT_REFRESH_MOUSE )
 		{
 			motion = true;
 			m_lastMousePos = pos;
@@ -262,7 +264,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 }
 
 
-void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent &aEvent )
+void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
 {
 	bool activateTool = false;
 	std::string toolName;

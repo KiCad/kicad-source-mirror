@@ -108,9 +108,9 @@ public:
     }
 
     // Accessors:
-    int GetPenWidth() { return m_penWidth; }
-    const wxPoint&  GetStart() { return m_start; }
-    const wxPoint&  GetEnd() { return m_end; }
+    int GetPenWidth() const { return m_penWidth; }
+    const wxPoint&  GetStart() const { return m_start; }
+    const wxPoint&  GetEnd() const { return m_end; }
 
     /** The function to draw a WS_DRAW_ITEM_LINE
      */
@@ -158,9 +158,9 @@ public:
     }
 
     // Accessors:
-    int GetPenWidth() { return m_penWidth; }
-    bool IsFilled() { return m_fill; }
-    const wxPoint& GetPosition() { return m_pos; }
+    int GetPenWidth() const { return m_penWidth; }
+    bool IsFilled() const { return m_fill; }
+    const wxPoint& GetPosition() const { return m_pos; }
 
     /** The function to draw a WS_DRAW_ITEM_POLYGON
      */

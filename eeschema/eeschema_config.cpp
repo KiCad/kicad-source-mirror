@@ -292,7 +292,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     for( unsigned i=0; i<tfnames.size(); ++i )
     {
-        D(printf("dlg.SetFieldName(%d, '%s')\n", i, TO_UTF8( tfnames[i].m_Name) );)
+        DBG(printf("dlg.SetFieldName(%d, '%s')\n", i, TO_UTF8( tfnames[i].m_Name) );)
 
         dlg.SetFieldName( i, tfnames[i].m_Name );
     }
@@ -680,7 +680,7 @@ void SCH_EDIT_FRAME::LoadSettings()
         catch( IO_ERROR& e )
         {
             // @todo show error msg
-            D( printf( "templatefieldnames parsing error: '%s'\n",
+            DBG( printf( "templatefieldnames parsing error: '%s'\n",
                        TO_UTF8( e.errorText ) ); )
         }
     }
@@ -751,7 +751,7 @@ void SCH_EDIT_FRAME::SaveSettings()
 
     m_TemplateFieldNames.Format( &sf, 0 );
 
-    D(printf("saving formatted template fieldnames:'%s'\n", sf.GetString().c_str() );)
+    DBG(printf("saving formatted template fieldnames:'%s'\n", sf.GetString().c_str() );)
 
     wxString record = FROM_UTF8( sf.GetString().c_str() );
     record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines

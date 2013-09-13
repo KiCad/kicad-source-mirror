@@ -120,9 +120,9 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     // menu Config
 	
     /* Tom's hacks start */	
-	  EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
+    EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_TOOL ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
-	  EVT_MENU ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
+    EVT_MENU ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_TOOL ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     /* Tom's hacks end */
 		
@@ -487,6 +487,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
+    destroyTools();
     m_RecordingMacros = -1;
 
     for( int i = 0; i < 10; i++ )
@@ -729,7 +730,7 @@ void PCB_EDIT_FRAME::SetGridColor(EDA_COLOR_T aColor)
 bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 {
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
-    LAYER_NUM currLayer = getActiveLayer();
+    LAYER_NUM currLayer = getCurrentLayer();
 
     if( !GetDesignSettings().m_MicroViasAllowed )
         return false;   // Obvious..
@@ -753,55 +754,102 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
     KiGfx::VIEW* view = m_galCanvas->GetView();
     KiGfx::RENDER_SETTINGS* rSettings = view->GetPainter()->GetSettings();
 
-    if( DisplayOpt.ContrastModeDisplay )
+    setTopLayer( aLayer );
+
+    rSettings->ClearActiveLayers();
+    rSettings->SetActiveLayer( aLayer );
+
+    if( IsCopperLayer( aLayer ) )
     {
-        view->ClearTopLayers();
-        view->SetTopLayer( aLayer );
+        // Bring some other layers to the front in case of copper layers and make them colored
+        // fixme do not like the idea of storing the list of layers here,
+        // should be done in some other way I guess..
+        LAYER_NUM layers[] = {
+                GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
+                ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
+                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+                ITEM_GAL_LAYER( SELECTION )
+        };
 
-        rSettings->ClearActiveLayers();
-        rSettings->SetActiveLayer( aLayer );
+        for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
+            rSettings->SetActiveLayer( layers[i] );
 
-        if( IsCopperLayer( aLayer ) )
+        // Pads should be shown too
+        if( aLayer == FIRST_COPPER_LAYER )
         {
-            // Bring some other layers to the front in case of copper layers and make them colored
-            LAYER_NUM layers[] = {
-                    GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
-                    ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
-                    ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE )
-            };
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
+        }
+        else if( aLayer == LAST_COPPER_LAYER )
+        {
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
+        }
+    }
 
-            for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
-            {
-                view->SetTopLayer( layers[i] );
-                rSettings->SetActiveLayer( layers[i] );
-            }
+    view->UpdateAllLayersColor();
+}
 
-            // Pads should be shown too
-            if( aLayer == FIRST_COPPER_LAYER )
-            {
-                view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-                view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
-                rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-                rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
-            }
-            else if( aLayer == LAST_COPPER_LAYER )
-            {
-                view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-                view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
-                rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-                rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
-            }
+
+void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
+{
+    // Set display settings for high contrast mode
+    KiGfx::VIEW* view = m_galCanvas->GetView();
+
+    view->ClearTopLayers();
+    view->SetTopLayer( aLayer );
+
+    if( IsCopperLayer( aLayer ) )
+    {
+        // Bring some other layers to the front in case of copper layers and make them colored
+        // fixme do not like the idea of storing the list of layers here,
+        // should be done in some other way I guess..
+        LAYER_NUM layers[] = {
+                GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
+                ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
+                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+                ITEM_GAL_LAYER( SELECTION )
+        };
+
+        for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
+        {
+            view->SetTopLayer( layers[i] );
         }
 
-        view->UpdateAllLayersOrder();
-        view->UpdateAllLayersColor();
+        // Pads should be shown too
+        if( aLayer == FIRST_COPPER_LAYER )
+        {
+            view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+            view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
+        }
+        else if( aLayer == LAST_COPPER_LAYER )
+        {
+            view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+            view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
+        }
     }
+
+    view->UpdateAllLayersOrder();
+}
+
+
+void PCB_EDIT_FRAME::setCurrentLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
+{
+    ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
+
+    setHighContrastLayer( aLayer );
+
+    if( doLayerWidgetUpdate )
+        syncLayerWidgetLayer();
+
+    if( m_galCanvasActive )
+        m_galCanvas->Refresh();
 }
 
 
 void PCB_EDIT_FRAME::syncLayerWidgetLayer()
 {
-    m_Layers->SelectLayer( getActiveLayer() );
+    m_Layers->SelectLayer( getCurrentLayer() );
     m_Layers->OnLayerSelected();
 }
 

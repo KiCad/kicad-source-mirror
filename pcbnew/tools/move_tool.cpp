@@ -61,7 +61,7 @@ void MOVE_TOOL::Reset()
     }
 
     // the tool launches upon reception of activate ("pcbnew.InteractiveMove")
-    Go( &MOVE_TOOL::Main, TOOL_EVENT( TC_Command, TA_ActivateTool, GetName() ) ); //"pcbnew.InteractiveMove"));
+    Go( &MOVE_TOOL::Main, TOOL_EVENT( TC_Command, TA_ActivateTool, GetName() ) );
 }
 
 

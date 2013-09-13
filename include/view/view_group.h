@@ -107,9 +107,8 @@ public:
      *
      * @param aLayer is the layer which should be drawn.
      * @param aGal is the GAL that should be used for drawing.
-     * @param aVisibleArea is limiting the drawing area.
      */
-    virtual void ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) const;
+    virtual void ViewDraw( int aLayer, GAL* aGal ) const;
 
     /**
      * Function ViewGetLayers()
@@ -119,9 +118,6 @@ public:
      * @param aCount is the number of layer indices in aLayers[].
      */
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
-
-    /// @copydoc VIEW_ITEM::ViewUpdate()
-    //virtual void ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw );
 
     /**
      * Function SetLayer()
@@ -134,8 +130,18 @@ public:
         m_layer = aLayer;
     }
 
+    /**
+     * Function FreeItems()
+     * Frees all the items that were added to the group.
+     */
     void FreeItems();
 
+    /**
+     * Function GetView()
+     * Returns pointer to the VIEW instance used by items.
+     *
+     * @return Pointer to the VIEW instance.
+     */
     KiGfx::VIEW *GetView() const
     {
         return m_view;

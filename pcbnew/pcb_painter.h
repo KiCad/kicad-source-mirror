@@ -27,6 +27,7 @@
 #define __CLASS_PCB_PAINTER_H
 
 #include <layers_id_colors_and_visibility.h>
+#include <boost/shared_ptr.hpp>
 #include <painter.h>
 
 class EDA_ITEM;
@@ -85,8 +86,11 @@ public:
      */
     void LoadDisplayOptions( const DISPLAY_OPTIONS& aOptions );
 
-    const COLOR4D& GetLayerColor ( int aLayer ) const;
-    
+    /// @copydoc RENDER_SETTINGS::GetColor()
+    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const;
+
+    const COLOR4D& GetLayerColor( int aLayer ) const;
+
 protected:
     /// @copydoc RENDER_SETTINGS::Update()
     void update();
@@ -129,13 +133,11 @@ public:
         PAINTER::ApplySettings( aSettings );
 
         // Store PCB specific render settings
-        m_pcbSettings = dynamic_cast<PCB_RENDER_SETTINGS*>( aSettings );
+        m_pcbSettings = (PCB_RENDER_SETTINGS*) m_settings.get(); //dynamic_cast<PCB_RENDER_SETTINGS*>( aSettings );
     }
 
-    /// @copydoc PAINTER::GetColor()
-    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer );
-
 protected:
+    /// Just a properly casted pointer to settings
     PCB_RENDER_SETTINGS* m_pcbSettings;
 
     // Drawing functions for various types of PCB-specific items

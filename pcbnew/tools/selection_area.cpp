@@ -47,7 +47,7 @@ void SELECTION_AREA::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SELECTION_AREA::ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) const
+void SELECTION_AREA::ViewDraw( int aLayer, GAL* aGal ) const
 {
     aGal->SetLineWidth( 1.0 );
     aGal->SetStrokeColor( COLOR4D( 1.0, 1.0, 0.4, 1.0 ) );

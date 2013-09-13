@@ -499,7 +499,7 @@ public:
 
     EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
 
-    virtual wxString GetScreenDesc();
+    virtual wxString GetScreenDesc() const;
 
     /**
      * Function GetScreen

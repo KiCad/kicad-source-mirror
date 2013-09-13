@@ -68,7 +68,7 @@ public:
         m_Size( aSize )
     { 
         Normalize();
-	}
+    }
 
     void SetMaximum()
     {
@@ -418,10 +418,10 @@ public:
     {
         ecoord_type x2 = m_Pos.x + m_Size.x;
         ecoord_type y2 = m_Pos.y + m_Size.y;
-        ecoord_type xdiff = std::max(aP.x < m_Pos.x ? m_Pos.x - aP.x : m_Pos.x - x2, (ecoord_type)0);
-        ecoord_type ydiff = std::max(aP.y < m_Pos.y ? m_Pos.y - aP.y : m_Pos.y - y2, (ecoord_type)0);
+        ecoord_type xdiff = std::max( aP.x < m_Pos.x ? m_Pos.x - aP.x : m_Pos.x - x2, (ecoord_type)0 );
+        ecoord_type ydiff = std::max( aP.y < m_Pos.y ? m_Pos.y - aP.y : m_Pos.y - y2, (ecoord_type)0 );
         return xdiff * xdiff + ydiff * ydiff;    
-	}
+    }
 
     ecoord_type Distance( const Vec& aP ) const
     {

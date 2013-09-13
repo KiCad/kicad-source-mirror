@@ -233,8 +233,11 @@ void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoin
     drawLineQuad( aStartPoint, aEndPoint );
 
     // Line caps
-    drawFilledSemiCircle( aStartPoint, lineWidth / 2, lineAngle + M_PI / 2 );
-    drawFilledSemiCircle( aEndPoint,   lineWidth / 2, lineAngle - M_PI / 2 );
+    if( lineWidth > 1.0 )
+    {
+        drawFilledSemiCircle( aStartPoint, lineWidth / 2, lineAngle + M_PI / 2 );
+        drawFilledSemiCircle( aEndPoint,   lineWidth / 2, lineAngle - M_PI / 2 );
+    }
 }
 
 
@@ -638,6 +641,7 @@ int OPENGL_GAL::BeginGroup()
 
 void OPENGL_GAL::EndGroup()
 {
+    cachedManager.FinishItem();
     isGrouping = false;
 }
 
@@ -662,6 +666,7 @@ void OPENGL_GAL::ChangeGroupDepth( int aGroupNumber, int aDepth )
 
 void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 {
+    // Frees memory in the container as well
     groups.erase( aGroupNumber );
 }
 

@@ -32,7 +32,8 @@
 
 #include <gal/color4d.h>
 #include <colors.h>
-
+#include <worksheet_shape_builder.h>
+#include <boost/shared_ptr.hpp>
 
 class EDA_ITEM;
 class COLORS_DESIGN_SETTINGS;
@@ -113,6 +114,21 @@ public:
         m_hiContrastEnabled = aEnabled;
     }
 
+    /**
+     * Function GetColor
+     * Returns the color that should be used to draw the specific VIEW_ITEM on the specific layer
+     * using currently used render settings.
+     * @param aItem is the VIEW_ITEM.
+     * @param aLayer is the layer.
+     * @return The color.
+     */
+    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const = 0;
+
+    float GetWorksheetLineWidth() const
+    {
+        return m_worksheetLineWidth;
+    }
+
 protected:
     /**
      * Function update
@@ -137,6 +153,7 @@ protected:
     float   m_selectFactor;         ///< Specifies how color of selected items is changed
     float   m_layerOpacity;         ///< Determines opacity of all layers
     float   m_outlineWidth;         ///< Line width used when drawing outlines
+    float   m_worksheetLineWidth;   ///< Line width used when drawing worksheet
 
     /// Map of colors that were usually used for display
     std::map<EDA_COLOR_T, COLOR4D> m_legacyColorMap;
@@ -177,10 +194,7 @@ public:
      */
     virtual void ApplySettings( RENDER_SETTINGS* aSettings )
     {
-        if( m_settings )
-            delete m_settings;
-
-        m_settings = aSettings;
+        m_settings.reset( aSettings );
     }
 
     /**
@@ -195,9 +209,9 @@ public:
      * Returns pointer to current settings that are going to be used when drawing items.
      * @return Current rendering settings.
      */
-    virtual RENDER_SETTINGS* GetSettings()
+    virtual RENDER_SETTINGS* GetSettings() const
     {
-        return m_settings;
+        return m_settings.get();
     }
 
     /**
@@ -217,23 +231,13 @@ public:
      */
     virtual void DrawBrightened( const VIEW_ITEM* aItem );
 
-    /**
-     * Function GetColor
-     * Returns the color that should be used to draw the specific VIEW_ITEM on the specific layer
-     * using currently used render settings.
-     * @param aItem is the VIEW_ITEM.
-     * @param aLayer is the layer.
-     * @return The color.
-     */
-    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) = 0;
-
 protected:
     /// Instance of graphic abstraction layer that gives an interface to call
     /// commands used to draw (eg. DrawLine, DrawCircle, etc.)
     GAL*                m_gal;
 
     /// Colors and display modes settings that are going to be used when drawing items.
-    RENDER_SETTINGS*    m_settings;
+    boost::shared_ptr<RENDER_SETTINGS> m_settings;
 
     /// Color of brightened item frame
     COLOR4D             m_brightenedColor;

@@ -50,7 +50,7 @@ public:
 
     virtual const BOX2I ViewBBox() const;
 
-    void ViewDraw( int aLayer, KiGfx::GAL* aGal, const BOX2I& aVisibleArea ) const;
+    void ViewDraw( int aLayer, KiGfx::GAL* aGal ) const;
     void ViewGetLayers( int aLayers[], int& aCount ) const;
 
     void SetOrigin ( VECTOR2I aOrigin )
@@ -63,7 +63,7 @@ public:
         m_end = aEnd;
     }
 
-    void Show( int x, std::ostream& st) const
+    void Show( int x, std::ostream& st ) const
     {
     }
 
