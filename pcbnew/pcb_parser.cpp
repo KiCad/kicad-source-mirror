@@ -1567,6 +1567,7 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
             break;
 
         case T_fp_lib:
+            NeedSYMBOLorNUMBER();
             fpid.SetLibNickname( FromUTF8() );
             NeedRIGHT();
             break;
