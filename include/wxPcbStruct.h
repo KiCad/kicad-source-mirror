@@ -810,6 +810,7 @@ public:
     bool DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM );
 
     void InstallDrillFrame( wxCommandEvent& event );
+    void GenD356File( wxCommandEvent& event );
     void ToPostProcess( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );

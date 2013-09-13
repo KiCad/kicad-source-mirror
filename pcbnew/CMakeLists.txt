@@ -155,6 +155,7 @@ set( PCBNEW_CLASS_SRCS
     edit_track_width.cpp
     edtxtmod.cpp
     event_handlers_tracks_vias_sizes.cpp
+    export_d356.cpp
     export_gencad.cpp
     export_vrml.cpp
     files.cpp
