@@ -459,7 +459,6 @@ private:
     struct VIEW_LAYER
     {
         bool                    enabled;         ///* is the layer to be rendered?
-        bool                    isDirty;         ///* does it contain any dirty items (updated since last redraw)
         bool                    displayOnly;     ///* is the layer display only?
         VIEW_RTREE*             items;           ///* R-tree indexing all items on this layer.
         int                     renderingOrder;  ///* rendering order of this layer
