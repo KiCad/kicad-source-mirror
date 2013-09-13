@@ -714,7 +714,7 @@ void VIEW::Clear()
 }
 
 
-void VIEW::PrepareTargets()
+void VIEW::ClearTargets()
 {
     if( IsTargetDirty( TARGET_CACHED ) || IsTargetDirty( TARGET_NONCACHED ) )
     {

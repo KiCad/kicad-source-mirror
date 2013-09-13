@@ -377,10 +377,10 @@ public:
     void    UpdateAllLayersOrder();
 
     /**
-     * Function PrepareTargets()
+     * Function ClearTargets()
      * Clears targets that are marked as dirty.
      */
-    void    PrepareTargets();
+    void    ClearTargets();
 
     /**
      * Function Redraw()

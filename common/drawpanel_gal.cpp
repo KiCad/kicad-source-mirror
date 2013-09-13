@@ -131,7 +131,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
     m_gal->ClearScreen();
 
-    m_view->PrepareTargets();
+    m_view->ClearTargets();
     // Grid has to be redrawn only when the NONCACHED target is redrawn
     if( m_view->IsTargetDirty( KiGfx::TARGET_NONCACHED ) )
         m_gal->DrawGrid();
@@ -240,8 +240,7 @@ void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
         m_eventDispatcher->DispatchWxEvent( aEvent );
     }
 
-//	if( m_view->IsDirty() )
-        Refresh();
+    Refresh();
 }
 
 
