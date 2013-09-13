@@ -47,7 +47,7 @@ public:
 		else if( type == wxEVT_COMMAND_MENU_SELECTED )
 			evt = TOOL_EVENT( TC_Command, TA_ContextMenuChoice, aEvent.GetId() );
 		
-		if(m_menu->m_tool)
+		if( m_menu->m_tool )
 			m_menu->m_tool->GetManager()->ProcessEvent( evt );
 	}
 

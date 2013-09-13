@@ -233,6 +233,12 @@ public:
     void SetItem( VERTEX_ITEM& aItem ) const;
 
     /**
+     * Function FinishItem()
+     * does the cleaning after adding an item.
+     */
+    void FinishItem() const;
+
+    /**
      * Function FreeItem()
      * frees the memory occupied by the item, so it is no longer stored in the container.
      *

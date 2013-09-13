@@ -324,7 +324,7 @@ SCH_SCREEN* SCH_EDIT_FRAME::GetScreen() const
 }
 
 
-wxString SCH_EDIT_FRAME::GetScreenDesc()
+wxString SCH_EDIT_FRAME::GetScreenDesc() const
 {
     wxString s = m_CurrentSheet->PathHumanReadable();
 

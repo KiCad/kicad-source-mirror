@@ -70,6 +70,7 @@ void VIEW_GROUP::Clear()
     m_items.clear();
 }
 
+
 void VIEW_GROUP::FreeItems()
 {
     BOOST_FOREACH( VIEW_ITEM* item, m_items )
@@ -78,6 +79,7 @@ void VIEW_GROUP::FreeItems()
     }
     m_items.clear();
 }
+
 
 unsigned int VIEW_GROUP::GetSize() const
 {
@@ -93,7 +95,7 @@ const BOX2I VIEW_GROUP::ViewBBox() const
 }
 
 
-void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) const
+void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal ) const
 {
     PAINTER* painter = m_view->GetPainter();
 
@@ -111,7 +113,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) co
                 aGal->SetLayerDepth( m_view->GetLayerOrder( layers[i] ) );
 
                 if( !painter->Draw( item, layers[i] ) )
-                    item->ViewDraw( layers[i], aGal, aVisibleArea );  // Alternative drawing method
+                    item->ViewDraw( layers[i], aGal );  // Alternative drawing method
             }
         }
     }

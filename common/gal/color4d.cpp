@@ -30,9 +30,9 @@ using namespace KiGfx;
 
 COLOR4D::COLOR4D( EDA_COLOR_T aColor )
 {
-    r = g_ColorRefs[aColor].m_Red;
-    g = g_ColorRefs[aColor].m_Green;
-    b = g_ColorRefs[aColor].m_Blue;
+    r = g_ColorRefs[aColor].m_Red / 255.0;
+    g = g_ColorRefs[aColor].m_Green / 255.0;
+    b = g_ColorRefs[aColor].m_Blue / 255.0;
     a = 1.0;
 }
 
@@ -59,91 +59,102 @@ const bool COLOR4D::operator!=( const COLOR4D& aColor )
     return a != aColor.a || r != aColor.r || g != aColor.g || b != aColor.b;
 }
 
-void COLOR4D::ToHSV(double& out_h, double& out_s, double& out_v) const
+
+void COLOR4D::ToHSV( double& aOutH, double& aOutS, double& aOutV ) const
 {
-    double      min, max, delta;
+    double min, max, delta;
 
     min = r < g ? r : g;
-    min = min  < b ? min  : b;
+    min = min < b ? min : b;
 
     max = r > g ? r : g;
-    max = max  > b ? max  : b;
+    max = max > b ? max : b;
 
-    out_v = max;                                // v
+    aOutV = max;                                // v
     delta = max - min;
-    
-    if( max > 0.0 ) {
-        out_s = (delta / max);                  // s
-    } else {
+
+    if( max > 0.0 )
+    {
+        aOutS = ( delta / max );                  // s
+    }
+    else
+    {
         // r = g = b = 0                        // s = 0, v is undefined
-        out_s = 0.0;
-        out_h = NAN;                            // its now undefined
+        aOutS = 0.0;
+        aOutH = NAN;                            // its now undefined
         return;
     }
-    if( r >= max )                           // > is bogus, just keeps compilor happy
-        out_h = ( g - b ) / delta;        // between yellow & magenta
-    else
-    if( g >= max )
-        out_h = 2.0 + ( b - r ) / delta;  // between cyan & yellow
-    else
-        out_h = 4.0 + ( r - g ) / delta;  // between magenta & cyan
 
-    out_h *= 60.0;                              // degrees
+    if( r >= max )                           // > is bogus, just keeps compiler happy
+        aOutH = ( g - b ) / delta;           // between yellow & magenta
+    else if( g >= max )
+        aOutH = 2.0 + ( b - r ) / delta;     // between cyan & yellow
+    else
+        aOutH = 4.0 + ( r - g ) / delta;     // between magenta & cyan
 
-    if( out_h < 0.0 )
-        out_h += 360.0;
+    aOutH *= 60.0;                              // degrees
+
+    if( aOutH < 0.0 )
+        aOutH += 360.0;
 }
 
-void COLOR4D::FromHSV(double in_h, double in_s, double in_v)
-{
-    double      hh, p, q, t, ff;
-    long        i;
 
-    if(in_s <= 0.0) {       // < is bogus, just shuts up warnings
-        r = in_v;
-        g = in_v;
-        b = in_v;
+void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
+{
+    double hh, p, q, t, ff;
+    long i;
+
+    if( aInS <= 0.0 )   // < is bogus, just shuts up warnings
+    {
+        r = aInV;
+        g = aInV;
+        b = aInV;
         return;
     }
-    hh = in_h;
-    if(hh >= 360.0) hh = 0.0;
-    hh /= 60.0;
-    i = (long)hh;
-    ff = hh - i;
-    p = in_v * (1.0 - in_s);
-    q = in_v * (1.0 - (in_s * ff));
-    t = in_v * (1.0 - (in_s * (1.0 - ff)));
 
-    switch(i) {
+    hh = aInH;
+    if( hh >= 360.0 )
+        hh = 0.0;
+    hh /= 60.0;
+
+    i = (long) hh;
+    ff = hh - i;
+
+    p = aInV * ( 1.0 - aInS );
+    q = aInV * ( 1.0 - ( aInS * ff ) );
+    t = aInV * ( 1.0 - ( aInS * ( 1.0 - ff ) ) );
+
+    switch (i)
+    {
     case 0:
-        r = in_v;
+        r = aInV;
         g = t;
         b = p;
         break;
     case 1:
         r = q;
-        g = in_v;
+        g = aInV;
         b = p;
         break;
     case 2:
         r = p;
-        g = in_v;
+        g = aInV;
         b = t;
         break;
 
     case 3:
         r = p;
         g = q;
-        b = in_v;
+        b = aInV;
         break;
     case 4:
         r = t;
         g = p;
-        b = in_v;
+        b = aInV;
         break;
     case 5:
     default:
-        r = in_v;
+        r = aInV;
         g = p;
         b = q;
         break;
@@ -151,11 +162,12 @@ void COLOR4D::FromHSV(double in_h, double in_s, double in_v)
     
 }
 
+
 COLOR4D& COLOR4D::Saturate( double aFactor )
 {
     double h, s, v;
-    ToHSV(h, s, v);
-    FromHSV(h, aFactor, 1.0);
+    ToHSV( h, s, v );
+    FromHSV( h, aFactor, 1.0 );
     
     return *this;
 }

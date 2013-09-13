@@ -245,7 +245,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
         aDimension = new DIMENSION( GetBoard() );
         aDimension->SetFlags( IS_NEW );
 
-        aDimension->SetLayer( getActiveLayer() );
+        aDimension->SetLayer( getCurrentLayer() );
 
         aDimension->m_crossBarO = aDimension->m_crossBarF = pos;
         aDimension->m_featureLineDO = aDimension->m_featureLineDF = pos;

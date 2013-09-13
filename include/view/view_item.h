@@ -70,8 +70,7 @@ public:
         ALL         = 0xff
     };
 
-    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_groups( NULL ),
-                  m_groupsSize( 0 ) {}
+    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_groups( NULL ), m_groupsSize( 0 ) {}
 
     /**
      * Destructor. For dynamic views, removes the item from the view.
@@ -101,11 +100,8 @@ public:
      *
      * @param aLayer: current drawing layer
      * @param aGal: pointer to the GAL device we are drawing on
-     * @param aVisibleArea: area (in world space coordinates) that is relevant for drawing. For
-     * example, when drawing a bitmap, one can clip the blitting area to aVisibleArea, reducing
-     * drawing time.
      */
-    virtual void ViewDraw( int aLayer, GAL* aGal, const BOX2I& aVisibleArea ) const { };
+    virtual void ViewDraw( int aLayer, GAL* aGal ) const {};
 
     /**
      * Function ViewGetLayers()
@@ -155,10 +151,8 @@ public:
      * this item has changed. For static views calling has no effect.
      *
      * @param aUpdateFlags: how much the object has changed
-     * @param aForceImmediateRedraw: when true, the VIEW is redrawn immediately,
-     *  otherwise, it will be redrawn upon next call of VIEW::Update()
      */
-    virtual void ViewUpdate( int aUpdateFlags = ALL, bool aForceImmediateRedraw = false );
+    virtual void ViewUpdate( int aUpdateFlags = ALL );
 
     /**
      * Function ViewRelease()
@@ -241,7 +235,10 @@ protected:
      *
      * @returns true in case it is cached at least for one layer.
      */
-    virtual bool storesGroups() const;
+    inline virtual bool storesGroups() const
+    {
+        return ( m_groupsSize > 0 );
+    }
 
     /// Stores layer numbers used by the item.
     std::bitset<VIEW::VIEW_MAX_LAYERS> m_layers;
@@ -258,7 +255,7 @@ protected:
         m_layers.reset();
 
         for( int i = 0; i < aCount; ++i )
-            m_layers.set(aLayers[i]);
+            m_layers.set( aLayers[i] );
     }
 
 };

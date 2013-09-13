@@ -28,6 +28,7 @@
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <tool/tool_dispatcher.h>
 
 using namespace KiGfx;
 
@@ -196,7 +197,10 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 
         dir = m_view->ToWorld( dir, false );
         m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
-        m_view->MakeDirty();
+
+        // Notify tools that the cursor position has changed in the world coordinates
+        wxCommandEvent moveEvent( TOOL_DISPATCHER::EVT_REFRESH_MOUSE );
+        wxPostEvent( m_parentPanel, moveEvent );
     }
     break;
 

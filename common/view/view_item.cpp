@@ -48,17 +48,12 @@ void VIEW_ITEM::ViewSetVisible( bool aIsVisible )
 }
 
 
-void VIEW_ITEM::ViewUpdate( int aUpdateFlags, bool aForceImmediateRedraw )
+void VIEW_ITEM::ViewUpdate( int aUpdateFlags )
 {
     if( !m_view )
         return;
 
     m_view->invalidateItem( this, aUpdateFlags );
-
-    if( aForceImmediateRedraw )
-    {
-        m_view->Redraw();
-    }
 }
 
 
@@ -141,10 +136,4 @@ void VIEW_ITEM::deleteGroups()
     delete[] m_groups;
     m_groups = NULL;
     m_groupsSize = 0;
-}
-
-
-bool VIEW_ITEM::storesGroups() const
-{
-    return ( m_groupsSize > 0 );
 }

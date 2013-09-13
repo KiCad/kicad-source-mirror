@@ -53,6 +53,7 @@
 #include <math/vector2d.h>
 #include <trigo.h>
 #include <pcb_painter.h>
+#include <worksheet_item.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -201,6 +202,20 @@ void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     {
         view->Add( zone );
     }
+
+    // Add an entry for the worksheet layout
+    KiGfx::WORKSHEET_ITEM* worksheet = new KiGfx::WORKSHEET_ITEM(
+                                            std::string( aBoard->GetFileName().mb_str() ),
+                                            std::string( GetScreenDesc().mb_str() ),
+                                            &GetPageSettings(), &GetTitleBlock() );
+    BASE_SCREEN* screen = GetScreen();
+    if( screen != NULL )
+    {
+        worksheet->SetSheetNumber( GetScreen()->m_ScreenNumber );
+        worksheet->SetSheetCount( GetScreen()->m_NumberOfScreens );
+    }
+
+    view->Add( worksheet );
 
     view->RecacheAllItems( true );
 
@@ -828,7 +843,7 @@ void PCB_BASE_FRAME::LoadSettings()
         {
             // Copper layers are required for netname layers
             view->SetRequired( GetNetnameLayer( layer ), layer );
-            view->SetLayerTarget( layer, KiGfx::TARGET_NONCACHED );
+            view->SetLayerTarget( layer, KiGfx::TARGET_CACHED );
         }
         else if( IsNetnameLayer( layer ) )
         {

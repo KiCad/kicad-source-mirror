@@ -82,11 +82,6 @@ VERTEX* NONCACHED_CONTAINER::Allocate( unsigned int aSize )
 }
 
 
-void NONCACHED_CONTAINER::Erase()
-{
-}
-
-
 void NONCACHED_CONTAINER::Clear()
 {
     m_freePtr   = 0;

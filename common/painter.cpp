@@ -32,13 +32,14 @@ using namespace KiGfx;
 RENDER_SETTINGS::RENDER_SETTINGS()
 {
     // Set the default initial values
-    m_highlightFactor   = 0.5;
-    m_selectFactor      = 0.5;
-    m_layerOpacity      = 0.8;
-    m_highlightEnabled  = false;
-    m_hiContrastEnabled = false;
-    m_hiContrastFactor  = 0.2;
-    m_outlineWidth      = 1;
+    m_highlightFactor       = 0.5;
+    m_selectFactor          = 0.5;
+    m_layerOpacity          = 0.8;
+    m_highlightEnabled      = false;
+    m_hiContrastEnabled     = false;
+    m_hiContrastFactor      = 0.2;
+    m_outlineWidth          = 1;
+    m_worksheetLineWidth    = 100000;
 
     // Store the predefined colors used in KiCad in format used by GAL
     for( int i = 0; i < NBCOLORS; i++ )
@@ -64,14 +65,13 @@ void RENDER_SETTINGS::update()
 
 
 PAINTER::PAINTER( GAL* aGal ) :
-    m_gal( aGal ), m_settings( NULL ), m_brightenedColor( 0.0, 1.0, 0.0, 0.9 )
+    m_gal( aGal ), m_brightenedColor( 0.0, 1.0, 0.0, 0.9 )
 {
 }
 
 
 PAINTER::~PAINTER()
 {
-    delete m_settings;
 }
 
 
@@ -91,7 +91,7 @@ void PAINTER::DrawBrightened( const VIEW_ITEM* aItem )
     m_gal->PushDepth();
     m_gal->SetLayerDepth( -1.0 );
 
-    // Draw semitransparent box that marks items as brightened
+    // Draw an outline that marks items as brightened
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( 100000.0 );
     m_gal->SetStrokeColor( m_brightenedColor );

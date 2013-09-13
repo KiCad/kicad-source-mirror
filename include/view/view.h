@@ -377,10 +377,10 @@ public:
     void    UpdateAllLayersOrder();
 
     /**
-     * Function PrepareTargets()
+     * Function ClearTargets()
      * Clears targets that are marked as dirty.
      */
-    void    PrepareTargets();
+    void    ClearTargets();
 
     /**
      * Function Redraw()
@@ -443,9 +443,13 @@ public:
         return ( m_layers.at( aLayer ).target == TARGET_CACHED );
     }
 
-    void MakeDirty()
+    /**
+     * Function MarkDirty()
+     * Forces redraw of view on the next rendering.
+     */
+    void MarkDirty()
     {
-        for(int i = 0; i < TARGETS_NUMBER; i++)
+        for( int i = 0; i < TARGETS_NUMBER; ++i )
             m_dirtyTargets[i] = true;
     }
 
@@ -455,7 +459,6 @@ private:
     struct VIEW_LAYER
     {
         bool                    enabled;         ///* is the layer to be rendered?
-        bool                    isDirty;         ///* does it contain any dirty items (updated since last redraw)
         bool                    displayOnly;     ///* is the layer display only?
         VIEW_RTREE*             items;           ///* R-tree indexing all items on this layer.
         int                     renderingOrder;  ///* rendering order of this layer

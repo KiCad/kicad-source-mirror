@@ -65,6 +65,9 @@ public:
     virtual void DispatchWxEvent( wxEvent& aEvent );
     virtual void DispatchWxCommand( wxCommandEvent& aEvent );
 
+    /// Event that forces mouse move event in the dispatcher
+    static const wxEventType EVT_REFRESH_MOUSE;
+
 private:
     static const int MouseButtonCount = 3;
     static const int DragTimeThreshold = 300;
@@ -73,7 +76,7 @@ private:
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
     bool handlePopupMenu( wxEvent& aEvent );
 
-    wxPoint getCurrentMousePos();
+    wxPoint getCurrentMousePos() const;
 
     int decodeModifiers( const wxKeyboardState* aState ) const;
 

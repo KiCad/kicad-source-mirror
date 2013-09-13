@@ -111,8 +111,28 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             }
             else
             {
-                // Now user wants to drag the selected items
-                m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
+                bool runTool = false;
+
+                // Check if dragging event started within the currently selected items bounding box
+                std::set<BOARD_ITEM*>::iterator it, it_end;
+                for( it = m_selectedItems.begin(), it_end = m_selectedItems.end(); it != it_end; ++it )
+                {
+                    BOX2I itemBox = (*it)->ViewBBox();
+                    itemBox.Inflate( 500000 );    // Give some margin for gripping an item
+
+                    if( itemBox.Contains( evt->Position() ) )
+                    {
+                        // Click event occurred within a selected item bounding box
+                        // -> user wants to drag selected items
+                        runTool = true;
+                        break;
+                    }
+                }
+
+                if( runTool )
+                    m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
+                else
+                    clearSelection();
             }
         }
         else if( dragging )
@@ -184,9 +204,26 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         break;
 
     default:
-        item = disambiguationMenu( &collector );
-        if( item )
-            toggleSelection( item );
+        // Remove footprints, they have to be selected by clicking on area that does not
+        // contain anything but footprint
+        for( int i = 0; i < collector.GetCount(); ++i )
+        {
+            BOARD_ITEM* boardItem = ( collector )[i];
+            if( boardItem->Type() == PCB_MODULE_T )
+                collector.Remove( i );
+        }
+
+        // Let's see if there is still disambiguation in selection..
+        if( collector.GetCount() == 1 )
+        {
+            toggleSelection( collector[0] );
+        }
+        else
+        {
+            item = disambiguationMenu( &collector );
+            if( item )
+                toggleSelection( item );
+        }
         break;
     }
 }
@@ -306,7 +343,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     for( int i = 0; i < limit; ++i )
     {
         wxString text;
-        BOARD_ITEM *item = ( *aCollector )[i];
+        BOARD_ITEM* item = ( *aCollector )[i];
         text = item->GetSelectMenuText();
         m_menu->Add( text, i );
     }

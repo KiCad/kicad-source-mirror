@@ -90,9 +90,10 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 	Connect( wxEVT_CHAR_HOOK,   wxEventHandler( EDA_DRAW_PANEL_GAL::skipEvent ) );
 	Connect( wxEVT_KEY_UP,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_KEY_DOWN,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    Connect( wxEVT_ENTER_WINDOW, wxEventHandler (EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
+    Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
+    Connect( TOOL_DISPATCHER::EVT_REFRESH_MOUSE, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ),
+             NULL, this );
     
-
     m_refreshTimer.SetOwner( this );
     Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
 
@@ -108,7 +109,7 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
     if( m_viewControls )
         delete m_viewControls;
 
-        if( m_view )
+    if( m_view )
         delete m_view;
 
     if( m_gal )
@@ -130,7 +131,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
     m_gal->ClearScreen();
 
-    m_view->PrepareTargets();
+    m_view->ClearTargets();
     // Grid has to be redrawn only when the NONCACHED target is redrawn
     if( m_view->IsTargetDirty( KiGfx::TARGET_NONCACHED ) )
         m_gal->DrawGrid();
@@ -164,19 +165,22 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 {
-    if(m_pendingRefresh)
+    if( m_pendingRefresh )
         return;
 
     wxLongLong t = wxGetLocalTimeMillis();
     wxLongLong delta = t - m_lastRefresh;
 
-    if(t >= MinRefreshPeriod)
+    if( delta >= MinRefreshPeriod )
     {
         wxPaintEvent redrawEvent;
         wxPostEvent( this, redrawEvent );
         m_pendingRefresh = true;
-    } else {
-        m_refreshTimer.Start ( (MinRefreshPeriod - t).ToLong(), true );
+    }
+    else
+    {
+        // One shot timer
+        m_refreshTimer.Start( ( MinRefreshPeriod - delta ).ToLong(), true );
         m_pendingRefresh = true;
     }
 } 
@@ -236,15 +240,16 @@ void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
         m_eventDispatcher->DispatchWxEvent( aEvent );
     }
 
-	if(m_view->IsDirty())
-        Refresh();
+    Refresh();
 }
 
 
-void EDA_DRAW_PANEL_GAL::onEnter ( wxEvent& aEvent )
+void EDA_DRAW_PANEL_GAL::onEnter( wxEvent& aEvent )
 {
+    // Getting focus is necessary in order to receive key events properly
     SetFocus();
 }
+
 
 void EDA_DRAW_PANEL_GAL::skipEvent( wxEvent& aEvent )
 {

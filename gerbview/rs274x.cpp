@@ -167,7 +167,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     if( m_GerbMetric )
         conv_scale /= 25.4;
 
-//    D( printf( "%22s: Command <%c%c>\n", __func__, (command >> 8) & 0xFF, command & 0xFF ); )
+//    DBG( printf( "%22s: Command <%c%c>\n", __func__, (command >> 8) & 0xFF, command & 0xFF ); )
 
     switch( command )
     {
@@ -521,7 +521,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
             m_ImageNegative = true;
         else
             m_ImageNegative = false;
-        D( printf( "%22s: IMAGE_POLARITY m_ImageNegative=%s\n", __func__,
+        DBG( printf( "%22s: IMAGE_POLARITY m_ImageNegative=%s\n", __func__,
                    m_ImageNegative ? "true" : "false" ); )
         break;
 
@@ -531,7 +531,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
 
         else
             GetLayerParams().m_LayerNegative = false;
-        D( printf( "%22s: LAYER_POLARITY m_LayerNegative=%s\n", __func__,
+        DBG( printf( "%22s: LAYER_POLARITY m_LayerNegative=%s\n", __func__,
                    GetLayerParams().m_LayerNegative ? "true" : "false" ); )
         break;
 

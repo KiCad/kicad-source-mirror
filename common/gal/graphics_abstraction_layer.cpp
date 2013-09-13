@@ -29,7 +29,6 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/definitions.h>
 
-
 using namespace KiGfx;
 
 GAL::GAL() :
@@ -41,19 +40,21 @@ GAL::GAL() :
     SetFillColor( COLOR4D( 0.0, 0.0, 0.0, 0.0 ) );
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     SetZoomFactor( 1.0 );
-    SetDepthRange( VECTOR2D( -2048, 2047 ) );
+    SetDepthRange( VECTOR2D( GAL::MIN_DEPTH, GAL::MAX_DEPTH ) );
     SetFlip( false, false );
     SetLineWidth( 1.0 );
 
     // Set grid defaults
     SetGridVisibility( true );
     SetGridStyle( GRID_STYLE_LINES );
+    SetGridOriginMarkerSize( 15 );
+    SetGridDrawThreshold( 10 );
     SetCoarseGrid( 10 );
     SetGridLineWidth( 0.5 );
 
     // Initialize the cursor shape
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
-    SetCursorSize( 20 );
+    SetCursorSize( 15 );
     SetCursorEnabled( true );
 
     strokeFont.LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize );
@@ -112,7 +113,7 @@ void GAL::DrawGrid()
 
     // Draw the origin marker
     double origSize = static_cast<double>( gridOriginMarkerSize ) / worldScale;
-    SetLayerDepth( 0.0 );
+    SetLayerDepth( GAL::GRID_DEPTH );
     SetIsFill( false );
     SetIsStroke( true );
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
