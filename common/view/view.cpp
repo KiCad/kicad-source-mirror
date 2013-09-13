@@ -80,7 +80,6 @@ void VIEW::AddLayer( int aLayer, bool aDisplayOnly )
         m_layers[aLayer].items          = new VIEW_RTREE();
         m_layers[aLayer].renderingOrder = aLayer;
         m_layers[aLayer].enabled        = true;
-        m_layers[aLayer].isDirty        = false;
         m_layers[aLayer].displayOnly    = aDisplayOnly;
         m_layers[aLayer].target         = TARGET_CACHED;
     }
@@ -100,7 +99,7 @@ void VIEW::Add( VIEW_ITEM* aItem )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Insert( aItem );
-        l.isDirty = true;
+        MarkTargetDirty( l.target );
     }
 
     if( m_dynamic )
@@ -120,7 +119,6 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
-        l.isDirty = true;
     }
 }
 
@@ -568,8 +566,6 @@ void VIEW::redrawRect( const BOX2I& aRect )
             m_gal->SetLayerDepth( l->renderingOrder );
             l->items->Query( aRect, drawFunc );
         }
-
-        l->isDirty = false;
     }
 }
 
@@ -815,8 +811,7 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
         }
 
         // Mark those layers as dirty, so the VIEW will be refreshed
-        m_layers[layerId].isDirty = true;
-        MarkTargetDirty( m_layers[layerId].target );   // TODO remove?
+        MarkTargetDirty( m_layers[layerId].target );
     }
 }
 
@@ -876,7 +871,7 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
         l.items->Insert( aItem );
-        l.isDirty = true;
+        MarkTargetDirty( l.target );
     }
 }
 
@@ -920,7 +915,7 @@ void VIEW::RecacheAllItems( bool aImmediately )
             m_gal->SetLayerDepth( l->renderingOrder );
             recacheLayer visitor( this, m_gal, l->id, aImmediately );
             l->items->Query( r, visitor );
-            l->isDirty = true;
+            MarkTargetDirty( l->target );
         }
     }
 
@@ -940,13 +935,6 @@ bool VIEW::IsTargetDirty( int aTarget ) const
     // Check the target status
     if( m_dirtyTargets[aTarget] )
         return true;
-
-    // Check if any of layers belonging to the target is dirty
-    BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
-    {
-        if( l->target == aTarget && l->isDirty )
-            return true;
-    }
 
     return false;
 }
