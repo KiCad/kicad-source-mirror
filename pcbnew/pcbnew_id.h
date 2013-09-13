@@ -260,6 +260,7 @@ enum pcbnew_ids
 
     ID_PCB_GEN_POS_MODULES_FILE,
     ID_PCB_GEN_DRILL_FILE,
+    ID_PCB_GEN_D356_FILE,
 
     ID_PCB_PAD_SETUP,
 
