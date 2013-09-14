@@ -31,6 +31,11 @@
 #include <common.h>
 #include <confirm.h>
 #include <build_version.h>
+#include <macros.h>
+#include <fpid.h>
+#include <fp_lib_table.h>
+#include <reporter.h>
+#include <html_messagebox.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
@@ -50,7 +55,6 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
         return;
 
     // If no component is selected, select the first one
-
     if( m_ListCmp->GetFirstSelected() < 0 )
     {
         componentIndex = 0;
@@ -58,11 +62,9 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
     }
 
     // iterate over the selection
-
-    while( m_ListCmp->GetFirstSelected() != -1)
+    while( m_ListCmp->GetFirstSelected() != -1 )
     {
         // Get the component for the current iteration
-
         componentIndex = m_ListCmp->GetFirstSelected();
         component = m_netlist.GetComponent( componentIndex );
 
@@ -70,13 +72,21 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
             return;
 
         // Check to see if the component has already a footprint set.
-
         hasFootprint = !component->GetFPID().empty();
 
+#if defined( USE_FP_LIB_TABLE )
+        FPID fpid;
+
+        wxCHECK_RET( fpid.Parse( TO_UTF8( aFootprintName ) ) < 0,
+                     wxString::Format( wxT( "<%s> is not a valid FPID." ),
+                                       GetChars( aFootprintName ) ) );
+
+        component->SetFPID( fpid );
+#else
         component->SetFPID( FPID( aFootprintName ) );
+#endif
 
         // create the new component description
-
         description.Printf( CMP_FORMAT, componentIndex + 1,
                             GetChars( component->GetReference() ),
                             GetChars( component->GetValue() ),
@@ -85,7 +95,6 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
         // If the component hasn't had a footprint associated with it
         // it now has, so we decrement the count of components without
         // a footprint assigned.
-
         if( !hasFootprint )
         {
             hasFootprint = true;
@@ -115,6 +124,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
 {
     COMPONENT* component;
     wxString   msg;
+    bool       isLegacy = true;
 
     ReadSchematicNetlist();
 
@@ -129,6 +139,87 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
     m_ListCmp->Clear();
     m_undefinedComponentCnt = 0;
 
+    if( m_netlist.AnyFootprintsLinked() )
+    {
+        for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
+        {
+            component = m_netlist.GetComponent( i );
+
+            if( component->GetFPID().empty() )
+                continue;
+
+            if( isLegacy )
+            {
+                if( !component->GetFPID().IsLegacy() )
+                    isLegacy = false;
+            }
+        }
+    }
+    else
+    {
+        isLegacy = false;  // None of the components have footprints assigned.
+    }
+
+
+#if defined( USE_FP_LIB_TABLE )
+    wxString missingLibs;
+
+    // Check if footprint links were generated before the footprint library table was implemented.
+    if( isLegacy )
+    {
+        if( m_footprintLibTable->MissingLegacyLibs( m_ModuleLibNames, &missingLibs ) )
+        {
+            msg = wxT( "The following legacy libraries are defined in the project file "
+                       "were not found in the footprint library table:\n\n" ) + missingLibs;
+            msg += wxT( "\nDo you want to update the footprint library table before "
+                        "attempting to update the assigned footprints?" );
+
+            if( IsOK( this, msg ) )
+            {
+                wxCommandEvent cmd;
+
+                OnEditFootprintLibraryTable( cmd );
+            }
+        }
+
+        msg = wxT( "Some or all of the assigned footprints contain legacy entries.  Would you "
+                   "like CvPcb to attempt to convert them to the new footprint library table "
+                   "format?" );
+
+        if( IsOK( this, msg ) )
+        {
+            msg.Clear();
+            WX_STRING_REPORTER reporter( &msg );
+
+            if( !m_footprintLibTable->ConvertFromLegacy( m_netlist, m_ModuleLibNames, &reporter ) )
+            {
+                HTML_MESSAGE_BOX dlg( this, wxEmptyString );
+
+                dlg.MessageSet( wxT( "The following errors occurred attempt to convert the "
+                                     "footprint assignments:\n\n" ) );
+                dlg.ListSet( msg );
+                dlg.MessageSet( wxT( "\nYou will need to reassign them manually if you want them "
+                                     "to be updated correctly the next time you import the "
+                                     "netlist in Pcbnew." ) );
+                dlg.ShowModal();
+            }
+
+            m_modified = true;
+        }
+        else
+        {
+            // Clear the legacy footprint assignments.
+            for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
+            {
+                FPID emptyFPID;
+                component = m_netlist.GetComponent( i );
+                component->SetFPID( emptyFPID );
+                m_modified = true;
+            }
+        }
+    }
+#endif
+
     for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
     {
         component = m_netlist.GetComponent( i );
@@ -137,10 +228,14 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
                     GetChars( component->GetReference() ),
                     GetChars( component->GetValue() ),
                     GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+
         m_ListCmp->AppendLine( msg );
 
         if( component->GetFPID().empty() )
+        {
             m_undefinedComponentCnt += 1;
+            continue;
+        }
     }
 
     if( !m_netlist.IsEmpty() )

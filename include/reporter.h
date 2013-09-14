@@ -136,4 +136,23 @@ public:
     REPORTER& Report( const wxString& aText );
 };
 
+
+/**
+ * Class WX_STRING_REPROTER
+ * is a wrapper for reporting to a wxString object.
+ */
+class WX_STRING_REPORTER : public REPORTER
+{
+    wxString* m_string;
+
+public:
+    WX_STRING_REPORTER( wxString* aString ) :
+        REPORTER(),
+        m_string( aString )
+    {
+    }
+
+    REPORTER& Report( const wxString& aText );
+};
+
 #endif     // _REPORTER_H_

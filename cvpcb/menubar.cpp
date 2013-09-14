@@ -110,11 +110,17 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;
 
+#if !defined( USE_FP_LIB_TABLE )
     // Libraries to load
     AddMenuItem( preferencesMenu, wxID_PREFERENCES,
                  _( "&Libraries" ),
                  _( "Set footprint libraries to load and library search paths" ),
                  KiBitmap( config_xpm ) );
+#else
+    AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
+                 _( "Li&brary Tables" ), _( "Setup footprint libraries" ),
+                 KiBitmap( library_table_xpm ) );
+#endif
 
     // Language submenu
     wxGetApp().AddMenuLanguageList( preferencesMenu );

@@ -39,7 +39,7 @@
 #include <pcbcommon.h>
 #include <wxBasePcbFrame.h>
 #include <msgpanel.h>
-#include <netlist_reader.h>
+#include <pcb_netlist.h>
 #include <reporter.h>
 #include <base_units.h>
 

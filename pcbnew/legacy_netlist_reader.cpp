@@ -31,6 +31,7 @@
 #include <richio.h>
 #include <kicad_string.h>
 
+#include <pcb_netlist.h>
 #include <netlist_reader.h>
 
 

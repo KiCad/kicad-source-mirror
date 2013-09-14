@@ -39,6 +39,7 @@
 #include <footprint_info.h>
 #include <io_mgr.h>
 #include <fp_lib_table.h>
+#include <fpid.h>
 
 #include <class_module.h>
 
@@ -179,6 +180,31 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
     m_List.sort();
 
     return true;
+}
+
+
+FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString & aFootprintName )
+{
+    BOOST_FOREACH( FOOTPRINT_INFO& footprint, m_List )
+    {
+#if defined( USE_FP_LIB_TABLE )
+        FPID fpid;
+
+        wxCHECK_MSG( fpid.Parse( TO_UTF8( aFootprintName ) ) < 0, NULL,
+                     wxString::Format( wxT( "<%s> is not a valid FPID." ),
+                                       GetChars( aFootprintName ) ) );
+
+        wxString libNickname = FROM_UTF8( fpid.GetLibNickname().c_str() );
+        wxString footprintName = FROM_UTF8( fpid.GetFootprintName().c_str() );
+
+        if( libNickname == footprint.m_libName && footprintName == footprint.m_Module )
+            return &footprint;
+#else
+        if( aFootprintName.CmpNoCase( footprint.m_Module ) == 0 )
+            return &footprint;
+#endif
+    }
+    return NULL;
 }
 
 
