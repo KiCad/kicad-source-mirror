@@ -9,6 +9,7 @@ include_directories(
     ./dialogs
     ../3d-viewer
     ../pcbnew
+    ../pcbnew/dialogs
     ../polygon
     ../common
     ${INC_AFTER}
@@ -22,6 +23,8 @@ set( CVPCB_DIALOGS
     dialogs/dialog_cvpcb_config_fbp.cpp
     dialogs/dialog_display_options.cpp
     dialogs/dialog_display_options_base.cpp
+    ../pcbnew/dialogs/dialog_fp_lib_table.cpp
+    ../pcbnew/dialogs/dialog_fp_lib_table_base.cpp
     )
 
 set( CVPCB_SRCS

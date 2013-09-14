@@ -28,22 +28,25 @@
  */
 
 #include <fctsys.h>
+#include <build_version.h>
 #include <appl_wxstruct.h>
 #include <macros.h>
 #include <confirm.h>
 #include <eda_doc.h>
 #include <eda_dde.h>
 #include <gestfich.h>
+#include <html_messagebox.h>
+#include <wildcards_and_files_ext.h>
+#include <fp_lib_table.h>
+#include <netlist_reader.h>
 
 #include <cvpcb_mainframe.h>
+#include <cvpcb.h>
 #include <cvstruct.h>
 #include <dialog_cvpcb_config.h>
 #include <class_DisplayFootprintsFrame.h>
 #include <cvpcb_id.h>
-#include <html_messagebox.h>
-#include <wildcards_and_files_ext.h>
 
-#include <build_version.h>
 
 #define FRAME_MIN_SIZE_X 450
 #define FRAME_MIN_SIZE_Y 300
@@ -52,6 +55,16 @@
 // option key to close CvPcb after saving files
 static const wxString KeepCvpcbOpenEntry( wxT( "KeepCvpcbOpen" ) );
 static const wxString FootprintDocFileEntry( wxT( "footprints_doc_file" ) );
+
+
+/**
+ * Function InvokePcbLibTableEditor
+ * shows the modal DIALOG_FP_LIB_TABLE for purposes of editing two lib tables.
+ *
+ * @return int - bits 0 and 1 tell whether a change was made to the @a aGlobal
+ *  and/or the @a aProject table, respectively.  If set, table was modified.
+ */
+int InvokePcbLibTableEditor( wxFrame* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject );
 
 
 BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
@@ -68,6 +81,10 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
     EVT_MENU( ID_SAVE_PROJECT, CVPCB_MAINFRAME::SaveProjectFile )
     EVT_MENU( ID_SAVE_PROJECT_AS, CVPCB_MAINFRAME::SaveProjectFile )
     EVT_MENU( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE, CVPCB_MAINFRAME::OnKeepOpenOnSave )
+
+#if defined( USE_FP_LIB_TABLE )
+    EVT_MENU( ID_CVPCB_LIB_TABLE_EDIT, CVPCB_MAINFRAME::OnEditFootprintLibraryTable )
+#endif
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, CVPCB_MAINFRAME::SetLanguage )
 
@@ -113,6 +130,11 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
     m_KeepCvpcbOpen         = false;
     m_undefinedComponentCnt = 0;
     m_skipComponentSelect   = false;
+
+#if defined( USE_FP_LIB_TABLE )
+    m_globalFootprintTable  = NULL;
+    m_footprintLibTable     = NULL;
+#endif
 
     /* Name of the document footprint list
      * usually located in share/modules/footprints_doc
@@ -185,6 +207,39 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
                           Right().BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
 
     m_auimgr.Update();
+
+#if defined( USE_FP_LIB_TABLE )
+    if( m_globalFootprintTable == NULL )
+    {
+        try
+        {
+            m_globalFootprintTable = new FP_LIB_TABLE();
+
+            if( !FP_LIB_TABLE::LoadGlobalTable( *m_globalFootprintTable ) )
+            {
+                DisplayInfoMessage( this, wxT( "You have run CvPcb for the first time using the "
+                                               "new footprint library table method of finding "
+                                               "footprints.  CvPcb has either copied the default "
+                                               "table or created an empty table in your home "
+                                               "folder.  You must first configure the library "
+                                               "table to include all footprint libraries not "
+                                               "included with KiCad.  See the \"Footprint Library "
+                                               "Table\" section of the CvPcb documentation for "
+                                               "more information." ) );
+            }
+        }
+        catch( IO_ERROR ioe )
+        {
+            wxString msg;
+            msg.Printf( _( "An error occurred attempting to load the global footprint library "
+                           "table:\n\n%s" ), GetChars( ioe.errorText ) );
+            DisplayError( this, msg );
+        }
+
+        m_footprintLibTable = new FP_LIB_TABLE( m_globalFootprintTable );
+    }
+#endif
+
 }
 
 
@@ -466,6 +521,30 @@ void CVPCB_MAINFRAME::ConfigCvpcb( wxCommandEvent& event )
 }
 
 
+#if defined( USE_FP_LIB_TABLE )
+void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
+{
+    int r = InvokePcbLibTableEditor( this, m_globalFootprintTable, m_footprintLibTable );
+
+    if( r & 1 )
+    {
+        FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
+        m_globalFootprintTable->Format( &sf, 0 );
+    }
+
+    if( r & 2 )
+    {
+        wxFileName fn = m_NetlistFileName;
+        fn.SetName( FP_LIB_TABLE::GetFileName() );
+        fn.SetExt( wxEmptyString );
+
+        FILE_OUTPUTFORMATTER sf( fn.GetFullPath() );
+        m_footprintLibTable->Format( &sf, 0 );
+    }
+}
+#endif
+
+
 void CVPCB_MAINFRAME::OnKeepOpenOnSave( wxCommandEvent& event )
 {
     m_KeepCvpcbOpen = event.IsChecked();
@@ -523,7 +602,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     // selected footprint.
     if( FindFocus() == m_ListCmp || FindFocus() == m_LibraryList )
     {
-        wxString module = FROM_UTF8( component->GetFPID().GetFootprintName().c_str() );
+        wxString module = FROM_UTF8( component->GetFPID().Format().c_str() );
 
         bool found = false;
 
@@ -667,7 +746,12 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
         return false;
     }
 
+#if !defined( USE_FP_LIB_TABLE )
     m_footprints.ReadFootprintFiles( m_ModuleLibNames );
+#else
+    if( m_footprintLibTable != NULL )
+        m_footprints.ReadFootprintFiles( *m_footprintLibTable );
+#endif
 
     // Display error messages, if any.
     if( !m_footprints.m_filesNotFound.IsEmpty() || !m_footprints.m_filesInvalid.IsEmpty() )
@@ -770,7 +854,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
             netlistReader->LoadNetlist();
         }
         else
-            wxMessageBox( _( "Unknown netlist format" ), wxEmptyString, wxOK | wxICON_ERROR );
+            wxMessageBox( _( "Unknown netlist format." ), wxEmptyString, wxOK | wxICON_ERROR );
     }
     catch( IO_ERROR& ioe )
     {
@@ -852,6 +936,11 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
                                                                 wxPoint( 0, 0 ),
                                                                 wxSize( 600, 400 ),
                                                                 KICAD_DEFAULT_DRAWFRAME_STYLE );
+
+#if defined( USE_FP_LIB_TABLE )
+        m_DisplayFootprintFrame->SetFootprintLibTable( m_footprintLibTable );
+#endif
+
         m_DisplayFootprintFrame->Show( true );
     }
     else
@@ -913,8 +1002,23 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
         m_ListCmp->m_ComponentList.Add( msg );
     }
 
-    m_ListCmp->SetItemCount( m_ListCmp->m_ComponentList.Count() );
-    m_ListCmp->SetSelection( 0, true );
+    if( m_ListCmp->m_ComponentList.Count() )
+    {
+        m_ListCmp->SetItemCount( m_ListCmp->m_ComponentList.Count() );
+        m_ListCmp->SetSelection( 0, true );
+        m_ListCmp->RefreshItems( 0L, m_ListCmp->m_ComponentList.Count()-1 );
+
+#if defined (__WXGTK__ )
+        // @bug On GTK and wxWidgets 2.8.x, this will assert in debug builds because the
+        //      column parameter is -1.  This was the only way to prevent GTK3 from
+        //      ellipsizing long strings down to a few characters.  It still doesn't set
+        //      the scroll bars correctly (too short) but it's better than any of the
+        //      other alternatives.  If someone knows how to fix this, please do.
+        m_ListCmp->SetColumnWidth( -1, wxLIST_AUTOSIZE );
+#else
+        m_ListCmp->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+#endif
+    }
 }
 
 
@@ -932,7 +1036,21 @@ void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
                                         wxFONTWEIGHT_NORMAL ) );
     }
 
+#if defined( USE_FP_LIB_TABLE )
+    if( m_footprintLibTable )
+    {
+        wxArrayString libNames;
+
+        std::vector< wxString > libNickNames = m_footprintLibTable->GetLogicalLibs();
+
+        for( unsigned ii = 0; ii < libNickNames.size(); ii++ )
+            libNames.Add( libNickNames[ii] );
+
+        m_LibraryList->SetLibraryList( libNames );
+    }
+#else
     m_LibraryList->SetLibraryList( m_ModuleLibNames );
+#endif
 }
 
 

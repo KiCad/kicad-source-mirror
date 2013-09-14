@@ -33,6 +33,7 @@
 #include <confirm.h>
 #include <dialog_helpers.h>
 #include <wxPcbStruct.h>
+#include <pcb_netlist.h>
 #include <netlist_reader.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
