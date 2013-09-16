@@ -25,15 +25,14 @@
 #ifndef __SELECTION_AREA_H
 #define __SELECTION_AREA_H
 
-#include <tool/tool_event.h>
-#include <tool/tool_manager.h>
-
-#include <math/box2.h>
-
-#include <view/view.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <base_struct.h>
 #include <layers_id_colors_and_visibility.h>
+#include <math/box2.h>
+
+namespace KiGfx
+{
+class GAL;
+}
 
 /**
  * Class SELECTION_AREA

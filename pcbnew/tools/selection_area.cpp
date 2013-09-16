@@ -22,11 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
-
-#include <layers_id_colors_and_visibility.h>
- 
 #include "selection_area.h"
+#include <gal/graphics_abstraction_layer.h>
+#include <gal/color4d.h>
 
 using namespace KiGfx;
 
@@ -47,7 +45,7 @@ void SELECTION_AREA::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SELECTION_AREA::ViewDraw( int aLayer, GAL* aGal ) const
+void SELECTION_AREA::ViewDraw( int aLayer, KiGfx::GAL* aGal ) const
 {
     aGal->SetLineWidth( 1.0 );
     aGal->SetStrokeColor( COLOR4D( 1.0, 1.0, 0.4, 1.0 ) );

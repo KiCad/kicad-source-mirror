@@ -36,6 +36,8 @@
 #include <view/view_controls.h>
 
 #include <tool/context_menu.h>
+#include <tool/tool_event.h>
+#include <tool/tool_manager.h>
 
 #include "selection_tool.h"
 #include "selection_area.h"
