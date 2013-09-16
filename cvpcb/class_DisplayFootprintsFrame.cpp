@@ -476,7 +476,7 @@ EDA_COLOR_T DISPLAY_FOOTPRINTS_FRAME::GetGridColor() const
 
 MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 {
-    MODULE* footprint;
+    MODULE* footprint = NULL;
 
     try
     {
@@ -550,6 +550,9 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
             }
 
             footprint = pi->FootprintLoad( libPath, aFootprintName );
+
+            if( footprint != NULL )
+                break;
         }
 #endif
     }
