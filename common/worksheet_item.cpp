@@ -200,6 +200,5 @@ void WORKSHEET_ITEM::drawBorder( GAL* aGal ) const
 
     aGal->SetIsStroke( true );
     aGal->SetIsFill( false );
-    aGal->SetStrokeColor( COLOR4D( 0.5, 0.5, 0.5, 1.0 ) );
     aGal->DrawRectangle( origin, end );
 }
