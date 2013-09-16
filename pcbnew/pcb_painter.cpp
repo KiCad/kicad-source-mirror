@@ -273,7 +273,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     if( m_pcbSettings->m_netNamesOnTracks && IsNetnameLayer( aLayer ) )
     {
         // If there is a net name - display it on the track
-        if( netNumber != 0 )
+        if( netNumber > 0 )
         {
             VECTOR2D line = ( end - start );
             double length = line.EuclideanNorm();
@@ -283,6 +283,9 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
                 return;
 
             NETINFO_ITEM* net = ( (BOARD*) aTrack->GetParent() )->FindNet( netNumber );
+            if( net == NULL )
+                return;
+
             std::string netName = std::string( net->GetShortNetname().mb_str() );
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
             double textOrientation = -atan( line.y / line.x );
