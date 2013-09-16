@@ -221,6 +221,7 @@ set(PCBNEW_CLASS_SRCS
     
     tools/selection_tool.cpp
     tools/selection_area.cpp
+    tools/bright_box.cpp
     tools/move_tool.cpp
     tools/pcb_tools.cpp
     )
