@@ -596,12 +596,6 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
         if( !m_painter->Draw( aItem, aLayer ) )
             aItem->ViewDraw( aLayer, m_gal );  // Alternative drawing method
     }
-
-    // Draws a bright contour around the item
-    if( static_cast<const EDA_ITEM*>( aItem )->IsBrightened() )
-    {
-        m_painter->DrawBrightened( aItem );
-    }
 }
 
 

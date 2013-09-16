@@ -224,13 +224,6 @@ public:
      */
     virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) = 0;
 
-    /**
-     * Function DrawBrightened
-     * Draws a special marking for the item.
-     * @param aItem is the item that is going to be marked.
-     */
-    virtual void DrawBrightened( const VIEW_ITEM* aItem );
-
 protected:
     /// Instance of graphic abstraction layer that gives an interface to call
     /// commands used to draw (eg. DrawLine, DrawCircle, etc.)

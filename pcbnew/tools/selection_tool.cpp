@@ -41,6 +41,7 @@
 
 #include "selection_tool.h"
 #include "selection_area.h"
+#include "bright_box.h"
 
 using namespace KiGfx;
 using boost::optional;
@@ -334,8 +335,8 @@ bool SELECTION_TOOL::selectMultiple()
 
 BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 {
-    OPT_TOOL_EVENT evt;
     BOARD_ITEM* current = NULL;
+    boost::shared_ptr<BRIGHT_BOX> brightBox;
 
     m_menu.reset( new CONTEXT_MENU() );
     m_menu->SetTitle( _( "Clarify selection" ) );
@@ -352,10 +353,13 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 
     SetContextMenu( m_menu.get(), CMENU_NOW );
 
-    while( evt = Wait() )
+    while( OPT_TOOL_EVENT evt = Wait() )
     {
+        wxLogDebug( wxT( "disambiguation menu event") );
+
         if( evt->Action() == TA_ContextMenuUpdate )
         {
+            // User has pointed an item, so show it in a different way
             if( current )
                 current->ClearBrightened();
 
@@ -380,14 +384,20 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
             {
                 current = ( *aCollector )[*id];
                 current->SetSelected();
-                return current;
             }
 
-            return NULL;
+            break;
+        }
+
+        if( current && current->IsBrightened() )
+        {
+            brightBox.reset( new BRIGHT_BOX( current ) );
+            getView()->Add( brightBox.get() );
         }
     }
 
-    return NULL;
+    getView()->MarkTargetDirty( TARGET_OVERLAY );
+    return current;
 }
 
 

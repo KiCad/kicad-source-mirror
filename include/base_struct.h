@@ -474,11 +474,11 @@ public:
 
     inline void SetSelected() { SetFlags( SELECTED ); ViewUpdate( COLOR ); }
     inline void SetHighlighted() { SetFlags( HIGHLIGHTED ); ViewUpdate( COLOR ); }
-    inline void SetBrightened() { SetFlags( BRIGHTENED ); ViewUpdate( COLOR ); }
+    inline void SetBrightened() { SetFlags( BRIGHTENED ); }
 
     inline void ClearSelected() { ClearFlags( SELECTED ); ViewUpdate( COLOR ); }
     inline void ClearHighlighted() { ClearFlags( HIGHLIGHTED ); ViewUpdate( COLOR ); }
-    inline void ClearBrightened() { ClearFlags( BRIGHTENED ); ViewUpdate( COLOR ); }
+    inline void ClearBrightened() { ClearFlags( BRIGHTENED ); }
 
     void SetModified();
 
