@@ -65,11 +65,6 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     m_mousePosition.x = aEvent.GetX();
     m_mousePosition.y = aEvent.GetY();
 
-    if( m_snappingEnabled )
-        m_cursorPosition = m_view->GetGAL()->GetGridPoint( m_mousePosition );
-    else
-        m_cursorPosition = m_mousePosition;
-
     bool isAutoPanning = false;
 
     if( m_autoPanEnabled )
@@ -219,6 +214,24 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
         m_parentPanel->CaptureMouse();
     else
         m_parentPanel->ReleaseMouse();
+}
+
+
+const VECTOR2D WX_VIEW_CONTROLS::GetMousePosition() const
+{
+    wxPoint msp = wxGetMousePosition();
+    wxPoint winp = m_parentPanel->GetScreenPosition();
+
+    return VECTOR2D( msp.x - winp.x, msp.y - winp.y );
+}
+
+
+const VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
+{
+    if( m_snappingEnabled )
+        return m_view->GetGAL()->GetGridPoint( GetMousePosition() );
+    else
+        return GetMousePosition();
 }
 
 

@@ -110,10 +110,7 @@ public:
      *
      * @return The current mouse pointer position.
      */
-    virtual const VECTOR2D& GetMousePosition() const
-    {
-        return m_mousePosition;
-    }
+    virtual const VECTOR2D GetMousePosition() const = 0;
 
     /**
      * Function GetCursorPosition()
@@ -122,21 +119,7 @@ public:
      *
      * @return The current cursor position in screen coordinates.
      */
-    virtual const VECTOR2D& GetCursorPosition() const
-    {
-        return m_cursorPosition;
-    }
-
-    /**
-     * Function SetCursorPosition()
-     * Allows to move the cursor to a different location.
-     *
-     * @param aPosition is the new location expressed in screen coordinates.
-     */
-    virtual void SetCursorPosition( const VECTOR2D& aPosition )
-    {
-        m_cursorPosition = aPosition;
-    }
+    virtual const VECTOR2D GetCursorPosition() const = 0;
 
 protected:
     /// Pointer to controlled VIEW.
@@ -144,9 +127,6 @@ protected:
 
     /// Current mouse position
     VECTOR2D    m_mousePosition;
-
-    /// Current cursor position
-    VECTOR2D    m_cursorPosition;
 
     /// Should the cursor snap to grid or move freely
     bool        m_snappingEnabled;
