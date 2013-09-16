@@ -278,10 +278,8 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
                       VECTOR2D( lineLength, -aWidth / 2.0 ) );
 
         // Draw line caps
-        drawStrokedSemiCircle( VECTOR2D( 0.0, 0.0 ),
-                               ( aWidth + lineWidth ) / 2, M_PI / 2 );
-        drawStrokedSemiCircle( VECTOR2D( lineLength, 0.0 ),
-                               ( aWidth + lineWidth ) / 2, -M_PI / 2 );
+        drawStrokedSemiCircle( VECTOR2D( 0.0, 0.0 ), aWidth / 2, M_PI / 2 );
+        drawStrokedSemiCircle( VECTOR2D( lineLength, 0.0 ), aWidth / 2, -M_PI / 2 );
 
         Restore();
     }
