@@ -40,8 +40,12 @@
 
 .text
 .globl make_fcontext
+
+#ifndef  __APPLE__
 .type make_fcontext,@function
-.align 16
+#endif
+
+.align 8
 make_fcontext:
     leaq   -0x58(%rdi),    %rax        /* reserve space for fcontext_t at top of context stack */
 
@@ -70,5 +74,8 @@ finish:
     xorq    %rdi,           %rdi       /* exit code is zero */
     call   _exit@PLT                   /* exit application */
     hlt
+
+#ifndef  __APPLE__
 .size make_fcontext,.-make_fcontext
+#endif
 
