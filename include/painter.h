@@ -81,12 +81,32 @@ public:
     }
 
     /**
+     * Function GetActiveLayers()
+     * Returns the set of currently active layers.
+     * @return The set of currently active layers.
+     */
+    const std::set<unsigned int> GetActiveLayers()
+    {
+        return m_activeLayers;
+    }
+
+    /**
      * Function ClearActiveLayers
      * Clears the list of active layers.
      */
     inline void ClearActiveLayers()
     {
         m_activeLayers.clear();
+    }
+
+    /**
+     * Function IsActiveLayer
+     * Returns information whether the queried layer is marked as active.
+     * @return True if the queried layer is marked as active.
+     */
+    inline bool IsActiveLayer( int aLayerId ) const
+    {
+        return ( m_activeLayers.count( aLayerId ) > 0 );
     }
 
     /**
@@ -112,6 +132,16 @@ public:
     inline void SetHighContrast( bool aEnabled )
     {
         m_hiContrastEnabled = aEnabled;
+    }
+
+    /**
+     * Function GetHighContrast
+     * Returns information about high contrast display mode.
+     * @return True if the high contrast mode is on, false otherwise.
+     */
+    inline bool GetHighContrast() const
+    {
+        return m_hiContrastEnabled;
     }
 
     /**
