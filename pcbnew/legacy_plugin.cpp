@@ -278,8 +278,13 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
         {
             auto_ptr<MODULE>    module( new MODULE( m_board ) );
 
+            FPID        fpid;
             std::string fpName = StrPurge( line + SZ( "$MODULE" ) );
-            module->SetFPID( FPID( fpName ) );
+
+            if( !fpName.empty() )
+                fpid = FPID( fpName );
+
+            module->SetFPID( fpid );
 
             LoadMODULE( module.get() );
             m_board->Add( module.release(), ADD_APPEND );
