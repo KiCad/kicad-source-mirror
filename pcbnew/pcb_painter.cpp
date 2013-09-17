@@ -229,7 +229,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_MODULE_T:
-        draw( (MODULE*) aItem );
+        draw( (MODULE*) aItem, aLayer );
         break;
 
     case PCB_TEXT_T:
@@ -700,11 +700,14 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
 }
 
 
-void PCB_PAINTER::draw( const MODULE* aModule )
+void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
 {
     // For modules we have to draw a selection box if needed
-    if( aModule->IsSelected() )
-        drawSelectionBox( aModule );
+    if( aLayer == ITEM_GAL_LAYER( SELECTION ) )
+    {
+        if( aModule->IsSelected() )
+            drawSelectionBox( aModule );
+    }
 }
 
 
