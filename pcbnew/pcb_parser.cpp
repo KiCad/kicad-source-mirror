@@ -1540,17 +1540,19 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
     wxCHECK_MSG( CurTok() == T_module, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as MODULE." ) );
 
-    wxPoint pt;
-    T       token;
-    FPID    fpid;
+    wxString name;
+    wxPoint  pt;
+    T        token;
+    FPID     fpid;
 
     auto_ptr< MODULE > module( new MODULE( m_board ) );
 
     module->SetInitialComments( aInitialComments );
 
     NeedSYMBOLorNUMBER();
+    name = FromUTF8();
 
-    if( fpid.Parse( FromUTF8() ) >= 0 )
+    if( !name.IsEmpty() && fpid.Parse( FromUTF8() ) >= 0 )
     {
         wxString error;
         error.Printf( _( "invalid PFID in\nfile: <%s>\nline: %d\noffset: %d" ),
