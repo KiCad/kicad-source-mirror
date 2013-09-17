@@ -1,5 +1,5 @@
 /**
- * @file pl_editor/files.cpp
+ * @file pagelayout_editor/files.cpp
  */
 
 /*

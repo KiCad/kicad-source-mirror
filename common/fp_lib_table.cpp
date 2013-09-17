@@ -103,7 +103,6 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
 
         // After (name), remaining (lib) elements are order independent, and in
         // some cases optional.
-
         bool    sawType = false;
         bool    sawOpts = false;
         bool    sawDesc = false;
@@ -460,11 +459,6 @@ bool FP_LIB_TABLE::ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aL
         }
         else
         {
-            wxLogDebug( wxT( "Found component %s footprint %s in legacy library <%s>." ),
-                        GetChars( component->GetReference() ),
-                        GetChars( GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) ),
-                        GetChars( libPath ) );
-
             wxString libNickname;
 
             FP_LIB_TABLE* cur = this;
@@ -480,9 +474,6 @@ bool FP_LIB_TABLE::ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aL
                     if( wxFileName::GetPathSeparator() == wxChar( '\\' )
                       && uri.Find( wxChar( '/' ) ) >= 0 )
                         uri.Replace( wxT( "/"), wxT( "\\" ) );
-
-                    wxLogDebug( wxT( "Comparing legacy path <%s> to lib table path <%s>." ),
-                                GetChars( libPath ), GetChars( uri ) );
 
                     if( uri == libPath )
                     {
@@ -537,8 +528,6 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARS
     bool tableExists = true;
     wxFileName fn = GetGlobalTableFileName();
 
-    wxLogDebug( wxT( "Loading global footprint table file: %s" ), GetChars( fn.GetFullPath() ) );
-
     if( !fn.FileExists() )
     {
         tableExists = false;
@@ -547,8 +536,6 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARS
         // the users home configuration path.
         wxString fileName( wxT( "fp_global_table" ) );
         fileName = wxGetApp().FindLibraryPath( fileName );
-
-        wxLogDebug( wxT( "Copying global footprint table from <%s>." ), GetChars( fileName ) );
 
         // The fallback is to create an empty global footprint table for the user to populate.
         if( fileName.IsEmpty() || !::wxCopyFile( fileName, fn.GetFullPath(), false ) )

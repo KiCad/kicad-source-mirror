@@ -197,7 +197,19 @@ bool CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
         // assignment list.  This is an usual case during the life of a design.
         if( component )
         {
-            component->SetFPID( FPID( footprint ) );
+            FPID fpid;
+
+            if( !footprint.IsEmpty() && fpid.Parse( footprint ) >= 0 )
+            {
+                wxString error;
+                error.Printf( _( "invalid PFID in\nfile: <%s>\nline: %d" ),
+                              GetChars( m_lineReader->GetSource() ),
+                              m_lineReader->LineNumber() );
+
+                THROW_IO_ERROR( error );
+            }
+
+            component->SetFPID( fpid );
         }
         else
         {

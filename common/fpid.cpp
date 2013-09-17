@@ -171,6 +171,12 @@ int FPID::Parse( const std::string& aId )
 }
 
 
+int FPID::Parse( const wxString& aId )
+{
+    return Parse( std::string( TO_UTF8( aId ) ) );
+}
+
+
 FPID::FPID( const std::string& aId ) throw( PARSE_ERROR )
 {
     int offset = Parse( aId );

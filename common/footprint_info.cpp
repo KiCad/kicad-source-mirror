@@ -190,7 +190,7 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString & aFootprintName )
 #if defined( USE_FP_LIB_TABLE )
         FPID fpid;
 
-        wxCHECK_MSG( fpid.Parse( TO_UTF8( aFootprintName ) ) < 0, NULL,
+        wxCHECK_MSG( fpid.Parse( aFootprintName ) < 0, NULL,
                      wxString::Format( wxT( "<%s> is not a valid FPID." ),
                                        GetChars( aFootprintName ) ) );
 

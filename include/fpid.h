@@ -82,6 +82,8 @@ public:
      */
     int Parse( const std::string& aId );
 
+    int Parse( const wxString& aId );
+
     /**
      * Function GetLibNickname
      * returns the logical library name  portion of a FPID.
