@@ -76,6 +76,7 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
     m_layerColors[ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
     m_layerColors[ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
     m_layerColors[ITEM_GAL_LAYER( WORKSHEET )]                  = COLOR4D( 0.5, 0.0, 0.0, 1.0 );
+    m_layerColors[ITEM_GAL_LAYER( SELECTION )]                  = COLOR4D( 1.0, 1.0, 1.0, 0.5 );
 
     // Netnames for copper layers
     for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
@@ -911,6 +912,6 @@ void PCB_PAINTER::drawSelectionBox( const VIEW_ITEM* aItem ) const
 
     m_gal->SetIsStroke( false );
     m_gal->SetIsFill( true );
-    m_gal->SetFillColor( COLOR4D( 1.0, 1.0, 1.0, 0.5 ) );
+    m_gal->SetFillColor( m_pcbSettings->GetLayerColor( ITEM_GAL_LAYER( SELECTION ) ) );
     m_gal->DrawRectangle( boundingBox.GetOrigin(), boundingBox.GetEnd() );
 }
