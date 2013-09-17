@@ -210,11 +210,11 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
 
     default:
         // Remove modules, they have to be selected by clicking on area that does not
-        // contain anything but module footprint
-        for( int i = 0; i < collector.GetCount(); ++i )
+        // contain anything but module footprint and not selectable items
+        for( int i = collector.GetCount() - 1; i >= 0 ; --i )
         {
             BOARD_ITEM* boardItem = ( collector )[i];
-            if( boardItem->Type() == PCB_MODULE_T )
+            if( boardItem->Type() == PCB_MODULE_T || !selectable( boardItem ) )
                 collector.Remove( i );
         }
 
@@ -223,7 +223,7 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         {
             toggleSelection( collector[0] );
         }
-        else
+        else if( collector.GetCount() > 1 )
         {
             item = disambiguationMenu( &collector );
             if( item )
@@ -345,21 +345,13 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 
     int limit = std::min( 10, aCollector->GetCount() );
 
-    int addedItems = 0;
     for( int i = 0; i < limit; ++i )
     {
         wxString text;
         BOARD_ITEM* item = ( *aCollector )[i];
-        if( selectable( item ) )
-        {
-            text = item->GetSelectMenuText();
-            m_menu->Add( text, i );
-            addedItems++;
-        }
+        text = item->GetSelectMenuText();
+        m_menu->Add( text, i );
     }
-
-    if( addedItems == 0 )   // none of items was selectable
-        return NULL;
 
     SetContextMenu( m_menu.get(), CMENU_NOW );
 
@@ -411,7 +403,6 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 
 bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
 {
-    BOARD* board = getModel<BOARD>( PCB_T );
     bool highContrast = getView()->GetPainter()->GetSettings()->GetHighContrast();
 
     if( highContrast )
@@ -437,6 +428,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
             return false;
     }
 
+    BOARD* board = getModel<BOARD>( PCB_T );
     switch( aItem->Type() )
     {
     case PCB_VIA_T:
