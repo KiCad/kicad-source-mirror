@@ -74,17 +74,16 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
         // Check to see if the component has already a footprint set.
         hasFootprint = !component->GetFPID().empty();
 
-#if defined( USE_FP_LIB_TABLE )
         FPID fpid;
 
-        wxCHECK_RET( fpid.Parse( aFootprintName ) < 0,
-                     wxString::Format( wxT( "<%s> is not a valid FPID." ),
-                                       GetChars( aFootprintName ) ) );
+        if( !aFootprintName.IsEmpty() )
+        {
+            wxCHECK_RET( fpid.Parse( aFootprintName ) < 0,
+                         wxString::Format( wxT( "<%s> is not a valid FPID." ),
+                                           GetChars( aFootprintName ) ) );
+        }
 
         component->SetFPID( fpid );
-#else
-        component->SetFPID( FPID( aFootprintName ) );
-#endif
 
         // create the new component description
         description.Printf( CMP_FORMAT, componentIndex + 1,
