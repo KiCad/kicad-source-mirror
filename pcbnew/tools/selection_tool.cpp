@@ -34,6 +34,7 @@
 #include <wxPcbStruct.h>
 #include <collectors.h>
 #include <view/view_controls.h>
+#include <painter.h>
 
 #include <tool/context_menu.h>
 #include <tool/tool_event.h>
@@ -118,7 +119,8 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
                 // Check if dragging event started within the currently selected items bounding box
                 std::set<BOARD_ITEM*>::iterator it, it_end;
-                for( it = m_selectedItems.begin(), it_end = m_selectedItems.end(); it != it_end; ++it )
+                for( it = m_selectedItems.begin(), it_end = m_selectedItems.end();
+                        it != it_end; ++it )
                 {
                     BOX2I itemBox = (*it)->ViewBBox();
                     itemBox.Inflate( 500000 );    // Give some margin for gripping an item
@@ -207,8 +209,8 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         break;
 
     default:
-        // Remove footprints, they have to be selected by clicking on area that does not
-        // contain anything but footprint
+        // Remove modules, they have to be selected by clicking on area that does not
+        // contain anything but module footprint
         for( int i = 0; i < collector.GetCount(); ++i )
         {
             BOARD_ITEM* boardItem = ( collector )[i];
@@ -343,20 +345,26 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 
     int limit = std::min( 10, aCollector->GetCount() );
 
+    int addedItems = 0;
     for( int i = 0; i < limit; ++i )
     {
         wxString text;
         BOARD_ITEM* item = ( *aCollector )[i];
-        text = item->GetSelectMenuText();
-        m_menu->Add( text, i );
+        if( selectable( item ) )
+        {
+            text = item->GetSelectMenuText();
+            m_menu->Add( text, i );
+            addedItems++;
+        }
     }
+
+    if( addedItems == 0 )   // none of items was selectable
+        return NULL;
 
     SetContextMenu( m_menu.get(), CMENU_NOW );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        wxLogDebug( wxT( "disambiguation menu event") );
-
         if( evt->Action() == TA_ContextMenuUpdate )
         {
             // User has pointed an item, so show it in a different way
@@ -404,6 +412,30 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
 {
     BOARD* board = getModel<BOARD>( PCB_T );
+    bool highContrast = getView()->GetPainter()->GetSettings()->GetHighContrast();
+
+    if( highContrast )
+    {
+        bool onActive = false;
+        int layers[KiGfx::VIEW::VIEW_MAX_LAYERS], layers_count;
+
+        // Filter out items that do not belong to active layers
+        std::set<unsigned int> activeLayers = getView()->GetPainter()->
+                                                GetSettings()->GetActiveLayers();
+        aItem->ViewGetLayers( layers, layers_count );
+
+        for( int i = 0; i < layers_count; ++i )
+        {
+            if( activeLayers.count( layers[i] ) > 0 )   // Item is on at least one active layer
+            {
+                onActive = true;
+                break;
+            }
+        }
+
+        if( !onActive )
+            return false;
+    }
 
     switch( aItem->Type() )
     {
