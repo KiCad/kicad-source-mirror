@@ -77,7 +77,7 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 #if defined( USE_FP_LIB_TABLE )
         FPID fpid;
 
-        wxCHECK_RET( fpid.Parse( TO_UTF8( aFootprintName ) ) < 0,
+        wxCHECK_RET( fpid.Parse( aFootprintName ) < 0,
                      wxString::Format( wxT( "<%s> is not a valid FPID." ),
                                        GetChars( aFootprintName ) ) );
 

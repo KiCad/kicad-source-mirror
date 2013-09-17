@@ -24,7 +24,7 @@
  */
 
 /**
- * @file dialog_target_properties.cpp
+ * @file target_edit.cpp
  * @brief Functions to edit targets (class #PCB_TARGET).
  */
 

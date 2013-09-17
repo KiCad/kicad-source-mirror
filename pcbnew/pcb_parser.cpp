@@ -1549,7 +1549,14 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
     module->SetInitialComments( aInitialComments );
 
     NeedSYMBOLorNUMBER();
-    fpid.SetFootprintName( FromUTF8() );
+
+    if( fpid.Parse( FromUTF8() ) >= 0 )
+    {
+        wxString error;
+        error.Printf( _( "invalid PFID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                      GetChars( CurSource() ), CurLineNumber(), CurOffset() );
+        THROW_IO_ERROR( error );
+    }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -1564,12 +1571,6 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
 
         case T_placed:
             module->SetIsPlaced( true );
-            break;
-
-        case T_fp_lib:
-            NeedSYMBOLorNUMBER();
-            fpid.SetLibNickname( FromUTF8() );
-            NeedRIGHT();
             break;
 
         case T_layer:

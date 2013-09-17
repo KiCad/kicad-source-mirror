@@ -1,5 +1,5 @@
 /**
- * @file page_layout_reader.cpp
+ * @file common/page_layout_reader.cpp
  * @brief read an S expression of description of graphic items and texts
  * to build a title block and page layout
  */

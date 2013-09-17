@@ -509,7 +509,6 @@ public:
      * Function SetCrossHairPosition
      * sets the screen cross hair position to \a aPosition in logical (drawing) units.
      * @param aPosition The new cross hair position.
-     * @param aGridOrigin Origin point of the snap grid.
      * @param aSnapToGrid Sets the cross hair position to the nearest grid position to
      *                    \a aPosition.
      *
@@ -520,7 +519,6 @@ public:
      * Function GetCursorPosition
      * returns the current cursor position in logical (drawing) units.
      * @param aOnGrid Returns the nearest grid position at the current cursor position.
-     * @param aGridOrigin Origin point of the snap grid.
      * @param aGridSize Custom grid size instead of the current grid size.  Only valid
      *        if \a aOnGrid is true.
      * @return The current cursor position.

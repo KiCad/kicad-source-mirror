@@ -1173,7 +1173,6 @@ bool EDA_APP::SetFootprintLibTablePath()
     if( m_commonSettings->Read( kicadFpLibPath, &path ) && wxFileName::DirExists( path ) )
     {
         wxSetEnv( wxT( "KISYSMOD" ), path );
-        wxLogDebug( wxT( "Setting $KISYSMOD=\"%s\"." ), GetChars( path ) );
         return true;
     }
 
@@ -1199,7 +1198,6 @@ bool EDA_APP::SetFootprintLibTablePath()
 
         if( modFileCount != 0 )
         {
-            wxLogDebug( wxT( "Setting $KISYSMOD=\"%s\"." ), GetChars( bestPath ) );
             wxSetEnv( wxT( "KISYSMOD" ), bestPath );
             return true;
         }

@@ -1,5 +1,5 @@
 /**
- * @file page_layout_default_description.cpp
+ * @file common/page_layout/page_layout_default_description.cpp
  */
 
 /*

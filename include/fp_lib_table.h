@@ -360,7 +360,7 @@ public:
 
     /**
      * Function FindRowByURI
-     * returns a #ROW if aURE is found in this table or in any chained
+     * returns a #FP_LIB_TABLE::ROW if aURE is found in this table or in any chained
      * fallBack table fragments, else NULL.
      */
     const ROW* FindRowByURI( const wxString& aURI );

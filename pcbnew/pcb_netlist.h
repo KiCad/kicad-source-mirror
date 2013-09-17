@@ -109,11 +109,10 @@ class COMPONENT
     /// The #FPID of the footprint assigned to the component.
     FPID           m_fpid;
 
-    /// The #MODULE loaded for #m_footprintName found in #m_footprintLib.
+    /// The #MODULE loaded for #m_fpid.
     std::auto_ptr< MODULE > m_footprint;
 
-    /// Set to true if #m_footprintName or #m_footprintLib was changed when the footprint
-    /// link file was read.
+    /// Set to true if #m_fpid was changed when the footprint link file was read.
     bool           m_footprintChanged;
 
     static COMPONENT_NET    m_emptyNet;

@@ -869,17 +869,13 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     }
 
     m_out->Print( aNestLevel, "(module %s",
-                  m_out->Quotes( aModule->GetFPID().GetFootprintName() ).c_str() );
+                  m_out->Quotes( aModule->GetFPID().Format() ).c_str() );
 
     if( aModule->IsLocked() )
         m_out->Print( 0, " locked" );
 
     if( aModule->IsPlaced() )
         m_out->Print( 0, " placed" );
-
-    if( !aModule->GetFPID().IsLegacy() )
-        m_out->Print( 0, " (fp_lib %s)",
-                      m_out->Quotes( aModule->GetFPID().GetLibNickname() ).c_str() );
 
     formatLayer( aModule );
 

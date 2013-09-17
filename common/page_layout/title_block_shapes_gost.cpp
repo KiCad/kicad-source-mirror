@@ -1,5 +1,5 @@
 /**
- * @file title_block_shape_gost.h
+ * @file title_block_shapes_gost.cpp
  * @brief description of graphic items and texts to build a title block
  * using GOST standard
  */
