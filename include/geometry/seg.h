@@ -307,18 +307,7 @@ inline VECTOR2I SEG::LineProject( const VECTOR2I& aP ) const
 {
 	// fixme: numerical errors for large integers
 	assert(false);
-    /*const VECTOR2I   		  d 	  = aB - aA;
-    ecoord   det     = d.Dot(d);
-    ecoord   dxdy    = (ecoord) d.x * d.y;
-    
-    ecoord   qx      =
-        ( (extended_type) aA.x * d.y * d.y + (extended_type) d.x * d.x * x - dxdy *
-          (aA.y - y) ) / det;
-    extended_type   qy =
-        ( (extended_type) aA.y * d.x * d.x + (extended_type) d.y * d.y * y - dxdy *
-          (aA.x - x) ) / det;
-
-    return VECTOR2<T> ( (T) qx, (T) qy );*/
+	return VECTOR2I(0, 0);
 }
 
 
