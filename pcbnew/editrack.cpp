@@ -147,7 +147,10 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             // Not a starting point, but a filled zone area can exist. This is also a
             // good starting point.
             ZONE_CONTAINER* zone;
-            zone = GetBoard()->HitTestForAnyFilledArea( pos, GetScreen()-> m_Active_Layer );
+            zone = GetBoard()->HitTestForAnyFilledArea( pos,
+                                                        GetScreen()-> m_Active_Layer,
+                                                        GetScreen()-> m_Active_Layer,
+                                                        -1 );
 
             if( zone )
                 GetBoard()->SetHighLightNet( zone->GetNet() );

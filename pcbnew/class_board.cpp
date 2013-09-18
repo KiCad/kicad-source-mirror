@@ -1500,7 +1500,8 @@ void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDr
 
 ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
                                                 LAYER_NUM      aStartLayer,
-                                                LAYER_NUM      aEndLayer )
+                                                LAYER_NUM      aEndLayer,
+                                                int aNetCode )
 {
     if( aEndLayer < 0 )
         aEndLayer = aStartLayer;
@@ -1518,6 +1519,9 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
 
         // In locate functions we must skip tagged items with BUSY flag set.
         if( area->GetState( BUSY ) )
+            continue;
+
+        if( aNetCode >= 0 && area->GetNet() != aNetCode )
             continue;
 
         if( area->HitTestFilledArea( aRefPos ) )
