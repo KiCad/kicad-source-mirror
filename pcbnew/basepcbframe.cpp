@@ -217,6 +217,7 @@ void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
 
     view->Add( worksheet );
 
+    view->SetPanBoundary( worksheet->ViewBBox() );
     view->RecacheAllItems( true );
 
     if( m_galCanvasActive )
