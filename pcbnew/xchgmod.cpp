@@ -324,14 +324,15 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
         check_module_value = true;
         value = m_CurrentModule->GetValue();
         msg.Printf( _( "Change modules %s -> %s (for value = %s)?" ),
-                    m_CurrentModule->GetFPID().Format().c_str(),
+                    GetChars( FROM_UTF8( m_CurrentModule->GetFPID().Format().c_str() ) ),
                     GetChars( newmodulename ),
                     GetChars( m_CurrentModule->GetValue() ) );
     }
     else
     {
         msg.Printf( _( "Change modules %s -> %s ?" ),
-                    lib_reference.GetFootprintName().c_str(), GetChars( newmodulename ) );
+                    GetChars( FROM_UTF8( lib_reference.Format().c_str() ) ),
+                    GetChars( newmodulename ) );
     }
 
     if( !IsOK( this, msg ) )
