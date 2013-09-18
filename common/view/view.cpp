@@ -452,6 +452,14 @@ void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
     m_layers[aLayer].items->Query( r, visitor );
 }
 
+int VIEW::GetTopLayer( ) const
+{
+    if( m_topLayers.size() == 0 )
+        return 0;
+
+    return *m_topLayers.begin();
+}
+
 
 void VIEW::SetTopLayer( int aLayer, bool aEnabled )
 {

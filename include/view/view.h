@@ -362,6 +362,8 @@ public:
      */
     void    EnableTopLayer( bool aEnable );
 
+    int     GetTopLayer() const;
+
     /**
      * Function ClearTopLayers()
      * Removes all layers from the on-the-top set (they are no longer displayed over the rest of
