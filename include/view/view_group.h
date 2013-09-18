@@ -142,7 +142,7 @@ public:
      *
      * @return Pointer to the VIEW instance.
      */
-    KiGfx::VIEW *GetView() const
+    KiGfx::VIEW* GetView() const
     {
         return m_view;
     }
