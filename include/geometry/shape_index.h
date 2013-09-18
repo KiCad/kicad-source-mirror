@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * @author Jacobo Aragunde Pérez
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,266 +26,328 @@
 #ifndef __SHAPE_INDEX_H
 #define __SHAPE_INDEX_H
 
-#include <boost/unordered_map.hpp>
+#include <vector>
+#include <geometry/shape.h>
+#include <geometry/rtree.h>
 
-template <class T> const SHAPE *defaultShapeFunctor( const T aItem )
+
+/**
+ * shapeFunctor template function
+ *
+ * It is used by SHAPE_INDEX to get a SHAPE* from another type.
+ * By default relies on T::GetShape() method, should be specialized if the T object
+ * doesn't allow that method.
+ * @param object generic T object
+ * @return a SHAPE* object equivalent to object.
+ */
+template <class T>
+static const SHAPE* shapeFunctor( T aItem )
 {
-	return aItem->GetShape();
+    return aItem->GetShape();
 }
 
-template <class T, const SHAPE *(ShapeFunctor)(const T) = defaultShapeFunctor<T> >
+/**
+ * shapeFunctor template function: specialization for T = SHAPE*
+ */
+template<>
+const SHAPE* shapeFunctor( SHAPE* aItem )
+{
+    return aItem;
+}
 
-class SHAPE_INDEX_LIST {
-	
-	struct ShapeEntry {
-		ShapeEntry(T aParent)
-		{
-			shape = ShapeFunctor(aParent);
-			bbox = shape->BBox(0);
-			parent = aParent;
-		}
+/**
+ * boundingBox template method
+ *
+ * It is used by SHAPE_INDEX to get the bounding box of a generic T object.
+ * By default relies on T::BBox() method, should be specialized if the T object
+ * doesn't allow that method.
+ * @param object generic T object
+ * @return a BOX2I object containing the bounding box of the T object.
+ */
+template <class T>
+BOX2I boundingBox( T object )
+{
+    return shapeFunctor(object)->BBox();
+}
 
-		~ShapeEntry()
-		{
-			
-		}
+/**
+ * acceptVisitor template method
+ *
+ * It is used by SHAPE_INDEX to implement Accept().
+ * By default relies on V::operation() redefinition, should be specialized if V class
+ * doesn't have its () operation defined to accept T objects.
+ * @param object generic T object
+ * @param visitor V visitor object
+ */
+template <class T, class V>
+void acceptVisitor( T object, V visitor )
+{
+    visitor(object);
+}
 
-		T parent;
-		const SHAPE *shape;
-		BOX2I bbox;
-	};
+/**
+ * collide template method
+ *
+ * It is used by SHAPE_INDEX to implement Query().
+ * By default relies on T::Collide(U) method, should be specialized if the T object
+ * doesn't allow that method.
+ * @param object generic T object
+ * @param anotherObject generic U object
+ * @param minDistance minimum collision distance
+ * @return if object and anotherObject collide
+ */
+template <class T, class U>
+bool collide( T object, U anotherObject, int minDistance )
+{
+    return shapeFunctor(object)->Collide( anotherObject, minDistance );
+}
 
-	typedef std::vector<ShapeEntry> ShapeVec;
-	typedef typename std::vector<ShapeEntry>::iterator ShapeVecIter;	
-	
-public:
+template<class T, class V>
+bool queryCallback(T shape, void* context) {
+    V* visitor = (V*) context;
+    acceptVisitor<T,V>(shape, *visitor);
+    return true;
+}
 
-// "Normal" iterator interface, for STL algorithms. 
-	class iterator {
+template <class T = SHAPE*>
+class SHAPE_INDEX {
 
-		public:
-			iterator() {};
+    public:
 
-			iterator( ShapeVecIter aCurrent)
-				: m_current(aCurrent) {};
+        SHAPE_INDEX();
 
-			iterator(const iterator &b) : 
-				m_current(b.m_current) {};
+        ~SHAPE_INDEX();
 
-			T operator*() const
-			{
-				return (*m_current).parent;
-			}
+        /**
+         * Function Add()
+         *
+         * Adds a SHAPE to the index.
+         * @param shape the new SHAPE
+         */
+        void Add( T shape );
 
-			void operator++()
-			{
-				++m_current;
-			}
+        /**
+         * Function Remove()
+         *
+         * Removes a SHAPE to the index.
+         * @param shape the new SHAPE
+         */
+        void Remove( T shape );
 
-			iterator& operator++(int dummy)
-			{
-				++m_current;
-				return *this;
-			}
+        /**
+         * Function RemoveAll()
+         *
+         * Removes all the contents of the index.
+         */
+        void RemoveAll();
 
-			bool operator ==( const iterator& rhs ) const
-			{
-				return m_current == rhs.m_current;
-			}
+        /**
+         * Function Accept()
+         *
+         * Accepts a visitor for every SHAPE object contained in this INDEX.
+         * @param visitor Visitor object to be run
+         */
+        template<class V>
+        void Accept( V visitor )
+        {
+            SHAPE_INDEX::Iterator iter = this->Begin();
+            while(!iter.IsNull()) {
+                T shape = *iter;
+                acceptVisitor(shape, visitor);
+                iter++;
+            }
+        }
 
-			bool operator !=( const iterator& rhs ) const
-			{
-				return m_current != rhs.m_current;
-			}
+        /**
+         * Function Reindex()
+         *
+         * Rebuilds the index. This should be used if the geometry of the objects
+         * contained by the index has changed.
+         */
+        void Reindex();
 
-			const iterator& operator=(const iterator& rhs) 
-			{
-				m_current = rhs.m_current;
-				return *this;
-			}
+        /**
+         * Function Query()
+         *
+         * Runs a callback on every SHAPE object contained in the bounding box of (shape).
+         * @param shape shape to search against
+         * @param minDistance distance threshold
+         * @param visitor object to be invoked on every object contained in the search area.
+         */
 
-		private:
-			ShapeVecIter m_current;
-	};
+		template<class V>
+        int Query( const SHAPE *shape, int minDistance, V& visitor, bool aExact )
+        {
+            BOX2I box = shape->BBox();
+            box.Inflate(minDistance);
+         
+			int min[2] = {box.GetX(), 		box.GetY()};
+            int max[2] = {box.GetRight(), 	box.GetBottom()};
 
-// "Query" iterator, for iterating over a set of spatially matching shapes.
-	class query_iterator {
-		public:
+			return this->m_tree->Search(min, max, visitor);   
+        }
 
-			query_iterator()
-			{
+        class Iterator
+        {
+        private:
 
-			}
+            typedef typename RTree<T, int, 2, float>::Iterator RTreeIterator;
+            RTreeIterator iterator;
 
-			query_iterator(  ShapeVecIter aCurrent, ShapeVecIter aEnd, SHAPE *aShape, int aMinDistance, bool aExact)
-				: m_end(aEnd),
-				  m_current(aCurrent),
-				  m_shape(aShape),
-				  m_minDistance(aMinDistance),
-				  m_exact(aExact)
-			{
-				if(aShape)
-				{
-					m_refBBox = aShape->BBox();
-					next();
-				}
-			}
+            /**
+             * Function Init()
+             *
+             * Setup the internal tree iterator.
+             * @param tree pointer to a RTREE object
+             */
+            void Init(RTree<T, int, 2, float>* tree) {
+                tree->GetFirst(iterator);
+            }
 
-			query_iterator(const query_iterator &b)
-				: m_end(b.m_end),
-				  m_current(b.m_current),
-				  m_shape(b.m_shape),
-				  m_minDistance(b.m_minDistance),
-				  m_exact(b.m_exact),
-				  m_refBBox(b.m_refBBox)
-			{
+        public:
 
-			}
+            /**
+             * Iterator constructor
+             *
+             * Creates an iterator for the index object
+             * @param index SHAPE_INDEX object to iterate
+             */
+            Iterator(SHAPE_INDEX* index) {
+                Init(index->m_tree);
+            }
 
-			
-			T operator*() const
-			{
-				return (*m_current).parent;
-			}
+            /**
+             * Operator * (prefix)
+             *
+             * Returns the next data element.
+             */
+            T operator*() {
+                return *iterator;
+            }
 
-			query_iterator& operator++()
-			{
-				++m_current;
-				next();
-			 	return *this;
-			}
+            /**
+             * Operator ++ (prefix)
+             *
+             * Shifts the iterator to the next element.
+             */
+            bool operator++() {
+                return ++iterator;
+            }
 
-			query_iterator& operator++(int dummy)
-			{
-				++m_current;
-				next();
-				return *this;
-			}
+            /**
+             * Operator ++ (postfix)
+             *
+             * Shifts the iterator to the next element.
+             */
+            bool operator++(int) {
+                return ++iterator;
+            }
 
-			bool operator ==( const query_iterator& rhs ) const
-			{
-				return m_current == rhs.m_current;
-			}
+            /**
+             * Function IsNull()
+             *
+             * Checks if the iterator has reached the end.
+             * @return true if it is in an invalid position (data finished)
+             */
+            bool IsNull() {
+                return iterator.IsNull();
+            }
 
-			bool operator !=( const query_iterator& rhs ) const
-			{
-				return m_current != rhs.m_current;
-			}
+            /**
+             * Function IsNotNull()
+             *
+             * Checks if the iterator has not reached the end.
+             * @return true if it is in an valid position (data not finished)
+             */
+            bool IsNotNull() {
+                return iterator.IsNotNull();
+            }
 
-			const query_iterator& operator=(const query_iterator& rhs) 
-			{
-				m_end = rhs.m_end;
-				m_current = rhs.m_current;
-				m_shape = rhs.m_shape;
-				m_minDistance = rhs.m_minDistance;
-				m_exact = rhs.m_exact;
-				m_refBBox = rhs.m_refBBox;
-				return *this;
-			}
+            /**
+             * Function Next()
+             *
+             * Returns the current element of the iterator and moves to the next
+             * position.
+             * @return SHAPE object pointed by the iterator before moving to the
+             *         next position.
+             */
+            T Next() {
+                T object = *iterator;
+                ++iterator;
+                return object;
+            }
+        };
 
-		private:
+        /**
+         * Function Begin()
+         *
+         * Creates an iterator for the current index object
+         * @return iterator
+         */
+        Iterator Begin();
 
-			void next()
-			{
-				while(m_current != m_end)
-				{
-					if (m_refBBox.Distance(m_current->bbox) <= m_minDistance)
-					{
-						if(!m_exact || m_current->shape->Collide(m_shape, m_minDistance))
-							return;
-					}
-					++m_current;
-				}
-			}
+    private:
 
-			ShapeVecIter m_end;
-			ShapeVecIter m_current;
-			BOX2I m_refBBox;
-			bool m_exact;
-			SHAPE *m_shape;
-			int m_minDistance;
-	};
-
-	void Add(T aItem)
-	{
-		ShapeEntry s (aItem);
-
-		m_shapes.push_back(s);
-	}
-	
-	void Remove(const T aItem)
-	{
-		ShapeVecIter i;
-		
-		for(i=m_shapes.begin(); i!=m_shapes.end();++i)
-		{
-			if(i->parent == aItem)
-				break;
-		}
-
-		if(i == m_shapes.end())
-			return;
-
-		m_shapes.erase(i);
-	}
-
-	int Size() const
-	{
-		return m_shapes.size();
-	}
-
-	template<class Visitor>
-		int Query( const SHAPE *aShape, int aMinDistance, Visitor &v, bool aExact = true) //const
-		{
-			ShapeVecIter i;
-			int n = 0;
-			VECTOR2I::extended_type minDistSq = (VECTOR2I::extended_type) aMinDistance * aMinDistance;
-
-			BOX2I refBBox = aShape->BBox();
-
-			for(i = m_shapes.begin(); i!=m_shapes.end(); ++i)
-			{
-				if (refBBox.SquaredDistance(i->bbox) <= minDistSq)
-				{
-					if(!aExact || i->shape->Collide(aShape, aMinDistance))
-					{
-						n++;
-						if(!v( i->parent ))
-							return n;
-					}
-				}
-			}
-			return n;
-		}
-
-	void Clear()
-	{
-		m_shapes.clear();
-	}
-	
-	query_iterator qbegin( SHAPE *aShape, int aMinDistance, bool aExact ) 
-	{
-		return query_iterator( m_shapes.begin(), m_shapes.end(), aShape, aMinDistance, aExact);
-	}
-
-	const query_iterator qend() 
-	{
-			return query_iterator( m_shapes.end(), m_shapes.end(), NULL, 0, false );
-	}
-
-	iterator begin()
-	{
-		return iterator( m_shapes.begin() );
-	}
-
-	iterator end()
-	{
-		return iterator( m_shapes.end() );
-	}
-
-private:
-
-	ShapeVec m_shapes;
+        RTree<T, int, 2, float>* m_tree;
 };
+
+/*
+ * Class members implementation
+ */
+
+template<class T>
+SHAPE_INDEX<T>::SHAPE_INDEX() {
+    this->m_tree = new RTree<T, int, 2, float>();
+}
+
+template<class T>
+SHAPE_INDEX<T>::~SHAPE_INDEX() {
+    delete this->m_tree;
+}
+
+template<class T>
+void SHAPE_INDEX<T>::Add(T shape) {
+    BOX2I box = boundingBox(shape);
+    int min[2]= {box.GetX(), box.GetY()};
+    int max[2] = {box.GetRight(), box.GetBottom()};
+    this->m_tree->Insert(min, max, shape);
+}
+
+template<class T>
+void SHAPE_INDEX<T>::Remove(T shape) {
+    BOX2I box = boundingBox(shape);
+    int min[2]= {box.GetX(), box.GetY()};
+    int max[2] = {box.GetRight(), box.GetBottom()};
+    this->m_tree->Remove(min, max, shape);
+}
+
+template<class T>
+void SHAPE_INDEX<T>::RemoveAll() {
+    this->m_tree->RemoveAll();
+}
+
+template<class T>
+void SHAPE_INDEX<T>::Reindex() {
+    RTree<T, int, 2, float>* newTree;
+    newTree = new RTree<T, int, 2, float>();
+
+    SHAPE_INDEX::Iterator iter = this->Begin();
+    while(!iter.IsNull()) {
+        T shape = *iter;
+        BOX2I box = boundingBox(shape);
+        int min[2]= {box.GetX(), box.GetY()};
+        int max[2] = {box.GetRight(), box.GetBottom()};
+        newTree->Insert(min, max, shape);
+        iter++;
+    }
+    delete this->m_tree;
+    this->m_tree = newTree;
+}
+
+template<class T>
+typename SHAPE_INDEX<T>::Iterator SHAPE_INDEX<T>::Begin() {
+    return Iterator(this);
+}
+
 
 #endif

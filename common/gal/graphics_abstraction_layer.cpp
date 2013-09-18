@@ -54,8 +54,8 @@ GAL::GAL() :
 
     // Initialize the cursor shape
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
-    SetCursorSize( 15 );
-    SetCursorEnabled( true );
+    SetCursorSize( 80 );
+    SetCursorEnabled( false );
 
     strokeFont.LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize );
 }

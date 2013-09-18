@@ -206,8 +206,6 @@ PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
 
 bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
-    const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( aItem );
-
     // the "cast" applied in here clarifies which overloaded draw() is called
     switch( item->Type() )
     {
@@ -284,9 +282,9 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
                 return;
 
             NETINFO_ITEM* net = ( (BOARD*) aTrack->GetParent() )->FindNet( netNumber );
-            if( net == NULL )
+            if( !net )
                 return;
-
+            
             std::string netName = std::string( net->GetShortNetname().mb_str() );
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
             double textOrientation = -atan( line.y / line.x );

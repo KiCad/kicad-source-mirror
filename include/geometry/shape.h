@@ -77,7 +77,10 @@ class SHAPE {
 		 * Returns a dynamically allocated copy of the shape
 		 * @retval copy of the shape
 		 */
-		virtual SHAPE* Clone() const { assert(false); };
+		virtual SHAPE* Clone() const { 
+			assert(false); 
+			return NULL; 
+		};
 
 		/**
 		 * Function Collide()

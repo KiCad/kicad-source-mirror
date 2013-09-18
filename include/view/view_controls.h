@@ -46,9 +46,9 @@ class VIEW;
 class VIEW_CONTROLS
 {
 public:
-    VIEW_CONTROLS( VIEW* aView ) : m_view( aView ), m_snappingEnabled( false ),
-        m_grabMouse( false ), m_autoPanEnabled( false ), m_autoPanMargin( 0.1 ),
-        m_autoPanSpeed( 0.15 ) {};
+    VIEW_CONTROLS( VIEW* aView ) : m_view( aView ), m_forceCursorPosition( false ),
+        m_snappingEnabled( false ), m_grabMouse( false ), m_autoPanEnabled( false ),
+        m_autoPanMargin( 0.1 ), m_autoPanSpeed( 0.15 ) {};
     virtual ~VIEW_CONTROLS() {};
 
     /**
@@ -121,12 +121,36 @@ public:
      */
     virtual const VECTOR2D GetCursorPosition() const = 0;
 
+
+    /** 
+     * Function ForceCursorPosition()
+     * Places the cursor immediately at a given point. Mouse movement is ignored.
+     * @param aEnabled enable forced cursor position
+     * @param aPosition the position
+     */
+    virtual void ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition = VECTOR2D(0, 0) )
+    {
+        m_forcedPosition = aPosition;
+        m_forceCursorPosition = aEnabled;
+    }
+
+    virtual void ShowCursor( bool aEnabled );
+
 protected:
     /// Pointer to controlled VIEW.
     VIEW*       m_view;
 
     /// Current mouse position
     VECTOR2D    m_mousePosition;
+
+    /// Current cursor position
+    VECTOR2D    m_cursorPosition;
+
+    /// Forced cursor position
+    VECTOR2D    m_forcedPosition;
+
+    /// Is the forced cursor position enabled
+    bool        m_forceCursorPosition;
 
     /// Should the cursor snap to grid or move freely
     bool        m_snappingEnabled;

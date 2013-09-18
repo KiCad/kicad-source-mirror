@@ -60,10 +60,23 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
 }
 
 
+void VIEW_CONTROLS::ShowCursor( bool aEnabled )
+{
+    m_view->GetGAL()->SetCursorEnabled( aEnabled );
+}
+
+
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
     m_mousePosition.x = aEvent.GetX();
     m_mousePosition.y = aEvent.GetY();
+
+    if( m_forceCursorPosition )
+        m_cursorPosition = m_view->ToScreen( m_forcedPosition );
+    else if( m_snappingEnabled )
+        m_cursorPosition = m_view->GetGAL()->GetGridPoint( m_mousePosition );
+    else
+        m_cursorPosition = m_mousePosition;
 
     bool isAutoPanning = false;
 
