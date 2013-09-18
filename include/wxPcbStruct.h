@@ -1690,6 +1690,11 @@ public:
      */
     void UpdateTitle();
 
+    void SetTopLayer( LAYER_NUM aLayer )
+    {
+        setTopLayer( aLayer );
+    }
+
 
     DECLARE_EVENT_TABLE()
 };
