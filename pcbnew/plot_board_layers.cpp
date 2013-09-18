@@ -58,7 +58,7 @@
  * unless the minimum thickness is 0.
  */
 static void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
-                                 long aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
+                                 LAYER_MSK aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
                                  int aMinThickness );
 
 /* Creates the plot for silkscreen layers
@@ -463,7 +463,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
  * (shapes will be better, and calculations faster)
  */
 void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
-                          long aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
+                          LAYER_MSK aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
                           int aMinThickness )
 {
     LAYER_NUM layer = ( aLayerMask & SOLDERMASK_LAYER_BACK ) ?
@@ -480,7 +480,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     {
         for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item->Next() )
         {
-            if( aLayerMask != item->GetLayer() )
+            if( layer != item->GetLayer() )
                 continue;
 
             switch( item->Type() )

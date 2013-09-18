@@ -1079,12 +1079,14 @@ public:
      * Note: if a zone has its flag BUSY (in .m_State) is set, it is ignored.
      * @param aRefPos A wxPoint to test
      * @param aStartLayer the first layer to test
-     * @param aEndLayer the last layer (-1 to ignore it) to test
+     * @param aEndLayer the last layer to test
+     * @param aNetCode = the netcode used to filter zones (-1 to to test all zones)
      * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else NULL
      */
     ZONE_CONTAINER* HitTestForAnyFilledArea( const wxPoint& aRefPos,
                                              LAYER_NUM      aStartLayer,
-                                             LAYER_NUM      aEndLayer = UNDEFINED_LAYER );
+                                             LAYER_NUM      aEndLayer,
+                                             int aNetCode );
 
     /**
      * Function RedrawAreasOutlines

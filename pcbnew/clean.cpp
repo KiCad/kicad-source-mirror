@@ -117,9 +117,9 @@ void PCB_EDIT_FRAME::Clean_Pcb()
 
     wxBusyCursor( dummy );
     TRACKS_CLEANER cleaner( GetBoard() );
-    cleaner.SetdeleteUnconnectedTracksOpt( dlg.deleteUnconnectedSegm );
-    cleaner.SetMergeSegmentsOpt( dlg.mergeSegments );
-    cleaner.SetCleanViasOpt( dlg.cleanVias );
+    cleaner.SetdeleteUnconnectedTracksOpt( dlg.m_deleteUnconnectedSegm );
+    cleaner.SetMergeSegmentsOpt( dlg.m_mergeSegments );
+    cleaner.SetCleanViasOpt( dlg.m_cleanVias );
 
     if( cleaner.CleanupBoard() )
     {
@@ -321,13 +321,16 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                     if( track->Type() != PCB_VIA_T )
                     {
                         zone = m_Brd->HitTestForAnyFilledArea( track->GetStart(),
-                                                               track->GetLayer() );
+                                                               track->GetLayer(),
+                                                               track->GetLayer(),
+                                                               track->GetNet() );
                     }
                     else
                     {
                         ((SEGVIA*)track)->ReturnLayerPair( &top_layer, &bottom_layer );
                         zone = m_Brd->HitTestForAnyFilledArea( track->GetStart(),
-                                                               top_layer, bottom_layer );
+                                                               top_layer, bottom_layer,
+                                                               track->GetNet() );
                     }
                 }
 
@@ -354,7 +357,9 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                         {
                             via->ReturnLayerPair( &top_layer, &bottom_layer );
                             zone = m_Brd->HitTestForAnyFilledArea( via->GetStart(),
-                                                                   bottom_layer, top_layer );
+                                                                   bottom_layer,
+                                                                   top_layer,
+                                                                   via->GetNet() );
                         }
 
                         if( (other == NULL) && (zone == NULL) )
@@ -376,13 +381,16 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                     if( track->Type() != PCB_VIA_T )
                     {
                         zone = m_Brd->HitTestForAnyFilledArea( track->GetEnd(),
-                                                               track->GetLayer() );
+                                                               track->GetLayer(),
+                                                               track->GetLayer(),
+                                                               track->GetNet() );
                     }
                     else
                     {
                         ((SEGVIA*)track)->ReturnLayerPair( &top_layer, &bottom_layer );
                         zone = m_Brd->HitTestForAnyFilledArea( track->GetEnd(),
-                                                               top_layer, bottom_layer );
+                                                               top_layer, bottom_layer,
+                                                               track->GetNet() );
                     }
                 }
 
@@ -410,7 +418,8 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                         {
                             via->ReturnLayerPair( &top_layer, &bottom_layer );
                             zone = m_Brd->HitTestForAnyFilledArea( via->GetEnd(),
-                                                                   bottom_layer, top_layer );
+                                                                   bottom_layer, top_layer,
+                                                                   via->GetNet() );
                         }
 
                         if( (other == NULL) && (zone == NULL) )
