@@ -207,7 +207,7 @@ PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
 bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
     // the "cast" applied in here clarifies which overloaded draw() is called
-    switch( item->Type() )
+    switch( aItem->Type() )
     {
     case PCB_ZONE_T:
     case PCB_TRACE_T:
