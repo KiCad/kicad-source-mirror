@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,52 +22,41 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __SELECTION_AREA_H
-#define __SELECTION_AREA_H
+#ifndef __BRIGHT_BOX_H
+#define __BRIGHT_BOX_H
 
-#include <base_struct.h>
-#include <layers_id_colors_and_visibility.h>
 #include <math/box2.h>
-
-namespace KiGfx
-{
-class GAL;
-}
+#include <view/view.h>
+#include <class_board_item.h>
+#include <layers_id_colors_and_visibility.h>
+#include <gal/color4d.h>
 
 /**
- * Class SELECTION_AREA
+ * Class BRIGHT_BOX
  *
- * Represents a selection area (currently a rectangle) in a VIEW.
+ * Draws a decoration to indicate a brightened item.
  */
-class SELECTION_AREA : public EDA_ITEM
+class BRIGHT_BOX : public EDA_ITEM
 {
 public:
-    static const int SelectionLayer = ITEM_GAL_LAYER( GP_OVERLAY );
-
-    SELECTION_AREA();
-    ~SELECTION_AREA() {};
+    BRIGHT_BOX( BOARD_ITEM* aItem );
+    ~BRIGHT_BOX() {};
 
     virtual const BOX2I ViewBBox() const;
 
     void ViewDraw( int aLayer, KiGfx::GAL* aGal ) const;
     void ViewGetLayers( int aLayers[], int& aCount ) const;
 
-    void SetOrigin ( VECTOR2I aOrigin )
-    {
-        m_origin = aOrigin;
-    }
-
-    void SetEnd ( VECTOR2I aEnd )
-    {
-        m_end = aEnd;
-    }
-
     void Show( int x, std::ostream& st ) const
     {
     }
 
 private:
-    VECTOR2I m_origin, m_end;
+    static const int BrightBoxLayer = ITEM_GAL_LAYER( SELECTION );
+    static const KiGfx::COLOR4D BrightColor;
+    static const double LineWidth = 100000.0;
+
+    BOARD_ITEM* item;
 };
 
 #endif

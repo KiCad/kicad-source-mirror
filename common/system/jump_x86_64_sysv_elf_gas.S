@@ -41,7 +41,7 @@
 .text
 .globl jump_fcontext
 .type jump_fcontext,@function
-.align 16
+.align 8
 jump_fcontext:
     movq     %rbx,       (%rdi)         /* save RBX */
     movq     %r12,       0x8(%rdi)      /* save R12 */

@@ -78,6 +78,12 @@ public:
             m_state = IDLE;
     }
 
+    /// @copydoc VIEW_CONTROLS::GetMousePosition()
+    virtual const VECTOR2D GetMousePosition() const;
+
+    /// @copydoc VIEW_CONTROLS::GetCursorPosition()
+    virtual const VECTOR2D GetCursorPosition() const;
+
 private:
     /// Possible states for WX_VIEW_CONTROLS
     enum State {

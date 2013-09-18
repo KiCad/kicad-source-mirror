@@ -46,9 +46,9 @@ class VIEW;
 class VIEW_CONTROLS
 {
 public:
-    VIEW_CONTROLS( VIEW* aView ) : m_view( aView ), m_snappingEnabled( false ),
-        m_grabMouse( false ), m_autoPanEnabled( false ), m_autoPanMargin( 0.1 ),
-        m_autoPanSpeed( 0.15 ) {};
+    VIEW_CONTROLS( VIEW* aView ) : m_view( aView ), m_forceCursorPosition( false ),
+        m_snappingEnabled( false ), m_grabMouse( false ), m_autoPanEnabled( false ),
+        m_autoPanMargin( 0.1 ), m_autoPanSpeed( 0.15 ) {};
     virtual ~VIEW_CONTROLS() {};
 
     /**
@@ -110,10 +110,7 @@ public:
      *
      * @return The current mouse pointer position.
      */
-    virtual const VECTOR2D& GetMousePosition() const
-    {
-        return m_mousePosition;
-    }
+    virtual const VECTOR2D GetMousePosition() const = 0;
 
     /**
      * Function GetCursorPosition()
@@ -122,10 +119,7 @@ public:
      *
      * @return The current cursor position in screen coordinates.
      */
-    virtual const VECTOR2D& GetCursorPosition() const
-    {
-        return m_cursorPosition;
-    }
+    virtual const VECTOR2D GetCursorPosition() const = 0;
 
 
     /** 
@@ -140,7 +134,7 @@ public:
         m_forceCursorPosition = aEnabled;
     }
 
-    virtual void ShowCursor ( bool aEnabled );
+    virtual void ShowCursor( bool aEnabled );
 
 protected:
     /// Pointer to controlled VIEW.
@@ -155,6 +149,9 @@ protected:
     /// Forced cursor position
     VECTOR2D    m_forcedPosition;
 
+    /// Is the forced cursor position enabled
+    bool        m_forceCursorPosition;
+
     /// Should the cursor snap to grid or move freely
     bool        m_snappingEnabled;
 
@@ -163,8 +160,6 @@ protected:
 
     /// Flag for turning on autopanning
     bool        m_autoPanEnabled;
-
-    bool        m_forceCursorPosition;
 
     /// Distance from cursor to VIEW edge when panning is active
     float       m_autoPanMargin;

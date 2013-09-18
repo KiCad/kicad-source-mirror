@@ -97,9 +97,6 @@ void WORKSHEET_ITEM::ViewDraw( int aLayer, GAL* aGal ) const
     EDA_COLOR_T edaColor = ColorFindNearest( color.r * 255, color.g * 255, color.b * 255 );
     drawList.BuildWorkSheetGraphicList( *m_pageInfo, *m_titleBlock, edaColor, edaColor );
 
-    // Draw gray line that outlines the sheet size
-    drawBorder( aGal );
-
     // Draw all the components that make the page layout
     WS_DRAW_ITEM_BASE* item = drawList.GetFirst();
     while( item )
@@ -125,6 +122,9 @@ void WORKSHEET_ITEM::ViewDraw( int aLayer, GAL* aGal ) const
 
         item = drawList.GetNext();
     }
+
+    // Draw gray line that outlines the sheet size
+    drawBorder( aGal );
 }
 
 
@@ -200,6 +200,5 @@ void WORKSHEET_ITEM::drawBorder( GAL* aGal ) const
 
     aGal->SetIsStroke( true );
     aGal->SetIsFill( false );
-    aGal->SetStrokeColor( COLOR4D( 0.5, 0.5, 0.5, 1.0 ) );
     aGal->DrawRectangle( origin, end );
 }

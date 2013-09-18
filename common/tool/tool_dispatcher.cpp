@@ -31,6 +31,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <view/view.h>
+#include <view/view_controls.h>
 
 #include <class_drawpanel_gal.h>
 
@@ -122,15 +123,6 @@ int TOOL_DISPATCHER::decodeModifiers( const wxKeyboardState* aState ) const
 }
 
 
-wxPoint TOOL_DISPATCHER::getCurrentMousePos() const
-{
-    wxPoint msp = wxGetMousePosition();
-    wxPoint winp = m_editFrame->GetGalCanvas()->GetScreenPosition();
-
-    return wxPoint( msp.x - winp.x, msp.y - winp.y );
-}
-
-
 bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion )
 {
 	ButtonState* st = m_buttons[aIndex];
@@ -208,7 +200,6 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
 	bool motion = false, buttonEvents = false;
-	VECTOR2D pos;
 	optional<TOOL_EVENT> evt;
 	
 	int type = aEvent.GetEventType();
@@ -220,7 +211,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
 	        type == EVT_REFRESH_MOUSE )
 	{
-		pos = getView()->ToWorld ( getCurrentMousePos() );		
+        VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetCursorPosition();
+        VECTOR2D pos = getView()->ToWorld( screenPos );
 		if( pos != m_lastMousePos || type == EVT_REFRESH_MOUSE )
 		{
 			motion = true;

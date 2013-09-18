@@ -34,11 +34,15 @@
 #include <wxPcbStruct.h>
 #include <collectors.h>
 #include <view/view_controls.h>
+#include <painter.h>
 
 #include <tool/context_menu.h>
+#include <tool/tool_event.h>
+#include <tool/tool_manager.h>
 
 #include "selection_tool.h"
 #include "selection_area.h"
+#include "bright_box.h"
 
 using namespace KiGfx;
 using boost::optional;
@@ -115,7 +119,8 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
                 // Check if dragging event started within the currently selected items bounding box
                 std::set<BOARD_ITEM*>::iterator it, it_end;
-                for( it = m_selectedItems.begin(), it_end = m_selectedItems.end(); it != it_end; ++it )
+                for( it = m_selectedItems.begin(), it_end = m_selectedItems.end();
+                        it != it_end; ++it )
                 {
                     BOX2I itemBox = (*it)->ViewBBox();
                     itemBox.Inflate( 500000 );    // Give some margin for gripping an item
@@ -204,12 +209,12 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         break;
 
     default:
-        // Remove footprints, they have to be selected by clicking on area that does not
-        // contain anything but footprint
-        for( int i = 0; i < collector.GetCount(); ++i )
+        // Remove modules, they have to be selected by clicking on area that does not
+        // contain anything but module footprint and not selectable items
+        for( int i = collector.GetCount() - 1; i >= 0 ; --i )
         {
             BOARD_ITEM* boardItem = ( collector )[i];
-            if( boardItem->Type() == PCB_MODULE_T )
+            if( boardItem->Type() == PCB_MODULE_T || !selectable( boardItem ) )
                 collector.Remove( i );
         }
 
@@ -218,7 +223,7 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         {
             toggleSelection( collector[0] );
         }
-        else
+        else if( collector.GetCount() > 1 )
         {
             item = disambiguationMenu( &collector );
             if( item )
@@ -332,8 +337,8 @@ bool SELECTION_TOOL::selectMultiple()
 
 BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 {
-    OPT_TOOL_EVENT evt;
     BOARD_ITEM* current = NULL;
+    boost::shared_ptr<BRIGHT_BOX> brightBox;
 
     m_menu.reset( new CONTEXT_MENU() );
     m_menu->SetTitle( _( "Clarify selection" ) );
@@ -350,10 +355,11 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 
     SetContextMenu( m_menu.get(), CMENU_NOW );
 
-    while( evt = Wait() )
+    while( OPT_TOOL_EVENT evt = Wait() )
     {
         if( evt->Action() == TA_ContextMenuUpdate )
         {
+            // User has pointed an item, so show it in a different way
             if( current )
                 current->ClearBrightened();
 
@@ -378,21 +384,51 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
             {
                 current = ( *aCollector )[*id];
                 current->SetSelected();
-                return current;
             }
 
-            return NULL;
+            break;
+        }
+
+        if( current && current->IsBrightened() )
+        {
+            brightBox.reset( new BRIGHT_BOX( current ) );
+            getView()->Add( brightBox.get() );
         }
     }
 
-    return NULL;
+    getView()->MarkTargetDirty( TARGET_OVERLAY );
+    return current;
 }
 
 
 bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
 {
-    BOARD* board = getModel<BOARD>( PCB_T );
+    bool highContrast = getView()->GetPainter()->GetSettings()->GetHighContrast();
 
+    if( highContrast )
+    {
+        bool onActive = false;
+        int layers[KiGfx::VIEW::VIEW_MAX_LAYERS], layers_count;
+
+        // Filter out items that do not belong to active layers
+        std::set<unsigned int> activeLayers = getView()->GetPainter()->
+                                                GetSettings()->GetActiveLayers();
+        aItem->ViewGetLayers( layers, layers_count );
+
+        for( int i = 0; i < layers_count; ++i )
+        {
+            if( activeLayers.count( layers[i] ) > 0 )   // Item is on at least one active layer
+            {
+                onActive = true;
+                break;
+            }
+        }
+
+        if( !onActive )
+            return false;
+    }
+
+    BOARD* board = getModel<BOARD>( PCB_T );
     switch( aItem->Type() )
     {
     case PCB_VIA_T:

@@ -79,25 +79,3 @@ void PAINTER::SetGAL( GAL* aGal )
 {
     m_gal = aGal;
 }
-
-
-void PAINTER::DrawBrightened( const VIEW_ITEM* aItem )
-{
-    BOX2I box = aItem->ViewBBox();
-
-    RenderTarget oldTarget = m_gal->GetTarget();
-    m_gal->SetTarget( TARGET_OVERLAY );
-
-    m_gal->PushDepth();
-    m_gal->SetLayerDepth( -1.0 );
-
-    // Draw an outline that marks items as brightened
-    m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( 100000.0 );
-    m_gal->SetStrokeColor( m_brightenedColor );
-
-    m_gal->DrawRectangle( box.GetOrigin(), box.GetOrigin() + box.GetSize() );
-    m_gal->PopDepth();
-
-    m_gal->SetTarget( oldTarget );
-}
