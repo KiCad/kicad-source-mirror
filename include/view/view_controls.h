@@ -127,16 +127,20 @@ public:
         return m_cursorPosition;
     }
 
-    /**
-     * Function SetCursorPosition()
-     * Allows to move the cursor to a different location.
-     *
-     * @param aPosition is the new location expressed in screen coordinates.
+
+    /** 
+     * Function ForceCursorPosition()
+     * Places the cursor immediately at a given point. Mouse movement is ignored.
+     * @param aEnabled enable forced cursor position
+     * @param aPosition the position
      */
-    virtual void SetCursorPosition( const VECTOR2D& aPosition )
+    virtual void ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition = VECTOR2D(0, 0) )
     {
-        m_cursorPosition = aPosition;
+        m_forcedPosition = aPosition;
+        m_forceCursorPosition = aEnabled;
     }
+
+    virtual void ShowCursor ( bool aEnabled );
 
 protected:
     /// Pointer to controlled VIEW.
@@ -148,6 +152,9 @@ protected:
     /// Current cursor position
     VECTOR2D    m_cursorPosition;
 
+    /// Forced cursor position
+    VECTOR2D    m_forcedPosition;
+
     /// Should the cursor snap to grid or move freely
     bool        m_snappingEnabled;
 
@@ -156,6 +163,8 @@ protected:
 
     /// Flag for turning on autopanning
     bool        m_autoPanEnabled;
+
+    bool        m_forceCursorPosition;
 
     /// Distance from cursor to VIEW edge when panning is active
     float       m_autoPanMargin;
