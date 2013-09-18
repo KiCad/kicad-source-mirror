@@ -217,6 +217,7 @@ void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
 
     view->Add( worksheet );
 
+    view->SetPanBoundary( worksheet->ViewBBox() );
     view->RecacheAllItems( true );
 
     if( m_galCanvasActive )
@@ -857,8 +858,17 @@ void PCB_BASE_FRAME::LoadSettings()
     view->SetRequired( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( VIAS_VISIBLE ) );
     view->SetRequired( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
     view->SetRequired( ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
+
     view->SetRequired( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    view->SetRequired( ADHESIVE_N_FRONT, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    view->SetRequired( SOLDERPASTE_N_FRONT, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    view->SetRequired( SOLDERMASK_N_FRONT, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+
     view->SetRequired( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    view->SetRequired( ADHESIVE_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    view->SetRequired( SOLDERPASTE_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    view->SetRequired( SOLDERMASK_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+
     view->SetLayerTarget( ITEM_GAL_LAYER( SELECTION ), KiGfx::TARGET_OVERLAY );
     view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KiGfx::TARGET_OVERLAY );
 

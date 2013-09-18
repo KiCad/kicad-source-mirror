@@ -28,6 +28,7 @@
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <tool/tool_dispatcher.h>
 
 using namespace KiGfx;
 
@@ -58,10 +59,12 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
                                 WX_VIEW_CONTROLS::onTimer ), NULL, this );
 }
 
-void VIEW_CONTROLS::ShowCursor ( bool aEnabled )
+
+void VIEW_CONTROLS::ShowCursor( bool aEnabled )
 {
     m_view->GetGAL()->SetCursorEnabled( aEnabled );
 }
+
 
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
@@ -69,7 +72,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     m_mousePosition.y = aEvent.GetY();
 
     if( m_forceCursorPosition )
-        m_cursorPosition = m_view->ToScreen (m_forcedPosition);
+        m_cursorPosition = m_view->ToScreen( m_forcedPosition );
     else if( m_snappingEnabled )
         m_cursorPosition = m_view->GetGAL()->GetGridPoint( m_mousePosition );
     else
@@ -190,26 +193,28 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 {
     switch( m_state )
     {
-        case AUTO_PANNING:
-        {
-            double borderSize = std::min( m_autoPanMargin * m_view->GetScreenPixelSize().x,
-                                          m_autoPanMargin * m_view->GetScreenPixelSize().y );
+    case AUTO_PANNING:
+    {
+        double borderSize = std::min( m_autoPanMargin * m_view->GetScreenPixelSize().x,
+                                      m_autoPanMargin * m_view->GetScreenPixelSize().y );
 
-            VECTOR2D dir( m_panDirection );
+        VECTOR2D dir( m_panDirection );
 
-            if( dir.EuclideanNorm() > borderSize )
-                dir = dir.Resize( borderSize );
+        if( dir.EuclideanNorm() > borderSize )
+            dir = dir.Resize( borderSize );
 
-            dir = m_view->ToWorld( dir, false );
-            m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
-            m_parentPanel->Refresh();
-            
-        }
+        dir = m_view->ToWorld( dir, false );
+        m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
+
+        // Notify tools that the cursor position has changed in the world coordinates
+        wxCommandEvent moveEvent( TOOL_DISPATCHER::EVT_REFRESH_MOUSE );
+        wxPostEvent( m_parentPanel, moveEvent );
+    }
+    break;
+
+    case IDLE:  // Just remove unnecessary warnings
+    case DRAG_PANNING:
         break;
-
-        case IDLE:  // Just remove unnecessary warnings
-        case DRAG_PANNING:
-            break;
     }
 }
 
@@ -222,6 +227,24 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
         m_parentPanel->CaptureMouse();
     else
         m_parentPanel->ReleaseMouse();
+}
+
+
+const VECTOR2D WX_VIEW_CONTROLS::GetMousePosition() const
+{
+    wxPoint msp = wxGetMousePosition();
+    wxPoint winp = m_parentPanel->GetScreenPosition();
+
+    return VECTOR2D( msp.x - winp.x, msp.y - winp.y );
+}
+
+
+const VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
+{
+    if( m_snappingEnabled )
+        return m_view->GetGAL()->GetGridPoint( GetMousePosition() );
+    else
+        return GetMousePosition();
 }
 
 

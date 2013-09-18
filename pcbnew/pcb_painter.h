@@ -145,7 +145,7 @@ protected:
     void draw( const SEGVIA*, int );
     void draw( const D_PAD*, int );
     void draw( const DRAWSEGMENT* );
-    void draw( const MODULE* );
+    void draw( const MODULE*, int );
     void draw( const TEXTE_PCB*, int );
     void draw( const TEXTE_MODULE*, int );
     void draw( const ZONE_CONTAINER* );

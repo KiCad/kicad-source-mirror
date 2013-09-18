@@ -45,8 +45,11 @@ VIEW::VIEW( bool aIsDynamic ) :
     m_scale( 1.0 ),
     m_painter( NULL ),
     m_gal( NULL ),
-    m_dynamic( aIsDynamic )
+    m_dynamic( aIsDynamic ),
+    m_scaleLimits( 15000.0, 1.0 )
 {
+    m_panBoundary.SetMaximum();
+
     // Redraw everything at the beginning
     for( int i = 0; i < TARGETS_NUMBER; ++i )
         MarkTargetDirty( i );
@@ -290,6 +293,11 @@ void VIEW::SetScale( double aScale )
 
 void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
 {
+    if( aScale > m_scaleLimits.x )
+        aScale = m_scaleLimits.x;
+    else if( aScale < m_scaleLimits.y )
+        aScale = m_scaleLimits.y;
+
     VECTOR2D a = ToScreen( aAnchor );
 
     m_gal->SetZoomFactor( aScale );
@@ -308,6 +316,20 @@ void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
 void VIEW::SetCenter( const VECTOR2D& aCenter )
 {
     m_center = aCenter;
+
+    if( !m_panBoundary.Contains( aCenter ) )
+    {
+        if( aCenter.x < m_panBoundary.GetLeft() )
+            m_center.x = m_panBoundary.GetLeft();
+        else if( aCenter.x > m_panBoundary.GetRight() )
+            m_center.x = m_panBoundary.GetRight();
+
+        if( aCenter.y < m_panBoundary.GetTop() )
+            m_center.y = m_panBoundary.GetTop();
+        else if( aCenter.y > m_panBoundary.GetBottom() )
+            m_center.y = m_panBoundary.GetBottom();
+    }
+
     m_gal->SetLookAtPoint( m_center );
     m_gal->ComputeWorldScreenMatrix();
 
@@ -603,12 +625,6 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
         // Immediate mode
         if( !m_painter->Draw( aItem, aLayer ) )
             aItem->ViewDraw( aLayer, m_gal );  // Alternative drawing method
-    }
-
-    // Draws a bright contour around the item
-    if( static_cast<const EDA_ITEM*>( aItem )->IsBrightened() )
-    {
-        m_painter->DrawBrightened( aItem );
     }
 }
 

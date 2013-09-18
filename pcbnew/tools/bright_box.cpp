@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,41 +22,51 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "selection_area.h"
+#include "bright_box.h"
 #include <gal/graphics_abstraction_layer.h>
-#include <gal/color4d.h>
+#include <class_track.h>
 
 using namespace KiGfx;
 
-const BOX2I SELECTION_AREA::ViewBBox() const
+BRIGHT_BOX::BRIGHT_BOX( BOARD_ITEM* aItem ) :
+	EDA_ITEM( NOT_USED ), // this item is never added to a BOARD so it needs no type
+	item( aItem )
 {
-	BOX2I tmp;
-    tmp.SetOrigin( m_origin );
-    tmp.SetEnd( m_end );
-	tmp.Normalize();
-	return tmp;
 }
 
 
-void SELECTION_AREA::ViewGetLayers( int aLayers[], int& aCount ) const
+const BOX2I BRIGHT_BOX::ViewBBox() const
 {
-    aLayers[0] = SelectionLayer;
+	return item->ViewBBox();
+}
+
+
+void BRIGHT_BOX::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aLayers[0] = BrightBoxLayer;
     aCount = 1;
 }
 
 
-void SELECTION_AREA::ViewDraw( int aLayer, KiGfx::GAL* aGal ) const
+void BRIGHT_BOX::ViewDraw( int aLayer, GAL* aGal ) const
 {
-    aGal->SetLineWidth( 1.0 );
-    aGal->SetStrokeColor( COLOR4D( 1.0, 1.0, 0.4, 1.0 ) );
-    aGal->SetFillColor( COLOR4D( 0.3, 0.3, 0.5, 0.3 ) );
     aGal->SetIsStroke( true );
-    aGal->SetIsFill( true );
-    aGal->DrawRectangle( m_origin, m_end );
+    aGal->SetIsFill( false );
+    aGal->SetLineWidth( LineWidth );
+    aGal->SetStrokeColor( BrightColor );
+
+    if( item->Type() == PCB_TRACE_T )
+    {
+        const TRACK* track = static_cast<const TRACK*>( item );
+
+        aGal->DrawSegment( track->GetStart(), track->GetEnd(), track->GetWidth() );
+    }
+    else
+    {
+        BOX2I box = item->ViewBBox();
+
+        aGal->DrawRectangle( box.GetOrigin(), box.GetOrigin() + box.GetSize() );
+    }
 }
 
-
-SELECTION_AREA::SELECTION_AREA() :
-	EDA_ITEM( NOT_USED ) // this item is never added to a BOARD so it needs no type.
-{
-}
+const COLOR4D BRIGHT_BOX::BrightColor = KiGfx::COLOR4D( 0.0, 1.0, 0.0, 1.0 );
