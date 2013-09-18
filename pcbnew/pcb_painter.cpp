@@ -283,6 +283,9 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
                 return;
 
             NETINFO_ITEM* net = ( (BOARD*) aTrack->GetParent() )->FindNet( netNumber );
+            if(!net)
+                return;
+            
             std::string netName = std::string( net->GetShortNetname().mb_str() );
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
             double textOrientation = -atan( line.y / line.x );
