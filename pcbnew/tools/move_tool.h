@@ -27,6 +27,7 @@
 
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
+#include <view/view_group.h>
 
 class BOARD_ITEM;
 class SELECTION_TOOL;
@@ -38,13 +39,8 @@ class VIEW_GROUP;
 
 /**
  * Class MOVE_TOOL
- *                                                      /// TODO DOCS!!
- * Our sample move tool: currently supports:
- * - pick single objects (click LMB)
- * - add objects to existing move (Shift+LMB)
- * - draw move box (drag LMB)
  *
- * WORK IN PROGRESS. CONSIDER AS A DEMO!
+ * Our sample move tool. Allows to move items selected by pcbnew.InteractiveSelection.
  */
 
 class MOVE_TOOL : public TOOL_INTERACTIVE
@@ -68,6 +64,7 @@ public:
     int Main( TOOL_EVENT& aEvent );
 
 private:
+    /// Adds an item to the VIEW_GROUP that holds all moved items and displays them on the overlay
     void viewGroupAdd( BOARD_ITEM* aItem, KiGfx::VIEW_GROUP* aGroup );
 
     /// Structure for (re)storing BOARD_ITEM state
@@ -108,7 +105,17 @@ private:
     /// Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
 
+    /// Stores the initial state of moved items (so it is possible to rollback changes)
     std::deque<ITEM_STATE> m_itemsState;
+
+    /// Set of selected items (obtained from pcbnew.
+    std::set<BOARD_ITEM*> m_selection;
+
+    /// VIEW_GROUP that helds currently moved items
+    KiGfx::VIEW_GROUP m_items;
+
+    /// Register hotkey fot activation of the move tool
+    TOOL_ACTION m_activate;
 };
 
 #endif

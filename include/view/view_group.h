@@ -42,7 +42,7 @@ namespace KiGfx
 class VIEW_GROUP : public VIEW_ITEM
 {
 public:
-    VIEW_GROUP( VIEW* aView );
+    VIEW_GROUP( VIEW* aView = NULL );
     virtual ~VIEW_GROUP();
 
     /**

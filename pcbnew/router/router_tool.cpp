@@ -42,11 +42,11 @@ using namespace KiGfx;
 using namespace std;
 using boost::optional;
 
-static TOOL_ACTION ACT_AutoEndRoute     ( "AutoEndRoute", SCOPE_CONTEXT, 'F' );
-static TOOL_ACTION ACT_PlaceVia         ( "PlaceVia", SCOPE_CONTEXT, 'V' );
-static TOOL_ACTION ACT_OpenRouteOptions ( "OpenRouterOptions", SCOPE_CONTEXT, 'E' );
-static TOOL_ACTION ACT_SwitchPosture    ( "SwitchPosture", SCOPE_CONTEXT, '/' );
-static TOOL_ACTION ACT_EndTrack         ( "SwitchPosture", SCOPE_CONTEXT, WXK_END );
+static TOOL_ACTION ACT_AutoEndRoute     ( "AutoEndRoute",       AS_CONTEXT, 'F' );
+static TOOL_ACTION ACT_PlaceVia         ( "PlaceVia",           AS_CONTEXT, 'V' );
+static TOOL_ACTION ACT_OpenRouteOptions ( "OpenRouterOptions",  AS_CONTEXT, 'E' );
+static TOOL_ACTION ACT_SwitchPosture    ( "SwitchPosture",      AS_CONTEXT, '/' );
+static TOOL_ACTION ACT_EndTrack         ( "SwitchPosture",      AS_CONTEXT, WXK_END );
 
 ROUTER_TOOL::ROUTER_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveRouter" )
@@ -88,7 +88,7 @@ void ROUTER_TOOL::Reset()
     if(getView())
         m_router->SetView( getView() );
 
-    Go( &ROUTER_TOOL::Main, TOOL_EVENT( TC_Command, TA_ActivateTool, GetName() ) );
+    Go( &ROUTER_TOOL::Main, TOOL_EVENT( TC_Command, TA_Action, GetName() ) );
 }
 
 int ROUTER_TOOL::getDefaultWidth( int aNetCode )

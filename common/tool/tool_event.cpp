@@ -83,9 +83,9 @@ const std::string TOOL_EVENT::Format() const
 		{ TA_ViewDirty, "view-dirty" },
 		{ TA_ChangeLayer, "change-layer" },
 		{ TA_CancelTool, "cancel-tool" },
-		{ TA_ActivateTool, "activate-tool" },
 		{ TA_ContextMenuUpdate, "context-menu-update" },
 		{ TA_ContextMenuChoice, "context-menu-choice" },
+		{ TA_Action, "action" },
 		{ 0, "" }
 	};
 

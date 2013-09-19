@@ -74,15 +74,16 @@ enum TOOL_Actions
 	// Tool cancel event. Issued automagically when the user hits escape or selects End Tool from the context menu.
 	TA_CancelTool   = 0x2000,
 
-	// Tool activation event. Issued by the GUI upon pressing a button/menu selection.
-	TA_ActivateTool = 0x4000,
-
 	// Context menu update. Issued whenever context menu is open and the user hovers the mouse over one of choices.
 	// Used in dynamic highligting in disambiguation menu 
-	TA_ContextMenuUpdate = 0x8000,
+	TA_ContextMenuUpdate = 0x4000,
 
 	// Context menu choice. Sent if the user picked something from the context menu or closed it without selecting anything.
-	TA_ContextMenuChoice = 0x10000,
+	TA_ContextMenuChoice = 0x8000,
+
+	// Tool action
+	TA_Action            = 0x10000,
+
 	TA_Any = 0xffffffff
 };
 
@@ -104,7 +105,15 @@ enum TOOL_Modifiers
     MD_ModifierMask = MD_ModShift | MD_ModCtrl | MD_ModAlt,
 };
 
-// Defines when a context menu is opened.
+/// Scope of tool actions
+enum TOOL_ActionScope
+{
+    AS_CONTEXT = 1,  ///> Action belongs to a particular tool (i.e. a part of a pop-up menu)
+    AS_ACTIVE,       ///> All active tools
+    AS_GLOBAL        ///> Global action (toolbar/main menu event, global shortcut)
+};
+
+/// Defines when a context menu is opened.
 enum CONTEXT_MENU_TRIGGER
 {
 	CMENU_BUTTON = 0,   // On the right button
@@ -122,16 +131,19 @@ class TOOL_EVENT
 public:
     const std::string Format() const;
 
-    TOOL_EVENT( TOOL_EventCategory aCategory = TC_None, TOOL_Actions aAction = TA_None ) :
+    TOOL_EVENT( TOOL_EventCategory aCategory = TC_None, TOOL_Actions aAction = TA_None,
+                TOOL_ActionScope aScope = AS_GLOBAL ) :
         m_category( aCategory ),
         m_actions( aAction ),
+        m_scope( aScope ),
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ) {}
 
-    TOOL_EVENT( TOOL_EventCategory aCategory, TOOL_Actions aAction, int aExtraParam ) :
+    TOOL_EVENT( TOOL_EventCategory aCategory, TOOL_Actions aAction, int aExtraParam, TOOL_ActionScope aScope = AS_GLOBAL ) :
         m_category( aCategory ),
-        m_actions( aAction )
+        m_actions( aAction ),
+        m_scope( aScope )
         {
             if( aCategory == TC_Mouse )
             {
@@ -153,15 +165,15 @@ public:
         }
 
     TOOL_EVENT( TOOL_EventCategory aCategory, TOOL_Actions aAction,
-                const std::string& aExtraParam ) :
+                const std::string& aExtraParam, TOOL_ActionScope aScope = AS_GLOBAL ) :
         m_category( aCategory ),
         m_actions( aAction ),
+        m_scope( aScope ),
         m_mouseButtons( 0 )
         {
             if( aCategory == TC_Command )
                 m_commandStr = aExtraParam;
         }
-
 
     TOOL_EventCategory Category() const
     {
@@ -285,6 +297,7 @@ private:
 
     TOOL_EventCategory m_category;
     TOOL_Actions m_actions;
+    TOOL_ActionScope m_scope;
 
     VECTOR2D m_mouseDelta;
     VECTOR2D m_mousePos;
@@ -314,9 +327,15 @@ public:
     TOOL_EVENT_LIST() {};
     TOOL_EVENT_LIST( const TOOL_EVENT& aSingleEvent )
     {
-        m_events.push_back(aSingleEvent);
+        m_events.push_back( aSingleEvent );
     }
 
+    /**
+     * Function Format()
+     * Returns information about event in form of a human-readable string.
+     *
+     * @return Event information.
+     */
     const std::string Format() const;
 
     boost::optional<const TOOL_EVENT&> Matches( const TOOL_EVENT &b ) const
