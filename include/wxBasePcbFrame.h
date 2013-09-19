@@ -115,6 +115,8 @@ protected:
     MODULE* loadFootprint( const FPID& aFootprintId )
         throw( IO_ERROR, PARSE_ERROR );
 
+    static const LAYER_NUM GAL_LAYER_ORDER[];
+
 public:
     PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
                     const wxString& aTitle,
