@@ -26,17 +26,24 @@ except IOError:
 # Create a new csv writer object to use as the output formatter
 out = csv.writer(f, lineterminator='\n', delimiter=',', quotechar="\"", quoting=csv.QUOTE_ALL)
 
+# override csv.writer's writerow() to support utf8 encoding:
+def writerow( acsvwriter, columns ):
+    utf8row = []
+    for col in columns:
+        utf8row.append( str(col).encode('utf8') )
+    acsvwriter.writerow( utf8row )
+
 # Output a field delimited header line
-out.writerow(['Source:', net.getSource()])
-out.writerow(['Date:', net.getDate()])
-out.writerow(['Tool:', net.getTool()])
-out.writerow(['Component Count:', len(net.components)])
-out.writerow(['Ref', 'Value', 'Footprint', 'Datasheet', 'Manufacturer', 'Vendor'])
+writerow( out, ['Source:', net.getSource()] )
+writerow( out, ['Date:', net.getDate()] )
+writerow( out, ['Tool:', net.getTool()] )
+writerow( out, ['Component Count:', len(net.components)] )
+writerow( out, ['Ref', 'Value', 'Footprint', 'Datasheet', 'Manufacturer', 'Vendor'] )
 
 components = net.getInterestingComponents()
 
 # Output all of the component information (One component per row)
 for c in components:
-    out.writerow([c.getRef(), c.getValue(), c.getFootprint(), c.getDatasheet(),
+    writerow( out, [c.getRef(), c.getValue(), c.getFootprint(), c.getDatasheet(),
         c.getField("Manufacturer"), c.getField("Vendor")])
 
