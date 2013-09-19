@@ -27,16 +27,23 @@ except IOError:
 # are created a tab delimited list instead!
 out = csv.writer(f, lineterminator='\n', delimiter='\t', quoting=csv.QUOTE_NONE)
 
+# override csv.writer's writerow() to support utf8 encoding:
+def writerow( acsvwriter, columns ):
+    utf8row = []
+    for col in columns:
+        utf8row.append( str(col).encode('utf8') )
+    acsvwriter.writerow( utf8row )
+
 # Output a field delimited header line
-out.writerow(['Source:', net.getSource()])
-out.writerow(['Date:', net.getDate()])
-out.writerow(['Tool:', net.getTool()])
-out.writerow(['Component Count:', len(net.components)])
-out.writerow(['Ref', 'Value', 'Part', 'Documentation', 'Description', 'Vendor'])
+writerow( out, ['Source:', net.getSource()] )
+writerow( out, ['Date:', net.getDate()] )
+writerow( out, ['Tool:', net.getTool()] )
+writerow( out, ['Component Count:', len(net.components)] )
+writerow( out, ['Ref', 'Value', 'Part', 'Documentation', 'Description', 'Vendor'] )
 
 components = net.getInterestingComponents()
 
 # Output all of the component information
 for c in components:
-    out.writerow([c.getRef(), c.getValue(), c.getLibName() + ":" + c.getPartName(),
+    writerow( out, [c.getRef(), c.getValue(), c.getLibName() + ":" + c.getPartName(),
         c.getDatasheet(), c.getDescription(), c.getField("Vendor")])
