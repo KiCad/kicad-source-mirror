@@ -162,6 +162,7 @@ set(COMMON_SRCS
     tool/tool_dispatcher.cpp
     tool/tool_event.cpp
     tool/tool_interactive.cpp
+    tool/action_manager.cpp
     tool/context_menu.cpp
 
 	geometry/seg.cpp

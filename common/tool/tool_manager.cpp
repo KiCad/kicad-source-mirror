@@ -82,9 +82,8 @@ struct TOOL_MANAGER::TOOL_STATE
 
 
 TOOL_MANAGER::TOOL_MANAGER() : 
-	m_model( NULL ), m_view( NULL )
+    m_actionMgr( this ), m_model( NULL ), m_view( NULL )
 {
-	
 }
 
 
@@ -128,35 +127,76 @@ bool TOOL_MANAGER::InvokeTool( TOOL_ID aToolId )
     TOOL_BASE* tool = FindTool( aToolId );
 
     if( tool && tool->GetType() == TOOL_Interactive )
-    {
-        // If the tool is already active, do not invoke it again
-        if( m_toolIdIndex[aToolId]->idle == false )
-            return false;
-
-        m_toolIdIndex[aToolId]->idle = false;
-        static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
-
-        TOOL_EVENT evt( TC_Command, TA_ActivateTool, tool->GetName() );
-        ProcessEvent( evt );
-
-        // Save the tool on the front of the processing queue
-        m_activeTools.push_front( aToolId );
-
-        return true;
-    }
+        return invokeTool( tool );
 
     return false;
 }
 
 
-bool TOOL_MANAGER::InvokeTool( const std::string& aName )
+bool TOOL_MANAGER::InvokeTool( const std::string& aToolName )
 {
-    TOOL_BASE* tool = FindTool( aName );
+    TOOL_BASE* tool = FindTool( aToolName );
 
-    if( tool )
-        return InvokeTool( tool->GetId() );
+    if( tool && tool->GetType() == TOOL_Interactive )
+        return invokeTool( tool );
 
     return false;
+}
+
+
+bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
+{
+    wxASSERT( aTool != NULL );
+
+    TOOL_EVENT evt( TC_Command, TA_Action, aTool->GetName() );
+    ProcessEvent( evt );
+
+    return true;
+}
+
+
+bool TOOL_MANAGER::runTool( TOOL_ID aToolId )
+{
+    TOOL_BASE* tool = FindTool( aToolId );
+
+    if( tool && tool->GetType() == TOOL_Interactive )
+        return runTool( tool );
+
+    return false;
+}
+
+
+bool TOOL_MANAGER::runTool( const std::string& aToolName )
+{
+    TOOL_BASE* tool = FindTool( aToolName );
+
+    if( tool && tool->GetType() == TOOL_Interactive )
+        return runTool( tool );
+
+    return false;
+}
+
+
+bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
+{
+    wxASSERT( aTool != NULL );
+
+    if( !isRegistered( aTool ) )
+        return false;
+
+    TOOL_STATE* state = m_toolState[aTool];
+
+    // If the tool is already active, do not invoke it again
+    if( state->idle == false )
+        return false;
+    state->idle = false;
+
+    static_cast<TOOL_INTERACTIVE*>( aTool )->Reset();
+
+    // Add the tool on the front of the processing queue (it gets events first)
+    m_activeTools.push_front( aTool->GetId() );
+
+    return true;
 }
 
 
@@ -228,7 +268,8 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 				    finishTool( st );
 				}
 
-				// The tool requested to stop propagating event to other tools
+				// If the tool did not request to propagate
+				// the event to other tools, we should stop it now
 				if( !m_passEvent )
 				    break;
 			}
@@ -269,6 +310,21 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 }
 
 
+bool TOOL_MANAGER::dispatchActivation( TOOL_EVENT& aEvent )
+{
+    BOOST_FOREACH( TOOL_STATE* st, m_toolState | boost::adaptors::map_values )
+    {
+        if( st->theTool->GetName() == aEvent.m_commandStr )
+        {
+            runTool( st->theTool );
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
     wxASSERT( m_activeTools.front() == aState->theTool->GetId() );
@@ -286,8 +342,18 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 {
 //	wxLogDebug( "event: %s", aEvent.Format().c_str() );
 
+	if( aEvent.Action() == TA_KeyUp )
+	{
+	    // Check if there is a hotkey associated
+	    if( m_actionMgr.RunHotKey( aEvent.Modifier() | aEvent.KeyCode() ) )
+	        return false;   // hotkey event was handled so it does not go any further
+	} else if( aEvent.Category() == TC_Command )        // it may be a tool activation event
+	{
+	    dispatchActivation( aEvent );
+	}
+
 	dispatchInternal( aEvent );
-	
+
     BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
     {
         TOOL_STATE* st = m_toolIdIndex[toolId];
@@ -358,4 +424,13 @@ void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KiGfx::VIEW* aView,
 	    if( tool->GetType() == TOOL_Interactive )
 	        static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
 	}
+}
+
+
+bool TOOL_MANAGER::isActive( TOOL_BASE* aTool )
+{
+    if( !isRegistered( aTool ) )
+        return false;
+
+    return !m_toolState[aTool]->idle;
 }

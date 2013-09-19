@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +49,8 @@ using namespace KiGfx;
 using boost::optional;
 
 SELECTION_TOOL::SELECTION_TOOL() :
-        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_multiple( false )
+        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_multiple( false ),
+        m_activate( m_toolName, AS_GLOBAL, 'S', "Selection tool", "Allows to select items" )
 {
     m_selArea = new SELECTION_AREA;
 }
@@ -63,92 +65,62 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 void SELECTION_TOOL::Reset()
 {
+    m_toolMgr->RegisterAction( &m_activate );
     m_selectedItems.clear();
 
-    // The tool launches upon reception of activate ("pcbnew.InteractiveSelection")
-    Go( &SELECTION_TOOL::Main, TOOL_EVENT( TC_Command, TA_ActivateTool, GetName() ) );
+    // The tool launches upon reception of action event ("pcbnew.InteractiveSelection")
+    Go( &SELECTION_TOOL::Main, m_activate.GetEvent() );
 }
 
 
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
-    bool dragging = false;
-    bool allowMultiple = true;
     BOARD* board = getModel<BOARD>( PCB_T );
 
-    if( !board )
-        return 0;
+    wxASSERT( board != NULL );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        // Should selected items be added to the current selection or
+        // become the new selection (discarding previously selected items)
         m_additive = evt->Modifier( MD_ModShift );
 
         if( evt->IsCancel() )
         {
-            if( !m_selectedItems.empty() )
+            if( !m_selectedItems.empty() )  // Cancel event deselects items...
                 clearSelection();
-            else
-                break;  // Finish
+            else                            // ...unless there is nothing selected
+                break;
         }
 
         // single click? Select single object
         if( evt->IsClick( MB_Left ) )
             selectSingle( evt->Position() );
 
-        // unlock the multiple selection box
-        if( evt->IsMouseUp( MB_Left ) )
-            allowMultiple = true;
-
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         if( evt->IsDrag( MB_Left ) )
         {
-            dragging = true;
-            getViewControls()->SetAutoPan( true );
-
             if( m_selectedItems.empty() || m_additive )
             {
                 // If nothings has been selected or user wants to select more
                 // draw the selection box
-                if( allowMultiple )
-                    allowMultiple = !selectMultiple();
+                selectMultiple();
             }
             else
             {
-                bool runTool = false;
-
-                // Check if dragging event started within the currently selected items bounding box
-                std::set<BOARD_ITEM*>::iterator it, it_end;
-                for( it = m_selectedItems.begin(), it_end = m_selectedItems.end();
-                        it != it_end; ++it )
+                if( containsSelected( evt->Position() ) )
                 {
-                    BOX2I itemBox = (*it)->ViewBBox();
-                    itemBox.Inflate( 500000 );    // Give some margin for gripping an item
-
-                    if( itemBox.Contains( evt->Position() ) )
-                    {
-                        // Click event occurred within a selected item bounding box
-                        // -> user wants to drag selected items
-                        runTool = true;
-                        break;
-                    }
-                }
-
-                if( runTool )
                     m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
+                    Wait();
+                }
                 else
+                {
                     clearSelection();
+                }
             }
         }
-        else if( dragging )
-        {
-            dragging = false;
-            getViewControls()->SetAutoPan( false );
-        }
     }
-
-    // Restore the default settings
-    getViewControls()->SetAutoPan( false );
 
     return 0;
 }
@@ -166,7 +138,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
         if( !m_additive )
             clearSelection();
 
-        // Prevent selection of invisible items
+        // Prevent selection of invisible or inactive items
         if( selectable( aItem ) )
         {
             aItem->SetSelected();
@@ -272,17 +244,17 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 
 bool SELECTION_TOOL::selectMultiple()
 {
-    OPT_TOOL_EVENT evt;
-    VIEW* v = getView();
+    VIEW* view = getView();
     bool cancelled = false;
-    m_multiple = true;
+    m_multiple = true;          // Multiple selection mode is active
+    getViewControls()->SetAutoPan( true );
 
     // Those 2 lines remove the blink-in-the-random-place effect
     m_selArea->SetOrigin( VECTOR2I( 0, 0 ) );
     m_selArea->SetEnd( VECTOR2I( 0, 0 ) );
-    v->Add( m_selArea );
+    view->Add( m_selArea );
 
-    while( evt = Wait() )
+    while( OPT_TOOL_EVENT evt = Wait() )
     {
         if( evt->IsCancel() )
         {
@@ -307,17 +279,17 @@ bool SELECTION_TOOL::selectMultiple()
             // End drawing a selection box
             m_selArea->ViewSetVisible( false );
 
-            // Mark items within a box as selected
+            // Mark items within the selection box as selected
             std::vector<VIEW::LayerItemPair> selectedItems;
             BOX2I selectionBox = m_selArea->ViewBBox();
+            view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
-            v->Query( selectionBox, selectedItems );
             std::vector<VIEW::LayerItemPair>::iterator it, it_end;
             for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
-                // Add only those items which are visible and fully within the selection box
+                // Add only those items that are visible and fully within the selection box
                 if( selectable( item ) && selectionBox.Contains( item->ViewBBox() ) )
                 {
                     item->SetSelected();
@@ -328,8 +300,9 @@ bool SELECTION_TOOL::selectMultiple()
         }
     }
 
-    v->Remove( m_selArea );
-    m_multiple = false;
+    view->Remove( m_selArea );
+    m_multiple = false;         // Multiple selection mode is inactive
+    getViewControls()->SetAutoPan( false );
 
     return cancelled;
 }
@@ -359,12 +332,12 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     {
         if( evt->Action() == TA_ContextMenuUpdate )
         {
-            // User has pointed an item, so show it in a different way
             if( current )
                 current->ClearBrightened();
 
             int id = *evt->GetCommandId();
 
+            // User has pointed an item, so show it in a different way
             if( id >= 0 )
             {
                 current = ( *aCollector )[id];
@@ -389,6 +362,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
             break;
         }
 
+        // Draw a mark to show which item is available to be selected
         if( current && current->IsBrightened() )
         {
             brightBox.reset( new BRIGHT_BOX( current ) );
@@ -473,4 +447,22 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
 
     // All other items are selected only if the layer on which they exist is visible
     return board->IsLayerVisible( aItem->GetLayer() );
+}
+
+
+bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
+{
+    // Check if the point is located within any of the currently selected items bounding boxes
+    std::set<BOARD_ITEM*>::iterator it, it_end;
+    for( it = m_selectedItems.begin(), it_end = m_selectedItems.end();
+            it != it_end; ++it )
+    {
+        BOX2I itemBox = (*it)->ViewBBox();
+        itemBox.Inflate( 500000 );    // Give some margin for gripping an item
+
+        if( itemBox.Contains( aPoint ) )
+            return true;
+    }
+
+    return false;
 }

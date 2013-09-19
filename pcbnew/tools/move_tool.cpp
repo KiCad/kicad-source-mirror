@@ -25,7 +25,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <tool/tool_manager.h>
-#include <view/view_group.h>
+#include <tool/tool_action.h>
 #include <view/view_controls.h>
 
 #include "selection_tool.h"
@@ -35,7 +35,8 @@ using namespace KiGfx;
 using boost::optional;
 
 MOVE_TOOL::MOVE_TOOL() :
-        TOOL_INTERACTIVE( "pcbnew.InteractiveMove" ), m_selectionTool( NULL )
+        TOOL_INTERACTIVE( "pcbnew.InteractiveMove" ), m_selectionTool( NULL ),
+        m_activate( m_toolName, AS_GLOBAL, 'M', "Move", "Moves the selected item(s)" )
 {
 }
 
@@ -47,6 +48,8 @@ MOVE_TOOL::~MOVE_TOOL()
 
 void MOVE_TOOL::Reset()
 {
+    m_toolMgr->RegisterAction( &m_activate );
+
     // Find the selection tool, so they can cooperate
     TOOL_BASE* selectionTool = m_toolMgr->FindTool( std::string( "pcbnew.InteractiveSelection" ) );
 
@@ -60,8 +63,8 @@ void MOVE_TOOL::Reset()
         return;
     }
 
-    // the tool launches upon reception of activate ("pcbnew.InteractiveMove")
-    Go( &MOVE_TOOL::Main, TOOL_EVENT( TC_Command, TA_ActivateTool, GetName() ) );
+    // the tool launches upon reception of action event ("pcbnew.InteractiveMove")
+    Go( &MOVE_TOOL::Main, m_activate.GetEvent() );
 }
 
 
@@ -69,13 +72,12 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
 {
     VECTOR2D dragPosition;
     bool dragging = false;
-    bool restore = false;
+    bool restore = false;       // Should items' state be restored when finishing the tool?
     VIEW* view = m_toolMgr->GetView();
-    std::set<BOARD_ITEM*> selection;
-    VIEW_GROUP items( view );
 
-    view->Add( &items );
-    m_toolMgr->GetViewControls()->SetSnapping( true );
+    view->Add( &m_items );
+    getViewControls()->SetSnapping( true );
+    getViewControls()->SetAutoPan( true );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -83,73 +85,68 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
         if( evt->IsCancel() )
         {
             restore = true;
-            m_toolMgr->PassEvent();
             break;  // Finish
         }
 
-        if( evt->IsDrag( MB_Left ) )
+        if( evt->IsMotion() || evt->IsDrag( MB_Left ) )
         {
             if( dragging )
             {
-                // Dragging is alre
+                // Dragging is already active
                 VECTOR2D movement = ( evt->Position() - dragPosition );
-
                 std::set<BOARD_ITEM*>::iterator it, it_end;
-                for( it = selection.begin(), it_end = selection.end(); it != it_end; ++it )
-                {
+
+                // so move all the selected items
+                for( it = m_selection.begin(), it_end = m_selection.end(); it != it_end; ++it )
                     (*it)->Move( wxPoint( movement.x, movement.y ) );
-                }
-                items.ViewUpdate( VIEW_ITEM::GEOMETRY );
             }
             else
             {
-                // Begin dragging
-                selection = m_selectionTool->GetSelection();
+                // Prepare to drag
+                m_selection = m_selectionTool->GetSelection();
+                if( m_selection.empty() )
+                    break;  // there are no items to operate on
 
                 std::set<BOARD_ITEM*>::iterator it;
-                for( it = selection.begin(); it != selection.end(); ++it )
+                for( it = m_selection.begin(); it != m_selection.end(); ++it )
                 {
-                    viewGroupAdd( *it, &items );
+                    // Gather all selected items into one VIEW_GROUP
+                    viewGroupAdd( *it, &m_items );
 
-                    // but if a MODULE was selected, then we need to redraw all of it's parts
+                    // Modules are treated in a special way - when they are moved, we have to
+                    // move all the parts that make the module, not the module itself
                     if( (*it)->Type() == PCB_MODULE_T )
                     {
                         MODULE* module = static_cast<MODULE*>( *it );
 
-                        // Move everything that belongs to the module
+                        // Add everything that belongs to the module (besides the module itself)
                         for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-                            viewGroupAdd( pad, &items );
+                            viewGroupAdd( pad, &m_items );
 
                         for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
                              drawing = drawing->Next() )
-                            viewGroupAdd( drawing, &items );
+                            viewGroupAdd( drawing, &m_items );
 
-                        viewGroupAdd( &module->Reference(), &items );
-                        viewGroupAdd( &module->Value(), &items );
+                        viewGroupAdd( &module->Reference(), &m_items );
+                        viewGroupAdd( &module->Value(), &m_items );
                     }
-
                 }
-                items.ViewUpdate( VIEW_ITEM::GEOMETRY );
 
                 dragging = true;
             }
 
+            m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );
             dragPosition = evt->Position();
         }
-        else if( evt->Category() == TC_Mouse ) // Filter out other events
-        {
-            if( dragging )
-            {
-                break;  // Finish
-            }
-        }
+        else if( evt->IsMouseUp( MB_Left ) || evt->IsClick( MB_Left ) )
+            break;  // Finish
     }
 
     // Clean-up after movement
     std::deque<ITEM_STATE>::iterator it, it_end;
     if( restore )
     {
-        // Movement has to be rollbacked, so restore previous state of items
+        // Movement has to be rollbacked, so restore the previous state of items
         for( it = m_itemsState.begin(), it_end = m_itemsState.end(); it != it_end; ++it )
             it->Restore();
     }
@@ -164,9 +161,10 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
     }
 
     m_itemsState.clear();
-    items.Clear();
-    view->Remove( &items );
-    m_toolMgr->GetViewControls()->SetSnapping( false );
+    m_items.Clear();
+    view->Remove( &m_items );
+    getViewControls()->SetSnapping( false );
+    getViewControls()->SetAutoPan( false );
 
     return 0;
 }

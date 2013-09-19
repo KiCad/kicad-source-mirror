@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +31,7 @@
 
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
+#include <tool/tool_action.h>
 
 class SELECTION_AREA;
 class BOARD_ITEM;
@@ -42,6 +44,9 @@ class GENERAL_COLLECTOR;
  * - pick single objects (click LMB)
  * - add objects to existing selection (Shift+LMB)
  * - draw selection box (drag LMB)
+ * - handles MODULEs properly (ie. selects either MODULE or its PADs, TEXTs, etc.)
+ * - takes into account high-contrast & layer visibility settings
+ * - invokes InteractiveMove tool when user starts to drag selected items
  */
 
 class SELECTION_TOOL : public TOOL_INTERACTIVE
@@ -131,10 +136,18 @@ private:
      */
     bool selectable( const BOARD_ITEM* aItem );
 
+    /**
+     * Function containsSelected()
+     * Checks if the given point is placed within any of selected items' bounding box.
+     *
+     * @return True if the given point is contained in any of selected items' bouding box.
+     */
+    bool containsSelected( const VECTOR2I& aPoint ) const;
+
     /// Container storing currently selected items
     std::set<BOARD_ITEM*> m_selectedItems;
 
-    /// Visual representation of selection area
+    /// Visual representation of selection box
     SELECTION_AREA* m_selArea;
 
     /// Menu shown in case of selection ambiguity
@@ -145,6 +158,9 @@ private:
 
     /// Flag saying if multiple selection mode is active
     bool m_multiple;
+
+    /// Register hotkey fot activation of the selection tool
+    TOOL_ACTION m_activate;
 };
 
 #endif
