@@ -34,14 +34,14 @@ def writerow( acsvwriter, columns ):
         utf8row.append( str(col).encode('utf8') )
     acsvwriter.writerow( utf8row )
 
+components = net.getInterestingComponents()
+
 # Output a field delimited header line
 writerow( out, ['Source:', net.getSource()] )
 writerow( out, ['Date:', net.getDate()] )
 writerow( out, ['Tool:', net.getTool()] )
-writerow( out, ['Component Count:', len(net.components)] )
+writerow( out, ['Component Count:', len(components)] )
 writerow( out, ['Ref', 'Value', 'Part', 'Documentation', 'Description', 'Vendor'] )
-
-components = net.getInterestingComponents()
 
 # Output all of the component information
 for c in components:
