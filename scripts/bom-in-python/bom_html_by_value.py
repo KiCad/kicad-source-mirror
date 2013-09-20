@@ -77,12 +77,14 @@ except IOError:
     print(__file__, ":", e, file=sys.stderr)
     f = stdout
 
+components = net.getInterestingComponents()
+
 # Output a set of rows for a header providing general information
 html = html.replace('<!--SOURCE-->', net.getSource())
 html = html.replace('<!--DATE-->', net.getDate())
 html = html.replace('<!--TOOL-->', net.getTool())
 html = html.replace('<!--COMPCOUNT-->', "<b>Component Count:</b>" + \
-    str(len(net.components)))
+    str(len(components)))
 
 row  = "<tr><th style='width:640px'>Ref</th>" + "<th>Qnty</th>"
 row += "<th>Value</th>" + "<th>Part</th>"
@@ -91,8 +93,6 @@ row +=  "<th>Description</th>"
 row += "<th>PartNumber</th>" + "<th>Vendor</th></tr>"
 
 html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
-
-components = net.getInterestingComponents()
 
 # Get all of the components in groups of matching parts + values
 # (see kicad_netlist_reader.py)
