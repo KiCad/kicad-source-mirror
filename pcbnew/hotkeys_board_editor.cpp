@@ -240,7 +240,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
-        ll = getCurrentLayer();
+        ll = getActiveLayer();
 
         if( (ll <= LAYER_N_BACK) || (ll > LAYER_N_FRONT) )
             break;
@@ -256,7 +256,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
-        ll = getCurrentLayer();
+        ll = getActiveLayer();
 
         if( (ll < LAYER_N_BACK) || (ll >= LAYER_N_FRONT) )
             break;
@@ -374,7 +374,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_BACK_SPACE:
-        if( /*m_ID_current_state == ID_TRACK_BUTT &&*/ (getCurrentLayer() <= LAYER_N_FRONT) )
+        if( /*m_ID_current_state == ID_TRACK_BUTT &&*/ (getActiveLayer() <= LAYER_N_FRONT) )
         {
             if( !itemCurrentlyEdited )
             {
@@ -580,7 +580,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
     switch( GetToolId() )
     {
     case ID_TRACK_BUTT:
-        if( getCurrentLayer() > LAYER_N_FRONT )
+        if( getActiveLayer() > LAYER_N_FRONT )
             return false;
 
         if( ItemFree )
@@ -949,7 +949,7 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
  */
 TRACK * PCB_EDIT_FRAME::OnHotkeyBeginRoute( wxDC* aDC )
 {
-    if( getCurrentLayer() > LAYER_N_FRONT )
+    if( getActiveLayer() > LAYER_N_FRONT )
         return NULL;
 
     bool itemCurrentlyEdited = (GetCurItem() && GetCurItem()->GetFlags());
