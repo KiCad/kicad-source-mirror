@@ -194,6 +194,7 @@ again." );
         case 'K':                       // It is a Marker item.
             // Markers are no more read from file. they are only created on
             // demand in schematic
+            itemLoaded = true;          // Just skip descr and disable err message
             break;
 
         case 'N':                       // It is a NoConnect item.
@@ -242,6 +243,9 @@ again." );
 
         if( !itemLoaded )
         {
+            msgDiag.Printf( _( "Eeschema file object not loaded at line %d, aborted" ),
+                            reader.LineNumber() );
+            msgDiag << wxT( "\n" ) << FROM_UTF8( line );
             DisplayError( this, msgDiag );
             break;
         }

@@ -88,7 +88,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     if( aHotkeyCode == 0 )
         return;
 
-    bool itemCurrentlyEdited = (GetCurItem() && GetCurItem()->GetFlags());
+    bool itemCurrentlyEdited = GetCurItem() && GetCurItem()->GetFlags();
     MODULE* module = NULL;
     int evt_type = 0;       //Used to post a wxCommandEvent on demand
     PCB_SCREEN* screen = GetScreen();
@@ -374,7 +374,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_BACK_SPACE:
-        if( /*m_ID_current_state == ID_TRACK_BUTT &&*/ (getActiveLayer() <= LAYER_N_FRONT) )
+        if( IsCopperLayer( getActiveLayer() ) )
         {
             if( !itemCurrentlyEdited )
             {
@@ -461,7 +461,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     case HK_ADD_BLIND_BURIED_VIA:
     case HK_ADD_THROUGH_VIA: // Switch to alternate layer and Place a via if a track is in progress
         if( GetBoard()->GetDesignSettings().m_BlindBuriedViaAllowed &&
-            hk_id == HK_ADD_BLIND_BURIED_VIA )
+            hk_id == HK_ADD_BLIND_BURIED_VIA  )
             GetBoard()->GetDesignSettings().m_CurrentViaType = VIA_BLIND_BURIED;
         else
             GetBoard()->GetDesignSettings().m_CurrentViaType = VIA_THROUGH;
@@ -485,6 +485,17 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
         evt_type = hk_id == HK_ADD_BLIND_BURIED_VIA ?
             ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA : ID_POPUP_PCB_PLACE_THROUGH_VIA;
+        break;
+
+    case HK_SEL_LAYER_AND_ADD_THROUGH_VIA:
+    case HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA:
+        if( GetCurItem() == NULL || !GetCurItem()->IsNew() ||
+            GetCurItem()->Type() != PCB_TRACE_T )
+            break;
+
+        evt_type = hk_id == HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA ?
+            ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA :
+            ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_THROUGH_VIA;
         break;
 
     case HK_SWITCH_TRACK_POSTURE:

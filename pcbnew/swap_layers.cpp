@@ -195,12 +195,11 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
         item_ID = ID_TEXT_0 + ii;
 
         /* When the first of these text strings is being added, determine
-         * what size is necessary to to be able to display any possible
-         * string without it being truncated. Then specify that size as the
-         * minimum size for all of these text strings. (If this minimum
-         * size is not determined in this fashion, then it is possible for
-         * the display of one or more of these strings to be truncated after
-         * different layers are selected.)
+         * what size is necessary to to be able to display the longest
+         * string without truncation. Then use that size as the
+         * minimum size for all text strings. (If the minimum
+         * size is not this size, strings can be truncated after
+         * some other layer is selected.)
          */
         if( ii == 0 )
         {
@@ -235,8 +234,8 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
     }
 
     /* Provide spacers to occupy otherwise blank cells within the second
-     * FlexGrid sizer. (As it incorporates three columns, three spacers
-     * are thus required for each otherwise unused row.)
+     * FlexGrid sizer. (Becuse there are three columns, three spacers
+     * are thus required for each unused row.)
      */
     for( int ii = 3 * NB_PCB_LAYERS; ii < 96; ii++ )
     {
@@ -289,28 +288,16 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
     if( (jj < 0) || (jj > NB_PCB_LAYERS) )
         jj = LAYER_NO_CHANGE; // (Defaults to "No Change".)
 
-    jj = m_Parent->SelectLayer( jj, UNDEFINED_LAYER, UNDEFINED_LAYER, true );
+    jj = m_Parent->SelectLayer( jj );
 
     if( !IsValidLayer( jj ) )
         return;
-
-    // No change if the selected layer matches the layer being edited.
-    // (Hence the only way to restore a layer to the "No Change"
-    // state is by specifically deselecting it; any attempt
-    // to select the same layer (instead) will be ignored.)
-    if( jj == ii )
-    {
-        wxString msg;
-        msg = _( "Deselect this layer to select the No Change state" );
-        DisplayInfoMessage( this, msg );
-        return;
-    }
 
     if( jj != New_Layer[ii] )
     {
         New_Layer[ii] = jj;
 
-        if( jj >= LAYER_NO_CHANGE )
+        if( jj >= LAYER_NO_CHANGE || jj == ii )
         {
             layer_list[ii]->SetLabel( _( "No Change" ) );
 

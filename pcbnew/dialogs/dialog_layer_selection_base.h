@@ -18,10 +18,10 @@
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/stattext.h>
 #include <wx/statline.h>
+#include <wx/button.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -38,12 +38,11 @@ class DIALOG_LAYER_SELECTION_BASE : public wxDialog
 	protected:
 		wxGrid* m_leftGridLayers;
 		wxGrid* m_rightGridLayers;
-		wxButton* m_buttonClear;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnLeftGridClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnRightGridClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnClearSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLeftGridCellClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnLeftButtonReleased( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnRightGridCellClick( wxGridEvent& event ) { event.Skip(); }
 		
 	
 	public:
@@ -71,8 +70,8 @@ class DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE : public wxDialog
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnLeftGridClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnRightGridClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnLeftGridCellClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnRightGridCellClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKClick( wxCommandEvent& event ) { event.Skip(); }
 		
