@@ -296,6 +296,19 @@ void EDA_DRAW_PANEL::RefreshDrawingRect( const EDA_RECT& aRect, bool aEraseBackg
 }
 
 
+void EDA_DRAW_PANEL::Refresh( bool eraseBackground, const wxRect* rect )
+{
+    if( GetParent()->IsGalCanvasActive() )
+    {
+        GetParent()->GetGalCanvas()->Refresh();
+    }
+    else
+    {
+        wxScrolledWindow::Refresh( eraseBackground, rect );
+    }
+}
+
+
 wxPoint EDA_DRAW_PANEL::GetScreenCenterLogicalPosition()
 {
     wxSize size = GetClientSize() / 2;

@@ -165,7 +165,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
         SetCurItem( NULL );
 
         Zoom_Automatique( false );
-        RefreshCanvas();
+        m_canvas->Refresh();
         Update3D_Frame();
         m_FootprintList->SetStringSelection( m_footprintName );
    }

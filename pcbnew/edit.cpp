@@ -399,7 +399,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             GetDesignSettings().m_CurrentViaType = v_type;
 
             if( DisplayOpt.ContrastModeDisplay )
-                RefreshCanvas();
+                m_canvas->Refresh();
         }
         break;
 
@@ -572,7 +572,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         m_canvas->MoveCursorToCrossHair();
         Fill_All_Zones( this );
-        RefreshCanvas();
+        m_canvas->Refresh();
         SetMsgPanel( GetBoard() );
         break;
 
@@ -584,7 +584,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             TestNetConnection( NULL, zone_container->GetNet() );
             OnModify();
             SetMsgPanel( GetBoard() );
-            RefreshCanvas();
+            m_canvas->Refresh();
         }
         SetCurItem( NULL );
         break;
@@ -604,7 +604,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         TestForActiveLinksInRatsnest( 0 );   // Recalculate the active ratsnest, i.e. the unconnected links
         OnModify();
         SetMsgPanel( GetBoard() );
-        RefreshCanvas();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_PCB_FILL_ZONE:
@@ -612,7 +612,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Fill_Zone( (ZONE_CONTAINER*) GetCurItem() );
         TestNetConnection( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNet() );
         SetMsgPanel( GetBoard() );
-        RefreshCanvas();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST:
@@ -1040,7 +1040,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Delete_Drawings_All_Layer( GetCurItem()->GetLayer() );
         SetCurItem( NULL );
         m_canvas->MoveCursorToCrossHair();
-        RefreshCanvas();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_PCB_EDIT_DRAWING:
@@ -1291,7 +1291,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
                 if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
                 {
                     if( DisplayOpt.ContrastModeDisplay )
-                        RefreshCanvas();
+                        m_canvas->Refresh();
                 }
 
                 // if the via was allowed by DRC, then the layer swap has already
@@ -1310,7 +1310,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
     setActiveLayer( layer );
 
     if( DisplayOpt.ContrastModeDisplay )
-        RefreshCanvas();
+        m_canvas->Refresh();
 }
 
 

@@ -234,7 +234,7 @@ void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
         m_galCanvas->GetView()->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
     }
 
-    RefreshCanvas();
+    m_canvas->Refresh();
 }
 
 
@@ -394,7 +394,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
         m_galCanvas->GetView()->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
     }
 
-    RefreshCanvas();
+    m_canvas->Refresh();
 }
 
 

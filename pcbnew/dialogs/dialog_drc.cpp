@@ -548,7 +548,7 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 
 void DIALOG_DRC_CONTROL::RedrawDrawPanel()
 {
-    m_Parent->RefreshCanvas();
+    m_Parent->GetCanvas()->Refresh();
 }
 
 
