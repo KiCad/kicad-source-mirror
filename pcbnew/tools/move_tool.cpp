@@ -73,11 +73,13 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
     VECTOR2D dragPosition;
     bool dragging = false;
     bool restore = false;       // Should items' state be restored when finishing the tool?
-    VIEW* view = m_toolMgr->GetView();
+    VIEW* view = getView();
+    VIEW_CONTROLS* controls = getViewControls();
 
     view->Add( &m_items );
-    getViewControls()->SetSnapping( true );
-    getViewControls()->SetAutoPan( true );
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+    controls->SetAutoPan( true );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -163,8 +165,9 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
     m_itemsState.clear();
     m_items.Clear();
     view->Remove( &m_items );
-    getViewControls()->SetSnapping( false );
-    getViewControls()->SetAutoPan( false );
+    controls->ShowCursor( false );
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
 
     return 0;
 }
