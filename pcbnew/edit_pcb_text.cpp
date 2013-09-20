@@ -126,7 +126,7 @@ void PCB_EDIT_FRAME::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 
     TextePcb->ClearFlags();
 #ifdef USE_WX_OVERLAY
-    RefreshCanvas();
+    m_canvas->Refresh();
 #endif
 }
 
@@ -144,7 +144,7 @@ void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC, bool aE
     SetMsgPanel( aTextePcb );
 
 #ifdef USE_WX_OVERLAY
-    RefreshCanvas();
+    m_canvas->Refresh();
 #endif
 
     SetCrossHairPosition( aTextePcb->GetTextPosition() );
@@ -257,7 +257,7 @@ void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 
     OnModify();
 #ifdef USE_WX_OVERLAY
-    RefreshCanvas();
+    m_canvas->Refresh();
 #endif
 }
 
@@ -281,6 +281,6 @@ void PCB_EDIT_FRAME::FlipTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC )
 
     OnModify();
 #ifdef USE_WX_OVERLAY
-    RefreshCanvas();
+    m_canvas->Refresh();
 #endif
 }

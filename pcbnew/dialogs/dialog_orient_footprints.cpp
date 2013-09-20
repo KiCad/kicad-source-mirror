@@ -104,7 +104,7 @@ void PCB_EDIT_FRAME::OnOrientFootprints( wxCommandEvent& event )
 
     if( ReOrientModules( text, dlg.GetOrientation(), dlg.ApplyToLockedModules() ) )
     {
-        RefreshCanvas();
+        m_canvas->Refresh();
         Compile_Ratsnest( NULL, true );
     }
 }

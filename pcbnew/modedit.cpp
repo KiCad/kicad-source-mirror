@@ -541,7 +541,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             GetScreen()->GetCurItem()->ClearFlags();
 
             if( ret > 0 )
-                RefreshCanvas();
+                m_canvas->Refresh();
         }
         break;
 
@@ -571,7 +571,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->MoveCursorToCrossHair();
 
             if( ret > 0 )
-                RefreshCanvas();
+                m_canvas->Refresh();
         }
         break;
 
@@ -660,38 +660,38 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->MoveCursorToCrossHair();
 
             if( edge )
-                RefreshCanvas();
+                m_canvas->Refresh();
         }
         break;
 
     case  ID_POPUP_MODEDIT_EDIT_BODY_ITEM :
         m_canvas->MoveCursorToCrossHair();
         InstallFootprintBodyItemPropertiesDlg( (EDGE_MODULE*) GetScreen()->GetCurItem() );
-        RefreshCanvas();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_MODEDIT_EDIT_WIDTH_CURRENT_EDGE:
         m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Width( (EDGE_MODULE*) GetScreen()->GetCurItem() );
-        RefreshCanvas();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE:
         m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Width( NULL );
-        RefreshCanvas();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_MODEDIT_EDIT_LAYER_CURRENT_EDGE:
         m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Layer( (EDGE_MODULE*) GetScreen()->GetCurItem() );
-        RefreshCanvas();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE:
         m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Layer( NULL );
-        RefreshCanvas();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_PCB_DELETE_EDGE:
@@ -774,7 +774,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
 
     if( redraw )
-        RefreshCanvas();
+        m_canvas->Refresh();
 }
 
 

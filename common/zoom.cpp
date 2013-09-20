@@ -52,7 +52,7 @@ void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
     if( aWarpPointer )
         m_canvas->MoveCursorToCrossHair();
 
-    RefreshCanvas();
+    m_canvas->Refresh();
     m_canvas->Update();
 }
 
@@ -64,17 +64,8 @@ void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
 
     AdjustScrollBars( newCenter );
 
-    RefreshCanvas();
+    m_canvas->Refresh();
     m_canvas->Update();
-}
-
-
-void EDA_DRAW_FRAME::RefreshCanvas()
-{
-    if( m_galCanvasActive )
-        m_galCanvas->Refresh();
-    else
-        m_canvas->Refresh();
 }
 
 
@@ -169,7 +160,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_ZOOM_REDRAW:
-        RefreshCanvas();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_ZOOM_CENTER:

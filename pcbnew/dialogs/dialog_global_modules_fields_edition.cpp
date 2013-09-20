@@ -136,7 +136,7 @@ void PCB_EDIT_FRAME::OnResetModuleTextSizes( wxCommandEvent& event )
     DIALOG_GLOBAL_MODULES_FIELDS_EDITION dlg(this);
     dlg.ShowModal();
 
-    RefreshCanvas();
+    m_canvas->Refresh();
 }
 
 void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,

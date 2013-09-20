@@ -349,7 +349,7 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
     text->SetThickness( newThickness );
 
     if( aDC )
-        RefreshCanvas();
+        m_canvas->Refresh();
 
     OnModify();
 }

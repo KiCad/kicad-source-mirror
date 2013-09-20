@@ -223,7 +223,7 @@ bool PCB_BASE_FRAME::InvokeDialogGrid()
         if( GetScreen()->GetGridId() == ID_POPUP_GRID_USER )
             GetScreen()->SetGrid( ID_POPUP_GRID_USER  );
 
-        RefreshCanvas();
+        m_canvas->Refresh();
 
         return true;
     }

@@ -285,7 +285,7 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeD
 
     // Redraw the full screen to ensure perfect display of board and ratsnest.
     if( aDC )
-        RefreshCanvas();
+        m_canvas->Refresh();
 
     return true;
 }
@@ -421,7 +421,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
         Compile_Ratsnest( aDC, true );
 
     if( aDC )
-        RefreshCanvas();
+        m_canvas->Refresh();
 
     SetMsgPanel( aModule );
 }
@@ -490,7 +490,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool
         }
 
         if( module->GetFlags() == 0 )  // module not in edit: redraw full screen
-            RefreshCanvas();
+            m_canvas->Refresh();
     }
 }
 

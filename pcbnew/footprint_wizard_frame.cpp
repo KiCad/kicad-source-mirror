@@ -409,7 +409,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
     ReCreateParameterList();
     ReCreateHToolbar();
     DisplayWizardInfos();
-    RefreshCanvas();
+    m_canvas->Refresh();
 }
 
 
@@ -507,7 +507,7 @@ void FOOTPRINT_WIZARD_FRAME::ClickOnPageList( wxCommandEvent& event )
         return;
 
     ReCreateParameterList();
-    RefreshCanvas();
+    m_canvas->Refresh();
     DisplayWizardInfos();
 }
 

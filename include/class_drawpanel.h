@@ -317,6 +317,9 @@ public:
      */
     void RefreshDrawingRect( const EDA_RECT& aRect, bool aEraseBackground = true );
 
+    /// @copydoc wxWindow::Refresh()
+    virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
+
     /**
      * Function GetScreenCenterLogicalPosition
      * @return The current screen center position in logical (drawing) units.

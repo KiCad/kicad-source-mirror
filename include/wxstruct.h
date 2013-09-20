@@ -772,12 +772,6 @@ public:
     void RedrawScreen2( const wxPoint& posBefore );
 
     /**
-     * Function RefreshCanvas
-     * Depending on the current state of GAL - it refreshes the default canvas of the GAL canvas.
-     */
-    void RefreshCanvas();
-
-    /**
      * Function Zoom_Automatique
      * redraws the screen with best zoom level and the best centering
      * that shows all the page or the board

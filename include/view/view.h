@@ -262,8 +262,8 @@ public:
     /**
      * Function SetLayerVisible()
      * Controls the visibility of a particular layer.
-     * @param aLayer: the layer to show/hide
-     * @param aVisible: the obvious
+     * @param aLayer: the layer to show/hide.
+     * @param aVisible: the obvious.
      */
     inline void SetLayerVisible( int aLayer, bool aVisible = true )
     {
