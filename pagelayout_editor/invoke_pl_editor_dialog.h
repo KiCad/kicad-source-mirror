@@ -1,5 +1,5 @@
 /**
- * @file invoke_pl_editor.h
+ * @file invoke_pl_editor_dialog.h
  */
 
 /*

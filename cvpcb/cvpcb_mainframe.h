@@ -31,12 +31,11 @@
 
 #include <wx/listctrl.h>
 #include <wx/filename.h>
-#include <netlist_reader.h>
+#include <pcb_netlist.h>
 #include <footprint_info.h>
 
 #include <wxBasePcbFrame.h>
 #include <param_config.h>
-#include <cvpcb.h>
 
 
 /*  Forward declarations of all top-level window classes. */
@@ -46,6 +45,7 @@ class COMPONENTS_LISTBOX;
 class LIBRARY_LISTBOX;
 class DISPLAY_FOOTPRINTS_FRAME;
 class COMPONENT;
+class FP_LIB_TABLE;
 
 
 /**
@@ -54,6 +54,16 @@ class COMPONENT;
 class CVPCB_MAINFRAME : public EDA_BASE_FRAME
 {
     wxArrayString             m_footprintListEntries;
+
+#if defined( USE_FP_LIB_TABLE )
+    /// The global footprint library table.
+    FP_LIB_TABLE*             m_globalFootprintTable;
+
+    /// The project footprint library table.  This is a combination of the project
+    /// footprint library table and the global footprint table.  This is the one to
+    /// use when finding a #MODULE.
+    FP_LIB_TABLE*             m_footprintLibTable;
+#endif
 
 public:
     bool                      m_KeepCvpcbOpen;
@@ -92,6 +102,13 @@ public:
      */
     void             OnSelectComponent( wxListEvent& event );
 
+    /**
+     * Function OnEditFootrprintLibraryTable
+     * displays the footprint library table editing dialog and updates the global and local
+     * footprint tables accordingly.
+     */
+    void             OnEditFootrprintLibraryTable( wxCommandEvent& event );
+
     void             OnQuit( wxCommandEvent& event );
     void             OnCloseWindow( wxCloseEvent& Event );
     void             OnSize( wxSizeEvent& SizeEvent );
@@ -126,6 +143,15 @@ public:
     void             LoadNetList( wxCommandEvent& event );
 
     void             ConfigCvpcb( wxCommandEvent& event );
+
+    /**
+     * Function OnEditLibraryTable
+     * envokes the footpirnt library table edit dialog.
+     */
+#if defined( USE_FP_LIB_TABLE )
+    void             OnEditFootprintLibraryTable( wxCommandEvent& aEvent );
+#endif
+
     void             OnKeepOpenOnSave( wxCommandEvent& event );
     void             DisplayModule( wxCommandEvent& event );
 

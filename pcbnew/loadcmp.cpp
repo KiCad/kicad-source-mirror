@@ -224,7 +224,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
 #else
     FPID fpid;
 
-    wxCHECK_MSG( fpid.Parse( TO_UTF8( moduleName ) ) < 0, NULL,
+    wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
                  wxString::Format( wxT( "Could not parse FPID string <%s>." ),
                                    GetChars( moduleName ) ) );
 
@@ -260,7 +260,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
 #else
             FPID fpid;
 
-            wxCHECK_MSG( fpid.Parse( TO_UTF8( moduleName ) ) < 0, NULL,
+            wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
                          wxString::Format( wxT( "Could not parse FPID string <%s>." ),
                                            GetChars( moduleName ) ) );
 

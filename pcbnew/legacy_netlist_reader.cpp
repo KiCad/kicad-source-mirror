@@ -31,6 +31,7 @@
 #include <richio.h>
 #include <kicad_string.h>
 
+#include <pcb_netlist.h>
 #include <netlist_reader.h>
 
 
@@ -165,7 +166,12 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText ) throw( PARSE_ERRO
         name = FROM_UTF8( text ).AfterFirst( wxChar( '=' ) ).BeforeLast( wxChar( '}' ) );
     }
 
-    COMPONENT* component = new COMPONENT( footprintName, reference, value, timeStamp );
+    FPID fpid;
+
+    if( !footprintName.IsEmpty() )
+        fpid.SetFootprintName( footprintName );
+
+    COMPONENT* component = new COMPONENT( fpid, reference, value, timeStamp );
     component->SetName( name );
     m_netlist->AddComponent( component );
     return component;

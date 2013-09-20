@@ -1,5 +1,5 @@
 /**
- * @file reporter.h
+ * @file reporter.cpp
  */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
@@ -41,5 +41,15 @@ REPORTER& WX_TEXT_CTRL_REPORTER::Report( const wxString& aText )
                  wxT( "No wxTextCtrl object defined in WX_TEXT_CTRL_REPORTER." ) );
 
     m_textCtrl->AppendText( aText );
+    return *this;
+}
+
+
+REPORTER& WX_STRING_REPORTER::Report( const wxString& aText )
+{
+    wxCHECK_MSG( m_string != NULL, *this,
+                 wxT( "No wxString object defined in WX_STRING_REPORTER." ) );
+
+    *m_string << aText;
     return *this;
 }

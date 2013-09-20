@@ -31,265 +31,11 @@
 #include <kicad_string.h>
 #include <reporter.h>
 
+#include <pcb_netlist.h>
 #include <netlist_reader.h>
 #include <class_module.h>
 
 #include <wx/regex.h>
-
-
-#if defined(DEBUG)
-/**
- * Function NestedSpace
- * outputs nested space for pretty indenting.
- * @param aNestLevel The nest count
- * @param aReporter A reference to a #REPORTER object where to output.
- * @return REPORTER& for continuation.
- **/
-static REPORTER& NestedSpace( int aNestLevel, REPORTER& aReporter )
-{
-    for( int i = 0;  i < aNestLevel;  ++i )
-        aReporter.Report( wxT( "  " ) );
-
-    return aReporter;
-}
-
-
-void COMPONENT_NET::Show( int aNestLevel, REPORTER& aReporter )
-{
-    NestedSpace( aNestLevel, aReporter );
-    aReporter.Report( wxString::Format( wxT( "<pin_name=%s net_name=%s>\n" ),
-                                        GetChars( m_pinName ), GetChars( m_netName ) ) );
-}
-#endif
-
-
-void COMPONENT::SetModule( MODULE* aModule )
-{
-    m_footprint.reset( aModule );
-
-    if( aModule == NULL )
-        return;
-
-    aModule->SetReference( m_reference );
-    aModule->SetValue( m_value );
-    aModule->SetLibRef( m_footprintName );
-    aModule->SetPath( m_timeStamp );
-}
-
-
-COMPONENT_NET COMPONENT::m_emptyNet;
-
-
-const COMPONENT_NET& COMPONENT::GetNet( const wxString& aPinName )
-{
-    for( unsigned i = 0;  i < m_nets.size();  i++ )
-    {
-        if( m_nets[i].GetPinName() == aPinName )
-            return m_nets[i];
-    }
-
-    return m_emptyNet;
-}
-
-
-bool COMPONENT::MatchesFootprintFilters( const wxString& aFootprintName ) const
-{
-    if( m_footprintFilters.GetCount() == 0 )
-        return true;
-
-    // The matching is case insensitive
-    wxString name = aFootprintName.Upper();
-
-    for( unsigned ii = 0; ii < m_footprintFilters.GetCount(); ii++ )
-    {
-        if( name.Matches( m_footprintFilters[ii].Upper() ) )
-            return true;
-    }
-
-    return false;
-}
-
-
-#if defined(DEBUG)
-void COMPONENT::Show( int aNestLevel, REPORTER& aReporter )
-{
-    NestedSpace( aNestLevel, aReporter );
-    aReporter.Report( wxT( "<component>\n" ) );
-    NestedSpace( aNestLevel+1, aReporter );
-    aReporter.Report( wxString::Format( wxT( "<ref=%s value=%s name=%s library=%s footprint=%s "
-                                             "footprint-lib=%s timestamp=%s>\n" ),
-                                        GetChars( m_reference ), GetChars( m_value ),
-                                        GetChars( m_name ), GetChars( m_library ),
-                                        GetChars( m_footprintName ), GetChars( m_footprintLib ),
-                                        GetChars( m_timeStamp ) ) );
-
-    if( !m_footprintFilters.IsEmpty() )
-    {
-        NestedSpace( aNestLevel+1, aReporter );
-        aReporter.Report( wxT( "<fp_filters>\n" ) );
-
-        for( unsigned i = 0;  i < m_footprintFilters.GetCount();  i++ )
-        {
-            NestedSpace( aNestLevel+2, aReporter );
-            aReporter.Report( wxString::Format( wxT( "<%s>\n" ),
-                                                GetChars( m_footprintFilters[i] ) ) );
-        }
-
-        NestedSpace( aNestLevel+1, aReporter );
-        aReporter.Report( wxT( "</fp_filters>\n" ) );
-    }
-
-    if( !m_nets.empty() )
-    {
-        NestedSpace( aNestLevel+1, aReporter );
-        aReporter.Report( wxT( "<nets>\n" ) );
-
-        for( unsigned i = 0;  i < m_nets.size();  i++ )
-            m_nets[i].Show( aNestLevel+3, aReporter );
-
-        NestedSpace( aNestLevel+1, aReporter );
-        aReporter.Report( "</nets>\n" );
-    }
-
-    NestedSpace( aNestLevel, aReporter );
-    aReporter.Report( "</component>\n" );
-}
-#endif
-
-
-void NETLIST::AddComponent( COMPONENT* aComponent )
-{
-    m_components.push_back( aComponent );
-}
-
-
-COMPONENT* NETLIST::GetComponentByReference( const wxString& aReference )
-{
-    COMPONENT* component = NULL;
-
-    for( unsigned i = 0;  i < m_components.size();  i++ )
-    {
-        if( m_components[i].GetReference() == aReference )
-        {
-            component = &m_components[i];
-            break;
-        }
-    }
-
-    return component;
-}
-
-
-COMPONENT* NETLIST::GetComponentByTimeStamp( const wxString& aTimeStamp )
-{
-    COMPONENT* component = NULL;
-
-    for( unsigned i = 0;  i < m_components.size();  i++ )
-    {
-        if( m_components[i].GetTimeStamp() == aTimeStamp )
-        {
-            component = &m_components[i];
-            break;
-        }
-    }
-
-    return component;
-}
-
-
-/**
- * Function ByFootprintName
- * is a helper function used to sort the component list used by loadNewModules.
- */
-static bool ByFootprintName( const COMPONENT& ref, const COMPONENT& cmp )
-{
-    return ref.GetFootprintName().CmpNoCase( cmp.GetFootprintName() ) > 0;
-}
-
-
-void NETLIST::SortByFootprintName()
-{
-    m_components.sort( ByFootprintName );
-}
-
-
-/**
- * Operator <
- * compares two #COMPONENT objects by reference designator.
- */
-bool operator < ( const COMPONENT& item1, const COMPONENT& item2 )
-{
-    return StrNumCmp( item1.GetReference(), item2.GetReference(), INT_MAX, true ) < 0;
-}
-
-
-void NETLIST::SortByReference()
-{
-    m_components.sort();
-}
-
-
-bool NETLIST::AnyFootprintsLinked() const
-{
-    for( unsigned i = 0;  i < m_components.size();  i++ )
-    {
-        if( !m_components[i].GetFootprintName().IsEmpty() )
-            return true;
-    }
-
-    return false;
-}
-
-
-bool NETLIST::AllFootprintsLinked() const
-{
-    for( unsigned i = 0;  i < m_components.size();  i++ )
-    {
-        if( m_components[i].GetFootprintName().IsEmpty() )
-            return false;
-    }
-
-    return true;
-}
-
-
-bool NETLIST::AnyFootprintsChanged() const
-{
-    for( unsigned i = 0;  i < m_components.size();  i++ )
-    {
-        if( m_components[i].FootprintChanged() )
-            return true;
-    }
-
-    return false;
-}
-
-
-#if defined( DEBUG )
-void NETLIST::Show( int aNestLevel, REPORTER& aReporter )
-{
-    NestedSpace( aNestLevel, aReporter );
-    aReporter.Report( "<netlist>\n" );
-
-    if( !m_components.empty() )
-    {
-        NestedSpace( aNestLevel+1, aReporter );
-        aReporter.Report( "<components>\n" );
-
-        for( unsigned i = 0;  i < m_components.size();  i++ )
-        {
-            m_components[i].Show( aNestLevel+2, aReporter );
-        }
-
-        NestedSpace( aNestLevel+1, aReporter );
-
-        aReporter.Report( "</components>\n" );
-    }
-
-    NestedSpace( aNestLevel, aReporter );
-    aReporter.Report( "</netlist>\n" );
-}
-#endif
 
 
 NETLIST_READER::~NETLIST_READER()
@@ -306,7 +52,6 @@ NETLIST_READER::~NETLIST_READER()
         m_footprintReader = NULL;
     }
 }
-
 
 
 NETLIST_READER::NETLIST_FILE_T NETLIST_READER::GuessNetlistFileType( LINE_READER* aLineReader )
@@ -447,14 +192,29 @@ bool CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
         // Find the corresponding item in component list:
         COMPONENT* component = aNetlist->GetComponentByReference( reference );
 
-        // the corresponding component could be no more existing in netlist:
-        // this is the case when it is just removed from schematic,
-        // and still exists in footprint assignment list, before this list is updated
-        // This is an usual case during the life of a design
+        // The corresponding component could no longer existing in the netlist.  This
+        // can happed when it is removed from schematic and still exists in footprint
+        // assignment list.  This is an usual case during the life of a design.
         if( component )
-            component->SetFootprintName( footprint );
+        {
+            FPID fpid;
+
+            if( !footprint.IsEmpty() && fpid.Parse( footprint ) >= 0 )
+            {
+                wxString error;
+                error.Printf( _( "invalid PFID in\nfile: <%s>\nline: %d" ),
+                              GetChars( m_lineReader->GetSource() ),
+                              m_lineReader->LineNumber() );
+
+                THROW_IO_ERROR( error );
+            }
+
+            component->SetFPID( fpid );
+        }
         else
+        {
             ok = false;     // can be used to display a warning in Pcbnew.
+        }
     }
 
     return ok;

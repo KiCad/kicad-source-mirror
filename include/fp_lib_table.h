@@ -31,13 +31,16 @@
 #include <vector>
 #include <map>
 
-//#include <fpid.h>
 #include <io_mgr.h>
 
 
+class wxFileName;
 class OUTPUTFORMATTER;
 class MODULE;
 class FP_LIB_TABLE_LEXER;
+class NETLIST;
+class REPORTER;
+
 
 /**
  * Class FP_LIB_TABLE
@@ -356,10 +359,48 @@ public:
     const ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
 
     /**
+     * Function FindRowByURI
+     * returns a #FP_LIB_TABLE::ROW if aURE is found in this table or in any chained
+     * fallBack table fragments, else NULL.
+     */
+    const ROW* FindRowByURI( const wxString& aURI );
+
+    /**
      * Function IsEmpty
      * @return true if the footprint library table is empty.
      */
     bool IsEmpty() const;
+
+    /**
+     * Function MissingLegacyLibs
+     * tests the list of \a aLibNames by URI to determine if any of them are missing from
+     * the #FP_LIB_TABLE.
+     *
+     * @note The missing legacy footprint library test is performed by using old library
+     *       file path lookup method.  If the library is found, it is compared against all
+     *       of the URIs in the table rather than the nickname.  This was done because the
+     *       user could change the nicknames from the default table.  Using the full path
+     *       is more reliable.
+     *
+     * @param aLibNames is the list of legacy library names.
+     * @param aErrorMsg is a pointer to a wxString object to store the URIs of any missing
+     *                  legacy library paths.  Can be NULL.
+     * @return true if there are missing legacy libraries.  Otherwise false.
+     */
+    bool MissingLegacyLibs( const wxArrayString& aLibNames, wxString* aErrorMsg = NULL );
+
+    /**
+     * Function ConvertFromLegacy
+     * converts the footprint names in \a aNetList from the legacy fromat to the #FPID format.
+     *
+     * @param aNetList is the #NETLIST object to convert.
+     * @param aLibNames is the list of legacy footprint library names from the currently loaded
+     *                  project.
+     * @param aReporter is the #REPORTER object to dump messages into.
+     * @return true if all footprint names were successfully converted to a valid FPID.
+     */
+    bool ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aLibNames,
+                            REPORTER* aReporter = NULL ) throw( IO_ERROR );
 
     /**
      * Function ExpandEnvSubsitutions
@@ -379,8 +420,11 @@ public:
      * time being.
      *
      * @param aTable the #FP_LIB_TABLE object to load.
+     * @return true if the global library table exists and is loaded properly.
+     * @throw IO_ERROR if an error occurs attempting to load the footprint library
+     *                 table.
      */
-    static void LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR );
+    static bool LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR );
 
     /**
      * Function GetGlobalTableFileName
@@ -393,6 +437,18 @@ public:
      * @return the footprint library file name.
      */
     static wxString GetFileName();
+
+    /**
+     * Function Load
+     * loads the footprint library table using the path defined in \a aFileName with
+     * \a aFallBackTable.
+     *
+     * @param aFileName contains the path and possible the file name and extension.
+     * @param aFallBackTable the fall back footprint library table which can be NULL.
+     * @throw IO_ERROR if an error occurs attempting to load the footprint library
+     *                 table.
+     */
+    void Load( const wxFileName& aFileName, FP_LIB_TABLE* aFallBackTable ) throw( IO_ERROR );
 
 protected:
 

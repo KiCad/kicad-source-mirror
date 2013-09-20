@@ -36,6 +36,9 @@
 #include <bitmaps.h>
 #include <msgpanel.h>
 #include <wildcards_and_files_ext.h>
+#include <fpid.h>
+#include <fp_lib_table.h>
+#include <pcbcommon.h>
 
 #include <io_mgr.h>
 #include <class_module.h>
@@ -473,10 +476,59 @@ EDA_COLOR_T DISPLAY_FOOTPRINTS_FRAME::GetGridColor() const
 
 MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 {
-    CVPCB_MAINFRAME* parent = ( CVPCB_MAINFRAME* ) GetParent();
+    MODULE* footprint = NULL;
 
     try
     {
+#if defined( USE_FP_LIB_TABLE )
+        FPID fpid;
+
+        if( fpid.Parse( aFootprintName ) >= 0 )
+        {
+            DisplayInfoMessage( this, wxString::Format( wxT( "Footprint ID <%s> is not valid." ),
+                                                        GetChars( aFootprintName ) ) );
+            return NULL;
+        }
+
+        wxString libName = FROM_UTF8( fpid.GetLibNickname().c_str() );
+
+        wxLogDebug( wxT( "Load footprint <%s> from library <%s>." ),
+                    fpid.GetFootprintName().c_str(), fpid.GetLibNickname().c_str()  );
+
+        const FP_LIB_TABLE::ROW* row;
+
+        try
+        {
+            row = m_footprintLibTable->FindRow( libName );
+
+            if( row == NULL )
+            {
+                wxString msg;
+                msg.Printf( _( "No library named <%s> was found in the footprint library table." ),
+                            fpid.GetLibNickname().c_str() );
+                DisplayInfoMessage( this, msg );
+                return NULL;
+            }
+        }
+        catch( IO_ERROR ioe )
+        {
+            DisplayError( this, ioe.errorText );
+        }
+
+        wxString footprintName = FROM_UTF8( fpid.GetFootprintName().c_str() );
+        wxString libPath = row->GetFullURI();
+
+        libPath = FP_LIB_TABLE::ExpandSubstitutions( libPath );
+
+        wxLogDebug( wxT( "Loading footprint <%s> from library <%s>." ),
+                    GetChars( footprintName ), GetChars( libPath ) );
+
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::EnumFromStr( row->GetType() ) ) );
+
+        footprint = pi->FootprintLoad( libPath, footprintName );
+#else
+        CVPCB_MAINFRAME* parent = ( CVPCB_MAINFRAME* ) GetParent();
+
         PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
         for( unsigned i = 0; i < parent->m_ModuleLibNames.GetCount();  ++i )
@@ -493,24 +545,28 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
                                                  fn.GetFullName().GetData() );
 
                 // @todo we should not be using wxMessageBox directly.
-                wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
+                wxMessageBox( msg, wxEmptyString, wxOK | wxICON_ERROR, this );
                 continue;
             }
 
-            MODULE* footprint = pi->FootprintLoad( libPath, aFootprintName );
+            footprint = pi->FootprintLoad( libPath, aFootprintName );
 
-            if( footprint )
-            {
-                footprint->SetParent( (EDA_ITEM*) GetBoard() );
-                footprint->SetPosition( wxPoint( 0, 0 ) );
-                return footprint;
-            }
+            if( footprint != NULL )
+                break;
         }
+#endif
     }
     catch( IO_ERROR ioe )
     {
         DisplayError( this, ioe.errorText );
         return NULL;
+    }
+
+    if( footprint )
+    {
+        footprint->SetParent( (EDA_ITEM*) GetBoard() );
+        footprint->SetPosition( wxPoint( 0, 0 ) );
+        return footprint;
     }
 
     wxString msg = wxString::Format( _( "Footprint '%s' not found" ), aFootprintName.GetData() );
@@ -532,6 +588,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
         FOOTPRINT_INFO* module_info = parentframe->m_footprints.GetModuleInfo( footprintName );
 
         const wxChar *libname;
+
         if( module_info )
             libname = GetChars( module_info->GetLibraryPath() );
         else

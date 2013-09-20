@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
+ * @author Wayne Stambaugh <stambaughw@verizon.net>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -906,6 +907,11 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             NeedRIGHT();
             break;
 
+        case T_blind_buried_vias_allowed:
+            designSettings.m_BlindBuriedViaAllowed = parseBool();
+            NeedRIGHT();
+            break;
+
         case T_uvia_min_size:
             designSettings.m_MicroViasMinSize = parseBoardUnits( T_uvia_min_size );
             NeedRIGHT();
@@ -1534,15 +1540,25 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
     wxCHECK_MSG( CurTok() == T_module, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as MODULE." ) );
 
-    wxPoint pt;
-    T       token;
+    wxString name;
+    wxPoint  pt;
+    T        token;
+    FPID     fpid;
 
     auto_ptr< MODULE > module( new MODULE( m_board ) );
 
     module->SetInitialComments( aInitialComments );
 
     NeedSYMBOLorNUMBER();
-    module->SetLibRef( FromUTF8() );
+    name = FromUTF8();
+
+    if( !name.IsEmpty() && fpid.Parse( FromUTF8() ) >= 0 )
+    {
+        wxString error;
+        error.Printf( _( "invalid PFID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                      GetChars( CurSource() ), CurLineNumber(), CurOffset() );
+        THROW_IO_ERROR( error );
+    }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -1741,6 +1757,7 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
         }
     }
 
+    module->SetFPID( fpid );
     module->CalculateBoundingBox();
 
     return module.release();

@@ -139,12 +139,33 @@ typedef unsigned LAYER_MSK;
 
 #define NO_LAYERS               0x00000000
 
-/** return a one bit layer mask from a layer number
- * aLayerNumber = the layer number to convert (0 .. LAYERS-1)
+/**
+ * @return a one bit layer mask from a layer number
+ * @param aLayerNumber = the layer number to convert (0 .. LAYERS-1)
  */
 inline LAYER_MSK GetLayerMask( LAYER_NUM aLayerNumber )
 {
     return 1 << aLayerNumber;
+}
+
+/**
+ * @return bool if aLayerNumber is a layer contained in aMask
+ * @param aMask = a layer mask
+ * @param aLayerNumber is the layer id to test
+ */
+inline bool IsLayerInList( LAYER_MSK aMask, LAYER_NUM aLayerNumber )
+{
+    return (aMask & GetLayerMask( aLayerNumber )) != 0;
+}
+
+/**
+ * @return bool if 2 layer masks have a comman layer
+ * @param aMask1 = a layer mask
+ * @param aMask2 = an other layer mask
+ */
+inline bool IsLayerMasksIntersect( LAYER_MSK aMask1, LAYER_MSK aMask2 )
+{
+    return (aMask1 & aMask2) != 0;
 }
 
 /**
@@ -284,11 +305,11 @@ inline bool IsPcbLayer( LAYER_NUM aLayer )
  * Function IsCopperLayer
  * tests whether a layer is a copper layer
  * @param aLayer = Layer  to test
- * @return true if aLayer is a valid copper layer 
+ * @return true if aLayer is a valid copper layer
  */
 inline bool IsCopperLayer( LAYER_NUM aLayer )
 {
-    return aLayer >= FIRST_COPPER_LAYER 
+    return aLayer >= FIRST_COPPER_LAYER
         && aLayer <= LAST_COPPER_LAYER;
 }
 
@@ -309,12 +330,12 @@ inline bool IsNonCopperLayer( LAYER_NUM aLayer )
    So a layer can be:
    - Front
    - Back
-   - Neither (internal or auxiliary) 
-   
+   - Neither (internal or auxiliary)
+
    The check most frequent is for back layers, since it involves flips */
 
 
-/** 
+/**
  * Layer classification: check if it's a front layer
  */
 inline bool IsFrontLayer( LAYER_NUM aLayer )
@@ -326,7 +347,7 @@ inline bool IsFrontLayer( LAYER_NUM aLayer )
              aLayer == SOLDERPASTE_N_FRONT );
 }
 
-/** 
+/**
  * Layer classification: check if it's a back layer
  */
 inline bool IsBackLayer( LAYER_NUM aLayer )
@@ -354,7 +375,7 @@ LAYER_MSK FlipLayerMask( LAYER_MSK aMask );
 
 /**
  * Extract the set layer from a mask. Returns UNDEFINED_LAYER if more
- * than one is set or UNSELECTED_LAYER if none is 
+ * than one is set or UNSELECTED_LAYER if none is
  */
 LAYER_NUM ExtractLayer( LAYER_MSK aMask );
 

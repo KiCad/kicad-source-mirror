@@ -598,6 +598,8 @@ public:
     /**
      * Populates the list from a S expr description stored in a string
      * @param aPageLayout = the S expr string
+     * @param Append Do not delete old layout if true and append \a aPageLayout
+     *               the existing one.
      */
     void SetPageLayout( const char* aPageLayout, bool Append = false );
 

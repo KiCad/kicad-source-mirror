@@ -67,10 +67,10 @@ private:
     void Change_Current_Module();
     void Change_ModuleId( bool aUseValue );
     void Change_ModuleAll();
-    int  Maj_ListeCmp( const wxString& reference, const wxString& old_name,
-                       const wxString& new_name, bool ShowError );
+    int  Maj_ListeCmp( const wxString& reference, const FPID& old_name,
+                       const FPID& new_name, bool ShowError );
     bool Change_1_Module( MODULE*            Module,
-                          const wxString&    new_module,
+                          const FPID&        new_module,
                           PICKED_ITEMS_LIST* aUndoPickList,
                           bool               ShowError );
 };
@@ -106,8 +106,8 @@ void DIALOG_EXCHANGE_MODULE::Init()
 {
     SetFocus();
 
-    m_OldModule->AppendText( m_CurrentModule->GetLibRef() );
-    m_NewModule->AppendText( m_CurrentModule->GetLibRef() );
+    m_OldModule->AppendText( FROM_UTF8( m_CurrentModule->GetFPID().Format().c_str() ) );
+    m_NewModule->AppendText( FROM_UTF8( m_CurrentModule->GetFPID().Format().c_str() ) );
     m_OldValue->AppendText( m_CurrentModule->GetValue() );
     m_Selection->SetSelection( s_SelectionMode );
 
@@ -168,8 +168,8 @@ void DIALOG_EXCHANGE_MODULE::OnSelectionClicked( wxCommandEvent& event )
  * Return 1 if error
  */
 int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
-                                          const wxString& old_name,
-                                          const wxString& new_name,
+                                          const FPID&     old_name,
+                                          const FPID&     new_name,
                                           bool            ShowError )
 {
     wxFileName  fn;
@@ -241,7 +241,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
 
         if( start_descr && strnicmp( line, "IdModule", 8 ) == 0 )
         {
-            sprintf( line + 8, "  = %s;\n", TO_UTF8( new_name ) );
+            sprintf( line + 8, "  = %s;\n", new_name.Format().c_str() );
 
             msg = wxT( " * in <" ) + fn.GetFullPath() + wxT( ">.\n" );
             m_WinMessages->AppendText( msg );
@@ -306,7 +306,8 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
     MODULE*  Module, * PtBack;
     bool     change = false;
     wxString newmodulename = m_NewModule->GetValue();
-    wxString value, lib_reference;
+    wxString value;
+    FPID     lib_reference;
     bool     check_module_value = false;
     int      ShowErr = 3;           // Post 3 error messages max.
 
@@ -316,21 +317,22 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
     if( newmodulename == wxEmptyString )
         return;
 
-    lib_reference = m_CurrentModule->GetLibRef();
+    lib_reference = m_CurrentModule->GetFPID();
 
     if( aUseValue )
     {
         check_module_value = true;
         value = m_CurrentModule->GetValue();
         msg.Printf( _( "Change modules %s -> %s (for value = %s)?" ),
-                    GetChars( m_CurrentModule->GetLibRef() ),
+                    GetChars( FROM_UTF8( m_CurrentModule->GetFPID().Format().c_str() ) ),
                     GetChars( newmodulename ),
                     GetChars( m_CurrentModule->GetValue() ) );
     }
     else
     {
         msg.Printf( _( "Change modules %s -> %s ?" ),
-                    GetChars( lib_reference ), GetChars( newmodulename ) );
+                    GetChars( FROM_UTF8( lib_reference.Format().c_str() ) ),
+                    GetChars( newmodulename ) );
     }
 
     if( !IsOK( this, msg ) )
@@ -350,7 +352,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
     {
         PtBack = Module->Back();
 
-        if( lib_reference.CmpNoCase( Module->GetLibRef() ) != 0 )
+        if( lib_reference != Module->GetFPID() )
             continue;
 
         if( check_module_value )
@@ -412,7 +414,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
     {
         PtBack = Module->Back();
 
-        if( Change_1_Module( Module, Module->GetLibRef(), &pickList, ShowErr ) )
+        if( Change_1_Module( Module, Module->GetFPID(), &pickList, ShowErr ) )
             change = true;
         else if( ShowErr )
             ShowErr--;
@@ -443,11 +445,11 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
  * Ratsnest must be recalculated after module exchange
  */
 bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
-                                              const wxString&    new_module,
+                                              const FPID&        new_module,
                                               PICKED_ITEMS_LIST* aUndoPickList,
                                               bool               ShowError )
 {
-    wxString namecmp, oldnamecmp;
+    FPID namecmp, oldnamecmp;
     MODULE*  NewModule;
     wxString line;
 
@@ -457,18 +459,18 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
     wxBusyCursor dummy;
 
     // Copy parameters from the old module.
-    oldnamecmp = Module->GetLibRef();
+    oldnamecmp = Module->GetFPID();
     namecmp    = new_module;
 
     // Load module.
     line.Printf( _( "Change module %s (from %s)  " ),
                  GetChars( Module->GetReference() ),
-                 GetChars( oldnamecmp ) );
+                 oldnamecmp.Format().c_str() );
     m_WinMessages->AppendText( line );
 
-    namecmp.Trim( true );
-    namecmp.Trim( false );
-    NewModule = m_Parent->GetModuleLibrary( wxEmptyString, namecmp, ShowError );
+    NewModule = m_Parent->GetModuleLibrary( FROM_UTF8( namecmp.GetLibNickname().c_str() ),
+                                            FROM_UTF8( namecmp.GetFootprintName().c_str() ),
+                                            ShowError );
 
     if( NewModule == NULL )  // New module not found, redraw the old one.
     {
@@ -641,7 +643,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         fprintf( FichCmp, "ValeurCmp = %s;\n",
                  !Module->GetValue().IsEmpty() ?
                  TO_UTF8( Module->GetValue() ) : "[NoVal]" );
-        fprintf( FichCmp, "IdModule  = %s;\n", TO_UTF8( Module->GetLibRef() ) );
+        fprintf( FichCmp, "IdModule  = %s;\n", Module->GetFPID().Format().c_str() );
         fprintf( FichCmp, "EndCmp\n" );
     }
 

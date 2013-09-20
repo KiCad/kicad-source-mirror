@@ -345,7 +345,7 @@ void PCB_LAYER_WIDGET::ReFill()
 void PCB_LAYER_WIDGET::OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor )
 {
     myframe->GetBoard()->SetLayerColor( aLayer, aColor );
-    myframe->ReCreateLayerBox( NULL );
+    myframe->ReCreateLayerBox( false );
     myframe->GetCanvas()->Refresh();
 }
 

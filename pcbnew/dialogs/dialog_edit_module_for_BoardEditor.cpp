@@ -308,19 +308,9 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
     m_CostRot180Ctrl->SetValue( m_CurrentModule->GetPlacementCost180() );
 
     // Initialize 3D parameters
-
-    wxBoxSizer* BoxSizer = new wxBoxSizer( wxVERTICAL );
-    m_3D_Scale = new VERTEX_VALUE_CTRL( m_Panel3D, _( "Shape Scale:" ), BoxSizer );
-    m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
-
-    BoxSizer    = new wxBoxSizer( wxVERTICAL );
-    m_3D_Offset = new VERTEX_VALUE_CTRL( m_Panel3D, _( "Shape Offset (inch):" ), BoxSizer );
-    m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
-
-    BoxSizer = new wxBoxSizer( wxVERTICAL );
-    m_3D_Rotation = new VERTEX_VALUE_CTRL( m_Panel3D,
-                                           _( "Shape Rotation (degrees):" ), BoxSizer );
-    m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
+    m_3D_Scale = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeScale );
+    m_3D_Offset = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeOffset );
+    m_3D_Rotation = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeRotation );
 
     // if m_3D_ShapeNameListBox is not empty, preselect first 3D shape
     if( m_3D_ShapeNameListBox->GetCount() > 0 )

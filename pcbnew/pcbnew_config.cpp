@@ -222,13 +222,30 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     SetElementVisibility( RATSNEST_VISIBLE, showRats );
 #endif
 
+    fn = GetBoard()->GetFileName();
+
+    // Check if a project footprint table is defined and load it.  If no project footprint
+    // table is defined, then the global library table is the footprint library table.
+#if defined( USE_FP_LIB_TABLE )
+    delete m_footprintLibTable;
+
+    m_footprintLibTable = new FP_LIB_TABLE();
+
+    try
+    {
+        m_footprintLibTable->Load( fn, m_globalFootprintTable );
+    }
+    catch( IO_ERROR ioe )
+    {
+        DisplayError( this, ioe.errorText );
+    }
+#endif
+
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
     // If empty, the default descr is loaded
     WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    pglayout.SetPageLayout(BASE_SCREEN::m_PageLayoutDescrFileName);
-
-    loadFootprintLibTable();
+    pglayout.SetPageLayout( BASE_SCREEN::m_PageLayoutDescrFileName );
 
     return true;
 }
@@ -548,34 +565,5 @@ void PCB_EDIT_FRAME::ReadMacros()
         }
 
         macrosNode = (XNODE*) macrosNode->GetNext();
-    }
-}
-
-
-void PCB_EDIT_FRAME::loadFootprintLibTable()
-{
-    delete m_footprintLibTable;
-
-    wxFileName fn = GetBoard()->GetFileName();
-    fn.SetName( FP_LIB_TABLE::GetFileName() );
-    fn.SetExt( wxEmptyString );
-
-    // Check if a project footprint table is defined and load it.  If no project footprint
-    // table is defined, then the global library table is the footprint library table.
-
-    m_footprintLibTable = new FP_LIB_TABLE( m_globalFootprintTable );
-
-    if( fn.FileExists() )
-    {
-        try
-        {
-            FILE_LINE_READER reader( fn.GetFullPath() );
-            FP_LIB_TABLE_LEXER lexer( &reader );
-            m_footprintLibTable->Parse( &lexer );
-        }
-        catch( IO_ERROR ioe )
-        {
-            DisplayError( this, ioe.errorText );
-        }
     }
 }

@@ -4,8 +4,10 @@
 # Example: Sorted and Grouped HTML BOM
 #
 
+from __future__ import print_function
+
 # Import the KiCad python helper module and the csv formatter
-import ky_generic_netlist_reader
+import kicad_netlist_reader
 import sys
 
 # Start with a basic html template
@@ -30,22 +32,24 @@ html = """
 
 # Generate an instance of a generic netlist, and load the netlist tree from
 # the command line option. If the file doesn't exist, execution will stop
-net = ky_generic_netlist_reader.netlist(sys.argv[1])
+net = kicad_netlist_reader.netlist(sys.argv[1])
 
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
 try:
     f = open(sys.argv[2], 'w')
 except IOError:
-    print >> sys.stderr, __file__, ":", e
+    print(__file__, ":", e, file=sys.stderr)
     f = stdout
+
+components = net.getInterestingComponents()
 
 # Output a set of rows for a header providing general information
 html = html.replace('<!--SOURCE-->', net.getSource())
 html = html.replace('<!--DATE-->', net.getDate())
 html = html.replace('<!--TOOL-->', net.getTool())
 html = html.replace('<!--COMPCOUNT-->', "<b>Component Count:</b>" + \
-    str(len(net.components)))
+    str(len(components)))
 
 row = "<tr><th style='width:640px'>Ref</th>" + "<th>Qnty</th>"
 row += "<th>Value</th>" + "<th>Part</th>" + "<th>Datasheet</th>"
@@ -54,8 +58,8 @@ row += "<th>Description</th>" + "<th>Vendor</th></tr>"
 html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 
 # Get all of the components in groups of matching parts + values
-# (see ky_generic_netlist_reader.py)
-grouped = net.groupComponents()
+# (see kicad_netlist_reader.py)
+grouped = net.groupComponents(components)
 
 # Output all of the component information
 for group in grouped:
@@ -64,16 +68,18 @@ for group in grouped:
     # Add the reference of every component in the group and keep a reference
     # to the component so that the other data can be filled in once per group
     for component in group:
-        refs += component.getRef() + ", "
+        if len(refs) > 0:
+            refs += ", "
+        refs += component.getRef()
         c = component
 
     row = "<tr><td>" + refs +"</td><td>" + str(len(group))
-    row += "</td><td>" + c.getValue() + "</td><td>" + c.getLib() + "/"
-    row += c.getPart() + "</td><td>" + c.getDatasheet() + "</td><td>"
+    row += "</td><td>" + c.getValue() + "</td><td>" + c.getLibName() + ":"
+    row += c.getPartName() + "</td><td>" + c.getDatasheet() + "</td><td>"
     row += c.getDescription() + "</td><td>" + c.getField("Vendor")
     row += "</td></tr>"
 
     html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 
 # Print the formatted html to the file
-print >> f, html
+print(html, file=f)

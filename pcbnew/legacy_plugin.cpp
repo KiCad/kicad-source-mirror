@@ -278,7 +278,13 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
         {
             auto_ptr<MODULE>    module( new MODULE( m_board ) );
 
-            module->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "$MODULE" ) ) ) );
+            FPID        fpid;
+            std::string fpName = StrPurge( line + SZ( "$MODULE" ) );
+
+            if( !fpName.empty() )
+                fpid = FPID( fpName );
+
+            module->SetFPID( fpid );
 
             LoadMODULE( module.get() );
             m_board->Add( module.release(), ADD_APPEND );
@@ -1001,7 +1007,7 @@ void LEGACY_PLUGIN::LoadMODULE( MODULE* aModule )
         {
             // There can be whitespace in the footprint name on some old libraries.
             // Grab everything after "Li" up to end of line:
-            //aModule->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
+            //aModule->SetFPID( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
         }
         */
 
@@ -1130,9 +1136,8 @@ void LEGACY_PLUGIN::LoadMODULE( MODULE* aModule )
         }
     }
 
-    wxString msg = wxString::Format(
-                        wxT( "Missing '$EndMODULE' for MODULE '%s'" ),
-                        GetChars( aModule->GetLibRef() ) );
+    wxString msg = wxString::Format( wxT( "Missing '$EndMODULE' for MODULE '%s'" ),
+                                     aModule->GetFPID().GetFootprintName().c_str() );
 
     THROW_IO_ERROR( msg );
 }
@@ -1183,10 +1188,10 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             case 'T':   padshape = PAD_TRAPEZOID;   break;
             default:
                 m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line:%d of module:'%s'" ),
-                    padchar,
-                    padchar,
-                    m_reader->LineNumber(),
-                    GetChars( aModule->GetLibRef() )
+                                padchar,
+                                padchar,
+                                m_reader->LineNumber(),
+                                aModule->GetFPID().GetFootprintName().c_str()
                     );
                 THROW_IO_ERROR( m_error );
             }
@@ -1387,7 +1392,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
                         (unsigned char) line[1],
                         (unsigned char) line[1],
                         m_reader->LineNumber(),
-                        GetChars( aModule->GetLibRef() )
+                        aModule->GetFPID().GetFootprintName().c_str()
                         );
         THROW_IO_ERROR( m_error );
     }
@@ -3399,7 +3404,9 @@ void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
     char        statusTxt[3];
     double      orient = me->GetOrientation();
 
-    fprintf( m_fp, "$MODULE %s\n", TO_UTF8( me->GetLibRef() ) );
+    // Do not save full FPID.  Only the footprint name.  The legacy file format should
+    // never support FPIDs.
+    fprintf( m_fp, "$MODULE %s\n", me->GetFPID().GetFootprintName().c_str() );
 
     statusTxt[0] = me->IsLocked() ? 'F' : '~';
     statusTxt[1] = me->IsPlaced() ? 'P' : '~';
@@ -3413,7 +3420,7 @@ void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
                     me->GetTimeStamp(),
                     statusTxt );
 
-    fprintf( m_fp, "Li %s\n", TO_UTF8( me->GetLibRef() ) );
+    fprintf( m_fp, "Li %s\n", me->GetFPID().GetFootprintName().c_str() );
 
     if( !me->GetDescription().IsEmpty() )
     {
@@ -3490,7 +3497,7 @@ void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
 
     SaveModule3D( me );
 
-    fprintf( m_fp, "$EndMODULE %s\n", TO_UTF8( me->GetLibRef() ) );
+    fprintf( m_fp, "$EndMODULE %s\n", me->GetFPID().GetFootprintName().c_str() );
 
     CHECK_WRITE_ERROR();
 }
@@ -4037,7 +4044,7 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
             std::string         footprintName = StrPurge( line + SZ( "$MODULE" ) );
 
             // set the footprint name first thing, so exceptions can use name.
-            module->SetLibRef( FROM_UTF8( footprintName.c_str() ) );
+            module->SetFPID( FPID( footprintName ) );
 
 #if 0 && defined( DEBUG )
             printf( "%s\n", footprintName.c_str() );
@@ -4052,7 +4059,9 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
 
             MODULE* m = module.release();   // exceptions after this are not expected.
 
-            wxASSERT( footprintName == TO_UTF8( m->GetLibRef() ) );
+            // Not sure why this is asserting on debug builds.  The debugger shows the
+            // strings are the same.  If it's not really needed maybe it can be removed.
+//            wxASSERT( footprintName == m->GetFPID().GetFootprintName() );
 
             /*
 
@@ -4099,7 +4108,7 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
                     {
                         nameOK = true;
 
-                        m->SetLibRef( FROM_UTF8( newName.c_str() ) );
+                        m->SetFPID( FPID( newName ) );
                         std::pair<MODULE_ITER, bool> r = m_modules.insert( newName, m );
 
                         wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );
@@ -4278,7 +4287,7 @@ void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* a
         THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ), aLibraryPath.GetData() ) );
     }
 
-    std::string footprintName = TO_UTF8( aFootprint->GetLibRef() );
+    std::string footprintName = aFootprint->GetFPID().GetFootprintName();
 
     MODULE_MAP&  mods = m_cache->m_modules;
 

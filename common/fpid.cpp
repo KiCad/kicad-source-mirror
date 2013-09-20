@@ -27,6 +27,7 @@
 #include <memory>
 #include <wx/wx.h>      // _()
 
+#include <macros.h>     // TO_UTF8()
 #include <fpid.h>
 
 
@@ -170,6 +171,12 @@ int FPID::Parse( const std::string& aId )
 }
 
 
+int FPID::Parse( const wxString& aId )
+{
+    return Parse( std::string( TO_UTF8( aId ) ) );
+}
+
+
 FPID::FPID( const std::string& aId ) throw( PARSE_ERROR )
 {
     int offset = Parse( aId );
@@ -179,6 +186,23 @@ FPID::FPID( const std::string& aId ) throw( PARSE_ERROR )
         THROW_PARSE_ERROR( _( "Illegal character found in FPID string" ),
                            wxString::FromUTF8( aId.c_str() ),
                            aId.c_str(),
+                           0,
+                           offset );
+    }
+}
+
+
+FPID::FPID( const wxString& aId ) throw( PARSE_ERROR )
+{
+    std::string id = TO_UTF8( aId );
+
+    int offset = Parse( id );
+
+    if( offset != -1 )
+    {
+        THROW_PARSE_ERROR( _( "Illegal character found in FPID string" ),
+                           wxString::FromUTF8( id.c_str() ),
+                           id.c_str(),
                            0,
                            offset );
     }
@@ -198,6 +222,12 @@ int FPID::SetLibNickname( const std::string& aLogical )
 }
 
 
+int FPID::SetLibNickname( const wxString& aLogical )
+{
+    return SetLibNickname( std::string( TO_UTF8( aLogical ) ) );
+}
+
+
 int FPID::SetFootprintName( const std::string& aFootprintName )
 {
     int          separation = int( aFootprintName.find_first_of( "/" ) );
@@ -213,6 +243,12 @@ int FPID::SetFootprintName( const std::string& aFootprintName )
     }
 
     return -1;
+}
+
+
+int FPID::SetFootprintName( const wxString& aFootprintName )
+{
+    return SetFootprintName( std::string( TO_UTF8( aFootprintName ) ) );
 }
 
 

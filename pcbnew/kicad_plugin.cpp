@@ -510,6 +510,8 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                       FMTIU( aBoard->m_ViasDimensionsList[ii].m_Drill ).c_str() );
 
     // for old versions compatibility:
+    if( aBoard->GetDesignSettings().m_BlindBuriedViaAllowed )
+        m_out->Print( aNestLevel+1, "(blind_buried_vias_allowed yes)\n" );
     m_out->Print( aNestLevel+1, "(uvia_size %s)\n",
                   FMTIU( aBoard->m_NetClasses.GetDefault()->GetuViaDiameter() ).c_str() );
     m_out->Print( aNestLevel+1, "(uvia_drill %s)\n",
@@ -866,7 +868,8 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         }
     }
 
-    m_out->Print( aNestLevel, "(module %s", m_out->Quotew( aModule->GetLibRef() ).c_str() );
+    m_out->Print( aNestLevel, "(module %s",
+                  m_out->Quotes( aModule->GetFPID().Format() ).c_str() );
 
     if( aModule->IsLocked() )
         m_out->Print( 0, " locked" );
@@ -1662,12 +1665,13 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
                                           aLibraryPath.GetData() ) );
     }
 
-    std::string footprintName = TO_UTF8( aFootprint->GetLibRef() );
+    std::string footprintName = aFootprint->GetFPID().GetFootprintName();
 
     MODULE_MAP& mods = m_cache->GetModules();
 
     // Quietly overwrite module and delete module file from path for any by same name.
-    wxFileName fn( aLibraryPath, aFootprint->GetLibRef(), KiCadFootprintFileExtension );
+    wxFileName fn( aLibraryPath, FROM_UTF8( aFootprint->GetFPID().GetFootprintName().c_str() ),
+                   KiCadFootprintFileExtension );
 
     if( !fn.IsOk() )
     {

@@ -1,5 +1,5 @@
 /**
- * @file pagelayout_editor/events_called_functions.cpp
+ * @file pagelayout_editor/events_functions.cpp
  * @brief page layout editor command event functions.
  */
 /*

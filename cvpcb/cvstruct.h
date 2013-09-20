@@ -30,7 +30,6 @@
 
 #include <wx/listctrl.h>
 
-#include <cvpcb.h>
 
 /*  Forward declarations of all top-level window classes. */
 class CVPCB_MAINFRAME;

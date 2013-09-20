@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 11 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+class PCB_LAYER_BOX_SELECTOR;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -19,6 +22,7 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/bmpcbox.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
@@ -43,7 +47,7 @@ class DIALOG_PCB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText10;
 		wxTextCtrl* m_SizeXCtrl;
 		wxTextCtrl* m_PositionXCtrl;
-		wxChoice* m_LayerSelectionCtrl;
+		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
 		wxChoice* m_DisplayCtrl;
 		wxStaticText* m_SizeYLabel;
 		wxStaticText* m_PositionYLabel;
@@ -69,7 +73,7 @@ class DIALOG_PCB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 433,450 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 483,450 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_PCB_TEXT_PROPERTIES_BASE();
 	
 };

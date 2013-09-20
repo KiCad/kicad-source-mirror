@@ -123,8 +123,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
     PCB_BASE_FRAME( aParent, MODULE_VIEWER_FRAME_TYPE, _( "Footprint Library Browser" ),
                     wxDefaultPosition, wxDefaultSize, aStyle, GetFootprintViewerFrameName() )
 {
-    wxASSERT( aTable != NULL );
-
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
     m_footprintLibTable = aTable;
@@ -211,8 +209,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
             GetBoard()->Add( footprint, ADD_APPEND );
 #else
         FPID id;
-        id.SetLibNickname( TO_UTF8( m_libraryName ) );
-        id.SetFootprintName( TO_UTF8( m_footprintName ) );
+        id.SetLibNickname( m_libraryName );
+        id.SetFootprintName( m_footprintName );
         GetBoard()->Add( loadFootprint( id ) );
 #endif
     }
@@ -506,8 +504,8 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
             GetBoard()->Add( footprint, ADD_APPEND );
 #else
         FPID id;
-        id.SetLibNickname( TO_UTF8( m_libraryName ) );
-        id.SetFootprintName( TO_UTF8( m_footprintName ) );
+        id.SetLibNickname( m_libraryName );
+        id.SetFootprintName( m_footprintName );
 
         try
         {

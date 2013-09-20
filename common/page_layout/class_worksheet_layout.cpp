@@ -1,5 +1,5 @@
 /**
- * @file class_worksheet_layuout.cpp
+ * @file class_worksheet_layout.cpp
  * @brief description of graphic items and texts to build a title block
  */
 

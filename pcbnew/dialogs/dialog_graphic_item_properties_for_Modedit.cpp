@@ -24,6 +24,7 @@
 #include <class_edge_mod.h>
 
 #include <dialog_graphic_item_properties_base.h>
+#include <class_pcb_layer_box_selector.h>
 
 class DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES: public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
 {
@@ -32,7 +33,6 @@ private:
     EDGE_MODULE* m_item;
     BOARD_DESIGN_SETTINGS  m_brdSettings;
     MODULE * m_module;
-    std::vector<LAYER_NUM> m_layerId;   // the layer Id with the same order as m_LayerSelectionCtrl widget
 
 public:
     DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES( FOOTPRINT_EDIT_FRAME* aParent,
@@ -129,7 +129,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
         m_EndPointXLabel->SetLabel(_("Start Point X"));
         m_EndPointYLabel->SetLabel(_("Start Point Y"));
 
-        // Here the angle is a double, but the UI is still working 
+        // Here the angle is a double, but the UI is still working
         // with integers
         msg << int( m_item->GetAngle() );
         m_Angle_Ctrl->SetValue(msg);
@@ -154,27 +154,16 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
 
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, m_brdSettings.m_ModuleSegmentWidth );
 
-    m_LayerSelectionCtrl->Append( m_parent->GetBoard()->GetLayerName( LAYER_N_BACK ) );
-    m_layerId.push_back( LAYER_N_BACK );
-    m_LayerSelectionCtrl->Append( m_parent->GetBoard()->GetLayerName( LAYER_N_FRONT ) );
-    m_layerId.push_back( LAYER_N_FRONT );
-    for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER; ++layer )
+    // Configure the layers list selector
+    m_LayerSelectionCtrl->SetLayersHotkeys( false );
+    m_LayerSelectionCtrl->SetLayerMask( INTERNAL_CU_LAYERS|EDGE_LAYER );
+    m_LayerSelectionCtrl->SetBoardFrame( m_parent );
+    m_LayerSelectionCtrl->Resync();
+    if( m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() ) < 0 )
     {
-        if( layer == EDGE_N )
-        // Do not use pcb edge layer for footprints, this is a special layer
-        // So skip it in list
-            continue;
-        m_LayerSelectionCtrl->Append( m_parent->GetBoard()->GetLayerName( layer ) );
-        m_layerId.push_back( layer );
-    }
-
-    for( unsigned ii = 0; ii < m_layerId.size(); ii++ )
-    {
-        if( m_layerId[ii] == m_item->GetLayer() )
-        {
-            m_LayerSelectionCtrl->SetSelection( ii );
-            break;
-        }
+        wxMessageBox( _("This item has an illegal layer id.\n"
+                        "Now, forced on the front silk screen layer. Please, fix it") );
+        m_LayerSelectionCtrl->SetLayerSelection( SILKSCREEN_N_FRONT );
     }
 }
 
@@ -191,14 +180,8 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
 /* Copy values in text control to the item parameters
 */
 {
-    int idx = m_LayerSelectionCtrl->GetCurrentSelection();
-    if( idx < 0 )
-    {
-        wxMessageBox( _("No valid layer selected for this item. Please, select a layer") );
-        return;
-    }
+    LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
 
-    LAYER_NUM layer = m_layerId[idx];
     if( IsCopperLayer( layer ) )
     {
         /* an edge is put on a copper layer: this it is very dangerous. a

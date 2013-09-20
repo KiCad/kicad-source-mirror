@@ -70,6 +70,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     // if true, when creating a new track starting on an existing track, use this track width
     m_UseConnectedTrackWidth = false;
 
+    m_BlindBuriedViaAllowed = false;            // true to allow blind/buried vias
     m_MicroViasAllowed = false;                 // true to allow micro vias
 
     m_DrawSegmentWidth = DEFAULT_GRAPHIC_THICKNESS;     // current graphic line width (not EDGE layer)

@@ -235,7 +235,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
         return NULL;
 
     // here the module is already in the BOARD, Create_1_Module() does that.
-    module->SetLibRef( wxT( "MuSelf" ) );
+    module->SetFPID( FPID( std::string( "MuSelf" ) ) );
     module->SetAttributes( MOD_VIRTUAL | MOD_CMS );
     module->ClearFlags();
     module->SetPosition( Mself.m_End );

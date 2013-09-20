@@ -181,6 +181,17 @@ public:
 
     void ViewReloadBoard( const BOARD* aBoard ) const;
 
+    /**
+     * Function SetFootprintLibTable
+     * set the footprint library table to \a aFootprintLibTable.
+     *
+     * @param aFootprintLibTable is a pointer to the #FP_LIB_TABLE object.
+     */
+    void SetFootprintLibTable( FP_LIB_TABLE* aFootprintLibTable )
+    {
+        m_footprintLibTable = aFootprintLibTable;
+    }
+
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
@@ -636,11 +647,19 @@ public:
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
 
 
-    // layerhandling:
-    // (See pcbnew/sel_layer.cpp for description of why null_layer parameter
-    // is provided)
-    LAYER_NUM SelectLayer( LAYER_NUM default_layer, LAYER_NUM min_layer, LAYER_NUM max_layer, bool null_layer = false );
-    void SelectLayerPair();
+    /** Install the dialog box for layer selection
+     * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
+     * @param aNotAllowedLayersMask = a layer mask for not allowed layers
+     *                            (= 0 to show all layers in use)
+     * @return the selected layer id
+     */
+    LAYER_NUM SelectLayer( LAYER_NUM aDefaultLayer, LAYER_MSK aNotAllowedLayersMask = 0 );
+
+    /* Display a list of two copper layers to choose a pair of copper layers
+     * the layer pair is used to fast switch between copper layers when placing vias
+     */
+    void SelectCopperLayerPair();
+
     virtual void SwitchLayer( wxDC* DC, LAYER_NUM layer );
 
     /**

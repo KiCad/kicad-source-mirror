@@ -214,6 +214,7 @@ set(PCB_COMMON_SRCS
     ../pcbnew/legacy_plugin.cpp
     ../pcbnew/kicad_plugin.cpp
     ../pcbnew/gpcb_plugin.cpp
+    ../pcbnew/pcb_netlist.cpp
     pcb_plot_params_keywords.cpp
     pcb_keywords.cpp
     ../pcbnew/pcb_parser.cpp

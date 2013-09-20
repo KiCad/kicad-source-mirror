@@ -124,7 +124,21 @@ void LIBRARY_LISTBOX::SetLibraryList( const wxArrayString& aList )
     if(  GetCount() == 0 || oldSelection < 0 || oldSelection >= GetCount() )
         SetSelection( 0, true );
 
-    Refresh();
+    if( m_libraryList.Count() )
+    {
+        RefreshItems( 0L, m_libraryList.Count()-1 );
+
+#if defined (__WXGTK__ )
+        // @bug On GTK and wxWidgets 2.8.x, this will assert in debug builds because the
+        //      column parameter is -1.  This was the only way to prevent GTK3 from
+        //      ellipsizing long strings down to a few characters.  It still doesn't set
+        //      the scroll bars correctly (too short) but it's better than any of the
+        //      other alternatives.  If someone knows how to fix this, please do.
+        SetColumnWidth( -1, wxLIST_AUTOSIZE );
+#else
+        SetColumnWidth( 0, wxLIST_AUTOSIZE );
+#endif
+    }
 }
 
 

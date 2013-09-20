@@ -38,17 +38,9 @@
 #include <class_board.h>
 #include <hotkeys.h>
 
-#include <wx/ownerdrw.h>
-#include <wx/menuitem.h>
-#include <wx/bmpcbox.h>
-#include <wx/wx.h>
-
 #include <class_pcb_layer_box_selector.h>
 
-/* class to display a layer list.
- *
- */
-
+// class to display a layer list in a wxBitmapComboBox.
 
 // Reload the Layers
 void PCB_LAYER_BOX_SELECTOR::Resync()
@@ -58,9 +50,14 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
     static DECLARE_LAYERS_ORDER_LIST( layertranscode );
     static DECLARE_LAYERS_HOTKEY( layerhk );
 
+    // Tray to fix a minimum width fot the BitmapComboBox
+    int minwidth = 80, h;
+    wxClientDC dc( GetParent() );   // The DC for "this" is not always initialized
+
+    #define BM_SIZE 14
     for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
     {
-        wxBitmap   layerbmp( 14, 14 );
+        wxBitmap   layerbmp( BM_SIZE, BM_SIZE );
         wxString   layername;
         LAYER_NUM  layerid = i;
 
@@ -70,23 +67,33 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
         if( ! IsLayerEnabled( layerid ) )
             continue;
 
+        if( ( m_layerMaskDisable & GetLayerMask( layerid ) ) )
+            continue;
+
         SetBitmapLayer( layerbmp, layerid );
 
         layername = GetLayerName( layerid );
 
         if( m_layerhotkeys && m_hotkeys != NULL )
-            layername = AddHotkeyName( layername, m_hotkeys, layerhk[layerid], IS_COMMENT );
+            layername = AddHotkeyName( layername, m_hotkeys,
+                                       layerhk[layerid], IS_COMMENT );
 
         Append( layername, layerbmp, (void*)(intptr_t) layerid );
+        int w;
+        dc.GetTextExtent ( layername, &w, &h );
+        minwidth = std::max( minwidth, w );
     }
+
+    minwidth += BM_SIZE + 35;    // Take in account the bitmap size and margins
+    SetMinSize( wxSize( minwidth, -1 ) );
 }
 
 
 // Returns true if the layer id is enabled (i.e. is it should be displayed)
 bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( LAYER_NUM aLayer ) const
 {
-    PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
-    BOARD* board = pcbFrame->GetBoard();
+    wxASSERT( m_boardFrame != NULL );
+    BOARD* board = m_boardFrame->GetBoard();
     wxASSERT( board != NULL );
 
     return board->IsLayerEnabled( aLayer );
@@ -96,8 +103,8 @@ bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( LAYER_NUM aLayer ) const
 // Returns a color index from the layer id
 EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
 {
-    PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
-    BOARD* board = pcbFrame->GetBoard();
+    wxASSERT( m_boardFrame != NULL );
+    BOARD* board = m_boardFrame->GetBoard();
     wxASSERT( board != NULL );
 
     return board->GetLayerColor( aLayer );
@@ -107,8 +114,8 @@ EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
 // Returns the name of the layer id
 wxString PCB_LAYER_BOX_SELECTOR::GetLayerName( LAYER_NUM aLayer ) const
 {
-    PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
-    BOARD* board = pcbFrame->GetBoard();
+    wxASSERT( m_boardFrame != NULL );
+    BOARD* board = m_boardFrame->GetBoard();
     wxASSERT( board != NULL );
 
     return board->GetLayerName( aLayer );
