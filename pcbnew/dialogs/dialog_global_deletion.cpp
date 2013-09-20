@@ -37,7 +37,7 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent )
 void PCB_EDIT_FRAME::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
 {
     DIALOG_GLOBAL_DELETION dlg( this );
-    dlg.SetCurrentLayer( getCurrentLayer() );
+    dlg.SetCurrentLayer( getActiveLayer() );
 
     dlg.ShowModal();
 }

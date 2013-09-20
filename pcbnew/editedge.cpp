@@ -246,7 +246,7 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T s
 
     s_large = GetDesignSettings().m_DrawSegmentWidth;
 
-    if( getCurrentLayer() == EDGE_N )
+    if( getActiveLayer() == EDGE_N )
     {
         s_large = GetDesignSettings().m_EdgeSegmentWidth;
     }
@@ -255,7 +255,7 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T s
     {
         SetCurItem( Segment = new DRAWSEGMENT( GetBoard() ) );
         Segment->SetFlags( IS_NEW );
-        Segment->SetLayer( getCurrentLayer() );
+        Segment->SetLayer( getActiveLayer() );
         Segment->SetWidth( s_large );
         Segment->SetShape( shape );
         Segment->SetAngle( 900 );

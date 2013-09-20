@@ -136,13 +136,13 @@ protected:
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    void setCurrentLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
+    void setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
 
     /**
      * Function getActiveLayer
      * returns the active layer
      */
-    LAYER_NUM getCurrentLayer()
+    LAYER_NUM getActiveLayer()
     {
         return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
     }

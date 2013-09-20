@@ -730,7 +730,7 @@ void PCB_EDIT_FRAME::SetGridColor(EDA_COLOR_T aColor)
 bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 {
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
-    LAYER_NUM currLayer = getCurrentLayer();
+    LAYER_NUM currLayer = getActiveLayer();
 
     if( !GetDesignSettings().m_MicroViasAllowed )
         return false;   // Obvious..
@@ -832,7 +832,7 @@ void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
 }
 
 
-void PCB_EDIT_FRAME::setCurrentLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
+void PCB_EDIT_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
 {
     ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 
@@ -848,7 +848,7 @@ void PCB_EDIT_FRAME::setCurrentLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate
 
 void PCB_EDIT_FRAME::syncLayerWidgetLayer()
 {
-    m_Layers->SelectLayer( getCurrentLayer() );
+    m_Layers->SelectLayer( getActiveLayer() );
     m_Layers->OnLayerSelected();
 }
 

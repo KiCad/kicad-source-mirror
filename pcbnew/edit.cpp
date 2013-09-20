@@ -917,10 +917,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER:
-        itmp = SelectLayer( getCurrentLayer(), UNDEFINED_LAYER, UNDEFINED_LAYER );
+        itmp = SelectLayer( getActiveLayer(), UNDEFINED_LAYER, UNDEFINED_LAYER );
 
         if( itmp >= 0 )
-            setCurrentLayer( itmp );
+            setActiveLayer( itmp );
 
         m_canvas->MoveCursorToCrossHair();
         break;
@@ -930,19 +930,19 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
-        itmp = SelectLayer( getCurrentLayer(), FIRST_NON_COPPER_LAYER, UNDEFINED_LAYER );
+        itmp = SelectLayer( getActiveLayer(), FIRST_NON_COPPER_LAYER, UNDEFINED_LAYER );
 
         if( itmp >= 0 )
-            setCurrentLayer( itmp );
+            setActiveLayer( itmp );
 
         m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
-        itmp = SelectLayer( getCurrentLayer(), UNDEFINED_LAYER, LAST_COPPER_LAYER );
+        itmp = SelectLayer( getActiveLayer(), UNDEFINED_LAYER, LAST_COPPER_LAYER );
 
         if( itmp >= 0 )
-            setCurrentLayer( itmp );
+            setActiveLayer( itmp );
 
         break;
 
@@ -952,7 +952,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
-        setCurrentLayer( m_SelLayerBox->GetLayerSelection() );
+        setActiveLayer( m_SelLayerBox->GetLayerSelection() );
 
         if( DisplayOpt.ContrastModeDisplay )
             m_canvas->Refresh( true );
@@ -1244,7 +1244,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 
 void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
 {
-    LAYER_NUM curLayer = getCurrentLayer();
+    LAYER_NUM curLayer = getActiveLayer();
 
     // Check if the specified layer matches the present layer
     if( layer == curLayer )
@@ -1286,7 +1286,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
                 GetScreen()->m_Route_Layer_TOP    = curLayer;
                 GetScreen()->m_Route_Layer_BOTTOM = layer;
 
-                setCurrentLayer( curLayer );
+                setActiveLayer( curLayer );
 
                 if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
                 {
@@ -1307,7 +1307,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
     // and a non-copper layer, or vice-versa?
     // ...
 
-    setCurrentLayer( layer );
+    setActiveLayer( layer );
 
     if( DisplayOpt.ContrastModeDisplay )
         RefreshCanvas();

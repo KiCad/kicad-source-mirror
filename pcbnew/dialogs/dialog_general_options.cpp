@@ -238,7 +238,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         // Apply new display options to the GAL canvas (this is faster than recaching)
         settings->LoadDisplayOptions( DisplayOpt );
 
-        setHighContrastLayer( getCurrentLayer() );
+        setHighContrastLayer( getActiveLayer() );
 //        m_galCanvas->GetView()->EnableTopLayer( state );
 
         if( m_galCanvasActive )
