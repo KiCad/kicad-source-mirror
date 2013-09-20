@@ -511,7 +511,7 @@ void PCB_MODULE::AddToBoard()
     module->SetTimeStamp( 0 );
     module->SetLastEditTime( 0 );
 
-    module->SetLibRef( m_compRef );
+    module->SetFPID( FPID( m_compRef ) );
 
     module->SetAttributes( MOD_DEFAULT | MOD_CMS );
 

@@ -155,10 +155,9 @@ class VERTEX_VALUE_CTRL
 {
 private:
     wxTextCtrl*   m_XValueCtrl, * m_YValueCtrl, * m_ZValueCtrl;
-    wxStaticText* m_Text;
 
 public:
-    VERTEX_VALUE_CTRL( wxWindow* parent, const wxString& title, wxBoxSizer* BoxSizer );
+    VERTEX_VALUE_CTRL( wxWindow* parent, wxBoxSizer* BoxSizer );
 
     ~VERTEX_VALUE_CTRL();
 

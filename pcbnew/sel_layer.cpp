@@ -1,7 +1,31 @@
 /**
  * @file sel_layer.cpp
- * @brief Set up the basic primitives for Layer control.
+ * @brief dialogs for one layer selection and a layer pair selection.
  */
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 
 #include <fctsys.h>
 #include <common.h>
@@ -9,340 +33,394 @@
 #include <confirm.h>
 #include <wxBasePcbFrame.h>
 #include <pcbcommon.h>
-
+#include <class_layer_box_selector.h>
 #include <class_board.h>
+#include <dialogs/dialog_layer_selection_base.h>
 
 
-enum layer_sel_id {
-    ID_LAYER_SELECT_TOP = 1800,
-    ID_LAYER_SELECT_BOTTOM,
-    ID_LAYER_SELECT
-};
-
-
-class SELECT_LAYER_DIALOG : public wxDialog
+/* classes to display a layer list using a wxGrid.
+ */
+class PCB_LAYER_SELECTOR: public LAYER_SELECTOR
 {
-private:
-    PCB_BASE_FRAME* m_Parent;
-    wxRadioBox*     m_LayerList;
-    LAYER_NUM m_LayerId[int(NB_PCB_LAYERS) + 1]; // One extra element for "(Deselect)" radiobutton
+    BOARD * m_brd;
 
 public:
-    // Constructor and destructor
-    SELECT_LAYER_DIALOG( PCB_BASE_FRAME* parent, LAYER_NUM default_layer,
-                         LAYER_NUM min_layer, LAYER_NUM max_layer, bool null_layer );
-    ~SELECT_LAYER_DIALOG() { };
+    PCB_LAYER_SELECTOR( BOARD* aBrd ):LAYER_SELECTOR()
+    {
+        m_brd = aBrd;
+    }
 
-private:
-    void OnLayerSelected( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
+protected:
+    // Returns true if the layer id is enabled (i.e. is it should be displayed)
+    bool IsLayerEnabled( LAYER_NUM aLayer ) const
+    {
+        return m_brd->IsLayerEnabled( aLayer );
+    }
 
-    DECLARE_EVENT_TABLE()
+    // Returns a color index from the layer id
+    // Virtual function
+    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const
+    {
+        return m_brd->GetLayerColor( aLayer );
+    }
+
+    // Returns the name of the layer id
+    // Virtual function
+    wxString GetLayerName( LAYER_NUM aLayer ) const
+    {
+        return m_brd->GetLayerName( aLayer );
+    }
 };
 
+/*
+ * This class display a pcb layers list in a dialog,
+ * to select one layer from this list
+ */
+class PCB_ONE_LAYER_SELECTOR : public PCB_LAYER_SELECTOR,
+                               public DIALOG_LAYER_SELECTION_BASE
+{
+    LAYER_NUM m_layerSelected;
+    LAYER_MSK m_notAllowedLayersMask;
+    std::vector<LAYER_NUM> m_layersIdLeftColumn;
+    std::vector<LAYER_NUM> m_layersIdRightColumn;
 
-BEGIN_EVENT_TABLE( SELECT_LAYER_DIALOG, wxDialog )
-    EVT_BUTTON( wxID_OK, SELECT_LAYER_DIALOG::OnLayerSelected )
-    EVT_BUTTON( wxID_CANCEL, SELECT_LAYER_DIALOG::OnCancelClick )
-    EVT_RADIOBOX( ID_LAYER_SELECT, SELECT_LAYER_DIALOG::OnLayerSelected )
-END_EVENT_TABLE()
+public:
+    PCB_ONE_LAYER_SELECTOR( wxWindow* aParent, BOARD * aBrd,
+                        LAYER_NUM aDefaultLayer,
+                        LAYER_MSK aNotAllowedLayersMask )
+        :PCB_LAYER_SELECTOR( aBrd ), DIALOG_LAYER_SELECTION_BASE( aParent )
+        {
+            m_layerSelected = (int) aDefaultLayer;
+            m_notAllowedLayersMask = aNotAllowedLayersMask;
+            BuildList();
+            Layout();
+            GetSizer()->SetSizeHints(this);
+            SetFocus();
+        }
 
+    LAYER_NUM GetLayerSelection() { return m_layerSelected; }
+
+private:
+    // Event handlers
+    void OnLeftGridCellClick( wxGridEvent& event );
+    void OnRightGridCellClick( wxGridEvent& event );
+
+    void BuildList();
+};
+
+// Build the layers list
+// Column position by function:
+#define SELECT_COLNUM 0
+#define COLOR_COLNUM 1
+#define LAYERNAME_COLNUM 2
+static DECLARE_LAYERS_ORDER_LIST( layertranscode );
+
+void PCB_ONE_LAYER_SELECTOR::BuildList()
+{
+    // Hide layerid column which is used only to know the layer id
+    // not to be shown in dialogs
+    m_leftGridLayers->SetColSize( COLOR_COLNUM, 20 );
+    m_rightGridLayers->SetColSize( COLOR_COLNUM, 20 );
+
+    int left_row = 0;
+    int right_row = 0;
+    wxString   layername;
+    for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
+    {
+        LAYER_NUM  layerid = i;
+
+        if( m_layerorder )
+            layerid = layertranscode[i];
+
+        if( ! IsLayerEnabled( layerid ) )
+            continue;
+
+        if( (m_notAllowedLayersMask & GetLayerMask( layerid )) != 0 )
+            continue;
+
+        wxColour color = MakeColour( GetLayerColor( layerid ) );
+        layername = GetLayerName( layerid );
+
+        if( layerid <= LAST_COPPER_LAYER )
+        {
+            if( left_row )
+                m_leftGridLayers->AppendRows( 1 );
+
+            m_leftGridLayers->SetCellBackgroundColour ( left_row, COLOR_COLNUM,
+                                                        color );
+            m_leftGridLayers->SetCellValue( left_row, LAYERNAME_COLNUM,
+                                            layername );
+
+            if( m_layerSelected == layerid )
+            {
+                m_leftGridLayers->SetCellValue( left_row, SELECT_COLNUM,
+                                                wxT("X") );
+                m_leftGridLayers->SetCellBackgroundColour ( left_row, SELECT_COLNUM,
+                                                        color );
+                m_leftGridLayers->SetGridCursor( left_row, LAYERNAME_COLNUM );
+            }
+
+            m_layersIdLeftColumn.push_back( layerid );
+            left_row++;
+        }
+        else
+        {
+            if( right_row )
+                m_rightGridLayers->AppendRows( 1 );
+
+            m_rightGridLayers->SetCellBackgroundColour ( right_row, COLOR_COLNUM,
+                                                         color );
+            m_rightGridLayers->SetCellValue( right_row, LAYERNAME_COLNUM,
+                                             layername );
+
+            if( m_layerSelected == layerid )
+            {
+                m_rightGridLayers->SetCellValue( right_row, SELECT_COLNUM,
+                                                 wxT("X") );
+                m_rightGridLayers->SetCellBackgroundColour ( right_row, SELECT_COLNUM,
+                                                         color );
+                m_rightGridLayers->SetGridCursor( right_row, LAYERNAME_COLNUM );
+            }
+
+            m_layersIdRightColumn.push_back( layerid );
+            right_row++;
+        }
+    }
+
+    // Show only populated lists:
+    if( left_row <= 0 )
+        m_leftGridLayers->Show( false );
+
+    if( right_row <= 0 )
+        m_rightGridLayers->Show( false );
+
+    m_leftGridLayers->AutoSizeColumn(LAYERNAME_COLNUM);
+    m_rightGridLayers->AutoSizeColumn(LAYERNAME_COLNUM);
+    m_leftGridLayers->AutoSizeColumn(SELECT_COLNUM);
+    m_rightGridLayers->AutoSizeColumn(SELECT_COLNUM);
+}
+
+void PCB_ONE_LAYER_SELECTOR::OnLeftGridCellClick( wxGridEvent& event )
+{
+    m_layerSelected = m_layersIdLeftColumn[ event.GetRow() ];
+    m_leftGridLayers->SetGridCursor( event.GetRow(), LAYERNAME_COLNUM );
+    EndModal( 1 );
+}
+
+void PCB_ONE_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
+{
+    m_layerSelected = m_layersIdRightColumn[ event.GetRow() ];
+    m_rightGridLayers->SetGridCursor( event.GetRow(), LAYERNAME_COLNUM );
+    EndModal( 2 );
+}
 
 /** Install the dialog box for layer selection
- * @param default_layer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
- * @param min_layer = min layer value (-1 if no min value)
- * @param max_layer = max layer value (-1 if no max value)
- * @param null_layer = display a "(Deselect)" radiobutton (when set to true)
- * @return new layer value (NB_PCB_LAYERS when "(Deselect)" radiobutton selected),
- *                         or -1 if canceled
- *
- * Providing the option to also display a "(Deselect)" radiobutton makes the
- * "Swap Layers" command (and GerbView's "Export to Pcbnew" command) more "user
- * friendly", by permitting any layer to be "deselected" immediately after its
- * corresponding radiobutton has been clicked on. (It would otherwise be
- * necessary to first cancel the "Select Layer:" dialog box (invoked after a
- * different radiobutton is clicked on) prior to then clicking on the
- * "Deselect"
- * button provided within the "Swap Layers:" or "Layer selection:" dialog box).
+ * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
+ * @param aNotAllowedLayers = a layer mask for not allowed layers
+ *                            (= 0 to show all layers in use)
+ * @return the selected layer id
  */
-LAYER_NUM PCB_BASE_FRAME::SelectLayer( LAYER_NUM  default_layer,
-                                       LAYER_NUM  min_layer,
-                                       LAYER_NUM  max_layer,
-                                       bool null_layer )
+LAYER_NUM PCB_BASE_FRAME::SelectLayer( LAYER_NUM  aDefaultLayer,
+                                       LAYER_MSK aNotAllowedLayersMask )
 {
-    SELECT_LAYER_DIALOG* frame = new SELECT_LAYER_DIALOG( this,
-                                                            default_layer,
-                                                            min_layer,
-                                                            max_layer,
-                                                            null_layer );
-
-    LAYER_NUM layer = frame->ShowModal();
-    frame->Destroy();
+    PCB_ONE_LAYER_SELECTOR dlg( this, GetBoard(),
+                                aDefaultLayer, aNotAllowedLayersMask );
+    dlg.ShowModal();
+    LAYER_NUM layer = dlg.GetLayerSelection();
     return layer;
 }
 
 
 /*
- * The "OK" and "Cancel" buttons are positioned (in a horizontal line)
- * beneath the "Layer" radiobox, unless that contains only one column of
- * radiobuttons, in which case they are positioned (in a vertical line)
- * to the right of that radiobox.
+ * This class display a double pcb copper layers list in a dialog,
+ * to select a layer pair from these lists
  */
-SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( PCB_BASE_FRAME* parent,
-                                          LAYER_NUM default_layer, LAYER_NUM min_layer,
-                                          LAYER_NUM max_layer, bool null_layer ) :
-    wxDialog( parent, -1, _( "Select Layer:" ), wxPoint( -1, -1 ),
-              wxSize( 470, 250 ),
-              DIALOG_STYLE )
-{
-    BOARD*    board = parent->GetBoard();
-    wxButton* Button;
-    LAYER_NUM ii;
-    wxString  LayerList[NB_PCB_LAYERS + 1]; // One extra element for "(Deselect)"
-                                        // radiobutton
-    int       LayerCount, LayerSelect = -1;
-
-    m_Parent = parent;
-
-    // Build the layer list
-    LayerCount = 0;
-    LAYER_MSK Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
-    Masque_Layer |= ALL_NO_CU_LAYERS;
-
-    for( ii = FIRST_LAYER; ii < NB_PCB_LAYERS; ++ii )
-    {
-        m_LayerId[ii] = FIRST_LAYER;
-
-        if( GetLayerMask( ii ) & Masque_Layer )
-        {
-            if( min_layer > ii )
-                continue;
-
-            if( ( max_layer >= 0 ) && ( max_layer < ii ) )
-                break;
-
-            LayerList[LayerCount] = board->GetLayerName( ii );
-
-            if( ii == default_layer )
-                LayerSelect = LayerCount;
-
-            m_LayerId[LayerCount] = ii;
-            LayerCount++;
-        }
-    }
-
-    // When appropriate, also provide a "(Deselect)" radiobutton
-    if( null_layer )
-    {
-        LayerList[LayerCount] = _( "(Deselect)" );
-
-        if( NB_PCB_LAYERS == default_layer )
-            LayerSelect = LayerCount;
-
-        m_LayerId[LayerCount] = NB_PCB_LAYERS;
-        LayerCount++;
-    }
-
-    m_LayerList = new wxRadioBox( this, ID_LAYER_SELECT, _( "Layer" ),
-                                  wxPoint( -1, -1 ), wxSize( -1, -1 ),
-                                  LayerCount, LayerList,
-                                  (LayerCount < 8) ? LayerCount : 8,
-                                  wxRA_SPECIFY_ROWS );
-
-    if( LayerSelect >= 0 )
-        m_LayerList->SetSelection( LayerSelect );
-
-    wxBoxSizer* FrameBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-    SetSizer( FrameBoxSizer );
-    FrameBoxSizer->Add( m_LayerList, 0, wxALIGN_TOP | wxALL, 5 );
-    wxBoxSizer* ButtonBoxSizer = new wxBoxSizer( wxVERTICAL );
-    FrameBoxSizer->Add( ButtonBoxSizer, 0, wxALIGN_BOTTOM | wxALL, 0 );
-
-    Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    Button->SetDefault();
-    ButtonBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    ButtonBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    SetFocus();
-
-    GetSizer()->SetSizeHints( this );
-
-    Center();
-}
-
-
-void SELECT_LAYER_DIALOG::OnLayerSelected( wxCommandEvent& event )
-{
-    int ii = m_LayerId[m_LayerList->GetSelection()];
-
-    EndModal( ii );
-}
-
-
-void SELECT_LAYER_DIALOG::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( -1 );
-}
-
-
-/*********************************************/
-/* Dialog for the selecting pairs of layers. */
-/*********************************************/
-
-class SELECT_LAYERS_PAIR_DIALOG : public wxDialog
+class SELECT_COPPER_LAYERS_PAIR_DIALOG: public PCB_LAYER_SELECTOR,
+                                        public DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 {
 private:
-    PCB_BASE_FRAME* m_Parent;
-    wxRadioBox*     m_LayerListTOP;
-    wxRadioBox*     m_LayerListBOTTOM;
-    LAYER_NUM m_LayerId[NB_COPPER_LAYERS];
+    BOARD* m_brd;
+    LAYER_NUM m_frontLayer;
+    LAYER_NUM m_backLayer;
+    int m_leftRowSelected;
+    int m_rightRowSelected;
+    std::vector<LAYER_NUM> m_layersId;
 
-public: SELECT_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* parent );
-    ~SELECT_LAYERS_PAIR_DIALOG() { };
+public:
+    SELECT_COPPER_LAYERS_PAIR_DIALOG( wxWindow* aParent, BOARD * aPcb,
+                                      LAYER_NUM aFrontLayer, LAYER_NUM aBackLayer );
+
+    void GetLayerPair( LAYER_NUM& aFrontLayer, LAYER_NUM& aBackLayer )
+    {
+        aFrontLayer = m_frontLayer;
+        aBackLayer = m_backLayer;
+    }
 
 private:
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
+    void OnLeftGridCellClick( wxGridEvent& event );
+    void OnRightGridCellClick( wxGridEvent& event );
 
-    DECLARE_EVENT_TABLE()
+    void OnOkClick( wxCommandEvent& event )
+    {
+        EndModal( wxID_OK );
+    }
+
+    void OnCancelClick( wxCommandEvent& event )
+    {
+        EndModal( wxID_CANCEL );
+    }
+
+    void BuildList();
+    void SetGridCursor( wxGrid* aGrid, int aRow, bool aEnable );
 };
 
-
-BEGIN_EVENT_TABLE( SELECT_LAYERS_PAIR_DIALOG, wxDialog )
-    EVT_BUTTON( wxID_OK, SELECT_LAYERS_PAIR_DIALOG::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, SELECT_LAYERS_PAIR_DIALOG::OnCancelClick )
-END_EVENT_TABLE()
-
-
-/* Display a list of two copper layers for selection of a pair of layers
- * for auto-routing, vias ...
+/* Display a list of two copper layers to choose a pair of copper layers
+ * the layer pair is used to fast switch between copper layers when placing vias
  */
-void PCB_BASE_FRAME::SelectLayerPair()
+void PCB_BASE_FRAME::SelectCopperLayerPair()
 {
-    // Check whether more than one copper layer has been enabled for the
-    // current PCB file, as Layer Pairs can only meaningfully be defined
-    // within PCB files which contain at least two copper layers.
-    if( GetBoard()->GetCopperLayerCount() < 2 )
+    PCB_SCREEN* screen = GetScreen();
+    SELECT_COPPER_LAYERS_PAIR_DIALOG dlg( this, GetBoard(),
+                                         screen->m_Route_Layer_TOP,
+                                         screen->m_Route_Layer_BOTTOM );
+
+    if( dlg.ShowModal() == wxID_OK )
     {
-        wxString InfoMsg;
-        InfoMsg = _( "Less than two copper layers are being used." );
-        InfoMsg << wxT( "\n" ) << _( "Hence layer pairs cannot be specified." );
-        DisplayInfoMessage( this, InfoMsg );
-        return;
+        dlg.GetLayerPair( screen->m_Route_Layer_TOP, screen->m_Route_Layer_BOTTOM );
+
+        // select the same layer for both layers is allowed (normal in some boards)
+        // but could be a mistake. So display an info message
+        if( screen->m_Route_Layer_TOP == screen->m_Route_Layer_BOTTOM )
+            DisplayInfoMessage( this,
+                                _( "Warning: The Top Layer and Bottom Layer are same." ) );
     }
 
-    SELECT_LAYERS_PAIR_DIALOG* frame = new SELECT_LAYERS_PAIR_DIALOG( this );
-
-    int result = frame->ShowModal();
-    frame->Destroy();
     m_canvas->MoveCursorToCrossHair();
-
-    // if user changed colors and we are in high contrast mode, then redraw
-    // because the PAD_SMD pads may change color.
-    if( result >= 0  &&  DisplayOpt.ContrastModeDisplay )
-    {
-        m_canvas->Refresh();
-    }
 }
 
-
-SELECT_LAYERS_PAIR_DIALOG::SELECT_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* parent ) :
-    wxDialog( parent, -1, _( "Select Layer Pair:" ), wxPoint( -1, -1 ),
-              wxSize( 470, 250 ), DIALOG_STYLE )
+SELECT_COPPER_LAYERS_PAIR_DIALOG::
+    SELECT_COPPER_LAYERS_PAIR_DIALOG( wxWindow* aParent, BOARD * aPcb,
+                                      LAYER_NUM aFrontLayer, LAYER_NUM aBackLayer) :
+    PCB_LAYER_SELECTOR( aPcb ),
+    DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE( aParent )
 {
-    BOARD*    board = parent->GetBoard();
-    wxButton* Button;
-    wxString  LayerList[NB_COPPER_LAYERS];
-    LAYER_NUM LayerTopSelect = FIRST_LAYER, LayerBottomSelect = FIRST_LAYER;
-
-    m_Parent = parent;
-
-    PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
-    LAYER_MSK Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
-    Masque_Layer |= ALL_NO_CU_LAYERS;
-
-    LAYER_NUM LayerCount = FIRST_LAYER;
-    for( LAYER_NUM ii = FIRST_COPPER_LAYER; ii < NB_COPPER_LAYERS; ++ii )
-    {
-        m_LayerId[ii] = FIRST_LAYER;
-
-        if( (GetLayerMask( ii ) & Masque_Layer) )
-        {
-            LayerList[LayerCount] = board->GetLayerName( ii );
-
-            if( ii == screen->m_Route_Layer_TOP )
-                LayerTopSelect = LayerCount;
-
-            if( ii == screen->m_Route_Layer_BOTTOM )
-                LayerBottomSelect = LayerCount;
-
-            m_LayerId[LayerCount] = ii;
-            ++LayerCount;
-        }
-    }
-
-    m_LayerListTOP = new wxRadioBox( this, ID_LAYER_SELECT_TOP,
-                                     _( "Top Layer" ),
-                                     wxPoint( -1, -1 ), wxSize( -1, -1 ),
-                                     LayerCount, LayerList,
-                                     (LayerCount < 8) ? LayerCount : 8,
-                                     wxRA_SPECIFY_ROWS );
-    m_LayerListTOP->SetSelection( LayerTopSelect );
-
-    m_LayerListBOTTOM = new wxRadioBox( this, ID_LAYER_SELECT_BOTTOM,
-                                        _( "Bottom Layer" ),
-                                        wxPoint( -1, -1 ), wxSize( -1, -1 ),
-                                        LayerCount, LayerList,
-                                        (LayerCount < 8) ? LayerCount : 8,
-                                        wxRA_SPECIFY_ROWS );
-    m_LayerListBOTTOM->SetSelection( LayerBottomSelect );
-
-    wxBoxSizer* FrameBoxSizer = new wxBoxSizer( wxVERTICAL );
-    SetSizer( FrameBoxSizer );
-
-    wxBoxSizer* RadioBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-    FrameBoxSizer->Add( RadioBoxSizer, 0, wxALIGN_LEFT | wxALL, 0 );
-
-    wxBoxSizer* ButtonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-    FrameBoxSizer->Add( ButtonBoxSizer, 0, wxALIGN_RIGHT | wxALL, 0 );
-
-    RadioBoxSizer->Add( m_LayerListTOP, 0, wxALIGN_TOP | wxALL, 5 );
-    RadioBoxSizer->Add( m_LayerListBOTTOM, 0, wxALIGN_TOP | wxALL, 5 );
-
-    Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    Button->SetDefault();
-    ButtonBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    ButtonBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
+    m_frontLayer = aFrontLayer;
+    m_backLayer = aBackLayer;
+    m_leftRowSelected = 0;
+    m_rightRowSelected = 0;
+    BuildList();
     SetFocus();
-
     GetSizer()->SetSizeHints( this );
     Center();
 }
 
-
-void SELECT_LAYERS_PAIR_DIALOG::OnOkClick( wxCommandEvent& event )
+void SELECT_COPPER_LAYERS_PAIR_DIALOG::BuildList()
 {
-    // select the same layer for top and bottom is allowed (normal in some
-    // boards)
-    // but could be a mistake. So display an info message
-    if( m_LayerId[m_LayerListTOP->GetSelection()] == m_LayerId[m_LayerListBOTTOM->GetSelection()] )
-        DisplayInfoMessage( this,
-                            _( "Warning: The Top Layer and Bottom Layer are same." ) );
+    m_leftGridLayers->SetColSize( COLOR_COLNUM, 20 );
+    m_rightGridLayers->SetColSize( COLOR_COLNUM, 20 );
 
-    PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
+    // Select a not show cell, to avoid a wrong cell selection for user
 
-    screen->m_Route_Layer_TOP    = m_LayerId[m_LayerListTOP->GetSelection()];
-    screen->m_Route_Layer_BOTTOM = m_LayerId[m_LayerListBOTTOM->GetSelection()];
+    int row = 0;
+    wxString   layername;
 
-    EndModal( 0 );
+    for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
+    {
+        LAYER_NUM  layerid = i;
+
+        if( m_layerorder )
+            layerid = layertranscode[i];
+
+        if( ! IsLayerEnabled( layerid ) )
+            continue;
+
+        if( layerid > LAST_COPPER_LAYER )
+            continue;
+
+        wxColour color = MakeColour( GetLayerColor( layerid ) );
+        layername = GetLayerName( layerid );
+
+        if( row )
+            m_leftGridLayers->AppendRows( 1 );
+
+        m_leftGridLayers->SetCellBackgroundColour ( row, COLOR_COLNUM,
+                                                    color );
+        m_leftGridLayers->SetCellValue( row, LAYERNAME_COLNUM,
+                                        layername );
+        m_layersId.push_back( layerid );
+
+        if( m_frontLayer == layerid )
+        {
+            SetGridCursor( m_leftGridLayers, row, true );
+            m_leftRowSelected = row;
+        }
+
+        if( row )
+            m_rightGridLayers->AppendRows( 1 );
+        m_rightGridLayers->SetCellBackgroundColour ( row, COLOR_COLNUM,
+                                                     color );
+        m_rightGridLayers->SetCellValue( row, LAYERNAME_COLNUM,
+                                         layername );
+
+        if( m_backLayer == layerid )
+        {
+            SetGridCursor( m_rightGridLayers, row, true );
+            m_rightRowSelected = row;
+        }
+
+        row++;
+    }
+
+    m_leftGridLayers->AutoSizeColumn(LAYERNAME_COLNUM);
+    m_rightGridLayers->AutoSizeColumn(LAYERNAME_COLNUM);
+    m_leftGridLayers->AutoSizeColumn(SELECT_COLNUM);
+    m_rightGridLayers->AutoSizeColumn(SELECT_COLNUM);
 }
 
-
-void SELECT_LAYERS_PAIR_DIALOG::OnCancelClick( wxCommandEvent& event )
+void SELECT_COPPER_LAYERS_PAIR_DIALOG::SetGridCursor( wxGrid* aGrid, int aRow,
+                                                      bool aEnable )
 {
-    EndModal( -1 );
+    if( aEnable )
+    {
+        LAYER_NUM  layerid = m_layersId[aRow];
+        wxColour color = MakeColour( GetLayerColor( layerid ) );
+        aGrid->SetCellValue( aRow, SELECT_COLNUM, wxT("X") );
+        aGrid->SetCellBackgroundColour( aRow, SELECT_COLNUM, color );
+        aGrid->SetGridCursor( aRow, LAYERNAME_COLNUM );
+    }
+    else
+    {
+        aGrid->SetCellValue( aRow, SELECT_COLNUM, wxEmptyString );
+        aGrid->SetCellBackgroundColour( aRow, SELECT_COLNUM,
+                                        aGrid->GetDefaultCellBackgroundColour() );
+        aGrid->SetGridCursor( aRow, LAYERNAME_COLNUM );
+    }
+}
+
+void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnLeftGridCellClick( wxGridEvent& event )
+{
+    int row = event.GetRow();
+    LAYER_NUM layer = m_layersId[row];
+
+    if( m_frontLayer == layer )
+        return;
+
+    SetGridCursor( m_leftGridLayers, m_leftRowSelected, false );
+    m_frontLayer = layer;
+    m_leftRowSelected = row;
+    SetGridCursor( m_leftGridLayers, m_leftRowSelected, true );
+}
+
+void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnRightGridCellClick( wxGridEvent& event )
+{
+    int row = event.GetRow();
+    LAYER_NUM layer = m_layersId[row];
+
+    if(  m_backLayer == layer )
+        return;
+
+    SetGridCursor( m_rightGridLayers, m_rightRowSelected, false );
+    m_backLayer = layer;
+    m_rightRowSelected = row;
+    SetGridCursor( m_rightGridLayers, m_rightRowSelected, true );
 }

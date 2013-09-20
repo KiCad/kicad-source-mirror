@@ -197,9 +197,13 @@ else()
     endif()
 endif()
 
+#================================================
 # Locations for install targets.
 set( KICAD_BIN bin
     CACHE PATH "Location of KiCad binaries." )
+
+set( KICAD_FP_LIB_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}"
+     CACHE PATH "Default path where footprint libraries are installed." )
 
 if( UNIX )
     # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
@@ -209,12 +213,10 @@ if( UNIX )
         CACHE PATH "Location of KiCad data files." )
     set( KICAD_DOCS share/doc/kicad
         CACHE PATH "Location of KiCad documentation files." )
+    set( KICAD_FP_LIB_INSTALL_PATH "${KICAD_FP_LIB_INSTALL_PATH}/share/kicad/modules" )
 endif()
 
 if( MINGW )
-    # Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
-    set( CMAKE_INSTALL_PREFIX c:/kicad
-        CACHE PATH "" )
     # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
     set( KICAD_PLUGINS ${KICAD_BIN}/plugins
         CACHE PATH "Location of KiCad plugins." )
@@ -222,6 +224,7 @@ if( MINGW )
         CACHE PATH "Location of KiCad data files." )
     set( KICAD_DOCS doc
         CACHE PATH "Location of KiCad documentation files." )
+    set( KICAD_FP_LIB_INSTALL_PATH "${KICAD_FP_LIB_INSTALL_PATH}/modules" )
 endif()
 
 set( KICAD_DEMOS ${KICAD_DATA}/demos

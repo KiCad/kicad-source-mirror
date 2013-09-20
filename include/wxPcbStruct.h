@@ -211,12 +211,6 @@ protected:
      */
     void duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone );
 
-    /**
-     * Function loadFootprintLibTable
-     * deletes the existing #FP_LIB_TABLE and creates a new one when a new project is loaded.
-     */
-    void loadFootprintLibTable();
-
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
     wxComboBox* m_SelTrackWidthBox;     // a combo box to display and select current track width
@@ -551,7 +545,15 @@ public:
     void ReCreateMicrowaveVToolbar();
     void ReCreateOptToolbar();
     void ReCreateMenuBar();
-    PCB_LAYER_BOX_SELECTOR* ReCreateLayerBox( wxAuiToolBar* parent );
+
+    /**
+     * Re create the layer Box by clearing the old list, and building
+     * le new one, from the new layers names and cole layers
+     * @param aForceResizeToolbar = true to resize the parent toolbar
+     * false if not needed (mainly in parent toolbar creation,
+     * or when the layers names are not modified)
+     */
+    void ReCreateLayerBox( bool aForceResizeToolbar = true );
 
     /**
      * Function OnModify
@@ -824,6 +826,7 @@ public:
     bool DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM );
 
     void InstallDrillFrame( wxCommandEvent& event );
+    void GenD356File( wxCommandEvent& event );
     void ToPostProcess( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );

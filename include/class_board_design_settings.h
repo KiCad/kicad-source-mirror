@@ -18,6 +18,7 @@ class BOARD_DESIGN_SETTINGS
 {
 public:
     bool    m_MicroViasAllowed;             ///< true to allow micro vias
+    bool    m_BlindBuriedViaAllowed;        ///< true to allow blind/buried vias
     int     m_CurrentViaType;               ///< via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
 
     /// if true, when creating a new track starting on an existing track, use this track width

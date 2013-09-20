@@ -60,9 +60,9 @@ wxString DRC_ITEM::GetErrorText() const
     case DRCE_ENDS_PROBLEM3:
     case DRCE_ENDS_PROBLEM4:
     case DRCE_ENDS_PROBLEM5:
-        return wxString( _("Two track ends") );
-    case DRCE_TRACK_UNKNOWN1:
-        return wxString( _("This looks bad") );  ///< @todo check source code and change this comment
+        return wxString( _("Two track ends too close") );
+    case DRCE_TRACK_SEGMENTS_TOO_CLOSE:
+        return wxString( _("Two parallel track segments too close") );
     case DRCE_TRACKS_CROSSING:
         return wxString( _("Tracks crossing") );
     case DRCE_PAD_NEAR_PAD1:

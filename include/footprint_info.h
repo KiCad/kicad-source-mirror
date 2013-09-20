@@ -102,15 +102,7 @@ public:
      * @return the item stored in list if found
      * @param aFootprintName = the name of item
      */
-    FOOTPRINT_INFO * GetModuleInfo( const wxString & aFootprintName )
-    {
-        BOOST_FOREACH( FOOTPRINT_INFO& footprint, m_List )
-        {
-            if( aFootprintName.CmpNoCase( footprint.m_Module ) == 0 )
-                return &footprint;
-        }
-        return NULL;
-    }
+    FOOTPRINT_INFO* GetModuleInfo( const wxString & aFootprintName );
 
     /**
      * Function GetItem
@@ -159,6 +151,13 @@ public:
 /// FOOTPRINT object list sort function.
 inline bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 )
 {
+#if defined( USE_FP_LIB_TABLE )
+    int retv = StrNumCmp( item1.m_libName, item2.m_libName, INT_MAX, true );
+
+    if( retv != 0 )
+        return retv < 0;
+#endif
+
     return StrNumCmp( item1.m_Module, item2.m_Module, INT_MAX, true ) < 0;
 }
 

@@ -81,6 +81,12 @@
 /// Definition to compile with Pcbnew footprint library table implementation.
 #cmakedefine USE_FP_LIB_TABLE
 
+/// The install prefix defined in CMAKE_INSTALL_PREFIX.
+#define DEFAULT_INSTALL_PATH               "@CMAKE_INSTALL_PREFIX"
+
+/// Default footprint library install path when installed with `make install`.
+#define DEFAULT_FP_LIB_PATH                "@KICAD_FP_LIB_INSTALL_PATH@"
+
 /// When defined, build the GITHUB_PLUGIN for pcbnew.
 #cmakedefine BUILD_GITHUB_PLUGIN
 

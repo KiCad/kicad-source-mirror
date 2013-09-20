@@ -284,7 +284,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     if( aModule == NULL )
         return;
 
-    fn.SetName( aModule->GetLibRef() );
+    fn.SetName( FROM_UTF8( aModule->GetFPID().GetFootprintName().c_str() ) );
 
     wxString    wildcard = wxGetTranslation( KiCadFootprintLibFileWildcard );
 
@@ -600,7 +600,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibPath,
     SetMsgPanel( aModule );
 
     // Ask what to use as the footprint name in the library
-    wxString footprintName = aModule->GetLibRef();
+    wxString footprintName = FROM_UTF8( aModule->GetFPID().GetFootprintName().c_str() );
 
     if( aDisplayDialog )
     {
@@ -624,17 +624,17 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibPath,
                         GetChars( footprintName ) );
 
             DisplayError( NULL, msg );
-                return false;
+            return false;
         }
 
-        aModule->SetLibRef( footprintName );
+        aModule->SetFPID( FPID( footprintName ) );
     }
 
     // Ensure this footprint has a libname
     if( footprintName.IsEmpty() )
     {
         footprintName = wxT("noname");
-        aModule->SetLibRef( footprintName );
+        aModule->SetFPID( footprintName );
     }
 
     IO_MGR::PCB_FILE_T  pluginType = IO_MGR::GuessPluginTypeFromLibPath( aLibPath );
@@ -730,7 +730,7 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
     module->SetLastEditTime();
 
     // Update its name in lib
-    module->SetLibRef( moduleName );
+    module->SetFPID( FPID( moduleName ) );
 
     // Update reference:
     module->SetReference( moduleName );

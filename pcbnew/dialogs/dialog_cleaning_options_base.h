@@ -50,9 +50,6 @@ class DIALOG_CLEANING_OPTIONS_BASE : public DIALOG_SHIM
 		
 	
 	public:
-		bool cleanVias; 
-		bool mergeSegments; 
-		bool deleteUnconnectedSegm; 
 		
 		DIALOG_CLEANING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Cleaning Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 243,146 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_CLEANING_OPTIONS_BASE();

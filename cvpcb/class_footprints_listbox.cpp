@@ -135,8 +135,14 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     {
         if( aFilterType == UNFILTERED )
         {
+#if !defined( USE_FP_LIB_TABLE )
             msg.Printf( wxT( "%3zu %s" ), newList.GetCount() + 1,
                         GetChars( aList.GetItem( ii ).m_Module ) );
+#else
+            msg.Printf( wxT( "%3zu %s:%s" ), newList.GetCount() + 1,
+                        GetChars( aList.GetItem( ii ).GetLibraryName() ),
+                        GetChars( aList.GetItem( ii ).m_Module ) );
+#endif
             newList.Add( msg );
             continue;
         }
@@ -153,8 +159,14 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
           && (aComponent->GetNetCount() != aList.GetItem( ii ).m_padCount) )
             continue;
 
+#if !defined( USE_FP_LIB_TABLE )
         msg.Printf( wxT( "%3zu %s" ), newList.GetCount() + 1,
                     aList.GetItem( ii ).m_Module.GetData() );
+#else
+        msg.Printf( wxT( "%3zu %s:%s" ), newList.GetCount() + 1,
+                    GetChars( aList.GetItem( ii ).GetLibraryName() ),
+                    GetChars( aList.GetItem( ii ).m_Module ) );
+#endif
         newList.Add( msg );
     }
 
@@ -169,9 +181,24 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
         selection = 0;
 
     DeleteAllItems();
-    SetItemCount( m_footprintList.GetCount() );
-    SetSelection( selection, true );
-    Refresh();
+
+    if( m_footprintList.GetCount() )
+    {
+        SetItemCount( m_footprintList.GetCount() );
+        SetSelection( selection, true );
+        RefreshItems( 0L, m_footprintList.GetCount()-1 );
+
+#if defined (__WXGTK__ )
+        // @bug On GTK and wxWidgets 2.8.x, this will assert in debug builds because the
+        //      column parameter is -1.  This was the only way to prevent GTK3 from
+        //      ellipsizing long strings down to a few characters.  It still doesn't set
+        //      the scroll bars correctly (too short) but it's better than any of the
+        //      other alternatives.  If someone knows how to fix this, please do.
+        SetColumnWidth( -1, wxLIST_AUTOSIZE );
+#else
+        SetColumnWidth( 0, wxLIST_AUTOSIZE );
+#endif
+    }
 }
 
 

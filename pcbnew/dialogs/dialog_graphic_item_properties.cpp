@@ -24,6 +24,7 @@
 #include <class_drawsegment.h>
 
 #include <dialog_graphic_item_properties_base.h>
+#include <class_pcb_layer_box_selector.h>
 
 class DIALOG_GRAPHIC_ITEM_PROPERTIES: public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
 {
@@ -127,7 +128,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
         m_EndPointXLabel->SetLabel(_("Start Point X"));
         m_EndPointYLabel->SetLabel(_("Start Point Y"));
 
-        // Here the angle is a double, but the UI is still working 
+        // Here the angle is a double, but the UI is still working
         // with integers
         msg << int( m_Item->GetAngle() );
         m_Angle_Ctrl->SetValue(msg);
@@ -159,20 +160,18 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
 
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness );
 
-    for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER;
-         layer <= LAST_NON_COPPER_LAYER; ++layer )
+    // Configure the layers list selector
+    m_LayerSelectionCtrl->SetLayersHotkeys( false );
+    m_LayerSelectionCtrl->SetLayerMask( ALL_CU_LAYERS );
+    m_LayerSelectionCtrl->SetBoardFrame( m_parent );
+    m_LayerSelectionCtrl->Resync();
+
+    if( m_LayerSelectionCtrl->SetLayerSelection( m_Item->GetLayer() ) < 0 )
     {
-        m_LayerSelectionCtrl->Append( m_parent->GetBoard()->GetLayerName( layer ) );
+        wxMessageBox( _("This item has an illegal layer id.\n"
+                        "Now, forced on the drawings layer. Please, fix it") );
+        m_LayerSelectionCtrl->SetLayerSelection( DRAW_N );
     }
-
-    LAYER_NUM layer = m_Item->GetLayer();
-
-    // It has to be an aux layer
-    if ( layer < FIRST_NON_COPPER_LAYER )
-        layer = FIRST_NON_COPPER_LAYER;
-    if ( layer > LAST_NON_COPPER_LAYER )
-        layer = LAST_NON_COPPER_LAYER;
-    m_LayerSelectionCtrl->SetSelection( layer - FIRST_NON_COPPER_LAYER );
 }
 
 
@@ -182,7 +181,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnLayerChoice( wxCommandEvent& event )
 {
     int thickness;
 
-    if( (m_LayerSelectionCtrl->GetCurrentSelection() + FIRST_NON_COPPER_LAYER) == EDGE_N )
+    if( m_LayerSelectionCtrl->GetLayerSelection() == EDGE_N )
         thickness =  m_brdSettings.m_EdgeSegmentWidth;
     else
         thickness =  m_brdSettings.m_DrawSegmentWidth;
@@ -221,7 +220,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     msg = m_DefaultThicknessCtrl->GetValue();
     int thickness = ReturnValueFromString( g_UserUnit, msg );
 
-    m_Item->SetLayer( FIRST_NON_COPPER_LAYER + m_LayerSelectionCtrl->GetCurrentSelection() );
+    m_Item->SetLayer( m_LayerSelectionCtrl->GetLayerSelection() );
 
     if( m_Item->GetLayer() == EDGE_N )
          m_brdSettings.m_EdgeSegmentWidth = thickness;

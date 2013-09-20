@@ -39,7 +39,7 @@
 #include <pcbcommon.h>
 #include <wxBasePcbFrame.h>
 #include <msgpanel.h>
-#include <netlist_reader.h>
+#include <pcb_netlist.h>
 #include <reporter.h>
 #include <base_units.h>
 
@@ -1513,7 +1513,8 @@ void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDr
 
 ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
                                                 LAYER_NUM      aStartLayer,
-                                                LAYER_NUM      aEndLayer )
+                                                LAYER_NUM      aEndLayer,
+                                                int aNetCode )
 {
     if( aEndLayer < 0 )
         aEndLayer = aStartLayer;
@@ -1531,6 +1532,9 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
 
         // In locate functions we must skip tagged items with BUSY flag set.
         if( area->GetState( BUSY ) )
+            continue;
+
+        if( aNetCode >= 0 && area->GetNet() != aNetCode )
             continue;
 
         if( area->HitTestFilledArea( aRefPos ) )
@@ -2387,7 +2391,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             msg.Printf( _( "Checking netlist component footprint \"%s:%s:%s\".\n" ),
                         GetChars( component->GetReference() ),
                         GetChars( component->GetTimeStamp() ),
-                        GetChars( component->GetFootprintName() ) );
+                        GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
             aReporter->Report( msg );
         }
 
@@ -2405,7 +2409,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetTimeStamp() ),
-                                GetChars( component->GetFootprintName() ) );
+                                GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
 
                     if( aReporter->ReportWarnings() )
                         aReporter->Report( msg );
@@ -2416,7 +2420,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                                    "footprint \"%s\".\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetTimeStamp() ),
-                                GetChars( component->GetFootprintName() ) );
+                                GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
 
                     if( aReporter->ReportErrors() )
                         aReporter->Report( msg );
@@ -2436,8 +2440,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
         else                           // An existing footprint.
         {
             // Test for footprint change.
-            if( !component->GetFootprintName().IsEmpty() &&
-                footprint->GetLibRef() != component->GetFootprintName() )
+            if( !component->GetFPID().empty() &&
+                footprint->GetFPID() != component->GetFPID() )
             {
                 if( aNetlist.GetReplaceFootprints() )
                 {
@@ -2449,8 +2453,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                                            "\"%s\".\n" ),
                                         GetChars( footprint->GetReference() ),
                                         GetChars( footprint->GetPath() ),
-                                        GetChars( footprint->GetLibRef() ),
-                                        GetChars( component->GetFootprintName() ) );
+                                        GetChars( FROM_UTF8( footprint->GetFPID().Format().c_str() ) ),
+                                        GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
 
                             if( aReporter->ReportWarnings() )
                                 aReporter->Report( msg );
@@ -2461,7 +2465,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                                            "footprint \"%s\".\n" ),
                                         GetChars( footprint->GetReference() ),
                                         GetChars( footprint->GetPath() ),
-                                        GetChars( component->GetFootprintName() ) );
+                                        GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
 
                             if( aReporter->ReportErrors() )
                                 aReporter->Report( msg );
@@ -2692,7 +2696,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 msg.Printf( _( "** Error: Component \"%s\" pad <%s> not found in footprint \"%s\" **\n" ),
                             GetChars( component->GetReference() ),
                             GetChars( padname ),
-                            GetChars( footprint->GetLibRef() ) );
+                            footprint->GetFPID().Format().c_str() );
                 aReporter->Report( msg );
             }
         }

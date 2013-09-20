@@ -114,7 +114,7 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_ReferenceCtrl->SetValue( m_referenceCopy->GetText() );
     m_ValueCtrl->SetValue( m_valueCopy->GetText() );
     m_ValueCtrl->SetValue( m_valueCopy->GetText() );
-    m_FootprintNameCtrl->SetValue( m_currentModule->GetLibRef() );
+    m_FootprintNameCtrl->SetValue( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
 
     m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non SMD components" ) );
     m_AttributsCtrl->SetItemToolTip( 1,
@@ -151,18 +151,9 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_CostRot180Ctrl->SetValue( m_currentModule->GetPlacementCost180() );
 
     // Initialize 3D parameters
-
-    wxBoxSizer* BoxSizer = new wxBoxSizer( wxVERTICAL );
-    m_3D_Scale = new VERTEX_VALUE_CTRL( m_Panel3D, _( "Shape Scale:" ), BoxSizer );
-    m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
-
-    BoxSizer    = new wxBoxSizer( wxVERTICAL );
-    m_3D_Offset = new VERTEX_VALUE_CTRL( m_Panel3D, _( "Shape Offset (inch):" ), BoxSizer );
-    m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
-
-    BoxSizer = new wxBoxSizer( wxVERTICAL );
-    m_3D_Rotation = new VERTEX_VALUE_CTRL( m_Panel3D, _( "Shape Rotation (degrees):" ), BoxSizer );
-    m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
+    m_3D_Scale = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeScale );
+    m_3D_Offset = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeOffset );
+    m_3D_Rotation = new VERTEX_VALUE_CTRL( m_Panel3D, m_bSizerShapeRotation );
 
     // Initialize dialog relative to masks clearances
     m_NetClearanceUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
@@ -405,7 +396,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 
     // Init footprint name in library
     if( ! footprintName.IsEmpty() )
-        m_currentModule->SetLibRef( footprintName );
+        m_currentModule->SetFPID( FPID( footprintName ) );
 
     // Init Fields:
     m_currentModule->Reference().Copy( m_referenceCopy );

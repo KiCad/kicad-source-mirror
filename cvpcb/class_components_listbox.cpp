@@ -22,7 +22,7 @@
  */
 
 /**
- * @file class_components_listbox.h
+ * @file class_components_listbox.cpp
  */
 
 #include <fctsys.h>

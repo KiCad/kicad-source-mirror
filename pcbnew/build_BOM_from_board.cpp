@@ -41,7 +41,7 @@ class cmp
 public:
     wxString m_Ref;
     wxString m_Val;
-    wxString m_Pkg;
+    FPID     m_fpid;
     int      m_Id;
     int      m_CmpCount;
 };
@@ -99,7 +99,8 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     CmpList           list;
     cmp*              comp = NULL;
     CmpList::iterator iter;
-    int i = 1;
+    int               i = 1;
+
     while( Module != NULL )
     {
         bool valExist = false;
@@ -109,7 +110,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         {
             cmp* current = *iter;
 
-            if( (current->m_Val == Module->GetValue()) && (current->m_Pkg == Module->GetLibRef()) )
+            if( (current->m_Val == Module->GetValue()) && (current->m_fpid == Module->GetFPID()) )
             {
                 current->m_Ref.Append( wxT( ", " ), 1 );
                 current->m_Ref.Append( Module->GetReference() );
@@ -127,7 +128,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
             comp->m_Id  = i++;
             comp->m_Val = Module->GetValue();
             comp->m_Ref = Module->GetReference();
-            comp->m_Pkg = Module->GetLibRef();
+            comp->m_fpid = Module->GetFPID();
             comp->m_CmpCount = 1;
             list.Append( comp );
         }
@@ -145,7 +146,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 
         msg << current->m_Id << wxT( ";\"" );
         msg << current->m_Ref << wxT( "\";\"" );
-        msg << current->m_Pkg << wxT( "\";" );
+        msg << FROM_UTF8( current->m_fpid.Format().c_str() ) << wxT( "\";" );
         msg << current->m_CmpCount << wxT( ";\"" );
         msg << current->m_Val << wxT( "\";;;\n" );
         fprintf( FichBom, "%s", TO_UTF8( msg ) );

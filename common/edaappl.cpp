@@ -64,18 +64,16 @@ static const wxChar* CommonConfigPath = wxT( "kicad_common" );
  * the size of the array. */
 #define LANGUAGE_DESCR_COUNT ( sizeof( s_Language_List ) / sizeof( struct LANGUAGE_DESCR ) )
 
-// Default font size
-#define FONT_DEFAULT_SIZE 10    // Default font size.
 
 // some key strings used to store parameters in config
 static wxString backgroundColorKey( wxT( "BackgroundColor" ) );
 static wxString showPageLimitsKey( wxT( "ShowPageLimits" ) );
 static wxString workingDirKey( wxT( "WorkingDir" ) ) ;
 static wxString languageCfgKey( wxT( "LanguageID" ) );
+static wxString kicadFpLibPath( wxT( "KicadFootprintLibraryPath" ) );
 
 
 /**
- * The real font size will be computed at run time
  *   A small class to handle the list on existing translations.
  *   the locale translation is automatic.
  *   the selection of languages is mainly for maintainer's convenience
@@ -354,7 +352,7 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
     wxImage::AddHandler( new wxJPEGHandler );
     wxFileSystem::AddHandler( new wxZipFSHandler );
 
-    // Analise the command line & init binary path
+    // Analyze the command line & init binary path
     SetBinDir();
     SetDefaultSearchPaths();
     SetLanguagePath();
@@ -496,24 +494,20 @@ void EDA_APP::SetDefaultSearchPaths( void )
      * if the user is savvy enough to set an environment variable they know
      * what they are doing. */
     if( ::wxGetEnv( wxT( "KICAD" ), NULL ) )
-        m_searchPaths.AddEnvList( wxT( "KICAD" ) );
+        tmp.AddEnvList( wxT( "KICAD" ) );
 
     // Add the user's home path.
-    m_searchPaths.Add( GetTraits()->GetStandardPaths().GetUserDataDir() );
+    tmp.Add( GetTraits()->GetStandardPaths().GetUserDataDir() );
 
     // Standard application data path if it is different from the binary path.
     if( fn.GetPath() != GetTraits()->GetStandardPaths().GetDataDir() )
     {
-        m_searchPaths.Add( GetTraits()->GetStandardPaths().GetDataDir() );
+        tmp.Add( GetTraits()->GetStandardPaths().GetDataDir() );
     }
 
     // Up one level relative to binary path with "share" appended for Windows.
     fn.RemoveLastDir();
-    m_searchPaths.Add( fn.GetPath() );
-    fn.AppendDir( wxT( "share" ) );
-    m_searchPaths.Add( fn.GetPath() );
-    fn.AppendDir( wxT( "kicad" ) );
-    m_searchPaths.Add( fn.GetPath() );
+    tmp.Add( fn.GetPath() );
 
     /* The normal OS program file install paths allow for binary to be
      * installed in a different path from the library files.  This is
@@ -524,13 +518,16 @@ void EDA_APP::SetDefaultSearchPaths( void )
 #ifdef __WXMSW__
     tmp.AddEnvList( wxT( "PROGRAMFILES" ) );
 #elif __WXMAC__
-    m_searchPaths.Add( wxT( "/Library/Application Support/kicad" ) );
-    m_searchPaths.Add( wxString( wxGetenv( wxT( "HOME" ) ) ) +
-                       wxT("/Library/Application Support/kicad") );
+    tmp.Add( wxT( "/Library/Application Support" ) );
+    tmp.Add( wxString( wxGetenv( wxT( "HOME" ) ) ) + wxT( "/Library/Application Support" ) );
 #else
     tmp.AddEnvList( wxT( "PATH" ) );
 #endif
 
+    // This is the equivalent of CMAKE_INSTALL_PREFIX.  Useful when installed by `make install`.
+    tmp.Add( wxT( DEFAULT_INSTALL_PATH ) );
+
+    // Add kicad, kicad/share, share, and share/kicad to each possible base path.
     for( i = 0; i < tmp.GetCount(); i++ )
     {
         fn = wxFileName( tmp[i], wxEmptyString );
@@ -621,6 +618,13 @@ void EDA_APP::SetDefaultSearchPaths( void )
             fn.RemoveLastDir();
         }
     }
+
+#if 0 && defined( DEBUG )
+    wxLogDebug( wxT( "Library search paths:" ) );
+
+    for( unsigned i = 0;  i < m_libSearchPaths.GetCount();  i++ )
+        wxLogDebug( wxT( "    %s" ), GetChars( m_libSearchPaths[i] ) );
+#endif
 }
 
 
@@ -662,11 +666,14 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
     }
 
     // FIXME OSX Mountain Lion (10.8)
-    // Seems that Read doesn't found anything and ColorFromInt Asserts - I'm unable to reproduce on 10.7
-    // In general terms i think is better have a failsafe default than an uninit variable
+    // Seems that Read doesn't found anything and ColorFromInt Asserts - I'm unable to reproduce
+    // on 10.7
+    // In general terms I think is better have a failsafe default than an uninit variable
     int draw_bg_color = (int)BLACK;      // Default for all apps but Eeschema
+
     if( m_Id == APP_EESCHEMA_T )
         draw_bg_color = (int)WHITE;      // Default for Eeschema
+
     m_settings->Read( backgroundColorKey, &draw_bg_color );
     g_DrawBgColor = ColorFromInt( draw_bg_color );
 
@@ -876,7 +883,7 @@ void EDA_APP::AddMenuLanguageList( wxMenu* MasterMenu )
 
 
 wxString EDA_APP::FindFileInSearchPaths( const wxString&      filename,
-                                            const wxArrayString* subdirs )
+                                         const wxArrayString* subdirs )
 {
     size_t     i, j;
     wxFileName fn;
@@ -976,21 +983,6 @@ wxString EDA_APP::GetHelpFile( void )
     }
 
     return fn;
-}
-
-
-wxString EDA_APP::GetLibraryFile( const wxString& filename )
-{
-    wxArrayString subdirs;
-
-    subdirs.Add( wxT( "share" ) );
-#ifndef __WXMSW__
-
-    /* Up on level relative to binary path with "share/kicad" appended for
-     * all other platforms. */
-    subdirs.Add( wxT( "kicad" ) );
-#endif
-    return FindFileInSearchPaths( filename, &subdirs );
 }
 
 
@@ -1163,4 +1155,53 @@ bool EDA_APP::LockFile( const wxString& fileName )
     }
 
     return true;
+}
+
+
+bool EDA_APP::SetFootprintLibTablePath()
+{
+    wxString path;
+
+    // Set the KISYSMOD environment variable for the current process if it is not already
+    // defined in the user's environment.  This is required to expand the global footprint
+    // library table paths.
+    if( wxGetEnv( wxT( "KISYSMOD" ), &path ) && wxFileName::DirExists( path ) )
+        return true;
+
+    // Set the KISYSMOD environment variable to the path defined in the user's configuration
+    // if it is defined and the path exists.
+    if( m_commonSettings->Read( kicadFpLibPath, &path ) && wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( wxT( "KISYSMOD" ), path );
+        return true;
+    }
+
+    // Attempt to determine where the footprint libraries were installed using the legacy
+    // library search paths.
+    if( !GetLibraryPathList().IsEmpty() )
+    {
+        unsigned      modFileCount = 0;
+        wxString      bestPath;
+        wxArrayString tmp;
+
+        for( unsigned i = 0;  i < GetLibraryPathList().GetCount();  i++ )
+        {
+            unsigned cnt = wxDir::GetAllFiles( GetLibraryPathList()[i], &tmp, wxT( "*.mod" ),
+                                               wxDIR_FILES );
+
+            if( cnt > modFileCount )
+            {
+                modFileCount = cnt;
+                bestPath = GetLibraryPathList()[i];
+            }
+        }
+
+        if( modFileCount != 0 )
+        {
+            wxSetEnv( wxT( "KISYSMOD" ), bestPath );
+            return true;
+        }
+    }
+
+    return false;
 }

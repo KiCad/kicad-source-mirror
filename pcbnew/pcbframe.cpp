@@ -150,6 +150,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     // menu Postprocess
     EVT_MENU( ID_PCB_GEN_POS_MODULES_FILE, PCB_EDIT_FRAME::GenFootprintsPositionFile )
     EVT_MENU( ID_PCB_GEN_DRILL_FILE, PCB_EDIT_FRAME::InstallDrillFrame )
+    EVT_MENU( ID_PCB_GEN_D356_FILE, PCB_EDIT_FRAME::GenD356File )
     EVT_MENU( ID_PCB_GEN_CMP_FILE, PCB_EDIT_FRAME::RecreateCmpFileFromBoard )
     EVT_MENU( ID_PCB_GEN_BOM_FILE_FROM_BOARD, PCB_EDIT_FRAME::RecreateBOMFileFromBoard )
 
@@ -312,8 +313,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
     m_useCmpFileForFpNames = true;
+
+#if defined( USE_FP_LIB_TABLE )
     m_footprintLibTable = NULL;
     m_globalFootprintTable = NULL;
+#endif
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
     m_pythonPanel = NULL;
@@ -321,7 +325,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     for ( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
-    
+
     SetBoard( new BOARD() );
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
@@ -466,12 +470,25 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     m_auimgr.Update();
 
+#if defined( USE_FP_LIB_TABLE )
     if( m_globalFootprintTable == NULL )
     {
         try
         {
             m_globalFootprintTable = new FP_LIB_TABLE();
-            FP_LIB_TABLE::LoadGlobalTable( *m_globalFootprintTable );
+
+            if( !FP_LIB_TABLE::LoadGlobalTable( *m_globalFootprintTable ) )
+            {
+                DisplayInfoMessage( this, wxT( "You have run Pcbnew for the first time using the "
+                                               "new footprint library table method for finding "
+                                               "footprints.  Pcbnew has either copied the default "
+                                               "table or created an empty table in your home "
+                                               "folder.  You must first configure the library "
+                                               "table to include all footprint libraries not "
+                                               "included with KiCad.  See the \"Footprint Library "
+                                               "Table\" section of the CvPcb documentation for "
+                                               "more information." ) );
+            }
         }
         catch( IO_ERROR ioe )
         {
@@ -481,9 +498,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
             DisplayError( this, msg );
         }
     }
-    
+#endif
+
     setupTools();
 }
+
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
@@ -494,7 +513,11 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
         m_Macros[i].m_Record.clear();
 
     delete m_drc;
+
+#if defined( USE_FP_LIB_TABLE )
+    delete m_footprintLibTable;
     delete m_globalFootprintTable;
+#endif
 }
 
 
@@ -636,7 +659,7 @@ void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
 
     if( returncode == wxID_OK )     // New rules, or others changes.
     {
-        ReCreateLayerBox( NULL );
+        ReCreateLayerBox();
         updateTraceWidthSelectBox();
         updateViaSizeSelectBox();
         OnModify();

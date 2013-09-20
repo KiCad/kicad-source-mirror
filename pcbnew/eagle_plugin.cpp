@@ -1866,7 +1866,7 @@ MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const std::string& aPkgName 
 {
     std::auto_ptr<MODULE>   m( new MODULE( NULL ) );
 
-    m->SetLibRef( FROM_UTF8( aPkgName.c_str() ) );
+    m->SetFPID( FPID( aPkgName ) );
 
     opt_string description = aPackage.get_optional<std::string>( "description" );
     if( description )

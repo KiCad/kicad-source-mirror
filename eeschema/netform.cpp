@@ -714,6 +714,8 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericLibParts()
     wxString    sLibpart  = wxT( "libpart" );
     wxString    sLib      = wxT( "lib" );
     wxString    sPart     = wxT( "part" );
+    wxString    sAliases  = wxT( "aliases" );
+    wxString    sAlias    = wxT( "alias" );
     wxString    sPins     = wxT( "pins" );      // key for library component pins list
     wxString    sPin      = wxT( "pin" );       // key for one library component pin descr
     wxString    sPinNum   = wxT( "num" );       // key for one library component pin num
@@ -743,6 +745,20 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericLibParts()
         xlibparts->AddChild( xlibpart = node( sLibpart ) );
         xlibpart->AddAttribute( sLib, library->GetLogicalName() );
         xlibpart->AddAttribute( sPart, lcomp->GetName()  );
+
+        if( lcomp->GetAliasCount() )
+        {
+            wxArrayString aliases = lcomp->GetAliasNames( false );
+            if( aliases.GetCount() )
+            {
+                XNODE*  xaliases = node( sAliases );
+                xlibpart->AddChild( xaliases );
+                for( unsigned i=0;  i<aliases.GetCount();  ++i )
+                {
+                    xaliases->AddChild( node( sAlias, aliases[i] ) );
+                }
+            }
+        }
 
         //----- show the important properties -------------------------
         if( !lcomp->GetAlias( 0 )->GetDescription().IsEmpty() )

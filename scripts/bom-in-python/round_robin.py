@@ -4,20 +4,24 @@
 # Example: Round robin, XML to XML conversion
 #
 
+from __future__ import print_function
+
 # Import the KiCad python helper module and the csv formatter
-import ky_generic_netlist_reader
+import kicad_netlist_reader
 import sys
+import pdb
+
 
 # Generate an instance of a generic netlist, and load the netlist tree from
 # the command line option. If the file doesn't exist, execution will stop
-net = ky_generic_netlist_reader.netlist(sys.argv[1])
+net = kicad_netlist_reader.netlist(sys.argv[1])
 
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
 try:
     f = open(sys.argv[2], 'w')
 except IOError:
-    print >> sys.stderr, __file__, ":", e
+    print( __file__, ":", e, file=sys.stderr)
     f = stdout
 
-print >> f, net.formatXML()
+print(net.formatXML(), file=f)

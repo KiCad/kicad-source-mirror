@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 11 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "class_pcb_layer_box_selector.h"
 
 #include "dialog_pcb_text_properties_base.h"
 
@@ -24,13 +26,14 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	bSizer9->Add( m_TextLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TextContentCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	m_TextContentCtrl->SetMaxLength( 0 ); 
 	m_TextContentCtrl->SetToolTip( _("Enter the text placed on selected layer.") );
 	m_TextContentCtrl->SetMinSize( wxSize( 400,60 ) );
 	
 	bSizer9->Add( m_TextContentCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 6, 4, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 4, 0, 0 );
 	fgSizer1->AddGrowableCol( 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->AddGrowableCol( 2 );
@@ -55,17 +58,15 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	fgSizer1->Add( m_staticText10, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	m_SizeXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeXCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_SizeXCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_PositionXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_PositionXCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_PositionXCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	wxArrayString m_LayerSelectionCtrlChoices;
-	m_LayerSelectionCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_LayerSelectionCtrlChoices, 0 );
-	m_LayerSelectionCtrl->SetSelection( 0 );
-	m_LayerSelectionCtrl->SetToolTip( _("Select the layer on which text should lay.") );
-	
-	fgSizer1->Add( m_LayerSelectionCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	fgSizer1->Add( m_LayerSelectionCtrl, 0, wxALL, 5 );
 	
 	wxString m_DisplayCtrlChoices[] = { _("Normal"), _("Mirrored") };
 	int m_DisplayCtrlNChoices = sizeof( m_DisplayCtrlChoices ) / sizeof( wxString );
@@ -90,9 +91,11 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	fgSizer1->Add( m_staticText11, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	m_SizeYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeYCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_SizeYCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_PositionYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_PositionYCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_PositionYCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	wxString m_StyleCtrlChoices[] = { _("Normal"), _("Italic") };
@@ -122,9 +125,11 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThicknessCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_ThicknessCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_OrientationCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_OrientationCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_OrientationCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	

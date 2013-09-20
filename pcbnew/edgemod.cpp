@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,16 +190,19 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
 
 void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
 {
+    // note: if aEdge == NULL, all outline segments will be modified
+
     MODULE* module    = GetBoard()->m_Modules;
-    LAYER_NUM new_layer = SILKSCREEN_N_FRONT;
+    LAYER_NUM layer = SILKSCREEN_N_FRONT;
+    bool modified = false;
 
     if( aEdge )
-        new_layer = aEdge->GetLayer();
+        layer = aEdge->GetLayer();
 
     // Ask for the new layer
-    new_layer = SelectLayer( new_layer, FIRST_COPPER_LAYER, ECO2_N );
+    LAYER_NUM new_layer = SelectLayer(layer, EDGE_LAYER );
 
-    if( new_layer < 0 )
+    if( layer < 0 )
         return;
 
     if( IsCopperLayer( new_layer ) )
@@ -211,8 +214,6 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
             return;
     }
 
-    SaveCopyInUndoList( module, UR_MODEDIT );
-
     if( aEdge == NULL )
     {
         aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->GraphicalItems();
@@ -222,17 +223,27 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
             if( aEdge->Type() != PCB_MODULE_EDGE_T )
                 continue;
 
-            aEdge->SetLayer( new_layer );
+            if( aEdge->GetLayer() != new_layer )
+            {
+                if( ! modified )    // save only once
+                    SaveCopyInUndoList( module, UR_MODEDIT );
+                aEdge->SetLayer( new_layer );
+                modified = true;
+            }
         }
     }
-    else
+    else if( aEdge->GetLayer() != new_layer )
     {
+        SaveCopyInUndoList( module, UR_MODEDIT );
         aEdge->SetLayer( new_layer );
+        modified = true;
     }
 
-    OnModify();
-    module->CalculateBoundingBox();
-    module->SetLastEditTime();
+    if( modified )
+    {
+        module->CalculateBoundingBox();
+        module->SetLastEditTime();
+    }
 }
 
 

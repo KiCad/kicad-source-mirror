@@ -94,9 +94,12 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
     case ID_POPUP_PCB_BEGIN_TRACK:
     case ID_POPUP_PCB_END_TRACK:
-    case ID_POPUP_PCB_PLACE_VIA:
-    case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
+    case ID_POPUP_PCB_PLACE_THROUGH_VIA:
+    case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_THROUGH_VIA:
+    case ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA:
+    case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA:
     case ID_POPUP_PCB_PLACE_MICROVIA:
+    case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
@@ -379,8 +382,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_PLACE_MICROVIA:
         if( !IsMicroViaAcceptable() )
             break;
-
-    case ID_POPUP_PCB_PLACE_VIA:
+        // fall through
+    case ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA:
+    case ID_POPUP_PCB_PLACE_THROUGH_VIA:
+    case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_THROUGH_VIA:
+    case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA:
         m_canvas->MoveCursorToCrossHair();
 
         if( GetCurItem()->IsDragging() )
@@ -390,12 +396,34 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         else
         {
             int v_type = GetDesignSettings().m_CurrentViaType;
-
-             // place micro via and switch layer.
-            if( id == ID_POPUP_PCB_PLACE_MICROVIA )
+            if( id == ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA ||
+                id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA )
+                GetDesignSettings().m_CurrentViaType = VIA_BLIND_BURIED;
+            else if( id == ID_POPUP_PCB_PLACE_MICROVIA )
                 GetDesignSettings().m_CurrentViaType = VIA_MICROVIA;
+            else
+                GetDesignSettings().m_CurrentViaType = VIA_THROUGH;
 
-            Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
+            // place via and switch layer.
+            if( id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_THROUGH_VIA ||
+                id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA )
+            {
+                m_canvas->SetIgnoreMouseEvents( true );
+                LAYER_NUM layer = SelectLayer( getActiveLayer(), ALL_NO_CU_LAYERS );
+                m_canvas->SetIgnoreMouseEvents( false );
+                m_canvas->MoveCursorToCrossHair();
+
+                if( getActiveLayer() != layer )
+                {
+                    GetScreen()->m_Route_Layer_TOP    = getActiveLayer();
+                    GetScreen()->m_Route_Layer_BOTTOM = layer;
+                    Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
+                }
+            }
+
+            else
+                Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
+
             GetDesignSettings().m_CurrentViaType = v_type;
 
             if( DisplayOpt.ContrastModeDisplay )
@@ -917,20 +945,28 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER:
-        itmp = SelectLayer( getActiveLayer(), UNDEFINED_LAYER, UNDEFINED_LAYER );
+        itmp = SelectLayer( getActiveLayer() );
 
         if( itmp >= 0 )
+        {
+            // if user changed colors and we are in high contrast mode, then redraw
+            // because the PAD_SMD pads may change color.
+            if( DisplayOpt.ContrastModeDisplay && getActiveLayer() != itmp )
+            {
+                m_canvas->Refresh();
+            }
             setActiveLayer( itmp );
+        }
 
         m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
-        SelectLayerPair();
+        SelectCopperLayerPair();
         break;
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
-        itmp = SelectLayer( getActiveLayer(), FIRST_NON_COPPER_LAYER, UNDEFINED_LAYER );
+        itmp = SelectLayer( getActiveLayer(), ALL_CU_LAYERS );
 
         if( itmp >= 0 )
             setActiveLayer( itmp );
@@ -939,7 +975,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
-        itmp = SelectLayer( getActiveLayer(), UNDEFINED_LAYER, LAST_COPPER_LAYER );
+        itmp = SelectLayer( getActiveLayer(), ALL_NO_CU_LAYERS );
 
         if( itmp >= 0 )
             setActiveLayer( itmp );
@@ -947,7 +983,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
-        SelectLayerPair();
+        SelectCopperLayerPair();
         m_canvas->MoveCursorToCrossHair();
         break;
 

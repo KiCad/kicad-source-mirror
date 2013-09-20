@@ -367,9 +367,10 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_DIMENSION_BUTT:
-        if( IsCopperLayer( getActiveLayer() ) )
+        if( IsLayerInList( EDGE_LAYER|ALL_CU_LAYERS ,getActiveLayer() ) )
         {
-            DisplayError( this, _( "Dimension not allowed on Copper layers" ) );
+            DisplayError( this,
+                          _( "Dimension not allowed on Copper or Edge Cut layers" ) );
             break;
         }
 

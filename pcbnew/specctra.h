@@ -3595,6 +3595,10 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     /// we don't want ownership here permanently, so we don't use boost::ptr_vector
     std::vector<NET*>   nets;
 
+    /// specctra cu layers, 0 based index:
+    int     m_top_via_layer;
+    int     m_bot_via_layer;
+
 
     /**
      * Function buildLayerMaps

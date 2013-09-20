@@ -28,6 +28,8 @@
 #include <wx/wx.h>
 #include <netlist_lexer.h>  // netlist_lexer is common to Eeschema and Pcbnew
 #include <macros.h>
+
+#include <pcb_netlist.h>
 #include <netlist_reader.h>
 
 using namespace NL_T;
@@ -281,9 +283,11 @@ void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR )
      * A component need a reference, value, footprint name and a full time stamp
      * The full time stamp is the sheetpath time stamp + the component time stamp
      */
+    FPID     fpid;
+    wxString footprint;
+    wxString tmp;
     wxString ref;
     wxString value;
-    wxString footprintName;
     wxString library;
     wxString name;
     wxString pathtimestamp, timestamp;
@@ -310,7 +314,7 @@ void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR )
 
         case T_footprint:
             NeedSYMBOLorNUMBER();
-            footprintName = FROM_UTF8( CurText() );
+            footprint = FromUTF8();
             NeedRIGHT();
             break;
 
@@ -361,8 +365,17 @@ void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR )
         }
     }
 
+    if( !footprint.IsEmpty() && fpid.Parse( footprint ) >= 0 )
+    {
+        wxString error;
+        error.Printf( _( "invalid PFID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                      GetChars( CurSource() ), CurLineNumber(), CurOffset() );
+
+        THROW_IO_ERROR( error );
+    }
+
     pathtimestamp += timestamp;
-    COMPONENT* component = new COMPONENT( footprintName, ref, value, pathtimestamp );
+    COMPONENT* component = new COMPONENT( fpid, ref, value, pathtimestamp );
     component->SetName( name );
     component->SetLibrary( library );
     m_netlist->AddComponent( component );

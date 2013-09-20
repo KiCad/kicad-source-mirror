@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file cvpcb.cpp
  */
@@ -22,7 +46,7 @@
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
 
-/* Constant string definitions for CvPcb */
+// Constant string definitions for CvPcb
 const wxString RetroFileExtension( wxT( "stf" ) );
 const wxString FootprintAliasFileExtension( wxT( "equ" ) );
 
@@ -36,7 +60,7 @@ const wxString titleLibLoadError( _( "Library Load Error" ) );
  * MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void EDA_APP::MacOpenFile(const wxString &fileName)
+void EDA_APP::MacOpenFile( const wxString &fileName )
 {
     wxFileName filename = fileName;
     wxString oldPath;
@@ -48,7 +72,7 @@ void EDA_APP::MacOpenFile(const wxString &fileName)
     if( frame->m_NetlistFileName.DirExists() )
         oldPath = frame->m_NetlistFileName.GetPath();
 
-    /* Update the library search path list. */
+    // Update the library search path list.
     if( wxGetApp().GetLibraryPathList().Index( oldPath ) != wxNOT_FOUND )
         wxGetApp().GetLibraryPathList().Remove( oldPath );
 
@@ -57,6 +81,7 @@ void EDA_APP::MacOpenFile(const wxString &fileName)
     frame->m_NetlistFileName = filename;
     frame->ReadNetListAndLinkFiles();
 }
+
 
 // Create a new application object
 IMPLEMENT_APP( EDA_APP )
@@ -74,6 +99,10 @@ bool EDA_APP::OnInit()
 
     InitEDA_Appl( wxT( "CvPcb" ), APP_CVPCB_T );
 
+#if defined( USE_FP_LIB_TABLE )
+    SetFootprintLibTablePath();
+#endif
+
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
         if( !IsOK( NULL, _( "CvPcb is already running, Continue?" ) ) )
@@ -88,7 +117,7 @@ bool EDA_APP::OnInit()
 
     // read current setup and reopen last directory if no filename to open in command line
     bool reopenLastUsedDirectory = argc == 1;
-    GetSettings(reopenLastUsedDirectory);
+    GetSettings( reopenLastUsedDirectory );
 
     g_DrawBgColor = BLACK;
 
@@ -97,15 +126,13 @@ bool EDA_APP::OnInit()
 
     // Show the frame
     SetTopWindow( frame );
-
-    frame->LoadProjectFile( filename.GetFullPath() );
     frame->Show( true );
-    frame->BuildFOOTPRINTS_LISTBOX();
-    frame->BuildLIBRARY_LISTBOX();
+    frame->m_NetlistFileExtension = wxT( "net" );
 
     if( filename.IsOk() && filename.FileExists() )
     {
         frame->m_NetlistFileName = filename;
+        frame->LoadProjectFile( filename.GetFullPath() );
 
         if( frame->ReadNetListAndLinkFiles() )
         {
@@ -114,9 +141,6 @@ bool EDA_APP::OnInit()
         }
     }
 
-    frame->LoadFootprintFiles();
-    frame->m_NetlistFileExtension = wxT( "net" );
-    frame->m_NetlistFileName.Clear();
     frame->UpdateTitle();
 
     return true;
