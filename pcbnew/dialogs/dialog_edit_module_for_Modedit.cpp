@@ -84,9 +84,7 @@ DIALOG_MODULE_MODULE_EDITOR::~DIALOG_MODULE_MODULE_EDITOR()
 }
 
 
-/********************************************************/
 void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
-/********************************************************/
 {
     SetFocus();
 
@@ -213,8 +211,7 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
 }
 
 
-/* Initialize 3D info displayed in dialog box from values in aStruct3DSource
- */
+// Initialize 3D info displayed in dialog box from values in aStruct3DSource
 void DIALOG_MODULE_MODULE_EDITOR::Transfert3DValuesToDisplay( S3D_MASTER * aStruct3DSource )
 {
     if( aStruct3DSource )
@@ -247,9 +244,8 @@ void DIALOG_MODULE_MODULE_EDITOR::TransfertDisplayTo3DValues( int aIndexSelectio
     struct3DDest->m_MatPosition = m_3D_Offset->GetValue();
 }
 
-/***********************************************************/
+
 void DIALOG_MODULE_MODULE_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
-/***********************************************************/
 {
     if( m_lastSelected3DShapeIndex >= 0 )
         TransfertDisplayTo3DValues( m_lastSelected3DShapeIndex );
@@ -268,9 +264,7 @@ void DIALOG_MODULE_MODULE_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
 }
 
 
-/***********************************************************/
 void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape(wxCommandEvent& event)
-/***********************************************************/
 {
     if( m_lastSelected3DShapeIndex >= 0 )
         TransfertDisplayTo3DValues( m_lastSelected3DShapeIndex );
@@ -293,9 +287,7 @@ void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape(wxCommandEvent& event)
 }
 
 
-/*********************************************************************/
 void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
-/*********************************************************************/
 {
     wxString fullfilename, shortfilename;
     wxString fullpath;
@@ -364,16 +356,13 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
 }
 
 
-/**********************************************************************/
 void DIALOG_MODULE_MODULE_EDITOR::OnCancelClick( wxCommandEvent& event )
-/**********************************************************************/
 {
     EndModal( -1 );
 }
 
-/******************************************************************************/
+
 void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
-/******************************************************************************/
 {
     // First, test for invalid chars in module name
     wxString footprintName = m_FootprintNameCtrl->GetValue();
@@ -486,25 +475,22 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 }
 
 
-/***********************************************************************/
 void DIALOG_MODULE_MODULE_EDITOR::OnEditReference(wxCommandEvent& event)
-/***********************************************************************/
 {
-    wxPoint tmp = m_parent->GetScreen()->GetCrossHairPosition();
-    m_parent->GetScreen()->SetCrossHairPosition( m_referenceCopy->GetTextPosition() );
+    wxPoint tmp = m_parent->GetCrossHairPosition();
+    m_parent->SetCrossHairPosition( m_referenceCopy->GetTextPosition() );
     m_parent->InstallTextModOptionsFrame( m_referenceCopy, NULL );
-    m_parent->GetScreen()->SetCrossHairPosition( tmp );
+    m_parent->SetCrossHairPosition( tmp );
     m_ReferenceCtrl->SetValue( m_referenceCopy->GetText() );
 }
 
-/***********************************************************/
+
 void DIALOG_MODULE_MODULE_EDITOR::OnEditValue(wxCommandEvent& event)
-/***********************************************************/
 {
-    wxPoint tmp = m_parent->GetScreen()->GetCrossHairPosition();
-    m_parent->GetScreen()->SetCrossHairPosition( m_valueCopy->GetTextPosition() );
+    wxPoint tmp = m_parent->GetCrossHairPosition();
+    m_parent->SetCrossHairPosition( m_valueCopy->GetTextPosition() );
     m_parent->InstallTextModOptionsFrame( m_valueCopy, NULL );
-    m_parent->GetScreen()->SetCrossHairPosition( tmp );
+    m_parent->SetCrossHairPosition( tmp );
     m_ValueCtrl->SetValue( m_valueCopy->GetText() );
 }
 

@@ -133,7 +133,7 @@ int PCB_EDIT_FRAME::SelectHighLight( wxDC* DC )
     // optionally, modify the "guide" here as needed using its member functions
 
     m_Collector->Collect( GetBoard(), GENERAL_COLLECTOR::PadsTracksOrZones,
-                          GetScreen()->RefPos( true ), guide );
+                          RefPos( true ), guide );
 
     BOARD_ITEM* item = (*m_Collector)[0];
 

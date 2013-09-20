@@ -34,6 +34,7 @@
  *       depending on the application.
  */
 
+#include <macros.h>
 #include <base_struct.h>
 #include <class_title_block.h>
 #include <common.h>
@@ -187,7 +188,7 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
 
 
 /* Convert a value to a string using double notation.
- * For readability, the mantissa has 3 or more digits (max 8 digits),
+ * For readability, the mantissa has 3 or more digits,
  * the trailing 0 are removed if the mantissa has more than 3 digits
  * and some trailing 0
  * This function should be used to display values in dialogs because a value
@@ -198,23 +199,39 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
  */
 wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol )
 {
-    wxString stringValue;
-    double   value_to_print;
-
-    value_to_print = To_User_Unit( aUnit, aValue );
+    double  value_to_print = To_User_Unit( aUnit, aValue );
 
 #if defined( EESCHEMA )
-    stringValue.Printf( wxT( "%.3f" ), value_to_print );
-#else
- #if defined( USE_PCBNEW_NANOMETRES )
-    stringValue.Printf( wxT( "%.8f" ), value_to_print );
- #else
-    stringValue.Printf( wxT( "%.4f" ), value_to_print );
- #endif
+    wxString    stringValue = wxString::Format( wxT( "%.3f" ), value_to_print );
 
     // Strip trailing zeros. However, keep at least 3 digits in mantissa
     // For readability
     StripTrailingZeros( stringValue, 3 );
+
+#else
+
+    char    buf[50];
+    int     len;
+
+    if( value_to_print != 0.0 && fabs( value_to_print ) <= 0.0001 )
+    {
+        len = sprintf( buf, "%.10f", value_to_print );
+
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        if( buf[len]=='.' || buf[len]==',' )
+            buf[len] = '\0';
+        else
+            ++len;
+    }
+    else
+    {
+        len = sprintf( buf, "%.10g", value_to_print );
+    }
+
+    wxString    stringValue( buf, wxConvUTF8 );
+
 #endif
 
     if( aAddUnitSymbol )
@@ -267,8 +284,6 @@ double From_User_Unit( EDA_UNITS_T aUnit, double aValue )
 
     return value;
 }
-
-
 
 
 int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )

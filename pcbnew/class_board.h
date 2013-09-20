@@ -215,6 +215,8 @@ private:
     ZONE_CONTAINERS         m_ZoneDescriptorList;
 
     LAYER                   m_Layer[NB_LAYERS];
+
+    wxPoint                 m_grid_origin;
                                                     // if true m_highLight_NetCode is used
     HIGH_LIGHT_INFO         m_highLight;                // current high light data
     HIGH_LIGHT_INFO         m_highLightPrevious;        // a previously stored high light data
@@ -230,9 +232,6 @@ private:
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;               ///< text in lower right of screen and plots
     PCB_PLOT_PARAMS         m_plotOptions;
-
-    /// Position of the origin axis, which is used in exports mostly
-    wxPoint                 m_originAxisPosition;
 
     /// Number of pads connected to the current net.
     int                     m_nodeCount;
@@ -390,6 +389,20 @@ public:
     {
         return (int) m_markers.size();
     }
+
+    /**
+     * Function SetAuxOrigin
+     * sets the origin point used for plotting.
+     */
+    void SetAuxOrigin( const wxPoint& aPoint )      { m_designSettings.m_AuxOrigin = aPoint; }
+    const wxPoint& GetAuxOrigin() const             { return m_designSettings.m_AuxOrigin; }
+
+    /**
+     * Function SetGridOrigin
+     * sets the origin point of the grid.
+     */
+    void SetGridOrigin( const wxPoint& aPoint )     { m_designSettings.m_GridOrigin = aPoint; }
+    const wxPoint& GetGridOrigin() const            { return m_designSettings.m_GridOrigin; }
 
     /**
      * Function ResetHighLight
@@ -598,9 +611,6 @@ public:
     const PCB_PLOT_PARAMS& GetPlotOptions() const           { return m_plotOptions; }
     void SetPlotOptions( const PCB_PLOT_PARAMS& aOptions )  { m_plotOptions = aOptions; }
 
-    const wxPoint& GetOriginAxisPosition() const            { return m_originAxisPosition; }
-    void SetOriginAxisPosition( const wxPoint& aPosition )  { m_originAxisPosition = aPosition; }
-
     TITLE_BLOCK& GetTitleBlock()                            { return m_titles; }
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }
 
@@ -608,7 +618,7 @@ public:
     void SetZoneSettings( const ZONE_SETTINGS& aSettings )  { m_zoneSettings = aSettings; }
 
     /**
-     * Function SetColorSettings
+     * Function GetColorSettings
      * @return the current COLORS_DESIGN_SETTINGS in use
      */
     COLORS_DESIGN_SETTINGS* GetColorsSettings() const { return m_colorsSettings; }
@@ -921,10 +931,13 @@ public:
      *   any extra unlock footprints are removed from the #BOARD.
      *
      * @param aNetlist is the new netlist to revise the contents of the #BOARD with.
+     * @param aDeleteSinglePadNets if true, remove nets counting only one pad
+     *                             and set net code to 0 for these pads
      * @param aReporter is a #REPORTER object to report the changes \a aNetlist makes to
      *                  the #BOARD.  If NULL, no change reporting occurs.
      */
-    void ReplaceNetlist( NETLIST& aNetlist, REPORTER* aReporter = NULL );
+    void ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
+                         REPORTER* aReporter = NULL );
 
     /**
      * Function ReturnSortedNetnamesList

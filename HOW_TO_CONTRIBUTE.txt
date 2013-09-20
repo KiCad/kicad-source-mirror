@@ -25,10 +25,10 @@ Contribute to KiCad (under Linux)
 6) Compile:
     cd kicad_john
     mkdir build; cd build
-    cmake ../ -DKICAD_TESTING_VERSION=ON -DCMAKE_BUILD_TYPE=Debug
+    cmake ../ -DCMAKE_BUILD_TYPE=Debug
     to build a debug version
     or
-    cmake ../ -DKICAD_TESTING_VERSION=ON -DCMAKE_BUILD_TYPE=Release
+    cmake ../ -DCMAKE_BUILD_TYPE=Release
     to build a release version
     make
 

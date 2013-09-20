@@ -123,7 +123,7 @@ static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         GRPoly( aPanel->GetClipBox(), aDC, 5, poly, false, 0, YELLOW, YELLOW );
     }
 
-    Mself.m_End = aPanel->GetScreen()->GetCrossHairPosition();
+    Mself.m_End = aPanel->GetParent()->GetCrossHairPosition();
     pt    = Mself.m_End - Mself.m_Start;
     angle = -ArcTangente( pt.y, pt.x );
     len   = KiROUND( EuclideanNorm( pt ) );
@@ -161,13 +161,13 @@ void PCB_EDIT_FRAME::Begin_Self( wxDC* DC )
         return;
     }
 
-    Mself.m_Start = GetScreen()->GetCrossHairPosition();
+    Mself.m_Start = GetCrossHairPosition();
     Mself.m_End   = Mself.m_Start;
 
     Self_On = 1;
 
     // Update the initial coordinates.
-    GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+    GetScreen()->m_O_Curseur = GetCrossHairPosition();
     UpdateStatusBar();
 
     m_canvas->SetMouseCapture( ShowBoundingBoxMicroWaveInductor, Exit_Self );
@@ -192,7 +192,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
 
     Self_On = 0;
 
-    Mself.m_End = GetScreen()->GetCrossHairPosition();
+    Mself.m_End = GetCrossHairPosition();
 
     wxPoint pt = Mself.m_End - Mself.m_Start;
     int     min_len = KiROUND( EuclideanNorm( pt ) );
@@ -751,7 +751,8 @@ private:
     wxRadioBox*      m_ShapeOptionCtrl;
     EDA_SIZE_CTRL*   m_SizeCtrl;
 
-public: WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent, const wxPoint& pos );
+public:
+    WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent, const wxPoint& pos );
     ~WinEDA_SetParamShapeFrame() { };
 
 private:

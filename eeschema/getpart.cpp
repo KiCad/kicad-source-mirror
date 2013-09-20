@@ -199,7 +199,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
 {
     int unit    = 1;
     int convert = 1;
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
     m_canvas->SetIgnoreMouseEvents( true );
 
     wxString Name = SelectComponentFromLibrary( aLibname, aHistoryList, aUseLibBrowser,
@@ -231,7 +231,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
 
     SCH_COMPONENT*  component;
     component = new SCH_COMPONENT( *Entry, m_CurrentSheet, unit, convert,
-                                   GetScreen()->GetCrossHairPosition(), true );
+                                   GetCrossHairPosition(), true );
 
     // Set the m_ChipName value, from component name in lib, for aliases
     // Note if Entry is found, and if Name is an alias of a component,

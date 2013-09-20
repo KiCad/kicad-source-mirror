@@ -244,7 +244,7 @@ void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
     }
 
     /* Redraw the module at the new position. */
-    g_Offset_Module = module->GetPosition() - aPanel->GetScreen()->GetCrossHairPosition();
+    g_Offset_Module = module->GetPosition() - aPanel->GetParent()->GetCrossHairPosition();
     DrawModuleOutlines( aPanel, aDC, module );
 
     DrawSegmentWhileMovingFootprint( aPanel, aDC );
@@ -391,7 +391,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
     if( g_Show_Module_Ratsnest && ( GetBoard()->m_Status_Pcb & LISTE_PAD_OK ) && aDC )
         TraceModuleRatsNest( aDC );
 
-    newpos = GetScreen()->GetCrossHairPosition();
+    newpos = GetCrossHairPosition();
     aModule->SetPosition( newpos );
     aModule->ClearFlags();
 

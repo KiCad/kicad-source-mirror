@@ -56,7 +56,7 @@
 
 #include <dialog_global_edit_tracks_and_vias.h>
 
-/* Handles the selection of command events. */
+// Handles the selection of command events.
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int         id = event.GetId();
@@ -122,6 +122,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
     case ID_POPUP_PCB_MOVE_TRACK_NODE:
+    case ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST:
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE:
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:
     case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:
@@ -145,6 +146,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_EDIT_DRAWING:
     case ID_POPUP_PCB_GETINFO_MARKER:
     case ID_POPUP_PCB_MOVE_TEXT_DIMENSION_REQUEST:
+    case ID_POPUP_PCB_DRAG_MODULE_REQUEST:
+    case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
+    case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:
+    case ID_POPUP_PCB_MOVE_MIRE_REQUEST:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -153,7 +158,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->EndMouseCapture();
         }
 
-        /* Should not be executed, just in case */
+        // Should not be executed, just in case
         if( GetScreen()->m_BlockLocate.GetCommand() != BLOCK_IDLE )
         {
             GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
@@ -284,11 +289,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_GET_NETLIST:
         InstallNetlistFrame( &dc );
-        break;
-
-    case ID_GET_TOOLS:
-
-        // InstalloolsFrame(this, wxPoint(-1,-1) );
         break;
 
     case ID_FIND_ITEMS:
@@ -544,7 +544,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
         m_canvas->MoveCursorToCrossHair();
         ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        wxPoint         pos = GetScreen()->GetCrossHairPosition();
+        wxPoint         pos = GetCrossHairPosition();
 
         /* add corner between zone_cont->m_CornerSelection
          * and zone_cont->m_CornerSelection+1
@@ -644,12 +644,12 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         SendMessageToEESCHEMA( module );
-        GetScreen()->SetCrossHairPosition( module->GetPosition() );
+        SetCrossHairPosition( module->GetPosition() );
         m_canvas->MoveCursorToCrossHair();
         StartMoveModule( module, &dc, id == ID_POPUP_PCB_DRAG_MODULE_REQUEST );
         break;
 
-    case ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST:      /* get module by name and move it */
+    case ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST:      // get module by name and move it
         SetCurItem( GetModuleByName() );
         module = (MODULE*) GetCurItem();
 
@@ -658,9 +658,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( module->IsLocked() )
         {
-            wxString msg;
-            msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->GetReference().GetData() );
+            wxString msg = wxString::Format(
+                _( "Footprint %s found, but it is locked" ),
+                module->GetReference().GetData() );
             DisplayInfoMessage( this, msg );
             break;
         }
@@ -719,7 +719,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         }
 
-        /* This is a simple rotation, no other editing in progress */
+        // This is a simple rotation, no other editing in progress
         if( !GetCurItem()->IsMoving() )
             SaveCopyInUndoList( GetCurItem(), UR_ROTATED, ((MODULE*)GetCurItem())->GetPosition() );
 
@@ -747,7 +747,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         }
 
-        /* This is a simple rotation, no other editing in progress */
+        // This is a simple rotation, no other editing in progress
         if( !GetCurItem()->IsMoving() )
             SaveCopyInUndoList( GetCurItem(), UR_ROTATED_CLOCKWISE,
                                 ((MODULE*)GetCurItem())->GetPosition() );
@@ -776,7 +776,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         }
 
-        /* This is a simple flip, no other editing in progress */
+        // This is a simple flip, no other editing in progress
         if( !GetCurItem()->IsMoving() )
             SaveCopyInUndoList( GetCurItem(), UR_FLIPPED, ((MODULE*)GetCurItem())->GetPosition() );
 
@@ -1108,14 +1108,18 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         {
             TRACK*  track = (TRACK*) GetScreen()->GetCurItem();
-            wxPoint pos   = GetScreen()->GetCrossHairPosition();
+            wxPoint pos   = GetCrossHairPosition();
+
             track->Draw( m_canvas, &dc, GR_XOR );
             PICKED_ITEMS_LIST itemsListPicker;
+
             TRACK*  newtrack = GetBoard()->CreateLockPoint( pos, track, &itemsListPicker );
+
             SaveCopyInUndoList( itemsListPicker, UR_UNSPECIFIED );
             track->Draw( m_canvas, &dc, GR_XOR );
             newtrack->Draw( m_canvas, &dc, GR_XOR );
-            /* compute the new ratsnest, because connectivity could change */
+
+            // compute the new ratsnest, because connectivity could change
             TestNetConnection( &dc, track->GetNet() );
         }
         break;

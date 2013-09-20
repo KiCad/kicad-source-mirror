@@ -85,7 +85,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     frame->SetCurItem( NULL );
     aPanel->SetMouseCapture( NULL, NULL );
 
-    /* Undo move and redraw trace segments. */
+    // Undo move and redraw trace segments.
     for( unsigned jj=0 ; jj < g_DragSegmentList.size(); jj++ )
     {
         TRACK* track = g_DragSegmentList[jj].m_Track;
@@ -101,12 +101,11 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 }
 
 
-/* Redraw the moved node according to the mouse cursor position */
+// Redraw the moved node according to the mouse cursor position
 static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                            bool aErase )
 {
     wxPoint      moveVector;
-    BASE_SCREEN* screen = aPanel->GetScreen();
     int          tmp = DisplayOpt.DisplayPcbTrackFill;
     GR_DRAWMODE  draw_mode = GR_XOR | GR_HIGHLIGHT;
 
@@ -118,8 +117,8 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     aErase = false;
 #endif
 
-    /* set the new track coordinates */
-    wxPoint Pos = screen->GetCrossHairPosition();
+    // set the new track coordinates
+    wxPoint Pos = aPanel->GetParent()->GetCrossHairPosition();
 
     moveVector = Pos - s_LastPos;
     s_LastPos  = Pos;
@@ -202,7 +201,6 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
     double       xi1 = 0, yi1 = 0, xi2 = 0, yi2 = 0;    // calculated intersection points
     double       tx1, tx2, ty1, ty2;                    // temporary storage of points
     int          dx, dy;
-    BASE_SCREEN* screen = aPanel->GetScreen();
     bool         update = true;
     TRACK*       Track;
     TRACK*       tSegmentToStart = NULL, * tSegmentToEnd = NULL;
@@ -243,7 +241,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
 
     GR_DRAWMODE draw_mode = GR_XOR | GR_HIGHLIGHT;
 
-    /* Undraw the current moved track segments before modification*/
+    // Undraw the current moved track segments before modification
 
 #ifndef USE_WX_OVERLAY
 //  if( erase )
@@ -258,13 +256,13 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
     }
 #endif
 
-    /* Compute the new track segment position */
-    wxPoint Pos = screen->GetCrossHairPosition();
+    // Compute the new track segment position
+    wxPoint Pos = aPanel->GetParent()->GetCrossHairPosition();
 
     dx = Pos.x - s_LastPos.x;
     dy = Pos.y - s_LastPos.y;
 
-    //move the line by dx and dy
+    // move the line by dx and dy
     tx1 = (double) ( Track->GetStart().x + dx );
     ty1 = (double) ( Track->GetStart().y + dy );
     tx2 = (double) ( Track->GetEnd().x + dx );
@@ -613,13 +611,13 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
 
     EraseDragList();
 
-    /* Change highlighted net: the new one will be highlighted */
+    // Change highlighted net: the new one will be highlighted
     GetBoard()->PushHighLight();
 
     if( GetBoard()->IsHighLightNetON() )
         HighLight( aDC );
 
-    PosInit = GetScreen()->GetCrossHairPosition();
+    PosInit = GetCrossHairPosition();
 
     if( aTrack->Type() == PCB_VIA_T )
     {
@@ -637,7 +635,7 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
     }
     else
     {
-        STATUS_FLAGS diag = aTrack->IsPointOnEnds( GetScreen()->GetCrossHairPosition(), -1 );
+        STATUS_FLAGS diag = aTrack->IsPointOnEnds( GetCrossHairPosition(), -1 );
         wxPoint pos;
 
         switch( aCommand )
@@ -754,7 +752,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     if( !TrackToEndPoint || ( TrackToEndPoint->Type() != PCB_TRACE_T ) )
         s_EndSegmentPresent = false;
 
-    /* Change high light net: the new one will be highlighted */
+    // Change high light net: the new one will be highlighted
     GetBoard()->PushHighLight();
 
     if( GetBoard()->IsHighLightNetON() )
@@ -791,8 +789,8 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     UndrawAndMarkSegmentsToDrag( m_canvas, DC );
 
 
-    PosInit   = GetScreen()->GetCrossHairPosition();
-    s_LastPos = GetScreen()->GetCrossHairPosition();
+    PosInit   = GetCrossHairPosition();
+    s_LastPos = GetCrossHairPosition();
     m_canvas->SetMouseCapture( Show_Drag_Track_Segment_With_Cte_Slope, Abort_MoveTrack );
 
     GetBoard()->SetHighLightNet( track->GetNet() );
@@ -823,7 +821,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
 }
 
 
-/* Place a dragged (or moved) track segment or via */
+// Place a dragged (or moved) track segment or via
 bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
 {
     int        errdrc;
@@ -841,7 +839,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
         if( errdrc == BAD_DRC )
             return false;
 
-        /* Redraw the dragged segments */
+        // Redraw the dragged segments
         for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
         {
             errdrc = m_drc->Drc( g_DragSegmentList[ii].m_Track, GetBoard()->m_Track );
@@ -855,7 +853,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     Track->ClearFlags();
     Track->SetState( IN_EDIT, false );
 
-    /* Draw dragged tracks */
+    // Draw dragged tracks
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         Track = g_DragSegmentList[ii].m_Track;

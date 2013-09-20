@@ -1,11 +1,11 @@
 /**
- * @file gerbview/hotkeys.cpp
+ * @file pagelayout_editor/hotkeys.cpp
  */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,7 +180,11 @@ void PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
         break;
 
     case HK_RESET_LOCAL_COORD:      // Reset the relative coord
-        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+        GetScreen()->m_O_Curseur = GetCrossHairPosition();
+        break;
+
+    case HK_SET_GRID_ORIGIN:
+        SetGridOrigin( GetCrossHairPosition() );
         break;
 
     case HK_MOVE_ITEM:

@@ -291,17 +291,31 @@ const wxSize PCB_BASE_FRAME::GetPageSizeIU() const
 }
 
 
-const wxPoint& PCB_BASE_FRAME::GetOriginAxisPosition() const
+const wxPoint& PCB_BASE_FRAME::GetAuxOrigin() const
 {
     wxASSERT( m_Pcb );
-    return m_Pcb->GetOriginAxisPosition();
+    return m_Pcb->GetAuxOrigin();
 }
 
 
-void PCB_BASE_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
+void PCB_BASE_FRAME::SetAuxOrigin( const wxPoint& aPoint )
 {
     wxASSERT( m_Pcb );
-    m_Pcb->SetOriginAxisPosition( aPosition );
+    m_Pcb->SetAuxOrigin( aPoint );
+}
+
+
+const wxPoint& PCB_BASE_FRAME::GetGridOrigin() const
+{
+    wxASSERT( m_Pcb );
+    return m_Pcb->GetGridOrigin();
+}
+
+
+void PCB_BASE_FRAME::SetGridOrigin( const wxPoint& aPoint )
+{
+    wxASSERT( m_Pcb );
+    m_Pcb->SetGridOrigin( aPoint );
 }
 
 
@@ -401,7 +415,7 @@ double PCB_BASE_FRAME::BestZoom()
 
     double bestzoom = std::max( iu_per_du_X, iu_per_du_Y );
 
-    GetScreen()->SetScrollCenterPosition( ibbbox.Centre() );
+    SetScrollCenterPosition( ibbbox.Centre() );
 
     return bestzoom;
 }
@@ -411,21 +425,19 @@ void PCB_BASE_FRAME::CursorGoto( const wxPoint& aPos, bool aWarp )
 {
     // factored out of pcbnew/find.cpp
 
-    PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
-
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     // There may be need to reframe the drawing.
     if( !m_canvas->IsPointOnDisplay( aPos ) )
     {
-        screen->SetCrossHairPosition( aPos );
+        SetCrossHairPosition( aPos );
         RedrawScreen( aPos, aWarp );
     }
     else
     {
         // Put cursor on item position
         m_canvas->CrossHairOff( &dc );
-        screen->SetCrossHairPosition( aPos );
+        SetCrossHairPosition( aPos );
 
         if( aWarp )
             m_canvas->MoveCursorToCrossHair();
@@ -720,8 +732,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     {
         double       theta, ro;
 
-        dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
-        dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+        dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
+        dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
 
         theta = ArcTangente( -dy, dx ) / 10;
 
@@ -758,15 +770,14 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     }
 
     // Display absolute coordinates:
-    dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
-    dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
+    dXpos = To_User_Unit( g_UserUnit, GetCrossHairPosition().x );
+    dYpos = To_User_Unit( g_UserUnit, GetCrossHairPosition().y );
 
     // The following sadly is an if Eeschema/if Pcbnew
     wxString absformatter;
 
     switch( g_UserUnit )
     {
-#if defined( USE_PCBNEW_NANOMETRES )
     case INCHES:
         absformatter = wxT( "X %.6f  Y %.6f" );
         locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
@@ -776,19 +787,6 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         absformatter = wxT( "X %.6f  Y %.6f" );
         locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
         break;
-#else
-    case INCHES:
-        absformatter = wxT( "X %.4f  Y %.4f" );
-        locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
-        break;
-
-    case MILLIMETRES:
-        dXpos = RoundTo0( dXpos, 1000.0 );
-        dYpos = RoundTo0( dYpos, 1000.0 );
-        absformatter = wxT( "X %.3f  Y %.3f" );
-        locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
-        break;
-#endif
 
     case UNSCALED_UNITS:
         absformatter = wxT( "X %f  Y %f" );
@@ -802,18 +800,10 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     if( !DisplayOpt.DisplayPolarCood )  // display relative cartesian coordinates
     {
         // Display relative coordinates:
-        dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
-        dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+        dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
+        dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
         dXpos = To_User_Unit( g_UserUnit, dx );
         dYpos = To_User_Unit( g_UserUnit, dy );
-
-#ifndef USE_PCBNEW_NANOMETRES
-        if ( g_UserUnit == MILLIMETRES )
-        {
-            dXpos = RoundTo0( dXpos, 1000.0 );
-            dYpos = RoundTo0( dYpos, 1000.0 );
-        }
-#endif
 
         // We already decided the formatter above
         line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );

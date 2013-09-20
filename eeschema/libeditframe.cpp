@@ -218,7 +218,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
 
     GetScreen()->m_Center = true;
 
-    GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
+    SetCrossHairPosition( wxPoint( 0, 0 ) );
 
     LoadSettings();
 
@@ -402,7 +402,7 @@ double LIB_EDIT_FRAME::BestZoom()
         BoundaryBox = m_component->GetBoundingBox( m_unit, m_convert );
         dx = BoundaryBox.GetWidth();
         dy = BoundaryBox.GetHeight();
-        GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
+        SetScrollCenterPosition( wxPoint( 0, 0 ) );
     }
     else
     {
@@ -411,7 +411,7 @@ double LIB_EDIT_FRAME::BestZoom()
         dx = pageInfo.GetSizeIU().x;
         dy = pageInfo.GetSizeIU().y;
 
-        GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
+        SetScrollCenterPosition( wxPoint( 0, 0 ) );
     }
 
     size = m_canvas->GetClientSize();
@@ -753,7 +753,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         STATUS_FLAGS oldFlags = m_drawItem->GetFlags();
         m_drawItem->ClearFlags();
         m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL, DefaultTransform );
-        ( (LIB_POLYLINE*) m_drawItem )->DeleteSegment( GetScreen()->GetCrossHairPosition( true ) );
+        ( (LIB_POLYLINE*) m_drawItem )->DeleteSegment( GetCrossHairPosition( true ) );
         m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL, DefaultTransform );
         m_drawItem->SetFlags( oldFlags );
         m_lastDrawItem = NULL;
@@ -1139,7 +1139,7 @@ LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition,
     if( item == NULL )
         return NULL;
 
-    wxPoint pos = GetScreen()->GetNearestGridPosition( aPosition );
+    wxPoint pos = GetNearestGridPosition( aPosition );
 
     if( item == NULL && aPosition != pos )
         item = locateItem( pos, aFilterList );

@@ -119,7 +119,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
     case ID_HIERARCHY:
         InstallHierarchyFrame( &dc, pos );
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
         break;
 
     case wxID_CUT:
@@ -127,12 +127,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
 
         HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
         SetSheetNumberAndCount();
         break;
 
     case wxID_PASTE:
-        HandleBlockBegin( &dc, BLOCK_PASTE, screen->GetCrossHairPosition() );
+        HandleBlockBegin( &dc, BLOCK_PASTE, GetCrossHairPosition() );
         break;
 
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
@@ -165,12 +165,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_BEGIN_WIRE:
         m_canvas->MoveCursorToCrossHair();
-        OnLeftClick( &dc, screen->GetCrossHairPosition() );
+        OnLeftClick( &dc, GetCrossHairPosition() );
         break;
 
     case ID_POPUP_SCH_BEGIN_BUS:
         m_canvas->MoveCursorToCrossHair();
-        OnLeftClick( &dc, screen->GetCrossHairPosition() );
+        OnLeftClick( &dc, GetCrossHairPosition() );
         break;
 
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
@@ -182,7 +182,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION );
         screen->SetCurItem( NULL );
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
         screen->TestDanglingEnds( m_canvas, &dc );
         m_canvas->Refresh();
         break;
@@ -194,7 +194,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         oldWires.SetOwnership( false );      // Prevent DLIST for deleting items in destructor.
         m_canvas->MoveCursorToCrossHair();
         screen->ExtractWires( oldWires, true );
-        screen->BreakSegment( screen->GetCrossHairPosition() );
+        screen->BreakSegment( GetCrossHairPosition() );
 
         if( oldWires.GetCount() != 0 )
         {
@@ -222,7 +222,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         DeleteItem( item );
         screen->SetCurItem( NULL );
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
         screen->TestDanglingEnds( m_canvas, &dc );
         SetSheetNumberAndCount();
         OnModify();
@@ -344,7 +344,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ADD_JUNCTION:
         m_canvas->MoveCursorToCrossHair();
-        screen->SetCurItem( AddJunction( &dc, screen->GetCrossHairPosition(), true ) );
+        screen->SetCurItem( AddJunction( &dc, GetCrossHairPosition(), true ) );
         screen->TestDanglingEnds( m_canvas, &dc );
         screen->SetCurItem( NULL );
         break;
@@ -375,7 +375,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     // End switch ( id )    (Command execution)
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
 }
 
 
@@ -445,7 +445,7 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
     }
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
 }
 
 
@@ -561,7 +561,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     default:
-        m_itemToRepeat = NULL;
+        SetRepeatItem( NULL );
     }
 
     // Simulate left click event if we got here from a hot key.
@@ -588,7 +588,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
 {
     PICKED_ITEMS_LIST   pickList;
     SCH_SCREEN*         screen = GetScreen();
-    wxPoint             pos = screen->GetCrossHairPosition();
+    wxPoint             pos = GetCrossHairPosition();
 
     if( screen->GetConnection( pos, pickList, aFullConnection ) != 0 )
     {
@@ -603,7 +603,7 @@ bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
     SCH_ITEM*   item;
     SCH_SCREEN* screen = GetScreen();
 
-    item = LocateItem( screen->GetCrossHairPosition(), SCH_COLLECTOR::ParentItems );
+    item = LocateItem( GetCrossHairPosition(), SCH_COLLECTOR::ParentItems );
 
     if( item )
     {
@@ -637,7 +637,7 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
         item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 #endif
 
-    item->SetPosition( screen->GetCrossHairPosition() );
+    item->SetPosition( aPanel->GetParent()->GetCrossHairPosition() );
 
     // Draw the item item at it's new position.
     item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
@@ -695,7 +695,7 @@ void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot move invalid schematic item" ) );
 
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
 
     if( !aItem->IsNew() )
     {
@@ -713,7 +713,7 @@ void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
     m_canvas->CrossHairOff( aDC );
 
     if( aItem->Type() != SCH_SHEET_PIN_T )
-        GetScreen()->SetCrossHairPosition( aItem->GetPosition() );
+        SetCrossHairPosition( aItem->GetPosition() );
 
     m_canvas->MoveCursorToCrossHair();
 
@@ -959,7 +959,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
         // is to simulate a block drag command
         if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
         {
-            if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->GetCrossHairPosition() ) )
+            if( !HandleBlockBegin( &dc, BLOCK_DRAG, GetCrossHairPosition() ) )
                 break;
 
             // Give a non null size to the search block:

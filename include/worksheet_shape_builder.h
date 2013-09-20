@@ -266,7 +266,7 @@ protected:
                                 // for basic inscriptions, in schematic
     const TITLE_BLOCK* m_titleBlock;    // for basic inscriptions
     const wxString* m_paperFormat;      // for basic inscriptions
-    const wxString* m_fileName;         // for basic inscriptions
+    wxString        m_fileName;         // for basic inscriptions
     const wxString* m_sheetFullName;    // for basic inscriptions
 
 
@@ -280,7 +280,6 @@ public:
         m_sheetCount = 1;
         m_titleBlock = NULL;
         m_paperFormat = NULL;
-        m_fileName = NULL;
         m_sheetFullName = NULL;
     }
 
@@ -296,7 +295,7 @@ public:
      */
     void SetFileName( const wxString & aFileName )
     {
-        m_fileName = &aFileName;
+        m_fileName = aFileName;
     }
 
     /**

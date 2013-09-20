@@ -4,8 +4,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2011 Jean-Pierre Charras.
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,11 +52,17 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
                                      bool            aDeleteUnconnectedTracks,
                                      bool            aDeleteExtraFootprints,
                                      bool            aSelectByTimeStamp,
+                                     bool            aDeleteSinglePadNets,
                                      bool            aIsDryRun )
 {
     wxString        msg;
     NETLIST         netlist;
     NETLIST_READER* netlistReader;
+
+    netlist.SetIsDryRun( aIsDryRun );
+    netlist.SetFindByTimeStamp( aSelectByTimeStamp );
+    netlist.SetDeleteExtraFootprints( aDeleteExtraFootprints );
+    netlist.SetReplaceFootprints( aChangeFootprints );
 
     try
     {
@@ -80,17 +88,12 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
         return;
     }
 
-    netlist.SetIsDryRun( aIsDryRun );
-    netlist.SetFindByTimeStamp( aSelectByTimeStamp );
-    netlist.SetDeleteExtraFootprints( aDeleteExtraFootprints );
-    netlist.SetReplaceFootprints( aChangeFootprints );
-
     // Clear undo and redo lists to avoid inconsistencies between lists
     if( !netlist.IsDryRun() )
         GetScreen()->ClearUndoRedoList();
 
     netlist.SortByReference();
-    GetBoard()->ReplaceNetlist( netlist, aReporter );
+    GetBoard()->ReplaceNetlist( netlist, aDeleteSinglePadNets, aReporter );
 
     // If it was a dry run, nothing has changed so we're done.
     if( netlist.IsDryRun() )
@@ -164,12 +167,16 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
 void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     throw( IO_ERROR, PARSE_ERROR )
 {
-    bool       loadFootprint;
     wxString   msg;
     wxString   lastFootprintLibName;
+    wxArrayString nofoundFootprints;    // A list of footprints used in netlist
+                                        // but not found in any library
+                                        // to avoid a full search in all libs
+                                        // each time a non existent footprint is needed
     COMPONENT* component;
     MODULE*    module = 0;
     MODULE*    fpOnBoard;
+
 
     if( aNetlist.IsEmpty() )
         return;
@@ -204,12 +211,48 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         else
             fpOnBoard = m_Pcb->FindModule( aNetlist.GetComponent( ii )->GetReference() );
 
-        loadFootprint = (fpOnBoard == NULL) ||
-                        (fpOnBoard->GetPath() != component->GetFootprintName());
+        bool footprintMisMatch = fpOnBoard &&
+                                 fpOnBoard->GetLibRef() != component->GetFootprintName();
+
+        if( footprintMisMatch && !aNetlist.GetReplaceFootprints() )
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "* Warning: component `%s` has footprint <%s> and should be  <%s>\n" ),
+                            GetChars( component->GetReference() ),
+                            GetChars( fpOnBoard->GetLibRef() ),
+                            GetChars( component->GetFootprintName() ) );
+                aReporter->Report( msg );
+            }
+
+            continue;
+        }
+
+        if( !aNetlist.GetReplaceFootprints() )
+            footprintMisMatch = false;
+
+        bool loadFootprint = (fpOnBoard == NULL) || footprintMisMatch;
 
         if( loadFootprint && (component->GetFootprintName() != lastFootprintLibName) )
         {
             module = NULL;
+
+            // Speed up the search: a search for a non existent footprint
+            // is hightly costly in time becuse the full set of libs is read.
+            // So it should be made only once.
+            // Therefore search in not found list first:
+            bool alreadySearched = false;
+            for( unsigned ii = 0; ii < nofoundFootprints.GetCount(); ii++ )
+            {
+                if( component->GetFootprintName() == nofoundFootprints[ii] )
+                {
+                    alreadySearched = true;
+                    break;
+                }
+            }
+
+            if( alreadySearched )
+                continue;
 
             for( unsigned ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
             {
@@ -240,17 +283,18 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
                 }
             }
 
-            if( module == NULL )
+            if( module == NULL && !alreadySearched )
             {
                 if( aReporter )
                 {
-                    wxString msg;
                     msg.Printf( _( "*** Warning: component `%s` footprint <%s> was not found in "
                                    "any libraries. ***\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetFootprintName() ) );
                     aReporter->Report( msg );
                 }
+
+                nofoundFootprints.Add( component->GetFootprintName() );
 
                 continue;
             }
@@ -274,7 +318,6 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
 void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     throw( IO_ERROR, PARSE_ERROR )
 {
-    bool       loadFootprint;
     wxString   msg;
     wxString   lastFootprintLibName;
     COMPONENT* component;
@@ -309,8 +352,27 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         else
             fpOnBoard = m_Pcb->FindModule( aNetlist.GetComponent( ii )->GetReference() );
 
-        loadFootprint = (fpOnBoard == NULL) ||
-                        (fpOnBoard->GetPath() != component->GetFootprintName());
+        bool footprintMisMatch = fpOnBoard &&
+                                 fpOnBoard->GetLibRef() != component->GetFootprintName();
+
+        if( footprintMisMatch && !aNetlist.GetReplaceFootprints() )
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "* Warning: component `%s` has footprint <%s> and should be  <%s>\n" ),
+                            GetChars( component->GetReference() ),
+                            GetChars( fpOnBoard->GetLibRef() ),
+                            GetChars( component->GetFootprintName() ) );
+                aReporter->Report( msg );
+            }
+
+            continue;
+        }
+
+        if( !aNetlist.GetReplaceFootprints() )
+            footprintMisMatch = false;
+
+        bool loadFootprint = (fpOnBoard == NULL) || footprintMisMatch;
 
         if( loadFootprint && (component->GetFootprintName() != lastFootprintLibName) )
         {

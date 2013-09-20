@@ -90,7 +90,7 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
             m_CurrentSheet->UpdateAllScreenReferences();
         }
 
-        sheetFoundIn->LastScreen()->SetCrossHairPosition( lastMarker->GetPosition() );
+        SetCrossHairPosition( lastMarker->GetPosition() );
 
         RedrawScreen( lastMarker->GetPosition(), warpCursor );
 
@@ -213,7 +213,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
         if( centerAndRedraw )
         {
-            GetScreen()->SetCrossHairPosition(pos);
+            SetCrossHairPosition( pos );
             RedrawScreen( pos, aWarpMouse );
         }
 
@@ -226,7 +226,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
             if( aWarpMouse )
                 m_canvas->MoveCursor( pos );
 
-            GetScreen()->SetCrossHairPosition(pos);
+            SetCrossHairPosition( pos );
 
             m_canvas->CrossHairOn( &dc );
         }
@@ -351,7 +351,8 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
             SetScreen( sheet->LastScreen() );
         }
 
-        sheet->LastScreen()->SetCrossHairPosition( data.GetPosition() );
+        // careful here
+        SetCrossHairPosition( data.GetPosition() );
 
         RedrawScreen( data.GetPosition(), warpCursor );
 

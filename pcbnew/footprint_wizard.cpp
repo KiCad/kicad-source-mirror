@@ -34,6 +34,7 @@ void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
     case ID_FOOTPRINT_WIZARD_NEXT:
         m_PageList->SetSelection( m_PageList->GetSelection() + 1, true );
+        ClickOnPageList( event );
         break;
 
     case ID_FOOTPRINT_WIZARD_PREVIOUS:
@@ -43,6 +44,7 @@ void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
             page = 0;
 
         m_PageList->SetSelection( page, true );
+        ClickOnPageList( event );
         break;
 
     default:
@@ -102,19 +104,20 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     SetCurItem( NULL );
     // Delete the current footprint
     GetBoard()->m_Modules.DeleteAll();
-    MODULE* m = footprintWizard->GetModule();
 
-    if( m )
+    // Creates the module
+    MODULE* module = footprintWizard->GetModule();
+
+    if( module )
     {
-        /* Here we should make a copy of the object before adding to board*/
-        m->SetParent( (EDA_ITEM*) GetBoard() );
-        GetBoard()->m_Modules.Append( m );
-        wxPoint p( 0, 0 );
-        m->SetPosition( p );
+        //  Add the object to board
+        module->SetParent( (EDA_ITEM*) GetBoard() );
+        GetBoard()->m_Modules.Append( module );
+        module->SetPosition( wxPoint( 0, 0 ) );
     }
     else
     {
-        printf( "footprintWizard->GetModule() returns NULL\n" );
+        DBG(printf( "footprintWizard->GetModule() returns NULL\n" );)
     }
 
     RefreshCanvas();
@@ -142,14 +145,12 @@ MODULE* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
 {
     FOOTPRINT_WIZARD* footprintWizard = FOOTPRINT_WIZARDS::GetWizard( m_wizardName );
 
-    if( footprintWizard )
+    if( footprintWizard && m_exportRequest )
     {
         return footprintWizard->GetModule();
     }
-    else
-    {
-        return NULL;
-    }
+
+    return NULL;
 }
 
 
@@ -158,7 +159,8 @@ void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
     DIALOG_FOOTPRINT_WIZARD_LIST* selectWizard =
         new DIALOG_FOOTPRINT_WIZARD_LIST( this );
 
-    selectWizard->ShowModal();
+    if( selectWizard->ShowModal() != wxID_OK )
+        return;
 
     FOOTPRINT_WIZARD* footprintWizard = selectWizard->GetWizard();
 
@@ -225,14 +227,11 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
                 dValue = dValue / 1000.0;
 
             dValue = From_User_Unit( g_UserUnit, dValue );
-
-            value.Printf( wxT( "%lf" ), dValue );
+            value.Printf( wxT( "%f" ), dValue );
         }
 
         // If our locale is set to use , for decimal point, just change it
         // to be scripting compatible
-
-
         arr.Add( value );
     }
 

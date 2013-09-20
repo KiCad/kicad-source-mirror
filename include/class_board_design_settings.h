@@ -18,7 +18,7 @@ class BOARD_DESIGN_SETTINGS
 {
 public:
     bool    m_MicroViasAllowed;             ///< true to allow micro vias
-    int     m_CurrentViaType;               ///< via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
+    int     m_CurrentViaType;               ///< via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
 
     /// if true, when creating a new track starting on an existing track, use this track width
     bool    m_UseConnectedTrackWidth;
@@ -45,6 +45,8 @@ public:
     wxSize  m_ModuleTextSize;               ///< Default footprint texts size
     int     m_ModuleTextWidth;
     int     m_ModuleSegmentWidth;
+    wxPoint m_AuxOrigin;                    ///< origin for plot exports
+    wxPoint m_GridOrigin;                   ///< origin for grid offsets
 
     D_PAD   m_Pad_Master;
 

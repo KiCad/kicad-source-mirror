@@ -462,6 +462,43 @@ void WORKSHEET_DATAITEM_TEXT::IncrementLabel( int aIncr )
         m_FullText << (wxChar) ( aIncr + lbchar );
 }
 
+// Replace the '\''n' sequence by EOL
+// and the sequence  '\''\' by only one '\' in m_FullText
+// if m_FullTextis a multiline text (i;e.contains '\n') return true
+bool WORKSHEET_DATAITEM_TEXT::ReplaceAntiSlashSequence()
+{
+    bool multiline = false;
+
+    for( unsigned ii = 0; ii < m_FullText.Len(); ii++ )
+    {
+        if( m_FullText[ii] == '\n' )
+            multiline = true;
+
+        else if( m_FullText[ii] == '\\' )
+        {
+            if( ++ii >= m_FullText.Len() )
+                break;
+
+            if( m_FullText[ii] == '\\' )
+            {
+                // a double \\ sequence is replaced by a single \ char
+                m_FullText.Remove(ii, 1);
+                ii--;
+            }
+            else if( m_FullText[ii] == 'n' )
+            {
+                // Replace the "\n" sequence by a EOL char
+                multiline = true;
+                m_FullText[ii] = '\n';
+                m_FullText.Remove(ii-1, 1);
+                ii--;
+            }
+        }
+    }
+
+    return multiline;
+}
+
 void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
 {
     m_ConstrainedTextSize = m_TextSize;
@@ -501,3 +538,4 @@ void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
             m_ConstrainedTextSize.y *= m_BoundingBoxSize.y / size.y;
     }
 }
+

@@ -1,12 +1,12 @@
 /**
- * @file gerbview/files.cpp
+ * @file pl_editor/files.cpp
  */
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,9 +112,9 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         OnNewPageLayout();
         break;
 
-    case ID_OPEN_POLYGON_DESCR_FILE:
+    case ID_APPEND_DESCR_FILE:
     {
-         wxFileDialog openFileDialog(this, _("Open polygon descr file"),
+         wxFileDialog openFileDialog(this, _("Append Page Layout Descr File"),
                 wxEmptyString,
                 wxEmptyString, PageLayoutDescrFileWildcard, wxFD_OPEN);
 

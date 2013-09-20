@@ -42,12 +42,16 @@ ELSE (WIN32)
 
   IF (APPLE)
 # These values for Apple could probably do with improvement.
-    FIND_PATH( GLEW_INCLUDE_DIR glew.h
+    FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h
       /System/Library/Frameworks/GLEW.framework/Versions/A/Headers
+      /opt/local/include
       ${OPENGL_LIBRARY_DIR}
     )
-    SET(GLEW_GLEW_LIBRARY "-framework GLEW" CACHE STRING "GLEW library for OSX")
-    SET(GLEW_cocoa_LIBRARY "-framework Cocoa" CACHE STRING "Cocoa framework for OSX")
+
+    FIND_LIBRARY( GLEW_GLEW_LIBRARY GLEW
+      /opt/local/lib
+    )
+
   ELSE (APPLE)
 
     FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h

@@ -147,7 +147,7 @@ void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC, bool aE
     RefreshCanvas();
 #endif
 
-    GetScreen()->SetCrossHairPosition( aTextePcb->GetTextPosition() );
+    SetCrossHairPosition( aTextePcb->GetTextPosition() );
     m_canvas->MoveCursorToCrossHair();
 
     m_canvas->SetMouseCapture( Move_Texte_Pcb, Abort_Edit_Pcb_Text );
@@ -156,7 +156,7 @@ void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC, bool aE
 }
 
 
-/* Move  PCB text following the cursor. */
+// Move  PCB text following the cursor.
 static void Move_Texte_Pcb( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                             bool aErase )
 {
@@ -168,7 +168,7 @@ static void Move_Texte_Pcb( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aP
     if( aErase )
         TextePcb->Draw( aPanel, aDC, GR_XOR );
 
-    TextePcb->SetTextPosition( aPanel->GetScreen()->GetCrossHairPosition() );
+    TextePcb->SetTextPosition( aPanel->GetParent()->GetCrossHairPosition() );
 
     TextePcb->Draw( aPanel, aDC, GR_XOR );
 }
@@ -214,7 +214,7 @@ TEXTE_PCB* PCB_EDIT_FRAME::CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText )
             textePcb->SetMirrored( true );
 
         textePcb->SetSize( GetBoard()->GetDesignSettings().m_PcbTextSize );
-        textePcb->SetTextPosition( GetScreen()->GetCrossHairPosition() );
+        textePcb->SetTextPosition( GetCrossHairPosition() );
         textePcb->SetThickness( GetBoard()->GetDesignSettings().m_PcbTextWidth );
 
         InstallTextPCBOptionsFrame( textePcb, aDC );

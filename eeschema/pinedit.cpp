@@ -210,7 +210,7 @@ void LIB_EDIT_FRAME::PlacePin()
         return;
     }
 
-    newpos = GetScreen()->GetCrossHairPosition( true );
+    newpos = GetCrossHairPosition( true );
 
     // Test for an other pin in same new position:
     for( Pin = m_component->GetNextPin(); Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
@@ -308,7 +308,7 @@ void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
     startPos.x = OldPos.x;
     startPos.y = -OldPos.y;
 //    m_canvas->CrossHairOff( DC );
-    GetScreen()->SetCrossHairPosition( startPos );
+    SetCrossHairPosition( startPos );
     m_canvas->MoveCursorToCrossHair();
 
     MSG_PANEL_ITEMS items;
@@ -350,7 +350,7 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     }
 
     // Redraw pin in new position
-    CurrentPin->Move( aPanel->GetScreen()->GetCrossHairPosition( true ) );
+    CurrentPin->Move( aPanel->GetParent()->GetCrossHairPosition( true ) );
     CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode,
                       &showPinText, DefaultTransform );
 
@@ -388,7 +388,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     if( SynchronizePins() )
         pin->SetFlags( IS_LINKED );
 
-    pin->Move( GetScreen()->GetCrossHairPosition( true ) );
+    pin->Move( GetCrossHairPosition( true ) );
     pin->SetLength( LastPinLength );
     pin->SetOrientation( LastPinOrient );
     pin->SetType( LastPinType );
@@ -555,10 +555,10 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     if( SynchronizePins() )
         Pin->SetFlags( IS_LINKED );
 
-    wxPoint savepos = GetScreen()->GetCrossHairPosition();
+    wxPoint savepos = GetCrossHairPosition();
     m_canvas->CrossHairOff( DC );
-    GetScreen()->SetCrossHairPosition( wxPoint( Pin->GetPosition().x,
-                                                -Pin->GetPosition().y ) );
+
+    SetCrossHairPosition( wxPoint( Pin->GetPosition().x, -Pin->GetPosition().y ) );
 
     // Add this new pin in list, and creates pins for others parts if needed
     m_drawItem = Pin;
@@ -566,7 +566,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     PlacePin();
     m_lastDrawItem = Pin;
 
-    GetScreen()->SetCrossHairPosition( savepos );
+    SetCrossHairPosition( savepos );
     m_canvas->CrossHairOn( DC );
 
     MSG_PANEL_ITEMS items;

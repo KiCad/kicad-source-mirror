@@ -240,7 +240,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
     if( aDimension == NULL )
     {
         status_dimension = 1;
-        pos = GetScreen()->GetCrossHairPosition();
+        pos = GetCrossHairPosition();
 
         aDimension = new DIMENSION( GetBoard() );
         aDimension->SetFlags( IS_NEW );
@@ -302,7 +302,7 @@ static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 {
     PCB_SCREEN* screen   = (PCB_SCREEN*) aPanel->GetScreen();
     DIMENSION*  Dimension = (DIMENSION*) screen->GetCurItem();
-    wxPoint     pos = screen->GetCrossHairPosition();
+    wxPoint     pos = aPanel->GetParent()->GetCrossHairPosition();
 
     if( Dimension == NULL )
         return;
@@ -386,7 +386,7 @@ void PCB_EDIT_FRAME::BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC )
     aItem->SetFlags( IS_MOVED );
     SetMsgPanel( aItem );
 
-    GetScreen()->SetCrossHairPosition( aItem->Text().GetTextPosition() );
+    SetCrossHairPosition( aItem->Text().GetTextPosition() );
     m_canvas->MoveCursorToCrossHair();
 
     m_canvas->SetMouseCapture( MoveDimensionText, AbortMoveDimensionText );
@@ -407,7 +407,7 @@ static void MoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     if( aErase )
         dimension->Draw( aPanel, aDC, GR_XOR );
 
-    dimension->Text().SetTextPosition( aPanel->GetScreen()->GetCrossHairPosition() );
+    dimension->Text().SetTextPosition( aPanel->GetParent()->GetCrossHairPosition() );
 
     dimension->Draw( aPanel, aDC, GR_XOR );
 }

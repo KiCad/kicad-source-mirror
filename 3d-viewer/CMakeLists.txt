@@ -2,7 +2,6 @@ add_definitions(-DPCBNEW)
 
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
-    ${Boost_INCLUDE_DIR}
     ../pcbnew
     ../polygon
     ${INC_AFTER}

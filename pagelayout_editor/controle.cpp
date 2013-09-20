@@ -1,8 +1,12 @@
+/**
+ * @file pagelayout_editor/controle.cpp
+ */
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2013 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2013-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +26,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pagelayout_editor/controle.cpp
- */
-
 #include <fctsys.h>
 #include <common.h>
 #include <class_drawpanel.h>
@@ -35,14 +35,9 @@
 void PL_EDITOR_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition,
                                       int aHotKey )
 {
-    wxRealPoint gridSize;
-    wxPoint     oldpos;
-    wxPoint     pos = aPosition;
-
-    pos = GetScreen()->GetNearestGridPosition( pos );
-
-    oldpos = GetScreen()->GetCrossHairPosition();
-    gridSize = GetScreen()->GetGridSize();
+    wxPoint     pos = GetNearestGridPosition( aPosition );
+    wxPoint     oldpos = GetCrossHairPosition();
+    wxRealPoint gridSize = GetScreen()->GetGridSize();
 
     switch( aHotKey )
     {
@@ -74,14 +69,14 @@ void PL_EDITOR_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition,
         break;
     }
 
-    GetScreen()->SetCrossHairPosition( pos );
+    SetCrossHairPosition( pos );
 
-    if( oldpos != GetScreen()->GetCrossHairPosition() )
+    if( oldpos != GetCrossHairPosition() )
     {
-        pos = GetScreen()->GetCrossHairPosition();
-        GetScreen()->SetCrossHairPosition( oldpos );
+        pos = GetCrossHairPosition();
+        SetCrossHairPosition( oldpos );
         m_canvas->CrossHairOff( aDC );
-        GetScreen()->SetCrossHairPosition( pos );
+        SetCrossHairPosition( pos );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )

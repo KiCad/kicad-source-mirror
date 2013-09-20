@@ -29,6 +29,10 @@
 
 using namespace KiGfx;
 
+
+const double STROKE_FONT::LINE_HEIGHT_RATIO  = 1.6;
+
+
 STROKE_FONT::STROKE_FONT( GAL* aGal ) :
     m_gal( aGal ),
     m_bold( false ),

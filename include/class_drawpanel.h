@@ -55,52 +55,55 @@ typedef void ( *END_MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC 
 class EDA_DRAW_PANEL : public wxScrolledWindow
 {
 private:
-    int m_currentCursor;          ///< Current mouse cursor shape id.
-    int m_defaultCursor;          ///< The default mouse cursor shape id.
-    bool m_showCrossHair;         ///< Indicate if cross hair is to be shown.
-    int m_cursorLevel;            ///< Index for cursor redraw in XOR mode.
-    int m_scrollIncrementX;       ///< X axis scroll increment in pixels per unit.
-    int m_scrollIncrementY;       ///< Y axis scroll increment in pixels per unit.
-    wxPoint m_CursorStartPos;     ///< Used for testing the cursor movement.
-    wxPoint m_PanStartCenter;     ///< Initial scroll center position when pan started
-    wxPoint m_PanStartEventPosition;   ///< Initial position of mouse event when pan started
+    int     m_currentCursor;                ///< Current mouse cursor shape id.
+    int     m_defaultCursor;                ///< The default mouse cursor shape id.
+    bool    m_showCrossHair;                ///< Indicate if cross hair is to be shown.
+    int     m_cursorLevel;                  ///< Index for cursor redraw in XOR mode.
+    int     m_scrollIncrementX;             ///< X axis scroll increment in pixels per unit.
+    int     m_scrollIncrementY;             ///< Y axis scroll increment in pixels per unit.
+
+    wxPoint m_CursorStartPos;               ///< Used for testing the cursor movement.
+    wxPoint m_PanStartCenter;               ///< Initial scroll center position when pan started
+    wxPoint m_PanStartEventPosition;        ///< Initial position of mouse event when pan started
 
     /// The drawing area used to redraw the screen which is usually the visible area
     /// of the drawing in internal units.
-    EDA_RECT m_ClipBox;
+    EDA_RECT    m_ClipBox;
 
-    bool m_abortRequest;          ///< Flag used to abort long commands.
+    bool    m_abortRequest;                 ///< Flag used to abort long commands.
 
-    bool m_enableZoomNoCenter;    ///< True to enable zooming around the crosshair instead of the center
-    bool m_enableMiddleButtonPan; ///< True to enable middle mouse button panning.
-    bool m_panScrollbarLimits;    ///< has meaning only if m_enableMiddleButtonPan = true
-                                  ///< true to limit panning to scrollbar current limits
-                                  ///< false to used unlimited pan
+    bool    m_enableZoomNoCenter;           ///< True to enable zooming around the crosshair instead of the center
+    bool    m_enableMiddleButtonPan;        ///< True to enable middle mouse button panning.
+    bool    m_panScrollbarLimits;           ///< has meaning only if m_enableMiddleButtonPan = true
+                                            ///< true to limit panning to scrollbar current limits
+                                            ///< false to used unlimited pan
 
-    bool m_enableAutoPan;         ///< True to enable automatic panning.
+    bool    m_enableAutoPan;                ///< True to enable automatic panning.
 
-    /// true to request an auto pan.  Valid only when m_enableAutoPan = true.
-    bool m_requestAutoPan;
+    bool    m_requestAutoPan;               ///< true to request an auto pan.  Valid only when m_enableAutoPan = true.
 
-    bool m_ignoreMouseEvents;     ///< Ignore mouse events when true.
+    bool    m_ignoreMouseEvents;            ///< Ignore mouse events when true.
 
     /* Used to inhibit a response to a mouse left button release, after a double click
      * (when releasing the left button at the end of the second click.  Used in Eeschema
      * to inhibit a mouse left release command when switching between hierarchical sheets
      * on a double click.
      */
-    bool m_ignoreNextLeftButtonRelease;    ///< Ignore the next mouse left button release when true.
+    bool    m_ignoreNextLeftButtonRelease;  ///< Ignore the next mouse left button release when true.
 
-    bool m_enableBlockCommands;   ///< True enables block commands.
+    bool    m_enableBlockCommands;          ///< True enables block commands.
 
-    int m_minDragEventCount;    /* Count the drag events. Used to filter mouse moves before starting a
-                                 * block command.  A block command can be started only if
-                                 * MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND
-                                 * in order to avoid spurious block commands. */
+    /**
+     * Count the drag events. Used to filter mouse moves before starting a
+     * block command.  A block command can be started only if
+     * MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND in order to avoid
+     * spurious block commands.
+     */
+    int     m_minDragEventCount;
 
     /// True when drawing in mirror mode. Used by the draw arc function, because arcs
     /// are oriented, and in mirror mode, orientations are reversed.
-    bool m_PrintIsMirrored;
+    bool    m_PrintIsMirrored;
 
     /// Mouse capture move callback function.
     MOUSE_CAPTURE_CALLBACK m_mouseCaptureCallback;
@@ -108,9 +111,10 @@ private:
     /// Abort mouse capture callback function.
     END_MOUSE_CAPTURE_CALLBACK m_endMouseCaptureCallback;
 
-    // useful to avoid false start block in certain cases
-    // (like switch from a sheet to an other sheet
-    int m_canStartBlock;          // >= 0 (or >= n) if a block can start
+    /// useful to avoid false start block in certain cases
+    /// (like switch from a sheet to an other sheet
+    /// >= 0 (or >= n) if a block can start
+    int     m_canStartBlock;
 
 public:
 
@@ -119,7 +123,7 @@ public:
 
     BASE_SCREEN* GetScreen();
 
-    virtual EDA_DRAW_FRAME* GetParent();
+    EDA_DRAW_FRAME* GetParent();
 
     void OnPaint( wxPaintEvent& event );
 
@@ -155,9 +159,8 @@ public:
 
     void SetEnableBlockCommands( bool aEnable ) { m_enableBlockCommands = aEnable; }
 
-    bool GetPrintMirrored() const { return m_PrintIsMirrored; }
-
-    void SetPrintMirrored( bool aMirror ) { m_PrintIsMirrored = aMirror; }
+    bool GetPrintMirrored() const               { return m_PrintIsMirrored; }
+    void SetPrintMirrored( bool aMirror )       { m_PrintIsMirrored = aMirror; }
 
     void SetCanStartBlock( int aStartBlock ) { m_canStartBlock = aStartBlock; }
 
@@ -196,8 +199,9 @@ public:
      * the grid origin is set by user, and is not (0,0)
      * @param aDC = current Device Context
      * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
+     * @param aGridOrigin = the absolute coordinate of grid origin for snap.
      */
-    void DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode );
+    void DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aGridOrigin );
 
     void OnEraseBackground( wxEraseEvent& event ) { }
 
@@ -324,7 +328,7 @@ public:
      * warps the cursor to the current cross hair position.
      */
     void MoveCursorToCrossHair();
-    
+
     /**
      * Function ToDeviceXY
      * transforms logical to device coordinates

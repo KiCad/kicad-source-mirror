@@ -136,8 +136,8 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
             msg << aTextbase[ii];
             continue;
         }
-        ii++;
-        if( ii >= aTextbase.Len() )
+
+        if( ++ii >= aTextbase.Len() )
             break;
 
         wxChar format = aTextbase[ii];
@@ -174,7 +174,7 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 
             case 'F':
                 {
-                    wxFileName fn( *m_fileName );
+                    wxFileName fn( m_fileName );
                     msg += fn.GetFullName();
                 }
                 break;
