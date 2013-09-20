@@ -55,7 +55,9 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 {
     wxString    msg;
     STATUS_FLAGS flags = 0;
-    bool        locate_track = false;
+    bool        trackFound = false; // Flag set to true,
+                                    // if a track is being the cursor, to avoid
+                                    // to display menus relative to tracks twice
     bool        blockActive  = !GetScreen()->m_BlockLocate.IsIdle();
 
     wxClientDC  dc( m_canvas );
@@ -118,8 +120,9 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
      */
     if( !item || (item->GetFlags() == 0) )
     {
-        // show "item selector" menu only if no item now or selected item was not
-        // previously picked at this position
+        // show the "item selector" menu if no item selected or
+        // if there is a selected item but the mouse has moved
+        // (therefore a new item is perhaps under the cursor)
         if( !item || cursorPos != selectPos )
         {
             m_canvas->SetAbortRequest( false );
@@ -140,6 +143,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     else
         flags = 0;
 
+    // Add the context menu, which depends on the picked item:
     if( item )
     {
         switch( item->Type() )
@@ -238,7 +242,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
         case PCB_TRACE_T:
         case PCB_VIA_T:
-            locate_track = true;
+            trackFound = true;
             createPopupMenuForTracks( (TRACK*) item, aPopMenu );
             break;
 
@@ -301,7 +305,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             break;
         }
 
-        aPopMenu->AppendSeparator();
+       aPopMenu->AppendSeparator();
     }
 
     if( !flags )
@@ -338,10 +342,9 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         break;
 
     case ID_TRACK_BUTT:
-        aPopMenu->AppendSeparator();
-
-        if ( ! locate_track )   // This menu is already added when a track is located
+        if ( ! trackFound )   // This menu is already added when a track is located
         {
+            aPopMenu->AppendSeparator();
             msg = AddHotkeyName( _( "Begin Track" ),
                                  g_Board_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK );
             AddMenuItem( aPopMenu, ID_POPUP_PCB_BEGIN_TRACK,
@@ -350,12 +353,13 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard() ),
                          ID_POPUP_PCB_SELECT_WIDTH, _( "Select Track Width" ),
                          KiBitmap( width_track_xpm ) );
+
+            AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_CU_LAYER,
+                         _( "Select Working Layer" ), KiBitmap( select_w_layer_xpm ) );
+            AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_LAYER_PAIR,
+                         _( "Select Layer Pair for Vias" ), KiBitmap( select_layer_pair_xpm ) );
+            aPopMenu->AppendSeparator();
         }
-        AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_CU_LAYER,
-                     _( "Select Working Layer" ), KiBitmap( select_w_layer_xpm ) );
-        AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_LAYER_PAIR,
-                     _( "Select Layer Pair for Vias" ), KiBitmap( select_layer_pair_xpm ) );
-        aPopMenu->AppendSeparator();
         break;
 
     case ID_PCB_CIRCLE_BUTT:
@@ -369,9 +373,12 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         break;
 
     case ID_PCB_MODULE_BUTT:
-        AddMenuItem( aPopMenu, ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC,
-                     _( "Footprint Documentation" ), KiBitmap( book_xpm ) );
-        aPopMenu->AppendSeparator();
+        if( !flags )
+        {
+            AddMenuItem( aPopMenu, ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC,
+                         _( "Footprint Documentation" ), KiBitmap( book_xpm ) );
+            aPopMenu->AppendSeparator();
+        }
         break;
 
     case ID_NO_TOOL_SELECTED:
@@ -415,17 +422,19 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             aPopMenu->AppendSeparator();
         }
 
-        msg = AddHotkeyName( _( "Begin Track" ), g_Board_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK );
-        AddMenuItem( aPopMenu, ID_POPUP_PCB_BEGIN_TRACK, msg, KiBitmap( add_tracks_xpm ) );
+        if( !trackFound )
+        {
+            msg = AddHotkeyName( _( "Begin Track" ), g_Board_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK );
+            AddMenuItem( aPopMenu, ID_POPUP_PCB_BEGIN_TRACK, msg, KiBitmap( add_tracks_xpm ) );
 
-        if( locate_track )
             AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard() ),
                          ID_POPUP_PCB_SELECT_WIDTH, _( "Select Track Width" ),
                          KiBitmap( width_track_xpm ) );
 
-        AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_LAYER,
-                     _( "Select Working Layer" ), KiBitmap( select_w_layer_xpm ) );
-        aPopMenu->AppendSeparator();
+            AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_LAYER,
+                         _( "Select Working Layer" ), KiBitmap( select_w_layer_xpm ) );
+            aPopMenu->AppendSeparator();
+        }
         break;
     }
 
@@ -466,6 +475,11 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 
     if( flags == 0 )
     {
+        msg = AddHotkeyName( _( "Begin Track" ),
+                             g_Board_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_BEGIN_TRACK,
+                     msg, KiBitmap( add_tracks_xpm ) );
+
         if( Track->Type() == PCB_VIA_T )
         {
             msg = AddHotkeyName( _( "Drag Via" ), g_Board_Editor_Hokeys_Descr,
@@ -495,6 +509,9 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                              _( "Break Track" ), KiBitmap( break_line_xpm ) );
             }
         }
+
+        AddMenuItem( PopMenu, ID_POPUP_PCB_SELECT_CU_LAYER,
+                     _( "Select Working Layer" ), KiBitmap( select_w_layer_xpm ) );
     }
     else if( flags & IS_DRAGGED )   // Drag via or node in progress
     {
@@ -506,11 +523,6 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         if( flags & IS_NEW )
         {
-            msg = AddHotkeyName( _( "Begin Track" ),
-                                 g_Board_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK );
-            AddMenuItem( PopMenu, ID_POPUP_PCB_BEGIN_TRACK,
-                         msg, KiBitmap( add_tracks_xpm ) );
-
             msg = AddHotkeyName( _( "End Track" ), g_Board_Editor_Hokeys_Descr, HK_END_TRACK );
             AddMenuItem( PopMenu, ID_POPUP_PCB_END_TRACK, msg, KiBitmap( apply_xpm ) );
         }
@@ -518,10 +530,21 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         msg = AddHotkeyName( _( "Place Through Via" ), g_Board_Editor_Hokeys_Descr, HK_ADD_THROUGH_VIA );
         AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_THROUGH_VIA, msg, KiBitmap( via_xpm ) );
 
+        msg = AddHotkeyName( _( "Select Layer and Place Through Via" ),
+                             g_Board_Editor_Hokeys_Descr, HK_SEL_LAYER_AND_ADD_THROUGH_VIA );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_THROUGH_VIA,
+                     msg, KiBitmap( select_w_layer_xpm ) );
+
         if( GetBoard()->GetDesignSettings().m_BlindBuriedViaAllowed )
         {
-            msg = AddHotkeyName( _( "Place Blind/Buried Via" ), g_Board_Editor_Hokeys_Descr, HK_ADD_BLIND_BURIED_VIA );
+            msg = AddHotkeyName( _( "Place Blind/Buried Via" ),
+                                 g_Board_Editor_Hokeys_Descr, HK_ADD_BLIND_BURIED_VIA );
             AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA, msg, KiBitmap( via_xpm ) );
+
+            msg = AddHotkeyName( _( "Select Layer and Place Blind/Buried Via" ),
+                                 g_Board_Editor_Hokeys_Descr, HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA,
+                         msg, KiBitmap( select_w_layer_xpm ) );
         }
 
         msg = AddHotkeyName( _( "Switch Track Posture" ), g_Board_Editor_Hokeys_Descr,
@@ -563,21 +586,21 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 
     // Delete control:
     PopMenu->AppendSeparator();
-    wxMenu* track_mnu = new wxMenu;
-    AddMenuItem( PopMenu, track_mnu, ID_POPUP_PCB_DELETE_TRACK_MNU, _( "Delete" ),
+    wxMenu* trackdel_mnu = new wxMenu;
+    AddMenuItem( PopMenu, trackdel_mnu, ID_POPUP_PCB_DELETE_TRACK_MNU, _( "Delete" ),
                  KiBitmap( delete_xpm ) );
 
     msg = AddHotkeyName( Track->Type()==PCB_VIA_T ?
                         _( "Delete Via" ) : _( "Delete Segment" ),
                          g_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
 
-    AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACKSEG, msg, KiBitmap( delete_line_xpm ) );
+    AddMenuItem( trackdel_mnu, ID_POPUP_PCB_DELETE_TRACKSEG, msg, KiBitmap( delete_line_xpm ) );
 
     if( !flags )
     {
         msg = AddHotkeyName( _( "Delete Track" ), g_Board_Editor_Hokeys_Descr, HK_DELETE );
-        AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACK, msg, KiBitmap( delete_track_xpm ) );
-        AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET, _( "Delete Net" ),
+        AddMenuItem( trackdel_mnu, ID_POPUP_PCB_DELETE_TRACK, msg, KiBitmap( delete_track_xpm ) );
+        AddMenuItem( trackdel_mnu, ID_POPUP_PCB_DELETE_TRACKNET, _( "Delete Net" ),
                      KiBitmap( delete_net_xpm ) );
     }
 
@@ -590,25 +613,25 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     }
 
     // Add lock/unlock flags menu:
-    track_mnu = new wxMenu;
+    wxMenu* trackflg_mnu = new wxMenu;
 
-    AddMenuItem( PopMenu, track_mnu, ID_POPUP_PCB_SETFLAGS_TRACK_MNU, _( "Set Flags" ),
+    AddMenuItem( PopMenu, trackflg_mnu, ID_POPUP_PCB_SETFLAGS_TRACK_MNU, _( "Set Flags" ),
                  KiBitmap( flag_xpm ) );
-    track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACKSEG, _( "Locked: Yes" ), wxEmptyString, true );
-    track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, _( "Locked: No" ), wxEmptyString, true );
+    trackflg_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACKSEG, _( "Locked: Yes" ), wxEmptyString, true );
+    trackflg_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, _( "Locked: No" ), wxEmptyString, true );
 
     if( Track->GetState( TRACK_LOCKED ) )
-        track_mnu->Check( ID_POPUP_PCB_LOCK_ON_TRACKSEG, true );
+        trackflg_mnu->Check( ID_POPUP_PCB_LOCK_ON_TRACKSEG, true );
     else
-        track_mnu->Check( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, true );
+        trackflg_mnu->Check( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, true );
 
     if( !flags )
     {
-        track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACK, _( "Track Locked: Yes" ) );
-        track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACK, _( "Track Locked: No" ) );
-        track_mnu->AppendSeparator();
-        track_mnu->Append( ID_POPUP_PCB_LOCK_ON_NET, _( "Net Locked: Yes" ) );
-        track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_NET, _( "Net Locked: No" ) );
+        trackflg_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACK, _( "Track Locked: Yes" ) );
+        trackflg_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACK, _( "Track Locked: No" ) );
+        trackflg_mnu->AppendSeparator();
+        trackflg_mnu->Append( ID_POPUP_PCB_LOCK_ON_NET, _( "Net Locked: Yes" ) );
+        trackflg_mnu->Append( ID_POPUP_PCB_LOCK_OFF_NET, _( "Net Locked: No" ) );
     }
 }
 

@@ -138,7 +138,13 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
     m_SelLayerBox->SetLayerMask( ALL_CU_LAYERS | EDGE_LAYER );
     m_SelLayerBox->SetBoardFrame( m_Parent );
     m_SelLayerBox->Resync();
-    m_SelLayerBox->SetLayerSelection( aDimension->GetLayer() );
+
+    if( m_SelLayerBox->SetLayerSelection( aDimension->GetLayer() ) < 0 )
+    {
+        wxMessageBox( _("This item has an illegal layer id.\n"
+                        "Now, forced on the drawings layer. Please, fix it") );
+        m_SelLayerBox->SetLayerSelection( DRAW_N );
+    }
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );

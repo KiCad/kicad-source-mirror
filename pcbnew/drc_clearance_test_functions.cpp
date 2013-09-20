@@ -420,6 +420,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             if( segStartPoint.x > (-w_dist) && segStartPoint.x < (m_segmLength + w_dist) )    /* possible error drc */
             {
+                // the start point is inside the reference range
+                //      X........
+                //    O--REF--+
+
                 // Fine test : we consider the rounded shape of each end of the track segment:
                 if( segStartPoint.x >= 0 && segStartPoint.x <= m_segmLength )
                 {
@@ -438,7 +442,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             if( segEndPoint.x > (-w_dist) && segEndPoint.x < (m_segmLength + w_dist) )
             {
-                /* Fine test : we consider the rounded shape of the ends */
+                // the end point is inside the reference range
+                //  .....X
+                //    O--REF--+
+                // Fine test : we consider the rounded shape of the ends
                 if( segEndPoint.x >= 0 && segEndPoint.x <= m_segmLength )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
@@ -456,8 +463,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             if( segStartPoint.x <=0 && segEndPoint.x >= 0 )
             {
+            // the segment straddles the reference range (this actually only
+            // checks if it straddles the origin, because the other cases where already
+            // handled)
+            //  X.............X
+            //    O--REF--+
                 m_currentMarker = fillMarker( aRefSeg, track,
-                                              DRCE_TRACK_UNKNOWN1, m_currentMarker );
+                                              DRCE_TRACK_SEGMENTS_TOO_CLOSE, m_currentMarker );
                 return false;
             }
         }
