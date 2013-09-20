@@ -1,8 +1,13 @@
+/**
+ * @file pagelayout_editor/menubar.cpp
+ * @brief (Re)Create the main menubar for Pl_Editor
+ */
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +27,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pl_editor/menubar.cpp
- * @brief (Re)Create the main menubar for Pl_Editor
- */
 #include <fctsys.h>
 
 #include <appl_wxstruct.h>

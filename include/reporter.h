@@ -47,9 +47,18 @@ class wxTextCtrl;
  * <li> know too much about the caller's UI, i.e. wx. </li>
  * <li> stop after the first error </li>
  * </ul>
+ * the reporter has 3 levels (flags) for filtering:
+ * no filter
+ * report warning
+ * report errors
+ * They are indicators for the calling code, filtering is not made here
  */
 class REPORTER
 {
+    bool m_reportAll;       // Filter flag: set to true to report all messages
+    bool m_reportWarnings;  // Filter flag: set to true to report warning
+    bool m_reportErrors;    // Filter flag: set to true to report errors
+
 public:
     /**
      * Function Report
@@ -68,6 +77,41 @@ public:
     REPORTER& operator <<( wxChar aChar ) { return Report( wxString( aChar ) ); }
 
     REPORTER& operator <<( const char* aText ) { return Report( aText ); }
+
+    /**
+     * Returns true if all messages should be reported
+     */
+    bool ReportAll() { return m_reportAll; }
+
+    /**
+     * Returns true if all messages or warning messages should be reported
+     */
+    bool ReportWarnings() { return m_reportAll | m_reportWarnings; }
+
+    /**
+     * Returns true if all messages or error messages should be reported
+     */
+    bool ReportErrors() { return m_reportAll | m_reportErrors; }
+
+    /**
+     * Set the report filter state, for all messages
+     * @param aEnable = filter state (true/false)
+     */
+    void SetReportAll( bool aEnable) { m_reportAll = aEnable; }
+
+    /**
+     * Set the report filter state, for warning messages
+     * note: report can be disable only if m_reportAll = false
+     * @param aEnable = filter state (true/false)
+     */
+    void SetReportWarnings( bool aEnable) { m_reportWarnings = aEnable; }
+
+    /**
+     * Set the report filter state, for error messages
+     * note: report can be disable only if m_reportAll = false
+     * @param aEnable = filter state (true/false)
+     */
+    void SetReportErrors( bool aEnable) { m_reportErrors = aEnable; }
 };
 
 
@@ -84,6 +128,9 @@ public:
         REPORTER(),
         m_textCtrl( aTextCtrl )
     {
+        SetReportAll( true );
+        SetReportWarnings( true );
+        SetReportErrors( true );
     }
 
     REPORTER& Report( const wxString& aText );

@@ -35,6 +35,26 @@
 #include <general.h>
 #include <sch_component.h>
 
+#include <wx/regex.h>
+
+
+/**
+ * The regular expression string for label bus notation.  Valid bus labels are defined as
+ * one or more non-whitespace characters from the beginning of the string followed by the
+ * bus notation [nn...mm] with no characters after the closing bracket.
+ */
+static wxRegEx busLabelRe( wxT( "^([^[:space:]]+)(\\[[\\d]+\\.+[\\d]+\\])$" ), wxRE_ADVANCED );
+
+
+bool IsBusLabel( const wxString& aLabel )
+{
+    wxCHECK_MSG( busLabelRe.IsValid(), false,
+                 wxT( "Invalid regular expression in IsBusLabel()." ) );
+
+    return busLabelRe.Matches( aLabel );
+}
+
+
 #if defined(DEBUG)
 
 #include <iostream>
@@ -220,31 +240,32 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
         wxCHECK_RET( false, wxT( "Net list object type is not valid." ) );
 
     unsigned i;
-    wxString tmp, busName;
+    wxString tmp, busName, busNumber;
     long begin, end, member;
 
-    /* Search for  '[' because a bus label is like "busname[nn..mm]" */
-    i = m_Label.Find( '[' );
+    busName = busLabelRe.GetMatch( m_Label, 1 );
+    busNumber = busLabelRe.GetMatch( m_Label, 2 );
 
-    busName = m_Label.Left( i );
+    /* Search for  '[' because a bus label is like "busname[nn..mm]" */
+    i = busNumber.Find( '[' );
     i++;
 
-    while( m_Label[i] != '.' && i < m_Label.Len() )
+    while( busNumber[i] != '.' && i < busNumber.Len() )
     {
-        tmp.Append( m_Label[i] );
+        tmp.Append( busNumber[i] );
         i++;
     }
 
     tmp.ToLong( &begin );
 
-    while( m_Label[i] == '.' && i < m_Label.Len() )
+    while( busNumber[i] == '.' && i < busNumber.Len() )
         i++;
 
     tmp.Empty();
 
-    while( m_Label[i] != ']' && i < m_Label.Len() )
+    while( busNumber[i] != ']' && i < busNumber.Len() )
     {
-        tmp.Append( m_Label[i] );
+        tmp.Append( busNumber[i] );
         i++;
     }
 

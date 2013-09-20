@@ -3,8 +3,8 @@ include_directories(BEFORE ${INC_BEFORE})
 include_directories(
     ./dialogs
     ./dialog_about
-    ${Boost_INCLUDE_DIR}
     ${CAIRO_INCLUDE_DIR}
+    ${GLEW_INCLUDE_DIR}
     ../3d-viewer
     ../pcbnew
     ../polygon
@@ -57,9 +57,10 @@ set(GAL_SRCS
 add_library(gal STATIC ${GAL_SRCS})
 add_dependencies(gal shader_headers)
 
-if(WIN32)
+# Only for win32 cross compilation using MXE
+if(WIN32 AND MSYS)
 add_definitions(-DGLEW_STATIC)
-endif(WIN32)
+endif(WIN32 AND MSYS)
 
 set(COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp

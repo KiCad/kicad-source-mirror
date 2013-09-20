@@ -502,13 +502,6 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp << wxT( "Boost version: " ) << ( BOOST_VERSION / 100000 ) << wxT( "." )
         << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." ) << ( BOOST_VERSION % 100 ) << wxT( "\n" );
 
-    tmp << wxT( "Options: USE_PCBNEW_NANOMETRES=" );
-#ifdef USE_PCBNEW_NANOMETRES
-    tmp << wxT( "ON\n" );
-#else
-    tmp << wxT( "OFF\n" );
-#endif
-
     tmp << wxT( "         USE_WX_GRAPHICS_CONTEXT=" );
 #ifdef USE_WX_GRAPHICS_CONTEXT
     tmp << wxT( "ON\n" );

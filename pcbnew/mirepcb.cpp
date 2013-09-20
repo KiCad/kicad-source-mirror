@@ -1,6 +1,31 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
+ * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file mirepcb.cpp
- * @brief Functions to edit targets (class MIRE).
+ * @brief Functions to edit targets (class #PCB_TARGET).
  */
 
 #include <fctsys.h>
@@ -16,24 +41,25 @@
 #include <protos.h>
 
 
-/* Routines Locales */
+// Routines Locales
 static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* aPanel,
                                              wxDC*           aDC,
                                              const wxPoint&  aPosition,
                                              bool            aErase );
 
-/* Local variables : */
-static int     MireDefaultSize = 5000;
+// Local variables :
+static int        MireDefaultSize = Millimeter2iu( 5 );
+
 static PCB_TARGET s_TargetCopy( NULL ); /* Used to store "old" values of the
                                          * current item parameters before
                                          * edition (used in undo/redo or
                                          * cancel operations)
                                          */
 
-/************************************/
+/*****************************************/
 /* class TARGET_PROPERTIES_DIALOG_EDITOR */
-/************************************/
+/*****************************************/
 
 class TARGET_PROPERTIES_DIALOG_EDITOR : public wxDialog
 {
@@ -93,7 +119,7 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME
     MainBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
     MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-    /* Create of the command buttons. */
+    // Create of the command buttons.
     Button = new wxButton( this, wxID_OK, _( "OK" ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
@@ -192,18 +218,17 @@ static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC )
         if( ( target->GetFlags() & (IN_EDIT | IS_MOVED) ) )
         {
             target->SetPosition( s_TargetCopy.GetPosition() );
-            target->SetWidth(    s_TargetCopy.GetWidth() );
-            target->SetSize(     s_TargetCopy.GetSize() );
-            target->SetShape(    s_TargetCopy.GetShape() );
+            target->SetWidth( s_TargetCopy.GetWidth() );
+            target->SetSize( s_TargetCopy.GetSize() );
+            target->SetShape( s_TargetCopy.GetShape() );
         }
+
         target->ClearFlags();
         target->Draw( Panel, DC, GR_OR );
     }
 }
 
 
-/* Draw Symbol PCB type MIRE.
- */
 PCB_TARGET* PCB_EDIT_FRAME::CreateTarget( wxDC* DC )
 {
     PCB_TARGET* target = new PCB_TARGET( GetBoard() );
@@ -215,7 +240,7 @@ PCB_TARGET* PCB_EDIT_FRAME::CreateTarget( wxDC* DC )
     target->SetLayer( EDGE_N );
     target->SetWidth( GetDesignSettings().m_EdgeSegmentWidth );
     target->SetSize( MireDefaultSize );
-    target->SetPosition( m_canvas->GetScreen()->GetCrossHairPosition() );
+    target->SetPosition( GetCrossHairPosition() );
 
     PlaceTarget( target, DC );
 
@@ -223,8 +248,6 @@ PCB_TARGET* PCB_EDIT_FRAME::CreateTarget( wxDC* DC )
 }
 
 
-/* Routine to initialize the displacement of a focal
- */
 void PCB_EDIT_FRAME::BeginMoveTarget( PCB_TARGET* aTarget, wxDC* DC )
 {
     if( aTarget == NULL )
@@ -273,7 +296,7 @@ void PCB_EDIT_FRAME::PlaceTarget( PCB_TARGET* aTarget, wxDC* DC )
 }
 
 
-/* Redraw the contour of the track while moving the mouse */
+// Redraw the contour of the track while moving the mouse
 static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                              const wxPoint& aPosition, bool aErase )
 {
@@ -286,7 +309,7 @@ static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     if( aErase )
         target->Draw( aPanel, aDC, GR_XOR );
 
-    target->SetPosition( screen->GetCrossHairPosition() );
+    target->SetPosition( aPanel->GetParent()->GetCrossHairPosition() );
 
     target->Draw( aPanel, aDC, GR_XOR );
 }

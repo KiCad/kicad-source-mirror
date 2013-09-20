@@ -136,7 +136,7 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
         return;
 
     bool newItem = item->IsNew();
-    item->EndEdit( parent->GetScreen()->GetCrossHairPosition( true ), true );
+    item->EndEdit( parent->GetCrossHairPosition( true ), true );
 
     if( newItem )
     {
@@ -153,7 +153,7 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
 LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
 {
     m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
-    wxPoint drawPos = GetScreen()->GetCrossHairPosition( true );
+    wxPoint drawPos = GetCrossHairPosition( true );
 
     // no temp copy -> the current version of component will be used for Undo
     // This is normal when adding new items to the current component
@@ -239,7 +239,7 @@ void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
     if( m_drawItem == NULL )
         return;
 
-    wxPoint pos = GetScreen()->GetCrossHairPosition( true );
+    wxPoint pos = GetCrossHairPosition( true );
 
     if( m_drawItem->ContinueEdit( pos ) )
     {
@@ -264,21 +264,20 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     if( item == NULL )
         return;
 
-    BASE_SCREEN* Screen = aPanel->GetScreen();
-
     item->SetEraseLastDrawItem( aErase );
 
     // if item is the reference field, we must add the current unit id
     if( item->Type() == LIB_FIELD_T )
     {
-        int unit = ((LIB_EDIT_FRAME*)aPanel->GetParent())->GetUnit();
-        wxString text = ((LIB_FIELD*)item)->GetFullText( unit );
-        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ),
+        int         unit = ((LIB_EDIT_FRAME*)aPanel->GetParent())->GetUnit();
+        wxString    text = ((LIB_FIELD*)item)->GetFullText( unit );
+
+        item->Draw( aPanel, aDC, aPanel->GetParent()->GetCrossHairPosition( true ),
                     UNSPECIFIED_COLOR, g_XorMode, &text,
                     DefaultTransform );
     }
     else
-        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ),
+        item->Draw( aPanel, aDC, aPanel->GetParent()->GetCrossHairPosition( true ),
                     UNSPECIFIED_COLOR, g_XorMode, NULL,
                     DefaultTransform );
 }
@@ -298,7 +297,7 @@ void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
     if( m_drawItem->Type() == LIB_FIELD_T )
         m_drawItem->BeginEdit( IS_MOVED, m_drawItem->GetPosition() );
     else
-        m_drawItem->BeginEdit( IS_MOVED, GetScreen()->GetCrossHairPosition( true ) );
+        m_drawItem->BeginEdit( IS_MOVED, GetCrossHairPosition( true ) );
 
     m_canvas->SetMouseCapture( RedrawWhileMovingCursor, AbortSymbolTraceOn );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, true );
@@ -312,7 +311,7 @@ void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC )
         return;
 
     TempCopyComponent();
-    m_drawItem->BeginEdit( IS_RESIZED, GetScreen()->GetCrossHairPosition( true ) );
+    m_drawItem->BeginEdit( IS_RESIZED, GetCrossHairPosition( true ) );
     m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, true );
 }
@@ -322,14 +321,13 @@ void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC )
 static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                bool aErase )
 {
-    BASE_SCREEN*   Screen   = aPanel->GetScreen();
     LIB_ITEM* item = ( (LIB_EDIT_FRAME*) aPanel->GetParent() )->GetDrawItem();
 
     if( item == NULL )
         return;
 
     item->SetEraseLastDrawItem( aErase );
-    item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), UNSPECIFIED_COLOR, g_XorMode, NULL,
+    item->Draw( aPanel, aDC, aPanel->GetParent()->GetCrossHairPosition( true ), UNSPECIFIED_COLOR, g_XorMode, NULL,
                 DefaultTransform );
 }
 
@@ -357,7 +355,7 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
     if( m_drawItem->IsNew() )
         m_component->AddDrawItem( m_drawItem );
 
-    m_drawItem->EndEdit( GetScreen()->GetCrossHairPosition( true ) );
+    m_drawItem->EndEdit( GetCrossHairPosition( true ) );
 
     m_drawItem = NULL;
 

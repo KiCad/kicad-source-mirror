@@ -96,7 +96,7 @@ void RemoteCommand( const char* cmdline )
             pos = pad->GetPosition();
         }
 
-        if( netcode > 0 )               /* highlight the pad net*/
+        if( netcode > 0 )               // highlight the pad net
         {
             pcb->HighLightON();
             pcb->SetHighLightNet( netcode );
@@ -127,7 +127,7 @@ void RemoteCommand( const char* cmdline )
 
     if( module )  // if found, center the module on screen, and redraw the screen.
     {
-        frame->GetScreen()->SetCrossHairPosition(pos);
+        frame->SetCrossHairPosition( pos );
         frame->RedrawScreen( pos, false );
     }
 }

@@ -99,8 +99,8 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         GetScreen()->m_BlockLocate.SetState( state );
         GetScreen()->m_BlockLocate.SetCommand( command );
         m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
-        GetScreen()->SetCrossHairPosition( wxPoint( GetScreen()->m_BlockLocate.GetRight(),
-                                                    GetScreen()->m_BlockLocate.GetBottom() ) );
+        SetCrossHairPosition( wxPoint( GetScreen()->m_BlockLocate.GetRight(),
+                                       GetScreen()->m_BlockLocate.GetBottom() ) );
         m_canvas->MoveCursorToCrossHair();
     }
 
@@ -171,7 +171,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             SaveCopyInUndoList( m_component );
 
         pt = GetScreen()->m_BlockLocate.Centre();
-        pt = GetScreen()->GetNearestGridPosition( pt );
+        pt = GetNearestGridPosition( pt );
         NEGATE( pt.y );
 
         if ( m_component )
@@ -183,7 +183,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
                 m_component->MirrorSelectedItemsH( pt );
             else if( block_cmd == BLOCK_MIRROR_X)
                 m_component->MirrorSelectedItemsV( pt );
-            else if( block_cmd == BLOCK_ROTATE)
+            else if( block_cmd == BLOCK_ROTATE )
                 m_component->RotateSelectedItems( pt );
         }
 
@@ -275,7 +275,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             SaveCopyInUndoList( m_component );
 
         pt = GetScreen()->m_BlockLocate.Centre();
-        pt = GetScreen()->GetNearestGridPosition( pt );
+        pt = GetNearestGridPosition( pt );
         NEGATE( pt.y );
 
         if ( m_component )
@@ -342,7 +342,7 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     }
 
     // Repaint new view
-    block->SetMoveVector( screen->GetCrossHairPosition() - block->GetLastCursorPosition() );
+    block->SetMoveVector( parent->GetCrossHairPosition() - block->GetLastCursorPosition() );
 
     GRSetDrawMode( aDC, g_XorMode );
     block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );

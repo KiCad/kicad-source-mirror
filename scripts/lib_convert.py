@@ -13,8 +13,8 @@
 # 3) Entered following command line, script takes to arguments: oldLibPath & newLibPath
 # $ PYTHONPATH=. <path_to>/lib_convert.py /usr/local/share/kicad/modules/smd_dil.mod /tmp/smd_dil.pretty
 
-# 4) inspect one footprint found in new librarypath /tmp/smd_dil
-# $ less /tmp/smd_dil/msoic-10.kicad_mod
+# 4) inspect one footprint found in new librarypath /tmp/smd_dil.pretty
+# $ less /tmp/smd_dil.pretty/msoic-10.kicad_mod
 
 
 from __future__ import print_function

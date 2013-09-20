@@ -30,6 +30,7 @@
 #include <boost/shared_ptr.hpp>
 #include <painter.h>
 
+
 class EDA_ITEM;
 class COLORS_DESIGN_SETTINGS;
 class DISPLAY_OPTIONS;
@@ -133,7 +134,7 @@ public:
         PAINTER::ApplySettings( aSettings );
 
         // Store PCB specific render settings
-        m_pcbSettings = (PCB_RENDER_SETTINGS*) m_settings.get(); //dynamic_cast<PCB_RENDER_SETTINGS*>( aSettings );
+        m_pcbSettings = (PCB_RENDER_SETTINGS*) m_settings.get();
     }
 
 protected:

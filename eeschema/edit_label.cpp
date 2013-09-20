@@ -72,25 +72,25 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
 {
     SCH_TEXT* textItem = NULL;
 
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
 
     switch( aType )
     {
     case LAYER_NOTES:
-        textItem = new SCH_TEXT( GetScreen()->GetCrossHairPosition() );
+        textItem = new SCH_TEXT( GetCrossHairPosition() );
         break;
 
     case LAYER_LOCLABEL:
-        textItem = new SCH_LABEL( GetScreen()->GetCrossHairPosition() );
+        textItem = new SCH_LABEL( GetCrossHairPosition() );
         break;
 
     case LAYER_HIERLABEL:
-        textItem = new SCH_HIERLABEL( GetScreen()->GetCrossHairPosition() );
+        textItem = new SCH_HIERLABEL( GetCrossHairPosition() );
         textItem->SetShape( lastGlobalLabelShape );
         break;
 
     case LAYER_GLOBLABEL:
-        textItem = new SCH_GLOBALLABEL( GetScreen()->GetCrossHairPosition() );
+        textItem = new SCH_GLOBALLABEL( GetCrossHairPosition() );
         textItem->SetShape( lastGlobalLabelShape );
         break;
 
@@ -235,7 +235,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
         }
     }
 
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
     OnModify();
     newtext->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     m_canvas->CrossHairOn( &dc );    // redraw schematic cursor

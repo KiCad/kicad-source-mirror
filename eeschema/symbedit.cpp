@@ -65,7 +65,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
+    SetCrossHairPosition( wxPoint( 0, 0 ) );
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
 
@@ -238,7 +238,9 @@ void LIB_EDIT_FRAME::PlaceAnchor()
     if( m_component == NULL )
         return;
 
-    wxPoint offset( -GetScreen()->GetCrossHairPosition().x, GetScreen()->GetCrossHairPosition().y );
+    const wxPoint& cross_hair = GetCrossHairPosition();
+
+    wxPoint offset( -cross_hair.x, cross_hair.y );
 
     OnModify( );
 

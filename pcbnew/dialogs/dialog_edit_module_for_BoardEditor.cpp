@@ -85,7 +85,7 @@ DIALOG_MODULE_BOARD_EDITOR::~DIALOG_MODULE_BOARD_EDITOR()
 }
 
 
-/* Creation of the panel properties of the module editor. */
+// Creation of the panel properties of the module editor.
 void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 {
     PutValueInLocalUnits( *m_ModPositionX, m_CurrentModule->GetPosition().x );
@@ -244,7 +244,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 
     m_LastSelected3DShapeIndex = -1;
 
-    /* Init 3D shape list */
+    // Init 3D shape list
     S3D_MASTER* draw3D = m_CurrentModule->Models();
 
     while( draw3D )
@@ -276,7 +276,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
         _( "Use this attribute for \"virtual\" components drawn on board\n"
            "(like a old ISA PC bus connector)" ) );
 
-    /* Controls on right side of the dialog */
+    // Controls on right side of the dialog
     switch( m_CurrentModule->GetAttributes() & 255 )
     {
     case 0:
@@ -601,7 +601,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     if( change_layer )
         m_CurrentModule->Flip( m_CurrentModule->GetPosition() );
 
-    /* Update 3D shape list */
+    // Update 3D shape list
     int         ii = m_3D_ShapeNameListBox->GetSelection();
 
     if( ii >= 0 )
@@ -660,23 +660,23 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
 void DIALOG_MODULE_BOARD_EDITOR::OnEditReference( wxCommandEvent& event )
 {
-    wxPoint tmp = m_Parent->GetScreen()->GetCrossHairPosition();
+    wxPoint tmp = m_Parent->GetCrossHairPosition();
 
-    m_Parent->GetScreen()->SetCrossHairPosition( m_ReferenceCopy->GetTextPosition() );
+    m_Parent->SetCrossHairPosition( m_ReferenceCopy->GetTextPosition() );
     m_ReferenceCopy->SetParent( m_CurrentModule );
     m_Parent->InstallTextModOptionsFrame( m_ReferenceCopy, NULL );
-    m_Parent->GetScreen()->SetCrossHairPosition( tmp );
+    m_Parent->SetCrossHairPosition( tmp );
     m_ReferenceCtrl->SetValue( m_ReferenceCopy->GetText() );
 }
 
 
 void DIALOG_MODULE_BOARD_EDITOR::OnEditValue( wxCommandEvent& event )
 {
-    wxPoint tmp = m_Parent->GetScreen()->GetCrossHairPosition();
+    wxPoint tmp = m_Parent->GetCrossHairPosition();
 
-    m_Parent->GetScreen()->SetCrossHairPosition( m_ValueCopy->GetTextPosition() );
+    m_Parent->SetCrossHairPosition( m_ValueCopy->GetTextPosition() );
     m_ValueCopy->SetParent( m_CurrentModule );
     m_Parent->InstallTextModOptionsFrame( m_ValueCopy, NULL );
-    m_Parent->GetScreen()->SetCrossHairPosition( tmp );
+    m_Parent->SetCrossHairPosition( tmp );
     m_ValueCtrl->SetValue( m_ValueCopy->GetText() );
 }

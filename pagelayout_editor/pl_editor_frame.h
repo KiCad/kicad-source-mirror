@@ -1,9 +1,12 @@
+/**
+ * @file pl_editor_frame.h
+ */
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 CERN
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +24,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file pl_editor_frame.h
  */
 
 #ifndef  _PL_EDITOR_FRAME_H
@@ -58,6 +57,8 @@ class PL_EDITOR_FRAME : public EDA_DRAW_FRAME
                                     // usefull when there are some items which are
                                     // only on page 1, not on page 1
 
+    wxPoint     m_grid_origin;
+
 protected:
     /// The last filename chosen to be proposed to the user
     wxString                m_lastFileName;
@@ -90,12 +91,21 @@ public:
         return (PL_EDITOR_SCREEN*) m_canvas->GetScreen();
     }
 
-    const wxPoint& GetOriginAxisPosition() const                // overload EDA_DRAW_FRAME
+    const wxPoint& GetAuxOrigin() const                         // overload EDA_DRAW_FRAME
     {
-        static wxPoint dummy( 0,0 );
+        static wxPoint dummy;   // ( 0,0 );
         return dummy;
     }
-    void SetOriginAxisPosition( const wxPoint& aPosition ) {}   // overload EDA_DRAW_FRAME
+    void SetAuxOrigin( const wxPoint& aPosition ) {}            // overload EDA_DRAW_FRAME
+
+    const wxPoint& GetGridOrigin() const                        // overload EDA_DRAW_FRAME
+    {
+        return m_grid_origin;
+    }
+    void SetGridOrigin( const wxPoint& aPoint )                 // overload EDA_DRAW_FRAME
+    {
+        m_grid_origin = aPoint;
+    }
 
     const TITLE_BLOCK& GetTitleBlock() const;                   // overload EDA_DRAW_FRAME
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload EDA_DRAW_FRAME

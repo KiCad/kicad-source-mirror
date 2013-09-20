@@ -201,18 +201,8 @@ const KICAD_T SPECCTRA_DB::scanPADs[] = { PCB_PAD_T, EOT };
  */
 static inline double scale( int kicadDist )
 {
-#if defined(USE_PCBNEW_NANOMETRES)
-
     // nanometers to um
     return kicadDist / ( IU_PER_MM / 1000.0 );
-
-    // nanometers to mils
-    // return kicadDist/IU_PER_MILS;
-
-#else
-    // deci-mils to mils.
-    return kicadDist / 10.0;
-#endif
 }
 
 
@@ -1113,10 +1103,11 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                 if( !graphic )
                 {
                     wxString error = wxString::Format(
-                        _( "Unable to find the next segment with an endpoint of (%d,%d).\n"
+                        _( "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
                            "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each." ),
-                        prevPt.x,
-                        prevPt.y );
+                        GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
+                        GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
+                        );
                     ThrowIOError( error );
                 }
             }
@@ -1144,7 +1135,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
             }
             else
             {
-                wxPoint startPt = wxPoint( graphic->GetEnd() );
+                wxPoint startPt( graphic->GetEnd() );
                 prevPt = graphic->GetEnd();
                 poly_ko->AppendPoint( mapPt( prevPt ) );
 
@@ -1229,10 +1220,10 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                     if( !graphic )
                     {
                         wxString error = wxString::Format(
-                            _( "Unable to find the next segment with an endpoint of (%d,%d).\n"
+                            _( "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
                                "Edit Edge.Cuts interior graphics, making them contiguous polygons each." ),
-                            prevPt.x,
-                            prevPt.y
+                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
+                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
                             );
 
                         ThrowIOError( error );
@@ -1245,9 +1236,9 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
     {
         // User has not defined a board perimeter yet...
 
-        EDA_RECT bbbox = aBoard->ComputeBoundingBox();
-
+        EDA_RECT    bbbox = aBoard->ComputeBoundingBox();
         RECTANGLE*  rect = new RECTANGLE( boundary );
+
         boundary->rectangle = rect;
 
         rect->layer_id = "pcb";
@@ -1356,7 +1347,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
     //-----<unit_descriptor> & <resolution_descriptor>--------------------
     {
-#if defined(USE_PCBNEW_NANOMETRES)
         // tell freerouter to use "tenths of micrometers",
         // which is 100 nm resolution.  Possibly more resolution is possible
         // in freerouter, but it would need testing.
@@ -1365,18 +1355,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         pcb->resolution->units  = T_um;
         pcb->resolution->value  = 10;       // tenths of a um
         // pcb->resolution->value = 1000;   // "thousandths of a um" (i.e. "nm")
-
-#else
-        pcb->unit->units = T_mil;
-        pcb->resolution->units = T_mil;
-
-        // Kicad only supports 1/10th of mil internal coordinates.  So to avoid
-        // having the router give us back 1/100th of mil coordinates which we
-        // will have to round and thereby cause error, we declare our maximum
-        // resolution precisely at 1/10th for now.  For more on this, see:
-        // http://www.freerouting.net/usren/viewtopic.php?f=3&t=354
-        pcb->resolution->value = 10;
-#endif
     }
 
     //-----<boundary_descriptor>------------------------------------------
@@ -1745,7 +1723,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
     }
 
 
-    //-----< output vias used in netclasses and as stock >---------------------
+    //-----< output vias used in netclasses >-----------------------------------
     {
         NETCLASSES& nclasses = aBoard->m_NetClasses;
 
@@ -1763,6 +1741,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         wxASSERT( pcb->library->vias.size() == 0 );
         pcb->library->AppendVia( via );
 
+#if 0
+        // Stock vias have drill diameter of zero, this is not sensible to freerouter
+        // User should use netclass based vias when going to freerouter.
+
         // output the stock vias, but preserve uniqueness in the via container by
         // using LookupVia().
         for( unsigned i = 0; i < aBoard->m_ViasDimensionsList.size(); ++i )
@@ -1779,6 +1761,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             if( registered != via )
                 delete via;
         }
+#endif
 
         // set the "spare via" index at the start of the
         // pcb->library->spareViaIndex = pcb->library->vias.size();

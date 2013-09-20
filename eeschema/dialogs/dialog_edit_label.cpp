@@ -102,13 +102,19 @@ void DIALOG_LABEL_EDITOR::InitDialog()
     if( m_CurrentText->IsMultilineAllowed() )
     {
         m_textLabel = m_textLabelMultiLine;
-        m_textLabelSingleLine->Show(false);
+        m_textLabelSingleLine->Show( false );
         multiLine = true;
     }
     else
     {
         m_textLabel = m_textLabelSingleLine;
-        m_textLabelMultiLine->Show(false);
+        m_textLabelMultiLine->Show( false );
+        wxTextValidator* validator = (wxTextValidator*) m_textLabel->GetValidator();
+        wxArrayString excludes;
+
+        // Add invalid label characters to this list.
+        excludes.Add( wxT( " " ) );
+        validator->SetExcludes( excludes );
     }
 
     m_textLabel->SetValue( m_CurrentText->GetText() );

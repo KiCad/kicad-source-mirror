@@ -1,7 +1,7 @@
 #ifndef CONVERT_TO_BIU_H_
 #define CONVERT_TO_BIU_H_
 
-#include <config.h>     // USE_PCBNEW_NANOMETRES is defined here
+#include <config.h>
 
 /**
  * @file convert_to_biu.h
@@ -18,41 +18,26 @@
 
 /// Scaling factor to convert mils to internal units.
 #if defined(PCBNEW) || defined(CVPCB) || defined(GERBVIEW)
- #if defined( USE_PCBNEW_NANOMETRES )
-  #if defined(GERBVIEW)
-   #define IU_PER_MM        1e5     // Gerbview IU is 10 nanometers.
-  #else
-   #define IU_PER_MM        1e6     // Pcbnew IU is 1 nanometer.
-  #endif
-  #define IU_PER_MILS       (IU_PER_MM * 0.0254)
-  #define IU_PER_DECIMILS   (IU_PER_MM * 0.00254)
-
- #else                              // Pcbnew compiled for deci-mils.
-  #define IU_PER_DECIMILS   1
-  #define IU_PER_MILS       10.0
-  #define IU_PER_MM         (1e4 / 25.4)
+ #if defined(GERBVIEW)
+  #define IU_PER_MM        1e5     // Gerbview IU is 10 nanometers.
+ #else
+  #define IU_PER_MM        1e6     // Pcbnew IU is 1 nanometer.
  #endif
+ #define IU_PER_MILS       (IU_PER_MM * 0.0254)
+ #define IU_PER_DECIMILS   (IU_PER_MM * 0.00254)
 
 /// Convert mils to PCBNEW internal units (iu).
 inline int Mils2iu( int mils )
 {
-#if defined( USE_PCBNEW_NANOMETRES )
     double x = mils * IU_PER_MILS;
     return int( x < 0 ? x - 0.5 : x + 0.5 );
-#else
-    return mils * IU_PER_MILS;
-#endif
 }
 
 /// Convert deci-mils to PCBNEW internal units (iu).
 inline int DMils2iu( int dmils )
 {
-#if defined( USE_PCBNEW_NANOMETRES )
     double x = dmils * IU_PER_DECIMILS;
     return int( x < 0 ? x - 0.5 : x + 0.5 );
-#else
-    return dmils;
-#endif
 }
 
 #elif defined (PL_EDITOR)

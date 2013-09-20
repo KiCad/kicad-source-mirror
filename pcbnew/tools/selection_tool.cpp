@@ -96,11 +96,16 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
         // single click? Select single object
         if( evt->IsClick( MB_Left ) )
+        {
+            wxLogDebug( wxT( "click ") );
             selectSingle( evt->Position() );
+        }
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         if( evt->IsDrag( MB_Left ) )
         {
+            wxLogDebug( wxT( "drag" ) );
+
             if( m_selectedItems.empty() || m_additive )
             {
                 // If nothings has been selected or user wants to select more

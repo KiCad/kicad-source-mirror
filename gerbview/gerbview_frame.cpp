@@ -196,7 +196,7 @@ double GERBVIEW_FRAME::BestZoom()
 
     double  x   = (double) bbox.GetWidth() / (double) size.x;
     double  y   = (double) bbox.GetHeight() / (double) size.y;
-    GetScreen()->SetScrollCenterPosition( bbox.Centre() );
+    SetScrollCenterPosition( bbox.Centre() );
 
     double  best_zoom = std::max( x, y );
     return best_zoom;
@@ -733,17 +733,17 @@ void GERBVIEW_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 }
 
 
-const wxPoint& GERBVIEW_FRAME::GetOriginAxisPosition() const
+const wxPoint& GERBVIEW_FRAME::GetAuxOrigin() const
 {
     wxASSERT( m_gerberLayout );
-    return m_gerberLayout->GetOriginAxisPosition();
+    return m_gerberLayout->GetAuxOrigin();
 }
 
 
-void GERBVIEW_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
+void GERBVIEW_FRAME::SetAuxOrigin( const wxPoint& aPosition )
 {
     wxASSERT( m_gerberLayout );
-    m_gerberLayout->SetOriginAxisPosition( aPosition );
+    m_gerberLayout->SetAuxOrigin( aPosition );
 }
 
 
@@ -800,8 +800,8 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     {
         double       theta, ro;
 
-        dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
-        dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+        dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
+        dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
 
         // atan2 in the 0,0 case returns 0
         theta = RAD2DEG( atan2( -dy, dx ) );
@@ -829,9 +829,8 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     }
 
     // Display absolute coordinates:
-    dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
-    dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
-
+    dXpos = To_User_Unit( g_UserUnit, GetCrossHairPosition().x );
+    dYpos = To_User_Unit( g_UserUnit, GetCrossHairPosition().y );
 
     wxString absformatter;
 
@@ -859,8 +858,8 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     if( !m_DisplayOptions.m_DisplayPolarCood )  // display relative cartesian coordinates
     {
         // Display relative coordinates:
-        dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
-        dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+        dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
+        dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
         dXpos = To_User_Unit( g_UserUnit, dx );
         dYpos = To_User_Unit( g_UserUnit, dy );
 

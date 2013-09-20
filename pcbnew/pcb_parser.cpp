@@ -883,12 +883,12 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_user_via:
-        {
-            int viaSize = parseBoardUnits( "user via size" );
-            int viaDrill = parseBoardUnits( "user via drill" );
-            m_board->m_ViasDimensionsList.push_back( VIA_DIMENSION( viaSize, viaDrill ) );
-            NeedRIGHT();
-        }
+            {
+                int viaSize = parseBoardUnits( "user via size" );
+                int viaDrill = parseBoardUnits( "user via drill" );
+                m_board->m_ViasDimensionsList.push_back( VIA_DIMENSION( viaSize, viaDrill ) );
+                NeedRIGHT();
+            }
             break;
 
         case T_uvia_size:
@@ -944,21 +944,21 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_pad_size:
-        {
-            wxSize sz;
-            sz.SetWidth( parseBoardUnits( "master pad width" ) );
-            sz.SetHeight( parseBoardUnits( "master pad height" ) );
-            designSettings.m_Pad_Master.SetSize( sz );
-            NeedRIGHT();
+            {
+                wxSize sz;
+                sz.SetWidth( parseBoardUnits( "master pad width" ) );
+                sz.SetHeight( parseBoardUnits( "master pad height" ) );
+                designSettings.m_Pad_Master.SetSize( sz );
+                NeedRIGHT();
+            }
             break;
-        }
 
         case T_pad_drill:
-        {
-            int drillSize = parseBoardUnits( T_pad_drill );
-            designSettings.m_Pad_Master.SetDrillSize( wxSize( drillSize, drillSize ) );
-            NeedRIGHT();
-        }
+            {
+                int drillSize = parseBoardUnits( T_pad_drill );
+                designSettings.m_Pad_Master.SetDrillSize( wxSize( drillSize, drillSize ) );
+                NeedRIGHT();
+            }
             break;
 
         case T_pad_to_mask_clearance:
@@ -982,14 +982,24 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_aux_axis_origin:
-        {
-            int x = parseBoardUnits( "auxiliary origin X" );
-            int y = parseBoardUnits( "auxiliary origin Y" );
-            // x, y are not evaluated left to right, since they are push on stack right to left
-            m_board->SetOriginAxisPosition( wxPoint( x, y ) );
-            NeedRIGHT();
+            {
+                int x = parseBoardUnits( "auxiliary origin X" );
+                int y = parseBoardUnits( "auxiliary origin Y" );
+                // m_board->SetAuxOrigin( wxPoint( x, y ) );    gets overwritten via SetDesignSettings below
+                designSettings.m_AuxOrigin = wxPoint( x, y );
+                NeedRIGHT();
+            }
             break;
-        }
+
+        case T_grid_origin:
+            {
+                int x = parseBoardUnits( "grid origin X" );
+                int y = parseBoardUnits( "grid origin Y" );
+                // m_board->SetGridOrigin( wxPoint( x, y ) );   gets overwritten SetDesignSettings below
+                designSettings.m_GridOrigin = wxPoint( x, y );
+                NeedRIGHT();
+            }
+            break;
 
         case T_visible_elements:
             designSettings.SetVisibleElements( parseHex() );
@@ -997,17 +1007,17 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_pcbplotparams:
-        {
-            PCB_PLOT_PARAMS plotParams;
-            PCB_PLOT_PARAMS_PARSER parser( reader );
+            {
+                PCB_PLOT_PARAMS plotParams;
+                PCB_PLOT_PARAMS_PARSER parser( reader );
 
-            plotParams.Parse( &parser );
-            m_board->SetPlotOptions( plotParams );
+                plotParams.Parse( &parser );
+                m_board->SetPlotOptions( plotParams );
 
-            // I don't know why but this seems to fix a problem in PCB_PLOT_PARAMS::Parse().
-            NextTok();
+                // I don't know why but this seems to fix a problem in PCB_PLOT_PARAMS::Parse().
+                NextTok();
+            }
             break;
-        }
 
         default:
             Unexpected( CurText() );

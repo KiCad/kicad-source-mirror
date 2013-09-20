@@ -20,8 +20,8 @@ class DIALOG_SHIM;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
-#include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -36,10 +36,13 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxGrid* m_footprintWizardsGrid;
-		wxButton* m_btOpen;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCellWizardClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOpenButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	

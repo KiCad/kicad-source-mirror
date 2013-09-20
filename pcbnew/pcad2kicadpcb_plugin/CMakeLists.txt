@@ -1,14 +1,12 @@
-add_definitions(-DPCBNEW)
 
-include_directories(BEFORE ${INC_BEFORE})
-include_directories(
-    ../../include
-    ../../pcbnew
-    ../../polygon
-    ${INC_AFTER}
-    )
+# Sources for the pcbnew PLUGIN called PCAD_PLUGIN
 
-set(PCAD2PCBNEW_SRCS
+# This CMakeLists.txt is included from pcbnew, so we are inheriting its include_directories(),
+# simply add the current source dir to inherited include_directories() for sources in here only.
+include_directories( . )
+
+
+set( PCAD2PCBNEW_SRCS
     pcad2kicad_common.cpp
     pcad_plugin.cpp
     pcb.cpp
@@ -30,4 +28,4 @@ set(PCAD2PCBNEW_SRCS
     s_expr_loader.cpp
     )
 
-add_library(pcad2kicadpcb STATIC ${PCAD2PCBNEW_SRCS})
+add_library( pcad2kicadpcb STATIC ${PCAD2PCBNEW_SRCS} )

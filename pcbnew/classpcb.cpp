@@ -64,12 +64,9 @@
 */
 static const double pcbZoomList[] =
 {
-#if defined( USE_PCBNEW_NANOMETRES )
     ZOOM_FACTOR( 0.1 ),
     ZOOM_FACTOR( 0.2 ),
     ZOOM_FACTOR( 0.3 ),
-#endif
-
     ZOOM_FACTOR( 0.5 ),
     ZOOM_FACTOR( 1.0 ),
     ZOOM_FACTOR( 1.5 ),
@@ -129,13 +126,6 @@ static const double pcbZoomList[] =
     The largest ZOOM_FACTOR in above table is ZOOM_FACTOR( 300 ), which computes
     out to 762000 just below 790885.
 */
-
-
-#if !defined( USE_PCBNEW_NANOMETRES )
-    ZOOM_FACTOR( 500.0 ),
-    ZOOM_FACTOR( 1000.0 ),
-    ZOOM_FACTOR( 2000.0 )
-#endif
 };
 
 

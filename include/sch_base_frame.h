@@ -58,8 +58,15 @@ public:
     const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
     const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME
 
-    const wxPoint& GetOriginAxisPosition() const;               // overload EDA_DRAW_FRAME
-    void SetOriginAxisPosition( const wxPoint& aPosition );     // overload EDA_DRAW_FRAME
+    const wxPoint& GetAuxOrigin() const;                        // overload EDA_DRAW_FRAME
+    void SetAuxOrigin( const wxPoint& aPosition );              // overload EDA_DRAW_FRAME
+
+    const wxPoint& GetGridOrigin() const                        // overload EDA_DRAW_FRAME
+    {
+        static wxPoint zero;
+        return zero;
+    }
+    void SetGridOrigin( const wxPoint& aPoint )   {}            // overload EDA_DRAW_FRAME
 
     const TITLE_BLOCK& GetTitleBlock() const;                   // overload EDA_DRAW_FRAME
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload EDA_DRAW_FRAME

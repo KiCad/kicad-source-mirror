@@ -101,7 +101,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
     TRACK*      TrackOnStartPoint = NULL;
     LAYER_MSK   layerMask = GetLayerMask( GetScreen()->m_Active_Layer );
     BOARD_CONNECTED_ITEM* LockPoint;
-    wxPoint     pos = GetScreen()->GetCrossHairPosition();
+    wxPoint     pos = GetCrossHairPosition();
 
     if( aTrack == NULL )  // Starting a new track segment
     {
@@ -595,17 +595,17 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, LAYER_NUM aLayer, const
  */
 static void PushTrack( EDA_DRAW_PANEL* panel )
 {
-    PCB_SCREEN* screen = ( (PCB_BASE_FRAME*) (panel->GetParent()) )->GetScreen();
-    BOARD*  pcb    = ( (PCB_BASE_FRAME*) (panel->GetParent()) )->GetBoard();
-    wxPoint cursor = screen->GetCrossHairPosition();
-    wxPoint cv, vec, n;
-    TRACK*  track = g_CurrentTrackSegment;
-    TRACK*  other;
-    double  det;
-    int     dist;
-    double  f;
+    PCB_SCREEN* screen = (PCB_SCREEN*) panel->GetParent()->GetScreen();
+    BOARD*      pcb    = ( (PCB_BASE_FRAME*) (panel->GetParent()) )->GetBoard();
+    wxPoint     cursor = panel->GetParent()->GetCrossHairPosition();
+    wxPoint     cv, vec, n;
+    TRACK*      track = g_CurrentTrackSegment;
+    TRACK*      other;
+    double      det;
+    int         dist;
+    double      f;
 
-    other = LocateIntrusion( pcb->m_Track, track, screen->m_Active_Layer, screen->RefPos( true ) );
+    other = LocateIntrusion( pcb->m_Track, track, screen->m_Active_Layer, panel->GetParent()->RefPos( true ) );
 
     // are we currently pointing into a conflicting trace ?
     if( !other )
@@ -735,7 +735,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     {
         if( g_TwoSegmentTrackBuild )
         {
-            g_CurrentTrackSegment->SetEnd( screen->GetCrossHairPosition() );
+            g_CurrentTrackSegment->SetEnd( frame->GetCrossHairPosition() );
 
             if( g_Drc_On )
                 PushTrack( aPanel );
@@ -750,7 +750,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
              * horizontal, vertical or 45 degrees.
              */
             wxPoint hp = g_CurrentTrackSegment->GetEnd();
-            CalculateSegmentEndPoint( screen->GetCrossHairPosition(),
+            CalculateSegmentEndPoint( frame->GetCrossHairPosition(),
                                       g_CurrentTrackSegment->GetStart().x,
                                       g_CurrentTrackSegment->GetStart().y,
                                       &hp.x,
@@ -760,7 +760,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     }
     else    // Here the angle is arbitrary
     {
-        g_CurrentTrackSegment->SetEnd( screen->GetCrossHairPosition() );
+        g_CurrentTrackSegment->SetEnd( frame->GetCrossHairPosition() );
     }
 
     // Redraw the new track

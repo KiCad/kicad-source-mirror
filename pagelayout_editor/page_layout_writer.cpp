@@ -7,9 +7,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
- *
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,7 +98,7 @@ public:
         }
         catch( IO_ERROR ioe )
         {
-            wxMessageBox( ioe.errorText, _("Write Page Layout Error" ) );
+            wxMessageBox( ioe.errorText, _("Error writing page layout descr file" ) );
         }
     }
 
@@ -126,7 +125,7 @@ public:
         }
         catch( IO_ERROR ioe )
         {
-            wxMessageBox( ioe.errorText, _("Write Page Layout Error" ) );
+            wxMessageBox( ioe.errorText, _("Error writing page layout descr file" ) );
         }
     }
 

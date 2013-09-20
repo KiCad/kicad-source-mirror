@@ -33,7 +33,6 @@ class DIALOG_SHIM;
 #include <wx/datectrl.h>
 #include <wx/dateevt.h>
 #include <wx/checkbox.h>
-#include <wx/filepicker.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -113,7 +112,8 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_TextComment4;
 		wxCheckBox* m_Comment4Export;
 		wxStaticText* m_staticTextfilename;
-		wxFilePickerCtrl* m_filePicker;
+		wxTextCtrl* m_textCtrlFilePicker;
+		wxButton* m_buttonBrowse;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -133,7 +133,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		virtual void OnComment2TextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnComment3TextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnComment4TextUpdated( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnWksFileSelection( wxFileDirPickerEvent& event ) { event.Skip(); }
+		virtual void OnWksFileSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		

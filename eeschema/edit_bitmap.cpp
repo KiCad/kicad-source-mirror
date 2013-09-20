@@ -93,7 +93,7 @@ static void moveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosit
     }
 
     // Draw the bitmap at it's new position.
-    image->SetPosition( screen->GetCrossHairPosition() );
+    image->SetPosition( aPanel->GetParent()->GetCrossHairPosition() );
     image->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 }
 
@@ -116,7 +116,7 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage( wxDC* aDC )
         return NULL;
     }
 
-    wxPoint     pos = GetScreen()->GetCrossHairPosition();
+    wxPoint     pos = GetCrossHairPosition();
 
     SCH_BITMAP* image = new SCH_BITMAP( pos );
 
@@ -144,12 +144,12 @@ void SCH_EDIT_FRAME::MoveImage( SCH_BITMAP* aImageItem, wxDC* aDC )
 
     m_canvas->SetMouseCapture( moveBitmap, abortMoveBitmap );
     GetScreen()->SetCurItem( aImageItem );
-    m_itemToRepeat = NULL;
+    SetRepeatItem( NULL );
 
     SetUndoItem( aImageItem );
 
     m_canvas->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( aImageItem->GetPosition() );
+    SetCrossHairPosition( aImageItem->GetPosition() );
     m_canvas->MoveCursorToCrossHair();
     m_canvas->CrossHairOn( aDC );
 

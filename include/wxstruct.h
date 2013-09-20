@@ -114,15 +114,15 @@ extern const wxChar* traceAutoSave;
 class EDA_BASE_FRAME : public wxFrame
 {
 protected:
-    ID_DRAWFRAME_TYPE m_Ident;  // Id Type (pcb, schematic, library..)
+    ID_DRAWFRAME_TYPE m_Ident;      ///< Id Type (pcb, schematic, library..)
     wxPoint      m_FramePos;
     wxSize       m_FrameSize;
 
-    wxAuiToolBar* m_mainToolBar; // Standard horizontal Toolbar
+    wxAuiToolBar* m_mainToolBar;    ///< Standard horizontal Toolbar
     bool         m_FrameIsActive;
-    wxString     m_FrameName;    // name used for writing and reading setup
-                                 // It is "SchematicFrame", "PcbFrame" ....
-    wxString     m_AboutTitle;   // Name of program displayed in About.
+    wxString     m_FrameName;       ///< name used for writing and reading setup
+                                    ///< It is "SchematicFrame", "PcbFrame" ....
+    wxString     m_AboutTitle;      ///< Name of program displayed in About.
 
     wxAuiManager m_auimgr;
 
@@ -409,47 +409,47 @@ protected:
     EDA_DRAW_PANEL_GAL* m_galCanvas;
 
     /// Tool ID of previously active draw tool bar button.
-    int m_lastDrawToolId;
+    int     m_lastDrawToolId;
 
     /// The shape of the KiCad cursor.  The default value (0) is the normal cross
     /// hair cursor.  Set to non-zero value to draw the full screen cursor.
     /// @note This is not the system mouse cursor.
-    int m_cursorShape;
+    int     m_cursorShape;
 
     /// True shows the X and Y axis indicators.
-    bool m_showAxis;
+    bool    m_showAxis;
 
     /// True shows the grid axis indicators.
-    bool m_showGridAxis;
+    bool    m_showGridAxis;
 
     /// True shows the origin axis used to indicate the coordinate offset for
     /// drill, gerber, and component position files.
-    bool m_showOriginAxis;
+    bool    m_showOriginAxis;
 
     /// True shows the drawing border and title block.
-    bool m_showBorderAndTitleBlock;
+    bool    m_showBorderAndTitleBlock;
 
     /// Choice box to choose the grid size.
-    wxComboBox* m_gridSelectBox;
+    wxComboBox*     m_gridSelectBox;
 
     /// Choice box to choose the zoom value.
-    wxComboBox* m_zoomSelectBox;
+    wxComboBox*     m_zoomSelectBox;
 
     /// The tool bar that contains the buttons for quick access to the application draw
     /// tools.  It typically is located on the right side of the main window.
-    wxAuiToolBar* m_drawToolBar;
+    wxAuiToolBar*   m_drawToolBar;
 
     /// The options tool bar typcially located on the left edge of the main window.
-    wxAuiToolBar* m_optionsToolBar;
+    wxAuiToolBar*   m_optionsToolBar;
 
     /// Panel used to display information at the bottom of the main window.
-    EDA_MSG_PANEL* m_messagePanel;
+    EDA_MSG_PANEL*  m_messagePanel;
 
-    int            m_MsgFrameHeight;
+    int             m_MsgFrameHeight;
 
 #ifdef USE_WX_OVERLAY
     // MAC Uses overlay to workaround the wxINVERT and wxXOR miss
-    wxOverlay m_overlay;
+    wxOverlay       m_overlay;
 #endif
 
     void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
@@ -483,8 +483,89 @@ public:
      */
     virtual const wxSize GetPageSizeIU() const = 0;
 
-    virtual const wxPoint& GetOriginAxisPosition() const = 0;
-    virtual void SetOriginAxisPosition( const wxPoint& aPosition ) = 0;
+    /**
+     * Function GetAuxOrigin
+     * returns the origin of the axis used for plotting and various exports.
+     */
+    virtual const wxPoint& GetAuxOrigin() const = 0;
+    virtual void SetAuxOrigin( const wxPoint& aPosition ) = 0;
+
+    /**
+     * Function GetGridOrigin
+     * returns the absolute coordinates of the origin of the snap grid.  This is
+     * treated as a relative offset, and snapping will occur at multiples of the grid
+     * size relative to this point.
+     */
+    virtual const wxPoint& GetGridOrigin() const = 0;
+    virtual void SetGridOrigin( const wxPoint& aPosition ) = 0;
+
+    //-----<BASE_SCREEN API moved here>------------------------------------------
+    /**
+     * Function GetCrossHairPosition
+     * return the current cross hair position in logical (drawing) coordinates.
+     * @param aInvertY Inverts the Y axis position.
+     * @return The cross hair position in drawing coordinates.
+     */
+    wxPoint GetCrossHairPosition( bool aInvertY = false ) const;
+
+    /**
+     * Function SetCrossHairPosition
+     * sets the screen cross hair position to \a aPosition in logical (drawing) units.
+     * @param aPosition The new cross hair position.
+     * @param aGridOrigin Origin point of the snap grid.
+     * @param aSnapToGrid Sets the cross hair position to the nearest grid position to
+     *                    \a aPosition.
+     *
+     */
+    void SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid = true );
+
+    /**
+     * Function GetCursorPosition
+     * returns the current cursor position in logical (drawing) units.
+     * @param aOnGrid Returns the nearest grid position at the current cursor position.
+     * @param aGridOrigin Origin point of the snap grid.
+     * @param aGridSize Custom grid size instead of the current grid size.  Only valid
+     *        if \a aOnGrid is true.
+     * @return The current cursor position.
+     */
+    wxPoint GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize = NULL ) const;
+
+    /**
+     * Function GetNearestGridPosition
+     * returns the nearest \a aGridSize location to \a aPosition.
+     * @param aPosition The position to check.
+     * @param aGridSize The grid size to locate to if provided.  If NULL then the current
+     *                  grid size is used.
+     * @return The nearst grid position.
+     */
+    wxPoint GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize = NULL ) const;
+
+    /**
+     * Function GetCursorScreenPosition
+     * returns the cross hair position in device (display) units.b
+     * @return The current cross hair position.
+     */
+    wxPoint GetCrossHairScreenPosition() const;
+
+    void SetMousePosition( const wxPoint& aPosition );
+
+    /**
+     * Function RefPos
+     * Return the reference position, coming from either the mouse position
+     * or the cursor position.
+     *
+     * @param useMouse If true, return mouse position, else cursor's.
+     *
+     * @return wxPoint - The reference point, either the mouse position or
+     *                   the cursor position.
+     */
+    wxPoint RefPos( bool useMouse ) const;
+
+    const wxPoint& GetScrollCenterPosition() const;
+    void SetScrollCenterPosition( const wxPoint& aPoint );
+
+    //-----</BASE_SCREEN API moved here>-----------------------------------------
+
 
     virtual const TITLE_BLOCK& GetTitleBlock() const = 0;
     virtual void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) = 0;
@@ -727,13 +808,13 @@ public:
     void DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
                          double aScale, const wxString &aFilename );
 
-    void DisplayToolMsg( const wxString& msg );
-    virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
-    virtual void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) = 0;
-    virtual void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    virtual bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
-    virtual void ToolOnRightClick( wxCommandEvent& event );
-    void AdjustScrollBars( const wxPoint& aCenterPosition );
+    void            DisplayToolMsg( const wxString& msg );
+    virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
+    virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) = 0;
+    virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
+    virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
+    virtual void    ToolOnRightClick( wxCommandEvent& event );
+    void            AdjustScrollBars( const wxPoint& aCenterPosition );
 
     /**
      * Function OnActivate (virtual)

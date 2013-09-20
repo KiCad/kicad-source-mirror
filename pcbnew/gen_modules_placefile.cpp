@@ -359,7 +359,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     MODULE*     module;
     char        line[1024];
 
-    File_Place_Offset = GetOriginAxisPosition();
+    File_Place_Offset = GetAuxOrigin();
 
     // Calculating the number of useful modules (CMS attribute, not VIRTUAL)
     int moduleCount = 0;

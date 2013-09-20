@@ -2,6 +2,29 @@
  * @file pagelayout_editor/events_called_functions.cpp
  * @brief page layout editor command event functions.
  */
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2013 CERN
+ * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <fctsys.h>
 #include <wx/treectrl.h>
@@ -38,7 +61,7 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_SAVEAS, PL_EDITOR_FRAME::Files_io )
     EVT_MENU( wxID_FILE, PL_EDITOR_FRAME::Files_io )
     EVT_MENU( ID_LOAD_DEFAULT_PAGE_LAYOUT, PL_EDITOR_FRAME::Files_io )
-    EVT_MENU( ID_OPEN_POLYGON_DESCR_FILE, PL_EDITOR_FRAME::Files_io )
+    EVT_MENU( ID_APPEND_DESCR_FILE, PL_EDITOR_FRAME::Files_io )
 
     EVT_MENU( ID_GEN_PLOT, PL_EDITOR_FRAME::ToPlotter )
 
@@ -67,7 +90,7 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( wxID_PREVIEW, PL_EDITOR_FRAME::ToPrinter )
     EVT_TOOL( ID_SHEET_SET, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
-    EVT_TOOL( ID_SHOW_LPEDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
+    EVT_TOOL( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
     EVT_CHOICE( ID_SELECT_COORDINATE_ORIGIN, PL_EDITOR_FRAME::OnSelectCoordOriginCorner)
     EVT_CHOICE( ID_SELECT_PAGE_NUMBER, PL_EDITOR_FRAME::Process_Special_Functions)
 
@@ -78,7 +101,7 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
                     PL_EDITOR_FRAME::Process_Special_Functions )
 
     EVT_UPDATE_UI( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode )
-    EVT_UPDATE_UI( ID_SHOW_LPEDITOR_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode )
+    EVT_UPDATE_UI( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode )
 
 END_EVENT_TABLE()
 
@@ -157,7 +180,22 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
             RebuildDesignTree();
             item = NULL;
         }
-        m_canvas->Refresh();
+        else
+        {
+            // Put the new item in move mode, after putting the cursor
+            // on the start point:
+            wxPoint position = item->GetStartPosUi();
+            SetCrossHairPosition( position, false );
+            position = GetCrossHairPosition();
+
+            if( m_canvas->IsPointOnDisplay( position ) )
+                m_canvas->MoveCursorToCrossHair();
+            else
+                RedrawScreen( position, true );
+
+            item->SetFlags( NEW_ITEM );
+            MoveItem( item );
+        }
         break;
 
     case ID_POPUP_ITEM_ADD_RECT:
@@ -171,7 +209,22 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
             RebuildDesignTree();
             item = NULL;
         }
-        m_canvas->Refresh();
+        else
+        {
+            // Put the new item in move mode, after putting the cursor
+            // on the start point:
+            wxPoint position = item->GetStartPosUi();
+            SetCrossHairPosition( position, false );
+            position = GetCrossHairPosition();
+
+            if( m_canvas->IsPointOnDisplay( position ) )
+                m_canvas->MoveCursorToCrossHair();
+            else
+                RedrawScreen( position, true );
+
+            item->SetFlags( NEW_ITEM );
+            MoveItem( item );
+        }
         break;
 
     case ID_POPUP_ITEM_ADD_TEXT:
@@ -185,11 +238,16 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
             RebuildDesignTree();
             item = NULL;
         }
-        m_canvas->Refresh();
+        else
+        {
+            // Put the new text in move mode:
+            item->SetFlags( NEW_ITEM | LOCATE_STARTPOINT );
+            MoveItem( item );
+        }
         break;
 
-    case ID_POPUP_ITEM_ADD_POLY:
-        cmd.SetId( ID_OPEN_POLYGON_DESCR_FILE );
+    case ID_POPUP_ITEM_APPEND_PAGE_LAYOUT:
+        cmd.SetId( ID_APPEND_DESCR_FILE );
         wxPostEvent( this, cmd );
         break;
 
@@ -240,6 +298,11 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
+/*
+ * Function moveItem: called when the mouse cursor is moving
+ * moves the item currently selected (or the start point or the end point)
+ * to the cursor position
+ */
 DPOINT initialPosition;         // The initial position of the item to move, in mm
 wxPoint initialPositionUi;      // The initial position of the item to move, in Ui
 wxPoint initialCursorPosition;  // The initial position of the cursor
@@ -250,7 +313,7 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
     WORKSHEET_DATAITEM *item = screen->GetCurItem();
 
     wxCHECK_RET( (item != NULL), wxT( "Cannot move NULL item." ) );
-    wxPoint position = screen->GetCrossHairPosition()
+    wxPoint position = aPanel->GetParent()->GetCrossHairPosition()
                       - ( initialCursorPosition - initialPositionUi );
 
     if( (item->GetFlags() & LOCATE_STARTPOINT) )
@@ -265,20 +328,37 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
         aPanel->Refresh();
 }
 
+/*
+ * Function abortMoveItem: called when an item is currently moving,
+ * and when the user aborts the move command.
+ * Restores the initial position of the item
+ */
 static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
     PL_EDITOR_SCREEN* screen = (PL_EDITOR_SCREEN*) aPanel->GetScreen();
     WORKSHEET_DATAITEM *item = screen->GetCurItem();
-    if( (item->GetFlags() & LOCATE_STARTPOINT) )
+
+    if( (item->GetFlags() & NEW_ITEM ) )
     {
-        item->MoveStartPointTo( initialPosition );
-    }
-    else if( (item->GetFlags() & LOCATE_ENDPOINT) )
-    {
-        item->MoveEndPointTo( initialPosition );
+        PL_EDITOR_FRAME* plframe = (PL_EDITOR_FRAME*) aPanel->GetParent();
+        plframe->RemoveLastCommandInUndoList();
+        WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+        pglayout.Remove( item );
+        plframe->RebuildDesignTree();
     }
     else
-        item->MoveTo( initialPosition );
+    {
+        if( (item->GetFlags() & LOCATE_STARTPOINT) )
+        {
+            item->MoveStartPointTo( initialPosition );
+        }
+        else if( (item->GetFlags() & LOCATE_ENDPOINT) )
+        {
+            item->MoveEndPointTo( initialPosition );
+        }
+        else
+            item->MoveTo( initialPosition );
+    }
 
     aPanel->SetMouseCapture( NULL, NULL );
     screen->SetCurItem( NULL );
@@ -290,7 +370,7 @@ void PL_EDITOR_FRAME::MoveItem( WORKSHEET_DATAITEM* aItem )
     wxCHECK_RET( aItem != NULL, wxT( "Cannot move NULL item" ) );
     initialPosition = aItem->GetStartPos();
     initialPositionUi = aItem->GetStartPosUi();
-    initialCursorPosition = GetScreen()->GetCrossHairPosition();
+    initialCursorPosition = GetCrossHairPosition();
 
     if( (aItem->GetFlags() & LOCATE_ENDPOINT) )
     {
@@ -300,8 +380,8 @@ void PL_EDITOR_FRAME::MoveItem( WORKSHEET_DATAITEM* aItem )
 
     if( aItem->GetFlags() & (LOCATE_STARTPOINT|LOCATE_ENDPOINT) )
     {
-        GetScreen()->SetCrossHairPosition( initialPositionUi, false );
-        initialCursorPosition = GetScreen()->GetCrossHairPosition();
+        SetCrossHairPosition( initialPositionUi, false );
+        initialCursorPosition = GetCrossHairPosition();
         if( m_canvas->IsPointOnDisplay( initialCursorPosition ) )
         {
             m_canvas->MoveCursorToCrossHair();
@@ -317,6 +397,7 @@ void PL_EDITOR_FRAME::MoveItem( WORKSHEET_DATAITEM* aItem )
     GetScreen()->SetCurItem( aItem );
 }
 
+
 /**
 * Save in Undo list the layout, and place an item being moved.
 * @param aItem is the item moved
@@ -325,6 +406,8 @@ void PL_EDITOR_FRAME::PlaceItem( WORKSHEET_DATAITEM* aItem )
 {
     DPOINT currStartPos = aItem->GetStartPos();
     DPOINT currEndPos = aItem->GetEndPos();
+
+    aItem->ClearFlags( NEW_ITEM );
 
     // Save the curren layout before changes
     if( (aItem->GetFlags() & LOCATE_STARTPOINT) )
@@ -361,7 +444,7 @@ void PL_EDITOR_FRAME::OnSelectCoordOriginCorner( wxCommandEvent& event )
 
 void PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode( wxCommandEvent& event )
 {
-    WORKSHEET_DATAITEM::m_SpecialMode = (event.GetId() == ID_SHOW_LPEDITOR_MODE);
+    WORKSHEET_DATAITEM::m_SpecialMode = (event.GetId() == ID_SHOW_PL_EDITOR_MODE);
     m_canvas->Refresh();
 }
 
@@ -444,20 +527,13 @@ void PL_EDITOR_FRAME::OnTreeMiddleClick( wxTreeEvent& event )
 {
 }
 
+extern void AddNewItemsCommand( wxMenu* aMainMenu );
 void PL_EDITOR_FRAME::OnTreeRightClick( wxTreeEvent& event )
 {
     m_treePagelayout->SelectCell( event.GetItem() );
 
     wxMenu popMenu;
-
-    AddMenuItem( &popMenu, ID_POPUP_ITEM_ADD_LINE, _( "Add line" ),
-                 KiBitmap( add_dashed_line_xpm ) );
-    AddMenuItem( &popMenu, ID_POPUP_ITEM_ADD_RECT, _( "Add rect" ),
-                 KiBitmap( add_rectangle_xpm ) );
-    AddMenuItem( &popMenu, ID_POPUP_ITEM_ADD_TEXT, _( "Add text" ),
-                 KiBitmap( add_text_xpm ) );
-    AddMenuItem( &popMenu, ID_POPUP_ITEM_ADD_POLY, _( "Import poly descr file" ),
-                 KiBitmap( add_polygon_xpm ) );
+    AddNewItemsCommand( &popMenu );
 
     popMenu.AppendSeparator();
     AddMenuItem( &popMenu, ID_POPUP_DESIGN_TREE_ITEM_DELETE, _( "Delete" ),

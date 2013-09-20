@@ -137,8 +137,11 @@ public:
     const PAGE_INFO& GetPageSettings() const;                   // overload
     const wxSize GetPageSizeIU() const;                         // overload
 
-    const wxPoint& GetOriginAxisPosition() const;               // overload
-    void SetOriginAxisPosition( const wxPoint& aPosition );     // overload
+    const wxPoint& GetAuxOrigin() const;                        // overload
+    void SetAuxOrigin( const wxPoint& aPoint );                 // overload
+
+    const wxPoint& GetGridOrigin() const;                       // overload
+    void SetGridOrigin( const wxPoint& aPoint );                // overload
 
     const TITLE_BLOCK& GetTitleBlock() const;                   // overload
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload

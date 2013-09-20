@@ -321,7 +321,7 @@ void DIALOG_GENDRILL::SetParams()
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_FileDrillOffset = wxPoint( 0, 0 );
     else
-        m_FileDrillOffset = m_parent->GetOriginAxisPosition();
+        m_FileDrillOffset = m_parent->GetAuxOrigin();
 
     if( m_UnitDrillIsInch )
         m_Precision = precisionListForInches;
