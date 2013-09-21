@@ -39,8 +39,8 @@ set( BOOST_ROOT "${PROJECT_SOURCE_DIR}/boost_root" )
 
 if( BUILD_GITHUB_PLUGIN )
     # Space separated list which indicates the subset of boost libraries to compile.
-    # Chosen libraries are based on pion-net _client_ (not server) requirements.  Client
-    # requirements are less demanding.
+    # Chosen libraries are based on AVHTTP requirements, and possibly
+    # unit_test_framework for its own worth.
     set( BOOST_LIBS_BUILT
         date_time
         #exception
@@ -52,7 +52,7 @@ if( BUILD_GITHUB_PLUGIN )
         #signals
         system
         thread
-        unit_test_framework
+        #unit_test_framework
         )
 endif()
 
@@ -75,16 +75,11 @@ set( headers_src "${PREFIX}/src/boost/boost" )
 
 function( set_boost_lib_names libs output )
     foreach( lib ${libs} )
-
-    if( false )
-        set( fullpath_lib, "${BOOST_ROOT}/lib/libboost_${lib}.${CMAKE_STATIC_LIBRARY_SUFFIX}" )
-        message( STATUS "fullpath_lib:${fullpath_lib}" )
-        list( APPEND output ${fullpath_lib} )
-    endif()
-
-        message( STATUS "lib:${lib}" )
-
+        set( fullpath_lib "${BOOST_ROOT}/lib/libboost_${lib}${CMAKE_STATIC_LIBRARY_SUFFIX}" )
+        list( APPEND results ${fullpath_lib} )
     endforeach()
+    # set the results into variable represented by output into caller's scope
+    set( ${output} ${results} PARENT_SCOPE )
 endfunction()
 
 
@@ -135,10 +130,9 @@ if( BUILD_GITHUB_PLUGIN )
         INSTALL_COMMAND ""
         )
 
-    #file( GLOB boost_libs "${BOOST_ROOT}/lib/*${CMAKE_STATIC_LIBRARY_SUFFIX}" )
-    set_boost_lib_names( ${BOOST_LIBS_BUILT} boost_libs )
-
-    message( STATUS "BOOST_ROOT:${BOOST_ROOT}  boost_libs:${boost_libs}" )
+    set( boost_libs "" )
+    set_boost_lib_names( "${BOOST_LIBS_BUILT}" boost_libs )
+    #message( STATUS "BOOST_ROOT:${BOOST_ROOT}  boost_libs:${boost_libs}" )
     set( Boost_LIBRARIES    ${boost_libs}           CACHE FILEPATH "Boost libraries directory" )
     set( Boost_INCLUDE_DIR  "${BOOST_ROOT}/include" CACHE FILEPATH "Boost include directory" )
 
