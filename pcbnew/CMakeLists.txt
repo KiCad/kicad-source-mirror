@@ -348,6 +348,14 @@ if( KICAD_SCRIPTING_MODULES )
         ${PCBNEW_EXTRA_LIBS}
         )
 
+     # create .i files from XML doxygen parsing, docstrings.i will include all of them
+    add_custom_target( qa
+        COMMAND PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR} ${PYTHON_EXECUTABLE} test.py
+        
+        COMMENT "running qa"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripting/qa
+        ) 
+
 endif()
 
 
