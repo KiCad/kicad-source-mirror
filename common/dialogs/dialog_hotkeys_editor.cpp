@@ -54,7 +54,7 @@ HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_DRAW_FRAME*    parent,
     m_hotkeys = hotkeys;
     m_curEditingRow = -1;
 
-    m_table = new HotkeyGridTable( hotkeys );
+    m_table = new HOTKEY_EDITOR_GRID_TABLE( hotkeys );
     m_hotkeyGrid->SetTable( m_table, true );
 
     m_hotkeyGrid->AutoSizeColumn( 0 );
@@ -76,7 +76,7 @@ HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_DRAW_FRAME*    parent,
 void HOTKEYS_EDITOR_DIALOG::OnOKClicked( wxCommandEvent& event )
 {
     /* edit the live hotkey table */
-    HotkeyGridTable::hotkey_spec_vector& hotkey_vec = m_table->getHotkeys();
+    HOTKEY_EDITOR_GRID_TABLE::hotkey_spec_vector& hotkey_vec = m_table->getHotkeys();
 
     EDA_HOTKEY_CONFIG*      section;
 
@@ -91,7 +91,7 @@ void HOTKEYS_EDITOR_DIALOG::OnOKClicked( wxCommandEvent& event )
             EDA_HOTKEY* info = *info_ptr;
 
             /* find the corresponding hotkey */
-            HotkeyGridTable::hotkey_spec_vector::iterator i;
+            HOTKEY_EDITOR_GRID_TABLE::hotkey_spec_vector::iterator i;
 
             for( i = hotkey_vec.begin(); i != hotkey_vec.end(); ++i )
             {
@@ -158,7 +158,7 @@ void HOTKEYS_EDITOR_DIALOG::OnClickOnCell( wxGridEvent& event )
 
     int newRow = event.GetRow();
 
-    if( ( event.GetCol() != 1 ) || ( m_table->isHeader( newRow ) ) )
+    if( ( event.GetCol() != 1 ) || ( m_table->IsHeader( newRow ) ) )
     {
         m_curEditingRow = -1;
     }

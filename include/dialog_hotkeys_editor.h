@@ -26,7 +26,7 @@ class HOTKEYS_EDITOR_DIALOG : public HOTKEYS_EDITOR_DIALOG_BASE
 protected:
     EDA_DRAW_FRAME* m_parent;
     struct EDA_HOTKEY_CONFIG* m_hotkeys;
-    HotkeyGridTable* m_table;
+    HOTKEY_EDITOR_GRID_TABLE* m_table;
 
     int m_curEditingRow;
 
