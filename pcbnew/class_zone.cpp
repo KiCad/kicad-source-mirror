@@ -557,25 +557,61 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 }
 
 
-bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect ) const
+bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    bool  is_out_of_box = false;
+    EDA_RECT arect = aRect;
+    arect.Inflate( aAccuracy );
+    CRect rect = m_Poly->GetBoundingBox();
+    EDA_RECT bbox;
 
-    CRect rect = m_Poly->GetCornerBounds();
+    bbox.SetOrigin( rect.left,  rect.bottom );
+    bbox.SetEnd(    rect.right, rect.top    );
 
-    if( rect.left < aRect.GetX() )
-        is_out_of_box = true;
+    if( aContained )
+         return arect.Contains( bbox );
+    else    // Test for intersection between aRect and the polygon
+            // For a polygon, using its bounding box has no sense here
+    {
+        // Fast test: if aRect is outside the polygon bounding box,
+        // rectangles cannot intersect
+        if( ! bbox.Intersects( arect ) )
+            return false;
 
-    if( rect.top < aRect.GetY() )
-        is_out_of_box = true;
+        // aRect is inside the polygon bounding box,
+        // and can intersect the polygon: use a fine test.
+        // aRect intersects the polygon if at least one aRect corner
+        // is inside the polygon
+        wxPoint corner = arect.GetOrigin();
 
-    if( rect.right > aRect.GetRight() )
-        is_out_of_box = true;
+        if( HitTestInsideZone( corner ) )
+            return true;
 
-    if( rect.bottom > aRect.GetBottom() )
-        is_out_of_box = true;
+        corner.x = arect.GetEnd().x;
 
-    return is_out_of_box ? false : true;
+        if( HitTestInsideZone( corner ) )
+            return true;
+
+        corner = arect.GetEnd();
+
+        if( HitTestInsideZone( corner ) )
+            return true;
+
+        corner.x = arect.GetOrigin().x;
+
+        if( HitTestInsideZone( corner ) )
+            return true;
+
+        // No corner inside arect, but outlines can intersect arect
+        // if one of outline corners is inside arect
+        int count = m_Poly->GetCornersCount();
+        for( int ii =0; ii < count; ii++ )
+        {
+            if( arect.Contains( m_Poly->GetPos( ii ) ) )
+                return true;
+        }
+
+        return false;
+    }
 }
 
 

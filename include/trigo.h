@@ -31,6 +31,19 @@
 #include <math.h>
 #include <wx/gdicmn.h> // For wxPoint
 
+/**
+ * Function SegmentIntersectsSegment
+ *
+ * @param a_p1_l1 The first point of the first line.
+ * @param a_p2_l1 The second point of the first line.
+ * @param a_p1_l2 The first point of the second line.
+ * @param a_p2_l2 The second point of the second line.
+ * @return bool - true if the two segments defined by four points intersect.
+ * (i.e. if the 2 segments have at least a common point)
+ */
+bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
+                               const wxPoint &a_p1_l2, const wxPoint &a_p2_l2 );
+
 /*
  * Calculate the new point of coord coord pX, pY,
  * for a rotation center 0, 0, and angle in (1 / 10 degree)

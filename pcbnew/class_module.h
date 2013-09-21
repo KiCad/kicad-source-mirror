@@ -318,7 +318,10 @@ public:
 
     bool HitTest( const wxPoint& aPosition );
 
-    bool HitTest( const EDA_RECT& aRect ) const;
+    /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
+     *                               bool aContained = true, int aAccuracy ) const
+     */
+    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
 
     /**
      * Function GetReference

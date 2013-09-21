@@ -9,6 +9,71 @@
 #include <common.h>
 #include <math_for_graphics.h>
 
+
+bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
+                               const wxPoint &a_p1_l2, const wxPoint &a_p2_l2 )
+{
+
+    //We are forced to use 64bit ints because the internal units can oveflow 32bit ints when
+    // multiplied with each other, the alternative would be to scale the units down (i.e. divide
+    // by a fixed number).
+    long long dX_a, dY_a, dX_b, dY_b, dX_ab, dY_ab;
+    long long num_a, num_b, den;
+
+    //Test for intersection within the bounds of both line segments using line equations of the
+    // form:
+    // x_k(u_k) = u_k * dX_k + x_k(0)
+    // y_k(u_k) = u_k * dY_k + y_k(0)
+    // with  0 <= u_k <= 1 and k = [ a, b ]
+
+    dX_a  = a_p2_l1.x - a_p1_l1.x;
+    dY_a  = a_p2_l1.y - a_p1_l1.y;
+    dX_b  = a_p2_l2.x - a_p1_l2.x;
+    dY_b  = a_p2_l2.y - a_p1_l2.y;
+    dX_ab = a_p1_l2.x - a_p1_l1.x;
+    dY_ab = a_p1_l2.y - a_p1_l1.y;
+
+    den   = dY_a  * dX_b - dY_b * dX_a ;
+
+    //Check if lines are parallel
+    if( den == 0 )
+        return false;
+
+    num_a = dY_ab * dX_b - dY_b * dX_ab;
+    num_b = dY_ab * dX_a - dY_a * dX_ab;
+
+    //We wont calculate directly the u_k of the intersection point to avoid floating point
+    // division but they could be calculated with:
+    // u_a = (float) num_a / (float) den;
+    // u_b = (float) num_b / (float) den;
+
+    if( den < 0 )
+    {
+        den   = -den;
+        num_a = -num_a;
+        num_b = -num_b;
+    }
+
+    //Test sign( u_a ) and return false if negative
+    if( num_a < 0 )
+        return false;
+
+    //Test sign( u_b ) and return false if negative
+    if( num_b < 0 )
+        return false;
+
+    //Test to ensure (u_a <= 1)
+    if( num_a > den )
+        return false;
+
+    //Test to ensure (u_b <= 1)
+    if( num_b > den )
+        return false;
+
+    return true;
+}
+
+
 /* Function TestSegmentHit
  * test for hit on line segment
  * i.e. a reference point is within a given distance from segment
@@ -29,7 +94,7 @@ static inline double square( int x )    // helper function to calculate x*x
 {
     return (double) x * x;
 }
-bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, 
+bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart,
                      wxPoint aEnd, int aDist )
 {
     // test for vertical or horizontal segment
@@ -163,7 +228,7 @@ double ArcTangente( int dy, int dx )
 
     /* gcc is surprisingly smart in optimizing these conditions in
        a tree! */
-    
+
     if( dx == 0 && dy == 0 )
         return 0;
 
