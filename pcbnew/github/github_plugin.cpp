@@ -38,19 +38,9 @@
 */
 
 
-#include <string>
-#include <vector>
-#include <iostream>
 #include <sstream>
-
-//#include <boost/filesystem.hpp>
-//#include <boost/array.hpp>
-//#include <boost/shared_ptr.hpp>
-//#include <boost/enable_shared_from_this.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
-
-#include <avhttp.hpp>
-
+#include <avhttp.hpp>                       // chinese SSL magic
 #include <wx/zipstrm.h>
 #include <wx/mstream.h>
 #include <wx/uri.h>
@@ -63,9 +53,7 @@
 #include <class_board.h>
 #include <github_plugin.h>
 
-
 using namespace std;
-
 
 typedef boost::ptr_map<std::string, wxZipEntry>     MODULE_MAP;
 typedef MODULE_MAP::iterator                        MODULE_ITER;
