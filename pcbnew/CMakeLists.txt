@@ -394,7 +394,7 @@ if( DOXYGEN_FOUND )
             ${CMAKE_COMMAND} -E remove_directory doxygen-python
             COMMAND PYTHON_SOURCES_TO_DOC=${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_python 
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            DEPENDS Doxyfile.python
+            DEPENDS Doxyfile_python
             DEPENDS xml-to-docstrings
             DEPENDS pcbnew.py
 
