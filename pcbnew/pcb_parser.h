@@ -31,6 +31,8 @@
 
 #include <pcb_lexer.h>
 #include <hashtables.h>
+#include <layers_id_colors_and_visibility.h>    // LAYER_NUM
+#include <common.h>                             // KiROUND
 
 using namespace PCB_KEYS_T;
 
@@ -40,15 +42,16 @@ class BOARD_ITEM;
 class D_PAD;
 class DIMENSION;
 class DRAWSEGMENT;
+class EDA_TEXT;
 class EDGE_MODULE;
 class TEXTE_MODULE;
 class TEXTE_PCB;
+class TRACK;
 class MODULE;
 class PCB_TARGET;
+class SEGVIA;
 class S3D_MASTER;
 class ZONE_CONTAINER;
-class FPL_CACHE;
-
 
 
 /**

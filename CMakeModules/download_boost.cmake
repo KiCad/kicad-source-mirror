@@ -29,13 +29,8 @@
 
 #-----<configure>----------------------------------------------------------------
 
-if( false )
-    set( BOOST_RELEASE 1.53.0 )
-    set( BOOST_MD5 a00d22605d5dbcfb4c9936a9b35bc4c2 )   # re-calc this on every RELEASE change
-else()
-    set( BOOST_RELEASE 1.54.0 )
-    set( BOOST_MD5 15cb8c0803064faef0c4ddf5bc5ca279 )   # re-calc this on every RELEASE change
-endif()
+set( BOOST_RELEASE 1.54.0 )
+set( BOOST_MD5 15cb8c0803064faef0c4ddf5bc5ca279 )   # re-calc this on every RELEASE change
 
 # The boost headers [and static libs if built] go here, at the top of KiCad
 # source tree in boost_root.
@@ -44,14 +39,19 @@ set( BOOST_ROOT "${PROJECT_SOURCE_DIR}/boost_root" )
 
 if( BUILD_GITHUB_PLUGIN )
     # Space separated list which indicates the subset of boost libraries to compile.
+    # Chosen libraries are based on pion-net _client_ (not server) requirements.  Client
+    # requirements are less demanding.
     set( BOOST_LIBS_BUILT
-        #filesystem
-        system
-        #regex
-        #program_options
-        #date_time
-        #thread
+        date_time
         #exception
+        filesystem
+        iostreams
+        locale
+        program_options
+        regex
+        #signals
+        #system
+        thread
         unit_test_framework
         )
 endif()
@@ -73,7 +73,7 @@ set( PREFIX ${DOWNLOAD_DIR}/boost_${BOOST_VERS} )
 set( headers_src "${PREFIX}/src/boost/boost" )
 
 
-# don't look at this:
+# don't look at this, not used, not working, not needed at this time.
 function( set_boost_lib_names libs output )
     foreach( lib ${libs} )
         set( fullpath_lib, "${BOOST_ROOT}/lib/libboost_${lib}.a" )
@@ -85,13 +85,15 @@ endfunction()
 
 if( BUILD_GITHUB_PLUGIN )
 
+    # It will probably be simpler to make this the only path in the future.
+
     # (BTW "test" yields "unit_test_framework" when passed to bootstrap.{sh,bat} ).
-    message( STATUS "BOOST_LIBS_BUILT:${BOOST_LIBS_BUILT}" )
+    #message( STATUS "BOOST_LIBS_BUILT:${BOOST_LIBS_BUILT}" )
     string( REPLACE "unit_test_framework" "test" libs_csv "${BOOST_LIBS_BUILT}" )
-    message( STATUS "REPLACE libs_csv:${libs_csv}" )
+    #message( STATUS "REPLACE libs_csv:${libs_csv}" )
 
     string( REGEX REPLACE "\\;" "," libs_csv "${libs_csv}" )
-    message( STATUS "libs_csv:${libs_csv}" )
+    #message( STATUS "libs_csv:${libs_csv}" )
 
     if( MINGW )
         set( bootstrap "bootstart.bat mingw" )
@@ -120,14 +122,14 @@ if( BUILD_GITHUB_PLUGIN )
                         variant=release
                         threading=multi
                         toolset=gcc
-                        link=static
+                        #link=static
                         --prefix=${BOOST_ROOT}
                         install
 
         INSTALL_COMMAND ""
         )
 
-    file( GLOB boost_libs "${BOOST_ROOT}/lib/*" )
+    file( GLOB boost_libs "${BOOST_ROOT}/lib/*${CMAKE_STATIC_LIBRARY_SUFFIX}" )
     #message( STATUS BOOST_ROOT:${BOOST_ROOT}  boost_libs:${boost_libs} )
     set( Boost_LIBRARIES    ${boost_libs}           CACHE FILEPATH "Boost libraries directory" )
     set( Boost_INCLUDE_DIR  "${BOOST_ROOT}/include" CACHE FILEPATH "Boost include directory" )

@@ -48,11 +48,12 @@ public:
      */
     enum PCB_FILE_T
     {
-        LEGACY,             //< Legacy Pcbnew file formats prior to s-expression.
-        KICAD,              //< S-expression Pcbnew file format.
+        LEGACY,         ///< Legacy Pcbnew file formats prior to s-expression.
+        KICAD,          ///< S-expression Pcbnew file format.
         EAGLE,
         PCAD,
-        GEDA_PCB,           //< Geda PCB file formats.
+        GEDA_PCB,       ///< Geda PCB file formats.
+        GITHUB,         ///< Read only http://github.com repo holding pretty footprints
 
         // add your type here.
 
@@ -397,7 +398,7 @@ public:
         API functions which take one.
     */
 
-    virtual ~PLUGIN() {}
+    virtual ~PLUGIN() {};
 
     /**
      * Class RELEASER

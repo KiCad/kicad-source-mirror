@@ -104,6 +104,11 @@ target_link_libraries( cvpcb
     ${GDI_PLUS_LIBRARIES}
     )
 
+if( BUILD_GITHUB_PLUGIN )
+    target_link_libraries( cvpcb github_plugin )
+endif()
+
+
 ###
 # Add cvpcb as install target
 ###
