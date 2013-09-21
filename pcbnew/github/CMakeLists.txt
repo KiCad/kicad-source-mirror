@@ -47,8 +47,8 @@ include_directories( . ${OPENSSL_INCLUDE_DIR} ${AVHTTP_INCLUDE_DIR} )
 add_definitions( -DAVHTTP_ENABLE_OPENSSL )
 
 # tone down the compiler warnings for avhttp header library:
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-sign-compare -Wno-reorder -Wno-unused-variable -Wno-unused-function" )
-
+set( CMAKE_CXX_FLAGS
+    "${CMAKE_CXX_FLAGS} -Wno-sign-compare -Wno-reorder -Wno-unused-variable -Wno-unused-function -Wno-strict-aliasing" )
 
 set( GITHUB_PLUGIN_SRCS
     github_plugin.cpp

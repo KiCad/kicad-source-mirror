@@ -53,7 +53,10 @@ option( KICAD_SCRIPTING_WXPYTHON
 
 option( USE_FP_LIB_TABLE "Use the new footprint library table implementation. ( default OFF)" )
 
-option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
+if( NOT MINGW )     # BUILD_GITHUB_PLUGIN is not MINGW ready yet.
+    # still have some build problems, even on linux
+    #option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
+endif()
 
 
 #Set version option (stable or testing)
