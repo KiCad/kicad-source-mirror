@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -55,7 +55,9 @@ HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWind
 	m_undoButton = new wxButton( this, wxID_CANCEL, _("Undo"), wxDefaultPosition, wxDefaultSize, 0 );
 	b_buttonsSizer->Add( m_undoButton, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( b_buttonsSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

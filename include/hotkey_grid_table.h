@@ -14,15 +14,15 @@
 #include <common.h>
 #include <hotkeys_basic.h>
 
-class HotkeyGridTable : public wxGridTableBase
+class HOTKEY_EDITOR_GRID_TABLE : public wxGridTableBase
 {
 
 public:
     typedef std::pair< wxString, EDA_HOTKEY* > hotkey_spec;
     typedef std::vector< hotkey_spec > hotkey_spec_vector;
 
-    HotkeyGridTable( struct EDA_HOTKEY_CONFIG* origin );
-    virtual ~HotkeyGridTable();
+    HOTKEY_EDITOR_GRID_TABLE( struct EDA_HOTKEY_CONFIG* origin );
+    virtual ~HOTKEY_EDITOR_GRID_TABLE();
     hotkey_spec_vector& getHotkeys();
 
 private:
@@ -45,7 +45,7 @@ private:
     virtual wxString GetColLabelValue( int col );
 
 public:
-    virtual bool isHeader( int row );
+    virtual bool IsHeader( int row );
     virtual void SetKeyCode( int row, long key );
     virtual void RestoreFrom( struct EDA_HOTKEY_CONFIG* origin );
 
