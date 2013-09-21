@@ -104,6 +104,7 @@ if( BUILD_GITHUB_PLUGIN )
     ExternalProject_Add( boost
         PREFIX          "${PREFIX}"
         DOWNLOAD_DIR    "${DOWNLOAD_DIR}"
+        INSTALL_DIR     "${BOOST_ROOT}"
         URL             http://downloads.sourceforge.net/project/boost/boost/${BOOST_RELEASE}/boost_${BOOST_VERS}.tar.bz2
         URL_MD5         ${BOOST_MD5}
 
@@ -123,14 +124,16 @@ if( BUILD_GITHUB_PLUGIN )
                         threading=multi
                         toolset=gcc
                         #link=static
-                        --prefix=${BOOST_ROOT}
+                        --prefix=<INSTALL_DIR>
                         install
 
         INSTALL_COMMAND ""
         )
 
-    file( GLOB boost_libs "${BOOST_ROOT}/lib/*${CMAKE_STATIC_LIBRARY_SUFFIX}" )
-    #message( STATUS BOOST_ROOT:${BOOST_ROOT}  boost_libs:${boost_libs} )
+    ExternalProject_Get_Property( boost install_dir )
+
+    file( GLOB boost_libs "${install_dir}/lib/*${CMAKE_STATIC_LIBRARY_SUFFIX}" )
+    message( STATUS BOOST_ROOT:${BOOST_ROOT}  boost_libs:${boost_libs} )
     set( Boost_LIBRARIES    ${boost_libs}           CACHE FILEPATH "Boost libraries directory" )
     set( Boost_INCLUDE_DIR  "${BOOST_ROOT}/include" CACHE FILEPATH "Boost include directory" )
 
