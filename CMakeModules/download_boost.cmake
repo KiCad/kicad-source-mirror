@@ -50,7 +50,7 @@ if( BUILD_GITHUB_PLUGIN )
         program_options
         regex
         #signals
-        #system
+        system
         thread
         unit_test_framework
         )
@@ -73,12 +73,17 @@ set( PREFIX ${DOWNLOAD_DIR}/boost_${BOOST_VERS} )
 set( headers_src "${PREFIX}/src/boost/boost" )
 
 
-# don't look at this, not used, not working, not needed at this time.
 function( set_boost_lib_names libs output )
     foreach( lib ${libs} )
-        set( fullpath_lib, "${BOOST_ROOT}/lib/libboost_${lib}.a" )
+
+    if( false )
+        set( fullpath_lib, "${BOOST_ROOT}/lib/libboost_${lib}.${CMAKE_STATIC_LIBRARY_SUFFIX}" )
         message( STATUS "fullpath_lib:${fullpath_lib}" )
-        set( output ${output} ${fullpath_lib} )
+        list( APPEND output ${fullpath_lib} )
+    endif()
+
+        message( STATUS "lib:${lib}" )
+
     endforeach()
 endfunction()
 
@@ -130,10 +135,10 @@ if( BUILD_GITHUB_PLUGIN )
         INSTALL_COMMAND ""
         )
 
-    ExternalProject_Get_Property( boost install_dir )
+    #file( GLOB boost_libs "${BOOST_ROOT}/lib/*${CMAKE_STATIC_LIBRARY_SUFFIX}" )
+    set_boost_lib_names( ${BOOST_LIBS_BUILT} boost_libs )
 
-    file( GLOB boost_libs "${install_dir}/lib/*${CMAKE_STATIC_LIBRARY_SUFFIX}" )
-    message( STATUS BOOST_ROOT:${BOOST_ROOT}  boost_libs:${boost_libs} )
+    message( STATUS "BOOST_ROOT:${BOOST_ROOT}  boost_libs:${boost_libs}" )
     set( Boost_LIBRARIES    ${boost_libs}           CACHE FILEPATH "Boost libraries directory" )
     set( Boost_INCLUDE_DIR  "${BOOST_ROOT}/include" CACHE FILEPATH "Boost include directory" )
 
