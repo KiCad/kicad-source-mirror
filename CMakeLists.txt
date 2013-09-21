@@ -53,7 +53,7 @@ option( KICAD_SCRIPTING_WXPYTHON
 
 option( USE_FP_LIB_TABLE "Use the new footprint library table implementation. ( default OFF)" )
 
-#option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
+option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
 
 
 #Set version option (stable or testing)
@@ -110,18 +110,18 @@ if( CMAKE_COMPILER_IS_GNUCXX )
             "Setting GCC version ${GCC_VERSION} build flags \"${KICAD_GCC_RELEASE_BUILD_FLAGS}\"" )
     endif()
 
-    if( MINGW )
-        # According to some sources, under Windows -fPIC option is not needed:
-        # http://mingw.5.n7.nabble.com/Option-fPIC-not-supported-td18480.html
+    set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wall" )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" )
 
+    if( MINGW )
         # Set default flags for Release build.
-        set( CMAKE_C_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG" )
-        set( CMAKE_CXX_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG" )
+        set( CMAKE_C_FLAGS_RELEASE "${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG" )
+        set( CMAKE_CXX_FLAGS_RELEASE "${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG" )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s -static-libgcc -static-libstdc++" )
 
         # Set default flags for Debug build.
-        set( CMAKE_C_FLAGS_DEBUG "-Wall ${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG" )
-        set( CMAKE_CXX_FLAGS_DEBUG "-Wall ${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG" )
+        set( CMAKE_C_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG" )
+        set( CMAKE_CXX_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG" )
         set( CMAKE_MODULE_LINKER_FLAGS "-static-libgcc -static-libstdc++") # SWIG macros on Windows
 
     else()
@@ -136,13 +136,13 @@ if( CMAKE_COMPILER_IS_GNUCXX )
         set( CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined" ) # needed by SWIG macros on linux
 
         # Set default flags for Release build.
-        set( CMAKE_C_FLAGS_RELEASE "${KICAD_GCC_RELEASE_BUILD_FLAGS} -Wall -DNDEBUG" )
-        set( CMAKE_CXX_FLAGS_RELEASE "${KICAD_GCC_RELEASE_BUILD_FLAGS} -Wall -DNDEBUG" )
+        set( CMAKE_C_FLAGS_RELEASE "${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG" )
+        set( CMAKE_CXX_FLAGS_RELEASE "${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG" )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
 
         # Set default flags for Debug build.
-        set( CMAKE_C_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -Wall  -g3 -ggdb3 -DDEBUG" )
-        set( CMAKE_CXX_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -Wall -g3 -ggdb3 -DDEBUG" )
+        set( CMAKE_C_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG" )
+        set( CMAKE_CXX_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG" )
     endif()
 
     # quiet GCC 4.8.1 while in boost

@@ -30,6 +30,11 @@
 #include <eagle_plugin.h>
 #include <pcad2kicadpcb_plugin/pcad_plugin.h>
 #include <gpcb_plugin.h>
+
+#if defined(BUILD_GITHUB_PLUGIN)
+ #include <github/github_plugin.h>
+#endif
+
 #include <wildcards_and_files_ext.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin '%s' does not implement the '%s' function." )
@@ -72,6 +77,12 @@ PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
 
     case GEDA_PCB:
         return new GPCB_PLUGIN();
+
+    case GITHUB:
+#if defined(BUILD_GITHUB_PLUGIN)
+        return new GITHUB_PLUGIN();
+#endif
+        ;   // GITHUB fall thru to NULL below
     }
 
     return NULL;
@@ -113,6 +124,12 @@ const wxString IO_MGR::ShowType( PCB_FILE_T aType )
 
     case GEDA_PCB:
         return wxString( wxT( "Geda-PCB" ) );
+
+#if defined(BUILD_GITHUB_PLUGIN)
+    case GITHUB:
+        return wxString( wxT( "Github" ) );
+#endif
+
     }
 }
 
@@ -137,6 +154,11 @@ IO_MGR::PCB_FILE_T IO_MGR::EnumFromStr( const wxString& aType )
 
     if( aType == wxT( "Geda-PCB" ) )
         return GEDA_PCB;
+
+#if defined(BUILD_GITHUB_PLUGIN)
+    if( aType == wxT( "Github" ) )
+        return GITHUB;
+#endif
 
     // wxASSERT( blow up here )
 
@@ -176,6 +198,11 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
     {
         ret = EAGLE;
     }
+
+#if defined(BUILD_GITHUB_PLUGIN)
+    // There is no extension for a remote repo.  We're thinking about this.
+#endif
+
     else
     {
         // Although KICAD PLUGIN uses libpaths with fixed extension of

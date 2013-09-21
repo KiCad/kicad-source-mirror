@@ -465,7 +465,6 @@ if( BUILD_GITHUB_PLUGIN )
 endif()
 
 
-
 ###
 # Create the pcbnew executable
 ###
@@ -500,6 +499,11 @@ target_link_libraries( pcbnew
     ${PYTHON_LIBRARIES}
     ${PCBNEW_EXTRA_LIBS}
     )
+
+if( BUILD_GITHUB_PLUGIN )
+    target_link_libraries( pcbnew github_plugin )
+endif()
+
 
 ###
 # Add pcbnew as install target
@@ -536,12 +540,10 @@ if( KICAD_SCRIPTING_MODULES )
 endif()
 
 
-# The specctra test fails to build properly using MS Visual Studio.
-if( NOT MSVC )
-    # This one gets made only when testing.
-    add_executable( specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp )
-    target_link_libraries( specctra_test common ${wxWidgets_LIBRARIES} )
-endif()
+# This one gets made only when testing.
+add_executable( specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp )
+target_link_libraries( specctra_test common ${wxWidgets_LIBRARIES} )
+
 
 # This one gets made only when testing.
 add_executable( layer_widget_test WIN32 EXCLUDE_FROM_ALL

@@ -22,12 +22,51 @@
 
 
 
+# Download avhttp and install the headers, not actually compiled
+#################################################
+include( download_avhttp )
 
-include_directories( . )
+if( MINGW )
+    # @todo: take this from python-a-mingw-us' PythonExternalPackages.cmake which does
+    # openssl compilation on MINGW.  About 20 minutes work.
+    include( download_openssl )
+else()
+    find_package( OpenSSL REQUIRED )
+    #message( STATUS "OPENSSL_FOUND:${OPENSSL_FOUND}  OPENSSL_LIBRARIES:${OPENSSL_LIBRARIES}" )
+
+    # FindOpenSSL.cmake does not set this var into cache, so is not globally visible,
+    # do it here incase some other link image needs these libraries
+    set( OPENSSL_LIBRARIES  "${OPENSSL_LIBRARIES}" CACHE FILEPATH "OpenSSL link libraries" )
+endif()
+
+
+# These are additions to any inherited from pcbnew dir:
+include_directories( . ${OPENSSL_INCLUDE_DIR} ${AVHTTP_INCLUDE_DIR} )
+
+# Tell AVHTTP we have SSL.
+add_definitions( -DAVHTTP_ENABLE_OPENSSL )
+
+# tone down the compiler warnings for avhttp header library:
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-sign-compare -Wno-reorder -Wno-unused-variable -Wno-unused-function" )
 
 
 set( GITHUB_PLUGIN_SRCS
     github_plugin.cpp
-    PARENT_SCOPE    # tell links based in 'directory pcbnew' about it, i.e. "../"
     )
+
+add_library( github_plugin
+    github_plugin.cpp
+    )
+
+# No, you don't get github without boost and openssl
+target_link_libraries( github_plugin
+    ${Boost_LIBRARIES}
+    ${OPENSSL_LIBRARIES}
+    )
+
+add_dependencies( github_plugin boost )
+add_dependencies( github_plugin avhttp )
+
+
+#target_link_libraries( github_plugin ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES})
 

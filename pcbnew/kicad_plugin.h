@@ -55,6 +55,19 @@ class PCB_PARSER;
 /// a BOARD file underneath IO_MGR.
 #define CTL_FOR_BOARD               (CTL_OMIT_INITIAL_COMMENTS)
 
+
+class DIMENSION;
+class EDGE_MODULE;
+class DRAWSEGMENT;
+class PCB_TARGET;
+class D_PAD;
+class TEXTE_MODULE;
+class TRACK;
+class ZONE_CONTAINER;
+class TEXTE_PCB;
+
+
+
 /**
  * Class PCB_IO
  * is a PLUGIN derivation for saving and loading Pcbnew s-expression formatted files.
