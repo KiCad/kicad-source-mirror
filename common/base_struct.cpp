@@ -321,6 +321,36 @@ bool EDA_RECT::Contains( const EDA_RECT& aRect ) const
 
 
 /* Intersects
+ * test for a common area between segment and rect.
+ * return true if at least a common point is found
+ */
+bool EDA_RECT::Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) const
+{
+    wxPoint point2, point4;
+
+    if( Contains( aPoint1 ) || Contains( aPoint2 ) )
+        return true;
+
+    point2.x = GetEnd().x;
+    point2.y = GetOrigin().y;
+    point4.x = GetOrigin().x;
+    point4.y = GetEnd().y;
+
+    //Only need to test 3 sides since a straight line cant enter and exit on same side
+    if( SegmentIntersectsSegment( aPoint1, aPoint2, GetOrigin() , point2 ) )
+        return true;
+
+    if( SegmentIntersectsSegment( aPoint1, aPoint2, point2      , GetEnd() ) )
+        return true;
+
+    if( SegmentIntersectsSegment( aPoint1, aPoint2, GetEnd()    , point4 ) )
+        return true;
+
+    return false;
+}
+
+
+/* Intersects
  * test for a common area between 2 rect.
  * return true if at least a common point is found
  */

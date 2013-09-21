@@ -1186,15 +1186,32 @@ bool TRACK::HitTest( const wxPoint& aPosition )
 }
 
 
-bool TRACK::HitTest( const EDA_RECT& aRect ) const
+bool TRACK::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( aRect.Contains( m_Start ) )
-        return true;
+    EDA_RECT box;
+    EDA_RECT arect = aRect;
+    arect.Inflate( aAccuracy );
 
-    if( aRect.Contains( m_End ) )
-        return true;
+    if( Type() == PCB_VIA_T )
+    {
+        box.SetOrigin( GetStart() );
+        box.Inflate( GetWidth() >> 1 );
 
-    return false;
+        if(aContained)
+            return arect.Contains( box );
+        else
+            return arect.Intersects( box );
+    }
+    else
+    {
+        if( aContained )
+            // Tracks are a specila case:
+            // they are considered inside the rect if one end
+            // is inside the rect
+            return arect.Contains( GetStart() ) || arect.Contains( GetEnd() );
+        else
+            return arect.Intersects( GetStart(), GetEnd() );
+    }
 }
 
 

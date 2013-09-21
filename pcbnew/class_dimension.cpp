@@ -430,12 +430,19 @@ bool DIMENSION::HitTest( const wxPoint& aPosition )
 }
 
 
-bool DIMENSION::HitTest( const EDA_RECT& aRect ) const
+bool DIMENSION::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( aRect.Contains( GetPosition() ) )
-        return true;
+    EDA_RECT arect = aRect;
+    arect.Inflate( aAccuracy );
 
-    return false;
+    EDA_RECT rect = GetBoundingBox();
+    if( aAccuracy )
+        rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return arect.Contains( rect );
+
+    return arect.Intersects( rect );
 }
 
 

@@ -102,7 +102,7 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
             continue;
 
         // legal polygon
-        CRect b1 = curr_area->Outline()->GetCornerBounds();
+        CRect b1 = curr_area->Outline()->GetBoundingBox();
         bool  mod_ia1 = false;
 
         for( unsigned ia2 = m_ZoneDescriptorList.size() - 1; ia2 > ia1; ia2-- )
@@ -121,7 +121,7 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
             if( curr_area->GetLayer() != area2->GetLayer() )
                 continue;
 
-            CRect b2 = area2->Outline()->GetCornerBounds();
+            CRect b2 = area2->Outline()->GetBoundingBox();
 
             if( !( b1.left > b2.right || b1.right < b2.left
                    || b1.bottom > b2.top || b1.top < b2.bottom ) )
@@ -194,8 +194,8 @@ bool BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area
     CPolyLine* poly2 = area_to_test->Outline();
 
     // test bounding rects
-    CRect      b1 = poly1->GetCornerBounds();
-    CRect      b2 = poly2->GetCornerBounds();
+    CRect      b1 = poly1->GetBoundingBox();
+    CRect      b2 = poly2->GetBoundingBox();
 
     if(  b1.bottom > b2.top || b1.top < b2.bottom ||
          b1.left > b2.right || b1.right < b2.left )

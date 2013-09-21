@@ -296,9 +296,8 @@ public:
     void        MoveOrigin( int x_off, int y_off );
 
     // misc. functions
-    CRect       GetBounds();
-    CRect       GetCornerBounds();
-    CRect       GetCornerBounds( int icont );
+    CRect       GetBoundingBox();
+    CRect       GetBoundingBox( int icont );
     void        Copy( const CPolyLine* src );
     bool        TestPointInside( int x, int y );
 
