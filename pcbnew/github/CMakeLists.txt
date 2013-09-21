@@ -27,8 +27,7 @@
 include( download_avhttp )
 
 if( MINGW )
-    # @todo: take this from python-a-mingw-us' PythonExternalPackages.cmake which does
-    # openssl compilation on MINGW.  About 20 minutes work.
+    # download, compile and install to scratch dir a recent OPENSSL library and headers
     include( download_openssl )
 else()
     find_package( OpenSSL REQUIRED )
@@ -36,7 +35,8 @@ else()
 
     # FindOpenSSL.cmake does not set this var into cache, so is not globally visible,
     # do it here incase some other link image needs these libraries
-    set( OPENSSL_LIBRARIES  "${OPENSSL_LIBRARIES}" CACHE FILEPATH "OpenSSL link libraries" )
+    set( OPENSSL_LIBRARIES   "${OPENSSL_LIBRARIES}"   CACHE FILEPATH "OpenSSL link libraries" )
+    set( OPENSSL_INCLUDE_DIR "${OPENSSL_INCLUDE_DIR}" CACHE FILEPATH "OpenSSL include dir" )
 endif()
 
 

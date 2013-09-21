@@ -53,9 +53,13 @@ option( KICAD_SCRIPTING_WXPYTHON
 
 option( USE_FP_LIB_TABLE "Use the new footprint library table implementation. ( default OFF)" )
 
-if( NOT MINGW )     # BUILD_GITHUB_PLUGIN is not MINGW ready yet.
-    # still have some build problems, even on linux
-    #option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
+# BUILD_GITHUB_PLUGIN for MINGW is pretty demanding due to download_openssl.cmake and openssl's
+# use of perl to drive its configure step.  You might find it works in a cross builder say on linux.
+# Dick is not personally supporting Windows any more with this exotic stuff.  Some other windows
+# developer will have to smooth out the build issues.  So enable this for MINGW without my help but
+# with my best wishes.
+if( NOT MINGW )
+    option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
 endif()
 
 
