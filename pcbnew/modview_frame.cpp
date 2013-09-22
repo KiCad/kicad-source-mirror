@@ -426,30 +426,49 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
         return;
     }
 
-    wxArrayString libsList;
+    bool           libLoaded = false;
+    FOOTPRINT_LIST fp_info_list;
+    wxArrayString  libsList;
+    wxBusyCursor   busyCursor;
 
 #if !defined( USE_FP_LIB_TABLE )
     libsList.Add( m_libraryName );
+    libLoaded = fp_info_list.ReadFootprintFiles( libsList );
 #else
-    wxString uri = m_footprintLibTable->FindRow( m_libraryName )->GetFullURI();
+    const FP_LIB_TABLE::ROW* row = m_footprintLibTable->FindRow( m_libraryName );
 
-    if( uri.IsEmpty() )
+    if( row == NULL )
+    {
+        wxString msg;
+        msg.Format( _( "Footprint library table entry <%s> not found." ),
+                    GetChars( m_libraryName ) );
+        DisplayError( this, msg );
         return;
+    }
 
-    uri = FP_LIB_TABLE::ExpandSubstitutions( uri );
-    wxLogDebug( wxT( "Footprint library <%s> selected." ), GetChars( uri ) );
-
-    libsList.Add( uri );
+    FP_LIB_TABLE tmp;
+    tmp.InsertRow( *row );
+    libLoaded = fp_info_list.ReadFootprintFiles( tmp );
 #endif
 
-    FOOTPRINT_LIST fp_info_list;
-    fp_info_list.ReadFootprintFiles( libsList );
+    if( !libLoaded )
+    {
+        wxString msg;
+        msg.Format( _( "Error occurred attempting to load footprint library <%s>:\n\n"
+                       "Files not found:\n\n%s\n\nFile load errors:\n\n%s" ),
+                    GetChars( m_libraryName ), GetChars( fp_info_list.m_filesNotFound ),
+                    GetChars( fp_info_list.m_filesInvalid ) );
+        DisplayError( this, msg );
+        return;
+    }
 
     wxArrayString  fpList;
+
     BOOST_FOREACH( FOOTPRINT_INFO& footprint, fp_info_list.m_List )
     {
-        fpList.Add(( footprint.m_Module ) );
+        fpList.Add( footprint.m_Module );
     }
+
     m_FootprintList->Append( fpList );
 
     int index = m_FootprintList->FindString( m_footprintName );

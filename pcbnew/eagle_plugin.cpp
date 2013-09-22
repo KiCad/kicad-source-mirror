@@ -1058,8 +1058,8 @@ static inline unsigned long timeStamp( CPTREE& aTree )
 
 EAGLE_PLUGIN::EAGLE_PLUGIN() :
     m_rules( new ERULES() ),
-    m_xpath( new XPATH() )
-//    m_mod_time( wxDateTime::Now() )
+    m_xpath( new XPATH() ),
+    m_mod_time( wxDateTime::Now() )
 {
     init( NULL );
 
@@ -1271,6 +1271,9 @@ void EAGLE_PLUGIN::loadDesignRules( CPTREE& aDesignRules )
 
 void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 {
+    if( m_board == NULL )
+        return;
+
     typedef std::vector<ELAYER>     ELAYERS;
     typedef ELAYERS::const_iterator EITER;
 
@@ -1289,6 +1292,7 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 
     // establish cu layer map:
     int ki_layer_count = 0;
+
     for( EITER it = cu.begin();  it != cu.end();  ++it,  ++ki_layer_count )
     {
         if( ki_layer_count == 0 )
@@ -2674,7 +2678,7 @@ LAYER_NUM EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         case 95:    kiLayer = ECO1_N;               break;
         case 96:    kiLayer = ECO2_N;               break;
         default:
-            D( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
+//            D( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
             kiLayer = -1;       break;  // some layers do not map to KiCad
         }
     }
@@ -2714,7 +2718,12 @@ wxDateTime EAGLE_PLUGIN::getModificationTime( const wxString& aPath )
     m_writable = fn.IsFileWritable();
     */
 
-    return fn.GetModificationTime();
+    wxDateTime modTime = fn.GetModificationTime();
+
+    if( !modTime.IsValid() )
+        modTime.Now();
+
+    return modTime;
 }
 
 
@@ -2723,6 +2732,9 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
     try
     {
         wxDateTime  modtime;
+
+        if( !m_mod_time.IsValid() )
+            m_mod_time.Now();
 
         if( aLibPath != m_lib_path ||
             m_mod_time != ( modtime = getModificationTime( aLibPath ) ) )
