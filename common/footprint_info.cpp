@@ -46,6 +46,8 @@
 
 bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
 {
+    bool retv = true;
+
     // Clear data before reading files
     m_filesNotFound.Empty();
     m_filesInvalid.Empty();
@@ -77,9 +79,10 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
             wxLogDebug( wxT( "Path <%s> -> <%s>." ), GetChars( aFootprintsLibNames[ii] ),
                         GetChars( filename.GetFullPath() ) );
 
-            if( !filename.FileExists() )
+            if( !filename.IsOk() || !filename.FileExists() )
             {
                 m_filesNotFound << aFootprintsLibNames[ii] << wxT( "\n" );
+                retv = false;
                 continue;
             }
 
@@ -110,6 +113,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
             catch( IO_ERROR ioe )
             {
                 m_filesInvalid << ioe.errorText << wxT( "\n" );
+                retv = false;
             }
         }
     }
@@ -124,12 +128,14 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
 
     m_List.sort();
 
-    return true;
+    return retv;
 }
 
 
 bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
 {
+    bool retv = true;
+
     // Clear data before reading files
     m_filesNotFound.Empty();
     m_filesInvalid.Empty();
@@ -151,6 +157,9 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
 
             wxString      path = FP_LIB_TABLE::ExpandSubstitutions( row->GetFullURI() );
             wxArrayString fpnames = pi->FootprintEnumerate( path );
+
+            wxLogDebug( wxT( "Load footprint library type %s from path <%s>" ),
+                        GetChars( row->GetType() ), GetChars( path ) );
 
             for( unsigned i=0;  i<fpnames.GetCount();  ++i )
             {
@@ -174,12 +183,13 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
         catch( IO_ERROR ioe )
         {
             m_filesInvalid << ioe.errorText << wxT( "\n" );
+            retv = false;
         }
     }
 
     m_List.sort();
 
-    return true;
+    return retv;
 }
 
 
