@@ -49,7 +49,7 @@ class EDGE_MODULE;
 class TRACK;
 class SEGZONE;
 class D_PAD;
-struct FPL_CACHE;
+struct LP_CACHE;
 
 
 /**
@@ -124,7 +124,7 @@ protected:
 
     wxString        m_field;        ///< reused to stuff MODULE fields.
     int             m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
-    FPL_CACHE*      m_cache;
+    LP_CACHE*       m_cache;
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
@@ -273,7 +273,7 @@ protected:
     /// we only cache one footprint library for now, this determines which one.
     void cacheLib( const wxString& aLibraryPath );
 
-    friend struct FPL_CACHE;
+    friend struct LP_CACHE;
 };
 
 #endif  // LEGACY_PLUGIN_H_
