@@ -511,7 +511,21 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
         return wxEmptyString;
     }
 
-    MList.ReadFootprintFiles( libTable );
+    if( !MList.ReadFootprintFiles( libTable ) )
+    {
+        msg.Format( _( "Error occurred attempting to load footprint library <%s>:\n\n" ),
+                    GetChars( aLibraryFullFilename ) );
+
+        if( !MList.m_filesNotFound.IsEmpty() )
+            msg += _( "Files not found:\n\n" ) + MList.m_filesNotFound;
+
+        if( !MList.m_filesInvalid.IsEmpty() )
+            msg +=  _("\n\nFile load errors:\n\n" ) + MList.m_filesInvalid;
+
+        DisplayError( this, msg );
+        return wxEmptyString;
+    }
+
 #endif
 
     if( MList.GetCount() == 0 )

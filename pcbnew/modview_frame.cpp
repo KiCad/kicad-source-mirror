@@ -429,7 +429,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
     bool           libLoaded = false;
     FOOTPRINT_LIST fp_info_list;
     wxArrayString  libsList;
-    wxBusyCursor   busyCursor;
 
 #if !defined( USE_FP_LIB_TABLE )
     libsList.Add( m_libraryName );
@@ -453,11 +452,18 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
     if( !libLoaded )
     {
+        m_libraryName = wxEmptyString;
+
         wxString msg;
-        msg.Format( _( "Error occurred attempting to load footprint library <%s>:\n\n"
-                       "Files not found:\n\n%s\n\nFile load errors:\n\n%s" ),
-                    GetChars( m_libraryName ), GetChars( fp_info_list.m_filesNotFound ),
-                    GetChars( fp_info_list.m_filesInvalid ) );
+        msg.Format( _( "Error occurred attempting to load footprint library <%s>:\n\n" ),
+                    GetChars( m_libraryName ) );
+
+        if( !fp_info_list.m_filesNotFound.IsEmpty() )
+            msg += _( "Files not found:\n\n" ) + fp_info_list.m_filesNotFound;
+
+        if( !fp_info_list.m_filesInvalid.IsEmpty() )
+            msg +=  _("\n\nFile load errors:\n\n" ) + fp_info_list.m_filesInvalid;
+
         DisplayError( this, msg );
         return;
     }
@@ -502,6 +508,9 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
 {
+    if( m_FootprintList->GetCount() == 0 )
+        return;
+
     int ii = m_FootprintList->GetSelection();
 
     if( ii < 0 )

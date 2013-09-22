@@ -93,6 +93,9 @@ typedef boost::optional<double>             opt_double;
 typedef boost::optional<bool>               opt_bool;
 
 
+const wxChar* traceEaglePlugin = wxT( "KicadEaglePlugin" );
+
+
 /// segment (element) of our XPATH into the Eagle XML document tree in PTREE form.
 struct TRIPLET
 {
@@ -2731,15 +2734,17 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 {
     try
     {
-        wxDateTime  modtime;
+        wxDateTime  modtime = getModificationTime( aLibPath );
 
-        if( !m_mod_time.IsValid() )
-            m_mod_time.Now();
+        // Fixes assertions in wxWidgets debug builds for the wxDateTime object.  Refresh the
+        // cache if either of the wxDateTime objects are invalid or the last file modification
+        // time differs from the current file modification time.
+        bool load = !m_mod_time.IsValid() || !modtime.IsValid() ||
+                    m_mod_time != modtime;
 
-        if( aLibPath != m_lib_path ||
-            m_mod_time != ( modtime = getModificationTime( aLibPath ) ) )
+        if( aLibPath != m_lib_path || load )
         {
-            //D(printf("Loading '%s'\n", TO_UTF8( aLibPath ) );)
+            wxLogTrace( traceEaglePlugin, wxT( "Loading '%s'" ), TO_UTF8( aLibPath ) );
 
             PTREE       doc;
             LOCALE_IO   toggle;     // toggles on, then off, the C locale.
