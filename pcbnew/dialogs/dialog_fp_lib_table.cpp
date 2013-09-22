@@ -628,10 +628,16 @@ public:
 
         wxArrayString choices;
         choices.Add( IO_MGR::ShowType( IO_MGR::KICAD ) );
+#if defined(BUILD_GITHUB_PLUGIN)
+        choices.Add( IO_MGR::ShowType( IO_MGR::GITHUB ) );
+#endif
         choices.Add( IO_MGR::ShowType( IO_MGR::LEGACY ) );
         choices.Add( IO_MGR::ShowType( IO_MGR::EAGLE ) );
-        choices.Add( IO_MGR::ShowType( IO_MGR::PCAD ) );
         choices.Add( IO_MGR::ShowType( IO_MGR::GEDA_PCB ) );
+
+        /* PCAD_PLUGIN does not support Footprint*() functions
+        choices.Add( IO_MGR::ShowType( IO_MGR::GITHUB ) );
+        */
 
         wxGridCellAttr* attr;
 

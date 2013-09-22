@@ -61,10 +61,10 @@ typedef MODULE_MAP::const_iterator                  MODULE_CITER;
 
 
 /**
- * Class FPL_CACHE
+ * Class GH_CACHE
  * assists only within GITHUB_PLUGIN and hold a map of footprint name to wxZipEntry
  */
-struct FPL_CACHE : public MODULE_MAP
+struct GH_CACHE : public MODULE_MAP
 {
     // MODULE_MAP is a boost::ptr_map template, made into a class hereby.
 };
@@ -157,7 +157,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath ) throw( IO_ERROR )
     if( !m_cache || m_lib_path != aLibraryPath )
     {
         delete m_cache;
-        m_cache = new FPL_CACHE();
+        m_cache = new GH_CACHE();
         remote_get_zip( aLibraryPath );
         m_lib_path = aLibraryPath;
 
