@@ -26,7 +26,7 @@
 #define GITHUB_PLUGIN_H_
 
 
-struct FPL_CACHE;
+struct GH_CACHE;
 
 
 /**
@@ -82,7 +82,7 @@ private:
 
     wxString    m_lib_path;     ///< from aLibraryPath, something like https://github.com/liftoff-sr/pretty_footprints
     std::string m_zip_image;    ///< byte image of the zip file in its entirety.
-    FPL_CACHE*  m_cache;
+    GH_CACHE*  m_cache;
 };
 
 #endif // GITHUB_PLUGIN_H_
