@@ -3872,7 +3872,7 @@ void LEGACY_PLUGIN::savePCB_TEXT( const TEXTE_PCB* me ) const
     would have to re-read the file when searching for any MODULE, and this would
     be very problematic filling a FOOTPRINT_LIST via this PLUGIN API. If memory
     becomes a concern, consider the cache lifetime policy, which determines the
-    time that a FPL_CACHE is in RAM. Note PLUGIN lifetime also plays a role in
+    time that a LP_CACHE is in RAM. Note PLUGIN lifetime also plays a role in
     cache lifetime.
 
 */
@@ -3887,12 +3887,12 @@ typedef MODULE_MAP::const_iterator              MODULE_CITER;
 
 
 /**
- * Class FPL_CACHE
+ * Class LP_CACHE
  * assists only for the footprint portion of the PLUGIN API, and only for the
  * LEGACY_PLUGIN, so therefore is private to this implementation file, i.e. not placed
  * into a header.
  */
-struct FPL_CACHE
+struct LP_CACHE
 {
     LEGACY_PLUGIN*  m_owner;        // my owner, I need its LEGACY_PLUGIN::LoadMODULE()
     wxString        m_lib_path;
@@ -3900,7 +3900,7 @@ struct FPL_CACHE
     MODULE_MAP      m_modules;      // map or tuple of footprint_name vs. MODULE*
     bool            m_writable;
 
-    FPL_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath );
+    LP_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath );
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
     // error codes nor user interface calls from here, nor in any PLUGIN.
@@ -3932,7 +3932,7 @@ struct FPL_CACHE
 };
 
 
-FPL_CACHE::FPL_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath ) :
+LP_CACHE::LP_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath ) :
     m_owner( aOwner ),
     m_lib_path( aLibraryPath ),
     m_writable( true )
@@ -3940,7 +3940,7 @@ FPL_CACHE::FPL_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath ) :
 }
 
 
-wxDateTime FPL_CACHE::GetLibModificationTime()
+wxDateTime LP_CACHE::GetLibModificationTime()
 {
     wxFileName  fn( m_lib_path );
 
@@ -3952,7 +3952,7 @@ wxDateTime FPL_CACHE::GetLibModificationTime()
 }
 
 
-void FPL_CACHE::Load()
+void LP_CACHE::Load()
 {
     FILE_LINE_READER    reader( m_lib_path );
 
@@ -3967,7 +3967,7 @@ void FPL_CACHE::Load()
 }
 
 
-void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
+void LP_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
 {
     char* line = aReader->ReadLine();
 
@@ -3999,7 +3999,7 @@ L_bad_library:
 }
 
 
-void FPL_CACHE::SkipIndex( LINE_READER* aReader )
+void LP_CACHE::SkipIndex( LINE_READER* aReader )
 {
     // Some broken INDEX sections have more than one section, due to prior bugs.
     // So we must read the next line after $EndINDEX tag,
@@ -4028,7 +4028,7 @@ void FPL_CACHE::SkipIndex( LINE_READER* aReader )
 }
 
 
-void FPL_CACHE::LoadModules( LINE_READER* aReader )
+void LP_CACHE::LoadModules( LINE_READER* aReader )
 {
     m_owner->SetReader( aReader );
 
@@ -4122,7 +4122,7 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
 }
 
 
-void FPL_CACHE::Save()
+void LP_CACHE::Save()
 {
     if( !m_writable )
     {
@@ -4179,7 +4179,7 @@ void FPL_CACHE::Save()
 }
 
 
-void FPL_CACHE::SaveHeader( FILE* aFile )
+void LP_CACHE::SaveHeader( FILE* aFile )
 {
     fprintf( aFile, "%s  %s\n", FOOTPRINT_LIBRARY_HEADER, TO_UTF8( DateAndTime() ) );
     fprintf( aFile, "# encoding utf-8\n" );
@@ -4187,7 +4187,7 @@ void FPL_CACHE::SaveHeader( FILE* aFile )
 }
 
 
-void FPL_CACHE::SaveIndex( FILE* aFile )
+void LP_CACHE::SaveIndex( FILE* aFile )
 {
     fprintf( aFile, "$INDEX\n" );
 
@@ -4200,7 +4200,7 @@ void FPL_CACHE::SaveIndex( FILE* aFile )
 }
 
 
-void FPL_CACHE::SaveModules( FILE* aFile )
+void LP_CACHE::SaveModules( FILE* aFile )
 {
     m_owner->SetFilePtr( aFile );
 
@@ -4219,7 +4219,7 @@ void LEGACY_PLUGIN::cacheLib( const wxString& aLibraryPath )
     {
         // a spectacular episode in memory management:
         delete m_cache;
-        m_cache = new FPL_CACHE( this, aLibraryPath );
+        m_cache = new LP_CACHE( this, aLibraryPath );
         m_cache->Load();
     }
 }
@@ -4360,7 +4360,7 @@ void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES
     init( NULL );
 
     delete m_cache;
-    m_cache = new FPL_CACHE( this, aLibraryPath );
+    m_cache = new LP_CACHE( this, aLibraryPath );
     m_cache->Save();
     m_cache->Load();    // update m_writable and m_mod_time
 }
