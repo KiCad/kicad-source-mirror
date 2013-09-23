@@ -231,7 +231,7 @@ public:
         return m_actions == TA_CancelTool;
     }
 
-    bool Modifier( int aMask = MD_ModifierMask ) const
+    int Modifier( int aMask = MD_ModifierMask ) const
     {
         return ( m_modifiers & aMask );
     }
