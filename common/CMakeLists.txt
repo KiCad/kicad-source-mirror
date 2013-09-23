@@ -151,12 +151,13 @@ enable_language(C CXX ASM)
 set_source_files_properties(system/fcontext.s PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp")
 
 set(COMMON_SRCS
-	${COMMON_SRCS}
-	view/view.cpp
-	view/view_item.cpp
-	view/view_group.cpp
+    ${COMMON_SRCS}
+    view/view.cpp
+    view/view_item.cpp
+    view/view_group.cpp
 
-	system/fcontext.s
+    math/math_util.cpp
+    system/fcontext.s
 	
     tool/tool_base.cpp
     tool/tool_manager.cpp
@@ -166,9 +167,10 @@ set(COMMON_SRCS
     tool/action_manager.cpp
     tool/context_menu.cpp
 
-	geometry/seg.cpp
-	geometry/shape_line_chain.cpp
-	geometry/shape_collisions.cpp
+    geometry/seg.cpp
+    geometry/shape_line_chain.cpp
+    geometry/shape_collisions.cpp
+    geometry/shape_index.cpp
 )
 
 add_library(common STATIC ${COMMON_SRCS})
