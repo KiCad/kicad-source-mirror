@@ -23,6 +23,7 @@
  */
 
 #include <wx/filename.h>
+#include <wx/uri.h>
 
 #include <io_mgr.h>
 #include <legacy_plugin.h>
@@ -183,8 +184,8 @@ const wxString IO_MGR::GetFileExtension( PCB_FILE_T aFileType )
 
 IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath )
 {
-    wxFileName  fn = aLibPath;
-    PCB_FILE_T  ret;
+    PCB_FILE_T  ret = KICAD;        // default guess, unless detected otherwise.
+    wxFileName  fn( aLibPath );
 
     if( fn.GetExt() == LegacyFootprintLibPathExtension )
     {
@@ -199,16 +200,25 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
         ret = EAGLE;
     }
 
-#if defined(BUILD_GITHUB_PLUGIN)
-    // There is no extension for a remote repo.  We're thinking about this.
-#endif
-
+    // Test this one anyways, even thought its the default guess, to avoid
+    // the wxURI instantiation below.
+    // We default ret to KICAD above, because somebody might have
+    // mistakenly put a pretty library into a directory other than
+    // *.pretty/ with *.kicad_mod in there., and I don't want to return -1,
+    // since we only claimed to be guessing.
+    else if( fn.GetExt() == KiCadFootprintLibPathExtension )
+    {
+        ret = KICAD;
+    }
     else
     {
-        // Although KICAD PLUGIN uses libpaths with fixed extension of
-        // KiCadFootprintLibPathExtension, we don't make that assumption since
-        // a default choice is needed.
-        ret = KICAD;
+        // There is no extension for a remote repo, so test the server name.
+        wxURI   uri( aLibPath );
+
+        if( uri.HasServer() && uri.GetServer() == wxT( "github.com" ) )
+        {
+            ret = GITHUB;
+        }
     }
 
     return ret;
