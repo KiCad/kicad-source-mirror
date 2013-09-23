@@ -50,10 +50,7 @@ static const SHAPE* shapeFunctor( T aItem )
  * shapeFunctor template function: specialization for T = SHAPE*
  */
 template<>
-const SHAPE* shapeFunctor( SHAPE* aItem )
-{
-    return aItem;
-}
+const SHAPE* shapeFunctor( SHAPE* aItem );
 
 /**
  * boundingBox template method
@@ -113,79 +110,6 @@ template <class T = SHAPE*>
 class SHAPE_INDEX {
 
     public:
-
-        SHAPE_INDEX();
-
-        ~SHAPE_INDEX();
-
-        /**
-         * Function Add()
-         *
-         * Adds a SHAPE to the index.
-         * @param shape the new SHAPE
-         */
-        void Add( T shape );
-
-        /**
-         * Function Remove()
-         *
-         * Removes a SHAPE to the index.
-         * @param shape the new SHAPE
-         */
-        void Remove( T shape );
-
-        /**
-         * Function RemoveAll()
-         *
-         * Removes all the contents of the index.
-         */
-        void RemoveAll();
-
-        /**
-         * Function Accept()
-         *
-         * Accepts a visitor for every SHAPE object contained in this INDEX.
-         * @param visitor Visitor object to be run
-         */
-        template<class V>
-        void Accept( V visitor )
-        {
-            SHAPE_INDEX::Iterator iter = this->Begin();
-            while(!iter.IsNull()) {
-                T shape = *iter;
-                acceptVisitor(shape, visitor);
-                iter++;
-            }
-        }
-
-        /**
-         * Function Reindex()
-         *
-         * Rebuilds the index. This should be used if the geometry of the objects
-         * contained by the index has changed.
-         */
-        void Reindex();
-
-        /**
-         * Function Query()
-         *
-         * Runs a callback on every SHAPE object contained in the bounding box of (shape).
-         * @param shape shape to search against
-         * @param minDistance distance threshold
-         * @param visitor object to be invoked on every object contained in the search area.
-         */
-
-		template<class V>
-        int Query( const SHAPE *shape, int minDistance, V& visitor, bool aExact )
-        {
-            BOX2I box = shape->BBox();
-            box.Inflate(minDistance);
-         
-			int min[2] = {box.GetX(), 		box.GetY()};
-            int max[2] = {box.GetRight(), 	box.GetBottom()};
-
-			return this->m_tree->Search(min, max, visitor);   
-        }
 
         class Iterator
         {
@@ -278,6 +202,79 @@ class SHAPE_INDEX {
             }
         };
 
+        SHAPE_INDEX();
+
+        ~SHAPE_INDEX();
+
+        /**
+         * Function Add()
+         *
+         * Adds a SHAPE to the index.
+         * @param shape the new SHAPE
+         */
+        void Add( T shape );
+
+        /**
+         * Function Remove()
+         *
+         * Removes a SHAPE to the index.
+         * @param shape the new SHAPE
+         */
+        void Remove( T shape );
+
+        /**
+         * Function RemoveAll()
+         *
+         * Removes all the contents of the index.
+         */
+        void RemoveAll();
+
+        /**
+         * Function Accept()
+         *
+         * Accepts a visitor for every SHAPE object contained in this INDEX.
+         * @param visitor Visitor object to be run
+         */
+        template<class V>
+        void Accept( V visitor )
+        {
+            Iterator iter = this->Begin();
+            while(!iter.IsNull()) {
+                T shape = *iter;
+                acceptVisitor(shape, visitor);
+                iter++;
+            }
+        }
+
+        /**
+         * Function Reindex()
+         *
+         * Rebuilds the index. This should be used if the geometry of the objects
+         * contained by the index has changed.
+         */
+        void Reindex();
+
+        /**
+         * Function Query()
+         *
+         * Runs a callback on every SHAPE object contained in the bounding box of (shape).
+         * @param shape shape to search against
+         * @param minDistance distance threshold
+         * @param visitor object to be invoked on every object contained in the search area.
+         */
+
+	template<class V>
+        int Query( const SHAPE *shape, int minDistance, V& visitor, bool aExact )
+        {
+            BOX2I box = shape->BBox();
+            box.Inflate(minDistance);
+         
+			int min[2] = {box.GetX(), 		box.GetY()};
+            int max[2] = {box.GetRight(), 	box.GetBottom()};
+
+			return this->m_tree->Search(min, max, visitor);   
+        }
+
         /**
          * Function Begin()
          *
@@ -331,7 +328,7 @@ void SHAPE_INDEX<T>::Reindex() {
     RTree<T, int, 2, float>* newTree;
     newTree = new RTree<T, int, 2, float>();
 
-    SHAPE_INDEX::Iterator iter = this->Begin();
+    Iterator iter = this->Begin();
     while(!iter.IsNull()) {
         T shape = *iter;
         BOX2I box = boundingBox(shape);

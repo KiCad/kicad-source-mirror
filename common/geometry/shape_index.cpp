@@ -1,8 +1,8 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (c) 2005 Michael Niedermayer <michaelni@gmx.at>
- * Copyright (C) CERN
+ * Copyright (C) 2013 CERN
+ * @author Jacobo Aragunde Pérez
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,23 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __MATH_UTIL_H
-#define __MATH_UTIL_H
+#include <geometry/shape_index.h>
 
-#include <cmath>
-#include <cstdlib>
-#include <stdint.h>
-#include <climits>
-
-/**
- * Function rescale()
- *
- * Scales a number (value) by rational (numerator/denominator). Numerator must be <= denominator.
- */
-
-template<typename T> T rescale( T numerator, T value, T denominator )
+template<>
+const SHAPE* shapeFunctor( SHAPE* aItem )
 {
-    return numerator * value / denominator;
+    return aItem;
 }
 
-#endif // __MATH_UTIL_H
