@@ -52,6 +52,7 @@
 #include <pcb_parser.h>
 #include <class_board.h>
 #include <github_plugin.h>
+#include <class_module.h>
 
 using namespace std;
 
@@ -137,6 +138,11 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
             PCB_PARSER              parser( &reader );
 
             MODULE* ret = (MODULE*) parser.Parse();
+
+            // Dude, the footprint name comes from the file name in
+            // a github library.  Zero out the library name, we don't know it here.
+            // Caller always has to set the library nickname if it knows it.
+            ret->SetFPID( fp_name );
 
             return ret;
         }

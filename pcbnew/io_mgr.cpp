@@ -200,7 +200,7 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
         ret = EAGLE;
     }
 
-    // Test this one anyways, even thought its the default guess, to avoid
+    // Test this one anyways, even though it's the default guess, to avoid
     // the wxURI instantiation below.
     // We default ret to KICAD above, because somebody might have
     // mistakenly put a pretty library into a directory other than
