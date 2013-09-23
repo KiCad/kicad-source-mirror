@@ -134,9 +134,12 @@ if( CMAKE_COMPILER_IS_GNUCXX )
     else()
         # We build DLL/DSOs from static libraries, so create position independent code
         # for all cases, since we do not have DLL/DSO specific static libraries.
-        # This flag could be localized to any object file going into a DLL/DSO in the future.
-        set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC" )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC" )
+        # Subdirectories via add_subdirectores() reference this variable, and it is either set or empty,
+        # empty for Windows.
+        set( PIC_FLAG -fPIC )
+
+        set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${PIC_FLAG}" )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PIC_FLAG}" )
 
         # Thou shalt not link vaporware and tell us it's a valid DSO:
         set( CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined" )

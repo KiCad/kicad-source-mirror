@@ -295,7 +295,7 @@ if( KICAD_SCRIPTING )
 
     add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
                         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
-        
+
         DEPENDS pcbcommon
         DEPENDS scripting/pcbnew.i
         DEPENDS scripting/board.i
@@ -310,7 +310,7 @@ if( KICAD_SCRIPTING )
 
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docstrings
         COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/docstrings/docstrings.i # this makes docstrings.i available if it doesn't exist
-        
+
         COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
         COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -322,8 +322,13 @@ endif()
 # _pcbnew DLL/DSO file creation
 ###
 
+unset( GITHUB_PLUGIN_LIBRARIES )
+if( BUILD_GITHUB_PLUGIN )
+    set( GITHUB_PLUGIN_LIBRARIES github_plugin )
+endif()
+
 if( ( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES ) AND NOT WIN32 AND NOT APPLE )
-    set ( PCBNEW_EXTRA_LIBS "rt" )
+    list( APPEND PCBNEW_EXTRA_LIBS rt )
 endif()
 
 
@@ -339,6 +344,7 @@ if( KICAD_SCRIPTING_MODULES )
         pcbcommon
         common
         pcad2kicadpcb
+        ${GITHUB_PLUGIN_LIBRARIES}
         polygon
         bitmaps
         ${wxWidgets_LIBRARIES}
@@ -351,10 +357,10 @@ if( KICAD_SCRIPTING_MODULES )
      # create .i files from XML doxygen parsing, docstrings.i will include all of them
     add_custom_target( qa
         COMMAND PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR} ${PYTHON_EXECUTABLE} test.py
-        
+
         COMMENT "running qa"
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripting/qa
-        ) 
+        )
 
 endif()
 
@@ -366,7 +372,7 @@ endif()
 find_package( Doxygen )
 if( DOXYGEN_FOUND )
     if( KICAD_SCRIPTING )
-        
+
         # create XML files from doxygen parsing
         add_custom_target( doxygen-python-xml
             ${CMAKE_COMMAND} -E remove_directory doxygen-python-xml
@@ -377,22 +383,22 @@ if( DOXYGEN_FOUND )
         )
 
         # create .i files from XML doxygen parsing, docstrings.i will include all of them
-        add_custom_target( xml-to-docstrings 
+        add_custom_target( xml-to-docstrings
             COMMAND ${CMAKE_COMMAND} -E remove_directory docstrings
             COMMAND ${CMAKE_COMMAND} -E make_directory docstrings
             COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/extract_docstrings.py pcbnew.py doxygen-xml/xml docstrings
-            
+
             COMMAND ${CMAKE_COMMAND} -E remove pcbnew.py # force removal so it will be recreated later with the new docstrings
             COMMENT "building docstring files"
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS pcbnew.py
             DEPENDS doxygen-python-xml
-            ) 
+            )
 
         # create doxygen-python html
         add_custom_target( doxygen-python
             ${CMAKE_COMMAND} -E remove_directory doxygen-python
-            COMMAND PYTHON_SOURCES_TO_DOC=${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_python 
+            COMMAND PYTHON_SOURCES_TO_DOC=${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_python
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS Doxyfile_python
             DEPENDS xml-to-docstrings

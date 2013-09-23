@@ -97,8 +97,11 @@ if( BUILD_GITHUB_PLUGIN )
 
     if( MINGW )
         set( bootstrap "bootstart.bat mingw" )
+        unset( PIC_STUFF )
     else()
         set( bootstrap bootstrap.sh )
+        # pass to *both* C and C++ compilers
+        set( PIC_STUFF "cflags=${PIC_FLAG}" )
     endif()
 
     ExternalProject_Add( boost
@@ -116,13 +119,14 @@ if( BUILD_GITHUB_PLUGIN )
         UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${BOOST_ROOT}"
 
         BINARY_DIR      "${PREFIX}/src/boost/"
-        CONFIGURE_COMMAND ${bootstrap}
+        CONFIGURE_COMMAND ./${bootstrap}
                         --with-libraries=${libs_csv}
 
-        BUILD_COMMAND   b2
+        BUILD_COMMAND   ./b2
                         variant=release
                         threading=multi
                         toolset=gcc
+                        ${PIC_STUFF}
                         #link=static
                         --prefix=<INSTALL_DIR>
                         install
