@@ -126,11 +126,8 @@ const wxString IO_MGR::ShowType( PCB_FILE_T aType )
     case GEDA_PCB:
         return wxString( wxT( "Geda-PCB" ) );
 
-#if defined(BUILD_GITHUB_PLUGIN)
     case GITHUB:
         return wxString( wxT( "Github" ) );
-#endif
-
     }
 }
 
@@ -156,10 +153,8 @@ IO_MGR::PCB_FILE_T IO_MGR::EnumFromStr( const wxString& aType )
     if( aType == wxT( "Geda-PCB" ) )
         return GEDA_PCB;
 
-#if defined(BUILD_GITHUB_PLUGIN)
     if( aType == wxT( "Github" ) )
         return GITHUB;
-#endif
 
     // wxASSERT( blow up here )
 

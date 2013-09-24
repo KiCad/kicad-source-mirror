@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Apr 30 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -53,6 +53,7 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		wxButton* m_delete_button;
 		wxButton* m_move_up_button;
 		wxButton* m_move_down_button;
+		wxButton* m_edit_options;
 		wxPanel* m_bottom;
 		wxGrid* m_path_subs_grid;
 		wxStdDialogButtonSizer* m_sdbSizer1;
@@ -69,6 +70,7 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		virtual void deleteRowHandler( wxMouseEvent& event ) { event.Skip(); }
 		virtual void moveUpHandler( wxMouseEvent& event ) { event.Skip(); }
 		virtual void moveDownHandler( wxMouseEvent& event ) { event.Skip(); }
+		virtual void optionsEditor( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		

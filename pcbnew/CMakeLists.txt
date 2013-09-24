@@ -1,3 +1,6 @@
+
+set( MAKE_LINK_MAPS true )
+
 add_definitions( -DPCBNEW )
 
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
@@ -322,7 +325,6 @@ endif()
 # _pcbnew DLL/DSO file creation
 ###
 
-unset( GITHUB_PLUGIN_LIBRARIES )
 if( BUILD_GITHUB_PLUGIN )
     set( GITHUB_PLUGIN_LIBRARIES github_plugin )
 endif()
@@ -361,6 +363,11 @@ if( KICAD_SCRIPTING_MODULES )
         COMMENT "running qa"
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripting/qa
         )
+
+    if( MAKE_LINK_MAPS )
+        # generate a link map with cross reference
+        set_target_properties( _pcbnew PROPERTIES LINK_FLAGS "-Wl,-cref -Wl,-Map=_pcbnew.map" )
+    endif()
 
 endif()
 
@@ -507,6 +514,7 @@ target_link_libraries( pcbnew
     pcad2kicadpcb
     polygon
     bitmaps
+    ${GITHUB_PLUGIN_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
@@ -514,8 +522,10 @@ target_link_libraries( pcbnew
     ${PCBNEW_EXTRA_LIBS}
     )
 
-if( BUILD_GITHUB_PLUGIN )
-    target_link_libraries( pcbnew github_plugin )
+
+if( MAKE_LINK_MAPS )
+    # generate a link map with cross reference
+    set_target_properties( pcbnew PROPERTIES LINK_FLAGS "-Wl,-cref -Wl,-Map=pcbnew.map" )
 endif()
 
 

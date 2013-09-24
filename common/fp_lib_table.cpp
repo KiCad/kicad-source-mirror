@@ -142,6 +142,9 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
                 sawOpts = true;
                 in->NeedSYMBOLorNUMBER();
                 row.SetOptions( in->FromUTF8() );
+
+                // create PROPERTIES* from options, set into the ROW
+                row.properties = ParseOptions( in->CurText() );
                 break;
 
             case T_descr:
@@ -202,6 +205,101 @@ void FP_LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
                 out->Quotew( GetOptions() ).c_str(),
                 out->Quotew( GetDescr() ).c_str()
                 );
+}
+
+
+#define OPT_SEP     '|'         ///< options separator character
+
+PROPERTIES* FP_LIB_TABLE::ParseOptions( const std::string& aOptionsList )
+{
+    const char* cp  = &aOptionsList[0];
+    const char* end = cp + aOptionsList.size();
+
+    PROPERTIES  props;
+    std::string pair;
+
+    // Parse all name=value pairs
+    while( cp < end )
+    {
+        pair.clear();
+
+        // Skip leading white space.
+        while( cp < end && isspace( *cp )  )
+            ++cp;
+
+        // Find the end of pair/field
+        while( cp<end )
+        {
+            if( *cp == '\\' && cp+1 < end && cp[1]==OPT_SEP  )
+            {
+                ++cp;           // skip the escape
+                pair += *cp++;  // add the separator
+            }
+
+            else if( *cp==OPT_SEP )
+            {
+                ++cp;           // skip the separator
+                break;          // process the pair
+            }
+            else
+                pair += *cp++;
+        }
+
+        // stash the pair
+        if( pair.size() )
+        {
+            // the first equals size established the end of the name
+            size_t  eqNdx = pair.find( '=' );
+            if( eqNdx != pair.npos )
+            {
+                std::string name  = pair.substr( 0, eqNdx );
+                std::string value = pair.substr( eqNdx + 1 );
+                props[name] = value;
+            }
+            else
+                props[pair] = "";
+        }
+    }
+
+    if( props.size() )
+        return new PROPERTIES( props );
+    else
+        return NULL;
+}
+
+
+std::string FP_LIB_TABLE::FormatOptions( const PROPERTIES* aProperties )
+{
+    std::string ret;
+
+    if( aProperties )
+    {
+        for( PROPERTIES::const_iterator it = aProperties->begin();  it != aProperties->end(); ++it )
+        {
+            const std::string& name  = it->first;
+            const std::string& value = it->second;
+
+            if( ret.size() )
+                ret += OPT_SEP;
+
+            ret += name;
+
+            // the separation between name and value is '='
+            if( value.size() )
+                ret += '=';
+
+            for( std::string::const_iterator si = value.begin();  si != value.end();  ++si )
+            {
+                // escape any separator in the value.
+                if( *si == OPT_SEP )
+                    ret += '\\';
+
+                ret += *si;
+            }
+        }
+    }
+
+    return ret;
 }
 
 
