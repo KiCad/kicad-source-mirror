@@ -1,5 +1,5 @@
 
-set( MAKE_LINK_MAPS true )
+set( MAKE_LINK_MAPS false )
 
 add_definitions( -DPCBNEW )
 
