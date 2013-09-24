@@ -158,9 +158,6 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
             wxString      path = FP_LIB_TABLE::ExpandSubstitutions( row->GetFullURI() );
             wxArrayString fpnames = pi->FootprintEnumerate( path );
 
-            wxLogDebug( wxT( "Load footprint library type %s from path <%s>" ),
-                        GetChars( row->GetType() ), GetChars( path ) );
-
             for( unsigned i=0;  i<fpnames.GetCount();  ++i )
             {
                 std::auto_ptr<MODULE> m( pi->FootprintLoad( path, fpnames[i] ) );

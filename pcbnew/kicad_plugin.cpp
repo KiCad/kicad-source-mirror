@@ -59,7 +59,7 @@ using namespace std;
 
 /**
  * Definition for enabling and disabling footprint library trace output.  See the
- * wxWidgets documentation on useing the WXTRACE environment variable.
+ * wxWidgets documentation on using the WXTRACE environment variable.
  */
 static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
 
@@ -95,12 +95,25 @@ FP_CACHE_ITEM::FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName ) :
     m_module( aModule )
 {
     m_file_name = aFileName;
-    m_mod_time.Now();
+
+    if( m_file_name.FileExists() )
+        m_mod_time = m_file_name.GetModificationTime();
+    else
+        m_mod_time.Now();
 }
 
 
 bool FP_CACHE_ITEM::IsModified() const
 {
+    if( !m_file_name.FileExists() )
+        return false;
+
+    wxLogTrace( traceFootprintLibrary, wxT( "File <%s>, m_mod_time %s-%s, file mod time: %s-%s." ),
+                GetChars( m_file_name.GetFullPath() ),
+                GetChars( m_mod_time.FormatDate() ), GetChars( m_mod_time.FormatTime() ),
+                GetChars( m_file_name.GetModificationTime().FormatDate() ),
+                GetChars( m_file_name.GetModificationTime().FormatTime() ) );
+
     return m_file_name.GetModificationTime() != m_mod_time;
 }
 
@@ -136,9 +149,35 @@ public:
 
     void Remove( const wxString& aFootprintName );
 
-    wxDateTime GetLibModificationTime();
+    wxDateTime GetLibModificationTime() const;
 
-    bool IsModified();
+    /**
+     * Function IsModified
+     * check if the footprint cache has been modified relative to \a aLibPath
+     * and \a aFootprintName.
+     *
+     * @param aLibPath is a path to test the current cache library path against.
+     * @param aFootprintName is the footprint name in the cache to test.  If the footprint
+     *                       name is empty, the all the footprint files in the library are
+     *                       checked to see if they have been modified.
+     * @return true if the cache has been modified.
+     */
+    bool IsModified( const wxString& aLibPath,
+                     const wxString& aFootprintName = wxEmptyString ) const;
+
+    /**
+     * Function IsPath
+     * checks if \a aPath is the same as the current cache path.
+     *
+     * This tests paths by converting \a aPath using the native separators.  Internally
+     * #FP_CACHE stores the current path using native separators.  This prevents path
+     * miscompares on Windows due to the fact that paths can be stored with / instead of \\
+     * in the footprint library table.
+     *
+     * @param aPath is the library path to test against.
+     * @return true if \a aPath is the same as the cache path.
+     */
+    bool IsPath( const wxString& aPath ) const;
 };
 
 
@@ -149,7 +188,7 @@ FP_CACHE::FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath )
 }
 
 
-wxDateTime FP_CACHE::GetLibModificationTime()
+wxDateTime FP_CACHE::GetLibModificationTime() const
 {
     return m_lib_path.GetModificationTime();
 }
@@ -181,7 +220,8 @@ void FP_CACHE::Save()
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
-            // wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ), GetChars( tempFileName ) );
+            wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ),
+                        GetChars( tempFileName ) );
 
             FILE_OUTPUTFORMATTER formatter( tempFileName );
 
@@ -228,9 +268,12 @@ void FP_CACHE::Load()
 
             m_owner->m_parser->SetLineReader( &reader );
 
-            std::string name = TO_UTF8( fpFileName );
+            std::string name = TO_UTF8( fullPath.GetName() );
+            MODULE*     footprint = (MODULE*) m_owner->m_parser->Parse();
 
-            m_modules.insert( name, new FP_CACHE_ITEM( (MODULE*) m_owner->m_parser->Parse(), fpFileName ) );
+            // The footprint name is the file name without the extension.
+            footprint->SetFPID( fullPath.GetName() );
+            m_modules.insert( name, new FP_CACHE_ITEM( footprint, fullPath ) );
 
         } while( dir.GetNext( &fpFileName ) );
 
@@ -263,29 +306,55 @@ void FP_CACHE::Remove( const wxString& aFootprintName )
 }
 
 
-bool FP_CACHE::IsModified()
+bool FP_CACHE::IsPath( const wxString& aPath ) const
 {
-    if( !m_lib_path.DirExists() )
+    // Converts path separators to native path separators
+    wxFileName newPath;
+    newPath.AssignDir( aPath );
+
+    return m_lib_path == newPath;
+}
+
+
+bool FP_CACHE::IsModified( const wxString& aLibPath, const wxString& aFootprintName ) const
+{
+    // The library is modified if the library path got deleted or changed.
+    if( !m_lib_path.DirExists() || !IsPath( aLibPath ) )
         return true;
 
-    for( MODULE_ITER it = m_modules.begin();  it != m_modules.end();  ++it )
+    // If no footprint was specified, check every file modification time against the time
+    // it was loaded.
+    if( aFootprintName.IsEmpty() )
     {
-        wxFileName fn = it->second->GetFileName();
-
-        if( !fn.FileExists() )
+        for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
         {
-            wxLogTrace( traceFootprintLibrary, wxT( "Footprint cache file '%s' does not exist." ),
-                        fn.GetFullPath().GetData() );
-            return true;
-        }
+            wxFileName fn = m_lib_path;
+            fn.SetName( it->second->GetFileName().GetName() );
+            fn.SetExt( KiCadFootprintFileExtension );
 
-        if( it->second->IsModified() )
-        {
-            wxLogTrace( traceFootprintLibrary,
-                        wxT( "Footprint cache file '%s' has been modified." ),
-                        fn.GetFullPath().GetData() );
-            return true;
+            if( !fn.FileExists() )
+            {
+                wxLogTrace( traceFootprintLibrary,
+                            wxT( "Footprint cache file '%s' does not exist." ),
+                            fn.GetFullPath().GetData() );
+                return true;
+            }
+
+            if( it->second->IsModified() )
+            {
+                wxLogTrace( traceFootprintLibrary,
+                            wxT( "Footprint cache file '%s' has been modified." ),
+                            fn.GetFullPath().GetData() );
+                return true;
+            }
         }
+    }
+    else
+    {
+        MODULE_CITER it = m_modules.find( TO_UTF8( aFootprintName ) );
+
+        if( it == m_modules.end() || it->second->IsModified() )
+            return true;
     }
 
     return false;
@@ -1590,9 +1659,9 @@ void PCB_IO::init( PROPERTIES* aProperties )
 }
 
 
-void PCB_IO::cacheLib( const wxString& aLibraryPath )
+void PCB_IO::cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName )
 {
-    if( !m_cache || m_cache->GetPath() != aLibraryPath || m_cache->IsModified() )
+    if( !m_cache || m_cache->IsModified( aLibraryPath, aFootprintName ) )
     {
         // a spectacular episode in memory management:
         delete m_cache;
@@ -1630,7 +1699,7 @@ MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFo
 
     init( aProperties );
 
-    cacheLib( aLibraryPath );
+    cacheLib( aLibraryPath, aFootprintName );
 
     const MODULE_MAP& mods = m_cache->GetModules();
 
@@ -1817,7 +1886,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProp
     wxMilliSleep( 250L );
 #endif
 
-    if( m_cache && m_cache->GetPath() == aLibraryPath )
+    if( m_cache && !m_cache->IsPath( aLibraryPath ) )
     {
         delete m_cache;
         m_cache = NULL;

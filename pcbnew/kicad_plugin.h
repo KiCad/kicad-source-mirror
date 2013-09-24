@@ -210,7 +210,7 @@ private:
         throw( IO_ERROR );
 
     /// we only cache one footprint library for now, this determines which one.
-    void cacheLib( const wxString& aLibraryPath );
+    void cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName = wxEmptyString );
 
     void init( PROPERTIES* aProperties );
 };
