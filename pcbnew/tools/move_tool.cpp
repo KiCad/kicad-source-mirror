@@ -36,7 +36,9 @@ using boost::optional;
 
 MOVE_TOOL::MOVE_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveMove" ), m_selectionTool( NULL ),
-        m_activate( m_toolName, AS_GLOBAL, 'M', "Move", "Moves the selected item(s)" )
+        m_activate( m_toolName, AS_GLOBAL, 'M', "Move", "Moves the selected item(s)" ),
+        m_rotate( m_toolName + ".rotate", AS_CONTEXT, ' ', "Rotate", "Rotates selected item(s)" ),
+        m_flip( m_toolName + ".flip", AS_CONTEXT, 'F', "Flip", "Flips selected item(s)" )
 {
 }
 
@@ -48,8 +50,6 @@ MOVE_TOOL::~MOVE_TOOL()
 
 void MOVE_TOOL::Reset()
 {
-    m_toolMgr->RegisterAction( &m_activate );
-
     // Find the selection tool, so they can cooperate
     TOOL_BASE* selectionTool = m_toolMgr->FindTool( std::string( "pcbnew.InteractiveSelection" ) );
 
@@ -62,6 +62,11 @@ void MOVE_TOOL::Reset()
         wxLogError( "pcbnew.InteractiveSelection tool is not available" );
         return;
     }
+
+    // Activate hotkeys
+    m_toolMgr->RegisterAction( &m_activate );
+    m_toolMgr->RegisterAction( &m_rotate );
+    m_toolMgr->RegisterAction( &m_flip );
 
     // the tool launches upon reception of action event ("pcbnew.InteractiveMove")
     Go( &MOVE_TOOL::Main, m_activate.GetEvent() );
@@ -90,17 +95,30 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
             break;  // Finish
         }
 
-        if( evt->IsMotion() || evt->IsDrag( MB_Left ) )
+        // Dispatch TOOL_ACTIONs
+        else if( evt->Category() == TC_Command )
+        {
+            VECTOR2D cursorPos = getView()->ToWorld( getViewControls()->GetCursorPosition() );
+
+            if( evt->Matches( m_rotate.GetEvent() ) )
+            {
+                m_state.Rotate( cursorPos, 900.0 );
+                m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );
+            }
+            else if( evt->Matches( m_flip.GetEvent() ) )
+            {
+                m_state.Flip( cursorPos );
+                m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );
+            }
+        }
+
+        else if( evt->IsMotion() || evt->IsDrag( MB_Left ) )
         {
             if( dragging )
             {
-                // Dragging is already active
+                // Drag items to the current cursor position
                 VECTOR2D movement = ( evt->Position() - dragPosition );
-                std::set<BOARD_ITEM*>::iterator it, it_end;
-
-                // so move all the selected items
-                for( it = m_selection.begin(), it_end = m_selection.end(); it != it_end; ++it )
-                    (*it)->Move( wxPoint( movement.x, movement.y ) );
+                m_state.Move( movement );
             }
             else
             {
@@ -112,27 +130,16 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
                 std::set<BOARD_ITEM*>::iterator it;
                 for( it = m_selection.begin(); it != m_selection.end(); ++it )
                 {
+                    // Save the state of the selected items, in case it has to be restored
+                    m_state.Save( *it );
+
                     // Gather all selected items into one VIEW_GROUP
                     viewGroupAdd( *it, &m_items );
-
-                    // Modules are treated in a special way - when they are moved, we have to
-                    // move all the parts that make the module, not the module itself
-                    if( (*it)->Type() == PCB_MODULE_T )
-                    {
-                        MODULE* module = static_cast<MODULE*>( *it );
-
-                        // Add everything that belongs to the module (besides the module itself)
-                        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-                            viewGroupAdd( pad, &m_items );
-
-                        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
-                             drawing = drawing->Next() )
-                            viewGroupAdd( drawing, &m_items );
-
-                        viewGroupAdd( &module->Reference(), &m_items );
-                        viewGroupAdd( &module->Value(), &m_items );
-                    }
                 }
+
+                // Hide the original items, they are temporarily shown in VIEW_GROUP on overlay
+                vgSetVisibility( &m_items, false );
+                vgUpdate( &m_items, VIEW_ITEM::APPEARANCE );
 
                 dragging = true;
             }
@@ -144,25 +151,21 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
             break;  // Finish
     }
 
-    // Clean-up after movement
-    std::deque<ITEM_STATE>::iterator it, it_end;
+    // Restore visibility of the original items
+    vgSetVisibility( &m_items, true );
+
+    // Movement has to be rollbacked, so restore the previous state of items
     if( restore )
     {
-        // Movement has to be rollbacked, so restore the previous state of items
-        for( it = m_itemsState.begin(), it_end = m_itemsState.end(); it != it_end; ++it )
-            it->Restore();
+        vgUpdate( &m_items, VIEW_ITEM::APPEARANCE );
+        m_state.RestoreAll();
     }
     else
     {
-        // Apply changes
-        for( it = m_itemsState.begin(), it_end = m_itemsState.end(); it != it_end; ++it )
-        {
-            it->RestoreVisibility();
-            it->item->ViewUpdate( VIEW_ITEM::GEOMETRY );
-        }
+        vgUpdate( &m_items, m_state.GetUpdateFlag() );
+        m_state.Apply();
     }
 
-    m_itemsState.clear();
     m_items.Clear();
     view->Remove( &m_items );
     controls->ShowCursor( false );
@@ -173,17 +176,43 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
 }
 
 
-void MOVE_TOOL::viewGroupAdd( BOARD_ITEM* aItem, KiGfx::VIEW_GROUP* aGroup )
+void MOVE_TOOL::viewGroupAdd( BOARD_ITEM* aItem, VIEW_GROUP* aGroup )
 {
-    // Save the state of the selected items, in case it has to be restored
-    ITEM_STATE state;
-    state.Save( aItem );
-    m_itemsState.push_back( state );
+    // Modules are treated in a special way - when they are moved, we have to
+    // move all the parts that make the module, not the module itself
+    if( aItem->Type() == PCB_MODULE_T )
+    {
+        MODULE* module = static_cast<MODULE*>( aItem );
+
+        // Add everything that belongs to the module (besides the module itself)
+        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+            viewGroupAdd( pad, &m_items );
+
+        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
+             drawing = drawing->Next() )
+            viewGroupAdd( drawing, &m_items );
+
+        viewGroupAdd( &module->Reference(), &m_items );
+        viewGroupAdd( &module->Value(), &m_items );
+    }
 
     // Add items to the VIEW_GROUP, so they will be displayed on the overlay
     // while dragging
     aGroup->Add( aItem );
+}
 
-    // Set the original item as invisible
-    aItem->ViewSetVisible( false );
+
+void MOVE_TOOL::vgSetVisibility( VIEW_GROUP* aGroup, bool aVisible ) const
+{
+    std::set<VIEW_ITEM*>::const_iterator it, it_end;
+    for( it = aGroup->Begin(), it_end = aGroup->End(); it != it_end; ++it )
+        (*it)->ViewSetVisible( aVisible );
+}
+
+
+void MOVE_TOOL::vgUpdate( VIEW_GROUP* aGroup, VIEW_ITEM::ViewUpdateFlags aFlags ) const
+{
+    std::set<VIEW_ITEM*>::const_iterator it, it_end;
+    for( it = aGroup->Begin(), it_end = aGroup->End(); it != it_end; ++it )
+        (*it)->ViewUpdate( aFlags );
 }

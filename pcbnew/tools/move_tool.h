@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * @author @author Maciej Suminski <maciej.suminski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
 
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
+#include <tool/item_state.h>
 #include <view/view_group.h>
 
 class BOARD_ITEM;
@@ -40,7 +41,8 @@ class VIEW_GROUP;
 /**
  * Class MOVE_TOOL
  *
- * Our sample move tool. Allows to move items selected by pcbnew.InteractiveSelection.
+ * Our sample move tool. Allows to move, rotate and flip items selected by
+ * pcbnew.InteractiveSelection tool.
  */
 
 class MOVE_TOOL : public TOOL_INTERACTIVE
@@ -67,55 +69,32 @@ private:
     /// Adds an item to the VIEW_GROUP that holds all moved items and displays them on the overlay
     void viewGroupAdd( BOARD_ITEM* aItem, KiGfx::VIEW_GROUP* aGroup );
 
-    /// Structure for (re)storing BOARD_ITEM state
-    typedef struct
-    {
-        BOARD_ITEM* item;       /// Pointer to the item
-        VECTOR2D position;      /// Original position of the item
-        bool visible;           /// Original visibility flag
+    /// Changes visibility settings for items stored in a VIEW_GROUP
+    void vgSetVisibility( KiGfx::VIEW_GROUP* aGroup, bool aVisible ) const;
 
-        void Save( BOARD_ITEM* aItem )
-        {
-            wxPoint pos = aItem->GetPosition();
+    /// Updates items stored in a VIEW_GROUP with selected update flag
+    void vgUpdate( KiGfx::VIEW_GROUP* aGroup, KiGfx::VIEW_ITEM::ViewUpdateFlags aFlags ) const;
 
-            item = aItem;
-            position.x = pos.x;
-            position.y = pos.y;
-            visible = aItem->ViewIsVisible();
-        }
-
-        void RestorePosition()
-        {
-            wxPoint curPosition = item->GetPosition();
-            item->Move( wxPoint( position.x - curPosition.x, position.y - curPosition.y ) );
-        }
-
-        void RestoreVisibility()
-        {
-            item->ViewSetVisible( visible );
-        }
-
-        void Restore()
-        {
-            RestorePosition();
-            RestoreVisibility();
-        }
-    } ITEM_STATE;
+    /// Saves the state of items and allows to restore them
+    ITEM_STATE m_state;
 
     /// Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
 
-    /// Stores the initial state of moved items (so it is possible to rollback changes)
-    std::deque<ITEM_STATE> m_itemsState;
-
-    /// Set of selected items (obtained from pcbnew.
+    /// Set of selected items (obtained from pcbnew.InteractiveSelection tool)
     std::set<BOARD_ITEM*> m_selection;
 
     /// VIEW_GROUP that helds currently moved items
     KiGfx::VIEW_GROUP m_items;
 
-    /// Register hotkey fot activation of the move tool
+    /// Register hotkey for activation of the move tool
     TOOL_ACTION m_activate;
+
+    /// Register hotkey for rotation of selected objects
+    TOOL_ACTION m_rotate;
+
+    /// Register hotkey for flipping of selected objects
+    TOOL_ACTION m_flip;
 };
 
 #endif
