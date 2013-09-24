@@ -84,6 +84,9 @@ public:
     /// @copydoc VIEW_CONTROLS::GetCursorPosition()
     virtual const VECTOR2D GetCursorPosition() const;
 
+    /// Event that forces mouse move event in the dispatcher
+    static const wxEventType EVT_REFRESH_MOUSE;
+
 private:
     /// Possible states for WX_VIEW_CONTROLS
     enum State {

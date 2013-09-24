@@ -29,7 +29,7 @@
 
 #include <tool/tool_event.h>
 
-#include <wx/event.h>
+//#include <wx/event.h>
 #include <wx/kbdstate.h>
 
 class TOOL_MANAGER;
@@ -64,9 +64,6 @@ public:
     virtual void ResetState();
     virtual void DispatchWxEvent( wxEvent& aEvent );
     virtual void DispatchWxCommand( wxCommandEvent& aEvent );
-
-    /// Event that forces mouse move event in the dispatcher
-    static const wxEventType EVT_REFRESH_MOUSE;
 
 private:
     static const int MouseButtonCount = 3;
