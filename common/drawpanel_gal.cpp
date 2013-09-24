@@ -188,6 +188,10 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 
 void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 {
+    // Protect from refreshing during backend switch
+    m_pendingRefresh = true;
+    m_refreshTimer.Stop();
+
     // Do not do anything if the currently used GAL is correct
     if( aGalType == m_currentGal && m_gal != NULL )
         return;
@@ -225,6 +229,7 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
     }
 
     m_currentGal = aGalType;
+    m_pendingRefresh = false;
 }
 
 
