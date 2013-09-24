@@ -281,10 +281,15 @@ bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
     try
     {
         PROPERTIES  props;
+        char        xbuf[30];
+        char        ybuf[30];
 
         // EAGLE_PLUGIN can use this info to center the BOARD, but it does not yet.
-        props["page_width"]  = wxString::Format( wxT( "%d" ), GetPageSizeIU().x );
-        props["page_height"] = wxString::Format( wxT( "%d" ), GetPageSizeIU().y );
+        sprintf( xbuf, "%d", GetPageSizeIU().x );
+        sprintf( ybuf, "%d", GetPageSizeIU().y );
+
+        props["page_width"]  = xbuf;
+        props["page_height"] = ybuf;
 
 #if USE_INSTRUMENTATION
         // measure the time to load a BOARD.

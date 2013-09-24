@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Convert a footprint library from one format to another, e.g. legacy to pretty.
+# Test a basic back to back FootprintLoad() of a single footprint, and FootprintEnumerate()
 
 # 1) Build target _pcbnew after enabling scripting in cmake.
 # $ make _pcbnew

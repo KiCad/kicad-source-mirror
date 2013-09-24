@@ -103,7 +103,9 @@ public:
 
         typedef IO_MGR::PCB_FILE_T   LIB_T;
 
-        ROW() : type( IO_MGR::KICAD )
+        ROW() :
+            type( IO_MGR::KICAD ),
+            properties( 0 )
         {
         }
 
@@ -112,9 +114,37 @@ public:
             nickName( aNick ),
             uri( aURI ),
             options( aOptions ),
-            description( aDescr )
+            description( aDescr ),
+            properties( 0 )
         {
             SetType( aType );
+        }
+
+        ROW( const ROW& a ) :
+            nickName( a.nickName ),
+            uri( a.uri ),
+            type( a.type ),
+            options( a.options ),
+            description( a.description ),
+            properties( 0 )
+        {
+            if( a.properties )
+                properties = new PROPERTIES( *a.properties );
+        }
+
+        ~ROW()
+        {
+            delete properties;
+        }
+
+        ROW& operator=( const ROW& r )
+        {
+            nickName = r.nickName;
+            uri      = r.uri;
+            type     = r.type;
+            options  = r.options;
+            properties = r.properties ? new PROPERTIES( *r.properties ) : NULL;
+            return *this;
         }
 
         bool operator==( const ROW& r ) const
@@ -206,6 +236,7 @@ public:
         LIB_T           type;
         wxString        options;
         wxString        description;
+        PROPERTIES*     properties;
     };
 
 
@@ -262,6 +293,31 @@ public:
     void Parse( FP_LIB_TABLE_LEXER* aParser ) throw( IO_ERROR, PARSE_ERROR );
 
     /**
+     * Function ParseOptions
+     * parses @a aOptionsList and places the result into a PROPERTIES object
+     * which is returned.  If the options field is empty, then the returned PROPERTIES
+     * will be a NULL pointer.
+     * <p>
+     * Typically aOptionsList comes from the "options" field within a ROW and
+     * the format is simply a comma separated list of name value pairs. e.g.:
+     * [name1[=value1][|name2[=value2]]] etc.  When using the UI to create or edit
+     * a fp lib table, this formatting is handled for you.
+     */
+    static PROPERTIES* ParseOptions( const std::string& aOptionsList );
+
+    /**
+     * Function FormatOptions
+     * returns a list of options from the aProperties parameter.  The name=value
+     * pairs will be separted with the '|' character.  The =value portion may not
+     * be present.  You might expect something like "name1=value1|name2=value2|flag_me".
+     * Notice that flag_me does not have a value.  This is ok.
+     *
+     * @param aProperties is the PROPERTIES to format or NULL.  If NULL the returned
+     *  string will be empty.
+     */
+    static std::string FormatOptions( const PROPERTIES* aProperties );
+
+    /**
      * Function Format
      * serializes this object as utf8 text to an #OUTPUTFORMATTER, and tries to
      * make it look good using multiple lines and indentation.
@@ -272,15 +328,12 @@ public:
      */
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR );
 
-
     /**
      * Function GetLogicalLibs
      * returns the logical library names, all of them that are pertinent to
      * a lookup done on this FP_LIB_TABLE.
      */
     std::vector<wxString> GetLogicalLibs();
-
-
 
     //----<read accessors>----------------------------------------------------
     // the returning of a const wxString* tells if not found, but might be too
@@ -480,7 +533,7 @@ protected:
     typedef ROWS::iterator              ROWS_ITER;
     typedef ROWS::const_iterator        ROWS_CITER;
 
-    ROWS           rows;
+    ROWS            rows;
 
     /// this is a non-owning index into the ROWS table
     typedef std::map<wxString,int>      INDEX;              // "int" is std::vector array index
@@ -491,7 +544,7 @@ protected:
     /// this particular key is the nickName within each row.
     INDEX           nickIndex;
 
-    FP_LIB_TABLE*  fallBack;
+    FP_LIB_TABLE*   fallBack;
 };
 
 
