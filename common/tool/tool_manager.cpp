@@ -78,6 +78,16 @@ struct TOOL_MANAGER::TOOL_STATE
 	/// List of possible transitions (ie. association of events and functions that are executed
 	/// upon the event reception
 	std::vector<TRANSITION> transitions;
+
+	bool operator==( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
+    {
+	    return ( aRhs.theTool == this->theTool );
+    }
+
+	bool operator!=( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
+    {
+	    return ( aRhs.theTool != this->theTool );
+    }
 };
 
 
@@ -262,7 +272,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 				st->wakeupEvent = aEvent;
 				st->pendingWait = false;
 				st->waitEvents.clear();
-				if( !st->cofunc->Resume() )
+				if( st->cofunc && !st->cofunc->Resume() )
 				{
 				    // The couroutine has finished
 				    finishTool( st );
@@ -327,12 +337,20 @@ bool TOOL_MANAGER::dispatchActivation( TOOL_EVENT& aEvent )
 
 void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
-    wxASSERT( m_activeTools.front() == aState->theTool->GetId() );
+    // Find the tool to be deactivated
+    std::deque<TOOL_ID>::iterator it, it_end;
+    for( it = m_activeTools.begin(), it_end = m_activeTools.end(); it != it_end; ++it )
+    {
+        if( aState == m_toolIdIndex[*it] )
+            break;
+    }
 
-    // Deactivate the most recent tool and remove it from the active tools queue
+    if( it != m_activeTools.end() )
+        m_activeTools.erase( it );
+    else
+        wxLogWarning( wxT( "Tried to finish not active tool" ) );
+
     aState->idle = true;
-    m_activeTools.erase( m_activeTools.begin() );
-
     delete aState->cofunc;
     aState->cofunc = NULL;
 }
