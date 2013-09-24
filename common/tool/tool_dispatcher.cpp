@@ -22,16 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
-#include <wx/event.h>
-
 #include <wxPcbStruct.h>
 #include <wxBasePcbFrame.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <view/view.h>
-#include <view/view_controls.h>
+#include <view/wx_view_controls.h>
 
 #include <class_drawpanel_gal.h>
 
@@ -41,8 +38,6 @@
 #include <boost/foreach.hpp>
 
 using boost::optional;
-
-const wxEventType TOOL_DISPATCHER::EVT_REFRESH_MOUSE = wxNewEventType();
 
 struct TOOL_DISPATCHER::ButtonState
 {
@@ -209,11 +204,11 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 	        type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
 	        type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
 	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
-	        type == EVT_REFRESH_MOUSE )
+	        type == KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
 	{
         VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetCursorPosition();
         VECTOR2D pos = getView()->ToWorld( screenPos );
-		if( pos != m_lastMousePos || type == EVT_REFRESH_MOUSE )
+		if( pos != m_lastMousePos || type == KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
 		{
 			motion = true;
 			m_lastMousePos = pos;

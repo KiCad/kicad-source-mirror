@@ -32,6 +32,8 @@
 
 using namespace KiGfx;
 
+const wxEventType WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE = wxNewEventType();
+
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     VIEW_CONTROLS( aView ),
     m_state( IDLE ),
@@ -207,7 +209,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
 
         // Notify tools that the cursor position has changed in the world coordinates
-        wxCommandEvent moveEvent( TOOL_DISPATCHER::EVT_REFRESH_MOUSE );
+        wxCommandEvent moveEvent( EVT_REFRESH_MOUSE );
         wxPostEvent( m_parentPanel, moveEvent );
     }
     break;

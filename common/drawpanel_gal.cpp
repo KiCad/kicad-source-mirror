@@ -47,7 +47,6 @@
 
 #define METRIC_UNIT_LENGTH (1e9)
 
-
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
                                         GalType aGalType ) :
@@ -91,8 +90,8 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 	Connect( wxEVT_KEY_UP,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 	Connect( wxEVT_KEY_DOWN,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
-    Connect( TOOL_DISPATCHER::EVT_REFRESH_MOUSE, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ),
-             NULL, this );
+    Connect( KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE,
+             wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     
     m_refreshTimer.SetOwner( this );
     Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
