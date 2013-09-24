@@ -149,7 +149,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
     SetBoard( new BOARD() );
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();
-    SetScreen( new PCB_SCREEN(GetPageSizeIU()) );
+    SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
     LoadSettings();
 
@@ -198,7 +198,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
 
     DisplayLibInfos();
 
-    // If a footprint was previsiously loaded, reload it
+    // If a footprint was previously loaded, reload it
     if( !m_libraryName.IsEmpty() && !m_footprintName.IsEmpty() )
     {
 #if !defined( USE_FP_LIB_TABLE )
@@ -235,9 +235,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
     mesg.MessageToolbarPane();
 
 
-    // Manage main toolbal
+    // Manage main toolbar
     m_auimgr.AddPane( m_mainToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT ("m_mainToolBar" ) ).Top().Row( 0 ) );
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Row( 0 ) );
 
     wxSize minsize( 60, -1 );
 
@@ -290,6 +290,7 @@ FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
         m_Draw3DFrame->Destroy();
 }
 
+
 /* return the frame name used when creating the frame
  * used to get a reference to this frame, if exists
  */
@@ -298,13 +299,14 @@ const wxChar* FOOTPRINT_VIEWER_FRAME::GetFootprintViewerFrameName()
     return FOOTPRINT_VIEWER_FRAME_NAME;
 }
 
+
 /* return a reference to the current opened Footprint viewer
  * or NULL if no Footprint viewer currently opened
  */
 FOOTPRINT_VIEWER_FRAME* FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer()
 {
     return (FOOTPRINT_VIEWER_FRAME*)
-            wxWindow::FindWindowByName(GetFootprintViewerFrameName());
+            wxWindow::FindWindowByName( GetFootprintViewerFrameName() );
 }
 
 
@@ -400,8 +402,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
     }
     else
     {
-        /* If not found, clear current library selection because it can be
-         * deleted after a config change. */
+        // If not found, clear current library selection because it can be deleted after
+        // a configuration change.
         m_libraryName = wxEmptyString;
         m_footprintName = wxEmptyString;
     }
@@ -452,6 +454,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
     if( !libLoaded )
     {
+        m_footprintName = wxEmptyString;
         m_libraryName = wxEmptyString;
 
         wxString msg;
@@ -462,7 +465,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
             msg += _( "Files not found:\n\n" ) + fp_info_list.m_filesNotFound;
 
         if( !fp_info_list.m_filesInvalid.IsEmpty() )
-            msg +=  _("\n\nFile load errors:\n\n" ) + fp_info_list.m_filesInvalid;
+            msg +=  _( "\n\nFile load errors:\n\n" ) + fp_info_list.m_filesInvalid;
 
         DisplayError( this, msg );
         return;
@@ -566,7 +569,7 @@ void FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList( wxCommandEvent& event )
         // event in the parent window which would cause the part to be parked
         // rather than staying in mode mode.
         // Remember the mouse button will be released in the parent window
-        // thus creating a mouse button release event which should be ingnored.
+        // thus creating a mouse button release event which should be ignored
         ((PCB_BASE_FRAME*)GetParent())->SkipNextLeftButtonReleaseEvent();
     }
 }
@@ -640,19 +643,37 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
     m_selectedFootprintName.Empty();
 
     // Ensure we have the right library list:
+#if !defined( USE_FP_LIB_TABLE )
     if( g_LibraryNames.GetCount() == m_LibList->GetCount() )
     {
         unsigned ii;
 
         for( ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
         {
-            if( m_LibList->GetString(ii) != g_LibraryNames[ii] )
+            if( m_LibList->GetString( ii ) != g_LibraryNames[ii] )
                 break;
         }
 
         if( ii == g_LibraryNames.GetCount() )
             return;
     }
+#else
+    std::vector< wxString > libNicknames = m_footprintLibTable->GetLogicalLibs();
+
+    if( libNicknames.size() == m_LibList->GetCount() )
+    {
+        unsigned ii;
+
+        for( ii = 0;  ii < libNicknames.size();  ii++ )
+        {
+            if( libNicknames[ii] != m_LibList->GetString( ii ) )
+                break;
+        }
+
+        if( ii == libNicknames.size() )
+            return;
+    }
+#endif
 
     // If we are here, the library list has changed, rebuild it
     ReCreateLibraryList();
