@@ -73,7 +73,6 @@ void VIEW_ITEM::getLayers( int* aLayers, int& aCount ) const
     {
         if( m_layers[i] )
             *layersPtr++ = i;
-
     }
 
     aCount = m_layers.count();

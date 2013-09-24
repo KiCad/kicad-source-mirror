@@ -633,7 +633,7 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate ) const
 {
     int layers[VIEW_MAX_LAYERS], layers_count;
 
-    aItem->getLayers( layers, layers_count );
+    aItem->ViewGetLayers( layers, layers_count );
     // Sorting is needed for drawing order dependent GALs (like Cairo)
     SortLayers( layers, layers_count );
 
@@ -813,19 +813,23 @@ void VIEW::clearGroupCache()
 
 void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 {
-    int layers[VIEW_MAX_LAYERS], layers_count;
-    aItem->getLayers( layers, layers_count );
-
-    if( aUpdateFlags & VIEW_ITEM::GEOMETRY )
+    // updateLayers updates geometry too, so we do not have to update both of them at the same time
+    if( aUpdateFlags & VIEW_ITEM::LAYERS )
+        updateLayers( aItem );
+    else if( aUpdateFlags & VIEW_ITEM::GEOMETRY )
         updateBbox( aItem );
+
+    int layers[VIEW_MAX_LAYERS], layers_count;
+    aItem->ViewGetLayers( layers, layers_count );
 
     // Iterate through layers used by the item and recache it immediately
     for( int i = 0; i < layers_count; i++ )
     {
         int layerId = layers[i];
 
-        if( aUpdateFlags & VIEW_ITEM::GEOMETRY )
+        if( aUpdateFlags & ( VIEW_ITEM::GEOMETRY | VIEW_ITEM::LAYERS ) )
         {
+            // Redraw
             if( IsCached( layerId ) )
                 updateItemGeometry( aItem, layerId );
         }
@@ -894,6 +898,31 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
+        l.items->Insert( aItem );
+        MarkTargetDirty( l.target );
+    }
+}
+
+
+void VIEW::updateLayers( VIEW_ITEM* aItem )
+{
+    int layers[VIEW_MAX_LAYERS], layers_count;
+
+    // Remove the item from previous layer set
+    aItem->getLayers( layers, layers_count );
+    for( int i = 0; i < layers_count; i++ )
+    {
+        VIEW_LAYER& l = m_layers[layers[i]];
+        l.items->Remove( aItem );
+        MarkTargetDirty( l.target );
+    }
+
+    // Add the item to new layer set
+    aItem->ViewGetLayers( layers, layers_count );
+    aItem->saveLayers( layers, layers_count );
+    for( int i = 0; i < layers_count; i++ )
+    {
+        VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Insert( aItem );
         MarkTargetDirty( l.target );
     }

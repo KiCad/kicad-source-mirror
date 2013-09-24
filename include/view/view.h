@@ -569,6 +569,9 @@ private:
     /// Updates bounding box of an item
     void updateBbox( VIEW_ITEM* aItem );
 
+    /// Updates set of layers that an item occupies
+    void updateLayers( VIEW_ITEM* aItem );
+
     /// Determines rendering order of layers. Used in display order sorting function.
     static bool compareRenderingOrder( VIEW_LAYER* i, VIEW_LAYER* j )
     {
