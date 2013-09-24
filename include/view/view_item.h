@@ -165,6 +165,7 @@ public:
         APPEARANCE  = 0x01,     /// Visibility flag has changed
         COLOR       = 0x02,     /// Color has changed
         GEOMETRY    = 0x04,     /// Position or shape has changed
+        LAYERS      = 0x08,     /// Layers have changed
         ALL         = 0xff
     };
 
