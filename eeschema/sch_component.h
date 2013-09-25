@@ -40,7 +40,7 @@ class SCH_SHEET_PATH;
 class LIB_ITEM;
 class LIB_PIN;
 class LIB_COMPONENT;
-
+class NETLIST_OBJECT_LIST;
 
 /// A container for several SCH_FIELD items
 typedef std::vector<SCH_FIELD> SCH_FIELDS;
@@ -384,8 +384,8 @@ public:
 
     BITMAP_DEF GetMenuImage() const { return  add_component_xpm; }
 
-    void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                 SCH_SHEET_PATH*          aSheetPath );
+    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                         SCH_SHEET_PATH*      aSheetPath );
 
     bool operator <( const SCH_ITEM& aItem ) const;
 

@@ -44,6 +44,7 @@ class SCH_EDIT_FRAME;
 class wxFindReplaceData;
 class PLOTTER;
 class NETLIST_OBJECT;
+class NETLIST_OBJECT_LIST;
 
 
 typedef boost::ptr_vector< SCH_ITEM > SCH_ITEMS;
@@ -342,8 +343,8 @@ public:
      * net list objects associated with them.
      * </p>
      */
-    virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                 SCH_SHEET_PATH*          aSheetPath ) { }
+    virtual void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                                 SCH_SHEET_PATH*      aSheetPath ) { }
 
     /**
      * Function GetPosition

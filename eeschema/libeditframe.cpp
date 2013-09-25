@@ -43,6 +43,7 @@
 #include <libeditframe.h>
 #include <class_library.h>
 #include <lib_polyline.h>
+#include <lib_pin.h>
 
 #include <kicad_device_context.h>
 #include <hotkeys.h>
