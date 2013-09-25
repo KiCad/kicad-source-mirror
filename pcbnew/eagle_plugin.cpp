@@ -1105,7 +1105,7 @@ wxSize inline EAGLE_PLUGIN::kicad_fontz( double d ) const
 }
 
 
-BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPERTIES* aProperties )
+BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
     PTREE       doc;
@@ -1188,7 +1188,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPE
 }
 
 
-void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
+void EAGLE_PLUGIN::init( const PROPERTIES* aProperties )
 {
     m_hole_count = 0;
 
@@ -2800,7 +2800,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 }
 
 
-wxArrayString EAGLE_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+wxArrayString EAGLE_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     init( aProperties );
 
@@ -2815,7 +2815,7 @@ wxArrayString EAGLE_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, PR
 }
 
 
-MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName, PROPERTIES* aProperties )
+MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
     init( aProperties );
 
@@ -2836,13 +2836,13 @@ MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStrin
 
 
 /*
-void EAGLE_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+void EAGLE_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
 {
     // Eagle lovers apply here.
 }
 
 
-void EAGLE_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, PROPERTIES* aProperties )
+void EAGLE_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, const PROPERTIES* aProperties )
 {
 }
 
@@ -2852,12 +2852,12 @@ void EAGLE_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString
 }
 
 
-void EAGLE_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+void EAGLE_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
 }
 
 
-bool EAGLE_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+bool EAGLE_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
 }
 

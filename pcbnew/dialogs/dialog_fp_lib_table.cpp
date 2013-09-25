@@ -412,11 +412,10 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
             {
                 wxString nick = model.GetValue( r, COL_NICKNAME ).Trim( false ).Trim();
                 wxString uri  = model.GetValue( r, COL_URI ).Trim( false ).Trim();
-                wxString type = model.GetValue( r, COL_TYPE ).Trim( false ).Trim();
 
-                if( !nick || !uri || !type )
+                if( !nick || !uri )
                 {
-                    // Delete the "empty" row, where empty means missing nick, uri, or type.
+                    // Delete the "empty" row, where empty means missing nick or uri.
                     // This also updates the UI which could be slow, but there should only be a few
                     // rows to delete, unless the user fell asleep on the Add Row
                     // button.
@@ -434,7 +433,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
                         m_auinotebook->SetSelection( &model == &m_global_model ? 0 : 1 );
                     }
 
-                    // go to the bottom of the two rows, it is technically the duplicate:
+                    // go to the problematic row
                     m_cur_grid->SelectBlock( r, 0, r, 0 );
                     m_cur_grid->MakeCellVisible( r, 0 );
 
@@ -447,7 +446,6 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
                     // set the trimmed values back into the table so they get saved to disk.
                     model.SetValue( r, COL_NICKNAME, nick );
                     model.SetValue( r, COL_URI, uri );
-                    model.SetValue( r, COL_TYPE, type );
                     ++r;        // this row was OK.
                 }
             }
@@ -460,9 +458,10 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
             for( int r1 = 0; r1 < model.GetNumberRows() - 1;  ++r1 )
             {
+                wxString    nick1 = model.GetValue( r1, COL_NICKNAME );
+
                 for( int r2=r1+1; r2 < model.GetNumberRows();  ++r2 )
                 {
-                    wxString    nick1 = model.GetValue( r1, COL_NICKNAME );
                     wxString    nick2 = model.GetValue( r2, COL_NICKNAME );
 
                     if( nick1 == nick2 )
@@ -478,7 +477,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
                             m_auinotebook->SetSelection( &model == &m_global_model ? 0 : 1 );
                         }
 
-                        // go to the bottom of the two rows, it is technically the duplicate:
+                        // go to the lower of the two rows, it is technically the duplicate:
                         m_cur_grid->SelectBlock( r2, 0, r2, 0 );
                         m_cur_grid->MakeCellVisible( r2, 0 );
 
@@ -582,7 +581,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
     void optionsEditor( wxMouseEvent& event )
     {
         // @todo: write the options editor, and pass the options to the Footprint*() calls.
-        D(printf("%s:%d\n", __func__, (int) m_cur_grid->GetNumberRows() );)
+        //D(printf("%s:%d\n", __func__, (int) m_cur_grid->GetNumberRows() );)
     }
 
     void onCancelButtonClick( wxCommandEvent& event )

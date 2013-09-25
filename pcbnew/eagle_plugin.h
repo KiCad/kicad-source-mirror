@@ -82,13 +82,13 @@ public:
     //-----<PUBLIC PLUGIN API>--------------------------------------------------
     const wxString& PluginName() const;
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPERTIES* aProperties = NULL );
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,  const PROPERTIES* aProperties = NULL );
 
     const wxString& GetFileExtension() const;
 
-    wxArrayString FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL);
+    wxArrayString FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL);
 
-    MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName, PROPERTIES* aProperties = NULL );
+    MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = NULL );
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath )
     {
@@ -96,16 +96,15 @@ public:
     }
 
 /*
-    void Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );
+    void Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties = NULL );
 
-    void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, PROPERTIES* aProperties = NULL );
+    void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, const PROPERTIES* aProperties = NULL );
 
-    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName );
+    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = NULL );
 
-    void FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
+    void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
 
-    bool FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
-
+    bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
 */
 
     //-----</PUBLIC PLUGIN API>-------------------------------------------------
@@ -132,7 +131,7 @@ private:
                                     ///< lookup key is either libname.packagename or simply
                                     ///< packagename if FootprintLoad() or FootprintEnumberate()
 
-    PROPERTIES* m_props;            ///< passed via Save() or Load(), no ownership, may be NULL.
+    const PROPERTIES* m_props;            ///< passed via Save() or Load(), no ownership, may be NULL.
     BOARD*      m_board;            ///< which BOARD is being worked on, no ownership here
 
     int         m_min_trace;        ///< smallest trace we find on Load(), in BIU.
@@ -146,7 +145,7 @@ private:
     wxDateTime  m_mod_time;
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
-    void    init( PROPERTIES* aProperties );
+    void    init( const PROPERTIES* aProperties );
 
     void    clear_cu_map();
 

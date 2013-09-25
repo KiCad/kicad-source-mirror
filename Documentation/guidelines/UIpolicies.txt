@@ -73,4 +73,11 @@ Dialogs:
     within the dialog, but for testing purposes please do not exceed this dialog
     size should the user have selected a font size of 13 points.
 
+Quoting:
+    Filenames and paths should be emphasized with <> angle brackets.  Anything
+    else should be emphasized with single quotes ''.  e.g.:
+    <filename.kicad_pcb>
+    <longpath/subdir>
+    'FOOTPRINTNAME'
+    'anything else'
 

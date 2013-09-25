@@ -216,6 +216,24 @@ public:
          */
         void SetDescr( const wxString& aDescr )     { description = aDescr; }
 
+        /**
+         * Function GetProperties
+         * returns the constant PROPERTIES for this library (ROW).  These are
+         * the "options" in a table.
+         */
+        const PROPERTIES* GetProperties() const     { return properties; }
+
+        /**
+         * Function SetProperties
+         * sets this ROW's PROPERTIES by taking ownership of @a aProperties.
+         * @param aProperties ownership is given over to this ROW.
+         */
+        void SetProperties( const PROPERTIES* aProperties )
+        {
+            delete properties;
+            properties = aProperties;
+        }
+
         //-----</accessors>-----------------------------------------------------
 
         /**
@@ -236,6 +254,7 @@ public:
         LIB_T           type;
         wxString        options;
         wxString        description;
+        const
         PROPERTIES*     properties;
     };
 

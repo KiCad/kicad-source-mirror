@@ -54,9 +54,6 @@
 // plugins coexisting.
 
 
-// static LEGACY_PLUGIN kicad_plugin;
-// static EAGLE_PLUGIN eagle_plugin;
-
 PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
 {
     // This implementation is subject to change, any magic is allowed here.
@@ -221,7 +218,7 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
 
 
 BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName,
-                     BOARD* aAppendToMe, PROPERTIES* aProperties )
+                     BOARD* aAppendToMe, const PROPERTIES* aProperties )
 {
     // release the PLUGIN even if an exception is thrown.
     PLUGIN::RELEASER pi = PluginFind( aFileType );
@@ -235,7 +232,7 @@ BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName,
 }
 
 
-void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
 {
     // release the PLUGIN even if an exception is thrown.
     PLUGIN::RELEASER pi = PluginFind( aFileType );
@@ -247,69 +244,5 @@ void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoar
     }
 
     THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
-}
-
-
-BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties )
-{
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData(), __FUNCTION__ ) );
-}
-
-
-void PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
-{
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData(), __FUNCTION__ ) );
-}
-
-
-wxArrayString PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
-{
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
-}
-
-
-MODULE* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                    PROPERTIES* aProperties )
-{
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
-}
-
-
-void PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, PROPERTIES* aProperties )
-{
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
-}
-
-
-void PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName )
-{
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
-}
-
-
-void PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties )
-{
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
-}
-
-
-bool PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
-{
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
-}
-
-
-bool PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
-{
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
 }
 
