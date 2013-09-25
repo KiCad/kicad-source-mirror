@@ -32,6 +32,7 @@
 
 #include <sch_item_struct.h>
 
+class NETLIST_OBJECT_LIST;
 
 class SCH_NO_CONNECT : public SCH_ITEM
 {
@@ -86,7 +87,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const { return noconn_xpm; }
 
-    void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems, SCH_SHEET_PATH* aSheetPath );
+    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath );
 
     wxPoint GetPosition() const { return m_pos; }
 

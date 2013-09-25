@@ -36,6 +36,7 @@
 #include <plot_common.h>
 
 #include <sch_junction.h>
+#include <class_netlist_object.h>
 
 
 int SCH_JUNCTION::m_symbolSize = 40;    // Default diameter of the junction symbol
@@ -173,7 +174,7 @@ void SCH_JUNCTION::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-void SCH_JUNCTION::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
+void SCH_JUNCTION::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                                    SCH_SHEET_PATH*          aSheetPath )
 {
     NETLIST_OBJECT* item = new NETLIST_OBJECT();

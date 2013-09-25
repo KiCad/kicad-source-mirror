@@ -1720,8 +1720,8 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData
 }
 
 
-void SCH_COMPONENT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                    SCH_SHEET_PATH*          aSheetPath )
+void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                                    SCH_SHEET_PATH*      aSheetPath )
 {
     LIB_COMPONENT* component = CMP_LIBRARY::FindLibraryComponent( GetLibName() );
 

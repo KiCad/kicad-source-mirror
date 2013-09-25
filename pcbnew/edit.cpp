@@ -60,17 +60,11 @@
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int         id = event.GetId();
-    wxPoint     pos;
-
     LAYER_NUM itmp;
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     MODULE* module;
 
     m_canvas->CrossHairOff( &dc );
-
-    wxGetMousePosition( &pos.x, &pos.y );
-
-    pos.y += 20;
 
     switch( id )   // Some (not all ) edit commands must be finished or aborted
     {
@@ -246,7 +240,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_PCB_GLOBAL_DELETE:
-        InstallPcbGlobalDeleteFrame( pos );
+        InstallPcbGlobalDeleteFrame( wxDefaultPosition );
         break;
 
     case ID_POPUP_PLACE_BLOCK:
@@ -409,7 +403,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA )
             {
                 m_canvas->SetIgnoreMouseEvents( true );
-                LAYER_NUM layer = SelectLayer( getActiveLayer(), ALL_NO_CU_LAYERS );
+                wxPoint dlgPosition;
+                wxGetMousePosition( &dlgPosition.x, &dlgPosition.y );
+                LAYER_NUM layer = SelectLayer( getActiveLayer(), ALL_NO_CU_LAYERS,
+                                               dlgPosition );
                 m_canvas->SetIgnoreMouseEvents( false );
                 m_canvas->MoveCursorToCrossHair();
 

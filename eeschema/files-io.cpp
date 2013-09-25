@@ -35,12 +35,11 @@
 #include <wxEeschemaStruct.h>
 #include <appl_wxstruct.h>
 
-#include <general.h>
-#include <protos.h>
 #include <eeschema_id.h>
 #include <class_library.h>
 #include <libeditframe.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <wildcards_and_files_ext.h>
 

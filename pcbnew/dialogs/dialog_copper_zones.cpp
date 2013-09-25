@@ -283,7 +283,7 @@ void DIALOG_COPPER_ZONE::initDialog()
     ctrlWidth += 4;     // add small margin between text and window borders
     m_LayerSelectionCtrl->SetMinSize( wxSize(ctrlWidth, -1));
 
-    wxString netNameDoNotShowFilter = wxT( "N-*" );
+    wxString netNameDoNotShowFilter = wxT( "Net-*" );
     if( m_Config )
     {
         int opt = m_Config->Read( ZONE_NET_SORT_OPTION_KEY, 1l );
