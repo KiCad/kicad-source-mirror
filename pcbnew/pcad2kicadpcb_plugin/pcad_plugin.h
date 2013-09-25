@@ -43,7 +43,7 @@ public:
 
     BOARD*          Load( const wxString&   aFileName,
                           BOARD*            aAppendToMe,
-                          PROPERTIES*       aProperties = NULL );
+                          const PROPERTIES* aProperties = NULL );
 
     const wxString& GetFileExtension() const;
 
@@ -52,8 +52,8 @@ public:
     PCAD_PLUGIN();
     ~PCAD_PLUGIN();
 private:
-    PROPERTIES* m_props;
-    BOARD*      m_board;
+    const PROPERTIES*   m_props;
+    BOARD*              m_board;
 };
 
 #endif    // PCAD_PLUGIN_H_

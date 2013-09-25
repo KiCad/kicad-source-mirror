@@ -231,7 +231,7 @@ static inline long hexParse( const char* next, const char** out = NULL )
 }
 
 
-BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties )
+BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2817,7 +2817,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 }
 
 
-void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
+void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
 {
     m_board = NULL;
     m_props = aProperties;
@@ -2838,7 +2838,7 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
 
 //-----<BOARD Save Functions>---------------------------------------------------
 
-void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2858,17 +2858,6 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
 
     m_fp = fp;          // member function accessibility
 
-#if 0   // old school, property "header" was not used by any other plugin.
-    if( m_props )
-    {
-        wxString header = (*m_props)["header"];
-
-        // save a file header, if caller provided one (with trailing \n hopefully).
-        fprintf( m_fp, "%s", TO_UTF8( header ) );
-    }
-
-#else
-
     wxString header = wxString::Format(
         wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by Pcbnew%s\n\n" ),
         LEGACY_BOARD_FILE_VERSION, DateAndTime().GetData(),
@@ -2876,7 +2865,6 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
 
     // save a file header, if caller provided one (with trailing \n hopefully).
     fprintf( m_fp, "%s", TO_UTF8( header ) );
-#endif
 
     SaveBOARD( aBoard );
 }
@@ -4225,7 +4213,7 @@ void LEGACY_PLUGIN::cacheLib( const wxString& aLibraryPath )
 }
 
 
-wxArrayString LEGACY_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+wxArrayString LEGACY_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -4246,8 +4234,8 @@ wxArrayString LEGACY_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, P
 }
 
 
-MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                    PROPERTIES* aProperties )
+MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
+        const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -4274,7 +4262,8 @@ MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStri
 }
 
 
-void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, PROPERTIES* aProperties )
+void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath,
+        const MODULE* aFootprint, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -4318,7 +4307,8 @@ void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* a
 }
 
 
-void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName )
+void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath,
+        const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -4346,7 +4336,7 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
 }
 
 
-void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     if( wxFileExists( aLibraryPath ) )
     {
@@ -4366,7 +4356,7 @@ void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES
 }
 
 
-bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     wxFileName fn = aLibraryPath;
 

@@ -235,7 +235,6 @@ PROPERTIES* FP_LIB_TABLE::ParseOptions( const std::string& aOptionsList )
                 ++cp;           // skip the escape
                 pair += *cp++;  // add the separator
             }
-
             else if( *cp==OPT_SEP )
             {
                 ++cp;           // skip the separator
@@ -248,7 +247,7 @@ PROPERTIES* FP_LIB_TABLE::ParseOptions( const std::string& aOptionsList )
         // stash the pair
         if( pair.size() )
         {
-            // the first equals size established the end of the name
+            // first equals sign separates 'name' and 'value'.
             size_t  eqNdx = pair.find( '=' );
             if( eqNdx != pair.npos )
             {
@@ -257,7 +256,7 @@ PROPERTIES* FP_LIB_TABLE::ParseOptions( const std::string& aOptionsList )
                 props[name] = value;
             }
             else
-                props[pair] = "";
+                props[pair] = "";       // property is present, but with no value.
         }
     }
 

@@ -361,7 +361,7 @@ bool FP_CACHE::IsModified( const wxString& aLibPath, const wxString& aFootprintN
 }
 
 
-void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1632,7 +1632,7 @@ PCB_IO::~PCB_IO()
 }
 
 
-BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties )
+BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties )
 {
     FILE_LINE_READER    reader( aFileName );
 
@@ -1652,7 +1652,7 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* 
 }
 
 
-void PCB_IO::init( PROPERTIES* aProperties )
+void PCB_IO::init( const PROPERTIES* aProperties )
 {
     m_board = NULL;
     m_props = aProperties;
@@ -1671,7 +1671,7 @@ void PCB_IO::cacheLib( const wxString& aLibraryPath, const wxString& aFootprintN
 }
 
 
-wxArrayString PCB_IO::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+wxArrayString PCB_IO::FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1693,7 +1693,7 @@ wxArrayString PCB_IO::FootprintEnumerate( const wxString& aLibraryPath, PROPERTI
 
 
 MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                               PROPERTIES* aProperties )
+                               const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1716,7 +1716,7 @@ MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFo
 
 
 void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
-                            PROPERTIES* aProperties )
+                            const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1783,7 +1783,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 }
 
 
-void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName )
+void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1801,7 +1801,7 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 }
 
 
-void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     if( wxDir::Exists( aLibraryPath ) )
     {
@@ -1819,7 +1819,7 @@ void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProp
 }
 
 
-bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     wxFileName fn;
     fn.SetPath( aLibraryPath );

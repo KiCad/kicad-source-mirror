@@ -805,7 +805,7 @@ GPCB_PLUGIN::~GPCB_PLUGIN()
 }
 
 
-void GPCB_PLUGIN::init( PROPERTIES* aProperties )
+void GPCB_PLUGIN::init( const PROPERTIES* aProperties )
 {
     m_props = aProperties;
 }
@@ -824,7 +824,7 @@ void GPCB_PLUGIN::cacheLib( const wxString& aLibraryPath )
 
 
 wxArrayString GPCB_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath,
-                                               PROPERTIES*     aProperties )
+                                               const PROPERTIES*     aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -846,7 +846,7 @@ wxArrayString GPCB_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath,
 
 
 MODULE* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                    PROPERTIES* aProperties )
+                                    const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -868,11 +868,11 @@ MODULE* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString
 }
 
 
-void GPCB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName )
+void GPCB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-    init( NULL );
+    init( aProperties );
 
     cacheLib( aLibraryPath );
 
@@ -886,7 +886,7 @@ void GPCB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString&
 }
 
 
-bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     wxFileName fn;
     fn.SetPath( aLibraryPath );

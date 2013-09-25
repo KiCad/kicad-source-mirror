@@ -451,7 +451,7 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
 
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::EnumFromStr( row->GetType() ) ) );
 
-    return pi->FootprintLoad( libPath, footprintName );
+    return pi->FootprintLoad( libPath, footprintName, row->GetProperties() );
 }
 
 

@@ -140,25 +140,22 @@ PCBNew
     various zoom factors.  I believe that a fixed distance in pixels might make
     for a friendlier UI.
 
-*)  Check that the new load visibility BOARD settings is properly setting the toolbar
-    buttons like show grid or ratsnest.  Add PCB_EDIT_FRAME::SetVisibleElements() so
-    toolbar crap is not known to a BOARD.
-
-*)  Finish removing global access requirements from PLUGINs, so that:
-    *)  a BOARD is a fully self contained document description.
-    *)  plugin developers do not have to access globals, since a plugin could
-        very well be a dynamically loaded DLL/DSO in the future.
-        One final problem remains is the BASE_SCREEN's grid origin.  An easy
-        solution is to move just that one field into the BOARD.
-
-*)  Add ::Footprint*() functions to EAGLE_PLUGIN, so that Eagle footprint libraries
-    can be used in situ.
-
-*)  Add a library table for Pcbnew like that in the sweet library and get rid of the
-    damn search path strategy.  This will enable concurrent usage of various types
-    of PLUGIN::Footprint*() functions.  At least LEGACY and KICAD are both needed
-    concurrently.
-
 *)  Add a hot key to toggle the 45 degree constraint on and off so that it can be
     changed when drawing a trace.
 
+
+Dick's Final TODO List:
+======================
+*) write options dialog for fp table dialog.
+*) Apply Fabrizio and Alexander's linux desktop patches after unifying them.
+*) Get licensing cleaned up.
+*) Re-arrange the repo architecture.
+*) Merge KiCad GAL/TOM/ORSON if nobody else does.
+*) lib_convert.py (i.e. convert) all footprint libraries to pretty format and move copy them to
+   github if nobody else does.
+*) DLL-ization of pcbnew eeschema
+*) Pass options, i.e. PROPERTIES to all PLUGIN::Footprint*() calls.  Current code needs
+   to be based on NickNames, not Libpaths, so we have access to the FP_LIB_TABLE::ROWs.
+   User should not be prompted for a libpath for reading from it, he/she must pick from the
+   known list of nicknames. Possibly duplicate some of the PLUGIN:::Footprint*() api in ROW or
+   FP_LIB_TABLE. Again, limited to PLUGIN::Footprint*() calls, not Load() and Save().
