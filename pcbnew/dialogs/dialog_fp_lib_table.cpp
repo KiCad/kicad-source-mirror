@@ -582,7 +582,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
     void optionsEditor( wxMouseEvent& event )
     {
         // @todo: write the options editor, and pass the options to the Footprint*() calls.
-        D(printf("%s:%d\n", __func__, (int) m_cur_grid->GetRowCount() );)
+        D(printf("%s:%d\n", __func__, (int) m_cur_grid->GetNumberRows() );)
     }
 
     void onCancelButtonClick( wxCommandEvent& event )
