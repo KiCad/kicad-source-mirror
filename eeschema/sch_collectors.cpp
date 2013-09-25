@@ -28,7 +28,7 @@
 
 #include <macros.h>
 
-#include <general.h>
+#include <sch_sheet_path.h>
 #include <transform.h>
 #include <sch_collectors.h>
 #include <sch_component.h>

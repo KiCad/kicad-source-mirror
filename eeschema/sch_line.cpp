@@ -516,8 +516,8 @@ BITMAP_DEF SCH_LINE::GetMenuImage() const
 }
 
 
-void SCH_LINE::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                               SCH_SHEET_PATH*          aSheetPath )
+void SCH_LINE::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                               SCH_SHEET_PATH*      aSheetPath )
 {
     // Net list item not required for graphic lines.
     if( (GetLayer() != LAYER_BUS) && (GetLayer() != LAYER_WIRE) )

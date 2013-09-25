@@ -37,7 +37,6 @@
 #include <kicad_string.h>
 #include <msgpanel.h>
 
-#include <general.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
@@ -1073,8 +1072,8 @@ wxPoint SCH_SHEET::GetResizePosition() const
 }
 
 
-void SCH_SHEET::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                SCH_SHEET_PATH*          aSheetPath )
+void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                                SCH_SHEET_PATH*      aSheetPath )
 {
     SCH_SHEET_PATH sheetPath = *aSheetPath;
     sheetPath.Push( this );

@@ -47,6 +47,7 @@
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 
 
 void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
