@@ -5,25 +5,19 @@
 #ifndef _GENERAL_H_
 #define _GENERAL_H_
 
-#include <wx/string.h>
-#include <wx/gdicmn.h>
+#include <colors.h>     // for EDA_COLOR_T
 
-#include <block_commande.h>
-#include <class_netlist_object.h>
-
-class SCH_SHEET;
 class TRANSFORM;
+class SCH_SHEET;
 
 #define EESCHEMA_VERSION 2
-
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
 
 #define TXTMARGE 10             // Offset in mils for placement of labels and pin numbers
 #define DEFAULT_TEXT_SIZE   50  // Default size for field texts
+#define DANGLING_SYMBOL_SIZE 12
 
 #define GR_DEFAULT_DRAWMODE GR_COPY
-
-#define DANGLING_SYMBOL_SIZE 12
 
 // this enum is for color management
 typedef enum {
@@ -74,8 +68,6 @@ extern int      g_RepeatDeltaLabel;
 
 /* First and main (root) screen */
 extern SCH_SHEET*   g_RootSheet;
-
-extern NETLIST_OBJECT_LIST g_NetObjectslist;
 
 /**
  * Default line thickness used to draw/plot items having a

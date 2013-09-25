@@ -643,9 +643,12 @@ public:
      * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
      * @param aNotAllowedLayersMask = a layer mask for not allowed layers
      *                            (= 0 to show all layers in use)
+     * @param aDlgPosition = position of dialog ( defualt = centered)
      * @return the selected layer id
      */
-    LAYER_NUM SelectLayer( LAYER_NUM aDefaultLayer, LAYER_MSK aNotAllowedLayersMask = 0 );
+    LAYER_NUM SelectLayer( LAYER_NUM aDefaultLayer,
+                           LAYER_MSK aNotAllowedLayersMask = 0,
+                           wxPoint aDlgPosition = wxDefaultPosition );
 
     /* Display a list of two copper layers to choose a pair of copper layers
      * the layer pair is used to fast switch between copper layers when placing vias

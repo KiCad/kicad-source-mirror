@@ -87,16 +87,7 @@ class PCB_ONE_LAYER_SELECTOR : public PCB_LAYER_SELECTOR,
 public:
     PCB_ONE_LAYER_SELECTOR( wxWindow* aParent, BOARD * aBrd,
                         LAYER_NUM aDefaultLayer,
-                        LAYER_MSK aNotAllowedLayersMask )
-        :PCB_LAYER_SELECTOR( aBrd ), DIALOG_LAYER_SELECTION_BASE( aParent )
-        {
-            m_layerSelected = (int) aDefaultLayer;
-            m_notAllowedLayersMask = aNotAllowedLayersMask;
-            BuildList();
-            Layout();
-            GetSizer()->SetSizeHints(this);
-            SetFocus();
-        }
+                        LAYER_MSK aNotAllowedLayersMask );
 
     LAYER_NUM GetLayerSelection() { return m_layerSelected; }
 
@@ -107,6 +98,20 @@ private:
 
     void BuildList();
 };
+
+PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( wxWindow* aParent,
+                    BOARD * aBrd,
+                    LAYER_NUM aDefaultLayer,
+                    LAYER_MSK aNotAllowedLayersMask )
+    : PCB_LAYER_SELECTOR( aBrd ), DIALOG_LAYER_SELECTION_BASE( aParent )
+{
+    m_layerSelected = (int) aDefaultLayer;
+    m_notAllowedLayersMask = aNotAllowedLayersMask;
+    BuildList();
+    Layout();
+    GetSizer()->SetSizeHints(this);
+    SetFocus();
+}
 
 // Build the layers list
 // Column position by function:
@@ -221,10 +226,18 @@ void PCB_ONE_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
  * @return the selected layer id
  */
 LAYER_NUM PCB_BASE_FRAME::SelectLayer( LAYER_NUM  aDefaultLayer,
-                                       LAYER_MSK aNotAllowedLayersMask )
+                                       LAYER_MSK aNotAllowedLayersMask,
+                                       wxPoint aDlgPosition )
 {
     PCB_ONE_LAYER_SELECTOR dlg( this, GetBoard(),
                                 aDefaultLayer, aNotAllowedLayersMask );
+    if( aDlgPosition != wxDefaultPosition )
+    {
+        wxSize dlgSize = dlg.GetSize();
+        aDlgPosition.x -= dlgSize.x/2;
+        aDlgPosition.y -= dlgSize.y/2;
+        dlg.SetPosition( aDlgPosition );
+    }
     dlg.ShowModal();
     LAYER_NUM layer = dlg.GetLayerSelection();
     return layer;

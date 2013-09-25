@@ -32,6 +32,7 @@
 
 #include <base_struct.h>
 #include <transform.h>
+#include <gr_basic.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

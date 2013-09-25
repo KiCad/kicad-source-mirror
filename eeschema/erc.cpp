@@ -33,8 +33,8 @@
 #include <kicad_string.h>
 #include <wxEeschemaStruct.h>
 
-#include <general.h>
 #include <netlist.h>
+#include <class_netlist_object.h>
 #include <lib_pin.h>
 #include <protos.h>
 #include <erc.h>

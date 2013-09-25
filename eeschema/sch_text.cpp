@@ -613,8 +613,8 @@ wxString SCH_TEXT::GetSelectMenuText() const
 }
 
 
-void SCH_TEXT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                               SCH_SHEET_PATH*          aSheetPath )
+void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                               SCH_SHEET_PATH*      aSheetPath )
 {
     if( GetLayer() == LAYER_NOTES || GetLayer() == LAYER_SHEETLABEL )
         return;

@@ -14,7 +14,6 @@
 #include <class_drawsegment.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 
 #include <wx/statline.h>
 
@@ -31,7 +30,7 @@ enum swap_layer_id {
 };
 
 
-class WinEDA_SwapLayerFrame : public DIALOG_SHIM
+class SWAP_LAYERS_DIALOG : public DIALOG_SHIM
 {
 private:
     PCB_BASE_FRAME*         m_Parent;
@@ -46,8 +45,8 @@ private:
 
 public:
 
-    WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent );
-    ~WinEDA_SwapLayerFrame() { };
+    SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent );
+    ~SWAP_LAYERS_DIALOG() { };
 
 private:
     void Sel_Layer( wxCommandEvent& event );
@@ -58,16 +57,16 @@ private:
 };
 
 
-BEGIN_EVENT_TABLE( WinEDA_SwapLayerFrame, wxDialog )
+BEGIN_EVENT_TABLE( SWAP_LAYERS_DIALOG, wxDialog )
     EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + NB_PCB_LAYERS - 1,
                        wxEVT_COMMAND_BUTTON_CLICKED,
-                       WinEDA_SwapLayerFrame::Sel_Layer )
-    EVT_BUTTON( wxID_OK, WinEDA_SwapLayerFrame::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, WinEDA_SwapLayerFrame::OnCancelClick )
+                       SWAP_LAYERS_DIALOG::Sel_Layer )
+    EVT_BUTTON( wxID_OK, SWAP_LAYERS_DIALOG::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, SWAP_LAYERS_DIALOG::OnCancelClick )
 END_EVENT_TABLE()
 
 
-WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
+SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent ) :
     DIALOG_SHIM( parent, -1, _( "Swap Layers:" ), wxPoint( -1, -1 ),
                  wxDefaultSize, wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
 {
@@ -269,10 +268,12 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
     {
         GetSizer()->SetSizeHints( this );
     }
+
+    Center();
 }
 
 
-void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
+void SWAP_LAYERS_DIALOG::Sel_Layer( wxCommandEvent& event )
 {
     int ii;
 
@@ -283,21 +284,24 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
 
     ii = event.GetId() - ID_BUTTON_0;
 
-    LAYER_NUM jj = New_Layer[ii];
+    LAYER_NUM layer = New_Layer[ii];
 
-    if( (jj < 0) || (jj > NB_PCB_LAYERS) )
-        jj = LAYER_NO_CHANGE; // (Defaults to "No Change".)
+    if( (layer < 0) || (layer > NB_PCB_LAYERS) )
+        layer = LAYER_NO_CHANGE; // (Defaults to "No Change".)
 
-    jj = m_Parent->SelectLayer( jj );
+    LAYER_MSK notallowed_mask = ii < NB_COPPER_LAYERS ?
+                                ALL_NO_CU_LAYERS : ALL_CU_LAYERS;
+    layer = m_Parent->SelectLayer( layer == LAYER_NO_CHANGE ? ii : layer,
+                                   notallowed_mask );
 
-    if( !IsValidLayer( jj ) )
+    if( !IsValidLayer( layer ) )
         return;
 
-    if( jj != New_Layer[ii] )
+    if( layer != New_Layer[ii] )
     {
-        New_Layer[ii] = jj;
+        New_Layer[ii] = layer;
 
-        if( jj >= LAYER_NO_CHANGE || jj == ii )
+        if( layer >= LAYER_NO_CHANGE || layer == ii )
         {
             layer_list[ii]->SetLabel( _( "No Change" ) );
 
@@ -307,7 +311,7 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
         }
         else
         {
-            layer_list[ii]->SetLabel( m_Parent->GetBoard()->GetLayerName( jj ) );
+            layer_list[ii]->SetLabel( m_Parent->GetBoard()->GetLayerName( layer ) );
 
             // Change the text color to fuchsia (to highlight
             // that this layer *is* being swapped)
@@ -317,13 +321,13 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
 }
 
 
-void WinEDA_SwapLayerFrame::OnCancelClick( wxCommandEvent& event )
+void SWAP_LAYERS_DIALOG::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( -1 );
 }
 
 
-void WinEDA_SwapLayerFrame::OnOkClick( wxCommandEvent& event )
+void SWAP_LAYERS_DIALOG::OnOkClick( wxCommandEvent& event )
 {
     EndModal( 1 );
 }
@@ -340,10 +344,9 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
     for( ii = FIRST_LAYER; ii < NB_PCB_LAYERS; ii++ )
         New_Layer[ii] = LAYER_NO_CHANGE;
 
-    WinEDA_SwapLayerFrame* frame = new WinEDA_SwapLayerFrame( this );
+    SWAP_LAYERS_DIALOG dlg( this );
 
-    ii = frame->ShowModal();
-    frame->Destroy();
+    ii = dlg.ShowModal();
 
     if( ii != 1 )
         return; // (Canceled dialog box returns -1 instead)

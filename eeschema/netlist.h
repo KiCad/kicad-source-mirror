@@ -37,6 +37,7 @@
 #include <class_libentry.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
+#include <sch_text.h>
 
 
 /// netlist types
@@ -483,7 +484,7 @@ private:
 
 /**
  * Class BOM_LABEL
- * is used to build a BOM by handling the list of labels in schematic because in a
+ * is used to build a List of Labels by handling the list of labels in schematic because in a
  * complex hierarchy, a label is used more than once and has more than one sheet path
  * so we must create a flat list of labels.
  */
@@ -512,7 +513,11 @@ public:
 
     const SCH_SHEET_PATH& GetSheetPath() const { return m_sheetPath; }
 
-    wxString GetText() const;
+    wxString GetText() const
+    {
+        const SCH_TEXT* tmp = (SCH_TEXT*) m_label;
+        return tmp->GetText();
+    }
 };
 
 

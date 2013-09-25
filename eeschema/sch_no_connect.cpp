@@ -188,8 +188,8 @@ void SCH_NO_CONNECT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-void SCH_NO_CONNECT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                     SCH_SHEET_PATH*          aSheetPath )
+void SCH_NO_CONNECT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                                     SCH_SHEET_PATH*      aSheetPath )
 {
     NETLIST_OBJECT* item = new NETLIST_OBJECT();
 

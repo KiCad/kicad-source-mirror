@@ -37,8 +37,8 @@
 #include <wxEeschemaStruct.h>
 #include <invoke_sch_dialog.h>
 
-#include <general.h>
 #include <netlist.h>
+#include <class_netlist_object.h>
 #include <sch_marker.h>
 #include <sch_sheet.h>
 #include <lib_pin.h>
