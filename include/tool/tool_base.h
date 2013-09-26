@@ -80,7 +80,7 @@ public:
 		return m_toolName;
 	}
 
-	TOOL_MANAGER* GetManager()
+	TOOL_MANAGER* GetManager() const
 	{
 		return m_toolMgr;
 	}
@@ -96,8 +96,8 @@ protected:
 	 */
 	void attachManager( TOOL_MANAGER* aManager );
 
-	KiGfx::VIEW* getView();
-	KiGfx::VIEW_CONTROLS* getViewControls();
+	KiGfx::VIEW* getView() const;
+	KiGfx::VIEW_CONTROLS* getViewControls() const;
 	
 	/**
 	 * Function getEditFrame()
@@ -106,7 +106,7 @@ protected:
 	 * run-time type check
 	 */
 	template<typename T>
-	T* getEditFrame()
+	T* getEditFrame() const
 	{
 		return static_cast<T*>( getEditFrameInt() );
 	}
@@ -117,10 +117,10 @@ protected:
 	 * Returns the model object if it matches the requested type.
 	 */
 	template<typename T> 
-	T* getModel( KICAD_T modelType ) 
+	T* getModel( KICAD_T modelType ) const
 	{
 		EDA_ITEM* m = getModelInt();
-//		assert(modelType == m->Type());
+
 		return static_cast<T*>( m );
 	}
 
@@ -132,8 +132,8 @@ protected:
 private:
 	// hide the implementation to avoid spreading half of
 	// kicad and wxWidgets headers to the tools that may not need them at all!
-	EDA_ITEM* getModelInt();
-	wxWindow* getEditFrameInt();
+	EDA_ITEM* getModelInt() const;
+	wxWindow* getEditFrameInt() const;
 };
 
 #endif
