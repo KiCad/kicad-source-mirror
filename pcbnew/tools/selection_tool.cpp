@@ -312,21 +312,19 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 {
     BOARD_ITEM* current = NULL;
     boost::shared_ptr<BRIGHT_BOX> brightBox;
-
-    m_menu.reset( new CONTEXT_MENU() );
-    m_menu->SetTitle( _( "Clarify selection" ) );
+    CONTEXT_MENU m_menu;
 
     int limit = std::min( 10, aCollector->GetCount() );
-
     for( int i = 0; i < limit; ++i )
     {
         wxString text;
         BOARD_ITEM* item = ( *aCollector )[i];
         text = item->GetSelectMenuText();
-        m_menu->Add( text, i );
+        m_menu.Add( text, i );
     }
 
-    SetContextMenu( m_menu.get(), CMENU_NOW );
+    m_menu.SetTitle( _( "Clarify selection" ) );
+    SetContextMenu( &m_menu, CMENU_NOW );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -350,14 +348,8 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         {
             optional<int> id = evt->GetCommandId();
 
-            if( current )
-                current->ClearSelected();
-
             if( id && ( *id >= 0 ) )
-            {
                 current = ( *aCollector )[*id];
-                current->SetSelected();
-            }
 
             break;
         }
@@ -371,11 +363,12 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     }
 
     getView()->MarkTargetDirty( TARGET_OVERLAY );
+
     return current;
 }
 
 
-bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
+bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 {
     bool highContrast = getView()->GetPainter()->GetSettings()->GetHighContrast();
 
@@ -443,7 +436,11 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem )
         // These are not selectable, otherwise silkscreen drawings would be easily destroyed
         return false;
         break;
+
+    default:    // Suppress warnings
+        break;
     }
+
 
     // All other items are selected only if the layer on which they exist is visible
     return board->IsLayerVisible( aItem->GetLayer() );
