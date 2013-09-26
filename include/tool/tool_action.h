@@ -26,7 +26,7 @@
 #define __TOOL_ACTION_H
 
 #include <string>
-#include <wx/wx.h>
+#include <cassert>
 
 #include <tool/tool_base.h>
 #include <tool/action_manager.h>
@@ -38,8 +38,9 @@
 class TOOL_ACTION
 {
 public:
-    TOOL_ACTION( const std::string& aName, TOOL_ActionScope aScope = AS_CONTEXT, int aDefaultHotKey = 0,
-                 const wxString& aMenuItem = wxT( "" ), const wxString& aMenuDesc = wxT( "" ) ) :
+    TOOL_ACTION( const std::string& aName, TOOL_ActionScope aScope = AS_CONTEXT,
+                 int aDefaultHotKey = 0, const std::string& aMenuItem = std::string( "" ),
+                 const std::string& aMenuDesc = std::string( "" ) ) :
             m_name( aName ), m_scope( aScope ), m_defaultHotKey( aDefaultHotKey ),
                 m_currentHotKey( aDefaultHotKey ), m_menuItem( aMenuItem ),
                 m_menuDescription( aMenuDesc ), m_id( -1 ), m_actionMgr( NULL )
@@ -87,6 +88,15 @@ public:
     }
 
     /**
+     * Function GetHotKey()
+     * Returns the associated hot key.
+     */
+    int GetHotKey() const
+    {
+        return m_currentHotKey;
+    }
+
+    /**
      * Function ChangeHotKey()
      * Assigns a new hot key.
      *
@@ -94,8 +104,8 @@ public:
      */
     void ChangeHotKey( int aNewHotKey )
     {
-        wxASSERT_MSG( false, wxT( "It is not fully implemented yet") );
-        // I mean it has to be changed in the ACTION_MANAGER, or change the implementation
+        assert( false );
+        // hotkey has to be changed in the ACTION_MANAGER, or change the implementation
         m_currentHotKey = aNewHotKey;
     }
 
@@ -105,8 +115,8 @@ public:
      */
     void RestoreHotKey()
     {
-        wxASSERT_MSG( false, wxT( "It is not fully implemented yet") );
-        // I mean it has to be changed in the ACTION_MANAGER, or change the implementation
+        assert( false );
+        // hotkey has to be changed in the ACTION_MANAGER, or change the implementation
         m_currentHotKey = m_defaultHotKey;
     }
 
@@ -132,6 +142,26 @@ public:
     TOOL_EVENT GetEvent() const
     {
         return TOOL_EVENT( TC_Command, TA_Action, m_name, m_scope );
+    }
+
+    const std::string& GetMenuItem() const
+    {
+        return m_menuItem;
+    }
+
+    void SetMenuItem( const std::string& aItem )
+    {
+        m_menuItem = aItem;
+    }
+
+    const std::string& GetDescription() const
+    {
+        return m_menuDescription;
+    }
+
+    void SetDescription( const std::string& aDescription )
+    {
+        m_menuDescription = aDescription;
     }
 
 private:
@@ -162,10 +192,10 @@ private:
     int m_currentHotKey;
 
     /// Menu entry text
-    wxString m_menuItem;
+    std::string m_menuItem;
 
     /// Pop-up help
-    wxString m_menuDescription;
+    std::string m_menuDescription;
 
     // Icon for menu entry
     //KiBitmap m_bitmap;
@@ -182,4 +212,5 @@ private:
     /// Originating UI object
 //    wxWindow* m_uiOrigin;
 };
+
 #endif

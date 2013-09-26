@@ -25,7 +25,8 @@
 #ifndef __CONTEXT_MENU_H
 #define __CONTEXT_MENU_H
 
-#include <wx/string.h>
+#include <wx/menu.h>
+#include <tool/tool_action.h>
 
 class wxMenu;
 class TOOL_INTERACTIVE;
@@ -41,23 +42,29 @@ class CONTEXT_MENU
 
 public:
 	CONTEXT_MENU();
-	~CONTEXT_MENU();
+	CONTEXT_MENU( const CONTEXT_MENU& aMenu );
 
 	void SetTitle( const wxString& aTitle );
-	void Add( const wxString& aItem, int aId );
-	
-	// fixme: unimplemented
-	// void Add ( const TOOL_ACTION& aAction, int aId = -1 );
-	
+	void Add( const wxString& aLabel, int aId );
+	void Add( const TOOL_ACTION& aAction, int aId = -1 );
 	void Clear();
 
 	wxMenu* GetMenu() const
 	{
-		return m_menu;
+		return const_cast<wxMenu*>( &m_menu );
 	}
 
 private:
-	class CMEventHandler;
+	class CMEventHandler : public wxEvtHandler
+	{
+	public:
+	    CMEventHandler( CONTEXT_MENU* aMenu ) : m_menu( aMenu ) {};
+
+	    void onEvent( wxEvent& aEvent );
+
+	private:
+	    CONTEXT_MENU* m_menu;
+	};
 	
 	friend class TOOL_INTERACTIVE;
 
@@ -66,10 +73,19 @@ private:
 		m_tool = aTool;
 	}
 
+	/**
+	 * Returns a hot key in the string format accepted by wxMenu.
+	 *
+	 * @param aAction is the action with hot key to be converted.
+	 * @return Hot key in the string format compatible with wxMenu.
+	 */
+	std::string getHotKeyDescription( const TOOL_ACTION& aAction ) const;
+
+	/// Flag indicating that the menu title was set up
 	bool m_titleSet;
 
-	wxMenu* m_menu;
-	CMEventHandler* m_handler;
+	wxMenu m_menu;
+	CMEventHandler m_handler;
 	TOOL_INTERACTIVE* m_tool;
 };
 

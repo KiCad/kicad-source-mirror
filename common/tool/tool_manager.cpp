@@ -26,6 +26,7 @@
 #include <deque>
 
 #include <boost/foreach.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/optional.hpp>
 #include <boost/range/adaptor/map.hpp>
 
@@ -380,14 +381,15 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 		{
 			if( st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( MB_Right ) )
 				break;
-			
+
 			st->pendingWait = true;
 			st->waitEvents = TOOL_EVENT( TC_Any, TA_Any );
-			
+
 			if( st->contextMenuTrigger == CMENU_NOW )
 				st->contextMenuTrigger = CMENU_OFF;
-			
-			GetEditFrame()->PopupMenu( st->contextMenu->GetMenu() );
+
+            boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *st->contextMenu ) );
+            GetEditFrame()->PopupMenu( menu->GetMenu() );
 
 			TOOL_EVENT evt( TC_Command, TA_ContextMenuChoice );
 			dispatchInternal( evt );
