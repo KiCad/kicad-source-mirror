@@ -1031,7 +1031,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 
     // Save pads.
     for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
-        Format( pad, aNestLevel+1 );
+        format( pad, aNestLevel+1 );
 
     // Save 3D info.
     for( S3D_MASTER* t3D = aModule->Models();  t3D;  t3D = t3D->Next() )
@@ -1067,7 +1067,12 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
     throw( IO_ERROR )
 {
-    m_out->Print( aNestLevel, "(layers" );
+    std::string  output;
+
+    if( aNestLevel == 0 )
+        output += ' ';
+
+    output += "(layers";
 
     LAYER_MSK cuMask = ALL_CU_LAYERS;
 
@@ -1078,36 +1083,36 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
 
     if( ( aLayerMask & cuMask ) == cuMask )
     {
-        m_out->Print( 0, " *.Cu" );
+        output += " *.Cu";
         aLayerMask &= ~ALL_CU_LAYERS;       // clear bits, so they are not output again below
     }
     else if( ( aLayerMask & cuMask ) == (LAYER_BACK | LAYER_FRONT) )
     {
-        m_out->Print( 0, " F&B.Cu" );
+        output += " F&B.Cu";
         aLayerMask &= ~(LAYER_BACK | LAYER_FRONT);
     }
 
     if( ( aLayerMask & (ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT)) == (ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT) )
     {
-        m_out->Print( 0, " *.Adhes" );
+        output += " *.Adhes";
         aLayerMask &= ~(ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT);
     }
 
     if( ( aLayerMask & (SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT)) == (SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT) )
     {
-        m_out->Print( 0, " *.Paste" );
+        output += " *.Paste";
         aLayerMask &= ~(SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT);
     }
 
     if( ( aLayerMask & (SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT)) == (SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT) )
     {
-        m_out->Print( 0, " *.SilkS" );
+        output += " *.SilkS";
         aLayerMask &= ~(SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT);
     }
 
     if( ( aLayerMask & (SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT)) == (SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT) )
     {
-        m_out->Print( 0, " *.Mask" );
+        output += " *.Mask";
         aLayerMask &= ~(SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT);
     }
 
@@ -1128,11 +1133,12 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
             else    // I am being called from FootprintSave()
                 layerName = BOARD::GetStandardLayerName( layer );
 
-            m_out->Print( 0, " %s", m_out->Quotew( layerName ).c_str() );
+            output += ' ';
+            output += m_out->Quotew( layerName );
         }
     }
 
-    m_out->Print( 0, ")\n" );
+    m_out->Print( aNestLevel, "%s)", output.c_str() );
 }
 
 
@@ -1203,49 +1209,46 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, ")" );
     }
 
-    m_out->Print( 0, "\n" );
+    formatLayers( aPad->GetLayerMask(), 0 );
 
-    formatLayers( aPad->GetLayerMask(), aNestLevel+1 );
+    std::string output;
 
     // Unconnected pad is default net so don't save it.
     if( !(m_ctl & CTL_OMIT_NETS) && aPad->GetNet() != 0 )
-    {
-        m_out->Print( aNestLevel+1, "(net %d %s)\n",
-                      aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
-    }
+        strprintf( &output, " (net %d %s)", aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
 
     if( aPad->GetPadToDieLength() != 0 )
-        m_out->Print( aNestLevel+1, "(die_length %s)\n",
-                      FMT_IU( aPad->GetPadToDieLength() ).c_str() );
+        strprintf( &output, " (die_length %s)", FMT_IU( aPad->GetPadToDieLength() ).c_str() );
 
     if( aPad->GetLocalSolderMaskMargin() != 0 )
-        m_out->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
-                      FMT_IU( aPad->GetLocalSolderMaskMargin() ).c_str() );
+        strprintf( &output, " (solder_mask_margin %s)", FMT_IU( aPad->GetLocalSolderMaskMargin() ).c_str() );
 
     if( aPad->GetLocalSolderPasteMargin() != 0 )
-        m_out->Print( aNestLevel+1, "(solder_paste_margin %s)\n",
-                      FMT_IU( aPad->GetLocalSolderPasteMargin() ).c_str() );
+        strprintf( &output, " (solder_paste_margin %s)", FMT_IU( aPad->GetLocalSolderPasteMargin() ).c_str() );
 
     if( aPad->GetLocalSolderPasteMarginRatio() != 0 )
-        m_out->Print( aNestLevel+1, "(solder_paste_margin_ratio %s)\n",
-                      Double2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
+        strprintf( &output, " (solder_paste_margin_ratio %s)",
+                Double2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
 
     if( aPad->GetLocalClearance() != 0 )
-        m_out->Print( aNestLevel+1, "(clearance %s)\n",
-                      FMT_IU( aPad->GetLocalClearance() ).c_str() );
+        strprintf( &output, " (clearance %s)", FMT_IU( aPad->GetLocalClearance() ).c_str() );
 
     if( aPad->GetZoneConnection() != UNDEFINED_CONNECTION )
-        m_out->Print( aNestLevel+1, "(zone_connect %d)\n", aPad->GetZoneConnection() );
+        strprintf( &output, " (zone_connect %d)", aPad->GetZoneConnection() );
 
     if( aPad->GetThermalWidth() != 0 )
-        m_out->Print( aNestLevel+1, "(thermal_width %s)\n",
-                      FMT_IU( aPad->GetThermalWidth() ).c_str() );
+        strprintf( &output, " (thermal_width %s)", FMT_IU( aPad->GetThermalWidth() ).c_str() );
 
     if( aPad->GetThermalGap() != 0 )
-        m_out->Print( aNestLevel+1, "(thermal_gap %s)\n",
-                      FMT_IU( aPad->GetThermalGap() ).c_str() );
+        strprintf( &output, " (thermal_gap %s)", FMT_IU( aPad->GetThermalGap() ).c_str() );
 
-    m_out->Print( aNestLevel, ")\n" );
+    if( output.size() )
+    {
+        m_out->Print( 0, "\n" );
+        m_out->Print( aNestLevel+1, "%s", output.c_str() + 1 );   // +1 skips initial space on first element
+    }
+
+    m_out->Print( 0, ")\n" );
 }
 
 
