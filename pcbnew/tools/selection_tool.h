@@ -31,6 +31,7 @@
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_action.h>
+#include <tool/context_menu.h>
 
 class SELECTION_AREA;
 class BOARD_ITEM;
@@ -54,12 +55,11 @@ public:
     SELECTION_TOOL();
     ~SELECTION_TOOL();
 
-    /**
-     * Function Reset()
-     *
-     * Initializes the selection tool.
-     */
+    /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset();
+
+    /// @copydoc TOOL_INTERACTIVE::Init()
+    bool Init();
 
     /**
      * Function Main()
@@ -77,6 +77,14 @@ public:
     {
         return m_selectedItems;
     }
+
+    /**
+     * Function AddAction()
+     *
+     * Adds a menu entry to run a TOOL_ACTION on selected items.
+     * @param aAction is a menu entry to be added.
+     */
+    void AddMenuItem( const TOOL_ACTION& aAction );
 
 private:
     /**
@@ -136,6 +144,37 @@ private:
     bool selectable( const BOARD_ITEM* aItem ) const;
 
     /**
+     * Function selectItem()
+     * Takes necessary action mark an item as selected.
+     *
+     * @param aItem is an item to be selected.
+     */
+    void selectItem( BOARD_ITEM* aItem )
+    {
+        aItem->SetSelected();
+        m_selectedItems.insert( aItem );
+
+        // Now the context menu should be enabled
+        SetContextMenu( &m_menu, CMENU_BUTTON );
+    }
+
+    /**
+     * Function deselectItem()
+     * Takes necessary action mark an item as deselected.
+     *
+     * @param aItem is an item to be deselected.
+     */
+    void deselectItem( BOARD_ITEM* aItem )
+    {
+        aItem->ClearSelected();
+        m_selectedItems.erase( aItem );
+
+        if( m_selectedItems.empty() )
+            // If there is nothing selected, disable the context menu
+            SetContextMenu( &m_menu, CMENU_OFF );
+    }
+
+    /**
      * Function containsSelected()
      * Checks if the given point is placed within any of selected items' bounding box.
      *
@@ -157,6 +196,9 @@ private:
 
     /// Register hotkey fot activation of the selection tool
     TOOL_ACTION m_activate;
+
+    /// Right click popup menu
+    CONTEXT_MENU m_menu;
 };
 
 #endif

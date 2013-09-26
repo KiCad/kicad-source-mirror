@@ -51,12 +51,11 @@ public:
     MOVE_TOOL();
     ~MOVE_TOOL();
 
-    /**
-     * Function Reset()
-     *
-     * Resets the tool and initializes it.
-     */
+    /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset();
+
+    /// @copydoc TOOL_INTERACTIVE::Init()
+    bool Init();
 
     /**
      * Function Main()

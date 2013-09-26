@@ -40,7 +40,6 @@ public:
      * @param aToolManager is a tool manager instance that is used to pass events to tools.
      */
     ACTION_MANAGER( TOOL_MANAGER* aToolManager );
-    ~ACTION_MANAGER();
 
     /**
      * Function RegisterAction()

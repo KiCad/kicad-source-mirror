@@ -129,7 +129,21 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 	aTool->m_toolMgr = this;
 	
 	if( aTool->GetType() == TOOL_Interactive )
-		static_cast<TOOL_INTERACTIVE*>( aTool )->Reset();
+	{
+		bool initState = static_cast<TOOL_INTERACTIVE*>( aTool )->Init();
+		if( !initState )
+		{
+		    wxLogError( wxT( "Initialization of the %s tool failed" ), aTool->GetName() );
+
+		    // Unregister the tool
+		    m_toolState.erase( aTool );
+		    m_toolNameIndex.erase( aTool->GetName() );
+		    m_toolIdIndex.erase( aTool->GetId() );
+
+		    delete st;
+		    delete aTool;
+		}
+	}
 }
 
 
