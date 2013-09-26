@@ -144,22 +144,22 @@ public:
                          KiGfx::VIEW_CONTROLS* aViewControls, wxWindow* aFrame );
 
     /* Accessors for the environment objects (view, model, etc.) */
-    KiGfx::VIEW* GetView()
+    KiGfx::VIEW* GetView() const
     {
         return m_view;
     }
 
-    KiGfx::VIEW_CONTROLS* GetViewControls()
+    KiGfx::VIEW_CONTROLS* GetViewControls() const
     {
         return m_viewControls;
     }
 
-    EDA_ITEM* GetModel()
+    EDA_ITEM* GetModel() const
     {
         return m_model;
     }
 
-    wxWindow* GetEditFrame()
+    wxWindow* GetEditFrame() const
     {
         return m_editFrame;
     }

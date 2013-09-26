@@ -25,25 +25,25 @@
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 
-KiGfx::VIEW* TOOL_BASE::getView()
+KiGfx::VIEW* TOOL_BASE::getView() const
 {
 	return m_toolMgr->GetView();
 }
 
 
-KiGfx::VIEW_CONTROLS* TOOL_BASE::getViewControls()
+KiGfx::VIEW_CONTROLS* TOOL_BASE::getViewControls() const
 {	
 	return m_toolMgr->GetViewControls();
 }
 
 
-wxWindow* TOOL_BASE::getEditFrameInt()
+wxWindow* TOOL_BASE::getEditFrameInt() const
 {
 	return m_toolMgr->GetEditFrame();
 }
 
 
-EDA_ITEM* TOOL_BASE::getModelInt()
+EDA_ITEM* TOOL_BASE::getModelInt() const
 {
 	return m_toolMgr->GetModel();
 }
