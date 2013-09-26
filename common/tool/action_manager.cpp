@@ -26,6 +26,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_event.h>
 #include <tool/tool_action.h>
+#include <cassert>
 
 ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
     m_toolMgr( aToolManager )
@@ -33,15 +34,11 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
 }
 
 
-ACTION_MANAGER::~ACTION_MANAGER()
-{
-}
-
-
 void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 {
-    int aId = MakeActionId( aAction->m_name );
-    aAction->setId( aId );
+    assert( aAction->GetId() == -1 );   // Check if the TOOL_ACTION was not registered before
+
+    aAction->setId( MakeActionId( aAction->m_name ) );
 
     m_actionNameIndex[aAction->m_name] = aAction;
     m_actionIdIndex[aAction->m_id] = aAction;

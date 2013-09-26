@@ -27,6 +27,7 @@
 
 #include <wx/menu.h>
 #include <tool/tool_action.h>
+#include <map>
 
 class wxMenu;
 class TOOL_INTERACTIVE;
@@ -46,7 +47,7 @@ public:
 
 	void SetTitle( const wxString& aTitle );
 	void Add( const wxString& aLabel, int aId );
-	void Add( const TOOL_ACTION& aAction, int aId = -1 );
+	void Add( const TOOL_ACTION& aAction );
 	void Clear();
 
 	wxMenu* GetMenu() const
@@ -87,6 +88,12 @@ private:
 	wxMenu m_menu;
 	CMEventHandler m_handler;
 	TOOL_INTERACTIVE* m_tool;
+
+    /// Menu items with ID higher than that are considered TOOL_ACTIONs
+    static const int m_actionId = 10000;
+
+    /// Stores tool actions that are choosable from the menu. Does not take the ownership.
+    std::map<int, const TOOL_ACTION*> m_toolActions;
 };
 
 #endif

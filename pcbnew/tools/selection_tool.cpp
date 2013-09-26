@@ -25,6 +25,7 @@
 
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
+#include <cassert>
 
 #include <class_drawpanel_gal.h>
 #include <class_board.h>
@@ -37,7 +38,6 @@
 #include <view/view_controls.h>
 #include <painter.h>
 
-#include <tool/context_menu.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 
@@ -65,7 +65,6 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 void SELECTION_TOOL::Reset()
 {
-    m_toolMgr->RegisterAction( &m_activate );
     m_selectedItems.clear();
 
     // The tool launches upon reception of action event ("pcbnew.InteractiveSelection")
@@ -73,11 +72,19 @@ void SELECTION_TOOL::Reset()
 }
 
 
+bool SELECTION_TOOL::Init()
+{
+    m_toolMgr->RegisterAction( &m_activate );
+
+    return true;
+}
+
+
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>( PCB_T );
 
-    wxASSERT( board != NULL );
+    assert( board != NULL );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -91,7 +98,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             if( !m_selectedItems.empty() )  // Cancel event deselects items...
                 clearSelection();
             else                            // ...unless there is nothing selected
-                break;
+                break;                      // then exit the tool
         }
 
         // single click? Select single object
@@ -126,12 +133,19 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 }
 
 
+void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
+{
+    assert( aAction.GetId() > 0 );  // Check if the action was registered before
+
+    m_menu.Add( aAction );
+}
+
+
 void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 {
     if( m_selectedItems.find( aItem ) != m_selectedItems.end() )
     {
-        aItem->ClearSelected();
-        m_selectedItems.erase( aItem );
+        deselectItem( aItem );
     }
     else
     {
@@ -140,10 +154,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 
         // Prevent selection of invisible or inactive items
         if( selectable( aItem ) )
-        {
-            aItem->SetSelected();
-            m_selectedItems.insert( aItem );
-        }
+            selectItem( aItem );
     }
 }
 
@@ -156,6 +167,9 @@ void SELECTION_TOOL::clearSelection()
     }
 
     m_selectedItems.clear();
+
+    // Do not show the context menu when there is nothing selected
+    SetContextMenu( &m_menu, CMENU_OFF );
 }
 
 
@@ -198,6 +212,7 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         else if( collector.GetCount() > 1 )
         {
             item = disambiguationMenu( &collector );
+
             if( item )
                 toggleSelection( item );
         }
@@ -296,6 +311,10 @@ bool SELECTION_TOOL::selectMultiple()
                     m_selectedItems.insert( item );
                 }
             }
+
+            // Now the context menu should be enabled
+            if( !m_selectedItems.empty() )
+                SetContextMenu( &m_menu, CMENU_BUTTON );
             break;
         }
     }
@@ -312,7 +331,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 {
     BOARD_ITEM* current = NULL;
     boost::shared_ptr<BRIGHT_BOX> brightBox;
-    CONTEXT_MENU m_menu;
+    CONTEXT_MENU menu;
 
     int limit = std::min( 10, aCollector->GetCount() );
     for( int i = 0; i < limit; ++i )
@@ -320,11 +339,11 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         wxString text;
         BOARD_ITEM* item = ( *aCollector )[i];
         text = item->GetSelectMenuText();
-        m_menu.Add( text, i );
+        menu.Add( text, i );
     }
 
-    m_menu.SetTitle( _( "Clarify selection" ) );
-    SetContextMenu( &m_menu, CMENU_NOW );
+    menu.SetTitle( _( "Clarify selection" ) );
+    SetContextMenu( &menu, CMENU_NOW );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -363,6 +382,9 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     }
 
     getView()->MarkTargetDirty( TARGET_OVERLAY );
+
+    // Restore the original menu
+    SetContextMenu( &m_menu, CMENU_BUTTON );
 
     return current;
 }

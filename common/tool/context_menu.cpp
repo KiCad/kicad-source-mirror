@@ -61,6 +61,9 @@ CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu ) :
         m_menu.Append( new wxMenuItem( &m_menu, item->GetId(), item->GetItemLabel(),
                         wxEmptyString, wxITEM_NORMAL ) );
     }
+
+    // Copy tool actions that are available to choose from menu
+    m_toolActions = aMenu.m_toolActions;
 }
 
 
@@ -86,11 +89,20 @@ void CONTEXT_MENU::Add( const wxString& aLabel, int aId )
 }
 
 
-void CONTEXT_MENU::Add( const TOOL_ACTION& aAction, int aId )
+void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 {
-    m_menu.Append( new wxMenuItem( &m_menu, aId,
-                    wxString( aAction.GetDescription() + '\t' + getHotKeyDescription( aAction ) ),
-                    wxEmptyString, wxITEM_NORMAL ) );
+    int id = m_actionId + aAction.GetId();
+    wxString menuEntry;
+
+    if( aAction.HasHotKey() )
+        menuEntry = wxString( aAction.GetMenuItem() + '\t' + getHotKeyDescription( aAction ) );
+    else
+        menuEntry = wxString( aAction.GetMenuItem() );
+
+    m_menu.Append( new wxMenuItem( &m_menu, id, menuEntry,
+                    wxString( aAction.GetDescription() ), wxITEM_NORMAL ) );
+
+    m_toolActions[id] = &aAction;
 }
 
 
@@ -100,6 +112,8 @@ void CONTEXT_MENU::Clear()
 
 	for( unsigned i = 0; i < m_menu.GetMenuItemCount(); ++i )
 	    m_menu.Destroy( m_menu.FindItemByPosition( 0 ) );
+
+	m_toolActions.clear();
 }
 
 
@@ -131,7 +145,17 @@ void CONTEXT_MENU::CMEventHandler::onEvent( wxEvent& aEvent )
     if( type == wxEVT_MENU_HIGHLIGHT )
         evt = TOOL_EVENT( TC_Command, TA_ContextMenuUpdate, aEvent.GetId() );
     else if( type == wxEVT_COMMAND_MENU_SELECTED )
-        evt = TOOL_EVENT( TC_Command, TA_ContextMenuChoice, aEvent.GetId() );
+    {
+        if( aEvent.GetId() > m_actionId )
+        {
+            if( m_menu->m_toolActions.count( aEvent.GetId() ) == 1 )
+                evt = m_menu->m_toolActions[aEvent.GetId()]->GetEvent();
+        }
+        else
+        {
+            evt = TOOL_EVENT( TC_Command, TA_ContextMenuChoice, aEvent.GetId() );
+        }
+    }
 
     if( m_menu->m_tool )
         m_menu->m_tool->GetManager()->ProcessEvent( evt );

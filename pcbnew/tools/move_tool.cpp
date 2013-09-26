@@ -50,26 +50,37 @@ MOVE_TOOL::~MOVE_TOOL()
 
 void MOVE_TOOL::Reset()
 {
+    // The tool launches upon reception of action event ("pcbnew.InteractiveMove")
+    Go( &MOVE_TOOL::Main, m_activate.GetEvent() );
+}
+
+
+bool MOVE_TOOL::Init()
+{
     // Find the selection tool, so they can cooperate
-    TOOL_BASE* selectionTool = m_toolMgr->FindTool( std::string( "pcbnew.InteractiveSelection" ) );
+    TOOL_BASE* selectionTool = m_toolMgr->FindTool( "pcbnew.InteractiveSelection" );
 
     if( selectionTool )
     {
         m_selectionTool = static_cast<SELECTION_TOOL*>( selectionTool );
+
+        // Activate hot keys
+        m_toolMgr->RegisterAction( &m_activate );
+        m_toolMgr->RegisterAction( &m_rotate );
+        m_toolMgr->RegisterAction( &m_flip );
+
+        // Add context menu entries for the selection tool
+        m_selectionTool->AddMenuItem( m_activate );
+        m_selectionTool->AddMenuItem( m_rotate );
+        m_selectionTool->AddMenuItem( m_flip );
     }
     else
     {
         wxLogError( "pcbnew.InteractiveSelection tool is not available" );
-        return;
+        return false;
     }
 
-    // Activate hotkeys
-    m_toolMgr->RegisterAction( &m_activate );
-    m_toolMgr->RegisterAction( &m_rotate );
-    m_toolMgr->RegisterAction( &m_flip );
-
-    // the tool launches upon reception of action event ("pcbnew.InteractiveMove")
-    Go( &MOVE_TOOL::Main, m_activate.GetEvent() );
+    return true;
 }
 
 

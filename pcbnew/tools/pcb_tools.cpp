@@ -45,7 +45,7 @@ void PCB_EDIT_FRAME::setupTools()
 	m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
 	m_galCanvas->SetEventDispatcher( m_toolDispatcher );
 
-	// Register tools.
+	// Register tools
 	m_toolManager->RegisterTool( new SELECTION_TOOL );
 	m_toolManager->RegisterTool( new ROUTER_TOOL );
 	m_toolManager->RegisterTool( new MOVE_TOOL );
