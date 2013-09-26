@@ -126,7 +126,6 @@ set( PCBNEW_AUTOROUTER_SRCS
 
 set( PCBNEW_CLASS_SRCS
     tool_modview.cpp
-    modview.cpp
     modview_frame.cpp
     pcbframe.cpp
     attribut.cpp
