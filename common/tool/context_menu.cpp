@@ -37,7 +37,7 @@ CONTEXT_MENU::CONTEXT_MENU() :
 	                 NULL, &m_handler );
 
 	// Workaround for the case when mouse cursor never reaches menu (it hangs up tools using menu)
-	wxMenuEvent menuEvent( wxEVT_MENU_HIGHLIGHT, 0, &m_menu );
+	wxMenuEvent menuEvent( wxEVT_MENU_HIGHLIGHT, -1, &m_menu );
 	m_menu.AddPendingEvent( menuEvent );
 }
 
@@ -51,7 +51,7 @@ CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu ) :
                      NULL, &m_handler );
 
     // Workaround for the case when mouse cursor never reaches menu (it hangs up tools using menu)
-    wxMenuEvent menuEvent( wxEVT_MENU_HIGHLIGHT, 0, &m_menu );
+    wxMenuEvent menuEvent( wxEVT_MENU_HIGHLIGHT, -1, &m_menu );
     m_menu.AddPendingEvent( menuEvent );
 
     // Copy all the menu entries
