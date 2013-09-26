@@ -27,7 +27,6 @@
 #define __SELECTION_TOOL_H
 
 #include <set>
-#include <boost/shared_ptr.hpp>
 
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
@@ -134,7 +133,7 @@ private:
      *
      * @return True if the item fulfills conditions to be selected.
      */
-    bool selectable( const BOARD_ITEM* aItem );
+    bool selectable( const BOARD_ITEM* aItem ) const;
 
     /**
      * Function containsSelected()
@@ -149,9 +148,6 @@ private:
 
     /// Visual representation of selection box
     SELECTION_AREA* m_selArea;
-
-    /// Menu shown in case of selection ambiguity
-    boost::shared_ptr<CONTEXT_MENU> m_menu;
 
     /// Flag saying if items should be added to the current selection or rather replace it
     bool m_additive;
