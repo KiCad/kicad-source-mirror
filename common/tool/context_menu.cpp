@@ -22,62 +22,45 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
-#include <wx/menu.h>
-
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_interactive.h>
-
 #include <tool/context_menu.h>
+#include <cassert>
 
-class CONTEXT_MENU::CMEventHandler : public wxEvtHandler
+CONTEXT_MENU::CONTEXT_MENU() :
+    m_titleSet( false ), m_handler( this ), m_tool( NULL )
 {
-public:
-	CMEventHandler( CONTEXT_MENU* aMenu ):
-		m_menu( aMenu ) {};
-
-	void onEvent( wxEvent& aEvent )
-	{
-		TOOL_EVENT evt;
-		wxEventType type = aEvent.GetEventType();
-
-		if( type == wxEVT_MENU_HIGHLIGHT )
-			evt = TOOL_EVENT( TC_Command, TA_ContextMenuUpdate, aEvent.GetId() );
-		else if( type == wxEVT_COMMAND_MENU_SELECTED )
-			evt = TOOL_EVENT( TC_Command, TA_ContextMenuChoice, aEvent.GetId() );
-		
-		if( m_menu->m_tool )
-			m_menu->m_tool->GetManager()->ProcessEvent( evt );
-	}
-
-private:
-	CONTEXT_MENU* m_menu;
-};
-
-
-CONTEXT_MENU::CONTEXT_MENU()
-{
-	m_tool = NULL;
-	m_menu = new wxMenu();
-	m_handler = new CMEventHandler( this );
-	m_menu->Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CMEventHandler::onEvent ),
-	                 NULL, m_handler );
-	m_menu->Connect( wxEVT_COMMAND_MENU_SELECTED, wxEventHandler( CMEventHandler::onEvent ),
-	                 NULL, m_handler );
+	m_menu.Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CMEventHandler::onEvent ),
+	                 NULL, &m_handler );
+	m_menu.Connect( wxEVT_COMMAND_MENU_SELECTED, wxEventHandler( CMEventHandler::onEvent ),
+	                 NULL, &m_handler );
 
 	// Workaround for the case when mouse cursor never reaches menu (it hangs up tools using menu)
-	wxMenuEvent menuEvent( wxEVT_MENU_HIGHLIGHT, 0, m_menu );
-	m_menu->AddPendingEvent( menuEvent );
-
-	m_titleSet = false;
+	wxMenuEvent menuEvent( wxEVT_MENU_HIGHLIGHT, 0, &m_menu );
+	m_menu.AddPendingEvent( menuEvent );
 }
 
 
-CONTEXT_MENU::~CONTEXT_MENU()
+CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu ) :
+    m_titleSet( aMenu.m_titleSet ), m_handler( this ), m_tool( aMenu.m_tool )
 {
-	delete m_menu;
-	delete m_handler;
+    m_menu.Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CMEventHandler::onEvent ),
+                     NULL, &m_handler );
+    m_menu.Connect( wxEVT_COMMAND_MENU_SELECTED, wxEventHandler( CMEventHandler::onEvent ),
+                     NULL, &m_handler );
+
+    // Workaround for the case when mouse cursor never reaches menu (it hangs up tools using menu)
+    wxMenuEvent menuEvent( wxEVT_MENU_HIGHLIGHT, 0, &m_menu );
+    m_menu.AddPendingEvent( menuEvent );
+
+    // Copy all the menu entries
+    for( unsigned i = 0; i < aMenu.m_menu.GetMenuItemCount(); ++i )
+    {
+        wxMenuItem* item = aMenu.m_menu.FindItemByPosition( i );
+        m_menu.Append( new wxMenuItem( &m_menu, item->GetId(), item->GetItemLabel(),
+                        wxEmptyString, wxITEM_NORMAL ) );
+    }
 }
 
 
@@ -86,23 +69,70 @@ void CONTEXT_MENU::SetTitle( const wxString& aTitle )
     // Unfortunately wxMenu::SetTitle() does nothing..
 	if( m_titleSet )
 	{
-        m_menu->Delete( m_menu->FindItemByPosition( 0 ) ); // fixme: this is LAME!
-        m_menu->Delete( m_menu->FindItemByPosition( 0 ) );
+        m_menu.FindItemByPosition( 0 )->SetItemLabel( aTitle );
 	}
-	
-	m_menu->InsertSeparator( 0 );
-	m_menu->Insert( 0, new wxMenuItem( m_menu, -1, aTitle, wxEmptyString, wxITEM_NORMAL ) );
-	m_titleSet = true;
+	else
+	{
+        m_menu.InsertSeparator( 0 );
+        m_menu.Insert( 0, new wxMenuItem( &m_menu, -1, aTitle, wxEmptyString, wxITEM_NORMAL ) );
+        m_titleSet = true;
+	}
 }
 
 
-void CONTEXT_MENU::Add( const wxString& aItem, int aId )
+void CONTEXT_MENU::Add( const wxString& aLabel, int aId )
 {
-	m_menu->Append( new wxMenuItem( m_menu, aId, aItem, wxEmptyString, wxITEM_NORMAL ) );
+	m_menu.Append( new wxMenuItem( &m_menu, aId, aLabel, wxEmptyString, wxITEM_NORMAL ) );
+}
+
+
+void CONTEXT_MENU::Add( const TOOL_ACTION& aAction, int aId )
+{
+    m_menu.Append( new wxMenuItem( &m_menu, aId,
+                    wxString( aAction.GetDescription() + '\t' + getHotKeyDescription( aAction ) ),
+                    wxEmptyString, wxITEM_NORMAL ) );
 }
 
 
 void CONTEXT_MENU::Clear()
 {
 	m_titleSet = false;
+
+	for( unsigned i = 0; i < m_menu.GetMenuItemCount(); ++i )
+	    m_menu.Destroy( m_menu.FindItemByPosition( 0 ) );
+}
+
+
+std::string CONTEXT_MENU::getHotKeyDescription( const TOOL_ACTION& aAction ) const
+{
+    int hotkey = aAction.GetHotKey();
+
+    std::string description = "";
+
+    if( hotkey & MD_ModAlt )
+        description += "ALT+";
+    if( hotkey & MD_ModCtrl )
+        description += "CTRL+";
+    if( hotkey & MD_ModShift )
+        description += "SHIFT+";
+
+    // TODO dispatch keys such as Fx, TAB, PG_UP/DN, HOME, END, etc.
+    description += char( hotkey & ~MD_ModifierMask );
+
+    return description;
+}
+
+
+void CONTEXT_MENU::CMEventHandler::onEvent( wxEvent& aEvent )
+{
+    TOOL_EVENT evt;
+    wxEventType type = aEvent.GetEventType();
+
+    if( type == wxEVT_MENU_HIGHLIGHT )
+        evt = TOOL_EVENT( TC_Command, TA_ContextMenuUpdate, aEvent.GetId() );
+    else if( type == wxEVT_COMMAND_MENU_SELECTED )
+        evt = TOOL_EVENT( TC_Command, TA_ContextMenuChoice, aEvent.GetId() );
+
+    if( m_menu->m_tool )
+        m_menu->m_tool->GetManager()->ProcessEvent( evt );
 }
