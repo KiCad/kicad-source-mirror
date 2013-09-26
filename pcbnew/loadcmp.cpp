@@ -154,7 +154,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
                                                bool            aUseFootprintViewer,
                                                wxDC*           aDC )
 {
-    MODULE*     module;
+    MODULE*     module = NULL;
     wxPoint     curspos = GetCrossHairPosition();
     wxString    moduleName, keys;
     wxString    libName = aLibrary;

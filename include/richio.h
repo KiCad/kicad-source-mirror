@@ -39,6 +39,44 @@
 
 
 /**
+ * Function vprint
+ * is like vsprintf() but the output is appended to a std::string instead of to a
+ * character array.
+ * @param result is the string to append to, previous text is not clear()ed.
+ * @param format is a printf() style format string.
+ * @param ap is a va_list argument stack pointer which gives the
+ *  modifying data for the format string.
+ */
+int vprint( std::string* result, const char* format, va_list ap );
+
+
+/**
+ * Function strprintf
+ * is like sprintf() but the output is appended to a std::string instead of to a
+ * character array.
+ * @param result is the string to append to, previous text is not clear()ed.
+ * @param format is a printf() style format string.
+ * @param ap is a va_list argument stack pointer which gives the
+ *  modifying data for the format string.
+ *
+ * @return int - the count of bytes appended to the result string, no terminating nul is included.
+ */
+int strprintf( std::string* result, const char* format, ... );
+
+
+/**
+ * Function strprintf
+ * is like sprintf() but the output is returned in a std::string instead of to a
+ * character array.
+ * @param result is the string to append to, previous text is not clear()ed.
+ * @param format is a printf() style format string.
+ * @param ap is a va_list argument stack pointer which gives the
+ *  modifying data for the format string.
+ */
+std::string strprintf( const char* format, ... );
+
+
+/**
  * @ingroup exception_types
  * @{
  */
@@ -647,6 +685,5 @@ protected:
     void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
-
 
 #endif // RICHIO_H_

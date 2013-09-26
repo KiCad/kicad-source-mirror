@@ -156,7 +156,9 @@ protected:
 
     wxString        m_error;        ///< for throwing exceptions
     BOARD*          m_board;        ///< which BOARD, no ownership here
-    const PROPERTIES*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
+
+    const
+    PROPERTIES*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
     FP_CACHE*       m_cache;        ///< Footprint library cache.
 
     LINE_READER*    m_reader;       ///< no ownership here.

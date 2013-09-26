@@ -144,7 +144,7 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
                 row.SetOptions( in->FromUTF8() );
 
                 // create PROPERTIES* from options, set into the ROW
-                row.properties = ParseOptions( in->CurText() );
+                row.properties = ParseOptions( in->CurStr() );
                 break;
 
             case T_descr:
@@ -228,9 +228,9 @@ PROPERTIES* FP_LIB_TABLE::ParseOptions( const std::string& aOptionsList )
             ++cp;
 
         // Find the end of pair/field
-        while( cp<end )
+        while( cp < end )
         {
-            if( *cp == '\\' && cp+1 < end && cp[1]==OPT_SEP  )
+            if( *cp=='\\'  &&  cp+1<end  &&  cp[1]==OPT_SEP  )
             {
                 ++cp;           // skip the escape
                 pair += *cp++;  // add the separator
@@ -261,7 +261,7 @@ PROPERTIES* FP_LIB_TABLE::ParseOptions( const std::string& aOptionsList )
     }
 
     if( props.size() )
-        return new PROPERTIES( props );
+        return new PROPERTIES( props );     // the far less probable case
     else
         return NULL;
 }
@@ -273,7 +273,7 @@ std::string FP_LIB_TABLE::FormatOptions( const PROPERTIES* aProperties )
 
     if( aProperties )
     {
-        for( PROPERTIES::const_iterator it = aProperties->begin();  it != aProperties->end(); ++it )
+        for( PROPERTIES::const_iterator it = aProperties->begin();  it != aProperties->end();  ++it )
         {
             const std::string& name  = it->first;
             const std::string& value = it->second;
