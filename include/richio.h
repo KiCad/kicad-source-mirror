@@ -39,41 +39,34 @@
 
 
 /**
- * Function vprint
- * is like vsprintf() but the output is appended to a std::string instead of to a
- * character array.
- * @param result is the string to append to, previous text is not clear()ed.
- * @param format is a printf() style format string.
- * @param ap is a va_list argument stack pointer which gives the
- *  modifying data for the format string.
- */
-int vprint( std::string* result, const char* format, va_list ap );
-
-
-/**
- * Function strprintf
+ * Function StrPrintf
  * is like sprintf() but the output is appended to a std::string instead of to a
  * character array.
- * @param result is the string to append to, previous text is not clear()ed.
- * @param format is a printf() style format string.
- * @param ap is a va_list argument stack pointer which gives the
- *  modifying data for the format string.
- *
- * @return int - the count of bytes appended to the result string, no terminating nul is included.
+ * @param aResult is the string to append to, previous text is not clear()ed.
+ * @param aFormat is a printf() style format string.
+ * @return int - the count of bytes appended to the result string, no terminating
+ *           nul is included.
  */
-int strprintf( std::string* result, const char* format, ... );
+int
+#if defined(__GNUG__)
+    __attribute__ ((format (printf, 2, 3)))
+#endif
+    StrPrintf( std::string* aResult, const char* aFormat, ... );
 
 
 /**
- * Function strprintf
+ * Function StrPrintf
  * is like sprintf() but the output is returned in a std::string instead of to a
  * character array.
- * @param result is the string to append to, previous text is not clear()ed.
- * @param format is a printf() style format string.
- * @param ap is a va_list argument stack pointer which gives the
- *  modifying data for the format string.
+ * @param aResult is the string to append to, previous text is not clear()ed.
+ * @param aFormat is a printf() style format string.
+ * @return std::string - the result of the sprintf().
  */
-std::string strprintf( const char* format, ... );
+std::string
+#if defined(__GNUG__)
+    __attribute__ ((format (printf, 1, 2)))
+#endif
+    StrPrintf( const char* format, ... );
 
 
 /**

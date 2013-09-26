@@ -1215,37 +1215,37 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     // Unconnected pad is default net so don't save it.
     if( !(m_ctl & CTL_OMIT_NETS) && aPad->GetNet() != 0 )
-        strprintf( &output, " (net %d %s)", aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
+        StrPrintf( &output, " (net %d %s)", aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
 
     if( aPad->GetPadToDieLength() != 0 )
-        strprintf( &output, " (die_length %s)", FMT_IU( aPad->GetPadToDieLength() ).c_str() );
+        StrPrintf( &output, " (die_length %s)", FMT_IU( aPad->GetPadToDieLength() ).c_str() );
 
     if( aPad->GetLocalSolderMaskMargin() != 0 )
-        strprintf( &output, " (solder_mask_margin %s)", FMT_IU( aPad->GetLocalSolderMaskMargin() ).c_str() );
+        StrPrintf( &output, " (solder_mask_margin %s)", FMT_IU( aPad->GetLocalSolderMaskMargin() ).c_str() );
 
     if( aPad->GetLocalSolderPasteMargin() != 0 )
-        strprintf( &output, " (solder_paste_margin %s)", FMT_IU( aPad->GetLocalSolderPasteMargin() ).c_str() );
+        StrPrintf( &output, " (solder_paste_margin %s)", FMT_IU( aPad->GetLocalSolderPasteMargin() ).c_str() );
 
     if( aPad->GetLocalSolderPasteMarginRatio() != 0 )
-        strprintf( &output, " (solder_paste_margin_ratio %s)",
+        StrPrintf( &output, " (solder_paste_margin_ratio %s)",
                 Double2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
 
     if( aPad->GetLocalClearance() != 0 )
-        strprintf( &output, " (clearance %s)", FMT_IU( aPad->GetLocalClearance() ).c_str() );
+        StrPrintf( &output, " (clearance %s)", FMT_IU( aPad->GetLocalClearance() ).c_str() );
 
     if( aPad->GetZoneConnection() != UNDEFINED_CONNECTION )
-        strprintf( &output, " (zone_connect %d)", aPad->GetZoneConnection() );
+        StrPrintf( &output, " (zone_connect %d)", aPad->GetZoneConnection() );
 
     if( aPad->GetThermalWidth() != 0 )
-        strprintf( &output, " (thermal_width %s)", FMT_IU( aPad->GetThermalWidth() ).c_str() );
+        StrPrintf( &output, " (thermal_width %s)", FMT_IU( aPad->GetThermalWidth() ).c_str() );
 
     if( aPad->GetThermalGap() != 0 )
-        strprintf( &output, " (thermal_gap %s)", FMT_IU( aPad->GetThermalGap() ).c_str() );
+        StrPrintf( &output, " (thermal_gap %s)", FMT_IU( aPad->GetThermalGap() ).c_str() );
 
     if( output.size() )
     {
         m_out->Print( 0, "\n" );
-        m_out->Print( aNestLevel+1, "%s", output.c_str() + 1 );   // +1 skips initial space on first element
+        m_out->Print( aNestLevel+1, "%s", output.c_str()+1 );   // +1 skips 1st space on 1st element
     }
 
     m_out->Print( 0, ")\n" );

@@ -40,7 +40,7 @@
 
 
 
-int vprint( std::string* result, const char* format, va_list ap )
+static int vprint( std::string* result, const char* format, va_list ap )
 {
     char    msg[512];
     size_t  len = vsnprintf( msg, sizeof(msg), format, ap );
@@ -67,7 +67,7 @@ int vprint( std::string* result, const char* format, va_list ap )
 }
 
 
-int strprintf( std::string* result, const char* format, ... )
+int StrPrintf( std::string* result, const char* format, ... )
 {
     va_list     args;
 
@@ -79,7 +79,7 @@ int strprintf( std::string* result, const char* format, ... )
 }
 
 
-std::string strprintf( const char* format, ... )
+std::string StrPrintf( const char* format, ... )
 {
     std::string ret;
     va_list     args;
