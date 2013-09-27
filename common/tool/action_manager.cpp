@@ -52,8 +52,9 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 
 void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 {
-    // Indicate that we no longer care about the object
+    // Indicate that the ACTION_MANAGER no longer care about the object
     aAction->setActionMgr( NULL );
+    aAction->setId( -1 );
 
     m_actionNameIndex.erase( aAction->m_name );
     m_actionIdIndex.erase( aAction->m_id );
@@ -75,7 +76,7 @@ bool ACTION_MANAGER::RunAction( const std::string& aActionName ) const
     std::map<std::string, TOOL_ACTION*>::const_iterator it = m_actionNameIndex.find( aActionName );
 
     if( it == m_actionNameIndex.end() )
-        return false;
+        return false;   // no action with given name found
 
     runAction( it->second );
 
@@ -88,7 +89,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     std::map<int, TOOL_ACTION*>::const_iterator it = m_actionHotKeys.find( aHotKey );
 
     if( it == m_actionHotKeys.end() )
-        return false;
+        return false;   // no appropriate action found for the hotkey
 
     runAction( it->second );
 

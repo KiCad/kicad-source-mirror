@@ -42,28 +42,41 @@ using boost::optional;
 struct TOOL_DISPATCHER::ButtonState
 {
 	ButtonState( TOOL_MouseButtons aButton, const wxEventType& aDownEvent,
-	             const wxEventType& aUpEvent, bool aTriggerMenu = false ) :
+	             const wxEventType& aUpEvent ) :
 		button( aButton ),
 		downEvent( aDownEvent ),
-		upEvent( aUpEvent ),
-		triggerContextMenu( aTriggerMenu )
+		upEvent( aUpEvent )
 	{};
 
+	///> Flag indicating that dragging is active for the given button.
 	bool dragging;
+
+	///> Flag indicating that the given button is pressed.
 	bool pressed;
 	
+	///> Point where dragging has started (in world coordinates).
 	VECTOR2D dragOrigin;
+
+	///> Point where click event has occurred.
 	VECTOR2D downPosition;
 
+	///> Difference between drag origin point and current mouse position (expressed as distance in
+	///> pixels).
 	double dragMaxDelta;
 	
+	///> Determines the mouse button for which information are stored.
 	TOOL_MouseButtons button;
+
+	///> The type of wxEvent that determines mouse button press.
 	wxEventType downEvent;
+
+	///> The type of wxEvent that determines mouse button release.
 	wxEventType upEvent;
-	bool triggerContextMenu;
-	
+
+	///> Time stamp for the last mouse button press event.
 	wxLongLong downTimestamp;
 
+	///> Restores initial state.
 	void Reset()
 	{
 		dragging = false;
@@ -76,7 +89,7 @@ TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditF
 	m_toolMgr( aToolMgr ), m_editFrame( aEditFrame )
 {
     m_buttons.push_back( new ButtonState( MB_Left, wxEVT_LEFT_DOWN, wxEVT_LEFT_UP ) );
-    m_buttons.push_back( new ButtonState( MB_Right, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_UP, true ) );
+    m_buttons.push_back( new ButtonState( MB_Right, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_UP ) );
     m_buttons.push_back( new ButtonState( MB_Middle, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_UP ) );
 
     ResetState();
@@ -124,14 +137,14 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 	wxEventType type = aEvent.GetEventType();
 	optional<TOOL_EVENT> evt;
 	bool isClick = false;
-		
+
 	bool up = type == st->upEvent;
 	bool down = type == st->downEvent;
-	
+
 	int mods = decodeModifiers( static_cast<wxMouseEvent*>( &aEvent ) );
 	int args = st->button | mods;
 
-	if( down )
+	if( down )      // Handle mouse button press
 	{
 		st->downTimestamp = wxGetLocalTimeMillis();
 		st->dragOrigin = m_lastMousePos;
@@ -140,7 +153,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 		st->pressed = true;
 		evt = TOOL_EVENT( TC_Mouse, TA_MouseDown, args );
 	}
-	else if( up )
+	else if( up )   // Handle mouse button release
 	{
 		st->pressed = false;
 
@@ -148,6 +161,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 		{
 			wxLongLong t = wxGetLocalTimeMillis();
 
+			// Determine if it was just a single click or beginning of dragging
 			if( t - st->downTimestamp < DragTimeThreshold &&
 			        st->dragMaxDelta < DragDistanceThreshold )
 				isClick = true;
@@ -156,7 +170,6 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 		}
 		else
 			isClick = true;
-
 		
 		if( isClick )
 			evt = TOOL_EVENT( TC_Mouse, TA_MouseClick, args );
@@ -208,6 +221,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 	{
         VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetCursorPosition();
         VECTOR2D pos = getView()->ToWorld( screenPos );
+
 		if( pos != m_lastMousePos || type == KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
 		{
 			motion = true;
@@ -251,7 +265,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 }
 
 
-void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
+void TOOL_DISPATCHER::DispatchWxCommand( const wxCommandEvent& aEvent )
 {
 	bool activateTool = false;
 	std::string toolName;

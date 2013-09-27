@@ -43,21 +43,21 @@ public:
 
     /**
      * Function RegisterAction()
-     * Adds a tool action to the manager set and sets it up. After that is is possible to invoke
-     * the action using hotkeys or its name.
+     * Adds a tool action to the manager and sets it up. After that is is possible to invoke
+     * the action using hotkeys or sending a command event with its name.
      * @param aAction: action to be added. Ownership is not transferred.
      */
     void RegisterAction( TOOL_ACTION* aAction );
 
     /**
      * Function UnregisterAction()
-     * Removes a tool action from the manager set and makes it unavailable for further usage.
+     * Removes a tool action from the manager and makes it unavailable for further usage.
      * @param aAction: action to be removed.
      */
     void UnregisterAction( TOOL_ACTION* aAction );
 
     /**
-     * Generates an unique ID from for a tool with given name.
+     * Generates an unique ID from for an action with given name.
      */
     static int MakeActionId( const std::string& aActionName );
 
@@ -82,9 +82,16 @@ public:
     bool RunHotKey( int aHotKey ) const;
 
 private:
+    ///> Tool manager needed to run actions
     TOOL_MANAGER* m_toolMgr;
+
+    ///> Map for indexing actions by their IDs
     std::map<int, TOOL_ACTION*> m_actionIdIndex;
+
+    ///> Map for indexing actions by their names
     std::map<std::string, TOOL_ACTION*> m_actionNameIndex;
+
+    ///> Map for indexing actions by their hotkeys
     std::map<int, TOOL_ACTION*> m_actionHotKeys;
 
     /**

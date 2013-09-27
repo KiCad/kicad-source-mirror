@@ -30,4 +30,3 @@ const SHAPE* shapeFunctor( SHAPE* aItem )
 {
     return aItem;
 }
-

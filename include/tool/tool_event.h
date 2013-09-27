@@ -29,6 +29,7 @@
 #include <deque>
 
 #include <math/vector2d.h>
+#include <cassert>
 
 #include <boost/optional.hpp>
 
@@ -71,17 +72,19 @@ enum TOOL_Actions
 	TA_ViewDirty    = 0x0800,
 	TA_ChangeLayer  = 0x1000,
 
-	// Tool cancel event. Issued automagically when the user hits escape or selects End Tool from the context menu.
+	// Tool cancel event. Issued automagically when the user hits escape or selects End Tool from
+	// the context menu.
 	TA_CancelTool   = 0x2000,
 
-	// Context menu update. Issued whenever context menu is open and the user hovers the mouse over one of choices.
-	// Used in dynamic highligting in disambiguation menu 
+	// Context menu update. Issued whenever context menu is open and the user hovers the mouse
+	// over one of choices. Used in dynamic highligting in disambiguation menu
 	TA_ContextMenuUpdate = 0x4000,
 
-	// Context menu choice. Sent if the user picked something from the context menu or closed it without selecting anything.
+	// Context menu choice. Sent if the user picked something from the context menu or
+	// closed it without selecting anything.
 	TA_ContextMenuChoice = 0x8000,
 
-	// Tool action
+	// Tool action (allows to control tools)
 	TA_Action            = 0x10000,
 
 	TA_Any = 0xffffffff
@@ -129,6 +132,12 @@ enum CONTEXT_MENU_TRIGGER
 class TOOL_EVENT
 {
 public:
+    /**
+     * Function Format()
+     * Returns information about event in form of a human-readable string.
+     *
+     * @return Event information.
+     */
     const std::string Format() const;
 
     TOOL_EVENT( TOOL_EventCategory aCategory = TC_None, TOOL_Actions aAction = TA_None,
@@ -175,33 +184,44 @@ public:
                 m_commandStr = aExtraParam;
         }
 
+    ///> Returns the category (eg. mouse/keyboard/action) of an event..
     TOOL_EventCategory Category() const
     {
         return m_category;
     }
 
+    ///> Returns more specific information about the type of an event.
     TOOL_Actions Action() const
     {
         return m_actions;
     }
 
+    ///> Returns information about difference between current mouse cursor position and the place
+    ///> where dragging has started.
     const VECTOR2D Delta() const
     {
+        assert( m_category == TC_Mouse );   // this should be used only with mouse events
         return m_mouseDelta;
     }
 
+    ///> Returns mouse cursor position in world coordinates.
     const VECTOR2D& Position() const
     {
+        assert( m_category == TC_Mouse );   // this should be used only with mouse events
         return m_mousePos;
     }
 
+    ///> Returns the point where dragging has started.
     const VECTOR2D& DragOrigin() const
     {
+        assert( m_category == TC_Mouse );   // this should be used only with mouse events
         return m_mouseDragOrigin;
     }
 
+    ///> Returns information about mouse buttons state.
     int Buttons() const
     {
+        assert( m_category == TC_Mouse );   // this should be used only with mouse events
         return m_mouseButtons;
     }
 
@@ -231,6 +251,7 @@ public:
         return m_actions == TA_CancelTool;
     }
 
+    ///> Returns information about key modifiers state (Ctrl, Alt, etc.)
     int Modifier( int aMask = MD_ModifierMask ) const
     {
         return ( m_modifiers & aMask );
@@ -251,8 +272,6 @@ public:
         return m_actions == TA_KeyDown;
     }
 
-    void Ignore();
-
     void SetMouseDragOrigin( const VECTOR2D &aP )
     {
         m_mouseDragOrigin = aP;
@@ -268,6 +287,13 @@ public:
         m_mouseDelta = aP;
     }
 
+    /**
+     * Function Matches()
+     * Tests whether two events match in terms of category & action or command.
+     *
+     * @param aEvent is the event to test against.
+     * @return True if two events match, false otherwise.
+     */
     bool Matches( const TOOL_EVENT& aEvent ) const
     {
         if( !( m_category & aEvent.m_category ) )
@@ -299,13 +325,25 @@ private:
     TOOL_Actions m_actions;
     TOOL_ActionScope m_scope;
 
+    ///> Difference between mouse cursor position and
+    ///> the point where dragging event has started
     VECTOR2D m_mouseDelta;
+
+    ///> Current mouse cursor position
     VECTOR2D m_mousePos;
+
+    ///> Point where dragging has started
     VECTOR2D m_mouseDragOrigin;
 
+    ///> State of mouse buttons
     int m_mouseButtons;
+
+    ///> Stores code of pressed/released key
     int m_keyCode;
+
+    ///> State of key modifierts (Ctrl/Alt/etc.)
     int m_modifiers;
+
     boost::optional<int> m_commandId;
     boost::optional<std::string> m_commandStr;
 };
@@ -324,7 +362,10 @@ public:
     typedef std::deque<TOOL_EVENT>::iterator iterator;
     typedef std::deque<TOOL_EVENT>::const_iterator const_iterator;
 
+    ///> Default constructor. Creates an empty list.
     TOOL_EVENT_LIST() {};
+
+    ///> Constructor for a list containing only one TOOL_EVENT.
     TOOL_EVENT_LIST( const TOOL_EVENT& aSingleEvent )
     {
         m_events.push_back( aSingleEvent );
@@ -346,6 +387,11 @@ public:
         return boost::optional<const TOOL_EVENT&>();
     }
 
+    /**
+     * Function Add()
+     * Adds a tool event to the list.
+     * @param aEvent is the tool event to be addded.
+     */
     void Add( const TOOL_EVENT& aEvent )
     {
         m_events.push_back( aEvent );

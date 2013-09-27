@@ -62,13 +62,15 @@ CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu ) :
                         wxEmptyString, wxITEM_NORMAL ) );
     }
 
-    // Copy tool actions that are available to choose from menu
+    // Copy tool actions that are available to choose from context menu
     m_toolActions = aMenu.m_toolActions;
 }
 
 
 void CONTEXT_MENU::SetTitle( const wxString& aTitle )
 {
+    // TODO handle an empty string (remove title and separator)
+
     // Unfortunately wxMenu::SetTitle() does nothing..
 	if( m_titleSet )
 	{
@@ -85,12 +87,18 @@ void CONTEXT_MENU::SetTitle( const wxString& aTitle )
 
 void CONTEXT_MENU::Add( const wxString& aLabel, int aId )
 {
+#ifdef DEBUG
+    if( m_menu.FindItem( aId ) != NULL )
+        wxLogWarning( wxT( "Adding more than one menu entry with the same ID may result in"
+                "undefined behaviour" ) );
+#endif
 	m_menu.Append( new wxMenuItem( &m_menu, aId, aLabel, wxEmptyString, wxITEM_NORMAL ) );
 }
 
 
 void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 {
+    /// ID numbers for tool actions need to have a value higher than m_actionId
     int id = m_actionId + aAction.GetId();
     wxString menuEntry;
 
@@ -110,6 +118,7 @@ void CONTEXT_MENU::Clear()
 {
 	m_titleSet = false;
 
+	// Remove all the entries from context menu
 	for( unsigned i = 0; i < m_menu.GetMenuItemCount(); ++i )
 	    m_menu.Destroy( m_menu.FindItemByPosition( 0 ) );
 
@@ -144,15 +153,18 @@ void CONTEXT_MENU::CMEventHandler::onEvent( wxEvent& aEvent )
 
     if( type == wxEVT_MENU_HIGHLIGHT )
         evt = TOOL_EVENT( TC_Command, TA_ContextMenuUpdate, aEvent.GetId() );
+
     else if( type == wxEVT_COMMAND_MENU_SELECTED )
     {
         if( aEvent.GetId() > m_actionId )
         {
+            // Handling TOOL_ACTIONs
             if( m_menu->m_toolActions.count( aEvent.GetId() ) == 1 )
                 evt = m_menu->m_toolActions[aEvent.GetId()]->GetEvent();
         }
         else
         {
+            // Handling common menu entries
             evt = TOOL_EVENT( TC_Command, TA_ContextMenuChoice, aEvent.GetId() );
         }
     }

@@ -83,7 +83,6 @@ bool SELECTION_TOOL::Init()
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>( PCB_T );
-
     assert( board != NULL );
 
     // Main loop: keep receiving events
@@ -116,13 +115,16 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             }
             else
             {
+                // Check if dragging has started within any of selected items bounding box
                 if( containsSelected( evt->Position() ) )
                 {
+                    // Yes -> run the move tool and wait till it finishes
                     m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
                     Wait();
                 }
                 else
                 {
+                    // No -> clear the selection list
                     clearSelection();
                 }
             }
@@ -135,7 +137,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
 {
-    assert( aAction.GetId() > 0 );  // Check if the action was registered before
+    assert( aAction.GetId() > 0 );  // Check if the action was registered before in ACTION_MANAGER
 
     m_menu.Add( aAction );
 }
@@ -259,9 +261,9 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 
 bool SELECTION_TOOL::selectMultiple()
 {
-    VIEW* view = getView();
-    bool cancelled = false;
+    bool cancelled = false;     // Was the tool cancelled while it was running?
     m_multiple = true;          // Multiple selection mode is active
+    VIEW* view = getView();
     getViewControls()->SetAutoPan( true );
 
     // Those 2 lines remove the blink-in-the-random-place effect
@@ -291,7 +293,7 @@ bool SELECTION_TOOL::selectMultiple()
 
         if( evt->IsMouseUp( MB_Left ) )
         {
-            // End drawing a selection box
+            // End drawing the selection box
             m_selArea->ViewSetVisible( false );
 
             // Mark items within the selection box as selected
@@ -315,6 +317,7 @@ bool SELECTION_TOOL::selectMultiple()
             // Now the context menu should be enabled
             if( !m_selectedItems.empty() )
                 SetContextMenu( &m_menu, CMENU_BUTTON );
+
             break;
         }
     }
@@ -367,6 +370,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         {
             optional<int> id = evt->GetCommandId();
 
+            // User has selected an item, so this one will be returned
             if( id && ( *id >= 0 ) )
                 current = ( *aCollector )[*id];
 
@@ -392,11 +396,12 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 
 bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 {
+    // Is high contrast mode enabled?
     bool highContrast = getView()->GetPainter()->GetSettings()->GetHighContrast();
 
     if( highContrast )
     {
-        bool onActive = false;
+        bool onActive = false;          // Is the item on any of active layers?
         int layers[KiGfx::VIEW::VIEW_MAX_LAYERS], layers_count;
 
         // Filter out items that do not belong to active layers
@@ -406,14 +411,14 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 
         for( int i = 0; i < layers_count; ++i )
         {
-            if( activeLayers.count( layers[i] ) > 0 )   // Item is on at least one active layer
+            if( activeLayers.count( layers[i] ) > 0 )   // Item is on at least one of active layers
             {
                 onActive = true;
                 break;
             }
         }
 
-        if( !onActive )
+        if( !onActive )     // We do not want to select items that are in the background
             return false;
     }
 
@@ -426,8 +431,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         LAYER_NUM top, bottom;
         static_cast<const SEGVIA*>( aItem )->ReturnLayerPair( &top, &bottom );
 
-        return ( board->IsLayerVisible( top ) ||
-                 board->IsLayerVisible( bottom ) );
+        return ( board->IsLayerVisible( top ) || board->IsLayerVisible( bottom ) );
     }
     break;
 
@@ -473,8 +477,7 @@ bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
 {
     // Check if the point is located within any of the currently selected items bounding boxes
     std::set<BOARD_ITEM*>::iterator it, it_end;
-    for( it = m_selectedItems.begin(), it_end = m_selectedItems.end();
-            it != it_end; ++it )
+    for( it = m_selectedItems.begin(), it_end = m_selectedItems.end(); it != it_end; ++it )
     {
         BOX2I itemBox = (*it)->ViewBBox();
         itemBox.Inflate( 500000 );    // Give some margin for gripping an item

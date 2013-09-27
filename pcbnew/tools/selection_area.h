@@ -50,6 +50,7 @@ public:
     virtual const BOX2I ViewBBox() const;
 
     void ViewDraw( int aLayer, KiGfx::GAL* aGal ) const;
+
     void ViewGetLayers( int aLayers[], int& aCount ) const;
 
     void SetOrigin ( VECTOR2I aOrigin )

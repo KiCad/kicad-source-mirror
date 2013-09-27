@@ -93,28 +93,27 @@ void acceptVisitor( T object, V visitor )
  * @param minDistance minimum collision distance
  * @return if object and anotherObject collide
  */
-template <class T, class U>
+template<class T, class U>
 bool collide( T object, U anotherObject, int minDistance )
 {
-    return shapeFunctor(object)->Collide( anotherObject, minDistance );
+    return shapeFunctor( object )->Collide( anotherObject, minDistance );
 }
 
 template<class T, class V>
-bool queryCallback(T shape, void* context) {
+bool queryCallback(T shape, void* context)
+{
     V* visitor = (V*) context;
-    acceptVisitor<T,V>(shape, *visitor);
+    acceptVisitor<T,V>( shape, *visitor );
+
     return true;
 }
 
-template <class T = SHAPE*>
+template<class T = SHAPE*>
 class SHAPE_INDEX {
-
     public:
-
         class Iterator
         {
         private:
-
             typedef typename RTree<T, int, 2, float>::Iterator RTreeIterator;
             RTreeIterator iterator;
 
@@ -124,20 +123,21 @@ class SHAPE_INDEX {
              * Setup the internal tree iterator.
              * @param tree pointer to a RTREE object
              */
-            void Init(RTree<T, int, 2, float>* tree) {
-                tree->GetFirst(iterator);
+            void Init( RTree<T, int, 2, float>* tree )
+            {
+                tree->GetFirst( iterator );
             }
 
         public:
-
             /**
              * Iterator constructor
              *
              * Creates an iterator for the index object
              * @param index SHAPE_INDEX object to iterate
              */
-            Iterator(SHAPE_INDEX* index) {
-                Init(index->m_tree);
+            Iterator( SHAPE_INDEX* index )
+            {
+                Init( index->m_tree );
             }
 
             /**
@@ -145,7 +145,8 @@ class SHAPE_INDEX {
              *
              * Returns the next data element.
              */
-            T operator*() {
+            T operator*()
+            {
                 return *iterator;
             }
 
@@ -154,7 +155,8 @@ class SHAPE_INDEX {
              *
              * Shifts the iterator to the next element.
              */
-            bool operator++() {
+            bool operator++()
+            {
                 return ++iterator;
             }
 
@@ -163,7 +165,8 @@ class SHAPE_INDEX {
              *
              * Shifts the iterator to the next element.
              */
-            bool operator++(int) {
+            bool operator++( int )
+            {
                 return ++iterator;
             }
 
@@ -173,7 +176,8 @@ class SHAPE_INDEX {
              * Checks if the iterator has reached the end.
              * @return true if it is in an invalid position (data finished)
              */
-            bool IsNull() {
+            bool IsNull()
+            {
                 return iterator.IsNull();
             }
 
@@ -183,7 +187,8 @@ class SHAPE_INDEX {
              * Checks if the iterator has not reached the end.
              * @return true if it is in an valid position (data not finished)
              */
-            bool IsNotNull() {
+            bool IsNotNull()
+            {
                 return iterator.IsNotNull();
             }
 
@@ -192,12 +197,13 @@ class SHAPE_INDEX {
              *
              * Returns the current element of the iterator and moves to the next
              * position.
-             * @return SHAPE object pointed by the iterator before moving to the
-             *         next position.
+             * @return SHAPE object pointed by the iterator before moving to the next position.
              */
-            T Next() {
+            T Next()
+            {
                 T object = *iterator;
                 ++iterator;
+
                 return object;
             }
         };
@@ -210,17 +216,17 @@ class SHAPE_INDEX {
          * Function Add()
          *
          * Adds a SHAPE to the index.
-         * @param shape the new SHAPE
+         * @param aShape is the new SHAPE.
          */
-        void Add( T shape );
+        void Add( T aShape );
 
         /**
          * Function Remove()
          *
          * Removes a SHAPE to the index.
-         * @param shape the new SHAPE
+         * @param aShape is the new SHAPE.
          */
-        void Remove( T shape );
+        void Remove( T aShape );
 
         /**
          * Function RemoveAll()
@@ -236,12 +242,14 @@ class SHAPE_INDEX {
          * @param visitor Visitor object to be run
          */
         template<class V>
-        void Accept( V visitor )
+        void Accept( V aVisitor )
         {
             Iterator iter = this->Begin();
-            while(!iter.IsNull()) {
+
+            while( !iter.IsNull() )
+            {
                 T shape = *iter;
-                acceptVisitor(shape, visitor);
+                acceptVisitor( shape, aVisitor );
                 iter++;
             }
         }
@@ -262,17 +270,16 @@ class SHAPE_INDEX {
          * @param minDistance distance threshold
          * @param visitor object to be invoked on every object contained in the search area.
          */
-
-	template<class V>
-        int Query( const SHAPE *shape, int minDistance, V& visitor, bool aExact )
+        template<class V>
+        int Query( const SHAPE *aShape, int aMinDistance, V& aVisitor, bool aExact )
         {
-            BOX2I box = shape->BBox();
-            box.Inflate(minDistance);
+            BOX2I box = aShape->BBox();
+            box.Inflate( aMinDistance );
          
-			int min[2] = {box.GetX(), 		box.GetY()};
-            int max[2] = {box.GetRight(), 	box.GetBottom()};
+			int min[2] = { box.GetX(), 		box.GetY() };
+            int max[2] = { box.GetRight(), 	box.GetBottom() };
 
-			return this->m_tree->Search(min, max, visitor);   
+			return this->m_tree->Search( min, max, aVisitor );
         }
 
         /**
@@ -284,7 +291,6 @@ class SHAPE_INDEX {
         Iterator Begin();
 
     private:
-
         RTree<T, int, 2, float>* m_tree;
 };
 
@@ -293,58 +299,68 @@ class SHAPE_INDEX {
  */
 
 template<class T>
-SHAPE_INDEX<T>::SHAPE_INDEX() {
+SHAPE_INDEX<T>::SHAPE_INDEX()
+{
     this->m_tree = new RTree<T, int, 2, float>();
 }
 
 template<class T>
-SHAPE_INDEX<T>::~SHAPE_INDEX() {
+SHAPE_INDEX<T>::~SHAPE_INDEX()
+{
     delete this->m_tree;
 }
 
 template<class T>
-void SHAPE_INDEX<T>::Add(T shape) {
-    BOX2I box = boundingBox(shape);
-    int min[2]= {box.GetX(), box.GetY()};
-    int max[2] = {box.GetRight(), box.GetBottom()};
-    this->m_tree->Insert(min, max, shape);
+void SHAPE_INDEX<T>::Add( T aShape )
+{
+    BOX2I box = boundingBox( aShape );
+    int min[2] = { box.GetX(), box.GetY() };
+    int max[2] = { box.GetRight(), box.GetBottom() };
+
+    this->m_tree->Insert( min, max, aShape );
 }
 
 template<class T>
-void SHAPE_INDEX<T>::Remove(T shape) {
-    BOX2I box = boundingBox(shape);
-    int min[2]= {box.GetX(), box.GetY()};
-    int max[2] = {box.GetRight(), box.GetBottom()};
-    this->m_tree->Remove(min, max, shape);
+void SHAPE_INDEX<T>::Remove(T aShape)
+{
+    BOX2I box = boundingBox( aShape );
+    int min[2] = { box.GetX(), box.GetY() };
+    int max[2] = { box.GetRight(), box.GetBottom() };
+
+    this->m_tree->Remove( min, max, aShape );
 }
 
 template<class T>
-void SHAPE_INDEX<T>::RemoveAll() {
+void SHAPE_INDEX<T>::RemoveAll()
+{
     this->m_tree->RemoveAll();
 }
 
 template<class T>
-void SHAPE_INDEX<T>::Reindex() {
+void SHAPE_INDEX<T>::Reindex()
+{
     RTree<T, int, 2, float>* newTree;
     newTree = new RTree<T, int, 2, float>();
 
     Iterator iter = this->Begin();
-    while(!iter.IsNull()) {
+    while( !iter.IsNull() )
+    {
         T shape = *iter;
-        BOX2I box = boundingBox(shape);
-        int min[2]= {box.GetX(), box.GetY()};
-        int max[2] = {box.GetRight(), box.GetBottom()};
-        newTree->Insert(min, max, shape);
+        BOX2I box = boundingBox( shape );
+        int min[2] = { box.GetX(), box.GetY() };
+        int max[2] = { box.GetRight(), box.GetBottom() };
+        newTree->Insert( min, max, shape );
         iter++;
     }
+
     delete this->m_tree;
     this->m_tree = newTree;
 }
 
 template<class T>
-typename SHAPE_INDEX<T>::Iterator SHAPE_INDEX<T>::Begin() {
-    return Iterator(this);
+typename SHAPE_INDEX<T>::Iterator SHAPE_INDEX<T>::Begin()
+{
+    return Iterator( this );
 }
-
 
 #endif

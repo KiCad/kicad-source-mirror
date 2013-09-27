@@ -36,6 +36,8 @@ using boost::optional;
 
 MOVE_TOOL::MOVE_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveMove" ), m_selectionTool( NULL ),
+
+        // Available actions:
         m_activate( m_toolName, AS_GLOBAL, 'M', "Move", "Moves the selected item(s)" ),
         m_rotate( m_toolName + ".rotate", AS_CONTEXT, ' ', "Rotate", "Rotates selected item(s)" ),
         m_flip( m_toolName + ".flip", AS_CONTEXT, 'F', "Flip", "Flips selected item(s)" )
@@ -69,7 +71,7 @@ bool MOVE_TOOL::Init()
         m_toolMgr->RegisterAction( &m_rotate );
         m_toolMgr->RegisterAction( &m_flip );
 
-        // Add context menu entries for the selection tool
+        // Add context menu entries that are displayed when selection tool is active
         m_selectionTool->AddMenuItem( m_activate );
         m_selectionTool->AddMenuItem( m_rotate );
         m_selectionTool->AddMenuItem( m_flip );
@@ -92,7 +94,9 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
     VIEW* view = getView();
     VIEW_CONTROLS* controls = getViewControls();
 
+    // Add a VIEW_GROUP that will hold all modified items
     view->Add( &m_items );
+
     controls->ShowCursor( true );
     controls->SetSnapping( true );
     controls->SetAutoPan( true );
@@ -102,7 +106,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
     {
         if( evt->IsCancel() )
         {
-            restore = true;
+            restore = true;     // Cancelling the tool means that items have to be restored
             break;  // Finish
         }
 
@@ -111,12 +115,12 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
         {
             VECTOR2D cursorPos = getView()->ToWorld( getViewControls()->GetCursorPosition() );
 
-            if( evt->Matches( m_rotate.GetEvent() ) )
+            if( evt->Matches( m_rotate.GetEvent() ) )           // got rotation event?
             {
                 m_state.Rotate( cursorPos, 900.0 );
                 m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );
             }
-            else if( evt->Matches( m_flip.GetEvent() ) )
+            else if( evt->Matches( m_flip.GetEvent() ) )        // got flip event?
             {
                 m_state.Flip( cursorPos );
                 m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );
@@ -165,20 +169,22 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
     // Restore visibility of the original items
     vgSetVisibility( &m_items, true );
 
-    // Movement has to be rollbacked, so restore the previous state of items
     if( restore )
     {
+        // Modifications has to be rollbacked, so restore the previous state of items
         vgUpdate( &m_items, VIEW_ITEM::APPEARANCE );
         m_state.RestoreAll();
     }
     else
     {
+        // Changes are applied, so update the items
         vgUpdate( &m_items, m_state.GetUpdateFlag() );
         m_state.Apply();
     }
 
     m_items.Clear();
     view->Remove( &m_items );
+
     controls->ShowCursor( false );
     controls->SetSnapping( false );
     controls->SetAutoPan( false );
