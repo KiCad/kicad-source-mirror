@@ -98,7 +98,7 @@ public:
 	 */
 	void Yield()
 	{
-		jump_fcontext( m_self, m_saved, 0 );
+		boost::context::jump_fcontext( m_self, m_saved, 0 );
 	}
 
 	/**
@@ -110,11 +110,11 @@ public:
 	void Yield( ReturnType& retVal )
 	{
 		m_retVal = retVal;
-		jump_fcontext( m_self, m_saved, 0 );
+		boost::context::jump_fcontext( m_self, m_saved, 0 );
 	}
 
 	/**
-	 * Function SetEntry()
+	 <F11>* Function SetEntry()
 	 * 
 	 * Defines the entry point for the coroutine, if not set in the constructor.
 	 */
@@ -156,7 +156,7 @@ public:
 	 */
 	bool Resume()
 	{
-        jump_fcontext( m_saved, m_self, 0 );
+        boost::context::jump_fcontext( m_saved, m_self, 0 );
         return m_running;
 	}
 
