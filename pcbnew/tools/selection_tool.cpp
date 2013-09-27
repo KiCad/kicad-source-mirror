@@ -44,13 +44,13 @@
 #include "selection_tool.h"
 #include "selection_area.h"
 #include "bright_box.h"
+#include "common_actions.h"
 
 using namespace KiGfx;
 using boost::optional;
 
 SELECTION_TOOL::SELECTION_TOOL() :
-        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_multiple( false ),
-        m_activate( m_toolName, AS_GLOBAL, 'S', "Selection tool", "Allows to select items" )
+        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_multiple( false )
 {
     m_selArea = new SELECTION_AREA;
 }
@@ -68,15 +68,7 @@ void SELECTION_TOOL::Reset()
     m_selectedItems.clear();
 
     // The tool launches upon reception of action event ("pcbnew.InteractiveSelection")
-    Go( &SELECTION_TOOL::Main, m_activate.MakeEvent() );
-}
-
-
-bool SELECTION_TOOL::Init()
-{
-    m_toolMgr->RegisterAction( &m_activate );
-
-    return true;
+    Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
 }
 
 

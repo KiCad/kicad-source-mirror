@@ -25,9 +25,9 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <tool/tool_manager.h>
-#include <tool/tool_action.h>
 #include <view/view_controls.h>
 
+#include "common_actions.h"
 #include "selection_tool.h"
 #include "move_tool.h"
 
@@ -35,12 +35,7 @@ using namespace KiGfx;
 using boost::optional;
 
 MOVE_TOOL::MOVE_TOOL() :
-        TOOL_INTERACTIVE( "pcbnew.InteractiveMove" ), m_selectionTool( NULL ),
-
-        // Available actions:
-        m_activate( m_toolName, AS_GLOBAL, 'M', "Move", "Moves the selected item(s)" ),
-        m_rotate( m_toolName + ".rotate", AS_CONTEXT, ' ', "Rotate", "Rotates selected item(s)" ),
-        m_flip( m_toolName + ".flip", AS_CONTEXT, 'F', "Flip", "Flips selected item(s)" )
+        TOOL_INTERACTIVE( "pcbnew.InteractiveMove" ), m_selectionTool( NULL )
 {
 }
 
@@ -53,7 +48,7 @@ MOVE_TOOL::~MOVE_TOOL()
 void MOVE_TOOL::Reset()
 {
     // The tool launches upon reception of action event ("pcbnew.InteractiveMove")
-    Go( &MOVE_TOOL::Main, m_activate.MakeEvent() );
+    Go( &MOVE_TOOL::Main, COMMON_ACTIONS::moveActivate.MakeEvent() );
 }
 
 
@@ -66,15 +61,10 @@ bool MOVE_TOOL::Init()
     {
         m_selectionTool = static_cast<SELECTION_TOOL*>( selectionTool );
 
-        // Activate hot keys
-        m_toolMgr->RegisterAction( &m_activate );
-        m_toolMgr->RegisterAction( &m_rotate );
-        m_toolMgr->RegisterAction( &m_flip );
-
         // Add context menu entries that are displayed when selection tool is active
-        m_selectionTool->AddMenuItem( m_activate );
-        m_selectionTool->AddMenuItem( m_rotate );
-        m_selectionTool->AddMenuItem( m_flip );
+        m_selectionTool->AddMenuItem( COMMON_ACTIONS::moveActivate );
+        m_selectionTool->AddMenuItem( COMMON_ACTIONS::rotate );
+        m_selectionTool->AddMenuItem( COMMON_ACTIONS::flip );
     }
     else
     {
@@ -115,12 +105,12 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
         {
             VECTOR2D cursorPos = getView()->ToWorld( getViewControls()->GetCursorPosition() );
 
-            if( evt->IsAction( &m_rotate ) )           // got rotation event?
+            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )           // got rotation event?
             {
                 m_state.Rotate( cursorPos, 900.0 );
                 m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );
             }
-            else if( evt->IsAction( &m_flip ) )        // got flip event?
+            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )        // got flip event?
             {
                 m_state.Flip( cursorPos );
                 m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );

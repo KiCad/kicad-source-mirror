@@ -85,15 +85,6 @@ private:
 
     /// VIEW_GROUP that helds currently moved items
     KiGfx::VIEW_GROUP m_items;
-
-    /// Register hotkey for activation of the move tool
-    TOOL_ACTION m_activate;
-
-    /// Register hotkey for rotation of selected objects
-    TOOL_ACTION m_rotate;
-
-    /// Register hotkey for flipping of selected objects
-    TOOL_ACTION m_flip;
 };
 
 #endif
