@@ -228,6 +228,7 @@ set( PCBNEW_CLASS_SRCS
     tools/bright_box.cpp
     tools/move_tool.cpp
     tools/pcb_tools.cpp
+    tools/common_actions.cpp
     )
 
 set( PCBNEW_SRCS ${PCBNEW_AUTOROUTER_SRCS} ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS} )

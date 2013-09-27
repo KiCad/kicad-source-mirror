@@ -66,7 +66,7 @@ void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 
 int ACTION_MANAGER::MakeActionId( const std::string& aActionName )
 {
-    static int currentActionId = 0;
+    static int currentActionId = 1;
     return currentActionId++;
 }
 

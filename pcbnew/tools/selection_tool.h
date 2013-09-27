@@ -30,7 +30,6 @@
 
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
-#include <tool/tool_action.h>
 #include <tool/context_menu.h>
 
 class SELECTION_AREA;
@@ -57,9 +56,6 @@ public:
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset();
-
-    /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init();
 
     /**
      * Function Main()
@@ -193,9 +189,6 @@ private:
 
     /// Flag saying if multiple selection mode is active
     bool m_multiple;
-
-    /// Register hotkey fot activation of the selection tool
-    TOOL_ACTION m_activate;
 
     /// Right click popup menu
     CONTEXT_MENU m_menu;

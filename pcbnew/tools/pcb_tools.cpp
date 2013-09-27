@@ -36,6 +36,7 @@
 
 #include "selection_tool.h"
 #include "move_tool.h"
+#include "common_actions.h"
 #include <router/router_tool.h>
 
 void PCB_EDIT_FRAME::setupTools()
@@ -44,6 +45,12 @@ void PCB_EDIT_FRAME::setupTools()
 	m_toolManager = new TOOL_MANAGER;
 	m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
 	m_galCanvas->SetEventDispatcher( m_toolDispatcher );
+
+    // Register tool actions
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::moveActivate );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionActivate );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::rotate );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::flip );
 
 	// Register tools
 	m_toolManager->RegisterTool( new SELECTION_TOOL );
@@ -54,6 +61,11 @@ void PCB_EDIT_FRAME::setupTools()
 
 void PCB_EDIT_FRAME::destroyTools()
 {
+    m_toolManager->UnregisterAction( &COMMON_ACTIONS::moveActivate );
+    m_toolManager->UnregisterAction( &COMMON_ACTIONS::selectionActivate );
+    m_toolManager->UnregisterAction( &COMMON_ACTIONS::rotate );
+    m_toolManager->UnregisterAction( &COMMON_ACTIONS::flip );
+
     delete m_toolDispatcher;
     delete m_toolManager;
 }
