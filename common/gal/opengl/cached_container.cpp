@@ -362,7 +362,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
     if( m_freeChunks.size() <= 1 ) // There are no chunks that can be merged
         return;
 
-#ifdef CACHED_CONTAINER_TEST > 0
+#if CACHED_CONTAINER_TEST > 0
     prof_counter totalTime;
     prof_start( &totalTime, false );
 #endif
@@ -406,7 +406,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
     // Add the last one
     m_freeChunks.insert( std::make_pair( size, offset ) );
 
-#ifdef CACHED_CONTAINER_TEST > 0
+#if CACHED_CONTAINER_TEST > 0
     prof_end( &totalTime );
 
     wxLogDebug( wxT( "Merged free chunks / %.1f ms" ), (double) totalTime.value / 1000.0 );

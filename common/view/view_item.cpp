@@ -69,7 +69,7 @@ void VIEW_ITEM::ViewRelease()
 void VIEW_ITEM::getLayers( int* aLayers, int& aCount ) const
 {
     int* layersPtr = aLayers;
-    for( int i = 0; i < m_layers.size(); ++i )
+    for( unsigned int i = 0; i < m_layers.size(); ++i )
     {
         if( m_layers[i] )
             *layersPtr++ = i;
