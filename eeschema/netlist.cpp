@@ -467,26 +467,40 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
     // (to avoid net names changes when the net is not modified,
     // even if components are moved or deleted and undelete or replaced, as long
     // the reference is kept)
-    netcode = 0;
+
+    // Build the list of items with no net names
+    NETLIST_OBJECT_LIST list;
+    for( unsigned ii = 0; ii < size(); ii++ )
+    {
+        item = GetItem( ii );
+        if( !item->HasNetNameCandidate() )
+            list.push_back( item );
+    }
+
+    if( list.size() == 0 )
+        return;
+
     idxstart = 0;
     candidate = NULL;
-    item = NULL;
-    for( unsigned ii = 0; ii <= size(); ii++ )
-    {
-        if( ii == size() ) // last item already found
-            netcode = -2;
-        else
-            item = GetItem( ii );
+    netcode = list.GetItemNet( 0 );
 
-        if( netcode != item->GetNet() )     // End of net found
+    for( unsigned ii = 0; ii <= list.size(); ii++ )
+    {
+        if( ii < list.size() )
+            item = list.GetItem( ii );
+
+        if( netcode != item->GetNet() || ii >= list.size() )     // End of net found
         {
             if( candidate )
             {
                 for (unsigned jj = idxstart; jj < ii; jj++ )
-                    GetItem( jj )->SetNetNameCandidate( candidate );
+                {
+                    NETLIST_OBJECT* obj = list.GetItem( jj );
+                    obj->SetNetNameCandidate( candidate );
+                }
             }
 
-            if( netcode == -2 )
+            if( ii >= list.size() )
                 break;
 
             netcode = item->GetNet();
@@ -494,17 +508,26 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
             idxstart = ii;
         }
 
-        if( item->m_Type == NET_PIN && item->GetShortNetName().IsEmpty() )
+        // Search all pins having no net name candidate yet, i.e. on nets
+        // having no labels
+        if( item->m_Type == NET_PIN )
         {
-            // A candidate is found: select the better between the previous
-            // and this one
-            item->SetNetNameCandidate( item );  // Needed to calculate GetShortNetName
-            if( candidate == NULL )
-                candidate = item;
-            else
+            // A candidate is found, however components which are not in
+            // netlist are not candidate because some have their reference
+            // is changed each time the netlist is built (power components)
+            // and anyway they are not a good candidate
+            SCH_COMPONENT* link = (SCH_COMPONENT*)item->m_Link;
+            if( link->IsInNetlist() )
             {
-                if( item->GetShortNetName().Cmp( candidate->GetShortNetName() ) < 0 )
+                // select the better between the previous and this one
+                item->SetNetNameCandidate( item );  // Needed to calculate GetShortNetName
+                if( candidate == NULL )
                     candidate = item;
+                else
+                {
+                    if( item->GetShortNetName().Cmp( candidate->GetShortNetName() ) < 0 )
+                        candidate = item;
+                }
             }
         }
     }

@@ -365,6 +365,13 @@ public:
 
     bool IsConnectable() const { return true; }
 
+    /**
+     * @return true if the component is in netlist
+     * which means this is not a power component, or something
+     * like a component reference starting by #
+     */
+    bool IsInNetlist() const;
+
     void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,

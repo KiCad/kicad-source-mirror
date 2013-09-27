@@ -165,6 +165,12 @@ public:
     void SetNetNameCandidate( NETLIST_OBJECT* aCandidate );
 
     /**
+     * @return true if an item has already a net name candidate
+     * and false if not ( m_netNameCandidate == NULL )
+     */
+    bool HasNetNameCandidate() { return m_netNameCandidate != NULL; }
+
+    /**
      * Function GetPinNum
      * returns a pin number in wxString form.  Pin numbers are not always
      * numbers.  \"A23\" would be a valid pin number.
