@@ -727,8 +727,9 @@ Do you want to annotate schematic?" ) ) )
     SCH_SCREENS screens;
     screens.SchematicCleanUp();
 
-    BuildNetListBase();
-    bool success = WriteNetListFile( aFormat, aFullFileName, aNetlistOptions );
+    NETLIST_OBJECT_LIST * connectedItemsList = BuildNetListBase();
+    bool success = WriteNetListFile( connectedItemsList, aFormat,
+                                     aFullFileName, aNetlistOptions );
 
     return success;
 }

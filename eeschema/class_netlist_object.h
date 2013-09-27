@@ -104,7 +104,7 @@ public:
     int m_Member;                       /* for labels type NET_BUSLABELMEMBER ( bus member
                                          * created from the BUS label ) member number.
                                          */
-    NET_CONNECTION_T m_FlagOfConnection;
+    NET_CONNECTION_T m_ConnectionType;  // Used to store the connection type
     SCH_SHEET_PATH  m_SheetListInclude; // sheet path which contains the hierarchical label
     long            m_PinNum;           // pin number ( 1 long = 4 bytes -> 4 ascii codes)
     wxString        m_Label;            // Label text (for labels) or Pin name (for pins)
@@ -136,6 +136,23 @@ public:
     // Accessors:
     void SetNet( int aNetCode ) { m_netCode = aNetCode; }
     int GetNet() const { return m_netCode; }
+
+    /**
+     * Set the item connection type:
+     * UNCONNECTED                 Pin or Label not connected (error)
+     * NOCONNECT_SYMBOL_PRESENT    Pin not connected but have a  NoConnect
+     *                             symbol on it (no error)
+     * PAD_CONNECT                 Normal connection (no error)
+     */
+    void SetConnectionType( NET_CONNECTION_T aFlg = UNCONNECTED )
+    {
+        m_ConnectionType = aFlg;
+    }
+
+    NET_CONNECTION_T GetConnectionType()
+    {
+        return m_ConnectionType;
+    }
 
     /**
      * Set m_netNameCandidate to a connected item which will
@@ -223,6 +240,10 @@ class NETLIST_OBJECT_LIST: public std::vector <NETLIST_OBJECT*>
 {
     bool m_isOwner;     // = true if the objects in list are owned my me, and therefore
                         // the memory should be freed by the destructor and the list cleared
+    int m_lastNetCode;  // Used in intermediate calculation: last net code created
+    int m_lastBusNetCode;  // Used in intermediate calculation:
+                           // last net code created for bus members
+
 public:
     /**
      * Constructor.
@@ -250,16 +271,64 @@ public:
     /*
      * Acces to an item in list
      */
-    NETLIST_OBJECT* GetItem( unsigned aIdx )
+    NETLIST_OBJECT* GetItem( unsigned aIdx ) const
     {
         return  *( this->begin() + aIdx );
     }
 
     /*
-     * Delete all objects in list and clear list
-     * (free memory used to store info about NETLIST_OBJECT items)
+     * Acces to an item type
      */
-    void ClearList();
+    NETLIST_ITEM_T GetItemType( unsigned aIdx ) const
+    {
+        return  GetItem( aIdx )->m_Type;
+    }
+
+    /*
+     * Acces to an item net code
+     */
+    int GetItemNet( unsigned aIdx ) const
+    {
+        return GetItem( aIdx )->GetNet();
+    }
+
+    NET_CONNECTION_T GetConnectionType( unsigned aIdx )
+    {
+        return GetItem( aIdx )->GetConnectionType();
+    }
+
+    /**
+     * Set the item connection type:
+     * UNCONNECTED                 Pin or Label not connected (error)
+     * NOCONNECT_SYMBOL_PRESENT    Pin not connected but have a  NoConnect
+     *                             symbol on it (no error)
+     * PAD_CONNECT                 Normal connection (no error)
+     */
+    void SetConnectionType( unsigned aIdx, NET_CONNECTION_T aFlg = UNCONNECTED )
+    {
+        GetItem( aIdx )->SetConnectionType( aFlg );
+    }
+
+    /*
+     * Delete all objects in list and clear list
+     * (delete NETLIST_OBJECT items)
+     */
+    void FreeList();
+
+    /*
+     * Clear list but do not delete NETLIST_OBJECT items
+     * (they can be deleted only if the instance is owner of the items
+     */
+    void Clear() { this->clear(); }
+
+    /**
+     * Reset the connection type of all items to UNCONNECTED type
+     */
+    void ResetConnectionsType( )
+    {
+        for( unsigned ii = 0; ii < size(); ii++ )
+            GetItem( ii )->SetConnectionType( UNCONNECTED );
+    }
 
     /*
      * Sorts the list of connected items by net code
@@ -273,46 +342,6 @@ public:
      */
     void SortListbySheet();
 
-    /*
-     * Propagate net codes from a parent sheet to an include sheet,
-     * from a pin sheet connection
-     */
-    void SheetLabelConnect( NETLIST_OBJECT* aSheetLabel );
-
-    void PointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus, int start );
-
-    /*
-     * Search connections betweena junction and segments
-     * Propagate the junction net code to objects connected by this junction.
-     * The junction must have a valid net code
-     * The list of objects is expected sorted by sheets.
-     * Search is done from index aIdxStart to the last element of list
-     */
-    void SegmentToPointConnect( NETLIST_OBJECT* aJonction, bool aIsBus, int aIdxStart );
-
-    void ConnectBusLabels();
-
-    /*
-     * Set the m_FlagOfConnection member of items in list
-     * depending on the connection type:
-     * UNCONNECTED, PAD_CONNECT or NOCONNECT_SYMBOL_PRESENT
-     * The list is expected sorted by order of net code,
-     * i.e. items having the same net code are grouped
-     */
-    void SetUnconnectedFlag();
-
-    /**
-     * Function FindBestNetNameForEachNet
-     * fill the .m_NetNameCandidate member of each item of aNetItemBuffer
-     * with a reference to the "best" NETLIST_OBJECT usable to give a name to the net
-     * If no suitable object found, .m_NetNameCandidate is filled with 0.
-     * The "best" NETLIST_OBJECT is a NETLIST_OBJECT that have the type label
-     * and by priority order:
-     * the label is global or local
-     * the label is in the first sheet in a hierarchy (the root sheet has the most priority)
-     * alphabetic order.
-     */
-    void FindBestNetNameForEachNet();
 
     #if defined(DEBUG)
     void DumpNetTable()
@@ -352,10 +381,47 @@ private:
     {
         return Objet1->m_SheetList.Cmp( Objet2->m_SheetList ) < 0;
     }
+    /*
+     * Propagate net codes from a parent sheet to an include sheet,
+     * from a pin sheet connection
+     */
+    void sheetLabelConnect( NETLIST_OBJECT* aSheetLabel );
+
+    void pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus, int start );
+
+    /*
+     * Search connections betweena junction and segments
+     * Propagate the junction net code to objects connected by this junction.
+     * The junction must have a valid net code
+     * The list of objects is expected sorted by sheets.
+     * Search is done from index aIdxStart to the last element of list
+     */
+    void segmentToPointConnect( NETLIST_OBJECT* aJonction, bool aIsBus, int aIdxStart );
+
+    void connectBusLabels();
+
+    /*
+     * Set the m_FlagOfConnection member of items in list
+     * depending on the connection type:
+     * UNCONNECTED, PAD_CONNECT or NOCONNECT_SYMBOL_PRESENT
+     * The list is expected sorted by order of net code,
+     * i.e. items having the same net code are grouped
+     */
+    void setUnconnectedFlag();
+
+    /**
+     * Function findBestNetNameForEachNet
+     * fill the .m_NetNameCandidate member of each item of aNetItemBuffer
+     * with a reference to the "best" NETLIST_OBJECT usable to give a name to the net
+     * If no suitable object found, .m_NetNameCandidate is filled with 0.
+     * The "best" NETLIST_OBJECT is a NETLIST_OBJECT that have the type label
+     * and by priority order:
+     * the label is global or local
+     * the label is in the first sheet in a hierarchy (the root sheet has the most priority)
+     * alphabetic order.
+     */
+    void findBestNetNameForEachNet();
 };
-
-
-extern NETLIST_OBJECT_LIST g_NetObjectslist;
 
 /**
  * Function IsBusLabel

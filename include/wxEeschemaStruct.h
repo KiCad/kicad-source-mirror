@@ -446,8 +446,14 @@ public:
      */
     void SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*  LibItem );
 
-    /* netlist generation */
-    void BuildNetListBase();
+    /**
+     * BuildNetListBase
+     * netlist generation:
+     * Creates a flat list which stores all connected objects, and mainly
+     * pins and labels.
+     * @return a pointer to the list
+     */
+    NETLIST_OBJECT_LIST * BuildNetListBase();
 
     /**
      * Function CreateNetlist
@@ -474,6 +480,8 @@ public:
     /**
      * Function  WriteNetListFile
      * Create the netlist file. Netlist info must be existing
+     * (BuildNetListBase() creates this info)
+     * @param aConnectedItemsList = the initialized list of connected items
      * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
      * @param aFullFileName = full netlist file name
      * @param aNetlistOptions = netlist options using OR'ed bits.
@@ -485,7 +493,8 @@ public:
      * </p>
      * @return true if success.
      */
-    bool WriteNetListFile( int             aFormat,
+    bool WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList,
+                           int             aFormat,
                            const wxString& aFullFileName,
                            unsigned        aNetlistOptions );
 
