@@ -29,7 +29,7 @@
 #include <geometry/shape_circle.h>
 #include <geometry/shape_rect.h>
 
-typedef typename VECTOR2I::extended_type ecoord;
+typedef VECTOR2I::extended_type ecoord;
 
 static inline bool Collide( const SHAPE_CIRCLE& a, const SHAPE_CIRCLE& b, int clearance, bool needMTV, VECTOR2I& aMTV )
 {
@@ -207,4 +207,4 @@ bool SHAPE::Collide ( const SHAPE *aShape, int aClerance ) const
 	VECTOR2I dummy;
 	return CollideShapes( this, aShape, aClerance, false, dummy);
 }
-		
+

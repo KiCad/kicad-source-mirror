@@ -49,7 +49,7 @@ enum ShapeType {
  */	
 class SHAPE {
 	protected:
-		typedef typename VECTOR2I::extended_type ecoord;
+		typedef VECTOR2I::extended_type ecoord;
 
 	public:
 		/**
