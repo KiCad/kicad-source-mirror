@@ -33,6 +33,7 @@
 
 #include <boost/optional.hpp>
 
+class TOOL_ACTION;
 class TOOL_MANAGER;
 
 /**
@@ -312,6 +313,14 @@ public:
 
         return true;
     }
+
+    /**
+     * Function IsAction()
+     * Tests if the event contains an action issued upon activation of the given TOOL_ACTION.
+     * @param aAction is the TOOL_ACTION to be checked against.
+     * @return True if it matches the given TOOL_ACTION.
+     */
+    bool IsAction( const TOOL_ACTION* aAction ) const;
 
     boost::optional<int> GetCommandId()
     {

@@ -34,8 +34,8 @@
 
 typedef boost::optional<VECTOR2I> OPT_VECTOR2I;
 
-class SEG {
-
+class SEG
+{
 	private:
 		typedef VECTOR2I::extended_type ecoord;
 
@@ -52,7 +52,7 @@ class SEG {
 		/** Default constructor
 		 * Creates an empty (0, 0) segment, locally-referenced 
 		 */
-		SEG(): a(m_a), b(m_b)
+		SEG() : a( m_a ), b( m_b )
 		{
 			a = m_a;
 			b = m_b;
@@ -62,12 +62,12 @@ class SEG {
 
 		/** 
 		 * Constructor
-		 * Creates a segment between (x1, y1) and (x2, y2), locally referenced
+		 * Creates a segment between (aX1, aY1) and (aX2, aY2), locally referenced
 		 */
-		SEG ( int x1, int y1, int x2, int y2 ) : a(m_a), b(m_b)
+		SEG( int aX1, int aY1, int aX2, int aY2 ) : a( m_a ), b( m_b )
 		{
-			m_a = VECTOR2I(x1, y1);
-			m_b = VECTOR2I(x2, y2);
+			m_a = VECTOR2I( aX1, aY1 );
+			m_b = VECTOR2I( aX2, aY2 );
 			a = m_a;
 			b = m_b;
 			m_is_local = true;
@@ -78,7 +78,7 @@ class SEG {
 		 * Constructor
 		 * Creates a segment between (aA) and (aB), locally referenced
 		 */
-		SEG ( const VECTOR2I& aA, const VECTOR2I& aB ): a(m_a), b(m_b), m_a(aA), m_b(aB)
+		SEG( const VECTOR2I& aA, const VECTOR2I& aB ) : a( m_a ), b( m_b ), m_a( aA ), m_b( aB )
 		{
 			a = m_a;
 			b = m_b;
@@ -93,7 +93,7 @@ class SEG {
 		 * @param aB reference to the end point in the parent shape
 		 * @param aIndex index of the segment within the parent shape
 		 */
-		SEG ( VECTOR2I& aA, VECTOR2I& aB, int aIndex ): a(aA), b(aB)
+		SEG ( VECTOR2I& aA, VECTOR2I& aB, int aIndex ) : a( aA ), b( aB )
 		{
 			m_is_local = false;
 			m_index = aIndex;
@@ -102,32 +102,32 @@ class SEG {
 		/**
 		 * Copy constructor
 		 */
-		SEG ( const SEG& seg ): a(m_a), b(m_b)
+		SEG ( const SEG& aSeg ) : a( m_a ), b( m_b )
 		{
-			if (seg.m_is_local)
+			if (aSeg.m_is_local)
 			{
-				m_a = seg.m_a;
-				m_b = seg.m_b;
+				m_a = aSeg.m_a;
+				m_b = aSeg.m_b;
 				a = m_a;
 				b = m_b;
 				m_is_local = true;
 				m_index = -1;
 			} else {
-				a = seg.a;
-				b = seg.b;
-				m_index = seg.m_index;
+				a = aSeg.a;
+				b = aSeg.b;
+				m_index = aSeg.m_index;
 				m_is_local = false;
 			}
 		}
 
-		SEG& operator=(const SEG& seg)
+		SEG& operator=( const SEG& aSeg )
 		{
-			a = seg.a;
-			b = seg.b;
-			m_a = seg.m_a;
-			m_b = seg.m_b;
-			m_index = seg.m_index;
-			m_is_local = seg.m_is_local;
+			a = aSeg.a;
+			b = aSeg.b;
+			m_a = aSeg.m_a;
+			m_b = aSeg.m_b;
+			m_index = aSeg.m_index;
+			m_is_local = aSeg.m_is_local;
 			return *this;
 		}
 
@@ -150,8 +150,9 @@ class SEG {
      	 */
     	int Side( const VECTOR2I& aP ) const
     	{
-		    const ecoord det = (b - a).Cross(aP - a); 
-    	 	return det < 0 ? -1 : (det > 0 ? 1 : 0);
+		    const ecoord det = ( b - a ).Cross( aP - a );
+
+    	 	return det < 0 ? -1 : ( det > 0 ? 1 : 0 );
 		}
 
     	/**
@@ -173,7 +174,6 @@ class SEG {
      	 */
     	const VECTOR2I NearestPoint( const VECTOR2I &aP ) const;
 
-
     	/**
     	 * Function Intersect()
     	 *
@@ -186,8 +186,6 @@ class SEG {
     	 */
 		OPT_VECTOR2I Intersect( const SEG& aSeg, bool aIgnoreEndpoints = false, bool aLines = false ) const;
 
-
-
 		/**
 		 * Function IntersectLines()
 		 *
@@ -195,9 +193,9 @@ class SEG {
 		 * @param aSeg segment defining the line to intersect with
 		 * @return intersection point, if exists
 		 */
-		OPT_VECTOR2I IntersectLines(  const SEG& aSeg ) const
+		OPT_VECTOR2I IntersectLines( const SEG& aSeg ) const
 		{
-			return Intersect ( aSeg, false, true );
+			return Intersect( aSeg, false, true );
 		}
 
 		bool Collide( const SEG& aSeg, int aClearance ) const;
@@ -210,14 +208,13 @@ class SEG {
 		 * @return minimum distance
 		 */
 		
-		ecoord SquaredDistance( const SEG& aSeg ) const ;
+		ecoord SquaredDistance( const SEG& aSeg ) const;
 		
 		int Distance( const SEG& aSeg ) const 
 		{
-			return sqrt ( SquaredDistance(aSeg) );
+			return sqrt( SquaredDistance( aSeg ) );
 		}
 		
-
 		/**
 		 * Function Distance()
 		 * 
@@ -225,18 +222,16 @@ class SEG {
 		 * @param aP the point
 		 * @return minimum distance
 		 */
-		 
 		ecoord SquaredDistance( const VECTOR2I& aP ) const 
 		{
-			return (NearestPoint(aP) - aP).SquaredEuclideanNorm();
+			return ( NearestPoint( aP ) - aP ).SquaredEuclideanNorm();
 		}
 
 		int Distance( const VECTOR2I& aP ) const 
 		{
-			return sqrt ( SquaredDistance( aP) );
+			return sqrt( SquaredDistance( aP ) );
 		}
 
-		
 		/**
 		 * Function Collinear()
 		 * 
@@ -244,7 +239,6 @@ class SEG {
 		 * @param aSeg the segment to chech colinearity with
 		 * @return true, when segments are collinear.
 		 */
-
 		bool Collinear( const SEG& aSeg ) const 
 		{
 			ecoord qa1 = a.y - b.y;
@@ -254,7 +248,7 @@ class SEG {
 			ecoord qb2 = aSeg.b.x - aSeg.a.x;
 			ecoord qc2 = -qa2 * aSeg.a.x - qb2 * aSeg.a.y;
 
-			return (qa1 == qa2) && (qb1 == qb2) && (qc1 == qc2);
+			return ( qa1 == qa2 ) && ( qb1 == qb2 ) && ( qc1 == qc2 );
 		}
 
 		/**
@@ -265,14 +259,13 @@ class SEG {
 		 */
 		int Length() const
 		{
-			return (a - b).EuclideanNorm();
+			return ( a - b ).EuclideanNorm();
 		}
 		 
-		ecoord	SquaredLength() const
+		ecoord SquaredLength() const
 		{
-			return (a - b).SquaredEuclideanNorm();
+			return ( a - b ).SquaredEuclideanNorm();
 		}
-
 
 		/**
 		 * Function Index()
@@ -285,20 +278,20 @@ class SEG {
 			return m_index;
 		}
 
+		bool Contains( const VECTOR2I& aP ) const;
 
-		bool Contains(const VECTOR2I& aP) const;
-
-		bool PointCloserThan ( const VECTOR2I& aP, int dist) const;
+		bool PointCloserThan( const VECTOR2I& aP, int aDist ) const;
 
 	//	friend std::ostream& operator<<( std::ostream& stream, const SEG& aSeg );
 	private:
-
-		bool ccw ( const VECTOR2I& a, const VECTOR2I& b, const VECTOR2I &c ) const;
+		bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I &aC ) const;
 		
 		///> locally stored start/end coordinates (used when m_is_local == true)
 		VECTOR2I m_a, m_b;
+
 		///> index withing the parent shape (used when m_is_local == false)
 		int m_index;
+
 		///> locality flag
 		bool m_is_local;
 };
@@ -306,49 +299,47 @@ class SEG {
 inline VECTOR2I SEG::LineProject( const VECTOR2I& aP ) const
 {
 	// fixme: numerical errors for large integers
-	assert(false);
-	return VECTOR2I(0, 0);
+	assert( false );
+	return VECTOR2I( 0, 0 );
 }
-
-
 
 inline int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
 {
-    ecoord   p   = a.y - b.y;
-    ecoord   q   = b.x - a.x;
-	ecoord   r   = -p * a.x - q * a.y;
+    ecoord p = a.y - b.y;
+    ecoord q = b.x - a.x;
+	ecoord r = -p * a.x - q * a.y;
 
-    ecoord   dist = ( p * aP.x + q * aP.y + r ) / sqrt( p * p + q * q );
-    return aDetermineSide ? dist : abs(dist);
+    ecoord dist = ( p * aP.x + q * aP.y + r ) / sqrt( p * p + q * q );
+
+    return aDetermineSide ? dist : abs( dist );
 }
 
-
-
-inline const VECTOR2I SEG::NearestPoint(const VECTOR2I& aP) const
+inline const VECTOR2I SEG::NearestPoint( const VECTOR2I& aP ) const
 {
-    VECTOR2I   		  d = b - a;
-    ecoord   l_squared = d.Dot(d);
+    VECTOR2I d = b - a;
+    ecoord l_squared = d.Dot( d );
 
     if( l_squared == 0 )
         return a;
     
-    ecoord t = d.Dot(aP - a);
+    ecoord t = d.Dot( aP - a );
         
     if( t < 0 )
         return a;
     else if( t > l_squared )
         return b;
     
-    int xp = rescale(t, (ecoord)d.x, l_squared);
-    int yp = rescale(t, (ecoord)d.y, l_squared);
+    int xp = rescale( t, (ecoord)d.x, l_squared );
+    int yp = rescale( t, (ecoord)d.y, l_squared );
 
-    return a + VECTOR2I(xp, yp);
+    return a + VECTOR2I( xp, yp );
 }
 
 inline std::ostream& operator<<( std::ostream& aStream, const SEG& aSeg )
 {
-    if(aSeg.m_is_local)
+    if( aSeg.m_is_local )
     	aStream << "[ local " << aSeg.a << " - " << aSeg.b << " ]";
+
     return aStream;
 }
 

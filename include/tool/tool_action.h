@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +32,16 @@
 #include <tool/tool_base.h>
 #include <tool/action_manager.h>
 
-// TOOL_ACTION - represents a single action. For instance:
-// - changing layer to top by pressing PgUp
-// - running the DRC from the menu
-// and so on, and so forth....
+/**
+ * Class TOOL_ACTION
+ *
+ * Represents a single user action. For instance:
+ * - changing layer to top by pressing PgUp
+ * - running the DRC from the menu
+ * and so on, and so forth....
+ * Action class groups all necessary properties of an action, including explanation,
+ * icons, hotkeys,.menu items, etc.
+ */
 class TOOL_ACTION
 {
 public:
@@ -133,13 +140,13 @@ public:
     }
 
     /**
-     * Function GetEvent()
+     * Function MakeEvent()
      * Returns the event associated with the action (ie. the event that will be sent after
      * activating the action).
      *
      * @return The event associated with the action.
      */
-    TOOL_EVENT GetEvent() const
+    TOOL_EVENT MakeEvent() const
     {
         return TOOL_EVENT( TC_Command, TA_Action, m_name, m_scope );
     }

@@ -181,7 +181,7 @@ public:
 	}
 
 private:
-	static const int c_defaultStackSize = 2000000;
+	static const int c_defaultStackSize = 2000000; // fixme: make configurable
 
 	/* real entry point of the coroutine */
 	static void callerStub( intptr_t data )

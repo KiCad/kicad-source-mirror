@@ -68,7 +68,7 @@ void SELECTION_TOOL::Reset()
     m_selectedItems.clear();
 
     // The tool launches upon reception of action event ("pcbnew.InteractiveSelection")
-    Go( &SELECTION_TOOL::Main, m_activate.GetEvent() );
+    Go( &SELECTION_TOOL::Main, m_activate.MakeEvent() );
 }
 
 
@@ -266,7 +266,7 @@ bool SELECTION_TOOL::selectMultiple()
     VIEW* view = getView();
     getViewControls()->SetAutoPan( true );
 
-    // Those 2 lines remove the blink-in-the-random-place effect
+    // These 2 lines remove the blink-in-the-random-place effect
     m_selArea->SetOrigin( VECTOR2I( 0, 0 ) );
     m_selArea->SetEnd( VECTOR2I( 0, 0 ) );
     view->Add( m_selArea );
@@ -467,7 +467,6 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         break;
     }
 
-
     // All other items are selected only if the layer on which they exist is visible
     return board->IsLayerVisible( aItem->GetLayer() );
 }
@@ -475,12 +474,14 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 
 bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
 {
+    const unsigned GRIP_MARGIN = 500000;
+
     // Check if the point is located within any of the currently selected items bounding boxes
     std::set<BOARD_ITEM*>::iterator it, it_end;
     for( it = m_selectedItems.begin(), it_end = m_selectedItems.end(); it != it_end; ++it )
     {
         BOX2I itemBox = (*it)->ViewBBox();
-        itemBox.Inflate( 500000 );    // Give some margin for gripping an item
+        itemBox.Inflate( GRIP_MARGIN );    // Give some margin for gripping an item
 
         if( itemBox.Contains( aPoint ) )
             return true;

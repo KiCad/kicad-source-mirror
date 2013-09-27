@@ -84,15 +84,16 @@ public:
     /// @copydoc VIEW_CONTROLS::GetCursorPosition()
     virtual const VECTOR2D GetCursorPosition() const;
 
-    /// Event that forces mouse move event in the dispatcher
+    /// Event that forces mouse move event in the dispatcher (eg. used in autopanning, when mouse
+    /// cursor does not move in screen coordinates, but does in world coordinates)
     static const wxEventType EVT_REFRESH_MOUSE;
 
 private:
     /// Possible states for WX_VIEW_CONTROLS
     enum State {
-        IDLE = 1,
-        DRAG_PANNING,
-        AUTO_PANNING,
+        IDLE = 1,           /// Nothing is happening
+        DRAG_PANNING,       /// Panning with mouse button pressed
+        AUTO_PANNING,       /// Panning on approaching borders of the frame
     };
 
     /**

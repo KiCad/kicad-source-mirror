@@ -22,6 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef ITEM_STATE_H_
+#define ITEM_STATE_H_
+
+#include <deque>
+#include <class_board_item.h>
+
 /**
  * Class ITEM_STATE
  *
@@ -29,13 +35,6 @@
  * the introduced changes. Does not take ownership of modified items, neither takes care of
  * refreshing.
  */
-
-#ifndef ITEM_STATE_H_
-#define ITEM_STATE_H_
-
-#include <deque>
-#include <class_board_item.h>
-
 class ITEM_STATE
 {
 public:
@@ -278,4 +277,3 @@ private:
 };
 
 #endif /* ITEM_STATE_H_ */
-

@@ -45,7 +45,7 @@ enum ShapeType {
 /**
  * Class SHAPE
  * 
- * Represents an abstract shape on 2D plane. All SHAPEs implement SHAPE interface.
+ * Represents an abstract shape on 2D plane.
  */	
 class SHAPE {
 	protected:
@@ -58,7 +58,7 @@ class SHAPE {
 		 * Creates an empty shape of type aType
 		 */
 
-		SHAPE ( ShapeType aType ): m_type( aType ) { };
+		SHAPE ( ShapeType aType ) : m_type( aType ) { };
 		
 		// Destructor
 		virtual ~SHAPE() {};
@@ -78,7 +78,7 @@ class SHAPE {
 		 * @retval copy of the shape
 		 */
 		virtual SHAPE* Clone() const { 
-			assert(false); 
+			assert( false );
 			return NULL; 
 		};
 
@@ -89,9 +89,9 @@ class SHAPE {
 		 * a collision.
 		 * @return true, if there is a collision.
 		 */
-		virtual bool Collide ( const VECTOR2I& aP, int aClearance = 0 ) const
+		virtual bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const
 		{
-			return Collide(SEG(aP, aP), aClearance);
+			return Collide( SEG( aP, aP ), aClearance );
 		}
 		
 		/**
@@ -99,10 +99,13 @@ class SHAPE {
 		 *
 		 * Checks if the boundary of shape (this) lies closer to the shape aShape than aClearance, indicating
 		 * a collision.
+		 * @param aShape shape to check collision against
+		 * @param aClearance minimum clearance
+		 * @param aMTV minimum translation vector
 		 * @return true, if there is a collision.
 		 */
-		virtual bool Collide ( const SHAPE *aShape, int aClerance, VECTOR2I& aMTV ) const;
-		virtual bool Collide ( const SHAPE *aShape, int aClerance = 0 ) const;
+		virtual bool Collide( const SHAPE* aShape, int aClerance, VECTOR2I& aMTV ) const;
+		virtual bool Collide( const SHAPE* aShape, int aClerance = 0 ) const;
 		/**
 		 * Function Collide()
 		 *
@@ -110,7 +113,7 @@ class SHAPE {
 		 * a collision.
 		 * @return true, if there is a collision.
 		 */
-		virtual bool Collide ( const SEG& aSeg, int aClearance = 0) const = 0;
+		virtual bool Collide( const SEG& aSeg, int aClearance = 0 ) const = 0;
 	
 		/**
 		 * Function Collide()
@@ -120,7 +123,7 @@ class SHAPE {
 		 * @aClearance how much the bounding box is expanded wrs to the minimum enclosing rectangle for the shape.
 		 * @return the bounding box.
 		 */
-		virtual const BOX2I BBox ( int aClearance = 0 ) const = 0;
+		virtual const BOX2I BBox( int aClearance = 0 ) const = 0;
 
 		/**
 		 * Function Centre()
@@ -130,7 +133,7 @@ class SHAPE {
 		 */
 		virtual VECTOR2I Centre() const
 		{
-			return BBox(0).Centre(); // if nothing better is available....
+			return BBox( 0 ).Centre(); // if nothing better is available....
 		}
 
 	private:
@@ -139,6 +142,6 @@ class SHAPE {
 
 };
 
-bool CollideShapes ( const SHAPE *a, const SHAPE *b, int clearance, bool needMTV, VECTOR2I& aMTV );
+bool CollideShapes( const SHAPE *aA, const SHAPE *aB, int aClearance, bool aNeedMTV, VECTOR2I& aMTV );
 
 #endif // __SHAPE_H

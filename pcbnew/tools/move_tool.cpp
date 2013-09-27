@@ -53,7 +53,7 @@ MOVE_TOOL::~MOVE_TOOL()
 void MOVE_TOOL::Reset()
 {
     // The tool launches upon reception of action event ("pcbnew.InteractiveMove")
-    Go( &MOVE_TOOL::Main, m_activate.GetEvent() );
+    Go( &MOVE_TOOL::Main, m_activate.MakeEvent() );
 }
 
 
@@ -115,12 +115,12 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
         {
             VECTOR2D cursorPos = getView()->ToWorld( getViewControls()->GetCursorPosition() );
 
-            if( evt->Matches( m_rotate.GetEvent() ) )           // got rotation event?
+            if( evt->IsAction( &m_rotate ) )           // got rotation event?
             {
                 m_state.Rotate( cursorPos, 900.0 );
                 m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );
             }
-            else if( evt->Matches( m_flip.GetEvent() ) )        // got flip event?
+            else if( evt->IsAction( &m_flip ) )        // got flip event?
             {
                 m_state.Flip( cursorPos );
                 m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );

@@ -140,7 +140,7 @@ private:
     /// Menu items with ID higher than that are considered TOOL_ACTIONs
     static const int m_actionId = 10000;
 
-    /// Stores tool actions that are choosable from the menu. Does not take the ownership.
+    /// Associates tool actions with menu item IDs. Non-owning.
     std::map<int, const TOOL_ACTION*> m_toolActions;
 };
 

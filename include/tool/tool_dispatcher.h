@@ -42,10 +42,10 @@ namespace KiGfx {
  * Class TOOL_DISPATCHER
  * 
  * - takes wx events,
- * - fixes all wx quirks (mouse warping, etc)
+ * - fixes all wx quirks (mouse warping, panning, ordering problems, etc)
  * - translates coordinates to world space
  * - low-level input conditioning (drag/click threshold), updating mouse position during view auto-scroll/pan.
- * - issues TOOL_EVENTS to the manager
+ * - issues TOOL_EVENTS to the tool manager
  */
 
 class TOOL_DISPATCHER
@@ -99,6 +99,7 @@ private:
 
     ///> Saves the state of key modifiers (Alt, Ctrl and so on).
     int decodeModifiers( const wxKeyboardState* aState ) const;
+
 
     ///> Stores all the informations regarding a mouse button state.
     struct ButtonState;

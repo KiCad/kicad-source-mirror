@@ -151,24 +151,28 @@ void CONTEXT_MENU::CMEventHandler::onEvent( wxEvent& aEvent )
     TOOL_EVENT evt;
     wxEventType type = aEvent.GetEventType();
 
+    // When the currently chosen item in the menu is changed, an update event is issued.
+    // For example, the selection tool can use this to dynamically highlight the current item
+    // from selection clarification popup.
     if( type == wxEVT_MENU_HIGHLIGHT )
         evt = TOOL_EVENT( TC_Command, TA_ContextMenuUpdate, aEvent.GetId() );
 
+    // One of menu entries was selected..
     else if( type == wxEVT_COMMAND_MENU_SELECTED )
     {
-        if( aEvent.GetId() > m_actionId )
+        // Check if there is a TOOL_ACTION for the given ID
+        if( m_menu->m_toolActions.count( aEvent.GetId() ) == 1 )
         {
-            // Handling TOOL_ACTIONs
-            if( m_menu->m_toolActions.count( aEvent.GetId() ) == 1 )
-                evt = m_menu->m_toolActions[aEvent.GetId()]->GetEvent();
+            evt = m_menu->m_toolActions[aEvent.GetId()]->MakeEvent();
         }
         else
         {
-            // Handling common menu entries
+            // Handling non-action menu entries (e.g. items in clarification list)
             evt = TOOL_EVENT( TC_Command, TA_ContextMenuChoice, aEvent.GetId() );
         }
     }
 
+    // forward the action/update event to the TOOL_MANAGER
     if( m_menu->m_tool )
         m_menu->m_tool->GetManager()->ProcessEvent( evt );
 }

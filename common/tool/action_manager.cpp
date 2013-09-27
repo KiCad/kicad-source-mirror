@@ -99,6 +99,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 
 void ACTION_MANAGER::runAction( const TOOL_ACTION* aAction ) const
 {
-    TOOL_EVENT event = aAction->GetEvent();
+    TOOL_EVENT event = aAction->MakeEvent();
+
     m_toolMgr->ProcessEvent( event );
 }

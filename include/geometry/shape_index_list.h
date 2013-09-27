@@ -27,30 +27,29 @@
 
 #include <boost/unordered_map.hpp>
 
-template <class T> const SHAPE *defaultShapeFunctor( const T aItem )
+template <class T> const SHAPE* defaultShapeFunctor( const T aItem )
 {
 	return aItem->GetShape();
 }
 
-template <class T, const SHAPE *(ShapeFunctor)(const T) = defaultShapeFunctor<T> >
+template <class T, const SHAPE* (ShapeFunctor)(const T) = defaultShapeFunctor<T> >
 
 class SHAPE_INDEX_LIST {
 	
 	struct ShapeEntry {
-		ShapeEntry(T aParent)
+		ShapeEntry( T aParent )
 		{
-			shape = ShapeFunctor(aParent);
-			bbox = shape->BBox(0);
+			shape = ShapeFunctor( aParent );
+			bbox = shape->BBox( 0 );
 			parent = aParent;
 		}
 
 		~ShapeEntry()
 		{
-			
 		}
 
 		T parent;
-		const SHAPE *shape;
+		const SHAPE* shape;
 		BOX2I bbox;
 	};
 
@@ -58,18 +57,16 @@ class SHAPE_INDEX_LIST {
 	typedef typename std::vector<ShapeEntry>::iterator ShapeVecIter;	
 	
 public:
-
-// "Normal" iterator interface, for STL algorithms. 
+	// "Normal" iterator interface, for STL algorithms.
 	class iterator {
-
 		public:
 			iterator() {};
 
-			iterator( ShapeVecIter aCurrent)
-				: m_current(aCurrent) {};
+			iterator( ShapeVecIter aCurrent )
+				: m_current( aCurrent ) {};
 
-			iterator(const iterator &b) : 
-				m_current(b.m_current) {};
+			iterator( const iterator &aB ) :
+				m_current( aB.m_current ) {};
 
 			T operator*() const
 			{
@@ -81,25 +78,25 @@ public:
 				++m_current;
 			}
 
-			iterator& operator++(int dummy)
+			iterator& operator++( int aDummy )
 			{
 				++m_current;
 				return *this;
 			}
 
-			bool operator ==( const iterator& rhs ) const
+			bool operator==( const iterator& aRhs ) const
 			{
-				return m_current == rhs.m_current;
+				return m_current == aRhs.m_current;
 			}
 
-			bool operator !=( const iterator& rhs ) const
+			bool operator!=( const iterator& aRhs ) const
 			{
-				return m_current != rhs.m_current;
+				return m_current != aRhs.m_current;
 			}
 
-			const iterator& operator=(const iterator& rhs) 
+			const iterator& operator=( const iterator& aRhs )
 			{
-				m_current = rhs.m_current;
+				m_current = aRhs.m_current;
 				return *this;
 			}
 
@@ -107,40 +104,37 @@ public:
 			ShapeVecIter m_current;
 	};
 
-// "Query" iterator, for iterating over a set of spatially matching shapes.
+	// "Query" iterator, for iterating over a set of spatially matching shapes.
 	class query_iterator {
 		public:
-
 			query_iterator()
 			{
-
 			}
 
-			query_iterator(  ShapeVecIter aCurrent, ShapeVecIter aEnd, SHAPE *aShape, int aMinDistance, bool aExact)
-				: m_end(aEnd),
-				  m_current(aCurrent),
-				  m_shape(aShape),
-				  m_minDistance(aMinDistance),
-				  m_exact(aExact)
+			query_iterator( ShapeVecIter aCurrent, ShapeVecIter aEnd, SHAPE* aShape,
+			                int aMinDistance, bool aExact ) :
+				  m_end( aEnd ),
+				  m_current( aCurrent ),
+				  m_shape( aShape ),
+				  m_minDistance( aMinDistance ),
+				  m_exact( aExact )
 			{
-				if(aShape)
+				if( aShape )
 				{
 					m_refBBox = aShape->BBox();
 					next();
 				}
 			}
 
-			query_iterator(const query_iterator &b)
-				: m_end(b.m_end),
-				  m_current(b.m_current),
-				  m_shape(b.m_shape),
-				  m_minDistance(b.m_minDistance),
-				  m_exact(b.m_exact),
-				  m_refBBox(b.m_refBBox)
+			query_iterator( const query_iterator &aB ) :
+				  m_end( aB.m_end ),
+				  m_current( aB.m_current ),
+				  m_shape( aB.m_shape ),
+				  m_minDistance( aB.m_minDistance ),
+				  m_exact( aB.m_exact ),
+				  m_refBBox( aB.m_refBBox )
 			{
-
 			}
-
 			
 			T operator*() const
 			{
@@ -154,45 +148,45 @@ public:
 			 	return *this;
 			}
 
-			query_iterator& operator++(int dummy)
+			query_iterator& operator++( int aDummy )
 			{
 				++m_current;
 				next();
 				return *this;
 			}
 
-			bool operator ==( const query_iterator& rhs ) const
+			bool operator==( const query_iterator& aRhs ) const
 			{
-				return m_current == rhs.m_current;
+				return m_current == aRhs.m_current;
 			}
 
-			bool operator !=( const query_iterator& rhs ) const
+			bool operator!=( const query_iterator& aRhs ) const
 			{
-				return m_current != rhs.m_current;
+				return m_current != aRhs.m_current;
 			}
 
-			const query_iterator& operator=(const query_iterator& rhs) 
+			const query_iterator& operator=( const query_iterator& aRhs )
 			{
-				m_end = rhs.m_end;
-				m_current = rhs.m_current;
-				m_shape = rhs.m_shape;
-				m_minDistance = rhs.m_minDistance;
-				m_exact = rhs.m_exact;
-				m_refBBox = rhs.m_refBBox;
+				m_end = aRhs.m_end;
+				m_current = aRhs.m_current;
+				m_shape = aRhs.m_shape;
+				m_minDistance = aRhs.m_minDistance;
+				m_exact = aRhs.m_exact;
+				m_refBBox = aRhs.m_refBBox;
 				return *this;
 			}
 
 		private:
-
 			void next()
 			{
-				while(m_current != m_end)
+				while( m_current != m_end )
 				{
-					if (m_refBBox.Distance(m_current->bbox) <= m_minDistance)
+					if( m_refBBox.Distance( m_current->bbox ) <= m_minDistance )
 					{
-						if(!m_exact || m_current->shape->Collide(m_shape, m_minDistance))
+						if( !m_exact || m_current->shape->Collide( m_shape, m_minDistance ) )
 							return;
 					}
+
 					++m_current;
 				}
 			}
@@ -205,27 +199,27 @@ public:
 			int m_minDistance;
 	};
 
-	void Add(T aItem)
+	void Add( T aItem )
 	{
-		ShapeEntry s (aItem);
+		ShapeEntry s( aItem );
 
 		m_shapes.push_back(s);
 	}
 	
-	void Remove(const T aItem)
+	void Remove( const T aItem )
 	{
 		ShapeVecIter i;
 		
-		for(i=m_shapes.begin(); i!=m_shapes.end();++i)
+		for( i = m_shapes.begin(); i != m_shapes.end(); ++i )
 		{
-			if(i->parent == aItem)
+			if( i->parent == aItem )
 				break;
 		}
 
-		if(i == m_shapes.end())
+		if( i == m_shapes.end() )
 			return;
 
-		m_shapes.erase(i);
+		m_shapes.erase( i );
 	}
 
 	int Size() const
@@ -234,37 +228,37 @@ public:
 	}
 
 	template<class Visitor>
-		int Query( const SHAPE *aShape, int aMinDistance, Visitor &v, bool aExact = true) //const
-		{
-			ShapeVecIter i;
-			int n = 0;
-			VECTOR2I::extended_type minDistSq = (VECTOR2I::extended_type) aMinDistance * aMinDistance;
+    int Query( const SHAPE *aShape, int aMinDistance, Visitor &aV, bool aExact = true ) //const
+    {
+        ShapeVecIter i;
+        int n = 0;
+        VECTOR2I::extended_type minDistSq = (VECTOR2I::extended_type) aMinDistance * aMinDistance;
 
-			BOX2I refBBox = aShape->BBox();
+        BOX2I refBBox = aShape->BBox();
 
-			for(i = m_shapes.begin(); i!=m_shapes.end(); ++i)
-			{
-				if (refBBox.SquaredDistance(i->bbox) <= minDistSq)
-				{
-					if(!aExact || i->shape->Collide(aShape, aMinDistance))
-					{
-						n++;
-						if(!v( i->parent ))
-							return n;
-					}
-				}
-			}
-			return n;
-		}
+        for( i = m_shapes.begin(); i != m_shapes.end(); ++i )
+        {
+            if( refBBox.SquaredDistance( i->bbox ) <= minDistSq )
+            {
+                if( !aExact || i->shape->Collide( aShape, aMinDistance ) )
+                {
+                    n++;
+                    if( !aV( i->parent ) )
+                        return n;
+                }
+            }
+        }
+        return n;
+    }
 
 	void Clear()
 	{
 		m_shapes.clear();
 	}
 	
-	query_iterator qbegin( SHAPE *aShape, int aMinDistance, bool aExact ) 
+	query_iterator qbegin( SHAPE* aShape, int aMinDistance, bool aExact )
 	{
-		return query_iterator( m_shapes.begin(), m_shapes.end(), aShape, aMinDistance, aExact);
+		return query_iterator( m_shapes.begin(), m_shapes.end(), aShape, aMinDistance, aExact );
 	}
 
 	const query_iterator qend() 
@@ -283,7 +277,6 @@ public:
 	}
 
 private:
-
 	ShapeVec m_shapes;
 };
 
