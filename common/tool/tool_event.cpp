@@ -25,9 +25,8 @@
 #include <cstring>
 #include <string>
 
-//#include <base_struct.h>
-
 #include <tool/tool_event.h>
+#include <tool/tool_action.h>
 #include <tool/tool_manager.h>
 
 #include <boost/foreach.hpp>
@@ -52,6 +51,12 @@ static const std::string flag2string( int flag, const FlagString* exps )
 	}
 
 	return rv;
+}
+
+
+bool TOOL_EVENT::IsAction( const TOOL_ACTION* aAction ) const
+{
+    return Matches( aAction->MakeEvent() );
 }
 
 

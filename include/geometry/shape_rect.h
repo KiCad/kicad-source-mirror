@@ -36,28 +36,28 @@ class SHAPE_RECT : public SHAPE {
 		 * Constructor
 		 * Creates an empty (0-sized) rectangle
 		 */
-		SHAPE_RECT(): 
-			SHAPE( SH_RECT ), m_w (0), m_h(0) {};
+		SHAPE_RECT() :
+			SHAPE( SH_RECT ), m_w( 0 ), m_h( 0 ) {};
 			
 		/**
 		 * Constructor
-		 * Creates a rectangle defined by top-left corner (x0, y0), width w and height h.
+		 * Creates a rectangle defined by top-left corner (aX0, aY0), width aW and height aH.
 		 */
-		SHAPE_RECT( int x0, int y0, int w, int h ):
-			SHAPE(SH_RECT), m_p0(x0, y0), m_w(w), m_h(h) {};
+		SHAPE_RECT( int aX0, int aY0, int aW, int aH ) :
+			SHAPE( SH_RECT ), m_p0( aX0, aY0 ), m_w( aW ), m_h( aH ) {};
 
 		/**
 		 * Constructor
-		 * Creates a rectangle defined by top-left corner p0, width w and height h.
+		 * Creates a rectangle defined by top-left corner aP0, width aW and height aH.
 		 */
-		 SHAPE_RECT( const VECTOR2I &p0, int w, int h ):
-			SHAPE(SH_RECT), m_p0(p0), m_w(w), m_h(h) {};
+		 SHAPE_RECT( const VECTOR2I &aP0, int aW, int aH ) :
+			SHAPE( SH_RECT ), m_p0( aP0 ), m_w( aW ), m_h( aH ) {};
 
 		/// @copydoc SHAPE::BBox()
 		const BOX2I BBox(int aClearance = 0) const
 		{
-			BOX2I bbox( VECTOR2I (m_p0.x - aClearance, m_p0.y - aClearance ),
-						  VECTOR2I (m_w + 2 * aClearance, m_h + 2 * aClearance ));
+			BOX2I bbox( VECTOR2I( m_p0.x - aClearance, m_p0.y - aClearance ),
+						  VECTOR2I( m_w + 2 * aClearance, m_h + 2 * aClearance ) );
 			//printf("bb : %s\n",bbox.Format().c_str());
 			return bbox;
 		}
@@ -70,11 +70,11 @@ class SHAPE_RECT : public SHAPE {
 		 */
 		int Diagonal() const
 		{
-			return VECTOR2I(m_w, m_h).EuclideanNorm();
+			return VECTOR2I( m_w, m_h ).EuclideanNorm();
 		}
 
 		/// @copydoc SHAPE::Collide()
-		bool Collide(const SEG& aSeg, int aClearance = 0) const
+		bool Collide( const SEG& aSeg, int aClearance = 0 ) const
 		{
 			//VECTOR2I pmin = VECTOR2I(std::min(aSeg.a.x, aSeg.b.x), std::min(aSeg.a.y, aSeg.b.y));
 			//VECTOR2I pmax = VECTOR2I(std::max(aSeg.a.x, aSeg.b.x), std::max(aSeg.a.y, aSeg.b.y));
@@ -83,19 +83,19 @@ class SHAPE_RECT : public SHAPE {
 			//if (BBox(0).SquaredDistance(r) > aClearance * aClearance)
 			//	return false;
 	
-			if(BBox(0).Contains(aSeg.a) || BBox(0).Contains(aSeg.b))
+			if( BBox( 0 ).Contains( aSeg.a ) || BBox( 0 ).Contains( aSeg.b ) )
 				return true;
 
- 			VECTOR2I vts[] = { 	VECTOR2I(m_p0.x, m_p0.y),
-								VECTOR2I(m_p0.x, m_p0.y + m_h),
-								VECTOR2I(m_p0.x + m_w, m_p0.y + m_h),
-								VECTOR2I(m_p0.x + m_w, m_p0.y),
-								VECTOR2I(m_p0.x, m_p0.y) };
+ 			VECTOR2I vts[] = { 	VECTOR2I( m_p0.x, m_p0.y ),
+								VECTOR2I( m_p0.x, m_p0.y + m_h ),
+								VECTOR2I( m_p0.x + m_w, m_p0.y + m_h ),
+								VECTOR2I( m_p0.x + m_w, m_p0.y ),
+								VECTOR2I( m_p0.x, m_p0.y ) };
 
-			for (int i = 0; i < 4; i++)
+			for( int i = 0; i < 4; i++ )
 			{
-				SEG s(vts[i], vts[i+1], i);
-				if(s.Distance(aSeg) <= aClearance)
+				SEG s( vts[i], vts[i + 1], i );
+				if( s.Distance( aSeg ) <= aClearance )
 					return true;
 			}
 			
@@ -114,7 +114,7 @@ class SHAPE_RECT : public SHAPE {
 		 * 
 		 * @return size of the rectangle
 		 */
-		const VECTOR2I GetSize() const { return VECTOR2I(m_w, m_h); }
+		const VECTOR2I GetSize() const { return VECTOR2I( m_w, m_h ); }
 
 		/**
 		 * Function GetWidth()
@@ -133,8 +133,10 @@ class SHAPE_RECT : public SHAPE {
 	private:
 		///> Top-left corner
 		VECTOR2I m_p0;
+
 		///> Width
 		int m_w;
+
 		///> Height
 		int m_h;
 	};

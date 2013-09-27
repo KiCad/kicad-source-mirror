@@ -27,8 +27,8 @@
 
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
-#include <tool/item_state.h>
 #include <view/view_group.h>
+#include "item_state.h"
 
 class BOARD_ITEM;
 class SELECTION_TOOL;

@@ -39,6 +39,7 @@
 
 using boost::optional;
 
+///> Stores information about a mouse button state
 struct TOOL_DISPATCHER::ButtonState
 {
 	ButtonState( TOOL_MouseButtons aButton, const wxEventType& aDownEvent,
@@ -217,6 +218,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 	        type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
 	        type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
 	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
+	        // Event issued whem mouse retains position in screen coordinates,
+	        // but changes in world coordinates (eg. autopanning)
 	        type == KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
 	{
         VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetCursorPosition();
@@ -247,7 +250,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         if( type == wxEVT_KEY_UP )
         {
-            if( key == WXK_ESCAPE )
+            if( key == WXK_ESCAPE )     // ESC is the special key for cancelling tools
                 evt = TOOL_EVENT( TC_Command, TA_CancelTool );
             else
                 evt = TOOL_EVENT( TC_Keyboard, TA_KeyUp, key | mods );
@@ -261,6 +264,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 	if( evt )
 		m_toolMgr->ProcessEvent( *evt );
 
+	// pass the event to the GUI, it might still be interested in it
 	aEvent.Skip();
 }
 
@@ -270,6 +274,7 @@ void TOOL_DISPATCHER::DispatchWxCommand( const wxCommandEvent& aEvent )
 	bool activateTool = false;
 	std::string toolName;
 	
+	// fixme: use TOOL_ACTIONs here
 	switch( aEvent.GetId() )
 	{
 		case ID_PNS_ROUTER_TOOL:
@@ -282,6 +287,7 @@ void TOOL_DISPATCHER::DispatchWxCommand( const wxCommandEvent& aEvent )
 			break;
 	}
 
+	// do nothing if the legacy view is active
 	if( activateTool && m_editFrame->IsGalCanvasActive() )
 		m_toolMgr->InvokeTool( toolName );
 }

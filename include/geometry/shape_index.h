@@ -62,9 +62,9 @@ const SHAPE* shapeFunctor( SHAPE* aItem );
  * @return a BOX2I object containing the bounding box of the T object.
  */
 template <class T>
-BOX2I boundingBox( T object )
+BOX2I boundingBox( T aObject )
 {
-    return shapeFunctor(object)->BBox();
+    return shapeFunctor( aObject )->BBox();
 }
 
 /**
@@ -77,9 +77,9 @@ BOX2I boundingBox( T object )
  * @param visitor V visitor object
  */
 template <class T, class V>
-void acceptVisitor( T object, V visitor )
+void acceptVisitor( T aObject, V aVisitor )
 {
-    visitor(object);
+    aVisitor( aObject );
 }
 
 /**
@@ -94,22 +94,23 @@ void acceptVisitor( T object, V visitor )
  * @return if object and anotherObject collide
  */
 template<class T, class U>
-bool collide( T object, U anotherObject, int minDistance )
+bool collide( T aObject, U aAnotherObject, int aMinDistance )
 {
-    return shapeFunctor( object )->Collide( anotherObject, minDistance );
+    return shapeFunctor( aObject )->Collide( aAnotherObject, aMinDistance );
 }
 
 template<class T, class V>
-bool queryCallback(T shape, void* context)
+bool queryCallback( T aShape, void* aContext )
 {
-    V* visitor = (V*) context;
-    acceptVisitor<T,V>( shape, *visitor );
+    V* visitor = (V*) aContext;
+    acceptVisitor<T,V>( aShape, *visitor );
 
     return true;
 }
 
 template<class T = SHAPE*>
-class SHAPE_INDEX {
+class SHAPE_INDEX
+{
     public:
         class Iterator
         {
@@ -123,9 +124,9 @@ class SHAPE_INDEX {
              * Setup the internal tree iterator.
              * @param tree pointer to a RTREE object
              */
-            void Init( RTree<T, int, 2, float>* tree )
+            void Init( RTree<T, int, 2, float>* aTree )
             {
-                tree->GetFirst( iterator );
+                aTree->GetFirst( iterator );
             }
 
         public:
@@ -135,9 +136,9 @@ class SHAPE_INDEX {
              * Creates an iterator for the index object
              * @param index SHAPE_INDEX object to iterate
              */
-            Iterator( SHAPE_INDEX* index )
+            Iterator( SHAPE_INDEX* aIndex )
             {
-                Init( index->m_tree );
+                Init( aIndex->m_tree );
             }
 
             /**
@@ -321,7 +322,7 @@ void SHAPE_INDEX<T>::Add( T aShape )
 }
 
 template<class T>
-void SHAPE_INDEX<T>::Remove(T aShape)
+void SHAPE_INDEX<T>::Remove( T aShape )
 {
     BOX2I box = boundingBox( aShape );
     int min[2] = { box.GetX(), box.GetY() };

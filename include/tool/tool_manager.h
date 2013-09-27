@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,11 +31,10 @@
 
 #include <math/vector2d.h>
 
-#include <tool/tool_event.h>
 #include <tool/tool_base.h>
-#include <tool/action_manager.h>
 
 class TOOL_BASE;
+class ACTION_MANAGER;
 class CONTEXT_MENU;
 class wxWindow;
 
@@ -89,10 +89,7 @@ public:
      *
      * @param aAction is the action to be registered.
      */
-    void RegisterAction( TOOL_ACTION* aAction )
-    {
-        m_actionMgr.RegisterAction( aAction );
-    }
+    void RegisterAction( TOOL_ACTION* aAction );
 
     /**
      * Function UnregisterAction()
@@ -100,10 +97,7 @@ public:
      *
      * @param aAction is the action to be unregistered.
      */
-    void UnregisterAction( TOOL_ACTION* aAction )
-    {
-        m_actionMgr.UnregisterAction( aAction );
-    }
+    void UnregisterAction( TOOL_ACTION* aAction );
 
     /**
      * Function FindTool()
@@ -206,6 +200,14 @@ private:
     void dispatchInternal( TOOL_EVENT& aEvent );
 
     /**
+     * Function dispatchStandardEvents()
+     * Handles specific events, that are intended for TOOL_MANAGER rather than tools.
+     * @aEvent is the event to be processed.
+     * @return False if the event was processed and should not go any further.
+     */
+    bool dispatchStandardEvents( TOOL_EVENT& aEvent );
+
+    /**
      * Function dispatchActivation()
      * Checks if it is a valid activation event and invokes a proper tool.
      * @param aEvent is an event to be tested.
@@ -215,7 +217,8 @@ private:
 
     /**
      * Function invokeTool()
-     * Invokes a tool by sending a proper event.
+     * Invokes a tool by sending a proper event (in contrary to runTool, which makes the tool run
+     * for real).
      * @param aTool is the tool to be invoked.
      */
     bool invokeTool( TOOL_BASE* aTool );
@@ -291,7 +294,9 @@ private:
     /// Stack of the active tools
     std::deque<TOOL_ID> m_activeTools;
 
-    ACTION_MANAGER m_actionMgr;
+    /// Instance of ACTION_MANAGER that handles TOOL_ACTIONs
+    ACTION_MANAGER* m_actionMgr;
+
     EDA_ITEM* m_model;
     KiGfx::VIEW* m_view;
     KiGfx::VIEW_CONTROLS* m_viewControls;
