@@ -9,7 +9,27 @@
 #include <common.h>
 #include <math_for_graphics.h>
 
+// Returns true if the point P is on the segment S.
+// faster than TestSegmentHit() because P should be exactly on S
+// therefore works fine only for H, V and 45 deg segm (suitable for wires in eeschema)
+bool IsPointOnSegment( const wxPoint& aSegStart, const wxPoint& aSegEnd,
+                       const wxPoint& aTestPoint )
+{
+    wxPoint vectSeg   = aSegEnd - aSegStart;    // Vector from S1 to S2
+    wxPoint vectPoint = aTestPoint - aSegStart; // Vector from S1 to P
 
+    // Use long long here to avoid overflow in calculations
+    if( (long long) vectSeg.x * vectPoint.y - (long long) vectSeg.y * vectPoint.x )
+        return false;        /* Cross product non-zero, vectors not parallel */
+
+    if( ( (long long) vectSeg.x * vectPoint.x + (long long) vectSeg.y * vectPoint.y ) <
+        ( (long long) vectPoint.x * vectPoint.x + (long long) vectPoint.y * vectPoint.y ) )
+        return false;          /* Point not on segment */
+
+    return true;
+}
+
+// Returns true if the segment 1 intersectd the segment 2.
 bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
                                const wxPoint &a_p1_l2, const wxPoint &a_p2_l2 )
 {

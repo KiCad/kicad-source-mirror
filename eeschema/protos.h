@@ -21,12 +21,6 @@ class SCH_ITEM;
 //void DisplayCmpDoc( wxString& Name );
 wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufName );
 
-
-/*********************/
-/* DANGLING_ENDS.CPP */
-/*********************/
-bool SegmentIntersect( wxPoint aSegStart, wxPoint aSegEnd, wxPoint aTestPoint );
-
 // operations_on_item_lists.cpp
 void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
 

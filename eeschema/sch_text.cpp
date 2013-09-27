@@ -535,7 +535,7 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
                          wxT( "Dangling end type list overflow.  Bad programmer!" ) );
 
             DANGLING_END_ITEM & nextItem = aItemList[ii];
-            m_isDangling = !SegmentIntersect( item.GetPosition(), nextItem.GetPosition(), m_Pos );
+            m_isDangling = !IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), m_Pos );
         }
             break;
 

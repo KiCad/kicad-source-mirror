@@ -32,6 +32,19 @@
 #include <wx/gdicmn.h> // For wxPoint
 
 /**
+ * Function IsPointOnSegment
+ * @param aSegStart The first point of the segment S.
+ * @param aSegEnd The second point of the segment S.
+ * @param aTestPoint The point P to test.
+ * @return true if the point P is on the segment S.
+ * faster than TestSegmentHit() because P should be exactly on S
+ * therefore works fine only for H, V and 45 deg segm.
+ * suitable for busses and wires in eeschema, otherwise use TestSegmentHit()
+ */
+bool IsPointOnSegment( const wxPoint& aSegStart, const wxPoint& aSegEnd,
+                       const wxPoint& aTestPoint );
+
+/**
  * Function SegmentIntersectsSegment
  *
  * @param a_p1_l1 The first point of the first line.
@@ -105,8 +118,8 @@ inline double EuclideanNorm( const wxSize &vector )
 //! @param linePointA Point on line
 //! @param linePointB Point on line
 //! @param referencePoint Reference point
-inline double DistanceLinePoint( const wxPoint &linePointA, 
-                                 const wxPoint &linePointB, 
+inline double DistanceLinePoint( const wxPoint &linePointA,
+                                 const wxPoint &linePointB,
                                  const wxPoint &referencePoint )
 {
     // Some of the multiple double casts are redundant. However in the previous
@@ -114,9 +127,9 @@ inline double DistanceLinePoint( const wxPoint &linePointA,
     // the division (EuclideanNorm gives a double so from int it would
     // be promoted); that means that the whole expression were
     // vulnerable to overflow during int multiplications
-    return fabs( ( double(linePointB.x - linePointA.x) * 
+    return fabs( ( double(linePointB.x - linePointA.x) *
                    double(linePointA.y - referencePoint.y) -
-                   double(linePointA.x - referencePoint.x ) * 
+                   double(linePointA.x - referencePoint.x ) *
                    double(linePointB.y - linePointA.y) )
             / EuclideanNorm( linePointB - linePointA ) );
 }
@@ -126,7 +139,7 @@ inline double DistanceLinePoint( const wxPoint &linePointA,
 //! @param pointB Second point
 //! @param threshold The maximum distance
 //! @return True or false
-inline bool HitTestPoints( const wxPoint &pointA, const wxPoint &pointB, 
+inline bool HitTestPoints( const wxPoint &pointA, const wxPoint &pointB,
                            double threshold )
 {
     wxPoint vectorAB = pointB - pointA;
@@ -157,7 +170,7 @@ inline double CrossProduct( const wxPoint &vectorA, const wxPoint &vectorB )
  * @param aEnd is the second end-point of the line segment
  * @param aDist = maximum distance for hit
 */
-bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, 
+bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart,
                      wxPoint aEnd, int aDist );
 
 /**
@@ -191,10 +204,10 @@ template <class T> inline void NORMALIZE_ANGLE_360( T &Angle )
     while( Angle < -3600 )
         Angle += 3600;
     while( Angle > 3600 )
-        Angle -= 3600; 
+        Angle -= 3600;
 }
 
-/// Normalize angle to be in the 0.0 .. 360.0 range: 
+/// Normalize angle to be in the 0.0 .. 360.0 range:
 template <class T> inline void NORMALIZE_ANGLE_POS( T &Angle )
 {
     while( Angle < 0 )

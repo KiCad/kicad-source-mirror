@@ -464,20 +464,20 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
      */
     TestDuplicateSheetNames( true );
 
-    m_parent->BuildNetListBase();
+    NETLIST_OBJECT_LIST* objectsConnectedList = m_parent->BuildNetListBase();
 
-    /* Reset the flag m_FlagOfConnection, that will be used next, in calculations */
-    for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
-        g_NetObjectslist[ii]->m_FlagOfConnection = UNCONNECTED;
+    // Reset the connection type indicator
+    objectsConnectedList->ResetConnectionsType();
 
     unsigned lastNet;
     unsigned nextNet = lastNet = 0;
     int NetNbItems = 0;
     int MinConn    = NOC;
 
-    for( unsigned net = 0; net < g_NetObjectslist.size(); net++ )
+    for( unsigned net = 0; net < objectsConnectedList->size(); net++ )
     {
-        if( g_NetObjectslist[lastNet]->GetNet() != g_NetObjectslist[net]->GetNet() )
+        if( objectsConnectedList->GetItemNet( lastNet ) !=
+            objectsConnectedList->GetItemNet( net ) )
         {
             // New net found:
             MinConn    = NOC;
@@ -485,7 +485,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
             nextNet   = net;
         }
 
-        switch( g_NetObjectslist[net]->m_Type )
+        switch( objectsConnectedList->GetItemType( net ) )
         {
         // These items do not create erc problems
         case NET_ITEM_UNSPECIFIED:
@@ -507,7 +507,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
             // ERC problems when pin sheets do not match hierarchical labels.
             // Each pin sheet must match a hierarchical label
             // Each hierarchical label must match a pin sheet
-            TestLabel( net, nextNet );
+            TestLabel( objectsConnectedList, net, nextNet );
             break;
 
         case NET_NOCONNECT:
@@ -516,14 +516,14 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
             MinConn = NET_NC;
 
             if( NetNbItems != 0 )
-                Diagnose( g_NetObjectslist[net], NULL, MinConn, UNC );
+                Diagnose( objectsConnectedList->GetItem( net ), NULL, MinConn, UNC );
 
             break;
 
         case NET_PIN:
 
             // Look for ERC problems between pins:
-            TestOthersItems( net, nextNet, &NetNbItems, &MinConn );
+            TestOthersItems( objectsConnectedList, net, nextNet, &NetNbItems, &MinConn );
             break;
         }
 
