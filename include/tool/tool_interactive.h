@@ -35,6 +35,10 @@ class CONTEXT_MENU;
 class TOOL_INTERACTIVE : public TOOL_BASE
 {
 public:
+    /**
+     * Constructor
+     *
+     * Creates a tool with given id & name. The name must be unique. */
 	TOOL_INTERACTIVE( TOOL_ID aId, const std::string& aName );
 	
 	/**
@@ -46,8 +50,8 @@ public:
 
 	/**
 	 * Function Reset()
-	 * Brings the tool to a known, initial state. If the tool claimed anything from the model or the view,
-	 * it must release it when its reset.
+	 * Brings the tool to a known, initial state. If the tool claimed anything from
+	 * the model or the view, it must release it when its reset.
 	 */
 	virtual void Reset() = 0;
 
@@ -65,7 +69,9 @@ public:
 	/**
 	 * Function SetContextMenu()
 	 * 
-	 * Assigns a context menu and tells when it should be activated
+	 * Assigns a context menu and tells when it should be activated.
+	 * @param aMenu is the menu to be assigned.
+	 * @param aTrigger determines conditions upon which the context menu is activated.
 	 */
 	void SetContextMenu( CONTEXT_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger = CMENU_BUTTON );
 
@@ -87,9 +93,8 @@ public:
 	 */
 	OPT_TOOL_EVENT Wait( const TOOL_EVENT_LIST& aEventList = TOOL_EVENT ( TC_Any, TA_Any ) );
 
-
 	/** functions below are not yet implemented - their interface may change */
-	template<class Parameters, class ReturnValue>
+	/*template<class Parameters, class ReturnValue>
 		bool InvokeTool( const std::string& aToolName, const Parameters& parameters,
 		                 ReturnValue& returnValue );
 
@@ -98,11 +103,10 @@ public:
 		                   ReturnValue& returnValue );
 
 	template<class T>
-		void Yield( const T& returnValue );
+		void Yield( const T& returnValue );*/
 
 protected:
-	/* helper functions for constructing events for Wait() and Go() with
-	   less typing */
+	/* helper functions for constructing events for Wait() and Go() with less typing */
 	const TOOL_EVENT evActivate( std::string aToolName = "" );
 	const TOOL_EVENT evCommand( int aCommandId = -1 );
 	const TOOL_EVENT evCommand( std::string aCommandStr = "" );

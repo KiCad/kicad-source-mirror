@@ -43,7 +43,6 @@
  * SHAPE_LINE_CHAIN class shall not be used for polygons!
  */
 class SHAPE_LINE_CHAIN : public SHAPE {
-
 	private:
 		typedef std::vector<VECTOR2I>::iterator point_iter;
 		typedef std::vector<VECTOR2I>::const_iterator point_citer;
@@ -55,7 +54,8 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 *
 		 * Represents an intersection between two line segments 
 		 */
-		struct Intersection {
+		struct Intersection
+		{
 			/// segment belonging from the (this) argument of Intersect()
 			SEG our;
 			/// segment belonging from the aOther argument of Intersect()
@@ -71,45 +71,45 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * Initializes an empty line chain.
 		 */
 		SHAPE_LINE_CHAIN():
-			SHAPE (SH_LINE_CHAIN), m_closed(false) {};
+			SHAPE( SH_LINE_CHAIN ), m_closed( false ) {};
 
 		/**
 		 * Copy Constructor
 		 */
-		SHAPE_LINE_CHAIN(const SHAPE_LINE_CHAIN& aShape):
-			SHAPE (SH_LINE_CHAIN), m_points(aShape.m_points), m_closed(aShape.m_closed) {};
+		SHAPE_LINE_CHAIN( const SHAPE_LINE_CHAIN& aShape ) :
+			SHAPE( SH_LINE_CHAIN ), m_points( aShape.m_points ), m_closed( aShape.m_closed ) {};
 
 		/**
 		 * Constructor
 		 * Initializes a 2-point line chain (a single segment)
 		 */
-		SHAPE_LINE_CHAIN(const VECTOR2I& a, const VECTOR2I& b):
-			SHAPE (SH_LINE_CHAIN),
-			m_closed(false)
+		SHAPE_LINE_CHAIN( const VECTOR2I& aA, const VECTOR2I& aB ) :
+			SHAPE( SH_LINE_CHAIN ),
+			m_closed( false )
 			{
-				m_points.resize(2);
-				m_points[0] = a;
-				m_points[1] = b;
+				m_points.resize( 2 );
+				m_points[0] = aA;
+				m_points[1] = aB;
 			}
 
-		SHAPE_LINE_CHAIN(const VECTOR2I& a, const VECTOR2I& b, const VECTOR2I& c):
-			SHAPE (SH_LINE_CHAIN),
-			m_closed(false)
+		SHAPE_LINE_CHAIN( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC ):
+			SHAPE( SH_LINE_CHAIN ),
+			m_closed( false )
 			{
-				m_points.resize(3);
-				m_points[0] = a;
-				m_points[1] = b;
-				m_points[2] = c;
+				m_points.resize( 3 );
+				m_points[0] = aA;
+				m_points[1] = aB;
+				m_points[2] = aC;
 			}
 
-
-		SHAPE_LINE_CHAIN(const VECTOR2I *v, int count):
-			SHAPE (SH_LINE_CHAIN),
-			m_closed(false)
+		SHAPE_LINE_CHAIN(const VECTOR2I* aV, int aCount ) :
+			SHAPE( SH_LINE_CHAIN ),
+			m_closed( false )
 		{
-			m_points.resize(count);
-			for(int i = 0; i < count ; i++)
-				m_points[i] = *v++;
+			m_points.resize( aCount );
+
+			for( int i = 0; i < aCount; i++ )
+				m_points[i] = *aV++;
 		}
 
 		~SHAPE_LINE_CHAIN() {};
@@ -118,7 +118,8 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * Function Clear()
 		 * Removes all points from the line chain.
 		 */
-		void Clear() {
+		void Clear()
+		{
 			m_points.clear();
 			m_closed = false;
 		}
@@ -129,7 +130,7 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * Marks the line chain as closed (i.e. with a segment connecting the last point with the first point).
 		 * @param aClosed: whether the line chain is to be closed or not.
  		 */
-		void SetClosed(bool aClosed)
+		void SetClosed( bool aClosed )
 		{
 			m_closed = aClosed;
 		}
@@ -153,9 +154,10 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		int SegmentCount() const 
 		{ 
 			int c = m_points.size() - 1;
-			if(m_closed)
+			if( m_closed )
 				c++;
-			return std::max(0, c);
+
+			return std::max( 0, c );
 		}
 
 		/**
@@ -167,85 +169,87 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		int PointCount() const 
 		{
 			return m_points.size();
-		};
+		}
 
 		/**
 		 * Function Segment()
 		 *
 		 * Returns a segment referencing to the segment (index) in the line chain.
 		 * Modifying ends of the returned segment will modify corresponding points in the line chain.
-		 * @param index: index of the segment in the line chain. Negative values are counted from the end (i.e. -1 means
+		 * @param aIndex: index of the segment in the line chain. Negative values are counted from the end (i.e. -1 means
 		 * the last segment in the line chain)
 		 * @return SEG referenced to given segment in the line chain
 		 */
-		SEG Segment ( int index ) 
+		SEG Segment( int aIndex )
 		{ 
-			if(index < 0) 
-				index += SegmentCount();
+			if( aIndex < 0 )
+				aIndex += SegmentCount();
 
-			if(index == (m_points.size() - 1) && m_closed )
-				return SEG ( m_points[index], m_points[0], index );
+			if( aIndex == ( m_points.size() - 1 ) && m_closed )
+				return SEG( m_points[aIndex], m_points[0], aIndex );
 			else
-				return SEG ( m_points[index], m_points[index + 1], index );
+				return SEG( m_points[aIndex], m_points[aIndex + 1], aIndex );
 		}
 
 		/**
 		 * Function CSegment()
 		 *
 		 * Returns a read-only segment referencing to the segment (index) in the line chain.
-		 * @param index: index of the segment in the line chain. Negative values are counted from the end (i.e. -1 means
+		 * @param aIndex: index of the segment in the line chain. Negative values are counted from the end (i.e. -1 means
 		 * the last segment in the line chain)
 		 * @return SEG referenced to given segment in the line chain
 		 */
-		const SEG CSegment ( int index ) const
+		const SEG CSegment( int aIndex ) const
 		{ 
-			if(index < 0) 
-				index += SegmentCount();
+			if( aIndex < 0 )
+				aIndex += SegmentCount();
 
-			if(index == (m_points.size() - 1) && m_closed )
-				return SEG ( const_cast<VECTOR2I&>(m_points[index]), 
-							 const_cast<VECTOR2I&>(m_points[0]), index );
+			if( aIndex == ( m_points.size() - 1 ) && m_closed )
+				return SEG( const_cast<VECTOR2I&>( m_points[aIndex] ),
+							const_cast<VECTOR2I&>( m_points[0] ), aIndex );
 			else
-				return SEG ( const_cast<VECTOR2I&>(m_points[index]), 
-							 const_cast<VECTOR2I&>(m_points[index + 1]), index );
+				return SEG( const_cast<VECTOR2I&>( m_points[aIndex] ),
+							const_cast<VECTOR2I&>( m_points[aIndex + 1] ), aIndex );
 		}
 
 		/**
 		 * Function Point()
 		 *
 		 * Returns a reference to a given point in the line chain.
-		 * @param index index of the point
+		 * @param aIndex index of the point
 		 * @return reference to the point
 		 */
-		VECTOR2I& Point ( int index ) 
+		VECTOR2I& Point( int aIndex )
 		{ 
-			if(index < 0)
-				index += PointCount();
-			return m_points[index];
+			if( aIndex < 0 )
+				aIndex += PointCount();
+
+			return m_points[aIndex];
 		}
 
 		/**
 		 * Function CPoint()
 		 *
 		 * Returns a const reference to a given point in the line chain.
-		 * @param index index of the point
+		 * @param aIndex index of the point
 		 * @return const reference to the point
 		 */
-		const VECTOR2I& CPoint ( int index ) const
+		const VECTOR2I& CPoint( int aIndex ) const
 		{ 
-			if(index < 0)
-				index += PointCount();
-			return m_points[index];
+			if( aIndex < 0 )
+				aIndex += PointCount();
+
+			return m_points[aIndex];
 		}
 
 		/// @copydoc SHAPE::BBox()
-		const BOX2I BBox ( int aClearance = 0 ) const 
+		const BOX2I BBox( int aClearance = 0 ) const
 		{
 			BOX2I bbox;
-			bbox.Compute(m_points);
+			bbox.Compute( m_points );
+
 			return bbox;
 		}
-
 
 		/** 
 		 * Function Collide()
@@ -255,7 +259,7 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * @param aClearance minimum distance that does not qualify as a collision.
 		 * @return true, when a collision has been found
 		 */
-		bool Collide ( const VECTOR2I& aP, int aClearance = 0 ) const;
+		bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const;
 		
 		/** 
 		 * Function Collide()
@@ -265,7 +269,7 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * @param aClearance minimum distance that does not qualify as a collision.
 		 * @return true, when a collision has been found
 		 */
-		bool Collide ( const BOX2I& aBox, int aClearance = 0 ) const;
+		bool Collide( const BOX2I& aBox, int aClearance = 0 ) const;
 		
 		/** 
 		 * Function Collide()
@@ -275,9 +279,8 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * @param aClearance minimum distance that does not qualify as a collision.
 		 * @return true, when a collision has been found
 		 */
-		bool Collide ( const SEG& aSeg, int aClearance = 0 ) const;
+		bool Collide( const SEG& aSeg, int aClearance = 0 ) const;
 		
-
 		/**
 		 * Function Distance()
 		 * 
@@ -285,7 +288,7 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * @param aP the point
 		 * @return minimum distance.
 		 */
-		int Distance( const VECTOR2I & aP ) const;
+		int Distance( const VECTOR2I& aP ) const;
 
 		/** 
 		 * Function Reverse()
@@ -307,13 +310,13 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * Function Append()
 		 *
 		 * Appends a new point at the end of the line chain.
-		 * @param x X coordinate of the new point
-		 * @param y Y coordinate of the new point
+		 * @param aX is X coordinate of the new point
+		 * @param aY is Y coordinate of the new point
 		 */
-		void Append(int x, int y)
+		void Append( int aX, int aY )
 		{
-			VECTOR2I v(x, y);
-			Append(v);
+			VECTOR2I v( aX, aY );
+			Append( v );
 		}
 
 		/**
@@ -322,15 +325,15 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * Appends a new point at the end of the line chain.
 		 * @param aP the new point
 		 */
-		void Append(const VECTOR2I& aP)
+		void Append( const VECTOR2I& aP )
 		{
-			if(m_points.size() == 0)
-				m_bbox = BOX2I(aP, VECTOR2I(0, 0));
+			if( m_points.size() == 0 )
+				m_bbox = BOX2I( aP, VECTOR2I( 0, 0 ) );
 			
-			if (m_points.size() == 0 || CPoint(-1) != aP) 
+			if( m_points.size() == 0 || CPoint( -1 ) != aP )
 			{
-				m_points.push_back(aP);
-				m_bbox.Merge(aP);
+				m_points.push_back( aP );
+				m_bbox.Merge( aP );
 			}
 		}
 
@@ -340,22 +343,23 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * Appends another line chain at the end.
 		 * @param aOtherLine the line chain to be appended.
 		 */
-		void Append(const SHAPE_LINE_CHAIN& aOtherLine)
+		void Append( const SHAPE_LINE_CHAIN& aOtherLine )
 		{
-			if(aOtherLine.PointCount() == 0)
+			if( aOtherLine.PointCount() == 0 )
 				return;
-			else if(PointCount() == 0 || aOtherLine.CPoint(0) != CPoint(-1))
+
+			else if( PointCount() == 0 || aOtherLine.CPoint( 0 ) != CPoint( -1 ) )
 			{
-				const VECTOR2I p = aOtherLine.CPoint(0);
-				m_points.push_back(p);
-				m_bbox.Merge(p);
+				const VECTOR2I p = aOtherLine.CPoint( 0 );
+				m_points.push_back( p );
+				m_bbox.Merge( p );
 			}
 
-			for(int i = 1; i<aOtherLine.PointCount(); i++)
+			for( int i = 1; i < aOtherLine.PointCount(); i++ )
 			{
-				const VECTOR2I p = aOtherLine.CPoint(i);
-				m_points.push_back(p);
-				m_bbox.Merge(p);
+				const VECTOR2I p = aOtherLine.CPoint( i );
+				m_points.push_back( p );
+				m_bbox.Merge( p );
 			}
 		}
 
@@ -364,30 +368,31 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * 
 		 * Replaces points with indices in range [start_index, end_index] with a single
 		 * point aP.
-		 * @param start_index start of the point range to be replaced (inclusive)
-		 * @param end_index end of the point range to be replaced (inclusive)
+		 * @param aStartIndex start of the point range to be replaced (inclusive)
+		 * @param aEndIndex end of the point range to be replaced (inclusive)
 		 * @param aP replacement point
 		 */
-		void Replace( int start_index, int end_index, const VECTOR2I& aP);
+		void Replace( int aStartIndex, int aEndIndex, const VECTOR2I& aP );
 
 		/**
 		 * Function Replace()
 		 * 
-		 * Replaces points with indices in range [start_index, end_index] with the points from line chain aLine.
-		 * @param start_index start of the point range to be replaced (inclusive)
-		 * @param end_index end of the point range to be replaced (inclusive)
+		 * Replaces points with indices in range [start_index, end_index] with the points from
+		 * line chain aLine.
+		 * @param aStartIndex start of the point range to be replaced (inclusive)
+		 * @param aEndIndex end of the point range to be replaced (inclusive)
 		 * @param aLine replacement line chain.
 		 */
-		void Replace( int start_index, int end_index, const SHAPE_LINE_CHAIN& aLine);		
+		void Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE_CHAIN& aLine );
 
 		/**
 		 * Function Remove()
 		 * 
 		 * Removes the range of points [start_index, end_index] from the line chain.
-		 * @param start_index start of the point range to be replaced (inclusive)
-		 * @param end_index end of the point range to be replaced (inclusive)
+		 * @param aStartIndex start of the point range to be replaced (inclusive)
+		 * @param aEndIndex end of the point range to be replaced (inclusive)
 		 */
-		void Remove( int start_index, int end_index);
+		void Remove( int aStartIndex, int aEndIndex );
 		
 		/**
 		 * Function Split()
@@ -397,7 +402,7 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * @param aP the point to be inserted
 		 * @return index of the newly inserted point (or a negative value if aP does not lie on our line)
 		 */
-		int Split( const VECTOR2I & aP );
+		int Split( const VECTOR2I& aP );
 		
 		/**
 		 * Function Find()
@@ -412,26 +417,25 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * Function Slice()
 		 * 
 		 * Returns a subset of this line chain containing the [start_index, end_index] range of points.
-		 * @param start_index start of the point range to be returned (inclusive)
-		 * @param end_index end of the point range to be returned (inclusive)
+		 * @param aStartIndex start of the point range to be returned (inclusive)
+		 * @param aEndIndex end of the point range to be returned (inclusive)
 		 * @return cut line chain.
 		 */
-		const SHAPE_LINE_CHAIN Slice( int start_index, int end_index = -1) const;
-		
+		const SHAPE_LINE_CHAIN Slice( int aStartIndex, int aEndIndex = -1) const;
 
-		struct compareOriginDistance {
+		struct compareOriginDistance
+		{
 			compareOriginDistance( VECTOR2I& aOrigin ):
-				m_origin(aOrigin) {};
+				m_origin( aOrigin ) {};
 
-			bool operator()(const Intersection &a, const Intersection& b) 
+			bool operator()( const Intersection& aA, const Intersection& aB )
 			{
-				return (m_origin - a.p).EuclideanNorm() < (m_origin - b.p).EuclideanNorm();
+				return ( m_origin - aA.p ).EuclideanNorm() < ( m_origin - aB.p ).EuclideanNorm();
 			}
 
 			VECTOR2I m_origin;
 		};
 
-		
 		/**
 		 * Function Intersect()
 		 *
@@ -452,7 +456,7 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * are sorted with increasing path lengths from the starting point of aChain.
 		 * @return number of intersections found
 		 */
-		int Intersect( const SHAPE_LINE_CHAIN &aChain, Intersections& aIp ) const;
+		int Intersect( const SHAPE_LINE_CHAIN& aChain, Intersections& aIp ) const;
 		
 		/**
 		 * Function PathLength()
@@ -461,7 +465,7 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * the point aP belonging to our line.
 		 * @return: path length in Euclidean metric or negative if aP does not belong to the line chain.
 		 */
-		int PathLength (const VECTOR2I& aP ) const;
+		int PathLength( const VECTOR2I& aP ) const;
 		
 		/**
 		 * Function PointInside()
@@ -471,7 +475,7 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * @param aP point to check
 		 * @return true if the point is inside the shape (edge is not treated as being inside). 
 		 */
-		 bool PointInside( const VECTOR2I& aP) const;
+		 bool PointInside( const VECTOR2I& aP ) const;
 	
 		/**
 		 * Function PointOnEdge()
@@ -480,7 +484,7 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * @param aP point to check
 		 * @return true if the point lies on the edge.
 		 */
-		bool PointOnEdge( const VECTOR2I& aP) const;
+		bool PointOnEdge( const VECTOR2I& aP ) const;
 		
 		/**
 		 * Function SelfIntersecting()
@@ -504,26 +508,32 @@ class SHAPE_LINE_CHAIN : public SHAPE {
 		 * Finds a point on the line chain that is closest to point aP.
 		 * @return the nearest point.
 		 */
-		const VECTOR2I NearestPoint(const VECTOR2I& aP) const;
+		const VECTOR2I NearestPoint( const VECTOR2I& aP ) const;
 		
 		/// @copydoc SHAPE::Format()
 		const std::string Format() const;
 
-		bool operator!=(const SHAPE_LINE_CHAIN& rhs) const
+		bool operator!=( const SHAPE_LINE_CHAIN& aRhs ) const
 		{
-			if(PointCount() != rhs.PointCount())
+			if( PointCount() != aRhs.PointCount() )
 				return true;
-			for(int i = 0; i < PointCount(); i++)
-				if( CPoint(i) != rhs.CPoint(i) )
+
+			for( int i = 0; i < PointCount(); i++ )
+			{
+				if( CPoint( i ) != aRhs.CPoint( i ) )
 					return true;
+			}
+
 			return false;
 		}
 
 	private:
 		/// array of vertices
 		std::vector<VECTOR2I> m_points;
+
 		/// is the line chain closed?
 		bool m_closed;
+
 		/// cached bounding box
 		BOX2I m_bbox;
 };

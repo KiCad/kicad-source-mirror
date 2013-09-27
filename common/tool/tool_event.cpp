@@ -25,7 +25,7 @@
 #include <cstring>
 #include <string>
 
-#include <base_struct.h>
+//#include <base_struct.h>
 
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>

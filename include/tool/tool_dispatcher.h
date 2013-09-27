@@ -29,7 +29,6 @@
 
 #include <tool/tool_event.h>
 
-//#include <wx/event.h>
 #include <wx/kbdstate.h>
 
 class TOOL_MANAGER;
@@ -61,26 +60,62 @@ public:
     TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditFrame );
     virtual ~TOOL_DISPATCHER();
 
+    /**
+     * Function ResetState()
+     * Brings the dispatcher to its initial state.
+     */
     virtual void ResetState();
+
+    /**
+     * Function DispatchWxEvent()
+     * Processes wxEvents (mostly UI events), translates them to TOOL_EVENTs, and makes tools
+     * handle those.
+     * @param aEvent is the wxWidgets event to be processed.
+     */
     virtual void DispatchWxEvent( wxEvent& aEvent );
-    virtual void DispatchWxCommand( wxCommandEvent& aEvent );
+
+    /**
+     * Function DispatchWxCommand()
+     * Processes wxCommands (mostly menu related events) and runs appropriate actions (eg. run the
+     * specified tool).
+     * @param aEvent is the wxCommandEvent to be processed.
+     */
+    virtual void DispatchWxCommand( const wxCommandEvent& aEvent );
 
 private:
+    ///> Number of mouse buttons that is handled in events.
     static const int MouseButtonCount = 3;
+
+    ///> The time threshold for a mouse button press that distinguishes between a single mouse
+    ///> click and a beginning of drag event (expressed in milliseconds).
     static const int DragTimeThreshold = 300;
+
+    ///> The distance threshold for mouse cursor that disinguishes between a single mouse click
+    ///> and a beginning of drag event (expressed in screen pixels).
     static const int DragDistanceThreshold = 8;
 
+    ///> Handles mouse related events (click, motion, dragging)
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
-    bool handlePopupMenu( wxEvent& aEvent );
 
+    ///> Saves the state of key modifiers (Alt, Ctrl and so on).
     int decodeModifiers( const wxKeyboardState* aState ) const;
 
+    ///> Stores all the informations regarding a mouse button state.
     struct ButtonState;
+
+    ///> The last mouse cursor position (in world coordinates).
     VECTOR2D m_lastMousePos;
+
+    ///> State of mouse buttons.
     std::vector<ButtonState*> m_buttons;
 
+    ///> Returns the instance of VIEW, used by the application.
     KiGfx::VIEW* getView();
+
+    ///> Instance of tool manager that cooperates with the dispatcher.
     TOOL_MANAGER* m_toolMgr;
+
+    ///> Instance of wxFrame that is the source of UI events.
     PCB_BASE_FRAME* m_editFrame;
 };
 

@@ -288,10 +288,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 				st->pendingWait = false;
 				st->waitEvents.clear();
 				if( st->cofunc && !st->cofunc->Resume() )
-				{
-				    // The couroutine has finished
-				    finishTool( st );
-				}
+				    finishTool( st );           // The couroutine has finished
 
 				// If the tool did not request to propagate
 				// the event to other tools, we should stop it now
@@ -303,6 +300,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 
     BOOST_FOREACH( TOOL_STATE* st, m_toolState | boost::adaptors::map_values )
     {
+        // the tool state handler is waiting for events (i.e. called Wait() method)
 		if( !st->pendingWait )
 		{
 			// no state handler in progress - check if there are any transitions (defined by
@@ -324,9 +322,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 						st->cofunc->Call( aEvent );
 						
 						if( !st->cofunc->Running() )
-						{
-						    finishTool( st );
-						}
+						    finishTool( st );   // The couroutine has finished
 					}
 				}
 			}
