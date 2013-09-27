@@ -1888,6 +1888,15 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
     return false;
 }
 
+/* return true if the component is in netlist
+ * which means this is not a power component, or something
+ * like a component reference starting by #
+ */
+bool SCH_COMPONENT::IsInNetlist() const
+{
+    SCH_FIELD* rf = GetField( REFERENCE );
+    return ! rf->GetText().StartsWith("#");
+}
 
 void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
 {
