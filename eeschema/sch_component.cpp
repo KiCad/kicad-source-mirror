@@ -1895,8 +1895,9 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 bool SCH_COMPONENT::IsInNetlist() const
 {
     SCH_FIELD* rf = GetField( REFERENCE );
-    return ! rf->GetText().StartsWith("#");
+    return ! rf->GetText().StartsWith( wxT( "#" ) );
 }
+
 
 void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
 {
