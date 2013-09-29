@@ -58,11 +58,11 @@ ROUTER_TOOL::ROUTER_TOOL() :
     m_menu->Add( wxT( "Cancel" ), 0 );
     m_menu->Add( wxT( "New track" ), 1 );
     m_menu->Add( wxT( "End track" ), 2 );
-    m_menu->Add( wxT( "Auto-end track" ), 2 );
-    m_menu->Add( wxT( "Place via" ), 3 );
-    m_menu->Add( wxT( "Switch posture" ), 4 );
+    m_menu->Add( wxT( "Auto-end track" ), 3 );
+    m_menu->Add( wxT( "Place via" ), 4 );
+    m_menu->Add( wxT( "Switch posture" ), 5 );
 
-    m_menu->Add( wxT( "Routing options..." ), 5 );
+    m_menu->Add( wxT( "Routing options..." ), 6 );
 }
 
 
