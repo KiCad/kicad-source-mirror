@@ -878,7 +878,7 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericListOfNets()
         comp = (SCH_COMPONENT*) nitem->m_Link;
 
         // Get the reference for the net name and the main parent component
-        ref = comp->GetRef( &nitem->m_SheetList );
+        ref = comp->GetRef( &nitem->m_SheetPath );
         if( ref[0] == wxChar( '#' ) )
             continue;
 
@@ -1520,7 +1520,7 @@ bool NETLIST_EXPORT_TOOL::addPinToComponentPinList( SCH_COMPONENT* aComponent,
             continue;
 
         // most expensive test at the end.
-        if( pin->m_SheetList != *aSheetPath )
+        if( pin->m_SheetPath != *aSheetPath )
             continue;
 
         m_SortedComponentPinList.push_back( pin );
@@ -1678,7 +1678,7 @@ bool NETLIST_EXPORT_TOOL::writeGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& 
         comp = (SCH_COMPONENT*) nitem->m_Link;
 
         // Get the reference for the net name and the main parent component
-        ref = comp->GetRef( &nitem->m_SheetList );
+        ref = comp->GetRef( &nitem->m_SheetPath );
         if( ref[0] == wxChar( '#' ) )
             continue;                 // Pseudo component (Like Power symbol)
 
@@ -1825,7 +1825,7 @@ bool NETLIST_EXPORT_TOOL::writeListOfNetsCADSTAR( FILE* f )
             continue;
 
         Cmp = (SCH_COMPONENT*) nitem->m_Link;
-        wxString refstr = Cmp->GetRef( &nitem->m_SheetList );
+        wxString refstr = Cmp->GetRef( &nitem->m_SheetPath );
         if( refstr[0] == '#' )
             continue;  // Power supply symbols.
 

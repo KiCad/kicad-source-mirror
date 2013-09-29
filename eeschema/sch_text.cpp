@@ -620,8 +620,8 @@ void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
         return;
 
     NETLIST_OBJECT* item = new NETLIST_OBJECT();
-    item->m_SheetList = *aSheetPath;
-    item->m_SheetListInclude = *aSheetPath;
+    item->m_SheetPath = *aSheetPath;
+    item->m_SheetPathInclude = *aSheetPath;
     item->m_Comp = (SCH_ITEM*) this;
     item->m_Type = NET_LABEL;
 

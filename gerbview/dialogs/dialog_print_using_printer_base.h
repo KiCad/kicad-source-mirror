@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/sizer.h>
@@ -29,9 +31,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_PRINT_USING_PRINTER_base
+/// Class DIALOG_PRINT_USING_PRINTER_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_PRINT_USING_PRINTER_base : public DIALOG_SHIM
+class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -68,8 +70,8 @@ class DIALOG_PRINT_USING_PRINTER_base : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,314 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_PRINT_USING_PRINTER_base();
+		DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,314 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_PRINT_USING_PRINTER_BASE();
 	
 };
 

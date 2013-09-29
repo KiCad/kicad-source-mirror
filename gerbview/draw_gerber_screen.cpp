@@ -39,6 +39,7 @@
 #include <colors_selection.h>
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
+#include <printout_controler.h>
 
 
 void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
@@ -56,10 +57,13 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer,
     m_DisplayOptions.m_DisplayDCodes = false;
     m_DisplayOptions.m_IsPrinting = true;
 
-    m_canvas->SetPrintMirrored( aPrintMirrorMode );
+    PRINT_PARAMETERS* printParameters = (PRINT_PARAMETERS*)aData;
 
-    // XXX -1 as drawmode?
-    GetGerberLayout()->Draw( m_canvas, aDC, UNSPECIFIED_DRAWMODE, wxPoint( 0, 0 ) );
+    m_canvas->SetPrintMirrored( aPrintMirrorMode );
+    bool printBlackAndWhite = printParameters && printParameters->m_Print_Black_and_White;
+
+    GetGerberLayout()->Draw( m_canvas, aDC, UNSPECIFIED_DRAWMODE,
+                             wxPoint( 0, 0 ), printBlackAndWhite );
 
     m_canvas->SetPrintMirrored( false );
 
@@ -123,13 +127,13 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
  * Redraw All GerbView layers, using a buffered mode or not
  */
 void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                       const wxPoint& aOffset )
+                       const wxPoint& aOffset, bool aPrintBlackAndWhite )
 {
     // Because Images can be negative (i.e with background filled in color) items are drawn
     // graphic layer per graphic layer, after the background is filled
     // to a temporary bitmap
     // at least when aDrawMode = GR_COPY or aDrawMode = GR_OR
-    // If aDrawMode = -1, items are drawn to the main screen, and therefore
+    // If aDrawMode = UNSPECIFIED_DRAWMODE, items are drawn to the main screen, and therefore
     // artifacts can happen with negative items or negative images
 
     wxColour bgColor = MakeColour( g_DrawBgColor );
@@ -200,7 +204,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( layer == active_layer ) // active layer will be drawn after other layers
             continue;
 
-        if( layer == 32 )   // last loop: draw active layer
+        if( layer == NB_GERBER_LAYERS )   // last loop: draw active layer
         {
             end   = true;
             layer = active_layer;
@@ -213,6 +217,12 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
+
+        EDA_COLOR_T color = gerbFrame->GetLayerColor( layer );
+
+        // Force black and white draw mode on request:
+        if( aPrintBlackAndWhite )
+            gerbFrame->SetLayerColor( layer, g_DrawBgColor == BLACK ? WHITE : BLACK );
 
         if( useBufferBitmap )
         {
@@ -299,6 +309,9 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
             item->Draw( aPanel, plotDC, drawMode, wxPoint(0,0) );
             doBlit = true;
         }
+
+        if( aPrintBlackAndWhite )
+            gerbFrame->SetLayerColor( layer, color );
     }
 
     if( doBlit && useBufferBitmap )     // Blit is used only if aDrawMode >= 0

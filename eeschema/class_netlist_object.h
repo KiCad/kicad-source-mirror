@@ -36,6 +36,7 @@
 #include <lib_pin.h>      // LIB_PIN::ReturnPinStringNum( m_PinNum )
 
 class NETLIST_OBJECT_LIST;
+class SCH_COMPONENT;
 
 
 /* Type of Net objects (wires, labels, pins...) */
@@ -97,7 +98,8 @@ public:
                                          * that contains this pin
                                          */
     int            m_Flag;              /* flag used in calculations */
-    SCH_SHEET_PATH m_SheetList;
+    SCH_SHEET_PATH m_SheetPath;         // the sheet path which contains this item
+    SCH_SHEET_PATH  m_SheetPathInclude; // sheet path which contains the hierarchical label
     int            m_ElectricalType;    /* Has meaning only for Pins and
                                          * hierarchical pins: electrical type */
     int m_BusNetCode;                   /* Used for BUS connections */
@@ -105,7 +107,6 @@ public:
                                          * created from the BUS label ) member number.
                                          */
     NET_CONNECTION_T m_ConnectionType;  // Used to store the connection type
-    SCH_SHEET_PATH  m_SheetListInclude; // sheet path which contains the hierarchical label
     long            m_PinNum;           // pin number ( 1 long = 4 bytes -> 4 ascii codes)
     wxString        m_Label;            // Label text (for labels) or Pin name (for pins)
     wxPoint         m_Start;            // Position of object or for segments: starting point
@@ -179,6 +180,19 @@ public:
     {
         // hide the ugliness in here, but do it inline.
         return LIB_PIN::ReturnPinStringNum( m_PinNum );
+    }
+
+    /**  For Pins (NET_PINS):
+     * @return the schematic component which contains this pin
+     * (Note: this is the schematic component, not the library component
+     * for others items: return NULL
+     */
+    SCH_COMPONENT* GetComponentParent() const
+    {
+        if( m_Link && m_Link->Type() == SCH_COMPONENT_T )
+            return (SCH_COMPONENT*) m_Link;
+
+        return NULL;
     }
 
     /**
@@ -385,7 +399,7 @@ private:
      */
     static bool sortItemsBySheet( const NETLIST_OBJECT* Objet1, const NETLIST_OBJECT* Objet2 )
     {
-        return Objet1->m_SheetList.Cmp( Objet2->m_SheetList ) < 0;
+        return Objet1->m_SheetPath.Cmp( Objet2->m_SheetPath ) < 0;
     }
     /*
      * Propagate net codes from a parent sheet to an include sheet,

@@ -16,7 +16,6 @@
 
 #include <gerbview.h>
 #include <pcbplot.h>
-#include <class_board_design_settings.h>
 
 static long   s_SelectedLayers;
 static double s_ScaleList[] =
@@ -34,10 +33,10 @@ static wxPageSetupDialogData* g_pageSetupData = (wxPageSetupDialogData*) NULL;
 static PRINT_PARAMETERS  s_Parameters;
 
 
-/* Dialog to print schematic. Class derived from DIALOG_PRINT_USING_PRINTER_base
+/* Dialog to print schematic. Class derived from DIALOG_PRINT_USING_PRINTER_BASE
  *  created by wxFormBuilder
  */
-class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_base
+class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
 {
 private:
     GERBVIEW_FRAME* m_Parent;
@@ -76,17 +75,17 @@ void GERBVIEW_FRAME::ToPrinter( wxCommandEvent& event )
  */
 {
     if( g_PrintData == NULL )  // First print
-    {
         g_PrintData = new wxPrintData();
 
-        if( !g_PrintData->Ok() )
-        {
-            DisplayError( this, _( "Error Init Printer info" ) );
-        }
-        g_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
+    if( !g_PrintData->Ok() )
+    {
+        DisplayError( this, _( "Error Init Printer info" ) );
+        return;
     }
 
-    g_PrintData->SetOrientation( GetPageSettings().IsPortrait() ? wxPORTRAIT : wxLANDSCAPE );
+    g_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );
+    g_PrintData->SetOrientation( GetPageSettings().IsPortrait() ?
+                                 wxPORTRAIT : wxLANDSCAPE );
 
     DIALOG_PRINT_USING_PRINTER* frame = new DIALOG_PRINT_USING_PRINTER( this );
 
@@ -97,24 +96,19 @@ void GERBVIEW_FRAME::ToPrinter( wxCommandEvent& event )
 
 /*************************************************************************************/
 DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( GERBVIEW_FRAME* parent ) :
-    DIALOG_PRINT_USING_PRINTER_base( parent )
+    DIALOG_PRINT_USING_PRINTER_BASE( parent )
 /*************************************************************************************/
 {
     m_Parent = parent;
     m_Config = wxGetApp().GetSettings();
 
     InitValues( );
+    GetSizer()->SetSizeHints( this );
 
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
 #ifdef __WXMAC__
     /* Problems with modal on wx-2.9 - Anyway preview is standard for OSX */
    m_buttonPreview->Hide();
 #endif
-
-    m_buttonPrint->SetDefault();
 }
 
 
@@ -130,7 +124,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     {
         g_pageSetupData = new wxPageSetupDialogData;
         // Set initial page margins.
-        // Margins are already set in Pcbnew, so we cans use 0
+        // Margins are already set in Pcbnew, so we can use 0
         g_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
         g_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
     }
@@ -176,7 +170,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
             s_Parameters.m_XScaleAdjust = s_Parameters.m_YScaleAdjust = 1.0;
 
         s_SelectedLayers = 0;
-        for( LAYER_NUM layer = FIRST_LAYER; layer<layer_max; ++layer )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < layer_max; ++layer )
         {
             wxString layerKey;
             bool     option;

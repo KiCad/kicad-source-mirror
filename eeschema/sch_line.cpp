@@ -524,8 +524,8 @@ void SCH_LINE::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
         return;
 
     NETLIST_OBJECT* item = new NETLIST_OBJECT();
-    item->m_SheetList = *aSheetPath;
-    item->m_SheetListInclude = *aSheetPath;
+    item->m_SheetPath = *aSheetPath;
+    item->m_SheetPathInclude = *aSheetPath;
     item->m_Comp = (SCH_ITEM*) this;
     item->m_Start = m_start;
     item->m_End = m_end;

@@ -59,7 +59,7 @@ static const wxString tracePrinting( wxT( "KicadPrinting" ) );
 
 PRINT_PARAMETERS::PRINT_PARAMETERS()
 {
-    m_PenDefaultSize        = Millimeter2iu( 0.2 ); // A reasonable defualt value to draw items
+    m_PenDefaultSize        = Millimeter2iu( 0.2 ); // A reasonable default value to draw items
                                       // which do not have a specified line width
     m_PrintScale            = 1.0;
     m_XScaleAdjust          = 1.0;
@@ -290,9 +290,6 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
 
     GRResetPenAndBrush( dc );
 
-    if( m_PrintParams.m_Print_Black_and_White )
-        GRForceBlackPen( true );
-
     EDA_DRAW_PANEL* panel = m_Parent->GetCanvas();
     EDA_RECT        tmp   = *panel->GetClipBox();
 
@@ -358,15 +355,26 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     {
         // Creates a "local" black background
         GRForceBlackPen( true );
-        m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
+        m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer,
+                             printMirror, &m_PrintParams );
         GRForceBlackPen( false );
     }
+
+    if( m_PrintParams.m_Print_Black_and_White )
+        GRForceBlackPen( true );
 
     if( m_PrintParams.PrintBorderAndTitleBlock() )
         m_Parent->DrawWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
                                   IU_PER_MILS, titleblockFilename );
 
-    m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
+#if defined (GERBVIEW)
+    // In B&W mode, do not force black pen for Gerbview
+    // because negative objects need a white pen, not a black pen
+    // B&W mode is handled in print page
+    GRForceBlackPen( false );
+#endif
+    m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror,
+                         &m_PrintParams );
 
     g_DrawBgColor = bg_color;
     screen->m_IsPrinting = false;

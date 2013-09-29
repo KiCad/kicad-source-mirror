@@ -378,14 +378,14 @@ void GERBVIEW_FRAME::syncLayerBox()
     UpdateTitleAndInfo();
 }
 
-
 void GERBVIEW_FRAME::Liste_D_Codes()
 {
     int             ii, jj;
     D_CODE*         pt_D_code;
     wxString        Line;
     wxArrayString   list;
-    double          scale = IU_PER_MILS * 1000;
+    double          scale = g_UserUnit == INCHES ? IU_PER_MILS * 1000 :
+                            IU_PER_MM;
     LAYER_NUM       curr_layer = getActiveLayer();
 
     for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
@@ -405,6 +405,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 
         list.Add( Line );
 
+        const char* units = g_UserUnit == INCHES ? "\"" : "mm";
         for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
         {
             pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE, false );
@@ -415,19 +416,19 @@ void GERBVIEW_FRAME::Liste_D_Codes()
             if( !pt_D_code->m_InUse && !pt_D_code->m_Defined )
                 continue;
 
-            Line.Printf( wxT( "tool %2.2d:   D%2.2d  V %2.4f  H %2.4f  %s" ),
+            Line.Printf( wxT( "tool %2.2d:   D%2.2d   V %.4f %s  H %.4f %s   %s  " ),
                          jj,
                          pt_D_code->m_Num_Dcode,
-                         pt_D_code->m_Size.y / scale,
-                         pt_D_code->m_Size.x / scale,
+                         pt_D_code->m_Size.y / scale, units,
+                         pt_D_code->m_Size.x / scale, units,
                          D_CODE::ShowApertureType( pt_D_code->m_Shape )
                          );
 
             if( !pt_D_code->m_Defined )
-                Line += wxT( " ?" );
+                Line += wxT( "(not used)" );
 
             if( !pt_D_code->m_InUse )
-                Line += wxT( " *" );
+                Line += wxT( "(in use)" );
 
             list.Add( Line );
             jj++;

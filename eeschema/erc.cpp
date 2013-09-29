@@ -240,7 +240,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
 
     marker->SetMarkerType( MARK_ERC );
     marker->SetErrorLevel( WAR );
-    screen = aNetItemRef->m_SheetList.LastScreen();
+    screen = aNetItemRef->m_SheetPath.LastScreen();
     screen->Append( marker );
 
     wxString msg;
@@ -277,7 +277,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
     cmp_ref = wxT( "?" );
 
     if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
-        cmp_ref = ( (SCH_COMPONENT*) aNetItemRef->m_Link )->GetRef( &aNetItemRef->m_SheetList );
+        cmp_ref = ( (SCH_COMPONENT*) aNetItemRef->m_Link )->GetRef( &aNetItemRef->m_SheetPath );
 
     if( aNetItemTst == NULL )
     {
@@ -296,7 +296,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
         {
             if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
                 cmp_ref = ( (SCH_COMPONENT*) aNetItemRef->m_Link )->GetRef(
-                    &aNetItemRef->m_SheetList );
+                    &aNetItemRef->m_SheetPath );
 
             msg.Printf( _( "Pin %s (%s) of component %s is not driven (Net %d)." ),
                         GetChars( string_pinnum ), MsgPinElectricType[ii], GetChars( cmp_ref ),
@@ -336,7 +336,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
         alt_cmp = wxT( "?" );
 
         if( aNetItemTst->m_Type == NET_PIN && aNetItemTst->m_Link )
-            alt_cmp = ( (SCH_COMPONENT*) aNetItemTst->m_Link )->GetRef( &aNetItemTst->m_SheetList );
+            alt_cmp = ( (SCH_COMPONENT*) aNetItemTst->m_Link )->GetRef( &aNetItemTst->m_SheetPath );
 
         msg.Printf( _( "Pin %s (%s) of component %s is connected to " ),
                     GetChars( string_pinnum ), MsgPinElectricType[ii], GetChars( cmp_ref ) );
@@ -405,9 +405,9 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList,
                             continue;
 
                         if( ( (SCH_COMPONENT*) aList->GetItem( aNetItemRef )->
-                             m_Link )->GetRef( &aList->GetItem( aNetItemRef )-> m_SheetList ) !=
+                             m_Link )->GetRef( &aList->GetItem( aNetItemRef )-> m_SheetPath ) !=
                             ( (SCH_COMPONENT*) aList->GetItem( duplicate )->m_Link )
-                           ->GetRef( &aList->GetItem( duplicate )->m_SheetList ) )
+                           ->GetRef( &aList->GetItem( duplicate )->m_SheetPath ) )
                             continue;
 
                         // Same component and same pin. Do dot create error for this pin
