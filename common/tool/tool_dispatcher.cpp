@@ -117,21 +117,6 @@ KiGfx::VIEW* TOOL_DISPATCHER::getView()
 }
 
 
-int TOOL_DISPATCHER::decodeModifiers( const wxKeyboardState* aState ) const
-{
-    int mods = 0;
-
-    if( aState->ControlDown() )
-        mods |= MD_ModCtrl;
-    if( aState->AltDown() )
-        mods |= MD_ModAlt;
-    if( aState->ShiftDown() )
-        mods |= MD_ModShift;
-
-    return mods;
-}
-
-
 bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion )
 {
 	ButtonState* st = m_buttons[aIndex];
@@ -142,7 +127,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 	bool up = type == st->upEvent;
 	bool down = type == st->downEvent;
 
-	int mods = decodeModifiers( static_cast<wxMouseEvent*>( &aEvent ) );
+	int mods = decodeModifiers<wxMouseEvent>( static_cast<wxMouseEvent*>( &aEvent ) );
 	int args = st->button | mods;
 
 	if( down )      // Handle mouse button press
@@ -246,7 +231,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     {
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
         int key = ke->GetKeyCode();
-        int mods = decodeModifiers( ke );
+        int mods = decodeModifiers<wxKeyEvent>( ke );
 
         if( type == wxEVT_KEY_UP )
         {

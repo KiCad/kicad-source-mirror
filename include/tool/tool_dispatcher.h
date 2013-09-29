@@ -29,8 +29,6 @@
 
 #include <tool/tool_event.h>
 
-#include <wx/kbdstate.h>
-
 class TOOL_MANAGER;
 class PCB_BASE_FRAME;
 
@@ -98,7 +96,20 @@ private:
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
 
     ///> Saves the state of key modifiers (Alt, Ctrl and so on).
-    int decodeModifiers( const wxKeyboardState* aState ) const;
+    template<class EventType>
+    static int decodeModifiers( const EventType* aState )
+    {
+        int mods = 0;
+
+        if( aState->ControlDown() )
+            mods |= MD_ModCtrl;
+        if( aState->AltDown() )
+            mods |= MD_ModAlt;
+        if( aState->ShiftDown() )
+            mods |= MD_ModShift;
+
+        return mods;
+    }
 
 
     ///> Stores all the informations regarding a mouse button state.
