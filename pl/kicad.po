@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-26 06:22+0100\n"
-"PO-Revision-Date: 2013-09-26 06:22+0100\n"
+"POT-Creation-Date: 2013-09-29 08:03+0100\n"
+"PO-Revision-Date: 2013-09-29 08:04+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -961,11 +961,11 @@ msgstr "Pin %s (%s) symbolu %s jest połączony z "
 msgid "pin %s (%s) of component %s (net %d)."
 msgstr "pin %s (%s) symbolu %s (sieć %d)."
 
-#: eeschema/erc.cpp:503
+#: eeschema/erc.cpp:501
 msgid "ERC report"
 msgstr "Raport ERC"
 
-#: eeschema/erc.cpp:511
+#: eeschema/erc.cpp:509
 #, c-format
 msgid ""
 "\n"
@@ -974,7 +974,7 @@ msgstr ""
 "\n"
 "***** Arkusz %s\n"
 
-#: eeschema/erc.cpp:533
+#: eeschema/erc.cpp:531
 #, c-format
 msgid ""
 "\n"
@@ -992,7 +992,7 @@ msgstr "Pliki schematów"
 msgid "Could not save backup of file <%s>"
 msgstr "Nie mogę zapisać kopii pliku <%s>"
 
-#: eeschema/files-io.cpp:114 eeschema/netform.cpp:380
+#: eeschema/files-io.cpp:114 eeschema/netform.cpp:386
 #, c-format
 msgid "Failed to create file <%s>"
 msgstr "Błąd przy tworzeniu pliku <%s>"
@@ -1135,7 +1135,8 @@ msgstr "Błąd przy tworzeniu pliku liblioteki <%s>"
 msgid "Component Library Editor: "
 msgstr "Edytor bibliotek symboli:"
 
-#: eeschema/libedit.cpp:66 eeschema/viewlibs.cpp:113 pcbnew/modview.cpp:97
+#: eeschema/libedit.cpp:66 eeschema/viewlibs.cpp:113
+#: pcbnew/modview_frame.cpp:808
 msgid "no library selected"
 msgstr "Nie wybrano biblioteki"
 
@@ -2687,11 +2688,11 @@ msgstr "W&czytaj ustawienia"
 msgid "Open the Eeschema manual"
 msgstr "Otwórz podręcznik programu Eeschema"
 
-#: eeschema/netlist.cpp:110
+#: eeschema/netlist.cpp:109
 msgid "No Objects"
 msgstr "Brak obiektów"
 
-#: eeschema/netlist.cpp:118
+#: eeschema/netlist.cpp:117
 #, c-format
 msgid "Net count = %zu"
 msgstr "Liczba sieci = %zu"
@@ -3810,7 +3811,7 @@ msgid "Part %c"
 msgstr "Element %c"
 
 #: eeschema/viewlibs.cpp:106 eeschema/viewlib_frame.cpp:105
-#: pcbnew/modview.cpp:91
+#: pcbnew/modview_frame.cpp:802
 msgid "Library Browser"
 msgstr "Przeglądarka bibliotek"
 
@@ -3955,11 +3956,11 @@ msgstr "Zapisz pliki z listą sieci"
 msgid "Plugin"
 msgstr "Wtyczka"
 
-#: eeschema/dialogs/dialog_bom.cpp:363 eeschema/dialogs/dialog_netlist.cpp:864
+#: eeschema/dialogs/dialog_bom.cpp:363 eeschema/dialogs/dialog_netlist.cpp:865
 msgid "This plugin already exists. Abort"
 msgstr "Ta wtyczka już istnieje. Przerwano."
 
-#: eeschema/dialogs/dialog_bom.cpp:384 eeschema/dialogs/dialog_netlist.cpp:917
+#: eeschema/dialogs/dialog_bom.cpp:384 eeschema/dialogs/dialog_netlist.cpp:918
 msgid "Plugin files:"
 msgstr "Pliki wtyczek:"
 
@@ -5678,15 +5679,15 @@ msgstr ""
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Błąd: Zdublowane nazwy arkuszy. Kontunować?"
 
-#: eeschema/dialogs/dialog_netlist.cpp:891
+#: eeschema/dialogs/dialog_netlist.cpp:892
 msgid "Error. You must provide a command String"
 msgstr "Błąd. Musisz wypełnić pole \"Polecenie netlisty\""
 
-#: eeschema/dialogs/dialog_netlist.cpp:897
+#: eeschema/dialogs/dialog_netlist.cpp:898
 msgid "Error. You must provide a Title"
 msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
 
-#: eeschema/dialogs/dialog_netlist.cpp:951
+#: eeschema/dialogs/dialog_netlist.cpp:952
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
@@ -7432,7 +7433,7 @@ msgstr "Parametr"
 msgid "Units"
 msgstr "Jednostki"
 
-#: pcbnew/footprint_wizard_frame.cpp:706 pcbnew/modview_frame.cpp:804
+#: pcbnew/footprint_wizard_frame.cpp:706 pcbnew/modview_frame.cpp:746
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "Podgląd Footprintów: Przeglądarka 3D [%s]"
@@ -7553,29 +7554,29 @@ msgstr "nieznany token \"%s\""
 msgid "Element token contains %d parameters."
 msgstr "Token \"Element\" zawiera %d parametrów."
 
-#: pcbnew/gpcb_plugin.cpp:881 pcbnew/kicad_plugin.cpp:1733
-#: pcbnew/kicad_plugin.cpp:1796 pcbnew/legacy_plugin.cpp:4276
+#: pcbnew/gpcb_plugin.cpp:881 pcbnew/kicad_plugin.cpp:1736
+#: pcbnew/kicad_plugin.cpp:1799 pcbnew/legacy_plugin.cpp:4276
 #: pcbnew/legacy_plugin.cpp:4321
 #, c-format
 msgid "Library <%s> is read only"
 msgstr "Biblioteka <%s> jest oznaczona jako 'Tylko do odczytu'"
 
-#: pcbnew/gpcb_plugin.cpp:900 pcbnew/kicad_plugin.cpp:1833
+#: pcbnew/gpcb_plugin.cpp:900 pcbnew/kicad_plugin.cpp:1836
 #, c-format
 msgid "user does not have permission to delete directory <%s>"
 msgstr "użytkownik nie ma wystarczających uprawnień by usunąć folder <%s>"
 
-#: pcbnew/gpcb_plugin.cpp:908 pcbnew/kicad_plugin.cpp:1841
+#: pcbnew/gpcb_plugin.cpp:908 pcbnew/kicad_plugin.cpp:1844
 #, c-format
 msgid "library directory <%s> has unexpected sub-directories"
 msgstr "folder z biblioteką <%s> zawiera niepożądane podfoldery"
 
-#: pcbnew/gpcb_plugin.cpp:927 pcbnew/kicad_plugin.cpp:1860
+#: pcbnew/gpcb_plugin.cpp:927 pcbnew/kicad_plugin.cpp:1863
 #, c-format
 msgid "unexpected file <%s> was found in library path '%s'"
 msgstr "został znaleziony niepożądany plik <%s> w ścieżce bibliotek '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:945 pcbnew/kicad_plugin.cpp:1878
+#: pcbnew/gpcb_plugin.cpp:945 pcbnew/kicad_plugin.cpp:1881
 #, c-format
 msgid "footprint library <%s> cannot be deleted"
 msgstr "biblioteka footprintów <%s> nie może zostać usunięta"
@@ -7681,37 +7682,37 @@ msgstr ""
 msgid "Footprint library path <%s> does not exist"
 msgstr "Ścieżka do biblioteki <%s> nie istnieje"
 
-#: pcbnew/kicad_plugin.cpp:1152 pcbnew/legacy_plugin.cpp:95
+#: pcbnew/kicad_plugin.cpp:1158 pcbnew/legacy_plugin.cpp:95
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "nieznany typ pola lutowniczego: %d"
 
-#: pcbnew/kicad_plugin.cpp:1165 pcbnew/legacy_plugin.cpp:96
+#: pcbnew/kicad_plugin.cpp:1171 pcbnew/legacy_plugin.cpp:96
 #, c-format
 msgid "unknown pad attribute: %d"
 msgstr "nieznany atrybut pola lutowniczego: %d"
 
-#: pcbnew/kicad_plugin.cpp:1349
+#: pcbnew/kicad_plugin.cpp:1352
 #, c-format
 msgid "unknown via type %d"
 msgstr "nieznany typ przelotki %d"
 
-#: pcbnew/kicad_plugin.cpp:1480
+#: pcbnew/kicad_plugin.cpp:1483
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "nieznany typ zaokrągleń krawędzi strefy %d"
 
-#: pcbnew/kicad_plugin.cpp:1747
+#: pcbnew/kicad_plugin.cpp:1750
 #, c-format
 msgid "Footprint file name <%s> is not valid."
 msgstr "Nazwa pliku <%s> jest niepoprawna."
 
-#: pcbnew/kicad_plugin.cpp:1753
+#: pcbnew/kicad_plugin.cpp:1756
 #, c-format
 msgid "user does not have write permission to delete file <%s> "
 msgstr "użytkownik nie ma wystarczających uprawnień do usunięcia pliku <%s>"
 
-#: pcbnew/kicad_plugin.cpp:1808
+#: pcbnew/kicad_plugin.cpp:1811
 #, c-format
 msgid "cannot overwrite library path <%s>"
 msgstr "nie mogę nadpisać biblioteki <%s>"
@@ -8006,7 +8007,7 @@ msgstr ""
 msgid "No footprint libraries were specified."
 msgstr "Nie okreslono żadnych bibliotek."
 
-#: pcbnew/loadcmp.cpp:516 pcbnew/modview_frame.cpp:461
+#: pcbnew/loadcmp.cpp:516 pcbnew/modview_frame.cpp:421
 #, c-format
 msgid ""
 "Error occurred attempting to load footprint library <%s>:\n"
@@ -8015,7 +8016,7 @@ msgstr ""
 "Wystąpił błąd przy próbie załadowania biblioteki footprintów <%s>:\n"
 "\n"
 
-#: pcbnew/loadcmp.cpp:520 pcbnew/modview_frame.cpp:465
+#: pcbnew/loadcmp.cpp:520 pcbnew/modview_frame.cpp:425
 msgid ""
 "Files not found:\n"
 "\n"
@@ -8023,7 +8024,7 @@ msgstr ""
 "Nie znaleziono plików:\n"
 "\n"
 
-#: pcbnew/loadcmp.cpp:523 pcbnew/modview_frame.cpp:468
+#: pcbnew/loadcmp.cpp:523 pcbnew/modview_frame.cpp:428
 msgid ""
 "\n"
 "\n"
@@ -8967,20 +8968,16 @@ msgstr "Szukaj footprintu"
 msgid "Delete Module %s (value %s) ?"
 msgstr "Usunąć footprint %s (wartość %s)?"
 
-#: pcbnew/modview.cpp:124
-msgid "Select Current Library:"
-msgstr "Wybierz bieżącą bibliotekę:"
-
-#: pcbnew/modview_frame.cpp:123
+#: pcbnew/modview_frame.cpp:128
 msgid "Footprint Library Browser"
 msgstr "Przeglądarka bibliotek footprintów"
 
-#: pcbnew/modview_frame.cpp:444
+#: pcbnew/modview_frame.cpp:404
 #, c-format
 msgid "Footprint library table entry <%s> not found."
 msgstr "Wpis <%s> w tabeli bibliotek footprintów nie został znaleziony."
 
-#: pcbnew/modview_frame.cpp:548
+#: pcbnew/modview_frame.cpp:508
 #, c-format
 msgid ""
 "Could not load footprint \"%s\" from library \"%s\".\n"
@@ -8990,6 +8987,10 @@ msgstr ""
 "Nie mogę załadować footprintu \"%s\" z biblioteki \"%s\".\n"
 "\n"
 "Błąd %s."
+
+#: pcbnew/modview_frame.cpp:835
+msgid "Select Current Library:"
+msgstr "Wybierz bieżącą bibliotekę:"
 
 #: pcbnew/move_or_drag_track.cpp:745
 msgid "Unable to drag this segment: too many segments connected"
@@ -16330,30 +16331,30 @@ msgstr "Wewnętrzne"
 msgid "Non-copper"
 msgstr "Poza warstwami ścieżek"
 
-#: common/richio.cpp:139
+#: common/richio.cpp:192
 #, c-format
 msgid "Unable to open filename '%s' for reading"
 msgstr "Nie mogę otworzyć pliku '%s' do odczytu"
 
-#: common/richio.cpp:183 common/richio.cpp:279
+#: common/richio.cpp:236 common/richio.cpp:332
 msgid "Maximum line length exceeded"
 msgstr "Przekroczona maksymalną długość linii"
 
-#: common/richio.cpp:245
+#: common/richio.cpp:298
 msgid "Line length exceeded"
 msgstr "Przekroczona długość linii"
 
-#: common/richio.cpp:500
+#: common/richio.cpp:553
 #, c-format
 msgid "cannot open or save file '%s'"
 msgstr "nie mogę otworzyć lub zapisać pliku '%s'"
 
-#: common/richio.cpp:519
+#: common/richio.cpp:572
 #, c-format
 msgid "error writing to file '%s'"
 msgstr "błąd zapisu do pliku '%s'"
 
-#: common/richio.cpp:540
+#: common/richio.cpp:593
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER błąd zapisu"
 
