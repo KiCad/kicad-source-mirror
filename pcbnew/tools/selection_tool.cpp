@@ -350,7 +350,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
             int id = *evt->GetCommandId();
 
             // User has pointed an item, so show it in a different way
-            if( id >= 0 )
+            if( id >= 0 && id < limit )
             {
                 current = ( *aCollector )[id];
                 current->SetBrightened();
