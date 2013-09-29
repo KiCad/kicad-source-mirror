@@ -103,12 +103,13 @@ void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
     wxString menuEntry;
 
     if( aAction.HasHotKey() )
-        menuEntry = wxString( aAction.GetMenuItem() + '\t' + getHotKeyDescription( aAction ) );
+        menuEntry = wxString( ( aAction.GetMenuItem() + '\t' + getHotKeyDescription( aAction ) ).c_str(),
+        				      wxConvUTF8 );
     else
-        menuEntry = wxString( aAction.GetMenuItem() );
+        menuEntry = wxString( aAction.GetMenuItem().c_str(), wxConvUTF8 );
 
     m_menu.Append( new wxMenuItem( &m_menu, id, menuEntry,
-                    wxString( aAction.GetDescription() ), wxITEM_NORMAL ) );
+                    wxString( aAction.GetDescription().c_str(), wxConvUTF8 ), wxITEM_NORMAL ) );
 
     m_toolActions[id] = &aAction;
 }

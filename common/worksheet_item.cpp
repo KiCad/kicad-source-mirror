@@ -79,8 +79,8 @@ const BOX2I WORKSHEET_ITEM::ViewBBox() const
 void WORKSHEET_ITEM::ViewDraw( int aLayer, GAL* aGal ) const
 {
     RENDER_SETTINGS* settings = m_view->GetPainter()->GetSettings();
-    wxString fileName( m_fileName );
-    wxString sheetName( m_sheetName );
+    wxString fileName( m_fileName.c_str(), wxConvUTF8 );
+    wxString sheetName( m_sheetName.c_str(), wxConvUTF8 );
     WS_DRAW_ITEM_LIST drawList;
 
     drawList.SetPenSize( settings->GetWorksheetLineWidth() );
