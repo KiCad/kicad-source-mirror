@@ -68,7 +68,7 @@ bool MOVE_TOOL::Init()
     }
     else
     {
-        wxLogError( "pcbnew.InteractiveSelection tool is not available" );
+        wxLogError( wxT( "pcbnew.InteractiveSelection tool is not available" ) );
         return false;
     }
 

@@ -139,7 +139,7 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 		bool initState = static_cast<TOOL_INTERACTIVE*>( aTool )->Init();
 		if( !initState )
 		{
-		    wxLogError( wxT( "Initialization of the %s tool failed" ), aTool->GetName() );
+		    wxLogError( wxT( "Initialization of the %s tool failed" ), aTool->GetName().c_str() );
 
 		    // Unregister the tool
 		    m_toolState.erase( aTool );
