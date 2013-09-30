@@ -47,10 +47,10 @@ public:
 
     const wxString& GetFileExtension() const;
 
-    wxArrayString FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties );
+    wxArrayString FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties );
 
     MODULE* FootprintLoad( const wxString& aLibraryPath,
-            const wxString& aFootprintName, PROPERTIES* aProperties );
+            const wxString& aFootprintName, const PROPERTIES* aProperties );
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath );
 
@@ -82,7 +82,7 @@ private:
 
     wxString    m_lib_path;     ///< from aLibraryPath, something like https://github.com/liftoff-sr/pretty_footprints
     std::string m_zip_image;    ///< byte image of the zip file in its entirety.
-    GH_CACHE*  m_cache;
+    GH_CACHE*   m_cache;
 };
 
 #endif // GITHUB_PLUGIN_H_

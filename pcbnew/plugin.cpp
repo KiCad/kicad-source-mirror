@@ -25,27 +25,42 @@
 #include <io_mgr.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin '%s' does not implement the '%s' function." )
-#define FMT_NOTFOUND        _( "Plugin type '%s' is not found." )
+
+/**
+ * Function not_implemented
+ * throws an IO_ERROR and complains of an API function not being implemented.
+ *
+ * @param aPlugin is a PLUGIN instance
+ * @param aCaller is the name of the unimplemented API function.
+ */
+static void not_implemented( PLUGIN* aPlugin, const char* aCaller )
+{
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED,
+            aPlugin->PluginName().GetData(),
+            wxString::FromUTF8( aCaller ).GetData() )
+            );
+}
 
 
 BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties )
 {
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData(), __FUNCTION__ ) );
+    not_implemented( this, __FUNCTION__ );
+    return NULL;
 }
 
 
 void PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData(), __FUNCTION__ ) );
+    not_implemented( this, __FUNCTION__ );
 }
 
 
 wxArrayString PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+    not_implemented( this, __FUNCTION__ );
+    return wxArrayString();
 }
 
 
@@ -53,41 +68,43 @@ MODULE* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFo
                                     const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+    not_implemented( this, __FUNCTION__ );
+    return NULL;
 }
 
 
 void PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+    not_implemented( this, __FUNCTION__ );
 }
 
 
 void PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+    not_implemented( this, __FUNCTION__ );
 }
 
 
 void PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+    not_implemented( this, __FUNCTION__ );
 }
 
 
 bool PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+    not_implemented( this, __FUNCTION__ );
+    return false;
 }
 
 
 bool PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+    not_implemented( this, __FUNCTION__ );
+    return false;
 }
-

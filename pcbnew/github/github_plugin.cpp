@@ -98,8 +98,10 @@ const wxString& GITHUB_PLUGIN::GetFileExtension() const
 
 
 wxArrayString GITHUB_PLUGIN::FootprintEnumerate(
-        const wxString& aLibraryPath, PROPERTIES* aProperties )
+        const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
+    D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
+
     cacheLib( aLibraryPath );
 
     wxArrayString   ret;
@@ -114,8 +116,10 @@ wxArrayString GITHUB_PLUGIN::FootprintEnumerate(
 
 
 MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
-        const wxString& aFootprintName, PROPERTIES* aProperties )
+        const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
+    D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
+
     cacheLib( aLibraryPath );
 
     string fp_name = TO_UTF8( aFootprintName );
@@ -162,10 +166,17 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath ) throw( IO_ERROR )
 {
     if( !m_cache || m_lib_path != aLibraryPath )
     {
+        D(printf("%s: this:%p  m_lib_path:'%s'  aLibraryPath:'%s'\n",
+            __func__, this, TO_UTF8( m_lib_path), TO_UTF8(aLibraryPath) );)
+
         delete m_cache;
         m_cache = new GH_CACHE();
         remote_get_zip( aLibraryPath );
+
         m_lib_path = aLibraryPath;
+
+        D(printf("%s2: this:%p  m_lib_path:'%s'  aLibraryPath:'%s'\n",
+            __func__, this, TO_UTF8( m_lib_path), TO_UTF8(aLibraryPath) );)
 
         wxMemoryInputStream mis( &m_zip_image[0], m_zip_image.size() );
 
@@ -194,7 +205,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath ) throw( IO_ERROR )
 bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
 {
     // e.g. "https://github.com/liftoff-sr/pretty_footprints"
-    D(printf("aRepoURL:%s\n", TO_UTF8( aRepoURL ) );)
+    //D(printf("aRepoURL:%s\n", TO_UTF8( aRepoURL ) );)
 
     wxURI   repo( aRepoURL );
 
