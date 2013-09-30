@@ -108,7 +108,7 @@ protected:
     bool    m_netNamesOnTracks;
 
     /// Maximum font size for netnames (and other dynamically shown strings)
-    static const double MAX_FONT_SIZE = 100000000;
+    static const double MAX_FONT_SIZE;
 
     /// Option for different display modes for zones
     DisplayZonesMode m_displayZoneMode;

@@ -913,3 +913,5 @@ void PCB_PAINTER::drawSelectionBox( const VIEW_ITEM* aItem ) const
     m_gal->SetFillColor( m_pcbSettings->GetLayerColor( ITEM_GAL_LAYER( SELECTION ) ) );
     m_gal->DrawRectangle( boundingBox.GetOrigin(), boundingBox.GetEnd() );
 }
+
+const double PCB_RENDER_SETTINGS::MAX_FONT_SIZE = 100000000;
