@@ -116,7 +116,7 @@ const char* ShowType( NETLIST_ITEM_T aType )
 
 void NETLIST_OBJECT::Show( std::ostream& out, int ndx ) const
 {
-    wxString path = m_SheetList.PathHumanReadable();
+    wxString path = m_SheetPath.PathHumanReadable();
 
     out << "<netItem ndx=\"" << ndx << '"' <<
     " type=\"" << ShowType( m_Type ) << '"' <<
@@ -129,13 +129,13 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx ) const
     if( !m_Label.IsEmpty() )
         out << " <label>" << m_Label.mb_str() << "</label>\n";
 
-    out << " <sheetpath>" << m_SheetList.PathHumanReadable().mb_str() << "</sheetpath>\n";
+    out << " <sheetpath>" << m_SheetPath.PathHumanReadable().mb_str() << "</sheetpath>\n";
 
     switch( m_Type )
     {
     case NET_PIN:
         /* GetRef() needs to be const
-        out << " <refOfComp>" << ((SCH_COMPONENT*)m_Link)->GetRef(&m_SheetList).mb_str()
+        out << " <refOfComp>" << GetComponentParent()->GetRef(&m_SheetPath).mb_str()
             << "</refOfComp>\n";
         */
 
@@ -222,7 +222,7 @@ bool NETLIST_OBJECT::IsLabelConnected( NETLIST_OBJECT* aNetItem )
     if(  ( at == NET_HIERLABEL || at == NET_HIERBUSLABELMEMBER )
       && ( bt == NET_SHEETLABEL || bt == NET_SHEETBUSLABELMEMBER ) )
     {
-        if( m_SheetList == aNetItem->m_SheetListInclude )
+        if( m_SheetPath == aNetItem->m_SheetPathInclude )
         {
             return true; //connected!
         }
@@ -325,7 +325,7 @@ wxString NETLIST_OBJECT::GetNetName() const
     if( !m_netNameCandidate->IsLabelGlobal() )
     {
         // usual net name, prefix it by the sheet path
-        netName = m_netNameCandidate->m_SheetList.PathHumanReadable();
+        netName = m_netNameCandidate->m_SheetPath.PathHumanReadable();
     }
 
     netName += m_netNameCandidate->m_Label;
@@ -347,11 +347,11 @@ wxString NETLIST_OBJECT::GetShortNetName() const
 
     if( m_netNameCandidate->m_Type == NET_PIN )
     {
-        SCH_COMPONENT* link = (SCH_COMPONENT*)m_netNameCandidate->m_Link;
+        SCH_COMPONENT* link = m_netNameCandidate->GetComponentParent();
         if( link )  // Should be always true
         {
             netName = wxT("Net-<");
-            netName << link->GetRef( &m_netNameCandidate->m_SheetList );
+            netName << link->GetRef( &m_netNameCandidate->m_SheetPath );
             netName << wxT("-Pad")
                     << LIB_PIN::ReturnPinStringNum( m_netNameCandidate->m_PinNum )
                     << wxT(">");

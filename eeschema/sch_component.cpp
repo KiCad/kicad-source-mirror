@@ -1741,9 +1741,9 @@ void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
         wxPoint pos = GetTransform().TransformCoordinate( pin->GetPosition() ) + m_Pos;
 
         NETLIST_OBJECT* item = new NETLIST_OBJECT();
-        item->m_SheetListInclude = *aSheetPath;
+        item->m_SheetPathInclude = *aSheetPath;
         item->m_Comp = (SCH_ITEM*) pin;
-        item->m_SheetList = *aSheetPath;
+        item->m_SheetPath = *aSheetPath;
         item->m_Type = NET_PIN;
         item->m_Link = (SCH_ITEM*) this;
         item->m_ElectricalType = pin->GetType();
@@ -1757,9 +1757,9 @@ void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
         {
             /* There is an associated PIN_LABEL. */
             item = new NETLIST_OBJECT();
-            item->m_SheetListInclude = *aSheetPath;
+            item->m_SheetPathInclude = *aSheetPath;
             item->m_Comp = NULL;
-            item->m_SheetList = *aSheetPath;
+            item->m_SheetPath = *aSheetPath;
             item->m_Type  = NET_PINLABEL;
             item->m_Label = pin->GetName();
             item->m_Start = pos;

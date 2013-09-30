@@ -193,8 +193,8 @@ void SCH_NO_CONNECT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
 {
     NETLIST_OBJECT* item = new NETLIST_OBJECT();
 
-    item->m_SheetList = *aSheetPath;
-    item->m_SheetListInclude = *aSheetPath;
+    item->m_SheetPath = *aSheetPath;
+    item->m_SheetPathInclude = *aSheetPath;
     item->m_Comp = this;
     item->m_Type = NET_NOCONNECT;
     item->m_Start = item->m_End = m_pos;
