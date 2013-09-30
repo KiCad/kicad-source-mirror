@@ -156,7 +156,7 @@ set(COMMON_SRCS
     view/view_item.cpp
     view/view_group.cpp
 
-#    math/math_util.cpp
+    math/math_util.cpp
     system/fcontext.s
 	
     tool/tool_base.cpp
