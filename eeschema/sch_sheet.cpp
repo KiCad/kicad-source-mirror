@@ -1081,8 +1081,8 @@ void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
     for( size_t i = 0;  i < m_pins.size();  i++ )
     {
         NETLIST_OBJECT* item = new NETLIST_OBJECT();
-        item->m_SheetListInclude = sheetPath;
-        item->m_SheetList = *aSheetPath;
+        item->m_SheetPathInclude = sheetPath;
+        item->m_SheetPath = *aSheetPath;
         item->m_Comp = &m_pins[i];
         item->m_Link = this;
         item->m_Type = NET_SHEETLABEL;

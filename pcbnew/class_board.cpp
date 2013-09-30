@@ -2633,8 +2633,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     if( aReporter && aReporter->ReportAll() )
                     {
                         msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad <%s>\n" ),
-                                    GetChars( pad->GetNetname() ),
-                                    GetChars( pad->GetParent()->GetReference() ),
+                                    GetChars( previouspad->GetNetname() ),
+                                    GetChars( previouspad->GetParent()->GetReference() ),
                                     GetChars( previouspad->GetPadName() ) );
                         aReporter->Report( msg );
                     }

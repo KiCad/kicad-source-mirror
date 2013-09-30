@@ -147,16 +147,16 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
     // Sort objects by Sheet
     SortListbySheet();
 
-    sheet = &(GetItem( 0 )->m_SheetList);
+    sheet = &(GetItem( 0 )->m_SheetPath);
     m_lastNetCode = m_lastBusNetCode = 1;
 
     for( unsigned ii = 0, istart = 0; ii < size(); ii++ )
     {
         NETLIST_OBJECT* net_item = GetItem( ii );
 
-        if( net_item->m_SheetList != *sheet )   // Sheet change
+        if( net_item->m_SheetPath != *sheet )   // Sheet change
         {
-            sheet  = &(net_item->m_SheetList);
+            sheet  = &(net_item->m_SheetPath);
             istart = ii;
         }
 
@@ -377,8 +377,8 @@ static bool evalLabelsPriority( const NETLIST_OBJECT* aLabel1,
     // use name defined in higher hierarchical sheet
     // (i.e. shorter path because paths are /<timestamp1>/<timestamp2>/...
     // and timestamp = 8 letters.
-    if( aLabel1->m_SheetList.Path().Length() != aLabel2->m_SheetList.Path().Length() )
-        return aLabel1->m_SheetList.Path().Length() < aLabel2->m_SheetList.Path().Length();
+    if( aLabel1->m_SheetPath.Path().Length() != aLabel2->m_SheetPath.Path().Length() )
+        return aLabel1->m_SheetPath.Path().Length() < aLabel2->m_SheetPath.Path().Length();
 
     // Sheet paths have the same length: use alphabetic label name order
     // For labels on sheets having an equivalent deep in hierarchy, use
@@ -386,8 +386,8 @@ static bool evalLabelsPriority( const NETLIST_OBJECT* aLabel1,
     if( aLabel1->m_Label.Cmp( aLabel2->m_Label ) != 0 )
         return aLabel1->m_Label.Cmp( aLabel2->m_Label ) < 0;
 
-    return aLabel1->m_SheetList.PathHumanReadable().Cmp(
-                aLabel2->m_SheetList.PathHumanReadable() ) < 0;
+    return aLabel1->m_SheetPath.PathHumanReadable().Cmp(
+                aLabel2->m_SheetPath.PathHumanReadable() ) < 0;
 }
 
 
@@ -508,19 +508,24 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
             idxstart = ii;
         }
 
-        // Search all pins having no net name candidate yet, i.e. on nets
-        // having no labels
+        // Examine all pins of the net to find the best candidate,
+        // i.e. the first net name candidate, by alphabetic order
+        // the net names are names bu_ilt by GetShortNetName
+        // (Net-<{reference}-Pad{pad number}> like Net-<U3-Pad5>
+        // Not named nets do not have usually a lot of members.
+        // Many have only 2 members(a pad and a non connection symbol)
         if( item->m_Type == NET_PIN )
         {
             // A candidate is found, however components which are not in
             // netlist are not candidate because some have their reference
-            // is changed each time the netlist is built (power components)
-            // and anyway they are not a good candidate
-            SCH_COMPONENT* link = (SCH_COMPONENT*)item->m_Link;
-            if( link->IsInNetlist() )
+            // changed each time the netlist is built (power components)
+            // and anyway obviously they are not a good candidate
+            SCH_COMPONENT* link = item->GetComponentParent();
+            if( link && link->IsInNetlist() )
             {
                 // select the better between the previous and this one
                 item->SetNetNameCandidate( item );  // Needed to calculate GetShortNetName
+
                 if( candidate == NULL )
                     candidate = item;
                 else
@@ -547,7 +552,7 @@ void NETLIST_OBJECT_LIST::sheetLabelConnect( NETLIST_OBJECT* SheetLabel )
     {
         NETLIST_OBJECT* ObjetNet = GetItem( ii );
 
-        if( ObjetNet->m_SheetList != SheetLabel->m_SheetListInclude )
+        if( ObjetNet->m_SheetPath != SheetLabel->m_SheetPathInclude )
             continue;  //use SheetInclude, not the sheet!!
 
         if( (ObjetNet->m_Type != NET_HIERLABEL ) && (ObjetNet->m_Type != NET_HIERBUSLABELMEMBER ) )
@@ -681,7 +686,7 @@ void NETLIST_OBJECT_LIST::pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus
         {
             NETLIST_OBJECT* item = GetItem( i );
 
-            if( item->m_SheetList != aRef->m_SheetList )  //used to be > (why?)
+            if( item->m_SheetPath != aRef->m_SheetPath )  //used to be > (why?)
                 continue;
 
             switch( item->m_Type )
@@ -725,7 +730,7 @@ void NETLIST_OBJECT_LIST::pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus
         {
             NETLIST_OBJECT* item =  GetItem( i );
 
-            if( item->m_SheetList != aRef->m_SheetList )
+            if( item->m_SheetPath != aRef->m_SheetPath )
                 continue;
 
             switch( item->m_Type )
@@ -779,7 +784,7 @@ void NETLIST_OBJECT_LIST::segmentToPointConnect( NETLIST_OBJECT* aJonction,
         NETLIST_OBJECT* segment = GetItem( i );
 
         // if different sheets, obviously no physical connection between elements.
-        if( segment->m_SheetList != aJonction->m_SheetList )
+        if( segment->m_SheetPath != aJonction->m_SheetPath )
             continue;
 
         if( aIsBus == IS_WIRE )
@@ -832,7 +837,7 @@ void NETLIST_OBJECT_LIST::labelConnect( NETLIST_OBJECT* aLabelRef )
         if( item->GetNet() == aLabelRef->GetNet() )
             continue;
 
-        if( item->m_SheetList != aLabelRef->m_SheetList )
+        if( item->m_SheetPath != aLabelRef->m_SheetPath )
         {
             if( item->m_Type != NET_PINLABEL && item->m_Type != NET_GLOBLABEL
                 && item->m_Type != NET_GLOBBUSLABELMEMBER )
