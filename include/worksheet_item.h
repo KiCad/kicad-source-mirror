@@ -49,7 +49,6 @@ class WORKSHEET_ITEM : public EDA_ITEM
 public:
     WORKSHEET_ITEM( const std::string& aFileName, const std::string& aSheetName,
                     const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock );
-    ~WORKSHEET_ITEM() {}
 
     /**
      * Function SetFileName()

@@ -66,7 +66,7 @@ public:
 
 private:
     /// Adds an item to the VIEW_GROUP that holds all moved items and displays them on the overlay
-    void viewGroupAdd( BOARD_ITEM* aItem, KiGfx::VIEW_GROUP* aGroup );
+    void vgAdd( BOARD_ITEM* aItem, KiGfx::VIEW_GROUP* aGroup );
 
     /// Changes visibility settings for items stored in a VIEW_GROUP
     void vgSetVisibility( KiGfx::VIEW_GROUP* aGroup, bool aVisible ) const;

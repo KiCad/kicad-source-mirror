@@ -139,7 +139,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
                     m_state.Save( *it );
 
                     // Gather all selected items into one VIEW_GROUP
-                    viewGroupAdd( *it, &m_items );
+                    vgAdd( *it, &m_items );
                 }
 
                 // Hide the original items, they are temporarily shown in VIEW_GROUP on overlay
@@ -183,7 +183,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
 }
 
 
-void MOVE_TOOL::viewGroupAdd( BOARD_ITEM* aItem, VIEW_GROUP* aGroup )
+void MOVE_TOOL::vgAdd( BOARD_ITEM* aItem, VIEW_GROUP* aGroup )
 {
     // Modules are treated in a special way - when they are moved, we have to
     // move all the parts that make the module, not the module itself
@@ -193,14 +193,14 @@ void MOVE_TOOL::viewGroupAdd( BOARD_ITEM* aItem, VIEW_GROUP* aGroup )
 
         // Add everything that belongs to the module (besides the module itself)
         for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-            viewGroupAdd( pad, &m_items );
+            aGroup->Add( pad );
 
         for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
              drawing = drawing->Next() )
-            viewGroupAdd( drawing, &m_items );
+            aGroup->Add( drawing );
 
-        viewGroupAdd( &module->Reference(), &m_items );
-        viewGroupAdd( &module->Value(), &m_items );
+        aGroup->Add( &module->Reference() );
+        aGroup->Add( &module->Value() );
     }
 
     // Add items to the VIEW_GROUP, so they will be displayed on the overlay
