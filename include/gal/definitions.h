@@ -38,13 +38,11 @@ namespace KiGfx
      */
     enum RenderTarget
     {
-        TARGET_CACHED,      ///< Main rendering target (cached)
+        TARGET_CACHED = 0,  ///< Main rendering target (cached)
         TARGET_NONCACHED,   ///< Auxiliary rendering target (noncached)
-        TARGET_OVERLAY      ///< Items that may change while the view stays the same (noncached)
+        TARGET_OVERLAY,     ///< Items that may change while the view stays the same (noncached)
+        TARGETS_NUMBER      ///< Number of available rendering targets
     };
-
-    /// Number of available rendering targets
-    static const int TARGETS_NUMBER = 3;
 }
 
 #endif /* DEFINITIONS_H_ */

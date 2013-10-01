@@ -71,16 +71,6 @@ void VIEW_GROUP::Clear()
 }
 
 
-void VIEW_GROUP::FreeItems()
-{
-    BOOST_FOREACH( VIEW_ITEM* item, m_items )
-    {
-        delete item;
-    }
-    m_items.clear();
-}
-
-
 unsigned int VIEW_GROUP::GetSize() const
 {
     return m_items.size();
@@ -98,6 +88,7 @@ const BOX2I VIEW_GROUP::ViewBBox() const
 void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal ) const
 {
     PAINTER* painter = m_view->GetPainter();
+    aGal->PushDepth();
 
     // Draw all items immediately (without caching)
     BOOST_FOREACH( VIEW_ITEM* item, m_items )
@@ -110,13 +101,15 @@ void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal ) const
         {
             if( m_view->IsCached( layers[i] ) && m_view->IsLayerVisible( layers[i] ) )
             {
-                aGal->SetLayerDepth( m_view->GetLayerOrder( layers[i] ) );
+                aGal->AdvanceDepth();
 
                 if( !painter->Draw( item, layers[i] ) )
                     item->ViewDraw( layers[i], aGal );  // Alternative drawing method
             }
         }
     }
+
+    aGal->PopDepth();
 }
 
 
@@ -125,6 +118,34 @@ void VIEW_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
     // Everything is displayed on a single layer
     aLayers[0] = m_layer;
     aCount = 1;
+}
+
+
+void VIEW_GROUP::FreeItems()
+{
+    BOOST_FOREACH( VIEW_ITEM* item, m_items )
+    {
+        delete item;
+    }
+    m_items.clear();
+}
+
+
+void VIEW_GROUP::ItemsSetVisibility( bool aVisible )
+{
+    std::set<VIEW_ITEM*>::const_iterator it, it_end;
+
+    for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
+        (*it)->ViewSetVisible( aVisible );
+}
+
+
+void VIEW_GROUP::ItemsViewUpdate( VIEW_ITEM::ViewUpdateFlags aFlags )
+{
+    std::set<VIEW_ITEM*>::const_iterator it, it_end;
+
+    for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
+        (*it)->ViewUpdate( aFlags );
 }
 
 
@@ -137,3 +158,5 @@ void VIEW_GROUP::updateBbox()
     view->Remove( this );
     view->Add( this );
 }
+
+

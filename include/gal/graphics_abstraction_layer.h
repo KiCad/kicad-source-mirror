@@ -798,7 +798,7 @@ public:
      */
     inline void AdvanceDepth()
     {
-        layerDepth -= std::numeric_limits<double>::epsilon();
+        layerDepth -= 0.001;
     }
 
     /**

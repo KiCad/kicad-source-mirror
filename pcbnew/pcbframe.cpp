@@ -790,7 +790,8 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
         LAYER_NUM layers[] = {
                 GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
-                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE )
+                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+                ITEM_GAL_LAYER( SELECTION ), ITEM_GAL_LAYER( GP_OVERLAY )
         };
 
         for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
@@ -830,7 +831,7 @@ void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
                 GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
                 ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
-                ITEM_GAL_LAYER( SELECTION )
+                ITEM_GAL_LAYER( SELECTION ), ITEM_GAL_LAYER( GP_OVERLAY )
         };
 
         for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )

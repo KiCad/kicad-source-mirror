@@ -147,6 +147,22 @@ public:
         return m_view;
     }
 
+    /**
+     * Function ItemsSetVisibility()
+     * Sets visibility of items stored in the VIEW_GROUP.
+     *
+     * @param aVisible decides if items should be visible or not.
+     */
+    virtual void ItemsSetVisibility( bool aVisible );
+
+    /**
+     * Function ItemsViewUpdate()
+     * Updates items stored in the VIEW_GROUP.
+     *
+     * @param aFlags determines the way in which items will be updated.
+     */
+    virtual void ItemsViewUpdate( VIEW_ITEM::ViewUpdateFlags aFlags );
+
 protected:
     /// These functions cannot be used with VIEW_GROUP as they are intended only to work with
     /// singular VIEW_ITEMs (there is only one-to-one relation between item/layer combination and
