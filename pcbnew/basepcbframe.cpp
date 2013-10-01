@@ -70,8 +70,6 @@ static const wxString DisplayModuleTextEntry( wxT( "DiModTx" ) );
 static const wxString FastGrid1Entry( wxT( "FastGrid1" ) );
 static const wxString FastGrid2Entry( wxT( "FastGrid2" ) );
 
-/// Rendering order of layers on GAL-based canvas (lower index in the array
-/// means that layer is displayed closer to the user, ie. on the top).
 const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
 {
     ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( SELECTION ),
