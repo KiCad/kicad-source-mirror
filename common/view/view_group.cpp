@@ -88,11 +88,12 @@ const BOX2I VIEW_GROUP::ViewBBox() const
 void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal ) const
 {
     PAINTER* painter = m_view->GetPainter();
-    aGal->PushDepth();
 
     // Draw all items immediately (without caching)
     BOOST_FOREACH( VIEW_ITEM* item, m_items )
     {
+        aGal->PushDepth();
+
         int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
         item->ViewGetLayers( layers, layers_count );
         m_view->SortLayers( layers, layers_count );
@@ -107,9 +108,9 @@ void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal ) const
                     item->ViewDraw( layers[i], aGal );  // Alternative drawing method
             }
         }
-    }
 
-    aGal->PopDepth();
+        aGal->PopDepth();
+    }
 }
 
 
@@ -158,5 +159,3 @@ void VIEW_GROUP::updateBbox()
     view->Remove( this );
     view->Add( this );
 }
-
-
