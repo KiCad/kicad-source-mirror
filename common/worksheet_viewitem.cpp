@@ -23,11 +23,11 @@
  */
 
 /**
- * @file worksheet_item.cpp
+ * @file worksheet_viewitem.cpp
  * @brief Class that handles properties and drawing of worksheet layout.
  */
 
-#include <worksheet_item.h>
+#include <worksheet_viewitem.h>
 #include <worksheet_shape_builder.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <painter.h>
@@ -36,28 +36,28 @@
 
 using namespace KiGfx;
 
-WORKSHEET_ITEM::WORKSHEET_ITEM( const std::string& aFileName, const std::string& aSheetName,
+WORKSHEET_VIEWITEM::WORKSHEET_VIEWITEM( const std::string& aFileName, const std::string& aSheetName,
                                 const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock ) :
     EDA_ITEM( NOT_USED ), // this item is never added to a BOARD so it needs no type
     m_fileName( aFileName ), m_sheetName( aSheetName ),
     m_titleBlock( aTitleBlock ), m_pageInfo( aPageInfo ), m_sheetNumber( 1 ), m_sheetCount( 1 ) {}
 
 
-void WORKSHEET_ITEM::SetPageInfo( const PAGE_INFO* aPageInfo )
+void WORKSHEET_VIEWITEM::SetPageInfo( const PAGE_INFO* aPageInfo )
 {
     m_pageInfo = aPageInfo;
     ViewUpdate( GEOMETRY );
 }
 
 
-void WORKSHEET_ITEM::SetTitleBlock( const TITLE_BLOCK* aTitleBlock )
+void WORKSHEET_VIEWITEM::SetTitleBlock( const TITLE_BLOCK* aTitleBlock )
 {
     m_titleBlock = aTitleBlock;
     ViewUpdate( GEOMETRY );
 }
 
 
-const BOX2I WORKSHEET_ITEM::ViewBBox() const
+const BOX2I WORKSHEET_VIEWITEM::ViewBBox() const
 {
     BOX2I bbox;
 
@@ -76,7 +76,7 @@ const BOX2I WORKSHEET_ITEM::ViewBBox() const
 }
 
 
-void WORKSHEET_ITEM::ViewDraw( int aLayer, GAL* aGal ) const
+void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
 {
     RENDER_SETTINGS* settings = m_view->GetPainter()->GetSettings();
     wxString fileName( m_fileName.c_str(), wxConvUTF8 );
@@ -128,14 +128,14 @@ void WORKSHEET_ITEM::ViewDraw( int aLayer, GAL* aGal ) const
 }
 
 
-void WORKSHEET_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+void WORKSHEET_VIEWITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
     aLayers[0] = ITEM_GAL_LAYER( WORKSHEET );
 }
 
 
-void WORKSHEET_ITEM::draw( const WS_DRAW_ITEM_LINE* aItem, GAL* aGal ) const
+void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_LINE* aItem, GAL* aGal ) const
 {
     aGal->SetIsStroke( true );
     aGal->SetIsFill( false );
@@ -145,7 +145,7 @@ void WORKSHEET_ITEM::draw( const WS_DRAW_ITEM_LINE* aItem, GAL* aGal ) const
 }
 
 
-void WORKSHEET_ITEM::draw( const WS_DRAW_ITEM_RECT* aItem, GAL* aGal ) const
+void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_RECT* aItem, GAL* aGal ) const
 {
     aGal->SetIsStroke( true );
     aGal->SetIsFill( false );
@@ -155,7 +155,7 @@ void WORKSHEET_ITEM::draw( const WS_DRAW_ITEM_RECT* aItem, GAL* aGal ) const
 }
 
 
-void WORKSHEET_ITEM::draw( const WS_DRAW_ITEM_POLYGON* aItem, GAL* aGal ) const
+void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_POLYGON* aItem, GAL* aGal ) const
 {
     std::deque<VECTOR2D> corners;
     BOOST_FOREACH( wxPoint point, aItem->m_Corners )
@@ -181,7 +181,7 @@ void WORKSHEET_ITEM::draw( const WS_DRAW_ITEM_POLYGON* aItem, GAL* aGal ) const
 }
 
 
-void WORKSHEET_ITEM::draw( const WS_DRAW_ITEM_TEXT* aItem, GAL* aGal ) const
+void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_TEXT* aItem, GAL* aGal ) const
 {
     VECTOR2D position( aItem->GetTextPosition().x, aItem->GetTextPosition().y );
 
@@ -192,7 +192,7 @@ void WORKSHEET_ITEM::draw( const WS_DRAW_ITEM_TEXT* aItem, GAL* aGal ) const
 }
 
 
-void WORKSHEET_ITEM::drawBorder( GAL* aGal ) const
+void WORKSHEET_VIEWITEM::drawBorder( GAL* aGal ) const
 {
     VECTOR2D origin = VECTOR2D( 0.0, 0.0 );
     VECTOR2D end = VECTOR2D( m_pageInfo->GetWidthMils() * 25400,
