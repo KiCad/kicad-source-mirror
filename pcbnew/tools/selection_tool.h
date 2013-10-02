@@ -36,6 +36,11 @@ class SELECTION_AREA;
 class BOARD_ITEM;
 class GENERAL_COLLECTOR;
 
+namespace KiGfx
+{
+class VIEW_GROUP;
+}
+
 /**
  * Class SELECTION_TOOL
  *
@@ -54,6 +59,18 @@ public:
     SELECTION_TOOL();
     ~SELECTION_TOOL();
 
+    struct SELECTION
+    {
+        /// Set of selected items
+        std::set<BOARD_ITEM*> items;
+
+        /// VIEW_GROUP that holds currently selected items
+        KiGfx::VIEW_GROUP* group;
+
+        /// Checks if there is anything selected
+        bool Empty() const { return items.empty(); }
+    };
+
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset();
 
@@ -69,9 +86,9 @@ public:
      *
      * Returns the set of currently selected items.
      */
-    const std::set<BOARD_ITEM*>& GetSelection() const
+    const SELECTION& GetSelection() const
     {
-        return m_selectedItems;
+        return m_selection;
     }
 
     /**
@@ -145,14 +162,7 @@ private:
      *
      * @param aItem is an item to be selected.
      */
-    void selectItem( BOARD_ITEM* aItem )
-    {
-        aItem->SetSelected();
-        m_selectedItems.insert( aItem );
-
-        // Now the context menu should be enabled
-        SetContextMenu( &m_menu, CMENU_BUTTON );
-    }
+    void selectItem( BOARD_ITEM* aItem );
 
     /**
      * Function deselectItem()
@@ -160,15 +170,7 @@ private:
      *
      * @param aItem is an item to be deselected.
      */
-    void deselectItem( BOARD_ITEM* aItem )
-    {
-        aItem->ClearSelected();
-        m_selectedItems.erase( aItem );
-
-        if( m_selectedItems.empty() )
-            // If there is nothing selected, disable the context menu
-            SetContextMenu( &m_menu, CMENU_OFF );
-    }
+    void deselectItem( BOARD_ITEM* aItem );
 
     /**
      * Function containsSelected()
@@ -178,11 +180,11 @@ private:
      */
     bool containsSelected( const VECTOR2I& aPoint ) const;
 
-    /// Container storing currently selected items
-    std::set<BOARD_ITEM*> m_selectedItems;
-
     /// Visual representation of selection box
     SELECTION_AREA* m_selArea;
+
+    /// Current state of selection
+    SELECTION m_selection;
 
     /// Flag saying if items should be added to the current selection or rather replace it
     bool m_additive;
