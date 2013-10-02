@@ -500,7 +500,7 @@ private:
 
     // Function objects that need to access VIEW/VIEW_ITEM private/protected members
     struct clearLayerCache;
-    struct recacheLayer;
+    struct recacheItem;
     struct drawItem;
     struct unlinkItem;
     struct updateItemsColor;
