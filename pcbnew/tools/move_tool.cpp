@@ -148,6 +148,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
     if( restore )
     {
         // Modifications has to be rollbacked, so restore the previous state of items
+        selection.group->ItemsViewUpdate( VIEW_ITEM::APPEARANCE );
         m_state.RestoreAll();
     }
     else
