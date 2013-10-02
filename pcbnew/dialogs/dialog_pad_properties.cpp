@@ -682,12 +682,15 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         if( m_dummyPad->GetDrillSize().x || m_dummyPad->GetDrillSize().y )
         {
             msg = _( "Error: pad is not on a copper layer and has a hole" );
+
             if( m_dummyPad->GetAttribute() == PAD_HOLE_NOT_PLATED )
             {
                 msg += wxT("\n");
-                msg += _( "For NPTH pad, set pad drill value to pad size value,\n\
-if you do not want this pad plotted in gerber files");
+                msg += _(   "For NPTH pad, set pad drill value to pad size value,\n"
+                            "if you do not want this pad plotted in gerber files"
+                            );
             }
+
             error_msgs.Add( msg );
         }
     }
@@ -697,6 +700,7 @@ if you do not want this pad plotted in gerber files");
     max_size.y = std::abs( m_dummyPad->GetOffset().y );
     max_size.x += m_dummyPad->GetDrillSize().x / 2;
     max_size.y += m_dummyPad->GetDrillSize().y / 2;
+
     if( ( m_dummyPad->GetSize().x / 2 < max_size.x ) ||
         ( m_dummyPad->GetSize().y / 2 < max_size.y ) )
     {
@@ -710,19 +714,21 @@ if you do not want this pad plotted in gerber files");
 
     switch( m_dummyPad->GetAttribute() )
     {
-        case PAD_STANDARD :     // Pad through hole, a hole is expected
-            if( m_dummyPad->GetDrillSize().x <= 0 )
-                error_msgs.Add( _( "Incorrect value for pad drill (too small value)" ) );
-            break;
+    case PAD_STANDARD :     // Pad through hole, a hole is expected
+        if( m_dummyPad->GetDrillSize().x <= 0 )
+            error_msgs.Add( _( "Incorrect value for pad drill (too small value)" ) );
+        break;
 
-        case PAD_SMD:     // SMD and Connector pads (One external copper layer only)
-        case PAD_CONN:
-            if( (padlayers_mask & LAYER_BACK) && (padlayers_mask & LAYER_FRONT) )
-                error_msgs.Add( _( "Error: only one copper layer allowed for this pad" ) );
-            break;
+    case PAD_SMD:     // SMD and Connector pads (One external copper layer only)
+        if( (padlayers_mask & LAYER_BACK) && (padlayers_mask & LAYER_FRONT) )
+            error_msgs.Add( _( "Error: only one copper layer allowed for this pad" ) );
+        break;
 
-        case PAD_HOLE_NOT_PLATED:     // Not plated
-            break;
+    case PAD_CONN:              // connectors can have pads on "All" Cu layers.
+        break;
+
+    case PAD_HOLE_NOT_PLATED:   // Not plated
+        break;
     }
 
     if( error_msgs.GetCount() )
