@@ -471,10 +471,12 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
             return false;
         break;
 
+    // These are not selectable, otherwise silkscreen drawings would be easily destroyed
     case PCB_MODULE_EDGE_T:
-        // These are not selectable, otherwise silkscreen drawings would be easily destroyed
+    // and some other stuff that should be selected
+    case NOT_USED:
+    case TYPE_NOT_INIT:
         return false;
-        break;
 
     default:    // Suppress warnings
         break;
