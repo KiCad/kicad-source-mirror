@@ -78,7 +78,7 @@ bool MOVE_TOOL::Init()
 
 int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION selection = m_selectionTool->GetSelection();
+    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
     if( selection.Empty() )
         return 0;  // there are no items to operate on
 
