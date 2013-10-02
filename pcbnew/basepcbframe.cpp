@@ -53,7 +53,7 @@
 #include <math/vector2d.h>
 #include <trigo.h>
 #include <pcb_painter.h>
-#include <worksheet_item.h>
+#include <worksheet_viewitem.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -240,7 +240,7 @@ void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     }
 
     // Add an entry for the worksheet layout
-    KiGfx::WORKSHEET_ITEM* worksheet = new KiGfx::WORKSHEET_ITEM(
+    KiGfx::WORKSHEET_VIEWITEM* worksheet = new KiGfx::WORKSHEET_VIEWITEM(
                                             std::string( aBoard->GetFileName().mb_str() ),
                                             std::string( GetScreenDesc().mb_str() ),
                                             &GetPageSettings(), &GetTitleBlock() );
