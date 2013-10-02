@@ -67,6 +67,13 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 void SELECTION_TOOL::Reset()
 {
+    m_selection.group->Clear();
+    m_selection.items.clear();
+
+    // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
+    getView()->Remove( m_selection.group );
+    getView()->Add( m_selection.group );
+
     // The tool launches upon reception of action event ("pcbnew.InteractiveSelection")
     Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
 }
