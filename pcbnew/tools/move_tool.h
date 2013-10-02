@@ -65,26 +65,11 @@ public:
     int Main( TOOL_EVENT& aEvent );
 
 private:
-    /// Adds an item to the VIEW_GROUP that holds all moved items and displays them on the overlay
-    void vgAdd( BOARD_ITEM* aItem, KiGfx::VIEW_GROUP* aGroup );
-
-    /// Changes visibility settings for items stored in a VIEW_GROUP
-    void vgSetVisibility( KiGfx::VIEW_GROUP* aGroup, bool aVisible ) const;
-
-    /// Updates items stored in a VIEW_GROUP with selected update flag
-    void vgUpdate( KiGfx::VIEW_GROUP* aGroup, KiGfx::VIEW_ITEM::ViewUpdateFlags aFlags ) const;
-
     /// Saves the state of items and allows to restore them
     ITEM_STATE m_state;
 
     /// Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
-
-    /// Set of selected items (obtained from pcbnew.InteractiveSelection tool)
-    std::set<BOARD_ITEM*> m_selection;
-
-    /// VIEW_GROUP that helds currently moved items
-    KiGfx::VIEW_GROUP m_items;
 };
 
 #endif
