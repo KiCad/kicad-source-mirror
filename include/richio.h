@@ -115,31 +115,29 @@ struct IO_ERROR // : std::exception
      * @param aMsg is error text that will be streamed through wxString.Printf()
      *  using the format string IO_FORMAT above.
      */
-    IO_ERROR( const char* aThrowersFile,
+    explicit IO_ERROR( const char* aThrowersFile,
               const char* aThrowersLoc,
               const wxString& aMsg )
     {
         init( aThrowersFile, aThrowersLoc, aMsg );
     }
 
-#if !wxCHECK_VERSION(2, 9, 0)
-    // 2.9.0 and greater provide a wxString() constructor taking "const char*" whereas
-    // 2.8 did not.  In 2.9.x this IO_ERROR() constructor uses that wxString( const char* )
-    // constructor making this here constructor ambiguous with the IO_ERROR()
-    // taking the wxString.
-
-    IO_ERROR( const char* aThrowersFile,
+    explicit IO_ERROR( const char* aThrowersFile,
               const char* aThrowersLoc,
               const std::string& aMsg )
     {
         init( aThrowersFile, aThrowersLoc, wxString::FromUTF8( aMsg.c_str() ) );
     }
-#endif
 
-    /**
-     * handles the case where _() is passed as aMsg.
-     */
-    IO_ERROR( const char* aThrowersFile,
+    explicit IO_ERROR( const char* aThrowersFile,
+              const char* aThrowersLoc,
+              const char* aMsg )
+    {
+        init( aThrowersFile, aThrowersLoc, wxString::FromUTF8( aMsg ) );
+    }
+
+    /// handle the case where _() is passed as aMsg.
+    explicit IO_ERROR( const char* aThrowersFile,
               const char* aThrowersLoc,
               const wxChar* aMsg )
     {
