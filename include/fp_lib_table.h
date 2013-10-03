@@ -202,7 +202,13 @@ public:
         /**
          * Function SetOptions
          */
-        void SetOptions( const wxString& aOptions ) { options = aOptions; }
+        void SetOptions( const wxString& aOptions )
+        {
+            options = aOptions;
+
+            // set PROPERTIES* from options
+            setProperties( ParseOptions( TO_UTF8( aOptions ) ) );
+        }
 
         /**
          * Function GetDescr
@@ -223,17 +229,6 @@ public:
          */
         const PROPERTIES* GetProperties() const     { return properties; }
 
-        /**
-         * Function SetProperties
-         * sets this ROW's PROPERTIES by taking ownership of @a aProperties.
-         * @param aProperties ownership is given over to this ROW.
-         */
-        void SetProperties( const PROPERTIES* aProperties )
-        {
-            delete properties;
-            properties = aProperties;
-        }
-
         //-----</accessors>-----------------------------------------------------
 
         /**
@@ -249,6 +244,17 @@ public:
 
     private:
 
+        /**
+         * Function setProperties
+         * sets this ROW's PROPERTIES by taking ownership of @a aProperties.
+         * @param aProperties ownership is given over to this ROW.
+         */
+        void setProperties( const PROPERTIES* aProperties )
+        {
+            delete properties;
+            properties = aProperties;
+        }
+
         wxString        nickName;
         wxString        uri;
         LIB_T           type;
@@ -257,7 +263,6 @@ public:
         const
         PROPERTIES*     properties;
     };
-
 
     /**
      * Constructor FP_LIB_TABLE
@@ -395,14 +400,7 @@ public:
         return row ? &row->options : 0;
     }
 #endif
-
     //----</read accessors>---------------------------------------------------
-
-#if 1 || defined(DEBUG)
-    /// implement the tests in here so we can honor the privilege levels of the
-    /// accessors, something difficult to do from int main(int, char**)
-    void Test();
-#endif
 
     /**
      * Function InsertRow
@@ -442,6 +440,14 @@ public:
      * @return true if the footprint library table is empty.
      */
     bool IsEmpty() const;
+
+    /**
+     * Function Assign
+     * assigns new contents to ROWs of this table by copying ALL rows from aOther,
+     * and modifying the size of this table if necessary.
+     * @param aDestNdx is the starting index into this table.
+    void Assign( const FP_LIB_TABLE& aOther, int aDestNdx );
+     */
 
     /**
      * Function MissingLegacyLibs
