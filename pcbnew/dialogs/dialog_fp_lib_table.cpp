@@ -41,6 +41,7 @@
 #include <fctsys.h>
 #include <dialog_fp_lib_table_base.h>
 #include <fp_lib_table.h>
+#include <fp_lib_table_lexer.h>
 #include <wx/grid.h>
 #include <wx/clipbrd.h>
 #include <wx/tokenzr.h>
@@ -287,7 +288,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
             selColCount = 0;
         }
 
-        // D(printf("selRowStart:%d selColStart:%d selRowCount:%d selColCount:%d\n", selRowStart, selColStart, selRowCount, selColCount );)
+        D(printf("selRowStart:%d selColStart:%d selRowCount:%d selColCount:%d\n", selRowStart, selColStart, selRowCount, selColCount );)
     }
 
     void rightClickCellPopupMenu()
@@ -300,15 +301,30 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
         getSelectedArea();
 
-        // if nothing is selected, diable cut and copy.
+        // if nothing is selected, disable cut and copy.
         if( !selRowCount && !selColCount )
         {
             menu.Enable( ID_CUT,  false );
             menu.Enable( ID_COPY, false );
         }
 
+        bool have_cb_text = false;
+        if( wxTheClipboard->Open() )
+        {
+            if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+                have_cb_text = true;
+
+            wxTheClipboard->Close();
+        }
+
+        if( !have_cb_text )
+        {
+            // if nothing on clipboard, disable paste.
+            menu.Enable( ID_PASTE, false );
+        }
+
         // if there is no current cell cursor, disable paste.
-        if( m_cur_row == -1 || m_cur_col == -1 )
+        else if( m_cur_row == -1 || m_cur_col == -1 )
             menu.Enable( ID_PASTE, false );
 
         PopupMenu( &menu );
@@ -362,30 +378,72 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
             {
                 if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
                 {
-                    wxGridTableBase*    tbl = m_cur_grid->GetTable();
                     wxTextDataObject    data;
+                    FP_TBL_MODEL*       tbl = (FP_TBL_MODEL*) m_cur_grid->GetTable();
 
                     wxTheClipboard->GetData( data );
 
-                    wxStringTokenizer   rows( data.GetText(), ROW_SEP, wxTOKEN_RET_EMPTY );
+                    wxString    cb_text = data.GetText();
+                    size_t      ndx = cb_text.find_first_of( wxT( "(fp_lib_table " ) );
 
-                    // if clipboard rows would extend past end of current table size...
-                    if( int( rows.CountTokens() ) > tbl->GetNumberRows() - m_cur_row )
+                    if( ndx != std::string::npos )
                     {
-                        int newRowsNeeded = rows.CountTokens() - ( tbl->GetNumberRows() - m_cur_row );
-                        tbl->AppendRows( newRowsNeeded );
-                    }
+                        // paste the ROWs of s-expression (fp_lib_table), starting
+                        // at column 0 regardless of current cursor column.
 
-                    for( int row = m_cur_row;  rows.HasMoreTokens();  ++row )
-                    {
-                        wxString rowTxt = rows.GetNextToken();
+                        STRING_LINE_READER  slr( TO_UTF8( cb_text ), wxT( "Clipboard" ) );
+                        FP_LIB_TABLE_LEXER  lexer( &slr );
+                        FP_LIB_TABLE        tmp_tbl;
+                        bool                parsed = true;
 
-                        wxStringTokenizer   cols( rowTxt, COL_SEP, wxTOKEN_RET_EMPTY );
-
-                        for( int col = m_cur_col; cols.HasMoreTokens();  ++col )
+                        try
                         {
-                            wxString cellTxt = cols.GetNextToken();
-                            tbl->SetValue( row, col, cellTxt );
+                            tmp_tbl.Parse( &lexer );
+                        }
+                        catch( PARSE_ERROR& pe )
+                        {
+                            // @todo tell what line and offset
+                            parsed = false;
+                        }
+
+                        if( parsed )
+                        {
+                            // if clipboard rows would extend past end of current table size...
+                            if( int( tmp_tbl.rows.size() ) > tbl->GetNumberRows() - m_cur_row )
+                            {
+                                int newRowsNeeded = tmp_tbl.rows.size() - ( tbl->GetNumberRows() - m_cur_row );
+                                tbl->AppendRows( newRowsNeeded );
+                            }
+
+                            for( int i = 0;  i < (int) tmp_tbl.rows.size();  ++i )
+                            {
+                                tbl->rows[m_cur_row+i] = tmp_tbl.rows[i];
+                            }
+                        }
+                        m_cur_grid->AutoSizeColumns();
+                    }
+                    else
+                    {
+                        wxStringTokenizer   rows( cb_text, ROW_SEP, wxTOKEN_RET_EMPTY );
+
+                        // if clipboard rows would extend past end of current table size...
+                        if( int( rows.CountTokens() ) > tbl->GetNumberRows() - m_cur_row )
+                        {
+                            int newRowsNeeded = rows.CountTokens() - ( tbl->GetNumberRows() - m_cur_row );
+                            tbl->AppendRows( newRowsNeeded );
+                        }
+
+                        for( int row = m_cur_row;  rows.HasMoreTokens();  ++row )
+                        {
+                            wxString rowTxt = rows.GetNextToken();
+
+                            wxStringTokenizer   cols( rowTxt, COL_SEP, wxTOKEN_RET_EMPTY );
+
+                            for( int col = m_cur_col; cols.HasMoreTokens();  ++col )
+                            {
+                                wxString cellTxt = cols.GetNextToken();
+                                tbl->SetValue( row, col, cellTxt );
+                            }
                         }
                     }
                 }
@@ -730,8 +788,8 @@ public:
         m_project( aProject ),
         m_global_model( *aGlobal ),
         m_project_model( *aProject ),
-        m_cur_row( -1 ),
-        m_cur_col( -1 )
+        m_cur_row( 0 ),
+        m_cur_col( 0 )
     {
         m_global_grid->SetTable( (wxGridTableBase*) &m_global_model );
         m_project_grid->SetTable( (wxGridTableBase*) &m_project_model );
@@ -740,10 +798,9 @@ public:
         m_project_grid->AutoSizeColumns( false );
 
         wxArrayString choices;
+
         choices.Add( IO_MGR::ShowType( IO_MGR::KICAD ) );
-#if defined(BUILD_GITHUB_PLUGIN)
         choices.Add( IO_MGR::ShowType( IO_MGR::GITHUB ) );
-#endif
         choices.Add( IO_MGR::ShowType( IO_MGR::LEGACY ) );
         choices.Add( IO_MGR::ShowType( IO_MGR::EAGLE ) );
         choices.Add( IO_MGR::ShowType( IO_MGR::GEDA_PCB ) );

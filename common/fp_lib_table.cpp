@@ -50,6 +50,22 @@ FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
 }
 
 
+/*
+void FP_LIB_TABLE::Paste( const FP_LIB_TABLE& aOther, int aDestNdx )
+{
+    if( aDestNdx == -1 )
+        aDestNdx = rows.size() - 1;
+    else if( unsigned( aDestNdx ) >= rows.size() )
+        return;     // bad caller.
+    else
+    {
+
+        rows.assign( aOther.rows.begin(), aOther.rows.end() );
+    }
+}
+*/
+
+
 void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR )
 {
     /*
@@ -142,9 +158,6 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
                 sawOpts = true;
                 in->NeedSYMBOLorNUMBER();
                 row.SetOptions( in->FromUTF8() );
-
-                // create PROPERTIES* from options, set into the ROW
-                row.properties = ParseOptions( in->CurStr() );
                 break;
 
             case T_descr:
