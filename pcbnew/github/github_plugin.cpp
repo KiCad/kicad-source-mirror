@@ -56,9 +56,9 @@
 
 using namespace std;
 
-typedef boost::ptr_map<std::string, wxZipEntry>     MODULE_MAP;
-typedef MODULE_MAP::iterator                        MODULE_ITER;
-typedef MODULE_MAP::const_iterator                  MODULE_CITER;
+typedef boost::ptr_map<string, wxZipEntry>  MODULE_MAP;
+typedef MODULE_MAP::iterator                MODULE_ITER;
+typedef MODULE_MAP::const_iterator          MODULE_CITER;
 
 
 /**
@@ -166,11 +166,17 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath ) throw( IO_ERROR )
 {
     if( !m_cache || m_lib_path != aLibraryPath )
     {
-        //D(printf("%s: this:%p  m_lib_path:'%s'  aLibraryPath:'%s'\n", __func__, this, TO_UTF8( m_lib_path), TO_UTF8(aLibraryPath) );)
+        // operator==( wxString, wxChar* ) does not exist, construct wxString once here.
+        const wxString    kicad_mod( wxT( "kicad_mod" ) );
 
+        //D(printf("%s: this:%p  m_lib_path:'%s'  aLibraryPath:'%s'\n", __func__, this, TO_UTF8( m_lib_path), TO_UTF8(aLibraryPath) );)
         delete m_cache;
         m_cache = new GH_CACHE();
+
+        // INIT_LOGGER( "/tmp", "test.log" );
         remote_get_zip( aLibraryPath );
+        // UNINIT_LOGGER();
+
         m_lib_path = aLibraryPath;
 
         wxMemoryInputStream mis( &m_zip_image[0], m_zip_image.size() );
@@ -182,11 +188,11 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath ) throw( IO_ERROR )
 
         while( ( entry = zis.GetNextEntry() ) != NULL )
         {
-            wxFileName  fn( entry->GetName() );
+            wxFileName  fn( entry->GetName() );     // chop long name into parts
 
-            if( fn.GetExt() == wxT( "kicad_mod" ) )
+            if( fn.GetExt() == kicad_mod )
             {
-                string fp_name = TO_UTF8( fn.GetName() );
+                string fp_name = TO_UTF8( fn.GetName() );   // omit extension & path
 
                 m_cache->insert( fp_name, entry );
             }
@@ -253,9 +259,17 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
 
         // 4 lines, using SSL, top that.
     }
-    catch( std::exception& e )
+    catch( boost::system::system_error& e )
     {
-        THROW_IO_ERROR( e.what() );
+        // https "GET" has faild, report this to API caller.
+        wxString fmt( _( "Cannot GET zip: '%s'\nfor lib-path: '%s'.\nWhat: '%s'" ) );
+
+        string msg = StrPrintf( TO_UTF8( fmt ),
+                zip_url.c_str(),
+                TO_UTF8( aRepoURL ),
+                e.what() );
+
+        THROW_IO_ERROR( msg );
     }
 }
 
