@@ -63,7 +63,7 @@ typedef MODULE_MAP::const_iterator                  MODULE_CITER;
 
 /**
  * Class GH_CACHE
- * assists only within GITHUB_PLUGIN and hold a map of footprint name to wxZipEntry
+ * assists only within GITHUB_PLUGIN and holds a map of footprint name to wxZipEntry
  */
 struct GH_CACHE : public MODULE_MAP
 {
@@ -100,7 +100,7 @@ const wxString& GITHUB_PLUGIN::GetFileExtension() const
 wxArrayString GITHUB_PLUGIN::FootprintEnumerate(
         const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
-    D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
+    //D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
 
     cacheLib( aLibraryPath );
 
@@ -118,7 +118,7 @@ wxArrayString GITHUB_PLUGIN::FootprintEnumerate(
 MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
         const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
-    D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
+    // D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
 
     cacheLib( aLibraryPath );
 
@@ -166,17 +166,12 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath ) throw( IO_ERROR )
 {
     if( !m_cache || m_lib_path != aLibraryPath )
     {
-        D(printf("%s: this:%p  m_lib_path:'%s'  aLibraryPath:'%s'\n",
-            __func__, this, TO_UTF8( m_lib_path), TO_UTF8(aLibraryPath) );)
+        //D(printf("%s: this:%p  m_lib_path:'%s'  aLibraryPath:'%s'\n", __func__, this, TO_UTF8( m_lib_path), TO_UTF8(aLibraryPath) );)
 
         delete m_cache;
         m_cache = new GH_CACHE();
         remote_get_zip( aLibraryPath );
-
         m_lib_path = aLibraryPath;
-
-        D(printf("%s2: this:%p  m_lib_path:'%s'  aLibraryPath:'%s'\n",
-            __func__, this, TO_UTF8( m_lib_path), TO_UTF8(aLibraryPath) );)
 
         wxMemoryInputStream mis( &m_zip_image[0], m_zip_image.size() );
 
@@ -185,7 +180,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath ) throw( IO_ERROR )
 
         wxZipEntry* entry;
 
-        while( (entry = zis.GetNextEntry()) != NULL )
+        while( ( entry = zis.GetNextEntry() ) != NULL )
         {
             wxFileName  fn( entry->GetName() );
 
@@ -212,11 +207,11 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
     if( repo.HasServer() && repo.HasPath() )
     {
         // goal: "https://github.com/liftoff-sr/pretty_footprints/archive/master.zip"
-        wxString    zip_url( wxT("https://") );
+        wxString    zip_url( wxT( "https://" ) );
 
         zip_url += repo.GetServer();
         zip_url += repo.GetPath();
-        zip_url += wxT('/');
+        zip_url += wxT( '/' );
         zip_url += wxT( "archive/master.zip" );
 
         *aZipURL = zip_url.utf8_str();
@@ -232,7 +227,7 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
 
     if( !repoURL_zipURL( aRepoURL, &zip_url ) )
     {
-        wxString msg = wxString::Format( _("Unable to parse URL: %s"), GetChars( m_lib_path ) );
+        wxString msg = wxString::Format( _( "Unable to parse URL:\n'%s'" ), GetChars( aRepoURL ) );
         THROW_IO_ERROR( msg );
     }
 
@@ -246,8 +241,9 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
 
     try
     {
-        h.open( zip_url );      // only one file, therefore do it synchronously.
         ostringstream os;
+
+        h.open( zip_url );      // only one file, therefore do it synchronously.
         os << &h;
 
         // Keep zip file byte image in RAM.  That plus the MODULE_MAP will constitute
@@ -268,7 +264,7 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
 
 int main( int argc, char** argv )
 {
-   INIT_LOGGER( ".", "test.log" );
+    INIT_LOGGER( ".", "test.log" );
 
     GITHUB_PLUGIN gh;
 
@@ -295,4 +291,3 @@ int main( int argc, char** argv )
 }
 
 #endif
-
