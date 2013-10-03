@@ -7,26 +7,8 @@
 
 #cmakedefine HAVE_STRNCASECMP
 
-#cmakedefine HAVE_ISO_STRICMP
-
-#cmakedefine HAVE_ISO_STRNICMP
-
-#cmakedefine HAVE_ISO_SNPRINTF
-
-#if defined( HAVE_ISO_SNPRINTF )
-#define snprintf _snprintf
-#endif
-
-
 // Handle platform differences in math.h
 #cmakedefine HAVE_MATH_H
-
-#cmakedefine HAVE_ISO_HYPOT
-
-#if defined( HAVE_ISO_HYPOT )
-#define hypot _hypot
-#endif
-
 
 // Handle platform differences in C++ cmath.
 #cmakedefine HAVE_CXX_CMATH
@@ -57,14 +39,10 @@
 
 #if defined( HAVE_STRCASECMP )
 #define stricmp strcasecmp
-#elif defined( HAVE_ISO_STRICMP )
-#define stricmp _stricmp
 #endif
 
 #if defined( HAVE_STRNCASECMP )
 #define strnicmp strncasecmp
-#elif defined( HAVE_ISO_STRNICMP )
-#define strnicmp _strnicmp
 #endif
 
 // Use Posix getc_unlocked() instead of getc() when it's available.
