@@ -51,8 +51,6 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	
 	// Cell Defaults
 	m_global_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_global_grid->SetToolTip( _("This table is associated with all projects") );
-	
 	m_global_sizer->Add( m_global_grid, 1, wxALL|wxEXPAND, 5 );
 	
 	
@@ -91,8 +89,6 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	
 	// Cell Defaults
 	m_project_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_project_grid->SetToolTip( _("Libraries list in this table is associated with the current project") );
-	
 	m_project_sizer->Add( m_project_grid, 1, wxALL|wxEXPAND, 5 );
 	
 	
