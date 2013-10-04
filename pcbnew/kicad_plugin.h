@@ -42,6 +42,7 @@ class PCB_PARSER;
 #define CTL_OMIT_NETS               (1 << 1)
 #define CTL_OMIT_TSTAMPS            (1 << 2)
 #define CTL_OMIT_INITIAL_COMMENTS   (1 << 3)    ///< omit MODULE initial comments
+#define CTL_OMIT_PATH               (1 << 4)
 
 // common combinations of the above:
 
@@ -49,7 +50,7 @@ class PCB_PARSER;
 #define CTL_FOR_CLIPBOARD           (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS)
 
 /// Format output for a footprint library instead of clipboard or BOARD
-#define CTL_FOR_LIBRARY             (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS|CTL_OMIT_TSTAMPS)
+#define CTL_FOR_LIBRARY             (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS|CTL_OMIT_TSTAMPS|CTL_OMIT_PATH)
 
 /// The zero arg constructor when PCB_IO is used for PLUGIN::Load() and PLUGIN::Save()ing
 /// a BOARD file underneath IO_MGR.
