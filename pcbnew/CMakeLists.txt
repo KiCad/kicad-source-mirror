@@ -199,10 +199,10 @@ set( PCBNEW_CLASS_SRCS
     print_board_functions.cpp
     printout_controler.cpp
     ratsnest.cpp
-    specctra.cpp
-    specctra_export.cpp
+#    specctra.cpp           #moved in pcbcommon lib
+#    specctra_export.cpp
+#    specctra_keywords.cpp
     specctra_import.cpp
-    specctra_keywords.cpp
     swap_layers.cpp
     target_edit.cpp
     tool_modedit.cpp

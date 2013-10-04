@@ -141,7 +141,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
 
     wxFileDialog    filedlg( this, _( "Board file name:" ),
                              path, fileName, LegacyPcbFileWildcard,
-                             wxFD_OPEN );
+                             wxFD_SAVE );
 
     if( filedlg.ShowModal() == wxID_CANCEL )
         return;
@@ -233,7 +233,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LA
     #define SEG_SHAPE   0
     #define ARC_SHAPE   2
     int     shape   = SEG_SHAPE;
-    
+
     // please note: the old PCB format only has integer support for angles
     int     angle   = 0;
     wxPoint seg_start, seg_end;

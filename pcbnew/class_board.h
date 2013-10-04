@@ -629,6 +629,23 @@ public:
     }
 
     /**
+     * Function GetBoardPolygonOutlines
+     * Extracts the board outlines and build a closed polygon
+     * from lines, arcs and circle items on edge cut layer
+     * Any closed outline inside the main outline is a hole
+     * All contours should be closed, i.e. have valid vertices to build a closed polygon
+     * @param aOutlines The CPOLYGONS_LIST to fill in with main outlines.
+     * @param aHoles The empty CPOLYGONS_LIST to fill in with holes, if any.
+     * @param aErrorText = a wxString reference to display an error message
+     *          with the coordinate of the point which creates the error
+     *          (default = NULL , no message returned on error)
+     * @return true if success, false if a contour is not valid
+     */
+    bool GetBoardPolygonOutlines( CPOLYGONS_LIST& aOutlines,
+                                  CPOLYGONS_LIST& aHoles,
+                                  wxString* aErrorText = NULL );
+
+    /**
      * Function GetLayerName
      * returns the name of a layer given by aLayer.  Copper layers may
      * have custom names.

@@ -58,8 +58,8 @@
  */
  /*
   * Note there are some variant of tool definition:
-  * T1F00S00C...    Feed Rate and Spindle Speed of Tool 1
-  * Feed Rate and Spindle Speed are just skipped because they are not used in a viwer
+  * T1F00S00C0.2 or T1C0.02F00S00 ... Feed Rate and Spindle Speed of Tool 1
+  * Feed Rate and Spindle Speed are just skipped because they are not used in a viewer
   */
 
 #include <fctsys.h>
@@ -348,7 +348,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         m_State = READ_PROGRAM_STATE;
         break;
 
-    case DRILL_REWIND_STOP:         // TODO: what this command really is ?
+    case DRILL_REWIND_STOP:         // End of header. No action in a viewer
         m_State = READ_PROGRAM_STATE;
         break;
 
@@ -440,11 +440,11 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
     case DRILL_TOOL_INFORMATION:
 
         // Read a tool definition like T1C0.02:
-        // or T1F00S00C0.02000
+        // or T1F00S00C0.02 or T1C0.02F00S00
         // Read tool number:
         iprm = ReadInt( text, false );
 
-        // Skip Feed rate and Spindle speed
+        // Skip Feed rate and Spindle speed, if any here
         while( *text && ( *text == 'F' || *text == 'S' ) )
         {
             text++;
