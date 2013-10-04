@@ -143,7 +143,10 @@ public:
             uri      = r.uri;
             type     = r.type;
             options  = r.options;
-            properties = r.properties ? new PROPERTIES( *r.properties ) : NULL;
+
+            description = r.description;
+            properties  = r.properties ? new PROPERTIES( *r.properties ) : NULL;
+
             return *this;
         }
 
