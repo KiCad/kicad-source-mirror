@@ -42,28 +42,21 @@
 using namespace FP_LIB_TABLE_T;
 
 
+void FP_LIB_TABLE::ROW::SetType( const wxString& aType )
+{
+    type = IO_MGR::EnumFromStr( aType );
+
+    if( IO_MGR::PCB_FILE_T( -1 ) == type )
+        type = IO_MGR::KICAD;
+}
+
+
 FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
     fallBack( aFallBackTable )
 {
     // not copying fall back, simply search aFallBackTable separately
     // if "nickName not found".
 }
-
-
-/*
-void FP_LIB_TABLE::Paste( const FP_LIB_TABLE& aOther, int aDestNdx )
-{
-    if( aDestNdx == -1 )
-        aDestNdx = rows.size() - 1;
-    else if( unsigned( aDestNdx ) >= rows.size() )
-        return;     // bad caller.
-    else
-    {
-
-        rows.assign( aOther.rows.begin(), aOther.rows.end() );
-    }
-}
-*/
 
 
 void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR )
