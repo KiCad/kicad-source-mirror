@@ -140,7 +140,7 @@ set(PCB_COMMON_SRCS
     ../pcbnew/gpcb_plugin.cpp
     ../pcbnew/pcb_netlist.cpp
     ../pcbnew/specctra.cpp
-    ../pcbnew/specctra_import.cpp
+    ../pcbnew/specctra_export.cpp
     ../pcbnew/specctra_keywords.cpp
     pcb_plot_params_keywords.cpp
     pcb_keywords.cpp
