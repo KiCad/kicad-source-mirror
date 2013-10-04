@@ -465,6 +465,9 @@ public:
         point1.FixNegativeZero();
     }
 
+    POINT GetOrigin() { return point0; }
+    POINT GetEnd() { return point1; }
+
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* newline = nestLevel ? "\n" : "";
@@ -593,6 +596,8 @@ public:
         points.push_back( aPoint );
     }
 
+    POINTS& GetPoints() {return points; }
+
     void SetLayerId( const char* aLayerId )
     {
         layer_id = aLayerId;
@@ -661,6 +666,40 @@ public:
     {
         delete rectangle;
     }
+
+    /**
+     * GetCorners fills aBuffer with a list of coordinates (x,y) of corners
+     */
+    void GetCorners( std::vector<double>& aBuffer )
+    {
+        if( rectangle )
+        {
+            aBuffer.push_back( rectangle->GetOrigin().x );
+            aBuffer.push_back( rectangle->GetOrigin().y );
+
+            aBuffer.push_back( rectangle->GetOrigin().x );
+            aBuffer.push_back( rectangle->GetEnd().y );
+
+            aBuffer.push_back( rectangle->GetEnd().x );
+            aBuffer.push_back( rectangle->GetEnd().y );
+
+            aBuffer.push_back( rectangle->GetEnd().x );
+            aBuffer.push_back( rectangle->GetOrigin().y );
+        }
+        else
+        {
+            for( PATHS::iterator i=paths.begin();  i!=paths.end();  ++i )
+            {
+                POINTS& plist = i->GetPoints();
+                for( unsigned jj = 0; jj < plist.size(); jj++ )
+                {
+                    aBuffer.push_back( plist[jj].x );
+                    aBuffer.push_back( plist[jj].y );
+                }
+            }
+        }
+    }
+
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
@@ -3926,6 +3965,26 @@ public:
      * flips the modules which were on the back side of the board back to the back.
      */
     void RevertMODULEs( BOARD* aBoard );
+
+    /**
+     * Function GetBoardPolygonOutlines
+     * Is not used in SPECCTRA export, but uses a lot of functions from it
+     * and is used to extract a board outlines (3D view, automatic zones build ...)
+     * makes the board perimeter by filling the BOUNDARY element
+     * any closed outline inside the main outline is a hole
+     * All contours should be closed, i.e. have valid vertices to build a closed polygon
+     * @param aBoard The BOARD to get information from in order to make the outlines.
+     * @param aOutlines The CPOLYGONS_LIST to fill in with main outlines.
+     * @param aHoles The empty CPOLYGONS_LIST to fill in with holes, if any.
+     * @param aErrorText = a wxString reference to display an error message
+     *          with the coordinate of the point which creates the error
+     *          (default = NULL , no message returned on error)
+     * @return true if success, false if a contour is not valid
+     */
+    bool GetBoardPolygonOutlines( BOARD* aBoard,
+                                  CPOLYGONS_LIST& aOutlines,
+                                  CPOLYGONS_LIST& aHoles,
+                                  wxString* aErrorText = NULL );
 };
 
 

@@ -49,7 +49,6 @@
 #include <3d_draw_basic_functions.h>
 
 // Imported function:
-extern void     SetGLColor( EDA_COLOR_T color );
 extern void     Set_Object_Data( std::vector<S3D_VERTEX>& aVertices, double aBiuTo3DUnits );
 extern void     CheckGLError();
 
@@ -161,14 +160,28 @@ void EDA_3D_CANVAS::BuildBoard3DView()
                                                 // for holes and items which do not need
                                                 // a fine representation
     double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2) );
-    CPOLYGONS_LIST  bufferPolys;
 
-    bufferPolys.reserve( 200000 );                  // Reserve for large board (tracks mainly)
-    CPOLYGONS_LIST  bufferZonesPolys;
-    bufferPolys.reserve( 500000 );                  // Reserve for large board ( copper zones mainly )
-    CPOLYGONS_LIST  currLayerHoles;                 // Contains holes for the current layer
-    CPOLYGONS_LIST  allLayerHoles;                  // Contains through holes, calculated only once
+    CPOLYGONS_LIST  bufferPolys;
+    bufferPolys.reserve( 200000 );              // Reserve for large board (tracks mainly)
+
+    CPOLYGONS_LIST  bufferPcbOutlines;          // stores the board main outlines
+    CPOLYGONS_LIST  allLayerHoles;              // Contains through holes, calculated only once
     allLayerHoles.reserve( 20000 );
+
+    // Build a polygon from edge cut items
+    wxString msg;
+    if( ! pcb->GetBoardPolygonOutlines( bufferPcbOutlines,
+                                        allLayerHoles, &msg ) )
+    {
+        msg << wxT("\n\n") <<
+            _("Unable to calculate the board outlines, will use the outlines boundary box");
+        wxMessageBox( msg );
+    }
+
+    CPOLYGONS_LIST  bufferZonesPolys;
+    bufferZonesPolys.reserve( 500000 );             // Reserve for large board ( copper zones mainly )
+
+    CPOLYGONS_LIST  currLayerHoles;                 // Contains holes for the current layer
     bool            throughHolesListBuilt = false;  // flag to build the through hole polygon list only once
     bool            hightQualityMode = false;
 
@@ -282,7 +295,8 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             }
         }
 
-        // bufferPolys contains polygons to merge. Many overlaps . Calculate merged polygons
+        // bufferPolys contains polygons to merge. Many overlaps .
+        // Calculate merged polygons
         if( bufferPolys.GetCornersCount() == 0 )
             continue;
 
@@ -346,6 +360,9 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         if( !g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) )
             continue;
 
+        if( layer == EDGE_N )
+            continue;
+
         bufferPolys.RemoveAllContours();
 
         for( BOARD_ITEM* item = pcb->m_Drawings; item; item = item->Next() )
@@ -407,31 +424,65 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         // Calculate merged polygons and remove pads and vias holes
         if( bufferPolys.GetCornersCount() == 0 )
             continue;
-
         KI_POLYGON_SET  currLayerPolyset;
         KI_POLYGON_SET  polyset;
-        bufferPolys.ExportTo( polyset );
-        // merge polys:
-        currLayerPolyset += polyset;
+
+        // Solder mask layers are "negative" layers.
+        // Shapes should be removed from the full board area.
+        if( layer == SOLDERMASK_N_BACK || layer == SOLDERMASK_N_FRONT )
+        {
+            bufferPcbOutlines.ExportTo( currLayerPolyset );
+            bufferPolys.Append( allLayerHoles );
+            bufferPolys.ExportTo( polyset );
+            currLayerPolyset -= polyset;
+        }
+        else    // usuall layers, merge polys built from each item shape:
+        {
+            bufferPolys.ExportTo( polyset );
+            currLayerPolyset += polyset;
+        }
 
         EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( layer );
         int         thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
         int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
 
-        if( layer == EDGE_N )
-        {
-            thickness = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_FRONT )
-                        - g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
-            zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK )
-                   + (thickness / 2);
-        }
-
-        SetGLColor( color );
+        SetGLColor( color, 0.7 );
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
         bufferPolys.RemoveAllContours();
         bufferPolys.ImportFrom( currLayerPolyset );
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
+                                            thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
+    }
+
+    // Draw board substrate:
+    if( bufferPcbOutlines.GetCornersCount() )
+    {
+        int copper_thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( LAYER_N_BACK );
+        int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
+        int thickness = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_FRONT )
+                        - g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
+        zpos += (thickness/2) + (copper_thickness/2);
+        thickness -= copper_thickness;
+        EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( EDGE_N );
+        SetGLColor( color, 0.8 );
+        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( LAYER_N_FRONT ) );
+        KI_POLYGON_SET  currLayerPolyset;
+        KI_POLYGON_SET  polysetHoles;
+
+        // Add polygons, without holes
+        bufferPcbOutlines.ExportTo( currLayerPolyset );
+
+        // Build holes list
+        allLayerHoles.ExportTo( polysetHoles );
+
+        // remove holes
+        currLayerPolyset -= polysetHoles;
+
+        bufferPcbOutlines.RemoveAllContours();
+        bufferPcbOutlines.ImportFrom( currLayerPolyset );
+
+        Draw3D_SolidHorizontalPolyPolygons( bufferPcbOutlines, zpos,
                                             thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
     }
 
@@ -517,6 +568,7 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
     EDA_COLOR_T gridcolor = DARKGRAY;           // Color of grid lines
     EDA_COLOR_T gridcolor_marker = LIGHTGRAY;   // Color of grid lines every 5 lines
     double      scale = g_Parm_3D_Visu.m_BiuTo3Dunits;
+    double transparency = 0.4;
 
     glNormal3f( 0.0, 0.0, 1.0 );
 
@@ -539,9 +591,9 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
     for( int ii = 0; ; ii++ )
     {
         if( (ii % 5) )
-            SetGLColor( gridcolor );
+            SetGLColor( gridcolor, transparency );
         else
-            SetGLColor( gridcolor_marker );
+            SetGLColor( gridcolor_marker, transparency );
 
         int delta = KiROUND( ii * aGriSizeMM * IU_PER_MM );
 
@@ -588,9 +640,9 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
     for( int ii = 0; ; ii++ )
     {
         if( (ii % 5) )
-            SetGLColor( gridcolor );
+            SetGLColor( gridcolor, transparency );
         else
-            SetGLColor( gridcolor_marker );
+            SetGLColor( gridcolor_marker, transparency );
 
         double delta = ii * aGriSizeMM * IU_PER_MM;
 
@@ -615,9 +667,9 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
     for( int ii = 0; ; ii++ )
     {
         if( (ii % 5) )
-            SetGLColor( gridcolor );
+            SetGLColor( gridcolor, transparency);
         else
-            SetGLColor( gridcolor_marker );
+            SetGLColor( gridcolor_marker, transparency );
 
         double delta = ii * aGriSizeMM * IU_PER_MM * scale;
 
