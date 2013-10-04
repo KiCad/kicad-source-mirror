@@ -1251,6 +1251,98 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
     }
 }
 
+/* This function is not used in SPECCTRA export,
+ * but uses a lot of functions from it
+ * and is used to extract a board outlines (3D view, automatic zones build ...)
+ * makes the board perimeter for the DSN file by filling the BOUNDARY element.
+ * Any closed outline inside the main outline is a hole
+ * All contours should be closed, i.e. valid closed polygon vertices
+ */
+bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
+                                           CPOLYGONS_LIST& aOutlines,
+                                           CPOLYGONS_LIST& aHoles,
+                                           wxString* aErrorText )
+{
+    bool success = true;
+    double specctra2UIfactor = IU_PER_MM / 1000.0;  // Specctra unite = micron
+
+    if( ! pcb )
+    {
+        pcb = new PCB();
+        pcb->structure = new STRUCTURE( pcb );
+    }
+
+    CPolyPt corner;
+    BOUNDARY* boundary = new BOUNDARY( 0 );
+    pcb->structure->SetBOUNDARY( boundary );
+
+    try
+    {
+        fillBOUNDARY( aBoard, boundary );
+        std::vector<double> buffer;
+        boundary->GetCorners( buffer );
+
+        for( unsigned ii = 0; ii < buffer.size(); ii+=2 )
+        {
+            corner.x = buffer[ii] * specctra2UIfactor;
+            corner.y =  - buffer[ii+1] * specctra2UIfactor;
+            aOutlines.Append( corner );
+        }
+
+        aOutlines.CloseLastContour();
+
+        // Export holes, stored as keepouts polygonal shapes.
+        // by fillBOUNDARY()
+        KEEPOUTS& holes = pcb->structure->keepouts;
+
+        for( KEEPOUTS::iterator i=holes.begin();  i!=holes.end();  ++i )
+        {
+            KEEPOUT& keepout = *i;
+            PATH* poly_hole = (PATH*)keepout.shape;
+            POINTS& plist = poly_hole->GetPoints();
+            for( unsigned ii = 0; ii < plist.size(); ii+=2 )
+            {
+                corner.x = plist[ii].x * specctra2UIfactor;
+                corner.y =  - plist[ii].y * specctra2UIfactor;
+                aHoles.Append( corner );
+            }
+            aHoles.CloseLastContour();
+        }
+    }
+    catch( IO_ERROR ioe )
+    {
+        // Creates a valid polygon outline is not possible.
+        // So uses the board edge cuts bounding box to create a
+        // rectangular outline
+        // (when no edge cuts items, fillBOUNDARY biuld n outline
+        // from global bounding box
+        success = false;
+        if( aErrorText )
+            *aErrorText = ioe.errorText;
+
+        EDA_RECT bbbox = aBoard->ComputeBoundingBox( true );
+        corner.x = bbbox.GetOrigin().x;
+        corner.y = bbbox.GetOrigin().y;
+        aOutlines.Append( corner );
+
+        corner.x = bbbox.GetOrigin().x;
+        corner.y = bbbox.GetEnd().y;
+        aOutlines.Append( corner );
+
+        corner.x = bbbox.GetEnd().x;
+        corner.y = bbbox.GetEnd().y;
+        aOutlines.Append( corner );
+
+        corner.x = bbbox.GetEnd().x;
+        corner.y = bbbox.GetOrigin().y;
+        aOutlines.Append( corner );
+
+        aOutlines.CloseLastContour();
+    }
+
+    return success;
+}
+
 
 typedef std::set<std::string>                   STRINGSET;
 typedef std::pair<STRINGSET::iterator, bool>    STRINGSET_PAIR;

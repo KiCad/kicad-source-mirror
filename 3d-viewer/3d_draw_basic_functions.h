@@ -118,5 +118,12 @@ void    Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
 void    Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
                                     int aRadius, int aHeight, int aThickness,
                                     int aZpos, double aBiuTo3DUnits  );
+/**
+ * Set the current 3D color from a Kicad  color, with optional transparency
+ * @param aColor = a EDA_COLOR_T kicad color index
+ * @param aTransparency = the color transparency (default = 1.0 = no transparency)
+ */
+void SetGLColor( EDA_COLOR_T aColor, double aTransparency = 1.0 );
+
 
 #endif      // _3D_DRAW_BASIC_FUNCTIONS_H_

@@ -34,7 +34,6 @@
 #include <info3d_visu.h>
 #include <3d_draw_basic_functions.h>
 
-
 // Imported function:
 extern void Set_Object_Data( std::vector<S3D_VERTEX>& aVertices, double aBiuTo3DUnits );
 extern void CheckGLError();
@@ -122,7 +121,7 @@ static void Draw3D_VerticalPolygonalCylinder( const CPOLYGONS_LIST& aPolysList,
 }
 
 
-void SetGLColor( EDA_COLOR_T color )
+void SetGLColor( EDA_COLOR_T color, double alpha )
 {
     double              red, green, blue;
     const StructColors &colordata = g_ColorRefs[ColorGetBase( color )];
@@ -130,7 +129,7 @@ void SetGLColor( EDA_COLOR_T color )
     red     = colordata.m_Red / 255.0;
     blue    = colordata.m_Blue / 255.0;
     green   = colordata.m_Green / 255.0;
-    glColor3f( red, green, blue );
+    glColor4f( red, green, blue, alpha );
 }
 
 
