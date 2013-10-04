@@ -31,9 +31,6 @@ set( CVPCB_SRCS
     ../common/base_units.cpp
     ../pcbnew/board_items_to_polygon_shape_transform.cpp
     ../pcbnew/class_drc_item.cpp
-    ../pcbnew/specctra.cpp
-    ../pcbnew/specctra_export.cpp
-    ../pcbnew/specctra_keywords.cpp
     autosel.cpp
     cfg.cpp
     class_components_listbox.cpp
