@@ -67,16 +67,16 @@ bool GERBER_PLOTTER::StartPlot()
     if( outputFile == NULL )
         return false;
 
+    /* Set coordinate format to 3.4 absolute, leading zero omitted */
+    fputs( "%FSLAX34Y34*%\n", outputFile );
+    fputs( "G04 Gerber Fmt 3.4, Leading zero omitted, Abs format*\n", outputFile );
+
     wxString Title = creator + wxT( " " ) + GetBuildVersion();
     fprintf( outputFile, "G04 (created by %s) date %s*\n",
              TO_UTF8( Title ), TO_UTF8( DateAndTime() ) );
 
     /* Mass parameter: unit = INCHES */
     fputs( "%MOIN*%\n", outputFile );
-
-    /* Set coordinate format to 3.4 absolute, leading zero omitted */
-    fputs( "G04 Gerber Fmt 3.4, Leading zero omitted, Abs format*\n%FSLAX34Y34*%\n",
-           outputFile );
 
     /* Specify linear interpol (G01), unit = INCH (G70), abs format (G90) */
     fputs( "G01*\nG70*\nG90*\n", outputFile );
