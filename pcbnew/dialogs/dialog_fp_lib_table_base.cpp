@@ -194,16 +194,18 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_FP_LIB_TABLE_BASE::onInitDialog ) );
+	this->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ) );
 	m_auinotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_FP_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
 	m_global_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellLeftClick ), NULL, this );
 	m_global_grid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellLeftDClick ), NULL, this );
 	m_global_grid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellRightClick ), NULL, this );
 	m_global_grid->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCmdSelectCell ), NULL, this );
+	m_global_grid->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ), NULL, this );
 	m_project_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellLeftClick ), NULL, this );
 	m_project_grid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellLeftDClick ), NULL, this );
 	m_project_grid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellRightClick ), NULL, this );
 	m_project_grid->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCmdSelectCell ), NULL, this );
+	m_project_grid->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ), NULL, this );
 	m_append_button->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_delete_button->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
 	m_move_up_button->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
@@ -216,16 +218,18 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 DIALOG_FP_LIB_TABLE_BASE::~DIALOG_FP_LIB_TABLE_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_FP_LIB_TABLE_BASE::onInitDialog ) );
+	this->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ) );
 	m_auinotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_FP_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
 	m_global_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellLeftClick ), NULL, this );
 	m_global_grid->Disconnect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellLeftDClick ), NULL, this );
 	m_global_grid->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellRightClick ), NULL, this );
 	m_global_grid->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCmdSelectCell ), NULL, this );
+	m_global_grid->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ), NULL, this );
 	m_project_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellLeftClick ), NULL, this );
 	m_project_grid->Disconnect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellLeftDClick ), NULL, this );
 	m_project_grid->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellRightClick ), NULL, this );
 	m_project_grid->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCmdSelectCell ), NULL, this );
+	m_project_grid->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ), NULL, this );
 	m_append_button->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_delete_button->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
 	m_move_up_button->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_LIB_TABLE_BASE::moveUpHandler ), NULL, this );

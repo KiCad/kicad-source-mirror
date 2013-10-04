@@ -57,7 +57,7 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
+		virtual void onKeyDown( wxKeyEvent& event ) { event.Skip(); }
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onGridCellLeftClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void onGridCellLeftDClick( wxGridEvent& event ) { event.Skip(); }

@@ -65,8 +65,8 @@
             <event name="OnHibernate"></event>
             <event name="OnIconize"></event>
             <event name="OnIdle"></event>
-            <event name="OnInitDialog">onInitDialog</event>
-            <event name="OnKeyDown"></event>
+            <event name="OnInitDialog"></event>
+            <event name="OnKeyDown">onKeyDown</event>
             <event name="OnKeyUp"></event>
             <event name="OnKillFocus"></event>
             <event name="OnLeaveWindow"></event>
@@ -396,7 +396,7 @@
                                                     <event name="OnGridRangeSelect"></event>
                                                     <event name="OnGridRowSize"></event>
                                                     <event name="OnGridSelectCell"></event>
-                                                    <event name="OnKeyDown"></event>
+                                                    <event name="OnKeyDown">onKeyDown</event>
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
                                                     <event name="OnLeaveWindow"></event>
@@ -625,7 +625,7 @@
                                                     <event name="OnGridRangeSelect"></event>
                                                     <event name="OnGridRowSize"></event>
                                                     <event name="OnGridSelectCell"></event>
-                                                    <event name="OnKeyDown"></event>
+                                                    <event name="OnKeyDown">onKeyDown</event>
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
                                                     <event name="OnLeaveWindow"></event>
@@ -1105,11 +1105,11 @@
                         </object>
                     </object>
                 </object>
-                <object class="sizeritem" expanded="1">
+                <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
                     <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxStaticBoxSizer" expanded="1">
+                    <object class="wxStaticBoxSizer" expanded="0">
                         <property name="id">wxID_ANY</property>
                         <property name="label">Path Substitutions</property>
                         <property name="minimum_size"></property>
@@ -1262,11 +1262,11 @@
                         </object>
                     </object>
                 </object>
-                <object class="sizeritem" expanded="1">
+                <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxBoxSizer" expanded="1">
+                    <object class="wxBoxSizer" expanded="0">
                         <property name="minimum_size"></property>
                         <property name="name">m_bottom_sizer</property>
                         <property name="orient">wxVERTICAL</property>
