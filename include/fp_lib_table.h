@@ -366,42 +366,76 @@ public:
     // the returning of a const wxString* tells if not found, but might be too
     // promiscuous?
 
-#if 0
-    /**
-     * Function GetURI
-     * returns the full library path from a logical library name.
-     * @param aLogicalLibraryName is the short name for the library of interest.
-     * @return const wxString* - or NULL if not found.
-     */
-    const wxString* GetURI( const wxString& aLogicalLibraryName ) const
-    {
-        const ROW* row = FindRow( aLogicalLibraryName );
-        return row ? &row->uri : 0;
-    }
+#if 0       // PLUGIN API SUBSET, REBASED ON aNickname
 
     /**
-     * Function GetType
-     * returns the type of a logical library.
-     * @param aLogicalLibraryName is the short name for the library of interest.
-     * @return const wxString* - or NULL if not found.
+     * Function FootprintEnumerate
+     * returns a list of footprint names contained within the library given by
+     * @a aNickname.
+     *
+     * @param aNickname is a locator for the "library", it is a "name"
+     *     in FP_LIB_TABLE::ROW
+     *
+     * @return wxArrayString - is the array of available footprint names inside
+     *   a library
+     *
+     * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
-    const wxString* GetType( const wxString& aLogicalLibraryName ) const
-    {
-        const ROW* row = FindRow( aLogicalLibraryName );
-        return row ? &row->type : 0;
-    }
+    wxArrayString FootprintEnumerate( const wxString& aNickname ) const;
 
     /**
-     * Function GetLibOptions
-     * returns the options string for \a aLogicalLibraryName.
-     * @param aLogicalLibraryName is the short name for the library of interest.
-     * @return const wxString* - or NULL if not found.
+     * Function FootprintLoad
+     * loads a footprint having @a aFootprintName from the library given by @a aNickname.
+     *
+     * @param aNickname is a locator for the "library", it is a "name"
+     *     in FP_LIB_TABLE::ROW
+     *
+     * @param aFootprintName is the name of the footprint to load.
+     *
+     * @return  MODULE* - if found caller owns it, else NULL if not found.
+     *
+     * @throw   IO_ERROR if the library cannot be found or read.  No exception
+     *          is thrown in the case where aFootprintName cannot be found.
      */
-    const wxString* GetLibOptions( const wxString& aLogicalLibraryName ) const
-    {
-        const ROW* row = FindRow( aLogicalLibraryName );
-        return row ? &row->options : 0;
-    }
+    MODULE* FootprintLoad( const wxString& aNickname, const wxString& aFootprintName ) const;
+
+    /**
+     * Function FootprintSave
+     * will write @a aFootprint to an existing library given by @a aNickname.
+     * If a footprint by the same name already exists, it is replaced.
+     *
+     * @param aNickname is a locator for the "library", it is a "name"
+     *     in FP_LIB_TABLE::ROW
+     *
+     * @param aFootprint is what to store in the library. The caller continues
+     *    to own the footprint after this call.
+     *
+     * @throw IO_ERROR if there is a problem saving.
+     */
+    void FootprintSave( const wxString& aNickname, const MODULE* aFootprint );
+
+    /**
+     * Function FootprintDelete
+     * deletes the @a aFootprintName from the library given by @a aNickname.
+     *
+     * @param aNickname is a locator for the "library", it is a "name"
+     *     in FP_LIB_TABLE::ROW
+     *
+     * @param aFootprintName is the name of a footprint to delete from the specified library.
+     *
+     * @throw IO_ERROR if there is a problem finding the footprint or the library, or deleting it.
+     */
+    void FootprintDelete( const wxString& aNickname, const wxString& aFootprintName );
+
+    /**
+     * Function IsFootprintLibWritable
+     * returns true iff the library given by @a aNickname is writable.  (Often
+     * system libraries are read only because of where they are installed.)
+     *
+     * @throw IO_ERROR if no library at aLibraryPath exists.
+     */
+    bool IsFootprintLibWritable( const wxString& aNickname );
+
 #endif
     //----</read accessors>---------------------------------------------------
 
@@ -443,14 +477,6 @@ public:
      * @return true if the footprint library table is empty.
      */
     bool IsEmpty() const;
-
-    /**
-     * Function Assign
-     * assigns new contents to ROWs of this table by copying ALL rows from aOther,
-     * and modifying the size of this table if necessary.
-     * @param aDestNdx is the starting index into this table.
-    void Assign( const FP_LIB_TABLE& aOther, int aDestNdx );
-     */
 
     /**
      * Function MissingLegacyLibs
