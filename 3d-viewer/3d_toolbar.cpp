@@ -206,8 +206,8 @@ void EDA_3D_FRAME::CreateMenuBar()
     item = AddMenuItem( prefsMenu, ID_MENU3D_ECO_ONOFF,
            _( "Show &Eco Layers" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
 
-    SetMenuBarOptionsState();
     SetMenuBar( menuBar );
+    SetMenuBarOptionsState();
 }
 
 void EDA_3D_FRAME::SetMenuBarOptionsState()
