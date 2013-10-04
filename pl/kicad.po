@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-29 08:03+0100\n"
-"PO-Revision-Date: 2013-09-29 08:04+0100\n"
+"POT-Creation-Date: 2013-10-04 06:23+0100\n"
+"PO-Revision-Date: 2013-10-04 06:30+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -808,7 +808,7 @@ msgid "Library <%s> error!"
 msgstr "Błąd podczas ładowania biblioteki <%s>!"
 
 #: eeschema/eelibs_read_libraryfiles.cpp:95
-#: gerbview/excellon_read_drill_file.cpp:184
+#: gerbview/excellon_read_drill_file.cpp:198
 msgid "Files not found"
 msgstr "Nie znaleziono plików"
 
@@ -1298,7 +1298,7 @@ msgstr "Typ"
 #: eeschema/viewlibs.cpp:306
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:37
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:211
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:212
 #: common/dialog_about/AboutDialog_main.cpp:127
 msgid "Description"
 msgstr "Opis"
@@ -3715,7 +3715,7 @@ msgstr "Wytnij zaznaczony element"
 msgid "Copy selected item"
 msgstr "Kopiuj zaznaczony element"
 
-#: eeschema/tool_sch.cpp:87 pcbnew/dialogs/dialog_fp_lib_table.cpp:299
+#: eeschema/tool_sch.cpp:87 pcbnew/dialogs/dialog_fp_lib_table.cpp:300
 msgid "Paste"
 msgstr "Wklej"
 
@@ -3934,7 +3934,7 @@ msgstr "Nie potwierdzaj"
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:109
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:106
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:109
 #: common/zoom.cpp:289 common/dialogs/dialog_display_info_HTML_base.cpp:22
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:52
 msgid "Close"
@@ -4326,7 +4326,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
 #: eeschema/dialogs/dialog_erc_base.cpp:133
 #: pcbnew/dialogs/dialog_block_options_base.cpp:20
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:210
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:211
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:94
 #: pcbnew/dialogs/dialog_plot_base.cpp:83
 #: bitmap2component/bitmap2cmp_gui_base.cpp:106
@@ -4630,7 +4630,7 @@ msgstr "Odbij pionowo |"
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:97
 #: gerbview/class_gerber_draw_item.cpp:572
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:77
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:79
 msgid "Mirror"
 msgstr "Odbicie"
 
@@ -4698,7 +4698,7 @@ msgstr "Usuń jedno z pól dodatkowych"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:111
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:40
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:84
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:120
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:119
 msgid "Move Up"
 msgstr "Przesuń w górę"
 
@@ -5613,7 +5613,7 @@ msgstr "Nazwa p&inu wewnątrz"
 #: eeschema/dialogs/dialog_netlist.cpp:311
 #: pcbnew/dialogs/dialog_drc_base.cpp:23
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:80
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:75
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:77
 msgid "Options:"
 msgstr "Opcje:"
 
@@ -5847,7 +5847,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:71
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:85
 msgid "Color"
 msgstr "Kolorowy"
 
@@ -5855,7 +5855,7 @@ msgstr "Kolorowy"
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:71
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:85
 msgid "Black and white"
 msgstr "Czarno-biały"
 
@@ -5898,7 +5898,7 @@ msgstr "Rysuj wszystkie strony"
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:51
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:135
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:100
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:102
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:237
 msgid "Preview"
 msgstr "Podgląd"
@@ -5941,12 +5941,12 @@ msgstr "Ustawienia strony"
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:54
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:482
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:138
-#: gerbview/dialogs/dialog_print_using_printer.cpp:394
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:103
+#: gerbview/dialogs/dialog_print_using_printer.cpp:388
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:105
 #: eeschema/dialogs/dialog_print_using_printer_base.h:55
 #: pcbnew/dialogs/dialog_print_for_modedit_base.h:61
 #: pcbnew/dialogs/dialog_print_using_printer_base.h:79
-#: gerbview/dialogs/dialog_print_using_printer_base.h:71
+#: gerbview/dialogs/dialog_print_using_printer_base.h:73
 msgid "Print"
 msgstr "Drukuj"
 
@@ -6291,7 +6291,7 @@ msgstr "Segment"
 #: pcbnew/class_pcb_text.cpp:133 pcbnew/class_text_mod.cpp:378
 #: pcbnew/class_track.cpp:1134 pcbnew/class_zone.cpp:739
 #: pcbnew/layer_widget.cpp:533 gerbview/class_gerbview_layer_widget.cpp:87
-#: gerbview/dialogs/dialog_print_using_printer.cpp:145
+#: gerbview/dialogs/dialog_print_using_printer.cpp:139
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:142
 msgid "Layer"
 msgstr "Warstwy sygnałowe"
@@ -7633,7 +7633,7 @@ msgstr ""
 msgid "Plugin '%s' does not implement the '%s' function."
 msgstr "Wtyczka '%s' nie posiada zaimplementowanej funkcji '%s'."
 
-#: pcbnew/io_mgr.cpp:42 pcbnew/plugin.cpp:28
+#: pcbnew/io_mgr.cpp:42
 #, c-format
 msgid "Plugin type '%s' is not found."
 msgstr "Wtyczka typu '%s' nie została znaleziona."
@@ -9618,7 +9618,7 @@ msgstr "Automatycznie trasuj ścieżki pola lutowniczego"
 msgid "Automatically Route Net"
 msgstr "Automatycznie trasuj ścieżki tej sieci połączeń"
 
-#: pcbnew/onrightclick.cpp:911 pcbnew/dialogs/dialog_fp_lib_table.cpp:298
+#: pcbnew/onrightclick.cpp:911 pcbnew/dialogs/dialog_fp_lib_table.cpp:299
 msgid "Copy"
 msgstr "Kopiuj"
 
@@ -9740,7 +9740,7 @@ msgid "Show &Layers Manager"
 msgstr "Pokaż menadżera warstw"
 
 #: pcbnew/pcbnew_config.cpp:147 pcbnew/pcbnew_config.cpp:519
-#: gerbview/excellon_read_drill_file.cpp:170
+#: gerbview/excellon_read_drill_file.cpp:184
 #, c-format
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
@@ -11907,119 +11907,133 @@ msgstr "Znajdź element"
 msgid "Find Marker"
 msgstr "Znajdź znacznik"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:205
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:206
 msgid "Nickname"
 msgstr "Nickname"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:206
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:207
 msgid "Library Path"
 msgstr "Ścieżka"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:209
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:210
 msgid "Plugin Type"
 msgstr "Typ wtyczki"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:297
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:298
 msgid "Cut"
 msgstr "Wytnij"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:297
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:298
 msgid "Clear selected cells"
 msgstr "Wyczyść zaznaczone komórki"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:298
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:299
 msgid "Copy selected cells to clipboard"
 msgstr "Kopiuj zaznaczone komórki do schowka"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:299
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:300
 msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Wklej komórki ze schowka do matrycy od bieżącej pozycji"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:427
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:485
 #, c-format
 msgid "Illegal character '%s' found in Nickname: '%s' in row %d"
 msgstr "Znaleziono niepoprawny znak '%s' w nazwie '%s' w rzędzie %d"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:440
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:498
 msgid "No Colon in Nicknames"
 msgstr "Nie można stosować przecinków w nazwach"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:470
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:528
 #, c-format
 msgid "Duplicate Nickname: '%s' in rows %d and %d"
 msgstr "Zdublowana nazwa '%s' w rzędach %d i %d"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:484
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:542
 msgid "Please Delete or Modify One"
 msgstr "Proszę usunąć lub zmodyfikować jednen z wpisów"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:25
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:20
 msgid "Library Tables by Scope"
 msgstr "Tabele bibliotek według zasięgu"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:29
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:24
 msgid "Module libraries which  are visible for all projects"
 msgstr "Biblioteki footprintów, które są widoczne dla wszystkich projektów"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:65
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:54
+msgid "This table is associated with all projects"
+msgstr "Ta tabela jest przypisana do wszystkich projektów"
+
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:62
 msgid "Global Libraries"
 msgstr "Biblioteki globalne"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:67
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:64
 msgid "Module libraries which  are visible for curent project only"
 msgstr "Biblioteki footprintów, które są widoczne tylko dla bieżącego projektu"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:103
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:94
+msgid "Libraries list in this table is associated with the current project"
+msgstr "Lista bibliotek w tej tabeli jest przypisana do bieżącego projektu"
+
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:102
 msgid "Project Specific Libraries"
 msgstr "Biblioteki własne projektu"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:110
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:109
 msgid "Append Row"
 msgstr "Dołącz wpis"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:111
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:110
 msgid "Add a PCB library row to this table"
 msgstr "Dodaje wpis o bibliotece PCB do tej tabeli"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:115
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:114
 msgid "Delete Row"
 msgstr "Usuń wpis"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:116
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:115
 msgid "Remove a PCB library from this library table"
 msgstr "Usuwa bibliotekę PCB z tej tabeli"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:121
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:120
 msgid "Move the currently selected row up one position"
 msgstr "Przesuń zaznaczony wpis o jedną pozycję w górę"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:125 3d-viewer/3d_canvas.cpp:379
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:124 3d-viewer/3d_canvas.cpp:379
 msgid "Move Down"
 msgstr "Przesuń w dół v"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:126
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:125
 msgid "Move the currently selected row down one position"
 msgstr "Przesuń zaznaczony wpis o jedną pozycję w górę"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:130
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:129
 msgid "Options Editor"
 msgstr "Edycja Opcji"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:131
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:130
 msgid "Zoom into the options table for current row"
 msgstr "Wchodzi do opcji tableli dla bieżącego rzędu"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:147
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:141
 msgid "Path Substitutions"
 msgstr "Odpowiedniki ścieżek"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:165
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:159
 msgid "Environment Variable"
 msgstr "Zmienna środowiskowa"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:166
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:160
 msgid "Path Segment"
 msgstr "Ścieżka"
+
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:172
+msgid "This is a read-only table which shows pertinent environment variables."
+msgstr ""
+"To jest tabela tylko do odczytu, która ma związek ze zmiennymi "
+"środowiskowymi."
 
 #: pcbnew/dialogs/dialog_freeroute_exchange.cpp:94
 msgid "Freeroute Help"
@@ -13753,7 +13767,7 @@ msgstr ""
 msgid "Error: pad is not on a copper layer and has a hole"
 msgstr "Błąd: Punkt lut. nie jest na wartwie miedzi i posiada otwór"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:688
+#: pcbnew/dialogs/dialog_pad_properties.cpp:689
 msgid ""
 "For NPTH pad, set pad drill value to pad size value,\n"
 "if you do not want this pad plotted in gerber files"
@@ -13761,28 +13775,28 @@ msgstr ""
 "Dla punktu lutowniczego NPTH, ustaw średnicę otworu taką samą\n"
 "jak rozmiar punktu, jeśli nie chcesz aby został narysowany w plikach Gerber"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:703
+#: pcbnew/dialogs/dialog_pad_properties.cpp:707
 msgid "Incorrect value for pad offset"
 msgstr "Niewłaściwa wartość dla przesunięcia pola lutowniczego"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:708
+#: pcbnew/dialogs/dialog_pad_properties.cpp:712
 msgid "Too large value for pad delta size"
 msgstr "Niewłaściwa wartość dla przesunięcia pola lutowniczego"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:715
+#: pcbnew/dialogs/dialog_pad_properties.cpp:719
 msgid "Incorrect value for pad drill (too small value)"
 msgstr "Nieprawidłowa wartość w polu wierceń (zbyt mała wartość)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:721
+#: pcbnew/dialogs/dialog_pad_properties.cpp:724
 msgid "Error: only one copper layer allowed for this pad"
 msgstr ""
 "Błąd: Tylko jedna warstwa miedzi jest dozwolona dla tego punktu lutowniczego."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:730
+#: pcbnew/dialogs/dialog_pad_properties.cpp:736
 msgid "Pad setup errors list"
 msgstr "Lista błędów ustawień pól lutowniczych"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:825
+#: pcbnew/dialogs/dialog_pad_properties.cpp:831
 msgid "Unknown netname, netname not changed"
 msgstr "Nieznana nazwa sieci. Bez zmian"
 
@@ -14143,13 +14157,13 @@ msgstr "Nie mogę zapisać plików z rysunkami w folderze \"%s\"."
 
 #: pcbnew/dialogs/dialog_plot.cpp:764
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:370
-#: gerbview/dialogs/dialog_print_using_printer.cpp:296
+#: gerbview/dialogs/dialog_print_using_printer.cpp:290
 msgid "Warning: Scale option set to a very small value"
 msgstr "Ostrzeżenie: skala została ustawiona na bardzo małą wartość"
 
 #: pcbnew/dialogs/dialog_plot.cpp:768
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:362
-#: gerbview/dialogs/dialog_print_using_printer.cpp:288
+#: gerbview/dialogs/dialog_print_using_printer.cpp:282
 msgid "Warning: Scale option set to a very large value"
 msgstr "Ostrzeżenie: Skala została ustawiona na bardzo dużą wartość"
 
@@ -14161,8 +14175,8 @@ msgstr "Plik rysunkowy \"%s\" został utworzony"
 #: pcbnew/dialogs/dialog_plot.cpp:818
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:436
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:474
-#: gerbview/dialogs/dialog_print_using_printer.cpp:356
-#: gerbview/dialogs/dialog_print_using_printer.cpp:386
+#: gerbview/dialogs/dialog_print_using_printer.cpp:350
+#: gerbview/dialogs/dialog_print_using_printer.cpp:380
 msgid "No layer selected"
 msgstr "Nie wybrano warstwy"
 
@@ -14425,14 +14439,14 @@ msgstr "Odznacz wszystkie warstwy"
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:64
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:94
-#: gerbview/dialogs/dialog_print_using_printer.cpp:84
+#: gerbview/dialogs/dialog_print_using_printer.cpp:82
 #: pagelayout_editor/events_functions.cpp:488
 msgid "Error Init Printer info"
 msgstr "Błąd inicjalizacji drukarki"
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:149
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:441
-#: gerbview/dialogs/dialog_print_using_printer.cpp:338
+#: gerbview/dialogs/dialog_print_using_printer.cpp:332
 msgid "Print Preview"
 msgstr "Podgląd wydruku"
 
@@ -14442,7 +14456,7 @@ msgstr "Drukuj footprinty"
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:199
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:494
-#: gerbview/dialogs/dialog_print_using_printer.cpp:405
+#: gerbview/dialogs/dialog_print_using_printer.cpp:399
 msgid "There was a problem printing"
 msgstr "Wystąpił problem podczas drukowania"
 
@@ -14508,13 +14522,13 @@ msgstr "Przybliżona skala:"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:36
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:111
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:85
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:87
 msgid "Print Mode"
 msgstr "Tryb wydruku"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:48
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:132
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:97
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:99
 msgid "Page Options"
 msgstr "Opcje strony"
 
@@ -14560,17 +14574,17 @@ msgid "X Scale Adjust"
 msgstr "Dostosuj skalę X"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:60
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:55
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:56
 msgid "Set X scale adjust for exact scale plotting"
 msgstr "Dostosuj skalę w osi X dla dokładnej skali rysowania"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:64
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:59
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:60
 msgid "Y Scale Adjust"
 msgstr "Dostosuj skalę Y"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:69
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:64
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:66
 msgid "Set Y scale adjust for exact scale plotting"
 msgstr "Dostosuj skalę w osi Y dla dokładnej skali rysowania"
 
@@ -14698,10 +14712,25 @@ msgstr "Jeden plik z wszystkimi warstwami"
 msgid "File option:"
 msgstr "Opcje pliku:"
 
-#: pcbnew/github/github_plugin.cpp:224
+#: pcbnew/github/github_plugin.cpp:236
 #, c-format
-msgid "Unable to parse URL: %s"
-msgstr "Nie mogę rozpoznać adresu URL: %s"
+msgid ""
+"Unable to parse URL:\n"
+"'%s'"
+msgstr ""
+"Nie mogę rozpoznać adresu URL:\n"
+"'%s'"
+
+#: pcbnew/github/github_plugin.cpp:265
+#, c-format
+msgid ""
+"Cannot GET zip: '%s'\n"
+"for lib-path: '%s'.\n"
+"What: '%s'"
+msgstr ""
+"Nie mogę pobrać zip: '%s'\n"
+"dla ścieżki bibliotek: '%s'.\n"
+"Która: '%s'"
 
 #: cvpcb/autosel.cpp:112
 #, c-format
@@ -15135,33 +15164,33 @@ msgstr "Edytor nie został zdefiniowany. Proszę wybrać"
 msgid "No file loaded on the active layer %d"
 msgstr "Nie załadowano pliku na aktywną warstwę %d"
 
-#: gerbview/excellon_read_drill_file.cpp:349
+#: gerbview/excellon_read_drill_file.cpp:363
 msgid "METRIC command has no parameter"
 msgstr "Polecenie METRIC nie posiada parametru"
 
-#: gerbview/excellon_read_drill_file.cpp:367
+#: gerbview/excellon_read_drill_file.cpp:381
 msgid "INCH command has no parameter"
 msgstr "Polecenie INCH nie posiada parametru"
 
-#: gerbview/excellon_read_drill_file.cpp:395
+#: gerbview/excellon_read_drill_file.cpp:409
 msgid "ICI command has no parameter"
 msgstr "Polecenie INI nie posiada parametru"
 
-#: gerbview/excellon_read_drill_file.cpp:405
+#: gerbview/excellon_read_drill_file.cpp:419
 msgid "ICI command has incorrect parameter"
 msgstr "Polecenie INI posiada nieprawidłowy parametr"
 
-#: gerbview/excellon_read_drill_file.cpp:434
+#: gerbview/excellon_read_drill_file.cpp:457
 #, c-format
 msgid "Tool definition <%c> not supported"
 msgstr "Definicja narzędzia <%c> nie jest obsługiwana"
 
-#: gerbview/excellon_read_drill_file.cpp:486
+#: gerbview/excellon_read_drill_file.cpp:509
 #, c-format
 msgid "Tool <%d> not defined"
 msgstr "Narzędzie <%d> nie zostało zdefiniowane"
 
-#: gerbview/excellon_read_drill_file.cpp:613
+#: gerbview/excellon_read_drill_file.cpp:636
 #, c-format
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
 msgstr "Nieznany G-kod Excellon: &lt;%s&gt;"
@@ -15255,20 +15284,20 @@ msgstr "Otwórz plik wierceń"
 msgid "GerbView is already running. Continue?"
 msgstr "Gerbview jest już uruchomiony. Kontynuować?"
 
-#: gerbview/gerbview_frame.cpp:438 gerbview/gerbview_frame.cpp:441
+#: gerbview/gerbview_frame.cpp:439 gerbview/gerbview_frame.cpp:442
 msgid "D Codes"
 msgstr "D Codes"
 
-#: gerbview/gerbview_frame.cpp:469
+#: gerbview/gerbview_frame.cpp:470
 #, c-format
 msgid "Layer %d not in use"
 msgstr "Warstwa %d nie jest używana"
 
-#: gerbview/gerbview_frame.cpp:475
+#: gerbview/gerbview_frame.cpp:476
 msgid "File:"
 msgstr "Plik:"
 
-#: gerbview/gerbview_frame.cpp:482
+#: gerbview/gerbview_frame.cpp:483
 #, c-format
 msgid "Image name: '%s'  Layer name: '%s'"
 msgstr "Nazwa obrazu: '%s'  Nazwa warstwy: '%s'"
@@ -15577,7 +15606,7 @@ msgstr "Zapamiętaj wybór"
 msgid "Get Stored Choice"
 msgstr "Pobierz zapamiętany wybór"
 
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:87
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:89
 msgid ""
 "Choose if you want to print sheets in color, or force the black and white "
 "mode."
@@ -16184,17 +16213,17 @@ msgstr "Niepoprawny znak w danych o logicznej nazwie biblioteki"
 msgid "Illegal character found in revision"
 msgstr "Niepoprawny znak w danych o rewizji"
 
-#: common/fp_lib_table.cpp:178
+#: common/fp_lib_table.cpp:191
 #, c-format
 msgid "'%s' is a duplicate footprint library nickName"
 msgstr "'%s' jest duplikatem footprintu biblioteki "
 
-#: common/fp_lib_table.cpp:413
+#: common/fp_lib_table.cpp:426
 #, c-format
 msgid "lib table contains no logical lib '%s'"
 msgstr "tabela bibliotek nie zawiera logicznej biblioteki '%s'"
 
-#: common/fp_lib_table.cpp:518
+#: common/fp_lib_table.cpp:531
 #, c-format
 msgid ""
 "Cannot find footprint library file \"%s\" in any of the KiCad legacy library "
@@ -16203,14 +16232,14 @@ msgstr ""
 "Nie mogę odnaleźć pliku biblioteki \"%s\" w żadnej ze standardowych ścieżek "
 "wyszukiwania bibliotek starszego typu.\n"
 
-#: common/fp_lib_table.cpp:543
+#: common/fp_lib_table.cpp:556
 #, c-format
 msgid "Component `%s` footprint <%s> was not found in any legacy library.\n"
 msgstr ""
 "Komponent '%s', footprint <%s> nie został znaleziony w żadnej z bibliotek "
 "starszego typu.\n"
 
-#: common/fp_lib_table.cpp:587
+#: common/fp_lib_table.cpp:600
 #, c-format
 msgid ""
 "Component `%s` footprint <%s> legacy library path <%s > was not found in the "
@@ -16219,7 +16248,7 @@ msgstr ""
 "Komponent '%s', footprint <%s> o ścieżce dostępu <%s> nie został znaleziony "
 "w tabeli bibliotek footprntów.\n"
 
-#: common/fp_lib_table.cpp:604
+#: common/fp_lib_table.cpp:617
 #, c-format
 msgid "Component `%s` FPID <%s> is not valid.\n"
 msgstr "Komponent '%s', FPID <%s> nie jest prawidłowy.\n"
@@ -18857,7 +18886,7 @@ msgstr "Opcje eksportu VRML dla płytek:"
 msgid "Footprint Wizards"
 msgstr "Kreator Footprintów"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.h:80
+#: pcbnew/dialogs/dialog_fp_lib_table_base.h:77
 msgid "PCB Library Tables"
 msgstr "Tabele bibliotek PCB"
 
