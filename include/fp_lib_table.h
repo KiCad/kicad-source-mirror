@@ -181,7 +181,7 @@ public:
          * Function SetType
          * changes the type represented by this row.
          */
-        void SetType( const wxString& aType )       { type = IO_MGR::EnumFromStr( aType ); }
+        void SetType( const wxString& aType );
 
         /**
          * Function GetFullURI
