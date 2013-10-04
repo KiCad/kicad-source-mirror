@@ -971,7 +971,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(tags %s)\n",
                       m_out->Quotew( aModule->GetKeywords() ).c_str() );
 
-    if( !aModule->GetPath().IsEmpty() )
+    if( !( m_ctl & CTL_OMIT_PATH ) && !!aModule->GetPath() )
         m_out->Print( aNestLevel+1, "(path %s)\n",
                       m_out->Quotew( aModule->GetPath() ).c_str() );
 
