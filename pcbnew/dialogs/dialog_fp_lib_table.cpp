@@ -236,11 +236,12 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
     enum
     {
-        MYID_CUT,     //  = wxID_HIGHEST + 1,
+        MYID_FIRST = -1,
+        MYID_CUT,
         MYID_COPY,
         MYID_PASTE,
         MYID_SELECT,
-        MYID_SENTINEL,
+        MYID_LAST,
     };
 
     // row & col "selection" acquisition
@@ -361,13 +362,14 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
             wxTheClipboard->SetData( new wxTextDataObject( txt ) );
             wxTheClipboard->Close();
+
+            m_cur_grid->AutoSizeColumns();
             m_cur_grid->ForceRefresh();
         }
     }
 
     void paste()
     {
-        D(printf( "paste\n" );)
         // assume format came from a spreadsheet or us.
         if( wxTheClipboard->Open() )
         {
@@ -379,7 +381,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
                 wxTheClipboard->GetData( data );
 
                 wxString    cb_text = data.GetText();
-                size_t      ndx = cb_text.find( wxT( "(fp_lib_table " ) );
+                size_t      ndx = cb_text.find( wxT( "(fp_lib_table" ) );
 
                 if( ndx != std::string::npos )
                 {
@@ -440,6 +442,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
                             tbl->SetValue( row, col, cellTxt );
                         }
                     }
+                    m_cur_grid->AutoSizeColumns();
                 }
             }
 
@@ -865,7 +868,7 @@ public:
         m_global_grid->AutoSizeColumns();
         m_project_grid->AutoSizeColumns();
 
-        Connect( MYID_CUT, MYID_SENTINEL-1, wxEVT_COMMAND_MENU_SELECTED,
+        Connect( MYID_FIRST, MYID_LAST, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler( DIALOG_FP_LIB_TABLE::onPopupSelection ), NULL, this );
 
         populateEnvironReadOnlyTable();
@@ -884,7 +887,7 @@ public:
 
     ~DIALOG_FP_LIB_TABLE()
     {
-        Disconnect( MYID_CUT, MYID_SENTINEL-1, wxEVT_COMMAND_MENU_SELECTED,
+        Disconnect( MYID_FIRST, MYID_LAST, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler( DIALOG_FP_LIB_TABLE::onPopupSelection ), NULL, this );
 
         // ~wxGrid() examines its table, and the tables will have been destroyed before
