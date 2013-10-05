@@ -59,6 +59,46 @@ FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
 }
 
 
+wxArrayString FP_LIB_TABLE::FootprintEnumerate( const wxString& aNickname )
+{
+    const ROW* row = FindRow( aNickname );
+    wxASSERT( (PLUGIN*) row->plugin );
+    return row->plugin->FootprintEnumerate( row->GetFullURI( true ), row->GetProperties() );
+}
+
+
+MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& aFootprintName )
+{
+    const ROW* row = FindRow( aNickname );
+    wxASSERT( (PLUGIN*) row->plugin );
+    return row->plugin->FootprintLoad( row->GetFullURI( true ), aFootprintName, row->GetProperties() );
+}
+
+
+void FP_LIB_TABLE::FootprintSave( const wxString& aNickname, const MODULE* aFootprint )
+{
+    const ROW* row = FindRow( aNickname );
+    wxASSERT( (PLUGIN*) row->plugin );
+    return row->plugin->FootprintSave( row->GetFullURI( true ), aFootprint, row->GetProperties() );
+}
+
+
+void FP_LIB_TABLE::FootprintDelete( const wxString& aNickname, const wxString& aFootprintName )
+{
+    const ROW* row = FindRow( aNickname );
+    wxASSERT( (PLUGIN*) row->plugin );
+    return row->plugin->FootprintDelete( row->GetFullURI( true ), aFootprintName, row->GetProperties() );
+}
+
+
+bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
+{
+    const ROW* row = FindRow( aNickname );
+    wxASSERT( (PLUGIN*) row->plugin );
+    return row->plugin->IsFootprintLibWritable( row->GetFullURI( true ) );
+}
+
+
 void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR )
 {
     /*
@@ -335,9 +375,9 @@ std::vector<wxString> FP_LIB_TABLE::GetLogicalLibs()
 }
 
 
-const FP_LIB_TABLE::ROW* FP_LIB_TABLE::findRow( const wxString& aNickName )
+FP_LIB_TABLE::ROW* FP_LIB_TABLE::findRow( const wxString& aNickName ) const
 {
-    FP_LIB_TABLE* cur = this;
+    FP_LIB_TABLE* cur = (FP_LIB_TABLE*) this;
 
     do
     {
@@ -412,7 +452,7 @@ bool FP_LIB_TABLE::InsertRow( const ROW& aRow, bool doReplace )
 const FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aLibraryNickName )
     throw( IO_ERROR )
 {
-    const ROW* row = findRow( aLibraryNickName );
+    ROW* row = findRow( aLibraryNickName );
 
     if( !row )
     {
@@ -421,20 +461,12 @@ const FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aLibraryNickName
         THROW_IO_ERROR( msg );
     }
 
+    /*  enable this when FP_LIB_TABLE::Footprint*() functions are put into use.
+    if( !row->plugin )
+        row->setPlugin( IO_MGR::PluginFind( row->type ) );
+    */
+
     return row;
-}
-
-
-PLUGIN* FP_LIB_TABLE::PluginFind( const wxString& aLibraryNickName )
-    throw( IO_ERROR )
-{
-    const ROW* row = FindRow( aLibraryNickName );
-
-    // row will never be NULL here.
-
-    PLUGIN* plugin = IO_MGR::PluginFind( row->type );
-
-    return plugin;
 }
 
 
