@@ -147,6 +147,8 @@ public:
             description = r.description;
             properties  = r.properties ? new PROPERTIES( *r.properties ) : NULL;
 
+            setPlugin( NULL );  // do not copy the PLUGIN, it is lazily created.
+
             return *this;
         }
 
@@ -186,8 +188,16 @@ public:
         /**
          * Function GetFullURI
          * returns the full location specifying URI for the LIB.
+         *
+         * @param doEnvVarSubs tells this function to do the substitution, else not.
          */
-        const wxString& GetFullURI() const          { return uri; }
+        const wxString GetFullURI( bool doEnvVarSubs = false ) const
+        {
+            if( doEnvVarSubs )
+                return FP_LIB_TABLE::ExpandSubstitutions( uri );
+            else
+                return uri;
+        }
 
         /**
          * Function SetFullURI
@@ -258,13 +268,19 @@ public:
             properties = aProperties;
         }
 
+        void setPlugin( PLUGIN* aPlugin )
+        {
+            plugin.set( aPlugin );
+        }
+
         wxString        nickName;
         wxString        uri;
         LIB_T           type;
         wxString        options;
         wxString        description;
-        const
-        PROPERTIES*     properties;
+
+        const PROPERTIES*   properties;
+        PLUGIN::RELEASER    plugin;
     };
 
     /**
@@ -362,11 +378,7 @@ public:
      */
     std::vector<wxString> GetLogicalLibs();
 
-    //----<read accessors>----------------------------------------------------
-    // the returning of a const wxString* tells if not found, but might be too
-    // promiscuous?
-
-#if 0       // PLUGIN API SUBSET, REBASED ON aNickname
+    //-----<PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
     /**
      * Function FootprintEnumerate
@@ -381,7 +393,7 @@ public:
      *
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
-    wxArrayString FootprintEnumerate( const wxString& aNickname ) const;
+    wxArrayString FootprintEnumerate( const wxString& aNickname );
 
     /**
      * Function FootprintLoad
@@ -397,7 +409,7 @@ public:
      * @throw   IO_ERROR if the library cannot be found or read.  No exception
      *          is thrown in the case where aFootprintName cannot be found.
      */
-    MODULE* FootprintLoad( const wxString& aNickname, const wxString& aFootprintName ) const;
+    MODULE* FootprintLoad( const wxString& aNickname, const wxString& aFootprintName );
 
     /**
      * Function FootprintSave
@@ -436,8 +448,8 @@ public:
      */
     bool IsFootprintLibWritable( const wxString& aNickname );
 
-#endif
-    //----</read accessors>---------------------------------------------------
+    //-----</PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
+
 
     /**
      * Function InsertRow
@@ -452,16 +464,12 @@ public:
     bool InsertRow( const ROW& aRow, bool doReplace = false );
 
     /**
-     * Function PluginFind
-     * returns a PLUGIN*.  Caller should wrap that in a PLUGIN::RELEASER()
-     * so when it goes out of scope, IO_MGR::PluginRelease() is called.
-     */
-    PLUGIN* PluginFind( const wxString& aLibraryNickName ) throw( IO_ERROR );
-
-    /**
      * Function FindRow
      * returns a ROW if aNickName is found in this table or in any chained
-     * fallBack table fragment, else NULL.
+     * fallBack table fragment.  The PLUGIN is loaded and attached
+     * to the "plugin" field of the ROW if not already loaded.
+     *
+     * @throw IO_ERROR if aNickName cannot be found.
      */
     const ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
 
@@ -564,7 +572,7 @@ protected:
      * returns a ROW if aNickName is found in this table or in any chained
      * fallBack table fragment, else NULL.
      */
-    const ROW* findRow( const wxString& aNickName );
+    ROW* findRow( const wxString& aNickName ) const;
 
     void reindex()
     {

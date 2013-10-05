@@ -416,6 +416,9 @@ public:
     {
         PLUGIN* plugin;
 
+        // private assignment operator so it's illegal
+        RELEASER& operator=( RELEASER& aOther ) { return *this; }
+
     public:
         RELEASER( PLUGIN* aPlugin = NULL ) :
             plugin( aPlugin )
@@ -425,15 +428,28 @@ public:
         ~RELEASER()
         {
             if( plugin )
-                IO_MGR::PluginRelease( plugin );
+                release();
         }
 
-        operator PLUGIN* ()
+        void release()
+        {
+            IO_MGR::PluginRelease( plugin );
+            plugin = NULL;
+        }
+
+        void set( PLUGIN* aPlugin )
+        {
+            if( plugin )
+                release();
+            plugin = aPlugin;
+        }
+
+        operator PLUGIN* () const
         {
             return plugin;
         }
 
-        PLUGIN* operator -> ()
+        PLUGIN* operator -> () const
         {
             return plugin;
         }
