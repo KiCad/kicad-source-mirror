@@ -823,12 +823,12 @@ void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
 
     setLibNickName( dlg.GetTextSelection() );
     wxString uri = m_footprintLibTable->FindRow( dlg.GetTextSelection() )->GetFullURI();
-    wxFileName fileName = FP_LIB_TABLE::ExpandSubstitutions( uri );
+    wxString fileName = FP_LIB_TABLE::ExpandSubstitutions( uri );
 
-    wxLogDebug( wxT( "Loading footprint library <%s> from <%s>." ),
-                GetChars( dlg.GetTextSelection() ), GetChars( fileName.GetFullPath() ) );
+    wxLogDebug( wxT( "Loading footprint library <%s> with uri <%s> from <%s>." ),
+                GetChars( dlg.GetTextSelection() ), GetChars( uri ), GetChars( fileName ) );
 
-    setLibPath( fileName.GetFullPath() );
+    setLibPath( fileName );
     updateTitle();
 }
 
