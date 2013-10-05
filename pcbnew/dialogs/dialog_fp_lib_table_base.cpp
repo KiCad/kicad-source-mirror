@@ -21,8 +21,6 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	
 	m_auinotebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_BOTTOM );
 	m_global_panel = new wxPanel( m_auinotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_global_panel->SetToolTip( _("Module libraries which  are visible for all projects") );
-	
 	wxBoxSizer* m_global_sizer;
 	m_global_sizer = new wxBoxSizer( wxVERTICAL );
 	
@@ -32,7 +30,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_global_grid->CreateGrid( 1, 5 );
 	m_global_grid->EnableEditing( true );
 	m_global_grid->EnableGridLines( true );
-	m_global_grid->EnableDragGridSize( true );
+	m_global_grid->EnableDragGridSize( false );
 	m_global_grid->SetMargins( 0, 0 );
 	
 	// Columns
@@ -43,7 +41,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_global_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
-	m_global_grid->EnableDragRowSize( true );
+	m_global_grid->EnableDragRowSize( false );
 	m_global_grid->SetRowLabelSize( 40 );
 	m_global_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
@@ -59,8 +57,6 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_global_sizer->Fit( m_global_panel );
 	m_auinotebook->AddPage( m_global_panel, _("Global Libraries"), true, wxNullBitmap );
 	m_project_panel = new wxPanel( m_auinotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_project_panel->SetToolTip( _("Module libraries which  are visible for curent project only") );
-	
 	wxBoxSizer* m_project_sizer;
 	m_project_sizer = new wxBoxSizer( wxVERTICAL );
 	
@@ -70,7 +66,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_project_grid->CreateGrid( 1, 5 );
 	m_project_grid->EnableEditing( true );
 	m_project_grid->EnableGridLines( true );
-	m_project_grid->EnableDragGridSize( true );
+	m_project_grid->EnableDragGridSize( false );
 	m_project_grid->SetMargins( 0, 0 );
 	
 	// Columns
@@ -81,7 +77,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_project_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
-	m_project_grid->EnableDragRowSize( true );
+	m_project_grid->EnableDragRowSize( false );
 	m_project_grid->SetRowLabelSize( 40 );
 	m_project_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
