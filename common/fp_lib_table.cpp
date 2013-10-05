@@ -51,6 +51,13 @@ void FP_LIB_TABLE::ROW::SetType( const wxString& aType )
 }
 
 
+void FP_LIB_TABLE::ROW::SetFullURI( const wxString& aFullURI )
+{
+    uri_user = aFullURI;
+    uri_expanded = FP_LIB_TABLE::ExpandSubstitutions( aFullURI );
+}
+
+
 FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
     fallBack( aFallBackTable )
 {
@@ -407,7 +414,7 @@ const FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRowByURI( const wxString& aURI )
 
         for( unsigned i = 0;  i < cur->rows.size();  i++ )
         {
-            wxString uri = ExpandSubstitutions( cur->rows[i].GetFullURI() );
+            wxString uri = cur->rows[i].GetFullURI( true );
 
             if( wxFileName::GetPathSeparator() == wxChar( '\\' ) && uri.Find( wxChar( '/' ) ) >= 0 )
                 uri.Replace( wxT( "/" ), wxT( "\\" ) );
@@ -461,16 +468,17 @@ const FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aLibraryNickName
         THROW_IO_ERROR( msg );
     }
 
-    /*  enable this when FP_LIB_TABLE::Footprint*() functions are put into use.
+#if 0   // enable this as soon as FP_LIB_TABLE::FindRow() is not being used outside
+        // this class, and FP_LIB_TABLE::Footprint*() functions are put into use.
     if( !row->plugin )
         row->setPlugin( IO_MGR::PluginFind( row->type ) );
-    */
+#endif
 
     return row;
 }
 
 
-const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString aString )
+const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString& aString )
 {
     // We reserve the right to do this another way, by providing our own member
     // function.
@@ -604,7 +612,7 @@ bool FP_LIB_TABLE::ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aL
 
                 for( unsigned i = 0;  i < cur->rows.size();  i++ )
                 {
-                    wxString uri = ExpandSubstitutions( cur->rows[i].GetFullURI() );
+                    wxString uri = cur->rows[i].GetFullURI( true );
 
                     if( wxFileName::GetPathSeparator() == wxChar( '\\' )
                       && uri.Find( wxChar( '/' ) ) >= 0 )
@@ -616,6 +624,7 @@ bool FP_LIB_TABLE::ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aL
                         break;
                     }
                 }
+
             } while( ( cur = cur->fallBack ) != 0 && libNickname.IsEmpty() );
 
             if( libNickname.IsEmpty() )

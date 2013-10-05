@@ -405,7 +405,11 @@ public:
         API functions which take one.
     */
 
-    virtual ~PLUGIN() {};
+    virtual ~PLUGIN()
+    {
+        //printf( "~%s", __func__ );
+    };
+
 
     /**
      * Class RELEASER
@@ -418,6 +422,9 @@ public:
 
         // private assignment operator so it's illegal
         RELEASER& operator=( RELEASER& aOther ) { return *this; }
+
+        // private copy constructor so it's illegal
+        RELEASER( const RELEASER& aOther ) {}
 
     public:
         RELEASER( PLUGIN* aPlugin = NULL ) :
