@@ -221,7 +221,7 @@ BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName,
                      BOARD* aAppendToMe, const PROPERTIES* aProperties )
 {
     // release the PLUGIN even if an exception is thrown.
-    PLUGIN::RELEASER pi = PluginFind( aFileType );
+    PLUGIN::RELEASER pi( PluginFind( aFileType ) );
 
     if( (PLUGIN*) pi )  // test pi->plugin
     {
@@ -235,7 +235,7 @@ BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName,
 void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
 {
     // release the PLUGIN even if an exception is thrown.
-    PLUGIN::RELEASER pi = PluginFind( aFileType );
+    PLUGIN::RELEASER pi( PluginFind( aFileType ) );
 
     if( (PLUGIN*) pi )  // test pi->plugin
     {

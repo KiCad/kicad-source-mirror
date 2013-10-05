@@ -112,17 +112,18 @@ public:
         ROW( const wxString& aNick, const wxString& aURI, const wxString& aType,
              const wxString& aOptions, const wxString& aDescr = wxEmptyString ) :
             nickName( aNick ),
-            uri( aURI ),
-            options( aOptions ),
             description( aDescr ),
             properties( 0 )
         {
+            SetOptions( aOptions ),
+            SetFullURI( aURI );
             SetType( aType );
         }
 
         ROW( const ROW& a ) :
             nickName( a.nickName ),
-            uri( a.uri ),
+            uri_user( a.uri_user ),
+            uri_expanded( a.uri_expanded ),
             type( a.type ),
             options( a.options ),
             description( a.description ),
@@ -139,22 +140,23 @@ public:
 
         ROW& operator=( const ROW& r )
         {
-            nickName = r.nickName;
-            uri      = r.uri;
-            type     = r.type;
-            options  = r.options;
+            nickName     = r.nickName;
+            uri_user     = r.uri_user;
+            uri_expanded = r.uri_expanded;
+            type         = r.type;
+            options      = r.options;
+            description  = r.description;
+            properties   = r.properties ? new PROPERTIES( *r.properties ) : NULL;
 
-            description = r.description;
-            properties  = r.properties ? new PROPERTIES( *r.properties ) : NULL;
-
-            setPlugin( NULL );  // do not copy the PLUGIN, it is lazily created.
+            // do not copy the PLUGIN, it is lazily created.
+            // setPlugin( NULL );
 
             return *this;
         }
 
         bool operator==( const ROW& r ) const
         {
-            return  nickName==r.nickName && uri==r.uri && type==r.type && options==r.options;
+            return  nickName==r.nickName && uri_user==r.uri_user && type==r.type && options==r.options;
         }
 
         bool operator!=( const ROW& r ) const   { return !( *this == r ); }
@@ -187,23 +189,24 @@ public:
 
         /**
          * Function GetFullURI
-         * returns the full location specifying URI for the LIB.
+         * returns the full location specifying URI for the LIB, either in original
+         * UI form or in environment variable expanded form.
          *
-         * @param doEnvVarSubs tells this function to do the substitution, else not.
+         * @param aSubstituted Tells if caller wanted the substituted form, else not.
          */
-        const wxString GetFullURI( bool doEnvVarSubs = false ) const
+        const wxString& GetFullURI( bool aSubstituted = false ) const
         {
-            if( doEnvVarSubs )
-                return FP_LIB_TABLE::ExpandSubstitutions( uri );
+            if( aSubstituted )
+                return uri_expanded;
             else
-                return uri;
+                return uri_user;
         }
 
         /**
          * Function SetFullURI
          * changes the full URI for the library.
          */
-        void SetFullURI( const wxString& aFullURI ) { uri = aFullURI; }
+        void SetFullURI( const wxString& aFullURI );
 
         /**
          * Function GetOptions
@@ -274,7 +277,8 @@ public:
         }
 
         wxString        nickName;
-        wxString        uri;
+        wxString        uri_user;           ///< what user entered from UI or loaded from disk
+        wxString        uri_expanded;       ///< from ExpandSubstitutions()
         LIB_T           type;
         wxString        options;
         wxString        description;
@@ -524,7 +528,7 @@ public:
      * This enables (fp_lib_table)s to have platform dependent environment
      * variables in them, allowing for a uniform table across platforms.
      */
-    static const wxString ExpandSubstitutions( const wxString aString );
+    static const wxString ExpandSubstitutions( const wxString& aString );
 
     /**
      * Function LoadGlobalTable
