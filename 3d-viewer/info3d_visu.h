@@ -72,6 +72,8 @@ public:
         FL_COMMENTS, FL_ECO,
         FL_GRID,
         FL_USE_COPPER_THICKNESS,
+        FL_SHOW_BOARD_BODY,
+        FL_USE_REALISTIC_MODE,
         FL_LAST
     };
 
@@ -133,11 +135,14 @@ public: INFO3D_VISU();
      * note: the thickness (Z size) of the copper is not the thickness
      * of the layer (the thickness of the layer is the epoxy thickness / layer count)
      *
-     * Note: if m_DrawFlags[FL_USE_COPPER_THICKNESS] is not set, returns 0
+     * Note: if m_DrawFlags[FL_USE_COPPER_THICKNESS] is not set,
+     * and normal mode, returns 0
      */
     int GetCopperThicknessBIU() const
     {
-        return m_DrawFlags[FL_USE_COPPER_THICKNESS] ?
+        bool use_copper_thickness = m_DrawFlags[FL_USE_COPPER_THICKNESS] ||
+                                    m_DrawFlags[FL_USE_REALISTIC_MODE];
+        return use_copper_thickness ?
             KiROUND( m_CopperThickness / m_BiuTo3Dunits )
             : 0;
     }
@@ -160,7 +165,9 @@ public: INFO3D_VISU();
      */
     int GetNonCopperLayerThicknessBIU() const
     {
-        return  m_DrawFlags[FL_USE_COPPER_THICKNESS] ?
+        bool use_copper_thickness = m_DrawFlags[FL_USE_COPPER_THICKNESS] ||
+                                    m_DrawFlags[FL_USE_REALISTIC_MODE];
+        return  use_copper_thickness ?
             KiROUND( m_NonCopperLayerThickness / m_BiuTo3Dunits )
             : 0;
     }
@@ -178,6 +185,8 @@ public: INFO3D_VISU();
                         GetNonCopperLayerThicknessBIU() :
                         GetCopperThicknessBIU();
     }
+
+    bool IsRealisticMode() { return m_DrawFlags[FL_USE_REALISTIC_MODE]; }
 };
 
 extern INFO3D_VISU g_Parm_3D_Visu;

@@ -37,7 +37,7 @@
  * @param aThickness = thickness in board internal units
  * @param aBiuTo3DUnits = board internal units to 3D units scaling value
  * If aThickness = 0, a polygon area is drawn in a XY plane at Z position = aZpos.
- * If aThickness 1 0, a solid object is drawn.
+ * If aThickness > 0, a solid object is drawn.
  *  The top side is located at aZpos + aThickness / 2
  *  The bottom side is located at aZpos - aThickness / 2
  */

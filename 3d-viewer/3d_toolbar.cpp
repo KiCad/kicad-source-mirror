@@ -158,17 +158,19 @@ void EDA_3D_FRAME::CreateMenuBar()
 
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
 
+    AddMenuItem( prefsMenu, ID_MENU3D_REALISTIC_MODE,
+           _( "Realistic Mode" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
+    prefsMenu->AppendSeparator();
+
     AddMenuItem( prefsMenu, ID_MENU3D_BGCOLOR_SELECTION,
                  _( "Choose background color" ), KiBitmap( palette_xpm ) );
 
-    wxMenuItem* item;
-    item = AddMenuItem( prefsMenu, ID_MENU3D_AXIS_ONOFF,
+    AddMenuItem( prefsMenu, ID_MENU3D_AXIS_ONOFF,
             _( "Show 3D &Axis" ), KiBitmap( axis3d_front_xpm ), wxITEM_CHECK );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_AXIS]);
 
     // Creates grid menu
     wxMenu * gridlistMenu = new wxMenu;
-    item = AddMenuItem( prefsMenu, gridlistMenu, ID_MENU3D_GRID,
+    AddMenuItem( prefsMenu, gridlistMenu, ID_MENU3D_GRID,
            _( "3D Grid" ), KiBitmap( grid_xpm ) );
     gridlistMenu->Append( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), wxEmptyString, true );
     gridlistMenu->Check( ID_MENU3D_GRID_NOGRID, true );
@@ -178,32 +180,34 @@ void EDA_3D_FRAME::CreateMenuBar()
     gridlistMenu->Append( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5 mm" ), wxEmptyString, true );
     gridlistMenu->Append( ID_MENU3D_GRID_1_MM, _( "3D Grid 1 mm" ), wxEmptyString, true );
 
-    item = AddMenuItem( prefsMenu, ID_MENU3D_USE_COPPER_THICKNESS,
+    AddMenuItem( prefsMenu, ID_MENU3D_SHOW_BOARD_BODY,
+           _( "Show Board Body" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( prefsMenu, ID_MENU3D_USE_COPPER_THICKNESS,
            _( "Show Copper Thickness" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
 
-    item = AddMenuItem( prefsMenu, ID_MENU3D_MODULE_ONOFF,
+    AddMenuItem( prefsMenu, ID_MENU3D_MODULE_ONOFF,
            _( "Show 3D F&ootprints" ), KiBitmap( shape_3d_xpm ), wxITEM_CHECK );
 
-    item = AddMenuItem( prefsMenu, ID_MENU3D_ZONE_ONOFF,
+    AddMenuItem( prefsMenu, ID_MENU3D_ZONE_ONOFF,
            _( "Show Zone &Filling" ), KiBitmap( add_zone_xpm ), wxITEM_CHECK );
 
-    item = AddMenuItem( prefsMenu, ID_MENU3D_ADHESIVE_ONOFF,
+    AddMenuItem( prefsMenu, ID_MENU3D_ADHESIVE_ONOFF,
            _( "Show &Adhesive Layers" ), KiBitmap( tools_xpm ), wxITEM_CHECK );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ADHESIVE]);
 
-    item = AddMenuItem( prefsMenu, ID_MENU3D_SILKSCREEN_ONOFF,
+    AddMenuItem( prefsMenu, ID_MENU3D_SILKSCREEN_ONOFF,
            _( "Show &Silkscreen Layer" ), KiBitmap( add_text_xpm ), wxITEM_CHECK );
 
-    item = AddMenuItem( prefsMenu, ID_MENU3D_SOLDER_MASK_ONOFF,
+    AddMenuItem( prefsMenu, ID_MENU3D_SOLDER_MASK_ONOFF,
            _( "Show Solder &Mask Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
 
-    item = AddMenuItem( prefsMenu, ID_MENU3D_SOLDER_PASTE_ONOFF,
+    AddMenuItem( prefsMenu, ID_MENU3D_SOLDER_PASTE_ONOFF,
            _( "Show Solder &Paste Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
 
-    item = AddMenuItem( prefsMenu, ID_MENU3D_COMMENTS_ONOFF,
+    AddMenuItem( prefsMenu, ID_MENU3D_COMMENTS_ONOFF,
            _( "Show &Comments and Drawings Layer" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
 
-    item = AddMenuItem( prefsMenu, ID_MENU3D_ECO_ONOFF,
+    AddMenuItem( prefsMenu, ID_MENU3D_ECO_ONOFF,
            _( "Show &Eco Layers" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
 
     SetMenuBar( menuBar );
@@ -219,6 +223,12 @@ void EDA_3D_FRAME::SetMenuBarOptionsState()
 
     wxMenuItem* item;
     // Set the state of toggle menus according to the current display options
+    item = menuBar->FindItem( ID_MENU3D_REALISTIC_MODE );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_REALISTIC_MODE]);
+
+    item = menuBar->FindItem( ID_MENU3D_SHOW_BOARD_BODY );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SHOW_BOARD_BODY]);
+
     item = menuBar->FindItem( ID_MENU3D_USE_COPPER_THICKNESS );
     item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_COPPER_THICKNESS]);
 
@@ -227,6 +237,9 @@ void EDA_3D_FRAME::SetMenuBarOptionsState()
 
     item = menuBar->FindItem( ID_MENU3D_ZONE_ONOFF );
     item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE]);
+
+    item = menuBar->FindItem( ID_MENU3D_AXIS_ONOFF );
+    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_AXIS]);
 
     item = menuBar->FindItem( ID_MENU3D_ADHESIVE_ONOFF );
     item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ADHESIVE]);
