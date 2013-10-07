@@ -146,11 +146,69 @@ void EDA_3D_CANVAS::Redraw( bool finish )
     SwapBuffers();
 }
 
+// Helper function: initialize the copper color to draw the board
+// in realistic mode.
+static inline void SetGLCopperColor()
+{
+    // Generates a golden yellow color, near board "copper" color
+    const double lum = 0.7/255.0;
+    glColor4f( 255.0*lum, 223.0*lum, 0.0*lum, 1.0 );
+}
+
+// Helper function: initialize the color to draw the epoxy layers
+// ( body board and solder mask layers) in realistic mode.
+static inline void SetGLEpoxyColor( double aTransparency = 1.0 )
+{
+    // Generates an epoxy color, near board color
+    const double lum = 0.2/255.0;
+    glColor4f( 100.0*lum, 255.0*lum, 180.0*lum, aTransparency );
+}
+
+// Helper function: initialize the color to draw the non copper layers
+// in realistic mode and normal mode.
+static inline void SetGLTechLayersColor( LAYER_NUM aLayer )
+{
+    // Generates an epoxy color, near board color
+//    const double lum = 0.2/255.0;
+
+    if( g_Parm_3D_Visu.IsRealisticMode() )
+    {
+        switch( aLayer )
+        {
+        case SOLDERPASTE_N_BACK:
+        case SOLDERPASTE_N_FRONT:
+            SetGLColor( DARKGRAY, 0.7 );
+            break;
+
+        case SILKSCREEN_N_BACK:
+        case SILKSCREEN_N_FRONT:
+            SetGLColor( LIGHTGRAY, 0.9 );
+            break;
+
+        case SOLDERMASK_N_BACK:
+        case SOLDERMASK_N_FRONT:
+            SetGLEpoxyColor( 0.7 );
+            break;
+
+        default:
+            EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( aLayer );
+            SetGLColor( color, 0.7 );
+            break;
+        }
+    }
+    else
+    {
+        EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( aLayer );
+        SetGLColor( color, 0.7 );
+    }
+}
+
 
 void EDA_3D_CANVAS::BuildBoard3DView()
 {
     PCB_BASE_FRAME* pcbframe = Parent()->Parent();
     BOARD*          pcb = pcbframe->GetBoard();
+    bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
 
     // Number of segments to draw a circle using segments
     const int       segcountforcircle   = 16;
@@ -170,12 +228,15 @@ void EDA_3D_CANVAS::BuildBoard3DView()
 
     // Build a polygon from edge cut items
     wxString msg;
-    if( ! pcb->GetBoardPolygonOutlines( bufferPcbOutlines,
-                                        allLayerHoles, &msg ) )
+    if( realistic_mode || g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SHOW_BOARD_BODY] )
     {
-        msg << wxT("\n\n") <<
-            _("Unable to calculate the board outlines, will use the outlines boundary box");
-        wxMessageBox( msg );
+        if( ! pcb->GetBoardPolygonOutlines( bufferPcbOutlines,
+                                            allLayerHoles, &msg ) )
+        {
+            msg << wxT("\n\n") <<
+                _("Unable to calculate the board outlines, will use the outlines boundary box");
+            wxMessageBox( msg );
+        }
     }
 
     CPOLYGONS_LIST  bufferZonesPolys;
@@ -192,7 +253,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             && layer >= g_Parm_3D_Visu.m_CopperLayersCount )
             continue;
 
-        if( !g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) )
+        if( !Is3DLayerEnabled( layer ) )
             continue;
 
         bufferPolys.RemoveAllContours();
@@ -315,11 +376,17 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         // Merge polygons, remove holes
         currLayerPolyset -= polysetHoles;
 
-        EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( layer );
         int         thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
         int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
 
-        SetGLColor( color );
+        if( realistic_mode )
+            SetGLCopperColor();
+        else
+        {
+            EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( layer );
+            SetGLColor( color );
+        }
+
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
         bufferPolys.RemoveAllContours();
@@ -350,6 +417,53 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             Draw3DPadHole( pad );
     }
 
+    // Draw board substrate:
+    if( bufferPcbOutlines.GetCornersCount() )
+    {
+        int copper_thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
+        // a small offset between substrate and external copper layer to avoid artifacts
+        // when drawing copper items on board
+        int epsilon = Millimeter2iu( 0.01 );
+        int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
+        int board_thickness = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_FRONT )
+                            - g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
+        // items on copper layers and having a thickness = copper_thickness
+        // are drawn from zpos - copper_thickness/2 to zpos + copper_thickness
+        // therefore substrate position is copper_thickness/2 to
+        // substrate_height - copper_thickness/2
+        zpos += (copper_thickness + epsilon) / 2;
+        board_thickness -= copper_thickness + epsilon;
+
+        if( realistic_mode )
+            SetGLEpoxyColor();
+        else
+        {
+            EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( EDGE_N );
+            SetGLColor( color, 0.7 );
+        }
+
+        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( LAYER_N_FRONT ) );
+        KI_POLYGON_SET  currLayerPolyset;
+        KI_POLYGON_SET  polysetHoles;
+
+        // Add polygons, without holes
+        bufferPcbOutlines.ExportTo( currLayerPolyset );
+
+        // Build holes list
+        allLayerHoles.ExportTo( polysetHoles );
+
+        // remove holes
+        currLayerPolyset -= polysetHoles;
+
+        bufferPcbOutlines.RemoveAllContours();
+        bufferPcbOutlines.ImportFrom( currLayerPolyset );
+
+        // for Draw3D_SolidHorizontalPolyPolygons, zpos it the middle between bottom and top
+        // sides
+        Draw3D_SolidHorizontalPolyPolygons( bufferPcbOutlines, zpos + board_thickness/2,
+                                            board_thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
+    }
+
     // draw graphic items, not on copper layers
     for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER;
          layer++ )
@@ -357,10 +471,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         if( !Is3DLayerEnabled( layer ) )
             continue;
 
-        if( !g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) )
-            continue;
-
-        if( layer == EDGE_N )
+        if( layer == EDGE_N && g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SHOW_BOARD_BODY] )
             continue;
 
         bufferPolys.RemoveAllContours();
@@ -442,47 +553,33 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             currLayerPolyset += polyset;
         }
 
-        EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( layer );
+        SetGLTechLayersColor( layer );
         int         thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
         int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
-
-        SetGLColor( color, 0.7 );
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
+
+        if( layer == EDGE_N )
+        {
+            thickness = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_FRONT )
+                        - g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
+            zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK )
+                   + (thickness / 2);
+        }
+        else
+        {
+            // for Draw3D_SolidHorizontalPolyPolygons, zpos it the middle between bottom and top
+            // sides.
+            // However for top layers, zpos should be the bottom layer pos,
+            // and for bottom layers, zpos should be the top layer pos.
+            if( Get3DLayer_Z_Orientation( layer ) > 0 )
+                zpos += thickness/2;
+            else
+                zpos -= thickness/2 ;
+        }
 
         bufferPolys.RemoveAllContours();
         bufferPolys.ImportFrom( currLayerPolyset );
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
-                                            thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
-    }
-
-    // Draw board substrate:
-    if( bufferPcbOutlines.GetCornersCount() )
-    {
-        int copper_thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( LAYER_N_BACK );
-        int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
-        int thickness = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_FRONT )
-                        - g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
-        zpos += (thickness/2) + (copper_thickness/2);
-        thickness -= copper_thickness;
-        EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( EDGE_N );
-        SetGLColor( color, 0.8 );
-        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( LAYER_N_FRONT ) );
-        KI_POLYGON_SET  currLayerPolyset;
-        KI_POLYGON_SET  polysetHoles;
-
-        // Add polygons, without holes
-        bufferPcbOutlines.ExportTo( currLayerPolyset );
-
-        // Build holes list
-        allLayerHoles.ExportTo( polysetHoles );
-
-        // remove holes
-        currLayerPolyset -= polysetHoles;
-
-        bufferPcbOutlines.RemoveAllContours();
-        bufferPcbOutlines.ImportFrom( currLayerPolyset );
-
-        Draw3D_SolidHorizontalPolyPolygons( bufferPcbOutlines, zpos,
                                             thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
     }
 
@@ -706,8 +803,14 @@ void EDA_3D_CANVAS::Draw3DViaHole( SEGVIA* aVia )
     aVia->ReturnLayerPair( &top_layer, &bottom_layer );
 
     // Drawing via hole:
-    EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + aVia->GetShape() );
-    SetGLColor( color );
+    if( g_Parm_3D_Visu.IsRealisticMode() )
+        SetGLCopperColor();
+    else
+    {
+        EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + aVia->GetShape() );
+        SetGLColor( color );
+    }
+
     int         height = g_Parm_3D_Visu.GetLayerZcoordBIU( top_layer ) -
                          g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer ) - thickness;
     int         zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer ) + thickness / 2;
@@ -773,7 +876,11 @@ void EDA_3D_CANVAS::Draw3DPadHole( D_PAD* aPad )
     int             height      = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_FRONT ) -
                                   g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK );
 
-    SetGLColor( DARKGRAY );
+    if( g_Parm_3D_Visu.IsRealisticMode() )
+        SetGLCopperColor();
+    else
+        SetGLColor( DARKGRAY );
+
     int holeZpoz    = g_Parm_3D_Visu.GetLayerZcoordBIU( LAYER_N_BACK ) + thickness / 2;
     int holeHeight  = height - thickness;
 
@@ -815,6 +922,7 @@ void EDA_3D_CANVAS::Draw3DPadHole( D_PAD* aPad )
 bool Is3DLayerEnabled( LAYER_NUM aLayer )
 {
     int flg;
+    bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
 
     // see if layer needs to be shown
     // check the flags
@@ -842,21 +950,37 @@ bool Is3DLayerEnabled( LAYER_NUM aLayer )
 
     case DRAW_N:
     case COMMENT_N:
+        if( realistic_mode )
+            return false;
+
         flg = g_Parm_3D_Visu.FL_COMMENTS;
         break;
 
     case ECO1_N:
     case ECO2_N:
+        if( realistic_mode )
+            return false;
+
         flg = g_Parm_3D_Visu.FL_ECO;
         break;
 
+    case LAYER_N_BACK:
+    case LAYER_N_FRONT:
+        return g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( aLayer )
+               || realistic_mode;
+        break;
+
     default:
-        // the layer was not a layer with a flag, so show it
-        return true;
+        // the layer is an internal copper layer
+        if( realistic_mode )
+            return false;
+
+        return g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( aLayer );
     }
 
     // if the layer has a flag, return the flag
-    return g_Parm_3D_Visu.m_DrawFlags[flg];
+    return g_Parm_3D_Visu.m_DrawFlags[flg] &&
+           g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( aLayer );
 }
 
 

@@ -47,6 +47,7 @@ static const wxString   keySizey( wxT( "Size_y" ) );
 static const wxString   keyBgColor_Red( wxT( "BgColor_Red" ) );
 static const wxString   keyBgColor_Green( wxT( "BgColor_Green" ) );
 static const wxString   keyBgColor_Blue( wxT( "BgColor_Blue" ) );
+static const wxString   keyShowRealisticMode( wxT( "ShowRealisticMode" ) );
 static const wxString   keyShowAxis( wxT( "ShowAxis" ) );
 static const wxString   keyShowZones( wxT( "ShowZones" ) );
 static const wxString   keyShowFootprints( wxT( "ShowFootprints" ) );
@@ -56,6 +57,7 @@ static const wxString   keyShowSilkScreenLayers( wxT( "ShowSilkScreenLayers" ) )
 static const wxString   keyShowSolderMaskLayers( wxT( "ShowSolderMasLayers" ) );
 static const wxString   keyShowSolderPasteLayers( wxT( "ShowSolderPasteLayers" ) );
 static const wxString   keyShowCommentsLayer( wxT( "ShowCommentsLayers" ) );
+static const wxString   keyShowBoardBody( wxT( "ShowBoardBody" ) );
 static const wxString   keyShowEcoLayers( wxT( "ShowEcoLayers" ) );
 
 BEGIN_EVENT_TABLE( EDA_3D_FRAME, wxFrame )
@@ -167,6 +169,8 @@ void EDA_3D_FRAME::GetSettings()
         config->Read( keyBgColor_Green, &g_Parm_3D_Visu.m_BgColor.m_Green, 0.0 );
         config->Read( keyBgColor_Blue, &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
         class INFO3D_VISU& prms = g_Parm_3D_Visu;
+        config->Read( keyShowRealisticMode,
+                      &prms.m_DrawFlags[prms.FL_USE_REALISTIC_MODE], false );
         config->Read( keyShowAxis, &prms.m_DrawFlags[prms.FL_AXIS], true );
         config->Read( keyShowFootprints, &prms.m_DrawFlags[prms.FL_MODULE], true );
         config->Read( keyShowCopperThickness,
@@ -179,6 +183,7 @@ void EDA_3D_FRAME::GetSettings()
         config->Read( keyShowSolderPasteLayers, &prms.m_DrawFlags[prms.FL_SOLDERPASTE], true );
         config->Read( keyShowCommentsLayer, &prms.m_DrawFlags[prms.FL_COMMENTS], true );
         config->Read( keyShowEcoLayers, &prms.m_DrawFlags[prms.FL_ECO], true );
+        config->Read( keyShowBoardBody, &prms.m_DrawFlags[prms.FL_SHOW_BOARD_BODY], true );
     }
 }
 
@@ -195,6 +200,7 @@ void EDA_3D_FRAME::SaveSettings()
     config->Write( keyBgColor_Green, g_Parm_3D_Visu.m_BgColor.m_Green );
     config->Write( keyBgColor_Blue, g_Parm_3D_Visu.m_BgColor.m_Blue );
     class INFO3D_VISU& prms = g_Parm_3D_Visu;
+    config->Write( keyShowRealisticMode, prms.m_DrawFlags[prms.FL_USE_REALISTIC_MODE] );
     config->Write( keyShowAxis, prms.m_DrawFlags[prms.FL_AXIS] );
     config->Write( keyShowFootprints, prms.m_DrawFlags[prms.FL_MODULE] );
     config->Write( keyShowCopperThickness, prms.m_DrawFlags[prms.FL_USE_COPPER_THICKNESS] );
@@ -205,6 +211,7 @@ void EDA_3D_FRAME::SaveSettings()
     config->Write( keyShowSolderPasteLayers, prms.m_DrawFlags[prms.FL_SOLDERPASTE] );
     config->Write( keyShowCommentsLayer, prms.m_DrawFlags[prms.FL_COMMENTS] );
     config->Write( keyShowEcoLayers, prms.m_DrawFlags[prms.FL_ECO] );
+    config->Write( keyShowBoardBody, prms.m_DrawFlags[prms.FL_SHOW_BOARD_BODY] );
 
     if( IsIconized() )
         return;
@@ -353,6 +360,16 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU3D_BGCOLOR_SELECTION:
         Set3DBgColor();
+        return;
+
+    case ID_MENU3D_REALISTIC_MODE:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_REALISTIC_MODE] = isChecked;
+        NewDisplay();
+        return;
+
+    case ID_MENU3D_SHOW_BOARD_BODY:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SHOW_BOARD_BODY] = isChecked;
+        NewDisplay();
         return;
 
     case ID_MENU3D_AXIS_ONOFF:
