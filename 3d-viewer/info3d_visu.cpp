@@ -68,10 +68,10 @@ INFO3D_VISU::INFO3D_VISU()
 
     // default all special item layers Visible
     for( ii = 0; ii < FL_LAST; ii++ )
-        m_DrawFlags[ii] = true;
+        m_drawFlags[ii] = true;
 
-    m_DrawFlags[FL_GRID] = false;
-    m_DrawFlags[FL_USE_COPPER_THICKNESS] = false;
+    SetFlag( FL_GRID, false );
+    SetFlag( FL_USE_COPPER_THICKNESS, false );
 }
 
 
@@ -164,7 +164,7 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
             break;
 
         case SOLDERMASK_N_FRONT:
-            zpos = zpos_copper_front + 2 * zpos_offset;
+            zpos = zpos_copper_front + 1 * zpos_offset;
             break;
 
         case SILKSCREEN_N_BACK:

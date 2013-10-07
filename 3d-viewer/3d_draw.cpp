@@ -168,9 +168,6 @@ static inline void SetGLEpoxyColor( double aTransparency = 1.0 )
 // in realistic mode and normal mode.
 static inline void SetGLTechLayersColor( LAYER_NUM aLayer )
 {
-    // Generates an epoxy color, near board color
-//    const double lum = 0.2/255.0;
-
     if( g_Parm_3D_Visu.IsRealisticMode() )
     {
         switch( aLayer )
@@ -228,15 +225,12 @@ void EDA_3D_CANVAS::BuildBoard3DView()
 
     // Build a polygon from edge cut items
     wxString msg;
-    if( realistic_mode || g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SHOW_BOARD_BODY] )
+    if( ! pcb->GetBoardPolygonOutlines( bufferPcbOutlines,
+                                        allLayerHoles, &msg ) )
     {
-        if( ! pcb->GetBoardPolygonOutlines( bufferPcbOutlines,
-                                            allLayerHoles, &msg ) )
-        {
-            msg << wxT("\n\n") <<
-                _("Unable to calculate the board outlines, will use the outlines boundary box");
-            wxMessageBox( msg );
-        }
+        msg << wxT("\n\n") <<
+            _("Unable to calculate the board outlines, will use the outlines boundary box");
+        wxMessageBox( msg );
     }
 
     CPOLYGONS_LIST  bufferZonesPolys;
@@ -317,7 +311,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
         }
 
         // Draw copper zones
-        if( g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE] )
+        if( g_Parm_3D_Visu.GetFlag( FL_ZONE ) )
         {
             for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
             {
@@ -418,7 +412,8 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     }
 
     // Draw board substrate:
-    if( bufferPcbOutlines.GetCornersCount() )
+    if( bufferPcbOutlines.GetCornersCount() &&
+        ( realistic_mode || g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY ) ) )
     {
         int copper_thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
         // a small offset between substrate and external copper layer to avoid artifacts
@@ -465,13 +460,16 @@ void EDA_3D_CANVAS::BuildBoard3DView()
     }
 
     // draw graphic items, not on copper layers
+    KI_POLYGON_SET  brdpolysetHoles;
+    allLayerHoles.ExportTo( brdpolysetHoles );
+
     for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER;
          layer++ )
     {
         if( !Is3DLayerEnabled( layer ) )
             continue;
 
-        if( layer == EDGE_N && g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SHOW_BOARD_BODY] )
+        if( layer == EDGE_N && g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY )  )
             continue;
 
         bufferPolys.RemoveAllContours();
@@ -547,6 +545,13 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             bufferPolys.ExportTo( polyset );
             currLayerPolyset -= polyset;
         }
+        // Remove holes from Solder paste layers and siklscreen
+        else if( layer == SOLDERPASTE_N_BACK || layer == SOLDERPASTE_N_FRONT
+                 || layer == SILKSCREEN_N_BACK || layer == SILKSCREEN_N_FRONT  )
+        {
+            bufferPolys.ExportTo( currLayerPolyset );
+            currLayerPolyset -= brdpolysetHoles;
+        }
         else    // usuall layers, merge polys built from each item shape:
         {
             bufferPolys.ExportTo( polyset );
@@ -606,7 +611,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
     // draw axis
-    if( g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_AXIS] )
+    if( g_Parm_3D_Visu.GetFlag( FL_AXIS )  )
     {
         glEnable( GL_COLOR_MATERIAL );
         SetGLColor( WHITE );
@@ -638,7 +643,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     BuildBoard3DView();
 
     // Draw grid
-    if( g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] )
+    if( g_Parm_3D_Visu.GetFlag( FL_GRID )  )
         DrawGrid( g_Parm_3D_Visu.m_3D_Grid );
 
     glEndList();
@@ -825,7 +830,7 @@ void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas )
     // Draw module shape: 3D shape if exists (or module outlines if not exists)
     S3D_MASTER* struct3D = m_3D_Drawings;
 
-    if( g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE] )
+    if( g_Parm_3D_Visu.GetFlag( FL_MODULE )  )
     {
         double zpos;
 
@@ -921,7 +926,7 @@ void EDA_3D_CANVAS::Draw3DPadHole( D_PAD* aPad )
 
 bool Is3DLayerEnabled( LAYER_NUM aLayer )
 {
-    int flg;
+    DISPLAY3D_FLG flg;
     bool realistic_mode = g_Parm_3D_Visu.IsRealisticMode();
 
     // see if layer needs to be shown
@@ -930,22 +935,22 @@ bool Is3DLayerEnabled( LAYER_NUM aLayer )
     {
     case ADHESIVE_N_BACK:
     case ADHESIVE_N_FRONT:
-        flg = g_Parm_3D_Visu.FL_ADHESIVE;
+        flg = FL_ADHESIVE;
         break;
 
     case SOLDERPASTE_N_BACK:
     case SOLDERPASTE_N_FRONT:
-        flg = g_Parm_3D_Visu.FL_SOLDERPASTE;
+        flg = FL_SOLDERPASTE;
         break;
 
     case SILKSCREEN_N_BACK:
     case SILKSCREEN_N_FRONT:
-        flg = g_Parm_3D_Visu.FL_SILKSCREEN;
+        flg = FL_SILKSCREEN;
         break;
 
     case SOLDERMASK_N_BACK:
     case SOLDERMASK_N_FRONT:
-        flg = g_Parm_3D_Visu.FL_SOLDERMASK;
+        flg = FL_SOLDERMASK;
         break;
 
     case DRAW_N:
@@ -953,7 +958,7 @@ bool Is3DLayerEnabled( LAYER_NUM aLayer )
         if( realistic_mode )
             return false;
 
-        flg = g_Parm_3D_Visu.FL_COMMENTS;
+        flg = FL_COMMENTS;
         break;
 
     case ECO1_N:
@@ -961,7 +966,7 @@ bool Is3DLayerEnabled( LAYER_NUM aLayer )
         if( realistic_mode )
             return false;
 
-        flg = g_Parm_3D_Visu.FL_ECO;
+        flg = FL_ECO;
         break;
 
     case LAYER_N_BACK:
@@ -979,7 +984,7 @@ bool Is3DLayerEnabled( LAYER_NUM aLayer )
     }
 
     // if the layer has a flag, return the flag
-    return g_Parm_3D_Visu.m_DrawFlags[flg] &&
+    return g_Parm_3D_Visu.GetFlag( flg ) &&
            g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( aLayer );
 }
 
