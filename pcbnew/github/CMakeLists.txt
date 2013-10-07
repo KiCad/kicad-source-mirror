@@ -26,7 +26,7 @@
 #################################################
 include( download_avhttp )
 
-if( MINGW )
+if( MINGW AND NOT OPENSSL_ROOT_DIR )
     # download, compile and install to scratch dir a recent OPENSSL library and headers
     include( download_openssl )
 else()
@@ -63,6 +63,13 @@ target_link_libraries( github_plugin
     ${Boost_LIBRARIES}
     ${OPENSSL_LIBRARIES}
     )
+
+if( MINGW )
+    target_link_libraries( github_plugin
+        ${wxWidgets_LIBRARIES}
+        ws2_32
+        )
+endif()
 
 add_dependencies( github_plugin boost )
 add_dependencies( github_plugin avhttp )
