@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,6 +180,8 @@ void EDA_3D_FRAME::CreateMenuBar()
     gridlistMenu->Append( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5 mm" ), wxEmptyString, true );
     gridlistMenu->Append( ID_MENU3D_GRID_1_MM, _( "3D Grid 1 mm" ), wxEmptyString, true );
 
+    prefsMenu->AppendSeparator();
+
     AddMenuItem( prefsMenu, ID_MENU3D_SHOW_BOARD_BODY,
            _( "Show Board Body" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
 
@@ -191,6 +193,8 @@ void EDA_3D_FRAME::CreateMenuBar()
 
     AddMenuItem( prefsMenu, ID_MENU3D_ZONE_ONOFF,
            _( "Show Zone &Filling" ), KiBitmap( add_zone_xpm ), wxITEM_CHECK );
+
+    prefsMenu->AppendSeparator();
 
     AddMenuItem( prefsMenu, ID_MENU3D_ADHESIVE_ONOFF,
            _( "Show &Adhesive Layers" ), KiBitmap( tools_xpm ), wxITEM_CHECK );
@@ -224,40 +228,40 @@ void EDA_3D_FRAME::SetMenuBarOptionsState()
     wxMenuItem* item;
     // Set the state of toggle menus according to the current display options
     item = menuBar->FindItem( ID_MENU3D_REALISTIC_MODE );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_REALISTIC_MODE]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_USE_REALISTIC_MODE ) );
 
     item = menuBar->FindItem( ID_MENU3D_SHOW_BOARD_BODY );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SHOW_BOARD_BODY]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_SHOW_BOARD_BODY ) );
 
     item = menuBar->FindItem( ID_MENU3D_USE_COPPER_THICKNESS );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_COPPER_THICKNESS]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_USE_COPPER_THICKNESS ) );
 
     item = menuBar->FindItem( ID_MENU3D_MODULE_ONOFF );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_MODULE ) );
 
     item = menuBar->FindItem( ID_MENU3D_ZONE_ONOFF );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_ZONE ) );
 
     item = menuBar->FindItem( ID_MENU3D_AXIS_ONOFF );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_AXIS]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_AXIS ) );
 
     item = menuBar->FindItem( ID_MENU3D_ADHESIVE_ONOFF );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ADHESIVE]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_ADHESIVE ) );
 
     item = menuBar->FindItem( ID_MENU3D_SILKSCREEN_ONOFF );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SILKSCREEN]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_SILKSCREEN ) );
 
     item = menuBar->FindItem( ID_MENU3D_SOLDER_MASK_ONOFF );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERMASK]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_SOLDERMASK ) );
 
     item = menuBar->FindItem( ID_MENU3D_SOLDER_PASTE_ONOFF );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERPASTE]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_SOLDERPASTE ) );
 
     item = menuBar->FindItem( ID_MENU3D_COMMENTS_ONOFF );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_COMMENTS]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_COMMENTS ) );
 
     item = menuBar->FindItem( ID_MENU3D_ECO_ONOFF );
-    item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO]);
+    item->Check(g_Parm_3D_Visu.GetFlag( FL_ECO ));
 }
 
 void EDA_3D_FRAME::SetToolbars()
