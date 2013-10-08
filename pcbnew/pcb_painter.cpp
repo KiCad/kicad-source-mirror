@@ -588,8 +588,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         VECTOR2D deltaPadSize = size - padSize; // = solder[Paste/Mask]Margin or 0
         VECTOR2D delta = VECTOR2D( aPad->GetDelta().x / 2,
                                    aPad->GetDelta().y / 2 );
-        VECTOR2D inflate = VECTOR2D( delta.y * ( deltaPadSize.x / size.x ),
-                                     delta.x * ( deltaPadSize.y / size.y ) );
 
         aPad->BuildPadPolygon( corners, wxSize( deltaPadSize.x, deltaPadSize.y ), 0.0 );
         pointList.push_back( VECTOR2D( corners[0] ) );
