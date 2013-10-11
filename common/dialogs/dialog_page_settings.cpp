@@ -258,12 +258,15 @@ void DIALOG_PAGES_SETTINGS::OnPaperSizeChoice( wxCommandEvent& event )
     {
         m_orientationComboBox->Enable( true );
 
-        if( paperType.Contains( wxT( "A4" ) ) && IsGOST() )
+#if 0
+        // ForcePortrait() does not exist, but could be useful.
+        // so I leave these lines, which could be seen as a todo feature
+        if( paperType.ForcePortrait() )
         {
             m_orientationComboBox->SetStringSelection( _( "Portrait" ) );
             m_orientationComboBox->Enable( false );
         }
-
+#endif
         m_TextUserSizeX->Enable( false );
         m_TextUserSizeY->Enable( false );
         m_customFmt = false;

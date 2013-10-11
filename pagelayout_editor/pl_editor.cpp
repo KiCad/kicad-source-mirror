@@ -122,9 +122,6 @@ bool EDA_APP::OnInit()
     if( !descrLoaded )
     {
         WORKSHEET_LAYOUT::GetTheInstance().SetPageLayout();
-        // Force DefaultDescrFlag to false in page layout editor,
-        // has meaning only for GOST version
-        WORKSHEET_LAYOUT::GetTheInstance().SetDefaultDescrFlag( false );
         frame->OnNewPageLayout();
     }
 

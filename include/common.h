@@ -169,17 +169,6 @@ inline int Mm2mils( double x ) { return KiROUND( x * 1000./25.4 ); }
 inline int Mils2mm( double x ) { return KiROUND( x * 25.4 / 1000. ); }
 
 
-/// Return whether GOST is in play
-inline bool IsGOST()
-{
-#if defined(KICAD_GOST)
-    return true;
-#else
-    return false;
-#endif
-}
-
-
 enum EDA_UNITS_T {
     INCHES = 0,
     MILLIMETRES = 1,

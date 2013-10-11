@@ -96,9 +96,6 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     {
     case ID_LOAD_DEFAULT_PAGE_LAYOUT:
         pglayout.SetPageLayout();
-        // Force DefaultDescrFlag to false in page layout editor,
-        // has meaning only for GOST version
-        pglayout.SetDefaultDescrFlag( false );
         OnNewPageLayout();
         break;
 
@@ -106,9 +103,6 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         pglayout.AllowVoidList( true );
         SetCurrFileName( wxEmptyString );
         pglayout.ClearList();
-        // Force DefaultDescrFlag to false in page layout editor,
-        // has meaning only for GOST version
-        pglayout.SetDefaultDescrFlag( false );
         OnNewPageLayout();
         break;
 

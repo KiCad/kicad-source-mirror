@@ -111,11 +111,6 @@ This option is used to enable or disable building KiCad with images in menu
 items.  If this is not defined when CMake is used to create the build files,
 images will be included in menu items on all platforms except OSX.
 
-KICAD_GOST (ON/OFF)
--------------------
-This option is used to enable or disable the GOST notation for multiple gates
-per package in Eeschema.  The default is  OFF
-
 KICAD_KEEPCASE (ON/OFF)
 -----------------------
 This option enables or disables turning off the  automatic component name
