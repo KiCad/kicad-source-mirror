@@ -51,7 +51,7 @@
  (lib (name SI570_SI571_Oscillator_RevA_11Jun2012)(type Legacy)(uri ${KISYSMOD}/SI570_SI571_Oscillator_RevA_11Jun2012.mod)(options "")(descr ""))
  (lib (name SIP9_Housing_14Jun2013)(type Legacy)(uri ${KISYSMOD}/SIP9_Housing_14Jun2013.mod)(options "")(descr ""))
  (lib (name smd_capacitors)(type Legacy)(uri ${KISYSMOD}/smd_capacitors.mod)(options "")(descr ""))
- (lib (name smd_crystal&oscillator)(type Legacy)(uri ${KISYSMOD}/smd_crystal&oscillator.mod)(options "")(descr ""))
+ (lib (name smd_crystal_and_oscillator)(type Legacy)(uri ${KISYSMOD}/smd_crystal_and_oscillator.mod)(options "")(descr ""))
  (lib (name smd_resistors)(type Legacy)(uri ${KISYSMOD}/smd_resistors.mod)(options "")(descr ""))
  (lib (name smd_soic_packages)(type Legacy)(uri ${KISYSMOD}/smd_soic_packages.mod)(options "")(descr ""))
  (lib (name smd_ssop_packages)(type Legacy)(uri ${KISYSMOD}/smd_ssop_packages.mod)(options "")(descr ""))

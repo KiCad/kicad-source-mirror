@@ -14,10 +14,6 @@ set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 # reports.
 #
 
-# Russian GOST patch
-option( wxUSE_UNICODE "enable/disable building unicode ( default OFF)" )
-option( KICAD_GOST "enable/disable building using GOST notation for multiple gates per package ( default OFF)" )
-
 #for those who bored with uppercase
 option( KICAD_KEEPCASE "turn-off automatic component name conversion to uppercase if selected" )
 
@@ -154,14 +150,6 @@ if( CMAKE_COMPILER_IS_GNUCXX )
     endif()
 
 endif( CMAKE_COMPILER_IS_GNUCXX )
-
-if( wxUSE_UNICODE )
-    add_definitions( -DwxUSE_UNICODE )
-endif()
-
-if( KICAD_GOST )
-    add_definitions( -DKICAD_GOST )
-endif()
 
 if( KICAD_KEEPCASE )
     add_definitions( -DKICAD_KEEPCASE )

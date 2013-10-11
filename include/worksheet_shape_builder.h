@@ -476,10 +476,6 @@ class WORKSHEET_LAYOUT
     double m_rightMargin;   // the right page margin in mm
     double m_topMargin;     // the top page margin in mm
     double m_bottomMargin;  // the bottom page margin in mm
-    bool   m_isDefaultDescr;    // true if the internal default descr is loaded
-                                // mainly used in Kicad GOST version, until
-                                // a GOST page descr file is available
-                                // to force the GOST default title block
 
 public:
     WORKSHEET_LAYOUT();
@@ -496,9 +492,6 @@ public:
     }
 
     // Accessors:
-    bool IsDefaultDescr() { return m_isDefaultDescr; }
-    void SetDefaultDescrFlag( bool aFlg ) { m_isDefaultDescr = aFlg; }
-
     double GetLeftMargin() { return m_leftMargin; }
     double GetRightMargin() { return m_rightMargin; }
     double GetTopMargin() { return m_topMargin; }

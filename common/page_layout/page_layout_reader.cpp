@@ -630,7 +630,6 @@ void WORKSHEET_LAYOUT::SetDefaultLayout()
     try
     {
         lp_parser.Parse( this );
-        SetDefaultDescrFlag( true );
     }
     catch( IO_ERROR ioe )
     {
@@ -652,7 +651,6 @@ void WORKSHEET_LAYOUT::SetPageLayout( const char* aPageLayout, bool Append )
     try
     {
         lp_parser.Parse( this );
-        SetDefaultDescrFlag( true );
     }
     catch( IO_ERROR ioe )
     {
@@ -716,7 +714,6 @@ void WORKSHEET_LAYOUT::SetPageLayout( const wxString& aFullFileName, bool Append
         try
         {
             lp_parser.Parse( this );
-            SetDefaultDescrFlag( false );
         }
         catch( IO_ERROR ioe )
         {

@@ -128,13 +128,17 @@ project is created.
 Installation from source code
 -----------------------------
 
-   Some dependencies must be satisfied for the correct installation of KiCad:
+Some dependencies must be satisfied for the correct installation of KiCad:
 under Linux:
 wxWidgets           >= 2.8.11        http://www.wxwidgets.org/
+(needs to be compiled with unicode support)
 under Windows:MacOSX
-wxWidgets           >= 2.9.3        http://www.wxwidgets.org/
-CMake               >= 2.6.4         http://www.cmake.org/
-Boost C++ Libraries  (files used by kicad are provided in kicad sources) http://www.boost.org/
+wxWidgets           >= 2.9.4        http://www.wxwidgets.org/
+
+CMake               >= 2.8.1         http://www.cmake.org/
+Boost C++ Libraries:
+    files used by kicad are autmatically downloaded and patched if needed
+    from boost site ( http://www.boost.org/ )
 OpenGL
   Linux:   Mesa 3D Graphics Library  http://www.mesa3d.org/
   Windows: built-in
@@ -185,12 +189,6 @@ configured and builded with "--enable-monolithic --disable-shared" parameters.
 -DwxWidgets_USE_STATIC=OFF
 For building dinamically linked executables. Can be used only if wxWidgets
 configured and builded with "--disable-monolithic --enable-shared" parameters.
-
--DwxUSE_UNICODE=ON
-Require on locale utf8 for build the KiCad with cyrillic fonts support.
-
--DKICAD_GOST=ON
-Build the KiCad with russian GOST support.
 
 -DKICAD_KEEPCASE=ON
 Build the KiCad with no component name conversion to uppercase (if you want your
