@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-08 06:19+0100\n"
-"PO-Revision-Date: 2013-10-08 06:21+0100\n"
+"POT-Creation-Date: 2013-10-12 11:36+0100\n"
+"PO-Revision-Date: 2013-10-12 11:36+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -5407,7 +5407,7 @@ msgstr "Szerokość:"
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:52
 #: common/common.cpp:197 common/common.cpp:247 common/drawframe.cpp:445
-#: common/dialogs/dialog_page_settings.cpp:449
+#: common/dialogs/dialog_page_settings.cpp:452
 #: pcb_calculator/UnitSelector.cpp:14
 #: pagelayout_editor/pl_editor_frame.cpp:429
 msgid "mm"
@@ -7322,7 +7322,7 @@ msgstr "Zapisz plik płytki GenCAD"
 
 #: pcbnew/export_gencad.cpp:139 pcbnew/gen_modules_placefile.cpp:225
 #: pcbnew/gen_modules_placefile.cpp:263 pcbnew/gen_modules_placefile.cpp:542
-#: pcbnew/dialogs/dialog_plot.cpp:808 pagelayout_editor/files.cpp:200
+#: pcbnew/dialogs/dialog_plot.cpp:808 pagelayout_editor/files.cpp:194
 #: pagelayout_editor/pl_editor_frame.cpp:223
 #, c-format
 msgid "Unable to create <%s>"
@@ -16065,7 +16065,7 @@ msgstr "Znacznik"
 msgid "\""
 msgstr "\""
 
-#: common/common.cpp:220 common/dialogs/dialog_page_settings.cpp:449
+#: common/common.cpp:220 common/dialogs/dialog_page_settings.cpp:452
 #: pagelayout_editor/pl_editor_frame.cpp:425
 msgid "inches"
 msgstr "cale"
@@ -16358,7 +16358,7 @@ msgid "Hotkey"
 msgstr "Skróty klawiszowe"
 
 #: common/page_layout_reader.cpp:604
-#: common/page_layout/page_layout_reader.cpp:707
+#: common/page_layout/page_layout_reader.cpp:705
 #, c-format
 msgid "The file <%s> was not fully read"
 msgstr "Plik <%s> nie został w pełni odczytany"
@@ -16696,18 +16696,18 @@ msgstr "USLedger 11x17in"
 msgid "User (Custom)"
 msgstr "Użytkownika"
 
-#: common/dialogs/dialog_page_settings.cpp:263
-#: common/dialogs/dialog_page_settings.cpp:694
+#: common/dialogs/dialog_page_settings.cpp:266
+#: common/dialogs/dialog_page_settings.cpp:697
 #: common/dialogs/dialog_page_settings_base.cpp:46
 msgid "Portrait"
 msgstr "Pionowo"
 
-#: common/dialogs/dialog_page_settings.cpp:414
+#: common/dialogs/dialog_page_settings.cpp:417
 #, c-format
 msgid "Page layout description file <%s> not found. Abort"
 msgstr "Plik <%s> z definicją układu strony nie został znaleziony. Przerwano."
 
-#: common/dialogs/dialog_page_settings.cpp:445
+#: common/dialogs/dialog_page_settings.cpp:448
 #, c-format
 msgid ""
 "Selected custom paper size\n"
@@ -16720,20 +16720,20 @@ msgstr ""
 "%.1f - %.1f %s!\n"
 "Chcesz wybrać inny rozmiar papieru?"
 
-#: common/dialogs/dialog_page_settings.cpp:451
+#: common/dialogs/dialog_page_settings.cpp:454
 msgid "Warning!"
 msgstr "Ostrzeżenie!"
 
-#: common/dialogs/dialog_page_settings.cpp:696
+#: common/dialogs/dialog_page_settings.cpp:699
 #: common/dialogs/dialog_page_settings_base.cpp:46
 msgid "Landscape"
 msgstr "Poziomo"
 
-#: common/dialogs/dialog_page_settings.cpp:782
+#: common/dialogs/dialog_page_settings.cpp:785
 msgid "Select Page Layout Descr File"
 msgstr "Wybierz plik definicji układu strony"
 
-#: common/dialogs/dialog_page_settings.cpp:802
+#: common/dialogs/dialog_page_settings.cpp:805
 #, c-format
 msgid ""
 "The page layout descr filename has changed\n"
@@ -18218,40 +18218,40 @@ msgstr ""
 "Bieżący układ strony został zmieniony.\n"
 "Czy chcesz porzucić wykonane zmiany?"
 
-#: pagelayout_editor/files.cpp:60 pagelayout_editor/files.cpp:160
+#: pagelayout_editor/files.cpp:60 pagelayout_editor/files.cpp:154
 #, c-format
 msgid "File <%s> loaded"
 msgstr "Plik <%s> został załadowany"
 
-#: pagelayout_editor/files.cpp:117 pagelayout_editor/onrightclick.cpp:52
+#: pagelayout_editor/files.cpp:111 pagelayout_editor/onrightclick.cpp:52
 msgid "Append Page Layout Descr File"
 msgstr "Dołącz plik definicji układu strony"
 
-#: pagelayout_editor/files.cpp:128 pagelayout_editor/files.cpp:154
+#: pagelayout_editor/files.cpp:122 pagelayout_editor/files.cpp:148
 #, c-format
 msgid "Unable to load %s file"
 msgstr "Nie mogę załadować pliku %s"
 
-#: pagelayout_editor/files.cpp:136
+#: pagelayout_editor/files.cpp:130
 #, c-format
 msgid "File <%s> inserted"
 msgstr "Plik <%s> został wstawiony"
 
-#: pagelayout_editor/files.cpp:144
+#: pagelayout_editor/files.cpp:138
 msgid "Open file"
 msgstr "Otwórz"
 
-#: pagelayout_editor/files.cpp:169
+#: pagelayout_editor/files.cpp:163
 #, c-format
 msgid "Unable to write <%s>"
 msgstr "Nie mogę utworzyć <%s>"
 
-#: pagelayout_editor/files.cpp:174 pagelayout_editor/files.cpp:206
+#: pagelayout_editor/files.cpp:168 pagelayout_editor/files.cpp:200
 #, c-format
 msgid "File <%s> written"
 msgstr "Plik <%s> został zapisany"
 
-#: pagelayout_editor/files.cpp:181 pagelayout_editor/pl_editor_frame.cpp:211
+#: pagelayout_editor/files.cpp:175 pagelayout_editor/pl_editor_frame.cpp:211
 msgid "Create file"
 msgstr "Utwórz plik"
 
