@@ -148,12 +148,22 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
     {
         const FP_LIB_TABLE::ROW* row = aTable.FindRow( libNickNames[ii] );
 
-        wxCHECK2_MSG( row != NULL, continue,
+        wxCHECK2_MSG( row != NULL, retv = false; continue,
                       wxString::Format( wxT( "No library name <%s> found in footprint library "
                                              "table." ), GetChars( libNickNames[ii] ) ) );
         try
         {
-            PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::EnumFromStr( row->GetType() ) ) );
+            PLUGIN* plugin = IO_MGR::PluginFind( IO_MGR::EnumFromStr( row->GetType() ) );
+
+            if( plugin == NULL )
+            {
+                m_filesNotFound << wxString::Format( _( "Cannot find plugin type '%s'." ),
+                                                     GetChars( row->GetType() ) );
+                retv = false;
+                continue;
+            }
+
+            PLUGIN::RELEASER pi( plugin );
 
             wxString      path = FP_LIB_TABLE::ExpandSubstitutions( row->GetFullURI() );
             wxArrayString fpnames = pi->FootprintEnumerate( path );

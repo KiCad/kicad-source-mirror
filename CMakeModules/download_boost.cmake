@@ -93,7 +93,14 @@ if( BUILD_GITHUB_PLUGIN )
     #message( STATUS "REPLACE libs_csv:${boost_libs_list}" )
 
     if( MINGW )
-        set( bootstrap bootstrap.bat mingw )
+        if( MSYS )
+            # The Boost system does not build properly on MSYS using bootstrap.sh.  Running
+            # bootstrap.bat with cmd.exe does.  It's ugly but it works.  At least for Boost
+            # version 1.54.
+            set( bootstrap cmd.exe /c "bootstrap.bat mingw" )
+        else()
+            set( bootstrap ./bootstrap.bat mingw )
+        endif()
 
         foreach( lib ${boost_libs_list} )
             set( b2_libs ${b2_libs} --with-${lib} )
@@ -103,7 +110,7 @@ if( BUILD_GITHUB_PLUGIN )
         string( REGEX REPLACE "\\;" "," libs_csv "${boost_libs_list}" )
         #message( STATUS "libs_csv:${libs_csv}" )
 
-        set( bootstrap bootstrap.sh --with-libraries=${libs_csv} )
+        set( bootstrap ./bootstrap.sh --with-libraries=${libs_csv} )
         # pass to *both* C and C++ compilers
         set( PIC_STUFF "cflags=${PIC_FLAG}" )
         set( BOOST_INCLUDE "${BOOST_ROOT}/include" )
@@ -125,7 +132,7 @@ if( BUILD_GITHUB_PLUGIN )
         UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${BOOST_ROOT}"
 
         BINARY_DIR      "${PREFIX}/src/boost/"
-        CONFIGURE_COMMAND ./${bootstrap}
+        CONFIGURE_COMMAND ${bootstrap}
 
         BUILD_COMMAND   ./b2
                         variant=release

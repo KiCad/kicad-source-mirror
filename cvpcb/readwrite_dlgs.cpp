@@ -271,6 +271,35 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
 
         if( !fn.HasExt() )
             fn.SetExt( ComponentFileExtension );
+
+#if defined( USE_FP_LIB_TABLE )
+        // Save the project specific footprint library table.
+        if( !m_footprintLibTable->IsEmpty( false ) )
+        {
+            wxFileName fpLibFileName = fn;
+            fpLibFileName.ClearExt();
+            fpLibFileName.SetName( FP_LIB_TABLE::GetFileName() );
+
+            if( fpLibFileName.FileExists()
+              && IsOK( this, _( "A footprint library table already exsist in this path.\n\nDo "
+                                "you want to overwrite it?" ) ) )
+            {
+                try
+                {
+                    m_footprintLibTable->Save( fpLibFileName );
+                }
+                catch( IO_ERROR& ioe )
+                {
+                    DisplayError( this,
+                                  wxString::Format( _( "An error occurred attempting to save the "
+                                                       "footpirnt library table <%s>\n\n%s" ),
+                                                    GetChars( fpLibFileName.GetFullPath() ),
+                                                    GetChars( ioe.errorText ) ) );
+                }
+            }
+        }
+#endif
+
     }
 
     if( !IsWritable( fn.GetFullPath() ) )

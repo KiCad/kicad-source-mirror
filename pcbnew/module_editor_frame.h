@@ -150,6 +150,7 @@ public:
     void OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent );
 
     /**
      * Function LoadModuleFromBoard
