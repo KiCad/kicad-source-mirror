@@ -56,4 +56,4 @@ ExternalProject_Add( avhttp
 
 
 set( AVHTTP_INCLUDE_DIR  "${PREFIX}/include" CACHE FILEPATH "AVHTTP include directory" )
-
+mark_as_advanced( AVHTTP_INCLUDE_DIR )

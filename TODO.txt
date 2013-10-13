@@ -151,11 +151,5 @@ Dick's Final TODO List:
 *) Get licensing cleaned up.
 *) Re-arrange the repo architecture.
 *) Merge KiCad GAL/TOM/ORSON if nobody else does.
-*) lib_convert.py (i.e. convert) all footprint libraries to pretty format and move copy them to
-   github if nobody else does.
-*) DLL-ization of pcbnew eeschema
-*) Pass options, i.e. PROPERTIES to all PLUGIN::Footprint*() calls.  Current code needs
-   to be based on NickNames, not Libpaths, so we have access to the FP_LIB_TABLE::ROWs.
-   User should not be prompted for a libpath for reading from it, he/she must pick from the
-   known list of nicknames. Possibly duplicate some of the PLUGIN:::Footprint*() api in ROW or
-   FP_LIB_TABLE. Again, limited to PLUGIN::Footprint*() calls, not Load() and Save().
+*) DLL-ization of pcbnew & eeschema
+   http://www.eevblog.com/forum/open-source-kicad-geda/seriously-irritated-with-the-library-editor!/

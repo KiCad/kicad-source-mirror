@@ -38,6 +38,7 @@
 #include <fpid.h>
 #include <fp_lib_table_lexer.h>
 #include <fp_lib_table.h>
+#include <class_module.h>
 
 using namespace FP_LIB_TABLE_T;
 
@@ -97,7 +98,23 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
 {
     const ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
-    return row->plugin->FootprintLoad( row->GetFullURI( true ), aFootprintName, row->GetProperties() );
+
+    MODULE* ret = row->plugin->FootprintLoad( row->GetFullURI( true ), aFootprintName, row->GetProperties() );
+
+    // The library cannot know its own name, because it might have been renamed or moved.
+    // Therefore footprints cannot know their own library nickname when residing in
+    // a footprint library.
+    // Only at this API layer can we tell the footprint about its actual library nickname.
+    if( ret )
+    {
+        // remove "const"-ness, I really do want to set nickname without
+        // having to copy the FPID and its two strings, twice each.
+        FPID& fpid = (FPID&) ret->GetFPID();
+
+        fpid.SetLibNickname( row->GetNickName() );
+    }
+
+    return ret;
 }
 
 
@@ -296,58 +313,60 @@ void FP_LIB_TABLE::Save( const wxFileName& aPath ) const throw( IO_ERROR )
 
 PROPERTIES* FP_LIB_TABLE::ParseOptions( const std::string& aOptionsList )
 {
-    const char* cp  = &aOptionsList[0];
-    const char* end = cp + aOptionsList.size();
-
-    PROPERTIES  props;
-    std::string pair;
-
-    // Parse all name=value pairs
-    while( cp < end )
+    if( aOptionsList.size() )
     {
-        pair.clear();
+        const char* cp  = &aOptionsList[0];
+        const char* end = cp + aOptionsList.size();
 
-        // Skip leading white space.
-        while( cp < end && isspace( *cp )  )
-            ++cp;
+        PROPERTIES  props;
+        std::string pair;
 
-        // Find the end of pair/field
+        // Parse all name=value pairs
         while( cp < end )
         {
-            if( *cp=='\\'  &&  cp+1<end  &&  cp[1]==OPT_SEP  )
+            pair.clear();
+
+            // Skip leading white space.
+            while( cp < end && isspace( *cp )  )
+                ++cp;
+
+            // Find the end of pair/field
+            while( cp < end )
             {
-                ++cp;           // skip the escape
-                pair += *cp++;  // add the separator
+                if( *cp=='\\'  &&  cp+1<end  &&  cp[1]==OPT_SEP  )
+                {
+                    ++cp;           // skip the escape
+                    pair += *cp++;  // add the separator
+                }
+                else if( *cp==OPT_SEP )
+                {
+                    ++cp;           // skip the separator
+                    break;          // process the pair
+                }
+                else
+                    pair += *cp++;
             }
-            else if( *cp==OPT_SEP )
+
+            // stash the pair
+            if( pair.size() )
             {
-                ++cp;           // skip the separator
-                break;          // process the pair
+                // first equals sign separates 'name' and 'value'.
+                size_t  eqNdx = pair.find( '=' );
+                if( eqNdx != pair.npos )
+                {
+                    std::string name  = pair.substr( 0, eqNdx );
+                    std::string value = pair.substr( eqNdx + 1 );
+                    props[name] = value;
+                }
+                else
+                    props[pair] = "";       // property is present, but with no value.
             }
-            else
-                pair += *cp++;
         }
 
-        // stash the pair
-        if( pair.size() )
-        {
-            // first equals sign separates 'name' and 'value'.
-            size_t  eqNdx = pair.find( '=' );
-            if( eqNdx != pair.npos )
-            {
-                std::string name  = pair.substr( 0, eqNdx );
-                std::string value = pair.substr( eqNdx + 1 );
-                props[name] = value;
-            }
-            else
-                props[pair] = "";       // property is present, but with no value.
-        }
+        if( props.size() )
+            return new PROPERTIES( props );
     }
-
-    if( props.size() )
-        return new PROPERTIES( props );     // the far less probable case
-    else
-        return NULL;
+    return NULL;
 }
 
 
@@ -487,23 +506,20 @@ bool FP_LIB_TABLE::InsertRow( const ROW& aRow, bool doReplace )
 }
 
 
-const FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aLibraryNickName )
+const FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
     throw( IO_ERROR )
 {
-    ROW* row = findRow( aLibraryNickName );
+    ROW* row = findRow( aNickname );
 
     if( !row )
     {
         wxString msg = wxString::Format( _( "lib table contains no logical lib '%s'" ),
-                                         GetChars( aLibraryNickName ) );
+                                         GetChars( aNickname ) );
         THROW_IO_ERROR( msg );
     }
 
-#if 0   // enable this as soon as FP_LIB_TABLE::FindRow() is not being used outside
-        // this class, and FP_LIB_TABLE::Footprint*() functions are put into use.
     if( !row->plugin )
         row->setPlugin( IO_MGR::PluginFind( row->type ) );
-#endif
 
     return row;
 }

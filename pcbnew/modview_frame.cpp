@@ -393,23 +393,14 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
     wxArrayString  libsList;
 
 #if !defined( USE_FP_LIB_TABLE )
+
     libsList.Add( m_libraryName );
     libLoaded = fp_info_list.ReadFootprintFiles( libsList );
+
 #else
-    const FP_LIB_TABLE::ROW* row = m_footprintLibTable->FindRow( m_libraryName );
 
-    if( row == NULL )
-    {
-        wxString msg;
-        msg.Format( _( "Footprint library table entry <%s> not found." ),
-                    GetChars( m_libraryName ) );
-        DisplayError( this, msg );
-        return;
-    }
+    libLoaded = fp_info_list.ReadFootprintFiles( m_footprintLibTable, &m_libraryName );
 
-    FP_LIB_TABLE tmp;
-    tmp.InsertRow( *row );
-    libLoaded = fp_info_list.ReadFootprintFiles( tmp );
 #endif
 
     if( !libLoaded )

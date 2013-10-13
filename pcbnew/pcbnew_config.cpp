@@ -54,6 +54,7 @@
 #include <module_editor_frame.h>
 #include <modview_frame.h>
 
+#include <invoke_pcb_dialog.h>
 #include <dialog_mask_clearance.h>
 #include <dialog_general_options.h>
 #include <wildcards_and_files_ext.h>

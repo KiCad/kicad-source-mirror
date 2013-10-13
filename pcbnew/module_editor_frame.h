@@ -434,7 +434,6 @@ protected:
 
     // @todo these will eventually have to be made instance variables.
     static wxString m_lib_nick_name;
-    static wxString m_lib_path;
 
     /// The library nickName is a short string, for now the same as the library path
     /// but without path and without extension.  After library table support it becomes
@@ -442,9 +441,18 @@ protected:
     wxString getLibNickName() const                     { return m_lib_nick_name; }
     void setLibNickName( const wxString& aLibNickName ) { m_lib_nick_name = aLibNickName; }
 
+    static wxString m_lib_path;
+
+#if !defined(USE_FP_LIB_TABLE)
+    void setLibPath( const wxString& aLibPath )         { m_lib_path = aLibPath; }
+
     /// The libPath is the full string used in the PLUGIN::Footprint*() calls.
     wxString getLibPath() const                         { return m_lib_path; }
-    void setLibPath( const wxString& aLibPath )         { m_lib_path = aLibPath;  }
+
+#else
+    /// The libPath is not publicly visible, grab it from the FP_LIB_TABLE if we must.
+    wxString getLibPath();
+#endif
 };
 
 #endif      // MODULE_EDITOR_FRAME_H_

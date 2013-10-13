@@ -57,24 +57,25 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onKeyDown( wxKeyEvent& event ) { event.Skip(); }
-		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) { event.Skip(); }
-		virtual void onGridCellLeftClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void onGridCellLeftDClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void onGridCellRightClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void onGridCmdSelectCell( wxGridEvent& event ) { event.Skip(); }
-		virtual void appendRowHandler( wxMouseEvent& event ) { event.Skip(); }
-		virtual void deleteRowHandler( wxMouseEvent& event ) { event.Skip(); }
-		virtual void moveUpHandler( wxMouseEvent& event ) { event.Skip(); }
-		virtual void moveDownHandler( wxMouseEvent& event ) { event.Skip(); }
-		virtual void optionsEditor( wxMouseEvent& event ) { event.Skip(); }
-		virtual void onCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCancelButtonClick( wxCloseEvent& event ) = 0;
+		virtual void onKeyDown( wxKeyEvent& event ) = 0;
+		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) = 0;
+		virtual void onGridCellLeftClick( wxGridEvent& event ) = 0;
+		virtual void onGridCellLeftDClick( wxGridEvent& event ) = 0;
+		virtual void onGridCellRightClick( wxGridEvent& event ) = 0;
+		virtual void onGridCmdSelectCell( wxGridEvent& event ) = 0;
+		virtual void appendRowHandler( wxMouseEvent& event ) = 0;
+		virtual void deleteRowHandler( wxMouseEvent& event ) = 0;
+		virtual void moveUpHandler( wxMouseEvent& event ) = 0;
+		virtual void moveDownHandler( wxMouseEvent& event ) = 0;
+		virtual void optionsEditor( wxMouseEvent& event ) = 0;
+		virtual void onCancelButtonClick( wxCommandEvent& event ) = 0;
+		virtual void onOKButtonClick( wxCommandEvent& event ) = 0;
 		
 	
 	public:
 		
-		DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Library Tables"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 900,600 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Library Tables"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 900,600 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER ); 
 		~DIALOG_FP_LIB_TABLE_BASE();
 	
 };

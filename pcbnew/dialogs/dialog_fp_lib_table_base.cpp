@@ -190,6 +190,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FP_LIB_TABLE_BASE::onCancelButtonClick ) );
 	this->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ) );
 	m_auinotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_FP_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
 	m_global_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellLeftClick ), NULL, this );
@@ -214,6 +215,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 DIALOG_FP_LIB_TABLE_BASE::~DIALOG_FP_LIB_TABLE_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FP_LIB_TABLE_BASE::onCancelButtonClick ) );
 	this->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ) );
 	m_auinotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_FP_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
 	m_global_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FP_LIB_TABLE_BASE::onGridCellLeftClick ), NULL, this );

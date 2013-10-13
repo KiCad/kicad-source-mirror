@@ -58,6 +58,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_find.cpp
     dialogs/dialog_fp_lib_table_base.cpp
     dialogs/dialog_fp_lib_table.cpp
+    dialogs/dialog_fp_plugin_options_base.cpp
+    dialogs/dialog_fp_plugin_options.cpp
     dialogs/dialog_freeroute_exchange.cpp
     dialogs/dialog_freeroute_exchange_base.cpp
     dialogs/dialog_gendrill.cpp

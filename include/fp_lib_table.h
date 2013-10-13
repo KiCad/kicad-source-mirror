@@ -149,7 +149,7 @@ public:
             properties   = r.properties ? new PROPERTIES( *r.properties ) : NULL;
 
             // do not copy the PLUGIN, it is lazily created.
-            // setPlugin( NULL );
+            setPlugin( NULL );
 
             return *this;
         }

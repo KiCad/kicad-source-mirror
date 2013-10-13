@@ -184,6 +184,11 @@ bool EDA_APP::OnInit()
      * display the real hotkeys in menus or tool tips */
     ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
 
+#if defined( USE_FP_LIB_TABLE )
+    // Set any environment variables before loading FP_LIB_TABLE
+    SetFootprintLibTablePath();
+#endif
+
     frame = new PCB_EDIT_FRAME( NULL, wxT( "Pcbnew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 
     #ifdef KICAD_SCRIPTING
@@ -205,10 +210,6 @@ bool EDA_APP::OnInit()
     // Load config and default values before loading a board file
     // Some will be overwritten after loading the board file
     frame->LoadProjectSettings( fn.GetFullPath() );
-
-#if defined( USE_FP_LIB_TABLE )
-    SetFootprintLibTablePath();
-#endif
 
     /* Load file specified in the command line. */
     if( fn.IsOk() )

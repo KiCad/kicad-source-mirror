@@ -73,7 +73,3 @@ endif()
 
 add_dependencies( github_plugin boost )
 add_dependencies( github_plugin avhttp )
-
-
-#target_link_libraries( github_plugin ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES})
-

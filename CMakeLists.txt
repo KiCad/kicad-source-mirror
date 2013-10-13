@@ -49,16 +49,10 @@ option( KICAD_SCRIPTING_WXPYTHON
 
 option( USE_FP_LIB_TABLE "Use the new footprint library table implementation. ( default OFF)" )
 
-# BUILD_GITHUB_PLUGIN for MINGW is pretty demanding due to download_openssl.cmake and openssl's
-# use of perl to drive its configure step.  You might find it works in a cross builder say on linux.
-# Dick is not personally supporting Windows any more with this exotic stuff.  Some other windows
-# developer will have to smooth out the build issues.  So enable this for MINGW without my help but
-# with my best wishes.
 option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
 
 
-#Set version option (stable or testing)
-
+# Set version option (stable or testing)
 if( KICAD_STABLE_VERSION)
     add_definitions( -DKICAD_STABLE_VERSION )
     message( STATUS "Building stable version of KiCad" )
