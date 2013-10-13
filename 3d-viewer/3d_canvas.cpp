@@ -489,24 +489,24 @@ void EDA_3D_CANVAS::InitGL()
         m_ZTop = 10.0;
 
         glDisable( GL_CULL_FACE );      // show back faces
-
         glEnable( GL_DEPTH_TEST );      // Enable z-buferring
-
+        glEnable( GL_ALPHA_TEST );
         glEnable( GL_LINE_SMOOTH );
+        glEnable(GL_POLYGON_SMOOTH);
         glEnable( GL_COLOR_MATERIAL );
         glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
-        /* speedups */
+        // speedups
         glEnable( GL_DITHER );
-        glShadeModel( GL_SMOOTH );
         glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_DONT_CARE );
         glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
-        glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );    // can be GL_FASTEST
+        glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
 
-        /* blend */
+        // Initialize alpha blending function.
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    }
+        glShadeModel( GL_FLAT );
+}
 
     // set viewing projection
 
