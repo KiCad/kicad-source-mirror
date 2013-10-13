@@ -229,7 +229,8 @@ void EDA_3D_CANVAS::BuildBoard3DView()
                                         allLayerHoles, &msg ) )
     {
         msg << wxT("\n\n") <<
-            _("Unable to calculate the board outlines, will use the outlines boundary box");
+            _("Unable to calculate the board outlines.\n"
+              "Therefore use the board boundary box.");
         wxMessageBox( msg );
     }
 

@@ -882,6 +882,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 {
     TYPE_COLLECTOR  items;
     unsigned        prox;       // a proximity BIU metric, not an accurate distance
+    const int   STEPS = 36;     // for a segmentation of an arc of 360 degrees
 
     // Get all the DRAWSEGMENTS and module graphics into 'items',
     // then keep only those on layer == EDGE_N.
@@ -945,17 +946,19 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                 // an arc with a series of short lines and put those
                 // line segments into the !same! PATH.
                 {
-                    const int   STEPS = 9;     // in an arc of 90 degrees
-
                     wxPoint     start   = graphic->GetArcStart();
                     wxPoint     center  = graphic->GetCenter();
                     double      angle   = -graphic->GetAngle();
+                    int         steps   = STEPS * fabs(angle) /3600.0;
+
+                    if( steps == 0 )
+                        steps = 1;
 
                     wxPoint     pt;
 
-                    for( int step = 1; step<=STEPS; ++step )
+                    for( int step = 1; step<=steps; ++step )
                     {
-                        double rotation = ( angle * step ) / STEPS;
+                        double rotation = ( angle * step ) / steps;
 
                         pt = start;
 
@@ -1053,12 +1056,14 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                     // an arc with a series of short lines and put those
                     // line segments into the !same! PATH.
                     {
-                        const int STEPS =  9;      // in an arc of 90 degrees
-
                         wxPoint start  = graphic->GetArcStart();
                         wxPoint end    = graphic->GetArcEnd();
                         wxPoint center = graphic->GetCenter();
                         double  angle  = -graphic->GetAngle();
+                        int     steps  = STEPS * fabs(angle) /3600.0;
+
+                        if( steps == 0 )
+                            steps = 1;
 
                         if( !close_enough( prevPt, start, prox ) )
                         {
@@ -1070,9 +1075,9 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 
                         wxPoint nextPt;
 
-                        for( int step = 1; step<=STEPS; ++step )
+                        for( int step = 1; step<=steps; ++step )
                         {
-                            double rotation = ( angle * step ) / STEPS;
+                            double rotation = ( angle * step ) / steps;
 
                             nextPt = start;
 
@@ -1169,12 +1174,14 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                         // an arc with a series of short lines and put those
                         // line segments into the !same! PATH.
                         {
-                            const int   STEPS = 9;     // in an arc of 90 degrees
-
                             wxPoint     start   = graphic->GetArcStart();
                             wxPoint     end     = graphic->GetArcEnd();
                             wxPoint     center  = graphic->GetCenter();
                             double      angle   = -graphic->GetAngle();
+                            int         steps   = STEPS * fabs(angle) /3600.0;
+
+                            if( steps == 0 )
+                                steps = 1;
 
                             if( !close_enough( prevPt, start, prox ) )
                             {
@@ -1186,9 +1193,9 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 
                             wxPoint nextPt;
 
-                            for( int step = 1; step<=STEPS; ++step )
+                            for( int step = 1; step<=steps; ++step )
                             {
-                                double rotation = ( angle * step ) / STEPS;
+                                double rotation = ( angle * step ) / steps;
 
                                 nextPt = start;
 
@@ -1300,7 +1307,7 @@ bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
             KEEPOUT& keepout = *i;
             PATH* poly_hole = (PATH*)keepout.shape;
             POINTS& plist = poly_hole->GetPoints();
-            for( unsigned ii = 0; ii < plist.size(); ii+=2 )
+            for( unsigned ii = 0; ii < plist.size(); ii++ )
             {
                 corner.x = plist[ii].x * specctra2UIfactor;
                 corner.y =  - plist[ii].y * specctra2UIfactor;
