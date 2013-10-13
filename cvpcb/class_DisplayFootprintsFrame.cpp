@@ -490,42 +490,13 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
             return NULL;
         }
 
-        wxString libName = FROM_UTF8( fpid.GetLibNickname().c_str() );
+        std::string nickname = fpid.GetLibNickname();
+        std::string fpname   = fpid.GetFootprintName();
 
         wxLogDebug( wxT( "Load footprint <%s> from library <%s>." ),
-                    fpid.GetFootprintName().c_str(), fpid.GetLibNickname().c_str()  );
+                    fpname.c_str(), nickname.c_str()  );
 
-        const FP_LIB_TABLE::ROW* row;
-
-        try
-        {
-            row = m_footprintLibTable->FindRow( libName );
-
-            if( row == NULL )
-            {
-                wxString msg;
-                msg.Printf( _( "No library named <%s> was found in the footprint library table." ),
-                            fpid.GetLibNickname().c_str() );
-                DisplayInfoMessage( this, msg );
-                return NULL;
-            }
-        }
-        catch( IO_ERROR ioe )
-        {
-            DisplayError( this, ioe.errorText );
-        }
-
-        wxString footprintName = FROM_UTF8( fpid.GetFootprintName().c_str() );
-        wxString libPath = row->GetFullURI();
-
-        libPath = FP_LIB_TABLE::ExpandSubstitutions( libPath );
-
-        wxLogDebug( wxT( "Loading footprint <%s> from library <%s>." ),
-                    GetChars( footprintName ), GetChars( libPath ) );
-
-        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::EnumFromStr( row->GetType() ) ) );
-
-        footprint = pi->FootprintLoad( libPath, footprintName );
+        footprint = m_footprintLibTable->FootprintLoad( FROM_UTF8( nickname.c_str() ), FROM_UTF8( fpname.c_str() ) );
 #else
         CVPCB_MAINFRAME* parent = ( CVPCB_MAINFRAME* ) GetParent();
 

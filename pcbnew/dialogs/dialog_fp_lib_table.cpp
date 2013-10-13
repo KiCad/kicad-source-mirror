@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -27,22 +26,23 @@
 /*  TODO:
 
 *)  Grab text from any pending ChoiceEditor when OK button pressed.
-
-*)  Test wxRE_ADVANCED on Windows.
+*)  After any change to uri, reparse the environment variables.
 
 */
 
 
-#include <fctsys.h>
-#include <dialog_fp_lib_table_base.h>
-#include <fp_lib_table.h>
-#include <fp_lib_table_lexer.h>
 #include <wx/grid.h>
 #include <wx/clipbrd.h>
 #include <wx/tokenzr.h>
 #include <wx/arrstr.h>
 #include <wx/regex.h>
 #include <set>
+
+#include <fctsys.h>
+#include <dialog_fp_lib_table_base.h>
+#include <fp_lib_table.h>
+#include <fp_lib_table_lexer.h>
+#include <invoke_pcb_dialog.h>
 
 
 /// grid column order is established by this sequence
@@ -411,6 +411,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
                     }
 
                     // go to the problematic row
+                    m_cur_grid->SetGridCursor( r, 0 );
                     m_cur_grid->SelectBlock( r, 0, r, 0 );
                     m_cur_grid->MakeCellVisible( r, 0 );
 
@@ -455,6 +456,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
                         }
 
                         // go to the lower of the two rows, it is technically the duplicate:
+                        m_cur_grid->SetGridCursor( r2, 0 );
                         m_cur_grid->SelectBlock( r2, 0, r2, 0 );
                         m_cur_grid->MakeCellVisible( r2, 0 );
 
@@ -508,15 +510,20 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
         {
             int last_row = m_cur_grid->GetNumberRows() - 1;
 
-            m_cur_grid->SelectBlock( last_row, 0, last_row, 0 );
             m_cur_grid->MakeCellVisible( last_row, 0 );
+            m_cur_grid->SetGridCursor( last_row, 0 );
         }
     }
 
     void deleteRowHandler( wxMouseEvent& event )
     {
-        int curRow = getCursorRow();
+        int rowCount = m_cur_grid->GetNumberRows();
+        int curRow   = getCursorRow();
+
         m_cur_grid->DeleteRows( curRow );
+
+        if( curRow && curRow == rowCount - 1 )
+            m_cur_grid->SetGridCursor( curRow-1, getCursorCol() );
     }
 
     void moveUpHandler( wxMouseEvent& event )
@@ -582,11 +589,26 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
     void optionsEditor( wxMouseEvent& event )
     {
-        // @todo: write the options editor, and pass the options to the Footprint*() calls.
-        //D(printf("%s:%d\n", __func__, (int) m_cur_grid->GetNumberRows() );)
+        FP_TBL_MODEL*   tbl = (FP_TBL_MODEL*) m_cur_grid->GetTable();
+
+        int     curRow = getCursorRow();
+        ROW&    row    = tbl->rows[curRow];
+
+        wxString        result;
+        const wxString& options = row.GetOptions();
+
+        InvokePluginOptionsEditor( this, row.GetNickName(), options, &result );
+
+        if( options != result )
+            row.SetOptions( result );
     }
 
     void onCancelButtonClick( wxCommandEvent& event )
+    {
+        EndModal( 0 );
+    }
+
+    void onCancelButtonClick( wxCloseEvent& event )
     {
         EndModal( 0 );
     }
@@ -615,6 +637,11 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
             EndModal( dialogRet );
         }
+    }
+
+    void onGridCmdSelectCell( wxGridEvent& event )
+    {
+        event.Skip();
     }
 
     void onGridCellLeftClick( wxGridEvent& event )
@@ -710,7 +737,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
     wxGrid*             m_cur_grid;     ///< changed based on tab choice
 
 public:
-    DIALOG_FP_LIB_TABLE( wxFrame* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject ) :
+    DIALOG_FP_LIB_TABLE( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject ) :
         DIALOG_FP_LIB_TABLE_BASE( aParent ),
         m_global( aGlobal ),
         m_project( aProject ),
@@ -900,7 +927,7 @@ void DIALOG_FP_LIB_TABLE::paste()
 }
 
 
-int InvokePcbLibTableEditor( wxFrame* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject )
+int InvokePcbLibTableEditor( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject )
 {
     DIALOG_FP_LIB_TABLE dlg( aParent, aGlobal, aProject );
 

@@ -42,6 +42,8 @@ if( BUILD_GITHUB_PLUGIN )
     # Chosen libraries are based on AVHTTP requirements, and possibly
     # unit_test_framework for its own worth.
     set( BOOST_LIBS_BUILT
+        context
+        #coroutine
         date_time
         #exception
         filesystem
@@ -172,13 +174,16 @@ if( BUILD_GITHUB_PLUGIN )
 
     set( boost_libs "" )
     set_boost_lib_names( "${BOOST_LIBS_BUILT}" boost_libs )
-    #message( STATUS "BOOST_ROOT:${BOOST_ROOT}  boost_libs:${boost_libs}" )
+
     set( Boost_LIBRARIES    ${boost_libs}      CACHE FILEPATH "Boost libraries directory" )
     set( Boost_INCLUDE_DIR  "${BOOST_INCLUDE}" CACHE FILEPATH "Boost include directory" )
+
+    mark_as_advanced( Boost_LIBRARIES Boost_INCLUDE_DIR )
+
+    #message( STATUS "BOOST_ROOT:${BOOST_ROOT}  BOOST_LIBRARIES:${BOOST_LIBRARIES}" )
     #message( STATUS "Boost_INCLUDE_DIR: ${Boost_INCLUDE_DIR}" )
 
 else( BUILD_GITHUB_PLUGIN )
-
 
     ExternalProject_Add( boost
         PREFIX          "${PREFIX}"

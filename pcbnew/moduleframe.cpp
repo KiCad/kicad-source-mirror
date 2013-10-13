@@ -256,6 +256,20 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
     m_Pcb = 0;
 }
 
+#if defined(USE_FP_LIB_TABLE)
+wxString FOOTPRINT_EDIT_FRAME::getLibPath()
+{
+    try
+    {
+        const FP_LIB_TABLE::ROW* row = GetFootprintLibraryTable()->FindRow( m_lib_nick_name );
+        return row->GetFullURI( true );
+    }
+    catch( IO_ERROR ioe )
+    {
+        return wxEmptyString;
+    }
+}
+#endif
 
 const wxChar* FOOTPRINT_EDIT_FRAME::GetFootprintEditorFrameName()
 {
