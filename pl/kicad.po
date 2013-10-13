@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-12 11:36+0100\n"
-"PO-Revision-Date: 2013-10-12 11:36+0100\n"
+"POT-Creation-Date: 2013-10-13 21:06+0100\n"
+"PO-Revision-Date: 2013-10-13 21:11+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -157,7 +157,7 @@ msgstr ""
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1024 pcbnew/moduleframe.cpp:602
+#: eeschema/schframe.cpp:1024 pcbnew/moduleframe.cpp:613
 #: pcbnew/pcbframe.cpp:848 cvpcb/cvframe.cpp:792
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
@@ -816,7 +816,7 @@ msgstr "Nie znaleziono plików"
 msgid "The following libraries could not be found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
-#: eeschema/eeschema.cpp:108 eeschema/files-io.cpp:289 pcbnew/files.cpp:252
+#: eeschema/eeschema.cpp:108 eeschema/files-io.cpp:289 pcbnew/files.cpp:277
 #: pcbnew/pcbnew.cpp:163
 msgid "This file is already open."
 msgstr "Ten plik jest już otwarty."
@@ -826,12 +826,12 @@ msgid "Eeschema is already running, Continue?"
 msgstr "Eeschema jest już uruchomiony. Kontynuować?"
 
 #: eeschema/eeschema_config.cpp:151 eeschema/eeschema_config.cpp:219
-#: pcbnew/pcbnew_config.cpp:137
+#: pcbnew/pcbnew_config.cpp:156
 msgid "Read Project File"
 msgstr "Odczytaj plik projektu"
 
-#: eeschema/eeschema_config.cpp:465 pcbnew/pcbnew_config.cpp:263
-#: cvpcb/cfg.cpp:117
+#: eeschema/eeschema_config.cpp:465 pcbnew/pcbnew_config.cpp:299
+#: cvpcb/cfg.cpp:126
 msgid "Save Project File"
 msgstr "Zapisz plik projektu"
 
@@ -997,7 +997,7 @@ msgstr "Nie mogę zapisać kopii pliku <%s>"
 msgid "Failed to create file <%s>"
 msgstr "Błąd przy tworzeniu pliku <%s>"
 
-#: eeschema/files-io.cpp:143 cvpcb/readwrite_dlgs.cpp:286
+#: eeschema/files-io.cpp:143 cvpcb/readwrite_dlgs.cpp:315
 #, c-format
 msgid "File %s saved"
 msgstr "Plik %s został zapisany"
@@ -7328,22 +7328,22 @@ msgstr "Zapisz plik płytki GenCAD"
 msgid "Unable to create <%s>"
 msgstr "Nie mogę utworzyć <%s>"
 
-#: pcbnew/files.cpp:64
+#: pcbnew/files.cpp:68
 msgid "Printed circuit board"
 msgstr "Wydrukuj obwód drukowany"
 
-#: pcbnew/files.cpp:111
+#: pcbnew/files.cpp:115
 #, c-format
 msgid "Recovery file <%s> not found."
 msgstr "Plik odtworzeniowy <%s> nie został znaleziony."
 
-#: pcbnew/files.cpp:117
+#: pcbnew/files.cpp:121
 #, c-format
 msgid "OK to load recovery or backup file <%s>"
 msgstr ""
 "Nacisnij OK by załadować dane odtworzeniowe lub plik kopii zapasowej <%s>"
 
-#: pcbnew/files.cpp:168
+#: pcbnew/files.cpp:193
 msgid ""
 "The current board has been modified.\n"
 "Do you wish to discard the changes?"
@@ -7351,11 +7351,11 @@ msgstr ""
 "Bieżąca płytka została zmieniona.\n"
 "Czy chcesz porzucić wykonane zmiany?"
 
-#: pcbnew/files.cpp:221 pcbnew/files.cpp:328
+#: pcbnew/files.cpp:246 pcbnew/files.cpp:353
 msgid "Open Board File"
 msgstr "Otwórz plik PCB"
 
-#: pcbnew/files.cpp:317
+#: pcbnew/files.cpp:342
 msgid ""
 "This file was created by an older version of Pcbnew.\n"
 "It will be stored in the new file format when you save this file again."
@@ -7363,7 +7363,7 @@ msgstr ""
 "Ten plik został stworzony w starszej wersji Pcbnew.\n"
 " Plik zostanie zachowany w nowym formacie, gdy ponownie zostanie zapisany."
 
-#: pcbnew/files.cpp:326
+#: pcbnew/files.cpp:351
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -7372,19 +7372,51 @@ msgstr ""
 "Błąd podczas odczytywania PCB.\n"
 "%s"
 
-#: pcbnew/files.cpp:467 cvpcb/readwrite_dlgs.cpp:265
+#: pcbnew/files.cpp:494 cvpcb/readwrite_dlgs.cpp:265
 msgid "Unnamed file"
 msgstr "Plik bez nazwy"
 
-#: pcbnew/files.cpp:474
+#: pcbnew/files.cpp:501
 msgid "Save Board File As"
 msgstr "Zapisz plik PCB jako"
 
-#: pcbnew/files.cpp:531
+#: pcbnew/files.cpp:528
+#, c-format
+msgid ""
+"The file <%s> already exists.\n"
+"\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Plik <%s> już istnieje.\n"
+"\n"
+"Czy chcesz go zastąpić?"
+
+#: pcbnew/files.cpp:542 cvpcb/readwrite_dlgs.cpp:284
+msgid ""
+"A footprint library table already exsist in this path.\n"
+"\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Tablica bibliotek footprintów już istnieje pod podaną ścieżka.\n"
+"\n"
+"Czy chcesz ją zastąpić?"
+
+#: pcbnew/files.cpp:552 cvpcb/readwrite_dlgs.cpp:294
+#, c-format
+msgid ""
+"An error occurred attempting to save the footpirnt library table <%s>\n"
+"\n"
+"%s"
+msgstr ""
+"Wystąpił błąd przy próbie zapisu tablicy bibliotek footprintów <%s>\n"
+"\n"
+"%s"
+
+#: pcbnew/files.cpp:595
 msgid "Warning: unable to create backup file "
 msgstr "Ostrzeżenie: Nie można utworzyć pliku kopii zapasowej "
 
-#: pcbnew/files.cpp:564
+#: pcbnew/files.cpp:628
 #, c-format
 msgid ""
 "Error saving board.\n"
@@ -7393,19 +7425,19 @@ msgstr ""
 "Błąd podczas zapisywania płytki.\n"
 "%s"
 
-#: pcbnew/files.cpp:566
+#: pcbnew/files.cpp:630
 msgid "Save Board File"
 msgstr "Zapisz plik PCB"
 
-#: pcbnew/files.cpp:595
+#: pcbnew/files.cpp:664
 msgid "Backup file: "
 msgstr "Plik kopii zapasowej: "
 
-#: pcbnew/files.cpp:599
+#: pcbnew/files.cpp:668
 msgid "Wrote board file: "
 msgstr "Zapisano plik płytki: "
 
-#: pcbnew/files.cpp:601
+#: pcbnew/files.cpp:670
 msgid "Failed to create "
 msgstr "Błąd przy tworzeniu "
 
@@ -8933,29 +8965,29 @@ msgstr "Zmień warstwę elementów"
 msgid "Set Line Width"
 msgstr "Ustaw szerokość linii"
 
-#: pcbnew/moduleframe.cpp:326
+#: pcbnew/moduleframe.cpp:327
 msgid "Save the changes in the module before closing?"
 msgstr "Zapisać zmiany w footprincie przed zamknięciem?"
 
-#: pcbnew/moduleframe.cpp:348
+#: pcbnew/moduleframe.cpp:349
 msgid "Library is not set, the module could not be saved."
 msgstr ""
 "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
-#: pcbnew/moduleframe.cpp:476 pcbnew/pcbframe.cpp:601
+#: pcbnew/moduleframe.cpp:487 pcbnew/pcbframe.cpp:601
 #: cvpcb/class_DisplayFootprintsFrame.cpp:443
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
-#: pcbnew/moduleframe.cpp:579
+#: pcbnew/moduleframe.cpp:590
 msgid "Module Editor "
 msgstr "Edytor Footprintów"
 
-#: pcbnew/moduleframe.cpp:585
+#: pcbnew/moduleframe.cpp:596
 msgid "(no active library)"
 msgstr " (brak aktywnej biblioteki)"
 
-#: pcbnew/moduleframe.cpp:599
+#: pcbnew/moduleframe.cpp:610
 msgid "Module Editor (active library: "
 msgstr "Edytor Footprintów (aktywna biblioteka: "
 
@@ -9727,29 +9759,55 @@ msgstr ""
 "Plik <%s> nie istnieje.\n"
 "Jest to normalne w przypadku nowych projektów."
 
-#: pcbnew/pcbnew_config.cpp:74 pcbnew/dialogs/dialog_general_options.cpp:236
+#: pcbnew/pcbnew_config.cpp:76 pcbnew/dialogs/dialog_general_options.cpp:236
 #: gerbview/events_called_functions.cpp:383 gerbview/menubar.cpp:152
 #: gerbview/menubar.cpp:154 gerbview/options.cpp:64
 msgid "Hide &Layers Manager"
 msgstr "Ukryj menadżera warstw"
 
-#: pcbnew/pcbnew_config.cpp:74 pcbnew/dialogs/dialog_general_options.cpp:236
+#: pcbnew/pcbnew_config.cpp:76 pcbnew/dialogs/dialog_general_options.cpp:236
 #: gerbview/events_called_functions.cpp:383 gerbview/menubar.cpp:154
 #: gerbview/options.cpp:64
 msgid "Show &Layers Manager"
 msgstr "Pokaż menadżera warstw"
 
-#: pcbnew/pcbnew_config.cpp:147 pcbnew/pcbnew_config.cpp:519
+#: pcbnew/pcbnew_config.cpp:101
+#, c-format
+msgid ""
+"Error occurred saving the global footprint library table:\n"
+"\n"
+"%s"
+msgstr ""
+"Wystąpił błąd przy próbie zapisu globlalnej tablicy bibliotek footprintów:\n"
+"\n"
+"%s"
+
+#: pcbnew/pcbnew_config.cpp:103 pcbnew/pcbnew_config.cpp:122
+msgid "File Seave Error"
+msgstr "Błąd zapisu pliku"
+
+#: pcbnew/pcbnew_config.cpp:120
+#, c-format
+msgid ""
+"Error occurred saving project specific footprint library table:\n"
+"\n"
+"%s"
+msgstr ""
+"Wystąpił błąd przy próbie zapisu lokalnej tablicy bibliotek footprintów:\n"
+"\n"
+"%s"
+
+#: pcbnew/pcbnew_config.cpp:166 pcbnew/pcbnew_config.cpp:555
 #: gerbview/excellon_read_drill_file.cpp:184
 #, c-format
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
 
-#: pcbnew/pcbnew_config.cpp:461
+#: pcbnew/pcbnew_config.cpp:497
 msgid "Save Macros File"
 msgstr "Zapisz plik makr"
 
-#: pcbnew/pcbnew_config.cpp:509
+#: pcbnew/pcbnew_config.cpp:545
 msgid "Read Macros File"
 msgstr "Odczytaj plik makr"
 
@@ -9846,13 +9904,13 @@ msgstr "Eksport płytki udany."
 msgid "Unable to export, please fix and try again."
 msgstr "Nie mogę eksportować. Napraw błędy i spróbuj ponownie."
 
-#: pcbnew/specctra_export.cpp:990 pcbnew/specctra_export.cpp:1090
-#: pcbnew/specctra_export.cpp:1207
+#: pcbnew/specctra_export.cpp:993 pcbnew/specctra_export.cpp:1095
+#: pcbnew/specctra_export.cpp:1214
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "Nieobsługiwany typ DRAWSEGMENT %s"
 
-#: pcbnew/specctra_export.cpp:1106
+#: pcbnew/specctra_export.cpp:1111
 #, c-format
 msgid ""
 "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
@@ -9861,7 +9919,7 @@ msgstr ""
 "Nie mogę odnaleźć następnego segmentu z punktem końcowym (%s mm, %s mm).\n"
 "Popraw obrys na warstwie Edge.Cuts, tworząc z niego zamknięty wielokąt."
 
-#: pcbnew/specctra_export.cpp:1223
+#: pcbnew/specctra_export.cpp:1230
 #, c-format
 msgid ""
 "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
@@ -9871,12 +9929,12 @@ msgstr ""
 "Popraw wewnętrzny obrys na warstwie Edge.Cuts, tworząc z niego zamknięty "
 "wielokąt."
 
-#: pcbnew/specctra_export.cpp:1373
+#: pcbnew/specctra_export.cpp:1380
 #, c-format
 msgid "Component with value of '%s' has empty reference id."
 msgstr "Komponent z wartością '%s' nie posiada oznaczenia."
 
-#: pcbnew/specctra_export.cpp:1381
+#: pcbnew/specctra_export.cpp:1388
 #, c-format
 msgid "Multiple components have identical reference IDs of '%s'."
 msgstr "Wiele komponentów ma to samo oznaczenie \"%s\"."
@@ -14992,7 +15050,7 @@ msgstr "Edytor bibliotek symboli"
 msgid "Save Component Footprint Link File"
 msgstr "Zapisz plik łącz komponentów z footprintami (plik .cmp)"
 
-#: cvpcb/readwrite_dlgs.cpp:281
+#: cvpcb/readwrite_dlgs.cpp:310
 msgid "Unable to create component footprint link file (.cmp)"
 msgstr "Nie mogę utworzyć pliku łącz komponentów (.cmp)"
 
@@ -15740,10 +15798,11 @@ msgstr "Nie mogę zapisać pliku"
 
 #: 3d-viewer/3d_draw.cpp:232
 msgid ""
-"Unable to calculate the board outlines, will use the outlines boundary box"
+"Unable to calculate the board outlines.\n"
+"Therefore use the board boundary box."
 msgstr ""
-"Nie można okreslić obrysu płytki, użyte zostanie pole określone przez "
-"krawędzie płytki"
+"Nie można obliczyć obrysu płytki.\n"
+"Użyte zostanie pole określone przez krawędzie płytki."
 
 #: 3d-viewer/3d_toolbar.cpp:53
 msgid "Reload board"
@@ -16216,6 +16275,11 @@ msgstr "Nieznany typ MIME pliku dokumentacji <%s>"
 msgid "Bold+Italic"
 msgstr "Pogrubiona kursywa"
 
+#: common/footprint_info.cpp:160
+#, c-format
+msgid "Cannot find plugin type '%s'."
+msgstr "Nie można znaleźć wtyczki typu '%s'."
+
 #: common/fpid.cpp:186 common/fpid.cpp:203
 msgid "Illegal character found in FPID string"
 msgstr "Znaleziono niepoprawny znak w ciągu FPID"
@@ -16228,17 +16292,17 @@ msgstr "Niepoprawny znak w danych o logicznej nazwie biblioteki"
 msgid "Illegal character found in revision"
 msgstr "Niepoprawny znak w danych o rewizji"
 
-#: common/fp_lib_table.cpp:231
+#: common/fp_lib_table.cpp:250
 #, c-format
 msgid "'%s' is a duplicate footprint library nickName"
 msgstr "'%s' jest duplikatem footprintu biblioteki "
 
-#: common/fp_lib_table.cpp:466
+#: common/fp_lib_table.cpp:497
 #, c-format
 msgid "lib table contains no logical lib '%s'"
 msgstr "tabela bibliotek nie zawiera logicznej biblioteki '%s'"
 
-#: common/fp_lib_table.cpp:564
+#: common/fp_lib_table.cpp:595
 #, c-format
 msgid ""
 "Cannot find footprint library file \"%s\" in any of the KiCad legacy library "
@@ -16247,14 +16311,14 @@ msgstr ""
 "Nie mogę odnaleźć pliku biblioteki \"%s\" w żadnej ze standardowych ścieżek "
 "wyszukiwania bibliotek starszego typu.\n"
 
-#: common/fp_lib_table.cpp:589
+#: common/fp_lib_table.cpp:620
 #, c-format
 msgid "Component `%s` footprint <%s> was not found in any legacy library.\n"
 msgstr ""
 "Komponent '%s', footprint <%s> nie został znaleziony w żadnej z bibliotek "
 "starszego typu.\n"
 
-#: common/fp_lib_table.cpp:634
+#: common/fp_lib_table.cpp:665
 #, c-format
 msgid ""
 "Component `%s` footprint <%s> legacy library path <%s > was not found in the "
@@ -16263,7 +16327,7 @@ msgstr ""
 "Komponent '%s', footprint <%s> o ścieżce dostępu <%s> nie został znaleziony "
 "w tabeli bibliotek footprntów.\n"
 
-#: common/fp_lib_table.cpp:651
+#: common/fp_lib_table.cpp:682
 #, c-format
 msgid "Component `%s` FPID <%s> is not valid.\n"
 msgstr "Komponent '%s', FPID <%s> nie jest prawidłowy.\n"
