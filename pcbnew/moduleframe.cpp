@@ -38,6 +38,7 @@
 #include <3d_viewer.h>
 #include <pcbcommon.h>
 #include <msgpanel.h>
+#include <fp_lib_table.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -133,7 +134,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, FOOTPRINT_EDIT_FRAME::Show3D_Frame )
 
     EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected )
-
+    EVT_UPDATE_UI( ID_MODEDIT_SELECT_CURRENT_LIB, FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib )
     EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
     EVT_UPDATE_UI( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
                    FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
@@ -452,6 +453,16 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent
     }
 
     aEvent.Enable( canReplace );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent )
+{
+#if defined( USE_FP_LIB_TABLE )
+    aEvent.Enable( m_footprintLibTable && !m_footprintLibTable->IsEmpty() );
+#else
+    aEvent.Enable( !g_LibraryNames.IsEmpty() );
+#endif
 }
 
 

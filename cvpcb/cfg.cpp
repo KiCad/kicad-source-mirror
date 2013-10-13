@@ -38,6 +38,7 @@
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
+#include <class_DisplayFootprintsFrame.h>
 
 
 #define GROUP wxT("/cvpcb")
@@ -94,9 +95,17 @@ void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
     // Attempt to load the project footprint library table if it exists.
     m_footprintLibTable = new FP_LIB_TABLE();
 
+    if( m_DisplayFootprintFrame )
+        m_DisplayFootprintFrame->SetFootprintLibTable( m_footprintLibTable );
+
+    wxFileName projectFpLibTableFileName;
+
+    projectFpLibTableFileName = FP_LIB_TABLE::GetProjectFileName( fn );
+
     try
     {
-        m_footprintLibTable->Load( fn, m_globalFootprintTable );
+        m_footprintLibTable->Load( projectFpLibTableFileName, m_globalFootprintTable );
+        FP_LIB_TABLE::SetProjectPathEnvVariable( projectFpLibTableFileName );
     }
     catch( IO_ERROR ioe )
     {

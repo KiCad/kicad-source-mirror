@@ -375,6 +375,8 @@ public:
      */
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR );
 
+    void Save( const wxFileName& aPath ) const throw( IO_ERROR );
+
     /**
      * Function GetLogicalLibs
      * returns the logical library names, all of them that are pertinent to
@@ -486,9 +488,11 @@ public:
 
     /**
      * Function IsEmpty
+     * @param aIncludeFallback is used to determine if the fallback table should be
+     *                         included in the test.
      * @return true if the footprint library table is empty.
      */
-    bool IsEmpty() const;
+    bool IsEmpty( bool aIncludeFallback = true );
 
     /**
      * Function MissingLegacyLibs
@@ -552,10 +556,16 @@ public:
     static wxString GetGlobalTableFileName();
 
     /**
-     * Function GetFootprintTableFileName
+     * Function GetFileName
      * @return the footprint library file name.
      */
-    static wxString GetFileName();
+    static const wxString& GetFileName();
+
+    static void SetProjectPathEnvVariable( const wxFileName& aPath );
+
+    const wxString& GetProjectPathEnvVariableName() const;
+
+    static wxString GetProjectFileName( const wxFileName& aPath );
 
     /**
      * Function Load
