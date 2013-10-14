@@ -772,6 +772,12 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARS
     {
         tableExists = false;
 
+        if( !fn.DirExists() && !fn.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
+        {
+            THROW_IO_ERROR( wxString::Format( _( "Cannot create global library table path <%s>." ),
+                                              GetChars( fn.GetPath() ) ) );
+        }
+
         // Attempt to copy the default global file table from the KiCad template folder to
         // the users home configuration path.
         wxString fileName( wxT( "fp_global_table" ) );
