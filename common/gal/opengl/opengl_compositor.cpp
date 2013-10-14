@@ -95,7 +95,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 {
     wxASSERT( m_initialized );
 
-    //if( usedBuffers() >= m_maxBuffers )
+    if( usedBuffers() >= m_maxBuffers )
     {
         wxLogError( wxT( "Cannot create more framebuffers. OpenGL rendering backend requires at"
                          "least 3 framebuffers. You may try to update/change "
