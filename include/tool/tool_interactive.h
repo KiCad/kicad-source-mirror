@@ -81,9 +81,9 @@ public:
      * Defines which state (aStateFunc) to go when a certain event arrives (aConditions).
      * No conditions means any event.
      */
-    template<class T>
-        void Go( int (T::*aStateFunc)( TOOL_EVENT& ),
-                 const TOOL_EVENT_LIST& aConditions = TOOL_EVENT( TC_Any, TA_Any ) );
+    template <class T>
+    void Go( int (T::* aStateFunc)( TOOL_EVENT& ),
+            const TOOL_EVENT_LIST& aConditions = TOOL_EVENT( TC_Any, TA_Any ) );
 
     /**
      * Function Wait()
@@ -91,18 +91,18 @@ public:
      * Suspends execution of the tool until an event specified in aEventList arrives.
      * No parameters means waiting for any event.
      */
-    OPT_TOOL_EVENT Wait( const TOOL_EVENT_LIST& aEventList = TOOL_EVENT ( TC_Any, TA_Any ) );
+    OPT_TOOL_EVENT Wait( const TOOL_EVENT_LIST& aEventList = TOOL_EVENT (TC_Any, TA_Any) );
 
     /** functions below are not yet implemented - their interface may change */
-    /*template<class Parameters, class ReturnValue>
+    /*template <class Parameters, class ReturnValue>
         bool InvokeTool( const std::string& aToolName, const Parameters& parameters,
                          ReturnValue& returnValue );
 
-    template<class Parameters, class ReturnValue>
+    template <class Parameters, class ReturnValue>
         bool InvokeWindow( const std::string& aWindowName, const Parameters& parameters,
                            ReturnValue& returnValue );
 
-    template<class T>
+    template <class T>
         void Yield( const T& returnValue );*/
 
 protected:
@@ -121,11 +121,12 @@ private:
 };
 
 // hide TOOL_MANAGER implementation
-template<class T>
-void TOOL_INTERACTIVE::Go( int (T::*aStateFunc)( TOOL_EVENT& ),
-                           const TOOL_EVENT_LIST& aConditions )
+template <class T>
+void TOOL_INTERACTIVE::Go( int (T::* aStateFunc)( TOOL_EVENT& ),
+        const TOOL_EVENT_LIST& aConditions )
 {
     TOOL_STATE_FUNC sptr( static_cast<T*>( this ), aStateFunc );
+
     goInternal( sptr, aConditions );
 }
 

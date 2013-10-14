@@ -31,11 +31,11 @@
 #include "selection_tool.h"
 #include "move_tool.h"
 
-using namespace KiGfx;
+using namespace KIGFX;
 using boost::optional;
 
 MOVE_TOOL::MOVE_TOOL() :
-        TOOL_INTERACTIVE( "pcbnew.InteractiveMove" ), m_selectionTool( NULL )
+    TOOL_INTERACTIVE( "pcbnew.InteractiveMove" ), m_selectionTool( NULL )
 {
 }
 
@@ -79,8 +79,9 @@ bool MOVE_TOOL::Init()
 int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+
     if( selection.Empty() )
-        return 0;  // there are no items to operate on
+        return 0; // there are no items to operate on
 
     VECTOR2D dragPosition;
     bool dragging = false;
@@ -96,8 +97,8 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
     {
         if( evt->IsCancel() )
         {
-            restore = true;     // Cancelling the tool means that items have to be restored
-            break;  // Finish
+            restore = true; // Cancelling the tool means that items have to be restored
+            break;          // Finish
         }
 
         // Dispatch TOOL_ACTIONs
@@ -129,6 +130,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
             {
                 // Prepare to drag
                 std::set<BOARD_ITEM*>::iterator it;
+
                 for( it = selection.items.begin(); it != selection.items.end(); ++it )
                 {
                     // Save the state of the selected items, in case it has to be restored
@@ -142,7 +144,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
             dragPosition = evt->Position();
         }
         else if( evt->IsMouseUp( MB_Left ) || evt->IsClick( MB_Left ) )
-            break;  // Finish
+            break; // Finish
     }
 
     if( restore )

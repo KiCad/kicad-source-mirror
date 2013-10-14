@@ -34,7 +34,7 @@
 #include <gal/opengl/gpu_manager.h>
 #include <gal/opengl/vertex_item.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 VERTEX_MANAGER::VERTEX_MANAGER( bool aCached ) :
     m_noTransform( true ), m_transform( 1.0f )
@@ -106,6 +106,7 @@ void VERTEX_MANAGER::ChangeItemColor( const VERTEX_ITEM& aItem, const COLOR4D& a
     unsigned int offset = aItem.GetOffset();
 
     VERTEX* vertex = m_container->GetVertices( offset );
+
     for( unsigned int i = 0; i < size; ++i )
     {
         vertex->r = aColor.r * 255.0;
@@ -125,6 +126,7 @@ void VERTEX_MANAGER::ChangeItemDepth( const VERTEX_ITEM& aItem, GLfloat aDepth )
     unsigned int offset = aItem.GetOffset();
 
     VERTEX* vertex = m_container->GetVertices( offset );
+
     for( unsigned int i = 0; i < size; ++i )
     {
         vertex->z = aDepth;

@@ -34,7 +34,7 @@
 
 #include <math/box2.h>
 
-namespace KiGfx
+namespace KIGFX
 {
 class GAL;
 
@@ -184,6 +184,6 @@ private:
 
     static const double LINE_HEIGHT_RATIO;
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* STROKE_FONT_H_ */

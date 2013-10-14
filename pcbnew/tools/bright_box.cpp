@@ -26,18 +26,18 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <class_track.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 BRIGHT_BOX::BRIGHT_BOX( BOARD_ITEM* aItem ) :
-	EDA_ITEM( NOT_USED ), // this item is never added to a BOARD so it needs no type
-	item( aItem )
+    EDA_ITEM( NOT_USED ),    // this item is never added to a BOARD so it needs no type
+    item( aItem )
 {
 }
 
 
 const BOX2I BRIGHT_BOX::ViewBBox() const
 {
-	return item->ViewBBox();
+    return item->ViewBBox();
 }
 
 
@@ -69,4 +69,5 @@ void BRIGHT_BOX::ViewDraw( int aLayer, GAL* aGal ) const
     }
 }
 
-const COLOR4D BRIGHT_BOX::BrightColor = KiGfx::COLOR4D( 0.0, 1.0, 0.0, 1.0 );
+
+const COLOR4D BRIGHT_BOX::BrightColor = KIGFX::COLOR4D( 0.0, 1.0, 0.0, 1.0 );

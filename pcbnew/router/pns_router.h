@@ -48,7 +48,7 @@ class PNS_VIA;
 class PNS_CLEARANCE_FUNC;
 class VIEW_GROUP;
 
-namespace KiGfx {
+namespace KIGFX {
 class VIEW;
 class VIEW_GROUP;
 };
@@ -81,7 +81,7 @@ public:
     void SetBoard( BOARD* aBoard );
     void SyncWorld();
 
-    void SetView( KiGfx::VIEW* aView );
+    void SetView( KIGFX::VIEW* aView );
 
     bool RoutingInProgress() const;
     void StartRouting( const VECTOR2I& aP, PNS_ITEM* aItem );
@@ -142,7 +142,7 @@ private:
 
     // optHoverItem queryHoverItemEx(const VECTOR2I& aP);
 
-    PNS_ITEM* pickSingleItem( PNS_ITEMSET& aItems ) const;                                    // std::vector<PNS_ITEM*> aItems) const;
+    PNS_ITEM* pickSingleItem( PNS_ITEMSET& aItems ) const;                               // std::vector<PNS_ITEM*> aItems) const;
     void splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, const VECTOR2I& aP );   // optHoverItem& aItem);
     void commitRouting( PNS_NODE* aNode );
     PNS_NODE* removeLoops( PNS_NODE* aNode, PNS_SEGMENT* aLatestSeg );
@@ -173,8 +173,8 @@ private:
     PNS_NODE* m_world;
     PNS_LINE_PLACER* m_placer;
 
-    KiGfx::VIEW* m_view;
-    KiGfx::VIEW_GROUP* m_previewItems;
+    KIGFX::VIEW* m_view;
+    KIGFX::VIEW_GROUP* m_previewItems;
 
     VECTOR2I m_currentEnd;
     VECTOR2I m_currentStart;
@@ -191,4 +191,3 @@ private:
 };
 
 #endif
-

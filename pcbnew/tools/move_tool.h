@@ -33,7 +33,7 @@
 class BOARD_ITEM;
 class SELECTION_TOOL;
 
-namespace KiGfx
+namespace KIGFX
 {
 class VIEW_GROUP;
 }

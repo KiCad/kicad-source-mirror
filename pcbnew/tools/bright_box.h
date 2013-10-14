@@ -44,7 +44,7 @@ public:
 
     virtual const BOX2I ViewBBox() const;
 
-    void ViewDraw( int aLayer, KiGfx::GAL* aGal ) const;
+    void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const;
     void ViewGetLayers( int aLayers[], int& aCount ) const;
 
     void Show( int x, std::ostream& st ) const
@@ -53,7 +53,7 @@ public:
 
 private:
     static const int BrightBoxLayer = ITEM_GAL_LAYER( GP_OVERLAY );
-    static const KiGfx::COLOR4D BrightColor;
+    static const KIGFX::COLOR4D BrightColor;
     static const double LineWidth = 100000.0;
 
     BOARD_ITEM* item;

@@ -170,10 +170,10 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     DisplayOpt.DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
 
     // Apply changes to the GAL
-    KiGfx::VIEW* view = m_Parent->GetGalCanvas()->GetView();
-    KiGfx::PCB_PAINTER* painter = static_cast<KiGfx::PCB_PAINTER*>( view->GetPainter() );
-    KiGfx::PCB_RENDER_SETTINGS* settings =
-            static_cast<KiGfx::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    KIGFX::VIEW* view = m_Parent->GetGalCanvas()->GetView();
+    KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
     settings->LoadDisplayOptions( DisplayOpt );
     view->RecacheAllItems( true );
 

@@ -27,7 +27,7 @@
 #include <view/view_item.h>
 #include <view/view.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 void VIEW_ITEM::ViewSetVisible( bool aIsVisible )
 {
@@ -69,6 +69,7 @@ void VIEW_ITEM::ViewRelease()
 void VIEW_ITEM::getLayers( int* aLayers, int& aCount ) const
 {
     int* layersPtr = aLayers;
+
     for( unsigned int i = 0; i < m_layers.size(); ++i )
     {
         if( m_layers[i] )

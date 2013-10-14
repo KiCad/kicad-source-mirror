@@ -26,15 +26,16 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/color4d.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 const BOX2I SELECTION_AREA::ViewBBox() const
 {
-	BOX2I tmp;
+    BOX2I tmp;
+
     tmp.SetOrigin( m_origin );
     tmp.SetEnd( m_end );
-	tmp.Normalize();
-	return tmp;
+    tmp.Normalize();
+    return tmp;
 }
 
 
@@ -45,7 +46,7 @@ void SELECTION_AREA::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SELECTION_AREA::ViewDraw( int aLayer, KiGfx::GAL* aGal ) const
+void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
 {
     aGal->SetLineWidth( 1.0 );
     aGal->SetStrokeColor( COLOR4D( 1.0, 1.0, 0.4, 1.0 ) );
@@ -57,6 +58,6 @@ void SELECTION_AREA::ViewDraw( int aLayer, KiGfx::GAL* aGal ) const
 
 
 SELECTION_AREA::SELECTION_AREA() :
-	EDA_ITEM( NOT_USED ) // this item is never added to a BOARD so it needs no type.
+    EDA_ITEM( NOT_USED )    // this item is never added to a BOARD so it needs no type.
 {
 }

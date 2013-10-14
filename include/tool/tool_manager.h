@@ -134,16 +134,16 @@ public:
      * These are made available to the tool. Called by the parent frame (PCB_EDIT_FRAME)
      * when the board is set up.
      */
-    void SetEnvironment( EDA_ITEM* aModel, KiGfx::VIEW* aView,
-                         KiGfx::VIEW_CONTROLS* aViewControls, wxWindow* aFrame );
+    void SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
+            KIGFX::VIEW_CONTROLS* aViewControls, wxWindow* aFrame );
 
     /* Accessors for the environment objects (view, model, etc.) */
-    KiGfx::VIEW* GetView() const
+    KIGFX::VIEW* GetView() const
     {
         return m_view;
     }
 
-    KiGfx::VIEW_CONTROLS* GetViewControls() const
+    KIGFX::VIEW_CONTROLS* GetViewControls() const
     {
         return m_viewControls;
     }
@@ -163,7 +163,7 @@ public:
      * to be called. Called by TOOL_INTERACTIVE::Go(). May be called from a coroutine context.
      */
     void ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandler,
-                            const TOOL_EVENT_LIST& aConditions );
+            const TOOL_EVENT_LIST& aConditions );
 
     /**
      * Pauses execution of a given tool until one or more events matching aConditions arrives.
@@ -171,7 +171,7 @@ public:
      * Called only from coroutines.
      */
     boost::optional<TOOL_EVENT> ScheduleWait( TOOL_BASE* aTool,
-                                              const TOOL_EVENT_LIST& aConditions );
+            const TOOL_EVENT_LIST& aConditions );
 
     /**
      * Sets behaviour of the tool's context popup menu.
@@ -183,7 +183,7 @@ public:
      * May be called from a coroutine context.
      */
     void ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
-                              CONTEXT_MENU_TRIGGER aTrigger );
+            CONTEXT_MENU_TRIGGER aTrigger );
 
     /**
      * Allows a tool to pass the already handled event to the next tool on the stack.
@@ -251,7 +251,7 @@ private:
     bool runTool( TOOL_BASE* aTool );
 
     template <class Parameters>
-        void invokeTool( const std::string& aName, const Parameters& aToolParams );
+    void invokeTool( const std::string& aName, const Parameters& aToolParams );
 
     /**
      * Function finishTool()
@@ -270,7 +270,7 @@ private:
      */
     bool isRegistered( TOOL_BASE* aTool ) const
     {
-        return ( m_toolState.count( aTool ) > 0 );
+        return m_toolState.count( aTool ) > 0;
     }
 
     /**
@@ -298,8 +298,8 @@ private:
     ACTION_MANAGER* m_actionMgr;
 
     EDA_ITEM* m_model;
-    KiGfx::VIEW* m_view;
-    KiGfx::VIEW_CONTROLS* m_viewControls;
+    KIGFX::VIEW* m_view;
+    KIGFX::VIEW_CONTROLS* m_viewControls;
     wxWindow* m_editFrame;
 
     /// Flag saying if the currently processed event should be passed to other tools.

@@ -38,7 +38,7 @@
 
 class EDA_DRAW_PANEL_GAL;
 
-namespace KiGfx
+namespace KIGFX
 {
 /**
  * Class WX_VIEW_CONTROLS
@@ -74,6 +74,7 @@ public:
     void SetAutoPan( bool aEnabled )
     {
         m_autoPanEnabled = aEnabled;
+
         if( m_state == AUTO_PANNING )
             m_state = IDLE;
     }
@@ -90,7 +91,8 @@ public:
 
 private:
     /// Possible states for WX_VIEW_CONTROLS
-    enum State {
+    enum State
+    {
         IDLE = 1,           /// Nothing is happening
         DRAG_PANNING,       /// Panning with mouse button pressed
         AUTO_PANNING,       /// Panning on approaching borders of the frame
@@ -127,6 +129,6 @@ private:
     /// Timer repsonsible for handling autopanning
     wxTimer     m_panTimer;
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif

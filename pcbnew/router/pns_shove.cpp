@@ -491,4 +491,3 @@ PNS_SHOVE::ShoveStatus PNS_SHOVE::ShoveLines( PNS_LINE* aCurrentHead )
         return SH_INCOMPLETE;
     }
 }
-

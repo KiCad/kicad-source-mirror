@@ -31,7 +31,7 @@
 #include <gal/opengl/opengl_compositor.h>
 #include <wx/log.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
     m_initialized( false ), m_current( 0 )
@@ -95,12 +95,12 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 {
     wxASSERT( m_initialized );
 
-    //if( usedBuffers() >= m_maxBuffers )
+    if( usedBuffers() >= m_maxBuffers )
     {
         wxLogError( wxT( "Cannot create more framebuffers. OpenGL rendering backend requires at"
                          "least 3 framebuffers. You may try to update/change "
                          "your graphic drivers." ) );
-        return 0; // Unfortunately we have no more free buffers left
+        return 0;    // Unfortunately we have no more free buffers left
     }
 
     // GL_COLOR_ATTACHMENTn are consecutive integers
@@ -145,7 +145,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
             wxLogFatalError( wxT( "The framebuffer does not have at least "
-                                   "one image attached to it." ) );
+                                  "one image attached to it." ) );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
@@ -225,6 +225,7 @@ void OPENGL_COMPOSITOR::ClearBuffer()
 void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 {
     wxASSERT( m_initialized );
+
     if( aBufferHandle == 0 || aBufferHandle > usedBuffers() )
     {
         wxLogError( wxT( "Wrong framebuffer handle" ) );
@@ -281,6 +282,7 @@ void OPENGL_COMPOSITOR::clean()
     glDeleteRenderbuffers( 1, &m_depthBuffer );
 
     OPENGL_BUFFERS::const_iterator it;
+
     for( it = m_buffers.begin(); it != m_buffers.end(); ++it )
     {
         glDeleteTextures( 1, &it->textureTarget );

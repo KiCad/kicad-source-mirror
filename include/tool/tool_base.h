@@ -34,7 +34,7 @@
 class EDA_ITEM;
 class TOOL_MANAGER;
 
-namespace KiGfx
+namespace KIGFX
 {
 class VIEW;
 class VIEW_CONTROLS;
@@ -66,7 +66,7 @@ public:
         m_type( aType ),
         m_toolId( aId ),
         m_toolName( aName ),
-        m_toolMgr( NULL ){};
+        m_toolMgr( NULL ) {};
 
     virtual ~TOOL_BASE() {};
 
@@ -130,7 +130,7 @@ protected:
      * Returns the instance of VIEW object used in the application. It allows tools to draw.
      * @return The instance of VIEW.
      */
-    KiGfx::VIEW* getView() const;
+    KIGFX::VIEW* getView() const;
 
     /**
      * Function getViewControls()
@@ -139,14 +139,14 @@ protected:
      * read & modify user input and its settings (eg. show cursor, enable snapping to grid, etc.)
      * @return The instance of VIEW_CONTROLS.
      */
-    KiGfx::VIEW_CONTROLS* getViewControls() const;
+    KIGFX::VIEW_CONTROLS* getViewControls() const;
 
     /**
      * Function getEditFrame()
      *
      * Returns the application window object, casted to requested user type.
      */
-    template<typename T>
+    template <typename T>
     T* getEditFrame() const
     {
         return static_cast<T*>( getEditFrameInt() );
@@ -157,7 +157,7 @@ protected:
      *
      * Returns the model object if it matches the requested type.
      */
-    template<typename T>
+    template <typename T>
     T* getModel( KICAD_T modelType ) const
     {
         EDA_ITEM* m = getModelInt();

@@ -26,7 +26,7 @@
 
 #include <gal/color4d.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 COLOR4D::COLOR4D( EDA_COLOR_T aColor )
 {
@@ -85,14 +85,14 @@ void COLOR4D::ToHSV( double& aOutH, double& aOutS, double& aOutV ) const
         return;
     }
 
-    if( r >= max )                           // > is bogus, just keeps compiler happy
-        aOutH = ( g - b ) / delta;           // between yellow & magenta
+    if( r >= max )                          // > is bogus, just keeps compiler happy
+        aOutH = ( g - b ) / delta;          // between yellow & magenta
     else if( g >= max )
-        aOutH = 2.0 + ( b - r ) / delta;     // between cyan & yellow
+        aOutH = 2.0 + ( b - r ) / delta;    // between cyan & yellow
     else
-        aOutH = 4.0 + ( r - g ) / delta;     // between magenta & cyan
+        aOutH = 4.0 + ( r - g ) / delta;    // between magenta & cyan
 
-    aOutH *= 60.0;                              // degrees
+    aOutH *= 60.0;                          // degrees
 
     if( aOutH < 0.0 )
         aOutH += 360.0;
@@ -104,7 +104,7 @@ void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
     double hh, p, q, t, ff;
     long i;
 
-    if( aInS <= 0.0 )   // < is bogus, just shuts up warnings
+    if( aInS <= 0.0 )    // < is bogus, just shuts up warnings
     {
         r = aInV;
         g = aInV;
@@ -113,8 +113,10 @@ void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
     }
 
     hh = aInH;
+
     if( hh >= 360.0 )
         hh = 0.0;
+
     hh /= 60.0;
 
     i = (long) hh;
@@ -124,18 +126,20 @@ void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
     q = aInV * ( 1.0 - ( aInS * ff ) );
     t = aInV * ( 1.0 - ( aInS * ( 1.0 - ff ) ) );
 
-    switch (i)
+    switch( i )
     {
     case 0:
         r = aInV;
         g = t;
         b = p;
         break;
+
     case 1:
         r = q;
         g = aInV;
         b = p;
         break;
+
     case 2:
         r = p;
         g = aInV;
@@ -147,11 +151,13 @@ void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
         g = q;
         b = aInV;
         break;
+
     case 4:
         r = t;
         g = p;
         b = aInV;
         break;
+
     case 5:
     default:
         r = aInV;
@@ -165,9 +171,9 @@ void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
 COLOR4D& COLOR4D::Saturate( double aFactor )
 {
     double h, s, v;
+
     ToHSV( h, s, v );
     FromHSV( h, aFactor, 1.0 );
 
     return *this;
 }
-

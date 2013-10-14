@@ -33,10 +33,10 @@
 
 #include <limits>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
-                      wxEvtHandler* aPaintListener, const wxString& aName ) :
+        wxEvtHandler* aPaintListener, const wxString& aName ) :
     wxWindow( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxEXPAND, aName )
 {
     parentWindow  = aParent;
@@ -92,6 +92,7 @@ CAIRO_GAL::~CAIRO_GAL()
 void CAIRO_GAL::BeginDrawing()
 {
     initSurface();
+
     if( !validCompositor )
         setCompositor();
 
@@ -284,6 +285,7 @@ void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
 
     if( validCompositor )
         compositor->Resize( aWidth, aHeight );
+
     validCompositor = false;
 
     SetSize( wxSize( aWidth, aHeight ) );
@@ -788,6 +790,7 @@ void CAIRO_GAL::ClearTarget( RenderTarget aTarget )
         compositor->SetBuffer( overlayBuffer );
         break;
     }
+
     compositor->ClearBuffer();
 
     // Restore the previous state

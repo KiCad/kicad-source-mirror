@@ -197,8 +197,8 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     if( m_galCanvasActive )
     {
         // Apply computed view settings to GAL
-        KiGfx::VIEW* view = m_galCanvas->GetView();
-        KiGfx::GAL* gal = m_galCanvas->GetGAL();
+        KIGFX::VIEW* view = m_galCanvas->GetView();
+        KIGFX::GAL* gal = m_galCanvas->GetGAL();
 
         double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
         double zoom = 1.0 / ( zoomFactor * GetZoom() );

@@ -75,9 +75,9 @@ PNS_WALKAROUND::WalkaroundStatus PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
     }
 
     aPath.NewWalkaround( current_obs->hull, path_pre[0], path_walk[0],
-                            path_post[0], aWindingDirection );
+            path_post[0], aWindingDirection );
     aPath.NewWalkaround( current_obs->hull, path_pre[1], path_walk[1],
-                        path_post[1], !aWindingDirection );
+            path_post[1], !aWindingDirection );
 
     int len_pre = path_walk[0].Length();
     int len_alt = path_walk[1].Length();
@@ -196,13 +196,13 @@ PNS_WALKAROUND::WalkaroundStatus PNS_WALKAROUND::Route( const PNS_LINE& aInitial
             const SEG s = l.Segment( i );
 
             VECTOR2I nearest = s.NearestPoint( m_cursorPos );
-            VECTOR2I::extended_type dist_a = (s.a - m_cursorPos).SquaredEuclideanNorm();
-            VECTOR2I::extended_type dist_b = (s.b - m_cursorPos).SquaredEuclideanNorm();
-            VECTOR2I::extended_type dist_n = (nearest - m_cursorPos).SquaredEuclideanNorm();
+            VECTOR2I::extended_type dist_a = ( s.a - m_cursorPos ).SquaredEuclideanNorm();
+            VECTOR2I::extended_type dist_b = ( s.b - m_cursorPos ).SquaredEuclideanNorm();
+            VECTOR2I::extended_type dist_n = ( nearest - m_cursorPos ).SquaredEuclideanNorm();
 
             if( dist_n <= dist_a && dist_n < dist_b )
             {
-                // PNSDisplayDebugLine(l, 3);
+                // PNSDisplayDebugLine( l, 3 );
                 l.Remove( i + 1, -1 );
                 l.Append( nearest );
                 l.Simplify();
@@ -228,4 +228,3 @@ PNS_WALKAROUND::WalkaroundStatus PNS_WALKAROUND::Route( const PNS_LINE& aInitial
 
     return st;
 }
-

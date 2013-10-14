@@ -142,7 +142,7 @@ public:
     const std::string Format() const;
 
     TOOL_EVENT( TOOL_EventCategory aCategory = TC_None, TOOL_Actions aAction = TA_None,
-                TOOL_ActionScope aScope = AS_GLOBAL ) :
+            TOOL_ActionScope aScope = AS_GLOBAL ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
@@ -150,40 +150,43 @@ public:
         m_keyCode( 0 ),
         m_modifiers( 0 ) {}
 
-    TOOL_EVENT( TOOL_EventCategory aCategory, TOOL_Actions aAction, int aExtraParam, TOOL_ActionScope aScope = AS_GLOBAL ) :
+    TOOL_EVENT( TOOL_EventCategory aCategory,
+            TOOL_Actions aAction,
+            int aExtraParam,
+            TOOL_ActionScope aScope = AS_GLOBAL ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope )
+    {
+        if( aCategory == TC_Mouse )
         {
-            if( aCategory == TC_Mouse )
-            {
-                m_mouseButtons = aExtraParam & MB_ButtonMask;
-            }
-            else if( aCategory == TC_Keyboard )
-            {
-                m_keyCode = aExtraParam & ~MD_ModifierMask;     // Filter out modifiers
-            }
-            else if ( aCategory == TC_Command )
-            {
-                m_commandId = aExtraParam;
-            }
-
-            if( aCategory & ( TC_Mouse | TC_Keyboard ) )
-            {
-                m_modifiers = aExtraParam & MD_ModifierMask;
-            }
+            m_mouseButtons = aExtraParam & MB_ButtonMask;
+        }
+        else if( aCategory == TC_Keyboard )
+        {
+            m_keyCode = aExtraParam & ~MD_ModifierMask;         // Filter out modifiers
+        }
+        else if( aCategory == TC_Command )
+        {
+            m_commandId = aExtraParam;
         }
 
+        if( aCategory & ( TC_Mouse | TC_Keyboard ) )
+        {
+            m_modifiers = aExtraParam & MD_ModifierMask;
+        }
+    }
+
     TOOL_EVENT( TOOL_EventCategory aCategory, TOOL_Actions aAction,
-                const std::string& aExtraParam, TOOL_ActionScope aScope = AS_GLOBAL ) :
+            const std::string& aExtraParam, TOOL_ActionScope aScope = AS_GLOBAL ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
         m_mouseButtons( 0 )
-        {
-            if( aCategory == TC_Command )
-                m_commandStr = aExtraParam;
-        }
+    {
+        if( aCategory == TC_Command )
+            m_commandStr = aExtraParam;
+    }
 
     ///> Returns the category (eg. mouse/keyboard/action) of an event..
     TOOL_EventCategory Category() const
@@ -201,35 +204,35 @@ public:
     ///> where dragging has started.
     const VECTOR2D Delta() const
     {
-        assert( m_category == TC_Mouse );   // this should be used only with mouse events
+        assert( m_category == TC_Mouse );    // this should be used only with mouse events
         return m_mouseDelta;
     }
 
     ///> Returns mouse cursor position in world coordinates.
     const VECTOR2D& Position() const
     {
-        assert( m_category == TC_Mouse );   // this should be used only with mouse events
+        assert( m_category == TC_Mouse );    // this should be used only with mouse events
         return m_mousePos;
     }
 
     ///> Returns the point where dragging has started.
     const VECTOR2D& DragOrigin() const
     {
-        assert( m_category == TC_Mouse );   // this should be used only with mouse events
+        assert( m_category == TC_Mouse );    // this should be used only with mouse events
         return m_mouseDragOrigin;
     }
 
     ///> Returns information about mouse buttons state.
     int Buttons() const
     {
-        assert( m_category == TC_Mouse );   // this should be used only with mouse events
+        assert( m_category == TC_Mouse );    // this should be used only with mouse events
         return m_mouseButtons;
     }
 
     bool IsClick( int aButtonMask = MB_Any ) const
     {
         return ( m_actions == TA_MouseClick )
-                && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
+               && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
     }
 
     bool IsDrag( int aButtonMask = MB_Any ) const
@@ -244,7 +247,7 @@ public:
 
     bool IsMotion() const
     {
-        return ( m_actions == TA_MouseMotion );
+        return m_actions == TA_MouseMotion;
     }
 
     bool IsCancel() const
@@ -255,7 +258,7 @@ public:
     ///> Returns information about key modifiers state (Ctrl, Alt, etc.)
     int Modifier( int aMask = MD_ModifierMask ) const
     {
-        return ( m_modifiers & aMask );
+        return m_modifiers & aMask;
     }
 
     int KeyCode() const
@@ -273,7 +276,7 @@ public:
         return m_actions == TA_KeyDown;
     }
 
-    void SetMouseDragOrigin( const VECTOR2D &aP )
+    void SetMouseDragOrigin( const VECTOR2D& aP )
     {
         m_mouseDragOrigin = aP;
     }
@@ -306,9 +309,10 @@ public:
         if( m_category == TC_Command )
         {
             if( m_commandStr && aEvent.m_commandStr )
-                return ( *m_commandStr == *aEvent.m_commandStr );
+                return *m_commandStr == *aEvent.m_commandStr;
+
             if( m_commandId && aEvent.m_commandId )
-                return ( *m_commandId == *aEvent.m_commandId );
+                return *m_commandId == *aEvent.m_commandId;
         }
 
         return true;
@@ -365,7 +369,8 @@ typedef boost::optional<TOOL_EVENT> OPT_TOOL_EVENT;
  * A list of TOOL_EVENTs, with overloaded || operators allowing for
  * concatenating TOOL_EVENTs with little code.
  */
-class TOOL_EVENT_LIST {
+class TOOL_EVENT_LIST
+{
 public:
     typedef TOOL_EVENT value_type;
     typedef std::deque<TOOL_EVENT>::iterator iterator;
@@ -388,11 +393,12 @@ public:
      */
     const std::string Format() const;
 
-    boost::optional<const TOOL_EVENT&> Matches( const TOOL_EVENT &b ) const
+    boost::optional<const TOOL_EVENT&> Matches( const TOOL_EVENT& b ) const
     {
         for( const_iterator i = m_events.begin(); i != m_events.end(); ++i )
-            if ( i->Matches( b ) )
+            if( i->Matches( b ) )
                 return *i;
+
         return boost::optional<const TOOL_EVENT&>();
     }
 
@@ -441,9 +447,9 @@ public:
         m_events.clear();
 
         for( std::deque<TOOL_EVENT>::const_iterator i = b.m_events.begin();
-                i != b.m_events.end(); ++i )
+             i != b.m_events.end(); ++i )
         {
-            m_events.push_back(*i);
+            m_events.push_back( *i );
         }
 
         return *this;
@@ -480,6 +486,7 @@ inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& a, const TOOL_EVENT& 
 
     return l;
 }
+
 
 inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& a, const TOOL_EVENT_LIST& b )
 {

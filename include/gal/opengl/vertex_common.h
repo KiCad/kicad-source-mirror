@@ -32,10 +32,11 @@
 
 #include <GL/glew.h>
 
-namespace KiGfx
+namespace KIGFX
 {
 // Possible types of shaders
-enum SHADER_TYPE {
+enum SHADER_TYPE
+{
     SHADER_NONE = 0,
     SHADER_LINE,
     SHADER_FILLED_CIRCLE,
@@ -68,7 +69,6 @@ const unsigned int ShaderSize   = sizeof(VERTEX().shader);
 const unsigned int ShaderStride = ShaderSize / sizeof(GLfloat);
 
 const unsigned int IndexSize    = sizeof(GLuint);
-
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* VERTEX_COMMON_H_ */

@@ -39,7 +39,7 @@
 #include <profile.h>
 #endif /* __WXDEBUG__ */
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 CACHED_CONTAINER::CACHED_CONTAINER( unsigned int aSize ) :
     VERTEX_CONTAINER( aSize ), m_item( NULL )
@@ -88,7 +88,7 @@ void CACHED_CONTAINER::FinishItem()
 #if CACHED_CONTAINER_TEST > 1
     wxLogDebug( wxT( "Finishing item 0x%08lx (size %d)" ), (long) m_item, m_itemSize );
     test();
-    m_item = NULL;  // electric fence
+    m_item = NULL;    // electric fence
 #endif
 }
 
@@ -157,6 +157,7 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
         // Indicate that the item is not stored in the container anymore
         aItem->setSize( 0 );
     }
+
     m_items.erase( aItem );
 
 #if CACHED_CONTAINER_TEST > 1
@@ -371,6 +372,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
     std::list<Chunk> freeChunks;
 
     FreeChunkMap::const_iterator it, it_end;
+
     for( it = m_freeChunks.begin(), it_end = m_freeChunks.end(); it != it_end; ++it )
     {
         freeChunks.push_back( std::make_pair( it->second, it->first ) );
@@ -527,6 +529,7 @@ void CACHED_CONTAINER::test()
     // Free space check
     unsigned int freeSpace = 0;
     FreeChunkMap::iterator itf;
+
     for( itf = m_freeChunks.begin(); itf != m_freeChunks.end(); ++itf )
         freeSpace += getChunkSize( *itf );
 
@@ -543,4 +546,5 @@ void CACHED_CONTAINER::test()
 
     // Overlapping check TBD
 }
+
 #endif /* CACHED_CONTAINER_TEST */

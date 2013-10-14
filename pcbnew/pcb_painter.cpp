@@ -41,7 +41,7 @@
 #include <pcb_painter.h>
 #include <gal/graphics_abstraction_layer.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 {

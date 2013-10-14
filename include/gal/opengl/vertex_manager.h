@@ -40,7 +40,7 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <wx/log.h>
 
-namespace KiGfx
+namespace KIGFX
 {
 class SHADER;
 class VERTEX_ITEM;
@@ -342,6 +342,6 @@ protected:
     GLfloat                 m_shader[ShaderStride];
 };
 
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* VERTEX_MANAGER_H_ */

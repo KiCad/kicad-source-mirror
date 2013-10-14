@@ -39,10 +39,10 @@
 #include <boost/foreach.hpp>
 #include <layers_id_colors_and_visibility.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 VIEW_GROUP::VIEW_GROUP( VIEW* aView ) :
-        m_layer( ITEM_GAL_LAYER( GP_OVERLAY ) )
+    m_layer( ITEM_GAL_LAYER( GP_OVERLAY ) )
 {
     m_view = aView;
 }
@@ -80,6 +80,7 @@ unsigned int VIEW_GROUP::GetSize() const
 const BOX2I VIEW_GROUP::ViewBBox() const
 {
     BOX2I maxBox;
+
     maxBox.SetMaximum();
     return maxBox;
 }
@@ -105,7 +106,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal ) const
                 aGal->AdvanceDepth();
 
                 if( !painter->Draw( item, layers[i] ) )
-                    item->ViewDraw( layers[i], aGal );  // Alternative drawing method
+                    item->ViewDraw( layers[i], aGal ); // Alternative drawing method
             }
         }
 

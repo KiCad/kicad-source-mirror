@@ -30,7 +30,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_dispatcher.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 const wxEventType WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE = wxNewEventType();
 
@@ -40,25 +40,25 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     m_parentPanel( aParentPanel )
 {
     m_parentPanel->Connect( wxEVT_MOTION, wxMouseEventHandler(
-                                WX_VIEW_CONTROLS::onMotion ), NULL, this );
+                    WX_VIEW_CONTROLS::onMotion ), NULL, this );
     m_parentPanel->Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler(
-                                WX_VIEW_CONTROLS::onWheel ), NULL, this );
+                    WX_VIEW_CONTROLS::onWheel ), NULL, this );
     m_parentPanel->Connect( wxEVT_MIDDLE_UP, wxMouseEventHandler(
-                                WX_VIEW_CONTROLS::onButton ), NULL, this );
+                    WX_VIEW_CONTROLS::onButton ), NULL, this );
     m_parentPanel->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler(
-                                WX_VIEW_CONTROLS::onButton ), NULL, this );
+                    WX_VIEW_CONTROLS::onButton ), NULL, this );
     m_parentPanel->Connect( wxEVT_LEFT_UP, wxMouseEventHandler(
-                                WX_VIEW_CONTROLS::onButton ), NULL, this );
+                    WX_VIEW_CONTROLS::onButton ), NULL, this );
     m_parentPanel->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler(
-                                WX_VIEW_CONTROLS::onButton ), NULL, this );
+                    WX_VIEW_CONTROLS::onButton ), NULL, this );
 #if defined _WIN32 || defined _WIN64
     m_parentPanel->Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler(
-                                WX_VIEW_CONTROLS::onEnter ), NULL, this );
+                    WX_VIEW_CONTROLS::onEnter ), NULL, this );
 #endif
 
     m_panTimer.SetOwner( this );
     this->Connect( wxEVT_TIMER, wxTimerEventHandler(
-                                WX_VIEW_CONTROLS::onTimer ), NULL, this );
+                    WX_VIEW_CONTROLS::onTimer ), NULL, this );
 }
 
 
@@ -133,7 +133,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         double      timeDiff    = timeStamp.ToDouble() - m_timeStamp.ToDouble();
 
         m_timeStamp = timeStamp;
-        double      zoomScale;
+        double zoomScale;
 
         // Set scaling speed depending on scroll wheel event interval
         if( timeDiff < 500 && timeDiff > 0 )
@@ -171,6 +171,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         {
             m_state = IDLE;     // Stop autopanning when user release left mouse button
         }
+
         break;
 
     case DRAG_PANNING:
@@ -178,6 +179,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         {
             m_state = IDLE;
         }
+
         break;
     }
 
@@ -214,7 +216,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
     }
     break;
 
-    case IDLE:  // Just remove unnecessary warnings
+    case IDLE:    // Just remove unnecessary warnings
     case DRAG_PANNING:
         break;
     }
@@ -284,6 +286,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 
             return false;
         }
+
         return true;
         break;
 
@@ -295,6 +298,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 
             return true;
         }
+
         return false;
         break;
 
@@ -303,5 +307,5 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
     }
 
     wxASSERT_MSG( false, wxT( "This line should never be reached" ) );
-    return false;   // Should not be reached, just avoid the compiler warnings..
+    return false;    // Should not be reached, just avoid the compiler warnings..
 }

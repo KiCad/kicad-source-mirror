@@ -25,7 +25,9 @@
 
 #include <geometry/seg.h>
 
-template<typename T> int sgn( T val ) {
+template<typename T>
+int sgn( T val )
+{
     return ( T( 0 ) < val ) - ( val < T( 0 ) );
 }
 
@@ -64,8 +66,8 @@ bool SEG::PointCloserThan( const VECTOR2I& aP, int dist ) const
     }
 
     VECTOR2I nearest;
-    nearest.x = a.x + rescale( t, (ecoord)d.x, l_squared );
-    nearest.y = a.y + rescale( t, (ecoord)d.y, l_squared );
+    nearest.x = a.x + rescale( t, (ecoord) d.x, l_squared );
+    nearest.y = a.y + rescale( t, (ecoord) d.y, l_squared );
 
     return ( nearest - aP ).SquaredEuclideanNorm() <= dist_sq;
 }
@@ -86,6 +88,7 @@ SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
     };
 
     ecoord m = VECTOR2I::ECOORD_MAX;
+
     for( int i = 0; i < 4; i++ )
         m = std::min( m, pts[i].SquaredEuclideanNorm() );
 
@@ -95,9 +98,9 @@ SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 
 OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines ) const
 {
-    const VECTOR2I e ( b - a );
-    const VECTOR2I f ( aSeg.b - aSeg.a );
-    const VECTOR2I ac ( aSeg.a - a );
+    const VECTOR2I  e( b - a );
+    const VECTOR2I  f( aSeg.b - aSeg.a );
+    const VECTOR2I  ac( aSeg.a - a );
 
     ecoord d = f.Cross( e );
     ecoord p = f.Cross( ac );
@@ -105,15 +108,18 @@ OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines
 
     if( d == 0 )
         return OPT_VECTOR2I();
-    if ( !aLines && d > 0 && ( q < 0 || q > d || p < 0 || p > d ) )
-        return OPT_VECTOR2I();
-    if ( !aLines && d < 0 && ( q < d || p < d || p > 0 || q > 0 ) )
-        return OPT_VECTOR2I();
-    if ( !aLines && aIgnoreEndpoints && ( q == 0 || q == d ) && ( p == 0 || p == d ) )
+
+    if( !aLines && d > 0 && ( q < 0 || q > d || p < 0 || p > d ) )
         return OPT_VECTOR2I();
 
-     VECTOR2I ip( aSeg.a.x + rescale( q, (ecoord)f.x, d ),
-                  aSeg.a.y + rescale( q, (ecoord)f.y, d ) );
+    if( !aLines && d < 0 && ( q < d || p < d || p > 0 || q > 0 ) )
+        return OPT_VECTOR2I();
+
+    if( !aLines && aIgnoreEndpoints && ( q == 0 || q == d ) && ( p == 0 || p == d ) )
+        return OPT_VECTOR2I();
+
+    VECTOR2I ip( aSeg.a.x + rescale( q, (ecoord) f.x, d ),
+                 aSeg.a.y + rescale( q, (ecoord) f.y, d ) );
 
      return ip;
 }
@@ -121,7 +127,7 @@ OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines
 
 bool SEG::ccw( const VECTOR2I& a, const VECTOR2I& b, const VECTOR2I& c ) const
 {
-    return (ecoord)( c.y - a.y ) * ( b.x - a.x ) > (ecoord)( b.y - a.y ) * ( c.x - a.x );
+    return (ecoord) ( c.y - a.y ) * ( b.x - a.x ) > (ecoord) ( b.y - a.y ) * ( c.x - a.x );
 }
 
 
@@ -133,8 +139,8 @@ bool SEG::Collide( const SEG& aSeg, int aClearance ) const
             ccw( a, b, aSeg.a ) != ccw( a, b, aSeg.b ) )
         return true;
 
-#define CHK(_seg, _pt) \
-    if( (_seg).PointCloserThan (_pt, aClearance ) ) return true;
+#define CHK( _seg, _pt ) \
+    if( (_seg).PointCloserThan( _pt, aClearance ) ) return true;
 
     CHK( *this, aSeg.a );
     CHK( *this, aSeg.b );

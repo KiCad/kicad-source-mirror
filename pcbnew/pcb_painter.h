@@ -49,7 +49,7 @@ class TEXTE_MODULE;
 class DIMENSION;
 class PCB_TARGET;
 
-namespace KiGfx
+namespace KIGFX
 {
 class GAL;
 
@@ -152,6 +152,6 @@ protected:
     void draw( const DIMENSION*, int );
     void draw( const PCB_TARGET* );
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* __CLASS_PAINTER_H */

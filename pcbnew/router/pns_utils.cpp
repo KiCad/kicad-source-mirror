@@ -42,4 +42,3 @@ const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0,
 
     return s;
 }
-

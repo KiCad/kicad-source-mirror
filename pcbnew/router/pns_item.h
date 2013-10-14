@@ -150,9 +150,8 @@ protected:
     PNS_NODE*   m_owner;
     PNS_LAYERSET m_layers;
 
-    bool m_movable;
-    int m_net;
+    bool    m_movable;
+    int     m_net;
 };
 
-#endif    // __PNS_ITEM_Ha
-
+#endif    // __PNS_ITEM_H

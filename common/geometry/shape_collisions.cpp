@@ -41,11 +41,11 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_CIRCLE& aB, int 
 
     ecoord dist_sq = delta.SquaredEuclideanNorm();
 
-    if ( dist_sq >= min_dist_sq )
+    if( dist_sq >= min_dist_sq )
         return false;
 
-    if ( aNeedMTV )
-        aMTV = delta.Resize( sqrt ( abs( min_dist_sq - dist_sq ) ) + 1 );
+    if( aNeedMTV )
+        aMTV = delta.Resize( sqrt( abs( min_dist_sq - dist_sq ) ) + 1 );
 
     return true;
 }
@@ -60,28 +60,29 @@ static inline  bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int a
     const ecoord min_dist = aClearance + r;
     const ecoord min_dist_sq = min_dist * min_dist;
 
-    if ( aA.BBox( 0 ).Contains( c ) )
+    if( aA.BBox( 0 ).Contains( c ) )
         return true;
 
-    const VECTOR2I vts[] = {
-                        VECTOR2I(p0.x,             p0.y),
-                        VECTOR2I(p0.x,            p0.y + size.y),
-                        VECTOR2I(p0.x + size.x, p0.y + size.y),
-                        VECTOR2I(p0.x + size.x, p0.y),
-                        VECTOR2I(p0.x,             p0.y) };
+    const VECTOR2I vts[] =
+    {
+        VECTOR2I( p0.x,          p0.y ),
+        VECTOR2I( p0.x,          p0.y + size.y ),
+        VECTOR2I( p0.x + size.x, p0.y + size.y ),
+        VECTOR2I( p0.x + size.x, p0.y ),
+        VECTOR2I( p0.x,          p0.y )
+    };
 
     ecoord nearest_seg_dist_sq = VECTOR2I::ECOORD_MAX;
     VECTOR2I nearest;
 
-    bool inside =  c.x >= p0.x && c.x <= ( p0.x + size.x )
-                && c.y >= p0.y && c.y <= ( p0.y + size.y );
+    bool inside = c.x >= p0.x && c.x <= ( p0.x + size.x )
+                  && c.y >= p0.y && c.y <= ( p0.y + size.y );
 
     if( !inside )
     {
-
         for( int i = 0; i < 4; i++ )
         {
-            const SEG seg( vts[i], vts[i+1] );
+            const SEG seg( vts[i], vts[i + 1] );
             ecoord dist_sq = seg.SquaredDistance( c );
 
             if( dist_sq < min_dist_sq )
@@ -119,7 +120,7 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN& aB, 
 {
     for( int s = 0; s < aB.SegmentCount(); s++ )
     {
-        if ( aA.Collide( aB.CSegment( s ), aClearance ) )
+        if( aA.Collide( aB.CSegment( s ), aClearance ) )
             return true;
     }
 
@@ -131,8 +132,9 @@ static inline bool Collide( const SHAPE_LINE_CHAIN& aA, const SHAPE_LINE_CHAIN& 
                             bool aNeedMTV, VECTOR2I& aMTV )
 {
     for( int i = 0; i < aB.SegmentCount(); i++ )
-        if( aA.Collide( aB.CSegment(i), aClearance ) )
+        if( aA.Collide( aB.CSegment( i ), aClearance ) )
             return true;
+
     return false;
 }
 
@@ -143,8 +145,9 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN& aB, in
     for( int s = 0; s < aB.SegmentCount(); s++ )
     {
         SEG seg = aB.CSegment( s );
-            if( aA.Collide( seg, aClearance ) )
-                return true;
+
+        if( aA.Collide( seg, aClearance ) )
+            return true;
     }
 
     return false;
@@ -222,12 +225,13 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
 
 bool SHAPE::Collide( const SHAPE* aShape, int aClerance, VECTOR2I& aMTV ) const
 {
-    return CollideShapes( this, aShape, aClerance, true, aMTV);
+    return CollideShapes( this, aShape, aClerance, true, aMTV );
 }
 
 
-bool SHAPE::Collide ( const SHAPE* aShape, int aClerance ) const
+bool SHAPE::Collide( const SHAPE* aShape, int aClerance ) const
 {
     VECTOR2I dummy;
+
     return CollideShapes( this, aShape, aClerance, false, dummy );
 }

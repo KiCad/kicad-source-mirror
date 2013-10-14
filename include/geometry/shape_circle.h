@@ -27,13 +27,13 @@
 
 #include "shape.h"
 
-class SHAPE_CIRCLE : public SHAPE {
-
+class SHAPE_CIRCLE : public SHAPE
+{
 public:
-    SHAPE_CIRCLE():
+    SHAPE_CIRCLE() :
         SHAPE( SH_CIRCLE ), m_radius( 0 ) {};
 
-    SHAPE_CIRCLE( const VECTOR2I& aCenter, int aRadius ):
+    SHAPE_CIRCLE( const VECTOR2I& aCenter, int aRadius ) :
         SHAPE( SH_CIRCLE ), m_radius( aRadius ), m_center( aCenter ) {};
 
     ~SHAPE_CIRCLE() {};
@@ -41,12 +41,14 @@ public:
     const BOX2I BBox( int aClearance = 0 ) const
     {
         const VECTOR2I rc( m_radius + aClearance, m_radius + aClearance );
+
         return BOX2I( m_center - rc, rc * 2 );
     }
 
     bool Collide( const SEG& aSeg, int aClearance = 0 ) const
     {
         int rc = aClearance + m_radius;
+
         return aSeg.Distance( m_center ) <= rc;
     }
 
@@ -69,6 +71,7 @@ public:
     {
         return m_center;
     }
+
 private:
     int m_radius;
     VECTOR2I m_center;

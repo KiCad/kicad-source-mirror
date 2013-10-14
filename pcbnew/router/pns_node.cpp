@@ -72,7 +72,7 @@ PNS_NODE::~PNS_NODE()
     allocNodes.erase( this );
 
     for( PNS_INDEX::ItemSet::iterator i = m_index->begin();
-            i != m_index->end(); ++i )
+         i != m_index->end(); ++i )
         if( (*i)->BelongsTo( this ) )
             delete *i;
 
@@ -119,7 +119,7 @@ PNS_NODE* PNS_NODE::Branch()
         JointMap::iterator j;
 
         for( PNS_INDEX::ItemSet::iterator i = m_index->begin();
-                i != m_index->end(); ++i )
+             i != m_index->end(); ++i )
             child->m_index->Add( *i );
 
         child->m_joints = m_joints;
@@ -307,9 +307,9 @@ PNS_NODE::OptObstacle PNS_NODE::NearestObstacle( const PNS_LINE* aItem, int aKin
                 {
                     found_isects = true;
                     nearest.dist_first = dist;
-                    nearest.ip_first    = isect.p;
-                    nearest.item    = obs.item;
-                    nearest.hull    = hull;
+                    nearest.ip_first = isect.p;
+                    nearest.item = obs.item;
+                    nearest.hull = hull;
                 }
 
                 if( dist > dist_max )
@@ -702,7 +702,7 @@ void PNS_NODE::FindLineEnds( PNS_LINE* aLine, PNS_JOINT& a, PNS_JOINT& b )
 
 int PNS_NODE::FindLinesBetweenJoints( PNS_JOINT& a, PNS_JOINT& b, vector<PNS_LINE*>& aLines )
 {
-    BOOST_FOREACH( PNS_ITEM * item, a.GetLinkList() )
+    BOOST_FOREACH( PNS_ITEM* item, a.GetLinkList() )
     {
         if( item->GetKind() == PNS_ITEM::SEGMENT )
         {
@@ -844,11 +844,13 @@ void PNS_NODE::Dump( bool aLong )
     }
 
     if( !isRoot() )
+	{
         for( i = m_root->m_items.begin(); i != m_root->m_items.end(); i++ )
         {
             if( (*i)->GetKind() == PNS_ITEM::SEGMENT && !overrides( *i ) )
                 all_segs.insert( static_cast<PNS_SEGMENT*>(*i) );
         }
+	}
 
     JointMap::iterator j;
 
@@ -878,7 +880,6 @@ void PNS_NODE::Dump( bool aLong )
                 }
             }
         }
-
 
 
     int lines_count = 0;
@@ -949,7 +950,7 @@ void PNS_NODE::Commit( PNS_NODE* aNode )
     Remove( item );
 
     for( PNS_INDEX::ItemSet::iterator i = aNode->m_index->begin();
-            i != aNode->m_index->end(); ++i )
+         i != aNode->m_index->end(); ++i )
         Add( *i );
 
     releaseChildren();
@@ -984,4 +985,3 @@ void PNS_NODE::AllItemsInNet( int aNet, std::list<PNS_ITEM*>& aItems )
 
     }
 }
-

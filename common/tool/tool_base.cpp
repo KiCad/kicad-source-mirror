@@ -25,13 +25,13 @@
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 
-KiGfx::VIEW* TOOL_BASE::getView() const
+KIGFX::VIEW* TOOL_BASE::getView() const
 {
     return m_toolMgr->GetView();
 }
 
 
-KiGfx::VIEW_CONTROLS* TOOL_BASE::getViewControls() const
+KIGFX::VIEW_CONTROLS* TOOL_BASE::getViewControls() const
 {
     return m_toolMgr->GetViewControls();
 }

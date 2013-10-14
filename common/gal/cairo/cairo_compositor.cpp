@@ -31,7 +31,7 @@
 #include <gal/cairo/cairo_compositor.h>
 #include <wx/log.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 CAIRO_COMPOSITOR::CAIRO_COMPOSITOR( cairo_t** aMainContext ) :
     m_current( 0 ), m_currentContext( aMainContext ), m_mainContext( *aMainContext )
@@ -67,6 +67,7 @@ unsigned int CAIRO_COMPOSITOR::CreateBuffer()
 {
     // Pixel storage
     BitmapPtr bitmap( new unsigned int[m_bufferSize] );
+
     memset( bitmap.get(), 0x00, m_bufferSize * sizeof(int) );
 
     // Create the Cairo surface

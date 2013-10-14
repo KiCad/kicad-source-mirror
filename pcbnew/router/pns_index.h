@@ -260,4 +260,3 @@ PNS_INDEX::NetItemsList* PNS_INDEX::GetItemsForNet( int aNet )
 }
 
 #endif
-

@@ -102,8 +102,8 @@ public:
     template <typename CastingType>
     VECTOR2( const VECTOR2<CastingType>& aVec )
     {
-        x   = (T) aVec.x;
-        y   = (T) aVec.y;
+        x = (T) aVec.x;
+        y = (T) aVec.y;
     }
 
     /// Casts a vector to another specialized subclass. Beware of rouding
@@ -131,7 +131,7 @@ public:
      * It is used to calculate the length of the vector.
      * @return Scalar, the euclidean norm
      */
-    extended_type       SquaredEuclideanNorm() const;
+    extended_type SquaredEuclideanNorm() const;
 
 
     /**
@@ -258,24 +258,24 @@ VECTOR2<T>::VECTOR2()
 template <class T>
 VECTOR2<T>::VECTOR2( wxPoint const& aPoint )
 {
-    x   = T( aPoint.x );
-    y   = T( aPoint.y );
+    x = T( aPoint.x );
+    y = T( aPoint.y );
 }
 
 
 template <class T>
 VECTOR2<T>::VECTOR2( wxSize const& aSize )
 {
-    x   = T( aSize.x );
-    y   = T( aSize.y );
+    x = T( aSize.x );
+    y = T( aSize.y );
 }
 #endif
 
 template <class T>
 VECTOR2<T>::VECTOR2( T aX, T aY )
 {
-    x   = aX;
-    y   = aY;
+    x = aX;
+    y = aY;
 }
 
 
@@ -285,12 +285,12 @@ T VECTOR2<T>::EuclideanNorm() const
     return sqrt( (extended_type) x * x + (extended_type) y * y );
 }
 
+
 template <class T>
 typename VECTOR2<T>::extended_type VECTOR2<T>::SquaredEuclideanNorm() const
 {
-    return (extended_type)x * x + (extended_type) y * y ;
+    return (extended_type) x * x + (extended_type) y * y;
 }
-
 
 
 template <class T>
@@ -311,8 +311,8 @@ VECTOR2<T> VECTOR2<T>::Perpendicular() const
 template <class T>
 VECTOR2<T>& VECTOR2<T>::operator=( const VECTOR2<T>& aVector )
 {
-    x   = aVector.x;
-    y   = aVector.y;
+    x = aVector.x;
+    y = aVector.y;
     return *this;
 }
 
@@ -320,8 +320,8 @@ VECTOR2<T>& VECTOR2<T>::operator=( const VECTOR2<T>& aVector )
 template <class T>
 VECTOR2<T>& VECTOR2<T>::operator+=( const VECTOR2<T>& aVector )
 {
-    x   += aVector.x;
-    y   += aVector.y;
+    x += aVector.x;
+    y += aVector.y;
     return *this;
 }
 
@@ -329,8 +329,8 @@ VECTOR2<T>& VECTOR2<T>::operator+=( const VECTOR2<T>& aVector )
 template <class T>
 VECTOR2<T>& VECTOR2<T>::operator+=( const T& aScalar )
 {
-    x   += aScalar;
-    y   += aScalar;
+    x += aScalar;
+    y += aScalar;
     return *this;
 }
 
@@ -338,8 +338,8 @@ VECTOR2<T>& VECTOR2<T>::operator+=( const T& aScalar )
 template <class T>
 VECTOR2<T>& VECTOR2<T>::operator-=( const VECTOR2<T>& aVector )
 {
-    x   -= aVector.x;
-    y   -= aVector.y;
+    x -= aVector.x;
+    y -= aVector.y;
     return *this;
 }
 
@@ -347,8 +347,8 @@ VECTOR2<T>& VECTOR2<T>::operator-=( const VECTOR2<T>& aVector )
 template <class T>
 VECTOR2<T>& VECTOR2<T>::operator-=( const T& aScalar )
 {
-    x   -= aScalar;
-    y   -= aScalar;
+    x -= aScalar;
+    y -= aScalar;
     return *this;
 }
 template <class T>
@@ -365,15 +365,15 @@ VECTOR2<T> VECTOR2<T>::Rotate( double aAngle ) const
 template <class T>
 VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
 {
-  if(x == 0 && y == 0)
-    return VECTOR2<T> (0, 0);
+    if( x == 0 && y == 0 )
+        return VECTOR2<T> ( 0, 0 );
 
-  extended_type l_sq_current = (extended_type)this->x * this->x + (extended_type)this->y * this->y;
-  extended_type l_sq_new = (extended_type) aNewLength * aNewLength;
+    extended_type l_sq_current = (extended_type) x * x + (extended_type) y * y;
+    extended_type l_sq_new = (extended_type) aNewLength * aNewLength;
 
-  return VECTOR2<T> (
-    (this->x < 0 ? -1 : 1 ) * sqrt(rescale(l_sq_new, (extended_type) x * x, l_sq_current)),
-    (this->y < 0 ? -1 : 1 ) * sqrt(rescale(l_sq_new, (extended_type) y * y, l_sq_current)));
+    return VECTOR2<T> (
+        ( x < 0 ? -1 : 1 ) * sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ),
+        ( y < 0 ? -1 : 1 ) * sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) );
 }
 
 

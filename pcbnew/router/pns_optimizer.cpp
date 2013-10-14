@@ -301,8 +301,8 @@ bool PNS_OPTIMIZER::mergeObtuse( PNS_LINE* aLine )
 
         while( n < n_segs - step )
         {
-            const SEG s1    = current_path.CSegment( n );
-            const SEG s2    = current_path.CSegment( n + step );
+            const SEG s1 = current_path.CSegment( n );
+            const SEG s2 = current_path.CSegment( n + step );
             SEG s1opt, s2opt;
 
             if( DIRECTION_45( s1 ).IsObtuse( DIRECTION_45( s2 ) ) )
@@ -512,8 +512,8 @@ PNS_OPTIMIZER::BreakoutList PNS_OPTIMIZER::rectBreakouts( int aWidth,
 
     VECTOR2I d_offset;
 
-    d_offset.x = (s.x > s.y) ? (s.x - s.y) / 2 : 0;
-    d_offset.y = (s.x < s.y) ? (s.y - s.x) / 2 : 0;
+    d_offset.x = ( s.x > s.y ) ? ( s.x - s.y ) / 2 : 0;
+    d_offset.y = ( s.x < s.y ) ? ( s.y - s.x ) / 2 : 0;
 
     VECTOR2I d_vert  = VECTOR2I( 0, s.y / 2 + aWidth );
     VECTOR2I d_horiz = VECTOR2I( s.x / 2 + aWidth, 0 );
@@ -601,7 +601,7 @@ PNS_ITEM* PNS_OPTIMIZER::findPadOrVia( int aLayer, int aNet, const VECTOR2I& aP 
     if( !jt )
         return NULL;
 
-    BOOST_FOREACH( PNS_ITEM * item, jt->GetLinkList() )
+    BOOST_FOREACH( PNS_ITEM* item, jt->GetLinkList() )
     {
         if( item->GetKind() == PNS_ITEM::VIA || item->GetKind() == PNS_ITEM::SOLID )
             return item;
@@ -680,10 +680,10 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
     }
 
     SHAPE_LINE_CHAIN l_best;
-    bool found  = false;
-    int p_best  = -1;
+    bool found = false;
+    int p_best = -1;
 
-    BOOST_FOREACH( RtVariant & vp, variants )
+    BOOST_FOREACH( RtVariant& vp, variants )
     {
         PNS_LINE tmp( *aLine, vp.second );
         int cost = PNS_COST_ESTIMATOR::CornerCost( vp.second );
@@ -761,4 +761,3 @@ bool PNS_OPTIMIZER::Optimize( PNS_LINE* aLine, int aEffortLevel, PNS_NODE* aWorl
     opt.SetCollisionMask( -1 );
     return opt.Optimize( aLine );
 }
-

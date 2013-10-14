@@ -34,14 +34,18 @@
  * Scales a number (value) by rational (numerator/denominator). Numerator must be <= denominator.
  */
 
-template<typename T> T rescale( T numerator, T value, T denominator )
+template <typename T>
+T rescale( T numerator, T value, T denominator )
 {
     return numerator * value / denominator;
 }
 
 
 // explicit specializations for integer types, taking care of overflow.
-template<> int rescale( int numerator, int value, int denominator );
-template<> int64_t rescale( int64_t numerator, int64_t value, int64_t denominator );
+template <>
+int rescale( int numerator, int value, int denominator );
+
+template <>
+int64_t rescale( int64_t numerator, int64_t value, int64_t denominator );
 
 #endif // __MATH_UTIL_H

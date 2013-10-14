@@ -31,7 +31,7 @@
 #include <gal/opengl/vertex_manager.h>
 #include <cstring>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 VERTEX_ITEM::VERTEX_ITEM( const VERTEX_MANAGER& aManager ) :
     m_manager( aManager ), m_offset( 0 ), m_size( 0 )

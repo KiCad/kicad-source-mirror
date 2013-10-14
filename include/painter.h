@@ -38,7 +38,7 @@
 class EDA_ITEM;
 class COLORS_DESIGN_SETTINGS;
 
-namespace KiGfx
+namespace KIGFX
 {
 class GAL;
 class VIEW_ITEM;
@@ -265,6 +265,6 @@ protected:
     /// Color of brightened item frame
     COLOR4D             m_brightenedColor;
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* __CLASS_PAINTER_H */

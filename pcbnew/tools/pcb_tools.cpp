@@ -41,10 +41,10 @@
 
 void PCB_EDIT_FRAME::setupTools()
 {
-	// Create the manager and dispatcher & route draw panel events to the dispatcher
-	m_toolManager = new TOOL_MANAGER;
-	m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
-	m_galCanvas->SetEventDispatcher( m_toolDispatcher );
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
+    m_galCanvas->SetEventDispatcher( m_toolDispatcher );
 
     // Register tool actions
     m_toolManager->RegisterAction( &COMMON_ACTIONS::moveActivate );
@@ -52,10 +52,10 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterAction( &COMMON_ACTIONS::rotate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::flip );
 
-	// Register tools
-	m_toolManager->RegisterTool( new SELECTION_TOOL );
-	m_toolManager->RegisterTool( new ROUTER_TOOL );
-	m_toolManager->RegisterTool( new MOVE_TOOL );
+    // Register tools
+    m_toolManager->RegisterTool( new SELECTION_TOOL );
+    m_toolManager->RegisterTool( new ROUTER_TOOL );
+    m_toolManager->RegisterTool( new MOVE_TOOL );
 }
 
 
@@ -71,8 +71,7 @@ void PCB_EDIT_FRAME::destroyTools()
 }
 
 
-void PCB_EDIT_FRAME::onGenericCommand( wxCommandEvent &aEvent )
+void PCB_EDIT_FRAME::onGenericCommand( wxCommandEvent& aEvent )
 {
-	m_toolDispatcher->DispatchWxCommand( aEvent );
+    m_toolDispatcher->DispatchWxCommand( aEvent );
 }
-

@@ -51,8 +51,11 @@
  */
 
 // Forward declaration for template friends
-template <class T> class MATRIX3x3;
-template <class T> std::ostream& operator<<( std::ostream& stream, const MATRIX3x3<T>& matrix );
+template <class T>
+class MATRIX3x3;
+
+template <class T>
+std::ostream& operator<<( std::ostream& stream, const MATRIX3x3<T>& matrix );
 
 template <class T>
 class MATRIX3x3
@@ -164,20 +167,21 @@ public:
 // Operators
 
 //! @brief Matrix multiplication
-template<class T> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, MATRIX3x3<T> const& b );
+template <class T> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, MATRIX3x3<T> const& b );
 
 //! @brief Multiplication with a 2D vector, the 3rd z-component is assumed to be 1
-template<class T> VECTOR2<T> const operator*( MATRIX3x3<T> const& a, VECTOR2<T> const& b );
+template <class T> VECTOR2<T> const operator*( MATRIX3x3<T> const& a, VECTOR2<T> const& b );
 
 //! @brief Multiplication with a scalar
-template<class T, class S> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, T scalar );
-template<class T, class S> MATRIX3x3<T> const operator*( T scalar, MATRIX3x3<T> const& matrix );
+template <class T, class S> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, T scalar );
+template <class T, class S> MATRIX3x3<T> const operator*( T scalar, MATRIX3x3<T> const& matrix );
 
 // ----------------------
 // --- Implementation ---
 // ----------------------
 
-template<class T> MATRIX3x3<T>::MATRIX3x3()
+template <class T>
+MATRIX3x3<T>::MATRIX3x3()
 {
     for( int j = 0; j < 3; j++ )
     {
@@ -189,8 +193,8 @@ template<class T> MATRIX3x3<T>::MATRIX3x3()
 }
 
 
-template<class T> MATRIX3x3<T>::MATRIX3x3( T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21,
-                                           T a22 )
+template <class T>
+MATRIX3x3<T>::MATRIX3x3( T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22 )
 {
     m_data[0][0] = a00;
     m_data[0][1] = a01;
@@ -206,7 +210,8 @@ template<class T> MATRIX3x3<T>::MATRIX3x3( T a00, T a01, T a02, T a10, T a11, T 
 }
 
 
-template<class T> void MATRIX3x3<T>::SetIdentity( void )
+template <class T>
+void MATRIX3x3<T>::SetIdentity( void )
 {
     for( int j = 0; j < 3; j++ )
     {
@@ -221,14 +226,16 @@ template<class T> void MATRIX3x3<T>::SetIdentity( void )
 }
 
 
-template<class T> void MATRIX3x3<T>::SetTranslation( VECTOR2<T> aTranslation )
+template <class T>
+void MATRIX3x3<T>::SetTranslation( VECTOR2<T> aTranslation )
 {
     m_data[0][2] = aTranslation.x;
     m_data[1][2] = aTranslation.y;
 }
 
 
-template<class T> VECTOR2<T> MATRIX3x3<T>::GetTranslation( void ) const
+template <class T>
+VECTOR2<T> MATRIX3x3<T>::GetTranslation( void ) const
 {
     VECTOR2<T> result;
     result.x = m_data[0][2];
@@ -237,7 +244,8 @@ template<class T> VECTOR2<T> MATRIX3x3<T>::GetTranslation( void ) const
 }
 
 
-template<class T> void MATRIX3x3<T>::SetRotation( T aAngle )
+template <class T>
+void MATRIX3x3<T>::SetRotation( T aAngle )
 {
     T cosValue = cos( aAngle );
     T sinValue = sin( aAngle );
@@ -248,21 +256,24 @@ template<class T> void MATRIX3x3<T>::SetRotation( T aAngle )
 }
 
 
-template<class T> void MATRIX3x3<T>::SetScale( VECTOR2<T> aScale )
+template <class T>
+void MATRIX3x3<T>::SetScale( VECTOR2<T> aScale )
 {
     m_data[0][0] = aScale.x;
     m_data[1][1] = aScale.y;
 }
 
 
-template<class T> VECTOR2<T> MATRIX3x3<T>::GetScale( void ) const
+template <class T>
+VECTOR2<T> MATRIX3x3<T>::GetScale( void ) const
 {
     VECTOR2<T> result( m_data[0][0], m_data[1][1] );
     return result;
 }
 
 
-template<class T> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, MATRIX3x3<T> const& b )
+template <class T>
+MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, MATRIX3x3<T> const& b )
 {
     MATRIX3x3<T> result;
 
@@ -279,8 +290,9 @@ template<class T> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, MATRIX3x3
 }
 
 
-template<class T> VECTOR2<T> const operator*( MATRIX3x3<T> const& matrix,
-                                              VECTOR2<T> const& vector )
+template <class T>
+VECTOR2<T> const operator*( MATRIX3x3<T> const& matrix,
+                            VECTOR2<T> const& vector )
 {
     VECTOR2<T> result( 0, 0 );
     result.x = matrix.m_data[0][0] * vector.x + matrix.m_data[0][1] * vector.y
@@ -292,7 +304,8 @@ template<class T> VECTOR2<T> const operator*( MATRIX3x3<T> const& matrix,
 }
 
 
-template<class T> T MATRIX3x3<T>::Determinant( void ) const
+template <class T>
+T MATRIX3x3<T>::Determinant( void ) const
 {
     return m_data[0][0] * ( m_data[1][1] * m_data[2][2] - m_data[1][2] * m_data[2][1] )
            - m_data[0][1] * ( m_data[1][0] * m_data[2][2] - m_data[1][2] * m_data[2][0] )
@@ -300,7 +313,8 @@ template<class T> T MATRIX3x3<T>::Determinant( void ) const
 }
 
 
-template<class T, class S> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& matrix, S scalar )
+template <class T, class S>
+MATRIX3x3<T> const operator*( MATRIX3x3<T> const& matrix, S scalar )
 {
     MATRIX3x3<T> result;
 
@@ -316,13 +330,15 @@ template<class T, class S> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& mat
 }
 
 
-template<class T, class S> MATRIX3x3<T> const operator*( S scalar, MATRIX3x3<T> const& matrix )
+template <class T, class S>
+MATRIX3x3<T> const operator*( S scalar, MATRIX3x3<T> const& matrix )
 {
     return matrix * scalar;
 }
 
 
-template<class T> MATRIX3x3<T> MATRIX3x3<T>::Inverse( void ) const
+template <class T>
+MATRIX3x3<T> MATRIX3x3<T>::Inverse() const
 {
     MATRIX3x3<T> result;
 
@@ -342,7 +358,8 @@ template<class T> MATRIX3x3<T> MATRIX3x3<T>::Inverse( void ) const
 }
 
 
-template<class T> MATRIX3x3<T> MATRIX3x3<T>::Transpose( void ) const
+template <class T>
+MATRIX3x3<T> MATRIX3x3<T>::Transpose() const
 {
     MATRIX3x3<T> result;
 
@@ -358,7 +375,8 @@ template<class T> MATRIX3x3<T> MATRIX3x3<T>::Transpose( void ) const
 }
 
 
-template<class T> std::ostream& operator<<( std::ostream& aStream, const MATRIX3x3<T>& aMatrix )
+template <class T>
+std::ostream& operator<<( std::ostream& aStream, const MATRIX3x3<T>& aMatrix )
 {
     for( int i = 0; i < 3; i++ )
     {
@@ -376,6 +394,7 @@ template<class T> std::ostream& operator<<( std::ostream& aStream, const MATRIX3
 
     return aStream;
 }
+
 
 /* Default specializations */
 typedef MATRIX3x3<double> MATRIX3x3D;

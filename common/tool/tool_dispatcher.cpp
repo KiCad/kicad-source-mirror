@@ -111,7 +111,7 @@ void TOOL_DISPATCHER::ResetState()
 }
 
 
-KiGfx::VIEW* TOOL_DISPATCHER::getView()
+KIGFX::VIEW* TOOL_DISPATCHER::getView()
 {
     return m_editFrame->GetGalCanvas()->GetView();
 }
@@ -139,7 +139,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
         st->pressed = true;
         evt = TOOL_EVENT( TC_Mouse, TA_MouseDown, args );
     }
-    else if( up )   // Handle mouse button release
+    else if( up )    // Handle mouse button release
     {
         st->pressed = false;
 
@@ -166,7 +166,8 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
     if( st->pressed && aMotion )
     {
         st->dragging = true;
-        double dragPixelDistance = getView()->ToScreen( m_lastMousePos - st->dragOrigin, false ).EuclideanNorm();
+        double dragPixelDistance =
+            getView()->ToScreen( m_lastMousePos - st->dragOrigin, false ).EuclideanNorm();
         st->dragMaxDelta = std::max( st->dragMaxDelta, dragPixelDistance );
 
         wxLongLong t = wxGetLocalTimeMillis();
@@ -200,17 +201,17 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     // Mouse handling
     if( type == wxEVT_MOTION || type == wxEVT_MOUSEWHEEL ||
-            type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
-            type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
-            type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
-            // Event issued whem mouse retains position in screen coordinates,
-            // but changes in world coordinates (eg. autopanning)
-            type == KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
+        type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
+        type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
+        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
+        // Event issued whem mouse retains position in screen coordinates,
+        // but changes in world coordinates (eg. autopanning)
+        type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
     {
         VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetCursorPosition();
         VECTOR2D pos = getView()->ToWorld( screenPos );
 
-        if( pos != m_lastMousePos || type == KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
+        if( pos != m_lastMousePos || type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
         {
             motion = true;
             m_lastMousePos = pos;
@@ -235,7 +236,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         if( type == wxEVT_KEY_UP )
         {
-            if( key == WXK_ESCAPE )     // ESC is the special key for cancelling tools
+            if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
                 evt = TOOL_EVENT( TC_Command, TA_CancelTool );
             else
                 evt = TOOL_EVENT( TC_Keyboard, TA_KeyUp, key | mods );
@@ -262,14 +263,15 @@ void TOOL_DISPATCHER::DispatchWxCommand( const wxCommandEvent& aEvent )
     // fixme: use TOOL_ACTIONs here
     switch( aEvent.GetId() )
     {
-        case ID_PNS_ROUTER_TOOL:
-            toolName = "pcbnew.InteractiveRouter";
-            activateTool = true;
-            break;
-        case ID_SELECTION_TOOL:
-            toolName = "pcbnew.InteractiveSelection";
-            activateTool = true;
-            break;
+    case ID_PNS_ROUTER_TOOL:
+        toolName = "pcbnew.InteractiveRouter";
+        activateTool = true;
+        break;
+
+    case ID_SELECTION_TOOL:
+        toolName = "pcbnew.InteractiveSelection";
+        activateTool = true;
+        break;
     }
 
     // do nothing if the legacy view is active

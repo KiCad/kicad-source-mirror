@@ -33,7 +33,7 @@
 #include <gal/opengl/shader.h>
 #include <wx/log.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 VERTEX_CONTAINER* VERTEX_CONTAINER::MakeContainer( bool aCached )
 {

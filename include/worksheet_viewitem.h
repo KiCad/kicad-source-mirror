@@ -40,7 +40,7 @@ class WS_DRAW_ITEM_RECT;
 class WS_DRAW_ITEM_POLYGON;
 class WS_DRAW_ITEM_TEXT;
 
-namespace KiGfx
+namespace KIGFX
 {
 class GAL;
 

@@ -66,13 +66,13 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_gal->SetZoomFactor( 1.0 );
     m_gal->ComputeWorldScreenMatrix();
 
-    m_painter = new KiGfx::PCB_PAINTER( m_gal );
+    m_painter = new KIGFX::PCB_PAINTER( m_gal );
 
-    m_view = new KiGfx::VIEW( true );
+    m_view = new KIGFX::VIEW( true );
     m_view->SetPainter( m_painter );
     m_view->SetGAL( m_gal );
 
-    m_viewControls = new KiGfx::WX_VIEW_CONTROLS( m_view, this );
+    m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 
     Connect( wxEVT_PAINT,       wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
     Connect( wxEVT_SIZE,        wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
@@ -90,7 +90,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     Connect( wxEVT_KEY_UP,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     Connect( wxEVT_KEY_DOWN,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
-    Connect( KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE,
+    Connect( KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE,
              wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 
     m_refreshTimer.SetOwner( this );
@@ -122,12 +122,12 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     m_lastRefresh = wxGetLocalTimeMillis();
 
     m_gal->BeginDrawing();
-    m_gal->SetBackgroundColor( KiGfx::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
+    m_gal->SetBackgroundColor( KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
     m_gal->ClearScreen();
 
     m_view->ClearTargets();
     // Grid has to be redrawn only when the NONCACHED target is redrawn
-    if( m_view->IsTargetDirty( KiGfx::TARGET_NONCACHED ) )
+    if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
         m_gal->DrawGrid();
     m_view->Redraw();
     m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
@@ -139,8 +139,8 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 {
     m_gal->ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
-    m_view->MarkTargetDirty( KiGfx::TARGET_CACHED );
-    m_view->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
+    m_view->MarkTargetDirty( KIGFX::TARGET_CACHED );
+    m_view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
 
 
@@ -189,11 +189,11 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
     switch( aGalType )
     {
     case GAL_TYPE_OPENGL:
-        m_gal = new KiGfx::OPENGL_GAL( this, this, this );
+        m_gal = new KIGFX::OPENGL_GAL( this, this, this );
         break;
 
     case GAL_TYPE_CAIRO:
-        m_gal = new KiGfx::CAIRO_GAL( this, this, this );
+        m_gal = new KIGFX::CAIRO_GAL( this, this, this );
         break;
 
     case GAL_TYPE_NONE:

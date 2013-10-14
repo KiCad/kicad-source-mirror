@@ -30,7 +30,8 @@
 #include <geometry/shape_circle.h>
 #include <geometry/seg.h>
 
-class SHAPE_RECT : public SHAPE {
+class SHAPE_RECT : public SHAPE
+{
     public:
         /**
          * Constructor
@@ -50,11 +51,11 @@ class SHAPE_RECT : public SHAPE {
          * Constructor
          * Creates a rectangle defined by top-left corner aP0, width aW and height aH.
          */
-         SHAPE_RECT( const VECTOR2I &aP0, int aW, int aH ) :
+         SHAPE_RECT( const VECTOR2I& aP0, int aW, int aH ) :
             SHAPE( SH_RECT ), m_p0( aP0 ), m_w( aW ), m_h( aH ) {};
 
         /// @copydoc SHAPE::BBox()
-        const BOX2I BBox(int aClearance = 0) const
+        const BOX2I BBox( int aClearance = 0 ) const
         {
             BOX2I bbox( VECTOR2I( m_p0.x - aClearance, m_p0.y - aClearance ),
                           VECTOR2I( m_w + 2 * aClearance, m_h + 2 * aClearance ) );
@@ -76,17 +77,17 @@ class SHAPE_RECT : public SHAPE {
         /// @copydoc SHAPE::Collide()
         bool Collide( const SEG& aSeg, int aClearance = 0 ) const
         {
-            //VECTOR2I pmin = VECTOR2I(std::min(aSeg.a.x, aSeg.b.x), std::min(aSeg.a.y, aSeg.b.y));
-            //VECTOR2I pmax = VECTOR2I(std::max(aSeg.a.x, aSeg.b.x), std::max(aSeg.a.y, aSeg.b.y));
-            //BOX2I r(pmin, VECTOR2I(pmax.x - pmin.x, pmax.y - pmin.y));
+            //VECTOR2I pmin = VECTOR2I( std::min( aSeg.a.x, aSeg.b.x ), std::min( aSeg.a.y, aSeg.b.y ) );
+            //VECTOR2I pmax = VECTOR2I( std::max( aSeg.a.x, aSeg.b.x ), std::max( aSeg.a.y, aSeg.b.y ));
+            //BOX2I r( pmin, VECTOR2I( pmax.x - pmin.x, pmax.y - pmin.y ) );
 
-            //if (BBox(0).SquaredDistance(r) > aClearance * aClearance)
+            //if( BBox( 0 ).SquaredDistance( r ) > aClearance * aClearance )
             //    return false;
 
             if( BBox( 0 ).Contains( aSeg.a ) || BBox( 0 ).Contains( aSeg.b ) )
                 return true;
 
-             VECTOR2I vts[] = {     VECTOR2I( m_p0.x, m_p0.y ),
+             VECTOR2I vts[] = { VECTOR2I( m_p0.x, m_p0.y ),
                                 VECTOR2I( m_p0.x, m_p0.y + m_h ),
                                 VECTOR2I( m_p0.x + m_w, m_p0.y + m_h ),
                                 VECTOR2I( m_p0.x + m_w, m_p0.y ),
@@ -107,28 +108,40 @@ class SHAPE_RECT : public SHAPE {
          *
          * @return top-left corner of the rectangle
          */
-        const VECTOR2I& GetPosition() const { return m_p0; }
+        const VECTOR2I& GetPosition() const
+        {
+            return m_p0;
+        }
 
         /**
          * Function GetSize()
          *
          * @return size of the rectangle
          */
-        const VECTOR2I GetSize() const { return VECTOR2I( m_w, m_h ); }
+        const VECTOR2I GetSize() const
+        {
+            return VECTOR2I( m_w, m_h );
+        }
 
         /**
          * Function GetWidth()
          *
          * @return width of the rectangle
          */
-         const int GetWidth() const { return m_w; }
+         const int GetWidth() const
+         {
+             return m_w;
+         }
 
         /**
          * Function GetHeight()
          *
          * @return height of the rectangle
          */
-        const int GetHeight() const { return m_h; }
+        const int GetHeight() const
+        {
+            return m_h;
+        }
 
     private:
         ///> Top-left corner

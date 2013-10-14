@@ -32,27 +32,27 @@
 #include "delegate.h"
 
 /**
-  Class COROUNTINE.
-  Implements a coroutine. Wikipedia has a good explanation:
-
-  "Coroutines are computer program components that generalize subroutines to
-  allow multiple entry points for suspending and resuming execution at certain locations.
-  Coroutines are well-suited for implementing more familiar program components such as cooperative
-  tasks, exceptions, event loop, iterators, infinite lists and pipes."
-
-  In other words, a coroutine can be considered a lightweight thread - which can be
-  preempted only when it deliberately yields the control to the caller. This way,
-  we avoid concurrency problems such as locking / race conditions.
-
-  Uses boost::context library to do the actual context switching.
-
-  This particular version takes a DELEGATE as an entry point, so it can invoke
-  methods within a given object as separate coroutines.
-
-  See coroutine_example.cpp for sample code.
+ *  Class COROUNTINE.
+ *  Implements a coroutine. Wikipedia has a good explanation:
+ *
+ *  "Coroutines are computer program components that generalize subroutines to
+ *  allow multiple entry points for suspending and resuming execution at certain locations.
+ *  Coroutines are well-suited for implementing more familiar program components such as cooperative
+ *  tasks, exceptions, event loop, iterators, infinite lists and pipes."
+ *
+ *  In other words, a coroutine can be considered a lightweight thread - which can be
+ *  preempted only when it deliberately yields the control to the caller. This way,
+ *  we avoid concurrency problems such as locking / race conditions.
+ *
+ *  Uses boost::context library to do the actual context switching.
+ *
+ *  This particular version takes a DELEGATE as an entry point, so it can invoke
+ *  methods within a given object as separate coroutines.
+ *
+ *  See coroutine_example.cpp for sample code.
  */
 
-template<class ReturnType, class ArgType>
+template <class ReturnType, class ArgType>
 class COROUTINE
 {
 public:
@@ -67,8 +67,8 @@ public:
      * Constructor
      * Creates a coroutine from a member method of an object
      */
-    template<class T>
-    COROUTINE( T* object, ReturnType (T::*ptr)( ArgType ) ) :
+    template <class T>
+    COROUTINE( T* object, ReturnType(T::* ptr)( ArgType ) ) :
         m_func( object, ptr ), m_saved( NULL ), m_stack( NULL ), m_stackSize( c_defaultStackSize )
     {
     }
@@ -78,13 +78,14 @@ public:
      * Creates a coroutine from a delegate object
      */
     COROUTINE( DELEGATE<ReturnType, ArgType> aEntry ) :
-            m_func( aEntry ), m_saved( NULL ), m_stack( NULL ), m_stackSize( c_defaultStackSize )
+        m_func( aEntry ), m_saved( NULL ), m_stack( NULL ), m_stackSize( c_defaultStackSize )
     {};
 
     ~COROUTINE()
     {
         if( m_saved )
             delete m_saved;
+
         if( m_stack )
             free( m_stack );
     }
@@ -114,7 +115,7 @@ public:
     }
 
     /**
-     <F11>* Function SetEntry()
+     *  <F11>* Function SetEntry()
      *
      * Defines the entry point for the coroutine, if not set in the constructor.
      */
@@ -135,7 +136,7 @@ public:
         m_stack = malloc( c_defaultStackSize );
 
         // align to 16 bytes
-        void *sp = (void *) ( ( ( (ptrdiff_t) m_stack ) + m_stackSize - 0xf ) & ( ~0x0f ) );
+        void* sp = (void*) ( ( ( (ptrdiff_t) m_stack ) + m_stackSize - 0xf ) & ( ~0x0f ) );
 
         m_args = &args;
         m_self = boost::context::make_fcontext( sp, m_stackSize, callerStub );
@@ -157,6 +158,7 @@ public:
     bool Resume()
     {
         boost::context::jump_fcontext( m_saved, m_self, 0 );
+
         return m_running;
     }
 
@@ -181,7 +183,7 @@ public:
     }
 
 private:
-    static const int c_defaultStackSize = 2000000; // fixme: make configurable
+    static const int c_defaultStackSize = 2000000;    // fixme: make configurable
 
     /* real entry point of the coroutine */
     static void callerStub( intptr_t data )
@@ -194,17 +196,19 @@ private:
         cor->m_running = false;
 
         // go back to wherever we came from.
-        boost::context::jump_fcontext( cor->m_self, cor->m_saved, 0 ); //reinterpret_cast<intptr_t>( this ));
+        boost::context::jump_fcontext( cor->m_self, cor->m_saved, 0 );    // reinterpret_cast<intptr_t>( this ));
     }
 
-    template <typename T> struct strip_ref
+    template <typename T>
+    struct strip_ref
     {
-          typedef T result;
+        typedef T result;
     };
 
-    template <typename T> struct strip_ref<T&>
+    template <typename T>
+    struct strip_ref<T&>
     {
-          typedef T result;
+        typedef T result;
     };
 
     DELEGATE<ReturnType, ArgType> m_func;

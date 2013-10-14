@@ -396,7 +396,7 @@ void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool is
     EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
     if( galCanvas )
     {
-        KiGfx::VIEW* view = galCanvas->GetView();
+        KIGFX::VIEW* view = galCanvas->GetView();
         view->SetLayerVisible( aLayer, isVisible );
     }
 
@@ -418,7 +418,7 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     EDA_DRAW_PANEL_GAL *galCanvas = myframe->GetGalCanvas();
     if( galCanvas )
     {
-        KiGfx::VIEW* view = galCanvas->GetView();
+        KIGFX::VIEW* view = galCanvas->GetView();
         view->SetLayerVisible( ITEM_GAL_LAYER( aId ), isEnabled );
     }
 

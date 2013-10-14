@@ -172,7 +172,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 
     if( m_galCanvas )
     {
-        KiGfx::VIEW* view = m_galCanvas->GetView();
+        KIGFX::VIEW* view = m_galCanvas->GetView();
 
         ViewReloadBoard( m_Pcb );
 
@@ -185,7 +185,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 
 void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
 {
-    KiGfx::VIEW* view = m_galCanvas->GetView();
+    KIGFX::VIEW* view = m_galCanvas->GetView();
     view->Clear();
 
     // All of PCB drawing elements should be added to the VIEW
@@ -194,7 +194,7 @@ void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     // Load zones
     for( int i = 0; i < aBoard->GetAreaCount(); ++i )
     {
-        view->Add( (KiGfx::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
+        view->Add( (KIGFX::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
     }
 
     // Load drawings
@@ -240,7 +240,7 @@ void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     }
 
     // Add an entry for the worksheet layout
-    KiGfx::WORKSHEET_VIEWITEM* worksheet = new KiGfx::WORKSHEET_VIEWITEM(
+    KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM(
                                             std::string( aBoard->GetFileName().mb_str() ),
                                             std::string( GetScreenDesc().mb_str() ),
                                             &GetPageSettings(), &GetTitleBlock() );
@@ -520,10 +520,10 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
     m_DisplayPadFill = DisplayOpt.DisplayPadFill = !m_DisplayPadFill;
 
     // Apply new display options to the GAL canvas
-    KiGfx::PCB_PAINTER* painter =
-            static_cast<KiGfx::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
-    KiGfx::PCB_RENDER_SETTINGS* settings =
-            static_cast<KiGfx::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
     settings->LoadDisplayOptions( DisplayOpt );
     m_galCanvas->GetView()->RecacheAllItems( true );
 
@@ -856,13 +856,13 @@ void PCB_BASE_FRAME::LoadSettings()
         m_DisplayModText = FILLED;
 
     // Apply display settings for GAL
-    KiGfx::VIEW* view = m_galCanvas->GetView();
+    KIGFX::VIEW* view = m_galCanvas->GetView();
 
     // Set rendering order and properties of layers
     for( LAYER_NUM i = 0; (unsigned) i < sizeof(GAL_LAYER_ORDER) / sizeof(LAYER_NUM); ++i )
     {
         LAYER_NUM layer = GAL_LAYER_ORDER[i];
-        wxASSERT( layer < KiGfx::VIEW::VIEW_MAX_LAYERS );
+        wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
 
         view->SetLayerOrder( layer, i );
 
@@ -870,13 +870,13 @@ void PCB_BASE_FRAME::LoadSettings()
         {
             // Copper layers are required for netname layers
             view->SetRequired( GetNetnameLayer( layer ), layer );
-            view->SetLayerTarget( layer, KiGfx::TARGET_CACHED );
+            view->SetLayerTarget( layer, KIGFX::TARGET_CACHED );
         }
         else if( IsNetnameLayer( layer ) )
         {
             // Netnames are drawn only when scale is sufficient (level of details)
             // so there is no point in caching them
-            view->SetLayerTarget( layer, KiGfx::TARGET_NONCACHED );
+            view->SetLayerTarget( layer, KIGFX::TARGET_NONCACHED );
         }
     }
 
@@ -895,12 +895,12 @@ void PCB_BASE_FRAME::LoadSettings()
     view->SetRequired( SOLDERPASTE_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
     view->SetRequired( SOLDERMASK_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
 
-    view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KiGfx::TARGET_OVERLAY );
+    view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
 
     // Apply layer coloring scheme & display options
     if( view->GetPainter() )
     {
-        KiGfx::PCB_RENDER_SETTINGS* settings = new KiGfx::PCB_RENDER_SETTINGS();
+        KIGFX::PCB_RENDER_SETTINGS* settings = new KIGFX::PCB_RENDER_SETTINGS();
 
         // Load layers' colors from PCB data
         settings->ImportLegacyColors( m_Pcb->GetColorsSettings() );

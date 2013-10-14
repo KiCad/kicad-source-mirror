@@ -88,6 +88,7 @@ void CONTEXT_MENU::SetTitle( const wxString& aTitle )
 void CONTEXT_MENU::Add( const wxString& aLabel, int aId )
 {
 #ifdef DEBUG
+
     if( m_menu.FindItem( aId ) != NULL )
         wxLogWarning( wxT( "Adding more than one menu entry with the same ID may result in"
                 "undefined behaviour" ) );
@@ -135,13 +136,15 @@ std::string CONTEXT_MENU::getHotKeyDescription( const TOOL_ACTION& aAction ) con
 
     if( hotkey & MD_ModAlt )
         description += "ALT+";
+
     if( hotkey & MD_ModCtrl )
         description += "CTRL+";
+
     if( hotkey & MD_ModShift )
         description += "SHIFT+";
 
     // TODO dispatch keys such as Fx, TAB, PG_UP/DN, HOME, END, etc.
-    description += char( hotkey & ~MD_ModifierMask );
+    description += char(hotkey & ~MD_ModifierMask);
 
     return description;
 }

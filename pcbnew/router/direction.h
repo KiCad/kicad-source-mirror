@@ -329,4 +329,3 @@ private:
 };
 
 #endif    // __DIRECTION_H
-

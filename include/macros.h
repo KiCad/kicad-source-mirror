@@ -58,7 +58,7 @@ static inline const wxChar* GetChars( const wxString& s )
 }
 
 // This really needs a function? well, it is used *a lot* of times
-template<class T> inline void NEGATE( T &x ) { x = -x; }
+template <class T> inline void NEGATE( T &x ) { x = -x; }
 
 /// # of elements in an array
 #define DIM( x )    unsigned( sizeof(x) / sizeof( (x)[0] ) )    // not size_t
@@ -67,7 +67,7 @@ template<class T> inline void NEGATE( T &x ) { x = -x; }
 // std::swap works only with arguments of the same type (which is saner); 
 // here the compiler will figure out what to do (I hope to get rid of
 // this soon or late)
-template<class T, class T2> inline void EXCHG( T& a, T2& b )
+template <class T, class T2> inline void EXCHG( T& a, T2& b )
 {
     T temp = a;
     a = b;

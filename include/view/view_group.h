@@ -36,9 +36,8 @@
 #include <view/view_item.h>
 #include <deque>
 
-namespace KiGfx
+namespace KIGFX
 {
-
 class VIEW_GROUP : public VIEW_ITEM
 {
 public:
@@ -146,7 +145,7 @@ public:
      *
      * @return Pointer to the VIEW instance.
      */
-    KiGfx::VIEW* GetView() const
+    KIGFX::VIEW* GetView() const
     {
         return m_view;
     }
@@ -186,6 +185,6 @@ private:
     /// Container for storing VIEW_ITEMs
     std::set<VIEW_ITEM*> m_items;
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif // VIEW_GROUP_H_

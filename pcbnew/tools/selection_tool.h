@@ -36,7 +36,7 @@ class SELECTION_AREA;
 class BOARD_ITEM;
 class GENERAL_COLLECTOR;
 
-namespace KiGfx
+namespace KIGFX
 {
 class VIEW_GROUP;
 }
@@ -65,7 +65,7 @@ public:
         std::set<BOARD_ITEM*> items;
 
         /// VIEW_GROUP that holds currently selected items
-        KiGfx::VIEW_GROUP* group;
+        KIGFX::VIEW_GROUP* group;
 
         /// Checks if there is anything selected
         bool Empty() const { return items.empty(); }

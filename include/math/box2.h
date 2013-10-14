@@ -39,7 +39,8 @@ template <>
 class BOX2_TRAITS<VECTOR2I>
 {
 public:
-    enum {
+    enum
+    {
         c_max_size = INT_MAX - 1,
         c_min_coord_value = INT_MIN / 2 + 1
     };
@@ -61,7 +62,7 @@ public:
     typedef typename Vec::coord_type    coord_type;
     typedef typename Vec::extended_type ecoord_type;
 
-    BOX2() { };
+    BOX2() {};
 
     BOX2( const Vec& aPos, const Vec& aSize ) :
         m_Pos( aPos ),
@@ -91,6 +92,7 @@ public:
     void Compute( const Container& aPointList )
     {
         Vec vmin, vmax;
+
         typename Container::const_iterator i;
 
         if( !aPointList.size() )
@@ -164,7 +166,7 @@ public:
             rel_pos.y += size.y;
         }
 
-        return (rel_pos.x >= 0) && (rel_pos.y >= 0) && ( rel_pos.y <= size.y) && ( rel_pos.x <= size.x);
+        return ( rel_pos.x >= 0 ) && ( rel_pos.y >= 0 ) && ( rel_pos.y <= size.y) && ( rel_pos.x <= size.x);
     }
 
     /**
@@ -418,8 +420,8 @@ public:
     {
         ecoord_type x2 = m_Pos.x + m_Size.x;
         ecoord_type y2 = m_Pos.y + m_Size.y;
-        ecoord_type xdiff = std::max( aP.x < m_Pos.x ? m_Pos.x - aP.x : m_Pos.x - x2, (ecoord_type)0 );
-        ecoord_type ydiff = std::max( aP.y < m_Pos.y ? m_Pos.y - aP.y : m_Pos.y - y2, (ecoord_type)0 );
+        ecoord_type xdiff = std::max( aP.x < m_Pos.x ? m_Pos.x - aP.x : m_Pos.x - x2, (ecoord_type) 0 );
+        ecoord_type ydiff = std::max( aP.y < m_Pos.y ? m_Pos.y - aP.y : m_Pos.y - y2, (ecoord_type) 0 );
         return xdiff * xdiff + ydiff * ydiff;
     }
 

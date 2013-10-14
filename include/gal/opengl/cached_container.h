@@ -37,9 +37,9 @@
 #include <set>
 
 // Debug messages verbosity level
-//#define CACHED_CONTAINER_TEST 1
+// #define CACHED_CONTAINER_TEST 1
 
-namespace KiGfx
+namespace KIGFX
 {
 class VERTEX_ITEM;
 class SHADER;
@@ -173,6 +173,6 @@ private:
     inline void test() {}
 #endif /* CACHED_CONTAINER_TEST */
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* CACHED_CONTAINER_H_ */

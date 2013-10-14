@@ -37,7 +37,7 @@
 #include <profile.h>
 #endif
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 GPU_MANAGER* GPU_MANAGER::MakeManager( VERTEX_CONTAINER* aContainer )
 {

@@ -29,7 +29,7 @@
 #include "pns_segment.h"
 #include "pns_via.h"
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS_ITEM* aItem, VIEW_GROUP* aParent ) :
     EDA_ITEM( NOT_USED )
@@ -115,7 +115,7 @@ const BOX2I ROUTER_PREVIEW_ITEM::ViewBBox() const
 }
 
 
-void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KiGfx::GAL* aGal ) const
+void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
 {
     switch( m_type )
     {
@@ -227,4 +227,3 @@ const COLOR4D ROUTER_PREVIEW_ITEM::assignColor( int aStyle ) const
 
     return color;
 }
-

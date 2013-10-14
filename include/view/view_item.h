@@ -40,7 +40,8 @@
  * Enum KICAD_T
  * is the set of class identification values, stored in EDA_ITEM::m_StructType
  */
-enum KICAD_T {
+enum KICAD_T
+{
     NOT_USED = -1,          ///< the 3d code uses this value
 
     EOT = 0,                ///< search types array terminator (End Of Types)
@@ -134,7 +135,7 @@ enum KICAD_T {
 };
 
 
-namespace KiGfx
+namespace KIGFX
 {
 // Forward declarations
 class GAL;
@@ -347,7 +348,7 @@ protected:
      */
     inline virtual bool storesGroups() const
     {
-        return ( m_groupsSize > 0 );
+        return m_groupsSize > 0;
     }
 
     /// Stores layer numbers used by the item.
@@ -367,8 +368,7 @@ protected:
         for( int i = 0; i < aCount; ++i )
             m_layers.set( aLayers[i] );
     }
-
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif

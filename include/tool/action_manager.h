@@ -76,8 +76,8 @@ public:
     bool RunAction( const std::string& aActionName ) const;
 
     // TODO to be considered
-    //bool RunAction( int aActionId ) const;
-    //bool RunAction( TOOL_ACTION* aAction ) const;
+    // bool RunAction( int aActionId ) const;
+    // bool RunAction( TOOL_ACTION* aAction ) const;
 
     /**
      * Function RunHotKey()
