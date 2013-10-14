@@ -95,8 +95,13 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 {
     wxASSERT( m_initialized );
 
-    if( m_buffers.size() >= m_maxBuffers )
+    //if( usedBuffers() >= m_maxBuffers )
+    {
+        wxLogError( wxT( "Cannot create more framebuffers. OpenGL rendering backend requires at"
+                         "least 3 framebuffers. You may try to update/change "
+                         "your graphic drivers." ) );
         return 0; // Unfortunately we have no more free buffers left
+    }
 
     // GL_COLOR_ATTACHMENTn are consecutive integers
     GLuint attachmentPoint = GL_COLOR_ATTACHMENT0 + usedBuffers();
@@ -165,6 +170,8 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
             wxLogFatalError( wxT( "Cannot create the framebuffer." ) );
             break;
         }
+
+        return 0;
     }
 
     ClearBuffer();
@@ -218,6 +225,11 @@ void OPENGL_COMPOSITOR::ClearBuffer()
 void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 {
     wxASSERT( m_initialized );
+    if( aBufferHandle == 0 || aBufferHandle > usedBuffers() )
+    {
+        wxLogError( wxT( "Wrong framebuffer handle" ) );
+        return;
+    }
 
     // Switch to the main framebuffer and blit the scene
     glBindFramebuffer( GL_FRAMEBUFFER, DIRECT_RENDERING );

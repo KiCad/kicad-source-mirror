@@ -55,14 +55,14 @@ ROUTER_TOOL::ROUTER_TOOL() :
     m_menu = new CONTEXT_MENU;
 
     m_menu->SetTitle( wxT( "Interactive router" ) );    // fixme: not implemented yet. Sorry.
-    m_menu->Add( wxT( "Cancel" ), 0 );
-    m_menu->Add( wxT( "New track" ), 1 );
-    m_menu->Add( wxT( "End track" ), 2 );
-    m_menu->Add( wxT( "Auto-end track" ), 3 );
-    m_menu->Add( wxT( "Place via" ), 4 );
-    m_menu->Add( wxT( "Switch posture" ), 5 );
+    m_menu->Add( wxT( "Cancel" ), 1 );
+    m_menu->Add( wxT( "New track" ), 2 );
+    m_menu->Add( wxT( "End track" ), 3 );
+    m_menu->Add( wxT( "Auto-end track" ), 4 );
+    m_menu->Add( wxT( "Place via" ), 5 );
+    m_menu->Add( wxT( "Switch posture" ), 6 );
 
-    m_menu->Add( wxT( "Routing options..." ), 6 );
+    m_menu->Add( wxT( "Routing options..." ), 7 );
 }
 
 
