@@ -45,6 +45,10 @@ public:
     VIEW_GROUP( VIEW* aView = NULL );
     virtual ~VIEW_GROUP();
 
+    /// Helper typedefs
+    typedef std::set<VIEW_ITEM*>::const_iterator const_iter;
+    typedef std::set<VIEW_ITEM*>::iterator iter;
+
     /**
      * Function Add()
      * Adds an item to the group.
@@ -71,7 +75,7 @@ public:
      * Function Begin()
      * Returns iterator to beginning.
      */
-    inline std::set<VIEW_ITEM*>::const_iterator Begin() const
+    inline const_iter Begin() const
     {
         return m_items.begin();
     }
@@ -80,7 +84,7 @@ public:
      * Function End()
      * Returns iterator to end.
      */
-    inline std::set<VIEW_ITEM*>::const_iterator End() const
+    inline const_iter End() const
     {
         return m_items.end();
     }
@@ -146,6 +150,22 @@ public:
     {
         return m_view;
     }
+
+    /**
+     * Function ItemsSetVisibility()
+     * Sets visibility of items stored in the VIEW_GROUP.
+     *
+     * @param aVisible decides if items should be visible or not.
+     */
+    virtual void ItemsSetVisibility( bool aVisible );
+
+    /**
+     * Function ItemsViewUpdate()
+     * Updates items stored in the VIEW_GROUP.
+     *
+     * @param aFlags determines the way in which items will be updated.
+     */
+    virtual void ItemsViewUpdate( VIEW_ITEM::ViewUpdateFlags aFlags );
 
 protected:
     /// These functions cannot be used with VIEW_GROUP as they are intended only to work with

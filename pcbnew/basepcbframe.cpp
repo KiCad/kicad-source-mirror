@@ -53,7 +53,7 @@
 #include <math/vector2d.h>
 #include <trigo.h>
 #include <pcb_painter.h>
-#include <worksheet_item.h>
+#include <worksheet_viewitem.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -70,11 +70,9 @@ static const wxString DisplayModuleTextEntry( wxT( "DiModTx" ) );
 static const wxString FastGrid1Entry( wxT( "FastGrid1" ) );
 static const wxString FastGrid2Entry( wxT( "FastGrid2" ) );
 
-/// Rendering order of layers on GAL-based canvas (lower index in the array
-/// means that layer is displayed closer to the user, ie. on the top).
 const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
 {
-    ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( SELECTION ),
+    ITEM_GAL_LAYER( GP_OVERLAY ),
     ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
     DRAW_N, COMMENT_N, ECO1_N, ECO2_N, EDGE_N,
     UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31,
@@ -242,7 +240,7 @@ void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     }
 
     // Add an entry for the worksheet layout
-    KiGfx::WORKSHEET_ITEM* worksheet = new KiGfx::WORKSHEET_ITEM(
+    KiGfx::WORKSHEET_VIEWITEM* worksheet = new KiGfx::WORKSHEET_VIEWITEM(
                                             std::string( aBoard->GetFileName().mb_str() ),
                                             std::string( GetScreenDesc().mb_str() ),
                                             &GetPageSettings(), &GetTitleBlock() );
@@ -897,7 +895,6 @@ void PCB_BASE_FRAME::LoadSettings()
     view->SetRequired( SOLDERPASTE_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
     view->SetRequired( SOLDERMASK_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
 
-    view->SetLayerTarget( ITEM_GAL_LAYER( SELECTION ), KiGfx::TARGET_OVERLAY );
     view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KiGfx::TARGET_OVERLAY );
 
     // Apply layer coloring scheme & display options

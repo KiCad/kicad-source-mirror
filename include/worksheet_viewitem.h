@@ -23,12 +23,12 @@
  */
 
 /**
- * @file worksheet_item.h
+ * @file worksheet_viewitem.h
  * @brief Class that handles properties and drawing of worksheet layout.
  */
 
-#ifndef WORKSHEET_ITEM_H
-#define WORKSHEET_ITEM_H
+#ifndef WORKSHEET_VIEWITEM_H
+#define WORKSHEET_VIEWITEM_H
 
 #include <base_struct.h>
 
@@ -44,12 +44,11 @@ namespace KiGfx
 {
 class GAL;
 
-class WORKSHEET_ITEM : public EDA_ITEM
+class WORKSHEET_VIEWITEM : public EDA_ITEM
 {
 public:
-    WORKSHEET_ITEM( const std::string& aFileName, const std::string& aSheetName,
+    WORKSHEET_VIEWITEM( const std::string& aFileName, const std::string& aSheetName,
                     const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock );
-    ~WORKSHEET_ITEM() {}
 
     /**
      * Function SetFileName()
@@ -160,4 +159,4 @@ protected:
 };
 }
 
-#endif /* WORKSHEET_ITEM_H */
+#endif /* WORKSHEET_VIEWITEM_H */
