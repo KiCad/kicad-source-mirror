@@ -89,8 +89,8 @@ public:
                 m_linkedItems[1]->GetKind() != SEGMENT )
             return false;
 
-        PNS_SEGMENT* seg1 = static_cast<PNS_SEGMENT*> (m_linkedItems[0]);
-        PNS_SEGMENT* seg2 = static_cast<PNS_SEGMENT*> (m_linkedItems[1]);
+        PNS_SEGMENT* seg1 = static_cast<PNS_SEGMENT*>( m_linkedItems[0] );
+        PNS_SEGMENT* seg2 = static_cast<PNS_SEGMENT*>( m_linkedItems[1] );
 
         // joints between segments of different widths are not trivial.
         return seg1->GetWidth() == seg2->GetWidth();
@@ -166,7 +166,7 @@ public:
 
         // fixme: duplicate links (?)
         for( LinkedItems::const_iterator i = aJoint.m_linkedItems.begin();
-                                    i != aJoint.m_linkedItems.end(); ++i )
+             i != aJoint.m_linkedItems.end(); ++i )
             m_linkedItems.push_back( *i );
     }
 
@@ -204,4 +204,3 @@ inline std::size_t hash_value( PNS_JOINT::HashTag const& p )
 }
 
 #endif    // __PNS_JOINT_H
-

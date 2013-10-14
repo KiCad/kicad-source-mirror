@@ -40,7 +40,7 @@
 #include <gal/stroke_font.h>
 #include <newstroke_font.h>
 
-namespace KiGfx
+namespace KIGFX
 {
 /**
  * GridStyle: Type definition of the grid style
@@ -891,6 +891,6 @@ protected:
     static const int MIN_DEPTH = -2048;
     static const int MAX_DEPTH = 2047;
 };
-} // namespace KiGfx
+}    // namespace KIGFX
 
 #endif /* GRAPHICSABSTRACTIONLAYER_H_ */

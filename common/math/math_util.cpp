@@ -28,16 +28,18 @@
 #include <climits>
 #include <math/math_util.h>
 
-template<> int rescale( int numerator, int value, int denominator )
+template<>
+int rescale( int numerator, int value, int denominator )
 {
     return (int) ( (int64_t) numerator * (int64_t) value / (int64_t) denominator );
 }
 
 
-template<> int64_t rescale( int64_t numerator, int64_t value, int64_t denominator )
+template<>
+int64_t rescale( int64_t numerator, int64_t value, int64_t denominator )
 {
     int64_t r = 0;
-    int64_t sign = ( ( numerator < 0) ? -1 : 1 ) * ( denominator < 0 ? - 1: 1 ) * (value < 0 ? - 1 : 1);
+    int64_t sign = ( ( numerator < 0) ? -1 : 1 ) * ( denominator < 0 ? -1 : 1 ) * ( value < 0 ? -1 : 1 );
 
     int64_t a = std::abs( numerator );
     int64_t b = std::abs( value );
@@ -51,7 +53,9 @@ template<> int64_t rescale( int64_t numerator, int64_t value, int64_t denominato
             return sign * ( (a * b + r ) / c );
         else
             return sign * (a / c * b + (a % c * b + r) / c);
-    } else {
+    }
+    else
+    {
         uint64_t a0 = a & 0xFFFFFFFF;
         uint64_t a1 = a >> 32;
         uint64_t b0 = b & 0xFFFFFFFF;
@@ -61,16 +65,16 @@ template<> int64_t rescale( int64_t numerator, int64_t value, int64_t denominato
         int i;
 
         a0 = a0 * b0 + t1a;
-        a1 = a1 * b1 + (t1 >> 32) + (a0 < t1a);
+        a1 = a1 * b1 + ( t1 >> 32 ) + ( a0 < t1a );
         a0 += r;
-        a1 += ((uint64_t)a0) < r;
+        a1 += ( (uint64_t) a0 ) < r;
 
         for( i = 63; i >= 0; i-- )
         {
-            a1  += a1 + ( (a0 >> i) & 1 );
+            a1  += a1 + ( ( a0 >> i ) & 1 );
             t1  += t1;
 
-            if( (uint64_t)c <= a1 )
+            if( (uint64_t) c <= a1 )
             {
                 a1 -= c;
                 t1++;

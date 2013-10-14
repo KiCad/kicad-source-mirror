@@ -774,8 +774,8 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
 {
     // Set display settings for high contrast mode
-    KiGfx::VIEW* view = m_galCanvas->GetView();
-    KiGfx::RENDER_SETTINGS* rSettings = view->GetPainter()->GetSettings();
+    KIGFX::VIEW* view = m_galCanvas->GetView();
+    KIGFX::RENDER_SETTINGS* rSettings = view->GetPainter()->GetSettings();
 
     setTopLayer( aLayer );
 
@@ -817,7 +817,7 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
 void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
 {
     // Set display settings for high contrast mode
-    KiGfx::VIEW* view = m_galCanvas->GetView();
+    KIGFX::VIEW* view = m_galCanvas->GetView();
 
     view->ClearTopLayers();
     view->SetTopLayer( aLayer );
@@ -887,7 +887,7 @@ void PCB_EDIT_FRAME::syncLayerVisibilities()
 {
     m_Layers->SyncLayerVisibilities();
 
-    KiGfx::VIEW* view = m_galCanvas->GetView();
+    KIGFX::VIEW* view = m_galCanvas->GetView();
     // Load layer & elements visibility settings
     for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
     {

@@ -34,14 +34,14 @@
 #include <string>
 #include <deque>
 
-namespace KiGfx
+namespace KIGFX
 {
 class OPENGL_GAL;
 
 /// Type definition for the shader
 enum ShaderType
 {
-    SHADER_TYPE_VERTEX = GL_VERTEX_SHADER,      ///< Vertex shader
+    SHADER_TYPE_VERTEX	 = GL_VERTEX_SHADER,    ///< Vertex shader
     SHADER_TYPE_FRAGMENT = GL_FRAGMENT_SHADER,  ///< Fragment shader
     SHADER_TYPE_GEOMETRY = GL_GEOMETRY_SHADER   ///< Geometry shader
 };
@@ -205,6 +205,6 @@ private:
     GLuint              geomOutputType;     ///< Output type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]
     std::deque<GLint>   parameterLocation;  ///< Location of the parameter
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* SHADER_H_ */

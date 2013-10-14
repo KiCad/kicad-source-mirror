@@ -79,4 +79,3 @@ PNS_ITEMSET& PNS_ITEMSET::FilterNet( int aNet )
     m_items = newItems;
     return *this;
 }
-

@@ -231,7 +231,7 @@ void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
     if( m_galCanvasActive )
     {
         m_galCanvas->GetGAL()->SetGridVisibility( IsGridVisible() );
-        m_galCanvas->GetView()->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
+        m_galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
     m_canvas->Refresh();
@@ -391,7 +391,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     {
         m_galCanvas->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x,
                                                       screen->GetGrid().m_Size.y ) );
-        m_galCanvas->GetView()->MarkTargetDirty( KiGfx::TARGET_NONCACHED );
+        m_galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
     m_canvas->Refresh();
@@ -425,8 +425,8 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
         if( m_galCanvasActive )
         {
             // Apply computed view settings to GAL
-            KiGfx::VIEW* view = m_galCanvas->GetView();
-            KiGfx::GAL* gal = m_galCanvas->GetGAL();
+            KIGFX::VIEW* view = m_galCanvas->GetView();
+            KIGFX::GAL* gal = m_galCanvas->GetGAL();
 
             double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
             double zoom = 1.0 / ( zoomFactor * GetZoom() );
@@ -954,8 +954,8 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
 void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 {
-    KiGfx::VIEW* view = m_galCanvas->GetView();
-    KiGfx::GAL* gal = m_galCanvas->GetGAL();
+    KIGFX::VIEW* view = m_galCanvas->GetView();
+    KIGFX::GAL* gal = m_galCanvas->GetGAL();
 
     double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
 

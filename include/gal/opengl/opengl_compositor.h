@@ -35,7 +35,7 @@
 #include <GL/glew.h>
 #include <deque>
 
-namespace KiGfx
+namespace KIGFX
 {
 class OPENGL_COMPOSITOR : public COMPOSITOR
 {
@@ -105,6 +105,6 @@ protected:
         return m_buffers.size();
     }
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* COMPOSITOR_H_ */

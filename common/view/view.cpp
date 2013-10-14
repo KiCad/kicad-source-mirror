@@ -38,7 +38,7 @@
 #include <profile.h>
 #endif /* __WXDEBUG__ */
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 VIEW::VIEW( bool aIsDynamic ) :
     m_enableOrderModifier( true ),
@@ -348,7 +348,7 @@ void VIEW::SetLayerOrder( int aLayer, int aRenderingOrder )
 
 int VIEW::GetLayerOrder( int aLayer ) const
 {
-    return m_layers.at(aLayer).renderingOrder;
+    return m_layers.at( aLayer ).renderingOrder;
 }
 
 
@@ -383,7 +383,7 @@ void VIEW::SortLayers( int aLayers[], int& aCount ) const
 struct VIEW::updateItemsColor
 {
     updateItemsColor( int aLayer, PAINTER* aPainter, GAL* aGal ) :
-        layer( aLayer ), painter( aPainter), gal( aGal )
+        layer( aLayer ), painter( aPainter ), gal( aGal )
     {
     }
 
@@ -474,7 +474,8 @@ void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
     m_layers[aLayer].items->Query( r, visitor );
 }
 
-int VIEW::GetTopLayer( ) const
+
+int VIEW::GetTopLayer() const
 {
     if( m_topLayers.size() == 0 )
         return 0;
@@ -512,10 +513,13 @@ void VIEW::SetTopLayer( int aLayer, bool aEnabled )
 
 void VIEW::EnableTopLayer( bool aEnable )
 {
-    if( aEnable == m_enableOrderModifier ) return;
+    if( aEnable == m_enableOrderModifier )
+        return;
+
     m_enableOrderModifier = aEnable;
 
     std::set<unsigned int>::iterator it;
+
     if( aEnable )
     {
         for( it = m_topLayers.begin(); it != m_topLayers.end(); ++it )
@@ -615,8 +619,10 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate ) const
         {
             group = m_gal->BeginGroup();
             aItem->setGroup( aLayer, group );
+
             if( !m_painter->Draw( aItem, aLayer ) )
                 aItem->ViewDraw( aLayer, m_gal ); // Alternative drawing method
+
             m_gal->EndGroup();
         }
     }
@@ -648,6 +654,7 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate ) const
 void VIEW::draw( VIEW_GROUP* aGroup, bool aImmediate ) const
 {
     std::set<VIEW_ITEM*>::const_iterator it;
+
     for( it = aGroup->Begin(); it != aGroup->End(); ++it )
     {
         draw( *it, aImmediate );
@@ -687,6 +694,7 @@ struct VIEW::recacheItem
     {
         // Remove previously cached group
         int prevGroup = aItem->getGroup( layer );
+
         if( prevGroup >= 0 )
             gal->DeleteGroup( prevGroup );
 
@@ -694,8 +702,10 @@ struct VIEW::recacheItem
         {
             int group = gal->BeginGroup();
             aItem->setGroup( layer, group );
+
             if( !view->m_painter->Draw( aItem, layer ) )
                 aItem->ViewDraw( layer, gal ); // Alternative drawing method
+
             gal->EndGroup();
         }
         else
@@ -803,7 +813,7 @@ void VIEW::clearGroupCache()
 
     for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
     {
-        VIEW_LAYER* l = & ( ( *i ).second );
+        VIEW_LAYER* l = &( ( *i ).second );
         l->items->Query( r, visitor );
     }
 }
@@ -881,6 +891,7 @@ void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
 
     // Redraw the item from scratch
     int prevGroup = aItem->getGroup( aLayer );
+
     if( prevGroup >= 0 )
         m_gal->DeleteGroup( prevGroup );
 
@@ -894,6 +905,7 @@ void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
 void VIEW::updateBbox( VIEW_ITEM* aItem )
 {
     int layers[VIEW_MAX_LAYERS], layers_count;
+
     aItem->ViewGetLayers( layers, layers_count );
 
     for( int i = 0; i < layers_count; i++ )
@@ -912,6 +924,7 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
 
     // Remove the item from previous layer set
     aItem->getLayers( layers, layers_count );
+
     for( int i = 0; i < layers_count; i++ )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
@@ -922,6 +935,7 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
     // Add the item to new layer set
     aItem->ViewGetLayers( layers, layers_count );
     aItem->saveLayers( layers, layers_count );
+
     for( int i = 0; i < layers_count; i++ )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
@@ -938,7 +952,7 @@ bool VIEW::areRequiredLayersEnabled( int aLayerId ) const
     std::set<int>::iterator it, it_end;
 
     for( it = m_layers.at( aLayerId ).requiredLayers.begin(),
-            it_end = m_layers.at( aLayerId ).requiredLayers.end(); it != it_end; ++it )
+         it_end = m_layers.at( aLayerId ).requiredLayers.end(); it != it_end; ++it )
     {
         // That is enough if just one layer is not enabled
         if( !m_layers.at( *it ).enabled )

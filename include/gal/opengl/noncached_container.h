@@ -33,7 +33,7 @@
 
 #include <gal/opengl/vertex_container.h>
 
-namespace KiGfx
+namespace KIGFX
 {
 class VERTEX_ITEM;
 class SHADER;
@@ -68,6 +68,6 @@ protected:
     ///< Index of the free first space where a vertex can be stored
     unsigned int m_freePtr;
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* NONCACHED_CONTAINER_H_ */

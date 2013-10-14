@@ -33,7 +33,7 @@
 #include <gal/opengl/vertex_common.h>
 #include <boost/scoped_array.hpp>
 
-namespace KiGfx
+namespace KIGFX
 {
 class SHADER;
 class VERTEX_CONTAINER;
@@ -90,14 +90,14 @@ protected:
     GPU_MANAGER( VERTEX_CONTAINER* aContainer );
 
     ///< Drawing status flag.
-    bool    m_isDrawing;
+    bool m_isDrawing;
 
     ///< Container that stores vertices data.
     VERTEX_CONTAINER* m_container;
 
     ///< Shader handling
     SHADER* m_shader;
-    int     m_shaderAttrib; ///< Location of shader attributes (for glVertexAttribPointer)
+    int m_shaderAttrib;    ///< Location of shader attributes (for glVertexAttribPointer)
 };
 
 
@@ -130,12 +130,11 @@ public:
     virtual void uploadToGpu();
 
 protected:
-    bool                        m_buffersInitialized;
+    bool m_buffersInitialized;
     boost::scoped_array<GLuint> m_indices;
-    GLuint*                     m_indicesPtr;
-    GLuint                      m_verticesBuffer;
-    unsigned int                m_indicesSize;
-
+    GLuint* m_indicesPtr;
+    GLuint  m_verticesBuffer;
+    unsigned int m_indicesSize;
 };
 
 
@@ -159,5 +158,5 @@ public:
     ///< @copydoc GPU_MANAGER::EndDrawing()
     virtual void EndDrawing();
 };
-} // namespace KiGfx
+} // namespace KIGFX
 #endif /* GPU_MANAGER_H_ */

@@ -36,43 +36,42 @@ typedef boost::optional<VECTOR2I> OPT_VECTOR2I;
 
 class SEG
 {
-    private:
-        typedef VECTOR2I::extended_type ecoord;
+private:
+    typedef VECTOR2I::extended_type ecoord;
 
-    public:
+public:
+    friend inline std::ostream& operator<<( std::ostream& aStream, const SEG& aSeg );
 
-        friend inline std::ostream& operator<<( std::ostream& aStream, const SEG& aSeg );
+    /* Start and the of the segment. Public, to make access simpler. These are references
+     * to an object the segment belongs to (e.g. a line chain) or references to locally stored points
+     * (m_a, m_b).
+     */
+    VECTOR2I& a, b;
 
-        /* Start and the of the segment. Public, to make access simpler. These are references
-         * to an object the segment belongs to (e.g. a line chain) or references to locally stored points
-         * (m_a, m_b).
-         */
-        VECTOR2I& a, b;
+    /** Default constructor
+     * Creates an empty (0, 0) segment, locally-referenced
+     */
+    SEG() : a( m_a ), b( m_b )
+    {
+        a = m_a;
+        b = m_b;
+        m_is_local = true;
+        m_index = -1;
+    }
 
-        /** Default constructor
-         * Creates an empty (0, 0) segment, locally-referenced
-         */
-        SEG() : a( m_a ), b( m_b )
-        {
-            a = m_a;
-            b = m_b;
-            m_is_local = true;
-            m_index = -1;
-        }
-
-        /**
-         * Constructor
-         * Creates a segment between (aX1, aY1) and (aX2, aY2), locally referenced
-         */
-        SEG( int aX1, int aY1, int aX2, int aY2 ) : a( m_a ), b( m_b )
-        {
-            m_a = VECTOR2I( aX1, aY1 );
-            m_b = VECTOR2I( aX2, aY2 );
-            a = m_a;
-            b = m_b;
-            m_is_local = true;
-            m_index = -1;
-        }
+    /**
+     * Constructor
+     * Creates a segment between (aX1, aY1) and (aX2, aY2), locally referenced
+     */
+    SEG( int aX1, int aY1, int aX2, int aY2 ) : a( m_a ), b( m_b )
+    {
+        m_a = VECTOR2I( aX1, aY1 );
+        m_b = VECTOR2I( aX2, aY2 );
+        a = m_a;
+        b = m_b;
+        m_is_local = true;
+        m_index = -1;
+    }
 
         /**
          * Constructor

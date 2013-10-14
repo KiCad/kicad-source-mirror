@@ -30,4 +30,3 @@ const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize
         int aClearance, int aChamfer );
 
 #endif    // __PNS_UTILS_H
-

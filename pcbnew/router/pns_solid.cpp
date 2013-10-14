@@ -60,4 +60,3 @@ PNS_ITEM* PNS_SOLID::Clone() const
     // solids are never cloned as the shove algorithm never moves them
     assert( false );
 }
-

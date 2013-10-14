@@ -96,4 +96,3 @@ void main()
 
     gl_FrontColor = gl_Color;
 }
-

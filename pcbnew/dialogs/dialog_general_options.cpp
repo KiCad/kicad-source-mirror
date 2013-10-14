@@ -159,10 +159,10 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
     bool state = event.IsChecked();
-    KiGfx::PCB_PAINTER* painter =
-            static_cast<KiGfx::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
-    KiGfx::PCB_RENDER_SETTINGS* settings =
-            static_cast<KiGfx::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
     bool recache = false;
 
     switch( id )

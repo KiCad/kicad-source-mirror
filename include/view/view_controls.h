@@ -34,7 +34,7 @@
 
 #include <math/box2.h>
 
-namespace KiGfx
+namespace KIGFX
 {
 class VIEW;
 
@@ -167,6 +167,6 @@ protected:
     /// How fast is panning when in auto mode
     float       m_autoPanSpeed;
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif

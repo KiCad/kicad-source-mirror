@@ -38,7 +38,7 @@
 class BOARD;
 class TOOL_DISPATCHER;
 
-namespace KiGfx
+namespace KIGFX
 {
 class GAL;
 class VIEW;
@@ -73,7 +73,7 @@ public:
      * Returns a pointer to the GAL instance used in the panel.
      * @return The instance of GAL.
      */
-    KiGfx::GAL* GetGAL() const
+    KIGFX::GAL* GetGAL() const
     {
         return m_gal;
     }
@@ -83,7 +83,7 @@ public:
      * Returns a pointer to the VIEW instance used in the panel.
      * @return The instance of VIEW.
      */
-    KiGfx::VIEW* GetView() const
+    KIGFX::VIEW* GetView() const
     {
         return m_view;
     }
@@ -93,9 +93,9 @@ public:
      * Returns a pointer to the VIEW_CONTROLS instance used in the panel.
      * @return The instance of VIEW_CONTROLS.
      */
-    KiGfx::VIEW_CONTROLS* GetViewControls() const
+    KIGFX::VIEW_CONTROLS* GetViewControls() const
     {
-        return (KiGfx::VIEW_CONTROLS*)( m_viewControls );
+        return (KIGFX::VIEW_CONTROLS*)( m_viewControls );
     }
 
     /// @copydoc wxWindow::Refresh()
@@ -125,12 +125,12 @@ protected:
     bool                     m_pendingRefresh;
     wxTimer                  m_refreshTimer;
 
-    KiGfx::GAL*              m_gal;              ///< Interface for drawing objects on a 2D-surface
-    KiGfx::VIEW*             m_view;             ///< Stores view settings (scale, center, etc.)
+    KIGFX::GAL*              m_gal;              ///< Interface for drawing objects on a 2D-surface
+    KIGFX::VIEW*             m_view;             ///< Stores view settings (scale, center, etc.)
                                                  ///< and items to be drawn
-    KiGfx::PAINTER*          m_painter;          ///< Contains information about how to draw items
+    KIGFX::PAINTER*          m_painter;          ///< Contains information about how to draw items
                                                  ///< using GAL
-    KiGfx::WX_VIEW_CONTROLS* m_viewControls;     ///< Control for VIEW (moving, zooming, etc.)
+    KIGFX::WX_VIEW_CONTROLS* m_viewControls;     ///< Control for VIEW (moving, zooming, etc.)
     GalType                  m_currentGal;       ///< Currently used GAL
     TOOL_DISPATCHER*         m_eventDispatcher;  ///< Processes and forwards events to tools
 };

@@ -27,13 +27,13 @@
 #include <iostream>
 #include <boost/format.hpp>
 
-static void _trace_print( const char* funcName, int level, const std::string& msg )
+static void _trace_print( const char* aFuncName, int level, const std::string& aMsg )
 {
-    std::cerr << "trace[" << level << "]: " << funcName << ": " << msg << std::endl;
+    std::cerr << "trace[" << level << "]: " << aFuncName << ": " << aMsg << std::endl;
 }
 
 #define TRACE( level, fmt, ... ) \
-    _trace_print( __FUNCTION__, level, (boost::format( fmt ) % __VA_ARGS__).str() );
+    _trace_print( __FUNCTION__, level, ( boost::format( fmt ) % __VA_ARGS__ ).str() );
 
 #define TRACEn( level, msg ) \
     _trace_print( __FUNCTION__, level, std::string( msg ) );

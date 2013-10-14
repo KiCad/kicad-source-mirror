@@ -34,7 +34,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <boost/foreach.hpp>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 WORKSHEET_VIEWITEM::WORKSHEET_VIEWITEM( const std::string& aFileName, const std::string& aSheetName,
                                 const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock ) :

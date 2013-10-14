@@ -31,7 +31,7 @@
 #include <gal/opengl/noncached_container.h>
 #include <cstdlib>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 NONCACHED_CONTAINER::NONCACHED_CONTAINER( unsigned int aSize ) :
     VERTEX_CONTAINER( aSize ), m_freePtr( 0 )

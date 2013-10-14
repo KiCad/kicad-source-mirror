@@ -57,7 +57,7 @@
 #define CALLBACK
 #endif
 
-namespace KiGfx
+namespace KIGFX
 {
 class SHADER;
 
@@ -253,6 +253,7 @@ public:
     {
         /// Manager used for storing new vertices
         VERTEX_MANAGER* vboManager;
+
         /// Intersect points, that have to be freed after tessellation
         std::deque< boost::shared_array<GLdouble> >& intersectPoints;
     } TessParams;
@@ -377,6 +378,6 @@ private:
      */
     unsigned int getNewGroupNumber();
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
-#endif // OPENGLGAL_H_
+#endif  // OPENGLGAL_H_

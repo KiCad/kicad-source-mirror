@@ -27,18 +27,18 @@
 
 // Selection tool actions
 TOOL_ACTION COMMON_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
-                                               AS_GLOBAL, 'S',
-                                               "Selection tool", "Allows to select items" );
+        AS_GLOBAL, 'S',
+        "Selection tool", "Allows to select items" );
 
 // Move tool actions
 TOOL_ACTION COMMON_ACTIONS::moveActivate( "pcbnew.InteractiveMove",
-                                          AS_GLOBAL, 'M',
-                                          "Move", "Moves the selected item(s)" );
+        AS_GLOBAL, 'M',
+        "Move", "Moves the selected item(s)" );
 
 TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveMove.rotate",
-                                    AS_CONTEXT,  ' ',
-                                    "Rotate", "Rotates selected item(s)" );
+        AS_CONTEXT, ' ',
+        "Rotate", "Rotates selected item(s)" );
 
 TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveMove.flip",
-                                  AS_CONTEXT, 'F',
-                                  "Flip", "Flips selected item(s)" );
+        AS_CONTEXT, 'F',
+        "Flip", "Flips selected item(s)" );

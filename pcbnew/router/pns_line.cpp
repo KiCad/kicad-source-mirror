@@ -37,7 +37,7 @@ PNS_LINE* PNS_LINE::Clone() const
     PNS_LINE* l = new PNS_LINE();
 
     l->m_line = m_line;
-    l->m_width  = m_width;
+    l->m_width = m_width;
     l->m_layers = m_layers;
     l->m_net = m_net;
     l->m_movable = m_movable;
@@ -434,8 +434,8 @@ void PNS_LINE::NewWalkaround( const SHAPE_LINE_CHAIN& aObstacle,
                     path.Append( l_hull.CPoint( j ) );
                     li = l_orig.Find( l_hull.CPoint( j ) );
 
-                    if( li >= 0 && ( li == (l_orig.PointCount() - 1 ) ||
-                                outside[li + 1]) )
+                    if( li >= 0 && ( li == ( l_orig.PointCount() - 1 ) ||
+                                outside[li + 1] ) )
                         break;
                 }
 
@@ -755,9 +755,8 @@ void PNS_LINE::ShowLinks()
         return;
     }
 
-    printf( "line %p: %d linked segs\n", this, (int)m_segmentRefs->size() );
+    printf( "line %p: %d linked segs\n", this, (int) m_segmentRefs->size() );
 
     for( int i = 0; i < (int) m_segmentRefs->size(); i++ )
         printf( "seg %d: %p\n", i, (*m_segmentRefs)[i] );
 }
-

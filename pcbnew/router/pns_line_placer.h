@@ -252,4 +252,3 @@ private:
 };
 
 #endif    // __PNS_LINE_PLACER_H
-

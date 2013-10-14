@@ -29,7 +29,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <math/box2.h>
 
-namespace KiGfx
+namespace KIGFX
 {
 class GAL;
 }
@@ -49,16 +49,16 @@ public:
 
     virtual const BOX2I ViewBBox() const;
 
-    void ViewDraw( int aLayer, KiGfx::GAL* aGal ) const;
+    void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const;
 
     void ViewGetLayers( int aLayers[], int& aCount ) const;
 
-    void SetOrigin ( VECTOR2I aOrigin )
+    void SetOrigin( VECTOR2I aOrigin )
     {
         m_origin = aOrigin;
     }
 
-    void SetEnd ( VECTOR2I aEnd )
+    void SetEnd( VECTOR2I aEnd )
     {
         m_end = aEnd;
     }

@@ -29,10 +29,10 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/definitions.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 GAL::GAL() :
-        strokeFont( this )
+    strokeFont( this )
 {
     // Set the default values for the internal variables
     SetIsFill( false );

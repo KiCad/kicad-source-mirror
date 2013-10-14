@@ -64,7 +64,7 @@ void PNS_LINE_PLACER::ApplySettings( const PNS_ROUTING_SETTINGS& aSettings )
 
 
 void PNS_LINE_PLACER::StartPlacement( const VECTOR2I& aStart, int aNet,
-                                      int aWidth, int aLayer )
+        int aWidth, int aLayer )
 {
     m_direction = m_initial_direction;
     TRACE( 1, "world %p, intitial-direction %s layer %d\n",
@@ -184,8 +184,7 @@ bool PNS_LINE_PLACER::handlePullback()
     // case 2: regardless of the current routing direction, if the tail/head
     // extremities form an acute or right angle, reduce the tail by one segment
     // (and hope that further iterations) will result with a cleaner trace
-    bool pullback_2 = (angle == DIRECTION_45::ANG_RIGHT ||
-                       angle == DIRECTION_45::ANG_ACUTE);
+    bool pullback_2 = (angle == DIRECTION_45::ANG_RIGHT || angle == DIRECTION_45::ANG_ACUTE);
 
     if( pullback_1 || pullback_2 )
     {
@@ -380,7 +379,7 @@ bool PNS_LINE_PLACER::handleViaPlacement( PNS_LINE& aHead )
 
 
 bool PNS_LINE_PLACER::routeHead( const VECTOR2I& aP, PNS_LINE& aNewHead,
-                                 bool aCwWalkaround )
+        bool aCwWalkaround )
 {
     // STAGE 1: route a simple two-segment trace between m_p_start and aP...
     SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace( m_p_start, aP );
@@ -677,4 +676,3 @@ PNS_NODE* PNS_LINE_PLACER::GetCurrentNode() const
 {
     return m_shove->GetCurrentNode();
 }
-

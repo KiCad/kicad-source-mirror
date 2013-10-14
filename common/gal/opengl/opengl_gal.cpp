@@ -37,7 +37,7 @@
 
 #include <limits>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 // Prototypes
 void InitTesselatorCallbacks( GLUtesselator* aTesselator );
@@ -90,10 +90,12 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     // Tesselator initialization
     tesselator = gluNewTess();
     InitTesselatorCallbacks( tesselator );
+
     if( tesselator == NULL )
     {
         wxLogFatalError( wxT( "Could not create the tesselator" ) );
     }
+
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 }
 
@@ -367,7 +369,8 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
         VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
-        double   alpha;
+        double alpha;
+
         for( alpha = aStartAngle + alphaIncrement; alpha < aEndAngle; alpha += alphaIncrement )
         {
             VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
@@ -570,7 +573,7 @@ void OPENGL_GAL::ClearScreen()
 
 void OPENGL_GAL::SetStrokeColor( const COLOR4D& aColor )
 {
-    strokeColor     = aColor;
+    strokeColor = aColor;
 
     // This is the default drawing color
     currentManager->Color( aColor.r, aColor.g, aColor.b, aColor.a );
@@ -734,6 +737,7 @@ void OPENGL_GAL::ClearTarget( RenderTarget aTarget )
         compositor.SetBuffer( overlayBuffer );
         break;
     }
+
     compositor.ClearBuffer();
 
     // Restore the previous state

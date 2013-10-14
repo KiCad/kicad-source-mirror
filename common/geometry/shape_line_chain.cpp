@@ -47,12 +47,12 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance ) const
     BOX2I box_a( aSeg.a, aSeg.b - aSeg.a );
     BOX2I::ecoord_type dist_sq = (BOX2I::ecoord_type) aClearance * aClearance;
 
-    for( int i = 0; i < SegmentCount() ;i++ )
+    for( int i = 0; i < SegmentCount(); i++ )
     {
         const SEG& s = CSegment( i );
         BOX2I box_b( s.a, s.b - s.a );
 
-        BOX2I::ecoord_type d = box_a.SquaredDistance ( box_b );
+        BOX2I::ecoord_type d = box_a.SquaredDistance( box_b );
 
         if( d < dist_sq )
         {
@@ -64,9 +64,11 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance ) const
     return false;
 }
 
+
 const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Reverse() const
 {
     SHAPE_LINE_CHAIN a( *this );
+
     reverse( a.m_points.begin(), a.m_points.end() );
     a.m_closed = m_closed;
 
@@ -77,6 +79,7 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Reverse() const
 int SHAPE_LINE_CHAIN::Length() const
 {
     int l = 0;
+
     for( int i = 0; i < SegmentCount(); i++ )
         l += CSegment( i ).Length();
 
@@ -88,11 +91,12 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const VECTOR2I& 
 {
     if( aEndIndex < 0 )
         aEndIndex += PointCount();
+
     if( aStartIndex < 0 )
         aStartIndex += PointCount();
 
     if( aStartIndex == aEndIndex )
-        m_points [aStartIndex] = aP;
+        m_points[aStartIndex] = aP;
     else
     {
         m_points.erase( m_points.begin() + aStartIndex + 1, m_points.begin() + aEndIndex + 1 );
@@ -105,6 +109,7 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE
 {
     if( aEndIndex < 0 )
         aEndIndex += PointCount();
+
     if( aStartIndex < 0 )
         aStartIndex += PointCount();
 
@@ -115,9 +120,10 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE
 
 void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
 {
-    if(aEndIndex < 0)
+    if( aEndIndex < 0 )
         aEndIndex += PointCount();
-    if(aStartIndex < 0)
+
+    if( aStartIndex < 0 )
         aStartIndex += PointCount();
 
     m_points.erase( m_points.begin() + aStartIndex, m_points.begin() + aEndIndex + 1 );
@@ -127,6 +133,7 @@ void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
 int SHAPE_LINE_CHAIN::Distance( const VECTOR2I& aP ) const
 {
     int d = INT_MAX;
+
     for( int s = 0; s < SegmentCount(); s++ )
         d = min( d, CSegment( s ).Distance( aP ) );
 
@@ -185,6 +192,7 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
 
     if( aEndIndex < 0 )
         aEndIndex += PointCount();
+
     if( aStartIndex < 0 )
         aStartIndex += PointCount();
 
@@ -197,7 +205,7 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
 
 struct compareOriginDistance
 {
-    compareOriginDistance( VECTOR2I& aOrigin ):
+    compareOriginDistance( VECTOR2I& aOrigin ) :
         m_origin( aOrigin ) {};
 
     bool operator()( const SHAPE_LINE_CHAIN::Intersection& aA,
@@ -215,6 +223,7 @@ int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, Intersections& aIp ) const
     for( int s = 0; s < SegmentCount(); s++ )
     {
         OPT_VECTOR2I p = CSegment( s ).Intersect( aSeg );
+
         if( p )
         {
             Intersection is;
@@ -236,7 +245,7 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, Intersections& 
 {
     BOX2I bb_other = aChain.BBox();
 
-    for ( int s1 = 0; s1 < SegmentCount(); s1++ )
+    for( int s1 = 0; s1 < SegmentCount(); s1++ )
     {
         const SEG& a = CSegment( s1 );
         const BOX2I bb_cur( a.a, a.b - a.a );
@@ -305,7 +314,6 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, Intersections& 
                     is.their = b;
                     aIp.push_back( is );
                 }
-
             }
         }
     }
@@ -317,6 +325,7 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, Intersections& 
 int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP ) const
 {
     int sum = 0;
+
     for( int i = 0; i < SegmentCount(); i++ )
     {
         const SEG seg = CSegment( i );
@@ -340,7 +349,7 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
     if( !m_closed || SegmentCount() < 3 )
         return false;
 
-    int cur = CSegment(0).Side( aP );
+    int cur = CSegment( 0 ).Side( aP );
 
     if( cur == 0 )
         return false;
@@ -352,7 +361,7 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
         if( aP == s.a || aP == s.b ) // edge does not belong to the interior!
             return false;
 
-        if( s.Side(aP) != cur )
+        if( s.Side( aP ) != cur )
             return false;
     }
 
@@ -372,7 +381,7 @@ bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
         if( s.a == aP || s.b == aP )
             return true;
 
-        if( s.Distance(aP) <= 1 )
+        if( s.Distance( aP ) <= 1 )
             return true;
     }
 
@@ -387,6 +396,7 @@ const optional<SHAPE_LINE_CHAIN::Intersection> SHAPE_LINE_CHAIN::SelfIntersectin
         for( int s2 = s1 + 1; s2 < SegmentCount(); s2++ )
         {
             const VECTOR2I s2a = CSegment( s2 ).a, s2b = CSegment( s2 ).b;
+
             if( s1 + 1 != s2 && CSegment( s1 ).Contains( s2a ) )
             {
                 Intersection is;
@@ -395,7 +405,7 @@ const optional<SHAPE_LINE_CHAIN::Intersection> SHAPE_LINE_CHAIN::SelfIntersectin
                 is.p = s2a;
                 return is;
             }
-            else if( CSegment( s1 ).Contains(s2b ) )
+            else if( CSegment( s1 ).Contains( s2b ) )
             {
                 Intersection is;
                 is.our = CSegment( s1 );
@@ -443,10 +453,11 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
     int np = PointCount();
 
     // stage 1: eliminate duplicate vertices
-    while ( i < np )
+    while( i < np )
     {
         int j = i + 1;
-        while( j < np && CPoint(i) == CPoint( j ) )
+
+        while( j < np && CPoint( i ) == CPoint( j ) )
             j++;
 
         pts_unique.push_back( CPoint( i ) );
@@ -457,17 +468,19 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
     np = pts_unique.size();
 
     i = 0;
+
     // stage 1: eliminate collinear segments
     while( i < np - 2 )
     {
         const VECTOR2I p0 = pts_unique[i];
-        const VECTOR2I p1 = pts_unique[i+1];
+        const VECTOR2I p1 = pts_unique[i + 1];
         int n = i;
 
         while( n < np - 2 && SEG( p0, p1 ).LineDistance( pts_unique[n + 2] ) <= 1 )
             n++;
 
         m_points.push_back( p0 );
+
         if( n > i )
             i = n;
 
@@ -493,9 +506,11 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP ) const
 {
     int min_d = INT_MAX;
     int nearest = 0;
-    for ( int i = 0; i < SegmentCount(); i++ )
+
+    for( int i = 0; i < SegmentCount(); i++ )
     {
         int d = CSegment( i ).Distance( aP );
+
         if( d < min_d )
         {
             min_d = d;
@@ -511,10 +526,10 @@ const string SHAPE_LINE_CHAIN::Format() const
 {
     stringstream ss;
 
-    ss << m_points.size() << " " << ( m_closed ? 1 : 0 ) << " " ;
+    ss << m_points.size() << " " << ( m_closed ? 1 : 0 ) << " ";
 
     for( int i = 0; i < PointCount(); i++ )
-        ss << m_points[i].x << " " << m_points[i].y << " ";// Format() << " ";
+        ss << m_points[i].x << " " << m_points[i].y << " "; // Format() << " ";
 
     return ss.str();
 }

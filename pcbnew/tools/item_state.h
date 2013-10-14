@@ -73,6 +73,7 @@ public:
 
         std::deque<BOARD_ITEM*>::iterator it, it_end;
         std::deque<COMMAND>::iterator cmd, cmd_end;
+
         for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
         {
             for( cmd = m_commands.begin(), cmd_end = m_commands.end(); cmd != cmd_end; ++cmd )
@@ -105,6 +106,7 @@ public:
         m_canSave = false;
 #endif
         std::deque<BOARD_ITEM*>::iterator it, it_end;
+
         for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
             (*it)->Move( wxPoint( aMovement.x, aMovement.y ) );
 
@@ -126,6 +128,7 @@ public:
         m_commands.push_front( COMMAND( COMMAND::ROTATE, aPoint, aAngle ) );
 
         std::deque<BOARD_ITEM*>::iterator it, it_end;
+
         for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
             (*it)->Rotate( wxPoint( aPoint.x, aPoint.y ), aAngle );
 
@@ -147,6 +150,7 @@ public:
         m_commands.push_front( COMMAND( COMMAND::FLIP, aPoint ) );
 
         std::deque<BOARD_ITEM*>::iterator it, it_end;
+
         for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
             (*it)->Flip( wxPoint( aPoint.x, aPoint.y ) );
 
@@ -166,6 +170,7 @@ public:
         m_commands.push_front( COMMAND( COMMAND::VISIBILITY ) );
 
         std::deque<BOARD_ITEM*>::iterator it, it_end;
+
         for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
             (*it)->ViewSetVisible( !(*it)->ViewIsVisible() );
     }
@@ -177,14 +182,14 @@ public:
      * them properly.
      * @return Flag required to refresh items.
      */
-    KiGfx::VIEW_ITEM::ViewUpdateFlags GetUpdateFlag() const
+    KIGFX::VIEW_ITEM::ViewUpdateFlags GetUpdateFlag() const
     {
-        if( m_flips % 2 == 1 )  // If number of flips is odd, then we need to change layers
-            return KiGfx::VIEW_ITEM::LAYERS;
+        if( m_flips % 2 == 1 ) // If number of flips is odd, then we need to change layers
+            return KIGFX::VIEW_ITEM::LAYERS;
         else if( m_movement.x != 0.0 || m_movement.y != 0.0 || m_rotation != 0.0 )
-            return KiGfx::VIEW_ITEM::GEOMETRY;
+            return KIGFX::VIEW_ITEM::GEOMETRY;
 
-        return KiGfx::VIEW_ITEM::APPEARANCE;
+        return KIGFX::VIEW_ITEM::APPEARANCE;
     }
 
 private:

@@ -30,7 +30,7 @@
 #include <colors.h>
 #include <cassert>
 
-namespace KiGfx
+namespace KIGFX
 {
 /**
  * Class COLOR4D
@@ -182,7 +182,7 @@ public:
     double GetBrightness() const
     {
         // Weighted W3C formula
-        return ( r * 0.299 + g * 0.587 + b * 0.117 );
+        return r * 0.299 + g * 0.587 + b * 0.117;
     }
 
     /**
@@ -217,6 +217,6 @@ public:
     double b; ///< Blue component
     double a; ///< Alpha component
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* COLOR4D_H_ */

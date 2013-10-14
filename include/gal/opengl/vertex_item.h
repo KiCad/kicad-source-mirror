@@ -34,7 +34,7 @@
 #include <gal/color4d.h>
 #include <cstddef>
 
-namespace KiGfx
+namespace KIGFX
 {
 class VERTEX_MANAGER;
 
@@ -98,6 +98,6 @@ private:
         m_size = aSize;
     }
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* VERTEX_ITEM_H_ */

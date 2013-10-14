@@ -36,7 +36,7 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
 
 void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 {
-    assert( aAction->GetId() == -1 );   // Check if the TOOL_ACTION was not registered before
+    assert( aAction->GetId() == -1 );    // Check if the TOOL_ACTION was not registered before
 
     aAction->setId( MakeActionId( aAction->m_name ) );
 
@@ -67,6 +67,7 @@ void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 int ACTION_MANAGER::MakeActionId( const std::string& aActionName )
 {
     static int currentActionId = 1;
+
     return currentActionId++;
 }
 
@@ -76,7 +77,7 @@ bool ACTION_MANAGER::RunAction( const std::string& aActionName ) const
     std::map<std::string, TOOL_ACTION*>::const_iterator it = m_actionNameIndex.find( aActionName );
 
     if( it == m_actionNameIndex.end() )
-        return false;   // no action with given name found
+        return false; // no action with given name found
 
     runAction( it->second );
 
@@ -89,7 +90,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     std::map<int, TOOL_ACTION*>::const_iterator it = m_actionHotKeys.find( aHotKey );
 
     if( it == m_actionHotKeys.end() )
-        return false;   // no appropriate action found for the hotkey
+        return false; // no appropriate action found for the hotkey
 
     runAction( it->second );
 

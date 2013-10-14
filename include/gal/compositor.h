@@ -31,7 +31,7 @@
 #ifndef COMPOSITOR_H_
 #define COMPOSITOR_H_
 
-namespace KiGfx
+namespace KIGFX
 {
 
 class COMPOSITOR
@@ -101,6 +101,6 @@ protected:
     unsigned int m_height;          ///< Height of the buffer (in pixels)
 };
 
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* COMPOSITOR_H_ */

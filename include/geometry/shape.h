@@ -35,11 +35,12 @@
  * Lists all supported shapes
  */
 
-enum ShapeType {
-    SH_RECT = 0,     ///> axis-aligned rectangle
-    SH_SEGMENT,        ///> line segment
-    SH_LINE_CHAIN,    ///> line chain (polyline)
-    SH_CIRCLE        ///> circle
+enum ShapeType
+{
+    SH_RECT = 0,        ///> axis-aligned rectangle
+    SH_SEGMENT,         ///> line segment
+    SH_LINE_CHAIN,      ///> line chain (polyline)
+    SH_CIRCLE           ///> circle
 };
 
 /**
@@ -47,7 +48,8 @@ enum ShapeType {
  *
  * Represents an abstract shape on 2D plane.
  */
-class SHAPE {
+class SHAPE
+{
     protected:
         typedef VECTOR2I::extended_type ecoord;
 
@@ -77,7 +79,8 @@ class SHAPE {
          * Returns a dynamically allocated copy of the shape
          * @retval copy of the shape
          */
-        virtual SHAPE* Clone() const {
+        virtual SHAPE* Clone() const
+        {
             assert( false );
             return NULL;
         };
@@ -106,6 +109,7 @@ class SHAPE {
          */
         virtual bool Collide( const SHAPE* aShape, int aClerance, VECTOR2I& aMTV ) const;
         virtual bool Collide( const SHAPE* aShape, int aClerance = 0 ) const;
+
         /**
          * Function Collide()
          *
@@ -139,9 +143,8 @@ class SHAPE {
     private:
         ///> type of our shape
         ShapeType m_type;
-
 };
 
-bool CollideShapes( const SHAPE *aA, const SHAPE *aB, int aClearance, bool aNeedMTV, VECTOR2I& aMTV );
+bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeedMTV, VECTOR2I& aMTV );
 
 #endif // __SHAPE_H

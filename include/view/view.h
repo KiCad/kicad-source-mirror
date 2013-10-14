@@ -32,7 +32,7 @@
 #include <math/box2.h>
 #include <gal/definitions.h>
 
-namespace KiGfx
+namespace KIGFX
 {
 class PAINTER;
 class GAL;
@@ -76,14 +76,14 @@ public:
      * Adds a VIEW_ITEM to the view.
      * @param aItem: item to be added. No ownership is given
      */
-    void    Add( VIEW_ITEM* aItem );
+    void Add( VIEW_ITEM* aItem );
 
     /**
      * Function Remove()
      * Removes a VIEW_ITEM from the view.
      * @param aItem: item to be removed. Caller must dispose the removed item if necessary
      */
-    void    Remove( VIEW_ITEM* aItem );
+    void Remove( VIEW_ITEM* aItem );
 
     /**
      * Function Query()
@@ -94,7 +94,7 @@ public:
      *  first).
      * @return Number of found items.
      */
-    int     Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult );
+    int Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult );
 
     /**
      * Function SetRequired()
@@ -104,19 +104,19 @@ public:
      * @param aRequiredId is the id of the required layer.
      * @param aRequired tells if the required layer should be added or removed from the list.
      */
-    void    SetRequired( int aLayerId, int aRequiredId, bool aRequired = true );
+    void SetRequired( int aLayerId, int aRequiredId, bool aRequired = true );
 
     /**
      * Function CopySettings()
      * Copies layers and visibility settings from another view.
      * @param aOtherView: view from which settings will be copied.
      */
-    void    CopySettings( const VIEW* aOtherView );
+    void CopySettings( const VIEW* aOtherView );
 
     /*
      *  Convenience wrappers for adding multiple items
-     *  template<class T> void AddItems( const T& aItems );
-     *  template<class T> void RemoveItems( const T& aItems );
+     *  template <class T> void AddItems( const T& aItems );
+     *  template <class T> void RemoveItems( const T& aItems );
      */
 
     /**
@@ -124,27 +124,27 @@ public:
      * Assigns a rendering device for the VIEW.
      * @param aGal: pointer to the GAL output device
      */
-    void    SetGAL( GAL* aGal );
+    void SetGAL( GAL* aGal );
 
     /**
      * Function GetGAL()
      * Returns the GAL this view is using to draw graphical primitives.
      * @return Pointer to the currently used GAL instance.
      */
-    GAL*    GetGAL() const { return m_gal; }
+    GAL* GetGAL() const { return m_gal; }
 
     /**
      * Function SetPainter()
      * Sets the painter object used by the view for drawing VIEW_ITEMS.
      */
-    void    SetPainter( PAINTER* aPainter );
+    void SetPainter( PAINTER* aPainter );
 
     /**
      * Function GetPainter()
      * Returns the painter object used by the view for drawing VIEW_ITEMS.
      * @return Pointer to the currently used Painter instance.
      */
-    PAINTER*    GetPainter() const { return m_painter; };
+    PAINTER* GetPainter() const { return m_painter; };
 
     /**
      * Function SetViewport()
@@ -152,14 +152,14 @@ public:
      * @param aViewport: desired visible area, in world space coordinates.
      * @param aKeepProportions: when true, the X/Y size proportions are kept.
      */
-    void    SetViewport( const BOX2D& aViewport, bool aKeepProportions = true );
+    void SetViewport( const BOX2D& aViewport, bool aKeepProportions = true );
 
     /**
      * Function GetViewport()
      * Returns the current viewport visible area rectangle.
      * @return Current viewport rectangle
      */
-    BOX2D   GetViewport() const;
+    BOX2D GetViewport() const;
 
     /**
      * Function SetMirror()
@@ -167,7 +167,7 @@ public:
      *  @param aMirrorX: when true, the X axis is mirrored
      *  @param aMirrorY: when true, the Y axis is mirrored.
      */
-    void    SetMirror( bool aMirrorX, bool aMirrorY );
+    void SetMirror( bool aMirrorX, bool aMirrorY );
 
     /**
      * Function SetScale()
@@ -175,7 +175,7 @@ public:
      * (depending on correct GAL unit length & DPI settings).
      * @param aScale: the scalefactor
      */
-    void    SetScale( double aScale );
+    void SetScale( double aScale );
 
     /**
      * Function SetScale()
@@ -183,7 +183,7 @@ public:
      * (depending on correct GAL unit length & DPI settings).
      * @param aScale: the scale factor
      */
-    void    SetScale( double aScale, const VECTOR2D& aAnchor );
+    void SetScale( double aScale, const VECTOR2D& aAnchor );
 
     /**
      * Function GetScale()
@@ -197,7 +197,7 @@ public:
      * of the screen).
      * @param aCenter: the new center point, in world space coordinates.
      */
-    void    SetCenter( const VECTOR2D& aCenter );
+    void SetCenter( const VECTOR2D& aCenter );
 
     /**
      * Function GetCenter()
@@ -212,7 +212,7 @@ public:
      * @param aCoord: the point/vector to be converted
      * @param aAbsolute: when true, aCoord is treated as a point, otherwise - as a direction (vector)
      */
-    VECTOR2D   ToWorld( const VECTOR2D& aCoord, bool aAbsolute = true ) const;
+    VECTOR2D ToWorld( const VECTOR2D& aCoord, bool aAbsolute = true ) const;
 
     /**
      * Function ToScreen()
@@ -220,7 +220,7 @@ public:
      * @param aCoord: the point/vector to be converted
      * @param aAbsolute: when true, aCoord is treated as a point, otherwise - as a direction (vector)
      */
-    VECTOR2D   ToScreen( const VECTOR2D& aCoord, bool aAbsolute = true ) const;
+    VECTOR2D ToScreen( const VECTOR2D& aCoord, bool aAbsolute = true ) const;
 
     /**
      * Function ToScreen()
@@ -228,14 +228,14 @@ public:
      * @param aCoord: the coordinate to be transformed.
      * @param aAbsolute: when true, aCoord is treated as a point, otherwise - as a direction (vector)
      */
-    double   ToScreen( double aCoord, bool aAbsolute = true ) const;
+    double ToScreen( double aCoord, bool aAbsolute = true ) const;
 
     /**
      * Function GetScreenPixelSize()
      * Returns the size of the our rendering area, in pixels.
      * @return viewport screen size
      */
-    VECTOR2D   GetScreenPixelSize() const;
+    VECTOR2D GetScreenPixelSize() const;
 
     /**
      * Function AddLayer()
@@ -244,20 +244,20 @@ public:
      * @param aDisplayOnly: layer is display-only (example: selection boxes, floating hints/menus).
      * Objects belonging to this layer are not taken into account by Query() method.
      */
-    void    AddLayer( int aLayer, bool aDisplayOnly = false );
+    void AddLayer( int aLayer, bool aDisplayOnly = false );
 
     /**
      * Function ClearLayer()
      * Removes all items from a given layer.
      * @param aLayer: ID of the layer to be cleared
      */
-    void    ClearLayer( int aLayer );
+    void ClearLayer( int aLayer );
 
     /**
      * Function Clear()
      * Removes all items from the view.
      */
-    void    Clear();
+    void Clear();
 
     /**
      * Function SetLayerVisible()
@@ -302,7 +302,7 @@ public:
      * @param aLayer: the layer
      * @param aRenderingOrder: arbitrary number denoting the rendering order.
      */
-    void    SetLayerOrder( int aLayer, int aRenderingOrder );
+    void SetLayerOrder( int aLayer, int aRenderingOrder );
 
     /**
      * Function GetLayerOrder()
@@ -310,7 +310,7 @@ public:
      * @param aLayer: the layer
      * @return Rendering order of a particular layer.
      */
-    int     GetLayerOrder( int aLayer ) const;
+    int GetLayerOrder( int aLayer ) const;
 
     /**
      * Function SortLayers()
@@ -320,7 +320,7 @@ public:
      * @param aLayers stores id of layers to be sorted.
      * @param aCount stores the number of layers.
      */
-    void    SortLayers( int aLayers[], int& aCount ) const;
+    void SortLayers( int aLayers[], int& aCount ) const;
 
     /**
      * Function UpdateLayerColor()
@@ -328,14 +328,14 @@ public:
      * @param aLayer is a number of the layer to be updated.
      * @see RENDER_SETTINGS
      */
-    void    UpdateLayerColor( int aLayer );
+    void UpdateLayerColor( int aLayer );
 
     /**
      * Function UpdateAllLayersColor()
      * Applies the new coloring scheme to all layers. The used scheme is held by RENDER_SETTINGS.
      * @see RENDER_SETTINGS
      */
-    void    UpdateAllLayersColor();
+    void UpdateAllLayersColor();
 
     /**
      * Function ChangeLayerDepth()
@@ -343,7 +343,7 @@ public:
      * @param aLayer is a number of the layer to be updated.
      * @param aDepth is the new depth.
      */
-    void    ChangeLayerDepth( int aLayer, int aDepth );
+    void ChangeLayerDepth( int aLayer, int aDepth );
 
     /**
      * Function SetTopLayer()
@@ -351,7 +351,7 @@ public:
      * @param aLayer: the layer or -1 in case when no particular layer should
      * be displayed on the top.
      */
-    void    SetTopLayer( int aLayer, bool aEnabled = true );
+    void SetTopLayer( int aLayer, bool aEnabled = true );
 
     /**
      * Function EnableTopLayer()
@@ -360,42 +360,42 @@ public:
      * layer set previously with SetTopLayer function.
      * @param aEnabled: whether to enable or disable display of the top layer.
      */
-    void    EnableTopLayer( bool aEnable );
+    void EnableTopLayer( bool aEnable );
 
-    int     GetTopLayer() const;
+    int GetTopLayer() const;
 
     /**
      * Function ClearTopLayers()
      * Removes all layers from the on-the-top set (they are no longer displayed over the rest of
      * layers).
      */
-    void    ClearTopLayers();
+    void ClearTopLayers();
 
     /**
      * Function UpdateLayerOrder()
      * Does everything that is needed to apply the rendering order of layers. It has to be called
      * after modification of renderingOrder field of LAYER.
      */
-    void    UpdateAllLayersOrder();
+    void UpdateAllLayersOrder();
 
     /**
      * Function ClearTargets()
      * Clears targets that are marked as dirty.
      */
-    void    ClearTargets();
+    void ClearTargets();
 
     /**
      * Function Redraw()
      * Immediately redraws the whole view.
      */
-    void    Redraw();
+    void Redraw();
 
     /**
      * Function PartialRedraw()
      * Redraws only the parts of the view that have been affected by items
      * for which ViewUpdate() function has been called since last redraw.
      */
-    void    PartialRedraw();
+    void PartialRedraw();
 
     /**
      * Function RecacheAllItems()
@@ -403,21 +403,21 @@ public:
      * @param aForceNow decides if every item should be instantly recached. Otherwise items are
      *        going to be recached when they become visible.
      */
-    void    RecacheAllItems( bool aForceNow = false );
+    void RecacheAllItems( bool aForceNow = false );
 
     /**
      * Function IsDynamic()
      * Tells if the VIEW is dynamic (ie. can be changed, for example displaying PCBs in a window)
      * or static (that cannot be modified, eg. displaying image/PDF).
      */
-    bool    IsDynamic() const { return m_dynamic; }
+    bool IsDynamic() const { return m_dynamic; }
 
     /**
      * Function IsDirty()
      * Returns true if any of the VIEW layers needs to be refreshened.
      * @return True in case if any of layers is marked as dirty.
      */
-    bool    IsDirty() const;
+    bool IsDirty() const;
 
     /**
      * Function IsTargetDirty()
@@ -442,7 +442,7 @@ public:
     /// Returns true if the layer is cached
     inline bool IsCached( int aLayer ) const
     {
-        return ( m_layers.at( aLayer ).target == TARGET_CACHED );
+        return m_layers.at( aLayer ).target == TARGET_CACHED;
     }
 
     /**
@@ -526,7 +526,7 @@ private:
      * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
      * for cached items.
      */
-    void    draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate = false ) const;
+    void draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate = false ) const;
 
     /**
      * Function draw()
@@ -536,7 +536,7 @@ private:
      * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
      * for cached items.
      */
-    void    draw( VIEW_ITEM* aItem, bool aImmediate = false ) const;
+    void draw( VIEW_ITEM* aItem, bool aImmediate = false ) const;
 
     /**
      * Function draw()
@@ -546,7 +546,7 @@ private:
      * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
      * for cached items.
      */
-    void    draw( VIEW_GROUP* aGroup, bool aImmediate = false ) const;
+    void draw( VIEW_GROUP* aGroup, bool aImmediate = false ) const;
 
 
     ///* Manages dirty flags & redraw queueing when updating an item. Called internally
@@ -585,42 +585,42 @@ private:
     bool m_enableOrderModifier;
 
     /// Contains set of possible displayed layers and its properties
-    LayerMap    m_layers;
+    LayerMap m_layers;
 
     /// Sorted list of pointers to members of m_layers
-    LayerOrder  m_orderedLayers;
+    LayerOrder m_orderedLayers;
 
     /// Stores set of layers that are displayed on the top
     std::set<unsigned int> m_topLayers;
 
     /// Center point of the VIEW (the point at which we are looking at)
-    VECTOR2D    m_center;
+    VECTOR2D m_center;
 
     /// Scale of displayed VIEW_ITEMs
-    double      m_scale;
+    double m_scale;
 
     /// PAINTER contains information how do draw items
-    PAINTER*    m_painter;
+    PAINTER* m_painter;
 
     /// Gives interface to PAINTER, that is used to draw items
-    GAL*        m_gal;
+    GAL* m_gal;
 
     /// Dynamic VIEW (eg. display PCB in window) allows changes once it is built,
     /// static (eg. image/PDF) - does not.
-    bool        m_dynamic;
+    bool m_dynamic;
 
     /// Flags to mark targets as dirty, so they have to be redrawn on the next refresh event
-    bool        m_dirtyTargets[TARGETS_NUMBER];
+    bool m_dirtyTargets[TARGETS_NUMBER];
 
     /// Rendering order modifier for layers that are marked as top layers
     static const int TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
 
     /// Panning boundaries
-    BOX2I       m_panBoundary;
+    BOX2I m_panBoundary;
 
     /// Zoom limits
-    VECTOR2D    m_scaleLimits;
+    VECTOR2D m_scaleLimits;
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif

@@ -32,8 +32,8 @@
 class TOOL_MANAGER;
 class PCB_BASE_FRAME;
 
-namespace KiGfx {
-    class VIEW;
+namespace KIGFX {
+class VIEW;
 };
 
 /**
@@ -96,21 +96,22 @@ private:
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
 
     ///> Saves the state of key modifiers (Alt, Ctrl and so on).
-    template<class EventType>
+    template <class EventType>
     static int decodeModifiers( const EventType* aState )
     {
         int mods = 0;
 
         if( aState->ControlDown() )
             mods |= MD_ModCtrl;
+
         if( aState->AltDown() )
             mods |= MD_ModAlt;
+
         if( aState->ShiftDown() )
             mods |= MD_ModShift;
 
         return mods;
     }
-
 
     ///> Stores all the informations regarding a mouse button state.
     struct ButtonState;
@@ -122,7 +123,7 @@ private:
     std::vector<ButtonState*> m_buttons;
 
     ///> Returns the instance of VIEW, used by the application.
-    KiGfx::VIEW* getView();
+    KIGFX::VIEW* getView();
 
     ///> Instance of tool manager that cooperates with the dispatcher.
     TOOL_MANAGER* m_toolMgr;

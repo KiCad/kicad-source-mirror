@@ -64,49 +64,53 @@ const std::string TOOL_EVENT::Format() const
 {
     std::string ev;
 
-    const FlagString categories[] = {
-        { TC_Mouse, "mouse" },
+    const FlagString categories[] =
+    {
+        { TC_Mouse,    "mouse"    },
         { TC_Keyboard, "keyboard" },
-        { TC_Command, "command" },
-        { TC_Message, "message" },
-        { TC_View, "view" },
-        { 0, "" }
+        { TC_Command,  "command"  },
+        { TC_Message,  "message"  },
+        { TC_View,     "view"     },
+        { 0,           ""         }
     };
 
-    const FlagString actions[] = {
-        { TA_MouseClick, "click" },
-        { TA_MouseUp, "button-up" },
-        { TA_MouseDown, "button-down" },
-        { TA_MouseDrag, "drag" },
-        { TA_MouseMotion, "motion" },
-        { TA_MouseWheel, "wheel" },
-        { TA_KeyUp, "key-up" },
-        { TA_KeyDown, "key-down" },
-        { TA_ViewRefresh, "view-refresh" },
-        { TA_ViewZoom, "view-zoom" },
-        { TA_ViewPan, "view-pan" },
-        { TA_ViewDirty, "view-dirty" },
-        { TA_ChangeLayer, "change-layer" },
-        { TA_CancelTool, "cancel-tool" },
+    const FlagString actions[] =
+    {
+        { TA_MouseClick,        "click"               },
+        { TA_MouseUp,           "button-up"           },
+        { TA_MouseDown,         "button-down"         },
+        { TA_MouseDrag,         "drag"                },
+        { TA_MouseMotion,       "motion"              },
+        { TA_MouseWheel,        "wheel"               },
+        { TA_KeyUp,             "key-up"              },
+        { TA_KeyDown,           "key-down"            },
+        { TA_ViewRefresh,       "view-refresh"        },
+        { TA_ViewZoom,          "view-zoom"           },
+        { TA_ViewPan,           "view-pan"            },
+        { TA_ViewDirty,         "view-dirty"          },
+        { TA_ChangeLayer,       "change-layer"        },
+        { TA_CancelTool,        "cancel-tool"         },
         { TA_ContextMenuUpdate, "context-menu-update" },
         { TA_ContextMenuChoice, "context-menu-choice" },
-        { TA_Action, "action" },
-        { 0, "" }
+        { TA_Action,            "action"              },
+        { 0,                    ""                    }
     };
 
-    const FlagString buttons[] = {
-        { MB_None, "none" },
-        { MB_Left, "left" },
-        { MB_Right, "right" },
+    const FlagString buttons[] =
+    {
+        { MB_None,   "none"   },
+        { MB_Left,   "left"   },
+        { MB_Right,  "right"  },
         { MB_Middle, "middle" },
-        { 0, "" }
+        { 0,         ""       }
     };
 
-    const FlagString modifiers[] = {
+    const FlagString modifiers[] =
+    {
         { MD_ModShift, "shift" },
-        { MD_ModCtrl, "ctrl" },
-        { MD_ModAlt, "alt" },
-        { 0, "" }
+        { MD_ModCtrl,  "ctrl"  },
+        { MD_ModAlt,   "alt"   },
+        { 0,           ""      }
     };
 
     ev = "category: ";

@@ -38,7 +38,7 @@
 #include "pns_router.h"
 #include "trace.h"
 
-using namespace KiGfx;
+using namespace KIGFX;
 using namespace std;
 using boost::optional;
 

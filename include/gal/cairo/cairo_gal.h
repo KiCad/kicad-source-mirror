@@ -40,9 +40,9 @@
 #define SCREEN_DEPTH 24
 #else
 #if wxCHECK_VERSION( 2, 9, 0 )
-#define SCREEN_DEPTH wxBITMAP_SCREEN_DEPTH
+#define SCREEN_DEPTH    wxBITMAP_SCREEN_DEPTH
 #else
-#define SCREEN_DEPTH 32
+#define SCREEN_DEPTH    32
 #endif
 #endif
 
@@ -58,7 +58,7 @@
  * of KiCad graphics surfaces as well.
  *
  */
-namespace KiGfx
+namespace KIGFX
 {
 class CAIRO_COMPOSITOR;
 
@@ -126,7 +126,7 @@ public:
     // --------------
 
     /// @brief Resizes the canvas.
-    virtual void ResizeScreen ( int aWidth, int aHeight );
+    virtual void ResizeScreen( int aWidth, int aHeight );
 
     /// @brief Shows/hides the GAL canvas
     virtual bool Show( bool aShow );
@@ -386,6 +386,6 @@ private:
     /// Format used to store pixels
     static const cairo_format_t GAL_FORMAT = CAIRO_FORMAT_RGB24;
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
-#endif // CAIROGAL_H_
+#endif  // CAIROGAL_H_

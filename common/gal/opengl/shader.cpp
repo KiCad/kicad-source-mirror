@@ -34,7 +34,7 @@
 #include <gal/opengl/shader.h>
 #include "shader_src.h"
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 SHADER::SHADER() :
     isProgramCreated( false ),
@@ -101,17 +101,19 @@ bool SHADER::Link()
                                (GLint*) &isShaderLinked );
 
 #ifdef __WXDEBUG__
+
     if( !isShaderLinked )
     {
         int maxLength;
         glGetProgramiv( programNumber, GL_INFO_LOG_LENGTH, &maxLength );
         maxLength = maxLength + 1;
-        char *linkInfoLog = new char[maxLength];
+        char* linkInfoLog = new char[maxLength];
         glGetProgramInfoLog( programNumber, maxLength, &maxLength, linkInfoLog );
         std::cerr << "Shader linking error:" << std::endl;
         std::cerr << linkInfoLog;
         delete[] linkInfoLog;
     }
+
 #endif /* __WXDEBUG__ */
 
     return isShaderLinked;

@@ -32,7 +32,7 @@
 
 #include <gal/opengl/vertex_common.h>
 
-namespace KiGfx
+namespace KIGFX
 {
 class VERTEX_ITEM;
 class SHADER;
@@ -45,6 +45,7 @@ public:
      * Returns a pointer to a new container of an appropriate type.
      */
     static VERTEX_CONTAINER* MakeContainer( bool aCached );
+
     virtual ~VERTEX_CONTAINER();
 
     /**
@@ -170,6 +171,6 @@ protected:
     ///< Default initial size of a container (expressed in vertices)
     static const unsigned int defaultInitSize = 1048576;
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* VERTEX_CONTAINER_H_ */

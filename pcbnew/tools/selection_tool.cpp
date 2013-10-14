@@ -47,14 +47,14 @@
 #include "bright_box.h"
 #include "common_actions.h"
 
-using namespace KiGfx;
+using namespace KIGFX;
 using boost::optional;
 
 SELECTION_TOOL::SELECTION_TOOL() :
-        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_multiple( false )
+    TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_multiple( false )
 {
     m_selArea = new SELECTION_AREA;
-    m_selection.group = new KiGfx::VIEW_GROUP;
+    m_selection.group = new KIGFX::VIEW_GROUP;
 }
 
 
@@ -98,8 +98,8 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         {
             if( !m_selection.Empty() )  // Cancel event deselects items...
                 clearSelection();
-            else                            // ...unless there is nothing selected
-                break;                      // then exit the tool
+            else                        // ...unless there is nothing selected
+                break;                  // then exit the tool
         }
 
         // single click? Select single object
@@ -141,7 +141,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
 {
-    assert( aAction.GetId() > 0 );  // Check if the action was registered before in ACTION_MANAGER
+    assert( aAction.GetId() > 0 );    // Check if the action was registered before in ACTION_MANAGER
 
     m_menu.Add( aAction );
 }
@@ -177,6 +177,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 void SELECTION_TOOL::clearSelection()
 {
     VIEW_GROUP::const_iter it, it_end;
+
     for( it = m_selection.group->Begin(), it_end = m_selection.group->End(); it != it_end; ++it )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
@@ -208,6 +209,7 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
     case 0:
         if( !m_additive )
             clearSelection();
+
         break;
 
     case 1:
@@ -220,6 +222,7 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         for( int i = collector.GetCount() - 1; i >= 0 ; --i )
         {
             BOARD_ITEM* boardItem = ( collector )[i];
+
             if( boardItem->Type() == PCB_MODULE_T || !selectable( boardItem ) )
                 collector.Remove( i );
         }
@@ -236,6 +239,7 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
             if( item )
                 toggleSelection( item );
         }
+
         break;
     }
 }
@@ -244,6 +248,7 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
 BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector )
 {
     int count = aCollector->GetPrimaryCount();     // try to use preferred layer
+
     if( 0 == count )
         count = aCollector->GetCount();
 
@@ -259,7 +264,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 
     for( int i = 0; i < count; ++i )
     {
-        MODULE* module = (MODULE*)( *aCollector )[i];
+        MODULE* module = (MODULE*) ( *aCollector )[i];
 
         int lx = module->GetBoundingBox().GetWidth();
         int ly = module->GetBoundingBox().GetHeight();
@@ -317,6 +322,7 @@ bool SELECTION_TOOL::selectMultiple()
             view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
             std::vector<VIEW::LayerItemPair>::iterator it, it_end;
+
             for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
@@ -349,6 +355,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     CONTEXT_MENU menu;
 
     int limit = std::min( 10, aCollector->GetCount() );
+
     for( int i = 0; i < limit; ++i )
     {
         wxString text;
@@ -415,27 +422,28 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     if( highContrast )
     {
         bool onActive = false;          // Is the item on any of active layers?
-        int layers[KiGfx::VIEW::VIEW_MAX_LAYERS], layers_count;
+        int layers[KIGFX::VIEW::VIEW_MAX_LAYERS], layers_count;
 
         // Filter out items that do not belong to active layers
         std::set<unsigned int> activeLayers = getView()->GetPainter()->
-                                                GetSettings()->GetActiveLayers();
+                                              GetSettings()->GetActiveLayers();
         aItem->ViewGetLayers( layers, layers_count );
 
         for( int i = 0; i < layers_count; ++i )
         {
-            if( activeLayers.count( layers[i] ) > 0 )   // Item is on at least one of active layers
+            if( activeLayers.count( layers[i] ) > 0 )    // Item is on at least one of active layers
             {
                 onActive = true;
                 break;
             }
         }
 
-        if( !onActive )     // We do not want to select items that are in the background
+        if( !onActive ) // We do not want to select items that are in the background
             return false;
     }
 
     BOARD* board = getModel<BOARD>( PCB_T );
+
     switch( aItem->Type() )
     {
     case PCB_VIA_T:
@@ -444,7 +452,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         LAYER_NUM top, bottom;
         static_cast<const SEGVIA*>( aItem )->ReturnLayerPair( &top, &bottom );
 
-        return ( board->IsLayerVisible( top ) || board->IsLayerVisible( bottom ) );
+        return board->IsLayerVisible( top ) || board->IsLayerVisible( bottom );
     }
     break;
 
@@ -469,6 +477,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         // Module texts are not selectable in multiple selection mode
         if( m_multiple )
             return false;
+
         break;
 
     // These are not selectable, otherwise silkscreen drawings would be easily destroyed
@@ -494,7 +503,7 @@ void SELECTION_TOOL::selectItem( BOARD_ITEM* aItem )
     {
         SELECTION& s;
 
-    public:
+	public:
         selectBase_( SELECTION& s_ ) : s( s_ ) {}
 
         void operator()( BOARD_ITEM* item )
@@ -578,6 +587,7 @@ bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
 
     // Check if the point is located within any of the currently selected items bounding boxes
     std::set<BOARD_ITEM*>::iterator it, it_end;
+
     for( it = m_selection.items.begin(), it_end = m_selection.items.end(); it != it_end; ++it )
     {
         BOX2I itemBox = (*it)->ViewBBox();

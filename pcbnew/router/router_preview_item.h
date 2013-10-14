@@ -56,7 +56,7 @@ public:
         PR_SUGGESTION = 1
     };
 
-    ROUTER_PREVIEW_ITEM( const PNS_ITEM* aItem = NULL, KiGfx::VIEW_GROUP* aParent = NULL );
+    ROUTER_PREVIEW_ITEM( const PNS_ITEM* aItem = NULL, KIGFX::VIEW_GROUP* aParent = NULL );
     ~ROUTER_PREVIEW_ITEM();
 
     void Update( const PNS_ITEM* aItem );
@@ -69,7 +69,7 @@ public:
 
     const BOX2I ViewBBox() const;
 
-    virtual void ViewDraw( int aLayer, KiGfx::GAL* aGal ) const;
+    virtual void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const
     {
@@ -80,10 +80,10 @@ public:
     void MarkAsHead();
 
 private:
-    const KiGfx::COLOR4D assignColor( int aStyle ) const;
-    const KiGfx::COLOR4D getLayerColor( int aLayer ) const;
+    const KIGFX::COLOR4D assignColor( int aStyle ) const;
+    const KIGFX::COLOR4D getLayerColor( int aLayer ) const;
 
-    KiGfx::VIEW_GROUP* m_parent;
+    KIGFX::VIEW_GROUP* m_parent;
 
     PNS_ROUTER* m_router;
     SHAPE_LINE_CHAIN m_line;
@@ -93,11 +93,10 @@ private:
     int m_width;
     int m_layer;
 
-    KiGfx::COLOR4D m_color;
+    KIGFX::COLOR4D m_color;
 
     VECTOR2I m_stuckPosition;
     VECTOR2I m_viaCenter;
 };
 
 #endif
-

@@ -29,7 +29,7 @@
 
 #include <rtree.h>
 
-namespace KiGfx
+namespace KIGFX
 {
 typedef RTree<VIEW_ITEM*, int, 2, float> VIEW_RTREE_BASE;
 
@@ -88,6 +88,6 @@ public:
 
 private:
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif

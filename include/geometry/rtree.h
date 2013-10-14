@@ -42,9 +42,9 @@
 // RTree.h
 //
 
-#define RTREE_TEMPLATE          template<class DATATYPE, class ELEMTYPE, int NUMDIMS, \
+#define RTREE_TEMPLATE          template <class DATATYPE, class ELEMTYPE, int NUMDIMS, \
     class ELEMTYPEREAL, int TMAXNODES, int TMINNODES>
-#define RTREE_SEARCH_TEMPLATE   template<class DATATYPE, class ELEMTYPE, int NUMDIMS, \
+#define RTREE_SEARCH_TEMPLATE   template <class DATATYPE, class ELEMTYPE, int NUMDIMS, \
     class ELEMTYPEREAL, int TMAXNODES, int TMINNODES, class VISITOR>
 #define RTREE_QUAL              RTree<DATATYPE, ELEMTYPE, NUMDIMS, ELEMTYPEREAL, TMAXNODES, \
     TMINNODES>

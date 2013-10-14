@@ -105,20 +105,20 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 
     case PAD_SMD:
     case PAD_CONN:
-        {
-            LAYER_MSK lmsk = aPad->GetLayerMask();
-            int i;
+    {
+        LAYER_MSK lmsk = aPad->GetLayerMask();
+        int i;
 
-            for( i = FIRST_COPPER_LAYER; i <= LAST_COPPER_LAYER; i++ )
-                if( lmsk & (1 << i) )
-                {
-                    layers = PNS_LAYERSET( i );
-                    break;
-                }
-
-
-            break;
-        }
+        for( i = FIRST_COPPER_LAYER; i <= LAST_COPPER_LAYER; i++ )
+		{
+            if( lmsk & (1 << i) )
+            {
+                layers = PNS_LAYERSET( i );
+                break;
+            }
+		}
+        break;
+    }
 
     default:
         TRACE( 0, "unsupported pad type 0x%x", aPad->GetAttribute() );
@@ -280,9 +280,9 @@ PNS_ROUTER::PNS_ROUTER()
 
     m_clearanceFunc = NULL;
 
-    m_currentLayer  = 1;
-    m_placingVia    = false;
-    m_currentNet    = -1;
+    m_currentLayer = 1;
+    m_placingVia = false;
+    m_currentNet = -1;
     m_state = IDLE;
     m_world = NULL;
     m_placer = NULL;
@@ -294,7 +294,7 @@ PNS_ROUTER::PNS_ROUTER()
 }
 
 
-void PNS_ROUTER::SetView( KiGfx::VIEW* aView )
+void PNS_ROUTER::SetView( KIGFX::VIEW* aView )
 {
     if( m_previewItems )
     {
@@ -303,7 +303,7 @@ void PNS_ROUTER::SetView( KiGfx::VIEW* aView )
     }
 
     m_view = aView;
-    m_previewItems = new KiGfx::VIEW_GROUP( m_view );
+    m_previewItems = new KIGFX::VIEW_GROUP( m_view );
     m_previewItems->SetLayer( ITEM_GAL_LAYER( GP_OVERLAY ) );
     m_view->Add( m_previewItems );
     m_previewItems->ViewSetVisible( true );
@@ -386,7 +386,7 @@ const VECTOR2I PNS_ROUTER::SnapToItem( PNS_ITEM* item, VECTOR2I aP, bool& aSplit
 
     case PNS_ITEM::SEGMENT:
         {
-            PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>(item);
+            PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
             const SEG& s = seg->GetSeg();
             int w = seg->GetWidth();
 
@@ -462,7 +462,7 @@ void PNS_ROUTER::EraseView()
     if( m_previewItems )
         m_previewItems->FreeItems();
 
-    m_previewItems->ViewUpdate( KiGfx::VIEW_ITEM::GEOMETRY );
+    m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 }
 
 
@@ -476,7 +476,7 @@ void PNS_ROUTER::DisplayItem( const PNS_ITEM* aItem, bool aIsHead )
         pitem->MarkAsHead();
 
     pitem->ViewSetVisible( true );
-    m_previewItems->ViewUpdate( KiGfx::VIEW_ITEM::GEOMETRY | KiGfx::VIEW_ITEM::APPEARANCE );
+    m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY | KIGFX::VIEW_ITEM::APPEARANCE );
 }
 
 
@@ -487,7 +487,7 @@ void PNS_ROUTER::DisplayDebugLine( const SHAPE_LINE_CHAIN& aLine, int aType, int
     pitem->DebugLine( aLine, aWidth, aType );
     m_previewItems->Add( pitem );
     pitem->ViewSetVisible( true );
-    m_previewItems->ViewUpdate( KiGfx::VIEW_ITEM::GEOMETRY | KiGfx::VIEW_ITEM::APPEARANCE );
+    m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY | KIGFX::VIEW_ITEM::APPEARANCE );
 }
 
 
@@ -523,7 +523,8 @@ void PNS_ROUTER::Move( const VECTOR2I& aP, PNS_ITEM* endItem )
 
     m_placer->GetCurrentNode()->GetUpdatedItems( removed, added );
 
-    BOOST_FOREACH( PNS_ITEM* item, added ) {
+    BOOST_FOREACH( PNS_ITEM* item, added )
+	{
         DisplayItem( item );
     }
 
@@ -537,7 +538,7 @@ void PNS_ROUTER::Move( const VECTOR2I& aP, PNS_ITEM* endItem )
                 m_hiddenItems.insert( parent );
 
             parent->ViewSetVisible( false );
-            parent->ViewUpdate( KiGfx::VIEW_ITEM::APPEARANCE );
+            parent->ViewUpdate( KIGFX::VIEW_ITEM::APPEARANCE );
         }
     }
 }
@@ -552,7 +553,7 @@ void PNS_ROUTER::splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, const V
         if( jt && jt->LinkCount() >= 1 )
             return;
 
-        PNS_SEGMENT* s_old = static_cast<PNS_SEGMENT*>(aSeg);
+        PNS_SEGMENT* s_old = static_cast<PNS_SEGMENT*>( aSeg );
         PNS_SEGMENT* s_new[2];
 
         s_new[0] = s_old->Clone();
@@ -627,7 +628,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
             newBI->ClearFlags();
             m_view->Add( newBI );
             m_board->Add( newBI );
-            newBI->ViewUpdate( KiGfx::VIEW_ITEM::GEOMETRY );
+            newBI->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
     }
 
@@ -770,8 +771,8 @@ void PNS_ROUTER::FlipPosture()
     if( m_placer->GetTail().GetCLine().SegmentCount() == 0 )
     {
         m_start_diagonal = !m_start_diagonal;
-        m_placer->SetInitialDirection( m_start_diagonal ? DIRECTION_45(
-                        DIRECTION_45::NE ) : DIRECTION_45( DIRECTION_45::N ) );
+        m_placer->SetInitialDirection( m_start_diagonal ? 
+			DIRECTION_45( DIRECTION_45::NE ) : DIRECTION_45( DIRECTION_45::N ) );
     }
     else
         m_placer->FlipPosture();
@@ -789,12 +790,12 @@ void PNS_ROUTER::SwitchLayer( int layer )
         break;
 
     case ROUTE_TRACK:
-        if( m_startsOnVia )
-        {
-            m_currentLayer = layer;
-            m_placer->StartPlacement( m_currentStart, m_currentNet, m_currentWidth,
-                    m_currentLayer );
-        }
+    if( m_startsOnVia )
+    {
+        m_currentLayer = layer;
+        m_placer->StartPlacement( m_currentStart, m_currentNet, m_currentWidth,
+                m_currentLayer );
+    }
 
     default:
         break;
@@ -810,4 +811,3 @@ void PNS_ROUTER::ToggleViaPlacement()
         m_placer->AddVia( m_placingVia, m_currentViaDiameter, m_currentViaDrill );
     }
 }
-

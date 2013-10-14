@@ -27,7 +27,7 @@
 #include <painter.h>
 #include <gal/graphics_abstraction_layer.h>
 
-using namespace KiGfx;
+using namespace KIGFX;
 
 RENDER_SETTINGS::RENDER_SETTINGS()
 {

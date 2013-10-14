@@ -85,12 +85,12 @@ struct TOOL_MANAGER::TOOL_STATE
 
     bool operator==( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
     {
-        return ( aRhs.theTool == this->theTool );
+        return aRhs.theTool == this->theTool;
     }
 
     bool operator!=( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
     {
-        return ( aRhs.theTool != this->theTool );
+        return aRhs.theTool != this->theTool;
     }
 };
 
@@ -137,6 +137,7 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
     if( aTool->GetType() == TOOL_Interactive )
     {
         bool initState = static_cast<TOOL_INTERACTIVE*>( aTool )->Init();
+
         if( !initState )
         {
             wxLogError( wxT( "Initialization of the %s tool failed" ), aTool->GetName().c_str() );
@@ -232,6 +233,7 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
     // If the tool is already active, do not invoke it again
     if( state->idle == false )
         return false;
+
     state->idle = false;
 
     static_cast<TOOL_INTERACTIVE*>( aTool )->Reset();
@@ -269,6 +271,7 @@ void TOOL_MANAGER::ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandle
                                       const TOOL_EVENT_LIST& aConditions )
 {
     TOOL_STATE* st = m_toolState[aTool];
+
     st->transitions.push_back( TRANSITION( aConditions, aHandler ) );
 }
 
@@ -309,8 +312,9 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
                 st->wakeupEvent = aEvent;
                 st->pendingWait = false;
                 st->waitEvents.clear();
+
                 if( st->cofunc && !st->cofunc->Resume() )
-                    finishTool( st );           // The couroutine has finished
+                    finishTool( st ); // The couroutine has finished
 
                 // If the tool did not request to propagate
                 // the event to other tools, we should stop it now
@@ -345,7 +349,7 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
                         st->cofunc->Call( aEvent );
 
                         if( !st->cofunc->Running() )
-                            finishTool( st );   // The couroutine has finished immediately?
+                            finishTool( st ); // The couroutine has finished immediately?
                     }
                 }
             }
@@ -360,9 +364,9 @@ bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
     {
         // Check if there is a hotkey associated
         if( m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode() ) )
-            return false;   // hotkey event was handled so it does not go any further
+            return false;                       // hotkey event was handled so it does not go any further
     }
-    else if( aEvent.Category() == TC_Command )        // it may be a tool activation event
+    else if( aEvent.Category() == TC_Command )  // it may be a tool activation event
     {
         dispatchActivation( aEvent );
         // do not return false, as the event has to go on to the destined tool
@@ -392,6 +396,7 @@ void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
     // Find the tool to be deactivated
     std::deque<TOOL_ID>::iterator it, it_end;
+
     for( it = m_activeTools.begin(), it_end = m_activeTools.end(); it != it_end; ++it )
     {
         if( aState == m_toolIdIndex[*it] )
@@ -411,7 +416,7 @@ void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
 bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 {
-//    wxLogDebug( "event: %s", aEvent.Format().c_str() );
+// wxLogDebug( "event: %s", aEvent.Format().c_str() );
 
     // Early dispatch of events destined for the TOOL_MANAGER
     if( !dispatchStandardEvents( aEvent ) )
@@ -451,7 +456,7 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
     if( m_view->IsDirty() )
     {
         PCB_EDIT_FRAME* f = static_cast<PCB_EDIT_FRAME*>( GetEditFrame() );
-        f->GetGalCanvas()->Refresh(); // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
+        f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
     }
 
     return false;
@@ -475,12 +480,13 @@ void TOOL_MANAGER::ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
 TOOL_ID TOOL_MANAGER::MakeToolId( const std::string& aToolName )
 {
     static int currentId;
+
     return currentId++;
 }
 
 
-void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KiGfx::VIEW* aView,
-                                   KiGfx::VIEW_CONTROLS* aViewControls, wxWindow* aFrame )
+void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
+                                   KIGFX::VIEW_CONTROLS* aViewControls, wxWindow* aFrame )
 {
     m_model = aModel;
     m_view = aView;

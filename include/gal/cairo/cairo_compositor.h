@@ -36,7 +36,7 @@
 #include <boost/smart_ptr/shared_array.hpp>
 #include <deque>
 
-namespace KiGfx
+namespace KIGFX
 {
 class CAIRO_COMPOSITOR : public COMPOSITOR
 {
@@ -122,6 +122,6 @@ protected:
         return m_buffers.size();
     }
 };
-} // namespace KiGfx
+} // namespace KIGFX
 
 #endif /* COMPOSITOR_H_ */
