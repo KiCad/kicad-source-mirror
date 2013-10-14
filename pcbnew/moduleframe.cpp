@@ -53,9 +53,6 @@
 
 static PCB_SCREEN* s_screenModule;      // the PCB_SCREEN used by the footprint editor
 
-wxString FOOTPRINT_EDIT_FRAME::m_lib_nick_name;
-wxString FOOTPRINT_EDIT_FRAME::m_lib_path;
-
 BOARD* FOOTPRINT_EDIT_FRAME::s_Pcb;
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )

@@ -146,6 +146,10 @@ PCBNew
 
 Dick's Final TODO List:
 ======================
+*) Rewrite
+        PCB_BASE_FRAME::Save_Module_In_Library
+        PCB_EDIT_FRAME::ArchiveModulesOnBoard
+   to use FP_LIB_TABLE mechanisms.
 *) write options dialog for fp table dialog.
 *) Apply Fabrizio and Alexander's linux desktop patches after unifying them.
 *) Get licensing cleaned up.
