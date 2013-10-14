@@ -60,7 +60,7 @@ class VIEW
 public:
     friend class VIEW_ITEM;
 
-    typedef std::pair<VIEW_ITEM*, int> LayerItemPair;
+    typedef std::pair<VIEW_ITEM*, int> LAYER_ITEM_PAIR;
 
     /**
      * Constructor.
@@ -94,7 +94,7 @@ public:
      *  first).
      * @return Number of found items.
      */
-    int Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult );
+    int Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult );
 
     /**
      * Function SetRequired()
@@ -131,7 +131,10 @@ public:
      * Returns the GAL this view is using to draw graphical primitives.
      * @return Pointer to the currently used GAL instance.
      */
-    GAL* GetGAL() const { return m_gal; }
+    GAL* GetGAL() const
+    {
+        return m_gal;
+    }
 
     /**
      * Function SetPainter()
@@ -144,7 +147,10 @@ public:
      * Returns the painter object used by the view for drawing VIEW_ITEMS.
      * @return Pointer to the currently used Painter instance.
      */
-    PAINTER* GetPainter() const { return m_painter; };
+    PAINTER* GetPainter() const
+    {
+        return m_painter;
+    }
 
     /**
      * Function SetViewport()
@@ -189,7 +195,10 @@ public:
      * Function GetScale()
      * @return Current scalefactor of this VIEW
      */
-    double  GetScale() const { return m_scale; }
+    double  GetScale() const
+    {
+        return m_scale;
+    }
 
     /**
      * Function SetCenter()
@@ -204,7 +213,10 @@ public:
      * Returns the center point of this VIEW (in world space coordinates)
      * @return center point of the view
      */
-    const VECTOR2D& GetCenter() const { return m_center; }
+    const VECTOR2D& GetCenter() const
+    {
+        return m_center;
+    }
 
     /**
      * Function ToWorld()
@@ -291,7 +303,7 @@ public:
      * @param aLayer is the layer.
      * @param aTarget is the rendering target.
      */
-    inline void SetLayerTarget( int aLayer, RenderTarget aTarget )
+    inline void SetLayerTarget( int aLayer, RENDER_TARGET aTarget )
     {
         m_layers[aLayer].target = aTarget;
     }
@@ -410,7 +422,10 @@ public:
      * Tells if the VIEW is dynamic (ie. can be changed, for example displaying PCBs in a window)
      * or static (that cannot be modified, eg. displaying image/PDF).
      */
-    bool IsDynamic() const { return m_dynamic; }
+    bool IsDynamic() const
+    {
+        return m_dynamic;
+    }
 
     /**
      * Function IsDirty()
@@ -488,15 +503,15 @@ private:
         VIEW_RTREE*             items;           ///* R-tree indexing all items on this layer.
         int                     renderingOrder;  ///* rendering order of this layer
         int                     id;              ///* layer ID
-        RenderTarget            target;          ///* where the layer should be rendered
-        std::set<int>           requiredLayers;  ///* layers that are required to be enabled to show the layer
+        RENDER_TARGET           target;          ///* where the layer should be rendered
+        std::set<int>           requiredLayers;  ///* layers that have to be enabled to show the layer
     };
 
     // Convenience typedefs
-    typedef boost::unordered_map<int, VIEW_LAYER>   LayerMap;
-    typedef LayerMap::iterator                      LayerMapIter;
-    typedef std::vector<VIEW_LAYER*>                LayerOrder;
-    typedef std::vector<VIEW_LAYER*>::iterator      LayerOrderIter;
+    typedef boost::unordered_map<int, VIEW_LAYER>   LAYER_MAP;
+    typedef LAYER_MAP::iterator                     LAYER_MAP_ITER;
+    typedef std::vector<VIEW_LAYER*>                LAYER_ORDER;
+    typedef std::vector<VIEW_LAYER*>::iterator      LAYER_ORDER_ITER;
 
     // Function objects that need to access VIEW/VIEW_ITEM private/protected members
     struct clearLayerCache;
@@ -573,9 +588,9 @@ private:
     void updateLayers( VIEW_ITEM* aItem );
 
     /// Determines rendering order of layers. Used in display order sorting function.
-    static bool compareRenderingOrder( VIEW_LAYER* i, VIEW_LAYER* j )
+    static bool compareRenderingOrder( VIEW_LAYER* aI, VIEW_LAYER* aJ )
     {
-        return i->renderingOrder > j->renderingOrder;
+        return aI->renderingOrder > aJ->renderingOrder;
     }
 
     /// Checks if every layer required by the aLayerId layer is enabled.
@@ -585,10 +600,10 @@ private:
     bool m_enableOrderModifier;
 
     /// Contains set of possible displayed layers and its properties
-    LayerMap m_layers;
+    LAYER_MAP m_layers;
 
     /// Sorted list of pointers to members of m_layers
-    LayerOrder m_orderedLayers;
+    LAYER_ORDER m_orderedLayers;
 
     /// Stores set of layers that are displayed on the top
     std::set<unsigned int> m_topLayers;

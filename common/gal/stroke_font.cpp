@@ -59,7 +59,7 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
     for( int j = 0; j < aNewStrokeFontSize; j++ )
     {
-        Glyph    glyph;
+        GLYPH    glyph;
         double   glyphStartX = 0.0;
         double   glyphEndX = 0.0;
         VECTOR2D glyphBoundingX;
@@ -118,21 +118,21 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 }
 
 
-BOX2D STROKE_FONT::computeBoundingBox( const Glyph& aGlyph, const VECTOR2D& aGlyphBoundingX ) const
+BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLYPHBoundingX ) const
 {
     BOX2D boundingBox;
 
     std::deque<VECTOR2D> boundingPoints;
 
-    boundingPoints.push_back( VECTOR2D( aGlyphBoundingX.x, 0 ) );
-    boundingPoints.push_back( VECTOR2D( aGlyphBoundingX.y, 0 ) );
+    boundingPoints.push_back( VECTOR2D( aGLYPHBoundingX.x, 0 ) );
+    boundingPoints.push_back( VECTOR2D( aGLYPHBoundingX.y, 0 ) );
 
-    for( Glyph::const_iterator pointListIt = aGlyph.begin(); pointListIt != aGlyph.end(); ++pointListIt )
+    for( GLYPH::const_iterator pointListIt = aGLYPH.begin(); pointListIt != aGLYPH.end(); ++pointListIt )
     {
         for( std::deque<VECTOR2D>::const_iterator pointIt = pointListIt->begin();
                 pointIt != pointListIt->end(); ++pointIt )
         {
-            boundingPoints.push_back( VECTOR2D( aGlyphBoundingX.x, pointIt->y ) );
+            boundingPoints.push_back( VECTOR2D( aGLYPHBoundingX.x, pointIt->y ) );
         }
     }
 
@@ -241,15 +241,15 @@ void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRo
             continue;
         }
 
-        GlyphList::iterator glyphIt = m_glyphs.begin();
+        GLYPH_LIST::iterator glyphIt = m_glyphs.begin();
         std::deque<BOX2D>::iterator bbIt = m_glyphBoundingBoxes.begin();
 
         advance( glyphIt, (int) ( *chIt ) - (int) ' ' );
         advance( bbIt, (int) ( *chIt ) - (int) ' ' );
 
-        Glyph glyph = *glyphIt;
+        GLYPH glyph = *glyphIt;
 
-        for( Glyph::iterator pointListIt = glyph.begin(); pointListIt != glyph.end();
+        for( GLYPH::iterator pointListIt = glyph.begin(); pointListIt != glyph.end();
              pointListIt++ )
         {
             std::deque<VECTOR2D> pointListScaled;

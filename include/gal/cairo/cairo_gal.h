@@ -217,13 +217,13 @@ public:
     virtual void RestoreScreen();
 
     /// @copydoc GAL::SetTarget()
-    virtual void SetTarget( RenderTarget aTarget );
+    virtual void SetTarget( RENDER_TARGET aTarget );
 
     /// @copydoc GAL::GetTarget()
-    virtual RenderTarget GetTarget() const;
+    virtual RENDER_TARGET GetTarget() const;
 
     /// @copydoc GAL::ClearTarget()
-    virtual void ClearTarget( RenderTarget aTarget );
+    virtual void ClearTarget( RENDER_TARGET aTarget );
 
     // -------
     // Cursor
@@ -267,7 +267,7 @@ private:
     boost::shared_ptr<CAIRO_COMPOSITOR> compositor; ///< Object for layers compositing
     unsigned int            mainBuffer;             ///< Handle to the main buffer
     unsigned int            overlayBuffer;          ///< Handle to the overlay buffer
-    RenderTarget            currentTarget;          ///< Current rendering target
+    RENDER_TARGET           currentTarget;          ///< Current rendering target
     bool                    validCompositor;        ///< Compositor initialization flag
 
     // Variables related to wxWidgets
@@ -290,7 +290,8 @@ private:
     static const int MAX_CAIRO_ARGUMENTS = 6;
 
     /// Definitions for the command recorder
-    enum GraphicsCommand {
+    enum GRAPHICS_COMMAND
+    {
         CMD_SET_FILL,                               ///< Enable/disable filling
         CMD_SET_STROKE,                             ///< Enable/disable stroking
         CMD_SET_FILLCOLOR,                          ///< Set the fill color
@@ -310,20 +311,20 @@ private:
     /// Type definition for an graphics group element
     typedef struct
     {
-        GraphicsCommand command;                    ///< Command to execute
+        GRAPHICS_COMMAND command;                    ///< Command to execute
         double arguments[MAX_CAIRO_ARGUMENTS];      ///< Arguments for Cairo commands
         bool boolArgument;                          ///< A bool argument
         int intArgument;                            ///< An int argument
         cairo_path_t* cairoPath;                    ///< Pointer to a Cairo path
-    } GroupElement;
+    } GROUP_ELEMENT;
 
     // Variables for the grouping function
     bool                        isGrouping;         ///< Is grouping enabled ?
     bool                        isElementAdded;     ///< Was an graphic element added ?
-    typedef std::deque<GroupElement> Group;         ///< A graphic group type definition
-    std::map<int, Group>        groups;             ///< List of graphic groups
+    typedef std::deque<GROUP_ELEMENT> GROUP;        ///< A graphic group type definition
+    std::map<int, GROUP>        groups;             ///< List of graphic groups
     unsigned int                groupCounter;       ///< Counter used for generating keys for groups
-    Group*                      currentGroup;       ///< Currently used group
+    GROUP*                      currentGroup;       ///< Currently used group
 
     // Variables related to Cairo <-> wxWidgets
     cairo_matrix_t      cairoWorldScreenMatrix; ///< Cairo world to screen transformation matrix

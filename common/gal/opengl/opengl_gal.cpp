@@ -691,7 +691,7 @@ void OPENGL_GAL::RestoreScreen()
 }
 
 
-void OPENGL_GAL::SetTarget( RenderTarget aTarget )
+void OPENGL_GAL::SetTarget( RENDER_TARGET aTarget )
 {
     switch( aTarget )
     {
@@ -713,13 +713,13 @@ void OPENGL_GAL::SetTarget( RenderTarget aTarget )
 }
 
 
-RenderTarget OPENGL_GAL::GetTarget() const
+RENDER_TARGET OPENGL_GAL::GetTarget() const
 {
     return currentTarget;
 }
 
 
-void OPENGL_GAL::ClearTarget( RenderTarget aTarget )
+void OPENGL_GAL::ClearTarget( RENDER_TARGET aTarget )
 {
     // Save the current state
     unsigned int oldTarget = compositor.GetBuffer();

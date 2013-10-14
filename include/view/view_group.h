@@ -164,17 +164,32 @@ public:
      *
      * @param aFlags determines the way in which items will be updated.
      */
-    virtual void ItemsViewUpdate( VIEW_ITEM::ViewUpdateFlags aFlags );
+    virtual void ItemsViewUpdate( VIEW_ITEM::VIEW_UPDATE_FLAGS aFlags );
 
 protected:
     /// These functions cannot be used with VIEW_GROUP as they are intended only to work with
     /// singular VIEW_ITEMs (there is only one-to-one relation between item/layer combination and
     /// its group).
-    int getGroup( int aLayer ) const { return -1; };
-    std::vector<int> getAllGroups() const { return std::vector<int>(); };
-    void setGroup( int aLayer, int aGroup ) {};
-    void deleteGroups() {};
-    bool storesGroups() const { return false; };
+    int getGroup( int aLayer ) const
+    {
+        return -1;
+    }
+
+    std::vector<int> getAllGroups() const
+    {
+        return std::vector<int>();
+    }
+
+    void setGroup( int aLayer, int aGroup )
+    {}
+
+    void deleteGroups()
+    {}
+
+    bool storesGroups() const
+    {
+        return false;
+    }
 
     /// Layer on which the group is drawn
     int m_layer;

@@ -32,7 +32,8 @@
 class TOOL_MANAGER;
 class PCB_BASE_FRAME;
 
-namespace KIGFX {
+namespace KIGFX
+{
 class VIEW;
 };
 
@@ -102,25 +103,25 @@ private:
         int mods = 0;
 
         if( aState->ControlDown() )
-            mods |= MD_ModCtrl;
+            mods |= MD_CTRL;
 
         if( aState->AltDown() )
-            mods |= MD_ModAlt;
+            mods |= MD_ALT;
 
         if( aState->ShiftDown() )
-            mods |= MD_ModShift;
+            mods |= MD_SHIFT;
 
         return mods;
     }
 
     ///> Stores all the informations regarding a mouse button state.
-    struct ButtonState;
+    struct BUTTON_STATE;
 
     ///> The last mouse cursor position (in world coordinates).
     VECTOR2D m_lastMousePos;
 
     ///> State of mouse buttons.
-    std::vector<ButtonState*> m_buttons;
+    std::vector<BUTTON_STATE*> m_buttons;
 
     ///> Returns the instance of VIEW, used by the application.
     KIGFX::VIEW* getView();

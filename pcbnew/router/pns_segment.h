@@ -44,8 +44,8 @@ public:
     {
         m_net = aNet;
         m_shape.Clear();
-        m_shape.Append( aSeg.a );
-        m_shape.Append( aSeg.b );
+        m_shape.Append( aSeg.A );
+        m_shape.Append( aSeg.B );
     };
 
     PNS_SEGMENT( const PNS_LINE& aParentLine, const SEG& aSeg ) :
@@ -55,8 +55,8 @@ public:
         m_layers = aParentLine.GetLayers();
         m_width = aParentLine.GetWidth();
         m_shape.Clear();
-        m_shape.Append( aSeg.a );
-        m_shape.Append( aSeg.b );
+        m_shape.Append( aSeg.A );
+        m_shape.Append( aSeg.B );
     };
 
 

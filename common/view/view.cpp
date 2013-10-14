@@ -67,7 +67,7 @@ VIEW::VIEW( bool aIsDynamic ) :
 
 VIEW::~VIEW()
 {
-    BOOST_FOREACH( LayerMap::value_type& l, m_layers )
+    BOOST_FOREACH( LAYER_MAP::value_type& l, m_layers )
     {
         delete l.second.items;
     }
@@ -156,7 +156,7 @@ struct queryVisitor
     void operator()( VIEW_ITEM* aItem )
     {
         if( aItem->ViewIsVisible() )
-            m_cont.push_back( VIEW::LayerItemPair( aItem, m_layer ) );
+            m_cont.push_back( VIEW::LAYER_ITEM_PAIR( aItem, m_layer ) );
     }
 
     Container&  m_cont;
@@ -164,7 +164,7 @@ struct queryVisitor
 };
 
 
-int VIEW::Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult )
+int VIEW::Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult )
 {
     if( m_orderedLayers.empty() )
         return 0;
@@ -179,7 +179,7 @@ int VIEW::Query( const BOX2I& aRect, std::vector<LayerItemPair>& aResult )
         if( ( *i )->displayOnly )
             continue;
 
-        queryVisitor<std::vector<LayerItemPair> > visitor( aResult, ( *i )->id );
+        queryVisitor<std::vector<LAYER_ITEM_PAIR> > visitor( aResult, ( *i )->id );
         ( *i )->items->Query( aRect, visitor );
     }
 
@@ -424,7 +424,7 @@ void VIEW::UpdateAllLayersColor()
 
     r.SetMaximum();
 
-    for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
+    for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = &( ( *i ).second );
 
@@ -555,7 +555,7 @@ void VIEW::UpdateAllLayersOrder()
 {
     sortLayers();
 
-    BOOST_FOREACH( LayerMap::value_type& l, m_layers )
+    BOOST_FOREACH( LAYER_MAP::value_type& l, m_layers )
     {
         ChangeLayerDepth( l.first, l.second.renderingOrder );
     }
@@ -727,7 +727,7 @@ void VIEW::Clear()
 
     r.SetMaximum();
 
-    for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
+    for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = &( ( *i ).second );
         unlinkItem v;
@@ -811,7 +811,7 @@ void VIEW::clearGroupCache()
     r.SetMaximum();
     clearLayerCache visitor( this );
 
-    for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
+    for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = &( ( *i ).second );
         l->items->Query( r, visitor );
@@ -858,7 +858,7 @@ void VIEW::sortLayers()
 
     m_orderedLayers.resize( m_layers.size() );
 
-    for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
+    for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
         m_orderedLayers[n++] = &i->second;
 
     sort( m_orderedLayers.begin(), m_orderedLayers.end(), compareRenderingOrder );
@@ -974,7 +974,7 @@ void VIEW::RecacheAllItems( bool aImmediately )
     prof_start( &totalRealTime, false );
 #endif /* __WXDEBUG__ */
 
-    for( LayerMapIter i = m_layers.begin(); i != m_layers.end(); ++i )
+    for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = &( ( *i ).second );
 

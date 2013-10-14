@@ -392,10 +392,10 @@ const VECTOR2I PNS_ROUTER::SnapToItem( PNS_ITEM* item, VECTOR2I aP, bool& aSplit
 
             aSplitsSegment = false;
 
-            if( (aP - s.a).EuclideanNorm() < w / 2 )
-                anchor = s.a;
-            else if( (aP - s.b).EuclideanNorm() < w / 2 )
-                anchor = s.b;
+            if( ( aP - s.A ).EuclideanNorm() < w / 2 )
+                anchor = s.A;
+            else if( ( aP - s.B ).EuclideanNorm() < w / 2 )
+                anchor = s.B;
             else
             {
                 anchor = s.NearestPoint( aP );
@@ -559,8 +559,8 @@ void PNS_ROUTER::splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, const V
         s_new[0] = s_old->Clone();
         s_new[1] = s_old->Clone();
 
-        s_new[0]->SetEnds( s_old->GetSeg().a, aP );
-        s_new[1]->SetEnds( aP, s_old->GetSeg().b );
+        s_new[0]->SetEnds( s_old->GetSeg().A, aP );
+        s_new[1]->SetEnds( aP, s_old->GetSeg().B );
 
         aNode->Remove( s_old );
         aNode->Add( s_new[0] );
@@ -598,8 +598,8 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
                 TRACK* track = new TRACK( m_board );
                 const SEG& s = seg->GetSeg();
 
-                track->SetStart( wxPoint( s.a.x, s.a.y ) );
-                track->SetEnd( wxPoint( s.b.x, s.b.y ) );
+                track->SetStart( wxPoint( s.A.x, s.A.y ) );
+                track->SetEnd( wxPoint( s.B.x, s.B.y ) );
                 track->SetWidth( seg->GetWidth() );
                 track->SetLayer( seg->GetLayers().Start() );
                 track->SetNet( seg->GetNet() );

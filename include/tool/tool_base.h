@@ -40,13 +40,13 @@ class VIEW;
 class VIEW_CONTROLS;
 };
 
-enum TOOL_Type
+enum TOOL_TYPE
 {
     ///> Tool that interacts with the user
-    TOOL_Interactive = 0x01,
+    INTERACTIVE = 0x01,
 
     ///> Tool that runs in the background without any user intervention
-    TOOL_Batch       = 0x02
+    BATCH       = 0x02
 };
 
 /// Unique identifier for tools
@@ -62,7 +62,7 @@ typedef DELEGATE<int, TOOL_EVENT&> TOOL_STATE_FUNC;
 class TOOL_BASE
 {
 public:
-    TOOL_BASE( TOOL_Type aType, TOOL_ID aId, const std::string& aName = std::string( "" ) ) :
+    TOOL_BASE( TOOL_TYPE aType, TOOL_ID aId, const std::string& aName = std::string( "" ) ) :
         m_type( aType ),
         m_toolId( aId ),
         m_toolName( aName ),
@@ -75,7 +75,7 @@ public:
      * Returns the type of the tool.
      * @return The type of the tool.
      */
-    TOOL_Type GetType() const
+    TOOL_TYPE GetType() const
     {
         return m_type;
     }
@@ -158,7 +158,7 @@ protected:
      * Returns the model object if it matches the requested type.
      */
     template <typename T>
-    T* getModel( KICAD_T modelType ) const
+    T* getModel( KICAD_T aModelType ) const
     {
         EDA_ITEM* m = getModelInt();
 
@@ -166,7 +166,7 @@ protected:
     }
 
     ///> Stores the type of the tool.
-    TOOL_Type m_type;
+    TOOL_TYPE m_type;
 
     ///> Unique identifier for the tool, assigned by a TOOL_MANAGER instance.
     TOOL_ID m_toolId;

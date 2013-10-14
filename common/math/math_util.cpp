@@ -28,31 +28,32 @@
 #include <climits>
 #include <math/math_util.h>
 
-template<>
-int rescale( int numerator, int value, int denominator )
+template <>
+int rescale( int aNumerator, int aValue, int aDenominator )
 {
-    return (int) ( (int64_t) numerator * (int64_t) value / (int64_t) denominator );
+    return (int) ( (int64_t) aNumerator * (int64_t) aValue / (int64_t) aDenominator );
 }
 
 
-template<>
-int64_t rescale( int64_t numerator, int64_t value, int64_t denominator )
+template <>
+int64_t rescale( int64_t aNumerator, int64_t aValue, int64_t aDenominator )
 {
     int64_t r = 0;
-    int64_t sign = ( ( numerator < 0) ? -1 : 1 ) * ( denominator < 0 ? -1 : 1 ) * ( value < 0 ? -1 : 1 );
+    int64_t sign = ( ( aNumerator < 0 ) ? -1 : 1 ) * ( aDenominator < 0 ? -1 : 1 ) *
+                                                    ( aValue < 0 ? -1 : 1 );
 
-    int64_t a = std::abs( numerator );
-    int64_t b = std::abs( value );
-    int64_t c = std::abs( denominator );
+    int64_t a = std::abs( aNumerator );
+    int64_t b = std::abs( aValue );
+    int64_t c = std::abs( aDenominator );
 
     r = c / 2;
 
     if( b <= INT_MAX && c <= INT_MAX )
     {
         if( a <= INT_MAX )
-            return sign * ( (a * b + r ) / c );
+            return sign * ( ( a * b + r ) / c );
         else
-            return sign * (a / c * b + (a % c * b + r) / c);
+            return sign * ( a / c * b + ( a % c * b + r ) / c);
     }
     else
     {

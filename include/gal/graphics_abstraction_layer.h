@@ -589,21 +589,21 @@ public:
      *
      * @param aTarget is the new target for rendering.
      */
-    virtual void SetTarget( RenderTarget aTarget ) = 0;
+    virtual void SetTarget( RENDER_TARGET aTarget ) = 0;
 
     /**
      * @brief Gets the currently used target for rendering.
      *
      * @return The current rendering target.
      */
-    virtual RenderTarget GetTarget() const = 0;
+    virtual RENDER_TARGET GetTarget() const = 0;
 
     /**
      * @brief Clears the target for rendering.
      *
      * @param aTarget is the target to be cleared.
      */
-    virtual void ClearTarget( RenderTarget aTarget ) = 0;
+    virtual void ClearTarget( RENDER_TARGET aTarget ) = 0;
 
     // -------------
     // Grid methods

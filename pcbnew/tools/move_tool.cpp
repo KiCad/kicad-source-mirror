@@ -102,7 +102,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
         }
 
         // Dispatch TOOL_ACTIONs
-        else if( evt->Category() == TC_Command )
+        else if( evt->Category() == TC_COMMAND )
         {
             VECTOR2D cursorPos = getView()->ToWorld( getViewControls()->GetCursorPosition() );
 
@@ -118,7 +118,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsMotion() || evt->IsDrag( MB_Left ) )
+        else if( evt->IsMotion() || evt->IsDrag( MB_LEFT ) )
         {
             if( dragging )
             {
@@ -143,7 +143,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
             selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
             dragPosition = evt->Position();
         }
-        else if( evt->IsMouseUp( MB_Left ) || evt->IsClick( MB_Left ) )
+        else if( evt->IsMouseUp( MB_LEFT ) || evt->IsClick( MB_LEFT ) )
             break; // Finish
     }
 

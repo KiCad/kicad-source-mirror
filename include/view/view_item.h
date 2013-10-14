@@ -155,14 +155,14 @@ class VIEW_ITEM
 {
 public:
     /**
-     * Enum ViewUpdateFlags.
+     * Enum VIEW_UPDATE_FLAGS.
      * Defines the how severely the shape/appearance of the item has been changed:
      * - APPEARANCE: shape or layer set of the item have not been affected,
      * only colors or visibility.
      * - GEOMETRY: shape or layer set of the item have changed, VIEW may need to reindex it.
      * - ALL: all flags above */
 
-    enum ViewUpdateFlags {
+    enum VIEW_UPDATE_FLAGS {
         APPEARANCE  = 0x01,     /// Visibility flag has changed
         COLOR       = 0x02,     /// Color has changed
         GEOMETRY    = 0x04,     /// Position or shape has changed
@@ -212,7 +212,8 @@ public:
      * @param aLayer: current drawing layer
      * @param aGal: pointer to the GAL device we are drawing on
      */
-    virtual void ViewDraw( int aLayer, GAL* aGal ) const {};
+    virtual void ViewDraw( int aLayer, GAL* aGal ) const
+    {}
 
     /**
      * Function ViewGetLayers()

@@ -83,7 +83,7 @@ public:
      */
     template <class T>
     void Go( int (T::* aStateFunc)( TOOL_EVENT& ),
-            const TOOL_EVENT_LIST& aConditions = TOOL_EVENT( TC_Any, TA_Any ) );
+            const TOOL_EVENT_LIST& aConditions = TOOL_EVENT( TC_ANY, TA_ANY ) );
 
     /**
      * Function Wait()
@@ -91,7 +91,7 @@ public:
      * Suspends execution of the tool until an event specified in aEventList arrives.
      * No parameters means waiting for any event.
      */
-    OPT_TOOL_EVENT Wait( const TOOL_EVENT_LIST& aEventList = TOOL_EVENT (TC_Any, TA_Any) );
+    OPT_TOOL_EVENT Wait( const TOOL_EVENT_LIST& aEventList = TOOL_EVENT( TC_ANY, TA_ANY ) );
 
     /** functions below are not yet implemented - their interface may change */
     /*template <class Parameters, class ReturnValue>
@@ -111,10 +111,10 @@ protected:
     const TOOL_EVENT evCommand( int aCommandId = -1 );
     const TOOL_EVENT evCommand( std::string aCommandStr = "" );
     const TOOL_EVENT evMotion();
-    const TOOL_EVENT evClick( int aButton = MB_Any );
-    const TOOL_EVENT evDrag( int aButton = MB_Any );
-    const TOOL_EVENT evButtonUp( int aButton = MB_Any );
-    const TOOL_EVENT evButtonDown(int aButton = MB_Any );
+    const TOOL_EVENT evClick( int aButton = MB_ANY );
+    const TOOL_EVENT evDrag( int aButton = MB_ANY );
+    const TOOL_EVENT evButtonUp( int aButton = MB_ANY );
+    const TOOL_EVENT evButtonDown(int aButton = MB_ANY );
 
 private:
     void goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIST& aConditions );
@@ -123,7 +123,7 @@ private:
 // hide TOOL_MANAGER implementation
 template <class T>
 void TOOL_INTERACTIVE::Go( int (T::* aStateFunc)( TOOL_EVENT& ),
-        const TOOL_EVENT_LIST& aConditions )
+                           const TOOL_EVENT_LIST& aConditions )
 {
     TOOL_STATE_FUNC sptr( static_cast<T*>( this ), aStateFunc );
 

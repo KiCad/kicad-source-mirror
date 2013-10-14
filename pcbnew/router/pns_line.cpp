@@ -118,22 +118,22 @@ bool PNS_LINE::MergeObtuseSegments()
 
                 if( s1.Distance( ip ) <= 1 || s2.Distance( ip ) <= 1 )
                 {
-                    s1opt = SEG( s1.a, ip );
-                    s2opt = SEG( ip, s2.b );
+                    s1opt = SEG( s1.A, ip );
+                    s2opt = SEG( ip, s2.B );
                 }
                 else
                 {
-                    s1opt = SEG( s1.a, ip );
-                    s2opt = SEG( ip, s2.b );
+                    s1opt = SEG( s1.A, ip );
+                    s2opt = SEG( ip, s2.B );
                 }
 
 
                 if( DIRECTION_45( s1opt ).IsObtuse( DIRECTION_45( s2opt ) ) )
                 {
                     SHAPE_LINE_CHAIN opt_path;
-                    opt_path.Append( s1opt.a );
-                    opt_path.Append( s1opt.b );
-                    opt_path.Append( s2opt.b );
+                    opt_path.Append( s1opt.A );
+                    opt_path.Append( s1opt.B );
+                    opt_path.Append( s2opt.B );
 
                     PNS_LINE opt_track( *this, opt_path );
 
@@ -204,12 +204,10 @@ bool PNS_LINE::MergeSegments()
 
             if( n > 0 )
             {
-                SHAPE_LINE_CHAIN path_straight = DIRECTION_45().BuildInitialTrace( s1.a,
-                        s2.a,
-                        false );
-                SHAPE_LINE_CHAIN path_diagonal = DIRECTION_45().BuildInitialTrace( s1.a,
-                        s2.a,
-                        true );
+                SHAPE_LINE_CHAIN path_straight = DIRECTION_45().BuildInitialTrace( s1.A,
+                                                                                   s2.A, false );
+                SHAPE_LINE_CHAIN path_diagonal = DIRECTION_45().BuildInitialTrace( s1.A,
+                                                                                   s2.A, true );
             }
 
             if( DIRECTION_45( s1 ) == DIRECTION_45( s2 ) )
@@ -219,8 +217,8 @@ bool PNS_LINE::MergeSegments()
                     // printf("Colinear: np %d step %d n1 %d n2 %d\n", n_segs, step, n, n+step);
 
                     SHAPE_LINE_CHAIN opt_path;
-                    opt_path.Append( s1.a );
-                    opt_path.Append( s2.b );
+                    opt_path.Append( s1.A );
+                    opt_path.Append( s2.B );
 
                     PNS_LINE tmp( *this, opt_path );
 
@@ -239,22 +237,22 @@ bool PNS_LINE::MergeSegments()
 
                 if( s1.Distance( ip ) <= 1 || s2.Distance( ip ) <= 1 )
                 {
-                    s1opt = SEG( s1.a, ip );
-                    s2opt = SEG( ip, s2.b );
+                    s1opt = SEG( s1.A, ip );
+                    s2opt = SEG( ip, s2.B );
                 }
                 else
                 {
-                    s1opt = SEG( s1.a, ip );
-                    s2opt = SEG( ip, s2.b );
+                    s1opt = SEG( s1.A, ip );
+                    s2opt = SEG( ip, s2.B );
                 }
 
 
                 if( DIRECTION_45( s1opt ).IsObtuse( DIRECTION_45( s2opt ) ) )
                 {
                     SHAPE_LINE_CHAIN opt_path;
-                    opt_path.Append( s1opt.a );
-                    opt_path.Append( s1opt.b );
-                    opt_path.Append( s2opt.b );
+                    opt_path.Append( s1opt.A );
+                    opt_path.Append( s1opt.B );
+                    opt_path.Append( s2opt.B );
 
                     PNS_LINE opt_track( *this, opt_path );
 
@@ -319,14 +317,14 @@ void PNS_LINE::NewWalkaround( const SHAPE_LINE_CHAIN& aObstacle,
         SHAPE_LINE_CHAIN& aPostPath,
         bool aCw ) const
 {
-    typedef SHAPE_LINE_CHAIN::Intersection Intersection;
+    typedef SHAPE_LINE_CHAIN::INTERSECTION INTERSECTION;
 
     SHAPE_LINE_CHAIN l_orig( m_line );
     SHAPE_LINE_CHAIN l_hull;
     vector<bool> outside, on_edge, inside;
     SHAPE_LINE_CHAIN path;
 
-    vector<Intersection> isects;
+    vector<INTERSECTION> isects;
 
     // don't calculate walkaround for empty lines
     if( m_line.PointCount() < 2 )
@@ -345,7 +343,7 @@ void PNS_LINE::NewWalkaround( const SHAPE_LINE_CHAIN& aObstacle,
     else
         l_hull = aObstacle;
 
-    BOOST_FOREACH( Intersection isect, isects ) {
+    BOOST_FOREACH( INTERSECTION isect, isects ) {
         l_orig.Split( isect.p );
         l_hull.Split( isect.p );
     }
@@ -379,7 +377,7 @@ void PNS_LINE::NewWalkaround( const SHAPE_LINE_CHAIN& aObstacle,
     for( int i = l_orig.PointCount() - 1; i >= 1; i-- )
         if( inside[i] && outside[i - 1] )
         {
-            SHAPE_LINE_CHAIN::Intersections ips;
+            SHAPE_LINE_CHAIN::INTERSECTIONS ips;
             l_hull.Intersect( SEG( l_orig.CPoint( i ), l_orig.CPoint( i - 1 ) ), ips );
             l_orig.Remove( i, -1 );
             l_orig.Append( ips[0].p );
@@ -488,55 +486,50 @@ bool PNS_LINE::onEdge( const SHAPE_LINE_CHAIN& obstacle, VECTOR2I p, int& ei,
 }
 
 
-bool PNS_LINE::walkScan( const SHAPE_LINE_CHAIN& line,
-        const SHAPE_LINE_CHAIN& obstacle,
-        bool reverse,
-        VECTOR2I& ip,
-        int& index_o,
-        int& index_l,
-        bool& is_vertex ) const
+bool PNS_LINE::walkScan( const SHAPE_LINE_CHAIN& aLine, const SHAPE_LINE_CHAIN& aObstacle,
+        bool aReverse, VECTOR2I& aIp, int& aIndexO, int& aIndexL, bool& aIsVertex ) const
 {
-    int sc = line.SegmentCount();
+    int sc = aLine.SegmentCount();
 
-    for( int i = 0; i < line.SegmentCount(); i++ )
+    for( int i = 0; i < aLine.SegmentCount(); i++ )
     {
-        printf( "check-seg rev %d %d/%d %d\n", reverse, i, sc, sc - 1 - i );
-        SEG tmp = line.CSegment( reverse ? sc - 1 - i : i );
-        SEG s( tmp.a, tmp.b );
+        printf( "check-seg rev %d %d/%d %d\n", aReverse, i, sc, sc - 1 - i );
+        SEG tmp = aLine.CSegment( aReverse ? sc - 1 - i : i );
+        SEG s( tmp.A, tmp.B );
 
-        if( reverse )
+        if( aReverse )
         {
-            s.a = tmp.b;
-            s.b = tmp.a;
+            s.A = tmp.B;
+            s.B = tmp.A;
         }
 
-        if( onEdge( obstacle, s.a, index_o, is_vertex ) )
+        if( onEdge( aObstacle, s.A, aIndexO, aIsVertex ) )
         {
-            index_l = (reverse ?  sc - 1 - i : i);
-            ip = s.a;
-            printf( "vertex %d on-%s %d\n", index_l,
-                    is_vertex ? "vertex" : "edge", index_o );
+            aIndexL = (aReverse ?  sc - 1 - i : i);
+            aIp = s.A;
+            printf( "vertex %d on-%s %d\n", aIndexL,
+                    aIsVertex ? "vertex" : "edge", aIndexO );
             return true;
         }
 
-        if( onEdge( obstacle, s.b, index_o, is_vertex ) )
+        if( onEdge( aObstacle, s.B, aIndexO, aIsVertex ) )
         {
-            index_l = (reverse ?  sc - 1 - i - 1 : i + 1);
-            ip = s.b;
-            printf( "vertex %d on-%s %d\n", index_l,
-                    is_vertex ? "vertex" : "edge", index_o );
+            aIndexL = (aReverse ?  sc - 1 - i - 1 : i + 1);
+            aIp = s.B;
+            printf( "vertex %d on-%s %d\n", aIndexL,
+                    aIsVertex ? "vertex" : "edge", aIndexO );
             return true;
         }
 
-        SHAPE_LINE_CHAIN::Intersections ips;
-        int n_is = obstacle.Intersect( s, ips );
+        SHAPE_LINE_CHAIN::INTERSECTIONS ips;
+        int n_is = aObstacle.Intersect( s, ips );
 
         if( n_is > 0 )
         {
-            index_o = ips[0].our.Index();
-            index_l = reverse ? sc - 1 - i : i;
-            printf( "segment-%d intersects edge-%d\n", index_l, index_o );
-            ip = ips[0].p;
+            aIndexO = ips[0].our.Index();
+            aIndexL = aReverse ? sc - 1 - i : i;
+            printf( "segment-%d intersects edge-%d\n", aIndexL, aIndexO );
+            aIp = ips[0].p;
             return true;
         }
     }
@@ -545,11 +538,8 @@ bool PNS_LINE::walkScan( const SHAPE_LINE_CHAIN& line,
 }
 
 
-bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN obstacle,
-        SHAPE_LINE_CHAIN& pre,
-        SHAPE_LINE_CHAIN& walk,
-        SHAPE_LINE_CHAIN& post,
-        bool cw ) const
+bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
+                           SHAPE_LINE_CHAIN& aWalk, SHAPE_LINE_CHAIN& aPost, bool aCw ) const
 {
     const SHAPE_LINE_CHAIN& line = GetCLine();
     VECTOR2I ip_start;
@@ -562,60 +552,55 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN obstacle,
     if( line.SegmentCount() < 1 )
         return false;
 
-    if( obstacle.PointInside( line.CPoint( 0 ) ) ||
-            obstacle.PointInside( line.CPoint( -1 ) ) )
+    if( aObstacle.PointInside( line.CPoint( 0 ) ) ||
+            aObstacle.PointInside( line.CPoint( -1 ) ) )
         return false;
 
 // printf("forward:\n");
-    bool found = walkScan( line,
-            obstacle,
-            false,
-            ip_start,
-            index_o_start,
-            index_l_start,
-            is_vertex_start );
+    bool found = walkScan( line, aObstacle, false, ip_start, index_o_start,
+                            index_l_start, is_vertex_start );
     // printf("reverse:\n");
-    found |= walkScan( line, obstacle, true, ip_end, index_o_end, index_l_end, is_vertex_end );
+    found |= walkScan( line, aObstacle, true, ip_end, index_o_end, index_l_end, is_vertex_end );
 
     if( !found || ip_start == ip_end )
     {
-        pre = line;
+        aPre = line;
         return true;
     }
 
-    pre = line.Slice( 0, index_l_start );
-    pre.Append( ip_start );
-    walk.Clear();
-    walk.Append( ip_start );
+    aPre = line.Slice( 0, index_l_start );
+    aPre.Append( ip_start );
+    aWalk.Clear();
+    aWalk.Append( ip_start );
 
-    if( cw )
+    if( aCw )
     {
-        int is = ( index_o_start + 1 ) % obstacle.PointCount();
-        int ie = ( is_vertex_end ? index_o_end : index_o_end + 1 ) % obstacle.PointCount();
+        int is = ( index_o_start + 1 ) % aObstacle.PointCount();
+        int ie = ( is_vertex_end ? index_o_end : index_o_end + 1 ) % aObstacle.PointCount();
 
         while( 1 )
         {
             printf( "is %d\n", is );
-            walk.Append( obstacle.CPoint( is ) );
+            aWalk.Append( aObstacle.CPoint( is ) );
 
             if( is == ie )
                 break;
 
             is++;
 
-            if( is == obstacle.PointCount() )
+            if( is == aObstacle.PointCount() )
                 is = 0;
         }
     }
     else
     {
         int is = index_o_start;
-        int ie = ( is_vertex_end ? index_o_end : index_o_end ) % obstacle.PointCount();
+        int ie = ( is_vertex_end ? index_o_end : index_o_end ) % aObstacle.PointCount();
 
         while( 1 )
         {
             printf( "is %d\n", is );
-            walk.Append( obstacle.CPoint( is ) );
+            aWalk.Append( aObstacle.CPoint( is ) );
 
             if( is == ie )
                 break;
@@ -623,15 +608,15 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN obstacle,
             is--;
 
             if( is < 0 )
-                is = obstacle.PointCount() - 1;
+                is = aObstacle.PointCount() - 1;
         }
     }
 
-    walk.Append( ip_end );
+    aWalk.Append( ip_end );
 
-    post.Clear();
-    post.Append( ip_end );
-    post.Append( line.Slice( is_vertex_end ? index_l_end : index_l_end + 1, -1 ) );
+    aPost.Clear();
+    aPost.Append( ip_end );
+    aPost.Append( line.Slice( is_vertex_end ? index_l_end : index_l_end + 1, -1 ) );
 
     // for(int i = (index_o_start + 1) % obstacle.PointCount();
     // i != (index_o_end + 1) % obstacle.PointCount(); i=(i+1) % obstacle.PointCount())
@@ -714,8 +699,8 @@ bool PNS_LINE::Is45Degree()
         const SEG& s = m_line.CSegment( i );
 
         double angle = 180.0 / M_PI *
-                       atan2( (double) s.b.y - (double) s.a.y,
-                              (double) s.b.x - (double) s.a.x );
+                       atan2( (double) s.B.y - (double) s.A.y,
+                              (double) s.B.x - (double) s.A.x );
 
         if( angle < 0 )
             angle += 360.0;

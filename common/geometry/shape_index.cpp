@@ -25,7 +25,7 @@
 
 #include <geometry/shape_index.h>
 
-template<>
+template <>
 const SHAPE* shapeFunctor( SHAPE* aItem )
 {
     return aItem;

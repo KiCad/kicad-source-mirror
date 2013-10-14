@@ -92,7 +92,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
     {
         // Should selected items be added to the current selection or
         // become the new selection (discarding previously selected items)
-        m_additive = evt->Modifier( MD_ModShift );
+        m_additive = evt->Modifier( MD_SHIFT );
 
         if( evt->IsCancel() )
         {
@@ -103,11 +103,11 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         }
 
         // single click? Select single object
-        if( evt->IsClick( MB_Left ) )
+        if( evt->IsClick( MB_LEFT ) )
             selectSingle( evt->Position() );
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
-        if( evt->IsDrag( MB_Left ) )
+        if( evt->IsDrag( MB_LEFT ) )
         {
             if( m_selection.Empty() || m_additive )
             {
@@ -299,7 +299,7 @@ bool SELECTION_TOOL::selectMultiple()
             break;
         }
 
-        if( evt->IsDrag( MB_Left ) )
+        if( evt->IsDrag( MB_LEFT ) )
         {
             if( !m_additive )
                 clearSelection();
@@ -311,17 +311,17 @@ bool SELECTION_TOOL::selectMultiple()
             m_selArea->ViewUpdate( VIEW_ITEM::GEOMETRY );
         }
 
-        if( evt->IsMouseUp( MB_Left ) )
+        if( evt->IsMouseUp( MB_LEFT ) )
         {
             // End drawing the selection box
             m_selArea->ViewSetVisible( false );
 
             // Mark items within the selection box as selected
-            std::vector<VIEW::LayerItemPair> selectedItems;
+            std::vector<VIEW::LAYER_ITEM_PAIR> selectedItems;
             BOX2I selectionBox = m_selArea->ViewBBox();
             view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
-            std::vector<VIEW::LayerItemPair>::iterator it, it_end;
+            std::vector<VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
 
             for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
             {
@@ -369,7 +369,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->Action() == TA_ContextMenuUpdate )
+        if( evt->Action() == TA_CONTEXT_MENU_UPDATE )
         {
             if( current )
                 current->ClearBrightened();
@@ -385,7 +385,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
             else
                 current = NULL;
         }
-        else if( evt->Action() == TA_ContextMenuChoice )
+        else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {
             optional<int> id = evt->GetCommandId();
 

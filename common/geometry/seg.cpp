@@ -22,28 +22,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #include <geometry/seg.h>
 
-template<typename T>
-int sgn( T val )
+template <typename T>
+int sgn( T aVal )
 {
-    return ( T( 0 ) < val ) - ( val < T( 0 ) );
+    return ( T( 0 ) < aVal ) - ( aVal < T( 0 ) );
 }
 
 
-bool SEG::PointCloserThan( const VECTOR2I& aP, int dist ) const
+bool SEG::PointCloserThan( const VECTOR2I& aP, int aDist ) const
 {
-    VECTOR2I         d = b - a;
-    ecoord dist_sq = (ecoord) dist * dist;
+    VECTOR2I d = B - A;
+    ecoord dist_sq = (ecoord) aDist * aDist;
 
     SEG::ecoord l_squared = d.Dot( d );
-    SEG::ecoord t = d.Dot( aP - a );
+    SEG::ecoord t = d.Dot( aP - A );
 
     if( t <= 0 || !l_squared )
-        return ( aP - a ).SquaredEuclideanNorm() < dist_sq;
+        return ( aP - A ).SquaredEuclideanNorm() < dist_sq;
     else if( t >= l_squared )
-        return ( aP - b ).SquaredEuclideanNorm() < dist_sq;
+        return ( aP - B ).SquaredEuclideanNorm() < dist_sq;
 
     int dxdy = abs( d.x ) - abs( d.y );
 
@@ -51,7 +50,7 @@ bool SEG::PointCloserThan( const VECTOR2I& aP, int dist ) const
     {
         int ca = -sgn( d.y );
         int cb = sgn( d.x );
-        int cc = -ca * a.x - cb * a.y;
+        int cc = -ca * A.x - cb * A.y;
 
         ecoord num = ca * aP.x + cb * aP.y + cc;
         num *= num;
@@ -66,8 +65,8 @@ bool SEG::PointCloserThan( const VECTOR2I& aP, int dist ) const
     }
 
     VECTOR2I nearest;
-    nearest.x = a.x + rescale( t, (ecoord) d.x, l_squared );
-    nearest.y = a.y + rescale( t, (ecoord) d.y, l_squared );
+    nearest.x = A.x + rescale( t, (ecoord) d.x, l_squared );
+    nearest.y = A.y + rescale( t, (ecoord) d.y, l_squared );
 
     return ( nearest - aP ).SquaredEuclideanNorm() <= dist_sq;
 }
@@ -81,10 +80,10 @@ SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 
     const VECTOR2I pts[4] =
     {
-        aSeg.NearestPoint( a ) - a,
-        aSeg.NearestPoint( b ) - b,
-        NearestPoint( aSeg.a ) - aSeg.a,
-        NearestPoint( aSeg.b ) - aSeg.b
+        aSeg.NearestPoint( A ) - A,
+        aSeg.NearestPoint( B ) - B,
+        NearestPoint( aSeg.A ) - aSeg.A,
+        NearestPoint( aSeg.B ) - aSeg.B
     };
 
     ecoord m = VECTOR2I::ECOORD_MAX;
@@ -98,9 +97,9 @@ SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 
 OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines ) const
 {
-    const VECTOR2I  e( b - a );
-    const VECTOR2I  f( aSeg.b - aSeg.a );
-    const VECTOR2I  ac( aSeg.a - a );
+    const VECTOR2I  e( B - A );
+    const VECTOR2I  f( aSeg.B - aSeg.A );
+    const VECTOR2I  ac( aSeg.A - A );
 
     ecoord d = f.Cross( e );
     ecoord p = f.Cross( ac );
@@ -118,16 +117,16 @@ OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines
     if( !aLines && aIgnoreEndpoints && ( q == 0 || q == d ) && ( p == 0 || p == d ) )
         return OPT_VECTOR2I();
 
-    VECTOR2I ip( aSeg.a.x + rescale( q, (ecoord) f.x, d ),
-                 aSeg.a.y + rescale( q, (ecoord) f.y, d ) );
+    VECTOR2I ip( aSeg.A.x + rescale( q, (ecoord) f.x, d ),
+                 aSeg.A.y + rescale( q, (ecoord) f.y, d ) );
 
      return ip;
 }
 
 
-bool SEG::ccw( const VECTOR2I& a, const VECTOR2I& b, const VECTOR2I& c ) const
+bool SEG::ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC ) const
 {
-    return (ecoord) ( c.y - a.y ) * ( b.x - a.x ) > (ecoord) ( b.y - a.y ) * ( c.x - a.x );
+    return (ecoord) ( aC.y - aA.y ) * ( aB.x - aA.x ) > (ecoord) ( aB.y - aA.y ) * ( aC.x - aA.x );
 }
 
 
@@ -135,17 +134,17 @@ bool SEG::Collide( const SEG& aSeg, int aClearance ) const
 {
     // check for intersection
     // fixme: move to a method
-    if( ccw( a, aSeg.a, aSeg.b ) != ccw( b, aSeg.a, aSeg.b ) &&
-            ccw( a, b, aSeg.a ) != ccw( a, b, aSeg.b ) )
+    if( ccw( A, aSeg.A, aSeg.B ) != ccw( B, aSeg.A, aSeg.B ) &&
+            ccw( A, B, aSeg.A ) != ccw( A, B, aSeg.B ) )
         return true;
 
 #define CHK( _seg, _pt ) \
     if( (_seg).PointCloserThan( _pt, aClearance ) ) return true;
 
-    CHK( *this, aSeg.a );
-    CHK( *this, aSeg.b );
-    CHK( aSeg, a );
-    CHK( aSeg, b );
+    CHK( *this, aSeg.A );
+    CHK( *this, aSeg.B );
+    CHK( aSeg, A );
+    CHK( aSeg, B );
 #undef CHK
 
     return false;

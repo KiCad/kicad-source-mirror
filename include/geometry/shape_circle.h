@@ -31,12 +31,15 @@ class SHAPE_CIRCLE : public SHAPE
 {
 public:
     SHAPE_CIRCLE() :
-        SHAPE( SH_CIRCLE ), m_radius( 0 ) {};
+        SHAPE( SH_CIRCLE ), m_radius( 0 )
+    {}
 
     SHAPE_CIRCLE( const VECTOR2I& aCenter, int aRadius ) :
-        SHAPE( SH_CIRCLE ), m_radius( aRadius ), m_center( aCenter ) {};
+        SHAPE( SH_CIRCLE ), m_radius( aRadius ), m_center( aCenter )
+    {}
 
-    ~SHAPE_CIRCLE() {};
+    ~SHAPE_CIRCLE()
+    {}
 
     const BOX2I BBox( int aClearance = 0 ) const
     {

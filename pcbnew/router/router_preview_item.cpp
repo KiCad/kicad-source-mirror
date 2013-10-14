@@ -127,10 +127,10 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
         aGal->SetIsFill( false );
 
         for( int s = 0; s < m_line.SegmentCount(); s++ )
-            aGal->DrawLine( m_line.CSegment( s ).a, m_line.CSegment( s ).b );
+            aGal->DrawLine( m_line.CSegment( s ).A, m_line.CSegment( s ).B );
 
         if( m_line.IsClosed() )
-            aGal->DrawLine( m_line.CSegment( -1 ).b, m_line.CSegment( 0 ).a );
+            aGal->DrawLine( m_line.CSegment( -1 ).B, m_line.CSegment( 0 ).A );
         break;
 
     case PR_VIA:

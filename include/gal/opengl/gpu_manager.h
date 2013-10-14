@@ -89,15 +89,17 @@ public:
 protected:
     GPU_MANAGER( VERTEX_CONTAINER* aContainer );
 
-    ///< Drawing status flag.
+    ///> Drawing status flag.
     bool m_isDrawing;
 
-    ///< Container that stores vertices data.
+    ///> Container that stores vertices data.
     VERTEX_CONTAINER* m_container;
 
-    ///< Shader handling
+    ///> Shader handling
     SHADER* m_shader;
-    int m_shaderAttrib;    ///< Location of shader attributes (for glVertexAttribPointer)
+
+    ///> Location of shader attributes (for glVertexAttribPointer)
+    int m_shaderAttrib;
 };
 
 
@@ -107,19 +109,19 @@ public:
     GPU_CACHED_MANAGER( VERTEX_CONTAINER* aContainer );
     ~GPU_CACHED_MANAGER();
 
-    ///< @copydoc GPU_MANAGER::Initialize()
+    ///> @copydoc GPU_MANAGER::Initialize()
     virtual void Initialize();
 
-    ///< @copydoc GPU_MANAGER::BeginDrawing()
+    ///> @copydoc GPU_MANAGER::BeginDrawing()
     virtual void BeginDrawing();
 
-    ///< @copydoc GPU_MANAGER::DrawIndices()
+    ///> @copydoc GPU_MANAGER::DrawIndices()
     virtual void DrawIndices( unsigned int aOffset, unsigned int aSize );
 
-    ///< @copydoc GPU_MANAGER::DrawAll()
+    ///> @copydoc GPU_MANAGER::DrawAll()
     virtual void DrawAll();
 
-    ///< @copydoc GPU_MANAGER::EndDrawing()
+    ///> @copydoc GPU_MANAGER::EndDrawing()
     virtual void EndDrawing();
 
     /**
@@ -130,10 +132,19 @@ public:
     virtual void uploadToGpu();
 
 protected:
+    ///> Buffers initialization flag
     bool m_buffersInitialized;
+
+    ///> Pointer to the current indices buffer
     boost::scoped_array<GLuint> m_indices;
+
+    ///> Pointer to the first free cell in the indices buffer
     GLuint* m_indicesPtr;
+
+    ///> Handle to vertices buffer
     GLuint  m_verticesBuffer;
+
+    ///> Number of indices stored in the indices buffer
     unsigned int m_indicesSize;
 };
 
@@ -143,19 +154,19 @@ class GPU_NONCACHED_MANAGER : public GPU_MANAGER
 public:
     GPU_NONCACHED_MANAGER( VERTEX_CONTAINER* aContainer );
 
-    ///< @copydoc GPU_MANAGER::Initialize()
+    ///> @copydoc GPU_MANAGER::Initialize()
     virtual void Initialize();
 
-    ///< @copydoc GPU_MANAGER::BeginDrawing()
+    ///> @copydoc GPU_MANAGER::BeginDrawing()
     virtual void BeginDrawing();
 
-    ///< @copydoc GPU_MANAGER::DrawIndices()
+    ///> @copydoc GPU_MANAGER::DrawIndices()
     virtual void DrawIndices( unsigned int aOffset, unsigned int aSize );
 
-    ///< @copydoc GPU_MANAGER::DrawAll()
+    ///> @copydoc GPU_MANAGER::DrawAll()
     virtual void DrawAll();
 
-    ///< @copydoc GPU_MANAGER::EndDrawing()
+    ///> @copydoc GPU_MANAGER::EndDrawing()
     virtual void EndDrawing();
 };
 } // namespace KIGFX

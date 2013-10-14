@@ -55,7 +55,7 @@ template <class T>
 class MATRIX3x3;
 
 template <class T>
-std::ostream& operator<<( std::ostream& stream, const MATRIX3x3<T>& matrix );
+std::ostream& operator<<( std::ostream& aStream, const MATRIX3x3<T>& aMatrix );
 
 template <class T>
 class MATRIX3x3
@@ -92,7 +92,7 @@ public:
      *
      * The diagonal components of the matrix are set to 1.
      */
-    void SetIdentity( void );
+    void SetIdentity();
 
     /**
      * @brief Set the translation components of the matrix.
@@ -106,7 +106,7 @@ public:
      *
      * @return is the translation (2D-vector).
      */
-    VECTOR2<T> GetTranslation( void ) const;
+    VECTOR2<T> GetTranslation() const;
 
     /**
      * @brief Set the rotation components of the matrix.
@@ -129,14 +129,14 @@ public:
      *
      * @return the scale factors, specified as 2D-vector.
      */
-    VECTOR2<T> GetScale( void ) const;
+    VECTOR2<T> GetScale() const;
 
     /**
      * @brief Compute the determinant of the matrix.
      *
      * @return the determinant value.
      */
-    T Determinant( void ) const;
+    T Determinant() const;
 
     /**
      * @brief Determine the inverse of the matrix.
@@ -148,33 +148,33 @@ public:
      *
      * @return the inverse matrix.
      */
-    MATRIX3x3 Inverse( void ) const;
+    MATRIX3x3 Inverse() const;
 
     /**
      * @brief Get the transpose of the matrix.
      *
      * @return the transpose matrix.
      */
-    MATRIX3x3 Transpose( void ) const;
+    MATRIX3x3 Transpose() const;
 
     /**
      * @brief Output to a stream.
      */
-    friend std::ostream& operator<<<T>( std::ostream& stream, const MATRIX3x3<T>& matrix );
+    friend std::ostream& operator<<<T>( std::ostream& aStream, const MATRIX3x3<T>& aMatrix );
 
 };
 
 // Operators
 
 //! @brief Matrix multiplication
-template <class T> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, MATRIX3x3<T> const& b );
+template <class T> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& aA, MATRIX3x3<T> const& aB );
 
 //! @brief Multiplication with a 2D vector, the 3rd z-component is assumed to be 1
-template <class T> VECTOR2<T> const operator*( MATRIX3x3<T> const& a, VECTOR2<T> const& b );
+template <class T> VECTOR2<T> const operator*( MATRIX3x3<T> const& aA, VECTOR2<T> const& aB );
 
 //! @brief Multiplication with a scalar
-template <class T, class S> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, T scalar );
-template <class T, class S> MATRIX3x3<T> const operator*( T scalar, MATRIX3x3<T> const& matrix );
+template <class T, class S> MATRIX3x3<T> const operator*( MATRIX3x3<T> const& aA, T aScalar );
+template <class T, class S> MATRIX3x3<T> const operator*( T aScalar, MATRIX3x3<T> const& aMatrix );
 
 // ----------------------
 // --- Implementation ---
@@ -235,11 +235,12 @@ void MATRIX3x3<T>::SetTranslation( VECTOR2<T> aTranslation )
 
 
 template <class T>
-VECTOR2<T> MATRIX3x3<T>::GetTranslation( void ) const
+VECTOR2<T> MATRIX3x3<T>::GetTranslation() const
 {
     VECTOR2<T> result;
     result.x = m_data[0][2];
     result.y = m_data[1][2];
+
     return result;
 }
 
@@ -265,15 +266,16 @@ void MATRIX3x3<T>::SetScale( VECTOR2<T> aScale )
 
 
 template <class T>
-VECTOR2<T> MATRIX3x3<T>::GetScale( void ) const
+VECTOR2<T> MATRIX3x3<T>::GetScale() const
 {
     VECTOR2<T> result( m_data[0][0], m_data[1][1] );
+
     return result;
 }
 
 
 template <class T>
-MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, MATRIX3x3<T> const& b )
+MATRIX3x3<T> const operator*( MATRIX3x3<T> const& aA, MATRIX3x3<T> const& aB )
 {
     MATRIX3x3<T> result;
 
@@ -281,8 +283,9 @@ MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, MATRIX3x3<T> const& b )
     {
         for( int j = 0; j < 3; j++ )
         {
-            result.m_data[i][j] = a.m_data[i][0] * b.m_data[0][j] + a.m_data[i][1] * b.m_data[1][j]
-                                  + a.m_data[i][2] * b.m_data[2][j];
+            result.m_data[i][j] = aA.m_data[i][0] * aB.m_data[0][j] +
+                                  aA.m_data[i][1] * aB.m_data[1][j] +
+                                  aA.m_data[i][2] * aB.m_data[2][j];
         }
     }
 
@@ -291,21 +294,20 @@ MATRIX3x3<T> const operator*( MATRIX3x3<T> const& a, MATRIX3x3<T> const& b )
 
 
 template <class T>
-VECTOR2<T> const operator*( MATRIX3x3<T> const& matrix,
-                            VECTOR2<T> const& vector )
+VECTOR2<T> const operator*( MATRIX3x3<T> const& aMatrix, VECTOR2<T> const& aVector )
 {
     VECTOR2<T> result( 0, 0 );
-    result.x = matrix.m_data[0][0] * vector.x + matrix.m_data[0][1] * vector.y
-               + matrix.m_data[0][2];
-    result.y = matrix.m_data[1][0] * vector.x + matrix.m_data[1][1] * vector.y
-               + matrix.m_data[1][2];
+    result.x = aMatrix.m_data[0][0] * aVector.x + aMatrix.m_data[0][1] * aVector.y
+               + aMatrix.m_data[0][2];
+    result.y = aMatrix.m_data[1][0] * aVector.x + aMatrix.m_data[1][1] * aVector.y
+               + aMatrix.m_data[1][2];
 
     return result;
 }
 
 
 template <class T>
-T MATRIX3x3<T>::Determinant( void ) const
+T MATRIX3x3<T>::Determinant() const
 {
     return m_data[0][0] * ( m_data[1][1] * m_data[2][2] - m_data[1][2] * m_data[2][1] )
            - m_data[0][1] * ( m_data[1][0] * m_data[2][2] - m_data[1][2] * m_data[2][0] )
@@ -314,7 +316,7 @@ T MATRIX3x3<T>::Determinant( void ) const
 
 
 template <class T, class S>
-MATRIX3x3<T> const operator*( MATRIX3x3<T> const& matrix, S scalar )
+MATRIX3x3<T> const operator*( MATRIX3x3<T> const& aMatrix, S aScalar )
 {
     MATRIX3x3<T> result;
 
@@ -322,7 +324,7 @@ MATRIX3x3<T> const operator*( MATRIX3x3<T> const& matrix, S scalar )
     {
         for( int j = 0; j < 3; j++ )
         {
-            result.m_data[i][j] = matrix.m_data[i][j] * scalar;
+            result.m_data[i][j] = aMatrix.m_data[i][j] * aScalar;
         }
     }
 
@@ -331,9 +333,9 @@ MATRIX3x3<T> const operator*( MATRIX3x3<T> const& matrix, S scalar )
 
 
 template <class T, class S>
-MATRIX3x3<T> const operator*( S scalar, MATRIX3x3<T> const& matrix )
+MATRIX3x3<T> const operator*( S aScalar, MATRIX3x3<T> const& aMatrix )
 {
-    return matrix * scalar;
+    return aMatrix * aScalar;
 }
 
 

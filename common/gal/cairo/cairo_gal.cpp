@@ -325,7 +325,7 @@ void CAIRO_GAL::SetIsFill( bool aIsFillEnabled )
 
     if( isGrouping )
     {
-        GroupElement groupElement;
+        GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SET_FILL;
         groupElement.boolArgument = aIsFillEnabled;
         currentGroup->push_back( groupElement );
@@ -340,7 +340,7 @@ void CAIRO_GAL::SetIsStroke( bool aIsStrokeEnabled )
 
     if( isGrouping )
     {
-        GroupElement groupElement;
+        GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SET_STROKE;
         groupElement.boolArgument = aIsStrokeEnabled;
         currentGroup->push_back( groupElement );
@@ -355,7 +355,7 @@ void CAIRO_GAL::SetStrokeColor( const COLOR4D& aColor )
 
     if( isGrouping )
     {
-        GroupElement groupElement;
+        GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SET_STROKECOLOR;
         groupElement.arguments[0] = strokeColor.r;
         groupElement.arguments[1] = strokeColor.g;
@@ -373,7 +373,7 @@ void CAIRO_GAL::SetFillColor( const COLOR4D& aColor )
 
     if( isGrouping )
     {
-        GroupElement groupElement;
+        GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SET_FILLCOLOR;
         groupElement.arguments[0] = fillColor.r;
         groupElement.arguments[1] = fillColor.g;
@@ -392,7 +392,7 @@ void CAIRO_GAL::SetLineWidth( double aLineWidth )
 
     if( isGrouping )
     {
-        GroupElement groupElement;
+        GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SET_LINE_WIDTH;
         groupElement.arguments[0] = aLineWidth;
         currentGroup->push_back( groupElement );
@@ -446,7 +446,7 @@ void CAIRO_GAL::Rotate( double aAngle )
 
     if( isGrouping )
     {
-        GroupElement groupElement;
+        GROUP_ELEMENT groupElement;
         groupElement.command = CMD_ROTATE;
         groupElement.arguments[0] = aAngle;
         currentGroup->push_back( groupElement );
@@ -464,7 +464,7 @@ void CAIRO_GAL::Translate( const VECTOR2D& aTranslation )
 
     if( isGrouping )
     {
-        GroupElement groupElement;
+        GROUP_ELEMENT groupElement;
         groupElement.command = CMD_TRANSLATE;
         groupElement.arguments[0] = aTranslation.x;
         groupElement.arguments[1] = aTranslation.y;
@@ -483,7 +483,7 @@ void CAIRO_GAL::Scale( const VECTOR2D& aScale )
 
     if( isGrouping )
     {
-        GroupElement groupElement;
+        GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SCALE;
         groupElement.arguments[0] = aScale.x;
         groupElement.arguments[1] = aScale.y;
@@ -502,7 +502,7 @@ void CAIRO_GAL::Save()
 
     if( isGrouping )
     {
-        GroupElement groupElement;
+        GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SAVE;
         currentGroup->push_back( groupElement );
     }
@@ -519,7 +519,7 @@ void CAIRO_GAL::Restore()
 
     if( isGrouping )
     {
-        GroupElement groupElement;
+        GROUP_ELEMENT groupElement;
         groupElement.command = CMD_RESTORE;
         currentGroup->push_back( groupElement );
     }
@@ -538,7 +538,7 @@ int CAIRO_GAL::BeginGroup()
     // a attribute was changed or when grouping stops with the end group method.
     storePath();
 
-    Group group;
+    GROUP group;
     int groupNumber = getNewGroupNumber();
     groups.insert( std::make_pair( groupNumber, group ) );
     currentGroup = &groups[groupNumber];
@@ -564,7 +564,7 @@ void CAIRO_GAL::DrawGroup( int aGroupNumber )
 
     storePath();
 
-    for( Group::iterator it = groups[aGroupNumber].begin();
+    for( GROUP::iterator it = groups[aGroupNumber].begin();
          it != groups[aGroupNumber].end(); ++it )
     {
         switch( it->command )
@@ -649,7 +649,7 @@ void CAIRO_GAL::ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor )
 {
     storePath();
 
-    for( Group::iterator it = groups[aGroupNumber].begin();
+    for( GROUP::iterator it = groups[aGroupNumber].begin();
          it != groups[aGroupNumber].end(); ++it )
     {
         if( it->command == CMD_SET_FILLCOLOR || it->command == CMD_SET_STROKECOLOR )
@@ -675,7 +675,7 @@ void CAIRO_GAL::DeleteGroup( int aGroupNumber )
     storePath();
 
     // Delete the Cairo paths
-    std::deque<GroupElement>::iterator it, end;
+    std::deque<GROUP_ELEMENT>::iterator it, end;
 
     for( it = groups[aGroupNumber].begin(), end = groups[aGroupNumber].end(); it != end; ++it )
     {
@@ -730,7 +730,7 @@ void CAIRO_GAL::RestoreScreen()
 }
 
 
-void CAIRO_GAL::SetTarget( RenderTarget aTarget )
+void CAIRO_GAL::SetTarget( RENDER_TARGET aTarget )
 {
     // If the compositor is not set, that means that there is a recaching process going on
     // and we do not need the compositor now
@@ -766,13 +766,13 @@ void CAIRO_GAL::SetTarget( RenderTarget aTarget )
 }
 
 
-RenderTarget CAIRO_GAL::GetTarget() const
+RENDER_TARGET CAIRO_GAL::GetTarget() const
 {
     return currentTarget;
 }
 
 
-void CAIRO_GAL::ClearTarget( RenderTarget aTarget )
+void CAIRO_GAL::ClearTarget( RENDER_TARGET aTarget )
 {
     // Save the current state
     unsigned int currentBuffer = compositor->GetBuffer();
@@ -844,7 +844,7 @@ void CAIRO_GAL::storePath()
             // add this command to the group list;
             if( isStrokeEnabled )
             {
-                GroupElement groupElement;
+                GROUP_ELEMENT groupElement;
                 groupElement.cairoPath = cairo_copy_path( currentContext );
                 groupElement.command   = CMD_STROKE_PATH;
                 currentGroup->push_back( groupElement );
@@ -852,7 +852,7 @@ void CAIRO_GAL::storePath()
 
             if( isFillEnabled )
             {
-                GroupElement groupElement;
+                GROUP_ELEMENT groupElement;
                 groupElement.cairoPath = cairo_copy_path( currentContext );
                 groupElement.command   = CMD_FILL_PATH;
                 currentGroup->push_back( groupElement );

@@ -311,22 +311,22 @@ bool PNS_OPTIMIZER::mergeObtuse( PNS_LINE* aLine )
 
                 if( s1.Distance( ip ) <= 1 || s2.Distance( ip ) <= 1 )
                 {
-                    s1opt = SEG( s1.a, ip );
-                    s2opt = SEG( ip, s2.b );
+                    s1opt = SEG( s1.A, ip );
+                    s2opt = SEG( ip, s2.B );
                 }
                 else
                 {
-                    s1opt = SEG( s1.a, ip );
-                    s2opt = SEG( ip, s2.b );
+                    s1opt = SEG( s1.A, ip );
+                    s2opt = SEG( ip, s2.B );
                 }
 
 
                 if( DIRECTION_45( s1opt ).IsObtuse( DIRECTION_45( s2opt ) ) )
                 {
                     SHAPE_LINE_CHAIN opt_path;
-                    opt_path.Append( s1opt.a );
-                    opt_path.Append( s1opt.b );
-                    opt_path.Append( s2opt.b );
+                    opt_path.Append( s1opt.A );
+                    opt_path.Append( s1opt.B );
+                    opt_path.Append( s2opt.B );
 
                     PNS_LINE opt_track( *aLine, opt_path );
 
@@ -446,7 +446,7 @@ bool PNS_OPTIMIZER::mergeStep( PNS_LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, 
         for( int i = 0; i < 2; i++ )
         {
             bool postureMatch = true;
-            SHAPE_LINE_CHAIN bypass = DIRECTION_45().BuildInitialTrace( s1.a, s2.b, i );
+            SHAPE_LINE_CHAIN bypass = DIRECTION_45().BuildInitialTrace( s1.A, s2.B, i );
             cost[i] = INT_MAX;
 
 

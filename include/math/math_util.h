@@ -35,17 +35,17 @@
  */
 
 template <typename T>
-T rescale( T numerator, T value, T denominator )
+T rescale( T aNumerator, T aValue, T aDenominator )
 {
-    return numerator * value / denominator;
+    return aNumerator * aValue / aDenominator;
 }
 
 
 // explicit specializations for integer types, taking care of overflow.
 template <>
-int rescale( int numerator, int value, int denominator );
+int rescale( int aNumerator, int aValue, int aDenominator );
 
 template <>
-int64_t rescale( int64_t numerator, int64_t value, int64_t denominator );
+int64_t rescale( int64_t aNumerator, int64_t aValue, int64_t aDenominator );
 
 #endif // __MATH_UTIL_H

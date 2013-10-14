@@ -39,26 +39,26 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     m_state( IDLE ),
     m_parentPanel( aParentPanel )
 {
-    m_parentPanel->Connect( wxEVT_MOTION, wxMouseEventHandler(
-                    WX_VIEW_CONTROLS::onMotion ), NULL, this );
-    m_parentPanel->Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler(
-                    WX_VIEW_CONTROLS::onWheel ), NULL, this );
-    m_parentPanel->Connect( wxEVT_MIDDLE_UP, wxMouseEventHandler(
-                    WX_VIEW_CONTROLS::onButton ), NULL, this );
-    m_parentPanel->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler(
-                    WX_VIEW_CONTROLS::onButton ), NULL, this );
-    m_parentPanel->Connect( wxEVT_LEFT_UP, wxMouseEventHandler(
-                    WX_VIEW_CONTROLS::onButton ), NULL, this );
-    m_parentPanel->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler(
-                    WX_VIEW_CONTROLS::onButton ), NULL, this );
+    m_parentPanel->Connect( wxEVT_MOTION,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
+    m_parentPanel->Connect( wxEVT_MOUSEWHEEL,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onWheel ), NULL, this );
+    m_parentPanel->Connect( wxEVT_MIDDLE_UP,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
+    m_parentPanel->Connect( wxEVT_MIDDLE_DOWN,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
+    m_parentPanel->Connect( wxEVT_LEFT_UP,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
+    m_parentPanel->Connect( wxEVT_LEFT_DOWN,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
 #if defined _WIN32 || defined _WIN64
-    m_parentPanel->Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler(
-                    WX_VIEW_CONTROLS::onEnter ), NULL, this );
+    m_parentPanel->Connect( wxEVT_ENTER_WINDOW,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onEnter ), NULL, this );
 #endif
 
     m_panTimer.SetOwner( this );
-    this->Connect( wxEVT_TIMER, wxTimerEventHandler(
-                    WX_VIEW_CONTROLS::onTimer ), NULL, this );
+    this->Connect( wxEVT_TIMER,
+                   wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), NULL, this );
 }
 
 

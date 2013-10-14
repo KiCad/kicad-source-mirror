@@ -34,9 +34,9 @@
 namespace KIGFX
 {
 /**
- * RenderTarget: Possible rendering targets
+ * RENDER_TARGET: Possible rendering targets
  */
-enum RenderTarget
+enum RENDER_TARGET
 {
     TARGET_CACHED = 0,      ///< Main rendering target (cached)
     TARGET_NONCACHED,       ///< Auxiliary rendering target (noncached)

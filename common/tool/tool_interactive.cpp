@@ -30,13 +30,13 @@
 #include <tool/context_menu.h>
 
 TOOL_INTERACTIVE::TOOL_INTERACTIVE( TOOL_ID aId, const std::string& aName ) :
-    TOOL_BASE( TOOL_Interactive, aId, aName )
+    TOOL_BASE( INTERACTIVE, aId, aName )
 {
 }
 
 
 TOOL_INTERACTIVE::TOOL_INTERACTIVE( const std::string& aName ) :
-    TOOL_BASE( TOOL_Interactive, TOOL_MANAGER::MakeToolId( aName ), aName )
+    TOOL_BASE( INTERACTIVE, TOOL_MANAGER::MakeToolId( aName ), aName )
 {
 }
 

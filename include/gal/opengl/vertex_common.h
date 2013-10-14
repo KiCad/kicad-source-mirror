@@ -35,7 +35,7 @@
 namespace KIGFX
 {
 // Possible types of shaders
-enum SHADER_TYPE
+enum SHADER_MODE
 {
     SHADER_NONE = 0,
     SHADER_LINE,

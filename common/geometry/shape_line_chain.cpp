@@ -31,6 +31,7 @@ using boost::optional;
 bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance ) const
 {
     assert( false );
+
     return false;
 }
 
@@ -38,19 +39,20 @@ bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance ) const
 bool SHAPE_LINE_CHAIN::Collide( const BOX2I& aBox, int aClearance ) const
 {
     assert( false );
+
     return false;
 }
 
 
 bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance ) const
 {
-    BOX2I box_a( aSeg.a, aSeg.b - aSeg.a );
+    BOX2I box_a( aSeg.A, aSeg.B - aSeg.A );
     BOX2I::ecoord_type dist_sq = (BOX2I::ecoord_type) aClearance * aClearance;
 
     for( int i = 0; i < SegmentCount(); i++ )
     {
         const SEG& s = CSegment( i );
-        BOX2I box_b( s.a, s.b - s.a );
+        BOX2I box_b( s.A, s.B - s.A );
 
         BOX2I::ecoord_type d = box_a.SquaredDistance( box_b );
 
@@ -158,7 +160,7 @@ int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
 
         // make sure we are not producing a 'slightly concave' primitive. This might happen
         // if aP lies very close to one of already existing points.
-        if( dist < min_dist && seg.a != aP && seg.b != aP )
+        if( dist < min_dist && seg.A != aP && seg.B != aP )
         {
             min_dist = dist;
             ii = s;
@@ -208,8 +210,8 @@ struct compareOriginDistance
     compareOriginDistance( VECTOR2I& aOrigin ) :
         m_origin( aOrigin ) {};
 
-    bool operator()( const SHAPE_LINE_CHAIN::Intersection& aA,
-                     const SHAPE_LINE_CHAIN::Intersection& aB )
+    bool operator()( const SHAPE_LINE_CHAIN::INTERSECTION& aA,
+                     const SHAPE_LINE_CHAIN::INTERSECTION& aB )
     {
         return ( m_origin - aA.p ).EuclideanNorm() < ( m_origin - aB.p ).EuclideanNorm();
     }
@@ -218,7 +220,7 @@ struct compareOriginDistance
 };
 
 
-int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, Intersections& aIp ) const
+int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, INTERSECTIONS& aIp ) const
 {
     for( int s = 0; s < SegmentCount(); s++ )
     {
@@ -226,7 +228,7 @@ int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, Intersections& aIp ) const
 
         if( p )
         {
-            Intersection is;
+            INTERSECTION is;
             is.our = CSegment( s );
             is.their = aSeg;
             is.p = *p;
@@ -234,21 +236,21 @@ int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, Intersections& aIp ) const
         }
     }
 
-    compareOriginDistance comp( aSeg.a );
+    compareOriginDistance comp( aSeg.A );
     sort( aIp.begin(), aIp.end(), comp );
 
     return aIp.size();
 }
 
 
-int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, Intersections& aIp ) const
+int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp ) const
 {
     BOX2I bb_other = aChain.BBox();
 
     for( int s1 = 0; s1 < SegmentCount(); s1++ )
     {
         const SEG& a = CSegment( s1 );
-        const BOX2I bb_cur( a.a, a.b - a.a );
+        const BOX2I bb_cur( a.A, a.B - a.A );
 
         if( !bb_other.Intersects( bb_cur ) )
             continue;
@@ -256,14 +258,14 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, Intersections& 
         for( int s2 = 0; s2 < aChain.SegmentCount(); s2++ )
         {
             const SEG& b = aChain.CSegment( s2 );
-            Intersection is;
+            INTERSECTION is;
 
             if( a.Collinear( b ) )
             {
-                if( a.Contains( b.a ) ) { is.p = b.a; aIp.push_back( is ); }
-                if( a.Contains( b.b ) ) { is.p = b.b; aIp.push_back( is ); }
-                if( b.Contains( a.a ) ) { is.p = a.a; aIp.push_back( is ); }
-                if( b.Contains( a.b ) ) { is.p = a.b; aIp.push_back( is ); }
+                if( a.Contains( b.A ) ) { is.p = b.A; aIp.push_back( is ); }
+                if( a.Contains( b.B ) ) { is.p = b.B; aIp.push_back( is ); }
+                if( b.Contains( a.A ) ) { is.p = a.A; aIp.push_back( is ); }
+                if( b.Contains( a.B ) ) { is.p = a.B; aIp.push_back( is ); }
             }
             else
             {
@@ -289,7 +291,7 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, Intersections& 
             const SEG& a = CSegment( s1 );
             const SEG& b = aChain.CSegment( s2 );
             OPT_VECTOR2I p = a.Intersect( b );
-            Intersection is;
+            INTERSECTION is;
 
             if( p )
             {
@@ -300,16 +302,16 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, Intersections& 
             }
             else if( a.Collinear( b ) )
             {
-                if( a.a != b.a && a.a != b.b && b.Contains( a.a ) )
+                if( a.A != b.A && a.A != b.B && b.Contains( a.A ) )
                 {
-                    is.p = a.a;
+                    is.p = a.A;
                     is.our = a;
                     is.their = b;
                     aIp.push_back( is );
                 }
-                else if( a.b != b.a && a.b != b.b && b.Contains( a.b ) )
+                else if( a.B != b.A && a.B != b.B && b.Contains( a.B ) )
                 {
-                    is.p = a.b;
+                    is.p = a.B;
                     is.our = a;
                     is.their = b;
                     aIp.push_back( is );
@@ -333,7 +335,7 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP ) const
 
         if( d <= 1 )
         {
-            sum += ( aP - seg.a ).EuclideanNorm();
+            sum += ( aP - seg.A ).EuclideanNorm();
             return sum;
         }
         else
@@ -358,7 +360,7 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
     {
         const SEG s = CSegment( i );
 
-        if( aP == s.a || aP == s.b ) // edge does not belong to the interior!
+        if( aP == s.A || aP == s.B ) // edge does not belong to the interior!
             return false;
 
         if( s.Side( aP ) != cur )
@@ -378,7 +380,7 @@ bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
     {
         const SEG s = CSegment( i );
 
-        if( s.a == aP || s.b == aP )
+        if( s.A == aP || s.B == aP )
             return true;
 
         if( s.Distance( aP ) <= 1 )
@@ -389,17 +391,17 @@ bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
 }
 
 
-const optional<SHAPE_LINE_CHAIN::Intersection> SHAPE_LINE_CHAIN::SelfIntersecting() const
+const optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersecting() const
 {
     for( int s1 = 0; s1 < SegmentCount(); s1++ )
     {
         for( int s2 = s1 + 1; s2 < SegmentCount(); s2++ )
         {
-            const VECTOR2I s2a = CSegment( s2 ).a, s2b = CSegment( s2 ).b;
+            const VECTOR2I s2a = CSegment( s2 ).A, s2b = CSegment( s2 ).B;
 
             if( s1 + 1 != s2 && CSegment( s1 ).Contains( s2a ) )
             {
-                Intersection is;
+                INTERSECTION is;
                 is.our = CSegment( s1 );
                 is.their = CSegment( s2 );
                 is.p = s2a;
@@ -407,7 +409,7 @@ const optional<SHAPE_LINE_CHAIN::Intersection> SHAPE_LINE_CHAIN::SelfIntersectin
             }
             else if( CSegment( s1 ).Contains( s2b ) )
             {
-                Intersection is;
+                INTERSECTION is;
                 is.our = CSegment( s1 );
                 is.their = CSegment( s2 );
                 is.p = s2b;
@@ -419,7 +421,7 @@ const optional<SHAPE_LINE_CHAIN::Intersection> SHAPE_LINE_CHAIN::SelfIntersectin
 
                 if( p )
                 {
-                    Intersection is;
+                    INTERSECTION is;
                     is.our = CSegment( s1 );
                     is.their = CSegment( s2 );
                     is.p = *p;
@@ -429,7 +431,7 @@ const optional<SHAPE_LINE_CHAIN::Intersection> SHAPE_LINE_CHAIN::SelfIntersectin
         }
     }
 
-    return optional<Intersection>();
+    return optional<INTERSECTION>();
 }
 
 

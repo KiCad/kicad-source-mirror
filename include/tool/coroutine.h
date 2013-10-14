@@ -108,9 +108,9 @@ public:
      * Yield with a value - passes a value of given type to the caller.
      * Useful for implementing generator objects.
      */
-    void Yield( ReturnType& retVal )
+    void Yield( ReturnType& aRetVal )
     {
-        m_retVal = retVal;
+        m_retVal = aRetVal;
         boost::context::jump_fcontext( m_self, m_saved, 0 );
     }
 
@@ -130,7 +130,7 @@ public:
      * @return true, if the coroutine has yielded and false if it has finished its
      * execution (returned).
      */
-    bool Call( ArgType args )
+    bool Call( ArgType aArgs )
     {
         // fixme: Clean up stack stuff. Add a guard
         m_stack = malloc( c_defaultStackSize );
@@ -138,7 +138,7 @@ public:
         // align to 16 bytes
         void* sp = (void*) ( ( ( (ptrdiff_t) m_stack ) + m_stackSize - 0xf ) & ( ~0x0f ) );
 
-        m_args = &args;
+        m_args = &aArgs;
         m_self = boost::context::make_fcontext( sp, m_stackSize, callerStub );
         m_saved = new boost::context::fcontext_t();
 
@@ -186,10 +186,10 @@ private:
     static const int c_defaultStackSize = 2000000;    // fixme: make configurable
 
     /* real entry point of the coroutine */
-    static void callerStub( intptr_t data )
+    static void callerStub( intptr_t aData )
     {
         // get pointer to self
-        COROUTINE<ReturnType, ArgType>* cor = reinterpret_cast<COROUTINE<ReturnType, ArgType>*>( data );
+        COROUTINE<ReturnType, ArgType>* cor = reinterpret_cast<COROUTINE<ReturnType, ArgType>*>( aData );
 
         // call the coroutine method
         cor->m_retVal = cor->m_func( *cor->m_args );
