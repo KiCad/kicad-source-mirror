@@ -32,7 +32,7 @@ set(GAL_SRCS
     # Common part
     drawpanel_gal.cpp
     painter.cpp
-    worksheet_item.cpp
+    worksheet_viewitem.cpp
     gal/graphics_abstraction_layer.cpp
     gal/stroke_font.cpp
     gal/color4d.cpp

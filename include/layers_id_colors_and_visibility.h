@@ -261,7 +261,6 @@ enum PCB_VISIBLE
     PAD_BK_NETNAMES_VISIBLE,
     PADS_NETNAMES_VISIBLE,
 
-    SELECTION,
     WORKSHEET,
     GP_OVERLAY,                 // General purpose overlay
 

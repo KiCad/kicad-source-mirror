@@ -676,9 +676,9 @@ struct VIEW::unlinkItem
 };
 
 
-struct VIEW::recacheLayer
+struct VIEW::recacheItem
 {
-    recacheLayer( VIEW* aView, GAL* aGal, int aLayer, bool aImmediately ) :
+    recacheItem( VIEW* aView, GAL* aGal, int aLayer, bool aImmediately ) :
         view( aView ), gal( aGal ), layer( aLayer ), immediately( aImmediately )
     {
     }
@@ -688,9 +688,7 @@ struct VIEW::recacheLayer
         // Remove previously cached group
         int prevGroup = aItem->getGroup( layer );
         if( prevGroup >= 0 )
-        {
             gal->DeleteGroup( prevGroup );
-        }
 
         if( immediately )
         {
@@ -882,6 +880,10 @@ void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
     m_gal->SetLayerDepth( l.renderingOrder );
 
     // Redraw the item from scratch
+    int prevGroup = aItem->getGroup( aLayer );
+    if( prevGroup >= 0 )
+        m_gal->DeleteGroup( prevGroup );
+
     int group = m_gal->BeginGroup();
     aItem->setGroup( aLayer, group );
     m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), aLayer );
@@ -966,7 +968,7 @@ void VIEW::RecacheAllItems( bool aImmediately )
         {
             m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
-            recacheLayer visitor( this, m_gal, l->id, aImmediately );
+            recacheItem visitor( this, m_gal, l->id, aImmediately );
             l->items->Query( r, visitor );
             MarkTargetDirty( l->target );
         }

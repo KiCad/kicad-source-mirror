@@ -115,6 +115,8 @@ protected:
     MODULE* loadFootprint( const FPID& aFootprintId )
         throw( IO_ERROR, PARSE_ERROR );
 
+    ///> Rendering order of layers on GAL-based canvas (lower index in the array
+    ///> means that layer is displayed closer to the user, ie. on the top).
     static const LAYER_NUM GAL_LAYER_ORDER[];
 
 public:

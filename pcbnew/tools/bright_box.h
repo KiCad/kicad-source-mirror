@@ -52,7 +52,7 @@ public:
     }
 
 private:
-    static const int BrightBoxLayer = ITEM_GAL_LAYER( SELECTION );
+    static const int BrightBoxLayer = ITEM_GAL_LAYER( GP_OVERLAY );
     static const KiGfx::COLOR4D BrightColor;
     static const double LineWidth = 100000.0;
 

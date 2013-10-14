@@ -76,7 +76,6 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
     m_layerColors[ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
     m_layerColors[ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
     m_layerColors[ITEM_GAL_LAYER( WORKSHEET )]                  = COLOR4D( 0.5, 0.0, 0.0, 1.0 );
-    m_layerColors[ITEM_GAL_LAYER( SELECTION )]                  = COLOR4D( 1.0, 1.0, 1.0, 0.5 );
 
     // Netnames for copper layers
     for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
@@ -225,10 +224,6 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     case PCB_LINE_T:
     case PCB_MODULE_EDGE_T:
         draw( (DRAWSEGMENT*) aItem );
-        break;
-
-    case PCB_MODULE_T:
-        draw( (MODULE*) aItem, aLayer );
         break;
 
     case PCB_TEXT_T:
@@ -593,8 +588,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         VECTOR2D deltaPadSize = size - padSize; // = solder[Paste/Mask]Margin or 0
         VECTOR2D delta = VECTOR2D( aPad->GetDelta().x / 2,
                                    aPad->GetDelta().y / 2 );
-        VECTOR2D inflate = VECTOR2D( delta.y * ( deltaPadSize.x / size.x ),
-                                     delta.x * ( deltaPadSize.y / size.y ) );
 
         aPad->BuildPadPolygon( corners, wxSize( deltaPadSize.x, deltaPadSize.y ), 0.0 );
         pointList.push_back( VECTOR2D( corners[0] ) );
@@ -699,63 +692,35 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
 }
 
 
-void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
-{
-    // For modules we have to draw a selection box if needed
-    if( aLayer == ITEM_GAL_LAYER( SELECTION ) )
-    {
-        if( aModule->IsSelected() )
-            drawSelectionBox( aModule );
-    }
-}
-
-
 void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
 {
-    if( aLayer == ITEM_GAL_LAYER( SELECTION ) )
-    {
-        if( aText->IsSelected() )
-            drawSelectionBox( aText );
-    }
-    else
-    {
-        if( aText->GetText().Length() == 0 )
-            return;
+    if( aText->GetText().Length() == 0 )
+        return;
 
-        COLOR4D  strokeColor = m_pcbSettings->GetColor( aText, aText->GetLayer() );
-        VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
-        double   orientation = aText->GetOrientation() * M_PI / 1800.0;
+    COLOR4D  strokeColor = m_pcbSettings->GetColor( aText, aText->GetLayer() );
+    VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
+    double   orientation = aText->GetOrientation() * M_PI / 1800.0;
 
-        m_gal->SetStrokeColor( strokeColor );
-        m_gal->SetLineWidth( aText->GetThickness() );
-        m_gal->SetTextAttributes( aText );
-        m_gal->StrokeText( std::string( aText->GetText().mb_str() ), position, orientation );
-    }
+    m_gal->SetStrokeColor( strokeColor );
+    m_gal->SetLineWidth( aText->GetThickness() );
+    m_gal->SetTextAttributes( aText );
+    m_gal->StrokeText( std::string( aText->GetText().mb_str() ), position, orientation );
 }
 
 
 void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 {
-    if( aLayer == ITEM_GAL_LAYER( SELECTION ) )
-    {
-        if( aText->IsSelected() )
-            drawSelectionBox( aText );
-    }
-    else
-    {
-        if( aText->GetLength() == 0 )
-            return;
+    if( aText->GetLength() == 0 )
+        return;
 
-        COLOR4D  strokeColor = m_pcbSettings->GetColor( aText, aLayer );
-        VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
-        double   orientation = aText->GetDrawRotation() * M_PI / 1800.0;
+    COLOR4D  strokeColor = m_pcbSettings->GetColor( aText, aLayer );
+    VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
+    double   orientation = aText->GetDrawRotation() * M_PI / 1800.0;
 
-        m_gal->SetStrokeColor( strokeColor );
-        m_gal->SetLineWidth( aText->GetThickness() );
-        m_gal->SetTextAttributes( aText );
-        m_gal->StrokeText( std::string( aText->GetText().mb_str() ), position, orientation );
-    }
-
+    m_gal->SetStrokeColor( strokeColor );
+    m_gal->SetLineWidth( aText->GetThickness() );
+    m_gal->SetTextAttributes( aText );
+    m_gal->StrokeText( std::string( aText->GetText().mb_str() ), position, orientation );
 }
 
 
@@ -830,41 +795,32 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
 
 void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
 {
-    if( aLayer == ITEM_GAL_LAYER( SELECTION ) )
-    {
-        if( aDimension->IsSelected() )
-            drawSelectionBox( aDimension );
-    }
-    else
-    {
-        int layer = aDimension->GetLayer();
-        COLOR4D strokeColor = m_pcbSettings->GetColor( aDimension, layer );
+    COLOR4D strokeColor = m_pcbSettings->GetColor( aDimension, aLayer );
 
-        m_gal->SetStrokeColor( strokeColor );
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( aDimension->GetWidth() );
+    m_gal->SetStrokeColor( strokeColor );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetLineWidth( aDimension->GetWidth() );
 
-        // Draw an arrow
-        m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarO ), VECTOR2D( aDimension->m_crossBarF ) );
-        m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineGO ),
-                         VECTOR2D( aDimension->m_featureLineGF ) );
-        m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineDO ),
-                         VECTOR2D( aDimension->m_featureLineDF ) );
-        m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD1O ), VECTOR2D( aDimension->m_arrowD1F ) );
-        m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD2O ), VECTOR2D( aDimension->m_arrowD2F ) );
-        m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG1O ), VECTOR2D( aDimension->m_arrowG1F ) );
-        m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG2O ), VECTOR2D( aDimension->m_arrowG2F ) );
+    // Draw an arrow
+    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarO ), VECTOR2D( aDimension->m_crossBarF ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineGO ),
+                     VECTOR2D( aDimension->m_featureLineGF ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineDO ),
+                     VECTOR2D( aDimension->m_featureLineDF ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD1O ), VECTOR2D( aDimension->m_arrowD1F ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD2O ), VECTOR2D( aDimension->m_arrowD2F ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG1O ), VECTOR2D( aDimension->m_arrowG1F ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG2O ), VECTOR2D( aDimension->m_arrowG2F ) );
 
-        // Draw text
-        TEXTE_PCB& text = aDimension->Text();
-        VECTOR2D position( text.GetTextPosition().x, text.GetTextPosition().y );
-        double   orientation = text.GetOrientation() * M_PI / 1800.0;
+    // Draw text
+    TEXTE_PCB& text = aDimension->Text();
+    VECTOR2D position( text.GetTextPosition().x, text.GetTextPosition().y );
+    double   orientation = text.GetOrientation() * M_PI / 1800.0;
 
-        m_gal->SetLineWidth( text.GetThickness() );
-        m_gal->SetTextAttributes( &text );
-        m_gal->StrokeText( std::string( text.GetText().mb_str() ), position, orientation );
-    }
+    m_gal->SetLineWidth( text.GetThickness() );
+    m_gal->SetTextAttributes( &text );
+    m_gal->StrokeText( std::string( text.GetText().mb_str() ), position, orientation );
 }
 
 
@@ -903,15 +859,5 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
     m_gal->Restore();
 }
 
-
-void PCB_PAINTER::drawSelectionBox( const VIEW_ITEM* aItem ) const
-{
-    BOX2I boundingBox = aItem->ViewBBox();
-
-    m_gal->SetIsStroke( false );
-    m_gal->SetIsFill( true );
-    m_gal->SetFillColor( m_pcbSettings->GetLayerColor( ITEM_GAL_LAYER( SELECTION ) ) );
-    m_gal->DrawRectangle( boundingBox.GetOrigin(), boundingBox.GetEnd() );
-}
 
 const double PCB_RENDER_SETTINGS::MAX_FONT_SIZE = 100000000;

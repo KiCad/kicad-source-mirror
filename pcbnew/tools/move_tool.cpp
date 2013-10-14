@@ -78,15 +78,15 @@ bool MOVE_TOOL::Init()
 
 int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
 {
+    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    if( selection.Empty() )
+        return 0;  // there are no items to operate on
+
     VECTOR2D dragPosition;
     bool dragging = false;
     bool restore = false;       // Should items' state be restored when finishing the tool?
-    VIEW* view = getView();
+
     VIEW_CONTROLS* controls = getViewControls();
-
-    // Add a VIEW_GROUP that will hold all modified items
-    view->Add( &m_items );
-
     controls->ShowCursor( true );
     controls->SetSnapping( true );
     controls->SetAutoPan( true );
@@ -108,12 +108,12 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )           // got rotation event?
             {
                 m_state.Rotate( cursorPos, 900.0 );
-                m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );
+                selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )        // got flip event?
             {
                 m_state.Flip( cursorPos );
-                m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );
+                selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
             }
         }
 
@@ -128,98 +128,39 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
             else
             {
                 // Prepare to drag
-                m_selection = m_selectionTool->GetSelection();
-                if( m_selection.empty() )
-                    break;  // there are no items to operate on
-
                 std::set<BOARD_ITEM*>::iterator it;
-                for( it = m_selection.begin(); it != m_selection.end(); ++it )
+                for( it = selection.items.begin(); it != selection.items.end(); ++it )
                 {
                     // Save the state of the selected items, in case it has to be restored
                     m_state.Save( *it );
-
-                    // Gather all selected items into one VIEW_GROUP
-                    viewGroupAdd( *it, &m_items );
                 }
-
-                // Hide the original items, they are temporarily shown in VIEW_GROUP on overlay
-                vgSetVisibility( &m_items, false );
-                vgUpdate( &m_items, VIEW_ITEM::APPEARANCE );
 
                 dragging = true;
             }
 
-            m_items.ViewUpdate( VIEW_ITEM::GEOMETRY );
+            selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
             dragPosition = evt->Position();
         }
         else if( evt->IsMouseUp( MB_Left ) || evt->IsClick( MB_Left ) )
             break;  // Finish
     }
 
-    // Restore visibility of the original items
-    vgSetVisibility( &m_items, true );
-
     if( restore )
     {
         // Modifications has to be rollbacked, so restore the previous state of items
-        vgUpdate( &m_items, VIEW_ITEM::APPEARANCE );
+        selection.group->ItemsViewUpdate( VIEW_ITEM::APPEARANCE );
         m_state.RestoreAll();
     }
     else
     {
         // Changes are applied, so update the items
-        vgUpdate( &m_items, m_state.GetUpdateFlag() );
+        selection.group->ItemsViewUpdate( m_state.GetUpdateFlag() );
         m_state.Apply();
     }
-
-    m_items.Clear();
-    view->Remove( &m_items );
 
     controls->ShowCursor( false );
     controls->SetSnapping( false );
     controls->SetAutoPan( false );
 
     return 0;
-}
-
-
-void MOVE_TOOL::viewGroupAdd( BOARD_ITEM* aItem, VIEW_GROUP* aGroup )
-{
-    // Modules are treated in a special way - when they are moved, we have to
-    // move all the parts that make the module, not the module itself
-    if( aItem->Type() == PCB_MODULE_T )
-    {
-        MODULE* module = static_cast<MODULE*>( aItem );
-
-        // Add everything that belongs to the module (besides the module itself)
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-            viewGroupAdd( pad, &m_items );
-
-        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
-             drawing = drawing->Next() )
-            viewGroupAdd( drawing, &m_items );
-
-        viewGroupAdd( &module->Reference(), &m_items );
-        viewGroupAdd( &module->Value(), &m_items );
-    }
-
-    // Add items to the VIEW_GROUP, so they will be displayed on the overlay
-    // while dragging
-    aGroup->Add( aItem );
-}
-
-
-void MOVE_TOOL::vgSetVisibility( VIEW_GROUP* aGroup, bool aVisible ) const
-{
-    std::set<VIEW_ITEM*>::const_iterator it, it_end;
-    for( it = aGroup->Begin(), it_end = aGroup->End(); it != it_end; ++it )
-        (*it)->ViewSetVisible( aVisible );
-}
-
-
-void MOVE_TOOL::vgUpdate( VIEW_GROUP* aGroup, VIEW_ITEM::ViewUpdateFlags aFlags ) const
-{
-    std::set<VIEW_ITEM*>::const_iterator it, it_end;
-    for( it = aGroup->Begin(), it_end = aGroup->End(); it != it_end; ++it )
-        (*it)->ViewUpdate( aFlags );
 }

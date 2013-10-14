@@ -36,6 +36,7 @@
 #include <wxPcbStruct.h>
 #include <collectors.h>
 #include <view/view_controls.h>
+#include <view/view_group.h>
 #include <painter.h>
 
 #include <tool/tool_event.h>
@@ -53,19 +54,25 @@ SELECTION_TOOL::SELECTION_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_multiple( false )
 {
     m_selArea = new SELECTION_AREA;
+    m_selection.group = new KiGfx::VIEW_GROUP;
 }
 
 
 SELECTION_TOOL::~SELECTION_TOOL()
 {
-    if( m_selArea )
-        delete m_selArea;
+    delete m_selArea;
+    delete m_selection.group;
 }
 
 
 void SELECTION_TOOL::Reset()
 {
-    m_selectedItems.clear();
+    m_selection.group->Clear();
+    m_selection.items.clear();
+
+    // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
+    getView()->Remove( m_selection.group );
+    getView()->Add( m_selection.group );
 
     // The tool launches upon reception of action event ("pcbnew.InteractiveSelection")
     Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
@@ -75,7 +82,10 @@ void SELECTION_TOOL::Reset()
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>( PCB_T );
+    VIEW* view = getView();
     assert( board != NULL );
+
+    view->Add( m_selection.group );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -86,7 +96,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
         if( evt->IsCancel() )
         {
-            if( !m_selectedItems.empty() )  // Cancel event deselects items...
+            if( !m_selection.Empty() )  // Cancel event deselects items...
                 clearSelection();
             else                            // ...unless there is nothing selected
                 break;                      // then exit the tool
@@ -99,7 +109,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         if( evt->IsDrag( MB_Left ) )
         {
-            if( m_selectedItems.empty() || m_additive )
+            if( m_selection.Empty() || m_additive )
             {
                 // If nothings has been selected or user wants to select more
                 // draw the selection box
@@ -112,7 +122,6 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
                 {
                     // Yes -> run the move tool and wait till it finishes
                     m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
-                    Wait();
                 }
                 else
                 {
@@ -122,6 +131,9 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             }
         }
     }
+
+    m_selection.group->Clear();
+    view->Remove( m_selection.group );
 
     return 0;
 }
@@ -137,9 +149,13 @@ void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
 
 void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 {
-    if( m_selectedItems.find( aItem ) != m_selectedItems.end() )
+    if( m_selection.items.find( aItem ) != m_selection.items.end() )
     {
         deselectItem( aItem );
+
+        // If there is nothing selected, disable the context menu
+        if( m_selection.Empty() )
+            SetContextMenu( &m_menu, CMENU_OFF );
     }
     else
     {
@@ -148,19 +164,29 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 
         // Prevent selection of invisible or inactive items
         if( selectable( aItem ) )
+        {
             selectItem( aItem );
+
+            // Now the context menu should be enabled
+            SetContextMenu( &m_menu, CMENU_BUTTON );
+        }
     }
 }
 
 
 void SELECTION_TOOL::clearSelection()
 {
-    BOOST_FOREACH( BOARD_ITEM* item, m_selectedItems )
+    VIEW_GROUP::const_iter it, it_end;
+    for( it = m_selection.group->Begin(), it_end = m_selection.group->End(); it != it_end; ++it )
     {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
+
+        item->ViewSetVisible( true );
         item->ClearSelected();
     }
 
-    m_selectedItems.clear();
+    m_selection.group->Clear();
+    m_selection.items.clear();
 
     // Do not show the context menu when there is nothing selected
     SetContextMenu( &m_menu, CMENU_OFF );
@@ -258,9 +284,6 @@ bool SELECTION_TOOL::selectMultiple()
     VIEW* view = getView();
     getViewControls()->SetAutoPan( true );
 
-    // These 2 lines remove the blink-in-the-random-place effect
-    m_selArea->SetOrigin( VECTOR2I( 0, 0 ) );
-    m_selArea->SetEnd( VECTOR2I( 0, 0 ) );
     view->Add( m_selArea );
 
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -300,14 +323,11 @@ bool SELECTION_TOOL::selectMultiple()
 
                 // Add only those items that are visible and fully within the selection box
                 if( selectable( item ) && selectionBox.Contains( item->ViewBBox() ) )
-                {
-                    item->SetSelected();
-                    m_selectedItems.insert( item );
-                }
+                    selectItem( item );
             }
 
             // Now the context menu should be enabled
-            if( !m_selectedItems.empty() )
+            if( !m_selection.Empty() )
                 SetContextMenu( &m_menu, CMENU_BUTTON );
 
             break;
@@ -377,6 +397,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         }
     }
 
+    // Removes possible brighten mark
     getView()->MarkTargetDirty( TARGET_OVERLAY );
 
     // Restore the original menu
@@ -450,10 +471,12 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
             return false;
         break;
 
+    // These are not selectable, otherwise silkscreen drawings would be easily destroyed
     case PCB_MODULE_EDGE_T:
-        // These are not selectable, otherwise silkscreen drawings would be easily destroyed
+    // and some other stuff that should be selected
+    case NOT_USED:
+    case TYPE_NOT_INIT:
         return false;
-        break;
 
     default:    // Suppress warnings
         break;
@@ -464,13 +487,98 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 }
 
 
+void SELECTION_TOOL::selectItem( BOARD_ITEM* aItem )
+{
+    /// Selecting an item needs a few operations, so they are wrapped in a functor
+    class selectBase_
+    {
+        SELECTION& s;
+
+    public:
+        selectBase_( SELECTION& s_ ) : s( s_ ) {}
+
+        void operator()( BOARD_ITEM* item )
+        {
+            s.group->Add( item );
+            // Hide the original item, so it is shown only on overlay
+            item->ViewSetVisible( false );
+            item->SetSelected();
+        }
+    } selectBase( m_selection );
+
+    // Modules are treated in a special way - when they are moved, we have to
+    // move all the parts that make the module, not the module itself
+    if( aItem->Type() == PCB_MODULE_T )
+    {
+        MODULE* module = static_cast<MODULE*>( aItem );
+
+        // Add everything that belongs to the module (besides the module itself)
+        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+            selectBase( pad );
+
+        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
+             drawing = drawing->Next() )
+            selectBase( drawing );
+
+        selectBase( &module->Reference() );
+        selectBase( &module->Value() );
+    }
+
+    // Add items to the VIEW_GROUP, so they will be displayed on the overlay
+    selectBase( aItem );
+    m_selection.items.insert( aItem );
+}
+
+
+void SELECTION_TOOL::deselectItem( BOARD_ITEM* aItem )
+{
+    /// Deselecting an item needs a few operations, so they are wrapped in a functor
+    class deselectBase_
+    {
+        SELECTION& s;
+
+    public:
+        deselectBase_( SELECTION& s_ ) : s( s_ ) {}
+
+        void operator()( BOARD_ITEM* item )
+        {
+            s.group->Remove( item );
+            // Restore original item visibility
+            item->ViewSetVisible( true );
+            item->ClearSelected();
+        }
+    } deselectBase( m_selection );
+
+    // Modules are treated in a special way - when they are moved, we have to
+    // move all the parts that make the module, not the module itself
+    if( aItem->Type() == PCB_MODULE_T )
+    {
+        MODULE* module = static_cast<MODULE*>( aItem );
+
+        // Add everything that belongs to the module (besides the module itself)
+        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+            deselectBase( pad );
+
+        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
+             drawing = drawing->Next() )
+            deselectBase( drawing );
+
+        deselectBase( &module->Reference() );
+        deselectBase( &module->Value() );
+    }
+
+    deselectBase( aItem );
+    m_selection.items.erase( aItem );
+}
+
+
 bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
 {
     const unsigned GRIP_MARGIN = 500000;
 
     // Check if the point is located within any of the currently selected items bounding boxes
     std::set<BOARD_ITEM*>::iterator it, it_end;
-    for( it = m_selectedItems.begin(), it_end = m_selectedItems.end(); it != it_end; ++it )
+    for( it = m_selection.items.begin(), it_end = m_selection.items.end(); it != it_end; ++it )
     {
         BOX2I itemBox = (*it)->ViewBBox();
         itemBox.Inflate( GRIP_MARGIN );    // Give some margin for gripping an item
