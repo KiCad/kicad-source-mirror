@@ -415,6 +415,7 @@ add_dependencies( 3d-viewer boost )
 add_dependencies( pcad2kicadpcb boost )
 add_dependencies( polygon boost )
 add_dependencies( pl_editor boost )
+add_dependencies( pnsrouter boost )
 
 
 #############
