@@ -29,205 +29,205 @@
 
 template <class T> const SHAPE* defaultShapeFunctor( const T aItem )
 {
-	return aItem->GetShape();
+    return aItem->GetShape();
 }
 
 template <class T, const SHAPE* (ShapeFunctor)(const T) = defaultShapeFunctor<T> >
 
 class SHAPE_INDEX_LIST {
-	
-	struct ShapeEntry {
-		ShapeEntry( T aParent )
-		{
-			shape = ShapeFunctor( aParent );
-			bbox = shape->BBox( 0 );
-			parent = aParent;
-		}
 
-		~ShapeEntry()
-		{
-		}
+    struct ShapeEntry {
+        ShapeEntry( T aParent )
+        {
+            shape = ShapeFunctor( aParent );
+            bbox = shape->BBox( 0 );
+            parent = aParent;
+        }
 
-		T parent;
-		const SHAPE* shape;
-		BOX2I bbox;
-	};
+        ~ShapeEntry()
+        {
+        }
 
-	typedef std::vector<ShapeEntry> ShapeVec;
-	typedef typename std::vector<ShapeEntry>::iterator ShapeVecIter;	
-	
+        T parent;
+        const SHAPE* shape;
+        BOX2I bbox;
+    };
+
+    typedef std::vector<ShapeEntry> ShapeVec;
+    typedef typename std::vector<ShapeEntry>::iterator ShapeVecIter;
+
 public:
-	// "Normal" iterator interface, for STL algorithms.
-	class iterator {
-		public:
-			iterator() {};
+    // "Normal" iterator interface, for STL algorithms.
+    class iterator {
+        public:
+            iterator() {};
 
-			iterator( ShapeVecIter aCurrent )
-				: m_current( aCurrent ) {};
+            iterator( ShapeVecIter aCurrent )
+                : m_current( aCurrent ) {};
 
-			iterator( const iterator &aB ) :
-				m_current( aB.m_current ) {};
+            iterator( const iterator &aB ) :
+                m_current( aB.m_current ) {};
 
-			T operator*() const
-			{
-				return (*m_current).parent;
-			}
+            T operator*() const
+            {
+                return (*m_current).parent;
+            }
 
-			void operator++()
-			{
-				++m_current;
-			}
+            void operator++()
+            {
+                ++m_current;
+            }
 
-			iterator& operator++( int aDummy )
-			{
-				++m_current;
-				return *this;
-			}
+            iterator& operator++( int aDummy )
+            {
+                ++m_current;
+                return *this;
+            }
 
-			bool operator==( const iterator& aRhs ) const
-			{
-				return m_current == aRhs.m_current;
-			}
+            bool operator==( const iterator& aRhs ) const
+            {
+                return m_current == aRhs.m_current;
+            }
 
-			bool operator!=( const iterator& aRhs ) const
-			{
-				return m_current != aRhs.m_current;
-			}
+            bool operator!=( const iterator& aRhs ) const
+            {
+                return m_current != aRhs.m_current;
+            }
 
-			const iterator& operator=( const iterator& aRhs )
-			{
-				m_current = aRhs.m_current;
-				return *this;
-			}
+            const iterator& operator=( const iterator& aRhs )
+            {
+                m_current = aRhs.m_current;
+                return *this;
+            }
 
-		private:
-			ShapeVecIter m_current;
-	};
+        private:
+            ShapeVecIter m_current;
+    };
 
-	// "Query" iterator, for iterating over a set of spatially matching shapes.
-	class query_iterator {
-		public:
-			query_iterator()
-			{
-			}
+    // "Query" iterator, for iterating over a set of spatially matching shapes.
+    class query_iterator {
+        public:
+            query_iterator()
+            {
+            }
 
-			query_iterator( ShapeVecIter aCurrent, ShapeVecIter aEnd, SHAPE* aShape,
-			                int aMinDistance, bool aExact ) :
-				  m_end( aEnd ),
-				  m_current( aCurrent ),
-				  m_shape( aShape ),
-				  m_minDistance( aMinDistance ),
-				  m_exact( aExact )
-			{
-				if( aShape )
-				{
-					m_refBBox = aShape->BBox();
-					next();
-				}
-			}
+            query_iterator( ShapeVecIter aCurrent, ShapeVecIter aEnd, SHAPE* aShape,
+                            int aMinDistance, bool aExact ) :
+                  m_end( aEnd ),
+                  m_current( aCurrent ),
+                  m_shape( aShape ),
+                  m_minDistance( aMinDistance ),
+                  m_exact( aExact )
+            {
+                if( aShape )
+                {
+                    m_refBBox = aShape->BBox();
+                    next();
+                }
+            }
 
-			query_iterator( const query_iterator &aB ) :
-				  m_end( aB.m_end ),
-				  m_current( aB.m_current ),
-				  m_shape( aB.m_shape ),
-				  m_minDistance( aB.m_minDistance ),
-				  m_exact( aB.m_exact ),
-				  m_refBBox( aB.m_refBBox )
-			{
-			}
-			
-			T operator*() const
-			{
-				return (*m_current).parent;
-			}
+            query_iterator( const query_iterator &aB ) :
+                  m_end( aB.m_end ),
+                  m_current( aB.m_current ),
+                  m_shape( aB.m_shape ),
+                  m_minDistance( aB.m_minDistance ),
+                  m_exact( aB.m_exact ),
+                  m_refBBox( aB.m_refBBox )
+            {
+            }
 
-			query_iterator& operator++()
-			{
-				++m_current;
-				next();
-			 	return *this;
-			}
+            T operator*() const
+            {
+                return (*m_current).parent;
+            }
 
-			query_iterator& operator++( int aDummy )
-			{
-				++m_current;
-				next();
-				return *this;
-			}
+            query_iterator& operator++()
+            {
+                ++m_current;
+                next();
+                 return *this;
+            }
 
-			bool operator==( const query_iterator& aRhs ) const
-			{
-				return m_current == aRhs.m_current;
-			}
+            query_iterator& operator++( int aDummy )
+            {
+                ++m_current;
+                next();
+                return *this;
+            }
 
-			bool operator!=( const query_iterator& aRhs ) const
-			{
-				return m_current != aRhs.m_current;
-			}
+            bool operator==( const query_iterator& aRhs ) const
+            {
+                return m_current == aRhs.m_current;
+            }
 
-			const query_iterator& operator=( const query_iterator& aRhs )
-			{
-				m_end = aRhs.m_end;
-				m_current = aRhs.m_current;
-				m_shape = aRhs.m_shape;
-				m_minDistance = aRhs.m_minDistance;
-				m_exact = aRhs.m_exact;
-				m_refBBox = aRhs.m_refBBox;
-				return *this;
-			}
+            bool operator!=( const query_iterator& aRhs ) const
+            {
+                return m_current != aRhs.m_current;
+            }
 
-		private:
-			void next()
-			{
-				while( m_current != m_end )
-				{
-					if( m_refBBox.Distance( m_current->bbox ) <= m_minDistance )
-					{
-						if( !m_exact || m_current->shape->Collide( m_shape, m_minDistance ) )
-							return;
-					}
+            const query_iterator& operator=( const query_iterator& aRhs )
+            {
+                m_end = aRhs.m_end;
+                m_current = aRhs.m_current;
+                m_shape = aRhs.m_shape;
+                m_minDistance = aRhs.m_minDistance;
+                m_exact = aRhs.m_exact;
+                m_refBBox = aRhs.m_refBBox;
+                return *this;
+            }
 
-					++m_current;
-				}
-			}
+        private:
+            void next()
+            {
+                while( m_current != m_end )
+                {
+                    if( m_refBBox.Distance( m_current->bbox ) <= m_minDistance )
+                    {
+                        if( !m_exact || m_current->shape->Collide( m_shape, m_minDistance ) )
+                            return;
+                    }
 
-			ShapeVecIter m_end;
-			ShapeVecIter m_current;
-			BOX2I m_refBBox;
-			bool m_exact;
-			SHAPE *m_shape;
-			int m_minDistance;
-	};
+                    ++m_current;
+                }
+            }
 
-	void Add( T aItem )
-	{
-		ShapeEntry s( aItem );
+            ShapeVecIter m_end;
+            ShapeVecIter m_current;
+            BOX2I m_refBBox;
+            bool m_exact;
+            SHAPE *m_shape;
+            int m_minDistance;
+    };
 
-		m_shapes.push_back(s);
-	}
-	
-	void Remove( const T aItem )
-	{
-		ShapeVecIter i;
-		
-		for( i = m_shapes.begin(); i != m_shapes.end(); ++i )
-		{
-			if( i->parent == aItem )
-				break;
-		}
+    void Add( T aItem )
+    {
+        ShapeEntry s( aItem );
 
-		if( i == m_shapes.end() )
-			return;
+        m_shapes.push_back(s);
+    }
 
-		m_shapes.erase( i );
-	}
+    void Remove( const T aItem )
+    {
+        ShapeVecIter i;
 
-	int Size() const
-	{
-		return m_shapes.size();
-	}
+        for( i = m_shapes.begin(); i != m_shapes.end(); ++i )
+        {
+            if( i->parent == aItem )
+                break;
+        }
 
-	template<class Visitor>
+        if( i == m_shapes.end() )
+            return;
+
+        m_shapes.erase( i );
+    }
+
+    int Size() const
+    {
+        return m_shapes.size();
+    }
+
+    template<class Visitor>
     int Query( const SHAPE *aShape, int aMinDistance, Visitor &aV, bool aExact = true ) //const
     {
         ShapeVecIter i;
@@ -251,33 +251,33 @@ public:
         return n;
     }
 
-	void Clear()
-	{
-		m_shapes.clear();
-	}
-	
-	query_iterator qbegin( SHAPE* aShape, int aMinDistance, bool aExact )
-	{
-		return query_iterator( m_shapes.begin(), m_shapes.end(), aShape, aMinDistance, aExact );
-	}
+    void Clear()
+    {
+        m_shapes.clear();
+    }
 
-	const query_iterator qend() 
-	{
-			return query_iterator( m_shapes.end(), m_shapes.end(), NULL, 0, false );
-	}
+    query_iterator qbegin( SHAPE* aShape, int aMinDistance, bool aExact )
+    {
+        return query_iterator( m_shapes.begin(), m_shapes.end(), aShape, aMinDistance, aExact );
+    }
 
-	iterator begin()
-	{
-		return iterator( m_shapes.begin() );
-	}
+    const query_iterator qend()
+    {
+            return query_iterator( m_shapes.end(), m_shapes.end(), NULL, 0, false );
+    }
 
-	iterator end()
-	{
-		return iterator( m_shapes.end() );
-	}
+    iterator begin()
+    {
+        return iterator( m_shapes.begin() );
+    }
+
+    iterator end()
+    {
+        return iterator( m_shapes.end() );
+    }
 
 private:
-	ShapeVec m_shapes;
+    ShapeVec m_shapes;
 };
 
 #endif

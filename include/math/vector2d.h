@@ -224,7 +224,7 @@ public:
 
     /// Division with a factor
     VECTOR2<T> operator/( const T& aFactor ) const;
-    
+
     /// Equality operator
     const bool operator==( const VECTOR2<T>& aVector ) const;
 

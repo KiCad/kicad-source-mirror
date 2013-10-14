@@ -30,48 +30,48 @@
 class SHAPE_CIRCLE : public SHAPE {
 
 public:
-	SHAPE_CIRCLE(): 
-		SHAPE( SH_CIRCLE ), m_radius( 0 ) {};
-			
-	SHAPE_CIRCLE( const VECTOR2I& aCenter, int aRadius ): 
-		SHAPE( SH_CIRCLE ), m_radius( aRadius ), m_center( aCenter ) {};
+    SHAPE_CIRCLE():
+        SHAPE( SH_CIRCLE ), m_radius( 0 ) {};
 
-	~SHAPE_CIRCLE() {};
+    SHAPE_CIRCLE( const VECTOR2I& aCenter, int aRadius ):
+        SHAPE( SH_CIRCLE ), m_radius( aRadius ), m_center( aCenter ) {};
 
-	const BOX2I BBox( int aClearance = 0 ) const
-	{
-		const VECTOR2I rc( m_radius + aClearance, m_radius + aClearance );
-		return BOX2I( m_center - rc, rc * 2 );
-	}
+    ~SHAPE_CIRCLE() {};
 
-	bool Collide( const SEG& aSeg, int aClearance = 0 ) const
-	{
-		int rc = aClearance + m_radius;
-		return aSeg.Distance( m_center ) <= rc;
-	}
+    const BOX2I BBox( int aClearance = 0 ) const
+    {
+        const VECTOR2I rc( m_radius + aClearance, m_radius + aClearance );
+        return BOX2I( m_center - rc, rc * 2 );
+    }
 
-	void SetRadius( int aRadius )
-	{
-		m_radius = aRadius;
-	}
+    bool Collide( const SEG& aSeg, int aClearance = 0 ) const
+    {
+        int rc = aClearance + m_radius;
+        return aSeg.Distance( m_center ) <= rc;
+    }
 
-	void SetCenter( const VECTOR2I& aCenter )
-	{
-		m_center = aCenter;
-	}
+    void SetRadius( int aRadius )
+    {
+        m_radius = aRadius;
+    }
 
-	int GetRadius() const 
-	{
-		return m_radius;
-	}
+    void SetCenter( const VECTOR2I& aCenter )
+    {
+        m_center = aCenter;
+    }
 
-	const VECTOR2I GetCenter() const
-	{
-		return m_center;
-	}
+    int GetRadius() const
+    {
+        return m_radius;
+    }
+
+    const VECTOR2I GetCenter() const
+    {
+        return m_center;
+    }
 private:
-	int m_radius;
-	VECTOR2I m_center;
+    int m_radius;
+    VECTOR2I m_center;
 };
 
 #endif

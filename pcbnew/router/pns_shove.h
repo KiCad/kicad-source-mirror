@@ -58,7 +58,7 @@ public:
 private:
     static const int ShoveTimeLimit = 3000;
 
-    bool tryShove( PNS_NODE* aWorld, PNS_LINE* aTrack, PNS_LINE* aObstacle, 
+    bool tryShove( PNS_NODE* aWorld, PNS_LINE* aTrack, PNS_LINE* aObstacle,
             PNS_SEGMENT& aObstacleSeg, PNS_LINE* aResult, bool aInvertWinding );
 
     ShoveStatus shoveSingleLine( PNS_NODE* aNode, PNS_LINE* aCurrent, PNS_LINE* aObstacle,

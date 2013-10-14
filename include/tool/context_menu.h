@@ -37,105 +37,105 @@ class TOOL_INTERACTIVE;
  * Defines the structure of a context (usually right-click) popup menu
  * for a given tool.
  */
-class CONTEXT_MENU 
+class CONTEXT_MENU
 {
 public:
     ///> Default constructor
-	CONTEXT_MENU();
+    CONTEXT_MENU();
 
-	///> Copy constructor
-	CONTEXT_MENU( const CONTEXT_MENU& aMenu );
+    ///> Copy constructor
+    CONTEXT_MENU( const CONTEXT_MENU& aMenu );
 
-	/**
-	 * Function SetTitle()
-	 * Sets title for the context menu. The title is shown as a text label shown on the top of
-	 * the menu.
-	 * @param aTitle is the new title.
-	 */
-	void SetTitle( const wxString& aTitle );
+    /**
+     * Function SetTitle()
+     * Sets title for the context menu. The title is shown as a text label shown on the top of
+     * the menu.
+     * @param aTitle is the new title.
+     */
+    void SetTitle( const wxString& aTitle );
 
-	/**
-	 * Function Add()
-	 * Adds an entry to the menu. After highlighting/selecting the entry, a TOOL_EVENT command is
-	 * sent that contains ID of the entry.
-	 * @param aLabel is the text label show in the menu.
-	 * @param aId is the ID that is sent in the TOOL_EVENT. It should be unique for every entry.
-	 */
-	void Add( const wxString& aLabel, int aId );
+    /**
+     * Function Add()
+     * Adds an entry to the menu. After highlighting/selecting the entry, a TOOL_EVENT command is
+     * sent that contains ID of the entry.
+     * @param aLabel is the text label show in the menu.
+     * @param aId is the ID that is sent in the TOOL_EVENT. It should be unique for every entry.
+     */
+    void Add( const wxString& aLabel, int aId );
 
-	/**
-	 * Function Add()
-	 * Adds an entry to the menu, basing on the TOOL_ACTION object. After selecting the entry,
-	 * a TOOL_EVENT command containing name of the action is sent.
-	 * @param aAction is the action to be added to menu entry.
-	 */
-	void Add( const TOOL_ACTION& aAction );
+    /**
+     * Function Add()
+     * Adds an entry to the menu, basing on the TOOL_ACTION object. After selecting the entry,
+     * a TOOL_EVENT command containing name of the action is sent.
+     * @param aAction is the action to be added to menu entry.
+     */
+    void Add( const TOOL_ACTION& aAction );
 
-	/**
-	 * Function Clear()
-	 * Removes all the entries from the menu (as well as its title). It leaves the menu in the
-	 * initial state.
-	 */
-	void Clear();
+    /**
+     * Function Clear()
+     * Removes all the entries from the menu (as well as its title). It leaves the menu in the
+     * initial state.
+     */
+    void Clear();
 
-	/**
-	 * Function GetMenu()
-	 * Returns the instance of wxMenu object used to display the menu.
-	 */
-	wxMenu* GetMenu() const
-	{
-		return const_cast<wxMenu*>( &m_menu );
-	}
+    /**
+     * Function GetMenu()
+     * Returns the instance of wxMenu object used to display the menu.
+     */
+    wxMenu* GetMenu() const
+    {
+        return const_cast<wxMenu*>( &m_menu );
+    }
 
 private:
-	///> Class CMEventHandler takes care of handling menu events. After reception of particular
-	///> events, it translates them to TOOL_EVENTs that may control tools.
-	class CMEventHandler : public wxEvtHandler
-	{
-	public:
-	    ///> Default constructor
-	    ///> aMenu is the CONTEXT_MENU instance for which it handles events.
-	    CMEventHandler( CONTEXT_MENU* aMenu ) : m_menu( aMenu ) {};
+    ///> Class CMEventHandler takes care of handling menu events. After reception of particular
+    ///> events, it translates them to TOOL_EVENTs that may control tools.
+    class CMEventHandler : public wxEvtHandler
+    {
+    public:
+        ///> Default constructor
+        ///> aMenu is the CONTEXT_MENU instance for which it handles events.
+        CMEventHandler( CONTEXT_MENU* aMenu ) : m_menu( aMenu ) {};
 
-	    ///> Handler for menu events.
-	    void onEvent( wxEvent& aEvent );
+        ///> Handler for menu events.
+        void onEvent( wxEvent& aEvent );
 
-	private:
-	    ///> CONTEXT_MENU instance for which it handles events.
-	    CONTEXT_MENU* m_menu;
-	};
-	
-	friend class TOOL_INTERACTIVE;
+    private:
+        ///> CONTEXT_MENU instance for which it handles events.
+        CONTEXT_MENU* m_menu;
+    };
 
-	/**
-	 * Function setTool()
-	 * Sets a tool that is the creator of the menu.
-	 * @param aTool is the tool that created the menu.
-	 */
-	void setTool( TOOL_INTERACTIVE* aTool )
-	{
-		m_tool = aTool;
-	}
+    friend class TOOL_INTERACTIVE;
 
-	/**
-	 * Function getHotKeyDescription()
-	 * Returns a hot key in the string format accepted by wxMenu.
-	 * @param aAction is the action with hot key to be translated..
-	 * @return Hot key in the string format compatible with wxMenu.
-	 */
-	std::string getHotKeyDescription( const TOOL_ACTION& aAction ) const;
+    /**
+     * Function setTool()
+     * Sets a tool that is the creator of the menu.
+     * @param aTool is the tool that created the menu.
+     */
+    void setTool( TOOL_INTERACTIVE* aTool )
+    {
+        m_tool = aTool;
+    }
 
-	///> Flag indicating that the menu title was set up.
-	bool m_titleSet;
+    /**
+     * Function getHotKeyDescription()
+     * Returns a hot key in the string format accepted by wxMenu.
+     * @param aAction is the action with hot key to be translated..
+     * @return Hot key in the string format compatible with wxMenu.
+     */
+    std::string getHotKeyDescription( const TOOL_ACTION& aAction ) const;
 
-	///> Instance of wxMenu used for display of the context menu.
-	wxMenu m_menu;
+    ///> Flag indicating that the menu title was set up.
+    bool m_titleSet;
 
-	///> Instance of menu event handler.
-	CMEventHandler m_handler;
+    ///> Instance of wxMenu used for display of the context menu.
+    wxMenu m_menu;
 
-	///> Creator of the menu
-	TOOL_INTERACTIVE* m_tool;
+    ///> Instance of menu event handler.
+    CMEventHandler m_handler;
+
+    ///> Creator of the menu
+    TOOL_INTERACTIVE* m_tool;
 
     /// Menu items with ID higher than that are considered TOOL_ACTIONs
     static const int m_actionId = 10000;

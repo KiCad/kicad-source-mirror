@@ -71,7 +71,7 @@ PNS_NODE::~PNS_NODE()
 
     allocNodes.erase( this );
 
-    for( PNS_INDEX::ItemSet::iterator i = m_index->begin(); 
+    for( PNS_INDEX::ItemSet::iterator i = m_index->begin();
             i != m_index->end(); ++i )
         if( (*i)->BelongsTo( this ) )
             delete *i;
@@ -111,14 +111,14 @@ PNS_NODE* PNS_NODE::Branch()
     child->m_clearanceFunctor = m_clearanceFunctor;
     child->m_root = isRoot() ? this : m_root;
 
-    // immmediate offspring of the root branch needs not copy anything. 
-    // For the rest, deep-copy joints, overridden item map and pointers 
+    // immmediate offspring of the root branch needs not copy anything.
+    // For the rest, deep-copy joints, overridden item map and pointers
     // to stored items.
     if( !isRoot() )
     {
         JointMap::iterator j;
 
-        for( PNS_INDEX::ItemSet::iterator i = m_index->begin(); 
+        for( PNS_INDEX::ItemSet::iterator i = m_index->begin();
                 i != m_index->end(); ++i )
             child->m_index->Add( *i );
 
@@ -150,7 +150,7 @@ void PNS_NODE::unlinkParent()
 }
 
 
-// function object that visits potential obstacles and performs 
+// function object that visits potential obstacles and performs
 // the actual collision refining
 struct PNS_NODE::obstacleVisitor
 {
@@ -200,7 +200,7 @@ struct PNS_NODE::obstacleVisitor
         if( !aItem->OfKind( m_kindMask ) )
             return true;
 
-        // check if there is a more recent branch with a newer 
+        // check if there is a more recent branch with a newer
         // (possibily modified) version of this item.
         if( m_override && m_override->overrides( aItem ) )
             return true;
@@ -428,8 +428,8 @@ struct hitVisitor
 const PNS_ITEMSET PNS_NODE::HitTest( const VECTOR2I& aPoint )
 {
     PNS_ITEMSET items;
-    // fixme: we treat a point as an infinitely small circle - this is inefficient. 
-    SHAPE_CIRCLE s( aPoint, 0 ); 
+    // fixme: we treat a point as an infinitely small circle - this is inefficient.
+    SHAPE_CIRCLE s( aPoint, 0 );
     hitVisitor visitor( items, aPoint, this );
 
     m_index->Query( &s, m_maxClearance, visitor );
@@ -537,12 +537,12 @@ void PNS_NODE::Add( PNS_ITEM* aItem )
 
 void PNS_NODE::doRemove( PNS_ITEM* aItem )
 {
-    // case 1: removing an item that is stored in the root node from any branch: 
+    // case 1: removing an item that is stored in the root node from any branch:
     // mark it as overridden, but do not remove
     if( aItem->BelongsTo( m_root ) && !isRoot() )
         m_override.insert( aItem );
 
-    // case 2: the item belongs to this branch or a parent, non-root branch, 
+    // case 2: the item belongs to this branch or a parent, non-root branch,
     // or the root itself and we are the root: remove from the index
     else if( !aItem->BelongsTo( m_root ) || isRoot() )
         m_index->Remove( aItem );
@@ -948,7 +948,7 @@ void PNS_NODE::Commit( PNS_NODE* aNode )
     BOOST_FOREACH( PNS_ITEM * item, aNode->m_override )
     Remove( item );
 
-    for( PNS_INDEX::ItemSet::iterator i = aNode->m_index->begin(); 
+    for( PNS_INDEX::ItemSet::iterator i = aNode->m_index->begin();
             i != aNode->m_index->end(); ++i )
         Add( *i );
 

@@ -53,7 +53,7 @@
 
 using namespace std;
 
-// an ugly singleton for drawing debug items within the router context. 
+// an ugly singleton for drawing debug items within the router context.
 // To be fixed sometime in the future.
 static PNS_ROUTER* theRouter;
 

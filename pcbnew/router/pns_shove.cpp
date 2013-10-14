@@ -429,7 +429,7 @@ PNS_SHOVE::ShoveStatus PNS_SHOVE::ShoveLines( PNS_LINE* aCurrentHead )
                         break;
                     }
 
-/*					if(lastWalkSolid == nearest->item)
+/*                    if(lastWalkSolid == nearest->item)
  *                   {
  *                       fail = true;
  *                       break;

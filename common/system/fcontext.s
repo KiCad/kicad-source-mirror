@@ -1,7 +1,7 @@
 /*
-	Boost::Context assembly wrapper - done to avoid compiling the whole boost binary library
-	which may be unpleasant, in particular under Windows (we don't support VC++, while boost::context
-	does not support mingw */
+    Boost::Context assembly wrapper - done to avoid compiling the whole boost binary library
+    which may be unpleasant, in particular under Windows (we don't support VC++, while boost::context
+    does not support mingw */
 
 #ifdef __APPLE__
 

@@ -42,52 +42,52 @@ using boost::optional;
 ///> Stores information about a mouse button state
 struct TOOL_DISPATCHER::ButtonState
 {
-	ButtonState( TOOL_MouseButtons aButton, const wxEventType& aDownEvent,
-	             const wxEventType& aUpEvent ) :
-		button( aButton ),
-		downEvent( aDownEvent ),
-		upEvent( aUpEvent )
-	{};
+    ButtonState( TOOL_MouseButtons aButton, const wxEventType& aDownEvent,
+                 const wxEventType& aUpEvent ) :
+        button( aButton ),
+        downEvent( aDownEvent ),
+        upEvent( aUpEvent )
+    {};
 
-	///> Flag indicating that dragging is active for the given button.
-	bool dragging;
+    ///> Flag indicating that dragging is active for the given button.
+    bool dragging;
 
-	///> Flag indicating that the given button is pressed.
-	bool pressed;
-	
-	///> Point where dragging has started (in world coordinates).
-	VECTOR2D dragOrigin;
+    ///> Flag indicating that the given button is pressed.
+    bool pressed;
 
-	///> Point where click event has occurred.
-	VECTOR2D downPosition;
+    ///> Point where dragging has started (in world coordinates).
+    VECTOR2D dragOrigin;
 
-	///> Difference between drag origin point and current mouse position (expressed as distance in
-	///> pixels).
-	double dragMaxDelta;
-	
-	///> Determines the mouse button for which information are stored.
-	TOOL_MouseButtons button;
+    ///> Point where click event has occurred.
+    VECTOR2D downPosition;
 
-	///> The type of wxEvent that determines mouse button press.
-	wxEventType downEvent;
+    ///> Difference between drag origin point and current mouse position (expressed as distance in
+    ///> pixels).
+    double dragMaxDelta;
 
-	///> The type of wxEvent that determines mouse button release.
-	wxEventType upEvent;
+    ///> Determines the mouse button for which information are stored.
+    TOOL_MouseButtons button;
 
-	///> Time stamp for the last mouse button press event.
-	wxLongLong downTimestamp;
+    ///> The type of wxEvent that determines mouse button press.
+    wxEventType downEvent;
 
-	///> Restores initial state.
-	void Reset()
-	{
-		dragging = false;
-		pressed = false;
-	}
+    ///> The type of wxEvent that determines mouse button release.
+    wxEventType upEvent;
+
+    ///> Time stamp for the last mouse button press event.
+    wxLongLong downTimestamp;
+
+    ///> Restores initial state.
+    void Reset()
+    {
+        dragging = false;
+        pressed = false;
+    }
 };
 
 
 TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditFrame ) :
-	m_toolMgr( aToolMgr ), m_editFrame( aEditFrame )
+    m_toolMgr( aToolMgr ), m_editFrame( aEditFrame )
 {
     m_buttons.push_back( new ButtonState( MB_Left, wxEVT_LEFT_DOWN, wxEVT_LEFT_UP ) );
     m_buttons.push_back( new ButtonState( MB_Right, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_UP ) );
@@ -99,135 +99,135 @@ TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditF
 
 TOOL_DISPATCHER::~TOOL_DISPATCHER()
 {
-	BOOST_FOREACH( ButtonState* st, m_buttons )
-		delete st;
+    BOOST_FOREACH( ButtonState* st, m_buttons )
+        delete st;
 }
 
 
 void TOOL_DISPATCHER::ResetState()
 {
-	BOOST_FOREACH( ButtonState* st, m_buttons )
-		st->Reset();
+    BOOST_FOREACH( ButtonState* st, m_buttons )
+        st->Reset();
 }
 
 
 KiGfx::VIEW* TOOL_DISPATCHER::getView()
 {
-	return m_editFrame->GetGalCanvas()->GetView();
+    return m_editFrame->GetGalCanvas()->GetView();
 }
 
 
 bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion )
 {
-	ButtonState* st = m_buttons[aIndex];
-	wxEventType type = aEvent.GetEventType();
-	optional<TOOL_EVENT> evt;
-	bool isClick = false;
+    ButtonState* st = m_buttons[aIndex];
+    wxEventType type = aEvent.GetEventType();
+    optional<TOOL_EVENT> evt;
+    bool isClick = false;
 
-	bool up = type == st->upEvent;
-	bool down = type == st->downEvent;
+    bool up = type == st->upEvent;
+    bool down = type == st->downEvent;
 
-	int mods = decodeModifiers<wxMouseEvent>( static_cast<wxMouseEvent*>( &aEvent ) );
-	int args = st->button | mods;
+    int mods = decodeModifiers<wxMouseEvent>( static_cast<wxMouseEvent*>( &aEvent ) );
+    int args = st->button | mods;
 
-	if( down )      // Handle mouse button press
-	{
-		st->downTimestamp = wxGetLocalTimeMillis();
-		st->dragOrigin = m_lastMousePos;
-		st->downPosition = m_lastMousePos;
-		st->dragMaxDelta = 0;
-		st->pressed = true;
-		evt = TOOL_EVENT( TC_Mouse, TA_MouseDown, args );
-	}
-	else if( up )   // Handle mouse button release
-	{
-		st->pressed = false;
+    if( down )      // Handle mouse button press
+    {
+        st->downTimestamp = wxGetLocalTimeMillis();
+        st->dragOrigin = m_lastMousePos;
+        st->downPosition = m_lastMousePos;
+        st->dragMaxDelta = 0;
+        st->pressed = true;
+        evt = TOOL_EVENT( TC_Mouse, TA_MouseDown, args );
+    }
+    else if( up )   // Handle mouse button release
+    {
+        st->pressed = false;
 
-		if( st->dragging )
-		{
-			wxLongLong t = wxGetLocalTimeMillis();
+        if( st->dragging )
+        {
+            wxLongLong t = wxGetLocalTimeMillis();
 
-			// Determine if it was just a single click or beginning of dragging
-			if( t - st->downTimestamp < DragTimeThreshold &&
-			        st->dragMaxDelta < DragDistanceThreshold )
-				isClick = true;
-			else
-				evt = TOOL_EVENT( TC_Mouse, TA_MouseUp, args );
-		}
-		else
-			isClick = true;
-		
-		if( isClick )
-			evt = TOOL_EVENT( TC_Mouse, TA_MouseClick, args );
+            // Determine if it was just a single click or beginning of dragging
+            if( t - st->downTimestamp < DragTimeThreshold &&
+                    st->dragMaxDelta < DragDistanceThreshold )
+                isClick = true;
+            else
+                evt = TOOL_EVENT( TC_Mouse, TA_MouseUp, args );
+        }
+        else
+            isClick = true;
 
-		st->dragging = false;
-	}
+        if( isClick )
+            evt = TOOL_EVENT( TC_Mouse, TA_MouseClick, args );
 
-	if( st->pressed && aMotion )
-	{
-		st->dragging = true;
-		double dragPixelDistance = getView()->ToScreen( m_lastMousePos - st->dragOrigin, false ).EuclideanNorm();
-		st->dragMaxDelta = std::max( st->dragMaxDelta, dragPixelDistance );
+        st->dragging = false;
+    }
 
-		wxLongLong t = wxGetLocalTimeMillis();
+    if( st->pressed && aMotion )
+    {
+        st->dragging = true;
+        double dragPixelDistance = getView()->ToScreen( m_lastMousePos - st->dragOrigin, false ).EuclideanNorm();
+        st->dragMaxDelta = std::max( st->dragMaxDelta, dragPixelDistance );
 
-		if( t - st->downTimestamp > DragTimeThreshold || st->dragMaxDelta > DragDistanceThreshold )
-		{			
-			evt = TOOL_EVENT( TC_Mouse, TA_MouseDrag, args );
-			evt->SetMouseDragOrigin( st->dragOrigin );
-			evt->SetMouseDelta( m_lastMousePos - st->dragOrigin );
-		}
-	}
+        wxLongLong t = wxGetLocalTimeMillis();
 
-	if( evt )
-	{
-		evt->SetMousePosition( isClick ? st->downPosition : m_lastMousePos );
-		m_toolMgr->ProcessEvent( *evt );
+        if( t - st->downTimestamp > DragTimeThreshold || st->dragMaxDelta > DragDistanceThreshold )
+        {
+            evt = TOOL_EVENT( TC_Mouse, TA_MouseDrag, args );
+            evt->SetMouseDragOrigin( st->dragOrigin );
+            evt->SetMouseDelta( m_lastMousePos - st->dragOrigin );
+        }
+    }
 
-		return true;
-	}
+    if( evt )
+    {
+        evt->SetMousePosition( isClick ? st->downPosition : m_lastMousePos );
+        m_toolMgr->ProcessEvent( *evt );
 
-	return false;
+        return true;
+    }
+
+    return false;
 }
 
 
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
-	bool motion = false, buttonEvents = false;
-	optional<TOOL_EVENT> evt;
-	
-	int type = aEvent.GetEventType();
+    bool motion = false, buttonEvents = false;
+    optional<TOOL_EVENT> evt;
 
-	// Mouse handling
-	if( type == wxEVT_MOTION || type == wxEVT_MOUSEWHEEL ||
-	        type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
-	        type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
-	        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
-	        // Event issued whem mouse retains position in screen coordinates,
-	        // but changes in world coordinates (eg. autopanning)
-	        type == KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
-	{
+    int type = aEvent.GetEventType();
+
+    // Mouse handling
+    if( type == wxEVT_MOTION || type == wxEVT_MOUSEWHEEL ||
+            type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
+            type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
+            type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
+            // Event issued whem mouse retains position in screen coordinates,
+            // but changes in world coordinates (eg. autopanning)
+            type == KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
+    {
         VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetCursorPosition();
         VECTOR2D pos = getView()->ToWorld( screenPos );
 
-		if( pos != m_lastMousePos || type == KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
-		{
-			motion = true;
-			m_lastMousePos = pos;
-		}
+        if( pos != m_lastMousePos || type == KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
+        {
+            motion = true;
+            m_lastMousePos = pos;
+        }
 
-	    for( unsigned int i = 0; i < m_buttons.size(); i++ )
-	        buttonEvents |= handleMouseButton( aEvent, i, motion );
+        for( unsigned int i = 0; i < m_buttons.size(); i++ )
+            buttonEvents |= handleMouseButton( aEvent, i, motion );
 
-	    if( !buttonEvents && motion )
-	    {
-	        evt = TOOL_EVENT( TC_Mouse, TA_MouseMotion );
-	        evt->SetMousePosition( pos );
-	    }
-	}
+        if( !buttonEvents && motion )
+        {
+            evt = TOOL_EVENT( TC_Mouse, TA_MouseMotion );
+            evt->SetMousePosition( pos );
+        }
+    }
 
-	// Keyboard handling
-	else if( type == wxEVT_KEY_UP || type == wxEVT_KEY_DOWN )
+    // Keyboard handling
+    else if( type == wxEVT_KEY_UP || type == wxEVT_KEY_DOWN )
     {
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
         int key = ke->GetKeyCode();
@@ -246,33 +246,33 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         }
     }
 
-	if( evt )
-		m_toolMgr->ProcessEvent( *evt );
+    if( evt )
+        m_toolMgr->ProcessEvent( *evt );
 
-	// pass the event to the GUI, it might still be interested in it
-	aEvent.Skip();
+    // pass the event to the GUI, it might still be interested in it
+    aEvent.Skip();
 }
 
 
 void TOOL_DISPATCHER::DispatchWxCommand( const wxCommandEvent& aEvent )
 {
-	bool activateTool = false;
-	std::string toolName;
-	
-	// fixme: use TOOL_ACTIONs here
-	switch( aEvent.GetId() )
-	{
-		case ID_PNS_ROUTER_TOOL:
-			toolName = "pcbnew.InteractiveRouter";
-			activateTool = true;
-			break;
-		case ID_SELECTION_TOOL:
-			toolName = "pcbnew.InteractiveSelection";
-			activateTool = true;
-			break;
-	}
+    bool activateTool = false;
+    std::string toolName;
 
-	// do nothing if the legacy view is active
-	if( activateTool && m_editFrame->IsGalCanvasActive() )
-		m_toolMgr->InvokeTool( toolName );
+    // fixme: use TOOL_ACTIONs here
+    switch( aEvent.GetId() )
+    {
+        case ID_PNS_ROUTER_TOOL:
+            toolName = "pcbnew.InteractiveRouter";
+            activateTool = true;
+            break;
+        case ID_SELECTION_TOOL:
+            toolName = "pcbnew.InteractiveSelection";
+            activateTool = true;
+            break;
+    }
+
+    // do nothing if the legacy view is active
+    if( activateTool && m_editFrame->IsGalCanvasActive() )
+        m_toolMgr->InvokeTool( toolName );
 }

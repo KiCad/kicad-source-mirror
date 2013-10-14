@@ -78,21 +78,21 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     Connect( wxEVT_SIZE,        wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
 
     /* Generic events for the Tool Dispatcher */
-	Connect( wxEVT_MOTION,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	Connect( wxEVT_LEFT_UP,     wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	Connect( wxEVT_LEFT_DOWN,   wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	Connect( wxEVT_RIGHT_UP,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	Connect( wxEVT_RIGHT_DOWN,  wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	Connect( wxEVT_MIDDLE_UP,   wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	Connect( wxEVT_MIDDLE_DOWN, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	Connect( wxEVT_MOUSEWHEEL,  wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	Connect( wxEVT_CHAR_HOOK,   wxEventHandler( EDA_DRAW_PANEL_GAL::skipEvent ) );
-	Connect( wxEVT_KEY_UP,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-	Connect( wxEVT_KEY_DOWN,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_MOTION,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_LEFT_UP,     wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_LEFT_DOWN,   wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_RIGHT_UP,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_RIGHT_DOWN,  wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_MIDDLE_UP,   wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_MIDDLE_DOWN, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_MOUSEWHEEL,  wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_CHAR_HOOK,   wxEventHandler( EDA_DRAW_PANEL_GAL::skipEvent ) );
+    Connect( wxEVT_KEY_UP,      wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
+    Connect( wxEVT_KEY_DOWN,    wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
     Connect( KiGfx::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE,
              wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
-    
+
     m_refreshTimer.SetOwner( this );
     Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
 
@@ -171,7 +171,7 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
         m_refreshTimer.Start( ( MinRefreshPeriod - delta ).ToLong(), true );
         m_pendingRefresh = true;
     }
-} 
+}
 
 
 void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
@@ -223,13 +223,13 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 
 void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
 {
-	if( !m_eventDispatcher )
-	{
-		aEvent.Skip();
-		return;
-	}
-	else
-	{
+    if( !m_eventDispatcher )
+    {
+        aEvent.Skip();
+        return;
+    }
+    else
+    {
         m_eventDispatcher->DispatchWxEvent( aEvent );
     }
 

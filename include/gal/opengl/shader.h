@@ -172,11 +172,11 @@ private:
     void programInfo( GLuint aProgram );
 
     /**
-	 * @brief Get the shader information.
-	 *
-	 * @param aShader is the shader number.
-	 */
-	void shaderInfo( GLuint aShader );
+     * @brief Get the shader information.
+     *
+     * @param aShader is the shader number.
+     */
+    void shaderInfo( GLuint aShader );
 
     /**
      * @brief Read the shader source file

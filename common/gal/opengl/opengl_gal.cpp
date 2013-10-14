@@ -127,7 +127,7 @@ void OPENGL_GAL::BeginDrawing()
         glViewport( 0, 0, (GLsizei) screenSize.x, (GLsizei) screenSize.y );
 
         // Create the screen transformation
-        glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y, 
+        glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y,
                 -depthRange.x, -depthRange.y );
 
         // Prepare rendering target buffers

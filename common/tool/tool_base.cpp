@@ -27,23 +27,23 @@
 
 KiGfx::VIEW* TOOL_BASE::getView() const
 {
-	return m_toolMgr->GetView();
+    return m_toolMgr->GetView();
 }
 
 
 KiGfx::VIEW_CONTROLS* TOOL_BASE::getViewControls() const
-{	
-	return m_toolMgr->GetViewControls();
+{
+    return m_toolMgr->GetViewControls();
 }
 
 
 wxWindow* TOOL_BASE::getEditFrameInt() const
 {
-	return m_toolMgr->GetEditFrame();
+    return m_toolMgr->GetEditFrame();
 }
 
 
 EDA_ITEM* TOOL_BASE::getModelInt() const
 {
-	return m_toolMgr->GetModel();
+    return m_toolMgr->GetModel();
 }

@@ -33,12 +33,12 @@ class TOOL_MANAGER;
 class PCB_BASE_FRAME;
 
 namespace KiGfx {
-	class VIEW;
+    class VIEW;
 };
 
-/** 
+/**
  * Class TOOL_DISPATCHER
- * 
+ *
  * - takes wx events,
  * - fixes all wx quirks (mouse warping, panning, ordering problems, etc)
  * - translates coordinates to world space

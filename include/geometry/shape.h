@@ -36,109 +36,109 @@
  */
 
 enum ShapeType {
-	SH_RECT = 0, 	///> axis-aligned rectangle
-	SH_SEGMENT,		///> line segment
-	SH_LINE_CHAIN,	///> line chain (polyline)
-	SH_CIRCLE		///> circle
+    SH_RECT = 0,     ///> axis-aligned rectangle
+    SH_SEGMENT,        ///> line segment
+    SH_LINE_CHAIN,    ///> line chain (polyline)
+    SH_CIRCLE        ///> circle
 };
 
 /**
  * Class SHAPE
- * 
+ *
  * Represents an abstract shape on 2D plane.
- */	
+ */
 class SHAPE {
-	protected:
-		typedef VECTOR2I::extended_type ecoord;
+    protected:
+        typedef VECTOR2I::extended_type ecoord;
 
-	public:
-		/**
-		 * Constructor
-		 *
-		 * Creates an empty shape of type aType
-		 */
+    public:
+        /**
+         * Constructor
+         *
+         * Creates an empty shape of type aType
+         */
 
-		SHAPE ( ShapeType aType ) : m_type( aType ) { };
-		
-		// Destructor
-		virtual ~SHAPE() {};
+        SHAPE ( ShapeType aType ) : m_type( aType ) { };
 
-		/**
-		 * Function Type()
-		 *
-		 * Returns the type of the shape.
-		 * @retval the type
-		 */
-		ShapeType Type() const { return m_type; }
+        // Destructor
+        virtual ~SHAPE() {};
 
-		/**
-		 * Function Clone()
-		 *
-		 * Returns a dynamically allocated copy of the shape
-		 * @retval copy of the shape
-		 */
-		virtual SHAPE* Clone() const { 
-			assert( false );
-			return NULL; 
-		};
+        /**
+         * Function Type()
+         *
+         * Returns the type of the shape.
+         * @retval the type
+         */
+        ShapeType Type() const { return m_type; }
 
-		/**
-		 * Function Collide()
-		 *
-		 * Checks if the boundary of shape (this) lies closer to the point aP than aClearance, indicating
-		 * a collision.
-		 * @return true, if there is a collision.
-		 */
-		virtual bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const
-		{
-			return Collide( SEG( aP, aP ), aClearance );
-		}
-		
-		/**
-		 * Function Collide()
-		 *
-		 * Checks if the boundary of shape (this) lies closer to the shape aShape than aClearance, indicating
-		 * a collision.
-		 * @param aShape shape to check collision against
-		 * @param aClearance minimum clearance
-		 * @param aMTV minimum translation vector
-		 * @return true, if there is a collision.
-		 */
-		virtual bool Collide( const SHAPE* aShape, int aClerance, VECTOR2I& aMTV ) const;
-		virtual bool Collide( const SHAPE* aShape, int aClerance = 0 ) const;
-		/**
-		 * Function Collide()
-		 *
-		 * Checks if the boundary of shape (this) lies closer to the segment aSeg than aClearance, indicating
-		 * a collision.
-		 * @return true, if there is a collision.
-		 */
-		virtual bool Collide( const SEG& aSeg, int aClearance = 0 ) const = 0;
-	
-		/**
-		 * Function Collide()
-		 *
-		 * Computes a bounding box of the shape, with a margin of aClearance
-		 * a collision.
-		 * @aClearance how much the bounding box is expanded wrs to the minimum enclosing rectangle for the shape.
-		 * @return the bounding box.
-		 */
-		virtual const BOX2I BBox( int aClearance = 0 ) const = 0;
+        /**
+         * Function Clone()
+         *
+         * Returns a dynamically allocated copy of the shape
+         * @retval copy of the shape
+         */
+        virtual SHAPE* Clone() const {
+            assert( false );
+            return NULL;
+        };
 
-		/**
-		 * Function Centre()
-		 *
-		 * Computes a center-of-mass of the shape
-		 * @return the center-of-mass point
-		 */
-		virtual VECTOR2I Centre() const
-		{
-			return BBox( 0 ).Centre(); // if nothing better is available....
-		}
+        /**
+         * Function Collide()
+         *
+         * Checks if the boundary of shape (this) lies closer to the point aP than aClearance, indicating
+         * a collision.
+         * @return true, if there is a collision.
+         */
+        virtual bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const
+        {
+            return Collide( SEG( aP, aP ), aClearance );
+        }
 
-	private:
-		///> type of our shape
-		ShapeType m_type;
+        /**
+         * Function Collide()
+         *
+         * Checks if the boundary of shape (this) lies closer to the shape aShape than aClearance, indicating
+         * a collision.
+         * @param aShape shape to check collision against
+         * @param aClearance minimum clearance
+         * @param aMTV minimum translation vector
+         * @return true, if there is a collision.
+         */
+        virtual bool Collide( const SHAPE* aShape, int aClerance, VECTOR2I& aMTV ) const;
+        virtual bool Collide( const SHAPE* aShape, int aClerance = 0 ) const;
+        /**
+         * Function Collide()
+         *
+         * Checks if the boundary of shape (this) lies closer to the segment aSeg than aClearance, indicating
+         * a collision.
+         * @return true, if there is a collision.
+         */
+        virtual bool Collide( const SEG& aSeg, int aClearance = 0 ) const = 0;
+
+        /**
+         * Function Collide()
+         *
+         * Computes a bounding box of the shape, with a margin of aClearance
+         * a collision.
+         * @aClearance how much the bounding box is expanded wrs to the minimum enclosing rectangle for the shape.
+         * @return the bounding box.
+         */
+        virtual const BOX2I BBox( int aClearance = 0 ) const = 0;
+
+        /**
+         * Function Centre()
+         *
+         * Computes a center-of-mass of the shape
+         * @return the center-of-mass point
+         */
+        virtual VECTOR2I Centre() const
+        {
+            return BBox( 0 ).Centre(); // if nothing better is available....
+        }
+
+    private:
+        ///> type of our shape
+        ShapeType m_type;
 
 };
 

@@ -72,7 +72,7 @@ public:
         m_cursorApproachMode = aEnabled;
     }
 
-    WalkaroundStatus Route( const PNS_LINE& aInitialPath, PNS_LINE& aWalkPath, 
+    WalkaroundStatus Route( const PNS_LINE& aInitialPath, PNS_LINE& aWalkPath,
             bool aOptimize = true );
 
 private:

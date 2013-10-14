@@ -159,7 +159,6 @@ void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
         b = q;
         break;
     }
-    
 }
 
 
@@ -168,7 +167,7 @@ COLOR4D& COLOR4D::Saturate( double aFactor )
     double h, s, v;
     ToHSV( h, s, v );
     FromHSV( h, aFactor, 1.0 );
-    
+
     return *this;
 }
-        
+
