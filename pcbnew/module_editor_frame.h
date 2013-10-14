@@ -432,8 +432,7 @@ protected:
      */
     void updateTitle();
 
-    // @todo these will eventually have to be made instance variables.
-    static wxString m_lib_nick_name;
+    wxString m_lib_nick_name;
 
     /// The library nickName is a short string, for now the same as the library path
     /// but without path and without extension.  After library table support it becomes
@@ -441,9 +440,10 @@ protected:
     wxString getLibNickName() const                     { return m_lib_nick_name; }
     void setLibNickName( const wxString& aLibNickName ) { m_lib_nick_name = aLibNickName; }
 
-    static wxString m_lib_path;
 
 #if !defined(USE_FP_LIB_TABLE)
+    wxString m_lib_path;
+
     void setLibPath( const wxString& aLibPath )         { m_lib_path = aLibPath; }
 
     /// The libPath is the full string used in the PLUGIN::Footprint*() calls.
