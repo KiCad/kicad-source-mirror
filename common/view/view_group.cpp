@@ -142,7 +142,7 @@ void VIEW_GROUP::ItemsSetVisibility( bool aVisible )
 }
 
 
-void VIEW_GROUP::ItemsViewUpdate( VIEW_ITEM::ViewUpdateFlags aFlags )
+void VIEW_GROUP::ItemsViewUpdate( VIEW_ITEM::VIEW_UPDATE_FLAGS aFlags )
 {
     std::set<VIEW_ITEM*>::const_iterator it, it_end;
 

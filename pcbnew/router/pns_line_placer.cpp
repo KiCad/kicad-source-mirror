@@ -100,7 +100,7 @@ void PNS_LINE_PLACER::SetInitialDirection( const DIRECTION_45& aDirection )
 
 bool PNS_LINE_PLACER::handleSelfIntersections()
 {
-    SHAPE_LINE_CHAIN::Intersections ips;
+    SHAPE_LINE_CHAIN::INTERSECTIONS ips;
     SHAPE_LINE_CHAIN& head = m_head.GetLine();
     SHAPE_LINE_CHAIN& tail = m_tail.GetLine();
 
@@ -119,7 +119,7 @@ bool PNS_LINE_PLACER::handleSelfIntersections()
 
     // if there is more than one intersection, find the one that is
     // closest to the beginning of the tail.
-    BOOST_FOREACH( SHAPE_LINE_CHAIN::Intersection i, ips )
+    BOOST_FOREACH( SHAPE_LINE_CHAIN::INTERSECTION i, ips )
     {
         if( i.our.Index() < n )
         {
@@ -147,7 +147,7 @@ bool PNS_LINE_PLACER::handleSelfIntersections()
         // Clip till the last tail segment before intersection.
         // Set the direction to the one of this segment.
         const SEG last = tail.CSegment( n - 1 );
-        m_p_start = last.a;
+        m_p_start = last.A;
         m_direction = DIRECTION_45( last );
         tail.Remove( n, -1 );
         return true;
@@ -190,7 +190,7 @@ bool PNS_LINE_PLACER::handlePullback()
     {
         const SEG last = tail.CSegment( -1 );
         m_direction = DIRECTION_45( last );
-        m_p_start = last.a;
+        m_p_start = last.A;
 
         TRACE( 0, "Placer: pullback triggered [%d] [%s %s]",
                 n % last_tail.Format().c_str() % first_head.Format().c_str() );
@@ -240,7 +240,7 @@ bool PNS_LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
 
         // calculate a replacement route and check if it matches
         // the direction of the segment to be replaced
-        SHAPE_LINE_CHAIN replacement = dir.BuildInitialTrace( s.a, aEnd );
+        SHAPE_LINE_CHAIN replacement = dir.BuildInitialTrace( s.A, aEnd );
 
         PNS_LINE tmp( m_tail, replacement );
 
@@ -249,7 +249,7 @@ bool PNS_LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
 
         if( DIRECTION_45( replacement.Segment( 0 ) ) == dir )
         {
-            new_start = s.a;
+            new_start = s.A;
             new_direction = dir;
             reduce_index = i;
         }
@@ -326,18 +326,18 @@ bool PNS_LINE_PLACER::mergeHead()
     }
 
     if( !n_tail )
-        tail.Append( head.CSegment( 0 ).a );
+        tail.Append( head.CSegment( 0 ).A );
 
     for( int i = 0; i < n_head - 2; i++ )
     {
-        tail.Append( head.CSegment( i ).b );
+        tail.Append( head.CSegment( i ).B );
     }
 
     tail.Simplify();
 
     SEG last = tail.CSegment( -1 );
 
-    m_p_start = last.b;
+    m_p_start = last.B;
     m_direction = DIRECTION_45( last ).Right();
 
     head.Remove( 0, n_head - 2 );

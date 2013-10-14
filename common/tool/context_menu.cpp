@@ -104,8 +104,8 @@ void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
     wxString menuEntry;
 
     if( aAction.HasHotKey() )
-        menuEntry = wxString( ( aAction.GetMenuItem() + '\t' + getHotKeyDescription( aAction ) ).c_str(),
-                              wxConvUTF8 );
+        menuEntry = wxString( ( aAction.GetMenuItem() + '\t' +
+                                getHotKeyDescription( aAction ) ).c_str(), wxConvUTF8 );
     else
         menuEntry = wxString( aAction.GetMenuItem().c_str(), wxConvUTF8 );
 
@@ -134,17 +134,17 @@ std::string CONTEXT_MENU::getHotKeyDescription( const TOOL_ACTION& aAction ) con
 
     std::string description = "";
 
-    if( hotkey & MD_ModAlt )
+    if( hotkey & MD_ALT )
         description += "ALT+";
 
-    if( hotkey & MD_ModCtrl )
+    if( hotkey & MD_CTRL )
         description += "CTRL+";
 
-    if( hotkey & MD_ModShift )
+    if( hotkey & MD_SHIFT )
         description += "SHIFT+";
 
     // TODO dispatch keys such as Fx, TAB, PG_UP/DN, HOME, END, etc.
-    description += char(hotkey & ~MD_ModifierMask);
+    description += char( hotkey & ~MD_MODIFIER_MASK );
 
     return description;
 }
@@ -159,7 +159,7 @@ void CONTEXT_MENU::CMEventHandler::onEvent( wxEvent& aEvent )
     // For example, the selection tool can use this to dynamically highlight the current item
     // from selection clarification popup.
     if( type == wxEVT_MENU_HIGHLIGHT )
-        evt = TOOL_EVENT( TC_Command, TA_ContextMenuUpdate, aEvent.GetId() );
+        evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_UPDATE, aEvent.GetId() );
 
     // One of menu entries was selected..
     else if( type == wxEVT_COMMAND_MENU_SELECTED )
@@ -172,7 +172,7 @@ void CONTEXT_MENU::CMEventHandler::onEvent( wxEvent& aEvent )
         else
         {
             // Handling non-action menu entries (e.g. items in clarification list)
-            evt = TOOL_EVENT( TC_Command, TA_ContextMenuChoice, aEvent.GetId() );
+            evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, aEvent.GetId() );
         }
     }
 

@@ -38,8 +38,8 @@ namespace KIGFX
 {
 class GAL;
 
-typedef std::deque< std::deque<VECTOR2D> > Glyph;
-typedef std::deque<Glyph>                  GlyphList;
+typedef std::deque< std::deque<VECTOR2D> > GLYPH;
+typedef std::deque<GLYPH>                  GLYPH_LIST;
 
 /**
  * @brief Class STROKE_FONT implements stroke font drawing.
@@ -157,7 +157,7 @@ public:
 
 private:
     GAL*                m_gal;                                    ///< Pointer to the GAL
-    GlyphList           m_glyphs;                                 ///< Glyph list
+    GLYPH_LIST          m_glyphs;                                 ///< Glyph list
     std::deque<BOX2D>   m_glyphBoundingBoxes;                     ///< Bounding boxes of the glyphs
     double              m_scaleFactor;                            ///< Scale factor for the glyph
     VECTOR2D            m_glyphSize;                              ///< Size of the glyphs
@@ -172,7 +172,7 @@ private:
      * @param aGlyphBoundingX is the x-component of the bounding box size.
      * @return is the complete bounding box size.
      */
-    BOX2D computeBoundingBox( const Glyph& aGlyph, const VECTOR2D& aGlyphBoundingX ) const;
+    BOX2D computeBoundingBox( const GLYPH& aGlyph, const VECTOR2D& aGlyphBoundingX ) const;
 
     /**
      * @brief Compute the size of a given text.

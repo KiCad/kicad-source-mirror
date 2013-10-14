@@ -48,8 +48,11 @@ class VIEW_CONTROLS
 public:
     VIEW_CONTROLS( VIEW* aView ) : m_view( aView ), m_forceCursorPosition( false ),
         m_snappingEnabled( false ), m_grabMouse( false ), m_autoPanEnabled( false ),
-        m_autoPanMargin( 0.1 ), m_autoPanSpeed( 0.15 ) {};
-    virtual ~VIEW_CONTROLS() {};
+        m_autoPanMargin( 0.1 ), m_autoPanSpeed( 0.15 )
+    {}
+
+    virtual ~VIEW_CONTROLS()
+    {}
 
     /**
      * Function SetSnapping()
@@ -134,6 +137,11 @@ public:
         m_forceCursorPosition = aEnabled;
     }
 
+    /**
+     * Function ShowCursor()
+     * Enables or disables display of cursor.
+     * @param aEnabled decides if the cursor should be shown.
+     */
     virtual void ShowCursor( bool aEnabled );
 
 protected:

@@ -62,7 +62,7 @@ struct VECTOR2_TRAITS<int>
 template <class T>
 class VECTOR2;
 template <class T>
-std::ostream& operator<<( std::ostream& stream, const VECTOR2<T>& vector );
+std::ostream& operator<<( std::ostream& aStream, const VECTOR2<T>& aVector );
 
 /**
  * Class VECTOR2
@@ -351,6 +351,8 @@ VECTOR2<T>& VECTOR2<T>::operator-=( const T& aScalar )
     y -= aScalar;
     return *this;
 }
+
+
 template <class T>
 VECTOR2<T> VECTOR2<T>::Rotate( double aAngle ) const
 {

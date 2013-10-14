@@ -48,7 +48,8 @@ class WX_VIEW_CONTROLS : public VIEW_CONTROLS, public wxEvtHandler
 {
 public:
     WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel );
-    ~WX_VIEW_CONTROLS() {};
+    ~WX_VIEW_CONTROLS()
+    {}
 
     /// Handler functions
     void onWheel( wxMouseEvent& aEvent );
@@ -80,10 +81,10 @@ public:
     }
 
     /// @copydoc VIEW_CONTROLS::GetMousePosition()
-    virtual const VECTOR2D GetMousePosition() const;
+    const VECTOR2D GetMousePosition() const;
 
     /// @copydoc VIEW_CONTROLS::GetCursorPosition()
-    virtual const VECTOR2D GetCursorPosition() const;
+    const VECTOR2D GetCursorPosition() const;
 
     /// Event that forces mouse move event in the dispatcher (eg. used in autopanning, when mouse
     /// cursor does not move in screen coordinates, but does in world coordinates)
@@ -91,7 +92,7 @@ public:
 
 private:
     /// Possible states for WX_VIEW_CONTROLS
-    enum State
+    enum STATE
     {
         IDLE = 1,           /// Nothing is happening
         DRAG_PANNING,       /// Panning with mouse button pressed
@@ -109,7 +110,7 @@ private:
     bool handleAutoPanning( const wxMouseEvent& aEvent );
 
     /// Current state of VIEW_CONTROLS
-    State       m_state;
+    STATE       m_state;
 
     /// Panel that is affected by VIEW_CONTROLS
     wxWindow*   m_parentPanel;

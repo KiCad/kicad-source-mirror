@@ -45,7 +45,7 @@
 class TOOL_ACTION
 {
 public:
-    TOOL_ACTION( const std::string& aName, TOOL_ActionScope aScope = AS_CONTEXT,
+    TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope = AS_CONTEXT,
             int aDefaultHotKey = 0, const std::string& aMenuItem = std::string( "" ),
             const std::string& aMenuDesc = std::string( "" ) ) :
         m_name( aName ), m_scope( aScope ), m_defaultHotKey( aDefaultHotKey ),
@@ -148,7 +148,7 @@ public:
      */
     TOOL_EVENT MakeEvent() const
     {
-        return TOOL_EVENT( TC_Command, TA_Action, m_name, m_scope );
+        return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
     }
 
     const std::string& GetMenuItem() const
@@ -190,7 +190,7 @@ private:
     std::string m_name;
 
     /// Scope of the action (ie. the event that is issued after activation).
-    TOOL_ActionScope m_scope;
+    TOOL_ACTION_SCOPE m_scope;
 
     /// Default hot key that activates the action.
     const int m_defaultHotKey;

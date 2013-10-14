@@ -182,7 +182,7 @@ public:
      * them properly.
      * @return Flag required to refresh items.
      */
-    KIGFX::VIEW_ITEM::ViewUpdateFlags GetUpdateFlag() const
+    KIGFX::VIEW_ITEM::VIEW_UPDATE_FLAGS GetUpdateFlag() const
     {
         if( m_flips % 2 == 1 ) // If number of flips is odd, then we need to change layers
             return KIGFX::VIEW_ITEM::LAYERS;

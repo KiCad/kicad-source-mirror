@@ -40,14 +40,14 @@ struct FlagString
 };
 
 
-static const std::string flag2string( int flag, const FlagString* exps )
+static const std::string flag2string( int aFlag, const FlagString* aExps )
 {
     std::string rv;
 
-    for( int i = 0; exps[i].str.length(); i++ )
+    for( int i = 0; aExps[i].str.length(); i++ )
     {
-        if( exps[i].flag & flag )
-            rv += exps[i].str + " ";
+        if( aExps[i].flag & aFlag )
+            rv += aExps[i].str + " ";
     }
 
     return rv;
@@ -66,51 +66,51 @@ const std::string TOOL_EVENT::Format() const
 
     const FlagString categories[] =
     {
-        { TC_Mouse,    "mouse"    },
-        { TC_Keyboard, "keyboard" },
-        { TC_Command,  "command"  },
-        { TC_Message,  "message"  },
-        { TC_View,     "view"     },
+        { TC_MOUSE,    "mouse"    },
+        { TC_KEYBOARD, "keyboard" },
+        { TC_COMMAND,  "command"  },
+        { TC_MESSAGE,  "message"  },
+        { TC_VIEW,     "view"     },
         { 0,           ""         }
     };
 
     const FlagString actions[] =
     {
-        { TA_MouseClick,        "click"               },
-        { TA_MouseUp,           "button-up"           },
-        { TA_MouseDown,         "button-down"         },
-        { TA_MouseDrag,         "drag"                },
-        { TA_MouseMotion,       "motion"              },
-        { TA_MouseWheel,        "wheel"               },
-        { TA_KeyUp,             "key-up"              },
-        { TA_KeyDown,           "key-down"            },
-        { TA_ViewRefresh,       "view-refresh"        },
-        { TA_ViewZoom,          "view-zoom"           },
-        { TA_ViewPan,           "view-pan"            },
-        { TA_ViewDirty,         "view-dirty"          },
-        { TA_ChangeLayer,       "change-layer"        },
-        { TA_CancelTool,        "cancel-tool"         },
-        { TA_ContextMenuUpdate, "context-menu-update" },
-        { TA_ContextMenuChoice, "context-menu-choice" },
-        { TA_Action,            "action"              },
-        { 0,                    ""                    }
+        { TA_MOUSE_CLICK,           "click"               },
+        { TA_MOUSE_UP,              "button-up"           },
+        { TA_MOUSE_DOWN,            "button-down"         },
+        { TA_MOUSE_DRAG,            "drag"                },
+        { TA_MOUSE_MOTION,          "motion"              },
+        { TA_MOUSE_WHEEL,           "wheel"               },
+        { TA_KEY_UP,                "key-up"              },
+        { TA_KEY_DOWN,              "key-down"            },
+        { TA_VIEW_REFRESH,          "view-refresh"        },
+        { TA_VIEW_ZOOM,             "view-zoom"           },
+        { TA_VIEW_PAN,              "view-pan"            },
+        { TA_VIEW_DIRTY,            "view-dirty"          },
+        { TA_CHANGE_LAYER,          "change-layer"        },
+        { TA_CANCEL_TOOL,           "cancel-tool"         },
+        { TA_CONTEXT_MENU_UPDATE,   "context-menu-update" },
+        { TA_CONTEXT_MENU_CHOICE,   "context-menu-choice" },
+        { TA_ACTION,                "action"              },
+        { 0,                        ""                    }
     };
 
     const FlagString buttons[] =
     {
-        { MB_None,   "none"   },
-        { MB_Left,   "left"   },
-        { MB_Right,  "right"  },
-        { MB_Middle, "middle" },
+        { MB_NONE,   "none"   },
+        { MB_LEFT,   "left"   },
+        { MB_RIGHT,  "right"  },
+        { MB_MIDDLE, "middle" },
         { 0,         ""       }
     };
 
     const FlagString modifiers[] =
     {
-        { MD_ModShift, "shift" },
-        { MD_ModCtrl,  "ctrl"  },
-        { MD_ModAlt,   "alt"   },
-        { 0,           ""      }
+        { MD_SHIFT, "shift" },
+        { MD_CTRL,  "ctrl"  },
+        { MD_ALT,   "alt"   },
+        { 0,        ""      }
     };
 
     ev = "category: ";
@@ -118,20 +118,20 @@ const std::string TOOL_EVENT::Format() const
     ev += " action: ";
     ev += flag2string( m_actions, actions );
 
-    if( m_actions & TA_Mouse )
+    if( m_actions & TA_MOUSE )
     {
         ev += " btns: ";
         ev += flag2string( m_mouseButtons, buttons );
     }
 
-    if( m_actions & TA_Keyboard )
+    if( m_actions & TA_KEYBOARD )
     {
         char tmp[128];
         sprintf( tmp, "key: %d", m_keyCode );
         ev += tmp;
     }
 
-    if( m_actions & ( TA_Mouse | TA_Keyboard ) )
+    if( m_actions & ( TA_MOUSE | TA_KEYBOARD ) )
     {
         ev += " mods: ";
         ev += flag2string( m_modifiers, modifiers );

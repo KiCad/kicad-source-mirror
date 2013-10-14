@@ -284,7 +284,7 @@ PNS_NODE::OptObstacle PNS_NODE::NearestObstacle( const PNS_LINE* aItem, int aKin
         VECTOR2I ip_first, ip_last;
         int dist_max = INT_MIN;
 
-        vector<SHAPE_LINE_CHAIN::Intersection> isect_list;
+        vector<SHAPE_LINE_CHAIN::INTERSECTION> isect_list;
 
         int clearance = GetClearance( obs.item, &aLine );
 
@@ -298,7 +298,7 @@ PNS_NODE::OptObstacle PNS_NODE::NearestObstacle( const PNS_LINE* aItem, int aKin
 
             viaHull.Intersect( hull, isect_list );
 
-            BOOST_FOREACH( SHAPE_LINE_CHAIN::Intersection isect, isect_list )
+            BOOST_FOREACH( SHAPE_LINE_CHAIN::INTERSECTION isect, isect_list )
             {
                 int dist = aLine.GetCLine().Length() +
                            ( isect.p - aLine.GetVia().GetPos() ).EuclideanNorm();
@@ -324,7 +324,7 @@ PNS_NODE::OptObstacle PNS_NODE::NearestObstacle( const PNS_LINE* aItem, int aKin
 
         hull.Intersect( aLine.GetCLine(), isect_list );
 
-        BOOST_FOREACH( SHAPE_LINE_CHAIN::Intersection isect, isect_list )
+        BOOST_FOREACH( SHAPE_LINE_CHAIN::INTERSECTION isect, isect_list )
         {
             int dist = aLine.GetCLine().PathLength( isect.p );
 
@@ -473,14 +473,14 @@ void PNS_NODE::addLine( PNS_LINE* aLine )
     {
         SEG s = l.CSegment( i );
 
-        if( s.a != s.b )
+        if( s.A != s.B )
         {
             PNS_SEGMENT* pseg = new PNS_SEGMENT( *aLine, s );
 
             pseg->SetOwner( this );
 
-            linkJoint( s.a, pseg->GetLayers(), aLine->GetNet(), pseg );
-            linkJoint( s.b, pseg->GetLayers(), aLine->GetNet(), pseg );
+            linkJoint( s.A, pseg->GetLayers(), aLine->GetNet(), pseg );
+            linkJoint( s.B, pseg->GetLayers(), aLine->GetNet(), pseg );
 
             aLine->LinkSegment( pseg );
 
@@ -492,7 +492,7 @@ void PNS_NODE::addLine( PNS_LINE* aLine )
 
 void PNS_NODE::addSegment( PNS_SEGMENT* aSeg )
 {
-    if( aSeg->GetSeg().a == aSeg->GetSeg().b )
+    if( aSeg->GetSeg().A == aSeg->GetSeg().B )
     {
         TRACEn( 0, "attempting to add a segment with same end coordinates, ignoring." )
         return;
@@ -500,8 +500,8 @@ void PNS_NODE::addSegment( PNS_SEGMENT* aSeg )
 
     aSeg->SetOwner( this );
 
-    linkJoint( aSeg->GetSeg().a, aSeg->GetLayers(), aSeg->GetNet(), aSeg );
-    linkJoint( aSeg->GetSeg().b, aSeg->GetLayers(), aSeg->GetNet(), aSeg );
+    linkJoint( aSeg->GetSeg().A, aSeg->GetLayers(), aSeg->GetNet(), aSeg );
+    linkJoint( aSeg->GetSeg().B, aSeg->GetLayers(), aSeg->GetNet(), aSeg );
 
     m_index->Add( aSeg );
 }
@@ -555,8 +555,8 @@ void PNS_NODE::doRemove( PNS_ITEM* aItem )
 
 void PNS_NODE::removeSegment( PNS_SEGMENT* aSeg )
 {
-    unlinkJoint( aSeg->GetSeg().a, aSeg->GetLayers(), aSeg->GetNet(), aSeg );
-    unlinkJoint( aSeg->GetSeg().b, aSeg->GetLayers(), aSeg->GetNet(), aSeg );
+    unlinkJoint( aSeg->GetSeg().A, aSeg->GetLayers(), aSeg->GetNet(), aSeg );
+    unlinkJoint( aSeg->GetSeg().B, aSeg->GetLayers(), aSeg->GetNet(), aSeg );
 
     doRemove( aSeg );
 }
@@ -629,7 +629,7 @@ void PNS_NODE::followLine( PNS_SEGMENT* current, bool scanDirection, int& pos,
     for( ; ; )
     {
         const VECTOR2I p =
-            (scanDirection ^ prevReversed) ? current->GetSeg().b : current->GetSeg().a;
+            (scanDirection ^ prevReversed) ? current->GetSeg().B : current->GetSeg().A;
         const OptJoint jt = FindJoint( p, current->GetLayer(), current->GetNet() );
 
         assert( jt );
@@ -645,7 +645,7 @@ void PNS_NODE::followLine( PNS_SEGMENT* current, bool scanDirection, int& pos,
 
         current = jt->NextSegment( current );
         prevReversed =
-            ( jt->GetPos() == (scanDirection ? current->GetSeg().b : current->GetSeg().a ) );
+            ( jt->GetPos() == (scanDirection ? current->GetSeg().B : current->GetSeg().A ) );
     }
 }
 
@@ -870,8 +870,8 @@ void PNS_NODE::Dump( bool aLong )
                 case PNS_ITEM::SEGMENT:
                     {
                         const PNS_SEGMENT* seg = static_cast<const PNS_SEGMENT*>(item);
-                        printf( " -> seg %s %s\n", seg->GetSeg().a.Format().c_str(),
-                                seg->GetSeg().b.Format().c_str() );
+                        printf( " -> seg %s %s\n", seg->GetSeg().A.Format().c_str(),
+                                seg->GetSeg().B.Format().c_str() );
                         break;
                     }
 
@@ -897,10 +897,10 @@ void PNS_NODE::Dump( bool aLong )
 
         for( vector<PNS_SEGMENT*>::iterator j = seg_refs->begin(); j != seg_refs->end(); ++j )
         {
-            printf( "%s ", (*j)->GetSeg().a.Format().c_str() );
+            printf( "%s ", (*j)->GetSeg().A.Format().c_str() );
 
             if( j + 1 == seg_refs->end() )
-                printf( "%s\n", (*j)->GetSeg().b.Format().c_str() );
+                printf( "%s\n", (*j)->GetSeg().B.Format().c_str() );
 
             all_segs.erase( *j );
         }

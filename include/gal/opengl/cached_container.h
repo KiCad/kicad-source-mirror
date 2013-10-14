@@ -49,19 +49,19 @@ class CACHED_CONTAINER : public VERTEX_CONTAINER
 public:
     CACHED_CONTAINER( unsigned int aSize = defaultInitSize );
 
-    ///< @copydoc VERTEX_CONTAINER::SetItem()
+    ///> @copydoc VERTEX_CONTAINER::SetItem()
     virtual void SetItem( VERTEX_ITEM* aItem );
 
-    ///< @copydoc VERTEX_CONTAINER::FinishItem()
+    ///> @copydoc VERTEX_CONTAINER::FinishItem()
     virtual void FinishItem();
 
-    ///< @copydoc VERTEX_CONTAINER::Allocate()
+    ///> @copydoc VERTEX_CONTAINER::Allocate()
     virtual VERTEX* Allocate( unsigned int aSize );
 
-    ///< @copydoc VERTEX_CONTAINER::Delete()
+    ///> @copydoc VERTEX_CONTAINER::Delete()
     virtual void Delete( VERTEX_ITEM* aItem );
 
-    ///< @copydoc VERTEX_CONTAINER::Clear()
+    ///> @copydoc VERTEX_CONTAINER::Clear()
     virtual void Clear();
 
     /**
@@ -73,23 +73,23 @@ public:
     virtual VERTEX* GetVertices( const VERTEX_ITEM* aItem ) const;
 
 protected:
-    ///< Maps size of free memory chunks to their offsets
-    typedef std::pair<unsigned int, unsigned int> Chunk;
-    typedef std::multimap<unsigned int, unsigned int> FreeChunkMap;
+    ///> Maps size of free memory chunks to their offsets
+    typedef std::pair<unsigned int, unsigned int> CHUNK;
+    typedef std::multimap<unsigned int, unsigned int> FREE_CHUNK_MAP;
 
     /// List of all the stored items
-    typedef std::set<VERTEX_ITEM*> Items;
+    typedef std::set<VERTEX_ITEM*> ITEMS;
 
-    ///< Stores size & offset of free chunks.
-    FreeChunkMap        m_freeChunks;
+    ///> Stores size & offset of free chunks.
+    FREE_CHUNK_MAP      m_freeChunks;
 
-    ///< Stored VERTEX_ITEMs
-    Items               m_items;
+    ///> Stored VERTEX_ITEMs
+    ITEMS               m_items;
 
-    ///< Currently modified item
+    ///> Currently modified item
     VERTEX_ITEM*        m_item;
 
-    ///< Properties of currently modified chunk & item
+    ///> Properties of currently modified chunk & item
     unsigned int        m_chunkSize;
     unsigned int        m_chunkOffset;
     unsigned int        m_itemSize;
@@ -146,7 +146,7 @@ private:
      *
      * @param aChunk is the chunk.
      */
-    inline int getChunkSize( const Chunk& aChunk ) const
+    inline int getChunkSize( const CHUNK& aChunk ) const
     {
         return aChunk.first;
     }
@@ -157,7 +157,7 @@ private:
      *
      * @param aChunk is the chunk.
      */
-    inline unsigned int getChunkOffset( const Chunk& aChunk ) const
+    inline unsigned int getChunkOffset( const CHUNK& aChunk ) const
     {
         return aChunk.second;
     }

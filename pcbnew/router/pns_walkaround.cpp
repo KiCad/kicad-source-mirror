@@ -196,8 +196,8 @@ PNS_WALKAROUND::WalkaroundStatus PNS_WALKAROUND::Route( const PNS_LINE& aInitial
             const SEG s = l.Segment( i );
 
             VECTOR2I nearest = s.NearestPoint( m_cursorPos );
-            VECTOR2I::extended_type dist_a = ( s.a - m_cursorPos ).SquaredEuclideanNorm();
-            VECTOR2I::extended_type dist_b = ( s.b - m_cursorPos ).SquaredEuclideanNorm();
+            VECTOR2I::extended_type dist_a = ( s.A - m_cursorPos ).SquaredEuclideanNorm();
+            VECTOR2I::extended_type dist_b = ( s.B - m_cursorPos ).SquaredEuclideanNorm();
             VECTOR2I::extended_type dist_n = ( nearest - m_cursorPos ).SquaredEuclideanNorm();
 
             if( dist_n <= dist_a && dist_n < dist_b )

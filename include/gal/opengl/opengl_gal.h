@@ -106,7 +106,8 @@ public:
     virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /// @copydoc GAL::DrawSegment()
-    virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth );
+    virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
+                              double aWidth );
 
     /// @copydoc GAL::DrawCircle()
     virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius );
@@ -209,13 +210,13 @@ public:
     virtual void RestoreScreen();
 
     /// @copydoc GAL::SetTarget()
-    virtual void SetTarget( RenderTarget aTarget );
+    virtual void SetTarget( RENDER_TARGET aTarget );
 
     /// @copydoc GAL::GetTarget()
-    virtual RenderTarget GetTarget() const;
+    virtual RENDER_TARGET GetTarget() const;
 
     /// @copydoc GAL::ClearTarget()
-    virtual void ClearTarget( RenderTarget aTarget );
+    virtual void ClearTarget( RENDER_TARGET aTarget );
 
     // -------
     // Cursor
@@ -275,8 +276,8 @@ private:
     wxEvtHandler*           paintListener;
 
     // Vertex buffer objects related fields
-    typedef std::map< unsigned int, boost::shared_ptr<VERTEX_ITEM> > GroupsMap;
-    GroupsMap               groups;                 ///< Stores informations about VBO objects (groups)
+    typedef std::map< unsigned int, boost::shared_ptr<VERTEX_ITEM> > GROUPS_MAP;
+    GROUPS_MAP              groups;                 ///< Stores informations about VBO objects (groups)
     unsigned int            groupCounter;           ///< Counter used for generating keys for groups
     VERTEX_MANAGER*         currentManager;         ///< Currently used VERTEX_MANAGER (for storing VERTEX_ITEMs)
     VERTEX_MANAGER          cachedManager;          ///< Container for storing cached VERTEX_ITEMs
@@ -287,7 +288,7 @@ private:
     OPENGL_COMPOSITOR       compositor;             ///< Handles multiple rendering targets
     unsigned int            mainBuffer;             ///< Main rendering target
     unsigned int            overlayBuffer;          ///< Auxiliary rendering target (for menus etc.)
-    RenderTarget            currentTarget;          ///< Current rendering target
+    RENDER_TARGET           currentTarget;          ///< Current rendering target
 
     // Shader
     SHADER                  shader;         ///< There is only one shader used for different objects

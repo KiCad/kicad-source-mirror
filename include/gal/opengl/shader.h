@@ -39,7 +39,7 @@ namespace KIGFX
 class OPENGL_GAL;
 
 /// Type definition for the shader
-enum ShaderType
+enum SHADER_TYPE
 {
     SHADER_TYPE_VERTEX	 = GL_VERTEX_SHADER,    ///< Vertex shader
     SHADER_TYPE_FRAGMENT = GL_FRAGMENT_SHADER,  ///< Fragment shader
@@ -77,7 +77,7 @@ public:
      * @param aShaderType is the type of the shader.
      * @return True in case of success, false otherwise.
      */
-    bool LoadBuiltinShader( unsigned int aShaderNumber, ShaderType aShaderType );
+    bool LoadBuiltinShader( unsigned int aShaderNumber, SHADER_TYPE aShaderType );
 
     /**
      * @brief Loads one of the built-in shaders and compiles it.
@@ -86,7 +86,7 @@ public:
      * @param aShaderType is the type of the shader.
      * @return True in case of success, false otherwise.
      */
-    bool LoadShaderFromFile( const std::string& aShaderSourceName, ShaderType aShaderType );
+    bool LoadShaderFromFile( const std::string& aShaderSourceName, SHADER_TYPE aShaderType );
 
     /**
      * @brief Link the shaders.
@@ -193,7 +193,7 @@ private:
      * @param aShaderType is the type of the shader.
      * @return True in case of success, false otherwise.
      */
-    bool addSource( const std::string& aShaderSource, ShaderType aShaderType );
+    bool addSource( const std::string& aShaderSource, SHADER_TYPE aShaderType );
 
     std::deque<GLuint>  shaderNumbers;      ///< Shader number list
     GLuint              programNumber;      ///< Shader program number

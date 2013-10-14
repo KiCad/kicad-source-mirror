@@ -87,7 +87,7 @@ void ROUTER_TOOL::Reset()
     if( getView() )
         m_router->SetView( getView() );
 
-    Go( &ROUTER_TOOL::Main, TOOL_EVENT( TC_Command, TA_Action, GetName() ) );
+    Go( &ROUTER_TOOL::Main, TOOL_EVENT( TC_COMMAND, TA_ACTION, GetName() ) );
 }
 
 
@@ -323,7 +323,7 @@ void ROUTER_TOOL::startRouting()
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
-        else if( evt->IsClick( MB_Left ) )
+        else if( evt->IsClick( MB_LEFT ) )
         {
             updateEndItem( *evt );
 
@@ -396,7 +396,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
             break; // Finish
         else if( evt->IsMotion() )
             updateStartItem( *evt );
-        else if( evt->IsClick( MB_Left ) )
+        else if( evt->IsClick( MB_LEFT ) )
         {
             updateStartItem( *evt );
             startRouting();

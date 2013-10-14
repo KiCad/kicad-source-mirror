@@ -134,7 +134,7 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 
     aTool->m_toolMgr = this;
 
-    if( aTool->GetType() == TOOL_Interactive )
+    if( aTool->GetType() == INTERACTIVE )
     {
         bool initState = static_cast<TOOL_INTERACTIVE*>( aTool )->Init();
 
@@ -158,7 +158,7 @@ bool TOOL_MANAGER::InvokeTool( TOOL_ID aToolId )
 {
     TOOL_BASE* tool = FindTool( aToolId );
 
-    if( tool && tool->GetType() == TOOL_Interactive )
+    if( tool && tool->GetType() == INTERACTIVE )
         return invokeTool( tool );
 
     return false;       // there is no tool with the given id
@@ -169,7 +169,7 @@ bool TOOL_MANAGER::InvokeTool( const std::string& aToolName )
 {
     TOOL_BASE* tool = FindTool( aToolName );
 
-    if( tool && tool->GetType() == TOOL_Interactive )
+    if( tool && tool->GetType() == INTERACTIVE )
         return invokeTool( tool );
 
     return false;       // there is no tool with the given name
@@ -192,7 +192,7 @@ bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 {
     wxASSERT( aTool != NULL );
 
-    TOOL_EVENT evt( TC_Command, TA_Action, aTool->GetName() );
+    TOOL_EVENT evt( TC_COMMAND, TA_ACTION, aTool->GetName() );
     ProcessEvent( evt );
 
     return true;
@@ -203,7 +203,7 @@ bool TOOL_MANAGER::runTool( TOOL_ID aToolId )
 {
     TOOL_BASE* tool = FindTool( aToolId );
 
-    if( tool && tool->GetType() == TOOL_Interactive )
+    if( tool && tool->GetType() == INTERACTIVE )
         return runTool( tool );
 
     return false;       // there is no tool with the given id
@@ -214,7 +214,7 @@ bool TOOL_MANAGER::runTool( const std::string& aToolName )
 {
     TOOL_BASE* tool = FindTool( aToolName );
 
-    if( tool && tool->GetType() == TOOL_Interactive )
+    if( tool && tool->GetType() == INTERACTIVE )
         return runTool( tool );
 
     return false;       // there is no tool with the given name
@@ -360,13 +360,13 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 
 bool TOOL_MANAGER::dispatchStandardEvents( TOOL_EVENT& aEvent )
 {
-    if( aEvent.Action() == TA_KeyUp )
+    if( aEvent.Action() == TA_KEY_UP )
     {
         // Check if there is a hotkey associated
         if( m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode() ) )
             return false;                       // hotkey event was handled so it does not go any further
     }
-    else if( aEvent.Category() == TC_Command )  // it may be a tool activation event
+    else if( aEvent.Category() == TC_COMMAND )  // it may be a tool activation event
     {
         dispatchActivation( aEvent );
         // do not return false, as the event has to go on to the destined tool
@@ -433,11 +433,11 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
         // or immediately (CMENU_NOW) mode. The latter is used for clarification lists.
         if( st->contextMenuTrigger != CMENU_OFF )
         {
-            if( st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( MB_Right ) )
+            if( st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( MB_RIGHT ) )
                 break;
 
             st->pendingWait = true;
-            st->waitEvents = TOOL_EVENT( TC_Any, TA_Any );
+            st->waitEvents = TOOL_EVENT( TC_ANY, TA_ANY );
 
             if( st->contextMenuTrigger == CMENU_NOW )
                 st->contextMenuTrigger = CMENU_OFF;
@@ -446,7 +446,7 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
             GetEditFrame()->PopupMenu( menu->GetMenu() );
 
             //
-            TOOL_EVENT evt( TC_Command, TA_ContextMenuChoice );
+            TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE );
             dispatchInternal( evt );
 
             break;
@@ -498,7 +498,7 @@ void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
     {
         TOOL_BASE* tool = m_toolIdIndex[toolId]->theTool;
 
-        if( tool->GetType() == TOOL_Interactive )
+        if( tool->GetType() == INTERACTIVE )
             static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
     }
 }

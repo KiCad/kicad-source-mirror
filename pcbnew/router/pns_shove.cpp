@@ -128,8 +128,8 @@ bool PNS_SHOVE::tryShove( PNS_NODE* aNode, PNS_LINE* aHead, PNS_LINE* aObstacle,
 
         if( aNode->CheckColliding( &hs, aObstacle ) )
         {
-            VECTOR2I v1 = hs.GetSeg().b - hs.GetSeg().a;
-            VECTOR2I v2 = aObstacleSeg.GetSeg().b - aObstacleSeg.GetSeg().a;
+            VECTOR2I v1 = hs.GetSeg().B - hs.GetSeg().A;
+            VECTOR2I v2 = aObstacleSeg.GetSeg().B - aObstacleSeg.GetSeg().A;
 
             VECTOR2I::extended_type det = v1.Cross( v2 );
 

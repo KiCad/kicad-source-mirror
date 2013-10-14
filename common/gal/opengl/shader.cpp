@@ -63,7 +63,7 @@ SHADER::~SHADER()
 }
 
 
-bool SHADER::LoadBuiltinShader( unsigned int aShaderNumber, ShaderType aShaderType )
+bool SHADER::LoadBuiltinShader( unsigned int aShaderNumber, SHADER_TYPE aShaderType )
 {
     if( aShaderNumber >= shaders_number )
         return false;
@@ -72,7 +72,7 @@ bool SHADER::LoadBuiltinShader( unsigned int aShaderNumber, ShaderType aShaderTy
 }
 
 
-bool SHADER::LoadShaderFromFile( const std::string& aShaderSourceName, ShaderType aShaderType )
+bool SHADER::LoadShaderFromFile( const std::string& aShaderSourceName, SHADER_TYPE aShaderType )
 {
     // Load shader sources
     const std::string shaderSource = readSource( aShaderSourceName );
@@ -219,7 +219,7 @@ std::string SHADER::readSource( std::string aShaderSourceName )
 }
 
 
-bool SHADER::addSource( const std::string& aShaderSource, ShaderType aShaderType )
+bool SHADER::addSource( const std::string& aShaderSource, SHADER_TYPE aShaderType )
 {
     if( isShaderLinked )
     {

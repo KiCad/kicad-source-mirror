@@ -45,7 +45,7 @@ CACHED_CONTAINER::CACHED_CONTAINER( unsigned int aSize ) :
     VERTEX_CONTAINER( aSize ), m_item( NULL )
 {
     // In the beginning there is only free space
-    m_freeChunks.insert( Chunk( aSize, 0 ) );
+    m_freeChunks.insert( CHUNK( aSize, 0 ) );
 }
 
 
@@ -80,7 +80,7 @@ void CACHED_CONTAINER::FinishItem()
         int itemOffset = m_item->GetOffset();
 
         // Add the not used memory back to the pool
-        m_freeChunks.insert( Chunk( m_chunkSize - m_itemSize, itemOffset + m_itemSize ) );
+        m_freeChunks.insert( CHUNK( m_chunkSize - m_itemSize, itemOffset + m_itemSize ) );
         m_freeSpace += ( m_chunkSize - m_itemSize );
         // mergeFreeChunks();   // veery slow and buggy
     }
@@ -152,7 +152,7 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
     // Insert a free memory chunk entry in the place where item was stored
     if( size > 0 )
     {
-        m_freeChunks.insert( Chunk( size, offset ) );
+        m_freeChunks.insert( CHUNK( size, offset ) );
         m_freeSpace += size;
         // Indicate that the item is not stored in the container anymore
         aItem->setSize( 0 );
@@ -186,7 +186,7 @@ void CACHED_CONTAINER::Clear()
 
     // Set the size of all the stored VERTEX_ITEMs to 0, so it is clear that they are not held
     // in the container anymore
-    Items::iterator it;
+    ITEMS::iterator it;
 
     for( it = m_items.begin(); it != m_items.end(); ++it )
     {
@@ -198,7 +198,7 @@ void CACHED_CONTAINER::Clear()
 
     // Now there is only free space left
     m_freeChunks.clear();
-    m_freeChunks.insert( Chunk( m_freeSpace, 0 ) );
+    m_freeChunks.insert( CHUNK( m_freeSpace, 0 ) );
 }
 
 
@@ -240,7 +240,7 @@ unsigned int CACHED_CONTAINER::reallocate( unsigned int aSize )
     }
 
     // Look for the free space chunk of at least given size
-    FreeChunkMap::iterator newChunk = m_freeChunks.lower_bound( aSize );
+    FREE_CHUNK_MAP::iterator newChunk = m_freeChunks.lower_bound( aSize );
 
     if( newChunk == m_freeChunks.end() )
     {
@@ -277,7 +277,7 @@ unsigned int CACHED_CONTAINER::reallocate( unsigned int aSize )
 
         // Free the space previously used by the chunk
         wxASSERT( m_itemSize > 0 );
-        m_freeChunks.insert( Chunk( m_itemSize, m_chunkOffset ) );
+        m_freeChunks.insert( CHUNK( m_itemSize, m_chunkOffset ) );
         m_freeSpace += m_itemSize;
     }
 
@@ -287,7 +287,7 @@ unsigned int CACHED_CONTAINER::reallocate( unsigned int aSize )
     // If there is some space left, return it to the pool - add an entry for it
     if( chunkSize > aSize )
     {
-        m_freeChunks.insert( Chunk( chunkSize - aSize, chunkOffset + aSize ) );
+        m_freeChunks.insert( CHUNK( chunkSize - aSize, chunkOffset + aSize ) );
     }
 
     m_freeSpace -= aSize;
@@ -321,7 +321,7 @@ bool CACHED_CONTAINER::defragment( VERTEX* aTarget )
     }
 
     int newOffset = 0;
-    Items::iterator it, it_end;
+    ITEMS::iterator it, it_end;
 
     for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
     {
@@ -345,7 +345,7 @@ bool CACHED_CONTAINER::defragment( VERTEX* aTarget )
     // Now there is only one big chunk of free memory
     m_freeChunks.clear();
     wxASSERT( m_freeSpace > 0 );
-    m_freeChunks.insert( Chunk( m_freeSpace, m_currentSize - m_freeSpace ) );
+    m_freeChunks.insert( CHUNK( m_freeSpace, m_currentSize - m_freeSpace ) );
 
 #if CACHED_CONTAINER_TEST > 0
     prof_end( &totalTime );
@@ -369,9 +369,9 @@ void CACHED_CONTAINER::mergeFreeChunks()
 #endif
 
     // Reversed free chunks map - this one stores chunk size with its offset as the key
-    std::list<Chunk> freeChunks;
+    std::list<CHUNK> freeChunks;
 
-    FreeChunkMap::const_iterator it, it_end;
+    FREE_CHUNK_MAP::const_iterator it, it_end;
 
     for( it = m_freeChunks.begin(), it_end = m_freeChunks.end(); it != it_end; ++it )
     {
@@ -381,7 +381,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
     m_freeChunks.clear();
     freeChunks.sort();
 
-    std::list<Chunk>::const_iterator itf, itf_end;
+    std::list<CHUNK>::const_iterator itf, itf_end;
     unsigned int offset = freeChunks.front().first;
     unsigned int size   = freeChunks.front().second;
     freeChunks.pop_front();
@@ -449,7 +449,7 @@ bool CACHED_CONTAINER::resizeContainer( unsigned int aNewSize )
         // We have to correct freeChunks after defragmentation
         m_freeChunks.clear();
         wxASSERT( aNewSize - reservedSpace() > 0 );
-        m_freeChunks.insert( Chunk( aNewSize - reservedSpace(), reservedSpace() ) );
+        m_freeChunks.insert( CHUNK( aNewSize - reservedSpace(), reservedSpace() ) );
     }
     else
     {
@@ -463,7 +463,7 @@ bool CACHED_CONTAINER::resizeContainer( unsigned int aNewSize )
         }
 
         // Add an entry for the new memory chunk at the end of the container
-        m_freeChunks.insert( Chunk( aNewSize - m_currentSize, m_currentSize ) );
+        m_freeChunks.insert( CHUNK( aNewSize - m_currentSize, m_currentSize ) );
     }
 
     m_vertices = newContainer;

@@ -40,9 +40,9 @@
 using boost::optional;
 
 ///> Stores information about a mouse button state
-struct TOOL_DISPATCHER::ButtonState
+struct TOOL_DISPATCHER::BUTTON_STATE
 {
-    ButtonState( TOOL_MouseButtons aButton, const wxEventType& aDownEvent,
+    BUTTON_STATE( TOOL_MOUSE_BUTTONS aButton, const wxEventType& aDownEvent,
                  const wxEventType& aUpEvent ) :
         button( aButton ),
         downEvent( aDownEvent ),
@@ -66,7 +66,7 @@ struct TOOL_DISPATCHER::ButtonState
     double dragMaxDelta;
 
     ///> Determines the mouse button for which information are stored.
-    TOOL_MouseButtons button;
+    TOOL_MOUSE_BUTTONS button;
 
     ///> The type of wxEvent that determines mouse button press.
     wxEventType downEvent;
@@ -89,9 +89,9 @@ struct TOOL_DISPATCHER::ButtonState
 TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditFrame ) :
     m_toolMgr( aToolMgr ), m_editFrame( aEditFrame )
 {
-    m_buttons.push_back( new ButtonState( MB_Left, wxEVT_LEFT_DOWN, wxEVT_LEFT_UP ) );
-    m_buttons.push_back( new ButtonState( MB_Right, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_UP ) );
-    m_buttons.push_back( new ButtonState( MB_Middle, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_UP ) );
+    m_buttons.push_back( new BUTTON_STATE( MB_LEFT, wxEVT_LEFT_DOWN, wxEVT_LEFT_UP ) );
+    m_buttons.push_back( new BUTTON_STATE( MB_RIGHT, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_UP ) );
+    m_buttons.push_back( new BUTTON_STATE( MB_MIDDLE, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_UP ) );
 
     ResetState();
 }
@@ -99,14 +99,14 @@ TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditF
 
 TOOL_DISPATCHER::~TOOL_DISPATCHER()
 {
-    BOOST_FOREACH( ButtonState* st, m_buttons )
+    BOOST_FOREACH( BUTTON_STATE* st, m_buttons )
         delete st;
 }
 
 
 void TOOL_DISPATCHER::ResetState()
 {
-    BOOST_FOREACH( ButtonState* st, m_buttons )
+    BOOST_FOREACH( BUTTON_STATE* st, m_buttons )
         st->Reset();
 }
 
@@ -119,7 +119,7 @@ KIGFX::VIEW* TOOL_DISPATCHER::getView()
 
 bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion )
 {
-    ButtonState* st = m_buttons[aIndex];
+    BUTTON_STATE* st = m_buttons[aIndex];
     wxEventType type = aEvent.GetEventType();
     optional<TOOL_EVENT> evt;
     bool isClick = false;
@@ -137,7 +137,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
         st->downPosition = m_lastMousePos;
         st->dragMaxDelta = 0;
         st->pressed = true;
-        evt = TOOL_EVENT( TC_Mouse, TA_MouseDown, args );
+        evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_DOWN, args );
     }
     else if( up )    // Handle mouse button release
     {
@@ -152,13 +152,13 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
                     st->dragMaxDelta < DragDistanceThreshold )
                 isClick = true;
             else
-                evt = TOOL_EVENT( TC_Mouse, TA_MouseUp, args );
+                evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_UP, args );
         }
         else
             isClick = true;
 
         if( isClick )
-            evt = TOOL_EVENT( TC_Mouse, TA_MouseClick, args );
+            evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_CLICK, args );
 
         st->dragging = false;
     }
@@ -174,7 +174,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 
         if( t - st->downTimestamp > DragTimeThreshold || st->dragMaxDelta > DragDistanceThreshold )
         {
-            evt = TOOL_EVENT( TC_Mouse, TA_MouseDrag, args );
+            evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_DRAG, args );
             evt->SetMouseDragOrigin( st->dragOrigin );
             evt->SetMouseDelta( m_lastMousePos - st->dragOrigin );
         }
@@ -222,7 +222,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         if( !buttonEvents && motion )
         {
-            evt = TOOL_EVENT( TC_Mouse, TA_MouseMotion );
+            evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_MOTION );
             evt->SetMousePosition( pos );
         }
     }
@@ -237,13 +237,13 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         if( type == wxEVT_KEY_UP )
         {
             if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
-                evt = TOOL_EVENT( TC_Command, TA_CancelTool );
+                evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
             else
-                evt = TOOL_EVENT( TC_Keyboard, TA_KeyUp, key | mods );
+                evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_UP, key | mods );
         }
         else
         {
-            evt = TOOL_EVENT( TC_Keyboard, TA_KeyDown, key | mods );
+            evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_DOWN, key | mods );
         }
     }
 

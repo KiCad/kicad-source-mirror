@@ -82,7 +82,7 @@ public:
      */
     DIRECTION_45( const SEG& aSeg )
     {
-        construct( aSeg.b - aSeg.a );
+        construct( aSeg.B - aSeg.A );
     }
 
     /**
