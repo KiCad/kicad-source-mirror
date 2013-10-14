@@ -1,7 +1,3 @@
-/*************************************************************/
-/*  board editor: undo and redo functions for board editor  */
-/*************************************************************/
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -45,8 +41,8 @@
 
 
 /* Functions to undo and redo edit commands.
- *  commmands to undo are stored in CurrentScreen->m_UndoList
- *  commmands to redo are stored in CurrentScreen->m_RedoList
+ *  commands to undo are stored in CurrentScreen->m_UndoList
+ *  commands to redo are stored in CurrentScreen->m_RedoList
  *
  *  m_UndoList and m_RedoList handle a std::vector of PICKED_ITEMS_LIST
  *  Each PICKED_ITEMS_LIST handle a std::vector of pickers (class ITEM_PICKER),
@@ -89,8 +85,8 @@
  *      => The list of item(s) is used to create a deleted list in undo list(same as a delete
  *         command)
  *
- *   Some block operations that change items can be undoed without memorise items, just the
- *   coordiantes of the transform:
+ *   Some block operations that change items can be undone without memorize items, just the
+ *   coordinates of the transform:
  *      move list of items (undo/redo is made by moving with the opposite move vector)
  *      mirror (Y) and flip list of items (undo/redo is made by mirror or flip items)
  *      so they are handled specifically.
@@ -101,7 +97,7 @@
 /**
  * Function TestForExistingItem
  * test if aItem exists somewhere in lists of items
- * This is a function unsed by PutDataInPreviousState to be sure an item was not deleted
+ * This is a function used by PutDataInPreviousState to be sure an item was not deleted
  * since an undo or redo.
  * This could be possible:
  *   - if a call to SaveCopyInUndoList was forgotten in Pcbnew
@@ -177,15 +173,6 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 }
 
 
-/**
- * Function SwapData
- * Used in undo / redo command:
- *  swap data between Item and a copy
- *  swapped data is data modified by edition, mainly sizes and texts
- * so ONLY FEW values are swapped
- * @param aItem = the item
- * @param aImage = a copy of the item
- */
 void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 {
     if( aItem == NULL || aImage == NULL )
@@ -287,16 +274,6 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 
     case PCB_TEXT_T:
         std::swap( *((TEXTE_PCB*)aItem), *((TEXTE_PCB*)aImage) );
-        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Mirror, ( (TEXTE_PCB*) aImage )->m_Mirror );
-        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Size, ( (TEXTE_PCB*) aImage )->m_Size );
-        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Pos, ( (TEXTE_PCB*) aImage )->m_Pos );
-        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Thickness, ( (TEXTE_PCB*) aImage )->m_Thickness );
-        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Orient, ( (TEXTE_PCB*) aImage )->m_Orient );
-        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Text, ( (TEXTE_PCB*) aImage )->m_Text );
-        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Italic, ( (TEXTE_PCB*) aImage )->m_Italic );
-        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Bold, ( (TEXTE_PCB*) aImage )->m_Bold );
-        // EXCHG( ( (TEXTE_PCB*) aItem )->m_HJustify, ( (TEXTE_PCB*) aImage )->m_HJustify );
-        // EXCHG( ( (TEXTE_PCB*) aItem )->m_VJustify, ( (TEXTE_PCB*) aImage )->m_VJustify );
         break;
 
     case PCB_TARGET_T:
@@ -304,19 +281,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         break;
 
     case PCB_DIMENSION_T:
-        {
-            std::swap( *((DIMENSION*)aItem), *((DIMENSION*)aImage) );
-            // wxString txt = ( (DIMENSION*) aItem )->GetText();
-            // ( (DIMENSION*) aItem )->SetText( ( (DIMENSION*) aImage )->GetText() );
-            // ( (DIMENSION*) aImage )->SetText( txt );
-            // EXCHG( ( (DIMENSION*) aItem )->m_Width, ( (DIMENSION*) aImage )->m_Width );
-            // EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Size, ( (DIMENSION*) aImage )->m_Text.m_Size );
-            // EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Pos, ( (DIMENSION*) aImage )->m_Text.m_Pos );
-            // EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Thickness,
-            //        ( (DIMENSION*) aImage )->m_Text.m_Thickness );
-            // EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Mirror,
-            //        ( (DIMENSION*) aImage )->m_Text.m_Mirror );
-        }
+        std::swap( *((DIMENSION*)aItem), *((DIMENSION*)aImage) );
         break;
 
     case PCB_ZONE_T:
@@ -327,18 +292,6 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 }
 
 
-/*
- * Function SaveCopyInUndoList
- * Create a copy of the current board item, and put it in the undo list.
- *
- *  aCommandType =
- *      UR_CHANGED
- *      UR_NEW
- *      UR_DELETED
- *      UR_MOVED
- *      UR_FLIPPED
- *      UR_ROTATED
- */
 void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
                                          UNDO_REDO_T    aCommandType,
                                          const wxPoint& aTransformPoint )
@@ -364,7 +317,7 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     case UR_DELETED:
 #ifdef USE_WX_OVERLAY
     // Avoid to redraw when autoplacing
-    if( aItem->Type() == PCB_MODULE_T )    
+    if( aItem->Type() == PCB_MODULE_T )
         if( ((MODULE*)aItem)->GetFlags() & MODULE_to_PLACE )
             break;
         m_canvas->Refresh();
@@ -400,12 +353,6 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
 }
 
 
-/**
- * Function SaveCopyInUndoList
- * @param aItemsList = a PICKED_ITEMS_LIST of items to save
- * @param aTypeCommand = type of comand ( UR_CHANGED, UR_NEW, UR_DELETED ...
- * @param aTransformPoint - Transform items around this point.
- */
 void PCB_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
                                          UNDO_REDO_T        aTypeCommand,
                                          const wxPoint&     aTransformPoint )
@@ -478,15 +425,6 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 }
 
 
-/**
- * Function PutDataInPreviousState
- * Used in undo or redo command.
- * Put data pointed by List in the previous state, i.e. the state memorised by List
- * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
- * @param aRedoCommand = a bool: true for redo, false for undo
- * @param aRebuildRatsnet = a bool: true to rebuid ratsnet (normal use, and default), false
- * to just retrieve las state (used in abort commands that do not need to rebuild ratsnest)
- */
 void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand,
                                              bool aRebuildRatsnet )
 {
@@ -497,7 +435,8 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
 
-    bool build_item_list = true;    // if true the list of esiting items must be rebuilt
+    bool build_item_list = true;    // if true the list of existing items must be rebuilt
+
     for( int ii = aList->GetCount()-1; ii >= 0 ; ii--  )
     {
         item = (BOARD_ITEM*) aList->GetPickedItem( ii );
@@ -508,19 +447,21 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
          *   - if a call to SaveCopyInUndoList was forgotten in Pcbnew
          *   - in zones outlines, when a change in one zone merges this zone with an other
          * This test avoids a Pcbnew crash
-         * Obviouly, this test is not made for deleted items
+         * Obviously, this test is not made for deleted items
          */
         UNDO_REDO_T status = aList->GetPickedItemStatus( ii );
+
         if( status != UR_DELETED )
         {
             if( build_item_list )
                 // Build list of existing items, for integrity test
                 TestForExistingItem( GetBoard(), NULL );
+
             build_item_list = false;
 
             if( !TestForExistingItem( GetBoard(), item ) )
             {
-                // Remove this non existant item
+                // Remove this non existent item
                 aList->RemovePicker( ii );
                 ii++;       // the current item was removed, ii points now the next item
                             // decrement it because it will be incremented later
@@ -595,18 +536,12 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     if( not_found )
         wxMessageBox( wxT( "Incomplete undo/redo operation: some items not found" ) );
 
-    // Rebuild pointers and rastnest that can be changed.
+    // Rebuild pointers and ratsnest that can be changed.
     if( reBuild_ratsnest && aRebuildRatsnet )
         Compile_Ratsnest( NULL, true );
 }
 
 
-/**
- * Function GetBoardFromUndoList
- * Undo the last edition:
- *     - Save the current board state in Redo list
- *     - Get an old version of the board state from Undo list
- */
 void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
@@ -626,13 +561,6 @@ void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
 }
 
 
-/**
- * Function GetBoardFromRedoList
- *  Redo the last edition:
- *  - Save the current board in Undo list
- *  - Get an old version of the board from Redo list
- *  @return none
- */
 void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
@@ -654,17 +582,6 @@ void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& event )
 }
 
 
-/**
- * Function ClearUndoORRedoList
- * free the undo or redo list from List element
- *  Wrappers are deleted.
- *  datas pointed by wrappers are deleted if not in use in schematic
- *  i.e. when they are copy of a schematic item or they are no more in use (DELETED)
- * @param aList = the UNDO_REDO_CONTAINER to clear
- * @param aItemCount = the count of items to remove. < 0 for all items
- * items (commands stored in list) are removed from the beginning of the list.
- * So this function can be called to remove old commands
- */
 void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
 {
     if( aItemCount == 0 )
