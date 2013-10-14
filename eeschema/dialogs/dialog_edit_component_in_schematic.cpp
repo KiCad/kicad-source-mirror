@@ -940,9 +940,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     // Initialize fixed field values to default values found in library
     // Note: the field texts are not modified because they are set in schematic,
     // the text from libraries is most of time a dummy text
-    // Only VALUE and REFERENCE are re-initialized
-    // Perhaps the FOOTPRINT field should also be considered,
-    // but for most of components it is not set in library
+    // Only VALUE, REFERENCE , FOOTPRINT and DATASHEET are re-initialized
     LIB_FIELD& refField = entry->GetReferenceField();
     m_Cmp->GetField( REFERENCE )->SetTextPosition( refField.GetTextPosition() + m_Cmp->m_Pos );
     m_Cmp->GetField( REFERENCE )->ImportValues( refField );
@@ -950,6 +948,20 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     LIB_FIELD& valField = entry->GetValueField();
     m_Cmp->GetField( VALUE )->SetTextPosition( valField.GetTextPosition() + m_Cmp->m_Pos );
     m_Cmp->GetField( VALUE )->ImportValues( valField );
+
+    LIB_FIELD* field = entry->GetField(FOOTPRINT);
+    if( field && m_Cmp->GetField( FOOTPRINT ) )
+    {
+        m_Cmp->GetField( FOOTPRINT )->SetTextPosition( field->GetTextPosition() + m_Cmp->m_Pos );
+        m_Cmp->GetField( FOOTPRINT )->ImportValues( *field );
+    }
+
+    field = entry->GetField(DATASHEET);
+    if( field && m_Cmp->GetField( DATASHEET ) )
+    {
+        m_Cmp->GetField( DATASHEET )->SetTextPosition( field->GetTextPosition() + m_Cmp->m_Pos );
+        m_Cmp->GetField( DATASHEET )->ImportValues( *field );
+    }
 
     m_Cmp->SetOrientation( CMP_NORMAL );
 

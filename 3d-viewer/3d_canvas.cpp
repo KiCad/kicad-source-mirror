@@ -493,6 +493,7 @@ void EDA_3D_CANVAS::InitGL()
         glEnable( GL_ALPHA_TEST );
         glEnable( GL_LINE_SMOOTH );
         glEnable(GL_POLYGON_SMOOTH);
+        glShadeModel( GL_SMOOTH );
         glEnable( GL_COLOR_MATERIAL );
         glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
@@ -505,7 +506,6 @@ void EDA_3D_CANVAS::InitGL()
         // Initialize alpha blending function.
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-        glShadeModel( GL_FLAT );
 }
 
     // set viewing projection

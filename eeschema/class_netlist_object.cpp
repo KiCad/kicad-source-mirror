@@ -350,11 +350,11 @@ wxString NETLIST_OBJECT::GetShortNetName() const
         SCH_COMPONENT* link = m_netNameCandidate->GetComponentParent();
         if( link )  // Should be always true
         {
-            netName = wxT("Net-<");
+            netName = wxT("Net-(");
             netName << link->GetRef( &m_netNameCandidate->m_SheetPath );
             netName << wxT("-Pad")
                     << LIB_PIN::ReturnPinStringNum( m_netNameCandidate->m_PinNum )
-                    << wxT(">");
+                    << wxT(")");
         }
     }
     else
