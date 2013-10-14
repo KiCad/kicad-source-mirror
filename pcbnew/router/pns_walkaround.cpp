@@ -74,7 +74,7 @@ PNS_WALKAROUND::WalkaroundStatus PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
         }
     }
 
-    aPath.NewWalkaround( current_obs->hull, path_pre[0], path_walk[0], 
+    aPath.NewWalkaround( current_obs->hull, path_pre[0], path_walk[0],
                             path_post[0], aWindingDirection );
     aPath.NewWalkaround( current_obs->hull, path_pre[1], path_walk[1],
                         path_post[1], !aWindingDirection );

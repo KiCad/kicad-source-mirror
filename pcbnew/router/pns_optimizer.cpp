@@ -109,7 +109,7 @@ bool PNS_COST_ESTIMATOR::IsBetter( PNS_COST_ESTIMATOR& aOther,
 {
     if( aOther.m_cornerCost < m_cornerCost && aOther.m_lengthCost < m_lengthCost )
         return true;
-    
+
     else if( aOther.m_cornerCost < m_cornerCost * aCornerTollerance && aOther.m_lengthCost <
              m_lengthCost * aLengthTollerance )
         return true;
@@ -531,19 +531,19 @@ PNS_OPTIMIZER::BreakoutList PNS_OPTIMIZER::rectBreakouts( int aWidth,
 
         if( s.x >= s.y )
         {
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_offset, 
+            breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_offset,
                                                    c + d_offset + VECTOR2I( l, l ) ) );
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_offset, 
+            breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_offset,
                                                    c + d_offset - VECTOR2I( -l, l ) ) );
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_offset, 
+            breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_offset,
                                                    c - d_offset + VECTOR2I( -l, l ) ) );
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_offset, 
+            breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_offset,
                                                    c - d_offset - VECTOR2I( l, l ) ) );
         }
         else
         {
             // fixme: this could be done more efficiently
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_offset, 
+            breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_offset,
                                                    c + d_offset + VECTOR2I( l, l ) ) );
             breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_offset,
                                                    c - d_offset - VECTOR2I( -l, l ) ) );
@@ -640,7 +640,7 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
             for( int diag = 0; diag < 2; diag++ )
             {
                 SHAPE_LINE_CHAIN v;
-                SHAPE_LINE_CHAIN connect = dir.BuildInitialTrace( l.CPoint( -1 ), 
+                SHAPE_LINE_CHAIN connect = dir.BuildInitialTrace( l.CPoint( -1 ),
                                 line.CPoint( p ), diag == 0 );
 
                 DIRECTION_45 dir_bkout( l.CSegment( -1 ) );
@@ -691,7 +691,7 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
 
         if( !checkColliding( &tmp ) )
         {
-/*			if(aEnd)
+/*            if(aEnd)
  *               PNSDisplayDebugLine (l_best, 6);
  *           else
  *               PNSDisplayDebugLine (l_best, 5);*/

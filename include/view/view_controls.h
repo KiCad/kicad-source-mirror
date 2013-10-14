@@ -122,7 +122,7 @@ public:
     virtual const VECTOR2D GetCursorPosition() const = 0;
 
 
-    /** 
+    /**
      * Function ForceCursorPosition()
      * Places the cursor immediately at a given point. Mouse movement is ignored.
      * @param aEnabled enable forced cursor position

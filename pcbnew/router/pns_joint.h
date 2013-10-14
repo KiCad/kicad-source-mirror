@@ -32,9 +32,9 @@
 /**
  * Class PNS_JOINT
  *
- * Represents a 2D point on a given set of layers and belonging to a certain 
+ * Represents a 2D point on a given set of layers and belonging to a certain
  * net, that links together a number of board items.
- * A hash table of joints is used by the router to follow connectivity between 
+ * A hash table of joints is used by the router to follow connectivity between
  * the items.
  **/
 class PNS_JOINT : public PNS_ITEM
@@ -53,8 +53,8 @@ public:
     PNS_JOINT() :
         PNS_ITEM( JOINT ) {}
 
-    PNS_JOINT( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers, 
-            int aNet = -1 ) : 
+    PNS_JOINT( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers,
+            int aNet = -1 ) :
         PNS_ITEM( JOINT )
     {
         m_tag.pos = aPos;
@@ -78,14 +78,14 @@ public:
         return NULL;
     }
 
-    ///> Returns true if the joint is a trivial line corner, connecting two 
+    ///> Returns true if the joint is a trivial line corner, connecting two
     /// segments of the same net, on the same layer.
     bool IsLineCorner() const
     {
         if( m_linkedItems.size() != 2 )
             return false;
 
-        if( m_linkedItems[0]->GetKind() != SEGMENT || 
+        if( m_linkedItems[0]->GetKind() != SEGMENT ||
                 m_linkedItems[1]->GetKind() != SEGMENT )
             return false;
 
@@ -99,7 +99,7 @@ public:
     ///> Links the joint to a given board item (when it's added to the PNS_NODE)
     void Link( PNS_ITEM* aItem )
     {
-        LinkedItems::iterator f = std::find( m_linkedItems.begin(), 
+        LinkedItems::iterator f = std::find( m_linkedItems.begin(),
                                              m_linkedItems.end(), aItem );
 
         if( f != m_linkedItems.end() )
@@ -112,7 +112,7 @@ public:
     ///> Returns true if the joint became dangling after unlinking.
     bool Unlink( PNS_ITEM* aItem )
     {
-        LinkedItems::iterator f = std::find( m_linkedItems.begin(), 
+        LinkedItems::iterator f = std::find( m_linkedItems.begin(),
                                              m_linkedItems.end(), aItem );
 
         if( f != m_linkedItems.end() )
@@ -142,7 +142,7 @@ public:
     {
         int n = 0;
 
-        for( LinkedItems::const_iterator i = m_linkedItems.begin(); 
+        for( LinkedItems::const_iterator i = m_linkedItems.begin();
                                          i != m_linkedItems.end(); ++i )
             if( (*i)->GetKind() & aMask )
                 n++;
@@ -172,7 +172,7 @@ public:
 
     bool Overlaps( const PNS_JOINT& rhs ) const
     {
-        return m_tag.pos == rhs.m_tag.pos && 
+        return m_tag.pos == rhs.m_tag.pos &&
             m_tag.net == rhs.m_tag.net && m_layers.Overlaps( rhs.m_layers );
     }
 
@@ -186,7 +186,7 @@ private:
 
 
 // hash function & comparison operator for boost::unordered_map<>
-inline bool operator==( PNS_JOINT::HashTag const& p1, 
+inline bool operator==( PNS_JOINT::HashTag const& p1,
                         PNS_JOINT::HashTag const& p2 )
 {
     return p1.pos == p2.pos && p1.net == p2.net;

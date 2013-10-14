@@ -28,7 +28,7 @@
 /**
  * Class PNS_ITEMSET
  *
- * Holds a list of board items, that can be filtered against net, kinds, 
+ * Holds a list of board items, that can be filtered against net, kinds,
  * layers, etc.
  **/
 

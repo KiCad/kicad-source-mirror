@@ -49,7 +49,7 @@ void strokedCircle( vec2 aCoord, float aRadius, float aWidth )
     float innerRadius = aRadius - ( aWidth / 2 );
     float relWidth = innerRadius / outerRadius;
 
-    if( ( dot( aCoord, aCoord ) < 1.0f ) && 
+    if( ( dot( aCoord, aCoord ) < 1.0f ) &&
         ( dot( aCoord, aCoord ) > relWidth * relWidth ) )
         gl_FragColor = gl_Color;
     else

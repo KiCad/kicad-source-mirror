@@ -434,7 +434,7 @@ void PNS_LINE::NewWalkaround( const SHAPE_LINE_CHAIN& aObstacle,
                     path.Append( l_hull.CPoint( j ) );
                     li = l_orig.Find( l_hull.CPoint( j ) );
 
-                    if( li >= 0 && ( li == (l_orig.PointCount() - 1 ) || 
+                    if( li >= 0 && ( li == (l_orig.PointCount() - 1 ) ||
                                 outside[li + 1]) )
                         break;
                 }
@@ -514,7 +514,7 @@ bool PNS_LINE::walkScan( const SHAPE_LINE_CHAIN& line,
         {
             index_l = (reverse ?  sc - 1 - i : i);
             ip = s.a;
-            printf( "vertex %d on-%s %d\n", index_l, 
+            printf( "vertex %d on-%s %d\n", index_l,
                     is_vertex ? "vertex" : "edge", index_o );
             return true;
         }
@@ -523,7 +523,7 @@ bool PNS_LINE::walkScan( const SHAPE_LINE_CHAIN& line,
         {
             index_l = (reverse ?  sc - 1 - i - 1 : i + 1);
             ip = s.b;
-            printf( "vertex %d on-%s %d\n", index_l, 
+            printf( "vertex %d on-%s %d\n", index_l,
                     is_vertex ? "vertex" : "edge", index_o );
             return true;
         }
@@ -562,7 +562,7 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN obstacle,
     if( line.SegmentCount() < 1 )
         return false;
 
-    if( obstacle.PointInside( line.CPoint( 0 ) ) || 
+    if( obstacle.PointInside( line.CPoint( 0 ) ) ||
             obstacle.PointInside( line.CPoint( -1 ) ) )
         return false;
 
@@ -714,7 +714,7 @@ bool PNS_LINE::Is45Degree()
         const SEG& s = m_line.CSegment( i );
 
         double angle = 180.0 / M_PI *
-                       atan2( (double) s.b.y - (double) s.a.y, 
+                       atan2( (double) s.b.y - (double) s.a.y,
                               (double) s.b.x - (double) s.a.x );
 
         if( angle < 0 )

@@ -79,13 +79,13 @@ struct PNS_OBSTACLE
 /**
  * Class PNS_NODE
  *
- * Keeps the router "world" - i.e. all the tracks, vias, solids in a 
+ * Keeps the router "world" - i.e. all the tracks, vias, solids in a
  * hierarchical and indexed way.
  * Features:
  * - spatial-indexed container for PCB item shapes
  * - collision search (with clearance checking)
  * - assembly of lines connecting joints, finding loops and unique paths
- * - lightweight cloning/branching (for recursive optimization and shove 
+ * - lightweight cloning/branching (for recursive optimization and shove
  * springback)
  **/
 
@@ -145,11 +145,11 @@ public:
     void Remove( PNS_ITEM* aItem );
     void Replace( PNS_ITEM* aOldItem, PNS_ITEM* aNewItem );
 
-    ///> Creates a lightweight copy ("branch") of self. Note that if there are 
+    ///> Creates a lightweight copy ("branch") of self. Note that if there are
     ///> any branches in use, their parents must NOT be deleted.
     PNS_NODE* Branch();
 
-    ///> Assembles a line connecting two non-trivial joints the 
+    ///> Assembles a line connecting two non-trivial joints the
     ///> segment aSeg belongs to.
     PNS_LINE* AssembleLine( PNS_SEGMENT* aSeg,
             const OptJoint& a = OptJoint(), const OptJoint& b = OptJoint() );
@@ -175,15 +175,15 @@ public:
     const OptJoint FindJoint( const VECTOR2I& aPos, int aLayer, int aNet );
 
     ///> finds all linest between a pair of joints. Used by the loop removal engine.
-    int FindLinesBetweenJoints( PNS_JOINT& a, PNS_JOINT& b, 
+    int FindLinesBetweenJoints( PNS_JOINT& a, PNS_JOINT& b,
                                 std::vector<PNS_LINE*>& aLines );
 
     ///> finds the joints corresponding to the ends of line aLine
     void FindLineEnds( PNS_LINE* aLine, PNS_JOINT& a, PNS_JOINT& b );
 
-    ///> finds all joints that have an (in)direct connection(s) 
+    ///> finds all joints that have an (in)direct connection(s)
     ///> (i.e. segments/vias) with the joint aJoint.
-    void FindConnectedJoints( const PNS_JOINT& aJoint, 
+    void FindConnectedJoints( const PNS_JOINT& aJoint,
                               std::vector<PNS_JOINT*>& aConnectedJoints );
 
     ///> Destroys all child nodes. Applicable only to the root node.
@@ -201,15 +201,15 @@ private:
     PNS_NODE& operator=( const PNS_NODE& b );
 
     ///> tries to find matching joint and creates a new one if not found
-    PNS_JOINT& touchJoint( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers, 
+    PNS_JOINT& touchJoint( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers,
                             int aNet );
 
     ///> touches a joint and links it to an item
-    void linkJoint( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers, 
+    void linkJoint( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers,
                         int aNet, PNS_ITEM* aWhere );
 
     ///> unlinks an item from a joint
-    void unlinkJoint( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers, 
+    void unlinkJoint( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers,
                         int aNet, PNS_ITEM* aWhere );
 
     ///> helpers for adding/removing items
@@ -231,7 +231,7 @@ private:
         return m_parent == NULL;
     }
 
-    ///> checks if this branch contains an updated version of the item 
+    ///> checks if this branch contains an updated version of the item
     ///> from the root branch.
     bool overrides( PNS_ITEM* aItem ) const
     {
@@ -249,7 +249,7 @@ private:
     ///> spatial index of all items
     // SHAPE_INDEX_LIST<PNS_ITEM *> m_items;
 
-    ///> hash table with the joints, linking the items. Joints are hashed by 
+    ///> hash table with the joints, linking the items. Joints are hashed by
     ///> their position, layer set and net.
     JointMap m_joints;
 

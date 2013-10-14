@@ -42,63 +42,63 @@ class TOOL_MANAGER;
  */
 enum TOOL_EventCategory
 {
-	TC_None     = 0x00,
-	TC_Mouse    = 0x01,
-	TC_Keyboard = 0x02,
-	TC_Command  = 0x04,
-	TC_Message  = 0x08,
-	TC_View     = 0x10,
-	TC_Any      = 0xffffffff
+    TC_None     = 0x00,
+    TC_Mouse    = 0x01,
+    TC_Keyboard = 0x02,
+    TC_Command  = 0x04,
+    TC_Message  = 0x08,
+    TC_View     = 0x10,
+    TC_Any      = 0xffffffff
 };
 
 enum TOOL_Actions
 {
     // UI input events
-	TA_None         = 0x0000,
-	TA_MouseClick   = 0x0001,
-	TA_MouseUp      = 0x0002,
-	TA_MouseDown    = 0x0004,
-	TA_MouseDrag    = 0x0008,
-	TA_MouseMotion  = 0x0010,
-	TA_MouseWheel   = 0x0020,
-	TA_Mouse        = 0x003f,
-	TA_KeyUp        = 0x0040,
+    TA_None         = 0x0000,
+    TA_MouseClick   = 0x0001,
+    TA_MouseUp      = 0x0002,
+    TA_MouseDown    = 0x0004,
+    TA_MouseDrag    = 0x0008,
+    TA_MouseMotion  = 0x0010,
+    TA_MouseWheel   = 0x0020,
+    TA_Mouse        = 0x003f,
+    TA_KeyUp        = 0x0040,
     TA_KeyDown      = 0x0080,
     TA_Keyboard     = TA_KeyUp | TA_KeyDown,
 
     // View related events
-	TA_ViewRefresh  = 0x0100,
-	TA_ViewZoom     = 0x0200,
-	TA_ViewPan      = 0x0400,
-	TA_ViewDirty    = 0x0800,
-	TA_ChangeLayer  = 0x1000,
+    TA_ViewRefresh  = 0x0100,
+    TA_ViewZoom     = 0x0200,
+    TA_ViewPan      = 0x0400,
+    TA_ViewDirty    = 0x0800,
+    TA_ChangeLayer  = 0x1000,
 
-	// Tool cancel event. Issued automagically when the user hits escape or selects End Tool from
-	// the context menu.
-	TA_CancelTool   = 0x2000,
+    // Tool cancel event. Issued automagically when the user hits escape or selects End Tool from
+    // the context menu.
+    TA_CancelTool   = 0x2000,
 
-	// Context menu update. Issued whenever context menu is open and the user hovers the mouse
-	// over one of choices. Used in dynamic highligting in disambiguation menu
-	TA_ContextMenuUpdate = 0x4000,
+    // Context menu update. Issued whenever context menu is open and the user hovers the mouse
+    // over one of choices. Used in dynamic highligting in disambiguation menu
+    TA_ContextMenuUpdate = 0x4000,
 
-	// Context menu choice. Sent if the user picked something from the context menu or
-	// closed it without selecting anything.
-	TA_ContextMenuChoice = 0x8000,
+    // Context menu choice. Sent if the user picked something from the context menu or
+    // closed it without selecting anything.
+    TA_ContextMenuChoice = 0x8000,
 
-	// Tool action (allows to control tools)
-	TA_Action            = 0x10000,
+    // Tool action (allows to control tools)
+    TA_Action            = 0x10000,
 
-	TA_Any = 0xffffffff
+    TA_Any = 0xffffffff
 };
 
 enum TOOL_MouseButtons
 {
-	MB_None         = 0x0,
-	MB_Left         = 0x1,
-	MB_Right        = 0x2,
-	MB_Middle       = 0x4,
-	MB_ButtonMask   = MB_Left | MB_Right | MB_Middle,
-	MB_Any          = 0xffffffff
+    MB_None         = 0x0,
+    MB_Left         = 0x1,
+    MB_Right        = 0x2,
+    MB_Middle       = 0x4,
+    MB_ButtonMask   = MB_Left | MB_Right | MB_Middle,
+    MB_Any          = 0xffffffff
 };
 
 enum TOOL_Modifiers
@@ -120,14 +120,14 @@ enum TOOL_ActionScope
 /// Defines when a context menu is opened.
 enum CONTEXT_MENU_TRIGGER
 {
-	CMENU_BUTTON = 0,   // On the right button
-	CMENU_NOW,          // Right now (after TOOL_INTERACTIVE::SetContextMenu)
-	CMENU_OFF           // Never
+    CMENU_BUTTON = 0,   // On the right button
+    CMENU_NOW,          // Right now (after TOOL_INTERACTIVE::SetContextMenu)
+    CMENU_OFF           // Never
 };
 
-/** 
+/**
  * Class TOOL_EVENT
- * 
+ *
  * Generic, UI-independent tool event.
  */
 class TOOL_EVENT
@@ -359,9 +359,9 @@ private:
 
 typedef boost::optional<TOOL_EVENT> OPT_TOOL_EVENT;
 
-/** 
+/**
  * Class TOOL_EVENT_LIST
- * 
+ *
  * A list of TOOL_EVENTs, with overloaded || operators allowing for
  * concatenating TOOL_EVENTs with little code.
  */
@@ -473,20 +473,20 @@ private:
 
 inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& a, const TOOL_EVENT& b )
 {
-	TOOL_EVENT_LIST l;
+    TOOL_EVENT_LIST l;
 
-	l.Add( a );
-	l.Add( b );
+    l.Add( a );
+    l.Add( b );
 
-	return l;
+    return l;
 }
 
 inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& a, const TOOL_EVENT_LIST& b )
 {
-	TOOL_EVENT_LIST l( b );
-	
-	l.Add( a );
-	return l;
+    TOOL_EVENT_LIST l( b );
+
+    l.Add( a );
+    return l;
 }
 
 #endif

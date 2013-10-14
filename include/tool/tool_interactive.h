@@ -39,23 +39,23 @@ public:
      * Constructor
      *
      * Creates a tool with given id & name. The name must be unique. */
-	TOOL_INTERACTIVE( TOOL_ID aId, const std::string& aName );
-	
-	/**
-	 * Constructor
-	 * 
-	 * Creates a tool with given name. The name must be unique. */
-	TOOL_INTERACTIVE( const std::string& aName );
-	virtual ~TOOL_INTERACTIVE();
+    TOOL_INTERACTIVE( TOOL_ID aId, const std::string& aName );
 
-	/**
-	 * Function Reset()
-	 * Brings the tool to a known, initial state. If the tool claimed anything from
-	 * the model or the view, it must release it when its reset.
-	 */
-	virtual void Reset() = 0;
+    /**
+     * Constructor
+     *
+     * Creates a tool with given name. The name must be unique. */
+    TOOL_INTERACTIVE( const std::string& aName );
+    virtual ~TOOL_INTERACTIVE();
 
-	/**
+    /**
+     * Function Reset()
+     * Brings the tool to a known, initial state. If the tool claimed anything from
+     * the model or the view, it must release it when its reset.
+     */
+    virtual void Reset() = 0;
+
+    /**
      * Function Init()
      * Init() is called once upon a registration of the tool.
      *
@@ -66,58 +66,58 @@ public:
         return true;
     }
 
-	/**
-	 * Function SetContextMenu()
-	 * 
-	 * Assigns a context menu and tells when it should be activated.
-	 * @param aMenu is the menu to be assigned.
-	 * @param aTrigger determines conditions upon which the context menu is activated.
-	 */
-	void SetContextMenu( CONTEXT_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger = CMENU_BUTTON );
+    /**
+     * Function SetContextMenu()
+     *
+     * Assigns a context menu and tells when it should be activated.
+     * @param aMenu is the menu to be assigned.
+     * @param aTrigger determines conditions upon which the context menu is activated.
+     */
+    void SetContextMenu( CONTEXT_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger = CMENU_BUTTON );
 
-	/**
-	 * Function Go()
-	 * 
-	 * Defines which state (aStateFunc) to go when a certain event arrives (aConditions).
-	 * No conditions means any event.
-	 */
-	template<class T>
-		void Go( int (T::*aStateFunc)( TOOL_EVENT& ),
-		         const TOOL_EVENT_LIST& aConditions = TOOL_EVENT( TC_Any, TA_Any ) );
+    /**
+     * Function Go()
+     *
+     * Defines which state (aStateFunc) to go when a certain event arrives (aConditions).
+     * No conditions means any event.
+     */
+    template<class T>
+        void Go( int (T::*aStateFunc)( TOOL_EVENT& ),
+                 const TOOL_EVENT_LIST& aConditions = TOOL_EVENT( TC_Any, TA_Any ) );
 
-	/**
-	 * Function Wait()
-	 * 
-	 * Suspends execution of the tool until an event specified in aEventList arrives.
-	 * No parameters means waiting for any event.
-	 */
-	OPT_TOOL_EVENT Wait( const TOOL_EVENT_LIST& aEventList = TOOL_EVENT ( TC_Any, TA_Any ) );
+    /**
+     * Function Wait()
+     *
+     * Suspends execution of the tool until an event specified in aEventList arrives.
+     * No parameters means waiting for any event.
+     */
+    OPT_TOOL_EVENT Wait( const TOOL_EVENT_LIST& aEventList = TOOL_EVENT ( TC_Any, TA_Any ) );
 
-	/** functions below are not yet implemented - their interface may change */
-	/*template<class Parameters, class ReturnValue>
-		bool InvokeTool( const std::string& aToolName, const Parameters& parameters,
-		                 ReturnValue& returnValue );
+    /** functions below are not yet implemented - their interface may change */
+    /*template<class Parameters, class ReturnValue>
+        bool InvokeTool( const std::string& aToolName, const Parameters& parameters,
+                         ReturnValue& returnValue );
 
-	template<class Parameters, class ReturnValue>
-		bool InvokeWindow( const std::string& aWindowName, const Parameters& parameters,
-		                   ReturnValue& returnValue );
+    template<class Parameters, class ReturnValue>
+        bool InvokeWindow( const std::string& aWindowName, const Parameters& parameters,
+                           ReturnValue& returnValue );
 
-	template<class T>
-		void Yield( const T& returnValue );*/
+    template<class T>
+        void Yield( const T& returnValue );*/
 
 protected:
-	/* helper functions for constructing events for Wait() and Go() with less typing */
-	const TOOL_EVENT evActivate( std::string aToolName = "" );
-	const TOOL_EVENT evCommand( int aCommandId = -1 );
-	const TOOL_EVENT evCommand( std::string aCommandStr = "" );
-	const TOOL_EVENT evMotion();
-	const TOOL_EVENT evClick( int aButton = MB_Any );
-	const TOOL_EVENT evDrag( int aButton = MB_Any );
-	const TOOL_EVENT evButtonUp( int aButton = MB_Any );
-	const TOOL_EVENT evButtonDown(int aButton = MB_Any );
+    /* helper functions for constructing events for Wait() and Go() with less typing */
+    const TOOL_EVENT evActivate( std::string aToolName = "" );
+    const TOOL_EVENT evCommand( int aCommandId = -1 );
+    const TOOL_EVENT evCommand( std::string aCommandStr = "" );
+    const TOOL_EVENT evMotion();
+    const TOOL_EVENT evClick( int aButton = MB_Any );
+    const TOOL_EVENT evDrag( int aButton = MB_Any );
+    const TOOL_EVENT evButtonUp( int aButton = MB_Any );
+    const TOOL_EVENT evButtonDown(int aButton = MB_Any );
 
 private:
-	void goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIST& aConditions );
+    void goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIST& aConditions );
 };
 
 // hide TOOL_MANAGER implementation
@@ -125,8 +125,8 @@ template<class T>
 void TOOL_INTERACTIVE::Go( int (T::*aStateFunc)( TOOL_EVENT& ),
                            const TOOL_EVENT_LIST& aConditions )
 {
-	TOOL_STATE_FUNC sptr( static_cast<T*>( this ), aStateFunc );
-	goInternal( sptr, aConditions );
+    TOOL_STATE_FUNC sptr( static_cast<T*>( this ), aStateFunc );
+    goInternal( sptr, aConditions );
 }
 
 #endif

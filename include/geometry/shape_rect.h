@@ -31,114 +31,114 @@
 #include <geometry/seg.h>
 
 class SHAPE_RECT : public SHAPE {
-	public:
-		/**
-		 * Constructor
-		 * Creates an empty (0-sized) rectangle
-		 */
-		SHAPE_RECT() :
-			SHAPE( SH_RECT ), m_w( 0 ), m_h( 0 ) {};
-			
-		/**
-		 * Constructor
-		 * Creates a rectangle defined by top-left corner (aX0, aY0), width aW and height aH.
-		 */
-		SHAPE_RECT( int aX0, int aY0, int aW, int aH ) :
-			SHAPE( SH_RECT ), m_p0( aX0, aY0 ), m_w( aW ), m_h( aH ) {};
+    public:
+        /**
+         * Constructor
+         * Creates an empty (0-sized) rectangle
+         */
+        SHAPE_RECT() :
+            SHAPE( SH_RECT ), m_w( 0 ), m_h( 0 ) {};
 
-		/**
-		 * Constructor
-		 * Creates a rectangle defined by top-left corner aP0, width aW and height aH.
-		 */
-		 SHAPE_RECT( const VECTOR2I &aP0, int aW, int aH ) :
-			SHAPE( SH_RECT ), m_p0( aP0 ), m_w( aW ), m_h( aH ) {};
+        /**
+         * Constructor
+         * Creates a rectangle defined by top-left corner (aX0, aY0), width aW and height aH.
+         */
+        SHAPE_RECT( int aX0, int aY0, int aW, int aH ) :
+            SHAPE( SH_RECT ), m_p0( aX0, aY0 ), m_w( aW ), m_h( aH ) {};
 
-		/// @copydoc SHAPE::BBox()
-		const BOX2I BBox(int aClearance = 0) const
-		{
-			BOX2I bbox( VECTOR2I( m_p0.x - aClearance, m_p0.y - aClearance ),
-						  VECTOR2I( m_w + 2 * aClearance, m_h + 2 * aClearance ) );
-			//printf("bb : %s\n",bbox.Format().c_str());
-			return bbox;
-		}
+        /**
+         * Constructor
+         * Creates a rectangle defined by top-left corner aP0, width aW and height aH.
+         */
+         SHAPE_RECT( const VECTOR2I &aP0, int aW, int aH ) :
+            SHAPE( SH_RECT ), m_p0( aP0 ), m_w( aW ), m_h( aH ) {};
 
-		/**
-		 * Function Diagonal()
-		 * 
-		 * Returns length of the diagonal of the rectangle
-		 * @return diagonal length
-		 */
-		int Diagonal() const
-		{
-			return VECTOR2I( m_w, m_h ).EuclideanNorm();
-		}
+        /// @copydoc SHAPE::BBox()
+        const BOX2I BBox(int aClearance = 0) const
+        {
+            BOX2I bbox( VECTOR2I( m_p0.x - aClearance, m_p0.y - aClearance ),
+                          VECTOR2I( m_w + 2 * aClearance, m_h + 2 * aClearance ) );
+            //printf("bb : %s\n",bbox.Format().c_str());
+            return bbox;
+        }
 
-		/// @copydoc SHAPE::Collide()
-		bool Collide( const SEG& aSeg, int aClearance = 0 ) const
-		{
-			//VECTOR2I pmin = VECTOR2I(std::min(aSeg.a.x, aSeg.b.x), std::min(aSeg.a.y, aSeg.b.y));
-			//VECTOR2I pmax = VECTOR2I(std::max(aSeg.a.x, aSeg.b.x), std::max(aSeg.a.y, aSeg.b.y));
-			//BOX2I r(pmin, VECTOR2I(pmax.x - pmin.x, pmax.y - pmin.y));
+        /**
+         * Function Diagonal()
+         *
+         * Returns length of the diagonal of the rectangle
+         * @return diagonal length
+         */
+        int Diagonal() const
+        {
+            return VECTOR2I( m_w, m_h ).EuclideanNorm();
+        }
 
-			//if (BBox(0).SquaredDistance(r) > aClearance * aClearance)
-			//	return false;
-	
-			if( BBox( 0 ).Contains( aSeg.a ) || BBox( 0 ).Contains( aSeg.b ) )
-				return true;
+        /// @copydoc SHAPE::Collide()
+        bool Collide( const SEG& aSeg, int aClearance = 0 ) const
+        {
+            //VECTOR2I pmin = VECTOR2I(std::min(aSeg.a.x, aSeg.b.x), std::min(aSeg.a.y, aSeg.b.y));
+            //VECTOR2I pmax = VECTOR2I(std::max(aSeg.a.x, aSeg.b.x), std::max(aSeg.a.y, aSeg.b.y));
+            //BOX2I r(pmin, VECTOR2I(pmax.x - pmin.x, pmax.y - pmin.y));
 
- 			VECTOR2I vts[] = { 	VECTOR2I( m_p0.x, m_p0.y ),
-								VECTOR2I( m_p0.x, m_p0.y + m_h ),
-								VECTOR2I( m_p0.x + m_w, m_p0.y + m_h ),
-								VECTOR2I( m_p0.x + m_w, m_p0.y ),
-								VECTOR2I( m_p0.x, m_p0.y ) };
+            //if (BBox(0).SquaredDistance(r) > aClearance * aClearance)
+            //    return false;
 
-			for( int i = 0; i < 4; i++ )
-			{
-				SEG s( vts[i], vts[i + 1], i );
-				if( s.Distance( aSeg ) <= aClearance )
-					return true;
-			}
-			
-			return false;
-		};
+            if( BBox( 0 ).Contains( aSeg.a ) || BBox( 0 ).Contains( aSeg.b ) )
+                return true;
 
-		/**
-		 * Function GetPosition()
-		 * 
-		 * @return top-left corner of the rectangle
-		 */
-		const VECTOR2I& GetPosition() const { return m_p0; }
-		
-		/**
-		 * Function GetSize()
-		 * 
-		 * @return size of the rectangle
-		 */
-		const VECTOR2I GetSize() const { return VECTOR2I( m_w, m_h ); }
+             VECTOR2I vts[] = {     VECTOR2I( m_p0.x, m_p0.y ),
+                                VECTOR2I( m_p0.x, m_p0.y + m_h ),
+                                VECTOR2I( m_p0.x + m_w, m_p0.y + m_h ),
+                                VECTOR2I( m_p0.x + m_w, m_p0.y ),
+                                VECTOR2I( m_p0.x, m_p0.y ) };
 
-		/**
-		 * Function GetWidth()
-		 * 
-		 * @return width of the rectangle
-		 */
- 		const int GetWidth() const { return m_w; }
+            for( int i = 0; i < 4; i++ )
+            {
+                SEG s( vts[i], vts[i + 1], i );
+                if( s.Distance( aSeg ) <= aClearance )
+                    return true;
+            }
 
-		/**
-		 * Function GetHeight()
-		 * 
-		 * @return height of the rectangle
-		 */
-		const int GetHeight() const { return m_h; }
+            return false;
+        };
 
-	private:
-		///> Top-left corner
-		VECTOR2I m_p0;
+        /**
+         * Function GetPosition()
+         *
+         * @return top-left corner of the rectangle
+         */
+        const VECTOR2I& GetPosition() const { return m_p0; }
 
-		///> Width
-		int m_w;
+        /**
+         * Function GetSize()
+         *
+         * @return size of the rectangle
+         */
+        const VECTOR2I GetSize() const { return VECTOR2I( m_w, m_h ); }
 
-		///> Height
-		int m_h;
-	};
+        /**
+         * Function GetWidth()
+         *
+         * @return width of the rectangle
+         */
+         const int GetWidth() const { return m_w; }
+
+        /**
+         * Function GetHeight()
+         *
+         * @return height of the rectangle
+         */
+        const int GetHeight() const { return m_h; }
+
+    private:
+        ///> Top-left corner
+        VECTOR2I m_p0;
+
+        ///> Width
+        int m_w;
+
+        ///> Height
+        int m_h;
+    };
 
 #endif // __SHAPE_RECT_H

@@ -87,7 +87,7 @@ public:
     {
         return m_view;
     }
-    
+
     /**
      * Function GetViewControls()
      * Returns a pointer to the VIEW_CONTROLS instance used in the panel.

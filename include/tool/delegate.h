@@ -28,38 +28,38 @@
 
 /**
  * class DELEGATE
- * A trivial delegate (pointer to member method of an object) pattern implementation. 
+ * A trivial delegate (pointer to member method of an object) pattern implementation.
  * Check delegate_example.cpp for a coding sample.
  */
 
 template<class ReturnType, class Arg>
-	class DELEGATE {
-	public:
-		typedef ReturnType (DELEGATE<ReturnType, Arg>::*MemberPointer)( Arg );
-		typedef ReturnType _ReturnType;
-		typedef Arg _ArgType;
+    class DELEGATE {
+    public:
+        typedef ReturnType (DELEGATE<ReturnType, Arg>::*MemberPointer)( Arg );
+        typedef ReturnType _ReturnType;
+        typedef Arg _ArgType;
 
-		DELEGATE ()
-		{
-		}
+        DELEGATE ()
+        {
+        }
 
-	template<class T>
-		DELEGATE ( T* object, ReturnType (T::*ptr)( Arg ) )
-		{
-			m_ptr = reinterpret_cast<MemberPointer>( ptr );
-			m_object = reinterpret_cast<void *>( object );
-		};
+    template<class T>
+        DELEGATE ( T* object, ReturnType (T::*ptr)( Arg ) )
+        {
+            m_ptr = reinterpret_cast<MemberPointer>( ptr );
+            m_object = reinterpret_cast<void *>( object );
+        };
 
-		
-		ReturnType operator()( Arg a ) const
-		{
-			DELEGATE<ReturnType, Arg> *casted = reinterpret_cast<DELEGATE<ReturnType, Arg>*>( m_object );
-			return (casted->*m_ptr)(a);
-		}
 
-private:		
-	MemberPointer m_ptr;
-	void *m_object;
+        ReturnType operator()( Arg a ) const
+        {
+            DELEGATE<ReturnType, Arg> *casted = reinterpret_cast<DELEGATE<ReturnType, Arg>*>( m_object );
+            return (casted->*m_ptr)(a);
+        }
+
+private:
+    MemberPointer m_ptr;
+    void *m_object;
 };
 
 /**
@@ -67,32 +67,32 @@ private:
  * Same as DELEGATE, but with no arguments.
  */
 template<class ReturnType>
-	class DELEGATE0 {
-	public:
-		typedef ReturnType ( DELEGATE0<ReturnType>::*MemberPointer )();
-		typedef ReturnType _ReturnType;
-		
-		DELEGATE0 ()
-		{
-		}
+    class DELEGATE0 {
+    public:
+        typedef ReturnType ( DELEGATE0<ReturnType>::*MemberPointer )();
+        typedef ReturnType _ReturnType;
 
-	template<class T>
-		DELEGATE0 ( T* object, ReturnType (T::*ptr)( ) )
-		{
-			m_ptr = reinterpret_cast<MemberPointer>( ptr );
-			m_object = reinterpret_cast<void*>( object );
-		};
+        DELEGATE0 ()
+        {
+        }
 
-		
-		ReturnType operator()( ) const
-		{
-			DELEGATE0<ReturnType>* casted = reinterpret_cast<DELEGATE0<ReturnType>*>( m_object );
-			return ( casted->*m_ptr )();
-		}
+    template<class T>
+        DELEGATE0 ( T* object, ReturnType (T::*ptr)( ) )
+        {
+            m_ptr = reinterpret_cast<MemberPointer>( ptr );
+            m_object = reinterpret_cast<void*>( object );
+        };
 
-private:		
-	MemberPointer m_ptr;
-	void *m_object;
+
+        ReturnType operator()( ) const
+        {
+            DELEGATE0<ReturnType>* casted = reinterpret_cast<DELEGATE0<ReturnType>*>( m_object );
+            return ( casted->*m_ptr )();
+        }
+
+private:
+    MemberPointer m_ptr;
+    void *m_object;
 };
 
 #endif

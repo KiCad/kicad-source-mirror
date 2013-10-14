@@ -63,7 +63,7 @@ void PNS_LINE_PLACER::ApplySettings( const PNS_ROUTING_SETTINGS& aSettings )
 }
 
 
-void PNS_LINE_PLACER::StartPlacement( const VECTOR2I& aStart, int aNet, 
+void PNS_LINE_PLACER::StartPlacement( const VECTOR2I& aStart, int aNet,
                                       int aWidth, int aLayer )
 {
     m_direction = m_initial_direction;
@@ -177,14 +177,14 @@ bool PNS_LINE_PLACER::handlePullback()
     DIRECTION_45 last_tail( tail.Segment( -1 ) );
     DIRECTION_45::AngleType angle = first_head.Angle( last_tail );
 
-    // case 1: we have a defined routing direction, and the currently computed 
+    // case 1: we have a defined routing direction, and the currently computed
     // head goes in different one.
     bool pullback_1 = false;    // (m_direction != DIRECTION_45::UNDEFINED && m_direction != first_head);
 
-    // case 2: regardless of the current routing direction, if the tail/head 
+    // case 2: regardless of the current routing direction, if the tail/head
     // extremities form an acute or right angle, reduce the tail by one segment
     // (and hope that further iterations) will result with a cleaner trace
-    bool pullback_2 = (angle == DIRECTION_45::ANG_RIGHT || 
+    bool pullback_2 = (angle == DIRECTION_45::ANG_RIGHT ||
                        angle == DIRECTION_45::ANG_ACUTE);
 
     if( pullback_1 || pullback_2 )
@@ -197,7 +197,7 @@ bool PNS_LINE_PLACER::handlePullback()
                 n % last_tail.Format().c_str() % first_head.Format().c_str() );
 
         // erase the last point in the tail, hoping that the next iteration will
-        // result with a head trace that starts with a segment following our 
+        // result with a head trace that starts with a segment following our
         // current direction.
         if( n < 2 )
             tail.Clear(); // don't leave a single-point tail
@@ -239,7 +239,7 @@ bool PNS_LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
         const SEG s = tail.CSegment( i );
         DIRECTION_45 dir( s );
 
-        // calculate a replacement route and check if it matches 
+        // calculate a replacement route and check if it matches
         // the direction of the segment to be replaced
         SHAPE_LINE_CHAIN replacement = dir.BuildInitialTrace( s.a, aEnd );
 
@@ -289,7 +289,7 @@ bool PNS_LINE_PLACER::mergeHead()
     SHAPE_LINE_CHAIN& head = m_head.GetLine();
     SHAPE_LINE_CHAIN& tail = m_tail.GetLine();
 
-    const int ForbiddenAngles = DIRECTION_45::ANG_ACUTE | 
+    const int ForbiddenAngles = DIRECTION_45::ANG_ACUTE |
                                 DIRECTION_45::ANG_HALF_FULL |
                                 DIRECTION_45::ANG_UNDEFINED;
 
@@ -366,7 +366,7 @@ bool PNS_LINE_PLACER::handleViaPlacement( PNS_LINE& aHead )
 
     if( v.PushoutForce( m_shove->GetCurrentNode(), lead, force, true, 20 ) )
     {
-        SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace( 
+        SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace(
                 aHead.GetCLine().CPoint( 0 ),
                 aHead.GetCLine().CPoint( -1 ) + force );
         aHead = PNS_LINE( aHead, line );
@@ -379,7 +379,7 @@ bool PNS_LINE_PLACER::handleViaPlacement( PNS_LINE& aHead )
 }
 
 
-bool PNS_LINE_PLACER::routeHead( const VECTOR2I& aP, PNS_LINE& aNewHead, 
+bool PNS_LINE_PLACER::routeHead( const VECTOR2I& aP, PNS_LINE& aNewHead,
                                  bool aCwWalkaround )
 {
     // STAGE 1: route a simple two-segment trace between m_p_start and aP...
@@ -543,7 +543,7 @@ bool PNS_LINE_PLACER::optimizeTailHeadTransition()
     PNS_LINE new_head( m_tail, opt_line );
 
     // and see if it could be made simpler by merging obtuse/collnear segments.
-    // If so, replace the (threshold) last tail points and the head with 
+    // If so, replace the (threshold) last tail points and the head with
     // the optimized line
 
     // if(PNS_OPTIMIZER::Optimize(&new_head, PNS_OPTIMIZER::MERGE_SEGMENTS))

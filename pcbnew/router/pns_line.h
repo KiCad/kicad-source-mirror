@@ -38,17 +38,17 @@ class PNS_VIA;
 /**
  * Class PNS_LINE
  *
- * Represents a track on a PCB, connecting two non-trivial joints (that is, 
- * vias, pads, junctions between multiple traces or two traces different widths 
- * and combinations of these). PNS_LINEs are NOT stored in the model (PNS_NODE). 
- * Instead, they are assembled on-the-fly, based on a via/pad/segment that 
+ * Represents a track on a PCB, connecting two non-trivial joints (that is,
+ * vias, pads, junctions between multiple traces or two traces different widths
+ * and combinations of these). PNS_LINEs are NOT stored in the model (PNS_NODE).
+ * Instead, they are assembled on-the-fly, based on a via/pad/segment that
  * belongs/begins them.
  *
- * PNS_LINEs can be either loose (consisting of segments that do not belong to 
- * any PNS_NODE) or owned (with segments taken from a PNS_NODE) - these are 
+ * PNS_LINEs can be either loose (consisting of segments that do not belong to
+ * any PNS_NODE) or owned (with segments taken from a PNS_NODE) - these are
  * returned by PNS_NODE::AssembleLine and friends.
  *
- * A PNS_LINE may have a PNS_VIA attached at its and - this is used by via 
+ * A PNS_LINE may have a PNS_VIA attached at its and - this is used by via
  * dragging/force propagation stuff.
  */
 
@@ -141,7 +141,7 @@ public:
         m_segmentRefs->push_back( aSeg );
     }
 
-    ///> Returns a list of segments from the owning node that constitute this 
+    ///> Returns a list of segments from the owning node that constitute this
     ///> line (or NULL if the line is loose)
     LinkedSegments* GetLinkedSegments()
     {
@@ -157,7 +157,7 @@ public:
                 aSeg ) != m_segmentRefs->end();
     }
 
-    ///> Returns this line, but clipped to the nearest obstacle 
+    ///> Returns this line, but clipped to the nearest obstacle
     ///> along, to avoid collision.
     const PNS_LINE ClipToNearestObstacle( PNS_NODE* aNode ) const;
 
@@ -168,7 +168,7 @@ public:
     ///> Returns the number of corners of angles specified by mask aAngles.
     int CountCorners( int aAngles );
 
-    ///> Calculates a line thightly wrapping a convex hull 
+    ///> Calculates a line thightly wrapping a convex hull
     ///> of an obstacle object (aObstacle).
     ///> aPrePath = path from origin to the obstacle
     ///> aWalkaroundPath = path around the obstacle

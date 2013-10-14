@@ -66,7 +66,7 @@ public:
     BOX2( const Vec& aPos, const Vec& aSize ) :
         m_Pos( aPos ),
         m_Size( aSize )
-    { 
+    {
         Normalize();
     }
 
@@ -420,7 +420,7 @@ public:
         ecoord_type y2 = m_Pos.y + m_Size.y;
         ecoord_type xdiff = std::max( aP.x < m_Pos.x ? m_Pos.x - aP.x : m_Pos.x - x2, (ecoord_type)0 );
         ecoord_type ydiff = std::max( aP.y < m_Pos.y ? m_Pos.y - aP.y : m_Pos.y - y2, (ecoord_type)0 );
-        return xdiff * xdiff + ydiff * ydiff;    
+        return xdiff * xdiff + ydiff * ydiff;
     }
 
     ecoord_type Distance( const Vec& aP ) const

@@ -32,38 +32,38 @@ template<typename T> int sgn( T val ) {
 
 bool SEG::PointCloserThan( const VECTOR2I& aP, int dist ) const
 {
-	VECTOR2I   	  d = b - a;
-	ecoord dist_sq = (ecoord) dist * dist;
+    VECTOR2I         d = b - a;
+    ecoord dist_sq = (ecoord) dist * dist;
 
- 	SEG::ecoord l_squared = d.Dot( d );
+    SEG::ecoord l_squared = d.Dot( d );
     SEG::ecoord t = d.Dot( aP - a );
 
     if( t <= 0 || !l_squared )
-    	return ( aP - a ).SquaredEuclideanNorm() < dist_sq;
-    else if( t >= l_squared ) 
-    	return ( aP - b ).SquaredEuclideanNorm() < dist_sq;
+        return ( aP - a ).SquaredEuclideanNorm() < dist_sq;
+    else if( t >= l_squared )
+        return ( aP - b ).SquaredEuclideanNorm() < dist_sq;
 
-	int dxdy = abs( d.x ) - abs( d.y );
+    int dxdy = abs( d.x ) - abs( d.y );
 
     if( ( dxdy >= -1 && dxdy <= 1 ) || abs( d.x ) <= 1 || abs( d.y ) <= 1 )
     {
-    	int ca = -sgn( d.y );
-    	int cb = sgn( d.x );
-    	int cc = -ca * a.x - cb * a.y;
-    	
-		ecoord num = ca * aP.x + cb * aP.y + cc;
-		num *= num;
+        int ca = -sgn( d.y );
+        int cb = sgn( d.x );
+        int cc = -ca * a.x - cb * a.y;
 
-		if( ca && cb )
-			num >>= 1;
+        ecoord num = ca * aP.x + cb * aP.y + cc;
+        num *= num;
 
-		if( num > ( dist_sq + 100 ) )
-			return false;
-		else if( num < ( dist_sq - 100 ) )
-			return true;
+        if( ca && cb )
+            num >>= 1;
+
+        if( num > ( dist_sq + 100 ) )
+            return false;
+        else if( num < ( dist_sq - 100 ) )
+            return true;
     }
 
-	VECTOR2I nearest;    
+    VECTOR2I nearest;
     nearest.x = a.x + rescale( t, (ecoord)d.x, l_squared );
     nearest.y = a.y + rescale( t, (ecoord)d.y, l_squared );
 
@@ -71,7 +71,7 @@ bool SEG::PointCloserThan( const VECTOR2I& aP, int dist ) const
 }
 
 
-SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const 
+SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 {
     // fixme: rather inefficient....
     if( Intersect( aSeg ) )
@@ -91,62 +91,62 @@ SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 
     return m;
 }
-	
+
 
 OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines ) const
 {
-	const VECTOR2I e ( b - a );
-	const VECTOR2I f ( aSeg.b - aSeg.a );
-	const VECTOR2I ac ( aSeg.a - a );
-	
-	ecoord d = f.Cross( e );
-	ecoord p = f.Cross( ac );
-	ecoord q = e.Cross( ac );
-	
-	if( d == 0 )
-		return OPT_VECTOR2I();
-	if ( !aLines && d > 0 && ( q < 0 || q > d || p < 0 || p > d ) )
-		return OPT_VECTOR2I();
-	if ( !aLines && d < 0 && ( q < d || p < d || p > 0 || q > 0 ) )
-		return OPT_VECTOR2I();
-	if ( !aLines && aIgnoreEndpoints && ( q == 0 || q == d ) && ( p == 0 || p == d ) )
-		return OPT_VECTOR2I();
-	
-	 VECTOR2I ip( aSeg.a.x + rescale( q, (ecoord)f.x, d ),
-	              aSeg.a.y + rescale( q, (ecoord)f.y, d ) );
+    const VECTOR2I e ( b - a );
+    const VECTOR2I f ( aSeg.b - aSeg.a );
+    const VECTOR2I ac ( aSeg.a - a );
 
-	 return ip;
+    ecoord d = f.Cross( e );
+    ecoord p = f.Cross( ac );
+    ecoord q = e.Cross( ac );
+
+    if( d == 0 )
+        return OPT_VECTOR2I();
+    if ( !aLines && d > 0 && ( q < 0 || q > d || p < 0 || p > d ) )
+        return OPT_VECTOR2I();
+    if ( !aLines && d < 0 && ( q < d || p < d || p > 0 || q > 0 ) )
+        return OPT_VECTOR2I();
+    if ( !aLines && aIgnoreEndpoints && ( q == 0 || q == d ) && ( p == 0 || p == d ) )
+        return OPT_VECTOR2I();
+
+     VECTOR2I ip( aSeg.a.x + rescale( q, (ecoord)f.x, d ),
+                  aSeg.a.y + rescale( q, (ecoord)f.y, d ) );
+
+     return ip;
 }
 
 
 bool SEG::ccw( const VECTOR2I& a, const VECTOR2I& b, const VECTOR2I& c ) const
 {
-	return (ecoord)( c.y - a.y ) * ( b.x - a.x ) > (ecoord)( b.y - a.y ) * ( c.x - a.x );
+    return (ecoord)( c.y - a.y ) * ( b.x - a.x ) > (ecoord)( b.y - a.y ) * ( c.x - a.x );
 }
 
 
-bool SEG::Collide( const SEG& aSeg, int aClearance ) const 
+bool SEG::Collide( const SEG& aSeg, int aClearance ) const
 {
-	// check for intersection 
-	// fixme: move to a method
-	if( ccw( a, aSeg.a, aSeg.b ) != ccw( b, aSeg.a, aSeg.b ) &&
-	        ccw( a, b, aSeg.a ) != ccw( a, b, aSeg.b ) )
-		return true;
+    // check for intersection
+    // fixme: move to a method
+    if( ccw( a, aSeg.a, aSeg.b ) != ccw( b, aSeg.a, aSeg.b ) &&
+            ccw( a, b, aSeg.a ) != ccw( a, b, aSeg.b ) )
+        return true;
 
 #define CHK(_seg, _pt) \
-	if( (_seg).PointCloserThan (_pt, aClearance ) ) return true;
-	
-	CHK( *this, aSeg.a );
-	CHK( *this, aSeg.b );
-	CHK( aSeg, a );
-	CHK( aSeg, b );
+    if( (_seg).PointCloserThan (_pt, aClearance ) ) return true;
+
+    CHK( *this, aSeg.a );
+    CHK( *this, aSeg.b );
+    CHK( aSeg, a );
+    CHK( aSeg, b );
 #undef CHK
 
-	return false;
+    return false;
 }
 
 
 bool SEG::Contains( const VECTOR2I& aP ) const
 {
-	return PointCloserThan( aP, 1 );
+    return PointCloserThan( aP, 1 );
 }

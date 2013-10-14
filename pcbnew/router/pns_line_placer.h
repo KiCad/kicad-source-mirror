@@ -39,7 +39,7 @@ class PNS_ROUTER_BASE;
 /**
  * Class PNS_LINE_PLACER
  *
- * Interactively routes a single track. Runs shove and walkaround 
+ * Interactively routes a single track. Runs shove and walkaround
  * algorithms when needed.
  */
 
@@ -63,9 +63,9 @@ public:
     /**
      * Function Route()
      *
-     * Re-routes the current track to point aP. Returns true, when routing has 
-     * completed successfully (i.e. the trace end has reached point aP), and false 
-     * if the trace was stuck somewhere on the way. May call routeStep() 
+     * Re-routes the current track to point aP. Returns true, when routing has
+     * completed successfully (i.e. the trace end has reached point aP), and false
+     * if the trace was stuck somewhere on the way. May call routeStep()
      * repetitively due to mouse smoothing.
      * @param aP ending point of current route.
      * @return true, if the routing is complete.
@@ -80,7 +80,7 @@ public:
     ///> Returns the "head" of the line being placed, that is the volatile part
     ///> that has not been settled yet
     const PNS_LINE& GetHead() const { return m_head; }
-    ///> Returns the "tail" of the line being placed the part that has been 
+    ///> Returns the "tail" of the line being placed the part that has been
     ///> fixed already (follow mouse mode only)
     const PNS_LINE& GetTail() const { return m_tail; }
 
@@ -99,9 +99,9 @@ public:
             return m_p_start;
     }
 
-    ///> Returns all items in the world that have been affected by the routing 
+    ///> Returns all items in the world that have been affected by the routing
     ///> operation. Used to update data structures of the host application
-    void GetUpdatedItems( PNS_NODE::ItemVector& aRemoved, 
+    void GetUpdatedItems( PNS_NODE::ItemVector& aRemoved,
                           PNS_NODE::ItemVector& aAdded );
 
     ///> Toggles the current posture (straight/diagonal) of the trace head.
@@ -114,30 +114,30 @@ private:
     static const double m_shoveLengthThreshold = 1.7;
 
     bool handleViaPlacement( PNS_LINE& aHead );
-    
+
     /**
      * Function checkObtusity()
      *
-     * Helper that checks if segments a and b form an obtuse angle 
+     * Helper that checks if segments a and b form an obtuse angle
      * (in 45-degree regime).
      * @return true, if angle (a, b) is obtuse
      */
     bool checkObtusity( const SEG& a, const SEG& b ) const;
-    
+
     /**
      * Function handleSelfIntersections()
      *
-     * Checks if the head of the track intersects its tail. If so, cuts the 
+     * Checks if the head of the track intersects its tail. If so, cuts the
      * tail up to the intersecting segment and fixes the head direction to match
      * the last segment before the cut.
      * @return true if the line has been changed.
      */
     bool handleSelfIntersections();
-    
+
     /**
      * Function handlePullback()
      *
-     * Deals with pull-back: reduces the tail if head trace is moved backwards 
+     * Deals with pull-back: reduces the tail if head trace is moved backwards
      * wrs to the current tail direction.
      * @return true if the line has been changed.
      */
@@ -146,7 +146,7 @@ private:
     /**
      * Function mergeHead()
      *
-     * Moves "estabished" segments from the head to the tail if certain 
+     * Moves "estabished" segments from the head to the tail if certain
      * conditions are met.
      * @return true, if the line has been changed.
      */
@@ -155,20 +155,20 @@ private:
     /**
      * Function reduceTail()
      *
-     * Attempts to reduce the numer of segments in the tail by trying to replace a 
-     * certain number of latest tail segments with a direct trace leading to aEnd 
+     * Attempts to reduce the numer of segments in the tail by trying to replace a
+     * certain number of latest tail segments with a direct trace leading to aEnd
      * that does not collide with anything.
      * @param aEnd: current routing destination point.
      * @return true if the line has been changed.
      */
     bool reduceTail( const VECTOR2I& aEnd );
-    
+
     void fixHeadPosture();
-    
+
     /**
      * Function optimizeTailHeadTransition()
      *
-     * Tries to reduce the corner count of the most recent part of tail/head by 
+     * Tries to reduce the corner count of the most recent part of tail/head by
      * merging obtuse/collinear segments.
      * @return true, if the line has been changed.
      */
@@ -177,12 +177,12 @@ private:
     /**
      * Function routeHead()
      *
-     * Computes the head trace between the current start point (m_p_start) and 
-     * point aP, starting with direction defined in m_direction. The trace walks 
-     * around all colliding solid or non-movable items. Movable segments are 
+     * Computes the head trace between the current start point (m_p_start) and
+     * point aP, starting with direction defined in m_direction. The trace walks
+     * around all colliding solid or non-movable items. Movable segments are
      * ignored, as they'll be handled later by the shove algorithm.
      */
-    bool routeHead( const VECTOR2I& aP, PNS_LINE& aNewHead, 
+    bool routeHead( const VECTOR2I& aP, PNS_LINE& aNewHead,
                     bool aCwWalkaround = true );
 
     /**
@@ -197,7 +197,7 @@ private:
     ///> routing mode (walkaround, shove, etc.)
     PNS_MODE m_mode;
 
-    ///> follow mouse trail by attaching new segments to the head 
+    ///> follow mouse trail by attaching new segments to the head
     ///> as the cursor moves
     bool m_follow_mouse;
 

@@ -276,11 +276,11 @@ class SHAPE_INDEX
         {
             BOX2I box = aShape->BBox();
             box.Inflate( aMinDistance );
-         
-			int min[2] = { box.GetX(), 		box.GetY() };
-            int max[2] = { box.GetRight(), 	box.GetBottom() };
 
-			return this->m_tree->Search( min, max, aVisitor );
+            int min[2] = { box.GetX(),         box.GetY() };
+            int max[2] = { box.GetRight(),     box.GetBottom() };
+
+            return this->m_tree->Search( min, max, aVisitor );
         }
 
         /**

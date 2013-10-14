@@ -52,50 +52,50 @@ using namespace std;
 struct TOOL_MANAGER::TOOL_STATE
 {
     /// The tool itself
-	TOOL_BASE* theTool;
-	
-	/// Is the tool active (pending execution) or disabled at the moment
-	bool idle;
+    TOOL_BASE* theTool;
 
-	/// Flag defining if the tool is waiting for any event (i.e. if it
-	/// issued a Wait() call).
-	bool pendingWait;
+    /// Is the tool active (pending execution) or disabled at the moment
+    bool idle;
 
-	/// Is there a context menu being displayed
-	bool pendingContextMenu;
+    /// Flag defining if the tool is waiting for any event (i.e. if it
+    /// issued a Wait() call).
+    bool pendingWait;
 
-	/// Context menu currently used by the tool
-	CONTEXT_MENU* contextMenu;
+    /// Is there a context menu being displayed
+    bool pendingContextMenu;
 
-	/// Defines when the context menu is opened
-	CONTEXT_MENU_TRIGGER contextMenuTrigger;
+    /// Context menu currently used by the tool
+    CONTEXT_MENU* contextMenu;
 
-	/// Tool execution context
-	COROUTINE<int, TOOL_EVENT&>* cofunc;
-	
-	/// The event that triggered the execution/wakeup of the tool after Wait() call
-	TOOL_EVENT wakeupEvent;
+    /// Defines when the context menu is opened
+    CONTEXT_MENU_TRIGGER contextMenuTrigger;
 
-	/// List of events the tool is currently waiting for
-	TOOL_EVENT_LIST waitEvents;
+    /// Tool execution context
+    COROUTINE<int, TOOL_EVENT&>* cofunc;
 
-	/// List of possible transitions (ie. association of events and state handlers that are executed
-	/// upon the event reception
-	std::vector<TRANSITION> transitions;
+    /// The event that triggered the execution/wakeup of the tool after Wait() call
+    TOOL_EVENT wakeupEvent;
 
-	bool operator==( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
+    /// List of events the tool is currently waiting for
+    TOOL_EVENT_LIST waitEvents;
+
+    /// List of possible transitions (ie. association of events and state handlers that are executed
+    /// upon the event reception
+    std::vector<TRANSITION> transitions;
+
+    bool operator==( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
     {
-	    return ( aRhs.theTool == this->theTool );
+        return ( aRhs.theTool == this->theTool );
     }
 
-	bool operator!=( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
+    bool operator!=( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
     {
-	    return ( aRhs.theTool != this->theTool );
+        return ( aRhs.theTool != this->theTool );
     }
 };
 
 
-TOOL_MANAGER::TOOL_MANAGER() : 
+TOOL_MANAGER::TOOL_MANAGER() :
     m_model( NULL ), m_view( NULL )
 {
     m_actionMgr = new ACTION_MANAGER( this );
@@ -119,37 +119,37 @@ TOOL_MANAGER::~TOOL_MANAGER()
 
 void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 {
-	TOOL_STATE* st = new TOOL_STATE;
+    TOOL_STATE* st = new TOOL_STATE;
 
-	st->theTool = aTool;
-	st->idle = true;
-	st->pendingWait = false;
-	st->pendingContextMenu = false;
-	st->cofunc = NULL;
-	st->contextMenuTrigger = CMENU_OFF;
+    st->theTool = aTool;
+    st->idle = true;
+    st->pendingWait = false;
+    st->pendingContextMenu = false;
+    st->cofunc = NULL;
+    st->contextMenuTrigger = CMENU_OFF;
 
-	m_toolState[aTool] = st;
-	m_toolNameIndex[aTool->GetName()] = st;
-	m_toolIdIndex[aTool->GetId()] = st;
-	
-	aTool->m_toolMgr = this;
-	
-	if( aTool->GetType() == TOOL_Interactive )
-	{
-		bool initState = static_cast<TOOL_INTERACTIVE*>( aTool )->Init();
-		if( !initState )
-		{
-		    wxLogError( wxT( "Initialization of the %s tool failed" ), aTool->GetName().c_str() );
+    m_toolState[aTool] = st;
+    m_toolNameIndex[aTool->GetName()] = st;
+    m_toolIdIndex[aTool->GetId()] = st;
 
-		    // Unregister the tool
-		    m_toolState.erase( aTool );
-		    m_toolNameIndex.erase( aTool->GetName() );
-		    m_toolIdIndex.erase( aTool->GetId() );
+    aTool->m_toolMgr = this;
 
-		    delete st;
-		    delete aTool;
-		}
-	}
+    if( aTool->GetType() == TOOL_Interactive )
+    {
+        bool initState = static_cast<TOOL_INTERACTIVE*>( aTool )->Init();
+        if( !initState )
+        {
+            wxLogError( wxT( "Initialization of the %s tool failed" ), aTool->GetName().c_str() );
+
+            // Unregister the tool
+            m_toolState.erase( aTool );
+            m_toolNameIndex.erase( aTool->GetName() );
+            m_toolIdIndex.erase( aTool->GetId() );
+
+            delete st;
+            delete aTool;
+        }
+    }
 }
 
 
@@ -268,89 +268,89 @@ TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
 void TOOL_MANAGER::ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandler,
                                       const TOOL_EVENT_LIST& aConditions )
 {
-	TOOL_STATE* st = m_toolState[aTool];
-	st->transitions.push_back( TRANSITION( aConditions, aHandler ) );
+    TOOL_STATE* st = m_toolState[aTool];
+    st->transitions.push_back( TRANSITION( aConditions, aHandler ) );
 }
 
 
 optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
                                                  const TOOL_EVENT_LIST& aConditions )
 {
-	TOOL_STATE* st = m_toolState[aTool];
-	
-	// indicate to the manager that we are going to sleep and we shall be
-	// woken up when an event matching aConditions arrive
-	st->pendingWait = true;
-	st->waitEvents = aConditions;
+    TOOL_STATE* st = m_toolState[aTool];
 
-	// switch context back to event dispatcher loop
-	st->cofunc->Yield();
+    // indicate to the manager that we are going to sleep and we shall be
+    // woken up when an event matching aConditions arrive
+    st->pendingWait = true;
+    st->waitEvents = aConditions;
 
-	return st->wakeupEvent;
+    // switch context back to event dispatcher loop
+    st->cofunc->Yield();
+
+    return st->wakeupEvent;
 }
 
 
 void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 {
-	// iterate over all registered tools
+    // iterate over all registered tools
     BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
     {
         TOOL_STATE* st = m_toolIdIndex[toolId];
 
-		// the tool state handler is waiting for events (i.e. called Wait() method)
-		if( st->pendingWait )
-		{
-			if( st->waitEvents.Matches( aEvent ) )
-			{
-			    // By default, already processed events are not passed further
-			    m_passEvent = false;
+        // the tool state handler is waiting for events (i.e. called Wait() method)
+        if( st->pendingWait )
+        {
+            if( st->waitEvents.Matches( aEvent ) )
+            {
+                // By default, already processed events are not passed further
+                m_passEvent = false;
 
-				// got matching event? clear wait list and wake up the coroutine
-				st->wakeupEvent = aEvent;
-				st->pendingWait = false;
-				st->waitEvents.clear();
-				if( st->cofunc && !st->cofunc->Resume() )
-				    finishTool( st );           // The couroutine has finished
+                // got matching event? clear wait list and wake up the coroutine
+                st->wakeupEvent = aEvent;
+                st->pendingWait = false;
+                st->waitEvents.clear();
+                if( st->cofunc && !st->cofunc->Resume() )
+                    finishTool( st );           // The couroutine has finished
 
-				// If the tool did not request to propagate
-				// the event to other tools, we should stop it now
-				if( !m_passEvent )
-				    break;
-			}
-		}
+                // If the tool did not request to propagate
+                // the event to other tools, we should stop it now
+                if( !m_passEvent )
+                    break;
+            }
+        }
     }
 
     BOOST_FOREACH( TOOL_STATE* st, m_toolState | boost::adaptors::map_values )
     {
         // the tool scheduled next state(s) by calling Go()
-		if( !st->pendingWait )
-		{
-			// no state handler in progress - check if there are any transitions (defined by
-			// Go() method that match the event.
-			if( st->transitions.size() )
-			{
-				BOOST_FOREACH( TRANSITION tr, st->transitions )
-				{
-					if( tr.first.Matches( aEvent ) )
-					{
-						st->transitions.clear();
+        if( !st->pendingWait )
+        {
+            // no state handler in progress - check if there are any transitions (defined by
+            // Go() method that match the event.
+            if( st->transitions.size() )
+            {
+                BOOST_FOREACH( TRANSITION tr, st->transitions )
+                {
+                    if( tr.first.Matches( aEvent ) )
+                    {
+                        st->transitions.clear();
 
-						// no tool context allocated yet? Create one.
-						if( !st->cofunc )
-							st->cofunc = new COROUTINE<int, TOOL_EVENT&>( tr.second );
-						else 
-							st->cofunc->SetEntry( tr.second );
-							
-						// got match? Run the handler.
-						st->cofunc->Call( aEvent );
-						
-						if( !st->cofunc->Running() )
-						    finishTool( st );   // The couroutine has finished immediately?
-					}
-				}
-			}
-		}
-	}	
+                        // no tool context allocated yet? Create one.
+                        if( !st->cofunc )
+                            st->cofunc = new COROUTINE<int, TOOL_EVENT&>( tr.second );
+                        else
+                            st->cofunc->SetEntry( tr.second );
+
+                        // got match? Run the handler.
+                        st->cofunc->Call( aEvent );
+
+                        if( !st->cofunc->Running() )
+                            finishTool( st );   // The couroutine has finished immediately?
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -411,90 +411,90 @@ void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
 bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
 {
-//	wxLogDebug( "event: %s", aEvent.Format().c_str() );
+//    wxLogDebug( "event: %s", aEvent.Format().c_str() );
 
     // Early dispatch of events destined for the TOOL_MANAGER
     if( !dispatchStandardEvents( aEvent ) )
         return false;
 
-	dispatchInternal( aEvent );
+    dispatchInternal( aEvent );
 
-	// popup menu handling
+    // popup menu handling
     BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
     {
         TOOL_STATE* st = m_toolIdIndex[toolId];
 
         // the tool requested a context menu. The menu is activated on RMB click (CMENU_BUTTON mode)
         // or immediately (CMENU_NOW) mode. The latter is used for clarification lists.
-		if( st->contextMenuTrigger != CMENU_OFF )
-		{
-			if( st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( MB_Right ) )
-				break;
+        if( st->contextMenuTrigger != CMENU_OFF )
+        {
+            if( st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( MB_Right ) )
+                break;
 
-			st->pendingWait = true;
-			st->waitEvents = TOOL_EVENT( TC_Any, TA_Any );
+            st->pendingWait = true;
+            st->waitEvents = TOOL_EVENT( TC_Any, TA_Any );
 
-			if( st->contextMenuTrigger == CMENU_NOW )
-				st->contextMenuTrigger = CMENU_OFF;
+            if( st->contextMenuTrigger == CMENU_NOW )
+                st->contextMenuTrigger = CMENU_OFF;
 
             boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *st->contextMenu ) );
             GetEditFrame()->PopupMenu( menu->GetMenu() );
 
             //
-			TOOL_EVENT evt( TC_Command, TA_ContextMenuChoice );
-			dispatchInternal( evt );
+            TOOL_EVENT evt( TC_Command, TA_ContextMenuChoice );
+            dispatchInternal( evt );
 
-			break;
-		}
-	}
+            break;
+        }
+    }
 
-	if( m_view->IsDirty() )
-	{
-		PCB_EDIT_FRAME* f = static_cast<PCB_EDIT_FRAME*>( GetEditFrame() );
-		f->GetGalCanvas()->Refresh(); // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
-	}
+    if( m_view->IsDirty() )
+    {
+        PCB_EDIT_FRAME* f = static_cast<PCB_EDIT_FRAME*>( GetEditFrame() );
+        f->GetGalCanvas()->Refresh(); // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
+    }
 
-	return false;
+    return false;
 }
 
 
 void TOOL_MANAGER::ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
                                         CONTEXT_MENU_TRIGGER aTrigger )
 {
-	TOOL_STATE* st = m_toolState[aTool];
+    TOOL_STATE* st = m_toolState[aTool];
 
-	st->contextMenu = aMenu;
-	st->contextMenuTrigger = aTrigger;
-	
-	// the tool wants the menu immediately? Preempt it and do so :)
-	if( aTrigger == CMENU_NOW )
-		st->cofunc->Yield();	
+    st->contextMenu = aMenu;
+    st->contextMenuTrigger = aTrigger;
+
+    // the tool wants the menu immediately? Preempt it and do so :)
+    if( aTrigger == CMENU_NOW )
+        st->cofunc->Yield();
 }
 
 
 TOOL_ID TOOL_MANAGER::MakeToolId( const std::string& aToolName )
 {
-	static int currentId;
-	return currentId++;
+    static int currentId;
+    return currentId++;
 }
 
 
 void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KiGfx::VIEW* aView,
                                    KiGfx::VIEW_CONTROLS* aViewControls, wxWindow* aFrame )
 {
-	m_model = aModel;
-	m_view = aView;
-	m_viewControls = aViewControls;
-	m_editFrame = aFrame;
+    m_model = aModel;
+    m_view = aView;
+    m_viewControls = aViewControls;
+    m_editFrame = aFrame;
 
-	// Reset state of the registered tools
-	BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
-	{
-	    TOOL_BASE* tool = m_toolIdIndex[toolId]->theTool;
+    // Reset state of the registered tools
+    BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
+    {
+        TOOL_BASE* tool = m_toolIdIndex[toolId]->theTool;
 
-	    if( tool->GetType() == TOOL_Interactive )
-	        static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
-	}
+        if( tool->GetType() == TOOL_Interactive )
+            static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
+    }
 }
 
 

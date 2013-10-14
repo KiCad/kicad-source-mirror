@@ -131,7 +131,7 @@ public:
      * Saturates the color to a given factor (in HSV model)
      */
     COLOR4D& Saturate( double aFactor );
-    
+
     /**
      * Function Brightened
      * Returns a color that is brighter by a given factor, without modifying object.

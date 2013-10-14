@@ -31,14 +31,14 @@
 CONTEXT_MENU::CONTEXT_MENU() :
     m_titleSet( false ), m_handler( this ), m_tool( NULL )
 {
-	m_menu.Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CMEventHandler::onEvent ),
-	                 NULL, &m_handler );
-	m_menu.Connect( wxEVT_COMMAND_MENU_SELECTED, wxEventHandler( CMEventHandler::onEvent ),
-	                 NULL, &m_handler );
+    m_menu.Connect( wxEVT_MENU_HIGHLIGHT, wxEventHandler( CMEventHandler::onEvent ),
+                     NULL, &m_handler );
+    m_menu.Connect( wxEVT_COMMAND_MENU_SELECTED, wxEventHandler( CMEventHandler::onEvent ),
+                     NULL, &m_handler );
 
-	// Workaround for the case when mouse cursor never reaches menu (it hangs up tools using menu)
-	wxMenuEvent menuEvent( wxEVT_MENU_HIGHLIGHT, -1, &m_menu );
-	m_menu.AddPendingEvent( menuEvent );
+    // Workaround for the case when mouse cursor never reaches menu (it hangs up tools using menu)
+    wxMenuEvent menuEvent( wxEVT_MENU_HIGHLIGHT, -1, &m_menu );
+    m_menu.AddPendingEvent( menuEvent );
 }
 
 
@@ -72,16 +72,16 @@ void CONTEXT_MENU::SetTitle( const wxString& aTitle )
     // TODO handle an empty string (remove title and separator)
 
     // Unfortunately wxMenu::SetTitle() does nothing..
-	if( m_titleSet )
-	{
+    if( m_titleSet )
+    {
         m_menu.FindItemByPosition( 0 )->SetItemLabel( aTitle );
-	}
-	else
-	{
+    }
+    else
+    {
         m_menu.InsertSeparator( 0 );
         m_menu.Insert( 0, new wxMenuItem( &m_menu, -1, aTitle, wxEmptyString, wxITEM_NORMAL ) );
         m_titleSet = true;
-	}
+    }
 }
 
 
@@ -92,7 +92,7 @@ void CONTEXT_MENU::Add( const wxString& aLabel, int aId )
         wxLogWarning( wxT( "Adding more than one menu entry with the same ID may result in"
                 "undefined behaviour" ) );
 #endif
-	m_menu.Append( new wxMenuItem( &m_menu, aId, aLabel, wxEmptyString, wxITEM_NORMAL ) );
+    m_menu.Append( new wxMenuItem( &m_menu, aId, aLabel, wxEmptyString, wxITEM_NORMAL ) );
 }
 
 
@@ -104,7 +104,7 @@ void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 
     if( aAction.HasHotKey() )
         menuEntry = wxString( ( aAction.GetMenuItem() + '\t' + getHotKeyDescription( aAction ) ).c_str(),
-        				      wxConvUTF8 );
+                              wxConvUTF8 );
     else
         menuEntry = wxString( aAction.GetMenuItem().c_str(), wxConvUTF8 );
 
@@ -117,13 +117,13 @@ void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 
 void CONTEXT_MENU::Clear()
 {
-	m_titleSet = false;
+    m_titleSet = false;
 
-	// Remove all the entries from context menu
-	for( unsigned i = 0; i < m_menu.GetMenuItemCount(); ++i )
-	    m_menu.Destroy( m_menu.FindItemByPosition( 0 ) );
+    // Remove all the entries from context menu
+    for( unsigned i = 0; i < m_menu.GetMenuItemCount(); ++i )
+        m_menu.Destroy( m_menu.FindItemByPosition( 0 ) );
 
-	m_toolActions.clear();
+    m_toolActions.clear();
 }
 
 
