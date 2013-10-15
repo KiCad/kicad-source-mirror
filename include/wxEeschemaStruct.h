@@ -1135,17 +1135,6 @@ public:
      */
     void InitBlockPasteInfos();
 
-    /* Function HandleBlockEndByPopUp
-     * performs an end block command from context menu.
-     *
-     * This can be called only after HandleBlockEnd and the current command is block
-     * move.  Execute a command other than block move from the current block move
-     * selected items list.  Due to (minor) problems in undo/redo or/and display block,
-     * a mirror/rotate command is immediately executed and multiple block commands are
-     * not allowed (multiple commands are tricky to undo/redo in one time)
-     */
-    void HandleBlockEndByPopUp( int Command, wxDC* DC );
-
     /**
      * Function ReturnBlockCommand
      * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
@@ -1172,10 +1161,12 @@ public:
      * depending on the current block command, this command is executed
      * or parameters are initialized to prepare a call to HandleBlockPlace
      * in GetScreen()->m_BlockLocate
+     *
+     * @param aDC is a device context to draw on.
      * @return false if no item selected, or command finished,
      * true if some items found and HandleBlockPlace must be called later
      */
-    virtual bool HandleBlockEnd( wxDC* DC );
+    virtual bool HandleBlockEnd( wxDC* aDC );
 
     /**
      * Function RepeatDrawItem
