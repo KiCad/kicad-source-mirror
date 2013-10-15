@@ -111,10 +111,10 @@ protected:
     const TOOL_EVENT evCommand( int aCommandId = -1 );
     const TOOL_EVENT evCommand( std::string aCommandStr = "" );
     const TOOL_EVENT evMotion();
-    const TOOL_EVENT evClick( int aButton = MB_ANY );
-    const TOOL_EVENT evDrag( int aButton = MB_ANY );
-    const TOOL_EVENT evButtonUp( int aButton = MB_ANY );
-    const TOOL_EVENT evButtonDown(int aButton = MB_ANY );
+    const TOOL_EVENT evClick( int aButton = BUT_ANY );
+    const TOOL_EVENT evDrag( int aButton = BUT_ANY );
+    const TOOL_EVENT evButtonUp( int aButton = BUT_ANY );
+    const TOOL_EVENT evButtonDown(int aButton = BUT_ANY );
 
 private:
     void goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIST& aConditions );

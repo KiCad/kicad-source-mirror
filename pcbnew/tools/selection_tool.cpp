@@ -103,11 +103,11 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         }
 
         // single click? Select single object
-        if( evt->IsClick( MB_LEFT ) )
+        if( evt->IsClick( BUT_LEFT ) )
             selectSingle( evt->Position() );
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
-        if( evt->IsDrag( MB_LEFT ) )
+        if( evt->IsDrag( BUT_LEFT ) )
         {
             if( m_selection.Empty() || m_additive )
             {
@@ -299,7 +299,7 @@ bool SELECTION_TOOL::selectMultiple()
             break;
         }
 
-        if( evt->IsDrag( MB_LEFT ) )
+        if( evt->IsDrag( BUT_LEFT ) )
         {
             if( !m_additive )
                 clearSelection();
@@ -311,7 +311,7 @@ bool SELECTION_TOOL::selectMultiple()
             m_selArea->ViewUpdate( VIEW_ITEM::GEOMETRY );
         }
 
-        if( evt->IsMouseUp( MB_LEFT ) )
+        if( evt->IsMouseUp( BUT_LEFT ) )
         {
             // End drawing the selection box
             m_selArea->ViewSetVisible( false );

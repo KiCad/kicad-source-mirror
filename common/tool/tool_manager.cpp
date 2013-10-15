@@ -433,7 +433,7 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
         // or immediately (CMENU_NOW) mode. The latter is used for clarification lists.
         if( st->contextMenuTrigger != CMENU_OFF )
         {
-            if( st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( MB_RIGHT ) )
+            if( st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( BUT_RIGHT ) )
                 break;
 
             st->pendingWait = true;

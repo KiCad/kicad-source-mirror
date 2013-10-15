@@ -118,7 +118,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsMotion() || evt->IsDrag( MB_LEFT ) )
+        else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
             if( dragging )
             {
@@ -143,7 +143,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
             selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
             dragPosition = evt->Position();
         }
-        else if( evt->IsMouseUp( MB_LEFT ) || evt->IsClick( MB_LEFT ) )
+        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
             break; // Finish
     }
 
