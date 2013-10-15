@@ -28,7 +28,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_staticText121->Wrap( -1 );
 	bSizer27->Add( m_staticText121, 0, wxTOP, 5 );
 	
-	wxString m_plotFormatOptChoices[] = { _("Gerber"), _("Postscript"), _("SVG"), _("DXF"), _("HPGL") };
+	wxString m_plotFormatOptChoices[] = { _("Gerber"), _("Postscript"), _("SVG"), _("DXF"), _("HPGL"), _("PDF") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 0 );
 	m_plotFormatOpt->SetSelection( 0 );
@@ -186,7 +186,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_PlotOptionsSizer->Add( sbOptionsSizer, 0, wxALL|wxEXPAND, 3 );
 	
 	wxStaticBoxSizer* sbSizerSoldMaskLayerOpt;
-	sbSizerSoldMaskLayerOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Solder mask current settings:") ), wxVERTICAL );
+	sbSizerSoldMaskLayerOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Current solder mask settings:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerSoldMaskOpts;
 	fgSizerSoldMaskOpts = new wxFlexGridSizer( 2, 2, 0, 0 );

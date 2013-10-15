@@ -219,7 +219,7 @@
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
-                                                <property name="choices">&quot;Gerber&quot; &quot;Postscript&quot; &quot;SVG&quot; &quot;DXF&quot; &quot;HPGL&quot;</property>
+                                                <property name="choices">&quot;Gerber&quot; &quot;Postscript&quot; &quot;SVG&quot; &quot;DXF&quot; &quot;HPGL&quot; &quot;PDF&quot;</property>
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
@@ -2318,7 +2318,7 @@
                                             <property name="proportion">1</property>
                                             <object class="wxStaticBoxSizer" expanded="1">
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Solder mask current settings:</property>
+                                                <property name="label">Current solder mask settings:</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="name">sbSizerSoldMaskLayerOpt</property>
                                                 <property name="orient">wxVERTICAL</property>
@@ -2676,11 +2676,11 @@
                                                 </object>
                                             </object>
                                         </object>
-                                        <object class="sizeritem" expanded="0">
+                                        <object class="sizeritem" expanded="1">
                                             <property name="border">3</property>
                                             <property name="flag">wxALL|wxEXPAND</property>
                                             <property name="proportion">0</property>
-                                            <object class="wxStaticBoxSizer" expanded="0">
+                                            <object class="wxStaticBoxSizer" expanded="1">
                                                 <property name="id">wxID_ANY</property>
                                                 <property name="label">Gerber Options</property>
                                                 <property name="minimum_size"></property>
