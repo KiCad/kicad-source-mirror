@@ -31,6 +31,7 @@
 #include <appl_wxstruct.h>
 #include <common.h>
 #include <class_drawpanel.h>
+#include <class_drawpanel_gal.h>
 #include <confirm.h>
 #include <macros.h>
 #include <bitmaps.h>
@@ -121,7 +122,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* parent,
     EDA_PANEINFO mesg;
     mesg.MessageToolbarPane();
 
-
+    m_galCanvas->Hide();
 
     m_auimgr.AddPane( m_mainToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top(). Row( 0 ) );
