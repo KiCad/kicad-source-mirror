@@ -98,10 +98,10 @@ const std::string TOOL_EVENT::Format() const
 
     const FlagString buttons[] =
     {
-        { MB_NONE,   "none"   },
-        { MB_LEFT,   "left"   },
-        { MB_RIGHT,  "right"  },
-        { MB_MIDDLE, "middle" },
+        { BUT_NONE,   "none"   },
+        { BUT_LEFT,   "left"   },
+        { BUT_RIGHT,  "right"  },
+        { BUT_MIDDLE, "middle" },
         { 0,         ""       }
     };
 

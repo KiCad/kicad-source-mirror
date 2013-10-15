@@ -93,12 +93,12 @@ enum TOOL_ACTIONS
 
 enum TOOL_MOUSE_BUTTONS
 {
-    MB_NONE         = 0x0,
-    MB_LEFT         = 0x1,
-    MB_RIGHT        = 0x2,
-    MB_MIDDLE       = 0x4,
-    MB_BUTTON_MASK  = MB_LEFT | MB_RIGHT | MB_MIDDLE,
-    MB_ANY          = 0xffffffff
+    BUT_NONE         = 0x0,
+    BUT_LEFT         = 0x1,
+    BUT_RIGHT        = 0x2,
+    BUT_MIDDLE       = 0x4,
+    BUT_BUTTON_MASK  = BUT_LEFT | BUT_RIGHT | BUT_MIDDLE,
+    BUT_ANY          = 0xffffffff
 };
 
 enum TOOL_MODIFIERS
@@ -158,7 +158,7 @@ public:
     {
         if( aCategory == TC_MOUSE )
         {
-            m_mouseButtons = aExtraParam & MB_BUTTON_MASK;
+            m_mouseButtons = aExtraParam & BUT_BUTTON_MASK;
         }
         else if( aCategory == TC_KEYBOARD )
         {
@@ -227,18 +227,18 @@ public:
         return m_mouseButtons;
     }
 
-    bool IsClick( int aButtonMask = MB_ANY ) const
+    bool IsClick( int aButtonMask = BUT_ANY ) const
     {
         return ( m_actions == TA_MOUSE_CLICK )
                && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
     }
 
-    bool IsDrag( int aButtonMask = MB_ANY ) const
+    bool IsDrag( int aButtonMask = BUT_ANY ) const
     {
         return ( m_actions == TA_MOUSE_DRAG ) && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
     }
 
-    bool IsMouseUp( int aButtonMask = MB_ANY ) const
+    bool IsMouseUp( int aButtonMask = BUT_ANY ) const
     {
         return ( m_actions == TA_MOUSE_UP ) && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
     }

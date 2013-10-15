@@ -323,7 +323,7 @@ void ROUTER_TOOL::startRouting()
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
-        else if( evt->IsClick( MB_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) )
         {
             updateEndItem( *evt );
 
@@ -396,7 +396,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
             break; // Finish
         else if( evt->IsMotion() )
             updateStartItem( *evt );
-        else if( evt->IsClick( MB_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) )
         {
             updateStartItem( *evt );
             startRouting();

@@ -89,9 +89,9 @@ struct TOOL_DISPATCHER::BUTTON_STATE
 TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditFrame ) :
     m_toolMgr( aToolMgr ), m_editFrame( aEditFrame )
 {
-    m_buttons.push_back( new BUTTON_STATE( MB_LEFT, wxEVT_LEFT_DOWN, wxEVT_LEFT_UP ) );
-    m_buttons.push_back( new BUTTON_STATE( MB_RIGHT, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_UP ) );
-    m_buttons.push_back( new BUTTON_STATE( MB_MIDDLE, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_UP ) );
+    m_buttons.push_back( new BUTTON_STATE( BUT_LEFT, wxEVT_LEFT_DOWN, wxEVT_LEFT_UP ) );
+    m_buttons.push_back( new BUTTON_STATE( BUT_RIGHT, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_UP ) );
+    m_buttons.push_back( new BUTTON_STATE( BUT_MIDDLE, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_UP ) );
 
     ResetState();
 }
