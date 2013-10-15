@@ -42,7 +42,7 @@ if( BUILD_GITHUB_PLUGIN )
     # Chosen libraries are based on AVHTTP requirements, and possibly
     # unit_test_framework for its own worth.
     set( BOOST_LIBS_BUILT
-        context
+        #context
         #coroutine
         date_time
         #exception
