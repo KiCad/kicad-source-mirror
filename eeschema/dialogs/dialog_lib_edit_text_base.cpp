@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 11 2012)
+// C++ code generated with wxFormBuilder (version Apr 30 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -30,6 +30,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	bTextValueBoxSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TextValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextValue->SetMaxLength( 0 ); 
 	m_TextValue->SetMinSize( wxSize( 200,-1 ) );
 	
 	bTextValueBoxSizer->Add( m_TextValue, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -45,6 +46,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	bTextSizeSizer->Add( m_TextSizeText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TextSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextSize->SetMaxLength( 0 ); 
 	bTextSizeSizer->Add( m_TextSize, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
@@ -57,7 +59,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	bBottomtBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sOptionsSizer;
-	sOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _(" Text Options : ") ), wxVERTICAL );
+	sOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Text Options:") ), wxVERTICAL );
 	
 	m_Orient = new wxCheckBox( this, wxID_ANY, _("Vertical"), wxDefaultPosition, wxDefaultSize, 0 );
 	sOptionsSizer->Add( m_Orient, 0, wxALL, 5 );
@@ -75,28 +77,28 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	sOptionsSizer->Add( m_Invisible, 0, wxALL, 5 );
 	
 	
-	bBottomtBoxSizer->Add( sOptionsSizer, 0, wxALL|wxEXPAND, 5 );
+	bBottomtBoxSizer->Add( sOptionsSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxString m_TextShapeOptChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
 	int m_TextShapeOptNChoices = sizeof( m_TextShapeOptChoices ) / sizeof( wxString );
 	m_TextShapeOpt = new wxRadioBox( this, wxID_ANY, _("Text Shape:"), wxDefaultPosition, wxDefaultSize, m_TextShapeOptNChoices, m_TextShapeOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextShapeOpt->SetSelection( 0 );
-	bBottomtBoxSizer->Add( m_TextShapeOpt, 0, wxALL|wxEXPAND, 5 );
+	bBottomtBoxSizer->Add( m_TextShapeOpt, 1, wxALL|wxEXPAND, 5 );
 	
 	wxString m_TextHJustificationOptChoices[] = { _("Align left"), _("Align center"), _("Align right") };
 	int m_TextHJustificationOptNChoices = sizeof( m_TextHJustificationOptChoices ) / sizeof( wxString );
-	m_TextHJustificationOpt = new wxRadioBox( this, wxID_ANY, _("Horiz. Justify"), wxDefaultPosition, wxDefaultSize, m_TextHJustificationOptNChoices, m_TextHJustificationOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextHJustificationOpt = new wxRadioBox( this, wxID_ANY, _("Horiz. Justify:"), wxDefaultPosition, wxDefaultSize, m_TextHJustificationOptNChoices, m_TextHJustificationOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextHJustificationOpt->SetSelection( 1 );
-	bBottomtBoxSizer->Add( m_TextHJustificationOpt, 0, wxALL|wxEXPAND, 5 );
+	bBottomtBoxSizer->Add( m_TextHJustificationOpt, 1, wxALL|wxEXPAND, 5 );
 	
 	wxString m_TextVJustificationOptChoices[] = { _("Align bottom"), _("Align center"), _("Align top") };
 	int m_TextVJustificationOptNChoices = sizeof( m_TextVJustificationOptChoices ) / sizeof( wxString );
-	m_TextVJustificationOpt = new wxRadioBox( this, wxID_ANY, _("Vert. Justify"), wxDefaultPosition, wxDefaultSize, m_TextVJustificationOptNChoices, m_TextVJustificationOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextVJustificationOpt = new wxRadioBox( this, wxID_ANY, _("Vert. Justify:"), wxDefaultPosition, wxDefaultSize, m_TextVJustificationOptNChoices, m_TextVJustificationOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextVJustificationOpt->SetSelection( 1 );
-	bBottomtBoxSizer->Add( m_TextVJustificationOpt, 0, wxALL|wxEXPAND, 5 );
+	bBottomtBoxSizer->Add( m_TextVJustificationOpt, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bPropertiesSizer->Add( bBottomtBoxSizer, 1, wxEXPAND, 5 );
+	bPropertiesSizer->Add( bBottomtBoxSizer, 1, wxALIGN_CENTER|wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
