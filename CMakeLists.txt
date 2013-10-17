@@ -65,6 +65,13 @@ endif()
 set( DOWNLOAD_DIR ${PROJECT_SOURCE_DIR}/.downloads-by-cmake
     CACHE PATH "Location of KiCad downloads, suggested is a dir common to all builds, i.e. global." )
 
+if( UNIX )
+    set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specifig KiCad config files" )
+elseif( MINGW )
+    set( KICAD_USER_CONFIG_DIR $ENV{%APPDATA%} CACHE PATH "Location of user specifig KiCad config files" )
+endif()
+mark_as_advanced( KICAD_USER_CONFIG_DIR )
+
 
 #================================================
 # Set flags for GCC.
@@ -415,20 +422,26 @@ endif()
 
 
 #================================================
-# make uninstall rules
+# "make uninstall" rules
 #================================================
 configure_file(
-  "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-  IMMEDIATE @ONLY )
+    "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY )
 
 add_custom_target( uninstall
-  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" )
+    "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" )
 
 
 #================================================
-# Installation parameters
+# Installation
 #================================================
+
+add_custom_target( install_user_configuration_files
+    "${CMAKE_COMMAND}" -E copy "${PROJECT_SOURCE_DIR}/template/fp-lib-table" ${KICAD_USER_CONFIG_DIR}/
+    COMMENT "Install template fp-lib-table into your home directory."
+    )
+
 install( FILES INSTALL.txt
     DESTINATION ${KICAD_DOCS}
     COMPONENT resources )
@@ -442,15 +455,16 @@ install( FILES resources/freeroute.jnlp
 ###
 if( UNIX )
     install( DIRECTORY scripts
-            DESTINATION ${KICAD_DOCS}
-            COMPONENT resources
-            PATTERN ".svn" EXCLUDE )
+        DESTINATION ${KICAD_DOCS}
+        COMPONENT resources
+        )
 endif()
 
 ###
 # FreeDesktop .desktop and MIME resources
 ###
 if( UNIX )
+
     # Set paths
     set( UNIX_MIME_DIR resources/linux/mime )
     set( UNIX_MIMELNK_FILES ${UNIX_MIME_DIR}/mimelnk )
@@ -462,25 +476,46 @@ if( UNIX )
     install( DIRECTORY ${UNIX_MIMELNK_FILES}
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share
         COMPONENT resources
-        PATTERN ".svn" EXCLUDE )
+        )
 
     # Install Mime directory
     install( DIRECTORY ${UNIX_ICONS_FILES}
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share
         COMPONENT resources
-        PATTERN ".svn" EXCLUDE )
+        )
 
     # Install Icons
     install( DIRECTORY ${UNIX_MIME_FILES}
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share
         COMPONENT resources
-        PATTERN ".svn" EXCLUDE )
+        )
 
     # Install Applications directory (.desktop files)
     install( DIRECTORY ${UNIX_APPLICATIONS_FILES}
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share
         COMPONENT resources
-        PATTERN ".svn" EXCLUDE )
+        )
 endif()
 
-include( CTest )
+#include( CTest )
+
+
+if( UNIX AND NOT APPLE )
+
+    # Create a *.deb file:
+    set( CPACK_GENERATOR "DEB" )
+    set( CPACK_DEBIAN_PACKAGE_MAINTAINER "http://launchpad.net/kicad" )
+
+    set( CPACK_PACKAGE_VERSION_MAJOR 1 )
+    set( CPACK_PACKAGE_VERSION_MINOR 0 )
+    set( CPACK_PACKAGE_VERSION_PATCH 0 )
+    #set( CPACK_PACKAGE_CONTACT Firstname Lastname <email@company.com> )
+    set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "KiCad built by CMake build system." )
+
+    # Tell debian CPack about all files which are configuration files
+    add_conffiles()         # clear file
+    add_conffiles( ${KICAD_USER_CONFIG_DIR}/fp-lib-table )  # append to it
+
+    include( CPack )
+
+endif()
