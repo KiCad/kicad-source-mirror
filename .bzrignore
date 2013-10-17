@@ -3,13 +3,16 @@ boost_root
 common/netlist_keywords.*
 common/netlist_lexer.h
 common/pcb_plot_params_lexer.h
-common/page_layout_reader_keywords.cpp
+common/page_layout/page_layout_reader_keywords.cpp
 common/fp_lib_table_keywords.*
 include/fp_lib_table_lexer.h
 include/netlist_lexer.h
 include/page_layout_reader_lexer.h
 eeschema/cmp_library_lexer.h
 eeschema/cmp_library_keywords.*
+eeschema/dialogs/dialog_bom_cfg_keywords.cpp
+eeschema/dialogs/dialog_bom_cfg_lexer.h
+eeschema/dialogs/dialog_bom_help_html.h
 eeschema/template_fieldnames_keywords.*
 eeschema/template_fieldnames_lexer.h
 pcbnew/dialogs/dialog_freeroute_exchange_help_html.h
