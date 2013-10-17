@@ -95,10 +95,16 @@ install_or_update()
 
     echo "step 7) installing KiCad program files..."
     sudo make install
-    echo " kicad installed."
+    echo " kicad program files installed."
 
 
-    echo "step 8) installing libraries..."
+    echo "step 8) as non-root, install user configuration files..."
+    # install ~/fp-lib-table [and friends]
+    make install_user_configuration_files
+    echo " kicad user-configuration files installed."
+
+
+    echo "step 9) installing libraries..."
     cd ../../kicad-lib.bzr
     rm -rf build && mkdir build && cd build
     cmake ../
@@ -106,7 +112,7 @@ install_or_update()
     echo " kicad-lib installed."
 
 
-    echo "step 9) installing documentation..."
+    echo "step 10) installing documentation..."
     cd ../../kicad-doc.bzr
     rm -rf build && mkdir build && cd build
     cmake ../
