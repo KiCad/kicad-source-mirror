@@ -91,24 +91,27 @@ protected:
     wxLocale* m_Locale;
 
     /// The current language setting.
-    int m_LanguageId;
+    int                 m_LanguageId;
 
     /// The file name of the the program selected for browsing pdf files.
-    wxString m_PdfBrowser;
+    wxString            m_PdfBrowser;
+    wxPathList          m_searchPaths;
+    wxFileHistory       m_fileHistory;
+    wxString            m_HelpFileName;
+    wxString            m_EditorName;
+    wxString            m_CurrentOptionFile;
+    wxString            m_CurrentOptionFileDateAndTime;
+    wxPoint             m_HelpPos;
+    wxSize              m_HelpSize;
+    wxString            m_Title;
+    wxPathList          m_libSearchPaths;
+    wxFileName          m_projectFileName;
+    wxString            m_LastVisitedLibPath;
 
-    wxPathList               m_searchPaths;
-    wxFileHistory            m_fileHistory;
-    wxString                 m_HelpFileName;
-    wxString                 m_EditorName;
-    wxString                 m_CurrentOptionFile;
-    wxString                 m_CurrentOptionFileDateAndTime;
-    wxPoint                  m_HelpPos;
-    wxSize                   m_HelpSize;
-    wxHtmlHelpController*    m_HtmlCtrl;
-    wxString                 m_Title;
-    wxPathList               m_libSearchPaths;
-    wxFileName               m_projectFileName;
-    wxString                 m_LastVisitedLibPath;
+    /// last visited module library in the module editor or viewer
+    wxString            m_module_nickname;
+
+    wxHtmlHelpController*   m_HtmlCtrl;
 
 public:
     EDA_APP();
@@ -125,17 +128,15 @@ public:
 
     void SetHtmlHelpController( wxHtmlHelpController* aController );
 
-    wxString GetHelpFileName() const { return m_HelpFileName; }
-
-    void SetHelpFileName( const wxString& aFileName ) { m_HelpFileName = aFileName; }
+    wxString GetHelpFileName() const                    { return m_HelpFileName; }
+    void SetHelpFileName( const wxString& aFileName )   { m_HelpFileName = aFileName; }
 
     wxConfig* GetSettings() { return m_settings; }
 
     wxConfig* GetCommonSettings() { return m_commonSettings; }
 
-    wxString GetEditorName() const { return m_EditorName; }
-
-    void SetEditorName( const wxString& aFileName ) { m_EditorName = aFileName; }
+    wxString GetEditorName() const                      { return m_EditorName; }
+    void SetEditorName( const wxString& aFileName )     { m_EditorName = aFileName; }
 
     wxString GetCurrentOptionFile() const { return m_CurrentOptionFile; }
 
@@ -349,8 +350,8 @@ public:
      */
     wxString& GetEditorName();
 
-    const wxString& GetTitle() { return m_Title; }
-    void SetTitle( const wxString& title ) { m_Title = title; }
+    const wxString& GetTitle()                      { return m_Title; }
+    void SetTitle( const wxString& aTitle )         { m_Title = aTitle; }
 
     wxPathList& GetLibraryPathList() { return m_libSearchPaths; }
     wxString FindLibraryPath( const wxString& fileName );
@@ -431,6 +432,9 @@ public:
      * @return false if the KISYSMOD path is not valid.
      */
     bool SetFootprintLibTablePath();
+
+    const wxString& GetModuleLibraryNickname()                  { return m_module_nickname; }
+    void SetModuleLibraryNickname( const wxString& aNickname )  { m_module_nickname = aNickname; }
 };
 
 
