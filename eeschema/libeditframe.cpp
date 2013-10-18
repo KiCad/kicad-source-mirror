@@ -351,7 +351,6 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         case wxID_NO:
             break;
 
-        case wxID_OK:
         case wxID_YES:
             if ( this->SaveActiveLibrary( false ) )
                 break;
