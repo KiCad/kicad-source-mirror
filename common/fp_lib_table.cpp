@@ -780,8 +780,7 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARS
 
         // Attempt to copy the default global file table from the KiCad template folder to
         // the users home configuration path.
-        wxString fileName( wxT( "fp_global_table" ) );
-        fileName = wxGetApp().FindLibraryPath( fileName );
+        wxString fileName = wxGetApp().FindLibraryPath( defaultFileName );
 
         // The fallback is to create an empty global footprint table for the user to populate.
         if( fileName.IsEmpty() || !::wxCopyFile( fileName, fn.GetFullPath(), false ) )
