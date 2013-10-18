@@ -236,6 +236,21 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
             }
         }
             break;
+
+        case WORKSHEET_DATAITEM::WS_BITMAP:
+
+            ((WORKSHEET_DATAITEM_BITMAP*)wsItem)->SetPixelScaleFactor();
+
+            for( int jj = 0; jj < wsItem->m_RepeatCount; jj++ )
+            {
+                if( jj && ! wsItem->IsInsidePage( jj ) )
+                    continue;
+
+                Append( new WS_DRAW_ITEM_BITMAP( wsItem,
+                    wsItem->GetStartPosUi( jj ) ) );
+            }
+            break;
+
         }
     }
 }

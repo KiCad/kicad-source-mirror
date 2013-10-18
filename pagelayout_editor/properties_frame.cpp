@@ -249,13 +249,18 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
         msg.Printf( wxT("%.3f"), item->m_Orient );
         m_textCtrlRotation->SetValue( msg );
     }
+    else if(aItem->GetType() == WORKSHEET_DATAITEM::WS_BITMAP )
+    {
+        m_staticTextInfoThickness->Show( false );
+    }
     else
     {
         m_staticTextInfoThickness->Show( true );
     }
 
     if( aItem->GetType() == WORKSHEET_DATAITEM::WS_SEGMENT ||
-        aItem->GetType() == WORKSHEET_DATAITEM::WS_RECT )
+        aItem->GetType() == WORKSHEET_DATAITEM::WS_RECT ||
+        aItem->GetType() == WORKSHEET_DATAITEM::WS_BITMAP )
     {
         m_SizerRotation->Show( false );
         m_SizerEndPosition->Show(true);

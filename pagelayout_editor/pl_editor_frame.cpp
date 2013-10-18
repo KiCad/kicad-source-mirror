@@ -521,6 +521,7 @@ void PL_EDITOR_FRAME::RebuildDesignTree()
     int lineId = 0;
     int textId = 0;
     int polyId = 0;
+    int bitmapId = 0;
 
     for( unsigned ii = 0; ii < pglayout.GetCount(); ii++ )
     {
@@ -544,6 +545,11 @@ void PL_EDITOR_FRAME::RebuildDesignTree()
 
             case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
                 item->m_Name = wxString::Format( wxT("poly%d:%s"), ++polyId,
+                                                 GetChars(item->GetClassName()) );
+                break;
+
+            case WORKSHEET_DATAITEM::WS_BITMAP:
+                item->m_Name = wxString::Format( wxT("bm%d:%s"), ++bitmapId,
                                                  GetChars(item->GetClassName()) );
                 break;
         }
@@ -575,6 +581,35 @@ WORKSHEET_DATAITEM * PL_EDITOR_FRAME::AddPageLayoutItem( int aType, int aIdx )
 
         case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
             item = new WORKSHEET_DATAITEM_POLYPOLYGON();
+            break;
+
+        case WORKSHEET_DATAITEM::WS_BITMAP:
+        {
+            wxFileDialog fileDlg( this, _( "Choose Image" ), wxEmptyString, wxEmptyString,
+                                  _( "Image Files " ) + wxImage::GetImageExtWildcard(),
+                                  wxFD_OPEN );
+
+            if( fileDlg.ShowModal() != wxID_OK )
+                return NULL;
+
+            wxString fullFilename = fileDlg.GetPath();
+
+            if( !wxFileExists( fullFilename ) )
+            {
+                wxMessageBox( _( "Couldn't load image from <%s>" ), GetChars( fullFilename ) );
+                break;
+            }
+            BITMAP_BASE* image = new BITMAP_BASE();
+
+            if( !image->ReadImageFile( fullFilename ) )
+            {
+                wxMessageBox( _( "Couldn't load image from <%s>" ),
+                                 GetChars( fullFilename ) );
+                delete image;
+                break;
+            }
+            item = new WORKSHEET_DATAITEM_BITMAP( image );
+        }
             break;
     }
 

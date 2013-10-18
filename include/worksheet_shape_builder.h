@@ -9,6 +9,8 @@
 
 #include <vector2d.h>
 #include <eda_text.h>
+#include <eda_text.h>
+#include <class_bitmap_base.h>
 
 class WORKSHEET_DATAITEM;        // Forward declaration
 class TITLE_BLOCK;
@@ -22,12 +24,14 @@ class TITLE_BLOCK;
  * rect
  * polygons (for logos)
  * graphic texts
+ * bitmaps, also for logos, but they cannot be plot by SVG, GERBER
+ * and HPGL plotters (In this case, only the bounding box is plotted)
  */
 class WS_DRAW_ITEM_BASE     // This basic class, not directly usable.
 {
 public:
     enum WS_DRAW_TYPE {
-        wsg_line, wsg_rect, wsg_poly, wsg_text
+        wsg_line, wsg_rect, wsg_poly, wsg_text, wsg_bitmap
     };
     int m_Flags;                    // temporary flgs used in page layout editor
                                     // to locate the item;
@@ -242,6 +246,43 @@ public:
      * return true if the point aPosition is on the starting point of this item.
      */
     virtual bool HitTestStartPoint( const wxPoint& aPosition);
+};
+
+// This class draws a bitmap.
+class WS_DRAW_ITEM_BITMAP : public WS_DRAW_ITEM_BASE
+{
+    wxPoint m_pos;                  // position of reference point
+
+public:
+    WS_DRAW_ITEM_BITMAP( WORKSHEET_DATAITEM* aParent, wxPoint aPos )
+        :WS_DRAW_ITEM_BASE( aParent, wsg_bitmap, UNSPECIFIED_COLOR )
+    {
+        m_pos = aPos;
+    }
+
+    WS_DRAW_ITEM_BITMAP()
+        :WS_DRAW_ITEM_BASE( NULL, wsg_bitmap, UNSPECIFIED_COLOR )
+    {
+    }
+
+    ~WS_DRAW_ITEM_BITMAP() {}
+
+    /** The function to draw a WS_DRAW_ITEM_BITMAP
+     */
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC );
+
+    /**
+     * Virtual function
+     * return true if the point aPosition is on bitmap
+     */
+    virtual bool HitTest( const wxPoint& aPosition);
+
+    /**
+     * return true if the point aPosition is on the reference point of this item.
+     */
+    virtual bool HitTestStartPoint( const wxPoint& aPosition);
+
+    const wxPoint& GetPosition() { return m_pos; }
 };
 
 /*

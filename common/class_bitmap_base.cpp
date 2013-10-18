@@ -121,6 +121,35 @@ bool BITMAP_BASE::SaveData( FILE* aFile ) const
     return true;
 }
 
+void BITMAP_BASE::SaveData( wxArrayString& aPngStrings ) const
+{
+    if( m_image )
+    {
+        wxMemoryOutputStream stream;
+        m_image->SaveFile( stream, wxBITMAP_TYPE_PNG );
+
+        // Write binary data in hexadecimal form (ASCII)
+        wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
+        char*           begin  = (char*) buffer->GetBufferStart();
+        wxString line;
+        for( int ii = 0; begin <= buffer->GetBufferEnd(); begin++, ii++ )
+        {
+            if( ii >= 32 )
+            {
+                ii = 0;
+                aPngStrings.Add( line );
+                line.Empty();
+            }
+
+            line << wxString::Format( wxT("%2.2X "), *begin & 0xFF );
+        }
+
+        // Add last line:
+        if( !line.IsEmpty() )
+            aPngStrings.Add( line );
+    }
+}
+
 
 bool BITMAP_BASE::LoadData( LINE_READER& aLine, wxString& aErrorMsg )
 {
@@ -130,9 +159,13 @@ bool BITMAP_BASE::LoadData( LINE_READER& aLine, wxString& aErrorMsg )
     while( true )
     {
         if( !aLine.ReadLine() )
+        {
+            aErrorMsg = wxT("Unexpected end of data");
             return false;
+        }
 
         line = aLine.Line();
+
         if( strnicmp( line, "EndData", 4 ) == 0 )
         {
             // all the PNG date is read.

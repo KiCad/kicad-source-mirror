@@ -492,7 +492,7 @@ void EDA_3D_CANVAS::InitGL()
         glEnable( GL_DEPTH_TEST );      // Enable z-buferring
         glEnable( GL_ALPHA_TEST );
         glEnable( GL_LINE_SMOOTH );
-        glEnable(GL_POLYGON_SMOOTH);
+//        glEnable(GL_POLYGON_SMOOTH);  // creates issues with some graphic cards
         glShadeModel( GL_SMOOTH );
         glEnable( GL_COLOR_MATERIAL );
         glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );

@@ -156,6 +156,18 @@ void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
                 }
             }
             break;
+
+        case WS_DRAW_ITEM_BASE::wsg_bitmap:
+            {
+                WS_DRAW_ITEM_BITMAP* bitmap = (WS_DRAW_ITEM_BITMAP*) item;
+
+                if( markerSize )
+                {
+                    drawMarker( aClipBox, aDC, bitmap->GetPosition(),
+                                markerSize );
+                }
+            }
+            break;
         }
     }
 }
@@ -274,10 +286,10 @@ bool WS_DRAW_ITEM_RECT::HitTest( const wxPoint& aPosition)
  */
 bool WS_DRAW_ITEM_RECT::HitTestStartPoint( const wxPoint& aPosition)
 {
-    wxPoint pos = GetStart();
+    wxPoint dist = GetStart() - aPosition;
 
-    if( std::abs( pos.x - aPosition.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 &&
-        std::abs( pos.y - aPosition.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 )
+    if( std::abs( dist.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 &&
+        std::abs( dist.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 )
         return true;
 
     return false;
@@ -313,10 +325,10 @@ bool WS_DRAW_ITEM_LINE::HitTest( const wxPoint& aPosition)
  */
 bool WS_DRAW_ITEM_LINE::HitTestStartPoint( const wxPoint& aPosition)
 {
-    wxPoint pos = GetStart();
+    wxPoint dist = GetStart() - aPosition;
 
-    if( std::abs( pos.x - aPosition.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 &&
-        std::abs( pos.y - aPosition.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 )
+    if( std::abs( dist.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 &&
+        std::abs( dist.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 )
         return true;
 
     return false;
@@ -326,10 +338,10 @@ bool WS_DRAW_ITEM_LINE::HitTestStartPoint( const wxPoint& aPosition)
  */
 bool WS_DRAW_ITEM_LINE::HitTestEndPoint( const wxPoint& aPosition)
 {
-    wxPoint pos = GetEnd();
+    wxPoint dist = GetEnd() - aPosition;
 
-    if( std::abs( pos.x - aPosition.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 &&
-        std::abs( pos.y - aPosition.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 )
+    if( std::abs( dist.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 &&
+        std::abs( dist.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 )
         return true;
 
     return false;
@@ -365,3 +377,47 @@ void WS_DRAW_ITEM_LIST::Locate( std::vector <WS_DRAW_ITEM_BASE*>& aList,
         }
     }
 }
+
+/** The function to draw a WS_DRAW_ITEM_BITMAP
+ */
+void WS_DRAW_ITEM_BITMAP::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC )
+{
+    WORKSHEET_DATAITEM_BITMAP* parent = (WORKSHEET_DATAITEM_BITMAP*)GetParent();
+
+    if( parent->m_ImageBitmap  )
+    {
+        parent->m_ImageBitmap->DrawBitmap( NULL, aDC, m_pos );
+    }
+}
+
+/**
+ * Virtual function
+ * return true if the point aPosition is on bitmap
+ */
+bool WS_DRAW_ITEM_BITMAP::HitTest( const wxPoint& aPosition)
+{
+    WORKSHEET_DATAITEM_BITMAP* parent = (WORKSHEET_DATAITEM_BITMAP*)GetParent();
+
+    if( parent->m_ImageBitmap == NULL )
+        return false;
+
+    EDA_RECT rect = parent->m_ImageBitmap->GetBoundingBox();
+    rect.Move( m_pos );
+    return rect.Contains( aPosition );
+}
+
+
+/**
+ * return true if the point aPosition is on the reference point of this item.
+ */
+bool WS_DRAW_ITEM_BITMAP::HitTestStartPoint( const wxPoint& aPosition)
+{
+    wxPoint dist = m_pos - aPosition;
+
+    if( std::abs( dist.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 &&
+        std::abs( dist.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 )
+        return true;
+
+    return false;
+}
+

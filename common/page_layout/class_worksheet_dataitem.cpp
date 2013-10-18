@@ -316,6 +316,7 @@ const wxString WORKSHEET_DATAITEM::GetClassName() const
         case WS_SEGMENT: name = wxT("Line"); break;
         case WS_RECT: name = wxT("Rect"); break;
         case WS_POLYPOLYGON: name = wxT("Poly"); break;
+        case WS_BITMAP: name = wxT("Bitmap"); break;
     }
 
     return name;
@@ -538,4 +539,5 @@ void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
             m_ConstrainedTextSize.y *= m_BoundingBoxSize.y / size.y;
     }
 }
+
 
