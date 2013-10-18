@@ -462,7 +462,6 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         case wxID_NO:
             break;
 
-        case wxID_OK:
         case wxID_YES:
             wxCommandEvent tmp( ID_SAVE_PROJECT );
             OnSaveProject( tmp );

@@ -308,7 +308,6 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
         case wxID_NO:
             break;
 
-        case wxID_OK:
         case wxID_YES:
             diag = SaveCmpLinkFile( m_NetlistFileName.GetFullPath() );
 

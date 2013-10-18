@@ -193,9 +193,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     bool            zoom_command = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
-    wxLogDebug( wxT( "Block end command %d, state %d, count %d" ),
-                block->GetCommand(), block->GetState(), block->GetCount() );
-
     if( block->GetCount() )
     {
         BLOCK_STATE_T   state   = block->GetState();

@@ -189,10 +189,15 @@ bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
 {
     if( GetScreen()->IsModify() && !aAppend )
     {
-        if( !IsOK( this,
-                   _( "The current board has been modified.\n"
-                      "Do you wish to discard the changes?" ) ) )
+        int response = YesNoCancelDialog( this, _( "The current board has been modified.  Do "
+                                                   "you wish to save the changes?" ),
+                                          wxEmptyString,
+                                          _( "Save and Load" ), _( "Load Without Saving" ) );
+
+        if( response == wxID_CANCEL )
             return false;
+        else if( response == wxID_YES )
+            SavePcbFile( GetBoard()->GetFileName(), true );
     }
 
     if( aAppend )
