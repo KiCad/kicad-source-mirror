@@ -8,6 +8,7 @@
 
 #include <vector2d.h>
 #include <eda_text.h>
+#include <class_bitmap_base.h>
 
 class WS_DRAW_ITEM_TEXT;            // Forward declaration
 
@@ -75,7 +76,8 @@ public:
         WS_TEXT,
         WS_SEGMENT,
         WS_RECT,
-        WS_POLYPOLYGON
+        WS_POLYPOLYGON,
+        WS_BITMAP
     };
 
 protected:
@@ -464,5 +466,44 @@ public:
             m_flags &= ~USE_ITALIC;
     }
 };
+
+class BITMAP_BASE;
+class WORKSHEET_DATAITEM_BITMAP : public WORKSHEET_DATAITEM
+{
+public:
+    BITMAP_BASE* m_ImageBitmap;
+
+public:
+    WORKSHEET_DATAITEM_BITMAP(BITMAP_BASE* aImage)
+        : WORKSHEET_DATAITEM( WS_BITMAP )
+    {
+        m_ImageBitmap = aImage;
+    }
+
+    /**
+     * @return false  (no end point)
+     */
+    virtual bool HasEndPoint() { return false; }
+
+    /**
+     * set the pixel scale factor of the bitmap
+     * this factor depend on the application internal unit
+     * and the pixel per inch bitmap factor
+     * the pixel scale factor is the pixel size to application internal unit
+     * and should be initialized before printing or drawing the bitmap
+     */
+    void SetPixelScaleFactor()
+    {
+        if( m_ImageBitmap )
+        {
+            // m_WSunits2Iu is the page layout unit to application internal unit
+            // i.e. the mm to to application internal unit
+            // however the bitmap definition is always known in pixels per inches
+            double scale = m_WSunits2Iu * 25.4 / m_ImageBitmap->GetPPI();
+            m_ImageBitmap->SetPixelScaleFactor( scale );
+        }
+    }
+};
+
 
 #endif      // CLASS_WORKSHEET_DATA_ITEM_H

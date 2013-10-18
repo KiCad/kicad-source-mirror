@@ -123,6 +123,15 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
     }
 
     /**
+     * @return the bitmap definition in ppi
+     * the default is 300 ppi
+     */
+    int GetPPI() const
+    {
+        return 300;
+    }
+
+    /**
      * Function GetBoundingBox
      * returns the orthogonal, bounding box of this object for display
      * purposes.  This box should be an enclosing perimeter for visible
@@ -147,7 +156,6 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
     bool     ReadImageFile( const wxString& aFullFilename );
 
     /**
-     * Function
      * writes the bitmap data to aFile
      * The format is png, in Hexadecimal form:
      * If the hexadecimal data is converted to binary it gives exactly a .png image data
@@ -157,8 +165,16 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
     bool     SaveData( FILE* aFile ) const;
 
     /**
+     * writes the bitmap data to an array string
+     * The format is png, in Hexadecimal form:
+     * If the hexadecimal data is converted to binary it gives exactly a .png image data
+     * @param aPngStrings The wxArrayString to write to.
+     */
+    void     SaveData( wxArrayString& aPngStrings ) const;
+
+    /**
      * Load an image data saved by SaveData (png, in Hexadecimal form)
-     * @param aLine - Essentially this is file to read schematic junction from.
+     * @param aLine - the LINE_READER used to read the data file.
      * @param aErrorMsg - Description of the error if an error occurs while loading the
      *                    png bimap data.
      * @return true if the bitmap loaded successfully.

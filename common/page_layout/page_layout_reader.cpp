@@ -76,8 +76,11 @@ private:
         throw( IO_ERROR, PARSE_ERROR );
     void parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
         throw( IO_ERROR, PARSE_ERROR );
+    void parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
+        throw( IO_ERROR, PARSE_ERROR );
     void parseCoordinate( POINT_COORD& aCoord) throw( IO_ERROR, PARSE_ERROR );
     void readOption( WORKSHEET_DATAITEM * aItem ) throw( IO_ERROR, PARSE_ERROR );
+    void readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem ) throw( IO_ERROR, PARSE_ERROR );
 };
 
 // PCB_PLOT_PARAMS_PARSER
@@ -128,6 +131,12 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WORKSHEET_LAYOUT* aLayout )
         case T_polygon:
             item = new WORKSHEET_DATAITEM_POLYPOLYGON();
             parsePolygon(  (WORKSHEET_DATAITEM_POLYPOLYGON*) item );
+            aLayout->Append( item );
+            break;
+
+        case T_bitmap:
+            item = new WORKSHEET_DATAITEM_BITMAP( NULL );
+            parseBitmap( (WORKSHEET_DATAITEM_BITMAP*) item );
             aLayout->Append( item );
             break;
 
@@ -305,6 +314,110 @@ void PAGE_LAYOUT_READER_PARSER::parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON
         }
     }
 }
+
+#include <wx/mstream.h>
+void PAGE_LAYOUT_READER_PARSER::parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
+    throw( IO_ERROR, PARSE_ERROR )
+{
+    T token;
+    BITMAP_BASE* image = new BITMAP_BASE;
+    aItem->m_ImageBitmap = image;
+
+    while( ( token = NextTok() ) != T_RIGHT )
+    {
+        if( token == T_EOF)
+           break;
+
+        if( token == T_LEFT )
+            token = NextTok();
+
+        switch( token )
+        {
+        case T_name:
+            NeedSYMBOLorNUMBER();
+            aItem->m_Name =  FromUTF8();
+            NeedRIGHT();
+            break;
+
+        case T_pos:
+            parseCoordinate( aItem->m_Pos );
+            break;
+
+        case T_repeat:
+            aItem->m_RepeatCount = parseInt( -1, 100 );
+            NeedRIGHT();
+            break;
+
+        case T_incrx:
+            aItem->m_IncrementVector.x = parseDouble();
+            NeedRIGHT();
+            break;
+
+        case T_incry:
+            aItem->m_IncrementVector.y = parseDouble();
+            NeedRIGHT();
+            break;
+
+        case T_linewidth:
+            aItem->m_LineWidth = parseDouble();
+            NeedRIGHT();
+            break;
+
+        case T_scale:
+            aItem->m_ImageBitmap->m_Scale = parseDouble();
+            NeedRIGHT();
+            break;
+
+        case T_pngdata:
+            readPngdata( aItem );
+            break;
+
+        default:
+            Unexpected( CurText() );
+            break;
+        }
+    }
+}
+
+void PAGE_LAYOUT_READER_PARSER::readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem )
+            throw( IO_ERROR, PARSE_ERROR )
+{
+    std::string tmp;
+    T token;
+
+    while( ( token = NextTok() ) != T_RIGHT )
+    {
+        if( token == T_EOF)
+           break;
+
+        if( token == T_LEFT )
+            token = NextTok();
+
+        switch( token )
+        {
+            case T_data:
+                NeedSYMBOLorNUMBER();
+                tmp += CurStr();
+                tmp += "\n";
+                NeedRIGHT();
+                break;
+
+            default:
+                Unexpected( CurText() );
+                break;
+        }
+    }
+
+    tmp += "EndData";
+
+    wxString msg;
+    STRING_LINE_READER reader( tmp, wxT("Png kicad_wks data") );
+    if( ! aItem->m_ImageBitmap->LoadData( reader, msg ) )
+    {
+        wxLogMessage(msg);
+    }
+}
+
 
 void PAGE_LAYOUT_READER_PARSER::readOption( WORKSHEET_DATAITEM * aItem )
     throw( IO_ERROR, PARSE_ERROR )

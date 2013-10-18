@@ -35,6 +35,7 @@
 #include <drawtxt.h>
 #include <class_title_block.h>
 #include "worksheet_shape_builder.h"
+#include "class_worksheet_dataitem.h"
 #include <wx/filename.h>
 
 
@@ -135,6 +136,20 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                 WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
                 plotter->PlotPoly( poly->m_Corners,
                                    poly->IsFilled() ? FILLED_SHAPE : NO_FILL );
+            }
+            break;
+
+        case WS_DRAW_ITEM_BASE::wsg_bitmap:
+            {
+                WS_DRAW_ITEM_BITMAP* bm = (WS_DRAW_ITEM_BITMAP*) item;
+
+                WORKSHEET_DATAITEM_BITMAP* parent = (WORKSHEET_DATAITEM_BITMAP*)bm->GetParent();
+
+                if( parent->m_ImageBitmap == NULL )
+                    break;
+
+                parent->m_ImageBitmap->PlotImage( plotter, bm->GetPosition(),
+                               plotColor, PLOTTER::DEFAULT_LINE_WIDTH );
             }
             break;
         }

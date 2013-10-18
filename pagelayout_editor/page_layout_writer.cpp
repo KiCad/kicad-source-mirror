@@ -76,6 +76,8 @@ private:
     void format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) const throw( IO_ERROR );
     void format( WORKSHEET_DATAITEM_POLYPOLYGON* aItem, int aNestLevel )
                  const throw( IO_ERROR );
+    void format( WORKSHEET_DATAITEM_BITMAP* aItem, int aNestLevel ) const
+                 throw( IO_ERROR );
     void formatCoordinate( const char * aToken, POINT_COORD & aCoord ) const
                            throw( IO_ERROR );
     void formatRepeatParameters( WORKSHEET_DATAITEM* aItem ) const throw( IO_ERROR );
@@ -170,6 +172,10 @@ void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) co
 
     case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
         format( (WORKSHEET_DATAITEM_POLYPOLYGON*) aItem, aNestLevel );
+        break;
+
+    case WORKSHEET_DATAITEM::WS_BITMAP:
+        format( (WORKSHEET_DATAITEM_BITMAP*) aItem, aNestLevel );
         break;
 
     default:
@@ -356,6 +362,34 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_POLYPOLYGON* aItem, int aNe
         }
         m_out->Print( 0, ")\n" );
     }
+
+    m_out->Print( aNestLevel, ")\n" );
+}
+
+void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_BITMAP* aItem, int aNestLevel ) const
+    throw( IO_ERROR )
+{
+    m_out->Print( aNestLevel, "( %s", getTokenName( T_bitmap ) );
+    m_out->Print( 0, " (%s %s)", getTokenName( T_name ),
+                  m_out->Quotew( aItem->m_Name ).c_str() );
+    formatCoordinate( getTokenName( T_pos ), aItem->m_Pos );
+    formatOptions( aItem );
+
+    m_out->Print( 0, " (%s %s)", getTokenName( T_scale ),
+                  double2Str(aItem->m_ImageBitmap->m_Scale ).c_str() );
+
+    formatRepeatParameters( aItem );
+    m_out->Print( 0,"\n");
+
+    // Write image in png readable format
+    m_out->Print( aNestLevel, "( %s\n", getTokenName( T_pngdata ) );
+    wxArrayString pngStrings;
+    aItem->m_ImageBitmap->SaveData( pngStrings );
+
+    for( unsigned ii = 0; ii < pngStrings.GetCount(); ii++ )
+        m_out->Print( aNestLevel+1, "(data \"%s\")\n", TO_UTF8(pngStrings[ii]) );
+
+    m_out->Print( aNestLevel+1, ")\n" );
 
     m_out->Print( aNestLevel, ")\n" );
 }
