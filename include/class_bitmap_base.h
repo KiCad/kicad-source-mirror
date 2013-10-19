@@ -54,6 +54,7 @@ private:
                                     // to convert the bitmap size (in pixels)
                                     // to internal KiCad units
                                     // Usually does not change
+    int       m_ppi;                // the bitmap definition. the default is 300PPI
 
 
 public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -128,7 +129,7 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
      */
     int GetPPI() const
     {
-        return 300;
+        return m_ppi;
     }
 
     /**

@@ -153,6 +153,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
     m_textCtrlPosX->SetValue( msg );
     msg.Printf( wxT("%.3f"), aItem->m_Pos.m_Pos.y );
     m_textCtrlPosY->SetValue( msg );
+
     switch(  aItem->m_Pos.m_Anchor )
     {
         case RB_CORNER:      // right bottom corner
@@ -170,6 +171,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
     m_textCtrlEndX->SetValue( msg );
     msg.Printf( wxT("%.3f"), aItem->m_End.m_Pos.y );
     m_textCtrlEndY->SetValue( msg );
+
     switch( aItem->m_End.m_Anchor )
     {
         case RB_CORNER:      // right bottom corner
@@ -242,33 +244,53 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
 
     if( aItem->GetType() == WORKSHEET_DATAITEM::WS_POLYPOLYGON )
     {
-        m_staticTextInfoThickness->Show( false );
-
         WORKSHEET_DATAITEM_POLYPOLYGON* item = (WORKSHEET_DATAITEM_POLYPOLYGON*) aItem;
         // Rotation (poly and text)
         msg.Printf( wxT("%.3f"), item->m_Orient );
         m_textCtrlRotation->SetValue( msg );
     }
-    else if(aItem->GetType() == WORKSHEET_DATAITEM::WS_BITMAP )
+
+    if( aItem->GetType() == WORKSHEET_DATAITEM::WS_BITMAP )
     {
-        m_staticTextInfoThickness->Show( false );
-    }
-    else
-    {
-        m_staticTextInfoThickness->Show( true );
+        WORKSHEET_DATAITEM_BITMAP* item = (WORKSHEET_DATAITEM_BITMAP*) aItem;
+        // select definition in PPI
+        msg.Printf( wxT("%d"), item->GetPPI() );
+        m_textCtrlBitmapPPI->SetValue( msg );
     }
 
-    if( aItem->GetType() == WORKSHEET_DATAITEM::WS_SEGMENT ||
-        aItem->GetType() == WORKSHEET_DATAITEM::WS_RECT ||
-        aItem->GetType() == WORKSHEET_DATAITEM::WS_BITMAP )
+    switch( aItem->GetType() )
     {
-        m_SizerRotation->Show( false );
-        m_SizerEndPosition->Show(true);
-    }
-    else
-    {
-        m_SizerRotation->Show( true );
-        m_SizerEndPosition->Show(false);
+        case WORKSHEET_DATAITEM::WS_SEGMENT:
+        case WORKSHEET_DATAITEM::WS_RECT:
+            m_SizerBitmapPPI->Show( false );
+            m_SizerLineThickness->Show( true );
+            m_staticTextInfoThickness->Show( true );
+            m_SizerRotation->Show( false );
+            m_SizerEndPosition->Show(true);
+            break;
+
+        case WORKSHEET_DATAITEM::WS_TEXT:
+            m_SizerBitmapPPI->Show( false );
+            m_SizerLineThickness->Show( true );
+            m_staticTextInfoThickness->Show( true );
+            m_SizerRotation->Show( true );
+            m_SizerEndPosition->Show(false);
+            break;
+
+        case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
+            m_SizerBitmapPPI->Show( false );
+            m_SizerLineThickness->Show( true );
+            m_staticTextInfoThickness->Show( false );   // No defaut value for thickness
+            m_SizerRotation->Show( true );
+            m_SizerEndPosition->Show(false);
+            break;
+
+        case WORKSHEET_DATAITEM::WS_BITMAP:
+            m_SizerBitmapPPI->Show( true );
+            m_SizerLineThickness->Show( false );
+            m_SizerRotation->Show( false );
+            m_SizerEndPosition->Show(false);
+            break;
     }
 
     // Repeat parameters
@@ -454,6 +476,16 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
         msg = m_textCtrlRotation->GetValue();
         msg.ToDouble( &dtmp );
         item->m_Orient = dtmp;
+    }
+
+    if( aItem->GetType() == WORKSHEET_DATAITEM::WS_BITMAP )
+    {
+        WORKSHEET_DATAITEM_BITMAP* item = (WORKSHEET_DATAITEM_BITMAP*) aItem;
+        // Set definition in PPI
+        long value;
+        msg = m_textCtrlBitmapPPI->GetValue();
+        if( msg.ToLong( &value ) )
+            item->SetPPI( (int)value );
     }
 
     return true;

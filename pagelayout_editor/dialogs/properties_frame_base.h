@@ -85,6 +85,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxTextCtrl* m_textCtrlEndY;
 		wxStaticText* m_staticTextOrgEnd;
 		wxComboBox* m_comboBoxCornerEnd;
+		wxBoxSizer* m_SizerLineThickness;
 		wxStaticText* m_staticTextThickness;
 		wxTextCtrl* m_textCtrlThickness;
 		wxStaticText* m_staticTextInfoThickness;
@@ -92,6 +93,9 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticTextRot;
 		wxTextCtrl* m_textCtrlRotation;
+		wxBoxSizer* m_SizerBitmapPPI;
+		wxStaticText* m_staticTextBitmapPPI;
+		wxTextCtrl* m_textCtrlBitmapPPI;
 		wxStaticLine* m_staticline4;
 		wxStaticText* m_staticTextRepeatPrms;
 		wxStaticText* m_staticTextRepeatCnt;
