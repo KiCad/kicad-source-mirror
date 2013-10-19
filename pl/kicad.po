@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-18 18:34+0100\n"
-"PO-Revision-Date: 2013-10-18 18:40+0100\n"
+"POT-Creation-Date: 2013-10-19 18:46+0100\n"
+"PO-Revision-Date: 2013-10-19 18:47+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -743,15 +743,19 @@ msgid "Select Component"
 msgstr "Wybierz symbol"
 
 #: eeschema/edit_bitmap.cpp:103 bitmap2component/bitmap2cmp_gui.cpp:216
+#: pagelayout_editor/pl_editor_frame.cpp:588
 msgid "Choose Image"
 msgstr "Wybierz obraz"
 
 #: eeschema/edit_bitmap.cpp:104 bitmap2component/bitmap2cmp_gui.cpp:217
+#: pagelayout_editor/pl_editor_frame.cpp:589
 msgid "Image Files "
 msgstr "Pliki obrazów"
 
 #: eeschema/edit_bitmap.cpp:115 eeschema/edit_bitmap.cpp:125
 #: bitmap2component/bitmap2cmp_gui.cpp:241
+#: pagelayout_editor/pl_editor_frame.cpp:599
+#: pagelayout_editor/pl_editor_frame.cpp:606
 #, c-format
 msgid "Couldn't load image from <%s>"
 msgstr "Nie mogę załadować obrazu z <%s>"
@@ -1478,7 +1482,7 @@ msgstr "Usuń element"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:161
 #: common/selcolor.cpp:210 common/dialogs/dialog_exit_base.cpp:69
 #: common/dialogs/dialog_get_component_base.cpp:51
-#: pagelayout_editor/onrightclick.cpp:110
+#: pagelayout_editor/onrightclick.cpp:113
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -4423,8 +4427,8 @@ msgstr "Dodaj"
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:77
-#: pagelayout_editor/events_functions.cpp:539
-#: pagelayout_editor/onrightclick.cpp:100
+#: pagelayout_editor/events_functions.cpp:559
+#: pagelayout_editor/onrightclick.cpp:103
 msgid "Delete"
 msgstr "Usuń"
 
@@ -5247,7 +5251,7 @@ msgstr "Pokaż granice strony"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:208
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:68
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:606
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:617
 msgid "General Options"
 msgstr "Opcje główne"
 
@@ -6854,7 +6858,7 @@ msgstr "Tekst PCB"
 #: pcbnew/class_pcb_text.cpp:144 pcbnew/class_text_mod.cpp:391
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:73
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:113
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:326
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:325
 msgid "Thickness"
 msgstr "Grubość"
 
@@ -7070,7 +7074,7 @@ msgid "Zone Outline %s on %s"
 msgstr "Obrys strefy %s na warstwie %s"
 
 #: pcbnew/controle.cpp:215 pcbnew/modedit.cpp:117
-#: pagelayout_editor/pl_editor_frame.cpp:662
+#: pagelayout_editor/pl_editor_frame.cpp:697
 msgid "Selection Clarification"
 msgstr "Precyzowanie wyboru"
 
@@ -9787,7 +9791,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcbnew_config.cpp:104 pcbnew/pcbnew_config.cpp:123
-msgid "File Seave Error"
+msgid "File Save Error"
 msgstr "Błąd zapisu pliku"
 
 #: pcbnew/pcbnew_config.cpp:121
@@ -14530,7 +14534,7 @@ msgstr "Odznacz wszystkie warstwy"
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:64
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:94
 #: gerbview/dialogs/dialog_print_using_printer.cpp:82
-#: pagelayout_editor/events_functions.cpp:488
+#: pagelayout_editor/events_functions.cpp:508
 msgid "Error Init Printer info"
 msgstr "Błąd inicjalizacji drukarki"
 
@@ -15197,7 +15201,7 @@ msgid "D Code"
 msgstr "D Code"
 
 #: gerbview/class_gerber_draw_item.cpp:562
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:351
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:350
 msgid "Rotation"
 msgstr "Obrót"
 
@@ -16453,12 +16457,6 @@ msgstr "Polecenie"
 msgid "Hotkey"
 msgstr "Skróty klawiszowe"
 
-#: common/page_layout_reader.cpp:604
-#: common/page_layout/page_layout_reader.cpp:705
-#, c-format
-msgid "The file <%s> was not fully read"
-msgstr "Plik <%s> nie został w pełni odczytany"
-
 #: common/pcbcommon.cpp:197
 msgid "No layers"
 msgstr "Brak warstw"
@@ -17024,6 +17022,11 @@ msgstr "Informacja o kompilacji"
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
 msgstr "Informacja o wersji biblioteki"
+
+#: common/page_layout/page_layout_reader.cpp:818
+#, c-format
+msgid "The file <%s> was not fully read"
+msgstr "Plik <%s> nie został w pełni odczytany"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:366
 msgid "Logo file (*.kicad_wks)|*.kicad_wks"
@@ -18411,24 +18414,28 @@ msgstr "Pokazuje informacje o programie do edycji układu strony"
 msgid "Add Rectangle"
 msgstr "Dodaj prostokąt"
 
-#: pagelayout_editor/onrightclick.cpp:80
+#: pagelayout_editor/onrightclick.cpp:55
+msgid "Add Bitmap"
+msgstr "Dodaj bitmapę"
+
+#: pagelayout_editor/onrightclick.cpp:83
 msgid "Move Start Point"
 msgstr "Przesuń punkt początkowy"
 
-#: pagelayout_editor/onrightclick.cpp:88
+#: pagelayout_editor/onrightclick.cpp:91
 msgid "Move End Point"
 msgstr "Przesuń punkt końcowy"
 
-#: pagelayout_editor/onrightclick.cpp:94
+#: pagelayout_editor/onrightclick.cpp:97
 msgid "Move Item"
 msgstr "Przesuń element"
 
-#: pagelayout_editor/onrightclick.cpp:108
+#: pagelayout_editor/onrightclick.cpp:111
 msgid "Place"
 msgstr "Umieść"
 
-#: pagelayout_editor/page_layout_writer.cpp:101
-#: pagelayout_editor/page_layout_writer.cpp:128
+#: pagelayout_editor/page_layout_writer.cpp:103
+#: pagelayout_editor/page_layout_writer.cpp:130
 msgid "Error writing page layout descr file"
 msgstr "Wystąpił błąd podczas zapisu pliku z projektem układu strony"
 
@@ -18458,15 +18465,15 @@ msgstr "Zapisać zmiany w nowym pliku przed zamknięciem?"
 msgid "coord origin: %s"
 msgstr "Punkt bazowy: %s"
 
-#: pagelayout_editor/pl_editor_frame.cpp:646
+#: pagelayout_editor/pl_editor_frame.cpp:681
 msgid "(start or end point)"
 msgstr "(punkt początkowy lub końcowy)"
 
-#: pagelayout_editor/pl_editor_frame.cpp:650
+#: pagelayout_editor/pl_editor_frame.cpp:685
 msgid "(start point)"
 msgstr "(punkt początkowy)"
 
-#: pagelayout_editor/pl_editor_frame.cpp:653
+#: pagelayout_editor/pl_editor_frame.cpp:688
 msgid "(end point)"
 msgstr "(punkt końcowy)"
 
@@ -18645,7 +18652,7 @@ msgid "Max Size Y (mm)"
 msgstr "Maks. wielkość Y (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:192
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:598
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:609
 msgid "Accept"
 msgstr "Zastosuj"
 
@@ -18653,75 +18660,79 @@ msgstr "Zastosuj"
 msgid "Comment"
 msgstr "Komentarz"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:336
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:335
 msgid "Set to 0 to use default"
 msgstr "Ustaw 0 by użyć wart. domyślnych"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:367
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:365
+msgid "Bitmap PPI"
+msgstr "Rozdzielczość"
+
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:378
 msgid "Repeat parameters:"
 msgstr "Parametry powtarzania:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:377
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:388
 msgid "Repeat count"
 msgstr "Ilość powtórzeń"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:389
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 msgid "Text Increment"
 msgstr "Zwiększaj tekst co"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:408
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:419
 msgid "Step X (mm)"
 msgstr "Skok X (mm)"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:421
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:432
 msgid "Step Y (mm)"
 msgstr "Skok Y (mm)"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:438
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:449
 msgid "Item Properties"
 msgstr "Właściwości elementu"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:447
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:458
 msgid "Default Values:"
 msgstr "Domyślne wartości:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:457
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:468
 msgid "Text Size X (mm)"
 msgstr "Poziomy rozmiar tekstu (mm)"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:470
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:481
 msgid "Text Size Y (mm)"
 msgstr "Pionowy rozmiar tekstu (mm)"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:489
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:500
 msgid "Line Thickness (mm)"
 msgstr "Grubość linii (mm)"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:502
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:513
 msgid "Text Thickness"
 msgstr "Grubość tekstu"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:518
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:529
 msgid "Set to Default"
 msgstr "Ustaw jako domyślne"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:527
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:538
 msgid "Page Margins"
 msgstr "Marginesy strony"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:537
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:548
 msgid "Left Margin (mm)"
 msgstr "Lewy margines (mm)"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:550
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:561
 msgid "Right Margin (mm)"
 msgstr "Prawy margines (mm)"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:569
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:580
 msgid "Top Margin (mm)"
 msgstr "Górny margines (mm)"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:582
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:593
 msgid "Bottom Margin (mm)"
 msgstr "Margines dolny (mm)"
 
