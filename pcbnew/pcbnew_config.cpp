@@ -101,7 +101,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
                 wxString msg;
                 msg.Printf( _( "Error occurred saving the global footprint library "
                                "table:\n\n%s" ), ioe.errorText.GetData() );
-                wxMessageBox( msg, _( "File Seave Error" ), wxOK | wxICON_ERROR );
+                wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
             }
         }
 
@@ -120,7 +120,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
                 wxString msg;
                 msg.Printf( _( "Error occurred saving project specific footprint library "
                                "table:\n\n%s" ), ioe.errorText.GetData() );
-                wxMessageBox( msg, _( "File Seave Error" ), wxOK | wxICON_ERROR );
+                wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
             }
         }
     }

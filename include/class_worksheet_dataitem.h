@@ -486,23 +486,24 @@ public:
     virtual bool HasEndPoint() { return false; }
 
     /**
+     * @return the PPI of the bitmap
+     */
+    int GetPPI() const;
+
+    /**
+     * adjust the PPI of the bitmap
+     * @param aBitmapPPI = the ned PPI for the bitmap
+     */
+    void SetPPI( int aBitmapPPI );
+
+    /**
      * set the pixel scale factor of the bitmap
      * this factor depend on the application internal unit
      * and the pixel per inch bitmap factor
      * the pixel scale factor is the pixel size to application internal unit
      * and should be initialized before printing or drawing the bitmap
      */
-    void SetPixelScaleFactor()
-    {
-        if( m_ImageBitmap )
-        {
-            // m_WSunits2Iu is the page layout unit to application internal unit
-            // i.e. the mm to to application internal unit
-            // however the bitmap definition is always known in pixels per inches
-            double scale = m_WSunits2Iu * 25.4 / m_ImageBitmap->GetPPI();
-            m_ImageBitmap->SetPixelScaleFactor( scale );
-        }
-    }
+    void SetPixelScaleFactor();
 };
 
 

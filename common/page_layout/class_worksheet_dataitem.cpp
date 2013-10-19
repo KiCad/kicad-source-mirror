@@ -540,4 +540,38 @@ void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
     }
 }
 
+/* set the pixel scale factor of the bitmap
+ * this factor depend on the application internal unit
+ * and the PPI bitmap factor
+ * the pixel scale factor should be initialized before drawing the bitmap
+ */
+void WORKSHEET_DATAITEM_BITMAP::SetPixelScaleFactor()
+{
+    if( m_ImageBitmap )
+    {
+        // m_WSunits2Iu is the page layout unit to application internal unit
+        // i.e. the mm to to application internal unit
+        // however the bitmap definition is always known in pixels per inches
+        double scale = m_WSunits2Iu * 25.4 / m_ImageBitmap->GetPPI();
+        m_ImageBitmap->SetPixelScaleFactor( scale );
+    }
+}
+
+/* return the PPI of the bitmap
+ */
+int WORKSHEET_DATAITEM_BITMAP::GetPPI() const
+{
+    if( m_ImageBitmap )
+        return m_ImageBitmap->GetPPI() / m_ImageBitmap->m_Scale;
+
+    return 300;
+}
+
+/*adjust the PPI of the bitmap
+ */
+void WORKSHEET_DATAITEM_BITMAP::SetPPI( int aBitmapPPI )
+{
+    if( m_ImageBitmap )
+        m_ImageBitmap->m_Scale = (double) m_ImageBitmap->GetPPI() / aBitmapPPI;
+}
 
