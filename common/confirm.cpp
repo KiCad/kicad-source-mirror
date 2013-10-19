@@ -110,7 +110,7 @@ bool IsOK( wxWindow* aParent, const wxString& aMessage )
     wxMessageDialog dlg( aParent, aMessage, _( "Confirmation" ),
                          wxYES_NO | wxCENTRE | wxICON_HAND );
 
-    return dlg.ShowModal() == wxYES;
+    return dlg.ShowModal() == wxID_YES;
 }
 
 
