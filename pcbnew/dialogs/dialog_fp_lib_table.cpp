@@ -25,7 +25,6 @@
 
 /*  TODO:
 
-*)  Grab text from any pending ChoiceEditor when OK button pressed.
 *)  After any change to uri, reparse the environment variables.
 
 */
@@ -251,17 +250,21 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
     int selRowCount;
     int selColCount;
 
+    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
+    /// else return a 0 based column index.
     int getCursorCol() const
     {
         return m_cur_grid->GetGridCursorCol();
     }
 
+    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
+    /// else return a 0 based row index.
     int getCursorRow() const
     {
         return m_cur_grid->GetGridCursorRow();
     }
 
-    /// Gets the selected area into a sensible rectangle of sel{Row,Col}{Start,Count} above.
+    /// Puts the selected area into a sensible rectangle of sel{Row,Col}{Start,Count} above.
     void getSelectedArea()
     {
         wxGridCellCoordsArray topLeft  = m_cur_grid->GetSelectionBlockTopLeft();
@@ -373,6 +376,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
             ;
         }
     }
+
 
     /**
      * Function verifyTables
@@ -616,6 +620,9 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
     void onOKButtonClick( wxCommandEvent& event )
     {
         int dialogRet = 0;
+
+        // stuff any pending cell editor text into the table.
+        m_cur_grid->SaveEditControlValue();
 
         if( verifyTables() )
         {
@@ -893,8 +900,8 @@ void DIALOG_FP_LIB_TABLE::paste()
             }
             else
             {
-                const int           cur_row = getCursorRow();                   // -1 is ok
-                const int           cur_col = std::max( getCursorCol(), 0 );    // no -1
+                const int cur_row = std::max( getCursorRow(), 0 );    // no -1
+                const int cur_col = std::max( getCursorCol(), 0 );
 
                 wxStringTokenizer   rows( cb_text, ROW_SEP, wxTOKEN_RET_EMPTY );
 
@@ -912,7 +919,7 @@ void DIALOG_FP_LIB_TABLE::paste()
 
                     wxStringTokenizer   cols( rowTxt, COL_SEP, wxTOKEN_RET_EMPTY );
 
-                    for( int col = cur_col; cols.HasMoreTokens();  ++col )
+                    for( int col = cur_col;  cols.HasMoreTokens();  ++col )
                     {
                         wxString cellTxt = cols.GetNextToken();
                         tbl->SetValue( row, col, cellTxt );
