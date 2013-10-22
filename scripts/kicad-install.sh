@@ -1,7 +1,11 @@
 #!/bin/bash
-# Install KiCad from source onto a Ubuntu/Debian/Mint compatible linux system.
-# The "installing pre-requisites" step is the only "distro dependent" one.  Could modify
-# that step for other linux distros probably.
+# Install KiCad from source onto either:
+#  -> a Ubuntu/Debian/Mint or
+#  -> a Red Hat
+# compatible linux system.
+#
+# The "install_prerequisites" step is the only "distro dependent" one.  Could modify
+# that step for other linux distros.
 
 
 # Set where the 3 source trees will go
@@ -23,19 +27,57 @@ usage()
 }
 
 
+install_prerequisites()
+{
+    # Find a package manager, PM
+    PM=$( command -v yum || command -v apt-get )
+
+    # assume all these Debian, Mint, Ubuntu systems have same prerequisites
+    if [ "$(expr match "$PM" '.*\(apt-get\)')" == "apt-get" ]; then
+        #echo "debian compatible system"
+        sudo apt-get install \
+            bzr \
+            bzrtools \
+            build-essential \
+            cmake \
+            cmake-curses-gui \
+            debhelper \
+            doxygen \
+            libssl-dev \
+            libwxgtk2.8-dev
+
+    # assume all yum systems have same prerequisites
+    elif [ "$(expr match "$PM" '.*\(yum\)')" == "yum" ]; then
+        #echo "red hat compatible system"
+        # Note: if you find this list not to be accurate, please submit a patch:
+        sudo yum install
+            bzr \
+            bzrtools \
+            build-essential \
+            cmake \
+            cmake-curses-gui \
+            debhelper \
+            doxygen \
+            libgl1-mesa-dev \
+            libglu1-mesa-dev \
+            libssl-dev \
+            libwxbase2.8-dev \
+            libwxgtk2.8-dev \
+            libx11-dev \
+            mesa-common-dev
+    else
+        echo
+        echo "Incompatible System. Neither 'yum' nor 'apt-get' found. Not possible to continue."
+        echo
+        exit 1
+    fi
+}
+
+
 install_or_update()
 {
     echo "step 1) installing pre-requisites"
-    sudo apt-get install \
-        bzr \
-        bzrtools \
-        build-essential \
-        cmake \
-        cmake-curses-gui \
-        debhelper \
-        doxygen \
-        libssl-dev \
-        libwxgtk2.8-dev
+    install_prerequisites
 
 
     echo "step 2) make $WORKING_TREES if it does not exist"
@@ -123,9 +165,11 @@ install_or_update()
 
 if [ $# -eq 1 -a "$1" == "--remove-sources" ]; then
     # run this only once, kills .config & makes dirs
+    echo "deleting $WORKING_TREES"
     rm -rf "$WORKING_TREES"
     exit
 fi
+
 
 if [ $# -eq 1 -a "$1" == "--install-or-update" ]; then
     install_or_update
