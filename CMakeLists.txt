@@ -83,8 +83,10 @@ if( CMAKE_COMPILER_IS_GNUCXX )
         OUTPUT_VARIABLE GCC_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE )
 
-    set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wall" )
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" )
+    # Establish -Wall early, so specialized relaxations of this may come
+    # subsequently on the command line, such as in pcbnew/github/CMakeLists.txt
+    set( CMAKE_C_FLAGS   "-Wall" )
+    set( CMAKE_CXX_FLAGS "-Wall" )
 
     # The optimization level is -O1 instead of the usual -O2 level because
     # boost::polygon has a function (inflate polygon) broken by the -O2 level
@@ -94,17 +96,17 @@ if( CMAKE_COMPILER_IS_GNUCXX )
     #   https://bugs.launchpad.net/kicad/+bug/1056926
     #   https://svn.boost.org/trac/boost/ticket/7983
     if( GCC_VERSION VERSION_EQUAL 4.7.0 OR ( GCC_VERSION VERSION_GREATER 4.7.0 AND GCC_VERSION VERSION_LESS 4.7.3 ) )
-        set( CMAKE_C_FLAGS_RELEASE "-O1" )
+        set( CMAKE_C_FLAGS_RELEASE   "-O1" )
         set( CMAKE_CXX_FLAGS_RELEASE "-O1" )
     else()
-        set( CMAKE_C_FLAGS_RELEASE "-O2" )
+        set( CMAKE_C_FLAGS_RELEASE   "-O2" )
         set( CMAKE_CXX_FLAGS_RELEASE "-O2" )
     endif()
 
-    set( CMAKE_C_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG" )
+    set( CMAKE_C_FLAGS_DEBUG   "-g3 -ggdb3 -DDEBUG" )
     set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG" )
 
-    set( CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG" )
+    set( CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG" )
     set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG" )
 
     if( MINGW )
@@ -121,7 +123,7 @@ if( CMAKE_COMPILER_IS_GNUCXX )
         # empty for Windows.
         set( PIC_FLAG -fPIC )
 
-        set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${PIC_FLAG}" )
+        set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${PIC_FLAG}" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PIC_FLAG}" )
 
         # Thou shalt not link vaporware and tell us it's a valid DSO:
