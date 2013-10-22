@@ -79,51 +79,39 @@ mark_as_advanced( KICAD_USER_CONFIG_DIR )
 
 if( CMAKE_COMPILER_IS_GNUCXX )
 
-    set( KICAD_GCC_RELEASE_BUILD_FLAGS "-O2" )
-    set( KICAD_GCC_RELEASE_DEBUG_FLAGS "" )
-
     execute_process( COMMAND ${CMAKE_C_COMPILER} -dumpversion
         OUTPUT_VARIABLE GCC_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE )
 
-    # Added -Wno-narrowing on 10/7/12 to prevent a huge number of warnings when
-    # compiling with GCC 4.7.  This appears to be caused by and int to unsigned
-    # conversion in the Boost polygon library.  At some point in the future when
-    # Boost is updated to the next version, -Wno-narrowing should be removed to
-    # see if the problem has been resolved.  Wayne.
-    #
-    # Also note the optimization level is -O1 instead of the usual -O2 level
-    # because boost::polygon has a function ( inflate polygon) broken by
-    # the -O2 level with GCC 4.7 (works fine with  with GCC 4.6).
-    # This lower optimization level does not have a significant change on the speed.
-    #
-    # As newer versions of GCC and/or Boost are released, this code needs reviewed to
-    # determine if the problems above have been fixed either in Boost or GCC.
-    if( GCC_VERSION VERSION_GREATER 4.7 OR GCC_VERSION VERSION_EQUAL 4.7 )
-        set( KICAD_GCC_RELEASE_BUILD_FLAGS "-Wno-narrowing -O1" )
-        set( KICAD_GCC_DEBUG_BUILD_FLAGS "-Wno-narrowing" )
-    endif()
-
-    if( CMAKE_BUILD_TYPE STREQUAL Debug )
-        message( STATUS
-            "Setting GCC version ${GCC_VERSION} build flags \"${KICAD_GCC_DEBUG_BUILD_FLAGS}\"" )
-    else()
-        message( STATUS
-            "Setting GCC version ${GCC_VERSION} build flags \"${KICAD_GCC_RELEASE_BUILD_FLAGS}\"" )
-    endif()
-
     set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wall" )
     set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" )
 
+    # The optimization level is -O1 instead of the usual -O2 level because
+    # boost::polygon has a function (inflate polygon) broken by the -O2 level
+    # with GCC 4.7.0 to 4.7.2 (works fine with  with GCC 4.6 and 4.7.3).
+    # This lower optimization level does not have a significant change on the speed.
+    # See also:
+    #   https://bugs.launchpad.net/kicad/+bug/1056926
+    #   https://svn.boost.org/trac/boost/ticket/7983
+    if( GCC_VERSION VERSION_EQUAL 4.7.0 OR ( GCC_VERSION VERSION_GREATER 4.7.0 AND GCC_VERSION VERSION_LESS 4.7.3 ) )
+        set( CMAKE_C_FLAGS_RELEASE "-O1" )
+        set( CMAKE_CXX_FLAGS_RELEASE "-O1" )
+    else()
+        set( CMAKE_C_FLAGS_RELEASE "-O2" )
+        set( CMAKE_CXX_FLAGS_RELEASE "-O2" )
+    endif()
+
+    set( CMAKE_C_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG" )
+    set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG" )
+
+    set( CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG" )
+    set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG" )
+
     if( MINGW )
         # Set default flags for Release build.
-        set( CMAKE_C_FLAGS_RELEASE "${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG" )
-        set( CMAKE_CXX_FLAGS_RELEASE "${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG" )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s -static-libgcc -static-libstdc++" )
 
         # Set default flags for Debug build.
-        set( CMAKE_C_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG" )
-        set( CMAKE_CXX_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG" )
         set( CMAKE_MODULE_LINKER_FLAGS "-static-libgcc -static-libstdc++") # SWIG macros on Windows
 
     else()
@@ -141,13 +129,8 @@ if( CMAKE_COMPILER_IS_GNUCXX )
         set( CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined" ) # needed by SWIG macros on linux
 
         # Set default flags for Release build.
-        set( CMAKE_C_FLAGS_RELEASE "${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG" )
-        set( CMAKE_CXX_FLAGS_RELEASE "${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG" )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
 
-        # Set default flags for Debug build.
-        set( CMAKE_C_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG" )
-        set( CMAKE_CXX_FLAGS_DEBUG "${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG" )
     endif()
 
     # quiet GCC 4.8.1 while in boost
