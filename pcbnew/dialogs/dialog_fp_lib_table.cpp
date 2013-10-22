@@ -251,14 +251,14 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
     int selRowCount;
     int selColCount;
 
-    int getCursorRow() const
-    {
-        return m_cur_grid->GetGridCursorRow();
-    }
-
     int getCursorCol() const
     {
         return m_cur_grid->GetGridCursorCol();
+    }
+
+    int getCursorRow() const
+    {
+        return m_cur_grid->GetGridCursorRow();
     }
 
     /// Gets the selected area into a sensible rectangle of sel{Row,Col}{Start,Count} above.
@@ -893,8 +893,9 @@ void DIALOG_FP_LIB_TABLE::paste()
             }
             else
             {
-                const int           cur_row = getCursorRow();
-                const int           cur_col = getCursorCol();
+                const int           cur_row = getCursorRow();                   // -1 is ok
+                const int           cur_col = std::max( getCursorCol(), 0 );    // no -1
+
                 wxStringTokenizer   rows( cb_text, ROW_SEP, wxTOKEN_RET_EMPTY );
 
                 // if clipboard rows would extend past end of current table size...
