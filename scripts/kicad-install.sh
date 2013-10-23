@@ -43,6 +43,7 @@ install_prerequisites()
             cmake-curses-gui \
             debhelper \
             doxygen \
+            libbz2-dev \
             libssl-dev \
             libwxgtk2.8-dev
 
@@ -58,6 +59,7 @@ install_prerequisites()
             cmake-curses-gui \
             debhelper \
             doxygen \
+            libbz2-dev \
             libgl1-mesa-dev \
             libglu1-mesa-dev \
             libssl-dev \
@@ -128,8 +130,8 @@ install_or_update()
     cd kicad.bzr
     rm -rf build && mkdir build && cd build
     cmake   -DCMAKE_BUILD_TYPE=Release \
-            -DUSE_FP_LIB_TABLE \
-            -DBUILD_GITHUB_PLUGIN \
+            -DUSE_FP_LIB_TABLE=ON \
+            -DBUILD_GITHUB_PLUGIN=ON \
             ../
     make
     echo " kicad compiled."
