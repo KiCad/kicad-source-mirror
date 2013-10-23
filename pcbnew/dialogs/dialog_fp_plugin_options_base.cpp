@@ -22,33 +22,33 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Plugin Options:") ), wxVERTICAL );
 	
-	m_grid1 = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_grid1->CreateGrid( 5, 2 );
-	m_grid1->EnableEditing( true );
-	m_grid1->EnableGridLines( true );
-	m_grid1->EnableDragGridSize( false );
-	m_grid1->SetMargins( 0, 0 );
+	m_grid->CreateGrid( 5, 2 );
+	m_grid->EnableEditing( true );
+	m_grid->EnableGridLines( true );
+	m_grid->EnableDragGridSize( false );
+	m_grid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_grid1->EnableDragColMove( false );
-	m_grid1->EnableDragColSize( true );
-	m_grid1->SetColLabelSize( 30 );
-	m_grid1->SetColLabelValue( 0, _("Option") );
-	m_grid1->SetColLabelValue( 1, _("Value") );
-	m_grid1->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	m_grid->EnableDragColMove( false );
+	m_grid->EnableDragColSize( true );
+	m_grid->SetColLabelSize( 30 );
+	m_grid->SetColLabelValue( 0, _("Option") );
+	m_grid->SetColLabelValue( 1, _("Value") );
+	m_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
-	m_grid1->EnableDragRowSize( false );
-	m_grid1->SetRowLabelSize( 80 );
-	m_grid1->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	m_grid->EnableDragRowSize( false );
+	m_grid->SetRowLabelSize( 80 );
+	m_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
 	
 	// Cell Defaults
-	m_grid1->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	sbSizer1->Add( m_grid1, 1, wxEXPAND, 5 );
+	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	sbSizer1->Add( m_grid, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
