@@ -37,7 +37,7 @@ class DIALOG_FP_PLUGIN_OPTIONS_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxGrid* m_grid1;
+		wxGrid* m_grid;
 		wxButton* m_add_row;
 		wxButton* m_delete_row;
 		wxButton* m_move_up;

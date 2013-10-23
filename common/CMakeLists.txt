@@ -73,6 +73,7 @@ set(COMMON_SRCS
     filter_reader.cpp
     gestfich.cpp
     getrunningmicrosecs.cpp
+    grid_tricks.cpp
     gr_basic.cpp
     hotkeys_basic.cpp
     hotkey_grid_table.cpp

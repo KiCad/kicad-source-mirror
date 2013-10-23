@@ -313,7 +313,11 @@ public:
         return false;
     }
 
-    bool operator!=( const FP_LIB_TABLE& r ) const { return !( *this == r ); }
+    bool operator!=( const FP_LIB_TABLE& r ) const  { return !( *this == r ); }
+
+    int     GetCount()                              { return rows.size(); }
+
+    ROW&    At( int aIndex )                        { return rows[aIndex]; }
 
     /**
      * Function Parse

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2013 CERN
  * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -30,18 +31,15 @@
 */
 
 
-#include <wx/grid.h>
-#include <wx/clipbrd.h>
-#include <wx/tokenzr.h>
-#include <wx/arrstr.h>
-#include <wx/regex.h>
 #include <set>
+#include <wx/regex.h>
 
 #include <fctsys.h>
 #include <dialog_fp_lib_table_base.h>
 #include <fp_lib_table.h>
 #include <fp_lib_table_lexer.h>
 #include <invoke_pcb_dialog.h>
+#include <grid_tricks.h>
 
 
 /// grid column order is established by this sequence
@@ -63,6 +61,8 @@ enum COL_ORDER
  */
 class FP_TBL_MODEL : public wxGridTableBase, public FP_LIB_TABLE
 {
+    friend class FP_GRID_TRICKS;
+
 public:
 
     /**
@@ -120,9 +120,7 @@ public:
 
     bool IsEmptyCell( int aRow, int aCol )
     {
-        if( unsigned( aRow ) < rows.size() )
-            return false;
-        return true;
+        return !GetValue( aRow, aCol );
     }
 
     bool InsertRows( size_t aPos = 0, size_t aNumRows = 1 )
@@ -212,16 +210,69 @@ public:
 };
 
 
-// It works for table data on clipboard for an Excell spreadsheet,
-// why not us too for now.
-#define COL_SEP     wxT( '\t' )
-#define ROW_SEP     wxT( '\n' )
-
-
-inline bool isCtl( int aChar, const wxKeyEvent& e )
+class FP_GRID_TRICKS : public GRID_TRICKS
 {
-    return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() && !e.ShiftDown() && !e.MetaDown();
-}
+public:
+    FP_GRID_TRICKS( wxGrid* aGrid ) :
+        GRID_TRICKS( aGrid )
+    {
+    }
+
+protected:
+
+    /// handle specialized clipboard text, with leading "(fp_lib_table", OR
+    /// spreadsheet formatted text.
+    virtual void paste_text( const wxString& cb_text )
+    {
+        FP_TBL_MODEL*       tbl = (FP_TBL_MODEL*) m_grid->GetTable();
+
+        size_t  ndx = cb_text.find( wxT( "(fp_lib_table" ) );
+
+        if( ndx != std::string::npos )
+        {
+            // paste the ROWs of s-expression (fp_lib_table), starting
+            // at column 0 regardless of current cursor column.
+
+            STRING_LINE_READER  slr( TO_UTF8( cb_text ), wxT( "Clipboard" ) );
+            FP_LIB_TABLE_LEXER  lexer( &slr );
+            FP_LIB_TABLE        tmp_tbl;
+            bool                parsed = true;
+
+            try
+            {
+                tmp_tbl.Parse( &lexer );
+            }
+            catch( PARSE_ERROR& pe )
+            {
+                // @todo tell what line and offset
+                parsed = false;
+            }
+
+            if( parsed )
+            {
+                const int cur_row = std::max( getCursorRow(), 0 );
+
+                // if clipboard rows would extend past end of current table size...
+                if( tmp_tbl.GetCount() > tbl->GetNumberRows() - cur_row )
+                {
+                    int newRowsNeeded = tmp_tbl.GetCount() - ( tbl->GetNumberRows() - cur_row );
+                    tbl->AppendRows( newRowsNeeded );
+                }
+
+                for( int i = 0;  i < tmp_tbl.GetCount();  ++i )
+                {
+                    tbl->At( cur_row+i ) = tmp_tbl.At( i );
+                }
+            }
+            m_grid->AutoSizeColumns( false );
+        }
+        else
+        {
+            // paste spreadsheet formatted text.
+            GRID_TRICKS::paste_text( cb_text );
+        }
+    }
+};
 
 
 /**
@@ -232,23 +283,6 @@ inline bool isCtl( int aChar, const wxKeyEvent& e )
 class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 {
     typedef FP_LIB_TABLE::ROW   ROW;
-
-    enum
-    {
-        MYID_FIRST = -1,
-        MYID_CUT,
-        MYID_COPY,
-        MYID_PASTE,
-        MYID_SELECT,
-        MYID_LAST,
-    };
-
-    // row & col "selection" acquisition
-    // selected area by cell coordinate and count
-    int selRowStart;
-    int selColStart;
-    int selRowCount;
-    int selColCount;
 
     /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
     /// else return a 0 based column index.
@@ -262,119 +296,6 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
     int getCursorRow() const
     {
         return m_cur_grid->GetGridCursorRow();
-    }
-
-    /// Puts the selected area into a sensible rectangle of sel{Row,Col}{Start,Count} above.
-    void getSelectedArea()
-    {
-        wxGridCellCoordsArray topLeft  = m_cur_grid->GetSelectionBlockTopLeft();
-        wxGridCellCoordsArray botRight = m_cur_grid->GetSelectionBlockBottomRight();
-
-        wxArrayInt  cols = m_cur_grid->GetSelectedCols();
-        wxArrayInt  rows = m_cur_grid->GetSelectedRows();
-
-        D(printf("topLeft.Count():%zd botRight:Count():%zd\n", topLeft.Count(), botRight.Count() );)
-
-        if( topLeft.Count() && botRight.Count() )
-        {
-            selRowStart = topLeft[0].GetRow();
-            selColStart = topLeft[0].GetCol();
-
-            selRowCount = botRight[0].GetRow() - selRowStart + 1;
-            selColCount = botRight[0].GetCol() - selColStart + 1;
-        }
-        else if( cols.Count() )
-        {
-            selColStart = cols[0];
-            selColCount = cols.Count();
-            selRowStart = 0;
-            selRowCount = m_cur_grid->GetNumberRows();
-        }
-        else if( rows.Count() )
-        {
-            selColStart = 0;
-            selColCount = m_cur_grid->GetNumberCols();
-            selRowStart = rows[0];
-            selRowCount = rows.Count();
-        }
-        else
-        {
-            selRowStart = -1;
-            selColStart = -1;
-            selRowCount = 0;
-            selColCount = 0;
-        }
-
-        D(printf("selRowStart:%d selColStart:%d selRowCount:%d selColCount:%d\n", selRowStart, selColStart, selRowCount, selColCount );)
-    }
-
-    void rightClickCellPopupMenu()
-    {
-        wxMenu      menu;
-
-        menu.Append( MYID_CUT,    _( "Cut\tCTRL+X" ),         _( "Clear selected cells pasting original contents to clipboard" ) );
-        menu.Append( MYID_COPY,   _( "Copy\tCTRL+C" ),        _( "Copy selected cells to clipboard" ) );
-        menu.Append( MYID_PASTE,  _( "Paste\tCTRL+V" ),       _( "Paste clipboard cells to matrix at current cell" ) );
-        menu.Append( MYID_SELECT, _( "Select All\tCTRL+A" ),  _( "Select all cells" ) );
-
-        getSelectedArea();
-
-        // if nothing is selected, disable cut and copy.
-        if( !selRowCount && !selColCount )
-        {
-            menu.Enable( MYID_CUT,  false );
-            menu.Enable( MYID_COPY, false );
-        }
-
-        bool have_cb_text = false;
-        if( wxTheClipboard->Open() )
-        {
-            if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
-                have_cb_text = true;
-
-            wxTheClipboard->Close();
-        }
-
-        if( !have_cb_text )
-        {
-            // if nothing on clipboard, disable paste.
-            menu.Enable( MYID_PASTE, false );
-        }
-
-        PopupMenu( &menu );
-
-        // passOnFocus();
-    }
-
-    void cutcopy( bool doCut );
-    void paste();
-
-    // the user clicked on a popup menu choice:
-    void onPopupSelection( wxCommandEvent& event )
-    {
-        int     menuId = event.GetId();
-
-        // assume getSelectedArea() was called by rightClickPopupMenu() and there's
-        // no way to have gotten here without that having been called.
-
-        switch( menuId )
-        {
-        case MYID_CUT:
-        case MYID_COPY:
-            cutcopy( menuId == MYID_CUT );
-            break;
-
-        case MYID_PASTE:
-            paste();
-            break;
-
-        case MYID_SELECT:
-            m_cur_grid->SelectAll();
-            break;
-
-        default:
-            ;
-        }
     }
 
 
@@ -479,27 +400,14 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
     void onKeyDown( wxKeyEvent& ev )
     {
-        if( isCtl( 'A', ev ) )
-        {
-            m_cur_grid->SelectAll();
-        }
-        else if( isCtl( 'C', ev ) )
-        {
-            getSelectedArea();
-            cutcopy( false );
-        }
-        else if( isCtl( 'V', ev ) )
-        {
-            getSelectedArea();
-            paste();
-        }
-        else if( isCtl( 'X', ev ) )
-        {
-            getSelectedArea();
-            cutcopy( true );
-        }
-        else
-            ev.Skip();
+#if 0
+        // send the key to the current grid
+        ((wxEvtHandler*)m_cur_grid)->ProcessEvent( ev );
+#else
+        // or no:
+        // m_cur_grid has the focus most of the time anyways, so above not needed.
+        ev.Skip();
+#endif
     }
 
     void pageChangedHandler( wxAuiNotebookEvent& event )
@@ -646,26 +554,6 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
         }
     }
 
-    void onGridCmdSelectCell( wxGridEvent& event )
-    {
-        event.Skip();
-    }
-
-    void onGridCellLeftClick( wxGridEvent& event )
-    {
-        event.Skip();
-    }
-
-    void onGridCellLeftDClick( wxGridEvent& event )
-    {
-        event.Skip();
-    }
-
-    void onGridCellRightClick( wxGridEvent& event )
-    {
-        rightClickCellPopupMenu();
-    }
-
     /// Populate the readonly environment variable table with names and values
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable()
@@ -676,6 +564,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
         std::set< wxString >        unique;
         typedef std::set<wxString>::const_iterator      SET_CITER;
 
+        // clear the table
         m_path_subs_grid->DeleteRows( 0, m_path_subs_grid->GetNumberRows() );
 
         int gblRowCount = m_global_model.GetNumberRows();
@@ -754,6 +643,10 @@ public:
         m_global_grid->SetTable( (wxGridTableBase*) &m_global_model );
         m_project_grid->SetTable( (wxGridTableBase*) &m_project_model );
 
+        // add Cut, Copy, and Paste to wxGrids
+        m_global_grid->PushEventHandler( new FP_GRID_TRICKS( m_global_grid ) );
+        m_project_grid->PushEventHandler( new FP_GRID_TRICKS( m_project_grid ) );
+
         m_global_grid->AutoSizeColumns( false );
         m_project_grid->AutoSizeColumns( false );
 
@@ -779,11 +672,13 @@ public:
         attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
         m_global_grid->SetColAttr( COL_TYPE, attr );
 
-        m_global_grid->AutoSizeColumns();
-        m_project_grid->AutoSizeColumns();
+        m_global_grid->AutoSizeColumns( false );
+        m_project_grid->AutoSizeColumns( false );
 
+        /*
         Connect( MYID_FIRST, MYID_LAST, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler( DIALOG_FP_LIB_TABLE::onPopupSelection ), NULL, this );
+        */
 
         populateEnvironReadOnlyTable();
 
@@ -801,8 +696,10 @@ public:
 
     ~DIALOG_FP_LIB_TABLE()
     {
-        Disconnect( MYID_FIRST, MYID_LAST, wxEVT_COMMAND_MENU_SELECTED,
-            wxCommandEventHandler( DIALOG_FP_LIB_TABLE::onPopupSelection ), NULL, this );
+        // Delete the GRID_TRICKS.
+        // Any additional event handlers should be popped before the window is deleted.
+        m_global_grid->PopEventHandler( true );
+        m_project_grid->PopEventHandler( true );
 
         // ~wxGrid() examines its table, and the tables will have been destroyed before
         // the wxGrids are, so remove the tables from the wxGrids' awareness.
@@ -811,128 +708,6 @@ public:
         m_project_grid->SetTable( NULL );
     }
 };
-
-
-void DIALOG_FP_LIB_TABLE::cutcopy( bool doCut )
-{
-    // this format is compatible with most spreadsheets
-    if( wxTheClipboard->Open() )
-    {
-        wxGridTableBase*    tbl = m_cur_grid->GetTable();
-        wxString            txt;
-
-        for( int row = selRowStart;  row < selRowStart + selRowCount;  ++row )
-        {
-            for( int col = selColStart;  col < selColStart + selColCount; ++col )
-            {
-                txt += tbl->GetValue( row, col );
-
-                if( col < selColStart + selColCount - 1 )   // that was not last column
-                    txt += COL_SEP;
-
-                if( doCut )
-                    tbl->SetValue( row, col, wxEmptyString );
-            }
-            txt += ROW_SEP;
-        }
-
-        wxTheClipboard->SetData( new wxTextDataObject( txt ) );
-        wxTheClipboard->Close();
-
-        m_cur_grid->AutoSizeColumns();
-        m_cur_grid->ForceRefresh();
-    }
-}
-
-
-void DIALOG_FP_LIB_TABLE::paste()
-{
-    // assume format came from a spreadsheet or us.
-    if( wxTheClipboard->Open() )
-    {
-        if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
-        {
-            wxTextDataObject    data;
-            FP_TBL_MODEL*       tbl = (FP_TBL_MODEL*) m_cur_grid->GetTable();
-
-            wxTheClipboard->GetData( data );
-
-            wxString    cb_text = data.GetText();
-            size_t      ndx = cb_text.find( wxT( "(fp_lib_table" ) );
-
-            if( ndx != std::string::npos )
-            {
-                // paste the ROWs of s-expression (fp_lib_table), starting
-                // at column 0 regardless of current cursor column.
-
-                STRING_LINE_READER  slr( TO_UTF8( cb_text ), wxT( "Clipboard" ) );
-                FP_LIB_TABLE_LEXER  lexer( &slr );
-                FP_LIB_TABLE        tmp_tbl;
-                bool                parsed = true;
-
-                try
-                {
-                    tmp_tbl.Parse( &lexer );
-                }
-                catch( PARSE_ERROR& pe )
-                {
-                    // @todo tell what line and offset
-                    parsed = false;
-                }
-
-                if( parsed )
-                {
-                    const int cur_row = getCursorRow();
-
-                    // if clipboard rows would extend past end of current table size...
-                    if( int( tmp_tbl.rows.size() ) > tbl->GetNumberRows() - cur_row )
-                    {
-                        int newRowsNeeded = tmp_tbl.rows.size() - ( tbl->GetNumberRows() - cur_row );
-                        tbl->AppendRows( newRowsNeeded );
-                    }
-
-                    for( int i = 0;  i < (int) tmp_tbl.rows.size();  ++i )
-                    {
-                        tbl->rows[cur_row+i] = tmp_tbl.rows[i];
-                    }
-                }
-                m_cur_grid->AutoSizeColumns();
-            }
-            else
-            {
-                const int cur_row = std::max( getCursorRow(), 0 );    // no -1
-                const int cur_col = std::max( getCursorCol(), 0 );
-
-                wxStringTokenizer   rows( cb_text, ROW_SEP, wxTOKEN_RET_EMPTY );
-
-                // if clipboard rows would extend past end of current table size...
-                if( int( rows.CountTokens() ) > tbl->GetNumberRows() - cur_row )
-                {
-                    int newRowsNeeded = rows.CountTokens() - ( tbl->GetNumberRows() - cur_row );
-
-                    tbl->AppendRows( newRowsNeeded );
-                }
-
-                for( int row = cur_row;  rows.HasMoreTokens();  ++row )
-                {
-                    wxString rowTxt = rows.GetNextToken();
-
-                    wxStringTokenizer   cols( rowTxt, COL_SEP, wxTOKEN_RET_EMPTY );
-
-                    for( int col = cur_col;  cols.HasMoreTokens();  ++col )
-                    {
-                        wxString cellTxt = cols.GetNextToken();
-                        tbl->SetValue( row, col, cellTxt );
-                    }
-                }
-                m_cur_grid->AutoSizeColumns();
-            }
-        }
-
-        wxTheClipboard->Close();
-        m_cur_grid->ForceRefresh();
-    }
-}
 
 
 int InvokePcbLibTableEditor( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject )

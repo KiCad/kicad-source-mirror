@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2013 CERN
  * Copyright (C) 2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -26,6 +27,7 @@
 #include <invoke_pcb_dialog.h>
 #include <dialog_fp_plugin_options_base.h>
 #include <fp_lib_table.h>
+#include <grid_tricks.h>
 
 
 class DIALOG_FP_PLUGIN_OPTIONS : public DIALOG_FP_PLUGIN_OPTIONS_BASE
@@ -43,6 +45,19 @@ public:
                 _( "Options for Library '%s'" ), GetChars( aNickname ) );
 
         SetTitle( title );
+
+        m_grid->AutoSizeColumns( false );
+
+        // add Cut, Copy, and Paste to wxGrids
+        m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+
+        // initial focus on the grid please.
+        m_grid->SetFocus();
+    }
+
+    ~DIALOG_FP_PLUGIN_OPTIONS()
+    {
+        m_grid->PopEventHandler( true );
     }
 
 
