@@ -26,6 +26,8 @@ include_directories(
     ../common
     ../polygon
     ../common/dialogs
+    ../lib_dxf
+    ./import_dxf
     ${INC_AFTER}
     )
 
@@ -114,6 +116,11 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_footprint_wizard_list.cpp
     )
 
+set( PCBNEW_IMPORT_DXF
+    import_dxf/dialog_dxf_import.cpp
+    import_dxf/dxf2brd_items.cpp
+    )
+
 set( PCBNEW_AUTOROUTER_SRCS
     autorouter/automove.cpp
     autorouter/autoplac.cpp
@@ -145,6 +152,7 @@ set( PCBNEW_CLASS_SRCS
     cross-probing.cpp
     deltrack.cpp
     ${PCBNEW_DIALOGS}
+    ${PCBNEW_IMPORT_DXF}
     dragsegm.cpp
     drc.cpp
     drc_clearance_test_functions.cpp
@@ -347,6 +355,7 @@ if( KICAD_SCRIPTING_MODULES )
         pcbcommon
         common
         pcad2kicadpcb
+        lib_dxf
         ${GITHUB_PLUGIN_LIBRARIES}
         polygon
         bitmaps
@@ -515,6 +524,7 @@ target_link_libraries( pcbnew
     pcad2kicadpcb
     polygon
     bitmaps
+    lib_dxf
     ${GITHUB_PLUGIN_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
