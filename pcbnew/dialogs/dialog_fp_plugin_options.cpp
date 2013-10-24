@@ -29,6 +29,12 @@
 #include <fp_lib_table.h>
 #include <grid_tricks.h>
 
+using std::string;
+
+// re-enter the dialog with the column sizes preserved from last time.
+static int col_width_option;
+static int col_width_value;
+
 
 class DIALOG_FP_PLUGIN_OPTIONS : public DIALOG_FP_PLUGIN_OPTIONS_BASE
 {
@@ -38,7 +44,6 @@ public:
             const wxString& aNickname, const wxString& aOptions, wxString* aResult ) :
         DIALOG_FP_PLUGIN_OPTIONS_BASE( aParent ),
         m_callers_options( aOptions ),
-        m_options( aOptions ),
         m_result( aResult )
     {
         wxString title = wxString::Format(
@@ -46,10 +51,34 @@ public:
 
         SetTitle( title );
 
-        m_grid->AutoSizeColumns( false );
-
         // add Cut, Copy, and Paste to wxGrids
         m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+
+        string options = TO_UTF8( aOptions );
+
+        PROPERTIES* props = FP_LIB_TABLE::ParseOptions( options );
+
+        if( props )
+        {
+            m_grid->AppendRows( props->size() );
+
+            int row = 0;
+            for( PROPERTIES::const_iterator it = props->begin();  it != props->end();  ++it, ++row )
+            {
+                m_grid->SetCellValue( row, 0, FROM_UTF8( it->first.c_str() ) );
+                m_grid->SetCellValue( row, 1, FROM_UTF8( it->second.c_str() ) );
+            }
+        }
+
+        if( !col_width_option )
+        {
+            m_grid->AutoSizeColumns( false );
+        }
+        else
+        {
+            m_grid->SetColSize( 0, col_width_option );
+            m_grid->SetColSize( 1, col_width_value );
+        }
 
         // initial focus on the grid please.
         m_grid->SetFocus();
@@ -57,14 +86,49 @@ public:
 
     ~DIALOG_FP_PLUGIN_OPTIONS()
     {
+        // destroy GRID_TRICKS before m_grid.
         m_grid->PopEventHandler( true );
     }
 
 
 private:
     const wxString& m_callers_options;
-    wxString        m_options;
     wxString*       m_result;
+
+    wxString makeResult()
+    {
+        PROPERTIES  props;
+        const int   rowCount = m_grid->GetNumberRows();
+
+        for( int row = 0;  row<rowCount;  ++row )
+        {
+            string  name  = TO_UTF8( m_grid->GetCellValue( row, 0 ).Trim( false ).Trim() );
+            string  value = TO_UTF8( m_grid->GetCellValue( row, 1 ).Trim( false ).Trim() );
+
+            if( name.size() )
+            {
+                props[name] = value;
+            }
+        }
+
+        string  options = FP_LIB_TABLE::FormatOptions( &props );
+
+        return FROM_UTF8( options.c_str() );
+    }
+
+    void saveColSizes()
+    {
+        col_width_option = m_grid->GetColSize( 0 );
+        col_width_value  = m_grid->GetColSize( 1 );
+    }
+
+    void abort()
+    {
+        saveColSizes();
+
+        *m_result = m_callers_options;      // tell caller "no change"
+        EndModal( 0 );
+    }
 
     //-----<event handlers>------------------------------------------------------
     void onAddRow( wxCommandEvent& event )
@@ -85,25 +149,22 @@ private:
 
     void onCancelButtonClick( wxCommandEvent& event )
     {
-        *m_result = m_callers_options;  // no change
-        EndModal( 0 );
+        abort();
     }
 
     void onCancelButtonClick( wxCloseEvent& event )
     {
-        *m_result = m_callers_options;  // no change
-        EndModal( 0 );
+        abort();
     }
 
     void onOKButtonClick( wxCommandEvent& event )
     {
-        *m_result = m_options;  // change from edits
+        saveColSizes();
 
+        *m_result = makeResult();       // change from edits
         EndModal( 1 );
     }
-
     //-----</event handlers>-----------------------------------------------------
-
 };
 
 

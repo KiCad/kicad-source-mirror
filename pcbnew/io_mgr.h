@@ -26,11 +26,22 @@
  */
 
 #include <richio.h>
-#include <hashtables.h>
+#include <map>
+
 
 class BOARD;
 class PLUGIN;
 class MODULE;
+
+/**
+ * Class PROPERTIES
+ * is a name/value tuple with unique names and optional values.  The names
+ * may be iterated alphabetically.
+ */
+class PROPERTIES : public std::map< std::string, std::string >
+{
+    // alphabetical tuple of name and value hereby defined.
+};
 
 
 /**
