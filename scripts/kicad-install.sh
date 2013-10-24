@@ -8,7 +8,7 @@
 # that step for other linux distros.
 
 
-# Set where the 3 source trees will go
+# Set where the 3 source trees will go, use a full path
 WORKING_TREES=~/kicad_sources
 
 
@@ -76,6 +76,15 @@ install_prerequisites()
 }
 
 
+rm_build_dir()
+{
+    local dir="$1"
+    # this file is often created as root, so remove as root
+    sudo rm "$dir/install_manifest.txt" 2> /dev/null
+    rm -rf "$dir"
+}
+
+
 install_or_update()
 {
     echo "step 1) installing pre-requisites"
@@ -106,11 +115,11 @@ install_or_update()
     echo "step 4) checking out the libraries from launchpad repo..."
     if [ ! -d "$WORKING_TREES/kicad-lib.bzr" ]; then
         bzr checkout lp:~kicad-lib-committers/kicad/library kicad-lib.bzr
-        echo ' kicad-lib just checked out.'
+        echo ' kicad-lib checked out.'
     else
         cd kicad-lib.bzr
         bzr up
-        echo ' kicad-lib repo just updated.'
+        echo ' kicad-lib repo updated.'
         cd ../
     fi
 
@@ -128,12 +137,20 @@ install_or_update()
 
     echo "step 6) compiling source code..."
     cd kicad.bzr
-    rm -rf build && mkdir build && cd build
-    cmake   -DCMAKE_BUILD_TYPE=Release \
-            -DUSE_FP_LIB_TABLE=ON \
-            -DBUILD_GITHUB_PLUGIN=ON \
-            ../
-    make
+    if [ ! -d "build" ]; then
+        mkdir build && cd build
+        cmake   -DCMAKE_BUILD_TYPE=Release \
+                -DUSE_FP_LIB_TABLE=ON \
+                -DBUILD_GITHUB_PLUGIN=ON \
+                ../
+    else
+        cd build
+
+        # Although a "make clean" is sometimes needed, more often than not it slows down the update
+        # more than it is worth.  Do it manually if you need to in this directory.
+        # make clean
+    fi
+    make -j4
     echo " kicad compiled."
 
 
@@ -150,7 +167,8 @@ install_or_update()
 
     echo "step 9) installing libraries..."
     cd ../../kicad-lib.bzr
-    rm -rf build && mkdir build && cd build
+    rm_build_dir build
+    mkdir build && cd build
     cmake ../
     sudo make install
     echo " kicad-lib installed."
@@ -158,16 +176,23 @@ install_or_update()
 
     echo "step 10) installing documentation..."
     cd ../../kicad-doc.bzr
-    rm -rf build && mkdir build && cd build
+    rm_build_dir build
+    mkdir build && cd build
     cmake ../
     sudo make install
     echo " kicad-doc.bzr installed."
+
+    echo
+    echo 'All KiCad "--install-or-update" steps completed, you are up to date.'
 }
 
 
 if [ $# -eq 1 -a "$1" == "--remove-sources" ]; then
     # run this only once, kills .config & makes dirs
     echo "deleting $WORKING_TREES"
+    rm_build_dir "$WORKING_TREES/kicad.bzr/build"
+    rm_build_dir "$WORKING_TREES/kicad-lib.bzr/build"
+    rm_build_dir "$WORKING_TREES/kicad-doc.bzr/build"
     rm -rf "$WORKING_TREES"
     exit
 fi
