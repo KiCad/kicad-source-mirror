@@ -51,10 +51,9 @@
 #include <class_pcb_text.h>
 #include <modview_frame.h>
 #include <class_pcb_layer_box_selector.h>
-
 #include <dialog_drc.h>
-
 #include <dialog_global_edit_tracks_and_vias.h>
+#include <invoke_pcb_dialog.h>
 
 // Handles the selection of command events.
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
@@ -1183,6 +1182,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU_ARCHIVE_ALL_MODULES:
         ArchiveModulesOnBoard( wxEmptyString, false );
+        break;
+
+    case ID_GEN_IMPORT_DXF_FILE:
+        InvokeDXFDialogImport( this );
+        m_canvas->Refresh();
         break;
 
     default:

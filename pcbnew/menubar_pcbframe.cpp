@@ -174,6 +174,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Import a routed \"Specctra Session\" (*.ses) file" ),
                  KiBitmap( import_xpm ) );
 
+    AddMenuItem( submenuImport, ID_GEN_IMPORT_DXF_FILE,
+                 _( "&DXF File" ),
+                 _( "Import a 2D Drawing DXF file to Pcbnew on the Drawings layer" ),
+                 KiBitmap( import_xpm ) );
+
     AddMenuItem( filesMenu, submenuImport,
                  ID_GEN_IMPORT_FILE, _( "&Import" ),
                  _( "Import files" ), KiBitmap( import_xpm ) );
