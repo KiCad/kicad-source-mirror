@@ -512,7 +512,10 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
         InvokePluginOptionsEditor( this, row.GetNickName(), options, &result );
 
         if( options != result )
+        {
             row.SetOptions( result );
+            m_cur_grid->AutoSizeColumn( COL_OPTIONS, false );
+        }
     }
 
     void onCancelButtonClick( wxCommandEvent& event )
