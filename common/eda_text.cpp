@@ -32,6 +32,13 @@
 #include <trigo.h>               // RotatePoint
 #include <class_drawpanel.h>     // EDA_DRAW_PANEL
 
+// until bzr rev 4410, Y position of vertical justification
+// of multiline texts was incorrectly calculated for BOTTOM
+// and CENTER vertical justification. (Only the first line was justified)
+// If this line is left uncommented, the bug is fixed, but
+// creates a (very minor) issue for existing texts, mainly in Pcbnew
+// because the text position is sometimes critical.
+#define FIX_MULTILINE_VERT_JUSTIF
 
 // Conversion to application internal units defined at build time.
 #if defined( PCBNEW )
@@ -90,6 +97,16 @@ int EDA_TEXT::LenSize( const wxString& aLine ) const
     return ReturnGraphicTextWidth( aLine, m_Size.x, m_Italic, m_Bold );
 }
 
+/**
+ * Function GetInterline
+ * return the distance between 2 text lines
+ * has meaning only for multiline texts
+ */
+int EDA_TEXT::GetInterline( int aTextThickness ) const
+{
+    int thickness = aTextThickness <= 0 ? m_Thickness : aTextThickness;
+    return (( m_Size.y * 14 ) / 10) + thickness;
+}
 
 EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
 {
@@ -98,6 +115,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     wxArrayString* list = NULL;
     wxString       text = m_Text;
     int            thickness = ( aThickness < 0 ) ? m_Thickness : aThickness;
+    int            linecount = 1;
 
     if( m_MultilineAllowed )
     {
@@ -109,12 +127,14 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
                 text = list->Item( aLine );
             else
                 text = list->Item( 0 );
+
+            linecount = list->GetCount();
         }
     }
 
     // calculate the H and V size
     int    dx = LenSize( text );
-    int    dy = GetInterline();
+    int    dy = GetInterline( aThickness );
 
     /* Creates bounding box (rectangle) for an horizontal text */
     wxSize textsize = wxSize( dx, dy );
@@ -175,12 +195,36 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
         break;
 
     case GR_TEXT_VJUSTIFY_CENTER:
-        rect.SetY( rect.GetY() - (dy / 2) );
+        rect.SetY( rect.GetY() - ( dy / 2) );
         break;
 
     case GR_TEXT_VJUSTIFY_BOTTOM:
         rect.SetY( rect.GetY() - dy );
         break;
+    }
+
+    if( linecount > 1 )
+    {
+#ifdef FIX_MULTILINE_VERT_JUSTIF
+        int yoffset;
+        linecount -= 1;
+
+        switch( m_VJustify )
+        {
+        case GR_TEXT_VJUSTIFY_TOP:
+            break;
+
+        case GR_TEXT_VJUSTIFY_CENTER:
+            yoffset = linecount * GetInterline() / 2;
+            rect.SetY( rect.GetY() - yoffset );
+            break;
+
+        case GR_TEXT_VJUSTIFY_BOTTOM:
+            yoffset = linecount * GetInterline( aThickness );
+            rect.SetY( rect.GetY() - yoffset );
+            break;
+        }
+#endif
     }
 
     rect.Inflate( thickness / 2 );
@@ -227,15 +271,31 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
 
         offset.y = GetInterline();
 
+#ifdef FIX_MULTILINE_VERT_JUSTIF
+        if( list->Count() > 1 )
+        {
+            switch( m_VJustify )
+            {
+            case GR_TEXT_VJUSTIFY_TOP:
+                break;
+
+            case GR_TEXT_VJUSTIFY_CENTER:
+                pos.y -= ( list->Count() - 1 ) * offset.y / 2;
+                break;
+
+            case GR_TEXT_VJUSTIFY_BOTTOM:
+                pos.y -= ( list->Count() - 1 ) * offset.y;
+                break;
+            }
+        }
+#endif
         RotatePoint( &offset, m_Orient );
 
         for( unsigned i = 0; i<list->Count(); i++ )
         {
             wxString txt = list->Item( i );
             drawOneLineOfText( aClipBox, aDC, aOffset, aColor,
-                               aDrawMode, aFillMode,
-                               i ?  UNSPECIFIED_COLOR : aAnchor_color,
-                               txt, pos );
+                               aDrawMode, aFillMode, txt, pos );
             pos += offset;
         }
 
@@ -243,15 +303,21 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
     }
     else
         drawOneLineOfText( aClipBox, aDC, aOffset, aColor,
-                           aDrawMode, aFillMode,
-                           aAnchor_color, m_Text, m_Pos );
+                           aDrawMode, aFillMode, m_Text, m_Pos );
+
+    // Draw text anchor, if requested
+    if( aAnchor_color != UNSPECIFIED_COLOR )
+    {
+        GRDrawAnchor( aClipBox, aDC,
+                      m_Pos.x + aOffset.x, m_Pos.y + aOffset.y,
+                      DIM_ANCRE_TEXTE, aAnchor_color );
+    }
 }
 
 
 void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
                                   const wxPoint& aOffset, EDA_COLOR_T aColor,
                                   GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
-                                  EDA_COLOR_T aAnchor_color,
                                   wxString& aText, wxPoint aPos )
 {
     int width = m_Thickness;
@@ -261,14 +327,6 @@ void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
 
     if( aDrawMode != UNSPECIFIED_DRAWMODE )
         GRSetDrawMode( aDC, aDrawMode );
-
-    // Draw text anchor, if requested
-    if( aAnchor_color != UNSPECIFIED_COLOR )
-    {
-        GRDrawAnchor( aClipBox, aDC,
-                      aPos.x + aOffset.x, aPos.y + aOffset.y,
-                      DIM_ANCRE_TEXTE, aAnchor_color );
-    }
 
     if( aFillMode == SKETCH )
         width = -width;
