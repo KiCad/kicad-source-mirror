@@ -112,6 +112,7 @@ bool DXF2BRD_CONVERTER::ImportDxfFile( const wxString& aFile, BOARD* aBoard )
  */
 void DXF2BRD_CONVERTER::addLayer( const DRW_Layer& data )
 {
+    // Not yet useful in Pcbnew.
 #if 0
     wxString name = wxString::FromUTF8( data.name.c_str() );
     wxLogMessage( name );
@@ -215,8 +216,8 @@ void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
 
     switch( data.alignV )
     {
-        case DRW_Text::VBaseLine:       // Top
-            pcb_text->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        case DRW_Text::VBaseLine:
+            pcb_text->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
             break;
 
         case DRW_Text::VBottom:
@@ -248,7 +249,7 @@ void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
 
         case DRW_Text::HAligned:
             // no equivalent options in text pcb.
-            pcb_text->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            pcb_text->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
             break;
 
         case DRW_Text::HMiddle:
@@ -258,7 +259,7 @@ void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
 
         case DRW_Text::HFit:
             // no equivalent options in text pcb.
-            pcb_text->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            pcb_text->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
             break;
     }
 
