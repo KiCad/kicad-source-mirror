@@ -544,7 +544,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
             fn.SetName( FP_LIB_TABLE::GetFileName() );
 
             if( fn.FileExists()
-              && IsOK( this, _( "A footprint library table already exsist in this path.\n\nDo "
+              && IsOK( this, _( "A footprint library table already exists in this path.\n\nDo "
                                 "you want to overwrite it?" ) ) )
             {
                 try
@@ -555,7 +555,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
                 {
                     DisplayError( this,
                                   wxString::Format( _( "An error occurred attempting to save the "
-                                                       "footpirnt library table <%s>\n\n%s" ),
+                                                       "footprint library table <%s>\n\n%s" ),
                                                     GetChars( fn.GetFullPath() ),
                                                     GetChars( ioe.errorText ) ) );
                 }
