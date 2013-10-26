@@ -46,6 +46,8 @@ private:
     double m_yOffset;       // Y coord offset for conversion (in mm)
     double m_defaultThickness;  // default line thickness for conversion (in dxf units)
     double m_Dfx2mm;        // The scale factor to convert DXF units to mm
+                            // Seems DRW_Interface always converts DXF coordinates in mm
+                            // (to be confirmed)
     int    m_brdLayer;      // The board layer to place imported dfx items
     int m_version;
     std::string m_codePage;

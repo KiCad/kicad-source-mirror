@@ -117,6 +117,7 @@ set( PCBNEW_DIALOGS
     )
 
 set( PCBNEW_IMPORT_DXF
+    import_dxf/dialog_dxf_import_base.cpp
     import_dxf/dialog_dxf_import.cpp
     import_dxf/dxf2brd_items.cpp
     )

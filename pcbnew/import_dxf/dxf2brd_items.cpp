@@ -72,7 +72,7 @@ int DXF2BRD_CONVERTER::mapX( double aDxfCoordX )
 
 int DXF2BRD_CONVERTER::mapY( double aDxfCoordY )
 {
-    return Millimeter2iu( -m_yOffset - (aDxfCoordY * m_Dfx2mm) );
+    return Millimeter2iu( m_yOffset - (aDxfCoordY * m_Dfx2mm) );
 }
 
 
