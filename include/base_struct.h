@@ -46,6 +46,10 @@ extern std::ostream& operator <<( std::ostream& out, const wxPoint& pt );
 #endif
 
 
+/// Flag to enable find and replace tracing using the WXTRACE environment variable.
+extern const wxString traceFindReplace;
+
+
 /**
  * Enum KICAD_T
  * is the set of class identification values, stored in EDA_ITEM::m_StructType

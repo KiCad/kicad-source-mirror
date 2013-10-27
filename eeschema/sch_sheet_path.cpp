@@ -438,6 +438,7 @@ SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
     m_index = 0;
     m_count = 0;
     m_List  = NULL;
+    m_isRootSheet = false;
 
     if( aSheet == NULL )
         aSheet = g_RootSheet;
@@ -518,6 +519,9 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheet( const wxString aPath, bool aHumanReada
 
 void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 {
+    if( aSheet == g_RootSheet )
+        m_isRootSheet = true;
+
     if( m_List == NULL )
     {
         int count = aSheet->CountSheets();
@@ -701,4 +705,26 @@ bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
         found = path->SetComponentFootprint( aReference, aFootPrint, aSetVisible );
 
     return found;
+}
+
+
+bool SCH_SHEET_LIST::IsComplexHierarchy()
+{
+    wxString fileName;
+
+    for( int i = 0;  i < GetCount();  i++ )
+    {
+        fileName = GetSheet( i )->Last()->GetFileName();
+
+        for( int j = 0;  j < GetCount();  j++ )
+        {
+            if( i == j )
+                continue;
+
+            if( fileName == GetSheet( j )->Last()->GetFileName() )
+                return true;
+        }
+    }
+
+    return false;
 }

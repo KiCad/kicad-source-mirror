@@ -194,6 +194,8 @@ protected:
      */
     void addCurrentItemToList( wxDC* aDC );
 
+    void updateFindReplaceView( wxFindDialogEvent& aEvent );
+
 public:
     SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
                     const wxPoint& aPosition, const wxSize& aSize,

@@ -292,6 +292,7 @@ private:
                                   * returning the next item in m_List.  Also used for
                                   * internal calculations in BuildSheetList()
                                   */
+    bool            m_isRootSheet;
     SCH_SHEET_PATH  m_currList;
 
 public:
@@ -441,6 +442,15 @@ public:
      */
     bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
                                 bool aSetVisible );
+
+    /**
+     * Function IsComplexHierarchy
+     * searches all of the sheets for duplicate files names which indicates a complex
+     * hierarchy.
+     *
+     * @return true if the #SCH_SHEET_LIST is a complex hierarchy.
+     */
+    bool IsComplexHierarchy();
 
 private:
 
