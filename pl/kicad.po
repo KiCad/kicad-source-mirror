@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-25 19:00+0100\n"
-"PO-Revision-Date: 2013-10-25 19:01+0100\n"
+"POT-Creation-Date: 2013-10-27 08:50+0100\n"
+"PO-Revision-Date: 2013-10-27 08:50+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1685,6 +1685,7 @@ msgstr "Brak symbolu"
 
 #: eeschema/libedit_plot_component.cpp:71
 #: eeschema/libedit_plot_component.cpp:91
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:21
 msgid "Filename:"
 msgstr "Nazwa pliku:"
 
@@ -7412,7 +7413,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:547 cvpcb/readwrite_dlgs.cpp:284
 msgid ""
-"A footprint library table already exsist in this path.\n"
+"A footprint library table already exists in this path.\n"
 "\n"
 "Do you want to overwrite it?"
 msgstr ""
@@ -7423,7 +7424,7 @@ msgstr ""
 #: pcbnew/files.cpp:557 cvpcb/readwrite_dlgs.cpp:294
 #, c-format
 msgid ""
-"An error occurred attempting to save the footpirnt library table <%s>\n"
+"An error occurred attempting to save the footprint library table <%s>\n"
 "\n"
 "%s"
 msgstr ""
@@ -11908,6 +11909,7 @@ msgstr "Przeglądaj biblioteki footprintów"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:29
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:165
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:82
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:33
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:103
 #: common/dialogs/dialog_page_settings_base.cpp:356
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:209
@@ -14801,6 +14803,30 @@ msgstr ""
 "Nie mogę pobrać zip: '%s'\n"
 "dla ścieżki bibliotek: '%s'.\n"
 "Która: '%s'"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
+msgid "Right top corner"
+msgstr "Prawy górny wierzchołek"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
+msgid "Middle"
+msgstr "Na środku"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
+msgid "Centered on page"
+msgstr "Umieść na środku strony"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
+msgid "Right bottom corner"
+msgstr "Prawy dolny narożnik"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:41
+msgid "Origin of DXF Coordinates"
+msgstr "Położenie rysunku DXF"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:45
+msgid "Board layer for import:"
+msgstr "Rysunek umieszczony na warstwie:"
 
 #: cvpcb/autosel.cpp:112
 #, c-format
@@ -19087,6 +19113,10 @@ msgstr "Właściwości siatki"
 #: pcbnew/dialogs/dialog_SVG_print_base.h:72
 msgid "Export SVG file"
 msgstr "Eksportuj plik SVG"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.h:62
+msgid "Import DXF file"
+msgstr "Importuj plik DXF"
 
 #: cvpcb/common_help_msg.h:4
 msgid "Open a net list file"
