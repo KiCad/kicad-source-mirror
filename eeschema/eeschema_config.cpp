@@ -364,10 +364,10 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
 
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
                                         LIB_COMPONENT::SubpartIdSeparatorPtr(),
-                                        IsGOST() ? '.' : 0, 0, 126 ) );
+                                        0, 0, 126 ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartFirstId" ),
                                         LIB_COMPONENT::SubpartFirstIdPtr(),
-                                        IsGOST() ? '1' : 'A', '1', 'z' ) );
+                                        'A', '1', 'z' ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),
                                                            &m_userLibraryPath ) );

@@ -133,12 +133,14 @@ void DIALOG_NEW_DATAITEM::initDlg()
             m_textCtrlText->Enable( false );
             break;
 
+        case WORKSHEET_DATAITEM::WS_BITMAP:
         case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
             m_textCtrlText->Enable( false );
             // fall through
         case WORKSHEET_DATAITEM::WS_TEXT:
             m_textCtrlEndX->Enable( false );
             m_textCtrlEndY->Enable( false );
+            m_choiceCornerEnd->Enable( false );
             break;
     }
 

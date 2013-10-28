@@ -132,6 +132,25 @@ static const char*  poly_xpm[] =
     "     xx     "
 };
 
+static const char*  img_xpm[] =
+{
+    "12 12 2 1",
+    "  c None",
+    "x c #800000",
+    "     xx     ",
+    "   xxxxxx   ",
+    " xx      xx ",
+    "xx        xx",
+    "xx        xx",
+    " xx      xx ",
+    "   xxxxxx   ",
+    "     xx     ",
+    "     xx     ",
+    "     xx     ",
+    "     xx     ",
+    "     xx     "
+};
+
 // Event table:
 
 
@@ -147,13 +166,14 @@ DESIGN_TREE_FRAME::DESIGN_TREE_FRAME( PL_EDITOR_FRAME* aParent ) :
     iconsize.y  = root_bm.GetHeight();
 
     // Make an image list containing small icons
-    m_imageList = new wxImageList( iconsize.x, iconsize.y, true, 4 );
+    m_imageList = new wxImageList( iconsize.x, iconsize.y, true, 6 );
 
     m_imageList->Add( root_bm );                    // root symbol
     m_imageList->Add( wxBitmap( line_xpm ) );       // line item
     m_imageList->Add( wxBitmap( rect_xpm ) );       // rect item
     m_imageList->Add( wxBitmap( text_xpm ) );       // text item
     m_imageList->Add( wxBitmap( poly_xpm ) );       // poly item
+    m_imageList->Add( wxBitmap( img_xpm ) );        // bitmap item
 
     SetImageList( m_imageList );
 }
@@ -201,6 +221,7 @@ void DESIGN_TREE_FRAME::ReCreateDesignTree()
             case WORKSHEET_DATAITEM::WS_RECT: img = 2; break;
             case WORKSHEET_DATAITEM::WS_TEXT: img = 3; break;
             case WORKSHEET_DATAITEM::WS_POLYPOLYGON: img = 4; break;
+            case WORKSHEET_DATAITEM::WS_BITMAP: img = 5; break;
         }
         wxTreeItemId cell= AppendItem( rootitem, item->m_Name, img, img );
         DESIGN_TREE_ITEM_DATA* data = new DESIGN_TREE_ITEM_DATA( item );

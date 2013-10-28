@@ -186,31 +186,19 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     m_canvas->Refresh();
 }
 
-/*
- * HandleBlockEnd is called when:
- * a block is defined
- * or a schematic iten should be dragged
- * When the block is defined, all items inside the block should be collected
- * When a schematic iten should be dragged, only this item should be collected
- *
- * In all cases, connected items are collected when a drag command is activated
- */
-bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
+
+bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 {
     bool            nextcmd = false;
     bool            zoom_command = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
-    bool            currItemOnly = false;
-
-    if ( block->GetCommand() == BLOCK_DRAG && GetScreen()->GetCurItem() != NULL )
-        currItemOnly = true;
 
     if( block->GetCount() )
     {
         BLOCK_STATE_T   state   = block->GetState();
         BLOCK_COMMAND_T command = block->GetCommand();
 
-        m_canvas->CallEndMouseCapture( DC );
+        m_canvas->CallEndMouseCapture( aDC );
 
         block->SetState( state );
         block->SetCommand( command );
@@ -231,7 +219,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_ROTATE:
             GetScreen()->UpdatePickList();
-            DrawAndSizingBlockOutlines( m_canvas, DC, wxDefaultPosition, false );
+            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
 
             if( block->GetCount() )
             {
@@ -243,25 +231,28 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
                 RotateListOfItems( block->GetItems(), rotationPoint );
                 OnModify();
             }
+
             block->ClearItemsList();
-            GetScreen()->TestDanglingEnds( m_canvas, DC );
+            GetScreen()->TestDanglingEnds( m_canvas, aDC );
             m_canvas->Refresh();
             break;
 
-        case BLOCK_DRAG:    /* Drag */
+        case BLOCK_DRAG:
             GetScreen()->BreakSegmentsOnJunctions();
             // fall through
 
         case BLOCK_MOVE:
         case BLOCK_COPY:
-            if( currItemOnly )
+            if( GetScreen()->GetCurItem() != NULL )
             {
                 ITEM_PICKER picker;
                 picker.SetItem( GetScreen()->GetCurItem() );
                 block->PushItem( picker );
             }
             else
+            {
                 GetScreen()->UpdatePickList();
+            }
             // fall through
 
         case BLOCK_PRESELECT_MOVE: /* Move with preselection list*/
@@ -269,21 +260,21 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             {
                 nextcmd = true;
                 GetScreen()->SelectBlockItems();
-                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+                m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
                 m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
-                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+                m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
                 block->SetState( STATE_BLOCK_MOVE );
             }
             else
             {
-                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+                m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
                 m_canvas->SetMouseCapture( NULL, NULL );
             }
             break;
 
-        case BLOCK_DELETE: /* Delete */
+        case BLOCK_DELETE:
             GetScreen()->UpdatePickList();
-            DrawAndSizingBlockOutlines( m_canvas, DC, wxDefaultPosition, false );
+            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
 
             if( block->GetCount() )
             {
@@ -291,13 +282,13 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
                 OnModify();
             }
             block->ClearItemsList();
-            GetScreen()->TestDanglingEnds( m_canvas, DC );
+            GetScreen()->TestDanglingEnds( m_canvas, aDC );
             m_canvas->Refresh();
             break;
 
-        case BLOCK_SAVE:  /* Save */
+        case BLOCK_SAVE:
             GetScreen()->UpdatePickList();
-            DrawAndSizingBlockOutlines( m_canvas, DC, wxDefaultPosition, false );
+            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
 
             if( block->GetCount() )
             {
@@ -313,8 +304,46 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             block->SetState( STATE_BLOCK_MOVE );
             break;
 
-        case BLOCK_ZOOM: /* Window Zoom */
+        case BLOCK_ZOOM:
             zoom_command = true;
+            break;
+
+        case BLOCK_MIRROR_X:
+            GetScreen()->UpdatePickList();
+            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
+
+            if( block->GetCount() )
+            {
+                // Compute the mirror center and put it on grid.
+                wxPoint mirrorPoint = block->Centre();
+                mirrorPoint = GetNearestGridPosition( mirrorPoint );
+                SetCrossHairPosition( mirrorPoint );
+                SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_X, mirrorPoint );
+                MirrorX( block->GetItems(), mirrorPoint );
+                OnModify();
+            }
+
+            GetScreen()->TestDanglingEnds( m_canvas, aDC );
+            m_canvas->Refresh();
+            break;
+
+        case BLOCK_MIRROR_Y:
+            GetScreen()->UpdatePickList();
+            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
+
+            if( block->GetCount() )
+            {
+                // Compute the mirror center and put it on grid.
+                wxPoint mirrorPoint = block->Centre();
+                mirrorPoint = GetNearestGridPosition( mirrorPoint );
+                SetCrossHairPosition( mirrorPoint );
+                SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_Y, mirrorPoint );
+                MirrorY( block->GetItems(), mirrorPoint );
+                OnModify();
+            }
+
+            GetScreen()->TestDanglingEnds( m_canvas, aDC );
+            m_canvas->Refresh();
             break;
 
         default:
@@ -341,158 +370,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         Window_Zoom( GetScreen()->m_BlockLocate );
 
     return nextcmd;
-}
-
-
-void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
-{
-    bool blockCmdFinished = true;   /* set to false for block command which
-                                     * have a next step
-                                     * and true if the block command is finished here
-                                     */
-    BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
-
-    // can convert only a block move command to an other command
-    if( block->GetCommand() != BLOCK_MOVE )
-        return;
-
-    // Useless if the new command is block move because we are already in block move.
-    if( Command == BLOCK_MOVE )
-        return;
-
-    block->SetCommand( (BLOCK_COMMAND_T) Command );
-    block->SetMessageBlock( this );
-
-    switch( block->GetCommand() )
-    {
-    case BLOCK_COPY:     /* move to copy */
-        block->SetState( STATE_BLOCK_MOVE );
-        blockCmdFinished = false;
-        break;
-
-    case BLOCK_DRAG:     /* move to Drag */
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-
-        // Clear list of items to move, and rebuild it with items to drag:
-        block->ClearItemsList();
-
-        GetScreen()->BreakSegmentsOnJunctions();
-        GetScreen()->UpdatePickList();
-
-        if( block->GetCount() )
-        {
-            blockCmdFinished = false;
-            GetScreen()->SelectBlockItems();
-
-            if( m_canvas->IsMouseCaptured() )
-                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-
-            block->SetState( STATE_BLOCK_MOVE );
-        }
-        break;
-
-    case BLOCK_DELETE:     /* move to Delete */
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-
-        if( block->GetCount() )
-        {
-            DeleteItemsInList( m_canvas, block->GetItems() );
-            OnModify();
-        }
-
-        GetScreen()->TestDanglingEnds( m_canvas, DC );
-        m_canvas->Refresh();
-        break;
-
-    case BLOCK_SAVE:     /* Save list in paste buffer*/
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-
-        if( block->GetCount() )
-        {
-            wxPoint move_vector = -GetScreen()->m_BlockLocate.GetLastCursorPosition();
-            copyBlockItems( block->GetItems() );
-            MoveItemsInList( m_blockItems.GetItems(), move_vector );
-        }
-        break;
-
-    case BLOCK_ZOOM:     /* Window Zoom */
-        m_canvas->CallEndMouseCapture( DC );
-        m_canvas->SetCursor( (wxStockCursor) m_canvas->GetDefaultCursor() );
-        Window_Zoom( GetScreen()->m_BlockLocate );
-        break;
-
-
-    case BLOCK_ROTATE:
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-
-        if( block->GetCount() )
-        {
-            /* Compute the rotation center and put it on grid */
-            wxPoint rotationPoint = block->Centre();
-            rotationPoint = GetNearestGridPosition( rotationPoint );
-            SetCrossHairPosition( rotationPoint );
-            SaveCopyInUndoList( block->GetItems(), UR_ROTATED, rotationPoint );
-            RotateListOfItems( block->GetItems(), rotationPoint );
-            OnModify();
-        }
-
-        GetScreen()->TestDanglingEnds( m_canvas, DC );
-        m_canvas->Refresh();
-        break;
-
-    case BLOCK_MIRROR_X:
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-
-        if( block->GetCount() )
-        {
-            /* Compute the mirror center and put it on grid */
-            wxPoint mirrorPoint = block->Centre();
-            mirrorPoint = GetNearestGridPosition( mirrorPoint );
-            SetCrossHairPosition( mirrorPoint );
-            SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_X, mirrorPoint );
-            MirrorX( block->GetItems(), mirrorPoint );
-            OnModify();
-        }
-
-        GetScreen()->TestDanglingEnds( m_canvas, DC );
-        m_canvas->Refresh();
-        break;
-
-    case BLOCK_MIRROR_Y:
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-
-        if( block->GetCount() )
-        {
-            /* Compute the mirror center and put it on grid */
-            wxPoint mirrorPoint = block->Centre();
-            mirrorPoint = GetNearestGridPosition( mirrorPoint );
-            SetCrossHairPosition( mirrorPoint );
-            SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_Y, mirrorPoint );
-            MirrorY( block->GetItems(), mirrorPoint );
-            OnModify();
-        }
-
-        GetScreen()->TestDanglingEnds( m_canvas, DC );
-        m_canvas->Refresh();
-        break;
-
-    default:
-        break;
-    }
-
-    if( blockCmdFinished )
-    {
-        block->Clear();
-        GetScreen()->SetCurItem( NULL );
-        m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
-                                   false );
-    }
 }
 
 

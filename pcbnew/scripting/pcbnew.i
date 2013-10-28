@@ -31,6 +31,9 @@
 %module pcbnew
 
 %feature("autodoc", "1");
+#ifdef ENABLE_DOCSTRINGS_FROM_DOXYGEN
+%include "docstrings.i"
+#endif
 
 %include "kicad.i"
 

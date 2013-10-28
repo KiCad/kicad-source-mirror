@@ -1,3 +1,6 @@
+
+set( MAKE_LINK_MAPS false )
+
 add_definitions( -DPCBNEW )
 add_subdirectory(router)
 
@@ -24,6 +27,8 @@ include_directories(
     ../common
     ../polygon
     ../common/dialogs
+    ../lib_dxf
+    ./import_dxf
     ${INC_AFTER}
     )
 
@@ -56,6 +61,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_find.cpp
     dialogs/dialog_fp_lib_table_base.cpp
     dialogs/dialog_fp_lib_table.cpp
+    dialogs/dialog_fp_plugin_options_base.cpp
+    dialogs/dialog_fp_plugin_options.cpp
     dialogs/dialog_freeroute_exchange.cpp
     dialogs/dialog_freeroute_exchange_base.cpp
     dialogs/dialog_gendrill.cpp
@@ -110,6 +117,12 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_footprint_wizard_list.cpp
     )
 
+set( PCBNEW_IMPORT_DXF
+    import_dxf/dialog_dxf_import_base.cpp
+    import_dxf/dialog_dxf_import.cpp
+    import_dxf/dxf2brd_items.cpp
+    )
+
 set( PCBNEW_AUTOROUTER_SRCS
     autorouter/automove.cpp
     autorouter/autoplac.cpp
@@ -124,7 +137,6 @@ set( PCBNEW_AUTOROUTER_SRCS
 
 set( PCBNEW_CLASS_SRCS
     tool_modview.cpp
-    modview.cpp
     modview_frame.cpp
     pcbframe.cpp
     attribut.cpp
@@ -142,6 +154,7 @@ set( PCBNEW_CLASS_SRCS
     cross-probing.cpp
     deltrack.cpp
     ${PCBNEW_DIALOGS}
+    ${PCBNEW_IMPORT_DXF}
     dragsegm.cpp
     drc.cpp
     drc_clearance_test_functions.cpp
@@ -198,10 +211,10 @@ set( PCBNEW_CLASS_SRCS
     print_board_functions.cpp
     printout_controler.cpp
     ratsnest.cpp
-    specctra.cpp
-    specctra_export.cpp
+#    specctra.cpp           #moved in pcbcommon lib
+#    specctra_export.cpp
+#    specctra_keywords.cpp
     specctra_import.cpp
-    specctra_keywords.cpp
     swap_layers.cpp
     target_edit.cpp
     tool_modedit.cpp
@@ -296,7 +309,14 @@ if( KICAD_SCRIPTING )
 
     set( SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
+    if( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/doxygen-xml )
+        set( SWIG_OPTS ${SWIG_OPTS} -DENABLE_DOCSTRINGS_FROM_DOXYGEN )
+        set( SWIG_OPTS ${SWIG_OPTS} -I${CMAKE_CURRENT_BINARY_DIR}/docstrings )
+    endif()
+
     add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
+                        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+
         DEPENDS pcbcommon
         DEPENDS scripting/pcbnew.i
         DEPENDS scripting/board.i
@@ -309,8 +329,11 @@ if( KICAD_SCRIPTING )
         DEPENDS ../scripting/wx.i
         DEPENDS ../scripting/kicadplugins.i
 
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docstrings
+        COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/docstrings/docstrings.i # this makes docstrings.i available if it doesn't exist
+
         COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
-        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
@@ -320,8 +343,12 @@ endif()
 # _pcbnew DLL/DSO file creation
 ###
 
+if( BUILD_GITHUB_PLUGIN )
+    set( GITHUB_PLUGIN_LIBRARIES github_plugin )
+endif()
+
 if( ( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES ) AND NOT WIN32 AND NOT APPLE )
-    set ( PCBNEW_EXTRA_LIBS "rt" )
+    list( APPEND PCBNEW_EXTRA_LIBS rt )
 endif()
 
 
@@ -338,6 +365,8 @@ if( KICAD_SCRIPTING_MODULES )
         pnsrouter
         common
         pcad2kicadpcb
+        lib_dxf
+        ${GITHUB_PLUGIN_LIBRARIES}
         polygon
         bitmaps
         gal
@@ -350,7 +379,70 @@ if( KICAD_SCRIPTING_MODULES )
         ${PCBNEW_EXTRA_LIBS}
         )
 
+     # create .i files from XML doxygen parsing, docstrings.i will include all of them
+    add_custom_target( qa
+        COMMAND PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR} ${PYTHON_EXECUTABLE} test.py
+
+        COMMENT "running qa"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripting/qa
+        )
+
+    if( MAKE_LINK_MAPS )
+        # generate a link map with cross reference
+        set_target_properties( _pcbnew PROPERTIES LINK_FLAGS "-Wl,-cref -Wl,-Map=_pcbnew.map" )
+    endif()
+
 endif()
+
+
+###
+# Doxygen python documentation
+###
+
+find_package( Doxygen )
+if( DOXYGEN_FOUND )
+    if( KICAD_SCRIPTING )
+
+        # create XML files from doxygen parsing
+        add_custom_target( doxygen-python-xml
+            ${CMAKE_COMMAND} -E remove_directory doxygen-python-xml
+            COMMAND SOURCES_DIR=${CMAKE_SOURCE_DIR} ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_xml
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS Doxyfile_xml
+            COMMENT "building doxygen docs into directory doxygen-python/html"
+        )
+
+        # create .i files from XML doxygen parsing, docstrings.i will include all of them
+        add_custom_target( xml-to-docstrings
+            COMMAND ${CMAKE_COMMAND} -E remove_directory docstrings
+            COMMAND ${CMAKE_COMMAND} -E make_directory docstrings
+            COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/extract_docstrings.py pcbnew.py doxygen-xml/xml docstrings
+
+            COMMAND ${CMAKE_COMMAND} -E remove pcbnew.py # force removal so it will be recreated later with the new docstrings
+            COMMENT "building docstring files"
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS pcbnew.py
+            DEPENDS doxygen-python-xml
+            )
+
+        # create doxygen-python html
+        add_custom_target( doxygen-python
+            ${CMAKE_COMMAND} -E remove_directory doxygen-python
+            COMMAND PYTHON_SOURCES_TO_DOC=${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_python
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS Doxyfile_python
+            DEPENDS xml-to-docstrings
+            DEPENDS pcbnew.py
+
+            COMMENT "building doxygen docs into directory doxygen-python/html"
+        )
+    endif()
+else()
+    message( STATUS "WARNING: Doxygen not found - doxygen-docs (Source Docs) target not created" )
+endif()
+
+
+
 
 ###
 # Windows resource file
@@ -417,7 +509,6 @@ if( BUILD_GITHUB_PLUGIN )
 endif()
 
 
-
 ###
 # Create the pcbnew executable
 ###
@@ -448,6 +539,8 @@ target_link_libraries( pcbnew
     polygon
     bitmaps
     gal
+    lib_dxf
+    ${GITHUB_PLUGIN_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
@@ -469,6 +562,12 @@ target_link_libraries(pcbnew
 	)
 endif(WIN32 AND MSYS)
 
+if( MAKE_LINK_MAPS )
+    # generate a link map with cross reference
+    set_target_properties( pcbnew PROPERTIES LINK_FLAGS "-Wl,-cref -Wl,-Map=pcbnew.map" )
+endif()
+
+
 ###
 # Add pcbnew as install target
 ###
@@ -479,7 +578,7 @@ install( TARGETS pcbnew
 
 if( KICAD_SCRIPTING )
     add_custom_target( FixSwigImportsScripting ALL
-        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
         DEPENDS pcbnew
         COMMENT "Fixing swig_import_helper in Kicad scripting"
         )
@@ -489,7 +588,7 @@ endif()
 
 if( KICAD_SCRIPTING_MODULES )
     add_custom_target( FixSwigImportsModuleScripting ALL
-        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
         DEPENDS _pcbnew
         COMMENT "Fixing swig_import_helper in Kicad scripting modules"
         )
@@ -504,12 +603,10 @@ if( KICAD_SCRIPTING_MODULES )
 endif()
 
 
-# The specctra test fails to build properly using MS Visual Studio.
-if( NOT MSVC )
-    # This one gets made only when testing.
-    add_executable( specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp )
-    target_link_libraries( specctra_test common ${wxWidgets_LIBRARIES} )
-endif()
+# This one gets made only when testing.
+add_executable( specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp )
+target_link_libraries( specctra_test common ${wxWidgets_LIBRARIES} )
+
 
 # This one gets made only when testing.
 add_executable( layer_widget_test WIN32 EXCLUDE_FROM_ALL

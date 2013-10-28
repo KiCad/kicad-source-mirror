@@ -94,6 +94,10 @@ void DIALOG_PLOT::Init_Dialog()
     case PLOT_FORMAT_HPGL:
         m_plotFormatOpt->SetSelection( 4 );
         break;
+
+    case PLOT_FORMAT_PDF:
+        m_plotFormatOpt->SetSelection( 5 );
+        break;
     }
 
     msg = ReturnStringFromValue( g_UserUnit, m_brdSettings.m_SolderMaskMargin, true );
@@ -610,7 +614,7 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetLineWidth() );
         m_linesWidth->SetValue( msg );
-        msg.Printf( _( "Default linewidth constrained!\n" ) );
+        msg.Printf( _( "Default line width constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
 
@@ -790,12 +794,13 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
             LOCALE_IO toggle;
             BOARD *board = m_parent->GetBoard();
-            PLOTTER *plotter = StartPlotBoard(board, &m_plotOpts,
-                                              fn.GetFullPath(),
-                                              wxEmptyString );
+            PLOTTER *plotter = StartPlotBoard( board, &m_plotOpts,
+                                               fn.GetFullPath(),
+                                               wxEmptyString );
 
             // Print diags in messages box:
             wxString msg;
+
             if( plotter )
             {
                 PlotOneBoardLayer( board, plotter, layer, m_plotOpts );

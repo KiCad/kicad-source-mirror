@@ -39,7 +39,7 @@
 
 // Thickness of copper
 // TODO: define the actual copper thickness by user
-#define COPPER_THICKNESS KiROUND( 0.035 * IU_PER_MM )   // for 35 µm
+#define COPPER_THICKNESS KiROUND( 0.035 * IU_PER_MM )   // for 35 um
 #define TECH_LAYER_THICKNESS KiROUND( 0.04 * IU_PER_MM )
 #define EPOXY_THICKNESS KiROUND( 1.6 * IU_PER_MM )   // for 1.6 mm
 
@@ -68,10 +68,10 @@ INFO3D_VISU::INFO3D_VISU()
 
     // default all special item layers Visible
     for( ii = 0; ii < FL_LAST; ii++ )
-        m_DrawFlags[ii] = true;
+        m_drawFlags[ii] = true;
 
-    m_DrawFlags[FL_GRID] = false;
-    m_DrawFlags[FL_USE_COPPER_THICKNESS] = false;
+    SetFlag( FL_GRID, false );
+    SetFlag( FL_USE_COPPER_THICKNESS, false );
 }
 
 
@@ -124,8 +124,10 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
             m_EpoxyThickness * layer / (copper_layers_cnt - 1);
     }
 
-    double  zpos_copper_back    = m_LayerZcoord[0];
-    double  zpos_copper_front   = m_EpoxyThickness;
+    #define layerThicknessMargin 1.1
+    double zpos_offset = m_NonCopperLayerThickness * layerThicknessMargin;
+    double  zpos_copper_back    = m_LayerZcoord[0] - layerThicknessMargin*m_CopperThickness/2;
+    double  zpos_copper_front   = m_EpoxyThickness + layerThicknessMargin*m_CopperThickness/2;
 
     // Fill remaining unused copper layers and front layer zpos
     // with m_EpoxyThickness
@@ -138,54 +140,44 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
     for( int layer_id = FIRST_NON_COPPER_LAYER; layer_id < NB_PCB_LAYERS; layer_id++ )
     {
         double zpos;
-        #define NonCopperLayerThicknessMargin 1.1
 
         switch( layer_id )
         {
         case ADHESIVE_N_BACK:
-            zpos = zpos_copper_back -
-                   4 * m_NonCopperLayerThickness * NonCopperLayerThicknessMargin;
+            zpos = zpos_copper_back - 4 * zpos_offset;
             break;
 
         case ADHESIVE_N_FRONT:
-            zpos = zpos_copper_front +
-                   4 * m_NonCopperLayerThickness * NonCopperLayerThicknessMargin;
+            zpos = zpos_copper_front + 4 * zpos_offset;
             break;
 
         case SOLDERPASTE_N_BACK:
-            zpos = zpos_copper_back -
-                   3 * m_NonCopperLayerThickness * NonCopperLayerThicknessMargin;
+            zpos = zpos_copper_back - 3 * zpos_offset;
             break;
 
         case SOLDERPASTE_N_FRONT:
-            zpos = zpos_copper_front +
-                   3 * m_NonCopperLayerThickness * NonCopperLayerThicknessMargin;
+            zpos = zpos_copper_front + 3 * zpos_offset;
             break;
 
         case SOLDERMASK_N_BACK:
-            zpos = zpos_copper_back -
-                   1 * m_NonCopperLayerThickness * NonCopperLayerThicknessMargin;
+            zpos = zpos_copper_back - 1 * zpos_offset;
             break;
 
         case SOLDERMASK_N_FRONT:
-            zpos = zpos_copper_front +
-                   1 * m_NonCopperLayerThickness * NonCopperLayerThicknessMargin;
+            zpos = zpos_copper_front + 1 * zpos_offset;
             break;
 
         case SILKSCREEN_N_BACK:
-            zpos = zpos_copper_back -
-                   2 * m_NonCopperLayerThickness * NonCopperLayerThicknessMargin;
+            zpos = zpos_copper_back - 2 * zpos_offset;
             break;
 
         case SILKSCREEN_N_FRONT:
-            zpos = zpos_copper_front +
-                   2 * m_NonCopperLayerThickness * NonCopperLayerThicknessMargin;
+            zpos = zpos_copper_front + 2 * zpos_offset;
             break;
 
         default:
             zpos = zpos_copper_front +
-                   (layer_id - FIRST_NON_COPPER_LAYER + 5) *
-                   m_NonCopperLayerThickness * NonCopperLayerThicknessMargin;
+                   (layer_id - FIRST_NON_COPPER_LAYER + 5) * zpos_offset;
             break;
         }
 

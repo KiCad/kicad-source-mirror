@@ -51,7 +51,7 @@ Resistor_Universal-Experimental_RevA,Legacy,${KISYSMOD}/Resistor_Universal-Exper
 SI570_SI571_Oscillator_RevA_11Jun2012,Legacy,${KISYSMOD}/SI570_SI571_Oscillator_RevA_11Jun2012.mod,"",""
 SIP9_Housing_14Jun2013,Legacy,${KISYSMOD}/SIP9_Housing_14Jun2013.mod,"",""
 smd_capacitors,Legacy,${KISYSMOD}/smd_capacitors.mod,"",""
-smd_crystal&oscillator,Legacy,${KISYSMOD}/smd_crystal&oscillator.mod,"",""
+smd_crystal_and_oscillator,Legacy,${KISYSMOD}/smd_crystal_and_oscillator.mod,"",""
 smd_resistors,Legacy,${KISYSMOD}/smd_resistors.mod,"",""
 smd_soic_packages,Legacy,${KISYSMOD}/smd_soic_packages.mod,"",""
 smd_ssop_packages,Legacy,${KISYSMOD}/smd_ssop_packages.mod,"",""

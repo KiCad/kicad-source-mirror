@@ -88,6 +88,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard,
     aBoard->SynchronizeNetsAndNetClasses();
     aBoard->SetCurrentNetClass( aBoard->m_NetClasses.GetDefault()->GetName() );
 
+#if 0
     wxString    header;
     PROPERTIES  props;
 
@@ -100,7 +101,9 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard,
         props["header"] = header;
     }
 
-
     IO_MGR::Save( aFormat, aFileName, aBoard, &props );
+#else
+    IO_MGR::Save( aFormat, aFileName, aBoard, NULL );
+#endif
     return true;
 }

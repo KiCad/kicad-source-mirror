@@ -51,7 +51,10 @@
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <pcbnew_config.h>
+#include <module_editor_frame.h>
+#include <modview_frame.h>
 
+#include <invoke_pcb_dialog.h>
 #include <dialog_mask_clearance.h>
 #include <dialog_general_options.h>
 #include <wildcards_and_files_ext.h>
@@ -88,20 +91,37 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
         if( r & 1 )
         {
-            FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
-            m_globalFootprintTable->Format( &sf, 0 );
-
+            try
+            {
+                FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
+                m_globalFootprintTable->Format( &sf, 0 );
+            }
+            catch( IO_ERROR& ioe )
+            {
+                wxString msg;
+                msg.Printf( _( "Error occurred saving the global footprint library "
+                               "table:\n\n%s" ), ioe.errorText.GetData() );
+                wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+            }
         }
 
-        if( r & 2 )
+        // If no board file is defined, do not save the project specific library table.  It
+        // is kept in memory and created in the path when the new board is saved.
+        if( (r & 2) && !GetBoard()->GetFileName().IsEmpty() )
         {
             wxFileName fn = GetBoard()->GetFileName();
-            fn.SetName( FP_LIB_TABLE::GetFileName() );
-            fn.SetExt( wxEmptyString );
 
-            FILE_OUTPUTFORMATTER sf( fn.GetFullPath() );
-            m_footprintLibTable->Format( &sf, 0 );
-
+            try
+            {
+                m_footprintLibTable->Save( fn );
+            }
+            catch( IO_ERROR& ioe )
+            {
+                wxString msg;
+                msg.Printf( _( "Error occurred saving project specific footprint library "
+                               "table:\n\n%s" ), ioe.errorText.GetData() );
+                wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+            }
         }
     }
 
@@ -188,6 +208,8 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
 bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
 {
+    wxLogDebug( wxT( "Loading project <%s> settings." ), GetChars( aProjectFileName ) );
+
     wxFileName fn = aProjectFileName;
 
     if( fn.GetExt() != ProjectFileExtension )
@@ -229,16 +251,31 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
 #if defined( USE_FP_LIB_TABLE )
     delete m_footprintLibTable;
 
+    wxFileName projectFpLibTableFileName;
+
+    projectFpLibTableFileName = FP_LIB_TABLE::GetProjectFileName( fn );
     m_footprintLibTable = new FP_LIB_TABLE();
 
     try
     {
-        m_footprintLibTable->Load( fn, m_globalFootprintTable );
+        m_footprintLibTable->Load( projectFpLibTableFileName, m_globalFootprintTable );
     }
     catch( IO_ERROR ioe )
     {
         DisplayError( this, ioe.errorText );
     }
+
+    FOOTPRINT_EDIT_FRAME* editFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+
+    if( editFrame )
+        editFrame->SetFootprintLibTable( m_footprintLibTable );
+
+    FOOTPRINT_VIEWER_FRAME* viewFrame = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
+
+    if( viewFrame )
+        viewFrame->SetFootprintLibTable( m_footprintLibTable );
+
+    FP_LIB_TABLE::SetProjectPathEnvVariable( fn );
 #endif
 
     // Load the page layout decr file, from the filename stored in

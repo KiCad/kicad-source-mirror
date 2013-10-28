@@ -63,11 +63,11 @@ macro(perform_feature_checks)
     # included in pyport.h which is where the problem ocurrs without this
     # fix.
     check_include_file("stdint.h" HAVE_STDINT_H)
-    
+
     if( HAVE_STDINT_H )
         add_definitions( -DHAVE_STDINT_H )
     endif()
-    
+
     # no place is this used, and "HAVE_STRINGS_H", if present in config.h then
     # conflicts with /usr/include/python2.6/Python.h.  Please rename the macro if
     # re-introduce this.
@@ -81,14 +81,8 @@ macro(perform_feature_checks)
     # Some platforms define malloc and free in malloc.h instead of stdlib.h.
     check_symbol_exists(malloc "stdlib.h" MALLOC_IN_STDLIB_H)
 
-    # Use ISO C++ conformant names to disable Visual C++ warnings.
-    check_symbol_exists(_stricmp "string.h" HAVE_ISO_STRICMP)
-    check_symbol_exists(_strnicmp "string.h" HAVE_ISO_STRNICMP)
-    check_symbol_exists(_snprintf "stdio.h" HAVE_ISO_SNPRINTF)
-
     # Check for functions in math.h.
     check_include_file("math.h" HAVE_MATH_H)
-    check_symbol_exists(_hypot "math.h" HAVE_ISO_HYPOT)
 
     # Check for functions in C++ cmath.
     check_include_file_cxx(cmath HAVE_CXX_CMATH)

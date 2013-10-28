@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2013 Jean-Pierre Charras, j-p.charras at wanadoo.fr
  * Copyright (C) 2010-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -212,17 +212,12 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
  */
 static void AddModifierToKey( wxString& aFullKey, const wxString & aKey )
 {
-#if 0       // set to 0 for new behavior, 1 for old
-    aFullKey << wxT( " <" ) << aKey << wxT( ">" );
-#else
     if( (aKey.Length() == 1) && (aKey[0] >= 'A')  && (aKey[0] <= 'Z'))
-        // We can use Shift+<key> as accelerator ans <key> for hot key
+        // We can use Shift+<key> as accelerator and <key> for hot key
         aFullKey << wxT( "\t" ) << MODIFIER_SHIFT << aKey;
     else
         // We must use Alt+<key> as accelerator ans <key> for hot key
         aFullKey << wxT( "\t" ) << MODIFIER_ALT << aKey;
-
-#endif
 }
 
 /* AddHotkeyName
@@ -430,6 +425,10 @@ void DisplayHotkeyList( EDA_DRAW_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescL
             if( !hk_decr->m_InfoMsg.Contains( wxT( "Macros" ) ) )
             {
                 keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
+                // Some chars should be modified, using html encoding, to be
+                // displayed by DisplayHtmlInfoMessage()
+                keyname.Replace( wxT("<"), wxT("&lt;") );
+                keyname.Replace( wxT(">"), wxT("&gt;") );
                 msg    += wxT( "<tr><td>" ) + hk_decr->m_InfoMsg + wxT("</td>");
                 msg    += wxT("<td><b>&nbsp;&nbsp;") + keyname + wxT( "</b></td></tr>" );
             }

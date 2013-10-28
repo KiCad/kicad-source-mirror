@@ -26,11 +26,22 @@
  */
 
 #include <richio.h>
-#include <hashtables.h>
+#include <map>
+
 
 class BOARD;
 class PLUGIN;
 class MODULE;
+
+/**
+ * Class PROPERTIES
+ * is a name/value tuple with unique names and optional values.  The names
+ * may be iterated alphabetically.
+ */
+class PROPERTIES : public std::map< std::string, std::string >
+{
+    // alphabetical tuple of name and value hereby defined.
+};
 
 
 /**
@@ -48,11 +59,12 @@ public:
      */
     enum PCB_FILE_T
     {
-        LEGACY,             //< Legacy Pcbnew file formats prior to s-expression.
-        KICAD,              //< S-expression Pcbnew file format.
+        LEGACY,         ///< Legacy Pcbnew file formats prior to s-expression.
+        KICAD,          ///< S-expression Pcbnew file format.
         EAGLE,
         PCAD,
-        GEDA_PCB,           //< Geda PCB file formats.
+        GEDA_PCB,       ///< Geda PCB file formats.
+        GITHUB,         ///< Read only http://github.com repo holding pretty footprints
 
         // add your type here.
 
@@ -133,7 +145,7 @@ public:
      *  or file cannot be loaded.
      */
     static BOARD* Load( PCB_FILE_T aFileType, const wxString& aFileName,
-                        BOARD* aAppendToMe = NULL, PROPERTIES* aProperties = NULL );
+                        BOARD* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
 
     /**
      * Function Save
@@ -159,7 +171,7 @@ public:
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     static void Save( PCB_FILE_T aFileType, const wxString& aFileName,
-                      BOARD* aBoard, PROPERTIES* aProperties = NULL );
+                      BOARD* aBoard, const PROPERTIES* aProperties = NULL );
 };
 
 
@@ -230,7 +242,7 @@ public:
      *  input file if possible.
      */
     virtual BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                         PROPERTIES* aProperties = NULL );
+                         const PROPERTIES* aProperties = NULL );
 
     /**
      * Function Save
@@ -253,7 +265,7 @@ public:
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     virtual void Save( const wxString& aFileName, BOARD* aBoard,
-                       PROPERTIES* aProperties = NULL );
+                       const PROPERTIES* aProperties = NULL );
 
     //-----<Footprint Stuff>-----------------------------
 
@@ -275,7 +287,7 @@ public:
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
     virtual wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
-                                              PROPERTIES*     aProperties = NULL);
+            const PROPERTIES* aProperties = NULL );
 
     /**
      * Function FootprintLoad
@@ -299,7 +311,7 @@ public:
      *          is thrown in the case where aFootprintName cannot be found.
      */
     virtual MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                    PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL );
 
     /**
      * Function FootprintSave
@@ -322,7 +334,7 @@ public:
      * @throw IO_ERROR if there is a problem saving.
      */
     virtual void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
-                                    PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL );
 
     /**
      * Function FootprintDelete
@@ -333,9 +345,16 @@ public:
      *
      * @param aFootprintName is the name of a footprint to delete from the specified library.
      *
+     * @param aProperties is an associative array that can be used to tell the
+     *  library create function anything special, because it can take any number of
+     *  additional named tuning arguments that the plugin is known to support.
+     *  The caller continues to own this object (plugin may not delete it), and
+     *  plugins should expect it to be optionally NULL.
+     *
      * @throw IO_ERROR if there is a problem finding the footprint or the library, or deleting it.
      */
-    virtual void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName );
+    virtual void FootprintDelete( const wxString& aLibraryPath,
+            const wxString& aFootprintName, const PROPERTIES* aProperties = NULL );
 
     /**
      * Function FootprintLibCreate
@@ -354,7 +373,7 @@ public:
      *
      * @throw IO_ERROR if there is a problem finding the library, or creating it.
      */
-    virtual void FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
+    virtual void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
 
     /**
      * Function FootprintLibDelete
@@ -375,7 +394,7 @@ public:
      *
      * @throw IO_ERROR if there is a problem deleting an existing library.
      */
-    virtual bool FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
+    virtual bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
 
     /**
      * Function IsFootprintLibWritable
@@ -397,7 +416,11 @@ public:
         API functions which take one.
     */
 
-    virtual ~PLUGIN() {}
+    virtual ~PLUGIN()
+    {
+        //printf( "~%s", __func__ );
+    };
+
 
     /**
      * Class RELEASER
@@ -408,6 +431,12 @@ public:
     {
         PLUGIN* plugin;
 
+        // private assignment operator so it's illegal
+        RELEASER& operator=( RELEASER& aOther ) { return *this; }
+
+        // private copy constructor so it's illegal
+        RELEASER( const RELEASER& aOther ) {}
+
     public:
         RELEASER( PLUGIN* aPlugin = NULL ) :
             plugin( aPlugin )
@@ -417,15 +446,28 @@ public:
         ~RELEASER()
         {
             if( plugin )
-                IO_MGR::PluginRelease( plugin );
+                release();
         }
 
-        operator PLUGIN* ()
+        void release()
+        {
+            IO_MGR::PluginRelease( plugin );
+            plugin = NULL;
+        }
+
+        void set( PLUGIN* aPlugin )
+        {
+            if( plugin )
+                release();
+            plugin = aPlugin;
+        }
+
+        operator PLUGIN* () const
         {
             return plugin;
         }
 
-        PLUGIN* operator -> ()
+        PLUGIN* operator -> () const
         {
             return plugin;
         }

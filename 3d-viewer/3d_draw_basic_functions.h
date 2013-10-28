@@ -37,7 +37,7 @@
  * @param aThickness = thickness in board internal units
  * @param aBiuTo3DUnits = board internal units to 3D units scaling value
  * If aThickness = 0, a polygon area is drawn in a XY plane at Z position = aZpos.
- * If aThickness 1 0, a solid object is drawn.
+ * If aThickness > 0, a solid object is drawn.
  *  The top side is located at aZpos + aThickness / 2
  *  The bottom side is located at aZpos - aThickness / 2
  */
@@ -118,5 +118,12 @@ void    Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
 void    Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
                                     int aRadius, int aHeight, int aThickness,
                                     int aZpos, double aBiuTo3DUnits  );
+/**
+ * Set the current 3D color from a Kicad  color, with optional transparency
+ * @param aColor = a EDA_COLOR_T kicad color index
+ * @param aTransparency = the color transparency (default = 1.0 = no transparency)
+ */
+void SetGLColor( EDA_COLOR_T aColor, double aTransparency = 1.0 );
+
 
 #endif      // _3D_DRAW_BASIC_FUNCTIONS_H_

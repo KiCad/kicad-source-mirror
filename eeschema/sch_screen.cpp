@@ -40,9 +40,8 @@
 #include <wxEeschemaStruct.h>
 #include <plot_common.h>
 
-#include <general.h>
-#include <protos.h>
 #include <netlist.h>
+#include <class_netlist_object.h>
 #include <class_library.h>
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
@@ -52,6 +51,7 @@
 #include <sch_sheet.h>
 #include <sch_component.h>
 #include <sch_text.h>
+#include <lib_pin.h>
 
 #include <boost/foreach.hpp>
 
@@ -101,7 +101,7 @@ static GRID_TYPE SchematicGridList[] = {
 
 
 SCH_SCREEN::SCH_SCREEN() : BASE_SCREEN( SCH_SCREEN_T ),
-    m_paper( wxT( "A4" ), IsGOST() )
+    m_paper( wxT( "A4" ) )
 {
     size_t i;
 

@@ -236,6 +236,8 @@ public:
      * for single line text, aLine is unused
      * If aLine == -1, the full area (considering all lines) is returned
      * @param aThickness Overrides the current thickness when greater than 0.
+     * this is needed when the current m_Thickness is 0 and a default line thickness
+     * is used
      * @param aInvertY Invert the Y axis when calculating bounding box.
      */
     EDA_RECT GetTextBox( int aLine = -1, int aThickness = -1, bool aInvertY = false ) const;
@@ -244,11 +246,11 @@ public:
      * Function GetInterline
      * return the distance between 2 text lines
      * has meaning only for multiline texts
+     * @param aTextThickness Overrides the current thickness when greater than 0.
+     * this is needed when the current m_Thickness is 0 and a default line thickness
+     * is used
      */
-    int GetInterline() const
-    {
-        return (( m_Size.y * 14 ) / 10) + m_Thickness;
-    }
+    int GetInterline( int aTextThickness = -1 ) const;
 
     /**
      * Function GetTextStyleName
@@ -286,15 +288,13 @@ private:
      * @param aColor = text color
      * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
      * @param aFillMode = LINE, FILLED or SKETCH
-     * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
      * @param aText = the single line of text to draw.
      * @param aPos = the position of this line ).
      */
     void drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
                             const wxPoint& aOffset, EDA_COLOR_T aColor,
                             GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
-                            EDA_COLOR_T aAnchor_color, wxString& aText,
-                            wxPoint aPos );
+                            wxString& aText, wxPoint aPos );
 };
 
 

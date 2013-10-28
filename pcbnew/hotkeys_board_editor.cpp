@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jp.charras@wanadoo.fr
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file hotkeys_board_editor.cpp
  */
@@ -117,7 +141,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         macros_record.m_HotkeyCode = aHotkeyCode;
         macros_record.m_Idcommand = HK_Descr->m_Idcommand;
         macros_record.m_Position  = GetNearestGridPosition( aPosition ) -
-                                      m_Macros[m_RecordingMacros].m_StartPosition;
+                                    m_Macros[m_RecordingMacros].m_StartPosition;
         m_Macros[m_RecordingMacros].m_Record.push_back( macros_record );
         wxString msg;
         msg.Printf( _( "Add key [%c] in macro %d" ), aHotkeyCode, m_RecordingMacros );
@@ -168,7 +192,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( GetCanvas()->IsMouseCaptured() )
             GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
 
-        if( GetBoard()->GetTrackWidthIndex() < GetBoard()->m_TrackWidthList.size() - 1)
+        if( GetBoard()->GetTrackWidthIndex() < GetBoard()->m_TrackWidthList.size() - 1 )
             GetBoard()->SetTrackWidthIndex( GetBoard()->GetTrackWidthIndex() + 1 );
         else
             GetBoard()->SetTrackWidthIndex( 0 );
@@ -606,7 +630,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
         {
             item = PcbGeneralLocateAndDisplay();
 
-            if( item && !item->IsTrack( ) )
+            if( item && !item->IsTrack() )
                 return false;
 
             Delete_Track( aDC, (TRACK*) item );
@@ -957,15 +981,7 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
     return false;
 }
 
-/*
- * Function OnHotkeyBeginRoute
- * If the current active layer is a copper layer,
- * and if no item currently edited, starta new track on
- * the current copper layer
- * If a new track is in progress, terminate the current segment and
- * start a new one.
- * Returns a reference to the track if a track is created, or NULL
- */
+
 TRACK * PCB_EDIT_FRAME::OnHotkeyBeginRoute( wxDC* aDC )
 {
     if( getActiveLayer() > LAYER_N_FRONT )
@@ -1016,42 +1032,48 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
     bool        itemCurrentlyEdited = item && item->GetFlags();
     int         evt_type = 0; // Used to post a wxCommandEvent on demand
 
-    if( !itemCurrentlyEdited )
-        item = PcbGeneralLocateAndDisplay();
-
-    if( item == NULL )
-        return false;
-
-    SetCurItem( item );
-
-    switch( item->Type() )
+    // Allows block rotate operation on hot key.
+    if( GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
     {
-    case PCB_MODULE_T:
-    {
-        if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
-            evt_type = ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE;
-
-        if( aIdCommand == HK_FLIP_ITEM )                   // move to other side
-            evt_type = ID_POPUP_PCB_CHANGE_SIDE_MODULE;
+        evt_type = ID_POPUP_ROTATE_BLOCK;
     }
-        break;
+    else
+    {
+        if( !itemCurrentlyEdited )
+            item = PcbGeneralLocateAndDisplay();
 
-    case PCB_TEXT_T:
-        if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
-            evt_type = ID_POPUP_PCB_ROTATE_TEXTEPCB;
-        else if( aIdCommand == HK_FLIP_ITEM )
-            evt_type = ID_POPUP_PCB_FLIP_TEXTEPCB;
+        if( item == NULL )
+            return false;
 
-        break;
+        SetCurItem( item );
 
-    case PCB_MODULE_TEXT_T:
-        if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
-            evt_type = ID_POPUP_PCB_ROTATE_TEXTMODULE;
+        switch( item->Type() )
+        {
+        case PCB_MODULE_T:
+            if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
+                evt_type = ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE;
 
-        break;
+            if( aIdCommand == HK_FLIP_ITEM )                        // move to other side
+                evt_type = ID_POPUP_PCB_CHANGE_SIDE_MODULE;
+            break;
 
-    default:
-        break;
+        case PCB_TEXT_T:
+            if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
+                evt_type = ID_POPUP_PCB_ROTATE_TEXTEPCB;
+            else if( aIdCommand == HK_FLIP_ITEM )
+                evt_type = ID_POPUP_PCB_FLIP_TEXTEPCB;
+
+            break;
+
+        case PCB_MODULE_TEXT_T:
+            if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
+                evt_type = ID_POPUP_PCB_ROTATE_TEXTMODULE;
+
+            break;
+
+        default:
+            break;
+        }
     }
 
     if( evt_type != 0 )

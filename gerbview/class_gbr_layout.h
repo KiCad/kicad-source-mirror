@@ -81,9 +81,12 @@ public:
      * @param aDC = the current device context
      * @param aDrawMode = GR_COPY, GR_OR ... (not always used)
      * @param aOffset = an draw offset value
+     * @param aPrintBlackAndWhite = true to force black and white insdeat of color
+     *        useful only to print/plot gebview layers
      */
     void    Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                  GR_DRAWMODE aDrawMode, const wxPoint& aOffset );
+                  GR_DRAWMODE aDrawMode, const wxPoint& aOffset,
+                  bool aPrintBlackAndWhite = false );
 
     /**
      * Function SetVisibleLayers

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Apr 30 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -28,7 +28,6 @@ class DIALOG_SHIM;
 #include <wx/aui/auibook.h>
 #include <wx/button.h>
 #include <wx/statbox.h>
-#include <wx/splitter.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -42,8 +41,6 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxSplitterWindow* m_splitter;
-		wxPanel* m_top;
 		wxAuiNotebook* m_auinotebook;
 		wxPanel* m_global_panel;
 		wxGrid* m_global_grid;
@@ -53,36 +50,29 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		wxButton* m_delete_button;
 		wxButton* m_move_up_button;
 		wxButton* m_move_down_button;
-		wxPanel* m_bottom;
+		wxButton* m_edit_options;
 		wxGrid* m_path_subs_grid;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) { event.Skip(); }
-		virtual void onGridCellLeftClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void onGridCellLeftDClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void onGridCellRightClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void onGridCmdSelectCell( wxGridEvent& event ) { event.Skip(); }
-		virtual void appendRowHandler( wxMouseEvent& event ) { event.Skip(); }
-		virtual void deleteRowHandler( wxMouseEvent& event ) { event.Skip(); }
-		virtual void moveUpHandler( wxMouseEvent& event ) { event.Skip(); }
-		virtual void moveDownHandler( wxMouseEvent& event ) { event.Skip(); }
-		virtual void onCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCancelButtonClick( wxCloseEvent& event ) = 0;
+		virtual void onKeyDown( wxKeyEvent& event ) = 0;
+		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) = 0;
+		virtual void appendRowHandler( wxMouseEvent& event ) = 0;
+		virtual void deleteRowHandler( wxMouseEvent& event ) = 0;
+		virtual void moveUpHandler( wxMouseEvent& event ) = 0;
+		virtual void moveDownHandler( wxMouseEvent& event ) = 0;
+		virtual void optionsEditor( wxMouseEvent& event ) = 0;
+		virtual void onCancelButtonClick( wxCommandEvent& event ) = 0;
+		virtual void onOKButtonClick( wxCommandEvent& event ) = 0;
 		
 	
 	public:
 		
-		DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Library Tables"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 996,652 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Library Tables"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 900,600 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_FP_LIB_TABLE_BASE();
-		
-		void m_splitterOnIdle( wxIdleEvent& )
-		{
-			m_splitter->SetSashPosition( 398 );
-			m_splitter->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_FP_LIB_TABLE_BASE::m_splitterOnIdle ), NULL, this );
-		}
 	
 };
 

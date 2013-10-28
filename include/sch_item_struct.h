@@ -44,6 +44,7 @@ class SCH_EDIT_FRAME;
 class wxFindReplaceData;
 class PLOTTER;
 class NETLIST_OBJECT;
+class NETLIST_OBJECT_LIST;
 
 
 typedef boost::ptr_vector< SCH_ITEM > SCH_ITEMS;
@@ -54,9 +55,6 @@ typedef vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
 #define FMT_IU          SCH_ITEM::FormatInternalUnits
 #define FMT_ANGLE       SCH_ITEM::FormatAngle
 
-
-/// Flag to enable find and replace tracing using the WXTRACE environment variable.
-extern const wxString traceFindReplace;
 
 /// Flag to enable find item tracing using the WXTRACE environment variable.  This
 /// flag generates a lot of debug output.
@@ -342,8 +340,8 @@ public:
      * net list objects associated with them.
      * </p>
      */
-    virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                 SCH_SHEET_PATH*          aSheetPath ) { }
+    virtual void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                                 SCH_SHEET_PATH*      aSheetPath ) { }
 
     /**
      * Function GetPosition

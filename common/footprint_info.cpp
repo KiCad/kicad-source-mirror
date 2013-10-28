@@ -43,9 +43,12 @@
 
 #include <class_module.h>
 
+#if !defined( USE_FP_LIB_TABLE )
 
-bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
+bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintLibNames )
 {
+    bool retv = true;
+
     // Clear data before reading files
     m_filesNotFound.Empty();
     m_filesInvalid.Empty();
@@ -56,10 +59,10 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
         PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
         // Parse Libraries Listed
-        for( unsigned ii = 0; ii < aFootprintsLibNames.GetCount(); ii++ )
+        for( unsigned ii = 0; ii < aFootprintLibNames.GetCount(); ii++ )
         {
             // Footprint library file names can be fully qualified or file name only.
-            wxFileName filename = aFootprintsLibNames[ii];
+            wxFileName filename = aFootprintLibNames[ii];
 
             if( !filename.FileExists() )
             {
@@ -67,19 +70,20 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
 
                 if( !filename.FileExists() )
                 {
-                    filename = wxFileName( wxEmptyString, aFootprintsLibNames[ii],
+                    filename = wxFileName( wxEmptyString, aFootprintLibNames[ii],
                                            LegacyFootprintLibPathExtension );
 
                     filename = wxGetApp().FindLibraryPath( filename.GetFullName() );
                 }
             }
 
-            wxLogDebug( wxT( "Path <%s> -> <%s>." ), GetChars( aFootprintsLibNames[ii] ),
+            wxLogDebug( wxT( "Path <%s> -> <%s>." ), GetChars( aFootprintLibNames[ii] ),
                         GetChars( filename.GetFullPath() ) );
 
-            if( !filename.FileExists() )
+            if( !filename.IsOk() || !filename.FileExists() )
             {
-                m_filesNotFound << aFootprintsLibNames[ii] << wxT( "\n" );
+                m_filesNotFound << aFootprintLibNames[ii] << wxT( "\n" );
+                retv = false;
                 continue;
             }
 
@@ -110,6 +114,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
             catch( IO_ERROR ioe )
             {
                 m_filesInvalid << ioe.errorText << wxT( "\n" );
+                retv = false;
             }
         }
     }
@@ -124,45 +129,49 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
 
     m_List.sort();
 
-    return true;
+    return retv;
 }
 
+#else
 
-bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
+bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname )
 {
+    bool retv = true;
+
     // Clear data before reading files
     m_filesNotFound.Empty();
     m_filesInvalid.Empty();
     m_List.clear();
 
-    std::vector< wxString > libNickNames = aTable.GetLogicalLibs();
+    std::vector< wxString > nicknames;
 
-    // Parse Libraries Listed
-    for( unsigned ii = 0; ii < libNickNames.size(); ii++ )
+    if( !aNickname )
+        // do all of them
+        nicknames = aTable->GetLogicalLibs();
+    else
+        nicknames.push_back( *aNickname );
+
+    for( unsigned ii = 0; ii < nicknames.size(); ii++ )
     {
-        const FP_LIB_TABLE::ROW* row = aTable.FindRow( libNickNames[ii] );
+        const wxString& nickname = nicknames[ii];
 
-        wxCHECK2_MSG( row != NULL, continue,
-                      wxString::Format( wxT( "No library name <%s> found in footprint library "
-                                             "table." ), GetChars( libNickNames[ii] ) ) );
         try
         {
-            PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::EnumFromStr( row->GetType() ) ) );
-
-            wxString      path = FP_LIB_TABLE::ExpandSubstitutions( row->GetFullURI() );
-            wxArrayString fpnames = pi->FootprintEnumerate( path );
+            wxArrayString fpnames = aTable->FootprintEnumerate( nickname );
 
             for( unsigned i=0;  i<fpnames.GetCount();  ++i )
             {
-                std::auto_ptr<MODULE> m( pi->FootprintLoad( path, fpnames[i] ) );
+                std::auto_ptr<MODULE> m( aTable->FootprintLoad( nickname, fpnames[i] ) );
 
                 // we're loading what we enumerated, all must be there.
                 wxASSERT( m.get() );
 
                 FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO();
 
-                fpinfo->SetLibraryName( libNickNames[ii] );
-                fpinfo->SetLibraryPath( path );
+                fpinfo->SetLibraryName( nickname );
+
+                //fpinfo->SetLibraryPath( path );
+
                 fpinfo->m_Module   = fpnames[i];
                 fpinfo->m_padCount = m->GetPadCount( MODULE::DO_NOT_INCLUDE_NPTH );
                 fpinfo->m_KeyWord  = m->GetKeywords();
@@ -174,16 +183,18 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE& aTable )
         catch( IO_ERROR ioe )
         {
             m_filesInvalid << ioe.errorText << wxT( "\n" );
+            retv = false;
         }
     }
 
     m_List.sort();
 
-    return true;
+    return retv;
 }
 
+#endif  // USE_FP_LIB_TABLE
 
-FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString & aFootprintName )
+FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
 {
     BOOST_FOREACH( FOOTPRINT_INFO& footprint, m_List )
     {

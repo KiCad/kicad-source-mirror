@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 jean-pierre.charras jp.charras at wanadoo.fr
+ * Copyright (C) 2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,13 +31,13 @@
 #define _BITMAP_BASE_H_
 
 
-#include <plot_common.h>
+class PLOTTER;
 
 /**
  * This class handle bitmap images in KiCad.
  * It is not intended to be used alone, but inside an other class,
  * so all methods are protected ( or private )
- * It is used in SCH_BITMAP class  (and other in futute)
+ * It is used in SCH_BITMAP class and WS_DRAW_ITEM_BITMAP (and other in future)
  *
  * Remember not all plotters are able to plot a bitmap
  * Mainly GERBER plotters cannot.
@@ -54,6 +54,7 @@ private:
                                     // to convert the bitmap size (in pixels)
                                     // to internal KiCad units
                                     // Usually does not change
+    int       m_ppi;                // the bitmap definition. the default is 300PPI
 
 
 public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -106,13 +107,13 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
 
     /**
      * Function GetSize
-     * @returns the actual size (in user units, not in pixels) of the image
+     * @return the actual size (in user units, not in pixels) of the image
      */
     wxSize   GetSize() const;
 
     /**
      * Function GetSizePixels
-     * @returns the size in pixels of the image
+     * @return the size in pixels of the image
      */
     wxSize GetSizePixels() const
     {
@@ -120,6 +121,15 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
             return wxSize( m_image->GetWidth(), m_image->GetHeight() );
         else
             return wxSize(0,0);
+    }
+
+    /**
+     * @return the bitmap definition in ppi
+     * the default is 300 ppi
+     */
+    int GetPPI() const
+    {
+        return m_ppi;
     }
 
     /**
@@ -136,8 +146,8 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
 
     /**
      * Function ReadImageFile
-     * Reads and stores an image file. Init the bitmap used to draw this item
-     * format.
+     * Reads and stores in memory an image file.
+     * Init the bitmap format used to draw this item.
      * supported images formats are format supported by wxImage
      * if all handlers are loaded
      * by default, .png, .jpeg are alway loaded
@@ -147,7 +157,6 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
     bool     ReadImageFile( const wxString& aFullFilename );
 
     /**
-     * Function
      * writes the bitmap data to aFile
      * The format is png, in Hexadecimal form:
      * If the hexadecimal data is converted to binary it gives exactly a .png image data
@@ -157,8 +166,16 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
     bool     SaveData( FILE* aFile ) const;
 
     /**
+     * writes the bitmap data to an array string
+     * The format is png, in Hexadecimal form:
+     * If the hexadecimal data is converted to binary it gives exactly a .png image data
+     * @param aPngStrings The wxArrayString to write to.
+     */
+    void     SaveData( wxArrayString& aPngStrings ) const;
+
+    /**
      * Load an image data saved by SaveData (png, in Hexadecimal form)
-     * @param aLine - Essentially this is file to read schematic junction from.
+     * @param aLine - the LINE_READER used to read the data file.
      * @param aErrorMsg - Description of the error if an error occurs while loading the
      *                    png bimap data.
      * @return true if the bitmap loaded successfully.
@@ -191,7 +208,7 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
      * @param aDefaultColor = the color used to plot the rectangle when bitmap is not supported
      * @param aDefaultPensize = the pen size used to plot the rectangle when bitmap is not supported
      */
-    void     PlotImage( PLOTTER* aPlotter, const wxPoint& aPos, 
+    void     PlotImage( PLOTTER* aPlotter, const wxPoint& aPos,
 		        EDA_COLOR_T aDefaultColor, int aDefaultPensize );
 };
 

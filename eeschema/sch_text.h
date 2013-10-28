@@ -37,6 +37,7 @@
 
 
 class LINE_READER;
+class NETLIST_OBJECT_LIST;
 
 
 /* Type of SCH_HIERLABEL and SCH_GLOBALLABEL
@@ -196,8 +197,8 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
 
-    virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                 SCH_SHEET_PATH*          aSheetPath );
+    virtual void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                                 SCH_SHEET_PATH*      aSheetPath );
 
     virtual wxPoint GetPosition() const { return m_Pos; }
 

@@ -1720,8 +1720,8 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData
 }
 
 
-void SCH_COMPONENT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                    SCH_SHEET_PATH*          aSheetPath )
+void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                                    SCH_SHEET_PATH*      aSheetPath )
 {
     LIB_COMPONENT* component = CMP_LIBRARY::FindLibraryComponent( GetLibName() );
 
@@ -1741,9 +1741,9 @@ void SCH_COMPONENT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
         wxPoint pos = GetTransform().TransformCoordinate( pin->GetPosition() ) + m_Pos;
 
         NETLIST_OBJECT* item = new NETLIST_OBJECT();
-        item->m_SheetListInclude = *aSheetPath;
+        item->m_SheetPathInclude = *aSheetPath;
         item->m_Comp = (SCH_ITEM*) pin;
-        item->m_SheetList = *aSheetPath;
+        item->m_SheetPath = *aSheetPath;
         item->m_Type = NET_PIN;
         item->m_Link = (SCH_ITEM*) this;
         item->m_ElectricalType = pin->GetType();
@@ -1757,9 +1757,9 @@ void SCH_COMPONENT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
         {
             /* There is an associated PIN_LABEL. */
             item = new NETLIST_OBJECT();
-            item->m_SheetListInclude = *aSheetPath;
+            item->m_SheetPathInclude = *aSheetPath;
             item->m_Comp = NULL;
-            item->m_SheetList = *aSheetPath;
+            item->m_SheetPath = *aSheetPath;
             item->m_Type  = NET_PINLABEL;
             item->m_Label = pin->GetName();
             item->m_Start = pos;
@@ -1886,6 +1886,16 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
     }
 
     return false;
+}
+
+/* return true if the component is in netlist
+ * which means this is not a power component, or something
+ * like a component reference starting by #
+ */
+bool SCH_COMPONENT::IsInNetlist() const
+{
+    SCH_FIELD* rf = GetField( REFERENCE );
+    return ! rf->GetText().StartsWith( wxT( "#" ) );
 }
 
 

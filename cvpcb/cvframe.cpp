@@ -43,6 +43,7 @@
 #include <cvpcb_mainframe.h>
 #include <cvpcb.h>
 #include <cvstruct.h>
+#include <invoke_pcb_dialog.h>
 #include <dialog_cvpcb_config.h>
 #include <class_DisplayFootprintsFrame.h>
 #include <cvpcb_id.h>
@@ -55,16 +56,6 @@
 // option key to close CvPcb after saving files
 static const wxString KeepCvpcbOpenEntry( wxT( "KeepCvpcbOpen" ) );
 static const wxString FootprintDocFileEntry( wxT( "footprints_doc_file" ) );
-
-
-/**
- * Function InvokePcbLibTableEditor
- * shows the modal DIALOG_FP_LIB_TABLE for purposes of editing two lib tables.
- *
- * @return int - bits 0 and 1 tell whether a change was made to the @a aGlobal
- *  and/or the @a aProject table, respectively.  If set, table was modified.
- */
-int InvokePcbLibTableEditor( wxFrame* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject );
 
 
 BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
@@ -317,7 +308,6 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
         case wxID_NO:
             break;
 
-        case wxID_OK:
         case wxID_YES:
             diag = SaveCmpLinkFile( m_NetlistFileName.GetFullPath() );
 
@@ -750,7 +740,7 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
     m_footprints.ReadFootprintFiles( m_ModuleLibNames );
 #else
     if( m_footprintLibTable != NULL )
-        m_footprints.ReadFootprintFiles( *m_footprintLibTable );
+        m_footprints.ReadFootprintFiles( m_footprintLibTable );
 #endif
 
     // Display error messages, if any.

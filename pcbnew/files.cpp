@@ -41,6 +41,7 @@
 #include <filter_reader.h>
 #include <appl_wxstruct.h>
 #include <msgpanel.h>
+#include <fp_lib_table.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -49,6 +50,9 @@
 
 #include <class_board.h>
 #include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
+#include <module_editor_frame.h>
+#include <modview_frame.h>
+
 
 //#define     USE_INSTRUMENTATION     true
 #define     USE_INSTRUMENTATION     false
@@ -136,8 +140,29 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
     case ID_NEW_BOARD:
         {
             Clear_Pcb( true );
-            wxFileName fn( wxT( "noname" ) );
+
+#if defined( USE_FP_LIB_TABLE )
+            // Create a new empty footprint library table for the new board.
+            delete m_footprintLibTable;
+            m_footprintLibTable = new FP_LIB_TABLE( m_globalFootprintTable );
+
+            FOOTPRINT_EDIT_FRAME* editFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+
+            if( editFrame )
+                editFrame->SetFootprintLibTable( m_footprintLibTable );
+
+            FOOTPRINT_VIEWER_FRAME* viewFrame = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
+
+            if( viewFrame )
+                viewFrame->SetFootprintLibTable( m_footprintLibTable );
+
+            wxFileName emptyFileName;
+            FP_LIB_TABLE::SetProjectPathEnvVariable( emptyFileName );
+#endif
+
+            wxFileName fn;
             fn.AssignCwd();
+            fn.SetName( wxT( "noname" ) );
             fn.SetExt( PcbFileExtension );
             GetBoard()->SetFileName( fn.GetFullPath() );
             UpdateTitle();
@@ -164,10 +189,15 @@ bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
 {
     if( GetScreen()->IsModify() && !aAppend )
     {
-        if( !IsOK( this,
-                   _( "The current board has been modified.\n"
-                      "Do you wish to discard the changes?" ) ) )
+        int response = YesNoCancelDialog( this, _( "The current board has been modified.  Do "
+                                                   "you wish to save the changes?" ),
+                                          wxEmptyString,
+                                          _( "Save and Load" ), _( "Load Without Saving" ) );
+
+        if( response == wxID_CANCEL )
             return false;
+        else if( response == wxID_YES )
+            SavePcbFile( GetBoard()->GetFileName(), true );
     }
 
     if( aAppend )
@@ -281,10 +311,15 @@ bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
     try
     {
         PROPERTIES  props;
+        char        xbuf[30];
+        char        ybuf[30];
 
         // EAGLE_PLUGIN can use this info to center the BOARD, but it does not yet.
-        props["page_width"]  = wxString::Format( wxT( "%d" ), GetPageSizeIU().x );
-        props["page_height"] = wxString::Format( wxT( "%d" ), GetPageSizeIU().y );
+        sprintf( xbuf, "%d", GetPageSizeIU().x );
+        sprintf( ybuf, "%d", GetPageSizeIU().y );
+
+        props["page_width"]  = xbuf;
+        props["page_height"] = ybuf;
 
 #if USE_INSTRUMENTATION
         // measure the time to load a BOARD.
@@ -446,6 +481,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     wxString    lowerTxt;
     wxString    msg;
     bool        saveok = true;
+    bool        isSaveAs = false;
 
     IO_MGR::PCB_FILE_T pluginType;
 
@@ -455,6 +491,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         wildcard << wxGetTranslation( PcbFileWildcard ) << wxChar( '|' ) <<
                     wxGetTranslation( LegacyPcbFileWildcard );
 
+        isSaveAs = true;
         pcbFileName = GetBoard()->GetFileName();
 
         if( pcbFileName.GetName() == wxEmptyString )
@@ -484,11 +521,48 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
         // Note: on Linux wxFileDialog is not reliable for noticing a changed filename.
         // We probably need to file a bug report or implement our own derivation.
-
         pcbFileName = dlg.GetPath();
 
         // enforce file extension, must match plugin's policy.
         pcbFileName.SetExt( IO_MGR::GetFileExtension( pluginType ) );
+
+        // Since the file overwrite test was removed from wxFileDialog because it doesn't work
+        // when multiple wildcards are defined, we have to check it ourselves to prevent an
+        // existing board file from silently being over written.
+        if( pcbFileName.FileExists()
+          && !IsOK( this, wxString::Format( _( "The file <%s> already exists.\n\nDo you want "
+                                               "to overwrite it?" ),
+                                            GetChars( pcbFileName.GetFullPath() ) )) )
+            return false;
+
+#if defined( USE_FP_LIB_TABLE )
+        // Save the project specific footprint library table.
+        if( !m_footprintLibTable->IsEmpty( false ) )
+        {
+            wxFileName fn = pcbFileName;
+            fn.ClearExt();
+            fn.SetName( FP_LIB_TABLE::GetFileName() );
+
+            if( fn.FileExists()
+              && IsOK( this, _( "A footprint library table already exists in this path.\n\nDo "
+                                "you want to overwrite it?" ) ) )
+            {
+                try
+                {
+                    m_footprintLibTable->Save( fn );
+                }
+                catch( IO_ERROR& ioe )
+                {
+                    DisplayError( this,
+                                  wxString::Format( _( "An error occurred attempting to save the "
+                                                       "footprint library table <%s>\n\n%s" ),
+                                                    GetChars( fn.GetFullPath() ),
+                                                    GetChars( ioe.errorText ) ) );
+                }
+            }
+        }
+#endif
+
     }
     else
     {
@@ -573,6 +647,11 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         // and not need to have an autosave file in file history
         if( aCreateBackupFile )
             UpdateFileHistory( GetBoard()->GetFileName() );
+
+        // It's possible that the save as wrote over an existing board file that was part of a
+        // project so attempt reload the projects settings.
+        if( isSaveAs )
+            LoadProjectSettings( pcbFileName.GetFullPath() );
     }
 
     // Display the file names:

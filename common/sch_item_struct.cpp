@@ -39,8 +39,6 @@
 #include <protos.h>
 
 
-const wxString traceFindReplace( wxT( "KicadFindReplace" ) );
-
 const wxString traceFindItem( wxT( "KicadFindItem" ) );
 
 

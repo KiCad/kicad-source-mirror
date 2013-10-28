@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,8 +32,8 @@
 #include <macros.h>
 #include <wxEeschemaStruct.h>
 
-#include <general.h>
 #include <sch_component.h>
+#include <class_netlist_object.h>
 
 #include <wx/regex.h>
 
@@ -116,7 +116,7 @@ const char* ShowType( NETLIST_ITEM_T aType )
 
 void NETLIST_OBJECT::Show( std::ostream& out, int ndx ) const
 {
-    wxString path = m_SheetList.PathHumanReadable();
+    wxString path = m_SheetPath.PathHumanReadable();
 
     out << "<netItem ndx=\"" << ndx << '"' <<
     " type=\"" << ShowType( m_Type ) << '"' <<
@@ -129,13 +129,13 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx ) const
     if( !m_Label.IsEmpty() )
         out << " <label>" << m_Label.mb_str() << "</label>\n";
 
-    out << " <sheetpath>" << m_SheetList.PathHumanReadable().mb_str() << "</sheetpath>\n";
+    out << " <sheetpath>" << m_SheetPath.PathHumanReadable().mb_str() << "</sheetpath>\n";
 
     switch( m_Type )
     {
     case NET_PIN:
         /* GetRef() needs to be const
-        out << " <refOfComp>" << ((SCH_COMPONENT*)m_Link)->GetRef(&m_SheetList).mb_str()
+        out << " <refOfComp>" << GetComponentParent()->GetRef(&m_SheetPath).mb_str()
             << "</refOfComp>\n";
         */
 
@@ -175,16 +175,16 @@ NETLIST_OBJECT::NETLIST_OBJECT()
     m_Flag = 0;                     /* flag used in calculations */
     m_ElectricalType = 0;           /* Has meaning only for Pins and hierarchical pins: electrical
                                      * type */
-    m_NetCode    = 0;               /* net code for all items except BUS labels because a BUS
+    m_netCode    = 0;               /* net code for all items except BUS labels because a BUS
                                      * label has as many net codes as bus members
                                      */
     m_BusNetCode = 0;               /* Used for BUS connections */
     m_Member     = 0;               /* for labels type NET_BUSLABELMEMBER ( bus member created
                                      * from the BUS label )  member number
                                      */
-    m_FlagOfConnection = UNCONNECTED;
+    m_ConnectionType = UNCONNECTED;
     m_PinNum = 0;                   /* pin number ( 1 long = 4 bytes -> 4 ascii codes) */
-    m_NetNameCandidate = NULL;      /* a pointer to a NETLIST_OBJECT type label connected to this
+    m_netNameCandidate = NULL;      /* a pointer to a NETLIST_OBJECT type label connected to this
                                      * object used to give a name to the net
                                      */
 }
@@ -201,6 +201,15 @@ NETLIST_OBJECT::~NETLIST_OBJECT()
 {
 }
 
+// return true if the object is a label of any type
+bool NETLIST_OBJECT::IsLabelType() const
+{
+    return m_Type == NET_LABEL
+        || m_Type == NET_GLOBLABEL || m_Type == NET_HIERLABEL
+        || m_Type == NET_BUSLABELMEMBER || m_Type == NET_GLOBBUSLABELMEMBER
+        || m_Type == NET_HIERBUSLABELMEMBER
+        || m_Type == NET_PINLABEL;
+}
 
 bool NETLIST_OBJECT::IsLabelConnected( NETLIST_OBJECT* aNetItem )
 {
@@ -213,7 +222,7 @@ bool NETLIST_OBJECT::IsLabelConnected( NETLIST_OBJECT* aNetItem )
     if(  ( at == NET_HIERLABEL || at == NET_HIERBUSLABELMEMBER )
       && ( bt == NET_SHEETLABEL || bt == NET_SHEETBUSLABELMEMBER ) )
     {
-        if( m_SheetList == aNetItem->m_SheetListInclude )
+        if( m_SheetPath == aNetItem->m_SheetPathInclude )
         {
             return true; //connected!
         }
@@ -297,5 +306,84 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
         item->m_Member = member;
 
         aNetListItems.push_back( item );
+    }
+}
+
+/*
+ * return the net name of the item
+ */
+wxString NETLIST_OBJECT::GetNetName() const
+{
+    if( m_netNameCandidate == NULL )
+        return wxEmptyString;
+
+    wxString netName;
+
+    if( m_netNameCandidate->m_Type == NET_PIN )
+        return GetShortNetName();
+
+    if( !m_netNameCandidate->IsLabelGlobal() )
+    {
+        // usual net name, prefix it by the sheet path
+        netName = m_netNameCandidate->m_SheetPath.PathHumanReadable();
+    }
+
+    netName += m_netNameCandidate->m_Label;
+
+    return netName;
+}
+
+/**
+ * return the short net name of the item i.e. the net name
+ * from the "best" label without any prefix.
+ * 2 different nets can have the same short name
+ */
+wxString NETLIST_OBJECT::GetShortNetName() const
+{
+    if( m_netNameCandidate == NULL )
+        return wxEmptyString;
+
+    wxString netName;
+
+    if( m_netNameCandidate->m_Type == NET_PIN )
+    {
+        SCH_COMPONENT* link = m_netNameCandidate->GetComponentParent();
+        if( link )  // Should be always true
+        {
+            netName = wxT("Net-(");
+            netName << link->GetRef( &m_netNameCandidate->m_SheetPath );
+            netName << wxT("-Pad")
+                    << LIB_PIN::ReturnPinStringNum( m_netNameCandidate->m_PinNum )
+                    << wxT(")");
+        }
+    }
+    else
+        netName = m_netNameCandidate->m_Label;
+
+    return netName;
+}
+
+/**
+ * Set m_netNameCandidate to a connected item which will
+ * be used to calcule the net name of the item
+ * Obviously the candidate can be only a label
+ * when there is no label on the net a pad which will
+ * used to build a net name (something like Cmp<REF>_Pad<PAD_NAME>
+ * @param aCandidate = the connected item candidate
+ */
+void NETLIST_OBJECT::SetNetNameCandidate( NETLIST_OBJECT* aCandidate )
+{
+    switch( aCandidate->m_Type )
+    {
+        case NET_HIERLABEL:
+        case NET_LABEL:
+        case NET_PINLABEL:
+        case NET_GLOBLABEL:
+        case NET_PIN:
+            m_netNameCandidate = aCandidate;
+            break;
+
+        default:
+            break;
     }
 }

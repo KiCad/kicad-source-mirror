@@ -38,6 +38,10 @@
 
 #include "../eeschema/dialogs/dialog_schematic_find.h"
 
+
+const wxString traceFindReplace( wxT( "KicadFindReplace" ) );
+
+
 enum textbox {
     ID_TEXTBOX_LIST = 8010
 };
@@ -190,8 +194,28 @@ bool EDA_ITEM::Replace( wxFindReplaceData& aSearchData, wxString& aText )
     wxCHECK_MSG( IsReplaceable(), false,
                  wxT( "Attempt to replace text in <" ) + GetClass() + wxT( "> item." ) );
 
-    return aText.Replace( aSearchData.GetFindString(),
-                          aSearchData.GetReplaceString(), false ) != 0;
+    wxString searchString = (aSearchData.GetFlags() & wxFR_MATCHCASE) ? aText.Upper() : aText;
+
+    int result = searchString.Find( (aSearchData.GetFlags() & wxFR_MATCHCASE) ?
+                                    aSearchData.GetFindString() :
+                                    aSearchData.GetFindString().Upper() );
+
+    if( result == wxNOT_FOUND )
+        return false;
+
+    wxString prefix = aText.Left( result );
+    wxString suffix;
+
+    if( aSearchData.GetFindString().length() + result < aText.length() )
+        suffix = aText.Right( aText.length() - ( aSearchData.GetFindString().length() + result ) );
+
+    wxLogTrace( traceFindReplace, wxT( "Replacing '%s', prefix '%s', replace '%s', suffix '%s'." ),
+                GetChars( aText ), GetChars( prefix ), GetChars( aSearchData.GetReplaceString() ),
+                GetChars( suffix ) );
+
+    aText = prefix + aSearchData.GetReplaceString() + suffix;
+
+    return true;
 }
 
 
@@ -333,6 +357,36 @@ bool EDA_RECT::Contains( const wxPoint& aPoint ) const
 bool EDA_RECT::Contains( const EDA_RECT& aRect ) const
 {
     return Contains( aRect.GetOrigin() ) && Contains( aRect.GetEnd() );
+}
+
+
+/* Intersects
+ * test for a common area between segment and rect.
+ * return true if at least a common point is found
+ */
+bool EDA_RECT::Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) const
+{
+    wxPoint point2, point4;
+
+    if( Contains( aPoint1 ) || Contains( aPoint2 ) )
+        return true;
+
+    point2.x = GetEnd().x;
+    point2.y = GetOrigin().y;
+    point4.x = GetOrigin().x;
+    point4.y = GetEnd().y;
+
+    //Only need to test 3 sides since a straight line cant enter and exit on same side
+    if( SegmentIntersectsSegment( aPoint1, aPoint2, GetOrigin() , point2 ) )
+        return true;
+
+    if( SegmentIntersectsSegment( aPoint1, aPoint2, point2      , GetEnd() ) )
+        return true;
+
+    if( SegmentIntersectsSegment( aPoint1, aPoint2, GetEnd()    , point4 ) )
+        return true;
+
+    return false;
 }
 
 

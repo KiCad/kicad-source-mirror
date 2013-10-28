@@ -51,6 +51,9 @@ void AddNewItemsCommand( wxMenu* aMainMenu )
     AddMenuItem( aMainMenu, ID_POPUP_ITEM_APPEND_PAGE_LAYOUT,
                  _( "Append Page Layout Descr File" ),
                  KiBitmap( import_xpm ) );
+    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_BITMAP,
+                 _( "Add Bitmap" ),
+                 KiBitmap( image_xpm ) );
 }
 
 /* Prepare the right-click pullup menu.
@@ -85,19 +88,19 @@ bool PL_EDITOR_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
 
             if( (item->GetFlags() & LOCATE_ENDPOINT ) )
             {
-                msg = AddHotkeyName(  _( "Move End Point" ), s_PlEditor_Hokeys_Descr,
+                msg = AddHotkeyName( _( "Move End Point" ), s_PlEditor_Hokeys_Descr,
                                      HK_MOVE_END_POINT );
                 AddMenuItem( aPopMenu, ID_POPUP_ITEM_MOVE_END_POINT, msg,
                              KiBitmap( move_xpm ) );
             }
 
-            msg = AddHotkeyName(  _( "Move Item" ), s_PlEditor_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move Item" ), s_PlEditor_Hokeys_Descr,
                                  HK_MOVE_ITEM );
             AddMenuItem( aPopMenu, ID_POPUP_ITEM_MOVE, msg,
                          KiBitmap( move_xpm ) );
             aPopMenu->AppendSeparator();
 
-            msg = AddHotkeyName(  _( "Delete" ), s_PlEditor_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Delete" ), s_PlEditor_Hokeys_Descr,
                                  HK_DELETE_ITEM );
             AddMenuItem( aPopMenu, ID_POPUP_ITEM_DELETE, msg, KiBitmap( delete_xpm ) );
             aPopMenu->AppendSeparator();

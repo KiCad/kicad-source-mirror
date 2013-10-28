@@ -39,6 +39,37 @@
 
 
 /**
+ * Function StrPrintf
+ * is like sprintf() but the output is appended to a std::string instead of to a
+ * character array.
+ * @param aResult is the string to append to, previous text is not clear()ed.
+ * @param aFormat is a printf() style format string.
+ * @return int - the count of bytes appended to the result string, no terminating
+ *           nul is included.
+ */
+int
+#if defined(__GNUG__)
+    __attribute__ ((format (printf, 2, 3)))
+#endif
+    StrPrintf( std::string* aResult, const char* aFormat, ... );
+
+
+/**
+ * Function StrPrintf
+ * is like sprintf() but the output is returned in a std::string instead of to a
+ * character array.
+ * @param aResult is the string to append to, previous text is not clear()ed.
+ * @param aFormat is a printf() style format string.
+ * @return std::string - the result of the sprintf().
+ */
+std::string
+#if defined(__GNUG__)
+    __attribute__ ((format (printf, 1, 2)))
+#endif
+    StrPrintf( const char* format, ... );
+
+
+/**
  * @ingroup exception_types
  * @{
  */
@@ -84,31 +115,29 @@ struct IO_ERROR // : std::exception
      * @param aMsg is error text that will be streamed through wxString.Printf()
      *  using the format string IO_FORMAT above.
      */
-    IO_ERROR( const char* aThrowersFile,
+    explicit IO_ERROR( const char* aThrowersFile,
               const char* aThrowersLoc,
               const wxString& aMsg )
     {
         init( aThrowersFile, aThrowersLoc, aMsg );
     }
 
-#if !wxCHECK_VERSION(2, 9, 0)
-    // 2.9.0 and greater provide a wxString() constructor taking "const char*" whereas
-    // 2.8 did not.  In 2.9.x this IO_ERROR() constructor uses that wxString( const char* )
-    // constructor making this here constructor ambiguous with the IO_ERROR()
-    // taking the wxString.
-
-    IO_ERROR( const char* aThrowersFile,
+    explicit IO_ERROR( const char* aThrowersFile,
               const char* aThrowersLoc,
               const std::string& aMsg )
     {
         init( aThrowersFile, aThrowersLoc, wxString::FromUTF8( aMsg.c_str() ) );
     }
-#endif
 
-    /**
-     * handles the case where _() is passed as aMsg.
-     */
-    IO_ERROR( const char* aThrowersFile,
+    explicit IO_ERROR( const char* aThrowersFile,
+              const char* aThrowersLoc,
+              const char* aMsg )
+    {
+        init( aThrowersFile, aThrowersLoc, wxString::FromUTF8( aMsg ) );
+    }
+
+    /// handle the case where _() is passed as aMsg.
+    explicit IO_ERROR( const char* aThrowersFile,
               const char* aThrowersLoc,
               const wxChar* aMsg )
     {
@@ -647,6 +676,5 @@ protected:
     void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
-
 
 #endif // RICHIO_H_

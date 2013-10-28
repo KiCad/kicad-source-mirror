@@ -38,6 +38,7 @@
 #include <3d_viewer.h>
 #include <pcbcommon.h>
 #include <msgpanel.h>
+#include <fp_lib_table.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -51,9 +52,6 @@
 
 
 static PCB_SCREEN* s_screenModule;      // the PCB_SCREEN used by the footprint editor
-
-wxString FOOTPRINT_EDIT_FRAME::m_lib_nick_name;
-wxString FOOTPRINT_EDIT_FRAME::m_lib_path;
 
 BOARD* FOOTPRINT_EDIT_FRAME::s_Pcb;
 
@@ -133,7 +131,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, FOOTPRINT_EDIT_FRAME::Show3D_Frame )
 
     EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected )
-
+    EVT_UPDATE_UI( ID_MODEDIT_SELECT_CURRENT_LIB, FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib )
     EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
     EVT_UPDATE_UI( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
                    FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
@@ -255,6 +253,20 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
     m_Pcb = 0;
 }
 
+#if defined(USE_FP_LIB_TABLE)
+wxString FOOTPRINT_EDIT_FRAME::getLibPath()
+{
+    try
+    {
+        const FP_LIB_TABLE::ROW* row = GetFootprintLibraryTable()->FindRow( m_lib_nick_name );
+        return row->GetFullURI( true );
+    }
+    catch( IO_ERROR ioe )
+    {
+        return wxEmptyString;
+    }
+}
+#endif
 
 const wxChar* FOOTPRINT_EDIT_FRAME::GetFootprintEditorFrameName()
 {
@@ -330,7 +342,6 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         case wxID_NO:
             break;
 
-        case wxID_OK:
         case wxID_YES:
             // code from FOOTPRINT_EDIT_FRAME::Process_Special_Functions,
             // at case ID_MODEDIT_SAVE_LIBMODULE
@@ -452,6 +463,16 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent
     }
 
     aEvent.Enable( canReplace );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent )
+{
+#if defined( USE_FP_LIB_TABLE )
+    aEvent.Enable( m_footprintLibTable && !m_footprintLibTable->IsEmpty() );
+#else
+    aEvent.Enable( !g_LibraryNames.IsEmpty() );
+#endif
 }
 
 

@@ -227,6 +227,26 @@ public:
      */
     wxString GetLayerName() const;
 
+    virtual bool HitTest( const wxPoint& aPosition )
+    {
+        return EDA_ITEM::HitTest( aPosition );
+    }
+
+    /**
+     * Function HitTest
+     * tests if the \a aRect intersects or contains this object (depending on \a aContained).
+     *
+     * @param aRect A reference to an EDA_RECT object containg the area to test.
+     * @param aContained Test if \a aRect contains this object completly.
+     * @param aAccuracy Increase the item bounding box by this amount.
+     * @return bool - True if \a aRect contains this object completly or if \a aRect intersects
+     *  the object and \a aContained is False, otherwise false.
+     */
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0) const
+    {
+        return false;   // derived classes should override this function
+    }
+
 
     /**
      * Function FormatInternalUnits

@@ -32,19 +32,17 @@
 // So boost seems best for all platforms.
 
 
-#if 0   // C++
+#if 0   // C++ std::unordered_map, maybe in the future
 
 #include <unordered_map>
 
-/// Map a C string to a wxString, used in PLUGINs.
-typedef std::unordered_map< std::string, wxString >  PROPERTIES;
 
 /// Map a C string to an integer.  Used in DSNLEXER.
-typedef std::unordered_map< std::string, int >       KEYWORD_MAP;
+typedef std::unordered_map< std::string, int >          KEYWORD_MAP;
 
 /// Map a C string to an EDA_RECT.
 /// The key is the classname of the derived wxformbuilder dialog.
-typedef std::unordered_map< std::string, EDA_RECT >  RECT_MAP;
+typedef std::unordered_map< std::string, EDA_RECT >     RECT_MAP;
 
 
 #elif 1     // boost::unordered_map
@@ -55,10 +53,6 @@ typedef std::unordered_map< std::string, EDA_RECT >  RECT_MAP;
 #include <boost/unordered_map.hpp>
 
 // see http://www.boost.org/doc/libs/1_49_0/doc/html/boost/unordered_map.html
-
-/// Map a std::string to a wxString, used in PLUGINs.
-typedef boost::unordered_map< std::string, wxString >  PROPERTIES;
-
 
 /// Equality test for "const char*" type used in very specialized KEYWORD_MAP below
 struct iequal_to : std::binary_function< const char*, const char*, bool >

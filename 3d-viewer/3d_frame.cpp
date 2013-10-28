@@ -47,6 +47,7 @@ static const wxString   keySizey( wxT( "Size_y" ) );
 static const wxString   keyBgColor_Red( wxT( "BgColor_Red" ) );
 static const wxString   keyBgColor_Green( wxT( "BgColor_Green" ) );
 static const wxString   keyBgColor_Blue( wxT( "BgColor_Blue" ) );
+static const wxString   keyShowRealisticMode( wxT( "ShowRealisticMode" ) );
 static const wxString   keyShowAxis( wxT( "ShowAxis" ) );
 static const wxString   keyShowZones( wxT( "ShowZones" ) );
 static const wxString   keyShowFootprints( wxT( "ShowFootprints" ) );
@@ -56,6 +57,7 @@ static const wxString   keyShowSilkScreenLayers( wxT( "ShowSilkScreenLayers" ) )
 static const wxString   keyShowSolderMaskLayers( wxT( "ShowSolderMasLayers" ) );
 static const wxString   keyShowSolderPasteLayers( wxT( "ShowSolderPasteLayers" ) );
 static const wxString   keyShowCommentsLayer( wxT( "ShowCommentsLayers" ) );
+static const wxString   keyShowBoardBody( wxT( "ShowBoardBody" ) );
 static const wxString   keyShowEcoLayers( wxT( "ShowEcoLayers" ) );
 
 BEGIN_EVENT_TABLE( EDA_3D_FRAME, wxFrame )
@@ -152,6 +154,7 @@ void EDA_3D_FRAME::GetSettings()
 {
     wxString    text;
     wxConfig*   config = wxGetApp().GetSettings(); // Current config used by application
+    class INFO3D_VISU& prms = g_Parm_3D_Visu;
 
     if( config )
     {
@@ -166,19 +169,43 @@ void EDA_3D_FRAME::GetSettings()
         config->Read( keyBgColor_Red, &g_Parm_3D_Visu.m_BgColor.m_Red, 0.0 );
         config->Read( keyBgColor_Green, &g_Parm_3D_Visu.m_BgColor.m_Green, 0.0 );
         config->Read( keyBgColor_Blue, &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
-        class INFO3D_VISU& prms = g_Parm_3D_Visu;
-        config->Read( keyShowAxis, &prms.m_DrawFlags[prms.FL_AXIS], true );
-        config->Read( keyShowFootprints, &prms.m_DrawFlags[prms.FL_MODULE], true );
-        config->Read( keyShowCopperThickness,
-                      &prms.m_DrawFlags[prms.FL_USE_COPPER_THICKNESS],
-                      false );
-        config->Read( keyShowZones, &prms.m_DrawFlags[prms.FL_ZONE], true );
-        config->Read( keyShowAdhesiveLayers, &prms.m_DrawFlags[prms.FL_ADHESIVE], true );
-        config->Read( keyShowSilkScreenLayers, &prms.m_DrawFlags[prms.FL_SILKSCREEN], true );
-        config->Read( keyShowSolderMaskLayers, &prms.m_DrawFlags[prms.FL_SOLDERMASK], true );
-        config->Read( keyShowSolderPasteLayers, &prms.m_DrawFlags[prms.FL_SOLDERPASTE], true );
-        config->Read( keyShowCommentsLayer, &prms.m_DrawFlags[prms.FL_COMMENTS], true );
-        config->Read( keyShowEcoLayers, &prms.m_DrawFlags[prms.FL_ECO], true );
+
+        bool tmp;
+        config->Read( keyShowRealisticMode, &tmp, false );
+        prms.SetFlag( FL_USE_REALISTIC_MODE, tmp );
+
+        config->Read( keyShowAxis, &tmp, true );
+        prms.SetFlag( FL_AXIS, tmp );
+
+        config->Read( keyShowFootprints, &tmp, true );
+        prms.SetFlag( FL_MODULE, tmp );
+
+        config->Read( keyShowCopperThickness, &tmp, false );
+        prms.SetFlag( FL_USE_COPPER_THICKNESS, tmp );
+
+        config->Read( keyShowZones, &tmp, true );
+        prms.SetFlag( FL_ZONE, tmp );
+
+        config->Read( keyShowAdhesiveLayers, &tmp, true );
+        prms.SetFlag( FL_ADHESIVE, tmp );
+
+        config->Read( keyShowSilkScreenLayers, &tmp, true );
+        prms.SetFlag( FL_SILKSCREEN, tmp );
+
+        config->Read( keyShowSolderMaskLayers, &tmp, true );
+        prms.SetFlag( FL_SOLDERMASK, tmp );
+
+        config->Read( keyShowSolderPasteLayers, &tmp, true );
+        prms.SetFlag( FL_SOLDERPASTE, tmp );
+
+        config->Read( keyShowCommentsLayer, &tmp, true );
+        prms.SetFlag( FL_COMMENTS, tmp );
+
+        config->Read( keyShowEcoLayers, &tmp, true );
+        prms.SetFlag( FL_ECO, tmp );
+
+        config->Read( keyShowBoardBody, &tmp, true );
+        prms.SetFlag( FL_SHOW_BOARD_BODY, tmp );
     }
 }
 
@@ -195,16 +222,18 @@ void EDA_3D_FRAME::SaveSettings()
     config->Write( keyBgColor_Green, g_Parm_3D_Visu.m_BgColor.m_Green );
     config->Write( keyBgColor_Blue, g_Parm_3D_Visu.m_BgColor.m_Blue );
     class INFO3D_VISU& prms = g_Parm_3D_Visu;
-    config->Write( keyShowAxis, prms.m_DrawFlags[prms.FL_AXIS] );
-    config->Write( keyShowFootprints, prms.m_DrawFlags[prms.FL_MODULE] );
-    config->Write( keyShowCopperThickness, prms.m_DrawFlags[prms.FL_USE_COPPER_THICKNESS] );
-    config->Write( keyShowZones, prms.m_DrawFlags[prms.FL_ZONE] );
-    config->Write( keyShowAdhesiveLayers, prms.m_DrawFlags[prms.FL_ADHESIVE] );
-    config->Write( keyShowSilkScreenLayers, prms.m_DrawFlags[prms.FL_SILKSCREEN] );
-    config->Write( keyShowSolderMaskLayers, prms.m_DrawFlags[prms.FL_SOLDERMASK] );
-    config->Write( keyShowSolderPasteLayers, prms.m_DrawFlags[prms.FL_SOLDERPASTE] );
-    config->Write( keyShowCommentsLayer, prms.m_DrawFlags[prms.FL_COMMENTS] );
-    config->Write( keyShowEcoLayers, prms.m_DrawFlags[prms.FL_ECO] );
+    config->Write( keyShowRealisticMode, prms.GetFlag( FL_USE_REALISTIC_MODE )  );
+    config->Write( keyShowAxis, prms.GetFlag( FL_AXIS )  );
+    config->Write( keyShowFootprints, prms.GetFlag( FL_MODULE )  );
+    config->Write( keyShowCopperThickness, prms.GetFlag( FL_USE_COPPER_THICKNESS )  );
+    config->Write( keyShowZones, prms.GetFlag( FL_ZONE )  );
+    config->Write( keyShowAdhesiveLayers, prms.GetFlag( FL_ADHESIVE )  );
+    config->Write( keyShowSilkScreenLayers, prms.GetFlag( FL_SILKSCREEN )  );
+    config->Write( keyShowSolderMaskLayers, prms.GetFlag( FL_SOLDERMASK )  );
+    config->Write( keyShowSolderPasteLayers, prms.GetFlag( FL_SOLDERPASTE )  );
+    config->Write( keyShowCommentsLayer, prms.GetFlag( FL_COMMENTS )  );
+    config->Write( keyShowEcoLayers, prms.GetFlag( FL_ECO )  );
+    config->Write( keyShowBoardBody, prms.GetFlag( FL_SHOW_BOARD_BODY )  );
 
     if( IsIconized() )
         return;
@@ -355,53 +384,63 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Set3DBgColor();
         return;
 
+    case ID_MENU3D_REALISTIC_MODE:
+        g_Parm_3D_Visu.SetFlag( FL_USE_REALISTIC_MODE, isChecked );
+        NewDisplay();
+        return;
+
+    case ID_MENU3D_SHOW_BOARD_BODY:
+        g_Parm_3D_Visu.SetFlag( FL_SHOW_BOARD_BODY, isChecked );
+        NewDisplay();
+        return;
+
     case ID_MENU3D_AXIS_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_AXIS] = isChecked;
+        g_Parm_3D_Visu.SetFlag( FL_AXIS, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_MODULE_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE] = isChecked;
+        g_Parm_3D_Visu.SetFlag( FL_MODULE, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_USE_COPPER_THICKNESS:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_COPPER_THICKNESS] = isChecked;
+        g_Parm_3D_Visu.SetFlag( FL_USE_COPPER_THICKNESS, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_ZONE_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE] = isChecked;
+        g_Parm_3D_Visu.SetFlag( FL_ZONE, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_ADHESIVE_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ADHESIVE] = isChecked;
+        g_Parm_3D_Visu.SetFlag( FL_ADHESIVE, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_SILKSCREEN_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SILKSCREEN] = isChecked;
+        g_Parm_3D_Visu.SetFlag( FL_SILKSCREEN, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_SOLDER_MASK_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERMASK] = isChecked;
+        g_Parm_3D_Visu.SetFlag( FL_SOLDERMASK, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_SOLDER_PASTE_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERPASTE] = isChecked;
+        g_Parm_3D_Visu.SetFlag( FL_SOLDERPASTE, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_COMMENTS_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_COMMENTS] = isChecked;
+        g_Parm_3D_Visu.SetFlag( FL_COMMENTS, isChecked );
         NewDisplay();
         return;
 
     case ID_MENU3D_ECO_ONOFF:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO] = isChecked;
+        g_Parm_3D_Visu.SetFlag( FL_ECO, isChecked );
         NewDisplay();
         return;
 
@@ -431,26 +470,26 @@ void EDA_3D_FRAME::On3DGridSelection( wxCommandEvent& event )
     switch( id )
     {
     case ID_MENU3D_GRID_NOGRID:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] = false;
+        g_Parm_3D_Visu.SetFlag( FL_GRID, false );
         break;
 
     case ID_MENU3D_GRID_10_MM:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] = true;
+        g_Parm_3D_Visu.SetFlag( FL_GRID, true );
         g_Parm_3D_Visu.m_3D_Grid = 10.0;
         break;
 
     case ID_MENU3D_GRID_5_MM:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] = true;
+        g_Parm_3D_Visu.SetFlag( FL_GRID, true );
         g_Parm_3D_Visu.m_3D_Grid = 5.0;
         break;
 
     case ID_MENU3D_GRID_2P5_MM:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] = true;
+        g_Parm_3D_Visu.SetFlag( FL_GRID, true );
         g_Parm_3D_Visu.m_3D_Grid = 2.5;
         break;
 
     case ID_MENU3D_GRID_1_MM:
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] = true;
+        g_Parm_3D_Visu.SetFlag( FL_GRID, true );
         g_Parm_3D_Visu.m_3D_Grid = 1.0;
         break;
 

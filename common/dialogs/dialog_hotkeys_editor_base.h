@@ -1,15 +1,19 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_hotkeys_editor_base__
-#define __dialog_hotkeys_editor_base__
+#ifndef __DIALOG_HOTKEYS_EDITOR_BASE_H__
+#define __DIALOG_HOTKEYS_EDITOR_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 
+#include "dialog_shim.h"
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
@@ -26,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class HOTKEYS_EDITOR_DIALOG_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class HOTKEYS_EDITOR_DIALOG_BASE : public wxDialog 
+class HOTKEYS_EDITOR_DIALOG_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -47,9 +51,9 @@ class HOTKEYS_EDITOR_DIALOG_BASE : public wxDialog
 	
 	public:
 		
-		HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Hotkeys Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 304,235 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Hotkeys Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 304,235 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~HOTKEYS_EDITOR_DIALOG_BASE();
 	
 };
 
-#endif //__dialog_hotkeys_editor_base__
+#endif //__DIALOG_HOTKEYS_EDITOR_BASE_H__

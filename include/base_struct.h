@@ -47,6 +47,10 @@ extern std::ostream& operator <<( std::ostream& out, const wxPoint& pt );
 #endif
 
 
+/// Flag to enable find and replace tracing using the WXTRACE environment variable.
+extern const wxString traceFindReplace;
+
+
 /**
  * Enum FILL_T
  * is the set of fill types used in plotting or drawing enclosed areas.
@@ -203,10 +207,24 @@ public:
 
     /**
      * Function Intersects
+     * tests for a common area between rectangles.
+     *
+     * @param aRect A rectangle to test intersection with.
      * @return bool - true if the argument rectangle intersects this rectangle.
      * (i.e. if the 2 rectangles have at least a common point)
      */
     bool Intersects( const EDA_RECT& aRect ) const;
+
+    /**
+     * Function Intersects
+     * tests for a common area between a segment and this rectangle.
+     *
+     * @param aPoint1 First point of the segment to test intersection with.
+     * @param aPoint2 Second point of the segment to test intersection with.
+     * @return bool - true if the argument segment intersects this rectangle.
+     * (i.e. if the segment and rectangle have at least a common point)
+     */
+    bool Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) const;
 
     /**
      * Function operator(wxRect)
@@ -441,18 +459,6 @@ public:
         return false;   // derived classes should override this function
     }
 
-    /**
-     * Function HitTest
-     * tests if the \a aRect intersects this object.
-     * For now, an ending point must be inside \a aRect.
-     *
-     * @param aRect A reference to an EDA_RECT object containg the area to test.
-     * @return True if \a aRect intersects the object, otherwise false.
-     */
-    virtual bool HitTest( const EDA_RECT& aRect ) const
-    {
-        return false;   // derived classes should override this function
-    }
 
     /**
      * Function GetBoundingBox

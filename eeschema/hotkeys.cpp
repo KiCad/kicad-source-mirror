@@ -183,9 +183,9 @@ static EDA_HOTKEY HkCopyComponentOrText( wxT( "Copy Component or Label" ),
                                          ID_POPUP_SCH_COPY_ITEM );
 
 static EDA_HOTKEY HkDrag( wxT( "Drag Item" ), HK_DRAG, 'G', ID_SCH_DRAG_ITEM );
-static EDA_HOTKEY HkSaveBlock( wxT( "Save Block" ), HK_SAVE_BLOCK, 'C' + GR_KB_CTRL );
+static EDA_HOTKEY HkSaveBlock( wxT( "Save Block" ), HK_SAVE_BLOCK, 'C' + GR_KB_CTRL, wxID_COPY );
 static EDA_HOTKEY HkMove2Drag( wxT( "Move Block -> Drag Block" ),
-                               HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
+                               HK_MOVEBLOCK_TO_DRAGBLOCK, '\t', ID_POPUP_DRAG_BLOCK );
 static EDA_HOTKEY HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
@@ -367,16 +367,10 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ZOOM_REDRAW:
     case HK_ZOOM_CENTER:
     case HK_ZOOM_AUTO:
+    case HK_MOVEBLOCK_TO_DRAGBLOCK:          // Switch to drag mode, when block moving
+    case HK_SAVE_BLOCK:                      // Copy block to clip board.
         cmd.SetId( hotKey->m_IdMenuEvent );
         GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_MOVEBLOCK_TO_DRAGBLOCK:   // Switch to drag mode, when block moving
-        HandleBlockEndByPopUp( BLOCK_DRAG, aDC );
-        break;
-
-    case HK_SAVE_BLOCK:
-        HandleBlockEndByPopUp( BLOCK_SAVE, aDC );
         break;
 
     case HK_DELETE:

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2010 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -1704,16 +1704,6 @@ public:
 
     DECLARE_EVENT_TABLE()
 };
-
-
-/**
- * Function InvokePcbLibTableEditor
- * shows the modal DIALOG_FP_LIB_TABLE for purposes of editing two lib tables.
- *
- * @return int - bits 0 and 1 tell whether a change was made to the @a aGlobal
- *  and/or the @a aProject table, respectively.  If set, table was modified.
- */
-int InvokePcbLibTableEditor( wxFrame* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject );
 
 
 #endif  // WXPCB_STRUCT_H_

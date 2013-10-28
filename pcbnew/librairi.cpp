@@ -619,7 +619,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibPath,
         if( ! MODULE::IsLibNameValid( footprintName ) )
         {
             wxString msg;
-            msg.Printf( _("Error:\none of invalid chars <%s> found\nin <%s>" ),
+            msg.Printf( _("Error:\none of invalid chars '%s' found\nin '%s'" ),
                         MODULE::ReturnStringLibNameInvalidChars( true ),
                         GetChars( footprintName ) );
 
@@ -655,7 +655,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibPath,
             if( aDisplayDialog )
             {
                 wxString msg = wxString::Format( FMT_MOD_EXISTS,
-                                                 footprintName.GetData(), aLibPath.GetData() );
+                        footprintName.GetData(), aLibPath.GetData() );
 
                 SetStatusText( msg );
             }
@@ -821,23 +821,11 @@ void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    setLibNickName( dlg.GetTextSelection() );
-    wxString uri = m_footprintLibTable->FindRow( dlg.GetTextSelection() )->GetFullURI();
-    wxFileName fileName = FP_LIB_TABLE::ExpandSubstitutions( uri );
+    wxString nickname = dlg.GetTextSelection();
 
-    if( fileName.IsOk() && fileName.FileExists() )
-    {
-        setLibPath( fileName.GetFullPath() );
-    }
-    else
-    {
-        wxString msg = wxString::Format( FMT_BAD_PATHS, GetChars( dlg.GetTextSelection() ) );
+    setLibNickName( nickname );
 
-        DisplayError( this, msg );
-
-        setLibNickName( wxEmptyString );
-        setLibPath( wxEmptyString );
-    }
+    wxLogDebug( wxT( "Chose footprint library <%s>." ), GetChars( nickname ) );
 
     updateTitle();
 }

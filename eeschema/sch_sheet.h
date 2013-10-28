@@ -42,6 +42,7 @@ class SCH_SHEET_PIN;
 class SCH_SHEET_PATH;
 class DANGLING_END_ITEM;
 class SCH_EDIT_FRAME;
+class NETLIST_OBJECT_LIST;
 
 
 #define MIN_SHEET_WIDTH  500
@@ -541,8 +542,8 @@ public:
 
     BITMAP_DEF GetMenuImage() const { return add_hierarchical_subsheet_xpm; }
 
-    void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                 SCH_SHEET_PATH*          aSheetPath );
+    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                         SCH_SHEET_PATH*      aSheetPath );
 
     SCH_ITEM& operator=( const SCH_ITEM& aSheet );
 

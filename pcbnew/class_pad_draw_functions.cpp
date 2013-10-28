@@ -435,7 +435,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         case PAD_CIRCLE:
             if( aDC->LogicalToDeviceXRel( hole ) > MIN_DRAW_WIDTH )
                 GRFilledCircle( aClipBox, aDC, holepos.x, holepos.y, hole, 0,
-                                aDrawInfo.m_Color, hole_color );
+                                hole_color, hole_color );
             break;
 
         case PAD_OVAL:

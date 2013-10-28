@@ -25,6 +25,8 @@ set( CVPCB_DIALOGS
     dialogs/dialog_display_options_base.cpp
     ../pcbnew/dialogs/dialog_fp_lib_table.cpp
     ../pcbnew/dialogs/dialog_fp_lib_table_base.cpp
+    ../pcbnew/dialogs/dialog_fp_plugin_options.cpp
+    ../pcbnew/dialogs/dialog_fp_plugin_options_base.cpp
     )
 
 set( CVPCB_SRCS
@@ -118,6 +120,12 @@ target_link_libraries(cvpcb
 	bz2
 	)
 endif(WIN32 AND MSYS)
+
+
+if( BUILD_GITHUB_PLUGIN )
+    target_link_libraries( cvpcb github_plugin )
+endif()
+
 
 ###
 # Add cvpcb as install target
