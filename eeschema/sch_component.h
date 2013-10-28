@@ -40,7 +40,7 @@ class SCH_SHEET_PATH;
 class LIB_ITEM;
 class LIB_PIN;
 class LIB_COMPONENT;
-
+class NETLIST_OBJECT_LIST;
 
 /// A container for several SCH_FIELD items
 typedef std::vector<SCH_FIELD> SCH_FIELDS;
@@ -365,6 +365,13 @@ public:
 
     bool IsConnectable() const { return true; }
 
+    /**
+     * @return true if the component is in netlist
+     * which means this is not a power component, or something
+     * like a component reference starting by #
+     */
+    bool IsInNetlist() const;
+
     void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
@@ -384,8 +391,8 @@ public:
 
     BITMAP_DEF GetMenuImage() const { return  add_component_xpm; }
 
-    void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                 SCH_SHEET_PATH*          aSheetPath );
+    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                         SCH_SHEET_PATH*      aSheetPath );
 
     bool operator <( const SCH_ITEM& aItem ) const;
 

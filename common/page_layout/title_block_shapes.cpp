@@ -62,27 +62,12 @@
 #include <class_worksheet_dataitem.h>
 
 
-// Temporary include. Will be removed when a GOST page layout descr file is available
-#ifdef KICAD_GOST
-#include "title_block_shapes_gost.cpp"
-#endif
-
 void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                        const PAGE_INFO& aPageInfo,
                        const TITLE_BLOCK& aTitleBlock,
                        EDA_COLOR_T aColor, EDA_COLOR_T aAltColor )
 {
     WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-
-// Ugly hack: will be removed when a GOST page layout descr file is available
-#ifdef KICAD_GOST
-    if( pglayout.IsDefaultDescr() )
-    {
-        ((WS_DRAW_ITEM_LIST_GOST*)this)->BuildWorkSheetGraphicListGOST( aPageInfo,
-                aTitleBlock, aColor, aAltColor );
-        return;
-    }
-#endif
 
     #define milsTomm (25.4/1000)
 
@@ -251,6 +236,21 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
             }
         }
             break;
+
+        case WORKSHEET_DATAITEM::WS_BITMAP:
+
+            ((WORKSHEET_DATAITEM_BITMAP*)wsItem)->SetPixelScaleFactor();
+
+            for( int jj = 0; jj < wsItem->m_RepeatCount; jj++ )
+            {
+                if( jj && ! wsItem->IsInsidePage( jj ) )
+                    continue;
+
+                Append( new WS_DRAW_ITEM_BITMAP( wsItem,
+                    wsItem->GetStartPosUi( jj ) ) );
+            }
+            break;
+
         }
     }
 }

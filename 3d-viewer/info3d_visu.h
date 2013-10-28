@@ -63,25 +63,27 @@ public: S3D_COLOR()
 };
 
 /* information needed to display 3D board */
+enum DISPLAY3D_FLG {
+    FL_AXIS=0, FL_MODULE, FL_ZONE,
+    FL_ADHESIVE, FL_SILKSCREEN, FL_SOLDERMASK, FL_SOLDERPASTE,
+    FL_COMMENTS, FL_ECO,
+    FL_GRID,
+    FL_USE_COPPER_THICKNESS,
+    FL_SHOW_BOARD_BODY,
+    FL_USE_REALISTIC_MODE,
+    FL_LAST
+};
+
+
 class INFO3D_VISU
 {
 public:
-    enum DISPLAY3D_FLG {
-        FL_AXIS=0, FL_MODULE, FL_ZONE,
-        FL_ADHESIVE, FL_SILKSCREEN, FL_SOLDERMASK, FL_SOLDERPASTE,
-        FL_COMMENTS, FL_ECO,
-        FL_GRID,
-        FL_USE_COPPER_THICKNESS,
-        FL_LAST
-    };
-
     double      m_Beginx, m_Beginy;                 // position of mouse (used in drag commands)
     double      m_Quat[4];                          // orientation of 3D view
     double      m_Rot[4];                           // rotation parameters of 3D view
     double      m_Zoom;                             // 3D zoom value
     double      m_3D_Grid;                          // 3D grid value, in mm
     S3D_COLOR   m_BgColor;
-    bool        m_DrawFlags[FL_LAST];               // Enable/disable flags (see DISPLAY3D_FLG list)
     wxPoint     m_BoardPos;                         // center board actual position in board units
     wxSize      m_BoardSize;                        // board actual size in board units
     int         m_CopperLayersCount;                // Number of copper layers actually used by the board
@@ -98,9 +100,17 @@ private:
     double  m_CopperThickness;                      // Copper thickness (normalized)
     double  m_EpoxyThickness;                       // Epoxy thickness (normalized)
     double  m_NonCopperLayerThickness;              // Non copper layers thickness
+    bool    m_drawFlags[FL_LAST];                   // Enable/disable flags (see DISPLAY3D_FLG list)
 
 public: INFO3D_VISU();
     ~INFO3D_VISU();
+
+    // Accessors
+    bool GetFlag( DISPLAY3D_FLG aFlag ) const { return m_drawFlags[aFlag]; }
+    bool SetFlag( DISPLAY3D_FLG aFlag, bool aState )
+    {
+        return m_drawFlags[aFlag] = aState;
+    }
 
     /**
      * Function InitSettings
@@ -133,11 +143,14 @@ public: INFO3D_VISU();
      * note: the thickness (Z size) of the copper is not the thickness
      * of the layer (the thickness of the layer is the epoxy thickness / layer count)
      *
-     * Note: if m_DrawFlags[FL_USE_COPPER_THICKNESS] is not set, returns 0
+     * Note: if m_drawFlags[FL_USE_COPPER_THICKNESS] is not set,
+     * and normal mode, returns 0
      */
     int GetCopperThicknessBIU() const
     {
-        return m_DrawFlags[FL_USE_COPPER_THICKNESS] ?
+        bool use_copper_thickness = GetFlag( FL_USE_COPPER_THICKNESS ) ||
+                                    GetFlag( FL_USE_REALISTIC_MODE );
+        return use_copper_thickness ?
             KiROUND( m_CopperThickness / m_BiuTo3Dunits )
             : 0;
     }
@@ -156,11 +169,13 @@ public: INFO3D_VISU();
      * @return the thickness (Z size) of a technical layer,
      *  in Board Internal Units
      *
-     * Note: if m_DrawFlags[FL_USE_COPPER_THICKNESS] is not set, returns 0
+     * Note: if m_drawFlags[FL_USE_COPPER_THICKNESS] is not set, returns 0
      */
     int GetNonCopperLayerThicknessBIU() const
     {
-        return  m_DrawFlags[FL_USE_COPPER_THICKNESS] ?
+        bool use_copper_thickness = GetFlag( FL_USE_COPPER_THICKNESS ) ||
+                                    GetFlag( FL_USE_REALISTIC_MODE );
+        return  use_copper_thickness ?
             KiROUND( m_NonCopperLayerThickness / m_BiuTo3Dunits )
             : 0;
     }
@@ -170,7 +185,7 @@ public: INFO3D_VISU();
      * @return the thickness (Z size) of the copper or a technical layer,
      *  in Board Internal Units, depending on the layer id
      *
-     * Note: if m_DrawFlags[FL_USE_COPPER_THICKNESS] is not set, returns 0
+     * Note: if m_drawFlags[FL_USE_COPPER_THICKNESS] is not set, returns 0
      */
     int GetLayerObjectThicknessBIU( int aLayerId) const
     {
@@ -178,6 +193,8 @@ public: INFO3D_VISU();
                         GetNonCopperLayerThicknessBIU() :
                         GetCopperThicknessBIU();
     }
+
+    bool IsRealisticMode() { return GetFlag( FL_USE_REALISTIC_MODE ); }
 };
 
 extern INFO3D_VISU g_Parm_3D_Visu;

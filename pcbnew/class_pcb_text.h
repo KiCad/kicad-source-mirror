@@ -81,9 +81,12 @@ public:
         return TextHitTest( aPosition );
     }
 
-    bool HitTest( const EDA_RECT& aRect ) const
+    /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
+     *                               bool aContained = true, int aAccuracy ) const
+     */
+    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const
     {
-        return TextHitTest( aRect );
+        return TextHitTest( aRect, aContained, aAccuracy );
     }
 
     wxString GetClass() const

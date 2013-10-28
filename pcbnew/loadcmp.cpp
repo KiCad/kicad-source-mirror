@@ -154,7 +154,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
                                                bool            aUseFootprintViewer,
                                                wxDC*           aDC )
 {
-    MODULE*     module;
+    MODULE*     module = NULL;
     wxPoint     curspos = GetCrossHairPosition();
     wxString    moduleName, keys;
     wxString    libName = aLibrary;
@@ -432,31 +432,15 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
     wxCHECK_MSG( m_footprintLibTable != NULL, NULL,
                  wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
 
-    wxString   libName = FROM_UTF8( aFootprintId.GetLibNickname().c_str() );
+    wxString   nickname = FROM_UTF8( aFootprintId.GetLibNickname().c_str() );
+    wxString   fpname   = FROM_UTF8( aFootprintId.GetFootprintName().c_str() );
 
-    const FP_LIB_TABLE::ROW* row = m_footprintLibTable->FindRow( libName );
-
-    if( row == NULL )
-    {
-        wxString msg;
-        msg.Printf( _( "No library named <%s> was found in the footprint library table." ),
-                    aFootprintId.GetLibNickname().c_str() );
-        THROW_IO_ERROR( msg );
-    }
-
-    wxString   footprintName = FROM_UTF8( aFootprintId.GetFootprintName().c_str() );
-    wxString   libPath = row->GetFullURI();
-
-    libPath = FP_LIB_TABLE::ExpandSubstitutions( libPath );
-
-    PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::EnumFromStr( row->GetType() ) ) );
-
-    return pi->FootprintLoad( libPath, footprintName );
+    return m_footprintLibTable->FootprintLoad( nickname, fpname );
 }
 
 
 wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
-                                          const wxString& aLibraryFullFilename,
+                                          const wxString& aLibraryName,
                                           const wxString& aMask,
                                           const wxString& aKeyWord,
                                           FP_LIB_TABLE*   aTable )
@@ -468,15 +452,15 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
     FP_LIB_TABLE                 libTable;
     std::vector< wxArrayString > rows;
 
-
 #if !defined( USE_FP_LIB_TABLE )
-    if( aLibraryFullFilename.IsEmpty() )
+
+    if( aLibraryName.IsEmpty() )
     {
         libraries = g_LibraryNames;
     }
     else
     {
-        libraries.Add( aLibraryFullFilename );
+        libraries.Add( aLibraryName );
     }
 
     if( libraries.IsEmpty() )
@@ -486,32 +470,26 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
     }
 
     MList.ReadFootprintFiles( libraries );
+
 #else
+
     wxASSERT( aTable != NULL );
 
-    if( aLibraryFullFilename.IsEmpty() )
+    if( !MList.ReadFootprintFiles( aTable, !aLibraryName ? NULL : &aLibraryName ) )
     {
-        std::vector< wxString > libNames = aTable->GetLogicalLibs();
+        msg.Format( _( "Error occurred attempting to load footprint library <%s>:\n\n" ),
+                    GetChars( aLibraryName ) );
 
-        for( unsigned i = 0; i < libNames.size(); i++ )
-        {
-            FP_LIB_TABLE::ROW row = *aTable->FindRow( libNames[i] );
-            libTable.InsertRow( row );
-        }
-    }
-    else
-    {
-        FP_LIB_TABLE::ROW row = *aTable->FindRow( aLibraryFullFilename );
-        libTable.InsertRow( row );
-    }
+        if( !MList.m_filesNotFound.IsEmpty() )
+            msg += _( "Files not found:\n\n" ) + MList.m_filesNotFound;
 
-    if( libTable.IsEmpty() )
-    {
-        DisplayError( aWindow, _( "No footprint libraries were specified." ) );
+        if( !MList.m_filesInvalid.IsEmpty() )
+            msg +=  _("\n\nFile load errors:\n\n" ) + MList.m_filesInvalid;
+
+        DisplayError( this, msg );
         return wxEmptyString;
     }
 
-    MList.ReadFootprintFiles( libTable );
 #endif
 
     if( MList.GetCount() == 0 )
@@ -577,6 +555,7 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
         headers.Add( _( "Library" ) );
 
         msg.Printf( _( "Modules [%d items]" ), (int) rows.size() );
+
         EDA_LIST_DIALOG dlg( aWindow, msg, headers, rows, OldName, DisplayCmpDoc );
 
         if( dlg.ShowModal() == wxID_OK )

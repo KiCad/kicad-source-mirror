@@ -754,8 +754,8 @@ T PCB_PARSER::lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR )
         // dump the whole darn table, there's something wrong with it.
         for( it = aMap.begin();  it != aMap.end();  ++it )
         {
-            printf( &aMap == (void*)&m_layerIndices ? "lm[%s] = %d\n" : "lm[%s] = %08X\n",
-                it->first.c_str(), it->second );
+            wxLogDebug( &aMap == (void*)&m_layerIndices ? wxT( "lm[%s] = %d" ) :
+                        wxT( "lm[%s] = %08X" ), it->first.c_str(), it->second );
         }
 #endif
 

@@ -34,7 +34,6 @@
 #include <wxEeschemaStruct.h>
 #include <menus_helpers.h>
 
-#include <general.h>
 #include <sch_bus_entry.h>
 #include <sch_text.h>
 #include <sch_marker.h>
@@ -43,6 +42,7 @@
 #include <sch_no_connect.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 #include <sch_bitmap.h>
 
 

@@ -43,6 +43,7 @@
 #include <libeditframe.h>
 #include <class_library.h>
 #include <lib_polyline.h>
+#include <lib_pin.h>
 
 #include <kicad_device_context.h>
 #include <hotkeys.h>
@@ -350,7 +351,6 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         case wxID_NO:
             break;
 
-        case wxID_OK:
         case wxID_YES:
             if ( this->SaveActiveLibrary( false ) )
                 break;

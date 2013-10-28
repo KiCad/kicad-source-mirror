@@ -172,7 +172,10 @@ public:
 
     virtual bool HitTest( const wxPoint& aPosition );
 
-    virtual bool HitTest( const EDA_RECT& aRect ) const;
+    /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
+     *                               bool aContained = true, int aAccuracy ) const
+     */
+    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
 
     wxString GetClass() const
     {

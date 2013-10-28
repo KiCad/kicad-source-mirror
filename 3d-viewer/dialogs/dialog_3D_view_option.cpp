@@ -10,6 +10,7 @@ public:
 
 private:
     EDA_3D_FRAME* m_parent;
+    INFO3D_VISU & m_3Dprms;
 
     void initDialog();
 
@@ -31,7 +32,7 @@ void EDA_3D_FRAME::Install_3D_ViewOptionDialog( wxCommandEvent& event )
 
 
 DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_FRAME* parent )
-     :DIALOG_3D_VIEW_OPTIONS_BASE( parent )
+     :DIALOG_3D_VIEW_OPTIONS_BASE( parent ), m_3Dprms( g_Parm_3D_Visu )
 {
     m_parent = parent;
 
@@ -55,24 +56,15 @@ void DIALOG_3D_VIEW_OPTIONS::initDialog()
     m_bitmapECO->SetBitmap( KiBitmap( edit_sheet_xpm ) );
 
     // Check/uncheck checkboxes
-    m_checkBoxCuThickness->SetValue(
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_COPPER_THICKNESS] );
-    m_checkBox3Dshapes->SetValue(
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE] );
-    m_checkBoxAreas->SetValue(
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE] );
-    m_checkBoxSilkscreen->SetValue(
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SILKSCREEN] );
-    m_checkBoxSolderMask->SetValue(
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERMASK] );
-    m_checkBoxSolderpaste->SetValue(
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERPASTE] );
-    m_checkBoxAdhesive->SetValue(
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ADHESIVE] );
-    m_checkBoxComments->SetValue(
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_COMMENTS] );
-    m_checkBoxECO->SetValue(
-        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO] );
+    m_checkBoxCuThickness->SetValue( m_3Dprms.GetFlag( FL_USE_COPPER_THICKNESS ) );
+    m_checkBox3Dshapes->SetValue( m_3Dprms.GetFlag( FL_MODULE ) );
+    m_checkBoxAreas->SetValue( m_3Dprms.GetFlag( FL_ZONE ) );
+    m_checkBoxSilkscreen->SetValue( m_3Dprms.GetFlag( FL_SILKSCREEN ) );
+    m_checkBoxSolderMask->SetValue( m_3Dprms.GetFlag( FL_SOLDERMASK ) );
+    m_checkBoxSolderpaste->SetValue( m_3Dprms.GetFlag( FL_SOLDERPASTE ) );
+    m_checkBoxAdhesive->SetValue( m_3Dprms.GetFlag( FL_ADHESIVE ) );
+    m_checkBoxComments->SetValue( m_3Dprms.GetFlag( FL_COMMENTS ) );
+    m_checkBoxECO->SetValue( m_3Dprms.GetFlag( FL_ECO ) );
 }
 
 void DIALOG_3D_VIEW_OPTIONS::OnShowAllClick( wxCommandEvent& event )
@@ -105,24 +97,16 @@ void DIALOG_3D_VIEW_OPTIONS::OnShowNoneClick( wxCommandEvent& event )
 
 void DIALOG_3D_VIEW_OPTIONS::OnOKClick( wxCommandEvent& event )
 {
-    g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_COPPER_THICKNESS] =
-        m_checkBoxCuThickness->GetValue();
-    g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE] =
-        m_checkBox3Dshapes->GetValue();
-    g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE] =
-        m_checkBoxAreas->GetValue();
-    g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SILKSCREEN] =
-        m_checkBoxSilkscreen->GetValue();
-    g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERMASK] =
-        m_checkBoxSolderMask->GetValue();
-    g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_SOLDERPASTE] =
-        m_checkBoxSolderpaste->GetValue();
-    g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ADHESIVE] =
-        m_checkBoxAdhesive->GetValue();
-    g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_COMMENTS] =
-        m_checkBoxComments->GetValue();
-     g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO] =
-        m_checkBoxECO->GetValue();
+    m_3Dprms.SetFlag( FL_USE_COPPER_THICKNESS,
+                            m_checkBoxCuThickness->GetValue() );
+    m_3Dprms.SetFlag( FL_MODULE, m_checkBox3Dshapes->GetValue() );
+    m_3Dprms.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
+    m_3Dprms.SetFlag( FL_SILKSCREEN, m_checkBoxSilkscreen->GetValue() );
+    m_3Dprms.SetFlag( FL_SOLDERMASK, m_checkBoxSolderMask->GetValue() );
+    m_3Dprms.SetFlag( FL_SOLDERPASTE, m_checkBoxSolderpaste->GetValue() );
+    m_3Dprms.SetFlag( FL_ADHESIVE, m_checkBoxAdhesive->GetValue() );
+    m_3Dprms.SetFlag( FL_COMMENTS, m_checkBoxComments->GetValue() );
+    m_3Dprms.SetFlag( FL_ECO, m_checkBoxECO->GetValue( ) );
 
     EndModal( wxID_OK );
 }

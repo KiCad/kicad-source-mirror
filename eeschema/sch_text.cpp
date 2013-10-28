@@ -535,7 +535,7 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
                          wxT( "Dangling end type list overflow.  Bad programmer!" ) );
 
             DANGLING_END_ITEM & nextItem = aItemList[ii];
-            m_isDangling = !SegmentIntersect( item.GetPosition(), nextItem.GetPosition(), m_Pos );
+            m_isDangling = !IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), m_Pos );
         }
             break;
 
@@ -613,15 +613,15 @@ wxString SCH_TEXT::GetSelectMenuText() const
 }
 
 
-void SCH_TEXT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                               SCH_SHEET_PATH*          aSheetPath )
+void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
+                               SCH_SHEET_PATH*      aSheetPath )
 {
     if( GetLayer() == LAYER_NOTES || GetLayer() == LAYER_SHEETLABEL )
         return;
 
     NETLIST_OBJECT* item = new NETLIST_OBJECT();
-    item->m_SheetList = *aSheetPath;
-    item->m_SheetListInclude = *aSheetPath;
+    item->m_SheetPath = *aSheetPath;
+    item->m_SheetPathInclude = *aSheetPath;
     item->m_Comp = (SCH_ITEM*) this;
     item->m_Type = NET_LABEL;
 

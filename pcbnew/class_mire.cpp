@@ -178,10 +178,15 @@ bool PCB_TARGET::HitTest( const wxPoint& aPosition )
 }
 
 
-bool PCB_TARGET::HitTest( const EDA_RECT& aRect ) const
+bool PCB_TARGET::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( aRect.Contains( m_Pos ) )
-        return true;
+    EDA_RECT arect = aRect;
+    arect.Inflate( aAccuracy );
+
+    if( aContained )
+        return arect.Contains( GetBoundingBox() );
+    else
+        return GetBoundingBox().Intersects( arect );
 
     return false;
 }

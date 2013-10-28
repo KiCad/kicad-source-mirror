@@ -555,21 +555,15 @@ bool MODULE::HitTest( const wxPoint& aPosition )
 }
 
 
-bool MODULE::HitTest( const EDA_RECT& aRect ) const
+bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( m_BoundaryBox.GetX() < aRect.GetX() )
-        return false;
+    EDA_RECT arect = aRect;
+    arect.Inflate( aAccuracy );
 
-    if( m_BoundaryBox.GetY() < aRect.GetY() )
-        return false;
-
-    if( m_BoundaryBox.GetRight() > aRect.GetRight() )
-        return false;
-
-    if( m_BoundaryBox.GetBottom() > aRect.GetBottom() )
-        return false;
-
-    return true;
+    if( aContained )
+        return arect.Contains( m_BoundaryBox );
+    else
+        return m_BoundaryBox.Intersects( arect );
 }
 
 

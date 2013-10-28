@@ -93,6 +93,9 @@ typedef boost::optional<double>             opt_double;
 typedef boost::optional<bool>               opt_bool;
 
 
+const wxChar* traceEaglePlugin = wxT( "KicadEaglePlugin" );
+
+
 /// segment (element) of our XPATH into the Eagle XML document tree in PTREE form.
 struct TRIPLET
 {
@@ -1058,8 +1061,8 @@ static inline unsigned long timeStamp( CPTREE& aTree )
 
 EAGLE_PLUGIN::EAGLE_PLUGIN() :
     m_rules( new ERULES() ),
-    m_xpath( new XPATH() )
-//    m_mod_time( wxDateTime::Now() )
+    m_xpath( new XPATH() ),
+    m_mod_time( wxDateTime::Now() )
 {
     init( NULL );
 
@@ -1102,7 +1105,7 @@ wxSize inline EAGLE_PLUGIN::kicad_fontz( double d ) const
 }
 
 
-BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPERTIES* aProperties )
+BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
     PTREE       doc;
@@ -1185,7 +1188,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPE
 }
 
 
-void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
+void EAGLE_PLUGIN::init( const PROPERTIES* aProperties )
 {
     m_hole_count = 0;
 
@@ -1271,6 +1274,9 @@ void EAGLE_PLUGIN::loadDesignRules( CPTREE& aDesignRules )
 
 void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 {
+    if( m_board == NULL )
+        return;
+
     typedef std::vector<ELAYER>     ELAYERS;
     typedef ELAYERS::const_iterator EITER;
 
@@ -1289,6 +1295,7 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 
     // establish cu layer map:
     int ki_layer_count = 0;
+
     for( EITER it = cu.begin();  it != cu.end();  ++it,  ++ki_layer_count )
     {
         if( ki_layer_count == 0 )
@@ -2674,7 +2681,7 @@ LAYER_NUM EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         case 95:    kiLayer = ECO1_N;               break;
         case 96:    kiLayer = ECO2_N;               break;
         default:
-            DBG( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
+//            D( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
             kiLayer = -1;       break;  // some layers do not map to KiCad
         }
     }
@@ -2714,7 +2721,12 @@ wxDateTime EAGLE_PLUGIN::getModificationTime( const wxString& aPath )
     m_writable = fn.IsFileWritable();
     */
 
-    return fn.GetModificationTime();
+    wxDateTime modTime = fn.GetModificationTime();
+
+    if( !modTime.IsValid() )
+        modTime.Now();
+
+    return modTime;
 }
 
 
@@ -2722,12 +2734,17 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 {
     try
     {
-        wxDateTime  modtime;
+        wxDateTime  modtime = getModificationTime( aLibPath );
 
-        if( aLibPath != m_lib_path ||
-            m_mod_time != ( modtime = getModificationTime( aLibPath ) ) )
+        // Fixes assertions in wxWidgets debug builds for the wxDateTime object.  Refresh the
+        // cache if either of the wxDateTime objects are invalid or the last file modification
+        // time differs from the current file modification time.
+        bool load = !m_mod_time.IsValid() || !modtime.IsValid() ||
+                    m_mod_time != modtime;
+
+        if( aLibPath != m_lib_path || load )
         {
-            //D(printf("Loading '%s'\n", TO_UTF8( aLibPath ) );)
+            wxLogTrace( traceEaglePlugin, wxT( "Loading '%s'" ), TO_UTF8( aLibPath ) );
 
             PTREE       doc;
             LOCALE_IO   toggle;     // toggles on, then off, the C locale.
@@ -2783,7 +2800,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 }
 
 
-wxArrayString EAGLE_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+wxArrayString EAGLE_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     init( aProperties );
 
@@ -2798,7 +2815,7 @@ wxArrayString EAGLE_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, PR
 }
 
 
-MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName, PROPERTIES* aProperties )
+MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
     init( aProperties );
 
@@ -2819,13 +2836,13 @@ MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStrin
 
 
 /*
-void EAGLE_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+void EAGLE_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
 {
     // Eagle lovers apply here.
 }
 
 
-void EAGLE_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, PROPERTIES* aProperties )
+void EAGLE_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, const PROPERTIES* aProperties )
 {
 }
 
@@ -2835,12 +2852,12 @@ void EAGLE_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString
 }
 
 
-void EAGLE_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+void EAGLE_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
 }
 
 
-bool EAGLE_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+bool EAGLE_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
 }
 

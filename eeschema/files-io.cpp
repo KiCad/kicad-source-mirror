@@ -35,12 +35,11 @@
 #include <wxEeschemaStruct.h>
 #include <appl_wxstruct.h>
 
-#include <general.h>
-#include <protos.h>
 #include <eeschema_id.h>
 #include <class_library.h>
 #include <libeditframe.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <wildcards_and_files_ext.h>
 
@@ -259,13 +258,25 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
 
     if( screen )
     {
-        if( !IsOK( this, _( "Discard changes to the current schematic?" ) ) )
+        int response = YesNoCancelDialog( this, _( "The current schematic has been modified.  Do "
+                                                   "you wish to save the changes?" ),
+                                          wxEmptyString,
+                                          _( "Save and Load" ), _( "Load Without Saving" ) );
+
+        if( response == wxID_CANCEL )
+        {
             return false;
+        }
+        else if( response == wxID_YES )
+        {
+            wxCommandEvent dummy;
+            OnSaveProject( dummy );
+        }
     }
 
     FullFileName = aFileName;
 
-    if( ( FullFileName.IsEmpty() ) && !aIsNew )
+    if( FullFileName.IsEmpty() && !aIsNew )
     {
         wxFileDialog dlg( this, _( "Open Schematic" ), wxGetCwd(),
                           wxEmptyString, SchematicFileWildcard,

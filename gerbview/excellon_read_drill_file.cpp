@@ -56,6 +56,12 @@
  *  T0
  *  M30
  */
+ /*
+  * Note there are some variant of tool definition:
+  * T1F00S00C0.2 or T1C0.02F00S00 ... Feed Rate and Spindle Speed of Tool 1
+  * Feed Rate and Spindle Speed are just skipped because they are not used in a viewer
+  */
+
 #include <fctsys.h>
 #include <common.h>
 #include <confirm.h>
@@ -72,6 +78,14 @@
 #include <cmath>
 
 #include <html_messagebox.h>
+
+// Default format for dimensions
+// number of digits in mantissa:
+static int fmtMantissaMM = 3;
+static int fmtMantissaInch = 4;
+// number of digits, integer part:
+static int fmtIntegerMM = 3;
+static int fmtIntegerInch = 2;
 
 extern int    ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
@@ -334,7 +348,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         m_State = READ_PROGRAM_STATE;
         break;
 
-    case DRILL_REWIND_STOP:         // TODO: what this command really is ?
+    case DRILL_REWIND_STOP:         // End of header. No action in a viewer
         m_State = READ_PROGRAM_STATE;
         break;
 
@@ -426,12 +440,21 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
     case DRILL_TOOL_INFORMATION:
 
         // Read a tool definition like T1C0.02:
+        // or T1F00S00C0.02 or T1C0.02F00S00
         // Read tool number:
         iprm = ReadInt( text, false );
 
+        // Skip Feed rate and Spindle speed, if any here
+        while( *text && ( *text == 'F' || *text == 'S' ) )
+        {
+            text++;
+            ReadInt( text, false );
+        }
+
         // Read tool shape
         if( *text != 'C' )
-            ReportMessage( _( "Tool definition <%c> not supported" ) );
+            ReportMessage( wxString:: Format(
+                           _( "Tool definition <%c> not supported" ), *text ) );
         if( *text )
             text++;
 
@@ -622,19 +645,30 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
 
 void EXCELLON_IMAGE::SelectUnits( bool aMetric )
 {
-    /* Inches: Default fmt = 2.4 for X and Y axis: 6 digits with  0.0001 resolution (00.0000)
-     * metric: Default fmt = 3.2 for X and Y axis: 5 digits, 1 micron resolution (00.000)
+    /* Coordinates are measured either in inch or metric (millimeters).
+     * Inch coordinates are in six digits (00.0000) with increments
+     * as small as 0.0001 (1/10,000).
+     * Metric coordinates can be measured in microns (thousandths of a millimeter)
+     * in one of the following three ways:
+     *  Five digit 10 micron resolution (000.00)
+     *  Six digit 10 micron resolution (0000.00)
+     *  Six digit micron resolution (000.000)
+     */
+    /* Inches: Default fmt = 2.4 for X and Y axis: 6 digits with  0.0001 resolution
+     * metric: Default fmt = 3.3 for X and Y axis: 6 digits, 1 micron resolution
      */
     if( aMetric )
     {
         m_GerbMetric = true;
-        m_FmtScale.x = m_FmtScale.y = 3;    // number of digits in mantissa: here 2
-        m_FmtLen.x = m_FmtLen.y = 5;        // number of digits: here 3+2
+        // number of digits in mantissa
+        m_FmtScale.x = m_FmtScale.y = fmtMantissaMM;
+        // number of digits (mantissa+interger)
+        m_FmtLen.x = m_FmtLen.y = fmtIntegerMM+fmtMantissaMM;
     }
     else
     {
         m_GerbMetric = false;
-        m_FmtScale.x = m_FmtScale.y = 4;    // number of digits in mantissa: here 4
-        m_FmtLen.x = m_FmtLen.y = 6;        // number of digits: here 2+4
+        m_FmtScale.x = m_FmtScale.y = fmtMantissaInch;
+        m_FmtLen.x = m_FmtLen.y = fmtIntegerInch+fmtMantissaInch;
     }
 }

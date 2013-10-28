@@ -35,9 +35,62 @@
 #endif
 
 
-// This file defines 3 classes useful for working with DSN text files and is named
-// "richio" after its author, Richard Hollenbeck, aka Dick Hollenbeck.
+// This file defines 3 classes and some functions useful for working with text files
+// and is named "richio" after its author, Richard Hollenbeck, aka Dick Hollenbeck.
 
+
+
+static int vprint( std::string* result, const char* format, va_list ap )
+{
+    char    msg[512];
+    size_t  len = vsnprintf( msg, sizeof(msg), format, ap );
+
+    if( len < sizeof(msg) )     // the output fit into msg
+    {
+        result->append( msg, msg + len );
+    }
+    else
+    {
+        // output was too big, so now incur the expense of allocating
+        // a buf for holding suffient characters.
+
+        std::vector<char>   buf;
+
+        buf.reserve( len+1 );   // reserve(), not resize() which writes. +1 for trailing nul.
+
+        len = vsnprintf( &buf[0], len+1, format, ap );
+
+        result->append( &buf[0], &buf[0] + len );
+    }
+
+    return len;
+}
+
+
+int StrPrintf( std::string* result, const char* format, ... )
+{
+    va_list     args;
+
+    va_start( args, format );
+    int ret = vprint( result, format, args );
+    va_end( args );
+
+    return ret;
+}
+
+
+std::string StrPrintf( const char* format, ... )
+{
+    std::string ret;
+    va_list     args;
+
+    va_start( args, format );
+    int ignore = vprint( &ret, format, args );
+    (void) ignore;
+    va_end( args );
+
+    return ret;
+}
 
 
 void IO_ERROR::init( const char* aThrowersFile, const char* aThrowersLoc, const wxString& aMsg )

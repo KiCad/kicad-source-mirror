@@ -59,7 +59,7 @@ using namespace std;
 
 /**
  * Definition for enabling and disabling footprint library trace output.  See the
- * wxWidgets documentation on useing the WXTRACE environment variable.
+ * wxWidgets documentation on using the WXTRACE environment variable.
  */
 static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
 
@@ -95,12 +95,25 @@ FP_CACHE_ITEM::FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName ) :
     m_module( aModule )
 {
     m_file_name = aFileName;
-    m_mod_time.Now();
+
+    if( m_file_name.FileExists() )
+        m_mod_time = m_file_name.GetModificationTime();
+    else
+        m_mod_time.Now();
 }
 
 
 bool FP_CACHE_ITEM::IsModified() const
 {
+    if( !m_file_name.FileExists() )
+        return false;
+
+    wxLogTrace( traceFootprintLibrary, wxT( "File <%s>, m_mod_time %s-%s, file mod time: %s-%s." ),
+                GetChars( m_file_name.GetFullPath() ),
+                GetChars( m_mod_time.FormatDate() ), GetChars( m_mod_time.FormatTime() ),
+                GetChars( m_file_name.GetModificationTime().FormatDate() ),
+                GetChars( m_file_name.GetModificationTime().FormatTime() ) );
+
     return m_file_name.GetModificationTime() != m_mod_time;
 }
 
@@ -136,9 +149,35 @@ public:
 
     void Remove( const wxString& aFootprintName );
 
-    wxDateTime GetLibModificationTime();
+    wxDateTime GetLibModificationTime() const;
 
-    bool IsModified();
+    /**
+     * Function IsModified
+     * check if the footprint cache has been modified relative to \a aLibPath
+     * and \a aFootprintName.
+     *
+     * @param aLibPath is a path to test the current cache library path against.
+     * @param aFootprintName is the footprint name in the cache to test.  If the footprint
+     *                       name is empty, the all the footprint files in the library are
+     *                       checked to see if they have been modified.
+     * @return true if the cache has been modified.
+     */
+    bool IsModified( const wxString& aLibPath,
+                     const wxString& aFootprintName = wxEmptyString ) const;
+
+    /**
+     * Function IsPath
+     * checks if \a aPath is the same as the current cache path.
+     *
+     * This tests paths by converting \a aPath using the native separators.  Internally
+     * #FP_CACHE stores the current path using native separators.  This prevents path
+     * miscompares on Windows due to the fact that paths can be stored with / instead of \\
+     * in the footprint library table.
+     *
+     * @param aPath is the library path to test against.
+     * @return true if \a aPath is the same as the cache path.
+     */
+    bool IsPath( const wxString& aPath ) const;
 };
 
 
@@ -149,7 +188,7 @@ FP_CACHE::FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath )
 }
 
 
-wxDateTime FP_CACHE::GetLibModificationTime()
+wxDateTime FP_CACHE::GetLibModificationTime() const
 {
     return m_lib_path.GetModificationTime();
 }
@@ -181,7 +220,8 @@ void FP_CACHE::Save()
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
-            // wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ), GetChars( tempFileName ) );
+            wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ),
+                        GetChars( tempFileName ) );
 
             FILE_OUTPUTFORMATTER formatter( tempFileName );
 
@@ -228,9 +268,12 @@ void FP_CACHE::Load()
 
             m_owner->m_parser->SetLineReader( &reader );
 
-            std::string name = TO_UTF8( fpFileName );
+            std::string name = TO_UTF8( fullPath.GetName() );
+            MODULE*     footprint = (MODULE*) m_owner->m_parser->Parse();
 
-            m_modules.insert( name, new FP_CACHE_ITEM( (MODULE*) m_owner->m_parser->Parse(), fpFileName ) );
+            // The footprint name is the file name without the extension.
+            footprint->SetFPID( fullPath.GetName() );
+            m_modules.insert( name, new FP_CACHE_ITEM( footprint, fullPath ) );
 
         } while( dir.GetNext( &fpFileName ) );
 
@@ -263,36 +306,62 @@ void FP_CACHE::Remove( const wxString& aFootprintName )
 }
 
 
-bool FP_CACHE::IsModified()
+bool FP_CACHE::IsPath( const wxString& aPath ) const
 {
-    if( !m_lib_path.DirExists() )
+    // Converts path separators to native path separators
+    wxFileName newPath;
+    newPath.AssignDir( aPath );
+
+    return m_lib_path == newPath;
+}
+
+
+bool FP_CACHE::IsModified( const wxString& aLibPath, const wxString& aFootprintName ) const
+{
+    // The library is modified if the library path got deleted or changed.
+    if( !m_lib_path.DirExists() || !IsPath( aLibPath ) )
         return true;
 
-    for( MODULE_ITER it = m_modules.begin();  it != m_modules.end();  ++it )
+    // If no footprint was specified, check every file modification time against the time
+    // it was loaded.
+    if( aFootprintName.IsEmpty() )
     {
-        wxFileName fn = it->second->GetFileName();
-
-        if( !fn.FileExists() )
+        for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
         {
-            wxLogTrace( traceFootprintLibrary, wxT( "Footprint cache file '%s' does not exist." ),
-                        fn.GetFullPath().GetData() );
-            return true;
-        }
+            wxFileName fn = m_lib_path;
+            fn.SetName( it->second->GetFileName().GetName() );
+            fn.SetExt( KiCadFootprintFileExtension );
 
-        if( it->second->IsModified() )
-        {
-            wxLogTrace( traceFootprintLibrary,
-                        wxT( "Footprint cache file '%s' has been modified." ),
-                        fn.GetFullPath().GetData() );
-            return true;
+            if( !fn.FileExists() )
+            {
+                wxLogTrace( traceFootprintLibrary,
+                            wxT( "Footprint cache file '%s' does not exist." ),
+                            fn.GetFullPath().GetData() );
+                return true;
+            }
+
+            if( it->second->IsModified() )
+            {
+                wxLogTrace( traceFootprintLibrary,
+                            wxT( "Footprint cache file '%s' has been modified." ),
+                            fn.GetFullPath().GetData() );
+                return true;
+            }
         }
+    }
+    else
+    {
+        MODULE_CITER it = m_modules.find( TO_UTF8( aFootprintName ) );
+
+        if( it == m_modules.end() || it->second->IsModified() )
+            return true;
     }
 
     return false;
 }
 
 
-void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -902,7 +971,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(tags %s)\n",
                       m_out->Quotew( aModule->GetKeywords() ).c_str() );
 
-    if( !aModule->GetPath().IsEmpty() )
+    if( !( m_ctl & CTL_OMIT_PATH ) && !!aModule->GetPath() )
         m_out->Print( aNestLevel+1, "(path %s)\n",
                       m_out->Quotew( aModule->GetPath() ).c_str() );
 
@@ -962,7 +1031,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 
     // Save pads.
     for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
-        Format( pad, aNestLevel+1 );
+        format( pad, aNestLevel+1 );
 
     // Save 3D info.
     for( S3D_MASTER* t3D = aModule->Models();  t3D;  t3D = t3D->Next() )
@@ -998,7 +1067,12 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
     throw( IO_ERROR )
 {
-    m_out->Print( aNestLevel, "(layers" );
+    std::string  output;
+
+    if( aNestLevel == 0 )
+        output += ' ';
+
+    output += "(layers";
 
     LAYER_MSK cuMask = ALL_CU_LAYERS;
 
@@ -1009,36 +1083,36 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
 
     if( ( aLayerMask & cuMask ) == cuMask )
     {
-        m_out->Print( 0, " *.Cu" );
+        output += " *.Cu";
         aLayerMask &= ~ALL_CU_LAYERS;       // clear bits, so they are not output again below
     }
     else if( ( aLayerMask & cuMask ) == (LAYER_BACK | LAYER_FRONT) )
     {
-        m_out->Print( 0, " F&B.Cu" );
+        output += " F&B.Cu";
         aLayerMask &= ~(LAYER_BACK | LAYER_FRONT);
     }
 
     if( ( aLayerMask & (ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT)) == (ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT) )
     {
-        m_out->Print( 0, " *.Adhes" );
+        output += " *.Adhes";
         aLayerMask &= ~(ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT);
     }
 
     if( ( aLayerMask & (SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT)) == (SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT) )
     {
-        m_out->Print( 0, " *.Paste" );
+        output += " *.Paste";
         aLayerMask &= ~(SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT);
     }
 
     if( ( aLayerMask & (SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT)) == (SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT) )
     {
-        m_out->Print( 0, " *.SilkS" );
+        output += " *.SilkS";
         aLayerMask &= ~(SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT);
     }
 
     if( ( aLayerMask & (SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT)) == (SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT) )
     {
-        m_out->Print( 0, " *.Mask" );
+        output += " *.Mask";
         aLayerMask &= ~(SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT);
     }
 
@@ -1059,11 +1133,12 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
             else    // I am being called from FootprintSave()
                 layerName = BOARD::GetStandardLayerName( layer );
 
-            m_out->Print( 0, " %s", m_out->Quotew( layerName ).c_str() );
+            output += ' ';
+            output += m_out->Quotew( layerName );
         }
     }
 
-    m_out->Print( 0, ")\n" );
+    m_out->Print( aNestLevel, "%s)", output.c_str() );
 }
 
 
@@ -1134,49 +1209,46 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, ")" );
     }
 
-    m_out->Print( 0, "\n" );
+    formatLayers( aPad->GetLayerMask(), 0 );
 
-    formatLayers( aPad->GetLayerMask(), aNestLevel+1 );
+    std::string output;
 
     // Unconnected pad is default net so don't save it.
     if( !(m_ctl & CTL_OMIT_NETS) && aPad->GetNet() != 0 )
-    {
-        m_out->Print( aNestLevel+1, "(net %d %s)\n",
-                      aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
-    }
+        StrPrintf( &output, " (net %d %s)", aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
 
     if( aPad->GetPadToDieLength() != 0 )
-        m_out->Print( aNestLevel+1, "(die_length %s)\n",
-                      FMT_IU( aPad->GetPadToDieLength() ).c_str() );
+        StrPrintf( &output, " (die_length %s)", FMT_IU( aPad->GetPadToDieLength() ).c_str() );
 
     if( aPad->GetLocalSolderMaskMargin() != 0 )
-        m_out->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
-                      FMT_IU( aPad->GetLocalSolderMaskMargin() ).c_str() );
+        StrPrintf( &output, " (solder_mask_margin %s)", FMT_IU( aPad->GetLocalSolderMaskMargin() ).c_str() );
 
     if( aPad->GetLocalSolderPasteMargin() != 0 )
-        m_out->Print( aNestLevel+1, "(solder_paste_margin %s)\n",
-                      FMT_IU( aPad->GetLocalSolderPasteMargin() ).c_str() );
+        StrPrintf( &output, " (solder_paste_margin %s)", FMT_IU( aPad->GetLocalSolderPasteMargin() ).c_str() );
 
     if( aPad->GetLocalSolderPasteMarginRatio() != 0 )
-        m_out->Print( aNestLevel+1, "(solder_paste_margin_ratio %s)\n",
-                      Double2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
+        StrPrintf( &output, " (solder_paste_margin_ratio %s)",
+                Double2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
 
     if( aPad->GetLocalClearance() != 0 )
-        m_out->Print( aNestLevel+1, "(clearance %s)\n",
-                      FMT_IU( aPad->GetLocalClearance() ).c_str() );
+        StrPrintf( &output, " (clearance %s)", FMT_IU( aPad->GetLocalClearance() ).c_str() );
 
     if( aPad->GetZoneConnection() != UNDEFINED_CONNECTION )
-        m_out->Print( aNestLevel+1, "(zone_connect %d)\n", aPad->GetZoneConnection() );
+        StrPrintf( &output, " (zone_connect %d)", aPad->GetZoneConnection() );
 
     if( aPad->GetThermalWidth() != 0 )
-        m_out->Print( aNestLevel+1, "(thermal_width %s)\n",
-                      FMT_IU( aPad->GetThermalWidth() ).c_str() );
+        StrPrintf( &output, " (thermal_width %s)", FMT_IU( aPad->GetThermalWidth() ).c_str() );
 
     if( aPad->GetThermalGap() != 0 )
-        m_out->Print( aNestLevel+1, "(thermal_gap %s)\n",
-                      FMT_IU( aPad->GetThermalGap() ).c_str() );
+        StrPrintf( &output, " (thermal_gap %s)", FMT_IU( aPad->GetThermalGap() ).c_str() );
 
-    m_out->Print( aNestLevel, ")\n" );
+    if( output.size() )
+    {
+        m_out->Print( 0, "\n" );
+        m_out->Print( aNestLevel+1, "%s", output.c_str()+1 );   // +1 skips 1st space on 1st element
+    }
+
+    m_out->Print( 0, ")\n" );
 }
 
 
@@ -1563,7 +1635,7 @@ PCB_IO::~PCB_IO()
 }
 
 
-BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties )
+BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties )
 {
     FILE_LINE_READER    reader( aFileName );
 
@@ -1583,16 +1655,16 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* 
 }
 
 
-void PCB_IO::init( PROPERTIES* aProperties )
+void PCB_IO::init( const PROPERTIES* aProperties )
 {
     m_board = NULL;
     m_props = aProperties;
 }
 
 
-void PCB_IO::cacheLib( const wxString& aLibraryPath )
+void PCB_IO::cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName )
 {
-    if( !m_cache || m_cache->GetPath() != aLibraryPath || m_cache->IsModified() )
+    if( !m_cache || m_cache->IsModified( aLibraryPath, aFootprintName ) )
     {
         // a spectacular episode in memory management:
         delete m_cache;
@@ -1602,7 +1674,7 @@ void PCB_IO::cacheLib( const wxString& aLibraryPath )
 }
 
 
-wxArrayString PCB_IO::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+wxArrayString PCB_IO::FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1624,13 +1696,13 @@ wxArrayString PCB_IO::FootprintEnumerate( const wxString& aLibraryPath, PROPERTI
 
 
 MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                               PROPERTIES* aProperties )
+                               const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
     init( aProperties );
 
-    cacheLib( aLibraryPath );
+    cacheLib( aLibraryPath, aFootprintName );
 
     const MODULE_MAP& mods = m_cache->GetModules();
 
@@ -1647,7 +1719,7 @@ MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFo
 
 
 void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
-                            PROPERTIES* aProperties )
+                            const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1714,7 +1786,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 }
 
 
-void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName )
+void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1732,7 +1804,7 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 }
 
 
-void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     if( wxDir::Exists( aLibraryPath ) )
     {
@@ -1750,7 +1822,7 @@ void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProp
 }
 
 
-bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     wxFileName fn;
     fn.SetPath( aLibraryPath );
@@ -1817,7 +1889,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProp
     wxMilliSleep( 250L );
 #endif
 
-    if( m_cache && m_cache->GetPath() == aLibraryPath )
+    if( m_cache && !m_cache->IsPath( aLibraryPath ) )
     {
         delete m_cache;
         m_cache = NULL;

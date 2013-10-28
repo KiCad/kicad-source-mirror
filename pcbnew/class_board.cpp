@@ -62,7 +62,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 BOARD::BOARD() :
     BOARD_ITEM( (BOARD_ITEM*) NULL, PCB_T ),
     m_NetInfo( this ),
-    m_paper( PAGE_INFO::A4, IsGOST() ),
+    m_paper( PAGE_INFO::A4 ),
     m_NetClasses( this )
 {
     // we have not loaded a board yet, assume latest until then.
@@ -2646,8 +2646,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     if( aReporter && aReporter->ReportAll() )
                     {
                         msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad <%s>\n" ),
-                                    GetChars( pad->GetNetname() ),
-                                    GetChars( pad->GetParent()->GetReference() ),
+                                    GetChars( previouspad->GetNetname() ),
+                                    GetChars( previouspad->GetParent()->GetReference() ),
                                     GetChars( previouspad->GetPadName() ) );
                         aReporter->Report( msg );
                     }
@@ -2728,3 +2728,19 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     }
 }
 
+/* Extracts the board outlines and build a closed polygon
+ * from lines, arcs and circle items on edge cut layer
+ * Any closed outline inside the main outline is a hole
+ * All contours should be closed, i.e. are valid vertices for a closed polygon
+ * return true if success, false if a contour is not valid
+ */
+#include <specctra.h>
+bool BOARD::GetBoardPolygonOutlines( CPOLYGONS_LIST& aOutlines,
+                                     CPOLYGONS_LIST& aHoles,
+                                     wxString* aErrorText )
+{
+    // the SPECCTRA_DB function to extract board outlines:
+    SPECCTRA_DB dummy;
+    return dummy.GetBoardPolygonOutlines( this, aOutlines,
+                                          aHoles, aErrorText );
+}

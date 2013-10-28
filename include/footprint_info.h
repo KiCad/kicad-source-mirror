@@ -126,27 +126,21 @@ public:
 
     /**
      * Function ReadFootprintFiles
-     * Read the list of libraries (*.mod files) and populates m_List ( list of available
-     * modules in libs ).
-     * for each module, are stored
-     *      the module name
-     *      documentation string
-     *      associated keywords
-     *      library name
-     * Module description format:
-     *   $MODULE c64acmd                    First line of module description
-     *   Li c64acmd DIN connector           Library reference
-     *   Cd Europe 96 AC male vertical      documentation string
-     *   Kw PAD_CONN DIN                    associated keywords
-     *   ...... other data (pads, outlines ..)
-     *   $Endmodule
      *
      * @param aFootprintsLibNames = an array string giving the list of libraries to load
      */
     bool ReadFootprintFiles( wxArrayString& aFootprintsLibNames );
 
-    bool ReadFootprintFiles( FP_LIB_TABLE& aTable );
+    /**
+     * Function ReadFootprintFiles
+     * reads all the footprints provided by the combination of aTable and aNickname.
+     * @param aTable defines all the libraries.
+     * @param aNickname is the library to read from, or if NULL means read all
+     *         footprints from all known libraries.
+     */
+    bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = NULL );
 };
+
 
 /// FOOTPRINT object list sort function.
 inline bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 )

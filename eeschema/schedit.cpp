@@ -47,6 +47,7 @@
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 
 
 void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
@@ -126,7 +127,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
             break;
 
-        HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
+        screen->m_BlockLocate.SetCommand( BLOCK_DELETE );
+        screen->m_BlockLocate.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
         SetRepeatItem( NULL );
         SetSheetNumberAndCount();
         break;
@@ -313,7 +316,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case wxID_COPY:         // really this is a Save block for paste
-        HandleBlockEndByPopUp( BLOCK_SAVE, &dc );
+        screen->m_BlockLocate.SetCommand( BLOCK_SAVE );
+        screen->m_BlockLocate.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_PLACE_BLOCK:
@@ -323,23 +328,31 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
-        HandleBlockEndByPopUp( BLOCK_ZOOM, &dc );
+        screen->m_BlockLocate.SetCommand( BLOCK_ZOOM );
+        screen->m_BlockLocate.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
         m_canvas->MoveCursorToCrossHair();
-        HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
+        screen->m_BlockLocate.SetCommand( BLOCK_DELETE );
+        screen->m_BlockLocate.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
         SetSheetNumberAndCount();
         break;
 
     case ID_POPUP_COPY_BLOCK:
         m_canvas->MoveCursorToCrossHair();
-        HandleBlockEndByPopUp( BLOCK_COPY, &dc );
+        screen->m_BlockLocate.SetCommand( BLOCK_COPY );
+        screen->m_BlockLocate.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DRAG_BLOCK:
         m_canvas->MoveCursorToCrossHair();
-        HandleBlockEndByPopUp( BLOCK_DRAG, &dc );
+        screen->m_BlockLocate.SetCommand( BLOCK_DRAG );
+        screen->m_BlockLocate.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_SCH_ADD_JUNCTION:
@@ -735,7 +748,8 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     // Allows block rotate operation on hot key.
     if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
     {
-        HandleBlockEndByPopUp( BLOCK_ROTATE, &dc );
+        screen->m_BlockLocate.SetCommand( BLOCK_ROTATE );
+        HandleBlockEnd( &dc );
         return;
     }
 
@@ -761,7 +775,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     {
     case SCH_COMPONENT_T:
         if( aEvent.GetId() == ID_SCH_ROTATE_CLOCKWISE )
-            OrientComponent(  CMP_ROTATE_CLOCKWISE );
+            OrientComponent( CMP_ROTATE_CLOCKWISE );
         else if( aEvent.GetId() == ID_SCH_ROTATE_COUNTERCLOCKWISE )
             OrientComponent( CMP_ROTATE_COUNTERCLOCKWISE );
         else
@@ -817,6 +831,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         // Set the locat filter, according to the edit command
         const KICAD_T* filterList = SCH_COLLECTOR::EditableItems;
         const KICAD_T* filterListAux = NULL;
+
         switch( aEvent.GetId() )
         {
         case ID_SCH_EDIT_COMPONENT_REFERENCE:
@@ -837,13 +852,12 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         default:
             break;
         }
-        item = LocateAndShowItem( data->GetPosition(), filterList,
-                                  aEvent.GetInt() );
+
+        item = LocateAndShowItem( data->GetPosition(), filterList, aEvent.GetInt() );
 
         // If no item found, and if an auxiliary filter exists, try to use it
         if( !item && filterListAux )
-            item = LocateAndShowItem( data->GetPosition(), filterListAux,
-                                      aEvent.GetInt() );
+            item = LocateAndShowItem( data->GetPosition(), filterListAux, aEvent.GetInt() );
 
         // Exit if no item found at the current location or the item is already being edited.
         if( (item == NULL) || (item->GetFlags() != 0) )
@@ -987,11 +1001,23 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
     if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
     {
         if( aEvent.GetId() == ID_SCH_MIRROR_X )
-            HandleBlockEndByPopUp( BLOCK_MIRROR_X, &dc );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            screen->m_BlockLocate.SetMessageBlock( this );
+            screen->m_BlockLocate.SetCommand( BLOCK_MIRROR_X );
+            HandleBlockEnd( &dc );
+        }
         else if( aEvent.GetId() == ID_SCH_MIRROR_Y )
-            HandleBlockEndByPopUp( BLOCK_MIRROR_Y, &dc );
+        {
+            m_canvas->MoveCursorToCrossHair();
+            screen->m_BlockLocate.SetMessageBlock( this );
+            screen->m_BlockLocate.SetCommand( BLOCK_MIRROR_Y );
+            HandleBlockEnd( &dc );
+        }
         else
+        {
             wxFAIL_MSG( wxT( "Unknown block oriention command ID." ) );
+        }
 
         return;
     }

@@ -463,21 +463,25 @@ public:
 
     /**
      * Function SelectFootprint
-     *  Display a list of modules found in active libraries or a given library
+     * displays a list of modules found in all libraries or a given library
+     *
      *  @param aWindow = the current window ( parent window )
-     *  @param aLibraryFullFilename = library to list (if aLibraryFullFilename
-     *                                == void, list all modules)
-     *  @param aMask = Display filter (wildcart)( Mask = wxEmptyString if not
-     *                  used )
+     *
+     *  @param aLibraryName = library to list (if aLibraryFullFilename is empty, then list all modules).
+     *           This is a nickname for the FP_LIB_TABLE build.
+     *
+     *  @param aMask = Display filter (wildcart)( Mask = wxEmptyString if not used )
+     *
      *  @param aKeyWord = keyword list, to display a filtered list of module
      *                    having one (or more) of these keywords in their
      *                    keyword list ( aKeyWord = wxEmptyString if not used )
+     *
      *  @param aTable is the #FP_LIB_TABLE to search.
      *
      *  @return wxEmptyString if abort or fails, or the selected module name if Ok
      */
     wxString SelectFootprint( EDA_DRAW_FRAME* aWindow,
-                              const wxString& aLibraryFullFilename,
+                              const wxString& aLibraryName,
                               const wxString& aMask,
                               const wxString& aKeyWord,
                               FP_LIB_TABLE*   aTable );
@@ -653,9 +657,12 @@ public:
      * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
      * @param aNotAllowedLayersMask = a layer mask for not allowed layers
      *                            (= 0 to show all layers in use)
+     * @param aDlgPosition = position of dialog ( defualt = centered)
      * @return the selected layer id
      */
-    LAYER_NUM SelectLayer( LAYER_NUM aDefaultLayer, LAYER_MSK aNotAllowedLayersMask = 0 );
+    LAYER_NUM SelectLayer( LAYER_NUM aDefaultLayer,
+                           LAYER_MSK aNotAllowedLayersMask = 0,
+                           wxPoint aDlgPosition = wxDefaultPosition );
 
     /* Display a list of two copper layers to choose a pair of copper layers
      * the layer pair is used to fast switch between copper layers when placing vias

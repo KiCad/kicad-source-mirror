@@ -494,30 +494,48 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition )
 }
 
 
-bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect ) const
+bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
+    wxPoint p1, p2;
+    int radius;
+    float theta;
+    EDA_RECT arect = aRect;
+    arect.Inflate( aAccuracy );
+
     switch( m_Shape )
     {
     case S_CIRCLE:
-        {
-            int radius = GetRadius();
-
-            // Text if area intersects the circle:
-            EDA_RECT area = aRect;
-            area.Inflate( radius );
-
-            if( area.Contains( m_Start ) )
-                return true;
-        }
+        // Test if area intersects or contains the circle:
+        if( aContained )
+            return arect.Contains( GetBoundingBox() );
+        else
+            return arect.Intersects( GetBoundingBox() );
         break;
 
     case S_ARC:
-    case S_SEGMENT:
-        if( aRect.Contains( GetStart() ) )
-            return true;
+        radius = hypot( (double)( GetEnd().x - GetStart().x ),
+                        (double)( GetEnd().y - GetStart().y ) );
+        theta  = std::atan2( GetEnd().y - GetStart().y , GetEnd().x - GetStart().x );
 
-        if( aRect.Contains( GetEnd() ) )
-            return true;
+        //Approximate the arc with two lines. This should be accurate enough for selection.
+        p1.x   = radius * std::cos( theta + M_PI/4 ) + GetStart().x;
+        p1.y   = radius * std::sin( theta + M_PI/4 ) + GetStart().y;
+        p2.x   = radius * std::cos( theta + M_PI/2 ) + GetStart().x;
+        p2.y   = radius * std::sin( theta + M_PI/2 ) + GetStart().y;
+
+        if( aContained )
+            return arect.Contains( GetEnd() ) && aRect.Contains( p1 ) && aRect.Contains( p2 );
+        else
+            return arect.Intersects( GetEnd(), p1 ) || aRect.Intersects( p1, p2 );
+
+        break;
+
+    case S_SEGMENT:
+        if( aContained )
+            return arect.Contains( GetStart() ) && aRect.Contains( GetEnd() );
+        else
+            return arect.Intersects( GetStart(), GetEnd() );
+
         break;
 
     default:

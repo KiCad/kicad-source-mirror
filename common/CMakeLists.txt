@@ -126,6 +126,7 @@ set(COMMON_SRCS
     filter_reader.cpp
     gestfich.cpp
     getrunningmicrosecs.cpp
+    grid_tricks.cpp
     gr_basic.cpp
     hotkeys_basic.cpp
     hotkey_grid_table.cpp
@@ -212,11 +213,15 @@ set(PCB_COMMON_SRCS
     ../pcbnew/sel_layer.cpp
     ../pcbnew/pcb_plot_params.cpp
     ../pcbnew/io_mgr.cpp
+    ../pcbnew/plugin.cpp
     ../pcbnew/eagle_plugin.cpp
     ../pcbnew/legacy_plugin.cpp
     ../pcbnew/kicad_plugin.cpp
     ../pcbnew/gpcb_plugin.cpp
     ../pcbnew/pcb_netlist.cpp
+    ../pcbnew/specctra.cpp
+    ../pcbnew/specctra_export.cpp
+    ../pcbnew/specctra_keywords.cpp
     pcb_plot_params_keywords.cpp
     pcb_keywords.cpp
     ../pcbnew/pcb_parser.cpp
@@ -237,6 +242,17 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
 
 add_library(pcbcommon STATIC ${PCB_COMMON_SRCS})
 
+# auto-generate specctra_lexer.h and specctra_keywords.cpp
+make_lexer(
+    ${PROJECT_SOURCE_DIR}/pcbnew/specctra.keywords
+    ${PROJECT_SOURCE_DIR}/pcbnew/specctra_lexer.h
+    ${PROJECT_SOURCE_DIR}/pcbnew/specctra_keywords.cpp
+    DSN
+
+    # Pass header file with dependency on *_lexer.h as extra_arg
+    specctra.h
+    )
+
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
 make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/netlist.keywords
@@ -255,7 +271,7 @@ make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
     PCBPLOTPARAMS_T
 
-    # Pass header file with dependency on *_lexer.h as extra_arg
+    # Pass header file with dependencies on *_lexer.h as extra_arg
     ${PROJECT_SOURCE_DIR}/pcbnew/pcb_plot_params.h
     )
 
@@ -287,11 +303,7 @@ make_lexer(
     TB_READER_T
     )
 
-# The dsntest may not build properly using MS Visual Studio.
-if(NOT MSVC)
-    # This one gets made only when testing.
-    # to build it, first enable #define STAND_ALONE at top of dsnlexer.cpp
-    add_executable( dsntest EXCLUDE_FROM_ALL dsnlexer.cpp )
-    target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} rt )
-
-endif( NOT MSVC )
+# This one gets made only when testing.
+# to build it, first enable #define STAND_ALONE at top of dsnlexer.cpp
+add_executable( dsntest EXCLUDE_FROM_ALL dsnlexer.cpp )
+target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} rt )

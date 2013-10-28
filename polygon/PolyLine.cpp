@@ -582,14 +582,7 @@ int CPolyLine::GetEndContour( int ic )
 }
 
 
-CRect CPolyLine::GetBounds()
-{
-    CRect r = GetCornerBounds();
-    return r;
-}
-
-
-CRect CPolyLine::GetCornerBounds()
+CRect CPolyLine::GetBoundingBox()
 {
     CRect r;
 
@@ -608,7 +601,7 @@ CRect CPolyLine::GetCornerBounds()
 }
 
 
-CRect CPolyLine::GetCornerBounds( int icont )
+CRect CPolyLine::GetBoundingBox( int icont )
 {
     CRect r;
 
@@ -1381,7 +1374,7 @@ bool CPolyLine::IsPolygonSelfIntersecting()
     cr.reserve( n_cont );
 
     for( int icont = 0; icont<n_cont; icont++ )
-        cr.push_back( GetCornerBounds( icont ) );
+        cr.push_back( GetBoundingBox( icont ) );
 
     for( int icont = 0; icont<n_cont; icont++ )
     {

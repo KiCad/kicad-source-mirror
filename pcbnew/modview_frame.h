@@ -47,16 +47,15 @@ private:
     // List of libraries (for selection )
     wxSashLayoutWindow* m_LibListWindow;
     wxListBox*          m_LibList;               // The list of libs names
-    wxSize              m_LibListSize;           // size of the window
 
     // List of components in the selected library
     wxSashLayoutWindow* m_FootprintListWindow;
     wxListBox*          m_FootprintList;         // The list of footprint names
-    wxSize              m_FootprintListSize;     // size of the window
 
     // Flags
     wxSemaphore*        m_Semaphore;             // != NULL if the frame must emulate a modal dialog
     wxString            m_configPath;            // subpath for configuration
+    wxString            m_perspective;           // wxAuiManager perspective.
 
 protected:
     static wxString     m_libraryName;           // Current selected library
@@ -101,13 +100,6 @@ private:
     void OnSize( wxSizeEvent& event );
 
     /**
-     * Function OnSashDrag
-     * resizes the child windows when dragging a sash window border.
-     */
-
-    void OnSashDrag( wxSashEvent& event );
-
-    /**
      * Function ReCreateLibraryList
      *
      * Creates or recreates the list of current loaded libraries.
@@ -116,7 +108,7 @@ private:
     void ReCreateLibraryList();
 
     void ReCreateFootprintList();
-    void Process_Special_Functions( wxCommandEvent& event );
+    void OnIterateFootprintList( wxCommandEvent& event );
     void DisplayLibInfos();
 
     /**

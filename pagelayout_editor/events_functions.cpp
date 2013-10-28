@@ -72,7 +72,8 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     // menu Preferences
     EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
                     PL_EDITOR_FRAME::Process_Config )
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, EDA_DRAW_FRAME::SetLanguage )
+    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
+                    EDA_DRAW_FRAME::SetLanguage )
     EVT_MENU( ID_MENU_PL_EDITOR_SELECT_PREFERED_EDITOR,
               EDA_BASE_FRAME::OnSelectPreferredEditor )
     EVT_MENU( wxID_PREFERENCES, PL_EDITOR_FRAME::Process_Config )
@@ -239,6 +240,25 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
             item = NULL;
         }
         else
+        {
+            // Put the new text in move mode:
+            item->SetFlags( NEW_ITEM | LOCATE_STARTPOINT );
+            MoveItem( item );
+        }
+        break;
+
+    case ID_POPUP_ITEM_ADD_BITMAP:
+        SaveCopyInUndoList();
+        idx =  m_treePagelayout->GetSelectedItemIndex();
+        item = AddPageLayoutItem( WORKSHEET_DATAITEM::WS_BITMAP, idx );
+        if( item && InvokeDialogNewItem( this, item ) == wxID_CANCEL )
+        {
+            RemoveLastCommandInUndoList();
+            pglayout.Remove( item );
+            RebuildDesignTree();
+            item = NULL;
+        }
+        if( item )
         {
             // Put the new text in move mode:
             item->SetFlags( NEW_ITEM | LOCATE_STARTPOINT );

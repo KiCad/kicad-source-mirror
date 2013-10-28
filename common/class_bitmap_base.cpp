@@ -46,11 +46,12 @@
 
 BITMAP_BASE::BITMAP_BASE( const wxPoint& pos )
 {
-    m_Scale  = 1.0;         // 1.0 = original bitmap size
+    m_Scale  = 1.0;                 // 1.0 = original bitmap size
     m_bitmap = NULL;
     m_image  = NULL;
-    m_pixelScaleFactor = 3.33;      // a value OK for bitmaps using 300 PPI
-                                    // (Eeschema uses currently 1000PPI
+    m_ppi    = 300;                 // the bitmap definition. the default is 300PPI
+    m_pixelScaleFactor = 1000.0 / m_ppi;    // a value OK for bitmaps using 300 PPI
+                                            // for Eeschema which uses currently 1000PPI
 }
 
 
@@ -72,6 +73,7 @@ void BITMAP_BASE::ImportData( BITMAP_BASE* aItem )
     *m_image  = *aItem->m_image;
     *m_bitmap = *aItem->m_bitmap;
     m_Scale   = aItem->m_Scale;
+    m_ppi     = aItem->m_ppi;
     m_pixelScaleFactor = aItem->m_pixelScaleFactor;
 }
 
@@ -121,6 +123,35 @@ bool BITMAP_BASE::SaveData( FILE* aFile ) const
     return true;
 }
 
+void BITMAP_BASE::SaveData( wxArrayString& aPngStrings ) const
+{
+    if( m_image )
+    {
+        wxMemoryOutputStream stream;
+        m_image->SaveFile( stream, wxBITMAP_TYPE_PNG );
+
+        // Write binary data in hexadecimal form (ASCII)
+        wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
+        char*           begin  = (char*) buffer->GetBufferStart();
+        wxString line;
+        for( int ii = 0; begin <= buffer->GetBufferEnd(); begin++, ii++ )
+        {
+            if( ii >= 32 )
+            {
+                ii = 0;
+                aPngStrings.Add( line );
+                line.Empty();
+            }
+
+            line << wxString::Format( wxT("%2.2X "), *begin & 0xFF );
+        }
+
+        // Add last line:
+        if( !line.IsEmpty() )
+            aPngStrings.Add( line );
+    }
+}
+
 
 bool BITMAP_BASE::LoadData( LINE_READER& aLine, wxString& aErrorMsg )
 {
@@ -130,9 +161,13 @@ bool BITMAP_BASE::LoadData( LINE_READER& aLine, wxString& aErrorMsg )
     while( true )
     {
         if( !aLine.ReadLine() )
+        {
+            aErrorMsg = wxT("Unexpected end of data");
             return false;
+        }
 
         line = aLine.Line();
+
         if( strnicmp( line, "EndData", 4 ) == 0 )
         {
             // all the PNG date is read.

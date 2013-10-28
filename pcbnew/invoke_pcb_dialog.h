@@ -1,6 +1,8 @@
+/**
+ * @file invoke_pcb_dialog.h
+ */
 
-/*
- * This program source code file is part of KiCad, a free EDA CAD application.
+/* This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 KiCad Developers, see change_log.txt for contributors.
@@ -41,31 +43,48 @@
 #define INVOKE_A_DIALOG_H_
 
 
-class wxFrame;
-class wxDialog;
+class wxTopLevelWindow;
 class wxPoint;
 class wxSize;
-class wxRealPoint;
+//class wxRealPoint;
+class wxString;
 
 
 // Often this is not used in the prototypes, since wxFrame is good enough and would
 // represent maximum information hiding.
 class PCB_EDIT_FRAME;
+class FP_LIB_TABLE;
 
 
-/* template:  junk it after some are added:
+/**
+ * Function InvokePcbLibTableEditor
+ * shows the modal DIALOG_FP_LIB_TABLE for purposes of editing two lib tables.
+ *
+ * @return int - bits 0 and 1 tell whether a change was made to the @a aGlobal
+ *  and/or the @a aProject table, respectively.  If set, table was modified.
+ */
+int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject );
 
-/// Create and show DIALOG_ANNOTATE and return whatever
-/// DIALOG_ANNOTATE::ShowModal() returns.
-int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller );
+/**
+ * Function InvokePluginOptionsEditor
+ * calls DIALOG_FP_PLUGIN_OPTIONS dialog so that plugin options set can be edited.
+ *
+ * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ * @param aNickname is the footprint library whose options are being edited.
+ * @param aOptionsIn is the options string on calling into this function.
+ * @param aResult is where to put the result of the editing.
+ */
+void InvokePluginOptionsEditor( wxTopLevelWindow* aCaller,
+        const wxString& aNickname, const wxString& aOptions, wxString* aResult );
 
-/// Create the modeless DIALOG_ERC and show it, return something to
-/// destroy or close it.  The dialog will have ID_DIALOG_ERC from id.h
-wxDialog* InvokeDialogERC( SCH_EDIT_FRAME* aCaller );
+/**
+ * Function InvokePcbLibTableEditor
+ * shows the modal DIALOG_FP_LIB_TABLE for purposes of editing two lib tables.
+ *
+ * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ * @return true if the ilport was made.
+ */
+bool InvokeDXFDialogImport( PCB_EDIT_FRAME* aCaller );
 
-/// Create and show DIALOG_PRINT_USING_PRINTER and return whatever
-/// DIALOG_PRINT_USING_PRINTER::ShowModal() returns.
-int InvokeDialogPrintUsingPrinter( SCH_EDIT_FRAME* aCaller );
-*/
 
 #endif  // INVOKE_A_DIALOG_H_

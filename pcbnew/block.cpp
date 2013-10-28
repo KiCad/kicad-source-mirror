@@ -382,6 +382,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 void PCB_EDIT_FRAME::Block_SelectItems()
 {
     LAYER_MSK layerMask;
+    bool selectOnlyComplete = GetScreen()->m_BlockLocate.GetWidth() > 0 ;
 
     GetScreen()->m_BlockLocate.Normalize();
 
@@ -395,7 +396,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         {
             LAYER_NUM layer = module->GetLayer();
 
-            if( module->HitTest( GetScreen()->m_BlockLocate )
+            if( module->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete )
                 && ( !module->IsLocked() || blockIncludeLockedModules ) )
             {
                 if( blockIncludeItemsOnInvisibleLayers || m_Pcb->IsModuleLayerVisible( layer ) )
@@ -410,14 +411,14 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     // Add tracks and vias
     if( blockIncludeTracks )
     {
-        for( TRACK* pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = pt_segm->Next() )
+        for( TRACK* track = m_Pcb->m_Track; track != NULL; track = track->Next() )
         {
-            if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
+            if( track->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
             {
                 if( blockIncludeItemsOnInvisibleLayers
-                  || m_Pcb->IsLayerVisible( pt_segm->GetLayer() ) )
+                  || m_Pcb->IsLayerVisible( track->GetLayer() ) )
                 {
-                    picker.SetItem ( pt_segm );
+                    picker.SetItem ( track );
                     itemsList->PushItem( picker );
                 }
             }
@@ -446,7 +447,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             if( (GetLayerMask( PtStruct->GetLayer() ) & layerMask) == 0  )
                 break;
 
-            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
+            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
                 break;
 
             select_me = true; // This item is in bloc: select it
@@ -456,7 +457,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             if( !blockIncludePcbTexts )
                 break;
 
-            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
+            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
                 break;
 
             select_me = true; // This item is in bloc: select it
@@ -466,7 +467,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             if( ( GetLayerMask( PtStruct->GetLayer() ) & layerMask ) == 0  )
                 break;
 
-            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
+            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
                 break;
 
             select_me = true; // This item is in bloc: select it
@@ -476,7 +477,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             if( ( GetLayerMask( PtStruct->GetLayer() ) & layerMask ) == 0 )
                 break;
 
-            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
+            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
                 break;
 
             select_me = true; // This item is in bloc: select it
@@ -500,7 +501,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         {
             ZONE_CONTAINER* area = m_Pcb->GetArea( ii );
 
-            if( area->HitTest( GetScreen()->m_BlockLocate ) )
+            if( area->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
             {
                 if( blockIncludeItemsOnInvisibleLayers
                   || m_Pcb->IsLayerVisible( area->GetLayer() ) )

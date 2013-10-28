@@ -880,6 +880,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 {
     TYPE_COLLECTOR  items;
     unsigned        prox;       // a proximity BIU metric, not an accurate distance
+    const int   STEPS = 36;     // for a segmentation of an arc of 360 degrees
 
     // Get all the DRAWSEGMENTS and module graphics into 'items',
     // then keep only those on layer == EDGE_N.
@@ -943,17 +944,19 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                 // an arc with a series of short lines and put those
                 // line segments into the !same! PATH.
                 {
-                    const int   STEPS = 9;     // in an arc of 90 degrees
-
                     wxPoint     start   = graphic->GetArcStart();
                     wxPoint     center  = graphic->GetCenter();
                     double      angle   = -graphic->GetAngle();
+                    int         steps   = STEPS * fabs(angle) /3600.0;
+
+                    if( steps == 0 )
+                        steps = 1;
 
                     wxPoint     pt;
 
-                    for( int step = 1; step<=STEPS; ++step )
+                    for( int step = 1; step<=steps; ++step )
                     {
-                        double rotation = ( angle * step ) / STEPS;
+                        double rotation = ( angle * step ) / steps;
 
                         pt = start;
 
@@ -1051,12 +1054,14 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                     // an arc with a series of short lines and put those
                     // line segments into the !same! PATH.
                     {
-                        const int STEPS =  9;      // in an arc of 90 degrees
-
                         wxPoint start  = graphic->GetArcStart();
                         wxPoint end    = graphic->GetArcEnd();
                         wxPoint center = graphic->GetCenter();
                         double  angle  = -graphic->GetAngle();
+                        int     steps  = STEPS * fabs(angle) /3600.0;
+
+                        if( steps == 0 )
+                            steps = 1;
 
                         if( !close_enough( prevPt, start, prox ) )
                         {
@@ -1068,9 +1073,9 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 
                         wxPoint nextPt;
 
-                        for( int step = 1; step<=STEPS; ++step )
+                        for( int step = 1; step<=steps; ++step )
                         {
-                            double rotation = ( angle * step ) / STEPS;
+                            double rotation = ( angle * step ) / steps;
 
                             nextPt = start;
 
@@ -1167,12 +1172,14 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                         // an arc with a series of short lines and put those
                         // line segments into the !same! PATH.
                         {
-                            const int   STEPS = 9;     // in an arc of 90 degrees
-
                             wxPoint     start   = graphic->GetArcStart();
                             wxPoint     end     = graphic->GetArcEnd();
                             wxPoint     center  = graphic->GetCenter();
                             double      angle   = -graphic->GetAngle();
+                            int         steps   = STEPS * fabs(angle) /3600.0;
+
+                            if( steps == 0 )
+                                steps = 1;
 
                             if( !close_enough( prevPt, start, prox ) )
                             {
@@ -1184,9 +1191,9 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 
                             wxPoint nextPt;
 
-                            for( int step = 1; step<=STEPS; ++step )
+                            for( int step = 1; step<=steps; ++step )
                             {
-                                double rotation = ( angle * step ) / STEPS;
+                                double rotation = ( angle * step ) / steps;
 
                                 nextPt = start;
 
@@ -1247,6 +1254,98 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
         rect->SetCorners( mapPt( bbbox.GetOrigin() ),
                           mapPt( bottomRight ) );
     }
+}
+
+/* This function is not used in SPECCTRA export,
+ * but uses a lot of functions from it
+ * and is used to extract a board outlines (3D view, automatic zones build ...)
+ * makes the board perimeter for the DSN file by filling the BOUNDARY element.
+ * Any closed outline inside the main outline is a hole
+ * All contours should be closed, i.e. valid closed polygon vertices
+ */
+bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
+                                           CPOLYGONS_LIST& aOutlines,
+                                           CPOLYGONS_LIST& aHoles,
+                                           wxString* aErrorText )
+{
+    bool success = true;
+    double specctra2UIfactor = IU_PER_MM / 1000.0;  // Specctra unite = micron
+
+    if( ! pcb )
+    {
+        pcb = new PCB();
+        pcb->structure = new STRUCTURE( pcb );
+    }
+
+    CPolyPt corner;
+    BOUNDARY* boundary = new BOUNDARY( 0 );
+    pcb->structure->SetBOUNDARY( boundary );
+
+    try
+    {
+        fillBOUNDARY( aBoard, boundary );
+        std::vector<double> buffer;
+        boundary->GetCorners( buffer );
+
+        for( unsigned ii = 0; ii < buffer.size(); ii+=2 )
+        {
+            corner.x = buffer[ii] * specctra2UIfactor;
+            corner.y =  - buffer[ii+1] * specctra2UIfactor;
+            aOutlines.Append( corner );
+        }
+
+        aOutlines.CloseLastContour();
+
+        // Export holes, stored as keepouts polygonal shapes.
+        // by fillBOUNDARY()
+        KEEPOUTS& holes = pcb->structure->keepouts;
+
+        for( KEEPOUTS::iterator i=holes.begin();  i!=holes.end();  ++i )
+        {
+            KEEPOUT& keepout = *i;
+            PATH* poly_hole = (PATH*)keepout.shape;
+            POINTS& plist = poly_hole->GetPoints();
+            for( unsigned ii = 0; ii < plist.size(); ii++ )
+            {
+                corner.x = plist[ii].x * specctra2UIfactor;
+                corner.y =  - plist[ii].y * specctra2UIfactor;
+                aHoles.Append( corner );
+            }
+            aHoles.CloseLastContour();
+        }
+    }
+    catch( IO_ERROR ioe )
+    {
+        // Creates a valid polygon outline is not possible.
+        // So uses the board edge cuts bounding box to create a
+        // rectangular outline
+        // (when no edge cuts items, fillBOUNDARY biuld n outline
+        // from global bounding box
+        success = false;
+        if( aErrorText )
+            *aErrorText = ioe.errorText;
+
+        EDA_RECT bbbox = aBoard->ComputeBoundingBox( true );
+        corner.x = bbbox.GetOrigin().x;
+        corner.y = bbbox.GetOrigin().y;
+        aOutlines.Append( corner );
+
+        corner.x = bbbox.GetOrigin().x;
+        corner.y = bbbox.GetEnd().y;
+        aOutlines.Append( corner );
+
+        corner.x = bbbox.GetEnd().x;
+        corner.y = bbbox.GetEnd().y;
+        aOutlines.Append( corner );
+
+        corner.x = bbbox.GetEnd().x;
+        corner.y = bbbox.GetOrigin().y;
+        aOutlines.Append( corner );
+
+        aOutlines.CloseLastContour();
+    }
+
+    return success;
 }
 
 

@@ -463,6 +463,15 @@ public:
     }
 
     /**
+     * Function CurStr
+     * returns a reference to current token in std::string form.
+     */
+    const std::string& CurStr()
+    {
+        return curText;
+    }
+
+    /**
      * Function FromUTF8
      * returns the current token text as a wxString, assuming that the input
      * byte stream is UTF8 encoded.

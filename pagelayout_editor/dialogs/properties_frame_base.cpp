@@ -317,28 +317,27 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	bSizerMain->Add( m_SizerEndPosition, 0, 0, 5 );
 	
-	wxBoxSizer* bSizerLineThickness;
-	bSizerLineThickness = new wxBoxSizer( wxHORIZONTAL );
+	m_SizerLineThickness = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bSizerthickness;
-	bSizerthickness = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerThickness;
+	bSizerThickness = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticTextThickness = new wxStaticText( m_swItemProperties, wxID_ANY, _("Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextThickness->Wrap( -1 );
-	bSizerthickness->Add( m_staticTextThickness, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizerThickness->Add( m_staticTextThickness, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlThickness = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerthickness->Add( m_textCtrlThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerThickness->Add( m_textCtrlThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerLineThickness->Add( bSizerthickness, 0, wxEXPAND, 5 );
+	m_SizerLineThickness->Add( bSizerThickness, 0, wxEXPAND, 5 );
 	
 	m_staticTextInfoThickness = new wxStaticText( m_swItemProperties, wxID_ANY, _("Set to 0 to use default"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoThickness->Wrap( -1 );
-	bSizerLineThickness->Add( m_staticTextInfoThickness, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_SizerLineThickness->Add( m_staticTextInfoThickness, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bSizerMain->Add( bSizerLineThickness, 0, 0, 5 );
+	bSizerMain->Add( m_SizerLineThickness, 0, 0, 5 );
 	
 	m_SizerRotation = new wxBoxSizer( wxVERTICAL );
 	
@@ -360,6 +359,18 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	
 	bSizerMain->Add( m_SizerRotation, 0, wxEXPAND, 5 );
+	
+	m_SizerBitmapPPI = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticTextBitmapPPI = new wxStaticText( m_swItemProperties, wxID_ANY, _("Bitmap PPI"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBitmapPPI->Wrap( -1 );
+	m_SizerBitmapPPI->Add( m_staticTextBitmapPPI, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_textCtrlBitmapPPI = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizerBitmapPPI->Add( m_textCtrlBitmapPPI, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	
+	bSizerMain->Add( m_SizerBitmapPPI, 0, wxEXPAND, 5 );
 	
 	m_staticline4 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMain->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );

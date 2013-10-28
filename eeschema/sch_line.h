@@ -32,6 +32,7 @@
 
 #include <sch_item_struct.h>
 
+class NETLIST_OBJECT_LIST;
 
 /**
  * Class SCH_LINE
@@ -128,7 +129,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const;
 
-    void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems, SCH_SHEET_PATH* aSheetPath );
+    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath );
 
     bool operator <( const SCH_ITEM& aItem ) const;
 

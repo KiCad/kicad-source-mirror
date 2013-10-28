@@ -151,7 +151,7 @@ public:
     void DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
                                  GR_DRAWMODE draw_mode = GR_OR );
 
-    /* Function GetBoundingBox
+    /** Function GetBoundingBox
      * @return an EDA_RECT that is the bounding box of the zone outline
      */
     EDA_RECT GetBoundingBox() const;
@@ -253,7 +253,25 @@ public:
 
     void SetOutline( CPolyLine* aOutline ) { m_Poly = aOutline; }
 
+    /**
+     * Function HitTest
+     * tests if a point is near an outline edge or a corner of this zone.
+     * @param aRefPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
     virtual bool HitTest( const wxPoint& aPosition );
+
+    /**
+     * Function HitTest
+     * tests if a point is inside the zone area, i.e. inside the main outline
+     * and outside holes.
+     * @param aRefPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    bool HitTestInsideZone( const wxPoint& aPosition ) const
+    {
+        return m_Poly->TestPointInside( aPosition.x, aPosition.y );
+    }
 
     /**
      * Function HitTestFilledArea
@@ -360,7 +378,10 @@ public:
      */
     bool HitTestForEdge( const wxPoint& refPos );
 
-    virtual bool HitTest( const EDA_RECT& aRect ) const;
+    /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
+     *                               bool aContained = true, int aAccuracy ) const
+     */
+    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
 
     /**
      * Function Fill_Zone

@@ -33,6 +33,7 @@
 
 class EDA_DRAW_PANEL;
 class NETLIST_OBJECT;
+class NETLIST_OBJECT_LIST;
 
 /* For ERC markers: error types (used in diags, and to set the color):
 */
@@ -83,15 +84,16 @@ extern void Diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst,
  * Perform ERC testing for electrical conflicts between \a NetItemRef and other items
  * on the same net.
  */
-extern void TestOthersItems( unsigned NetItemRef, unsigned NetStart,
-                             int* NetNbItems, int* MinConnexion );
+extern void TestOthersItems( NETLIST_OBJECT_LIST* aList,
+                             unsigned aNetItemRef, unsigned aNetStart,
+                             int* aNetNbItems, int* aMinConnexion );
 
 /**
  * Function TestLabel
  * performs an ERC on a sheet labels to verify that it is connected to a corresponding
  * sub sheet global label.
  */
-extern void TestLabel( unsigned NetItemRef, unsigned StartNet );
+extern void TestLabel( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned aStartNet );
 
 /**
  * Function TestDuplicateSheetNames( )
