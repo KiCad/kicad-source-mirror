@@ -18,8 +18,6 @@
 #include <string>
 #include <cmath>
 
-using std::string;
-
 #define UTF8STRING std::string
 #define DRW_UNUSED( x ) (void) x
 
@@ -203,7 +201,7 @@ public:
 // string codepage;
 private:
 // DRW_VarContent content;
-    string data;
+    std::string data;
 };
 
 
