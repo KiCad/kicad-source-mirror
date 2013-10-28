@@ -27,16 +27,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <appl_wxstruct.h>
 #include <dxf2brd_items.h>
 #include <wxPcbStruct.h>
 #include <convert_from_iu.h>
 #include <dialog_dxf_import_base.h>
 #include <class_pcb_layer_box_selector.h>
 
+
+// Keys to store setup in config
+#define DXF_IMPORT_LAYER_OPTION_KEY wxT("DxfImportBrdLayer")
+#define DXF_IMPORT_COORD_ORIGIN_KEY wxT("DxfImportCoordOrigin")
+#define DXF_IMPORT_LAST_FILE_KEY wxT("DxfImportLastFile")
+
 class DIALOG_DXF_IMPORT : public DIALOG_DXF_IMPORT_BASE
 {
 private:
     PCB_EDIT_FRAME * m_parent;
+    wxConfig*        m_config;               // Current config
+
     static wxString m_dxfFilename;
     static int m_offsetSelection;
     static LAYER_NUM m_layer;
@@ -64,6 +73,15 @@ DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_EDIT_FRAME* aParent )
     : DIALOG_DXF_IMPORT_BASE(  aParent )
 {
     m_parent = aParent;
+    m_config = wxGetApp().GetSettings();
+
+    if( m_config )
+    {
+        m_layer = m_config->Read( DXF_IMPORT_LAYER_OPTION_KEY, (long)DRAW_N );
+        m_offsetSelection = m_config->Read( DXF_IMPORT_COORD_ORIGIN_KEY, 3 );
+        m_dxfFilename =  m_config->Read( DXF_IMPORT_LAST_FILE_KEY, wxEmptyString );
+    }
+
     m_textCtrlFileName->SetValue( m_dxfFilename );
     m_rbOffsetOption->SetSelection( m_offsetSelection );
 
@@ -72,6 +90,7 @@ DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_EDIT_FRAME* aParent )
     m_SelLayerBox->SetLayerMask( ALL_CU_LAYERS );   // Do not use copper layers
     m_SelLayerBox->SetBoardFrame( m_parent );
     m_SelLayerBox->Resync();
+
     if( m_SelLayerBox->SetLayerSelection( m_layer ) < 0 )
     {
         m_layer = DRAW_N;
@@ -88,14 +107,28 @@ DIALOG_DXF_IMPORT::~DIALOG_DXF_IMPORT()
 {
     m_offsetSelection = m_rbOffsetOption->GetSelection();
     m_layer = m_SelLayerBox->GetLayerSelection();
+
+    if( m_config )
+    {
+        m_config->Write( DXF_IMPORT_LAYER_OPTION_KEY, (long)m_layer );
+        m_config->Write( DXF_IMPORT_COORD_ORIGIN_KEY, m_offsetSelection );
+        m_config->Write( DXF_IMPORT_LAST_FILE_KEY, m_dxfFilename );
+    }
 }
 
 
 void DIALOG_DXF_IMPORT::OnBrowseDxfFiles( wxCommandEvent& event )
 {
+    wxString path;
+
+    if( !m_dxfFilename.IsEmpty() )
+    {
+        wxFileName fn( m_dxfFilename );
+        path = fn.GetPath();
+    }
     wxFileDialog dlg( m_parent,
                       wxT( "Open File" ),
-                      wxEmptyString, wxEmptyString,
+                      path, m_dxfFilename,
                       wxT( "dxf Files (*.dxf)|*.dxf|*.DXF" ),
                       wxFD_OPEN|wxFD_FILE_MUST_EXIST );
     dlg.ShowModal();

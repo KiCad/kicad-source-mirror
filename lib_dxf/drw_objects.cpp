@@ -679,7 +679,7 @@ void DRW_ImageDef::parseCode( int code, dxfReader* reader )
 }
 
 
-void DRW_Header::addComment( string c )
+void DRW_Header::addComment( std::string c )
 {
     if( !comments.empty() )
         comments += '\n';
@@ -858,6 +858,9 @@ void DRW_Header::write( dxfWriter* writer, DRW::Version ver )
     writer->writeString( 1, varStr );
     writer->setVersion( &varStr );
 
+    getStr( "$ACADVER", &varStr );
+    getStr( "$ACADMAINTVER", &varStr );
+
     if( ver > DRW::AC1012 )
     {
         writer->writeString( 9, "$HANDSEED" );
@@ -970,12 +973,31 @@ void DRW_Header::write( dxfWriter* writer, DRW::Version ver )
     else
         writer->writeString( 7, "STANDARD" );
 
+    writer->writeString( 9, "$CLAYER" );
+
+    if( getStr( "$CLAYER", &varStr ) )
+        if( ver == DRW::AC1009 )
+            writer->writeUtf8Caps( 8, varStr );
+        else
+            writer->writeUtf8String( 8, varStr );
+
+
+    else
+        writer->writeString( 8, "0" );
+
     writer->writeString( 9, "$DIMASZ" );
 
     if( getDouble( "$DIMASZ", &varDouble ) )
         writer->writeDouble( 40, varDouble );
     else
         writer->writeDouble( 40, 2.5 );
+
+    writer->writeString( 9, "$DIMLFAC" );
+
+    if( getDouble( "$DIMLFAC", &varDouble ) )
+        writer->writeDouble( 40, varDouble );
+    else
+        writer->writeDouble( 40, 1.0 );
 
     writer->writeString( 9, "$DIMSCALE" );
 
@@ -1210,16 +1232,20 @@ void DRW_Header::write( dxfWriter* writer, DRW::Version ver )
             writer->writeDouble( 40, 0.0 );
     }
 
+#ifdef DRW_DBG
     std::map<std::string, DRW_Variant*>::const_iterator it;
 
     for( it = vars.begin(); it != vars.end(); it++ )
     {
+// QString key = QString::fromStdString((*it).first);
         std::cerr << (*it).first << std::endl;
     }
+
+#endif
 }
 
 
-bool DRW_Header::getDouble( string key, double* varDouble )
+bool DRW_Header::getDouble( std::string key, double* varDouble )
 {
     bool result = false;
     std::map<std::string, DRW_Variant*>::iterator it;
@@ -1243,7 +1269,7 @@ bool DRW_Header::getDouble( string key, double* varDouble )
 }
 
 
-bool DRW_Header::getInt( string key, int* varInt )
+bool DRW_Header::getInt( std::string key, int* varInt )
 {
     bool result = false;
     std::map<std::string, DRW_Variant*>::iterator it;
@@ -1267,7 +1293,7 @@ bool DRW_Header::getInt( string key, int* varInt )
 }
 
 
-bool DRW_Header::getStr( string key, std::string* varStr )
+bool DRW_Header::getStr( std::string key, std::string* varStr )
 {
     bool result = false;
     std::map<std::string, DRW_Variant*>::iterator it;
@@ -1291,7 +1317,7 @@ bool DRW_Header::getStr( string key, std::string* varStr )
 }
 
 
-bool DRW_Header::getCoord( string key, DRW_Coord* varCoord )
+bool DRW_Header::getCoord( std::string key, DRW_Coord* varCoord )
 {
     bool result = false;
     std::map<std::string, DRW_Variant*>::iterator it;
