@@ -52,11 +52,10 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     nonCachedManager( false ),
     overlayManager( false )
 {
-    // Create the OpenGL-Context
-    glContext       = new wxGLContext( this );
     parentWindow    = aParent;
     mouseListener   = aMouseListener;
     paintListener   = aPaintListener;
+    glContext       = NULL;
 
     // Initialize the flags
     isGlewInitialized        = false;
@@ -113,6 +112,9 @@ OPENGL_GAL::~OPENGL_GAL()
 
 void OPENGL_GAL::BeginDrawing()
 {
+    if( !glContext )
+        glContext = new wxGLContext( this );
+
     SetCurrent( *glContext );
 
     clientDC = new wxClientDC( this );
