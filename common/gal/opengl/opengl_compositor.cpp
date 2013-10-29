@@ -56,25 +56,25 @@ void OPENGL_COMPOSITOR::Initialize()
 
     // We need framebuffer objects for drawing the screen contents
     // Generate framebuffer and a depth buffer
-    glGenFramebuffers( 1, &m_framebuffer );
-    glBindFramebuffer( GL_FRAMEBUFFER, m_framebuffer );
+    glGenFramebuffersEXT( 1, &m_framebuffer );
+    glBindFramebufferEXT( GL_FRAMEBUFFER, m_framebuffer );
     m_currentFbo = m_framebuffer;
 
     // Allocate memory for the depth buffer
     // Attach the depth buffer to the framebuffer
-    glGenRenderbuffers( 1, &m_depthBuffer );
-    glBindRenderbuffer( GL_RENDERBUFFER, m_depthBuffer );
+    glGenRenderbuffersEXT( 1, &m_depthBuffer );
+    glBindRenderbufferEXT( GL_RENDERBUFFER_EXT, m_depthBuffer );
 
     // Use here a size of 24 bits for the depth buffer, 8 bits for the stencil buffer
     // this is required later for anti-aliasing
-    glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_STENCIL, m_width, m_height );
-    glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-                               GL_RENDERBUFFER, m_depthBuffer );
-    glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
-                               GL_RENDERBUFFER, m_depthBuffer );
+    glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_STENCIL, m_width, m_height );
+    glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT,
+                               GL_RENDERBUFFER_EXT, m_depthBuffer );
+    glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT,
+                               GL_RENDERBUFFER_EXT, m_depthBuffer );
 
     // Unbind the framebuffer, so by default all the rendering goes directly to the display
-    glBindFramebuffer( GL_FRAMEBUFFER, DIRECT_RENDERING );
+    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, DIRECT_RENDERING );
     m_currentFbo = 0;
 
     m_initialized = true;
@@ -119,50 +119,45 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 
     // Bind the texture to the specific attachment point, clear and rebind the screen
-    glBindFramebuffer( GL_FRAMEBUFFER, m_framebuffer );
+    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebuffer );
     m_currentFbo = m_framebuffer;
-    glFramebufferTexture2D( GL_FRAMEBUFFER, attachmentPoint, GL_TEXTURE_2D, textureTarget, 0 );
+    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, attachmentPoint, GL_TEXTURE_2D, textureTarget, 0 );
 
     // Check the status, exit if the framebuffer can't be created
-    GLenum status = glCheckFramebufferStatus( GL_FRAMEBUFFER );
+    GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );
 
-    if( status != GL_FRAMEBUFFER_COMPLETE )
+    if( status != GL_FRAMEBUFFER_COMPLETE_EXT )
     {
         switch( status )
         {
-        case GL_FRAMEBUFFER_UNDEFINED:
-            wxLogFatalError( wxT( "Target is the default framebuffer, "
-                                  "but the default framebuffer does not exist." ) );
-            break;
-
-        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
             wxLogFatalError( wxT( "Cannot create the framebuffer." ) );
             break;
 
-        case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+        case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
             wxLogFatalError( wxT( "The framebuffer attachment points are incomplete." ) );
             break;
 
-        case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+        case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
             wxLogFatalError( wxT( "The framebuffer does not have at least "
                                   "one image attached to it." ) );
             break;
 
-        case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+        case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
             wxLogFatalError( wxT( "The framebuffer read buffer is incomplete." ) );
             break;
 
-        case GL_FRAMEBUFFER_UNSUPPORTED:
+        case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
             wxLogFatalError( wxT( "The combination of internal formats of the attached images "
                                   "violates an implementation-dependent set of restrictions." ) );
             break;
 
-        case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+        case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
             wxLogFatalError( wxT( "GL_RENDERBUFFER_SAMPLES is not the same "
                                   "for all attached renderbuffers" ) );
             break;
 
-        case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+        case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
             wxLogFatalError( wxT( "Framebuffer incomplete layer targets errors." ) );
             break;
 
@@ -177,7 +172,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
     ClearBuffer();
 
     // Return to direct rendering (we were asked only to create a buffer, not switch to one)
-    glBindFramebuffer( GL_FRAMEBUFFER, DIRECT_RENDERING );
+    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, DIRECT_RENDERING );
     m_currentFbo = DIRECT_RENDERING;
 
     // Store the new buffer
@@ -196,12 +191,12 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
     // Change the rendering destination to the selected attachment point
     if( aBufferHandle == DIRECT_RENDERING )
     {
-        glBindFramebuffer( GL_FRAMEBUFFER, DIRECT_RENDERING );
+        glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, DIRECT_RENDERING );
         m_currentFbo = DIRECT_RENDERING;
     }
     else if( m_currentFbo != m_framebuffer )
     {
-        glBindFramebuffer( GL_FRAMEBUFFER, m_framebuffer );
+        glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebuffer );
         m_currentFbo = m_framebuffer;
     }
 
@@ -233,7 +228,7 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
     }
 
     // Switch to the main framebuffer and blit the scene
-    glBindFramebuffer( GL_FRAMEBUFFER, DIRECT_RENDERING );
+    glBindFramebufferEXT( GL_FRAMEBUFFER, DIRECT_RENDERING );
     m_currentFbo = DIRECT_RENDERING;
 
     // Depth test has to be disabled to make transparency working
@@ -278,8 +273,8 @@ void OPENGL_COMPOSITOR::clean()
 {
     wxASSERT( m_initialized );
 
-    glDeleteFramebuffers( 1, &m_framebuffer );
-    glDeleteRenderbuffers( 1, &m_depthBuffer );
+    glDeleteFramebuffersEXT( 1, &m_framebuffer );
+    glDeleteRenderbuffersEXT( 1, &m_depthBuffer );
 
     OPENGL_BUFFERS::const_iterator it;
 
