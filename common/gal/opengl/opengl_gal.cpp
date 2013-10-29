@@ -215,6 +215,9 @@ void OPENGL_GAL::EndDrawing()
     compositor.SetBuffer( overlayBuffer );
     overlayManager.EndDrawing();
 
+    // Be sure that the framebuffer is not colorized (happens on specific GPU&drivers combinations)
+    glColor4d( 1.0, 1.0, 1.0, 1.0 );
+
     // Draw the remaining contents, blit the rendering targets to the screen, swap the buffers
     compositor.DrawBuffer( mainBuffer );
     compositor.DrawBuffer( overlayBuffer );
@@ -980,9 +983,6 @@ void OPENGL_GAL::blitCursor()
     glVertex2d( cursorBegin.x, cursorCenter.y );
     glVertex2d( cursorEnd.x, cursorCenter.y );
     glEnd();
-
-    // Restore the default color, so textures will be drawn properly
-    glColor4d( 1.0, 1.0, 1.0, 1.0 );
 }
 
 
