@@ -197,19 +197,19 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
         if( !parseDoubleTriplet( properties[ wxT( "diffuseColor" ) ],
                                  material->m_DiffuseColor ) )
         {
-            D( printf("diffuseColor parsing error") );
+            DBG( printf("diffuseColor parsing error") );
         }
 
         if( !parseDoubleTriplet( properties[ wxT( "specularColor" ) ],
                                  material->m_SpecularColor ) )
         {
-            D( printf("specularColor parsing error") );
+            DBG( printf("specularColor parsing error") );
         }
 
         if( !parseDoubleTriplet( properties[ wxT( "emissiveColor" ) ],
                                  material->m_EmissiveColor ) )
         {
-            D( printf("emissiveColor parsing error") );
+            DBG( printf("emissiveColor parsing error") );
         }
 
         wxStringTokenizer values;
@@ -221,7 +221,7 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
         }
         else
         {
-            D( printf( "ambienterror" ) );
+            DBG( printf( "ambienterror" ) );
         }
 
         values.SetString( properties[ wxT( "shininess" ) ]  );
@@ -232,7 +232,7 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
         }
         else
         {
-            D( printf( "shininess error" ) );
+            DBG( printf( "shininess error" ) );
         }
 
         values.SetString( properties[ wxT( "transparency" ) ] );
@@ -243,7 +243,7 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
         }
         else
         {
-            D( printf( "trans error") );
+            DBG( printf( "trans error") );
         }
 
         material->SetMaterial();
@@ -303,7 +303,7 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
             }
         }
 
-        D( printf( "ReadMaterial error: material not found\n" ) );
+        DBG( printf( "ReadMaterial error: material not found\n" ) );
     }
 }
 
@@ -373,7 +373,7 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
           tokens.GetNextToken().ToDouble( &rotation.z ) &&
           tokens.GetNextToken().ToDouble( &angle ) ) )
     {
-        D( printf("rotation read error") );
+        DBG( printf("rotation read error") );
     }
 
     double vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits *
@@ -407,7 +407,7 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
 
     if( points.size() % 3 != 0 )
     {
-        D( printf( "Number of points is incorrect" ) );
+        DBG( printf( "Number of points is incorrect" ) );
         return;
     }
 

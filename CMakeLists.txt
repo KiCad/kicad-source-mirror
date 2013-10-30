@@ -39,7 +39,7 @@ option( KICAD_SCRIPTING_MODULES
 option( KICAD_SCRIPTING_WXPYTHON
     "set this option ON to build wxpython implementation for wx interface building in python and py.shell"
     )
-
+    
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -230,11 +230,26 @@ include( ExternalProject )
 #================================================
 include( CheckFindPackageResult )
 
+# Turn on wxWidgets compatibility mode for some classes 
+add_definitions(-DWX_COMPATIBILITY)
+
 #######################
 # Find OpenGL library #
 #######################
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
+
+#####################
+# Find GLEW library #
+#####################
+find_package(GLEW)
+check_find_package_result(GLEW_FOUND "GLEW")
+
+######################
+# Find Cairo library #
+######################
+find_package(Cairo 1.8.1 QUIET)
+check_find_package_result(CAIRO_FOUND "Cairo")
 
 # Download boost and possibly build parts of it
 #################################################
@@ -360,6 +375,7 @@ add_subdirectory( cvpcb )
 add_subdirectory( eeschema )
 add_subdirectory( gerbview )
 add_subdirectory( kicad )
+add_subdirectory( lib_dxf )
 add_subdirectory( pcbnew )
 add_subdirectory( polygon )
 add_subdirectory( pagelayout_editor )
@@ -375,12 +391,14 @@ add_subdirectory( tools )
 add_dependencies( pcbnew boost )
 add_dependencies( eeschema boost )
 add_dependencies( cvpcb boost )
+add_dependencies( gal boost )
 add_dependencies( common boost )
 add_dependencies( pcbcommon boost )
 add_dependencies( 3d-viewer boost )
 add_dependencies( pcad2kicadpcb boost )
 add_dependencies( polygon boost )
 add_dependencies( pl_editor boost )
+add_dependencies( pnsrouter boost )
 
 
 #############

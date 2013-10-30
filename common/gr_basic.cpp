@@ -1488,12 +1488,12 @@ bool ColorIsLight( EDA_COLOR_T aColor )
 
 EDA_COLOR_T ColorFindNearest( const wxColour &aColor )
 {
-    EDA_COLOR_T candidate = BLACK;
+    return ColorFindNearest( aColor.Red(), aColor.Green(), aColor.Blue() );
+}
 
-    // These are ints because we will subtract them later
-    int r = aColor.Red();
-    int g = aColor.Green();
-    int b = aColor.Blue();
+EDA_COLOR_T ColorFindNearest( int aR, int aG, int aB )
+{
+    EDA_COLOR_T candidate = BLACK;
 
     /* Find the 'nearest' color in the palette. This is fun. There is
        a gazilion of metrics for the color space and no one of the
@@ -1511,11 +1511,11 @@ EDA_COLOR_T ColorFindNearest( const wxColour &aColor )
     for( EDA_COLOR_T trying = BLACK; trying < NBCOLORS; trying = NextColor(trying) )
     {
         const StructColors &c = g_ColorRefs[trying];
-        int distance = (r - c.m_Red) * (r - c.m_Red) +
-            (g - c.m_Green) * (g - c.m_Green) +
-            (b - c.m_Blue) * (b - c.m_Blue);
-        if( distance < nearest_distance && c.m_Red >= r &&
-            c.m_Green >= g && c.m_Blue >= b )
+        int distance = (aR - c.m_Red) * (aR - c.m_Red) +
+            (aG - c.m_Green) * (aG - c.m_Green) +
+            (aB - c.m_Blue) * (aB - c.m_Blue);
+        if( distance < nearest_distance && c.m_Red >= aR &&
+            c.m_Green >= aG && c.m_Blue >= aB )
         {
             nearest_distance = distance;
             candidate = trying;

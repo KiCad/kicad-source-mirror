@@ -456,7 +456,7 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 
 // Mask margins handling:
 
-int D_PAD::GetSolderMaskMargin()
+int D_PAD::GetSolderMaskMargin() const
 {
     int     margin = m_LocalSolderMaskMargin;
     MODULE* module = GetParent();
@@ -489,7 +489,7 @@ int D_PAD::GetSolderMaskMargin()
 }
 
 
-wxSize D_PAD::GetSolderPasteMargin()
+wxSize D_PAD::GetSolderPasteMargin() const
 {
     int     margin = m_LocalSolderPasteMargin;
     double  mratio = m_LocalSolderPasteMarginRatio;
@@ -808,3 +808,72 @@ EDA_ITEM* D_PAD::Clone() const
     return new D_PAD( *this );
 }
 
+
+void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount = 0;
+
+    // These types of pads contain a hole
+    if( m_Attribute == PAD_STANDARD || m_Attribute == PAD_HOLE_NOT_PLATED )
+        aLayers[aCount++] = ITEM_GAL_LAYER( PADS_HOLES_VISIBLE );
+
+    if( IsOnLayer( LAYER_N_FRONT ) && IsOnLayer( LAYER_N_BACK ) )
+    {
+        // Multi layer pad
+        aLayers[aCount++] = ITEM_GAL_LAYER( PADS_VISIBLE );
+        aLayers[aCount++] = ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE );
+        aLayers[aCount++] = SOLDERMASK_N_FRONT;
+        aLayers[aCount++] = SOLDERMASK_N_BACK;
+        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
+        aLayers[aCount++] = SOLDERPASTE_N_BACK;
+    }
+    else if( IsOnLayer( LAYER_N_FRONT ) )
+    {
+        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
+        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
+        aLayers[aCount++] = SOLDERMASK_N_FRONT;
+        aLayers[aCount++] = SOLDERPASTE_N_FRONT;
+    }
+    else if( IsOnLayer( LAYER_N_BACK ) )
+    {
+        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
+        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
+        aLayers[aCount++] = SOLDERMASK_N_BACK;
+        aLayers[aCount++] = SOLDERPASTE_N_BACK;
+    }
+#ifdef __WXDEBUG__
+    else    // Should not occur
+    {
+        wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD on layer different than FRONT/BACK") );
+    }
+#endif
+}
+
+
+unsigned int D_PAD::ViewGetLOD( int aLayer ) const
+{
+    // Netnames and soldermasks will be shown only if zoom is appropriate
+    if( IsNetnameLayer( aLayer ) )
+    {
+        return ( 100000000 / std::max( m_Size.x, m_Size.y ) );
+    }
+
+    // Other layers are shown without any conditions
+    return 0;
+}
+
+
+const BOX2I D_PAD::ViewBBox() const
+{
+    // Bounding box includes soldermask too
+    int solderMaskMargin       = GetSolderMaskMargin();
+    VECTOR2I solderPasteMargin = VECTOR2D( GetSolderPasteMargin() );
+    EDA_RECT bbox              = GetBoundingBox();
+
+    // Look for the biggest possible bounding box
+    int xMargin = std::max( solderMaskMargin, solderPasteMargin.x );
+    int yMargin = std::max( solderMaskMargin, solderPasteMargin.y );
+
+    return BOX2I( VECTOR2I( bbox.GetOrigin() ) - VECTOR2I( xMargin, yMargin ),
+                  VECTOR2I( bbox.GetSize() ) + VECTOR2I( 2 * xMargin, 2 * yMargin ) );
+}

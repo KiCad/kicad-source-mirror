@@ -247,7 +247,7 @@ public:
      * 2 - if null, the parent footprint value
      * 1 - if null, the global value
      */
-    int GetSolderMaskMargin();
+    int GetSolderMaskMargin() const;
 
     /**
      * Function GetSolderPasteMargin
@@ -259,7 +259,7 @@ public:
      * 2 - if null, the parent footprint value
      * 1 - if null, the global value
      */
-    wxSize GetSolderPasteMargin();
+    wxSize GetSolderPasteMargin() const;
 
     void SetZoneConnection( ZoneConnection aType ) { m_ZoneConnection = aType; }
     ZoneConnection GetZoneConnection() const;
@@ -432,6 +432,15 @@ public:
     void AppendConfigs( PARAM_CFG_ARRAY* aResult );
 
     EDA_ITEM* Clone() const;
+
+    /// @copydoc VIEW_ITEM::ViewGetLayers()
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+
+    /// @copydoc VIEW_ITEM::ViewGetLOD()
+    virtual unsigned int ViewGetLOD( int aLayer ) const;
+
+    /// @copydoc VIEW_ITEM::ViewBBox()
+    virtual const BOX2I ViewBBox() const;
 
     /**
      * Function CopyNetlistSettings

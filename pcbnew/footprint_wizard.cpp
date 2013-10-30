@@ -117,7 +117,7 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     }
     else
     {
-        D(printf( "footprintWizard->GetModule() returns NULL\n" );)
+        DBG(printf( "footprintWizard->GetModule() returns NULL\n" );)
     }
 
     m_canvas->Refresh();

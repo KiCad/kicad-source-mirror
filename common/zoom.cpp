@@ -33,13 +33,15 @@
 #include <fctsys.h>
 #include <id.h>
 #include <class_drawpanel.h>
+#include <class_drawpanel_gal.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <view/view.h>
 #include <class_base_screen.h>
 #include <wxstruct.h>
 #include <kicad_device_context.h>
 #include <hotkeys_basic.h>
 #include <menus_helpers.h>
 #include <base_units.h>
-
 
 
 void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
@@ -82,7 +84,8 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
     if( screen->m_FirstRedraw )
         SetCrossHairPosition( GetScrollCenterPosition() );
 
-    RedrawScreen( GetScrollCenterPosition(), aWarpPointer );
+    if( !m_galCanvasActive )
+        RedrawScreen( GetScrollCenterPosition(), aWarpPointer );
 }
 
 
@@ -189,6 +192,20 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         }
         if( screen->SetZoom( screen->m_ZoomList[i] ) )
             RedrawScreen( center, true );
+    }
+
+    if( m_galCanvasActive )
+    {
+        // Apply computed view settings to GAL
+        KIGFX::VIEW* view = m_galCanvas->GetView();
+        KIGFX::GAL* gal = m_galCanvas->GetGAL();
+
+        double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+        double zoom = 1.0 / ( zoomFactor * GetZoom() );
+
+        view->SetScale( zoom );
+        view->SetCenter( VECTOR2D( center ) );
+        m_galCanvas->Refresh();
     }
 
     UpdateStatusBar();

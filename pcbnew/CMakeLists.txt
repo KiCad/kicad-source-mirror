@@ -2,6 +2,7 @@
 set( MAKE_LINK_MAPS false )
 
 add_definitions( -DPCBNEW )
+add_subdirectory(router)
 
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting )
@@ -26,6 +27,8 @@ include_directories(
     ../common
     ../polygon
     ../common/dialogs
+    ../lib_dxf
+    ./import_dxf
     ${INC_AFTER}
     )
 
@@ -114,6 +117,12 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_footprint_wizard_list.cpp
     )
 
+set( PCBNEW_IMPORT_DXF
+    import_dxf/dialog_dxf_import_base.cpp
+    import_dxf/dialog_dxf_import.cpp
+    import_dxf/dxf2brd_items.cpp
+    )
+
 set( PCBNEW_AUTOROUTER_SRCS
     autorouter/automove.cpp
     autorouter/autoplac.cpp
@@ -145,6 +154,7 @@ set( PCBNEW_CLASS_SRCS
     cross-probing.cpp
     deltrack.cpp
     ${PCBNEW_DIALOGS}
+    ${PCBNEW_IMPORT_DXF}
     dragsegm.cpp
     drc.cpp
     drc_clearance_test_functions.cpp
@@ -225,6 +235,13 @@ set( PCBNEW_CLASS_SRCS
     zones_polygons_test_connections.cpp
     zones_test_and_combine_areas.cpp
     class_footprint_wizard.cpp
+    
+    tools/selection_tool.cpp
+    tools/selection_area.cpp
+    tools/bright_box.cpp
+    tools/move_tool.cpp
+    tools/pcb_tools.cpp
+    tools/common_actions.cpp
     )
 
 set( PCBNEW_SRCS ${PCBNEW_AUTOROUTER_SRCS} ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS} )
@@ -345,11 +362,16 @@ if( KICAD_SCRIPTING_MODULES )
     swig_link_libraries( pcbnew
         3d-viewer
         pcbcommon
+        pnsrouter
         common
         pcad2kicadpcb
+        lib_dxf
         ${GITHUB_PLUGIN_LIBRARIES}
         polygon
         bitmaps
+        gal
+    	${GLEW_LIBRARIES}
+    	${CAIRO_LIBRARIES}
         ${wxWidgets_LIBRARIES}
         ${OPENGL_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
@@ -511,18 +533,34 @@ endif()
 target_link_libraries( pcbnew
     3d-viewer
     pcbcommon
+    pnsrouter
     common
     pcad2kicadpcb
     polygon
     bitmaps
+    gal
+    lib_dxf
     ${GITHUB_PLUGIN_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
     ${PCBNEW_EXTRA_LIBS}
+	${GLEW_LIBRARIES}
+	${CAIRO_LIBRARIES}
     )
 
+# Only for win32 cross compilation using MXE
+if(WIN32 AND MSYS)
+target_link_libraries(pcbnew
+	opengl32
+	glu32
+	pixman-1
+	fontconfig
+	freetype
+	bz2
+	)
+endif(WIN32 AND MSYS)
 
 if( MAKE_LINK_MAPS )
     # generate a link map with cross reference

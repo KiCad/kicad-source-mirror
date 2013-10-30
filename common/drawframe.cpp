@@ -35,6 +35,7 @@
 #include <macros.h>
 #include <id.h>
 #include <class_drawpanel.h>
+#include <class_drawpanel_gal.h>
 #include <class_base_screen.h>
 #include <msgpanel.h>
 #include <wxstruct.h>
@@ -42,10 +43,11 @@
 #include <kicad_device_context.h>
 #include <dialog_helpers.h>
 #include <base_units.h>
-#include <vector2d.h>
+#include <math/box2.h>
 
 #include <wx/fontdlg.h>
-
+#include <view/view.h>
+#include <gal/graphics_abstraction_layer.h>
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -100,6 +102,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* aParent,
     m_HotkeysZoomAndGridList = NULL;
 
     m_canvas              = NULL;
+    m_galCanvas           = NULL;
+    m_galCanvasActive     = false;
     m_messagePanel        = NULL;
     m_currentScreen       = NULL;
     m_toolId              = ID_NO_TOOL_SELECTED;
@@ -224,6 +228,12 @@ void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
 void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {
     SetGridVisibility( !IsGridVisible() );
+    if( m_galCanvasActive )
+    {
+        m_galCanvas->GetGAL()->SetGridVisibility( IsGridVisible() );
+        m_galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    }
+
     m_canvas->Refresh();
 }
 
@@ -376,7 +386,15 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     m_LastGridSizeId = id - ID_POPUP_GRID_LEVEL_1000;
     screen->SetGrid( id );
     SetCrossHairPosition( RefPos( true ) );
-    Refresh();
+
+    if( m_galCanvasActive )
+    {
+        m_galCanvas->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x,
+                                                      screen->GetGrid().m_Size.y ) );
+        m_galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    }
+
+    m_canvas->Refresh();
 }
 
 
@@ -403,7 +421,21 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
             return;
 
         GetScreen()->SetZoom( selectedZoom );
-        RedrawScreen( GetScrollCenterPosition(), false );
+
+        if( m_galCanvasActive )
+        {
+            // Apply computed view settings to GAL
+            KIGFX::VIEW* view = m_galCanvas->GetView();
+            KIGFX::GAL* gal = m_galCanvas->GetGAL();
+
+            double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+            double zoom = 1.0 / ( zoomFactor * GetZoom() );
+
+            view->SetScale( zoom );
+            m_galCanvas->Refresh();
+        }
+        else
+            RedrawScreen( GetScrollCenterPosition(), false );
     }
 }
 
@@ -738,7 +770,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     DSIZE   clientSizeIU( clientSizeDU.x / scale, clientSizeDU.y / scale );
 
     // Full drawing or "page" rectangle in internal units
-    DBOX    pageRectIU( 0, 0, GetPageSizeIU().x, GetPageSizeIU().y );
+    DBOX    pageRectIU( wxPoint( 0, 0 ), wxSize( GetPageSizeIU().x, GetPageSizeIU().y ) );
 
     // The upper left corner of the client rectangle in internal units.
     double xIU = aCenterPositionIU.x - clientSizeIU.x / 2.0;
@@ -748,11 +780,11 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     if( screen->m_Center )
     {
         // half page offset.
-        xIU += pageRectIU.width  / 2.0;
-        yIU += pageRectIU.height / 2.0;
+        xIU += pageRectIU.GetWidth()  / 2.0;
+        yIU += pageRectIU.GetHeight() / 2.0;
     }
 
-    DBOX    clientRectIU( xIU, yIU, clientSizeIU.x, clientSizeIU.y );
+    DBOX    clientRectIU( wxPoint( xIU, yIU ), wxSize( clientSizeIU.x, clientSizeIU.y ) );
     wxPoint centerPositionIU;
 
     // put "int" limits on the clientRect
@@ -765,13 +797,13 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     if( clientRectIU.GetBottom() > VIRT_MAX )
         clientRectIU.MoveBottomTo( VIRT_MAX );
 
-    centerPositionIU.x = KiROUND( clientRectIU.x + clientRectIU.width/2 );
-    centerPositionIU.y = KiROUND( clientRectIU.y + clientRectIU.height/2 );
+    centerPositionIU.x = KiROUND( clientRectIU.GetX() + clientRectIU.GetWidth() / 2 );
+    centerPositionIU.y = KiROUND( clientRectIU.GetY() + clientRectIU.GetHeight() / 2 );
 
     if( screen->m_Center )
     {
-        centerPositionIU.x -= KiROUND( pageRectIU.width  / 2.0 );
-        centerPositionIU.y -= KiROUND( pageRectIU.height  / 2.0 );
+        centerPositionIU.x -= KiROUND( pageRectIU.GetWidth() / 2.0 );
+        centerPositionIU.y -= KiROUND( pageRectIU.GetHeight() / 2.0 );
     }
 
     DSIZE   virtualSizeIU;
@@ -782,26 +814,26 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
     else
     {
-        double pageCenterX    = pageRectIU.x   + ( pageRectIU.width / 2 );
-        double clientCenterX  = clientRectIU.x + ( clientRectIU.width / 2 );
+        double pageCenterX    = pageRectIU.GetX()   + ( pageRectIU.GetWidth() / 2 );
+        double clientCenterX  = clientRectIU.GetX() + ( clientRectIU.GetWidth() / 2 );
 
-        if( clientRectIU.width > pageRectIU.width )
+        if( clientRectIU.GetWidth() > pageRectIU.GetWidth() )
         {
             if( pageCenterX > clientCenterX )
                 virtualSizeIU.x = ( pageCenterX - clientRectIU.GetLeft() ) * 2;
             else if( pageCenterX < clientCenterX )
                 virtualSizeIU.x = ( clientRectIU.GetRight() - pageCenterX ) * 2;
             else
-                virtualSizeIU.x = clientRectIU.width;
+                virtualSizeIU.x = clientRectIU.GetWidth();
         }
         else
         {
             if( pageCenterX > clientCenterX )
-                virtualSizeIU.x = pageRectIU.width + ( (pageRectIU.GetLeft() - clientRectIU.GetLeft() ) * 2 );
+                virtualSizeIU.x = pageRectIU.GetWidth() + ( (pageRectIU.GetLeft() - clientRectIU.GetLeft() ) * 2 );
             else if( pageCenterX < clientCenterX )
-                virtualSizeIU.x = pageRectIU.width + ( (clientRectIU.GetRight() - pageRectIU.GetRight() ) * 2 );
+                virtualSizeIU.x = pageRectIU.GetWidth() + ( (clientRectIU.GetRight() - pageRectIU.GetRight() ) * 2 );
             else
-                virtualSizeIU.x = pageRectIU.width;
+                virtualSizeIU.x = pageRectIU.GetWidth();
         }
     }
 
@@ -811,28 +843,28 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
     else
     {
-        double pageCenterY   = pageRectIU.y   + ( pageRectIU.height / 2 );
-        double clientCenterY = clientRectIU.y + ( clientRectIU.height / 2 );
+        double pageCenterY   = pageRectIU.GetY()   + ( pageRectIU.GetHeight() / 2 );
+        double clientCenterY = clientRectIU.GetY() + ( clientRectIU.GetHeight() / 2 );
 
-        if( clientRectIU.height > pageRectIU.height )
+        if( clientRectIU.GetHeight() > pageRectIU.GetHeight() )
         {
             if( pageCenterY > clientCenterY )
                 virtualSizeIU.y = ( pageCenterY - clientRectIU.GetTop() ) * 2;
             else if( pageCenterY < clientCenterY )
                 virtualSizeIU.y = ( clientRectIU.GetBottom() - pageCenterY ) * 2;
             else
-                virtualSizeIU.y = clientRectIU.height;
+                virtualSizeIU.y = clientRectIU.GetHeight();
         }
         else
         {
             if( pageCenterY > clientCenterY )
-                virtualSizeIU.y = pageRectIU.height +
+                virtualSizeIU.y = pageRectIU.GetHeight() +
                                 ( ( pageRectIU.GetTop() - clientRectIU.GetTop() ) * 2 );
             else if( pageCenterY < clientCenterY )
-                virtualSizeIU.y = pageRectIU.height +
+                virtualSizeIU.y = pageRectIU.GetHeight() +
                                 ( ( clientRectIU.GetBottom() - pageRectIU.GetBottom() ) * 2 );
             else
-                virtualSizeIU.y = pageRectIU.height;
+                virtualSizeIU.y = pageRectIU.GetHeight();
         }
     }
 
@@ -847,8 +879,8 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
     else
     {
-        screen->m_DrawOrg.x = -KiROUND( ( virtualSizeIU.x - pageRectIU.width )  / 2.0 );
-        screen->m_DrawOrg.y = -KiROUND( ( virtualSizeIU.y - pageRectIU.height ) / 2.0 );
+        screen->m_DrawOrg.x = -KiROUND( ( virtualSizeIU.x - pageRectIU.GetWidth() )  / 2.0 );
+        screen->m_DrawOrg.y = -KiROUND( ( virtualSizeIU.y - pageRectIU.GetHeight() ) / 2.0 );
     }
 
     /* Always set scrollbar pixels per unit to 1 unless you want the zoom
@@ -867,8 +899,8 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     // center position at the center of client rectangle.
     SetScrollCenterPosition( centerPositionIU );
 
-    double posX = centerPositionIU.x - clientRectIU.width /2.0 - screen->m_DrawOrg.x;
-    double posY = centerPositionIU.y - clientRectIU.height/2.0 - screen->m_DrawOrg.y;
+    double posX = centerPositionIU.x - clientRectIU.GetWidth()  / 2.0 - screen->m_DrawOrg.x;
+    double posY = centerPositionIU.y - clientRectIU.GetHeight() / 2.0 - screen->m_DrawOrg.y;
 
     // Convert scroll bar position to device units.
     posX = KiROUND( posX * scale );
@@ -917,6 +949,61 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
                              screen->m_ScrollbarNumber.y,
                              screen->m_ScrollbarPos.x,
                              screen->m_ScrollbarPos.y, noRefresh );
+}
+
+
+void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
+{
+    KIGFX::VIEW* view = m_galCanvas->GetView();
+    KIGFX::GAL* gal = m_galCanvas->GetGAL();
+
+    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+
+    // Display the same view after canvas switching
+    if( aEnable )
+    {
+        BASE_SCREEN* screen = GetScreen();
+
+        // Switch to GAL rendering
+        if( !m_galCanvasActive )
+        {
+            // Set up viewport
+            double zoom = 1.0 / ( zoomFactor * m_canvas->GetZoom() );
+            view->SetScale( zoom );
+            view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+        }
+
+        // Set up grid settings
+        gal->SetGridVisibility( IsGridVisible() );
+        gal->SetGridSize( VECTOR2D( screen->GetGridSize().x, screen->GetGridSize().y ) );
+        gal->SetGridOrigin( VECTOR2D( GetGridOrigin() ) );
+    }
+    else
+    {
+        // Switch to standard rendering
+        if( m_galCanvasActive )
+        {
+            // Change view settings only if GAL was active previously
+            double zoom = 1.0 / ( zoomFactor * view->GetScale() );
+            m_canvas->SetZoom( zoom );
+
+            VECTOR2D center = view->GetCenter();
+            RedrawScreen( wxPoint( center.x, center.y ), false );
+        }
+    }
+
+    m_canvas->SetEvtHandlerEnabled( !aEnable );
+    m_galCanvas->SetEvtHandlerEnabled( aEnable );
+
+    // Switch panes
+    m_auimgr.GetPane( wxT( "DrawFrame" ) ).Show( !aEnable );
+    m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show( aEnable );
+    m_auimgr.Update();
+
+    m_galCanvasActive = aEnable;
+
+    if( aEnable )
+        m_galCanvas->SetFocus();
 }
 
 //-----< BASE_SCREEN API moved here >--------------------------------------------
@@ -986,4 +1073,3 @@ void EDA_DRAW_FRAME::SetScrollCenterPosition( const wxPoint& aPoint )
 }
 
 //-----</BASE_SCREEN API moved here >--------------------------------------------
-

@@ -38,6 +38,10 @@
 
 #include "../eeschema/dialogs/dialog_schematic_find.h"
 
+
+const wxString traceFindReplace( wxT( "KicadFindReplace" ) );
+
+
 enum textbox {
     ID_TEXTBOX_LIST = 8010
 };
@@ -190,8 +194,28 @@ bool EDA_ITEM::Replace( wxFindReplaceData& aSearchData, wxString& aText )
     wxCHECK_MSG( IsReplaceable(), false,
                  wxT( "Attempt to replace text in <" ) + GetClass() + wxT( "> item." ) );
 
-    return aText.Replace( aSearchData.GetFindString(),
-                          aSearchData.GetReplaceString(), false ) != 0;
+    wxString searchString = (aSearchData.GetFlags() & wxFR_MATCHCASE) ? aText.Upper() : aText;
+
+    int result = searchString.Find( (aSearchData.GetFlags() & wxFR_MATCHCASE) ?
+                                    aSearchData.GetFindString() :
+                                    aSearchData.GetFindString().Upper() );
+
+    if( result == wxNOT_FOUND )
+        return false;
+
+    wxString prefix = aText.Left( result );
+    wxString suffix;
+
+    if( aSearchData.GetFindString().length() + result < aText.length() )
+        suffix = aText.Right( aText.length() - ( aSearchData.GetFindString().length() + result ) );
+
+    wxLogTrace( traceFindReplace, wxT( "Replacing '%s', prefix '%s', replace '%s', suffix '%s'." ),
+                GetChars( aText ), GetChars( prefix ), GetChars( aSearchData.GetReplaceString() ),
+                GetChars( suffix ) );
+
+    aText = prefix + aSearchData.GetReplaceString() + suffix;
+
+    return true;
 }
 
 
@@ -219,6 +243,22 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
     }
 
     return *this;
+}
+
+
+const BOX2I EDA_ITEM::ViewBBox() const
+{
+    // Basic fallback
+    return BOX2I( VECTOR2I( GetBoundingBox().GetOrigin() ),
+                  VECTOR2I( GetBoundingBox().GetSize() ) );
+}
+
+
+void EDA_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    // Basic fallback
+    aCount      = 1;
+    aLayers[0]  = 0;
 }
 
 

@@ -49,6 +49,16 @@ public:
 
     ~TEXTE_PCB();
 
+    virtual const wxPoint& GetPosition() const
+    {
+        return m_Pos;
+    }
+
+    virtual void SetPosition( const wxPoint& aPos )
+    {
+        m_Pos = aPos;
+    }
+
     void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
@@ -123,6 +133,9 @@ public:
     EDA_RECT GetBoundingBox() const { return GetTextBox(); };
 
     EDA_ITEM* Clone() const;
+
+    /// @copydoc VIEW_ITEM::ViewBBox()
+    virtual const BOX2I ViewBBox() const;
 
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override

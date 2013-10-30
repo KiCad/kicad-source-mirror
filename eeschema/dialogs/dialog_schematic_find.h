@@ -48,7 +48,7 @@
  */
 enum SchematicFindReplaceFlags
 {
-    // The last wxFindReplaceFlag enum is wxFR_MATCHCASE.
+    // The last wxFindReplaceFlag enum is wxFR_MATCHCASE = 0x4.
 
     /// Search the current sheet only.
     FR_CURRENT_SHEET_ONLY    = wxFR_MATCHCASE << 1,

@@ -56,9 +56,6 @@ typedef vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
 #define FMT_ANGLE       SCH_ITEM::FormatAngle
 
 
-/// Flag to enable find and replace tracing using the WXTRACE environment variable.
-extern const wxString traceFindReplace;
-
 /// Flag to enable find item tracing using the WXTRACE environment variable.  This
 /// flag generates a lot of debug output.
 extern const wxString traceFindItem;

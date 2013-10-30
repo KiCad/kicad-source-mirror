@@ -140,6 +140,14 @@ EDA_COLOR_T ColorByName( const wxChar *aName );
 EDA_COLOR_T ColorFindNearest( const wxColour &aColor );
 
 /**
+ * Find the nearest color match
+ * @param aR is the red component of the color to be matched (in range 0-255)
+ * @param aG is the green component of the color to be matched (in range 0-255)
+ * @param aG is the blue component of the color to be matched (in range 0-255)
+ */
+EDA_COLOR_T ColorFindNearest( int aR, int aG, int aB );
+
+/**
  * Check if a color is light i.e. if black would be more readable than
  * white on it
  */

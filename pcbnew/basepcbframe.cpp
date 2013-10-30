@@ -42,11 +42,21 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <class_board.h>
+#include <class_track.h>
+#include <class_module.h>
+#include <class_drawsegment.h>
 
 #include <collectors.h>
 #include <class_drawpanel.h>
-#include <vector2d.h>
+#include <class_drawpanel_gal.h>
+#include <view/view.h>
+#include <math/vector2d.h>
 #include <trigo.h>
+#include <pcb_painter.h>
+#include <worksheet_viewitem.h>
+
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
 
 // Configuration entry names.
 static const wxString UserGridSizeXEntry( wxT( "PcbUserGrid_X" ) );
@@ -60,6 +70,42 @@ static const wxString DisplayModuleTextEntry( wxT( "DiModTx" ) );
 static const wxString FastGrid1Entry( wxT( "FastGrid1" ) );
 static const wxString FastGrid2Entry( wxT( "FastGrid2" ) );
 
+const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
+{
+    ITEM_GAL_LAYER( GP_OVERLAY ),
+    ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+    DRAW_N, COMMENT_N, ECO1_N, ECO2_N, EDGE_N,
+    UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31,
+    ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ),
+    ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE), ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ),
+
+    ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ),
+    ITEM_GAL_LAYER( VIAS_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
+
+    ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ), SOLDERMASK_N_FRONT,
+    ITEM_GAL_LAYER( LAYER_16_NETNAMES_VISIBLE ), LAYER_N_FRONT,
+    SILKSCREEN_N_FRONT, SOLDERPASTE_N_FRONT, ADHESIVE_N_FRONT,
+    ITEM_GAL_LAYER( LAYER_15_NETNAMES_VISIBLE ), LAYER_N_15,
+    ITEM_GAL_LAYER( LAYER_14_NETNAMES_VISIBLE ), LAYER_N_14,
+    ITEM_GAL_LAYER( LAYER_13_NETNAMES_VISIBLE ), LAYER_N_13,
+    ITEM_GAL_LAYER( LAYER_12_NETNAMES_VISIBLE ), LAYER_N_12,
+    ITEM_GAL_LAYER( LAYER_11_NETNAMES_VISIBLE ), LAYER_N_11,
+    ITEM_GAL_LAYER( LAYER_10_NETNAMES_VISIBLE ), LAYER_N_10,
+    ITEM_GAL_LAYER( LAYER_9_NETNAMES_VISIBLE ), LAYER_N_9,
+    ITEM_GAL_LAYER( LAYER_8_NETNAMES_VISIBLE ), LAYER_N_8,
+    ITEM_GAL_LAYER( LAYER_7_NETNAMES_VISIBLE ), LAYER_N_7,
+    ITEM_GAL_LAYER( LAYER_6_NETNAMES_VISIBLE ), LAYER_N_6,
+    ITEM_GAL_LAYER( LAYER_5_NETNAMES_VISIBLE ), LAYER_N_5,
+    ITEM_GAL_LAYER( LAYER_4_NETNAMES_VISIBLE ), LAYER_N_4,
+    ITEM_GAL_LAYER( LAYER_3_NETNAMES_VISIBLE ), LAYER_N_3,
+    ITEM_GAL_LAYER( LAYER_2_NETNAMES_VISIBLE ), LAYER_N_2,
+    ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ), SOLDERMASK_N_BACK,
+    ITEM_GAL_LAYER( LAYER_1_NETNAMES_VISIBLE ), LAYER_N_BACK,
+
+    ADHESIVE_N_BACK, SOLDERPASTE_N_BACK, SILKSCREEN_N_BACK,
+    ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ),
+    ITEM_GAL_LAYER( WORKSHEET )
+};
 
 BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
@@ -72,7 +118,7 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnUpdatePadDrawMode )
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, PCB_BASE_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, PCB_BASE_FRAME::OnUpdateSelectZoom )
-
+    
     EVT_UPDATE_UI_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, PCB_BASE_FRAME::OnUpdateSelectZoom )
 END_EVENT_TABLE()
 
@@ -84,6 +130,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
     EDA_DRAW_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     m_Pcb                 = NULL;
+    m_toolManager         = NULL;
+    m_toolDispatcher      = NULL;
 
     m_DisplayPadFill      = true;   // How to draw pads
     m_DisplayViaFill      = true;   // How to draw vias
@@ -101,6 +149,9 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
     m_FastGrid1           = 0;
     m_FastGrid2           = 0;
 
+    m_galCanvas           = new EDA_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                              EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+
     m_auxiliaryToolBar    = NULL;
 }
 
@@ -110,6 +161,7 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
     delete m_Collector;
 
     delete m_Pcb;       // is already NULL for FOOTPRINT_EDIT_FRAME
+    delete m_galCanvas;
 }
 
 
@@ -117,6 +169,95 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 {
     delete m_Pcb;
     m_Pcb = aBoard;
+
+    if( m_galCanvas )
+    {
+        KIGFX::VIEW* view = m_galCanvas->GetView();
+
+        ViewReloadBoard( m_Pcb );
+
+        // update the tool manager with the new board and its view.
+        if( m_toolManager )
+            m_toolManager->SetEnvironment( m_Pcb, view, m_galCanvas->GetViewControls(), this );
+    }
+}
+
+
+void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
+{
+    KIGFX::VIEW* view = m_galCanvas->GetView();
+    view->Clear();
+
+    // All of PCB drawing elements should be added to the VIEW
+    // in order to be displayed
+
+    // Load zones
+    for( int i = 0; i < aBoard->GetAreaCount(); ++i )
+    {
+        view->Add( (KIGFX::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
+    }
+
+    // Load drawings
+    for( BOARD_ITEM* drawing = aBoard->m_Drawings; drawing; drawing = drawing->Next() )
+    {
+        view->Add( drawing );
+    }
+
+    // Load tracks
+    for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
+    {
+        view->Add( track );
+    }
+
+    // Load modules and its additional elements
+    for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
+    {
+        // Load module's pads
+        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        {
+            view->Add( pad );
+        }
+
+        // Load module's drawing (mostly silkscreen)
+        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
+             drawing = drawing->Next() )
+        {
+            view->Add( drawing );
+        }
+
+        // Load module's texts (name and value)
+        view->Add( &module->Reference() );
+        view->Add( &module->Value() );
+
+        // Add the module itself
+        view->Add( module );
+    }
+
+    // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
+    for( SEGZONE* zone = aBoard->m_Zone; zone; zone = zone->Next() )
+    {
+        view->Add( zone );
+    }
+
+    // Add an entry for the worksheet layout
+    KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM(
+                                            std::string( aBoard->GetFileName().mb_str() ),
+                                            std::string( GetScreenDesc().mb_str() ),
+                                            &GetPageSettings(), &GetTitleBlock() );
+    BASE_SCREEN* screen = GetScreen();
+    if( screen != NULL )
+    {
+        worksheet->SetSheetNumber( GetScreen()->m_ScreenNumber );
+        worksheet->SetSheetCount( GetScreen()->m_NumberOfScreens );
+    }
+
+    view->Add( worksheet );
+
+    view->SetPanBoundary( worksheet->ViewBBox() );
+    view->RecacheAllItems( true );
+
+    if( m_galCanvasActive )
+        m_galCanvas->Refresh();
 }
 
 
@@ -377,6 +518,15 @@ void PCB_BASE_FRAME::OnTogglePolarCoords( wxCommandEvent& aEvent )
 void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 {
     m_DisplayPadFill = DisplayOpt.DisplayPadFill = !m_DisplayPadFill;
+
+    // Apply new display options to the GAL canvas
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    settings->LoadDisplayOptions( DisplayOpt );
+    m_galCanvas->GetView()->RecacheAllItems( true );
+
     m_canvas->Refresh();
 }
 
@@ -442,6 +592,14 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 
     if( current != m_zoomSelectBox->GetSelection() )
         m_zoomSelectBox->SetSelection( current );
+}
+
+
+void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
+{
+    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    ViewReloadBoard( m_Pcb );
 }
 
 
@@ -696,6 +854,61 @@ void PCB_BASE_FRAME::LoadSettings()
 
     if( m_DisplayModText < LINE || m_DisplayModText > SKETCH )
         m_DisplayModText = FILLED;
+
+    // Apply display settings for GAL
+    KIGFX::VIEW* view = m_galCanvas->GetView();
+
+    // Set rendering order and properties of layers
+    for( LAYER_NUM i = 0; (unsigned) i < sizeof(GAL_LAYER_ORDER) / sizeof(LAYER_NUM); ++i )
+    {
+        LAYER_NUM layer = GAL_LAYER_ORDER[i];
+        wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
+
+        view->SetLayerOrder( layer, i );
+
+        if( IsCopperLayer( layer ) )
+        {
+            // Copper layers are required for netname layers
+            view->SetRequired( GetNetnameLayer( layer ), layer );
+            view->SetLayerTarget( layer, KIGFX::TARGET_CACHED );
+        }
+        else if( IsNetnameLayer( layer ) )
+        {
+            // Netnames are drawn only when scale is sufficient (level of details)
+            // so there is no point in caching them
+            view->SetLayerTarget( layer, KIGFX::TARGET_NONCACHED );
+        }
+    }
+
+    // Some more required layers settings
+    view->SetRequired( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( VIAS_VISIBLE ) );
+    view->SetRequired( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
+    view->SetRequired( ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
+
+    view->SetRequired( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    view->SetRequired( ADHESIVE_N_FRONT, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    view->SetRequired( SOLDERPASTE_N_FRONT, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    view->SetRequired( SOLDERMASK_N_FRONT, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+
+    view->SetRequired( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    view->SetRequired( ADHESIVE_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    view->SetRequired( SOLDERPASTE_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    view->SetRequired( SOLDERMASK_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+
+    view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
+
+    // Apply layer coloring scheme & display options
+    if( view->GetPainter() )
+    {
+        KIGFX::PCB_RENDER_SETTINGS* settings = new KIGFX::PCB_RENDER_SETTINGS();
+
+        // Load layers' colors from PCB data
+        settings->ImportLegacyColors( m_Pcb->GetColorsSettings() );
+        view->GetPainter()->ApplySettings( settings );
+
+        // Load display options (such as filled/outline display of items)
+        settings->LoadDisplayOptions( DisplayOpt );
+    }
 
     // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
     // when reading doubles in config,

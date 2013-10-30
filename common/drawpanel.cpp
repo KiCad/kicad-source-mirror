@@ -34,6 +34,7 @@
 #include <macros.h>
 #include <id.h>
 #include <class_drawpanel.h>
+#include <class_drawpanel_gal.h>
 #include <class_base_screen.h>
 #include <wxstruct.h>
 
@@ -84,10 +85,17 @@ END_EVENT_TABLE()
 
 EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
                                 const wxPoint& pos, const wxSize& size ) :
+#if wxCHECK_VERSION( 2, 9, 5 )
+    wxScrolledWindow( parent, id, pos, size, wxBORDER | wxHSCROLL | wxVSCROLL )
+#else
     wxScrolledWindow( parent, id, pos, size, wxBORDER | wxHSCROLL | wxVSCROLL | wxALWAYS_SHOW_SB )
+#endif
 {
     wxASSERT( parent );
 
+#if wxCHECK_VERSION( 2, 9, 5 )
+    ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
+#endif
     m_scrollIncrementX = std::min( size.x / 8, 10 );
     m_scrollIncrementY = std::min( size.y / 8, 10 );
 
@@ -285,6 +293,19 @@ void EDA_DRAW_PANEL::RefreshDrawingRect( const EDA_RECT& aRect, bool aEraseBackg
                 rect.x, rect.y, rect.width, rect.height );
 
     RefreshRect( rect, aEraseBackground );
+}
+
+
+void EDA_DRAW_PANEL::Refresh( bool eraseBackground, const wxRect* rect )
+{
+    if( GetParent()->IsGalCanvasActive() )
+    {
+        GetParent()->GetGalCanvas()->Refresh();
+    }
+    else
+    {
+        wxScrolledWindow::Refresh( eraseBackground, rect );
+    }
 }
 
 

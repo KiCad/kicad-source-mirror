@@ -42,7 +42,9 @@
 #include <class_board.h>
 
 #include <dialog_general_options.h>
-
+#include <class_drawpanel_gal.h>
+#include <view/view.h>
+#include <pcb_painter.h>
 
 DIALOG_GENERALOPTIONS::DIALOG_GENERALOPTIONS( PCB_EDIT_FRAME* parent ) :
     DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( parent )
@@ -157,6 +159,11 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
     bool state = event.IsChecked();
+    KIGFX::PCB_PAINTER* painter =
+            static_cast<KIGFX::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    bool recache = false;
 
     switch( id )
     {
@@ -191,33 +198,46 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_ZONES:
         DisplayOpt.DisplayZonesMode = 0;
+        recache = true;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
         DisplayOpt.DisplayZonesMode = 1;
+        recache = true;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
         DisplayOpt.DisplayZonesMode = 2;
+        recache = true;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
         m_DisplayViaFill = DisplayOpt.DisplayViaFill = !state;
+        recache = true;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = !state;
+        recache = true;
         m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
+    {
         DisplayOpt.ContrastModeDisplay = state;
+
+        // Apply new display options to the GAL canvas (this is faster than recaching)
+        settings->LoadDisplayOptions( DisplayOpt );
+
+        setHighContrastLayer( getActiveLayer() );
         m_canvas->Refresh();
+
         break;
+    }
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
         m_show_microwave_tools = state;
@@ -241,4 +261,14 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
                       wxT( "PCB_EDIT_FRAME::OnSelectOptionToolbar error \n (event not handled!)" ) );
         break;
     }
+
+    if( recache )
+    {
+        // Apply new display options to the GAL canvas
+        settings->LoadDisplayOptions( DisplayOpt );
+        m_galCanvas->GetView()->RecacheAllItems( true );
+    }
+
+    if( IsGalCanvasActive() )
+        m_galCanvas->Refresh();
 }

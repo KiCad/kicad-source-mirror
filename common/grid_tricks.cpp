@@ -65,7 +65,7 @@ void GRID_TRICKS::getSelectedArea()
     wxArrayInt  cols = m_grid->GetSelectedCols();
     wxArrayInt  rows = m_grid->GetSelectedRows();
 
-    D(printf("topLeft.Count():%zd botRight:Count():%zd\n", topLeft.Count(), botRight.Count() );)
+    DBG(printf("topLeft.Count():%zd botRight:Count():%zd\n", topLeft.Count(), botRight.Count() );)
 
     if( topLeft.Count() && botRight.Count() )
     {
@@ -97,7 +97,7 @@ void GRID_TRICKS::getSelectedArea()
         m_sel_col_count = 0;
     }
 
-    //D(printf("m_sel_row_start:%d m_sel_col_start:%d m_sel_row_count:%d m_sel_col_count:%d\n", m_sel_row_start, m_sel_col_start, m_sel_row_count, m_sel_col_count );)
+    //DBG(printf("m_sel_row_start:%d m_sel_col_start:%d m_sel_row_count:%d m_sel_col_count:%d\n", m_sel_row_start, m_sel_col_start, m_sel_row_count, m_sel_col_count );)
 }
 
 

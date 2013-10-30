@@ -424,7 +424,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
             wxFileName  tmpFile = aFullFileName;
             tmpFile.SetExt( INTERMEDIATE_NETLIST_EXT );
 
-            D(printf("tmpFile:'%s'\n", TO_UTF8( tmpFile.GetFullPath() ) );)
+            DBG(printf("tmpFile:'%s'\n", TO_UTF8( tmpFile.GetFullPath() ) );)
 
             ret = helper.WriteGENERICNetList( tmpFile.GetFullPath() );
             if( !ret )
@@ -442,7 +442,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
                                                                  tmpFile.GetFullPath(),
                                                                  aFullFileName );
 
-            D(printf("commandLine:'%s'\n", TO_UTF8( commandLine ) );)
+            DBG(printf("commandLine:'%s'\n", TO_UTF8( commandLine ) );)
 
             ProcessExecute( commandLine, wxEXEC_SYNC );
         }

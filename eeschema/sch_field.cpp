@@ -431,8 +431,11 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
     bool isReplaced;
     wxString text = GetFullyQualifiedText();
 
-    if( m_id == REFERENCE && aAuxData != NULL )
+    if( m_id == REFERENCE )
     {
+        wxCHECK_MSG( aAuxData != NULL, false,
+                     wxT( "Cannot replace reference designator without valid sheet path." ) );
+
         wxCHECK_MSG( aSearchData.GetFlags() & FR_REPLACE_REFERENCES, false,
                      wxT( "Invalid replace component reference field call." ) ) ;
 
@@ -443,8 +446,8 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 
         text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
-        if( component->GetPartCount() > 1 )
-            text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
+        // if( component->GetPartCount() > 1 )
+        //     text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
 
         isReplaced = EDA_ITEM::Replace( aSearchData, text );
 

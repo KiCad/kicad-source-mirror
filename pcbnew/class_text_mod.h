@@ -79,6 +79,25 @@ public:
 
     ~TEXTE_MODULE();
 
+    virtual const wxPoint& GetPosition() const
+    {
+        return m_Pos;
+    }
+
+    virtual void SetPosition( const wxPoint& aPos )
+    {
+        m_Pos = aPos;
+    }
+
+    void Move( const wxPoint& aMoveVector )
+    {
+        m_Pos += aMoveVector;
+    }
+
+    void Rotate( const wxPoint& aRotCentre, double aAngle );
+
+    void Flip( const wxPoint& aCentre );
+
     TEXTE_MODULE* Next() const { return (TEXTE_MODULE*) Pnext; }
 
     TEXTE_MODULE* Back() const { return (TEXTE_MODULE*) Pback; }
@@ -142,12 +161,14 @@ public:
         return wxT( "MTEXT" );
     }
 
-
     wxString GetSelectMenuText() const;
 
     BITMAP_DEF GetMenuImage() const { return  footprint_text_xpm; }
 
     EDA_ITEM* Clone() const;
+
+    /// @copydoc VIEW_ITEM::ViewGetLayers()
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
 
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override

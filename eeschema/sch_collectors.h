@@ -238,15 +238,6 @@ class SCH_FIND_COLLECTOR : public COLLECTOR
     bool m_forceSearch;
 
     /**
-     * Function PassedEnd
-     * tests if #m_foundIndex is beyond the end of the list give the current
-     * find/replace criterial in #m_findReplaceData.
-     *
-     * @return True if #m_foundIndex has crossed the end of the found item list.
-     */
-    bool PassedEnd() const;
-
-    /**
      * Function dump
      * is a helper to dump the items in the find list for debugging purposes.
      */
@@ -266,7 +257,23 @@ public:
         m_forceSearch = false;
     }
 
+    void Empty()
+    {
+        m_foundIndex = 0;
+        COLLECTOR::Empty();
+        m_data.clear();
+    }
+
     void SetForceSearch() { m_forceSearch = true; }
+
+    /**
+     * Function PassedEnd
+     * tests if #m_foundIndex is beyond the end of the list give the current
+     * find/replace criterial in #m_findReplaceData.
+     *
+     * @return True if #m_foundIndex has crossed the end of the found item list.
+     */
+    bool PassedEnd() const;
 
     /**
      * Function UpdateIndex
@@ -326,7 +333,7 @@ public:
      *
      * @return True if the text replace occurred otherwise false.
      */
-    bool ReplaceItem();
+    bool ReplaceItem( SCH_SHEET_PATH* aSheetPath = NULL );
 
     SEARCH_RESULT Inspect( EDA_ITEM* aItem, const void* aTestData = NULL );
 
@@ -340,6 +347,8 @@ public:
      *                   value searches the entire schematic hierarchy.
      */
     void Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData, SCH_SHEET_PATH* aSheetPath = NULL );
+
+    void IncrementIndex() { m_foundIndex += 1; }
 };
 
 

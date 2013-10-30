@@ -6,7 +6,7 @@
 #ifndef  CLASS_WORKSHEET_DATA_ITEM_H
 #define  CLASS_WORKSHEET_DATA_ITEM_H
 
-#include <vector2d.h>
+#include <math/vector2d.h>
 #include <eda_text.h>
 #include <class_bitmap_base.h>
 
