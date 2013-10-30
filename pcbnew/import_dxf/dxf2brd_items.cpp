@@ -106,8 +106,16 @@ bool DXF2BRD_CONVERTER::ImportDxfFile( const wxString& aFile, BOARD* aBoard )
     return true;
 }
 
+// Add aItem the the board
+// this item is also added to the list of new items
+// (for undo command for instance)
+void DXF2BRD_CONVERTER::appendToBoard( BOARD_ITEM * aItem )
+{
+    m_brd->Add( aItem );
+    m_newItemsList.push_back( aItem );
+}
 
-/**
+/*
  * Implementation of the method which handles layers.
  */
 void DXF2BRD_CONVERTER::addLayer( const DRW_Layer& data )
@@ -134,7 +142,7 @@ void DXF2BRD_CONVERTER::addLine( const DRW_Line& data )
     segm->SetEnd( end );
     segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness
                             : data.thickness ) );
-    m_brd->Add( segm );
+    appendToBoard( segm );
 }
 
 
@@ -154,7 +162,7 @@ void DXF2BRD_CONVERTER::addCircle( const DRW_Circle& data )
     segm->SetEnd( circle_start );
     segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness
                             : data.thickness ) );
-    m_brd->Add( segm );
+    appendToBoard( segm );
 }
 
 
@@ -190,7 +198,7 @@ void DXF2BRD_CONVERTER::addArc( const DRW_Arc& data )
 
     segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness
                             : data.thickness ) );
-    m_brd->Add( segm );
+    appendToBoard( segm );
 }
 
 /**
@@ -289,7 +297,7 @@ void DXF2BRD_CONVERTER::addText(const DRW_Text& data)
                                     : data.thickness ) );
     pcb_text->SetText( text );
 
-    m_brd->Add( pcb_text );
+    appendToBoard( pcb_text );
 }
 
 
@@ -389,7 +397,7 @@ void DXF2BRD_CONVERTER::addMText( const DRW_MText& data )
     }
 #endif
 
-    m_brd->Add( pcb_text );
+    appendToBoard( pcb_text );
 }
 
 

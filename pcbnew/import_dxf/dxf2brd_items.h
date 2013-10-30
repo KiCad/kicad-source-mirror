@@ -31,6 +31,7 @@
 
 class dxfRW;
 class BOARD;
+class BOARD_ITEM;
 
 /**
  * This format filter class can import and export DXF files.
@@ -41,17 +42,19 @@ class BOARD;
 class DXF2BRD_CONVERTER : public DRW_Interface
 {
 private:
+    std::vector<BOARD_ITEM*> m_newItemsList;    // The list of new items added
+                                                // to the board
     BOARD * m_brd;
     double m_xOffset;       // X coord offset for conversion (in mm)
     double m_yOffset;       // Y coord offset for conversion (in mm)
-    double m_defaultThickness;  // default line thickness for conversion (in dxf units)
+    double m_defaultThickness;  // default line thickness for conversion (in mm)
     double m_Dfx2mm;        // The scale factor to convert DXF units to mm
                             // Seems DRW_Interface always converts DXF coordinates in mm
                             // (to be confirmed)
     int    m_brdLayer;      // The board layer to place imported dfx items
-    int m_version;
-    std::string m_codePage;
-    dxfRW* m_dxf;
+    int m_version;          // the dxf version, not used here
+    std::string m_codePage; // The code page, not used here
+    dxfRW* m_dxf;           // the dxf reader
 
 public:
     DXF2BRD_CONVERTER();
@@ -67,8 +70,8 @@ public:
      */
     void SetOffset( double aOffsetX, double aOffsetY )
     {
-        m_xOffset =aOffsetX;
-        m_yOffset =aOffsetY;
+        m_xOffset = aOffsetX;
+        m_yOffset = aOffsetY;
     }
 
     /**
@@ -79,11 +82,24 @@ public:
 
     bool ImportDxfFile(  const wxString& aFile, BOARD * aBoard );
 
+    /**
+     * @return the list of new BOARD_ITEM
+     */
+    std::vector<BOARD_ITEM*>& GetItemsList()
+    {
+        return m_newItemsList;
+    }
+
 private:
     // coordinate conversions from dxf to internal units
     int mapX( double aDxfCoordX );
     int mapY( double aDxfCoordY );
     int mapDim( double aDxfValue );
+
+    // Add aItem the the board
+    // this item is also added to the list of new items
+    // (for undo command for instance)
+    void appendToBoard( BOARD_ITEM * aItem );
 
     // Methods from DRW_CreationInterface:
     // They are "call back" fonctions, called when the corresponding object

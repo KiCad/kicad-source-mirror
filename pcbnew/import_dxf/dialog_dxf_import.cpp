@@ -179,7 +179,22 @@ void DIALOG_DXF_IMPORT::OnOKClick( wxCommandEvent& event )
     dxf_importer.SetOffset( offsetX, offsetY );
     m_layer = m_SelLayerBox->GetLayerSelection();
     dxf_importer.SetBrdLayer( m_layer );
+
+    // Read dxf file:
     dxf_importer.ImportDxfFile( m_dxfFilename, brd );
+
+    // Prepare the undo list
+    std::vector<BOARD_ITEM*>& list = dxf_importer.GetItemsList();
+    PICKED_ITEMS_LIST picklist;
+
+    // Build the undo list
+    for( unsigned ii = 0; ii < list.size(); ii++ )
+    {
+        ITEM_PICKER itemWrapper( list[ii], UR_NEW );
+        picklist.PushItem( itemWrapper );
+    }
+
+    m_parent->SaveCopyInUndoList( picklist, UR_NEW, wxPoint(0,0) );
 
     EndModal( wxID_OK );
 }
