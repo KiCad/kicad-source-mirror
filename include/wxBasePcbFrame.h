@@ -56,7 +56,8 @@ class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
 class FPID;
-
+class TOOL_MANAGER;
+class TOOL_DISPATCHER;
 
 /**
  * class PCB_BASE_FRAME
@@ -94,6 +95,9 @@ protected:
     /// main window.
     wxAuiToolBar*       m_auxiliaryToolBar;
 
+    TOOL_MANAGER*       m_toolManager;
+    TOOL_DISPATCHER*    m_toolDispatcher;
+    
     void updateGridSelectBox();
     void updateZoomSelectBox();
     virtual void unitsChangeRefresh();
@@ -110,6 +114,10 @@ protected:
      */
     MODULE* loadFootprint( const FPID& aFootprintId )
         throw( IO_ERROR, PARSE_ERROR );
+
+    ///> Rendering order of layers on GAL-based canvas (lower index in the array
+    ///> means that layer is displayed closer to the user, ie. on the top).
+    static const LAYER_NUM GAL_LAYER_ORDER[];
 
 public:
     PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
@@ -172,6 +180,8 @@ public:
         wxASSERT( m_Pcb );
         return m_Pcb;
     }
+
+    void ViewReloadBoard( const BOARD* aBoard ) const;
 
     /**
      * Function SetFootprintLibTable
@@ -695,6 +705,8 @@ public:
     void OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
+
+    virtual void UseGalCanvas( bool aEnable );
 
     DECLARE_EVENT_TABLE()
 };

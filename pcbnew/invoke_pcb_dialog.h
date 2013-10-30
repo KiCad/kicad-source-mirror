@@ -1,6 +1,8 @@
+/**
+ * @file invoke_pcb_dialog.h
+ */
 
-/*
- * This program source code file is part of KiCad, a free EDA CAD application.
+/* This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 KiCad Developers, see change_log.txt for contributors.
@@ -74,6 +76,15 @@ int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal, F
  */
 void InvokePluginOptionsEditor( wxTopLevelWindow* aCaller,
         const wxString& aNickname, const wxString& aOptions, wxString* aResult );
+
+/**
+ * Function InvokePcbLibTableEditor
+ * shows the modal DIALOG_FP_LIB_TABLE for purposes of editing two lib tables.
+ *
+ * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ * @return true if the ilport was made.
+ */
+bool InvokeDXFDialogImport( PCB_EDIT_FRAME* aCaller );
 
 
 #endif  // INVOKE_A_DIALOG_H_

@@ -56,11 +56,17 @@
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
 #include <convert_from_iu.h>
+#include <view/view.h>
+#include <painter.h>
 
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
 #endif
+
+#include <class_drawpanel_gal.h>
 
 // Keys used in read/write config
 #define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth_mm" )
@@ -105,6 +111,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     EVT_MENU( ID_GEN_IMPORT_SPECCTRA_SESSION,PCB_EDIT_FRAME::ImportSpecctraSession )
     EVT_MENU( ID_GEN_IMPORT_SPECCTRA_DESIGN, PCB_EDIT_FRAME::ImportSpecctraDesign )
+    EVT_MENU( ID_GEN_IMPORT_DXF_FILE, PCB_EDIT_FRAME::Process_Special_Functions )
 
     EVT_MENU( ID_MENU_ARCHIVE_NEW_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_ARCHIVE_ALL_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
@@ -112,6 +119,14 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
 
     // menu Config
+	
+    /* Tom's hacks start */	
+    EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
+    EVT_TOOL ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
+    EVT_MENU ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
+    EVT_TOOL ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
+    /* Tom's hacks end */
+		
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, PCB_EDIT_FRAME::OnConfigurePcbOptions )
     EVT_MENU( ID_CONFIG_REQ, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT, PCB_EDIT_FRAME::Process_Config )
@@ -155,6 +170,11 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, PCB_EDIT_FRAME::Show3D_Frame )
+
+    // Switching canvases
+    EVT_MENU( ID_MENU_CANVAS_DEFAULT,           PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_CAIRO,             PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL,            PCB_EDIT_FRAME::SwitchCanvas )
 
     // Menu Get Design Rules Editor
     EVT_MENU( ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG, PCB_EDIT_FRAME::ShowDesignRulesEditor )
@@ -320,7 +340,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     if( screenHeight <= 900 )
         pointSize = (pointSize * 8) / 10;
 
-    m_Layers = new PCB_LAYER_WIDGET( this, m_canvas, pointSize );
+    m_Layers = new PCB_LAYER_WIDGET( this, m_galCanvas, pointSize );
 
     m_drc = new DRC( this );        // these 2 objects point to each other
 
@@ -418,6 +438,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
         m_auimgr.AddPane( m_canvas,
                           wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
+    if( m_galCanvas )
+        m_auimgr.AddPane( (wxWindow*) m_galCanvas,
+                          wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
+
     if( m_messagePanel )
         m_auimgr.AddPane( m_messagePanel,
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
@@ -477,11 +501,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     }
 #endif
 
+    setupTools();
 }
 
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
+    destroyTools();
     m_RecordingMacros = -1;
 
     for( int i = 0; i < 10; i++ )
@@ -600,6 +626,29 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
     m_Draw3DFrame = new EDA_3D_FRAME( this, _( "3D Viewer" ) );
     m_Draw3DFrame->SetDefaultFileName( GetBoard()->GetFileName() );
     m_Draw3DFrame->Show( true );
+}
+
+
+void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
+{
+    int id = aEvent.GetId();
+
+    switch( id )
+    {
+    case ID_MENU_CANVAS_DEFAULT:
+        UseGalCanvas( false );
+        break;
+
+    case ID_MENU_CANVAS_CAIRO:
+        m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+        UseGalCanvas( true );
+        break;
+
+    case ID_MENU_CANVAS_OPENGL:
+        m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+        UseGalCanvas( true );
+        break;
+    }
 }
 
 
@@ -722,6 +771,105 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 }
 
 
+void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
+{
+    // Set display settings for high contrast mode
+    KIGFX::VIEW* view = m_galCanvas->GetView();
+    KIGFX::RENDER_SETTINGS* rSettings = view->GetPainter()->GetSettings();
+
+    setTopLayer( aLayer );
+
+    rSettings->ClearActiveLayers();
+    rSettings->SetActiveLayer( aLayer );
+
+    if( IsCopperLayer( aLayer ) )
+    {
+        // Bring some other layers to the front in case of copper layers and make them colored
+        // fixme do not like the idea of storing the list of layers here,
+        // should be done in some other way I guess..
+        LAYER_NUM layers[] = {
+                GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
+                ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
+                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+                ITEM_GAL_LAYER( GP_OVERLAY )
+        };
+
+        for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
+            rSettings->SetActiveLayer( layers[i] );
+
+        // Pads should be shown too
+        if( aLayer == FIRST_COPPER_LAYER )
+        {
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
+        }
+        else if( aLayer == LAST_COPPER_LAYER )
+        {
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
+        }
+    }
+
+    view->UpdateAllLayersColor();
+}
+
+
+void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
+{
+    // Set display settings for high contrast mode
+    KIGFX::VIEW* view = m_galCanvas->GetView();
+
+    view->ClearTopLayers();
+    view->SetTopLayer( aLayer );
+
+    if( IsCopperLayer( aLayer ) )
+    {
+        // Bring some other layers to the front in case of copper layers and make them colored
+        // fixme do not like the idea of storing the list of layers here,
+        // should be done in some other way I guess..
+        LAYER_NUM layers[] = {
+                GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
+                ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
+                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+                ITEM_GAL_LAYER( GP_OVERLAY )
+        };
+
+        for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
+        {
+            view->SetTopLayer( layers[i] );
+        }
+
+        // Pads should be shown too
+        if( aLayer == FIRST_COPPER_LAYER )
+        {
+            view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+            view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
+        }
+        else if( aLayer == LAST_COPPER_LAYER )
+        {
+            view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+            view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
+        }
+    }
+
+    view->UpdateAllLayersOrder();
+}
+
+
+void PCB_EDIT_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate )
+{
+    ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
+
+    setHighContrastLayer( aLayer );
+
+    if( doLayerWidgetUpdate )
+        syncLayerWidgetLayer();
+
+    if( m_galCanvasActive )
+        m_galCanvas->Refresh();
+}
+
+
 void PCB_EDIT_FRAME::syncLayerWidgetLayer()
 {
     m_Layers->SelectLayer( getActiveLayer() );
@@ -738,6 +886,26 @@ void PCB_EDIT_FRAME::syncRenderStates()
 void PCB_EDIT_FRAME::syncLayerVisibilities()
 {
     m_Layers->SyncLayerVisibilities();
+
+    KIGFX::VIEW* view = m_galCanvas->GetView();
+    // Load layer & elements visibility settings
+    for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
+    {
+        view->SetLayerVisible( i, m_Pcb->IsLayerVisible( i ) );
+    }
+
+    for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )
+    {
+        view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( i ) );
+    }
+
+    // Enable some layers that are GAL specific
+    for( LAYER_NUM i = FIRST_NETNAME_LAYER; i < LAST_NETNAME_LAYER; ++i )
+    {
+        view->SetLayerVisible( i, true );
+    }
+    view->SetLayerVisible( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), true );
+    view->SetLayerVisible( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), true );
 }
 
 

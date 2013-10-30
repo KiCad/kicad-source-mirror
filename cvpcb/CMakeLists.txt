@@ -101,10 +101,26 @@ target_link_libraries( cvpcb
     common
     bitmaps
     polygon
+    gal
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${CAIRO_LIBRARIES}
     )
+
+# Only for win32 cross compilation using MXE
+if(WIN32 AND MSYS)
+target_link_libraries(cvpcb
+	opengl32
+	glu32
+	pixman-1
+	fontconfig
+	freetype
+	bz2
+	)
+endif(WIN32 AND MSYS)
+
 
 if( BUILD_GITHUB_PLUGIN )
     target_link_libraries( cvpcb github_plugin )

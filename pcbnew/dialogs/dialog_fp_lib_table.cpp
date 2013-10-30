@@ -496,7 +496,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
             m_cur_grid->SetGridCursor( curRow, curCol );
         }
-        D(printf("%s\n", __func__);)
+        DBG(printf("%s\n", __func__);)
     }
 
     void optionsEditor( wxMouseEvent& event )

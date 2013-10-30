@@ -150,8 +150,6 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
 
     try
     {
-
-
         GetBoard()->SynchronizeNetsAndNetClasses();
         db.FromBOARD( GetBoard() );
         db.ExportPCB(  fullFileName, true );
@@ -783,7 +781,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         case S_RECT:
         case S_ARC:
         default:
-            D( printf( "makeIMAGE(): unsupported shape %s\n",
+            DBG( printf( "makeIMAGE(): unsupported shape %s\n",
                        TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ) ); )
             continue;
         }
@@ -899,7 +897,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
         }
         else    // remove graphics not on EDGE_N layer
         {
-            D( items[i]->Show( 0, std::cout );)
+            DBG( items[i]->Show( 0, std::cout );)
             ++i;
         }
     }

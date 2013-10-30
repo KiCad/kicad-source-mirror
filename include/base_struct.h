@@ -35,6 +35,7 @@
 #include <colors.h>
 #include <bitmaps.h>
 #include <richio.h>
+#include <view/view_item.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -46,102 +47,8 @@ extern std::ostream& operator <<( std::ostream& out, const wxPoint& pt );
 #endif
 
 
-/**
- * Enum KICAD_T
- * is the set of class identification values, stored in EDA_ITEM::m_StructType
- */
-enum KICAD_T {
-    NOT_USED = -1,          ///< the 3d code uses this value
-
-    EOT = 0,                ///< search types array terminator (End Of Types)
-
-    TYPE_NOT_INIT = 0,
-    PCB_T,
-    SCREEN_T,               ///< not really an item, used to identify a screen
-
-    // Items in pcb
-    PCB_MODULE_T,           ///< class MODULE, a footprint
-    PCB_PAD_T,              ///< class D_PAD, a pad in a footprint
-    PCB_LINE_T,             ///< class DRAWSEGMENT, a segment not on copper layers
-    PCB_TEXT_T,             ///< class TEXTE_PCB, text on a layer
-    PCB_MODULE_TEXT_T,      ///< class TEXTE_MODULE, text in a footprint
-    PCB_MODULE_EDGE_T,      ///< class EDGE_MODULE, a footprint edge
-    PCB_TRACE_T,            ///< class TRACKE, a track segment (segment on a copper layer)
-    PCB_VIA_T,              ///< class SEGVIA, a via (like a track segment on a copper layer)
-    PCB_ZONE_T,             ///< class SEGZONE, a segment used to fill a zone area (segment on a
-                            ///< copper layer)
-    PCB_MARKER_T,           ///< class MARKER_PCB, a marker used to show something
-    PCB_DIMENSION_T,        ///< class DIMENSION, a dimension (graphic item)
-    PCB_TARGET_T,           ///< class PCB_TARGET, a target (graphic item)
-    PCB_ZONE_AREA_T,        ///< class ZONE_CONTAINER, a zone area
-    PCB_ITEM_LIST_T,        ///< class BOARD_ITEM_LIST, a list of board items
-
-    // Schematic draw Items.  The order of these items effects the sort order.
-    // It is currently ordered to mimic the old Eeschema locate behavior where
-    // the smallest item is the selected item.
-    SCH_MARKER_T,
-    SCH_JUNCTION_T,
-    SCH_NO_CONNECT_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_LINE_T,
-    SCH_BITMAP_T,
-    SCH_TEXT_T,
-    SCH_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIERARCHICAL_LABEL_T,
-    SCH_FIELD_T,
-    SCH_COMPONENT_T,
-    SCH_SHEET_PIN_T,
-    SCH_SHEET_T,
-
-    // Be prudent with these 3 types:
-    // they should be used only to locate a specific field type
-    // among SCH_FIELD_T items types
-    SCH_FIELD_LOCATE_REFERENCE_T,
-    SCH_FIELD_LOCATE_VALUE_T,
-    SCH_FIELD_LOCATE_FOOTPRINT_T,
-
-    // General
-    SCH_SCREEN_T,
-
-    /*
-     * Draw items in library component.
-     *
-     * The order of these items effects the sort order for items inside the
-     * "DRAW/ENDDRAW" section of the component definition in a library file.
-     * If you add a new draw item, type, please make sure you add it so the
-     * sort order is logical.
-     */
-    LIB_COMPONENT_T,
-    LIB_ALIAS_T,
-    LIB_ARC_T,
-    LIB_CIRCLE_T,
-    LIB_TEXT_T,
-    LIB_RECTANGLE_T,
-    LIB_POLYLINE_T,
-    LIB_BEZIER_T,
-    LIB_PIN_T,
-
-    /*
-     * Fields are not saved inside the "DRAW/ENDDRAW".  Add new draw item
-     * types before this line.
-     */
-    LIB_FIELD_T,
-
-    /*
-     * For GerbView: items type:
-     */
-    TYPE_GERBER_DRAW_ITEM,
-
-    /*
-     * for Pl_Editor, in undo/redo commands
-     */
-    TYPE_PL_EDITOR_LAYOUT,
-
-    // End value
-    MAX_STRUCT_TYPE_ID
-};
+/// Flag to enable find and replace tracing using the WXTRACE environment variable.
+extern const wxString traceFindReplace;
 
 
 /**
@@ -400,6 +307,9 @@ public:
 #define END_ONPAD      (1 << 23)   ///< Pcbnew: flag set for track segment ending on a pad
 #define BUSY           (1 << 24)   ///< Pcbnew: flag indicating that the structure has
                                    ///< already been edited, in some functions
+#define HIGHLIGHTED    (1 << 25)   ///< item is drawn in normal colors, when the rest is darkened
+#define BRIGHTENED     (1 << 26)   ///< item is drawn with a bright contour
+
 #define EDA_ITEM_ALL_FLAGS -1
 
 typedef unsigned STATUS_FLAGS;
@@ -409,7 +319,7 @@ typedef unsigned STATUS_FLAGS;
  * is a base class for most all the KiCad significant classes, used in
  * schematics and boards.
  */
-class EDA_ITEM
+class EDA_ITEM : public KIGFX::VIEW_ITEM
 {
 private:
 
@@ -450,12 +360,7 @@ public:
     EDA_ITEM( const EDA_ITEM& base );
     virtual ~EDA_ITEM() { };
 
-    /**
-     * Function Type
-     * returns the type of object.  This attribute should never be changed
-     * after a constructor sets it, so there is no public "setter" method.
-     * @return KICAD_T - the type of object.
-     */
+    /// @copydoc VIEW_ITEM::Type()
     KICAD_T Type()  const { return m_StructType; }
 
     void SetTimeStamp( time_t aNewTimeStamp ) { m_TimeStamp = aNewTimeStamp; }
@@ -479,6 +384,16 @@ public:
     inline bool IsDragging() const { return m_Flags & IS_DRAGGED; }
     inline bool IsSelected() const { return m_Flags & SELECTED; }
     inline bool IsResized() const { return m_Flags & IS_RESIZED; }
+    inline bool IsHighlighted() const { return m_Flags & HIGHLIGHTED; }
+    inline bool IsBrightened() const { return m_Flags & BRIGHTENED; }
+
+    inline void SetSelected() { SetFlags( SELECTED ); ViewUpdate( COLOR ); }
+    inline void SetHighlighted() { SetFlags( HIGHLIGHTED ); ViewUpdate( COLOR ); }
+    inline void SetBrightened() { SetFlags( BRIGHTENED ); }
+
+    inline void ClearSelected() { ClearFlags( SELECTED ); ViewUpdate( COLOR ); }
+    inline void ClearHighlighted() { ClearFlags( HIGHLIGHTED ); ViewUpdate( COLOR ); }
+    inline void ClearBrightened() { ClearFlags( BRIGHTENED ); }
 
     void SetModified();
 
@@ -747,6 +662,12 @@ public:
      *          as there is a known issue with wxString buffers.
      */
     virtual EDA_ITEM& operator=( const EDA_ITEM& aItem );
+
+    /// @copydoc VIEW_ITEM::ViewBBox()
+    virtual const BOX2I ViewBBox() const;
+
+    /// @copydoc VIEW_ITEM::ViewGetLayers()
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
 
 #if defined(DEBUG)
 

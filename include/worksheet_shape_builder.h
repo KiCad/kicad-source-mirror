@@ -7,7 +7,7 @@
 #ifndef  WORKSHEET_SHAPE_BUILDER_H
 #define  WORKSHEET_SHAPE_BUILDER_H
 
-#include <vector2d.h>
+#include <math/vector2d.h>
 #include <eda_text.h>
 #include <eda_text.h>
 #include <class_bitmap_base.h>
@@ -43,7 +43,6 @@ protected:
                                     // to the parent WORKSHEET_DATAITEM item,
                                     // in page layout editor
 
-protected:
     WS_DRAW_ITEM_BASE( WORKSHEET_DATAITEM*  aParent,
                        WS_DRAW_TYPE aType, EDA_COLOR_T aColor )
     {
@@ -57,8 +56,8 @@ public:
     virtual ~WS_DRAW_ITEM_BASE() {}
 
     // Accessors:
-    EDA_COLOR_T GetColor() { return m_color; }
-    WS_DRAW_TYPE GetType() { return m_type; };
+    EDA_COLOR_T GetColor() const { return m_color; }
+    WS_DRAW_TYPE GetType() const { return m_type; };
 
     WORKSHEET_DATAITEM* GetParent() { return m_parent; }
 
@@ -113,9 +112,9 @@ public:
     }
 
     // Accessors:
-    int GetPenWidth() { return m_penWidth; }
-    const wxPoint&  GetStart() { return m_start; }
-    const wxPoint&  GetEnd() { return m_end; }
+    int GetPenWidth() const { return m_penWidth; }
+    const wxPoint&  GetStart() const { return m_start; }
+    const wxPoint&  GetEnd() const { return m_end; }
 
     /** The function to draw a WS_DRAW_ITEM_LINE
      */
@@ -163,9 +162,9 @@ public:
     }
 
     // Accessors:
-    int GetPenWidth() { return m_penWidth; }
-    bool IsFilled() { return m_fill; }
-    const wxPoint& GetPosition() { return m_pos; }
+    int GetPenWidth() const { return m_penWidth; }
+    bool IsFilled() const { return m_fill; }
+    const wxPoint& GetPosition() const { return m_pos; }
 
     /** The function to draw a WS_DRAW_ITEM_POLYGON
      */

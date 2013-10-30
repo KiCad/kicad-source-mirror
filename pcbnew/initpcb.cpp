@@ -4,6 +4,9 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
+#include <class_drawpanel_gal.h>
+#include <view/view.h>
+#include <pcb_painter.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
 
@@ -67,8 +70,11 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     // Default copper layers count set to 2: double layer board
     GetBoard()->SetCopperLayerCount( 2 );
 
-    // Update display:
+    // Update display
     GetBoard()->SetVisibleLayers( ALL_LAYERS );
+
+    // Set currently selected layer to be shown in high contrast mode, when enabled`
+    setHighContrastLayer( GetScreen()->m_Active_Layer );
 
     ReFillLayerWidget();
 

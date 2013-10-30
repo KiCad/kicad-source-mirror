@@ -480,7 +480,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
     // fixed fields:
     for( int i=0; i<MANDATORY_FIELDS; ++i )
     {
-        D( printf( "add fixed:%s\n", TO_UTF8( cmpFields[i].GetName() ) ); )
+        DBG( printf( "add fixed:%s\n", TO_UTF8( cmpFields[i].GetName() ) ); )
         m_FieldsBuf.push_back( cmpFields[i] );
     }
 
@@ -505,7 +505,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
         // values from the component will be set.
         if( !libField )
         {
-            D( printf( "add template:%s\n", TO_UTF8( it->m_Name ) ); )
+            DBG( printf( "add template:%s\n", TO_UTF8( it->m_Name ) ); )
 
             fld.SetName( it->m_Name );
             fld.SetText( it->m_Value );   // empty? ok too.
@@ -517,7 +517,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
         }
         else
         {
-            D( printf( "match template:%s\n", TO_UTF8( libField->GetName() ) ); )
+            DBG( printf( "match template:%s\n", TO_UTF8( libField->GetName() ) ); )
             fld = *libField;    // copy values from component, m_Name too
         }
 
@@ -533,7 +533,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
 
         if( !buf )
         {
-            D( printf( "add cmp:%s\n", TO_UTF8( cmp->GetName() ) ); )
+            DBG( printf( "add cmp:%s\n", TO_UTF8( cmp->GetName() ) ); )
             m_FieldsBuf.push_back( *cmp );
         }
     }
@@ -731,11 +731,11 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     if( field.GetId() >= MANDATORY_FIELDS )
     {
         wxString name = fieldNameTextCtrl->GetValue();
-        D( printf("name:%s\n", TO_UTF8( name ) ); )
+        DBG( printf("name:%s\n", TO_UTF8( name ) ); )
         field.SetName( name );
     }
 
-    D( printf("setname:%s\n", TO_UTF8( field.GetName() ) ); )
+    DBG( printf("setname:%s\n", TO_UTF8( field.GetName() ) ); )
 
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 

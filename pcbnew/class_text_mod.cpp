@@ -87,6 +87,22 @@ TEXTE_MODULE::~TEXTE_MODULE()
 }
 
 
+void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
+{
+    RotatePoint( &m_Pos, aRotCentre, aAngle );
+    m_Orient += aAngle;
+    NORMALIZE_ANGLE_360( m_Orient );
+}
+
+
+void TEXTE_MODULE::Flip(const wxPoint& aCentre )
+{
+    m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
+    SetLayer( FlipLayer( GetLayer() ) );
+    m_Mirror = !m_Mirror;
+}
+
+
 void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
 {
     if( source == NULL )
@@ -429,3 +445,32 @@ EDA_ITEM* TEXTE_MODULE::Clone() const
     return new TEXTE_MODULE( *this );
 }
 
+
+void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    switch( m_Type )
+    {
+    case TEXT_is_REFERENCE:
+        aLayers[0] = ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE );
+        break;
+
+    case TEXT_is_VALUE:
+        aLayers[0] = ITEM_GAL_LAYER( MOD_VALUES_VISIBLE );
+        break;
+
+    default:
+        switch( GetParent()->GetLayer() )
+        {
+        case LAYER_N_BACK:
+            aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE );    // how about SILKSCREEN_N_BACK?
+            break;
+
+        case LAYER_N_FRONT:
+            aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );    // how about SILKSCREEN_N_FRONT?
+            break;
+        }
+        break;
+    }
+
+    aCount = 1;
+}

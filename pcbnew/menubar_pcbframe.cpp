@@ -174,6 +174,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Import a routed \"Specctra Session\" (*.ses) file" ),
                  KiBitmap( import_xpm ) );
 
+    AddMenuItem( submenuImport, ID_GEN_IMPORT_DXF_FILE,
+                 _( "&DXF File" ),
+                 _( "Import a 2D Drawing DXF file to Pcbnew on the Drawings layer" ),
+                 KiBitmap( import_xpm ) );
+
     AddMenuItem( filesMenu, submenuImport,
                  ID_GEN_IMPORT_FILE, _( "&Import" ),
                  _( "Import files" ), KiBitmap( import_xpm ) );
@@ -303,6 +308,18 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Reset text size and width of all module fields to current defaults" ),
                  KiBitmap( reset_text_xpm ) );
 
+    editMenu->AppendSeparator();
+
+    AddMenuItem( editMenu, ID_SELECTION_TOOL,
+                 _( "Select Tool" ),
+                 _( "Interactive selection and drag&drop tool." ),
+                 KiBitmap( tools_xpm ) );
+
+    AddMenuItem( editMenu, ID_PNS_ROUTER_TOOL,
+                 _( "Interactive router" ),
+                 _( "Interactive router drag&drop tool." ),
+                 KiBitmap( tools_xpm ) );
+
     /** Create View menu **/
     wxMenu* viewMenu = new wxMenu;
 
@@ -352,6 +369,30 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_MENU_LIST_NETS,
                  _( "&List Nets" ), _( "View a list of nets with names and id's" ),
                  KiBitmap( tools_xpm ) );
+
+    // Switching GAL-based canvas on/off
+    viewMenu->AppendSeparator();
+
+    text = AddHotkeyName( _( "&Switch canvas to default" ), g_Pcbnew_Editor_Hokeys_Descr,
+            HK_CANVAS_DEFAULT, IS_ACCELERATOR );
+
+    AddMenuItem( viewMenu, ID_MENU_CANVAS_DEFAULT,
+                 text, _( "Switch the canvas implementation to default" ),
+                KiBitmap( tools_xpm ) );
+
+    text = AddHotkeyName( _( "&Switch canvas to OpenGL" ), g_Pcbnew_Editor_Hokeys_Descr,
+            HK_CANVAS_OPENGL, IS_ACCELERATOR );
+
+    AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
+                 text, _( "Switch the canvas implementation to OpenGL" ),
+                KiBitmap( tools_xpm ) );
+
+    text = AddHotkeyName( _( "&Switch canvas to Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
+            HK_CANVAS_CAIRO, IS_ACCELERATOR );
+
+    AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
+                 text, _( "Switch the canvas implementation to Cairo" ),
+                KiBitmap( tools_xpm ) );
 
     /** Create Place Menu **/
     wxMenu* placeMenu = new wxMenu;

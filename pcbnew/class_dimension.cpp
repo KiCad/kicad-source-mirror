@@ -475,6 +475,15 @@ EDA_RECT DIMENSION::GetBoundingBox() const
     ymax    = std::max( ymax, m_featureLineGO.y );
     ymax    = std::max( ymax, m_featureLineGF.y );
 
+    xmin    = std::min( xmin, m_featureLineDO.x );
+    xmin    = std::min( xmin, m_featureLineDF.x );
+    ymin    = std::min( ymin, m_featureLineDO.y );
+    ymin    = std::min( ymin, m_featureLineDF.y );
+    xmax    = std::max( xmax, m_featureLineDO.x );
+    xmax    = std::max( xmax, m_featureLineDF.x );
+    ymax    = std::max( ymax, m_featureLineDO.y );
+    ymax    = std::max( ymax, m_featureLineDF.y );
+
     bBox.SetX( xmin );
     bBox.SetY( ymin );
     bBox.SetWidth( xmax - xmin + 1 );
@@ -493,6 +502,16 @@ wxString DIMENSION::GetSelectMenuText() const
                 GetChars( GetText() ), GetChars( GetLayerName() ) );
 
     return text;
+}
+
+
+const BOX2I DIMENSION::ViewBBox() const
+{
+    BOX2I dimBBox = BOX2I( VECTOR2I( GetBoundingBox().GetPosition() ),
+                           VECTOR2I( GetBoundingBox().GetSize() ) );
+    dimBBox.Merge( m_Text.ViewBBox() );
+
+    return dimBBox;
 }
 
 

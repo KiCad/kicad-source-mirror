@@ -149,7 +149,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             // so deselect the active tool
             SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
             SetCurItem( NULL );
-            m_canvas->Refresh();
+	        m_canvas->Refresh();
         }
         break;
 

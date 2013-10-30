@@ -3,11 +3,64 @@ include_directories(BEFORE ${INC_BEFORE})
 include_directories(
     ./dialogs
     ./dialog_about
+    ${CAIRO_INCLUDE_DIR}
+    ${GLEW_INCLUDE_DIR}
     ../3d-viewer
     ../pcbnew
     ../polygon
     ${INC_AFTER}
     )
+
+# Generate header files containing shader programs
+# Order of input files is significant
+add_custom_command(
+    OUTPUT gal/opengl/shader_src.h
+    COMMAND ${CMAKE_COMMAND}
+        -DinputFiles="${PROJECT_SOURCE_DIR}/common/gal/opengl/shader.vert\\;${PROJECT_SOURCE_DIR}/common/gal/opengl/shader.frag"
+        -DoutputFile="shader_src.h"
+        -P ${CMAKE_MODULE_PATH}/Shaders.cmake
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/common/gal/opengl
+    COMMENT "Generating headers containing GLSL source code"
+)
+
+add_custom_target(
+    shader_headers ALL
+    DEPENDS gal/opengl/shader_src.h
+)
+
+set(GAL_SRCS
+    # Common part
+    drawpanel_gal.cpp
+    painter.cpp
+    worksheet_viewitem.cpp
+    gal/graphics_abstraction_layer.cpp
+    gal/stroke_font.cpp
+    gal/color4d.cpp
+    view/wx_view_controls.cpp
+
+    # OpenGL GAL
+    gal/opengl/opengl_gal.cpp
+    gal/opengl/shader.cpp
+    gal/opengl/vertex_item.cpp
+    gal/opengl/vertex_container.cpp
+    gal/opengl/cached_container.cpp
+    gal/opengl/noncached_container.cpp
+    gal/opengl/vertex_manager.cpp
+    gal/opengl/gpu_manager.cpp
+    gal/opengl/opengl_compositor.cpp
+
+    # Cairo GAL
+    gal/cairo/cairo_gal.cpp
+    gal/cairo/cairo_compositor.cpp
+    )
+
+add_library(gal STATIC ${GAL_SRCS})
+add_dependencies(gal shader_headers)
+
+# Only for win32 cross compilation using MXE
+if(WIN32 AND MSYS)
+add_definitions(-DGLEW_STATIC)
+endif(WIN32 AND MSYS)
 
 set(COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp
@@ -95,6 +148,32 @@ set(COMMON_SRCS
     zoom.cpp
     )
 
+enable_language(C CXX ASM)
+set_source_files_properties(system/fcontext.s PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp")
+
+set(COMMON_SRCS
+    ${COMMON_SRCS}
+    view/view.cpp
+    view/view_item.cpp
+    view/view_group.cpp
+
+    math/math_util.cpp
+    system/fcontext.s
+	
+    tool/tool_base.cpp
+    tool/tool_manager.cpp
+    tool/tool_dispatcher.cpp
+    tool/tool_event.cpp
+    tool/tool_interactive.cpp
+    tool/action_manager.cpp
+    tool/context_menu.cpp
+
+    geometry/seg.cpp
+    geometry/shape_line_chain.cpp
+    geometry/shape_collisions.cpp
+    geometry/shape_index.cpp
+)
+
 add_library(common STATIC ${COMMON_SRCS})
 
 set(PCB_COMMON_SRCS
@@ -151,6 +230,10 @@ set(PCB_COMMON_SRCS
     fp_lib_table.cpp
 )
 
+set(PCB_COMMON_SRCS
+    ${PCB_COMMON_SRCS} 
+    ../pcbnew/pcb_painter.cpp
+    )
 
 # add -DPCBNEW to compilation of these PCBNEW sources
 set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES

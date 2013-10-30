@@ -31,6 +31,10 @@
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <class_drawpanel.h>
+#include <class_drawpanel_gal.h>
+#include <view/view.h>
+#include <painter.h>
+
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <pcbstruct.h>      // enum PCB_VISIBLE
@@ -104,7 +108,7 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwn
 void PCB_LAYER_WIDGET::installRightLayerClickHandler()
 {
     int rowCount = GetLayerRowCount();
-    for( int row=0; row<rowCount; ++row )
+    for( int row=0; row < rowCount; ++row )
     {
         for( int col=0; col<LYR_COLUMN_COUNT; ++col )
         {
@@ -170,7 +174,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             }
         }
 
-        // Enbale/disable the copper layers visibility:
+        // Enable/disable the copper layers visibility:
         for( int row=0;  row<rowCount;  ++row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
@@ -354,11 +358,12 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
 
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();
-    else if(DisplayOpt.ContrastModeDisplay)
+    else if( DisplayOpt.ContrastModeDisplay )
         myframe->GetCanvas()->Refresh();
 
     return true;
 }
+
 
 bool  PCB_LAYER_WIDGET::OnLayerSelected()
 {
@@ -375,7 +380,6 @@ bool  PCB_LAYER_WIDGET::OnLayerSelected()
 }
 
 
-
 void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal )
 {
     BOARD* brd = myframe->GetBoard();
@@ -388,6 +392,13 @@ void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool is
         visibleLayers &= ~GetLayerMask( aLayer );
 
     brd->SetVisibleLayers( visibleLayers );
+
+    EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
+    if( galCanvas )
+    {
+        KIGFX::VIEW* view = galCanvas->GetView();
+        view->SetLayerVisible( aLayer, isVisible );
+    }
 
     if( isFinal )
         myframe->GetCanvas()->Refresh();
@@ -403,7 +414,18 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 {
     BOARD*  brd = myframe->GetBoard();
     brd->SetElementVisibility( aId, isEnabled );
-    myframe->GetCanvas()->Refresh();
+
+    EDA_DRAW_PANEL_GAL *galCanvas = myframe->GetGalCanvas();
+    if( galCanvas )
+    {
+        KIGFX::VIEW* view = galCanvas->GetView();
+        view->SetLayerVisible( ITEM_GAL_LAYER( aId ), isEnabled );
+    }
+
+    if( myframe->IsGalCanvasActive() )
+        galCanvas->Refresh();
+    else
+        myframe->GetCanvas()->Refresh();
 }
 
 //-----</LAYER_WIDGET callbacks>------------------------------------------

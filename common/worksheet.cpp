@@ -101,7 +101,7 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
 }
 
 
-wxString EDA_DRAW_FRAME::GetScreenDesc()
+wxString EDA_DRAW_FRAME::GetScreenDesc() const
 {
     // Virtual function. In basic class, returns
     // an empty string.

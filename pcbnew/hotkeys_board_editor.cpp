@@ -591,6 +591,18 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         DisplayOpt.ContrastModeDisplay = !DisplayOpt.ContrastModeDisplay;
         m_canvas->Refresh();
         break;
+
+    case HK_CANVAS_CAIRO:
+        evt_type = ID_MENU_CANVAS_CAIRO;
+        break;
+
+    case HK_CANVAS_OPENGL:
+        evt_type = ID_MENU_CANVAS_OPENGL;
+        break;
+
+    case HK_CANVAS_DEFAULT:
+        evt_type = ID_MENU_CANVAS_DEFAULT;
+        break;
     }
 
     if( evt_type != 0 )

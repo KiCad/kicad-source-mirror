@@ -65,7 +65,6 @@ class PARSE_ERROR;
 class IO_ERROR;
 class FP_LIB_TABLE;
 
-
 /**
  * class PCB_EDIT_FRAME
  * the main frame for Pcbnew
@@ -118,6 +117,10 @@ protected:
     bool              m_useCmpFileForFpNames;   ///< is true, use the .cmp file from CvPcb, else use the netlist
                                                 // to know the footprint name of components.
 
+    void setupTools();
+    void destroyTools();
+	void onGenericCommand( wxCommandEvent& aEvent );
+		
     // we'll use lower case function names for private member functions.
     void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
     void createPopUpMenuForFootprints( MODULE* aModule, wxMenu* aPopMenu );
@@ -133,13 +136,7 @@ protected:
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    void setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true )
-    {
-        ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
-
-        if( doLayerWidgetUpdate )
-            syncLayerWidgetLayer();
-    }
+    void setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true );
 
     /**
      * Function getActiveLayer
@@ -149,6 +146,18 @@ protected:
     {
         return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
     }
+
+    /**
+     * Function setHighContrastLayer
+     * takes care of display settings for the given layer to be displayed in high contrast mode.
+     */
+    void setHighContrastLayer( LAYER_NUM aLayer );
+
+    /**
+     * Function setTopLayer
+     * moves the selected layer to the top, so it is displayed above all others.
+     */
+    void setTopLayer( LAYER_NUM aLayer );
 
     /**
      * Function syncLayerWidgetLayer
@@ -593,6 +602,13 @@ public:
      * displays the 3D view of current printed circuit board.
      */
     void Show3D_Frame( wxCommandEvent& event );
+
+    /**
+     * Function ChangeCanvas
+     * switches currently used canvas (default / Cairo / OpenGL).
+     */
+    void SwitchCanvas( wxCommandEvent& aEvent );
+
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
@@ -1679,6 +1695,11 @@ public:
      * </p>
      */
     void UpdateTitle();
+
+    void SetTopLayer( LAYER_NUM aLayer )
+    {
+        setTopLayer( aLayer );
+    }
 
 
     DECLARE_EVENT_TABLE()

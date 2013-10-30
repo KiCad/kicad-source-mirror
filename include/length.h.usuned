@@ -67,7 +67,7 @@ template < typename T > struct LENGTH_TRAITS< T, 0 >
     typedef T flat;
 };
 
-template< typename T, int P > class LENGTH
+template < typename T, int P > class LENGTH
 {
     friend class LENGTH_UNITS< T >;
     friend class LENGTH_TRAITS< T, P >;
@@ -109,7 +109,7 @@ public:
         this->m_U = y.m_U;
         return *this;
     }
-    template<typename Y> operator LENGTH< Y, P > ( void )
+    template <typename Y> operator LENGTH< Y, P > ( void )
     {
         return this->m_U;
     }

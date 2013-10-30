@@ -65,6 +65,7 @@
 class EDA_ITEM;
 class EDA_RECT;
 class EDA_DRAW_PANEL;
+class EDA_DRAW_PANEL_GAL;
 class EDA_MSG_PANEL;
 class BASE_SCREEN;
 class PARAM_CFG_BASE;
@@ -398,10 +399,14 @@ protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
     int         m_LastGridSizeId;
     bool        m_DrawGrid;                 // hide/Show grid
+    bool        m_galCanvasActive;          // whether to use new GAL engine
     EDA_COLOR_T m_GridColor;                // Grid color
 
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
+
+    /// New type of area (GAL-based) to draw on.
+    EDA_DRAW_PANEL_GAL* m_galCanvas;
 
     /// Tool ID of previously active draw tool bar button.
     int     m_lastDrawToolId;
@@ -446,8 +451,6 @@ protected:
     // MAC Uses overlay to workaround the wxINVERT and wxXOR miss
     wxOverlay       m_overlay;
 #endif
-
-protected:
 
     void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
@@ -575,7 +578,7 @@ public:
 
     EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
 
-    virtual wxString GetScreenDesc();
+    virtual wxString GetScreenDesc() const;
 
     /**
      * Function GetScreen
@@ -966,6 +969,30 @@ public:
      * @return The converted string for display in user interface elements.
      */
     wxString LengthDoubleToString( double aValue, bool aConvertToMils = false ) const;
+
+    /**
+     * Function UseGalCanvas
+     * used to switch between standard and GAL-based canvas.
+     * 
+     * @param aEnable True for GAL-based canvas, false for standard canvas. 
+     */
+    virtual void UseGalCanvas( bool aEnable );
+    
+    /**
+     * Function IsNewCanvasActive
+     * is used to check which canvas (GAL-based or standard) is currently in use.
+     * 
+     * @return True for GAL-based canvas, false for standard canvas.
+     */
+    bool IsGalCanvasActive() { return m_galCanvasActive; }
+
+    /**
+     * Function GetCalCanvas
+     * returns a pointer to GAL-based canvas of given EDA draw frame.
+     *
+     * @return Pointer to GAL-based canvas.
+     */
+    EDA_DRAW_PANEL_GAL* GetGalCanvas() { return m_galCanvas; }
 
     DECLARE_EVENT_TABLE()
 };

@@ -18,6 +18,10 @@
 #include <dialog_display_options.h>
 #include <dialog_display_options_base.h>
 
+#include <class_drawpanel_gal.h>
+#include <view/view.h>
+#include <pcb_painter.h>
+
 
 void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
 {
@@ -165,7 +169,18 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     DisplayOpt.DisplayDrawItems = m_OptDisplayDrawings->GetSelection();
     DisplayOpt.DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
 
-    m_Parent->GetCanvas()->Refresh();
+    // Apply changes to the GAL
+    KIGFX::VIEW* view = m_Parent->GetGalCanvas()->GetView();
+    KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    settings->LoadDisplayOptions( DisplayOpt );
+    view->RecacheAllItems( true );
+
+    if( m_Parent->IsGalCanvasActive() )
+        m_Parent->GetGalCanvas()->Refresh();
+    else
+        m_Parent->GetCanvas()->Refresh();
 
     EndModal( 1 );
 }

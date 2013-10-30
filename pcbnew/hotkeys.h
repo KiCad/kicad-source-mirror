@@ -87,6 +87,9 @@ enum hotkey_id_commnand {
     HK_CALL_MACROS_9,
     HK_MACRO_ID_END,
     HK_SWITCH_HIGHCONTRAST_MODE,
+    HK_CANVAS_DEFAULT,
+    HK_CANVAS_OPENGL,
+    HK_CANVAS_CAIRO,
 };
 
 // Full list of hotkey descriptors for board editor and footprint editor
