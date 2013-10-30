@@ -56,7 +56,7 @@ enum COL_ORDER
 
 /**
  * Class FP_TBL_MODEL
- * mixes in wxGridTableBase into FP_LIB_TABLE so that the latter can be used
+ * mixes in FP_LIB_TABLE into wxGridTableBase so the result can be used
  * as a table within wxGrid.
  */
 class FP_TBL_MODEL : public wxGridTableBase, public FP_LIB_TABLE
@@ -282,369 +282,17 @@ protected:
  */
 class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 {
-    typedef FP_LIB_TABLE::ROW   ROW;
-
-    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
-    /// else return a 0 based column index.
-    int getCursorCol() const
-    {
-        return m_cur_grid->GetGridCursorCol();
-    }
-
-    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
-    /// else return a 0 based row index.
-    int getCursorRow() const
-    {
-        return m_cur_grid->GetGridCursorRow();
-    }
-
-
-    /**
-     * Function verifyTables
-     * trims important fields, removes blank row entries, and checks for duplicates.
-     * @return bool - true if tables are OK, else false.
-     */
-    bool verifyTables()
-    {
-        for( int t=0; t<2; ++t )
-        {
-            FP_TBL_MODEL& model = t==0 ? m_global_model : m_project_model;
-
-            for( int r = 0; r < model.GetNumberRows(); )
-            {
-                wxString nick = model.GetValue( r, COL_NICKNAME ).Trim( false ).Trim();
-                wxString uri  = model.GetValue( r, COL_URI ).Trim( false ).Trim();
-
-                if( !nick || !uri )
-                {
-                    // Delete the "empty" row, where empty means missing nick or uri.
-                    // This also updates the UI which could be slow, but there should only be a few
-                    // rows to delete, unless the user fell asleep on the Add Row
-                    // button.
-                    model.DeleteRows( r, 1 );
-                }
-                else if( nick.find(':') != size_t(-1) )
-                {
-                    wxString msg = wxString::Format(
-                        _( "Illegal character '%s' found in Nickname: '%s' in row %d" ),
-                        wxT( ":" ), GetChars( nick ), r );
-
-                    // show the tabbed panel holding the grid we have flunked:
-                    if( &model != (FP_TBL_MODEL*) m_cur_grid->GetTable() )
-                    {
-                        m_auinotebook->SetSelection( &model == &m_global_model ? 0 : 1 );
-                    }
-
-                    // go to the problematic row
-                    m_cur_grid->SetGridCursor( r, 0 );
-                    m_cur_grid->SelectBlock( r, 0, r, 0 );
-                    m_cur_grid->MakeCellVisible( r, 0 );
-
-                    wxMessageDialog errdlg( this, msg, _( "No Colon in Nicknames" ) );
-                    errdlg.ShowModal();
-                    return false;
-                }
-                else
-                {
-                    // set the trimmed values back into the table so they get saved to disk.
-                    model.SetValue( r, COL_NICKNAME, nick );
-                    model.SetValue( r, COL_URI, uri );
-                    ++r;        // this row was OK.
-                }
-            }
-        }
-
-        // check for duplicate nickNames, separately in each table.
-        for( int t=0; t<2; ++t )
-        {
-            FP_TBL_MODEL& model = t==0 ? m_global_model : m_project_model;
-
-            for( int r1 = 0; r1 < model.GetNumberRows() - 1;  ++r1 )
-            {
-                wxString    nick1 = model.GetValue( r1, COL_NICKNAME );
-
-                for( int r2=r1+1; r2 < model.GetNumberRows();  ++r2 )
-                {
-                    wxString    nick2 = model.GetValue( r2, COL_NICKNAME );
-
-                    if( nick1 == nick2 )
-                    {
-                        wxString msg = wxString::Format(
-                            _( "Duplicate Nickname: '%s' in rows %d and %d" ),
-                            GetChars( nick1 ), r1+1, r2+1
-                            );
-
-                        // show the tabbed panel holding the grid we have flunked:
-                        if( &model != (FP_TBL_MODEL*) m_cur_grid->GetTable() )
-                        {
-                            m_auinotebook->SetSelection( &model == &m_global_model ? 0 : 1 );
-                        }
-
-                        // go to the lower of the two rows, it is technically the duplicate:
-                        m_cur_grid->SetGridCursor( r2, 0 );
-                        m_cur_grid->SelectBlock( r2, 0, r2, 0 );
-                        m_cur_grid->MakeCellVisible( r2, 0 );
-
-                        wxMessageDialog errdlg( this, msg, _( "Please Delete or Modify One" ) );
-                        errdlg.ShowModal();
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
-    //-----<event handlers>----------------------------------
-
-    void onKeyDown( wxKeyEvent& ev )
-    {
-#if 0
-        // send the key to the current grid
-        ((wxEvtHandler*)m_cur_grid)->ProcessEvent( ev );
-#else
-        // or no:
-        // m_cur_grid has the focus most of the time anyways, so above not needed.
-        ev.Skip();
-#endif
-    }
-
-    void pageChangedHandler( wxAuiNotebookEvent& event )
-    {
-        int pageNdx = m_auinotebook->GetSelection();
-        m_cur_grid = ( pageNdx == 0 ) ? m_global_grid : m_project_grid;
-    }
-
-    void appendRowHandler( wxMouseEvent& event )
-    {
-        if( m_cur_grid->AppendRows( 1 ) )
-        {
-            int last_row = m_cur_grid->GetNumberRows() - 1;
-
-            m_cur_grid->MakeCellVisible( last_row, 0 );
-            m_cur_grid->SetGridCursor( last_row, 0 );
-        }
-    }
-
-    void deleteRowHandler( wxMouseEvent& event )
-    {
-        int rowCount = m_cur_grid->GetNumberRows();
-        int curRow   = getCursorRow();
-
-        m_cur_grid->DeleteRows( curRow );
-
-        if( curRow && curRow == rowCount - 1 )
-            m_cur_grid->SetGridCursor( curRow-1, getCursorCol() );
-    }
-
-    void moveUpHandler( wxMouseEvent& event )
-    {
-        int curRow = getCursorRow();
-        if( curRow >= 1 )
-        {
-            int curCol = getCursorCol();
-
-            FP_TBL_MODEL* tbl = (FP_TBL_MODEL*) m_cur_grid->GetTable();
-
-            ROW move_me = tbl->rows[curRow];
-
-            tbl->rows.erase( tbl->rows.begin() + curRow );
-            --curRow;
-            tbl->rows.insert( tbl->rows.begin() + curRow, move_me );
-
-            if( tbl->GetView() )
-            {
-                // fire a msg to cause redrawing
-                wxGridTableMessage msg( tbl,
-                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
-                                        curRow,
-                                        0 );
-
-                tbl->GetView()->ProcessTableMessage( msg );
-            }
-
-            m_cur_grid->SetGridCursor( curRow, curCol );
-        }
-    }
-
-    void moveDownHandler( wxMouseEvent& event )
-    {
-        FP_TBL_MODEL* tbl = (FP_TBL_MODEL*) m_cur_grid->GetTable();
-
-        int curRow = getCursorRow();
-        if( unsigned( curRow + 1 ) < tbl->rows.size() )
-        {
-            int curCol  = getCursorCol();
-
-            ROW move_me = tbl->rows[curRow];
-
-            tbl->rows.erase( tbl->rows.begin() + curRow );
-             ++curRow;
-            tbl->rows.insert( tbl->rows.begin() + curRow, move_me );
-
-            if( tbl->GetView() )
-            {
-                // fire a msg to cause redrawing
-                wxGridTableMessage msg( tbl,
-                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
-                                        curRow - 1,
-                                        0 );
-
-                tbl->GetView()->ProcessTableMessage( msg );
-            }
-
-            m_cur_grid->SetGridCursor( curRow, curCol );
-        }
-        DBG(printf("%s\n", __func__);)
-    }
-
-    void optionsEditor( wxMouseEvent& event )
-    {
-        FP_TBL_MODEL*   tbl = (FP_TBL_MODEL*) m_cur_grid->GetTable();
-
-        int     curRow = getCursorRow();
-        ROW&    row    = tbl->rows[curRow];
-
-        wxString        result;
-        const wxString& options = row.GetOptions();
-
-        InvokePluginOptionsEditor( this, row.GetNickName(), options, &result );
-
-        if( options != result )
-        {
-            row.SetOptions( result );
-            m_cur_grid->AutoSizeColumn( COL_OPTIONS, false );
-        }
-    }
-
-    void onCancelButtonClick( wxCommandEvent& event )
-    {
-        EndModal( 0 );
-    }
-
-    void onCancelButtonClick( wxCloseEvent& event )
-    {
-        EndModal( 0 );
-    }
-
-    void onOKButtonClick( wxCommandEvent& event )
-    {
-        int dialogRet = 0;
-
-        // stuff any pending cell editor text into the table.
-        m_cur_grid->SaveEditControlValue();
-
-        if( verifyTables() )
-        {
-            if( m_global_model != *m_global )
-            {
-                dialogRet |= 1;
-
-                *m_global  = m_global_model;
-                m_global->reindex();
-            }
-
-            if( m_project_model != *m_project )
-            {
-                dialogRet |= 2;
-
-                *m_project = m_project_model;
-                m_project->reindex();
-            }
-
-            EndModal( dialogRet );
-        }
-    }
-
-    /// Populate the readonly environment variable table with names and values
-    /// by examining all the full_uri columns.
-    void populateEnvironReadOnlyTable()
-    {
-        wxRegEx re( wxT( ".*?\\$\\{(.+?)\\}.*?" ), wxRE_ADVANCED );
-        wxASSERT( re.IsValid() );   // wxRE_ADVANCED is required.
-
-        std::set< wxString >        unique;
-        typedef std::set<wxString>::const_iterator      SET_CITER;
-
-        // clear the table
-        m_path_subs_grid->DeleteRows( 0, m_path_subs_grid->GetNumberRows() );
-
-        int gblRowCount = m_global_model.GetNumberRows();
-        int prjRowCount = m_project_model.GetNumberRows();
-        int row;
-
-        for( row = 0;  row < gblRowCount;  ++row )
-        {
-            wxString uri = m_global_model.GetValue( row, COL_URI );
-
-            while( re.Matches( uri ) )
-            {
-                wxString envvar = re.GetMatch( uri, 1 );
-
-                // ignore duplicates
-                unique.insert( envvar );
-
-                // delete the last match and search again
-                uri.Replace( re.GetMatch( uri, 0 ), wxEmptyString );
-            }
-        }
-
-        for( row = 0;  row < prjRowCount;  ++row )
-        {
-            wxString uri = m_project_model.GetValue( row, COL_URI );
-
-            while( re.Matches( uri ) )
-            {
-                wxString envvar = re.GetMatch( uri, 1 );
-
-                // ignore duplicates
-                unique.insert( envvar );
-
-                // delete the last match and search again
-                uri.Replace( re.GetMatch( uri, 0 ), wxEmptyString );
-            }
-        }
-
-        m_path_subs_grid->AppendRows( unique.size() );
-
-        row = 0;
-        for( SET_CITER it = unique.begin();  it != unique.end();  ++it, ++row )
-        {
-            wxString    evName = *it;
-            wxString    evValue;
-
-            m_path_subs_grid->SetCellValue( row, 0, evName );
-
-            if( wxGetEnv( evName, &evValue ) )
-                m_path_subs_grid->SetCellValue( row, 1, evValue );
-        }
-
-        m_path_subs_grid->AutoSizeColumns();
-    }
-
-    //-----</event handlers>---------------------------------
-
-    // caller's tables are modified only on OK button.
-    FP_LIB_TABLE*       m_global;
-    FP_LIB_TABLE*       m_project;
-
-    // local copies which are edited, but aborted if Cancel button.
-    FP_TBL_MODEL        m_global_model;
-    FP_TBL_MODEL        m_project_model;
-
-    wxGrid*             m_cur_grid;     ///< changed based on tab choice
 
 public:
     DIALOG_FP_LIB_TABLE( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject ) :
         DIALOG_FP_LIB_TABLE_BASE( aParent ),
         m_global( aGlobal ),
-        m_project( aProject ),
-        m_global_model( *aGlobal ),
-        m_project_model( *aProject )
+        m_project( aProject )
     {
-        m_global_grid->SetTable( (wxGridTableBase*) &m_global_model );
-        m_project_grid->SetTable( (wxGridTableBase*) &m_project_model );
+        // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
+        // so make it a grid owned table.
+        m_global_grid->SetTable(  new FP_TBL_MODEL( *aGlobal ),  true );
+        m_project_grid->SetTable( new FP_TBL_MODEL( *aProject ), true );
 
         // add Cut, Copy, and Paste to wxGrids
         m_global_grid->PushEventHandler( new FP_GRID_TRICKS( m_global_grid ) );
@@ -703,13 +351,366 @@ public:
         // Any additional event handlers should be popped before the window is deleted.
         m_global_grid->PopEventHandler( true );
         m_project_grid->PopEventHandler( true );
-
-        // ~wxGrid() examines its table, and the tables will have been destroyed before
-        // the wxGrids are, so remove the tables from the wxGrids' awareness.
-        // Otherwise there is a segfault.
-        m_global_grid->SetTable( NULL );
-        m_project_grid->SetTable( NULL );
     }
+
+
+private:
+    typedef FP_LIB_TABLE::ROW   ROW;
+
+    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
+    /// else return a 0 based column index.
+    int getCursorCol() const
+    {
+        return m_cur_grid->GetGridCursorCol();
+    }
+
+    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
+    /// else return a 0 based row index.
+    int getCursorRow() const
+    {
+        return m_cur_grid->GetGridCursorRow();
+    }
+
+    /**
+     * Function verifyTables
+     * trims important fields, removes blank row entries, and checks for duplicates.
+     * @return bool - true if tables are OK, else false.
+     */
+    bool verifyTables()
+    {
+        for( int t=0; t<2; ++t )
+        {
+            FP_TBL_MODEL& model = t==0 ? *global_model() : *project_model();
+
+            for( int r = 0; r < model.GetNumberRows(); )
+            {
+                wxString nick = model.GetValue( r, COL_NICKNAME ).Trim( false ).Trim();
+                wxString uri  = model.GetValue( r, COL_URI ).Trim( false ).Trim();
+
+                if( !nick || !uri )
+                {
+                    // Delete the "empty" row, where empty means missing nick or uri.
+                    // This also updates the UI which could be slow, but there should only be a few
+                    // rows to delete, unless the user fell asleep on the Add Row
+                    // button.
+                    model.DeleteRows( r, 1 );
+                }
+                else if( nick.find(':') != size_t(-1) )
+                {
+                    wxString msg = wxString::Format(
+                        _( "Illegal character '%s' found in Nickname: '%s' in row %d" ),
+                        wxT( ":" ), GetChars( nick ), r );
+
+                    // show the tabbed panel holding the grid we have flunked:
+                    if( &model != cur_model() )
+                    {
+                        m_auinotebook->SetSelection( &model == global_model() ? 0 : 1 );
+                    }
+
+                    // go to the problematic row
+                    m_cur_grid->SetGridCursor( r, 0 );
+                    m_cur_grid->SelectBlock( r, 0, r, 0 );
+                    m_cur_grid->MakeCellVisible( r, 0 );
+
+                    wxMessageDialog errdlg( this, msg, _( "No Colon in Nicknames" ) );
+                    errdlg.ShowModal();
+                    return false;
+                }
+                else
+                {
+                    // set the trimmed values back into the table so they get saved to disk.
+                    model.SetValue( r, COL_NICKNAME, nick );
+                    model.SetValue( r, COL_URI, uri );
+                    ++r;        // this row was OK.
+                }
+            }
+        }
+
+        // check for duplicate nickNames, separately in each table.
+        for( int t=0; t<2; ++t )
+        {
+            FP_TBL_MODEL& model = t==0 ? *global_model() : *project_model();
+
+            for( int r1 = 0; r1 < model.GetNumberRows() - 1;  ++r1 )
+            {
+                wxString    nick1 = model.GetValue( r1, COL_NICKNAME );
+
+                for( int r2=r1+1; r2 < model.GetNumberRows();  ++r2 )
+                {
+                    wxString    nick2 = model.GetValue( r2, COL_NICKNAME );
+
+                    if( nick1 == nick2 )
+                    {
+                        wxString msg = wxString::Format(
+                            _( "Duplicate Nickname: '%s' in rows %d and %d" ),
+                            GetChars( nick1 ), r1+1, r2+1
+                            );
+
+                        // show the tabbed panel holding the grid we have flunked:
+                        if( &model != cur_model() )
+                        {
+                            m_auinotebook->SetSelection( &model == global_model() ? 0 : 1 );
+                        }
+
+                        // go to the lower of the two rows, it is technically the duplicate:
+                        m_cur_grid->SetGridCursor( r2, 0 );
+                        m_cur_grid->SelectBlock( r2, 0, r2, 0 );
+                        m_cur_grid->MakeCellVisible( r2, 0 );
+
+                        wxMessageDialog errdlg( this, msg, _( "Please Delete or Modify One" ) );
+                        errdlg.ShowModal();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    //-----<event handlers>----------------------------------
+
+    void onKeyDown( wxKeyEvent& ev )
+    {
+#if 0
+        // send the key to the current grid
+        ((wxEvtHandler*)m_cur_grid)->ProcessEvent( ev );
+#else
+        // or no:
+        // m_cur_grid has the focus most of the time anyways, so above not needed.
+        ev.Skip();
+#endif
+    }
+
+    void pageChangedHandler( wxAuiNotebookEvent& event )
+    {
+        int pageNdx = m_auinotebook->GetSelection();
+        m_cur_grid = ( pageNdx == 0 ) ? m_global_grid : m_project_grid;
+    }
+
+    void appendRowHandler( wxMouseEvent& event )
+    {
+        if( m_cur_grid->AppendRows( 1 ) )
+        {
+            int last_row = m_cur_grid->GetNumberRows() - 1;
+
+            // wx documentation is wrong, SetGridCursor does not make visible.
+            m_cur_grid->MakeCellVisible( last_row, 0 );
+            m_cur_grid->SetGridCursor( last_row, 0 );
+        }
+    }
+
+    void deleteRowHandler( wxMouseEvent& event )
+    {
+        int rowCount = m_cur_grid->GetNumberRows();
+        int curRow   = getCursorRow();
+
+        m_cur_grid->DeleteRows( curRow );
+
+        if( curRow && curRow == rowCount - 1 )
+            m_cur_grid->SetGridCursor( curRow-1, getCursorCol() );
+    }
+
+    void moveUpHandler( wxMouseEvent& event )
+    {
+        int curRow = getCursorRow();
+        if( curRow >= 1 )
+        {
+            int curCol = getCursorCol();
+
+            FP_TBL_MODEL* tbl = cur_model();
+
+            ROW move_me = tbl->rows[curRow];
+
+            tbl->rows.erase( tbl->rows.begin() + curRow );
+            --curRow;
+            tbl->rows.insert( tbl->rows.begin() + curRow, move_me );
+
+            if( tbl->GetView() )
+            {
+                // fire a msg to cause redrawing
+                wxGridTableMessage msg( tbl,
+                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
+                                        curRow,
+                                        0 );
+
+                tbl->GetView()->ProcessTableMessage( msg );
+            }
+
+            m_cur_grid->MakeCellVisible( curRow, curCol );
+            m_cur_grid->SetGridCursor( curRow, curCol );
+        }
+    }
+
+    void moveDownHandler( wxMouseEvent& event )
+    {
+        FP_TBL_MODEL* tbl = cur_model();
+
+        int curRow = getCursorRow();
+        if( unsigned( curRow + 1 ) < tbl->rows.size() )
+        {
+            int curCol  = getCursorCol();
+
+            ROW move_me = tbl->rows[curRow];
+
+            tbl->rows.erase( tbl->rows.begin() + curRow );
+             ++curRow;
+            tbl->rows.insert( tbl->rows.begin() + curRow, move_me );
+
+            if( tbl->GetView() )
+            {
+                // fire a msg to cause redrawing
+                wxGridTableMessage msg( tbl,
+                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
+                                        curRow - 1,
+                                        0 );
+
+                tbl->GetView()->ProcessTableMessage( msg );
+            }
+
+            m_cur_grid->MakeCellVisible( curRow, curCol );
+            m_cur_grid->SetGridCursor( curRow, curCol );
+        }
+    }
+
+    void optionsEditor( wxMouseEvent& event )
+    {
+        FP_TBL_MODEL*   tbl = cur_model();
+
+        int     curRow = getCursorRow();
+        ROW&    row    = tbl->rows[curRow];
+
+        wxString        result;
+        const wxString& options = row.GetOptions();
+
+        InvokePluginOptionsEditor( this, row.GetNickName(), options, &result );
+
+        if( options != result )
+        {
+            row.SetOptions( result );
+            m_cur_grid->AutoSizeColumn( COL_OPTIONS, false );
+        }
+    }
+
+    void onCancelButtonClick( wxCommandEvent& event )
+    {
+        EndModal( 0 );
+    }
+
+    void onCancelButtonClick( wxCloseEvent& event )
+    {
+        EndModal( 0 );
+    }
+
+    void onOKButtonClick( wxCommandEvent& event )
+    {
+        int dialogRet = 0;
+
+        // stuff any pending cell editor text into the table.
+        m_cur_grid->SaveEditControlValue();
+
+        if( verifyTables() )
+        {
+            if( *global_model() != *m_global )
+            {
+                dialogRet |= 1;
+
+                *m_global  = *global_model();
+                m_global->reindex();
+            }
+
+            if( *project_model() != *m_project )
+            {
+                dialogRet |= 2;
+
+                *m_project = *project_model();
+                m_project->reindex();
+            }
+
+            EndModal( dialogRet );
+        }
+    }
+
+    /// Populate the readonly environment variable table with names and values
+    /// by examining all the full_uri columns.
+    void populateEnvironReadOnlyTable()
+    {
+        wxRegEx re( wxT( ".*?\\$\\{(.+?)\\}.*?" ), wxRE_ADVANCED );
+        wxASSERT( re.IsValid() );   // wxRE_ADVANCED is required.
+
+        std::set< wxString >        unique;
+        typedef std::set<wxString>::const_iterator      SET_CITER;
+
+        // clear the table
+        m_path_subs_grid->DeleteRows( 0, m_path_subs_grid->GetNumberRows() );
+
+        FP_TBL_MODEL*   gbl = global_model();
+        FP_TBL_MODEL*   prj = project_model();
+
+        int gblRowCount = gbl->GetNumberRows();
+        int prjRowCount = prj->GetNumberRows();
+        int row;
+
+        for( row = 0;  row < gblRowCount;  ++row )
+        {
+            wxString uri = gbl->GetValue( row, COL_URI );
+
+            while( re.Matches( uri ) )
+            {
+                wxString envvar = re.GetMatch( uri, 1 );
+
+                // ignore duplicates
+                unique.insert( envvar );
+
+                // delete the last match and search again
+                uri.Replace( re.GetMatch( uri, 0 ), wxEmptyString );
+            }
+        }
+
+        for( row = 0;  row < prjRowCount;  ++row )
+        {
+            wxString uri = prj->GetValue( row, COL_URI );
+
+            while( re.Matches( uri ) )
+            {
+                wxString envvar = re.GetMatch( uri, 1 );
+
+                // ignore duplicates
+                unique.insert( envvar );
+
+                // delete the last match and search again
+                uri.Replace( re.GetMatch( uri, 0 ), wxEmptyString );
+            }
+        }
+
+        m_path_subs_grid->AppendRows( unique.size() );
+
+        row = 0;
+        for( SET_CITER it = unique.begin();  it != unique.end();  ++it, ++row )
+        {
+            wxString    evName = *it;
+            wxString    evValue;
+
+            m_path_subs_grid->SetCellValue( row, 0, evName );
+
+            if( wxGetEnv( evName, &evValue ) )
+                m_path_subs_grid->SetCellValue( row, 1, evValue );
+        }
+
+        m_path_subs_grid->AutoSizeColumns();
+    }
+
+    //-----</event handlers>---------------------------------
+
+    // caller's tables are modified only on OK button and successful verification.
+    FP_LIB_TABLE*       m_global;
+    FP_LIB_TABLE*       m_project;
+
+    FP_TBL_MODEL*       global_model()  const   { return (FP_TBL_MODEL*) m_global_grid->GetTable(); }
+    FP_TBL_MODEL*       project_model() const   { return (FP_TBL_MODEL*) m_project_grid->GetTable(); }
+    FP_TBL_MODEL*       cur_model() const       { return (FP_TBL_MODEL*) m_cur_grid->GetTable(); }
+
+    wxGrid*             m_cur_grid;     ///< changed based on tab choice
 };
 
 
