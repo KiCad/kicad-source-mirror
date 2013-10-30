@@ -123,7 +123,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
     }
     else
     {
-#ifdef __WXDEBUG__
+#ifdef DEBUG
         wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetClearance():NULL netclass,type %d"), Type() );
 #endif
     }
@@ -148,7 +148,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 
     if( board == NULL )     // Should not occur
     {
-#ifdef __WXDEBUG__
+#ifdef DEBUG
         wxLogWarning( wxT("BOARD_CONNECTED_ITEM::GetNetClass():NULL board,type %d"), Type() );
 #endif
         return NULL;
@@ -162,7 +162,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
     {
         netclass = net->GetNetClass();
 
-#ifdef __WXDEBUG__
+#ifdef DEBUG
         if( netclass == NULL )
         {
             wxLogWarning( wxT("BOARD_CONNECTED_ITEM::GetNetClass():NULL netclass,type %d"), Type() );
