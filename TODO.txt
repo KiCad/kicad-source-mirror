@@ -154,6 +154,5 @@ Dick's Final TODO List:
 *) Apply Fabrizio and Alexander's linux desktop patches after unifying them.
 *) Get licensing cleaned up.
 *) Re-arrange the repo architecture.
-*) Merge KiCad GAL/TOM/ORSON if nobody else does.
 *) DLL-ization of pcbnew & eeschema
    http://www.eevblog.com/forum/open-source-kicad-geda/seriously-irritated-with-the-library-editor!/

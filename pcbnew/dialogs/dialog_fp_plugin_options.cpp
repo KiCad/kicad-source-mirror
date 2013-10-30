@@ -24,6 +24,7 @@
  */
 
 
+#include <fctsys.h>
 #include <invoke_pcb_dialog.h>
 #include <dialog_fp_plugin_options_base.h>
 #include <fp_lib_table.h>
@@ -36,6 +37,12 @@ static int col_width_option;
 static int col_width_value;
 
 
+/**
+ * Class DIALOG_FP_PLUGIN_OPTIONS
+ * is an options editor in the form of a two column name/value
+ * spreadsheet like (table) UI.  It takes hints from a pcbnew PLUGIN as to
+ * supported options.
+ */
 class DIALOG_FP_PLUGIN_OPTIONS : public DIALOG_FP_PLUGIN_OPTIONS_BASE
 {
 
@@ -60,7 +67,7 @@ public:
 
         if( props )
         {
-            if( props->size() > m_grid->GetNumberRows() )
+            if( (int) props->size() > m_grid->GetNumberRows() )
                 m_grid->AppendRows( props->size() - m_grid->GetNumberRows() );
 
             int row = 0;
@@ -98,6 +105,42 @@ private:
     const wxString& m_callers_options;
     wxString*       m_result;
 
+    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
+    /// else return a 0 based column index.
+    int getCursorCol() const
+    {
+        return m_grid->GetGridCursorCol();
+    }
+
+    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
+    /// else return a 0 based row index.
+    int getCursorRow() const
+    {
+        return m_grid->GetGridCursorRow();
+    }
+
+    wxArrayString getRow( int aRow )
+    {
+        wxArrayString row;
+
+        const int col_count = m_grid->GetNumberCols();
+        for( int col = 0;  col < col_count;  ++col )
+        {
+            row.Add( m_grid->GetCellValue( aRow, col ) );
+        }
+
+        return row;
+    }
+
+    void setRow( int aRow, const wxArrayString& aPair )
+    {
+        const int col_count = m_grid->GetNumberCols();
+        for( int col = 0;  col < col_count;  ++col )
+        {
+            m_grid->SetCellValue( aRow, col, aPair[col] );
+        }
+    }
+
     wxString makeResult()
     {
         PROPERTIES  props;
@@ -133,21 +176,98 @@ private:
         EndModal( 0 );
     }
 
+
+
     //-----<event handlers>------------------------------------------------------
     void onAddRow( wxCommandEvent& event )
     {
+        if( m_grid->AppendRows( 1 ) )
+        {
+            int last_row = m_grid->GetNumberRows() - 1;
+
+            // wx documentation is wrong, SetGridCursor does not make visible.
+            m_grid->MakeCellVisible( last_row, 0 );
+            m_grid->SetGridCursor( last_row, 0 );
+        }
     }
 
     void onDeleteRow( wxCommandEvent& event )
     {
+        int rowCount = m_grid->GetNumberRows();
+        int curRow   = getCursorRow();
+
+        m_grid->DeleteRows( curRow );
+
+        if( curRow && curRow == rowCount - 1 )
+        {
+            m_grid->MakeCellVisible( curRow-1, getCursorCol() );
+            m_grid->SetGridCursor( curRow-1, getCursorCol() );
+        }
     }
 
     void onMoveUp( wxCommandEvent& event )
     {
+        int curRow = getCursorRow();
+        if( curRow >= 1 )
+        {
+            int curCol = getCursorCol();
+
+            wxArrayString move_me = getRow( curRow );
+
+            m_grid->DeleteRows( curRow );
+            --curRow;
+            m_grid->InsertRows( curRow );
+
+            setRow( curRow, move_me );
+
+            wxGridTableBase* tbl = m_grid->GetTable();
+
+            if( tbl->GetView() )
+            {
+                // fire a msg to cause redrawing
+                wxGridTableMessage msg( tbl,
+                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
+                                        curRow,
+                                        0 );
+
+                tbl->GetView()->ProcessTableMessage( msg );
+            }
+
+            m_grid->MakeCellVisible( curRow, curCol );
+            m_grid->SetGridCursor( curRow, curCol );
+        }
     }
 
     void onMoveDown( wxCommandEvent& event )
     {
+        int curRow = getCursorRow();
+        if( curRow + 1 < m_grid->GetNumberRows() )
+        {
+            int curCol  = getCursorCol();
+
+            wxArrayString move_me = getRow( curRow );
+
+            m_grid->DeleteRows( curRow );
+             ++curRow;
+            m_grid->InsertRows( curRow );
+            setRow( curRow, move_me );
+
+            wxGridTableBase* tbl = m_grid->GetTable();
+
+            if( tbl->GetView() )
+            {
+                // fire a msg to cause redrawing
+                wxGridTableMessage msg( tbl,
+                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
+                                        curRow - 1,
+                                        0 );
+
+                tbl->GetView()->ProcessTableMessage( msg );
+            }
+
+            m_grid->MakeCellVisible( curRow, curCol );
+            m_grid->SetGridCursor( curRow, curCol );
+        }
     }
 
     void onCancelButtonClick( wxCommandEvent& event )
