@@ -51,7 +51,7 @@ public:
 
         SetTitle( title );
 
-        // add Cut, Copy, and Paste to wxGrids
+        // add Cut, Copy, and Paste to wxGrid
         m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
         string options = TO_UTF8( aOptions );
@@ -60,7 +60,8 @@ public:
 
         if( props )
         {
-            m_grid->AppendRows( props->size() );
+            if( props->size() > m_grid->GetNumberRows() )
+                m_grid->AppendRows( props->size() - m_grid->GetNumberRows() );
 
             int row = 0;
             for( PROPERTIES::const_iterator it = props->begin();  it != props->end();  ++it, ++row )
@@ -68,6 +69,8 @@ public:
                 m_grid->SetCellValue( row, 0, FROM_UTF8( it->first.c_str() ) );
                 m_grid->SetCellValue( row, 1, FROM_UTF8( it->second.c_str() ) );
             }
+
+            delete props;
         }
 
         if( !col_width_option )

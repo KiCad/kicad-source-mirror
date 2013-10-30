@@ -388,15 +388,17 @@ std::string FP_LIB_TABLE::FormatOptions( const PROPERTIES* aProperties )
 
             // the separation between name and value is '='
             if( value.size() )
+            {
                 ret += '=';
 
-            for( std::string::const_iterator si = value.begin();  si != value.end();  ++si )
-            {
-                // escape any separator in the value.
-                if( *si == OPT_SEP )
-                    ret += '\\';
+                for( std::string::const_iterator si = value.begin();  si != value.end();  ++si )
+                {
+                    // escape any separator in the value.
+                    if( *si == OPT_SEP )
+                        ret += '\\';
 
-                ret += *si;
+                    ret += *si;
+                }
             }
         }
     }
