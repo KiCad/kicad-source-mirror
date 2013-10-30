@@ -188,7 +188,6 @@ install_or_update()
 
 
 if [ $# -eq 1 -a "$1" == "--remove-sources" ]; then
-    # run this only once, kills .config & makes dirs
     echo "deleting $WORKING_TREES"
     rm_build_dir "$WORKING_TREES/kicad.bzr/build"
     rm_build_dir "$WORKING_TREES/kicad-lib.bzr/build"
