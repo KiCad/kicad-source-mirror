@@ -599,6 +599,9 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
 
+    m_toolManager->SetEnvironment( m_Pcb, m_galCanvas->GetView(),
+                                    m_galCanvas->GetViewControls(), this );
+
     ViewReloadBoard( m_Pcb );
 }
 
