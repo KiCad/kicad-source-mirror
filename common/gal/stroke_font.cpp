@@ -244,8 +244,13 @@ void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRo
         GLYPH_LIST::iterator glyphIt = m_glyphs.begin();
         std::deque<BOX2D>::iterator bbIt = m_glyphBoundingBoxes.begin();
 
-        advance( glyphIt, (int) ( *chIt ) - (int) ' ' );
-        advance( bbIt, (int) ( *chIt ) - (int) ' ' );
+        unsigned dd = (unsigned) ((unsigned char) *chIt ) - (unsigned) ' ';
+
+        if( dd >= m_glyphBoundingBoxes.size() )
+            dd = '?' - ' ';
+
+        advance( glyphIt, dd );
+        advance( bbIt, dd );
 
         GLYPH glyph = *glyphIt;
 
@@ -297,7 +302,13 @@ VECTOR2D STROKE_FONT::computeTextSize( const std::string& aText ) const
             continue;
 
         std::deque<BOX2D>::const_iterator bbIt = m_glyphBoundingBoxes.begin();
-        advance( bbIt, (int) ( *chIt ) - (int) ' ' );
+        unsigned dd =  (unsigned) ((unsigned char)*chIt) - (unsigned) ' ';
+
+        if( dd >= m_glyphBoundingBoxes.size() )
+            dd = '?' - ' ';
+
+        advance( bbIt, dd );
+
         result.x += m_scaleFactor * m_glyphSize.x * bbIt->GetEnd().x;
     }
 
