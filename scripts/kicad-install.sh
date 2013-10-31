@@ -19,8 +19,9 @@ usage()
     echo ""
     echo "./kicad-install.sh <cmd>"
     echo "    where <cmd> is one of:"
-    echo "        --install-or-update  (does full installation or update.)"
-    echo "        --remove-sources     (removes source trees for another attempt.)"
+    echo "        --install-or-update       (does full installation or update.)"
+    echo "        --remove-sources          (removes source trees for another attempt.)"
+    echo "        --uninstall-libraries     (removes KiCad supplied libraries.)"
     echo ""
     echo "example:"
     echo '    $ ./kicad-install.sh --install-or-update'
@@ -82,6 +83,27 @@ rm_build_dir()
     # this file is often created as root, so remove as root
     sudo rm "$dir/install_manifest.txt" 2> /dev/null
     rm -rf "$dir"
+}
+
+
+cmake_uninstall()
+{
+    # assume caller set the CWD, and is only telling us about it in $1
+    local dir="$1"
+
+    cwd=`pwd`
+    if [ "$cwd" != "$dir" ]; then
+        echo "missing dir $dir"
+    elif [ ! -e install_manifest.txt  ]; then
+        echo
+        echo "Missing file $dir/install_manifest.txt."
+        echo "Libraries may have already been uinstalled, or were not"
+        echo 'originally installed with an "uninstall" knowledgable CMakeLists.txt file.'
+    else
+        echo "uninstalling from $dir"
+        sudo make uninstall
+        sudo rm install_manifest.txt
+    fi
 }
 
 
@@ -199,6 +221,13 @@ fi
 
 if [ $# -eq 1 -a "$1" == "--install-or-update" ]; then
     install_or_update
+    exit
+fi
+
+
+if [ $# -eq 1 -a "$1" == "--uninstall-libraries" ]; then
+    cd "$WORKING_TREES/kicad-lib.bzr/build"
+    cmake_uninstall "$WORKING_TREES/kicad-lib.bzr/build"
     exit
 fi
 
