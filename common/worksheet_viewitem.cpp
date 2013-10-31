@@ -118,6 +118,9 @@ void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
         case WS_DRAW_ITEM_BASE::wsg_text:
             draw( static_cast<const WS_DRAW_ITEM_TEXT*>( item ), aGal );
             break;
+
+        case WS_DRAW_ITEM_BASE::wsg_bitmap:
+            break;
         }
 
         item = drawList.GetNext();

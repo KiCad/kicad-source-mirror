@@ -140,7 +140,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
                         GetChars( aList.GetItem( ii ).m_Module ) );
 #else
             msg.Printf( wxT( "%3zu %s:%s" ), newList.GetCount() + 1,
-                        GetChars( aList.GetItem( ii ).GetLibraryName() ),
+                        GetChars( aList.GetItem( ii ).GetNickname() ),
                         GetChars( aList.GetItem( ii ).m_Module ) );
 #endif
             newList.Add( msg );
@@ -164,7 +164,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
                     aList.GetItem( ii ).m_Module.GetData() );
 #else
         msg.Printf( wxT( "%3zu %s:%s" ), newList.GetCount() + 1,
-                    GetChars( aList.GetItem( ii ).GetLibraryName() ),
+                    GetChars( aList.GetItem( ii ).GetNickname() ),
                     GetChars( aList.GetItem( ii ).m_Module ) );
 #endif
         newList.Add( msg );
@@ -188,8 +188,9 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
         SetSelection( selection, true );
         RefreshItems( 0L, m_footprintList.GetCount()-1 );
 
-#if defined (__WXGTK__ )
+#if defined (__WXGTK__ ) //&& wxMINOR_VERSION == 8
         // @bug On GTK and wxWidgets 2.8.x, this will assert in debug builds because the
+
         //      column parameter is -1.  This was the only way to prevent GTK3 from
         //      ellipsizing long strings down to a few characters.  It still doesn't set
         //      the scroll bars correctly (too short) but it's better than any of the

@@ -47,13 +47,21 @@ class FP_LIB_TABLE;
 class FOOTPRINT_INFO
 {
 public:
-    wxString   m_libName;    ///< Name of the library containing this module excluding path and ext.
-    wxString   m_libPath;    ///< The full library name and path associated the footprint.
-    wxString   m_Module;     ///< Module name.
-    int        m_Num;        ///< Order number in the display list.
-    wxString   m_Doc;        ///< Footprint description.
-    wxString   m_KeyWord;    ///< Footprint key words.
-    unsigned   m_padCount;   ///< Number of pads
+
+    // friend bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 );
+
+    wxString    m_nickname;     ///< the library nickname, eventually
+
+#if !defined(USE_FP_LIB_TABLE)
+    wxString    m_lib_path;
+#endif
+
+
+    wxString    m_Module;       ///< Module name.
+    int         m_Num;          ///< Order number in the display list.
+    wxString    m_Doc;          ///< Footprint description.
+    wxString    m_KeyWord;      ///< Footprint key words.
+    unsigned    m_padCount;     ///< Number of pads
 
     FOOTPRINT_INFO()
     {
@@ -61,25 +69,42 @@ public:
         m_padCount = 0;
     }
 
-    const wxString& GetFootprintName() const { return m_Module; }
+    const wxString& GetFootprintName() const            { return m_Module; }
 
-    void SetLibraryName( const wxString& aLibName ) { m_libName = aLibName; }
-    const wxString& GetLibraryName() const { return m_libName; }
+    void SetNickname( const wxString& aLibNickname )    { m_nickname = aLibNickname; }
+    const wxString& GetNickname() const                 { return m_nickname; }
 
-    void SetLibraryPath( const wxString& aLibPath ) { m_libPath = aLibPath; }
-    const wxString& GetLibraryPath() const { return m_libPath; }
+#if !defined(USE_FP_LIB_TABLE)
+    void SetLibPath( const wxString& aLibPath )         { m_lib_path = aLibPath; }
+    const wxString& GetLibPath() const                  { return m_lib_path; }
+#endif
 
     /**
      * Function InLibrary
      * tests if the #FOOTPRINT_INFO object was loaded from \a aLibrary.
      *
-     * @param aLibrary is the file name or the fully qualified path and file name
-     *                 to test.
+     * @param aLibrary is the nickname of the library to test.
+     *
      * @return true if the #FOOTPRINT_INFO object was loaded from \a aLibrary.  Otherwise
      *         false.
      */
     bool InLibrary( const wxString& aLibrary ) const;
 };
+
+
+/// FOOTPRINT object list sort function.
+inline bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 )
+{
+#if defined( USE_FP_LIB_TABLE )
+    int retv = StrNumCmp( item1.m_nickname, item2.m_nickname, INT_MAX, true );
+
+    if( retv != 0 )
+        return retv < 0;
+#endif
+
+    return StrNumCmp( item1.m_Module, item2.m_Module, INT_MAX, true ) < 0;
+}
+
 
 
 class FOOTPRINT_LIST
@@ -140,19 +165,5 @@ public:
      */
     bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = NULL );
 };
-
-
-/// FOOTPRINT object list sort function.
-inline bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 )
-{
-#if defined( USE_FP_LIB_TABLE )
-    int retv = StrNumCmp( item1.m_libName, item2.m_libName, INT_MAX, true );
-
-    if( retv != 0 )
-        return retv < 0;
-#endif
-
-    return StrNumCmp( item1.m_Module, item2.m_Module, INT_MAX, true ) < 0;
-}
 
 #endif  // FOOTPRINT_INFO_H_
