@@ -51,7 +51,7 @@ static const wxString traceFpLibTable( wxT( "KicadFpLibTable" ) );
 
 /// The evinronment variable name for the current project path.  This is used interanally
 /// at run time and is not exposed outside of the current process.
-static wxString projectPathEnvVariableName( wxT( "KICAD_PRJ_PATH" ) );
+static wxString projectPathEnvVariableName( wxT( "KIPRJMOD" ) );
 
 /// The footprint library table name used when no project file is passed to Pcbnew or CvPcb.
 /// This is used temporarily to store the project specific library table until the project
