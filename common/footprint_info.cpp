@@ -101,8 +101,8 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintLibNames )
 
                     FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO();
 
-                    fpinfo->SetLibraryName( filename.GetName() );
-                    fpinfo->SetLibraryPath( filename.GetFullPath() );
+                    fpinfo->SetNickname( filename.GetName() );
+                    fpinfo->SetLibPath( filename.GetFullPath() );
                     fpinfo->m_Module   = fpnames[i];
                     fpinfo->m_padCount = m->GetPadCount( MODULE::DO_NOT_INCLUDE_NPTH );
                     fpinfo->m_KeyWord  = m->GetKeywords();
@@ -168,9 +168,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* a
 
                 FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO();
 
-                fpinfo->SetLibraryName( nickname );
-
-                //fpinfo->SetLibraryPath( path );
+                fpinfo->SetNickname( nickname );
 
                 fpinfo->m_Module   = fpnames[i];
                 fpinfo->m_padCount = m->GetPadCount( MODULE::DO_NOT_INCLUDE_NPTH );
@@ -202,13 +200,13 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
         FPID fpid;
 
         wxCHECK_MSG( fpid.Parse( aFootprintName ) < 0, NULL,
-                     wxString::Format( wxT( "<%s> is not a valid FPID." ),
+                     wxString::Format( wxT( "'%s' is not a valid FPID." ),
                                        GetChars( aFootprintName ) ) );
 
         wxString libNickname = FROM_UTF8( fpid.GetLibNickname().c_str() );
         wxString footprintName = FROM_UTF8( fpid.GetFootprintName().c_str() );
 
-        if( libNickname == footprint.m_libName && footprintName == footprint.m_Module )
+        if( libNickname == footprint.m_nickname && footprintName == footprint.m_Module )
             return &footprint;
 #else
         if( aFootprintName.CmpNoCase( footprint.m_Module ) == 0 )
@@ -221,10 +219,14 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
 
 bool FOOTPRINT_INFO::InLibrary( const wxString& aLibrary ) const
 {
+#if defined( USE_FP_LIB_TABLE )
+    return aLibrary == m_nickname;
+#else
+
     if( aLibrary.IsEmpty() )
         return false;
 
-    if( aLibrary == m_libName || aLibrary == m_libPath )
+    if( aLibrary == m_nickname || aLibrary == m_lib_path )
         return true;
 
     wxFileName filename = aLibrary;
@@ -232,11 +234,12 @@ bool FOOTPRINT_INFO::InLibrary( const wxString& aLibrary ) const
     if( filename.GetExt().IsEmpty() )
         filename.SetExt( LegacyFootprintLibPathExtension );
 
-    if( filename.GetFullPath() == m_libPath )
+    if( filename.GetFullPath() == m_lib_path )
         return true;
 
     if( filename.GetPath().IsEmpty() )
         filename = wxGetApp().FindLibraryPath( filename.GetFullName() );
 
-    return filename.GetFullPath() == m_libPath;
+    return filename.GetFullPath() == m_lib_path;
+#endif
 }

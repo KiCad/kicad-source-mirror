@@ -516,7 +516,7 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
             {
                 wxArrayString   cols;
                 cols.Add( MList.GetItem( ii ).GetFootprintName() );
-                cols.Add( MList.GetItem( ii ).GetLibraryName() );
+                cols.Add( MList.GetItem( ii ).GetNickname() );
                 rows.push_back( cols );
             }
         }
@@ -531,7 +531,7 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
             {
                 wxArrayString   cols;
                 cols.Add( MList.GetItem( ii ).GetFootprintName() );
-                cols.Add( MList.GetItem( ii ).GetLibraryName() );
+                cols.Add( MList.GetItem( ii ).GetNickname() );
                 rows.push_back( cols );
             }
         }
@@ -542,7 +542,7 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
         {
             wxArrayString   cols;
             cols.Add( MList.GetItem( ii ).GetFootprintName() );
-            cols.Add( MList.GetItem( ii ).GetLibraryName() );
+            cols.Add( MList.GetItem( ii ).GetNickname() );
             rows.push_back( cols );
         }
     }
