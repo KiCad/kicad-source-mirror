@@ -39,7 +39,7 @@ option( KICAD_SCRIPTING_MODULES
 option( KICAD_SCRIPTING_WXPYTHON
     "set this option ON to build wxpython implementation for wx interface building in python and py.shell"
     )
-    
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -64,6 +64,9 @@ endif()
 # the source tree.
 set( DOWNLOAD_DIR ${PROJECT_SOURCE_DIR}/.downloads-by-cmake
     CACHE PATH "Location of KiCad downloads, suggested is a dir common to all builds, i.e. global." )
+
+#Add option to add user directories for linker, if any
+LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} )
 
 if( UNIX )
     set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specifig KiCad config files" )
@@ -230,7 +233,7 @@ include( ExternalProject )
 #================================================
 include( CheckFindPackageResult )
 
-# Turn on wxWidgets compatibility mode for some classes 
+# Turn on wxWidgets compatibility mode for some classes
 add_definitions(-DWX_COMPATIBILITY)
 
 #######################

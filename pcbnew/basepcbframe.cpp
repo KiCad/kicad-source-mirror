@@ -151,6 +151,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
 
     m_galCanvas           = new EDA_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                               EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+    // Hide by default, it has to be explicitly shown
+    m_galCanvas->Hide();
 
     m_auxiliaryToolBar    = NULL;
 }

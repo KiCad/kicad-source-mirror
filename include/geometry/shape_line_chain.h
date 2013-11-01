@@ -188,7 +188,7 @@ public:
         if( aIndex < 0 )
             aIndex += SegmentCount();
 
-        if( aIndex == ( m_points.size() - 1 ) && m_closed )
+        if( aIndex == (int)( m_points.size() - 1 ) && m_closed )
             return SEG( m_points[aIndex], m_points[0], aIndex );
         else
             return SEG( m_points[aIndex], m_points[aIndex + 1], aIndex );
@@ -207,7 +207,7 @@ public:
         if( aIndex < 0 )
             aIndex += SegmentCount();
 
-        if( aIndex == ( m_points.size() - 1 ) && m_closed )
+        if( aIndex == (int)( m_points.size() - 1 ) && m_closed )
             return SEG( const_cast<VECTOR2I&>( m_points[aIndex] ),
                         const_cast<VECTOR2I&>( m_points[0] ), aIndex );
         else
