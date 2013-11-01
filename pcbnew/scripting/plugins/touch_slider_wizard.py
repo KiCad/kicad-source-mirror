@@ -184,8 +184,8 @@ class TouchSliderWizard(FootprintWizardPlugin):
             self.AddStrip(pos,steps,band_width,step_length,touch_clearance)
             pos+=wxPoint(0,band_width)
 
-
-        module.SetLibRef("S"+str(steps))
+        fpid = pcbnew.FPID(self.module.GetReference())   #the name in library
+        module.SetFPID( fpid )
 
 def register():
     # create our footprint wizard

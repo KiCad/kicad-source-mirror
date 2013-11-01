@@ -94,7 +94,8 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         module.Value().SetTextPosition(module.Value().GetPos0())
         module.Value().SetSize( size_text )
 
-        module.SetLibRef("FPC"+str(pads))   #the name in library
+        fpid = pcbnew.FPID(self.module.GetReference())   #the name in library
+        module.SetFPID( fpid )
 
         # create a pad array and add it to the module
         for n in range (0,pads):
