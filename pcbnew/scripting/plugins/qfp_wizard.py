@@ -96,7 +96,8 @@ class QFPWizard(pcbnew.FootprintWizardPlugin):
         self.module.Value().SetTextPosition(self.module.Value().GetPos0())
         self.module.Value().SetSize(text_size)
 
-        self.module.SetLibRef("QFP-%d" % int(num_pads))
+        fpid = pcbnew.FPID(self.module.GetReference())   #the name in library
+        self.module.SetFPID( fpid )
 
         pad_size_left_right = pcbnew.wxSize(pad_length, pad_width)
         pad_size_bottom_top = pcbnew.wxSize(pad_width, pad_length)
@@ -106,7 +107,7 @@ class QFPWizard(pcbnew.FootprintWizardPlugin):
 
             if side == 0 or side == 2:
                 pad_size = pad_size_left_right
-                
+
                 pad_pos_x = -(pad_horizontal_pitch / 2)
                 if side == 2:
                     pad_pos_x = -pad_pos_x
