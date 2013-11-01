@@ -49,6 +49,7 @@ class PNS_CLEARANCE_FUNC
 {
 public:
     virtual int operator()( const PNS_ITEM* a, const PNS_ITEM* b ) = 0;
+    virtual ~PNS_CLEARANCE_FUNC() {}
 };
 
 /**

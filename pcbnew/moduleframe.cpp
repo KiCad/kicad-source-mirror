@@ -224,11 +224,13 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent, FP_LIB_TABL
     m_auimgr.AddPane( m_auxiliaryToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_auxiliaryToolBar" ) ).Top().Row( 1 ) );
 
+    // The main right vertical toolbar
     m_auimgr.AddPane( m_drawToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Layer(1) );
 
+    // The left vertical toolbar (fast acces to display options)
     m_auimgr.AddPane( m_optionsToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ). Left() );
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ). Left().Layer(1) );
 
     m_auimgr.AddPane( m_canvas,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
