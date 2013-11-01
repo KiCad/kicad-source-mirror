@@ -114,6 +114,35 @@ bool EDA_APP::OnInit()
 #ifdef KICAD_SCRIPTING
     msg.Empty();
 #ifdef __WINDOWS__
+    // force python environment under Windows:
+    const wxString python_us("python27_us");
+
+    // Build our python path inside kicad
+    wxString kipython = m_BinDir + python_us;
+
+    // If our python install is existing inside kicad, use it
+    if( wxDirExists( kipython ) )
+    {
+        wxString ppath;
+        if( !wxGetEnv( wxT( "PYTHONPATH" ), &ppath ) || !ppath.Contains( python_us ) )
+        {
+            ppath << kipython << wxT("/pylib;");
+            ppath << kipython << wxT("/lib;");
+            ppath << kipython << wxT("/dll");
+            wxSetEnv( wxT( "PYTHONPATH" ), ppath );
+            DBG( std::cout << "set PYTHONPATH to "  << TO_UTF8(ppath) << "\n"; )
+
+            // Add python executable path:
+            wxGetEnv( wxT( "PATH" ), &ppath );
+            if( !ppath.Contains( python_us ) )
+            {
+                kipython << wxT(";") << ppath;
+                wxSetEnv( wxT( "PATH" ), kipython );
+                DBG( std::cout << "set PATH to " << TO_UTF8(kipython) << "\n"; )
+            }
+        }
+    }
+
     // TODO: make this path definable by the user, and set more than one path
     // (and remove the fixed paths from <src>/scripting/kicadplugins.i)
 
