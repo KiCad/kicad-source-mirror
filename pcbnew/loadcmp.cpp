@@ -225,7 +225,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
     FPID fpid;
 
     wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
-                 wxString::Format( wxT( "Could not parse FPID string <%s>." ),
+                 wxString::Format( wxT( "Could not parse FPID string '%s'." ),
                                    GetChars( moduleName ) ) );
 
     try
@@ -234,7 +234,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
     }
     catch( IO_ERROR ioe )
     {
-        wxLogDebug( wxT( "An error occurred attemping to load footprint <%s>.\n\nError: %s" ),
+        wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
                     fpid.Format().c_str(), GetChars( ioe.errorText ) );
     }
 #endif
@@ -261,7 +261,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
             FPID fpid;
 
             wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
-                         wxString::Format( wxT( "Could not parse FPID string <%s>." ),
+                         wxString::Format( wxT( "Could not parse FPID string '%s'." ),
                                            GetChars( moduleName ) ) );
 
             try
@@ -270,7 +270,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
             }
             catch( IO_ERROR ioe )
             {
-                wxLogDebug( wxT( "An error occurred attemping to load footprint <%s>.\n\nError: %s" ),
+                wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
                             fpid.Format().c_str(), GetChars( ioe.errorText ) );
             }
 #endif
@@ -341,7 +341,7 @@ MODULE* PCB_BASE_FRAME::loadFootprintFromLibrary( const wxString& aLibraryPath,
             if( aDisplayError )
             {
                 wxString msg = wxString::Format(
-                    _( "Footprint %s not found in library <%s>." ),
+                    _( "Footprint '%s' not found in library '%s'." ),
                     aFootprintName.GetData(),
                     libPath.GetData() );
 
@@ -384,7 +384,7 @@ MODULE* PCB_BASE_FRAME::loadFootprintFromLibraries(
                 if( aDisplayError && !showed_error )
                 {
                     wxString msg = wxString::Format(
-                        _( "PCB footprint library file <%s> not found in search paths." ),
+                        _( "PCB footprint library file '%s' not found in search paths." ),
                         fn.GetFullName().GetData() );
 
                     DisplayError( this, msg );
@@ -435,7 +435,28 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
     wxString   nickname = FROM_UTF8( aFootprintId.GetLibNickname().c_str() );
     wxString   fpname   = FROM_UTF8( aFootprintId.GetFootprintName().c_str() );
 
-    return m_footprintLibTable->FootprintLoad( nickname, fpname );
+    if( nickname.size() )
+    {
+        return m_footprintLibTable->FootprintLoad( nickname, fpname );
+    }
+
+    // user did not enter a nickname, just a footprint name, help him out a little:
+    else
+    {
+        std::vector<wxString> nicks = m_footprintLibTable->GetLogicalLibs();
+
+        // Search each library going through libraries alphabetically.
+        for( unsigned i = 0;  i<nicks.size();  ++i )
+        {
+            // FootprintLoad() returns NULL on not found, does not throw exception
+            // unless there's an IO_ERROR.
+            MODULE* ret = m_footprintLibTable->FootprintLoad( nicks[i], fpname );
+            if( ret )
+                return ret;
+        }
+
+        return NULL;
+    }
 }
 
 
@@ -477,7 +498,7 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
 
     if( !MList.ReadFootprintFiles( aTable, !aLibraryName ? NULL : &aLibraryName ) )
     {
-        msg.Format( _( "Error occurred attempting to load footprint library <%s>:\n\n" ),
+        msg.Format( _( "Error occurred attempting to load footprint library '%s':\n\n" ),
                     GetChars( aLibraryName ) );
 
         if( !MList.m_filesNotFound.IsEmpty() )
@@ -580,7 +601,7 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
     if( CmpName != wxEmptyString )
         OldName = CmpName;
 
-    wxLogDebug( wxT( "Footprint <%s> was selected." ), GetChars( CmpName ) );
+    wxLogDebug( wxT( "Footprint '%s' was selected." ), GetChars( CmpName ) );
 
     return CmpName;
 }
@@ -682,7 +703,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
     }
 
     wxString msg = wxString::Format(
-                    _( "Footprint library <%s> saved as <%s>." ),
+                    _( "Footprint library '%s' saved as '%s'." ),
                     GetChars( curLibPath ), GetChars( dstLibPath ) );
 
     DisplayInfoMessage( this, msg );

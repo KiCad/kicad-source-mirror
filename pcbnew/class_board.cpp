@@ -45,6 +45,7 @@
 
 #include <pcbnew.h>
 #include <colors_selection.h>
+#include <collectors.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -139,7 +140,39 @@ void BOARD::SetPosition( const wxPoint& aPos )
 
 void BOARD::Move( const wxPoint& aMoveVector )        // overload
 {
-    wxLogWarning( wxT( "This should not be called on the BOARD object") );
+    // Implement 'interface INSPECTOR' which is only INSPECTOR::Inspect(),
+    // here it does the moving.
+    struct MOVER : public INSPECTOR
+    {
+        SEARCH_RESULT Inspect( EDA_ITEM* item, const void* data )
+        {
+            BOARD_ITEM*     brd_item = (BOARD_ITEM*) item;
+            const wxPoint*  vector   = (const wxPoint*) data;
+
+            brd_item->Move( *vector );
+
+            return SEARCH_CONTINUE;
+        }
+    } inspector;
+
+    // @todo : anything like this elsewhere?  maybe put into GENERAL_COLLECTOR class.
+    static const KICAD_T top_level_board_stuff[] = {
+        PCB_MARKER_T,
+        PCB_TEXT_T,
+        PCB_LINE_T,
+        PCB_DIMENSION_T,
+        PCB_TARGET_T,
+        PCB_VIA_T,
+        PCB_TRACE_T,
+        //        PCB_PAD_T,
+        //        PCB_MODULE_TEXT_T,
+        PCB_MODULE_T,
+        PCB_ZONE_AREA_T,         // if it is visible on screen, it should be selectable
+        EOT
+    };
+
+    // visit this BOARD with the above inspector, which moves all items.
+    Visit( &inspector, &aMoveVector, top_level_board_stuff );
 }
 
 
@@ -1395,10 +1428,11 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
 
 MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 {
-    struct FindModule : public INSPECTOR
+    struct FINDER : public INSPECTOR
     {
         MODULE* found;
-        FindModule() : found( 0 )  {}
+
+        FINDER() : found( 0 )  {}
 
         // implement interface INSPECTOR
         SEARCH_RESULT Inspect( EDA_ITEM* item, const void* data )
@@ -1427,20 +1461,29 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 }
 
 
-MODULE* BOARD::FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeStamp )
+MODULE* BOARD::FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeStamp ) const
 {
-    for( MODULE* module = m_Modules;  module != NULL;  module = module->Next() )
+    if( aSearchByTimeStamp )
     {
-        if( aSearchByTimeStamp )
+        for( MODULE* module = m_Modules;  module;  module = module->Next() )
         {
             if( aRefOrTimeStamp.CmpNoCase( module->GetPath() ) == 0 )
                 return module;
         }
-        else
+    }
+    else
+    {
+
+#if 0   // case independent compare, why?
+        for( MODULE* module = m_Modules;  module;  module = module->Next() )
         {
             if( aRefOrTimeStamp.CmpNoCase( module->GetReference() ) == 0 )
                 return module;
         }
+#else
+        return FindModuleByReference( aRefOrTimeStamp );
+#endif
+
     }
 
     return NULL;
@@ -2388,6 +2431,14 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 
         if( aReporter && aReporter->ReportAll() )
         {
+#if defined(DEBUG)
+            if( component->GetReference() == wxT( "D2" ) )
+            {
+                int breakhere = 1;
+                (void) breakhere;
+            }
+#endif
+
             msg.Printf( _( "Checking netlist component footprint \"%s:%s:%s\".\n" ),
                         GetChars( component->GetReference() ),
                         GetChars( component->GetTimeStamp() ),
@@ -2626,12 +2677,15 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     if( aDeleteSinglePadNets && !aNetlist.IsDryRun() )
     {
         BuildListOfNets();
+
         std::vector<D_PAD*> padlist = GetPads();
+
         // padlist is the list of pads, sorted by netname.
-        int count = 0;
-        wxString netname;
-        D_PAD * pad = NULL;
-        D_PAD * previouspad = NULL;
+        int         count = 0;
+        wxString    netname;
+        D_PAD*      pad = NULL;
+        D_PAD*      previouspad = NULL;
+
         for( unsigned ii = 0; ii < padlist.size(); ii++ )
         {
             pad = padlist[ii];
@@ -2645,7 +2699,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 {
                     if( aReporter && aReporter->ReportAll() )
                     {
-                        msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad <%s>\n" ),
+                        msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad '%s'\n" ),
                                     GetChars( previouspad->GetNetname() ),
                                     GetChars( previouspad->GetParent()->GetReference() ),
                                     GetChars( previouspad->GetPadName() ) );
@@ -2693,7 +2747,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     continue;   // OK, pad found
 
                 // not found: bad footprint, report error
-                msg.Printf( _( "** Error: Component \"%s\" pad <%s> not found in footprint \"%s\" **\n" ),
+                msg.Printf( _( "** Error: Component \"%s\" pad '%s' not found in footprint \"%s\" **\n" ),
                             GetChars( component->GetReference() ),
                             GetChars( padname ),
                             footprint->GetFPID().Format().c_str() );
@@ -2718,7 +2772,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             // Net name not valid, report error
             wxString coord;
             coord << zone->GetPosition();
-            msg.Printf( _( "** Error: Zone %s layer <%s>"
+            msg.Printf( _( "** Error: Zone '%s' layer '%s'"
                            " has non-existent net name \"%s\" **\n" ),
                         GetChars( coord ),
                         GetChars( zone->GetLayerName() ),

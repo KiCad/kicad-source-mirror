@@ -41,6 +41,24 @@ class MODULE;
 class PROPERTIES : public std::map< std::string, std::string >
 {
     // alphabetical tuple of name and value hereby defined.
+
+public:
+
+    /**
+     * Function Value
+     * fetches a property by aName and returns true if that property was found, else false.
+     * If not found, aFetchedValue is not touched.
+     */
+    bool Value( const char* aName, std::string* aFetchedValue ) const
+    {
+        PROPERTIES::const_iterator it = find( aName );
+        if( it != end() )
+        {
+            *aFetchedValue = it->second;
+            return true;
+        }
+        return false;
+    }
 };
 
 
