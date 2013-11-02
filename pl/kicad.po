@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-01 08:34+0100\n"
-"PO-Revision-Date: 2013-11-01 08:36+0100\n"
+"POT-Creation-Date: 2013-11-02 08:44+0100\n"
+"PO-Revision-Date: 2013-11-02 08:46+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -157,7 +157,7 @@ msgstr ""
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1023 pcbnew/moduleframe.cpp:623
+#: eeschema/schframe.cpp:1023 pcbnew/moduleframe.cpp:625
 #: pcbnew/pcbframe.cpp:1015 cvpcb/cvframe.cpp:782
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
@@ -734,7 +734,7 @@ msgstr "Symbol"
 
 #: eeschema/database.cpp:118 eeschema/sch_component.cpp:1475
 #: pcbnew/librairi.cpp:75 pcbnew/librairi.cpp:759 pcbnew/librairi.cpp:807
-#: pcbnew/loadcmp.cpp:555
+#: pcbnew/loadcmp.cpp:576
 msgid "Library"
 msgstr "Biblioteka"
 
@@ -821,7 +821,7 @@ msgid "The following libraries could not be found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
 #: eeschema/eeschema.cpp:108 eeschema/files-io.cpp:301 pcbnew/files.cpp:282
-#: pcbnew/pcbnew.cpp:163
+#: pcbnew/pcbnew.cpp:192
 msgid "This file is already open."
 msgstr "Ten plik jest już otwarty."
 
@@ -3696,18 +3696,18 @@ msgstr "Wyłącz siatkę"
 
 #: eeschema/tool_lib.cpp:231 eeschema/tool_sch.cpp:285
 #: pcbnew/tool_modedit.cpp:220 pcbnew/tool_pcb.cpp:339
-#: cvpcb/class_DisplayFootprintsFrame.cpp:193
+#: cvpcb/class_DisplayFootprintsFrame.cpp:191
 msgid "Units in inches"
 msgstr "Jednostki w calach"
 
 #: eeschema/tool_lib.cpp:235 eeschema/tool_sch.cpp:289
 #: pcbnew/tool_modedit.cpp:224 pcbnew/tool_pcb.cpp:342
-#: cvpcb/class_DisplayFootprintsFrame.cpp:197
+#: cvpcb/class_DisplayFootprintsFrame.cpp:195
 msgid "Units in millimeters"
 msgstr "Jednostki w milimetrach"
 
 #: eeschema/tool_lib.cpp:239 eeschema/tool_sch.cpp:293 pcbnew/tool_pcb.cpp:345
-#: cvpcb/class_DisplayFootprintsFrame.cpp:201 gerbview/toolbars_gerber.cpp:166
+#: cvpcb/class_DisplayFootprintsFrame.cpp:199 gerbview/toolbars_gerber.cpp:166
 msgid "Change cursor shape"
 msgstr "Zmień kształt kursora"
 
@@ -6076,37 +6076,37 @@ msgstr "Rozmiar:"
 msgid "&Sheet name:"
 msgstr "Nazwa arku&sza:"
 
-#: pcbnew/basepcbframe.cpp:539
+#: pcbnew/basepcbframe.cpp:548
 msgid "Display rectangular coordinates"
 msgstr "Pokaż współrzędne kartezyjskie"
 
-#: pcbnew/basepcbframe.cpp:540 pcbnew/tool_pcb.cpp:336
-#: cvpcb/class_DisplayFootprintsFrame.cpp:189
+#: pcbnew/basepcbframe.cpp:549 pcbnew/tool_pcb.cpp:336
+#: cvpcb/class_DisplayFootprintsFrame.cpp:187
 msgid "Display polar coordinates"
 msgstr "Pokaż współrzędne polarne"
 
-#: pcbnew/basepcbframe.cpp:549 pcbnew/tool_pcb.cpp:375
-#: cvpcb/class_DisplayFootprintsFrame.cpp:206
+#: pcbnew/basepcbframe.cpp:558 pcbnew/tool_pcb.cpp:375
+#: cvpcb/class_DisplayFootprintsFrame.cpp:204
 msgid "Show pads in outline mode"
 msgstr "Pokaż pola lutownicze jako zarys"
 
-#: pcbnew/basepcbframe.cpp:550
+#: pcbnew/basepcbframe.cpp:559
 msgid "Show pads in fill mode"
 msgstr "Pokaż pola lutownicze jako pełne"
 
-#: pcbnew/basepcbframe.cpp:962
+#: pcbnew/basepcbframe.cpp:971
 msgid "Grid:"
 msgstr "Siatka:"
 
-#: pcbnew/basepcbframe.cpp:989 common/zoom.cpp:276
+#: pcbnew/basepcbframe.cpp:998 common/zoom.cpp:276
 msgid "User Grid"
 msgstr "Siatka użytkownika"
 
-#: pcbnew/basepcbframe.cpp:1006 pcbnew/dialogs/dialog_plot_base.cpp:151
+#: pcbnew/basepcbframe.cpp:1015 pcbnew/dialogs/dialog_plot_base.cpp:151
 msgid "Auto"
 msgstr "Dopasuj powiększenie"
 
-#: pcbnew/basepcbframe.cpp:1011
+#: pcbnew/basepcbframe.cpp:1020
 msgid "Zoom "
 msgstr "Powiększenie "
 
@@ -6155,123 +6155,123 @@ msgstr "Oznaczenie"
 msgid "Supplier and ref"
 msgstr "Dostawca i numer artykułu"
 
-#: pcbnew/class_board.cpp:91
+#: pcbnew/class_board.cpp:92
 msgid "This is the default net class."
 msgstr "To jest domyślna klasa połączeń."
 
-#: pcbnew/class_board.cpp:1004 pcbnew/class_module.cpp:491
+#: pcbnew/class_board.cpp:1037 pcbnew/class_module.cpp:491
 #: pcbnew/class_netinfo_item.cpp:133
 #: cvpcb/dialogs/dialog_display_options_base.cpp:44
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:61
 msgid "Pads"
 msgstr "Pola lutownicze"
 
-#: pcbnew/class_board.cpp:1007 pcbnew/class_netinfo_item.cpp:154
+#: pcbnew/class_board.cpp:1040 pcbnew/class_netinfo_item.cpp:154
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Przelotki"
 
-#: pcbnew/class_board.cpp:1010
+#: pcbnew/class_board.cpp:1043
 msgid "trackSegm"
 msgstr "Segmenty"
 
-#: pcbnew/class_board.cpp:1013
+#: pcbnew/class_board.cpp:1046
 msgid "Nodes"
 msgstr "Węzły"
 
-#: pcbnew/class_board.cpp:1016
+#: pcbnew/class_board.cpp:1049
 msgid "Nets"
 msgstr "Sieci"
 
-#: pcbnew/class_board.cpp:1024
+#: pcbnew/class_board.cpp:1057
 msgid "Links"
 msgstr "Łącza"
 
-#: pcbnew/class_board.cpp:1027
+#: pcbnew/class_board.cpp:1060
 msgid "Connect"
 msgstr "Połączone"
 
-#: pcbnew/class_board.cpp:1030 pcbnew/dialogs/dialog_drc_base.cpp:177
+#: pcbnew/class_board.cpp:1063 pcbnew/dialogs/dialog_drc_base.cpp:177
 msgid "Unconnected"
 msgstr "Niepołączone"
 
-#: pcbnew/class_board.cpp:2391
+#: pcbnew/class_board.cpp:2442
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Sprawdzam footprint komponentu z listy sieci \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2409
+#: pcbnew/class_board.cpp:2460
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Dodaję nowy komponent \"%s:%s\" o footprincie \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2419
+#: pcbnew/class_board.cpp:2470
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Nie mogę dodać nowego komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s"
 "\".\n"
 
-#: pcbnew/class_board.cpp:2452
+#: pcbnew/class_board.cpp:2503
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Zamieniam footprint komponentu \"%s:%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2464
+#: pcbnew/class_board.cpp:2515
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Nie mogę zamienić komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2498
+#: pcbnew/class_board.cpp:2549
 #, c-format
 msgid "Changing footprint \"%s:%s\" reference to \"%s\".\n"
 msgstr "Zmieniam odnośnik footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2514
+#: pcbnew/class_board.cpp:2565
 #, c-format
 msgid "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Zmieniam wartość footprintu \"%s:%s\" z \"%s\" do \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2531
+#: pcbnew/class_board.cpp:2582
 #, c-format
 msgid "Changing footprint path \"%s:%s\" to \"%s\".\n"
 msgstr "Zmieniam ścieżkę footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2557
+#: pcbnew/class_board.cpp:2608
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Kasuje nazwę sieci z komponentu \"%s:%s\" pin \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2574
+#: pcbnew/class_board.cpp:2625
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr ""
 "Zmieniam nazwę sieci komponentu \"%s:%s\" pin \"%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2613
+#: pcbnew/class_board.cpp:2664
 #, c-format
 msgid "Removing footprint \"%s:%s\".\n"
 msgstr "Usuwam footprint \"%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2648
+#: pcbnew/class_board.cpp:2702
 #, c-format
-msgid "Remove single pad net \"%s\" on \"%s\" pad <%s>\n"
-msgstr "Usunięcie niepołączonej sieci \"%s\" z \"%s\" pole <%s>\n"
+msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
+msgstr "Usunięcie niepołączonej sieci \"%s\" z \"%s\" pole '%s'\n"
 
-#: pcbnew/class_board.cpp:2696
+#: pcbnew/class_board.cpp:2750
 #, c-format
-msgid "** Error: Component \"%s\" pad <%s> not found in footprint \"%s\" **\n"
+msgid "** Error: Component \"%s\" pad '%s' not found in footprint \"%s\" **\n"
 msgstr ""
-"** BŁĄD: Komponent \"%s\", pole <%s> nie zostało znalezione w footprincie "
+"** BŁĄD: Komponent \"%s\", pole '%s' nie zostało znalezione w footprincie "
 "\"%s\" **\n"
 
-#: pcbnew/class_board.cpp:2721
+#: pcbnew/class_board.cpp:2775
 #, c-format
-msgid "** Error: Zone %s layer <%s> has non-existent net name \"%s\" **\n"
+msgid "** Error: Zone '%s' layer '%s' has non-existent net name \"%s\" **\n"
 msgstr ""
-"** BŁĄD: Strefa %s na warstwie <%s> posiada nie istniejącą nazwę sieci \"%s"
+"** BŁĄD: Strefa %s na warstwie '%s' posiada nie istniejącą nazwę sieci \"%s"
 "\" **\n"
 
 #: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:750
@@ -6454,7 +6454,7 @@ msgstr "Elementy graficzne"
 
 #: pcbnew/class_edge_mod.cpp:250 pcbnew/class_module.cpp:527
 #: pcbnew/class_pad.cpp:576 pcbnew/class_text_mod.cpp:378
-#: pcbnew/loadcmp.cpp:554 pcbnew/loadcmp.cpp:620 cvpcb/cvframe.cpp:925
+#: pcbnew/loadcmp.cpp:575 pcbnew/loadcmp.cpp:641 cvpcb/cvframe.cpp:925
 msgid "Module"
 msgstr "Footprint"
 
@@ -8064,33 +8064,33 @@ msgstr "Załaduj footprint"
 
 #: pcbnew/loadcmp.cpp:344
 #, c-format
-msgid "Footprint %s not found in library <%s>."
-msgstr "Nie znaleziono footprintu %s w bibliotece <%s>."
+msgid "Footprint '%s' not found in library '%s'."
+msgstr "Nie znaleziono footprintu %s w bibliotece '%s'."
 
 #: pcbnew/loadcmp.cpp:387
 #, c-format
-msgid "PCB footprint library file <%s> not found in search paths."
-msgstr "Nie znaleziono pliku biblioteki <%s> w podanych ścieżkach dostępu."
+msgid "PCB footprint library file '%s' not found in search paths."
+msgstr "Nie znaleziono pliku biblioteki '%s' w podanych ścieżkach dostępu."
 
 #: pcbnew/loadcmp.cpp:411
 #, c-format
 msgid "Footprint %s not found in any library."
 msgstr "Footprint %s nie został znaleziony w żadnej z bibliotek."
 
-#: pcbnew/loadcmp.cpp:468
+#: pcbnew/loadcmp.cpp:489
 msgid "No footprint libraries were specified."
 msgstr "Nie okreslono żadnych bibliotek."
 
-#: pcbnew/loadcmp.cpp:480 pcbnew/modview_frame.cpp:412
+#: pcbnew/loadcmp.cpp:501
 #, c-format
 msgid ""
-"Error occurred attempting to load footprint library <%s>:\n"
+"Error occurred attempting to load footprint library '%s':\n"
 "\n"
 msgstr ""
-"Wystąpił błąd przy próbie załadowania biblioteki footprintów <%s>:\n"
+"Wystąpił błąd przy próbie załadowania biblioteki footprintów '%s':\n"
 "\n"
 
-#: pcbnew/loadcmp.cpp:484 pcbnew/modview_frame.cpp:416
+#: pcbnew/loadcmp.cpp:505 pcbnew/modview_frame.cpp:416
 msgid ""
 "Files not found:\n"
 "\n"
@@ -8098,7 +8098,7 @@ msgstr ""
 "Nie znaleziono plików:\n"
 "\n"
 
-#: pcbnew/loadcmp.cpp:487 pcbnew/modview_frame.cpp:419
+#: pcbnew/loadcmp.cpp:508 pcbnew/modview_frame.cpp:419
 msgid ""
 "\n"
 "\n"
@@ -8110,7 +8110,7 @@ msgstr ""
 "Błędy podczas ładowania pliku:\n"
 "\n"
 
-#: pcbnew/loadcmp.cpp:504
+#: pcbnew/loadcmp.cpp:525
 #, c-format
 msgid ""
 "No footprints could be read from library file(s):\n"
@@ -8125,20 +8125,20 @@ msgstr ""
 "w dowolnej ze ścieżek przeszukiwań. Sprawdź czy konfiguracja jest poprawna "
 "by program mógł wyszukiwać biblioteki footprintów."
 
-#: pcbnew/loadcmp.cpp:557 pcbnew/loadcmp.cpp:617
+#: pcbnew/loadcmp.cpp:578 pcbnew/loadcmp.cpp:638
 #, c-format
 msgid "Modules [%d items]"
 msgstr "Footprinty [%d pozycji]"
 
-#: pcbnew/loadcmp.cpp:576
+#: pcbnew/loadcmp.cpp:597
 msgid "No footprint found."
 msgstr "Nie znaleziono footprintów."
 
-#: pcbnew/loadcmp.cpp:599 cvpcb/cvframe.cpp:685
+#: pcbnew/loadcmp.cpp:620 cvpcb/cvframe.cpp:685
 msgid "Description: "
 msgstr "Opis:"
 
-#: pcbnew/loadcmp.cpp:600
+#: pcbnew/loadcmp.cpp:621
 msgid ""
 "\n"
 "Key words: "
@@ -8146,10 +8146,10 @@ msgstr ""
 "\n"
 "Słowa kluczowe:"
 
-#: pcbnew/loadcmp.cpp:685
+#: pcbnew/loadcmp.cpp:706
 #, c-format
-msgid "Footprint library <%s> saved as <%s>."
-msgstr "Bibliotekę <%s> zapisano jako <%s>."
+msgid "Footprint library '%s' saved as '%s'."
+msgstr "Bibliotekę '%s' zapisano jako '%s'."
 
 #: pcbnew/menubar_modedit.cpp:65
 msgid "Current Library"
@@ -9059,29 +9059,29 @@ msgstr "Zmień warstwę elementów"
 msgid "Set Line Width"
 msgstr "Ustaw szerokość linii"
 
-#: pcbnew/moduleframe.cpp:338
+#: pcbnew/moduleframe.cpp:340
 msgid "Save the changes in the module before closing?"
 msgstr "Zapisać zmiany w footprincie przed zamknięciem?"
 
-#: pcbnew/moduleframe.cpp:359
+#: pcbnew/moduleframe.cpp:361
 msgid "Library is not set, the module could not be saved."
 msgstr ""
 "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
-#: pcbnew/moduleframe.cpp:497 pcbnew/pcbframe.cpp:626
-#: cvpcb/class_DisplayFootprintsFrame.cpp:444
+#: pcbnew/moduleframe.cpp:499 pcbnew/pcbframe.cpp:626
+#: cvpcb/class_DisplayFootprintsFrame.cpp:442
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
-#: pcbnew/moduleframe.cpp:600
+#: pcbnew/moduleframe.cpp:602
 msgid "Module Editor "
 msgstr "Edytor Footprintów"
 
-#: pcbnew/moduleframe.cpp:606
+#: pcbnew/moduleframe.cpp:608
 msgid "(no active library)"
 msgstr " (brak aktywnej biblioteki)"
 
-#: pcbnew/moduleframe.cpp:620
+#: pcbnew/moduleframe.cpp:622
 msgid "Module Editor (active library: "
 msgstr "Edytor Footprintów (aktywna biblioteka: "
 
@@ -9097,6 +9097,15 @@ msgstr "Usunąć footprint %s (wartość %s)?"
 #: pcbnew/modview_frame.cpp:128
 msgid "Footprint Library Browser"
 msgstr "Przeglądarka bibliotek footprintów"
+
+#: pcbnew/modview_frame.cpp:412
+#, c-format
+msgid ""
+"Error occurred attempting to load footprint library <%s>:\n"
+"\n"
+msgstr ""
+"Wystąpił błąd przy próbie załadowania biblioteki footprintów <%s>:\n"
+"\n"
 
 #: pcbnew/modview_frame.cpp:499
 #, c-format
@@ -9260,17 +9269,17 @@ msgstr "Brak footprintów"
 msgid "Components"
 msgstr "Komponenty"
 
-#: pcbnew/netlist.cpp:199 pcbnew/netlist.cpp:342
+#: pcbnew/netlist.cpp:199 pcbnew/netlist.cpp:352
 #, c-format
-msgid "No footprint defined for component `%s`.\n"
+msgid "No footprint defined for component '%s'.\n"
 msgstr "Dla komponentu '%s' nie został zdefiniowany footprint.\n"
 
-#: pcbnew/netlist.cpp:221 pcbnew/netlist.cpp:364
+#: pcbnew/netlist.cpp:221 pcbnew/netlist.cpp:374
 #, c-format
-msgid "* Warning: component `%s` has footprint <%s> and should be  <%s>\n"
+msgid "* Warning: component '%s' has footprint '%s' and should be '%s'\n"
 msgstr ""
-"*** OSTRZEŻENIE: Komponent '%s', posiada footprint <%s> choć powinien "
-"posiadać <%s> ***\n"
+"*** OSTRZEŻENIE: Komponent '%s', posiada footprint '%s' choć powinien "
+"posiadać '%s' ***\n"
 
 #: pcbnew/netlist.cpp:269
 #, c-format
@@ -9284,26 +9293,26 @@ msgstr ""
 #: pcbnew/netlist.cpp:292
 #, c-format
 msgid ""
-"*** Warning: component `%s` footprint <%s> was not found in any libraries. "
+"*** Warning: component '%s' footprint '%s' was not found in any libraries. "
 "***\n"
 msgstr ""
-"*** OSTRZEŻENIE: Komponent \"%s\", footprint <%s> nie został znaleziony w "
+"*** OSTRZEŻENIE: Komponent \"%s\", footprint '%s' nie został znaleziony w "
 "żadnej z bibliotek. *** \n"
 
-#: pcbnew/netlist.cpp:387
+#: pcbnew/netlist.cpp:403
 #, c-format
-msgid "*** Warning: Component \"%s\" footprint ID <%s> is not valid. ***\n"
+msgid "*** Warning: Component '%s' footprint ID '%s' is not valid. ***\n"
 msgstr ""
-"*** OSTRZEŻENIE: Komponent \"%s\", identyfikator footprintu <%s> nie jest "
+"*** OSTRZEŻENIE: Komponent \"%s\", identyfikator footprintu '%s' nie jest "
 "prawidłowy. *** \n"
 
-#: pcbnew/netlist.cpp:409
+#: pcbnew/netlist.cpp:425
 #, c-format
 msgid ""
-"*** Warning: component `%s` footprint <%s> was not found in any libraries in "
+"*** Warning: component '%s' footprint '%s' was not found in any libraries in "
 "the footprint library table. ***\n"
 msgstr ""
-"*** OSTRZEŻENIE: Komponent \"%s\", footprint <%s> nie został znaleziony w "
+"*** OSTRZEŻENIE: Komponent \"%s\", footprint '%s' nie został znaleziony w "
 "żadnej z bibliotek znajdującej się w tabeli bibliotek. *** \n"
 
 #: pcbnew/netlist_reader.cpp:100
@@ -9813,7 +9822,7 @@ msgstr "Plik automatycznej kopii zapasowej <%s> nie może zostac usunięty!"
 msgid " [new file]"
 msgstr " [nowy plik]"
 
-#: pcbnew/pcbnew.cpp:153
+#: pcbnew/pcbnew.cpp:182
 #, c-format
 msgid ""
 "Pcbnew file <%s> has a wrong extension.\n"
@@ -9822,11 +9831,11 @@ msgstr ""
 "Plik Pcbnew <%s> posiada niepoprawne rozszerzenie.\n"
 "Zostaje zmienione na .%s."
 
-#: pcbnew/pcbnew.cpp:170
+#: pcbnew/pcbnew.cpp:199
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew jest już uruchomiony. Kontynuować?"
 
-#: pcbnew/pcbnew.cpp:242
+#: pcbnew/pcbnew.cpp:271
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -9839,7 +9848,7 @@ msgstr ""
 "Czy chcesz go otworzyć?\n"
 "Zostanie on następnie zapisany w nowym formacie."
 
-#: pcbnew/pcbnew.cpp:272
+#: pcbnew/pcbnew.cpp:301
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -10219,7 +10228,7 @@ msgid "Add Text"
 msgstr "Dodaj tekst"
 
 #: pcbnew/tool_modedit.cpp:212 pcbnew/tool_pcb.cpp:333
-#: cvpcb/class_DisplayFootprintsFrame.cpp:185 common/drawframe.cpp:293
+#: cvpcb/class_DisplayFootprintsFrame.cpp:183 common/drawframe.cpp:293
 msgid "Hide grid"
 msgstr "Schowaj siatkę"
 
@@ -14935,58 +14944,58 @@ msgstr ""
 msgid "CvPcb Error"
 msgstr "Błąd CvPcb"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:210
-#: cvpcb/class_DisplayFootprintsFrame.cpp:257
+#: cvpcb/class_DisplayFootprintsFrame.cpp:208
+#: cvpcb/class_DisplayFootprintsFrame.cpp:255
 msgid "Show texts in line mode"
 msgstr "Pokaż tekst jako linie"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:214
-#: cvpcb/class_DisplayFootprintsFrame.cpp:274
+#: cvpcb/class_DisplayFootprintsFrame.cpp:212
+#: cvpcb/class_DisplayFootprintsFrame.cpp:272
 msgid "Show outlines in line mode"
 msgstr "Pokaż szkic jako linie"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:229
+#: cvpcb/class_DisplayFootprintsFrame.cpp:227
 #: pcbnew/dialogs/dialog_display_options_base.h:71
 msgid "Display options"
 msgstr "Opcje wyświetlania"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:234
+#: cvpcb/class_DisplayFootprintsFrame.cpp:232
 msgid "Zoom in (F1)"
 msgstr "Powiększ (F1)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:237
+#: cvpcb/class_DisplayFootprintsFrame.cpp:235
 msgid "Zoom out (F2)"
 msgstr "Pomniejsz (F2)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:240
+#: cvpcb/class_DisplayFootprintsFrame.cpp:238
 msgid "Redraw view (F3)"
 msgstr "Odśwież widok (F3)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:243
+#: cvpcb/class_DisplayFootprintsFrame.cpp:241
 msgid "Zoom auto (Home)"
 msgstr "Dopasuj powiększenie (Home)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:247
+#: cvpcb/class_DisplayFootprintsFrame.cpp:245
 msgid "3D Display"
 msgstr "Widok 3D"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:258
+#: cvpcb/class_DisplayFootprintsFrame.cpp:256
 msgid "Show texts in filled mode"
 msgstr "Pokaż tekst jako wypełniony"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:259
+#: cvpcb/class_DisplayFootprintsFrame.cpp:257
 msgid "Show texts in sketch mode"
 msgstr "Pokaż tylko zarys tekstu"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:275
+#: cvpcb/class_DisplayFootprintsFrame.cpp:273
 msgid "Show outlines in filled mode"
 msgstr "Pokaż szkic jako wypełniony"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:276
+#: cvpcb/class_DisplayFootprintsFrame.cpp:274
 msgid "Show outlines in sketch mode"
 msgstr "Pokaż tylko zarys szkicu"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:515
+#: cvpcb/class_DisplayFootprintsFrame.cpp:513
 #, c-format
 msgid ""
 "PCB footprint library file <%s> could not be found in the default search "
@@ -14995,17 +15004,17 @@ msgstr ""
 "Biblioteka footprintów <%s> nie może zostać odnaleziona w domyślych "
 "ścieżkach wyszukiwania."
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:544
+#: cvpcb/class_DisplayFootprintsFrame.cpp:542
 #, c-format
 msgid "Footprint '%s' not found"
 msgstr "Footprintu '%s' nie znaleziono"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:560
+#: cvpcb/class_DisplayFootprintsFrame.cpp:558
 #, c-format
 msgid "Footprint: %s"
 msgstr "Footprint: %s"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:572
+#: cvpcb/class_DisplayFootprintsFrame.cpp:570
 #, c-format
 msgid "Lib: %s"
 msgstr "Biblioteka: %s"
