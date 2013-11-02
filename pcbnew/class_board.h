@@ -919,9 +919,9 @@ public:
      * @param aRefOrTimeStamp is the search string.
      * @param aSearchByTimeStamp searches by the module time stamp value if true.  Otherwise
      *                           search by reference designator.
-     * @return the module found or NULL if not module is found that meets the search criteria.
+     * @return MODULE* - If found, the module meeting the search criteria, else NULL.
      */
-    MODULE* FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeStamp = false );
+    MODULE* FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeStamp = false ) const;
 
     /**
      * Function ReplaceNetlist

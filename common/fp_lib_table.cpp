@@ -840,22 +840,3 @@ void FP_LIB_TABLE::Load( const wxFileName& aFileName, FP_LIB_TABLE* aFallBackTab
     }
 }
 
-
-#if 0  // don't know that this is needed yet
-MODULE* FP_LIB_TABLE::LookupFootprint( const FP_LIB_ID& aFootprintId )
-    throw( IO_ERROR )
-{
-    const ROW* row = FindRow( aFootprintId.GetLibraryNickName() );
-
-    // row will never be NULL here.
-
-    PLUGIN::RELEASER pi( PluginFind( row->type ) );
-
-    return pi->FootprintLoad(   aLibraryPath->GetFullURI() ),
-                                aFootprintId.GetFootprintName(),
-
-                                // fetch a PROPERTIES instance on stack here
-                                row->GetPropertiesFromOptions()
-                                );
-}
-#endif

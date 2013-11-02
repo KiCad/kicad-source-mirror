@@ -196,7 +196,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "No footprint defined for component `%s`.\n" ),
+                msg.Printf( _( "No footprint defined for component '%s'.\n" ),
                             GetChars( component->GetReference() ) );
                 aReporter->Report( msg );
             }
@@ -218,7 +218,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "* Warning: component `%s` has footprint <%s> and should be  <%s>\n" ),
+                msg.Printf( _( "* Warning: component '%s' has footprint '%s' and should be '%s'\n" ),
                             GetChars( component->GetReference() ),
                             fpOnBoard->GetFPID().Format().c_str(),
                             component->GetFPID().GetFootprintName().c_str() );
@@ -289,7 +289,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "*** Warning: component `%s` footprint <%s> was not found in "
+                    msg.Printf( _( "*** Warning: component '%s' footprint '%s' was not found in "
                                    "any libraries. ***\n" ),
                                 GetChars( component->GetReference() ),
                                 component->GetFPID().GetFootprintName().c_str() );
@@ -317,6 +317,10 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
 
 #else
 
+
+#define ALLOW_PARTIAL_FPID      1
+
+
 void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     throw( IO_ERROR, PARSE_ERROR )
 {
@@ -335,11 +339,17 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     {
         component = aNetlist.GetComponent( ii );
 
+#if ALLOW_PARTIAL_FPID
+        // The FPID is ok as long as there is a footprint portion coming
+        // from eeschema.
+        if( !component->GetFPID().GetFootprintName().size() )
+#else
         if( component->GetFPID().empty() )
+#endif
         {
             if( aReporter )
             {
-                msg.Printf( _( "No footprint defined for component `%s`.\n" ),
+                msg.Printf( _( "No footprint defined for component '%s'.\n" ),
                             GetChars( component->GetReference() ) );
                 aReporter->Report( msg );
             }
@@ -348,7 +358,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         }
 
         // Check if component footprint is already on BOARD and only load the footprint from
-        // the library if it's needed.
+        // the library if it's needed.  Nickname can be blank.
         if( aNetlist.IsFindByTimeStamp() )
             fpOnBoard = m_Pcb->FindModule( aNetlist.GetComponent( ii )->GetTimeStamp(), true );
         else
@@ -361,7 +371,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "* Warning: component `%s` has footprint <%s> and should be  <%s>\n" ),
+                msg.Printf( _( "* Warning: component '%s' has footprint '%s' and should be '%s'\n" ),
                             GetChars( component->GetReference() ),
                             fpOnBoard->GetFPID().GetFootprintName().c_str(),
                             component->GetFPID().GetFootprintName().c_str() );
@@ -380,11 +390,17 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         {
             module = NULL;
 
+#if ALLOW_PARTIAL_FPID
+            // The FPID is ok as long as there is a footprint portion coming
+            // the library if it's needed.  Nickname can be blank.
+            if( !component->GetFPID().GetFootprintName().size() )
+#else
             if( !component->GetFPID().IsValid() )
+#endif
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "*** Warning: Component \"%s\" footprint ID <%s> is not "
+                    msg.Printf( _( "*** Warning: Component '%s' footprint ID '%s' is not "
                                    "valid. ***\n" ),
                                 GetChars( component->GetReference() ),
                                 component->GetFPID().GetFootprintName().c_str() );
@@ -394,19 +410,19 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
                 continue;
             }
 
+            // loadFootprint() can find a footprint with an empty nickname in fpid.
             module = PCB_BASE_FRAME::loadFootprint( component->GetFPID() );
 
             if( module )
             {
                 lastFPID = component->GetFPID();
             }
-
-            if( module == NULL )
+            else
             {
                 if( aReporter )
                 {
                     wxString msg;
-                    msg.Printf( _( "*** Warning: component `%s` footprint <%s> was not found in "
+                    msg.Printf( _( "*** Warning: component '%s' footprint '%s' was not found in "
                                    "any libraries in the footprint library table. ***\n" ),
                                 GetChars( component->GetReference() ),
                                 component->GetFPID().GetFootprintName().c_str() );

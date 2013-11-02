@@ -118,7 +118,7 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnUpdatePadDrawMode )
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, PCB_BASE_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, PCB_BASE_FRAME::OnUpdateSelectZoom )
-    
+
     EVT_UPDATE_UI_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, PCB_BASE_FRAME::OnUpdateSelectZoom )
 END_EVENT_TABLE()
 
@@ -176,7 +176,14 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
     {
         KIGFX::VIEW* view = m_galCanvas->GetView();
 
-        ViewReloadBoard( m_Pcb );
+        try
+        {
+            ViewReloadBoard( m_Pcb );
+        }
+        catch( const std::exception& ex )
+        {
+            DBG(printf( "ViewReloadBoard: exception: %s\n", ex.what() );)
+        }
 
         // update the tool manager with the new board and its view.
         if( m_toolManager )

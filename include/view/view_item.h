@@ -367,7 +367,12 @@ protected:
         m_layers.reset();
 
         for( int i = 0; i < aCount; ++i )
+        {
+            // this fires on some eagle board after EAGLE_PLUGIN::Load()
+            wxASSERT( unsigned( aLayers[i] ) <= unsigned( VIEW::VIEW_MAX_LAYERS ) );
+
             m_layers.set( aLayers[i] );
+        }
     }
 };
 } // namespace KIGFX

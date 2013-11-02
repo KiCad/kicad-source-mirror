@@ -2692,22 +2692,28 @@ LAYER_NUM EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 
 void EAGLE_PLUGIN::centerBoard()
 {
-    /*
     if( m_props )
     {
-        const wxString& pageWidth  = (*m_props)["page_width"];
-        const wxString& pageHeight = (*m_props)["page_height"];
+        std::string page_width;
+        std::string page_height;
 
-        if( pageWidth.size() && pageHeight.size() )
+        if( m_props->Value( "page_width",  &page_width ) &&
+            m_props->Value( "page_height", &page_height ) )
         {
-            EDA_RECT bbbox = m_board->GetBoundingBox();
-            int w = wxAtoi( pageWidth );
-            int h = wxAtoi( pageHeight );
+            EDA_RECT bbbox = m_board->ComputeBoundingBox( true );
 
-            m_board->Move( );
+            int w = atoi( page_width.c_str() );
+            int h = atoi( page_height.c_str() );
+
+            int desired_x = ( w - bbbox.GetWidth() )  / 2;
+            int desired_y = ( h - bbbox.GetHeight() ) / 2;
+
+            DBG(printf( "bbox.width:%d bbox.height:%d w:%d h:%d desired_x:%d desired_y:%d\n",
+                bbbox.GetWidth(), bbbox.GetHeight(), w, h, desired_x, desired_y );)
+
+            m_board->Move( wxPoint( desired_x - bbbox.GetX(), desired_y - bbbox.GetY() ) );
         }
     }
-    */
 }
 
 
