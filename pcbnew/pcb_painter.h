@@ -68,6 +68,7 @@ public:
         CL_TRACKS   = 0x4
     };
 
+    ///> Determines how zones should be displayed
     enum DisplayZonesMode {
         DZ_HIDE_FILLED = 0,
         DZ_SHOW_FILLED,
@@ -90,27 +91,44 @@ public:
     /// @copydoc RENDER_SETTINGS::GetColor()
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const;
 
+    /**
+     * Function GetLayerColor
+     * Returns the color used to draw a layer.
+     * @param aLayer is the layer number.
+     */
     const COLOR4D& GetLayerColor( int aLayer ) const;
 
 protected:
-    /// @copydoc RENDER_SETTINGS::Update()
+    ///> @copydoc RENDER_SETTINGS::Update()
     void update();
 
-    /// Colors for all layers (including special, highlighted & darkened versions)
+    ///> Colors for all layers (normal)
     COLOR4D m_layerColors    [TOTAL_LAYER_COUNT];
+
+    ///> Colors for all layers (highlighted)
     COLOR4D m_layerColorsHi  [TOTAL_LAYER_COUNT];
+
+    ///> Colors for all layers (selected)
     COLOR4D m_layerColorsSel [TOTAL_LAYER_COUNT];
+
+    ///> Colors for all layers (darkened)
     COLOR4D m_layerColorsDark[TOTAL_LAYER_COUNT];
 
     bool    m_sketchModeSelect[TOTAL_LAYER_COUNT];
+
+    ///> Flag determining if pad numbers should be visible
     bool    m_padNumbers;
+
+    ///> Flag determining if net names should be visible for pads
     bool    m_netNamesOnPads;
+
+    ///> Flag determining if net names should be visible for tracks
     bool    m_netNamesOnTracks;
 
-    /// Maximum font size for netnames (and other dynamically shown strings)
+    ///> Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;
 
-    /// Option for different display modes for zones
+    ///> Option for different display modes for zones
     DisplayZonesMode m_displayZoneMode;
 };
 
@@ -122,7 +140,6 @@ protected:
 class PCB_PAINTER : public PAINTER
 {
 public:
-
     PCB_PAINTER( GAL* aGal );
 
     /// @copydoc PAINTER::Draw()
@@ -142,16 +159,17 @@ protected:
     PCB_RENDER_SETTINGS* m_pcbSettings;
 
     // Drawing functions for various types of PCB-specific items
-    void draw( const TRACK*, int );
-    void draw( const SEGVIA*, int );
-    void draw( const D_PAD*, int );
-    void draw( const DRAWSEGMENT* );
-    void draw( const TEXTE_PCB*, int );
-    void draw( const TEXTE_MODULE*, int );
-    void draw( const ZONE_CONTAINER* );
-    void draw( const DIMENSION*, int );
-    void draw( const PCB_TARGET* );
+    void draw( const TRACK* aTrack, int aLayer );
+    void draw( const SEGVIA* aVia, int aLayer );
+    void draw( const D_PAD* aPad, int aLayer );
+    void draw( const DRAWSEGMENT* aSegment );
+    void draw( const TEXTE_PCB* aText, int aLayer );
+    void draw( const TEXTE_MODULE* aText, int aLayer );
+    void draw( const ZONE_CONTAINER* aZone );
+    void draw( const DIMENSION* aDimension, int aLayer );
+    void draw( const PCB_TARGET* aTarget );
 };
 } // namespace KIGFX
 
 #endif /* __CLASS_PAINTER_H */
+
