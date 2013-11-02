@@ -167,7 +167,7 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         //        PCB_PAD_T,
         //        PCB_MODULE_TEXT_T,
         PCB_MODULE_T,
-        PCB_ZONE_AREA_T,         // if it is visible on screen, it should be selectable
+        PCB_ZONE_AREA_T,
         EOT
     };
 
