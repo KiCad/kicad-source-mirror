@@ -378,6 +378,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     double      orientation = aPad->GetOrientation();
     NORMALIZE_ANGLE_90( orientation );  // do not display descriptions upside down
     orientation = orientation * M_PI / 1800.0;
+    wxString buffer;
 
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )
@@ -387,31 +388,30 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         {
             bool displayNetname = ( m_pcbSettings->m_netNamesOnPads &&
                                     !aPad->GetNetname().empty() );
-            size = VECTOR2D( aPad->GetSize() / 2 );
+            VECTOR2D padsize = VECTOR2D( aPad->GetSize() );
+            size = padsize;
             double scale = m_gal->GetZoomFactor();
-            double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE / scale;
-
-            // Font size limits
-            if( size.x > maxSize )
-                size.x = maxSize;
-            if( size.y > maxSize )
-                size.y = maxSize;
+            double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
 
             // Keep the size ratio for the font, but make it smaller
-            if( size.x < size.y )
+            if( padsize.x < padsize.y )
             {
                 orientation -= M_PI / 2.0;
-                size.y = size.x * 4.0 / 3.0;
+                size.y = size.x;
             }
-            else if( size.x == size.y )
+            else if( padsize.x == padsize.y )
             {
                 // If the text is displayed on a symmetrical pad, do not rotate it
                 orientation = 0.0;
             }
             else
             {
-                size.x = size.y * 3.0 / 4.0;
+                size.x = size.y;
             }
+
+            // Font size limits
+            if( size.x > maxSize )
+                size.x = size.y = maxSize;
 
             m_gal->Save();
             m_gal->Translate( position );
@@ -433,36 +433,51 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             else
                 m_gal->SetStrokeColor( labelColor );
 
+            VECTOR2D textpos( 0.0, 0.0);
             if( displayNetname && m_pcbSettings->m_padNumbers )
             {
+                m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+                m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+
                 // Divide the space, when both pad numbers and netnames are enabled
                 size = size / 2.0;
-                m_gal->SetGlyphSize( size );
-                m_gal->SetLineWidth( size.y / 8.0 );
+                aPad->ReturnStringPadName( buffer );
+                VECTOR2D numsize = size / buffer.Length();
+                VECTOR2D namesize = size / aPad->GetShortNetname().Length();
 
-                m_gal->StrokeText( std::string( aPad->GetNetname().mb_str() ),
-                                   VECTOR2D( 0.0, size.y ), 0.0 );
+                textpos.y = size.y / 2.0;
+                m_gal->SetGlyphSize( namesize );
+                m_gal->SetLineWidth( namesize.y / 8.0 );
+                m_gal->StrokeText( std::string( aPad->GetShortNetname().mb_str() ),
+                                   textpos, 0.0 );
 
+                textpos.y = -size.y / 2.0;
+                m_gal->SetGlyphSize( numsize );
+                m_gal->SetLineWidth( numsize.y / 8.0 );
                 m_gal->StrokeText( std::string( aPad->GetPadName().mb_str() ),
-                                   VECTOR2D( 0.0, -size.y / 2.0 ), 0.0 );
+                                   textpos, 0.0 );
             }
             else
             {
                 // There is only one thing to display
                 if( displayNetname )
                 {
-                    m_gal->SetGlyphSize( size / 2.0 );
-                    m_gal->SetLineWidth( size.y / 12.0 );
-                    m_gal->StrokeText( std::string( aPad->GetNetname().mb_str() ),
-                                       VECTOR2D( 0.0, 0.0 ), 0.0 );
+                    VECTOR2D namesize = size / aPad->GetShortNetname().Length();
+                    m_gal->SetGlyphSize( namesize / 2.0 );
+                    m_gal->SetLineWidth( namesize.y / 8.0 );
+                    m_gal->StrokeText( std::string( aPad->GetShortNetname().mb_str() ),
+                                       textpos, 0.0 );
                 }
 
                 if( m_pcbSettings->m_padNumbers )
                 {
-                    m_gal->SetGlyphSize( size );
-                    m_gal->SetLineWidth( size.y / 10.0 );
+                    aPad->ReturnStringPadName( buffer );
+                    VECTOR2D numsize = size / 2 / buffer.Length();
+
+                    m_gal->SetGlyphSize( numsize );
+                    m_gal->SetLineWidth( numsize.y / 8.0 );
                     m_gal->StrokeText( std::string( aPad->GetPadName().mb_str() ),
-                                       VECTOR2D( 0.0, 0.0 ), 0.0 );
+                                       textpos, 0.0 );
                 }
             }
 
@@ -860,4 +875,4 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 }
 
 
-const double PCB_RENDER_SETTINGS::MAX_FONT_SIZE = 100000000;
+const double PCB_RENDER_SETTINGS::MAX_FONT_SIZE = Millimeter2iu( 10.0 );
