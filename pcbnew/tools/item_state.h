@@ -55,8 +55,8 @@ public:
     void Save( BOARD_ITEM* aItem )
     {
 #ifdef __WXDEBUG__
-    wxASSERT_MSG( m_canSave, "You cannot save items after issuing commands. "
-                             "You have either RestoreAll() or Apply() before adding items!" );
+        wxASSERT_MSG( m_canSave, wxT( "You cannot save items after issuing commands. You have "
+                                      "either RestoreAll() or Apply() before adding items!" ) );
 #endif
         m_items.push_back( aItem );
     }

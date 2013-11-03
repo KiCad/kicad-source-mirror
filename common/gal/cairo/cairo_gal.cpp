@@ -959,7 +959,7 @@ void CAIRO_GAL::initSurface()
     context = cairo_create( surface );
 #ifdef __WXDEBUG__
     cairo_status_t status = cairo_status( context );
-    wxASSERT_MSG( status == CAIRO_STATUS_SUCCESS, "Cairo context creation error" );
+    wxASSERT_MSG( status == CAIRO_STATUS_SUCCESS, wxT( "Cairo context creation error" ) );
 #endif /* __WXDEBUG__ */
     currentContext = context;
 

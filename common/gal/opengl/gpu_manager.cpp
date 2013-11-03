@@ -46,7 +46,7 @@ GPU_MANAGER* GPU_MANAGER::MakeManager( VERTEX_CONTAINER* aContainer )
     else if( typeid( *aContainer ) == typeid( NONCACHED_CONTAINER ) )
         return new GPU_NONCACHED_MANAGER( aContainer );
 
-    wxASSERT_MSG( false, "Not handled container type" );
+    wxASSERT_MSG( false, wxT( "Not handled container type" ) );
     return NULL;
 }
 
