@@ -87,11 +87,11 @@ static EDA_HOTKEY HkSetGridOrigin( wxT("Set Grid Origin"), HK_SET_GRID_ORIGIN, '
 static EDA_HOTKEY HkResetGridOrigin( wxT("Reset Grid Origin"), HK_RESET_GRID_ORIGIN, 'Z' );
 
 static EDA_HOTKEY HkCanvasDefault( wxT( "Switch to default canvas" ),
-                                   HK_CANVAS_DEFAULT, GR_KB_ALT + WXK_F9 );
+                                   HK_CANVAS_DEFAULT, WXK_F9 );
 static EDA_HOTKEY HkCanvasOpenGL( wxT( "Switch to OpenGL canvas" ),
-                                  HK_CANVAS_OPENGL, GR_KB_ALT + WXK_F11 );
+                                  HK_CANVAS_OPENGL, WXK_F11 );
 static EDA_HOTKEY HkCanvasCairo( wxT( "Switch to Cairo canvas" ),
-                                 HK_CANVAS_CAIRO, GR_KB_ALT + WXK_F12 );
+                                 HK_CANVAS_CAIRO, WXK_F12 );
 
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
