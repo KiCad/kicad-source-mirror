@@ -376,8 +376,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     PAD_SHAPE_T shape;
     double      m, n;
     double      orientation = aPad->GetOrientation();
-    NORMALIZE_ANGLE_90( orientation );  // do not display descriptions upside down
-    orientation = orientation * M_PI / 1800.0;
     wxString buffer;
 
     // Draw description layer
@@ -386,18 +384,21 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         // Is anything that we can display enabled?
         if( m_pcbSettings->m_netNamesOnPads || m_pcbSettings->m_padNumbers )
         {
+            // Min char count to calculate string size
+            #define MIN_CHAR_COUNT 3
+
             bool displayNetname = ( m_pcbSettings->m_netNamesOnPads &&
                                     !aPad->GetNetname().empty() );
             VECTOR2D padsize = VECTOR2D( aPad->GetSize() );
-            size = padsize;
-            double scale = m_gal->GetZoomFactor();
             double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
+            double size = padsize.y;
 
             // Keep the size ratio for the font, but make it smaller
             if( padsize.x < padsize.y )
             {
-                orientation -= M_PI / 2.0;
-                size.y = size.x;
+                orientation += 900.0;
+                size = padsize.x;
+                EXCHG( padsize.x, padsize.y );
             }
             else if( padsize.x == padsize.y )
             {
@@ -406,16 +407,18 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             }
             else
             {
-                size.x = size.y;
             }
 
             // Font size limits
-            if( size.x > maxSize )
-                size.x = size.y = maxSize;
+            if( size > maxSize )
+                size = maxSize;
 
             m_gal->Save();
             m_gal->Translate( position );
-            m_gal->Rotate( -orientation );
+
+            // do not display descriptions upside down
+            NORMALIZE_ANGLE_90( orientation );
+            m_gal->Rotate( -orientation * M_PI / 1800.0 );
 
             // Default font settings
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
@@ -434,51 +437,45 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                 m_gal->SetStrokeColor( labelColor );
 
             VECTOR2D textpos( 0.0, 0.0);
+
+            // Divide the space, to display both pad numbers and netnames
+            // and set the Y text position to display 2 lines
             if( displayNetname && m_pcbSettings->m_padNumbers )
             {
-                m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
-                m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-
-                // Divide the space, when both pad numbers and netnames are enabled
                 size = size / 2.0;
-                aPad->ReturnStringPadName( buffer );
-                VECTOR2D numsize = size / buffer.Length();
-                VECTOR2D namesize = size / aPad->GetShortNetname().Length();
+                textpos.y = size / 2.0;
+            }
 
-                textpos.y = size.y / 2.0;
+            if( displayNetname )
+            {
+                // calculate the size of net name text:
+                double tsize = padsize.x / aPad->GetShortNetname().Length();
+                tsize = std::min( tsize, size );
+                // Use a smaller text size to handle interline, pen size..
+                tsize *= 0.7;
+                VECTOR2D namesize( tsize, tsize );
                 m_gal->SetGlyphSize( namesize );
-                m_gal->SetLineWidth( namesize.y / 8.0 );
+                m_gal->SetLineWidth( namesize.x / 12.0 );
                 m_gal->StrokeText( std::string( aPad->GetShortNetname().mb_str() ),
                                    textpos, 0.0 );
+            }
 
-                textpos.y = -size.y / 2.0;
+            if( m_pcbSettings->m_padNumbers )
+            {
+                textpos.y = -textpos.y;
+                aPad->ReturnStringPadName( buffer );
+                int len = buffer.Length();
+                double tsize = padsize.x / std::max( len, MIN_CHAR_COUNT );
+                tsize = std::min( tsize, size );
+                // Use a smaller text size to handle interline, pen size..
+                tsize *= 0.7;
+                tsize = std::min( tsize, size );
+                VECTOR2D numsize( tsize, tsize );
+
                 m_gal->SetGlyphSize( numsize );
-                m_gal->SetLineWidth( numsize.y / 8.0 );
+                m_gal->SetLineWidth( numsize.x / 12.0 );
                 m_gal->StrokeText( std::string( aPad->GetPadName().mb_str() ),
                                    textpos, 0.0 );
-            }
-            else
-            {
-                // There is only one thing to display
-                if( displayNetname )
-                {
-                    VECTOR2D namesize = size / aPad->GetShortNetname().Length();
-                    m_gal->SetGlyphSize( namesize / 2.0 );
-                    m_gal->SetLineWidth( namesize.y / 8.0 );
-                    m_gal->StrokeText( std::string( aPad->GetShortNetname().mb_str() ),
-                                       textpos, 0.0 );
-                }
-
-                if( m_pcbSettings->m_padNumbers )
-                {
-                    aPad->ReturnStringPadName( buffer );
-                    VECTOR2D numsize = size / 2 / buffer.Length();
-
-                    m_gal->SetGlyphSize( numsize );
-                    m_gal->SetLineWidth( numsize.y / 8.0 );
-                    m_gal->StrokeText( std::string( aPad->GetPadName().mb_str() ),
-                                       textpos, 0.0 );
-                }
             }
 
             m_gal->Restore();
@@ -601,8 +598,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
         VECTOR2D padSize = VECTOR2D( aPad->GetSize().x, aPad->GetSize().y ) / 2;
         VECTOR2D deltaPadSize = size - padSize; // = solder[Paste/Mask]Margin or 0
-        VECTOR2D delta = VECTOR2D( aPad->GetDelta().x / 2,
-                                   aPad->GetDelta().y / 2 );
 
         aPad->BuildPadPolygon( corners, wxSize( deltaPadSize.x, deltaPadSize.y ), 0.0 );
         pointList.push_back( VECTOR2D( corners[0] ) );

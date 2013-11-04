@@ -216,7 +216,7 @@ static void AddModifierToKey( wxString& aFullKey, const wxString & aKey )
         // We can use Shift+<key> as accelerator and <key> for hot key
         aFullKey << wxT( "\t" ) << MODIFIER_SHIFT << aKey;
     else
-        // We must use Alt+<key> as accelerator ans <key> for hot key
+        // We must use Alt+<key> as accelerator and <key> for hot key
         aFullKey << wxT( "\t" ) << MODIFIER_ALT << aKey;
 }
 
