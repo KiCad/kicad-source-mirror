@@ -1321,6 +1321,7 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
     {
         LAYER_NUM layer = kicad_layer( it->number );
 
+        // these function provide their own protection against UNDEFINED_LAYER:
         m_board->SetLayerName( layer, FROM_UTF8( it->name.c_str() ) );
         m_board->SetLayerType( layer, LT_SIGNAL );
 
@@ -1339,8 +1340,9 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
         if( gr->first == "wire" )
         {
             m_xpath->push( "wire" );
-            EWIRE   w( gr->second );
-            LAYER_NUM layer = kicad_layer( w.layer );
+
+            EWIRE       w( gr->second );
+            LAYER_NUM   layer = kicad_layer( w.layer );
 
             if( layer != UNDEFINED_LAYER )
             {
@@ -1366,10 +1368,11 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             }
 #endif
             m_xpath->push( "text" );
-            ETEXT   t( gr->second );
-            LAYER_NUM layer = kicad_layer( t.layer );
 
-            if( layer != -1 )       // supported layer
+            ETEXT       t( gr->second );
+            LAYER_NUM   layer = kicad_layer( t.layer );
+
+            if( layer != UNDEFINED_LAYER )
             {
                 TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
                 m_board->Add( pcbtxt, ADD_APPEND );
@@ -1456,8 +1459,9 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
         else if( gr->first == "circle" )
         {
             m_xpath->push( "circle" );
-            ECIRCLE c( gr->second );
-            LAYER_NUM layer = kicad_layer( c.layer );
+
+            ECIRCLE     c( gr->second );
+            LAYER_NUM   layer = kicad_layer( c.layer );
 
             if( layer != UNDEFINED_LAYER )       // unsupported layer
             {
@@ -1479,8 +1483,9 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
         else if( gr->first == "rectangle" )
         {
             m_xpath->push( "rectangle" );
-            ERECT   r( gr->second );
-            LAYER_NUM layer = kicad_layer( r.layer );
+
+            ERECT       r( gr->second );
+            LAYER_NUM   layer = kicad_layer( r.layer );
 
             if( IsCopperLayer( layer ) )
             {
@@ -1501,9 +1506,8 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                 zone->Outline()->CloseLastContour();
 
                 // this is not my fault:
-                zone->Outline()->SetHatch( outline_hatch,
-                                           Mils2iu( zone->Outline()->GetDefaultHatchPitchMils() ),
-                                           true );
+                zone->Outline()->SetHatch(
+                        outline_hatch, Mils2iu( zone->Outline()->GetDefaultHatchPitchMils() ), true );
             }
 
             m_xpath->pop();
@@ -1914,10 +1918,10 @@ MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const std::string& aPkgName 
 
 void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
 {
-    EWIRE   w( aTree );
-    LAYER_NUM layer = kicad_layer( w.layer );
+    EWIRE       w( aTree );
+    LAYER_NUM   layer = kicad_layer( w.layer );
 
-    if( IsNonCopperLayer( layer ) )  // skip copper package wires
+    if( IsNonCopperLayer( layer ) )     // only valid non-copper wires, skip copper package wires
     {
         wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
         wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
@@ -2021,8 +2025,13 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
 
 void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 {
-    ETEXT   t( aTree );
-    LAYER_NUM layer = kicad_layer( t.layer );
+    ETEXT       t( aTree );
+    LAYER_NUM   layer = kicad_layer( t.layer );
+
+    if( layer == UNDEFINED_LAYER )
+    {
+        layer = COMMENT_N;
+    }
 
     TEXTE_MODULE* txt;
 
@@ -2124,8 +2133,8 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 
 void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
 {
-    ERECT   r( aTree );
-    LAYER_NUM layer = kicad_layer( r.layer );
+    ERECT       r( aTree );
+    LAYER_NUM   layer = kicad_layer( r.layer );
 
     if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
@@ -2158,7 +2167,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 {
     EPOLYGON    p( aTree );
-    LAYER_NUM layer = kicad_layer( p.layer );
+    LAYER_NUM   layer = kicad_layer( p.layer );
 
     if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
@@ -2206,21 +2215,22 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 
 void EAGLE_PLUGIN::packageCircle( MODULE* aModule, CPTREE& aTree ) const
 {
-    ECIRCLE e( aTree );
-    LAYER_NUM layer = kicad_layer( e.layer );
+    ECIRCLE         e( aTree );
+    LAYER_NUM       layer = kicad_layer( e.layer );
+    EDGE_MODULE*    gr = new EDGE_MODULE( aModule, S_CIRCLE );
 
-    EDGE_MODULE* gr = new EDGE_MODULE( aModule, S_CIRCLE );
     aModule->GraphicalItems().PushBack( gr );
 
     gr->SetWidth( kicad( e.width ) );
 
-    /*
     switch( layer )
     {
-    case ECO1_N:    layer = SILKSCREEN_N_FRONT; break;
-    case ECO2_N:    layer = SILKSCREEN_N_BACK;  break;
-    }
+    case UNDEFINED_LAYER:   layer = COMMENT_N;          break;
+    /*
+    case ECO1_N:            layer = SILKSCREEN_N_FRONT; break;
+    case ECO2_N:            layer = SILKSCREEN_N_BACK;  break;
     */
+    }
 
     gr->SetLayer( layer );
     gr->SetTimeStamp( timeStamp( aTree ) );
@@ -2263,8 +2273,8 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE& aTree ) const
 
 void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
 {
-    ESMD    e( aTree );
-    LAYER_NUM layer = kicad_layer( e.layer );
+    ESMD        e( aTree );
+    LAYER_NUM   layer = kicad_layer( e.layer );
 
     if( !IsCopperLayer( layer ) )
     {
@@ -2468,8 +2478,9 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
             else if( it->first == "polygon" )
             {
                 m_xpath->push( "polygon" );
-                EPOLYGON p( it->second );
-                LAYER_NUM layer = kicad_layer( p.layer );
+
+                EPOLYGON    p( it->second );
+                LAYER_NUM   layer = kicad_layer( p.layer );
 
                 if( IsCopperLayer( layer ) )
                 {
@@ -2552,7 +2563,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 }
 
 
-LAYER_NUM EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
+int EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 {
     /* will assume this is a valid mapping for all eagle boards until I get paid more:
 
@@ -2681,8 +2692,9 @@ LAYER_NUM EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         case 95:    kiLayer = ECO1_N;               break;
         case 96:    kiLayer = ECO2_N;               break;
         default:
-//            D( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
-            kiLayer = -1;       break;  // some layers do not map to KiCad
+            // some layers do not map to KiCad
+            // DBG( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
+            kiLayer = UNDEFINED_LAYER;              break;
         }
     }
 
