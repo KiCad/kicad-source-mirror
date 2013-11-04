@@ -116,7 +116,12 @@ public:
      * is virtual because some items (in fact: class DIMENSION)
      * have a slightly different initialization
      */
-    virtual void SetLayer( LAYER_NUM aLayer )  { m_Layer = aLayer; }
+    virtual void SetLayer( LAYER_NUM aLayer )
+    {
+        // trap any invalid layers, then go find the caller and fix it.
+        // wxASSERT( unsigned( aLayer ) < unsigned( NB_PCB_LAYERS ) );
+        m_Layer = aLayer;
+    }
 
     /**
      * Function Draw
