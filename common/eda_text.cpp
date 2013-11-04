@@ -38,7 +38,9 @@
 // If this line is left uncommented, the bug is fixed, but
 // creates a (very minor) issue for existing texts, mainly in Pcbnew
 // because the text position is sometimes critical.
-#define FIX_MULTILINE_VERT_JUSTIF
+// Currently, this change is broken for rotated or mirrored texts,
+// so keep this line commented until there are fixes
+//#define FIX_MULTILINE_VERT_JUSTIF
 
 // Conversion to application internal units defined at build time.
 #if defined( PCBNEW )
