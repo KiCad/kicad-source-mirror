@@ -532,3 +532,40 @@ double EDA_RECT::GetArea() const
 {
     return (double) GetWidth() * (double) GetHeight();
 }
+
+/* Calculate the bounding box of this, when rotated
+ */
+EDA_RECT EDA_RECT::GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle )
+{
+    wxPoint corners[4];
+
+    // Build the corners list
+    corners[0]   = GetOrigin();
+    corners[2]   = GetEnd();
+    corners[1].x = corners[0].x;
+    corners[1].y = corners[2].y;
+    corners[3].x = corners[2].x;
+    corners[3].y = corners[0].y;
+
+    // Rotate all corners, to find the bounding box
+    for( int ii = 0; ii < 4; ii ++ )
+        RotatePoint( &corners[ii], aRotCenter, aAngle );
+
+    // Find the corners bounding box
+    wxPoint start = corners[0];
+    wxPoint end = corners[0];
+
+    for( int ii = 1; ii < 4; ii ++ )
+    {
+        start.x = std::min( start.x, corners[ii].x);
+        start.y = std::min( start.y, corners[ii].y);
+        end.x = std::max( end.x, corners[ii].x);
+        end.y = std::max( end.y, corners[ii].y);
+    }
+
+    EDA_RECT bbox;
+    bbox.SetOrigin( start );
+    bbox.SetEnd( end );
+
+    return bbox;
+}

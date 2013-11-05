@@ -117,14 +117,11 @@ public:
 
     int GetLength() const;        // text length
 
-    double GetDrawRotation() const;  // Return text rotation for drawings and plotting
-
     /**
-     * Function GetTextRect
-     * @return an EDA_RECT which gives the position and size of the text area
-     * (for the 0 orient text and footprint)
+     * @return the text rotation for drawings and plotting
+     * the footprint rotation is taken in account
      */
-    EDA_RECT GetTextRect( void ) const;
+    double GetDrawRotation() const;
 
     EDA_RECT GetBoundingBox() const;
 

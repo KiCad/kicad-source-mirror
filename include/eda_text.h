@@ -229,7 +229,8 @@ public:
      * useful in multiline texts to calculate the full text or a line area (for
      * zones filling, locate functions....)
      * @return the rect containing the line of text (i.e. the position and the
-     *         size of one line) this rectangle is calculated for 0 orient text.
+     *         size of one line)
+     *         this rectangle is calculated for 0 orient text.
      *         If orientation is not 0 the rect must be rotated to match the
      *         physical area
      * @param aLine The line of text to consider.

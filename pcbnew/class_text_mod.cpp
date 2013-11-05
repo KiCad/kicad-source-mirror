@@ -159,45 +159,14 @@ void TEXTE_MODULE::SetLocalCoord()
     }
 
     m_Pos0 = m_Pos - module->GetPosition();
-
     double angle = module->GetOrientation();
-
     RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
 }
-
-
-/**
- * Function GetTextRect
- * @return an EDA_RECT which gives the position and size of the text area
- *         (for the footprint orientation)
- */
-EDA_RECT TEXTE_MODULE::GetTextRect( void ) const
-{
-    EDA_RECT area;
-
-    int      dx, dy;
-
-    dx  = ( m_Size.x * GetLength() ) / 2;
-    dx  = (dx * 10) / 9; /* letter size = 10/9 */
-    dx += m_Thickness / 2;
-    dy  = ( m_Size.y + m_Thickness ) / 2;
-
-    wxPoint Org = m_Pos;    // This is the position of the center of the area
-    Org.x -= dx;
-    Org.y -= dy;
-    area.SetOrigin( Org );
-    area.SetHeight( 2 * dy );
-    area.SetWidth( 2 * dx );
-    area.Normalize();
-
-    return area;
-}
-
 
 bool TEXTE_MODULE::HitTest( const wxPoint& aPosition )
 {
     wxPoint  rel_pos;
-    EDA_RECT area = GetTextRect();
+    EDA_RECT area = GetTextBox( -1, -1 );
 
     /* Rotate refPos to - angle
      * to test if refPos is within area (which is relative to an horizontal
@@ -220,20 +189,12 @@ bool TEXTE_MODULE::HitTest( const wxPoint& aPosition )
  */
 EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 {
-    // Calculate area without text fields:
-    EDA_RECT text_area;
     double   angle = GetDrawRotation();
-    wxPoint  textstart, textend;
+    EDA_RECT text_area = GetTextBox( -1, -1 );
 
-    text_area = GetTextRect();
-    textstart = text_area.GetOrigin();
-    textend   = text_area.GetEnd();
-    RotatePoint( &textstart, m_Pos, angle );
-    RotatePoint( &textend, m_Pos, angle );
+    if( angle )
+        text_area = text_area.GetBoundingBoxRotated( m_Pos, m_Orient );
 
-    text_area.SetOrigin( textstart );
-    text_area.SetEnd( textend );
-    text_area.Normalize();
     return text_area;
 }
 
@@ -319,6 +280,14 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
     DrawGraphicText( clipbox, DC, pos, color, m_Text, orient,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
+
+    // Enable these line to draw the bounding box (debug tests purposes only)
+#if 0
+    {
+        EDA_RECT BoundaryBox = GetBoundingBox();
+        GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
+    }
+#endif
 }
 
 /* Draws a line from the TEXTE_MODULE origin to parent MODULE origin.
