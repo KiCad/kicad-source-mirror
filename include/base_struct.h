@@ -274,6 +274,16 @@ public:
      * @return The area of the rectangle.
      */
     double GetArea() const;
+
+    /**
+     * Function GetBoundingBoxRotated
+     * @return the bounding box of this, after rotation
+     * @param aAngle = the rotation angle in 0.1 deg.
+     * @param aRotCenter = the rotation point.
+     * useful to calculate bounding box of rotated items, when
+     * rotation if not k*90 degrees
+     */
+    EDA_RECT GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle );
 };
 
 

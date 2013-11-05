@@ -106,6 +106,14 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
     EDA_TEXT::Draw( clipbox, DC, offset, color,
                     DrawMode, fillmode, anchor_color );
+
+    // Enable these line to draw the bounding box (debug tests purposes only)
+#if 0
+    {
+        EDA_RECT BoundaryBox = GetBoundingBox();
+        GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
+    }
+#endif
 }
 
 
@@ -148,6 +156,16 @@ void TEXTE_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     msg = ::CoordinateToString( m_Size.y );
     aList.push_back( MSG_PANEL_ITEM( _( "Size Y" ), msg, RED ) );
+}
+
+EDA_RECT TEXTE_PCB::GetBoundingBox() const
+{
+    EDA_RECT rect = GetTextBox( -1, -1 );
+
+    if( m_Orient )
+        rect = rect.GetBoundingBoxRotated( m_Pos, m_Orient );
+
+    return rect;
 }
 
 

@@ -1877,7 +1877,16 @@ MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const std::string& aPkgName 
 {
     std::auto_ptr<MODULE>   m( new MODULE( NULL ) );
 
-    m->SetFPID( FPID( aPkgName ) );
+    // Replace reserved chars in FPID by other chars
+    // ':' and '/' are used as separators in FPIDs
+    std::string fpid_str = aPkgName;
+    for( unsigned ii = 0; ii < fpid_str.size(); ii++ )
+    {
+        if( fpid_str[ii] == ':' ) fpid_str[ii] = '_';
+        if( fpid_str[ii] == '/' ) fpid_str[ii] = '-';
+    }
+
+    m->SetFPID( FPID( fpid_str ) );
 
     opt_string description = aPackage.get_optional<std::string>( "description" );
     if( description )
