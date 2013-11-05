@@ -35,6 +35,9 @@
 
 using namespace KIGFX;
 
+///> Opacity of a single layer
+const float LAYER_ALPHA = 0.8;
+
 CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
         wxEvtHandler* aPaintListener, const wxString& aName ) :
     wxWindow( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxEXPAND, aName )
@@ -111,7 +114,7 @@ void CAIRO_GAL::EndDrawing()
 
     // Cairo grouping prevents display of overlapping items on the same layer in the lighter color
     cairo_pop_group_to_source( currentContext );
-    cairo_paint_with_alpha( currentContext, fillColor.a );
+    cairo_paint_with_alpha( currentContext, LAYER_ALPHA );
 
     // Merge buffers on the screen
     compositor->DrawBuffer( mainBuffer );
@@ -417,7 +420,7 @@ void CAIRO_GAL::SetLayerDepth( double aLayerDepth )
         storePath();
 
         cairo_pop_group_to_source( currentContext );
-        cairo_paint_with_alpha( currentContext, fillColor.a );
+        cairo_paint_with_alpha( currentContext, LAYER_ALPHA );
 
         cairo_push_group( currentContext );
     }
@@ -743,7 +746,7 @@ void CAIRO_GAL::SetTarget( RENDER_TARGET aTarget )
         storePath();
 
         cairo_pop_group_to_source( currentContext );
-        cairo_paint_with_alpha( currentContext, fillColor.a );
+        cairo_paint_with_alpha( currentContext, LAYER_ALPHA );
     }
 
     switch( aTarget )
