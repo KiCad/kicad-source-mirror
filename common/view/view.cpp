@@ -645,7 +645,7 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate ) const
 
     for( int i = 0; i < layers_count; ++i )
     {
-        m_gal->SetLayerDepth( m_layers.at( i ).renderingOrder );
+        m_gal->SetLayerDepth( m_layers.at( layers[i] ).renderingOrder );
         draw( aItem, layers[i], aImmediate );
     }
 }
