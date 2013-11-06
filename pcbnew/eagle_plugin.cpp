@@ -48,10 +48,8 @@ our error message.
 
 Load() TODO's
 
-*) test footprint placement on board back
-*) netclass info?
 *) verify zone fill clearances are correct
-*) write BOARD::Move() and reposition to center of page from centerBoard()
+*) there is a problem with ARC line segments
 
 */
 
@@ -87,13 +85,30 @@ typedef std::pair<CA_ITER, CA_ITER>         CA_ITER_RANGE;
 typedef MODULE_MAP::iterator                MODULE_ITER;
 typedef MODULE_MAP::const_iterator          MODULE_CITER;
 
-typedef boost::optional<std::string>        opt_string;
+typedef boost::optional<string>             opt_string;
 typedef boost::optional<int>                opt_int;
 typedef boost::optional<double>             opt_double;
 typedef boost::optional<bool>               opt_bool;
 
 
 const wxChar* traceEaglePlugin = wxT( "KicadEaglePlugin" );
+
+/// Test footprint name for kicad legality, fix if needed and return true if fixing was required.
+static bool fix_eagle_package_name( string* aName )
+{
+    bool    changed = false;
+
+    for( string::iterator it = aName->begin();  it != aName->end();  ++it )
+    {
+        switch( *it )   // for mapping, I always prefer a tabular switch presentation:
+        {
+        case ':':   *it = '_';  changed = true;     break;
+        case '/':   *it = '-';  changed = true;     break;
+        }
+    }
+
+    return changed;
+}
 
 
 /// segment (element) of our XPATH into the Eagle XML document tree in PTREE form.
@@ -151,11 +166,11 @@ public:
     }
 
     /// return the contents of the XPATH as a single string
-    std::string Contents()
+    string Contents()
     {
         typedef std::vector<TRIPLET>::const_iterator CITER;
 
-        std::string ret;
+        string ret;
 
         for( CITER it = p.begin();  it != p.end();  ++it )
         {
@@ -187,7 +202,7 @@ public:
 static opt_bool parseOptionalBool( CPTREE& attribs, const char* aName )
 {
     opt_bool    ret;
-    opt_string  stemp = attribs.get_optional<std::string>( aName );
+    opt_string  stemp = attribs.get_optional<string>( aName );
 
     if( stemp )
         ret = !stemp->compare( "yes" );
@@ -227,7 +242,7 @@ typedef boost::optional<EROT>   opt_erot;
 
 /// parse an Eagle XML "rot" field.  Unfortunately the DTD seems not to explain
 /// this format very well.  [S][M]R<degrees>.   Examples: "R90", "MR180", "SR180"
-static EROT erot( const std::string& aRot )
+static EROT erot( const string& aRot )
 {
     EROT    rot;
 
@@ -245,7 +260,7 @@ static EROT erot( const std::string& aRot )
 static opt_erot parseOptionalEROT( CPTREE& attribs )
 {
     opt_erot    ret;
-    opt_string  stemp = attribs.get_optional<std::string>( "rot" );
+    opt_string  stemp = attribs.get_optional<string>( "rot" );
     if( stemp )
         ret = erot( *stemp );
     return ret;
@@ -316,7 +331,7 @@ EWIRE::EWIRE( CPTREE& aWire )
 
     curve = attribs.get_optional<double>( "curve" );
 
-    opt_string s = attribs.get_optional<std::string>( "style" );
+    opt_string s = attribs.get_optional<string>( "style" );
     if( s )
     {
         if( !s->compare( "continuous" ) )
@@ -329,7 +344,7 @@ EWIRE::EWIRE( CPTREE& aWire )
             style = EWIRE::DASHDOT;
     }
 
-    s = attribs.get_optional<std::string>( "cap" );
+    s = attribs.get_optional<string>( "cap" );
     if( s )
     {
         if( !s->compare( "round" ) )
@@ -374,13 +389,13 @@ EVIA::EVIA( CPTREE& aVia )
     x     = attribs.get<double>( "x" );
     y     = attribs.get<double>( "y" );
 
-    std::string ext = attribs.get<std::string>( "extent" );
+    string ext = attribs.get<string>( "extent" );
 
     sscanf( ext.c_str(), "%u-%u", &layer_front_most, &layer_back_most );
 
     drill = attribs.get<double>( "drill" );
     diam  = attribs.get_optional<double>( "diameter" );
-    shape = attribs.get_optional<std::string>( "shape" );
+    shape = attribs.get_optional<string>( "shape" );
 }
 
 
@@ -460,7 +475,7 @@ ERECT::ERECT( CPTREE& aRect )
 /// Eagle "attribute" XML element, no foolin'.
 struct EATTR
 {
-    std::string name;
+    string      name;
     opt_string  value;
     opt_double  x;
     opt_double  y;
@@ -508,8 +523,8 @@ EATTR::EATTR( CPTREE& aAttribute )
         >
     */
 
-    name    = attribs.get<std::string>( "name" );                    // #REQUIRED
-    value   = attribs.get_optional<std::string>( "value" );
+    name    = attribs.get<string>( "name" );                    // #REQUIRED
+    value   = attribs.get_optional<string>( "value" );
 
     x       = attribs.get_optional<double>( "x" );
     y       = attribs.get_optional<double>( "y" );
@@ -522,7 +537,7 @@ EATTR::EATTR( CPTREE& aAttribute )
     ratio   = attribs.get_optional<double>( "ratio" );
     rot     = parseOptionalEROT( attribs );
 
-    opt_string stemp = attribs.get_optional<std::string>( "display" );
+    opt_string stemp = attribs.get_optional<string>( "display" );
     if( stemp )
     {
         // (off | value | name | both)
@@ -541,7 +556,7 @@ EATTR::EATTR( CPTREE& aAttribute )
 /// Eagle text element
 struct ETEXT
 {
-    std::string text;
+    string      text;
     double      x;
     double      y;
     double      size;
@@ -593,11 +608,11 @@ ETEXT::ETEXT( CPTREE& aText )
     size   = attribs.get<double>( "size" );
     layer  = attribs.get<int>( "layer" );
 
-    font   = attribs.get_optional<std::string>( "font" );
+    font   = attribs.get_optional<string>( "font" );
     ratio  = attribs.get_optional<double>( "ratio" );
     rot    = parseOptionalEROT( attribs );
 
-    opt_string stemp = attribs.get_optional<std::string>( "align" );
+    opt_string stemp = attribs.get_optional<string>( "align" );
     if( stemp )
     {
         // (bottom-left | bottom-center | bottom-right | center-left |
@@ -627,7 +642,7 @@ ETEXT::ETEXT( CPTREE& aText )
 /// Eagle thru hol pad
 struct EPAD
 {
-    std::string name;
+    string      name;
     double      x;
     double      y;
     double      drill;
@@ -671,14 +686,14 @@ EPAD::EPAD( CPTREE& aPad )
     */
 
     // #REQUIRED says DTD, throw exception if not found
-    name  = attribs.get<std::string>( "name" );
+    name  = attribs.get<string>( "name" );
     x     = attribs.get<double>( "x" );
     y     = attribs.get<double>( "y" );
     drill = attribs.get<double>( "drill" );
 
     diameter = attribs.get_optional<double>( "diameter" );
 
-    opt_string s = attribs.get_optional<std::string>( "shape" );
+    opt_string s = attribs.get_optional<string>( "shape" );
     if( s )
     {
         // (square | round | octagon | long | offset)
@@ -704,7 +719,7 @@ EPAD::EPAD( CPTREE& aPad )
 /// Eagle SMD pad
 struct ESMD
 {
-    std::string name;
+    string      name;
     double      x;
     double      y;
     double      dx;
@@ -740,7 +755,7 @@ ESMD::ESMD( CPTREE& aSMD )
     */
 
     // DTD #REQUIRED, throw exception if not found
-    name  = attribs.get<std::string>( "name" );
+    name  = attribs.get<string>( "name" );
     x     = attribs.get<double>( "x" );
     y     = attribs.get<double>( "y" );
     dx    = attribs.get<double>( "dx" );
@@ -824,7 +839,7 @@ EPOLYGON::EPOLYGON( CPTREE& aPolygon )
     layer   = attribs.get<int>( "layer" );
     spacing = attribs.get_optional<double>( "spacing" );
 
-    opt_string s = attribs.get_optional<std::string>( "pour" );
+    opt_string s = attribs.get_optional<string>( "pour" );
     if( s )
     {
         // (solid | hatch | cutout)
@@ -874,10 +889,10 @@ EHOLE::EHOLE( CPTREE& aHole )
 /// Eagle element element
 struct EELEMENT
 {
-    std::string name;
-    std::string library;
-    std::string package;
-    std::string value;
+    string      name;
+    string      library;
+    string      package;
+    string      value;
     double      x;
     double      y;
     opt_bool    locked;
@@ -907,10 +922,12 @@ EELEMENT::EELEMENT( CPTREE& aElement )
     */
 
     // #REQUIRED
-    name    = attribs.get<std::string>( "name" );
-    library = attribs.get<std::string>( "library" );
-    package = attribs.get<std::string>( "package" );
-    value   = attribs.get<std::string>( "value" );
+    name    = attribs.get<string>( "name" );
+    library = attribs.get<string>( "library" );
+    value   = attribs.get<string>( "value" );
+
+    package = attribs.get<string>( "package" );
+    fix_eagle_package_name( &package );
 
     x = attribs.get<double>( "x" );
     y = attribs.get<double>( "y" );
@@ -925,7 +942,7 @@ EELEMENT::EELEMENT( CPTREE& aElement )
 struct ELAYER
 {
     int         number;
-    std::string name;
+    string      name;
     int         color;
     int         fill;
     opt_bool    visible;
@@ -951,7 +968,7 @@ ELAYER::ELAYER( CPTREE& aLayer )
     */
 
     number = attribs.get<int>( "number" );
-    name   = attribs.get<std::string>( "name" );
+    name   = attribs.get<string>( "name" );
     color  = attribs.get<int>( "color" );
     visible = parseOptionalBool( attribs, "visible" );
     active  = parseOptionalBool( attribs, "active" );
@@ -960,7 +977,7 @@ ELAYER::ELAYER( CPTREE& aLayer )
 
 /// Parse an eagle distance which is either mm, or mils if there is "mil" suffix.
 /// Return is in BIU.
-static double parseEagle( const std::string& aDistance )
+static double parseEagle( const string& aDistance )
 {
     double ret = strtod( aDistance.c_str(), NULL );
     if( aDistance.npos != aDistance.find( "mil" ) )
@@ -1017,7 +1034,7 @@ void ERULES::parse( CPTREE& aRules )
 
         CPTREE& attribs = it->second.get_child( "<xmlattr>" );
 
-        const std::string& name = attribs.get<std::string>( "name" );
+        const string& name = attribs.get<string>( "name" );
 
         if( name == "psElongationLong" )
             psElongationLong = attribs.get<int>( "value" );
@@ -1026,27 +1043,27 @@ void ERULES::parse( CPTREE& aRules )
         else if( name == "rvPadTop" )
             rvPadTop = attribs.get<double>( "value" );
         else if( name == "rlMinPadTop" )
-            rlMinPadTop = parseEagle( attribs.get<std::string>( "value" ) );
+            rlMinPadTop = parseEagle( attribs.get<string>( "value" ) );
         else if( name == "rlMaxPadTop" )
-            rlMaxPadTop = parseEagle( attribs.get<std::string>( "value" ) );
+            rlMaxPadTop = parseEagle( attribs.get<string>( "value" ) );
 
         else if( name == "rvViaOuter" )
             rvViaOuter = attribs.get<double>( "value" );
         else if( name == "rlMinViaOuter" )
-            rlMinViaOuter = parseEagle( attribs.get<std::string>( "value" ) );
+            rlMinViaOuter = parseEagle( attribs.get<string>( "value" ) );
         else if( name == "rlMaxViaOuter" )
-            rlMaxViaOuter = parseEagle( attribs.get<std::string>( "value" ) );
+            rlMaxViaOuter = parseEagle( attribs.get<string>( "value" ) );
         else if( name == "mdWireWire" )
-            mdWireWire = parseEagle( attribs.get<std::string>( "value" ) );
+            mdWireWire = parseEagle( attribs.get<string>( "value" ) );
     }
 }
 
 
 /// Assemble a two part key as a simple concatonation of aFirst and aSecond parts,
 /// using a separator.
-static inline std::string makeKey( const std::string& aFirst, const std::string& aSecond )
+static inline string makeKey( const string& aFirst, const string& aSecond )
 {
-    std::string key = aFirst + '\x02' +  aSecond;
+    string key = aFirst + '\x02' +  aSecond;
     return key;
 }
 
@@ -1126,7 +1143,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
         // 8 bit "filename" should be encoded according to disk filename encoding,
         // (maybe this is current locale, maybe not, its a filesystem issue),
         // and is not necessarily utf8.
-        std::string filename = (const char*) aFileName.char_str( wxConvFile );
+        string filename = (const char*) aFileName.char_str( wxConvFile );
 
         read_xml( filename, doc, xml_parser::trim_whitespace | xml_parser::no_comments );
 
@@ -1171,7 +1188,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
     // so one catch should be OK for all errors.
     catch( ptree_error pte )
     {
-        std::string errmsg = pte.what();
+        string errmsg = pte.what();
 
         errmsg += " @\n";
         errmsg += m_xpath->Contents();
@@ -1570,7 +1587,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 }
 
 
-void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const std::string* aLibName )
+void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const string* aLibName )
 {
     m_xpath->push( "packages" );
 
@@ -1584,9 +1601,14 @@ void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const std::string* aLibName )
     for( CITER package = packages.begin();  package != packages.end();  ++package )
     {
         m_xpath->push( "package", "name" );
-        const std::string& pack_name = package->second.get<std::string>( "<xmlattr>.name" );
 
-#if defined(DEBUG)
+        const string& pack_ref = package->second.get<string>( "<xmlattr>.name" );
+
+        string pack_name( pack_ref );
+
+        fix_eagle_package_name( &pack_name );
+
+#if 0 && defined(DEBUG)
         if( pack_name == "TO220H" )
         {
             int breakhere = 1;
@@ -1595,7 +1617,7 @@ void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const std::string* aLibName )
 #endif
         m_xpath->Value( pack_name.c_str() );
 
-        std::string key = aLibName ? makeKey( *aLibName, pack_name ) : pack_name;
+        string key = aLibName ? makeKey( *aLibName, pack_name ) : pack_name;
 
         MODULE* m = makeModule( package->second, pack_name );
 
@@ -1628,7 +1650,7 @@ void EAGLE_PLUGIN::loadLibraries( CPTREE& aLibs )
 
     for( CITER library = aLibs.begin();  library != aLibs.end();  ++library )
     {
-        const std::string& lib_name = library->second.get<std::string>( "<xmlattr>.name" );
+        const string& lib_name = library->second.get<string>( "<xmlattr>.name" );
 
         m_xpath->Value( lib_name.c_str() );
 
@@ -1659,7 +1681,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 
         m_xpath->Value( e.name.c_str() );
 
-        std::string key = makeKey( e.library, e.package );
+        string key = makeKey( e.library, e.package );
 
         MODULE_CITER mi = m_templates.find( key );
 
@@ -1685,7 +1707,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
         // update the nets within the pads of the clone
         for( D_PAD* pad = m->Pads();  pad;  pad = pad->Next() )
         {
-            std::string key  = makeKey( e.name, TO_UTF8( pad->GetPadName() ) );
+            string key  = makeKey( e.name, TO_UTF8( pad->GetPadName() ) );
 
             NET_MAP_CITER ni = m_pads_to_nets.find( key );
             if( ni != m_pads_to_nets.end() )
@@ -1873,22 +1895,13 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
 }
 
 
-MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const std::string& aPkgName ) const
+MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const string& aPkgName ) const
 {
     std::auto_ptr<MODULE>   m( new MODULE( NULL ) );
 
-    // Replace reserved chars in FPID by other chars
-    // ':' and '/' are used as separators in FPIDs
-    std::string fpid_str = aPkgName;
-    for( unsigned ii = 0; ii < fpid_str.size(); ii++ )
-    {
-        if( fpid_str[ii] == ':' ) fpid_str[ii] = '_';
-        if( fpid_str[ii] == '/' ) fpid_str[ii] = '-';
-    }
+    m->SetFPID( FPID( aPkgName ) );
 
-    m->SetFPID( FPID( fpid_str ) );
-
-    opt_string description = aPackage.get_optional<std::string>( "description" );
+    opt_string description = aPackage.get_optional<string>( "description" );
     if( description )
         m->SetDescription( FROM_UTF8( description->c_str() ) );
 
@@ -2355,7 +2368,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
         zones.clear();
 
-        const std::string& nname = net->second.get<std::string>( "<xmlattr>.name" );
+        const string& nname = net->second.get<string>( "<xmlattr>.name" );
         wxString netName = FROM_UTF8( nname.c_str() );
 
         m_xpath->Value( nname.c_str() );
@@ -2470,10 +2483,10 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 // <contactref element="RN1" pad="7"/>
                 CPTREE& attribs = it->second.get_child( "<xmlattr>" );
 
-                const std::string& reference = attribs.get<std::string>( "element" );
-                const std::string& pad       = attribs.get<std::string>( "pad" );
+                const string& reference = attribs.get<string>( "element" );
+                const string& pad       = attribs.get<string>( "pad" );
 
-                std::string key = makeKey( reference, pad ) ;
+                string key = makeKey( reference, pad ) ;
 
                 // D(printf( "adding refname:'%s' pad:'%s' netcode:%d netname:'%s'\n", reference.c_str(), pad.c_str(), netCode, nname.c_str() );)
 
@@ -2715,8 +2728,8 @@ void EAGLE_PLUGIN::centerBoard()
 {
     if( m_props )
     {
-        std::string page_width;
-        std::string page_height;
+        string page_width;
+        string page_height;
 
         if( m_props->Value( "page_width",  &page_width ) &&
             m_props->Value( "page_height", &page_height ) )
@@ -2786,7 +2799,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
             // 8 bit "filename" should be encoded according to disk filename encoding,
             // (maybe this is current locale, maybe not, its a filesystem issue),
             // and is not necessarily utf8.
-            std::string filename = (const char*) aLibPath.char_str( wxConvFile );
+            string filename = (const char*) aLibPath.char_str( wxConvFile );
 
             read_xml( filename, doc, xml_parser::trim_whitespace | xml_parser::no_comments );
 
@@ -2817,7 +2830,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
     // so one catch should be OK for all errors.
     catch( ptree_error pte )
     {
-        std::string errmsg = pte.what();
+        string errmsg = pte.what();
 
         errmsg += " @\n";
         errmsg += m_xpath->Contents();
@@ -2848,7 +2861,7 @@ MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStrin
 
     cacheLib( aLibraryPath );
 
-    std::string key = TO_UTF8( aFootprintName );
+    string key = TO_UTF8( aFootprintName );
 
     MODULE_CITER mi = m_templates.find( key );
 
