@@ -45,6 +45,7 @@ install_prerequisites()
             debhelper \
             doxygen \
             libbz2-dev \
+            libglew-dev \
             libssl-dev \
             libwxgtk2.8-dev
 
@@ -58,16 +59,11 @@ install_prerequisites()
             build-essential \
             cmake \
             cmake-curses-gui \
-            debhelper \
             doxygen \
             libbz2-dev \
-            libgl1-mesa-dev \
-            libglu1-mesa-dev \
+            libglew-dev \
             libssl-dev \
-            libwxbase2.8-dev \
-            libwxgtk2.8-dev \
-            libx11-dev \
-            mesa-common-dev
+            libwxgtk2.8-dev
     else
         echo
         echo "Incompatible System. Neither 'yum' nor 'apt-get' found. Not possible to continue."
