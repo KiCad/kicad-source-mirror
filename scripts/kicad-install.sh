@@ -45,6 +45,7 @@ install_prerequisites()
             debhelper \
             doxygen \
             libbz2-dev \
+            libcairo2-dev \
             libglew-dev \
             libssl-dev \
             libwxgtk2.8-dev
@@ -61,6 +62,7 @@ install_prerequisites()
             cmake-curses-gui \
             doxygen \
             libbz2-dev \
+            libcairo2-dev \
             libglew-dev \
             libssl-dev \
             libwxgtk2.8-dev
