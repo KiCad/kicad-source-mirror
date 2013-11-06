@@ -41,7 +41,6 @@ class BOARD;
 /* Layer identification (layer number) */
 typedef int LAYER_NUM;
 #define UNDEFINED_LAYER         -1
-#define NO_LAYER                0
 #define FIRST_LAYER             0
 #define FIRST_COPPER_LAYER      0
 #define LAYER_N_BACK            0

@@ -670,12 +670,18 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
         m_gal->SetFillColor( color );
 
         m_gal->Save();
-        m_gal->Translate( VECTOR2D( aSegment->GetPosition() ) );
 
         MODULE* module = aSegment->GetParentModule();
         if( module )
         {
+            m_gal->Translate( module->GetPosition() );
             m_gal->Rotate( -module->GetOrientation() * M_PI / 1800.0 );
+        }
+        else
+        {
+            // not tested
+            m_gal->Translate( aSegment->GetPosition() );
+            m_gal->Rotate( -aSegment->GetAngle() * M_PI / 1800.0 );
         }
 
         std::copy( aSegment->GetPolyPoints().begin(), aSegment->GetPolyPoints().end(),
