@@ -101,11 +101,11 @@ void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
     wxFileName projectFpLibTableFileName;
 
     projectFpLibTableFileName = FP_LIB_TABLE::GetProjectFileName( fn );
+    FP_LIB_TABLE::SetProjectPathEnvVariable( projectFpLibTableFileName );
 
     try
     {
         m_footprintLibTable->Load( projectFpLibTableFileName, m_globalFootprintTable );
-        FP_LIB_TABLE::SetProjectPathEnvVariable( projectFpLibTableFileName );
     }
     catch( IO_ERROR ioe )
     {
