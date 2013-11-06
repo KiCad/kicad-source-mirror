@@ -249,6 +249,8 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     // Check if a project footprint table is defined and load it.  If no project footprint
     // table is defined, then the global library table is the footprint library table.
 #if defined( USE_FP_LIB_TABLE )
+    FP_LIB_TABLE::SetProjectPathEnvVariable( fn );
+
     delete m_footprintLibTable;
 
     wxFileName projectFpLibTableFileName;
@@ -274,8 +276,6 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
 
     if( viewFrame )
         viewFrame->SetFootprintLibTable( m_footprintLibTable );
-
-    FP_LIB_TABLE::SetProjectPathEnvVariable( fn );
 #endif
 
     // Load the page layout decr file, from the filename stored in
