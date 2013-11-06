@@ -114,10 +114,15 @@ if( CMAKE_COMPILER_IS_GNUCXX )
 
     if( MINGW )
         # Set default flags for Release build.
-        set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s -static-libgcc -static-libstdc++" )
+        # Use a static link for libstdc++ reduce the starting time for Pcbnew (and eeschema)
+        # (10 times faster)
+        # This problem is caused by large relocation table and inefficient MinGW implementation
+        # see http://sourceforge.net/p/mingw/bugs/1747/ and also
+        # http://stackoverflow.com/questions/15310996/clang-slow-startup-using-mingw
+        set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s -static-libstdc++" )
 
         # Set default flags for Debug build.
-        set( CMAKE_MODULE_LINKER_FLAGS "-static-libgcc -static-libstdc++") # SWIG macros on Windows
+        set( CMAKE_MODULE_LINKER_FLAGS "-static-libstdc++")
 
     else()
         # We build DLL/DSOs from static libraries, so create position independent code
