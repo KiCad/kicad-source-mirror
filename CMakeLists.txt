@@ -113,16 +113,7 @@ if( CMAKE_COMPILER_IS_GNUCXX )
     set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG" )
 
     if( MINGW )
-        # Set default flags for Release build.
-        # Use a static link for libstdc++ reduce the starting time for Pcbnew (and eeschema)
-        # (10 times faster)
-        # This problem is caused by large relocation table and inefficient MinGW implementation
-        # see http://sourceforge.net/p/mingw/bugs/1747/ and also
-        # http://stackoverflow.com/questions/15310996/clang-slow-startup-using-mingw
-        set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s -static-libstdc++" )
-
-        # Set default flags for Debug build.
-        set( CMAKE_MODULE_LINKER_FLAGS "-static-libstdc++")
+        set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
 
     else()
         # We build DLL/DSOs from static libraries, so create position independent code
@@ -274,9 +265,9 @@ include( download_boost )
 # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
 if( APPLE )
     find_package( wxWidgets COMPONENTS gl adv html core net base xml QUIET )
-else( APPLE )
+else()
     find_package( wxWidgets COMPONENTS gl aui adv html core net base xml QUIET )
-endif( APPLE )
+endif()
 check_find_package_result( wxWidgets_FOUND "wxWidgets" )
 
 
