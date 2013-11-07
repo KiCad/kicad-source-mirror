@@ -72,6 +72,9 @@ install_prerequisites()
         echo
         exit 1
     fi
+
+    # ensure bzr name and email are set.  No message since bzr prints an excellent diagnostic.
+    bzr whoami || exit 2
 }
 
 
