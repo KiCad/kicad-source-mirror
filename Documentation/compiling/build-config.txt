@@ -77,7 +77,7 @@ wxWidgets_USE_DEBUG to ON.
 
 wxWidgets_USE_UNICODE (ON/OFF)
 ------------------------------
-If you platform supports Unicode and you wish to build KiCad with Unicode
+If your platform supports Unicode and you wish to build KiCad with Unicode
 support, set wxWidgets_USE_UNICODE to ON.  Please note as of the 2.9 branch
 this option is not required.
 
