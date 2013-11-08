@@ -60,7 +60,6 @@ ExternalProject_Add(
     # This one requires the bzr commit below, since bzr patch only knows a working tree.
     PATCH_COMMAND bzr patch -p0 ${PROJECT_SOURCE_DIR}/patches/openssl-1.0.1e.patch
 
-    # this requires that perl be installed:
     CONFIGURE_COMMAND
             ${CMAKE_COMMAND}
             -G ${CMAKE_GENERATOR}
