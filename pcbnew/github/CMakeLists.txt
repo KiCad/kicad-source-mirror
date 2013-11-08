@@ -73,3 +73,8 @@ endif()
 
 add_dependencies( github_plugin boost )
 add_dependencies( github_plugin avhttp )
+
+if( MINGW AND NOT OPENSSL_ROOT_DIR )
+    add_dependencies( github_plugin openssl )
+endif()
+

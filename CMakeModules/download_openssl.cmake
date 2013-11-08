@@ -29,52 +29,17 @@
 #-----<configure>-------------------------------------------------------------------------------------
 
 set( OPENSSL_RELEASE "1.0.1e" )
-set( OPENSSL_MD5 66bf6f10f060d561929de96f9dfe5b8c ) # re-calc on every RELEASE change
+set( OPENSSL_MD5 08bec482fe1c4795e819bfcfcb9647b9 ) # re-calc on every RELEASE change
 
 #-----</configure>-----------------------------------------------------------------------------------
 
-unset( PIC_FLAG )
-set( CFLAGS CFLAGS=${CMAKE_C_FLAGS} )
-
-if( MINGW )         # either MINGW or cross compiling?
-    if( CMAKE_SIZEOF_VOID_P EQUAL 4 )
-        set( MINGW32 true )
-        set( MACHINE x86_32 )
-    elseif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-        set( MINGW64 true )
-        set( MACHINE x86_64 )
-    endif()
-
-    if( MINGW32 )
-        set( HOST "--host=i586-pc-mingw32" )
-    elseif( MINGW64 )
-        set( HOST "--host=x86_64-pc-mingw32" )
-    endif()
-
-    set( CC "CC=${CMAKE_C_COMPILER}" )
-    set( RANLIB "RANLIB=${CMAKE_RANLIB}" )
-    set( AR "AR=${CMAKE_AR}" )
-else()
-    set( PIC_FLAG -fPIC )
-endif()
-
-string( TOLOWER ${CMAKE_HOST_SYSTEM_NAME} build )
-
-# Force some configure scripts into knowing this is a cross-compilation, if it is.
-set( BUILD --build=${CMAKE_HOST_SYSTEM_PROCESSOR}-pc-${build} )
-
-
-# http://www.blogcompiler.com/2011/12/21/openssl-for-windows/
-# http://qt-project.org/wiki/Compiling-OpenSSL-with-MinGW
 set( PREFIX ${DOWNLOAD_DIR}/openssl-${OPENSSL_RELEASE} )
 
-unset( CROSS )
-if( MINGW32 )
-    set( MW mingw )
-    set( CROSS "CROSS_COMPILE=${CROSS_COMPILE}" )
-elseif( MINGW64 )
-    set( MW mingw64 )
-    set( CROSS "CROSS_COMPILE=${CROSS_COMPILE}" )
+# CMake barfs if we pass in an empty CMAKE_TOOLCHAIN_FILE, so we only set it up
+# if it has a non-empty value
+unset( TOOLCHAIN )
+if( CMAKE_TOOLCHAIN_FILE )
+    set( TOOLCHAIN "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" )
 endif()
 
 ExternalProject_Add(
@@ -82,7 +47,7 @@ ExternalProject_Add(
     DOWNLOAD_DIR ${DOWNLOAD_DIR}
     PREFIX ${PREFIX}
     TIMEOUT 60
-    URL http://www.openssl.org/source/openssl-${OPENSSL_RELEASE}.tar.gz
+    URL http://launchpad.net/openssl-cmake/1.0.1e/1.0.1e-1/+download/openssl-cmake-1.0.1e-src.tar.gz
     URL_MD5 ${OPENSSL_MD5}
 
     # mingw uses msvcrt.dll's printf() which cannot handle %zd, so having
@@ -97,17 +62,17 @@ ExternalProject_Add(
 
     # this requires that perl be installed:
     CONFIGURE_COMMAND
-            ${CROSS}
-            <SOURCE_DIR>/Configure
-            ${MW}
-            --prefix=<INSTALL_DIR>
-            ${PIC_FLAG}         # empty for MINGW
-            shared
+            ${CMAKE_COMMAND}
+            -G ${CMAKE_GENERATOR}
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+            -DBUILD_SHARED_LIBS=ON
+            ${TOOLCHAIN}
+            <SOURCE_DIR>
 
     BUILD_IN_SOURCE 1
-    BUILD_COMMAND make depend
-          COMMAND make
-    INSTALL_COMMAND make install
+    BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
+    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
     )
 
 # In order to use "bzr patch", we have to have a bzr working tree, this means a bzr repo
@@ -141,8 +106,8 @@ set( OPENSSL_INCLUDE_DIR
     )
 
 set( OPENSSL_LIBRARIES
-    ${PREFIX}/lib/libssl.a
-    ${PREFIX}/lib/libcrypto.a
+    ${PREFIX}/lib/libssl${CMAKE_IMPORT_LIBRARY_SUFFIX}
+    ${PREFIX}/lib/libcrypto${CMAKE_IMPORT_LIBRARY_SUFFIX}
     CACHE STRING "OPENSSL libraries"
     )
 set( OPENSSL_FOUND true )
