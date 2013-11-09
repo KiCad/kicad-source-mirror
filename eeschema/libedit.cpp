@@ -87,7 +87,7 @@ void LIB_EDIT_FRAME::SelectActiveLibrary( CMP_LIBRARY* aLibrary )
 bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, CMP_LIBRARY* aLibrary )
 {
     if( GetScreen()->IsModify()
-        && !IsOK( this, _( "Current part not saved.\n\nDiscard current changes?" ) ) )
+        && !IsOK( this, _( "The current component is not saved.\n\nDiscard current changes?" ) ) )
         return false;
 
     SelectActiveLibrary( aLibrary );
@@ -119,7 +119,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     if( GetScreen()->IsModify()
-        && !IsOK( this, _( "Current part not saved.\n\nDiscard current changes?" ) ) )
+        && !IsOK( this, _( "Current component is not saved.\n\nDiscard current changes?" ) ) )
         return;
 
      // No current lib, ask user for the library to use.
@@ -151,10 +151,12 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     /* Load the new library component */
     libEntry = m_library->FindEntry( CmpName );
     CMP_LIBRARY* searchLib = m_library;
+
     if( libEntry == NULL )
     {   // Not found in the active library: search inside the full list
         // (can happen when using Viewlib to load a component)
         libEntry = CMP_LIBRARY::FindLibraryEntry( CmpName );
+
         if( libEntry )
         {
             searchLib = libEntry->GetLibrary();
@@ -164,6 +166,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
             msg << _("The selected component is not in the active library");
             msg << wxT("\n\n");
             msg << _("Do you want to change the active library?");
+
             if( IsOK( this, msg ) )
                 SelectActiveLibrary( searchLib );
         }
@@ -221,7 +224,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLib
 
     if( m_component == NULL )
     {
-        msg.Printf( _( "Could not create copy of part <%s> in library <%s>." ),
+        msg.Printf( _( "Could not create copy of component <%s> in library <%s>." ),
                     GetChars( aEntry->GetName() ),
                     GetChars( aLibrary->GetName() ) );
         DisplayError( this, msg );
@@ -261,8 +264,7 @@ void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
         wxString fieldText = field->GetText();
         wxString fieldfullText = field->GetFullText( m_unit );
         field->EDA_TEXT::SetText( fieldfullText );  // change the field text string only
-        m_component->Draw( m_canvas, aDC, aOffset, m_unit,
-                           m_convert, GR_DEFAULT_DRAWMODE );
+        m_component->Draw( m_canvas, aDC, aOffset, m_unit, m_convert, GR_DEFAULT_DRAWMODE );
         field->EDA_TEXT::SetText( fieldText );      // restore the field text string
     }
 }
@@ -455,7 +457,7 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
 
     msg = m_component->GetName();
 
-    AppendMsgPanel( _( "Part" ), msg, BLUE, 8 );
+    AppendMsgPanel( _( "Name" ), msg, BLUE, 8 );
 
     if( m_aliasName == m_component->GetName() )
         msg = _( "None" );

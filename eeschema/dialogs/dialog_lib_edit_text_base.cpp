@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 30 2013)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,7 +25,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bTextValueBoxSizer;
 	bTextValueBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Text"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	bTextValueBoxSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -59,7 +59,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	bBottomtBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sOptionsSizer;
-	sOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Text Options:") ), wxVERTICAL );
+	sOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
 	
 	m_Orient = new wxCheckBox( this, wxID_ANY, _("Vertical"), wxDefaultPosition, wxDefaultSize, 0 );
 	sOptionsSizer->Add( m_Orient, 0, wxALL, 5 );
@@ -67,10 +67,10 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	sOptionsSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
-	m_CommonUnit = new wxCheckBox( this, wxID_ANY, _("Common to Units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CommonUnit = new wxCheckBox( this, wxID_ANY, _("Common to all units"), wxDefaultPosition, wxDefaultSize, 0 );
 	sOptionsSizer->Add( m_CommonUnit, 0, wxALL, 5 );
 	
-	m_CommonConvert = new wxCheckBox( this, wxID_ANY, _("Common to convert"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CommonConvert = new wxCheckBox( this, wxID_ANY, _("Common to all body styles"), wxDefaultPosition, wxDefaultSize, 0 );
 	sOptionsSizer->Add( m_CommonConvert, 0, wxALL|wxEXPAND, 5 );
 	
 	m_Invisible = new wxCheckBox( this, wxID_ANY, _("Invisible"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -81,19 +81,19 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	
 	wxString m_TextShapeOptChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
 	int m_TextShapeOptNChoices = sizeof( m_TextShapeOptChoices ) / sizeof( wxString );
-	m_TextShapeOpt = new wxRadioBox( this, wxID_ANY, _("Text Shape:"), wxDefaultPosition, wxDefaultSize, m_TextShapeOptNChoices, m_TextShapeOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextShapeOpt = new wxRadioBox( this, wxID_ANY, _("Style"), wxDefaultPosition, wxDefaultSize, m_TextShapeOptNChoices, m_TextShapeOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextShapeOpt->SetSelection( 0 );
 	bBottomtBoxSizer->Add( m_TextShapeOpt, 1, wxALL|wxEXPAND, 5 );
 	
 	wxString m_TextHJustificationOptChoices[] = { _("Align left"), _("Align center"), _("Align right") };
 	int m_TextHJustificationOptNChoices = sizeof( m_TextHJustificationOptChoices ) / sizeof( wxString );
-	m_TextHJustificationOpt = new wxRadioBox( this, wxID_ANY, _("Horiz. Justify:"), wxDefaultPosition, wxDefaultSize, m_TextHJustificationOptNChoices, m_TextHJustificationOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextHJustificationOpt = new wxRadioBox( this, wxID_ANY, _("Horizontal Justify"), wxDefaultPosition, wxDefaultSize, m_TextHJustificationOptNChoices, m_TextHJustificationOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextHJustificationOpt->SetSelection( 1 );
 	bBottomtBoxSizer->Add( m_TextHJustificationOpt, 1, wxALL|wxEXPAND, 5 );
 	
 	wxString m_TextVJustificationOptChoices[] = { _("Align bottom"), _("Align center"), _("Align top") };
 	int m_TextVJustificationOptNChoices = sizeof( m_TextVJustificationOptChoices ) / sizeof( wxString );
-	m_TextVJustificationOpt = new wxRadioBox( this, wxID_ANY, _("Vert. Justify:"), wxDefaultPosition, wxDefaultSize, m_TextVJustificationOptNChoices, m_TextVJustificationOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextVJustificationOpt = new wxRadioBox( this, wxID_ANY, _("Verticle Justify"), wxDefaultPosition, wxDefaultSize, m_TextVJustificationOptNChoices, m_TextVJustificationOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextVJustificationOpt->SetSelection( 1 );
 	bBottomtBoxSizer->Add( m_TextVJustificationOpt, 1, wxALL|wxEXPAND, 5 );
 	

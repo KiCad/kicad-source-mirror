@@ -1462,7 +1462,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     if( root_component->IsPower() )
         msg = _( "Power symbol" );
     else
-        msg = _( "Name" );
+        msg = _( "Value" );
 
     aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetText(), DARKCYAN ) );
 
@@ -1478,7 +1478,8 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     if( ! GetField( FOOTPRINT )->IsVoid() )
         msg = GetField( FOOTPRINT )->GetText();
     else
-        msg = _("<Unknown>");
+        msg = _( "<Unknown>" );
+
     aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKRED ) );
 
     // Display description of the component, and keywords found in lib

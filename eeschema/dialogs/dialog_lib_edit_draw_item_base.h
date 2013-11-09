@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -36,7 +36,7 @@ class DIALOG_LIB_EDIT_DRAW_ITEM_BASE : public wxDialog
 	protected:
 		enum
 		{
-			ID_M_STATICTEXTSHARING = 1000,
+			ID_M_STATICTEXTSHARING = 1000
 		};
 		
 		wxStaticText* m_staticText1;

@@ -261,18 +261,18 @@ LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
 }
 
+
 const wxChar* LIB_VIEW_FRAME::GetLibViewerFrameName()
 {
     return LIB_VIEW_FRAME_NAME;
 }
 
-/* return a reference to the current opened Library viewer
- * or NULL if no Library viewer currently opened
- */
+
 LIB_VIEW_FRAME* LIB_VIEW_FRAME::GetActiveLibraryViewer()
 {
     return (LIB_VIEW_FRAME*) wxWindow::FindWindowByName(GetLibViewerFrameName());
 }
+
 
 void LIB_VIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
@@ -508,6 +508,7 @@ void LIB_VIEW_FRAME::DClickOnCmpList( wxCommandEvent& event )
         ((SCH_BASE_FRAME*) GetParent())->SkipNextLeftButtonReleaseEvent();
     }
 }
+
 
 void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
 {

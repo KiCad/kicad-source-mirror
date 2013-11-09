@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 11 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -41,6 +41,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer2->Add( 0, 0, 1, wxEXPAND, 3 );
 	
 	m_textName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 100,-1 ), 0 );
+	m_textName->SetMaxLength( 0 ); 
 	bSizer2->Add( m_textName, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
@@ -65,6 +66,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_textReference = new wxTextCtrl( this, wxID_ANY, _("U"), wxDefaultPosition, wxSize( 100,-1 ), 0 );
+	m_textReference->SetMaxLength( 0 ); 
 	bSizer3->Add( m_textReference, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
@@ -131,7 +133,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	bSizer9->Add( 12, 0, 0, wxEXPAND, 3 );
 	
-	m_checkLockItems = new wxCheckBox( this, wxID_ANY, _("Parts in package locked (cannot be swapped)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkLockItems = new wxCheckBox( this, wxID_ANY, _("Units in package locked (cannot be swapped)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkLockItems->SetToolTip( _("Check this option if Eeschema cannot change parts selections inside a given package\nThis happens when parts are different in this package.\nWhen this option is not checked, Eeschema automatically choose the parts in packages to minimize packages count") );
 	
 	bSizer9->Add( m_checkLockItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );

@@ -120,7 +120,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( editMenu,
                  wxID_UNDO,
                  text,
-                 _( "Undo last edition" ),
+                 _( "Undo last edit" ),
                  KiBitmap( undo_xpm ) );
 
     // Redo

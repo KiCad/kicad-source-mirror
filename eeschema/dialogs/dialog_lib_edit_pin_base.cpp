@@ -80,10 +80,10 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	wxStaticBoxSizer* sbSizerPinSharing;
 	sbSizerPinSharing = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Sharing") ), wxVERTICAL );
 	
-	m_checkApplyToAllParts = new wxCheckBox( this, wxID_ANY, _("Shared by all &parts in component"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkApplyToAllParts = new wxCheckBox( this, wxID_ANY, _("Common to all &units in component"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerPinSharing->Add( m_checkApplyToAllParts, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Shared by all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerPinSharing->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
