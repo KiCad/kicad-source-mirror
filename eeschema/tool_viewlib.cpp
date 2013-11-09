@@ -61,16 +61,16 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
         m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
                                 KiBitmap( add_component_xpm ),
-                                _( "Select part to browse" ) );
+                                _( "Select component to browse" ) );
 
         m_mainToolBar->AddSeparator();
         m_mainToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
                                 KiBitmap( lib_previous_xpm ),
-                                _( "Display previous part" ) );
+                                _( "Display previous component" ) );
 
         m_mainToolBar->AddTool( ID_LIBVIEW_NEXT, wxEmptyString,
                                 KiBitmap( lib_next_xpm ),
-                                _( "Display next part" ) );
+                                _( "Display next component" ) );
 
         m_mainToolBar->AddSeparator();
         msg = AddHotkeyName( _( "Zoom in" ), s_Viewlib_Hokeys_Descr,
@@ -173,7 +173,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     for( ii = 0; ii < parts_count; ii++ )
     {
         wxString msg;
-        msg.Printf( _( "Part %c" ), 'A' + ii );
+        msg.Printf( _( "Unit %c" ), 'A' + ii );
         SelpartBox->Append( msg );
     }
 

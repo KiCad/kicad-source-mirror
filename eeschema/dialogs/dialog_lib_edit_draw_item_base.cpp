@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -39,11 +39,13 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	bSizer3->Add( 0, 0, 1, wxEXPAND, 3 );
 	
 	m_textWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textWidth->SetMaxLength( 0 ); 
 	bSizer3->Add( m_textWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_staticWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticWidthUnits->Wrap( -1 );
 	bSizer3->Add( m_staticWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
 	
 	dlgBorderSizer->Add( bSizer3, 0, wxALL|wxEXPAND, 0 );
 	
@@ -59,8 +61,9 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	
 	bSizer4->Add( 12, 0, 0, wxEXPAND, 3 );
 	
-	m_checkApplyToAllUnits = new wxCheckBox( this, wxID_ANY, _("Shared by all &parts in component"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkApplyToAllUnits = new wxCheckBox( this, wxID_ANY, _("Common to all &units in component"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer4->Add( m_checkApplyToAllUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
 	
 	dlgBorderSizer->Add( bSizer4, 0, wxALL|wxEXPAND, 0 );
 	
@@ -70,8 +73,9 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	
 	bSizer5->Add( 12, 0, 0, wxEXPAND, 3 );
 	
-	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Shared by all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
 	
 	dlgBorderSizer->Add( bSizer5, 0, wxEXPAND, 3 );
 	
@@ -103,7 +107,9 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	m_radioFillBackground = new wxRadioButton( this, wxID_ANY, _("Fill &background"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer7->Add( m_radioFillBackground, 0, wxALL, 3 );
 	
+	
 	bSizer6->Add( bSizer7, 0, wxEXPAND, 0 );
+	
 	
 	dlgBorderSizer->Add( bSizer6, 1, wxALL|wxEXPAND, 0 );
 	
@@ -116,9 +122,12 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	dlgBorderSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 0 );
 	
+	
 	mainSizer->Add( dlgBorderSizer, 1, wxALL|wxEXPAND, 12 );
+	
 	
 	this->SetSizer( mainSizer );
 	this->Layout();

@@ -19,32 +19,32 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_NoteBook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_PanelBasic = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+	m_NoteBook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0|wxTAB_TRAVERSAL );
+	m_PanelBasic = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerBasicPanel;
 	bSizerBasicPanel = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* m_OptionsBoxSizer;
-	m_OptionsBoxSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("General :") ), wxVERTICAL );
+	m_OptionsBoxSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("General") ), wxVERTICAL );
 	
-	m_AsConvertButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("As Convert"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_AsConvertButt->SetToolTip( _("Check this option for components that have a De Morgan representation.\nThis is usual for gates.") );
+	m_AsConvertButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Has alternate symbol (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AsConvertButt->SetToolTip( _("Check this option if the component has an alternate body style (De Morgan)") );
 	
 	m_OptionsBoxSizer->Add( m_AsConvertButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_ShowPinNumButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Show Pin Num"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowPinNumButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Show pin number"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowPinNumButt->SetValue(true); 
 	m_ShowPinNumButt->SetToolTip( _("Show or hide pin numbers") );
 	
 	m_OptionsBoxSizer->Add( m_ShowPinNumButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_ShowPinNameButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Show Pin Name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowPinNameButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Show pin name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowPinNameButt->SetValue(true); 
 	m_ShowPinNameButt->SetToolTip( _("Show or hide pin names") );
 	
 	m_OptionsBoxSizer->Add( m_ShowPinNameButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_PinsNameInsideButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Pin Name Inside"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PinsNameInsideButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Place pin names inside"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PinsNameInsideButt->SetValue(true); 
 	m_PinsNameInsideButt->SetToolTip( _("Check this option to have pin names inside the body and pin number outside.\nIf not checked pins names and pins numbers are outside.") );
 	
@@ -62,9 +62,9 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* bSizernbunits;
 	bSizernbunits = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextNbUnits = new wxStaticText( m_PanelBasic, wxID_ANY, _("Number of Units:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNbUnits = new wxStaticText( m_PanelBasic, wxID_ANY, _("Number of Units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextNbUnits->Wrap( -1 );
-	m_staticTextNbUnits->SetToolTip( _("This is the number of parts in this component package.\nA 74LS00 gate has 4 parts per packages.") );
+	m_staticTextNbUnits->SetToolTip( _("Enter the number of units in for a component that contains more than one unit") );
 	
 	bSizernbunits->Add( m_staticTextNbUnits, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -77,7 +77,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* bSizer17;
 	bSizer17 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextskew = new wxStaticText( m_PanelBasic, wxID_ANY, _("Skew:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextskew = new wxStaticText( m_PanelBasic, wxID_ANY, _("Pin Name Position Offset"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextskew->Wrap( -1 );
 	m_staticTextskew->SetToolTip( _("Margin (in 0.001 inches) between a pin name position and the component body.\nA value from 10 to 40 is usually good.") );
 	
@@ -95,13 +95,13 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_staticline1 = new wxStaticLine( m_PanelBasic, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerBasicPanel->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
-	m_OptionPower = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Power Symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptionPower->SetToolTip( _("Check this option for power symbols.\nPower symbols have specific properties for Eeschema:\n- Value cannot be edited (to avoid mistakes) because this is the pin name that is important for a power symbol\n- Reference is updated automatically when a netlist is created (no need to run Annotate)") );
+	m_OptionPower = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Define as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptionPower->SetToolTip( _("Check this option when the component is a power symbol") );
 	
 	bSizerBasicPanel->Add( m_OptionPower, 0, wxALL, 5 );
 	
-	m_OptionPartsLocked = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Parts are locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptionPartsLocked->SetToolTip( _("Check this option if Eeschema cannot change parts selections inside a given package\nThis happens when parts are different in this package.\nWhen this option is not checked, Eeschema automatically choose the parts in packages to minimize packages count") );
+	m_OptionPartsLocked = new wxCheckBox( m_PanelBasic, wxID_ANY, _("All units are not interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptionPartsLocked->SetToolTip( _("Check this option when creating multiple unit components and all units are not interchangeable") );
 	
 	bSizerBasicPanel->Add( m_OptionPartsLocked, 0, wxALL, 5 );
 	
@@ -110,11 +110,11 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelBasic->Layout();
 	bSizerBasicPanel->Fit( m_PanelBasic );
 	m_NoteBook->AddPage( m_PanelBasic, _("Options"), true );
-	m_PanelDoc = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+	m_PanelDoc = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_PanelDocBoxSizer;
 	m_PanelDocBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextDescription = new wxStaticText( m_PanelDoc, wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDescription = new wxStaticText( m_PanelDoc, wxID_ANY, _("Description"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDescription->Wrap( -1 );
 	m_staticTextDescription->SetToolTip( _("A short description that is displayed in Eeschema.\nCan be a very good help when selecting components in libraries components lists.") );
 	
@@ -124,7 +124,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_DocCtrl->SetMaxLength( 0 ); 
 	m_PanelDocBoxSizer->Add( m_DocCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticTextKeywords = new wxStaticText( m_PanelDoc, wxID_ANY, _("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextKeywords = new wxStaticText( m_PanelDoc, wxID_ANY, _("Keywords"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextKeywords->Wrap( -1 );
 	m_staticTextKeywords->SetToolTip( _("Enter key words that can be used to select this component.\nKey words cannot have spaces and are separated by a space.") );
 	
@@ -134,7 +134,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_KeywordsCtrl->SetMaxLength( 0 ); 
 	m_PanelDocBoxSizer->Add( m_KeywordsCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticTextDocFileName = new wxStaticText( m_PanelDoc, wxID_ANY, _("DocFileName:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDocFileName = new wxStaticText( m_PanelDoc, wxID_ANY, _("Documentation File Name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDocFileName->Wrap( -1 );
 	m_staticTextDocFileName->SetToolTip( _("Enter the documentation file (a .pdf document) associated to the component.") );
 	
@@ -147,10 +147,10 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* bSizerPaneldocbutts;
 	bSizerPaneldocbutts = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_ButtonCopyDoc = new wxButton( m_PanelDoc, ID_COPY_DOC_TO_ALIAS, _("Copy Doc from Parent"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ButtonCopyDoc = new wxButton( m_PanelDoc, ID_COPY_DOC_TO_ALIAS, _("Copy Document from Parent"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPaneldocbutts->Add( m_ButtonCopyDoc, 0, wxALL, 5 );
 	
-	m_buttonBrowseDocFiles = new wxButton( m_PanelDoc, ID_BROWSE_DOC_FILES, _("Browse DocFiles"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonBrowseDocFiles = new wxButton( m_PanelDoc, ID_BROWSE_DOC_FILES, _("Browse Files"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPaneldocbutts->Add( m_buttonBrowseDocFiles, 0, wxALL, 5 );
 	
 	
@@ -161,14 +161,14 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelDoc->Layout();
 	m_PanelDocBoxSizer->Fit( m_PanelDoc );
 	m_NoteBook->AddPage( m_PanelDoc, _("Description"), false );
-	m_PanelAlias = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+	m_PanelAlias = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerMainPanelAlias;
 	bSizerMainPanelAlias = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxBoxSizer* bLeftBoxSizerPanelAlias;
 	bLeftBoxSizerPanelAlias = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextAlias = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias List:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAlias = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias List"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAlias->Wrap( -1 );
 	m_staticTextAlias->SetToolTip( _("An alias is a component that uses the body of its root component.\nIt has its own documentation and keywords.\nA fast way to extend a library with similar components") );
 	
@@ -200,7 +200,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelAlias->Layout();
 	bSizerMainPanelAlias->Fit( m_PanelAlias );
 	m_NoteBook->AddPage( m_PanelAlias, _("Alias"), false );
-	m_PanelFootprintFilter = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+	m_PanelFootprintFilter = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bPanelFpFilterBoxSizer;
 	bPanelFpFilterBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
