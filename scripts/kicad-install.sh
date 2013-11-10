@@ -11,6 +11,14 @@
 # Set where the 3 source trees will go, use a full path
 WORKING_TREES=~/kicad_sources
 
+# CMake Options
+OPTS="$OPTS -DCMAKE_BUILD_TYPE=Release"
+OPTS="$OPTS -DUSE_FP_LIB_TABLE=ON"
+OPTS="$OPTS -DBUILD_GITHUB_PLUGIN=ON"
+
+# Python scripting, uncomment to enable
+#OPTS="$OPTS -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_MODULES=ON -DKICAD_SCRIPTING_WXPYTHON=ON"
+
 
 usage()
 {
@@ -48,7 +56,8 @@ install_prerequisites()
             libcairo2-dev \
             libglew-dev \
             libssl-dev \
-            libwxgtk2.8-dev
+            libwxgtk2.8-dev \
+            python-wxgtk2.8
 
     # assume all yum systems have same prerequisites
     elif [ "$(expr match "$PM" '.*\(yum\)')" == "yum" ]; then
@@ -65,7 +74,8 @@ install_prerequisites()
             libcairo2-dev \
             libglew-dev \
             libssl-dev \
-            libwxgtk2.8-dev
+            libwxgtk2.8-dev \
+            python-wxgtk2.8
     else
         echo
         echo "Incompatible System. Neither 'yum' nor 'apt-get' found. Not possible to continue."
@@ -162,10 +172,7 @@ install_or_update()
     cd kicad.bzr
     if [ ! -d "build" ]; then
         mkdir build && cd build
-        cmake   -DCMAKE_BUILD_TYPE=Release \
-                -DUSE_FP_LIB_TABLE=ON \
-                -DBUILD_GITHUB_PLUGIN=ON \
-                ../
+        cmake $OPTS ../
     else
         cd build
 
