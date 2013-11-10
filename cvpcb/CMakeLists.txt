@@ -110,7 +110,7 @@ target_link_libraries( cvpcb
     )
 
 # Only for win32 cross compilation using MXE
-if(WIN32 AND MSYS)
+if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
 target_link_libraries(cvpcb
 	opengl32
 	glu32
@@ -119,7 +119,7 @@ target_link_libraries(cvpcb
 	freetype
 	bz2
 	)
-endif(WIN32 AND MSYS)
+endif()
 
 
 if( BUILD_GITHUB_PLUGIN )

@@ -235,7 +235,7 @@ set( PCBNEW_CLASS_SRCS
     zones_polygons_test_connections.cpp
     zones_test_and_combine_areas.cpp
     class_footprint_wizard.cpp
-    
+
     tools/selection_tool.cpp
     tools/selection_area.cpp
     tools/bright_box.cpp
@@ -551,7 +551,7 @@ target_link_libraries( pcbnew
     )
 
 # Only for win32 cross compilation using MXE
-if(WIN32 AND MSYS)
+if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
 target_link_libraries(pcbnew
 	opengl32
 	glu32
@@ -560,7 +560,7 @@ target_link_libraries(pcbnew
 	freetype
 	bz2
 	)
-endif(WIN32 AND MSYS)
+endif()
 
 if( MAKE_LINK_MAPS )
     # generate a link map with cross reference

@@ -115,6 +115,26 @@ if( CMAKE_COMPILER_IS_GNUCXX )
     if( MINGW )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
 
+        # _UNICODE definition seems needed under mingw/gcc 4.8
+        # (Kicad uses unicode, and on Windows, wxWidgets >= 2.9.4 is mandatory
+        # and uses unicode)
+        if( GCC_VERSION VERSION_EQUAL 4.8.0 OR GCC_VERSION VERSION_GREATER 4.8.0 )
+            add_definitions(-D_UNICODE)
+        endif()
+
+        # Since version 2.8.5, Cmake uses a response file (.rsp) to
+        # pass the list of include paths to gcc
+        # unfortunately, under mingw32+msys, at least with gcc 4.8 and previous,
+        # this file is not expanded and include paths defined in this file are not taken in account
+        # this is the case of wxWidgets includes
+        # Disable this response file for includes ( See Windows-GNU.cmake module )
+        if( WIN32 AND MSYS AND NOT CMAKE_CROSSCOMPILING )
+            # fixme: it is needed only with MSYS+MINGW32? or always under MINGW
+            if (${CMAKE_SIZEOF_VOID_P} MATCHES 4)
+                set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDES 0)
+            endif()
+        endif()
+
     else()
         # We build DLL/DSOs from static libraries, so create position independent code
         # for all cases, since we do not have DLL/DSO specific static libraries.
