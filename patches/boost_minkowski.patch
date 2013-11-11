@@ -1,4 +1,3 @@
-=== modified file 'boost/polygon/detail/minkowski.hpp'
 --- boost/polygon/detail/minkowski.hpp	2013-05-31 02:24:16 +0000
 +++ boost/polygon/detail/minkowski.hpp	2013-05-31 02:26:26 +0000
 @@ -30,13 +30,13 @@
@@ -17,4 +16,3 @@
        point prev_b = *bb;
        itrT2 tmpb = bb;
        ++tmpb;
-
