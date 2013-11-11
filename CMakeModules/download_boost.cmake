@@ -37,26 +37,24 @@ set( BOOST_MD5 15cb8c0803064faef0c4ddf5bc5ca279 )   # re-calc this on every RELE
 set( BOOST_ROOT "${PROJECT_SOURCE_DIR}/boost_root" )
 
 
-if( BUILD_GITHUB_PLUGIN )
-    # Space separated list which indicates the subset of boost libraries to compile.
-    # Chosen libraries are based on AVHTTP requirements, and possibly
-    # unit_test_framework for its own worth.
-    set( BOOST_LIBS_BUILT
-        #context
-        #coroutine
-        date_time
-        #exception
-        filesystem
-        iostreams
-        locale
-        program_options
-        regex
-        #signals
-        system
-        thread
-        #unit_test_framework
-        )
-endif()
+# Space separated list which indicates the subset of boost libraries to compile.
+# Chosen libraries are based on AVHTTP requirements, and possibly
+# unit_test_framework for its own worth.
+set( BOOST_LIBS_BUILT
+    #context
+    #coroutine
+    date_time
+    #exception
+    filesystem
+    iostreams
+    locale
+    program_options
+    regex
+    #signals
+    system
+    thread
+    #unit_test_framework
+    )
 
 #-----</configure>---------------------------------------------------------------
 
@@ -85,133 +83,100 @@ function( set_boost_lib_names libs output )
 endfunction()
 
 
-if( BUILD_GITHUB_PLUGIN )
+# (BTW "test" yields "unit_test_framework" when passed to bootstrap.sh ).
+#message( STATUS "BOOST_LIBS_BUILT:${BOOST_LIBS_BUILT}" )
+string( REPLACE "unit_test_framework" "test" boost_libs_list "${BOOST_LIBS_BUILT}" )
+#message( STATUS "REPLACE libs_csv:${boost_libs_list}" )
 
-    # It will probably be simpler to make this the only path in the future.
-
-    # (BTW "test" yields "unit_test_framework" when passed to bootstrap.sh ).
-    #message( STATUS "BOOST_LIBS_BUILT:${BOOST_LIBS_BUILT}" )
-    string( REPLACE "unit_test_framework" "test" boost_libs_list "${BOOST_LIBS_BUILT}" )
-    #message( STATUS "REPLACE libs_csv:${boost_libs_list}" )
-
-    if( MINGW )
-        if( MSYS )
-            # The Boost system does not build properly on MSYS using bootstrap.sh.  Running
-            # bootstrap.bat with cmd.exe does.  It's ugly but it works.  At least for Boost
-            # version 1.54.
-            set( bootstrap cmd.exe /c "bootstrap.bat mingw" )
-        else()
-            set( bootstrap ./bootstrap.bat mingw )
-        endif()
-
-        foreach( lib ${boost_libs_list} )
-            set( b2_libs ${b2_libs} --with-${lib} )
-        endforeach()
-        unset( PIC_STUFF )
+if( MINGW )
+    if( MSYS )
+        # The Boost system does not build properly on MSYS using bootstrap.sh.  Running
+        # bootstrap.bat with cmd.exe does.  It's ugly but it works.  At least for Boost
+        # version 1.54.
+        set( bootstrap cmd.exe /c "bootstrap.bat mingw" )
     else()
-        string( REGEX REPLACE "\\;" "," libs_csv "${boost_libs_list}" )
-        #message( STATUS "libs_csv:${libs_csv}" )
-
-        set( bootstrap ./bootstrap.sh --with-libraries=${libs_csv} )
-        # pass to *both* C and C++ compilers
-        set( PIC_STUFF "cflags=${PIC_FLAG}" )
-        set( BOOST_INCLUDE "${BOOST_ROOT}/include" )
-        unset( b2_libs )
+        set( bootstrap ./bootstrap.bat mingw )
     endif()
 
-    ExternalProject_Add( boost
-        PREFIX          "${PREFIX}"
-        DOWNLOAD_DIR    "${DOWNLOAD_DIR}"
-        INSTALL_DIR     "${BOOST_ROOT}"
-        URL             http://downloads.sourceforge.net/project/boost/boost/${BOOST_RELEASE}/boost_${BOOST_VERS}.tar.bz2
-        URL_MD5         ${BOOST_MD5}
+    foreach( lib ${boost_libs_list} )
+        set( b2_libs ${b2_libs} --with-${lib} )
+    endforeach()
+    unset( PIC_STUFF )
+else()
+    string( REGEX REPLACE "\\;" "," libs_csv "${boost_libs_list}" )
+    #message( STATUS "libs_csv:${libs_csv}" )
 
-        # The patch command executes with the working directory set to <SOURCE_DIR>
-        PATCH_COMMAND   bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost.patch"
+    set( bootstrap ./bootstrap.sh --with-libraries=${libs_csv} )
+    # pass to *both* C and C++ compilers
+    set( PIC_STUFF "cflags=${PIC_FLAG}" )
+    set( BOOST_INCLUDE "${BOOST_ROOT}/include" )
+    unset( b2_libs )
+endif()
 
-        # [Mis-]use this step to erase all the boost headers and libraries before
-        # replacing them below.
-        UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${BOOST_ROOT}"
+ExternalProject_Add( boost
+    PREFIX          "${PREFIX}"
+    DOWNLOAD_DIR    "${DOWNLOAD_DIR}"
+    INSTALL_DIR     "${BOOST_ROOT}"
+    URL             http://downloads.sourceforge.net/project/boost/boost/${BOOST_RELEASE}/boost_${BOOST_VERS}.tar.bz2
+    URL_MD5         ${BOOST_MD5}
 
-        BINARY_DIR      "${PREFIX}/src/boost/"
-        CONFIGURE_COMMAND ${bootstrap}
+    # The patch command executes with the working directory set to <SOURCE_DIR>
+    PATCH_COMMAND   bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost.patch"
 
-        BUILD_COMMAND   ./b2
-                        variant=release
-                        threading=multi
-                        toolset=gcc
-                        ${PIC_STUFF}
-                        ${b2_libs}
-                        #link=static
-                        --prefix=<INSTALL_DIR>
-                        install
+    # [Mis-]use this step to erase all the boost headers and libraries before
+    # replacing them below.
+    UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${BOOST_ROOT}"
 
-        INSTALL_COMMAND ""
-        )
+    BINARY_DIR      "${PREFIX}/src/boost/"
+    CONFIGURE_COMMAND ${bootstrap}
 
-    if( MINGW )
-        execute_process( COMMAND ${CMAKE_C_COMPILER} -dumpversion
-            OUTPUT_VARIABLE GCC_VERSION
-            OUTPUT_STRIP_TRAILING_WHITESPACE )
+    BUILD_COMMAND   ./b2
+                    variant=release
+                    threading=multi
+                    toolset=gcc
+                    ${PIC_STUFF}
+                    ${b2_libs}
+                    #link=static
+                    --prefix=<INSTALL_DIR>
+                    install
 
-        string( REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.[0-9]+.*" "\\1\\2" BOOST_GCC_VERSION ${GCC_VERSION} )
-        #message( STATUS "BOOST_GCC_VERSION: ${BOOST_GCC_VERSION}" )
+    INSTALL_COMMAND ""
+    )
 
-        string( REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9])" "\\1_\\2" BOOST_LIB_VERSION ${BOOST_RELEASE} )
-        #message( STATUS "BOOST_LIB_VERSION: ${BOOST_LIB_VERSION}" )
+if( MINGW )
+    execute_process( COMMAND ${CMAKE_C_COMPILER} -dumpversion
+        OUTPUT_VARIABLE GCC_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE )
 
-        # adjust the names of the libraries to suit the build. There's no
-        # symbolic links provided on the MinGW build to allow us to use
-        # generic names for the libs
-        foreach( lib ${BOOST_LIBS_BUILT} )
-            set( mingw_boost_libs ${mingw_boost_libs} ${lib}-mgw${BOOST_GCC_VERSION}-mt-${BOOST_LIB_VERSION} )
-        endforeach()
+    string( REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.[0-9]+.*" "\\1\\2" BOOST_GCC_VERSION ${GCC_VERSION} )
+    #message( STATUS "BOOST_GCC_VERSION: ${BOOST_GCC_VERSION}" )
 
-        set( BOOST_LIBS_BUILT ${mingw_boost_libs} )
-        set( BOOST_INCLUDE "${BOOST_ROOT}/include/boost-${BOOST_LIB_VERSION}" )
-        unset( mingw_boost_libs )
-    endif()
+    string( REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9])" "\\1_\\2" BOOST_LIB_VERSION ${BOOST_RELEASE} )
+    #message( STATUS "BOOST_LIB_VERSION: ${BOOST_LIB_VERSION}" )
 
-    set( boost_libs "" )
-    set_boost_lib_names( "${BOOST_LIBS_BUILT}" boost_libs )
+    # adjust the names of the libraries to suit the build. There's no
+    # symbolic links provided on the MinGW build to allow us to use
+    # generic names for the libs
+    foreach( lib ${BOOST_LIBS_BUILT} )
+        set( mingw_boost_libs ${mingw_boost_libs} ${lib}-mgw${BOOST_GCC_VERSION}-mt-${BOOST_LIB_VERSION} )
+    endforeach()
 
-    set( Boost_LIBRARIES    ${boost_libs}      CACHE FILEPATH "Boost libraries directory" )
-    set( Boost_INCLUDE_DIR  "${BOOST_INCLUDE}" CACHE FILEPATH "Boost include directory" )
+    set( BOOST_LIBS_BUILT ${mingw_boost_libs} )
+    set( BOOST_INCLUDE "${BOOST_ROOT}/include/boost-${BOOST_LIB_VERSION}" )
+    unset( mingw_boost_libs )
+endif()
 
-    mark_as_advanced( Boost_LIBRARIES Boost_INCLUDE_DIR )
+set( boost_libs "" )
+set_boost_lib_names( "${BOOST_LIBS_BUILT}" boost_libs )
 
-    #message( STATUS "BOOST_ROOT:${BOOST_ROOT}  BOOST_LIBRARIES:${BOOST_LIBRARIES}" )
-    #message( STATUS "Boost_INCLUDE_DIR: ${Boost_INCLUDE_DIR}" )
+set( Boost_LIBRARIES    ${boost_libs}      CACHE FILEPATH "Boost libraries directory" )
+set( Boost_INCLUDE_DIR  "${BOOST_INCLUDE}" CACHE FILEPATH "Boost include directory" )
 
-else( BUILD_GITHUB_PLUGIN )
+mark_as_advanced( Boost_LIBRARIES Boost_INCLUDE_DIR )
 
-    ExternalProject_Add( boost
-        PREFIX          "${PREFIX}"
-        DOWNLOAD_DIR    "${DOWNLOAD_DIR}"
-        URL             http://downloads.sourceforge.net/project/boost/boost/${BOOST_RELEASE}/boost_${BOOST_VERS}.tar.bz2
-        URL_MD5         ${BOOST_MD5}
+#message( STATUS "BOOST_ROOT:${BOOST_ROOT}  BOOST_LIBRARIES:${BOOST_LIBRARIES}" )
+#message( STATUS "Boost_INCLUDE_DIR: ${Boost_INCLUDE_DIR}" )
 
-        # The patch command executes with the working directory set to <SOURCE_DIR>
-        PATCH_COMMAND   bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost.patch"
-
-        # Dick 18-Aug-2013:
-        # [mis-]use this UPDATE_COMMAND opportunity to remove the old place of boost headers.
-        # Can eventually remove this step after headers are moved from <kicad_src>/include/boost
-        # to <kicad_src>/boost_root/include/boost over the next several months.
-        UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${PROJECT_SOURCE_DIR}/include/boost"
-
-        CONFIGURE_COMMAND ""
-
-        # remove then re-copy into the include/boost directory during next two steps:
-        BUILD_COMMAND   ${CMAKE_COMMAND} -E remove_directory ${BOOST_ROOT}
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory "${headers_src}" "${BOOST_ROOT}/include/boost"
-        )
-
-    # Until my find_package() support is done for my boost.
-    set( Boost_INCLUDE_DIR  "${BOOST_ROOT}/include" CACHE FILEPATH "Boost include directory" )
-
-
-endif( BUILD_GITHUB_PLUGIN )
 
 
 ExternalProject_Add_Step( boost bzr_commit_boost
