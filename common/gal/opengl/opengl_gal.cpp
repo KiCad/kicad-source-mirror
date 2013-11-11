@@ -31,6 +31,7 @@
 
 #include <wx/log.h>
 #include <macros.h>
+#include <confirm.h>
 #ifdef __WXDEBUG__
 #include <profile.h>
 #endif /* __WXDEBUG__ */
@@ -93,7 +94,8 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     if( tesselator == NULL )
     {
-        wxLogFatalError( wxT( "Could not create the tesselator" ) );
+        DisplayError( parentWindow, wxT( "Could not create the tesselator" ) );
+        exit( 1 );
     }
 
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
@@ -144,13 +146,22 @@ void OPENGL_GAL::BeginDrawing()
     if( !isShaderInitialized )
     {
         if( !shader.LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
-            wxLogFatalError( wxT( "Cannot compile vertex shader!" ) );
+        {
+            DisplayError( parentWindow, wxT( "Cannot compile vertex shader!" ) );
+            exit( 1 );
+        }
 
         if( !shader.LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
-            wxLogFatalError( wxT( "Cannot compile fragment shader!" ) );
+        {
+            DisplayError( parentWindow, wxT( "Cannot compile fragment shader!" ) );
+            exit( 1 );
+        }
 
         if( !shader.Link() )
-            wxLogFatalError( wxT( "Cannot link the shaders!" ) );
+        {
+            DisplayError( parentWindow, wxT( "Cannot link the shaders!" ) );
+            exit( 1 );
+        }
 
         // Make VBOs use shaders
         cachedManager.SetShader( shader );
@@ -915,7 +926,7 @@ void OPENGL_GAL::initGlew()
 
     if( GLEW_OK != err )
     {
-        wxLogError( wxString::FromUTF8( (char*) glewGetErrorString( err ) ) );
+        DisplayError( parentWindow, wxString::FromUTF8( (char*) glewGetErrorString( err ) ) );
         exit( 1 );
     }
     else
@@ -931,21 +942,21 @@ void OPENGL_GAL::initGlew()
     }
     else
     {
-        wxLogError( wxT( "OpenGL Version 2.1 is not supported!" ) );
+        DisplayError( parentWindow, wxT( "OpenGL Version 2.1 is not supported!" ) );
         exit( 1 );
     }
 
     // Framebuffers have to be supported
     if( !GLEW_EXT_framebuffer_object )
     {
-        wxLogError( wxT( "Framebuffer objects are not supported!" ) );
+        DisplayError( parentWindow, wxT( "Framebuffer objects are not supported!" ) );
         exit( 1 );
     }
 
     // Vertex buffer have to be supported
     if( !GLEW_ARB_vertex_buffer_object )
     {
-        wxLogError( wxT( "Vertex buffer objects are not supported!" ) );
+        DisplayError( parentWindow, wxT( "Vertex buffer objects are not supported!" ) );
         exit( 1 );
     }
 
@@ -1040,10 +1051,12 @@ void CALLBACK EdgeCallback( GLboolean aEdgeFlag )
 
 void CALLBACK ErrorCallback( GLenum aErrorCode )
 {
-    const GLubyte* estring;
+    const GLubyte* eString = gluErrorString( aErrorCode );
 
-    estring = gluErrorString( aErrorCode );
-    wxLogError( wxT( "Tessellation Error: %s" ), (char*) estring );
+    DisplayError( NULL, wxString( std::string( "Tessellation error: " ) +
+            std::string( (const char*)( eString ) ) ) );
+
+    exit( 1 );
 }
 
 

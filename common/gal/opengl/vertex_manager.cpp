@@ -33,6 +33,7 @@
 #include <gal/opengl/noncached_container.h>
 #include <gal/opengl/gpu_manager.h>
 #include <gal/opengl/vertex_item.h>
+#include <confirm.h>
 
 using namespace KIGFX;
 
@@ -55,7 +56,7 @@ void VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ ) const
 
     if( newVertex == NULL )
     {
-        wxLogError( wxT( "Vertex allocation error" ) );
+        DisplayError( NULL, wxT( "Vertex allocation error" ) );
         return;
     }
 
@@ -70,7 +71,7 @@ void VERTEX_MANAGER::Vertices( const VERTEX aVertices[], unsigned int aSize ) co
 
     if( newVertex == NULL )
     {
-        wxLogError( wxT( "Vertex allocation error" ) );
+        DisplayError( NULL, wxT( "Vertex allocation error" ) );
         return;
     }
 

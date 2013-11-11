@@ -33,6 +33,7 @@
 #include <gal/opengl/vertex_manager.h>
 #include <gal/opengl/vertex_item.h>
 #include <gal/opengl/shader.h>
+#include <confirm.h>
 #include <wx/log.h>
 #include <list>
 #ifdef __WXDEBUG__
@@ -315,7 +316,7 @@ bool CACHED_CONTAINER::defragment( VERTEX* aTarget )
 
         if( aTarget == NULL )
         {
-            wxLogError( wxT( "Run out of memory" ) );
+            DisplayError( NULL, wxT( "Run out of memory" ) );
             return false;
         }
     }
@@ -439,7 +440,7 @@ bool CACHED_CONTAINER::resizeContainer( unsigned int aNewSize )
 
         if( newContainer == NULL )
         {
-            wxLogError( wxT( "Run out of memory" ) );
+            DisplayError( NULL, wxT( "Run out of memory" ) );
             return false;
         }
 
@@ -458,7 +459,7 @@ bool CACHED_CONTAINER::resizeContainer( unsigned int aNewSize )
 
         if( newContainer == NULL )
         {
-            wxLogError( wxT( "Run out of memory" ) );
+            DisplayError( NULL, wxT( "Run out of memory" ) );
             return false;
         }
 
