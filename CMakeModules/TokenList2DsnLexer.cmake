@@ -245,7 +245,7 @@ public:
      * Constructor ( const std::string&, const wxString& )
      * @param aSExpression is (utf8) text possibly from the clipboard that you want to parse.
      * @param aSource is a description of the origin of @a aSExpression, such as a filename.
-     *   If left empty, then _("clipboard") is used.
+     *   If left empty, then _(\"clipboard\") is used.
      */
     ${LEXERCLASS}( const std::string& aSExpression, const wxString& aSource = wxEmptyString ) :
         DSNLEXER( keywords, keyword_count, aSExpression, aSource )
