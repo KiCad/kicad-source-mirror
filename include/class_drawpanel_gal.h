@@ -99,7 +99,7 @@ public:
     }
 
     /// @copydoc wxWindow::Refresh()
-    virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
+    void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
 
     /**
      * Function SetEventDispatcher()
@@ -121,34 +121,34 @@ protected:
 
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
 
-    ///< Last timestamp when the panel was refreshed
+    /// Last timestamp when the panel was refreshed
     wxLongLong               m_lastRefresh;
 
-    ///< Is there a redraw event requested?
+    /// Is there a redraw event requested?
     bool                     m_pendingRefresh;
 
-    ///< True if GAL is currently redrawing the view
+    /// True if GAL is currently redrawing the view
     bool                     m_drawing;
 
-    ///< Timer responsible for preventing too frequent refresh
+    /// Timer responsible for preventing too frequent refresh
     wxTimer                  m_refreshTimer;
 
-    ///< Interface for drawing objects on a 2D-surface
+    /// Interface for drawing objects on a 2D-surface
     KIGFX::GAL*              m_gal;
 
-    ///< Stores view settings (scale, center, etc.) and items to be drawn
+    /// Stores view settings (scale, center, etc.) and items to be drawn
     KIGFX::VIEW*             m_view;
 
-    ///< Contains information about how to draw items using GAL
+    /// Contains information about how to draw items using GAL
     KIGFX::PAINTER*          m_painter;
 
-    ///< Control for VIEW (moving, zooming, etc.)
+    /// Control for VIEW (moving, zooming, etc.)
     KIGFX::WX_VIEW_CONTROLS* m_viewControls;
 
-    ///< Currently used GAL
+    /// Currently used GAL
     GalType                  m_currentGal;
 
-    ///< Processes and forwards events to tools
+    /// Processes and forwards events to tools
     TOOL_DISPATCHER*         m_eventDispatcher;
 };
 
