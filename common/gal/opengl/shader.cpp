@@ -30,6 +30,8 @@
 #include <fstream>
 
 #include <wx/log.h>
+#include <wx/gdicmn.h>
+#include <confirm.h>
 
 #include <gal/opengl/shader.h>
 #include "shader_src.h"
@@ -201,7 +203,7 @@ std::string SHADER::readSource( std::string aShaderSourceName )
 
     if( !inputFile )
     {
-        wxLogError( wxString::FromUTF8( "Can't read the shader source: " ) +
+        DisplayError( NULL, wxString::FromUTF8( "Can't read the shader source: " ) +
                     wxString( aShaderSourceName.c_str(), wxConvUTF8 ) );
         exit( 1 );
     }
@@ -223,7 +225,7 @@ bool SHADER::addSource( const std::string& aShaderSource, SHADER_TYPE aShaderTyp
 {
     if( isShaderLinked )
     {
-        wxLogError( wxString::FromUTF8( "Shader is already linked!" ) );
+        wxLogDebug( wxT( "Shader is already linked!" ) );
     }
 
     // Create the program
@@ -259,7 +261,7 @@ bool SHADER::addSource( const std::string& aShaderSource, SHADER_TYPE aShaderTyp
 
     if( status != GL_TRUE )
     {
-        wxLogError( wxT( "Shader compilation error" ) );
+        DisplayError( NULL, wxT( "Shader compilation error" ) );
 
         shaderInfo( shaderNumber );
 
