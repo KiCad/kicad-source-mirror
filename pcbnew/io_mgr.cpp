@@ -31,6 +31,7 @@
 #include <eagle_plugin.h>
 #include <pcad2kicadpcb_plugin/pcad_plugin.h>
 #include <gpcb_plugin.h>
+#include <config.h>
 
 #if defined(BUILD_GITHUB_PLUGIN)
  #include <github/github_plugin.h>

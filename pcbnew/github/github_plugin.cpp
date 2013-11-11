@@ -37,22 +37,33 @@
     could use the above API.
 */
 
+#ifdef WIN32
+    // defines needed by avhttp
+    // Minimal Windows version is XP: Google for _WIN32_WINNT
+    #define _WIN32_WINNT 0x0501
+    #define WINVER 0x0501
+#endif
 
 #include <sstream>
 #include <boost/ptr_container/ptr_map.hpp>
-#include <avhttp.hpp>                       // chinese SSL magic
+
 #include <wx/zipstrm.h>
 #include <wx/mstream.h>
 #include <wx/uri.h>
 
-#include <macros.h>
 #include <fctsys.h>
+// Under Windows Mingw/msys, avhttp.hpp should be included after fctsys.h
+// in fact after wx/wx.h, included by fctsys.h,
+// to avoid issues (perhaps due to incompatible defines)
+#include <avhttp.hpp>                       // chinese SSL magic
+
 #include <io_mgr.h>
 #include <richio.h>
 #include <pcb_parser.h>
 #include <class_board.h>
 #include <github_plugin.h>
 #include <class_module.h>
+#include <macros.h>
 
 using namespace std;
 
