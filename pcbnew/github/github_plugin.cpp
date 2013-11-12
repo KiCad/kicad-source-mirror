@@ -36,15 +36,17 @@
     remote pretty libraries.  If you want to support writing to the repo, then you
     could use the above API.
 
-@todo:  Derive this PLUGIN from KICAD_PLUGIN so we can use its FootprintSave().
-
+@todo:
+    Derive this PLUGIN from KICAD_PLUGIN so we can use its FootprintSave().
+    Support local footprints if they are present in an optional directory.
+    Possibly cache the zip file locally.  Use HTTP's "have changed" or whatever it is called.
 */
 
 #ifdef WIN32
-    // defines needed by avhttp
-    // Minimal Windows version is XP: Google for _WIN32_WINNT
-    #define _WIN32_WINNT 0x0501
-    #define WINVER 0x0501
+ // defines needed by avhttp
+ // Minimal Windows version is XP: Google for _WIN32_WINNT
+ #define _WIN32_WINNT   0x0501
+ #define WINVER         0x0501
 #endif
 
 #include <sstream>
@@ -53,7 +55,6 @@
 #include <wx/zipstrm.h>
 #include <wx/mstream.h>
 #include <wx/uri.h>
-//#include <wx/strconv.h>
 
 #include <fctsys.h>
 // Under Windows Mingw/msys, avhttp.hpp should be included after fctsys.h
@@ -247,10 +248,24 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
         // goal: "https://github.com/liftoff-sr/pretty_footprints/archive/master.zip"
         wxString    zip_url( wxT( "https://" ) );
 
+#if 0   // Github issues a redirect for this "master.zip".  i.e.
+        //  "https://github.com/liftoff-sr/pretty_footprints/archive/master.zip"
+        // would be redirected to:
+        //  "https://codeload.github.com/liftoff-sr/pretty_footprints/zip/master"
+
+        // The alternate code path below uses the redirected URL on first attempt
+        // to save one HTTP GET hit.  avhttp does the redirect behind the scenes normally.
+
         zip_url += repo.GetServer();
         zip_url += repo.GetPath();
         zip_url += wxT( '/' );
         zip_url += wxT( "archive/master.zip" );
+#else
+        zip_url += wxT( "codeload.github.com" );
+        zip_url += repo.GetPath();
+        zip_url += wxT( '/' );
+        zip_url += wxT( "zip/master" );
+#endif
 
         *aZipURL = zip_url.utf8_str();
         return true;

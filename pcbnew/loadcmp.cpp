@@ -110,13 +110,12 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     return true;
 }
 
-/*
- * Launch the footprint viewer to select the name of a footprint to load.
- * return the selected footprint name
- */
-wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser( void )
+
+wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 {
     wxString    fpname;
+    wxString    fpid;
+
     wxSemaphore semaphore( 0, 1 );
 
     // Close the current Lib browser, if opened, and open a new one, in "modal" mode:
@@ -135,17 +134,22 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser( void )
         wxMilliSleep( 50 );
     }
 
+    fpname = viewer->GetSelectedFootprint();
+
+    if( !!fpname )
+    {
 #if !defined( USE_FP_LIB_TABLE )
-    // Returns the full fp name, i.e. the lib name and th fp name,
-    // separated by a '/' (/ is now an illegal char in fp names)
-    fpname = viewer->GetSelectedLibraryFullName() + wxT( "/" ) + viewer->GetSelectedFootprint();
+        // Returns the full fp name, i.e. the lib name and the fp name,
+        // separated by a '/' (/ is now an illegal char in fp names)
+        fpid = viewer->GetSelectedLibraryFullName() + wxT( "/" ) + fpname;
 #else
-    fpname = viewer->GetSelectedLibrary() + wxT( ":" ) + viewer->GetSelectedFootprint();
+        fpid = viewer->GetSelectedLibrary() + wxT( ":" ) + fpname;
 #endif
+    }
 
     viewer->Destroy();
 
-    return fpname;
+    return fpid;
 }
 
 
