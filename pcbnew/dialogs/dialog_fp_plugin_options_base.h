@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 30 2013)
+// C++ code generated with wxFormBuilder (version Nov  5 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -23,6 +23,9 @@ class DIALOG_SHIM;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/listbox.h>
+#include <wx/stattext.h>
+#include <wx/html/htmlwin.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,8 +44,10 @@ class DIALOG_FP_PLUGIN_OPTIONS_BASE : public DIALOG_SHIM
 		wxButton* m_delete_row;
 		wxButton* m_move_up;
 		wxButton* m_move_down;
-		wxButton* m_button1;
-		wxGrid* m_option_choices;
+		wxListBox* m_listbox;
+		wxButton* m_append_choice_button;
+		wxStaticText* m_staticText1;
+		wxHtmlWindow* m_html;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -53,7 +58,9 @@ class DIALOG_FP_PLUGIN_OPTIONS_BASE : public DIALOG_SHIM
 		virtual void onDeleteRow( wxMouseEvent& event ) = 0;
 		virtual void onMoveUp( wxMouseEvent& event ) = 0;
 		virtual void onMoveDown( wxMouseEvent& event ) = 0;
-		virtual void onAppendOption( wxMouseEvent& event ) = 0;
+		virtual void onListBoxItemSelected( wxCommandEvent& event ) = 0;
+		virtual void onListBoxItemDoubleClicked( wxCommandEvent& event ) = 0;
+		virtual void onAppendOption( wxCommandEvent& event ) = 0;
 		virtual void onCancelButtonClick( wxCommandEvent& event ) = 0;
 		virtual void onOKButtonClick( wxCommandEvent& event ) = 0;
 		

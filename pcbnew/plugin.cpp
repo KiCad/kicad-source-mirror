@@ -112,10 +112,27 @@ bool PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 
 void PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
 {
-    // (*aListToAppendTo)["debug_level"] = TO_UTF8( _( "Enable debug logging for Footprint*() functions in this PLUGIN." ) );
+#if 1
+    (*aListToAppendTo)["debug_level"] = wxString( _(
+        "Enable debug logging for Footprint*() functions in this PLUGIN."
+        )).utf8_str();
 
-    // (*aListToAppendTo)["read_filter_regex"] = TO_UTF8( _("Regular expression footprint name filter") );
+    (*aListToAppendTo)["read_filter_regex"] = wxString( _(
+        "Regular expression <b>footprint name</b> filter."
+        )).utf8_str();
 
-    // (*aListToAppendTo)["enable transaction logging"] = "";   // mere presence enables, value is moot.
+    (*aListToAppendTo)["enable_transaction_logging"] = wxString( _(
+        "Enable transaction logging.  The mere presence of this option turns on the "
+        " logging, no need to set a Value."
+        )).utf8_str();
+#endif
+
+#if 1
+    // Suitable for a C++ to python PLUGIN::Footprint*() adapter, move it to the adapter
+    // if and when implemented.
+    (*aListToAppendTo)["python_footprint_plugin"] = wxString( _(
+        "Enter the python module which implements the PLUGIN::Footprint*() functions."
+        )).utf8_str();
+#endif
 }
 

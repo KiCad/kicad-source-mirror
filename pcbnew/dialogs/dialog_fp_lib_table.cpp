@@ -323,19 +323,24 @@ public:
         attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
         m_global_grid->SetColAttr( COL_TYPE, attr );
 
-        m_global_grid->AutoSizeColumns( false );
-        m_project_grid->AutoSizeColumns( false );
-
-        /*
-        Connect( MYID_FIRST, MYID_LAST, wxEVT_COMMAND_MENU_SELECTED,
-            wxCommandEventHandler( DIALOG_FP_LIB_TABLE::onPopupSelection ), NULL, this );
-        */
-
         populateEnvironReadOnlyTable();
 
-        /* This scrunches the dialog hideously
-        Fit();
-        */
+        for( int i=0; i<2; ++i )
+        {
+            wxGrid* g = i==0 ? m_global_grid : m_project_grid;
+
+            // all but COL_OPTIONS, which is edited with Option Editor anyways.
+            g->AutoSizeColumn( COL_NICKNAME, true );
+            g->AutoSizeColumn( COL_TYPE, false );
+            g->AutoSizeColumn( COL_URI, false );
+            g->AutoSizeColumn( COL_DESCR, false );
+
+            g->SetColSize( COL_OPTIONS, 80 );
+        }
+
+        // This scrunches the dialog hideously, probably due to wxAUI container.
+        // Fit();
+        // We derive from DIALOG_SHIM so prior size will be used anyways.
 
         // fire pageChangedHandler() so m_cur_grid gets set
         wxAuiNotebookEvent uneventful;

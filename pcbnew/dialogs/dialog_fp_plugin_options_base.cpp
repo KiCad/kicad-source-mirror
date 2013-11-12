@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 30 2013)
+// C++ code generated with wxFormBuilder (version Nov  5 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -83,50 +83,32 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	wxGridSizer* m_choose_size;
 	m_choose_size = new wxGridSizer( 1, 1, 0, 0 );
 	
-	m_button1 = new wxButton( this, wxID_ANY, _("<<"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_button1->SetMaxSize( wxSize( 50,-1 ) );
-	
-	m_choose_size->Add( m_button1, 0, wxALIGN_CENTER|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-	
 	
 	m_horizontal_sizer->Add( m_choose_size, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* m_options_sizer;
-	m_options_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Option Choices:") ), wxHORIZONTAL );
+	m_options_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Option Choices:") ), wxVERTICAL );
 	
 	m_options_sizer->SetMinSize( wxSize( 200,-1 ) ); 
-	m_option_choices = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_listbox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_ALWAYS_SB|wxLB_SINGLE ); 
+	m_listbox->SetToolTip( _("Options supported by current plugin") );
 	
-	// Grid
-	m_option_choices->CreateGrid( 0, 2 );
-	m_option_choices->EnableEditing( false );
-	m_option_choices->EnableGridLines( true );
-	m_option_choices->EnableDragGridSize( false );
-	m_option_choices->SetMargins( 0, 0 );
+	m_options_sizer->Add( m_listbox, 0, wxALL|wxEXPAND, 5 );
 	
-	// Columns
-	m_option_choices->AutoSizeColumns();
-	m_option_choices->EnableDragColMove( false );
-	m_option_choices->EnableDragColSize( true );
-	m_option_choices->SetColLabelSize( 30 );
-	m_option_choices->SetColLabelValue( 0, _("Option") );
-	m_option_choices->SetColLabelValue( 1, _("Description") );
-	m_option_choices->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	m_append_choice_button = new wxButton( this, wxID_ANY, _("<< Append Selected Option"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_options_sizer->Add( m_append_choice_button, 0, wxALIGN_CENTER|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	// Rows
-	m_option_choices->AutoSizeRows();
-	m_option_choices->EnableDragRowSize( true );
-	m_option_choices->SetRowLabelSize( 0 );
-	m_option_choices->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Option Specific Help:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1->Wrap( -1 );
+	m_options_sizer->Add( m_staticText1, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	// Label Appearance
+	m_html = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxVSCROLL );
+	m_html->SetMinSize( wxSize( 300,300 ) );
 	
-	// Cell Defaults
-	m_option_choices->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_options_sizer->Add( m_option_choices, 1, wxEXPAND|wxTOP, 5 );
+	m_options_sizer->Add( m_html, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	m_horizontal_sizer->Add( m_options_sizer, 4, wxEXPAND, 5 );
+	m_horizontal_sizer->Add( m_options_sizer, 2, wxEXPAND, 5 );
 	
 	
 	bSizer4->Add( m_horizontal_sizer, 1, wxALL|wxEXPAND, 5 );
@@ -153,7 +135,9 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	m_delete_row->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onDeleteRow ), NULL, this );
 	m_move_up->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onMoveUp ), NULL, this );
 	m_move_down->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onMoveDown ), NULL, this );
-	m_button1->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendOption ), NULL, this );
+	m_listbox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onListBoxItemSelected ), NULL, this );
+	m_listbox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onListBoxItemDoubleClicked ), NULL, this );
+	m_append_choice_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendOption ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onCancelButtonClick ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onOKButtonClick ), NULL, this );
 }
@@ -166,7 +150,9 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::~DIALOG_FP_PLUGIN_OPTIONS_BASE()
 	m_delete_row->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onDeleteRow ), NULL, this );
 	m_move_up->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onMoveUp ), NULL, this );
 	m_move_down->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onMoveDown ), NULL, this );
-	m_button1->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendOption ), NULL, this );
+	m_listbox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onListBoxItemSelected ), NULL, this );
+	m_listbox->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onListBoxItemDoubleClicked ), NULL, this );
+	m_append_choice_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendOption ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onCancelButtonClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onOKButtonClick ), NULL, this );
 	
