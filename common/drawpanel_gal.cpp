@@ -93,7 +93,10 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     Connect( KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE,
              wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ), NULL, this );
 
+    // Set up timer that prevents too frequent redraw commands
     m_refreshTimer.SetOwner( this );
+    m_pendingRefresh = false;
+    m_drawing = false;
     Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
 
     this->SetFocus();
@@ -121,18 +124,25 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     m_pendingRefresh = false;
     m_lastRefresh = wxGetLocalTimeMillis();
 
-    m_gal->BeginDrawing();
-    m_gal->SetBackgroundColor( KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
-    m_gal->ClearScreen();
+    if( !m_drawing )
+    {
+        m_drawing = true;
 
-    m_view->ClearTargets();
-    // Grid has to be redrawn only when the NONCACHED target is redrawn
-    if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
-        m_gal->DrawGrid();
-    m_view->Redraw();
-    m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
+        m_gal->BeginDrawing();
+        m_gal->SetBackgroundColor( KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
+        m_gal->ClearScreen();
 
-    m_gal->EndDrawing();
+        m_view->ClearTargets();
+        // Grid has to be redrawn only when the NONCACHED target is redrawn
+        if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+            m_gal->DrawGrid();
+        m_view->Redraw();
+        m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
+
+        m_gal->EndDrawing();
+
+        m_drawing = false;
+    }
 }
 
 

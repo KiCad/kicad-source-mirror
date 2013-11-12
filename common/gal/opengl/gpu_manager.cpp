@@ -32,9 +32,12 @@
 #include <gal/opengl/noncached_container.h>
 #include <gal/opengl/shader.h>
 #include <typeinfo>
-#include <wx/log.h>
+#include <wx/msgdlg.h>
+#include <confirm.h>
 #ifdef __WXDEBUG__
 #include <profile.h>
+#include <wx/debug.h>
+#include <wx/log.h>
 #endif
 
 using namespace KIGFX;
@@ -70,7 +73,7 @@ void GPU_MANAGER::SetShader( SHADER& aShader )
 
     if( m_shaderAttrib == -1 )
     {
-        wxLogFatalError( wxT( "Could not get the shader attribute location" ) );
+        DisplayError( NULL, wxT( "Could not get the shader attribute location" ) );
     }
 }
 
@@ -205,7 +208,7 @@ void GPU_CACHED_MANAGER::uploadToGpu()
 
     if( glGetError() != GL_NO_ERROR )
     {
-        wxLogError( wxT( "Error during data upload to the GPU memory" ) );
+        DisplayError( NULL, wxT( "Error during data upload to the GPU memory" ) );
     }
 
 #ifdef __WXDEBUG__

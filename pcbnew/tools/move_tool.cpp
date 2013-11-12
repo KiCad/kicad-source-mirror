@@ -26,6 +26,7 @@
 #include <class_module.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
+#include <confirm.h>
 
 #include "common_actions.h"
 #include "selection_tool.h"
@@ -68,7 +69,7 @@ bool MOVE_TOOL::Init()
     }
     else
     {
-        wxLogError( wxT( "pcbnew.InteractiveSelection tool is not available" ) );
+        DisplayError( NULL, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
         return false;
     }
 
