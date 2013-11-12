@@ -23,7 +23,6 @@ class DIALOG_SHIM;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/listctrl.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,17 +42,18 @@ class DIALOG_FP_PLUGIN_OPTIONS_BASE : public DIALOG_SHIM
 		wxButton* m_move_up;
 		wxButton* m_move_down;
 		wxButton* m_button1;
-		wxListCtrl* m_listCtrl1;
+		wxGrid* m_option_choices;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onCancelButtonClick( wxCloseEvent& event ) = 0;
-		virtual void onAddRow( wxCommandEvent& event ) = 0;
-		virtual void onDeleteRow( wxCommandEvent& event ) = 0;
-		virtual void onMoveUp( wxCommandEvent& event ) = 0;
-		virtual void onMoveDown( wxCommandEvent& event ) = 0;
+		virtual void onAppendRow( wxMouseEvent& event ) = 0;
+		virtual void onDeleteRow( wxMouseEvent& event ) = 0;
+		virtual void onMoveUp( wxMouseEvent& event ) = 0;
+		virtual void onMoveDown( wxMouseEvent& event ) = 0;
+		virtual void onAppendOption( wxMouseEvent& event ) = 0;
 		virtual void onCancelButtonClick( wxCommandEvent& event ) = 0;
 		virtual void onOKButtonClick( wxCommandEvent& event ) = 0;
 		

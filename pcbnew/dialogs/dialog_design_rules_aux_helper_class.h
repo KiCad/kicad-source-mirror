@@ -7,39 +7,51 @@
 
 #include <wx/listctrl.h>
 
-/* helper class to display lists of nets and associated netclasses
+/**
+ * Class NETS_LIST_CTRL
+ * is a helper to display lists of nets and associated netclasses
  * used in dialog design rules.
- * It s needed because the 2 wxListCtlr used to display lists of nets
- * use the wxLC_VIRTUAL option.
- *  The virtual wxString OnGetItemText(long item, long column) const method
- * must be overlaid.
+ * It's needed because the 2 "wxListCtl"s used to display lists of nets
+ * uses the wxLC_VIRTUAL option. The method:
+ *
+ *   virtual wxString OnGetItemText( long item, long column ) const
+ *
+ * must be overloaded.
  */
 class NETS_LIST_CTRL: public wxListCtrl
 {
-private:
-    wxArrayString           m_Netnames;             ///< an array to store the list of nets (column 0)
-    wxArrayString           m_Classnames;            ///< an array to store the list of netclasse (column 1)
-public:   
-    NETS_LIST_CTRL(wxWindow* parent, wxWindowID id,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxLC_ICON):
-            wxListCtrl( parent, id, pos, size, style )
+public:
+    NETS_LIST_CTRL( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = wxLC_ICON ):
+        wxListCtrl( parent, id, pos, size, style )
     {
     };
-    
-    NETS_LIST_CTRL()
-    {
-    };
-    void setRowItems(unsigned aRow, const wxString & aNetname, const wxString & aNetclassName ); 
+
     void ClearList()
     {
-        SetItemCount(0);
+        SetItemCount( 0 );
         m_Netnames.Clear();
         m_Classnames.Clear();
     }
 
-    virtual wxString OnGetItemText(long item, long column) const;
+    /**
+     * Function OnGetItemText
+     * is an overloaded method needed by wxListCtrl with wxLC_VIRTUAL options
+     */
+    virtual wxString OnGetItemText( long item, long column ) const;
+
+    /**
+     * Function SetRowItems
+     * sets the net name and the net class name at @a aRow.
+     * @param aRow = row index (if aRow > number of stored row, empty rows will be created)
+     * @param aNetname = the string to display in row aRow, column 0
+     * @param aNetclassName = the string to display in row aRow, column 1
+     */
+    void SetRowItems( unsigned aRow, const wxString& aNetname, const wxString& aNetclassName );
+
+private:
+    wxArrayString   m_Netnames;     ///< column 0: nets
+    wxArrayString   m_Classnames;   ///< column 1: netclasses
 };
 
 

@@ -198,7 +198,7 @@ public:
         case COL_NICKNAME:  return _( "Nickname" );
         case COL_URI:       return _( "Library Path" );
 
-        // keep this text fairly long so column is sized wide enough
+        // keep this "Plugin Type" text fairly long so column is sized wide enough
         case COL_TYPE:      return _( "Plugin Type" );
         case COL_OPTIONS:   return _( "Options" );
         case COL_DESCR:     return _( "Description" );
@@ -583,12 +583,16 @@ private:
         wxString        result;
         const wxString& options = row.GetOptions();
 
-        InvokePluginOptionsEditor( this, row.GetNickName(), options, &result );
+        InvokePluginOptionsEditor( this, row.GetNickName(), row.GetType(), options, &result );
 
         if( options != result )
         {
             row.SetOptions( result );
-            m_cur_grid->AutoSizeColumn( COL_OPTIONS, false );
+
+            // all but options:
+            m_cur_grid->AutoSizeColumn( COL_NICKNAME, false );
+            m_cur_grid->AutoSizeColumn( COL_URI, false );
+            m_cur_grid->AutoSizeColumn( COL_TYPE, false );
         }
     }
 

@@ -35,6 +35,9 @@
     from RAM as needed.  Therefore the PLUGIN is read only for accessing
     remote pretty libraries.  If you want to support writing to the repo, then you
     could use the above API.
+
+@todo:  Derive this PLUGIN from KICAD_PLUGIN so we can use its FootprintSave().
+
 */
 
 #ifdef WIN32
@@ -50,6 +53,7 @@
 #include <wx/zipstrm.h>
 #include <wx/mstream.h>
 #include <wx/uri.h>
+//#include <wx/strconv.h>
 
 #include <fctsys.h>
 // Under Windows Mingw/msys, avhttp.hpp should be included after fctsys.h
@@ -170,6 +174,23 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 bool GITHUB_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 {
     return false;
+}
+
+
+void GITHUB_PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
+{
+    // inherit options supported by all PLUGINs.
+    PLUGIN::FootprintLibOptions( aListToAppendTo );
+
+    (*aListToAppendTo)["allow_pretty_writing_to_this_dir"] = wxString(
+        _(  "Set this property to a directory where footprints are written to.\n"
+            "The directory should have a 'pretty' extension"
+        )).utf8_str();
+
+    (*aListToAppendTo)["cache_github_zip_in_this_dir"] = wxString(
+        _(  "Set this property to a directory where the github *.zip file will be cached.\n"
+            "This should speed up subsequent visits to this library."
+        )).utf8_str();
 }
 
 

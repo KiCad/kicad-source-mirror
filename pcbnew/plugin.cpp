@@ -108,3 +108,14 @@ bool PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
     not_implemented( this, __FUNCTION__ );
     return false;
 }
+
+
+void PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
+{
+    // (*aListToAppendTo)["debug_level"] = TO_UTF8( _( "Enable debug logging for Footprint*() functions in this PLUGIN." ) );
+
+    // (*aListToAppendTo)["read_filter_regex"] = TO_UTF8( _("Regular expression footprint name filter") );
+
+    // (*aListToAppendTo)["enable transaction logging"] = "";   // mere presence enables, value is moot.
+}
+

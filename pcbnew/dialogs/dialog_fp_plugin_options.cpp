@@ -48,7 +48,8 @@ class DIALOG_FP_PLUGIN_OPTIONS : public DIALOG_FP_PLUGIN_OPTIONS_BASE
 
 public:
     DIALOG_FP_PLUGIN_OPTIONS( wxTopLevelWindow* aParent,
-            const wxString& aNickname, const wxString& aOptions, wxString* aResult ) :
+            const wxString& aNickname, const wxString& aPluginType,
+            const wxString& aOptions, wxString* aResult ) :
         DIALOG_FP_PLUGIN_OPTIONS_BASE( aParent ),
         m_callers_options( aOptions ),
         m_result( aResult )
@@ -61,6 +62,7 @@ public:
         // add Cut, Copy, and Paste to wxGrid
         m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
+        // Fill the grid with aOptions
         string options = TO_UTF8( aOptions );
 
         PROPERTIES* props = FP_LIB_TABLE::ParseOptions( options );
@@ -79,6 +81,31 @@ public:
 
             delete props;
         }
+
+        // Option Choices Panel:
+
+        IO_MGR::PCB_FILE_T  pi_type = IO_MGR::EnumFromStr( aPluginType );
+        PLUGIN::RELEASER    pi( IO_MGR::PluginFind( pi_type ) );
+        PROPERTIES          choices;
+
+        pi->FootprintLibOptions( &choices );
+
+        if( choices.size() )
+        {
+            int needed_rows = (int) choices.size() - m_option_choices->GetNumberRows();
+            if( needed_rows > 0 )
+                m_option_choices->AppendRows( needed_rows );
+
+            int row = 0;
+            for( PROPERTIES::const_iterator it = choices.begin();  it != choices.end();  ++it, ++row )
+            {
+                DBG(printf( "[%s]:'%s'\n", it->first.c_str(), it->second.c_str() );)
+                m_option_choices->SetCellValue( row, 0, FROM_UTF8( it->first.c_str() ) );
+                m_option_choices->SetCellValue( row, 1, FROM_UTF8( it->second.c_str() ) );
+            }
+        }
+
+        m_option_choices->AutoSizeColumns( false );
 
         if( !col_width_option )
         {
@@ -176,10 +203,7 @@ private:
         EndModal( 0 );
     }
 
-
-
-    //-----<event handlers>------------------------------------------------------
-    void onAddRow( wxCommandEvent& event )
+    int appendRow()
     {
         if( m_grid->AppendRows( 1 ) )
         {
@@ -188,10 +212,47 @@ private:
             // wx documentation is wrong, SetGridCursor does not make visible.
             m_grid->MakeCellVisible( last_row, 0 );
             m_grid->SetGridCursor( last_row, 0 );
+
+            return last_row;
+        }
+
+        return -1;
+    }
+
+    //-----<event handlers>------------------------------------------------------
+
+    void onAppendOption( wxMouseEvent& event )
+    {
+        int selected_row = m_option_choices->GetCursorRow();
+        if( selected_row >= 0 )
+        {
+            wxString    option = m_option_choices->GetCellValue( selected_row, 0 );
+
+            int row_count = m_grid->GetNumberRows();
+            int row;
+
+            for( row=0;  row<row_count;  ++row )
+            {
+                wxString col0 = m_grid->GetCellValue( row, 0 );
+
+                if( !col0 )     // empty col0
+                    break;
+            }
+
+            if( row == row_count )
+                row = appendRow();
+
+            m_grid->SetCellValue( row, 0, option );
+            m_grid->AutoSizeColumns( false );
         }
     }
 
-    void onDeleteRow( wxCommandEvent& event )
+    void onAppendRow( wxMouseEvent& event )
+    {
+        appendRow();
+    }
+
+    void onDeleteRow( wxMouseEvent& event )
     {
         int rowCount = m_grid->GetNumberRows();
         int curRow   = getCursorRow();
@@ -205,7 +266,7 @@ private:
         }
     }
 
-    void onMoveUp( wxCommandEvent& event )
+    void onMoveUp( wxMouseEvent& event )
     {
         int curRow = getCursorRow();
         if( curRow >= 1 )
@@ -238,7 +299,7 @@ private:
         }
     }
 
-    void onMoveDown( wxCommandEvent& event )
+    void onMoveDown( wxMouseEvent& event )
     {
         int curRow = getCursorRow();
         if( curRow + 1 < m_grid->GetNumberRows() )
@@ -292,9 +353,10 @@ private:
 
 
 void InvokePluginOptionsEditor( wxTopLevelWindow* aCaller,
-        const wxString& aNickname, const wxString& aOptions, wxString* aResult )
+        const wxString& aNickname, const wxString& aPluginType,
+        const wxString& aOptions, wxString* aResult )
 {
-    DIALOG_FP_PLUGIN_OPTIONS    dlg( aCaller, aNickname, aOptions, aResult );
+    DIALOG_FP_PLUGIN_OPTIONS    dlg( aCaller, aNickname, aPluginType, aOptions, aResult );
 
     dlg.ShowModal();
 }
