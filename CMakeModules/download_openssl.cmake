@@ -58,7 +58,13 @@ ExternalProject_Add(
     # PATCH_COMMAND patch -p0 < ${PROJECT_SOURCE_DIR}/patches/openssl-1.0.1e.patch
 
     # This one requires the bzr commit below, since bzr patch only knows a working tree.
-    PATCH_COMMAND bzr patch -p0 ${PROJECT_SOURCE_DIR}/patches/openssl-1.0.1e.patch
+    
+    # Revert the branch to pristine before applying patch sets as bzr patch
+    # fails when applying a patch to the branch twice and doesn't have a switch
+    # to ignore previously applied patches
+    PATCH_COMMAND   bzr revert
+        # PATCH_COMMAND continuation (any *_COMMAND here can be continued with COMMAND):
+        COMMAND     bzr patch -p0 ${PROJECT_SOURCE_DIR}/patches/openssl-1.0.1e.patch
 
     CONFIGURE_COMMAND
             ${CMAKE_COMMAND}
