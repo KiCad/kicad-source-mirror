@@ -30,6 +30,11 @@
 #include <fp_lib_table.h>
 #include <grid_tricks.h>
 
+
+#define INITIAL_HELP    \
+    _(  "Select an <b>Option Choice</b> in the listbox above, and then click the <b>Append Selected Option</b> button." )
+
+
 using std::string;
 
 // re-enter the dialog with the column sizes preserved from last time.
@@ -52,7 +57,8 @@ public:
             const wxString& aOptions, wxString* aResult ) :
         DIALOG_FP_PLUGIN_OPTIONS_BASE( aParent ),
         m_callers_options( aOptions ),
-        m_result( aResult )
+        m_result( aResult ),
+        m_initial_help( INITIAL_HELP )
     {
         wxString title = wxString::Format(
                 _( "Options for Library '%s'" ), GetChars( aNickname ) );
@@ -62,7 +68,9 @@ public:
         // add Cut, Copy, and Paste to wxGrid
         m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-        // Fill the grid with aOptions
+        m_grid->SetColMinimalWidth( 1, 250 );
+
+        // Fill the grid with existing aOptions
         string options = TO_UTF8( aOptions );
 
         PROPERTIES* props = FP_LIB_TABLE::ParseOptions( options );
@@ -86,26 +94,21 @@ public:
 
         IO_MGR::PCB_FILE_T  pi_type = IO_MGR::EnumFromStr( aPluginType );
         PLUGIN::RELEASER    pi( IO_MGR::PluginFind( pi_type ) );
-        PROPERTIES          choices;
 
-        pi->FootprintLibOptions( &choices );
+        pi->FootprintLibOptions( &m_choices );
 
-        if( choices.size() )
+        if( m_choices.size() )
         {
-            int needed_rows = (int) choices.size() - m_option_choices->GetNumberRows();
-            if( needed_rows > 0 )
-                m_option_choices->AppendRows( needed_rows );
-
             int row = 0;
-            for( PROPERTIES::const_iterator it = choices.begin();  it != choices.end();  ++it, ++row )
+            for( PROPERTIES::const_iterator it = m_choices.begin();  it != m_choices.end();  ++it, ++row )
             {
-                DBG(printf( "[%s]:'%s'\n", it->first.c_str(), it->second.c_str() );)
-                m_option_choices->SetCellValue( row, 0, FROM_UTF8( it->first.c_str() ) );
-                m_option_choices->SetCellValue( row, 1, FROM_UTF8( it->second.c_str() ) );
+                wxString item = FROM_UTF8( it->first.c_str() );
+
+                m_listbox->InsertItems( 1, &item, row );
             }
         }
 
-        m_option_choices->AutoSizeColumns( false );
+        m_html->SetPage( m_initial_help );
 
         if( !col_width_option )
         {
@@ -116,6 +119,8 @@ public:
             m_grid->SetColSize( 0, col_width_option );
             m_grid->SetColSize( 1, col_width_value );
         }
+
+        Fit();
 
         // initial focus on the grid please.
         m_grid->SetFocus();
@@ -131,6 +136,9 @@ public:
 private:
     const wxString& m_callers_options;
     wxString*       m_result;
+    PROPERTIES      m_choices;
+    wxString        m_initial_help;
+
 
     /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
     /// else return a 0 based column index.
@@ -219,14 +227,12 @@ private:
         return -1;
     }
 
-    //-----<event handlers>------------------------------------------------------
-
-    void onAppendOption( wxMouseEvent& event )
+    void appendOption()
     {
-        int selected_row = m_option_choices->GetCursorRow();
-        if( selected_row >= 0 )
+        int selected_row = m_listbox->GetSelection();
+        if( selected_row != wxNOT_FOUND )
         {
-            wxString    option = m_option_choices->GetCellValue( selected_row, 0 );
+            wxString    option = m_listbox->GetString( selected_row );
 
             int row_count = m_grid->GetNumberRows();
             int row;
@@ -245,6 +251,38 @@ private:
             m_grid->SetCellValue( row, 0, option );
             m_grid->AutoSizeColumns( false );
         }
+    }
+
+    //-----<event handlers>------------------------------------------------------
+
+    void onListBoxItemSelected( wxCommandEvent& event )
+    {
+        if( event.IsSelection() )
+        {
+            const char* option = TO_UTF8( event.GetString() );
+            string      help_text;
+
+            if( m_choices.Value( option, &help_text ) )
+            {
+                wxString page( FROM_UTF8( help_text.c_str() ) );
+
+                m_html->SetPage( page );
+            }
+            else
+            {
+                m_html->SetPage( m_initial_help );
+            }
+        }
+    }
+
+    void onListBoxItemDoubleClicked( wxCommandEvent& event )
+    {
+        appendOption();
+    }
+
+    void onAppendOption( wxCommandEvent& event )
+    {
+        appendOption();
     }
 
     void onAppendRow( wxMouseEvent& event )

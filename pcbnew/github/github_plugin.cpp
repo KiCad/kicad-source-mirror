@@ -183,14 +183,18 @@ void GITHUB_PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
     // inherit options supported by all PLUGINs.
     PLUGIN::FootprintLibOptions( aListToAppendTo );
 
-    (*aListToAppendTo)["allow_pretty_writing_to_this_dir"] = wxString(
-        _(  "Set this property to a directory where footprints are written to.\n"
-            "The directory should have a 'pretty' extension"
+    (*aListToAppendTo)["allow_pretty_writing_to_this_dir"] = wxString( _(
+        "Set this property to a directory where footprints are to be written as pretty "
+        "footprints when saving to this library. Anything saved will take precedence over "
+        "footprints by the same name in the github repo.  These saved footprints can then "
+        "be sent to the library maintainer as updates. "
+        "<p>The directory should have a <b>.pretty</b> file extension because the "
+        "Kicad plugin is used to do the saving.</p>"
         )).utf8_str();
 
-    (*aListToAppendTo)["cache_github_zip_in_this_dir"] = wxString(
-        _(  "Set this property to a directory where the github *.zip file will be cached.\n"
-            "This should speed up subsequent visits to this library."
+    (*aListToAppendTo)["cache_github_zip_in_this_dir"] = wxString( _(
+        "Set this property to a directory where the github *.zip file will be cached. "
+        "This should speed up subsequent visits to this library."
         )).utf8_str();
 }
 
