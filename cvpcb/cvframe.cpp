@@ -514,12 +514,24 @@ void CVPCB_MAINFRAME::ConfigCvpcb( wxCommandEvent& event )
 #if defined( USE_FP_LIB_TABLE )
 void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 {
+    bool tableChanged = false;
     int r = InvokePcbLibTableEditor( this, m_globalFootprintTable, m_footprintLibTable );
 
     if( r & 1 )
     {
-        FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
-        m_globalFootprintTable->Format( &sf, 0 );
+        try
+        {
+            FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
+            m_globalFootprintTable->Format( &sf, 0 );
+            tableChanged = true;
+        }
+        catch( IO_ERROR& ioe )
+        {
+            wxString msg;
+            msg.Printf( _( "Error occurred saving the global footprint library "
+                           "table:\n\n%s" ), ioe.errorText.GetData() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
     }
 
     if( r & 2 )
@@ -528,9 +540,23 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
         fn.SetName( FP_LIB_TABLE::GetFileName() );
         fn.SetExt( wxEmptyString );
 
-        FILE_OUTPUTFORMATTER sf( fn.GetFullPath() );
-        m_footprintLibTable->Format( &sf, 0 );
+        try
+        {
+            FILE_OUTPUTFORMATTER sf( fn.GetFullPath() );
+            m_footprintLibTable->Format( &sf, 0 );
+            tableChanged = true;
+        }
+        catch( IO_ERROR& ioe )
+        {
+            wxString msg;
+            msg.Printf( _( "Error occurred saving the global footprint library "
+                           "table:\n\n%s" ), ioe.errorText.GetData() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
     }
+
+    if( tableChanged )
+        BuildLIBRARY_LISTBOX();
 }
 #endif
 

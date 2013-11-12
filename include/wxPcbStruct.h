@@ -111,7 +111,7 @@ protected:
 
     DRC* m_drc;                                 ///< the DRC controller, see drc.cpp
 
-    PARAM_CFG_ARRAY   m_configSettings;          ///< List of Pcbnew configuration settings.
+    PARAM_CFG_ARRAY   m_configSettings;         ///< List of Pcbnew configuration settings.
 
     wxString          m_lastNetListRead;        ///< Last net list read with relative path.
     bool              m_useCmpFileForFpNames;   ///< is true, use the .cmp file from CvPcb, else use the netlist
@@ -120,7 +120,7 @@ protected:
     void setupTools();
     void destroyTools();
 	void onGenericCommand( wxCommandEvent& aEvent );
-		
+
     // we'll use lower case function names for private member functions.
     void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
     void createPopUpMenuForFootprints( MODULE* aModule, wxMenu* aPopMenu );

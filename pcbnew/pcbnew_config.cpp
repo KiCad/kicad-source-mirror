@@ -87,6 +87,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     case ID_PCB_LIB_TABLE_EDIT:
     {
+        bool tableChanged = false;
         int r = InvokePcbLibTableEditor( this, m_globalFootprintTable, m_footprintLibTable );
 
         if( r & 1 )
@@ -95,6 +96,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             {
                 FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
                 m_globalFootprintTable->Format( &sf, 0 );
+                tableChanged = true;
             }
             catch( IO_ERROR& ioe )
             {
@@ -114,6 +116,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             try
             {
                 m_footprintLibTable->Save( fn );
+                tableChanged = true;
             }
             catch( IO_ERROR& ioe )
             {
@@ -122,6 +125,11 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
                                "table:\n\n%s" ), ioe.errorText.GetData() );
                 wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
             }
+        }
+
+        if( tableChanged && FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer() != NULL )
+        {
+            FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer()->ReCreateLibraryList();
         }
     }
 

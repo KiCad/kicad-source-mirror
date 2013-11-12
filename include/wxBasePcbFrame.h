@@ -97,7 +97,7 @@ protected:
 
     TOOL_MANAGER*       m_toolManager;
     TOOL_DISPATCHER*    m_toolDispatcher;
-    
+
     void updateGridSelectBox();
     void updateZoomSelectBox();
     virtual void unitsChangeRefresh();

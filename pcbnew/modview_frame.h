@@ -95,10 +95,6 @@ public:
 
     virtual EDA_COLOR_T GetGridColor( void ) const;
 
-private:
-
-    void OnSize( wxSizeEvent& event );
-
     /**
      * Function ReCreateLibraryList
      *
@@ -106,6 +102,10 @@ private:
      * This list is sorted, with the library cache always at end of the list
      */
     void ReCreateLibraryList();
+
+private:
+
+    void OnSize( wxSizeEvent& event );
 
     void ReCreateFootprintList();
     void OnIterateFootprintList( wxCommandEvent& event );
@@ -200,9 +200,9 @@ private:
      * Virtual functions, not used here, but needed by PCB_BASE_FRAME
      * (virtual pure functions )
      */
-    void OnLeftDClick(wxDC*, const wxPoint&) {}
-    void SaveCopyInUndoList(BOARD_ITEM*, UNDO_REDO_T, const wxPoint&) {}
-    void SaveCopyInUndoList(PICKED_ITEMS_LIST&, UNDO_REDO_T, const wxPoint&) {}
+    void OnLeftDClick( wxDC*, const wxPoint& ) {}
+    void SaveCopyInUndoList( BOARD_ITEM*, UNDO_REDO_T, const wxPoint& ) {}
+    void SaveCopyInUndoList( PICKED_ITEMS_LIST&, UNDO_REDO_T, const wxPoint &) {}
 
 
     DECLARE_EVENT_TABLE()
