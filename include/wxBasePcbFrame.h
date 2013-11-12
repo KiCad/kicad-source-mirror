@@ -503,11 +503,12 @@ public:
                                    wxDC*           aDC = NULL );
 
     /**
-     * SelectFootprintFromLibBrowser
-     * Launch the footprint viewer to select the name of a footprint to load.
-     * @return the selected footprint name
+     * Function SelectFootprintFromLibBrowser
+     * launches the footprint viewer to select the name of a footprint to load.
+     *
+     * @return the selected footprint name or an empty string if no selection was made.
      */
-    wxString SelectFootprintFromLibBrowser( void );
+    wxString SelectFootprintFromLibBrowser();
 
     /**
      * Function GetFootprintLibraryTable
