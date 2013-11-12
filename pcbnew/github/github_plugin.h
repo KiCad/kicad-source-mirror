@@ -54,6 +54,8 @@ public:
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath );
 
+    void FootprintLibOptions( PROPERTIES* aListToAppendTo ) const;
+
     //-----</PLUGIN API>---------------------------------------------------------
 
     GITHUB_PLUGIN();        // constructor, if any, must be zero arg

@@ -418,6 +418,34 @@ public:
      */
     virtual bool IsFootprintLibWritable( const wxString& aLibraryPath );
 
+    /**
+     * Function FootprintLibOptions
+     * appends supported PLUGIN options to @a aListToAppenTo along with
+     * internationalized descriptions.  Options are typically appended so
+     * that a derived PLUGIN can call its base class
+     * function by the same name first, thus inheriting options declared there.
+     * (Some base class options could pertain to all Footprint*() functions
+     * in all derived PLUGINs.)  Note that since aListToAppendTo is a PROPERTIES
+     * object, all options will be unique and last guy wins.
+     *
+     * @param aListToAppendTo holds a tuple of
+     * <dl>
+        <dt>option</dt>
+        <dd>This eventually is what shows up into the fp-lib-table "options"
+            field, possibly combined with others.</dd>
+        <dt>internationalized description</dt>
+        <dd>The internationalized description is displayed in DIALOG_FP_PLUGIN_OPTIONS.
+     *      It may be multi-line and be quite explanatory of the option.</dd>
+       </dl>
+     * <br>
+     *  In the future perhaps @a aListToAppendTo evolves to something capable of also
+     *  holding a wxValidator for the cells in said dialog:
+     *  http://forums.wxwidgets.org/viewtopic.php?t=23277&p=104180.
+        This would require a 3 column list, and introducing wx GUI knowledge to
+        PLUGIN, which has been avoided to date.
+     */
+    virtual void FootprintLibOptions( PROPERTIES* aListToAppendTo ) const;
+
     //-----</PUBLIC PLUGIN API>------------------------------------------------
 
 

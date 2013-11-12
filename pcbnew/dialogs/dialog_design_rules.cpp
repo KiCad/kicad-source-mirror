@@ -68,9 +68,6 @@ int DIALOG_DESIGN_RULES::s_LastTabSelection = -1;
 
 // methods for the helper class NETS_LIST_CTRL
 
-/** OnGetItemText (overlaid method)
- * needed by wxListCtrl with wxLC_VIRTUAL options
- */
 wxString NETS_LIST_CTRL::OnGetItemText( long item, long column ) const
 {
     if( column == 0 )
@@ -87,14 +84,7 @@ wxString NETS_LIST_CTRL::OnGetItemText( long item, long column ) const
 }
 
 
-/**
- * Function setRowItems
- * Initialize the net name and the net class name at row aRow
- * @param aRow = row index (if aRow > number of stored row, empty rows will be created)
- * @param aNetname = the string to display in row aRow, column 0
- * @param aNetclassName = the string to display in row aRow, column 1
- */
-void NETS_LIST_CTRL::setRowItems( unsigned        aRow,
+void NETS_LIST_CTRL::SetRowItems( unsigned        aRow,
                                   const wxString& aNetname,
                                   const wxString& aNetclassName )
 {
@@ -422,7 +412,7 @@ void DIALOG_DESIGN_RULES::FillListBoxWithNetNames( NETS_LIST_CTRL* aListCtrl,
         wxSize   class_needed = sDC.GetTextExtent( (*i)->clazz );
         net_colsize = std::max( net_colsize, net_needed.x );
         class_colsize = std::max( class_colsize, class_needed.x );
-        aListCtrl->setRowItems( row, (*i)->net, (*i)->clazz );
+        aListCtrl->SetRowItems( row, (*i)->net, (*i)->clazz );
     }
 
     int margin = sDC.GetTextExtent( wxT("XX") ).x;;

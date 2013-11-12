@@ -71,11 +71,12 @@ int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal, F
  *
  * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
  * @param aNickname is the footprint library whose options are being edited.
+ * @param aPluginType is something that will pass through IO_MGR::EnumFromStr().
  * @param aOptionsIn is the options string on calling into this function.
  * @param aResult is where to put the result of the editing.
  */
-void InvokePluginOptionsEditor( wxTopLevelWindow* aCaller,
-        const wxString& aNickname, const wxString& aOptions, wxString* aResult );
+void InvokePluginOptionsEditor( wxTopLevelWindow* aCaller, const wxString& aNickname,
+    const wxString& aPluginType, const wxString& aOptions, wxString* aResult );
 
 /**
  * Function InvokePcbLibTableEditor
