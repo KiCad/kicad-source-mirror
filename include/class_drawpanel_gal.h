@@ -99,7 +99,7 @@ public:
     }
 
     /// @copydoc wxWindow::Refresh()
-    virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
+    void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
 
     /**
      * Function SetEventDispatcher()
@@ -121,18 +121,35 @@ protected:
 
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
 
-    wxLongLong               m_lastRefresh;      ///< Last time the panel was refreshed
+    /// Last timestamp when the panel was refreshed
+    wxLongLong               m_lastRefresh;
+
+    /// Is there a redraw event requested?
     bool                     m_pendingRefresh;
+
+    /// True if GAL is currently redrawing the view
+    bool                     m_drawing;
+
+    /// Timer responsible for preventing too frequent refresh
     wxTimer                  m_refreshTimer;
 
-    KIGFX::GAL*              m_gal;              ///< Interface for drawing objects on a 2D-surface
-    KIGFX::VIEW*             m_view;             ///< Stores view settings (scale, center, etc.)
-                                                 ///< and items to be drawn
-    KIGFX::PAINTER*          m_painter;          ///< Contains information about how to draw items
-                                                 ///< using GAL
-    KIGFX::WX_VIEW_CONTROLS* m_viewControls;     ///< Control for VIEW (moving, zooming, etc.)
-    GalType                  m_currentGal;       ///< Currently used GAL
-    TOOL_DISPATCHER*         m_eventDispatcher;  ///< Processes and forwards events to tools
+    /// Interface for drawing objects on a 2D-surface
+    KIGFX::GAL*              m_gal;
+
+    /// Stores view settings (scale, center, etc.) and items to be drawn
+    KIGFX::VIEW*             m_view;
+
+    /// Contains information about how to draw items using GAL
+    KIGFX::PAINTER*          m_painter;
+
+    /// Control for VIEW (moving, zooming, etc.)
+    KIGFX::WX_VIEW_CONTROLS* m_viewControls;
+
+    /// Currently used GAL
+    GalType                  m_currentGal;
+
+    /// Processes and forwards events to tools
+    TOOL_DISPATCHER*         m_eventDispatcher;
 };
 
 #endif

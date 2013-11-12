@@ -29,7 +29,8 @@
  */
 
 #include <gal/opengl/opengl_compositor.h>
-#include <wx/log.h>
+#include <wx/msgdlg.h>
+#include <confirm.h>
 
 using namespace KIGFX;
 
@@ -97,9 +98,9 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 
     if( usedBuffers() >= m_maxBuffers )
     {
-        wxLogError( wxT( "Cannot create more framebuffers. OpenGL rendering backend requires at"
-                         "least 3 framebuffers. You may try to update/change "
-                         "your graphic drivers." ) );
+        DisplayError( NULL, wxT( "Cannot create more framebuffers. OpenGL rendering "
+                        "backend requires at least 3 framebuffers. You may try to update/change "
+                        "your graphic drivers." ) );
         return 0;    // Unfortunately we have no more free buffers left
     }
 
@@ -131,38 +132,38 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
         switch( status )
         {
         case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-            wxLogFatalError( wxT( "Cannot create the framebuffer." ) );
+            DisplayError( NULL, wxT( "Cannot create the framebuffer." ) );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-            wxLogFatalError( wxT( "The framebuffer attachment points are incomplete." ) );
+            DisplayError( NULL, wxT( "The framebuffer attachment points are incomplete." ) );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-            wxLogFatalError( wxT( "The framebuffer does not have at least "
-                                  "one image attached to it." ) );
+            DisplayError( NULL, wxT( "The framebuffer does not have at least "
+                                        "one image attached to it." ) );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-            wxLogFatalError( wxT( "The framebuffer read buffer is incomplete." ) );
+            DisplayError( NULL, wxT( "The framebuffer read buffer is incomplete." ) );
             break;
 
         case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-            wxLogFatalError( wxT( "The combination of internal formats of the attached images "
+            DisplayError( NULL, wxT( "The combination of internal formats of the attached images "
                                   "violates an implementation-dependent set of restrictions." ) );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
-            wxLogFatalError( wxT( "GL_RENDERBUFFER_SAMPLES is not the same "
+            DisplayError( NULL, wxT( "GL_RENDERBUFFER_SAMPLES is not the same "
                                   "for all attached renderbuffers" ) );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
-            wxLogFatalError( wxT( "Framebuffer incomplete layer targets errors." ) );
+            DisplayError( NULL, wxT( "Framebuffer incomplete layer targets errors." ) );
             break;
 
         default:
-            wxLogFatalError( wxT( "Cannot create the framebuffer." ) );
+            DisplayError( NULL, wxT( "Cannot create the framebuffer." ) );
             break;
         }
 
@@ -223,7 +224,7 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 
     if( aBufferHandle == 0 || aBufferHandle > usedBuffers() )
     {
-        wxLogError( wxT( "Wrong framebuffer handle" ) );
+        DisplayError( NULL, wxT( "Wrong framebuffer handle" ) );
         return;
     }
 
