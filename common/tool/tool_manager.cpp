@@ -139,8 +139,8 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
     {
         if( !static_cast<TOOL_INTERACTIVE*>( aTool )->Init() )
         {
-            DisplayError( NULL, wxString( std::string( "Initialization of the %s tool failed" ) +
-                                            aTool->GetName() ) );
+            DisplayError( NULL, wxT( "Initialization of the %s tool failed" ) +
+                                     wxString( aTool->GetName().c_str(), wxConvUTF8 ) );
 
             // Unregister the tool
             m_toolState.erase( aTool );
