@@ -42,6 +42,13 @@
     Possibly cache the zip file locally.  Use HTTP's "have changed" or whatever it is called.
 */
 
+
+#ifndef WIN32_LEAN_AND_MEAN
+// when WIN32_LEAN_AND_MEAN is defined, some useless includes in <window.h>
+// are skipped, and this avoid some compil issues
+#define WIN32_LEAN_AND_MEAN
+#endif
+
 #ifdef WIN32
  // defines needed by avhttp
  // Minimal Windows version is XP: Google for _WIN32_WINNT
