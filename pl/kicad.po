@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-09 20:55+0100\n"
-"PO-Revision-Date: 2013-11-09 21:23+0100\n"
+"POT-Creation-Date: 2013-11-14 22:35+0100\n"
+"PO-Revision-Date: 2013-11-14 22:51+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -158,7 +158,7 @@ msgstr ""
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
 #: eeschema/schframe.cpp:1024 pcbnew/moduleframe.cpp:625
-#: pcbnew/pcbframe.cpp:1015 cvpcb/cvframe.cpp:782
+#: pcbnew/pcbframe.cpp:1015 cvpcb/cvframe.cpp:808
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -734,7 +734,7 @@ msgstr "Symbol"
 
 #: eeschema/database.cpp:118 eeschema/sch_component.cpp:1475
 #: pcbnew/librairi.cpp:75 pcbnew/librairi.cpp:759 pcbnew/librairi.cpp:807
-#: pcbnew/loadcmp.cpp:576
+#: pcbnew/loadcmp.cpp:580
 msgid "Library"
 msgstr "Biblioteka"
 
@@ -830,11 +830,11 @@ msgid "Eeschema is already running, Continue?"
 msgstr "Eeschema jest już uruchomiony. Kontynuować?"
 
 #: eeschema/eeschema_config.cpp:151 eeschema/eeschema_config.cpp:219
-#: pcbnew/pcbnew_config.cpp:157
+#: pcbnew/pcbnew_config.cpp:165
 msgid "Read Project File"
 msgstr "Odczytaj plik projektu"
 
-#: eeschema/eeschema_config.cpp:465 pcbnew/pcbnew_config.cpp:300
+#: eeschema/eeschema_config.cpp:465 pcbnew/pcbnew_config.cpp:308
 #: cvpcb/cfg.cpp:126
 msgid "Save Project File"
 msgstr "Zapisz plik projektu"
@@ -1937,7 +1937,7 @@ msgstr "Oznaczenie"
 #: pcbnew/footprint_wizard_frame.cpp:205
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:59
-#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:39
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
 msgid "Value"
 msgstr "Wartość"
@@ -3298,7 +3298,7 @@ msgstr "Schemat"
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1027 cvpcb/cvframe.cpp:787
+#: eeschema/schframe.cpp:1027 cvpcb/cvframe.cpp:813
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -4409,6 +4409,7 @@ msgstr "Dodaj"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
 #: pcbnew/onrightclick.cpp:590 pcbnew/onrightclick.cpp:813
 #: pcbnew/onrightclick.cpp:876 pcbnew/onrightclick.cpp:928
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:62
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:77
@@ -4703,7 +4704,7 @@ msgstr "Usuń jedno z pól dodatkowych"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:40
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:84
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:111
-#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:62
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:67
 msgid "Move Up"
 msgstr "Przesuń w górę"
 
@@ -6473,7 +6474,7 @@ msgstr "Elementy graficzne"
 
 #: pcbnew/class_edge_mod.cpp:250 pcbnew/class_module.cpp:527
 #: pcbnew/class_pad.cpp:576 pcbnew/class_text_mod.cpp:347
-#: pcbnew/loadcmp.cpp:575 pcbnew/loadcmp.cpp:641 cvpcb/cvframe.cpp:925
+#: pcbnew/loadcmp.cpp:579 pcbnew/loadcmp.cpp:645 cvpcb/cvframe.cpp:951
 msgid "Module"
 msgstr "Footprint"
 
@@ -7697,17 +7698,17 @@ msgstr ""
 "Bieżący footprint zostanie utracony i ta operacja nie może zostać cofnięta. "
 "Kontynuować?"
 
-#: pcbnew/io_mgr.cpp:41 pcbnew/plugin.cpp:27
+#: pcbnew/io_mgr.cpp:42 pcbnew/plugin.cpp:27
 #, c-format
 msgid "Plugin '%s' does not implement the '%s' function."
 msgstr "Wtyczka '%s' nie posiada zaimplementowanej funkcji '%s'."
 
-#: pcbnew/io_mgr.cpp:42
+#: pcbnew/io_mgr.cpp:43
 #, c-format
 msgid "Plugin type '%s' is not found."
 msgstr "Wtyczka typu '%s' nie została znaleziona."
 
-#: pcbnew/io_mgr.cpp:125
+#: pcbnew/io_mgr.cpp:126
 #, c-format
 msgid "Unknown PCB_FILE_T value: %d"
 msgstr "Nieznana wartość PCB_FILE_T: %d"
@@ -8077,30 +8078,30 @@ msgstr "Symbol [%s] zastąpiony przez <%s>"
 msgid "Component [%s] added in  <%s>"
 msgstr "Symbol [%s] dodany do <%s>"
 
-#: pcbnew/loadcmp.cpp:167
+#: pcbnew/loadcmp.cpp:171
 msgid "Load Module"
 msgstr "Załaduj footprint"
 
-#: pcbnew/loadcmp.cpp:344
+#: pcbnew/loadcmp.cpp:348
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "Nie znaleziono footprintu %s w bibliotece '%s'."
 
-#: pcbnew/loadcmp.cpp:387
+#: pcbnew/loadcmp.cpp:391
 #, c-format
 msgid "PCB footprint library file '%s' not found in search paths."
 msgstr "Nie znaleziono pliku biblioteki '%s' w podanych ścieżkach dostępu."
 
-#: pcbnew/loadcmp.cpp:411
+#: pcbnew/loadcmp.cpp:415
 #, c-format
 msgid "Footprint %s not found in any library."
 msgstr "Footprint %s nie został znaleziony w żadnej z bibliotek."
 
-#: pcbnew/loadcmp.cpp:489
+#: pcbnew/loadcmp.cpp:493
 msgid "No footprint libraries were specified."
 msgstr "Nie okreslono żadnych bibliotek."
 
-#: pcbnew/loadcmp.cpp:501
+#: pcbnew/loadcmp.cpp:505
 #, c-format
 msgid ""
 "Error occurred attempting to load footprint library '%s':\n"
@@ -8109,7 +8110,7 @@ msgstr ""
 "Wystąpił błąd przy próbie załadowania biblioteki footprintów '%s':\n"
 "\n"
 
-#: pcbnew/loadcmp.cpp:505 pcbnew/modview_frame.cpp:416
+#: pcbnew/loadcmp.cpp:509 pcbnew/modview_frame.cpp:416
 msgid ""
 "Files not found:\n"
 "\n"
@@ -8117,7 +8118,7 @@ msgstr ""
 "Nie znaleziono plików:\n"
 "\n"
 
-#: pcbnew/loadcmp.cpp:508 pcbnew/modview_frame.cpp:419
+#: pcbnew/loadcmp.cpp:512 pcbnew/modview_frame.cpp:419
 msgid ""
 "\n"
 "\n"
@@ -8129,7 +8130,7 @@ msgstr ""
 "Błędy podczas ładowania pliku:\n"
 "\n"
 
-#: pcbnew/loadcmp.cpp:525
+#: pcbnew/loadcmp.cpp:529
 #, c-format
 msgid ""
 "No footprints could be read from library file(s):\n"
@@ -8144,20 +8145,20 @@ msgstr ""
 "w dowolnej ze ścieżek przeszukiwań. Sprawdź czy konfiguracja jest poprawna "
 "by program mógł wyszukiwać biblioteki footprintów."
 
-#: pcbnew/loadcmp.cpp:578 pcbnew/loadcmp.cpp:638
+#: pcbnew/loadcmp.cpp:582 pcbnew/loadcmp.cpp:642
 #, c-format
 msgid "Modules [%d items]"
 msgstr "Footprinty [%d pozycji]"
 
-#: pcbnew/loadcmp.cpp:597
+#: pcbnew/loadcmp.cpp:601
 msgid "No footprint found."
 msgstr "Nie znaleziono footprintów."
 
-#: pcbnew/loadcmp.cpp:620 cvpcb/cvframe.cpp:685
+#: pcbnew/loadcmp.cpp:624 cvpcb/cvframe.cpp:711
 msgid "Description: "
 msgstr "Opis:"
 
-#: pcbnew/loadcmp.cpp:621
+#: pcbnew/loadcmp.cpp:625
 msgid ""
 "\n"
 "Key words: "
@@ -8165,7 +8166,7 @@ msgstr ""
 "\n"
 "Słowa kluczowe:"
 
-#: pcbnew/loadcmp.cpp:706
+#: pcbnew/loadcmp.cpp:710
 #, c-format
 msgid "Footprint library '%s' saved as '%s'."
 msgstr "Bibliotekę '%s' zapisano jako '%s'."
@@ -9262,7 +9263,7 @@ msgstr "Nie można otworzyć pliku listy sieci \"%s\"."
 msgid "Netlist Load Error."
 msgstr "Błąd odczytu listy sieci."
 
-#: pcbnew/netlist.cpp:87 cvpcb/cvframe.cpp:851
+#: pcbnew/netlist.cpp:87 cvpcb/cvframe.cpp:877
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -9272,7 +9273,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/netlist.cpp:88 pcbnew/dialogs/dialog_netlist.cpp:427
-#: cvpcb/cvframe.cpp:852
+#: cvpcb/cvframe.cpp:878
 msgid "Netlist Load Error"
 msgstr "Błąd odczytu listy sieci"
 
@@ -9884,7 +9885,7 @@ msgstr "Ukryj menadżera warstw"
 msgid "Show &Layers Manager"
 msgstr "Pokaż menadżera warstw"
 
-#: pcbnew/pcbnew_config.cpp:102
+#: pcbnew/pcbnew_config.cpp:104 cvpcb/cvframe.cpp:531 cvpcb/cvframe.cpp:552
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -9895,11 +9896,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbnew_config.cpp:104 pcbnew/pcbnew_config.cpp:123
+#: pcbnew/pcbnew_config.cpp:106 pcbnew/pcbnew_config.cpp:126
+#: cvpcb/cvframe.cpp:533 cvpcb/cvframe.cpp:554
 msgid "File Save Error"
 msgstr "Błąd zapisu pliku"
 
-#: pcbnew/pcbnew_config.cpp:121
+#: pcbnew/pcbnew_config.cpp:124
 #, c-format
 msgid ""
 "Error occurred saving project specific footprint library table:\n"
@@ -9910,17 +9912,17 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbnew_config.cpp:167 pcbnew/pcbnew_config.cpp:556
+#: pcbnew/pcbnew_config.cpp:175 pcbnew/pcbnew_config.cpp:564
 #: gerbview/excellon_read_drill_file.cpp:184
 #, c-format
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
 
-#: pcbnew/pcbnew_config.cpp:498
+#: pcbnew/pcbnew_config.cpp:506
 msgid "Save Macros File"
 msgstr "Zapisz plik makr"
 
-#: pcbnew/pcbnew_config.cpp:546
+#: pcbnew/pcbnew_config.cpp:554
 msgid "Read Macros File"
 msgstr "Odczytaj plik makr"
 
@@ -10000,6 +10002,28 @@ msgstr "nie mogę obsłużyć tekstu footprintu typu %s"
 #, c-format
 msgid "Your BOARD has a bad layer number for module %s"
 msgstr "Twoja płytka posiada błędny numer warstwy w footprincie %s"
+
+#: pcbnew/plugin.cpp:117
+msgid "Enable debug logging for Footprint*() functions in this PLUGIN."
+msgstr "Włącz logowanie dla funkcji Footprint*() dla tej wtyczki."
+
+#: pcbnew/plugin.cpp:121
+msgid "Regular expression <b>footprint name</b> filter."
+msgstr "Filtrowanie z pomocą wyrażeń regularnch dla <b>Nazwy footprintu</b>"
+
+#: pcbnew/plugin.cpp:125
+msgid ""
+"Enable transaction logging.  The mere presence of this option turns on the  "
+"logging, no need to set a Value."
+msgstr ""
+"Włącz logowanie transakcji. Obecność tej opcji włącza logowanie, nie jest "
+"potrzebne ustawienie wartości."
+
+#: pcbnew/plugin.cpp:134
+msgid ""
+"Enter the python module which implements the PLUGIN::Footprint*() functions."
+msgstr ""
+"Wprowadź moduł języka Python który implementuje funkcje PLUGIN::Footrpint*()."
 
 #: pcbnew/sel_layer.cpp:308
 msgid "Warning: The Top Layer and Bottom Layer are same."
@@ -10879,113 +10903,113 @@ msgstr "Klasa"
 msgid "* (Any)"
 msgstr "* (Dowolna)"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:201
+#: pcbnew/dialogs/dialog_design_rules.cpp:191
 msgid "<b>Current general settings:</b><br>"
 msgstr "<b>Bieżące ustawienia główne:</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:205
+#: pcbnew/dialogs/dialog_design_rules.cpp:195
 #, c-format
 msgid "Minimum value for tracks width: <b>%s</b><br>\n"
 msgstr "Minimalna wartość dla szerokości ścieżek: <b>%s</b><br>\n"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:209
+#: pcbnew/dialogs/dialog_design_rules.cpp:199
 #, c-format
 msgid "Minimum value for vias diameter: <b>%s</b><br>\n"
 msgstr "Minimalna wartość dla średnicy przelotek: <b>%s</b><br>\n"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:213
+#: pcbnew/dialogs/dialog_design_rules.cpp:203
 #, c-format
 msgid "Minimum value for microvias diameter: <b>%s</b><br>\n"
 msgstr "Minimalna wartość dla średnicy mikroprzelotek: <b>%s</b><br>\n"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:677
+#: pcbnew/dialogs/dialog_design_rules.cpp:667
 msgid "Errors detected, Abort"
 msgstr "Wystąpiły błędy. Przerwano"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:699
+#: pcbnew/dialogs/dialog_design_rules.cpp:689
 msgid "New Net Class Name:"
 msgstr "Nowa nazwa klasy połączeń:"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:717
+#: pcbnew/dialogs/dialog_design_rules.cpp:707
 msgid "This NetClass is already existing, cannot add it; Aborted"
 msgstr ""
 "Taka klasa połączeń jest już zdefiniowana, nie można dodać takiej samej; "
 "Przerwano"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:780
+#: pcbnew/dialogs/dialog_design_rules.cpp:770
 msgid "The default Netclass cannot be removed"
 msgstr "Domyślna klasa połączeń nie może zostać usunięta"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:979
+#: pcbnew/dialogs/dialog_design_rules.cpp:969
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
 msgstr "%s: <b>Szerokość ścieżki</b> &lt; <b>Min. szerokość ścieżki</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:992
+#: pcbnew/dialogs/dialog_design_rules.cpp:982
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>"
 msgstr "%s: <b>Średnica przelotki</b> &lt; <b>Min. średnica przelotki</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1003
+#: pcbnew/dialogs/dialog_design_rules.cpp:993
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
 msgstr ""
 "%s: <b>Średnica otworu przelotki</b> &ge; <b>Średnica przelotki</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1012
+#: pcbnew/dialogs/dialog_design_rules.cpp:1002
 #, c-format
 msgid "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>"
 msgstr ""
 "%s: <b>Średnica otworu przelotki</b> &lt; <b>Min. średnica otworu przelotki</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1025
+#: pcbnew/dialogs/dialog_design_rules.cpp:1015
 #, c-format
 msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
 msgstr ""
 "%s: <b>Średnica mikroprzelotki</b> &lt; <b>Min. średnica mikroprzelotki</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1036
+#: pcbnew/dialogs/dialog_design_rules.cpp:1026
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>"
 msgstr ""
 "%s: <b>Średnica otworu mikroprzelotki</b> &ge; <b>Średnica mikroprzelotki</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1045
+#: pcbnew/dialogs/dialog_design_rules.cpp:1035
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>"
 msgstr ""
 "%s: <b>Średnica otworu mikroprzelotki</b> &lt; <b>Min. średnica otworu "
 "mikroprzelotki</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1065
+#: pcbnew/dialogs/dialog_design_rules.cpp:1055
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
 msgstr ""
 "<b>Szerokość %d dodatkowej ścieżki </b>%s &lt; <b>Min. szerokość ścieżki</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1073
+#: pcbnew/dialogs/dialog_design_rules.cpp:1063
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Szerokość %d dodatkowej ścieżki </b>%s &gt; <b>1 cal!</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1097
+#: pcbnew/dialogs/dialog_design_rules.cpp:1087
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
 msgstr ""
 "<b>Rozmiar %d dodatkowej przelotki </b>%s &lt; <b>Min. rozmiar przelotki</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1106
+#: pcbnew/dialogs/dialog_design_rules.cpp:1096
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &le; <b> Drill Size</b> %s<br>"
 msgstr ""
 "<b>Rozmiar %d dodatkowej przelotki</b> %s &le; <b> Rozmiar otworu</b> %s<br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1116
+#: pcbnew/dialogs/dialog_design_rules.cpp:1106
 #, c-format
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Rozmiar %d dodatkowej przelotki </b>%s &gt; <b>1 cal!</b><br>"
@@ -12098,21 +12122,21 @@ msgstr "Ścieżka"
 msgid "Plugin Type"
 msgstr "Typ wtyczki"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:401
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:406
 #, c-format
 msgid "Illegal character '%s' found in Nickname: '%s' in row %d"
 msgstr "Znaleziono niepoprawny znak '%s' w nazwie '%s' w rzędzie %d"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:415
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:420
 msgid "No Colon in Nicknames"
 msgstr "Nie można stosować przecinków w nazwach"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:445
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:450
 #, c-format
 msgid "Duplicate Nickname: '%s' in rows %d and %d"
 msgstr "Zdublowana nazwa '%s' w rzędach %d i %d"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:460
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:465
 msgid "Please Delete or Modify One"
 msgstr "Proszę usunąć lub zmodyfikować jednen z wpisów"
 
@@ -12137,7 +12161,6 @@ msgid "Add a PCB library row to this table"
 msgstr "Dodaje wpis o bibliotece PCB do tej tabeli"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:106
-#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:59
 msgid "Delete Row"
 msgstr "Usuń wpis"
 
@@ -12150,7 +12173,7 @@ msgid "Move the currently selected row up one position"
 msgstr "Przesuń zaznaczony wpis o jedną pozycję w górę"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:116
-#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:65
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
 #: 3d-viewer/3d_canvas.cpp:379
 msgid "Move Down"
 msgstr "Przesuń w dół v"
@@ -12185,7 +12208,15 @@ msgstr ""
 "To jest tabela tylko do odczytu, która ma związek ze zmiennymi "
 "środowiskowymi."
 
-#: pcbnew/dialogs/dialog_fp_plugin_options.cpp:57
+#: pcbnew/dialogs/dialog_fp_plugin_options.cpp:35
+msgid ""
+"Select an <b>Option Choice</b> in the listbox above, and then click the "
+"<b>Append Selected Option</b> button."
+msgstr ""
+"Wybierz <b>Wybór opcji</b> na powyższej liście i kliknij przycisk <b>Dodaj "
+"wybraną opcję</b>."
+
+#: pcbnew/dialogs/dialog_fp_plugin_options.cpp:64
 #, c-format
 msgid "Options for Library '%s'"
 msgstr "Opcje biblioteki '%s'"
@@ -12194,21 +12225,45 @@ msgstr "Opcje biblioteki '%s'"
 msgid "Plugin Options:"
 msgstr "Opcje wtyczki:"
 
-#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:38
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:39
 msgid "Option"
 msgstr "Opcje"
 
-#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:56
-msgid "Add Row"
-msgstr "Dodaj rząd"
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:57
+msgid "Append"
+msgstr "Dołącz"
 
-#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:77
-msgid "<<"
-msgstr "<<"
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:58
+msgid "Append a blank row"
+msgstr "Dołącz pusty wiersz"
 
-#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:84
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:63
+msgid "Delete the selected row"
+msgstr "Usuń wybrany wiersz"
+
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:68
+msgid "Move the selected row up one position"
+msgstr "Przesuń zaznaczony wiersz o jedną pozycję w górę"
+
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:73
+msgid "Move the selected row down one position"
+msgstr "Przesuń zaznaczony wiersz o jedną pozycję w dół"
+
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:90
 msgid "Option Choices:"
 msgstr "Wybór opcji:"
+
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:94
+msgid "Options supported by current plugin"
+msgstr "Opcje obsługiwane przez wybraną wtyczkę"
+
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:98
+msgid "<< Append Selected Option"
+msgstr "<< Dodaj wybraną opcję"
+
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:101
+msgid "Option Specific Help:"
+msgstr "Informacja na temat opcji:"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange.cpp:94
 msgid "Freeroute Help"
@@ -14887,7 +14942,33 @@ msgstr "Jeden plik z wszystkimi warstwami"
 msgid "File option:"
 msgstr "Opcje pliku:"
 
-#: pcbnew/github/github_plugin.cpp:236
+#: pcbnew/github/github_plugin.cpp:194
+msgid ""
+"Set this property to a directory where footprints are to be written as "
+"pretty footprints when saving to this library. Anything saved will take "
+"precedence over footprints by the same name in the github repo.  These saved "
+"footprints can then be sent to the library maintainer as updates. <p>The "
+"directory should have a <b>.pretty</b> file extension because the Kicad "
+"plugin is used to do the saving.</p>"
+msgstr ""
+"Ustaw tą właściwość by wskazywała folder gdzie zapisywane będą footprinty w "
+"formacie PRETTY podczas zapisywania bilbioteki. Wszsytko co zostanie "
+"zapisane będzie miało pierwszeństwo nad footprintami o tej samej nazwie z "
+"repozytorium GitHub. Zapisywane tutaj footprinty, mogą być wysyłane do "
+"opiekuna bliblioteki jako ich aktualizacje. <p>Folder powinien posiadać "
+"pliki z rozszerzeniem <b>.pretty</b> ponieważ do zapisywania używana jest "
+"wtyczka programu KiCad.</p>"
+
+#: pcbnew/github/github_plugin.cpp:203
+msgid ""
+"Set this property to a directory where the github *.zip file will be cached. "
+"This should speed up subsequent visits to this library."
+msgstr ""
+"Ustaw tą właściwość by wskazywała folder gdzie zapisywane będą podręczne "
+"pliki GitHub w formacie archiwów ZIP. To powinno przyśpieszyć kolejne wizyty "
+"w tej bibliotece."
+
+#: pcbnew/github/github_plugin.cpp:294
 #, c-format
 msgid ""
 "Unable to parse URL:\n"
@@ -14896,7 +14977,7 @@ msgstr ""
 "Nie mogę rozpoznać adresu URL:\n"
 "'%s'"
 
-#: pcbnew/github/github_plugin.cpp:265
+#: pcbnew/github/github_plugin.cpp:323
 #, c-format
 msgid ""
 "Cannot GET zip: '%s'\n"
@@ -15061,61 +15142,61 @@ msgstr "Usuń zaznaczone"
 msgid "Open Net List"
 msgstr "Otwórz plik netlisty"
 
-#: cvpcb/cvframe.cpp:655
+#: cvpcb/cvframe.cpp:681
 #, c-format
 msgid "Components: %d, unassigned: %d"
 msgstr "Komponenty: %d, nieprzydzielone: %d"
 
-#: cvpcb/cvframe.cpp:673
+#: cvpcb/cvframe.cpp:699
 msgid "Filter list: "
 msgstr "Filtruj listę wg: "
 
-#: cvpcb/cvframe.cpp:688
+#: cvpcb/cvframe.cpp:714
 msgid "Key words: "
 msgstr "Słowa kluczowe:"
 
-#: cvpcb/cvframe.cpp:699
+#: cvpcb/cvframe.cpp:725
 msgid "key words"
 msgstr "słów kluczowych"
 
-#: cvpcb/cvframe.cpp:706
+#: cvpcb/cvframe.cpp:732
 msgid "pin count"
 msgstr "ilości wyprowadzeń"
 
-#: cvpcb/cvframe.cpp:714
+#: cvpcb/cvframe.cpp:740
 msgid "library"
 msgstr "bibliotek"
 
-#: cvpcb/cvframe.cpp:718
+#: cvpcb/cvframe.cpp:744
 msgid "No filtering"
 msgstr "Bez filtracji"
 
-#: cvpcb/cvframe.cpp:720
+#: cvpcb/cvframe.cpp:746
 msgid "Filtered by "
 msgstr "Filtrowane według "
 
-#: cvpcb/cvframe.cpp:734
+#: cvpcb/cvframe.cpp:760
 msgid "No PCB footprint libraries are listed in the current project file."
 msgstr ""
 "Brak wyszczególnionych bibliotek footprintów w bieżącym pliku projektu."
 
-#: cvpcb/cvframe.cpp:735
+#: cvpcb/cvframe.cpp:761
 msgid "Project File Error"
 msgstr "Błąd pliku"
 
-#: cvpcb/cvframe.cpp:749
+#: cvpcb/cvframe.cpp:775
 msgid "Load Error"
 msgstr "Błąd wczytywania"
 
-#: cvpcb/cvframe.cpp:753
+#: cvpcb/cvframe.cpp:779
 msgid "Some files could not be found!"
 msgstr "Pewne pliki nie zostały znalezione!"
 
-#: cvpcb/cvframe.cpp:761
+#: cvpcb/cvframe.cpp:787
 msgid "Some files are invalid!"
 msgstr "Niektóre pliki są niepoprawne!"
 
-#: cvpcb/cvframe.cpp:847
+#: cvpcb/cvframe.cpp:873
 msgid "Unknown netlist format."
 msgstr "Nieznany format listy sieci"
 
@@ -16177,30 +16258,30 @@ msgid "Copy the version string to clipboard to send with bug reports"
 msgstr ""
 "Skopiuj informację o wersji do schowka by wysłać ją razem z raportem błędów"
 
-#: common/basicframe.cpp:484
+#: common/basicframe.cpp:493
 msgid "Could not open clipboard to write version information."
 msgstr "Nie mogę otworzyć schowka by zapisać informacje o wersji."
 
-#: common/basicframe.cpp:485
+#: common/basicframe.cpp:494
 msgid "Clipboard Error"
 msgstr "Błąd Schowka"
 
-#: common/basicframe.cpp:565
+#: common/basicframe.cpp:608
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
 msgstr "Nie masz uprawnień zapisu do folderu <%s>."
 
-#: common/basicframe.cpp:570
+#: common/basicframe.cpp:613
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr "Nie masz uprawnień zapisu do pliku <%s> w folderze <%s>."
 
-#: common/basicframe.cpp:575
+#: common/basicframe.cpp:618
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
 msgstr "Nie masz uprawnień zapisu do pliku <%s>."
 
-#: common/basicframe.cpp:608
+#: common/basicframe.cpp:651
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!  It appears that the last time you "
@@ -16211,12 +16292,12 @@ msgstr ""
 "został zapisany poprawnie.\n"
 "Czy chcesz przywrócić ostatnie edycje jakie wykonałeś?"
 
-#: common/basicframe.cpp:634
+#: common/basicframe.cpp:677
 #, c-format
 msgid "Could not create backup file <%s>"
 msgstr "Nie mogę utworzyć pliku kopii zapasowej <%s>"
 
-#: common/basicframe.cpp:642
+#: common/basicframe.cpp:685
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Nie można zmienić nazwy pliku automatycznej kopii zapasowej na właściwą."
@@ -19281,6 +19362,12 @@ msgstr "Kalkulator PCB"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nowy element"
+
+#~ msgid "Add Row"
+#~ msgstr "Dodaj rząd"
+
+#~ msgid "<<"
+#~ msgstr "<<"
 
 #~ msgid "Part %s"
 #~ msgstr "Część %s"
