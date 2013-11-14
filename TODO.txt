@@ -26,16 +26,6 @@ Common
   but is now in scripts/python/ky temporarily.
 
 
-FP LIB TABLE
-------------
-
-Dialog:
-- - - -
-
-a) check for duplicate nicknames in a single table, complain, give the user a nice indication of the duplicate(s)
-
-b) in the uri column give a small button popup a window(dialog?) which lets user choose a file or directory local to his system by pointing at it.
-
 
 Eeschema
 --------
