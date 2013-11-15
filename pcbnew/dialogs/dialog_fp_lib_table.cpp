@@ -696,6 +696,7 @@ private:
         // not used yet.  It is automatically set by KiCad to the directory holding
         // the current project.
         unique.insert( FP_LIB_TABLE::ProjectPathEnvVariableName() );
+        unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
 
         m_path_subs_grid->AppendRows( unique.size() );
 

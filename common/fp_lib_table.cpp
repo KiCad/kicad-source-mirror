@@ -734,6 +734,12 @@ const wxString FP_LIB_TABLE::ProjectPathEnvVariableName()
 }
 
 
+const wxString FP_LIB_TABLE::GlobalPathEnvVariableName()
+{
+    return  wxT( "KISYSMOD" );
+}
+
+
 wxString FP_LIB_TABLE::GetProjectFileName( const wxFileName& aPath )
 {
     wxFileName fn = aPath;
