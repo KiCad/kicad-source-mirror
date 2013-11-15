@@ -6,6 +6,8 @@ cmake_minimum_required( VERSION 2.8.4 FATAL_ERROR )
 # Path to local CMake modules.
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 
+message( STATUS "CMAKE_CXX_FLAGS_DEBUG:${CMAKE_CXX_FLAGS_DEBUG}" )
+
 #
 # KiCad build options should be added below.
 #
@@ -88,8 +90,8 @@ if( CMAKE_COMPILER_IS_GNUCXX )
 
     # Establish -Wall early, so specialized relaxations of this may come
     # subsequently on the command line, such as in pcbnew/github/CMakeLists.txt
-    set( CMAKE_C_FLAGS   "-Wall" )
-    set( CMAKE_CXX_FLAGS "-Wall" )
+    set( CMAKE_C_FLAGS   "-Wall ${CMAKE_C_FLAGS}" )
+    set( CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}" )
 
     # The optimization level is -O1 instead of the usual -O2 level because
     # boost::polygon has a function (inflate polygon) broken by the -O2 level
