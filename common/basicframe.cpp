@@ -573,12 +573,14 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         BUILD_GIT_HUB_PLUGIN=" );
-#ifdef BUILD_GIT_HUB_PLUGIN
+    tmp << wxT( "         BUILD_GITHUB_PLUGIN=" );
+#ifdef BUILD_GITHUB_PLUGIN
     tmp << wxT( "ON\n" );
 #else
     tmp << wxT( "OFF\n" );
 #endif
+
+    wxMessageBox( tmp, _("Version Information (copied to the clipboard)") );
 
     wxTheClipboard->SetData( new wxTextDataObject( tmp ) );
     wxTheClipboard->Close();
