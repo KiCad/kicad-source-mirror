@@ -567,7 +567,12 @@ public:
 
     static void SetProjectPathEnvVariable( const wxFileName& aPath );
 
-    const wxString& GetProjectPathEnvVariableName() const;
+    /**
+     * Function ProjectPathEnvVarVariableName
+     * returns the name of the environment variable used to hold the directory of
+     * the current project on program startup.
+     */
+    static const wxString ProjectPathEnvVariableName();
 
     static wxString GetProjectFileName( const wxFileName& aPath );
 

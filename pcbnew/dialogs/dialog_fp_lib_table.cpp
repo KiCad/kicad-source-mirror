@@ -692,6 +692,11 @@ private:
             }
         }
 
+        // Make sure this special environment variable shows up even if it was
+        // not used yet.  It is automatically set by KiCad to the directory holding
+        // the current project.
+        unique.insert( FP_LIB_TABLE::ProjectPathEnvVariableName() );
+
         m_path_subs_grid->AppendRows( unique.size() );
 
         row = 0;

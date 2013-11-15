@@ -49,9 +49,6 @@ using namespace FP_LIB_TABLE_T;
  */
 static const wxString traceFpLibTable( wxT( "KicadFpLibTable" ) );
 
-/// The evinronment variable name for the current project path.  This is used interanally
-/// at run time and is not exposed outside of the current process.
-static wxString projectPathEnvVariableName( wxT( "KIPRJMOD" ) );
 
 /// The footprint library table name used when no project file is passed to Pcbnew or CvPcb.
 /// This is used temporarily to store the project specific library table until the project
@@ -726,14 +723,14 @@ void FP_LIB_TABLE::SetProjectPathEnvVariable( const wxFileName& aPath )
         path = aPath.GetPath();
 
     wxLogTrace( traceFpLibTable, wxT( "Setting env %s to <%s>." ),
-                GetChars( projectPathEnvVariableName ), GetChars( path ) );
-    wxSetEnv( projectPathEnvVariableName, path );
+                GetChars( ProjectPathEnvVariableName() ), GetChars( path ) );
+    wxSetEnv( ProjectPathEnvVariableName(), path );
 }
 
 
-const wxString& FP_LIB_TABLE::GetProjectPathEnvVariableName() const
+const wxString FP_LIB_TABLE::ProjectPathEnvVariableName()
 {
-    return projectPathEnvVariableName;
+    return  wxT( "KIPRJMOD" );
 }
 
 
