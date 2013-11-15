@@ -51,9 +51,7 @@
 #include <wx/overlay.h>
 #endif
 
-// Option for dialog boxes
-#define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER
-
+// Option for main frames
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
 
 
@@ -973,15 +971,15 @@ public:
     /**
      * Function UseGalCanvas
      * used to switch between standard and GAL-based canvas.
-     * 
-     * @param aEnable True for GAL-based canvas, false for standard canvas. 
+     *
+     * @param aEnable True for GAL-based canvas, false for standard canvas.
      */
     virtual void UseGalCanvas( bool aEnable );
-    
+
     /**
      * Function IsNewCanvasActive
      * is used to check which canvas (GAL-based or standard) is currently in use.
-     * 
+     *
      * @return True for GAL-based canvas, false for standard canvas.
      */
     bool IsGalCanvasActive() { return m_galCanvasActive; }
