@@ -34,6 +34,8 @@
 #include <io_mgr.h>
 
 
+#define KISYSMOD        "KISYSMOD"
+
 class wxFileName;
 class OUTPUTFORMATTER;
 class MODULE;

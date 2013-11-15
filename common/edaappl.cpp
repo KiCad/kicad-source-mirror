@@ -1162,7 +1162,7 @@ bool EDA_APP::LockFile( const wxString& fileName )
 bool EDA_APP::SetFootprintLibTablePath()
 {
     wxString    path;
-    wxString    kisysmod = FP_LIB_TABLE::GlobalPathEnvVariableName();
+    wxString    kisysmod( wxT( KISYSMOD ) );
 
     // Set the KISYSMOD environment variable for the current process if it is not already
     // defined in the user's environment.  This is required to expand the global footprint
