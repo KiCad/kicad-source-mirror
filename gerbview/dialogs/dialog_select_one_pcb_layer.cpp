@@ -86,7 +86,7 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
                                           bool aShowDeselectOption ) :
     wxDialog( parent, -1, _( "Select Layer:" ), wxPoint( -1, -1 ),
               wxSize( 470, 250 ),
-              DIALOG_STYLE )
+              wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     wxButton* Button;
     LAYER_NUM ii;

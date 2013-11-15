@@ -65,6 +65,7 @@ Load() TODO's
 #include <macros.h>
 #include <fctsys.h>
 #include <trigo.h>
+#include <macros.h>
 #include <wx/filename.h>
 
 #include <class_board.h>
