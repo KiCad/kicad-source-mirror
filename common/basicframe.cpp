@@ -552,20 +552,6 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         KICAD_SCRIPTING_WXPYTHON=" );
-#ifdef KICAD_SCRIPTING_WXPYTHON
-    tmp << wxT( "ON\n" );
-#else
-    tmp << wxT( "OFF\n" );
-#endif
-
-    tmp << wxT( "         USE_FP_LIB_TABLE=" );
-#ifdef USE_FP_LIB_TABLE
-    tmp << wxT( "ON\n" );
-#else
-    tmp << wxT( "OFF\n" );
-#endif
-
     tmp << wxT( "         USE_FP_LIB_TABLE=" );
 #ifdef USE_FP_LIB_TABLE
     tmp << wxT( "ON\n" );

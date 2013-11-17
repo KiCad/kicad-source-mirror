@@ -32,14 +32,12 @@
 #include <trigo.h>               // RotatePoint
 #include <class_drawpanel.h>     // EDA_DRAW_PANEL
 
-// until bzr rev 4410, Y position of vertical justification
+// until bzr rev 4476, Y position of vertical justification
 // of multiline texts was incorrectly calculated for BOTTOM
 // and CENTER vertical justification. (Only the first line was justified)
 // If this line is left uncommented, the bug is fixed, but
 // creates a (very minor) issue for existing texts, mainly in Pcbnew
 // because the text position is sometimes critical.
-// Currently, this change is broken for rotated or mirrored texts,
-// so keep this line commented until there are fixes
 #define FIX_MULTILINE_VERT_JUSTIF
 
 // Conversion to application internal units defined at build time.
