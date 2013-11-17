@@ -81,7 +81,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	bSizer4->Add( 12, 0, 0, wxEXPAND, 3 );
 	
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Number of &parts per package:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Number of units per &package:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	m_staticText4->SetToolTip( _("This is the number of parts in this component package.\nA 74LS00 gate has 4 parts per packages.") );
 	
@@ -133,7 +133,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	bSizer9->Add( 12, 0, 0, wxEXPAND, 3 );
 	
-	m_checkLockItems = new wxCheckBox( this, wxID_ANY, _("Units in package locked (cannot be swapped)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkLockItems = new wxCheckBox( this, wxID_ANY, _("Units are not &interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkLockItems->SetToolTip( _("Check this option if Eeschema cannot change parts selections inside a given package\nThis happens when parts are different in this package.\nWhen this option is not checked, Eeschema automatically choose the parts in packages to minimize packages count") );
 	
 	bSizer9->Add( m_checkLockItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
