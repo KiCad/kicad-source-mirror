@@ -27,6 +27,7 @@
  */
 
 #include <fctsys.h>
+#include <macros.h>
 #include <wxstruct.h>
 #include <kicad_string.h>
 #include <dialog_helpers.h>
@@ -48,7 +49,6 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
         wxListItem column;
         column.SetId( i );
         column.SetText( aItemHeaders.Item( i ) );
-        column.SetWidth( 300 / aItemHeaders.Count() );
         m_listBox->InsertColumn( i, column );
     }
 
@@ -66,6 +66,13 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
         }
     }
 
+    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
+    // because so many dialogs share this same class.
+    m_hash_key = TO_UTF8( aTitle );
+
+    for( unsigned i = 0; i < aItemHeaders.Count(); i++ )
+        m_listBox->SetColumnWidth( i, wxLIST_AUTOSIZE );
+
     if( m_callBackFct == NULL )
     {
         m_messages->Show( false );
@@ -74,9 +81,7 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
 
     m_filterBox->SetFocus();
 
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
-    Centre();
+    Layout();
 }
 
 
