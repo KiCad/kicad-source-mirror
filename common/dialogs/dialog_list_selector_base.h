@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  5 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -48,17 +48,17 @@ class EDA_LIST_DIALOG_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void textChangeInFilterBox( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onListItemActivated( wxListEvent& event ) { event.Skip(); }
-		virtual void onListItemSelected( wxListEvent& event ) { event.Skip(); }
-		virtual void onCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onClose( wxCloseEvent& event ) = 0;
+		virtual void textChangeInFilterBox( wxCommandEvent& event ) = 0;
+		virtual void onListItemActivated( wxListEvent& event ) = 0;
+		virtual void onListItemSelected( wxListEvent& event ) = 0;
+		virtual void onCancelClick( wxCommandEvent& event ) = 0;
+		virtual void onOkClick( wxCommandEvent& event ) = 0;
 		
 	
 	public:
 		
-		EDA_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 329,398 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		EDA_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~EDA_LIST_DIALOG_BASE();
 	
 };

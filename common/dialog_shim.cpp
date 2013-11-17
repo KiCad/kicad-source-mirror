@@ -46,7 +46,17 @@ static RECT_MAP class_map;
 bool DIALOG_SHIM::Show( bool show )
 {
     bool        ret;
-    const char* classname = typeid(*this).name();
+    const char* hash_key;
+
+    if( m_hash_key.size() )
+    {
+        // a special case like EDA_LIST_DIALOG, which has multiple uses.
+        hash_key = m_hash_key.c_str();
+    }
+    else
+    {
+        hash_key = typeid(*this).name();
+    }
 
     // Show or hide the window.  If hiding, save current position and size.
     // If showing, use previous position and size.
@@ -55,7 +65,7 @@ bool DIALOG_SHIM::Show( bool show )
         ret = wxDialog::Show( show );
 
         // classname is key, returns a zeroed out default EDA_RECT if none existed before.
-        EDA_RECT r = class_map[ classname ];
+        EDA_RECT r = class_map[ hash_key ];
 
         if( r.GetSize().x != 0 && r.GetSize().y != 0 )
             SetSize( r.GetPosition().x, r.GetPosition().y, r.GetSize().x, r.GetSize().y, 0 );
@@ -64,7 +74,7 @@ bool DIALOG_SHIM::Show( bool show )
     {
         // Save the dialog's position & size before hiding, using classname as key
         EDA_RECT  r( wxDialog::GetPosition(), wxDialog::GetSize() );
-        class_map[ classname ] = r;
+        class_map[ hash_key ] = r;
 
         ret = wxDialog::Show( show );
     }
