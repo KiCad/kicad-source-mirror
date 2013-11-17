@@ -95,7 +95,9 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 
 #if wxCHECK_VERSION( 2, 9, 5 )
     ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
+    DisableKeyboardScrolling();
 #endif
+
     m_scrollIncrementX = std::min( size.x / 8, 10 );
     m_scrollIncrementY = std::min( size.y / 8, 10 );
 
