@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +105,6 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
     textItem->SetSize( wxSize( GetDefaultLabelSize(), GetDefaultLabelSize() ) );
     textItem->SetFlags( IS_NEW | IS_MOVED );
 
-    textItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     EditSchematicText( textItem );
 
     if( textItem->GetText().IsEmpty() )
@@ -123,7 +122,8 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
         lastGlobalLabelShape = textItem->GetShape();
     }
 
-    textItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    // Prepare display to move the new item
+    textItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     MoveItem( (SCH_ITEM*) textItem, aDC );
 
     return textItem;

@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2008 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,7 +295,7 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
 
     m_Parent->OnModify();
 
-    /* Make the text size as new default size if it is a new text */
+    // Make the text size the new default size ( if it is a new text ):
     if( m_CurrentText->IsNew() )
         m_Parent->SetDefaultLabelSize( m_CurrentText->GetSize().x );
 

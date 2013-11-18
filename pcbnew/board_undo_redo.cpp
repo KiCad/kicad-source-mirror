@@ -181,17 +181,6 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         return;
     }
 
-    // Swap layers:
-    if( aItem->Type() != PCB_MODULE_T && aItem->Type() != PCB_ZONE_AREA_T )
-    {
-        // These items have a global swap function.
-        LAYER_NUM layer, layerimg;
-        layer    = aItem->GetLayer();
-        layerimg = aImage->GetLayer();
-        aItem->SetLayer( layerimg );
-        aImage->SetLayer( layer );
-    }
-
     switch( aItem->Type() )
     {
     case PCB_MODULE_T:
@@ -213,18 +202,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         break;
 
     case PCB_LINE_T:
-#if 0
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Start, ( (DRAWSEGMENT*) aImage )->m_Start );
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_End, ( (DRAWSEGMENT*) aImage )->m_End );
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Width, ( (DRAWSEGMENT*) aImage )->m_Width );
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Shape, ( (DRAWSEGMENT*) aImage )->m_Shape );
-#else
-        {
-            DRAWSEGMENT tmp = *(DRAWSEGMENT*) aImage;
-            *aImage = *aItem;
-            *aItem  = tmp;
-        }
-#endif
+        std::swap( *((DRAWSEGMENT*)aItem), *((DRAWSEGMENT*)aImage) );
         break;
 
     case PCB_TRACE_T:
@@ -277,7 +255,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         break;
 
     case PCB_TARGET_T:
-        ( (PCB_TARGET*) aItem )->Exchg( (PCB_TARGET*) aImage );
+        std::swap( *((PCB_TARGET*)aItem), *((PCB_TARGET*)aImage) );
         break;
 
     case PCB_DIMENSION_T:

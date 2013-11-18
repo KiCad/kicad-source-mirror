@@ -1,6 +1,28 @@
-/**************************************/
-/* dialog_graphic_item_properties.cpp */
-/**************************************/
+/**
+ * @file dialog_graphic_item_properties.cpp
+ */
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 /* Edit parameters values of graphic items type DRAWSEGMENTS:
  * Lines
@@ -41,7 +63,7 @@ public:
 private:
     void initDlg( );
     void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
     void OnLayerChoice( wxCommandEvent& event );
 };
 
@@ -71,9 +93,8 @@ void PCB_EDIT_FRAME::InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxD
     }
 
     m_canvas->SetIgnoreMouseEvents( true );
-    DIALOG_GRAPHIC_ITEM_PROPERTIES* dialog = new DIALOG_GRAPHIC_ITEM_PROPERTIES( this, aItem, aDC );
-    dialog->ShowModal();
-    dialog->Destroy();
+    DIALOG_GRAPHIC_ITEM_PROPERTIES dlg( this, aItem, aDC );
+    dlg.ShowModal();
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
 }
@@ -85,7 +106,6 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
  * according to the item parameters values
 */
 {
-    SetFocus();
     m_StandardButtonsSizerOK->SetDefault();
 
     // Set unit symbol
@@ -246,9 +266,3 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
 
     Close( true );
 }
-
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnCancelClick( wxCommandEvent& event )
-{
-    event.Skip();
-}
-
