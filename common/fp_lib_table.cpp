@@ -139,6 +139,17 @@ bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
 }
 
 
+const wxString& FP_LIB_TABLE::GetDescription( const wxString& aNickname )
+{
+    // use no exception form of find row:
+    const ROW* row = findRow( aNickname );
+    if( row )
+        return row->description;
+    else
+        return wxEmptyString;
+}
+
+
 void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR )
 {
     /*

@@ -6,8 +6,6 @@ cmake_minimum_required( VERSION 2.8.4 FATAL_ERROR )
 # Path to local CMake modules.
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 
-message( STATUS "CMAKE_CXX_FLAGS_DEBUG:${CMAKE_CXX_FLAGS_DEBUG}" )
-
 #
 # KiCad build options should be added below.
 #

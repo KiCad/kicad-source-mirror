@@ -75,7 +75,7 @@
 #define FMT_LIBRARY         _( "Library" )                                      // window title
 #define FMT_MOD_EXISTS      _( "Module %s already exists in library <%s>" )
 #define FMT_NO_REF_ABORTED  _( "No reference, aborted" )
-#define FMT_SELECT_LIB      _( "Select Active Library:" )
+#define FMT_SELECT_LIB      _( "Select Active Library" )
 
 
 static const wxString ModExportFileWildcard( _( "KiCad foot print export files (*.emp)|*.emp" ) );
@@ -800,19 +800,21 @@ void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
 
 void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
 {
-    if( m_footprintLibTable->IsEmpty() )
-        return;
-
     wxArrayString headers;
-    headers.Add( _( "Library" ) );
+
+    headers.Add( _( "Nickname" ) );
+    headers.Add( _( "Description" ) );
 
     std::vector< wxArrayString > itemsToDisplay;
-    std::vector< wxString >      libNames = m_footprintLibTable->GetLogicalLibs();
+    std::vector< wxString >      nicknames = m_footprintLibTable->GetLogicalLibs();
 
-    for( unsigned i = 0; i < libNames.size(); i++ )
+    for( unsigned i = 0; i < nicknames.size(); i++ )
     {
         wxArrayString item;
-        item.Add( libNames[i] );
+
+        item.Add( nicknames[i] );
+        item.Add( m_footprintLibTable->GetDescription( nicknames[i] ) );
+
         itemsToDisplay.push_back( item );
     }
 

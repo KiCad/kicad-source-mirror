@@ -159,7 +159,7 @@ set(COMMON_SRCS
 
     math/math_util.cpp
     system/fcontext.s
-	
+
     tool/tool_base.cpp
     tool/tool_manager.cpp
     tool/tool_dispatcher.cpp
@@ -231,7 +231,7 @@ set(PCB_COMMON_SRCS
 )
 
 set(PCB_COMMON_SRCS
-    ${PCB_COMMON_SRCS} 
+    ${PCB_COMMON_SRCS}
     ../pcbnew/pcb_painter.cpp
     )
 
