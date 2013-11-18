@@ -462,6 +462,12 @@ public:
 
     //-----</PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
+    /**
+     * Function GetDescription
+     * returns the library desicription from @a aNickname, or an empty string
+     * if aNickname does not exist.
+     */
+    const wxString& GetDescription( const wxString& aNickname );
 
     /**
      * Function InsertRow
@@ -604,10 +610,10 @@ protected:
 
     /**
      * Function findRow
-     * returns a ROW if aNickName is found in this table or in any chained
+     * returns a ROW if aNickname is found in this table or in any chained
      * fallBack table fragment, else NULL.
      */
-    ROW* findRow( const wxString& aNickName ) const;
+    ROW* findRow( const wxString& aNickname ) const;
 
     void reindex()
     {

@@ -81,7 +81,7 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
 
     m_filterBox->SetFocus();
 
-    Layout();
+    Fit();
 }
 
 
