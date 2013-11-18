@@ -467,7 +467,7 @@ public:
      * returns the library desicription from @a aNickname, or an empty string
      * if aNickname does not exist.
      */
-    const wxString& GetDescription( const wxString& aNickname );
+    const wxString GetDescription( const wxString& aNickname );
 
     /**
      * Function InsertRow
