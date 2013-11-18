@@ -470,11 +470,13 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
                                           const wxString& aKeyWord,
                                           FP_LIB_TABLE*   aTable )
 {
-    static wxString              OldName;    // Save the name of the last module loaded.
-    wxString                     CmpName;
-    wxString                     msg;
-    wxArrayString                libraries;
-    FP_LIB_TABLE                 libTable;
+    static wxString oldName;    // Save the name of the last module loaded.
+
+    wxString        fpname;
+    wxString        msg;
+    wxArrayString   libraries;
+    FP_LIB_TABLE    libTable;
+
     std::vector< wxArrayString > rows;
 
 #if !defined( USE_FP_LIB_TABLE )
@@ -581,33 +583,33 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
 
         msg.Printf( _( "Modules [%d items]" ), (int) rows.size() );
 
-        EDA_LIST_DIALOG dlg( aWindow, msg, headers, rows, OldName, DisplayCmpDoc );
+        EDA_LIST_DIALOG dlg( aWindow, msg, headers, rows, oldName, DisplayCmpDoc );
 
         if( dlg.ShowModal() == wxID_OK )
         {
-            CmpName = dlg.GetTextSelection();
+            fpname = dlg.GetTextSelection();
 
 #if defined( USE_FP_LIB_TABLE )
-            CmpName = dlg.GetTextSelection( 1 ) + wxT( ":" ) + CmpName;
+            fpname = dlg.GetTextSelection( 1 ) + wxT( ":" ) + fpname;
 #endif
 
             SkipNextLeftButtonReleaseEvent();
         }
         else
-            CmpName.Empty();
+            fpname.Empty();
     }
     else
     {
         DisplayError( aWindow, _( "No footprint found." ) );
-        CmpName.Empty();
+        fpname.Empty();
     }
 
-    if( CmpName != wxEmptyString )
-        OldName = CmpName;
+    if( fpname != wxEmptyString )
+        oldName = fpname;
 
-    wxLogDebug( wxT( "Footprint '%s' was selected." ), GetChars( CmpName ) );
+    wxLogDebug( wxT( "Footprint '%s' was selected." ), GetChars( fpname ) );
 
-    return CmpName;
+    return fpname;
 }
 
 
@@ -628,27 +630,29 @@ static void DisplayCmpDoc( wxString& Name )
 
 MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprint( BOARD* aPcb )
 {
-    MODULE*         module;
-    static wxString OldName;       // Save name of last module selected.
-    wxString        CmpName, msg;
+    static wxString oldName;       // Save name of last module selected.
 
-    wxArrayString listnames;
+    wxString        fpname;
+    wxString        msg;
+    wxArrayString   listnames;
+    MODULE*         module = aPcb->m_Modules;
 
-    module = aPcb->m_Modules;
-
-    for( ; module != NULL; module = (MODULE*) module->Next() )
+    for(  ; module;  module = module->Next() )
         listnames.Add( module->GetReference() );
 
     msg.Printf( _( "Modules [%d items]" ), listnames.GetCount() );
 
     wxArrayString headers;
+
     headers.Add( _( "Module" ) );
+
     std::vector<wxArrayString> itemsToDisplay;
 
     // Conversion from wxArrayString to vector of ArrayString
     for( unsigned i = 0; i < listnames.GetCount(); i++ )
     {
         wxArrayString item;
+
         item.Add( listnames[i] );
         itemsToDisplay.push_back( item );
     }
@@ -656,17 +660,17 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprint( BOARD* aPcb )
     EDA_LIST_DIALOG dlg( this, msg, headers, itemsToDisplay, wxEmptyString, NULL, SORT_LIST );
 
     if( dlg.ShowModal() == wxID_OK )
-        CmpName = dlg.GetTextSelection();
+        fpname = dlg.GetTextSelection();
     else
         return NULL;
 
-    OldName = CmpName;
+    oldName = fpname;
 
     module = aPcb->m_Modules;
 
-    for( ; module != NULL; module = (MODULE*) module->Next() )
+    for(  ;  module;  module = module->Next() )
     {
-        if( CmpName == module->GetReference() )
+        if( fpname == module->GetReference() )
             break;
     }
 
