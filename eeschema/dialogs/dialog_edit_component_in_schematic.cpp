@@ -793,13 +793,15 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     rotateCheckBox->SetValue( field.GetOrientation() == TEXT_ORIENT_VERT );
 
     // Copy the text justification
-    EDA_TEXT_HJUSTIFY_T hjustify[3] = {
-        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_HJUSTIFY_CENTER,
+    static const EDA_TEXT_HJUSTIFY_T hjustify[] = {
+        GR_TEXT_HJUSTIFY_LEFT,
+        GR_TEXT_HJUSTIFY_CENTER,
         GR_TEXT_HJUSTIFY_RIGHT
     };
 
-    EDA_TEXT_VJUSTIFY_T vjustify[3] = {
-        GR_TEXT_VJUSTIFY_BOTTOM, GR_TEXT_VJUSTIFY_CENTER,
+    static const EDA_TEXT_VJUSTIFY_T vjustify[] = {
+        GR_TEXT_VJUSTIFY_BOTTOM,
+        GR_TEXT_VJUSTIFY_CENTER,
         GR_TEXT_VJUSTIFY_TOP
     };
 

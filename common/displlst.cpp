@@ -65,7 +65,30 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
         m_staticTextMsg->Show( false );
     }
 
+#if !wxCHECK_VERSION( 2, 9, 0 )
+    // wx 2.8.x has bug in wxListCtrl WRT honoring the omission of wxHSCROLL, at least
+    // on gtk2.  Fix by setting minimum width so horizontal wxListCtrl scrolling is
+    // not needed on 2.8.x because of minumum visible width setting:
+    {
+        int width = 0;
+
+        for( unsigned col = 0;  col < aItemHeaders.Count();  ++col )
+        {
+            width += m_listBox->GetColumnWidth( col ) + 2;
+        }
+
+        //width += 40;    // vert scroll bar.
+
+        wxSize sz = m_listBox->GetSize();
+
+        sz.SetWidth( width );
+
+        m_listBox->SetMinSize( sz );
+    }
+#endif
+
     Fit();
+    Centre();
 
     if( !!aSelection )
     {
