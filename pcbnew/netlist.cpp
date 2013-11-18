@@ -119,8 +119,6 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
 
 MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
 {
-    MODULE* Module;
-
     if( GetBoard()->m_Modules == NULL )
     {
         DisplayError( this, _( "No Modules" ) );
@@ -128,10 +126,11 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
     }
 
     wxArrayString listnames;
-    Module = (MODULE*) GetBoard()->m_Modules;
 
-    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
-        listnames.Add( Module->GetReference() );
+    MODULE* module;
+
+    for( module = GetBoard()->m_Modules;  module;  module = module->Next() )
+        listnames.Add( module->GetReference() );
 
     wxArrayString headers;
     headers.Add( wxT( "Module" ) );
@@ -151,15 +150,14 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
         return NULL;
 
     wxString ref = dlg.GetTextSelection();
-    Module = (MODULE*) GetBoard()->m_Modules;
 
-    for( ; Module != NULL; Module = Module->Next() )
+    for( module = GetBoard()->m_Modules;  module;  module = module->Next() )
     {
-        if( Module->GetReference() == ref )
+        if( module->GetReference() == ref )
             break;
     }
 
-    return Module;
+    return module;
 }
 
 

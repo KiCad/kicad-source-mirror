@@ -29,7 +29,7 @@ EDA_LIST_DIALOG_BASE::EDA_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	m_staticText2->Wrap( -1 );
 	bSizerMain->Add( m_staticText2, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_listBox = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL|wxALWAYS_SHOW_SB|wxVSCROLL );
+	m_listBox = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES|wxALWAYS_SHOW_SB|wxVSCROLL );
 	m_listBox->SetMinSize( wxSize( -1,200 ) );
 	
 	bSizerMain->Add( m_listBox, 3, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );

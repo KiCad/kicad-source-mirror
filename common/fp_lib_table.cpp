@@ -139,9 +139,9 @@ bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
 }
 
 
-const wxString& FP_LIB_TABLE::GetDescription( const wxString& aNickname )
+const wxString FP_LIB_TABLE::GetDescription( const wxString& aNickname )
 {
-    // use no exception form of find row:
+    // use "no exception" form of find row:
     const ROW* row = findRow( aNickname );
     if( row )
         return row->description;
