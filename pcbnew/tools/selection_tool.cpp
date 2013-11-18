@@ -81,9 +81,9 @@ void SELECTION_TOOL::Reset()
 
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
-    BOARD* board = getModel<BOARD>( PCB_T );
-    VIEW* view = getView();
-    assert( board != NULL );
+    VIEW*   view = getView();
+
+    assert( getModel<BOARD>( PCB_T ) != NULL );
 
     view->Add( m_selection.group );
 
@@ -503,7 +503,7 @@ void SELECTION_TOOL::selectItem( BOARD_ITEM* aItem )
     {
         SELECTION& s;
 
-	public:
+    public:
         selectBase_( SELECTION& s_ ) : s( s_ ) {}
 
         void operator()( BOARD_ITEM* item )

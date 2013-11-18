@@ -35,8 +35,8 @@
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemHeaders,
                                   const std::vector<wxArrayString>& aItemList,
-                                  const wxString& aRefText,
-                                  void(*aCallBackFunction)(wxString& Text),
+                                  const wxString& aSelection,
+                                  void( *aCallBackFunction )( wxString& ),
                                   bool aSortList ) :
     EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle )
 {
@@ -47,28 +47,14 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
     for( unsigned i = 0; i < aItemHeaders.Count(); i++ )
     {
         wxListItem column;
+
         column.SetId( i );
         column.SetText( aItemHeaders.Item( i ) );
+
         m_listBox->InsertColumn( i, column );
     }
 
     InsertItems( aItemList, 0 );
-
-    if( !aRefText.IsEmpty() )    // try to select the item matching aRefText
-    {
-        for( unsigned ii = 0; ii < aItemList.size(); ii++ )
-        {
-            if( aItemList[ii][0] == aRefText )
-            {
-                m_listBox->SetItemState( ii, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-                break;
-            }
-        }
-    }
-
-    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
-    // because so many dialogs share this same class.
-    m_hash_key = TO_UTF8( aTitle );
 
     for( unsigned i = 0; i < aItemHeaders.Count(); i++ )
         m_listBox->SetColumnWidth( i, wxLIST_AUTOSIZE );
@@ -79,9 +65,27 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
         m_staticTextMsg->Show( false );
     }
 
-    m_filterBox->SetFocus();
-
     Fit();
+
+    if( !!aSelection )
+    {
+        for( unsigned row = 0; row < aItemList.size(); ++row )
+        {
+            if( aItemList[row][0] == aSelection )
+            {
+                m_listBox->SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+                m_listBox->EnsureVisible( row );
+                break;
+            }
+        }
+    }
+
+    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
+    // because so many dialogs share this same class, with different numbers of
+    // columns, different column names, and column widths.
+    m_hash_key = TO_UTF8( aTitle );
+
+    m_filterBox->SetFocus();
 }
 
 
