@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -38,14 +38,14 @@ class TARGET_PROPERTIES_DIALOG_EDITOR_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_staticTextSize;
-		wxTextCtrl* m_MireWidthCtrl;
+		wxTextCtrl* m_TargetSizeCtrl;
 		wxStaticText* m_staticTextSizeUnits;
 		wxStaticText* m_staticTextThickness;
-		wxTextCtrl* m_MireSizeCtrl;
+		wxTextCtrl* m_TargetThicknessCtrl;
 		wxStaticText* m_staticTextThicknessUnits;
 		wxStaticText* m_staticTextShape;
-		wxChoice* m_MireShape;
-		wxStaticLine* m_staticline1;
+		wxChoice* m_TargetShape;
+		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizerButts;
 		wxButton* m_sdbSizerButtsOK;
 		wxButton* m_sdbSizerButtsCancel;

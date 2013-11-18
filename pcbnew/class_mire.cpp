@@ -71,16 +71,6 @@ PCB_TARGET::~PCB_TARGET()
 {
 }
 
-
-void PCB_TARGET::Exchg( PCB_TARGET* source )
-{
-    EXCHG( m_Pos,   source->m_Pos );
-    EXCHG( m_Width, source->m_Width );
-    EXCHG( m_Size,  source->m_Size );
-    EXCHG( m_Shape, source->m_Shape );
-}
-
-
 void PCB_TARGET::Copy( PCB_TARGET* source )
 {
     m_Layer     = source->m_Layer;
