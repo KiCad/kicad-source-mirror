@@ -172,11 +172,13 @@ public:
 
     /**
      * Function DeleteStructure
-     * deletes this object after UnLink()ing it from its owner.
+     * deletes this object after UnLink()ing it from its owner if it has one.
      */
     void DeleteStructure()
     {
-        UnLink();
+        if( GetList() != NULL )
+            UnLink();
+
         delete this;
     }
 
