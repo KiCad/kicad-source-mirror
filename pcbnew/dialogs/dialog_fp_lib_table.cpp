@@ -330,11 +330,12 @@ public:
             wxGrid* g = i==0 ? m_global_grid : m_project_grid;
 
             // all but COL_OPTIONS, which is edited with Option Editor anyways.
-            g->AutoSizeColumn( COL_NICKNAME, true );
+            g->AutoSizeColumn( COL_NICKNAME, false );
             g->AutoSizeColumn( COL_TYPE, false );
             g->AutoSizeColumn( COL_URI, false );
             g->AutoSizeColumn( COL_DESCR, false );
 
+            // would set this to width of title, if it was easily known.
             g->SetColSize( COL_OPTIONS, 80 );
         }
 

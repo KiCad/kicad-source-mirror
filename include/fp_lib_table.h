@@ -27,13 +27,13 @@
 #define FP_LIB_TABLE_H_
 
 #include <macros.h>
-
 #include <vector>
 #include <map>
-
 #include <io_mgr.h>
 
 
+
+#define FP_LATE_ENVVAR  1           ///< late=1/early=0 environment variable expansion
 #define KISYSMOD        "KISYSMOD"
 
 class wxFileName;
@@ -122,44 +122,17 @@ public:
             SetType( aType );
         }
 
-        ROW( const ROW& a ) :
-            nickName( a.nickName ),
-            uri_user( a.uri_user ),
-            uri_expanded( a.uri_expanded ),
-            type( a.type ),
-            options( a.options ),
-            description( a.description ),
-            properties( 0 )
-        {
-            if( a.properties )
-                properties = new PROPERTIES( *a.properties );
-        }
+        ROW( const ROW& a );
 
         ~ROW()
         {
             delete properties;
         }
 
-        ROW& operator=( const ROW& r )
-        {
-            nickName     = r.nickName;
-            uri_user     = r.uri_user;
-            uri_expanded = r.uri_expanded;
-            type         = r.type;
-            options      = r.options;
-            description  = r.description;
-            properties   = r.properties ? new PROPERTIES( *r.properties ) : NULL;
+        ROW& operator=( const ROW& r );
 
-            // do not copy the PLUGIN, it is lazily created.
-            setPlugin( NULL );
-
-            return *this;
-        }
-
-        bool operator==( const ROW& r ) const
-        {
-            return  nickName==r.nickName && uri_user==r.uri_user && type==r.type && options==r.options;
-        }
+        /// Used in DIALOG_FP_LIB_TABLE for detecting an edit.
+        bool operator==( const ROW& r ) const;
 
         bool operator!=( const ROW& r ) const   { return !( *this == r ); }
 
@@ -196,13 +169,7 @@ public:
          *
          * @param aSubstituted Tells if caller wanted the substituted form, else not.
          */
-        const wxString& GetFullURI( bool aSubstituted = false ) const
-        {
-            if( aSubstituted )
-                return uri_expanded;
-            else
-                return uri_user;
-        }
+        const wxString GetFullURI( bool aSubstituted = false ) const;
 
         /**
          * Function SetFullURI
@@ -280,7 +247,11 @@ public:
 
         wxString        nickName;
         wxString        uri_user;           ///< what user entered from UI or loaded from disk
+
+#if !FP_LATE_ENVVAR
         wxString        uri_expanded;       ///< from ExpandSubstitutions()
+#endif
+
         LIB_T           type;
         wxString        options;
         wxString        description;

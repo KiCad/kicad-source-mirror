@@ -71,7 +71,71 @@ void FP_LIB_TABLE::ROW::SetType( const wxString& aType )
 void FP_LIB_TABLE::ROW::SetFullURI( const wxString& aFullURI )
 {
     uri_user = aFullURI;
+
+#if !FP_LATE_ENVVAR
     uri_expanded = FP_LIB_TABLE::ExpandSubstitutions( aFullURI );
+#endif
+}
+
+
+const wxString FP_LIB_TABLE::ROW::GetFullURI( bool aSubstituted ) const
+{
+    if( aSubstituted )
+    {
+#if !FP_LATE_ENVVAR         // early expansion
+        return uri_expanded;
+
+#else   // late expansion
+        return FP_LIB_TABLE::ExpandSubstitutions( uri_user );
+#endif
+    }
+    else
+        return uri_user;
+}
+
+
+FP_LIB_TABLE::ROW::ROW( const ROW& a ) :
+    nickName( a.nickName ),
+    type( a.type ),
+    options( a.options ),
+    description( a.description ),
+    properties( 0 )
+{
+    // may call ExpandSubstitutions()
+    SetFullURI( a.uri_user );
+
+    if( a.properties )
+        properties = new PROPERTIES( *a.properties );
+}
+
+
+FP_LIB_TABLE::ROW& FP_LIB_TABLE::ROW::operator=( const ROW& r )
+{
+    nickName     = r.nickName;
+    type         = r.type;
+    options      = r.options;
+    description  = r.description;
+    properties   = r.properties ? new PROPERTIES( *r.properties ) : NULL;
+
+    // may call ExpandSubstitutions()
+    SetFullURI( r.uri_user );
+
+    // Do not copy the PLUGIN, it is lazily created.  Delete any existing
+    // destination plugin.
+    setPlugin( NULL );
+
+    return *this;
+}
+
+
+bool FP_LIB_TABLE::ROW::operator==( const ROW& r ) const
+{
+    return nickName == r.nickName
+        && uri_user == r.uri_user
+        && type == r.type
+        && options == r.options
+        && description == r.description
+        ;
 }
 
 

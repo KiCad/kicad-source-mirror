@@ -432,13 +432,11 @@ protected:
      */
     void updateTitle();
 
-    wxString m_lib_nick_name;
-
     /// The library nickName is a short string, for now the same as the library path
     /// but without path and without extension.  After library table support it becomes
     /// a lookup key.
-    wxString getLibNickName() const                     { return m_lib_nick_name; }
-    void setLibNickName( const wxString& aLibNickName ) { m_lib_nick_name = aLibNickName; }
+    const wxString& getLibNickName() const;
+    void setLibNickName( const wxString& aNickname );
 
 
 #if !defined(USE_FP_LIB_TABLE)
