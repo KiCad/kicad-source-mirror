@@ -32,6 +32,8 @@
 #define CLASS_EDGE_MOD_H_
 
 
+#include <wx/gdicmn.h>
+
 #include <class_drawsegment.h>
 
 
@@ -51,6 +53,9 @@ public:
 
     EDGE_MODULE* Next() const { return (EDGE_MODULE*) Pnext; }
     EDGE_MODULE* Back() const { return (EDGE_MODULE*) Pback; }
+
+    /// skip the linked list stuff, and parent
+    const EDGE_MODULE& operator = ( const EDGE_MODULE& rhs );
 
     void Copy( EDGE_MODULE* source );           // copy structure
 
