@@ -1,10 +1,8 @@
-/**
- * @file dialog_graphic_item_properties.cpp
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010 Jean-Pierre Charras <jp.charras@wanadoo.fr>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +20,10 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file dialog_graphic_item_properties.cpp
  */
 
 /* Edit parameters values of graphic items type DRAWSEGMENTS:
@@ -48,6 +50,7 @@
 #include <dialog_graphic_item_properties_base.h>
 #include <class_pcb_layer_box_selector.h>
 
+
 class DIALOG_GRAPHIC_ITEM_PROPERTIES: public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
 {
 private:
@@ -68,7 +71,7 @@ private:
 };
 
 DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_EDIT_FRAME* aParent,
-                                                          DRAWSEGMENT * aItem, wxDC * aDC):
+                                                                DRAWSEGMENT * aItem, wxDC * aDC ):
     DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( aParent )
 {
     m_parent = aParent;
@@ -82,13 +85,11 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_EDIT_FRAME* 
 }
 
 
-/*******************************************************************************************/
-void PCB_EDIT_FRAME::InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxDC* aDC)
-/*******************************************************************************************/
+void PCB_EDIT_FRAME::InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem, wxDC* aDC )
 {
     if ( aItem == NULL )
     {
-        DisplayError(this, wxT("InstallGraphicItemPropertiesDialog() error: NULL item"));
+        DisplayError( this, wxT( "InstallGraphicItemPropertiesDialog() error: NULL item" ) );
         return;
     }
 
@@ -99,12 +100,8 @@ void PCB_EDIT_FRAME::InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxD
     m_canvas->SetIgnoreMouseEvents( false );
 }
 
-/**************************************************************************/
+
 void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
-/**************************************************************************/
-/* Initialize messages and values in text control,
- * according to the item parameters values
-*/
 {
     m_StandardButtonsSizerOK->SetDefault();
 
@@ -124,6 +121,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
     {
         if( texts_unit[ii] == NULL )
             break;
+
         texts_unit[ii]->SetLabel( GetAbbreviatedUnitsLabel() );
     }
 
@@ -133,31 +131,30 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
     switch ( m_Item->GetShape() )
     {
     case S_CIRCLE:
-        m_StartPointXLabel->SetLabel(_("Center X"));
-        m_StartPointYLabel->SetLabel(_("Center Y"));
-        m_EndPointXLabel->SetLabel(_("Point X"));
-        m_EndPointYLabel->SetLabel(_("Point Y"));
-        m_Angle_Text->Show(false);
-        m_Angle_Ctrl->Show(false);
-        m_AngleUnit->Show(false);
+        m_StartPointXLabel->SetLabel( _( "Center X" ) );
+        m_StartPointYLabel->SetLabel( _( "Center Y" ) );
+        m_EndPointXLabel->SetLabel( _( "Point X" ) );
+        m_EndPointYLabel->SetLabel( _( "Point Y" ) );
+        m_Angle_Text->Show( false );
+        m_Angle_Ctrl->Show( false );
+        m_AngleUnit->Show( false );
         break;
 
     case S_ARC:
-        m_StartPointXLabel->SetLabel(_("Center X"));
-        m_StartPointYLabel->SetLabel(_("Center Y"));
-        m_EndPointXLabel->SetLabel(_("Start Point X"));
-        m_EndPointYLabel->SetLabel(_("Start Point Y"));
+        m_StartPointXLabel->SetLabel( _( "Center X" ) );
+        m_StartPointYLabel->SetLabel( _( "Center Y" ) );
+        m_EndPointXLabel->SetLabel( _( "Start Point X" ) );
+        m_EndPointYLabel->SetLabel( _( "Start Point Y" ) );
 
-        // Here the angle is a double, but the UI is still working
-        // with integers
+        // Here the angle is a double, but the UI is still working with integers.
         msg << int( m_Item->GetAngle() );
-        m_Angle_Ctrl->SetValue(msg);
+        m_Angle_Ctrl->SetValue( msg );
         break;
 
     default:
-        m_Angle_Text->Show(false);
-        m_Angle_Ctrl->Show(false);
-        m_AngleUnit->Show(false);
+        m_Angle_Text->Show( false );
+        m_Angle_Ctrl->Show( false );
+        m_AngleUnit->Show( false );
         break;
     }
 
@@ -188,16 +185,14 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
 
     if( m_LayerSelectionCtrl->SetLayerSelection( m_Item->GetLayer() ) < 0 )
     {
-        wxMessageBox( _("This item has an illegal layer id.\n"
-                        "Now, forced on the drawings layer. Please, fix it") );
+        wxMessageBox( _( "This item has an illegal layer id.\n"
+                         "Now, forced on the drawings layer. Please, fix it" ) );
         m_LayerSelectionCtrl->SetLayerSelection( DRAW_N );
     }
 }
 
 
-/*******************************************************************/
 void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnLayerChoice( wxCommandEvent& event )
-/*******************************************************************/
 {
     int thickness;
 
@@ -209,11 +204,8 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnLayerChoice( wxCommandEvent& event )
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness );
 }
 
-/*******************************************************************/
+
 void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
-/*******************************************************************/
-/* Copy values in text control to the item parameters
-*/
 {
     m_parent->SaveCopyInUndoList( m_Item, UR_CHANGED );
 

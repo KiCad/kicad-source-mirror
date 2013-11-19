@@ -38,6 +38,7 @@
 #include <class_module.h>
 #include <class_dimension.h>
 #include <class_zone.h>
+#include <class_edge_mod.h>
 
 
 /* Functions to undo and redo edit commands.
@@ -195,81 +196,70 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     switch( aItem->Type() )
     {
     case PCB_MODULE_T:
-        {
-            MODULE* tmp = (MODULE*) aImage->Clone();
-            ( (MODULE*) aImage )->Copy( (MODULE*) aItem );
-            ( (MODULE*) aItem )->Copy( tmp );
-            delete tmp;
-        }
+    {
+        MODULE* tmp = (MODULE*) aImage->Clone();
+        ( (MODULE*) aImage )->Copy( (MODULE*) aItem );
+        ( (MODULE*) aItem )->Copy( tmp );
+        delete tmp;
+    }
         break;
 
     case PCB_ZONE_AREA_T:
-        {
-            ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) aImage->Clone();
-            ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) aItem );
-            ( (ZONE_CONTAINER*) aItem )->Copy( tmp );
-            delete tmp;
-        }
+    {
+        ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) aImage->Clone();
+        ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) aItem );
+        ( (ZONE_CONTAINER*) aItem )->Copy( tmp );
+        delete tmp;
+    }
         break;
 
     case PCB_LINE_T:
-#if 0
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Start, ( (DRAWSEGMENT*) aImage )->m_Start );
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_End, ( (DRAWSEGMENT*) aImage )->m_End );
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Width, ( (DRAWSEGMENT*) aImage )->m_Width );
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Shape, ( (DRAWSEGMENT*) aImage )->m_Shape );
-#else
-        {
-            DRAWSEGMENT tmp = *(DRAWSEGMENT*) aImage;
-            *aImage = *aItem;
-            *aItem  = tmp;
-        }
-#endif
+        std::swap( *((DRAWSEGMENT*)aItem), *((DRAWSEGMENT*)aImage) );
         break;
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
-        {
-            TRACK* track = (TRACK*) aItem;
-            TRACK* image = (TRACK*) aImage;
+    {
+        TRACK* track = (TRACK*) aItem;
+        TRACK* image = (TRACK*) aImage;
 
-            // swap start, end, width and shape for track and image.
-            wxPoint exchp = track->GetStart();
-            track->SetStart( image->GetStart() );
-            image->SetStart( exchp );
-            exchp = track->GetEnd();
-            track->SetEnd( image->GetEnd() );
-            image->SetEnd( exchp );
+        // swap start, end, width and shape for track and image.
+        wxPoint exchp = track->GetStart();
+        track->SetStart( image->GetStart() );
+        image->SetStart( exchp );
+        exchp = track->GetEnd();
+        track->SetEnd( image->GetEnd() );
+        image->SetEnd( exchp );
 
-            int atmp = track->GetWidth();
-            track->SetWidth( image->GetWidth() );
-            image->SetWidth( atmp );
-            atmp = track->GetShape();
-            track->SetShape( image->GetShape() );
-            image->SetShape( atmp );
+        int atmp = track->GetWidth();
+        track->SetWidth( image->GetWidth() );
+        image->SetWidth( atmp );
+        atmp = track->GetShape();
+        track->SetShape( image->GetShape() );
+        image->SetShape( atmp );
 
-            atmp = track->GetDrillValue();
+        atmp = track->GetDrillValue();
 
-            if( track->IsDrillDefault() )
-                atmp = -1;
+        if( track->IsDrillDefault() )
+            atmp = -1;
 
-            int itmp = image->GetDrillValue();
+        int itmp = image->GetDrillValue();
 
-            if( image->IsDrillDefault() )
-                itmp = -1;
+        if( image->IsDrillDefault() )
+            itmp = -1;
 
-            EXCHG(itmp, atmp );
+        EXCHG(itmp, atmp );
 
-            if( atmp > 0 )
-                track->SetDrill( atmp );
-            else
-                track->SetDrillDefault();
+        if( atmp > 0 )
+            track->SetDrill( atmp );
+        else
+            track->SetDrillDefault();
 
-            if( itmp > 0 )
-                image->SetDrill( itmp );
-            else
-                image->SetDrillDefault();
-        }
+        if( itmp > 0 )
+            image->SetDrill( itmp );
+        else
+            image->SetDrillDefault();
+    }
         break;
 
     case PCB_TEXT_T:
