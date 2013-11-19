@@ -277,7 +277,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         break;
 
     case PCB_TARGET_T:
-        ( (PCB_TARGET*) aItem )->Exchg( (PCB_TARGET*) aImage );
+        std::swap( *((PCB_TARGET*)aItem), *((PCB_TARGET*)aImage) );
         break;
 
     case PCB_DIMENSION_T:
