@@ -93,7 +93,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	m_listbox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_ALWAYS_SB|wxLB_SINGLE ); 
 	m_listbox->SetToolTip( _("Options supported by current plugin") );
 	
-	m_options_sizer->Add( m_listbox, 0, wxALL|wxEXPAND, 5 );
+	m_options_sizer->Add( m_listbox, 2, wxALL|wxEXPAND, 5 );
 	
 	m_append_choice_button = new wxButton( this, wxID_ANY, _("<< Append Selected Option"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_options_sizer->Add( m_append_choice_button, 0, wxALIGN_CENTER|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -105,7 +105,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	m_html = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxVSCROLL );
 	m_html->SetMinSize( wxSize( 300,300 ) );
 	
-	m_options_sizer->Add( m_html, 1, wxALL|wxEXPAND, 5 );
+	m_options_sizer->Add( m_html, 3, wxALL|wxEXPAND, 5 );
 	
 	
 	m_horizontal_sizer->Add( m_options_sizer, 2, wxEXPAND, 5 );

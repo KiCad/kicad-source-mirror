@@ -112,9 +112,10 @@ bool PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 
 void PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
 {
+    // disable all these in another couple of months, after everyone has seen them:
 #if 1
     (*aListToAppendTo)["debug_level"] = wxString( _(
-        "Enable debug logging for Footprint*() functions in this PLUGIN."
+        "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
         )).utf8_str();
 
     (*aListToAppendTo)["read_filter_regex"] = wxString( _(
@@ -124,6 +125,14 @@ void PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
     (*aListToAppendTo)["enable_transaction_logging"] = wxString( _(
         "Enable transaction logging.  The mere presence of this option turns on the "
         " logging, no need to set a Value."
+        )).utf8_str();
+
+    (*aListToAppendTo)["username"] = wxString( _(
+        "User name for <b>login</b> to some special library server."
+        )).utf8_str();
+
+    (*aListToAppendTo)["password"] = wxString( _(
+        "Password for <b>login</b> to some special library server."
         )).utf8_str();
 #endif
 
