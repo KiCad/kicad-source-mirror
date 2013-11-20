@@ -109,6 +109,9 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME
     // Shape
     m_TargetShape->SetSelection( m_Target->GetShape() ? 1 : 0 );
 
+    // OK button on return key.
+    SetDefaultItem( m_sdbSizerButtsOK );
+
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Centre();
