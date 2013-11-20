@@ -34,7 +34,6 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <trigo.h>
-#include <protos.h>
 #include <richio.h>
 #include <wxstruct.h>
 #include <macros.h>

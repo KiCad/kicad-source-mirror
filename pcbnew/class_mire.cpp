@@ -38,7 +38,6 @@
 #include <colors_selection.h>
 #include <trigo.h>
 #include <macros.h>
-#include <protos.h>
 #include <richio.h>
 
 #include <class_board.h>

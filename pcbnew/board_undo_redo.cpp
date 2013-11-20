@@ -174,32 +174,23 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 }
 
 
-void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
+void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
 {
-    if( aItem == NULL || aImage == NULL )
+    if( aImage == NULL )
     {
-        wxMessageBox( wxT( "SwapData error: NULL pointer" ) );
         return;
     }
 
-    // Swap layers:
-    if( aItem->Type() != PCB_MODULE_T && aItem->Type() != PCB_ZONE_AREA_T )
-    {
-        // These items have a global swap function.
-        LAYER_NUM layer, layerimg;
-        layer    = aItem->GetLayer();
-        layerimg = aImage->GetLayer();
-        aItem->SetLayer( layerimg );
-        aImage->SetLayer( layer );
-    }
+    EDA_ITEM * pnext = Next();
+    EDA_ITEM * pback = Back();
 
-    switch( aItem->Type() )
+    switch( Type() )
     {
     case PCB_MODULE_T:
     {
         MODULE* tmp = (MODULE*) aImage->Clone();
-        ( (MODULE*) aImage )->Copy( (MODULE*) aItem );
-        ( (MODULE*) aItem )->Copy( tmp );
+        ( (MODULE*) aImage )->Copy( (MODULE*) this );
+        ( (MODULE*) this )->Copy( tmp );
         delete tmp;
     }
         break;
@@ -207,21 +198,23 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     case PCB_ZONE_AREA_T:
     {
         ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) aImage->Clone();
-        ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) aItem );
-        ( (ZONE_CONTAINER*) aItem )->Copy( tmp );
+        ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) this );
+        ( (ZONE_CONTAINER*) this )->Copy( tmp );
         delete tmp;
     }
         break;
 
     case PCB_LINE_T:
-        std::swap( *((DRAWSEGMENT*)aItem), *((DRAWSEGMENT*)aImage) );
+        std::swap( *((DRAWSEGMENT*)this), *((DRAWSEGMENT*)aImage) );
         break;
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
     {
-        TRACK* track = (TRACK*) aItem;
+        TRACK* track = (TRACK*) this;
         TRACK* image = (TRACK*) aImage;
+
+        EXCHG(track->m_Layer, image->m_Layer );
 
         // swap start, end, width and shape for track and image.
         wxPoint exchp = track->GetStart();
@@ -263,21 +256,31 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         break;
 
     case PCB_TEXT_T:
-        std::swap( *((TEXTE_PCB*)aItem), *((TEXTE_PCB*)aImage) );
+        std::swap( *((TEXTE_PCB*)this), *((TEXTE_PCB*)aImage) );
         break;
 
     case PCB_TARGET_T:
-        std::swap( *((PCB_TARGET*)aItem), *((PCB_TARGET*)aImage) );
+        std::swap( *((PCB_TARGET*)this), *((PCB_TARGET*)aImage) );
         break;
 
     case PCB_DIMENSION_T:
-        std::swap( *((DIMENSION*)aItem), *((DIMENSION*)aImage) );
+        std::swap( *((DIMENSION*)this), *((DIMENSION*)aImage) );
         break;
 
     case PCB_ZONE_T:
     default:
-        wxMessageBox( wxT( "SwapData() error: unexpected type" ) );
+        wxLogMessage( wxT( "SwapData() error: unexpected type %d" ), Type() );
         break;
+    }
+
+    if( pnext != Next() || pback != Back() )
+    {
+        Pnext = pnext;
+        Pback = pback;
+#ifdef DEBUG
+        wxLogMessage( wxT( "SwapData Error: %s Pnext or Pback pointers modified" ),
+                      GetClass().GetData() );
+#endif
     }
 }
 
@@ -481,7 +484,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         case UR_CHANGED:    /* Exchange old and new data for each item */
         {
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
-            SwapData( item, image );
+            item->SwapData( image );
         }
         break;
 

@@ -34,7 +34,6 @@
 #include <dialog_helpers.h>
 #include <base_units.h>
 #include <gr_basic.h>
-#include <protos.h>
 
 #include <class_board.h>
 #include <class_mire.h>
@@ -258,9 +257,9 @@ void PCB_EDIT_FRAME::PlaceTarget( PCB_TARGET* aTarget, wxDC* DC )
 
     if( (aTarget->GetFlags() & IN_EDIT) )
     {
-        SwapData( aTarget, &s_TargetCopy );
+        aTarget->SwapData( &s_TargetCopy );
         SaveCopyInUndoList( aTarget, UR_CHANGED );
-        SwapData( aTarget, &s_TargetCopy );
+        aTarget->SwapData( &s_TargetCopy );
     }
 
     aTarget->ClearFlags();
