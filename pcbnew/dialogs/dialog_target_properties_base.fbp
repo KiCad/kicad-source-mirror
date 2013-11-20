@@ -20,10 +20,8 @@
         <property name="path">.</property>
         <property name="precompiled_header"></property>
         <property name="relative_path">1</property>
-        <property name="skip_lua_events">1</property>
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
-        <property name="ui_table">UI</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -44,7 +42,7 @@
             <property name="minimum_size"></property>
             <property name="name">TARGET_PROPERTIES_DIALOG_EDITOR_BASE</property>
             <property name="pos"></property>
-            <property name="size">285,170</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Target Properties</property>
@@ -900,7 +898,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_RIGHT|wxEXPAND</property>
+                    <property name="flag">wxALIGN_RIGHT|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="1">
                         <property name="Apply">0</property>

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -76,11 +76,12 @@ TARGET_PROPERTIES_DIALOG_EDITOR_BASE::TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWi
 	m_sdbSizerButts->AddButton( m_sdbSizerButtsCancel );
 	m_sdbSizerButts->Realize();
 	
-	bSizerMain->Add( m_sdbSizerButts, 0, wxALIGN_RIGHT|wxEXPAND, 5 );
+	bSizerMain->Add( m_sdbSizerButts, 0, wxALIGN_RIGHT|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

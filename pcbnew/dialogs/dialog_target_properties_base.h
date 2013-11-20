@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -57,7 +57,7 @@ class TARGET_PROPERTIES_DIALOG_EDITOR_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Target Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 285,170 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Target Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~TARGET_PROPERTIES_DIALOG_EDITOR_BASE();
 	
 };
