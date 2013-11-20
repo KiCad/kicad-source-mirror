@@ -327,7 +327,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     wxLogTrace( tracePrinting, wxT( "Logical origin:                   x=%d, y=%d" ),
                 offset.x, offset.y );
 
-#if defined(wxUSE_LOG_TRACE)
+#if defined(wxUSE_LOG_TRACE) && defined( DEBUG )
     wxRect paperRect = GetPaperRectPixels();
     wxLogTrace( tracePrinting, wxT( "Paper rectangle:                  left=%d, top=%d, "
                                     "right=%d, bottom=%d" ),

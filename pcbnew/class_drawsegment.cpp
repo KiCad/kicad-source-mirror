@@ -44,7 +44,6 @@
 #include <msgpanel.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <math_for_graphics.h>
 
 #include <class_board.h>

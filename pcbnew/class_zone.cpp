@@ -41,7 +41,6 @@
 #include <wxBasePcbFrame.h>
 #include <msgpanel.h>
 
-#include <protos.h>
 #include <class_board.h>
 #include <class_zone.h>
 
