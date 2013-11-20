@@ -95,6 +95,8 @@ public:
         return false;   // until someone writes others like FootprintSave(), etc.
     }
 
+    void FootprintLibOptions( PROPERTIES* aProperties ) const;
+
 /*
     void Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties = NULL );
 

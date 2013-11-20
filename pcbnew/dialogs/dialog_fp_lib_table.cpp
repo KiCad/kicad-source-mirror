@@ -40,7 +40,7 @@
 #include <fp_lib_table_lexer.h>
 #include <invoke_pcb_dialog.h>
 #include <grid_tricks.h>
-
+#include <confirm.h>
 
 /// grid column order is established by this sequence
 enum COL_ORDER
@@ -244,7 +244,7 @@ protected:
             }
             catch( PARSE_ERROR& pe )
             {
-                // @todo tell what line and offset
+                DisplayError( NULL, pe.errorText );
                 parsed = false;
             }
 
