@@ -128,6 +128,16 @@ public:
     ~PCB_BASE_FRAME();
 
     /**
+     * Function LoadFootprint
+     * attempts to load \a aFootprintId from the footprint library table.
+     *
+     * @param aFootprintId is the #FPID of component footprint to load.
+     * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
+     *         libraries in #m_footprintLibTable.
+     */
+    MODULE* LoadFootprint( const FPID& aFootprintId );
+
+    /**
      * Function GetBoardBoundingBox
      * calculates the bounding box containing all board items (or board edge segments).
      * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
