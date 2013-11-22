@@ -119,14 +119,14 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
 
     // menu Config
-	
-    /* Tom's hacks start */	
+
+    /* Tom's hacks start */
     EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_TOOL ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_MENU ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_TOOL ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     /* Tom's hacks end */
-		
+
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, PCB_EDIT_FRAME::OnConfigurePcbOptions )
     EVT_MENU( ID_CONFIG_REQ, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT, PCB_EDIT_FRAME::Process_Config )
@@ -597,6 +597,10 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     SaveSettings();
+
+    // Delete board structs and undo/redo lists, to avoid crash on exit
+    // when deleting some structs (mainly in undo/redo lists) too late
+    Clear_Pcb( false );
 
     // do not show the window because ScreenPcb will be deleted and we do not
     // want any paint event

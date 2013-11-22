@@ -336,7 +336,22 @@ MODULE* PCB_BASE_FRAME::loadFootprintFromLibrary( const wxString& aLibraryPath,
     {
         PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
-        wxString libPath = wxGetApp().FindLibraryPath( aLibraryPath );
+        // Ensure the library name has the right extension
+        // (sometimes the name is given without ext)
+        wxString libname = aLibraryPath;
+
+        if( !libname.EndsWith( wxT(".") + LegacyFootprintLibPathExtension) )
+            libname <<  wxT(".") << LegacyFootprintLibPathExtension;
+
+        wxString libPath = wxGetApp().FindLibraryPath( libname );
+
+        if( libPath.IsEmpty() )
+        {
+            wxString msg = wxString::Format( _( "Library '%s' not found." ),
+                                             libname.GetData() );
+            DisplayError( NULL, msg );
+            return NULL;
+        }
 
         MODULE* footprint = pi->FootprintLoad( libPath, aFootprintName );
 
@@ -427,6 +442,26 @@ MODULE* PCB_BASE_FRAME::loadFootprintFromLibraries(
     }
 
     return NULL;
+}
+
+/* attempts to load aFootprintId from the footprint library table.
+ * return the #MODULE if found or NULL if not found or error.
+ */
+MODULE* PCB_BASE_FRAME::LoadFootprint( const FPID& aFootprintId )
+{
+    MODULE* module = NULL;
+
+    try
+    {
+        module = loadFootprint( aFootprintId );
+    }
+    catch( IO_ERROR ioe )
+    {
+        wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
+                    aFootprintId.Format().c_str(), GetChars( ioe.errorText ) );
+    }
+
+    return module;
 }
 
 
