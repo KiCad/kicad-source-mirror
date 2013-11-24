@@ -165,7 +165,7 @@ public:
         return (m_Attributs & TEXT_NO_VISIBLE) == 0 ? true : false;
     }
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;    // Virtual
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 

@@ -72,7 +72,7 @@ public:
 
     bool Save( FILE* aFile ) const;
 
-    EDA_RECT GetBoundingBox() const;
+    EDA_RECT const GetBoundingBox() const;      // Virtual
 
     // Geometric transforms (used in block operations):
 

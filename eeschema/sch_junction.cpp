@@ -98,7 +98,7 @@ bool SCH_JUNCTION::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-EDA_RECT SCH_JUNCTION::GetBoundingBox() const
+const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 {
     EDA_RECT rect;
 

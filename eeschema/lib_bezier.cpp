@@ -378,7 +378,7 @@ bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
 }
 
 
-EDA_RECT LIB_BEZIER::GetBoundingBox() const
+const EDA_RECT LIB_BEZIER::GetBoundingBox() const
 {
     EDA_RECT rect;
     int      xmin, xmax, ymin, ymax;

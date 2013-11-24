@@ -151,7 +151,7 @@ public:
 
     virtual void SwapData( SCH_ITEM* aItem );
 
-    virtual EDA_RECT GetBoundingBox() const;
+    virtual const EDA_RECT GetBoundingBox() const;
 
     virtual bool Save( FILE* aFile ) const;
 
@@ -249,7 +249,7 @@ public:
 
     void Rotate( wxPoint aPosition );
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;  // Virtual
 
     bool Save( FILE* aFile ) const;
 
@@ -298,7 +298,7 @@ public:
 
     bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;  // Virtual
 
     void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos );
 
@@ -353,7 +353,7 @@ public:
 
     bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;      // Virtual
 
     void MirrorY( int aYaxis_position );
 

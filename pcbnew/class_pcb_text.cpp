@@ -158,7 +158,7 @@ void TEXTE_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Size Y" ), msg, RED ) );
 }
 
-EDA_RECT TEXTE_PCB::GetBoundingBox() const
+const EDA_RECT TEXTE_PCB::GetBoundingBox() const
 {
     EDA_RECT rect = GetTextBox( -1, -1 );
 

@@ -532,7 +532,7 @@ double EDA_RECT::GetArea() const
 
 /* Calculate the bounding box of this, when rotated
  */
-EDA_RECT EDA_RECT::GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle )
+const EDA_RECT EDA_RECT::GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle )
 {
     wxPoint corners[4];
 

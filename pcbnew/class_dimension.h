@@ -139,7 +139,8 @@ public:
         return wxT( "DIMENSION" );
     }
 
-    EDA_RECT    GetBoundingBox() const;
+    // Virtual function
+    const EDA_RECT    GetBoundingBox() const;
 
     wxString    GetSelectMenuText() const;
 

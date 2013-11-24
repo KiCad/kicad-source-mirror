@@ -1531,52 +1531,6 @@ public:
      */
     void AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC );
 
-    /**
-     * Function GetOptimalModulePlacement
-     * searches for the optimal position of the \a aModule.
-     *
-     * @param aModule A pointer to the MODULE object to get the optimal placement.
-     * @param aDC The device context to draw on.
-     * @return 1 if placement impossible or 0 if OK.
-     */
-    int GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC );
-
-    void GenModuleOnBoard( MODULE* Module );
-
-    /**
-     * Function Compute_Ratsnest_PlaceModule
-     * displays the module's ratsnest during displacement, and assess the "cost"
-     * of the position.
-     *
-     * The cost is the longest ratsnest distance with penalty for connections
-     * approaching 45 degrees.
-     */
-    double Compute_Ratsnest_PlaceModule( wxDC* DC );
-
-    /**
-     * Function GenPlaceBoard
-     * generates board board (component side copper + rating):
-     * Allocate the memory needed to represent in "bitmap" on the grid
-     * Current:
-     * - The size of clearance area of component (the board)
-     * - The bitmap PENALTIES
-     * And initialize the cells of the board has
-     * - Hole in the cells occupied by a segment EDGE
-     * - CELL_is_ZONE for cell internal contour EDGE (if closed)
-     *
-     * Placement surface (board) gives the cells internal to the contour
-     * PCB, and among the latter the free cells and cells already occupied
-     *
-     * The bitmap PENALTIES give cells occupied by the modules,
-     * Plus a surface penalty related to the number of pads of the module
-     *
-     * Bitmap of the penalty is set to 0
-     * Occupation cell is a 0 leaves
-     */
-    int GenPlaceBoard();
-
-    void DrawInfoPlace( wxDC* DC );
-
     // Autorouting:
     int Solve( wxDC* DC, int two_sides );
     void Reset_Noroutable( wxDC* DC );

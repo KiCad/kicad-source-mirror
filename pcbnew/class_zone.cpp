@@ -358,7 +358,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 }
 
 
-EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
+const EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
 {
     const int PRELOAD = 0x7FFFFFFF;     // Biggest integer (32 bits)
 

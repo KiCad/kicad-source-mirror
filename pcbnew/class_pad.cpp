@@ -119,7 +119,7 @@ int D_PAD::boundingRadius() const
 }
 
 
-EDA_RECT D_PAD::GetBoundingBox() const
+const EDA_RECT D_PAD::GetBoundingBox() const
 {
     EDA_RECT area;
     wxPoint quadrant1, quadrant2, quadrant3, quadrant4;

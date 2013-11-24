@@ -67,7 +67,7 @@ public:
 
     int GetPenSize( ) const;
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;  // Virtual
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 

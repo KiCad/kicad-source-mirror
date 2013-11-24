@@ -105,7 +105,7 @@ bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
     if( aThreshold < 0 )
         aThreshold = GetPenSize() / 2;
 
-    int dist = KiROUND( GetLineLength( aPosRef, aTransform.TransformCoordinate( m_Pos ) ) ); 
+    int dist = KiROUND( GetLineLength( aPosRef, aTransform.TransformCoordinate( m_Pos ) ) );
 
     if( abs( dist - m_Radius ) <= aThreshold )
         return true;
@@ -251,7 +251,7 @@ void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 }
 
 
-EDA_RECT LIB_CIRCLE::GetBoundingBox() const
+const EDA_RECT LIB_CIRCLE::GetBoundingBox() const
 {
     EDA_RECT rect;
 

@@ -151,10 +151,10 @@ public:
     void DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
                                  GR_DRAWMODE draw_mode = GR_OR );
 
-    /** Function GetBoundingBox
+    /** Function GetBoundingBox (virtual)
      * @return an EDA_RECT that is the bounding box of the zone outline
      */
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;
 
     int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const;
 

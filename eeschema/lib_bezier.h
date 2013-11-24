@@ -76,7 +76,7 @@ public:
 
     bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;  // Virtual
 
     bool Inside( EDA_RECT& aRect ) const;
 

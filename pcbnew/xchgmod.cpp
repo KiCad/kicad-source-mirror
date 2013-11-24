@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
@@ -43,10 +43,7 @@
 #include <dialog_exchange_modules_base.h>
 #include <wildcards_and_files_ext.h>
 
-static char*  quiet_gcc_4_4_3;      // GCC 4.4.3 and next ..
-
 static bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName );
-
 
 class DIALOG_EXCHANGE_MODULE : public DIALOG_EXCHANGE_MODULE_BASE
 {
@@ -64,13 +61,12 @@ private:
     void OnOkClick( wxCommandEvent& event );
     void OnQuit( wxCommandEvent& event );
     void BrowseAndSelectFootprint( wxCommandEvent& event );
+    void RebuildCmpList( wxCommandEvent& event );
     void init();
 
     void ChangeCurrentFootprint();
-    void ChangeSameFootprints( bool aUseValue );
+    void ChangeSameFootprints( bool aUseValue);
     void ChangeAllFootprints();
-    int  Maj_ListeCmp( const wxString& aReference, const FPID& aOldFootprintFPID,
-                       const FPID& aNewFootprintFPID, bool aShowError );
     bool Change_1_Module( MODULE*            aModule,
                           const FPID&        aNewFootprintFPID,
                           PICKED_ITEMS_LIST* aUndoPickList,
@@ -123,6 +119,7 @@ void DIALOG_EXCHANGE_MODULE::init()
 void DIALOG_EXCHANGE_MODULE::OnOkClick( wxCommandEvent& event )
 {
     m_selectionMode = m_Selection->GetSelection();
+
     switch( m_Selection->GetSelection() )
     {
     case 0:
@@ -146,120 +143,51 @@ void DIALOG_EXCHANGE_MODULE::OnOkClick( wxCommandEvent& event )
 
 void DIALOG_EXCHANGE_MODULE::OnSelectionClicked( wxCommandEvent& event )
 {
+    bool enable = true;
+
     switch( m_Selection->GetSelection() )
     {
     case 0:
     case 1:
     case 2:
-        m_NewModule->Enable( true );
-        m_Browsebutton->Enable( true );
         break;
 
     case 3:
-        m_NewModule->Enable( false );
-        m_Browsebutton->Enable( false );
+        enable = false;
         break;
     }
+
+    m_NewModule->Enable( enable );
+    m_Browsebutton->Enable( enable );
 }
 
 
 /*
- * Updates the file name.CMP (if any) after an exchange module
- * (By command changeMod), if the modules are managed by this file
- *
- * If ShowError! = 0 displays error message if the file. Cmp is not found.
- * Return 1 if error
+ * Rebuild the file name.CMP (if any) after exchanging footprints
+ * if the footprint are managed by this file
+ * Return false if error
  */
-int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& aReference,
-                                          const FPID&     aOldFootprintFPID,
-                                          const FPID&     aNewFootprintFPID,
-                                          bool            aShowError )
+void DIALOG_EXCHANGE_MODULE::RebuildCmpList( wxCommandEvent& event )
 {
     wxFileName  fn;
-    wxFileName  tmpFileName;
-    FILE*       FichCmp, * NewFile;
-    char        line[1024];
     wxString    msg;
-
-    if( aOldFootprintFPID == aNewFootprintFPID )
-        return 0;
 
     // Build CMP file name by changing the extension of NetList filename
     fn = m_parent->GetBoard()->GetFileName();
     fn.SetExt( ComponentFileExtension );
 
-    FichCmp = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
-
-    if( FichCmp == NULL )
+    if( RecreateCmpFile( m_parent->GetBoard(), fn.GetFullPath() ) )
     {
-        if( aShowError )
-        {
-            msg.Printf( _( "file <%s> not found" ), GetChars( fn.GetFullPath() ) );
-            m_WinMessages->AppendText( msg );
-        }
-
-        return 1;
+        msg.Printf( _( "File '%s' created\n" ),
+                    GetChars( fn.GetFullPath() ) );
+    }
+    else
+    {
+        msg.Printf( _( "** Could not create file '%s' ***\n" ),
+                    GetChars( fn.GetFullPath() ) );
     }
 
-    tmpFileName = fn;
-    tmpFileName.SetExt( wxT( "$$$" ) );
-    NewFile = wxFopen( tmpFileName.GetFullPath(), wxT( "wt" ) );
-
-    if( NewFile == NULL )
-    {
-        if( aShowError )
-        {
-            msg.Printf( _( "Unable to create file <%s>" ),
-                        GetChars( tmpFileName.GetFullPath() ) );
-            m_WinMessages->AppendText( msg );
-        }
-
-        return 1;
-    }
-
-    quiet_gcc_4_4_3 = fgets( line, sizeof(line), FichCmp );
-
-    fprintf( NewFile, "Cmp-Mod V01 Created by PcbNew date = %s\n", TO_UTF8( DateAndTime() ) );
-
-    bool start_descr = false;
-
-    while( fgets( line, sizeof(line), FichCmp ) != NULL )
-    {
-        if( strnicmp( line, "Reference = ", 9 ) == 0 )
-        {
-            char buf[1024];
-            strcpy( buf, line + 12 );
-            strtok( buf, ";\n\r" );
-
-            if( stricmp( buf, TO_UTF8( aReference ) ) == 0 )
-            {
-                start_descr = true;
-            }
-        }
-
-        if( (strnicmp( line, "Begin", 5 ) == 0) || (strnicmp( line, "End", 3 ) == 0) )
-        {
-            start_descr = false;
-        }
-
-        if( start_descr && strnicmp( line, "IdModule", 8 ) == 0 )
-        {
-            sprintf( line + 8, "  = %s;\n", aNewFootprintFPID.Format().c_str() );
-
-            msg = wxT( " * in <" ) + fn.GetFullPath() + wxT( ">.\n" );
-            m_WinMessages->AppendText( msg );
-
-            start_descr = false;
-        }
-
-        fputs( line, NewFile );
-    }
-
-    fclose( FichCmp );
-    fclose( NewFile );
-    wxRemoveFile( fn.GetFullPath() );
-    wxRenameFile( tmpFileName.GetFullPath(), fn.GetFullPath() );
-    return 0;
+    m_WinMessages->AppendText( msg );
 }
 
 
@@ -401,7 +329,7 @@ void DIALOG_EXCHANGE_MODULE::ChangeAllFootprints()
     if( !IsOK( this, _( "Change ALL modules ?" ) ) )
         return;
 
-    /* The change is done from the last module for the routine
+    /* The change is done from the last module because the function
      * Change_1_Module () modifies the last module in the list
      */
     PICKED_ITEMS_LIST pickList;
@@ -460,9 +388,10 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            aModule,
     FPID  oldFootprintFPID = aModule->GetFPID();
 
     // Load module.
-    line.Printf( _( "Change module %s (from %s)  " ),
+    line.Printf( _( "Change module %s (from %s) to %s" ),
                  GetChars( aModule->GetReference() ),
-                 oldFootprintFPID.Format().c_str() );
+                 oldFootprintFPID.Format().c_str(),
+                 aNewFootprintFPID.Format().c_str() );
     m_WinMessages->AppendText( line );
 
     wxString moduleName = FROM_UTF8( aNewFootprintFPID.GetFootprintName().c_str() );
@@ -476,7 +405,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            aModule,
 
     if( newModule == NULL )  // New module not found, redraw the old one.
     {
-        m_WinMessages->AppendText( wxT( "No\n" ) );
+        m_WinMessages->AppendText( wxT( " No\n" ) );
         return false;
     }
 
@@ -485,12 +414,9 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            aModule,
     if( aModule == m_currentModule )
         m_currentModule = newModule;
 
-    m_WinMessages->AppendText( wxT( "OK\n" ) );
+    m_WinMessages->AppendText( wxT( " OK\n" ) );
 
     m_parent->Exchange_Module( aModule, newModule, aUndoPickList );
-
-    Maj_ListeCmp( newModule->GetReference(),
-                  oldFootprintFPID, aNewFootprintFPID, aShowError );
 
     return true;
 }
@@ -610,7 +536,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
 
     if( ! RecreateCmpFile( GetBoard(), fn.GetFullPath() ) )
     {
-        msg = _( "Unable to create file " ) + fn.GetFullPath();
+        msg.Printf( _( "Could not create file '%s'" ), GetChars(fn.GetFullPath() ) );
         DisplayError( this, msg );
         return;
     }

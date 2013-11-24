@@ -62,7 +62,7 @@ public:
 
     bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;  // Virtual
 
     // Geometric transforms (used in block operations):
 

@@ -90,7 +90,7 @@ public:
      */
     wxSize GetSize() const;
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;    // Virtual
 
     void SwapData( SCH_ITEM* aItem );
 

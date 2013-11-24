@@ -484,7 +484,7 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 }
 
 
-EDA_RECT LIB_ARC::GetBoundingBox() const
+const EDA_RECT LIB_ARC::GetBoundingBox() const
 {
     int      minX, minY, maxX, maxY, angleStart, angleEnd;
     EDA_RECT rect;

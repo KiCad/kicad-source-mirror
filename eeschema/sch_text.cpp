@@ -574,7 +574,7 @@ void SCH_TEXT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-EDA_RECT SCH_TEXT::GetBoundingBox() const
+const EDA_RECT SCH_TEXT::GetBoundingBox() const
 {
     // We must pass the effective text thickness to GetTextBox
     // when calculating the bounding box
@@ -969,7 +969,7 @@ void SCH_LABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 }
 
 
-EDA_RECT SCH_LABEL::GetBoundingBox() const
+const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
     int x, y, dx, dy, length, height;
 
@@ -1397,7 +1397,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 }
 
 
-EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
+const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
 {
     int x, y, dx, dy, length, height;
 
@@ -1663,7 +1663,7 @@ void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wx
 }
 
 
-EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
+const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 {
     int x, y, dx, dy, length, height;
 
