@@ -353,7 +353,7 @@ bool LIB_POLYLINE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& 
 }
 
 
-EDA_RECT LIB_POLYLINE::GetBoundingBox() const
+const EDA_RECT LIB_POLYLINE::GetBoundingBox() const
 {
     EDA_RECT rect;
     int      xmin, xmax, ymin, ymax;

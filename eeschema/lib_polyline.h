@@ -78,7 +78,7 @@ public:
 
     bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;    // Virtual
 
     int GetPenSize( ) const;
 

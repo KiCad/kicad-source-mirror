@@ -409,12 +409,12 @@ void MODULE::DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offs
 
 void MODULE::CalculateBoundingBox()
 {
-    m_BoundaryBox = GetFootPrintRect();
+    m_BoundaryBox = GetFootprintRect();
     m_Surface = std::abs( (double) m_BoundaryBox.GetWidth() * m_BoundaryBox.GetHeight() );
 }
 
 
-EDA_RECT MODULE::GetFootPrintRect() const
+EDA_RECT MODULE::GetFootprintRect() const
 {
     EDA_RECT area;
 
@@ -433,9 +433,9 @@ EDA_RECT MODULE::GetFootPrintRect() const
 }
 
 
-EDA_RECT MODULE::GetBoundingBox() const
+const EDA_RECT MODULE::GetBoundingBox() const
 {
-    EDA_RECT area = GetFootPrintRect();
+    EDA_RECT area = GetFootprintRect();
 
     // Calculate extended area including text fields
     area.Merge( m_Reference->GetBoundingBox() );

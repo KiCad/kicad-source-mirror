@@ -1430,7 +1430,7 @@ EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
 }
 
 
-EDA_RECT SCH_COMPONENT::GetBoundingBox() const
+const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 {
     EDA_RECT bbox = GetBodyBoundingBox();
     for( size_t i = 0; i < m_Fields.size(); i++ )

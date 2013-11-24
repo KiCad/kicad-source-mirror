@@ -259,7 +259,7 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 }
 
 
-EDA_RECT SCH_FIELD::GetBoundingBox() const
+const EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
     SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) m_Parent;
     int linewidth = ( m_Thickness == 0 ) ? GetDefaultLineThickness() : m_Thickness;

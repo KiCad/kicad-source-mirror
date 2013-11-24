@@ -360,7 +360,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 }
 
 
-EDA_RECT DRAWSEGMENT::GetBoundingBox() const
+const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 {
     EDA_RECT bbox;
 

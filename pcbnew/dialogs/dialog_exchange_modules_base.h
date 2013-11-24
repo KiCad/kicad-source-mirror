@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -47,6 +47,7 @@ class DIALOG_EXCHANGE_MODULE_BASE : public DIALOG_SHIM
 		wxRadioBox* m_Selection;
 		wxButton* m_OKbutton;
 		wxButton* m_Quitbutton;
+		wxButton* m_buttonCmpList;
 		wxButton* m_Browsebutton;
 		wxStaticText* m_staticTextMsg;
 		wxTextCtrl* m_WinMessages;
@@ -55,6 +56,7 @@ class DIALOG_EXCHANGE_MODULE_BASE : public DIALOG_SHIM
 		virtual void OnSelectionClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void RebuildCmpList( wxCommandEvent& event ) { event.Skip(); }
 		virtual void BrowseAndSelectFootprint( wxCommandEvent& event ) { event.Skip(); }
 		
 	

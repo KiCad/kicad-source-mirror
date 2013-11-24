@@ -218,7 +218,7 @@ public:
      */
     D_CODE* GetDcodeDescr();
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;  // Virtual
 
     /* Display on screen: */
     void Draw( EDA_DRAW_PANEL*         aPanel,

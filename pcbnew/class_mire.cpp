@@ -194,7 +194,7 @@ void PCB_TARGET::Flip(const wxPoint& aCentre )
 }
 
 
-EDA_RECT PCB_TARGET::GetBoundingBox() const
+const EDA_RECT PCB_TARGET::GetBoundingBox() const
 {
     EDA_RECT bBox;
     bBox.SetX( m_Pos.x - m_Size/2 );

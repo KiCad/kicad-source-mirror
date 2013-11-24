@@ -92,7 +92,8 @@ public:
      */
     bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
 
-    EDA_RECT GetBoundingBox() const;
+    // Virtual function
+    const EDA_RECT GetBoundingBox() const;
 
     wxString GetSelectMenuText() const;
 

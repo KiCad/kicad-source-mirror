@@ -283,7 +283,7 @@ public:
      * useful to calculate bounding box of rotated items, when
      * rotation if not k*90 degrees
      */
-    EDA_RECT GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle );
+    const EDA_RECT GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle );
 };
 
 
@@ -476,7 +476,7 @@ public:
      * system.
      * It is OK to overestimate the size by a few counts.
      */
-    virtual EDA_RECT GetBoundingBox() const
+    virtual const EDA_RECT GetBoundingBox() const
     {
 #if defined(DEBUG)
         printf( "Missing GetBoundingBox()\n" );
