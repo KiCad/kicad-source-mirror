@@ -56,6 +56,7 @@ class MARKER_PCB;
 class MSG_PANEL_ITEM;
 class NETLIST;
 class REPORTER;
+class RN_DATA;
 
 
 // non-owning container of item candidates when searching for items on the same track.
@@ -225,6 +226,7 @@ private:
 
     EDA_RECT                m_BoundingBox;
     NETINFO_LIST            m_NetInfo;              ///< net info list (name, design constraints ..
+    RN_DATA*                m_ratsnest;
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
     ZONE_SETTINGS           m_zoneSettings;
@@ -354,6 +356,16 @@ public:
      * @return BOARD_ITEM* \a aBoardItem which was passed in.
      */
     BOARD_ITEM* Remove( BOARD_ITEM* aBoardItem );
+
+    /**
+     * Function GetRatsnest()
+     * returns list of missing connections between components/tracks.
+     * @return RATSNEST* is an object that contains informations about missing connections.
+     */
+    RN_DATA* GetRatsnest() const
+    {
+        return m_ratsnest;
+    }
 
     /**
      * Function DeleteMARKERs

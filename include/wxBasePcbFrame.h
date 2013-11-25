@@ -183,15 +183,13 @@ public:
      * BOARD.
      * @param aBoard The BOARD to put into the frame.
      */
-    void SetBoard( BOARD* aBoard );
+    virtual void SetBoard( BOARD* aBoard );
 
     BOARD* GetBoard() const
     {
         wxASSERT( m_Pcb );
         return m_Pcb;
     }
-
-    void ViewReloadBoard( const BOARD* aBoard ) const;
 
     /**
      * Function SetFootprintLibTable
@@ -716,8 +714,6 @@ public:
     void OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
-
-    virtual void UseGalCanvas( bool aEnable );
 
     DECLARE_EVENT_TABLE()
 };
