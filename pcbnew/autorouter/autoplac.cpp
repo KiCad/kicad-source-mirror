@@ -723,8 +723,8 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
                     wxString msg;
                     msg.Printf( wxT( "Score %g, pos %s, %s" ),
                                 min_cost,
-                                ::CoordinateToString( LastPosOK.x ),
-                                ::CoordinateToString( LastPosOK.y ) );
+                                GetChars( ::CoordinateToString( LastPosOK.x ) ),
+                                GetChars( ::CoordinateToString( LastPosOK.y ) ) );
                     aFrame->SetStatusText( msg );
                 }
             }
