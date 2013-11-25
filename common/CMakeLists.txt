@@ -1,4 +1,3 @@
-
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
     ./dialogs
@@ -37,6 +36,7 @@ set(GAL_SRCS
     gal/stroke_font.cpp
     gal/color4d.cpp
     view/wx_view_controls.cpp
+    geometry/hetriang.cpp
 
     # OpenGL GAL
     gal/opengl/opengl_gal.cpp

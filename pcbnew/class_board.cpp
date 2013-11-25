@@ -42,6 +42,7 @@
 #include <pcb_netlist.h>
 #include <reporter.h>
 #include <base_units.h>
+#include <ratsnest_data.h>
 
 #include <pcbnew.h>
 #include <colors_selection.h>
@@ -102,11 +103,15 @@ BOARD::BOARD() :
     m_NetClasses.GetDefault()->SetParams();
 
     SetCurrentNetClass( m_NetClasses.GetDefault()->GetName() );
+
+    m_ratsnest = new RN_DATA( this );
 }
 
 
 BOARD::~BOARD()
 {
+    delete m_ratsnest;
+
     while( m_ZoneDescriptorList.size() )
     {
         ZONE_CONTAINER* area_to_remove = m_ZoneDescriptorList[0];

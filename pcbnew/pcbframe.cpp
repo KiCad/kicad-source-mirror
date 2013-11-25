@@ -59,6 +59,13 @@
 #include <view/view.h>
 #include <painter.h>
 
+#include <class_track.h>
+#include <class_board.h>
+#include <class_module.h>
+#include <worksheet_viewitem.h>
+#include <ratsnest_data.h>
+#include <ratsnest_viewitem.h>
+
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 
@@ -329,6 +336,16 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     SetBoard( new BOARD() );
 
+    if( m_galCanvas )
+    {
+        ViewReloadBoard( m_Pcb );
+
+        // update the tool manager with the new board and its view.
+        if( m_toolManager )
+            m_toolManager->SetEnvironment( m_Pcb, m_galCanvas->GetView(),
+                                           m_galCanvas->GetViewControls(), this );
+    }
+
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
 
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -522,6 +539,106 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 }
 
 
+void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
+{
+    PCB_BASE_FRAME::SetBoard( aBoard );
+
+    if( m_galCanvas )
+    {
+        ViewReloadBoard( aBoard );
+
+        // update the tool manager with the new board and its view.
+        if( m_toolManager )
+            m_toolManager->SetEnvironment( aBoard, m_galCanvas->GetView(),
+                                           m_galCanvas->GetViewControls(), this );
+    }
+}
+
+
+void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
+{
+    KIGFX::VIEW* view = m_galCanvas->GetView();
+    view->Clear();
+
+    // All of PCB drawing elements should be added to the VIEW
+    // in order to be displayed
+
+    // Load zones
+    for( int i = 0; i < aBoard->GetAreaCount(); ++i )
+    {
+        view->Add( (KIGFX::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
+    }
+
+    // Load drawings
+    for( BOARD_ITEM* drawing = aBoard->m_Drawings; drawing; drawing = drawing->Next() )
+    {
+        view->Add( drawing );
+    }
+
+    // Load tracks
+    for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
+    {
+        view->Add( track );
+    }
+
+    // Load modules and its additional elements
+    for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
+    {
+        // Load module's pads
+        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        {
+            view->Add( pad );
+        }
+
+        // Load module's drawing (mostly silkscreen)
+        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
+             drawing = drawing->Next() )
+        {
+            view->Add( drawing );
+        }
+
+        // Load module's texts (name and value)
+        view->Add( &module->Reference() );
+        view->Add( &module->Value() );
+
+        // Add the module itself
+        view->Add( module );
+    }
+
+    // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
+    for( SEGZONE* zone = aBoard->m_Zone; zone; zone = zone->Next() )
+    {
+        view->Add( zone );
+    }
+
+    // Add an entry for the worksheet layout
+    KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM(
+                                            std::string( aBoard->GetFileName().mb_str() ),
+                                            std::string( GetScreenDesc().mb_str() ),
+                                            &GetPageSettings(), &GetTitleBlock() );
+    BASE_SCREEN* screen = GetScreen();
+    if( screen != NULL )
+    {
+        worksheet->SetSheetNumber( GetScreen()->m_ScreenNumber );
+        worksheet->SetSheetCount( GetScreen()->m_NumberOfScreens );
+    }
+
+    view->Add( worksheet );
+
+    // Add an entry for the ratsnest
+    RN_DATA* ratsnest = aBoard->GetRatsnest();
+    ratsnest->ProcessBoard();
+    ratsnest->Recalculate();
+    view->Add( new KIGFX::RATSNEST_VIEWITEM( ratsnest ) );
+
+    view->SetPanBoundary( worksheet->ViewBBox() );
+    view->RecacheAllItems( true );
+
+    if( m_galCanvasActive )
+        m_galCanvas->Refresh();
+}
+
+
 bool PCB_EDIT_FRAME::isAutoSaveRequired() const
 {
     return GetScreen()->IsSave();
@@ -630,6 +747,17 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
     m_Draw3DFrame = new EDA_3D_FRAME( this, _( "3D Viewer" ) );
     m_Draw3DFrame->SetDefaultFileName( GetBoard()->GetFileName() );
     m_Draw3DFrame->Show( true );
+}
+
+
+void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
+{
+    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    m_toolManager->SetEnvironment( m_Pcb, m_galCanvas->GetView(),
+                                    m_galCanvas->GetViewControls(), this );
+
+    ViewReloadBoard( m_Pcb );
 }
 
 
@@ -795,7 +923,7 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
                 GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
                 ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
-                ITEM_GAL_LAYER( GP_OVERLAY )
+                ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE )
         };
 
         for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
@@ -835,7 +963,7 @@ void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
                 GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
                 ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
-                ITEM_GAL_LAYER( GP_OVERLAY ), DRAW_N
+                ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE ), DRAW_N
         };
 
         for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )

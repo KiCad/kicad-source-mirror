@@ -225,7 +225,7 @@ public:
                     const wxPoint& pos, const wxSize& size,
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
-    ~PCB_EDIT_FRAME();
+    virtual ~PCB_EDIT_FRAME();
 
     void OnQuit( wxCommandEvent& event );
 
@@ -604,6 +604,13 @@ public:
     void Show3D_Frame( wxCommandEvent& event );
 
     /**
+     * Function UseGalCanvas
+     * Enables/disables GAL canvas.
+     * @param aEnable determines if GAL should be active or not.
+     */
+    void UseGalCanvas( bool aEnable );
+
+    /**
      * Function ChangeCanvas
      * switches currently used canvas (default / Cairo / OpenGL).
      */
@@ -887,6 +894,15 @@ public:
      * @param aQuery = true to prompt user for confirmation, false to initialize silently
      */
     bool Clear_Pcb( bool aQuery );
+
+    /// @copydoc PCB_BASE_FRAME::SetBoard()
+    void SetBoard( BOARD* aBoard );
+
+    /**
+    * Function ViewReloadBoard
+    * adds all items from the current board to the VIEW, so they can be displayed by GAL.
+    */
+    void ViewReloadBoard( const BOARD* aBoard ) const;
 
     // Drc control
 
