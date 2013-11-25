@@ -1,6 +1,6 @@
 /**
  * @file autoplac.cpp
- * @brief Routiness to automatically place MODULES on a board.
+ * @brief Functions to automatically place Footprints on a board.
  */
 
 /*
@@ -57,9 +57,8 @@
 #define KEEP_OUT_MARGIN 500
 
 
-/* Penalty for guidance given by CntRot90 and CntRot180:
- * graduated from 0 (rotation allowed) to 10 (rotation not allowed)
- * the count is increased.
+/* Penalty (cost) for CntRot90 and CntRot180:
+ * CntRot90 and CntRot180 are from 0 (rotation allowed) to 10 (rotation not allowed)
  */
 static const double OrientPenality[11] =
 {
@@ -79,6 +78,7 @@ static const double OrientPenality[11] =
 // Cell states.
 #define OUT_OF_BOARD        -2
 #define OCCUPED_By_MODULE   -1
+#define FREE_CELL   0
 
 
 static wxPoint  CurrPosition; // Current position of the current module placement
@@ -114,8 +114,11 @@ static double   compute_Ratsnest_PlaceModule( BOARD* aBrd );
 /* Place a footprint on the Routing matrix.
  */
 void            genModuleOnRoutingMatrix( MODULE* Module );
+/*
+ * Displays the Placement/Routing matrix on the screen
+ */
+static void     drawPlacementRoutingMatrix( BOARD* aBrd, wxDC* DC );
 
-static void     drawInfoPlace( BOARD* aBrd, wxDC* DC );
 static int      TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide );
 
 static void     CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
@@ -180,8 +183,8 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     RoutingMatrix.m_GridRouting = (int) GetScreen()->GetGridSize().x;
 
     // Ensure Board.m_GridRouting has a reasonable value:
-    if( RoutingMatrix.m_GridRouting < 10 * IU_PER_MILS )
-        RoutingMatrix.m_GridRouting = 10 * IU_PER_MILS; // Min value = 1/100 inch
+    if( RoutingMatrix.m_GridRouting < Millimeter2iu( 0.25 ) )
+        RoutingMatrix.m_GridRouting = Millimeter2iu( 0.25 );
 
     // Compute module parameters used in auto place
     if( genPlacementRoutingMatrix( GetBoard(), m_messagePanel ) == 0 )
@@ -255,7 +258,6 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             break;
         }
 
-
         if( Module->NeedsPlaced() )    // Erase from screen
         {
             moduleCount++;
@@ -267,12 +269,11 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         }
     }
 
-    // Undo command: commit list
+    // Undo command: prepare list
     if( newList.GetCount() )
         SaveCopyInUndoList( newList, UR_CHANGED );
 
     int         cnt = 0;
-    int         ii;
     wxString    msg;
 
     while( ( Module = PickModule( this, DC ) ) != NULL )
@@ -281,36 +282,37 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         msg.Printf( _( "Place module %d of %d" ), cnt, moduleCount );
         SetStatusText( msg );
 
+        double initialOrient = Module->GetOrientation();
         // Display fill area of interest, barriers, penalties.
-        drawInfoPlace( GetBoard(), DC );
+        drawPlacementRoutingMatrix( GetBoard(), DC );
 
         error = getOptimalModulePlacement( this, Module, DC );
-        double BestScore = MinCout;
+        double bestScore = MinCout;
+        double bestRotation = 0.0;
+        int rotAllowed;
         PosOK = CurrPosition;
 
         if( error == ESC )
             goto end_of_tst;
 
-        // Determine if the best orientation of a module is 180.
-        ii = Module->GetPlacementCost180() & 0x0F;
+        // Try orientations 90, 180, 270 degrees from initial orientation
+        rotAllowed = Module->GetPlacementCost180();
 
-        if( ii != 0 )
+        if( rotAllowed != 0 )
         {
-            int Angle_Rot_Module = 1800;
-            Rotate_Module( DC, Module, Angle_Rot_Module, false );
-            Module->CalculateBoundingBox();
+            Rotate_Module( DC, Module, 1800.0, true );
             error   = getOptimalModulePlacement( this, Module, DC );
-            MinCout *= OrientPenality[ii];
+            MinCout *= OrientPenality[rotAllowed];
 
-            if( BestScore > MinCout )    // This orientation is best.
+            if( bestScore > MinCout )    // This orientation is better.
             {
                 PosOK       = CurrPosition;
-                BestScore   = MinCout;
+                bestScore   = MinCout;
+                bestRotation = 1800.0;
             }
             else
             {
-                Angle_Rot_Module = -1800;
-                Rotate_Module( DC, Module, Angle_Rot_Module, false );
+                Rotate_Module( DC, Module, initialOrient, false );
             }
 
             if( error == ESC )
@@ -318,49 +320,45 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         }
 
         // Determine if the best orientation of a module is 90.
-        ii = Module->GetPlacementCost90() & 0x0F;
+        rotAllowed = Module->GetPlacementCost90();
 
-        if( ii != 0 )
+        if( rotAllowed != 0 )
         {
-            int Angle_Rot_Module = 900;
-            Rotate_Module( DC, Module, Angle_Rot_Module, false );
+            Rotate_Module( DC, Module, 900.0, true );
             error   = getOptimalModulePlacement( this, Module, DC );
-            MinCout *= OrientPenality[ii];
+            MinCout *= OrientPenality[rotAllowed];
 
-            if( BestScore > MinCout )    // This orientation is best.
+            if( bestScore > MinCout )    // This orientation is better.
             {
                 PosOK       = CurrPosition;
-                BestScore   = MinCout;
+                bestScore   = MinCout;
+                bestRotation = 900.0;
             }
             else
             {
-                Angle_Rot_Module = -900;
-                Rotate_Module( DC, Module, Angle_Rot_Module, false );
+                Rotate_Module( DC, Module, initialOrient, false );
             }
 
             if( error == ESC )
                 goto end_of_tst;
         }
 
-        // Determine if the best orientation of a module is 270.
-        ii = (Module->GetPlacementCost90() >> 4 ) & 0x0F;
-
-        if( ii != 0 )
+        // Determine if the best orientation of a module is -90.
+        if( rotAllowed != 0 )
         {
-            int Angle_Rot_Module = 2700;
-            Rotate_Module( DC, Module, Angle_Rot_Module, false );
+            Rotate_Module( DC, Module, 2700.0, true );
             error   = getOptimalModulePlacement( this, Module, DC );
-            MinCout *= OrientPenality[ii];
+            MinCout *= OrientPenality[rotAllowed];
 
-            if( BestScore > MinCout )    // This orientation is best.
+            if( bestScore > MinCout )    // This orientation is better.
             {
                 PosOK       = CurrPosition;
-                BestScore   = MinCout;
+                bestScore   = MinCout;
+                bestRotation = 2700.0;
             }
             else
             {
-                Angle_Rot_Module = -2700;
-                Rotate_Module( DC, Module, Angle_Rot_Module, false );
+                Rotate_Module( DC, Module, initialOrient, false );
             }
 
             if( error == ESC )
@@ -375,7 +373,14 @@ end_of_tst:
         // Place module.
         CurrPosition = GetCrossHairPosition();
         SetCrossHairPosition( PosOK );
+
         PlaceModule( Module, DC );
+
+        bestRotation += initialOrient;
+
+        if( bestRotation != Module->GetOrientation() )
+            Rotate_Module( DC, Module, bestRotation, false );
+
         SetCrossHairPosition( CurrPosition );
 
         Module->CalculateBoundingBox();
@@ -405,7 +410,7 @@ end_of_tst:
 }
 
 
-void drawInfoPlace( BOARD* aBrd, wxDC* DC )
+void drawPlacementRoutingMatrix( BOARD* aBrd, wxDC* DC )
 {
     int         ii, jj;
     EDA_COLOR_T color;
@@ -608,6 +613,13 @@ void genModuleOnRoutingMatrix( MODULE* Module )
     CreateKeepOutRectangle( ox, oy, fx, fy, margin, KEEP_OUT_MARGIN, layerMask );
 }
 
+// A minor helper function to draw a bounding box:
+inline void draw_FootprintRect(EDA_RECT * aClipBox, wxDC* aDC, EDA_RECT& fpBBox, EDA_COLOR_T aColor)
+{
+#ifndef USE_WX_OVERLAY
+    GRRect( aClipBox, aDC, fpBBox, 0, aColor );
+#endif
+}
 
 int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aDC )
 {
@@ -617,6 +629,8 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
     bool    TstOtherSide;
     bool    showRats = g_Show_Module_Ratsnest;
     BOARD*  brd = aFrame->GetBoard();
+
+    aModule->CalculateBoundingBox();
 
     g_Show_Module_Ratsnest = false;
 
@@ -674,8 +688,9 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
     }
 
     // Draw the initial bounding box position
+    EDA_COLOR_T color = BROWN;
     fpBBox.SetOrigin( fpBBoxOrg + CurrPosition );
-    GRRect( aFrame->GetCanvas()->GetClipBox(), aDC, fpBBox, 0, BROWN );
+    draw_FootprintRect(aFrame->GetCanvas()->GetClipBox(), aDC, fpBBox, color);
 
     min_cost = -1.0;
     aFrame->SetStatusText( wxT( "Score ??, pos ??" ) );
@@ -696,18 +711,16 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
 
         for( ; CurrPosition.y < xylimit.y; CurrPosition.y += RoutingMatrix.m_GridRouting )
         {
-#ifndef USE_WX_OVERLAY
             // Erase traces.
-            GRRect( aFrame->GetCanvas()->GetClipBox(), aDC, fpBBox, 0, BROWN );
-#endif
+            draw_FootprintRect( aFrame->GetCanvas()->GetClipBox(), aDC, fpBBox, color );
 
             fpBBox.SetOrigin( fpBBoxOrg + CurrPosition );
             g_Offset_Module = mod_pos - CurrPosition;
-#ifndef USE_WX_OVERLAY
-            // Draw at new place
-            GRRect( aFrame->GetCanvas()->GetClipBox(), aDC, fpBBox, 0, BROWN );
-#endif
             int keepOutCost = TstModuleOnBoard( brd, aModule, TstOtherSide );
+
+            // Draw at new place
+            color = keepOutCost >= 0 ? BROWN : RED;
+            draw_FootprintRect( aFrame->GetCanvas()->GetClipBox(), aDC, fpBBox, color );
 
             if( keepOutCost >= 0 )    // i.e. if the module can be put here
             {
@@ -750,7 +763,7 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
  * - is a free zone (except OCCUPED_By_MODULE returns)
  * - is on the working surface of the board (otherwise returns OUT_OF_BOARD)
  *
- * Returns OUT_OF_BOARD, or, OCCUPED_By_MODULE or 0 if OK
+ * Returns OUT_OF_BOARD, or OCCUPED_By_MODULE or FREE_CELL if OK
  */
 int TstRectangle( BOARD* Pcb, const EDA_RECT& aRect, int side )
 {
@@ -801,7 +814,7 @@ int TstRectangle( BOARD* Pcb, const EDA_RECT& aRect, int side )
         }
     }
 
-    return 0;
+    return FREE_CELL;
 }
 
 
@@ -877,14 +890,14 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* aModule, bool TstOtherSide )
 
     int         diag = TstRectangle( Pcb, fpBBox, side );
 
-    if( diag < 0 )
+    if( diag != FREE_CELL )
         return diag;
 
     if( TstOtherSide )
     {
         diag = TstRectangle( Pcb, fpBBox, otherside );
 
-        if( diag < 0 )
+        if( diag != FREE_CELL )
             return diag;
     }
 
