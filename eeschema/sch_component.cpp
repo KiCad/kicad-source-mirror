@@ -1229,7 +1229,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
             int multi = atoi( name1 );
 
-            if( multi < 0 || multi > 25 )
+            if( multi < 0 || multi > 26 )
                 multi = 1;
 
             AddHierarchicalReference( path, ref, multi );
