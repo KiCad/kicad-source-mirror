@@ -2892,6 +2892,8 @@ MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStrin
 
 void EAGLE_PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
 {
+    PLUGIN::FootprintLibOptions( aListToAppendTo );
+
     /*
     (*aListToAppendTo)["ignore_duplicates"] = wxString( _(
         "Ignore duplicately named footprints within the same Eagle library. "
