@@ -42,6 +42,7 @@
 
 #include <sstream>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <set>
 
 #include <wx/zipstrm.h>
 #include <wx/mstream.h>
@@ -114,14 +115,28 @@ wxArrayString GITHUB_PLUGIN::FootprintEnumerate(
     //D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
     cacheLib( aLibraryPath, aProperties );
 
-    wxArrayString   ret;
+    typedef std::set<wxString>      MYSET;
+
+    MYSET   unique;
 
     if( m_pretty_dir.size() )
-        ret = PCB_IO::FootprintEnumerate( m_pretty_dir );
+    {
+        wxArrayString locals = PCB_IO::FootprintEnumerate( m_pretty_dir );
+
+        for( unsigned i=0; i<locals.GetCount();  ++i )
+            unique.insert( locals[i] );
+    }
 
     for( MODULE_ITER it = m_gh_cache->begin();  it!=m_gh_cache->end();  ++it )
     {
-        ret.Add( FROM_UTF8( it->first.c_str() ) );
+        unique.insert( FROM_UTF8( it->first.c_str() ) );
+    }
+
+    wxArrayString ret;
+
+    for( MYSET::const_iterator it = unique.begin();  it != unique.end();  ++it )
+    {
+        ret.Add( *it );
     }
 
     return ret;
