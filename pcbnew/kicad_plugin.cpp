@@ -85,7 +85,10 @@ public:
 
     wxString    GetName() const { return m_file_name.GetDirs().Last(); }
     wxFileName  GetFileName() const { return m_file_name; }
+
+    /// Tell if the disk content or the lib_path has changed.
     bool        IsModified() const;
+
     MODULE*     GetModule() const { return m_module.get(); }
     void        UpdateModificationTime() { m_mod_time = m_file_name.GetModificationTime(); }
 };
@@ -339,6 +342,7 @@ bool FP_CACHE::IsModified( const wxString& aLibPath, const wxString& aFootprintN
         for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
         {
             wxFileName fn = m_lib_path;
+
             fn.SetName( it->second->GetFileName().GetName() );
             fn.SetExt( KiCadFootprintFileExtension );
 
@@ -1804,7 +1808,7 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-    init( NULL );
+    init( aProperties );
 
     cacheLib( aLibraryPath );
 

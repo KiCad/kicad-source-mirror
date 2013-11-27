@@ -24,22 +24,6 @@
 
 
 /*
-    This is a pcbnew PLUGIN which supports some of the PLUGIN::Footprint*() functions
-    in the PLUGIN interface, and could do so by utilizing the version 3 github.com
-    API documented here:
-
-        http://developer.github.com
-        https://help.github.com/articles/creating-an-access-token-for-command-line-use
-
-    but it does not.  Rather it simply reads in a zip file of the repo and unzips it
-    from RAM as needed.  Therefore the PLUGIN is read only for accessing
-    remote pretty libraries.  If you want to support writing to the repo, then you
-    could use the above API.
-
-@todo:
-    Derive this PLUGIN from KICAD_PLUGIN so we can use its FootprintSave().
-    Support local footprints if they are present in an optional directory.
-    Possibly cache the zip file locally.  Use HTTP's "have changed" or whatever it is called.
 */
 
 
@@ -76,8 +60,13 @@
 #include <github_plugin.h>
 #include <class_module.h>
 #include <macros.h>
+#include <fp_lib_table.h>       // ExpandSubstitutions()
 
 using namespace std;
+
+
+static const char* PRETTY_DIR = "allow_pretty_writing_to_this_dir";
+
 
 typedef boost::ptr_map<string, wxZipEntry>  MODULE_MAP;
 typedef MODULE_MAP::iterator                MODULE_ITER;
@@ -95,28 +84,27 @@ struct GH_CACHE : public MODULE_MAP
 
 
 GITHUB_PLUGIN::GITHUB_PLUGIN() :
-    m_cache( 0 )
+    PCB_IO(),
+    m_gh_cache( 0 )
 {
 }
 
 
 GITHUB_PLUGIN::~GITHUB_PLUGIN()
 {
-    delete m_cache;
+    delete m_gh_cache;
 }
 
 
-const wxString& GITHUB_PLUGIN::PluginName() const
+const wxString GITHUB_PLUGIN::PluginName() const
 {
-    static wxString name( wxT( "Github" ) );
-    return name;
+    return wxT( "Github" );
 }
 
 
-const wxString& GITHUB_PLUGIN::GetFileExtension() const
+const wxString GITHUB_PLUGIN::GetFileExtension() const
 {
-    static wxString empty_ext;
-    return empty_ext;
+    return wxEmptyString;
 }
 
 
@@ -124,12 +112,14 @@ wxArrayString GITHUB_PLUGIN::FootprintEnumerate(
         const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     //D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
-
-    cacheLib( aLibraryPath );
+    cacheLib( aLibraryPath, aProperties );
 
     wxArrayString   ret;
 
-    for( MODULE_ITER it = m_cache->begin();  it!=m_cache->end();  ++it )
+    if( m_pretty_dir.size() )
+        ret = PCB_IO::FootprintEnumerate( m_pretty_dir );
+
+    for( MODULE_ITER it = m_gh_cache->begin();  it!=m_gh_cache->end();  ++it )
     {
         ret.Add( FROM_UTF8( it->first.c_str() ) );
     }
@@ -143,13 +133,24 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 {
     // D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
 
-    cacheLib( aLibraryPath );
+    // clear or set to valid the variable m_pretty_dir
+    cacheLib( aLibraryPath, aProperties );
+
+    if( m_pretty_dir.size() )
+    {
+        // API has FootprintLoad() *not* throwing an exception if footprint not found.
+        MODULE* local = PCB_IO::FootprintLoad( m_pretty_dir, aFootprintName, aProperties );
+
+        if( local )
+            return local;
+    }
+
 
     string fp_name = TO_UTF8( aFootprintName );
 
-    MODULE_CITER it = m_cache->find( fp_name );
+    MODULE_CITER it = m_gh_cache->find( fp_name );
 
-    if( it != m_cache->end() )  // fp_name is present
+    if( it != m_gh_cache->end() )  // fp_name is present
     {
         wxMemoryInputStream mis( &m_zip_image[0], m_zip_image.size() );
 
@@ -181,7 +182,109 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 
 bool GITHUB_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 {
-    return false;
+    if( m_pretty_dir.size() )
+        return PCB_IO::IsFootprintLibWritable( m_pretty_dir );
+    else
+        return false;
+}
+
+
+void GITHUB_PLUGIN::FootprintSave( const wxString& aLibraryPath,
+        const MODULE* aFootprint, const PROPERTIES* aProperties )
+{
+    // set m_pretty_dir to either empty or something in aProperties
+    cacheLib( aLibraryPath, aProperties );
+
+    if( GITHUB_PLUGIN::IsFootprintLibWritable( aLibraryPath ) )
+    {
+        PCB_IO::FootprintSave( m_pretty_dir, aFootprint, aProperties );
+    }
+    else
+    {
+        // This typically will not happen if the caller first properly calls
+        // IsFootprintLibWritable() to determine if calling FootprintSave() is
+        // even legal, so I spend no time on internationalization here:
+
+        string msg = StrPrintf( "Github library\n'%s'\nis only writable if you set option '%s' in Library Tables dialog.",
+                (const char*) TO_UTF8( aLibraryPath ), PRETTY_DIR );
+
+        THROW_IO_ERROR( msg );
+    }
+}
+
+
+void GITHUB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
+        const PROPERTIES* aProperties )
+{
+    // set m_pretty_dir to either empty or something in aProperties
+    cacheLib( aLibraryPath, aProperties );
+
+    if( GITHUB_PLUGIN::IsFootprintLibWritable( aLibraryPath ) )
+    {
+        // Does the PCB_IO base class have this footprint?
+        // We cannot write to github.
+
+        wxArrayString pretties = PCB_IO::FootprintEnumerate( m_pretty_dir, aProperties );
+
+        if( pretties.Index( aFootprintName ) != wxNOT_FOUND )
+        {
+            PCB_IO::FootprintDelete( m_pretty_dir, aFootprintName, aProperties );
+        }
+        else
+        {
+            wxString msg = wxString::Format(
+                    _( "Footprint\n'%s'\nis not in the writable portion of this Github library\n'%s'" ),
+                    GetChars( aFootprintName ),
+                    GetChars( aLibraryPath )
+                    );
+
+            THROW_IO_ERROR( msg );
+        }
+    }
+    else
+    {
+        // This typically will not happen if the caller first properly calls
+        // IsFootprintLibWritable() to determine if calling FootprintSave() is
+        // even legal, so I spend no time on internationalization here:
+
+        string msg = StrPrintf( "Github library\n'%s'\nis only writable if you set option '%s' in Library Tables dialog.",
+                (const char*) TO_UTF8( aLibraryPath ), PRETTY_DIR );
+
+        THROW_IO_ERROR( msg );
+    }
+}
+
+
+void GITHUB_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+{
+    // set m_pretty_dir to either empty or something in aProperties
+    cacheLib( aLibraryPath, aProperties );
+
+    if( m_pretty_dir.size() )
+    {
+        PCB_IO::FootprintLibCreate( m_pretty_dir, aProperties );
+    }
+    else
+    {
+        // THROW_IO_ERROR()   @todo
+    }
+}
+
+
+bool GITHUB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+{
+    // set m_pretty_dir to either empty or something in aProperties
+    cacheLib( aLibraryPath, aProperties );
+
+    if( m_pretty_dir.size() )
+    {
+        return PCB_IO::FootprintLibDelete( m_pretty_dir, aProperties );
+    }
+    else
+    {
+        // THROW_IO_ERROR()   @todo
+        return false;
+    }
 }
 
 
@@ -190,32 +293,74 @@ void GITHUB_PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
     // inherit options supported by all PLUGINs.
     PLUGIN::FootprintLibOptions( aListToAppendTo );
 
-    (*aListToAppendTo)["allow_pretty_writing_to_this_dir"] = wxString( _(
+    (*aListToAppendTo)[ PRETTY_DIR ] = wxString( _(
         "Set this property to a directory where footprints are to be written as pretty "
         "footprints when saving to this library. Anything saved will take precedence over "
         "footprints by the same name in the github repo.  These saved footprints can then "
         "be sent to the library maintainer as updates. "
-        "<p>The directory should have a <b>.pretty</b> file extension because the "
-        "Kicad plugin is used to do the saving.</p>"
+        "<p>The directory <b>must</b> have a <b>.pretty</b> file extension because the "
+        "format of the save is pretty.</p>"
         )).utf8_str();
 
+    /*
     (*aListToAppendTo)["cache_github_zip_in_this_dir"] = wxString( _(
         "Set this property to a directory where the github *.zip file will be cached. "
         "This should speed up subsequent visits to this library."
         )).utf8_str();
+    */
 }
 
 
-void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath ) throw( IO_ERROR )
+void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aProperties ) throw( IO_ERROR )
 {
-    if( !m_cache || m_lib_path != aLibraryPath )
+    // This is edge triggered based on a change in 'aLibraryPath',
+    // usually it does nothing.  When the edge fires, m_pretty_dir is set
+    // to either:
+    // 1) empty or
+    // 2) a verified and validated, writable, *.pretty directory.
+
+    if( !m_gh_cache || m_lib_path != aLibraryPath )
     {
+        delete m_gh_cache;
+        m_gh_cache = 0;
+
+        m_pretty_dir.clear();
+
+        if( aProperties )
+        {
+            string  pretty_dir;
+
+            if( aProperties->Value( PRETTY_DIR, &pretty_dir ) )
+            {
+                wxString    wx_pretty_dir = FROM_UTF8( pretty_dir.c_str() );
+
+                wx_pretty_dir = FP_LIB_TABLE::ExpandSubstitutions( wx_pretty_dir );
+
+                wxFileName wx_pretty_fn = wx_pretty_dir;
+
+                if( !wx_pretty_fn.IsOk() ||
+                    !wx_pretty_fn.IsDirWritable() ||
+                    wx_pretty_fn.GetExt() != wxT( "pretty" )
+                  )
+                {
+                    wxString msg = wxString::Format(
+                            _( "option '%s' for Github library '%s' must point to a writable directory ending with '.pretty'." ),
+                            GetChars( FROM_UTF8( PRETTY_DIR ) ),
+                            GetChars( aLibraryPath )
+                            );
+
+                    THROW_IO_ERROR( msg );
+                }
+
+                m_pretty_dir = wx_pretty_dir;
+            }
+        }
+
         // operator==( wxString, wxChar* ) does not exist, construct wxString once here.
         const wxString    kicad_mod( wxT( "kicad_mod" ) );
 
         //D(printf("%s: this:%p  m_lib_path:'%s'  aLibraryPath:'%s'\n", __func__, this, TO_UTF8( m_lib_path), TO_UTF8(aLibraryPath) );)
-        delete m_cache;
-        m_cache = new GH_CACHE();
+        m_gh_cache = new GH_CACHE();
 
         // INIT_LOGGER( "/tmp", "test.log" );
         remote_get_zip( aLibraryPath );
@@ -238,7 +383,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath ) throw( IO_ERROR )
             {
                 string fp_name = TO_UTF8( fn.GetName() );   // omit extension & path
 
-                m_cache->insert( fp_name, entry );
+                m_gh_cache->insert( fp_name, entry );
             }
             else
                 delete entry;
