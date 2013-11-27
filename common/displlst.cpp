@@ -203,7 +203,7 @@ void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList,
 
         for( unsigned col = 0; col < itemList[row].GetCount(); col++ )
         {
-            long itemIndex;
+            long itemIndex = 0;
 
             if( col == 0 )
             {
