@@ -60,8 +60,8 @@ void PCB_ARC::Parse( XNODE*     aNode,
     XNODE*      lNode;
     double      a = 0.0;
     int         r = 0;
-    int         endX;
-    int         endY;
+    int         endX = 0;
+    int         endY = 0;
 
     m_PCadLayer     = aLayer;
     m_KiCadLayer    = GetKiCadLayer();
