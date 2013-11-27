@@ -55,15 +55,13 @@ typedef enum {
 } SelectFixeFct;
 
 
-static bool sortModulesbySize( MODULE* ref, MODULE* compare );
-
 
 wxString ModulesMaskSelection = wxT( "*" );
 
 
 /* Called on events (popup menus) relative to automove and autoplace footprints
  */
-void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
+void PCB_EDIT_FRAME::OnPlaceOrRouteFootprints( wxCommandEvent& event )
 {
     int        id = event.GetId();
 
@@ -130,12 +128,19 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
         AutoPlaceModule( NULL, PLACE_INCREMENTAL, &dc );
         break;
 
-    case ID_POPUP_PCB_AUTOMOVE_ALL_MODULES:
-        AutoMoveModulesOnPcb( false );
-        break;
+    case ID_POPUP_PCB_SPREAD_ALL_MODULES:
+        if( !IsOK( this,
+                   _("Not locked footprints inside the board will be moved. OK?") ) )
+            break;
+        // Fall through
+    case ID_POPUP_PCB_SPREAD_NEW_MODULES:
+        if( GetBoard()->m_Modules == NULL )
+        {
+            DisplayError( this, _( "No modules found!" ) );
+            return;
+        }
 
-    case ID_POPUP_PCB_AUTOMOVE_NEW_MODULES:
-        AutoMoveModulesOnPcb( true );
+        SpreadFootprints( id == ID_POPUP_PCB_SPREAD_NEW_MODULES );
         break;
 
     case ID_POPUP_PCB_AUTOROUTE_ALL_MODULES:
@@ -159,141 +164,12 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
         break;
 
     default:
-        wxMessageBox( wxT( "AutoPlace command error" ) );
+        wxMessageBox( wxT( "OnPlaceOrRouteFootprints command error" ) );
         break;
     }
 
     GetBoard()->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;
     Compile_Ratsnest( &dc, true );
-}
-
-
-/* Function to move components in a rectangular area format 4 / 3,
- * starting from the mouse cursor
- * The components with the FIXED status set are not moved
- */
-void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
-{
-    std::vector <MODULE*> moduleList;
-    wxPoint  start, current;
-    int      Ymax_size, Xsize_allowed;
-    int      pas_grille = (int) GetScreen()->GetGridSize().x;
-    double   surface;
-
-    // Undo: init list
-    PICKED_ITEMS_LIST  newList;
-    newList.m_Status = UR_CHANGED;
-    ITEM_PICKER        picker( NULL, UR_CHANGED );
-
-    if( GetBoard()->m_Modules == NULL )
-    {
-        DisplayError( this, _( "No modules found!" ) );
-        return;
-    }
-
-    // Confirmation
-    if( !IsOK( this, _( "Move modules?" ) ) )
-        return;
-
-    EDA_RECT bbbox = GetBoard()->ComputeBoundingBox( true );
-
-    bool     edgesExist = ( bbbox.GetWidth() || bbbox.GetHeight() );
-
-    // no edges exist
-    if( PlaceModulesHorsPcb && !edgesExist )
-    {
-        DisplayError( this,
-                      _( "Could not automatically place modules. No board outlines detected." ) );
-        return;
-    }
-
-    // Build sorted footprints list (sort by decreasing size )
-    MODULE* Module = GetBoard()->m_Modules;
-
-    for( ; Module != NULL; Module = Module->Next() )
-    {
-        Module->CalculateBoundingBox();
-        moduleList.push_back(Module);
-    }
-
-    sort( moduleList.begin(), moduleList.end(), sortModulesbySize );
-
-    /* to move modules outside the board, the cursor is placed below
-     * the current board, to avoid placing components in board area.
-     */
-    if( PlaceModulesHorsPcb && edgesExist )
-    {
-        if( GetCrossHairPosition().y < (bbbox.GetBottom() + 2000) )
-        {
-            wxPoint pos = GetCrossHairPosition();
-            pos.y = bbbox.GetBottom() + 2000;
-            SetCrossHairPosition( pos );
-        }
-    }
-
-    // calculate the area needed by footprints
-    surface = 0.0;
-
-    for( unsigned ii = 0; ii < moduleList.size(); ii++ )
-    {
-        Module = moduleList[ii];
-
-        if( PlaceModulesHorsPcb && edgesExist )
-        {
-            if( bbbox.Contains( Module->GetPosition() ) )
-                continue;
-        }
-
-        surface += Module->GetArea();
-    }
-
-    Xsize_allowed = (int) ( sqrt( surface ) * 4.0 / 3.0 );
-
-    start     = current = GetCrossHairPosition();
-    Ymax_size = 0;
-
-    for( unsigned ii = 0; ii < moduleList.size(); ii++ )
-    {
-        Module = moduleList[ii];
-
-        if( Module->IsLocked() )
-            continue;
-
-        if( PlaceModulesHorsPcb && edgesExist )
-        {
-            if( bbbox.Contains( Module->GetPosition() ) )
-                continue;
-        }
-
-        // Undo: add copy of old Module to undo
-        picker.SetItem( Module );
-        picker.SetLink( Module->Clone() );
-
-        if( current.x > (Xsize_allowed + start.x) )
-        {
-            current.x  = start.x;
-            current.y += Ymax_size + pas_grille;
-            Ymax_size  = 0;
-        }
-
-        SetCrossHairPosition( current + Module->GetPosition() -
-            Module->GetBoundingBox().GetPosition() );
-
-        Ymax_size = std::max( Ymax_size, Module->GetBoundingBox().GetHeight() );
-
-        PlaceModule( Module, NULL, true );
-
-        // Undo: add new Module to undo
-        newList.PushItem( picker );
-
-        current.x += Module->GetBoundingBox().GetWidth() + pas_grille;
-    }
-
-    // Undo: commit
-    if( newList.GetCount() )
-        SaveCopyInUndoList( newList, UR_CHANGED );
-
-    m_canvas->Refresh();
 }
 
 
@@ -322,8 +198,3 @@ void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
     }
 }
 
-
-static bool sortModulesbySize( MODULE* ref, MODULE* compare )
-{
-    return compare->GetArea() < ref->GetArea();
-}
