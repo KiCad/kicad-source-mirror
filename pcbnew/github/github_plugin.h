@@ -42,10 +42,10 @@ struct GH_CACHE;
    </pre>
 
    but it does not. Rather it simply reads in a zip file of the repo and unzips
-   it from RAM as needed. <b>Therefore the PLUGIN is read only for accessing
-   remote pretty libraries at https://github.com.</b> The "Library Path" in the
-   fp-lib-table row for a Github library should be set to the full https:// URL.
-   For example:
+   it from RAM as needed. <b>Therefore this "Github" plugin type is read only
+   for accessing remote pretty libraries at https://github.com.</b> The "Library
+   Path" in the fp-lib-table row for a Github library should be set to the full
+   https:// URL. For example:
 
    <pre>
         https://github.com/liftoff-sr/pretty_footprints
@@ -59,15 +59,17 @@ struct GH_CACHE;
    <p>
 
    This PLUGIN also supports "Copy On Write", a.k.a. "COW". Thus a Github
-   library defined in either the fp-lib-table (project or global) will take an
+   library defined in either fp-lib-table (project or global) will take an
    optional option called <b>allow_pretty_writing_to_this_dir</b>. This option
-   is essentially the "Library Path" for a local Kicad (pretty) library which is
-   combined to make up the Github library found in the same fp-lib-table row. If
-   the option is missing, then the Github library is read only as always. If the
-   option is present for a Github library, then any writes to this library will
-   go to the local *.pretty directory. Note that the github.com resident portion
-   of this hybrid COW library is always read only, meaning you cannot delete
-   anything or modify any footprint at github directly.
+   is essentially the "Library Path" for a local "KiCad" (pretty) type library
+   which is combined to make up the Github library found in the same
+   fp-lib-table row. If the option is missing, then the Github library is read
+   only as always. If the option is present for a Github library, then any
+   writes to this hybrid library will go to the local *.pretty directory. Note
+   that the github.com resident portion of this hybrid COW library is always
+   read only, meaning you cannot delete anything or modify any footprint at
+   github directly. The aggregate library "Type" remains "Github", but it
+   consists of a local R/W portion and a remote R/O portion.
 
    <p>
 
