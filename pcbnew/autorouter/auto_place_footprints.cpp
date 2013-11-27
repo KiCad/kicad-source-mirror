@@ -1085,7 +1085,7 @@ static bool Tri_PlaceModules( MODULE* ref, MODULE* compare )
 }
 
 
-static bool Tri_RatsModules( MODULE* ref, MODULE* compare )
+static bool sortFootprintsByRatsnestSize( MODULE* ref, MODULE* compare )
 {
     double ff1, ff2;
 
@@ -1141,7 +1141,7 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 
     pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
 
-    sort( moduleList.begin(), moduleList.end(), Tri_RatsModules );
+    sort( moduleList.begin(), moduleList.end(), sortFootprintsByRatsnestSize );
 
     // Search for "best" module.
     MODULE* bestModule  = NULL;
