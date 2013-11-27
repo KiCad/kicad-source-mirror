@@ -63,19 +63,20 @@ install_prerequisites()
     elif [ "$(expr match "$PM" '.*\(yum\)')" == "yum" ]; then
         #echo "red hat compatible system"
         # Note: if you find this list not to be accurate, please submit a patch:
-        sudo yum install
+        sudo yum groupinstall "Development Tools"
+        sudo yum install \
             bzr \
             bzrtools \
-            build-essential \
             cmake \
-            cmake-curses-gui \
+            cmake-gui \
             doxygen \
-            libbz2-dev \
-            libcairo2-dev \
-            libglew-dev \
-            libssl-dev \
-            libwxgtk2.8-dev \
-            python-wxgtk2.8
+            bzip2-libs \
+            bzip2-devel \
+            cairo-devel \
+            glew-devel \
+            openssl-devel \
+            wxGTK-devel \
+            wxPython
     else
         echo
         echo "Incompatible System. Neither 'yum' nor 'apt-get' found. Not possible to continue."
