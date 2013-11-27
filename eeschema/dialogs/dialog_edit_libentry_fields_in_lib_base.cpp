@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 30 2013)
+// C++ code generated with wxFormBuilder (version Nov  5 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -43,7 +43,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	bSizerFiledsList->Add( moveUpButton, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerFieldsSetup->Add( bSizerFiledsList, 1, wxEXPAND, 5 );
+	bSizerFieldsSetup->Add( bSizerFiledsList, 3, wxEXPAND, 5 );
 	
 	wxBoxSizer* fieldEditBoxSizer;
 	fieldEditBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -179,7 +179,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	fieldEditBoxSizer->Add( fgSizerPosSize, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	
-	bSizerFieldsSetup->Add( fieldEditBoxSizer, 0, wxEXPAND, 5 );
+	bSizerFieldsSetup->Add( fieldEditBoxSizer, 2, wxEXPAND, 5 );
 	
 	
 	mainSizer->Add( bSizerFieldsSetup, 1, wxEXPAND, 5 );
