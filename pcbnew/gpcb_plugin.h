@@ -52,16 +52,14 @@ public:
 
     //-----<PLUGIN API>---------------------------------------------------------
 
-    const wxString& PluginName() const
+    const wxString PluginName() const
     {
-        static const wxString name = wxT( "Geda PCB" );
-        return name;
+        return wxT( "Geda PCB" );
     }
 
-    const wxString& GetFileExtension() const
+    const wxString GetFileExtension() const
     {
-        static const wxString extension = wxT( "fp" );
-        return extension;
+        return wxT( "fp" );
     }
 
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL);

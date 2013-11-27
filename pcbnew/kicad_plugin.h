@@ -83,20 +83,18 @@ public:
 
     //-----<PLUGIN API>---------------------------------------------------------
 
-    const wxString& PluginName() const
+    const wxString PluginName() const
     {
-        static const wxString name = wxT( "KiCad" );
-        return name;
+        return wxT( "KiCad" );
     }
 
-    const wxString& GetFileExtension() const
+    const wxString GetFileExtension() const
     {
         // Would have used wildcards_and_files_ext.cpp's KiCadPcbFileExtension,
         // but to be pure, a plugin should not assume that it will always be linked
         // with the core of the pcbnew code. (Might someday be a DLL/DSO.)  Besides,
         // file extension policy should be controlled by the plugin.
-        static const wxString extension = wxT( "kicad_pcb" );
-        return extension;
+        return wxT( "kicad_pcb" );
     }
 
     void Save( const wxString& aFileName, BOARD* aBoard,
@@ -172,6 +170,10 @@ protected:
     int                 m_ctl;
     PCB_PARSER*         m_parser;
 
+    /// we only cache one footprint library, this determines which one.
+    void cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName = wxEmptyString );
+
+    void init( const PROPERTIES* aProperties );
 
 private:
     void format( BOARD* aBoard, int aNestLevel = 0 ) const
@@ -211,11 +213,6 @@ private:
 
     void formatLayers( LAYER_MSK aLayerMask, int aNestLevel = 0 ) const
         throw( IO_ERROR );
-
-    /// we only cache one footprint library for now, this determines which one.
-    void cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName = wxEmptyString );
-
-    void init( const PROPERTIES* aProperties );
 };
 
 #endif  // KICAD_PLUGIN_H_

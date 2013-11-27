@@ -39,18 +39,19 @@ public:
 
     // -----<PUBLIC PLUGIN API>--------------------------------------------------
 
-    const wxString& PluginName() const;
+    const wxString  PluginName() const;
 
     BOARD*          Load( const wxString&   aFileName,
                           BOARD*            aAppendToMe,
                           const PROPERTIES* aProperties = NULL );
 
-    const wxString& GetFileExtension() const;
+    const wxString  GetFileExtension() const;
 
     // -----</PUBLIC PLUGIN API>-------------------------------------------------
 
     PCAD_PLUGIN();
     ~PCAD_PLUGIN();
+
 private:
     const PROPERTIES*   m_props;
     BOARD*              m_board;

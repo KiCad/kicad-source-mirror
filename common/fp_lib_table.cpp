@@ -179,11 +179,27 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
 }
 
 
-void FP_LIB_TABLE::FootprintSave( const wxString& aNickname, const MODULE* aFootprint )
+FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname, const MODULE* aFootprint, bool aOverwrite )
 {
     const ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
-    return row->plugin->FootprintSave( row->GetFullURI( true ), aFootprint, row->GetProperties() );
+
+    if( !aOverwrite )
+    {
+        // Try loading the footprint to see if it already exists, caller wants overwrite
+        // protection, which is atypical, not the default.
+
+        wxString fpname = FROM_UTF8( aFootprint->GetFPID().GetFootprintName().c_str() );
+
+        std::auto_ptr<MODULE>   m( row->plugin->FootprintLoad( row->GetFullURI( true ), fpname, row->GetProperties() ) );
+
+        if( m.get() )
+            return SAVE_SKIPPED;
+    }
+
+    row->plugin->FootprintSave( row->GetFullURI( true ), aFootprint, row->GetProperties() );
+
+    return SAVE_OK;
 }
 
 
@@ -200,6 +216,22 @@ bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
     const ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
     return row->plugin->IsFootprintLibWritable( row->GetFullURI( true ) );
+}
+
+
+void FP_LIB_TABLE::FootprintLibDelete( const wxString& aNickname )
+{
+    const ROW* row = FindRow( aNickname );
+    wxASSERT( (PLUGIN*) row->plugin );
+    row->plugin->FootprintLibDelete( row->GetFullURI( true ), row->GetProperties() );
+}
+
+
+void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
+{
+    const ROW* row = FindRow( aNickname );
+    wxASSERT( (PLUGIN*) row->plugin );
+    row->plugin->FootprintLibCreate( row->GetFullURI( true ), row->GetProperties() );
 }
 
 

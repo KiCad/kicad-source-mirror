@@ -119,7 +119,7 @@ protected:
 
     void setupTools();
     void destroyTools();
-	void onGenericCommand( wxCommandEvent& aEvent );
+    void onGenericCommand( wxCommandEvent& aEvent );
 
     // we'll use lower case function names for private member functions.
     void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
@@ -906,12 +906,11 @@ public:
     /**
      * Function ArchiveModulesOnBoard
      * Save modules in a library:
-     * @param aLibName: the full filename of the library to create or modify
      * @param aNewModulesOnly:
      *              true : save modules not already existing in this lib
      *              false: save all modules
      */
-    void ArchiveModulesOnBoard( const wxString& aLibName, bool aNewModulesOnly );
+    void ArchiveModulesOnBoard( bool aNewModulesOnly );
 
     /**
      * Function RecreateBOMFileFromBoard

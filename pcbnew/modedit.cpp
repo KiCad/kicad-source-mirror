@@ -249,7 +249,22 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SELECT_CURRENT_LIB:
-        Select_Active_Library();
+        {
+            wxString library = SelectLibrary( getLibNickName() );
+
+            if( library.size() )
+            {
+#if defined(USE_FP_LIB_TABLE)
+                setLibNickName( library );
+#else
+                wxFileName fileName( library );
+
+                setLibNickName( fileName.GetName() );
+                setLibPath( fileName.GetFullPath() );
+#endif
+                updateTitle();
+            }
+        }
         break;
 
     case ID_OPEN_MODULE_VIEWER:
@@ -349,11 +364,19 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SAVE_LIBMODULE:
+#if defined(USE_FP_LIB_TABLE)
+        if( GetBoard()->m_Modules && getLibNickName().size() )
+        {
+            Save_Module_In_Library( getLibNickName(), GetBoard()->m_Modules, true, true );
+            GetScreen()->ClrModify();
+        }
+#else
         if( GetBoard()->m_Modules && getLibPath() != wxEmptyString )
         {
             Save_Module_In_Library( getLibPath(), GetBoard()->m_Modules, true, true );
             GetScreen()->ClrModify();
         }
+#endif
         break;
 
     case ID_MODEDIT_INSERT_MODULE_IN_BOARD:

@@ -363,9 +363,15 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         case wxID_YES:
             // code from FOOTPRINT_EDIT_FRAME::Process_Special_Functions,
             // at case ID_MODEDIT_SAVE_LIBMODULE
+#if defined(USE_FP_LIB_TABLE)
+            if( GetBoard()->m_Modules && getLibNickName().size() )
+            {
+                if( Save_Module_In_Library( getLibNickName(), GetBoard()->m_Modules, true, true ) )
+#else
             if( GetBoard()->m_Modules && getLibPath() != wxEmptyString )
             {
                 if( Save_Module_In_Library( getLibPath(), GetBoard()->m_Modules, true, true ) )
+#endif
                 {
                     // save was correct
                     GetScreen()->ClrModify();

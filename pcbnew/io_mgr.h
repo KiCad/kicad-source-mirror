@@ -220,13 +220,13 @@ public:
      * Function PluginName
      * returns a brief hard coded name for this PLUGIN.
      */
-    virtual const wxString& PluginName() const = 0;
+    virtual const wxString PluginName() const = 0;
 
     /**
      * Function GetFileExtension
      * returns the file extension for the PLUGIN.
      */
-    virtual const wxString& GetFileExtension() const = 0;
+    virtual const wxString GetFileExtension() const = 0;
 
     /**
      * Function Load

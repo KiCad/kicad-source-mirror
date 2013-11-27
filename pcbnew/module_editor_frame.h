@@ -401,8 +401,6 @@ public:
      */
     bool DeleteModuleFromCurrentLibrary();
 
-    void Select_Active_Library();
-
     virtual EDA_COLOR_T GetGridColor( void ) const;
 
     DECLARE_EVENT_TABLE()
