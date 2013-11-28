@@ -77,6 +77,7 @@ const std::string TOOL_EVENT::Format() const
     const FlagString actions[] =
     {
         { TA_MOUSE_CLICK,           "click"               },
+        { TA_MOUSE_DBLCLICK,        "double click"        },
         { TA_MOUSE_UP,              "button-up"           },
         { TA_MOUSE_DOWN,            "button-down"         },
         { TA_MOUSE_DRAG,            "drag"                },
@@ -102,7 +103,7 @@ const std::string TOOL_EVENT::Format() const
         { BUT_LEFT,   "left"   },
         { BUT_RIGHT,  "right"  },
         { BUT_MIDDLE, "middle" },
-        { 0,         ""       }
+        { 0,          ""       }
     };
 
     const FlagString modifiers[] =

@@ -54,39 +54,43 @@ enum TOOL_EVENT_CATEGORY
 enum TOOL_ACTIONS
 {
     // UI input events
-    TA_NONE         = 0x0000,
-    TA_MOUSE_CLICK  = 0x0001,
-    TA_MOUSE_UP     = 0x0002,
-    TA_MOUSE_DOWN   = 0x0004,
-    TA_MOUSE_DRAG   = 0x0008,
-    TA_MOUSE_MOTION = 0x0010,
-    TA_MOUSE_WHEEL  = 0x0020,
-    TA_MOUSE        = 0x003f,
-    TA_KEY_UP       = 0x0040,
-    TA_KEY_DOWN     = 0x0080,
-    TA_KEYBOARD     = TA_KEY_UP | TA_KEY_DOWN,
+    TA_NONE                 = 0x0000,
+    TA_MOUSE_CLICK          = 0x0001,
+    TA_MOUSE_DBLCLICK       = 0x0002,
+    TA_MOUSE_UP             = 0x0004,
+    TA_MOUSE_DOWN           = 0x0008,
+    TA_MOUSE_DRAG           = 0x0010,
+    TA_MOUSE_MOTION         = 0x0020,
+    TA_MOUSE_WHEEL          = 0x0040,
+    TA_MOUSE                = 0x007f,
+
+    TA_KEY_UP               = 0x0080,
+    TA_KEY_DOWN             = 0x0100,
+    TA_KEYBOARD             = TA_KEY_UP | TA_KEY_DOWN,
 
     // View related events
-    TA_VIEW_REFRESH = 0x0100,
-    TA_VIEW_ZOOM    = 0x0200,
-    TA_VIEW_PAN     = 0x0400,
-    TA_VIEW_DIRTY   = 0x0800,
-    TA_CHANGE_LAYER = 0x1000,
+    TA_VIEW_REFRESH         = 0x0200,
+    TA_VIEW_ZOOM            = 0x0400,
+    TA_VIEW_PAN             = 0x0800,
+    TA_VIEW_DIRTY           = 0x1000,
+    TA_VIEW                 = 0x1e00,
+
+    TA_CHANGE_LAYER         = 0x2000,
 
     // Tool cancel event. Issued automagically when the user hits escape or selects End Tool from
     // the context menu.
-    TA_CANCEL_TOOL  = 0x2000,
+    TA_CANCEL_TOOL          = 0x4000,
 
     // Context menu update. Issued whenever context menu is open and the user hovers the mouse
     // over one of choices. Used in dynamic highligting in disambiguation menu
-    TA_CONTEXT_MENU_UPDATE = 0x4000,
+    TA_CONTEXT_MENU_UPDATE  = 0x8000,
 
     // Context menu choice. Sent if the user picked something from the context menu or
     // closed it without selecting anything.
-    TA_CONTEXT_MENU_CHOICE = 0x8000,
+    TA_CONTEXT_MENU_CHOICE  = 0x10000,
 
     // Tool action (allows to control tools)
-    TA_ACTION             = 0x10000,
+    TA_ACTION               = 0x20000,
 
     TA_ANY = 0xffffffff
 };
@@ -233,6 +237,12 @@ public:
                && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
     }
 
+    bool IsDblClick( int aButtonMask = BUT_ANY ) const
+    {
+        return ( m_actions == TA_MOUSE_DBLCLICK )
+               && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
+    }
+
     bool IsDrag( int aButtonMask = BUT_ANY ) const
     {
         return ( m_actions == TA_MOUSE_DRAG ) && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
@@ -277,7 +287,7 @@ public:
     void SetMouseDragOrigin( const VECTOR2D& aP )
     {
         m_mouseDragOrigin = aP;
-    }
+     }
 
     void SetMousePosition( const VECTOR2D& aP )
     {
