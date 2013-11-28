@@ -970,12 +970,15 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     else
         m_out->Print( 0, "\n" );
 
-    m_out->Print( aNestLevel+1, "(at %s", FMT_IU( aModule->GetPosition() ).c_str() );
+    if( !( m_ctl & CTL_OMIT_AT ) )
+    {
+        m_out->Print( aNestLevel+1, "(at %s", FMT_IU( aModule->GetPosition() ).c_str() );
 
-    if( aModule->GetOrientation() != 0.0 )
-        m_out->Print( 0, " %s", FMT_ANGLE( aModule->GetOrientation() ).c_str() );
+        if( aModule->GetOrientation() != 0.0 )
+            m_out->Print( 0, " %s", FMT_ANGLE( aModule->GetOrientation() ).c_str() );
 
-    m_out->Print( 0, ")\n" );
+        m_out->Print( 0, ")\n" );
+    }
 
     if( !aModule->GetDescription().IsEmpty() )
         m_out->Print( aNestLevel+1, "(descr %s)\n",
