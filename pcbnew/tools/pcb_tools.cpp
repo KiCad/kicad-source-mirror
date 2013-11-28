@@ -61,13 +61,8 @@ void PCB_EDIT_FRAME::setupTools()
 
 void PCB_EDIT_FRAME::destroyTools()
 {
-    m_toolManager->UnregisterAction( &COMMON_ACTIONS::moveActivate );
-    m_toolManager->UnregisterAction( &COMMON_ACTIONS::selectionActivate );
-    m_toolManager->UnregisterAction( &COMMON_ACTIONS::rotate );
-    m_toolManager->UnregisterAction( &COMMON_ACTIONS::flip );
-
-    delete m_toolDispatcher;
     delete m_toolManager;
+    delete m_toolDispatcher;
 }
 
 

@@ -48,6 +48,12 @@ public:
     ACTION_MANAGER( TOOL_MANAGER* aToolManager );
 
     /**
+     * Destructor.
+     * Unregisters every registered action.
+     */
+    ~ACTION_MANAGER();
+
+    /**
      * Function RegisterAction()
      * Adds a tool action to the manager and sets it up. After that is is possible to invoke
      * the action using hotkeys or sending a command event with its name.

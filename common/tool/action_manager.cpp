@@ -34,6 +34,13 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
 }
 
 
+ACTION_MANAGER::~ACTION_MANAGER()
+{
+    while( !m_actionIdIndex.empty() )
+        UnregisterAction( m_actionIdIndex.begin()->second );
+}
+
+
 void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 {
     assert( aAction->GetId() == -1 );    // Check if the TOOL_ACTION was not registered before
