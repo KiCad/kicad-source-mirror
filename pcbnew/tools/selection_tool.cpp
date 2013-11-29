@@ -47,7 +47,6 @@
 #include "bright_box.h"
 #include "common_actions.h"
 
-using namespace KIGFX;
 using boost::optional;
 
 SELECTION_TOOL::SELECTION_TOOL() :
@@ -81,7 +80,7 @@ void SELECTION_TOOL::Reset()
 
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
-    VIEW*   view = getView();
+    KIGFX::VIEW* view = getView();
 
     assert( getModel<BOARD>( PCB_T ) != NULL );
 
@@ -176,7 +175,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 
 void SELECTION_TOOL::clearSelection()
 {
-    VIEW_GROUP::const_iter it, it_end;
+    KIGFX::VIEW_GROUP::const_iter it, it_end;
 
     for( it = m_selection.group->Begin(), it_end = m_selection.group->End(); it != it_end; ++it )
     {
@@ -286,7 +285,7 @@ bool SELECTION_TOOL::selectMultiple()
 {
     bool cancelled = false;     // Was the tool cancelled while it was running?
     m_multiple = true;          // Multiple selection mode is active
-    VIEW* view = getView();
+    KIGFX::VIEW* view = getView();
     getViewControls()->SetAutoPan( true );
 
     view->Add( m_selArea );
@@ -308,7 +307,7 @@ bool SELECTION_TOOL::selectMultiple()
             m_selArea->SetOrigin( evt->DragOrigin() );
             m_selArea->SetEnd( evt->Position() );
             m_selArea->ViewSetVisible( true );
-            m_selArea->ViewUpdate( VIEW_ITEM::GEOMETRY );
+            m_selArea->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
 
         if( evt->IsMouseUp( BUT_LEFT ) )
@@ -317,11 +316,11 @@ bool SELECTION_TOOL::selectMultiple()
             m_selArea->ViewSetVisible( false );
 
             // Mark items within the selection box as selected
-            std::vector<VIEW::LAYER_ITEM_PAIR> selectedItems;
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
             BOX2I selectionBox = m_selArea->ViewBBox();
             view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
-            std::vector<VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
 
             for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
             {
@@ -405,7 +404,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     }
 
     // Removes possible brighten mark
-    getView()->MarkTargetDirty( TARGET_OVERLAY );
+    getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 
     // Restore the original menu
     SetContextMenu( &m_menu, CMENU_BUTTON );
