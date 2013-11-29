@@ -66,6 +66,7 @@ Load() TODO's
 #include <fctsys.h>
 #include <trigo.h>
 #include <macros.h>
+#include <kicad_string.h>
 #include <wx/filename.h>
 
 #include <class_board.h>
@@ -93,34 +94,6 @@ typedef boost::optional<bool>               opt_bool;
 
 
 const wxChar* traceEaglePlugin = wxT( "KicadEaglePlugin" );
-
-/// Test footprint name for kicad legality, fix if needed and return true if fixing was required.
-static bool fix_eagle_package_name( string* aName )
-{
-    string  result;
-    bool    changed = false;
-
-    for( string::iterator it = aName->begin();  it != aName->end();  ++it )
-    {
-        switch( *it )
-        {
-        case ':':
-        case '/':
-            // replace *it with %xx, as in URL encoding
-            StrPrintf( &result, "%%%02x", *it );
-            changed = true;
-            break;
-
-        default:
-            result += *it;
-        }
-    }
-
-    if( changed )
-        *aName = result;
-
-    return changed;
-}
 
 
 /// segment (element) of our XPATH into the Eagle XML document tree in PTREE form.
@@ -939,7 +912,7 @@ EELEMENT::EELEMENT( CPTREE& aElement )
     value   = attribs.get<string>( "value" );
 
     package = attribs.get<string>( "package" );
-    fix_eagle_package_name( &package );
+    ReplaceIllegalFileNameChars( &package );
 
     x = attribs.get<double>( "x" );
     y = attribs.get<double>( "y" );
@@ -1617,7 +1590,7 @@ void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const string* aLibName )
 
         string pack_name( pack_ref );
 
-        fix_eagle_package_name( &pack_name );
+        ReplaceIllegalFileNameChars( &pack_name );
 
 #if 0 && defined(DEBUG)
         if( pack_name == "TO220H" )

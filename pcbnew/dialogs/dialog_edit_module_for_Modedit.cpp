@@ -42,6 +42,8 @@
 #include <wxPcbStruct.h>
 #include <base_units.h>
 #include <macros.h>
+#include <validators.h>
+#include <kicad_string.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>
@@ -62,6 +64,7 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
     icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
     SetIcon( icon );
 
+    m_FootprintNameCtrl->SetValidator( FOOTPRINT_NAME_VALIDATOR() );
     initModeditProperties();
     m_sdbSizerStdButtonsOK->SetDefault();
     GetSizer()->SetSizeHints( this );
@@ -100,15 +103,15 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
             S3D_MASTER* draw3DCopy = new S3D_MASTER(NULL);
             draw3DCopy->Copy( draw3D );
             m_shapes3D_list.push_back( draw3DCopy );
-            m_3D_ShapeNameListBox->Append(draw3DCopy->m_Shape3DName);
+            m_3D_ShapeNameListBox->Append( draw3DCopy->m_Shape3DName );
         }
         draw3D = (S3D_MASTER*) draw3D->Next();
     }
 
     m_DocCtrl->SetValue( m_currentModule->GetDescription() );
     m_KeywordCtrl->SetValue( m_currentModule->GetKeywords() );
-    m_referenceCopy = new TEXTE_MODULE(NULL);
-    m_valueCopy = new TEXTE_MODULE(NULL);
+    m_referenceCopy = new TEXTE_MODULE( NULL );
+    m_valueCopy = new TEXTE_MODULE( NULL );
     m_referenceCopy->Copy( &m_currentModule->Reference() );
     m_valueCopy->Copy( &m_currentModule->Value() );
     m_ReferenceCtrl->SetValue( m_referenceCopy->GetText() );
@@ -147,7 +150,6 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Disable hotkey move commands and Auto Placement" ) );
 
     m_CostRot90Ctrl->SetValue( m_currentModule->GetPlacementCost90() );
-
     m_CostRot180Ctrl->SetValue( m_currentModule->GetPlacementCost180() );
 
     // Initialize 3D parameters
@@ -168,7 +170,7 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     PutValueInLocalUnits( *m_SolderPasteMarginCtrl, m_currentModule->GetLocalSolderPasteMargin() );
 
     if( m_currentModule->GetLocalSolderPasteMargin() == 0 )
-        m_SolderPasteMarginCtrl->SetValue( wxT("-") + m_SolderPasteMarginCtrl->GetValue() );
+        m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) + m_SolderPasteMarginCtrl->GetValue() );
 
     if( m_currentModule->GetLocalSolderPasteMarginRatio() == 0.0 )
         msg.Printf( wxT( "-%f" ), m_currentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
@@ -179,12 +181,11 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
 
     // Add solder paste margin ration in per cent
     // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
-    msg.Printf( wxT( "%f" ),
-                    m_currentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
+    msg.Printf( wxT( "%f" ), m_currentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
 
     if( m_currentModule->GetLocalSolderPasteMarginRatio() == 0.0 &&
         msg[0] == '0')  // Sometimes Printf adds a sign if the value is very small (0.0)
-        m_SolderPasteMarginRatioCtrl->SetValue( wxT("-") + msg );
+        m_SolderPasteMarginRatioCtrl->SetValue( wxT( "-" ) + msg );
     else
         m_SolderPasteMarginRatioCtrl->SetValue( msg );
 
@@ -208,9 +209,7 @@ void DIALOG_MODULE_MODULE_EDITOR::Transfert3DValuesToDisplay( S3D_MASTER * aStru
     if( aStruct3DSource )
     {
         m_3D_Scale->SetValue( aStruct3DSource->m_MatScale );
-
         m_3D_Offset->SetValue( aStruct3DSource->m_MatPosition );
-
         m_3D_Rotation->SetValue( aStruct3DSource->m_MatRotation );
     }
     else
@@ -220,6 +219,7 @@ void DIALOG_MODULE_MODULE_EDITOR::Transfert3DValuesToDisplay( S3D_MASTER * aStru
         m_3D_Scale->SetValue( dummy_vertex );
     }
 }
+
 
 /** Copy 3D info displayed in dialog box to values in a item in m_shapes3D_list
  * @param aIndexSelection = item index in m_shapes3D_list
@@ -240,6 +240,7 @@ void DIALOG_MODULE_MODULE_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
 {
     if( m_lastSelected3DShapeIndex >= 0 )
         TransfertDisplayTo3DValues( m_lastSelected3DShapeIndex );
+
     m_lastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetSelection();
 
     if( m_lastSelected3DShapeIndex < 0 )    // happens under wxGTK when deleting an item in m_3D_ShapeNameListBox wxListBox
@@ -247,10 +248,11 @@ void DIALOG_MODULE_MODULE_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
 
     if( m_lastSelected3DShapeIndex >= (int)m_shapes3D_list.size() )
     {
-        wxMessageBox(wxT("On3DShapeNameSelected() error"));
+        wxMessageBox( wxT( "On3DShapeNameSelected() error" ) );
         m_lastSelected3DShapeIndex = -1;
         return;
     }
+
     Transfert3DValuesToDisplay( m_shapes3D_list[m_lastSelected3DShapeIndex] );
 }
 
@@ -261,18 +263,19 @@ void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape(wxCommandEvent& event)
         TransfertDisplayTo3DValues( m_lastSelected3DShapeIndex );
 
     int ii = m_3D_ShapeNameListBox->GetSelection();
+
     if( ii < 0 )
         return;
 
-    m_shapes3D_list.erase(m_shapes3D_list.begin() + ii );
-    m_3D_ShapeNameListBox->Delete(ii);
+    m_shapes3D_list.erase( m_shapes3D_list.begin() + ii );
+    m_3D_ShapeNameListBox->Delete( ii );
 
     if( m_3D_ShapeNameListBox->GetCount() == 0)
         Transfert3DValuesToDisplay( NULL );
     else
     {
         m_lastSelected3DShapeIndex = 0;
-        m_3D_ShapeNameListBox->SetSelection(m_lastSelected3DShapeIndex);
+        m_3D_ShapeNameListBox->SetSelection( m_lastSelected3DShapeIndex );
         Transfert3DValuesToDisplay( m_shapes3D_list[m_lastSelected3DShapeIndex] );
     }
 }
@@ -284,6 +287,7 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
     wxString fullpath;
 
     fullpath = wxGetApp().ReturnLastVisitedLibraryPath( LIB3D_PATH );
+
 #ifdef __WINDOWS__
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
@@ -313,6 +317,7 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
     shortfilename = wxGetApp().ReturnFilenameWithRelativePathInLibPath( fullfilename );
 
     wxFileName aux = shortfilename;
+
     if( aux.IsAbsolute() )
     {   // Absolute path, ask if the user wants a relative one
         int diag = wxMessageBox(
@@ -322,12 +327,13 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
 
         if( diag == wxYES )
         {   // Make it relative
-            aux.MakeRelativeTo( wxT(".") );
+            aux.MakeRelativeTo( wxT( "." ) );
             shortfilename = aux.GetPathWithSep() + aux.GetFullName();
         }
     }
 
     S3D_MASTER* new3DShape = new S3D_MASTER(NULL);
+
 #ifdef __WINDOWS__
     // Store filename in Unix notation
     shortfilename.Replace( wxT( "\\" ), wxT( "/" ) );
@@ -341,7 +347,7 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
         TransfertDisplayTo3DValues( m_lastSelected3DShapeIndex );
 
     m_lastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetCount() - 1;
-    m_3D_ShapeNameListBox->SetSelection(m_lastSelected3DShapeIndex);
+    m_3D_ShapeNameListBox->SetSelection( m_lastSelected3DShapeIndex );
     Transfert3DValuesToDisplay( m_shapes3D_list[m_lastSelected3DShapeIndex] );
 
 }
@@ -357,12 +363,13 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 {
     // First, test for invalid chars in module name
     wxString footprintName = m_FootprintNameCtrl->GetValue();
+
     if( ! footprintName.IsEmpty() )
     {
         if( ! MODULE::IsLibNameValid( footprintName ) )
         {
             wxString msg;
-            msg.Printf( _("Error:\none of invalid chars <%s> found\nin <%s>" ),
+            msg.Printf( _( "Error:\none of invalid chars <%s> found\nin <%s>" ),
                         MODULE::ReturnStringLibNameInvalidChars( true ),
                         GetChars( footprintName ) );
 
@@ -404,9 +411,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 
     // Initialize masks clearances
     m_currentModule->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
-
     m_currentModule->SetLocalSolderMaskMargin( ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
-
     m_currentModule->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
     double   dtmp;
     wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();
@@ -415,6 +420,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     // A  -50% margin ratio means no paste on a pad, the ratio must be >= -50 %
     if( dtmp < -50.0 )
         dtmp = -50.0;
+
     // A margin ratio is always <= 0
     if( dtmp > 0.0 )
         dtmp = 0.0;
@@ -423,14 +429,19 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 
     // Update 3D shape list
     int ii = m_3D_ShapeNameListBox->GetSelection();
+
     if ( ii >= 0 )
-        TransfertDisplayTo3DValues( ii  );
+        TransfertDisplayTo3DValues( ii );
+
     S3D_MASTER*   draw3D  = m_currentModule->Models();
+
     for( unsigned ii = 0; ii < m_shapes3D_list.size(); ii++ )
     {
         S3D_MASTER*   draw3DCopy = m_shapes3D_list[ii];
+
         if( draw3DCopy->m_Shape3DName.IsEmpty() )
             continue;
+
         if( draw3D == NULL )
         {
             draw3D = new S3D_MASTER( draw3D );
@@ -447,6 +458,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 
     // Remove old extra 3D shapes
     S3D_MASTER* nextdraw3D;
+
     for( ; draw3D != NULL; draw3D = nextdraw3D )
     {
         nextdraw3D = (S3D_MASTER*) draw3D->Next();
@@ -484,4 +496,3 @@ void DIALOG_MODULE_MODULE_EDITOR::OnEditValue(wxCommandEvent& event)
     m_parent->SetCrossHairPosition( tmp );
     m_ValueCtrl->SetValue( m_valueCopy->GetText() );
 }
-
