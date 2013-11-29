@@ -446,9 +446,12 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
             boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *st->contextMenu ) );
             GetEditFrame()->PopupMenu( menu->GetMenu() );
 
-            //
-            TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE );
-            dispatchInternal( evt );
+            // If nothing was chosen from the context menu, we must notify the tool as well
+            if( menu->GetSelected() < 0 )
+            {
+                TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE );
+                dispatchInternal( evt );
+            }
 
             break;
         }

@@ -147,7 +147,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
         st->pressed = true;
         evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_DOWN, args );
     }
-    else if( up )    // Handle mouse button release
+    else if( up )   // Handle mouse button release
     {
         st->pressed = false;
 
