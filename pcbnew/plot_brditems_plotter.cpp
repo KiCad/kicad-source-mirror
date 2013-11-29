@@ -477,20 +477,18 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 
     if( pt_texte->IsMultilineAllowed() )
     {
+        std::vector<wxPoint> positions;
         wxArrayString* list = wxStringSplit( pt_texte->GetText(), '\n' );
-        wxPoint        offset;
+        positions.reserve( list->Count() );
 
-        offset.y = pt_texte->GetInterline();
+        pt_texte->GetPositionsOfLinesOfMultilineText( positions, list->Count() );
 
-        RotatePoint( &offset, orient );
-
-        for( unsigned i = 0; i < list->Count(); i++ )
+        for( unsigned ii = 0; ii < list->Count(); ii++ )
         {
-            wxString txt = list->Item( i );
-            m_plotter->Text( pos, UNSPECIFIED_COLOR, txt, orient, size,
+            wxString& txt = list->Item( ii );
+            m_plotter->Text( positions[ii], UNSPECIFIED_COLOR, txt, orient, size,
                              pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
                              thickness, pt_texte->IsItalic(), allow_bold );
-            pos += offset;
         }
 
         delete list;
