@@ -819,7 +819,7 @@ void VIEW::clearGroupCache()
 }
 
 
-void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
+void VIEW::InvalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 {
     // updateLayers updates geometry too, so we do not have to update both of them at the same time
     if( aUpdateFlags & VIEW_ITEM::LAYERS )

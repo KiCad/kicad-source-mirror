@@ -53,7 +53,7 @@ void VIEW_ITEM::ViewUpdate( int aUpdateFlags )
     if( !m_view )
         return;
 
-    m_view->invalidateItem( this, aUpdateFlags );
+    m_view->InvalidateItem( this, aUpdateFlags );
 }
 
 
