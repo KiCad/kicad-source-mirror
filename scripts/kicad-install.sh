@@ -148,10 +148,12 @@ install_or_update()
 
     echo "step 4) checking out the libraries from launchpad repo..."
     if [ ! -d "$WORKING_TREES/kicad-lib.bzr" ]; then
-        bzr checkout lp:~kicad-lib-committers/kicad/library kicad-lib.bzr
+        bzr checkout lp:~dickelbeck/kicad/library-read-only kicad-lib.bzr
         echo ' kicad-lib checked out.'
     else
         cd kicad-lib.bzr
+        # change the name of the repo this checkout is bound to
+        bzr bind lp:~dickelbeck/kicad/library-read-only
         bzr up
         echo ' kicad-lib repo updated.'
         cd ../
