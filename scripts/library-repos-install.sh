@@ -17,7 +17,7 @@
 #    on https://github.com using Github plugin.  After running this script you should be able to
 #      a)  $ cp ~/kicad_sources/library-repos/kicad-library/template/fp-lib-table.for-pretty ~/fp-lib-table
 #    and then
-#      b) set your environment variable KISYSMOD to "~/kicad_sources/library-repos/kicad-library"
+#      b) set your environment variable KISYSMOD to "~/kicad_sources/library-repos"
 #    before starting pcbnew.  This will use the KiCad plugin against the *.pretty dirs in that base dir.
 
 
