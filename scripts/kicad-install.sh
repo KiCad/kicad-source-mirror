@@ -4,8 +4,25 @@
 #  -> a Red Hat
 # compatible linux system.
 #
-# The "install_prerequisites" step is the only "distro dependent" one.  Could modify
-# that step for other linux distros.
+# The "install_prerequisites" step is the only "distro dependent" one.  That step could be modified
+# for other linux distros.
+#
+# There are 3 package groups in a KiCad install:
+# 1) Compiled source code in the form of executable programs.
+# 2) User manuals and other documentation typically as *.pdf files.
+# 3) a) Schematic parts, b) layout footprints, and c) 3D models for footprints.
+#
+# To achieve 1) source is checked out from its repo and compiled by this script then executables
+#  are installed using CMake.
+# To achieve 2) documentation is checked out from its repo and installed using CMake.
+# TO achieve 3a) and 3c) they are checked out from their repos and installed using CMake.
+# To achieve 3b) a global fp-lib-table is put into your home directory which points to
+#  http://github.com/KiCad.  No actual footprints are installed locally, internet access is used
+#  during program operation to fetch footprints from github as if it was a remote drive in the cloud.
+#  If you want to install those same KiCad footprints locally, you may run a separate script
+#  named library-repos-install.sh found in this same directory.  That script requires that "git" be on
+#  your system whereas this script does not.  The footprints require some means to download them and
+#  bzr-git seems not up to the task.  wget or curl would also work.
 
 
 # Set where the 3 source trees will go, use a full path
@@ -19,6 +36,8 @@ OPTS="$OPTS -DBUILD_GITHUB_PLUGIN=ON"
 # Python scripting, uncomment to enable
 #OPTS="$OPTS -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_MODULES=ON -DKICAD_SCRIPTING_WXPYTHON=ON"
 
+LIB_REPO=~kicad-testing-committers/kicad/library
+
 
 usage()
 {
@@ -27,9 +46,10 @@ usage()
     echo ""
     echo "./kicad-install.sh <cmd>"
     echo "    where <cmd> is one of:"
-    echo "        --install-or-update       (does full installation or update.)"
-    echo "        --remove-sources          (removes source trees for another attempt.)"
-    echo "        --uninstall-libraries     (removes KiCad supplied libraries.)"
+    echo "      --install-or-update     (does full installation or update.)"
+    echo "      --remove-sources        (removes source trees for another attempt.)"
+    echo "      --uninstall-libraries   (removes KiCad supplied libraries.)"
+    echo "      --uninstall-kicad       (uninstalls all of KiCad but leaves source trees.)"
     echo ""
     echo "example:"
     echo '    $ ./kicad-install.sh --install-or-update'
@@ -109,8 +129,6 @@ cmake_uninstall()
     elif [ ! -e install_manifest.txt  ]; then
         echo
         echo "Missing file $dir/install_manifest.txt."
-        echo "Libraries may have already been uinstalled, or were not"
-        echo 'originally installed with an "uninstall" knowledgable CMakeLists.txt file.'
     else
         echo "uninstalling from $dir"
         sudo make uninstall
@@ -145,15 +163,11 @@ install_or_update()
         cd ../
     fi
 
-
-    echo "step 4) checking out the libraries from launchpad repo..."
     if [ ! -d "$WORKING_TREES/kicad-lib.bzr" ]; then
-        bzr checkout lp:~dickelbeck/kicad/library-read-only kicad-lib.bzr
+        bzr checkout "lp:$LIB_REPO" kicad-lib.bzr
         echo ' kicad-lib checked out.'
     else
         cd kicad-lib.bzr
-        # change the name of the repo this checkout is bound to
-        bzr bind lp:~dickelbeck/kicad/library-read-only
         bzr up
         echo ' kicad-lib repo updated.'
         cd ../
@@ -178,7 +192,6 @@ install_or_update()
         cmake $OPTS ../
     else
         cd build
-
         # Although a "make clean" is sometimes needed, more often than not it slows down the update
         # more than it is worth.  Do it manually if you need to in this directory.
         # make clean
@@ -192,19 +205,19 @@ install_or_update()
     echo " kicad program files installed."
 
 
-    echo "step 8) as non-root, install user configuration files..."
-    # install ~/fp-lib-table [and friends]
-    make install_user_configuration_files
-    echo " kicad user-configuration files installed."
-
-
-    echo "step 9) installing libraries..."
+    echo "step 8) installing libraries..."
     cd ../../kicad-lib.bzr
     rm_build_dir build
     mkdir build && cd build
     cmake ../
     sudo make install
     echo " kicad-lib installed."
+
+
+    echo "step 9) as non-root, install user configuration files..."
+    # install ~/fp-lib-table
+    make  install_github_fp-lib-table
+    echo " kicad user-configuration files installed."
 
 
     echo "step 10) installing documentation..."
@@ -241,5 +254,21 @@ if [ $# -eq 1 -a "$1" == "--uninstall-libraries" ]; then
     cmake_uninstall "$WORKING_TREES/kicad-lib.bzr/build"
     exit
 fi
+
+
+if [ $# -eq 1 -a "$1" == "--uninstall-kicad" ]; then
+    cd "$WORKING_TREES/kicad.bzr/build"
+    cmake_uninstall "$WORKING_TREES/kicad.bzr/build"
+
+    cd "$WORKING_TREES/kicad-lib.bzr/build"
+    cmake_uninstall "$WORKING_TREES/kicad-lib.bzr/build"
+
+    # this may fail since "uninstall" support is a recent feature of this repo:
+    cd "$WORKING_TREES/kicad-doc.bzr/build"
+    cmake_uninstall "$WORKING_TREES/kicad-doc.bzr/build"
+
+    exit
+fi
+
 
 usage
