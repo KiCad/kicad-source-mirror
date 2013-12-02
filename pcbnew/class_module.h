@@ -447,6 +447,9 @@ public:
 
     EDA_ITEM* Clone() const;
 
+    /// @copydoc VIEW_ITEM::ViewUpdate()
+    void ViewUpdate( int aUpdateFlags );
+
     /**
      * Function CopyNetlistSettings
      * copies the netlist settings to \a aModule.
