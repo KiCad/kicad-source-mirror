@@ -31,60 +31,9 @@
 #define __TPROFILE_H
 
 #include <sys/time.h>
+#include <string>
 #include <stdint.h>
 
-/**
- * Function rdtsc
- * Returns processor's time-stamp counter. Main purpose is precise time measuring of code
- * execution time.
- * @return unsigned long long - Value of time-stamp counter.
- */
-#if defined(__i386__)
-static __inline__ unsigned long long rdtsc()
-{
-    unsigned long long int x;
-    __asm__ volatile ( ".byte 0x0f, 0x31" : "=A" ( x ) );
-
-    return x;
-}
-
-
-#elif defined(__x86_64__)
-static __inline__ unsigned long long rdtsc()
-{
-    unsigned hi, lo;
-    __asm__ __volatile__ ( "rdtsc" : "=a" ( lo ), "=d" ( hi ) );
-
-    return ( (unsigned long long) lo ) | ( ( (unsigned long long) hi ) << 32 );
-}
-
-
-#elif defined(__powerpc__)
-static __inline__ unsigned long long rdtsc()
-{
-    unsigned long long int  result = 0;
-    unsigned long int       upper, lower, tmp;
-    __asm__ volatile (
-        "0:                  \n"
-        "\tmftbu   %0           \n"
-        "\tmftb    %1           \n"
-        "\tmftbu   %2           \n"
-        "\tcmpw    %2,%0        \n"
-        "\tbne     0b         \n"
-        : "=r" ( upper ), "=r" ( lower ), "=r" ( tmp )
-        );
-
-    result  = upper;
-    result  = result << 32;
-    result  = result | lower;
-
-    return result;
-}
-
-
-#endif /* __powerpc__ */
-
-// Fixme: OS X version
 /**
  * Function get_tics
  * Returns the number of microseconds that have elapsed since the system was started.
@@ -98,14 +47,22 @@ static inline uint64_t get_tics()
     return (uint64_t) tv.tv_sec * 1000000ULL + (uint64_t) tv.tv_usec;
 }
 
-
 /**
  * Structure for storing data related to profiling counters.
  */
 struct prof_counter
 {
-    uint64_t    value;          /// Stored timer value
-    bool        use_rdtsc;      /// Method of time measuring (rdtsc or tics)
+    uint64_t start, end;         // Stored timer value
+
+    uint64_t usecs() const
+    {
+        return end - start;
+    }
+
+    float msecs() const
+    {
+        return ( end - start ) / 1000.0;
+    }
 };
 
 /**
@@ -116,32 +73,19 @@ struct prof_counter
  *      Otherwise is system tics method will be used. IMPORTANT: time-stamp counter should not
  *      be used on multicore machines executing threaded code.
  */
-static inline void prof_start( prof_counter* cnt, bool use_rdtsc )
+static inline void prof_start( prof_counter* aCnt )
 {
-    cnt->use_rdtsc = use_rdtsc;
-
-    if( use_rdtsc )
-    {
-        cnt->value = rdtsc();
-    }
-    else
-    {
-        cnt->value = get_tics();
-    }
+    aCnt->start = get_tics();
 }
-
 
 /**
  * Function prof_stop
  * Ends code execution time counting for a given profiling counter.
  * @param cnt is the counter which should be stopped.
  */
-static inline void prof_end( prof_counter* cnt )
+static inline void prof_end( prof_counter* aCnt )
 {
-    if( cnt->use_rdtsc )
-        cnt->value = rdtsc() - cnt->value;
-    else
-        cnt->value = get_tics() - cnt->value;
+    aCnt->end = get_tics();
 }
 
 #endif
