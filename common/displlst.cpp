@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -201,9 +202,9 @@ void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList,
     {
         wxASSERT( (int) itemList[row].GetCount() == m_listBox->GetColumnCount() );
 
+        long itemIndex = 0;
         for( unsigned col = 0; col < itemList[row].GetCount(); col++ )
         {
-            long itemIndex = 0;
 
             if( col == 0 )
             {
