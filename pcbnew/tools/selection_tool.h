@@ -68,7 +68,16 @@ public:
         KIGFX::VIEW_GROUP* group;
 
         /// Checks if there is anything selected
-        bool Empty() const { return items.empty(); }
+        bool Empty() const
+        {
+            return items.empty();
+        }
+
+        /// Returns the number of selected parts
+        int Size() const
+        {
+            return items.size();
+        }
     };
 
     /// @copydoc TOOL_INTERACTIVE::Reset()

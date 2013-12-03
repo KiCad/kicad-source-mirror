@@ -321,6 +321,9 @@ public:
 
             if( m_commandId && aEvent.m_commandId )
                 return *m_commandId == *aEvent.m_commandId;
+
+            // Command-type event has to contain either id or string
+            assert( false );
         }
 
         return true;

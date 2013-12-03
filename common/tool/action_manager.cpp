@@ -44,6 +44,8 @@ ACTION_MANAGER::~ACTION_MANAGER()
 void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 {
     assert( aAction->GetId() == -1 );    // Check if the TOOL_ACTION was not registered before
+    assert( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
+    assert( m_actionIdIndex.find( aAction->m_id ) == m_actionIdIndex.end() );
 
     aAction->setId( MakeActionId( aAction->m_name ) );
 
