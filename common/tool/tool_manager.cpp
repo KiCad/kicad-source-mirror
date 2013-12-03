@@ -120,6 +120,11 @@ TOOL_MANAGER::~TOOL_MANAGER()
 
 void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 {
+    wxASSERT_MSG( m_toolNameIndex.find( aTool->GetName() ) == m_toolNameIndex.end(),
+            wxT( "Adding two tools with the same name may result in unexpected behaviour.") );
+    wxASSERT_MSG( m_toolIdIndex.find( aTool->GetId() ) == m_toolIdIndex.end(),
+            wxT( "Adding two tools with the same ID may result in unexpected behaviour.") );
+
     TOOL_STATE* st = new TOOL_STATE;
 
     st->theTool = aTool;
@@ -227,7 +232,10 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
     wxASSERT( aTool != NULL );
 
     if( !isRegistered( aTool ) )
+    {
+        wxASSERT_MSG( false, wxT( "You cannot run unregistered tools" ) );
         return false;
+    }
 
     TOOL_STATE* state = m_toolState[aTool];
 
@@ -334,10 +342,11 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
             // Go() method that match the event.
             if( st->transitions.size() )
             {
-                BOOST_FOREACH( TRANSITION tr, st->transitions )
+                BOOST_FOREACH( TRANSITION& tr, st->transitions )
                 {
                     if( tr.first.Matches( aEvent ) )
                     {
+                        // as the state changes, the transition table has to be set up again
                         st->transitions.clear();
 
                         // no tool context allocated yet? Create one.
@@ -351,6 +360,9 @@ void TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 
                         if( !st->cofunc->Running() )
                             finishTool( st ); // The couroutine has finished immediately?
+
+                        // there is no point in further checking, as transitions got cleared
+                        break;
                     }
                 }
             }
@@ -406,8 +418,6 @@ void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
     if( it != m_activeTools.end() )
         m_activeTools.erase( it );
-    else
-        wxLogWarning( wxT( "Tried to finish inactive tool" ) );
 
     aState->idle = true;
     delete aState->cofunc;
