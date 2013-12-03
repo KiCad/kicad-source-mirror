@@ -194,6 +194,12 @@ void TOOL_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 }
 
 
+bool TOOL_MANAGER::RunAction( const std::string& aActionName )
+{
+    return m_actionMgr->RunAction( aActionName );
+}
+
+
 bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 {
     wxASSERT( aTool != NULL );

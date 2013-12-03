@@ -100,6 +100,15 @@ public:
     void UnregisterAction( TOOL_ACTION* aAction );
 
     /**
+     * Function RunAction()
+     * Runs the specified action. The common format is "application.ToolName.Action".
+     *
+     * @param aActionName is the name of action to be invoked.
+     * @return True if the action finished successfully, false otherwise.
+     */
+    bool RunAction( const std::string& aActionName );
+
+    /**
      * Function FindTool()
      * Searches for a tool with given ID.
      *
