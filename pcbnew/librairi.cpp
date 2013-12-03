@@ -40,6 +40,7 @@
 #include <pcbcommon.h>
 #include <macros.h>
 #include <fp_lib_table.h>
+#include <validators.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -377,7 +378,7 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 
     wxString    wildcard;
 
-    wildcard << wxGetTranslation( LegacyFootprintLibPathWildcard ) << wxChar('|')
+    wildcard << wxGetTranslation( LegacyFootprintLibPathWildcard ) << wxChar( '|' )
              << wxGetTranslation( KiCadFootprintLibPathWildcard );
 
     // prompt user for libPath and PLUGIN (library) type
@@ -845,6 +846,7 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
     if( moduleName.IsEmpty() )
     {
         wxTextEntryDialog dlg( this, FMT_MOD_REF, FMT_MOD_CREATE, moduleName );
+        dlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR() );
 
         if( dlg.ShowModal() != wxID_OK )
             return NULL;    //Aborted by user

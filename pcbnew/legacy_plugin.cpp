@@ -281,6 +281,10 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
             FPID        fpid;
             std::string fpName = StrPurge( line + SZ( "$MODULE" ) );
 
+            // The footprint names in legacy libraries can contain the '/' and ':'
+            // characters which will cause the FPID parser to choke.
+            ReplaceIllegalFileNameChars( &fpName );
+
             if( !fpName.empty() )
                 fpid = FPID( fpName );
 
@@ -4030,6 +4034,10 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
             auto_ptr<MODULE>    module( new MODULE( m_owner->m_board ) );
 
             std::string         footprintName = StrPurge( line + SZ( "$MODULE" ) );
+
+            // The footprint names in legacy libraries can contain the '/' and ':'
+            // characters which will cause the FPID parser to choke.
+            ReplaceIllegalFileNameChars( &footprintName );
 
             // set the footprint name first thing, so exceptions can use name.
             module->SetFPID( FPID( footprintName ) );
