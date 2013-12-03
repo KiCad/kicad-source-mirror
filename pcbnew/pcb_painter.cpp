@@ -280,7 +280,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             if( !net )
                 return;
 
-            std::string netName = std::string( net->GetShortNetname().mb_str() );
+            std::wstring netName = std::wstring( net->GetShortNetname().wc_str() );
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
             double textOrientation = -atan( line.y / line.x );
             double textSize = std::min( static_cast<double>( width ), length / netName.length() );
@@ -456,7 +456,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                 VECTOR2D namesize( tsize, tsize );
                 m_gal->SetGlyphSize( namesize );
                 m_gal->SetLineWidth( namesize.x / 12.0 );
-                m_gal->StrokeText( std::string( aPad->GetShortNetname().mb_str() ),
+                m_gal->StrokeText( std::wstring( aPad->GetShortNetname().wc_str() ),
                                    textpos, 0.0 );
             }
 
@@ -474,8 +474,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
                 m_gal->SetGlyphSize( numsize );
                 m_gal->SetLineWidth( numsize.x / 12.0 );
-                m_gal->StrokeText( std::string( aPad->GetPadName().mb_str() ),
-                                   textpos, 0.0 );
+                m_gal->StrokeText( std::wstring( aPad->GetPadName().wc_str() ), textpos, 0.0 );
             }
 
             m_gal->Restore();
@@ -720,7 +719,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetLineWidth( aText->GetThickness() );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( std::string( aText->GetText().mb_str() ), position, orientation );
+    m_gal->StrokeText( std::wstring( aText->GetText().wc_str() ), position, orientation );
 }
 
 
@@ -736,7 +735,7 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetLineWidth( aText->GetThickness() );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( std::string( aText->GetText().mb_str() ), position, orientation );
+    m_gal->StrokeText( std::wstring( aText->GetText().wc_str() ), position, orientation );
 }
 
 
@@ -836,7 +835,7 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
 
     m_gal->SetLineWidth( text.GetThickness() );
     m_gal->SetTextAttributes( &text );
-    m_gal->StrokeText( std::string( text.GetText().mb_str() ), position, orientation );
+    m_gal->StrokeText( std::wstring( text.GetText().wc_str() ), position, orientation );
 }
 
 
