@@ -50,7 +50,7 @@ class VIEW_GROUP;
  * - draw selection box (drag LMB)
  * - handles MODULEs properly (ie. selects either MODULE or its PADs, TEXTs, etc.)
  * - takes into account high-contrast & layer visibility settings
- * - invokes InteractiveMove tool when user starts to drag selected items
+ * - invokes InteractiveEdit tool when user starts to drag selected items
  */
 
 class SELECTION_TOOL : public TOOL_INTERACTIVE

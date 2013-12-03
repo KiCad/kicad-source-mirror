@@ -116,7 +116,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
                 selectSingle( evt->Position() );
 
             // Display properties window
-            m_toolMgr->RunAction( "pcbnew.InteractiveMove.properties" );
+            m_toolMgr->RunAction( "pcbnew.InteractiveEdit.properties" );
         }
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
@@ -134,7 +134,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
                 if( containsSelected( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
-                    m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
+                    m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
                 }
                 else
                 {

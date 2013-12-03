@@ -35,7 +35,7 @@
 #include <pcbnew_id.h>
 
 #include "selection_tool.h"
-#include "move_tool.h"
+#include "edit_tool.h"
 #include "common_actions.h"
 #include <router/router_tool.h>
 
@@ -47,7 +47,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_galCanvas->SetEventDispatcher( m_toolDispatcher );
 
     // Register tool actions
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::moveActivate );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::editActivate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionActivate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::rotate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::flip );
@@ -56,7 +56,7 @@ void PCB_EDIT_FRAME::setupTools()
     // Register tools
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new ROUTER_TOOL );
-    m_toolManager->RegisterTool( new MOVE_TOOL );
+    m_toolManager->RegisterTool( new EDIT_TOOL );
 }
 
 
