@@ -172,6 +172,12 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
         // having to copy the FPID and its two strings, twice each.
         FPID& fpid = (FPID&) ret->GetFPID();
 
+        // Catch any misbehaving plugin, which should be setting internal footprint name properly:
+        wxASSERT( aFootprintName == FROM_UTF8( fpid.GetFootprintName().c_str() ) );
+
+        // and clearing nickname
+        wxASSERT( !fpid.GetLibNickname().size() );
+
         fpid.SetLibNickname( row->GetNickName() );
     }
 

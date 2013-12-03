@@ -157,9 +157,14 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
         MODULE* local = PCB_IO::FootprintLoad( m_pretty_dir, aFootprintName, aProperties );
 
         if( local )
-            return local;
-    }
+        {
+            // It has worked, see <src>/scripts/test_kicad_plugin.py.  So this was not firing:
+            // wxASSERT( aFootprintName == FROM_UTF8( local->GetFPID().GetFootprintName().c_str() ) );
+            // Moving it to higher API layer FP_LIB_TABLE::FootprintLoad().
 
+            return local;
+        }
+    }
 
     string fp_name = TO_UTF8( aFootprintName );
 
@@ -178,13 +183,21 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
         if( zis.OpenEntry( *entry ) )
         {
             INPUTSTREAM_LINE_READER reader( &zis );
+#if 1
+            // I am a PCB_IO derivative with my own PCB_PARSER
+            m_parser->SetLineReader( &reader );     // ownership not passed
+
+            MODULE* ret = (MODULE*) m_parser->Parse();
+#else
             PCB_PARSER              parser( &reader );
 
             MODULE* ret = (MODULE*) parser.Parse();
+#endif
 
             // Dude, the footprint name comes from the file name in
             // a github library.  Zero out the library name, we don't know it here.
-            // Caller always has to set the library nickname if it knows it.
+            // Some caller may set the library nickname, one such instance is
+            // FP_LIB_TABLE::FootprintLoad().
             ret->SetFPID( fp_name );
 
             return ret;
