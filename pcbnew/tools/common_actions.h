@@ -36,7 +36,7 @@ class COMMON_ACTIONS
 {
 public:
     /// Activation of the move tool
-    static TOOL_ACTION moveActivate;
+    static TOOL_ACTION editActivate;
 
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;

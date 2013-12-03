@@ -30,19 +30,19 @@ TOOL_ACTION COMMON_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
         AS_GLOBAL, 'S',
         "Selection tool", "Allows to select items" );
 
-// Move tool actions
-TOOL_ACTION COMMON_ACTIONS::moveActivate( "pcbnew.InteractiveMove",
+// Edit tool actions
+TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 'M',
         "Move", "Moves the selected item(s)" );
 
-TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveMove.rotate",
+TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveEdit.rotate",
         AS_CONTEXT, 'R',
         "Rotate", "Rotates selected item(s)" );
 
-TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveMove.flip",
+TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         AS_CONTEXT, 'F',
         "Flip", "Flips selected item(s)" );
 
-TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveMove.properties",
+TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, 'E',
         "Properties...", "Displays properties window" );
