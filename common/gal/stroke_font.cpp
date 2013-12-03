@@ -142,7 +142,7 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLY
 }
 
 
-void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRotationAngle )
+void STROKE_FONT::Draw( std::wstring aText, const VECTOR2D& aPosition, double aRotationAngle )
 {
     // By default overbar is turned off
     m_overbar = false;
@@ -156,7 +156,7 @@ void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRo
     // Split multiline strings into separate ones and draw them line by line
     size_t newlinePos = aText.find( '\n' );
 
-    if( newlinePos != std::string::npos )
+    if( newlinePos != std::wstring::npos )
     {
         VECTOR2D nextlinePosition = VECTOR2D( 0.0, m_glyphSize.y * LINE_HEIGHT_RATIO );
 
@@ -233,7 +233,7 @@ void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRo
         m_gal->SetLineWidth( m_gal->GetLineWidth() * 1.3 );
     }
 
-    for( std::string::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
+    for( std::wstring::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
     {
         if( *chIt == '~' )
         {
@@ -244,7 +244,7 @@ void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRo
         GLYPH_LIST::iterator glyphIt = m_glyphs.begin();
         std::deque<BOX2D>::iterator bbIt = m_glyphBoundingBoxes.begin();
 
-        unsigned dd = (unsigned) ((unsigned char) *chIt ) - (unsigned) ' ';
+        unsigned dd = *chIt - ' ';
 
         if( dd >= m_glyphBoundingBoxes.size() )
             dd = '?' - ' ';
@@ -292,17 +292,17 @@ void STROKE_FONT::Draw( std::string aText, const VECTOR2D& aPosition, double aRo
 }
 
 
-VECTOR2D STROKE_FONT::computeTextSize( const std::string& aText ) const
+VECTOR2D STROKE_FONT::computeTextSize( const std::wstring& aText ) const
 {
     VECTOR2D result = VECTOR2D( 0.0, m_glyphSize.y );
 
-    for( std::string::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
+    for( std::wstring::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
     {
         if( *chIt == '~' )
             continue;
 
         std::deque<BOX2D>::const_iterator bbIt = m_glyphBoundingBoxes.begin();
-        unsigned dd =  (unsigned) ((unsigned char)*chIt) - (unsigned) ' ';
+        unsigned dd = *chIt - ' ';
 
         if( dd >= m_glyphBoundingBoxes.size() )
             dd = '?' - ' ';
