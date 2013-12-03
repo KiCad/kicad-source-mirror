@@ -36,9 +36,13 @@ TOOL_ACTION COMMON_ACTIONS::moveActivate( "pcbnew.InteractiveMove",
         "Move", "Moves the selected item(s)" );
 
 TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveMove.rotate",
-        AS_CONTEXT, ' ',
+        AS_CONTEXT, 'R',
         "Rotate", "Rotates selected item(s)" );
 
 TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveMove.flip",
         AS_CONTEXT, 'F',
         "Flip", "Flips selected item(s)" );
+
+TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveMove.properties",
+        AS_GLOBAL, 'E',
+        "Properties...", "Displays properties window" );

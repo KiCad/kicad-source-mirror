@@ -102,11 +102,25 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         }
 
         // single click? Select single object
-        if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !m_additive && m_selection.Size() > 1 )
+                clearSelection();
+
             selectSingle( evt->Position() );
+        }
+
+        else if( evt->IsDblClick( BUT_LEFT ) )
+        {
+            if( m_selection.Empty() )
+                selectSingle( evt->Position() );
+
+            // Display properties window
+            m_toolMgr->RunAction( "pcbnew.InteractiveMove.properties" );
+        }
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
-        if( evt->IsDrag( BUT_LEFT ) )
+        else if( evt->IsDrag( BUT_LEFT ) )
         {
             if( m_selection.Empty() || m_additive )
             {

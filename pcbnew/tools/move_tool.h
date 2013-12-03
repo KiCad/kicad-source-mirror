@@ -49,10 +49,9 @@ class MOVE_TOOL : public TOOL_INTERACTIVE
 {
 public:
     MOVE_TOOL();
-    ~MOVE_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset();
+    void Reset() {};
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init();
@@ -61,15 +60,43 @@ public:
      * Function Main()
      *
      * Main loop in which events are handled.
+     * @param aEvent is the handled event.
      */
     int Main( TOOL_EVENT& aEvent );
 
+    /**
+     * Function Edit()
+     *
+     * Displays properties window for the selected object.
+     */
+    int Properties( TOOL_EVENT& aEvent );
+
+    /**
+     * Function Rotate()
+     *
+     * Rotates currently selected items.
+     */
+    int Rotate( TOOL_EVENT& aEvent );
+
+    /**
+     * Function Flip()
+     *
+     * Rotates currently selected items. The rotation point is the current cursor position.
+     */
+    int Flip( TOOL_EVENT& aEvent );
+
 private:
-    /// Saves the state of items and allows to restore them
+    ///> Saves the state of items and allows to restore them
     ITEM_STATE m_state;
 
-    /// Selection tool used for obtaining selected items
+    ///> Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
+
+    ///> Flag determining if anything is being dragged right now
+    bool m_dragging;
+
+    ///> Sets up handlers for various events
+    void setTransitions();
 };
 
 #endif

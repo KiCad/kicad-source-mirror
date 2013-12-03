@@ -24,6 +24,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <wxPcbStruct.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <confirm.h>
@@ -41,37 +42,25 @@ MOVE_TOOL::MOVE_TOOL() :
 }
 
 
-MOVE_TOOL::~MOVE_TOOL()
-{
-}
-
-
-void MOVE_TOOL::Reset()
-{
-    // The tool launches upon reception of action event ("pcbnew.InteractiveMove")
-    Go( &MOVE_TOOL::Main, COMMON_ACTIONS::moveActivate.MakeEvent() );
-}
-
-
 bool MOVE_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
     TOOL_BASE* selectionTool = m_toolMgr->FindTool( "pcbnew.InteractiveSelection" );
 
-    if( selectionTool )
-    {
-        m_selectionTool = static_cast<SELECTION_TOOL*>( selectionTool );
-
-        // Add context menu entries that are displayed when selection tool is active
-        m_selectionTool->AddMenuItem( COMMON_ACTIONS::moveActivate );
-        m_selectionTool->AddMenuItem( COMMON_ACTIONS::rotate );
-        m_selectionTool->AddMenuItem( COMMON_ACTIONS::flip );
-    }
-    else
+    m_selectionTool = static_cast<SELECTION_TOOL*>( selectionTool );
+    if( !selectionTool )
     {
         DisplayError( NULL, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
         return false;
     }
+
+    // Add context menu entries that are displayed when selection tool is active
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::moveActivate );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::rotate );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::flip );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::properties );
+
+    setTransitions();
 
     return true;
 }
@@ -85,7 +74,7 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
         return 0; // there are no items to operate on
 
     VECTOR2D dragPosition;
-    bool dragging = false;
+    m_dragging = false;
     bool restore = false;       // Should items' state be restored when finishing the tool?
 
     VIEW_CONTROLS* controls = getViewControls();
@@ -105,23 +94,15 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
         // Dispatch TOOL_ACTIONs
         else if( evt->Category() == TC_COMMAND )
         {
-            VECTOR2D cursorPos = getView()->ToWorld( getViewControls()->GetCursorPosition() );
-
-            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )           // got rotation event?
-            {
-                m_state.Rotate( cursorPos, 900.0 );
-                selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
-            }
-            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )        // got flip event?
-            {
-                m_state.Flip( cursorPos );
-                selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
-            }
+            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+                Rotate( aEvent );
+            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+                Flip( aEvent );
         }
 
         else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
-            if( dragging )
+            if( m_dragging )
             {
                 // Drag items to the current cursor position
                 VECTOR2D movement = ( evt->Position() - dragPosition );
@@ -138,15 +119,18 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
                     m_state.Save( *it );
                 }
 
-                dragging = true;
+                m_dragging = true;
             }
 
             selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
             dragPosition = evt->Position();
         }
+
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
             break; // Finish
     }
+
+    m_dragging = false;
 
     if( restore )
     {
@@ -165,5 +149,91 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
     controls->SetSnapping( false );
     controls->SetAutoPan( false );
 
+    setTransitions();
+
     return 0;
+}
+
+
+int MOVE_TOOL::Properties( TOOL_EVENT& aEvent )
+{
+    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+
+    // Properties are displayed when there is only one item selected
+    if( selection.items.size() == 1 )
+    {
+        // Display properties dialog
+        PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
+        BOARD_ITEM* item = *selection.items.begin();
+        editFrame->OnEditItemRequest( NULL, item );
+
+        item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    }
+
+    setTransitions();
+
+    return 0;
+}
+
+
+int MOVE_TOOL::Rotate( TOOL_EVENT& aEvent )
+{
+    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    VECTOR2D cursorPos = getView()->ToWorld( getViewControls()->GetCursorPosition() );
+
+    if( m_dragging )
+    {
+        m_state.Rotate( cursorPos, 900.0 );
+        selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
+    }
+    else
+    {
+        std::set<BOARD_ITEM*>::iterator it;
+
+        for( it = selection.items.begin(); it != selection.items.end(); ++it )
+        {
+            (*it)->Rotate( wxPoint( cursorPos.x, cursorPos.y ), 900.0 );
+            (*it)->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        setTransitions();
+    }
+
+    return 0;
+}
+
+
+int MOVE_TOOL::Flip( TOOL_EVENT& aEvent )
+{
+    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    VECTOR2D cursorPos = getView()->ToWorld( getViewControls()->GetCursorPosition() );
+
+    if( m_dragging )
+    {
+        m_state.Flip( cursorPos );
+        selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
+    }
+    else
+    {
+        std::set<BOARD_ITEM*>::iterator it;
+
+        for( it = selection.items.begin(); it != selection.items.end(); ++it )
+        {
+            (*it)->Flip( wxPoint( cursorPos.x, cursorPos.y ) );
+            (*it)->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
+        }
+
+        setTransitions();
+    }
+
+    return 0;
+}
+
+
+void MOVE_TOOL::setTransitions()
+{
+    Go( &MOVE_TOOL::Main,       COMMON_ACTIONS::moveActivate.MakeEvent() );
+    Go( &MOVE_TOOL::Rotate,     COMMON_ACTIONS::rotate.MakeEvent() );
+    Go( &MOVE_TOOL::Flip,       COMMON_ACTIONS::flip.MakeEvent() );
+    Go( &MOVE_TOOL::Properties, COMMON_ACTIONS::properties.MakeEvent() );
 }

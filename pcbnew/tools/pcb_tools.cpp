@@ -51,6 +51,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionActivate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::rotate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::flip );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::properties );
 
     // Register tools
     m_toolManager->RegisterTool( new SELECTION_TOOL );

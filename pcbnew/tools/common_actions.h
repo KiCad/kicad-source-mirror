@@ -24,7 +24,7 @@
 
 #include <tool/tool_action.h>
 
-class ACTION_MANAGER;
+//class ACTION_MANAGER;
 
 /**
  * Class COMMON_ACTIONS
@@ -46,4 +46,7 @@ public:
 
     /// Flipping of selected objects
     static TOOL_ACTION flip;
+
+    /// Activation of the edit tool
+    static TOOL_ACTION properties;
 };
