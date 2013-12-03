@@ -280,11 +280,6 @@ void TOOL_DISPATCHER::DispatchWxCommand( const wxCommandEvent& aEvent )
         toolName = "pcbnew.InteractiveRouter";
         activateTool = true;
         break;
-
-    case ID_SELECTION_TOOL:
-        toolName = "pcbnew.InteractiveSelection";
-        activateTool = true;
-        break;
     }
 
     // do nothing if the legacy view is active

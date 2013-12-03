@@ -121,8 +121,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     // menu Config
 
     /* Tom's hacks start */
-    EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
-    EVT_TOOL ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_MENU ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_TOOL ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     /* Tom's hacks end */

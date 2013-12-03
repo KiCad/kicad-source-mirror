@@ -66,6 +66,8 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 void SELECTION_TOOL::Reset()
 {
+    clearSelection();
+
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
     getView()->Add( m_selection.group );
@@ -77,12 +79,6 @@ void SELECTION_TOOL::Reset()
 
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW* view = getView();
-
-    assert( getModel<BOARD>( PCB_T ) != NULL );
-
-    view->Add( m_selection.group );
-
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -94,8 +90,8 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         {
             if( !m_selection.Empty() )  // Cancel event deselects items...
                 clearSelection();
-            else                        // ...unless there is nothing selected
-                break;                  // then exit the tool
+
+            // This tool never exits
         }
 
         // single click? Select single object
@@ -142,8 +138,8 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         }
     }
 
-    m_selection.group->Clear();
-    view->Remove( m_selection.group );
+    // This tool is supposed to be active forever
+    assert( false );
 
     return 0;
 }
@@ -188,6 +184,7 @@ void SELECTION_TOOL::clearSelection()
 {
     KIGFX::VIEW_GROUP::const_iter it, it_end;
 
+    // Restore the initial properties
     for( it = m_selection.group->Begin(), it_end = m_selection.group->End(); it != it_end; ++it )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
@@ -196,8 +193,7 @@ void SELECTION_TOOL::clearSelection()
         item->ClearSelected();
     }
 
-    m_selection.group->Clear();
-    m_selection.items.clear();
+    m_selection.Clear();
 
     // Do not show the context menu when there is nothing selected
     SetContextMenu( &m_menu, CMENU_OFF );
@@ -608,4 +604,11 @@ bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
     }
 
     return false;
+}
+
+
+void SELECTION_TOOL::SELECTION::Clear()
+{
+    items.clear();
+    group->Clear();
 }

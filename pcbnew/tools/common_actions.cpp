@@ -27,8 +27,7 @@
 
 // Selection tool actions
 TOOL_ACTION COMMON_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
-        AS_GLOBAL, 'S',
-        "Selection tool", "Allows to select items" );
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
 // Edit tool actions
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",

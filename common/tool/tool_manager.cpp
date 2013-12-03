@@ -97,7 +97,7 @@ struct TOOL_MANAGER::TOOL_STATE
 
 
 TOOL_MANAGER::TOOL_MANAGER() :
-    m_model( NULL ), m_view( NULL )
+    m_model( NULL ), m_view( NULL ), m_viewControls( NULL ), m_editFrame( NULL )
 {
     m_actionMgr = new ACTION_MANAGER( this );
 }
@@ -476,7 +476,8 @@ bool TOOL_MANAGER::ProcessEvent( TOOL_EVENT& aEvent )
     if( m_view->IsDirty() )
     {
         PCB_EDIT_FRAME* f = static_cast<PCB_EDIT_FRAME*>( GetEditFrame() );
-        f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
+        if( f->IsGalCanvasActive() )
+            f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
     }
 
     return false;
