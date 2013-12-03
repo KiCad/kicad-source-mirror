@@ -78,6 +78,10 @@ public:
         {
             return items.size();
         }
+
+        /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
+        /// change properties of selected items (e.g. selection flag).
+        void Clear();
     };
 
     /// @copydoc TOOL_INTERACTIVE::Reset()

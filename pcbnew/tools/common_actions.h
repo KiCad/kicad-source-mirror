@@ -35,11 +35,11 @@
 class COMMON_ACTIONS
 {
 public:
-    /// Activation of the move tool
-    static TOOL_ACTION editActivate;
-
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;
+
+    /// Activation of the edit tool
+    static TOOL_ACTION editActivate;
 
     /// Rotation of selected objects
     static TOOL_ACTION rotate;
