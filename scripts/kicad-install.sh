@@ -230,6 +230,12 @@ install_or_update()
 
     echo
     echo 'All KiCad "--install-or-update" steps completed, you are up to date.'
+
+    if [ -z "${KIGITHUB}" ]; then
+        echo "Please set an environment variable by adding:"
+        echo "export KIGITHUB=https://github.com/KiCad"
+        echo "to your ~/.bashrc file.  Then reboot."
+    fi
 }
 
 
