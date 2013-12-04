@@ -66,7 +66,7 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 void SELECTION_TOOL::Reset()
 {
-    clearSelection();
+    ClearSelection();
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
@@ -89,7 +89,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         if( evt->IsCancel() )
         {
             if( !m_selection.Empty() )  // Cancel event deselects items...
-                clearSelection();
+                ClearSelection();
 
             // This tool never exits
         }
@@ -98,7 +98,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_LEFT ) )
         {
             if( !m_additive && m_selection.Size() > 1 )
-                clearSelection();
+                ClearSelection();
 
             selectSingle( evt->Position() );
         }
@@ -132,7 +132,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
                 else
                 {
                     // No -> clear the selection list
-                    clearSelection();
+                    ClearSelection();
                 }
             }
         }
@@ -145,42 +145,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
-{
-    assert( aAction.GetId() > 0 );    // Check if the action was registered before in ACTION_MANAGER
-
-    m_menu.Add( aAction );
-}
-
-
-void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
-{
-    if( m_selection.items.find( aItem ) != m_selection.items.end() )
-    {
-        deselectItem( aItem );
-
-        // If there is nothing selected, disable the context menu
-        if( m_selection.Empty() )
-            SetContextMenu( &m_menu, CMENU_OFF );
-    }
-    else
-    {
-        if( !m_additive )
-            clearSelection();
-
-        // Prevent selection of invisible or inactive items
-        if( selectable( aItem ) )
-        {
-            selectItem( aItem );
-
-            // Now the context menu should be enabled
-            SetContextMenu( &m_menu, CMENU_BUTTON );
-        }
-    }
-}
-
-
-void SELECTION_TOOL::clearSelection()
+void SELECTION_TOOL::ClearSelection()
 {
     KIGFX::VIEW_GROUP::const_iter it, it_end;
 
@@ -195,8 +160,42 @@ void SELECTION_TOOL::clearSelection()
 
     m_selection.Clear();
 
+    getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+
     // Do not show the context menu when there is nothing selected
     SetContextMenu( &m_menu, CMENU_OFF );
+}
+
+
+void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
+{
+    assert( aAction.GetId() > 0 );    // Check if the action was registered before in ACTION_MANAGER
+
+    m_menu.Add( aAction );
+}
+
+
+void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
+{
+    if( isSelected( aItem ) )
+    {
+        deselectItem( aItem );
+    }
+    else
+    {
+        if( !m_additive )
+            ClearSelection();
+
+        // Prevent selection of invisible or inactive items
+        if( selectable( aItem ) )
+            selectItem( aItem );
+    }
+}
+
+
+bool SELECTION_TOOL::isSelected( const BOARD_ITEM* aItem ) const
+{
+    return ( m_selection.items.find( const_cast<BOARD_ITEM*>( aItem ) ) != m_selection.items.end() );
 }
 
 
@@ -214,7 +213,7 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
     {
     case 0:
         if( !m_additive )
-            clearSelection();
+            ClearSelection();
 
         break;
 
@@ -308,7 +307,7 @@ bool SELECTION_TOOL::selectMultiple()
         if( evt->IsDrag( BUT_LEFT ) )
         {
             if( !m_additive )
-                clearSelection();
+                ClearSelection();
 
             // Start drawing a selection box
             m_selArea->SetOrigin( evt->DragOrigin() );
@@ -338,11 +337,10 @@ bool SELECTION_TOOL::selectMultiple()
                     selectItem( item );
             }
 
-            // Now the context menu should be enabled
-            if( !m_selection.Empty() )
-                SetContextMenu( &m_menu, CMENU_BUTTON );
+            // Do not display information about selected item,as there is more than one
+            getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
 
-            break;
+            break;  // Stop waiting for events
         }
     }
 
@@ -412,9 +410,6 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 
     // Removes possible brighten mark
     getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-
-    // Restore the original menu
-    SetContextMenu( &m_menu, CMENU_BUTTON );
 
     return current;
 }
@@ -542,6 +537,16 @@ void SELECTION_TOOL::selectItem( BOARD_ITEM* aItem )
     // Add items to the VIEW_GROUP, so they will be displayed on the overlay
     selectBase( aItem );
     m_selection.items.insert( aItem );
+
+    // It is enough to do it only for the first selected item
+    if( m_selection.items.size() == 1 )
+    {
+        // Set as the current item, so the information about selection is displayed
+        getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( aItem, true );
+
+        // Now the context menu should be enabled
+        SetContextMenu( &m_menu, CMENU_BUTTON );
+    }
 }
 
 
@@ -584,6 +589,13 @@ void SELECTION_TOOL::deselectItem( BOARD_ITEM* aItem )
 
     deselectBase( aItem );
     m_selection.items.erase( aItem );
+
+    // If there is nothing selected, disable the context menu
+    if( m_selection.Empty() )
+    {
+        SetContextMenu( &m_menu, CMENU_OFF );
+        getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+    }
 }
 
 

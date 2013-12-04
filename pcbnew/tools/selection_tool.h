@@ -105,6 +105,12 @@ public:
     }
 
     /**
+     * Function ClearSelection()
+     * Clears the current selection.
+     */
+    void ClearSelection();
+
+    /**
      * Function AddAction()
      *
      * Adds a menu entry to run a TOOL_ACTION on selected items.
@@ -156,10 +162,13 @@ private:
     void toggleSelection( BOARD_ITEM* aItem );
 
     /**
-     * Function clearSelection()
-     * Clears selections of currently selected items.
+     * Function isSelected()
+     * Tests if an item is currently selected.
+     *
+     * @param aItem is the item to be checked.
+     * @return True if the item is selected, false otherwise.
      */
-    void clearSelection();
+    bool isSelected( const BOARD_ITEM* aItem ) const;
 
     /**
      * Function selectable()
