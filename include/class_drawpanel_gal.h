@@ -111,6 +111,12 @@ public:
         m_eventDispatcher = aEventDispatcher;
     }
 
+    /**
+     * Function StopDrawing()
+     * Prevents the GAL canvas from further drawing till it is recreated.
+     */
+    void StopDrawing();
+
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
