@@ -116,7 +116,7 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-EDA_RECT SCH_LINE::GetBoundingBox() const
+const EDA_RECT SCH_LINE::GetBoundingBox() const
 {
     int      width = 25;
 

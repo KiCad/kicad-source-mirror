@@ -68,7 +68,7 @@ int64_t rescale( int64_t aNumerator, int64_t aValue, int64_t aDenominator )
         a0 = a0 * b0 + t1a;
         a1 = a1 * b1 + ( t1 >> 32 ) + ( a0 < t1a );
         a0 += r;
-        a1 += ( (uint64_t) a0 ) < r;
+        a1 += a0 < (uint64_t)r;
 
         for( i = 63; i >= 0; i-- )
         {

@@ -139,7 +139,7 @@ public:
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;    // Virtual
 
     /**
      * Function ReturnPinEndPoint

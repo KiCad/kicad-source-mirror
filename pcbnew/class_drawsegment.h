@@ -168,7 +168,7 @@ public:
 
     virtual void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
-    virtual EDA_RECT GetBoundingBox() const;
+    virtual const EDA_RECT GetBoundingBox() const;
 
     virtual bool HitTest( const wxPoint& aPosition );
 

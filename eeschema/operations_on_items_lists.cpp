@@ -202,7 +202,6 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) newitem;
                 sheet->SetTimeStamp( GetNewTimeStamp() );
-                sheet->SetSon( NULL );
                 break;
             }
 

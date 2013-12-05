@@ -100,7 +100,7 @@ public:
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;    // Virtual
 
     /**
      * Function IsVoid

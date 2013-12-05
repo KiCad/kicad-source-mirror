@@ -76,7 +76,7 @@ public:
 
     static bool Load( LINE_READER& aLine, wxString& aErrorMsg, SCH_ITEM **out );
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;    // Virtual
 
     void Move( const wxPoint& aMoveVector )
     {

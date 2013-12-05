@@ -38,6 +38,7 @@
 #include <class_module.h>
 #include <class_dimension.h>
 #include <class_zone.h>
+#include <class_edge_mod.h>
 
 
 /* Functions to undo and redo edit commands.
@@ -173,121 +174,113 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 }
 
 
-void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
+void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
 {
-    if( aItem == NULL || aImage == NULL )
+    if( aImage == NULL )
     {
-        wxMessageBox( wxT( "SwapData error: NULL pointer" ) );
         return;
     }
 
-    // Swap layers:
-    if( aItem->Type() != PCB_MODULE_T && aItem->Type() != PCB_ZONE_AREA_T )
-    {
-        // These items have a global swap function.
-        LAYER_NUM layer, layerimg;
-        layer    = aItem->GetLayer();
-        layerimg = aImage->GetLayer();
-        aItem->SetLayer( layerimg );
-        aImage->SetLayer( layer );
-    }
+    EDA_ITEM * pnext = Next();
+    EDA_ITEM * pback = Back();
 
-    switch( aItem->Type() )
+    switch( Type() )
     {
     case PCB_MODULE_T:
-        {
-            MODULE* tmp = (MODULE*) aImage->Clone();
-            ( (MODULE*) aImage )->Copy( (MODULE*) aItem );
-            ( (MODULE*) aItem )->Copy( tmp );
-            delete tmp;
-        }
+    {
+        MODULE* tmp = (MODULE*) aImage->Clone();
+        ( (MODULE*) aImage )->Copy( (MODULE*) this );
+        ( (MODULE*) this )->Copy( tmp );
+        delete tmp;
+    }
         break;
 
     case PCB_ZONE_AREA_T:
-        {
-            ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) aImage->Clone();
-            ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) aItem );
-            ( (ZONE_CONTAINER*) aItem )->Copy( tmp );
-            delete tmp;
-        }
+    {
+        ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) aImage->Clone();
+        ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) this );
+        ( (ZONE_CONTAINER*) this )->Copy( tmp );
+        delete tmp;
+    }
         break;
 
     case PCB_LINE_T:
-#if 0
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Start, ( (DRAWSEGMENT*) aImage )->m_Start );
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_End, ( (DRAWSEGMENT*) aImage )->m_End );
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Width, ( (DRAWSEGMENT*) aImage )->m_Width );
-        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Shape, ( (DRAWSEGMENT*) aImage )->m_Shape );
-#else
-        {
-            DRAWSEGMENT tmp = *(DRAWSEGMENT*) aImage;
-            *aImage = *aItem;
-            *aItem  = tmp;
-        }
-#endif
+        std::swap( *((DRAWSEGMENT*)this), *((DRAWSEGMENT*)aImage) );
         break;
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
-        {
-            TRACK* track = (TRACK*) aItem;
-            TRACK* image = (TRACK*) aImage;
+    {
+        TRACK* track = (TRACK*) this;
+        TRACK* image = (TRACK*) aImage;
 
-            // swap start, end, width and shape for track and image.
-            wxPoint exchp = track->GetStart();
-            track->SetStart( image->GetStart() );
-            image->SetStart( exchp );
-            exchp = track->GetEnd();
-            track->SetEnd( image->GetEnd() );
-            image->SetEnd( exchp );
+        EXCHG(track->m_Layer, image->m_Layer );
 
-            int atmp = track->GetWidth();
-            track->SetWidth( image->GetWidth() );
-            image->SetWidth( atmp );
-            atmp = track->GetShape();
-            track->SetShape( image->GetShape() );
-            image->SetShape( atmp );
+        // swap start, end, width and shape for track and image.
+        wxPoint exchp = track->GetStart();
+        track->SetStart( image->GetStart() );
+        image->SetStart( exchp );
+        exchp = track->GetEnd();
+        track->SetEnd( image->GetEnd() );
+        image->SetEnd( exchp );
 
-            atmp = track->GetDrillValue();
+        int atmp = track->GetWidth();
+        track->SetWidth( image->GetWidth() );
+        image->SetWidth( atmp );
+        atmp = track->GetShape();
+        track->SetShape( image->GetShape() );
+        image->SetShape( atmp );
 
-            if( track->IsDrillDefault() )
-                atmp = -1;
+        atmp = track->GetDrillValue();
 
-            int itmp = image->GetDrillValue();
+        if( track->IsDrillDefault() )
+            atmp = -1;
 
-            if( image->IsDrillDefault() )
-                itmp = -1;
+        int itmp = image->GetDrillValue();
 
-            EXCHG(itmp, atmp );
+        if( image->IsDrillDefault() )
+            itmp = -1;
 
-            if( atmp > 0 )
-                track->SetDrill( atmp );
-            else
-                track->SetDrillDefault();
+        EXCHG(itmp, atmp );
 
-            if( itmp > 0 )
-                image->SetDrill( itmp );
-            else
-                image->SetDrillDefault();
-        }
+        if( atmp > 0 )
+            track->SetDrill( atmp );
+        else
+            track->SetDrillDefault();
+
+        if( itmp > 0 )
+            image->SetDrill( itmp );
+        else
+            image->SetDrillDefault();
+    }
         break;
 
     case PCB_TEXT_T:
-        std::swap( *((TEXTE_PCB*)aItem), *((TEXTE_PCB*)aImage) );
+        std::swap( *((TEXTE_PCB*)this), *((TEXTE_PCB*)aImage) );
         break;
 
     case PCB_TARGET_T:
-        ( (PCB_TARGET*) aItem )->Exchg( (PCB_TARGET*) aImage );
+        std::swap( *((PCB_TARGET*)this), *((PCB_TARGET*)aImage) );
         break;
 
     case PCB_DIMENSION_T:
-        std::swap( *((DIMENSION*)aItem), *((DIMENSION*)aImage) );
+        std::swap( *((DIMENSION*)this), *((DIMENSION*)aImage) );
         break;
 
     case PCB_ZONE_T:
     default:
-        wxMessageBox( wxT( "SwapData() error: unexpected type" ) );
+        wxLogMessage( wxT( "SwapData() error: unexpected type %d" ), Type() );
         break;
+    }
+
+    if( pnext != Next() || pback != Back() )
+    {
+        Pnext = pnext;
+        Pback = pback;
+#ifdef DEBUG
+        wxLogMessage( wxT( "SwapData Error: %s Pnext or Pback pointers modified" ),
+                      GetClass().GetData() );
+#endif
     }
 }
 
@@ -491,7 +484,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         case UR_CHANGED:    /* Exchange old and new data for each item */
         {
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
-            SwapData( item, image );
+            item->SwapData( image );
         }
         break;
 

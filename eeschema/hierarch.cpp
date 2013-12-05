@@ -138,7 +138,8 @@ void SCH_EDIT_FRAME::InstallHierarchyFrame( wxDC* DC, wxPoint& pos )
 
 
 HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos ) :
-    wxDialog( parent, -1, _( "Navigator" ), pos, wxSize( 110, 50 ), DIALOG_STYLE )
+    wxDialog( parent, -1, _( "Navigator" ), pos, wxSize( 110, 50 ),
+    wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     wxTreeItemId cellule;
 

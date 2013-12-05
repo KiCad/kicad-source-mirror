@@ -65,6 +65,8 @@ Load() TODO's
 #include <macros.h>
 #include <fctsys.h>
 #include <trigo.h>
+#include <macros.h>
+#include <kicad_string.h>
 #include <wx/filename.h>
 
 #include <class_board.h>
@@ -92,23 +94,6 @@ typedef boost::optional<bool>               opt_bool;
 
 
 const wxChar* traceEaglePlugin = wxT( "KicadEaglePlugin" );
-
-/// Test footprint name for kicad legality, fix if needed and return true if fixing was required.
-static bool fix_eagle_package_name( string* aName )
-{
-    bool    changed = false;
-
-    for( string::iterator it = aName->begin();  it != aName->end();  ++it )
-    {
-        switch( *it )   // for mapping, I always prefer a tabular switch presentation:
-        {
-        case ':':   *it = '_';  changed = true;     break;
-        case '/':   *it = '-';  changed = true;     break;
-        }
-    }
-
-    return changed;
-}
 
 
 /// segment (element) of our XPATH into the Eagle XML document tree in PTREE form.
@@ -927,7 +912,7 @@ EELEMENT::EELEMENT( CPTREE& aElement )
     value   = attribs.get<string>( "value" );
 
     package = attribs.get<string>( "package" );
-    fix_eagle_package_name( &package );
+    ReplaceIllegalFileNameChars( &package );
 
     x = attribs.get<double>( "x" );
     y = attribs.get<double>( "y" );
@@ -1094,17 +1079,15 @@ EAGLE_PLUGIN::~EAGLE_PLUGIN()
 }
 
 
-const wxString& EAGLE_PLUGIN::PluginName() const
+const wxString EAGLE_PLUGIN::PluginName() const
 {
-    static const wxString name = wxT( "Eagle" );
-    return name;
+    return wxT( "Eagle" );
 }
 
 
-const wxString& EAGLE_PLUGIN::GetFileExtension() const
+const wxString EAGLE_PLUGIN::GetFileExtension() const
 {
-    static const wxString extension = wxT( "brd" );
-    return extension;
+    return wxT( "brd" );
 }
 
 
@@ -1291,9 +1274,6 @@ void EAGLE_PLUGIN::loadDesignRules( CPTREE& aDesignRules )
 
 void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 {
-    if( m_board == NULL )
-        return;
-
     typedef std::vector<ELAYER>     ELAYERS;
     typedef ELAYERS::const_iterator EITER;
 
@@ -1332,17 +1312,21 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
     }
 #endif
 
-    m_board->SetCopperLayerCount( cu.size() );
-
-    for( EITER it = cu.begin();  it != cu.end();  ++it )
+    // Set the layer names and cu count iff we're loading a board.
+    if( m_board )
     {
-        LAYER_NUM layer = kicad_layer( it->number );
+        m_board->SetCopperLayerCount( cu.size() );
 
-        // these function provide their own protection against UNDEFINED_LAYER:
-        m_board->SetLayerName( layer, FROM_UTF8( it->name.c_str() ) );
-        m_board->SetLayerType( layer, LT_SIGNAL );
+        for( EITER it = cu.begin();  it != cu.end();  ++it )
+        {
+            LAYER_NUM layer = kicad_layer( it->number );
 
-        // could map the colors here
+            // these function provide their own protection against UNDEFINED_LAYER:
+            m_board->SetLayerName( layer, FROM_UTF8( it->name.c_str() ) );
+            m_board->SetLayerType( layer, LT_SIGNAL );
+
+            // could map the colors here
+        }
     }
 }
 
@@ -1606,7 +1590,7 @@ void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const string* aLibName )
 
         string pack_name( pack_ref );
 
-        fix_eagle_package_name( &pack_name );
+        ReplaceIllegalFileNameChars( &pack_name );
 
 #if 0 && defined(DEBUG)
         if( pack_name == "TO220H" )
@@ -1624,13 +1608,15 @@ void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const string* aLibName )
         // add the templating MODULE to the MODULE template factory "m_templates"
         std::pair<MODULE_ITER, bool> r = m_templates.insert( key, m );
 
-        if( !r.second )
+        if( !r.second
+            // && !( m_props && m_props->Value( "ignore_duplicates" ) )
+          )
         {
             wxString lib = aLibName ? FROM_UTF8( aLibName->c_str() ) : m_lib_path;
             wxString pkg = FROM_UTF8( pack_name.c_str() );
 
             wxString emsg = wxString::Format(
-                _( "<package> name:'%s' duplicated in eagle <library>:'%s'" ),
+                _( "<package> name: '%s' duplicated in eagle <library>: '%s'" ),
                 GetChars( pkg ),
                 GetChars( lib )
                 );
@@ -2872,6 +2858,19 @@ MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStrin
     MODULE* ret = new MODULE( *mi->second );
 
     return ret;
+}
+
+
+void EAGLE_PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
+{
+    PLUGIN::FootprintLibOptions( aListToAppendTo );
+
+    /*
+    (*aListToAppendTo)["ignore_duplicates"] = wxString( _(
+        "Ignore duplicately named footprints within the same Eagle library. "
+        "Only the first similarly named footprint will be loaded."
+        )).utf8_str();
+    */
 }
 
 

@@ -127,7 +127,8 @@ public:
     int GetShape() const                        { return m_Shape; }
     void SetShape( int aShape )                 { m_Shape = aShape; }
 
-    EDA_RECT GetBoundingBox() const;
+    // Virtual function
+    const EDA_RECT GetBoundingBox() const;
 
     /**
      * Function GetBestInsertPoint

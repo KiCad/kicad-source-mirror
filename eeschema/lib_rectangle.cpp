@@ -256,7 +256,7 @@ void LIB_RECTANGLE::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 }
 
 
-EDA_RECT LIB_RECTANGLE::GetBoundingBox() const
+const EDA_RECT LIB_RECTANGLE::GetBoundingBox() const
 {
     EDA_RECT rect;
 

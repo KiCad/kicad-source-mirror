@@ -220,7 +220,7 @@ public:
      */
     void SetTimeStamp( time_t aNewTimeStamp );
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;    // Virtual
 
     //-----<Fields>-----------------------------------------------------------
 

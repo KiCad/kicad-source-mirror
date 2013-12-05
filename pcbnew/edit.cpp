@@ -1177,11 +1177,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MENU_ARCHIVE_NEW_MODULES:
-        ArchiveModulesOnBoard( wxEmptyString, true );
+        ArchiveModulesOnBoard( true );
         break;
 
     case ID_MENU_ARCHIVE_ALL_MODULES:
-        ArchiveModulesOnBoard( wxEmptyString, false );
+        ArchiveModulesOnBoard( false );
         break;
 
     case ID_GEN_IMPORT_DXF_FILE:

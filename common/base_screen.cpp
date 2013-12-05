@@ -30,6 +30,7 @@
  */
 
 #include <fctsys.h>
+#include <macros.h>
 #include <common.h>
 #include <base_struct.h>
 #include <class_base_screen.h>

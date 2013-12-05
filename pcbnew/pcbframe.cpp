@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2010 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
- * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,14 +119,14 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
 
     // menu Config
-	
-    /* Tom's hacks start */	
+
+    /* Tom's hacks start */
     EVT_MENU ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_TOOL ( ID_SELECTION_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_MENU ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     EVT_TOOL ( ID_PNS_ROUTER_TOOL, PCB_EDIT_FRAME::onGenericCommand )
     /* Tom's hacks end */
-		
+
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, PCB_EDIT_FRAME::OnConfigurePcbOptions )
     EVT_MENU( ID_CONFIG_REQ, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT, PCB_EDIT_FRAME::Process_Config )
@@ -237,7 +237,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
                     PCB_EDIT_FRAME::ProcessMuWaveFunctions )
 
     EVT_MENU_RANGE( ID_POPUP_PCB_AUTOPLACE_START_RANGE, ID_POPUP_PCB_AUTOPLACE_END_RANGE,
-                    PCB_EDIT_FRAME::AutoPlace )
+                    PCB_EDIT_FRAME::OnPlaceOrRouteFootprints )
 
     EVT_MENU( ID_POPUP_PCB_REORIENT_ALL_MODULES, PCB_EDIT_FRAME::OnOrientFootprints )
 
@@ -597,6 +597,10 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     SaveSettings();
+
+    // Delete board structs and undo/redo lists, to avoid crash on exit
+    // when deleting some structs (mainly in undo/redo lists) too late
+    Clear_Pcb( false );
 
     // do not show the window because ScreenPcb will be deleted and we do not
     // want any paint event

@@ -88,8 +88,8 @@ if( CMAKE_COMPILER_IS_GNUCXX )
 
     # Establish -Wall early, so specialized relaxations of this may come
     # subsequently on the command line, such as in pcbnew/github/CMakeLists.txt
-    set( CMAKE_C_FLAGS   "-Wall" )
-    set( CMAKE_CXX_FLAGS "-Wall" )
+    set( CMAKE_C_FLAGS   "-Wall ${CMAKE_C_FLAGS}" )
+    set( CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}" )
 
     # The optimization level is -O1 instead of the usual -O2 level because
     # boost::polygon has a function (inflate polygon) broken by the -O2 level
@@ -459,11 +459,6 @@ add_custom_target( uninstall
 # Installation
 #================================================
 
-add_custom_target( install_user_configuration_files
-    "${CMAKE_COMMAND}" -E copy "${PROJECT_SOURCE_DIR}/template/fp-lib-table" ${KICAD_USER_CONFIG_DIR}/
-    COMMENT "Install template fp-lib-table into your home directory."
-    )
-
 install( FILES INSTALL.txt
     DESTINATION ${KICAD_DOCS}
     COMPONENT resources )
@@ -533,10 +528,6 @@ if( UNIX AND NOT APPLE )
     set( CPACK_PACKAGE_VERSION_PATCH 0 )
     #set( CPACK_PACKAGE_CONTACT Firstname Lastname <email@company.com> )
     set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "KiCad built by CMake build system." )
-
-    # Tell debian CPack about all files which are configuration files
-    add_conffiles()         # clear file
-    add_conffiles( ${KICAD_USER_CONFIG_DIR}/fp-lib-table )  # append to it
 
     include( CPack )
 

@@ -628,7 +628,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 }
 
 
-EDA_RECT SCH_SHEET::GetBoundingBox() const
+const EDA_RECT SCH_SHEET::GetBoundingBox() const
 {
     wxPoint end;
     EDA_RECT box( m_pos, m_size );

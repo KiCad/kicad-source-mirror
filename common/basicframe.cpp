@@ -459,7 +459,12 @@ void EDA_BASE_FRAME::AddHelpVersionInfoMenuEntry( wxMenu* aMenu )
 static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
 {
     return
-    " (" __WX_BO_UNICODE __ABI_VERSION __BO_COMPILER __WX_BO_STL
+#ifdef __WXDEBUG__
+    " (debug,"
+#else
+    " (release,"
+#endif
+    __WX_BO_UNICODE __ABI_VERSION __BO_COMPILER __WX_BO_STL
     __WX_BO_WXWIN_COMPAT_2_6 __WX_BO_WXWIN_COMPAT_2_8 ")"
     ;
 }
@@ -469,7 +474,11 @@ static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
 static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
 {
     return
-    " (" __WX_BO_DEBUG ","
+#ifdef __WXDEBUG__
+    " (debug,"
+#else
+    " (release,"
+#endif
     __WX_BO_UNICODE __ABI_VERSION __BO_COMPILER __WX_BO_STL
     __WX_BO_WXWIN_COMPAT_2_4 __WX_BO_WXWIN_COMPAT_2_6 ")"
     ;
@@ -490,8 +499,14 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     wxPlatformInfo info;
 
     tmp = wxT( "Application: " ) + wxGetApp().GetTitle() + wxT( "\n" );
-    tmp += wxT( "Version: " ) + GetBuildVersion() + wxT( "\n" );
-    tmp << wxT( "Build: " ) << wxVERSION_STRING
+    tmp << wxT( "Version: " ) << GetBuildVersion()
+#ifdef DEBUG
+        << wxT( " Debug" )
+#else
+        << wxT( " Release" )
+#endif
+        << wxT( " build\n" );
+    tmp << wxT( "wxWidgets: Version " ) << FROM_UTF8( wxVERSION_NUM_DOT_STRING )
         << FROM_UTF8( KICAD_BUILD_OPTIONS_SIGNATURE() ) << wxT( "\n" )
         << wxT( "Platform: " ) << wxGetOsDescription() << wxT( ", " )
         << info.GetArchName() << wxT( ", " ) << info.GetEndiannessName() << wxT( ", " )
@@ -536,6 +551,22 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
 #else
     tmp << wxT( "OFF\n" );
 #endif
+
+    tmp << wxT( "         USE_FP_LIB_TABLE=" );
+#ifdef USE_FP_LIB_TABLE
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
+
+    tmp << wxT( "         BUILD_GITHUB_PLUGIN=" );
+#ifdef BUILD_GITHUB_PLUGIN
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
+
+    wxMessageBox( tmp, _("Version Information (copied to the clipboard)") );
 
     wxTheClipboard->SetData( new wxTextDataObject( tmp ) );
     wxTheClipboard->Close();

@@ -985,7 +985,7 @@ void VIEW::RecacheAllItems( bool aImmediately )
 
 #ifdef __WXDEBUG__
     prof_counter totalRealTime;
-    prof_start( &totalRealTime, false );
+    prof_start( &totalRealTime );
 #endif /* __WXDEBUG__ */
 
     for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
@@ -1006,7 +1006,7 @@ void VIEW::RecacheAllItems( bool aImmediately )
     prof_end( &totalRealTime );
 
     wxLogDebug( wxT( "RecacheAllItems::immediately: %u %.1f ms" ),
-                aImmediately, (double) totalRealTime.value / 1000.0 );
+                aImmediately, totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }
 

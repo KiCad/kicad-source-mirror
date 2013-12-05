@@ -200,6 +200,15 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     bool singleFile = OneFileOnly();
     int fullcount = 0;
 
+    // Count the footprints to place, do not yet create a file
+    int fpcount = m_parent->DoGenFootprintsPositionFile( wxEmptyString, UnitsMM(),
+                                                         ForceAllSmd(), 2 );
+    if( fpcount == 0)
+    {
+        wxMessageBox( _( "No modules for automated placement." ) );
+        return false;
+    }
+
     fn = m_parent->GetBoard()->GetFileName();
     fn.SetPath( GetOutputDirectory() );
     frontLayerName = brd->GetLayerName( LAYER_N_FRONT );
@@ -208,29 +217,24 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     // Create the the Front or Top side placement file,
     // or the single file
     int side = 1;
+
     if( singleFile )
     {
         side = 2;
         fn.SetName( fn.GetName() + wxT( "-" ) + wxT("all") );
     }
-     else
+    else
         fn.SetName( fn.GetName() + wxT( "-" ) + frontLayerName );
 
     fn.SetExt( FootprintPlaceFileExtension );
 
-    int fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
-                                                         ForceAllSmd(), side );
+    fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
+                                                     ForceAllSmd(), side );
     if( fpcount < 0 )
     {
         msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
         AddMessage( msg + wxT("\n") );
         wxMessageBox( msg );
-        return false;
-    }
-
-    if( fpcount == 0)
-    {
-        wxMessageBox( _( "No modules for automated placement." ) );
         return false;
     }
 
@@ -339,6 +343,8 @@ void PCB_EDIT_FRAME::GenFootprintsPositionFile( wxCommandEvent& event )
  * aSide = 0 -> Back (bottom) side)
  * aSide = 1 -> Front (top) side)
  * aSide = 2 -> both sides
+ * if aFullFileName is empty, the file is not crated, only the
+ * count of footprints to place is returned
  *
  * The format is:
  *  ### Module positions - created on 04/12/2012 15:24:24 ###
@@ -404,6 +410,9 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
 
         moduleCount++;
     }
+
+    if( aFullFileName.IsEmpty() )
+        return moduleCount;
 
     FILE * file = wxFopen( aFullFileName, wxT( "wt" ) );
     if( file == NULL )

@@ -27,12 +27,14 @@
 #define FP_LIB_TABLE_H_
 
 #include <macros.h>
-
 #include <vector>
 #include <map>
-
 #include <io_mgr.h>
 
+
+
+#define FP_LATE_ENVVAR  1           ///< late=1/early=0 environment variable expansion
+#define KISYSMOD        "KISYSMOD"
 
 class wxFileName;
 class OUTPUTFORMATTER;
@@ -120,44 +122,17 @@ public:
             SetType( aType );
         }
 
-        ROW( const ROW& a ) :
-            nickName( a.nickName ),
-            uri_user( a.uri_user ),
-            uri_expanded( a.uri_expanded ),
-            type( a.type ),
-            options( a.options ),
-            description( a.description ),
-            properties( 0 )
-        {
-            if( a.properties )
-                properties = new PROPERTIES( *a.properties );
-        }
+        ROW( const ROW& a );
 
         ~ROW()
         {
             delete properties;
         }
 
-        ROW& operator=( const ROW& r )
-        {
-            nickName     = r.nickName;
-            uri_user     = r.uri_user;
-            uri_expanded = r.uri_expanded;
-            type         = r.type;
-            options      = r.options;
-            description  = r.description;
-            properties   = r.properties ? new PROPERTIES( *r.properties ) : NULL;
+        ROW& operator=( const ROW& r );
 
-            // do not copy the PLUGIN, it is lazily created.
-            setPlugin( NULL );
-
-            return *this;
-        }
-
-        bool operator==( const ROW& r ) const
-        {
-            return  nickName==r.nickName && uri_user==r.uri_user && type==r.type && options==r.options;
-        }
+        /// Used in DIALOG_FP_LIB_TABLE for detecting an edit.
+        bool operator==( const ROW& r ) const;
 
         bool operator!=( const ROW& r ) const   { return !( *this == r ); }
 
@@ -194,13 +169,7 @@ public:
          *
          * @param aSubstituted Tells if caller wanted the substituted form, else not.
          */
-        const wxString& GetFullURI( bool aSubstituted = false ) const
-        {
-            if( aSubstituted )
-                return uri_expanded;
-            else
-                return uri_user;
-        }
+        const wxString GetFullURI( bool aSubstituted = false ) const;
 
         /**
          * Function SetFullURI
@@ -278,7 +247,11 @@ public:
 
         wxString        nickName;
         wxString        uri_user;           ///< what user entered from UI or loaded from disk
+
+#if !FP_LATE_ENVVAR
         wxString        uri_expanded;       ///< from ExpandSubstitutions()
+#endif
+
         LIB_T           type;
         wxString        options;
         wxString        description;
@@ -422,6 +395,16 @@ public:
     MODULE* FootprintLoad( const wxString& aNickname, const wxString& aFootprintName );
 
     /**
+     * Enum SAVE_T
+     * is the set of return values from FootprintSave() below.
+     */
+    enum SAVE_T
+    {
+        SAVE_OK,
+        SAVE_SKIPPED,
+    };
+
+    /**
      * Function FootprintSave
      * will write @a aFootprint to an existing library given by @a aNickname.
      * If a footprint by the same name already exists, it is replaced.
@@ -432,9 +415,14 @@ public:
      * @param aFootprint is what to store in the library. The caller continues
      *    to own the footprint after this call.
      *
+     * @param aOverwrite when true means overwrite any existing footprint by the
+     *  same name, else if false means skip the write and return SAVE_SKIPPED.
+     *
+     * @return SAVE_T - SAVE_OK or SAVE_SKIPPED.  If error saving, then IO_ERROR is thrown.
+     *
      * @throw IO_ERROR if there is a problem saving.
      */
-    void FootprintSave( const wxString& aNickname, const MODULE* aFootprint );
+    SAVE_T FootprintSave( const wxString& aNickname, const MODULE* aFootprint, bool aOverwrite = true );
 
     /**
      * Function FootprintDelete
@@ -458,8 +446,18 @@ public:
      */
     bool IsFootprintLibWritable( const wxString& aNickname );
 
+    void FootprintLibDelete( const wxString& aNickname );
+
+    void FootprintLibCreate( const wxString& aNickname );
+
     //-----</PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
+    /**
+     * Function GetDescription
+     * returns the library desicription from @a aNickname, or an empty string
+     * if aNickname does not exist.
+     */
+    const wxString GetDescription( const wxString& aNickname );
 
     /**
      * Function InsertRow
@@ -567,7 +565,22 @@ public:
 
     static void SetProjectPathEnvVariable( const wxFileName& aPath );
 
-    const wxString& GetProjectPathEnvVariableName() const;
+    /**
+     * Function ProjectPathEnvVarVariableName
+     * returns the name of the environment variable used to hold the directory of
+     * the current project on program startup.
+     */
+    static const wxString ProjectPathEnvVariableName();
+
+    /**
+     * Function GlobalPathEnvVarVariableName
+     * returns the name of the environment variable used to hold the directory of
+     * locally installed "KiCad sponsored" system footprint libraries.  These can
+     * be either legacy or pretty format.  The only thing special about this
+     * particular environment variable is that it is set automatically by
+     * KiCad on program startup, <b>iff</b> it is not set already in the environment.
+     */
+    static const wxString GlobalPathEnvVariableName();
 
     static wxString GetProjectFileName( const wxFileName& aPath );
 
@@ -587,10 +600,10 @@ protected:
 
     /**
      * Function findRow
-     * returns a ROW if aNickName is found in this table or in any chained
+     * returns a ROW if aNickname is found in this table or in any chained
      * fallBack table fragment, else NULL.
      */
-    ROW* findRow( const wxString& aNickName ) const;
+    ROW* findRow( const wxString& aNickname ) const;
 
     void reindex()
     {

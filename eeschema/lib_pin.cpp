@@ -1869,7 +1869,7 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 }
 
 
-EDA_RECT LIB_PIN::GetBoundingBox() const
+const EDA_RECT LIB_PIN::GetBoundingBox() const
 {
     LIB_COMPONENT* entry = (LIB_COMPONENT*) m_Parent;
     EDA_RECT       bbox;

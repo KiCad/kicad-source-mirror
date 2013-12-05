@@ -130,7 +130,8 @@ public:
 
     BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
 
-    EDA_RECT GetBoundingBox() const;
+    // Virtual function
+    const EDA_RECT GetBoundingBox() const;
 
     EDA_ITEM* Clone() const;
 

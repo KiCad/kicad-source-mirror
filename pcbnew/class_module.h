@@ -96,13 +96,14 @@ public:
     void CalculateBoundingBox();
 
     /**
-     * Function GetFootPrintRect()
+     * Function GetFootprintRect()
      * Returns the area of the module footprint excluding any text.
      * @return EDA_RECT - The rectangle containing the footprint.
      */
-    EDA_RECT GetFootPrintRect() const;
+    EDA_RECT GetFootprintRect() const;
 
-    EDA_RECT GetBoundingBox() const;
+    // Virtual function
+    const EDA_RECT GetBoundingBox() const;
 
     DLIST<D_PAD>& Pads()                        { return m_Pads; }
     const DLIST<D_PAD>& Pads() const            { return m_Pads; }

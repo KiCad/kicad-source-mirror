@@ -283,7 +283,7 @@ public:
      * useful to calculate bounding box of rotated items, when
      * rotation if not k*90 degrees
      */
-    EDA_RECT GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle );
+    const EDA_RECT GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle );
 };
 
 
@@ -346,8 +346,7 @@ protected:
     EDA_ITEM*     Pback;          ///< previous in linked list
     DHEAD*        m_List;         ///< which DLIST I am on.
 
-    EDA_ITEM*     m_Parent;       /* Linked list: Link (parent struct) */
-    EDA_ITEM*     m_Son;          /* Linked list: Link (son struct) */
+    EDA_ITEM*     m_Parent;       ///< Linked list: Link (parent struct)
     time_t        m_TimeStamp;    ///< Time stamp used for logical links
 
     /// Set to true to override the visibility setting of the item.
@@ -379,13 +378,11 @@ public:
     EDA_ITEM* Next() const { return (EDA_ITEM*) Pnext; }
     EDA_ITEM* Back() const { return (EDA_ITEM*) Pback; }
     EDA_ITEM* GetParent() const { return m_Parent; }
-    EDA_ITEM* GetSon() const { return m_Son; }
     DHEAD* GetList() const { return m_List; }
 
     void SetNext( EDA_ITEM* aNext )       { Pnext = aNext; }
     void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
     void SetParent( EDA_ITEM* aParent )   { m_Parent = aParent; }
-    void SetSon( EDA_ITEM* aSon )         { m_Son = aSon; }
     void SetList( DHEAD* aList )          { m_List = aList; }
 
     inline bool IsNew() const { return m_Flags & IS_NEW; }
@@ -479,7 +476,7 @@ public:
      * system.
      * It is OK to overestimate the size by a few counts.
      */
-    virtual EDA_RECT GetBoundingBox() const
+    virtual const EDA_RECT GetBoundingBox() const
     {
 #if defined(DEBUG)
         printf( "Missing GetBoundingBox()\n" );

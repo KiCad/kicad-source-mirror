@@ -26,92 +26,6 @@ Common
   but is now in scripts/python/ky temporarily.
 
 
-FP LIB TABLE
-------------
-
-Dialog:
-- - - -
-
-a) check for duplicate nicknames in a single table, complain, give the user a nice indication of the duplicate(s)
-
-b) in the uri column give a small button popup a window(dialog?) which lets user choose a file or directory local to his system by pointing at it.
-
-c) Active library table load and save functions.  There are two tables active at any time, but
-they look like one table.  Identify a place to keep the access mechanism (pointer).  Modify
-the project specific portion of this RAM table when the board changes.
-
-
-Other:
-- - - -
-
-a) develop a syntax for nickname:footprint combo, i.e. bring to life class FPID
- with development and testing of parsing and formatting.
-
-
-b) modify cvpcb to handle the nickname:footprint, i.e. textual form of FPID.
-This means having a wider textfield for the FPID than was allocated for the footprint name alone.
-Needed is the ability to pick a footprint from any active library.
-
-
-c) modify the netlist format to handle nickname:footprint, save and load.
-The nickname needs to be optional.  I would say allowed in the grammar in the
-footprint position are:
-
-    footprint | (fp_id FPID)
-
-or just
-
-    FPID   # if it can be parsed when nickname is missing.
-
-
-d) write functions to lookup a footprint from
- i) FPID
- ii) footprint alone since most old netlists don't have nicknames in them.
-
-e) Replace MODULE::m_LibRef which is a wxString with FPID.  FPID supports
-   the footprint name only which is backwards compatible with the current
-   design.
-
-f) On the first time an empty global footprint table is encountered, add
-   standard KiCad and user libraries not located in the project directory
-   or any of it's sub-directories to the global footprint library table.
-
-g) When a project is opened and the project footprint library table is
-   empty, add any user library that is located in the project path or any
-   of it's sub-directories to the project footprint library table.
-
-h) When populating the footprint library tables, use the library  file name
-   without the extension as the FPID nickname.  When duplicate names exist,
-   append an incremental integer to the nickname so that the second logic
-   libraries FPID nickname becomes logic1.  Assign FPID library nicknames
-   to each MODULE based on the legacy library search order when loading an
-   existing board that does not have fully defined MODULE FPIDs.
-
-i) Add check for KISYSMOD environment variable, on Pcbnew and CvPcb start up
-   and set it to the known directory of the default KiCad footprint libraries.
-   The code should look something like:
-
-{
-    const char* envar;
-
-    envar = getenv( "KISYSMOD" );
-
-    if( !envar )
-    {
-        envvar = knownDirOfSysMods;
-
-        setenv( "KISYSMOD", envar );
-    }
-}
-
-
-These i) and ii) merge into one if footprint alone is a valid FPID.
-Incorporate any environment variable in the the uri expansion using:
-const wxString FP_LIB_TABLE::ExpandSubtitutions( const wxString aString )
-
-
-
-
 
 Eeschema
 --------
@@ -148,10 +62,6 @@ PCBNew
 
 Dick's Final TODO List:
 ======================
-*) Rewrite
-        PCB_BASE_FRAME::Save_Module_In_Library
-        PCB_EDIT_FRAME::ArchiveModulesOnBoard
-   to use FP_LIB_TABLE mechanisms.
 *) Apply Fabrizio and Alexander's linux desktop patches after unifying them.
 *) Get licensing cleaned up.
 *) Re-arrange the repo architecture.

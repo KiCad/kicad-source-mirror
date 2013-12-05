@@ -44,7 +44,6 @@
 #include <msgpanel.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <math_for_graphics.h>
 
 #include <class_board.h>
@@ -361,7 +360,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 }
 
 
-EDA_RECT DRAWSEGMENT::GetBoundingBox() const
+const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 {
     EDA_RECT bbox;
 

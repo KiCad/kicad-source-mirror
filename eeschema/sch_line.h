@@ -76,7 +76,7 @@ public:
 
     void SetEndPoint( const wxPoint& aPosition ) { m_end = aPosition; }
 
-    EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const;    // Virtual
 
     /**
      * Function GetLength

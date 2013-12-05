@@ -37,18 +37,6 @@ class BOARD_ITEM;
 class TRACK;
 class MODULE;
 
-/**
- * Function SwapData
- * Used in undo / redo command:
- *  swap data between Item and a copy
- *  swapped data is data modified by edition, mainly sizes and texts
- * so ONLY FEW values are swapped
- * @param aItem = the item
- * @param aImage = a copy of the item
- */
-void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage );
-
-
 
 /***************/
 /* TRPISTE.CPP */
@@ -72,18 +60,7 @@ void DrawTraces( EDA_DRAW_PANEL* panel,
                  int             nbsegment,
                  GR_DRAWMODE     mode_color );
 
-/*************/
-/* MODULES.C */
-/*************/
-
 void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module );
-
-
-/****************/
-/* EDITRACK.C : */
-/****************/
-
-TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, LAYER_NUM aLayer, const wxPoint& aRef );
 
 void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                    bool aErase );
@@ -94,12 +71,15 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
  */
 void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
 
-
-/****************/
-/* CONTROLE.CPP */
-/****************/
 void RemoteCommand( const char* cmdline );
+
+/**
+ * Finds the projection of a grid point on a track. This is the point
+ * from where we want to draw new orthogonal tracks when starting on a track.
+ */
 bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track );
+TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, LAYER_NUM aLayer, const wxPoint& aRef );
+
 
 
 #endif  /* #define PROTO_H */

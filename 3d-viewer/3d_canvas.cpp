@@ -228,8 +228,6 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
 
 void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
 {
-    wxSize size( GetClientSize() );
-
     if( event.ShiftDown() )
     {
         if( event.GetWheelRotation() < 0 )

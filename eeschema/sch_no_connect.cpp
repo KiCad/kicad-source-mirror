@@ -71,7 +71,7 @@ void SCH_NO_CONNECT::SwapData( SCH_ITEM* aItem )
 }
 
 
-EDA_RECT SCH_NO_CONNECT::GetBoundingBox() const
+const EDA_RECT SCH_NO_CONNECT::GetBoundingBox() const
 {
     int      delta = ( GetPenSize() + m_size.x ) / 2;
     EDA_RECT box;

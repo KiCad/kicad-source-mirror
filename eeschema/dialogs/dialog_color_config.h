@@ -61,7 +61,7 @@ private:
                  const wxString& aCaption =  _( "EESchema Colors" ),
                  const wxPoint& aPosition = wxDefaultPosition,
                  const wxSize& aSize = wxDefaultSize,
-                 long aStyle = wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER );
+                 long aStyle = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
 
     // Initializes member variables
     void Init();

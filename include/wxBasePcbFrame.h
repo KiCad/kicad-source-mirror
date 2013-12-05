@@ -128,6 +128,16 @@ public:
     ~PCB_BASE_FRAME();
 
     /**
+     * Function LoadFootprint
+     * attempts to load \a aFootprintId from the footprint library table.
+     *
+     * @param aFootprintId is the #FPID of component footprint to load.
+     * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
+     *         libraries in #m_footprintLibTable.
+     */
+    MODULE* LoadFootprint( const FPID& aFootprintId );
+
+    /**
      * Function GetBoardBoundingBox
      * calculates the bounding box containing all board items (or board edge segments).
      * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
@@ -285,7 +295,7 @@ public:
      * @param aLibName = name of the library to use
      * @param aModule = the given footprint
      * @param aOverwrite = true to overwrite an existing footprint, false to
-     *                     abort an existing footprint is found
+     *                     abort if an existing footprint with same name is found
      * @param aDisplayDialog = true to display a dialog to enter or confirm the
      *                         footprint name
      * @return : true if OK, false if abort
@@ -294,6 +304,16 @@ public:
                                  MODULE*         aModule,
                                  bool            aOverwrite,
                                  bool            aDisplayDialog );
+
+    /**
+     * Function SelectLibrary
+     * puts up a dialog and allows the user to pick a library, for unspecified use.
+     *
+     * @param aNicknameExisting is the current choice to highlight
+     *
+     * @return wxString - the library or wxEmptyString on abort.
+     */
+    wxString SelectLibrary( const wxString& aNicknameExisting );
 
     MODULE* GetModuleByName();
 

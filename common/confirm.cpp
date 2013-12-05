@@ -52,9 +52,9 @@ public:
     };
 
 private:
-	void OnSaveAndExit( wxCommandEvent& event ) { EndModal( wxID_YES ); }
-	void OnCancel( wxCommandEvent& event ) { EndModal( wxID_CANCEL ); }
-	void OnExitNoSave( wxCommandEvent& event ) { EndModal( wxID_NO ); }
+    void OnSaveAndExit( wxCommandEvent& event ) { EndModal( wxID_YES ); }
+    void OnCancel( wxCommandEvent& event ) { EndModal( wxID_CANCEL ); }
+    void OnExitNoSave( wxCommandEvent& event ) { EndModal( wxID_NO ); }
 };
 
 
@@ -73,10 +73,14 @@ void DisplayError( wxWindow* parent, const wxString& text, int displaytime )
 
     if( displaytime > 0 )
         dialog = new wxMessageDialog( parent, text, _( "Warning" ),
-                                      wxOK | wxCENTRE | wxICON_INFORMATION );
+                                      wxOK | wxCENTRE | wxICON_INFORMATION
+                                      | wxRESIZE_BORDER
+                                      );
     else
         dialog = new wxMessageDialog( parent, text, _( "Error" ),
-                                      wxOK | wxCENTRE | wxICON_ERROR );
+                                      wxOK | wxCENTRE | wxICON_ERROR
+                                      | wxRESIZE_BORDER
+                                      );
 
     dialog->ShowModal();
     dialog->Destroy();
