@@ -58,7 +58,7 @@ set( BOOST_LIBS_BUILT
 
 #-----</configure>---------------------------------------------------------------
 
-
+find_package( BZip2 REQUIRED )
 
 string( REGEX REPLACE "\\." "_" BOOST_VERS "${BOOST_RELEASE}" )
 set( PREFIX ${DOWNLOAD_DIR}/boost_${BOOST_VERS} )

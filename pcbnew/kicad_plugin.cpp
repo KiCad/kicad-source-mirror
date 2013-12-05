@@ -85,7 +85,10 @@ public:
 
     wxString    GetName() const { return m_file_name.GetDirs().Last(); }
     wxFileName  GetFileName() const { return m_file_name; }
+
+    /// Tell if the disk content or the lib_path has changed.
     bool        IsModified() const;
+
     MODULE*     GetModule() const { return m_module.get(); }
     void        UpdateModificationTime() { m_mod_time = m_file_name.GetModificationTime(); }
 };
@@ -339,6 +342,7 @@ bool FP_CACHE::IsModified( const wxString& aLibPath, const wxString& aFootprintN
         for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
         {
             wxFileName fn = m_lib_path;
+
             fn.SetName( it->second->GetFileName().GetName() );
             fn.SetExt( KiCadFootprintFileExtension );
 
@@ -966,12 +970,15 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     else
         m_out->Print( 0, "\n" );
 
-    m_out->Print( aNestLevel+1, "(at %s", FMT_IU( aModule->GetPosition() ).c_str() );
+    if( !( m_ctl & CTL_OMIT_AT ) )
+    {
+        m_out->Print( aNestLevel+1, "(at %s", FMT_IU( aModule->GetPosition() ).c_str() );
 
-    if( aModule->GetOrientation() != 0.0 )
-        m_out->Print( 0, " %s", FMT_ANGLE( aModule->GetOrientation() ).c_str() );
+        if( aModule->GetOrientation() != 0.0 )
+            m_out->Print( 0, " %s", FMT_ANGLE( aModule->GetOrientation() ).c_str() );
 
-    m_out->Print( 0, ")\n" );
+        m_out->Print( 0, ")\n" );
+    }
 
     if( !aModule->GetDescription().IsEmpty() )
         m_out->Print( aNestLevel+1, "(descr %s)\n",
@@ -1804,7 +1811,7 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-    init( NULL );
+    init( aProperties );
 
     cacheLib( aLibraryPath );
 

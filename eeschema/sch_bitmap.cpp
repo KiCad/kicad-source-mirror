@@ -176,7 +176,7 @@ bool SCH_BITMAP::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-EDA_RECT SCH_BITMAP::GetBoundingBox() const
+const EDA_RECT SCH_BITMAP::GetBoundingBox() const
 {
     EDA_RECT rect = m_Image->GetBoundingBox();
 

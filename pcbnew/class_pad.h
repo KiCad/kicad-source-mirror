@@ -392,7 +392,8 @@ public:
         return wxT( "PAD" );
     }
 
-    EDA_RECT GetBoundingBox() const;
+    // Virtual function:
+    const EDA_RECT GetBoundingBox() const;
 
     /**
      * Function Compare

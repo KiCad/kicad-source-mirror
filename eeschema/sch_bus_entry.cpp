@@ -110,7 +110,7 @@ bool SCH_BUS_BUS_ENTRY::Save( FILE* aFile ) const
 }
 
 
-bool SCH_BUS_ENTRY_BASE::Load( LINE_READER& aLine, wxString& aErrorMsg, 
+bool SCH_BUS_ENTRY_BASE::Load( LINE_READER& aLine, wxString& aErrorMsg,
                                SCH_ITEM **out )
 {
     char Name1[256];
@@ -136,7 +136,7 @@ bool SCH_BUS_ENTRY_BASE::Load( LINE_READER& aLine, wxString& aErrorMsg,
         this_new = new SCH_BUS_WIRE_ENTRY;
     *out = this_new;
 
-    if( !aLine.ReadLine() || sscanf( (char*) aLine, "%d %d %d %d ", 
+    if( !aLine.ReadLine() || sscanf( (char*) aLine, "%d %d %d %d ",
                 &this_new->m_pos.x, &this_new->m_pos.y,
                 &this_new->m_size.x, &this_new->m_size.y ) != 4 )
     {
@@ -153,7 +153,7 @@ bool SCH_BUS_ENTRY_BASE::Load( LINE_READER& aLine, wxString& aErrorMsg,
 }
 
 
-EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
+const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 {
     EDA_RECT box;
 

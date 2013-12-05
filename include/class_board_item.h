@@ -131,6 +131,17 @@ public:
                        GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset ) = 0;
 
     /**
+     * Swap data between aItem and aImage.
+     * aItem and aImage should have the same type
+     * Used in undo redo command to swap values between an item and its copy
+     * Only values like layer, size .. which are modified by edition are swapped,
+     * not the pointers like
+     * Pnext and Pback because aItem is not changed in the linked list
+     * @param aImage = the item image which contains data to swap
+     */
+    void SwapData( BOARD_ITEM* aImage );
+
+    /**
      * Function IsOnLayer
      * tests to see if this object is on the given layer.  Is virtual so
      * objects like D_PAD, which reside on multiple layers can do their own
@@ -172,11 +183,13 @@ public:
 
     /**
      * Function DeleteStructure
-     * deletes this object after UnLink()ing it from its owner.
+     * deletes this object after UnLink()ing it from its owner if it has one.
      */
     void DeleteStructure()
     {
-        UnLink();
+        if( GetList() != NULL )
+            UnLink();
+
         delete this;
     }
 

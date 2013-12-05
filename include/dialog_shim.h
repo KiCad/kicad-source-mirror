@@ -52,15 +52,20 @@ public:
             const   wxPoint& pos = wxDefaultPosition,
             const   wxSize&  size = wxDefaultSize,
             long    style = wxDEFAULT_DIALOG_STYLE,
-            const   wxString& name = wxDialogNameStr );
+            const   wxString& name = wxDialogNameStr
+            );
 
     bool Show( bool show );     // overload wxDialog::Show
 
+protected:
+    std::string m_hash_key;     // alternate for class_map when classname re-used.
 
 #if DLGSHIM_USE_SETFOCUS
 private:
     void    onInit( wxInitDialogEvent& aEvent );
 #endif
+
+
 };
 
 #endif  // DIALOG_SHIM_

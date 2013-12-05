@@ -37,8 +37,7 @@
 
 #include <class_board.h>
 #include <class_pcb_text.h>
-
-#include <protos.h>
+#include <class_board_item.h>
 
 
 static void Move_Texte_Pcb( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
@@ -54,7 +53,6 @@ static TEXTE_PCB s_TextCopy( (BOARD_ITEM*) NULL ); /* copy of the edited text
 
 /*
  * Abort current text edit progress.
- *
  * If a text is selected, its initial coord are regenerated
  */
 void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
@@ -78,7 +76,7 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
     }
 
 
-    SwapData( TextePcb, &s_TextCopy );
+    TextePcb->SwapData( &s_TextCopy );
     TextePcb->ClearFlags();
 #ifndef USE_WX_OVERLAY
     TextePcb->Draw( Panel, DC, GR_OR );
@@ -117,11 +115,11 @@ void PCB_EDIT_FRAME::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     else
     {
         // Restore initial params
-        SwapData( TextePcb, &s_TextCopy );
+        TextePcb->SwapData( &s_TextCopy );
         // Prepare undo command
         SaveCopyInUndoList( TextePcb, UR_CHANGED );
-        SwapData( TextePcb, &s_TextCopy );
         // Restore current params
+        TextePcb->SwapData( &s_TextCopy );
     }
 
     TextePcb->ClearFlags();

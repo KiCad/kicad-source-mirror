@@ -446,7 +446,7 @@ bool DIMENSION::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 }
 
 
-EDA_RECT DIMENSION::GetBoundingBox() const
+const EDA_RECT DIMENSION::GetBoundingBox() const
 {
     EDA_RECT    bBox;
     int         xmin, xmax, ymin, ymax;

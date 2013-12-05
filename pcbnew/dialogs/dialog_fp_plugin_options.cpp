@@ -257,14 +257,15 @@ private:
 
     void onListBoxItemSelected( wxCommandEvent& event )
     {
+        // change the help text based on the m_listbox selection:
         if( event.IsSelection() )
         {
-            const char* option = TO_UTF8( event.GetString() );
-            string      help_text;
+            string  option = TO_UTF8( event.GetString() );
+            string  help_text;
 
-            if( m_choices.Value( option, &help_text ) )
+            if( m_choices.Value( option.c_str(), &help_text ) )
             {
-                wxString page( FROM_UTF8( help_text.c_str() ) );
+                wxString page = FROM_UTF8( help_text.c_str() );
 
                 m_html->SetPage( page );
             }

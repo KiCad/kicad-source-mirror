@@ -43,6 +43,8 @@ class PCB_PARSER;
 #define CTL_OMIT_TSTAMPS            (1 << 2)
 #define CTL_OMIT_INITIAL_COMMENTS   (1 << 3)    ///< omit MODULE initial comments
 #define CTL_OMIT_PATH               (1 << 4)
+#define CTL_OMIT_AT                 (1 << 5)
+
 
 // common combinations of the above:
 
@@ -50,7 +52,7 @@ class PCB_PARSER;
 #define CTL_FOR_CLIPBOARD           (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS)
 
 /// Format output for a footprint library instead of clipboard or BOARD
-#define CTL_FOR_LIBRARY             (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS|CTL_OMIT_TSTAMPS|CTL_OMIT_PATH)
+#define CTL_FOR_LIBRARY             (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS|CTL_OMIT_TSTAMPS|CTL_OMIT_PATH|CTL_OMIT_AT)
 
 /// The zero arg constructor when PCB_IO is used for PLUGIN::Load() and PLUGIN::Save()ing
 /// a BOARD file underneath IO_MGR.
@@ -83,20 +85,18 @@ public:
 
     //-----<PLUGIN API>---------------------------------------------------------
 
-    const wxString& PluginName() const
+    const wxString PluginName() const
     {
-        static const wxString name = wxT( "KiCad" );
-        return name;
+        return wxT( "KiCad" );
     }
 
-    const wxString& GetFileExtension() const
+    const wxString GetFileExtension() const
     {
         // Would have used wildcards_and_files_ext.cpp's KiCadPcbFileExtension,
         // but to be pure, a plugin should not assume that it will always be linked
         // with the core of the pcbnew code. (Might someday be a DLL/DSO.)  Besides,
         // file extension policy should be controlled by the plugin.
-        static const wxString extension = wxT( "kicad_pcb" );
-        return extension;
+        return wxT( "kicad_pcb" );
     }
 
     void Save( const wxString& aFileName, BOARD* aBoard,
@@ -172,6 +172,10 @@ protected:
     int                 m_ctl;
     PCB_PARSER*         m_parser;
 
+    /// we only cache one footprint library, this determines which one.
+    void cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName = wxEmptyString );
+
+    void init( const PROPERTIES* aProperties );
 
 private:
     void format( BOARD* aBoard, int aNestLevel = 0 ) const
@@ -211,11 +215,6 @@ private:
 
     void formatLayers( LAYER_MSK aLayerMask, int aNestLevel = 0 ) const
         throw( IO_ERROR );
-
-    /// we only cache one footprint library for now, this determines which one.
-    void cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName = wxEmptyString );
-
-    void init( const PROPERTIES* aProperties );
 };
 
 #endif  // KICAD_PLUGIN_H_

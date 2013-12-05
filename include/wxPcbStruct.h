@@ -119,7 +119,7 @@ protected:
 
     void setupTools();
     void destroyTools();
-	void onGenericCommand( wxCommandEvent& aEvent );
+    void onGenericCommand( wxCommandEvent& aEvent );
 
     // we'll use lower case function names for private member functions.
     void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
@@ -906,12 +906,11 @@ public:
     /**
      * Function ArchiveModulesOnBoard
      * Save modules in a library:
-     * @param aLibName: the full filename of the library to create or modify
      * @param aNewModulesOnly:
      *              true : save modules not already existing in this lib
      *              false: save all modules
      */
-    void ArchiveModulesOnBoard( const wxString& aLibName, bool aNewModulesOnly );
+    void ArchiveModulesOnBoard( bool aNewModulesOnly );
 
     /**
      * Function RecreateBOMFileFromBoard
@@ -1495,7 +1494,7 @@ public:
 
 
     // Autoplacement:
-    void AutoPlace( wxCommandEvent& event );
+    void OnPlaceOrRouteFootprints( wxCommandEvent& event );
 
     /**
      * Function ScriptingConsoleEnableDisable
@@ -1521,7 +1520,17 @@ public:
      */
     bool ReOrientModules( const wxString& ModuleMask, double Orient, bool include_fixe );
     void LockModule( MODULE* aModule, bool aLocked );
-    void AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );
+
+    /**
+     * Function SpreadFootprints
+     * Footprints (after loaded by reading a netlist for instance) are moved
+     * to be in a small free area (outside the current board) without overlapping.
+     * @param aFootprintsOutsideBoardOnly: true to move only
+     * footprints outside the board outlines
+     * (they are outside if the position of a footprint is outside
+     * the board outlines bounding box
+     */
+    void SpreadFootprints( bool aFootprintsOutsideBoardOnly );
 
     /**
      * Function AutoPlaceModule
@@ -1530,52 +1539,6 @@ public:
      * calling the placement of 1 module, it will be replaced.
      */
     void AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC );
-
-    /**
-     * Function GetOptimalModulePlacement
-     * searches for the optimal position of the \a aModule.
-     *
-     * @param aModule A pointer to the MODULE object to get the optimal placement.
-     * @param aDC The device context to draw on.
-     * @return 1 if placement impossible or 0 if OK.
-     */
-    int GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC );
-
-    void GenModuleOnBoard( MODULE* Module );
-
-    /**
-     * Function Compute_Ratsnest_PlaceModule
-     * displays the module's ratsnest during displacement, and assess the "cost"
-     * of the position.
-     *
-     * The cost is the longest ratsnest distance with penalty for connections
-     * approaching 45 degrees.
-     */
-    double Compute_Ratsnest_PlaceModule( wxDC* DC );
-
-    /**
-     * Function GenPlaceBoard
-     * generates board board (component side copper + rating):
-     * Allocate the memory needed to represent in "bitmap" on the grid
-     * Current:
-     * - The size of clearance area of component (the board)
-     * - The bitmap PENALTIES
-     * And initialize the cells of the board has
-     * - Hole in the cells occupied by a segment EDGE
-     * - CELL_is_ZONE for cell internal contour EDGE (if closed)
-     *
-     * Placement surface (board) gives the cells internal to the contour
-     * PCB, and among the latter the free cells and cells already occupied
-     *
-     * The bitmap PENALTIES give cells occupied by the modules,
-     * Plus a surface penalty related to the number of pads of the module
-     *
-     * Bitmap of the penalty is set to 0
-     * Occupation cell is a 0 leaves
-     */
-    int GenPlaceBoard();
-
-    void DrawInfoPlace( wxDC* DC );
 
     // Autorouting:
     int Solve( wxDC* DC, int two_sides );

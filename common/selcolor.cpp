@@ -6,7 +6,6 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <common.h>
 #include <colors.h>
 
@@ -64,7 +63,7 @@ WinEDA_SelColorFrame::WinEDA_SelColorFrame( wxWindow*      parent,
                                             const wxPoint& framepos,
                                             int            OldColor ) :
     wxDialog( parent, -1, _( "Colors" ), framepos, wxDefaultSize,
-              wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
+              wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
 
     Init_Dialog( OldColor );

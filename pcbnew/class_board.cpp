@@ -2134,7 +2134,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, LAYER_NUM aActiveLayer,
         // Filter non visible modules if requested
         if( (!aVisibleOnly) || IsModuleLayerVisible( layer ) )
         {
-            EDA_RECT bb = pt_module->GetFootPrintRect();
+            EDA_RECT bb = pt_module->GetFootprintRect();
             int offx = bb.GetX() + bb.GetWidth() / 2;
             int offy = bb.GetY() + bb.GetHeight() / 2;
 

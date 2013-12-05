@@ -40,7 +40,7 @@
 #include <fp_lib_table_lexer.h>
 #include <invoke_pcb_dialog.h>
 #include <grid_tricks.h>
-
+#include <confirm.h>
 
 /// grid column order is established by this sequence
 enum COL_ORDER
@@ -244,7 +244,7 @@ protected:
             }
             catch( PARSE_ERROR& pe )
             {
-                // @todo tell what line and offset
+                DisplayError( NULL, pe.errorText );
                 parsed = false;
             }
 
@@ -330,11 +330,12 @@ public:
             wxGrid* g = i==0 ? m_global_grid : m_project_grid;
 
             // all but COL_OPTIONS, which is edited with Option Editor anyways.
-            g->AutoSizeColumn( COL_NICKNAME, true );
+            g->AutoSizeColumn( COL_NICKNAME, false );
             g->AutoSizeColumn( COL_TYPE, false );
             g->AutoSizeColumn( COL_URI, false );
             g->AutoSizeColumn( COL_DESCR, false );
 
+            // would set this to width of title, if it was easily known.
             g->SetColSize( COL_OPTIONS, 80 );
         }
 
@@ -691,6 +692,12 @@ private:
                 uri.Replace( re.GetMatch( uri, 0 ), wxEmptyString );
             }
         }
+
+        // Make sure this special environment variable shows up even if it was
+        // not used yet.  It is automatically set by KiCad to the directory holding
+        // the current project.
+        unique.insert( FP_LIB_TABLE::ProjectPathEnvVariableName() );
+        unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
 
         m_path_subs_grid->AppendRows( unique.size() );
 

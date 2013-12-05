@@ -38,7 +38,6 @@
 #include <colors_selection.h>
 #include <trigo.h>
 #include <macros.h>
-#include <protos.h>
 #include <richio.h>
 
 #include <class_board.h>
@@ -70,16 +69,6 @@ PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent, int aShape, LAYER_NUM aLayer,
 PCB_TARGET::~PCB_TARGET()
 {
 }
-
-
-void PCB_TARGET::Exchg( PCB_TARGET* source )
-{
-    EXCHG( m_Pos,   source->m_Pos );
-    EXCHG( m_Width, source->m_Width );
-    EXCHG( m_Size,  source->m_Size );
-    EXCHG( m_Shape, source->m_Shape );
-}
-
 
 void PCB_TARGET::Copy( PCB_TARGET* source )
 {
@@ -205,7 +194,7 @@ void PCB_TARGET::Flip(const wxPoint& aCentre )
 }
 
 
-EDA_RECT PCB_TARGET::GetBoundingBox() const
+const EDA_RECT PCB_TARGET::GetBoundingBox() const
 {
     EDA_RECT bBox;
     bBox.SetX( m_Pos.x - m_Size/2 );

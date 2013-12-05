@@ -123,7 +123,8 @@ public:
      */
     double GetDrawRotation() const;
 
-    EDA_RECT GetBoundingBox() const;
+    // Virtual function
+    const EDA_RECT GetBoundingBox() const;
 
     void SetDrawCoord();        // Set absolute coordinates.
 

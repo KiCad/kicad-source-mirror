@@ -38,14 +38,14 @@ class TARGET_PROPERTIES_DIALOG_EDITOR_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_staticTextSize;
-		wxTextCtrl* m_MireWidthCtrl;
+		wxTextCtrl* m_TargetSizeCtrl;
 		wxStaticText* m_staticTextSizeUnits;
 		wxStaticText* m_staticTextThickness;
-		wxTextCtrl* m_MireSizeCtrl;
+		wxTextCtrl* m_TargetThicknessCtrl;
 		wxStaticText* m_staticTextThicknessUnits;
 		wxStaticText* m_staticTextShape;
-		wxChoice* m_MireShape;
-		wxStaticLine* m_staticline1;
+		wxChoice* m_TargetShape;
+		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizerButts;
 		wxButton* m_sdbSizerButtsOK;
 		wxButton* m_sdbSizerButtsCancel;
@@ -57,7 +57,7 @@ class TARGET_PROPERTIES_DIALOG_EDITOR_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Target Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 285,170 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Target Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~TARGET_PROPERTIES_DIALOG_EDITOR_BASE();
 	
 };

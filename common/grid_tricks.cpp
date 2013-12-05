@@ -188,7 +188,9 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
         cutcopy( true );
     }
     else
-        ev.Skip();
+    {
+        ev.Skip( true );
+    }
 }
 
 

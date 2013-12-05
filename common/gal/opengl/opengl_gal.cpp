@@ -1053,8 +1053,8 @@ void CALLBACK ErrorCallback( GLenum aErrorCode )
 {
     const GLubyte* eString = gluErrorString( aErrorCode );
 
-    DisplayError( NULL, wxString( std::string( "Tessellation error: " ) +
-            std::string( (const char*)( eString ) ) ) );
+    DisplayError( NULL, wxT( "Tessellation error: " ) +
+                        wxString( (const char*)( eString ), wxConvUTF8 ) );
 
     exit( 1 );
 }

@@ -67,7 +67,6 @@ EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
     InitVars();
     m_StructType = base.m_StructType;
     m_Parent     = base.m_Parent;
-    m_Son        = base.m_Son;
     m_Flags      = base.m_Flags;
 
     // A copy of an item cannot have the same time stamp as the original item.
@@ -82,7 +81,6 @@ void EDA_ITEM::InitVars()
     Pnext       = NULL;     // Linked list: Link (next struct)
     Pback       = NULL;     // Linked list: Link (previous struct)
     m_Parent    = NULL;     // Linked list: Link (parent struct)
-    m_Son       = NULL;     // Linked list: Link (son struct)
     m_List      = NULL;     // I am not on any list yet
     m_Image     = NULL;     // Link to an image copy for undelete or abort command
     m_Flags     = 0;        // flags for editions and other
@@ -235,7 +233,6 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
         m_Image = aItem.m_Image;
         m_StructType = aItem.m_StructType;
         m_Parent = aItem.m_Parent;
-        m_Son = aItem.m_Son;
         m_Flags = aItem.m_Flags;
         m_TimeStamp = aItem.m_TimeStamp;
         m_Status = aItem.m_Status;
@@ -535,7 +532,7 @@ double EDA_RECT::GetArea() const
 
 /* Calculate the bounding box of this, when rotated
  */
-EDA_RECT EDA_RECT::GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle )
+const EDA_RECT EDA_RECT::GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle )
 {
     wxPoint corners[4];
 

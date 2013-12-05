@@ -189,7 +189,7 @@ void GPU_CACHED_MANAGER::uploadToGpu()
 {
 #ifdef __WXDEBUG__
     prof_counter totalTime;
-    prof_start( &totalTime, false );
+    prof_start( &totalTime );
 #endif /* __WXDEBUG__ */
 
     if( !m_buffersInitialized )
@@ -214,8 +214,7 @@ void GPU_CACHED_MANAGER::uploadToGpu()
 #ifdef __WXDEBUG__
     prof_end( &totalTime );
 
-    wxLogDebug( wxT( "Uploading %d vertices to GPU / %.1f ms" ),
-                bufferSize, (double) totalTime.value / 1000.0 );
+    wxLogDebug( wxT( "Uploading %d vertices to GPU / %.1f ms" ), bufferSize, totalTime.msecs() );
 #endif /* __WXDEBUG__ */
 }
 

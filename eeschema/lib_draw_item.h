@@ -260,7 +260,7 @@ public:
    /**
      * @return the boundary box for this, in library coordinates
      */
-    virtual EDA_RECT GetBoundingBox() const { return EDA_ITEM::GetBoundingBox(); }
+    virtual const EDA_RECT GetBoundingBox() const { return EDA_ITEM::GetBoundingBox(); }
 
     /**
      * Function GetMsgPanelInfo

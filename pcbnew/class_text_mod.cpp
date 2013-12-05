@@ -182,12 +182,12 @@ bool TEXTE_MODULE::HitTest( const wxPoint& aPosition )
 }
 
 
-/**
- * Function GetBoundingBox
+/*
+ * Function GetBoundingBox (virtual)
  * returns the bounding box of this Text (according to text and footprint
  * orientation)
  */
-EDA_RECT TEXTE_MODULE::GetBoundingBox() const
+const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 {
     double   angle = GetDrawRotation();
     EDA_RECT text_area = GetTextBox( -1, -1 );

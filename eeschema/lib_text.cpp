@@ -430,7 +430,7 @@ void LIB_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 }
 
 
-EDA_RECT LIB_TEXT::GetBoundingBox() const
+const EDA_RECT LIB_TEXT::GetBoundingBox() const
 {
     /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
      * calling GetTextBox() that works using top to bottom Y axis orientation.

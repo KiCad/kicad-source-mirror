@@ -51,6 +51,7 @@
 #include <online_help.h>
 #include <gestfich.h>
 #include <menus_helpers.h>
+#include <fp_lib_table.h>
 
 
 static const wxChar* CommonConfigPath = wxT( "kicad_common" );
@@ -1160,19 +1161,20 @@ bool EDA_APP::LockFile( const wxString& fileName )
 
 bool EDA_APP::SetFootprintLibTablePath()
 {
-    wxString path;
+    wxString    path;
+    wxString    kisysmod( wxT( KISYSMOD ) );
 
     // Set the KISYSMOD environment variable for the current process if it is not already
     // defined in the user's environment.  This is required to expand the global footprint
     // library table paths.
-    if( wxGetEnv( wxT( "KISYSMOD" ), &path ) && wxFileName::DirExists( path ) )
+    if( wxGetEnv( kisysmod, &path ) && wxFileName::DirExists( path ) )
         return true;
 
     // Set the KISYSMOD environment variable to the path defined in the user's configuration
     // if it is defined and the path exists.
     if( m_commonSettings->Read( kicadFpLibPath, &path ) && wxFileName::DirExists( path ) )
     {
-        wxSetEnv( wxT( "KISYSMOD" ), path );
+        wxSetEnv( kisysmod, path );
         return true;
     }
 
@@ -1198,7 +1200,7 @@ bool EDA_APP::SetFootprintLibTablePath()
 
         if( modFileCount != 0 )
         {
-            wxSetEnv( wxT( "KISYSMOD" ), bestPath );
+            wxSetEnv( kisysmod, bestPath );
             return true;
         }
     }

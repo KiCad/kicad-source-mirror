@@ -398,7 +398,7 @@ public:
                GR_DRAWMODE     aDrawMode,
                EDA_COLOR_T     aColor = UNSPECIFIED_COLOR );
 
-    EDA_RECT GetBoundingBox() const;
+    EDA_RECT const GetBoundingBox() const;
 
     /**
      * Function GetResizePos

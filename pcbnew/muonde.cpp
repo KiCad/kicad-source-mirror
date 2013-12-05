@@ -791,7 +791,8 @@ END_EVENT_TABLE()
 
 WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent,
                                                       const wxPoint&  framepos ) :
-    wxDialog( parent, -1, _( "Complex shape" ), framepos, wxSize( 350, 280 ), DIALOG_STYLE )
+    wxDialog( parent, -1, _( "Complex shape" ), framepos, wxSize( 350, 280 ),
+              wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     m_Parent = parent;
 

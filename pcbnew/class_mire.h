@@ -71,12 +71,6 @@ public:
     void SetWidth( int aWidth )     { m_Width = aWidth; }
     int GetWidth() const            { return m_Width; }
 
-    /**
-     * Function Exchg
-     * swaps data with another PCB_TARGET for use by undo-redo.
-     */
-    void Exchg( PCB_TARGET* aTarget );
-
     void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
@@ -98,7 +92,8 @@ public:
      */
     bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
 
-    EDA_RECT GetBoundingBox() const;
+    // Virtual function
+    const EDA_RECT GetBoundingBox() const;
 
     wxString GetSelectMenuText() const;
 

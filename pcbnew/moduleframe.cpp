@@ -255,12 +255,28 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
     m_Pcb = 0;
 }
 
-#if defined(USE_FP_LIB_TABLE)
+
+const wxString& FOOTPRINT_EDIT_FRAME::getLibNickName() const
+{
+    return wxGetApp().GetModuleLibraryNickname();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::setLibNickName( const wxString& aNickname )
+{
+    wxGetApp().SetModuleLibraryNickname( aNickname );
+}
+
+
+#if 1 && defined(USE_FP_LIB_TABLE)
 wxString FOOTPRINT_EDIT_FRAME::getLibPath()
 {
     try
     {
-        const FP_LIB_TABLE::ROW* row = GetFootprintLibraryTable()->FindRow( m_lib_nick_name );
+        const wxString& nickname = getLibNickName();
+
+        const FP_LIB_TABLE::ROW* row = GetFootprintLibraryTable()->FindRow( nickname );
+
         return row->GetFullURI( true );
     }
     catch( IO_ERROR ioe )
@@ -347,9 +363,15 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         case wxID_YES:
             // code from FOOTPRINT_EDIT_FRAME::Process_Special_Functions,
             // at case ID_MODEDIT_SAVE_LIBMODULE
+#if defined(USE_FP_LIB_TABLE)
+            if( GetBoard()->m_Modules && getLibNickName().size() )
+            {
+                if( Save_Module_In_Library( getLibNickName(), GetBoard()->m_Modules, true, true ) )
+#else
             if( GetBoard()->m_Modules && getLibPath() != wxEmptyString )
             {
                 if( Save_Module_In_Library( getLibPath(), GetBoard()->m_Modules, true, true ) )
+#endif
                 {
                     // save was correct
                     GetScreen()->ClrModify();
@@ -600,6 +622,8 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
     wxString title   = _( "Module Editor " );
+
+#if !defined(USE_FP_LIB_TABLE)
     wxString libPath = getLibPath();
 
     if( !libPath )
@@ -632,6 +656,37 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
             goto L_none;
         }
     }
+
+#else
+
+    wxString nickname = getLibNickName();
+
+    if( !nickname )
+    {
+    L_none:
+        title += _( "(no active library)" );
+    }
+    else
+    {
+        try
+        {
+            bool writable = m_footprintLibTable->IsFootprintLibWritable( nickname );
+
+            // no exception was thrown, this means libPath is valid, but it may be read only.
+            title = _( "Module Editor (active library: " ) + nickname + wxT( ")" );
+
+            if( !writable )
+                title += _( " [Read Only]" );
+        }
+        catch( IO_ERROR ioe )
+        {
+            // user may be bewildered as to why after selecting a library it is not showing up
+            // in the title, we could show an error message, but that should have been done at time
+            // of libary selection UI.
+            goto L_none;
+        }
+    }
+#endif
 
     SetTitle( title );
 }

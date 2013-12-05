@@ -1229,7 +1229,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
             int multi = atoi( name1 );
 
-            if( multi < 0 || multi > 25 )
+            if( multi < 0 || multi > 26 )
                 multi = 1;
 
             AddHierarchicalReference( path, ref, multi );
@@ -1430,7 +1430,7 @@ EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
 }
 
 
-EDA_RECT SCH_COMPONENT::GetBoundingBox() const
+const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 {
     EDA_RECT bbox = GetBodyBoundingBox();
     for( size_t i = 0; i < m_Fields.size(); i++ )

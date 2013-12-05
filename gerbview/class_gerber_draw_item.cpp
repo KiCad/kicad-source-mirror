@@ -234,7 +234,7 @@ D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr()
 }
 
 
-EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
+const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
 {
     // return a rectangle which is (pos,dim) in nature.  therefore the +1
     EDA_RECT bbox( m_Start, wxSize( 1, 1 ) );

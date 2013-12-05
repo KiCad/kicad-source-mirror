@@ -117,6 +117,8 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
     m_lastSheetPinType = sheetPin->GetShape();
     m_lastSheetPinTextSize = sheetPin->GetSize();
 
+    sheetPin->SetPosition( GetCrossHairPosition() );
+    sheetPin->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     MoveItem( (SCH_ITEM*) sheetPin, aDC );
 
     OnModify();
@@ -160,7 +162,9 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
     sheetPin->SetSize( m_lastSheetPinTextSize );
     m_lastSheetPinType = label->GetShape();
     sheetPin->SetShape( label->GetShape() );
+    sheetPin->SetPosition( GetCrossHairPosition() );
 
+    sheetPin->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     MoveItem( (SCH_ITEM*) sheetPin, aDC );
 
     return sheetPin;

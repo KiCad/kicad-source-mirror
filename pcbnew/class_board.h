@@ -857,7 +857,7 @@ public:
      * as long as the BOARD has not changed.  Remember, ComputeBoundingBox()'s
      * aBoardEdgesOnly argument is considered in this return value also.
      */
-    EDA_RECT GetBoundingBox() const { return m_BoundingBox; }   // override
+    const EDA_RECT GetBoundingBox() const { return m_BoundingBox; }   // override
 
     void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
 

@@ -249,7 +249,22 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SELECT_CURRENT_LIB:
-        Select_Active_Library();
+        {
+            wxString library = SelectLibrary( getLibNickName() );
+
+            if( library.size() )
+            {
+#if defined(USE_FP_LIB_TABLE)
+                setLibNickName( library );
+#else
+                wxFileName fileName( library );
+
+                setLibNickName( fileName.GetName() );
+                setLibPath( fileName.GetFullPath() );
+#endif
+                updateTitle();
+            }
+        }
         break;
 
     case ID_OPEN_MODULE_VIEWER:
@@ -282,29 +297,29 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_NEW_MODULE:
+    {
+        Clear_Pcb( true );
+        GetScreen()->ClearUndoRedoList();
+        SetCurItem( NULL );
+        SetCrossHairPosition( wxPoint( 0, 0 ) );
+
+        MODULE* module = Create_1_Module( wxEmptyString );
+
+        if( module )        // i.e. if create module command not aborted
         {
-            Clear_Pcb( true );
-            GetScreen()->ClearUndoRedoList();
-            SetCurItem( NULL );
-            SetCrossHairPosition( wxPoint( 0, 0 ) );
+            // Initialize data relative to nets and netclasses (for a new
+            // module the defaults are used)
+            // This is mandatory to handle and draw pads
+            GetBoard()->BuildListOfNets();
+            redraw = true;
+            module->SetPosition( wxPoint( 0, 0 ) );
 
-            MODULE* module = Create_1_Module( wxEmptyString );
+            if( GetBoard()->m_Modules )
+                GetBoard()->m_Modules->ClearFlags();
 
-            if( module )        // i.e. if create module command not aborted
-            {
-                // Initialize data relative to nets and netclasses (for a new
-                // module the defaults are used)
-                // This is mandatory to handle and draw pads
-                GetBoard()->BuildListOfNets();
-                redraw = true;
-                module->SetPosition( wxPoint( 0, 0 ) );
-
-                if( GetBoard()->m_Modules )
-                    GetBoard()->m_Modules->ClearFlags();
-
-                Zoom_Automatique( false );
-            }
+            Zoom_Automatique( false );
         }
+    }
         break;
 
     case ID_MODEDIT_NEW_MODULE_FROM_WIZARD:
@@ -349,11 +364,19 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SAVE_LIBMODULE:
+#if defined(USE_FP_LIB_TABLE)
+        if( GetBoard()->m_Modules && getLibNickName().size() )
+        {
+            Save_Module_In_Library( getLibNickName(), GetBoard()->m_Modules, true, true );
+            GetScreen()->ClrModify();
+        }
+#else
         if( GetBoard()->m_Modules && getLibPath() != wxEmptyString )
         {
             Save_Module_In_Library( getLibPath(), GetBoard()->m_Modules, true, true );
             GetScreen()->ClrModify();
         }
+#endif
         break;
 
     case ID_MODEDIT_INSERT_MODULE_IN_BOARD:

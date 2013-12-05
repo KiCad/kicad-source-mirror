@@ -32,15 +32,13 @@
 #include <trigo.h>               // RotatePoint
 #include <class_drawpanel.h>     // EDA_DRAW_PANEL
 
-// until bzr rev 4410, Y position of vertical justification
+// until bzr rev 4476, Y position of vertical justification
 // of multiline texts was incorrectly calculated for BOTTOM
 // and CENTER vertical justification. (Only the first line was justified)
 // If this line is left uncommented, the bug is fixed, but
 // creates a (very minor) issue for existing texts, mainly in Pcbnew
 // because the text position is sometimes critical.
-// Currently, this change is broken for rotated or mirrored texts,
-// so keep this line commented until there are fixes
-//#define FIX_MULTILINE_VERT_JUSTIF
+#define FIX_MULTILINE_VERT_JUSTIF
 
 // Conversion to application internal units defined at build time.
 #if defined( PCBNEW )
@@ -267,38 +265,17 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
 {
     if( m_MultilineAllowed )
     {
-        wxPoint        pos  = m_Pos;
+        std::vector<wxPoint> positions;
         wxArrayString* list = wxStringSplit( m_Text, '\n' );
-        wxPoint        offset;
+        positions.reserve( list->Count() );
 
-        offset.y = GetInterline();
+        GetPositionsOfLinesOfMultilineText(positions, list->Count() );
 
-#ifdef FIX_MULTILINE_VERT_JUSTIF
-        if( list->Count() > 1 )
+        for( unsigned ii = 0; ii < list->Count(); ii++ )
         {
-            switch( m_VJustify )
-            {
-            case GR_TEXT_VJUSTIFY_TOP:
-                break;
-
-            case GR_TEXT_VJUSTIFY_CENTER:
-                pos.y -= ( list->Count() - 1 ) * offset.y / 2;
-                break;
-
-            case GR_TEXT_VJUSTIFY_BOTTOM:
-                pos.y -= ( list->Count() - 1 ) * offset.y;
-                break;
-            }
-        }
-#endif
-        RotatePoint( &offset, m_Orient );
-
-        for( unsigned i = 0; i<list->Count(); i++ )
-        {
-            wxString txt = list->Item( i );
+            wxString& txt = list->Item( ii );
             drawOneLineOfText( aClipBox, aDC, aOffset, aColor,
-                               aDrawMode, aFillMode, txt, pos );
-            pos += offset;
+                               aDrawMode, aFillMode, txt, positions[ii] );
         }
 
         delete (list);
@@ -316,6 +293,49 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
     }
 }
 
+
+void EDA_TEXT::GetPositionsOfLinesOfMultilineText(
+        std::vector<wxPoint>& aPositions, int aLineCount )
+{
+    wxPoint        pos  = m_Pos;  // Position of first line of the
+                                  // multiline text according to
+                                  // the center of the multiline text block
+
+    wxPoint        offset;        // Offset to next line.
+
+    offset.y = GetInterline();
+
+#ifdef FIX_MULTILINE_VERT_JUSTIF
+    if( aLineCount > 1 )
+    {
+        switch( m_VJustify )
+        {
+        case GR_TEXT_VJUSTIFY_TOP:
+            break;
+
+        case GR_TEXT_VJUSTIFY_CENTER:
+            pos.y -= ( aLineCount - 1 ) * offset.y / 2;
+            break;
+
+        case GR_TEXT_VJUSTIFY_BOTTOM:
+            pos.y -= ( aLineCount - 1 ) * offset.y;
+            break;
+        }
+    }
+
+    // Rotate the position of the first line
+    // around the center of the multiline text block
+    RotatePoint( &pos, m_Pos, m_Orient );
+#endif
+    // Rotate the offset lines to increase happened in the right direction
+    RotatePoint( &offset, m_Orient );
+
+    for( int ii = 0; ii < aLineCount; ii++ )
+    {
+        aPositions.push_back( pos );
+        pos += offset;
+    }
+}
 
 void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
                                   const wxPoint& aOffset, EDA_COLOR_T aColor,

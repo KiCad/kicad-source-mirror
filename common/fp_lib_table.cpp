@@ -49,9 +49,6 @@ using namespace FP_LIB_TABLE_T;
  */
 static const wxString traceFpLibTable( wxT( "KicadFpLibTable" ) );
 
-/// The evinronment variable name for the current project path.  This is used interanally
-/// at run time and is not exposed outside of the current process.
-static wxString projectPathEnvVariableName( wxT( "KIPRJMOD" ) );
 
 /// The footprint library table name used when no project file is passed to Pcbnew or CvPcb.
 /// This is used temporarily to store the project specific library table until the project
@@ -74,7 +71,71 @@ void FP_LIB_TABLE::ROW::SetType( const wxString& aType )
 void FP_LIB_TABLE::ROW::SetFullURI( const wxString& aFullURI )
 {
     uri_user = aFullURI;
+
+#if !FP_LATE_ENVVAR
     uri_expanded = FP_LIB_TABLE::ExpandSubstitutions( aFullURI );
+#endif
+}
+
+
+const wxString FP_LIB_TABLE::ROW::GetFullURI( bool aSubstituted ) const
+{
+    if( aSubstituted )
+    {
+#if !FP_LATE_ENVVAR         // early expansion
+        return uri_expanded;
+
+#else   // late expansion
+        return FP_LIB_TABLE::ExpandSubstitutions( uri_user );
+#endif
+    }
+    else
+        return uri_user;
+}
+
+
+FP_LIB_TABLE::ROW::ROW( const ROW& a ) :
+    nickName( a.nickName ),
+    type( a.type ),
+    options( a.options ),
+    description( a.description ),
+    properties( 0 )
+{
+    // may call ExpandSubstitutions()
+    SetFullURI( a.uri_user );
+
+    if( a.properties )
+        properties = new PROPERTIES( *a.properties );
+}
+
+
+FP_LIB_TABLE::ROW& FP_LIB_TABLE::ROW::operator=( const ROW& r )
+{
+    nickName     = r.nickName;
+    type         = r.type;
+    options      = r.options;
+    description  = r.description;
+    properties   = r.properties ? new PROPERTIES( *r.properties ) : NULL;
+
+    // may call ExpandSubstitutions()
+    SetFullURI( r.uri_user );
+
+    // Do not copy the PLUGIN, it is lazily created.  Delete any existing
+    // destination plugin.
+    setPlugin( NULL );
+
+    return *this;
+}
+
+
+bool FP_LIB_TABLE::ROW::operator==( const ROW& r ) const
+{
+    return nickName == r.nickName
+        && uri_user == r.uri_user
+        && type == r.type
+        && options == r.options
+        && description == r.description
+        ;
 }
 
 
@@ -111,6 +172,12 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
         // having to copy the FPID and its two strings, twice each.
         FPID& fpid = (FPID&) ret->GetFPID();
 
+        // Catch any misbehaving plugin, which should be setting internal footprint name properly:
+        wxASSERT( aFootprintName == FROM_UTF8( fpid.GetFootprintName().c_str() ) );
+
+        // and clearing nickname
+        wxASSERT( !fpid.GetLibNickname().size() );
+
         fpid.SetLibNickname( row->GetNickName() );
     }
 
@@ -118,11 +185,27 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
 }
 
 
-void FP_LIB_TABLE::FootprintSave( const wxString& aNickname, const MODULE* aFootprint )
+FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname, const MODULE* aFootprint, bool aOverwrite )
 {
     const ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
-    return row->plugin->FootprintSave( row->GetFullURI( true ), aFootprint, row->GetProperties() );
+
+    if( !aOverwrite )
+    {
+        // Try loading the footprint to see if it already exists, caller wants overwrite
+        // protection, which is atypical, not the default.
+
+        wxString fpname = FROM_UTF8( aFootprint->GetFPID().GetFootprintName().c_str() );
+
+        std::auto_ptr<MODULE>   m( row->plugin->FootprintLoad( row->GetFullURI( true ), fpname, row->GetProperties() ) );
+
+        if( m.get() )
+            return SAVE_SKIPPED;
+    }
+
+    row->plugin->FootprintSave( row->GetFullURI( true ), aFootprint, row->GetProperties() );
+
+    return SAVE_OK;
 }
 
 
@@ -139,6 +222,33 @@ bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
     const ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
     return row->plugin->IsFootprintLibWritable( row->GetFullURI( true ) );
+}
+
+
+void FP_LIB_TABLE::FootprintLibDelete( const wxString& aNickname )
+{
+    const ROW* row = FindRow( aNickname );
+    wxASSERT( (PLUGIN*) row->plugin );
+    row->plugin->FootprintLibDelete( row->GetFullURI( true ), row->GetProperties() );
+}
+
+
+void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
+{
+    const ROW* row = FindRow( aNickname );
+    wxASSERT( (PLUGIN*) row->plugin );
+    row->plugin->FootprintLibCreate( row->GetFullURI( true ), row->GetProperties() );
+}
+
+
+const wxString FP_LIB_TABLE::GetDescription( const wxString& aNickname )
+{
+    // use "no exception" form of find row:
+    const ROW* row = findRow( aNickname );
+    if( row )
+        return row->description;
+    else
+        return wxEmptyString;
 }
 
 
@@ -726,14 +836,20 @@ void FP_LIB_TABLE::SetProjectPathEnvVariable( const wxFileName& aPath )
         path = aPath.GetPath();
 
     wxLogTrace( traceFpLibTable, wxT( "Setting env %s to <%s>." ),
-                GetChars( projectPathEnvVariableName ), GetChars( path ) );
-    wxSetEnv( projectPathEnvVariableName, path );
+                GetChars( ProjectPathEnvVariableName() ), GetChars( path ) );
+    wxSetEnv( ProjectPathEnvVariableName(), path );
 }
 
 
-const wxString& FP_LIB_TABLE::GetProjectPathEnvVariableName() const
+const wxString FP_LIB_TABLE::ProjectPathEnvVariableName()
 {
-    return projectPathEnvVariableName;
+    return  wxT( "KIPRJMOD" );
+}
+
+
+const wxString FP_LIB_TABLE::GlobalPathEnvVariableName()
+{
+    return  wxT( KISYSMOD );
 }
 
 

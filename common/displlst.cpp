@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +28,7 @@
  */
 
 #include <fctsys.h>
+#include <macros.h>
 #include <wxstruct.h>
 #include <kicad_string.h>
 #include <dialog_helpers.h>
@@ -34,8 +36,8 @@
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemHeaders,
                                   const std::vector<wxArrayString>& aItemList,
-                                  const wxString& aRefText,
-                                  void(*aCallBackFunction)(wxString& Text),
+                                  const wxString& aSelection,
+                                  void( *aCallBackFunction )( wxString& ),
                                   bool aSortList ) :
     EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle )
 {
@@ -46,25 +48,14 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
     for( unsigned i = 0; i < aItemHeaders.Count(); i++ )
     {
         wxListItem column;
+
         column.SetId( i );
         column.SetText( aItemHeaders.Item( i ) );
-        column.SetWidth( 300 / aItemHeaders.Count() );
+
         m_listBox->InsertColumn( i, column );
     }
 
     InsertItems( aItemList, 0 );
-
-    if( !aRefText.IsEmpty() )    // try to select the item matching aRefText
-    {
-        for( unsigned ii = 0; ii < aItemList.size(); ii++ )
-        {
-            if( aItemList[ii][0] == aRefText )
-            {
-                m_listBox->SetItemState( ii, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-                break;
-            }
-        }
-    }
 
     if( m_callBackFct == NULL )
     {
@@ -72,16 +63,75 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
         m_staticTextMsg->Show( false );
     }
 
-    m_filterBox->SetFocus();
+    for( unsigned col = 0; col < aItemHeaders.Count();  ++col )
+    {
+        m_listBox->SetColumnWidth( col, wxLIST_AUTOSIZE );
 
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
+#if !wxCHECK_VERSION( 2, 9, 0 )
+        // include the column header in the width decision, wx 2.8 forgets this:
+        wxListItem  col_info;
+
+        m_listBox->GetColumn( col, col_info );
+
+        wxString    header  = col_info.GetText();
+        int         headerz = GetTextSize( header, m_listBox ).x;
+
+        // A reasonable column header has about 14 pixels of whitespace
+        // in addition to the width of the text itself.
+        headerz += 14;
+
+        if( headerz > col_info.GetWidth() )
+        {
+            col_info.SetWidth( headerz );
+
+            m_listBox->SetColumn( col, col_info );
+        }
+#endif
+    }
+
+
+#if !wxCHECK_VERSION( 2, 9, 0 )
+    // wx 2.8.x has bug in wxListCtrl WRT honoring the omission of wxHSCROLL, at least
+    // on gtk2.  Fix by setting minimum width so horizontal wxListCtrl scrolling is
+    // not needed on 2.8.x because of minumum visible width setting:
+    {
+        int width = 0;
+
+        for( unsigned col = 0;  col < aItemHeaders.Count();  ++col )
+        {
+            width += m_listBox->GetColumnWidth( col ) + 2;
+        }
+
+        wxSize sz = m_listBox->GetSize();
+
+        sz.SetWidth( width );
+
+        m_listBox->SetMinSize( sz );
+    }
+#endif
+
+    Fit();
     Centre();
-}
 
+    if( !!aSelection )
+    {
+        for( unsigned row = 0; row < aItemList.size(); ++row )
+        {
+            if( aItemList[row][0] == aSelection )
+            {
+                m_listBox->SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+                m_listBox->EnsureVisible( row );
+                break;
+            }
+        }
+    }
 
-EDA_LIST_DIALOG::~EDA_LIST_DIALOG()
-{
+    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
+    // because so many dialogs share this same class, with different numbers of
+    // columns, different column names, and column widths.
+    m_hash_key = TO_UTF8( aTitle );
+
+    m_filterBox->SetFocus();
 }
 
 
@@ -111,22 +161,24 @@ void EDA_LIST_DIALOG::textChangeInFilterBox( wxCommandEvent& event )
 
 wxString EDA_LIST_DIALOG::GetTextSelection( int aColumn )
 {
-    wxCHECK_MSG( aColumn < m_listBox->GetColumnCount(), wxEmptyString,
+    wxCHECK_MSG( unsigned( aColumn ) < unsigned( m_listBox->GetColumnCount() ), wxEmptyString,
                  wxT( "Invalid list control column." ) );
 
-    wxListItem info;
-    wxString   text;
-    long       item = -1;
-    item = m_listBox->GetNextItem( item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+    long    item = m_listBox->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
 
-    info.m_mask = wxLIST_MASK_TEXT;
-    info.m_itemId = item;
-    info.m_col = aColumn;
+    if( item >= 0 )     // if something is selected.
+    {
+        wxListItem info;
 
-    if( !m_listBox->GetItem( info ) )
-        return wxEmptyString;
+        info.m_mask = wxLIST_MASK_TEXT;
+        info.m_itemId = item;
+        info.m_col = aColumn;
 
-    return info.m_text;
+        if( m_listBox->GetItem( info ) )
+            return info.m_text;
+    }
+
+    return wxEmptyString;
 }
 
 
@@ -150,9 +202,9 @@ void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList,
     {
         wxASSERT( (int) itemList[row].GetCount() == m_listBox->GetColumnCount() );
 
+        long itemIndex = 0;
         for( unsigned col = 0; col < itemList[row].GetCount(); col++ )
         {
-            long itemIndex;
 
             if( col == 0 )
             {
