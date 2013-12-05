@@ -70,7 +70,7 @@ public:
      * @param aPosition is the text position in world coordinates.
      * @param aRotationAngle is the text rotation angle.
      */
-    void Draw( wxString aText, const VECTOR2D& aPosition, double aRotationAngle );
+    void Draw( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle );
 
     /**
      * @brief Set the glyph size.

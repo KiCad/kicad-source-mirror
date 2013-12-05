@@ -147,7 +147,7 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLY
 }
 
 
-void STROKE_FONT::Draw( wxString aText, const VECTOR2D& aPosition, double aRotationAngle )
+void STROKE_FONT::Draw( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle )
 {
     // Context needs to be saved before any transformations
     m_gal->Save();
