@@ -297,7 +297,10 @@ void STROKE_FONT::drawSingleLineText( const wxString& aText )
                 {
                     // FIXME should be done other way - referring to the lowest Y value of point
                     // because now italic fonts are translated a bit
-                    pointPos.x += pointPos.y * 0.1;
+                    if( m_mirrored )
+                        pointPos.x += pointPos.y * 0.1;
+                    else
+                        pointPos.x -= pointPos.y * 0.1;
                 }
 
                 pointListScaled.push_back( pointPos );
