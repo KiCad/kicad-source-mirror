@@ -277,7 +277,7 @@ public:
      * @param aPosition is the text position in world coordinates.
      * @param aRotationAngle is the text rotation angle.
      */
-    inline virtual void StrokeText( const std::string& aText, const VECTOR2D& aPosition,
+    inline virtual void StrokeText( const wxString& aText, const VECTOR2D& aPosition,
                                     double aRotationAngle )
     {
         strokeFont.Draw( aText, aPosition, aRotationAngle );
