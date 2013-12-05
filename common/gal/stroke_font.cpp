@@ -3,6 +3,8 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * Stroke font class
  *
@@ -44,11 +46,6 @@ STROKE_FONT::STROKE_FONT( GAL* aGal ) :
     m_glyphSize = VECTOR2D( 10.0, 10.0 );
     m_verticalJustify   = GR_TEXT_VJUSTIFY_BOTTOM;
     m_horizontalJustify = GR_TEXT_HJUSTIFY_LEFT;
-}
-
-
-STROKE_FONT::~STROKE_FONT()
-{
 }
 
 
@@ -190,7 +187,7 @@ void STROKE_FONT::Draw( wxString aText, const VECTOR2D& aPosition, double aRotat
 
     // Split multiline strings into separate ones and draw them line by line
     int begin = 0;
-    int newlinePos = aText.find( '\n' );
+    int newlinePos = aText.Find( '\n' );
 
     while( newlinePos != wxNOT_FOUND )
     {
@@ -203,7 +200,8 @@ void STROKE_FONT::Draw( wxString aText, const VECTOR2D& aPosition, double aRotat
     }
 
     // Draw the last (or the only one) line
-    drawSingleLineText( aText.Mid( begin ) );
+    if( !aText.IsEmpty() )
+        drawSingleLineText( aText.Mid( begin ) );
 
     m_gal->Restore();
 }
@@ -243,7 +241,6 @@ void STROKE_FONT::drawSingleLineText( const wxString& aText )
         break;
     }
 
-
     if( m_mirrored )
     {
         // In case of mirrored text invert the X scale of points and their X direction
@@ -256,13 +253,18 @@ void STROKE_FONT::drawSingleLineText( const wxString& aText )
         xOffset = 0.0;
     }
 
-    for( wxString::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
+    for( wxString::const_iterator chIt = aText.begin(); chIt != aText.end(); ++chIt )
     {
         // Toggle overbar
         if( *chIt == '~' )
         {
-            m_overbar = !m_overbar;
-            continue;
+            if( ++chIt == aText.end() )
+                break;
+
+            if( *chIt != '~' )      // It was a single tilda, it toggles overbar
+                m_overbar = !m_overbar;
+
+            // If it is a double tilda, just process the second one
         }
 
         unsigned dd = *chIt - ' ';
@@ -282,12 +284,12 @@ void STROKE_FONT::drawSingleLineText( const wxString& aText )
         }
 
         for( GLYPH::iterator pointListIt = glyph.begin(); pointListIt != glyph.end();
-             pointListIt++ )
+             ++pointListIt )
         {
             std::deque<VECTOR2D> pointListScaled;
 
             for( std::deque<VECTOR2D>::iterator pointIt = pointListIt->begin();
-                 pointIt != pointListIt->end(); pointIt++ )
+                 pointIt != pointListIt->end(); ++pointIt )
             {
                 VECTOR2D pointPos( pointIt->x * glyphSize.x + xOffset, pointIt->y * glyphSize.y );
 
@@ -315,13 +317,18 @@ VECTOR2D STROKE_FONT::computeTextSize( const wxString& aText ) const
 {
     VECTOR2D result = VECTOR2D( 0.0, m_glyphSize.y );
 
-    for( wxString::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
+    for( wxString::const_iterator chIt = aText.begin(); chIt != aText.end(); ++chIt )
     {
         wxASSERT_MSG( *chIt != '\n',
                       wxT( "This function is intended to work with single line strings" ) );
 
+        // If it is double tilda, then it is displayed as a single tilda
+        // If it is single tilda, then it is toggling overbar, so we need to skip it
         if( *chIt == '~' )
-            continue;
+        {
+            if( ++chIt == aText.end() )
+                break;
+        }
 
         // Index in the bounding boxes table
         unsigned dd = *chIt - ' ';

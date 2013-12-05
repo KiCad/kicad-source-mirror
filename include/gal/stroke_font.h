@@ -3,6 +3,8 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * Stroke font class
  *
@@ -51,9 +53,6 @@ class STROKE_FONT
 public:
     /// Constructor
     STROKE_FONT( GAL* aGal );
-
-    /// Destructor
-    ~STROKE_FONT();
 
     /**
      * @brief Load the new stroke font.
