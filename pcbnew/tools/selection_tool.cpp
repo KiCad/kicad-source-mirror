@@ -458,21 +458,21 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     break;
 
     case PCB_PAD_T:
-    {
         // Pads are not selectable in multiple selection mode
         if( m_multiple )
             return false;
+        /* no break */
 
-        // Pads are supposed to be on top, bottom or both at the same time (THT)
-        if( aItem->IsOnLayer( LAYER_N_FRONT ) && board->IsLayerVisible( LAYER_N_FRONT ) )
+    case PCB_MODULE_T:
+        if( aItem->IsOnLayer( LAYER_N_FRONT ) && board->IsElementVisible( MOD_FR_VISIBLE ) )
             return true;
 
-        if( aItem->IsOnLayer( LAYER_N_BACK ) && board->IsLayerVisible( LAYER_N_BACK ) )
+        if( aItem->IsOnLayer( LAYER_N_BACK ) && board->IsLayerVisible( MOD_BK_VISIBLE ) )
             return true;
 
         return false;
-    }
-    break;
+
+        break;
 
     case PCB_MODULE_TEXT_T:
         // Module texts are not selectable in multiple selection mode
@@ -483,7 +483,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 
     // These are not selectable, otherwise silkscreen drawings would be easily destroyed
     case PCB_MODULE_EDGE_T:
-    // and some other stuff that should be selected
+    // and some other stuff that should not be selected
     case NOT_USED:
     case TYPE_NOT_INIT:
         return false;
@@ -516,8 +516,8 @@ void SELECTION_TOOL::selectItem( BOARD_ITEM* aItem )
         }
     } selectBase( m_selection );
 
-    // Modules are treated in a special way - when they are moved, we have to
-    // move all the parts that make the module, not the module itself
+    // Modules are treated in a special way - when they are selected, we have to
+    // select all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
@@ -569,8 +569,8 @@ void SELECTION_TOOL::deselectItem( BOARD_ITEM* aItem )
         }
     } deselectBase( m_selection );
 
-    // Modules are treated in a special way - when they are moved, we have to
-    // move all the parts that make the module, not the module itself
+    // Modules are treated in a special way - when they are selected, we have to
+    // select all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
