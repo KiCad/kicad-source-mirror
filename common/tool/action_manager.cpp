@@ -53,7 +53,13 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
     m_actionIdIndex[aAction->m_id] = aAction;
 
     if( aAction->HasHotKey() )
+    {
+        // Duplication of hot keys leads to unexpected behaviour
+        // The right way to change a hotkey is to use ACTION_MANAGER::ClearHotKey() first
+        assert( m_actionHotKeys.find( aAction->m_currentHotKey ) == m_actionHotKeys.end() );
+
         m_actionHotKeys[aAction->m_currentHotKey] = aAction;
+    }
 
     aAction->setActionMgr( this );
 }
@@ -104,6 +110,12 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     runAction( it->second );
 
     return true;
+}
+
+
+void ACTION_MANAGER::ClearHotKey( int aHotKey )
+{
+    m_actionHotKeys.erase( aHotKey );
 }
 
 
