@@ -30,9 +30,9 @@
 
 using namespace KIGFX;
 
-
-const double STROKE_FONT::LINE_HEIGHT_RATIO  = 1.6;
-
+const double STROKE_FONT::OVERBAR_HEIGHT = 0.45;
+const double STROKE_FONT::BOLD_FACTOR = 1.3;
+const double STROKE_FONT::HERSHEY_SCALE = 1.0 / 21.0;
 
 STROKE_FONT::STROKE_FONT( GAL* aGal ) :
     m_gal( aGal ),
@@ -41,7 +41,6 @@ STROKE_FONT::STROKE_FONT( GAL* aGal ) :
     m_mirrored( false )
 {
     // Default values
-    m_scaleFactor = 1.0 / 21.0;
     m_glyphSize = VECTOR2D( 10.0, 10.0 );
     m_verticalJustify   = GR_TEXT_VJUSTIFY_BOTTOM;
     m_horizontalJustify = GR_TEXT_HJUSTIFY_LEFT;
@@ -57,6 +56,8 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 {
     m_glyphs.clear();
     m_glyphBoundingBoxes.clear();
+    m_glyphs.resize( aNewStrokeFontSize );
+    m_glyphBoundingBoxes.resize( aNewStrokeFontSize );
 
     for( int j = 0; j < aNewStrokeFontSize; j++ )
     {
@@ -82,8 +83,8 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             if( i < 2 )
             {
                 // The first two values contain the width of the char
-                glyphStartX     = coordinate[0] - 'R';
-                glyphEndX       = coordinate[1] - 'R';
+                glyphStartX     = ( coordinate[0] - 'R' ) * HERSHEY_SCALE;
+                glyphEndX       = ( coordinate[1] - 'R' ) * HERSHEY_SCALE;
                 glyphBoundingX  = VECTOR2D( 0, glyphEndX - glyphStartX );
             }
             else if( ( coordinate[0] == ' ' ) && ( coordinate[1] == 'R' ) )
@@ -98,8 +99,8 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             {
                 // Every coordinate description of the Hershey format has an offset,
                 // it has to be subtracted
-                point.x = (double) ( coordinate[0] - 'R' ) - glyphStartX;
-                point.y = (double) ( coordinate[1] - 'R' ) - 11.0;
+                point.x = (double) ( coordinate[0] - 'R' ) * HERSHEY_SCALE - glyphStartX;
+                point.y = (double) ( coordinate[1] - 'R' ) * HERSHEY_SCALE;
                 pointList.push_back( point );
             }
 
@@ -109,13 +110,19 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
         if( pointList.size() > 0 )
             glyph.push_back( pointList );
 
-        m_glyphs.push_back( glyph );
+        m_glyphs[j] = glyph;
 
         // Compute the bounding box of the glyph
-        m_glyphBoundingBoxes.push_back( computeBoundingBox( glyph, glyphBoundingX ) );
+        m_glyphBoundingBoxes[j] = computeBoundingBox( glyph, glyphBoundingX );
     }
 
     return true;
+}
+
+
+int STROKE_FONT::getInterline() const
+{
+    return ( m_glyphSize.y * 14 ) / 10 + m_gal->GetLineWidth();
 }
 
 
@@ -145,115 +152,134 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLY
 
 void STROKE_FONT::Draw( wxString aText, const VECTOR2D& aPosition, double aRotationAngle )
 {
-    // By default overbar is turned off
-    m_overbar = false;
-
     // Context needs to be saved before any transformations
     m_gal->Save();
 
     m_gal->Translate( aPosition );
-    m_gal->Rotate( -aRotationAngle );
 
-    // Split multiline strings into separate ones and draw them line by line
-    int newlinePos = aText.Find( '\n' );
+    // Single line height
+    int lineHeight = getInterline();
 
-    if( newlinePos != wxNOT_FOUND )
-    {
-        VECTOR2D nextlinePosition = VECTOR2D( 0.0, m_glyphSize.y * LINE_HEIGHT_RATIO );
-
-        Draw( aText.Mid( newlinePos + 1 ), nextlinePosition, 0.0 );
-        aText = aText.Mid( 0, newlinePos );
-    }
-
-    // Compute the text size
-    VECTOR2D textsize = computeTextSize( aText );
-
-    // Adjust the text position to the given alignment
-    switch( m_horizontalJustify )
-    {
-    case GR_TEXT_HJUSTIFY_CENTER:
-        m_gal->Translate( VECTOR2D( -textsize.x / 2.0, 0 ) );
-        break;
-
-    case GR_TEXT_HJUSTIFY_RIGHT:
-        if( !m_mirrored )
-            m_gal->Translate( VECTOR2D( -textsize.x, 0 ) );
-
-        break;
-
-    case GR_TEXT_HJUSTIFY_LEFT:
-        if( m_mirrored )
-            m_gal->Translate( VECTOR2D( -textsize.x, 0 ) );
-
-        break;
-
-    default:
-        break;
-    }
+    // The overall height of all lines of text
+    double textBlockHeight = lineHeight * ( linesCount( aText ) - 1 );
 
     switch( m_verticalJustify )
     {
     case GR_TEXT_VJUSTIFY_CENTER:
-        m_gal->Translate( VECTOR2D( 0, textsize.y / 2.0 ) );
-        break;
-
-    case GR_TEXT_VJUSTIFY_TOP:
-        m_gal->Translate( VECTOR2D( 0, textsize.y ) );
+        m_gal->Translate( VECTOR2D( 0, -textBlockHeight / 2.0 ) );
         break;
 
     case GR_TEXT_VJUSTIFY_BOTTOM:
+        m_gal->Translate( VECTOR2D( 0, -textBlockHeight ) );
+        break;
+
+    case GR_TEXT_VJUSTIFY_TOP:
         break;
 
     default:
         break;
     }
 
-    double xOffset, glyphSizeX;
-
-    if( m_mirrored )
-    {
-        // In case of mirrored text invert the X scale of points and their X direction
-        // (m_glyphSize.x) and start drawing from the position where text normally should end
-        // (textsize.x)
-        xOffset     = textsize.x;
-        glyphSizeX  = -m_glyphSize.x;
-    }
-    else
-    {
-        xOffset     = 0.0;
-        glyphSizeX  = m_glyphSize.x;
-    }
-    double scaleY = m_scaleFactor * m_glyphSize.y;
-    double scaleX = m_scaleFactor * glyphSizeX;
+    m_gal->Rotate( -aRotationAngle );
 
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
 
     if( m_bold )
+        m_gal->SetLineWidth( m_gal->GetLineWidth() * BOLD_FACTOR );
+
+    // Split multiline strings into separate ones and draw them line by line
+    int begin = 0;
+    int newlinePos = aText.find( '\n' );
+
+    while( newlinePos != wxNOT_FOUND )
     {
-        m_gal->SetLineWidth( m_gal->GetLineWidth() * 1.3 );
+        size_t length = newlinePos - begin;
+        drawSingleLineText( aText.Mid( begin, length ) );
+        m_gal->Translate( VECTOR2D( 0.0, lineHeight ) );
+
+        begin = newlinePos + 1;
+        newlinePos = aText.find( '\n', begin + 1 );
+    }
+
+    // Draw the last (or the only one) line
+    drawSingleLineText( aText.Mid( begin ) );
+
+    m_gal->Restore();
+}
+
+
+void STROKE_FONT::drawSingleLineText( const wxString& aText )
+{
+    // By default the overbar is turned off
+    m_overbar = false;
+
+    double xOffset;
+    VECTOR2D glyphSize( m_glyphSize );
+
+    // Compute the text size
+    VECTOR2D textSize = computeTextSize( aText );
+
+    m_gal->Save();
+
+    // Adjust the text position to the given alignment
+    switch( m_horizontalJustify )
+    {
+    case GR_TEXT_HJUSTIFY_CENTER:
+        m_gal->Translate( VECTOR2D( -textSize.x / 2.0, 0 ) );
+        break;
+
+    case GR_TEXT_HJUSTIFY_RIGHT:
+        if( !m_mirrored )
+            m_gal->Translate( VECTOR2D( -textSize.x, 0 ) );
+        break;
+
+    case GR_TEXT_HJUSTIFY_LEFT:
+        if( m_mirrored )
+            m_gal->Translate( VECTOR2D( -textSize.x, 0 ) );
+        break;
+
+    default:
+        break;
+    }
+
+
+    if( m_mirrored )
+    {
+        // In case of mirrored text invert the X scale of points and their X direction
+        // (m_glyphSize.x) and start drawing from the position where text normally should end
+        // (textSize.x)
+        xOffset = textSize.x;
+        glyphSize.x = -m_glyphSize.x;
+    } else
+    {
+        xOffset = 0.0;
     }
 
     for( wxString::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
     {
+        // Toggle overbar
         if( *chIt == '~' )
         {
             m_overbar = !m_overbar;
             continue;
         }
 
-        GLYPH_LIST::iterator glyphIt = m_glyphs.begin();
-        std::deque<BOX2D>::iterator bbIt = m_glyphBoundingBoxes.begin();
-
         unsigned dd = *chIt - ' ';
 
-        if( dd >= m_glyphBoundingBoxes.size() )
+        if( dd >= m_glyphBoundingBoxes.size() || dd < 0 )
             dd = '?' - ' ';
 
-        advance( glyphIt, dd );
-        advance( bbIt, dd );
+        GLYPH& glyph = m_glyphs[dd];
+        BOX2D& bbox = m_glyphBoundingBoxes[dd];
 
-        GLYPH glyph = *glyphIt;
+        if( m_overbar )
+        {
+            VECTOR2D startOverbar( xOffset, -getInterline() * OVERBAR_HEIGHT );
+            VECTOR2D endOverbar( xOffset + glyphSize.x * bbox.GetEnd().x,
+                                 -getInterline() * OVERBAR_HEIGHT );
+            m_gal->DrawLine( startOverbar, endOverbar );
+        }
 
         for( GLYPH::iterator pointListIt = glyph.begin(); pointListIt != glyph.end();
              pointListIt++ )
@@ -263,7 +289,7 @@ void STROKE_FONT::Draw( wxString aText, const VECTOR2D& aPosition, double aRotat
             for( std::deque<VECTOR2D>::iterator pointIt = pointListIt->begin();
                  pointIt != pointListIt->end(); pointIt++ )
             {
-                VECTOR2D pointPos( pointIt->x * scaleX + xOffset, pointIt->y * scaleY );
+                VECTOR2D pointPos( pointIt->x * glyphSize.x + xOffset, pointIt->y * glyphSize.y );
 
                 if( m_italic )
                 {
@@ -278,15 +304,7 @@ void STROKE_FONT::Draw( wxString aText, const VECTOR2D& aPosition, double aRotat
             m_gal->DrawPolyline( pointListScaled );
         }
 
-        if( m_overbar )
-        {
-            VECTOR2D startOverbar( xOffset, -textsize.y * 1.2 );
-            VECTOR2D endOverbar( xOffset + m_scaleFactor * glyphSizeX * bbIt->GetEnd().x,
-                                 -textsize.y * 1.2 );
-            m_gal->DrawLine( startOverbar, endOverbar );
-        }
-
-        xOffset += m_scaleFactor * glyphSizeX * bbIt->GetEnd().x;
+        xOffset += glyphSize.x * bbox.GetEnd().x;
     }
 
     m_gal->Restore();
@@ -299,18 +317,19 @@ VECTOR2D STROKE_FONT::computeTextSize( const wxString& aText ) const
 
     for( wxString::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
     {
+        wxASSERT_MSG( *chIt != '\n',
+                      wxT( "This function is intended to work with single line strings" ) );
+
         if( *chIt == '~' )
             continue;
 
-        std::deque<BOX2D>::const_iterator bbIt = m_glyphBoundingBoxes.begin();
+        // Index in the bounding boxes table
         unsigned dd = *chIt - ' ';
 
-        if( dd >= m_glyphBoundingBoxes.size() )
+        if( dd >= m_glyphBoundingBoxes.size() || dd < 0 )
             dd = '?' - ' ';
 
-        advance( bbIt, dd );
-
-        result.x += m_scaleFactor * m_glyphSize.x * bbIt->GetEnd().x;
+        result.x += m_glyphSize.x * m_glyphBoundingBoxes[dd].GetEnd().x;
     }
 
     return result;

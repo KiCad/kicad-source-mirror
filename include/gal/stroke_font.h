@@ -39,7 +39,7 @@ namespace KIGFX
 class GAL;
 
 typedef std::deque< std::deque<VECTOR2D> > GLYPH;
-typedef std::deque<GLYPH>                  GLYPH_LIST;
+typedef std::vector<GLYPH>                 GLYPH_LIST;
 
 /**
  * @brief Class STROKE_FONT implements stroke font drawing.
@@ -54,8 +54,6 @@ public:
 
     /// Destructor
     ~STROKE_FONT();
-
-    // TODO Load font from a text file
 
     /**
      * @brief Load the new stroke font.
@@ -74,16 +72,6 @@ public:
      * @param aRotationAngle is the text rotation angle.
      */
     void Draw( wxString aText, const VECTOR2D& aPosition, double aRotationAngle );
-
-    /**
-     * @brief Set the scale factor of the font for the glyph size.
-     *
-     * @param aScaleFactor is the scale factor of the font.
-     */
-    inline void SetScaleFactor( const double aScaleFactor )
-    {
-        m_scaleFactor = aScaleFactor;
-    }
 
     /**
      * @brief Set the glyph size.
@@ -158,12 +146,18 @@ public:
 private:
     GAL*                m_gal;                                    ///< Pointer to the GAL
     GLYPH_LIST          m_glyphs;                                 ///< Glyph list
-    std::deque<BOX2D>   m_glyphBoundingBoxes;                     ///< Bounding boxes of the glyphs
-    double              m_scaleFactor;                            ///< Scale factor for the glyph
+    std::vector<BOX2D>  m_glyphBoundingBoxes;                     ///< Bounding boxes of the glyphs
     VECTOR2D            m_glyphSize;                              ///< Size of the glyphs
     EDA_TEXT_HJUSTIFY_T m_horizontalJustify;                      ///< Horizontal justification
     EDA_TEXT_VJUSTIFY_T m_verticalJustify;                        ///< Vertical justification
     bool                m_bold, m_italic, m_mirrored, m_overbar;  ///< Properties of text
+
+    /**
+     * @brief Returns a single line height using current settings.
+     *
+     * @return The line height.
+     */
+    int getInterline() const;
 
     /**
      * @brief Compute the bounding box of a given glyph.
@@ -175,6 +169,14 @@ private:
     BOX2D computeBoundingBox( const GLYPH& aGlyph, const VECTOR2D& aGlyphBoundingX ) const;
 
     /**
+     * @brief Draws a single line of text. Multiline texts should be split before using the
+     * function.
+     *
+     * @param aText is the text to be drawn.
+     */
+    void drawSingleLineText( const wxString& aText );
+
+    /**
      * @brief Compute the size of a given text.
      *
      * @param aText is the text string.
@@ -182,7 +184,34 @@ private:
      */
     VECTOR2D computeTextSize( const wxString& aText ) const;
 
-    static const double LINE_HEIGHT_RATIO;
+    /**
+     * @brief Returns number of lines for a given text.
+     *
+     * @param aText is the text to be checked.
+     * @return Number of lines of aText.
+     */
+    unsigned int linesCount( const wxString& aText ) const
+    {
+        wxString::const_iterator it, itEnd;
+        unsigned int lines = 1;
+
+        for( it = aText.begin(), itEnd = aText.end(); it != itEnd; ++it )
+        {
+            if( *it == '\n' )
+                ++lines;
+        }
+
+        return lines;
+    }
+
+    ///> Factor that determines relative height of overbar.
+    static const double OVERBAR_HEIGHT;
+
+    ///> Factor that determines relative line width for bold text.
+    static const double BOLD_FACTOR;
+
+    ///> Scale factor for the glyph
+    static const double HERSHEY_SCALE;
 };
 } // namespace KIGFX
 
