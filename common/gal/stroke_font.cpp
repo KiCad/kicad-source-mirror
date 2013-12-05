@@ -26,6 +26,7 @@
 
 #include <gal/stroke_font.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <wx/string.h>
 
 using namespace KIGFX;
 
@@ -142,7 +143,7 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLY
 }
 
 
-void STROKE_FONT::Draw( std::wstring aText, const VECTOR2D& aPosition, double aRotationAngle )
+void STROKE_FONT::Draw( wxString aText, const VECTOR2D& aPosition, double aRotationAngle )
 {
     // By default overbar is turned off
     m_overbar = false;
@@ -154,14 +155,14 @@ void STROKE_FONT::Draw( std::wstring aText, const VECTOR2D& aPosition, double aR
     m_gal->Rotate( -aRotationAngle );
 
     // Split multiline strings into separate ones and draw them line by line
-    size_t newlinePos = aText.find( '\n' );
+    int newlinePos = aText.Find( '\n' );
 
-    if( newlinePos != std::wstring::npos )
+    if( newlinePos != wxNOT_FOUND )
     {
         VECTOR2D nextlinePosition = VECTOR2D( 0.0, m_glyphSize.y * LINE_HEIGHT_RATIO );
 
-        Draw( aText.substr( newlinePos + 1 ), nextlinePosition, 0.0 );
-        aText = aText.substr( 0, newlinePos );
+        Draw( aText.Mid( newlinePos + 1 ), nextlinePosition, 0.0 );
+        aText = aText.Mid( 0, newlinePos );
     }
 
     // Compute the text size
@@ -233,7 +234,7 @@ void STROKE_FONT::Draw( std::wstring aText, const VECTOR2D& aPosition, double aR
         m_gal->SetLineWidth( m_gal->GetLineWidth() * 1.3 );
     }
 
-    for( std::wstring::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
+    for( wxString::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
     {
         if( *chIt == '~' )
         {
@@ -292,11 +293,11 @@ void STROKE_FONT::Draw( std::wstring aText, const VECTOR2D& aPosition, double aR
 }
 
 
-VECTOR2D STROKE_FONT::computeTextSize( const std::wstring& aText ) const
+VECTOR2D STROKE_FONT::computeTextSize( const wxString& aText ) const
 {
     VECTOR2D result = VECTOR2D( 0.0, m_glyphSize.y );
 
-    for( std::wstring::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
+    for( wxString::const_iterator chIt = aText.begin(); chIt != aText.end(); chIt++ )
     {
         if( *chIt == '~' )
             continue;

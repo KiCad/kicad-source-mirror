@@ -73,7 +73,7 @@ public:
      * @param aPosition is the text position in world coordinates.
      * @param aRotationAngle is the text rotation angle.
      */
-    void Draw( std::wstring aText, const VECTOR2D& aPosition, double aRotationAngle );
+    void Draw( wxString aText, const VECTOR2D& aPosition, double aRotationAngle );
 
     /**
      * @brief Set the scale factor of the font for the glyph size.
@@ -180,7 +180,7 @@ private:
      * @param aText is the text string.
      * @return is the text size.
      */
-    VECTOR2D computeTextSize( const std::wstring& aText ) const;
+    VECTOR2D computeTextSize( const wxString& aText ) const;
 
     static const double LINE_HEIGHT_RATIO;
 };

@@ -719,7 +719,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetLineWidth( aText->GetThickness() );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( std::wstring( aText->GetText().wc_str() ), position, orientation );
+    m_gal->StrokeText( aText->GetText(), position, orientation );
 }
 
 
@@ -735,7 +735,7 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetLineWidth( aText->GetThickness() );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( std::wstring( aText->GetText().wc_str() ), position, orientation );
+    m_gal->StrokeText( aText->GetText(), position, orientation );
 }
 
 
