@@ -59,11 +59,11 @@ public:
         return wxString( c_str(), wxConvUTF8 );
     }
 
-    static int uni_forward( const_iterator it, uint32_t* result )
+    static int uni_forward( unsigned char* it, uint32_t* result )
     {
         // @todo: have this read UTF8 characters into result, not bytes.
         // What's here now is scaffolding, reading single byte characters only.
-        *result = (unsigned char) *it;
+        *result = *it;
         return 1;
     }
 
@@ -74,13 +74,13 @@ public:
      * they return a uint32_t holding the unicode character appropriate for respective
      * operation.
      */
-    class uni_iter : public std::string::const_iterator
+    class uni_iter
     {
-        const_iterator  it;
+        unsigned char* it;
 
     public:
-        uni_iter( const_iterator start ) :
-            it( start )
+        uni_iter( const char* start ) :
+            it( (unsigned char*) start )
         {
         }
 
@@ -138,12 +138,12 @@ public:
 
     uni_iter ubegin() const
     {
-        return uni_iter( begin() );
+        return uni_iter( data() );
     }
 
     uni_iter uend() const
     {
-        return uni_iter( end() );
+        return uni_iter( data() + size() );
     }
 };
 
