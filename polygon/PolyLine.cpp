@@ -1187,7 +1187,7 @@ void CPOLYGONS_LIST::ExportTo( KI_POLYGON_WITH_HOLES& aPolygoneWithHole )
             {
                 cornerslist.push_back( KI_POLY_POINT( GetX( ic ), GetY( ic ) ) );
 
-                if( IsEndContour( ic ) )
+                if( IsEndContour( ic++ ) )
                     break;
             }
 
