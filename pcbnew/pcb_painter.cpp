@@ -771,7 +771,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
 
         // Set up drawing options
         m_gal->SetFillColor( color );
-        m_gal->SetLineWidth( aZone->GetThermalReliefCopperBridge() / 2.0 );
+        m_gal->SetLineWidth( aZone->GetMinThickness() );
 
         if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_FILLED )
         {
