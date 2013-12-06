@@ -2,68 +2,69 @@
 #include <stdio.h>
 #include <string>
 #include <wx/string.h>
-#include <stdint.h>
+#include <assert.h>
 
 
 /**
  * Class UTF8
- * is an 8 bit std::string assuredly encoded in UTF8 that supplies special
- * conversion support to and from wxString, and has iteration over
- * UTF8 code points.
+ * is an 8 bit std::string that is assuredly encoded in UTF8, and supplies special
+ * conversion support to and from wxString, and has iteration over unicode characters.
+ *
+ * @author Dick Hollenbeck
  */
 class UTF8 : public std::string
 {
-
 public:
 
-    UTF8( const wxString& o ) :
-        std::string( (const char*) o.utf8_str() )
-    {
-        // @todo: should not be inline.
-    }
+    UTF8( const wxString& o );
 
+    /// This is the only constructor for which you could end up with
+    /// non-UTF8 encoding, but that would be your fault.
     UTF8( const char* txt ) :
         std::string( txt )
     {
-        // ok inline
     }
 
     explicit UTF8( const std::string& o ) :
         std::string( o )
     {
-        // ok inline
     }
 
     UTF8() :
         std::string()
     {
-        // ok inline
     }
 
-    UTF8& operator = ( const wxString& o )
+    UTF8& operator=( const wxString& o );
+
+    UTF8& operator=( const std::string& o )
     {
-        // @todo: should not be inline.
-        std::string::operator=( (const char*) o.utf8_str() );
+        std::string::operator=( o );
         return *this;
     }
 
-    UTF8& operator = ( const std::string& o )
+    operator wxString () const;
+
+    /// This one is not in std::string, and one wonders why... might be a solid
+    /// enough reason to remove it still.
+    operator char* () const
     {
-        std::string::operator = ( o );
-        return *this;
+        return (char*) c_str();
     }
 
-    operator wxString () const
-    {
-        // @todo: should not be inline.
-        return wxString( c_str(), wxConvUTF8 );
-    }
-
-    static int uni_forward( unsigned char* it, uint32_t* result )
+    /**
+     * Function uni_forward
+     * advances over a UTF8 encoded multibyte character, capturing the unicode
+     * character as it goes, and returning the number of bytes consumed.
+     *
+     * @param aSequence is the UTF8 byte sequence.
+     * @param aResult is where to put the unicode character.
+     */
+    static int uni_forward( unsigned char* aSequence, unsigned* aResult )
     {
         // @todo: have this read UTF8 characters into result, not bytes.
         // What's here now is scaffolding, reading single byte characters only.
-        *result = *it;
+        *aResult = *aSequence;
         return 1;
     }
 
@@ -71,37 +72,40 @@ public:
      * class uni_iter
      * is a non-mutable iterator that walks through code points in the UTF8 encoded
      * string.  The normal ++(), ++(int), ->(), and *() operators are all supported and
-     * they return a uint32_t holding the unicode character appropriate for respective
+     * they return a unsigned holding the unicode character appropriate for respective
      * operation.
      */
     class uni_iter
     {
+        friend class UTF8;
+
         unsigned char* it;
 
-    public:
         uni_iter( const char* start ) :
             it( (unsigned char*) start )
         {
+            assert( sizeof(unsigned) >= 4 );
         }
 
+    public:
+
         /// pre-increment and return unicode at new position
-        uint32_t operator++()
+        unsigned operator++()
         {
-            uint32_t    result;
+            unsigned    result;
 
             // advance, and toss the result
             it += uni_forward( it, &result );
 
             // get the next result, but do not advance:
             uni_forward( it, &result );
-
             return result;
         }
 
         /// post-increment and return unicode at initial position
-        uint32_t operator++( int )
+        unsigned operator++( int )
         {
-            uint32_t    result;
+            unsigned    result;
 
             // grab the result and advance.
             it += uni_forward( it, &result );
@@ -109,9 +113,9 @@ public:
         }
 
         /// return unicode at current position
-        uint32_t operator->() const
+        unsigned operator->() const
         {
-            uint32_t    result;
+            unsigned    result;
 
             // grab the result, do not advance
             uni_forward( it, &result );
@@ -119,9 +123,9 @@ public:
         }
 
         /// return unicode at current position
-        uint32_t operator*() const
+        unsigned operator*() const
         {
-            uint32_t    result;
+            unsigned    result;
 
             // grab the result, do not advance
             uni_forward( it, &result );
@@ -136,11 +140,19 @@ public:
         bool operator>=( const uni_iter& other ) const  { return it >= other.it; }
     };
 
+    /**
+     * Function ubegin
+     * returns a @a uni_iter initialized to the start of this UTF8 byte sequence.
+     */
     uni_iter ubegin() const
     {
         return uni_iter( data() );
     }
 
+    /**
+     * Function uend
+     * returns a @a uni_iter initialized to the end of this UTF8 byte sequence.
+     */
     uni_iter uend() const
     {
         return uni_iter( data() + size() );
@@ -148,9 +160,11 @@ public:
 };
 
 
-wxString aFunctionTaking_wxString( const wxString& wx )
+wxString wxFunctionTaking_wxString( const wxString& wx )
 {
-    printf( "%s: '%s'\n", __func__, UTF8( wx ).c_str() );
+    printf( "%s:'%s'\n", __func__, (char*) UTF8( wx ) );
+    printf( "%s:'%s'\n", __func__, (const char*) UTF8( wx ) );
+    printf( "%s:'%s'\n", __func__, UTF8( wx ).c_str() );
 
     return wx;
 }
@@ -158,9 +172,11 @@ wxString aFunctionTaking_wxString( const wxString& wx )
 
 int main()
 {
-    UTF8        u1 = "output";
     std::string str = "input";
-    wxString    wx = wxT( "input" );
+    UTF8        u1 = "initial";
+    wxString    wx = wxT( "input2" );
+
+    printf( "u1:'%s'\n", u1.c_str() );
 
     u1 = str;
 
@@ -170,25 +186,49 @@ int main()
 
     u2 += 'X';
 
-    printf( "utf2:'%s'\n", u2.c_str() );
+    printf( "u2:'%s'\n", u2.c_str() );
 
     // key accomplishments here:
     // 1) passing a UTF8 to a function which normally takes a wxString.
     // 2) return a wxString back into a UTF8.
-    UTF8    result = aFunctionTaking_wxString( u2 );
+    UTF8    result = wxFunctionTaking_wxString( u2 );
 
     printf( "result:'%s'\n", result.c_str() );
 
     // test the unicode iterator:
     for( UTF8::uni_iter it = u2.ubegin();  it != u2.uend();  )
     {
+        // test post-increment:
         printf( " _%c_", it++ );
 
-        // after UTF7::uni_forward() is implemented, it++ %c is no longer useable.
+        // after UTF8::uni_forward() is implemented, %c is no longer useable.
         // printf( " _%02x_", it++ );
     }
+
     printf( "\n" );
 
     return 0;
 }
 
+
+// These to go into a library *.cpp, they are not inlined so that code space
+// is saved creating the intermediate objects and referencing wxConvUTF8.
+
+
+UTF8::UTF8( const wxString& o ) :
+    std::string( (const char*) o.utf8_str() )
+{
+}
+
+
+UTF8::operator wxString () const
+{
+    return wxString( c_str(), wxConvUTF8 );
+}
+
+
+UTF8& UTF8::operator=( const wxString& o )
+{
+    std::string::operator=( (const char*) o.utf8_str() );
+    return *this;
+}
