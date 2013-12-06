@@ -67,12 +67,12 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 
 void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 {
+    m_actionNameIndex.erase( aAction->m_name );
+    m_actionIdIndex.erase( aAction->m_id );
+
     // Indicate that the ACTION_MANAGER no longer care about the object
     aAction->setActionMgr( NULL );
     aAction->setId( -1 );
-
-    m_actionNameIndex.erase( aAction->m_name );
-    m_actionIdIndex.erase( aAction->m_id );
 
     if( aAction->HasHotKey() )
         m_actionHotKeys.erase( aAction->m_currentHotKey );
