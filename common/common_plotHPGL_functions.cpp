@@ -196,7 +196,7 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     paperSize.x *= 10.0 * aIusPerDecimil;
     paperSize.y *= 10.0 * aIusPerDecimil;
     SetDefaultLineWidth( 0 );    // HPGL has pen sizes instead
-    plotMirror = aMirror;
+    m_plotMirror = aMirror;
 }
 
 
@@ -392,14 +392,15 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
 
     DPOINT centre_dev = userToDeviceCoordinates( centre );
 
-    if( plotMirror )
+    if( m_plotMirror )
         angle = StAngle - EndAngle;
     else
         angle = EndAngle - StAngle;
+
     NORMALIZE_ANGLE_180( angle );
     angle /= 10;
 
-    // Calculate start point,
+    // Calculate arc start point:
     wxPoint cmap;
     cmap.x  = centre.x + KiROUND( cosdecideg( radius, StAngle ) );
     cmap.y  = centre.y - KiROUND( sindecideg( radius, StAngle ) );
@@ -407,10 +408,8 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
 
     fprintf( outputFile,
              "PU;PA %.0f,%.0f;PD;AA %.0f,%.0f,",
-             cmap_dev.x,
-             cmap_dev.y,
-             centre_dev.x,
-             centre_dev.y );
+             cmap_dev.x, cmap_dev.y,
+             centre_dev.x, centre_dev.y );
     fprintf( outputFile, "%.0f", angle );
     fprintf( outputFile, ";PU;\n" );
     PenFinish();
@@ -431,7 +430,7 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double
      */
     if( size.x > size.y )
     {
-        EXCHG( size.x, size.y ); 
+        EXCHG( size.x, size.y );
         orient = AddAngles( orient, 900 );
     }
 

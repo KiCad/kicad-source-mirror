@@ -44,7 +44,7 @@ void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     iuPerDeviceUnit *= 0.00254;             // ... now in mm
 
     SetDefaultLineWidth( 0 );               // No line width on DXF
-    plotMirror = false;                     // No mirroring on DXF
+    m_plotMirror = false;                     // No mirroring on DXF
     m_currentColor = BLACK;
 }
 

@@ -153,7 +153,7 @@ public:
                        int width = DEFAULT_LINE_WIDTH ) = 0;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = DEFAULT_LINE_WIDTH ) = 0;
-    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle, 
+    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
 
     /**
@@ -214,7 +214,7 @@ public:
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode );
-    virtual void ThickArc( const wxPoint& centre, double StAngle, double EndAngle, 
+    virtual void ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
                            int rayon, int width, EDA_DRAW_MODE_T tracemode );
     virtual void ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
                             EDA_DRAW_MODE_T tracemode );
@@ -301,7 +301,7 @@ protected:
                       int width );
 
     // Coordinate and scaling conversion functions
-    virtual DPOINT userToDeviceCoordinates( const wxPoint& pos );
+    virtual DPOINT userToDeviceCoordinates( const wxPoint& aCoordinate );
     virtual DPOINT userToDeviceSize( const wxSize& size );
     virtual double userToDeviceSize( double size );
 
@@ -320,6 +320,12 @@ protected:
     /// Plot offset (in IUs)
     wxPoint       plotOffset;
 
+    /// X axis orientation (SVG)
+    /// and plot mirrored (only for PS, PDF HPGL and SVG)
+    bool          m_plotMirror;
+    bool          m_mirrorIsHorizontal;     /// true to mirror horizontally (else vertically)
+    bool          m_yaxisReversed;          /// true if the Y axis is top to bottom (SVG)
+
     /// Output file
     FILE*         outputFile;
 
@@ -332,7 +338,6 @@ protected:
     char          penState;
     /// Last pen positions; set to -1,-1 when the pen is at rest
     wxPoint       penLastpos;
-    bool          plotMirror;
     wxString      creator;
     wxString      filename;
     PAGE_INFO     pageInfo;
@@ -402,7 +407,7 @@ public:
 
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode );
-    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle, 
+    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
     virtual void PenTo( const wxPoint& pos, char plume );
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
@@ -786,7 +791,7 @@ public:
                        int width = DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = DEFAULT_LINE_WIDTH );
-    virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle, 
+    virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
                       int aRadius, FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
@@ -877,7 +882,7 @@ public:
                            FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode );
-    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle, 
+    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
     virtual void PenTo( const wxPoint& pos, char plume );
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
