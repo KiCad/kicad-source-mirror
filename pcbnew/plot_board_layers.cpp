@@ -797,7 +797,15 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
     }
 
     // Compute the viewport and set the other options
-    initializePlotter( plotter, aBoard, aPlotOpts );
+
+    // page layout is not mirrored, so temporary change mirror option
+    // just to plot the page layout
+    PCB_PLOT_PARAMS plotOpts = *aPlotOpts;
+
+    if( plotOpts.GetPlotFrameRef() && plotOpts.GetMirror() )
+        plotOpts.SetMirror( false );
+
+    initializePlotter( plotter, aBoard, &plotOpts );
 
     if( plotter->OpenFile( aFullFileName ) )
     {
@@ -805,10 +813,15 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
 
         // Plot the frame reference if requested
         if( aPlotOpts->GetPlotFrameRef() )
+        {
             PlotWorkSheet( plotter, aBoard->GetTitleBlock(),
                            aBoard->GetPageSettings(),
                            1, 1, // Only one page
                            aSheetDesc, aBoard->GetFileName() );
+
+            if( aPlotOpts->GetMirror() )
+            initializePlotter( plotter, aBoard, aPlotOpts );
+        }
 
         /* When plotting a negative board: draw a black rectangle
          * (background for plot board in white) and switch the current
