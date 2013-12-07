@@ -59,9 +59,6 @@
 #define PREVIOUS_PART -1
 
 
-static wxString entryPerspective( wxT( "ModViewPerspective" ) );
-
-
 /**
  * Save previous component library viewer state.
  */
@@ -217,11 +214,13 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
 
     m_auimgr.SetManagedWindow( this );
 
-    EDA_PANEINFO horiz;
-    horiz.HorizontalToolbarPane();
-
-    EDA_PANEINFO vert;
-    vert.VerticalToolbarPane();
+    // Main toolbar is initially docked at the top of the main window and dockable on any side.
+    // The close button is disable because the footprint viewer has no main menu to re-enable it.
+    // The tool bar will only be dockable on the top or bottom of the main frame window.  This is
+    // most likely due to the fact that the other windows are not dockable and are preventing the
+    // tool bar from docking on the right and left.
+    wxAuiPaneInfo toolbarPaneInfo;
+    toolbarPaneInfo.Name( wxT( "m_mainToolBar" ) ).ToolbarPane().Top().CloseButton( false );
 
     EDA_PANEINFO info;
     info.InfoToolbarPane();
@@ -229,27 +228,25 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
     EDA_PANEINFO mesg;
     mesg.MessageToolbarPane();
 
-    // Manage main toolbar
-    m_auimgr.AddPane( m_mainToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Row( 0 ) );
+    // Manage main toolbar, top pane
+    m_auimgr.AddPane( m_mainToolBar, toolbarPaneInfo );
 
-    // Manage the left window (list of libraries)
+    // Manage the list of libraries, left pane.
     if( m_LibListWindow )
         m_auimgr.AddPane( m_LibListWindow, wxAuiPaneInfo( info ).Name( wxT( "m_LibList" ) ).
-                          Left().Row( 0 ) );
+                          Left().Row( 1 ) );
 
-    // Manage the list of components)
+    // Manage the list of footprints, center pane.
     m_auimgr.AddPane( m_FootprintListWindow,
-                      wxAuiPaneInfo( info ).Name( wxT( "m_FootprintList" ) ).
-                      Left().Row( 1 ) );
+                      wxAuiPaneInfo( info ).Name( wxT( "m_FootprintList" ) ).Centre().Row( 1 ) );
 
-    // Manage the draw panel
+    // Manage the draw panel, right pane.
     m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).Centre().CloseButton( false ) );
+                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).Right().Row( 1 ).CloseButton( false ) );
 
-    // Manage the message panel
+    // Manage the message panel, bottom pane.
     m_auimgr.AddPane( m_messagePanel,
-                      wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer( 10 ) );
+                      wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     /* Now the minimum windows are fixed, set library list
      * and component list of the previous values from last viewlib use
@@ -547,8 +544,6 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( )
 
     wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
     cfg = wxGetApp().GetSettings();
-
-    cfg->Read( entryPerspective, &m_perspective );
 }
 
 
@@ -560,8 +555,6 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings()
 
     wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
     cfg = wxGetApp().GetSettings();
-
-    cfg->Write( entryPerspective, m_auimgr.SavePerspective() );
 }
 
 
