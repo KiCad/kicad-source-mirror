@@ -136,6 +136,8 @@ protected:
     /// The timer used to implement the auto save feature;
     wxTimer*     m_autoSaveTimer;
 
+    wxString     m_perspective;     ///< wxAuiManager perspective.
+
     /**
      * Function onAutoSaveTimer
      * handles the auto save timer event.
