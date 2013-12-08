@@ -10,14 +10,20 @@
  * is an 8 bit std::string that is assuredly encoded in UTF8, and supplies special
  * conversion support to and from wxString, and has iteration over unicode characters.
  *
- * <p>I've been careful to supply only conversion facillities and not try
+ * <p>I've been careful to supply only conversion facilities and not try
  * and duplicate wxString() with many member functions.  In the end it is
  * to be a std::string.  There are multiple ways to create text into a std::string
- * without the need of member functions.  std::ostringstream.
+ * without the need of too many member functions:
+ *
+ * <ul>
+ *  <li>richio.h's StrPrintf()</li>
+ *  <li>std::ostringstream.</li>
+ * </ul>
  *
  * <p>Because this class used no virtuals, it should be possible to cast any
  * std::string into a UTF8 using this kind of cast: (UTF8 &) without construction
- * or copying being the effect of the cast.
+ * or copying being the effect of the cast.  Be sure the source std::string holds
+ * UTF8 encoded text before you do that.
  *
  * @author Dick Hollenbeck
  */
@@ -73,53 +79,54 @@ public:
      * @param aResult is where to put the unicode character, and may be NULL if no interest.
      * @return int - the count of bytes consumed.
      */
-    static int uni_forward( unsigned char* aSequence, unsigned* aResult = NULL );
+    static int uni_forward( const unsigned char* aSequence, unsigned* aResult = NULL );
 
     /**
      * class uni_iter
-     * is a non-mutable iterator that walks through code points in the UTF8 encoded
-     * string.  The normal ++(), ++(int), ->(), and *() operators are all supported and
-     * they return an unsigned holding the unicode character appropriate for respective
-     * operation.
+     * is a non-muting iterator that walks through unicode code points in the UTF8 encoded
+     * string.  The normal ++(), ++(int), ->(), and *() operators are all supported
+     * for read only access and they return an unsigned holding the unicode character
+     * appropriate for the respective operator.
      */
     class uni_iter
     {
         friend class UTF8;
 
-        unsigned char* it;
+        const unsigned char* it;
 
         // private constructor.
         uni_iter( const char* start ) :
-            it( (unsigned char*) start )
+            it( (const unsigned char*) start )
         {
             // for the human: assert( sizeof(unsigned) >= 4 );
         }
 
+
     public:
 
-        /// pre-increment and return unicode at new position
-        unsigned operator++()
+        uni_iter( const uni_iter& o )
         {
-            unsigned    result;
+            it = o.it;
+        }
 
-            // advance over current, and toss the unicode result
+        /// pre-increment and return uni_iter at new position
+        const uni_iter& operator++()
+        {
             it += uni_forward( it );
 
-            // get the next unicode result, but do not advance:
-            uni_forward( it, &result );
-            return result;
+            return *this;
         }
 
-        /// post-increment and return unicode at initial position
-        unsigned operator++( int )
+        /// post-increment and return uni_iter at initial position
+        uni_iter operator++( int )
         {
-            unsigned    result;
+            uni_iter ret = *this;
 
-            // grab the result and advance.
-            it += uni_forward( it, &result );
-            return result;
+            it += uni_forward( it );
+            return ret;
         }
 
+        /*
         /// return unicode at current position
         unsigned operator->() const
         {
@@ -129,6 +136,7 @@ public:
             uni_forward( it, &result );
             return result;
         }
+        */
 
         /// return unicode at current position
         unsigned operator*() const
@@ -142,6 +150,9 @@ public:
 
         bool operator==( const uni_iter& other ) const  { return it == other.it; }
         bool operator!=( const uni_iter& other ) const  { return it != other.it; }
+
+        /// Since the ++ operators advance more than one byte, this is your best
+        /// loop termination test, < end(), not == end().
         bool operator< ( const uni_iter& other ) const  { return it <  other.it; }
         bool operator<=( const uni_iter& other ) const  { return it <= other.it; }
         bool operator> ( const uni_iter& other ) const  { return it >  other.it; }
@@ -150,7 +161,7 @@ public:
 
     /**
      * Function ubegin
-     * returns a @a uni_iter initialized to the start of this UTF8 byte sequence.
+     * returns a @a uni_iter initialized to the start of "this" UTF8 byte sequence.
      */
     uni_iter ubegin() const
     {
@@ -159,7 +170,7 @@ public:
 
     /**
      * Function uend
-     * returns a @a uni_iter initialized to the end of this UTF8 byte sequence.
+     * returns a @a uni_iter initialized to the end of "this" UTF8 byte sequence.
      */
     uni_iter uend() const
     {
@@ -213,13 +224,25 @@ int main()
     for( UTF8::uni_iter it = u2.ubegin();  it < u2.uend();  )
     {
         // test post-increment:
-        printf( " _%c_", it++ );
+        printf( " _%c_", *it++ );
 
         // after UTF8::uni_forward() is implemented, %c is no longer useable.
-        // printf( " _%02x_", it++ );
+        // printf( " _%02x_", *it++ );
     }
 
     printf( "\n" );
+
+    UTF8::uni_iter it = u2.ubegin();
+
+    UTF8::uni_iter it2 = it++;
+
+    printf( "post_inc:'%c' should be 'i'\n", *it2 );
+
+    it2 = ++it;
+
+    printf( "pre_inc:'%c' should be 'p'\n", *it2 );
+
+    printf( "u[1]:'%c' should be 'n'\n", u2[1] );
 
     return 0;
 }
@@ -253,30 +276,6 @@ UTF8& UTF8::operator=( const wxString& o )
 }
 
 
-static const unsigned char utf8_len[256] = {
-    // Map encoded prefix byte to sequence length.  Zero means
-    // illegal prefix.  See RFC 3629 for details
-    /*
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // 00-0F
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // 70-7F
-    */
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 80-8F
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // B0-BF
-    0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, // C0-C1 + C2-CF
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, // D0-DF
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, // E0-EF
-    4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  // F0-F4 + F5-FF
-};
-
-
 #ifndef THROW_IO_ERROR
  #define THROW_IO_ERROR(x)      // nothing
 #endif
@@ -284,7 +283,7 @@ static const unsigned char utf8_len[256] = {
 // There is no wxWidgets function that does this, because wchar_t is 16 bits
 // on windows and wx wants to encode the output in UTF16 for such.
 
-int UTF8::uni_forward( unsigned char* aSequence, unsigned* aResult )
+int UTF8::uni_forward( const unsigned char* aSequence, unsigned* aResult )
 {
     unsigned ch = *aSequence;
 
@@ -295,7 +294,30 @@ int UTF8::uni_forward( unsigned char* aSequence, unsigned* aResult )
         return 1;
     }
 
-    unsigned char* s = aSequence;
+    const unsigned char* s = aSequence;
+
+    static const unsigned char utf8_len[] = {
+        // Map encoded prefix byte to sequence length.  Zero means
+        // illegal prefix.  See RFC 3629 for details
+        /*
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // 00-0F
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // 70-7F
+        */
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 80-8F
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // B0-BF
+        0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, // C0-C1 + C2-CF
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, // D0-DF
+        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, // E0-EF
+        4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  // F0-F4 + F5-FF
+    };
 
     int len = utf8_len[ *s - 0x80  /* top half of table is missing */ ];
 
