@@ -249,7 +249,8 @@ void STROKE_FONT::drawSingleLineText( const wxString& aText )
         // (textSize.x)
         xOffset = textSize.x;
         glyphSize.x = -m_glyphSize.x;
-    } else
+    }
+    else
     {
         xOffset = 0.0;
     }
