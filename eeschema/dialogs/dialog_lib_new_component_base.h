@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  5 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,8 +21,8 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
 #include <wx/spinctrl.h>
+#include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -37,20 +37,19 @@ class DIALOG_LIB_NEW_COMPONENT_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxStaticText* m_staticText6;
+		wxStaticText* m_staticText8;
 		wxStaticText* m_staticText2;
 		wxTextCtrl* m_textName;
-		wxStaticText* m_staticText3;
+		wxStaticText* m_staticText9;
 		wxTextCtrl* m_textReference;
-		wxStaticText* m_staticText4;
+		wxStaticText* m_staticText10;
 		wxSpinCtrl* m_spinPartCount;
 		wxCheckBox* m_checkHasConversion;
 		wxCheckBox* m_checkIsPowerSymbol;
 		wxCheckBox* m_checkLockItems;
-		wxStaticText* m_staticText7;
-		wxStaticText* m_staticText41;
+		wxStaticText* m_staticText11;
+		wxStaticText* m_staticText12;
 		wxSpinCtrl* m_spinPinTextPosition;
-		wxStaticText* m_staticText5;
 		wxCheckBox* m_checkShowPinNumber;
 		wxCheckBox* m_checkShowPinName;
 		wxCheckBox* m_checkShowPinNameInside;
