@@ -186,17 +186,18 @@ void STROKE_FONT::Draw( const wxString& aText, const VECTOR2D& aPosition, double
         m_gal->SetLineWidth( m_gal->GetLineWidth() * BOLD_FACTOR );
 
     // Split multiline strings into separate ones and draw them line by line
-    int begin = 0;
-    int newlinePos = aText.Find( '\n' );
+    size_t  begin = 0;
+    size_t  newlinePos = aText.find( '\n' );
 
-    while( newlinePos != wxNOT_FOUND )
+    while( newlinePos != aText.npos )
     {
         size_t length = newlinePos - begin;
+
         drawSingleLineText( aText.Mid( begin, length ) );
         m_gal->Translate( VECTOR2D( 0.0, lineHeight ) );
 
         begin = newlinePos + 1;
-        newlinePos = aText.find( '\n', begin + 1 );
+        newlinePos = aText.find( '\n', begin );
     }
 
     // Draw the last (or the only one) line
