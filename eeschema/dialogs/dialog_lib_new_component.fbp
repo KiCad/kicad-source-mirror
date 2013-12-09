@@ -516,7 +516,7 @@
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
                                         <property name="validator_variable"></property>
-                                        <property name="value"></property>
+                                        <property name="value">U</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
@@ -1315,7 +1315,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="checked">0</property>
+                                        <property name="checked">1</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -1403,7 +1403,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="checked">0</property>
+                                        <property name="checked">1</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -1491,7 +1491,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="checked">0</property>
+                                        <property name="checked">1</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>

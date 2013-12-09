@@ -45,7 +45,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	m_staticText9->Wrap( -1 );
 	fgSizer31->Add( m_staticText9, 0, wxALL, 5 );
 	
-	m_textReference = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textReference = new wxTextCtrl( this, wxID_ANY, _("U"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer31->Add( m_textReference, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText10 = new wxStaticText( this, wxID_ANY, _("Number of units per package:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -107,12 +107,15 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer19 = new wxBoxSizer( wxVERTICAL );
 	
 	m_checkShowPinNumber = new wxCheckBox( this, wxID_ANY, _("Show pin number text"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkShowPinNumber->SetValue(true); 
 	bSizer19->Add( m_checkShowPinNumber, 0, wxALL, 5 );
 	
 	m_checkShowPinName = new wxCheckBox( this, wxID_ANY, _("Show pin name text"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkShowPinName->SetValue(true); 
 	bSizer19->Add( m_checkShowPinName, 0, wxALL, 5 );
 	
 	m_checkShowPinNameInside = new wxCheckBox( this, wxID_ANY, _("Pin name inside"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkShowPinNameInside->SetValue(true); 
 	bSizer19->Add( m_checkShowPinNameInside, 0, wxALL, 5 );
 	
 	
