@@ -379,6 +379,7 @@ if( KICAD_SCRIPTING_MODULES )
         ${GDI_PLUS_LIBRARIES}
         ${PYTHON_LIBRARIES}
         ${PCBNEW_EXTRA_LIBS}
+        ${Boost_LIBRARIES}
         )
 
      # create .i files from XML doxygen parsing, docstrings.i will include all of them
@@ -532,6 +533,8 @@ endif()
 # Link executable target pcbnew with correct libraries
 ###
 
+message( STATUS "Boost_LIBRARIES:${Boost_LIBRARIES}" )
+
 target_link_libraries( pcbnew
     3d-viewer
     pcbcommon
@@ -550,11 +553,12 @@ target_link_libraries( pcbnew
     ${PCBNEW_EXTRA_LIBS}
     ${GLEW_LIBRARIES}
     ${CAIRO_LIBRARIES}
+    ${Boost_LIBRARIES}
     )
 
 # Only for win32 cross compilation using MXE
 if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
-target_link_libraries(pcbnew
+target_link_libraries( pcbnew
     opengl32
     glu32
     pixman-1
