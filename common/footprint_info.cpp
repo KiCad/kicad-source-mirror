@@ -321,7 +321,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* a
         i += jobz;
     }
 
-    // Wait for all the worder threads to complete, it does not matter in what order
+    // Wait for all the worker threads to complete, it does not matter in what order
     // we wait for them as long as a full sweep is made.  Think of the great race,
     // everyone must finish.
     for( unsigned i=0;  i<threads.size();  ++i )

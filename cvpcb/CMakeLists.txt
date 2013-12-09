@@ -107,7 +107,6 @@ target_link_libraries( cvpcb
     ${GDI_PLUS_LIBRARIES}
     ${GLEW_LIBRARIES}
     ${CAIRO_LIBRARIES}
-    ${Boost_LIBRARIES}
     )
 
 # Only for win32 cross compilation using MXE
@@ -126,6 +125,9 @@ endif()
 if( BUILD_GITHUB_PLUGIN )
     target_link_libraries( cvpcb github_plugin )
 endif()
+
+# Must follow github_plugin
+target_link_libraries( cvpcb ${Boost_LIBRARIES} )
 
 
 ###
