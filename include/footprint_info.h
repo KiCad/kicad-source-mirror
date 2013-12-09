@@ -33,10 +33,15 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
 
+#if defined( USE_FP_LIB_TABLE )
+  #include <ki_mutex.h>
+#endif
+
 #include <kicad_string.h>
 
 
 class FP_LIB_TABLE;
+class wxTopLevelWindow;
 
 
 /*
@@ -106,64 +111,103 @@ inline bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 
 }
 
 
-
+/**
+ * Class FOOTPRINT_LIST
+ * holds a list of FOOTPRINT_INFO objects, along with a list of IO_ERRORs or
+ * PARSE_ERRORs that were thrown acquiring the FOOTPRINT_INFOs.
+ */
 class FOOTPRINT_LIST
 {
-public:
-    boost::ptr_vector< FOOTPRINT_INFO > m_List;
-    wxString m_filesNotFound;
-    wxString m_filesInvalid;
+    FP_LIB_TABLE*   m_lib_table;        ///< no ownership
+    volatile int    m_error_count;      ///< thread safe to read.
+
+
+    typedef boost::ptr_vector< FOOTPRINT_INFO >         FPILIST;
+    typedef boost::ptr_vector< IO_ERROR >               ERRLIST;
+
+    FPILIST m_list;
+    ERRLIST m_errors;                   ///< some can be PARSE_ERRORs also
+
+#if defined( USE_FP_LIB_TABLE )
+    MUTEX   m_errors_lock;
+    MUTEX   m_list_lock;
+#endif
+
+    /**
+     * Function loader_job
+     * loads footprints from @a aNicknameList and calls AddItem() on to help fill
+     * m_list.
+     *
+     * @param aNicknameList is a wxString[] holding libraries to load all footprints from.
+     * @param aJobZ is the size of the job, i.e. the count of nicknames.
+     */
+    void loader_job( const wxString* aNicknameList, int aJobZ );
 
 public:
+
+    FOOTPRINT_LIST() :
+        m_lib_table( 0 ),
+        m_error_count( 0 )
+    {
+    }
 
     /**
      * Function GetCount
      * @return the number of items stored in list
      */
-    unsigned GetCount() const { return m_List.size(); }
+    unsigned GetCount() const { return m_list.size(); }
+
+    /// Was forced to add this by modview_frame.cpp
+    const FPILIST& GetList() const { return m_list; }
 
     /**
      * Function GetModuleInfo
-     * @return the item stored in list if found
-     * @param aFootprintName = the name of item
+     * @param aFootprintName = the footprint name inside the FOOTPRINT_INFO of interest.
+     * @return const FOOTPRINT_INF* - the item stored in list if found
      */
-    FOOTPRINT_INFO* GetModuleInfo( const wxString & aFootprintName );
+    const FOOTPRINT_INFO* GetModuleInfo( const wxString& aFootprintName );
 
     /**
      * Function GetItem
-     * @return the aIdx item in list
      * @param aIdx = index of the given item
+     * @return the aIdx item in list
      */
-    FOOTPRINT_INFO & GetItem( unsigned aIdx )
-    {
-        return m_List[aIdx];
-    }
+    const FOOTPRINT_INFO& GetItem( unsigned aIdx )  const     { return m_list[aIdx]; }
 
     /**
      * Function AddItem
      * add aItem in list
      * @param aItem = item to add
      */
-    void AddItem( FOOTPRINT_INFO* aItem )
-    {
-        m_List.push_back( aItem );
-    }
+    void AddItem( FOOTPRINT_INFO* aItem );
 
+    unsigned GetErrorCount() const  { return m_errors.size(); }
+
+    const IO_ERROR* GetError( unsigned aIdx ) const     { return &m_errors[aIdx]; }
+
+#if !defined( USE_FP_LIB_TABLE )
     /**
      * Function ReadFootprintFiles
      *
      * @param aFootprintsLibNames = an array string giving the list of libraries to load
      */
     bool ReadFootprintFiles( wxArrayString& aFootprintsLibNames );
+#endif
 
     /**
      * Function ReadFootprintFiles
      * reads all the footprints provided by the combination of aTable and aNickname.
+     *
      * @param aTable defines all the libraries.
      * @param aNickname is the library to read from, or if NULL means read all
-     *         footprints from all known libraries.
+     *         footprints from all known libraries in aTable.
+     * @return bool - true if it ran to completion, else false if it aborted after
+     *  some number of errors.  If true, it does not mean there were no errors, check
+     *  GetErrorCount() for that, should be zero to indicate success.
      */
     bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = NULL );
+
+    void DisplayErrors( wxTopLevelWindow* aCaller = NULL );
 };
 
 #endif  // FOOTPRINT_INFO_H_

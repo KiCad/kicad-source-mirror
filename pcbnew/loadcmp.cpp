@@ -537,18 +537,11 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
 
     wxASSERT( aTable != NULL );
 
-    if( !MList.ReadFootprintFiles( aTable, !aLibraryName ? NULL : &aLibraryName ) )
+    MList.ReadFootprintFiles( aTable, !aLibraryName ? NULL : &aLibraryName );
+
+    if( MList.GetErrorCount() )
     {
-        msg.Format( _( "Error occurred attempting to load footprint library '%s':\n\n" ),
-                    GetChars( aLibraryName ) );
-
-        if( !MList.m_filesNotFound.IsEmpty() )
-            msg += _( "Files not found:\n\n" ) + MList.m_filesNotFound;
-
-        if( !MList.m_filesInvalid.IsEmpty() )
-            msg +=  _("\n\nFile load errors:\n\n" ) + MList.m_filesInvalid;
-
-        DisplayError( this, msg );
+        MList.DisplayErrors( this );
         return wxEmptyString;
     }
 
@@ -587,7 +580,7 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
     {
         for( unsigned ii = 0; ii < MList.GetCount(); ii++ )
         {
-            wxString& candidate = MList.GetItem( ii ).m_Module;
+            const wxString& candidate = MList.GetItem( ii ).m_Module;
 
             if( WildCompareString( aMask, candidate, false ) )
             {
@@ -648,18 +641,18 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
 }
 
 
-static void DisplayCmpDoc( wxString& Name )
+static void DisplayCmpDoc( wxString& aName )
 {
-    FOOTPRINT_INFO* module_info = MList.GetModuleInfo( Name );
+    const FOOTPRINT_INFO* module_info = MList.GetModuleInfo( aName );
 
     if( !module_info )
     {
-        Name.Empty();
+        aName.Empty();
         return;
     }
 
-    Name  = _( "Description: " ) + module_info->m_Doc;
-    Name += _( "\nKey words: " ) + module_info->m_KeyWord;
+    aName  = _( "Description: " ) + module_info->m_Doc;
+    aName += _( "\nKey words: " ) + module_info->m_KeyWord;
 }
 
 

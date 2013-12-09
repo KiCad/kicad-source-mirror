@@ -558,9 +558,9 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
         msg.Printf( _( "Footprint: %s" ), GetChars( footprintName ) );
 
         SetTitle( msg );
-        FOOTPRINT_INFO* module_info = parentframe->m_footprints.GetModuleInfo( footprintName );
+        const FOOTPRINT_INFO* module_info = parentframe->m_footprints.GetModuleInfo( footprintName );
 
-        const wxChar *libname;
+        const wxChar* libname;
 
         if( module_info )
             libname = GetChars( module_info->GetNickname() );

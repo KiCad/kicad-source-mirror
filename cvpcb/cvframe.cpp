@@ -703,8 +703,9 @@ void CVPCB_MAINFRAME::DisplayStatus()
     }
     else
     {
-        wxString        footprintName = m_FootprintList->GetSelectedFootprint();
-        FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( footprintName );
+        wxString footprintName = m_FootprintList->GetSelectedFootprint();
+
+        const FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( footprintName );
 
         if( module )    // can be NULL if no netlist loaded
         {
@@ -715,7 +716,6 @@ void CVPCB_MAINFRAME::DisplayStatus()
             SetStatusText( msg, 1 );
         }
     }
-
 
     msg.Empty();
 
@@ -769,26 +769,9 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
         m_footprints.ReadFootprintFiles( m_footprintLibTable );
 #endif
 
-    // Display error messages, if any.
-    if( !m_footprints.m_filesNotFound.IsEmpty() || !m_footprints.m_filesInvalid.IsEmpty() )
+    if( m_footprints.GetErrorCount() )
     {
-        HTML_MESSAGE_BOX dialog( this, _( "Load Error" ) );
-
-        if( !m_footprints.m_filesNotFound.IsEmpty() )
-        {
-            wxString message = _( "Some files could not be found!" );
-            dialog.MessageSet( message );
-            dialog.ListSet( m_footprints.m_filesNotFound );
-        }
-
-        // Display if there are invalid files.
-        if( !m_footprints.m_filesInvalid.IsEmpty() )
-        {
-            dialog.MessageSet( _( "Some files are invalid!" ) );
-            dialog.ListSet( m_footprints.m_filesInvalid );
-        }
-
-        dialog.ShowModal();
+        m_footprints.DisplayErrors( this );
     }
 
     return true;
