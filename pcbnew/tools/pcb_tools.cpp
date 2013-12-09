@@ -50,6 +50,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterAction( &COMMON_ACTIONS::editActivate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::rotate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::flip );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::remove );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::properties );
 
     // Register tools
@@ -59,6 +60,7 @@ void PCB_EDIT_FRAME::setupTools()
 
     m_toolManager->SetEnvironment( NULL, m_galCanvas->GetView(),
                                    m_galCanvas->GetViewControls(), this );
+    m_toolManager->ResetTools( TOOL_BASE::RUN );
 
     // Run the selection tool, it is supposed to be always active
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );

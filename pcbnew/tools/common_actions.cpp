@@ -42,6 +42,10 @@ TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         AS_CONTEXT, 'F',
         "Flip", "Flips selected item(s)" );
 
+TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.delete",
+        AS_GLOBAL, 127,                                             // 127 stands for DELETE key
+        "Remove", "Deletes selected item(s)" );
+
 TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, 'E',
         "Properties...", "Displays properties window" );

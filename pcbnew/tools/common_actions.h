@@ -49,4 +49,7 @@ public:
 
     /// Activation of the edit tool
     static TOOL_ACTION properties;
+
+    /// Deleting a BOARD_ITEM
+    static TOOL_ACTION remove;
 };
