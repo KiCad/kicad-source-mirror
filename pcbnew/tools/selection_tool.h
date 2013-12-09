@@ -85,7 +85,7 @@ public:
     };
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset();
+    void Reset( RESET_REASON aReason );
 
     /**
      * Function Main()
