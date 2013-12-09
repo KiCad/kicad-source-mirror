@@ -57,7 +57,7 @@ const wxChar* traceAutoSave = wxT( "KicadAutoSave" );
 static const wxChar* entryAutoSaveInterval = wxT( "AutoSaveInterval" );
 
 /// Configuration file entry for wxAuiManger perspective.
-static const wxChar* entryPerspective = wxT( "ModViewPerspective" );
+static const wxChar* entryPerspective = wxT( "Perspective" );
 
 
 
