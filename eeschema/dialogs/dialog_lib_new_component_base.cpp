@@ -52,7 +52,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	m_staticText10->Wrap( -1 );
 	fgSizer31->Add( m_staticText10, 0, wxALL, 5 );
 	
-	m_spinPartCount = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	m_spinPartCount = new wxSpinCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 26, 0 );
 	fgSizer31->Add( m_spinPartCount, 0, wxALL, 5 );
 	
 	
@@ -97,7 +97,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	m_staticText12->Wrap( -1 );
 	fgSizer4->Add( m_staticText12, 0, wxALL, 5 );
 	
-	m_spinPinTextPosition = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	m_spinPinTextPosition = new wxSpinCtrl( this, wxID_ANY, wxT("40"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 40 );
 	fgSizer4->Add( m_spinPinTextPosition, 0, wxALL, 5 );
 	
 	
