@@ -41,7 +41,7 @@ public:
     ROUTER_TOOL();
     ~ROUTER_TOOL();
 
-    void Reset();
+    void Reset( RESET_REASON aReason );
     int Main( TOOL_EVENT& aEvent );
 
 private:

@@ -64,9 +64,15 @@ SELECTION_TOOL::~SELECTION_TOOL()
 }
 
 
-void SELECTION_TOOL::Reset()
+void SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
-    ClearSelection();
+    if( aReason == TOOL_BASE::MODEL_RELOAD )
+        // Remove pointers to the selected items from containers
+        // without changing their properties (as they are already deleted)
+        m_selection.Clear();
+    else
+        // Restore previous properties of selected items and remove them from containers
+        ClearSelection();
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
@@ -157,7 +163,6 @@ void SELECTION_TOOL::ClearSelection()
         item->ViewSetVisible( true );
         item->ClearSelected();
     }
-
     m_selection.Clear();
 
     getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );

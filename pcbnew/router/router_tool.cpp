@@ -72,7 +72,7 @@ ROUTER_TOOL::~ROUTER_TOOL()
 }
 
 
-void ROUTER_TOOL::Reset()
+void ROUTER_TOOL::Reset( RESET_REASON aReason )
 {
     if( m_router )
         delete m_router;

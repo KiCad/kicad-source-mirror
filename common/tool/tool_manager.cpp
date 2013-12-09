@@ -140,22 +140,20 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 
     aTool->m_toolMgr = this;
 
-    if( aTool->GetType() == INTERACTIVE )
+    if( !aTool->Init() )
     {
-        if( !static_cast<TOOL_INTERACTIVE*>( aTool )->Init() )
-        {
-            std::string msg = StrPrintf( "Initialization of the %s tool failed", aTool->GetName().c_str() );
+        std::string msg = StrPrintf( "Initialization of the %s tool failed",
+                                     aTool->GetName().c_str() );
 
-            DisplayError( NULL, wxString::FromUTF8( msg.c_str() ) );
+        DisplayError( NULL, wxString::FromUTF8( msg.c_str() ) );
 
-            // Unregister the tool
-            m_toolState.erase( aTool );
-            m_toolNameIndex.erase( aTool->GetName() );
-            m_toolIdIndex.erase( aTool->GetId() );
+        // Unregister the tool
+        m_toolState.erase( aTool );
+        m_toolNameIndex.erase( aTool->GetName() );
+        m_toolIdIndex.erase( aTool->GetId() );
 
-            delete st;
-            delete aTool;
-        }
+        delete st;
+        delete aTool;
     }
 }
 
@@ -251,7 +249,7 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 
     state->idle = false;
 
-    static_cast<TOOL_INTERACTIVE*>( aTool )->Reset();
+    aTool->Reset( TOOL_INTERACTIVE::RUN );
 
     // Add the tool on the front of the processing queue (it gets events first)
     m_activeTools.push_front( aTool->GetId() );
@@ -279,6 +277,13 @@ TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
         return it->second->theTool;
 
     return NULL;
+}
+
+
+void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
+{
+    BOOST_FOREACH( TOOL_BASE* tool, m_toolState | boost::adaptors::map_keys )
+        tool->Reset( aReason );
 }
 
 
@@ -513,15 +518,6 @@ void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
     m_view = aView;
     m_viewControls = aViewControls;
     m_editFrame = aFrame;
-
-    // Reset state of the registered tools
-    BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
-    {
-        TOOL_BASE* tool = m_toolIdIndex[toolId]->theTool;
-
-        if( tool->GetType() == INTERACTIVE )
-            static_cast<TOOL_INTERACTIVE*>( tool )->Reset();
-    }
 }
 
 

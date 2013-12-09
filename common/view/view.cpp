@@ -122,6 +122,12 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
+        MarkTargetDirty( l.target );
+
+        // Clear the GAL cache
+        int prevGroup = aItem->getGroup( layers[i] );
+        if( prevGroup >= 0 )
+            m_gal->DeleteGroup( prevGroup );
     }
 }
 
@@ -930,6 +936,12 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
         MarkTargetDirty( l.target );
+
+        // Redraw the item from scratch
+        int prevGroup = aItem->getGroup( layers[i] );
+
+        if( prevGroup >= 0 )
+            m_gal->DeleteGroup( prevGroup );
     }
 
     // Add the item to new layer set

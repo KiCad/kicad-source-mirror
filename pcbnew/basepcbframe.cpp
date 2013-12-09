@@ -187,7 +187,10 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 
         // update the tool manager with the new board and its view.
         if( m_toolManager )
+        {
             m_toolManager->SetEnvironment( m_Pcb, view, m_galCanvas->GetViewControls(), this );
+            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+        }
     }
 }
 
@@ -610,8 +613,12 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
 
     ViewReloadBoard( m_Pcb );
 
-    m_toolManager->SetEnvironment( m_Pcb, m_galCanvas->GetView(),
-                                   m_galCanvas->GetViewControls(), this );
+    if( aEnable )
+    {
+        m_toolManager->SetEnvironment( m_Pcb, m_galCanvas->GetView(),
+                                       m_galCanvas->GetViewControls(), this );
+        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+    }
 }
 
 
