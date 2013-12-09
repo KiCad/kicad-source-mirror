@@ -238,15 +238,15 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
     // Get a copy of the selected items set
     std::set<BOARD_ITEM*> selectedItems = m_selectionTool->GetSelection().items;
 
-    // As we are about to remove items, they have to be removed from the selection
+    // As we are about to remove items, they have to be removed from the selection first
     m_selectionTool->ClearSelection();
 
     std::set<BOARD_ITEM*>::iterator it;
     for( it = selectedItems.begin(); it != selectedItems.end(); ++it )
         remove( *it );
 
-    BOARD* board = getModel<BOARD>( PCB_T );
     // Rebuild list of pads and nets if necessary
+    BOARD* board = getModel<BOARD>( PCB_T );
     if( !( board->GetStatus() & NET_CODES_OK ) )
         board->BuildListOfNets();
 
@@ -276,10 +276,9 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
         getView()->Remove( &module->Reference() );
         getView()->Remove( &module->Value() );
 
-        // Module itself is deleted after the switch scope
+        // Module itself is deleted after the switch scope is finished
         // list of pads is rebuild by BOARD::BuildListOfNets()
 
-//        module->ClearFlags();       // TODO is it necessary? clearing ratsnest/list of pads?
         // Clear flags to indicate, that the ratsnest, list of nets & pads are not valid anymore
         board->m_Status_Pcb = 0;
     }
