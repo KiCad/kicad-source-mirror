@@ -102,6 +102,7 @@ private:
     ///> Flag determining if anything is being dragged right now
     bool m_dragging;
 
+    ///> Removes and frees a single BOARD_ITEM.
     void remove( BOARD_ITEM* aItem );
 
     ///> Sets up handlers for various events
