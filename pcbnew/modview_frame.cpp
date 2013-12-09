@@ -385,43 +385,29 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
         return;
     }
 
-    bool           libLoaded = false;
     FOOTPRINT_LIST fp_info_list;
     wxArrayString  libsList;
 
 #if !defined( USE_FP_LIB_TABLE )
 
     libsList.Add( m_libraryName );
-    libLoaded = fp_info_list.ReadFootprintFiles( libsList );
+    fp_info_list.ReadFootprintFiles( libsList );
 
 #else
 
-    libLoaded = fp_info_list.ReadFootprintFiles( m_footprintLibTable, &m_libraryName );
+    fp_info_list.ReadFootprintFiles( m_footprintLibTable, &m_libraryName );
 
 #endif
 
-    if( !libLoaded )
+    if( fp_info_list.GetErrorCount() )
     {
-        m_footprintName = wxEmptyString;
-        m_libraryName = wxEmptyString;
-
-        wxString msg;
-        msg.Format( _( "Error occurred attempting to load footprint library <%s>:\n\n" ),
-                    GetChars( m_libraryName ) );
-
-        if( !fp_info_list.m_filesNotFound.IsEmpty() )
-            msg += _( "Files not found:\n\n" ) + fp_info_list.m_filesNotFound;
-
-        if( !fp_info_list.m_filesInvalid.IsEmpty() )
-            msg +=  _( "\n\nFile load errors:\n\n" ) + fp_info_list.m_filesInvalid;
-
-        DisplayError( this, msg );
+        fp_info_list.DisplayErrors( this );
         return;
     }
 
     wxArrayString  fpList;
 
-    BOOST_FOREACH( FOOTPRINT_INFO& footprint, fp_info_list.m_List )
+    BOOST_FOREACH( const FOOTPRINT_INFO& footprint, fp_info_list.GetList() )
     {
         fpList.Add( footprint.m_Module );
     }
@@ -538,23 +524,23 @@ void FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint( wxCommandEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::LoadSettings( )
 {
-    wxConfig* cfg ;
-
     EDA_DRAW_FRAME::LoadSettings();
 
     wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
-    cfg = wxGetApp().GetSettings();
+
+    // wxConfig* cfg =
+    wxGetApp().GetSettings();
 }
 
 
 void FOOTPRINT_VIEWER_FRAME::SaveSettings()
 {
-    wxConfig* cfg;
-
     EDA_DRAW_FRAME::SaveSettings();
 
     wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
-    cfg = wxGetApp().GetSettings();
+
+    // wxConfig* cfg =
+    wxGetApp().GetSettings();
 }
 
 

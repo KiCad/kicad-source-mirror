@@ -28,20 +28,20 @@ double UNIT_SELECTOR_LEN::GetUnitScale()
 {
     switch( GetCurrentSelection() )
     {
-        case 0: return UNIT_MM; break;
-        case 1: return UNIT_MICRON; break;
-        case 2: return UNIT_CM; break;
-        case 3: return UNIT_MIL; break;
-        case 4: return UNIT_INCH; break;
+    case 0: return UNIT_MM;     break;
+    case 1: return UNIT_MICRON; break;
+    case 2: return UNIT_CM;     break;
+    case 3: return UNIT_MIL;    break;
+    case 4: return UNIT_INCH;   break;
     }
     return 1.0;
 }
 
 
-UNIT_SELECTOR_FREQUENCY::UNIT_SELECTOR_FREQUENCY(wxWindow *parent, wxWindowID id,
-                  const wxPoint& pos, const wxSize& size,
-                  const wxArrayString& choices, long style )
-                : UNIT_SELECTOR( parent, id, pos, size, choices, style )
+UNIT_SELECTOR_FREQUENCY::UNIT_SELECTOR_FREQUENCY( wxWindow *parent, wxWindowID id,
+        const wxPoint& pos, const wxSize& size,
+        const wxArrayString& choices, long style ):
+    UNIT_SELECTOR( parent, id, pos, size, choices, style )
 {
     Append( _("GHz") );
     Append( _("MHz") );
@@ -58,19 +58,19 @@ double UNIT_SELECTOR_FREQUENCY::GetUnitScale()
 {
     switch( GetCurrentSelection() )
     {
-        case 0: return UNIT_GHZ; break;
-        case 1: return UNIT_MHZ; break;
-        case 2: return UNIT_KHZ; break;
-        case 3: return 1.0; break;
+    case 0: return UNIT_GHZ;
+    case 1: return UNIT_MHZ;
+    case 2: return UNIT_KHZ;
+    case 3: return 1.0;
     }
     return 1.0;
 }
 
 
-UNIT_SELECTOR_ANGLE::UNIT_SELECTOR_ANGLE(wxWindow *parent, wxWindowID id,
-                  const wxPoint& pos, const wxSize& size,
-                  const wxArrayString& choices, long style )
-                : UNIT_SELECTOR( parent, id, pos, size, choices, style )
+UNIT_SELECTOR_ANGLE::UNIT_SELECTOR_ANGLE( wxWindow *parent, wxWindowID id,
+        const wxPoint& pos, const wxSize& size,
+        const wxArrayString& choices, long style ) :
+    UNIT_SELECTOR( parent, id, pos, size, choices, style )
 {
     Append( _("Radian") );
     Append( _("Degree") );
@@ -85,8 +85,8 @@ double UNIT_SELECTOR_ANGLE::GetUnitScale()
 {
     switch( GetCurrentSelection() )
     {
-        case 0: return UNIT_RADIAN; break;
-        case 1: return UNIT_DEGREE; break;
+    case 0: return UNIT_RADIAN; break;
+    case 1: return UNIT_DEGREE; break;
     }
     return 1.0;
 }
@@ -111,8 +111,8 @@ double UNIT_SELECTOR_RESISTOR::GetUnitScale()
 {
     switch( GetCurrentSelection() )
     {
-        case 0: return UNIT_OHM; break;
-        case 1: return UNIT_KOHM; break;
+    case 0: return UNIT_OHM;    break;
+    case 1: return UNIT_KOHM;   break;
     }
     return 1.0;
 }
