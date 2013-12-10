@@ -556,6 +556,7 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     m_canvas->SetAbortRequest( true );
+    m_galCanvas->StopDrawing();
 
     if( GetScreen()->IsModify() )
     {
