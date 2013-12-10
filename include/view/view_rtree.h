@@ -27,7 +27,7 @@
 
 #include <math/box2.h>
 
-#include <rtree.h>
+#include <geometry/rtree.h>
 
 namespace KIGFX
 {
@@ -76,7 +76,6 @@ public:
      * Executes a function object aVisitor for each item whose bounding box intersects
      * with aBounds.
      */
-
     template <class Visitor>
     void Query( const BOX2I& aBounds, Visitor& aVisitor )    // const
     {

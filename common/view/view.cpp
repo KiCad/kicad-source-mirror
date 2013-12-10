@@ -153,10 +153,12 @@ struct queryVisitor
     {
     }
 
-    void operator()( VIEW_ITEM* aItem )
+    bool operator()( VIEW_ITEM* aItem )
     {
         if( aItem->ViewIsVisible() )
             m_cont.push_back( VIEW::LAYER_ITEM_PAIR( aItem, m_layer ) );
+
+        return true;
     }
 
     Container&  m_cont;
@@ -387,7 +389,7 @@ struct VIEW::updateItemsColor
     {
     }
 
-    void operator()( VIEW_ITEM* aItem )
+    bool operator()( VIEW_ITEM* aItem )
     {
         // Obtain the color that should be used for coloring the item
         const COLOR4D color = painter->GetSettings()->GetColor( aItem, layer );
@@ -395,6 +397,8 @@ struct VIEW::updateItemsColor
 
         if( group >= 0 )
             gal->ChangeGroupColor( group, color );
+
+        return true;
     }
 
     int layer;
@@ -447,12 +451,14 @@ struct VIEW::changeItemsDepth
     {
     }
 
-    void operator()( VIEW_ITEM* aItem )
+    bool operator()( VIEW_ITEM* aItem )
     {
         int group = aItem->getGroup( layer );
 
         if( group >= 0 )
             gal->ChangeGroupDepth( group, depth );
+
+        return true;
     }
 
     int layer, depth;
@@ -571,15 +577,17 @@ struct VIEW::drawItem
     {
     }
 
-    void operator()( VIEW_ITEM* aItem )
+    bool operator()( VIEW_ITEM* aItem )
     {
         // Conditions that have te be fulfilled for an item to be drawn
         bool drawCondition = aItem->ViewIsVisible() &&
                              aItem->ViewGetLOD( currentLayer->id ) < view->m_scale;
         if( !drawCondition )
-            return;
+            return true;
 
         view->draw( aItem, currentLayer->id );
+
+        return true;
     }
 
     const VIEW_LAYER* currentLayer;
@@ -676,9 +684,11 @@ bool VIEW::IsDirty() const
 
 struct VIEW::unlinkItem
 {
-    void operator()( VIEW_ITEM* aItem )
+    bool operator()( VIEW_ITEM* aItem )
     {
         aItem->m_view = NULL;
+
+        return true;
     }
 };
 
@@ -690,7 +700,7 @@ struct VIEW::recacheItem
     {
     }
 
-    void operator()( VIEW_ITEM* aItem )
+    bool operator()( VIEW_ITEM* aItem )
     {
         // Remove previously cached group
         int prevGroup = aItem->getGroup( layer );
@@ -712,6 +722,8 @@ struct VIEW::recacheItem
         {
             aItem->setGroup( layer, -1 );
         }
+
+        return true;
     }
 
     VIEW* view;
@@ -792,12 +804,14 @@ struct VIEW::clearLayerCache
     {
     }
 
-    void operator()( VIEW_ITEM* aItem )
+    bool operator()( VIEW_ITEM* aItem )
     {
         if( aItem->storesGroups() )
         {
             aItem->deleteGroups();
         }
+
+        return true;
     }
 
     VIEW* view;
