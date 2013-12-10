@@ -164,4 +164,9 @@ wxString GetIllegalFileNameWxChars();
  */
 bool ReplaceIllegalFileNameChars( std::string* aName );
 
+#ifndef HAVE_STRTOKR
+// common/strtok_r.c optionally:
+extern "C" char* strtok_r( char* str, const char* delim, char** nextp );
+#endif
+
 #endif  // KICAD_STRING_H_

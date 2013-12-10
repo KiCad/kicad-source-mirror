@@ -53,9 +53,20 @@
 
 
 /*
-wxString ToHTML( const IO_ERROR** aList, int aCount )
+static wxString ToHTMLFragment( const IO_ERROR* aDerivative )
 {
-    wxString msg = wxT( "<table>" );
+    @todo
+
+    1)  change up IO_ERROR so it keeps linenumbers, source file name and
+        error message in separate strings.
+
+    2)  Add a summarizing virtual member like
+            virtual wxString What()
+        to combine all portions of an IO_ERROR's text into a single wxString.
+
+    3)  Do same for PARSE_ERROR.
+
+    4)  Add a "reason or error category" to IO_ERROR and thereby also PARSE_ERROR?
 
     msg += "
 
@@ -175,11 +186,6 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintLibNames )
 
 #else       // yes USE_FP_LIB_TABLE, by all means:
 
-
-#if USE_WORKER_THREADS      //---------------------------------------------------------------------
-
-#define USE_WORKER_THREADS  1       // 1:yes, 0:no. use worker threads to load libraries
-
 #define JOBZ                6       // no. libraries per worker thread.  It takes about
                                     // a second to load a GITHUB library, so assigning
                                     // this no. libraries to each thread should give a little
@@ -190,7 +196,6 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintLibNames )
 #define NTOLERABLE_ERRORS   4       // max errors before aborting, although threads
                                     // in progress will still pile on for a bit.  e.g. if 9 threads
                                     // expect 9 greater than this.
-
 
 void FOOTPRINT_LIST::loader_job( const wxString* aNicknameList, int aJobZ )
 {
@@ -225,7 +230,7 @@ void FOOTPRINT_LIST::loader_job( const wxString* aNicknameList, int aJobZ )
         }
         catch( const PARSE_ERROR& pe )
         {
-            // push_back is not thread safe, use the lock the MUTEX.
+            // m_errors.push_back is not thread safe, lock its MUTEX.
             MUTLOCK lock( m_errors_lock );
 
             ++m_error_count;        // modify only under lock
@@ -244,7 +249,7 @@ void FOOTPRINT_LIST::loader_job( const wxString* aNicknameList, int aJobZ )
         // worker threads.
         catch( const std::exception& se )
         {
-            // this is a round about way to do this, but who knows what THROW_IO_ERROR()
+            // This is a round about way to do this, but who knows what THROW_IO_ERROR()
             // may be tricked out to do someday, keep it in the game.
             try
             {
@@ -261,8 +266,6 @@ void FOOTPRINT_LIST::loader_job( const wxString* aNicknameList, int aJobZ )
     }
 }
 
-#endif  // USE_WORKER_THREADS ---------------------------------------------------
-
 
 bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname )
 {
@@ -275,62 +278,66 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* a
     m_errors.clear();
     m_list.clear();
 
-    std::vector< wxString > nicknames;
+    if( aNickname )
+        // single footprint
+        loader_job( aNickname, 1 );
+    else
+    {
+        std::vector< wxString > nicknames;
 
-    if( !aNickname )
         // do all of them
         nicknames = aTable->GetLogicalLibs();
-    else
-        // single footprint
-        nicknames.push_back( *aNickname );
 
 #if USE_WORKER_THREADS
 
-    // Something which will not invoke a thread copy constructor, one of many ways obviously:
-    typedef boost::ptr_vector< boost::thread >  MYTHREADS;
+        // Something which will not invoke a thread copy constructor, one of many ways obviously:
+        typedef boost::ptr_vector< boost::thread >  MYTHREADS;
 
-    MYTHREADS threads;
+        MYTHREADS threads;
 
-    // Give each thread JOBZ nicknames to process.  The last portion of, or if the entire
-    // size() is small, I'll do myself.
-    for( unsigned i=0; i<nicknames.size();  )
-    {
-        if( m_error_count >= NTOLERABLE_ERRORS )
+        // Give each thread JOBZ nicknames to process.  The last portion of, or if the entire
+        // size() is small, I'll do myself.
+        for( unsigned i=0; i<nicknames.size();  )
         {
-            // abort the remaining nicknames.
-            retv = false;
-            break;
+            if( m_error_count >= NTOLERABLE_ERRORS )
+            {
+                // abort the remaining nicknames.
+                retv = false;
+                break;
+            }
+
+            int jobz = JOBZ;
+
+            if( i + jobz >= nicknames.size() )
+            {
+                jobz = nicknames.size() - i;
+
+                // Only a little bit to do, I'll do it myself, on current thread.
+                loader_job( &nicknames[i], jobz );
+            }
+            else
+            {
+                // Delegate the job to a worker thread created here.
+                threads.push_back( new boost::thread( &FOOTPRINT_LIST::loader_job,
+                        this, &nicknames[i], jobz ) );
+            }
+
+            i += jobz;
         }
 
-        int jobz = JOBZ;
-
-        if( i + jobz >= nicknames.size() )
+        // Wait for all the worker threads to complete, it does not matter in what order
+        // we wait for them as long as a full sweep is made.  Think of the great race,
+        // everyone must finish.
+        for( unsigned i=0;  i<threads.size();  ++i )
         {
-            jobz = nicknames.size() - i;
-
-            // Only a little bit to do, I'll do it myself, on current thread.
-            // This is the path for a single footprint also.
-            loader_job( &nicknames[i], jobz );
+            threads[i].join();
         }
-        else
-        {
-            // Delegate the job to a worker thread created here.
-            threads.push_back( new boost::thread( &FOOTPRINT_LIST::loader_job,
-                    this, &nicknames[i], jobz ) );
-        }
+#else
+        loader_job( &nicknames[0], nicknames.size() );
+#endif
 
-        i += jobz;
+        m_list.sort();
     }
-
-    // Wait for all the worker threads to complete, it does not matter in what order
-    // we wait for them as long as a full sweep is made.  Think of the great race,
-    // everyone must finish.
-    for( unsigned i=0;  i<threads.size();  ++i )
-    {
-        threads[i].join();
-    }
-
-    m_list.sort();
 
     // The result of this function can be a blend of successes and failures, whose
     // mix is given by the Count()s of the two lists.  The return value indicates whether
@@ -338,57 +345,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* a
     // false definitely means failure.
 
     return retv;
-
-#else
-
-    bool retv = true;
-
-    for( unsigned ii = 0; ii < nicknames.size(); ii++ )
-    {
-        const wxString& nickname = nicknames[ii];
-
-        try
-        {
-            wxArrayString fpnames = aTable->FootprintEnumerate( nickname );
-
-            for( unsigned i=0;  i<fpnames.GetCount();  ++i )
-            {
-                std::auto_ptr<MODULE> m( aTable->FootprintLoad( nickname, fpnames[i] ) );
-
-                // we're loading what we enumerated, all must be there.
-                wxASSERT( m.get() );
-
-                FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO();
-
-                fpinfo->SetNickname( nickname );
-
-                fpinfo->m_Module   = fpnames[i];
-                fpinfo->m_padCount = m->GetPadCount( MODULE::DO_NOT_INCLUDE_NPTH );
-                fpinfo->m_KeyWord  = m->GetKeywords();
-                fpinfo->m_Doc      = m->GetDescription();
-
-                AddItem( fpinfo );
-            }
-        }
-        catch( const PARSE_ERROR& pe )
-        {
-            m_errors.push_back( new IO_ERROR( pe ) );
-            retv = false;
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            m_errors.push_back( new IO_ERROR( ioe ) );
-            retv = false;
-        }
-    }
-
-    m_list.sort();
-
-    return retv;
-
-#endif
 }
-
 #endif  // USE_FP_LIB_TABLE
 
 
