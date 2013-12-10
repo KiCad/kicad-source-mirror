@@ -184,6 +184,13 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool eraseBackground, const wxRect* rect )
 }
 
 
+void EDA_DRAW_PANEL_GAL::StopDrawing()
+{
+    Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
+    m_refreshTimer.Stop();
+}
+
+
 void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 {
     // Protect from refreshing during backend switch
