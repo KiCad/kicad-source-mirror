@@ -77,6 +77,7 @@ macro(perform_feature_checks)
     check_symbol_exists(strcasecmp "strings.h" HAVE_STRCASECMP)
     check_symbol_exists(strncasecmp "string.h" HAVE_STRNCASECMP)
     check_symbol_exists(strncasecmp "strings.h" HAVE_STRNCASECMP)
+    check_symbol_exists( strtok_r "string.h" HAVE_STRTOKR )
 
     # Some platforms define malloc and free in malloc.h instead of stdlib.h.
     check_symbol_exists(malloc "stdlib.h" MALLOC_IN_STDLIB_H)

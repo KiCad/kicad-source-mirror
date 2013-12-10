@@ -149,6 +149,10 @@ set(COMMON_SRCS
     zoom.cpp
     )
 
+if( NOT HAVE_STRTOKR )
+    set( COMMON_SRCS ${COMMON_SRCS} strtok_r.c )
+endif()
+
 enable_language(C CXX ASM)
 set_source_files_properties(system/fcontext.s PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp")
 
