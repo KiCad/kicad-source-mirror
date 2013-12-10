@@ -57,25 +57,25 @@
 #define FMT_OK_OVERWRITE    _( "Library '%s' exists, OK to replace ?" )
 #define FMT_CREATE_LIB      _( "Create New Library" )
 #define FMT_OK_DELETE       _( "OK to delete module %s in library '%s'" )
-#define FMT_IMPORT_MODULE   _( "Import Footprint Module" )
+#define FMT_IMPORT_MODULE   _( "Import Footprint" )
 #define FMT_FILE_NOT_FOUND  _( "File '%s' not found" )
-#define FMT_NOT_MODULE      _( "Not a module file" )
+#define FMT_NOT_MODULE      _( "Not a footprint file" )
 #define FMT_MOD_NOT_FOUND   _( "Unable to find or load footprint %s from lib path '%s'" )
 #define FMT_BAD_PATH        _( "Unable to find or load footprint from path '%s'" )
 #define FMT_BAD_PATHS       _( "The footprint library '%s' could not be found in any of the search paths." )
 #define FMT_LIB_READ_ONLY   _( "Library '%s' is read only, not writable" )
 
-#define FMT_EXPORT_MODULE   _( "Export Module" )
-#define FMT_SAVE_MODULE     _( "Save Module" )
-#define FMT_MOD_REF         _( "Module Reference:" )
-#define FMT_EXPORTED        _( "Module exported to file '%s'" )
-#define FMT_MOD_DELETED     _( "Module %s deleted from library '%s'" )
-#define FMT_MOD_CREATE      _( "Module Creation" )
+#define FMT_EXPORT_MODULE   _( "Export Footprint" )
+#define FMT_SAVE_MODULE     _( "Save Footprint" )
+#define FMT_MOD_REF         _( "Enter footprint name:" )
+#define FMT_EXPORTED        _( "Footprint exported to file '%s'" )
+#define FMT_MOD_DELETED     _( "Footprint %s deleted from library '%s'" )
+#define FMT_MOD_CREATE      _( "New Footprint" )
 
-#define FMT_NO_MODULES      _( "No modules to archive!" )
+#define FMT_NO_MODULES      _( "No footprints to archive!" )
 #define FMT_LIBRARY         _( "Library" )                                      // window title
-#define FMT_MOD_EXISTS      _( "Module %s already exists in library '%s'" )
-#define FMT_NO_REF_ABORTED  _( "No reference, aborted" )
+#define FMT_MOD_EXISTS      _( "Footprint %s already exists in library '%s'" )
+#define FMT_NO_REF_ABORTED  _( "No footprint name defined." )
 #define FMT_SELECT_LIB      _( "Select Library" )
 
 
@@ -846,18 +846,16 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
     if( moduleName.IsEmpty() )
     {
         wxTextEntryDialog dlg( this, FMT_MOD_REF, FMT_MOD_CREATE, moduleName );
-        dlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR() );
+        dlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &moduleName ) );
 
         if( dlg.ShowModal() != wxID_OK )
             return NULL;    //Aborted by user
-
-        moduleName = dlg.GetValue();
     }
 
     moduleName.Trim( true );
     moduleName.Trim( false );
 
-    if( moduleName.IsEmpty( ) )
+    if( moduleName.IsEmpty() )
     {
         DisplayInfoMessage( this, FMT_NO_REF_ABORTED );
         return NULL;
