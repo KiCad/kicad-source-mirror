@@ -281,6 +281,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
 
 FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
 {
+    SaveSettings();
+
     if( m_Draw3DFrame )
         m_Draw3DFrame->Destroy();
 }
@@ -301,8 +303,6 @@ FOOTPRINT_VIEWER_FRAME* FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer()
 
 void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    SaveSettings();
-
     if( m_Semaphore )
     {
         m_Semaphore->Post();
