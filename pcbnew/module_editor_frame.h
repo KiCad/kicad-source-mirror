@@ -437,18 +437,8 @@ protected:
     void setLibNickName( const wxString& aNickname );
 
 
-#if !defined(USE_FP_LIB_TABLE)
-    wxString m_lib_path;
-
-    void setLibPath( const wxString& aLibPath )         { m_lib_path = aLibPath; }
-
-    /// The libPath is the full string used in the PLUGIN::Footprint*() calls.
-    wxString getLibPath() const                         { return m_lib_path; }
-
-#else
     /// The libPath is not publicly visible, grab it from the FP_LIB_TABLE if we must.
     wxString getLibPath();
-#endif
 };
 
 #endif      // MODULE_EDITOR_FRAME_H_

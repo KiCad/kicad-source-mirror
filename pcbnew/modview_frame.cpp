@@ -195,18 +195,10 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
     // If a footprint was previously loaded, reload it
     if( !m_libraryName.IsEmpty() && !m_footprintName.IsEmpty() )
     {
-#if !defined( USE_FP_LIB_TABLE )
-        MODULE* footprint = GetModuleLibrary( m_libraryName + wxT( "." ) +  LegacyFootprintLibPathExtension,
-                                              m_footprintName, false );
-
-        if( footprint )
-            GetBoard()->Add( footprint, ADD_APPEND );
-#else
         FPID id;
         id.SetLibNickname( m_libraryName );
         id.SetFootprintName( m_footprintName );
         GetBoard()->Add( loadFootprint( id ) );
-#endif
     }
 
     if( m_canvas )
@@ -338,17 +330,10 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
 
     m_LibList->Clear();
 
-#if !defined( USE_FP_LIB_TABLE )
-    for( unsigned ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
-    {
-        m_LibList->Append( g_LibraryNames[ii] );
-    }
-#else
     std::vector< wxString > libName = m_footprintLibTable->GetLogicalLibs();
 
     for( unsigned ii = 0; ii < libName.size(); ii++ )
         m_LibList->Append( libName[ii] );
-#endif
 
     // Search for a previous selection:
     int index =  m_LibList->FindString( m_libraryName );
@@ -388,16 +373,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
     FOOTPRINT_LIST fp_info_list;
     wxArrayString  libsList;
 
-#if !defined( USE_FP_LIB_TABLE )
-
-    libsList.Add( m_libraryName );
-    fp_info_list.ReadFootprintFiles( libsList );
-
-#else
-
     fp_info_list.ReadFootprintFiles( m_footprintLibTable, &m_libraryName );
-
-#endif
 
     if( fp_info_list.GetErrorCount() )
     {
@@ -409,7 +385,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
     BOOST_FOREACH( const FOOTPRINT_INFO& footprint, fp_info_list.GetList() )
     {
-        fpList.Add( footprint.m_Module );
+        fpList.Add( footprint.GetFootprintName() );
     }
 
     m_FootprintList->Append( fpList );
@@ -461,13 +437,6 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         SetCurItem( NULL );
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
-#if !defined( USE_FP_LIB_TABLE )
-        MODULE* footprint = GetModuleLibrary( m_libraryName + wxT( "." ) + LegacyFootprintLibPathExtension,
-                                              m_footprintName, true );
-
-        if( footprint )
-            GetBoard()->Add( footprint, ADD_APPEND );
-#else
         FPID id;
         id.SetLibNickname( m_libraryName );
         id.SetFootprintName( m_footprintName );
@@ -484,7 +453,6 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
                         GetChars( ioe.errorText ) );
             DisplayError( this, msg );
         }
-#endif
 
         DisplayLibInfos();
         Zoom_Automatique( false );
@@ -555,21 +523,6 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
     m_selectedFootprintName.Empty();
 
     // Ensure we have the right library list:
-#if !defined( USE_FP_LIB_TABLE )
-    if( g_LibraryNames.GetCount() == m_LibList->GetCount() )
-    {
-        unsigned ii;
-
-        for( ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
-        {
-            if( m_LibList->GetString( ii ) != g_LibraryNames[ii] )
-                break;
-        }
-
-        if( ii == g_LibraryNames.GetCount() )
-            return;
-    }
-#else
     std::vector< wxString > libNicknames = m_footprintLibTable->GetLogicalLibs();
 
     if( libNicknames.size() == m_LibList->GetCount() )
@@ -585,7 +538,6 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
         if( ii == libNicknames.size() )
             return;
     }
-#endif
 
     // If we are here, the library list has changed, rebuild it
     ReCreateLibraryList();

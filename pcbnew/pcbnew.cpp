@@ -213,10 +213,8 @@ bool EDA_APP::OnInit()
      * display the real hotkeys in menus or tool tips */
     ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
 
-#if defined( USE_FP_LIB_TABLE )
     // Set any environment variables before loading FP_LIB_TABLE
     SetFootprintLibTablePath();
-#endif
 
     frame = new PCB_EDIT_FRAME( NULL, wxT( "Pcbnew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 

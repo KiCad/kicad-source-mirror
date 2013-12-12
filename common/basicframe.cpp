@@ -566,12 +566,7 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         USE_FP_LIB_TABLE=" );
-#ifdef USE_FP_LIB_TABLE
-    tmp << wxT( "ON\n" );
-#else
-    tmp << wxT( "OFF\n" );
-#endif
+    tmp << wxT( "         USE_FP_LIB_TABLE=HARD_CODED_ON\n" );
 
     tmp << wxT( "         BUILD_GITHUB_PLUGIN=" );
 #ifdef BUILD_GITHUB_PLUGIN
