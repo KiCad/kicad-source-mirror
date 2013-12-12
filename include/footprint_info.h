@@ -33,14 +33,15 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
 
-#if defined( USE_FP_LIB_TABLE )
-  #include <ki_mutex.h>
-#endif
-
+#include <ki_mutex.h>
 #include <kicad_string.h>
 
 
+#define USE_FPI_LAZY            0   // 1:yes lazy,  0:no early
+
+
 class FP_LIB_TABLE;
+class FOOTPRINT_LIST;
 class wxTopLevelWindow;
 
 
@@ -51,38 +52,52 @@ class wxTopLevelWindow;
  */
 class FOOTPRINT_INFO
 {
+    friend bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 );
+
 public:
 
-    // friend bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 );
+    // These two accessors do not have to call ensure_loaded(), because constructor
+    // fills in these fields:
 
-    wxString    m_nickname;     ///< the library nickname, eventually
-
-#if !defined(USE_FP_LIB_TABLE)
-    wxString    m_lib_path;
-#endif
-
-
-    wxString    m_Module;       ///< Module name.
-    int         m_Num;          ///< Order number in the display list.
-    wxString    m_Doc;          ///< Footprint description.
-    wxString    m_KeyWord;      ///< Footprint key words.
-    unsigned    m_padCount;     ///< Number of pads
-
-    FOOTPRINT_INFO()
-    {
-        m_Num = 0;
-        m_padCount = 0;
-    }
-
-    const wxString& GetFootprintName() const            { return m_Module; }
-
-    void SetNickname( const wxString& aLibNickname )    { m_nickname = aLibNickname; }
+    const wxString& GetFootprintName() const            { return m_fpname; }
     const wxString& GetNickname() const                 { return m_nickname; }
 
-#if !defined(USE_FP_LIB_TABLE)
-    void SetLibPath( const wxString& aLibPath )         { m_lib_path = aLibPath; }
-    const wxString& GetLibPath() const                  { return m_lib_path; }
+    FOOTPRINT_INFO( FOOTPRINT_LIST* aOwner, const wxString& aNickname, const wxString& aFootprintName ) :
+        m_owner( aOwner ),
+        m_loaded( false ),
+        m_nickname( aNickname ),
+        m_fpname( aFootprintName ),
+        m_num( 0 ),
+        m_pad_count( 0 )
+    {
+#if !USE_FPI_LAZY
+        load();
 #endif
+    }
+
+    const wxString& GetDoc()
+    {
+        ensure_loaded();
+        return m_doc;
+    }
+
+    const wxString& GetKeywords()
+    {
+        ensure_loaded();
+        return m_keywords;
+    }
+
+    unsigned GetPadCount()
+    {
+        ensure_loaded();
+        return m_pad_count;
+    }
+
+    int GetOrderNum()
+    {
+        ensure_loaded();
+        return m_num;
+    }
 
     /**
      * Function InLibrary
@@ -94,20 +109,40 @@ public:
      *         false.
      */
     bool InLibrary( const wxString& aLibrary ) const;
+
+private:
+
+    void ensure_loaded()
+    {
+        if( !m_loaded )
+            load();
+    }
+
+    /// lazily load stuff not filled in by constructor.  This may throw IO_ERRORS.
+    void load();
+
+    FOOTPRINT_LIST* m_owner;    ///< provides access to FP_LIB_TABLE
+
+    bool        m_loaded;
+
+    wxString    m_nickname;     ///< library as known in FP_LIB_TABLE
+    wxString    m_fpname;       ///< Module name.
+    int         m_num;          ///< Order number in the display list.
+    int         m_pad_count;    ///< Number of pads
+    wxString    m_doc;          ///< Footprint description.
+    wxString    m_keywords;     ///< Footprint keywords.
 };
 
 
 /// FOOTPRINT object list sort function.
 inline bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 )
 {
-#if defined( USE_FP_LIB_TABLE )
     int retv = StrNumCmp( item1.m_nickname, item2.m_nickname, INT_MAX, true );
 
     if( retv != 0 )
         return retv < 0;
-#endif
 
-    return StrNumCmp( item1.m_Module, item2.m_Module, INT_MAX, true ) < 0;
+    return StrNumCmp( item1.m_fpname, item2.m_fpname, INT_MAX, true ) < 0;
 }
 
 
@@ -121,17 +156,14 @@ class FOOTPRINT_LIST
     FP_LIB_TABLE*   m_lib_table;        ///< no ownership
     volatile int    m_error_count;      ///< thread safe to read.
 
-
     typedef boost::ptr_vector< FOOTPRINT_INFO >         FPILIST;
     typedef boost::ptr_vector< IO_ERROR >               ERRLIST;
 
     FPILIST m_list;
     ERRLIST m_errors;                   ///< some can be PARSE_ERRORs also
 
-#if defined( USE_FP_LIB_TABLE )
     MUTEX   m_errors_lock;
     MUTEX   m_list_lock;
-#endif
 
     /**
      * Function loader_job
@@ -142,6 +174,16 @@ class FOOTPRINT_LIST
      * @param aJobZ is the size of the job, i.e. the count of nicknames.
      */
     void loader_job( const wxString* aNicknameList, int aJobZ );
+
+    void addItem( FOOTPRINT_INFO* aItem )
+    {
+        // m_list is not thread safe, and this function is called from
+        // worker threads, lock m_list.
+        MUTLOCK lock( m_list_lock );
+
+        m_list.push_back( aItem );
+    }
+
 
 public:
 
@@ -163,16 +205,16 @@ public:
     /**
      * Function GetModuleInfo
      * @param aFootprintName = the footprint name inside the FOOTPRINT_INFO of interest.
-     * @return const FOOTPRINT_INF* - the item stored in list if found
+     * @return FOOTPRINT_INF* - the item stored in list if found
      */
-    const FOOTPRINT_INFO* GetModuleInfo( const wxString& aFootprintName );
+    FOOTPRINT_INFO* GetModuleInfo( const wxString& aFootprintName );
 
     /**
      * Function GetItem
      * @param aIdx = index of the given item
      * @return the aIdx item in list
      */
-    const FOOTPRINT_INFO& GetItem( unsigned aIdx )  const     { return m_list[aIdx]; }
+    FOOTPRINT_INFO& GetItem( unsigned aIdx )            { return m_list[aIdx]; }
 
     /**
      * Function AddItem
@@ -184,15 +226,6 @@ public:
     unsigned GetErrorCount() const  { return m_errors.size(); }
 
     const IO_ERROR* GetError( unsigned aIdx ) const     { return &m_errors[aIdx]; }
-
-#if !defined( USE_FP_LIB_TABLE )
-    /**
-     * Function ReadFootprintFiles
-     *
-     * @param aFootprintsLibNames = an array string giving the list of libraries to load
-     */
-    bool ReadFootprintFiles( wxArrayString& aFootprintsLibNames );
-#endif
 
     /**
      * Function ReadFootprintFiles
@@ -208,6 +241,8 @@ public:
     bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = NULL );
 
     void DisplayErrors( wxTopLevelWindow* aCaller = NULL );
+
+    FP_LIB_TABLE* GetTable() const { return m_lib_table; }
 };
 
 #endif  // FOOTPRINT_INFO_H_

@@ -159,8 +159,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
         isLegacy = false;  // None of the components have footprints assigned.
     }
 
-
-#if defined( USE_FP_LIB_TABLE )
     wxString missingLibs;
 
     // Check if footprint links were generated before the footprint library table was implemented.
@@ -217,7 +215,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
             }
         }
     }
-#endif
 
     for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
     {
@@ -272,7 +269,6 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
         if( !fn.HasExt() )
             fn.SetExt( ComponentFileExtension );
 
-#if defined( USE_FP_LIB_TABLE )
         // Save the project specific footprint library table.
         if( !m_footprintLibTable->IsEmpty( false ) )
         {
@@ -298,8 +294,6 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
                 }
             }
         }
-#endif
-
     }
 
     if( !IsWritable( fn.GetFullPath() ) )

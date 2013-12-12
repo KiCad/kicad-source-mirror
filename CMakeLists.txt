@@ -47,8 +47,6 @@ option( KICAD_SCRIPTING_WXPYTHON
 # python binary file should be is exec path.
 
 
-option( USE_FP_LIB_TABLE "Use the new footprint library table implementation. ( default OFF)"  ON )
-
 option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
 
 

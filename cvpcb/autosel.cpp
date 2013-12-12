@@ -185,7 +185,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 
                 for( size_t jj = 0; jj < filtercount && !found; jj++ )
                 {
-                    found = module->m_Module.Matches( component->GetFootprintFilters()[jj] );
+                    found = module->GetFootprintName().Matches( component->GetFootprintFilters()[jj] );
                 }
             }
             else

@@ -397,11 +397,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            aModule,
     wxString moduleName = FROM_UTF8( aNewFootprintFPID.GetFootprintName().c_str() );
     wxString libName = FROM_UTF8( aNewFootprintFPID.GetLibNickname().c_str() );
 
-#if !defined( USE_FP_LIB_TABLE )
-    newModule = m_parent->GetModuleLibrary( libName, moduleName, aShowError );
-#else
     newModule = m_parent->LoadFootprint( aNewFootprintFPID );
-#endif
 
     if( newModule == NULL )  // New module not found, redraw the old one.
     {

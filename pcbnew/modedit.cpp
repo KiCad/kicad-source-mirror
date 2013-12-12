@@ -254,14 +254,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( library.size() )
             {
-#if defined(USE_FP_LIB_TABLE)
                 setLibNickName( library );
-#else
-                wxFileName fileName( library );
-
-                setLibNickName( fileName.GetName() );
-                setLibPath( fileName.GetFullPath() );
-#endif
                 updateTitle();
             }
         }
@@ -364,19 +357,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SAVE_LIBMODULE:
-#if defined(USE_FP_LIB_TABLE)
         if( GetBoard()->m_Modules && getLibNickName().size() )
         {
             Save_Module_In_Library( getLibNickName(), GetBoard()->m_Modules, true, true );
             GetScreen()->ClrModify();
         }
-#else
-        if( GetBoard()->m_Modules && getLibPath() != wxEmptyString )
-        {
-            Save_Module_In_Library( getLibPath(), GetBoard()->m_Modules, true, true );
-            GetScreen()->ClrModify();
-        }
-#endif
         break;
 
     case ID_MODEDIT_INSERT_MODULE_IN_BOARD:
@@ -507,11 +492,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Clear_Pcb( true );
         SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-#if !defined( USE_FP_LIB_TABLE )
-        LoadModuleFromLibrary( getLibPath(), m_footprintLibTable, true );
-#else
         LoadModuleFromLibrary( getLibNickName(), m_footprintLibTable, true );
-#endif
         redraw = true;
 
         if( GetBoard()->m_Modules )

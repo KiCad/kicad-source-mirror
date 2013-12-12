@@ -30,7 +30,6 @@ WORKING_TREES=~/kicad_sources
 
 # CMake Options
 OPTS="$OPTS -DCMAKE_BUILD_TYPE=Release"
-OPTS="$OPTS -DUSE_FP_LIB_TABLE=ON"
 OPTS="$OPTS -DBUILD_GITHUB_PLUGIN=ON"
 
 # Python scripting, uncomment to enable

@@ -315,10 +315,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_microWaveToolBar = NULL;
     m_useCmpFileForFpNames = true;
 
-#if defined( USE_FP_LIB_TABLE )
     m_footprintLibTable = NULL;
     m_globalFootprintTable = NULL;
-#endif
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
     m_pythonPanel = NULL;
@@ -471,7 +469,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     m_auimgr.Update();
 
-#if defined( USE_FP_LIB_TABLE )
     if( m_globalFootprintTable == NULL )
     {
         try
@@ -499,7 +496,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
             DisplayError( this, msg );
         }
     }
-#endif
 
     setupTools();
 }
@@ -515,10 +511,8 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 
     delete m_drc;
 
-#if defined( USE_FP_LIB_TABLE )
     delete m_footprintLibTable;
     delete m_globalFootprintTable;
-#endif
 }
 
 

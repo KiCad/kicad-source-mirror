@@ -30,7 +30,6 @@
 
 #define USE_WORKER_THREADS      1       // 1:yes, 0:no. use worker thread to load libraries
 
-
 /*
  * Functions to read footprint libraries and fill m_footprints by available footprints names
  * and their documentation (comments and keywords)
@@ -46,10 +45,7 @@
 #include <fp_lib_table.h>
 #include <fpid.h>
 #include <class_module.h>
-
-#if defined(USE_FP_LIB_TABLE)
- #include <boost/thread.hpp>
-#endif
+#include <boost/thread.hpp>
 
 
 /*
@@ -97,94 +93,22 @@ static wxString ToHTMLFragment( const IO_ERROR* aDerivative )
 */
 
 
-#if !defined( USE_FP_LIB_TABLE )
-
-bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintLibNames )
+void FOOTPRINT_INFO::load()
 {
-    bool retv = true;
+    FP_LIB_TABLE*   fptable = m_owner->GetTable();
 
-    // Clear data before reading files
-    m_error_count = 0;
-    m_errors.clear();
-    m_list.clear();
+    wxASSERT( fptable );
 
-    // try
-    {
-        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+    std::auto_ptr<MODULE> m( fptable->FootprintLoad( m_nickname, m_fpname ) );
 
-        // Parse Libraries Listed
-        for( unsigned ii = 0; ii < aFootprintLibNames.GetCount(); ii++ )
-        {
-            // Footprint library file names can be fully qualified or file name only.
-            wxFileName filename = aFootprintLibNames[ii];
+    m_pad_count = m->GetPadCount( MODULE::DO_NOT_INCLUDE_NPTH );
+    m_keywords  = m->GetKeywords();
+    m_doc       = m->GetDescription();
 
-            if( !filename.FileExists() )
-            {
-                filename = wxGetApp().FindLibraryPath( filename.GetFullName() );
-
-                if( !filename.FileExists() )
-                {
-                    filename = wxFileName( wxEmptyString, aFootprintLibNames[ii],
-                                           LegacyFootprintLibPathExtension );
-
-                    filename = wxGetApp().FindLibraryPath( filename.GetFullName() );
-                }
-            }
-
-            wxLogDebug( wxT( "Path <%s> -> <%s>." ), GetChars( aFootprintLibNames[ii] ),
-                        GetChars( filename.GetFullPath() ) );
-
-            try
-            {
-                wxArrayString fpnames = pi->FootprintEnumerate( filename.GetFullPath() );
-
-                for( unsigned i=0; i<fpnames.GetCount();  ++i )
-                {
-                    std::auto_ptr<MODULE> m( pi->FootprintLoad( filename.GetFullPath(),
-                                                                fpnames[i] ) );
-
-                    // we're loading what we enumerated, all must be there.
-                    wxASSERT( m.get() );
-
-                    FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO();
-
-                    fpinfo->SetNickname( filename.GetName() );
-                    fpinfo->SetLibPath( filename.GetFullPath() );
-                    fpinfo->m_Module   = fpnames[i];
-                    fpinfo->m_padCount = m->GetPadCount( MODULE::DO_NOT_INCLUDE_NPTH );
-                    fpinfo->m_KeyWord  = m->GetKeywords();
-                    fpinfo->m_Doc      = m->GetDescription();
-
-                    AddItem( fpinfo );
-                }
-            }
-            catch( const PARSE_ERROR& pe )
-            {
-                m_errors.push_back( new PARSE_ERROR( pe ) );
-                retv = false;
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                m_errors.push_back( new IO_ERROR( ioe ) );
-                retv = false;
-            }
-        }
-    }
-
-    /*  caller should catch this, UI seems not wanted here.
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( NULL, ioe.errorText );
-        return false;
-    }
-    */
-
-    m_list.sort();
-
-    return retv;
+    // tell ensure_loaded() I'm loaded.
+    m_loaded = true;
 }
 
-#else       // yes USE_FP_LIB_TABLE, by all means:
 
 #define JOBZ                6       // no. libraries per worker thread.  It takes about
                                     // a second to load a GITHUB library, so assigning
@@ -214,18 +138,9 @@ void FOOTPRINT_LIST::loader_job( const wxString* aNicknameList, int aJobZ )
 
             for( unsigned ni=0;  ni<fpnames.GetCount();  ++ni )
             {
-                std::auto_ptr<MODULE> m( m_lib_table->FootprintLoad( nickname, fpnames[ni] ) );
+                FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO( this, nickname, fpnames[ni] );
 
-                FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO();
-
-                fpinfo->SetNickname( nickname );
-
-                fpinfo->m_Module   = fpnames[ni];
-                fpinfo->m_padCount = m->GetPadCount( MODULE::DO_NOT_INCLUDE_NPTH );
-                fpinfo->m_KeyWord  = m->GetKeywords();
-                fpinfo->m_Doc      = m->GetDescription();
-
-                AddItem( fpinfo );
+                addItem( fpinfo );
             }
         }
         catch( const PARSE_ERROR& pe )
@@ -346,27 +261,12 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* a
 
     return retv;
 }
-#endif  // USE_FP_LIB_TABLE
 
 
-void FOOTPRINT_LIST::AddItem( FOOTPRINT_INFO* aItem )
+FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
 {
-#if defined( USE_FP_LIB_TABLE )
-
-    // m_list is not thread safe, and this function is called from
-    // worker threads, lock m_list.
-    MUTLOCK lock( m_list_lock );
-#endif
-
-    m_list.push_back( aItem );
-}
-
-
-const FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
-{
-    BOOST_FOREACH( const FOOTPRINT_INFO& footprint, m_list )
+    BOOST_FOREACH( FOOTPRINT_INFO& fp, m_list )
     {
-#if defined( USE_FP_LIB_TABLE )
         FPID fpid;
 
         wxCHECK_MSG( fpid.Parse( aFootprintName ) < 0, NULL,
@@ -376,42 +276,17 @@ const FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintN
         wxString libNickname   = FROM_UTF8( fpid.GetLibNickname().c_str() );
         wxString footprintName = FROM_UTF8( fpid.GetFootprintName().c_str() );
 
-        if( libNickname == footprint.m_nickname && footprintName == footprint.m_Module )
-            return &footprint;
-#else
-        if( aFootprintName.CmpNoCase( footprint.m_Module ) == 0 )
-            return &footprint;
-#endif
+        if( libNickname == fp.GetNickname() && footprintName == fp.GetFootprintName() )
+            return &fp;
     }
+
     return NULL;
 }
 
 
 bool FOOTPRINT_INFO::InLibrary( const wxString& aLibrary ) const
 {
-#if defined( USE_FP_LIB_TABLE )
     return aLibrary == m_nickname;
-#else
-
-    if( aLibrary.IsEmpty() )
-        return false;
-
-    if( aLibrary == m_nickname || aLibrary == m_lib_path )
-        return true;
-
-    wxFileName filename = aLibrary;
-
-    if( filename.GetExt().IsEmpty() )
-        filename.SetExt( LegacyFootprintLibPathExtension );
-
-    if( filename.GetFullPath() == m_lib_path )
-        return true;
-
-    if( filename.GetPath().IsEmpty() )
-        filename = wxGetApp().FindLibraryPath( filename.GetFullName() );
-
-    return filename.GetFullPath() == m_lib_path;
-#endif
 }
 
 
