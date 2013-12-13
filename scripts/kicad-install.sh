@@ -71,6 +71,7 @@ install_prerequisites()
             cmake-curses-gui \
             debhelper \
             doxygen \
+            grep \
             libbz2-dev \
             libcairo2-dev \
             libglew-dev \
@@ -86,13 +87,14 @@ install_prerequisites()
         sudo yum install \
             bzr \
             bzrtools \
+            bzip2-libs \
+            bzip2-devel \
             cmake \
             cmake-gui \
             doxygen \
-            bzip2-libs \
-            bzip2-devel \
             cairo-devel \
             glew-devel \
+            grep \
             openssl-devel \
             wxGTK-devel \
             wxPython
@@ -132,6 +134,33 @@ cmake_uninstall()
         echo "uninstalling from $dir"
         sudo make uninstall
         sudo rm install_manifest.txt
+    fi
+}
+
+
+# Function set_env_var
+# sets an environment variable globally.
+set_env_var()
+{
+    local VAR=$1
+    local VAL=$2
+
+    if [ -d /etc/profile.d ]; then
+        if [ ! -e /etc/profile.d/kicad.sh ] || ! grep "$VAR" /etc/profile.d/kicad.sh; then
+            echo
+            echo "Adding environment variable $VAR to file /etc/profile.d/kicad.sh"
+            echo "Please logout and back in after this script completes for environment"
+            echo "variable to get set into environment."
+            sudo sh -c "echo export $VAR=$VAL >> /etc/profile.d/kicad.sh"
+        fi
+
+    elif [ -e /etc/environment ]; then
+        if ! grep "$VAR" /etc/environment; then
+            echo
+            echo "Adding environment variable $VAR to file /etc/environment"
+            echo "Please reboot after this script completes for environment variable to get set into environment."
+            sudo sh -c "echo $VAR=$VAL >> /etc/environment"
+        fi
     fi
 }
 
@@ -231,9 +260,7 @@ install_or_update()
     echo 'All KiCad "--install-or-update" steps completed, you are up to date.'
 
     if [ -z "${KIGITHUB}" ]; then
-        echo "Please set an environment variable by adding:"
-        echo "export KIGITHUB=https://github.com/KiCad"
-        echo "to your ~/.bashrc file.  Then reboot."
+        set_env_var KIGITHUB https://github.com/KiCad
     fi
 }
 
