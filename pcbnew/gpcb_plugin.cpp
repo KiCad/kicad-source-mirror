@@ -893,7 +893,7 @@ wxArrayString GPCB_PLUGIN::FootprintEnumerate( const wxString&   aLibraryPath,
 
     init( aProperties );
 
-#if 0                         // Set to 0 to only read directory contents, not load cache.
+#if 1                         // Set to 0 to only read directory contents, not load cache.
     cacheLib( aLibraryPath );
 
     const MODULE_MAP& mods = m_cache->GetModules();
