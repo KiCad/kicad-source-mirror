@@ -189,7 +189,7 @@ public:
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
-    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+    virtual void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const;
 
     virtual bool CanIncrementLabel() const { return true; }
 

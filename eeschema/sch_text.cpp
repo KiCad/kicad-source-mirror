@@ -564,7 +564,7 @@ bool SCH_TEXT::IsSelectStateChanged( const wxRect& aRect )
 }
 
 
-void SCH_TEXT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+void SCH_TEXT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     // Normal text labels do not have connection points.  All others do.
     if( Type() == SCH_TEXT_T )

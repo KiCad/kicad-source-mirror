@@ -168,7 +168,7 @@ bool SCH_JUNCTION::IsSelectStateChanged( const wxRect& aRect )
 }
 
 
-void SCH_JUNCTION::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+void SCH_JUNCTION::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     aPoints.push_back( m_pos );
 }

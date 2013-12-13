@@ -182,7 +182,7 @@ bool SCH_NO_CONNECT::IsSelectStateChanged( const wxRect& aRect )
 }
 
 
-void SCH_NO_CONNECT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+void SCH_NO_CONNECT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     aPoints.push_back( m_pos );
 }

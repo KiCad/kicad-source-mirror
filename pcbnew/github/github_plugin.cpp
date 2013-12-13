@@ -63,15 +63,12 @@
 #include <macros.h>
 #include <fp_lib_table.h>       // ExpandSubstitutions()
 
-using namespace std;
-
-
 static const char* PRETTY_DIR = "allow_pretty_writing_to_this_dir";
 
 
-typedef boost::ptr_map<string, wxZipEntry>  MODULE_MAP;
-typedef MODULE_MAP::iterator                MODULE_ITER;
-typedef MODULE_MAP::const_iterator          MODULE_CITER;
+typedef boost::ptr_map<std::string, wxZipEntry> MODULE_MAP;
+typedef MODULE_MAP::iterator                    MODULE_ITER;
+typedef MODULE_MAP::const_iterator              MODULE_CITER;
 
 
 /**
@@ -166,7 +163,7 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
         }
     }
 
-    string fp_name = TO_UTF8( aFootprintName );
+    std::string fp_name = TO_UTF8( aFootprintName );
 
     MODULE_CITER it = m_gh_cache->find( fp_name );
 
@@ -233,7 +230,7 @@ void GITHUB_PLUGIN::FootprintSave( const wxString& aLibraryPath,
         // IsFootprintLibWritable() to determine if calling FootprintSave() is
         // even legal, so I spend no time on internationalization here:
 
-        string msg = StrPrintf( "Github library\n'%s'\nis only writable if you set option '%s' in Library Tables dialog.",
+        std::string msg = StrPrintf( "Github library\n'%s'\nis only writable if you set option '%s' in Library Tables dialog.",
                 (const char*) TO_UTF8( aLibraryPath ), PRETTY_DIR );
 
         THROW_IO_ERROR( msg );
@@ -275,7 +272,7 @@ void GITHUB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
         // IsFootprintLibWritable() to determine if calling FootprintSave() is
         // even legal, so I spend no time on internationalization here:
 
-        string msg = StrPrintf( "Github library\n'%s'\nis only writable if you set option '%s' in Library Tables dialog.",
+        std::string msg = StrPrintf( "Github library\n'%s'\nis only writable if you set option '%s' in Library Tables dialog.",
                 (const char*) TO_UTF8( aLibraryPath ), PRETTY_DIR );
 
         THROW_IO_ERROR( msg );
@@ -356,7 +353,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
 
         if( aProperties )
         {
-            string  pretty_dir;
+            std::string pretty_dir;
 
             if( aProperties->Value( PRETTY_DIR, &pretty_dir ) )
             {
@@ -409,7 +406,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
 
             if( fn.GetExt() == kicad_mod )
             {
-                string fp_name = TO_UTF8( fn.GetName() );   // omit extension & path
+                std::string fp_name = TO_UTF8( fn.GetName() );   // omit extension & path
 
                 m_gh_cache->insert( fp_name, entry );
             }
@@ -420,7 +417,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
 }
 
 
-bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
+bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, std::string* aZipURL )
 {
     // e.g. "https://github.com/liftoff-sr/pretty_footprints"
     //D(printf("aRepoURL:%s\n", TO_UTF8( aRepoURL ) );)
@@ -460,7 +457,7 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
 
 void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
 {
-    string  zip_url;
+    std::string zip_url;
 
     if( !repoURL_zipURL( aRepoURL, &zip_url ) )
     {
@@ -478,7 +475,7 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
 
     try
     {
-        ostringstream os;
+        std::ostringstream os;
 
         h.open( zip_url );      // only one file, therefore do it synchronously.
         os << &h;
@@ -495,10 +492,8 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
         // https "GET" has faild, report this to API caller.
         wxString fmt( _( "Cannot GET zip: '%s'\nfor lib-path: '%s'.\nWhat: '%s'" ) );
 
-        string msg = StrPrintf( TO_UTF8( fmt ),
-                zip_url.c_str(),
-                TO_UTF8( aRepoURL ),
-                e.what() );
+        std::string msg = StrPrintf( TO_UTF8( fmt ), zip_url.c_str(),
+                                     TO_UTF8( aRepoURL ), e.what() );
 
         THROW_IO_ERROR( msg );
     }

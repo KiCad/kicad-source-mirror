@@ -29,7 +29,6 @@
 #include "pns_utils.h"
 #include "pns_router.h"
 
-using namespace std;
 using boost::optional;
 
 PNS_LINE* PNS_LINE::Clone() const
@@ -321,10 +320,10 @@ void PNS_LINE::NewWalkaround( const SHAPE_LINE_CHAIN& aObstacle,
 
     SHAPE_LINE_CHAIN l_orig( m_line );
     SHAPE_LINE_CHAIN l_hull;
-    vector<bool> outside, on_edge, inside;
+    std::vector<bool> outside, on_edge, inside;
     SHAPE_LINE_CHAIN path;
 
-    vector<INTERSECTION> isects;
+    std::vector<INTERSECTION> isects;
 
     // don't calculate walkaround for empty lines
     if( m_line.PointCount() < 2 )

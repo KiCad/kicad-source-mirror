@@ -461,7 +461,7 @@ bool SCH_LINE::IsConnectable() const
 }
 
 
-void SCH_LINE::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+void SCH_LINE::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     aPoints.push_back( m_start );
     aPoints.push_back( m_end );

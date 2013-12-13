@@ -52,9 +52,6 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <memory.h>
 
-using namespace std;
-
-
 #define FMTIU        BOARD_ITEM::FormatInternalUnits
 
 /**
@@ -78,7 +75,7 @@ class FP_CACHE_ITEM
     wxFileName              m_file_name; ///< The the full file name and path of the footprint to cache.
     bool                    m_writable;  ///< Writability status of the footprint file.
     wxDateTime              m_mod_time;  ///< The last file modified time stamp.
-    auto_ptr< MODULE >      m_module;
+    std::auto_ptr<MODULE>   m_module;
 
 public:
     FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName );

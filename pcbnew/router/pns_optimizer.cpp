@@ -28,8 +28,6 @@
 #include "pns_optimizer.h"
 #include "pns_utils.h"
 
-using namespace std;
-
 /**
  *
  *  Cost Estimator Methods
@@ -620,8 +618,8 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
     const int ForbiddenAngles = DIRECTION_45::ANG_ACUTE | DIRECTION_45::ANG_RIGHT |
                                 DIRECTION_45::ANG_HALF_FULL | DIRECTION_45::ANG_UNDEFINED;
 
-    typedef pair<int, SHAPE_LINE_CHAIN> RtVariant;
-    vector<RtVariant> variants;
+    typedef std::pair<int, SHAPE_LINE_CHAIN> RtVariant;
+    std::vector<RtVariant> variants;
 
     BreakoutList breakouts = computeBreakouts( aLine->GetWidth(), aPad, true );
 
@@ -629,7 +627,7 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
 
     // bool startDiagonal = DIRECTION_45( line.CSegment(0) ).IsDiagonal();
 
-    int p_end = min( aEndVertex, min( 3, line.PointCount() - 1 ) );
+    int p_end = std::min( aEndVertex, std::min( 3, line.PointCount() - 1 ) );
 
     for( int p = 1; p <= p_end; p++ )
     {

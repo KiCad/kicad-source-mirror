@@ -48,9 +48,6 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <memory.h>
 
-using namespace std;
-
-
 /**
  * Definition for enabling and disabling footprint library trace output.  See the
  * wxWidgets documentation on using the WXTRACE environment variable.
@@ -118,7 +115,7 @@ class GPCB_FPL_CACHE_ITEM
     wxFileName         m_file_name; ///< The the full file name and path of the footprint to cache.
     bool               m_writable;  ///< Writability status of the footprint file.
     wxDateTime         m_mod_time;  ///< The last file modified time stamp.
-    auto_ptr< MODULE > m_module;
+    std::auto_ptr<MODULE> m_module;
 
 public:
     GPCB_FPL_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName );
@@ -385,13 +382,13 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
     // Old version unit = 1 mil, so conv_unit is 10 or 0.1
     #define NEW_GPCB_UNIT_CONV ( 0.01*IU_PER_MILS )
 
-    int                paramCnt;
-    double             conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and Pcbnew 0.1
-    wxPoint            refPos( 0, 0 );
-    wxPoint            textPos;
-    wxString           msg;
-    wxArrayString      parameters;
-    auto_ptr< MODULE > module( new MODULE( NULL ) );
+    int                   paramCnt;
+    double                conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and Pcbnew 0.1
+    wxPoint               refPos( 0, 0 );
+    wxPoint               textPos;
+    wxString              msg;
+    wxArrayString         parameters;
+    std::auto_ptr<MODULE> module( new MODULE( NULL ) );
 
 
     if( aLineReader->ReadLine() == NULL )
