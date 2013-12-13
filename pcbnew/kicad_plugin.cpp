@@ -1688,22 +1688,44 @@ void PCB_IO::cacheLib( const wxString& aLibraryPath, const wxString& aFootprintN
 }
 
 
-wxArrayString PCB_IO::FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+wxArrayString PCB_IO::FootprintEnumerate( const wxString&   aLibraryPath,
+                                          const PROPERTIES* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+    LOCALE_IO     toggle;     // toggles on, then off, the C locale.
+    wxArrayString ret;
+    wxDir         dir( aLibraryPath );
+
+    if( !dir.IsOpened() )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "footprint library path '%s' does not exist" ),
+                                          GetChars( aLibraryPath ) ) );
+    }
 
     init( aProperties );
 
+#if 0                         // Set to 0 to only read directory contents, not load cache.
     cacheLib( aLibraryPath );
 
     const MODULE_MAP& mods = m_cache->GetModules();
 
-    wxArrayString ret;
 
     for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
     {
         ret.Add( FROM_UTF8( it->first.c_str() ) );
     }
+#else
+    wxString fpFileName;
+    wxString wildcard = wxT( "*." ) + KiCadFootprintFileExtension;
+
+    if( dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
+    {
+        do
+        {
+            wxFileName fn( aLibraryPath, fpFileName );
+            ret.Add( fn.GetName() );
+        } while( dir.GetNext( &fpFileName ) );
+    }
+#endif
 
     return ret;
 }
