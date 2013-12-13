@@ -113,9 +113,9 @@ public:
      */
     bool MergeOverlap( SCH_LINE* aLine );
 
-    void GetEndPoints( vector <DANGLING_END_ITEM>& aItemList );
+    void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList );
 
-    bool IsDanglingStateChanged( vector< DANGLING_END_ITEM >& aItemList );
+    bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList );
 
     bool IsDangling() const { return m_startIsDangling || m_endIsDangling; }
 
@@ -123,7 +123,7 @@ public:
 
     bool IsConnectable() const;
 
-    void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+    void GetConnectionPoints(std::vector< wxPoint >& aPoints ) const;
 
     wxString GetSelectMenuText() const;
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Poly2Tri Copyright (c) 2009-2010, Poly2Tri Contributors
  * http://code.google.com/p/poly2tri/
  *
@@ -96,14 +96,14 @@ void Triangle::ClearNeighbor(Triangle *triangle )
     }
     else if( neighbors_[1] == triangle )
     {
-        neighbors_[1] = NULL;            
+        neighbors_[1] = NULL;
     }
     else
     {
         neighbors_[2] = NULL;
     }
 }
-    
+
 void Triangle::ClearNeighbors()
 {
   neighbors_[0] = NULL;
@@ -357,10 +357,9 @@ Triangle& Triangle::NeighborAcross(Point& opoint)
 
 void Triangle::DebugPrint()
 {
-  using namespace std;
-  cout << points_[0]->x << "," << points_[0]->y << " ";
-  cout << points_[1]->x << "," << points_[1]->y << " ";
-  cout << points_[2]->x << "," << points_[2]->y << endl;
+  std::cout << points_[0]->x << "," << points_[0]->y << " ";
+  std::cout << points_[1]->x << "," << points_[1]->y << " ";
+  std::cout << points_[2]->x << "," << points_[2]->y << "\n";
 }
 
 }

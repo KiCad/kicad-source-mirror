@@ -1605,7 +1605,7 @@ bool SCH_COMPONENT::IsSelectStateChanged( const wxRect& aRect )
 }
 
 
-void SCH_COMPONENT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     LIB_PIN* pin;
     LIB_COMPONENT* component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
@@ -1876,7 +1876,7 @@ bool SCH_COMPONENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccura
 
 bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 {
-    vector< wxPoint > pts;
+    std::vector< wxPoint > pts;
 
     GetConnectionPoints( pts );
 

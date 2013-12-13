@@ -110,9 +110,6 @@
 #include <wx/image.h>
 #include <wx/filename.h>
 
-using namespace std;
-
-
 /**
  * @brief A directory which contains information about the project template and does not get
  * copied. This define is the default filename for this directory
@@ -200,7 +197,7 @@ public:
      * @brief Get a vector list of filenames for the template. The files are the source files,
      * and have not yet been through any renaming
      */
-    vector<wxFileName> GetFileList();
+    std::vector<wxFileName> GetFileList();
 };
 
 #endif

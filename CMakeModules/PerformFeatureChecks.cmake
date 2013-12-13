@@ -93,7 +93,7 @@ macro(perform_feature_checks)
 
     # CMakes check_cxx_symbol_exists() doesn't work for templates so we must create a
     # small program to verify isinf() exists in cmath.
-    check_cxx_source_compiles( "#include <cmath>\nusing namespace std;\nint main(int argc, char** argv)\n{\n  (void)argv;\n  isinf(1.0);  (void)argc;\n  return 0;\n}\n"  HAVE_CMATH_ISINF )
+    check_cxx_source_compiles( "#include <cmath>\nint main(int argc, char** argv)\n{\n  (void)argv;\n  std::isinf(1.0);  (void)argc;\n  return 0;\n}\n"  HAVE_CMATH_ISINF )
 
     #check_symbol_exists(clock_gettime "time.h" HAVE_CLOCK_GETTIME) non-standard library, does not work
     check_library_exists(rt clock_gettime "" HAVE_CLOCK_GETTIME)

@@ -39,7 +39,6 @@
 #include "trace.h"
 
 using namespace KIGFX;
-using namespace std;
 using boost::optional;
 
 static TOOL_ACTION ACT_AutoEndRoute( "AutoEndRoute", AS_CONTEXT, 'F' );

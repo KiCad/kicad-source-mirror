@@ -51,8 +51,6 @@
 #include <class_track.h>
 #include <layers_id_colors_and_visibility.h>
 
-using namespace std;
-
 // an ugly singleton for drawing debug items within the router context.
 // To be fixed sometime in the future.
 static PNS_ROUTER* theRouter;
@@ -89,7 +87,7 @@ public:
     }
 
 private:
-    vector<int> m_clearanceCache;
+    std::vector<int> m_clearanceCache;
     int m_defaultClearance;
 };
 
@@ -232,7 +230,7 @@ int PNS_ROUTER::NextCopperLayer( bool aUp )
 
 void PNS_ROUTER::SyncWorld()
 {
-    vector<D_PAD*> pads;
+    std::vector<D_PAD*> pads;
 
     if( !m_board )
     {
@@ -662,7 +660,7 @@ PNS_NODE* PNS_ROUTER::removeLoops( PNS_NODE* aNode, PNS_SEGMENT* aLatestSeg )
     PNS_NODE* cleaned = aNode->Branch();
     PNS_JOINT a, b;
 
-    vector<PNS_LINE*> lines;
+    std::vector<PNS_LINE*> lines;
 
     cleaned->FindLineEnds( ourLine, a, b );
     cleaned->FindLinesBetweenJoints( a, b, lines );
@@ -699,7 +697,7 @@ bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     if( aEndItem && m_currentNet >= 0 && m_currentNet == aEndItem->GetNet() )
         real_end = true;
 
-    int last = ( real_end || m_placingVia ) ? l.SegmentCount() : max( 1, l.SegmentCount() - 1 );
+    int last = ( real_end || m_placingVia ) ? l.SegmentCount() : std::max( 1, l.SegmentCount() - 1 );
 
     PNS_NODE* latest = m_placer->GetCurrentNode();
 
@@ -771,7 +769,7 @@ void PNS_ROUTER::FlipPosture()
     if( m_placer->GetTail().GetCLine().SegmentCount() == 0 )
     {
         m_start_diagonal = !m_start_diagonal;
-        m_placer->SetInitialDirection( m_start_diagonal ? 
+        m_placer->SetInitialDirection( m_start_diagonal ?
 			DIRECTION_45( DIRECTION_45::NE ) : DIRECTION_45( DIRECTION_45::N ) );
     }
     else

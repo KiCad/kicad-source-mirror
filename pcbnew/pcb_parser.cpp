@@ -51,9 +51,6 @@
 #include <pcb_parser.h>
 
 
-using namespace std;
-
-
 void PCB_PARSER::init()
 {
     m_layerIndices.clear();
@@ -263,7 +260,7 @@ S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR )
 
     T token;
 
-    auto_ptr< S3D_MASTER > n3D( new S3D_MASTER( NULL ) );
+    std::auto_ptr< S3D_MASTER > n3D( new S3D_MASTER( NULL ) );
 
     NeedSYMBOLorNUMBER();
     n3D->m_Shape3DName = FromUTF8();
@@ -1084,7 +1081,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
+    std::auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
 
     // Read netclass name (can be a name or just a number like track width)
     NeedSYMBOLorNUMBER();
@@ -1164,7 +1161,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
     wxPoint pt;
-    auto_ptr< DRAWSEGMENT > segment( new DRAWSEGMENT( NULL ) );
+    std::auto_ptr< DRAWSEGMENT > segment( new DRAWSEGMENT( NULL ) );
 
     switch( CurTok() )
     {
@@ -1325,7 +1322,7 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    auto_ptr< TEXTE_PCB > text( new TEXTE_PCB( m_board ) );
+    std::auto_ptr<TEXTE_PCB> text( new TEXTE_PCB( m_board ) );
     NeedSYMBOLorNUMBER();
 
     text->SetText( FromUTF8() );
@@ -1393,7 +1390,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    auto_ptr< DIMENSION > dimension( new DIMENSION( NULL ) );
+    std::auto_ptr<DIMENSION> dimension( new DIMENSION( NULL ) );
 
     dimension->SetValue( parseBoardUnits( "dimension value" ) );
     NeedLEFT();
@@ -1545,7 +1542,7 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
     T        token;
     FPID     fpid;
 
-    auto_ptr< MODULE > module( new MODULE( m_board ) );
+    std::auto_ptr<MODULE> module( new MODULE( m_board ) );
 
     module->SetInitialComments( aInitialComments );
 
@@ -1773,7 +1770,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
 
     T token = NextTok();
 
-    auto_ptr< TEXTE_MODULE > text( new TEXTE_MODULE( NULL ) );
+    std::auto_ptr<TEXTE_MODULE> text( new TEXTE_MODULE( NULL ) );
 
     switch( token )
     {
@@ -1858,7 +1855,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    auto_ptr< EDGE_MODULE > segment( new EDGE_MODULE( NULL ) );
+    std::auto_ptr< EDGE_MODULE > segment( new EDGE_MODULE( NULL ) );
 
     switch( CurTok() )
     {
@@ -2023,7 +2020,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
 
     wxSize sz;
     wxPoint pt;
-    auto_ptr< D_PAD > pad( new D_PAD( NULL ) );
+    std::auto_ptr< D_PAD > pad( new D_PAD( NULL ) );
 
     NeedSYMBOLorNUMBER();
     pad->SetPadName( FromUTF8() );
@@ -2260,7 +2257,7 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    auto_ptr< TRACK > track( new TRACK( m_board ) );
+    std::auto_ptr< TRACK > track( new TRACK( m_board ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2322,7 +2319,7 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    auto_ptr< SEGVIA > via( new SEGVIA( m_board ) );
+    std::auto_ptr< SEGVIA > via( new SEGVIA( m_board ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2407,7 +2404,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
     // bigger scope since each filled_polygon is concatenated in here
     CPOLYGONS_LIST pts;
 
-    auto_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
+    std::auto_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
 
     zone->SetPriority( 0 );
 
@@ -2721,8 +2718,7 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    auto_ptr< PCB_TARGET > target( new PCB_TARGET( NULL ) );
-
+    std::auto_ptr< PCB_TARGET > target( new PCB_TARGET( NULL ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
