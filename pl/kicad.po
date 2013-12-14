@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-08 16:07+0100\n"
-"PO-Revision-Date: 2013-12-08 16:14+0100\n"
+"POT-Creation-Date: 2013-12-14 01:17+0100\n"
+"PO-Revision-Date: 2013-12-14 01:23+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: D:/Programy/BAZAAR/KICADSRC\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Generator: Poedit 1.6.1\n"
+"X-Generator: Poedit 1.6.2\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -157,8 +157,8 @@ msgstr ""
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1024 pcbnew/moduleframe.cpp:649
-#: pcbnew/moduleframe.cpp:679 pcbnew/pcbframe.cpp:1019 cvpcb/cvframe.cpp:808
+#: eeschema/schframe.cpp:1024 pcbnew/moduleframe.cpp:632
+#: pcbnew/pcbframe.cpp:1014 cvpcb/cvframe.cpp:778
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -332,7 +332,7 @@ msgstr "Ustawienia przeglądarki PDF"
 
 #: kicad/menubar.cpp:278 eeschema/menubar.cpp:523
 #: eeschema/menubar_libedit.cpp:273 pcbnew/menubar_modedit.cpp:272
-#: pcbnew/menubar_pcbframe.cpp:632 cvpcb/menubar.cpp:155
+#: pcbnew/menubar_pcbframe.cpp:626 cvpcb/menubar.cpp:147
 #: gerbview/menubar.cpp:222 pagelayout_editor/menubar.cpp:149
 msgid "&Contents"
 msgstr "&Zawartość"
@@ -343,13 +343,13 @@ msgstr "Otwórz podręcznik programu KiCad"
 
 #: kicad/menubar.cpp:284 eeschema/menubar.cpp:529
 #: eeschema/menubar_libedit.cpp:279 pcbnew/menubar_modedit.cpp:277
-#: pcbnew/menubar_pcbframe.cpp:637
+#: pcbnew/menubar_pcbframe.cpp:631
 msgid "&Getting Started in KiCad"
 msgstr "Pierwsze kroki w pro&gramie KiCad"
 
 #: kicad/menubar.cpp:285 eeschema/menubar.cpp:530
 #: eeschema/menubar_libedit.cpp:280 pcbnew/menubar_modedit.cpp:278
-#: pcbnew/menubar_pcbframe.cpp:638
+#: pcbnew/menubar_pcbframe.cpp:632
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
 msgstr ""
 "Otwiera przewodnik dla początkujących zatytułowany \"Pierwsze kroki w "
@@ -365,7 +365,7 @@ msgstr "O programie Menedżer projektu KiCad"
 
 #: kicad/menubar.cpp:299 eeschema/menubar.cpp:542
 #: eeschema/menubar_libedit.cpp:293 pcbnew/menubar_modedit.cpp:289
-#: pcbnew/menubar_pcbframe.cpp:651 cvpcb/menubar.cpp:166
+#: pcbnew/menubar_pcbframe.cpp:645 cvpcb/menubar.cpp:158
 #: gerbview/menubar.cpp:234 3d-viewer/3d_toolbar.cpp:145
 #: pagelayout_editor/menubar.cpp:161
 msgid "&File"
@@ -375,14 +375,14 @@ msgstr "&Plik"
 msgid "&Browse"
 msgstr "P&odgląd"
 
-#: kicad/menubar.cpp:301 cvpcb/menubar.cpp:167 gerbview/menubar.cpp:235
+#: kicad/menubar.cpp:301 cvpcb/menubar.cpp:159 gerbview/menubar.cpp:235
 #: 3d-viewer/3d_toolbar.cpp:159 pagelayout_editor/menubar.cpp:162
 msgid "&Preferences"
 msgstr "&Ustawienia"
 
 #: kicad/menubar.cpp:302 eeschema/menubar.cpp:548
 #: eeschema/menubar_libedit.cpp:298 pcbnew/menubar_modedit.cpp:295
-#: pcbnew/menubar_pcbframe.cpp:659 cvpcb/menubar.cpp:168
+#: pcbnew/menubar_pcbframe.cpp:653 cvpcb/menubar.cpp:160
 #: gerbview/menubar.cpp:237 pagelayout_editor/menubar.cpp:163
 msgid "&Help"
 msgstr "Pomo&c"
@@ -530,7 +530,7 @@ msgstr "Zmienia nazwę pliku"
 msgid "<html><h1>Template Selector</h1></html>"
 msgstr "<html><h1>Proszę wybrać szablon</h1></html>"
 
-#: eeschema/annotate.cpp:87
+#: eeschema/annotate.cpp:86
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "Zostało znalezionych i zamienionych %d powielonych odcisków czasowych."
@@ -733,7 +733,7 @@ msgid "Component"
 msgstr "Symbol"
 
 #: eeschema/database.cpp:118 eeschema/sch_component.cpp:1475
-#: pcbnew/librairi.cpp:76 pcbnew/librairi.cpp:903 pcbnew/loadcmp.cpp:617
+#: pcbnew/librairi.cpp:76 pcbnew/loadcmp.cpp:567
 msgid "Library"
 msgstr "Biblioteka"
 
@@ -819,7 +819,7 @@ msgstr "Nie znaleziono plików"
 msgid "The following libraries could not be found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
-#: eeschema/eeschema.cpp:108 eeschema/files-io.cpp:301 pcbnew/files.cpp:282
+#: eeschema/eeschema.cpp:108 eeschema/files-io.cpp:301 pcbnew/files.cpp:280
 #: pcbnew/pcbnew.cpp:192
 msgid "This file is already open."
 msgstr "Ten plik jest już otwarty."
@@ -833,8 +833,8 @@ msgstr "Eeschema jest już uruchomiony. Kontynuować?"
 msgid "Read Project File"
 msgstr "Odczytaj plik projektu"
 
-#: eeschema/eeschema_config.cpp:465 pcbnew/pcbnew_config.cpp:308
-#: cvpcb/cfg.cpp:126
+#: eeschema/eeschema_config.cpp:465 pcbnew/pcbnew_config.cpp:306
+#: cvpcb/cfg.cpp:124
 msgid "Save Project File"
 msgstr "Zapisz plik projektu"
 
@@ -1000,7 +1000,7 @@ msgstr "Nie mogę zapisać kopii pliku <%s>"
 msgid "Failed to create file <%s>"
 msgstr "Błąd przy tworzeniu pliku <%s>"
 
-#: eeschema/files-io.cpp:143 cvpcb/readwrite_dlgs.cpp:315
+#: eeschema/files-io.cpp:143 cvpcb/readwrite_dlgs.cpp:309
 #, c-format
 msgid "File %s saved"
 msgstr "Plik %s został zapisany"
@@ -1019,11 +1019,11 @@ msgid ""
 msgstr ""
 "Bieżący schemat został zmodyfikowany. Czy chcesz zapisać dokonane zmiany?"
 
-#: eeschema/files-io.cpp:264 pcbnew/files.cpp:195
+#: eeschema/files-io.cpp:264 pcbnew/files.cpp:193
 msgid "Save and Load"
 msgstr "Zapisz i Załaduj"
 
-#: eeschema/files-io.cpp:264 pcbnew/files.cpp:195
+#: eeschema/files-io.cpp:264 pcbnew/files.cpp:193
 msgid "Load Without Saving"
 msgstr "Załaduj bez zapisu"
 
@@ -1149,7 +1149,7 @@ msgid "Component Library Editor: "
 msgstr "Edytor bibliotek symboli:"
 
 #: eeschema/libedit.cpp:66 eeschema/viewlibs.cpp:113
-#: pcbnew/modview_frame.cpp:792
+#: pcbnew/modview_frame.cpp:730
 msgid "no library selected"
 msgstr "Nie wybrano biblioteki"
 
@@ -1325,7 +1325,7 @@ msgstr "Typ"
 #: eeschema/viewlibs.cpp:306
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
-#: pcbnew/librairi.cpp:944
+#: pcbnew/librairi.cpp:733
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:37
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:204
 #: common/dialog_about/AboutDialog_main.cpp:127
@@ -1446,7 +1446,7 @@ msgid "Set pin options"
 msgstr "Ustaw opcje pinu"
 
 #: eeschema/libeditframe.cpp:1052 eeschema/schedit.cpp:537
-#: pcbnew/edit.cpp:1429 pcbnew/modedit.cpp:879
+#: pcbnew/edit.cpp:1429 pcbnew/modedit.cpp:860
 msgid "Add text"
 msgstr "Dodaj tekst"
 
@@ -1454,15 +1454,15 @@ msgstr "Dodaj tekst"
 msgid "Add rectangle"
 msgstr "Dodaj prostokąt"
 
-#: eeschema/libeditframe.cpp:1060 pcbnew/modedit.cpp:875
+#: eeschema/libeditframe.cpp:1060 pcbnew/modedit.cpp:856
 msgid "Add circle"
 msgstr "Dodaj okrąg"
 
-#: eeschema/libeditframe.cpp:1064 pcbnew/modedit.cpp:871
+#: eeschema/libeditframe.cpp:1064 pcbnew/modedit.cpp:852
 msgid "Add arc"
 msgstr "Dodaj łuk"
 
-#: eeschema/libeditframe.cpp:1068 pcbnew/modedit.cpp:867
+#: eeschema/libeditframe.cpp:1068 pcbnew/modedit.cpp:848
 msgid "Add line"
 msgstr "Dodaj linię"
 
@@ -1479,7 +1479,7 @@ msgid "Export"
 msgstr "Eksportuj"
 
 #: eeschema/libeditframe.cpp:1094 eeschema/schedit.cpp:573
-#: pcbnew/edit.cpp:1441 pcbnew/modedit.cpp:904
+#: pcbnew/edit.cpp:1441 pcbnew/modedit.cpp:885
 msgid "Delete item"
 msgstr "Usuń element"
 
@@ -2516,21 +2516,21 @@ msgstr "&Opcje"
 msgid "Eeschema preferences"
 msgstr "Ustawienia Eeschema"
 
-#: eeschema/menubar.cpp:441 pcbnew/menubar_pcbframe.cpp:564
+#: eeschema/menubar.cpp:441 pcbnew/menubar_pcbframe.cpp:558
 msgid "&Save Preferences"
 msgstr "&Zapisz ustawienia"
 
 #: eeschema/menubar.cpp:442 eeschema/menubar_libedit.cpp:254
-#: pcbnew/menubar_pcbframe.cpp:565
+#: pcbnew/menubar_pcbframe.cpp:559
 msgid "Save application preferences"
 msgstr "Zapisz ustawienia aplikacji"
 
-#: eeschema/menubar.cpp:448 pcbnew/menubar_pcbframe.cpp:570
+#: eeschema/menubar.cpp:448 pcbnew/menubar_pcbframe.cpp:564
 msgid "&Read Preferences"
 msgstr "W&czytaj ustawienia"
 
 #: eeschema/menubar.cpp:449 eeschema/menubar_libedit.cpp:261
-#: pcbnew/menubar_pcbframe.cpp:571
+#: pcbnew/menubar_pcbframe.cpp:565
 msgid "Read application preferences"
 msgstr "Wczytaj ustawienia aplikacji"
 
@@ -2595,26 +2595,26 @@ msgid "About Eeschema schematic designer"
 msgstr "Informacje o  programie edytora schematów Eeschema"
 
 #: eeschema/menubar.cpp:543 eeschema/menubar_libedit.cpp:294
-#: pcbnew/menubar_modedit.cpp:290 pcbnew/menubar_pcbframe.cpp:652
+#: pcbnew/menubar_modedit.cpp:290 pcbnew/menubar_pcbframe.cpp:646
 msgid "&Edit"
 msgstr "&Edytuj"
 
 #: eeschema/menubar.cpp:544 eeschema/menubar_libedit.cpp:295
-#: pcbnew/menubar_modedit.cpp:293 pcbnew/menubar_pcbframe.cpp:653
+#: pcbnew/menubar_modedit.cpp:293 pcbnew/menubar_pcbframe.cpp:647
 msgid "&View"
 msgstr "&Widok"
 
 #: eeschema/menubar.cpp:545 eeschema/menubar_libedit.cpp:296
-#: pcbnew/menubar_modedit.cpp:294 pcbnew/menubar_pcbframe.cpp:654
+#: pcbnew/menubar_modedit.cpp:294 pcbnew/menubar_pcbframe.cpp:648
 msgid "&Place"
 msgstr "&Dodaj"
 
 #: eeschema/menubar.cpp:546 eeschema/menubar_libedit.cpp:297
-#: pcbnew/menubar_pcbframe.cpp:655
+#: pcbnew/menubar_pcbframe.cpp:649
 msgid "P&references"
 msgstr "Ustawienia"
 
-#: eeschema/menubar.cpp:547 pcbnew/menubar_pcbframe.cpp:657
+#: eeschema/menubar.cpp:547 pcbnew/menubar_pcbframe.cpp:651
 msgid "&Tools"
 msgstr "Narzędzia"
 
@@ -3262,7 +3262,7 @@ msgstr "Dodaj symbol"
 msgid "Add power"
 msgstr "Dodaj port zasilania"
 
-#: eeschema/schframe.cpp:452 pcbnew/pcbframe.cpp:563
+#: eeschema/schframe.cpp:452 pcbnew/pcbframe.cpp:558
 #: pagelayout_editor/pl_editor_frame.cpp:193
 #, c-format
 msgid ""
@@ -3298,7 +3298,7 @@ msgstr "Schemat"
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1027 cvpcb/cvframe.cpp:813
+#: eeschema/schframe.cpp:1027 cvpcb/cvframe.cpp:783
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -3321,6 +3321,7 @@ msgid "Item %s found in sheet %s"
 msgstr "Element %s został znaleziony w arkuszu %s"
 
 #: eeschema/sch_component.cpp:223
+#: eeschema/dialogs/dialog_lib_new_component_base.cpp:48
 msgid "U"
 msgstr "U"
 
@@ -3832,7 +3833,7 @@ msgid "Unit %c"
 msgstr "Część składowa %c"
 
 #: eeschema/viewlibs.cpp:106 eeschema/viewlib_frame.cpp:105
-#: pcbnew/modview_frame.cpp:786
+#: pcbnew/modview_frame.cpp:724
 msgid "Library Browser"
 msgstr "Przeglądarka bibliotek"
 
@@ -4004,7 +4005,7 @@ msgstr "Dostępne wtyczki:"
 #: eeschema/dialogs/dialog_bom_base.cpp:45
 #: eeschema/dialogs/dialog_netlist_base.cpp:113
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:28
-#: pcbnew/librairi.cpp:712 pcbnew/modules.cpp:68
+#: pcbnew/librairi.cpp:587 pcbnew/modules.cpp:68
 #: common/dialogs/dialog_get_component_base.cpp:22
 msgid "Name:"
 msgstr "Nazwa:"
@@ -5589,11 +5590,11 @@ msgstr "Przesunięcie pozycji tekstu w opisie pinu:"
 msgid "Show pin number text"
 msgstr "Pokaż numer pinu"
 
-#: eeschema/dialogs/dialog_lib_new_component_base.cpp:112
+#: eeschema/dialogs/dialog_lib_new_component_base.cpp:113
 msgid "Show pin name text"
 msgstr "Pokaż nazwę pinu"
 
-#: eeschema/dialogs/dialog_lib_new_component_base.cpp:115
+#: eeschema/dialogs/dialog_lib_new_component_base.cpp:117
 msgid "Pin name inside"
 msgstr "Nazwa pinu wewnątrz"
 
@@ -5678,7 +5679,7 @@ msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
-#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:476
+#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:469
 #: eeschema/dialogs/dialog_netlist_base.h:76
 #: pcbnew/dialogs/dialog_netlist_fbp.h:86
 msgid "Netlist"
@@ -6082,7 +6083,7 @@ msgstr "Operacje na blokach"
 msgid "Comma separated value files (*.csv)|*.csv"
 msgstr "Plik wartości oddzielonych przecinkiem (*.csv)|*.csv"
 
-#: pcbnew/build_BOM_from_board.cpp:62 pcbnew/xchgmod.cpp:519
+#: pcbnew/build_BOM_from_board.cpp:62 pcbnew/xchgmod.cpp:515
 msgid "No Modules!"
 msgstr "Brak footprintów!"
 
@@ -6418,7 +6419,7 @@ msgstr "Elementy graficzne"
 
 #: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:527
 #: pcbnew/class_pad.cpp:575 pcbnew/class_text_mod.cpp:347
-#: pcbnew/loadcmp.cpp:616 pcbnew/loadcmp.cpp:682 cvpcb/cvframe.cpp:951
+#: pcbnew/loadcmp.cpp:566 pcbnew/loadcmp.cpp:630 cvpcb/cvframe.cpp:921
 msgid "Module"
 msgstr "Footprint"
 
@@ -7332,15 +7333,15 @@ msgid "OK to load recovery or backup file <%s>"
 msgstr ""
 "Nacisnij OK by załadować dane odtworzeniowe lub plik kopii zapasowej <%s>"
 
-#: pcbnew/files.cpp:192
+#: pcbnew/files.cpp:190
 msgid "The current board has been modified.  Do you wish to save the changes?"
 msgstr "Bieżąca płytka została zmieniona. Czy chcesz zapisać dokonane zmiany?"
 
-#: pcbnew/files.cpp:251 pcbnew/files.cpp:358
+#: pcbnew/files.cpp:249 pcbnew/files.cpp:356
 msgid "Open Board File"
 msgstr "Otwórz plik PCB"
 
-#: pcbnew/files.cpp:347
+#: pcbnew/files.cpp:345
 msgid ""
 "This file was created by an older version of Pcbnew.\n"
 "It will be stored in the new file format when you save this file again."
@@ -7348,7 +7349,7 @@ msgstr ""
 "Ten plik został stworzony w starszej wersji Pcbnew.\n"
 " Plik zostanie zachowany w nowym formacie, gdy ponownie zostanie zapisany."
 
-#: pcbnew/files.cpp:356
+#: pcbnew/files.cpp:354
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -7357,15 +7358,15 @@ msgstr ""
 "Błąd podczas odczytywania PCB.\n"
 "%s"
 
-#: pcbnew/files.cpp:499 cvpcb/readwrite_dlgs.cpp:265
+#: pcbnew/files.cpp:497 cvpcb/readwrite_dlgs.cpp:262
 msgid "Unnamed file"
 msgstr "Plik bez nazwy"
 
-#: pcbnew/files.cpp:506
+#: pcbnew/files.cpp:504
 msgid "Save Board File As"
 msgstr "Zapisz plik PCB jako"
 
-#: pcbnew/files.cpp:533
+#: pcbnew/files.cpp:531
 #, c-format
 msgid ""
 "The file <%s> already exists.\n"
@@ -7376,7 +7377,7 @@ msgstr ""
 "\n"
 "Czy chcesz go zastąpić?"
 
-#: pcbnew/files.cpp:547 cvpcb/readwrite_dlgs.cpp:284
+#: pcbnew/files.cpp:544 cvpcb/readwrite_dlgs.cpp:280
 msgid ""
 "A footprint library table already exists in this path.\n"
 "\n"
@@ -7386,7 +7387,7 @@ msgstr ""
 "\n"
 "Czy chcesz ją zastąpić?"
 
-#: pcbnew/files.cpp:557 cvpcb/readwrite_dlgs.cpp:294
+#: pcbnew/files.cpp:554 cvpcb/readwrite_dlgs.cpp:290
 #, c-format
 msgid ""
 "An error occurred attempting to save the footprint library table <%s>\n"
@@ -7397,11 +7398,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:600
+#: pcbnew/files.cpp:595
 msgid "Warning: unable to create backup file "
 msgstr "Ostrzeżenie: Nie można utworzyć pliku kopii zapasowej "
 
-#: pcbnew/files.cpp:633
+#: pcbnew/files.cpp:628
 #, c-format
 msgid ""
 "Error saving board.\n"
@@ -7410,19 +7411,19 @@ msgstr ""
 "Błąd podczas zapisywania płytki.\n"
 "%s"
 
-#: pcbnew/files.cpp:635
+#: pcbnew/files.cpp:630
 msgid "Save Board File"
 msgstr "Zapisz plik PCB"
 
-#: pcbnew/files.cpp:669
+#: pcbnew/files.cpp:664
 msgid "Backup file: "
 msgstr "Plik kopii zapasowej: "
 
-#: pcbnew/files.cpp:673
+#: pcbnew/files.cpp:668
 msgid "Wrote board file: "
 msgstr "Zapisano plik płytki: "
 
-#: pcbnew/files.cpp:675
+#: pcbnew/files.cpp:670
 msgid "Failed to create "
 msgstr "Błąd przy tworzeniu "
 
@@ -7450,7 +7451,7 @@ msgstr "Parametr"
 msgid "Units"
 msgstr "Jednostki"
 
-#: pcbnew/footprint_wizard_frame.cpp:706 pcbnew/modview_frame.cpp:730
+#: pcbnew/footprint_wizard_frame.cpp:706 pcbnew/modview_frame.cpp:668
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "Podgląd Footprintów: Przeglądarka 3D [%s]"
@@ -7544,57 +7545,58 @@ msgstr ""
 msgid "Module Report"
 msgstr "Raport Footprintów"
 
-#: pcbnew/gpcb_plugin.cpp:88
+#: pcbnew/gpcb_plugin.cpp:85
 #, c-format
 msgid "Cannot convert \"%s\" to an integer"
 msgstr "Nie można dokonać konwersji \"%s\" na wartość Integer"
 
-#: pcbnew/gpcb_plugin.cpp:235
+#: pcbnew/gpcb_plugin.cpp:268 pcbnew/gpcb_plugin.cpp:890
+#: pcbnew/kicad_plugin.cpp:1700
 #, c-format
-msgid "footprint library path <%s> does not exist"
-msgstr "ścieżka do biblioteki <%s> nie istnieje"
+msgid "footprint library path '%s' does not exist"
+msgstr "ścieżka do biblioteki '%s' nie istnieje"
 
-#: pcbnew/gpcb_plugin.cpp:281 pcbnew/legacy_plugin.cpp:4339
+#: pcbnew/gpcb_plugin.cpp:309 pcbnew/legacy_plugin.cpp:4353
 #, c-format
 msgid "library <%s> has no footprint '%s' to delete"
 msgstr "biblioteka <%s> nie posiada footprintu '%s' by go usunąć"
 
-#: pcbnew/gpcb_plugin.cpp:356 pcbnew/pcb_parser.cpp:361
-#: pcbnew/pcb_parser.cpp:450
+#: pcbnew/gpcb_plugin.cpp:411 pcbnew/pcb_parser.cpp:358
+#: pcbnew/pcb_parser.cpp:447
 #, c-format
 msgid "unknown token \"%s\""
 msgstr "nieznany token \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:363
+#: pcbnew/gpcb_plugin.cpp:418
 #, c-format
 msgid "Element token contains %d parameters."
 msgstr "Token \"Element\" zawiera %d parametrów."
 
-#: pcbnew/gpcb_plugin.cpp:881 pcbnew/legacy_plugin.cpp:4284
-#: pcbnew/legacy_plugin.cpp:4329
+#: pcbnew/gpcb_plugin.cpp:958 pcbnew/kicad_plugin.cpp:1773
+#: pcbnew/kicad_plugin.cpp:1839 pcbnew/librairi.cpp:472
 #, c-format
-msgid "Library <%s> is read only"
-msgstr "Biblioteka <%s> jest oznaczona jako 'Tylko do odczytu'"
+msgid "Library '%s' is read only"
+msgstr "Biblioteka '%s' jest oznaczona jako tylko do odczytu"
 
-#: pcbnew/gpcb_plugin.cpp:900
+#: pcbnew/gpcb_plugin.cpp:977 pcbnew/kicad_plugin.cpp:1876
 #, c-format
-msgid "user does not have permission to delete directory <%s>"
-msgstr "użytkownik nie ma wystarczających uprawnień by usunąć folder <%s>"
+msgid "user does not have permission to delete directory '%s'"
+msgstr "użytkownik nie ma wystarczających uprawnień by usunąć folder '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:908
+#: pcbnew/gpcb_plugin.cpp:985 pcbnew/kicad_plugin.cpp:1884
 #, c-format
-msgid "library directory <%s> has unexpected sub-directories"
-msgstr "folder z biblioteką <%s> zawiera niepożądane podfoldery"
+msgid "library directory '%s' has unexpected sub-directories"
+msgstr "folder z biblioteką '%s' zawiera niepożądane podfoldery"
 
-#: pcbnew/gpcb_plugin.cpp:927
+#: pcbnew/gpcb_plugin.cpp:1004 pcbnew/kicad_plugin.cpp:1903
 #, c-format
-msgid "unexpected file <%s> was found in library path '%s'"
-msgstr "został znaleziony niepożądany plik <%s> w ścieżce bibliotek '%s'"
+msgid "unexpected file '%s' was found in library path '%s'"
+msgstr "został znaleziony niepożądany plik '%s' w ścieżce bibliotek '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:945
+#: pcbnew/gpcb_plugin.cpp:1022 pcbnew/kicad_plugin.cpp:1921
 #, c-format
-msgid "footprint library <%s> cannot be deleted"
-msgstr "biblioteka footprintów <%s> nie może zostać usunięta"
+msgid "footprint library '%s' cannot be deleted"
+msgstr "biblioteka footprintów '%s' nie może zostać usunięta"
 
 #: pcbnew/highlight.cpp:56
 msgid "Filter Net Names"
@@ -7663,7 +7665,7 @@ msgstr "Nieznana wartość PCB_FILE_T: %d"
 msgid "Cannot find component with reference \"%s\" in netlist."
 msgstr "Nie mogę odnaleźć komponentu z oznaczeniem \"%s\" na liście sieci."
 
-#: pcbnew/kicad_netlist_reader.cpp:371 pcbnew/pcb_parser.cpp:1558
+#: pcbnew/kicad_netlist_reader.cpp:371 pcbnew/pcb_parser.cpp:1555
 #, c-format
 msgid ""
 "invalid PFID in\n"
@@ -7676,92 +7678,66 @@ msgstr ""
 "linia: %d:\n"
 "przesunięcie: %d"
 
-#: pcbnew/kicad_plugin.cpp:204
+#: pcbnew/kicad_plugin.cpp:201
 #, c-format
 msgid "Cannot create footprint library path '%s'"
 msgstr "Nie można utworzyć ścieżki '%s' do biblioteki footprintów"
 
-#: pcbnew/kicad_plugin.cpp:210
+#: pcbnew/kicad_plugin.cpp:207
 #, c-format
 msgid "Footprint library path '%s' is read only"
 msgstr "Biblioteka '%s' jest oznaczona jako tylko do odczytu"
 
-#: pcbnew/kicad_plugin.cpp:240
+#: pcbnew/kicad_plugin.cpp:237
 #, c-format
 msgid "Cannot rename temporary file '%s' to footprint library file '%s'"
 msgstr ""
 "Nie mogę zmienić nazwy pliku tymczasowego '%s' na nazwę pliku biblioteki '%s'"
 
-#: pcbnew/kicad_plugin.cpp:260
+#: pcbnew/kicad_plugin.cpp:257
 #, c-format
 msgid "Footprint library path '%s' does not exist"
 msgstr "Ścieżka do biblioteki '%s' nie istnieje"
 
-#: pcbnew/kicad_plugin.cpp:308
+#: pcbnew/kicad_plugin.cpp:305
 #, c-format
 msgid "library '%s' has no footprint '%s' to delete"
 msgstr "biblioteka '%s' nie posiada footprintu '%s' by go usunąć"
 
-#: pcbnew/kicad_plugin.cpp:1175 pcbnew/legacy_plugin.cpp:95
+#: pcbnew/kicad_plugin.cpp:1172 pcbnew/legacy_plugin.cpp:95
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "nieznany typ pola lutowniczego: %d"
 
-#: pcbnew/kicad_plugin.cpp:1188 pcbnew/legacy_plugin.cpp:96
+#: pcbnew/kicad_plugin.cpp:1185 pcbnew/legacy_plugin.cpp:96
 #, c-format
 msgid "unknown pad attribute: %d"
 msgstr "nieznany atrybut pola lutowniczego: %d"
 
-#: pcbnew/kicad_plugin.cpp:1369
+#: pcbnew/kicad_plugin.cpp:1366
 #, c-format
 msgid "unknown via type %d"
 msgstr "nieznany typ przelotki %d"
 
-#: pcbnew/kicad_plugin.cpp:1500
+#: pcbnew/kicad_plugin.cpp:1497
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "nieznany typ zaokrągleń krawędzi strefy %d"
 
-#: pcbnew/kicad_plugin.cpp:1754 pcbnew/kicad_plugin.cpp:1820
-#: pcbnew/librairi.cpp:474
-#, c-format
-msgid "Library '%s' is read only"
-msgstr "Biblioteka '%s' jest oznaczona jako tylko do odczytu"
-
-#: pcbnew/kicad_plugin.cpp:1771
+#: pcbnew/kicad_plugin.cpp:1790
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Nazwa pliku '%s' jest niepoprawna."
 
-#: pcbnew/kicad_plugin.cpp:1777
+#: pcbnew/kicad_plugin.cpp:1796
 #, c-format
 msgid "user does not have write permission to delete file '%s' "
 msgstr "użytkownik nie ma wystarczających uprawnień do usunięcia pliku '%s'"
 
-#: pcbnew/kicad_plugin.cpp:1832
+#: pcbnew/kicad_plugin.cpp:1851
 #, c-format
 msgid "cannot overwrite library path '%s'"
 msgstr "nie mogę nadpisać biblioteki '%s'"
-
-#: pcbnew/kicad_plugin.cpp:1857
-#, c-format
-msgid "user does not have permission to delete directory '%s'"
-msgstr "użytkownik nie ma wystarczających uprawnień by usunąć folder '%s'"
-
-#: pcbnew/kicad_plugin.cpp:1865
-#, c-format
-msgid "library directory '%s' has unexpected sub-directories"
-msgstr "folder z biblioteką '%s' zawiera niepożądane podfoldery"
-
-#: pcbnew/kicad_plugin.cpp:1884
-#, c-format
-msgid "unexpected file '%s' was found in library path '%s'"
-msgstr "został znaleziony niepożądany plik '%s' w ścieżce bibliotek '%s'"
-
-#: pcbnew/kicad_plugin.cpp:1902
-#, c-format
-msgid "footprint library '%s' cannot be deleted"
-msgstr "biblioteka footprintów '%s' nie może zostać usunięta"
 
 #: pcbnew/layer_widget.cpp:420
 msgid ""
@@ -7826,23 +7802,23 @@ msgstr ""
 msgid "unknown graphic type: %d"
 msgstr "nieznany typ grafiki: %d"
 
-#: pcbnew/legacy_plugin.cpp:539
+#: pcbnew/legacy_plugin.cpp:541
 #, c-format
 msgid "Unknown sheet type '%s' on line:%d"
 msgstr "Nieznany typ arkusza '%s' w lini:%d"
 
-#: pcbnew/legacy_plugin.cpp:1194
+#: pcbnew/legacy_plugin.cpp:1199
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line:%d of module:'%s'"
 msgstr ""
 "Nieznany kształt pola lutowniczego '%c=0x%02x' n lini: %d footprintu: '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2171
+#: pcbnew/legacy_plugin.cpp:2181
 #, c-format
 msgid "duplicate NETCLASS name '%s'"
 msgstr "zduplikowana nazwa Klasy Sieci '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2766 pcbnew/legacy_plugin.cpp:2803
+#: pcbnew/legacy_plugin.cpp:2779 pcbnew/legacy_plugin.cpp:2816
 #, c-format
 msgid ""
 "invalid float number in file: <%s>\n"
@@ -7851,7 +7827,7 @@ msgstr ""
 "niepoprawna liczba typu float w pliku: <%s>\n"
 "linia: %d, przesunięcie: %d"
 
-#: pcbnew/legacy_plugin.cpp:2775 pcbnew/legacy_plugin.cpp:2811
+#: pcbnew/legacy_plugin.cpp:2788 pcbnew/legacy_plugin.cpp:2824
 #, c-format
 msgid ""
 "missing float number in file: <%s>\n"
@@ -7860,44 +7836,49 @@ msgstr ""
 "brak liczby typu float w pliku: <%s>\n"
 "linia: %d, przesunięcie: %d"
 
-#: pcbnew/legacy_plugin.cpp:2854
+#: pcbnew/legacy_plugin.cpp:2867
 #, c-format
 msgid "Unable to open file <%s>"
 msgstr "Nie mogę otworzyć pliku <%s>"
 
-#: pcbnew/legacy_plugin.cpp:2879
+#: pcbnew/legacy_plugin.cpp:2892
 #, c-format
 msgid "error writing to file <%s>"
 msgstr "błąd zapisu do pliku <%s>"
 
-#: pcbnew/legacy_plugin.cpp:3989
+#: pcbnew/legacy_plugin.cpp:4003
 #, c-format
 msgid "File <%s> is empty or is not a legacy library"
 msgstr "Plik <%s> jest pusty lub nie jest plikiem biblioteki starszego typu"
 
-#: pcbnew/legacy_plugin.cpp:4126
+#: pcbnew/legacy_plugin.cpp:4140
 #, c-format
 msgid "Legacy library file <%s> is read only"
 msgstr ""
 "Plik biblioteki starszego typu <%s> jest oznaczony jako 'Tylko do odczytu'."
 
-#: pcbnew/legacy_plugin.cpp:4145
+#: pcbnew/legacy_plugin.cpp:4159
 #, c-format
 msgid "Unable to open or create legacy library file <%s>"
 msgstr "Nie mogę otworzyć ani utworzyć biblioteki starszego typu <%s>"
 
-#: pcbnew/legacy_plugin.cpp:4171
+#: pcbnew/legacy_plugin.cpp:4185
 #, c-format
 msgid "Unable to rename tempfile <%s> to library file <%s>"
 msgstr ""
 "Nie mogę zmienić nazwy pliku tymczasowego <%s> na nazwę pliku biblioteki <%s>"
 
-#: pcbnew/legacy_plugin.cpp:4352
+#: pcbnew/legacy_plugin.cpp:4298 pcbnew/legacy_plugin.cpp:4343
+#, c-format
+msgid "Library <%s> is read only"
+msgstr "Biblioteka <%s> jest oznaczona jako 'Tylko do odczytu'"
+
+#: pcbnew/legacy_plugin.cpp:4366
 #, c-format
 msgid "library <%s> already exists, will not create a new"
 msgstr "biblioteka <%s> już istnieje, nie można stworzyć nowej"
 
-#: pcbnew/legacy_plugin.cpp:4379
+#: pcbnew/legacy_plugin.cpp:4393
 #, c-format
 msgid "library <%s> cannot be deleted"
 msgstr "biblioteka <%s> nie może zostać usunięta"
@@ -7917,8 +7898,8 @@ msgid "OK to delete module %s in library '%s'"
 msgstr "Czy usunąć footprint %s z biblioteki '%s'?"
 
 #: pcbnew/librairi.cpp:60
-msgid "Import Footprint Module"
-msgstr "Importuj Footprint"
+msgid "Import Footprint"
+msgstr "Importuj footprint"
 
 #: pcbnew/librairi.cpp:61
 #, c-format
@@ -7926,8 +7907,8 @@ msgid "File '%s' not found"
 msgstr "Nie znaleziono pliku '%s'"
 
 #: pcbnew/librairi.cpp:62
-msgid "Not a module file"
-msgstr "To nie jest plik footprintów"
+msgid "Not a footprint file"
+msgstr "To nie jest plik z footprintem"
 
 #: pcbnew/librairi.cpp:63
 #, c-format
@@ -7953,43 +7934,43 @@ msgid "Library '%s' is read only, not writable"
 msgstr "Biblioteka '%s' jest oznaczona jako 'Tylko do odczytu'"
 
 #: pcbnew/librairi.cpp:68
-msgid "Export Module"
-msgstr "Eksportuj Footprint"
+msgid "Export Footprint"
+msgstr "Eksportuj footprint"
 
 #: pcbnew/librairi.cpp:69
-msgid "Save Module"
+msgid "Save Footprint"
 msgstr "Zapisz footprint"
 
 #: pcbnew/librairi.cpp:70
-msgid "Module Reference:"
-msgstr "Oznaczenie footprintu:"
+msgid "Enter footprint name:"
+msgstr "Wpisz nazwę footprintu:"
 
 #: pcbnew/librairi.cpp:71
 #, c-format
-msgid "Module exported to file '%s'"
+msgid "Footprint exported to file '%s'"
 msgstr "Footprint wyeksportowano do pliku '%s'"
 
 #: pcbnew/librairi.cpp:72
 #, c-format
-msgid "Module %s deleted from library '%s'"
-msgstr "Symbol %s usunięty z biblioteki '%s'"
+msgid "Footprint %s deleted from library '%s'"
+msgstr "Footprint %s usunięty z biblioteki '%s'"
 
 #: pcbnew/librairi.cpp:73
-msgid "Module Creation"
-msgstr "Tworzenie footprintu"
+msgid "New Footprint"
+msgstr "Nowy footprint"
 
 #: pcbnew/librairi.cpp:75
-msgid "No modules to archive!"
-msgstr "Brak footprintów do zarchiwizowania!"
+msgid "No footprints to archive!"
+msgstr "Brak footprintów do archiwizacji!"
 
 #: pcbnew/librairi.cpp:77
 #, c-format
-msgid "Module %s already exists in library '%s'"
-msgstr "Footprint %s istnieje już w bibliotece '%s'"
+msgid "Footprint %s already exists in library '%s'"
+msgstr "Footprint %s już istnieje w bibliotece '%s'"
 
 #: pcbnew/librairi.cpp:78
-msgid "No reference, aborted"
-msgstr "Brak oznaczenia. Przerwano."
+msgid "No footprint name defined."
+msgstr "Nie zdefiniowana nazwa footprintu."
 
 #: pcbnew/librairi.cpp:82
 msgid "KiCad foot print export files (*.emp)|*.emp"
@@ -7999,7 +7980,7 @@ msgstr "Pliki eksportowe footprintów programu KiCad (*.emp)|*.emp"
 msgid "GPcb foot print files (*)|*"
 msgstr "Pliki footprintów GPcb (*)|*"
 
-#: pcbnew/librairi.cpp:727
+#: pcbnew/librairi.cpp:602
 #, c-format
 msgid ""
 "Error:\n"
@@ -8010,78 +7991,45 @@ msgstr ""
 "Znaleziono jeden z nieprawidłowych znaków '%s'\n"
 "w '%s'"
 
-#: pcbnew/librairi.cpp:826
+#: pcbnew/librairi.cpp:661
 #, c-format
 msgid "Component [%s] replaced in '%s'"
 msgstr "Symbol [%s] zastąpiony przez '%s'"
 
-#: pcbnew/librairi.cpp:827
+#: pcbnew/librairi.cpp:662
 #, c-format
 msgid "Component [%s] added in  '%s'"
 msgstr "Symbol [%s] dodany do '%s'"
 
-#: pcbnew/librairi.cpp:943 pcbnew/dialogs/dialog_fp_lib_table.cpp:198
+#: pcbnew/librairi.cpp:732 pcbnew/dialogs/dialog_fp_lib_table.cpp:198
 msgid "Nickname"
 msgstr "Nickname"
 
-#: pcbnew/loadcmp.cpp:171
+#: pcbnew/loadcmp.cpp:165
 msgid "Load Module"
 msgstr "Załaduj footprint"
 
-#: pcbnew/loadcmp.cpp:350
+#: pcbnew/loadcmp.cpp:330
 #, c-format
 msgid "Library '%s' not found."
 msgstr "Nie znaleziono biblioteki '%s'."
 
-#: pcbnew/loadcmp.cpp:363
+#: pcbnew/loadcmp.cpp:343
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "Nie znaleziono footprintu %s w bibliotece '%s'."
 
-#: pcbnew/loadcmp.cpp:406
+#: pcbnew/loadcmp.cpp:386
 #, c-format
 msgid "PCB footprint library file '%s' not found in search paths."
 msgstr "Nie znaleziono pliku biblioteki '%s' w podanych ścieżkach dostępu."
 
-#: pcbnew/loadcmp.cpp:430
+#: pcbnew/loadcmp.cpp:410
 #, c-format
 msgid "Footprint %s not found in any library."
 msgstr "Footprint %s nie został znaleziony w żadnej z bibliotek."
 
-#: pcbnew/loadcmp.cpp:530
-msgid "No footprint libraries were specified."
-msgstr "Nie okreslono żadnych bibliotek."
-
-#: pcbnew/loadcmp.cpp:542
-#, c-format
-msgid ""
-"Error occurred attempting to load footprint library '%s':\n"
-"\n"
-msgstr ""
-"Wystąpił błąd przy próbie załadowania biblioteki footprintów '%s':\n"
-"\n"
-
-#: pcbnew/loadcmp.cpp:546 pcbnew/modview_frame.cpp:413
-msgid ""
-"Files not found:\n"
-"\n"
-msgstr ""
-"Nie znaleziono plików:\n"
-"\n"
-
-#: pcbnew/loadcmp.cpp:549 pcbnew/modview_frame.cpp:416
-msgid ""
-"\n"
-"\n"
-"File load errors:\n"
-"\n"
-msgstr ""
-"\n"
-"\n"
-"Błędy podczas ładowania pliku:\n"
-"\n"
-
-#: pcbnew/loadcmp.cpp:566
+#: pcbnew/loadcmp.cpp:516
 #, c-format
 msgid ""
 "No footprints could be read from library file(s):\n"
@@ -8096,20 +8044,20 @@ msgstr ""
 "w dowolnej ze ścieżek przeszukiwań. Sprawdź czy konfiguracja jest poprawna "
 "by program mógł wyszukiwać biblioteki footprintów."
 
-#: pcbnew/loadcmp.cpp:619 pcbnew/loadcmp.cpp:678
+#: pcbnew/loadcmp.cpp:569 pcbnew/loadcmp.cpp:626
 #, c-format
 msgid "Modules [%d items]"
 msgstr "Footprinty [%d pozycji]"
 
-#: pcbnew/loadcmp.cpp:638
+#: pcbnew/loadcmp.cpp:586
 msgid "No footprint found."
 msgstr "Nie znaleziono footprintów."
 
-#: pcbnew/loadcmp.cpp:661 cvpcb/cvframe.cpp:711
+#: pcbnew/loadcmp.cpp:609 cvpcb/cvframe.cpp:703
 msgid "Description: "
 msgstr "Opis:"
 
-#: pcbnew/loadcmp.cpp:662
+#: pcbnew/loadcmp.cpp:610
 msgid ""
 "\n"
 "Key words: "
@@ -8117,7 +8065,7 @@ msgstr ""
 "\n"
 "Słowa kluczowe:"
 
-#: pcbnew/loadcmp.cpp:749
+#: pcbnew/loadcmp.cpp:697
 #, c-format
 msgid "Footprint library '%s' saved as '%s'."
 msgstr "Bibliotekę '%s' zapisano jako '%s'."
@@ -8287,7 +8235,7 @@ msgstr "Pokaż płytkę w przeglądarce 3D"
 msgid "&Pad"
 msgstr "&Pole lutownicze"
 
-#: pcbnew/menubar_modedit.cpp:230 pcbnew/modedit.cpp:893
+#: pcbnew/menubar_modedit.cpp:230 pcbnew/modedit.cpp:874
 msgid "Add pad"
 msgstr "Dodaj pole lutownicze"
 
@@ -8312,11 +8260,11 @@ msgstr "Z&akotwiczenie"
 msgid "Place the footprint module reference anchor"
 msgstr "Ustaw punkt zakotwiczenia footprintu"
 
-#: pcbnew/menubar_modedit.cpp:273 pcbnew/menubar_pcbframe.cpp:633
+#: pcbnew/menubar_modedit.cpp:273 pcbnew/menubar_pcbframe.cpp:627
 msgid "Open the Pcbnew handbook"
 msgstr "Otwórz podręcznik programu CvPcb"
 
-#: pcbnew/menubar_modedit.cpp:284 pcbnew/menubar_pcbframe.cpp:644
+#: pcbnew/menubar_modedit.cpp:284 pcbnew/menubar_pcbframe.cpp:638
 msgid "&About Pcbnew"
 msgstr "&O programie Pcbnew"
 
@@ -8348,7 +8296,7 @@ msgstr "Dołącz płytkę"
 msgid "Append another Pcbnew board to the current loaded board"
 msgstr "Dołącz inną płytkę z programu Pcbnew do biężącej płytki"
 
-#: pcbnew/menubar_pcbframe.cpp:102 pcbnew/menubar_pcbframe.cpp:530
+#: pcbnew/menubar_pcbframe.cpp:102 pcbnew/menubar_pcbframe.cpp:524
 msgid "&Save"
 msgstr "&Zapisz"
 
@@ -8718,171 +8666,163 @@ msgstr "Punkt bazowy siatki"
 msgid "Set the origin point for the grid"
 msgstr "Ustaw punkt bazowy dla siatki"
 
-#: pcbnew/menubar_pcbframe.cpp:472
-msgid "Li&brary"
-msgstr "&Biblioteki"
-
-#: pcbnew/menubar_pcbframe.cpp:472
-msgid "Setting libraries, directories and others..."
-msgstr "Ustawienia dotyczące bibliotek, folderów i innych..."
-
-#: pcbnew/menubar_pcbframe.cpp:476 cvpcb/menubar.cpp:121
+#: pcbnew/menubar_pcbframe.cpp:471 cvpcb/menubar.cpp:114
 msgid "Li&brary Tables"
 msgstr "Tabele bib&liotek"
 
-#: pcbnew/menubar_pcbframe.cpp:476 cvpcb/menubar.cpp:121
+#: pcbnew/menubar_pcbframe.cpp:471 cvpcb/menubar.cpp:114
 msgid "Setup footprint libraries"
 msgstr "Ustawienia tabeli bibliotek footprintów"
 
-#: pcbnew/menubar_pcbframe.cpp:483
+#: pcbnew/menubar_pcbframe.cpp:477
 msgid "Hide La&yers Manager"
 msgstr "Ukryj menadżera warstw"
 
-#: pcbnew/menubar_pcbframe.cpp:483
+#: pcbnew/menubar_pcbframe.cpp:477
 msgid "Show La&yers Manager"
 msgstr "Pokaż menadżera warstw"
 
-#: pcbnew/menubar_pcbframe.cpp:492
+#: pcbnew/menubar_pcbframe.cpp:486
 msgid "&General"
 msgstr "&Główne"
 
-#: pcbnew/menubar_pcbframe.cpp:492
+#: pcbnew/menubar_pcbframe.cpp:486
 msgid "Select general options for Pcbnew"
 msgstr "Główne ustawienia dla Pcbnew"
 
-#: pcbnew/menubar_pcbframe.cpp:498
+#: pcbnew/menubar_pcbframe.cpp:492
 msgid "&Display"
 msgstr "&Wyświetlanie"
 
-#: pcbnew/menubar_pcbframe.cpp:499
+#: pcbnew/menubar_pcbframe.cpp:493
 msgid "Select how items (pads, tracks texts ... ) are displayed"
 msgstr "Wybierz sposób wyświetlania elementów"
 
-#: pcbnew/menubar_pcbframe.cpp:507
+#: pcbnew/menubar_pcbframe.cpp:501
 msgid "G&rid"
 msgstr "Siatka"
 
-#: pcbnew/menubar_pcbframe.cpp:507
+#: pcbnew/menubar_pcbframe.cpp:501
 msgid "Adjust user grid dimensions"
 msgstr "Dostosuj siatkę użytkownika"
 
-#: pcbnew/menubar_pcbframe.cpp:512
+#: pcbnew/menubar_pcbframe.cpp:506
 msgid "Te&xts and Drawings"
 msgstr "Teksty i rysunki"
 
-#: pcbnew/menubar_pcbframe.cpp:513
+#: pcbnew/menubar_pcbframe.cpp:507
 msgid "Adjust dimensions for texts and drawings"
 msgstr "Zmieniaj szerokość dla tekstów i rysunków"
 
-#: pcbnew/menubar_pcbframe.cpp:518
+#: pcbnew/menubar_pcbframe.cpp:512
 msgid "&Pads"
 msgstr "&Pola lutownicze"
 
-#: pcbnew/menubar_pcbframe.cpp:518
+#: pcbnew/menubar_pcbframe.cpp:512
 msgid "Adjust default pad characteristics"
 msgstr "Ustaw domyslne właściwości pól lutowniczych"
 
-#: pcbnew/menubar_pcbframe.cpp:523
+#: pcbnew/menubar_pcbframe.cpp:517
 msgid "Pads &Mask Clearance"
 msgstr "Prześwit &maski pól lutowniczych"
 
-#: pcbnew/menubar_pcbframe.cpp:524
+#: pcbnew/menubar_pcbframe.cpp:518
 msgid "Adjust the global clearance between pads and the solder resist mask"
 msgstr "Ustaw globalne ustawienia prześwitów pól lut. i maski lutowniczej"
 
-#: pcbnew/menubar_pcbframe.cpp:530
+#: pcbnew/menubar_pcbframe.cpp:524
 msgid "Save dimension preferences"
 msgstr "Zapisz ustawienia rozmiarów"
 
-#: pcbnew/menubar_pcbframe.cpp:545
+#: pcbnew/menubar_pcbframe.cpp:539
 msgid "&Save macros"
 msgstr "Zapi&sz makra"
 
-#: pcbnew/menubar_pcbframe.cpp:546
+#: pcbnew/menubar_pcbframe.cpp:540
 msgid "Save macros to file"
 msgstr "Zapisuje makra do pliku"
 
-#: pcbnew/menubar_pcbframe.cpp:550
+#: pcbnew/menubar_pcbframe.cpp:544
 msgid "&Read macros"
 msgstr "Odczytaj mak&ra"
 
-#: pcbnew/menubar_pcbframe.cpp:551
+#: pcbnew/menubar_pcbframe.cpp:545
 msgid "Read macros from file"
 msgstr "Wczytuje makra z pliku"
 
-#: pcbnew/menubar_pcbframe.cpp:556
+#: pcbnew/menubar_pcbframe.cpp:550
 msgid "Ma&cros"
 msgstr "Makro"
 
-#: pcbnew/menubar_pcbframe.cpp:557
+#: pcbnew/menubar_pcbframe.cpp:551
 msgid "Macros save/read operations"
 msgstr "Zapis/odczyt makr"
 
-#: pcbnew/menubar_pcbframe.cpp:581
+#: pcbnew/menubar_pcbframe.cpp:575
 msgid "&Netlist"
 msgstr "Lista sieci"
 
-#: pcbnew/menubar_pcbframe.cpp:582
+#: pcbnew/menubar_pcbframe.cpp:576
 msgid "Read the netlist and update board connectivity"
 msgstr "Wczytaj listę sieci i uaktualnij brakujące połączenia"
 
-#: pcbnew/menubar_pcbframe.cpp:587
+#: pcbnew/menubar_pcbframe.cpp:581
 msgid "&Layer Pair"
 msgstr "Para warstw"
 
-#: pcbnew/menubar_pcbframe.cpp:587
+#: pcbnew/menubar_pcbframe.cpp:581
 msgid "Change the active layer pair"
 msgstr "Zmień aktywną parę warstw"
 
-#: pcbnew/menubar_pcbframe.cpp:592
+#: pcbnew/menubar_pcbframe.cpp:586
 msgid "&DRC"
 msgstr "&DRC"
 
-#: pcbnew/menubar_pcbframe.cpp:593 pcbnew/tool_pcb.cpp:275
+#: pcbnew/menubar_pcbframe.cpp:587 pcbnew/tool_pcb.cpp:275
 msgid "Perform design rules check"
 msgstr "Kontrola reguł projektowych PCB"
 
-#: pcbnew/menubar_pcbframe.cpp:597
+#: pcbnew/menubar_pcbframe.cpp:591
 msgid "&FreeRoute"
 msgstr "&FreeRoute"
 
-#: pcbnew/menubar_pcbframe.cpp:598 pcbnew/tool_pcb.cpp:303
+#: pcbnew/menubar_pcbframe.cpp:592 pcbnew/tool_pcb.cpp:303
 msgid "Fast access to the Web Based FreeROUTE advanced router"
 msgstr "Szybki dostęp do zaawansowanego routera FreeRoute na stronie WWW"
 
-#: pcbnew/menubar_pcbframe.cpp:604
+#: pcbnew/menubar_pcbframe.cpp:598
 msgid "&Scripting Console"
 msgstr "Konsola &Skryptów"
 
-#: pcbnew/menubar_pcbframe.cpp:605 pcbnew/tool_pcb.cpp:311
+#: pcbnew/menubar_pcbframe.cpp:599 pcbnew/tool_pcb.cpp:311
 msgid "Show/Hide the Scripting console"
 msgstr "Pokzuje/Ukrywa konsolę skryptów"
 
-#: pcbnew/menubar_pcbframe.cpp:615
+#: pcbnew/menubar_pcbframe.cpp:609
 msgid "Design Rules"
 msgstr "Edytor reguł projektowych"
 
-#: pcbnew/menubar_pcbframe.cpp:616
+#: pcbnew/menubar_pcbframe.cpp:610
 msgid "Open the design rules editor"
 msgstr "Otwórz edytor reguł projektowych"
 
-#: pcbnew/menubar_pcbframe.cpp:620
+#: pcbnew/menubar_pcbframe.cpp:614
 msgid "&Layers Setup"
 msgstr "&Opcje warstw"
 
-#: pcbnew/menubar_pcbframe.cpp:620
+#: pcbnew/menubar_pcbframe.cpp:614
 msgid "Enable and set layer properties"
 msgstr "Włączanie warstw i ustawianie ich właściwości"
 
-#: pcbnew/menubar_pcbframe.cpp:645
+#: pcbnew/menubar_pcbframe.cpp:639
 msgid "About Pcbnew printed circuit board designer"
 msgstr "O programie Pcbnew"
 
-#: pcbnew/menubar_pcbframe.cpp:656
+#: pcbnew/menubar_pcbframe.cpp:650
 msgid "D&imensions"
 msgstr "Wym&iary"
 
-#: pcbnew/menubar_pcbframe.cpp:658
+#: pcbnew/menubar_pcbframe.cpp:652
 msgid "&Design Rules"
 msgstr "Reguły projektowe"
 
@@ -8894,11 +8834,11 @@ msgstr ""
 "Bieżące zmiany w footprincie zostaną utracone i ta operacja nie może zostać "
 "cofnięta. Kontynuować?"
 
-#: pcbnew/modedit.cpp:409
+#: pcbnew/modedit.cpp:394
 msgid "Unable to find the footprint source on the main board"
 msgstr "Nie mogę znaleźć źródła footprintu na płycie głównej"
 
-#: pcbnew/modedit.cpp:410
+#: pcbnew/modedit.cpp:395
 msgid ""
 "\n"
 "Cannot update the footprint"
@@ -8906,11 +8846,11 @@ msgstr ""
 "\n"
 "Nie mogę uaktualnić footprintu"
 
-#: pcbnew/modedit.cpp:419
+#: pcbnew/modedit.cpp:404
 msgid "A footprint source was found on the main board"
 msgstr "Źródło footprintu nie zostało znalezione na płycie głównej"
 
-#: pcbnew/modedit.cpp:420
+#: pcbnew/modedit.cpp:405
 msgid ""
 "\n"
 "Cannot insert this footprint"
@@ -8918,15 +8858,15 @@ msgstr ""
 "\n"
 "Nie mogę wstawić tego footprintu"
 
-#: pcbnew/modedit.cpp:883
+#: pcbnew/modedit.cpp:864
 msgid "Place anchor"
 msgstr "Dodaj zakotwiczenie"
 
-#: pcbnew/modedit.cpp:887
+#: pcbnew/modedit.cpp:868
 msgid "Set grid origin"
 msgstr "Ustaw punkt bazowy siatki"
 
-#: pcbnew/modedit.cpp:897 pcbnew/tool_modedit.cpp:144
+#: pcbnew/modedit.cpp:878 pcbnew/tool_modedit.cpp:144
 msgid "Pad settings"
 msgstr "Właściwości pól lutowniczych"
 
@@ -9026,29 +8966,29 @@ msgstr "Zmień warstwę elementów"
 msgid "Set Line Width"
 msgstr "Ustaw szerokość linii"
 
-#: pcbnew/moduleframe.cpp:356
+#: pcbnew/moduleframe.cpp:355
 msgid "Save the changes in the module before closing?"
 msgstr "Zapisać zmiany w footprincie przed zamknięciem?"
 
-#: pcbnew/moduleframe.cpp:383
+#: pcbnew/moduleframe.cpp:376
 msgid "Library is not set, the module could not be saved."
 msgstr ""
 "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
-#: pcbnew/moduleframe.cpp:521 pcbnew/pcbframe.cpp:630
+#: pcbnew/moduleframe.cpp:510 pcbnew/pcbframe.cpp:625
 #: cvpcb/class_DisplayFootprintsFrame.cpp:442
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
-#: pcbnew/moduleframe.cpp:624
+#: pcbnew/moduleframe.cpp:613
 msgid "Module Editor "
 msgstr "Edytor Footprintów"
 
-#: pcbnew/moduleframe.cpp:632 pcbnew/moduleframe.cpp:667
+#: pcbnew/moduleframe.cpp:620
 msgid "(no active library)"
 msgstr " (brak aktywnej biblioteki)"
 
-#: pcbnew/moduleframe.cpp:646 pcbnew/moduleframe.cpp:676
+#: pcbnew/moduleframe.cpp:629
 msgid "Module Editor (active library: "
 msgstr "Edytor Footprintów (aktywna biblioteka: "
 
@@ -9065,16 +9005,7 @@ msgstr "Usunąć footprint %s (wartość %s)?"
 msgid "Footprint Library Browser"
 msgstr "Przeglądarka bibliotek footprintów"
 
-#: pcbnew/modview_frame.cpp:409
-#, c-format
-msgid ""
-"Error occurred attempting to load footprint library <%s>:\n"
-"\n"
-msgstr ""
-"Wystąpił błąd przy próbie załadowania biblioteki footprintów <%s>:\n"
-"\n"
-
-#: pcbnew/modview_frame.cpp:496
+#: pcbnew/modview_frame.cpp:451
 #, c-format
 msgid ""
 "Could not load footprint \"%s\" from library \"%s\".\n"
@@ -9085,7 +9016,7 @@ msgstr ""
 "\n"
 "Błąd %s."
 
-#: pcbnew/modview_frame.cpp:819
+#: pcbnew/modview_frame.cpp:757
 msgid "Select Current Library:"
 msgstr "Wybierz bieżącą bibliotekę:"
 
@@ -9214,7 +9145,7 @@ msgstr "Nie można otworzyć pliku listy sieci \"%s\"."
 msgid "Netlist Load Error."
 msgstr "Błąd odczytu listy sieci."
 
-#: pcbnew/netlist.cpp:87 cvpcb/cvframe.cpp:877
+#: pcbnew/netlist.cpp:87 cvpcb/cvframe.cpp:847
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -9224,7 +9155,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/netlist.cpp:88 pcbnew/dialogs/dialog_netlist.cpp:427
-#: cvpcb/cvframe.cpp:878
+#: cvpcb/cvframe.cpp:848
 msgid "Netlist Load Error"
 msgstr "Błąd odczytu listy sieci"
 
@@ -9236,44 +9167,26 @@ msgstr "Brak footprintów"
 msgid "Components"
 msgstr "Komponenty"
 
-#: pcbnew/netlist.cpp:197 pcbnew/netlist.cpp:350
+#: pcbnew/netlist.cpp:194
 #, c-format
 msgid "No footprint defined for component '%s'.\n"
 msgstr "Dla komponentu '%s' nie został zdefiniowany footprint.\n"
 
-#: pcbnew/netlist.cpp:219 pcbnew/netlist.cpp:372
+#: pcbnew/netlist.cpp:216
 #, c-format
 msgid "* Warning: component '%s' has footprint '%s' and should be '%s'\n"
 msgstr ""
 "*** OSTRZEŻENIE: Komponent '%s', posiada footprint '%s' choć powinien "
 "posiadać '%s' ***\n"
 
-#: pcbnew/netlist.cpp:267
-#, c-format
-msgid ""
-"*** Warning: Cannot find footprint library file \"%s\" in any of the "
-"standard KiCad library search paths. ***\n"
-msgstr ""
-"*** OSTRZEŻENIE: Nie mogę odnaleźć pliku biblioteki \"%s\" w żadnej ze "
-"standardowych ścieżek wyszukiwania bibliotek. ***\n"
-
-#: pcbnew/netlist.cpp:290
-#, c-format
-msgid ""
-"*** Warning: component '%s' footprint '%s' was not found in any libraries. "
-"***\n"
-msgstr ""
-"*** OSTRZEŻENIE: Komponent \"%s\", footprint '%s' nie został znaleziony w "
-"żadnej z bibliotek. *** \n"
-
-#: pcbnew/netlist.cpp:401
+#: pcbnew/netlist.cpp:245
 #, c-format
 msgid "*** Warning: Component '%s' footprint ID '%s' is not valid. ***\n"
 msgstr ""
 "*** OSTRZEŻENIE: Komponent \"%s\", identyfikator footprintu '%s' nie jest "
 "prawidłowy. *** \n"
 
-#: pcbnew/netlist.cpp:423
+#: pcbnew/netlist.cpp:267
 #, c-format
 msgid ""
 "*** Warning: component '%s' footprint '%s' was not found in any libraries in "
@@ -9763,12 +9676,12 @@ msgstr "Przelotka %s, wiercenie %s"
 msgid "Delete Pad (module %s %s) "
 msgstr "Usuń pole lutownicze (footprint %s %s) "
 
-#: pcbnew/pcbframe.cpp:402 pcbnew/pcbframe.cpp:952
+#: pcbnew/pcbframe.cpp:400 pcbnew/pcbframe.cpp:947
 #: gerbview/events_called_functions.cpp:319 gerbview/gerbview_frame.cpp:140
 msgid "Visibles"
 msgstr "Widoczność"
 
-#: pcbnew/pcbframe.cpp:497 cvpcb/cvframe.cpp:225
+#: pcbnew/pcbframe.cpp:494 cvpcb/cvframe.cpp:220
 #, c-format
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
@@ -9780,12 +9693,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbframe.cpp:593
+#: pcbnew/pcbframe.cpp:588
 #, c-format
 msgid "The auto save file <%s> could not be removed!"
 msgstr "Plik automatycznej kopii zapasowej <%s> nie może zostac usunięty!"
 
-#: pcbnew/pcbframe.cpp:1023
+#: pcbnew/pcbframe.cpp:1018
 msgid " [new file]"
 msgstr " [nowy plik]"
 
@@ -9802,7 +9715,7 @@ msgstr ""
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew jest już uruchomiony. Kontynuować?"
 
-#: pcbnew/pcbnew.cpp:271
+#: pcbnew/pcbnew.cpp:269
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -9815,7 +9728,7 @@ msgstr ""
 "Czy chcesz go otworzyć?\n"
 "Zostanie on następnie zapisany w nowym formacie."
 
-#: pcbnew/pcbnew.cpp:301
+#: pcbnew/pcbnew.cpp:299
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -9836,7 +9749,7 @@ msgstr "Ukryj menadżera warstw"
 msgid "Show &Layers Manager"
 msgstr "Pokaż menadżera warstw"
 
-#: pcbnew/pcbnew_config.cpp:104 cvpcb/cvframe.cpp:531 cvpcb/cvframe.cpp:552
+#: pcbnew/pcbnew_config.cpp:104 cvpcb/cvframe.cpp:523 cvpcb/cvframe.cpp:544
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -9848,7 +9761,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcbnew_config.cpp:106 pcbnew/pcbnew_config.cpp:126
-#: cvpcb/cvframe.cpp:533 cvpcb/cvframe.cpp:554
+#: cvpcb/cvframe.cpp:525 cvpcb/cvframe.cpp:546
 msgid "File Save Error"
 msgstr "Błąd zapisu pliku"
 
@@ -9863,17 +9776,17 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbnew_config.cpp:175 pcbnew/pcbnew_config.cpp:564
+#: pcbnew/pcbnew_config.cpp:175 pcbnew/pcbnew_config.cpp:562
 #: gerbview/excellon_read_drill_file.cpp:184
 #, c-format
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
 
-#: pcbnew/pcbnew_config.cpp:506
+#: pcbnew/pcbnew_config.cpp:504
 msgid "Save Macros File"
 msgstr "Zapisz plik makr"
 
-#: pcbnew/pcbnew_config.cpp:554
+#: pcbnew/pcbnew_config.cpp:552
 msgid "Read Macros File"
 msgstr "Odczytaj plik makr"
 
@@ -9893,7 +9806,7 @@ msgstr "Folder wyjściowy <%s> został utworzony.\n"
 msgid "*** Error: cannot create output directory <%s>! ***\n"
 msgstr "*** Błąd: Nie można utwożyć folderu docelowego <%s>! ***\n"
 
-#: pcbnew/pcb_parser.cpp:93
+#: pcbnew/pcb_parser.cpp:90
 #, c-format
 msgid ""
 "invalid floating point number in\n"
@@ -9906,7 +9819,7 @@ msgstr ""
 "linia: %d\n"
 "przesunięcie: %d"
 
-#: pcbnew/pcb_parser.cpp:102
+#: pcbnew/pcb_parser.cpp:99
 #, c-format
 msgid ""
 "missing floating point number in\n"
@@ -9919,17 +9832,17 @@ msgstr ""
 "linia: %d\n"
 "przesunięcie: %d"
 
-#: pcbnew/pcb_parser.cpp:541
+#: pcbnew/pcb_parser.cpp:538
 #, c-format
 msgid "page type \"%s\" is not valid "
 msgstr "typ strony \"%s\" nie jest poprawny"
 
-#: pcbnew/pcb_parser.cpp:734
+#: pcbnew/pcb_parser.cpp:731
 #, c-format
 msgid "%d is not a valid layer count"
 msgstr "%d nie jest prawidłową liczbą warstw"
 
-#: pcbnew/pcb_parser.cpp:763
+#: pcbnew/pcb_parser.cpp:760
 #, c-format
 msgid ""
 "Layer '%s' in file <%s> at line %d, position %d, was not defined in the "
@@ -9938,13 +9851,13 @@ msgstr ""
 "Warstwa '%s' w pliku <%s> w linii %d, pozycja %d, nie została zdefiniowana w "
 "sekcji warstw"
 
-#: pcbnew/pcb_parser.cpp:1152
+#: pcbnew/pcb_parser.cpp:1149
 #, c-format
 msgid "duplicate NETCLASS name '%s' in file <%s> at line %d, offset %d"
 msgstr ""
 "zduplikowana nazwa Klasy Sieci '%s' w pliku <%s> w linii %d, przesunięcie %d"
 
-#: pcbnew/pcb_parser.cpp:1792
+#: pcbnew/pcb_parser.cpp:1789
 #, c-format
 msgid "cannot handle module text type %s"
 msgstr "nie mogę obsłużyć tekstu footprintu typu %s"
@@ -10419,11 +10332,11 @@ msgstr "Zamienić WSZYSTKIE footprinty?"
 msgid "Change module %s (from %s) to %s"
 msgstr "Zamień footprint %s (z %s) na %s"
 
-#: pcbnew/xchgmod.cpp:528
+#: pcbnew/xchgmod.cpp:524
 msgid "Save Component Files"
 msgstr "Zapisz pliki komponentów"
 
-#: pcbnew/xchgmod.cpp:539
+#: pcbnew/xchgmod.cpp:535
 #, c-format
 msgid "Could not create file '%s'"
 msgstr "Nie mogę utworzyć pliku '%s'"
@@ -15071,31 +14984,22 @@ msgstr "Pokaż szkic jako wypełniony"
 msgid "Show outlines in sketch mode"
 msgstr "Pokaż tylko zarys szkicu"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:513
-#, c-format
-msgid ""
-"PCB footprint library file <%s> could not be found in the default search "
-"paths."
-msgstr ""
-"Biblioteka footprintów <%s> nie może zostać odnaleziona w domyślych "
-"ścieżkach wyszukiwania."
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:542
+#: cvpcb/class_DisplayFootprintsFrame.cpp:512
 #, c-format
 msgid "Footprint '%s' not found"
 msgstr "Footprintu '%s' nie znaleziono"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:558
+#: cvpcb/class_DisplayFootprintsFrame.cpp:528
 #, c-format
 msgid "Footprint: %s"
 msgstr "Footprint: %s"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:570
+#: cvpcb/class_DisplayFootprintsFrame.cpp:540
 #, c-format
 msgid "Lib: %s"
 msgstr "Biblioteka: %s"
 
-#: cvpcb/cvframe.cpp:299
+#: cvpcb/cvframe.cpp:292
 msgid ""
 "Component to Footprint links modified.\n"
 "Save before exit ?"
@@ -15103,73 +15007,61 @@ msgstr ""
 "Linki pomiędzy komponentami a footprintami zostały zmienione.\n"
 "Zapisać przed zakończeniem?"
 
-#: cvpcb/cvframe.cpp:320
+#: cvpcb/cvframe.cpp:313
 msgid "Problem when saving file, exit anyway ?"
 msgstr "Problem podczas zapisu pliku, zakończyć mimo to?"
 
-#: cvpcb/cvframe.cpp:446
+#: cvpcb/cvframe.cpp:439
 msgid "Delete selections"
 msgstr "Usuń zaznaczone"
 
-#: cvpcb/cvframe.cpp:480
+#: cvpcb/cvframe.cpp:473
 msgid "Open Net List"
 msgstr "Otwórz plik netlisty"
 
-#: cvpcb/cvframe.cpp:681
+#: cvpcb/cvframe.cpp:672
 #, c-format
 msgid "Components: %d, unassigned: %d"
 msgstr "Komponenty: %d, nieprzydzielone: %d"
 
-#: cvpcb/cvframe.cpp:699
+#: cvpcb/cvframe.cpp:690
 msgid "Filter list: "
 msgstr "Filtruj listę wg: "
 
-#: cvpcb/cvframe.cpp:714
+#: cvpcb/cvframe.cpp:706
 msgid "Key words: "
 msgstr "Słowa kluczowe:"
 
-#: cvpcb/cvframe.cpp:725
+#: cvpcb/cvframe.cpp:716
 msgid "key words"
 msgstr "słów kluczowych"
 
-#: cvpcb/cvframe.cpp:732
+#: cvpcb/cvframe.cpp:723
 msgid "pin count"
 msgstr "ilości wyprowadzeń"
 
-#: cvpcb/cvframe.cpp:740
+#: cvpcb/cvframe.cpp:731
 msgid "library"
 msgstr "bibliotek"
 
-#: cvpcb/cvframe.cpp:744
+#: cvpcb/cvframe.cpp:735
 msgid "No filtering"
 msgstr "Bez filtracji"
 
-#: cvpcb/cvframe.cpp:746
+#: cvpcb/cvframe.cpp:737
 msgid "Filtered by "
 msgstr "Filtrowane według "
 
-#: cvpcb/cvframe.cpp:760
+#: cvpcb/cvframe.cpp:751
 msgid "No PCB footprint libraries are listed in the current project file."
 msgstr ""
 "Brak wyszczególnionych bibliotek footprintów w bieżącym pliku projektu."
 
-#: cvpcb/cvframe.cpp:761
+#: cvpcb/cvframe.cpp:752
 msgid "Project File Error"
 msgstr "Błąd pliku"
 
-#: cvpcb/cvframe.cpp:775
-msgid "Load Error"
-msgstr "Błąd wczytywania"
-
-#: cvpcb/cvframe.cpp:779
-msgid "Some files could not be found!"
-msgstr "Pewne pliki nie zostały znalezione!"
-
-#: cvpcb/cvframe.cpp:787
-msgid "Some files are invalid!"
-msgstr "Niektóre pliki są niepoprawne!"
-
-#: cvpcb/cvframe.cpp:873
+#: cvpcb/cvframe.cpp:843
 msgid "Unknown netlist format."
 msgstr "Nieznany format listy sieci"
 
@@ -15181,7 +15073,7 @@ msgstr "Pliki aliasów footprintów programu KiCad (*.equ)|*.equ"
 msgid "Library Load Error"
 msgstr "Błąd podczas ładowania biblioteki"
 
-#: cvpcb/cvpcb.cpp:108
+#: cvpcb/cvpcb.cpp:106
 msgid "CvPcb is already running, Continue?"
 msgstr "CvPcb jest już uruchomiony. Kontynuować?"
 
@@ -15197,47 +15089,39 @@ msgstr "Zapisz j&ako...\tCtrl+Shift+S"
 msgid "Quit CvPcb"
 msgstr "Zakończ CvPcb"
 
-#: cvpcb/menubar.cpp:116
-msgid "&Libraries"
-msgstr "&Biblioteki"
-
-#: cvpcb/menubar.cpp:117
-msgid "Set footprint libraries to load and library search paths"
-msgstr "Wybierz ładowane biblioteki i ścieżkę poszukiwań bibliotek"
-
-#: cvpcb/menubar.cpp:130
+#: cvpcb/menubar.cpp:122
 msgid "Keep Open On Save"
 msgstr "Pozostaw otwarte okno po zapisie"
 
-#: cvpcb/menubar.cpp:131
+#: cvpcb/menubar.cpp:123
 msgid "Prevent CvPcb from exiting after saving netlist file"
 msgstr "Zablokuj zamknięcie CvPcb po zapisaniu pliku listy sieci"
 
-#: cvpcb/menubar.cpp:139
+#: cvpcb/menubar.cpp:131
 msgid "&Save Project File"
 msgstr "Zapi&sz plik projektu"
 
-#: cvpcb/menubar.cpp:140
+#: cvpcb/menubar.cpp:132
 msgid "Save changes to the project configuration file"
 msgstr "Zapisuje zmiany w pliku konfiguracji projektu"
 
-#: cvpcb/menubar.cpp:144
+#: cvpcb/menubar.cpp:136
 msgid "&Save Project File As"
 msgstr "Zapi&sz plik projektu jako"
 
-#: cvpcb/menubar.cpp:145
+#: cvpcb/menubar.cpp:137
 msgid "Save changes to the project configuration to a new file"
 msgstr "Zapisuje zmiany w konfiguracji projektu w nowym pliku"
 
-#: cvpcb/menubar.cpp:156
+#: cvpcb/menubar.cpp:148
 msgid "Open the CvPcb handbook"
 msgstr "Otwórz podręcznik programu CvPcb"
 
-#: cvpcb/menubar.cpp:161
+#: cvpcb/menubar.cpp:153
 msgid "&About CvPcb"
 msgstr "&O programie CvPcb"
 
-#: cvpcb/menubar.cpp:162
+#: cvpcb/menubar.cpp:154
 msgid "About CvPcb footprint selector"
 msgstr "O programie CvPcb"
 
@@ -15245,11 +15129,11 @@ msgstr "O programie CvPcb"
 msgid "Component Library Error"
 msgstr "Edytor bibliotek symboli"
 
-#: cvpcb/readwrite_dlgs.cpp:264
+#: cvpcb/readwrite_dlgs.cpp:261
 msgid "Save Component Footprint Link File"
 msgstr "Zapisz plik łącz komponentów z footprintami (plik .cmp)"
 
-#: cvpcb/readwrite_dlgs.cpp:310
+#: cvpcb/readwrite_dlgs.cpp:304
 msgid "Unable to create component footprint link file (.cmp)"
 msgstr "Nie mogę utworzyć pliku łącz komponentów (.cmp)"
 
@@ -16244,26 +16128,26 @@ msgstr "Nie mogę otworzyć schowka by zapisać informacje o wersji."
 msgid "Clipboard Error"
 msgstr "Błąd Schowka"
 
-#: common/basicframe.cpp:583
+#: common/basicframe.cpp:578
 msgid "Version Information (copied to the clipboard)"
 msgstr "Informacje o wersji (kopiowane do schowka)"
 
-#: common/basicframe.cpp:610
+#: common/basicframe.cpp:605
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
 msgstr "Nie masz uprawnień zapisu do folderu <%s>."
 
-#: common/basicframe.cpp:615
+#: common/basicframe.cpp:610
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr "Nie masz uprawnień zapisu do pliku <%s> w folderze <%s>."
 
-#: common/basicframe.cpp:620
+#: common/basicframe.cpp:615
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
 msgstr "Nie masz uprawnień zapisu do pliku <%s>."
 
-#: common/basicframe.cpp:653
+#: common/basicframe.cpp:648
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!  It appears that the last time you "
@@ -16274,12 +16158,12 @@ msgstr ""
 "został zapisany poprawnie.\n"
 "Czy chcesz przywrócić ostatnie edycje jakie wykonałeś?"
 
-#: common/basicframe.cpp:679
+#: common/basicframe.cpp:674
 #, c-format
 msgid "Could not create backup file <%s>"
 msgstr "Nie mogę utworzyć pliku kopii zapasowej <%s>"
 
-#: common/basicframe.cpp:687
+#: common/basicframe.cpp:682
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Nie można zmienić nazwy pliku automatycznej kopii zapasowej na właściwą."
@@ -16483,6 +16367,14 @@ msgstr "Nieznany typ MIME pliku dokumentacji <%s>"
 msgid "Bold+Italic"
 msgstr "Pogrubiona kursywa"
 
+#: common/footprint_info.cpp:302 common/footprint_info.cpp:323
+msgid "Errors were encountered loading footprints"
+msgstr "Wystąpiły błędy podczas ładowania footprintów"
+
+#: common/footprint_info.cpp:321
+msgid "Load Error"
+msgstr "Błąd wczytywania"
+
 #: common/fpid.cpp:186 common/fpid.cpp:203
 msgid "Illegal character found in FPID string"
 msgstr "Znaleziono niepoprawny znak w ciągu FPID"
@@ -16505,7 +16397,7 @@ msgstr "'%s' jest duplikatem footprintu biblioteki "
 msgid "lib table contains no logical lib '%s'"
 msgstr "tabela bibliotek nie zawiera logicznej biblioteki '%s'"
 
-#: common/fp_lib_table.cpp:723
+#: common/fp_lib_table.cpp:744
 #, c-format
 msgid ""
 "Cannot find footprint library file \"%s\" in any of the KiCad legacy library "
@@ -16514,14 +16406,14 @@ msgstr ""
 "Nie mogę odnaleźć pliku biblioteki \"%s\" w żadnej ze standardowych ścieżek "
 "wyszukiwania bibliotek starszego typu.\n"
 
-#: common/fp_lib_table.cpp:748
+#: common/fp_lib_table.cpp:769
 #, c-format
 msgid "Component `%s` footprint <%s> was not found in any legacy library.\n"
 msgstr ""
 "Komponent '%s', footprint <%s> nie został znaleziony w żadnej z bibliotek "
 "starszego typu.\n"
 
-#: common/fp_lib_table.cpp:793
+#: common/fp_lib_table.cpp:814
 #, c-format
 msgid ""
 "Component `%s` footprint <%s> legacy library path <%s > was not found in the "
@@ -16530,12 +16422,12 @@ msgstr ""
 "Komponent '%s', footprint <%s> o ścieżce dostępu <%s> nie został znaleziony "
 "w tabeli bibliotek footprntów.\n"
 
-#: common/fp_lib_table.cpp:810
+#: common/fp_lib_table.cpp:831
 #, c-format
 msgid "Component `%s` FPID <%s> is not valid.\n"
 msgstr "Komponent '%s', FPID <%s> nie jest prawidłowy.\n"
 
-#: common/fp_lib_table.cpp:895
+#: common/fp_lib_table.cpp:916
 #, c-format
 msgid "Cannot create global library table path <%s>."
 msgstr "Nie można utworzyć globalnej tabeli bibliotek w ścieżce <%s>."
@@ -19344,6 +19236,116 @@ msgstr "Kalkulator PCB"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nowy element"
+
+#~ msgid "footprint library path <%s> does not exist"
+#~ msgstr "ścieżka do biblioteki <%s> nie istnieje"
+
+#~ msgid "user does not have permission to delete directory <%s>"
+#~ msgstr "użytkownik nie ma wystarczających uprawnień by usunąć folder <%s>"
+
+#~ msgid "library directory <%s> has unexpected sub-directories"
+#~ msgstr "folder z biblioteką <%s> zawiera niepożądane podfoldery"
+
+#~ msgid "unexpected file <%s> was found in library path '%s'"
+#~ msgstr "został znaleziony niepożądany plik <%s> w ścieżce bibliotek '%s'"
+
+#~ msgid "footprint library <%s> cannot be deleted"
+#~ msgstr "biblioteka footprintów <%s> nie może zostać usunięta"
+
+#~ msgid "Not a module file"
+#~ msgstr "To nie jest plik footprintów"
+
+#~ msgid "Export Module"
+#~ msgstr "Eksportuj Footprint"
+
+#~ msgid "Save Module"
+#~ msgstr "Zapisz footprint"
+
+#~ msgid "Module Reference:"
+#~ msgstr "Oznaczenie footprintu:"
+
+#~ msgid "Module Creation"
+#~ msgstr "Tworzenie footprintu"
+
+#~ msgid "Module %s already exists in library '%s'"
+#~ msgstr "Footprint %s istnieje już w bibliotece '%s'"
+
+#~ msgid "No reference, aborted"
+#~ msgstr "Brak oznaczenia. Przerwano."
+
+#~ msgid "No footprint libraries were specified."
+#~ msgstr "Nie okreslono żadnych bibliotek."
+
+#~ msgid ""
+#~ "Error occurred attempting to load footprint library '%s':\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Wystąpił błąd przy próbie załadowania biblioteki footprintów '%s':\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "Files not found:\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Nie znaleziono plików:\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "File load errors:\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Błędy podczas ładowania pliku:\n"
+#~ "\n"
+
+#~ msgid "Li&brary"
+#~ msgstr "&Biblioteki"
+
+#~ msgid "Setting libraries, directories and others..."
+#~ msgstr "Ustawienia dotyczące bibliotek, folderów i innych..."
+
+#~ msgid ""
+#~ "Error occurred attempting to load footprint library <%s>:\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Wystąpił błąd przy próbie załadowania biblioteki footprintów <%s>:\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "*** Warning: Cannot find footprint library file \"%s\" in any of the "
+#~ "standard KiCad library search paths. ***\n"
+#~ msgstr ""
+#~ "*** OSTRZEŻENIE: Nie mogę odnaleźć pliku biblioteki \"%s\" w żadnej ze "
+#~ "standardowych ścieżek wyszukiwania bibliotek. ***\n"
+
+#~ msgid ""
+#~ "*** Warning: component '%s' footprint '%s' was not found in any "
+#~ "libraries. ***\n"
+#~ msgstr ""
+#~ "*** OSTRZEŻENIE: Komponent \"%s\", footprint '%s' nie został znaleziony w "
+#~ "żadnej z bibliotek. *** \n"
+
+#~ msgid ""
+#~ "PCB footprint library file <%s> could not be found in the default search "
+#~ "paths."
+#~ msgstr ""
+#~ "Biblioteka footprintów <%s> nie może zostać odnaleziona w domyślych "
+#~ "ścieżkach wyszukiwania."
+
+#~ msgid "Some files could not be found!"
+#~ msgstr "Pewne pliki nie zostały znalezione!"
+
+#~ msgid "Some files are invalid!"
+#~ msgstr "Niektóre pliki są niepoprawne!"
+
+#~ msgid "&Libraries"
+#~ msgstr "&Biblioteki"
+
+#~ msgid "Set footprint libraries to load and library search paths"
+#~ msgstr "Wybierz ładowane biblioteki i ścieżkę poszukiwań bibliotek"
 
 #~ msgid ""
 #~ "This is the reference used in schematic for annotation.\n"
