@@ -27,13 +27,13 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
+//#include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxEeschemaStruct.h>
 #include <base_units.h>
 
-#include <general.h>
+//#include <general.h>
 #include <sch_sheet.h>
 
 #include <dialogs/dialog_sch_sheet_props.h>
@@ -55,6 +55,8 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     dlg.SetSheetName( aSheet->GetName() );
     dlg.SetSheetNameTextSize( ReturnStringFromValue( g_UserUnit, aSheet->GetSheetNameSize() ) );
     dlg.SetSheetNameTextSizeUnits( units );
+    dlg.SetSheetTimeStamp( wxString::Format( wxT("%8.8lX"),
+                           (unsigned long) aSheet->GetTimeStamp() ) );
 
     /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier
      * versions for the flex grid sizer in wxGTK that prevents the last

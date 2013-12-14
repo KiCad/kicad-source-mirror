@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -863,7 +863,19 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 
     // Disable unit selection if only one unit exists:
     if( choiceCount <= 1 )
+    {
         unitChoice->Enable( false );
+        unitsInterchageableLabel->Show( false );
+        unitsInterchageableText->Show( false );
+    }
+    else
+    {
+        // Show the "Units are not interchangeable" message option?
+        if( !m_LibEntry || !m_LibEntry->UnitsLocked() )
+            unitsInterchageableLabel->SetLabel( _("Yes") );
+        else
+            unitsInterchageableLabel->SetLabel( _("No") );
+    }
 
     int orientation = m_Cmp->GetOrientation()
         & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
@@ -895,24 +907,17 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     // Activate/Desactivate the normal/convert option ? (activated only if
     // the component has more than one shape)
     if( m_Cmp->GetConvert() > 1 )
-    {
         convertCheckBox->SetValue( true );
-    }
 
     if( m_LibEntry == NULL || !m_LibEntry->HasConversion() )
-    {
         convertCheckBox->Enable( false );
-    }
-
-    // Show the "Parts Locked" option?
-    if( !m_LibEntry || !m_LibEntry->UnitsLocked() )
-    {
-        DBG( printf( "partsAreLocked->false\n" ); )
-        partsAreLockedLabel->Show( false );
-    }
 
     // Set the component's library name.
     chipnameTextCtrl->SetValue( m_Cmp->m_ChipName );
+
+    // Set the component's unique ID time stamp.
+    m_textCtrlTimeStamp->SetValue( wxString::Format( wxT("%8.8lX"),
+                                   (unsigned long) m_Cmp->GetTimeStamp() ) );
 }
 
 
