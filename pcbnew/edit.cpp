@@ -747,7 +747,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( !GetCurItem()->IsMoving() )
             SaveCopyInUndoList( GetCurItem(), UR_ROTATED, ((MODULE*)GetCurItem())->GetPosition() );
 
-        Rotate_Module( &dc, (MODULE*) GetCurItem(), g_RotationAngle, true );
+        Rotate_Module( &dc, (MODULE*) GetCurItem(), m_rotationAngle, true );
         break;
 
     case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
@@ -776,7 +776,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             SaveCopyInUndoList( GetCurItem(), UR_ROTATED_CLOCKWISE,
                                 ((MODULE*)GetCurItem())->GetPosition() );
 
-        Rotate_Module( &dc, (MODULE*) GetCurItem(), -g_RotationAngle, true );
+        Rotate_Module( &dc, (MODULE*) GetCurItem(), -m_rotationAngle, true );
         break;
 
     case ID_POPUP_PCB_CHANGE_SIDE_MODULE:

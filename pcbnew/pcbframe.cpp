@@ -317,6 +317,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     m_footprintLibTable = NULL;
     m_globalFootprintTable = NULL;
+    m_rotationAngle = 900;
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
     m_pythonPanel = NULL;
@@ -1071,4 +1072,13 @@ void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 {
     DIALOG_PLOT dlg( this );
     dlg.ShowModal();
+}
+
+
+void PCB_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
+{
+    wxCHECK2_MSG( aRotationAngle > 0 && aRotationAngle < 900, aRotationAngle = 900,
+                  wxT( "Invalid rotation angle, defaulting to 90." ) );
+
+    m_rotationAngle = aRotationAngle;
 }
