@@ -45,6 +45,12 @@ public:
     {
         m_staticSheetNameSizeUnits->SetLabel( aUnits );
     }
+
+    void SetSheetTimeStamp(const wxString& aTimeStamp)
+    {
+        m_textCtrlTimeStamp->SetValue( aTimeStamp );
+    }
+
 };
 
 #endif // __dialog_sch_sheet_props__
