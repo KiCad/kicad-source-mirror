@@ -87,6 +87,9 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
     /// The global footprint library table.
     FP_LIB_TABLE* m_globalFootprintTable;
 
+    /// User defined rotation angle (in tenths of a degree).
+    int             m_rotationAngle;
+
     /**
      * Function loadFootprints
      * loads the footprints for each #COMPONENT in \a aNetlist from the list of libraries.
@@ -329,6 +332,9 @@ public:
      * @param aColor = the new color of the grid
      */
     virtual void SetGridColor(EDA_COLOR_T aColor);
+
+    int GetRotationAngle() const { return m_rotationAngle; }
+    void SetRotationAngle( int aRotationAngle );
 
     // Configurations:
     void InstallConfigFrame();

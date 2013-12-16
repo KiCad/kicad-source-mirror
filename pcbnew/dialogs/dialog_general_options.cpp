@@ -69,7 +69,7 @@ void DIALOG_GENERALOPTIONS::init()
     m_CursorShape->SetSelection( GetParent()->GetCursorShape() ? 1 : 0 );
 
 
-    switch( g_RotationAngle )
+    switch( GetParent()->GetRotationAngle() )
     {
     case 450:
         m_RotationAngle->SetSelection( 0 );
@@ -121,8 +121,7 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
 
     GetParent()->SetCursorShape( m_CursorShape->GetSelection() );
     GetParent()->SetAutoSaveInterval( m_SaveTime->GetValue() * 60 );
-
-    g_RotationAngle = 10 * wxAtoi( m_RotationAngle->GetStringSelection() );
+    GetParent()->SetRotationAngle( 10 * wxAtoi( m_RotationAngle->GetStringSelection() ) );
 
     /* Updating the combobox to display the active layer. */
     g_MaxLinksShowed = m_MaxShowLinks->GetValue();
