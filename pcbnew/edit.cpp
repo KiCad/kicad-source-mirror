@@ -745,7 +745,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // This is a simple rotation, no other editing in progress
         if( !GetCurItem()->IsMoving() )
-            SaveCopyInUndoList( GetCurItem(), UR_ROTATED, ((MODULE*)GetCurItem())->GetPosition() );
+            SaveCopyInUndoList( GetCurItem(), UR_CHANGED, ((MODULE*)GetCurItem())->GetPosition() );
 
         Rotate_Module( &dc, (MODULE*) GetCurItem(), m_rotationAngle, true );
         break;
@@ -773,8 +773,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // This is a simple rotation, no other editing in progress
         if( !GetCurItem()->IsMoving() )
-            SaveCopyInUndoList( GetCurItem(), UR_ROTATED_CLOCKWISE,
-                                ((MODULE*)GetCurItem())->GetPosition() );
+            SaveCopyInUndoList( GetCurItem(), UR_CHANGED, ((MODULE*)GetCurItem())->GetPosition() );
 
         Rotate_Module( &dc, (MODULE*) GetCurItem(), -m_rotationAngle, true );
         break;
