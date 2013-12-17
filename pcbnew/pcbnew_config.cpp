@@ -479,7 +479,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
 
     // Miscellaneous:
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RotationAngle" ), &m_rotationAngle,
-                                                   900, 450, 900 ) );
+                                                   900, 1, 900 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "MaxLnkS" ), &g_MaxLinksShowed,
                                                    3, 0, 15 ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ShowMRa" ),

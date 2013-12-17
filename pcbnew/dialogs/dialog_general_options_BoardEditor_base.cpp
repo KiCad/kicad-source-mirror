@@ -79,13 +79,10 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	m_staticTextRotationAngle->Wrap( -1 );
 	fgSizer1->Add( m_staticTextRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	wxString m_RotationAngleChoices[] = { _("45"), _("90") };
-	int m_RotationAngleNChoices = sizeof( m_RotationAngleChoices ) / sizeof( wxString );
-	m_RotationAngle = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_RotationAngleNChoices, m_RotationAngleChoices, 0 );
-	m_RotationAngle->SetSelection( 0 );
-	m_RotationAngle->SetToolTip( _("Footprints rotation increment, for rotate menu or hot key.") );
+	m_RotationAngle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_RotationAngle->SetToolTip( _("Context menu and hot key footprint rotation increment.") );
 	
-	fgSizer1->Add( m_RotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer1->Add( m_RotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bMiddleLeftSizer->Add( fgSizer1, 0, wxEXPAND, 5 );

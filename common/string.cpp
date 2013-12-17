@@ -477,3 +477,18 @@ bool ReplaceIllegalFileNameChars( std::string* aName )
 
     return changed;
 }
+
+
+wxString RemoveTrailingZeros( const wxString& aString )
+{
+    wxString retv = aString;
+    int      i = retv.Length();
+
+    while( --i > 0 && retv[i] == wxChar( '0' ) )
+        retv.RemoveLast();
+
+    if( retv[i] == wxChar( '.' ) )
+        retv.RemoveLast();
+
+    return retv;
+}

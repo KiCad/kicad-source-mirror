@@ -37,7 +37,7 @@
 #include <wxPcbStruct.h>
 #include <class_board_design_settings.h>
 #include <pcbcommon.h>
-
+#include <kicad_string.h>
 #include <pcbnew_id.h>
 #include <class_board.h>
 
@@ -69,15 +69,9 @@ void DIALOG_GENERALOPTIONS::init()
     m_CursorShape->SetSelection( GetParent()->GetCursorShape() ? 1 : 0 );
 
 
-    switch( GetParent()->GetRotationAngle() )
-    {
-    case 450:
-        m_RotationAngle->SetSelection( 0 );
-        break;
-
-    default:
-        m_RotationAngle->SetSelection( 1 );
-    }
+    wxString rotationAngle;
+    rotationAngle.Printf( wxT( "%.1f" ), ((double)GetParent()->GetRotationAngle()) / 10.0 );
+    m_RotationAngle->SetValue( RemoveTrailingZeros( rotationAngle ) );
 
     wxString timevalue;
     timevalue << GetParent()->GetAutoSaveInterval() / 60;
@@ -121,7 +115,7 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
 
     GetParent()->SetCursorShape( m_CursorShape->GetSelection() );
     GetParent()->SetAutoSaveInterval( m_SaveTime->GetValue() * 60 );
-    GetParent()->SetRotationAngle( 10 * wxAtoi( m_RotationAngle->GetStringSelection() ) );
+    GetParent()->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
 
     /* Updating the combobox to display the active layer. */
     g_MaxLinksShowed = m_MaxShowLinks->GetValue();
