@@ -503,7 +503,6 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
         module->RunOnChildren( std::bind1st( std::mem_fun( &SELECTION_TOOL::selectVisually ), this ) );
-
     }
 
     selectVisually( aItem );
@@ -519,8 +518,8 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
         // Now the context menu should be enabled
         SetContextMenu( &m_menu, CMENU_BUTTON );
     }
-    else
-    {
+    else if( m_selection.Size() == 2 )  // Check only for 2, so it will not be
+    {                                   // called for every next selected item
         // If multiple items are selected, do not show the information about the selected item
         getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL, true );
     }
@@ -535,7 +534,6 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
         module->RunOnChildren( std::bind1st( std::mem_fun( &SELECTION_TOOL::deselectVisually ), this ) );
-
     }
 
     deselectVisually( aItem );
