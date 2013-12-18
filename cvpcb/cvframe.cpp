@@ -548,7 +548,10 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
     }
 
     if( tableChanged )
+    {
         BuildLIBRARY_LISTBOX();
+        m_footprints.ReadFootprintFiles( m_footprintLibTable );
+    }
 }
 
 
