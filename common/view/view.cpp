@@ -34,9 +34,9 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <painter.h>
 
-#ifdef __WXDEBUG__
+#ifdef PROFILE
 #include <profile.h>
-#endif /* __WXDEBUG__ */
+#endif /* PROFILE  */
 
 using namespace KIGFX;
 
@@ -981,10 +981,10 @@ void VIEW::RecacheAllItems( bool aImmediately )
 
     r.SetMaximum();
 
-#ifdef __WXDEBUG__
+#ifdef PROFILE
     prof_counter totalRealTime;
     prof_start( &totalRealTime );
-#endif /* __WXDEBUG__ */
+#endif /* PROFILE */
 
     for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
@@ -1000,12 +1000,12 @@ void VIEW::RecacheAllItems( bool aImmediately )
         }
     }
 
-#ifdef __WXDEBUG__
+#ifdef PROFILE
     prof_end( &totalRealTime );
 
     wxLogDebug( wxT( "RecacheAllItems::immediately: %u %.1f ms" ),
                 aImmediately, totalRealTime.msecs() );
-#endif /* __WXDEBUG__ */
+#endif /* PROFILE */
 }
 
 
