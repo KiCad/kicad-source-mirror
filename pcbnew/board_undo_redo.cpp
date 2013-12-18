@@ -346,7 +346,7 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
 }
 
 
-void PCB_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                                          UNDO_REDO_T        aTypeCommand,
                                          const wxPoint&     aTransformPoint )
 {
