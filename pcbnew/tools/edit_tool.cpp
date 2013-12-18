@@ -129,12 +129,6 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             else
             {
                 // Prepare to drag - save items, so changes can be undone
-                for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
-                {
-                    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( i ) );
-                    std::cout << "saved " << (unsigned long) item << std::endl;
-                }
-
                 editFrame->OnModify();
                 editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
