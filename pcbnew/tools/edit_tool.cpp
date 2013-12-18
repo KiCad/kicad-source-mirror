@@ -112,6 +112,11 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
                 // Flip causes change of layers
                 enableUpdateFlag( KIGFX::VIEW_ITEM::LAYERS );
             }
+            else if( evt->IsAction( &COMMON_ACTIONS::remove ) )
+            {
+                Remove( aEvent );
+                break;
+            }
         }
 
         else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
