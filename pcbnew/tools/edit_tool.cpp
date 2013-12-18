@@ -303,16 +303,7 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
         module->ClearFlags();
-
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-            getView()->Remove( pad );
-
-        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
-             drawing = drawing->Next() )
-            getView()->Remove( drawing );
-
-        getView()->Remove( &module->Reference() );
-        getView()->Remove( &module->Value() );
+        module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ), getView() ) );
 
         // Module itself is deleted after the switch scope is finished
         // list of pads is rebuild by BOARD::BuildListOfNets()
@@ -321,11 +312,6 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
         board->m_Status_Pcb = 0;
     }
     break;
-
-    case PCB_ZONE_AREA_T:
-        getView()->Remove( aItem );
-        getModel<BOARD>( PCB_T )->Delete( aItem );
-        return;
 
     // These are not supposed to be removed
     case PCB_PAD_T:
@@ -341,6 +327,7 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
     case PCB_TARGET_T:              // a target (graphic item)
     case PCB_MARKER_T:              // a marker used to show something
     case PCB_ZONE_T:                // SEG_ZONE items are now deprecated
+    case PCB_ZONE_AREA_T:
         break;
 
     default:                        // other types do not need to (or should not) be handled
