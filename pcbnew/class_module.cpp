@@ -728,6 +728,19 @@ EDA_ITEM* MODULE::Clone() const
 }
 
 
+void MODULE::RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction )
+{
+    for( D_PAD* pad = m_Pads.GetFirst(); pad; pad = pad->Next() )
+        aFunction( static_cast<BOARD_ITEM*>( pad ) );
+
+    for( BOARD_ITEM* drawing = m_Drawings.GetFirst(); drawing; drawing = drawing->Next() )
+        aFunction( drawing );
+
+    aFunction( static_cast<BOARD_ITEM*>( m_Reference ) );
+    aFunction( static_cast<BOARD_ITEM*>( m_Value ) );
+}
+
+
 void MODULE::ViewUpdate( int aUpdateFlags )
 {
     if( !m_view )
