@@ -26,11 +26,10 @@
 #ifndef __SELECTION_TOOL_H
 #define __SELECTION_TOOL_H
 
-#include <set>
-
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
 #include <tool/context_menu.h>
+#include <class_undoredo_container.h>
 
 class SELECTION_AREA;
 class BOARD_ITEM;
@@ -62,7 +61,7 @@ public:
     struct SELECTION
     {
         /// Set of selected items
-        std::set<BOARD_ITEM*> items;
+        PICKED_ITEMS_LIST items;
 
         /// VIEW_GROUP that holds currently selected items
         KIGFX::VIEW_GROUP* group;
@@ -70,13 +69,13 @@ public:
         /// Checks if there is anything selected
         bool Empty() const
         {
-            return items.empty();
+            return ( items.GetCount() == 0 );
         }
 
         /// Returns the number of selected parts
         int Size() const
         {
-            return items.size();
+            return items.GetCount();
         }
 
         /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
@@ -111,7 +110,7 @@ public:
     void ClearSelection();
 
     /**
-     * Function AddAction()
+     * Function AddMenuItem()
      *
      * Adds a menu entry to run a TOOL_ACTION on selected items.
      * @param aAction is a menu entry to be added.
@@ -162,15 +161,6 @@ private:
     void toggleSelection( BOARD_ITEM* aItem );
 
     /**
-     * Function isSelected()
-     * Tests if an item is currently selected.
-     *
-     * @param aItem is the item to be checked.
-     * @return True if the item is selected, false otherwise.
-     */
-    bool isSelected( const BOARD_ITEM* aItem ) const;
-
-    /**
      * Function selectable()
      * Checks conditions for an item to be selected.
      *
@@ -184,7 +174,7 @@ private:
      *
      * @param aItem is an item to be selected.
      */
-    void selectItem( BOARD_ITEM* aItem );
+    void select( BOARD_ITEM* aItem );
 
     /**
      * Function deselectItem()
@@ -192,7 +182,21 @@ private:
      *
      * @param aItem is an item to be deselected.
      */
-    void deselectItem( BOARD_ITEM* aItem );
+    void deselect( BOARD_ITEM* aItem );
+
+    /**
+     * Function deselectVisually()
+     * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
+     * @param aItem is an item to be be marked.
+     */
+    void selectVisually( BOARD_ITEM* aItem ) const;
+
+    /**
+     * Function deselectVisually()
+     * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
+     * @param aItem is an item to be be marked.
+     */
+    void deselectVisually( BOARD_ITEM* aItem ) const;
 
     /**
      * Function containsSelected()

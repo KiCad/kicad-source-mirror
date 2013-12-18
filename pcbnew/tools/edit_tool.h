@@ -28,7 +28,6 @@
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
 #include <view/view_group.h>
-#include "item_state.h"
 
 class BOARD_ITEM;
 class SELECTION_TOOL;
@@ -93,9 +92,6 @@ public:
     int Remove( TOOL_EVENT& aEvent );
 
 private:
-    ///> Saves the state of items and allows to restore them
-    ITEM_STATE m_state;
-
     ///> Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
 
@@ -107,6 +103,16 @@ private:
 
     ///> Sets up handlers for various events
     void setTransitions();
+
+    ///> The required update flag for modified items
+    KIGFX::VIEW_ITEM::VIEW_UPDATE_FLAGS m_updateFlag;
+
+    ///> Enables higher order update flag
+    void enableUpdateFlag( KIGFX::VIEW_ITEM::VIEW_UPDATE_FLAGS aFlag )
+    {
+        if( m_updateFlag < aFlag )
+            m_updateFlag = aFlag;
+    }
 };
 
 #endif

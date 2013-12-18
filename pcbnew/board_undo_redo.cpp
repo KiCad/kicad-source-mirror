@@ -25,6 +25,7 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
+#include <class_drawpanel_gal.h>
 #include <macros.h>
 
 #include <pcbnew.h>
@@ -40,6 +41,8 @@
 #include <class_zone.h>
 #include <class_edge_mod.h>
 
+#include <tools/selection_tool.h>
+#include <tool/tool_manager.h>
 
 /* Functions to undo and redo edit commands.
  *  commands to undo are stored in CurrentScreen->m_UndoList
@@ -424,6 +427,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     BOARD_ITEM* item;
     bool        not_found = false;
     bool        reBuild_ratsnest = false;
+    KIGFX::VIEW* view = m_galCanvas->GetView();
 
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
@@ -484,35 +488,80 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         case UR_CHANGED:    /* Exchange old and new data for each item */
         {
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
+
+            // Remove all pads/drawings/texts, as they become invalid
+            // for the VIEW after SwapData() called for modules
+            if( item->Type() == PCB_MODULE_T )
+            {
+                MODULE* oldModule = static_cast<MODULE*>( item );
+                oldModule->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ),
+                                                        view ) );
+            }
+
             item->SwapData( image );
+
+            // Update all pads/drawings/texts, as they become invalid
+            // for the VIEW after SwapData() called for modules
+            if( item->Type() == PCB_MODULE_T )
+            {
+                MODULE* newModule = static_cast<MODULE*>( item );
+                newModule->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ),
+                                                        view ) );
+            }
+
+            item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
         }
         break;
 
         case UR_NEW:        /* new items are deleted */
             aList->SetPickedItemStatus( UR_DELETED, ii );
             GetBoard()->Remove( item );
+
+            if( item->Type() == PCB_MODULE_T )
+            {
+                MODULE* module = static_cast<MODULE*>( item );
+                module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ),
+                                                                   view ) );
+            }
+            view->Remove( item );
+
+            item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
 
         case UR_DELETED:    /* deleted items are put in List, as new items */
             aList->SetPickedItemStatus( UR_NEW, ii );
             GetBoard()->Add( item );
+
+            if( item->Type() == PCB_MODULE_T )
+            {
+                MODULE* module = static_cast<MODULE*>( item );
+                module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ),
+                                                                   view ) );
+            }
+            view->Add( item );
+
+            item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             build_item_list = true;
             break;
 
         case UR_MOVED:
             item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
+            item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
 
         case UR_ROTATED:
             item->Rotate( aList->m_TransformPoint, aRedoCommand ? 900 : -900 );
+            item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
 
         case UR_ROTATED_CLOCKWISE:
             item->Rotate( aList->m_TransformPoint, aRedoCommand ? -900 : 900 );
+            item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
 
         case UR_FLIPPED:
             item->Flip( aList->m_TransformPoint );
+            item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
             break;
 
         default:
@@ -540,6 +589,11 @@ void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
+    // Clear the selection, as it may be altered with undone items
+    SELECTION_TOOL* selectionTool = static_cast<SELECTION_TOOL*>( m_toolManager->FindTool(
+                                                                  "pcbnew.InteractiveSelection" ) );
+    selectionTool->ClearSelection();
+
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
     /* Undo the command */
@@ -559,6 +613,10 @@ void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& event )
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;
 
+    // Clear the selection, as it may be altered with redone items
+    SELECTION_TOOL* selectionTool = static_cast<SELECTION_TOOL*>( m_toolManager->FindTool(
+                                                                  "pcbnew.InteractiveSelection" ) );
+    selectionTool->ClearSelection();
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
