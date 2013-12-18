@@ -200,46 +200,25 @@ void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     KIGFX::VIEW* view = m_galCanvas->GetView();
     view->Clear();
 
-    // All of PCB drawing elements should be added to the VIEW
-    // in order to be displayed
+    // All the PCB drawable items should be added to the VIEW in order to be displayed
 
     // Load zones
     for( int i = 0; i < aBoard->GetAreaCount(); ++i )
-    {
         view->Add( (KIGFX::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
-    }
 
     // Load drawings
     for( BOARD_ITEM* drawing = aBoard->m_Drawings; drawing; drawing = drawing->Next() )
-    {
         view->Add( drawing );
-    }
 
     // Load tracks
     for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
-    {
         view->Add( track );
-    }
 
     // Load modules and its additional elements
     for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
     {
-        // Load module's pads
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-        {
-            view->Add( pad );
-        }
-
-        // Load module's drawing (mostly silkscreen)
-        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
-             drawing = drawing->Next() )
-        {
-            view->Add( drawing );
-        }
-
-        // Load module's texts (name and value)
-        view->Add( &module->Reference() );
-        view->Add( &module->Value() );
+        // Load items that belong to a module
+        module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), view ) );
 
         // Add the module itself
         view->Add( module );
@@ -247,9 +226,7 @@ void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
 
     // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
     for( SEGZONE* zone = aBoard->m_Zone; zone; zone = zone->Next() )
-    {
         view->Add( zone );
-    }
 
     // Add an entry for the worksheet layout
     KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM(
