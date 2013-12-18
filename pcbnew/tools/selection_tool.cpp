@@ -220,13 +220,10 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         break;
 
     default:
-        // Remove modules, they have to be selected by clicking on area that does not
-        // contain anything but module footprint and not selectable items
+        // Remove unselectable items
         for( int i = collector.GetCount() - 1; i >= 0 ; --i )
         {
-            BOARD_ITEM* boardItem = collector[i];
-
-            if( boardItem->Type() == PCB_MODULE_T || !selectable( boardItem ) )
+            if( !selectable( collector[i] ) )
                 collector.Remove( i );
         }
 
@@ -455,12 +452,6 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     }
     break;
 
-    case PCB_PAD_T:
-        // Pads are not selectable in multiple selection mode
-        if( m_multiple )
-            return false;
-        /* no break */
-
     case PCB_MODULE_T:
         if( aItem->IsOnLayer( LAYER_N_FRONT ) && board->IsElementVisible( MOD_FR_VISIBLE ) )
             return true;
@@ -472,16 +463,10 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 
         break;
 
-    case PCB_MODULE_TEXT_T:
-        // Module texts are not selectable in multiple selection mode
-        if( m_multiple )
-            return false;
-
-        break;
-
-    // These are not selectable, otherwise silkscreen drawings would be easily destroyed
+    // These are not selectable
     case PCB_MODULE_EDGE_T:
-    // and some other stuff that should not be selected
+    case PCB_MODULE_TEXT_T:
+    case PCB_PAD_T:
     case NOT_USED:
     case TYPE_NOT_INIT:
         return false;
