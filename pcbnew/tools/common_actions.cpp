@@ -24,6 +24,7 @@
 
 #include "common_actions.h"
 #include <tool/action_manager.h>
+#include <wx/defs.h>
 
 // Selection tool actions
 TOOL_ACTION COMMON_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
@@ -42,8 +43,8 @@ TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         AS_CONTEXT, 'F',
         "Flip", "Flips selected item(s)" );
 
-TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.delete",
-        AS_GLOBAL, 127,                                             // 127 stands for DELETE key
+TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
+        AS_GLOBAL, WXK_DELETE,
         "Remove", "Deletes selected item(s)" );
 
 TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
