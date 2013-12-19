@@ -295,6 +295,17 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     if( aItem == NULL )     // Nothing to save
         return;
 
+    // For texts belonging to modules, we need to save state of the parent module
+    if( aItem->Type() == PCB_MODULE_TEXT_T )
+    {
+        aItem = aItem->GetParent();
+        wxASSERT( aItem->Type() == PCB_MODULE_T );
+        aCommandType = UR_CHANGED;
+
+        if( aItem == NULL )
+            return;
+    }
+
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
     commandToUndo->m_TransformPoint = aTransformPoint;
@@ -364,6 +375,20 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
     for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )
     {
         BOARD_ITEM* item    = (BOARD_ITEM*) commandToUndo->GetPickedItem( ii );
+
+        // For texts belonging to modules, we need to save state of the parent module
+        if( item->Type() == PCB_MODULE_TEXT_T )
+        {
+            item = item->GetParent();
+            wxASSERT( item->Type() == PCB_MODULE_T );
+
+            if( item == NULL )
+                continue;
+
+            commandToUndo->SetPickedItem( item, ii );
+            commandToUndo->SetPickedItemStatus( UR_CHANGED, ii );
+        }
+
         UNDO_REDO_T command = commandToUndo->GetPickedItemStatus( ii );
 
         if( command == UR_UNSPECIFIED )
