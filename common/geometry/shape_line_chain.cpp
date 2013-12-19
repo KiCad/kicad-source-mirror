@@ -25,7 +25,6 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_circle.h>
 
-using namespace std;
 using boost::optional;
 
 bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance ) const
@@ -137,7 +136,7 @@ int SHAPE_LINE_CHAIN::Distance( const VECTOR2I& aP ) const
     int d = INT_MAX;
 
     for( int s = 0; s < SegmentCount(); s++ )
-        d = min( d, CSegment( s ).Distance( aP ) );
+        d = std::min( d, CSegment( s ).Distance( aP ) );
 
     return d;
 }
@@ -437,7 +436,7 @@ const optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersectin
 
 SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
 {
-    vector<VECTOR2I> pts_unique;
+    std::vector<VECTOR2I> pts_unique;
 
     if( PointCount() < 2 )
     {
@@ -524,9 +523,9 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP ) const
 }
 
 
-const string SHAPE_LINE_CHAIN::Format() const
+const std::string SHAPE_LINE_CHAIN::Format() const
 {
-    stringstream ss;
+    std::stringstream ss;
 
     ss << m_points.size() << " " << ( m_closed ? 1 : 0 ) << " ";
 

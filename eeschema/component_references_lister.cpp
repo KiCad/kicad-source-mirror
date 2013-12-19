@@ -30,7 +30,7 @@
 
 
 #include <wx/regex.h>
-#include <algorithm> // to use sort vector
+#include <algorithm>
 #include <vector>
 
 #include <fctsys.h>

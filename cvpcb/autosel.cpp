@@ -176,7 +176,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 
             /* filter alias so one can use multiple aliases (for polar and nonpolar caps for
              * example) */
-            FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( alias.m_FootprintName );
+            const FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( alias.m_FootprintName );
 
             if( module )
             {
@@ -185,7 +185,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 
                 for( size_t jj = 0; jj < filtercount && !found; jj++ )
                 {
-                    found = module->m_Module.Matches( component->GetFootprintFilters()[jj] );
+                    found = module->GetFootprintName().Matches( component->GetFootprintFilters()[jj] );
                 }
             }
             else
@@ -210,7 +210,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
         {
             /* we do not need to analyse wildcards: single footprint do not contain them */
             /* and if there are wildcards it just will not match any */
-            FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( component->GetFootprintFilters()[0] );
+            const FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( component->GetFootprintFilters()[0] );
 
             if( module )
             {

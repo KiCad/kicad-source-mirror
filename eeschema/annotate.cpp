@@ -26,8 +26,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <algorithm> // to use sort vector
-#include <vector>
+#include <algorithm>
 
 #include <fctsys.h>
 #include <class_drawpanel.h>

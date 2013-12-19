@@ -141,12 +141,17 @@ set(COMMON_SRCS
     selcolor.cpp
     string.cpp
     trigo.cpp
+    utf8.cpp
     wildcards_and_files_ext.cpp
     worksheet.cpp
     wxwineda.cpp
     xnode.cpp
     zoom.cpp
     )
+
+if( NOT HAVE_STRTOKR )
+    set( COMMON_SRCS ${COMMON_SRCS} strtok_r.c )
+endif()
 
 enable_language(C CXX ASM)
 set_source_files_properties(system/fcontext.s PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp")

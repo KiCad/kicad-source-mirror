@@ -3,8 +3,6 @@
 
 #include <tool/delegate.h>
 
-using namespace std;
-
 class MyClass
 {
 public:

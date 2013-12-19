@@ -47,7 +47,6 @@
 #include <class_drawpanel_gal.h>
 
 using boost::optional;
-using namespace std;
 
 /// Struct describing the current execution state of a TOOL
 struct TOOL_MANAGER::TOOL_STATE

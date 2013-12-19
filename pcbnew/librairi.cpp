@@ -57,25 +57,25 @@
 #define FMT_OK_OVERWRITE    _( "Library '%s' exists, OK to replace ?" )
 #define FMT_CREATE_LIB      _( "Create New Library" )
 #define FMT_OK_DELETE       _( "OK to delete module %s in library '%s'" )
-#define FMT_IMPORT_MODULE   _( "Import Footprint Module" )
+#define FMT_IMPORT_MODULE   _( "Import Footprint" )
 #define FMT_FILE_NOT_FOUND  _( "File '%s' not found" )
-#define FMT_NOT_MODULE      _( "Not a module file" )
+#define FMT_NOT_MODULE      _( "Not a footprint file" )
 #define FMT_MOD_NOT_FOUND   _( "Unable to find or load footprint %s from lib path '%s'" )
 #define FMT_BAD_PATH        _( "Unable to find or load footprint from path '%s'" )
 #define FMT_BAD_PATHS       _( "The footprint library '%s' could not be found in any of the search paths." )
 #define FMT_LIB_READ_ONLY   _( "Library '%s' is read only, not writable" )
 
-#define FMT_EXPORT_MODULE   _( "Export Module" )
-#define FMT_SAVE_MODULE     _( "Save Module" )
-#define FMT_MOD_REF         _( "Module Reference:" )
-#define FMT_EXPORTED        _( "Module exported to file '%s'" )
-#define FMT_MOD_DELETED     _( "Module %s deleted from library '%s'" )
-#define FMT_MOD_CREATE      _( "Module Creation" )
+#define FMT_EXPORT_MODULE   _( "Export Footprint" )
+#define FMT_SAVE_MODULE     _( "Save Footprint" )
+#define FMT_MOD_REF         _( "Enter footprint name:" )
+#define FMT_EXPORTED        _( "Footprint exported to file '%s'" )
+#define FMT_MOD_DELETED     _( "Footprint %s deleted from library '%s'" )
+#define FMT_MOD_CREATE      _( "New Footprint" )
 
-#define FMT_NO_MODULES      _( "No modules to archive!" )
+#define FMT_NO_MODULES      _( "No footprints to archive!" )
 #define FMT_LIBRARY         _( "Library" )                                      // window title
-#define FMT_MOD_EXISTS      _( "Module %s already exists in library '%s'" )
-#define FMT_NO_REF_ABORTED  _( "No reference, aborted" )
+#define FMT_MOD_EXISTS      _( "Footprint %s already exists in library '%s'" )
+#define FMT_NO_REF_ABORTED  _( "No footprint name defined." )
 #define FMT_SELECT_LIB      _( "Select Library" )
 
 
@@ -464,8 +464,6 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 
 bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 {
-#if defined(USE_FP_LIB_TABLE)
-
     wxString    nickname = getLibNickName();
 
     if( !m_footprintLibTable->IsFootprintLibWritable( nickname ) )
@@ -509,48 +507,9 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
     SetStatusText( msg );
 
     return true;
-
-#else
-    PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
-    wxString        libPath = getLibPath();
-    wxString        footprintName = PCB_BASE_FRAME::SelectFootprint( this, libPath,
-                                                                     wxEmptyString, wxEmptyString,
-                                                                     parent->GetFootprintLibraryTable() );
-
-    if( !footprintName )
-        return false;
-
-    // Confirmation
-    wxString msg = wxString::Format( FMT_OK_DELETE, footprintName.GetData(), libPath.GetData() );
-
-    if( !IsOK( this, msg ) )
-        return false;
-
-    IO_MGR::PCB_FILE_T pluginType = IO_MGR::GuessPluginTypeFromLibPath( libPath );
-
-    try
-    {
-        PLUGIN::RELEASER  pi( IO_MGR::PluginFind( pluginType ) );
-
-        pi->FootprintDelete( libPath, footprintName );
-    }
-    catch( IO_ERROR ioe )
-    {
-        DisplayError( NULL, ioe.errorText );
-        return false;
-    }
-
-    msg.Printf( FMT_MOD_DELETED, footprintName.GetData(), libPath.GetData() );
-
-    SetStatusText( msg );
-
-    return true;
-
-#endif
 }
 
 
-#if defined(USE_FP_LIB_TABLE)
 void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aNewModulesOnly )
 {
     if( GetBoard()->m_Modules == NULL )
@@ -608,90 +567,6 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aNewModulesOnly )
         DisplayError( this, ioe.errorText );
     }
 }
-#else
-void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aNewModulesOnly )
-{
-    wxString fileName;
-    wxString path;
-
-    if( GetBoard()->m_Modules == NULL )
-    {
-        DisplayInfoMessage( this, FMT_NO_MODULES );
-        return;
-    }
-
-    path = wxGetApp().ReturnLastVisitedLibraryPath();
-
-    {
-        wxFileDialog dlg( this, FMT_LIBRARY, path,
-                          wxEmptyString,
-                          wxGetTranslation( LegacyFootprintLibPathWildcard ),
-                          wxFD_SAVE );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return;
-
-        fileName = dlg.GetPath();
-    }
-
-    wxFileName fn( fileName );
-
-    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
-
-    bool       lib_exists = wxFileExists( fileName );
-
-    if( !aNewModulesOnly && lib_exists )
-    {
-        wxString msg = wxString::Format( FMT_OK_OVERWRITE, GetChars( fileName ) );
-
-        if( !IsOK( this, msg ) )
-            return;
-    }
-
-    m_canvas->SetAbortRequest( false );
-
-    try
-    {
-        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
-
-        // Delete old library if we're replacing it entirely.
-        if( lib_exists && !aNewModulesOnly )
-        {
-            pi->FootprintLibDelete( fileName );
-            lib_exists = false;
-        }
-
-        if( !lib_exists )
-        {
-            pi->FootprintLibCreate( fileName );
-        }
-
-        if( !aNewModulesOnly )
-        {
-            for( MODULE* m = GetBoard()->m_Modules;  m;  m = m->Next() )
-            {
-                pi->FootprintSave( fileName, m );
-            }
-        }
-        else
-        {
-            for( MODULE* m = GetBoard()->m_Modules;  m;  m = m->Next() )
-            {
-                if( !Save_Module_In_Library( fileName, m, false, false ) )
-                    break;
-
-                // Check for request to stop backup (ESCAPE key actuated)
-                if( m_canvas->GetAbortRequest() )
-                    break;
-            }
-        }
-    }
-    catch( IO_ERROR ioe )
-    {
-        DisplayError( this, ioe.errorText );
-    }
-}
-#endif
 
 
 bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
@@ -744,7 +619,6 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
 
     bool module_exists = false;
 
-#if defined(USE_FP_LIB_TABLE)
     try
     {
         MODULE* m = m_footprintLibTable->FootprintLoad( aLibrary, footprintName );
@@ -774,45 +648,6 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
         // this always overwrites any existing footprint, but should yell on its
         // own if the library or footprint is not writable.
         m_footprintLibTable->FootprintSave( aLibrary, aModule );
-
-#else
-
-
-    IO_MGR::PCB_FILE_T  pluginType = IO_MGR::GuessPluginTypeFromLibPath( aLibrary );
-
-    try
-    {
-        PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
-
-        MODULE* m = pi->FootprintLoad( aLibrary, footprintName );
-
-        if( m )
-        {
-            delete m;
-
-            module_exists = true;
-
-            // an existing footprint is found in current lib
-            if( aDisplayDialog )
-            {
-                wxString msg = wxString::Format( FMT_MOD_EXISTS,
-                        footprintName.GetData(), aLibrary.GetData() );
-
-                SetStatusText( msg );
-            }
-
-            if( !aOverwrite )
-            {
-                // Do not save the given footprint: an old one exists
-                return true;
-            }
-        }
-
-        // this always overwrites any existing footprint, but should yell on its
-        // own if the library or footprint is not writable.
-        pi->FootprintSave( aLibrary, aModule );
-#endif
-
     }
     catch( IO_ERROR ioe )
     {
@@ -846,18 +681,16 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
     if( moduleName.IsEmpty() )
     {
         wxTextEntryDialog dlg( this, FMT_MOD_REF, FMT_MOD_CREATE, moduleName );
-        dlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR() );
+        dlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &moduleName ) );
 
         if( dlg.ShowModal() != wxID_OK )
             return NULL;    //Aborted by user
-
-        moduleName = dlg.GetValue();
     }
 
     moduleName.Trim( true );
     moduleName.Trim( false );
 
-    if( moduleName.IsEmpty( ) )
+    if( moduleName.IsEmpty() )
     {
         DisplayInfoMessage( this, FMT_NO_REF_ABORTED );
         return NULL;
@@ -892,50 +725,6 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
 }
 
 
-#if !defined( USE_FP_LIB_TABLE )
-
-wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
-{
-    if( g_LibraryNames.GetCount() == 0 )
-        return wxEmptyString;
-
-    wxArrayString headers;
-    headers.Add( _( "Library" ) );
-
-    std::vector<wxArrayString> itemsToDisplay;
-
-    // Conversion from wxArrayString to vector of ArrayString
-    for( unsigned i = 0; i < g_LibraryNames.GetCount(); i++ )
-    {
-        wxArrayString item;
-        item.Add( g_LibraryNames[i] );
-        itemsToDisplay.push_back( item );
-    }
-
-    EDA_LIST_DIALOG dlg( this, FMT_SELECT_LIB, headers, itemsToDisplay, aNicknameExisting );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return wxEmptyString;
-
-    wxFileName fileName = wxFileName( wxEmptyString, dlg.GetTextSelection(),
-                                      LegacyFootprintLibPathExtension );
-
-    fileName = wxGetApp().FindLibraryPath( fileName );
-
-    if( !fileName.IsOk() || !fileName.FileExists() )
-    {
-        wxString msg = wxString::Format( FMT_BAD_PATHS, GetChars( dlg.GetTextSelection() ) );
-
-        DisplayError( this, msg );
-
-        return wxEmptyString;
-    }
-
-    return fileName.GetFullPath();
-}
-
-#else
-
 wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
 {
     wxArrayString headers;
@@ -967,5 +756,3 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
 
     return nickname;
 }
-
-#endif

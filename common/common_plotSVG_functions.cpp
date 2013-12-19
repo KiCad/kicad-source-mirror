@@ -172,7 +172,8 @@ void SVG_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                                double aScale, bool aMirror )
 {
     wxASSERT( !outputFile );
-    plotMirror  = not aMirror;      // unlike other plotters, SVG has Y axis reversed
+    m_plotMirror = aMirror;
+    m_yaxisReversed = true;     // unlike other plotters, SVG has Y axis reversed
     plotOffset  = aOffset;
     plotScale   = aScale;
     m_IUsPerDecimil = aIusPerDecimil;
@@ -345,11 +346,26 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
     DPOINT  centre_dev  = userToDeviceCoordinates( centre );
     double  radius_dev  = userToDeviceSize( radius );
 
-    if( !plotMirror )
+    if( m_yaxisReversed )   // Should be always the case
     {
         double tmp  = StAngle;
         StAngle     = -EndAngle;
         EndAngle    = -tmp;
+    }
+
+    if( m_plotMirror )
+    {
+        if( m_mirrorIsHorizontal )
+        {
+            StAngle = 1800.0 -StAngle;
+            EndAngle = 1800.0 -EndAngle;
+            EXCHG( StAngle, EndAngle );
+        }
+        else
+        {
+            StAngle = -StAngle;
+            EndAngle = -EndAngle;
+        }
     }
 
     DPOINT  start;

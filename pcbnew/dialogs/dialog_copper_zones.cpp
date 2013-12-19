@@ -446,7 +446,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     if( m_settings.m_ThermalReliefCopperBridge <= m_settings.m_ZoneMinThickness )
     {
         DisplayError( this,
-                     _( "Thermal relief spoke width is smaller than the minimum width." ) );
+                     _( "Thermal relief spoke must be greater than the minimum width." ) );
         return false;
     }
 

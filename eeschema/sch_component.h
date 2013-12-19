@@ -357,7 +357,7 @@ public:
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
-    void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+    void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList );
 
     wxPoint GetPinPhysicalPosition( LIB_PIN* Pin );
 
@@ -372,7 +372,7 @@ public:
      */
     bool IsInNetlist() const;
 
-    void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+    void GetConnectionPoints( std::vector<wxPoint>& aPoints ) const;
 
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                                  const KICAD_T scanTypes[] );

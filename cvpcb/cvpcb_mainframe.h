@@ -55,7 +55,6 @@ class CVPCB_MAINFRAME : public EDA_BASE_FRAME
 {
     wxArrayString             m_footprintListEntries;
 
-#if defined( USE_FP_LIB_TABLE )
     /// The global footprint library table.
     FP_LIB_TABLE*             m_globalFootprintTable;
 
@@ -63,7 +62,6 @@ class CVPCB_MAINFRAME : public EDA_BASE_FRAME
     /// footprint library table and the global footprint table.  This is the one to
     /// use when finding a #MODULE.
     FP_LIB_TABLE*             m_footprintLibTable;
-#endif
 
 public:
     bool                      m_KeepCvpcbOpen;
@@ -148,9 +146,7 @@ public:
      * Function OnEditLibraryTable
      * envokes the footpirnt library table edit dialog.
      */
-#if defined( USE_FP_LIB_TABLE )
     void             OnEditFootprintLibraryTable( wxCommandEvent& aEvent );
-#endif
 
     void             OnKeepOpenOnSave( wxCommandEvent& event );
     void             DisplayModule( wxCommandEvent& event );

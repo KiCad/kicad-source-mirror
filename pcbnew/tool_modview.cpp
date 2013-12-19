@@ -44,10 +44,10 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
 {
     wxString msg;
 
-    if( m_mainToolBar  == NULL )
+    if( m_mainToolBar == NULL )
     {
         m_mainToolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW );
 
         // Set up toolbar
         m_mainToolBar->AddTool( ID_MODVIEW_SELECT_LIB, wxEmptyString,

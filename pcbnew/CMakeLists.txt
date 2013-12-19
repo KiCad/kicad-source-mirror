@@ -372,13 +372,14 @@ if( KICAD_SCRIPTING_MODULES )
         polygon
         bitmaps
         gal
-    	${GLEW_LIBRARIES}
-    	${CAIRO_LIBRARIES}
+        ${GLEW_LIBRARIES}
+        ${CAIRO_LIBRARIES}
         ${wxWidgets_LIBRARIES}
         ${OPENGL_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         ${PYTHON_LIBRARIES}
         ${PCBNEW_EXTRA_LIBS}
+        ${Boost_LIBRARIES}      # must follow GITHUB
         )
 
      # create .i files from XML doxygen parsing, docstrings.i will include all of them
@@ -548,20 +549,21 @@ target_link_libraries( pcbnew
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
     ${PCBNEW_EXTRA_LIBS}
-	${GLEW_LIBRARIES}
-	${CAIRO_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${CAIRO_LIBRARIES}
+    ${Boost_LIBRARIES}      # must follow GITHUB
     )
 
 # Only for win32 cross compilation using MXE
 if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
-target_link_libraries(pcbnew
-	opengl32
-	glu32
-	pixman-1
-	fontconfig
-	freetype
-	bz2
-	)
+target_link_libraries( pcbnew
+    opengl32
+    glu32
+    pixman-1
+    fontconfig
+    freetype
+    bz2
+    )
 endif()
 
 if( MAKE_LINK_MAPS )

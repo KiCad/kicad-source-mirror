@@ -142,8 +142,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( tools_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_D356_FILE,
-		 _( "IPC-D-356 Netlist File" ),
-		 _( "Generate IPC-D-356 netlist file" ),
+         _( "IPC-D-356 Netlist File" ),
+         _( "Generate IPC-D-356 netlist file" ),
                  KiBitmap( netlist_xpm ) );
 
     // Component File
@@ -462,15 +462,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* configmenu = new wxMenu;
 
     // Library
-#if !defined( USE_FP_LIB_TABLE )
-    AddMenuItem( configmenu, ID_CONFIG_REQ,
-                 _( "Li&brary" ), _( "Setting libraries, directories and others..." ),
-                 KiBitmap( library_xpm ) );
-#else
     AddMenuItem( configmenu, ID_PCB_LIB_TABLE_EDIT,
                 _( "Li&brary Tables" ), _( "Setup footprint libraries" ),
                 KiBitmap( library_table_xpm ) );
-#endif
 
     // Colors and Visibility are also handled by the layers manager toolbar
     AddMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,

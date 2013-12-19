@@ -158,27 +158,27 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_CONFIG_READ:
+    {
+        fn = GetBoard()->GetFileName();
+        fn.SetExt( ProjectFileExtension );
+
+        wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
+                          fn.GetFullName(), ProjectFileWildcard,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            break;
+
+        if( !wxFileExists( dlg.GetPath() ) )
         {
-            fn = GetBoard()->GetFileName();
-            fn.SetExt( ProjectFileExtension );
-
-            wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
-                              fn.GetFullName(), ProjectFileWildcard,
-                              wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
-
-            if( dlg.ShowModal() == wxID_CANCEL )
-                break;
-
-            if( !wxFileExists( dlg.GetPath() ) )
-            {
-                wxString msg;
-                msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
-                DisplayError( this, msg );
-                break;
-            }
-
-            LoadProjectSettings( dlg.GetPath() );
+            wxString msg;
+            msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
+            DisplayError( this, msg );
+            break;
         }
+
+        LoadProjectSettings( dlg.GetPath() );
+    }
         break;
 
     // Hotkey IDs
@@ -256,7 +256,6 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
 
     // Check if a project footprint table is defined and load it.  If no project footprint
     // table is defined, then the global library table is the footprint library table.
-#if defined( USE_FP_LIB_TABLE )
     FP_LIB_TABLE::SetProjectPathEnvVariable( fn );
 
     delete m_footprintLibTable;
@@ -284,7 +283,6 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
 
     if( viewFrame )
         viewFrame->SetFootprintLibTable( m_footprintLibTable );
-#endif
 
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
@@ -480,16 +478,16 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                         WHITE ) );
 
     // Miscellaneous:
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RotationAngle" ), &g_RotationAngle,
-                                                   900, 450, 900 ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RotationAngle" ), &m_rotationAngle,
+                                                   900, 1, 900 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "MaxLnkS" ), &g_MaxLinksShowed,
                                                    3, 0, 15 ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ShowMRa" ),
                                                     &g_Show_Module_Ratsnest, true ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "TwoSegT" ),
                                                     &g_TwoSegmentTrackBuild, true ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SegmPcb45Only" ), &g_Segments_45_Only,
-                                                    true ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SegmPcb45Only" )
+                                                    , &g_Segments_45_Only, true ) );
     return m_configSettings;
 }
 

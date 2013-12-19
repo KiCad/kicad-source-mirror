@@ -81,7 +81,7 @@ public:
 
     bool IsConnectable() const { return true; }
 
-    void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const;
 
     wxString GetSelectMenuText() const { return wxString( _( "Junction" ) ); }
 

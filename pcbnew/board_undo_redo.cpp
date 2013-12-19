@@ -575,13 +575,13 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             break;
 
         case UR_ROTATED:
-            item->Rotate( aList->m_TransformPoint, aRedoCommand ? 900 : -900 );
-            item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            item->Rotate( aList->m_TransformPoint,
+                          aRedoCommand ? m_rotationAngle : -m_rotationAngle );
             break;
 
         case UR_ROTATED_CLOCKWISE:
-            item->Rotate( aList->m_TransformPoint, aRedoCommand ? -900 : 900 );
-            item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            item->Rotate( aList->m_TransformPoint,
+                          aRedoCommand ? -m_rotationAngle : m_rotationAngle );
             break;
 
         case UR_FLIPPED:
