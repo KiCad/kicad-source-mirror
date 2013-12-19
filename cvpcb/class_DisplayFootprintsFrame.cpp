@@ -479,7 +479,6 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 
     try
     {
-#if defined( USE_FP_LIB_TABLE )
         FPID fpid;
 
         if( fpid.Parse( aFootprintName ) >= 0 )
@@ -496,35 +495,6 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
                     fpname.c_str(), nickname.c_str()  );
 
         footprint = m_footprintLibTable->FootprintLoad( FROM_UTF8( nickname.c_str() ), FROM_UTF8( fpname.c_str() ) );
-#else
-        CVPCB_MAINFRAME* parent = ( CVPCB_MAINFRAME* ) GetParent();
-
-        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
-
-        for( unsigned i = 0; i < parent->m_ModuleLibNames.GetCount();  ++i )
-        {
-            wxFileName fn( wxEmptyString, parent->m_ModuleLibNames[i],
-                           LegacyFootprintLibPathExtension );
-
-            wxString libPath = wxGetApp().FindLibraryPath( fn );
-
-            if( !libPath )
-            {
-                wxString msg = wxString::Format( _( "PCB footprint library file <%s> could not "
-                                                    "be found in the default search paths." ),
-                                                 fn.GetFullName().GetData() );
-
-                // @todo we should not be using wxMessageBox directly.
-                wxMessageBox( msg, wxEmptyString, wxOK | wxICON_ERROR, this );
-                continue;
-            }
-
-            footprint = pi->FootprintLoad( libPath, aFootprintName );
-
-            if( footprint != NULL )
-                break;
-        }
-#endif
     }
     catch( IO_ERROR ioe )
     {
@@ -558,9 +528,9 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
         msg.Printf( _( "Footprint: %s" ), GetChars( footprintName ) );
 
         SetTitle( msg );
-        FOOTPRINT_INFO* module_info = parentframe->m_footprints.GetModuleInfo( footprintName );
+        const FOOTPRINT_INFO* module_info = parentframe->m_footprints.GetModuleInfo( footprintName );
 
-        const wxChar *libname;
+        const wxChar* libname;
 
         if( module_info )
             libname = GetChars( module_info->GetNickname() );

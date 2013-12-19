@@ -99,9 +99,7 @@ bool EDA_APP::OnInit()
 
     InitEDA_Appl( wxT( "CvPcb" ), APP_CVPCB_T );
 
-#if defined( USE_FP_LIB_TABLE )
     SetFootprintLibTablePath();
-#endif
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {

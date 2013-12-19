@@ -31,7 +31,6 @@
 #include <vector>
 #include <functional>
 
-using namespace std;
 #ifndef _GDIPLUS_H
 
 // I designed this with GDI+ in mind. However, this particular code doesn't
@@ -80,9 +79,9 @@ public:
 
 #endif // _GDIPLUS_H
 
-typedef vector<PointF>                 pointVector;
-typedef vector<PointF>::iterator       pointIterator;
-typedef vector<PointF>::const_iterator cpointIterator;
+typedef std::vector<PointF>                 pointVector;
+typedef std::vector<PointF>::iterator       pointIterator;
+typedef std::vector<PointF>::const_iterator cpointIterator;
 
 class SutherlandHodgman
 {
@@ -249,10 +248,10 @@ private:
     // rectangles, we include the left and top boundaries, but not the right and bottom boundaries.
     // In other words: a vertex on the left boundary is considered to be inside, but a vertex
     // on the right boundary is considered to be outside.
-    typedef BoundaryVert < less<REAL> >               BoundaryRight;
-    typedef BoundaryHor < greater_equal<REAL> >       BoundaryTop;
-    typedef BoundaryVert < greater_equal<REAL> >      BoundaryLeft;
-    typedef BoundaryHor < less<REAL> >                BoundaryBottom;
+    typedef BoundaryVert<std::less<REAL> >               BoundaryRight;
+    typedef BoundaryHor<std::greater_equal<REAL> >       BoundaryTop;
+    typedef BoundaryVert<std::greater_equal<REAL> >      BoundaryLeft;
+    typedef BoundaryHor<std::less<REAL> >                BoundaryBottom;
 
     // Next typedefs define the four stages. First template parameter is the boundary,
     // second template parameter is the next stage.

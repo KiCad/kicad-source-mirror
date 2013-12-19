@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  5 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,7 +21,7 @@ DIALOG_DISPLAY_HTML_TEXT_BASE::DIALOG_DISPLAY_HTML_TEXT_BASE( wxWindow* parent, 
 	
 	m_buttonClose = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	m_buttonClose->SetDefault(); 
-	bMainSizer->Add( m_buttonClose, 0, wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( m_buttonClose, 0, wxALIGN_RIGHT|wxALL, 10 );
 	
 	
 	this->SetSizer( bMainSizer );

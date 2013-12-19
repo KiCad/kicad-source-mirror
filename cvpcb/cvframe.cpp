@@ -73,9 +73,7 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
     EVT_MENU( ID_SAVE_PROJECT_AS, CVPCB_MAINFRAME::SaveProjectFile )
     EVT_MENU( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE, CVPCB_MAINFRAME::OnKeepOpenOnSave )
 
-#if defined( USE_FP_LIB_TABLE )
     EVT_MENU( ID_CVPCB_LIB_TABLE_EDIT, CVPCB_MAINFRAME::OnEditFootprintLibraryTable )
-#endif
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, CVPCB_MAINFRAME::SetLanguage )
 
@@ -122,10 +120,8 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
     m_undefinedComponentCnt = 0;
     m_skipComponentSelect   = false;
 
-#if defined( USE_FP_LIB_TABLE )
     m_globalFootprintTable  = NULL;
     m_footprintLibTable     = NULL;
-#endif
 
     /* Name of the document footprint list
      * usually located in share/modules/footprints_doc
@@ -199,7 +195,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
 
     m_auimgr.Update();
 
-#if defined( USE_FP_LIB_TABLE )
     if( m_globalFootprintTable == NULL )
     {
         try
@@ -229,8 +224,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
 
         m_footprintLibTable = new FP_LIB_TABLE( m_globalFootprintTable );
     }
-#endif
-
 }
 
 
@@ -511,7 +504,6 @@ void CVPCB_MAINFRAME::ConfigCvpcb( wxCommandEvent& event )
 }
 
 
-#if defined( USE_FP_LIB_TABLE )
 void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 {
     bool tableChanged = false;
@@ -556,9 +548,11 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
     }
 
     if( tableChanged )
+    {
         BuildLIBRARY_LISTBOX();
+        m_footprints.ReadFootprintFiles( m_footprintLibTable );
+    }
 }
-#endif
 
 
 void CVPCB_MAINFRAME::OnKeepOpenOnSave( wxCommandEvent& event )
@@ -703,19 +697,19 @@ void CVPCB_MAINFRAME::DisplayStatus()
     }
     else
     {
-        wxString        footprintName = m_FootprintList->GetSelectedFootprint();
+        wxString footprintName = m_FootprintList->GetSelectedFootprint();
+
         FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( footprintName );
 
         if( module )    // can be NULL if no netlist loaded
         {
-            msg = _( "Description: " ) + module->m_Doc;
+            msg = _( "Description: " ) + module->GetDoc();
             SetStatusText( msg, 0 );
 
-            msg  = _( "Key words: " ) + module->m_KeyWord;
+            msg  = _( "Key words: " ) + module->GetKeywords();
             SetStatusText( msg, 1 );
         }
     }
-
 
     msg.Empty();
 
@@ -762,33 +756,12 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
         return false;
     }
 
-#if !defined( USE_FP_LIB_TABLE )
-    m_footprints.ReadFootprintFiles( m_ModuleLibNames );
-#else
     if( m_footprintLibTable != NULL )
         m_footprints.ReadFootprintFiles( m_footprintLibTable );
-#endif
 
-    // Display error messages, if any.
-    if( !m_footprints.m_filesNotFound.IsEmpty() || !m_footprints.m_filesInvalid.IsEmpty() )
+    if( m_footprints.GetErrorCount() )
     {
-        HTML_MESSAGE_BOX dialog( this, _( "Load Error" ) );
-
-        if( !m_footprints.m_filesNotFound.IsEmpty() )
-        {
-            wxString message = _( "Some files could not be found!" );
-            dialog.MessageSet( message );
-            dialog.ListSet( m_footprints.m_filesNotFound );
-        }
-
-        // Display if there are invalid files.
-        if( !m_footprints.m_filesInvalid.IsEmpty() )
-        {
-            dialog.MessageSet( _( "Some files are invalid!" ) );
-            dialog.ListSet( m_footprints.m_filesInvalid );
-        }
-
-        dialog.ShowModal();
+        m_footprints.DisplayErrors( this );
     }
 
     return true;
@@ -953,9 +926,7 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
                                                                 wxSize( 600, 400 ),
                                                                 KICAD_DEFAULT_DRAWFRAME_STYLE );
 
-#if defined( USE_FP_LIB_TABLE )
         m_DisplayFootprintFrame->SetFootprintLibTable( m_footprintLibTable );
-#endif
 
         m_DisplayFootprintFrame->Show( true );
     }
@@ -1052,7 +1023,6 @@ void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
                                         wxFONTWEIGHT_NORMAL ) );
     }
 
-#if defined( USE_FP_LIB_TABLE )
     if( m_footprintLibTable )
     {
         wxArrayString libNames;
@@ -1064,9 +1034,6 @@ void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
 
         m_LibraryList->SetLibraryList( libNames );
     }
-#else
-    m_LibraryList->SetLibraryList( m_ModuleLibNames );
-#endif
 }
 
 

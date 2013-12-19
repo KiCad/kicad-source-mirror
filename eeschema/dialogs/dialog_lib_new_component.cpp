@@ -3,7 +3,9 @@
 DIALOG_LIB_NEW_COMPONENT::DIALOG_LIB_NEW_COMPONENT( wxWindow* parent ) :
     DIALOG_LIB_NEW_COMPONENT_BASE( parent )
 {
-    /* Required to make escape key work correctly in wxGTK. */
-    m_sdbSizerOK->SetFocus();
+    // initial focus should be on first editable field.
+    m_textName->SetFocus();
+
+    // What happens when user presses "Enter"? OK button!  OK?
     m_sdbSizerOK->SetDefault();
 }

@@ -34,9 +34,6 @@
 #include <class_base_screen.h>
 #include <general.h>
 
-using namespace std;
-
-
 class SCH_ITEM;
 class SCH_SHEET_PATH;
 class LINE_READER;
@@ -49,7 +46,7 @@ class NETLIST_OBJECT_LIST;
 
 typedef boost::ptr_vector< SCH_ITEM > SCH_ITEMS;
 typedef SCH_ITEMS::iterator SCH_ITEMS_ITR;
-typedef vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
+typedef std::vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
 
 
 #define FMT_IU          SCH_ITEM::FormatInternalUnits
@@ -228,7 +225,7 @@ public:
      *
      * @param aItemList - List of DANGLING_END_ITEMS to add to.
      */
-    virtual void GetEndPoints( vector< DANGLING_END_ITEM >& aItemList ) {}
+    virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) {}
 
     /**
      * Function IsDanglingStateChanged
@@ -243,7 +240,7 @@ public:
      * @param aItemList - List of items to test item against.
      * @return True if the dangling state has changed from it's current setting.
      */
-    virtual bool IsDanglingStateChanged( vector< DANGLING_END_ITEM >& aItemList ) { return false; }
+    virtual bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList ) { return false; }
 
     virtual bool IsDangling() const { return false; }
 
@@ -273,7 +270,7 @@ public:
      *
      * @param aPoints List of connection points to add to.
      */
-    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const { }
+    virtual void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const { }
 
     /**
      * Function ClearConnections

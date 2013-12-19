@@ -141,7 +141,6 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
         {
             Clear_Pcb( true );
 
-#if defined( USE_FP_LIB_TABLE )
             // Create a new empty footprint library table for the new board.
             delete m_footprintLibTable;
             m_footprintLibTable = new FP_LIB_TABLE( m_globalFootprintTable );
@@ -158,7 +157,6 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 
             wxFileName emptyFileName;
             FP_LIB_TABLE::SetProjectPathEnvVariable( emptyFileName );
-#endif
 
             wxFileName fn;
             fn.AssignCwd();
@@ -535,7 +533,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
                                             GetChars( pcbFileName.GetFullPath() ) )) )
             return false;
 
-#if defined( USE_FP_LIB_TABLE )
         // Save the project specific footprint library table.
         if( !m_footprintLibTable->IsEmpty( false ) )
         {
@@ -561,8 +558,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
                 }
             }
         }
-#endif
-
     }
     else
     {

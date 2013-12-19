@@ -112,19 +112,22 @@ target_link_libraries( cvpcb
 # Only for win32 cross compilation using MXE
 if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
 target_link_libraries(cvpcb
-	opengl32
-	glu32
-	pixman-1
-	fontconfig
-	freetype
-	bz2
-	)
+    opengl32
+    glu32
+    pixman-1
+    fontconfig
+    freetype
+    bz2
+    )
 endif()
 
 
 if( BUILD_GITHUB_PLUGIN )
     target_link_libraries( cvpcb github_plugin )
 endif()
+
+# Must follow github_plugin
+target_link_libraries( cvpcb ${Boost_LIBRARIES} )
 
 
 ###

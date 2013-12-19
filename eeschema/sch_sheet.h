@@ -533,7 +533,7 @@ public:
 
     bool IsConnectable() const { return true; }
 
-    void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const;
 
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                                  const KICAD_T scanTypes[] );

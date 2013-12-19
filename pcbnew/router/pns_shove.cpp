@@ -35,8 +35,6 @@
 
 #include <profile.h>
 
-using namespace std;
-
 PNS_SHOVE::PNS_SHOVE( PNS_NODE* aWorld )
 {
     m_root = aWorld;
@@ -280,9 +278,9 @@ const PNS_COST_ESTIMATOR PNS_SHOVE::TotalCost() const
 
 PNS_SHOVE::ShoveStatus PNS_SHOVE::ShoveLines( PNS_LINE* aCurrentHead )
 {
-    stack <PNS_LINE*> lineStack;
+    std::stack<PNS_LINE*> lineStack;
     PNS_NODE* node, * parent;
-    PNS_VIA*    headVia = NULL;
+    PNS_VIA* headVia = NULL;
     bool    fail    = false;
     int     iter    = 0;
 

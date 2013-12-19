@@ -246,7 +246,7 @@ bool SCH_BUS_ENTRY_BASE::IsSelectStateChanged( const wxRect& aRect )
 }
 
 
-void SCH_BUS_ENTRY_BASE::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+void SCH_BUS_ENTRY_BASE::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     aPoints.push_back( m_pos );
     aPoints.push_back( m_End() );

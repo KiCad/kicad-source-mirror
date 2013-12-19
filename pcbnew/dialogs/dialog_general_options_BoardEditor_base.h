@@ -23,7 +23,7 @@ class DIALOG_SHIM;
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/spinctrl.h>
-#include <wx/choice.h>
+#include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
 #include <wx/statline.h>
@@ -64,7 +64,7 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextautosave;
 		wxSpinCtrl* m_SaveTime;
 		wxStaticText* m_staticTextRotationAngle;
-		wxChoice* m_RotationAngle;
+		wxTextCtrl* m_RotationAngle;
 		wxCheckBox* m_DrcOn;
 		wxCheckBox* m_ShowGlobalRatsnest;
 		wxCheckBox* m_ShowModuleRatsnest;

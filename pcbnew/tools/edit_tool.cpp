@@ -153,8 +153,8 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     if( restore )
     {
         // Modifications has to be rollbacked, so restore the previous state of items
-        wxCommandEvent undoEvent( wxEVT_TOOL, wxID_UNDO );
-        wxPostEvent( editFrame, undoEvent );
+        wxCommandEvent dummy;
+        editFrame->GetBoardFromUndoList( dummy );
     }
     else
     {

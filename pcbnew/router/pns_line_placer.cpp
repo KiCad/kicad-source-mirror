@@ -18,7 +18,6 @@
  * with this program.  If not, see <http://www.gnu.or/licenses/>.
  */
 
-#include <vector>
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 
@@ -30,7 +29,6 @@
 #include "pns_shove.h"
 #include "pns_utils.h"
 
-using namespace std;
 using boost::optional;
 
 PNS_LINE_PLACER::PNS_LINE_PLACER( PNS_NODE* aWorld )
@@ -528,7 +526,7 @@ bool PNS_LINE_PLACER::optimizeTailHeadTransition()
 
     const int TailLookbackSegments = 5;
 
-    int threshold = min( tail.PointCount(), TailLookbackSegments + 1 );
+    int threshold = std::min( tail.PointCount(), TailLookbackSegments + 1 );
 
     if( tail.SegmentCount() < 3 )
         return false;

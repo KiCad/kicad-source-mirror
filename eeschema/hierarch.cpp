@@ -169,7 +169,7 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* parent, wxDC* DC, cons
 
     // Set dialog window size to be large enough
     m_TreeSize.x = itemrect.GetWidth() + 20;
-    m_TreeSize.x = max( m_TreeSize.x, 250 );
+    m_TreeSize.x = std::max( m_TreeSize.x, 250 );
 
     // Readjust the size of the frame to an optimal value.
     m_TreeSize.y = m_nbsheets * itemrect.GetHeight();

@@ -52,9 +52,6 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <memory.h>
 
-using namespace std;
-
-
 #define FMTIU        BOARD_ITEM::FormatInternalUnits
 
 /**
@@ -78,7 +75,7 @@ class FP_CACHE_ITEM
     wxFileName              m_file_name; ///< The the full file name and path of the footprint to cache.
     bool                    m_writable;  ///< Writability status of the footprint file.
     wxDateTime              m_mod_time;  ///< The last file modified time stamp.
-    auto_ptr< MODULE >      m_module;
+    std::auto_ptr<MODULE>   m_module;
 
 public:
     FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName );
@@ -1691,22 +1688,44 @@ void PCB_IO::cacheLib( const wxString& aLibraryPath, const wxString& aFootprintN
 }
 
 
-wxArrayString PCB_IO::FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+wxArrayString PCB_IO::FootprintEnumerate( const wxString&   aLibraryPath,
+                                          const PROPERTIES* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+    LOCALE_IO     toggle;     // toggles on, then off, the C locale.
+    wxArrayString ret;
+    wxDir         dir( aLibraryPath );
+
+    if( !dir.IsOpened() )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "footprint library path '%s' does not exist" ),
+                                          GetChars( aLibraryPath ) ) );
+    }
 
     init( aProperties );
 
+#if 1                         // Set to 0 to only read directory contents, not load cache.
     cacheLib( aLibraryPath );
 
     const MODULE_MAP& mods = m_cache->GetModules();
 
-    wxArrayString ret;
 
     for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
     {
         ret.Add( FROM_UTF8( it->first.c_str() ) );
     }
+#else
+    wxString fpFileName;
+    wxString wildcard = wxT( "*." ) + KiCadFootprintFileExtension;
+
+    if( dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
+    {
+        do
+        {
+            wxFileName fn( aLibraryPath, fpFileName );
+            ret.Add( fn.GetName() );
+        } while( dir.GetNext( &fpFileName ) );
+    }
+#endif
 
     return ret;
 }

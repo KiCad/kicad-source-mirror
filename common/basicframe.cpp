@@ -56,6 +56,10 @@ const wxChar* traceAutoSave = wxT( "KicadAutoSave" );
 /// Configuration file entry name for auto save interval.
 static const wxChar* entryAutoSaveInterval = wxT( "AutoSaveInterval" );
 
+/// Configuration file entry for wxAuiManger perspective.
+static const wxChar* entryPerspective = wxT( "Perspective" );
+
+
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent,
                                 ID_DRAWFRAME_TYPE aFrameType,
@@ -213,6 +217,11 @@ void EDA_BASE_FRAME::LoadSettings()
 
     if( maximized )
         Maximize();
+
+    // Once this is fully implemented, wxAuiManager will be used to maintain the persistance of
+    // the main frame and all it's managed windows and all of the legacy frame persistence
+    // position code can be removed.
+    config->Read( m_FrameName + entryPerspective, &m_perspective );
 }
 
 
@@ -247,6 +256,11 @@ void EDA_BASE_FRAME::SaveSettings()
         text = m_FrameName + entryAutoSaveInterval;
         config->Write( text, m_autoSaveInterval );
     }
+
+    // Once this is fully implemented, wxAuiManager will be used to maintain the persistance of
+    // the main frame and all it's managed windows and all of the legacy frame persistence
+    // position code can be removed.
+    config->Write( m_FrameName + entryPerspective, m_auimgr.SavePerspective() );
 }
 
 
@@ -552,12 +566,7 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         USE_FP_LIB_TABLE=" );
-#ifdef USE_FP_LIB_TABLE
-    tmp << wxT( "ON\n" );
-#else
-    tmp << wxT( "OFF\n" );
-#endif
+    tmp << wxT( "         USE_FP_LIB_TABLE=HARD_CODED_ON\n" );
 
     tmp << wxT( "         BUILD_GITHUB_PLUGIN=" );
 #ifdef BUILD_GITHUB_PLUGIN

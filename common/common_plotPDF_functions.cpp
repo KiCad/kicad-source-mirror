@@ -71,7 +71,7 @@ void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror )
 {
     wxASSERT( !workFile );
-    plotMirror = aMirror;
+    m_plotMirror = aMirror;
     plotOffset = aOffset;
     plotScale = aScale;
     m_IUsPerDecimil = aIusPerDecimil;

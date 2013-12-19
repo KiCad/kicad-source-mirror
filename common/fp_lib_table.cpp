@@ -172,6 +172,12 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
         // having to copy the FPID and its two strings, twice each.
         FPID& fpid = (FPID&) ret->GetFPID();
 
+        // Catch any misbehaving plugin, which should be setting internal footprint name properly:
+        wxASSERT( aFootprintName == FROM_UTF8( fpid.GetFootprintName().c_str() ) );
+
+        // and clearing nickname
+        wxASSERT( !fpid.GetLibNickname().size() );
+
         fpid.SetLibNickname( row->GetNickName() );
     }
 
@@ -631,6 +637,26 @@ const FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
 }
 
 
+// wxGetenv( wchar_t* ) is not re-entrant on linux.
+// Put a lock on multithreaded use of wxGetenv( wchar_t* ), called from wxEpandEnvVars(),
+// needed by bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = NULL );
+#if 1
+
+#include <ki_mutex.h>
+
+const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString& aString )
+{
+    static MUTEX    getenv_mutex;
+
+    MUTLOCK lock( getenv_mutex );
+
+    // We reserve the right to do this another way, by providing our own member
+    // function.
+    return wxExpandEnvVars( aString );
+}
+
+#else
+
 const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString& aString )
 {
     // We reserve the right to do this another way, by providing our own member
@@ -638,6 +664,7 @@ const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString& aString )
     return wxExpandEnvVars( aString );
 }
 
+#endif
 
 bool FP_LIB_TABLE::IsEmpty( bool aIncludeFallback )
 {
