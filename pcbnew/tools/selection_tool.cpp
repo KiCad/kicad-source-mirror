@@ -463,9 +463,13 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 
         break;
 
+    case PCB_MODULE_TEXT_T:
+        if( m_multiple )
+            return false;
+        break;
+
     // These are not selectable
     case PCB_MODULE_EDGE_T:
-    case PCB_MODULE_TEXT_T:
     case PCB_PAD_T:
     case NOT_USED:
     case TYPE_NOT_INIT:
