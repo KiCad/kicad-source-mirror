@@ -1008,7 +1008,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 
         // Set maximum proximity threshold for point to point nearness metric for
         // board perimeter only, not interior keepouts yet.
-        prox = Mils2iu( 1 );
+        prox = Mils2iu( 0 );
 
         // Output the Edge.Cuts perimeter as circle or polygon.
         if( graphic->GetShape() == S_CIRCLE )
