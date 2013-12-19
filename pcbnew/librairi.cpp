@@ -378,13 +378,14 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 
     wxString    wildcard;
 
-    wildcard << wxGetTranslation( LegacyFootprintLibPathWildcard ) << wxChar( '|' )
-             << wxGetTranslation( KiCadFootprintLibPathWildcard );
+//    wildcard << wxGetTranslation( LegacyFootprintLibPathWildcard ) << wxChar( '|' )
+//             << wxGetTranslation( KiCadFootprintLibPathWildcard );
+    wildcard << wxGetTranslation( KiCadFootprintLibPathWildcard ) << wxChar( '|' )
+             << wxGetTranslation( LegacyFootprintLibPathWildcard );
 
     // prompt user for libPath and PLUGIN (library) type
     wxFileDialog dlg( this, FMT_CREATE_LIB, fn.GetPath(), wxEmptyString,
-                      wildcard,
-                      wxFD_SAVE
+                      wildcard, wxFD_SAVE
                       // | wxFD_OVERWRITE_PROMPT overwrite is tested below
                       // after file extension has been added.
                       );
@@ -400,7 +401,7 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
     }
 
     // wildcard's filter index has legacy in position 0.
-    IO_MGR::PCB_FILE_T  piType = ( dlg.GetFilterIndex() == 0 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
+    IO_MGR::PCB_FILE_T  piType = ( dlg.GetFilterIndex() == 1 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
 
     // wxFileDialog does not supply nor enforce the file extension, add it here.
     if( piType == IO_MGR::LEGACY )
