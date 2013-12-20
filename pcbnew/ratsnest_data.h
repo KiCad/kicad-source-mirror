@@ -61,7 +61,8 @@ typedef hed::Triangulation TRIANGULATOR;
 struct RN_NODE_FILTER : public std::unary_function<const RN_NODE_PTR&, bool>
 {
     virtual ~RN_NODE_FILTER() {}
-    virtual bool operator()( const RN_NODE_PTR& aNode )
+
+    virtual bool operator()( const RN_NODE_PTR& aNode ) const
     {
         return true;        // By default everything passes
     }
@@ -70,7 +71,7 @@ struct RN_NODE_FILTER : public std::unary_function<const RN_NODE_PTR&, bool>
 ///> Filters out nodes that have the flag set.
 struct WITHOUT_FLAG : public RN_NODE_FILTER
 {
-    bool operator()( const RN_NODE_PTR& aNode )
+    bool operator()( const RN_NODE_PTR& aNode ) const
     {
         return !aNode->GetFlag();
     }
@@ -159,7 +160,10 @@ public:
      * Removes a connection described by a given edge pointer.
      * @param aEdge is a pointer to edge to be removed.
      */
-    void RemoveConnection( const RN_EDGE_PTR& aEdge );
+    void RemoveConnection( const RN_EDGE_PTR& aEdge )
+    {
+        m_edges.remove( aEdge );
+    }
 
     /**
      * Function GetConnections()
@@ -395,7 +399,8 @@ public:
      * @param aNode is the node for which the closest node is searched.
      * @param aFilter is a functor that filters nodes.
      */
-    const RN_NODE_PTR GetClosestNode( const RN_NODE_PTR& aNode, RN_NODE_FILTER aFilter ) const;
+    const RN_NODE_PTR GetClosestNode( const RN_NODE_PTR& aNode,
+                                      const RN_NODE_FILTER& aFilter ) const;
 
     /**
      * Function GetClosestNodes()
@@ -417,7 +422,7 @@ public:
      * nodes then the size of list is limited to number of possible nodes.
      */
     std::list<RN_NODE_PTR> GetClosestNodes( const RN_NODE_PTR& aNode,
-                                            RN_NODE_FILTER aFilter, int aNumber = -1 ) const;
+                                            const RN_NODE_FILTER& aFilter, int aNumber = -1 ) const;
 
     /**
      * Function GetEdges()

@@ -172,7 +172,6 @@ void RN_NET::validateEdge( RN_EDGE_PTR& aEdge )
     {
         valid = false;
 
-        WITHOUT_FLAG without_flag;
         std::list<RN_NODE_PTR> closest = GetClosestNodes( target, WITHOUT_FLAG() );
         BOOST_FOREACH( RN_NODE_PTR& node, closest )
         {
@@ -217,12 +216,6 @@ const RN_EDGE_PTR& RN_LINKS::AddConnection( const RN_NODE_PTR& aNode1, const RN_
     m_edges.push_back( boost::make_shared<RN_EDGE_MST>( aNode1, aNode2, aDistance ) );
 
     return m_edges.back();
-}
-
-
-void RN_LINKS::RemoveConnection( const RN_EDGE_PTR& aEdge )
-{
-    m_edges.remove( aEdge );
 }
 
 
@@ -536,7 +529,8 @@ const RN_NODE_PTR RN_NET::GetClosestNode( const RN_NODE_PTR& aNode ) const
 }
 
 
-const RN_NODE_PTR RN_NET::GetClosestNode( const RN_NODE_PTR& aNode, RN_NODE_FILTER aFilter ) const
+const RN_NODE_PTR RN_NET::GetClosestNode( const RN_NODE_PTR& aNode,
+                                          const RN_NODE_FILTER& aFilter ) const
 {
     const RN_LINKS::RN_NODE_SET& nodes = m_links.GetNodes();
     RN_LINKS::RN_NODE_SET::const_iterator it, itEnd;
@@ -589,7 +583,7 @@ std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode, int aN
 
 
 std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode,
-                                                RN_NODE_FILTER aFilter, int aNumber ) const
+                                                const RN_NODE_FILTER& aFilter, int aNumber ) const
 {
     std::list<RN_NODE_PTR> closest;
     const RN_LINKS::RN_NODE_SET& nodes = m_links.GetNodes();
