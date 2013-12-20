@@ -55,7 +55,6 @@ private:
     // Flags
     wxSemaphore*        m_Semaphore;             // != NULL if the frame must emulate a modal dialog
     wxString            m_configPath;            // subpath for configuration
-    wxString            m_perspective;           // wxAuiManager perspective.
 
 protected:
     static wxString     m_libraryName;           // Current selected library

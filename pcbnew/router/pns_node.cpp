@@ -37,8 +37,6 @@
 #include "pns_joint.h"
 #include "pns_index.h"
 
-using namespace std;
-
 using boost::unordered_set;
 using boost::unordered_map;
 
@@ -138,7 +136,7 @@ void PNS_NODE::unlinkParent()
     if( isRoot() )
         return;
 
-    for( vector<PNS_NODE*>::iterator i = m_parent->m_children.begin();
+    for( std::vector<PNS_NODE*>::iterator i = m_parent->m_children.begin();
          i != m_parent->m_children.end(); ++i )
     {
         if( *i == this )
@@ -284,7 +282,7 @@ PNS_NODE::OptObstacle PNS_NODE::NearestObstacle( const PNS_LINE* aItem, int aKin
         VECTOR2I ip_first, ip_last;
         int dist_max = INT_MIN;
 
-        vector<SHAPE_LINE_CHAIN::INTERSECTION> isect_list;
+        std::vector<SHAPE_LINE_CHAIN::INTERSECTION> isect_list;
 
         int clearance = GetClearance( obs.item, &aLine );
 
@@ -564,7 +562,7 @@ void PNS_NODE::removeSegment( PNS_SEGMENT* aSeg )
 
 void PNS_NODE::removeLine( PNS_LINE* aLine )
 {
-    vector<PNS_SEGMENT*>* segRefs = aLine->GetLinkedSegments();
+    std::vector<PNS_SEGMENT*>* segRefs = aLine->GetLinkedSegments();
 
     if( !segRefs )
         return;
@@ -700,7 +698,7 @@ void PNS_NODE::FindLineEnds( PNS_LINE* aLine, PNS_JOINT& a, PNS_JOINT& b )
 }
 
 
-int PNS_NODE::FindLinesBetweenJoints( PNS_JOINT& a, PNS_JOINT& b, vector<PNS_LINE*>& aLines )
+int PNS_NODE::FindLinesBetweenJoints( PNS_JOINT& a, PNS_JOINT& b, std::vector<PNS_LINE*>& aLines )
 {
     BOOST_FOREACH( PNS_ITEM* item, a.GetLinkList() )
     {
@@ -763,7 +761,7 @@ PNS_JOINT& PNS_NODE::touchJoint( const VECTOR2I& aPos, const PNS_LAYERSET& aLaye
     // try to find the joint in this node.
     JointMap::iterator f = m_joints.find( tag );
 
-    pair<JointMap::iterator, JointMap::iterator> range;
+    std::pair<JointMap::iterator, JointMap::iterator> range;
 
     // not found and we are not root? find in the root and copy results here.
     if( f == m_joints.end() && !isRoot() )
@@ -895,7 +893,7 @@ void PNS_NODE::Dump( bool aLong )
             printf( "Line: %s, net %d ", l->GetLine().Format().c_str(), l->GetNet() );
 
 
-        for( vector<PNS_SEGMENT*>::iterator j = seg_refs->begin(); j != seg_refs->end(); ++j )
+        for( std::vector<PNS_SEGMENT*>::iterator j = seg_refs->begin(); j != seg_refs->end(); ++j )
         {
             printf( "%s ", (*j)->GetSeg().A.Format().c_str() );
 
@@ -932,7 +930,7 @@ void PNS_NODE::GetUpdatedItems( ItemVector& aRemoved, ItemVector& aAdded )
 void PNS_NODE::releaseChildren()
 {
     // copy the kids as the PNS_NODE destructor erases the item from the parent node.
-    vector<PNS_NODE*> kids = m_children;
+    std::vector<PNS_NODE*> kids = m_children;
 
     BOOST_FOREACH( PNS_NODE * node, kids ) {
         node->releaseChildren();

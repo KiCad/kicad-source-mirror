@@ -906,11 +906,22 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     bool offCenterReq = event.ControlDown() && event.ShiftDown();
     offCenterReq = offCenterReq || m_enableZoomNoCenter;
 
+#if wxMAJOR_VERSION >= 2 && wxMINOR_VERSION >= 9
+    int axis = event.GetWheelAxis();
+#else
+    const int axis = 0;
+#endif
+
     // This is a zoom in or out command
     if( event.GetWheelRotation() > 0 )
     {
         if( event.ShiftDown() && !event.ControlDown() )
-            cmd.SetId( ID_PAN_UP );
+        {
+            if( axis == 0 )
+                cmd.SetId( ID_PAN_UP );
+            else
+                cmd.SetId( ID_PAN_RIGHT );
+        }
         else if( event.ControlDown() && !event.ShiftDown() )
             cmd.SetId( ID_PAN_LEFT );
         else if( offCenterReq )
@@ -921,7 +932,12 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     else if( event.GetWheelRotation() < 0 )
     {
         if( event.ShiftDown() && !event.ControlDown() )
-            cmd.SetId( ID_PAN_DOWN );
+        {
+            if( axis == 0 )
+                cmd.SetId( ID_PAN_DOWN );
+            else
+                cmd.SetId( ID_PAN_LEFT );
+        }
         else if( event.ControlDown() && !event.ShiftDown() )
             cmd.SetId( ID_PAN_RIGHT );
         else if( offCenterReq )

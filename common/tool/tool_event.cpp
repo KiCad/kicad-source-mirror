@@ -31,8 +31,6 @@
 
 #include <boost/foreach.hpp>
 
-using namespace std;
-
 struct FlagString
 {
     int flag;
@@ -153,7 +151,7 @@ const std::string TOOL_EVENT::Format() const
 
 const std::string TOOL_EVENT_LIST::Format() const
 {
-    string s;
+    std::string s;
 
     BOOST_FOREACH( TOOL_EVENT e, m_events )
         s += e.Format() + " ";

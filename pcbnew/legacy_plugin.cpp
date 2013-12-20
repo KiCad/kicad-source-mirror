@@ -281,6 +281,10 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
             FPID        fpid;
             std::string fpName = StrPurge( line + SZ( "$MODULE" ) );
 
+            // The footprint names in legacy libraries can contain the '/' and ':'
+            // characters which will cause the FPID parser to choke.
+            ReplaceIllegalFileNameChars( &fpName );
+
             if( !fpName.empty() )
                 fpid = FPID( fpName );
 
@@ -405,6 +409,7 @@ void LEGACY_PLUGIN::checkVersion()
 void LEGACY_PLUGIN::loadGENERAL()
 {
     char*   line;
+    char*   saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -413,7 +418,7 @@ void LEGACY_PLUGIN::loadGENERAL()
         if( TESTLINE( "Units" ) )
         {
             // what are the engineering units of the lengths in the BOARD?
-            data = strtok( line + SZ("Units"), delims );
+            data = strtok_r( line + SZ("Units"), delims, &saveptr );
 
             if( !strcmp( data, "mm" ) )
             {
@@ -516,6 +521,7 @@ void LEGACY_PLUGIN::loadSHEET()
     char        buf[260];
     TITLE_BLOCK tb;
     char*       line;
+    char*       saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -525,7 +531,7 @@ void LEGACY_PLUGIN::loadSHEET()
             // width and height are in 1/1000th of an inch, always
 
             PAGE_INFO   page;
-            char*       sname  = strtok( line + SZ( "Sheet" ), delims );
+            char*       sname  = strtok_r( line + SZ( "Sheet" ), delims, &saveptr );
 
             if( sname )
             {
@@ -537,9 +543,9 @@ void LEGACY_PLUGIN::loadSHEET()
                     THROW_IO_ERROR( m_error );
                 }
 
-                char*   width  = strtok( NULL, delims );
-                char*   height = strtok( NULL, delims );
-                char*   orient = strtok( NULL, delims );
+                char*   width  = strtok_r( NULL, delims, &saveptr );
+                char*   height = strtok_r( NULL, delims, &saveptr );
+                char*   orient = strtok_r( NULL, delims, &saveptr );
 
                 // only parse the width and height if page size is custom ("User")
                 if( wname == PAGE_INFO::Custom )
@@ -630,6 +636,7 @@ void LEGACY_PLUGIN::loadSETUP()
     BOARD_DESIGN_SETTINGS   bds = m_board->GetDesignSettings();
     ZONE_SETTINGS           zs  = m_board->GetZoneSettings();
     char*                   line;
+    char*                   saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -667,13 +674,13 @@ void LEGACY_PLUGIN::loadSETUP()
 
             LAYER_NUM layer = layerParse( line + SZ( "Layer[" ), &data );
 
-            data = strtok( (char*) data+1, delims );    // +1 for ']'
+            data = strtok_r( (char*) data+1, delims, &saveptr );    // +1 for ']'
             if( data )
             {
                 wxString layerName = FROM_UTF8( data );
                 m_board->SetLayerName( layer, layerName );
 
-                data = strtok( NULL, delims );
+                data = strtok_r( NULL, delims, &saveptr );
                 if( data )  // optional in old board files
                 {
                     LAYER_T type = LAYER::ParseType( data );
@@ -743,7 +750,7 @@ void LEGACY_PLUGIN::loadSETUP()
             BIU drill    = 0;
             BIU diameter = biuParse( line + SZ( "ViaSizeList" ), &data );
 
-            data = strtok( (char*) data, delims );
+            data = strtok_r( (char*) data, delims, &saveptr );
             if( data )  // DRILL may not be present ?
                 drill = biuParse( data );
 
@@ -925,7 +932,8 @@ void LEGACY_PLUGIN::loadSETUP()
 
 void LEGACY_PLUGIN::LoadMODULE( MODULE* aModule )
 {
-    char*               line;
+    char*   line;
+    char*   saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -985,7 +993,7 @@ void LEGACY_PLUGIN::LoadMODULE( MODULE* aModule )
             long edittime  = hexParse( data, &data );
             time_t timestamp = hexParse( data, &data );
 
-            data = strtok( (char*) data+1, delims );
+            data = strtok_r( (char*) data+1, delims, &saveptr );
 
             // data is now a two character long string
             // Note: some old files do not have this field
@@ -1057,7 +1065,7 @@ void LEGACY_PLUGIN::LoadMODULE( MODULE* aModule )
         else if( TESTLINE( "AR" ) )         // Alternate Reference
         {
             // e.g. "AR /47BA2624/45525076"
-            data = strtok( line + SZ( "AR" ), delims );
+            data = strtok_r( line + SZ( "AR" ), delims, &saveptr );
             if( data )
                 aModule->SetPath( FROM_UTF8( data ) );
         }
@@ -1147,6 +1155,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 {
     auto_ptr<D_PAD> pad( new D_PAD( aModule ) );
     char*           line;
+    char*           saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -1235,17 +1244,17 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
             PAD_SHAPE_T drShape = PAD_CIRCLE;
 
-            data = strtok( (char*) data, delims );
+            data = strtok_r( (char*) data, delims, &saveptr );
             if( data )  // optional shape
             {
                 if( data[0] == 'O' )
                 {
                     drShape = PAD_OVAL;
 
-                    data    = strtok( NULL, delims );
+                    data    = strtok_r( NULL, delims, &saveptr );
                     drill_x = biuParse( data );
 
-                    data    = strtok( NULL, delims );
+                    data    = strtok_r( NULL, delims, &saveptr );
                     drill_y = biuParse( data );
                 }
             }
@@ -1262,7 +1271,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
             PAD_ATTR_T  attribute;
 
-            data = strtok( line + SZ( "At" ), delims );
+            data = strtok_r( line + SZ( "At" ), delims, &saveptr );
 
             if( !strcmp( data, "SMD" ) )
                 attribute = PAD_SMD;
@@ -1273,8 +1282,8 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             else
                 attribute = PAD_STANDARD;
 
-            data = strtok( NULL, delims );  // skip BufCar
-            data = strtok( NULL, delims );
+            data = strtok_r( NULL, delims, &saveptr );  // skip BufCar
+            data = strtok_r( NULL, delims, &saveptr );
 
             LAYER_MSK layer_mask = hexParse( data );
 
@@ -1528,6 +1537,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     const char* data;
     const char* txt_end;
     const char* line = m_reader->Line();     // current (old) line
+    char*       saveptr;
 
     // sscanf( line + 1, "%d %d %d %d %d %d %d %s %s %d %s",
     //  &type, &m_Pos0.x, &m_Pos0.y, &m_Size.y, &m_Size.x,
@@ -1567,14 +1577,14 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     // after switching to strtok, there's no easy coming back because of the
     // embedded nul(s?) placed to the right of the current field.
     // (that's the reason why strtok was deprecated...)
-    char*   mirror  = strtok( (char*) data, delims );
-    char*   hide    = strtok( NULL, delims );
-    char*   tmp     = strtok( NULL, delims );
+    char*   mirror  = strtok_r( (char*) data, delims, &saveptr );
+    char*   hide    = strtok_r( NULL, delims, &saveptr );
+    char*   tmp     = strtok_r( NULL, delims, &saveptr );
     LAYER_NUM layer = tmp ? layerParse( tmp ) : SILKSCREEN_N_FRONT;
-    char*   italic  = strtok( NULL, delims );
+    char*   italic  = strtok_r( NULL, delims, &saveptr );
 
-    char*   hjust   = strtok( (char*) txt_end, delims );
-    char*   vjust   = strtok( NULL, delims );
+    char*   hjust   = strtok_r( (char*) txt_end, delims, &saveptr );
+    char*   vjust   = strtok_r( NULL, delims, &saveptr );
 
     if( type != TEXTE_MODULE::TEXT_is_REFERENCE
      && type != TEXTE_MODULE::TEXT_is_VALUE )
@@ -1693,7 +1703,9 @@ void LEGACY_PLUGIN::loadPCB_LINE()
     */
 
     auto_ptr<DRAWSEGMENT>   dseg( new DRAWSEGMENT( m_board ) );
-    char*                   line;
+
+    char*   line;
+    char*   saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -1723,8 +1735,8 @@ void LEGACY_PLUGIN::loadPCB_LINE()
             BIU     x = 0;
             BIU     y;
 
-            data = strtok( line + SZ( "De" ), delims );
-            for( int i = 0;  data;  ++i, data = strtok( NULL, delims ) )
+            data = strtok_r( line + SZ( "De" ), delims, &saveptr );
+            for( int i = 0;  data;  ++i, data = strtok_r( NULL, delims, &saveptr ) )
             {
                 switch( i )
                 {
@@ -1860,7 +1872,8 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
     TEXTE_PCB*  pcbtxt = new TEXTE_PCB( m_board );
     m_board->Add( pcbtxt, ADD_APPEND );
 
-    char*       line;
+    char*   line;
+    char*   saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -1924,9 +1937,9 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             LAYER_NUM layer     = layerParse( line + SZ( "De" ), &data );
             int     notMirrored = intParse( data, &data );
             time_t  timestamp   = hexParse( data, &data );
-            char*   style       = strtok( (char*) data, delims );
-            char*   hJustify    = strtok( NULL, delims );
-            char*   vJustify    = strtok( NULL, delims );
+            char*   style       = strtok_r( (char*) data, delims, &saveptr );
+            char*   hJustify    = strtok_r( NULL, delims, &saveptr );
+            char*   vJustify    = strtok_r( NULL, delims, &saveptr );
 
             pcbtxt->SetMirrored( !notMirrored );
             pcbtxt->SetTimeStamp( timestamp );
@@ -1964,6 +1977,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 void LEGACY_PLUGIN::loadTrackList( int aStructType )
 {
     char*   line;
+    char*   saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -1989,7 +2003,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         BIU width   = biuParse( data, &data );
 
         // optional 7th drill parameter (must be optional in an old format?)
-        data = strtok( (char*) data, delims );
+        data = strtok_r( (char*) data, delims, &saveptr );
 
         BIU drill   = data ? biuParse( data ) : -1;     // SetDefault() if < 0
 
@@ -2184,6 +2198,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
     bool    sawCorner = false;
     char    buf[1024];
     char*   line;
+    char*   saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -2236,7 +2251,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         {
             // e.g. "ZAux 7 E"
             int     ignore = intParse( line + SZ( "ZAux" ), &data );
-            char*   hopt   = strtok( (char*) data, delims );
+            char*   hopt   = strtok_r( (char*) data, delims, &saveptr );
 
             if( !hopt )
             {
@@ -2280,27 +2295,27 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         {
             zc->SetIsKeepout( true );
             // e.g. "ZKeepout tracks N vias N pads Y"
-           data = strtok( line + SZ( "ZKeepout" ), delims );
+           data = strtok_r( line + SZ( "ZKeepout" ), delims, &saveptr );
 
             while( data )
             {
                 if( !strcmp( data, "tracks" ) )
                 {
-                    data = strtok( NULL, delims );
+                    data = strtok_r( NULL, delims, &saveptr );
                     zc->SetDoNotAllowTracks( data && *data == 'N' );
                 }
                 else if( !strcmp( data, "vias" ) )
                 {
-                    data = strtok( NULL, delims );
+                    data = strtok_r( NULL, delims, &saveptr );
                     zc->SetDoNotAllowVias( data && *data == 'N' );
                 }
                 else if( !strcmp( data, "copperpour" ) )
                 {
-                    data = strtok( NULL, delims );
+                    data = strtok_r( NULL, delims, &saveptr );
                     zc->SetDoNotAllowCopperPour( data && *data == 'N' );
                 }
 
-                data = strtok( NULL, delims );
+                data = strtok_r( NULL, delims, &saveptr );
             }
         }
 
@@ -2331,7 +2346,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         {
             // e.g. "ZClearance 40 I"
             BIU     clearance = biuParse( line + SZ( "ZClearance" ), &data );
-            char*   padoption = strtok( (char*) data, delims );  // data: " I"
+            char*   padoption = strtok_r( (char*) data, delims, &saveptr );  // data: " I"
 
             ZoneConnection popt;
             switch( *padoption )
@@ -2443,7 +2458,9 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 void LEGACY_PLUGIN::loadDIMENSION()
 {
     auto_ptr<DIMENSION> dim( new DIMENSION( m_board ) );
-    char*               line;
+
+    char*   line;
+    char*   saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {
@@ -2500,7 +2517,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU     height = biuParse( data, &data );
             BIU     thickn = biuParse( data, &data );
             double  orient = degParse( data, &data );
-            char*   mirror = strtok( (char*) data, delims );
+            char*   mirror = strtok_r( (char*) data, delims, &saveptr );
 
             // This sets both DIMENSION's position and internal m_Text's.
             // @todo: But why do we even know about internal m_Text?
@@ -3958,6 +3975,7 @@ void LP_CACHE::Load()
 void LP_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
 {
     char* line = aReader->ReadLine();
+    char* saveptr;
 
     if( !line )
         goto L_bad_library;
@@ -3969,7 +3987,7 @@ void LP_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
     {
         if( TESTLINE( "Units" ) )
         {
-            const char* units = strtok( line + SZ( "Units" ), delims );
+            const char* units = strtok_r( line + SZ( "Units" ), delims, &saveptr );
 
             if( !strcmp( units, "mm" ) )
             {
@@ -4030,6 +4048,10 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
             auto_ptr<MODULE>    module( new MODULE( m_owner->m_board ) );
 
             std::string         footprintName = StrPurge( line + SZ( "$MODULE" ) );
+
+            // The footprint names in legacy libraries can contain the '/' and ':'
+            // characters which will cause the FPID parser to choke.
+            ReplaceIllegalFileNameChars( &footprintName );
 
             // set the footprint name first thing, so exceptions can use name.
             module->SetFPID( FPID( footprintName ) );

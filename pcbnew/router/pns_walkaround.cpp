@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.or/licenses/>.
  */
 
-#include <vector>
-
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 
@@ -29,8 +27,6 @@
 #include "pns_optimizer.h"
 #include "pns_utils.h"
 #include "pns_router.h"
-
-using namespace std;
 using boost::optional;
 
 void PNS_WALKAROUND::start( const PNS_LINE& aInitialPath )

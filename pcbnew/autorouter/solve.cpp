@@ -324,7 +324,6 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
             AppendMsgPanel( wxT( "Activity" ), msg, BROWN );
         }
 
-        pt_cur_ch = pt_cur_ch;
         segm_oX = GetBoard()->GetBoundingBox().GetX() + (RoutingMatrix.m_GridRouting * col_source);
         segm_oY = GetBoard()->GetBoundingBox().GetY() + (RoutingMatrix.m_GridRouting * row_source);
         segm_fX = GetBoard()->GetBoundingBox().GetX() + (RoutingMatrix.m_GridRouting * col_target);

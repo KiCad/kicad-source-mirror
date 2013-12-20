@@ -266,6 +266,17 @@ public:
     void SetVertJustify( EDA_TEXT_VJUSTIFY_T aType )    { m_VJustify = aType; };
 
     /**
+     * Function GetPositionsOfLinesOfMultilineText
+     * Populates aPositions with the position of each line of
+     * a multiline text, according to the vertical justification and the
+     * rotation of the whole text
+     * @param aPositions is the list to populate by the wxPoint positions
+     * @param aLineCount is the number of lines (not recalculated here
+     * for efficiency reasons
+     */
+    void GetPositionsOfLinesOfMultilineText(
+                std::vector<wxPoint>& aPositions, int aLineCount );
+    /**
      * Function Format
      * outputs the object to \a aFormatter in s-expression form.
      *

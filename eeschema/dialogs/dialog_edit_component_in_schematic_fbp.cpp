@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 30 2013)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,22 +32,27 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	unitChoice->SetSelection( 0 );
 	optionsSizer->Add( unitChoice, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	wxBoxSizer* orientationSizer;
-	orientationSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerUnitsInterchangeable;
+	bSizerUnitsInterchangeable = new wxBoxSizer( wxHORIZONTAL );
+	
+	unitsInterchageableText = new wxStaticText( this, wxID_ANY, _("Units are interchangeable:"), wxDefaultPosition, wxDefaultSize, 0 );
+	unitsInterchageableText->Wrap( -1 );
+	bSizerUnitsInterchangeable->Add( unitsInterchageableText, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	
+	unitsInterchageableLabel = new wxStaticText( this, wxID_ANY, _("Yes"), wxDefaultPosition, wxDefaultSize, 0 );
+	unitsInterchageableLabel->Wrap( -1 );
+	bSizerUnitsInterchangeable->Add( unitsInterchageableLabel, 0, wxALL, 5 );
+	
+	
+	optionsSizer->Add( bSizerUnitsInterchangeable, 1, wxEXPAND, 5 );
 	
 	wxString orientationRadioBoxChoices[] = { _("0"), _("+90"), _("180"), _("-90") };
 	int orientationRadioBoxNChoices = sizeof( orientationRadioBoxChoices ) / sizeof( wxString );
 	orientationRadioBox = new wxRadioBox( this, wxID_ANY, _("Orientation (Degrees)"), wxDefaultPosition, wxDefaultSize, orientationRadioBoxNChoices, orientationRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
-	orientationRadioBox->SetSelection( 0 );
+	orientationRadioBox->SetSelection( 1 );
 	orientationRadioBox->SetToolTip( _("Select if the component is to be rotated when drawn") );
 	
-	orientationSizer->Add( orientationRadioBox, 1, wxALL|wxEXPAND, 8 );
-	
-	
-	optionsSizer->Add( orientationSizer, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 0 );
-	
-	wxBoxSizer* mirrorSizer;
-	mirrorSizer = new wxBoxSizer( wxHORIZONTAL );
+	optionsSizer->Add( orientationRadioBox, 0, wxEXPAND|wxALL, 5 );
 	
 	wxString mirrorRadioBoxChoices[] = { _("Normal"), _("Mirror ---"), _("Mirror |") };
 	int mirrorRadioBoxNChoices = sizeof( mirrorRadioBoxChoices ) / sizeof( wxString );
@@ -55,10 +60,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	mirrorRadioBox->SetSelection( 0 );
 	mirrorRadioBox->SetToolTip( _("Pick the graphical transformation to be used when displaying the component, if any") );
 	
-	mirrorSizer->Add( mirrorRadioBox, 1, wxALL, 8 );
-	
-	
-	optionsSizer->Add( mirrorSizer, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 0 );
+	optionsSizer->Add( mirrorRadioBox, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticTextChipname = new wxStaticText( this, wxID_ANY, _("Chip Name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextChipname->Wrap( -1 );
@@ -73,19 +75,24 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	convertCheckBox = new wxCheckBox( this, wxID_ANY, _("Convert"), wxDefaultPosition, wxDefaultSize, 0 );
 	convertCheckBox->SetToolTip( _("Use the alternate shape of this component.\nFor gates, this is the \"De Morgan\" conversion") );
 	
-	optionsSizer->Add( convertCheckBox, 0, wxALL, 8 );
-	
-	partsAreLockedLabel = new wxStaticText( this, wxID_ANY, _("Parts are locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	partsAreLockedLabel->Wrap( -1 );
-	optionsSizer->Add( partsAreLockedLabel, 0, wxALL|wxEXPAND, 8 );
+	optionsSizer->Add( convertCheckBox, 0, wxALL, 5 );
 	
 	defaultsButton = new wxButton( this, wxID_ANY, _("Reset to Library Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	defaultsButton->SetToolTip( _("Set position and style of fields and component orientation  to default lib value.\nFields texts are not modified.") );
 	
 	optionsSizer->Add( defaultsButton, 0, wxALL|wxEXPAND, 5 );
 	
+	m_staticTextTimeStamp = new wxStaticText( this, wxID_ANY, _("Timestamp"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTimeStamp->Wrap( -1 );
+	optionsSizer->Add( m_staticTextTimeStamp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	upperSizer->Add( optionsSizer, 0, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
+	m_textCtrlTimeStamp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_textCtrlTimeStamp->SetToolTip( _("An unique ID (a time stamp) to identify the component.\nThis is an alternate identifier to the reference.") );
+	
+	optionsSizer->Add( m_textCtrlTimeStamp, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	
+	upperSizer->Add( optionsSizer, 0, wxALIGN_TOP|wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* fieldsSizer;
 	fieldsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fields") ), wxHORIZONTAL );
@@ -265,7 +272,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	stdDialogButtonSizer->AddButton( stdDialogButtonSizerCancel );
 	stdDialogButtonSizer->Realize();
 	
-	mainSizer->Add( stdDialogButtonSizer, 0, wxALL|wxEXPAND, 8 );
+	mainSizer->Add( stdDialogButtonSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( mainSizer );

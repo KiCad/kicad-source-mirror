@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -113,6 +113,15 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	
 	
 	bSizerLeft->Add( fgSizerPos, 0, wxEXPAND|wxBOTTOM, 5 );
+	
+	m_TextSheetPath = new wxStaticText( m_PanelProperties, wxID_ANY, _("Sheet path:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextSheetPath->Wrap( -1 );
+	bSizerLeft->Add( m_TextSheetPath, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_textCtrlSheetPath = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_textCtrlSheetPath->SetToolTip( _("An unique ID (a time stamp) to identify the component.\nThis is an alternate identifier to the reference.") );
+	
+	bSizerLeft->Add( m_textCtrlSheetPath, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
 	m_PanelPropertiesBoxSizer->Add( bSizerLeft, 1, wxEXPAND, 5 );

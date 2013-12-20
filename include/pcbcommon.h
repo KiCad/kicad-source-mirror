@@ -25,8 +25,6 @@ extern DISPLAY_OPTIONS DisplayOpt;
 
 extern int g_CurrentVersionPCB;
 
-extern int g_RotationAngle;
-
 /// List of segments of the trace currently being drawn.
 extern DLIST<TRACK> g_CurrentTrackList;
 

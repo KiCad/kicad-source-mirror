@@ -1,13 +1,13 @@
-/******************************************************************************
- * Module editor: Dialog box for editing module properties in the pcb editor. *
- ******************************************************************************/
+/**
+ * Module editor: Dialog for editing module properties in the pcb editor.
+ */
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2011 Jean-Pierre Charras
- * Copyright (C) 2012 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras
+ * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -265,6 +265,9 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
     m_ValueCopy->Copy( &m_CurrentModule->Value() );
     m_ReferenceCtrl->SetValue( m_ReferenceCopy->GetText() );
     m_ValueCtrl->SetValue( m_ValueCopy->GetText() );
+
+    // Shows the footprint's schematic path.
+    m_textCtrlSheetPath->SetValue( m_CurrentModule->GetPath() );
 
     m_AttributsCtrl->SetItemToolTip( 0,
         _( "Use this attribute for most non SMD components\n"

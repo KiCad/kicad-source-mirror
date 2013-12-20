@@ -89,7 +89,6 @@ void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
     // User library path takes precedent over default library search paths.
     wxGetApp().InsertLibraryPath( m_UserLibraryPath, 1 );
 
-#if defined( USE_FP_LIB_TABLE )
     delete m_footprintLibTable;
 
     // Attempt to load the project footprint library table if it exists.
@@ -111,7 +110,6 @@ void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
     {
         DisplayError( this, ioe.errorText );
     }
-#endif
 }
 
 

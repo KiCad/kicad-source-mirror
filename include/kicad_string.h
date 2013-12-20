@@ -1,6 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
- * This file is part of the common library \n
- * Custom string manipulation routines.
  * @file  kicad_string.h
  * @see   common.h, string.cpp
  */
@@ -10,6 +31,7 @@
 #define KICAD_STRING_H_
 
 #include <wx/string.h>
+#include <wx/filename.h>
 
 
 /**
@@ -57,7 +79,7 @@ std::string EscapedUTF8( const wxString& aString );
 char* GetLine( FILE* aFile, char* Line, int* LineNum = NULL, int SizeLine = 255 );
 
 /**
- * Funxtion StrPurge
+ * Function StrPurge
  * removes leading and training spaces, tabs and end of line chars in \a text
  * return a pointer on the first n char in text
  */
@@ -79,7 +101,7 @@ wxString DateAndTime();
  *
  * @param aString1 A wxChar pointer to the reference string.
  * @param aString2 A wxChar pointer to the comparison string.
- * @param aLength The numbere of characters to compare.  Set to -1 to compare
+ * @param aLength The number of characters to compare.  Set to -1 to compare
  *                the entire string.
  * @param aIgnoreCase Use true to make the comparison case insensitive.
  * @return An integer value of -1 if \a aString1 is less than \a aString2, 0 if
@@ -120,5 +142,43 @@ int SplitString( wxString  strToSplit,
                  wxString* strBeginning,
                  wxString* strDigits,
                  wxString* strEnd );
+
+/**
+ * Function GetIllegalFileNameWxChars
+ * @return a wString object containing the illegal file name characters for all platforms.
+ */
+wxString GetIllegalFileNameWxChars();
+
+/**
+ * Function ReplaceIllegalFileNameChars
+ * checks \a aName for illegal file name characters.
+ *
+ * The Windows (DOS) file system forbidden characters already include the forbidden file
+ * name characters for both Posix and OSX systems.  The characters \/?*|"\<\> are illegal
+ * and are replaced with %xx where xx the hexadecimal equivalent of the replaced character.
+ * This replacement may not be as elegant as using an underscore ('_') or hyphen ('-') but
+ * it guarentees that there will be no naming conflicts when fixing footprint library names.
+ *
+ * @param aName is a point to a std::string object containing the footprint name to verify.
+ * @return true if any characters have been replaced in \a aName.
+ */
+bool ReplaceIllegalFileNameChars( std::string* aName );
+
+/**
+ * Function RemoveTrailingZeros
+ * removes the trailing zeros from \a aString.
+ *
+ * All trailing zeros and the '.' character from floating point numbers are removed from
+ * \a aString.
+ *
+ * @param aString is a wxString object to remove the trailing zeros from.
+ * @return a wxString with the trailing zeros removed.
+ */
+wxString RemoveTrailingZeros( const wxString& aString );
+
+#ifndef HAVE_STRTOKR
+// common/strtok_r.c optionally:
+extern "C" char* strtok_r( char* str, const char* delim, char** nextp );
+#endif
 
 #endif  // KICAD_STRING_H_

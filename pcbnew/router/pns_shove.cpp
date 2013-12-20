@@ -35,8 +35,6 @@
 
 #include <profile.h>
 
-using namespace std;
-
 PNS_SHOVE::PNS_SHOVE( PNS_NODE* aWorld )
 {
     m_root = aWorld;
@@ -280,9 +278,9 @@ const PNS_COST_ESTIMATOR PNS_SHOVE::TotalCost() const
 
 PNS_SHOVE::ShoveStatus PNS_SHOVE::ShoveLines( PNS_LINE* aCurrentHead )
 {
-    stack <PNS_LINE*> lineStack;
+    std::stack<PNS_LINE*> lineStack;
     PNS_NODE* node, * parent;
-    PNS_VIA*    headVia = NULL;
+    PNS_VIA* headVia = NULL;
     bool    fail    = false;
     int     iter    = 0;
 
@@ -343,11 +341,11 @@ PNS_SHOVE::ShoveStatus PNS_SHOVE::ShoveLines( PNS_LINE* aCurrentHead )
 
         PNS_LINE* currentLine = lineStack.top();
 
-        prof_start( &totalRealTime, false );
+        prof_start( &totalRealTime );
         nearest = node->NearestObstacle( currentLine, PNS_ITEM::ANY );
         prof_end( &totalRealTime );
 
-        TRACE( 2, "t-nearestObstacle %lld us", (totalRealTime.value ) );
+        TRACE( 2, "t-nearestObstacle %lld us", totalRealTime.usecs() );
 
         if( !nearest )
         {
@@ -362,7 +360,7 @@ PNS_SHOVE::ShoveStatus PNS_SHOVE::ShoveLines( PNS_LINE* aCurrentHead )
                 TRACE( 1, "Iter %d optimize-line [range %d-%d, total %d]",
                         iter % r_start % r_end % original->GetCLine().PointCount() );
                 // lastWalkSolid = NULL;
-                prof_start( &totalRealTime, false );
+                prof_start( &totalRealTime );
 
                 if( optimizer.Optimize( original, &optimized ) )
                 {
@@ -376,7 +374,7 @@ PNS_SHOVE::ShoveStatus PNS_SHOVE::ShoveLines( PNS_LINE* aCurrentHead )
 
                 prof_end( &totalRealTime );
 
-                TRACE( 2, "t-optimizeObstacle %lld us", (totalRealTime.value ) );
+                TRACE( 2, "t-optimizeObstacle %lld us", totalRealTime.usecs() );
             }
 
             lineStack.pop();
@@ -393,12 +391,12 @@ PNS_SHOVE::ShoveStatus PNS_SHOVE::ShoveLines( PNS_LINE* aCurrentHead )
                     PNS_LINE* collidingLine = node->AssembleLine( pseg );
                     PNS_LINE* shovedLine = collidingLine->CloneProperties();
 
-                    prof_start( &totalRealTime, false );
+                    prof_start( &totalRealTime );
                     ShoveStatus st = shoveSingleLine( node, currentLine, collidingLine,
                             *pseg, shovedLine );
                     prof_end( &totalRealTime );
 
-                    TRACE( 2, "t-shoveSingle %lld us", (totalRealTime.value ) );
+                    TRACE( 2, "t-shoveSingle %lld us", totalRealTime.usecs() );
 
                     if( st == SH_OK )
                     {
@@ -441,11 +439,11 @@ PNS_SHOVE::ShoveStatus PNS_SHOVE::ShoveLines( PNS_LINE* aCurrentHead )
                     walkaround.SetSolidsOnly( true );
                     walkaround.SetSingleDirection( true );
 
-                    prof_start( &totalRealTime, false );
+                    prof_start( &totalRealTime );
                     walkaround.Route( *currentLine, *walkaroundLine, false );
                     prof_end( &totalRealTime );
 
-                    TRACE( 2, "t-walkSolid %lld us", (totalRealTime.value ) );
+                    TRACE( 2, "t-walkSolid %lld us", totalRealTime.usecs() );
 
 
                     node->Replace( currentLine, walkaroundLine );

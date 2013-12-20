@@ -124,12 +124,14 @@ set( PCBNEW_IMPORT_DXF
     )
 
 set( PCBNEW_AUTOROUTER_SRCS
-    autorouter/automove.cpp
-    autorouter/autoplac.cpp
+    autorouter/rect_placement/rect_placement.cpp
+    autorouter/move_and_route_event_functions.cpp
+    autorouter/auto_place_footprints.cpp
     autorouter/autorout.cpp
     autorouter/routing_matrix.cpp
     autorouter/dist.cpp
     autorouter/queue.cpp
+    autorouter/spread_footprints.cpp
     autorouter/solve.cpp
     autorouter/graphpcb.cpp
     autorouter/work.cpp
@@ -379,6 +381,7 @@ if( KICAD_SCRIPTING_MODULES )
         ${GDI_PLUS_LIBRARIES}
         ${PYTHON_LIBRARIES}
         ${PCBNEW_EXTRA_LIBS}
+        ${Boost_LIBRARIES}      # must follow GITHUB
         )
 
      # create .i files from XML doxygen parsing, docstrings.i will include all of them
@@ -548,20 +551,21 @@ target_link_libraries( pcbnew
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
     ${PCBNEW_EXTRA_LIBS}
-	${GLEW_LIBRARIES}
-	${CAIRO_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${CAIRO_LIBRARIES}
+    ${Boost_LIBRARIES}      # must follow GITHUB
     )
 
 # Only for win32 cross compilation using MXE
 if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
-target_link_libraries(pcbnew
-	opengl32
-	glu32
-	pixman-1
-	fontconfig
-	freetype
-	bz2
-	)
+target_link_libraries( pcbnew
+    opengl32
+    glu32
+    pixman-1
+    fontconfig
+    freetype
+    bz2
+    )
 endif()
 
 if( MAKE_LINK_MAPS )

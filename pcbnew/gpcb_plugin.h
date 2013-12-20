@@ -52,24 +52,24 @@ public:
 
     //-----<PLUGIN API>---------------------------------------------------------
 
-    const wxString& PluginName() const
+    const wxString PluginName() const
     {
-        static const wxString name = wxT( "Geda PCB" );
-        return name;
+        return wxT( "Geda PCB" );
     }
 
-    const wxString& GetFileExtension() const
+    const wxString GetFileExtension() const
     {
-        static const wxString extension = wxT( "fp" );
-        return extension;
+        return wxT( "fp" );
     }
 
-    wxArrayString FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL);
+    wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
+                                      const PROPERTIES* aProperties = NULL);
 
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                            const PROPERTIES* aProperties = NULL );
 
-    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = NULL );
+    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
+                          const PROPERTIES* aProperties = NULL );
 
     bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
 
@@ -85,17 +85,16 @@ public:
 
 protected:
 
-    wxString        m_error;        ///< for throwing exceptions
-    const PROPERTIES*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
-    GPCB_FPL_CACHE* m_cache;        ///< Footprint library cache.
-    int             m_ctl;
-
-    LINE_READER*    m_reader;       ///< no ownership here.
-    wxString        m_filename;     ///< for saves only, name is in m_reader for loads
+    wxString          m_error;        ///< for throwing exceptions
+    const PROPERTIES* m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
+    GPCB_FPL_CACHE*   m_cache;        ///< Footprint library cache.
+    int               m_ctl;
+    LINE_READER*      m_reader;       ///< no ownership here.
+    wxString          m_filename;     ///< for saves only, name is in m_reader for loads
 
 private:
     /// we only cache one footprint library for now, this determines which one.
-    void cacheLib( const wxString& aLibraryPath );
+    void cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName = wxEmptyString );
 
     void init( const PROPERTIES* aProperties );
 };

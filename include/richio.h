@@ -93,7 +93,7 @@ std::string
 
 /**
  * Struct IO_ERROR
- * is a class used to hold an error message and may be used to throw exceptions
+ * is a class used to hold an error message and may be used when throwing exceptions
  * containing meaningful error messages.
  * @author Dick Hollenbeck
  */
@@ -148,7 +148,9 @@ struct IO_ERROR // : std::exception
 
     IO_ERROR() {}
 
-    ~IO_ERROR() throw ( /*none*/ ){}
+    // Destructor is virtual because PARSE_ERROR is derived from it and
+    // boost::ptr_vector lists consisting of both will need a virtual destructor.
+    virtual ~IO_ERROR() throw ( /*none*/ ){}
 };
 
 

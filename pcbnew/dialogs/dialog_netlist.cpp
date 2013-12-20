@@ -167,7 +167,7 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
                          "sure you want to read the netlist?" ) ) )
         return;
 
-    wxBusyCursor busy();
+    wxBusyCursor busy;
     m_MessageWindow->Clear();
 
     msg.Printf( _( "Reading netlist file \"%s\".\n" ), GetChars( netlistFileName ) );

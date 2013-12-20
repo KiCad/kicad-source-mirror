@@ -74,7 +74,8 @@ public:
                      const wxString& aRefText,
                      void(*aCallBackFunction)(wxString& Text) = NULL,
                      bool aSortList = false );
-    ~EDA_LIST_DIALOG();
+
+    // ~EDA_LIST_DIALOG() {}
 
     void     Append( const wxArrayString& aItemStr );
     void     InsertItems( const std::vector<wxArrayString>& aItemList, int aPosition = 0 );
