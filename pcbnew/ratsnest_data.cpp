@@ -836,7 +836,7 @@ void RN_DATA::Recalculate( int aNet )
                 updateNet( i );
         }
     }
-    else                        // Recompute only specific net
+    else if( aNet > 0 )         // Recompute only specific net
     {
         updateNet( aNet );
     }
