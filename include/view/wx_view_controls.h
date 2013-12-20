@@ -84,7 +84,10 @@ public:
     const VECTOR2D GetMousePosition() const;
 
     /// @copydoc VIEW_CONTROLS::GetCursorPosition()
-    const VECTOR2D GetCursorPosition() const;
+    const VECTOR2D GetCursorPosition() const
+    {
+        return m_cursorPosition;
+    }
 
     /// Event that forces mouse move event in the dispatcher (eg. used in autopanning, when mouse
     /// cursor does not move in screen coordinates, but does in world coordinates)

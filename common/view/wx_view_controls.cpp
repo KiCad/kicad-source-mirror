@@ -83,9 +83,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     bool isAutoPanning = false;
 
     if( m_autoPanEnabled )
-    {
         isAutoPanning = handleAutoPanning( aEvent );
-    }
 
     if( !isAutoPanning && aEvent.Dragging() )
     {
@@ -240,15 +238,6 @@ const VECTOR2D WX_VIEW_CONTROLS::GetMousePosition() const
     wxPoint winp = m_parentPanel->GetScreenPosition();
 
     return VECTOR2D( msp.x - winp.x, msp.y - winp.y );
-}
-
-
-const VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
-{
-    if( m_snappingEnabled )
-        return m_view->GetGAL()->GetGridPoint( GetMousePosition() );
-    else
-        return GetMousePosition();
 }
 
 

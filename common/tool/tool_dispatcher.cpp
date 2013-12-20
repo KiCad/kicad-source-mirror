@@ -221,7 +221,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         // but changes in world coordinates (e.g. autopanning)
         type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
     {
-        VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetCursorPosition();
+        VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetMousePosition();
         VECTOR2D pos = getView()->ToWorld( screenPos );
 
         if( pos != m_lastMousePos || type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
