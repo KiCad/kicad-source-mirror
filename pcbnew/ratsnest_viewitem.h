@@ -1,5 +1,5 @@
 /*
- * This program source code file is part of KiCad, a free EDA CAD application.
+ * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -22,55 +22,46 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __MOVE_TOOL_H
-#define __MOVE_TOOL_H
+/**
+ * @file ratsnest_viewitem.h
+ * @brief Class that draws missing connections on a PCB.
+ */
 
+#ifndef RATSNEST_VIEWITEM_H
+#define RATSNEST_VIEWITEM_H
+
+#include <base_struct.h>
 #include <math/vector2d.h>
-#include <tool/tool_interactive.h>
-#include <view/view_group.h>
-#include "item_state.h"
 
-class BOARD_ITEM;
-class SELECTION_TOOL;
+class GAL;
+class RN_DATA;
 
 namespace KIGFX
 {
-class VIEW_GROUP;
-}
-
-/**
- * Class MOVE_TOOL
- *
- * Our sample move tool. Allows to move, rotate and flip items selected by
- * pcbnew.InteractiveSelection tool.
- */
-
-class MOVE_TOOL : public TOOL_INTERACTIVE
+class RATSNEST_VIEWITEM : public EDA_ITEM
 {
 public:
-    MOVE_TOOL();
+    RATSNEST_VIEWITEM( RN_DATA* aData );
 
-    /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset();
+    /// @copydoc VIEW_ITEM::ViewBBox()
+    const BOX2I ViewBBox() const;
 
-    /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init();
+    /// @copydoc VIEW_ITEM::ViewDraw()
+    void ViewDraw( int aLayer, GAL* aGal ) const;
 
-    /**
-     * Function Main()
-     *
-     * Main loop in which events are handled.
-     */
-    int Main( TOOL_EVENT& aEvent );
+    /// @copydoc VIEW_ITEM::ViewGetLayers()
+    void ViewGetLayers( int aLayers[], int& aCount ) const;
 
-private:
-    void updateRatsnest( bool aRedraw );
+    /// @copydoc EDA_ITEM::Show()
+    void Show( int x, std::ostream& st ) const
+    {
+    }
 
-    /// Saves the state of items and allows to restore them
-    ITEM_STATE m_state;
-
-    /// Selection tool used for obtaining selected items
-    SELECTION_TOOL* m_selectionTool;
+protected:
+    ///> Object containing ratsnest data.
+    RN_DATA* m_data;
 };
 
-#endif
+}   // namespace KIGFX
+
+#endif /* RATSNEST_VIEWITEM_H */

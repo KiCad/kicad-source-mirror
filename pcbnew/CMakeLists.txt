@@ -213,6 +213,8 @@ set( PCBNEW_CLASS_SRCS
     print_board_functions.cpp
     printout_controler.cpp
     ratsnest.cpp
+    ratsnest_data.cpp
+    ratsnest_viewitem.cpp
 #    specctra.cpp           #moved in pcbcommon lib
 #    specctra_export.cpp
 #    specctra_keywords.cpp
