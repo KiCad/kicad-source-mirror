@@ -59,8 +59,6 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
     aGal->SetLineWidth( 1.0 );
     aGal->SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 0.4 ) );
 
-    WITHOUT_FLAG without_flag;
-
     // Draw the temporary ratsnest
     BOOST_FOREACH( const RN_NET& net, m_data->GetNets() )
     {
@@ -73,7 +71,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
         // Draw the "dynamic" ratsnest (ie. for objects that may be currently being moved)
         BOOST_FOREACH( const RN_NODE_PTR& node, net.GetSimpleNodes() )
         {
-            RN_NODE_PTR dest = net.GetClosestNode( node, without_flag );
+            RN_NODE_PTR dest = net.GetClosestNode( node, WITHOUT_FLAG() );
 
             if( dest && usedDestinations.find( dest ) == usedDestinations.end() )
             {
