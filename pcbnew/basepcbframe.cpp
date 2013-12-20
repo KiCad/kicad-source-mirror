@@ -54,6 +54,8 @@
 #include <trigo.h>
 #include <pcb_painter.h>
 #include <worksheet_viewitem.h>
+#include <ratsnest_data.h>
+#include <ratsnest_viewitem.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -79,6 +81,7 @@ const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
     ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ),
     ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE), ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ),
 
+    ITEM_GAL_LAYER( RATSNEST_VISIBLE ),
     ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ),
     ITEM_GAL_LAYER( VIAS_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
 
@@ -171,102 +174,6 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 {
     delete m_Pcb;
     m_Pcb = aBoard;
-
-    if( m_galCanvas )
-    {
-        KIGFX::VIEW* view = m_galCanvas->GetView();
-
-        try
-        {
-            ViewReloadBoard( m_Pcb );
-        }
-        catch( const std::exception& ex )
-        {
-            DBG(printf( "ViewReloadBoard: exception: %s\n", ex.what() );)
-        }
-
-        // update the tool manager with the new board and its view.
-        if( m_toolManager )
-            m_toolManager->SetEnvironment( m_Pcb, view, m_galCanvas->GetViewControls(), this );
-    }
-}
-
-
-void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
-{
-    KIGFX::VIEW* view = m_galCanvas->GetView();
-    view->Clear();
-
-    // All of PCB drawing elements should be added to the VIEW
-    // in order to be displayed
-
-    // Load zones
-    for( int i = 0; i < aBoard->GetAreaCount(); ++i )
-    {
-        view->Add( (KIGFX::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
-    }
-
-    // Load drawings
-    for( BOARD_ITEM* drawing = aBoard->m_Drawings; drawing; drawing = drawing->Next() )
-    {
-        view->Add( drawing );
-    }
-
-    // Load tracks
-    for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
-    {
-        view->Add( track );
-    }
-
-    // Load modules and its additional elements
-    for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
-    {
-        // Load module's pads
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-        {
-            view->Add( pad );
-        }
-
-        // Load module's drawing (mostly silkscreen)
-        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
-             drawing = drawing->Next() )
-        {
-            view->Add( drawing );
-        }
-
-        // Load module's texts (name and value)
-        view->Add( &module->Reference() );
-        view->Add( &module->Value() );
-
-        // Add the module itself
-        view->Add( module );
-    }
-
-    // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
-    for( SEGZONE* zone = aBoard->m_Zone; zone; zone = zone->Next() )
-    {
-        view->Add( zone );
-    }
-
-    // Add an entry for the worksheet layout
-    KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM(
-                                            std::string( aBoard->GetFileName().mb_str() ),
-                                            std::string( GetScreenDesc().mb_str() ),
-                                            &GetPageSettings(), &GetTitleBlock() );
-    BASE_SCREEN* screen = GetScreen();
-    if( screen != NULL )
-    {
-        worksheet->SetSheetNumber( GetScreen()->m_ScreenNumber );
-        worksheet->SetSheetCount( GetScreen()->m_NumberOfScreens );
-    }
-
-    view->Add( worksheet );
-
-    view->SetPanBoundary( worksheet->ViewBBox() );
-    view->RecacheAllItems( true );
-
-    if( m_galCanvasActive )
-        m_galCanvas->Refresh();
 }
 
 
@@ -604,17 +511,6 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 }
 
 
-void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
-{
-    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
-
-    ViewReloadBoard( m_Pcb );
-
-    m_toolManager->SetEnvironment( m_Pcb, m_galCanvas->GetView(),
-                                   m_galCanvas->GetViewControls(), this );
-}
-
-
 void PCB_BASE_FRAME::ProcessItemSelection( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
@@ -908,6 +804,7 @@ void PCB_BASE_FRAME::LoadSettings()
     view->SetRequired( SOLDERMASK_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
 
     view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
+    view->SetLayerTarget( ITEM_GAL_LAYER( RATSNEST_VISIBLE ), KIGFX::TARGET_OVERLAY );
 
     // Apply layer coloring scheme & display options
     if( view->GetPainter() )

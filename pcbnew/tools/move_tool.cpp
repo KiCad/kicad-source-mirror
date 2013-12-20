@@ -26,7 +26,10 @@
 #include <class_module.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
+#include <ratsnest_data.h>
 #include <confirm.h>
+
+#include <boost/foreach.hpp>
 
 #include "common_actions.h"
 #include "selection_tool.h"
@@ -37,11 +40,6 @@ using boost::optional;
 
 MOVE_TOOL::MOVE_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveMove" ), m_selectionTool( NULL )
-{
-}
-
-
-MOVE_TOOL::~MOVE_TOOL()
 {
 }
 
@@ -111,11 +109,13 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
             {
                 m_state.Rotate( cursorPos, 900.0 );
                 selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
+                updateRatsnest( true );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )        // got flip event?
             {
                 m_state.Flip( cursorPos );
                 selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
+                updateRatsnest( true );
             }
         }
 
@@ -126,6 +126,8 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
                 // Drag items to the current cursor position
                 VECTOR2D movement = ( evt->Position() - dragPosition );
                 m_state.Move( movement );
+
+                updateRatsnest( true );
             }
             else
             {
@@ -153,17 +155,50 @@ int MOVE_TOOL::Main( TOOL_EVENT& aEvent )
         // Modifications has to be rollbacked, so restore the previous state of items
         selection.group->ItemsViewUpdate( VIEW_ITEM::APPEARANCE );
         m_state.RestoreAll();
+
+        updateRatsnest( false );
     }
     else
     {
         // Changes are applied, so update the items
         selection.group->ItemsViewUpdate( m_state.GetUpdateFlag() );
         m_state.Apply();
+
     }
+
+    RN_DATA* ratsnest = static_cast<BOARD*>( m_toolMgr->GetModel() )->GetRatsnest();
+    ratsnest->Recalculate();
 
     controls->ShowCursor( false );
     controls->SetSnapping( false );
     controls->SetAutoPan( false );
 
     return 0;
+}
+
+
+void MOVE_TOOL::updateRatsnest( bool aRedraw )
+{
+    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    RN_DATA* ratsnest = static_cast<BOARD*>( m_toolMgr->GetModel() )->GetRatsnest();
+
+    ratsnest->ClearSimple();
+    BOOST_FOREACH( BOARD_ITEM* item, selection.items )
+    {
+        if( item->Type() == PCB_PAD_T || item->Type() == PCB_TRACE_T ||
+                item->Type() == PCB_VIA_T || item->Type() == PCB_ZONE_AREA_T )
+        {
+            ratsnest->Update( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+
+            if( aRedraw )
+                ratsnest->AddSimple( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+        }
+        else if( item->Type() == PCB_MODULE_T )
+        {
+            ratsnest->Update( static_cast<MODULE*>( item ) );
+
+            if( aRedraw )
+                ratsnest->AddSimple( static_cast<MODULE*>( item ) );
+        }
+    }
 }
