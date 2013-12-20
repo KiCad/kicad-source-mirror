@@ -52,9 +52,6 @@
 #include <errno.h>
 #include <assert.h>
 
-#include <vector>
-using namespace std;
-
 #include <sch_dir_lib_source.h>
 using namespace SCH;
 

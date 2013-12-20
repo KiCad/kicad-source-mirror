@@ -87,6 +87,9 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
     /// The global footprint library table.
     FP_LIB_TABLE* m_globalFootprintTable;
 
+    /// User defined rotation angle (in tenths of a degree).
+    int             m_rotationAngle;
+
     /**
      * Function loadFootprints
      * loads the footprints for each #COMPONENT in \a aNetlist from the list of libraries.
@@ -119,7 +122,7 @@ protected:
 
     void setupTools();
     void destroyTools();
-	void onGenericCommand( wxCommandEvent& aEvent );
+    void onGenericCommand( wxCommandEvent& aEvent );
 
     // we'll use lower case function names for private member functions.
     void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
@@ -329,6 +332,9 @@ public:
      * @param aColor = the new color of the grid
      */
     virtual void SetGridColor(EDA_COLOR_T aColor);
+
+    int GetRotationAngle() const { return m_rotationAngle; }
+    void SetRotationAngle( int aRotationAngle );
 
     // Configurations:
     void InstallConfigFrame();
@@ -922,12 +928,11 @@ public:
     /**
      * Function ArchiveModulesOnBoard
      * Save modules in a library:
-     * @param aLibName: the full filename of the library to create or modify
      * @param aNewModulesOnly:
      *              true : save modules not already existing in this lib
      *              false: save all modules
      */
-    void ArchiveModulesOnBoard( const wxString& aLibName, bool aNewModulesOnly );
+    void ArchiveModulesOnBoard( bool aNewModulesOnly );
 
     /**
      * Function RecreateBOMFileFromBoard
@@ -1511,7 +1516,7 @@ public:
 
 
     // Autoplacement:
-    void AutoPlace( wxCommandEvent& event );
+    void OnPlaceOrRouteFootprints( wxCommandEvent& event );
 
     /**
      * Function ScriptingConsoleEnableDisable
@@ -1537,7 +1542,17 @@ public:
      */
     bool ReOrientModules( const wxString& ModuleMask, double Orient, bool include_fixe );
     void LockModule( MODULE* aModule, bool aLocked );
-    void AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );
+
+    /**
+     * Function SpreadFootprints
+     * Footprints (after loaded by reading a netlist for instance) are moved
+     * to be in a small free area (outside the current board) without overlapping.
+     * @param aFootprintsOutsideBoardOnly: true to move only
+     * footprints outside the board outlines
+     * (they are outside if the position of a footprint is outside
+     * the board outlines bounding box
+     */
+    void SpreadFootprints( bool aFootprintsOutsideBoardOnly );
 
     /**
      * Function AutoPlaceModule

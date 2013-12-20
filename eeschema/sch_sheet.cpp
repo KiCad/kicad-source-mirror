@@ -1000,7 +1000,7 @@ bool SCH_SHEET::IsSelectStateChanged( const wxRect& aRect )
 }
 
 
-void SCH_SHEET::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+void SCH_SHEET::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     for( size_t i = 0; i < GetPins().size(); i++ )
         aPoints.push_back( GetPins()[i].GetPosition() );

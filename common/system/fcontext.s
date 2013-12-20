@@ -33,6 +33,10 @@
         #include "jump_x86_64_sysv_elf_gas.S"
         #include "make_x86_64_sysv_elf_gas.S"
 
+    #elif __arm__
+        #include "jump_arm_aapcs_elf_gas.S"
+        #include "make_arm_aapcs_elf_gas.S"
+
     #else
          #error "Missing make_fcontext & jump_fcontext routines for this architecture"
     #endif

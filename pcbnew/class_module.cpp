@@ -473,9 +473,9 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     msg = FROM_UTF8( bufcar );
     aList.push_back( MSG_PANEL_ITEM( _( "Last Change" ), msg, BROWN ) );
 
-    // display time stamp in schematic
-    msg.Printf( wxT( "%8.8lX" ), m_TimeStamp );
+    // display schematic path
     aList.push_back( MSG_PANEL_ITEM( _( "Netlist path" ), m_Path, BROWN ) );
+
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), RED ) );
 
     EDA_ITEM* PtStruct = m_Pads;

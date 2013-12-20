@@ -395,6 +395,16 @@ public:
     MODULE* FootprintLoad( const wxString& aNickname, const wxString& aFootprintName );
 
     /**
+     * Enum SAVE_T
+     * is the set of return values from FootprintSave() below.
+     */
+    enum SAVE_T
+    {
+        SAVE_OK,
+        SAVE_SKIPPED,
+    };
+
+    /**
      * Function FootprintSave
      * will write @a aFootprint to an existing library given by @a aNickname.
      * If a footprint by the same name already exists, it is replaced.
@@ -405,9 +415,14 @@ public:
      * @param aFootprint is what to store in the library. The caller continues
      *    to own the footprint after this call.
      *
+     * @param aOverwrite when true means overwrite any existing footprint by the
+     *  same name, else if false means skip the write and return SAVE_SKIPPED.
+     *
+     * @return SAVE_T - SAVE_OK or SAVE_SKIPPED.  If error saving, then IO_ERROR is thrown.
+     *
      * @throw IO_ERROR if there is a problem saving.
      */
-    void FootprintSave( const wxString& aNickname, const MODULE* aFootprint );
+    SAVE_T FootprintSave( const wxString& aNickname, const MODULE* aFootprint, bool aOverwrite = true );
 
     /**
      * Function FootprintDelete
@@ -430,6 +445,10 @@ public:
      * @throw IO_ERROR if no library at aLibraryPath exists.
      */
     bool IsFootprintLibWritable( const wxString& aNickname );
+
+    void FootprintLibDelete( const wxString& aNickname );
+
+    void FootprintLibCreate( const wxString& aNickname );
 
     //-----</PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
@@ -620,27 +639,5 @@ protected:
 
     FP_LIB_TABLE*   fallBack;
 };
-
-
-#if 0   // I don't think this is going to be needed.
-
-    /**
-     * Function LookupPart
-     * finds and loads a MODULE, and parses it.  As long as the part is
-     * accessible in any LIB_SOURCE, opened or not opened, this function
-     * will find it and load it into its containing LIB, even if that means
-     * having to open a LIB in this table that was not previously opened.
-     *
-     * @param aFootprintId The fully qualified name of the footprint to look up.
-     *
-     * @return MODULE* - this will never be NULL, and no ownership is transferred because
-     *  all MODULEs live in LIBs.  You only get to point to them in some LIB. If the MODULE
-     *  cannot be found, then an exception is thrown.
-     *
-     * @throw IO_ERROR if any problem occurs or if the footprint cannot be found.
-     */
-    MODULE* LookupFootprint( const FP_LIB_ID& aFootprintId ) throw( IO_ERROR );
-#endif
-
 
 #endif  // FP_LIB_TABLE_H_

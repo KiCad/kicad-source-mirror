@@ -163,7 +163,7 @@ public:
 
     /// Calculate Statistics
 
-    Statistics CalcStats( );
+    Statistics CalcStats();
 
     /// Remove all entries from tree
     void    RemoveAll();
@@ -396,7 +396,7 @@ protected:
         bool    IsInternalNode()                         { return m_level > 0;  }   // Not a leaf, but a internal node
         bool    IsLeaf()                                 { return m_level == 0;  }  // A leaf, contains data
 
-        int     m_count;                          ///< Count
+        int     m_count;                            ///< Count
         int     m_level;                            ///< Leaf is zero, others positive
         Branch  m_branch[MAXNODES];                 ///< Branch
     };
@@ -830,18 +830,18 @@ RTREE_TEMPLATE
 bool RTREE_QUAL::Load( RTFileStream& a_stream )
 {
     // Write some kind of header
-    int _dataFileId = ('R' << 0) | ('T' << 8) | ('R' << 16) | ('E' << 24);
-    int _dataSize = sizeof(DATATYPE);
-    int _dataNumDims = NUMDIMS;
-    int _dataElemSize = sizeof(ELEMTYPE);
+    int _dataFileId         = ('R' << 0) | ('T' << 8) | ('R' << 16) | ('E' << 24);
+    int _dataSize           = sizeof(DATATYPE);
+    int _dataNumDims        = NUMDIMS;
+    int _dataElemSize       = sizeof(ELEMTYPE);
     int _dataElemRealSize   = sizeof(ELEMTYPEREAL);
     int _dataMaxNodes       = TMAXNODES;
     int _dataMinNodes       = TMINNODES;
 
-    int dataFileId = 0;
-    int dataSize = 0;
-    int dataNumDims = 0;
-    int dataElemSize = 0;
+    int dataFileId          = 0;
+    int dataSize            = 0;
+    int dataNumDims         = 0;
+    int dataElemSize        = 0;
     int dataElemRealSize    = 0;
     int dataMaxNodes        = 0;
     int dataMinNodes        = 0;
@@ -932,10 +932,10 @@ RTREE_TEMPLATE
 bool RTREE_QUAL::Save( RTFileStream& a_stream )
 {
     // Write some kind of header
-    int dataFileId = ('R' << 0) | ('T' << 8) | ('R' << 16) | ('E' << 24);
-    int dataSize = sizeof(DATATYPE);
-    int dataNumDims = NUMDIMS;
-    int dataElemSize = sizeof(ELEMTYPE);
+    int dataFileId          = ('R' << 0) | ('T' << 8) | ('R' << 16) | ('E' << 24);
+    int dataSize            = sizeof(DATATYPE);
+    int dataNumDims         = NUMDIMS;
+    int dataElemSize        = sizeof(ELEMTYPE);
     int dataElemRealSize    = sizeof(ELEMTYPEREAL);
     int dataMaxNodes        = TMAXNODES;
     int dataMinNodes        = TMINNODES;
@@ -1286,27 +1286,27 @@ int RTREE_QUAL::PickBranch( Rect* a_rect, Node* a_node )
     ELEMTYPEREAL    increase;
     ELEMTYPEREAL    bestIncr = (ELEMTYPEREAL) -1;
     ELEMTYPEREAL    area;
-    ELEMTYPEREAL    bestArea;
+    ELEMTYPEREAL    bestArea = 0;
     int             best = 0;
     Rect            tempRect;
 
     for( int index = 0; index < a_node->m_count; ++index )
     {
         Rect* curRect = &a_node->m_branch[index].m_rect;
-        area = CalcRectVolume( curRect );
+        area        = CalcRectVolume( curRect );
         tempRect    = CombineRect( a_rect, curRect );
         increase    = CalcRectVolume( &tempRect ) - area;
 
         if( (increase < bestIncr) || firstTime )
         {
-            best = index;
+            best        = index;
             bestArea    = area;
             bestIncr    = increase;
             firstTime   = false;
         }
         else if( (increase == bestIncr) && (area < bestArea) )
         {
-            best = index;
+            best        = index;
             bestArea    = area;
             bestIncr    = increase;
         }
@@ -1594,8 +1594,8 @@ void RTREE_QUAL::InitParVars( PartitionVars* a_parVars, int a_maxRects, int a_mi
 
     for( int index = 0; index < a_maxRects; ++index )
     {
-        a_parVars->m_taken[index] = false;
-        a_parVars->m_partition[index] = -1;
+        a_parVars->m_taken[index]       = false;
+        a_parVars->m_partition[index]   = -1;
     }
 }
 
@@ -1622,7 +1622,7 @@ void RTREE_QUAL::PickSeeds( PartitionVars* a_parVars )
                                         &a_parVars->m_branchBuf[indexB].m_rect );
             waste = CalcRectVolume( &oneRect ) - area[indexA] - area[indexB];
 
-            if( waste > worst )
+            if( waste >= worst )
             {
                 worst   = waste;
                 seed0   = indexA;
@@ -1854,8 +1854,6 @@ bool RTREE_QUAL::Search( Node* a_node, Rect* a_rect, int& a_foundCount, bool a_r
 
     return true; // Continue searching
 }
-
-
 
 
 //calculate the minimum distance between a point and a rectangle as defined by Manolopoulos et al.

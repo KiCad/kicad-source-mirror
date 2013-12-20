@@ -81,7 +81,6 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
 
     EDA_COLOR_T plotColor = plotter->GetColorMode() ? RED : BLACK;
     plotter->SetColor( plotColor );
-    plotter->SetCurrentLineWidth( PLOTTER::DEFAULT_LINE_WIDTH );
     WS_DRAW_ITEM_LIST drawList;
 
     // Print only a short filename, if aFilename is the full filename
@@ -103,11 +102,14 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item;
          item = drawList.GetNext() )
     {
+        plotter->SetCurrentLineWidth( PLOTTER::DEFAULT_LINE_WIDTH );
+
         switch( item->GetType() )
         {
         case WS_DRAW_ITEM_BASE::wsg_line:
             {
                 WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
+                plotter->SetCurrentLineWidth( line->GetPenWidth() );
                 plotter->MoveTo( line->GetStart() );
                 plotter->FinishTo( line->GetEnd() );
             }
@@ -116,7 +118,11 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
         case WS_DRAW_ITEM_BASE::wsg_rect:
             {
                 WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
-                plotter->Rect( rect->GetStart(), rect->GetEnd(), NO_FILL );           }
+                plotter->Rect( rect->GetStart(),
+                               rect->GetEnd(),
+                               NO_FILL,
+                               rect->GetPenWidth() );
+            }
             break;
 
         case WS_DRAW_ITEM_BASE::wsg_text:
@@ -135,7 +141,8 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             {
                 WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
                 plotter->PlotPoly( poly->m_Corners,
-                                   poly->IsFilled() ? FILLED_SHAPE : NO_FILL );
+                                   poly->IsFilled() ? FILLED_SHAPE : NO_FILL,
+                                   poly->GetPenWidth() );
             }
             break;
 

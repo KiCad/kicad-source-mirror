@@ -3,8 +3,6 @@
 
 #include <tool/coroutine.h>
 
-using namespace std;
-
 typedef COROUTINE<int, int> MyCoroutine;
 
 class MyClass

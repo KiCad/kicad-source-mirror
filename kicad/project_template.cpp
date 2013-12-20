@@ -33,8 +33,6 @@
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
 
-using namespace std;
-
 #define SEP()   wxFileName::GetPathSeparator()
 
 
@@ -71,9 +69,9 @@ PROJECT_TEMPLATE::PROJECT_TEMPLATE( const wxString& aPath )
     metaIcon = new wxBitmap( templateMetaIconFile.GetFullPath(), wxBITMAP_TYPE_PNG );
 }
 
-vector<wxFileName> PROJECT_TEMPLATE::GetFileList()
+std::vector<wxFileName> PROJECT_TEMPLATE::GetFileList()
 {
-    vector<wxFileName> files;
+    std::vector<wxFileName> files;
     wxString f = templateBasePath.GetPath();
     wxArrayString allfiles;
     wxFileName p;
@@ -122,8 +120,8 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath )
 {
     bool result = true;
 
-    vector<wxFileName> srcFiles = GetFileList();
-    vector<wxFileName> dstFiles;
+    std::vector<wxFileName> srcFiles = GetFileList();
+    std::vector<wxFileName> dstFiles;
 
     for( size_t i=0; i < srcFiles.size(); i++ )
     {

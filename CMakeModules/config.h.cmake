@@ -7,6 +7,8 @@
 
 #cmakedefine HAVE_STRNCASECMP
 
+#cmakedefine HAVE_STRTOKR       // spelled odly to differ from wx's similar test
+
 // Handle platform differences in math.h
 #cmakedefine HAVE_MATH_H
 
@@ -55,9 +57,6 @@
 
 /// The legacy file format revision of the *.brd file created by this build
 #define LEGACY_BOARD_FILE_VERSION 2
-
-/// Definition to compile with Pcbnew footprint library table implementation.
-#cmakedefine USE_FP_LIB_TABLE
 
 /// The install prefix defined in CMAKE_INSTALL_PREFIX.
 #define DEFAULT_INSTALL_PATH               "@CMAKE_INSTALL_PREFIX"

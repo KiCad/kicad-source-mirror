@@ -1358,8 +1358,8 @@ void ClipAndDrawPoly( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPoints[], int n )
     }
 
     // A clip box exists: clip and draw the polygon.
-    static vector<wxPoint> clippedPolygon;
-    static pointVector     inputPolygon, outputPolygon;
+    static std::vector<wxPoint> clippedPolygon;
+    static pointVector inputPolygon, outputPolygon;
 
     inputPolygon.clear();
     outputPolygon.clear();

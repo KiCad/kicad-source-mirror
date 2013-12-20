@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 30 2013)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,8 +21,8 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/choice.h>
-#include <wx/radiobox.h>
 #include <wx/sizer.h>
+#include <wx/radiobox.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
@@ -43,13 +43,16 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticTextUnit;
 		wxChoice* unitChoice;
+		wxStaticText* unitsInterchageableText;
+		wxStaticText* unitsInterchageableLabel;
 		wxRadioBox* orientationRadioBox;
 		wxRadioBox* mirrorRadioBox;
 		wxStaticText* m_staticTextChipname;
 		wxTextCtrl* chipnameTextCtrl;
 		wxCheckBox* convertCheckBox;
-		wxStaticText* partsAreLockedLabel;
 		wxButton* defaultsButton;
+		wxStaticText* m_staticTextTimeStamp;
+		wxTextCtrl* m_textCtrlTimeStamp;
 		wxListCtrl* fieldListCtrl;
 		wxButton* addFieldButton;
 		wxButton* deleteFieldButton;

@@ -64,16 +64,14 @@ public:
 
     //-----<PLUGIN IMPLEMENTATION>----------------------------------------------
 
-    const wxString& PluginName() const
+    const wxString PluginName() const
     {
-        static const wxString name = wxT( "KiCad-Legacy" );
-        return name;
+        return wxT( "KiCad-Legacy" );
     }
 
-    const wxString& GetFileExtension() const
+    const wxString GetFileExtension() const
     {
-        static const wxString extension = wxT( "brd" );
-        return extension;
+        return wxT( "brd" );
     }
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties = NULL );

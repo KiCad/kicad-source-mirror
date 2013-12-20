@@ -30,7 +30,9 @@ PLOTTER::PLOTTER( )
     defaultPenWidth = 0;
     currentPenWidth = -1;       // To-be-set marker
     penState = 'Z';             // End-of-path idle
-    plotMirror = false;    		// Mirror flag
+    m_plotMirror = false;    		// Mirror flag
+    m_mirrorIsHorizontal = true;
+    m_yaxisReversed = false;
     outputFile = 0;
     colorMode = false;          // Starts as a BW plot
     negativeMode = false;
@@ -74,16 +76,27 @@ bool PLOTTER::OpenFile( const wxString& aFullFilename )
  * scale factor, and offsets trace. Also convert from a wxPoint to DPOINT,
  * since some output engines needs floating point coordinates.
  */
-DPOINT PLOTTER::userToDeviceCoordinates( const wxPoint& pos )
+DPOINT PLOTTER::userToDeviceCoordinates( const wxPoint& aCoordinate )
 {
-    double x = (pos.x - plotOffset.x) * plotScale * iuPerDeviceUnit;
-    double y;
+    wxPoint pos = aCoordinate - plotOffset;
 
-    if( plotMirror )
-        y = ( pos.y - plotOffset.y ) * plotScale * iuPerDeviceUnit ;
-    else
-        y = ( paperSize.y - ( pos.y - plotOffset.y )
-	      * plotScale ) * iuPerDeviceUnit ;
+    double x = pos.x * plotScale;
+    double y = ( paperSize.y - pos.y * plotScale );
+
+    if( m_plotMirror )
+    {
+        if( m_mirrorIsHorizontal )
+            x = ( paperSize.x - pos.x * plotScale );
+        else
+            y = pos.y * plotScale;
+    }
+
+    if( m_yaxisReversed )
+        y = paperSize.y - y;
+
+    x *= iuPerDeviceUnit;
+    y *= iuPerDeviceUnit;
+
     return DPOINT( x, y );
 }
 

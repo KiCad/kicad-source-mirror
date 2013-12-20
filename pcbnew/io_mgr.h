@@ -220,13 +220,13 @@ public:
      * Function PluginName
      * returns a brief hard coded name for this PLUGIN.
      */
-    virtual const wxString& PluginName() const = 0;
+    virtual const wxString PluginName() const = 0;
 
     /**
      * Function GetFileExtension
      * returns the file extension for the PLUGIN.
      */
-    virtual const wxString& GetFileExtension() const = 0;
+    virtual const wxString GetFileExtension() const = 0;
 
     /**
      * Function Load
@@ -286,11 +286,11 @@ public:
      * Function FootprintEnumerate
      * returns a list of footprint names contained within the library at @a aLibraryPath.
      *
-     * @param aLibraryPath is a locator for the "library", usually a directory
-     *   or file containing several footprints.
+     * @param aLibraryPath is a locator for the "library", usually a directory, file,
+     *   or URL containing several footprints.
      *
      * @param aProperties is an associative array that can be used to tell the
-     *  plugin how to access the library.
+     *  plugin anything needed about how to perform with respect to @a aLibraryPath.
      *  The caller continues to own this object (plugin may not delete it), and
      *  plugins should expect it to be optionally NULL.
      *
@@ -307,8 +307,8 @@ public:
      * loads a footprint having @a aFootprintName from the @a aLibraryPath containing
      * a library format that this PLUGIN knows about.
      *
-     * @param aLibraryPath is a locator for the "library", usually a directory
-     *   or file containing several footprints.
+     * @param aLibraryPath is a locator for the "library", usually a directory, file,
+     *   or URL containing several footprints.
      *
      * @param aFootprintName is the name of the footprint to load.
      *
@@ -331,9 +331,8 @@ public:
      * will write @a aModule to an existing library located at @a aLibraryPath.
      * If a footprint by the same name already exists, it is replaced.
      *
-     * @param aLibraryPath is a locator for the "library", usually a directory
-     *      or file containing several footprints. This is where the footprint is
-     *      to be stored.
+     * @param aLibraryPath is a locator for the "library", usually a directory, file,
+     *   or URL containing several footprints.
      *
      * @param aFootprint is what to store in the library. The caller continues
      *    to own the footprint after this call.
@@ -351,15 +350,15 @@ public:
 
     /**
      * Function FootprintDelete
-     * deletes the @a aFootprintName from the library at @a aLibraryPath.
+     * deletes @a aFootprintName from the library at @a aLibraryPath.
      *
-     * @param aLibraryPath is a locator for the "library", usually a directory
-     *   or file containing several footprints.
+     * @param aLibraryPath is a locator for the "library", usually a directory, file,
+     *   or URL containing several footprints.
      *
      * @param aFootprintName is the name of a footprint to delete from the specified library.
      *
      * @param aProperties is an associative array that can be used to tell the
-     *  library create function anything special, because it can take any number of
+     *  library delete function anything special, because it can take any number of
      *  additional named tuning arguments that the plugin is known to support.
      *  The caller continues to own this object (plugin may not delete it), and
      *  plugins should expect it to be optionally NULL.
@@ -375,8 +374,8 @@ public:
      * error to attempt to create an existing library or to attempt to create
      * on a "read only" location.
      *
-     * @param aLibraryPath is a locator for the "library", usually a directory
-     *   or file which will contain footprints.
+     * @param aLibraryPath is a locator for the "library", usually a directory, file,
+     *   or URL containing several footprints.
      *
      * @param aProperties is an associative array that can be used to tell the
      *  library create function anything special, because it can take any number of
@@ -413,6 +412,9 @@ public:
      * Function IsFootprintLibWritable
      * returns true iff the library at @a aLibraryPath is writable.  (Often
      * system libraries are read only because of where they are installed.)
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory, file,
+     *   or URL containing several footprints.
      *
      * @throw IO_ERROR if no library at aLibraryPath exists.
      */

@@ -135,14 +135,9 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     {
         if( aFilterType == UNFILTERED )
         {
-#if !defined( USE_FP_LIB_TABLE )
-            msg.Printf( wxT( "%3zu %s" ), newList.GetCount() + 1,
-                        GetChars( aList.GetItem( ii ).m_Module ) );
-#else
             msg.Printf( wxT( "%3zu %s:%s" ), newList.GetCount() + 1,
                         GetChars( aList.GetItem( ii ).GetNickname() ),
-                        GetChars( aList.GetItem( ii ).m_Module ) );
-#endif
+                        GetChars( aList.GetItem( ii ).GetFootprintName() ) );
             newList.Add( msg );
             continue;
         }
@@ -151,22 +146,17 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
           && !aList.GetItem( ii ).InLibrary( aLibName ) )
             continue;
 
-        if( (aFilterType & BY_COMPONENT) && (aComponent != NULL)
-          && !aComponent->MatchesFootprintFilters( aList.GetItem( ii ).m_Module ) )
+        if( (aFilterType & BY_COMPONENT) && aComponent
+          && !aComponent->MatchesFootprintFilters( aList.GetItem( ii ).GetFootprintName() ) )
             continue;
 
-        if( (aFilterType & BY_PIN_COUNT) && (aComponent!= NULL)
-          && (aComponent->GetNetCount() != aList.GetItem( ii ).m_padCount) )
+        if( (aFilterType & BY_PIN_COUNT) && aComponent
+          && aComponent->GetNetCount() != aList.GetItem( ii ).GetPadCount() )
             continue;
 
-#if !defined( USE_FP_LIB_TABLE )
-        msg.Printf( wxT( "%3zu %s" ), newList.GetCount() + 1,
-                    aList.GetItem( ii ).m_Module.GetData() );
-#else
         msg.Printf( wxT( "%3zu %s:%s" ), newList.GetCount() + 1,
                     GetChars( aList.GetItem( ii ).GetNickname() ),
-                    GetChars( aList.GetItem( ii ).m_Module ) );
-#endif
+                    GetChars( aList.GetItem( ii ).GetFootprintName() ) );
         newList.Add( msg );
     }
 

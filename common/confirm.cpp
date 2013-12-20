@@ -102,10 +102,10 @@ void DisplayInfoMessage( wxWindow* parent, const wxString& text, int displaytime
 void DisplayHtmlInfoMessage( wxWindow* parent, const wxString& title,
                              const wxString& text, const wxSize& size )
 {
-    HTML_MESSAGE_BOX *dlg = new HTML_MESSAGE_BOX(parent,title, wxDefaultPosition, size );
-    dlg->AddHTML_Text( text );
-    dlg->ShowModal();
-    dlg->Destroy();
+    HTML_MESSAGE_BOX dlg( parent, title, wxDefaultPosition, size );
+
+    dlg.AddHTML_Text( text );
+    dlg.ShowModal();
 }
 
 

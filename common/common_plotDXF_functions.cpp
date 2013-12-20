@@ -44,7 +44,7 @@ void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     iuPerDeviceUnit *= 0.00254;             // ... now in mm
 
     SetDefaultLineWidth( 0 );               // No line width on DXF
-    plotMirror = false;                     // No mirroring on DXF
+    m_plotMirror = false;                     // No mirroring on DXF
     m_currentColor = BLACK;
 }
 
@@ -386,7 +386,7 @@ void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int 
     }
 }
 
-/** Plot an arc in DXF format
+/* Plot an arc in DXF format
  * Filling is not supported
  */
 void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
@@ -396,6 +396,14 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 
     if( radius <= 0 )
         return;
+
+    // In DXF, arcs are drawn CCW.
+    // In Kicad, arcs are CW or CCW
+    // If StAngle > EndAngle, it is CW. So transform it to CCW
+    if( StAngle > EndAngle )
+    {
+        EXCHG( StAngle, EndAngle );
+    }
 
     DPOINT centre_dev = userToDeviceCoordinates( centre );
     double radius_dev = userToDeviceSize( radius );
@@ -425,6 +433,7 @@ void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double 
         EXCHG( size.x, size.y );
         orient = AddAngles( orient, 900 );
     }
+
     sketchOval( pos, size, orient, -1 );
 }
 

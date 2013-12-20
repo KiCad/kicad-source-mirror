@@ -564,7 +564,7 @@ bool SCH_TEXT::IsSelectStateChanged( const wxRect& aRect )
 }
 
 
-void SCH_TEXT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+void SCH_TEXT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     // Normal text labels do not have connection points.  All others do.
     if( Type() == SCH_TEXT_T )
@@ -673,20 +673,17 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
 
     if( m_MultilineAllowed )
     {
-        wxPoint        pos  = textpos;
+        std::vector<wxPoint> positions;
         wxArrayString* list = wxStringSplit( m_Text, '\n' );
-        wxPoint        offset;
+        positions.reserve( list->Count() );
 
-        offset.y = GetInterline();
+        GetPositionsOfLinesOfMultilineText(positions, list->Count() );
 
-        RotatePoint( &offset, m_Orient );
-
-        for( unsigned i = 0; i<list->Count(); i++ )
+        for( unsigned ii = 0; ii < list->Count(); ii++ )
         {
-            wxString txt = list->Item( i );
-            aPlotter->Text( pos, color, txt, m_Orient, m_Size, m_HJustify,
+            wxString& txt = list->Item( ii );
+            aPlotter->Text( positions[ii], color, txt, m_Orient, m_Size, m_HJustify,
                             m_VJustify, thickness, m_Italic, m_Bold );
-            pos += offset;
         }
 
         delete (list);

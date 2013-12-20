@@ -386,25 +386,26 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         {
             wxMenu* commands = new wxMenu;
             AddMenuItem( aPopMenu, commands, ID_POPUP_PCB_AUTOPLACE_COMMANDS,
-                         _( "Global Move and Place" ), KiBitmap( move_xpm ) );
+                         _( "Global Spread and Place" ), KiBitmap( move_xpm ) );
             AddMenuItem( commands, ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES,
-                         _( "Unlock All Modules" ), KiBitmap( unlocked_xpm ) );
+                         _( "Unlock All Footprints" ), KiBitmap( unlocked_xpm ) );
             AddMenuItem( commands, ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES,
-                         _( "Lock All Modules" ), KiBitmap( locked_xpm ) );
+                         _( "Lock All Footprints" ), KiBitmap( locked_xpm ) );
             commands->AppendSeparator();
-            AddMenuItem( commands, ID_POPUP_PCB_AUTOMOVE_ALL_MODULES,
-                         _( "Move All Modules" ), KiBitmap( move_xpm ) );
-            commands->Append( ID_POPUP_PCB_AUTOMOVE_NEW_MODULES, _( "Move New Modules" ) );
+            AddMenuItem( commands, ID_POPUP_PCB_SPREAD_ALL_MODULES,
+                         _( "Spread out All Footprints" ), KiBitmap( move_xpm ) );
+            commands->Append( ID_POPUP_PCB_SPREAD_NEW_MODULES,
+                              _( "Spread out Footprints not Already on Board" ) );
             commands->AppendSeparator();
             commands->Append( ID_POPUP_PCB_AUTOPLACE_ALL_MODULES,
-                              _( "Automatically Place All Modules" ) );
+                              _( "Automatically Place All Footprints" ) );
             commands->Append( ID_POPUP_PCB_AUTOPLACE_NEW_MODULES,
-                              _( "Automatically Place New Modules" ) );
+                              _( "Automatically Place New Footprints" ) );
             commands->Append( ID_POPUP_PCB_AUTOPLACE_NEXT_MODULE,
-                              _( "Automatically Place Next Module" ) );
+                              _( "Automatically Place Next Footprints" ) );
             commands->AppendSeparator();
             AddMenuItem( commands, ID_POPUP_PCB_REORIENT_ALL_MODULES,
-                         _( "Orient All Modules" ), KiBitmap( rotate_module_pos_xpm ) );
+                         _( "Orient All Footprints" ), KiBitmap( rotate_module_pos_xpm ) );
             aPopMenu->AppendSeparator();
         }
 

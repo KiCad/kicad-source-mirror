@@ -306,7 +306,7 @@ void PS_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 			      double aScale, bool aMirror )
 {
     wxASSERT( !outputFile );
-    plotMirror = aMirror;
+    m_plotMirror = aMirror;
     plotOffset = aOffset;
     plotScale = aScale;
     m_IUsPerDecimil = aIusPerDecimil;
@@ -471,7 +471,7 @@ void PS_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int widt
 }
 
 
-void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
+void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int radius, FILL_T fill, int width )
 {
     wxASSERT( outputFile );
@@ -486,14 +486,24 @@ void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle,
     // Calculate start point.
     DPOINT centre_dev = userToDeviceCoordinates( centre );
     double radius_dev = userToDeviceSize( radius );
-    if( plotMirror )
-        fprintf( outputFile, "%g %g %g %g %g arc%d\n", centre_dev.x, centre_dev.y,
-                 radius_dev, -EndAngle / 10.0, -StAngle / 10.0,
-                 fill );
-    else
-        fprintf( outputFile, "%g %g %g %g %g arc%d\n", centre_dev.x, centre_dev.y,
-                 radius_dev, StAngle / 10.0, EndAngle / 10.0,
-                 fill );
+
+    if( m_plotMirror )
+    {
+        if( m_mirrorIsHorizontal )
+        {
+            StAngle = 1800.0 -StAngle;
+            EndAngle = 1800.0 -EndAngle;
+            EXCHG( StAngle, EndAngle );
+        }
+        else
+        {
+            StAngle = -StAngle;
+            EndAngle = -EndAngle;
+        }
+    }
+
+    fprintf( outputFile, "%g %g %g %g %g arc%d\n", centre_dev.x, centre_dev.y,
+             radius_dev, StAngle / 10.0, EndAngle / 10.0, fill );
 }
 
 

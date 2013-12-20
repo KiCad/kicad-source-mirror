@@ -30,9 +30,16 @@ void FOOTPRINT_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     lastcmd->PushItem( wrapper );
 
     GetScreen()->PushCommandToUndoList( lastcmd );
+
     /* Clear current flags (which can be temporary set by a current edit command) */
     for( item = CopyItem->GraphicalItems(); item != NULL; item = item->Next() )
         item->ClearFlags();
+
+    for( D_PAD* pad = CopyItem->Pads();  pad;  pad = pad->Next() )
+        pad->ClearFlags();
+
+    CopyItem->Reference().ClearFlags();
+    CopyItem->Value().ClearFlags();
 
     /* Clear redo list, because after new save there is no redo to do */
     GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
