@@ -75,10 +75,10 @@ mark_as_advanced( KICAD_USER_CONFIG_DIR )
 
 
 #================================================
-# Set flags for GCC.
+# Set flags for GCC, or treat llvm as GCC
 #================================================
 
-if( CMAKE_COMPILER_IS_GNUCXX )
+if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     execute_process( COMMAND ${CMAKE_C_COMPILER} -dumpversion
         OUTPUT_VARIABLE GCC_VERSION
@@ -157,7 +157,7 @@ if( CMAKE_COMPILER_IS_GNUCXX )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedefs" )
     endif()
 
-endif( CMAKE_COMPILER_IS_GNUCXX )
+endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
 if( KICAD_KEEPCASE )
     add_definitions( -DKICAD_KEEPCASE )

@@ -113,6 +113,33 @@ else()
     unset( b2_libs )
 endif()
 
+if( APPLE )
+    # I set this to being compatible with wxWidgets
+    # wxWidgets still using libstdc++ (gcc), meanwhile OSX 
+    # has switched to libc++ (llvm) by default
+    set(BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=10.5"  )
+    set(BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=10.5" )
+
+    if( CMAKE_OSX_ARCHITECTURES )
+
+        if( (CMAKE_OSX_ARCHITECTURES MATCHES "386" OR CMAKE_OSX_ARCHITECTURES MATCHES "ppc ") AND
+            (CMAKE_OSX_ARCHITECTURES MATCHES "64"))
+            message("-- BOOST found 32/64 Address Model")
+
+            set(BOOST_ADDRESSMODEL "address-model=32_64")
+        endif()
+
+        if( (${CMAKE_OSX_ARCHITECTURES} MATCHES "x86_64" OR ${CMAKE_OSX_ARCHITECTURES} MATCHES "386") AND
+            (${CMAKE_OSX_ARCHITECTURES} MATCHES "ppc"))
+            message("-- BOOST found ppc/intel Architecture")
+
+            set(BOOST_ARCHITECTURE "architecture=combined")
+        endif()
+
+    endif()
+
+endif()
+
 ExternalProject_Add( boost
     PREFIX          "${PREFIX}"
     DOWNLOAD_DIR    "${DOWNLOAD_DIR}"
@@ -139,8 +166,11 @@ ExternalProject_Add( boost
     BUILD_COMMAND   ./b2
                     variant=release
                     threading=multi
-                    toolset=gcc
                     ${PIC_STUFF}
+                    ${BOOST_CXXFLAGS} 
+                    ${BOOST_LINKFLAGS} 
+                    ${BOOST_ADDRESSMODEL}
+                    ${BOOST_ARCHITECTURE}
                     ${b2_libs}
                     #link=static
                     --prefix=<INSTALL_DIR>
