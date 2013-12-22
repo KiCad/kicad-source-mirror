@@ -113,12 +113,15 @@ else()
     unset( b2_libs )
 endif()
 
+    set( TOOLSET "toolset=gcc" )
+
 if( APPLE )
     # I set this to being compatible with wxWidgets
-    # wxWidgets still using libstdc++ (gcc), meanwhile OSX 
+    # wxWidgets still using libstdc++ (gcc), meanwhile OSX
     # has switched to libc++ (llvm) by default
     set(BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=10.5"  )
     set(BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=10.5" )
+    set( TOOLSET "" )
 
     if( CMAKE_OSX_ARCHITECTURES )
 
@@ -137,7 +140,6 @@ if( APPLE )
         endif()
 
     endif()
-
 endif()
 
 ExternalProject_Add( boost
@@ -167,8 +169,9 @@ ExternalProject_Add( boost
                     variant=release
                     threading=multi
                     ${PIC_STUFF}
-                    ${BOOST_CXXFLAGS} 
-                    ${BOOST_LINKFLAGS} 
+                    ${TOOLSET}
+                    ${BOOST_CXXFLAGS}
+                    ${BOOST_LINKFLAGS}
                     ${BOOST_ADDRESSMODEL}
                     ${BOOST_ARCHITECTURE}
                     ${b2_libs}
