@@ -183,11 +183,13 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     if ( m_module)
         m_parent->SaveCopyInUndoList( m_module, UR_CHANGED );
 
+#ifndef USE_WX_OVERLAY
     if( m_dc )     //Erase old text on screen
     {
         m_currentText->Draw( m_parent->GetCanvas(), m_dc, GR_XOR,
                              (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
     }
+#endif
 
     m_currentText->SetText( m_Name->GetValue() );
     m_currentText->SetItalic( m_Style->GetSelection() == 1 );
@@ -238,11 +240,15 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 
     m_currentText->SetDrawCoord();
 
+#ifndef USE_WX_OVERLAY
     if( m_dc )     // Display new text
     {
         m_currentText->Draw( m_parent->GetCanvas(), m_dc, GR_XOR,
                              (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
     }
+#else
+    m_parent->Refresh();
+#endif
 
     m_parent->OnModify();
 
