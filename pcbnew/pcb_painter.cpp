@@ -755,11 +755,15 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
     for( int i = 0; i < outline->GetCornersCount(); ++i )
     {
         corners.push_back( VECTOR2D( outline->GetPos( i ) ) );
+
+        if( outline->IsEndContour( i ) )
+        {
+            // The last point for closing the polyline
+            corners.push_back( corners[0] );
+            m_gal->DrawPolyline( corners );
+            corners.clear();
+        }
     }
-    // The last point for closing the polyline
-    corners.push_back( VECTOR2D( outline->GetPos( 0 ) ) );
-    m_gal->DrawPolyline( corners );
-    corners.clear();
 
     // Draw the filling
     if( displayMode != PCB_RENDER_SETTINGS::DZ_HIDE_FILLED )
@@ -770,7 +774,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
 
         // Set up drawing options
         m_gal->SetFillColor( color );
-        m_gal->SetLineWidth( aZone->GetThermalReliefCopperBridge() / 2.0 );
+        m_gal->SetLineWidth( aZone->GetMinThickness() );
 
         if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_FILLED )
         {
