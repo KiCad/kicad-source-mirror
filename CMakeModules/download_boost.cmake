@@ -88,6 +88,9 @@ endfunction()
 string( REPLACE "unit_test_framework" "test" boost_libs_list "${BOOST_LIBS_BUILT}" )
 #message( STATUS "REPLACE libs_csv:${boost_libs_list}" )
 
+# Default Toolset
+set( BOOST_TOOLSET "toolset=gcc" )
+
 if( MINGW )
     if( MSYS )
         # The Boost system does not build properly on MSYS using bootstrap.sh.  Running
@@ -113,7 +116,6 @@ else()
     unset( b2_libs )
 endif()
 
-    set( TOOLSET "toolset=gcc" )
 
 if( APPLE )
     # I set this to being compatible with wxWidgets
@@ -121,7 +123,7 @@ if( APPLE )
     # has switched to libc++ (llvm) by default
     set(BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=10.5"  )
     set(BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=10.5" )
-    set( TOOLSET "" )
+    set(BOOST_TOOLSET   "toolset=darwin" )
 
     if( CMAKE_OSX_ARCHITECTURES )
 
@@ -169,7 +171,7 @@ ExternalProject_Add( boost
                     variant=release
                     threading=multi
                     ${PIC_STUFF}
-                    ${TOOLSET}
+                    ${BOOST_TOOLSET}
                     ${BOOST_CXXFLAGS}
                     ${BOOST_LINKFLAGS}
                     ${BOOST_ADDRESSMODEL}
