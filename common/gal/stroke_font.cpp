@@ -153,6 +153,7 @@ void STROKE_FONT::Draw( const wxString& aText, const VECTOR2D& aPosition, double
     m_gal->Save();
 
     m_gal->Translate( aPosition );
+    m_gal->Rotate( -aRotationAngle );
 
     // Single line height
     int lineHeight = getInterline();
@@ -176,8 +177,6 @@ void STROKE_FONT::Draw( const wxString& aText, const VECTOR2D& aPosition, double
     default:
         break;
     }
-
-    m_gal->Rotate( -aRotationAngle );
 
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
