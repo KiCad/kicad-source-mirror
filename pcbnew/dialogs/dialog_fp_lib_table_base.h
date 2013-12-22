@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 30 2013)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -57,7 +57,7 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onCancelButtonClick( wxCloseEvent& event ) = 0;
+		virtual void onCancelCaptionButtonClick( wxCloseEvent& event ) = 0;
 		virtual void onKeyDown( wxKeyEvent& event ) = 0;
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) = 0;
 		virtual void appendRowHandler( wxMouseEvent& event ) = 0;

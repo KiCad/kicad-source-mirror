@@ -599,6 +599,12 @@ private:
             m_cur_grid->AutoSizeColumn( COL_NICKNAME, false );
             m_cur_grid->AutoSizeColumn( COL_URI, false );
             m_cur_grid->AutoSizeColumn( COL_TYPE, false );
+
+            // On Windows, the grid is not refresh,
+            // so force resfresh after a change
+#ifdef __WINDOWS__
+            Refresh();
+#endif
         }
     }
 
@@ -607,7 +613,7 @@ private:
         EndModal( 0 );
     }
 
-    void onCancelButtonClick( wxCloseEvent& event )
+    void onCancelCaptionButtonClick( wxCloseEvent& event )
     {
         EndModal( 0 );
     }
