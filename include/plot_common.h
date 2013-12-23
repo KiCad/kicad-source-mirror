@@ -253,7 +253,8 @@ public:
                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                        int                         aWidth,
                        bool                        aItalic,
-                       bool                        aBold );
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false );
 
     /**
      * Draw a marker (used for the drill map)

@@ -602,6 +602,7 @@ void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
  *      Use a value min(aSize.x, aSize.y) / 5 for a bold text
  *  @param aItalic = true to simulate an italic font
  *  @param aBold = true to use a bold font Useful only with default width value (aWidth = 0)
+ *  @param aMultilineAllowed = true to plot text as multiline, otherwise single line
  */
 void PLOTTER::Text( const wxPoint&              aPos,
                     enum EDA_COLOR_T            aColor,
@@ -612,7 +613,8 @@ void PLOTTER::Text( const wxPoint&              aPos,
                     enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                     int                         aWidth,
                     bool                        aItalic,
-                    bool                        aBold )
+                    bool                        aBold,
+                    bool                        aMultilineAllowed )
 {
     int textPensize = aWidth;
 
@@ -630,13 +632,50 @@ void PLOTTER::Text( const wxPoint&              aPos,
     if( aColor >= 0 )
         SetColor( aColor );
 
-    DrawGraphicText( NULL, NULL, aPos, aColor, aText,
-                     aOrient, aSize,
-                     aH_justify, aV_justify,
-                     textPensize, aItalic,
-                     aBold,
-                     NULL,
-                     this );
+    if( aMultilineAllowed )
+    {
+        // EDA_TEXT needs for calculations of the position of every
+        // line according to orientation and justifications
+        EDA_TEXT* multilineText = new EDA_TEXT( aText );
+        multilineText->SetSize( aSize );
+        multilineText->SetTextPosition( aPos );
+        multilineText->SetOrientation( aOrient );
+        multilineText->SetHorizJustify( aH_justify );
+        multilineText->SetVertJustify( aV_justify );
+        multilineText->SetThickness( aWidth );
+        multilineText->SetMultilineAllowed( aMultilineAllowed );
+
+        std::vector<wxPoint> positions;
+        wxArrayString* list = wxStringSplit( aText, '\n' );
+        positions.reserve( list->Count() );
+
+        multilineText->GetPositionsOfLinesOfMultilineText(
+                positions, list->Count() );
+
+        for( unsigned ii = 0; ii < list->Count(); ii++ )
+        {
+            wxString& txt = list->Item( ii );
+            DrawGraphicText( NULL, NULL, positions[ii], aColor, txt,
+                             aOrient, aSize,
+                             aH_justify, aV_justify,
+                             textPensize, aItalic,
+                             aBold,
+                             NULL,
+                             this );
+        }
+        delete multilineText;
+        delete list;
+    }
+    else
+    {
+        DrawGraphicText( NULL, NULL, aPos, aColor, aText,
+                         aOrient, aSize,
+                         aH_justify, aV_justify,
+                         textPensize, aItalic,
+                         aBold,
+                         NULL,
+                         this );
+    }
 
     if( aWidth != textPensize )
         SetCurrentLineWidth( aWidth );
