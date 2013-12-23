@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 # Install KiCad from source onto either:
 #  -> a Ubuntu/Debian/Mint or
 #  -> a Red Hat
@@ -23,6 +23,12 @@
 #  named library-repos-install.sh found in this same directory.  That script requires that "git" be on
 #  your system whereas this script does not.  The footprints require some means to download them and
 #  bzr-git seems not up to the task.  wget or curl would also work.
+
+
+# Since bash is invoked with -e by the first line of this script, all the steps in this script
+# must succeed otherwise bash will abort at the first non-zero error code.  Therefore any script
+# functions must be crafted to anticipate numerous conditions, such that no command fails unless it
+# is a serious situation.
 
 
 # Set where the 3 source trees will go, use a full path
@@ -113,9 +119,17 @@ install_prerequisites()
 rm_build_dir()
 {
     local dir="$1"
-    # this file is often created as root, so remove as root
-    sudo rm "$dir/install_manifest.txt" 2> /dev/null
-    rm -rf "$dir"
+
+    echo "removing directory $dir"
+
+    if [ -e "$dir/install_manifest.txt" ]; then
+        # this file is often created as root, so remove as root
+        sudo rm "$dir/install_manifest.txt" 2> /dev/null
+    fi
+
+    if [ -d "$dir" ]; then
+        rm -rf "$dir"
+    fi
 }
 
 
@@ -142,24 +156,24 @@ cmake_uninstall()
 # sets an environment variable globally.
 set_env_var()
 {
-    local VAR=$1
-    local VAL=$2
+    local var=$1
+    local val=$2
 
     if [ -d /etc/profile.d ]; then
-        if [ ! -e /etc/profile.d/kicad.sh ] || ! grep "$VAR" /etc/profile.d/kicad.sh; then
+        if [ ! -e /etc/profile.d/kicad.sh ] || ! grep "$var" /etc/profile.d/kicad.sh >> /dev/null; then
             echo
-            echo "Adding environment variable $VAR to file /etc/profile.d/kicad.sh"
+            echo "Adding environment variable $var to file /etc/profile.d/kicad.sh"
             echo "Please logout and back in after this script completes for environment"
             echo "variable to get set into environment."
-            sudo sh -c "echo export $VAR=$VAL >> /etc/profile.d/kicad.sh"
+            sudo sh -c "echo export $var=$val >> /etc/profile.d/kicad.sh"
         fi
 
     elif [ -e /etc/environment ]; then
-        if ! grep "$VAR" /etc/environment; then
+        if ! grep "$var" /etc/environment >> /dev/null; then
             echo
-            echo "Adding environment variable $VAR to file /etc/environment"
+            echo "Adding environment variable $var to file /etc/environment"
             echo "Please reboot after this script completes for environment variable to get set into environment."
-            sudo sh -c "echo $VAR=$VAL >> /etc/environment"
+            sudo sh -c "echo $var=$val >> /etc/environment"
         fi
     fi
 }
@@ -239,7 +253,7 @@ install_or_update()
     mkdir build && cd build
     cmake ../
     sudo make install
-    echo " kicad-lib installed."
+    echo " kicad-lib.bzr installed."
 
 
     echo "step 9) as non-root, install user configuration files..."
@@ -256,12 +270,14 @@ install_or_update()
     sudo make install
     echo " kicad-doc.bzr installed."
 
-    echo
-    echo 'All KiCad "--install-or-update" steps completed, you are up to date.'
-
+    echo "step 11) check for environment variables..."
     if [ -z "${KIGITHUB}" ]; then
         set_env_var KIGITHUB https://github.com/KiCad
     fi
+
+    echo
+    echo 'All KiCad "--install-or-update" steps completed, you are up to date.'
+    echo
 }
 
 
