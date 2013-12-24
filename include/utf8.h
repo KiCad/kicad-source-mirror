@@ -65,7 +65,7 @@ public:
     /// For use with _() function on wx 2.8:
     UTF8( const wchar_t* txt );
 
-    explicit UTF8( const std::string& o ) :
+    UTF8( const std::string& o ) :
         std::string( o )
     {
     }
