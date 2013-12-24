@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Categories=Development;Electronics
+Comment=Design a printed circuit board
+Exec=pcbnew
+GenericName=EDA Suite
+Icon=pcbnew
+MimeType=application/x-pcbnew-project;
+Name=pcbnew
+Type=Application
+Name[en_US]=pcbnew
