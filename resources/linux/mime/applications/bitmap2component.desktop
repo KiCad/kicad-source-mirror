@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Categories=Development;Electronics
+Comment=Design a printed circuit board
+Exec=bitmap2component
+GenericName=EDA Suite
+Icon=bitmap2component
+MimeType=application/x-bitmap2component-project;
+Name=bitmap2component
+Type=Application
+Name[en_US]=bitmap2component
