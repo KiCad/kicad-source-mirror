@@ -93,9 +93,6 @@ typedef boost::optional<double>             opt_double;
 typedef boost::optional<bool>               opt_bool;
 
 
-const wxChar* traceEaglePlugin = wxT( "KicadEaglePlugin" );
-
-
 /// segment (element) of our XPATH into the Eagle XML document tree in PTREE form.
 struct TRIPLET
 {
@@ -2741,6 +2738,18 @@ wxDateTime EAGLE_PLUGIN::getModificationTime( const wxString& aPath )
 {
     wxFileName  fn( aPath );
 
+    // Do not call wxFileName::GetModificationTime() on a non-existent file, because
+    // if it fails, wx's implementation calls the crap wxLogSysError() which
+    // eventually infects our UI with an unwanted popup window, so don't let it fail.
+    if( !fn.IsFileReadable() )
+    {
+        wxString msg = wxString::Format(
+            _( "File '%s' is not readable." ),
+            GetChars( aPath ) );
+
+        THROW_IO_ERROR( msg );
+    }
+
     /*
     // update the writable flag while we have a wxFileName, in a network this
     // is possibly quite dynamic anyway.
@@ -2770,8 +2779,6 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 
         if( aLibPath != m_lib_path || load )
         {
-            wxLogTrace( traceEaglePlugin, wxT( "Loading '%s'" ), TO_UTF8( aLibPath ) );
-
             PTREE       doc;
             LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
