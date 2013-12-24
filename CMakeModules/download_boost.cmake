@@ -134,8 +134,8 @@ if( APPLE )
             set(BOOST_ADDRESSMODEL "address-model=32_64")
         endif()
 
-        if( (${CMAKE_OSX_ARCHITECTURES} MATCHES "x86_64" OR ${CMAKE_OSX_ARCHITECTURES} MATCHES "386") AND
-            (${CMAKE_OSX_ARCHITECTURES} MATCHES "ppc"))
+        if( (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64" OR CMAKE_OSX_ARCHITECTURES MATCHES "386") AND
+            (CMAKE_OSX_ARCHITECTURES MATCHES "ppc"))
             message("-- BOOST found ppc/intel Architecture")
 
             set(BOOST_ARCHITECTURE "architecture=combined")
