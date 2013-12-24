@@ -484,7 +484,7 @@ if( UNIX )
     set( UNIX_MIME_DIR resources/linux/mime )
     set( UNIX_MIMELNK_FILES ${UNIX_MIME_DIR}/mimelnk )
     set( UNIX_MIME_FILES ${UNIX_MIME_DIR}/mime )
-    set( UNIX_ICONS_FILES ${UNIX_MIME_DIR}/icons )
+    set( UNIX_ICON_FILES ${UNIX_MIME_DIR}/icons )
     set( UNIX_APPLICATIONS_FILES ${UNIX_MIME_DIR}/applications )
 
     # Install Mimelnk directory
@@ -494,7 +494,7 @@ if( UNIX )
         )
 
     # Install Mime directory
-    install( DIRECTORY ${UNIX_ICONS_FILES}
+    install( DIRECTORY ${UNIX_ICON_FILES}
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share
         COMPONENT resources
         )
