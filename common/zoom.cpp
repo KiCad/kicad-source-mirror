@@ -84,7 +84,7 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
     if( screen->m_FirstRedraw )
         SetCrossHairPosition( GetScrollCenterPosition() );
 
-    if( !m_galCanvasActive )
+    if( !IsGalCanvasActive() )
         RedrawScreen( GetScrollCenterPosition(), aWarpPointer );
 }
 
@@ -194,18 +194,18 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
             RedrawScreen( center, true );
     }
 
-    if( m_galCanvasActive )
+    if( IsGalCanvasActive() )
     {
         // Apply computed view settings to GAL
-        KIGFX::VIEW* view = m_galCanvas->GetView();
-        KIGFX::GAL* gal = m_galCanvas->GetGAL();
+        KIGFX::VIEW* view = GetGalCanvas()->GetView();
+        KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
 
         double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
         double zoom = 1.0 / ( zoomFactor * GetZoom() );
 
         view->SetScale( zoom );
         view->SetCenter( VECTOR2D( center ) );
-        m_galCanvas->Refresh();
+        GetGalCanvas()->Refresh();
     }
 
     UpdateStatusBar();

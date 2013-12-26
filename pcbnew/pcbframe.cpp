@@ -335,14 +335,14 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     SetBoard( new BOARD() );
 
-    if( m_galCanvas )
+    if( GetGalCanvas() )
     {
         ViewReloadBoard( m_Pcb );
 
         // update the tool manager with the new board and its view.
         if( m_toolManager )
-            m_toolManager->SetEnvironment( m_Pcb, m_galCanvas->GetView(),
-                                           m_galCanvas->GetViewControls(), this );
+            m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
+                                           GetGalCanvas()->GetViewControls(), this );
     }
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
@@ -356,7 +356,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     if( screenHeight <= 900 )
         pointSize = (pointSize * 8) / 10;
 
-    m_Layers = new PCB_LAYER_WIDGET( this, m_galCanvas, pointSize );
+    m_Layers = new PCB_LAYER_WIDGET( this, GetGalCanvas(), pointSize );
 
     m_drc = new DRC( this );        // these 2 objects point to each other
 
@@ -454,8 +454,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
         m_auimgr.AddPane( m_canvas,
                           wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
-    if( m_galCanvas )
-        m_auimgr.AddPane( (wxWindow*) m_galCanvas,
+    if( GetGalCanvas() )
+        m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
                           wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
 
     if( m_messagePanel )
@@ -538,21 +538,21 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 {
     PCB_BASE_FRAME::SetBoard( aBoard );
 
-    if( m_galCanvas )
+    if( GetGalCanvas() )
     {
         ViewReloadBoard( aBoard );
 
         // update the tool manager with the new board and its view.
         if( m_toolManager )
-            m_toolManager->SetEnvironment( aBoard, m_galCanvas->GetView(),
-                                           m_galCanvas->GetViewControls(), this );
+            m_toolManager->SetEnvironment( aBoard, GetGalCanvas()->GetView(),
+                                           GetGalCanvas()->GetViewControls(), this );
     }
 }
 
 
 void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
 {
-    KIGFX::VIEW* view = m_galCanvas->GetView();
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
     view->Clear();
 
     // All of PCB drawing elements should be added to the VIEW
@@ -629,8 +629,8 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     view->SetPanBoundary( worksheet->ViewBBox() );
     view->RecacheAllItems( true );
 
-    if( m_galCanvasActive )
-        m_galCanvas->Refresh();
+    if( IsGalCanvasActive() )
+        GetGalCanvas()->Refresh();
 }
 
 
@@ -668,7 +668,7 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     m_canvas->SetAbortRequest( true );
-    m_galCanvas->StopDrawing();
+    GetGalCanvas()->StopDrawing();
 
     if( GetScreen()->IsModify() )
     {
@@ -750,8 +750,8 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
 
-    m_toolManager->SetEnvironment( m_Pcb, m_galCanvas->GetView(),
-                                    m_galCanvas->GetViewControls(), this );
+    m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
+                                    GetGalCanvas()->GetViewControls(), this );
 
     ViewReloadBoard( m_Pcb );
 }
@@ -768,12 +768,12 @@ void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
         break;
 
     case ID_MENU_CANVAS_CAIRO:
-        m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+        GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
         UseGalCanvas( true );
         break;
 
     case ID_MENU_CANVAS_OPENGL:
-        m_galCanvas->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+        GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
         UseGalCanvas( true );
         break;
     }
@@ -902,7 +902,7 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
 {
     // Set display settings for high contrast mode
-    KIGFX::VIEW* view = m_galCanvas->GetView();
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
     KIGFX::RENDER_SETTINGS* rSettings = view->GetPainter()->GetSettings();
 
     setTopLayer( aLayer );
@@ -945,7 +945,7 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
 void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
 {
     // Set display settings for high contrast mode
-    KIGFX::VIEW* view = m_galCanvas->GetView();
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
 
     view->ClearTopLayers();
     view->SetTopLayer( aLayer );
@@ -993,8 +993,8 @@ void PCB_EDIT_FRAME::setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate 
     if( doLayerWidgetUpdate )
         syncLayerWidgetLayer();
 
-    if( m_galCanvasActive )
-        m_galCanvas->Refresh();
+    if( IsGalCanvasActive() )
+        GetGalCanvas()->Refresh();
 }
 
 
@@ -1015,7 +1015,7 @@ void PCB_EDIT_FRAME::syncLayerVisibilities()
 {
     m_Layers->SyncLayerVisibilities();
 
-    KIGFX::VIEW* view = m_galCanvas->GetView();
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
     // Load layer & elements visibility settings
     for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
     {

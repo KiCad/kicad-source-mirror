@@ -390,23 +390,23 @@ class EDA_DRAW_FRAME : public EDA_BASE_FRAME
     friend class EDA_DRAW_PANEL;
 
     ///< Id of active button on the vertical toolbar.
-    int m_toolId;
+    int         m_toolId;
 
-    BASE_SCREEN* m_currentScreen;           ///< current used SCREEN
-    bool         m_snapToGrid;              ///< Indicates if cursor should be snapped to grid.
+    BASE_SCREEN*    m_currentScreen;        ///< current used SCREEN
+
+    bool        m_snapToGrid;               ///< Indicates if cursor should be snapped to grid.
+    bool        m_galCanvasActive;          ///< whether to use new GAL engine
+
+    EDA_DRAW_PANEL_GAL* m_galCanvas;
 
 protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
     int         m_LastGridSizeId;
     bool        m_DrawGrid;                 // hide/Show grid
-    bool        m_galCanvasActive;          // whether to use new GAL engine
     EDA_COLOR_T m_GridColor;                // Grid color
 
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
-
-    /// New type of area (GAL-based) to draw on.
-    EDA_DRAW_PANEL_GAL* m_galCanvas;
 
     /// Tool ID of previously active draw tool bar button.
     int     m_lastDrawToolId;
@@ -979,20 +979,22 @@ public:
     virtual void UseGalCanvas( bool aEnable );
 
     /**
-     * Function IsNewCanvasActive
+     * Function IsGalCanvasActive
      * is used to check which canvas (GAL-based or standard) is currently in use.
      *
      * @return True for GAL-based canvas, false for standard canvas.
      */
-    bool IsGalCanvasActive() { return m_galCanvasActive; }
+    bool IsGalCanvasActive() const          { return m_galCanvasActive; }
+    void SetGalCanvasActive( bool aState )  { m_galCanvasActive = aState; }
 
     /**
-     * Function GetCalCanvas
+     * Function GetGalCanvas
      * returns a pointer to GAL-based canvas of given EDA draw frame.
      *
      * @return Pointer to GAL-based canvas.
      */
-    EDA_DRAW_PANEL_GAL* GetGalCanvas() { return m_galCanvas; }
+    EDA_DRAW_PANEL_GAL* GetGalCanvas() const        { return m_galCanvas; }
+    void SetGalCanvas( EDA_DRAW_PANEL_GAL* aPanel ) { m_galCanvas = aPanel; }
 
     DECLARE_EVENT_TABLE()
 };

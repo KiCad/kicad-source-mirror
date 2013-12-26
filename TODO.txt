@@ -62,7 +62,6 @@ PCBNew
 
 Dick's Final TODO List:
 ======================
-*) Apply Fabrizio and Alexander's linux desktop patches after unifying them.
 *) Get licensing cleaned up.
 *) Re-arrange the repo architecture.
 *) DLL-ization of pcbnew & eeschema
