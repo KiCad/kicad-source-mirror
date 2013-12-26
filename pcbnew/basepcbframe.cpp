@@ -152,10 +152,12 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
     m_FastGrid1           = 0;
     m_FastGrid2           = 0;
 
-    m_galCanvas           = new EDA_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                              EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+    SetGalCanvas( new EDA_DRAW_PANEL_GAL(
+            this, -1, wxPoint( 0, 0 ), m_FrameSize,
+            EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) );
+
     // Hide by default, it has to be explicitly shown
-    m_galCanvas->Hide();
+    GetGalCanvas()->Hide();
 
     m_auxiliaryToolBar    = NULL;
 }
@@ -166,7 +168,7 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
     delete m_Collector;
 
     delete m_Pcb;       // is already NULL for FOOTPRINT_EDIT_FRAME
-    delete m_galCanvas;
+    delete GetGalCanvas();
 }
 
 
@@ -437,11 +439,11 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 
     // Apply new display options to the GAL canvas
     KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
+            static_cast<KIGFX::PCB_PAINTER*> ( GetGalCanvas()->GetView()->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
     settings->LoadDisplayOptions( DisplayOpt );
-    m_galCanvas->GetView()->RecacheAllItems( true );
+    GetGalCanvas()->GetView()->RecacheAllItems( true );
 
     m_canvas->Refresh();
 }
@@ -764,7 +766,7 @@ void PCB_BASE_FRAME::LoadSettings()
         m_DisplayModText = FILLED;
 
     // Apply display settings for GAL
-    KIGFX::VIEW* view = m_galCanvas->GetView();
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
 
     // Set rendering order and properties of layers
     for( LAYER_NUM i = 0; (unsigned) i < sizeof(GAL_LAYER_ORDER) / sizeof(LAYER_NUM); ++i )
