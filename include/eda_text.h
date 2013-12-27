@@ -275,7 +275,7 @@ public:
      * for efficiency reasons
      */
     void GetPositionsOfLinesOfMultilineText(
-                std::vector<wxPoint>& aPositions, int aLineCount );
+                std::vector<wxPoint>& aPositions, int aLineCount ) const;
     /**
      * Function Format
      * outputs the object to \a aFormatter in s-expression form.
