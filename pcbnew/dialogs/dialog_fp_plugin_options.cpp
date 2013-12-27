@@ -375,7 +375,7 @@ private:
         abort();
     }
 
-    void onCancelButtonClick( wxCloseEvent& event )
+    void onCancelCaptionButtonClick( wxCloseEvent& event )
     {
         abort();
     }
