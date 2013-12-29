@@ -71,6 +71,7 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
     double paramvalue = 0.0;
     double curr_value = 0.0;
     parm_item_type state = POPVALUE;
+
     for( unsigned ii = 0; ii < m_paramStack.size(); ii++ )
     {
         AM_PARAM_ITEM item = m_paramStack[ii];
@@ -85,12 +86,19 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
 
             case PUSHPARM:
                 // get the parameter from the aDcode
-                if( aDcode && item.GetIndex() <= aDcode->GetParamCount() )
-                    curr_value = aDcode->GetParam( item.GetIndex() );
-                else    // Get parameter from local param definition
+                if( aDcode )    // should be always true here
                 {
-                    const APERTURE_MACRO * am_parent = aDcode->GetMacro();
-                    curr_value = am_parent->GetLocalParam( aDcode, item.GetIndex() );
+                    if( item.GetIndex() <= aDcode->GetParamCount() )
+                        curr_value = aDcode->GetParam( item.GetIndex() );
+                    else    // Get parameter from local param definition
+                    {
+                        const APERTURE_MACRO * am_parent = aDcode->GetMacro();
+                        curr_value = am_parent->GetLocalParam( aDcode, item.GetIndex() );
+                    }
+                }
+                else
+                {
+                    wxLogDebug( wxT( "AM_PARAM::GetValue(): NULL param aDcode\n" ) );
                 }
                 // Fall through
             case PUSHVALUE: // a value is on the stack:

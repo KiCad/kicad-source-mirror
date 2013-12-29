@@ -1154,12 +1154,18 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
         LAYER_NUM top_layer, bottom_layer;
 
         Via->ReturnLayerPair( &top_layer, &bottom_layer );
-        msg = board->GetLayerName( top_layer ) + wxT( "/" )
-            + board->GetLayerName( bottom_layer );
+        if( board )
+            msg = board->GetLayerName( top_layer ) + wxT( "/" )
+                + board->GetLayerName( bottom_layer );
+        else
+            msg.Printf(wxT("%d/%d"), top_layer, bottom_layer );
     }
     else
     {
-        msg = board->GetLayerName( m_Layer );
+        if( board )
+            msg = board->GetLayerName( m_Layer );
+        else
+            msg.Printf(wxT("%d"), m_Layer );
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, BROWN ) );
