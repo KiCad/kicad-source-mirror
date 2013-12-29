@@ -409,13 +409,31 @@ public:
      */
     int     Distance( wxPoint aStart, wxPoint aEnd, int aWidth );
 
+    /**
+     * Function HitTestForEdge
+     * test is the point aPos is near (< aDistMax ) a vertex
+     * @param aPos = the reference point
+     * @param aDistMax = the max distance between a vertex and the reference point
+     * @return int = the index of the first corner of the vertex, or -1 if not found.
+     */
+    int HitTestForEdge( const wxPoint& aPos, int aDistMax ) const;
+
+    /**
+     * Function HitTestForCorner
+     * test is the point aPos is near (< aDistMax ) a corner
+     * @param aPos = the reference point
+     * @param aDistMax = the max distance between a vertex and the corner
+     * @return int = the index of corner of the, or -1 if not found.
+     */
+    int HitTestForCorner( const wxPoint& aPos, int aDistMax ) const;
+
 private:
     LAYER_NUM           m_layer;            // layer to draw on
     enum HATCH_STYLE    m_hatchStyle;       // hatch style, see enum above
-    int                     m_hatchPitch;   // for DIAGONAL_EDGE hatched outlines, basic distance between 2 hatch lines
+    int                 m_hatchPitch;       // for DIAGONAL_EDGE hatched outlines, basic distance between 2 hatch lines
                                             // and the len of eacvh segment
                                             // for DIAGONAL_FULL, the pitch is twice this value
-    int                     m_utility;      // a flag used in some calculations
+    int                 m_utility;          // a flag used in some calculations
 public:
     CPOLYGONS_LIST          m_CornersList;  // array of points for corners
     std::vector <CSegment>  m_HatchLines;   // hatch lines showing the polygon area
