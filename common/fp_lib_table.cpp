@@ -828,10 +828,14 @@ bool FP_LIB_TABLE::ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aL
 
                 if( !newFPID.IsValid() )
                 {
-                    msg.Printf( _( "Component `%s` FPID <%s> is not valid.\n" ),
-                                GetChars( component->GetReference() ),
-                                GetChars( FROM_UTF8( newFPID.Format().c_str() ) ) );
-                    aReporter->Report( msg );
+                    if( aReporter )
+                    {
+                        msg.Printf( _( "Component `%s` FPID <%s> is not valid.\n" ),
+                                    GetChars( component->GetReference() ),
+                                    GetChars( FROM_UTF8( newFPID.Format().c_str() ) ) );
+                        aReporter->Report( msg );
+                    }
+
                     retv = false;
                 }
                 else
