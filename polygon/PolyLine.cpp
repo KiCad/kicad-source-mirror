@@ -1149,6 +1149,75 @@ int CPolyLine::Distance( const wxPoint& aPoint )
 }
 
 
+/* test is the point aPos is near (< aDistMax ) a vertex
+ * return int = the index of the first corner of the vertex, or -1 if not found.
+ */
+int CPolyLine::HitTestForEdge( const wxPoint& aPos, int aDistMax ) const
+{
+    unsigned lim = m_CornersList.GetCornersCount();
+    int corner = -1;     // Set to not found
+    unsigned first_corner_pos = 0;
+
+    for( unsigned item_pos = 0; item_pos < lim; item_pos++ )
+    {
+        unsigned end_segm = item_pos + 1;
+
+        /* the last corner of the current outline is tested
+         * the last segment of the current outline starts at current corner, and ends
+         * at the first corner of the outline
+         */
+        if( m_CornersList.IsEndContour ( item_pos ) || end_segm >= lim )
+        {
+            unsigned tmp = first_corner_pos;
+            first_corner_pos = end_segm;    // first_corner_pos is now the beginning of the next outline
+            end_segm = tmp;                 // end_segm is the beginning of the current outline
+        }
+
+        // test the dist between segment and ref point
+        int dist = KiROUND( GetPointToLineSegmentDistance(
+                    aPos.x, aPos.y,
+                    m_CornersList.GetX( item_pos ),
+                    m_CornersList.GetY( item_pos ),
+                    m_CornersList.GetX( end_segm ),
+                    m_CornersList.GetY( end_segm ) ) );
+
+        if( dist < aDistMax )
+        {
+            corner = item_pos;
+            aDistMax = dist;
+        }
+    }
+
+    return corner;
+}
+
+/* test is the point aPos is near (< aDistMax ) a corner
+ * return int = the index of corner of the, or -1 if not found.
+ */
+int CPolyLine::HitTestForCorner( const wxPoint& aPos, int aDistMax ) const
+{
+    int corner = -1;         // Set to not found
+    wxPoint delta;
+    unsigned lim = m_CornersList.GetCornersCount();
+
+    for( unsigned item_pos = 0; item_pos < lim; item_pos++ )
+    {
+        delta.x = aPos.x - m_CornersList.GetX( item_pos );
+        delta.y = aPos.y - m_CornersList.GetY( item_pos );
+
+        // Calculate a distance:
+        int dist = std::max( abs( delta.x ), abs( delta.y ) );
+
+        if( dist < aDistMax )  // this corner is a candidate:
+        {
+            corner = item_pos;
+            aDistMax = dist;
+        }
+    }
+
+    return corner;
+}
+
 /*
  * Copy the contours to a KI_POLYGON_WITH_HOLES
  * The first contour is the main outline, others are holes

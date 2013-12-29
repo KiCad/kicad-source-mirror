@@ -234,7 +234,9 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         }
 
         nbconnect--;
-        pt_del->SetState( IS_LINKED, false );
+
+        if( pt_del )
+            pt_del->SetState( IS_LINKED, false );
 
         pt_del = GetBoard()->MarkTrace( pt_del, &nb_segm, NULL, NULL, true );
 
