@@ -40,9 +40,15 @@ set( BOOST_ROOT "${PROJECT_SOURCE_DIR}/boost_root" )
 # Space separated list which indicates the subset of boost libraries to compile.
 # Chosen libraries are based on AVHTTP requirements, and possibly
 # unit_test_framework for its own worth.
-# tool_manager.cpp -> coroutine -> context (_jump_fcontext)
+# tool_manager.cpp -> coroutine -> context (_jump_fcontext) (on OSX)
+if( APPLE )
+    set( BOOST_EXTRA_LIBS "context" )
+else()
+    set( BOOST_EXTRA_LIBS "" )
+endif()
+
 set( BOOST_LIBS_BUILT
-    context
+    ${BOOST_EXTRA_LIBS}
     #coroutine
     date_time
     #exception
