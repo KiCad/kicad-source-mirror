@@ -269,7 +269,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     for( int ii = aList->GetCount() - 1; ii >= 0; ii--  )
     {
         item = (SCH_ITEM*) aList->GetPickedItem( ii );
-        wxAssert( item );
+        wxASSERT( item );
 
         item->ClearFlags();
 
