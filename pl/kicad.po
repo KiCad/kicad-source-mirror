@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-19 18:53+0100\n"
-"PO-Revision-Date: 2013-12-19 18:56+0100\n"
+"POT-Creation-Date: 2013-12-29 12:52+0100\n"
+"PO-Revision-Date: 2013-12-29 12:53+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -158,7 +158,7 @@ msgstr ""
 
 #: kicad/kicad.cpp:74 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
 #: eeschema/schframe.cpp:1024 pcbnew/moduleframe.cpp:632
-#: pcbnew/pcbframe.cpp:1015 cvpcb/cvframe.cpp:781
+#: pcbnew/pcbframe.cpp:1143 cvpcb/cvframe.cpp:781
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -1313,7 +1313,7 @@ msgstr "Symbol zasilania"
 #: eeschema/lib_pin.cpp:1850 eeschema/sch_text.cpp:794
 #: pcbnew/class_drawsegment.cpp:326 pcbnew/class_marker_pcb.cpp:98
 #: pcbnew/class_text_mod.cpp:353 pcbnew/class_track.cpp:1093
-#: pcbnew/class_zone.cpp:686 pcbnew/dialogs/dialog_layers_setup.cpp:290
+#: pcbnew/class_zone.cpp:630 pcbnew/dialogs/dialog_layers_setup.cpp:290
 #: gerbview/class_gerber_draw_item.cpp:547
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:167
@@ -3265,7 +3265,7 @@ msgstr "Dodaj symbol"
 msgid "Add power"
 msgstr "Dodaj port zasilania"
 
-#: eeschema/schframe.cpp:452 pcbnew/pcbframe.cpp:559
+#: eeschema/schframe.cpp:452 pcbnew/pcbframe.cpp:676
 #: pagelayout_editor/pl_editor_frame.cpp:193
 #, c-format
 msgid ""
@@ -6062,37 +6062,37 @@ msgstr "Nazwa arku&sza:"
 msgid "Unique timestamp:"
 msgstr "Unikalny znacznik czasowy:"
 
-#: pcbnew/basepcbframe.cpp:548
+#: pcbnew/basepcbframe.cpp:457
 msgid "Display rectangular coordinates"
 msgstr "Pokaż współrzędne kartezyjskie"
 
-#: pcbnew/basepcbframe.cpp:549 pcbnew/tool_pcb.cpp:336
+#: pcbnew/basepcbframe.cpp:458 pcbnew/tool_pcb.cpp:336
 #: cvpcb/class_DisplayFootprintsFrame.cpp:187
 msgid "Display polar coordinates"
 msgstr "Pokaż współrzędne polarne"
 
-#: pcbnew/basepcbframe.cpp:558 pcbnew/tool_pcb.cpp:375
+#: pcbnew/basepcbframe.cpp:467 pcbnew/tool_pcb.cpp:375
 #: cvpcb/class_DisplayFootprintsFrame.cpp:204
 msgid "Show pads in outline mode"
 msgstr "Pokaż pola lutownicze jako zarys"
 
-#: pcbnew/basepcbframe.cpp:559
+#: pcbnew/basepcbframe.cpp:468
 msgid "Show pads in fill mode"
 msgstr "Pokaż pola lutownicze jako pełne"
 
-#: pcbnew/basepcbframe.cpp:971
+#: pcbnew/basepcbframe.cpp:870
 msgid "Grid:"
 msgstr "Siatka:"
 
-#: pcbnew/basepcbframe.cpp:998 common/zoom.cpp:276
+#: pcbnew/basepcbframe.cpp:897 common/zoom.cpp:276
 msgid "User Grid"
 msgstr "Siatka użytkownika"
 
-#: pcbnew/basepcbframe.cpp:1015 pcbnew/dialogs/dialog_plot_base.cpp:151
+#: pcbnew/basepcbframe.cpp:914 pcbnew/dialogs/dialog_plot_base.cpp:151
 msgid "Auto"
 msgstr "Dopasuj powiększenie"
 
-#: pcbnew/basepcbframe.cpp:1020
+#: pcbnew/basepcbframe.cpp:919
 msgid "Zoom "
 msgstr "Powiększenie "
 
@@ -6141,119 +6141,119 @@ msgstr "Oznaczenie"
 msgid "Supplier and ref"
 msgstr "Dostawca i numer artykułu"
 
-#: pcbnew/class_board.cpp:92
+#: pcbnew/class_board.cpp:93
 msgid "This is the default net class."
 msgstr "To jest domyślna klasa połączeń."
 
-#: pcbnew/class_board.cpp:1037 pcbnew/class_module.cpp:491
+#: pcbnew/class_board.cpp:1042 pcbnew/class_module.cpp:491
 #: pcbnew/class_netinfo_item.cpp:133
 #: cvpcb/dialogs/dialog_display_options_base.cpp:44
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:61
 msgid "Pads"
 msgstr "Pola lutownicze"
 
-#: pcbnew/class_board.cpp:1040 pcbnew/class_netinfo_item.cpp:154
+#: pcbnew/class_board.cpp:1045 pcbnew/class_netinfo_item.cpp:154
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Przelotki"
 
-#: pcbnew/class_board.cpp:1043
+#: pcbnew/class_board.cpp:1048
 msgid "trackSegm"
 msgstr "Segmenty"
 
-#: pcbnew/class_board.cpp:1046
+#: pcbnew/class_board.cpp:1051
 msgid "Nodes"
 msgstr "Węzły"
 
-#: pcbnew/class_board.cpp:1049
+#: pcbnew/class_board.cpp:1054
 msgid "Nets"
 msgstr "Sieci"
 
-#: pcbnew/class_board.cpp:1057
+#: pcbnew/class_board.cpp:1062
 msgid "Links"
 msgstr "Łącza"
 
-#: pcbnew/class_board.cpp:1060
+#: pcbnew/class_board.cpp:1065
 msgid "Connect"
 msgstr "Połączone"
 
-#: pcbnew/class_board.cpp:1063 pcbnew/dialogs/dialog_drc_base.cpp:177
+#: pcbnew/class_board.cpp:1068 pcbnew/dialogs/dialog_drc_base.cpp:177
 msgid "Unconnected"
 msgstr "Niepołączone"
 
-#: pcbnew/class_board.cpp:2442
+#: pcbnew/class_board.cpp:2447
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Sprawdzam footprint komponentu z listy sieci \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2460
+#: pcbnew/class_board.cpp:2465
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Dodaję nowy komponent \"%s:%s\" o footprincie \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2470
+#: pcbnew/class_board.cpp:2475
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Nie mogę dodać nowego komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s"
 "\".\n"
 
-#: pcbnew/class_board.cpp:2503
+#: pcbnew/class_board.cpp:2508
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Zamieniam footprint komponentu \"%s:%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2515
+#: pcbnew/class_board.cpp:2520
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Nie mogę zamienić komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2549
+#: pcbnew/class_board.cpp:2554
 #, c-format
 msgid "Changing footprint \"%s:%s\" reference to \"%s\".\n"
 msgstr "Zmieniam odnośnik footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2565
+#: pcbnew/class_board.cpp:2570
 #, c-format
 msgid "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Zmieniam wartość footprintu \"%s:%s\" z \"%s\" do \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2582
+#: pcbnew/class_board.cpp:2587
 #, c-format
 msgid "Changing footprint path \"%s:%s\" to \"%s\".\n"
 msgstr "Zmieniam ścieżkę footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2608
+#: pcbnew/class_board.cpp:2613
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Kasuje nazwę sieci z komponentu \"%s:%s\" pin \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2625
+#: pcbnew/class_board.cpp:2630
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr ""
 "Zmieniam nazwę sieci komponentu \"%s:%s\" pin \"%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2664
+#: pcbnew/class_board.cpp:2669
 #, c-format
 msgid "Removing footprint \"%s:%s\".\n"
 msgstr "Usuwam footprint \"%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2702
+#: pcbnew/class_board.cpp:2707
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr "Usunięcie niepołączonej sieci \"%s\" z \"%s\" pole '%s'\n"
 
-#: pcbnew/class_board.cpp:2750
+#: pcbnew/class_board.cpp:2755
 #, c-format
 msgid "** Error: Component \"%s\" pad '%s' not found in footprint \"%s\" **\n"
 msgstr ""
 "** BŁĄD: Komponent \"%s\", pole '%s' nie zostało znalezione w footprincie "
 "\"%s\" **\n"
 
-#: pcbnew/class_board.cpp:2775
+#: pcbnew/class_board.cpp:2780
 #, c-format
 msgid "** Error: Zone '%s' layer '%s' has non-existent net name \"%s\" **\n"
 msgstr ""
@@ -6299,7 +6299,7 @@ msgstr "Segment"
 #: pcbnew/class_drawsegment.cpp:357 pcbnew/class_module.cpp:479
 #: pcbnew/class_pad.cpp:591 pcbnew/class_pcb_layer_widget.cpp:205
 #: pcbnew/class_pcb_text.cpp:141 pcbnew/class_text_mod.cpp:363
-#: pcbnew/class_track.cpp:1165 pcbnew/class_zone.cpp:738
+#: pcbnew/class_track.cpp:1171 pcbnew/class_zone.cpp:682
 #: pcbnew/layer_widget.cpp:533 gerbview/class_gerbview_layer_widget.cpp:87
 #: gerbview/dialogs/dialog_print_using_printer.cpp:139
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:142
@@ -6307,7 +6307,7 @@ msgid "Layer"
 msgstr "Warstwy sygnałowe"
 
 #: pcbnew/class_drawsegment.cpp:359 pcbnew/class_edge_mod.cpp:269
-#: pcbnew/class_track.cpp:1192 pcbnew/dialogs/dialog_design_rules_base.cpp:327
+#: pcbnew/class_track.cpp:1198 pcbnew/dialogs/dialog_design_rules_base.cpp:327
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
 msgid "Width"
 msgstr "Szerokość"
@@ -6566,7 +6566,7 @@ msgstr "Rozmiar poziomy"
 msgid "V Size"
 msgstr "Rozmiar pionowy"
 
-#: pcbnew/class_pad.cpp:606 pcbnew/class_track.cpp:1180
+#: pcbnew/class_pad.cpp:606 pcbnew/class_track.cpp:1186
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:278
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid "Drill"
@@ -6947,13 +6947,13 @@ msgstr "Ścieżka"
 msgid "Zone"
 msgstr "Strefa"
 
-#: pcbnew/class_track.cpp:1105 pcbnew/class_zone.cpp:721
+#: pcbnew/class_track.cpp:1105 pcbnew/class_zone.cpp:665
 #: pcbnew/zones_by_polygon_fill_functions.cpp:111
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:46
 msgid "NetName"
 msgstr "Nazwa sieci"
 
-#: pcbnew/class_track.cpp:1109 pcbnew/class_zone.cpp:726
+#: pcbnew/class_track.cpp:1109 pcbnew/class_zone.cpp:670
 msgid "NetCode"
 msgstr "Kod sieci"
 
@@ -6961,101 +6961,101 @@ msgstr "Kod sieci"
 msgid "Status"
 msgstr "Status"
 
-#: pcbnew/class_track.cpp:1173
+#: pcbnew/class_track.cpp:1179
 msgid "Diam"
 msgstr "Średnica"
 
-#: pcbnew/class_track.cpp:1184
+#: pcbnew/class_track.cpp:1190
 msgid "(Specific)"
 msgstr "(Określona)"
 
-#: pcbnew/class_track.cpp:1186
+#: pcbnew/class_track.cpp:1192
 msgid "(Default)"
 msgstr "(Domyślny)"
 
-#: pcbnew/class_track.cpp:1199
+#: pcbnew/class_track.cpp:1205
 msgid "Segment Length"
 msgstr "Długość segmentu"
 
-#: pcbnew/class_track.cpp:1578
+#: pcbnew/class_track.cpp:1584
 msgid "Not found"
 msgstr "Nie znaleziono"
 
-#: pcbnew/class_track.cpp:1586
+#: pcbnew/class_track.cpp:1592
 #, c-format
 msgid "Track %s, net [%s] (%d) on layer %s, length: %s"
 msgstr "Ścieżka %s, sieć [%s] (%d) na warstwie %s, długość: %s"
 
-#: pcbnew/class_zone.cpp:677
+#: pcbnew/class_zone.cpp:621
 msgid "Zone Outline"
 msgstr "Obrys strefy"
 
-#: pcbnew/class_zone.cpp:684 pcbnew/class_zone.cpp:958
+#: pcbnew/class_zone.cpp:628 pcbnew/class_zone.cpp:902
 msgid "(Cutout)"
 msgstr "(Obszar odcięty)"
 
-#: pcbnew/class_zone.cpp:693
+#: pcbnew/class_zone.cpp:637
 msgid "No via"
 msgstr "Bez przelotek"
 
-#: pcbnew/class_zone.cpp:696
+#: pcbnew/class_zone.cpp:640
 msgid "No track"
 msgstr "Bez ścieżek"
 
-#: pcbnew/class_zone.cpp:699
+#: pcbnew/class_zone.cpp:643
 msgid "No copper pour"
 msgstr "Bez stref wypełnień"
 
-#: pcbnew/class_zone.cpp:701
+#: pcbnew/class_zone.cpp:645
 msgid "Keepout"
 msgstr "Strefa chroniona"
 
-#: pcbnew/class_zone.cpp:718 pcbnew/class_zone.cpp:988
+#: pcbnew/class_zone.cpp:662 pcbnew/class_zone.cpp:932
 msgid "Not Found"
 msgstr "Nie znaleziono"
 
-#: pcbnew/class_zone.cpp:731
+#: pcbnew/class_zone.cpp:675
 msgid "Priority"
 msgstr "Priorytet"
 
-#: pcbnew/class_zone.cpp:735
+#: pcbnew/class_zone.cpp:679
 msgid "Non Copper Zone"
 msgstr "Strefa bez pola miedzi"
 
-#: pcbnew/class_zone.cpp:741
+#: pcbnew/class_zone.cpp:685
 msgid "Corners"
 msgstr "Narożniki"
 
-#: pcbnew/class_zone.cpp:744
+#: pcbnew/class_zone.cpp:688
 msgid "Segments"
 msgstr "Segmenty"
 
-#: pcbnew/class_zone.cpp:746
+#: pcbnew/class_zone.cpp:690
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:67
 msgid "Polygons"
 msgstr "Wielokąty"
 
-#: pcbnew/class_zone.cpp:748
+#: pcbnew/class_zone.cpp:692
 msgid "Fill mode"
 msgstr "Tryb wypełnienia"
 
-#: pcbnew/class_zone.cpp:752
+#: pcbnew/class_zone.cpp:696
 msgid "Hatch lines"
 msgstr "Linie kreskowe"
 
-#: pcbnew/class_zone.cpp:757
+#: pcbnew/class_zone.cpp:701
 msgid "Corners in DrawList"
 msgstr "Narożniki w liście rysunkowej"
 
-#: pcbnew/class_zone.cpp:961
+#: pcbnew/class_zone.cpp:905
 msgid "(Keepout)"
 msgstr "(Strefa chroniona)"
 
-#: pcbnew/class_zone.cpp:981
+#: pcbnew/class_zone.cpp:925
 msgid "** NO BOARD DEFINED **"
 msgstr "** NIE ZDEFINIOWANO PŁYTKI **"
 
-#: pcbnew/class_zone.cpp:993
+#: pcbnew/class_zone.cpp:937
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Obrys strefy %s na warstwie %s"
@@ -7098,8 +7098,8 @@ msgstr ""
 "Ten element posiada niepoprawny identyfikator warstwy.\n"
 "Obecnie został przeniesiony na warstwę rysunkową. Proszę to naprawić."
 
-#: pcbnew/dimension.cpp:200 pcbnew/dialogs/dialog_edit_module_text.cpp:228
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:236
+#: pcbnew/dimension.cpp:200 pcbnew/dialogs/dialog_edit_module_text.cpp:230
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:238
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr ""
 "Grubość lini tekstu jest nieproporcjonalna do jego rozmiaru. Zostanie "
@@ -7185,16 +7185,21 @@ msgstr ""
 msgid "Track clearances"
 msgstr "Prześwity ścieżek"
 
-#: pcbnew/eagle_plugin.cpp:1619
+#: pcbnew/eagle_plugin.cpp:1616
 #, c-format
 msgid "<package> name: '%s' duplicated in eagle <library>: '%s'"
 msgstr ""
 "Nazwa footprintu '%s' została zduplikowana w bibliotece programu Eagle: '%s'"
 
-#: pcbnew/eagle_plugin.cpp:1676
+#: pcbnew/eagle_plugin.cpp:1673
 #, c-format
 msgid "No '%s' package in library '%s'"
 msgstr "Nie ma obudowy '%s' w bibliotece '%s'"
+
+#: pcbnew/eagle_plugin.cpp:2747
+#, c-format
+msgid "File '%s' is not readable."
+msgstr "Nie jest możliwe odczytanie pliku '%s'."
 
 #: pcbnew/edgemod.cpp:213
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:190
@@ -8996,7 +9001,7 @@ msgid "Library is not set, the module could not be saved."
 msgstr ""
 "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
-#: pcbnew/moduleframe.cpp:510 pcbnew/pcbframe.cpp:626
+#: pcbnew/moduleframe.cpp:510 pcbnew/pcbframe.cpp:743
 #: cvpcb/class_DisplayFootprintsFrame.cpp:442
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
@@ -9697,12 +9702,12 @@ msgstr "Przelotka %s, wiercenie %s"
 msgid "Delete Pad (module %s %s) "
 msgstr "Usuń pole lutownicze (footprint %s %s) "
 
-#: pcbnew/pcbframe.cpp:401 pcbnew/pcbframe.cpp:948
+#: pcbnew/pcbframe.cpp:418 pcbnew/pcbframe.cpp:1076
 #: gerbview/events_called_functions.cpp:319 gerbview/gerbview_frame.cpp:140
 msgid "Visibles"
 msgstr "Widoczność"
 
-#: pcbnew/pcbframe.cpp:495 cvpcb/cvframe.cpp:220
+#: pcbnew/pcbframe.cpp:512 cvpcb/cvframe.cpp:220
 #, c-format
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
@@ -9714,12 +9719,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbframe.cpp:589
+#: pcbnew/pcbframe.cpp:706
 #, c-format
 msgid "The auto save file <%s> could not be removed!"
 msgstr "Plik automatycznej kopii zapasowej <%s> nie może zostac usunięty!"
 
-#: pcbnew/pcbframe.cpp:1019
+#: pcbnew/pcbframe.cpp:1147
 msgid " [new file]"
 msgstr " [nowy plik]"
 
@@ -9936,13 +9941,13 @@ msgstr "Eksport płytki udany."
 msgid "Unable to export, please fix and try again."
 msgstr "Nie mogę eksportować. Napraw błędy i spróbuj ponownie."
 
-#: pcbnew/specctra_export.cpp:991 pcbnew/specctra_export.cpp:1093
-#: pcbnew/specctra_export.cpp:1212
+#: pcbnew/specctra_export.cpp:991 pcbnew/specctra_export.cpp:1094
+#: pcbnew/specctra_export.cpp:1213
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "Nieobsługiwany typ DRAWSEGMENT %s"
 
-#: pcbnew/specctra_export.cpp:1109
+#: pcbnew/specctra_export.cpp:1110
 #, c-format
 msgid ""
 "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
@@ -9951,7 +9956,7 @@ msgstr ""
 "Nie mogę odnaleźć następnego segmentu z punktem końcowym (%s mm, %s mm).\n"
 "Popraw obrys na warstwie Edge.Cuts, tworząc z niego zamknięty wielokąt."
 
-#: pcbnew/specctra_export.cpp:1228
+#: pcbnew/specctra_export.cpp:1229
 #, c-format
 msgid ""
 "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
@@ -9961,12 +9966,12 @@ msgstr ""
 "Popraw wewnętrzny obrys na warstwie Edge.Cuts, tworząc z niego zamknięty "
 "wielokąt."
 
-#: pcbnew/specctra_export.cpp:1378
+#: pcbnew/specctra_export.cpp:1379
 #, c-format
 msgid "Component with value of '%s' has empty reference id."
 msgstr "Komponent z wartością '%s' nie posiada oznaczenia."
 
-#: pcbnew/specctra_export.cpp:1386
+#: pcbnew/specctra_export.cpp:1387
 #, c-format
 msgid "Multiple components have identical reference IDs of '%s'."
 msgstr "Wiele komponentów ma to samo oznaczenie \"%s\"."
