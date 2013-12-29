@@ -40,8 +40,9 @@ set( BOOST_ROOT "${PROJECT_SOURCE_DIR}/boost_root" )
 # Space separated list which indicates the subset of boost libraries to compile.
 # Chosen libraries are based on AVHTTP requirements, and possibly
 # unit_test_framework for its own worth.
+# tool_manager.cpp -> coroutine -> context (_jump_fcontext)
 set( BOOST_LIBS_BUILT
-    #context
+    context
     #coroutine
     date_time
     #exception
@@ -55,7 +56,6 @@ set( BOOST_LIBS_BUILT
     thread
     #unit_test_framework
     )
-
 #-----</configure>---------------------------------------------------------------
 
 find_package( BZip2 REQUIRED )
@@ -104,14 +104,14 @@ if( MINGW )
     foreach( lib ${boost_libs_list} )
         set( b2_libs ${b2_libs} --with-${lib} )
     endforeach()
-    unset( PIC_STUFF )
+    unset( BOOST_CFLAGS )
 else()
     string( REGEX REPLACE "\\;" "," libs_csv "${boost_libs_list}" )
     #message( STATUS "libs_csv:${libs_csv}" )
 
     set( bootstrap ./bootstrap.sh --with-libraries=${libs_csv} )
     # pass to *both* C and C++ compilers
-    set( PIC_STUFF "cflags=${PIC_FLAG}" )
+    set( BOOST_CFLAGS "cflags=${PIC_FLAG}" )
     set( BOOST_INCLUDE "${BOOST_ROOT}/include" )
     unset( b2_libs )
 endif()
@@ -121,8 +121,8 @@ if( APPLE )
     # I set this to being compatible with wxWidgets
     # wxWidgets still using libstdc++ (gcc), meanwhile OSX
     # has switched to libc++ (llvm) by default
-    set(BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=10.5"  )
-    set(BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=10.5" )
+    set(BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=10.5  -fno-common -fno-lto" )
+    set(BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=10.5 -fno-common -fno-lto" )
     set(BOOST_TOOLSET   "toolset=darwin" )
 
     if( CMAKE_OSX_ARCHITECTURES )
@@ -141,6 +141,9 @@ if( APPLE )
             set(BOOST_ARCHITECTURE "architecture=combined")
         endif()
 
+        set(BOOST_CFLAGS    "${BOOST_CFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}"  )
+        set(BOOST_CXXFLAGS  "${BOOST_CXXFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}"  )
+        set(BOOST_LINKFLAGS "${BOOST_LINKFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}" )
     endif()
 endif()
 
@@ -159,6 +162,8 @@ ExternalProject_Add( boost
         # PATCH_COMMAND continuation (any *_COMMAND here can be continued with COMMAND):
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_minkowski.patch"
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_cstdint.patch"
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86.patch"        #https://svn.boost.org/trac/boost/ticket/8266
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86_build.patch"  #https://svn.boost.org/trac/boost/ticket/8266
 
     # [Mis-]use this step to erase all the boost headers and libraries before
     # replacing them below.
@@ -170,7 +175,7 @@ ExternalProject_Add( boost
     BUILD_COMMAND   ./b2
                     variant=release
                     threading=multi
-                    ${PIC_STUFF}
+                    ${BOOST_CFLAGS}
                     ${BOOST_TOOLSET}
                     ${BOOST_CXXFLAGS}
                     ${BOOST_LINKFLAGS}
@@ -229,7 +234,7 @@ ExternalProject_Add_Step( boost bzr_commit_boost
 
 ExternalProject_Add_Step( boost bzr_add_boost
     # add only the headers to the scratch repo, repo = "../.bzr" from ${headers_src}
-    COMMAND bzr add -q ${headers_src}
+    COMMAND bzr add -q ${PREFIX}/src/boost
     COMMENT "adding pristine boost files to 'boost scratch repo'"
     DEPENDERS bzr_commit_boost
     )
