@@ -367,7 +367,7 @@ if( KICAD_SCRIPTING_MODULES )
         3d-viewer
         pcbcommon
         pnsrouter
-        c${ommon
+        common
         pcad2kicadpcb
         lib_dxf
         ${GITHUB_PLUGIN_LIBRARIES}
