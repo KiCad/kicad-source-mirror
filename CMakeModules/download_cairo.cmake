@@ -39,10 +39,15 @@ set( PREFIX ${DOWNLOAD_DIR}/cairo )
 
 if (APPLE) 
     if( CMAKE_OSX_ARCHITECTURES )
-        set( CAIRO_CFLAGS  "CFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -isysroot ${CMAKE_OSX_SYSROOT} -fno-lto" )
+        set( CAIRO_CFLAGS  "CFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -fno-lto" )
         set( CAIRO_LDFLAGS "LDFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -framework CoreGraphics -framework CoreServices" )
         set( CAIRO_OPTS    "--enable-quartz-image" )
     endif( CMAKE_OSX_ARCHITECTURES )
+
+    if( CMAKE_OSX_SYSROOT )
+        set( CAIRO_CFLAGS  "${CAIRO_CFLAGS}  -isysroot ${CMAKE_OSX_SYSROOT}")
+    endif( CMAKE_OSX_SYSROOT)
+
 endif(APPLE)
 
 # <SOURCE_DIR> = ${PREFIX}/src/glew
