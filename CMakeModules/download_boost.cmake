@@ -97,6 +97,13 @@ string( REPLACE "unit_test_framework" "test" boost_libs_list "${BOOST_LIBS_BUILT
 # Default Toolset
 set( BOOST_TOOLSET "toolset=gcc" )
 
+if( KICAD_BUILD_STATIC )
+    set(BOOST_LINKTYPE  "link=static")
+else()
+    set( BOOST_LINKTYPE "#link=static")
+endif()
+
+
 if( MINGW )
     if( MSYS )
         # The Boost system does not build properly on MSYS using bootstrap.sh.  Running
@@ -122,14 +129,18 @@ else()
     unset( b2_libs )
 endif()
 
-
 if( APPLE )
     # I set this to being compatible with wxWidgets
     # wxWidgets still using libstdc++ (gcc), meanwhile OSX
     # has switched to libc++ (llvm) by default
-    set(BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=10.5  -fno-common -fno-lto" )
-    set(BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=10.5 -fno-common -fno-lto" )
+    set(BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=10.5  -fno-common" )
+    set(BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=10.5 -fno-common" )
     set(BOOST_TOOLSET   "toolset=darwin" )
+  
+    if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+        set(BOOST_CXXFLAGS  "${BOOST_CXXFLAGS} -fno-lto" )
+        set(BOOST_LINKFLAGS "${BOOST_LINKFLAGS} -fno-lto" )
+    endif()
 
     if( CMAKE_OSX_ARCHITECTURES )
 
@@ -142,9 +153,17 @@ if( APPLE )
 
         if( (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64" OR CMAKE_OSX_ARCHITECTURES MATCHES "386") AND
             (CMAKE_OSX_ARCHITECTURES MATCHES "ppc"))
-            message("-- BOOST found ppc/intel Architecture")
+            message("-- BOOST found ppc/x86 Architecture")
 
             set(BOOST_ARCHITECTURE "architecture=combined")
+        elseif( (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64" OR CMAKE_OSX_ARCHITECTURES MATCHES "386") )
+            message("-- BOOST found x86 Architecture")
+
+            set(BOOST_ARCHITECTURE "architecture=x86")
+        elseif( (CMAKE_OSX_ARCHITECTURES MATCHES "ppc64" OR CMAKE_OSX_ARCHITECTURES MATCHES "ppc") )
+            message("-- BOOST found ppc Architecture")
+
+            set(BOOST_ARCHITECTURE "architecture=ppc")
         endif()
 
         set(BOOST_CFLAGS    "${BOOST_CFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}"  )
@@ -188,7 +207,7 @@ ExternalProject_Add( boost
                     ${BOOST_ADDRESSMODEL}
                     ${BOOST_ARCHITECTURE}
                     ${b2_libs}
-                    #link=static
+                    ${BOOST_LINKTYPE}
                     --prefix=<INSTALL_DIR>
                     install
 

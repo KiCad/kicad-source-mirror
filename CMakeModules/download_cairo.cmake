@@ -39,13 +39,18 @@ set( PREFIX ${DOWNLOAD_DIR}/cairo )
 
 if (APPLE) 
     if( CMAKE_OSX_ARCHITECTURES )
-        set( CAIRO_CFLAGS  "CFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -fno-lto" )
-        set( CAIRO_LDFLAGS "LDFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -framework CoreGraphics -framework CoreServices" )
+        set( CAIRO_CFLAGS  "CFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES}" )
+        set( CAIRO_LDFLAGS "LDFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -framework CoreServices -framework Cocoa" )
         set( CAIRO_OPTS    "--enable-quartz-image" )
     endif( CMAKE_OSX_ARCHITECTURES )
 
+    if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+        set(CAIRO_CFLAGS  "${CAIRO_CFLAGS} -fno-lto" )
+    endif()
+
     if( CMAKE_OSX_SYSROOT )
-        set( CAIRO_CFLAGS  "${CAIRO_CFLAGS}  -isysroot ${CMAKE_OSX_SYSROOT}")
+        #set( CAIRO_CFLAGS  "${CAIRO_CFLAGS}  -isysroot ${CMAKE_OSX_SYSROOT}")
+        set( CAIRO_LDFLAGS "${CAIRO_LDFLAGS}  -isysroot ${CMAKE_OSX_SYSROOT}")
     endif( CMAKE_OSX_SYSROOT)
 
 endif(APPLE)
@@ -72,10 +77,9 @@ ExternalProject_Add(  cairo
                       PKG_CONFIG=${PROJECT_SOURCE_DIR}/pkgconfig_root/bin/pkg-config
                       PKG_CONFIG_PATH=${PROJECT_SOURCE_DIR}/pixman_root/lib/pkgconfig:${PROJECT_SOURCE_DIR}/libpng_root/lib/pkgconfig
                       --enable-png=yes --enable-svg=yes
-                      --disable-silent-rules 
+                      --disable-silent-rules --disable-dependency-tracking
                       ${CAIRO_CFLAGS}
                       ${CAIRO_LDFLAGS}
-                      CC=${CMAKE_C_COMPILER}
                      
     #BINARY_DIR      "${PREFIX}"
 
