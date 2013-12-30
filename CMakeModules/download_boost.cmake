@@ -41,14 +41,9 @@ set( BOOST_ROOT "${PROJECT_SOURCE_DIR}/boost_root" )
 # Chosen libraries are based on AVHTTP requirements, and possibly
 # unit_test_framework for its own worth.
 # tool_manager.cpp -> coroutine -> context (_jump_fcontext) (on OSX)
-if( APPLE )
-    set( BOOST_EXTRA_LIBS "context" )
-else()
-    set( BOOST_EXTRA_LIBS "" )
-endif()
 
 set( BOOST_LIBS_BUILT
-    ${BOOST_EXTRA_LIBS}
+    context
     #coroutine
     date_time
     #exception
@@ -98,9 +93,9 @@ string( REPLACE "unit_test_framework" "test" boost_libs_list "${BOOST_LIBS_BUILT
 set( BOOST_TOOLSET "toolset=gcc" )
 
 if( KICAD_BUILD_STATIC )
-    set(BOOST_LINKTYPE  "link=static")
+    set( BOOST_LINKTYPE  "link=static" )
 else()
-    set( BOOST_LINKTYPE "#link=static")
+    unset( BOOST_LINKTYPE )
 endif()
 
 
@@ -129,14 +124,15 @@ else()
     unset( b2_libs )
 endif()
 
+
 if( APPLE )
     # I set this to being compatible with wxWidgets
     # wxWidgets still using libstdc++ (gcc), meanwhile OSX
     # has switched to libc++ (llvm) by default
-    set(BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=10.5  -fno-common" )
-    set(BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=10.5 -fno-common" )
-    set(BOOST_TOOLSET   "toolset=darwin" )
-  
+    set( BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=10.5  -fno-common" )
+    set( BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=10.5 -fno-common" )
+    set( BOOST_TOOLSET   "toolset=darwin" )
+
     if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set(BOOST_CXXFLAGS  "${BOOST_CXXFLAGS} -fno-lto" )
         set(BOOST_LINKFLAGS "${BOOST_LINKFLAGS} -fno-lto" )
@@ -146,9 +142,9 @@ if( APPLE )
 
         if( (CMAKE_OSX_ARCHITECTURES MATCHES "386" OR CMAKE_OSX_ARCHITECTURES MATCHES "ppc ") AND
             (CMAKE_OSX_ARCHITECTURES MATCHES "64"))
-            message("-- BOOST found 32/64 Address Model")
+            message( "-- BOOST found 32/64 Address Model" )
 
-            set(BOOST_ADDRESSMODEL "address-model=32_64")
+            set( BOOST_ADDRESSMODEL "address-model=32_64" )
         endif()
 
         if( (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64" OR CMAKE_OSX_ARCHITECTURES MATCHES "386") AND
@@ -166,9 +162,9 @@ if( APPLE )
             set(BOOST_ARCHITECTURE "architecture=ppc")
         endif()
 
-        set(BOOST_CFLAGS    "${BOOST_CFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}"  )
-        set(BOOST_CXXFLAGS  "${BOOST_CXXFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}"  )
-        set(BOOST_LINKFLAGS "${BOOST_LINKFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}" )
+        set( BOOST_CFLAGS    "${BOOST_CFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}"  )
+        set( BOOST_CXXFLAGS  "${BOOST_CXXFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}"  )
+        set( BOOST_LINKFLAGS "${BOOST_LINKFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}" )
     endif()
 endif()
 
@@ -187,8 +183,20 @@ ExternalProject_Add( boost
         # PATCH_COMMAND continuation (any *_COMMAND here can be continued with COMMAND):
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_minkowski.patch"
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_cstdint.patch"
+
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86.patch"        #https://svn.boost.org/trac/boost/ticket/8266
+        # tell bzr about new files added by last patch so above "bzr revert" works:
+        COMMAND     bzr add libs/context/src/asm/jump_i386_x86_64_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/make_i386_x86_64_sysv_macho_gas.S
+
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86_build.patch"  #https://svn.boost.org/trac/boost/ticket/8266
+
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_mingw.patch"             #https://svn.boost.org/trac/boost/ticket/7262
+        # tell bzr about new files added by last patch so above "bzr revert" works:
+        COMMAND     bzr add libs/context/src/asm/make_i386_ms_pe_gas.S
+        COMMAND     bzr add libs/context/src/asm/jump_i386_ms_pe_gas.S
+        COMMAND     bzr add libs/context/src/asm/make_x86_64_ms_pe_gas.S
+        COMMAND     bzr add libs/context/src/asm/jump_x86_64_ms_pe_gas.S
 
     # [Mis-]use this step to erase all the boost headers and libraries before
     # replacing them below.
@@ -240,8 +248,8 @@ endif()
 set( boost_libs "" )
 set_boost_lib_names( "${BOOST_LIBS_BUILT}" boost_libs )
 
-set( Boost_LIBRARIES    ${boost_libs}      CACHE FILEPATH "Boost libraries directory" )
-set( Boost_INCLUDE_DIR  "${BOOST_INCLUDE}" CACHE FILEPATH "Boost include directory" )
+set( Boost_LIBRARIES    ${boost_libs} )
+set( Boost_INCLUDE_DIR  "${BOOST_INCLUDE}" )
 
 mark_as_advanced( Boost_LIBRARIES Boost_INCLUDE_DIR )
 

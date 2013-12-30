@@ -114,6 +114,14 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     set( CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG" )
     set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG" )
 
+    if( GXX_HAS_VISIBILITY_FLAG )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden" )
+    endif()
+
+    if( GXX_HAS_VISIBILITY_INLINES_FLAG )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden" )
+    endif()
+
     if( MINGW )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
 
@@ -132,8 +140,8 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         # Disable this response file for includes ( See Windows-GNU.cmake module )
         if( WIN32 AND MSYS AND NOT CMAKE_CROSSCOMPILING )
             # fixme: it is needed only with MSYS+MINGW32? or always under MINGW
-            if (${CMAKE_SIZEOF_VOID_P} MATCHES 4)
-                set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDES 0)
+            if( ${CMAKE_SIZEOF_VOID_P} MATCHES 4 )
+                set( CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDES 0 )
             endif()
         endif()
 
@@ -160,13 +168,13 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     if( GCC_VERSION VERSION_GREATER 4.8 OR GCC_VERSION VERSION_EQUAL 4.8 )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedefs" )
     endif()
-   
-    if( APPLE ) 
+
+    if( APPLE )
         set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__" )
     endif()
- 
-endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+
+endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
 if( KICAD_KEEPCASE )
     add_definitions( -DKICAD_KEEPCASE )
@@ -251,7 +259,7 @@ include( Functions )
 
 include( ExternalProject )
 
-if ( APPLE ) 
+if ( APPLE )
     set( KICAD_BUILD_STATIC ON)
 
     if( NOT CMAKE_CXX_COMPILER )
@@ -286,13 +294,13 @@ if ( KICAD_BUILD_STATIC )
         set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config")
     include( download_glew )
         set( GLEW_GLEW_LIBRARY "${GLEW_ROOT}/lib/libGLEW.a")
-        set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include") 
+        set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include")
     include( download_pixman )
         set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a")
     include( download_libpng )
     include( download_cairo )
         set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo")
-        set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a") 
+        set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a")
 endif( KICAD_BUILD_STATIC )
 
 #####################
