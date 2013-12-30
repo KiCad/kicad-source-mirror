@@ -40,6 +40,10 @@ option( KICAD_SCRIPTING_WXPYTHON
     "set this option ON to build wxpython implementation for wx interface building in python and py.shell"
     )
 
+option( KICAD_BUILD_STATIC
+    "Builds Kicad and all libraries static (except wx-widgets)"
+    )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -156,7 +160,12 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     if( GCC_VERSION VERSION_GREATER 4.8 OR GCC_VERSION VERSION_EQUAL 4.8 )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedefs" )
     endif()
-
+   
+    if( APPLE ) 
+        set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__" )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__" )
+    endif()
+ 
 endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
 if( KICAD_KEEPCASE )
@@ -242,6 +251,19 @@ include( Functions )
 
 include( ExternalProject )
 
+if ( APPLE ) 
+    set( KICAD_BUILD_STATIC ON)
+
+    if( NOT CMAKE_CXX_COMPILER )
+        EXEC_PROGRAM( wx-config ARGS --cc  OUTPUT_VARIABLE CMAKE_C_COMPILER )
+    endif( NOT CMAKE_CXX_COMPILER )
+
+    if( NOT CMAKE_CXX_COMPILER )
+        EXEC_PROGRAM( wx-config ARGS --cxx OUTPUT_VARIABLE CMAKE_CXX_COMPILER )
+    endif( NOT CMAKE_CXX_COMPILER )
+
+endif( APPLE )
+
 #================================================
 # Find libraries that are needed to build KiCad.
 #================================================
@@ -255,6 +277,23 @@ add_definitions(-DWX_COMPATIBILITY)
 #######################
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
+
+if ( KICAD_BUILD_STATIC )
+
+    #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
+
+    include( download_pkgconfig )
+        set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config")
+    include( download_glew )
+        set( GLEW_GLEW_LIBRARY "${GLEW_ROOT}/lib/libGLEW.a")
+        set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include") 
+    include( download_pixman )
+        set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a")
+    include( download_libpng )
+    include( download_cairo )
+        set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo")
+        set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a") 
+endif( KICAD_BUILD_STATIC )
 
 #####################
 # Find GLEW library #
@@ -271,7 +310,6 @@ check_find_package_result(CAIRO_FOUND "Cairo")
 # Download boost and possibly build parts of it
 #################################################
 include( download_boost )
-
 
 ##########################
 # Find wxWidgets library #

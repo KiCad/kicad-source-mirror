@@ -367,7 +367,7 @@ if( KICAD_SCRIPTING_MODULES )
         3d-viewer
         pcbcommon
         pnsrouter
-        common
+        c${ommon
         pcad2kicadpcb
         lib_dxf
         ${GITHUB_PLUGIN_LIBRARIES}
@@ -376,6 +376,7 @@ if( KICAD_SCRIPTING_MODULES )
         gal
         ${GLEW_LIBRARIES}
         ${CAIRO_LIBRARIES}
+        ${PIXMAN_LIBRARY}
         ${wxWidgets_LIBRARIES}
         ${OPENGL_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
@@ -553,6 +554,7 @@ target_link_libraries( pcbnew
     ${PCBNEW_EXTRA_LIBS}
     ${GLEW_LIBRARIES}
     ${CAIRO_LIBRARIES}
+    ${PIXMAN_LIBRARY}
     ${Boost_LIBRARIES}      # must follow GITHUB
     )
 
