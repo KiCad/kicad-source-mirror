@@ -59,7 +59,7 @@ ExternalProject_Add( libpng
     BUILD_IN_SOURCE 1
 
     #PATCH_COMMAND     "true"
-    CONFIGURE_COMMAND  ./configure --prefix=${LIBPNG_ROOT} --enable-static --disable-shared ${LIBPNG_CFLAGS}
+    CONFIGURE_COMMAND  ./configure --prefix=${LIBPNG_ROOT} --enable-static --disable-shared ${LIBPNG_CFLAGS} --disable-dependency-tracking
     #BINARY_DIR      "${PREFIX}"
 
     BUILD_COMMAND   make

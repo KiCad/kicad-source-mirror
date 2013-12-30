@@ -59,7 +59,7 @@ ExternalProject_Add( pixman
     BUILD_IN_SOURCE 1
 
     #PATCH_COMMAND     "true"
-    CONFIGURE_COMMAND ./configure --prefix=${PIXMAN_ROOT} --enable-static=yes --enable-shared=no ${PIXMAN_CPPFLAGS} CC=${CMAKE_C_COMPILER}
+    CONFIGURE_COMMAND ./configure --prefix=${PIXMAN_ROOT} --enable-static=yes --enable-shared=no ${PIXMAN_CPPFLAGS}  --disable-dependency-tracking
     #BINARY_DIR      "${PREFIX}"
 
     BUILD_COMMAND   make
