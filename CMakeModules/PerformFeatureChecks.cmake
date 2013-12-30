@@ -36,17 +36,21 @@
 # Consider it a benchmark when writing your own feature tests.
 #
 
-macro(perform_feature_checks)
+macro( perform_feature_checks )
 
-    include(CheckIncludeFile)
-    #include(CheckFunctionExists)
-    include(CheckLibraryExists)
-    include(CheckSymbolExists)
-    include(CheckIncludeFileCXX)
-    include(CheckCXXSymbolExists)
-    include(CheckCXXSourceCompiles)
+    include( CheckIncludeFile )
+    #include( CheckFunctionExists )
+    include( CheckLibraryExists )
+    include( CheckSymbolExists )
+    include( CheckIncludeFileCXX )
+    include( CheckCXXSymbolExists )
+    include( CheckCXXSourceCompiles )
+    include( CheckCXXCompilerFlag )
 
-    check_include_file("malloc.h" HAVE_MALLOC_H)
+    check_cxx_compiler_flag( -fvisibility=hidden GXX_HAS_VISIBILITY_FLAG )
+    check_cxx_compiler_flag( -fvisibility-inlines-hidden GXX_HAS_VISIBILITY_INLINES_FLAG )
+
+    check_include_file( "malloc.h" HAVE_MALLOC_H )
 
     # FIXME: Visual C++ does not support the "not" keyword natively.  It is
     #        defined as a macro in <iso646.h>.  There should be a cmake macro
@@ -54,7 +58,7 @@ macro(perform_feature_checks)
     #        then check for <iso646.h> and include it.  Although it doesn't
     #        appear to cause any problems with other compilers, that doesn't
     #        mean won't fail somewhere down the line.
-    check_include_file("iso646.h" HAVE_ISO646_H)
+    check_include_file( "iso646.h" HAVE_ISO646_H )
 
     # The STDINT header file test is required because MinGW under Windows
     # doesn't define HAVE_STDINT_H even though it does have it.
@@ -62,7 +66,7 @@ macro(perform_feature_checks)
     # We need to add it to the global compiler definitions as config.h is not
     # included in pyport.h which is where the problem ocurrs without this
     # fix.
-    check_include_file("stdint.h" HAVE_STDINT_H)
+    check_include_file( "stdint.h" HAVE_STDINT_H )
 
     if( HAVE_STDINT_H )
         add_definitions( -DHAVE_STDINT_H )
@@ -73,40 +77,41 @@ macro(perform_feature_checks)
     # re-introduce this.
     # check_include_file("strings.h" HAVE_STRINGS_H)
 
-    check_symbol_exists(strcasecmp "string.h" HAVE_STRCASECMP)
-    check_symbol_exists(strcasecmp "strings.h" HAVE_STRCASECMP)
-    check_symbol_exists(strncasecmp "string.h" HAVE_STRNCASECMP)
-    check_symbol_exists(strncasecmp "strings.h" HAVE_STRNCASECMP)
+    check_symbol_exists( strcasecmp "string.h" HAVE_STRCASECMP )
+    check_symbol_exists( strcasecmp "strings.h" HAVE_STRCASECMP )
+    check_symbol_exists( strncasecmp "string.h" HAVE_STRNCASECMP )
+    check_symbol_exists( strncasecmp "strings.h" HAVE_STRNCASECMP )
     check_symbol_exists( strtok_r "string.h" HAVE_STRTOKR )
 
     # Some platforms define malloc and free in malloc.h instead of stdlib.h.
-    check_symbol_exists(malloc "stdlib.h" MALLOC_IN_STDLIB_H)
+    check_symbol_exists( malloc "stdlib.h" MALLOC_IN_STDLIB_H )
 
     # Check for functions in math.h.
-    check_include_file("math.h" HAVE_MATH_H)
+    check_include_file( "math.h" HAVE_MATH_H )
 
     # Check for functions in C++ cmath.
-    check_include_file_cxx(cmath HAVE_CXX_CMATH)
-    check_cxx_symbol_exists(asinh cmath HAVE_CMATH_ASINH )
-    check_cxx_symbol_exists(acosh cmath HAVE_CMATH_ACOSH )
-    check_cxx_symbol_exists(atanh cmath HAVE_CMATH_ATANH )
+    check_include_file_cxx( cmath HAVE_CXX_CMATH )
+    check_cxx_symbol_exists( asinh cmath HAVE_CMATH_ASINH )
+    check_cxx_symbol_exists( acosh cmath HAVE_CMATH_ACOSH )
+    check_cxx_symbol_exists( atanh cmath HAVE_CMATH_ATANH )
 
     # CMakes check_cxx_symbol_exists() doesn't work for templates so we must create a
     # small program to verify isinf() exists in cmath.
     check_cxx_source_compiles( "#include <cmath>\nint main(int argc, char** argv)\n{\n  (void)argv;\n  std::isinf(1.0);  (void)argc;\n  return 0;\n}\n"  HAVE_CMATH_ISINF )
 
-    #check_symbol_exists(clock_gettime "time.h" HAVE_CLOCK_GETTIME) non-standard library, does not work
-    check_library_exists(rt clock_gettime "" HAVE_CLOCK_GETTIME)
+    #check_symbol_exists( clock_gettime "time.h" HAVE_CLOCK_GETTIME ) non-standard library, does not work
+    check_library_exists( rt clock_gettime "" HAVE_CLOCK_GETTIME )
 
     # HAVE_GETTIMEOFDAY is already in use within 2.9 wxWidgets, so use HAVE_GETTIMEOFDAY_FUNC
-    check_symbol_exists(gettimeofday "sys/time.h" HAVE_GETTIMEOFDAY_FUNC)
+    check_symbol_exists( gettimeofday "sys/time.h" HAVE_GETTIMEOFDAY_FUNC )
 
     # Check for Posix getc_unlocked() for improved performance over getc().  Fall back to
     # getc() on platforms where getc_unlocked() doesn't exist.
-    check_symbol_exists(getc_unlocked "stdio.h" HAVE_FGETC_NOLOCK)
+    check_symbol_exists( getc_unlocked "stdio.h" HAVE_FGETC_NOLOCK )
 
     # Generate config.h.
-    configure_file(${PROJECT_SOURCE_DIR}/CMakeModules/config.h.cmake
-                   ${CMAKE_BINARY_DIR}/config.h)
+    configure_file( ${PROJECT_SOURCE_DIR}/CMakeModules/config.h.cmake
+        ${CMAKE_BINARY_DIR}/config.h
+        )
 
-endmacro(perform_feature_checks)
+endmacro( perform_feature_checks )
