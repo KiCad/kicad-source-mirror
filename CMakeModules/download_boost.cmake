@@ -180,12 +180,14 @@ ExternalProject_Add( boost
     # fails when applying a patch to the branch twice and doesn't have a switch
     # to ignore previously applied patches
     PATCH_COMMAND   bzr revert
-        # PATCH_COMMAND continuation (any *_COMMAND here can be continued with COMMAND):
+        # bzr revert is insufficient to remove "added" files:
+        COMMAND     bzr clean-tree -q
+
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_minkowski.patch"
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_cstdint.patch"
 
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86.patch"        #https://svn.boost.org/trac/boost/ticket/8266
-        # tell bzr about new files added by last patch so above "bzr revert" works:
+        # tell bzr about "added" files by last patch:
         COMMAND     bzr add libs/context/src/asm/jump_i386_x86_64_sysv_macho_gas.S
         COMMAND     bzr add libs/context/src/asm/make_i386_x86_64_sysv_macho_gas.S
 
@@ -193,7 +195,7 @@ ExternalProject_Add( boost
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_older_openssl.patch"  #https://svn.boost.org/trac/boost/ticket/9273
 
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_mingw.patch"             #https://svn.boost.org/trac/boost/ticket/7262
-        # tell bzr about new files added by last patch so above "bzr revert" works:
+        # tell bzr about "added" files by last patch:
         COMMAND     bzr add libs/context/src/asm/make_i386_ms_pe_gas.S
         COMMAND     bzr add libs/context/src/asm/jump_i386_ms_pe_gas.S
         COMMAND     bzr add libs/context/src/asm/make_x86_64_ms_pe_gas.S
