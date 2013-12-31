@@ -190,6 +190,7 @@ ExternalProject_Add( boost
         COMMAND     bzr add libs/context/src/asm/make_i386_x86_64_sysv_macho_gas.S
 
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86_build.patch"  #https://svn.boost.org/trac/boost/ticket/8266
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_older_openssl.patch"  #https://svn.boost.org/trac/boost/ticket/9273
 
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_mingw.patch"             #https://svn.boost.org/trac/boost/ticket/7262
         # tell bzr about new files added by last patch so above "bzr revert" works:
