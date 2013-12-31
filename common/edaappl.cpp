@@ -505,8 +505,8 @@ void EDA_APP::SetDefaultSearchPaths()
 #ifdef __WXMSW__
     tmp.AddEnvList( wxT( "PROGRAMFILES" ) );
 #elif __WXMAC__
-    tmp.Add( wxT( "/Library/Application Support" ) );
     tmp.Add( wxString( wxGetenv( wxT( "HOME" ) ) ) + wxT( "/Library/Application Support" ) );
+    tmp.Add( wxT( "/Library/Application Support" ) );
 #else
     tmp.AddEnvList( wxT( "PATH" ) );
 #endif
