@@ -61,54 +61,49 @@ static const wxChar* CommonConfigPath = wxT( "kicad_common" );
 #   define TMP_FILE "/tmp/kicad.tmp"
 #endif
 
-/* Just add new languages to the list.  This macro will properly recalculate
- * the size of the array. */
-#define LANGUAGE_DESCR_COUNT ( sizeof( s_Language_List ) / sizeof( struct LANGUAGE_DESCR ) )
-
 
 // some key strings used to store parameters in config
-static wxString backgroundColorKey( wxT( "BackgroundColor" ) );
-static wxString showPageLimitsKey( wxT( "ShowPageLimits" ) );
-static wxString workingDirKey( wxT( "WorkingDir" ) ) ;
-static wxString languageCfgKey( wxT( "LanguageID" ) );
-static wxString kicadFpLibPath( wxT( "KicadFootprintLibraryPath" ) );
+static const wxChar backgroundColorKey[] = wxT( "BackgroundColor" );
+static const wxChar showPageLimitsKey[]  = wxT( "ShowPageLimits" );
+static const wxChar workingDirKey[]  = wxT( "WorkingDir" );
+static const wxChar languageCfgKey[] = wxT( "LanguageID" );
+static const wxChar kicadFpLibPath[] = wxT( "KicadFootprintLibraryPath" );
 
 
 /**
- *   A small class to handle the list on existing translations.
- *   the locale translation is automatic.
- *   the selection of languages is mainly for maintainer's convenience
+ *   A small class to handle the list of existing translations.
+ *   The locale translation is automatic.
+ *   The selection of languages is mainly for maintainer's convenience
  *   To add a support to a new translation:
  *   create a new icon (flag of the country) (see Lang_Fr.xpm as an example)
- *   add a new item to s_Language_List[LANGUAGE_DESCR_COUNT]
- *   and set LANGUAGE_DESCR_COUNT to the new value
+ *   add a new item to s_Languages[].
  */
 struct LANGUAGE_DESCR
 {
     /// wxWidgets locale identifier (See wxWidgets doc)
-    int     m_WX_Lang_Identifier;
+    int         m_WX_Lang_Identifier;
 
     /// KiCad identifier used in menu selection (See id.h)
-    int     m_KI_Lang_Identifier;
+    int         m_KI_Lang_Identifier;
 
     /// The menu language icons
-    BITMAP_DEF m_Lang_Icon;
+    BITMAP_DEF  m_Lang_Icon;
 
     /// Labels used in menus
     const wxChar* m_Lang_Label;
 
     /// Set to true if the m_Lang_Label must not be translated
-    bool m_DoNotTranslate;
+    bool        m_DoNotTranslate;
 };
 
 
 /**
- * Language list struct
+ * Variable s_Languages
  * Note: because this list is not created on the fly, wxTranslation
  * must be called when a language name must be displayed after translation.
- * Do don change this behavior, because m_Lang_Label is also used as key in config
+ * Do not change this behavior, because m_Lang_Label is also used as key in config
  */
-static struct LANGUAGE_DESCR s_Language_List[] =
+static LANGUAGE_DESCR s_Languages[] =
 {
     // Default language
     {
@@ -262,6 +257,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
         lang_jp_xpm,
         _( "Japanese" )
     },
+
     // Bulgarian language
     {
         wxLANGUAGE_BULGARIAN,
@@ -290,28 +286,17 @@ EDA_APP::~EDA_APP()
     SaveSettings();
 
     // delete user datas
-    if( m_projectSettings )
-        delete m_projectSettings;
-
-    if( m_commonSettings )
-        delete m_commonSettings;
-
+    delete m_projectSettings;
+    delete m_commonSettings;
     delete m_settings;
-
-    if( m_Checker )
-        delete m_Checker;
-
-    if( m_oneInstancePerFileChecker )
-        delete m_oneInstancePerFileChecker;
-
+    delete m_Checker;
+    delete m_oneInstancePerFileChecker;
     delete m_Locale;
 }
 
 
 void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
 {
-    wxString EnvLang;
-
     m_Id = aId;
     m_Checker = new wxSingleInstanceChecker( aName.Lower() + wxT( "-" ) + wxGetUserId() );
 
@@ -342,8 +327,11 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
     SetVendorName( wxT( "KiCad" ) );
     SetAppName( aName.Lower() );
     SetTitle( aName );
+
     m_settings = new wxConfig();
+
     wxASSERT( m_settings != NULL );
+
     m_commonSettings = new wxConfig( CommonConfigPath );
     wxASSERT( m_commonSettings != NULL );
 
@@ -365,11 +353,11 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
     m_LanguageId = wxLANGUAGE_DEFAULT;
 
     // Search for the current selection
-    for( unsigned int ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
+    for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
     {
-        if( s_Language_List[ii].m_Lang_Label == languageSel )
+        if( s_Languages[ii].m_Lang_Label == languageSel )
         {
-            m_LanguageId = s_Language_List[ii].m_WX_Lang_Identifier;
+            m_LanguageId = s_Languages[ii].m_WX_Lang_Identifier;
             break;
         }
     }
@@ -387,8 +375,7 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
 
 void EDA_APP::SetHtmlHelpController( wxHtmlHelpController* aController )
 {
-    if( m_HtmlCtrl )
-        delete m_HtmlCtrl;
+    delete m_HtmlCtrl;
 
     m_HtmlCtrl = aController;
 }
@@ -459,8 +446,8 @@ bool EDA_APP::SetBinDir()
 #endif
 
     // Use unix notation for paths. I am not sure this is a good idea,
-    // but it simplify compatibility between Windows and Unices
-    // However it is a potential problem in path handling under Windows
+    // but it simplifies compatibility between Windows and Unices.
+    // However it is a potential problem in path handling under Windows.
     m_BinDir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
     // Remove file name form command line:
@@ -471,9 +458,8 @@ bool EDA_APP::SetBinDir()
 }
 
 
-void EDA_APP::SetDefaultSearchPaths( void )
+void EDA_APP::SetDefaultSearchPaths()
 {
-    size_t     i;
     wxString   path = m_BinDir;
     wxPathList tmp;
 
@@ -529,7 +515,7 @@ void EDA_APP::SetDefaultSearchPaths( void )
     tmp.Add( wxT( DEFAULT_INSTALL_PATH ) );
 
     // Add kicad, kicad/share, share, and share/kicad to each possible base path.
-    for( i = 0; i < tmp.GetCount(); i++ )
+    for( unsigned i = 0; i < tmp.GetCount(); i++ )
     {
         fn = wxFileName( tmp[i], wxEmptyString );
 
@@ -550,7 +536,7 @@ void EDA_APP::SetDefaultSearchPaths( void )
     }
 
     // Remove all non-existent paths from the list.
-    for( i = 0; i < m_searchPaths.GetCount(); i++ )
+    for( unsigned i = 0; i < m_searchPaths.GetCount(); i++ )
     {
         if( !wxFileName::IsDirReadable( m_searchPaths[i] ) )
         {
@@ -587,7 +573,7 @@ void EDA_APP::SetDefaultSearchPaths( void )
             }
 
             // Add PCB library file path to search path list.
-            if( ( m_Id == APP_PCBNEW_T ) || ( m_Id == APP_CVPCB_T ) )
+            if( m_Id == APP_PCBNEW_T  ||  m_Id == APP_CVPCB_T )
             {
                 fn.AppendDir( wxT( "modules" ) );
 
@@ -633,21 +619,20 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
 {
     wxASSERT( m_settings != NULL && m_commonSettings != NULL );
 
-    wxString Line;
-
     m_HelpSize.x = 500;
     m_HelpSize.y = 400;
 
     wxString languageSel;
+
     m_commonSettings->Read( languageCfgKey, &languageSel );
     m_LanguageId = wxLANGUAGE_DEFAULT;
 
     // Search for the current selection
-    for( unsigned int ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
+    for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
     {
-        if( s_Language_List[ii].m_Lang_Label == languageSel )
+        if( s_Languages[ii].m_Lang_Label == languageSel )
         {
-            m_LanguageId = s_Language_List[ii].m_WX_Lang_Identifier;
+            m_LanguageId = s_Languages[ii].m_WX_Lang_Identifier;
             break;
         }
     }
@@ -660,9 +645,11 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
 
     if( aReopenLastUsedDirectory )
     {
-        if( m_settings->Read( workingDirKey, &Line ) && wxDirExists( Line ) )
+        wxString dir;
+
+        if( m_settings->Read( workingDirKey, &dir ) && wxDirExists( dir ) )
         {
-            wxSetWorkingDirectory( Line );
+            wxSetWorkingDirectory( dir );
         }
     }
 
@@ -685,14 +672,14 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
 
     while( 1 )
     {
-        upath = m_commonSettings->Read( wxString::Format( wxT( "LibraryPath%d" ), i ),
-                                        wxT( "" ) );
+        upath = m_commonSettings->Read(
+                    wxString::Format( wxT( "LibraryPath%d" ), i ), wxT( "" ) );
 
         if( upath.IsSameAs( wxT( "" ) ) )
             break;
 
         m_libSearchPaths.Add( upath );
-        i ++;
+        i++;
     }
 }
 
@@ -700,6 +687,7 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
 void EDA_APP::SaveSettings()
 {
     wxASSERT( m_settings != NULL );
+
     m_settings->Write( showPageLimitsKey, g_ShowPageLimits );
     m_settings->Write( workingDirKey, wxGetCwd() );
     m_settings->Write( backgroundColorKey, (long) g_DrawBgColor );
@@ -731,6 +719,7 @@ bool EDA_APP::SetLanguage( bool first_time )
 
         m_LanguageId = wxLANGUAGE_DEFAULT;
         delete m_Locale;
+
         m_Locale = new wxLocale;
         m_Locale->Init();
         retv = false;
@@ -746,11 +735,11 @@ bool EDA_APP::SetLanguage( bool first_time )
         wxString languageSel;
 
         // Search for the current selection
-        for( unsigned int ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
+        for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
         {
-            if( s_Language_List[ii].m_WX_Lang_Identifier == m_LanguageId )
+            if( s_Languages[ii].m_WX_Lang_Identifier == m_LanguageId )
             {
-                languageSel = s_Language_List[ii].m_Lang_Label;
+                languageSel = s_Languages[ii].m_Lang_Label;
                 break;
             }
         }
@@ -762,11 +751,14 @@ bool EDA_APP::SetLanguage( bool first_time )
     // Make a conversion double <=> string
     double dtst = 0.5;
     wxString msg;
+
     extern bool g_DisableFloatingPointLocalNotation;    // See common.cpp
+
     g_DisableFloatingPointLocalNotation = false;
+
     msg << dtst;
     double result;
-    msg.ToDouble(&result);
+    msg.ToDouble( &result );
 
     if( result != dtst )  // string to double encode/decode does not work! Bug detected
     {
@@ -788,27 +780,25 @@ bool EDA_APP::SetLanguage( bool first_time )
 void EDA_APP::SetLanguageIdentifier( int menu_id )
 {
     wxLogDebug( wxT( "Select language ID %d from %zd possible languages." ),
-                menu_id, LANGUAGE_DESCR_COUNT );
+                menu_id, DIM( s_Languages ) );
 
-    for( unsigned int ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
+    for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
     {
-        if( menu_id == s_Language_List[ii].m_KI_Lang_Identifier )
+        if( menu_id == s_Languages[ii].m_KI_Lang_Identifier )
         {
-            m_LanguageId = s_Language_List[ii].m_WX_Lang_Identifier;
+            m_LanguageId = s_Languages[ii].m_WX_Lang_Identifier;
             break;
         }
     }
 }
 
 
-void EDA_APP::SetLanguagePath( void )
+void EDA_APP::SetLanguagePath()
 {
-    size_t i;
-
     // Add defined search paths to locale paths
     if( !m_searchPaths.IsEmpty() )
     {
-        for( i = 0; i < m_searchPaths.GetCount(); i++ )
+        for( unsigned i = 0; i < m_searchPaths.GetCount(); i++ )
         {
             wxFileName fn( m_searchPaths[i], wxEmptyString );
 
@@ -843,7 +833,6 @@ void EDA_APP::AddMenuLanguageList( wxMenu* MasterMenu )
 {
     wxMenu*      menu = NULL;
     wxMenuItem*  item;
-    unsigned int ii;
 
     item = MasterMenu->FindItem( ID_LANGUAGE_CHOICE );
 
@@ -852,17 +841,17 @@ void EDA_APP::AddMenuLanguageList( wxMenu* MasterMenu )
 
     menu = new wxMenu;
 
-    for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
+    for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
     {
         wxString label;
 
-        if( s_Language_List[ii].m_DoNotTranslate )
-            label = s_Language_List[ii].m_Lang_Label;
+        if( s_Languages[ii].m_DoNotTranslate )
+            label = s_Languages[ii].m_Lang_Label;
         else
-            label = wxGetTranslation( s_Language_List[ii].m_Lang_Label );
+            label = wxGetTranslation( s_Languages[ii].m_Lang_Label );
 
-        AddMenuItem( menu, s_Language_List[ii].m_KI_Lang_Identifier,
-                     label, KiBitmap(s_Language_List[ii].m_Lang_Icon ),
+        AddMenuItem( menu, s_Languages[ii].m_KI_Lang_Identifier,
+                     label, KiBitmap(s_Languages[ii].m_Lang_Icon ),
                      wxITEM_CHECK );
     }
 
@@ -873,18 +862,18 @@ void EDA_APP::AddMenuLanguageList( wxMenu* MasterMenu )
                  KiBitmap( language_xpm ) );
 
     // Set Check mark on current selected language
-    for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
+    for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
     {
-        if( m_LanguageId == s_Language_List[ii].m_WX_Lang_Identifier )
-            menu->Check( s_Language_List[ii].m_KI_Lang_Identifier, true );
+        if( m_LanguageId == s_Languages[ii].m_WX_Lang_Identifier )
+            menu->Check( s_Languages[ii].m_KI_Lang_Identifier, true );
         else
-            menu->Check( s_Language_List[ii].m_KI_Lang_Identifier, false );
+            menu->Check( s_Languages[ii].m_KI_Lang_Identifier, false );
     }
 }
 
 
-wxString EDA_APP::FindFileInSearchPaths( const wxString&      filename,
-                                         const wxArrayString* subdirs )
+wxString EDA_APP::FindFileInSearchPaths(
+        const wxString& filename, const wxArrayString* subdirs )
 {
     size_t     i, j;
     wxFileName fn;
@@ -909,7 +898,7 @@ wxString EDA_APP::FindFileInSearchPaths( const wxString&      filename,
 }
 
 
-wxString EDA_APP::GetHelpFile( void )
+wxString EDA_APP::GetHelpFile()
 {
     wxString      fn;
     wxArrayString subdirs, altsubdirs;
@@ -950,6 +939,7 @@ wxString EDA_APP::GetHelpFile( void )
     // Step 1 : Try to find help file in help/<canonical name>
     subdirs.Add( m_Locale->GetCanonicalName() );
     altsubdirs.Add( m_Locale->GetCanonicalName() );
+
     fn = FindFileInSearchPaths( m_HelpFileName, &altsubdirs );
 
     if( !fn  )
@@ -964,6 +954,7 @@ wxString EDA_APP::GetHelpFile( void )
         // wxLocale::GetName() does not return always the short name
         subdirs.Add( m_Locale->GetName().BeforeLast( '_' ) );
         altsubdirs.Add( m_Locale->GetName().BeforeLast( '_' ) );
+
         fn = FindFileInSearchPaths( m_HelpFileName, &altsubdirs );
 
         if( !fn )
@@ -977,6 +968,7 @@ wxString EDA_APP::GetHelpFile( void )
         altsubdirs.RemoveAt( altsubdirs.GetCount() - 1 );
         subdirs.Add( _T( "en" ) );
         altsubdirs.Add( _T( "en" ) );
+
         fn = FindFileInSearchPaths( m_HelpFileName, &altsubdirs );
 
         if( !fn )
@@ -1002,6 +994,7 @@ wxString EDA_APP::ReturnLastVisitedLibraryPath( const wxString& aSubPathToSearch
     if( pcount )
     {
         unsigned ipath = 0;
+
         if( m_libSearchPaths[0] == wxGetCwd() )
             ipath = 1;
 
@@ -1207,3 +1200,4 @@ bool EDA_APP::SetFootprintLibTablePath()
 
     return false;
 }
+
