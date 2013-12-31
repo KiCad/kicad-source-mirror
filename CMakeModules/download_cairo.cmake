@@ -41,7 +41,7 @@ if (APPLE)
     if( CMAKE_OSX_ARCHITECTURES )
         set( CAIRO_CFLAGS  "CFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES}" )
         set( CAIRO_LDFLAGS "LDFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -framework CoreServices -framework Cocoa" )
-        set( CAIRO_OPTS    "--enable-quartz-image" )
+        set( CAIRO_OPTS    --enable-ft=no )
     endif( CMAKE_OSX_ARCHITECTURES )
 
     if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
@@ -80,7 +80,8 @@ ExternalProject_Add(  cairo
                       --disable-silent-rules --disable-dependency-tracking
                       ${CAIRO_CFLAGS}
                       ${CAIRO_LDFLAGS}
-                     
+                      ${CAIRO_OPTS}
+
     #BINARY_DIR      "${PREFIX}"
 
     BUILD_COMMAND   make
