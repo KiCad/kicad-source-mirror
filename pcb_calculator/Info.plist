@@ -32,5 +32,7 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string></string>
+        <key>NSHighResolutionCapable</key>
+        <string>True</string>
 </dict>
 </plist>
