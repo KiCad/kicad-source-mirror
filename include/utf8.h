@@ -83,6 +83,23 @@ public:
         return *this;
     }
 
+    UTF8& operator=( const char* s )
+    {
+        std::string::operator=( s );
+        return *this;
+    }
+
+    UTF8& operator=( char c )
+    {
+        std::string::operator=( c );
+        return *this;
+    }
+
+    UTF8 substr( size_t pos = 0, size_t len = npos ) const
+    {
+        return std::string::substr( pos, len );
+    }
+
     operator wxString () const;
 
     /// This one is not in std::string, and one wonders why... might be a solid

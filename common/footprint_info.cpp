@@ -273,8 +273,8 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
                      wxString::Format( wxT( "'%s' is not a valid FPID." ),
                                        GetChars( aFootprintName ) ) );
 
-        wxString libNickname   = FROM_UTF8( fpid.GetLibNickname().c_str() );
-        wxString footprintName = FROM_UTF8( fpid.GetFootprintName().c_str() );
+        wxString libNickname   = fpid.GetLibNickname();
+        wxString footprintName = fpid.GetFootprintName();
 
         if( libNickname == fp.GetNickname() && footprintName == fp.GetFootprintName() )
             return &fp;

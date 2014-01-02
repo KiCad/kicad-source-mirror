@@ -29,8 +29,8 @@
 // "richio" after its author, Richard Hollenbeck, aka Dick Hollenbeck.
 
 
-#include <string>
 #include <vector>
+#include <utf8.h>
 
 // I really did not want to be dependent on wxWidgets in richio
 // but the errorText needs to be wide char so wxString rules.

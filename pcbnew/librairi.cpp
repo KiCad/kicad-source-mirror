@@ -285,7 +285,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     if( aModule == NULL )
         return;
 
-    fn.SetName( FROM_UTF8( aModule->GetFPID().GetFootprintName().c_str() ) );
+    fn.SetName( aModule->GetFPID().GetFootprintName() );
 
     wxString    wildcard = wxGetTranslation( KiCadFootprintLibFileWildcard );
 
@@ -485,7 +485,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
         return false;
 
     FPID        fpid( fpid_txt );
-    wxString    fpname = FROM_UTF8( fpid.GetFootprintName().c_str() );
+    wxString    fpname = fpid.GetFootprintName();
 
     // Confirmation
     wxString msg = wxString::Format( FMT_OK_DELETE, fpname.GetData(), nickname.GetData() );
@@ -581,7 +581,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
     SetMsgPanel( aModule );
 
     // Ask what to use as the footprint name in the library
-    wxString footprintName = FROM_UTF8( aModule->GetFPID().GetFootprintName().c_str() );
+    wxString footprintName = aModule->GetFPID().GetFootprintName();
 
     if( aDisplayDialog )
     {

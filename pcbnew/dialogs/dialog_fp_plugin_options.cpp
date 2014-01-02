@@ -84,7 +84,7 @@ public:
             for( PROPERTIES::const_iterator it = props->begin();  it != props->end();  ++it, ++row )
             {
                 m_grid->SetCellValue( row, 0, FROM_UTF8( it->first.c_str() ) );
-                m_grid->SetCellValue( row, 1, FROM_UTF8( it->second.c_str() ) );
+                m_grid->SetCellValue( row, 1, it->second );
             }
 
             delete props;
@@ -184,7 +184,7 @@ private:
         for( int row = 0;  row<rowCount;  ++row )
         {
             string  name  = TO_UTF8( m_grid->GetCellValue( row, 0 ).Trim( false ).Trim() );
-            string  value = TO_UTF8( m_grid->GetCellValue( row, 1 ).Trim( false ).Trim() );
+            UTF8    value = m_grid->GetCellValue( row, 1 ).Trim( false ).Trim();
 
             if( name.size() )
             {
@@ -192,9 +192,7 @@ private:
             }
         }
 
-        string  options = FP_LIB_TABLE::FormatOptions( &props );
-
-        return FROM_UTF8( options.c_str() );
+        return FP_LIB_TABLE::FormatOptions( &props );
     }
 
     void saveColSizes()
@@ -261,11 +259,11 @@ private:
         if( event.IsSelection() )
         {
             string  option = TO_UTF8( event.GetString() );
-            string  help_text;
+            UTF8    help_text;
 
             if( m_choices.Value( option.c_str(), &help_text ) )
             {
-                wxString page = FROM_UTF8( help_text.c_str() );
+                wxString page = help_text;
 
                 m_html->SetPage( page );
             }

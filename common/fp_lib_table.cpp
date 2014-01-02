@@ -173,7 +173,7 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
         FPID& fpid = (FPID&) ret->GetFPID();
 
         // Catch any misbehaving plugin, which should be setting internal footprint name properly:
-        wxASSERT( aFootprintName == FROM_UTF8( fpid.GetFootprintName().c_str() ) );
+        wxASSERT( aFootprintName == (wxString) fpid.GetFootprintName() );
 
         // and clearing nickname
         wxASSERT( !fpid.GetLibNickname().size() );
@@ -195,7 +195,7 @@ FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname, con
         // Try loading the footprint to see if it already exists, caller wants overwrite
         // protection, which is atypical, not the default.
 
-        wxString fpname = FROM_UTF8( aFootprint->GetFPID().GetFootprintName().c_str() );
+        wxString fpname = aFootprint->GetFPID().GetFootprintName();
 
         std::auto_ptr<MODULE>   m( row->plugin->FootprintLoad( row->GetFullURI( true ), fpname, row->GetProperties() ) );
 
@@ -480,16 +480,17 @@ PROPERTIES* FP_LIB_TABLE::ParseOptions( const std::string& aOptionsList )
 }
 
 
-std::string FP_LIB_TABLE::FormatOptions( const PROPERTIES* aProperties )
+UTF8 FP_LIB_TABLE::FormatOptions( const PROPERTIES* aProperties )
 {
-    std::string ret;
+    UTF8 ret;
 
     if( aProperties )
     {
         for( PROPERTIES::const_iterator it = aProperties->begin();  it != aProperties->end();  ++it )
         {
             const std::string& name  = it->first;
-            const std::string& value = it->second;
+
+            const UTF8& value = it->second;
 
             if( ret.size() )
                 ret += OPT_SEP;
@@ -741,7 +742,7 @@ bool FP_LIB_TABLE::ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aL
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "Cannot find footprint library file \"%s\" in any of the "
+                        msg.Printf( _( "Cannot find footprint library file '%s' in any of the "
                                        "KiCad legacy library search paths.\n" ),
                                     GetChars( fn.GetFullPath() ) );
                         aReporter->Report( msg );
@@ -751,8 +752,7 @@ bool FP_LIB_TABLE::ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aL
                     continue;
                 }
 
-                module = pi->FootprintLoad( libPath,
-                                            FROM_UTF8( component->GetFPID().GetFootprintName().c_str() ) );
+                module = pi->FootprintLoad( libPath, component->GetFPID().GetFootprintName() );
 
                 if( module )
                 {
@@ -766,10 +766,10 @@ bool FP_LIB_TABLE::ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aL
         {
             if( aReporter )
             {
-                msg.Printf( _( "Component `%s` footprint <%s> was not found in any legacy "
+                msg.Printf( _( "Component `%s` footprint '%s' was not found in any legacy "
                                "library.\n" ),
                             GetChars( component->GetReference() ),
-                            GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+                            GetChars( component->GetFPID().Format() ) );
                 aReporter->Report( msg );
             }
 
@@ -811,10 +811,10 @@ bool FP_LIB_TABLE::ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aL
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "Component `%s` footprint <%s> legacy library path <%s > "
+                    msg.Printf( _( "Component `%s` footprint '%s' legacy library path <%s > "
                                    "was not found in the footprint library table.\n" ),
                                 GetChars( component->GetReference() ),
-                                GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+                                GetChars( component->GetFPID().Format() ) );
                     aReporter->Report( msg );
                 }
 
@@ -830,9 +830,9 @@ bool FP_LIB_TABLE::ConvertFromLegacy( NETLIST& aNetList, const wxArrayString& aL
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "Component `%s` FPID <%s> is not valid.\n" ),
+                        msg.Printf( _( "Component `%s` FPID '%s' is not valid.\n" ),
                                     GetChars( component->GetReference() ),
-                                    GetChars( FROM_UTF8( newFPID.Format().c_str() ) ) );
+                                    GetChars( newFPID.Format() ) );
                         aReporter->Report( msg );
                     }
 
@@ -860,7 +860,7 @@ void FP_LIB_TABLE::SetProjectPathEnvVariable( const wxFileName& aPath )
     else
         path = aPath.GetPath();
 
-    wxLogTrace( traceFpLibTable, wxT( "Setting env %s to <%s>." ),
+    wxLogTrace( traceFpLibTable, wxT( "Setting env %s to '%s'." ),
                 GetChars( ProjectPathEnvVariableName() ), GetChars( path ) );
     wxSetEnv( ProjectPathEnvVariableName(), path );
 }
@@ -899,7 +899,7 @@ wxString FP_LIB_TABLE::GetProjectFileName( const wxFileName& aPath )
         fn.SetName( defaultFileName );
     }
 
-    wxLogTrace( traceFpLibTable, wxT( "Project specific footprint library table file <%s>." ),
+    wxLogTrace( traceFpLibTable, wxT( "Project specific footprint library table file '%s'." ),
                 GetChars( fn.GetFullPath() ) );
 
     return fn.GetFullPath();
@@ -917,7 +917,7 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARS
 
         if( !fn.DirExists() && !fn.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Cannot create global library table path <%s>." ),
+            THROW_IO_ERROR( wxString::Format( _( "Cannot create global library table path '%s'." ),
                                               GetChars( fn.GetPath() ) ) );
         }
 
@@ -954,7 +954,7 @@ wxString FP_LIB_TABLE::GetGlobalTableFileName()
 
     fn.SetName( GetFileName() );
 
-    wxLogTrace( traceFpLibTable, wxT( "Global footprint library table file <%s>." ),
+    wxLogTrace( traceFpLibTable, wxT( "Global footprint library table file '%s'." ),
                 GetChars( fn.GetFullPath() ) );
 
     return fn.GetFullPath();
