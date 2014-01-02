@@ -55,6 +55,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_edit_module_text.cpp
     dialogs/dialog_edit_module_text_base.cpp
     dialogs/dialog_exchange_modules_base.cpp
+    dialogs/dialog_export_idf.cpp
+    dialogs/dialog_export_idf_base.cpp
     dialogs/dialog_export_vrml_base.cpp
     dialogs/dialog_export_vrml.cpp
     dialogs/dialog_find_base.cpp
@@ -173,6 +175,7 @@ set( PCBNEW_CLASS_SRCS
     event_handlers_tracks_vias_sizes.cpp
     export_d356.cpp
     export_gencad.cpp
+    export_idf.cpp
     export_vrml.cpp
     files.cpp
     gen_drill_report_files.cpp
@@ -183,6 +186,7 @@ set( PCBNEW_CLASS_SRCS
     hotkeys.cpp
     hotkeys_board_editor.cpp
     hotkeys_module_editor.cpp
+    idf.cpp
     initpcb.cpp
     layer_widget.cpp
     librairi.cpp
