@@ -204,6 +204,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Export a VRML board representation" ),
                  KiBitmap( three_d_xpm ) );
 
+    // IDF3
+    AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_IDF3,
+                 _( "I&DFv3 Board Shape Export" ), _( "Basci export of board shape only IDFv3 format" ),
+                 KiBitmap( export_xpm ) );
+
     AddMenuItem( filesMenu, submenuexport,
                  ID_GEN_EXPORT_FILE, _( "E&xport" ),
                  _( "Export board" ), KiBitmap( export_xpm ) );

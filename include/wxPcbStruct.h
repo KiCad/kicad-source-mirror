@@ -978,6 +978,12 @@ public:
                           bool aExport3DFiles, const wxString & a3D_Subdir );
 
     /**
+     * Function ExportToIDF3
+     * will export the current BOARD to a IDFv3 board and lib files.
+     */
+    void ExportToIDF3( wxCommandEvent& event );
+
+    /**
      * Function ExporttoSPECCTRA
      * will export the current BOARD to a specctra dsn file.  See
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
