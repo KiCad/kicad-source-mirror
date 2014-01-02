@@ -394,8 +394,8 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            aModule,
                  aNewFootprintFPID.Format().c_str() );
     m_WinMessages->AppendText( line );
 
-    wxString moduleName = FROM_UTF8( aNewFootprintFPID.GetFootprintName().c_str() );
-    wxString libName = FROM_UTF8( aNewFootprintFPID.GetLibNickname().c_str() );
+    wxString moduleName = aNewFootprintFPID.GetFootprintName();
+    wxString libName    = aNewFootprintFPID.GetLibNickname();
 
     newModule = m_parent->LoadFootprint( aNewFootprintFPID );
 

@@ -2711,8 +2711,8 @@ void EAGLE_PLUGIN::centerBoard()
 {
     if( m_props )
     {
-        string page_width;
-        string page_height;
+        UTF8 page_width;
+        UTF8 page_height;
 
         if( m_props->Value( "page_width",  &page_width ) &&
             m_props->Value( "page_height", &page_height ) )
@@ -2873,10 +2873,10 @@ void EAGLE_PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
     PLUGIN::FootprintLibOptions( aListToAppendTo );
 
     /*
-    (*aListToAppendTo)["ignore_duplicates"] = wxString( _(
+    (*aListToAppendTo)["ignore_duplicates"] = UTF8( _(
         "Ignore duplicately named footprints within the same Eagle library. "
         "Only the first similarly named footprint will be loaded."
-        )).utf8_str();
+        ));
     */
 }
 

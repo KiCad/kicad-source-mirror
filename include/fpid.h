@@ -27,7 +27,7 @@
 #define _FPID_H_
 
 #include <richio.h>
-
+#include <utf8.h>
 
 /**
  * Class FPID
@@ -53,7 +53,7 @@
  *
  * @author Dick Hollenbeck
  */
-class FPID  // aka GUID
+class FPID
 {
 public:
 
@@ -88,7 +88,7 @@ public:
      * Function GetLibNickname
      * returns the logical library name  portion of a FPID.
      */
-    const std::string& GetLibNickname() const
+    const UTF8& GetLibNickname() const
     {
         return nickname;
     }
@@ -108,7 +108,7 @@ public:
      * Function GetFootprintName
      * returns the footprint name, i.e. footprintName.
      */
-    const std::string& GetFootprintName() const { return footprint; }
+    const UTF8& GetFootprintName() const { return footprint; }
 
     /**
      * Function SetFootprintName
@@ -120,15 +120,15 @@ public:
 
     int SetRevision( const std::string& aRevision );
 
-    const std::string& GetRevision() const { return revision; }
+    const UTF8& GetRevision() const { return revision; }
 
-    std::string GetFootprintNameAndRev() const;
+    UTF8 GetFootprintNameAndRev() const;
 
     /**
      * Function Format
      * returns the fully formatted text of the FPID.
      */
-    std::string Format() const;
+    UTF8 Format() const;
 
     /**
      * Function Format
@@ -137,7 +137,7 @@ public:
      *
      * @throw PARSE_ERROR if any of the pieces are illegal.
      */
-    static std::string Format( const std::string& aLibNickname, const std::string& aFootprintName,
+    static UTF8 Format( const std::string& aLibNickname, const std::string& aFootprintName,
                                const std::string& aRevision )
         throw( PARSE_ERROR );
 
@@ -182,8 +182,8 @@ public:
      */
     int compare( const FPID& aFPID ) const;
 
-    bool operator <( const FPID& aFPID ) const { return this->compare( aFPID ) < 0; }
-    bool operator >( const FPID& aFPID ) const { return this->compare( aFPID ) > 0; }
+    bool operator < ( const FPID& aFPID ) const { return this->compare( aFPID ) < 0; }
+    bool operator > ( const FPID& aFPID ) const { return this->compare( aFPID ) > 0; }
     bool operator ==( const FPID& aFPID ) const { return this->compare( aFPID ) == 0; }
     bool operator !=( const FPID& aFPID ) const { return !(*this == aFPID); }
 
@@ -192,9 +192,9 @@ public:
 #endif
 
 protected:
-    std::string    nickname;       ///< The nickname of the footprint library or empty.
-    std::string    footprint;      ///< The name of the footprint in the logical library.
-    std::string    revision;       ///< The footprint revision.
+    UTF8    nickname;       ///< The nickname of the footprint library or empty.
+    UTF8    footprint;      ///< The name of the footprint in the logical library.
+    UTF8    revision;       ///< The footprint revision.
 };
 
 
