@@ -27,7 +27,7 @@ class dxfRW
 public:
     dxfRW( const char* name );
     ~dxfRW();
-    // / reads the file specified in constructor
+    /// reads the file specified in constructor
     /*!
      * An interface must be provided. It is used by the class to signal various
      * components being added.
@@ -71,7 +71,7 @@ public:
 
     void setEllipseParts( int parts ) { elParts = parts; }    /*!< set parts munber when convert ellipse to polyline */
 private:
-    // / used by read() to parse the content of the file
+    /// used by read() to parse the content of the file
     bool            processDxf();
     bool            processHeader();
     bool            processTables();
