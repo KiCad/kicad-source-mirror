@@ -88,8 +88,8 @@ CPolyLine::~CPolyLine()
 #include "clipper.hpp"
 int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
 {
-    ClipperLib::Polygon raw_polygon;
-    ClipperLib::Polygons normalized_polygons;
+    ClipperLib::Path raw_polygon;
+    ClipperLib::Paths normalized_polygons;
 
     unsigned corners_count = m_CornersList.GetCornersCount();
 
@@ -115,7 +115,7 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
     // enter main outline
     for( unsigned ii = 0; ii < normalized_polygons.size(); ii++ )
     {
-        ClipperLib::Polygon& polygon = normalized_polygons[ii];
+        ClipperLib::Path& polygon = normalized_polygons[ii];
         cornerslist.clear();
         for( unsigned jj = 0; jj < polygon.size(); jj++ )
             cornerslist.push_back( KI_POLY_POINT( KiROUND( polygon[jj].X ),
@@ -142,7 +142,7 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
                 ClipperLib::SimplifyPolygon( raw_polygon, normalized_polygons );
                 for( unsigned ii = 0; ii < normalized_polygons.size(); ii++ )
                 {
-                    ClipperLib::Polygon& polygon = normalized_polygons[ii];
+                    ClipperLib::Path& polygon = normalized_polygons[ii];
                     cornerslist.clear();
                     for( unsigned jj = 0; jj < polygon.size(); jj++ )
                         cornerslist.push_back( KI_POLY_POINT( KiROUND( polygon[jj].X ),
