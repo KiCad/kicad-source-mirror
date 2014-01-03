@@ -112,11 +112,10 @@ static wxAcceleratorEntry accels[] =
     wxAcceleratorEntry( wxACCEL_NORMAL, WXK_SPACE, ID_SET_RELATIVE_OFFSET )
 };
 
-#define ACCEL_TABLE_CNT ( sizeof( accels ) / sizeof( wxAcceleratorEntry ) )
 
-#define EXTRA_BORDER_SIZE 2
+#define EXTRA_BORDER_SIZE               2
 
-#define FOOTPRINT_VIEWER_FRAME_NAME wxT( "ModViewFrame" )
+#define FOOTPRINT_VIEWER_FRAME_NAME     wxT( "ModViewFrame" )
 
 FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
                                                 FP_LIB_TABLE*   aTable,
@@ -125,7 +124,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
     PCB_BASE_FRAME( aParent, MODULE_VIEWER_FRAME_TYPE, _( "Footprint Library Browser" ),
                     wxDefaultPosition, wxDefaultSize, aStyle, GetFootprintViewerFrameName() )
 {
-    wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
+    wxAcceleratorTable table( DIM( accels ), accels );
 
     m_footprintLibTable = aTable;
     m_FrameName = GetFootprintViewerFrameName();
