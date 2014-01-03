@@ -176,10 +176,11 @@ set( COMMON_SRCS
     geometry/shape_index.cpp
 )
 
-# TODO: remove this whole if test and remove the sytem/*.s sources once every platform is tested with
-# boost::context library
-if( UNIX AND NOT APPLE )
-else()
+
+# TODO: remove this whole "if test" on or after 14-Jan-2014 and remove the system/*.s
+# sources if no one complains by then.
+# boost::context library replaces this functionality:
+if( false )
     enable_language( C CXX ASM )
     set_source_files_properties( system/fcontext.s PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp" )
     list( APPEND COMMON_SRCS system/fcontext.s )
