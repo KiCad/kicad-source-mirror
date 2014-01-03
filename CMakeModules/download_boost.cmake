@@ -181,7 +181,7 @@ ExternalProject_Add( boost
     # to ignore previously applied patches
     PATCH_COMMAND   bzr revert
         # bzr revert is insufficient to remove "added" files:
-        COMMAND     bzr clean-tree -q
+        COMMAND     bzr clean-tree -q --force
 
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_minkowski.patch"
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_cstdint.patch"
