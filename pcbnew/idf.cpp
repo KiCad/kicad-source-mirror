@@ -492,30 +492,24 @@ bool IDF_BOARD::Setup( wxString aBoardName,
         return false;
     }
 
-
-    time_t date;
-    time( &date );
-    struct tm tdate;
-
-    time( &date );
-    localtime_r( &date, &tdate );
+    wxDateTime tdate( time( NULL ) );
 
     fprintf( layoutFile, ".HEADER\n"
                          "BOARD_FILE 3.0 \"Created by KiCad %s\""
-                         " %.4d/%.2d/%.2d.%.2d:%.2d:%.2d 1\n"
+                         " %.4u/%.2u/%.2u.%.2u:%.2u:%.2u 1\n"
                          "\"%s\" %s\n"
                          ".END_HEADER\n\n",
             TO_UTF8( GetBuildVersion() ),
-            tdate.tm_year + 1900, tdate.tm_mon + 1, tdate.tm_mday,
-            tdate.tm_hour, tdate.tm_min, tdate.tm_sec,
+            tdate.GetYear(), tdate.GetMonth() + 1, tdate.GetDay(),
+            tdate.GetHour(), tdate.GetMinute(), tdate.GetSecond(),
             TO_UTF8( brdname.GetFullName() ), useThou ? "THOU" : "MM" );
 
     fprintf( libFile, ".HEADER\n"
                       "BOARD_FILE 3.0 \"Created by KiCad %s\" %.4d/%.2d/%.2d.%.2d:%.2d:%.2d 1\n"
                       ".END_HEADER\n\n",
             TO_UTF8( GetBuildVersion() ),
-            tdate.tm_year + 1900, tdate.tm_mon + 1, tdate.tm_mday,
-            tdate.tm_hour, tdate.tm_min, tdate.tm_sec );
+            tdate.GetYear(), tdate.GetMonth() + 1, tdate.GetDay(),
+            tdate.GetHour(), tdate.GetMinute(), tdate.GetSecond() );
 
     return true;
 }
