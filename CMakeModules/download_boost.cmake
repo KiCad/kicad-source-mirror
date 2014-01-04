@@ -201,6 +201,16 @@ ExternalProject_Add( boost
         COMMAND     bzr add libs/context/src/asm/make_x86_64_ms_pe_gas.S
         COMMAND     bzr add libs/context/src/asm/jump_x86_64_ms_pe_gas.S
 
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/patch_macosx_context_ppc_v2.patch" #https://svn.boost.org/trac/boost/ticket/8266
+        COMMAND     bzr add libs/context/build/Jamfile.v2
+        COMMAND     bzr add libs/context/build/architecture.jam
+        COMMAND     bzr add libs/context/src/asm/jump_combined_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/jump_ppc32_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/jump_ppc64_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/make_combined_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/make_ppc32_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/make_ppc64_sysv_macho_gas.S
+
     # [Mis-]use this step to erase all the boost headers and libraries before
     # replacing them below.
     UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${BOOST_ROOT}"
