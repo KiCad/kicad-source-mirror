@@ -133,11 +133,15 @@ void Triangle::ClearDelunayEdges()
 Point* Triangle::OppositePoint( Triangle& t, Point& p )
 {
     Point*  cw  = t.PointCW( p );
+
+    /*
     double  x   = cw->x;
     double  y   = cw->y;
 
     x   = p.x;
     y   = p.y;
+    */
+
     return PointCW( *cw );
 }
 
@@ -195,6 +199,7 @@ int Triangle::Index( const Point* p )
     }
 
     assert( 0 );
+    return 0;           // you better hope its a Debug build.
 }
 
 
@@ -285,6 +290,7 @@ Point* Triangle::PointCW( Point& point )
     }
 
     assert( 0 );
+    return NULL;    // you better hope its a Debug build.
 }
 
 
@@ -305,6 +311,7 @@ Point* Triangle::PointCCW( Point& point )
     }
 
     assert( 0 );
+    return NULL;    // you better hope its a Debug build.
 }
 
 
