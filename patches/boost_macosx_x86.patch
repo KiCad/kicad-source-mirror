@@ -5,16 +5,16 @@
     ;
  
  alias asm_context_sources
-+   : asm/make_i386_x86_64_sysv_macho_gas.S
-+     asm/jump_i386_x86_64_sysv_macho_gas.S
-+   : <address-model>32_64
-+     <architecture>x86
-+     <binary-format>mach-o
-+     <target-os>darwin
-+     <toolset>darwin
-+   ;
-+
-+alias asm_context_sources
++#   : asm/make_i386_x86_64_sysv_macho_gas.S
++#     asm/jump_i386_x86_64_sysv_macho_gas.S
++#   : <address-model>32_64
++#     <architecture>x86
++#     <binary-format>mach-o
++#     <target-os>darwin
++#     <toolset>darwin
++#   ;
++#
++#alias asm_context_sources
 +   : [ make asm/make_i386_x86_64_sysv_macho_gas.o : asm/make_i386_x86_64_sysv_macho_gas.S : @gas ]
 +     [ make asm/jump_i386_x86_64_sysv_macho_gas.o : asm/jump_i386_x86_64_sysv_macho_gas.S : @gas ]
 +   : <address-model>32_64
