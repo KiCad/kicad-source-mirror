@@ -116,8 +116,9 @@ public:
     void SetEndY( int y )                   { m_End.y = y; }
     void SetEndX( int x )                   { m_End.x = x; }
 
-    // Arc attributes are read only, since they are "calculated" from
-    // m_Start, m_End, and m_Angle.  No Set...() functions.
+    // Some attributes are read only, since they are "calculated" from
+    // m_Start, m_End, and m_Angle.
+    // No Set...() function for these attributes.
 
     const wxPoint& GetCenter() const        { return m_Start; }
     const wxPoint& GetArcStart() const      { return m_End; }
@@ -139,6 +140,17 @@ public:
         double radius = GetLineLength( m_Start, m_End );
         return KiROUND( radius );
     }
+
+    /**
+     * Initialize the start arc point. can be used for circles
+     * to initialize one point of the cicumference
+     */
+    void SetArcStart( const wxPoint& aArcStartPoint )
+    { m_End = aArcStartPoint; }
+
+    /** For arcs and circles:
+     */
+    void SetCenter( const wxPoint& aCenterPoint ) { m_Start = aCenterPoint; }
 
     /**
      * Function GetParentModule

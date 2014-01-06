@@ -49,6 +49,7 @@
 #include <class_board_item.h>
 #include <class_pad.h>
 #include <class_track.h>
+#include <ratsnest_data.h>
 #include <layers_id_colors_and_visibility.h>
 
 // an ugly singleton for drawing debug items within the router context.
@@ -626,6 +627,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
             newBI->ClearFlags();
             m_view->Add( newBI );
             m_board->Add( newBI );
+            m_board->GetRatsnest()->Update( static_cast<BOARD_CONNECTED_ITEM*>( newBI ) );
             newBI->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
     }
@@ -757,6 +759,8 @@ void PNS_ROUTER::StopRouting()
 
     // highlightCurrent(false);
 
+    // Update the ratsnest
+    m_board->GetRatsnest()->Recalculate( m_currentNet );
     EraseView();
 
     m_state = IDLE;

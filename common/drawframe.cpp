@@ -228,10 +228,10 @@ void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
 void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {
     SetGridVisibility( !IsGridVisible() );
-    if( m_galCanvasActive )
+    if( IsGalCanvasActive() )
     {
-        m_galCanvas->GetGAL()->SetGridVisibility( IsGridVisible() );
-        m_galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+        GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
+        GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
     m_canvas->Refresh();
@@ -387,11 +387,11 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     screen->SetGrid( id );
     SetCrossHairPosition( RefPos( true ) );
 
-    if( m_galCanvasActive )
+    if( IsGalCanvasActive() )
     {
-        m_galCanvas->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x,
+        GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x,
                                                       screen->GetGrid().m_Size.y ) );
-        m_galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+        GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
     m_canvas->Refresh();
@@ -422,17 +422,17 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 
         GetScreen()->SetZoom( selectedZoom );
 
-        if( m_galCanvasActive )
+        if( IsGalCanvasActive() )
         {
             // Apply computed view settings to GAL
-            KIGFX::VIEW* view = m_galCanvas->GetView();
-            KIGFX::GAL* gal = m_galCanvas->GetGAL();
+            KIGFX::VIEW* view = GetGalCanvas()->GetView();
+            KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
 
             double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
             double zoom = 1.0 / ( zoomFactor * GetZoom() );
 
             view->SetScale( zoom );
-            m_galCanvas->Refresh();
+            GetGalCanvas()->Refresh();
         }
         else
             RedrawScreen( GetScrollCenterPosition(), false );
@@ -636,7 +636,7 @@ void EDA_DRAW_FRAME::ClearMsgPanel( void )
 
 void EDA_DRAW_FRAME::SetMsgPanel( const MSG_PANEL_ITEMS& aList )
 {
-    if( m_messagePanel == NULL && !aList.empty() )
+    if( m_messagePanel == NULL )
         return;
 
     ClearMsgPanel();
@@ -954,8 +954,8 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
 void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 {
-    KIGFX::VIEW* view = m_galCanvas->GetView();
-    KIGFX::GAL* gal = m_galCanvas->GetGAL();
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
+    KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
 
     double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
 
@@ -965,7 +965,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         BASE_SCREEN* screen = GetScreen();
 
         // Switch to GAL rendering
-        if( !m_galCanvasActive )
+        if( !IsGalCanvasActive() )
         {
             // Set up viewport
             double zoom = 1.0 / ( zoomFactor * m_canvas->GetZoom() );
@@ -981,7 +981,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     else
     {
         // Switch to standard rendering
-        if( m_galCanvasActive )
+        if( IsGalCanvasActive() )
         {
             // Change view settings only if GAL was active previously
             double zoom = 1.0 / ( zoomFactor * view->GetScale() );
@@ -993,17 +993,17 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     }
 
     m_canvas->SetEvtHandlerEnabled( !aEnable );
-    m_galCanvas->SetEvtHandlerEnabled( aEnable );
+    GetGalCanvas()->SetEvtHandlerEnabled( aEnable );
 
     // Switch panes
     m_auimgr.GetPane( wxT( "DrawFrame" ) ).Show( !aEnable );
     m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show( aEnable );
     m_auimgr.Update();
 
-    m_galCanvasActive = aEnable;
+    SetGalCanvasActive( aEnable );
 
     if( aEnable )
-        m_galCanvas->SetFocus();
+        GetGalCanvas()->SetFocus();
 }
 
 //-----< BASE_SCREEN API moved here >--------------------------------------------

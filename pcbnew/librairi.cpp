@@ -285,7 +285,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     if( aModule == NULL )
         return;
 
-    fn.SetName( FROM_UTF8( aModule->GetFPID().GetFootprintName().c_str() ) );
+    fn.SetName( aModule->GetFPID().GetFootprintName() );
 
     wxString    wildcard = wxGetTranslation( KiCadFootprintLibFileWildcard );
 
@@ -378,13 +378,14 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 
     wxString    wildcard;
 
-    wildcard << wxGetTranslation( LegacyFootprintLibPathWildcard ) << wxChar( '|' )
-             << wxGetTranslation( KiCadFootprintLibPathWildcard );
+//    wildcard << wxGetTranslation( LegacyFootprintLibPathWildcard ) << wxChar( '|' )
+//             << wxGetTranslation( KiCadFootprintLibPathWildcard );
+    wildcard << wxGetTranslation( KiCadFootprintLibPathWildcard ) << wxChar( '|' )
+             << wxGetTranslation( LegacyFootprintLibPathWildcard );
 
     // prompt user for libPath and PLUGIN (library) type
     wxFileDialog dlg( this, FMT_CREATE_LIB, fn.GetPath(), wxEmptyString,
-                      wildcard,
-                      wxFD_SAVE
+                      wildcard, wxFD_SAVE
                       // | wxFD_OVERWRITE_PROMPT overwrite is tested below
                       // after file extension has been added.
                       );
@@ -400,7 +401,7 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
     }
 
     // wildcard's filter index has legacy in position 0.
-    IO_MGR::PCB_FILE_T  piType = ( dlg.GetFilterIndex() == 0 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
+    IO_MGR::PCB_FILE_T  piType = ( dlg.GetFilterIndex() == 1 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
 
     // wxFileDialog does not supply nor enforce the file extension, add it here.
     if( piType == IO_MGR::LEGACY )
@@ -484,7 +485,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
         return false;
 
     FPID        fpid( fpid_txt );
-    wxString    fpname = FROM_UTF8( fpid.GetFootprintName().c_str() );
+    wxString    fpname = fpid.GetFootprintName();
 
     // Confirmation
     wxString msg = wxString::Format( FMT_OK_DELETE, fpname.GetData(), nickname.GetData() );
@@ -580,7 +581,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibrary,
     SetMsgPanel( aModule );
 
     // Ask what to use as the footprint name in the library
-    wxString footprintName = FROM_UTF8( aModule->GetFPID().GetFootprintName().c_str() );
+    wxString footprintName = aModule->GetFPID().GetFootprintName();
 
     if( aDisplayDialog )
     {

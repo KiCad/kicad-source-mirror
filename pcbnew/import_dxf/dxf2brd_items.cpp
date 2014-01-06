@@ -41,9 +41,11 @@
 #include <wx/regex.h>
 
 #include <trigo.h>
+#include <macros.h>
 #include <class_board.h>
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
+#include <convert_from_iu.h>
 
 DXF2BRD_CONVERTER::DXF2BRD_CONVERTER() : DRW_Interface()
 {
@@ -156,10 +158,10 @@ void DXF2BRD_CONVERTER::addCircle( const DRW_Circle& data )
     segm->SetLayer( m_brdLayer );
     segm->SetShape( S_CIRCLE );
     wxPoint center( mapX( data.basePoint.x ), mapY( data.basePoint.y ) );
-    segm->SetPosition( center );
+    segm->SetCenter( center );
     wxPoint circle_start( mapX( data.basePoint.x + data.radious ),
                           mapY( data.basePoint.y ) );
-    segm->SetEnd( circle_start );
+    segm->SetArcStart( circle_start );
     segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness
                             : data.thickness ) );
     appendToBoard( segm );
@@ -178,18 +180,21 @@ void DXF2BRD_CONVERTER::addArc( const DRW_Arc& data )
 
     // Init arc centre:
     wxPoint center( mapX( data.basePoint.x ), mapY( data.basePoint.y ) );
-    segm->SetPosition( center );
+    segm->SetCenter( center );
 
     // Init arc start point
     double  arcStartx   = data.radious;
     double  arcStarty   = 0;
-    RotatePoint( &arcStartx, &arcStarty, -RAD2DECIDEG( data.staangle ) );
+    double  startangle = data.staangle;
+    double  endangle = data.endangle;
+
+    RotatePoint( &arcStartx, &arcStarty, -RAD2DECIDEG( startangle ) );
     wxPoint arcStart( mapX( arcStartx + data.basePoint.x ),
                       mapY( arcStarty + data.basePoint.y ) );
-    segm->SetEnd( arcStart );
+    segm->SetArcStart( arcStart );
 
     // calculate arc angle (arcs are CCW, and should be < 0 in Pcbnew)
-    double angle = -RAD2DECIDEG( data.endangle - data.staangle );
+    double angle = -RAD2DECIDEG( endangle - startangle );
 
     if( angle > 0.0 )
         angle -= 3600.0;

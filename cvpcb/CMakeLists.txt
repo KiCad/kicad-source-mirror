@@ -107,6 +107,7 @@ target_link_libraries( cvpcb
     ${GDI_PLUS_LIBRARIES}
     ${GLEW_LIBRARIES}
     ${CAIRO_LIBRARIES}
+    ${PIXMAN_LIBRARY}
     )
 
 # Only for win32 cross compilation using MXE

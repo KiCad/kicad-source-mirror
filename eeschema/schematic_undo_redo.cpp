@@ -269,19 +269,15 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     for( int ii = aList->GetCount() - 1; ii >= 0; ii--  )
     {
         item = (SCH_ITEM*) aList->GetPickedItem( ii );
+        wxASSERT( item );
 
-        if( item )
-            item->ClearFlags();
+        item->ClearFlags();
 
         SCH_ITEM* image = (SCH_ITEM*) aList->GetPickedItemLink( ii );
 
         switch( aList->GetPickedItemStatus( ii ) )
         {
         case UR_CHANGED: /* Exchange old and new data for each item */
-            // tmp = item->Clone();
-            // *item = *image;
-            // *image = *tmp;
-            // delete tmp;
             item->SwapData( image );
             break;
 

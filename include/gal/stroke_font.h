@@ -29,8 +29,8 @@
 #ifndef STROKE_FONT_H_
 #define STROKE_FONT_H_
 
-#include <string>
 #include <deque>
+#include <utf8.h>
 
 #include <eda_text.h>
 
@@ -70,7 +70,7 @@ public:
      * @param aPosition is the text position in world coordinates.
      * @param aRotationAngle is the text rotation angle.
      */
-    void Draw( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle );
+    void Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle );
 
     /**
      * @brief Set the glyph size.
@@ -173,7 +173,7 @@ private:
      *
      * @param aText is the text to be drawn.
      */
-    void drawSingleLineText( const wxString& aText );
+    void drawSingleLineText( const UTF8& aText );
 
     /**
      * @brief Compute the size of a given text.
@@ -181,20 +181,19 @@ private:
      * @param aText is the text string.
      * @return is the text size.
      */
-    VECTOR2D computeTextSize( const wxString& aText ) const;
+    VECTOR2D computeTextSize( const UTF8& aText ) const;
 
     /**
      * @brief Returns number of lines for a given text.
      *
      * @param aText is the text to be checked.
-     * @return Number of lines of aText.
+     * @return unsigned - The number of lines in aText.
      */
-    unsigned int linesCount( const wxString& aText ) const
+    unsigned linesCount( const UTF8& aText ) const
     {
-        wxString::const_iterator it, itEnd;
-        unsigned int lines = 1;
+        unsigned lines = 1;
 
-        for( it = aText.begin(), itEnd = aText.end(); it != itEnd; ++it )
+        for( UTF8::const_iterator it = aText.begin(), itEnd = aText.end(); it != itEnd; ++it )
         {
             if( *it == '\n' )
                 ++lines;
@@ -214,4 +213,4 @@ private:
 };
 } // namespace KIGFX
 
-#endif /* STROKE_FONT_H_ */
+#endif // STROKE_FONT_H_

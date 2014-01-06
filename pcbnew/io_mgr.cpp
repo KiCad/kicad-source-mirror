@@ -44,7 +44,7 @@
 
 
 // is there a better place for this function?
-bool PROPERTIES::Value( const char* aName, std::string* aFetchedValue ) const
+bool PROPERTIES::Value( const char* aName, UTF8* aFetchedValue ) const
 {
     PROPERTIES::const_iterator it = find( aName );
 

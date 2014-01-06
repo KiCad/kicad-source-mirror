@@ -187,11 +187,13 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     if( m_SelectedPCBText->GetFlags() != 0 )
         m_SelectedPCBText->SetFlags( IN_EDIT );
 
+#ifndef USE_WX_OVERLAY
     // Erase old text on screen if context is available
     if( m_DC )
     {
         m_SelectedPCBText->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
     }
+#endif
 
     // Set the new text content
     if( !m_TextContentCtrl->GetValue().IsEmpty() )
@@ -268,12 +270,15 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
         break;
     }
 
+#ifndef USE_WX_OVERLAY
     // Finally, display new text if there is a context to do so
     if( m_DC )
     {
         m_SelectedPCBText->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
     }
-
+#else
+    m_parent->Refresh();
+#endif
     m_Parent->OnModify();
     EndModal( 1 );
 }

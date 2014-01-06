@@ -40,6 +40,10 @@ option( KICAD_SCRIPTING_WXPYTHON
     "set this option ON to build wxpython implementation for wx interface building in python and py.shell"
     )
 
+option( KICAD_BUILD_STATIC
+    "Builds Kicad and all libraries static (except wx-widgets)"
+    )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -75,10 +79,10 @@ mark_as_advanced( KICAD_USER_CONFIG_DIR )
 
 
 #================================================
-# Set flags for GCC.
+# Set flags for GCC, or treat llvm as GCC
 #================================================
 
-if( CMAKE_COMPILER_IS_GNUCXX )
+if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     execute_process( COMMAND ${CMAKE_C_COMPILER} -dumpversion
         OUTPUT_VARIABLE GCC_VERSION
@@ -110,6 +114,14 @@ if( CMAKE_COMPILER_IS_GNUCXX )
     set( CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG" )
     set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG" )
 
+    if( GXX_HAS_VISIBILITY_FLAG AND NOT APPLE )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden" )
+    endif()
+
+    if( GXX_HAS_VISIBILITY_INLINES_FLAG AND NOT APPLE )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden" )
+    endif()
+
     if( MINGW )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
 
@@ -128,8 +140,8 @@ if( CMAKE_COMPILER_IS_GNUCXX )
         # Disable this response file for includes ( See Windows-GNU.cmake module )
         if( WIN32 AND MSYS AND NOT CMAKE_CROSSCOMPILING )
             # fixme: it is needed only with MSYS+MINGW32? or always under MINGW
-            if (${CMAKE_SIZEOF_VOID_P} MATCHES 4)
-                set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDES 0)
+            if( ${CMAKE_SIZEOF_VOID_P} MATCHES 4 )
+                set( CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDES 0 )
             endif()
         endif()
 
@@ -157,7 +169,12 @@ if( CMAKE_COMPILER_IS_GNUCXX )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedefs" )
     endif()
 
-endif( CMAKE_COMPILER_IS_GNUCXX )
+    if( APPLE )
+        set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__" )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__" )
+    endif()
+
+endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
 if( KICAD_KEEPCASE )
     add_definitions( -DKICAD_KEEPCASE )
@@ -242,6 +259,19 @@ include( Functions )
 
 include( ExternalProject )
 
+if ( APPLE )
+    set( KICAD_BUILD_STATIC ON)
+
+    if( NOT CMAKE_CXX_COMPILER )
+        EXEC_PROGRAM( wx-config ARGS --cc  OUTPUT_VARIABLE CMAKE_C_COMPILER )
+    endif( NOT CMAKE_CXX_COMPILER )
+
+    if( NOT CMAKE_CXX_COMPILER )
+        EXEC_PROGRAM( wx-config ARGS --cxx OUTPUT_VARIABLE CMAKE_CXX_COMPILER )
+    endif( NOT CMAKE_CXX_COMPILER )
+
+endif( APPLE )
+
 #================================================
 # Find libraries that are needed to build KiCad.
 #================================================
@@ -255,6 +285,23 @@ add_definitions(-DWX_COMPATIBILITY)
 #######################
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
+
+if ( KICAD_BUILD_STATIC )
+
+    #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
+
+    include( download_pkgconfig )
+        set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config")
+    include( download_glew )
+        set( GLEW_GLEW_LIBRARY "${GLEW_ROOT}/lib/libGLEW.a")
+        set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include")
+    include( download_pixman )
+        set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a")
+    include( download_libpng )
+    include( download_cairo )
+        set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo")
+        set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a")
+endif( KICAD_BUILD_STATIC )
 
 #####################
 # Find GLEW library #
@@ -271,7 +318,6 @@ check_find_package_result(CAIRO_FOUND "Cairo")
 # Download boost and possibly build parts of it
 #################################################
 include( download_boost )
-
 
 ##########################
 # Find wxWidgets library #
@@ -484,7 +530,7 @@ if( UNIX )
     set( UNIX_MIME_DIR resources/linux/mime )
     set( UNIX_MIMELNK_FILES ${UNIX_MIME_DIR}/mimelnk )
     set( UNIX_MIME_FILES ${UNIX_MIME_DIR}/mime )
-    set( UNIX_ICONS_FILES ${UNIX_MIME_DIR}/icons )
+    set( UNIX_ICON_FILES ${UNIX_MIME_DIR}/icons )
     set( UNIX_APPLICATIONS_FILES ${UNIX_MIME_DIR}/applications )
 
     # Install Mimelnk directory
@@ -494,7 +540,7 @@ if( UNIX )
         )
 
     # Install Mime directory
-    install( DIRECTORY ${UNIX_ICONS_FILES}
+    install( DIRECTORY ${UNIX_ICON_FILES}
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share
         COMPONENT resources
         )

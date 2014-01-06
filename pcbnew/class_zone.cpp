@@ -480,32 +480,12 @@ bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition )
 // Zones outlines have no thickness, so it Hit Test functions
 // we must have a default distance between the test point
 // and a corner or a zone edge:
-#define MIN_DIST_IN_MILS 10
+#define MAX_DIST_IN_MM 0.25
 
 bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 {
-    m_CornerSelection = -1;         // Set to not found
-
-    // distance (in internal units) to detect a corner in a zone outline.
-    int min_dist = MIN_DIST_IN_MILS*IU_PER_MILS;
-
-    wxPoint delta;
-    unsigned lim = m_Poly->m_CornersList.GetCornersCount();
-
-    for( unsigned item_pos = 0; item_pos < lim; item_pos++ )
-    {
-        delta.x = refPos.x - m_Poly->m_CornersList.GetX( item_pos );
-        delta.y = refPos.y - m_Poly->m_CornersList.GetY( item_pos );
-
-        // Calculate a distance:
-        int dist = std::max( abs( delta.x ), abs( delta.y ) );
-
-        if( dist < min_dist )  // this corner is a candidate:
-        {
-            m_CornerSelection = item_pos;
-            min_dist = dist;
-        }
-    }
+    int distmax = Millimeter2iu( MAX_DIST_IN_MM );
+    m_CornerSelection = m_Poly->HitTestForCorner( refPos, distmax );
 
     return m_CornerSelection >= 0;
 }
@@ -513,44 +493,8 @@ bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 
 bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 {
-    unsigned lim = m_Poly->m_CornersList.GetCornersCount();
-
-    m_CornerSelection = -1;     // Set to not found
-
-    // distance (in internal units) to detect a zone outline
-    int min_dist = MIN_DIST_IN_MILS*IU_PER_MILS;
-
-    unsigned first_corner_pos = 0;
-
-    for( unsigned item_pos = 0; item_pos < lim; item_pos++ )
-    {
-        unsigned end_segm = item_pos + 1;
-
-        /* the last corner of the current outline is tested
-         * the last segment of the current outline starts at current corner, and ends
-         * at the first corner of the outline
-         */
-        if( m_Poly->m_CornersList.IsEndContour ( item_pos ) || end_segm >= lim )
-        {
-            unsigned tmp = first_corner_pos;
-            first_corner_pos = end_segm;    // first_corner_pos is now the beginning of the next outline
-            end_segm = tmp;                 // end_segm is the beginning of the current outline
-        }
-
-        // test the dist between segment and ref point
-        int dist = KiROUND( GetPointToLineSegmentDistance(
-                    refPos.x, refPos.y,
-                    m_Poly->m_CornersList.GetX( item_pos ),
-                    m_Poly->m_CornersList.GetY( item_pos ),
-                    m_Poly->m_CornersList.GetX( end_segm ),
-                    m_Poly->m_CornersList.GetY( end_segm ) ) );
-
-        if( dist < min_dist )
-        {
-            m_CornerSelection = item_pos;
-            min_dist = dist;
-        }
-    }
+    int distmax = Millimeter2iu( MAX_DIST_IN_MM );
+    m_CornerSelection = m_Poly->HitTestForEdge( refPos, distmax );
 
     return m_CornerSelection >= 0;
 }

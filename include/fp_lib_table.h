@@ -339,7 +339,7 @@ public:
      * @param aProperties is the PROPERTIES to format or NULL.  If NULL the returned
      *  string will be empty.
      */
-    static std::string FormatOptions( const PROPERTIES* aProperties );
+    static UTF8 FormatOptions( const PROPERTIES* aProperties );
 
     /**
      * Function Format

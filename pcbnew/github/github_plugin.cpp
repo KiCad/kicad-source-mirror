@@ -166,7 +166,7 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
         }
     }
 
-    string fp_name = TO_UTF8( aFootprintName );
+    UTF8 fp_name = aFootprintName;
 
     MODULE_CITER it = m_gh_cache->find( fp_name );
 
@@ -321,20 +321,20 @@ void GITHUB_PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
     // inherit options supported by all PLUGINs.
     PLUGIN::FootprintLibOptions( aListToAppendTo );
 
-    (*aListToAppendTo)[ PRETTY_DIR ] = wxString( _(
+    (*aListToAppendTo)[ PRETTY_DIR ] = UTF8( _(
         "Set this property to a directory where footprints are to be written as pretty "
         "footprints when saving to this library. Anything saved will take precedence over "
         "footprints by the same name in the github repo.  These saved footprints can then "
         "be sent to the library maintainer as updates. "
         "<p>The directory <b>must</b> have a <b>.pretty</b> file extension because the "
         "format of the save is pretty.</p>"
-        )).utf8_str();
+        ));
 
     /*
-    (*aListToAppendTo)["cache_github_zip_in_this_dir"] = wxString( _(
+    (*aListToAppendTo)["cache_github_zip_in_this_dir"] = UTF8( _(
         "Set this property to a directory where the github *.zip file will be cached. "
         "This should speed up subsequent visits to this library."
-        )).utf8_str();
+        ));
     */
 }
 
@@ -356,11 +356,11 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
 
         if( aProperties )
         {
-            string  pretty_dir;
+            UTF8  pretty_dir;
 
             if( aProperties->Value( PRETTY_DIR, &pretty_dir ) )
             {
-                wxString    wx_pretty_dir = FROM_UTF8( pretty_dir.c_str() );
+                wxString    wx_pretty_dir = pretty_dir;
 
                 wx_pretty_dir = FP_LIB_TABLE::ExpandSubstitutions( wx_pretty_dir );
 
@@ -409,7 +409,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
 
             if( fn.GetExt() == kicad_mod )
             {
-                string fp_name = TO_UTF8( fn.GetName() );   // omit extension & path
+                UTF8 fp_name = fn.GetName();    // omit extension & path
 
                 m_gh_cache->insert( fp_name, entry );
             }

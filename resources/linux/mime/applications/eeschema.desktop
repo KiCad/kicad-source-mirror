@@ -2,10 +2,10 @@
 Categories=Development;Electronics
 Comment=Design an electronic schematic
 Comment[fr]=Dessiner des schémas électroniques
-Exec=eeschema
+Exec=eeschema %f
 GenericName=Electronic schematic design
 GenericName[fr]=Saisie de schéma électronique
 Icon=eeschema
-MimeType=application/x-kicad-schematic;
+MimeType=application/x-eeschema-schematic;
 Name=Eeschema
 Type=Application

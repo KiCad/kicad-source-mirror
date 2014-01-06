@@ -93,9 +93,6 @@ typedef boost::optional<double>             opt_double;
 typedef boost::optional<bool>               opt_bool;
 
 
-const wxChar* traceEaglePlugin = wxT( "KicadEaglePlugin" );
-
-
 /// segment (element) of our XPATH into the Eagle XML document tree in PTREE form.
 struct TRIPLET
 {
@@ -2714,8 +2711,8 @@ void EAGLE_PLUGIN::centerBoard()
 {
     if( m_props )
     {
-        string page_width;
-        string page_height;
+        UTF8 page_width;
+        UTF8 page_height;
 
         if( m_props->Value( "page_width",  &page_width ) &&
             m_props->Value( "page_height", &page_height ) )
@@ -2740,6 +2737,18 @@ void EAGLE_PLUGIN::centerBoard()
 wxDateTime EAGLE_PLUGIN::getModificationTime( const wxString& aPath )
 {
     wxFileName  fn( aPath );
+
+    // Do not call wxFileName::GetModificationTime() on a non-existent file, because
+    // if it fails, wx's implementation calls the crap wxLogSysError() which
+    // eventually infects our UI with an unwanted popup window, so don't let it fail.
+    if( !fn.IsFileReadable() )
+    {
+        wxString msg = wxString::Format(
+            _( "File '%s' is not readable." ),
+            GetChars( aPath ) );
+
+        THROW_IO_ERROR( msg );
+    }
 
     /*
     // update the writable flag while we have a wxFileName, in a network this
@@ -2770,8 +2779,6 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 
         if( aLibPath != m_lib_path || load )
         {
-            wxLogTrace( traceEaglePlugin, wxT( "Loading '%s'" ), TO_UTF8( aLibPath ) );
-
             PTREE       doc;
             LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2866,10 +2873,10 @@ void EAGLE_PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
     PLUGIN::FootprintLibOptions( aListToAppendTo );
 
     /*
-    (*aListToAppendTo)["ignore_duplicates"] = wxString( _(
+    (*aListToAppendTo)["ignore_duplicates"] = UTF8( _(
         "Ignore duplicately named footprints within the same Eagle library. "
         "Only the first similarly named footprint will be loaded."
-        )).utf8_str();
+        ));
     */
 }
 

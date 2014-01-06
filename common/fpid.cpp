@@ -265,9 +265,9 @@ int FPID::SetRevision( const std::string& aRevision )
 }
 
 
-std::string FPID::Format() const
+UTF8 FPID::Format() const
 {
-    std::string  ret;
+    UTF8    ret;
 
     if( nickname.size() )
     {
@@ -287,9 +287,9 @@ std::string FPID::Format() const
 }
 
 
-std::string FPID::GetFootprintNameAndRev() const
+UTF8 FPID::GetFootprintNameAndRev() const
 {
-    std::string ret;
+    UTF8 ret;
 
     if( revision.size() )
     {
@@ -301,11 +301,11 @@ std::string FPID::GetFootprintNameAndRev() const
 }
 
 
-std::string FPID::Format( const std::string& aLogicalLib, const std::string& aFootprintName,
+UTF8 FPID::Format( const std::string& aLogicalLib, const std::string& aFootprintName,
                           const std::string& aRevision )
     throw( PARSE_ERROR )
 {
-    std::string  ret;
+    UTF8    ret;
     int     offset;
 
     if( aLogicalLib.size() )

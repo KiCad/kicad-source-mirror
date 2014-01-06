@@ -54,6 +54,8 @@
 #include <trigo.h>
 #include <pcb_painter.h>
 #include <worksheet_viewitem.h>
+#include <ratsnest_data.h>
+#include <ratsnest_viewitem.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -79,6 +81,7 @@ const LAYER_NUM PCB_BASE_FRAME::GAL_LAYER_ORDER[] =
     ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ),
     ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE), ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ),
 
+    ITEM_GAL_LAYER( RATSNEST_VISIBLE ),
     ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ),
     ITEM_GAL_LAYER( VIAS_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
 
@@ -149,10 +152,12 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
     m_FastGrid1           = 0;
     m_FastGrid2           = 0;
 
-    m_galCanvas           = new EDA_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                              EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+    SetGalCanvas( new EDA_DRAW_PANEL_GAL(
+            this, -1, wxPoint( 0, 0 ), m_FrameSize,
+            EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) );
+
     // Hide by default, it has to be explicitly shown
-    m_galCanvas->Hide();
+    GetGalCanvas()->Hide();
 
     m_auxiliaryToolBar    = NULL;
 }
@@ -163,7 +168,7 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
     delete m_Collector;
 
     delete m_Pcb;       // is already NULL for FOOTPRINT_EDIT_FRAME
-    delete m_galCanvas;
+    delete GetGalCanvas();
 }
 
 
@@ -171,82 +176,6 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 {
     delete m_Pcb;
     m_Pcb = aBoard;
-
-    if( m_galCanvas )
-    {
-        KIGFX::VIEW* view = m_galCanvas->GetView();
-
-        try
-        {
-            ViewReloadBoard( m_Pcb );
-        }
-        catch( const std::exception& ex )
-        {
-            DBG(printf( "ViewReloadBoard: exception: %s\n", ex.what() );)
-        }
-
-        // update the tool manager with the new board and its view.
-        if( m_toolManager )
-        {
-            m_toolManager->SetEnvironment( m_Pcb, view, m_galCanvas->GetViewControls(), this );
-            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-        }
-    }
-}
-
-
-void PCB_BASE_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
-{
-    KIGFX::VIEW* view = m_galCanvas->GetView();
-    view->Clear();
-
-    // All the PCB drawable items should be added to the VIEW in order to be displayed
-
-    // Load zones
-    for( int i = 0; i < aBoard->GetAreaCount(); ++i )
-        view->Add( (KIGFX::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
-
-    // Load drawings
-    for( BOARD_ITEM* drawing = aBoard->m_Drawings; drawing; drawing = drawing->Next() )
-        view->Add( drawing );
-
-    // Load tracks
-    for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
-        view->Add( track );
-
-    // Load modules and its additional elements
-    for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
-    {
-        // Load items that belong to a module
-        module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), view ) );
-
-        // Add the module itself
-        view->Add( module );
-    }
-
-    // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
-    for( SEGZONE* zone = aBoard->m_Zone; zone; zone = zone->Next() )
-        view->Add( zone );
-
-    // Add an entry for the worksheet layout
-    KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM(
-                                            std::string( aBoard->GetFileName().mb_str() ),
-                                            std::string( GetScreenDesc().mb_str() ),
-                                            &GetPageSettings(), &GetTitleBlock() );
-    BASE_SCREEN* screen = GetScreen();
-    if( screen != NULL )
-    {
-        worksheet->SetSheetNumber( GetScreen()->m_ScreenNumber );
-        worksheet->SetSheetCount( GetScreen()->m_NumberOfScreens );
-    }
-
-    view->Add( worksheet );
-
-    view->SetPanBoundary( worksheet->ViewBBox() );
-    view->RecacheAllItems( true );
-
-    if( m_galCanvasActive )
-        m_galCanvas->Refresh();
 }
 
 
@@ -510,11 +439,11 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 
     // Apply new display options to the GAL canvas
     KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
+            static_cast<KIGFX::PCB_PAINTER*> ( GetGalCanvas()->GetView()->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
     settings->LoadDisplayOptions( DisplayOpt );
-    m_galCanvas->GetView()->RecacheAllItems( true );
+    GetGalCanvas()->GetView()->RecacheAllItems( true );
 
     m_canvas->Refresh();
 }
@@ -581,21 +510,6 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 
     if( current != m_zoomSelectBox->GetSelection() )
         m_zoomSelectBox->SetSelection( current );
-}
-
-
-void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
-{
-    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
-
-    ViewReloadBoard( m_Pcb );
-
-    if( aEnable )
-    {
-        m_toolManager->SetEnvironment( m_Pcb, m_galCanvas->GetView(),
-                                       m_galCanvas->GetViewControls(), this );
-        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
-    }
 }
 
 
@@ -852,7 +766,7 @@ void PCB_BASE_FRAME::LoadSettings()
         m_DisplayModText = FILLED;
 
     // Apply display settings for GAL
-    KIGFX::VIEW* view = m_galCanvas->GetView();
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
 
     // Set rendering order and properties of layers
     for( LAYER_NUM i = 0; (unsigned) i < sizeof(GAL_LAYER_ORDER) / sizeof(LAYER_NUM); ++i )
@@ -892,6 +806,7 @@ void PCB_BASE_FRAME::LoadSettings()
     view->SetRequired( SOLDERMASK_N_BACK, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
 
     view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
+    view->SetLayerTarget( ITEM_GAL_LAYER( RATSNEST_VISIBLE ), KIGFX::TARGET_OVERLAY );
 
     // Apply layer coloring scheme & display options
     if( view->GetPainter() )

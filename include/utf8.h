@@ -65,7 +65,7 @@ public:
     /// For use with _() function on wx 2.8:
     UTF8( const wchar_t* txt );
 
-    explicit UTF8( const std::string& o ) :
+    UTF8( const std::string& o ) :
         std::string( o )
     {
     }
@@ -81,6 +81,23 @@ public:
     {
         std::string::operator=( o );
         return *this;
+    }
+
+    UTF8& operator=( const char* s )
+    {
+        std::string::operator=( s );
+        return *this;
+    }
+
+    UTF8& operator=( char c )
+    {
+        std::string::operator=( c );
+        return *this;
+    }
+
+    UTF8 substr( size_t pos = 0, size_t len = npos ) const
+    {
+        return std::string::substr( pos, len );
     }
 
     operator wxString () const;

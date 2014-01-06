@@ -452,7 +452,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     BOARD_ITEM* item;
     bool        not_found = false;
     bool        reBuild_ratsnest = false;
-    KIGFX::VIEW* view = m_galCanvas->GetView();
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
 
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command

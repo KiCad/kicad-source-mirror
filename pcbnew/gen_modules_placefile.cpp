@@ -479,9 +479,11 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     for( int ii = 0; ii < moduleCount; ii++ )
     {
         wxPoint  module_pos;
+
         const wxString& ref = list[ii].m_Reference;
         const wxString& val = list[ii].m_Value;
-        const wxString& pkg = FROM_UTF8( list[ii].m_Module->GetFPID().Format().c_str() );
+        const wxString& pkg = list[ii].m_Module->GetFPID().Format();
+
         sprintf( line, "%-8.8s %-16.16s %-16.16s",
                  TO_UTF8( ref ), TO_UTF8( val ), TO_UTF8( pkg ) );
 

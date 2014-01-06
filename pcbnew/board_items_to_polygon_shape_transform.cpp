@@ -290,22 +290,19 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
 
     if( IsMultilineAllowed() )
     {
-        wxPoint        pos  = GetTextPosition();
         wxArrayString* list = wxStringSplit( GetText(), '\n' );
-        wxPoint        offset;
+        std::vector<wxPoint> positions;
+        positions.reserve( list->Count() );
+        GetPositionsOfLinesOfMultilineText( positions, list->Count() );
 
-        offset.y = GetInterline();
-        RotatePoint( &offset, GetOrientation() );
-
-        for( unsigned i = 0; i<list->Count(); i++ )
+        for( unsigned ii = 0; ii < list->Count(); ii++ )
         {
-            wxString txt = list->Item( i );
-            DrawGraphicText( NULL, NULL, pos, color,
+            wxString txt = list->Item( ii );
+            DrawGraphicText( NULL, NULL, positions[ii], color,
                              txt, GetOrientation(), size,
                              GetHorizJustify(), GetVertJustify(),
                              GetThickness(), IsItalic(),
                              true, addTextSegmToPoly );
-            pos += offset;
         }
 
         delete list;

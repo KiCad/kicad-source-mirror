@@ -40,8 +40,10 @@ set( BOOST_ROOT "${PROJECT_SOURCE_DIR}/boost_root" )
 # Space separated list which indicates the subset of boost libraries to compile.
 # Chosen libraries are based on AVHTTP requirements, and possibly
 # unit_test_framework for its own worth.
+# tool_manager.cpp -> coroutine -> context (_jump_fcontext) (on OSX)
+
 set( BOOST_LIBS_BUILT
-    #context
+    context
     #coroutine
     date_time
     #exception
@@ -55,7 +57,6 @@ set( BOOST_LIBS_BUILT
     thread
     #unit_test_framework
     )
-
 #-----</configure>---------------------------------------------------------------
 
 find_package( BZip2 REQUIRED )
@@ -88,6 +89,16 @@ endfunction()
 string( REPLACE "unit_test_framework" "test" boost_libs_list "${BOOST_LIBS_BUILT}" )
 #message( STATUS "REPLACE libs_csv:${boost_libs_list}" )
 
+# Default Toolset
+set( BOOST_TOOLSET "toolset=gcc" )
+
+if( KICAD_BUILD_STATIC )
+    set( BOOST_LINKTYPE  "link=static" )
+else()
+    unset( BOOST_LINKTYPE )
+endif()
+
+
 if( MINGW )
     if( MSYS )
         # The Boost system does not build properly on MSYS using bootstrap.sh.  Running
@@ -101,16 +112,60 @@ if( MINGW )
     foreach( lib ${boost_libs_list} )
         set( b2_libs ${b2_libs} --with-${lib} )
     endforeach()
-    unset( PIC_STUFF )
+    unset( BOOST_CFLAGS )
 else()
     string( REGEX REPLACE "\\;" "," libs_csv "${boost_libs_list}" )
     #message( STATUS "libs_csv:${libs_csv}" )
 
     set( bootstrap ./bootstrap.sh --with-libraries=${libs_csv} )
     # pass to *both* C and C++ compilers
-    set( PIC_STUFF "cflags=${PIC_FLAG}" )
+    set( BOOST_CFLAGS "cflags=${PIC_FLAG}" )
     set( BOOST_INCLUDE "${BOOST_ROOT}/include" )
     unset( b2_libs )
+endif()
+
+
+if( APPLE )
+    # I set this to being compatible with wxWidgets
+    # wxWidgets still using libstdc++ (gcc), meanwhile OSX
+    # has switched to libc++ (llvm) by default
+    set( BOOST_CXXFLAGS  "cxxflags=-mmacosx-version-min=10.5  -fno-common" )
+    set( BOOST_LINKFLAGS "linkflags=-mmacosx-version-min=10.5 -fno-common" )
+    set( BOOST_TOOLSET   "toolset=darwin" )
+
+    if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+        set(BOOST_CXXFLAGS  "${BOOST_CXXFLAGS} -fno-lto" )
+        set(BOOST_LINKFLAGS "${BOOST_LINKFLAGS} -fno-lto" )
+    endif()
+
+    if( CMAKE_OSX_ARCHITECTURES )
+
+        if( (CMAKE_OSX_ARCHITECTURES MATCHES "386" OR CMAKE_OSX_ARCHITECTURES MATCHES "ppc ") AND
+            (CMAKE_OSX_ARCHITECTURES MATCHES "64"))
+            message( "-- BOOST found 32/64 Address Model" )
+
+            set( BOOST_ADDRESSMODEL "address-model=32_64" )
+        endif()
+
+        if( (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64" OR CMAKE_OSX_ARCHITECTURES MATCHES "386") AND
+            (CMAKE_OSX_ARCHITECTURES MATCHES "ppc"))
+            message("-- BOOST found ppc/x86 Architecture")
+
+            set(BOOST_ARCHITECTURE "architecture=combined")
+        elseif( (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64" OR CMAKE_OSX_ARCHITECTURES MATCHES "386") )
+            message("-- BOOST found x86 Architecture")
+
+            set(BOOST_ARCHITECTURE "architecture=x86")
+        elseif( (CMAKE_OSX_ARCHITECTURES MATCHES "ppc64" OR CMAKE_OSX_ARCHITECTURES MATCHES "ppc") )
+            message("-- BOOST found ppc Architecture")
+
+            set(BOOST_ARCHITECTURE "architecture=ppc")
+        endif()
+
+        set( BOOST_CFLAGS    "${BOOST_CFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}"  )
+        set( BOOST_CXXFLAGS  "${BOOST_CXXFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}"  )
+        set( BOOST_LINKFLAGS "${BOOST_LINKFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}" )
+    endif()
 endif()
 
 ExternalProject_Add( boost
@@ -125,9 +180,36 @@ ExternalProject_Add( boost
     # fails when applying a patch to the branch twice and doesn't have a switch
     # to ignore previously applied patches
     PATCH_COMMAND   bzr revert
-        # PATCH_COMMAND continuation (any *_COMMAND here can be continued with COMMAND):
+        # bzr revert is insufficient to remove "added" files:
+        COMMAND     bzr clean-tree -q --force
+
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_minkowski.patch"
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_cstdint.patch"
+
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86.patch"        #https://svn.boost.org/trac/boost/ticket/8266
+        # tell bzr about "added" files by last patch:
+        COMMAND     bzr add libs/context/src/asm/jump_i386_x86_64_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/make_i386_x86_64_sysv_macho_gas.S
+
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_x86_build.patch"  #https://svn.boost.org/trac/boost/ticket/8266
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_macosx_older_openssl.patch"  #https://svn.boost.org/trac/boost/ticket/9273
+
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/boost_mingw.patch"             #https://svn.boost.org/trac/boost/ticket/7262
+        # tell bzr about "added" files by last patch:
+        COMMAND     bzr add libs/context/src/asm/make_i386_ms_pe_gas.S
+        COMMAND     bzr add libs/context/src/asm/jump_i386_ms_pe_gas.S
+        COMMAND     bzr add libs/context/src/asm/make_x86_64_ms_pe_gas.S
+        COMMAND     bzr add libs/context/src/asm/jump_x86_64_ms_pe_gas.S
+
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/patch_macosx_context_ppc_v2.patch" #https://svn.boost.org/trac/boost/ticket/8266
+        COMMAND     bzr add libs/context/build/Jamfile.v2
+        COMMAND     bzr add libs/context/build/architecture.jam
+        COMMAND     bzr add libs/context/src/asm/jump_combined_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/jump_ppc32_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/jump_ppc64_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/make_combined_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/make_ppc32_sysv_macho_gas.S
+        COMMAND     bzr add libs/context/src/asm/make_ppc64_sysv_macho_gas.S
 
     # [Mis-]use this step to erase all the boost headers and libraries before
     # replacing them below.
@@ -139,10 +221,14 @@ ExternalProject_Add( boost
     BUILD_COMMAND   ./b2
                     variant=release
                     threading=multi
-                    toolset=gcc
-                    ${PIC_STUFF}
+                    ${BOOST_CFLAGS}
+                    ${BOOST_TOOLSET}
+                    ${BOOST_CXXFLAGS}
+                    ${BOOST_LINKFLAGS}
+                    ${BOOST_ADDRESSMODEL}
+                    ${BOOST_ARCHITECTURE}
                     ${b2_libs}
-                    #link=static
+                    ${BOOST_LINKTYPE}
                     --prefix=<INSTALL_DIR>
                     install
 
@@ -175,8 +261,8 @@ endif()
 set( boost_libs "" )
 set_boost_lib_names( "${BOOST_LIBS_BUILT}" boost_libs )
 
-set( Boost_LIBRARIES    ${boost_libs}      CACHE FILEPATH "Boost libraries directory" )
-set( Boost_INCLUDE_DIR  "${BOOST_INCLUDE}" CACHE FILEPATH "Boost include directory" )
+set( Boost_LIBRARIES    ${boost_libs} )
+set( Boost_INCLUDE_DIR  "${BOOST_INCLUDE}" )
 
 mark_as_advanced( Boost_LIBRARIES Boost_INCLUDE_DIR )
 
@@ -194,7 +280,7 @@ ExternalProject_Add_Step( boost bzr_commit_boost
 
 ExternalProject_Add_Step( boost bzr_add_boost
     # add only the headers to the scratch repo, repo = "../.bzr" from ${headers_src}
-    COMMAND bzr add -q ${headers_src}
+    COMMAND bzr add -q ${PREFIX}/src/boost
     COMMENT "adding pristine boost files to 'boost scratch repo'"
     DEPENDERS bzr_commit_boost
     )

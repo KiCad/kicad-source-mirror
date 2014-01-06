@@ -404,25 +404,27 @@ void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool is
         myframe->GetCanvas()->Refresh();
 }
 
+
 void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, EDA_COLOR_T aColor )
 {
     myframe->GetBoard()->SetVisibleElementColor( aId, aColor );
     myframe->GetCanvas()->Refresh();
 }
 
+
 void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 {
     BOARD*  brd = myframe->GetBoard();
     brd->SetElementVisibility( aId, isEnabled );
 
-    EDA_DRAW_PANEL_GAL *galCanvas = myframe->GetGalCanvas();
+    EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
     if( galCanvas )
     {
         KIGFX::VIEW* view = galCanvas->GetView();
         view->SetLayerVisible( ITEM_GAL_LAYER( aId ), isEnabled );
     }
 
-    if( myframe->IsGalCanvasActive() )
+    if( galCanvas && myframe->IsGalCanvasActive() )
         galCanvas->Refresh();
     else
         myframe->GetCanvas()->Refresh();

@@ -221,7 +221,8 @@ void EDA_BASE_FRAME::LoadSettings()
     // Once this is fully implemented, wxAuiManager will be used to maintain the persistance of
     // the main frame and all it's managed windows and all of the legacy frame persistence
     // position code can be removed.
-    config->Read( m_FrameName + entryPerspective, &m_perspective );
+    if( config )
+        config->Read( m_FrameName + entryPerspective, &m_perspective );
 }
 
 
