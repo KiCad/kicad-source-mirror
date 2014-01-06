@@ -177,6 +177,7 @@ set( PCBNEW_CLASS_SRCS
     export_gencad.cpp
     export_idf.cpp
     export_vrml.cpp
+    vrml_board.cpp
     files.cpp
     gen_drill_report_files.cpp
     gen_modules_placefile.cpp
