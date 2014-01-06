@@ -44,7 +44,7 @@ void PCB_EDIT_FRAME::setupTools()
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, this );
-    m_galCanvas->SetEventDispatcher( m_toolDispatcher );
+    GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
 
     // Register tool actions
     m_toolManager->RegisterAction( &COMMON_ACTIONS::editActivate );
@@ -58,8 +58,8 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new ROUTER_TOOL );
     m_toolManager->RegisterTool( new EDIT_TOOL );
 
-    m_toolManager->SetEnvironment( NULL, m_galCanvas->GetView(),
-                                   m_galCanvas->GetViewControls(), this );
+    m_toolManager->SetEnvironment( NULL, GetGalCanvas()->GetView(),
+                                   GetGalCanvas()->GetViewControls(), this );
     m_toolManager->ResetTools( TOOL_BASE::RUN );
 
     // Run the selection tool, it is supposed to be always active

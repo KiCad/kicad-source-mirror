@@ -1,5 +1,4 @@
-
-include_directories(BEFORE ${INC_BEFORE})
+include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
     ./dialog_about
@@ -37,6 +36,7 @@ set(GAL_SRCS
     gal/stroke_font.cpp
     gal/color4d.cpp
     view/wx_view_controls.cpp
+    geometry/hetriang.cpp
 
     # OpenGL GAL
     gal/opengl/opengl_gal.cpp
@@ -62,7 +62,7 @@ if(WIN32 AND MSYS)
 add_definitions(-DGLEW_STATIC)
 endif(WIN32 AND MSYS)
 
-set(COMMON_ABOUT_DLG_SRCS
+set( COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp
     dialog_about/dialog_about.cpp
     dialog_about/dialog_about_base.cpp
@@ -78,7 +78,7 @@ set(COMMON_ABOUT_DLG_SRCS
     dialogs/dialog_page_settings_base.cpp
     )
 
-set(COMMON_PAGE_LAYOUT_SRCS
+set( COMMON_PAGE_LAYOUT_SRCS
     page_layout/title_block_shapes.cpp
     page_layout/class_worksheet_dataitem.cpp
     page_layout/class_worksheet_layout.cpp
@@ -88,7 +88,7 @@ set(COMMON_PAGE_LAYOUT_SRCS
     page_layout/page_layout_reader.cpp
     )
 
-set(COMMON_SRCS
+set( COMMON_SRCS
     ${COMMON_ABOUT_DLG_SRCS}
     ${COMMON_PAGE_LAYOUT_SRCS}
     base_struct.cpp
@@ -153,17 +153,14 @@ if( NOT HAVE_STRTOKR )
     set( COMMON_SRCS ${COMMON_SRCS} strtok_r.c )
 endif()
 
-enable_language(C CXX ASM)
-set_source_files_properties(system/fcontext.s PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp")
 
-set(COMMON_SRCS
+set( COMMON_SRCS
     ${COMMON_SRCS}
     view/view.cpp
     view/view_item.cpp
     view/view_group.cpp
 
     math/math_util.cpp
-    system/fcontext.s
 
     tool/tool_base.cpp
     tool/tool_manager.cpp
@@ -179,9 +176,20 @@ set(COMMON_SRCS
     geometry/shape_index.cpp
 )
 
-add_library(common STATIC ${COMMON_SRCS})
 
-set(PCB_COMMON_SRCS
+# TODO: remove this whole "if test" on or after 14-Jan-2014 and remove the system/*.s
+# sources if no one complains by then.
+# boost::context library replaces this functionality:
+if( false )
+    enable_language( C CXX ASM )
+    set_source_files_properties( system/fcontext.s PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp" )
+    list( APPEND COMMON_SRCS system/fcontext.s )
+endif()
+
+
+add_library( common STATIC ${COMMON_SRCS} )
+
+set( PCB_COMMON_SRCS
     base_screen.cpp
     eda_text.cpp
     class_page_info.cpp
@@ -235,7 +243,7 @@ set(PCB_COMMON_SRCS
     fp_lib_table.cpp
 )
 
-set(PCB_COMMON_SRCS
+set( PCB_COMMON_SRCS
     ${PCB_COMMON_SRCS}
     ../pcbnew/pcb_painter.cpp
     )
@@ -245,7 +253,7 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
     COMPILE_DEFINITIONS "PCBNEW"
     )
 
-add_library(pcbcommon STATIC ${PCB_COMMON_SRCS})
+add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
 
 # auto-generate specctra_lexer.h and specctra_keywords.cpp
 make_lexer(

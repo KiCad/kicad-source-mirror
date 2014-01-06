@@ -153,7 +153,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     int id = event.GetId();
     bool state = event.IsChecked();
     KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*> ( m_galCanvas->GetView()->GetPainter() );
+            static_cast<KIGFX::PCB_PAINTER*> ( GetGalCanvas()->GetView()->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
     bool recache = false;
@@ -259,9 +259,9 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     {
         // Apply new display options to the GAL canvas
         settings->LoadDisplayOptions( DisplayOpt );
-        m_galCanvas->GetView()->RecacheAllItems( true );
+        GetGalCanvas()->GetView()->RecacheAllItems( true );
     }
 
     if( IsGalCanvasActive() )
-        m_galCanvas->Refresh();
+        GetGalCanvas()->Refresh();
 }

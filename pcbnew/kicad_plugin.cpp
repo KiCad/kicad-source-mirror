@@ -1782,8 +1782,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     MODULE_MAP& mods = m_cache->GetModules();
 
     // Quietly overwrite module and delete module file from path for any by same name.
-    wxFileName fn( aLibraryPath, FROM_UTF8( aFootprint->GetFPID().GetFootprintName().c_str() ),
-                   KiCadFootprintFileExtension );
+    wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetFootprintName(), KiCadFootprintFileExtension );
 
     if( !fn.IsOk() )
     {

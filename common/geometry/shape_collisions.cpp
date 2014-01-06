@@ -160,69 +160,67 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance,
 {
     switch( aA->Type() )
     {
-        case SH_RECT:
-            switch( aB->Type() )
-            {
-                case SH_CIRCLE:
-                    return Collide( *static_cast<const SHAPE_RECT*>( aA ),
-                        *static_cast<const SHAPE_CIRCLE*>( aB ), aClearance, aNeedMTV, aMTV );
-
-                case SH_LINE_CHAIN:
-                    return Collide( *static_cast<const SHAPE_RECT*>( aA ),
-                        *static_cast<const SHAPE_LINE_CHAIN*>( aB ), aClearance, aNeedMTV, aMTV );
-
-                default:
-                    break;
-            }
-            break;
-
+    case SH_RECT:
+        switch( aB->Type() )
+        {
         case SH_CIRCLE:
-            switch( aB->Type() )
-            {
-                case SH_RECT:
-                    return Collide( *static_cast<const SHAPE_RECT*>( aB ),
-                        *static_cast<const SHAPE_CIRCLE*>( aA ), aClearance, aNeedMTV, aMTV );
-
-                case SH_CIRCLE:
-                    return Collide( *static_cast<const SHAPE_CIRCLE*>( aA ),
-                        *static_cast<const SHAPE_CIRCLE*>( aB ), aClearance, aNeedMTV, aMTV );
-
-                case SH_LINE_CHAIN:
-                    return Collide( *static_cast<const SHAPE_CIRCLE*>( aA ),
-                        *static_cast<const SHAPE_LINE_CHAIN *>( aB ), aClearance, aNeedMTV, aMTV );
-
-                default:
-                    break;
-            }
-            break;
+            return Collide( *static_cast<const SHAPE_RECT*>( aA ),
+                *static_cast<const SHAPE_CIRCLE*>( aB ), aClearance, aNeedMTV, aMTV );
 
         case SH_LINE_CHAIN:
-            switch( aB->Type() )
-            {
-                case SH_RECT:
-                    return Collide( *static_cast<const SHAPE_RECT*>( aB ),
-                        *static_cast<const SHAPE_LINE_CHAIN*>( aA ), aClearance, aNeedMTV, aMTV );
-
-                case SH_CIRCLE:
-                    return Collide( *static_cast<const SHAPE_CIRCLE*>( aB ),
-                        *static_cast<const SHAPE_LINE_CHAIN*>( aA ), aClearance, aNeedMTV, aMTV );
-
-                case SH_LINE_CHAIN:
-                    return Collide( *static_cast<const SHAPE_LINE_CHAIN*>( aA ),
-                        *static_cast<const SHAPE_LINE_CHAIN*>( aB ), aClearance, aNeedMTV, aMTV );
-
-                default:
-                    break;
-            }
-            break;
+            return Collide( *static_cast<const SHAPE_RECT*>( aA ),
+                *static_cast<const SHAPE_LINE_CHAIN*>( aB ), aClearance, aNeedMTV, aMTV );
 
         default:
             break;
+        }
+        break;
+
+    case SH_CIRCLE:
+        switch( aB->Type() )
+        {
+        case SH_RECT:
+            return Collide( *static_cast<const SHAPE_RECT*>( aB ),
+                *static_cast<const SHAPE_CIRCLE*>( aA ), aClearance, aNeedMTV, aMTV );
+
+        case SH_CIRCLE:
+            return Collide( *static_cast<const SHAPE_CIRCLE*>( aA ),
+                *static_cast<const SHAPE_CIRCLE*>( aB ), aClearance, aNeedMTV, aMTV );
+
+        case SH_LINE_CHAIN:
+            return Collide( *static_cast<const SHAPE_CIRCLE*>( aA ),
+                *static_cast<const SHAPE_LINE_CHAIN *>( aB ), aClearance, aNeedMTV, aMTV );
+
+        default:
+            break;
+        }
+        break;
+
+    case SH_LINE_CHAIN:
+        switch( aB->Type() )
+        {
+        case SH_RECT:
+            return Collide( *static_cast<const SHAPE_RECT*>( aB ),
+                *static_cast<const SHAPE_LINE_CHAIN*>( aA ), aClearance, aNeedMTV, aMTV );
+
+        case SH_CIRCLE:
+            return Collide( *static_cast<const SHAPE_CIRCLE*>( aB ),
+                *static_cast<const SHAPE_LINE_CHAIN*>( aA ), aClearance, aNeedMTV, aMTV );
+
+        case SH_LINE_CHAIN:
+            return Collide( *static_cast<const SHAPE_LINE_CHAIN*>( aA ),
+                *static_cast<const SHAPE_LINE_CHAIN*>( aB ), aClearance, aNeedMTV, aMTV );
+
+        default:
+            break;
+        }
+        break;
+
+    default:
+        break;
     }
 
-    bool unsupported_collision = true;
-
-    assert( unsupported_collision == false );
+    assert( 0 );    // unsupported_collision
 
     return false;
 }

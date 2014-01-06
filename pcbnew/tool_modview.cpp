@@ -97,9 +97,18 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
         {
             // The library browser is called from a "load component" command
             m_mainToolBar->AddSeparator();
-            m_mainToolBar->AddTool( ID_MODVIEW_FOOTPRINT_EXPORT_TO_BOARD,
-                                    wxEmptyString, KiBitmap( export_footprint_names_xpm ),
+
+            /*
+            this ID_MODVIEW_FOOTPRINT_EXPORT_TO_BOARD control
+            is broken it does not lead to a fetched footprint on linux, either 3.0 nor 2.8 wx:
+            and I really don't like the drop down menu here:
+
+            whoever broke it, please fix it:
+
+            m_mainToolBar->AddTool( ID_MODVIEW_FOOTPRINT_EXPORT_TO_BOARD, wxEmptyString,
+                                    KiBitmap( export_footprint_names_xpm ),
                                     _( "Insert footprint in board" ) );
+            */
         }
 
         // after adding the buttons to the toolbar, must call Realize() to

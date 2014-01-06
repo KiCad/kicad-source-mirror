@@ -133,7 +133,8 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                                text->GetSize(),
                                text->GetHorizJustify(), text->GetVertJustify(),
                                text->GetPenWidth(),
-                               text->IsItalic(), text->IsBold() );
+                               text->IsItalic(), text->IsBold(),
+                               text->IsMultilineAllowed() );
             }
             break;
 

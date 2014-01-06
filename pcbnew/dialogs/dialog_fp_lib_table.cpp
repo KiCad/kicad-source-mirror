@@ -583,22 +583,31 @@ private:
     {
         FP_TBL_MODEL*   tbl = cur_model();
 
-        int     curRow = getCursorRow();
-        ROW&    row    = tbl->rows[curRow];
-
-        wxString        result;
-        const wxString& options = row.GetOptions();
-
-        InvokePluginOptionsEditor( this, row.GetNickName(), row.GetType(), options, &result );
-
-        if( options != result )
+        if( tbl->GetNumberRows() )
         {
-            row.SetOptions( result );
+            int     curRow = getCursorRow();
+            ROW&    row    = tbl->rows[curRow];
 
-            // all but options:
-            m_cur_grid->AutoSizeColumn( COL_NICKNAME, false );
-            m_cur_grid->AutoSizeColumn( COL_URI, false );
-            m_cur_grid->AutoSizeColumn( COL_TYPE, false );
+            wxString        result;
+            const wxString& options = row.GetOptions();
+
+            InvokePluginOptionsEditor( this, row.GetNickName(), row.GetType(), options, &result );
+
+            if( options != result )
+            {
+                row.SetOptions( result );
+
+                // all but options:
+                m_cur_grid->AutoSizeColumn( COL_NICKNAME, false );
+                m_cur_grid->AutoSizeColumn( COL_URI, false );
+                m_cur_grid->AutoSizeColumn( COL_TYPE, false );
+
+                // On Windows, the grid is not refresh,
+                // so force resfresh after a change
+#ifdef __WINDOWS__
+                Refresh();
+#endif
+            }
         }
     }
 
@@ -607,7 +616,7 @@ private:
         EndModal( 0 );
     }
 
-    void onCancelButtonClick( wxCloseEvent& event )
+    void onCancelCaptionButtonClick( wxCloseEvent& event )
     {
         EndModal( 0 );
     }

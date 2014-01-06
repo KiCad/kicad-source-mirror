@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  5 2013)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -130,7 +130,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onCancelButtonClick ) );
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onCancelCaptionButtonClick ) );
 	m_add_row->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendRow ), NULL, this );
 	m_delete_row->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onDeleteRow ), NULL, this );
 	m_move_up->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onMoveUp ), NULL, this );
@@ -145,7 +145,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 DIALOG_FP_PLUGIN_OPTIONS_BASE::~DIALOG_FP_PLUGIN_OPTIONS_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onCancelButtonClick ) );
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onCancelCaptionButtonClick ) );
 	m_add_row->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendRow ), NULL, this );
 	m_delete_row->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onDeleteRow ), NULL, this );
 	m_move_up->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onMoveUp ), NULL, this );

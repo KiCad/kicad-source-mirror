@@ -42,6 +42,7 @@
 #include <pcb_netlist.h>
 #include <reporter.h>
 #include <base_units.h>
+#include <ratsnest_data.h>
 
 #include <pcbnew.h>
 #include <colors_selection.h>
@@ -102,11 +103,15 @@ BOARD::BOARD() :
     m_NetClasses.GetDefault()->SetParams();
 
     SetCurrentNetClass( m_NetClasses.GetDefault()->GetName() );
+
+    m_ratsnest = new RN_DATA( this );
 }
 
 
 BOARD::~BOARD()
 {
+    delete m_ratsnest;
+
     while( m_ZoneDescriptorList.size() )
     {
         ZONE_CONTAINER* area_to_remove = m_ZoneDescriptorList[0];
@@ -2442,7 +2447,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             msg.Printf( _( "Checking netlist component footprint \"%s:%s:%s\".\n" ),
                         GetChars( component->GetReference() ),
                         GetChars( component->GetTimeStamp() ),
-                        GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+                        GetChars( component->GetFPID().Format() ) );
             aReporter->Report( msg );
         }
 
@@ -2460,7 +2465,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetTimeStamp() ),
-                                GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+                                GetChars( component->GetFPID().Format() ) );
 
                     if( aReporter->ReportWarnings() )
                         aReporter->Report( msg );
@@ -2471,7 +2476,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                                    "footprint \"%s\".\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetTimeStamp() ),
-                                GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+                                GetChars( component->GetFPID().Format() ) );
 
                     if( aReporter->ReportErrors() )
                         aReporter->Report( msg );
@@ -2504,8 +2509,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                                            "\"%s\".\n" ),
                                         GetChars( footprint->GetReference() ),
                                         GetChars( footprint->GetPath() ),
-                                        GetChars( FROM_UTF8( footprint->GetFPID().Format().c_str() ) ),
-                                        GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+                                        GetChars( footprint->GetFPID().Format() ),
+                                        GetChars( component->GetFPID().Format() ) );
 
                             if( aReporter->ReportWarnings() )
                                 aReporter->Report( msg );
@@ -2516,7 +2521,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                                            "footprint \"%s\".\n" ),
                                         GetChars( footprint->GetReference() ),
                                         GetChars( footprint->GetPath() ),
-                                        GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+                                        GetChars( component->GetFPID().Format() ) );
 
                             if( aReporter->ReportErrors() )
                                 aReporter->Report( msg );
@@ -2750,7 +2755,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 msg.Printf( _( "** Error: Component \"%s\" pad '%s' not found in footprint \"%s\" **\n" ),
                             GetChars( component->GetReference() ),
                             GetChars( padname ),
-                            footprint->GetFPID().Format().c_str() );
+                            GetChars( footprint->GetFPID().Format() ) );
                 aReporter->Report( msg );
             }
         }

@@ -487,7 +487,7 @@ wxString RemoveTrailingZeros( const wxString& aString )
     while( --i > 0 && retv[i] == wxChar( '0' ) )
         retv.RemoveLast();
 
-    if( retv[i] == wxChar( '.' ) )
+    if( retv[i] == wxChar( '.' ) || retv[i] == wxChar( ',' ) )
         retv.RemoveLast();
 
     return retv;

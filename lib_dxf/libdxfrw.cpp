@@ -1683,7 +1683,7 @@ DRW_ImageDef* dxfRW::writeImage( DRW_Image* ent, std::string name )
         writer->writeInt16( 282, ent->contrast );
         writer->writeInt16( 283, ent->fade );
         writer->writeString( 360, idReactor );
-        id->reactors[idReactor] = ent->handle;
+        id->reactors[idReactor] = toHexStr( ent->handle );
         return id;
     }
 
@@ -3817,9 +3817,9 @@ bool dxfRW::processImageDef()
 std::string dxfRW::toHexStr( int n )
 {
 #if defined(__APPLE__)
-    std::string buffer( 9, '\0' );
-    snprintf( &buffer[0], 9, "%X", n );
-    return buffer;
+    char buffer[9] = { '\0' };
+    snprintf( buffer, 9, "%X", n );
+    return std::string( buffer );
 #else
     std::ostringstream Convert;
     Convert << std::uppercase << std::hex << n;

@@ -599,25 +599,6 @@ void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
 {
     GRSetColorPen( aDC, aColor, aWidth );
 
-#if defined( USE_WX_GRAPHICS_CONTEXT ) || defined(__WXMAC__)
-    wxGraphicsContext* gc = wxGraphicsContext::Create( aDC );
-    wxASSERT( gc );
-    gc->Clip( aClipBox->GetX(), aClipBox->GetY(), aClipBox->GetRight(), aClipBox->GetHeight() );
-    wxGraphicsPath     path = gc->CreatePath();
-
-    for( unsigned i = 0; i < aLines.size(); )
-    {
-        path.MoveToPoint( aLines[i].x, aLines[i].y );
-        i++;
-        path.AddLineToPoint( aLines[i].x, aLines[i].y );
-        i++;
-    }
-
-    gc->StrokePath( path );
-    gc->ResetClip();
-    delete gc;
-#else
-
     if( aClipBox )
         aClipBox->Inflate(aWidth/2);
     for( unsigned i = 0; i < aLines.size(); i += 2)
@@ -633,7 +614,6 @@ void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
     }
     if( aClipBox )
         aClipBox->Inflate(-aWidth/2);
-#endif
 }
 
 

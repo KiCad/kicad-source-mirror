@@ -115,7 +115,7 @@ void Sweep::EdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* triangl
   if (o1 == COLLINEAR) {
     if( triangle->Contains(&eq, p1)) {
       triangle->MarkConstrainedEdge(&eq, p1 );
-      // We are modifying the constraint maybe it would be better to 
+      // We are modifying the constraint maybe it would be better to
       // not change the given constraint and just keep a variable for the new constraint
       tcx.edge_event.constrained_edge->q = p1;
       triangle = &triangle->NeighborAcross(point);
@@ -132,7 +132,7 @@ void Sweep::EdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* triangl
   if (o2 == COLLINEAR) {
     if( triangle->Contains(&eq, p2)) {
       triangle->MarkConstrainedEdge(&eq, p2 );
-      // We are modifying the constraint maybe it would be better to 
+      // We are modifying the constraint maybe it would be better to
       // not change the given constraint and just keep a variable for the new constraint
       tcx.edge_event.constrained_edge->q = p2;
       triangle = &triangle->NeighborAcross(point);
@@ -252,7 +252,7 @@ void Sweep::FillAdvancingFront(SweepContext& tcx, Node& n)
 
 // True if HoleAngle exceeds 90 degrees.
 bool Sweep::LargeHole_DontFill(Node* node) {
-  
+
   Node* nextNode = node->next;
   Node* prevNode = node->prev;
   if (!AngleExceeds90Degrees(node->point, nextNode->point, prevNode->point))
@@ -803,7 +803,8 @@ void Sweep::FlipScanEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle&
 Sweep::~Sweep() {
 
     // Clean up memory
-    for(int i = 0; i < nodes_.size(); i++) {
+    for( unsigned i = 0; i < nodes_.size(); i++ )
+    {
         delete nodes_[i];
     }
 

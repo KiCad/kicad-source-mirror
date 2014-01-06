@@ -451,8 +451,8 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
     wxCHECK_MSG( m_footprintLibTable != NULL, NULL,
                  wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
 
-    wxString   nickname = FROM_UTF8( aFootprintId.GetLibNickname().c_str() );
-    wxString   fpname   = FROM_UTF8( aFootprintId.GetFootprintName().c_str() );
+    wxString   nickname = aFootprintId.GetLibNickname();
+    wxString   fpname   = aFootprintId.GetFootprintName();
 
     if( nickname.size() )
     {

@@ -38,7 +38,7 @@ class MODULE;
  * is a name/value tuple with unique names and optional values.  The names
  * may be iterated alphabetically.
  */
-class PROPERTIES : public std::map< std::string, std::string >
+class PROPERTIES : public std::map< std::string, UTF8 >
 {
     // alphabetical tuple of name and value hereby defined.
 
@@ -53,7 +53,7 @@ public:
      *  exists and aFetchedValue is not NULL.
      * @return bool - true if property is found, else false.
      */
-    bool Value( const char* aName, std::string* aFetchedValue = NULL ) const;
+    bool Value( const char* aName, UTF8* aFetchedValue = NULL ) const;
 };
 
 

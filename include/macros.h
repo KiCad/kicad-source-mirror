@@ -34,22 +34,22 @@ static inline wxString FROM_UTF8( const char* cstring )
 
 /**
  * Function GetChars
- * returns a wxChar* to the actual character data within a wxString, and is
- * helpful for passing strings to wxString::Printf(wxT("%s"), GetChars(wxString) )
+ * returns a wxChar* to the actual wxChar* data within a wxString, and is
+ * helpful for passing strings to wxString::Printf() and wxString::Format().
+ * It can also be passed a UTF8 parameter which will be converted to wxString
+ * by the compiler.
  * <p>
- * wxChar is defined to be
+ * Example:  wxString::Format( wxT( "%s" ), GetChars( UTF( "some text" ) ) );
+ * <p>
+ * When wxWidgets is properly built for KiCad, a const wxChar* points to either:
  * <ul>
- * <li> standard C style char when wxUSE_UNICODE==0 </li>
- * <li> wchar_t when wxUSE_UNICODE==1 (the default). </li>
+ * <li> 32 bit unicode characters on linux/OSX or </li>
+ * <li> 16 bit UTF16 characters on windows. </li>
  * </ul>
- * i.e. it depends on how the wxWidgets library was compiled.
- * ( wxUSE_UNICODE is defined in wxWidgets, inside setup.h.
- * for version >= 2.9 wxUSE_UNICODE is always defined to 1 )
- * There was a period
- * during the development of wxWidgets 2.9 when GetData() was missing, so this
- * function was used to provide insulation from that design change.  It may
- * no longer be needed, and is harmless.  GetData() seems to be an acceptable
- * alternative in all cases now.
+ * Note that you cannot pass 8 bit strings to wxString::Format() or Printf() so this
+ * is a useful conversion function to wxChar*, which is needed by wxString::Format().
+ *
+ * @return const wxChar* - a pointer to the UNICODE or UTF16 (on windows) text.
  */
 static inline const wxChar* GetChars( const wxString& s )
 {

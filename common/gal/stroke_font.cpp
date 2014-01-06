@@ -147,12 +147,13 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLY
 }
 
 
-void STROKE_FONT::Draw( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle )
+void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle )
 {
     // Context needs to be saved before any transformations
     m_gal->Save();
 
     m_gal->Translate( aPosition );
+    m_gal->Rotate( -aRotationAngle );
 
     // Single line height
     int lineHeight = getInterline();
@@ -177,8 +178,6 @@ void STROKE_FONT::Draw( const wxString& aText, const VECTOR2D& aPosition, double
         break;
     }
 
-    m_gal->Rotate( -aRotationAngle );
-
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
 
@@ -193,7 +192,7 @@ void STROKE_FONT::Draw( const wxString& aText, const VECTOR2D& aPosition, double
     {
         size_t length = newlinePos - begin;
 
-        drawSingleLineText( aText.Mid( begin, length ) );
+        drawSingleLineText( aText.substr( begin, length ) );
         m_gal->Translate( VECTOR2D( 0.0, lineHeight ) );
 
         begin = newlinePos + 1;
@@ -201,20 +200,20 @@ void STROKE_FONT::Draw( const wxString& aText, const VECTOR2D& aPosition, double
     }
 
     // Draw the last (or the only one) line
-    if( !aText.IsEmpty() )
-        drawSingleLineText( aText.Mid( begin ) );
+    if( !aText.empty() )
+        drawSingleLineText( aText.substr( begin ) );
 
     m_gal->Restore();
 }
 
 
-void STROKE_FONT::drawSingleLineText( const wxString& aText )
+void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 {
     // By default the overbar is turned off
     m_overbar = false;
 
-    double xOffset;
-    VECTOR2D glyphSize( m_glyphSize );
+    double      xOffset;
+    VECTOR2D    glyphSize( m_glyphSize );
 
     // Compute the text size
     VECTOR2D textSize = computeTextSize( aText );
@@ -255,12 +254,12 @@ void STROKE_FONT::drawSingleLineText( const wxString& aText )
         xOffset = 0.0;
     }
 
-    for( wxString::const_iterator chIt = aText.begin(); chIt != aText.end(); ++chIt )
+    for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
     {
         // Toggle overbar
         if( *chIt == '~' )
         {
-            if( ++chIt == aText.end() )
+            if( ++chIt >= end )
                 break;
 
             if( *chIt != '~' )      // It was a single tilda, it toggles overbar
@@ -275,13 +274,14 @@ void STROKE_FONT::drawSingleLineText( const wxString& aText )
             dd = '?' - ' ';
 
         GLYPH& glyph = m_glyphs[dd];
-        BOX2D& bbox = m_glyphBoundingBoxes[dd];
+        BOX2D& bbox  = m_glyphBoundingBoxes[dd];
 
         if( m_overbar )
         {
             VECTOR2D startOverbar( xOffset, -getInterline() * OVERBAR_HEIGHT );
             VECTOR2D endOverbar( xOffset + glyphSize.x * bbox.GetEnd().x,
                                  -getInterline() * OVERBAR_HEIGHT );
+
             m_gal->DrawLine( startOverbar, endOverbar );
         }
 
@@ -318,25 +318,25 @@ void STROKE_FONT::drawSingleLineText( const wxString& aText )
 }
 
 
-VECTOR2D STROKE_FONT::computeTextSize( const wxString& aText ) const
+VECTOR2D STROKE_FONT::computeTextSize( const UTF8& aText ) const
 {
     VECTOR2D result = VECTOR2D( 0.0, m_glyphSize.y );
 
-    for( wxString::const_iterator chIt = aText.begin(); chIt != aText.end(); ++chIt )
+    for( UTF8::uni_iter it = aText.ubegin(), end = aText.uend(); it < end; ++it )
     {
-        wxASSERT_MSG( *chIt != '\n',
+        wxASSERT_MSG( *it != '\n',
                       wxT( "This function is intended to work with single line strings" ) );
 
         // If it is double tilda, then it is displayed as a single tilda
         // If it is single tilda, then it is toggling overbar, so we need to skip it
-        if( *chIt == '~' )
+        if( *it == '~' )
         {
-            if( ++chIt == aText.end() )
+            if( ++it >= end )
                 break;
         }
 
         // Index in the bounding boxes table
-        unsigned dd = *chIt - ' ';
+        unsigned dd = *it - ' ';
 
         if( dd >= m_glyphBoundingBoxes.size() || dd < 0 )
             dd = '?' - ' ';

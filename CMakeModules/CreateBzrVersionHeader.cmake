@@ -30,8 +30,15 @@ macro( create_bzr_version_header )
         set( _Bazaar_SAVED_LC_ALL "$ENV{LC_ALL}" )
         set( ENV{LC_ALL} C )
 
+        # Get the tree revison
         execute_process( COMMAND
-                         ${Bazaar_EXECUTABLE} log -r-1 ${PROJECT_SOURCE_DIR}
+                         ${Bazaar_EXECUTABLE} revno --tree ${PROJECT_SOURCE_DIR}
+                         OUTPUT_VARIABLE _bazaar_TREE_DATE
+                         OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+        # Get more info about that revision
+        execute_process( COMMAND
+                         ${Bazaar_EXECUTABLE} log -r${_bazaar_TREE_DATE} ${PROJECT_SOURCE_DIR}
                          OUTPUT_VARIABLE _bazaar_LAST_CHANGE_LOG
                          ERROR_VARIABLE _bazaar_log_error
                          RESULT_VARIABLE _bazaar_log_result

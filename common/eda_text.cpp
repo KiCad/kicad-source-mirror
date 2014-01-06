@@ -295,7 +295,7 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
 
 
 void EDA_TEXT::GetPositionsOfLinesOfMultilineText(
-        std::vector<wxPoint>& aPositions, int aLineCount )
+        std::vector<wxPoint>& aPositions, int aLineCount ) const
 {
     wxPoint        pos  = m_Pos;  // Position of first line of the
                                   // multiline text according to
