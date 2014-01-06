@@ -40,6 +40,8 @@ set( PREFIX ${DOWNLOAD_DIR}/pixman )
 if (APPLE) 
     if( CMAKE_OSX_ARCHITECTURES )
         set(PIXMAN_CPPFLAGS "CFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -fno-common -mmacosx-version-min=10.5")
+    else()
+        set(PIXMAN_CPPFLAGS "CFLAGS=-fno-common -mmacosx-version-min=10.5")
     endif( CMAKE_OSX_ARCHITECTURES )
 endif(APPLE)
 

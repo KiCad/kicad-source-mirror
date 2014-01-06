@@ -170,8 +170,8 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 
     if( APPLE )
-        set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__" )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__" )
+        set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
     endif()
 
 endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
