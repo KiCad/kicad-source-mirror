@@ -45,10 +45,10 @@
 
 //use_lines: Enables line clipping. Adds a very minor cost to performance.
 //#define use_lines
-  
+
 //use_deprecated: Enables support for the obsolete OffsetPaths() function
 //which has been replace with the ClipperOffset class.
-#define use_deprecated  
+#define use_deprecated
 
 #include <vector>
 #include <set>
@@ -92,7 +92,7 @@ struct IntPoint {
   }
   friend inline bool operator!= (const IntPoint& a, const IntPoint& b)
   {
-    return a.X != b.X  || a.Y != b.Y; 
+    return a.X != b.X  || a.Y != b.Y;
   }
 };
 //------------------------------------------------------------------------------
@@ -130,8 +130,8 @@ enum EndType {etClosedPolygon, etClosedLine, etOpenButt, etOpenSquare, etOpenRou
 class PolyNode;
 typedef std::vector< PolyNode* > PolyNodes;
 
-class PolyNode 
-{ 
+class PolyNode
+{
 public:
     PolyNode();
     Path Contour;
@@ -149,11 +149,11 @@ private:
     PolyNode* GetNextSiblingUp() const;
     void AddChild(PolyNode& child);
     friend class Clipper; //to access Index
-    friend class ClipperOffset; 
+    friend class ClipperOffset;
 };
 
 class PolyTree: public PolyNode
-{ 
+{
 public:
     ~PolyTree(){Clear();};
     PolyNode* GetFirst() const;
@@ -284,10 +284,10 @@ private:
   PolyFillType     m_ClipFillType;
   PolyFillType     m_SubjFillType;
   bool             m_ReverseOutput;
-  bool             m_UsingPolyTree; 
+  bool             m_UsingPolyTree;
   bool             m_StrictSimple;
 #ifdef use_xyz
-  TZFillCallback   m_ZFill; //custom callback 
+  TZFillCallback   m_ZFill; //custom callback
 #endif
   void SetWindingCount(TEdge& edge);
   bool IsEvenOddFillType(const TEdge& edge) const;
@@ -347,7 +347,7 @@ private:
 };
 //------------------------------------------------------------------------------
 
-class ClipperOffset 
+class ClipperOffset
 {
 public:
   ClipperOffset(double miterLimit = 2.0, double roundPrecision = 0.25);
