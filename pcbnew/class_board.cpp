@@ -867,26 +867,41 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
         break;
 
     case PCB_ZONE_AREA_T:    // this one uses a vector
+    {
+        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( aBoardItem );
+
         // find the item in the vector, then delete then erase it.
-        for( unsigned i = 0; i<m_ZoneDescriptorList.size(); ++i )
+        for( unsigned i = 0; i < m_ZoneDescriptorList.size(); ++i )
         {
-            if( m_ZoneDescriptorList[i] == (ZONE_CONTAINER*) aBoardItem )
+            if( m_ZoneDescriptorList[i] == zone )
             {
                 m_ZoneDescriptorList.erase( m_ZoneDescriptorList.begin() + i );
                 break;
             }
         }
 
-        break;
+        m_ratsnest->GetNets()[zone->GetNet()].RemoveItem( zone );
+    }
+    break;
 
     case PCB_MODULE_T:
+    {
+        MODULE* module = static_cast<MODULE*>( aBoardItem );
         m_Modules.Remove( (MODULE*) aBoardItem );
-        break;
+
+        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+            m_ratsnest->GetNets()[pad->GetNet()].RemoveItem( pad );
+    }
+    break;
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
-        m_Track.Remove( (TRACK*) aBoardItem );
-        break;
+    {
+        TRACK* track = static_cast<TRACK*>( aBoardItem );
+        m_Track.Remove( track );
+        m_ratsnest->GetNets()[track->GetNet()].RemoveItem( track );
+    }
+    break;
 
     case PCB_ZONE_T:
         m_Zone.Remove( (SEGZONE*) aBoardItem );

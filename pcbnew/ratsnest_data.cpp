@@ -201,12 +201,18 @@ const RN_NODE_PTR& RN_LINKS::AddNode( int aX, int aY )
 }
 
 
-void RN_LINKS::RemoveNode( const RN_NODE_PTR& aNode )
+bool RN_LINKS::RemoveNode( const RN_NODE_PTR& aNode )
 {
     aNode->DecRefCount(); // TODO use the shared_ptr use_count
 
     if( aNode->GetRefCount() == 0 )
+    {
         m_nodes.erase( aNode );
+
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -270,6 +276,9 @@ void RN_NET::compute()
 
 void RN_NET::clearNode( const RN_NODE_PTR& aNode )
 {
+    if( !m_rnEdges )
+        return;
+
     std::vector<RN_EDGE_PTR>::iterator newEnd;
 
     // Remove all ratsnest edges for associated with the node
@@ -430,75 +439,92 @@ void RN_NET::AddItem( const ZONE_CONTAINER* aZone )
 
 void RN_NET::RemoveItem( const D_PAD* aPad )
 {
-    RN_NODE_PTR& node = m_pads[aPad];
-    if( !node )
-        return;
+    try
+    {
+        RN_NODE_PTR node = m_pads.at( aPad );
 
-    // Remove edges associated with the node
-    clearNode( node );
-    m_links.RemoveNode( node );
+        if( m_links.RemoveNode( node ) )
+            clearNode( node );
 
-    m_pads.erase( aPad );
+        m_pads.erase( aPad );
 
-    m_dirty = true;
+        m_dirty = true;
+    }
+    catch( ... )
+    {
+    }
 }
 
 
 void RN_NET::RemoveItem( const SEGVIA* aVia )
 {
-    RN_NODE_PTR& node = m_vias[aVia];
-    if( !node )
-        return;
+    try
+    {
+        RN_NODE_PTR node = m_vias.at( aVia );
 
-    // Remove edges associated with the node
-    clearNode( node );
-    m_links.RemoveNode( node );
+        if( m_links.RemoveNode( node ) )
+            clearNode( node );
 
-    m_vias.erase( aVia );
+        m_vias.erase( aVia );
 
-    m_dirty = true;
+        m_dirty = true;
+    }
+    catch( ... )
+    {
+    }
 }
 
 
 void RN_NET::RemoveItem( const TRACK* aTrack )
 {
-    RN_EDGE_PTR& edge = m_tracks[aTrack];
-    if( !edge )
-        return;
+    try
+    {
+        RN_EDGE_PTR& edge = m_tracks.at( aTrack );
 
-    // Save nodes, so they can be cleared later
-    const RN_NODE_PTR& aBegin = edge->getSourceNode();
-    const RN_NODE_PTR& aEnd = edge->getTargetNode();
-    m_links.RemoveConnection( edge );
+        // Save nodes, so they can be cleared later
+        RN_NODE_PTR aBegin = edge->getSourceNode();
+        RN_NODE_PTR aEnd = edge->getTargetNode();
+        m_links.RemoveConnection( edge );
 
-    // Remove nodes associated with the edge. It is done in a safe way, there is a check
-    // if nodes are not used by other edges.
-    clearNode( aBegin );
-    clearNode( aEnd );
-    m_links.RemoveNode( aBegin );
-    m_links.RemoveNode( aEnd );
+        // Remove nodes associated with the edge. It is done in a safe way, there is a check
+        // if nodes are not used by other edges.
+        if( m_links.RemoveNode( aBegin ) )
+            clearNode( aBegin );
 
-    m_tracks.erase( aTrack );
+        if( m_links.RemoveNode( aEnd ) )
+            clearNode( aEnd );
 
-    m_dirty = true;
+        m_tracks.erase( aTrack );
+
+        m_dirty = true;
+    }
+    catch( ... )
+    {
+    }
 }
 
 
 void RN_NET::RemoveItem( const ZONE_CONTAINER* aZone )
 {
-    // Remove all subpolygons that make the zone
-    std::deque<RN_POLY>& polygons = m_zonePolygons[aZone];
-    BOOST_FOREACH( RN_POLY& polygon, polygons )
-        m_links.RemoveNode( polygon.GetNode() );
-    polygons.clear();
+    try
+    {
+        // Remove all subpolygons that make the zone
+        std::deque<RN_POLY>& polygons = m_zonePolygons.at( aZone );
+        BOOST_FOREACH( RN_POLY& polygon, polygons )
+            m_links.RemoveNode( polygon.GetNode() );
+        polygons.clear();
 
-    // Remove all connections added by the zone
-    std::deque<RN_EDGE_PTR>& edges = m_zoneConnections[aZone];
-    BOOST_FOREACH( RN_EDGE_PTR& edge, edges )
-        m_links.RemoveConnection( edge );
-    edges.clear();
+        // Remove all connections added by the zone
+        std::deque<RN_EDGE_PTR>& edges = m_zoneConnections.at( aZone );
+        BOOST_FOREACH( RN_EDGE_PTR& edge, edges )
+            m_links.RemoveConnection( edge );
+        edges.clear();
 
-    m_dirty = true;
+        m_dirty = true;
+    }
+    catch( ... )
+    {
+    }
 }
 
 
@@ -832,6 +858,7 @@ void RN_DATA::Recalculate( int aNet )
         // Start with net number 1, as 0 stand for not connected
         for( unsigned int i = 1; i < m_board->GetNetCount(); ++i )
         {
+            // Recompute only nets that require it
             if( m_nets[i].IsDirty() )
                 updateNet( i );
         }
