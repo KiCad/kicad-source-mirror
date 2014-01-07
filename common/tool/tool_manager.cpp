@@ -127,7 +127,6 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
     TOOL_STATE* st = new TOOL_STATE;
 
     st->theTool = aTool;
-    st->idle = true;
     st->pendingWait = false;
     st->pendingContextMenu = false;
     st->cofunc = NULL;
@@ -240,13 +239,9 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
         return false;
     }
 
-    TOOL_STATE* state = m_toolState[aTool];
-
     // If the tool is already active, do not invoke it again
-    if( state->idle == false )
+    if( isActive( aTool ) )
         return false;
-
-    state->idle = false;
 
     aTool->Reset( TOOL_INTERACTIVE::RUN );
 
@@ -417,19 +412,18 @@ bool TOOL_MANAGER::dispatchActivation( TOOL_EVENT& aEvent )
 
 void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
-    // Find the tool to be deactivated
-    std::deque<TOOL_ID>::iterator it, it_end;
+    std::deque<TOOL_ID>::iterator it, itEnd;
 
-    for( it = m_activeTools.begin(), it_end = m_activeTools.end(); it != it_end; ++it )
+    // Find the tool and deactivate it
+    for( it = m_activeTools.begin(), itEnd = m_activeTools.end(); it != itEnd; ++it )
     {
         if( aState == m_toolIdIndex[*it] )
+        {
+            m_activeTools.erase( it );
             break;
+        }
     }
 
-    if( it != m_activeTools.end() )
-        m_activeTools.erase( it );
-
-    aState->idle = true;
     delete aState->cofunc;
     aState->cofunc = NULL;
 }
@@ -525,5 +519,6 @@ bool TOOL_MANAGER::isActive( TOOL_BASE* aTool )
     if( !isRegistered( aTool ) )
         return false;
 
-    return !m_toolState[aTool]->idle;
+    // Just check if the tool is on the active tools stack
+    return std::find( m_activeTools.begin(), m_activeTools.end(), aTool->GetId() ) != m_activeTools.end();
 }
