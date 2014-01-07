@@ -334,16 +334,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     SetBoard( new BOARD() );
 
-    if( GetGalCanvas() )
-    {
-        ViewReloadBoard( m_Pcb );
-
-        // update the tool manager with the new board and its view.
-        if( m_toolManager )
-            m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                           GetGalCanvas()->GetViewControls(), this );
-    }
-
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
 
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -543,8 +533,11 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
         // update the tool manager with the new board and its view.
         if( m_toolManager )
+        {
             m_toolManager->SetEnvironment( aBoard, GetGalCanvas()->GetView(),
                                            GetGalCanvas()->GetViewControls(), this );
+            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+        }
     }
 }
 
@@ -749,10 +742,14 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
 
-    m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                    GetGalCanvas()->GetViewControls(), this );
-
     ViewReloadBoard( m_Pcb );
+
+    if( aEnable )
+    {
+        m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
+                                       GetGalCanvas()->GetViewControls(), this );
+        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+    }
 }
 
 
