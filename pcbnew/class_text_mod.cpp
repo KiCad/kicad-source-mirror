@@ -415,6 +415,18 @@ EDA_ITEM* TEXTE_MODULE::Clone() const
 }
 
 
+const BOX2I TEXTE_MODULE::ViewBBox() const
+{
+    double   angle = GetDrawRotation();
+    EDA_RECT text_area = GetTextBox( -1, -1 );
+
+    if( angle )
+        text_area = text_area.GetBoundingBoxRotated( m_Pos, angle );
+
+    return BOX2I( text_area.GetPosition(), text_area.GetSize() );
+}
+
+
 void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     switch( m_Type )
