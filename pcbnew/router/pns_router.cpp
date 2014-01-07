@@ -263,7 +263,7 @@ void PNS_ROUTER::SyncWorld()
         if( type == PCB_TRACE_T )
             item = syncTrack( t );
         else if( type == PCB_VIA_T )
-            item = syncVia( static_cast <SEGVIA*>(t) );
+            item = syncVia( static_cast<SEGVIA*>( t ) );
 
         if( item )
             m_world->Add( item );
@@ -754,13 +754,12 @@ bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 
 void PNS_ROUTER::StopRouting()
 {
+    // Update the ratsnest with new changes
+    m_board->GetRatsnest()->Recalculate( m_currentNet );
+
     if( !RoutingInProgress() )
         return;
 
-    // highlightCurrent(false);
-
-    // Update the ratsnest
-    m_board->GetRatsnest()->Recalculate( m_currentNet );
     EraseView();
 
     m_state = IDLE;

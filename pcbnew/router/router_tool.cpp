@@ -369,8 +369,7 @@ void ROUTER_TOOL::startRouting()
         }
     }
 
-    if( m_router->RoutingInProgress() )
-        m_router->StopRouting();
+    m_router->StopRouting();
 
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
