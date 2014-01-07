@@ -47,7 +47,7 @@
 
 #include <class_board.h>
 #include <class_board_item.h>
-#include <class_pad.h>
+#include <class_module.h>
 #include <class_track.h>
 #include <ratsnest_data.h>
 #include <layers_id_colors_and_visibility.h>
@@ -248,11 +248,15 @@ void PNS_ROUTER::SyncWorld()
     m_world->SetMaxClearance( 1000000 );    // m_board->GetBiggestClearanceValue());
     pads = m_board->GetPads();
 
-    BOOST_FOREACH( D_PAD * pad, pads ) {
-        PNS_ITEM* solid = syncPad( pad );
+    for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
+    {
+        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+        {
+            PNS_ITEM* solid = syncPad( pad );
 
-        if( solid )
-            m_world->Add( solid );
+            if( solid )
+                m_world->Add( solid );
+        }
     }
 
     for( TRACK* t = m_board->m_Track; t; t = t->Next() )
