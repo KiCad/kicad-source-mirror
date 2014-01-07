@@ -278,7 +278,7 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
     else
     {
         m_endItem = NULL;
-        m_endSnapPoint = p;
+        m_endSnapPoint = getView()->ToWorld( ctls->GetCursorPosition() );
         ctls->ForceCursorPosition( false );
     }
 
@@ -407,6 +407,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     // Restore the default settings
     ctls->SetAutoPan( false );
     ctls->ShowCursor( false );
+    ctls->ForceCursorPosition( false );
 
     return 0;
 }
