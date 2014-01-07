@@ -28,8 +28,10 @@
 #include <wxPcbStruct.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
+#include <ratsnest_data.h>
 #include <confirm.h>
 #include <cassert>
+#include <boost/foreach.hpp>
 
 #include "common_actions.h"
 #include "selection_tool.h"
@@ -88,6 +90,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
     controls->SetSnapping( true );
     controls->SetAutoPan( true );
+    controls->ForceCursorPosition( false );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -115,6 +118,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             else if( evt->IsAction( &COMMON_ACTIONS::remove ) )
             {
                 Remove( aEvent );
+
                 break;
             }
         }
@@ -124,12 +128,15 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             if( m_dragging )
             {
                 // Drag items to the current cursor position
-                VECTOR2D movement = ( evt->Position() - dragPosition );
+                VECTOR2D movement = ( getView()->ToWorld( controls->GetCursorPosition() ) -
+                                      dragPosition );
                 for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
                 {
                     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( i ) );
                     item->Move( wxPoint( movement.x, movement.y ) );
                 }
+
+                updateRatsnest( true );
             }
             else
             {
@@ -141,7 +148,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             }
 
             selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
-            dragPosition = evt->Position();
+            dragPosition = getView()->ToWorld( controls->GetCursorPosition() );
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
@@ -161,6 +168,10 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
         // Changes are applied, so update the items
         selection.group->ItemsViewUpdate( m_updateFlag );
     }
+
+    RN_DATA* ratsnest = getModel<BOARD>( PCB_T )->GetRatsnest();
+    ratsnest->ClearSimple();
+    ratsnest->Recalculate();
 
     controls->ShowCursor( false );
     controls->SetSnapping( false );
@@ -195,6 +206,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
     }
 
     setTransitions();
+    updateRatsnest( true );
 
     return 0;
 }
@@ -225,6 +237,7 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
     setTransitions();
+    updateRatsnest( true );
 
     return 0;
 }
@@ -255,6 +268,7 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
     setTransitions();
+    updateRatsnest( true );
 
     return 0;
 }
@@ -284,10 +298,11 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
 
     // Rebuild list of pads and nets if necessary
     BOARD* board = getModel<BOARD>( PCB_T );
-    if( !( board->GetStatus() & NET_CODES_OK ) )
+    if( !( board->m_Status_Pcb & NET_CODES_OK ) )
         board->BuildListOfNets();
 
     setTransitions();
+    board->GetRatsnest()->Recalculate();
 
     return 0;
 }
@@ -348,4 +363,33 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Flip,       COMMON_ACTIONS::flip.MakeEvent() );
     Go( &EDIT_TOOL::Remove,     COMMON_ACTIONS::remove.MakeEvent() );
     Go( &EDIT_TOOL::Properties, COMMON_ACTIONS::properties.MakeEvent() );
+}
+
+
+void EDIT_TOOL::updateRatsnest( bool aRedraw )
+{
+    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
+    RN_DATA* ratsnest = getModel<BOARD>( PCB_T )->GetRatsnest();
+
+    ratsnest->ClearSimple();
+    for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( i ) );
+
+        if( item->Type() == PCB_PAD_T || item->Type() == PCB_TRACE_T ||
+                item->Type() == PCB_VIA_T || item->Type() == PCB_ZONE_AREA_T )
+        {
+            ratsnest->Update( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+
+            if( aRedraw )
+                ratsnest->AddSimple( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+        }
+        else if( item->Type() == PCB_MODULE_T )
+        {
+            ratsnest->Update( static_cast<MODULE*>( item ) );
+
+            if( aRedraw )
+                ratsnest->AddSimple( static_cast<MODULE*>( item ) );
+        }
+    }
 }

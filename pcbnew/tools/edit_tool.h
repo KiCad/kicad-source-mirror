@@ -113,6 +113,8 @@ private:
         if( m_updateFlag < aFlag )
             m_updateFlag = aFlag;
     }
+
+    void updateRatsnest( bool aRedraw );
 };
 
 #endif
