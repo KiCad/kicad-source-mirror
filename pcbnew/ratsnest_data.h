@@ -129,8 +129,9 @@ public:
      * Function RemoveNode()
      * Removes a node described by a given node pointer.
      * @param aNode is a pointer to node to be removed.
+     * @return True if node was removed, false if there were other references, so it was kept.
      */
-    void RemoveNode( const RN_NODE_PTR& aNode );
+    bool RemoveNode( const RN_NODE_PTR& aNode );
 
     /**
      * Function GetNodes()
@@ -577,7 +578,7 @@ public:
      * Returns ratsnest grouped by net numbers.
      * @return Vector of ratsnest grouped by net numbers.
      */
-    const std::vector<RN_NET>& GetNets() const
+    std::vector<RN_NET>& GetNets()
     {
         return m_nets;
     }
