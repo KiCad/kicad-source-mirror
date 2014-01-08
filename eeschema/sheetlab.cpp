@@ -37,7 +37,6 @@
 #include <base_units.h>
 
 #include <general.h>
-#include <protos.h>
 #include <sch_sheet.h>
 #include <dialog_helpers.h>
 

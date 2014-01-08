@@ -43,7 +43,6 @@
 #include <pcbnew.h>
 #include <module_editor_frame.h>
 #include <pcbplot.h>
-#include <protos.h>
 
 #include <wx/overlay.h>
 

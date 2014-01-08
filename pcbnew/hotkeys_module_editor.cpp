@@ -12,7 +12,6 @@
 #include <class_board_design_settings.h>
 
 #include <hotkeys.h>
-#include <protos.h>
 
 /* How to add a new hotkey:
  * See hotkeys.cpp

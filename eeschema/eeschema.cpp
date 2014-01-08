@@ -39,8 +39,7 @@
 
 #include <general.h>
 #include <class_libentry.h>
-#include <sch_junction.h>
-#include <protos.h>
+//#include <sch_junction.h>
 #include <hotkeys.h>
 #include <dialogs/dialog_color_config.h>
 #include <transform.h>
@@ -138,11 +137,7 @@ bool EDA_APP::OnInit()
     SetTopWindow( frame );
     frame->Show( true );
 
-    if( CreateServer( frame, KICAD_SCH_PORT_SERVICE_NUMBER ) )
-    {
-        // RemoteCommand is in controle.cpp and is called when Pcbnew sends Eeschema a command.
-        SetupServerFunction( RemoteCommand );
-    }
+    CreateServer( frame, KICAD_SCH_PORT_SERVICE_NUMBER );
 
     frame->Zoom_Automatique( true );
 

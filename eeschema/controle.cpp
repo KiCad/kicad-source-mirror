@@ -38,7 +38,6 @@
 #include <eeschema_id.h>
 #include <general.h>
 #include <hotkeys.h>
-#include <protos.h>
 #include <libeditframe.h>
 #include <viewlib_frame.h>
 #include <lib_draw_item.h>

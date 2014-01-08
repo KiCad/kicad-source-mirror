@@ -33,7 +33,6 @@
 #include <eeschema_id.h>
 
 #include <general.h>
-#include <protos.h>
 #include <hotkeys.h>
 #include <class_library.h>
 #include <viewlib_frame.h>

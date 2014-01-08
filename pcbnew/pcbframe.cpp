@@ -43,7 +43,6 @@
 #include <fp_lib_table.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <pcbnew_id.h>
 #include <drc_stuff.h>
 #include <layer_widget.h>

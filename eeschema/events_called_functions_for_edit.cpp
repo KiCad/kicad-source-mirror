@@ -8,8 +8,6 @@
 #include <general.h>
 #include <kicad_device_context.h>
 #include <wxEeschemaStruct.h>
-
-#include <protos.h>
 #include <sch_component.h>
 #include <sch_text.h>
 

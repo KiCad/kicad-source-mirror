@@ -40,7 +40,6 @@
 #include <msgpanel.h>
 
 #include <general.h>
-#include <protos.h>
 #include <libeditframe.h>
 #include <class_libentry.h>
 #include <lib_pin.h>

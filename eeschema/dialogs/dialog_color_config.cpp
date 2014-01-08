@@ -8,7 +8,6 @@
 #include <class_drawpanel.h>
 
 #include <general.h>
-#include <protos.h>
 
 #include <dialog_color_config.h>
 #include <layers_id_colors_and_visibility.h>

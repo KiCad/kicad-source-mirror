@@ -227,10 +227,7 @@ bool EDA_APP::OnInit()
     SetTopWindow( frame );
     frame->Show( true );
 
-    if( CreateServer( frame, KICAD_PCB_PORT_SERVICE_NUMBER ) )
-    {
-        SetupServerFunction( RemoteCommand );
-    }
+    CreateServer( frame, KICAD_PCB_PORT_SERVICE_NUMBER );
 
     frame->Zoom_Automatique( true );
 
