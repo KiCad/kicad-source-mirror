@@ -17,7 +17,8 @@ wxString GetBuildVersion()
 {
     wxString msg = wxString::Format(
         wxT( "%s-%s" ),
-        wxT( KICAD_BUILD_VERSION )
+        wxT( KICAD_BUILD_VERSION ),
+        wxT( KICAD_REPO_NAME )
         );
 
     return msg;
