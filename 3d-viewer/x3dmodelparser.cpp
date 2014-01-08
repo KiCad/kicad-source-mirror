@@ -36,8 +36,10 @@
 #include <queue>
 #include <vector>
 
-#include "3d_struct.h"
-#include "modelparsers.h"
+#include <3d_struct.h>
+#include <modelparsers.h>
+#include <xnode.h>
+
 
 X3D_MODEL_PARSER::X3D_MODEL_PARSER( S3D_MASTER* aMaster ) :
     S3D_MODEL_PARSER( aMaster )
@@ -54,13 +56,13 @@ void X3D_MODEL_PARSER::Load( const wxString aFilename )
 
     if( !doc.Load( aFilename ) )
     {
-        wxLogError( wxT( "Error while parsing file <%s>" ), GetChars( aFilename ) );
+        wxLogError( wxT( "Error while parsing file '%s'" ), GetChars( aFilename ) );
         return;
     }
 
     if( doc.GetRoot()->GetName() != wxT( "X3D" ) )
     {
-        wxLogError( wxT( "Filetype is not X3D <%s>" ), GetChars( aFilename ) );
+        wxLogError( wxT( "Filetype is not X3D '%s'" ), GetChars( aFilename ) );
         return;
     }
 
@@ -85,24 +87,25 @@ wxString X3D_MODEL_PARSER::VRML_representation()
 
     for( unsigned i = 0; i < vrml_points.size(); i++ )
     {
-    output += wxT( "Shape {\n"
-                   "  appearance Appearance {\n"
-                   "    material Material {\n" ) +
-              vrml_materials[i] +
-              wxT( "    }\n"
-                   "  }\n"
-                   "  geometry IndexedFaceSet {\n"
-                   "    solid TRUE\n"
-                   "    coord Coordinate {\n"
-                   "      point [\n") +
-              vrml_points[i] +
-              wxT( "      ]\n"
-                   "    }\n"
-                   "    coordIndex [\n" ) +
-              vrml_coord_indexes[i] +
-              wxT( "    ]\n"
-                   "  }\n"
-                   "},\n" );
+        output +=
+            wxT( "Shape {\n"
+                 "  appearance Appearance {\n"
+                 "    material Material {\n" ) +
+            vrml_materials[i] +
+            wxT( "    }\n"
+                 "  }\n"
+                 "  geometry IndexedFaceSet {\n"
+                 "    solid TRUE\n"
+                 "    coord Coordinate {\n"
+                 "      point [\n") +
+            vrml_points[i] +
+            wxT( "      ]\n"
+                 "    }\n"
+                 "    coordIndex [\n" ) +
+            vrml_coord_indexes[i] +
+            wxT( "    ]\n"
+                 "  }\n"
+                 "},\n" );
     }
 
     return output;
@@ -115,6 +118,7 @@ void X3D_MODEL_PARSER::GetChildsByName( wxXmlNode* aParent,
 {
     // Breadth-first search (BFS)
     std::queue< wxXmlNode* > found;
+
     found.push( aParent );
 
     while( !found.empty() )
@@ -140,7 +144,7 @@ void X3D_MODEL_PARSER::GetChildsByName( wxXmlNode* aParent,
 
 void X3D_MODEL_PARSER::GetNodeProperties( wxXmlNode* aNode, PROPERTY_MAP& aProps )
 {
-    wxXmlProperty *prop;
+    wxXmlAttribute* prop;
 
     for( prop = aNode->GetAttributes();
          prop != NULL;
@@ -167,6 +171,7 @@ void X3D_MODEL_PARSER::readTransform( wxXmlNode* aTransformNode )
     childnodes.clear();
 
     PROPERTY_MAP properties;
+
     GetNodeProperties( aTransformNode, properties );
     GetChildsByName( aTransformNode, wxT("IndexedFaceSet"), childnodes );
 
@@ -252,7 +257,7 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
         wxString vrml_material;
         PROPERTY_MAP::const_iterator p = ++properties.begin(); // skip DEF
 
-        for(;p != properties.end();p++)
+        for( ; p != properties.end(); p++ )
         {
             vrml_material.Append( p->first + wxT( " " ) + p->second + wxT( "\n" ) );
         }
@@ -270,8 +275,8 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
         {
             if( material->m_Name == mat_name )
             {
-
                 wxString vrml_material;
+
                 vrml_material.Append( wxString::Format( wxT( "specularColor %f %f %f\n" ),
                                                              material->m_SpecularColor.x,
                                                              material->m_SpecularColor.y,
@@ -457,6 +462,7 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
     while( index_tokens.HasMoreTokens() )
     {
         long index = 0;
+
         index_tokens.GetNextToken().ToLong( &index );
 
         // -1 marks the end of polygon

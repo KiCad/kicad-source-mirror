@@ -480,7 +480,12 @@ static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
     " (release,"
 #endif
     __WX_BO_UNICODE __ABI_VERSION __BO_COMPILER __WX_BO_STL
-    __WX_BO_WXWIN_COMPAT_2_6 __WX_BO_WXWIN_COMPAT_2_8 ")"
+
+#if !wxCHECK_VERSION( 3, 0, 0 )
+    __WX_BO_WXWIN_COMPAT_2_6
+#endif
+
+    __WX_BO_WXWIN_COMPAT_2_8 ")"
     ;
 }
 

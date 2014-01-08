@@ -495,7 +495,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
 void PCB_EDIT_FRAME::SaveMacros()
 {
     wxXmlDocument xml;
-    wxXmlProperty *macrosProp, *hkProp, *xProp, *yProp;
+    wxXmlAttribute *macrosProp, *hkProp, *xProp, *yProp;
     wxString str, hkStr, xStr, yStr;
 
     wxFileName fn = GetBoard()->GetFileName();
@@ -513,7 +513,7 @@ void PCB_EDIT_FRAME::SaveMacros()
     for( int number = 9; number >= 0; number-- )
     {
         str.Printf( wxT( "%d" ), number );
-        macrosProp = new wxXmlProperty( wxT( "number" ), str );
+        macrosProp = new wxXmlAttribute( wxT( "number" ), str );
 
             XNODE * macrosNode = new XNODE( rootNode, wxXML_ELEMENT_NODE,
                                             wxT( "macros" ), wxEmptyString,
@@ -527,9 +527,9 @@ void PCB_EDIT_FRAME::SaveMacros()
             xStr.Printf( wxT( "%d" ), i->m_Position.x );
             yStr.Printf( wxT( "%d" ), i->m_Position.y );
 
-            yProp = new wxXmlProperty( wxT( "y" ), yStr );
-            xProp = new wxXmlProperty( wxT( "x" ), xStr, yProp );
-            hkProp = new wxXmlProperty( wxT( "hkcode" ), hkStr, xProp );
+            yProp  = new wxXmlAttribute( wxT( "y" ), yStr );
+            xProp  = new wxXmlAttribute( wxT( "x" ), xStr, yProp );
+            hkProp = new wxXmlAttribute( wxT( "hkcode" ), hkStr, xProp );
 
             new XNODE( macrosNode, wxXML_ELEMENT_NODE, wxT( "hotkey" ),
                        wxEmptyString, hkProp );
