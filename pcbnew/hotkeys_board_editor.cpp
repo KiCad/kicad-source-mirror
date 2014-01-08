@@ -39,7 +39,6 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
-#include <protos.h>
 
 /* How to add a new hotkey:
  * see hotkeys.cpp

@@ -32,7 +32,6 @@
 
 #include <netlist.h>
 #include <class_netlist_object.h>
-#include <protos.h>
 #include <class_library.h>
 #include <lib_pin.h>
 #include <sch_junction.h>

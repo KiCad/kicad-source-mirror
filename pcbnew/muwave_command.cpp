@@ -11,8 +11,6 @@
 #include <pcbnew_id.h>
 #include <kicad_device_context.h>
 
-#include <protos.h>
-
 
 /* Handle microwave commands.
  */

@@ -44,7 +44,6 @@
 #include <drc_stuff.h>
 #include <drag.h>
 #include <pcbnew_id.h>
-#include <protos.h>
 
 
 static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,

@@ -588,6 +588,17 @@ public:
      */
     virtual BASE_SCREEN* GetScreen() const  { return m_currentScreen; }
 
+    /**
+     * Execute a remote command send via a socket to the application,
+     * port KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242)
+     * It called by EDA_DRAW_FRAME::OnSockRequest().
+     * this is a virtual function becuse the actual commands depends on the
+     * application.
+     * the basic function do nothing
+     * @param cmdline = received command from socket
+     */
+    virtual void ExecuteRemoteCommand( const char* cmdline ){}
+
     void OnMenuOpen( wxMenuEvent& event );
     void  OnMouseEvent( wxMouseEvent& event );
 

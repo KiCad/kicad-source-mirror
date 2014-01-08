@@ -42,7 +42,6 @@
 #include <base_units.h>
 
 #include <wx/dcbuffer.h>
-#include <protos.h>
 
 #include <class_board.h>
 #include <class_module.h>

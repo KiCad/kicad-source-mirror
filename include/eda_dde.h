@@ -23,6 +23,5 @@
 
 wxSocketServer* CreateServer( wxWindow * window, int port, bool local = true );
 bool SendCommand( int port, const char* cmdline );
-void SetupServerFunction( void (*remotefct) (const char* remotecmd) );
 
 #endif    // EDA_DDE_H_

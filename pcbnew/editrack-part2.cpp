@@ -43,7 +43,6 @@
 
 #include <pcbnew.h>
 #include <drc_stuff.h>
-#include <protos.h>
 
 
 bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
@@ -200,7 +199,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
      * which also is on the via (will change when moving mouse)
      */
     track->SetEnd( via->GetStart() );
-    track->SetStart( via->GetStart() ); 
+    track->SetStart( via->GetStart() );
 
     g_CurrentTrackList.PushBack( track );
 
@@ -312,17 +311,3 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
     }
 }
 
-
-void PCB_EDIT_FRAME::HighlightUnconnectedPads( wxDC* DC )
-{
-    for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
-    {
-        RATSNEST_ITEM* net = &GetBoard()->m_FullRatsnest[ii];
-
-        if( (net->m_Status & CH_ACTIF) == 0 )
-            continue;
-
-        net->m_PadStart->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
-        net->m_PadEnd->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
-    }
-}
