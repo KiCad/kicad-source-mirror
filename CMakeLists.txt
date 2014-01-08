@@ -56,6 +56,10 @@ mark_as_advanced( KICAD_SKIP_BOOST )    # Normal builders should build Boost.
 
 option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
 
+# This can be set to a custom name to brag about a particular branch in the "About" dialog:
+set( KICAD_REPO_NAME "product" CACHE STRING "Name of the tree from which this build came." )
+
+
 # All CMake downloads go here.  Suggested is up in the source tree, not in the build dir where they
 # would have to be downloaded over and over again.  The default is to choose a directory that is
 # hidden on linux (starts with a '.') because there is a way to exclude this directory when grepping
