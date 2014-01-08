@@ -23,11 +23,6 @@ option( USE_WX_GRAPHICS_CONTEXT
 option( USE_WX_OVERLAY
     "Use wxOverlay: Always ON for MAC ( default OFF). Warning, this is experimental" )
 
-#One of these 2 option *must* be set to ON:
-option( KICAD_STABLE_VERSION
-    "set this option to ON to build the stable version of KICAD. mainly used to set version ID (default OFF)"
-    )
-
 option( KICAD_SCRIPTING
     "set this option ON to build the scripting support inside kicad binaries"
     )
@@ -44,21 +39,22 @@ option( KICAD_BUILD_STATIC
     "Builds Kicad and all libraries static (except wx-widgets)"
     )
 
+# WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
+# as it is known to work with KiCad.  Other versions may contain bugs that may result
+# in KiCad errors.
+option( KICAD_SKIP_BOOST
+    "Skip building downloaded Boost library components, use Boost from your system."
+    )
+mark_as_advanced( KICAD_SKIP_BOOST )    # Normal builders should build Boost.
+
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
 # when not defined by user, the default is python.exe under Windows and python2 for others
 # python binary file should be is exec path.
 
-
 option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." OFF )
-
-
-# Set version option (stable or testing)
-if( KICAD_STABLE_VERSION)
-    add_definitions( -DKICAD_STABLE_VERSION )
-    message( STATUS "Building stable version of KiCad" )
-endif()
 
 # All CMake downloads go here.  Suggested is up in the source tree, not in the build dir where they
 # would have to be downloaded over and over again.  The default is to choose a directory that is
@@ -317,7 +313,21 @@ check_find_package_result(CAIRO_FOUND "Cairo")
 
 # Download boost and possibly build parts of it
 #################################################
-include( download_boost )
+if( KICAD_SKIP_BOOST )
+    find_package( Boost 1.54.0 REQUIRED COMPONENTS context date_time filesystem iostreams locale
+                                                   program_options regex system thread )
+
+    if( NOT Boost_FOUND )
+        message( FATAL_ERROR "Boost 1.54+ libraries are required." )
+    endif()
+
+    message( WARNING "
+WARNING: You decided to skip building boost library.
+KiCad developers strongly advise you to build the bundled boost library, as it is known to work with KiCad.
+Other versions may contain bugs that may result in KiCad errors." )
+else()
+    include( download_boost )
+endif()
 
 ##########################
 # Find wxWidgets library #
