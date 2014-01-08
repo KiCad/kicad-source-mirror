@@ -9,13 +9,6 @@
 #   define KICAD_BUILD_VERSION "(2013-jul-14)"
 #endif
 
-
-#if defined KICAD_STABLE_VERSION
-#   define VERSION_STABILITY  "stable"
-#else
-#   define VERSION_STABILITY  "product"
-#endif
-
 /**
  * Function GetBuildVersion
  * Return the build date and version
@@ -24,8 +17,7 @@ wxString GetBuildVersion()
 {
     wxString msg = wxString::Format(
         wxT( "%s-%s" ),
-        wxT( KICAD_BUILD_VERSION ),
-        wxT( VERSION_STABILITY )
+        wxT( KICAD_BUILD_VERSION )
         );
 
     return msg;
