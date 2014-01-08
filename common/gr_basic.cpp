@@ -396,15 +396,22 @@ void GRSetBrush( wxDC* DC, EDA_COLOR_T Color, bool fill )
        || s_DC_lastbrushfill  != fill
        || s_DC_lastDC != DC  )
     {
-        wxBrush DrawBrush;
-        DrawBrush.SetColour( MakeColour( Color ) );
+        wxBrush brush;
+
+        brush.SetColour( MakeColour( Color ) );
 
         if( fill )
-            DrawBrush.SetStyle( wxSOLID );
+#if wxCHECK_VERSION( 3, 0, 0 )
+            brush.SetStyle( wxBRUSHSTYLE_SOLID );
         else
-            DrawBrush.SetStyle( wxTRANSPARENT );
+            brush.SetStyle( wxBRUSHSTYLE_TRANSPARENT );
+#else
+            brush.SetStyle( wxSOLID );
+        else
+            brush.SetStyle( wxTRANSPARENT );
+#endif
 
-        DC->SetBrush( DrawBrush );
+        DC->SetBrush( brush );
 
         s_DC_lastbrushcolor = Color;
         s_DC_lastbrushfill  = fill;

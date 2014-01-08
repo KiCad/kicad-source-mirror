@@ -26,7 +26,7 @@
 #include <xnode.h>
 #include <macros.h>
 
-typedef wxXmlProperty   XATTR;
+typedef wxXmlAttribute   XATTR;
 
 
 void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
