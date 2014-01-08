@@ -7,17 +7,9 @@
 class EDA_DRAW_PANEL;
 class EDA_DRAW_FRAME;
 class PICKED_ITEMS_LIST;
-class SCH_EDIT_FRAME;
-class LIB_EDIT_FRAME;
 class CMP_LIBRARY;
-class SCH_COMPONENT;
-class SCH_SCREEN;
 class SCH_ITEM;
 
-
-/****************/
-/* DATABASE.CPP */
-/****************/
 //void DisplayCmpDoc( wxString& Name );
 wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufName );
 
@@ -39,7 +31,8 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 /****************/
 /* EEREDRAW.CPP */
 /****************/
-void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, EDA_COLOR_T Color );
+void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC,
+                         const wxPoint& pos, EDA_COLOR_T Color );
 
 
 /***************/
@@ -80,12 +73,5 @@ CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame );
  * Place the name of the selected component list in BufName
  */
 int GetNameOfPartToLoad( EDA_DRAW_FRAME* frame, CMP_LIBRARY* Lib, wxString& BufName );
-
-
-/****************/
-/* CONTROLE.CPP */
-/****************/
-void RemoteCommand( const char* cmdline );
-
 
 #endif  /* __PROTOS_H__ */

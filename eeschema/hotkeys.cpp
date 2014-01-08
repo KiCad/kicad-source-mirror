@@ -33,7 +33,6 @@
 #include <wxEeschemaStruct.h>
 
 #include <general.h>
-#include <protos.h>
 #include <libeditframe.h>
 #include <class_libentry.h>
 #include <sch_junction.h>

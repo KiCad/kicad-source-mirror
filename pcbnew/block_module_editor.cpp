@@ -43,7 +43,6 @@
 #include <trigo.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 
 #include <class_board.h>
 #include <class_track.h>

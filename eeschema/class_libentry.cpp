@@ -37,7 +37,6 @@
 #include <richio.h>
 
 #include <general.h>
-#include <protos.h>
 #include <template_fieldnames.h>
 #include <transform.h>
 #include <class_library.h>

@@ -32,7 +32,6 @@
 #include <appl_wxstruct.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
-#include <protos.h>
 #include <hotkeys.h>
 #include <pcbnew_id.h>
 

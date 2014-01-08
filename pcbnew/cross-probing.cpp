@@ -22,18 +22,16 @@
 
 #include <collectors.h>
 #include <pcbnew.h>
-#include <protos.h>
 
 
-/**
- * Read a remote command send by Eeschema via a socket,
- * port KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242)
- * @param cmdline = received command from Eeschema
+/* Execute a remote command send by Eeschema via a socket,
+ * port KICAD_PCB_PORT_SERVICE_NUMBER
+ * cmdline = received command from Eeschema
  * Commands are
  * $PART: "reference"   put cursor on component
  * $PIN: "pin name"  $PART: "reference" put cursor on the footprint pin
  */
-void RemoteCommand( const char* cmdline )
+void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 {
     char            line[1024];
     wxString        msg;
@@ -41,8 +39,7 @@ void RemoteCommand( const char* cmdline )
     char*           idcmd;
     char*           text;
     MODULE*         module = 0;
-    PCB_EDIT_FRAME* frame  = (PCB_EDIT_FRAME*)wxGetApp().GetTopWindow();
-    BOARD* pcb             = frame->GetBoard();
+    BOARD* pcb = GetBoard();
     wxPoint         pos;
 
     strncpy( line, cmdline, sizeof(line) - 1 );
@@ -57,14 +54,14 @@ void RemoteCommand( const char* cmdline )
     {
         modName = FROM_UTF8( text );
 
-        module = frame->GetBoard()->FindModuleByReference( modName );
+        module = pcb->FindModuleByReference( modName );
 
         if( module )
             msg.Printf( _( "%s found" ), GetChars( modName ) );
         else
             msg.Printf( _( "%s not found" ), GetChars( modName ) );
 
-        frame->SetStatusText( msg );
+        SetStatusText( msg );
 
         if( module )
             pos = module->GetPosition();
@@ -114,21 +111,21 @@ void RemoteCommand( const char* cmdline )
         else if( pad == NULL )
         {
             msg.Printf( _( "%s pin %s not found" ), GetChars( modName ), GetChars( pinName ) );
-            frame->SetCurItem( module );
+            SetCurItem( module );
         }
         else
         {
             msg.Printf( _( "%s pin %s found" ), GetChars( modName ), GetChars( pinName ) );
-            frame->SetCurItem( pad );
+            SetCurItem( pad );
         }
 
-        frame->SetStatusText( msg );
+        SetStatusText( msg );
     }
 
     if( module )  // if found, center the module on screen, and redraw the screen.
     {
-        frame->SetCrossHairPosition( pos );
-        frame->RedrawScreen( pos, false );
+        SetCrossHairPosition( pos );
+        RedrawScreen( pos, false );
     }
 }
 

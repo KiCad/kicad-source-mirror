@@ -35,15 +35,13 @@
 
 #include <general.h>
 #include <eeschema_id.h>
-#include <protos.h>
 #include <lib_draw_item.h>
 #include <lib_pin.h>
 #include <sch_component.h>
 
 
 /**
- * Function RemoteCommand
- * read a remote command sent by Pcbnew via a socket connection.
+ * Execute a remote command sent by Pcbnew via a socket connection.
  * <p>
  * When user selects a module or pin in Pcbnew, Eeschema shows that same
  * component or pin and moves cursor on the item.  The socket port used
@@ -57,7 +55,7 @@
  * <p>
  * @param cmdline = received command from Pcbnew
  */
-void RemoteCommand( const char* cmdline )
+void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 {
     char     line[1024];
     char*    idcmd;
