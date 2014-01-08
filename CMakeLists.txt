@@ -39,11 +39,13 @@ option( KICAD_BUILD_STATIC
     "Builds Kicad and all libraries static (except wx-widgets)"
     )
 
+# WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
+# as it is known to work with KiCad.  Other versions may contain bugs that may result
+# in KiCad errors.
 option( KICAD_SKIP_BOOST
-    "Skips building the required boost library components.
-    WARNING: KiCad developers strongly advise you to build the bundled boost library, as it is
-    known to work with KiCad. Other versions may contain bugs that may result in KiCad errors."
+    "Skip building downloaded Boost library components, use Boost from your system."
     )
+mark_as_advanced( KICAD_SKIP_BOOST )    # Normal builders should build Boost.
 
 
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
