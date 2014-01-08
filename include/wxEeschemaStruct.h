@@ -362,6 +362,14 @@ public:
 
     void InstallConfigFrame( wxCommandEvent& event );
 
+    /**
+     * Execute a remote command send by Pcbnew via a socket,
+     * port KICAD_SCH_PORT_SERVICE_NUMBER (currently 4243)
+     * this is a virtual function called by EDA_DRAW_FRAME::OnSockRequest().
+     * @param cmdline = received command from socket
+     */
+    virtual void ExecuteRemoteCommand( const char* cmdline );
+
     void OnLeftClick( wxDC* aDC, const wxPoint& aPosition );
     void OnLeftDClick( wxDC* aDC, const wxPoint& aPosition );
     bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu );

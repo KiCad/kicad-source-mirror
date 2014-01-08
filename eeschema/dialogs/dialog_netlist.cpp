@@ -46,7 +46,6 @@
 
 #include <general.h>
 #include <netlist.h>
-#include <protos.h>
 #include <sch_sheet.h>
 #include <dialog_helpers.h>
 #include <dialogs/dialog_netlist_base.h>

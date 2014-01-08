@@ -36,7 +36,6 @@
 #include <netlist.h>
 #include <class_netlist_object.h>
 #include <lib_pin.h>
-#include <protos.h>
 #include <erc.h>
 #include <sch_marker.h>
 #include <sch_component.h>

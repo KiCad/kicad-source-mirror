@@ -36,7 +36,6 @@
 #include <wxEeschemaStruct.h>
 
 #include <general.h>
-#include <protos.h>
 
 
 const wxString traceFindItem( wxT( "KicadFindItem" ) );

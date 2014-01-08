@@ -40,7 +40,6 @@
 #include <class_zone.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <drc_stuff.h>
 
 #include <dialog_drc.h>

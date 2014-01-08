@@ -38,7 +38,6 @@
 #include <msgpanel.h>
 
 #include <general.h>
-#include <protos.h>
 #include <lib_rectangle.h>
 #include <transform.h>
 

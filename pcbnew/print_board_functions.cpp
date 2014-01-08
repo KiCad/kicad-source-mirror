@@ -39,7 +39,6 @@
 #include <class_zone.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <pcbplot.h>
 #include <module_editor_frame.h>
 

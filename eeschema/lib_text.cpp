@@ -39,7 +39,6 @@
 
 #include <lib_draw_item.h>
 #include <general.h>
-#include <protos.h>
 #include <transform.h>
 #include <lib_text.h>
 

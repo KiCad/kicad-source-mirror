@@ -38,7 +38,6 @@
 #include <msgpanel.h>
 
 #include <general.h>
-#include <protos.h>
 #include <lib_polyline.h>
 #include <transform.h>
 
