@@ -134,7 +134,7 @@ On either cmake command line shown below, you can optionally include
     -DCMAKE_INSTALL_PREFIX=<finallInstallDir>
 
 If windows, run the following command:
-    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release  -DKICAD_TESTING_VERSION=ON -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
+    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
 
 If linux, run instead the following command:
     cmake -DCMAKE_BUILD_TYPE=Release ../../
@@ -167,7 +167,7 @@ Although normally you do not install the Debug binaries, you can debug them
 where they were built.
 
 If windows, run the following command:
-    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Debug -DKICAD_TESTING_VERSION=ON -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
+    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Debug -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
 where <wxInstallDir> is <wxWidgets path>/Release
 
 If linux, run instead the following command:

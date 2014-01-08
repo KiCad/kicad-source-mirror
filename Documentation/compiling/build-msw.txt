@@ -149,8 +149,7 @@ command line enter the following commands:
 To create a release build of KiCad, run the following command:
 #cd build
 #cmake -G "MSYS Makefiles"                  \  # Back slashes are not required
-       -DCMAKE_BUILD_TYPE=Release           \  # and are for formatting only.
-       -DKICAD_TESTING_VERSION=ON ../../
+       -DCMAKE_BUILD_TYPE=Release ../../    \  # and are for formatting only.
 
 If the configuration fails, you have failed to install the required software
 on you system.  The error message should give you a good indication of what is
@@ -187,8 +186,7 @@ To create a debug version of KiCad, enter the following commands:
 
 #cd <kicadSource>/build/debug
 #cmake -G "MSYS Makefiles"                       \
-       -DCMAKE_BUILD_TYPE=Debug                  \
-       -DKICAD_TESTING_VERSION=ON ../../
+       -DCMAKE_BUILD_TYPE=Debug ../../
 #make
 
 Generally speaking you do not install debug binaries.  They can be debugged in
@@ -209,8 +207,7 @@ compile the source as described above.
 #cmake -G "MSYS Makefiles"                       \
        -DCMAKE_BUILD_TYPE=Release                \
        -DKICAD_PYTHON_SCRIPTING=ON               \
-       -DKICAD_PYTHON_MODULES=ON                 \
-       -DKICAD_TESTING_VERSION=ON ../../
+       -DKICAD_PYTHON_MODULES=ON ../../
 
 You only need to include the KICAD_PYTHON_MODULES option if you want to
 install the python modules that ship with KiCad.  Also note that the wxPython
