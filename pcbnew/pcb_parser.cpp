@@ -1066,9 +1066,7 @@ void PCB_PARSER::parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR )
     // (TODO: a better test.)
     if( number > 0 || m_board->FindNet( 0 ) == NULL )
     {
-        NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
-        net->SetNet( number );
-        net->SetNetname( name );
+        NETINFO_ITEM* net = new NETINFO_ITEM( m_board, name, number );
         m_board->AppendNet( net );
     }
 }

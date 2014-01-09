@@ -228,14 +228,14 @@ private:
 class NETINFO_ITEM
 {
 private:
-    int       m_NetCode;        ///< A number equivalent to the net name.
+    const int m_NetCode;        ///< A number equivalent to the net name.
                                 ///< Used for fast comparisons in ratsnest and DRC computations.
 
-    wxString  m_Netname;        ///< Full net name like /mysheet/mysubsheet/vout
+    const wxString m_Netname;   ///< Full net name like /mysheet/mysubsheet/vout
                                 ///< used by Eeschema
 
-    wxString  m_ShortNetname;   // short net name, like vout from
-                                // /mysheet/mysubsheet/vout
+    const wxString m_ShortNetname;  // short net name, like vout from
+                                    // /mysheet/mysubsheet/vout
 
     wxString  m_NetClassName;   // Net Class name. if void this is equivalent
                                 // to "default" (the first
@@ -386,8 +386,10 @@ public:
      */
     int GetNet() const { return m_NetCode; }
 
-    void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
-
+    /**
+     * Function GetNodesCount
+     * @return int - number of nodes in the net
+     */
     int GetNodesCount() const { return m_PadInNetList.size(); }
 
     /**
@@ -403,12 +405,6 @@ public:
     wxString GetShortNetname() const { return m_ShortNetname; }
 
     /**
-     * Function SetNetname
-     * @param aNetname : the new netname
-     */
-    void SetNetname( const wxString& aNetname );
-
-    /**
      * Function GetMsgPanelInfo
      * returns the information about the #NETINFO_ITEM in \a aList to display in the
      * message panel.
@@ -416,6 +412,25 @@ public:
      * @param aList is the list in which to place the  status information.
      */
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+
+    /**
+     * Function Clear
+     * sets all fields to their defaults values.
+     */
+    void Clear()
+    {
+        m_PadInNetList.clear();
+
+        m_NbNodes           = 0;
+        m_NbLink            = 0;
+        m_NbNoconn          = 0;
+        m_Flag              = 0;
+        m_RatsnestStartIdx  = 0;     // Starting point of ratsnests of this net in a
+                                     // general buffer of ratsnest
+        m_RatsnestEndIdx    = 0;     // Ending point of ratsnests of this net
+
+        SetClass( NULL );
+    }
 };
 
 
