@@ -1811,7 +1811,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
 {
     char  buf[1024];
 
-    NETINFO_ITEM*   net = new NETINFO_ITEM( m_board );
+    NETINFO_ITEM*   net;
     char*           line;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
@@ -1822,11 +1822,10 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
         {
             // e.g. "Na 58 "/cpu.sch/PAD7"\r\n"
 
-            int tmp = intParse( line + SZ( "Na" ), &data );
-            net->SetNet( tmp );
+            int netCode = intParse( line + SZ( "Na" ), &data );
 
             ReadDelimitedText( buf, data, sizeof(buf) );
-            net->SetNetname( FROM_UTF8( buf ) );
+            net = new NETINFO_ITEM( m_board, FROM_UTF8( buf ), netCode );
         }
 
         else if( TESTLINE( "$EndEQUIPOT" ) )

@@ -49,13 +49,9 @@
 /* class NETINFO_ITEM: handle data relative to a given net */
 /*********************************************************/
 
-NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int aNetCode )
+NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int aNetCode ) :
+    m_NetCode( aNetCode ), m_Netname( aNetName ), m_ShortNetname( m_Netname.AfterLast( '/' ) )
 {
-    SetNet( aNetCode );
-
-    if( aNetName.size() )
-        SetNetname( aNetName );
-
     m_parent   = aParent;
     m_NbNodes  = 0;
     m_NbLink   = 0;
@@ -74,17 +70,6 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int a
 NETINFO_ITEM::~NETINFO_ITEM()
 {
     // m_NetClass is not owned by me.
-}
-
-
-/**
- * Function SetNetname
- * @param aNetname : the new netname
- */
-void NETINFO_ITEM::SetNetname( const wxString& aNetname )
-{
-    m_Netname = aNetname;
-    m_ShortNetname = m_Netname.AfterLast( '/' );
 }
 
 

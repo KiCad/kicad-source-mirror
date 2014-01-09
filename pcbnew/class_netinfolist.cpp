@@ -37,10 +37,6 @@ void NETINFO_LIST::clear()
 }
 
 
-/**
- * Function Append
- * adds \a aNewElement to the end of the list.
- */
 void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 {
     m_NetBuffer.push_back( aNewElement );
@@ -80,46 +76,29 @@ void NETINFO_LIST::buildListOfNets()
     int             nodes_count = 0;
     NETINFO_ITEM*   net_item;
 
-    clear();        // Remove all nets info and free memory
-
-    // Create and add the "unconnected net", always existing,
-    // used to handle pads and tracks that are not member of a "real" net
-    net_item = new NETINFO_ITEM( m_Parent );
-    AppendNet( net_item );
-
     // Build the PAD list, sorted by net
     buildPadsFullList();
 
-    // Build netnames list, and create a netcode for each netname
-    D_PAD* last_pad = NULL;
-    int    netcode = 0;
+    // Restore the initial state of NETINFO_ITEMs
+    for( unsigned i = 0; i < GetNetCount(); ++i )
+    {
+        GetNetItem( i )->Clear();
+    }
 
+    std::cout << m_PadsFullList.size() << std::endl;
+
+    // Assign pads to appropriate NETINFO_ITEMs
     for( unsigned ii = 0; ii < m_PadsFullList.size(); ii++ )
     {
         pad = m_PadsFullList[ii];
 
-        if( pad->GetNetname().IsEmpty() ) // pad not connected
-        {
-            pad->SetNet( 0 );
+        if( pad->GetNet() == 0 ) // pad not connected
             continue;
-        }
 
-        /* if the current netname was already found: add pad to the current net_item ,
-         *  else create a new net_code and a new net_item
-         */
-        if( last_pad == NULL || ( pad->GetNetname() != last_pad->GetNetname() ) )
-        {
-            netcode++;
-            net_item = new NETINFO_ITEM( m_Parent, pad->GetNetname(), netcode );
-            AppendNet( net_item );
-        }
-
-        pad->SetNet( netcode );
+        net_item = GetNetItem( pad->GetNet() );
         net_item->m_PadInNetList.push_back( pad );
 
-        nodes_count++;
-
-        last_pad = pad;
+        ++nodes_count;
     }
 
     m_Parent->SetNodeCount( nodes_count );
@@ -129,8 +108,6 @@ void NETINFO_LIST::buildListOfNets()
     m_Parent->m_Status_Pcb |= NET_CODES_OK;
 
     m_Parent->SetAreasNetCodesFromNetNames();
-
-    // D( Show(); )
 }
 
 #if defined(DEBUG)

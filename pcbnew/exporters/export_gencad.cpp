@@ -647,7 +647,6 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
         if( net->GetNetname() == wxEmptyString ) // dummy netlist (no connection)
         {
             wxString msg; msg << wxT( "NoConnection" ) << NbNoConn++;
-            net->SetNetname( msg );
         }
 
         if( net->GetNet() <= 0 )  // dummy netlist (no connection)
