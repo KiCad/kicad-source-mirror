@@ -70,7 +70,10 @@ public:
 
 void MIN_SPAN_TREE_PADS::AddTreeToRatsnest( std::vector<RATSNEST_ITEM> &aRatsnestList )
 {
-    std::vector<D_PAD*> & padsBuffer = *m_PadsList;
+    std::vector<D_PAD*>& padsBuffer = *m_PadsList;
+    if( padsBuffer.empty() )
+        return;
+
     int netcode = padsBuffer[0]->GetNet();
     // Note: to get edges in minimum spanning tree,
     // the index value 0 is not used: it is just

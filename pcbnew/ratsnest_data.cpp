@@ -240,7 +240,7 @@ void RN_NET::compute()
 
         return;
     }
-    else if( boardNodes.size() == 1 )   // This case is even simpler
+    else if( boardNodes.size() == 1 || boardNodes.empty() )   // This case is even simpler
     {
         m_rnEdges.reset( new std::vector<RN_EDGE_PTR>( 0 ) );
 
