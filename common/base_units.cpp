@@ -377,3 +377,18 @@ wxString& operator <<( wxString& aString, const wxPoint& aPos )
     return aString;
 }
 
+/**
+ * Function AngleToStringDegrees
+ * is a helper to convert the \a double \a aAngle (in internal unit)
+ * to a string in degrees
+ */
+wxString AngleToStringDegrees( double aAngle )
+{
+    wxString text;
+
+    text.Printf( wxT( "%.3f" ), aAngle/10.0 );
+    StripTrailingZeros( text, 1 );
+
+    return text;
+}
+

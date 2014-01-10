@@ -164,18 +164,6 @@ wxString GetIllegalFileNameWxChars();
  */
 bool ReplaceIllegalFileNameChars( std::string* aName );
 
-/**
- * Function RemoveTrailingZeros
- * removes the trailing zeros from \a aString.
- *
- * All trailing zeros and the '.' character from floating point numbers are removed from
- * \a aString.
- *
- * @param aString is a wxString object to remove the trailing zeros from.
- * @return a wxString with the trailing zeros removed.
- */
-wxString RemoveTrailingZeros( const wxString& aString );
-
 #ifndef HAVE_STRTOKR
 // common/strtok_r.c optionally:
 extern "C" char* strtok_r( char* str, const char* delim, char** nextp );

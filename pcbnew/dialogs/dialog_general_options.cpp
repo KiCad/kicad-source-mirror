@@ -45,6 +45,7 @@
 #include <class_drawpanel_gal.h>
 #include <view/view.h>
 #include <pcb_painter.h>
+#include <base_units.h>
 
 DIALOG_GENERALOPTIONS::DIALOG_GENERALOPTIONS( PCB_EDIT_FRAME* parent ) :
     DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( parent )
@@ -70,8 +71,8 @@ void DIALOG_GENERALOPTIONS::init()
 
 
     wxString rotationAngle;
-    rotationAngle.Printf( wxT( "%.1f" ), ((double)GetParent()->GetRotationAngle()) / 10.0 );
-    m_RotationAngle->SetValue( RemoveTrailingZeros( rotationAngle ) );
+    rotationAngle = AngleToStringDegrees( (double)GetParent()->GetRotationAngle() );
+    m_RotationAngle->SetValue( rotationAngle );
 
     wxString timevalue;
     timevalue << GetParent()->GetAutoSaveInterval() / 60;

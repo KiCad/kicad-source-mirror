@@ -84,6 +84,13 @@ double To_User_Unit( EDA_UNITS_T aUnit, double aValue );
 wxString CoordinateToString( int aValue, bool aConvertToMils = false );
 
 /**
+ * Function AngleToStringDegrees
+ * is a helper to convert the \a double \a aAngle (in internal unit)
+ * to a string in degrees
+ */
+wxString AngleToStringDegrees( double aAngle );
+
+/**
  * Function LenghtDoubleToString
  * is a helper to convert the \a double length \a aValue to a string in inches,
  * millimeters, or unscaled units according to the current user units setting.
