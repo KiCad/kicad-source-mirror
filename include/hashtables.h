@@ -98,6 +98,24 @@ struct fnv_1a
 };
 
 
+/// Hash function for wxString, counterpart of std::string hash
+struct WXSTRING_HASH : std::unary_function<wxString, std::size_t>
+{
+    std::size_t operator()( const wxString& aString ) const
+    {
+        std::size_t hash = 2166136261u;
+
+        for( wxString::const_iterator it = aString.begin(); it != aString.end(); ++it )
+        {
+            hash ^= (unsigned char) *it;
+            hash *= 16777619;
+        }
+
+        return hash;
+    }
+};
+
+
 /**
  * Type KEYWORD_MAP
  * is a hashtable made of a const char* and an int.  Note that use of this

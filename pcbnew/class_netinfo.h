@@ -37,6 +37,8 @@
 #include <vector>
 #include <gr_basic.h>
 #include <class_netclass.h>
+#include <boost/unordered_map.hpp>
+#include <hashtables.h>
 
 
 class wxDC;
@@ -115,7 +117,6 @@ public:
 };
 
 
-
 /**
  * Class NETINFO
  * is a container class for NETINFO_ITEM elements, which are the nets.  That makes
@@ -139,6 +140,20 @@ public:
         if( unsigned( aNetcode ) >= GetNetCount() )     // catches < 0 too
             return NULL;
         return m_NetBuffer[aNetcode];
+    }
+
+    /**
+     * Function GetItem
+     * @param aNetName = net name to identify a given NETINFO_ITEM
+     * @return NETINFO_ITEM* - by \a aNetName, or NULL if not found
+     */
+    NETINFO_ITEM* GetNetItem( const wxString& aNetName ) const
+    {
+        NETNAMES_MAP::const_iterator result = m_netNames.find( aNetName );
+        if( result != m_netNames.end() )
+            return (*result).second;
+
+        return NULL;
     }
 
     /**
@@ -188,6 +203,8 @@ public:
     void Show() const;
 #endif
 
+    typedef boost::unordered_map<const wxString, NETINFO_ITEM*, WXSTRING_HASH> NETNAMES_MAP;
+
 private:
 
     /**
@@ -214,6 +231,7 @@ private:
     void buildPadsFullList();
 
     BOARD*                      m_Parent;
+    NETNAMES_MAP m_netNames;                    ///< map for a fast look up by net names
     std::vector<NETINFO_ITEM*>  m_NetBuffer;    ///< net list (name, design constraints ..)
 
     std::vector<D_PAD*>         m_PadsFullList; ///< contains all pads, sorted by pad's netname.
@@ -394,15 +412,15 @@ public:
 
     /**
      * Function GetNetname
-     * @return const wxString * , a pointer to the full netname
+     * @return const wxString&, a reference to the full netname
      */
-    wxString GetNetname() const { return m_Netname; }
+    const wxString& GetNetname() const { return m_Netname; }
 
     /**
      * Function GetShortNetname
-     * @return const wxString * , a pointer to the short netname
+     * @return const wxString &, a reference to the short netname
      */
-    wxString GetShortNetname() const { return m_ShortNetname; }
+    const wxString& GetShortNetname() const { return m_ShortNetname; }
 
     /**
      * Function GetMsgPanelInfo

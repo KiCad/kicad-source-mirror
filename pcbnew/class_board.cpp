@@ -1355,79 +1355,7 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
 
 NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
 {
-    // the first valid netcode is 1.
-    // zero is reserved for "no connection" and is not used.
-    if( aNetname.IsEmpty() )
-        return NULL;
-
-    int ncount = m_NetInfo.GetNetCount();
-
-    // Search for a netname = aNetname
-#if 0
-
-    // Use a sequential search: easy to understand, but slow
-    for( int ii = 1; ii < ncount; ii++ )
-    {
-        NETINFO_ITEM* item = m_NetInfo.GetNetItem( ii );
-
-        if( item && item->GetNetname() == aNetname )
-        {
-            return item;
-        }
-    }
-
-#else
-
-    // Use a fast binary search,
-    // this is possible because Nets are alphabetically ordered in list
-    // see NETINFO_LIST::BuildListOfNets() and
-    // NETINFO_LIST::Build_Pads_Full_List()
-    int imax  = ncount - 1;
-    int index = imax;
-
-    while( ncount > 0 )
-    {
-        int ii = ncount;
-        ncount >>= 1;
-
-        if( (ii & 1) && ( ii > 1 ) )
-            ncount++;
-
-        NETINFO_ITEM* item = m_NetInfo.GetNetItem( index );
-
-        if( item == NULL )
-            return NULL;
-
-        int icmp = item->GetNetname().Cmp( aNetname );
-
-        if( icmp == 0 ) // found !
-        {
-            return item;
-        }
-
-        if( icmp < 0 ) // must search after item
-        {
-            index += ncount;
-
-            if( index > imax )
-                index = imax;
-
-            continue;
-        }
-
-        if( icmp > 0 ) // must search before item
-        {
-            index -= ncount;
-
-            if( index < 1 )
-                index = 1;
-
-            continue;
-        }
-    }
-
-#endif
-    return NULL;
+    return m_NetInfo.GetNetItem( aNetname );
 }
 
 
@@ -2618,7 +2546,10 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     }
 
                     if( !aNetlist.IsDryRun() )
+                    {
                         pad->SetNetname( wxEmptyString );
+                        pad->SetNet( 0 );
+                    }
                 }
             }
             else                                 // Footprint pad has a net.
@@ -2638,7 +2569,19 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     }
 
                     if( !aNetlist.IsDryRun() )
+                    {
                         pad->SetNetname( net.GetNetName() );
+
+                        NETINFO_ITEM* netinfo = FindNet( net.GetNetName() );
+                        if( netinfo == NULL )
+                        {
+                            // It is a new net, we have to add it
+                            netinfo = new NETINFO_ITEM( this, net.GetNetName(), m_NetInfo.GetNetCount() );
+                            m_NetInfo.AppendNet( netinfo );
+                        }
+
+                        pad->SetNet( netinfo->GetNet() );
+                    }
                 }
             }
         }
@@ -2711,6 +2654,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                         aReporter->Report( msg );
                     }
                     previouspad->SetNetname( wxEmptyString );
+                    previouspad->SetNet( 0 );
                 }
                 netname = pad->GetNetname();
                 count = 1;
@@ -2723,7 +2667,10 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 
         // Examine last pad
         if( pad && count == 1 )
+        {
             pad->SetNetname( wxEmptyString );
+            pad->SetNet( 0 );
+        }
     }
 
     // Last step: Some tests:

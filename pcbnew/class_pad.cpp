@@ -413,6 +413,7 @@ void D_PAD::CopyNetlistSettings( D_PAD* aPad )
     wxCHECK_RET( aPad != NULL && aPad != this, wxT( "Cannot copy to NULL or yourself." ) );
 
     aPad->SetNetname( GetNetname() );
+    aPad->SetNet( GetNet() );
 
     aPad->SetLocalClearance( m_LocalClearance );
     aPad->SetLocalSolderMaskMargin( m_LocalSolderMaskMargin );

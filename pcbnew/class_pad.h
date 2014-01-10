@@ -128,7 +128,13 @@ public:
      * Function GetNetname
      * @return const wxString& - the full netname
      */
-    const wxString& GetNetname() const { return m_Netname; }
+    const wxString& GetNetname() const
+    {
+        assert( ( GetNet() == 0 ) == m_Netname.IsEmpty() );
+        // assert( GetBoard()->FindNet( GetNet() ) == GetBoard()->FindNet( m_Netname ) );
+
+        return m_Netname;
+    }
 
     /**
      * Function GetShortNetname
