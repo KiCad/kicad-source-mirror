@@ -15,9 +15,10 @@
 
 
 // Constructor and destructor
-NETINFO_LIST::NETINFO_LIST( BOARD* aParent )
+NETINFO_LIST::NETINFO_LIST( BOARD* aParent ) : m_Parent( aParent )
 {
-    m_Parent = aParent;
+    // Make sure that the unconnected net has number 0
+    AppendNet( new NETINFO_ITEM( aParent, wxEmptyString, 0 ) );
 }
 
 
@@ -34,14 +35,20 @@ void NETINFO_LIST::clear()
 
     m_NetBuffer.clear();
     m_PadsFullList.clear();
+    m_netNames.clear();
 }
 
 
 void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 {
+    // net names & codes are supposed to be unique
+    assert( GetNetItem( aNewElement->GetNetname() ) == NULL );
+    assert( GetNetItem( aNewElement->GetNet() ) == NULL );
+
     m_NetBuffer.push_back( aNewElement );
 
-    // D(Show();)
+    // add an entry for fast look up by a net name using a map
+    m_netNames.insert( std::make_pair( aNewElement->GetNetname(), aNewElement ) );
 }
 
 
@@ -74,18 +81,13 @@ void NETINFO_LIST::buildListOfNets()
 {
     D_PAD*          pad;
     int             nodes_count = 0;
-    NETINFO_ITEM*   net_item;
 
     // Build the PAD list, sorted by net
     buildPadsFullList();
 
     // Restore the initial state of NETINFO_ITEMs
     for( unsigned i = 0; i < GetNetCount(); ++i )
-    {
         GetNetItem( i )->Clear();
-    }
-
-    std::cout << m_PadsFullList.size() << std::endl;
 
     // Assign pads to appropriate NETINFO_ITEMs
     for( unsigned ii = 0; ii < m_PadsFullList.size(); ii++ )
@@ -95,8 +97,8 @@ void NETINFO_LIST::buildListOfNets()
         if( pad->GetNet() == 0 ) // pad not connected
             continue;
 
-        net_item = GetNetItem( pad->GetNet() );
-        net_item->m_PadInNetList.push_back( pad );
+        // Add pad to the appropriate list of pads
+        GetNetItem( pad->GetNet() )->m_PadInNetList.push_back( pad );
 
         ++nodes_count;
     }
