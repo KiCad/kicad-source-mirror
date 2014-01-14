@@ -455,17 +455,13 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     // Update pad netnames ( when possible)
     for( D_PAD* pad = aNewModule->Pads(); pad != NULL; pad = pad->Next() )
     {
-        pad->SetNetname( wxEmptyString );
         pad->SetNet( 0 );
         D_PAD*  old_pad = aOldModule->Pads();
 
         for( ; old_pad != NULL; old_pad = old_pad->Next() )
         {
             if( pad->PadNameEqual( old_pad ) )
-            {
-                pad->SetNetname( old_pad->GetNetname() );
                 pad->SetNet( old_pad->GetNet() );
-            }
         }
     }
 
