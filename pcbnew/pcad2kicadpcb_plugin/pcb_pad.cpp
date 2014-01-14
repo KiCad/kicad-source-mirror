@@ -273,8 +273,16 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
 
         pad->SetAttribute( padType );
 
-        pad->SetNet( 0 );
-        pad->SetNetname( m_net );
+        // Set the proper net code
+        NETINFO_ITEM* netinfo = m_board->FindNet( m_net );
+        if( netinfo == NULL )   // I believe this should not happen, but just in case
+        {
+            // It is a new net
+            netinfo = new NETINFO_ITEM( m_board, m_net, m_board->GetNetCount() );
+            m_board->AppendNet( netinfo );
+        }
+
+        pad->SetNet( netinfo->GetNet() );
     }
 
     if( !aEncapsulatedPad )

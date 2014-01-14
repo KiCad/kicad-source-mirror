@@ -2546,10 +2546,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     }
 
                     if( !aNetlist.IsDryRun() )
-                    {
-                        pad->SetNetname( wxEmptyString );
                         pad->SetNet( 0 );
-                    }
                 }
             }
             else                                 // Footprint pad has a net.
@@ -2570,8 +2567,6 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 
                     if( !aNetlist.IsDryRun() )
                     {
-                        pad->SetNetname( net.GetNetName() );
-
                         NETINFO_ITEM* netinfo = FindNet( net.GetNetName() );
                         if( netinfo == NULL )
                         {
@@ -2653,7 +2648,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                                     GetChars( previouspad->GetPadName() ) );
                         aReporter->Report( msg );
                     }
-                    previouspad->SetNetname( wxEmptyString );
+
                     previouspad->SetNet( 0 );
                 }
                 netname = pad->GetNetname();
@@ -2667,10 +2662,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 
         // Examine last pad
         if( pad && count == 1 )
-        {
-            pad->SetNetname( wxEmptyString );
             pad->SetNet( 0 );
-        }
     }
 
     // Last step: Some tests:

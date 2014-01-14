@@ -1696,7 +1696,6 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
             if( ni != m_pads_to_nets.end() )
             {
                 const ENET* enet = &ni->second;
-                pad->SetNetname( FROM_UTF8( enet->netname.c_str() ) );
                 pad->SetNet( enet->netcode );
             }
         }

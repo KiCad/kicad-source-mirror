@@ -2191,7 +2191,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
         case T_net:
             pad->SetNet( parseInt( "net number" ) );
             NeedSYMBOLorNUMBER();
-            pad->SetNetname( FromUTF8() );
+            assert( FromUTF8() == m_board->FindNet( pad->GetNet() )->GetNetname() );
             NeedRIGHT();
             break;
 

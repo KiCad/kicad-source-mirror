@@ -119,30 +119,6 @@ public:
     }
 
     /**
-     * Function SetNetname
-     * @param aNetname: the new netname
-     */
-    void SetNetname( const wxString& aNetname );
-
-    /**
-     * Function GetNetname
-     * @return const wxString& - the full netname
-     */
-    const wxString& GetNetname() const
-    {
-        assert( ( GetNet() == 0 ) == m_Netname.IsEmpty() );
-        // assert( GetBoard()->FindNet( GetNet() ) == GetBoard()->FindNet( m_Netname ) );
-
-        return m_Netname;
-    }
-
-    /**
-     * Function GetShortNetname
-     * @return const wxString& - the short netname
-     */
-    const wxString& GetShortNetname() const { return m_ShortNetname; }
-
-    /**
      * Function GetShape
      * @return the shape of this pad.
      */
@@ -474,10 +450,6 @@ private:
     int boundingRadius() const;
 
     int         m_boundingRadius;  ///< radius of the circle containing the pad shape
-
-
-    wxString    m_Netname;         ///< Full net name like /mysheet/mysubsheet/vout used by Eeschema
-    wxString    m_ShortNetname;    ///< short net name, like vout from /mysheet/mysubsheet/vout
 
     /// Pad name (4 char) or a long identifier (used in pad name
     /// comparisons because this is faster than string comparison)
