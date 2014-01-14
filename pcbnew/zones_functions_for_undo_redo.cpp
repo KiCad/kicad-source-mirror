@@ -67,7 +67,7 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     if( GetLayer() != aZoneToCompare.GetLayer() )
         return false;
 
-    if( m_Netname != aZoneToCompare.m_Netname )
+    if( GetNet() != aZoneToCompare.GetNet() )
         return false;
 
     if( GetPriority() != aZoneToCompare.GetPriority() )

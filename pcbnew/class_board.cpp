@@ -1535,7 +1535,7 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
 
         if( GetArea( ii )->GetNet() != 0 )      // i.e. if this zone is connected to a net
         {
-            const NETINFO_ITEM* net = FindNet( GetArea( ii )->GetNetName() );
+            const NETINFO_ITEM* net = FindNet( GetArea( ii )->GetNetname() );
 
             if( net )
             {
@@ -2720,7 +2720,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                            " has non-existent net name \"%s\" **\n" ),
                         GetChars( coord ),
                         GetChars( zone->GetLayerName() ),
-                        GetChars( zone->GetNetName() ) );
+                        GetChars( zone->GetNetname() ) );
             aReporter->Report( msg );
         }
     }

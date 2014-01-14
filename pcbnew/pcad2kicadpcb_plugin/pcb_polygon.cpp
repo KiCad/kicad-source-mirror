@@ -172,7 +172,6 @@ void PCB_POLYGON::AddToBoard()
         zone->SetTimeStamp( m_timestamp );
         zone->SetLayer( m_KiCadLayer );
         zone->SetNet( m_netCode );
-        zone->SetNetName( m_net );
 
         // add outline
         int outline_hatch = CPolyLine::DIAGONAL_EDGE;

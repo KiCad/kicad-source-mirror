@@ -138,31 +138,6 @@ const wxPoint& ZONE_CONTAINER::GetPosition() const
 }
 
 
-void ZONE_CONTAINER::SetNet( int aNetCode )
-{
-    BOARD_CONNECTED_ITEM::SetNet( aNetCode );
-
-    if( aNetCode < 0 )
-        return;
-
-    BOARD* board = GetBoard();
-
-    if( board )
-    {
-        NETINFO_ITEM* net = board->FindNet( aNetCode );
-
-        if( net )
-            m_Netname = net->GetNetname();
-        else
-            m_Netname.Empty();
-    }
-    else
-    {
-        m_Netname.Empty();
-    }
-}
-
-
 void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMode,
                            const wxPoint& offset )
 {
@@ -658,7 +633,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         else // a netcode < 0 is an error
         {
             msg = wxT( " [" );
-            msg << m_Netname + wxT( "]" );
+            msg << GetNetname() + wxT( "]" );
             msg << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
 
@@ -849,20 +824,6 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
 }
 
 
-bool ZONE_CONTAINER::SetNetNameFromNetCode( void )
-{
-    NETINFO_ITEM* net;
-
-    if( m_Parent && ( net = ( (BOARD*) m_Parent )->FindNet( GetNet() ) ) )
-    {
-        m_Netname = net->GetNetname();
-        return true;
-    }
-
-    return false;
-}
-
-
 ZoneConnection ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
 {
     if( aPad == NULL || aPad->GetZoneConnection() == UNDEFINED_CONNECTION )
@@ -928,7 +889,7 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
         else
         {   // A netcode < 0 is an error:
             // Netname not found or area not initialised
-            text << wxT( " [" ) << m_Netname << wxT( "]" );
+            text << wxT( " [" ) << GetNetname() << wxT( "]" );
             text << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
     }
