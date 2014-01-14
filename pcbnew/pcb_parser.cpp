@@ -2423,7 +2423,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
         case T_net_name:
             NeedSYMBOLorNUMBER();
-            zone->SetNetName( FromUTF8() );
+            assert( m_board->FindNet( zone->GetNet() )->GetNetname() == FromUTF8() );
             NeedRIGHT();
             break;
 
@@ -2699,10 +2699,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
     // Ensure keepout does not have a net (which have no sense for a keepout zone)
     if( zone->GetIsKeepout() )
-    {
-        zone->SetNet(0);
-        zone->SetNetName( wxEmptyString );
-    }
+        zone->SetNet( 0 );
 
     return zone.release();
 }

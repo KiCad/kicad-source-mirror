@@ -1557,7 +1557,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
             plane->SetShape( mainPolygon );
 
-            plane->name = TO_UTF8( item->GetNetName() );
+            plane->name = TO_UTF8( item->GetNetname() );
 
             if( plane->name.size() == 0 )
             {

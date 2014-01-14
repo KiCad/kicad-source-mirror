@@ -2238,7 +2238,6 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
             zc->BOARD_CONNECTED_ITEM::SetNet( netcode );
-            zc->SetNetName( FROM_UTF8( buf ) );     // init the net name here
         }
 
         else if( TESTLINE( "ZLayer" ) )     // layer found
@@ -2255,7 +2254,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             if( !hopt )
             {
-                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
+                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2266,7 +2265,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             case 'F':   outline_hatch = CPolyLine::DIAGONAL_FULL;   break;
 
             default:
-                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
+                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2283,7 +2282,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             if( smoothing >= ZONE_SETTINGS::SMOOTHING_LAST || smoothing < 0 )
             {
-                m_error.Printf( wxT( "Bad ZSmoothing for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
+                m_error.Printf( wxT( "Bad ZSmoothing for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2358,7 +2357,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             default:
                 m_error.Printf( wxT( "Bad ZClearance padoption for CZONE_CONTAINER '%s'" ),
-                    zc->GetNetName().GetData() );
+                    zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2422,10 +2421,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // Ensure keepout does not have a net
             // (which have no sense for a keepout zone)
             if( zc->GetIsKeepout() )
-            {
-                zc->SetNet(0);
-                zc->SetNetName( wxEmptyString );
-            }
+                zc->SetNet( 0 );
 
             // should always occur, but who knows, a zone without two corners
             // is no zone at all, it's a spot?
@@ -3644,7 +3640,7 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     fprintf( m_fp,  "ZInfo %lX %d %s\n",
                     me->GetTimeStamp(),
                     me->GetIsKeepout() ? 0 : me->GetNet(),
-                    EscapedUTF8( me->GetIsKeepout() ? wxT("") : me->GetNetName() ).c_str() );
+                    EscapedUTF8( me->GetIsKeepout() ? wxT("") : me->GetNetname() ).c_str() );
 
     // Save the outline layer info
     fprintf( m_fp, "ZLayer %d\n", me->GetLayer() );

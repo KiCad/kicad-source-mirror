@@ -2259,7 +2259,6 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE& aTree ) const
     // no offset, no net name, no pad name allowed
     // pad->SetOffset( wxPoint( 0, 0 ) );
     // pad->SetPadName( wxEmptyString );
-    // pad->SetNetname( wxEmptyString );
 
     wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
 
@@ -2496,7 +2495,6 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     zone->SetTimeStamp( timeStamp( it->second ) );
                     zone->SetLayer( layer );
                     zone->SetNet( netCode );
-                    zone->SetNetName( netName );
 
                     CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::DIAGONAL_EDGE;
 
@@ -2552,10 +2550,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
             // KiCad does not support an unconnected zone with its own non-zero netcode,
             // but only when assigned netcode = 0 w/o a name...
             for( ZONES::iterator it = zones.begin();  it != zones.end();  ++it )
-            {
                 (*it)->SetNet( 0 );
-                (*it)->SetNetName( wxEmptyString );
-            }
 
             // therefore omit this signal/net.
         }

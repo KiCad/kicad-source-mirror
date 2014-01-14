@@ -186,31 +186,6 @@ public:
         return ( GetLayer() < FIRST_NON_COPPER_LAYER ) ? true : false;
     }
 
-    /**
-     * Function SetNet
-     * sets the netcode and the netname.
-     *
-     * @param aNetCode The net code of the zone container if greater than or equal to
-     *                 zero.  Otherwise the current net code is kept and set the net
-     *                 code error flag.
-     */
-    virtual void SetNet( int aNetCode );
-
-    /**
-     * Function SetNetNameFromNetCode
-     * Find the net name corresponding to the net code.
-     * @return bool - true if net found, else false
-     */
-    bool SetNetNameFromNetCode( void );
-
-    /**
-     * Function GetNetName
-     * returns the net name.
-     * @return const wxString& - The net name.
-     */
-    const wxString& GetNetName() const                  { return m_Netname; };
-    void SetNetName( const wxString& aName )            { m_Netname = aName; }
-
     /// How to fill areas: 0 = use filled polygons, 1 => fill with segments.
     void SetFillMode( int aFillMode )                   { m_FillMode = aFillMode; }
     int GetFillMode() const                             { return m_FillMode; }
@@ -607,7 +582,6 @@ public:
 
 private:
     CPolyLine*            m_Poly;                ///< Outline of the zone.
-    wxString              m_Netname;             ///< Name of the net assigned to the zone.
     CPolyLine*            m_smoothedPoly;        // Corner-smoothed version of m_Poly
     int                   m_cornerSmoothingType;
     unsigned int          m_cornerRadius;
