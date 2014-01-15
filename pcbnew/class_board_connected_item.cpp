@@ -34,34 +34,50 @@
 #include <class_board.h>
 #include <class_board_item.h>
 
-
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
-    BOARD_ITEM( aParent, idtype ), m_NetCode( 0 ), m_Subnet( 0 ), m_ZoneSubnet( 0 )
+    BOARD_ITEM( aParent, idtype ), m_Subnet( 0 ), m_ZoneSubnet( 0 ),
+    m_netinfo( &NETINFO_LIST::ORPHANED )
 {
+    // The unconnected is set only in case the item belongs to a BOARD
+    SetNet( NETINFO_LIST::UNCONNECTED );
 }
 
 
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem ) :
-    BOARD_ITEM( aItem ), m_NetCode( aItem.m_NetCode ), m_Subnet( aItem.m_Subnet ),
-    m_ZoneSubnet( aItem.m_ZoneSubnet )
+    BOARD_ITEM( aItem ), m_Subnet( aItem.m_Subnet ), m_ZoneSubnet( aItem.m_ZoneSubnet ),
+    m_netinfo( aItem.m_netinfo )
 {
+}
+
+
+int BOARD_CONNECTED_ITEM::GetNet() const
+{
+    return m_netinfo->GetNet();
+}
+
+
+void BOARD_CONNECTED_ITEM::SetNet( int aNetCode )
+{
+    BOARD* board = GetBoard();
+    if( board )
+    {
+        m_netinfo = board->FindNet( aNetCode );
+
+        if( m_netinfo == NULL )
+            m_netinfo = board->FindNet( NETINFO_LIST::UNCONNECTED );
+    }
 }
 
 
 const wxString& BOARD_CONNECTED_ITEM::GetNetname() const
 {
-    BOARD* board = GetBoard();
-    NETINFO_ITEM* netinfo = board->FindNet( m_NetCode );
-
-    return netinfo->GetNetname();
+    return m_netinfo->GetNetname();
 }
 
 
 const wxString& BOARD_CONNECTED_ITEM::GetShortNetname() const
 {
-    NETINFO_ITEM* netinfo = GetBoard()->FindNet( m_NetCode );
-
-    return netinfo->GetShortNetname();
+    return m_netinfo->GetShortNetname();
 }
 
 

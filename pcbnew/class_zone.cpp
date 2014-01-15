@@ -53,7 +53,6 @@
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     BOARD_CONNECTED_ITEM( aBoard, PCB_ZONE_AREA_T )
 {
-    SetNet( -1 );                               // Net number for fast comparisons
     m_CornerSelection = -1;
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = 0;                             // How to fill areas: 0 = use filled polygons, != 0 fill with segments

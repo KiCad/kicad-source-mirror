@@ -33,6 +33,7 @@
 
 #include <class_board_item.h>
 
+class NETINFO_ITEM;
 class NETCLASS;
 class TRACK;
 class D_PAD;
@@ -54,14 +55,15 @@ public:
     std::vector<D_PAD*> m_PadsConnected;        // list of other pads connected to me
 
 private:
-    int         m_NetCode;      // Net number
-
     int         m_Subnet;       /* In rastnest routines : for the current net, block number
                                  * (number common to the current connected items found)
                                  */
 
     int         m_ZoneSubnet;   // used in rastnest computations : for the current net,
                                 // handle cluster number in zone connection
+
+    /// Stores all informations about the net that item belongs to
+    const NETINFO_ITEM* m_netinfo;
 
 public:
     BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype );
@@ -72,15 +74,15 @@ public:
      * Function GetNet
      * @return int - the net code.
      */
-    int GetNet() const
-    {
-        return m_NetCode;
-    }
+    int GetNet() const;
 
-    virtual void SetNet( int aNetCode )
-    {
-        m_NetCode = aNetCode;
-    }
+    /**
+     * Function SetNet
+     * sets net using a net code.
+     * @param aNetCode is a net code for the new net. It has to exist in NETINFO_LIST held by BOARD.
+     * Otherwise, item is assigned to the unconnected net.
+     */
+    void SetNet( int aNetCode );
 
     /**
      * Function GetSubNet
@@ -112,13 +114,13 @@ public:
 
     /**
      * Function GetNetname
-     * @return const wxString& - the full netname
+     * @return wxString - the full netname
      */
     const wxString& GetNetname() const;
 
     /**
      * Function GetShortNetname
-     * @return const wxString& - the short netname
+     * @return wxString - the short netname
      */
     const wxString& GetShortNetname() const;
 

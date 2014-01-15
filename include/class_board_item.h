@@ -83,8 +83,7 @@ protected:
 public:
 
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
-        EDA_ITEM( aParent, idtype )
-        , m_Layer( FIRST_LAYER )
+        EDA_ITEM( aParent, idtype ), m_Layer( FIRST_LAYER )
     {
     }
 

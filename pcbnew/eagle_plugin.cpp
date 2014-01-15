@@ -1879,7 +1879,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
 
 MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const string& aPkgName ) const
 {
-    std::auto_ptr<MODULE>   m( new MODULE( NULL ) );
+    std::auto_ptr<MODULE>   m( new MODULE( m_board ) );
 
     m->SetFPID( FPID( aPkgName ) );
 
@@ -2351,6 +2351,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
         const string& nname = net->second.get<string>( "<xmlattr>.name" );
         wxString netName = FROM_UTF8( nname.c_str() );
+        m_board->AppendNet( new NETINFO_ITEM( m_board, netName, netCode ) );
 
         m_xpath->Value( nname.c_str() );
 
@@ -2555,7 +2556,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
             // therefore omit this signal/net.
         }
         else
-            m_board->AppendNet( new NETINFO_ITEM( m_board, netName, netCode++ ) );
+            netCode++;
     }
 
     m_xpath->pop();     // "signals.signal"

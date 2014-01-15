@@ -2571,7 +2571,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                         if( netinfo == NULL )
                         {
                             // It is a new net, we have to add it
-                            netinfo = new NETINFO_ITEM( this, net.GetNetName(), m_NetInfo.GetNetCount() );
+                            netinfo = new NETINFO_ITEM( this, net.GetNetName(),
+                                                        m_NetInfo.GetNetCount() );
                             m_NetInfo.AppendNet( netinfo );
                         }
 
