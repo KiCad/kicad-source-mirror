@@ -202,6 +202,10 @@ public:
     ///> Constant that holds the unconnected net number
     static const int UNCONNECTED;
 
+    ///> NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
+    ///> board storing net list available.
+    static const NETINFO_ITEM ORPHANED;
+
 #if defined(DEBUG)
     void Show() const;
 #endif

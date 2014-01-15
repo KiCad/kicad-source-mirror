@@ -1731,7 +1731,7 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
 
         case T_pad:
         {
-            D_PAD* pad = parseD_PAD();
+            D_PAD* pad = parseD_PAD( module.get() );
             wxPoint pt = pad->GetPos0();
             RotatePoint( &pt, module->GetOrientation() );
             pad->SetPosition( pt + module->GetPosition() );
@@ -2011,14 +2011,14 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
+D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
 {
     wxCHECK_MSG( CurTok() == T_pad, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as D_PAD." ) );
 
     wxSize sz;
     wxPoint pt;
-    std::auto_ptr< D_PAD > pad( new D_PAD( NULL ) );
+    std::auto_ptr< D_PAD > pad( new D_PAD( aParent ) );
 
     NeedSYMBOLorNUMBER();
     pad->SetPadName( FromUTF8() );
