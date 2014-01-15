@@ -2421,7 +2421,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // Ensure keepout does not have a net
             // (which have no sense for a keepout zone)
             if( zc->GetIsKeepout() )
-                zc->SetNet( 0 );
+                zc->SetNet( NETINFO_LIST::UNCONNECTED );
 
             // should always occur, but who knows, a zone without two corners
             // is no zone at all, it's a spot?
@@ -2431,7 +2431,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 if( !zc->IsOnCopperLayer() )
                 {
                     zc->SetFillMode( 0 );
-                    zc->SetNet( 0 );
+                    zc->SetNet( NETINFO_LIST::UNCONNECTED );
                 }
 
                 // Hatch here, after outlines corners are read

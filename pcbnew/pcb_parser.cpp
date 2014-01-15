@@ -2687,7 +2687,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
         if( !zone->IsOnCopperLayer() )
         {
             zone->SetFillMode( 0 );
-            zone->SetNet( 0 );
+            zone->SetNet( NETINFO_LIST::UNCONNECTED );
         }
 
         // Set hatch here, after outlines corners are read
@@ -2699,7 +2699,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
     // Ensure keepout does not have a net (which have no sense for a keepout zone)
     if( zone->GetIsKeepout() )
-        zone->SetNet( 0 );
+        zone->SetNet( NETINFO_LIST::UNCONNECTED );
 
     return zone.release();
 }

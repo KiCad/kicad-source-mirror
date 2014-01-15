@@ -1529,7 +1529,7 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
     {
         if( !GetArea( ii )->IsOnCopperLayer() )
         {
-            GetArea( ii )->SetNet( 0 );
+            GetArea( ii )->SetNet( NETINFO_LIST::UNCONNECTED );
             continue;
         }
 
@@ -2546,7 +2546,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     }
 
                     if( !aNetlist.IsDryRun() )
-                        pad->SetNet( 0 );
+                        pad->SetNet( NETINFO_LIST::UNCONNECTED );
                 }
             }
             else                                 // Footprint pad has a net.
@@ -2649,7 +2649,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                         aReporter->Report( msg );
                     }
 
-                    previouspad->SetNet( 0 );
+                    previouspad->SetNet( NETINFO_LIST::UNCONNECTED );
                 }
                 netname = pad->GetNetname();
                 count = 1;
@@ -2662,7 +2662,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 
         // Examine last pad
         if( pad && count == 1 )
-            pad->SetNet( 0 );
+            pad->SetNet( NETINFO_LIST::UNCONNECTED );
     }
 
     // Last step: Some tests:
