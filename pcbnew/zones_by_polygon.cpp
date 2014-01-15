@@ -577,7 +577,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                     zoneInfo.SetIsKeepout( true );
                     // Netcode and netname are irrelevant,
                     // so ensure they are cleared
-                    zone->SetNet( 0 );
+                    zone->SetNet( NETINFO_LIST::UNCONNECTED );
                     edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
                 }
                 else

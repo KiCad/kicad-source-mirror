@@ -1493,7 +1493,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
                 zone->SetTimeStamp( timeStamp( gr->second ) );
                 zone->SetLayer( layer );
-                zone->SetNet( 0 );
+                zone->SetNet( NETINFO_LIST::UNCONNECTED );
 
                 CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::DIAGONAL_EDGE;
 
@@ -2550,7 +2550,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
             // KiCad does not support an unconnected zone with its own non-zero netcode,
             // but only when assigned netcode = 0 w/o a name...
             for( ZONES::iterator it = zones.begin();  it != zones.end();  ++it )
-                (*it)->SetNet( 0 );
+                (*it)->SetNet( NETINFO_LIST::UNCONNECTED );
 
             // therefore omit this signal/net.
         }

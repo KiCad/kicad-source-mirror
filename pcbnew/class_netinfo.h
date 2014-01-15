@@ -199,6 +199,9 @@ public:
             return NULL;
     }
 
+    ///> Constant that holds the unconnected net number
+    static const int UNCONNECTED;
+
 #if defined(DEBUG)
     void Show() const;
 #endif

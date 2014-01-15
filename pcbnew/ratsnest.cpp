@@ -540,7 +540,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
         // collect active pads of the module:
         for( pad_ref = aModule->Pads(); pad_ref != NULL; pad_ref = pad_ref->Next() )
         {
-            if( pad_ref->GetNet() == 0 )
+            if( pad_ref->GetNet() == NETINFO_LIST::UNCONNECTED )
                 continue;
 
             localPadList.push_back( pad_ref );

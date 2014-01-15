@@ -162,3 +162,6 @@ void NETINFO_LIST::buildPadsFullList()
 
     m_Parent->m_Status_Pcb = LISTE_PAD_OK;
 }
+
+
+const int NETINFO_LIST::UNCONNECTED = 0;
