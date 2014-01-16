@@ -34,7 +34,6 @@
 #define __CLASSES_NETINFO__
 
 
-#include <vector>
 #include <gr_basic.h>
 #include <class_netclass.h>
 #include <boost/unordered_map.hpp>
@@ -132,14 +131,16 @@ public:
 
     /**
      * Function GetItem
-     * @param aNetcode = netcode to identify a given NETINFO_ITEM
-     * @return NETINFO_ITEM* - by \a aNetcode, or NULL if not found
+     * @param aNetCode = netcode to identify a given NETINFO_ITEM
+     * @return NETINFO_ITEM* - by \a aNetCode, or NULL if not found
      */
-    NETINFO_ITEM* GetNetItem( int aNetcode ) const
+    NETINFO_ITEM* GetNetItem( int aNetCode ) const
     {
-        if( unsigned( aNetcode ) >= GetNetCount() )     // catches < 0 too
-            return NULL;
-        return m_NetBuffer[aNetcode];
+        NETCODES_MAP::const_iterator result = m_netCodes.find( aNetCode );
+        if( result != m_netCodes.end() )
+            return (*result).second;
+
+        return NULL;
     }
 
     /**
@@ -161,7 +162,7 @@ public:
      * @return the number of nets ( always >= 1 )
      * because the first net is the "not connected" net and always exists
      */
-    unsigned GetNetCount() const { return m_NetBuffer.size(); }
+    unsigned GetNetCount() const { return m_netNames.size(); }
 
     /**
      * Function Append
@@ -211,9 +212,9 @@ public:
 #endif
 
     typedef boost::unordered_map<const wxString, NETINFO_ITEM*, WXSTRING_HASH> NETNAMES_MAP;
+    typedef boost::unordered_map<const int, NETINFO_ITEM*> NETCODES_MAP;
 
 private:
-
     /**
      * Function DeleteData
      * deletes the list of nets (and free memory)
@@ -237,9 +238,20 @@ private:
      */
     void buildPadsFullList();
 
+    /**
+     * Function getFreeNetCode
+     * returns the first available net code that is not used by any other net.
+     */
+    int getFreeNetCode() const;
+
     BOARD*                      m_Parent;
+
     NETNAMES_MAP m_netNames;                    ///< map for a fast look up by net names
-    std::vector<NETINFO_ITEM*>  m_NetBuffer;    ///< net list (name, design constraints ..)
+    NETCODES_MAP m_netCodes;                    ///< map for a fast look up by net codes
+
+    static int m_newNetCode;                    ///< number that has a *high* chance to be unused
+                                                ///< (to be sure, it is advised to use
+                                                ///< getFreeNetCode() function)
 
     std::vector<D_PAD*>         m_PadsFullList; ///< contains all pads, sorted by pad's netname.
                                                 ///< can be used in ratsnest calculations.
@@ -252,6 +264,8 @@ private:
  */
 class NETINFO_ITEM
 {
+    friend class NETINFO_LIST;
+
 private:
     const int m_NetCode;        ///< A number equivalent to the net name.
                                 ///< Used for fast comparisons in ratsnest and DRC computations.
@@ -271,12 +285,6 @@ private:
     BOARD_ITEM* m_parent;       ///< The parent board item object the net belongs to.
 
 public:
-    int m_NbNodes;                     // Pads count for this net
-    int m_NbLink;                      // Ratsnets count for this net
-    int m_NbNoconn;                    // Ratsnets remaining to route count
-    int m_Flag;                        // used in some calculations. Had no
-                                       // special meaning
-
     std::vector <D_PAD*> m_PadInNetList;    // List of pads connected to this net
 
     unsigned m_RatsnestStartIdx;       /* Starting point of ratsnests of this
@@ -287,7 +295,7 @@ public:
     unsigned m_RatsnestEndIdx;         // Ending point of ratsnests of this net
                                        // (excluded) in this buffer
 
-    NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName = wxEmptyString, int aNetCode = 0 );
+    NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName = wxEmptyString, int aNetCode = -1 );
     ~NETINFO_ITEM();
 
     /**
@@ -446,10 +454,6 @@ public:
     {
         m_PadInNetList.clear();
 
-        m_NbNodes           = 0;
-        m_NbLink            = 0;
-        m_NbNoconn          = 0;
-        m_Flag              = 0;
         m_RatsnestStartIdx  = 0;     // Starting point of ratsnests of this net in a
                                      // general buffer of ratsnest
         m_RatsnestEndIdx    = 0;     // Ending point of ratsnests of this net

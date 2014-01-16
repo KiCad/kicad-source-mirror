@@ -30,25 +30,29 @@ NETINFO_LIST::~NETINFO_LIST()
 
 void NETINFO_LIST::clear()
 {
-    for( unsigned ii = 0; ii < GetNetCount(); ii++ )
-        delete m_NetBuffer[ii];
+    NETNAMES_MAP::iterator it, itEnd;
+    for( it = m_netNames.begin(), itEnd = m_netNames.end(); it != itEnd; ++it )
+        delete it->second;
 
-    m_NetBuffer.clear();
     m_PadsFullList.clear();
     m_netNames.clear();
+    m_netCodes.clear();
 }
 
 
 void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 {
+    // negative net code means that it has to be auto assigned
+    if( aNewElement->m_NetCode < 0 )
+        const_cast<int&>( aNewElement->m_NetCode ) = getFreeNetCode();
+
     // net names & codes are supposed to be unique
     assert( GetNetItem( aNewElement->GetNetname() ) == NULL );
     assert( GetNetItem( aNewElement->GetNet() ) == NULL );
 
-    m_NetBuffer.push_back( aNewElement );
-
     // add an entry for fast look up by a net name using a map
     m_netNames.insert( std::make_pair( aNewElement->GetNetname(), aNewElement ) );
+    m_netCodes.insert( std::make_pair( aNewElement->GetNet(), aNewElement ) );
 }
 
 
@@ -115,11 +119,13 @@ void NETINFO_LIST::buildListOfNets()
 #if defined(DEBUG)
 void NETINFO_LIST::Show() const
 {
-    for( unsigned i=0; i < m_NetBuffer.size();  ++i )
+    int i = 0;
+    NETNAMES_MAP::const_iterator it, itEnd;
+    for( it = m_netNames.begin(), itEnd = m_netNames.end(); it != itEnd; ++it )
     {
         printf( "[%d]: netcode:%d  netname:<%s>\n",
-            i, m_NetBuffer[i]->GetNet(),
-            TO_UTF8( m_NetBuffer[i]->GetNetname() ) );
+            i++, it->second->GetNet(),
+            TO_UTF8( it->second->GetNetname() ) );
     }
 }
 #endif
@@ -164,5 +170,17 @@ void NETINFO_LIST::buildPadsFullList()
 }
 
 
+int NETINFO_LIST::getFreeNetCode() const
+{
+    do {
+        if( m_newNetCode < 0 )
+            m_newNetCode = 0;
+    } while( m_netCodes.count( ++NETINFO_LIST::m_newNetCode ) != 0 );
+
+    return m_newNetCode;
+}
+
+
 const NETINFO_ITEM NETINFO_LIST::ORPHANED = NETINFO_ITEM( NULL, wxString( "orphaned" ), -1 );
 const int NETINFO_LIST::UNCONNECTED = 0;
+int NETINFO_LIST::m_newNetCode = 0;
