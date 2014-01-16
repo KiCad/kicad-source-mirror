@@ -654,14 +654,19 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     m_out->Print( aNestLevel, ")\n\n" );
 
-    int netcount = aBoard->GetNetCount();
+    // Unconditionally save the unconnected net
+    m_out->Print( aNestLevel, "(net 0 \"\")\n" );
 
-    for( int i = 0;  i < netcount;  ++i )
+    // and now the rest of nets
+    for( NETINFO_LIST::iterator net( aBoard->BeginNet() ), netEnd( aBoard->EndNet() );
+            net != netEnd; ++net )
     {
-        NETINFO_ITEM*   net = aBoard->FindNet( i );
-        m_out->Print( aNestLevel, "(net %d %s)\n",
-                      net->GetNet(),
-                      m_out->Quotew( net->GetNetname() ).c_str() );
+        if( net->GetNodesCount() > 0 )  // save only not empty nets
+        {
+            m_out->Print( aNestLevel, "(net %d %s)\n",
+                          net->GetNet(),
+                          m_out->Quotew( net->GetNetname() ).c_str() );
+        }
     }
 
     m_out->Print( 0, "\n" );

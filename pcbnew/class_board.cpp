@@ -1440,10 +1440,11 @@ int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCoun
 
     netBuffer.reserve( m_NetInfo.GetNetCount() );
 
-    for( unsigned ii = 1; ii < m_NetInfo.GetNetCount(); ii++ )
+    for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
+                net != netEnd; ++net )
     {
-        if( m_NetInfo.GetNetItem( ii )->GetNet() > 0 )
-            netBuffer.push_back( m_NetInfo.GetNetItem( ii ) );
+        if( net->GetNet() > 0 )
+            netBuffer.push_back( *net );
     }
 
     // sort the list
