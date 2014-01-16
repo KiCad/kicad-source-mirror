@@ -53,10 +53,6 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int a
     m_NetCode( aNetCode ), m_Netname( aNetName ), m_ShortNetname( m_Netname.AfterLast( '/' ) )
 {
     m_parent   = aParent;
-    m_NbNodes  = 0;
-    m_NbLink   = 0;
-    m_NbNoconn = 0;
-    m_Flag     = 0;
     m_RatsnestStartIdx = 0;     // Starting point of ratsnests of this net in a
                                 // general buffer of ratsnest
     m_RatsnestEndIdx   = 0;     // Ending point of ratsnests of this net
