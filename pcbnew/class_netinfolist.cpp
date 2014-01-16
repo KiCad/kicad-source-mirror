@@ -181,6 +181,6 @@ int NETINFO_LIST::getFreeNetCode() const
 }
 
 
-const NETINFO_ITEM NETINFO_LIST::ORPHANED = NETINFO_ITEM( NULL, wxString( "orphaned" ), -1 );
+const NETINFO_ITEM NETINFO_LIST::ORPHANED = NETINFO_ITEM( NULL, wxString::FromUTF8( "orphaned" ), -1 );
 const int NETINFO_LIST::UNCONNECTED = 0;
 int NETINFO_LIST::m_newNetCode = 0;
