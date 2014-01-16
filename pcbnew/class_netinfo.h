@@ -214,6 +214,66 @@ public:
     typedef boost::unordered_map<const wxString, NETINFO_ITEM*, WXSTRING_HASH> NETNAMES_MAP;
     typedef boost::unordered_map<const int, NETINFO_ITEM*> NETCODES_MAP;
 
+    ///> Wrapper class, so you can iterate through NETINFO_ITEM*s, not
+    ///> std::pair<int/wxString, NETINFO_ITEM*>
+    class iterator
+    {
+    public:
+        iterator( NETNAMES_MAP::const_iterator aIter ) : m_iterator( aIter )
+        {
+        }
+
+        /// pre-increment operator
+        const iterator& operator++()
+        {
+            ++m_iterator;
+
+            return *this;
+        }
+
+        /// post-increment operator
+        iterator operator++( int )
+        {
+            iterator ret = *this;
+            ++m_iterator;
+
+            return ret;
+        }
+
+        NETINFO_ITEM* operator*() const
+        {
+            return m_iterator->second;
+        }
+
+        NETINFO_ITEM* operator->() const
+        {
+            return m_iterator->second;
+        }
+
+        bool operator!=( const iterator& aOther ) const
+        {
+            return m_iterator != aOther.m_iterator;
+        }
+
+        bool operator==( const iterator& aOther ) const
+        {
+            return m_iterator == aOther.m_iterator;
+        }
+
+    private:
+        NETNAMES_MAP::const_iterator m_iterator;
+    };
+
+    iterator begin() const
+    {
+        return iterator( m_netNames.begin() );
+    }
+
+    iterator end() const
+    {
+        return iterator( m_netNames.end() );
+    }
+
 private:
     /**
      * Function DeleteData

@@ -90,8 +90,8 @@ void NETINFO_LIST::buildListOfNets()
     buildPadsFullList();
 
     // Restore the initial state of NETINFO_ITEMs
-    for( unsigned i = 0; i < GetNetCount(); ++i )
-        GetNetItem( i )->Clear();
+    for( NETINFO_LIST::iterator net( begin() ), netEnd( end() ); net != netEnd; ++net )
+        net->Clear();
 
     // Assign pads to appropriate NETINFO_ITEMs
     for( unsigned ii = 0; ii < m_PadsFullList.size(); ii++ )
