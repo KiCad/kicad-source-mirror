@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-09 19:47+0100\n"
-"PO-Revision-Date: 2014-01-09 19:48+0100\n"
+"POT-Creation-Date: 2014-01-18 21:53+0100\n"
+"PO-Revision-Date: 2014-01-18 21:54+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -882,93 +882,93 @@ msgstr "Pin z otwartym emiterem..."
 msgid "No Connection......"
 msgstr "Nie połączony............."
 
-#: eeschema/erc.cpp:104
+#: eeschema/erc.cpp:103
 msgid "Input Pin"
 msgstr "Wejście"
 
-#: eeschema/erc.cpp:105
+#: eeschema/erc.cpp:104
 msgid "Output Pin"
 msgstr "Wyjście"
 
-#: eeschema/erc.cpp:106
+#: eeschema/erc.cpp:105
 msgid "Bidirectional Pin"
 msgstr "Dwukierunkowy"
 
-#: eeschema/erc.cpp:107
+#: eeschema/erc.cpp:106
 msgid "Tri-State Pin"
 msgstr "Trójstanowy"
 
-#: eeschema/erc.cpp:108
+#: eeschema/erc.cpp:107
 msgid "Passive Pin"
 msgstr "Pasywny"
 
-#: eeschema/erc.cpp:109
+#: eeschema/erc.cpp:108
 msgid "Unspecified Pin"
 msgstr "Nieokreślony"
 
-#: eeschema/erc.cpp:110
+#: eeschema/erc.cpp:109
 msgid "Power Input Pin"
 msgstr "Wejście zasilania"
 
-#: eeschema/erc.cpp:111
+#: eeschema/erc.cpp:110
 msgid "Power Output Pin"
 msgstr "Wyjście zasilania"
 
-#: eeschema/erc.cpp:112
+#: eeschema/erc.cpp:111
 msgid "Open Collector"
 msgstr "Otwarty kolektor"
 
-#: eeschema/erc.cpp:113
+#: eeschema/erc.cpp:112
 msgid "Open Emitter"
 msgstr "Otwarty emiter"
 
-#: eeschema/erc.cpp:114
+#: eeschema/erc.cpp:113
 msgid "No Connection"
 msgstr "Nie podłączony"
 
-#: eeschema/erc.cpp:209
+#: eeschema/erc.cpp:207
 msgid "Duplicate sheet name"
 msgstr "Podwójna nazwa arkusza"
 
-#: eeschema/erc.cpp:252
+#: eeschema/erc.cpp:250
 #, c-format
 msgid "Hierarchical label %s is not connected to a sheet label."
 msgstr "Etykieta hierarchiczna %s nie jest połączona z etykietą arkusza."
 
-#: eeschema/erc.cpp:257
+#: eeschema/erc.cpp:255
 #, c-format
 msgid "Sheet label %s is not connected to a hierarchical label."
 msgstr "Etykieta arkusza %s nie jest połączona z etykietą hierarchiczną."
 
-#: eeschema/erc.cpp:285
+#: eeschema/erc.cpp:283
 #, c-format
 msgid "Pin %s (%s) of component %s is unconnected."
 msgstr "Pin %s (%s) w symbolu %s nie jest podłączony."
 
-#: eeschema/erc.cpp:300
+#: eeschema/erc.cpp:298
 #, c-format
 msgid "Pin %s (%s) of component %s is not driven (Net %d)."
 msgstr "Pin %s, (%s) symbolu %s nie jest sterowany (Sieć %d)."
 
-#: eeschema/erc.cpp:312
+#: eeschema/erc.cpp:310
 msgid "More than 1 pin connected to an UnConnect symbol."
 msgstr "Więcej niż 1 pin podłączony do symbolu \"Niepołączony\"."
 
-#: eeschema/erc.cpp:340
+#: eeschema/erc.cpp:338
 #, c-format
 msgid "Pin %s (%s) of component %s is connected to "
 msgstr "Pin %s (%s) symbolu %s jest połączony z "
 
-#: eeschema/erc.cpp:343
+#: eeschema/erc.cpp:341
 #, c-format
 msgid "pin %s (%s) of component %s (net %d)."
 msgstr "pin %s (%s) symbolu %s (sieć %d)."
 
-#: eeschema/erc.cpp:500
+#: eeschema/erc.cpp:498
 msgid "ERC report"
 msgstr "Raport ERC"
 
-#: eeschema/erc.cpp:508
+#: eeschema/erc.cpp:506
 #, c-format
 msgid ""
 "\n"
@@ -977,7 +977,7 @@ msgstr ""
 "\n"
 "***** Arkusz %s\n"
 
-#: eeschema/erc.cpp:530
+#: eeschema/erc.cpp:528
 #, c-format
 msgid ""
 "\n"
@@ -5313,15 +5313,15 @@ msgstr "Wzorce nazw pól"
 msgid "Marker not found"
 msgstr "Nie znaleziono znacznika"
 
-#: eeschema/dialogs/dialog_erc.cpp:440
+#: eeschema/dialogs/dialog_erc.cpp:437
 msgid "Annotation required!"
 msgstr "Wymagana numeracja elementów!"
 
-#: eeschema/dialogs/dialog_erc.cpp:558
+#: eeschema/dialogs/dialog_erc.cpp:555
 msgid "ERC File"
 msgstr "Plik ERC"
 
-#: eeschema/dialogs/dialog_erc.cpp:559
+#: eeschema/dialogs/dialog_erc.cpp:556
 msgid "Electronic rule check file (.erc)|*.erc"
 msgstr "Pliki ERC (*.erc)|*.erc"
 
@@ -9674,13 +9674,13 @@ msgstr ""
 "Plik <%s> nie istnieje.\n"
 "Jest to normalne w przypadku nowych projektów."
 
-#: pcbnew/pcbnew_config.cpp:77 pcbnew/dialogs/dialog_general_options.cpp:249
+#: pcbnew/pcbnew_config.cpp:77 pcbnew/dialogs/dialog_general_options.cpp:250
 #: gerbview/events_called_functions.cpp:383 gerbview/menubar.cpp:152
 #: gerbview/menubar.cpp:154 gerbview/options.cpp:64
 msgid "Hide &Layers Manager"
 msgstr "Ukryj menadżera warstw"
 
-#: pcbnew/pcbnew_config.cpp:77 pcbnew/dialogs/dialog_general_options.cpp:249
+#: pcbnew/pcbnew_config.cpp:77 pcbnew/dialogs/dialog_general_options.cpp:250
 #: gerbview/events_called_functions.cpp:383 gerbview/menubar.cpp:154
 #: gerbview/options.cpp:64
 msgid "Show &Layers Manager"
@@ -10864,7 +10864,7 @@ msgstr "Otwór mikroprzelotki"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:110
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:120
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:132
-#: common/edaappl.cpp:113
+#: common/edaappl.cpp:108
 msgid "Default"
 msgstr "Domyślny"
 
@@ -15115,13 +15115,15 @@ msgid "Filtered by "
 msgstr "Filtrowane według "
 
 #: cvpcb/cvframe.cpp:754
-msgid "No PCB footprint libraries are listed in the current project file."
+msgid ""
+"No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
-"Brak wyszczególnionych bibliotek footprintów w bieżącym pliku projektu."
+"Brak wyszczególnionych bibliotek footprintów w bieżącym pliku z tabelą "
+"bibliotek."
 
 #: cvpcb/cvframe.cpp:755
-msgid "Project File Error"
-msgstr "Błąd pliku"
+msgid "Configuration Error"
+msgstr "Błąd Konfiguracji"
 
 #: cvpcb/cvframe.cpp:846
 msgid "Unknown netlist format."
@@ -16335,83 +16337,83 @@ msgstr "Niezakończony separator tekstu"
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "Separator musi być pojedynczym znakiem: ', \" lub $"
 
-#: common/edaappl.cpp:130
+#: common/edaappl.cpp:125
 msgid "French"
 msgstr "Francuski"
 
-#: common/edaappl.cpp:138
+#: common/edaappl.cpp:133
 msgid "Finnish"
 msgstr "Suomi (Fiński)"
 
-#: common/edaappl.cpp:146
+#: common/edaappl.cpp:141
 msgid "Spanish"
 msgstr "Hiszpański"
 
-#: common/edaappl.cpp:154
+#: common/edaappl.cpp:149
 msgid "Portuguese"
 msgstr "Portugalski"
 
-#: common/edaappl.cpp:162
+#: common/edaappl.cpp:157
 msgid "Italian"
 msgstr "Włoski"
 
-#: common/edaappl.cpp:170
+#: common/edaappl.cpp:165
 msgid "German"
 msgstr "Niemiecki"
 
-#: common/edaappl.cpp:178
+#: common/edaappl.cpp:173
 msgid "Greek"
 msgstr "Grecki"
 
-#: common/edaappl.cpp:186
+#: common/edaappl.cpp:181
 msgid "Slovenian"
 msgstr "Słoweński"
 
-#: common/edaappl.cpp:194
+#: common/edaappl.cpp:189
 msgid "Hungarian"
 msgstr "Węgierski"
 
-#: common/edaappl.cpp:202
+#: common/edaappl.cpp:197
 msgid "Polish"
 msgstr "Polski"
 
-#: common/edaappl.cpp:210
+#: common/edaappl.cpp:205
 msgid "Czech"
 msgstr "Czeski"
 
-#: common/edaappl.cpp:218
+#: common/edaappl.cpp:213
 msgid "Russian"
 msgstr "Rosyjski"
 
-#: common/edaappl.cpp:226
+#: common/edaappl.cpp:221
 msgid "Korean"
 msgstr "Koreański"
 
-#: common/edaappl.cpp:234
+#: common/edaappl.cpp:229
 msgid "Chinese simplified"
 msgstr "Chiński uproszczony"
 
-#: common/edaappl.cpp:242
+#: common/edaappl.cpp:237
 msgid "Catalan"
 msgstr "Kataloński"
 
-#: common/edaappl.cpp:250
+#: common/edaappl.cpp:245
 msgid "Dutch"
 msgstr "Holenderski"
 
-#: common/edaappl.cpp:258
+#: common/edaappl.cpp:253
 msgid "Japanese"
 msgstr "Japoński"
 
-#: common/edaappl.cpp:266
+#: common/edaappl.cpp:261
 msgid "Bulgarian"
 msgstr "Bułgarski"
 
-#: common/edaappl.cpp:860
+#: common/edaappl.cpp:855
 msgid "Language"
 msgstr "Język"
 
-#: common/edaappl.cpp:861
+#: common/edaappl.cpp:856
 msgid "Select application language (only for testing!)"
 msgstr "Wybierz język aplikacji (tylko do testowania!)"
 
@@ -16454,12 +16456,12 @@ msgstr "Niepoprawny znak w danych o rewizji"
 msgid "'%s' is a duplicate footprint library nickName"
 msgstr "'%s' jest duplikatem footprintu biblioteki "
 
-#: common/fp_lib_table.cpp:629
+#: common/fp_lib_table.cpp:630
 #, c-format
-msgid "lib table contains no logical lib '%s'"
-msgstr "tabela bibliotek nie zawiera logicznej biblioteki '%s'"
+msgid "fp-lib-table files contain no lib with nickname '%s'"
+msgstr "Plik fp-lib-table nie zawiera biblioteki z nazwą sktrótową '%s'"
 
-#: common/fp_lib_table.cpp:745
+#: common/fp_lib_table.cpp:749
 #, c-format
 msgid ""
 "Cannot find footprint library file '%s' in any of the KiCad legacy library "
@@ -16468,14 +16470,14 @@ msgstr ""
 "Nie mogę odnaleźć pliku biblioteki '%s' w żadnej ze standardowych ścieżek "
 "wyszukiwania bibliotek starszego typu.\n"
 
-#: common/fp_lib_table.cpp:769
+#: common/fp_lib_table.cpp:773
 #, c-format
 msgid "Component `%s` footprint '%s' was not found in any legacy library.\n"
 msgstr ""
 "Komponent '%s', footprint '%s' nie został znaleziony w żadnej z bibliotek "
 "starszego typu.\n"
 
-#: common/fp_lib_table.cpp:814
+#: common/fp_lib_table.cpp:818
 #, c-format
 msgid ""
 "Component `%s` footprint '%s' legacy library path <%s > was not found in the "
@@ -16484,12 +16486,12 @@ msgstr ""
 "Komponent '%s', footprint '%s' o ścieżce dostępu '%s' nie został znaleziony "
 "w tabeli bibliotek footprntów.\n"
 
-#: common/fp_lib_table.cpp:833
+#: common/fp_lib_table.cpp:837
 #, c-format
 msgid "Component `%s` FPID '%s' is not valid.\n"
 msgstr "Komponent '%s', FPID '%s' nie jest prawidłowy.\n"
 
-#: common/fp_lib_table.cpp:920
+#: common/fp_lib_table.cpp:924
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "Nie można utworzyć globalnej tabeli bibliotek w ścieżce '%s'."
@@ -19298,6 +19300,9 @@ msgstr "Kalkulator PCB"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nowy element"
+
+#~ msgid "Project File Error"
+#~ msgstr "Błąd pliku"
 
 #~ msgid "Parts are locked"
 #~ msgstr "Elementy są zablokowane"
