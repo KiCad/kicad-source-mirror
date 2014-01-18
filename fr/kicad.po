@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-09 20:15+0100\n"
-"PO-Revision-Date: 2014-01-09 20:21+0100\n"
+"POT-Creation-Date: 2014-01-18 20:29+0100\n"
+"PO-Revision-Date: 2014-01-18 20:32+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "Language: fr_FR\n"
@@ -209,15 +209,14 @@ msgstr "Suppression net à pad unique \"%s\" sur \"%s\" pad '%s'\n"
 
 #: pcbnew/class_board.cpp:2755
 #, c-format
-msgid "** Error: Component \"%s\" pad '%s' not found in footprint \"%s\" **\n"
+msgid "*** Error: Component '%s' pad '%s' not found in footprint '%s' ***\n"
 msgstr ""
-"*** Erreur: Composant \"'%s\" pad '%s' non trouvé dans l'empreinte \"%s\" "
-"**\n"
+"*** Erreur: Composant ''%s' pad '%s' non trouvé dans l'empreinte '%s' **\n"
 
 #: pcbnew/class_board.cpp:2780
 #, c-format
-msgid "** Error: Zone '%s' layer '%s' has non-existent net name \"%s\" **\n"
-msgstr "** Erreur: Zone %s couche '%s' a un nom de net inexistant \"%s\" **\n"
+msgid "*** Error: Zone '%s' layer '%s' has non-existent net name '%s' ***\n"
+msgstr "*** Erreur: Zone '%s' couche '%s' a un nom de net inexistant '%s' **\n"
 
 #: pcbnew/class_board_item.cpp:42
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
@@ -1573,11 +1572,11 @@ msgstr "Paramètre"
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:35
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:27
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:33
-#: common/drawframe.cpp:481
+#: common/drawframe.cpp:483
 msgid "Units"
 msgstr "Unités"
 
-#: pcbnew/footprint_wizard_frame.cpp:714 pcbnew/modview_frame.cpp:667
+#: pcbnew/footprint_wizard_frame.cpp:714 pcbnew/modview_frame.cpp:654
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "ModView: Visualiseur 3D [%s]"
@@ -1594,12 +1593,12 @@ msgstr "Sélection élément éditable précédent "
 msgid "Select next editable item"
 msgstr "Sélection élément éditable suivant"
 
-#: pcbnew/footprint_wizard_frame.cpp:754 pcbnew/tool_modview.cpp:73
+#: pcbnew/footprint_wizard_frame.cpp:754 pcbnew/tool_modview.cpp:75
 msgid "Show footprint in 3D viewer"
 msgstr "Visualiser l'empreinte en 3D"
 
 #: pcbnew/footprint_wizard_frame.cpp:757 pcbnew/tool_modedit.cpp:129
-#: pcbnew/tool_modview.cpp:76 eeschema/tool_viewlib.cpp:75
+#: pcbnew/tool_modview.cpp:78 eeschema/tool_viewlib.cpp:75
 #: gerbview/toolbars_gerber.cpp:76 common/zoom.cpp:227
 #: 3d-viewer/3d_toolbar.cpp:73 pagelayout_editor/toolbars_pl_editor.cpp:79
 #: pcbnew/help_common_strings.h:19 eeschema/help_common_strings.h:19
@@ -1607,7 +1606,7 @@ msgid "Zoom in"
 msgstr "Zoom +"
 
 #: pcbnew/footprint_wizard_frame.cpp:762 pcbnew/tool_modedit.cpp:132
-#: pcbnew/tool_modview.cpp:81 eeschema/tool_viewlib.cpp:80
+#: pcbnew/tool_modview.cpp:83 eeschema/tool_viewlib.cpp:80
 #: gerbview/toolbars_gerber.cpp:79 common/zoom.cpp:229
 #: 3d-viewer/3d_toolbar.cpp:76 pagelayout_editor/toolbars_pl_editor.cpp:82
 #: pcbnew/help_common_strings.h:20 eeschema/help_common_strings.h:20
@@ -1615,20 +1614,20 @@ msgid "Zoom out"
 msgstr "Zoom -"
 
 #: pcbnew/footprint_wizard_frame.cpp:767 pcbnew/tool_modedit.cpp:135
-#: pcbnew/tool_modview.cpp:86 eeschema/tool_viewlib.cpp:85
+#: pcbnew/tool_modview.cpp:88 eeschema/tool_viewlib.cpp:85
 #: gerbview/toolbars_gerber.cpp:82 common/zoom.cpp:231
 #: 3d-viewer/3d_toolbar.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:85
 msgid "Redraw view"
 msgstr "Redessin de l'écran"
 
 #: pcbnew/footprint_wizard_frame.cpp:772 pcbnew/tool_modedit.cpp:139
-#: pcbnew/tool_modview.cpp:91 eeschema/tool_viewlib.cpp:90
+#: pcbnew/tool_modview.cpp:93 eeschema/tool_viewlib.cpp:90
 #: gerbview/toolbars_gerber.cpp:85 common/zoom.cpp:233
 #: pagelayout_editor/toolbars_pl_editor.cpp:88
 msgid "Zoom auto"
 msgstr "Zoom Automatique"
 
-#: pcbnew/footprint_wizard_frame.cpp:783
+#: pcbnew/footprint_wizard_frame.cpp:783 pcbnew/tool_modview.cpp:105
 msgid "Insert footprint in board"
 msgstr "Insérer l'empreinte dans le circuit  imprimé"
 
@@ -1643,7 +1642,7 @@ msgstr "Ne peut convertir \"%s\" en un entier"
 msgid "footprint library path '%s' does not exist"
 msgstr "Le chemin de librairie d'empreintes '%s' n'existe pas"
 
-#: pcbnew/gpcb_plugin.cpp:309 pcbnew/legacy_plugin.cpp:4354
+#: pcbnew/gpcb_plugin.cpp:309
 #, c-format
 msgid "library <%s> has no footprint '%s' to delete"
 msgstr "La libraire <%s> n'a pas d'empreinte '%s' à supprimer"
@@ -1660,7 +1659,8 @@ msgid "Element token contains %d parameters."
 msgstr "Element token contains %d parameters."
 
 #: pcbnew/gpcb_plugin.cpp:958 pcbnew/kicad_plugin.cpp:1773
-#: pcbnew/kicad_plugin.cpp:1838 pcbnew/librairi.cpp:473
+#: pcbnew/kicad_plugin.cpp:1838 pcbnew/legacy_plugin.cpp:4299
+#: pcbnew/legacy_plugin.cpp:4344 pcbnew/librairi.cpp:473
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "Librairie '%s' est en lecture seule"
@@ -1787,7 +1787,7 @@ msgstr ""
 msgid "Footprint library path '%s' does not exist"
 msgstr "Le chemin de librairie d'empreintes '%s' n'existe pas"
 
-#: pcbnew/kicad_plugin.cpp:305
+#: pcbnew/kicad_plugin.cpp:305 pcbnew/legacy_plugin.cpp:4354
 #, c-format
 msgid "library '%s' has no footprint '%s' to delete"
 msgstr "La libraire '%s' n'a pas d'empreinte '%s' à supprimer"
@@ -1886,11 +1886,11 @@ msgstr ""
 #: pcbnew/legacy_plugin.cpp:93
 #, c-format
 msgid ""
-"File <%s> is format version: %d.\n"
+"File '%s' is format version: %d.\n"
 "I only support format version <= %d.\n"
 "Please upgrade Pcbnew to load this file."
 msgstr ""
-"Le fichier <%s> est en format version: %d.\n"
+"Le fichier '%s' est en format version: %d.\n"
 "Le format version supporté est <= %d.\n"
 "SVP mettre à jour Pcbnew pour charger ce fichier."
 
@@ -1906,8 +1906,8 @@ msgstr "Type de feuille inconnue '%s' ligne: %d"
 
 #: pcbnew/legacy_plugin.cpp:1200
 #, c-format
-msgid "Unknown padshape '%c=0x%02x' on line:%d of module:'%s'"
-msgstr "Forme de pad '%c=0x%02x' inconnue ligne:%d, module:'%s'"
+msgid "Unknown padshape '%c=0x%02x' on line: %d of module: '%s'"
+msgstr "Forme de pad '%c=0x%02x' inconnue ligne: %d, module:'%s'"
 
 #: pcbnew/legacy_plugin.cpp:2182
 #, c-format
@@ -1917,16 +1917,16 @@ msgstr "Nom NETCLASS '%s' dupliqué"
 #: pcbnew/legacy_plugin.cpp:2780 pcbnew/legacy_plugin.cpp:2817
 #, c-format
 msgid ""
-"invalid float number in file: <%s>\n"
+"invalid float number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Nombre flottant invalide dans le fichier: <%s>\n"
+"Nombre flottant invalide dans le fichier: '%s'\n"
 "ligne: %d, offset: %d"
 
 #: pcbnew/legacy_plugin.cpp:2789 pcbnew/legacy_plugin.cpp:2825
 #, c-format
 msgid ""
-"missing float number in file: <%s>\n"
+"missing float number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
 "Nombre flottant manquant dans le fichier: '%s'\n"
@@ -1934,49 +1934,44 @@ msgstr ""
 
 #: pcbnew/legacy_plugin.cpp:2868
 #, c-format
-msgid "Unable to open file <%s>"
-msgstr "Ne peut pas ouvrir le fichier <%s>"
+msgid "Unable to open file '%s'"
+msgstr "Ne peut pas ouvrir le fichier '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2893
+#: pcbnew/legacy_plugin.cpp:2893 common/richio.cpp:572
 #, c-format
-msgid "error writing to file <%s>"
-msgstr "Erreur lors de l'écriture du fichier <%s>"
+msgid "error writing to file '%s'"
+msgstr "Erreur système sur écriture fichier \"%s\""
 
 #: pcbnew/legacy_plugin.cpp:4004
 #, c-format
-msgid "File <%s> is empty or is not a legacy library"
-msgstr "Le fichier <%s> est vide ou n'est pas une librairie à l'ancien format"
+msgid "File '%s' is empty or is not a legacy library"
+msgstr "Le fichier '%s' est vide ou n'est pas une librairie à l'ancien format"
 
 #: pcbnew/legacy_plugin.cpp:4141
 #, c-format
-msgid "Legacy library file <%s> is read only"
-msgstr "Le fichier librairie ancien format <%s> est en lecture seule."
+msgid "Legacy library file '%s' is read only"
+msgstr "Le fichier librairie ancien format '%s' est en lecture seule."
 
 #: pcbnew/legacy_plugin.cpp:4160
 #, c-format
-msgid "Unable to open or create legacy library file <%s>"
-msgstr "Impossible d'ouvrir ou de créer la librairie ancienn format <%s>"
+msgid "Unable to open or create legacy library file '%s'"
+msgstr "Impossible d'ouvrir ou de créer la librairie ancienn format '%s'"
 
 #: pcbnew/legacy_plugin.cpp:4186
 #, c-format
-msgid "Unable to rename tempfile <%s> to library file <%s>"
+msgid "Unable to rename tempfile '%s' to library file '%s'"
 msgstr ""
-"Incapable de renommer le fichier temporaire <%s> en fichier librairie <%s>"
-
-#: pcbnew/legacy_plugin.cpp:4299 pcbnew/legacy_plugin.cpp:4344
-#, c-format
-msgid "Library <%s> is read only"
-msgstr "Librairie <%s> est en lecture seule"
+"Incapable de renommer le fichier temporaire '%s' en fichier librairie '%s'"
 
 #: pcbnew/legacy_plugin.cpp:4367
 #, c-format
-msgid "library <%s> already exists, will not create a new"
-msgstr "La librairie <%s> existe déjà, on ne peut en créer une nouvelle"
+msgid "library '%s' already exists, will not create a new"
+msgstr "La librairie '%s' existe déjà, on ne peut en créer une nouvelle"
 
 #: pcbnew/legacy_plugin.cpp:4394
 #, c-format
-msgid "library <%s> cannot be deleted"
-msgstr "la librairie <%s> ne peut pas être supprimée"
+msgid "library '%s' cannot be deleted"
+msgstr "la librairie '%s' ne peut pas être supprimée"
 
 #: pcbnew/librairi.cpp:57
 #, c-format
@@ -2685,7 +2680,7 @@ msgstr "Export I&DFv3 de la Forme du Pcb"
 
 #: pcbnew/menubar_pcbframe.cpp:208
 msgid "Basic export of board shape only IDFv3 format"
-msgstr ""
+msgstr "Export de la forme du CI seule en format IDFv3"
 
 #: pcbnew/menubar_pcbframe.cpp:212
 msgid "E&xport"
@@ -3367,11 +3362,11 @@ msgstr "Cherche Module"
 msgid "Delete Module %s (value %s) ?"
 msgstr "Supprimer Module %s (valeur %s) ?"
 
-#: pcbnew/modview_frame.cpp:124
+#: pcbnew/modview_frame.cpp:125
 msgid "Footprint Library Browser"
 msgstr "Examinateur de Librairies d'Empreintes"
 
-#: pcbnew/modview_frame.cpp:450
+#: pcbnew/modview_frame.cpp:437
 #, c-format
 msgid ""
 "Could not load footprint \"%s\" from library \"%s\".\n"
@@ -3382,17 +3377,17 @@ msgstr ""
 "\n"
 "Erreur %s."
 
-#: pcbnew/modview_frame.cpp:723 eeschema/viewlibs.cpp:106
+#: pcbnew/modview_frame.cpp:710 eeschema/viewlibs.cpp:106
 #: eeschema/viewlib_frame.cpp:105
 msgid "Library Browser"
 msgstr "Visualisateur de Librairies"
 
-#: pcbnew/modview_frame.cpp:729 eeschema/libedit.cpp:66
+#: pcbnew/modview_frame.cpp:716 eeschema/libedit.cpp:66
 #: eeschema/viewlibs.cpp:113
 msgid "no library selected"
 msgstr "Pas de librairie sélectionnée"
 
-#: pcbnew/modview_frame.cpp:756
+#: pcbnew/modview_frame.cpp:743
 msgid "Select Current Library:"
 msgstr "Sélectionner la Librairie Courante:"
 
@@ -4195,13 +4190,13 @@ msgstr ""
 "Fichier <%s> non existant.\n"
 "Ceci est normal pour un nouveau projet."
 
-#: pcbnew/pcbnew_config.cpp:77 pcbnew/dialogs/dialog_general_options.cpp:249
+#: pcbnew/pcbnew_config.cpp:77 pcbnew/dialogs/dialog_general_options.cpp:250
 #: gerbview/events_called_functions.cpp:383 gerbview/menubar.cpp:152
 #: gerbview/menubar.cpp:154 gerbview/options.cpp:64
 msgid "Hide &Layers Manager"
 msgstr "Cacher le &Gestionnaire de Couches"
 
-#: pcbnew/pcbnew_config.cpp:77 pcbnew/dialogs/dialog_general_options.cpp:249
+#: pcbnew/pcbnew_config.cpp:77 pcbnew/dialogs/dialog_general_options.cpp:250
 #: gerbview/events_called_functions.cpp:383 gerbview/menubar.cpp:154
 #: gerbview/options.cpp:64
 msgid "Show &Layers Manager"
@@ -4262,19 +4257,19 @@ msgstr "Lire Fichier Macros"
 
 #: pcbnew/pcbplot.cpp:151
 #, c-format
-msgid "*** Error: cannot make path <%s> absolute with respect to <%s>! ***"
+msgid "*** Error: cannot make path '%s' absolute with respect to '%s'! ***"
 msgstr ""
-"*** Erreur: impossible de faire <%s> un chemin absolu à partir de <%s>! ***"
+"*** Erreur: impossible de faire '%s' un chemin absolu à partir de '%s'! ***"
 
 #: pcbnew/pcbplot.cpp:168
 #, c-format
-msgid "Output directory <%s> created.\n"
-msgstr "Répertoire de sortie <%s> créé.\n"
+msgid "Output directory '%s' created.\n"
+msgstr "Répertoire de sortie '%s' créé.\n"
 
 #: pcbnew/pcbplot.cpp:177
 #, c-format
-msgid "*** Error: cannot create output directory <%s>! ***\n"
-msgstr "*** Error: impossible de créer le répertoire de sortie <%s>! ***\n"
+msgid "*** Error: cannot create output directory '%s'! ***\n"
+msgstr "*** Error: impossible de créer le répertoire de sortie '%s'! ***\n"
 
 #: pcbnew/pcb_parser.cpp:90
 #, c-format
@@ -4347,7 +4342,7 @@ msgstr "Expression réguliere de filtre du <b>nom d'empreinte</b>."
 
 #: pcbnew/plugin.cpp:126
 msgid ""
-"Enable transaction logging.  The mere presence of this option turns on the  "
+"Enable transaction logging. The mere presence of this option turns on the "
 "logging, no need to set a Value."
 msgstr ""
 "Active le logging de la connexion. La simple présence de cette option active "
@@ -4624,7 +4619,7 @@ msgid "Add Text"
 msgstr "Ajout de Texte"
 
 #: pcbnew/tool_modedit.cpp:212 pcbnew/tool_pcb.cpp:333
-#: cvpcb/class_DisplayFootprintsFrame.cpp:183 common/drawframe.cpp:293
+#: cvpcb/class_DisplayFootprintsFrame.cpp:183 common/drawframe.cpp:295
 msgid "Hide grid"
 msgstr "Ne pas afficher la grille"
 
@@ -4660,19 +4655,19 @@ msgstr "Afficher textes en contour"
 msgid "Show Edges Sketch"
 msgstr "Afficher Modules en contour"
 
-#: pcbnew/tool_modview.cpp:55 eeschema/tool_viewlib.cpp:59
+#: pcbnew/tool_modview.cpp:57 eeschema/tool_viewlib.cpp:59
 msgid "Select library to browse"
 msgstr "Sélection de la librairie à examiner"
 
-#: pcbnew/tool_modview.cpp:59
+#: pcbnew/tool_modview.cpp:61
 msgid "Select footprint to browse"
 msgstr "Sélectionner l'empreinte à visualiser"
 
-#: pcbnew/tool_modview.cpp:64
+#: pcbnew/tool_modview.cpp:66
 msgid "Display previous footprint"
 msgstr "Afficher empreinte précédente"
 
-#: pcbnew/tool_modview.cpp:68
+#: pcbnew/tool_modview.cpp:70
 msgid "Display next footprint"
 msgstr "Afficher empreinte suivante"
 
@@ -4831,8 +4826,8 @@ msgstr "Change TOUS les modules ?"
 
 #: pcbnew/xchgmod.cpp:391
 #, c-format
-msgid "Change module %s (from %s) to %s"
-msgstr "Change empreinte %s (de %s) en %s"
+msgid "Change module '%s' (from '%s') to '%s'"
+msgstr "Change empreinte '%s' (de '%s') en '%s'"
 
 #: pcbnew/xchgmod.cpp:524
 msgid "Save Component Files"
@@ -5447,7 +5442,7 @@ msgstr " Perçage µVia"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:110
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:120
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:132
-#: common/edaappl.cpp:113
+#: common/edaappl.cpp:108
 msgid "Default"
 msgstr "Défaut"
 
@@ -5564,12 +5559,13 @@ msgstr "Vias aveugles/enterrées:"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:174
 msgid ""
 "Allows or not blind/buried vias.\n"
-"Do not allow is the usual selection\n"
+"Do not allow is the usual selection.\n"
 "Note: micro vias are a special type of blind vias and are not managed here"
 msgstr ""
 "Autorise ou non les vias aveugles/enterrées.\n"
-"Ne pas autoriser est la sélection usuellenNote: les micro-vias sont un type "
-"spécial de via aveugle et ne sont pas gérées ici"
+"Ne pas autoriser est la sélection usuelle.\n"
+"Note: les micro-vias sont un type spécial de via aveugle et ne sont pas "
+"gérées ici"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:178
 msgid "Do not allow micro vias"
@@ -6638,7 +6634,7 @@ msgstr "Sous-répertoire des fichier VRML formes 3D"
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:52
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:45
-#: common/common.cpp:197 common/common.cpp:247 common/drawframe.cpp:477
+#: common/common.cpp:197 common/common.cpp:247 common/drawframe.cpp:479
 #: common/dialogs/dialog_page_settings.cpp:452
 #: pagelayout_editor/pl_editor_frame.cpp:429
 msgid "mm"
@@ -7033,7 +7029,7 @@ msgstr "Millimètres"
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:79
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:91
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:31
-#: common/drawframe.cpp:145 common/drawframe.cpp:473
+#: common/drawframe.cpp:147 common/drawframe.cpp:475
 #: pagelayout_editor/pl_editor_frame.cpp:118
 msgid "Inches"
 msgstr "Pouces"
@@ -10029,11 +10025,11 @@ msgstr ""
 #: pcbnew/github/github_plugin.cpp:496
 #, c-format
 msgid ""
-"Cannot GET zip: '%s'\n"
-"for lib-path: '%s'.\n"
-"What: '%s'"
+"Cannot get/download Zip archive: '%s'\n"
+"for library path: '%s'.\n"
+"Reason: '%s'"
 msgstr ""
-"Ne peut OBTENIR le fichier zip: '%s'\n"
+"Ne peut Obtenir/Downloader le fichier zip: '%s'\n"
 "à partir du chemin librairie: '%s'.\n"
 "Raison: '%s'"
 
@@ -10412,93 +10408,93 @@ msgstr "Pin Emetteur Ouv."
 msgid "No Connection......"
 msgstr "Pas de Connexion"
 
-#: eeschema/erc.cpp:104
+#: eeschema/erc.cpp:103
 msgid "Input Pin"
 msgstr "Pin en Entrée"
 
-#: eeschema/erc.cpp:105
+#: eeschema/erc.cpp:104
 msgid "Output Pin"
 msgstr "Pin en Sortie"
 
-#: eeschema/erc.cpp:106
+#: eeschema/erc.cpp:105
 msgid "Bidirectional Pin"
 msgstr "PIn Bidirectionnelle"
 
-#: eeschema/erc.cpp:107
+#: eeschema/erc.cpp:106
 msgid "Tri-State Pin"
 msgstr "Pin 3 états"
 
-#: eeschema/erc.cpp:108
+#: eeschema/erc.cpp:107
 msgid "Passive Pin"
 msgstr "Pin Passive"
 
-#: eeschema/erc.cpp:109
+#: eeschema/erc.cpp:108
 msgid "Unspecified Pin"
 msgstr "Pin non Specifiée"
 
-#: eeschema/erc.cpp:110
+#: eeschema/erc.cpp:109
 msgid "Power Input Pin"
 msgstr "Pin Power Input"
 
-#: eeschema/erc.cpp:111
+#: eeschema/erc.cpp:110
 msgid "Power Output Pin"
 msgstr "Pin Power Output"
 
-#: eeschema/erc.cpp:112
+#: eeschema/erc.cpp:111
 msgid "Open Collector"
 msgstr "Collecteur Ouvert"
 
-#: eeschema/erc.cpp:113
+#: eeschema/erc.cpp:112
 msgid "Open Emitter"
 msgstr "Emetteur Ouv."
 
-#: eeschema/erc.cpp:114
+#: eeschema/erc.cpp:113
 msgid "No Connection"
 msgstr "Pas de Connexion"
 
-#: eeschema/erc.cpp:209
+#: eeschema/erc.cpp:207
 msgid "Duplicate sheet name"
 msgstr "Nom de feuille en double"
 
-#: eeschema/erc.cpp:252
+#: eeschema/erc.cpp:250
 #, c-format
 msgid "Hierarchical label %s is not connected to a sheet label."
 msgstr "Label hiérarchique %s non connecté à un label de feuille"
 
-#: eeschema/erc.cpp:257
+#: eeschema/erc.cpp:255
 #, c-format
 msgid "Sheet label %s is not connected to a hierarchical label."
 msgstr "Label de feuille %s non connecté à un label hiérarchique"
 
-#: eeschema/erc.cpp:285
+#: eeschema/erc.cpp:283
 #, c-format
 msgid "Pin %s (%s) of component %s is unconnected."
 msgstr "La pin %s (%s) du composant %s est non connectée."
 
-#: eeschema/erc.cpp:300
+#: eeschema/erc.cpp:298
 #, c-format
 msgid "Pin %s (%s) of component %s is not driven (Net %d)."
 msgstr "Pin %s (%s) du composant %s non pilotée (Net %d)."
 
-#: eeschema/erc.cpp:312
+#: eeschema/erc.cpp:310
 msgid "More than 1 pin connected to an UnConnect symbol."
 msgstr "Plus de 1 Pin connectée à un symbole de Non Connexion"
 
-#: eeschema/erc.cpp:340
+#: eeschema/erc.cpp:338
 #, c-format
 msgid "Pin %s (%s) of component %s is connected to "
 msgstr "Pin %s (%s) du composant %s  connectée à "
 
-#: eeschema/erc.cpp:343
+#: eeschema/erc.cpp:341
 #, c-format
 msgid "pin %s (%s) of component %s (net %d)."
 msgstr "pin %s (%s) du composant %s (net %d)."
 
-#: eeschema/erc.cpp:500
+#: eeschema/erc.cpp:498
 msgid "ERC report"
 msgstr "Rapport d'erreur"
 
-#: eeschema/erc.cpp:508
+#: eeschema/erc.cpp:506
 #, c-format
 msgid ""
 "\n"
@@ -10507,7 +10503,7 @@ msgstr ""
 "\n"
 "***** Feuille %s\n"
 
-#: eeschema/erc.cpp:530
+#: eeschema/erc.cpp:528
 #, c-format
 msgid ""
 "\n"
@@ -10671,23 +10667,13 @@ msgstr "Impossible de créer le fichier librairie <%s>"
 msgid "Component Library Editor: "
 msgstr "Editeur de Composants: "
 
-#: eeschema/libedit.cpp:90
+#: eeschema/libedit.cpp:90 eeschema/libedit.cpp:122
 msgid ""
 "The current component is not saved.\n"
 "\n"
 "Discard current changes?"
 msgstr ""
 "Le composant courant non sauvé.\n"
-"\n"
-"Perdre les changements en cours ?"
-
-#: eeschema/libedit.cpp:122
-msgid ""
-"Current component is not saved.\n"
-"\n"
-"Discard current changes?"
-msgstr ""
-"Le composant courant n'est pas sauvé.\n"
 "\n"
 "Perdre les changements en cours ?"
 
@@ -13883,15 +13869,15 @@ msgstr "Noms des Champs Modèles"
 msgid "Marker not found"
 msgstr "Marqueur non trouvé"
 
-#: eeschema/dialogs/dialog_erc.cpp:440
+#: eeschema/dialogs/dialog_erc.cpp:437
 msgid "Annotation required!"
 msgstr "Numérotation requise!"
 
-#: eeschema/dialogs/dialog_erc.cpp:558
+#: eeschema/dialogs/dialog_erc.cpp:555
 msgid "ERC File"
 msgstr "Fichier ERC"
 
-#: eeschema/dialogs/dialog_erc.cpp:559
+#: eeschema/dialogs/dialog_erc.cpp:556
 msgid "Electronic rule check file (.erc)|*.erc"
 msgstr "Fichier Contrôle des règles électroniques (.erc)|*.erc"
 
@@ -14647,12 +14633,14 @@ msgid "Filtered by "
 msgstr "Filtré par "
 
 #: cvpcb/cvframe.cpp:754
-msgid "No PCB footprint libraries are listed in the current project file."
-msgstr "Aucune librairie de modules PCB listée dans le fichier projet courant."
+msgid ""
+"No PCB footprint libraries are listed in the current footprint library table."
+msgstr ""
+"Aucune librairie de modules PCB listée dans la table de librairie courante."
 
 #: cvpcb/cvframe.cpp:755
-msgid "Project File Error"
-msgstr "Erreur en Fichier Projet"
+msgid "Configuration Error"
+msgstr "Erreur de Configuration"
 
 #: cvpcb/cvframe.cpp:846
 msgid "Unknown netlist format."
@@ -16033,7 +16021,7 @@ msgstr "Infos"
 msgid "Confirmation"
 msgstr "Confirmation"
 
-#: common/drawframe.cpp:293
+#: common/drawframe.cpp:295
 msgid "Show grid"
 msgstr "Afficher grille"
 
@@ -16071,83 +16059,83 @@ msgstr ""
 "Le caractère de délimitation de ligne doit être un seul caractère  ', \", or "
 "$"
 
-#: common/edaappl.cpp:130
+#: common/edaappl.cpp:125
 msgid "French"
 msgstr "Français"
 
-#: common/edaappl.cpp:138
+#: common/edaappl.cpp:133
 msgid "Finnish"
 msgstr "Finlandais"
 
-#: common/edaappl.cpp:146
+#: common/edaappl.cpp:141
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: common/edaappl.cpp:154
+#: common/edaappl.cpp:149
 msgid "Portuguese"
 msgstr "Portugais"
 
-#: common/edaappl.cpp:162
+#: common/edaappl.cpp:157
 msgid "Italian"
 msgstr "Italien"
 
-#: common/edaappl.cpp:170
+#: common/edaappl.cpp:165
 msgid "German"
 msgstr "Allemand"
 
-#: common/edaappl.cpp:178
+#: common/edaappl.cpp:173
 msgid "Greek"
 msgstr "Grec"
 
-#: common/edaappl.cpp:186
+#: common/edaappl.cpp:181
 msgid "Slovenian"
 msgstr "Slovène"
 
-#: common/edaappl.cpp:194
+#: common/edaappl.cpp:189
 msgid "Hungarian"
 msgstr "Hongrois"
 
-#: common/edaappl.cpp:202
+#: common/edaappl.cpp:197
 msgid "Polish"
 msgstr "Polonais"
 
-#: common/edaappl.cpp:210
+#: common/edaappl.cpp:205
 msgid "Czech"
 msgstr "Tchèque"
 
-#: common/edaappl.cpp:218
+#: common/edaappl.cpp:213
 msgid "Russian"
 msgstr "Russe"
 
-#: common/edaappl.cpp:226
+#: common/edaappl.cpp:221
 msgid "Korean"
 msgstr "Coréen"
 
-#: common/edaappl.cpp:234
+#: common/edaappl.cpp:229
 msgid "Chinese simplified"
 msgstr "Chinois Simplifié"
 
-#: common/edaappl.cpp:242
+#: common/edaappl.cpp:237
 msgid "Catalan"
 msgstr "Catalan"
 
-#: common/edaappl.cpp:250
+#: common/edaappl.cpp:245
 msgid "Dutch"
 msgstr "Hollandais"
 
-#: common/edaappl.cpp:258
+#: common/edaappl.cpp:253
 msgid "Japanese"
 msgstr "Japonais"
 
-#: common/edaappl.cpp:266
+#: common/edaappl.cpp:261
 msgid "Bulgarian"
 msgstr "Bulgare"
 
-#: common/edaappl.cpp:860
+#: common/edaappl.cpp:855
 msgid "Language"
 msgstr "Langue"
 
-#: common/edaappl.cpp:861
+#: common/edaappl.cpp:856
 msgid "Select application language (only for testing!)"
 msgstr "Choisir la langue (seulement pour tests!)"
 
@@ -16190,12 +16178,13 @@ msgstr "Charactère illegal trouvé en révision"
 msgid "'%s' is a duplicate footprint library nickName"
 msgstr "'%s' est un pseudo nom de librairie dupliqué"
 
-#: common/fp_lib_table.cpp:629
+#: common/fp_lib_table.cpp:630
 #, c-format
-msgid "lib table contains no logical lib '%s'"
-msgstr "La table de librairie ne contient pas de librairie logique '%s'"
+msgid "fp-lib-table files contain no lib with nickname '%s'"
+msgstr ""
+"La table de librairie ne contient pas de nom logique pour la librairie '%s'"
 
-#: common/fp_lib_table.cpp:745
+#: common/fp_lib_table.cpp:749
 #, c-format
 msgid ""
 "Cannot find footprint library file '%s' in any of the KiCad legacy library "
@@ -16204,14 +16193,14 @@ msgstr ""
 "Impossible de trouver le fichier librairie d'empreintes '%s' dans les "
 "chemins de recherche des librairies ancien format.\n"
 
-#: common/fp_lib_table.cpp:769
+#: common/fp_lib_table.cpp:773
 #, c-format
 msgid "Component `%s` footprint '%s' was not found in any legacy library.\n"
 msgstr ""
 "Composant '%s' empreinte '%s' non trouvée dans les librairies ancien "
 "format.\n"
 
-#: common/fp_lib_table.cpp:814
+#: common/fp_lib_table.cpp:818
 #, c-format
 msgid ""
 "Component `%s` footprint '%s' legacy library path <%s > was not found in the "
@@ -16220,12 +16209,12 @@ msgstr ""
 "Composant '%s' empreinte '%s' chemin de librairie ancien format <%s> non "
 "trouvé dans la table des librairies d'empreintes.\n"
 
-#: common/fp_lib_table.cpp:833
+#: common/fp_lib_table.cpp:837
 #, c-format
 msgid "Component `%s` FPID '%s' is not valid.\n"
 msgstr "Composant '%s' FPID '%s' non valide.\n"
 
-#: common/fp_lib_table.cpp:920
+#: common/fp_lib_table.cpp:924
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "Impossible de créer le chemin de la table des librairie globale '%s'."
@@ -16383,11 +16372,6 @@ msgstr "Longueur de ligne dépassée"
 #, c-format
 msgid "cannot open or save file '%s'"
 msgstr "ne peut pas ouvrir ou sauver le fichier \"%s\""
-
-#: common/richio.cpp:572
-#, c-format
-msgid "error writing to file '%s'"
-msgstr "Erreur système sur écriture fichier \"%s\""
 
 #: common/richio.cpp:593
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
@@ -16821,8 +16805,8 @@ msgid "Comment4"
 msgstr "Commentaire4"
 
 #: common/dialogs/dialog_page_settings_base.cpp:346
-msgid "Page layout file description"
-msgstr "Fichier de description de page"
+msgid "Page layout description file"
+msgstr "Fichier de Description de Page"
 
 #: common/dialog_about/AboutDialog_main.cpp:131
 msgid ""
@@ -18123,6 +18107,27 @@ msgstr "Convertisseur Bitmap en Composant"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nouveau Item"
+
+#~ msgid "Project File Error"
+#~ msgstr "Erreur en Fichier Projet"
+
+#~ msgid "error writing to file <%s>"
+#~ msgstr "Erreur lors de l'écriture du fichier <%s>"
+
+#~ msgid "Library <%s> is read only"
+#~ msgstr "Librairie <%s> est en lecture seule"
+
+#~ msgid ""
+#~ "Current component is not saved.\n"
+#~ "\n"
+#~ "Discard current changes?"
+#~ msgstr ""
+#~ "Le composant courant n'est pas sauvé.\n"
+#~ "\n"
+#~ "Perdre les changements en cours ?"
+
+#~ msgid "Page layout file description"
+#~ msgstr "Fichier de description de page"
 
 #~ msgid "45"
 #~ msgstr "45"
