@@ -240,7 +240,7 @@ public:
      * @param aName - Name of entry, case insensitive.
      * @return Entry if found.  NULL if not found.
      */
-    LIB_ALIAS* FindEntry( const wxChar* aName );
+    LIB_ALIAS* FindEntry( const wxString& aName );
 
     /**
      * Find component by \a aName.
@@ -251,7 +251,7 @@ public:
      * @param aName - Name of component, case insensitive.
      * @return Component if found.  NULL if not found.
      */
-    LIB_COMPONENT* FindComponent( const wxChar* aName );
+    LIB_COMPONENT* FindComponent( const wxString& aName );
 
     /**
      * Find alias by \a nName.
@@ -262,7 +262,7 @@ public:
      * @param aName - Name of alias, case insensitive.
      * @return Alias if found.  NULL if not found.
      */
-    LIB_ALIAS* FindAlias( const wxChar* aName )
+    LIB_ALIAS* FindAlias( const wxString& aName )
     {
         return (LIB_ALIAS*) FindEntry( aName );
     }
@@ -331,7 +331,7 @@ public:
      * @param aName - Name of current entry.
      * @return Next entry if entry name is found. Otherwise NULL.
      */
-    LIB_ALIAS* GetNextEntry( const wxChar* aName );
+    LIB_ALIAS* GetNextEntry( const wxString& aName );
 
 
     /**
@@ -343,7 +343,7 @@ public:
      * @param aName - Name of current entry.
      * @return Previous entry if entry name is found, otherwise NULL.
      */
-    LIB_ALIAS* GetPreviousEntry( const wxChar* aName );
+    LIB_ALIAS* GetPreviousEntry( const wxString& aName );
 
     /**
      * Return the file name without path or extension.
@@ -525,7 +525,7 @@ public:
 /**
  * Case insensitive library name comparison.
  */
-extern bool operator==( const CMP_LIBRARY& aLibrary, const wxChar* aName );
-extern bool operator!=( const CMP_LIBRARY& aLibrary, const wxChar* aName );
+extern bool operator==( const CMP_LIBRARY& aLibrary, const wxString& aName );
+extern bool operator!=( const CMP_LIBRARY& aLibrary, const wxString& aName );
 
 #endif  //  CLASS_LIBRARY_H

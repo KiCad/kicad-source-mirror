@@ -290,10 +290,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
                 wxPoint txtpos;
                 txtpos.x = x + (bitmap_size.x / 2);
                 txtpos.y = y - text_height;
-                text     = new wxStaticText( m_matrixPanel,
-                                             -1,
-                                             CommentERC_V[ii],
-                                             txtpos );
+                text     = new wxStaticText( m_matrixPanel, -1, CommentERC_V[ii], txtpos );
             }
 
             int event_id = ID_MATRIX_0 + ii + ( jj * PIN_NMAX );
