@@ -57,11 +57,6 @@
 static const wxChar* CommonConfigPath = wxT( "kicad_common" );
 
 
-#ifdef __UNIX__
-#   define TMP_FILE "/tmp/kicad.tmp"
-#endif
-
-
 // some key strings used to store parameters in config
 static const wxChar backgroundColorKey[] = wxT( "BackgroundColor" );
 static const wxChar showPageLimitsKey[]  = wxT( "ShowPageLimits" );
@@ -90,7 +85,7 @@ struct LANGUAGE_DESCR
     BITMAP_DEF  m_Lang_Icon;
 
     /// Labels used in menus
-    const wxChar* m_Lang_Label;
+    wxString    m_Lang_Label;
 
     /// Set to true if the m_Lang_Label must not be translated
     bool        m_DoNotTranslate;

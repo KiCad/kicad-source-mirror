@@ -45,6 +45,8 @@ enum errortype
     UNC         // Error: unconnected pin
 };
 
+extern const wxString CommentERC_H[];
+extern const wxString CommentERC_V[];
 
 /// DRC error codes:
 #define ERCE_UNSPECIFIED          0

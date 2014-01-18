@@ -267,6 +267,7 @@ public:
     }
 };
 
+
 class WORKSHEET_DATAITEM_POLYPOLYGON : public WORKSHEET_DATAITEM
 {
 public:
@@ -355,26 +356,27 @@ public:
     bool IsInsidePage( int ii ) const;
 };
 
+
 class WORKSHEET_DATAITEM_TEXT : public WORKSHEET_DATAITEM
 {
 public:
-    wxString          m_TextBase;           // The basic text, with format symbols
-    wxString          m_FullText;           // The expanded text, shown on screen
-    double            m_Orient;             //  Orientation in degrees
-    enum EDA_TEXT_HJUSTIFY_T m_Hjustify;
-    enum EDA_TEXT_VJUSTIFY_T m_Vjustify;
-    DSIZE             m_TextSize;
-    DSIZE             m_BoundingBoxSize;    // When not null, this is the max
-                                            // size of the full text.
-                                            // the text size will be modified
-                                            // to keep the full text insite this
-                                            // bound.
-    DSIZE             m_ConstrainedTextSize;// Actual text size, if constrained by
-                                            // the m_BoundingBoxSize constraint
+    wxString            m_TextBase;             // The basic text, with format symbols
+    wxString            m_FullText;             // The expanded text, shown on screen
+    double              m_Orient;               //  Orientation in degrees
+    EDA_TEXT_HJUSTIFY_T m_Hjustify;
+    EDA_TEXT_VJUSTIFY_T m_Vjustify;
+    DSIZE               m_TextSize;
+    DSIZE               m_BoundingBoxSize;      // When not null, this is the max
+                                                // size of the full text.
+                                                // the text size will be modified
+                                                // to keep the full text insite this
+                                                // bound.
+    DSIZE               m_ConstrainedTextSize;  // Actual text size, if constrained by
+                                                // the m_BoundingBoxSize constraint
 
 
 public:
-    WORKSHEET_DATAITEM_TEXT( const wxChar* aTextBase );
+    WORKSHEET_DATAITEM_TEXT( const wxString& aTextBase );
 
     /**
      * @return false  (no end point)
@@ -466,6 +468,7 @@ public:
             m_flags &= ~USE_ITALIC;
     }
 };
+
 
 class BITMAP_BASE;
 class WORKSHEET_DATAITEM_BITMAP : public WORKSHEET_DATAITEM
