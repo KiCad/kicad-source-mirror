@@ -20,8 +20,10 @@
         <property name="path">.</property>
         <property name="precompiled_header"></property>
         <property name="relative_path">1</property>
+        <property name="skip_lua_events">1</property>
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
+        <property name="ui_table">UI</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -783,7 +785,7 @@
                                                                     <property name="style"></property>
                                                                     <property name="subclass"></property>
                                                                     <property name="toolbar_pane">0</property>
-                                                                    <property name="tooltip">Enter the number of units in for a component that contains more than one unit</property>
+                                                                    <property name="tooltip">Enter the number of units for a component that contains more than one unit</property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
@@ -908,7 +910,7 @@
                                                         <property name="proportion">1</property>
                                                         <object class="wxBoxSizer" expanded="1">
                                                             <property name="minimum_size"></property>
-                                                            <property name="name">bSizer17</property>
+                                                            <property name="name">bSizerOffset</property>
                                                             <property name="orient">wxVERTICAL</property>
                                                             <property name="permission">none</property>
                                                             <object class="sizeritem" expanded="1">

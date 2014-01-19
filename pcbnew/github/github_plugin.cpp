@@ -493,7 +493,7 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
     catch( boost::system::system_error& e )
     {
         // https "GET" has faild, report this to API caller.
-        wxString fmt( _( "Cannot GET zip: '%s'\nfor lib-path: '%s'.\nWhat: '%s'" ) );
+        wxString fmt( _( "Cannot get/download Zip archive: '%s'\nfor library path: '%s'.\nReason: '%s'" ) );
 
         string msg = StrPrintf( TO_UTF8( fmt ),
                 zip_url.c_str(),

@@ -388,7 +388,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            aModule,
     FPID  oldFootprintFPID = aModule->GetFPID();
 
     // Load module.
-    line.Printf( _( "Change module %s (from %s) to %s" ),
+    line.Printf( _( "Change module '%s' (from '%s') to '%s'" ),
                  GetChars( aModule->GetReference() ),
                  oldFootprintFPID.Format().c_str(),
                  aNewFootprintFPID.Format().c_str() );

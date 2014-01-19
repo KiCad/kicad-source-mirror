@@ -2752,7 +2752,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     continue;   // OK, pad found
 
                 // not found: bad footprint, report error
-                msg.Printf( _( "** Error: Component \"%s\" pad '%s' not found in footprint \"%s\" **\n" ),
+                msg.Printf( _( "*** Error: Component '%s' pad '%s' not found in footprint '%s' ***\n" ),
                             GetChars( component->GetReference() ),
                             GetChars( padname ),
                             GetChars( footprint->GetFPID().Format() ) );
@@ -2777,8 +2777,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             // Net name not valid, report error
             wxString coord;
             coord << zone->GetPosition();
-            msg.Printf( _( "** Error: Zone '%s' layer '%s'"
-                           " has non-existent net name \"%s\" **\n" ),
+            msg.Printf( _( "*** Error: Zone '%s' layer '%s'"
+                           " has non-existent net name '%s' ***\n" ),
                         GetChars( coord ),
                         GetChars( zone->GetLayerName() ),
                         GetChars( zone->GetNetName() ) );
