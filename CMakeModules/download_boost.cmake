@@ -170,6 +170,7 @@ endif()
 
 ExternalProject_Add( boost
     PREFIX          "${PREFIX}"
+    TIMEOUT         60
     DOWNLOAD_DIR    "${DOWNLOAD_DIR}"
     INSTALL_DIR     "${BOOST_ROOT}"
     URL             http://downloads.sourceforge.net/project/boost/boost/${BOOST_RELEASE}/boost_${BOOST_VERS}.tar.bz2
