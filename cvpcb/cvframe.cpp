@@ -749,7 +749,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
 bool CVPCB_MAINFRAME::LoadFootprintFiles()
 {
     // Check if there are footprint libraries in the footprint library table.
-    if( m_footprintLibTable == NULL || m_footprintLibTable->GetCount() == 0 )
+    if( m_footprintLibTable == NULL || !m_footprintLibTable->GetLogicalLibs().size() )
     {
         wxMessageBox( _( "No PCB footprint libraries are listed in the current footprint "
                          "library table." ), _( "Configuration Error" ), wxOK | wxICON_ERROR );
