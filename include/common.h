@@ -433,18 +433,30 @@ class LOCALE_IO
 public:
     LOCALE_IO()
     {
-        if( C_count++ == 0 )
+        wxASSERT_MSG( C_count >= 0, wxT( "LOCALE_IO::C_count mismanaged." ) );
+
+        // use thread safe, atomic operation
+        if( __sync_fetch_and_add( &C_count, 1 ) == 0 )
+        {
+            // printf( "setting C locale.\n" );
             SetLocaleTo_C_standard();
+        }
     }
 
     ~LOCALE_IO()
     {
-        if( --C_count == 0 )
+        // use thread safe, atomic operation
+        if( __sync_sub_and_fetch( &C_count, 1 ) == 0 )
+        {
+            // printf( "restoring default locale.\n" );
             SetLocaleTo_Default();
+        }
+
+        wxASSERT_MSG( C_count >= 0, wxT( "LOCALE_IO::C_count mismanaged." ) );
     }
 
 private:
-    static int C_count;     // allow for nesting of LOCALE_IO instantiations
+    static int  C_count;    // allow for nesting of LOCALE_IO instantiations
 };
 
 
