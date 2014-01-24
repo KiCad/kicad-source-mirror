@@ -177,8 +177,19 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 
     if( APPLE )
+        set( KICAD_BUILD_STATIC ON)
+
         set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
+
+        if( NOT CMAKE_CXX_COMPILER )
+            EXEC_PROGRAM( wx-config ARGS --cc  OUTPUT_VARIABLE CMAKE_C_COMPILER )
+        endif( NOT CMAKE_CXX_COMPILER )
+    
+        if( NOT CMAKE_CXX_COMPILER )
+            EXEC_PROGRAM( wx-config ARGS --cxx OUTPUT_VARIABLE CMAKE_CXX_COMPILER )
+        endif( NOT CMAKE_CXX_COMPILER )
+
     endif()
 
 endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
@@ -266,19 +277,6 @@ include( Functions )
 
 include( ExternalProject )
 
-if ( APPLE )
-    set( KICAD_BUILD_STATIC ON)
-
-    if( NOT CMAKE_CXX_COMPILER )
-        EXEC_PROGRAM( wx-config ARGS --cc  OUTPUT_VARIABLE CMAKE_C_COMPILER )
-    endif( NOT CMAKE_CXX_COMPILER )
-
-    if( NOT CMAKE_CXX_COMPILER )
-        EXEC_PROGRAM( wx-config ARGS --cxx OUTPUT_VARIABLE CMAKE_CXX_COMPILER )
-    endif( NOT CMAKE_CXX_COMPILER )
-
-endif( APPLE )
-
 #================================================
 # Find libraries that are needed to build KiCad.
 #================================================
@@ -293,9 +291,26 @@ add_definitions(-DWX_COMPATIBILITY)
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
 
-if ( KICAD_BUILD_STATIC )
+if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC ) 
 
     #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
+
+    if( KICAD_BUILD_STATIC AND KICAD_BUILD_DYNAMIC )
+        message(FATAL_ERROR "You can't build STATIC and DYNAMIC together")
+    endif()
+
+    if( KICAD_BUILD_DYNAMIC )
+        message(FATAL_ERROR "KICAD_BUILD_DYNAMIC Not implemented yet")
+    endif()
+
+
+    include( download_libpng )
+
+    if( KICAD_SCRIPTING_WXPYTHON )
+        message(FATAL_ERROR "KICAD_BUILD_* and SCRIPTING Not Implemented Yet!")
+    else()
+        include( download_wxwidgets )
+    endif( KICAD_SCRIPTING_WXPYTHON )
 
     include( download_pkgconfig )
         set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config")
@@ -304,11 +319,12 @@ if ( KICAD_BUILD_STATIC )
         set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include")
     include( download_pixman )
         set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a")
-    include( download_libpng )
     include( download_cairo )
         set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo")
         set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a")
-endif( KICAD_BUILD_STATIC )
+    
+
+endif( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC)
 
 #####################
 # Find GLEW library #
@@ -348,13 +364,16 @@ endif()
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
 
 # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
-if( APPLE )
+# Seems no more needed on wx-3
+if( APPLE AND NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
     find_package( wxWidgets COMPONENTS gl adv html core net base xml QUIET )
 else()
     find_package( wxWidgets COMPONENTS gl aui adv html core net base xml QUIET )
 endif()
-check_find_package_result( wxWidgets_FOUND "wxWidgets" )
 
+if( NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
+check_find_package_result( wxWidgets_FOUND "wxWidgets" )
+endif( NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
 
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
