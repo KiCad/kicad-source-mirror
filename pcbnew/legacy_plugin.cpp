@@ -1643,7 +1643,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
 {
     S3D_MASTER* t3D = aModule->Models();
 
-    if( !t3D->m_Shape3DName.IsEmpty() )
+    if( !t3D->GetShape3DName().IsEmpty() )
     {
         S3D_MASTER* n3D = new S3D_MASTER( aModule );
 
@@ -1659,7 +1659,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
         {
             char    buf[512];
             ReadDelimitedText( buf, line + SZ( "Na" ), sizeof(buf) );
-            t3D->m_Shape3DName = FROM_UTF8( buf );
+            t3D->SetShape3DName( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Sc" ) )     // Scale
@@ -3513,11 +3513,11 @@ void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 {
     for( S3D_MASTER* t3D = me->Models();  t3D;  t3D = t3D->Next() )
     {
-        if( !t3D->m_Shape3DName.IsEmpty() )
+        if( !t3D->GetShape3DName().IsEmpty() )
         {
             fprintf( m_fp, "$SHAPE3D\n" );
 
-            fprintf( m_fp, "Na %s\n", EscapedUTF8( t3D->m_Shape3DName ).c_str() );
+            fprintf( m_fp, "Na %s\n", EscapedUTF8( t3D->GetShape3DName() ).c_str() );
 
             fprintf(m_fp,
 #if defined(DEBUG)

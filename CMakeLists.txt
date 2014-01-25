@@ -171,10 +171,11 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
     endif()
 
-    # quiet GCC 4.8.1 while in boost
+    # quiet GCC while in boost
     if( GCC_VERSION VERSION_GREATER 4.8 OR GCC_VERSION VERSION_EQUAL 4.8 )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedefs" )
     endif()
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing" )
 
     if( APPLE )
         set( KICAD_BUILD_STATIC ON)
@@ -185,7 +186,7 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         if( NOT CMAKE_CXX_COMPILER )
             EXEC_PROGRAM( wx-config ARGS --cc  OUTPUT_VARIABLE CMAKE_C_COMPILER )
         endif( NOT CMAKE_CXX_COMPILER )
-    
+
         if( NOT CMAKE_CXX_COMPILER )
             EXEC_PROGRAM( wx-config ARGS --cxx OUTPUT_VARIABLE CMAKE_CXX_COMPILER )
         endif( NOT CMAKE_CXX_COMPILER )
@@ -291,7 +292,7 @@ add_definitions(-DWX_COMPATIBILITY)
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
 
-if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC ) 
+if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
 
@@ -322,7 +323,7 @@ if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
     include( download_cairo )
         set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo")
         set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a")
-    
+
 
 endif( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC)
 
