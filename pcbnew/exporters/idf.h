@@ -29,6 +29,8 @@
 #define IDF_H
 
 #include <wx/string.h>
+#include <set>
+#include <string>
 
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626433832795028841
@@ -46,6 +48,7 @@ class IDF_POINT;
 class IDF_SEGMENT;
 class IDF_DRILL_DATA;
 class IDF_OUTLINE;
+class IDF_LIB;
 
 namespace IDF3 {
 enum KEY_OWNER
@@ -86,6 +89,20 @@ double  CalcAngleDeg( const IDF_POINT& aStartPoint, const IDF_POINT& aEndPoint )
 void GetOutline( std::list<IDF_SEGMENT*>& aLines,
         IDF_OUTLINE& aOutline );
 }
+
+
+/**
+ * @Struct IDF_POINT
+ * represents a vector of three doubles; this may be represent
+ * a point in space, or scaling, translation or rotation along
+ * three axes.
+ */
+struct IDF_VECTOR
+{
+    double x;
+    double y;
+    double z;
+};
 
 
 /**
@@ -288,12 +305,154 @@ public:
 
 
 /**
+ * @Class IDF_COMP
+ * is responsible for parsing individual component files and rewriting relevant
+ * data to a library file.
+ */
+class IDF_COMP
+{
+private:
+    /// filename (full path) of the IDF component footprint
+    wxString componentFile;
+
+    /// reference designator; a valid designator or NOREFDES
+    std::string refdes;
+
+    /// overall translation of the part (component location + 3D offset)
+    double loc_x;
+    double loc_y;
+    double loc_z;
+
+    /// overall rotation of the part (3D Z rotation + component rotation)
+    double rotation;
+
+    /// true if the component is on the top of the board
+    bool top;
+
+    /// geometry of the package; for example, HORIZ, VERT, "HORIZ 0.2 inch"
+    std::string geometry;
+
+    /// package name or part number; for example "TO92" or "BC107"
+    std::string partno;
+
+    /// the owning IDF_LIB instance
+    IDF_LIB* parent;
+
+    /**
+     * Function substituteComponent
+     * places a substitute component footprint into the library file
+     * and creates an appropriate entry for the PLACEMENT section
+     * @param aLibFile is the library file to write to
+     * @return bool: true if data was successfully written
+     */
+    bool substituteComponent( FILE* aLibFile );
+
+    // parse RECORD 2; return TRUE if all is OK, otherwise FALSE
+    bool parseRec2( const std::string aLine, bool& isNewItem );
+
+    // parse RECORD 3; return TRUE if all is OK, otherwise FALSE
+    bool parseRec3( const std::string aLine, int& aLoopIndex,
+                    double& aX, double& aY, bool& aClosed );
+
+public:
+    IDF_COMP( IDF_LIB* aParent );
+
+    /**
+     * Function PlaceComponent
+     * specifies the parameters of an IDF component outline placed on the board
+     * @param aComponentFile is the IDF component file to include
+     * @param aRefDes is the component reference designator; an empty string,
+     *                '~' or '0' all default to "NOREFDES".
+     * @param aLocation is the overall translation of the part (board location + 3D offset)
+     * @param aRotation is the overall rotation of the part (component rotation + 3D Z rotation)
+     * @return bool: true if the specified component file exists
+     */
+    bool PlaceComponent( const wxString aComponentFile, const std::string aRefDes,
+                         double aXLoc, double aYLoc, double aZLoc,
+                         double aRotation, bool isOnTop );
+
+    /**
+     * Function WriteLib
+     * parses the model file to extract information needed by the
+     * PLACEMENT section and writes data (if necessary) to the
+     * library file
+     * @param aLibFile is the library file to write to
+     * @return bool: true if data was successfully written
+     */
+    bool WriteLib( FILE* aLibFile );
+
+    /**
+     * Function WritePlacement
+     * write the .PLACEMENT data of the component to the IDF board @param aLayoutFile
+     * @return bool: true if data was successfully written
+     */
+    bool WritePlacement( FILE* aLayoutFile );
+};
+
+
+/**
+ * @Class IDF_LIB
+ * stores information on IDF models ( also has an inbuilt NOMODEL model )
+ * and is responsible for writing the ELECTRICAL sections of the library file
+ * (*.emp) and the PLACEMENT section of the board file.
+ */
+class IDF_LIB
+{
+    /// a list of component outline names and a flag to indicate their save state
+    std::set< std::string > regOutlines;
+    std::list< IDF_COMP* > components;
+    bool libWritten;
+
+    /**
+     * Function writeLib
+     * writes all current library information to the output file
+     */
+    bool writeLib( FILE* aLibFile );
+
+    /**
+     * Function writeBrd
+     * write placement information to the board file
+     */
+    bool writeBrd( FILE* aLayoutFile );
+
+public:
+    virtual ~IDF_LIB();
+
+    /**
+     * Function WriteFiles
+     * writes the library entries to the *.emp file (aLibFile) and the
+     * .PLACEMENT section to the *.emn file (aLayoutFile)
+     * @param aLayoutFile IDF board file
+     * @param aLibFile IDF library file
+     * @return bool: true if all data was written successfully
+     */
+    bool WriteFiles( FILE* aLayoutFile, FILE* aLibFile );
+
+    /**
+     * Function RegisterOutline
+     * adds the given string to a list of current outline entities.
+     * @param aGeomPartString is a concatenation of the IDF component's
+     * geometry name and part name; this is used as a unique identifier
+     * to prevent redundant entries in the library output.
+     * @return bool: true if the string was already registered,
+     * false if it is a new registration.
+     */
+    bool RegisterOutline( const std::string aGeomPartString );
+
+    bool PlaceComponent( const wxString  aComponentFile, const std::string aRefDes,
+                         double aXLoc, double aYLoc, double aZLoc,
+                         double aRotation, bool isOnTop );
+};
+
+
+/**
  * @Class IDF_BOARD
  * contains objects necessary for the maintenance of the IDF board and library files.
  */
 class IDF_BOARD
 {
 private:
+    IDF_LIB IDFLib;                         ///< IDF library manager
     std::list<IDF_DRILL_DATA*> drills;      ///< IDF drill data
     int outlineIndex;                       ///< next outline index to use
     bool useThou;                           ///< true if output is THOU
@@ -375,6 +534,10 @@ public:
      * represent the Reference Designator association with a slot.
      */
     bool AddSlot( double aWidth, double aLength, double aOrientation, double aX, double aY );
+
+    bool PlaceComponent( const wxString aComponentFile, const std::string aRefDes,
+                         double aXLoc, double aYLoc, double aZLoc,
+                         double aRotation, bool isOnTop );
 };
 
 
@@ -420,35 +583,6 @@ public:
      * writes a single line representing the hole within a .DRILLED_HOLES section
      */
     bool Write( FILE* aLayoutFile );
-};
-
-
-/**
- * @Class IDF_LIB
- * stores information on IDF models ( also has an inbuilt NOMODEL model )
- * and is responsible for writing the ELECTRICAL sections of the library file
- * (*.emp) and the PLACEMENT section of the board file.
- */
-class IDF_LIB
-{
-    // TODO: IMPLEMENT
-
-public:
-    /**
-     * Function WriteLib
-     * writes all current library information to the output file
-     */
-    bool WriteLib( FILE* aLibFile );
-
-    // write placement information to the board file
-    bool WriteBrd( FILE* aLayoutFile );
-
-    // bool Finish( void )
-    // {
-    // TODO: Write out the library (*.emp) file
-    // idf_lib.Write( lib_file );
-    // TODO: fclose( lib_file );
-    // }
 };
 
 #endif  // IDF_H
