@@ -94,6 +94,7 @@ extern const wxString SVGFileWildcard;
 extern const wxString ReportFileWildcard;
 extern const wxString FootprintPlaceFileWildcard;
 extern const wxString Shapes3DFileWildcard;
+extern const wxString IDF3DFileWildcard;
 extern const wxString DocModulesFileName;
 extern const wxString LegacyFootprintLibPathWildcard;
 extern const wxString KiCadFootprintLibFileWildcard;

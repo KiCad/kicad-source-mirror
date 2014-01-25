@@ -1,8 +1,8 @@
 (export (version D)
   (design
     (source F:/kicad-launchpad/testing/demos/complex_hierarchy/complex_hierarchy.sch)
-    (date "09/01/2014 08:56:21")
-    (tool "eeschema (2014-01-08 BZR 4616)-product"))
+    (date "25/01/2014 08:31:41")
+    (tool "eeschema (2014-01-22 BZR 4630)-product"))
   (components
     (comp (ref C10)
       (value 10uF)

@@ -30,10 +30,17 @@
 
 #include <list>
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <algorithm>
 #include <cstdio>
 #include <cmath>
 #include <ctime>
+#include <cctype>
+#include <strings.h>
+#include <appl_wxstruct.h>
+#include <wx/file.h>
 #include <wx/filename.h>
 #include <macros.h>
 #include <idf.h>
@@ -48,6 +55,19 @@
 // which is about the thickness of a single kapton layer typically
 // used in a flexible design.
 #define IDF_MIN_BRD_THICKNESS (12000)
+
+
+// START: a few routines to help IDF_LIB but which may be of general use in the future
+// as IDF support develops
+
+// fetch a line from the given input file and trim the ends
+static bool FetchIDFLine( std::ifstream& aModel, std::string& aLine, bool& isComment );
+
+// extract an IDF string and move the index to point to the character after the substring
+static bool GetIDFString( const std::string& aLine, std::string& aIDFString,
+                          bool& hasQuotes, int& aIndex );
+
+// END: IDF_LIB helper routines
 
 bool IDF_POINT::Matches( const IDF_POINT& aPoint, double aRadius )
 {
@@ -518,40 +538,32 @@ bool IDF_BOARD::Setup( wxString aBoardName,
 bool IDF_BOARD::Finish( void )
 {
     // Steps to finalize the board and library files:
-    // 1. (emp) finalize the library file
-    // 2. (emn) close the BOARD_OUTLINE section
-    // 3. (emn) write out the DRILLED_HOLES section
+    // 1. (emn) close the BOARD_OUTLINE section
+    // 2. (emn) write out the DRILLED_HOLES section
+    // 3. (emp) finalize the library file
     // 4. (emn) write out the COMPONENT_PLACEMENT section
 
-    // TODO:
-    // idfLib.Finish();
-    if( libFile != NULL )
-    {
-        fclose( libFile );
-        libFile = NULL;
-    }
-
-    if( layoutFile == NULL )
+    if( layoutFile == NULL || libFile == NULL )
         return false;
 
     // Finalize the board outline section
     fprintf( layoutFile, ".END_BOARD_OUTLINE\n\n" );
 
     // Write out the drill section
-    if( WriteDrills() )
-    {
-        fclose( layoutFile );
-        layoutFile = NULL;
-        return false;
-    }
+    bool ok = WriteDrills();
 
-    // TODO: Write out the component placement section
-    // IDF3::export_placement();
+    // populate the library (*.emp) file and write the
+    // PLACEMENT section
+    if( ok )
+        ok = IDFLib.WriteFiles( layoutFile, libFile );
+
+    fclose( libFile );
+    libFile = NULL;
 
     fclose( layoutFile );
     layoutFile = NULL;
 
-    return true;
+    return ok;
 }
 
 
@@ -753,6 +765,16 @@ bool IDF_BOARD::AddSlot( double aWidth, double aLength, double aOrientation,
 }
 
 
+bool IDF_BOARD::PlaceComponent( const wxString aComponentFile, const std::string aRefDes,
+                     double aXLoc, double aYLoc, double aZLoc,
+                     double aRotation, bool isOnTop )
+{
+    return IDFLib.PlaceComponent( aComponentFile, aRefDes,
+                                  aXLoc, aYLoc, aZLoc,
+                                  aRotation, isOnTop );
+}
+
+
 bool IDF_BOARD::WriteDrills( void )
 {
     if( !layoutFile )
@@ -936,27 +958,818 @@ void IDF3::GetOutline( std::list<IDF_SEGMENT*>& aLines,
 }
 
 
-bool IDF_LIB::WriteLib( FILE* aLibFile )
+IDF_LIB::~IDF_LIB()
+{
+    while( !components.empty() )
+    {
+        delete components.back();
+        components.pop_back();
+    }
+}
+
+
+bool IDF_LIB::writeLib( FILE* aLibFile )
 {
     if( !aLibFile )
         return false;
 
     // TODO: check stream integrity and return false as appropriate
 
-    // TODO: export models
+    // export models
+    std::list< IDF_COMP* >::const_iterator mbeg = components.begin();
+    std::list< IDF_COMP* >::const_iterator mend = components.end();
+
+    while( mbeg != mend )
+    {
+        if( !(*mbeg)->WriteLib( aLibFile ) )
+            return false;
+        ++mbeg;
+    }
+
+    libWritten = true;
+    return true;
+}
+
+
+bool IDF_LIB::writeBrd( FILE* aLayoutFile )
+{
+    if( !aLayoutFile || !libWritten )
+        return false;
+
+    if( components.empty() )
+        return true;
+
+    // TODO: check stream integrity and return false as appropriate
+
+    // write out the board placement information
+    std::list< IDF_COMP* >::const_iterator mbeg = components.begin();
+    std::list< IDF_COMP* >::const_iterator mend = components.end();
+
+    fprintf( aLayoutFile, "\n.PLACEMENT\n" );
+
+    while( mbeg != mend )
+    {
+        if( !(*mbeg)->WritePlacement( aLayoutFile ) )
+            return false;
+        ++mbeg;
+    }
+
+    fprintf( aLayoutFile, ".END_PLACEMENT\n" );
 
     return true;
 }
 
 
-bool IDF_LIB::WriteBrd( FILE* aLayoutFile )
+bool IDF_LIB::WriteFiles( FILE* aLayoutFile, FILE* aLibFile )
 {
-    if( !aLayoutFile )
+    if( !aLayoutFile || !aLibFile )
         return false;
 
-    // TODO: check stream integrity and return false as appropriate
+    libWritten = false;
+    regOutlines.clear();
 
-    // TODO: write out the board placement information
+    if( !writeLib( aLibFile ) )
+        return false;
+
+    return writeBrd( aLayoutFile );
+}
+
+
+bool IDF_LIB::RegisterOutline( const std::string aGeomPartString )
+{
+    std::set< std::string >::const_iterator it = regOutlines.find( aGeomPartString );
+
+    if( it != regOutlines.end() )
+        return true;
+
+    regOutlines.insert( aGeomPartString );
+
+    return false;
+}
+
+
+bool IDF_LIB::PlaceComponent( const wxString aComponentFile, const std::string aRefDes,
+                                double aXLoc, double aYLoc, double aZLoc,
+                                double aRotation, bool isOnTop )
+{
+    IDF_COMP* comp = new IDF_COMP( this );
+
+    if( comp == NULL )
+    {
+        std::cerr << "IDF_LIB: *ERROR* could not allocate memory for a component\n";
+        return false;
+    }
+
+    components.push_back( comp );
+
+    if( !comp->PlaceComponent( aComponentFile, aRefDes,
+                                     aXLoc, aYLoc, aZLoc,
+                                     aRotation, isOnTop ) )
+    {
+        std::cerr << "IDF_LIB: file does not exist (or is symlink):\n";
+        std::cerr << "   FILE: " << TO_UTF8( aComponentFile ) << "\n";
+        return false;
+    }
+
+    return true;
+}
+
+
+IDF_COMP::IDF_COMP( IDF_LIB* aParent )
+{
+    parent = aParent;
+}
+
+
+bool IDF_COMP::PlaceComponent( const wxString aComponentFile, const std::string aRefDes,
+                               double aXLoc, double aYLoc, double aZLoc,
+                               double aRotation, bool isOnTop )
+{
+    componentFile = aComponentFile;
+    refdes = aRefDes;
+
+    if( refdes.empty() || !refdes.compare("~") || !refdes.compare("0") )
+        refdes = "NOREFDES";
+
+    loc_x = aXLoc;
+    loc_y = aYLoc;
+    loc_z = aZLoc;
+    rotation = aRotation;
+    top = isOnTop;
+
+    if( !wxFileName::FileExists( aComponentFile ) )
+    {
+        wxFileName fn = aComponentFile;
+        wxString fname = wxGetApp().FindLibraryPath( fn );
+
+        if( fname.IsEmpty() )
+            return false;
+        else
+            componentFile = fname;
+    }
+
+    return true;
+}
+
+
+bool IDF_COMP::WritePlacement( FILE* aLayoutFile )
+{
+    if( aLayoutFile == NULL )
+    {
+        std::cerr << "IDF_COMP: *ERROR* WritePlacement() invoked with aLayoutFile = NULL\n";
+        return false;
+    }
+
+    if( parent == NULL )
+    {
+        std::cerr << "IDF_COMP: *ERROR* no valid pointer \n";
+        return false;
+    }
+
+    if( componentFile.empty() )
+    {
+        std::cerr << "IDF_COMP: *BUG* empty componentFile name in WritePlacement()\n";
+        return false;
+    }
+
+    if( geometry.empty() && partno.empty() )
+    {
+        std::cerr << "IDF_COMP: *BUG* geometry and partno strings are empty in WritePlacement()\n";
+        return false;
+    }
+
+    // TODO: monitor stream integrity and respond accordingly
+
+    // PLACEMENT, RECORD 2:
+    fprintf( aLayoutFile, "\"%s\" \"%s\" \"%s\"\n",
+             geometry.c_str(), partno.c_str(), refdes.c_str() );
+
+    // PLACEMENT, RECORD 3:
+    if( rotation >= -MIN_ANG && rotation <= -MIN_ANG )
+    {
+        fprintf( aLayoutFile, "%.6f %.6f %.6f 0 %s ECAD\n",
+                 loc_x, loc_y, loc_z, top ? "TOP" : "BOTTOM" );
+    }
+    else
+    {
+        fprintf( aLayoutFile, "%.6f %.6f %.6f %.3f %s ECAD\n",
+                 loc_x, loc_y, loc_z, rotation, top ? "TOP" : "BOTTOM" );
+    }
+
+    return true;
+}
+
+
+bool IDF_COMP::WriteLib( FILE* aLibFile )
+{
+    // 1. parse the file for the .ELECTRICAL or .MECHANICAL section
+    //      and extract the Geometry and PartNumber strings
+    // 2. Register the name; check if it already exists
+    // 3. parse the rest of the file until .END_ELECTRICAL or
+    //      .END_MECHANICAL; validate that each entry conforms
+    //      to a valid outline
+    // 4. write lines to library file
+    //
+    // NOTE on parsing (the order matters):
+    //  + store each line which begins with '#'
+    //  + strip blanks from both ends of the line
+    //  + drop each blank line
+    //  + the first non-blank non-comment line must be
+    //      .ELECTRICAL or .MECHANICAL (as per spec, case does not matter)
+    //  + the first non-blank line after RECORD 1 must be RECORD 2
+    //  + following RECORD 2, only blank lines, valid outline entries,
+    //      and .END_{MECHANICAL,ELECTRICAL} are allowed
+    //  + only a single outline may be specified; the order may be
+    //      CW or CCW.
+    //  + all valid lines are stored and written to the library file
+    //
+    // return: false if we do could not write model data; we may return
+    //  true even if we could not read an IDF file for some reason, provided
+    //  that the default model was written. In such a case, warnings will be
+    //  written to stderr.
+
+    if( aLibFile == NULL )
+    {
+        std::cerr << "IDF_COMP: *ERROR* WriteLib() invoked with aLibFile = NULL\n";
+        return false;
+    }
+
+    if( parent == NULL )
+    {
+        std::cerr << "IDF_COMP: *ERROR* no valid pointer \n";
+        return false;
+    }
+
+    if( componentFile.empty() )
+    {
+        std::cerr << "IDF_COMP: *BUG* empty componentFile name in WriteLib()\n";
+        return false;
+    }
+
+    std::list< std::string > records;
+    std::ifstream model;
+    std::string fname = TO_UTF8( componentFile );
+
+    model.open( fname.c_str(), std::ios_base::in );
+
+    if( !model.is_open() )
+    {
+        std::cerr << "* IDF EXPORT: could not open file " << fname << "\n";
+        return substituteComponent( aLibFile );
+    }
+
+    std::string entryType;  // will be one of ELECTRICAL or MECHANICAL
+    std::string endMark;    // will be one of .END_ELECTRICAL or .END_MECHANICAL
+    std::string iline;      // the input line
+    int state = 1;
+    bool isComment;         // true if a line just read in is a comment line
+    bool isNewItem = false; // true if the outline is a previously unsaved IDF item
+
+    // some vars for parsing record 3
+    int    loopIdx = -1;        // direction of points in outline (0=CW, 1=CCW, -1=no points yet)
+    double firstX;
+    double firstY;
+    bool   lineClosed = false;  // true when outline has been closed; only one outline is permitted
+
+    while( state )
+    {
+        while( !FetchIDFLine( model, iline, isComment ) && model.good() );
+
+        if( !model.good() )
+        {
+            // this should not happen; we should at least
+            // have encountered the .END_ statement;
+            // however, we shall make a concession if the
+            // last line is an .END_ statement which had
+            // not been correctly terminated
+            if( !endMark.empty() && !strncasecmp( iline.c_str(), endMark.c_str(), 15 ) )
+            {
+                std::cerr << "IDF EXPORT: *WARNING* IDF file is not properly terminated\n";
+                std::cerr << "*     FILE: " << fname << "\n";
+                records.push_back( endMark );
+                break;
+            }
+
+            std::cerr << "IDF EXPORT: *ERROR* faulty IDF file\n";
+            std::cerr << "*     FILE: " << fname << "\n";
+            return substituteComponent( aLibFile );
+        }
+
+        switch( state )
+        {
+            case 1:
+                // accept comment lines, .ELECTRICAL, or .MECHANICAL;
+                // all others are simply ignored
+                if( isComment )
+                {
+                    records.push_back( iline );
+                    break;
+                }
+
+                if( !strncasecmp( iline.c_str(), ".electrical", 11 ) )
+                {
+                    entryType = ".ELECTRICAL";
+                    endMark   = ".END_ELECTRICAL";
+                    records.push_back( entryType );
+                    state = 2;
+                    break;
+                }
+
+                if( !strncasecmp( iline.c_str(), ".mechanical", 11 ) )
+                {
+                    entryType = ".MECHANICAL";
+                    endMark   = ".END_MECHANICAL";
+                    records.push_back( entryType );
+                    state = 2;
+                    break;
+                }
+
+                break;
+
+            case 2:
+                // accept only a RECORD 2 compliant line;
+                // anything else constitutes a malformed IDF file
+                if( isComment )
+                {
+                    std::cerr << "IDF EXPORT: bad IDF file\n";
+                    std::cerr << "*     LINE: " << iline << "\n";
+                    std::cerr << "*     FILE: " << fname << "\n";
+                    std::cerr << "*   REASON: comment within "
+                              << entryType << " section\n";
+                    model.close();
+                    return substituteComponent( aLibFile );
+                }
+
+                if( !parseRec2( iline, isNewItem ) )
+                {
+                    std::cerr << "IDF EXPORT: bad IDF file\n";
+                    std::cerr << "*     LINE: " << iline << "\n";
+                    std::cerr << "*     FILE: " << fname << "\n";
+                    std::cerr << "*   REASON: expecting RECORD 2 of "
+                              << entryType << " section\n";
+                    model.close();
+                    return substituteComponent( aLibFile );
+                }
+
+                if( isNewItem )
+                {
+                    records.push_back( iline );
+                    state = 3;
+                }
+                else
+                {
+                    model.close();
+                    return true;
+                }
+
+                break;
+
+            case 3:
+                // accept outline entries or end of section
+                if( isComment )
+                {
+                    std::cerr << "IDF EXPORT: bad IDF file\n";
+                    std::cerr << "*     LINE: " << iline << "\n";
+                    std::cerr << "*     FILE: " << fname << "\n";
+                    std::cerr << "*   REASON: comment within "
+                              << entryType << " section\n";
+                    model.close();
+                    return substituteComponent( aLibFile );
+                }
+
+                if( !strncasecmp( iline.c_str(), endMark.c_str(), 15 ) )
+                {
+                    records.push_back( endMark );
+                    state = 0;
+                    break;
+                }
+
+                if( lineClosed )
+                {
+                    // there should be no further points
+                    std::cerr << "IDF EXPORT: faulty IDF file\n";
+                    std::cerr << "*     LINE: " << iline << "\n";
+                    std::cerr << "*     FILE: " << fname << "\n";
+                    std::cerr << "*   REASON: more than 1 outline in "
+                              << entryType << " section\n";
+                    model.close();
+                    return substituteComponent( aLibFile );
+                }
+
+                if( !parseRec3( iline, loopIdx, firstX, firstY, lineClosed ) )
+                {
+                    std::cerr << "IDF EXPORT: unexpected line in IDF file\n";
+                    std::cerr << "*     LINE: " << iline << "\n";
+                    std::cerr << "*     FILE: " << fname << "\n";
+                    model.close();
+                    return substituteComponent( aLibFile );
+                }
+
+                records.push_back( iline );
+                break;
+
+            default:
+                std::cerr << "IDF EXPORT: BUG in " << __FUNCTION__ << ": unexpected state\n";
+                model.close();
+                return substituteComponent( aLibFile );
+                break;
+        }   // switch( state )
+    }       // while( state )
+
+    model.close();
+
+    if( !lineClosed )
+    {
+        std::cerr << "IDF EXPORT: component outline not closed\n";
+        std::cerr << "*     FILE: " << fname << "\n";
+        return substituteComponent( aLibFile );
+    }
+
+    std::list< std::string >::iterator lbeg = records.begin();
+    std::list< std::string >::iterator lend = records.end();
+
+    // TODO: check stream integrity
+    while( lbeg != lend )
+    {
+        fprintf( aLibFile, "%s\n", lbeg->c_str() );
+        ++lbeg;
+    }
+    fprintf( aLibFile, "\n" );
+
+    return true;
+}
+
+
+bool IDF_COMP::substituteComponent( FILE* aLibFile )
+{
+    // the component outline does not exist or could not be
+    // read; substitute a placeholder
+
+    // TODO: check the stream integrity
+    geometry = "NOGEOM";
+    partno   = "NOPART";
+
+    if( parent->RegisterOutline( "NOGEOM_NOPART" ) )
+        return true;
+
+    fprintf( aLibFile, ".ELECTRICAL\n" );
+    fprintf( aLibFile, "\"NOGEOM\" \"NOPART\" MM 5\n" );
+    // TODO: for now we shall use a simple cylinder; a more intricate
+    // and readily recognized feature (a stylistic X) would be of
+    // much greater value.
+    fprintf( aLibFile, "0 0 0 0\n" );
+    fprintf( aLibFile, "0 2.5 0 360\n" );
+    fprintf( aLibFile, ".END_ELECTRICAL\n\n" );
+
+    return true;
+}
+
+
+bool IDF_COMP::parseRec2( const std::string aLine, bool& isNewItem )
+{
+    // RECORD 2:
+    // + "Geometry Name"
+    // + "Part Number"
+    // + MM or THOU
+    // + height (float)
+
+    isNewItem = false;
+
+    int idx = 0;
+    bool quoted = false;
+    std::string entry;
+
+    if( !GetIDFString( aLine, entry, quoted, idx ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 2 in model file (no Geometry Name entry)\n";
+        return false;
+    }
+
+    geometry = entry;
+
+    if( !GetIDFString( aLine, entry, quoted, idx ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 2 in model file (no Part No. entry)\n";
+        return false;
+    }
+
+    partno = entry;
+
+    if( geometry.empty() && partno.empty() )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 2 in model file\n";
+        std::cerr << "          Geometry Name and Part Number are both empty.\n";
+        return false;
+    }
+
+    if( !GetIDFString( aLine, entry, quoted, idx ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 2, missing FIELD 3\n";
+        return false;
+    }
+
+    if( strcasecmp( "MM", entry.c_str() ) && strcasecmp( "THOU", entry.c_str() ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 2, invalid FIELD 3 \""
+                  << entry << "\"\n";
+        return false;
+    }
+
+    if( !GetIDFString( aLine, entry, quoted, idx ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 2, missing FIELD 4\n";
+        return false;
+    }
+
+    if( quoted )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 2, invalid FIELD 4 (quoted)\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    // ensure that we have a valid value
+    double val;
+    std::stringstream teststr;
+    teststr << entry;
+
+    if( !( teststr >> val ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 2, invalid FIELD 4 (must be numeric)\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    teststr.str( "" );
+    teststr << geometry << "_" << partno;
+    isNewItem = parent->RegisterOutline( teststr.str() );
+
+    return true;
+}
+
+
+bool IDF_COMP::parseRec3( const std::string aLine, int& aLoopIndex,
+                          double& aX, double& aY, bool& aClosed )
+{
+    // RECORD 3:
+    // + 0,1 (loop label)
+    // + X coord (float)
+    // + Y coord (float)
+    // + included angle (0 for line, +ang for CCW, -ang for CW, +360 for circle)
+    //
+    // notes:
+    // 1. first entry may not be a circle or arc
+    // 2. it would be nice, but not essential, to ensure that the
+    //      winding is indeed as specified by the loop label
+    //
+
+    double x, y, ang;
+    bool ccw    = false;
+    bool quoted = false;
+    int idx = 0;
+    std::string entry;
+
+    if( !GetIDFString( aLine, entry, quoted, idx ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, no data\n";
+        return false;
+    }
+
+    if( quoted )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, FIELD 1 is quoted\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    if( entry.compare( "0" ) && entry.compare( "1" ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, FIELD 1 is invalid (must be 0 or 1)\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    if( !entry.compare( "0" ) )
+        ccw = true;
+
+    if( aLoopIndex == 0 && !ccw )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, LOOP INDEX changed from 0 to 1\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    if( aLoopIndex == 1 && ccw )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, LOOP INDEX changed from 1 to 0\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    if( !GetIDFString( aLine, entry, quoted, idx ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, FIELD 2 does not exist\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    if( quoted )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, FIELD 2 is quoted\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    std::stringstream tstr;
+    tstr.str( entry );
+
+    if( !(tstr >> x ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, invalid X value in FIELD 2\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    if( !GetIDFString( aLine, entry, quoted, idx ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, FIELD 3 does not exist\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    if( quoted )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, FIELD 3 is quoted\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    tstr.clear();
+    tstr.str( entry );
+
+    if( !(tstr >> y ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, invalid Y value in FIELD 3\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    if( !GetIDFString( aLine, entry, quoted, idx ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, FIELD 4 does not exist\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    if( quoted )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, FIELD 4 is quoted\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    tstr.clear();
+    tstr.str( entry );
+
+    if( !(tstr >> ang ) )
+    {
+        std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, invalid ANGLE value in FIELD 3\n";
+        std::cerr << "    LINE: " << aLine << "\n";
+        return false;
+    }
+
+    if( aLoopIndex == -1 )
+    {
+        // this is the first point; there are some special checks
+        aLoopIndex = ccw ? 0 : 1;
+        aX = x;
+        aY = y;
+        aClosed = false;
+
+        // ensure that the first point is not an arc specification
+        if( ang < -MIN_ANG || ang > MIN_ANG )
+        {
+            std::cerr << "IDF_COMP: *ERROR* invalid RECORD 3, first point has non-zero angle\n";
+            std::cerr << "    LINE: " << aLine << "\n";
+            return false;
+        }
+    }
+    else
+    {
+        // does this close the outline?
+        if( ang < 0.0 ) ang = -ang;
+
+        ang -= 360.0;
+
+        if( ang > -MIN_ANG && ang < MIN_ANG )
+        {
+            // this is  a circle; the loop is closed
+            aClosed = true;
+        }
+        else
+        {
+            x = (aX - x) * (aX - x);
+            y = (aY - y) * (aY - y) + x;
+
+            if( y <= 1e-6 )
+            {
+                // the points are close enough; the loop is closed
+                aClosed = true;
+            }
+        }
+    }
+
+    // NOTE:
+    // 1. ideally we would ensure that there are no arcs with a radius of 0; this entails
+    //    actively calculating the last point as the previous entry could have been an instruction
+    //    to create an arc. This check is sacrificed in the interest of speed.
+    // 2. a bad outline can be crafted by giving at least one valid segment and then introducing
+    //    a circle; such a condition is not checked for here in the interest of speed.
+    // 3. a circle specified with an angle of -360 is invalid, but that condition is not
+    //    tested here.
+
+    return true;
+}
+
+
+// fetch a line from the given input file and trim the ends
+static bool FetchIDFLine( std::ifstream& aModel, std::string& aLine, bool& isComment )
+{
+    aLine = "";
+    std::getline( aModel, aLine );
+
+    isComment = false;
+
+    // A comment begins with a '#' and must be the first character on the line
+    if( aLine[0] == '#' )
+        isComment = true;
+
+
+    while( !aLine.empty() && isspace( *aLine.begin() ) )
+        aLine.erase( aLine.begin() );
+
+    while( !aLine.empty() && isspace( *aLine.rbegin() ) )
+        aLine.erase( --aLine.end() );
+
+    if( aLine.empty() )
+        return false;
+
+    return true;
+}
+
+
+// extract an IDF string and move the index to point to the character after the substring
+static bool GetIDFString( const std::string& aLine, std::string& aIDFString,
+                          bool& hasQuotes, int& aIndex )
+{
+    // 1. drop all leading spaces
+    // 2. if the first character is '"', read until the next '"',
+    //    otherwise read until the next space or EOL.
+
+    std::ostringstream ostr;
+
+    int len = aLine.length();
+    int idx = aIndex;
+
+    if( idx < 0 || idx >= len )
+        return false;
+
+    while( isspace( aLine[idx] ) && idx < len ) ++idx;
+
+    if( idx == len )
+    {
+        aIndex = idx;
+        return false;
+    }
+
+    if( aLine[idx] == '"' )
+    {
+        hasQuotes = true;
+        ++idx;
+        while( aLine[idx] != '"' && idx < len )
+            ostr << aLine[idx++];
+
+        if( idx == len )
+        {
+            std::cerr << "GetIDFString(): *ERROR*: unterminated quote mark in line:\n";
+            std::cerr << "LINE: " << aLine << "\n";
+            aIndex = idx;
+            return false;
+        }
+
+        ++idx;
+    }
+    else
+    {
+        hasQuotes = false;
+
+        while( !isspace( aLine[idx] ) && idx < len )
+            ostr << aLine[idx++];
+
+    }
+
+    aIDFString = ostr.str();
+    aIndex = idx;
 
     return true;
 }
