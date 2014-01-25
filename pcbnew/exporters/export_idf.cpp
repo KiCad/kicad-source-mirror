@@ -34,6 +34,7 @@
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <idf.h>
+#include <3d_struct.h>
 
 // assumed default graphical line thickness: 10000 IU == 0.1mm
 #define LINE_WIDTH (100000)
@@ -316,8 +317,50 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
         }
     }
 
-    // TODO
-    // add to the library item list
+    // add any valid models to the library item list
+    std::string refdes;
+
+    for( S3D_MASTER* modfile = aModule->Models(); modfile != 0; modfile = modfile->Next() )
+    {
+        if( !modfile->Is3DType( S3D_MASTER::FILE3D_IDF ) )
+            continue;
+
+        double rotz = modfile->m_MatRotation.z + aModule->GetOrientation()/10.0;
+        double locx = modfile->m_MatPosition.x;
+        double locy = modfile->m_MatPosition.y;
+        double locz = modfile->m_MatPosition.z;
+
+        bool top = ( aModule->GetLayer() == LAYER_N_BACK ) ? false : true;
+
+        refdes = TO_UTF8( aModule->GetReference() );
+
+        if( top )
+        {
+            locy = -locy;
+            RotatePoint( &locx, &locy, aModule->GetOrientation() );
+            locy = -locy;
+        }
+        if( !top )
+        {
+            RotatePoint( &locx, &locy, aModule->GetOrientation() );
+            locy = -locy;
+
+            rotz = 180.0 - rotz;
+
+            if( rotz >= 360.0 )
+                while( rotz >= 360.0 ) rotz -= 360.0;
+
+            if( rotz <= -360.0 )
+                while( rotz <= -360.0 ) rotz += 360.0;
+        }
+
+        locx += aModule->GetPosition().x * scale + dx;
+        locy += -aModule->GetPosition().y * scale + dy;
+
+        aIDFBoard.PlaceComponent(modfile->GetShape3DName(), refdes, locx, locy, locz, rotz, top);
+    }
+
+    return;
 }
 
 
@@ -332,14 +375,12 @@ bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName, double aUseThou )
 
     SetLocaleTo_C_standard();
 
-    // NOTE:
-    // XXX We may enclose all this in a TRY .. CATCH block
     idfBoard.Setup( aPcb->GetFileName(), aFullFileName, aUseThou,
             aPcb->GetDesignSettings().GetBoardThickness() );
 
     // set up the global offsets
     EDA_RECT bbox = aPcb->ComputeBoundingBox( true );
-    idfBoard.SetOffset( bbox.Centre().x * idfBoard.GetScale(),
+    idfBoard.SetOffset( -bbox.Centre().x * idfBoard.GetScale(),
                          bbox.Centre().y * idfBoard.GetScale() );
 
     // Export the board outline

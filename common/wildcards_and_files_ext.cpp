@@ -97,4 +97,5 @@ const wxString PSFileWildcard( _( "PostScript files (.ps)|*.ps" ) );
 const wxString ReportFileWildcard = _( "Report files (*.rpt)|*.rpt" );
 const wxString FootprintPlaceFileWildcard = _( "Footprint place files (*.pos)|*.pos" );
 const wxString Shapes3DFileWildcard( _( "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d" ) );
+const wxString IDF3DFileWildcard( _( "IDFv3 component files (*.idf)|*.idf" ) );
 const wxString TextWildcard( _( "Text files (*.txt)|*.txt" ) );

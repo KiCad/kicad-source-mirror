@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -10,6 +10,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 class DIALOG_SHIM;
 
 #include "dialog_shim.h"
@@ -20,7 +21,8 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/filepicker.h>
-#include <wx/checkbox.h>
+#include <wx/radiobox.h>
+#include <wx/statline.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -37,14 +39,15 @@ class DIALOG_EXPORT_IDF3_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_txtBrdFile;
 		wxFilePickerCtrl* m_filePickerIDF;
-		wxCheckBox* m_chkThou;
+		wxRadioBox* m_rbUnitSelection;
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 	
 	public:
 		
-		DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Export IDFv3"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 458,177 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export IDFv3"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 424,191 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EXPORT_IDF3_BASE();
 	
 };
