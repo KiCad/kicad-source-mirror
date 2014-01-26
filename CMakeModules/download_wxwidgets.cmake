@@ -62,23 +62,25 @@ ExternalProject_Add( libwx
 
     BUILD_IN_SOURCE 1
 
-    # wxOverlay PATCH for OSX
+    # wxOverlay PATCH for OSX - http://trac.wxwidgets.org/ticket/12894
     PATCH_COMMAND   bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/wxwidgets-3.0.0_macosx.patch"
 
 
     CONFIGURE_COMMAND  ./configure --prefix=${LIBWX_ROOT} -with-opengl --enable-aui --enable-debug_info -with-expat=builtin --with-regex=builtin --enable-utf8 ${LIBWX_ARCHITECTURES} ${LIBWX_BUILDTYPE}
-    #BINARY_DIR      "${PREFIX}"
+    #BINARY_DIR     "${PREFIX}"
 
-    BUILD_COMMAND   make 
+    BUILD_COMMAND    $(MAKE) VERBOSE=1
 
     INSTALL_DIR     "${LIBWX_ROOT}"
-    INSTALL_COMMAND make install
+    INSTALL_COMMAND  make install
     )
 
+#SET directories
 set(wxWidgets_BIN_DIR           ${LIBWX_ROOT}/bin)
 set(wxWidgets_CONFIG_EXECUTABLE ${LIBWX_ROOT}/bin/wx-config)
 set(wxWidgets_INCLUDE_DIRS      ${LIBWX_ROOT}/include) 
 set(wxWidgets_LIBRARY_DIRS      ${LIBWX_ROOT}/lib)
+
 
 ExternalProject_Add_Step( libwx bzr_commit_libwx
     COMMAND bzr ci -q -m pristine <SOURCE_DIR>
@@ -101,20 +103,13 @@ ExternalProject_Add_Step( libwx bzr_init_libwx
     DEPENDEES download
     )
 
+######
+# Now is time to search what we have built
+######
+
 ExternalProject_Add_Step( libwx libwx_recursive_message
     COMMAND cmake . 
-    COMMENT "*** RERUN CMAKE ***"
+    COMMENT "*** RERUN CMAKE - wxWidgets built, now reissue a cmake to build Kicad"
     DEPENDEES install
     )
 
-#ExternalProject_Add_Step( libwx libwx_recursive_cmake
-#    COMMAND cmake .
-#    COMMENT "recurse cmake"
-#    DEPENDEES libwx_recursive_message
-#    )
-#
-#ExternalProject_Add_Step( libwx libwx_recursive_make
-#    COMMAND make
-#    COMMENT "recurse make"
-#    DEPENDEES libwx_recursive_cmake
-#    )

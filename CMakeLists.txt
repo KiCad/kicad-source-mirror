@@ -178,7 +178,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing" )
 
     if( APPLE )
-        set( KICAD_BUILD_STATIC ON)
 
         set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
@@ -300,10 +299,18 @@ if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
         message(FATAL_ERROR "You can't build STATIC and DYNAMIC together")
     endif()
 
-    if( KICAD_BUILD_DYNAMIC )
-        message(FATAL_ERROR "KICAD_BUILD_DYNAMIC Not implemented yet")
+    if( KICAD_BUILD_STATIC )
+        message(STATUS "KICAD_BUILD_STATIC set")
     endif()
 
+    if( KICAD_BUILD_DYNAMIC )
+        message(STATUS "KICAD_BUILD_DYNAMIC set")
+        # TODO - Library packaging/relocation 
+    endif()
+
+    add_custom_target( lib-dependencies
+                       DEPENDS boost cairo glew libpng pixman pkgconfig
+                     )
 
     include( download_libpng )
 
@@ -311,6 +318,7 @@ if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
         message(FATAL_ERROR "KICAD_BUILD_* and SCRIPTING Not Implemented Yet!")
     else()
         include( download_wxwidgets )
+        add_dependencies( lib-dependencies libwx )
     endif( KICAD_SCRIPTING_WXPYTHON )
 
     include( download_pkgconfig )
@@ -503,6 +511,21 @@ add_dependencies( pcad2kicadpcb boost )
 add_dependencies( polygon boost )
 add_dependencies( pl_editor boost )
 add_dependencies( pnsrouter boost )
+
+
+if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
+add_dependencies( pcbnew lib-dependencies )
+add_dependencies( eeschema lib-dependencies )
+add_dependencies( cvpcb lib-dependencies )
+add_dependencies( gal lib-dependencies )
+add_dependencies( common lib-dependencies )
+add_dependencies( pcbcommon lib-dependencies )
+add_dependencies( 3d-viewer lib-dependencies )
+add_dependencies( pcad2kicadpcb lib-dependencies )
+add_dependencies( polygon lib-dependencies )
+add_dependencies( pl_editor lib-dependencies )
+add_dependencies( pnsrouter lib-dependencies )
+endif()
 
 
 #############

@@ -92,7 +92,7 @@ string( REPLACE "unit_test_framework" "test" boost_libs_list "${BOOST_LIBS_BUILT
 # Default Toolset
 set( BOOST_TOOLSET "toolset=gcc" )
 
-if( KICAD_BUILD_STATIC )
+if( KICAD_BUILD_STATIC OR APPLE )
     set( BOOST_LINKTYPE  "link=static" )
 else()
     unset( BOOST_LINKTYPE )

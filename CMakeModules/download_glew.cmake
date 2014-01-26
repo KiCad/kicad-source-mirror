@@ -65,8 +65,8 @@ ExternalProject_Add( glew
 
     #BINARY_DIR      "${PREFIX}"
 
-    BUILD_COMMAND   make ${GLEW_CFLAGS} ${GLEW_LDFLAGS} ${GLEW_STRIP}
+    BUILD_COMMAND   $(MAKE) ${GLEW_CFLAGS} ${GLEW_LDFLAGS} ${GLEW_STRIP}
 
-    INSTALL_DIR     "${GLEW_ROOT}"
-    INSTALL_COMMAND make GLEW_DEST="${GLEW_ROOT}" install && ranlib "${GLEW_ROOT}/lib/libGLEW.a"
+    INSTALL_DIR      "${GLEW_ROOT}"
+    INSTALL_COMMAND  $(MAKE) GLEW_DEST="${GLEW_ROOT}" install && ranlib "${GLEW_ROOT}/lib/libGLEW.a"
     )
