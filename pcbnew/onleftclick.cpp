@@ -325,6 +325,13 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_ADD_TEXT_BUTT:
+        if( IsLayerInList( EDGE_LAYER, getActiveLayer() ) )
+        {
+            DisplayError( this,
+                          _( "Texts not allowed on Edge Cut layers" ) );
+            break;
+        }
+
         if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
             SetCurItem( CreateTextePcb( aDC ) );
@@ -367,7 +374,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_DIMENSION_BUTT:
-        if( IsLayerInList( EDGE_LAYER|ALL_CU_LAYERS ,getActiveLayer() ) )
+        if( IsLayerInList( EDGE_LAYER|ALL_CU_LAYERS, getActiveLayer() ) )
         {
             DisplayError( this,
                           _( "Dimension not allowed on Copper or Edge Cut layers" ) );

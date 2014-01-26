@@ -172,6 +172,15 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
 {
+    // Test for acceptable layer.
+    // Incorrect layer can happen for old boards,
+    // having texts on edge cut layer for instance
+    if( m_LayerSelectionCtrl->GetLayerSelection() < 0 )
+    {
+        wxMessageBox( wxT("No layer selected, Please select the text layer") );
+        return;
+    }
+
     wxPoint newPosition;
     wxSize  newSize;
 
