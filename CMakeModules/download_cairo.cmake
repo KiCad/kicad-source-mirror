@@ -37,6 +37,11 @@ find_package( BZip2 REQUIRED )
 
 set( PREFIX ${DOWNLOAD_DIR}/cairo )
 
+if ( KICAD_BUILD_STATIC )
+    set( CAIRO_BUILDTYPE --disable-shared )
+endif( KICAD_BUILD_STATIC )
+
+
 if (APPLE) 
 
     set( CAIRO_CFLAGS  "CFLAGS=" )
@@ -77,7 +82,7 @@ ExternalProject_Add(  cairo
     #SOURCE_DIR       "${PREFIX}"
     #PATCH_COMMAND    ""
 
-    CONFIGURE_COMMAND ./configure --prefix=${CAIRO_ROOT} --enable-static --disable-shared
+    CONFIGURE_COMMAND ./configure --prefix=${CAIRO_ROOT} --enable-static ${CAIRO_BUILDTYPE}
                       PKG_CONFIG=${PROJECT_SOURCE_DIR}/pkgconfig_root/bin/pkg-config
                       PKG_CONFIG_PATH=${PROJECT_SOURCE_DIR}/pixman_root/lib/pkgconfig:${PROJECT_SOURCE_DIR}/libpng_root/lib/pkgconfig
                       --enable-png=yes --enable-svg=yes
@@ -88,8 +93,8 @@ ExternalProject_Add(  cairo
 
     #BINARY_DIR      "${PREFIX}"
 
-    BUILD_COMMAND   make
+    BUILD_COMMAND   $(MAKE) 
 
     INSTALL_DIR     "${CAIRO_ROOT}"
-    INSTALL_COMMAND make install
+    INSTALL_COMMAND $(MAKE) install
     )

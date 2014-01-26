@@ -37,6 +37,12 @@ find_package( BZip2 REQUIRED )
 
 set( PREFIX ${DOWNLOAD_DIR}/pkgconfig )
 
+if ( KICAD_BUILD_STATIC )
+    set( PKGCONFIG_BUILDTYPE --enable-shared=no --enable-static=yes )
+else()
+    set( PKGCONFIG_BUILDTYPE --enable-shared=yes --enable-static=yes )
+endif( KICAD_BUILD_STATIC )
+
 # <SOURCE_DIR> = ${PREFIX}/src/glew
 # There is a Bazaar 'boost scratch repo' in <SOURCE_DIR>/boost and after committing pristine
 # download, the patch is applied.  This lets you regenerate a new patch at any time
@@ -53,11 +59,22 @@ ExternalProject_Add( pkgconfig
     BUILD_IN_SOURCE 1
 
     #PATCH_COMMAND     "true"
-    CONFIGURE_COMMAND  ./configure --prefix=${PKGCONFIG_ROOT} --with-internal-glib --enable-shared=no --enable-static=yes --disable-silent-rules
+    CONFIGURE_COMMAND  ./configure --prefix=${PKGCONFIG_ROOT} --with-internal-glib ${PKGCONFIG_BUILDTYPE} --disable-silent-rules
     #BINARY_DIR      "${PREFIX}"
 
-    BUILD_COMMAND   make
+    BUILD_COMMAND   $(MAKE)
 
     INSTALL_DIR     "${PKGCONFIG_ROOT}"
-    INSTALL_COMMAND make install
+    INSTALL_COMMAND $(MAKE) install
     )
+
+#
+# At second execution make install will fail ..
+#
+
+ExternalProject_Add_Step( pkgconfig pkgconfig_erase_dir
+    COMMAND rm -fr ${PKGCONFIG_ROOT}
+    COMMENT "*** Erasing pkgconfig directory"
+    DEPENDEES build
+    )
+
