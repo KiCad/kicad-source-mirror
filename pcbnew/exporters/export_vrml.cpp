@@ -1043,7 +1043,7 @@ static void export_vrml_pad( MODEL_VRML& aModel, BOARD* pcb, D_PAD* aPad )
     // Export the hole on the edge layer
     if( hole_drill > 0 )
     {
-        if( aPad->GetDrillShape() == PAD_OVAL )
+        if( aPad->GetDrillShape() == PAD_DRILL_OBLONG )
         {
             // Oblong hole (slot)
             aModel.holes.AddSlot( hole_x, -hole_y, hole_drill_w * 2.0, hole_drill_h * 2.0,

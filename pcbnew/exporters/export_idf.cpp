@@ -200,7 +200,7 @@ UseBoundingBox:
         p1.y    = py[i - 1];
         p2.x    = px[i];
         p2.y    = py[i];
-        
+
         outline.push( new IDF_SEGMENT( p1, p2 ) );
     }
 
@@ -271,7 +271,8 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
             tstr = TO_UTF8( pad->GetPadName() );
 
             if( tstr.empty() || !tstr.compare( "0" ) || !tstr.compare( "~" )
-                || ( kplate == IDF3::NPTH ) || ( pad->GetDrillShape() == PAD_OVAL ) )
+                || ( kplate == IDF3::NPTH )
+                ||( pad->GetDrillShape() == PAD_DRILL_OBLONG ) )
                 pintype = "MTG";
             else
                 pintype = "PIN";
@@ -284,7 +285,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
             // 5. Assoc. part : BOARD | NOREFDES | PANEL | {"refdes"}
             // 6. type : PIN | VIA | MTG | TOOL | { "other" }
             // 7. owner : MCAD | ECAD | UNOWNED
-            if( ( pad->GetDrillShape() == PAD_OVAL )
+            if( ( pad->GetDrillShape() == PAD_DRILL_OBLONG )
                 && ( pad->GetDrillSize().x != pad->GetDrillSize().y ) )
             {
                 // NOTE: IDF does not have direct support for slots;

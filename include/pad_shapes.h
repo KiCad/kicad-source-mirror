@@ -11,13 +11,21 @@
  */
 enum PAD_SHAPE_T
 {
-    PAD_NONE,
     PAD_CIRCLE,
     PAD_ROUND = PAD_CIRCLE,
     PAD_RECT,
     PAD_OVAL,
-    PAD_TRAPEZOID,
-    PAD_OCTAGON         // Provided, but not existing in Pcbnew. waiting for a volunteer
+    PAD_TRAPEZOID
+};
+
+/**
+ * Enum PAD_DRILL_SHAPE_T
+ * is the set of pad dtill shapes, used with D_PAD::{Set,Get}DrillShape()
+ */
+enum PAD_DRILL_SHAPE_T
+{
+    PAD_DRILL_CIRCLE,
+    PAD_DRILL_OBLONG
 };
 
 

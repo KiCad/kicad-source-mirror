@@ -2138,7 +2138,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
                 switch( token )
                 {
                 case T_oval:
-                    pad->SetDrillShape( PAD_OVAL );
+                    pad->SetDrillShape( PAD_DRILL_OBLONG );
                     break;
 
                 case T_NUMBER:
