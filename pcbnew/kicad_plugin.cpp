@@ -1208,7 +1208,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     {
         m_out->Print( 0, " (drill" );
 
-        if( aPad->GetDrillShape() == PAD_OVAL )
+        if( aPad->GetDrillShape() == PAD_DRILL_OBLONG )
             m_out->Print( 0, " oval" );
 
         if( sz.GetWidth() > 0 )

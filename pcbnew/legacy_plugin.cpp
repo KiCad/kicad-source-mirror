@@ -1243,14 +1243,14 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             BIU offs_x  = biuParse( data, &data );
             BIU offs_y  = biuParse( data, &data );
 
-            PAD_SHAPE_T drShape = PAD_CIRCLE;
+            PAD_DRILL_SHAPE_T drShape = PAD_DRILL_CIRCLE;
 
             data = strtok_r( (char*) data, delims, &saveptr );
             if( data )  // optional shape
             {
                 if( data[0] == 'O' )
                 {
-                    drShape = PAD_OVAL;
+                    drShape = PAD_DRILL_OBLONG;
 
                     data    = strtok_r( NULL, delims, &saveptr );
                     drill_x = biuParse( data );
@@ -3348,7 +3348,7 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
                     fmtBIU( me->GetDrillSize().x ).c_str(),
                     fmtBIUPoint( me->GetOffset() ).c_str() );
 
-    if( me->GetDrillShape() == PAD_OVAL )
+    if( me->GetDrillShape() == PAD_DRILL_OBLONG )
     {
         fprintf( m_fp, " %c %s", 'O', fmtBIUSize( me->GetDrillSize() ).c_str() );
     }

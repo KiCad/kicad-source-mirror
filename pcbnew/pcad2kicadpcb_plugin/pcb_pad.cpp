@@ -202,7 +202,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
         pad->SetShape( PAD_CIRCLE );
         pad->SetAttribute( PAD_HOLE_NOT_PLATED );
 
-        pad->SetDrillShape( PAD_CIRCLE );
+        pad->SetDrillShape( PAD_DRILL_CIRCLE );
         pad->SetDrillSize( wxSize( m_hole, m_hole ) );
         pad->SetSize( wxSize( m_hole, m_hole ) );
 
@@ -267,7 +267,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
         pad->SetDelta( wxSize( 0, 0 ) );
         pad->SetOrientation( m_rotation + aRotation );
 
-        pad->SetDrillShape( PAD_CIRCLE );
+        pad->SetDrillShape( PAD_DRILL_CIRCLE );
         pad->SetOffset( wxPoint( 0, 0 ) );
         pad->SetDrillSize( wxSize( m_hole, m_hole ) );
 
