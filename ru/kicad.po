@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-20 10:50+0300\n"
-"PO-Revision-Date: 2014-01-20 11:04+0300\n"
+"POT-Creation-Date: 2014-01-27 09:55+0300\n"
+"PO-Revision-Date: 2014-01-27 10:02+0300\n"
 "Last-Translator: faa <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -466,7 +466,7 @@ msgstr "Номер"
 
 #: eeschema/lib_pin.cpp:1849 eeschema/lib_draw_item.cpp:64
 #: eeschema/libedit.cpp:490 eeschema/sch_text.cpp:794
-#: gerbview/class_gerber_draw_item.cpp:547 pcbnew/class_drawsegment.cpp:326
+#: gerbview/class_gerber_draw_item.cpp:547 pcbnew/class_drawsegment.cpp:323
 #: pcbnew/class_text_mod.cpp:353 pcbnew/class_track.cpp:1093
 #: pcbnew/class_zone.cpp:630 pcbnew/class_marker_pcb.cpp:98
 #: pcbnew/dialogs/dialog_layers_setup.cpp:290
@@ -2054,7 +2054,7 @@ msgid "Electronics rule check error"
 msgstr "Ошибка проверки электрических правил"
 
 #: eeschema/lib_circle.cpp:53 gerbview/class_gerber_draw_item.cpp:189
-#: pcbnew/class_drawsegment.cpp:333 pcbnew/class_pad.cpp:743
+#: pcbnew/class_drawsegment.cpp:330 pcbnew/class_pad.cpp:764
 #: pcbnew/class_board_item.cpp:45
 msgid "Circle"
 msgstr "Окружность"
@@ -3442,7 +3442,7 @@ msgid "Rotate Block ccw"
 msgstr "Повернуть блок"
 
 #: eeschema/lib_arc.cpp:95 gerbview/class_gerber_draw_item.cpp:186
-#: pcbnew/class_drawsegment.cpp:337 pcbnew/class_board_item.cpp:44
+#: pcbnew/class_drawsegment.cpp:334 pcbnew/class_board_item.cpp:44
 msgid "Arc"
 msgstr "Дуга"
 
@@ -5076,16 +5076,16 @@ msgstr "Основные пути библиотек"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:374
 #: cvpcb/dialogs/dialog_cvpcb_config.cpp:406
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:461
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:324
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:466
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:329
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths.cpp:358
 msgid "Use a relative path?"
 msgstr "Использовать относительный путь?"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:374
 #: cvpcb/dialogs/dialog_cvpcb_config.cpp:407
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:462
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:325
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:467
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:330
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths.cpp:359
 msgid "Path type"
 msgstr "Тип пути"
@@ -6720,7 +6720,7 @@ msgstr "Не удалось создать файл <%s>"
 #: gerbview/class_gerbview_layer_widget.cpp:87
 #: gerbview/dialogs/dialog_print_using_printer.cpp:139
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:142
-#: pcbnew/class_pcb_text.cpp:139 pcbnew/class_drawsegment.cpp:357
+#: pcbnew/class_pcb_text.cpp:139 pcbnew/class_drawsegment.cpp:354
 #: pcbnew/class_pcb_layer_widget.cpp:205 pcbnew/class_module.cpp:479
 #: pcbnew/class_text_mod.cpp:363 pcbnew/class_track.cpp:1171
 #: pcbnew/class_pad.cpp:591 pcbnew/class_zone.cpp:682
@@ -7453,6 +7453,7 @@ msgstr "Дюймы"
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:25
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:33
+#: pcbnew/dialogs/dialog_export_idf_base.cpp:27
 msgid "Millimeters"
 msgstr "Миллиметры"
 
@@ -7728,6 +7729,10 @@ msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
 msgstr "Vrml и x3d файлы (*.wrl *.x3d)|*.wrl;*.x3d"
 
 #: common/wildcards_and_files_ext.cpp:100
+msgid "IDFv3 component files (*.idf)|*.idf"
+msgstr "Файлы компонентов IDFv3 (*.idf)|*.idf"
+
+#: common/wildcards_and_files_ext.cpp:101
 msgid "Text files (*.txt)|*.txt"
 msgstr "Текстовые файлы (*.txt)|*.txt"
 
@@ -7813,11 +7818,11 @@ msgstr "Japanese"
 msgid "Bulgarian"
 msgstr "Болгарский"
 
-#: common/edaappl.cpp:855
+#: common/edaappl.cpp:854
 msgid "Language"
 msgstr "Язык"
 
-#: common/edaappl.cpp:856
+#: common/edaappl.cpp:855
 msgid "Select application language (only for testing!)"
 msgstr "Выбор языка интерфейса программы (только для тестирования!)"
 
@@ -7837,11 +7842,11 @@ msgstr " мм"
 msgid " \""
 msgstr " \""
 
-#: common/footprint_info.cpp:302 common/footprint_info.cpp:323
+#: common/footprint_info.cpp:312 common/footprint_info.cpp:333
 msgid "Errors were encountered loading footprints"
 msgstr "При загрузке посадочных мест возникли ошибки"
 
-#: common/footprint_info.cpp:321
+#: common/footprint_info.cpp:331
 msgid "Load Error"
 msgstr "Ошибка загрузки"
 
@@ -9056,7 +9061,7 @@ msgstr "Слой мод."
 msgid "Seg Layer"
 msgstr "Слой сегм."
 
-#: pcbnew/class_edge_mod.cpp:269 pcbnew/class_drawsegment.cpp:359
+#: pcbnew/class_edge_mod.cpp:269 pcbnew/class_drawsegment.cpp:356
 #: pcbnew/class_track.cpp:1198
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:327
@@ -9094,25 +9099,25 @@ msgstr "Ошибка DRC: завершение создания зоны дае�
 msgid "Your BOARD has a bad layer number for module %s"
 msgstr "Плата содержит неверный номер слоя в модуле %s"
 
-#: pcbnew/class_drawsegment.cpp:328
+#: pcbnew/class_drawsegment.cpp:325
 msgid "Shape"
 msgstr "Форма"
 
-#: pcbnew/class_drawsegment.cpp:339
+#: pcbnew/class_drawsegment.cpp:336
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:904
 msgid "Angle"
 msgstr "Угол"
 
-#: pcbnew/class_drawsegment.cpp:343
+#: pcbnew/class_drawsegment.cpp:340
 msgid "Curve"
 msgstr "Кривая"
 
-#: pcbnew/class_drawsegment.cpp:347
+#: pcbnew/class_drawsegment.cpp:344
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 msgid "Segment"
 msgstr "Отрезок"
 
-#: pcbnew/class_drawsegment.cpp:552
+#: pcbnew/class_drawsegment.cpp:549
 #, c-format
 msgid "Pcb Graphic: %s, length %s on %s"
 msgstr "Графика: %s длина: %s на %s"
@@ -9761,7 +9766,11 @@ msgstr "Графика не разрешена на медных слоях"
 msgid "Tracks on Copper layers only "
 msgstr "Дорожки только на медных слоях"
 
-#: pcbnew/onleftclick.cpp:373
+#: pcbnew/onleftclick.cpp:331
+msgid "Texts not allowed on Edge Cut layers"
+msgstr "Текст не разрешен на слоях контура платы"
+
+#: pcbnew/onleftclick.cpp:380
 msgid "Dimension not allowed on Copper or Edge Cut layers"
 msgstr "Размерные линии не разрешены на слоях меди и контура платы"
 
@@ -10856,7 +10865,7 @@ msgstr ""
 "Этот элемент имеет неправильный слой.\n"
 "Принудительно назначен слой чертежа. Пожалуйста, поправьте это"
 
-#: pcbnew/dimension.cpp:200 pcbnew/dialogs/dialog_pcb_text_properties.cpp:238
+#: pcbnew/dimension.cpp:200 pcbnew/dialogs/dialog_pcb_text_properties.cpp:247
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:230
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr "Толщина линии текста больше размера текста. Текст может быть нечитаем"
@@ -11137,12 +11146,12 @@ msgid "Export a VRML board representation"
 msgstr "Экспорт VRML-презентации печатной платы"
 
 #: pcbnew/menubar_pcbframe.cpp:208
-msgid "I&DFv3 Board Shape Export"
-msgstr "I&DFv3 экспорт платы"
+msgid "I&DFv3 Export"
+msgstr "I&DFv3 экспорт"
 
 #: pcbnew/menubar_pcbframe.cpp:208
-msgid "Basic export of board shape only IDFv3 format"
-msgstr "Базовый экспорт изображения платы только в IDFv3 формате"
+msgid "IDFv3 board and component export"
+msgstr "IDFv3 экспорт платы и компонентов"
 
 #: pcbnew/menubar_pcbframe.cpp:212
 msgid "E&xport"
@@ -11965,41 +11974,41 @@ msgstr "Y позиция"
 msgid "Length in package"
 msgstr "Длина в корпусе"
 
-#: pcbnew/class_pad.cpp:746 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
+#: pcbnew/class_pad.cpp:767 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Oval"
 msgstr "Овал"
 
-#: pcbnew/class_pad.cpp:749 pcbnew/class_board_item.cpp:43
+#: pcbnew/class_pad.cpp:770 pcbnew/class_board_item.cpp:43
 msgid "Rect"
 msgstr "Прямоуг."
 
-#: pcbnew/class_pad.cpp:752
+#: pcbnew/class_pad.cpp:773
 msgid "Trap"
 msgstr "Трап"
 
-#: pcbnew/class_pad.cpp:765
+#: pcbnew/class_pad.cpp:786
 msgid "Std"
 msgstr "Стд"
 
-#: pcbnew/class_pad.cpp:768 pcbnew/dialogs/dialog_pad_properties_base.cpp:58
+#: pcbnew/class_pad.cpp:789 pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "SMD"
 msgstr "SMD"
 
-#: pcbnew/class_pad.cpp:771
+#: pcbnew/class_pad.cpp:792
 msgid "Conn"
 msgstr "Conn"
 
-#: pcbnew/class_pad.cpp:774
+#: pcbnew/class_pad.cpp:795
 msgid "Not Plated"
 msgstr "Без мет."
 
-#: pcbnew/class_pad.cpp:790
+#: pcbnew/class_pad.cpp:811
 #, c-format
 msgid "Pad on %s of %s"
 msgstr "Конт.пл. на %s из %s"
 
-#: pcbnew/class_pad.cpp:796
+#: pcbnew/class_pad.cpp:817
 #, c-format
 msgid "Pad %s on %s of %s"
 msgstr "Конт.пл. %s на %s из %s"
@@ -14378,8 +14387,8 @@ msgstr "Включить горячие клавиши команд переме
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Отключить горячие клавиши команд перемещения и авторазмещения"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:431
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:295
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:436
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:300
 msgid "3D Shape:"
 msgstr "3D вид:"
 
@@ -16171,7 +16180,7 @@ msgstr ""
 "Используйте этот атрибут для \"виртуальных\" компонентов отображаемых на "
 "плате (таких как старый разъем шины ISA PC)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:372
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:377
 #, c-format
 msgid ""
 "Error:\n"
@@ -16694,6 +16703,22 @@ msgstr "Включая зафиксированные посадочные ме�
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:44
 msgid "Force locked footprints to be modified"
 msgstr "Зафиксированные посадочные места изменены"
+
+#: pcbnew/dialogs/dialog_export_idf_base.cpp:20
+msgid "IDF board file"
+msgstr "IDF файл платы:"
+
+#: pcbnew/dialogs/dialog_export_idf_base.cpp:24
+msgid "Select an IDF export filename"
+msgstr "Выбор имени файла экспорта IDF"
+
+#: pcbnew/dialogs/dialog_export_idf_base.cpp:27
+msgid "Mils"
+msgstr "милс"
+
+#: pcbnew/dialogs/dialog_export_idf_base.cpp:29
+msgid "IDF File Units"
+msgstr "Единицы измерения в IDF файле"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "Plot format:"
@@ -18647,6 +18672,10 @@ msgstr "Выбор пары медных слоев:"
 msgid "Grid Properties"
 msgstr "Параметры сетки"
 
+#: pcbnew/dialogs/dialog_export_idf_base.h:50
+msgid "Export IDFv3"
+msgstr "Экспорт IDFv3"
+
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.h:70
 msgid "Keepout Area Properties"
 msgstr "Свойства области запрета"
@@ -18686,6 +18715,9 @@ msgstr "Калькулятор для печатных плат"
 #: pcb_calculator/dialogs/dialog_regulator_data_base.h:62
 msgid "Regulator Parameters"
 msgstr "Параметры стабилизатора"
+
+#~ msgid "Basic export of board shape only IDFv3 format"
+#~ msgstr "Базовый экспорт изображения платы только в IDFv3 формате"
 
 #~ msgid ""
 #~ "Current component is not saved.\n"
