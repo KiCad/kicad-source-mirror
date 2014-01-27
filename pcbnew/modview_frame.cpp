@@ -776,7 +776,7 @@ const wxString FOOTPRINT_VIEWER_FRAME::GetSelectedLibraryFullName( void )
 
 void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
 {
-    if( m_libraryName.IsEmpty() )
+    if( !m_libraryName )
         return;
 
     int selection = m_footprintList->FindString( m_footprintName );
@@ -801,7 +801,8 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
 
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
-        MODULE* footprint = GetModuleLibrary( GetSelectedLibraryFullName(), m_footprintName, true );
+
+        MODULE* footprint = m_footprintLibTable->FootprintLoad( m_libraryName, m_footprintName );
 
         if( footprint )
             GetBoard()->Add( footprint, ADD_APPEND );
