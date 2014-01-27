@@ -68,6 +68,8 @@ ExternalProject_Add( pixman
     #SOURCE_DIR      "${PREFIX}"
     BUILD_IN_SOURCE 1
 
+    UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${PIXMAN_ROOT}"
+
     #PATCH_COMMAND     "true"
     CONFIGURE_COMMAND ./configure --prefix=${PIXMAN_ROOT} ${PIXMAN_OPTS} ${PIXMAN_CPPFLAGS}  --disable-dependency-tracking
     #BINARY_DIR      "${PREFIX}"

@@ -182,6 +182,9 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
 
+        # Allows .dylib relocation in the future
+        set( CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS} -headerpad_max_install_names")
+
         if( NOT CMAKE_CXX_COMPILER )
             EXEC_PROGRAM( wx-config ARGS --cc  OUTPUT_VARIABLE CMAKE_C_COMPILER )
         endif( NOT CMAKE_CXX_COMPILER )
@@ -331,6 +334,11 @@ if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
     include( download_cairo )
         set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo")
         set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a")
+
+    if( KICAD_BUILD_DYNAMIC AND APPLE ) 
+        add_custom_target( osx_fix_bundles ALL DEPENDS cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
+        add_custom_command(TARGET osx_fix_bundles POST_BUILD COMMAND scripts/osx_fixbundle.sh COMMENT "Migrating dylibs to bundles")
+    endif()
 
 
 endif( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC)
@@ -525,8 +533,13 @@ add_dependencies( pcad2kicadpcb lib-dependencies )
 add_dependencies( polygon lib-dependencies )
 add_dependencies( pl_editor lib-dependencies )
 add_dependencies( pnsrouter lib-dependencies )
+    if ( BUILD_GITHUB_PLUGIN ) 
+    add_dependencies( github_plugin lib-dependencies )
+    endif()
 endif()
 
+if ( KICAD_BUILD_DYNAMIC )
+endif()
 
 #############
 # Resources #

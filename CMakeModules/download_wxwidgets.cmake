@@ -62,9 +62,11 @@ ExternalProject_Add( libwx
 
     BUILD_IN_SOURCE 1
 
-    # wxOverlay PATCH for OSX - http://trac.wxwidgets.org/ticket/12894
-    PATCH_COMMAND   bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/wxwidgets-3.0.0_macosx.patch"
+    PATCH_COMMAND   bzr revert
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/wxwidgets-3.0.0_macosx.patch"
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/wxwidgets-3.0.0_macosx_bug_15908.patch"
 
+    UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${LIBWX_ROOT}"
 
     CONFIGURE_COMMAND  ./configure --prefix=${LIBWX_ROOT} -with-opengl --enable-aui --enable-debug_info -with-expat=builtin --with-regex=builtin --enable-utf8 ${LIBWX_ARCHITECTURES} ${LIBWX_BUILDTYPE}
     #BINARY_DIR     "${PREFIX}"

@@ -60,6 +60,8 @@ ExternalProject_Add( glew
     #SOURCE_DIR      "${PREFIX}"
     BUILD_IN_SOURCE 1
 
+    UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${GLEW_ROOT}"
+
     #PATCH_COMMAND     "true"
     CONFIGURE_COMMAND ""
 
@@ -68,5 +70,18 @@ ExternalProject_Add( glew
     BUILD_COMMAND   $(MAKE) ${GLEW_CFLAGS} ${GLEW_LDFLAGS} ${GLEW_STRIP}
 
     INSTALL_DIR      "${GLEW_ROOT}"
-    INSTALL_COMMAND  $(MAKE) GLEW_DEST="${GLEW_ROOT}" install && ranlib "${GLEW_ROOT}/lib/libGLEW.a"
+    INSTALL_COMMAND  $(MAKE) GLEW_DEST="${GLEW_ROOT}" install
     )
+
+#
+# Optional Steps
+#
+
+if( APPLE )
+# On OSX is needed to run ranlib to make .a indexes for all platforms
+ExternalProject_Add_Step( glew glew_osx_ranlib
+    COMMAND ranlib "${GLEW_ROOT}/lib/libGLEW.a"
+    COMMENT "ranlib ${GLEW_ROOT}/lib/libGLEW.a - Needed on OSX only"
+    DEPENDEES install
+    )
+endif()
