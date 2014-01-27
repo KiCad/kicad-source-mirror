@@ -24,6 +24,45 @@
 
 
 /*
+
+While exploring the possibility of local caching of the zip file, I discovered
+this command to retrieve the time stamp of the last commit into any particular
+repo:
+
+ $time curl -I -i https://api.github.com/repos/KiCad/Mounting_Holes.pretty
+
+This gets just the header to what would otherwise return information on the repo
+in JSON format, and is reasonably faster than actually getting the repo
+in zip form.  However it still takes 5 seconds or more when github is busy, so
+I have lost my enthusiasm for local caching until a faster time stamp retrieval
+mechanism can be found, or github gets more servers.  But note that the occasionally
+slow response is the exception rather than the norm.  Normally the response is
+down around a 1/3 of a second.  The information we would use is in the header
+named "Last-Modified" as seen below.  This would need parsing, but avhttp may
+offer some help there, if not, then boost async probably does.
+
+
+HTTP/1.1 200 OK
+Server: GitHub.com
+Date: Mon, 27 Jan 2014 15:46:46 GMT
+Content-Type: application/json; charset=utf-8
+Status: 200 OK
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 49
+X-RateLimit-Reset: 1390839612
+Cache-Control: public, max-age=60, s-maxage=60
+Last-Modified: Mon, 02 Dec 2013 10:08:51 GMT
+ETag: "3d04d760f469f2516a51a56eac63bbd5"
+Vary: Accept
+X-GitHub-Media-Type: github.beta
+X-Content-Type-Options: nosniff
+Content-Length: 6310
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+Access-Control-Allow-Origin: *
+X-GitHub-Request-Id: 411087C2:659E:50FD6E6:52E67F66
+Vary: Accept-Encoding
+
 */
 
 
@@ -493,13 +532,17 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
     catch( boost::system::system_error& e )
     {
         // https "GET" has faild, report this to API caller.
-        wxString errorcmd( wxT("https GET command failed") ); // Do not translate this message
-        wxString fmt( _( "%s\nCannot get/download Zip archive: '%s'\nfor library path: '%s'.\nReason: '%s'" ) );
+        static const char errorcmd[] = "https GET command failed";  // Do not translate this message
 
-        string msg = StrPrintf( TO_UTF8( fmt ),
-                TO_UTF8( errorcmd ),
-                zip_url.c_str(),
-                TO_UTF8( aRepoURL ),
+        UTF8 fmt( _( "%s\nCannot get/download Zip archive: '%s'\nfor library path: '%s'.\nReason: '%s'" ) );
+
+        string msg = StrPrintf( fmt.c_str(),
+                errorcmd,
+                // Report both secret zip_url and Lib Path, to user.  The secret
+                // zip_url may go bad at some point in future if github changes
+                // their server architecture.  Then fix repoURL_zipURL() to reflect
+                // new architecture.
+                zip_url.c_str(), TO_UTF8( aRepoURL ),
                 e.what() );
 
         THROW_IO_ERROR( msg );
