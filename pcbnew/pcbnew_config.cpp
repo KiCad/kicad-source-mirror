@@ -81,58 +81,53 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         InstallDialogLayerSetup();
         break;
 
-    case ID_CONFIG_REQ:
-        InstallConfigFrame();
-        break;
-
     case ID_PCB_LIB_TABLE_EDIT:
-    {
-        bool tableChanged = false;
-        int r = InvokePcbLibTableEditor( this, m_globalFootprintTable, m_footprintLibTable );
-
-        if( r & 1 )
         {
-            try
+            bool tableChanged = false;
+            int r = InvokePcbLibTableEditor( this, m_globalFootprintTable, m_footprintLibTable );
+
+            if( r & 1 )
             {
-                FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
-                m_globalFootprintTable->Format( &sf, 0 );
-                tableChanged = true;
+                try
+                {
+                    FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
+                    m_globalFootprintTable->Format( &sf, 0 );
+                    tableChanged = true;
+                }
+                catch( IO_ERROR& ioe )
+                {
+                    wxString msg;
+                    msg.Printf( _( "Error occurred saving the global footprint library "
+                                   "table:\n\n%s" ), ioe.errorText.GetData() );
+                    wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+                }
             }
-            catch( IO_ERROR& ioe )
+
+            // If no board file is defined, do not save the project specific library table.  It
+            // is kept in memory and created in the path when the new board is saved.
+            if( (r & 2) && !GetBoard()->GetFileName().IsEmpty() )
             {
-                wxString msg;
-                msg.Printf( _( "Error occurred saving the global footprint library "
-                               "table:\n\n%s" ), ioe.errorText.GetData() );
-                wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+                wxFileName fn = GetBoard()->GetFileName();
+
+                try
+                {
+                    m_footprintLibTable->Save( fn );
+                    tableChanged = true;
+                }
+                catch( IO_ERROR& ioe )
+                {
+                    wxString msg;
+                    msg.Printf( _( "Error occurred saving project specific footprint library "
+                                   "table:\n\n%s" ), ioe.errorText.GetData() );
+                    wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+                }
+            }
+
+            if( tableChanged && FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer() != NULL )
+            {
+                FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer()->ReCreateLibraryList();
             }
         }
-
-        // If no board file is defined, do not save the project specific library table.  It
-        // is kept in memory and created in the path when the new board is saved.
-        if( (r & 2) && !GetBoard()->GetFileName().IsEmpty() )
-        {
-            wxFileName fn = GetBoard()->GetFileName();
-
-            try
-            {
-                m_footprintLibTable->Save( fn );
-                tableChanged = true;
-            }
-            catch( IO_ERROR& ioe )
-            {
-                wxString msg;
-                msg.Printf( _( "Error occurred saving project specific footprint library "
-                               "table:\n\n%s" ), ioe.errorText.GetData() );
-                wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-            }
-        }
-
-        if( tableChanged && FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer() != NULL )
-        {
-            FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer()->ReCreateLibraryList();
-        }
-    }
-
         break;
 
     case ID_PCB_MASK_CLEARANCE:
@@ -224,9 +219,6 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
         fn.SetExt( ProjectFileExtension );
 
     wxGetApp().RemoveLibraryPath( g_UserLibDirBuffer );
-
-    // Initialize default values.
-    g_LibraryNames.Clear();
 
     wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
 
@@ -325,16 +317,11 @@ PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
     pca.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
                                           &BASE_SCREEN::m_PageLayoutDescrFileName ) );
 
-    pca.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),&g_UserLibDirBuffer,
-                                           GROUPLIB ) );
-    pca.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
-                                               &g_LibraryNames,  GROUPLIB ) );
+    pca.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ), &g_UserLibDirBuffer, GROUPLIB ) );
 
-    pca.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ),
-                                           &m_lastNetListRead ) );
+    pca.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ), &m_lastNetListRead ) );
 
-    pca.push_back( new PARAM_CFG_BOOL( wxT( "UseCmpFile" ),
-                                       &m_useCmpFileForFpNames, true ) );
+    pca.push_back( new PARAM_CFG_BOOL( wxT( "UseCmpFile" ), &m_useCmpFileForFpNames, true ) );
     GetBoard()->GetDesignSettings().AppendConfigs( &pca );
 
     return pca;
