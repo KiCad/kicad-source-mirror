@@ -51,8 +51,6 @@ using namespace hed;
 using namespace std;
 
 
-Triangulation* TTLtraits::triang_ = NULL;
-
 #ifdef TTL_USE_NODE_ID
   int Node::id_count = 0;
 #endif
@@ -165,10 +163,29 @@ EdgePtr Triangulation::initTwoEnclosingTriangles(NodesContainer::iterator first,
 
 
 //--------------------------------------------------------------------------------------------------
+Triangulation::Triangulation() {
+  helper = new ttl::TriangulationHelper( *this );
+}
+
+
+//--------------------------------------------------------------------------------------------------
+Triangulation::Triangulation(const Triangulation& tr) {
+  std::cout << "Triangulation: Copy constructor not present - EXIT.";
+  exit(-1);
+}
+
+
+//--------------------------------------------------------------------------------------------------
+Triangulation::~Triangulation() {
+  cleanAll();
+  delete helper;
+}
+
+
+//--------------------------------------------------------------------------------------------------
 void Triangulation::createDelaunay(NodesContainer::iterator first,
                                    NodesContainer::iterator last) {
-  
-  TTLtraits::triang_ = this;
+
   cleanAll();
   
   EdgePtr bedge = initTwoEnclosingTriangles(first, last);
@@ -178,7 +195,7 @@ void Triangulation::createDelaunay(NodesContainer::iterator first,
   
   NodesContainer::iterator it;
   for (it = first; it != last; ++it) {
-      ttl::insertNode<TTLtraits>(d_iter, *it);
+      helper->insertNode<TTLtraits>(d_iter, *it);
   }
 
   // In general (e.g. for the triangle based data structure), the initial dart
@@ -189,7 +206,7 @@ void Triangulation::createDelaunay(NodesContainer::iterator first,
   // triangle "outside" the triangulation.)
 
   // Assumes rectangular domain
-  ttl::removeRectangularBoundary<TTLtraits>(dc);
+  helper->removeRectangularBoundary<TTLtraits>(dc);
 }
 
 
@@ -269,7 +286,7 @@ cout << "Iterate boundary 2" << endl;
 
   Dart dart_iter = dart;
   do {
-  if (ttl::isBoundaryEdge(dart_iter))
+  if (helper->isBoundaryEdge(dart_iter))
   dart_iter.alpha0().alpha1();
   else
   dart_iter.alpha2().alpha1();
@@ -319,6 +336,31 @@ bool Triangulation::removeLeadingEdgeFromList(EdgePtr& leadingEdge) {
 //--------------------------------------------------------------------------------------------------
 void Triangulation::cleanAll() {
   leadingEdges_.clear();
+}
+
+
+//--------------------------------------------------------------------------------------------------
+void Triangulation::swapEdge(Dart& dart) {
+  if (!dart.getEdge()->isConstrained()) swapEdge(dart.getEdge());
+}
+
+
+//--------------------------------------------------------------------------------------------------
+void Triangulation::splitTriangle(Dart& dart, NodePtr point) {
+  EdgePtr edge = splitTriangle(dart.getEdge(), point);
+  dart.init(edge);
+}
+
+
+//--------------------------------------------------------------------------------------------------
+void Triangulation::reverse_splitTriangle(Dart& dart) {
+  reverse_splitTriangle(dart.getEdge());
+}
+
+
+//--------------------------------------------------------------------------------------------------
+void Triangulation::removeBoundaryTriangle(Dart& d) {
+  removeTriangle(d.getEdge());
 }
 
 
@@ -486,7 +528,7 @@ void Triangulation::swapEdge(EdgePtr& diagonal) {
   
   // Note that diagonal is both input and output and it is always
   // kept in counterclockwise direction (this is not required by all 
-  // finctions in ttl:: now)
+  // functions in TriangulationHelper now)
   
   // Swap by rotating counterclockwise
   // Use the same objects - no deletion or new objects
@@ -567,7 +609,7 @@ bool Triangulation::checkDelaunay() const {
       // only one of the half-edges
       if (!twinedge || (size_t)edge.get() > (size_t)twinedge.get()) {
         Dart dart(edge);
-        if (ttl::swapTestDelaunay<TTLtraits>(dart)) {
+        if (helper->swapTestDelaunay<TTLtraits>(dart)) {
           noNotDelaunay++;
           
           //printEdge(dart,os); os << "\n";
@@ -610,7 +652,7 @@ void Triangulation::optimizeDelaunay() {
       
       Dart dart(edge);
       // Constrained edges should not be swapped
-      if (!edge->isConstrained() && ttl::swapTestDelaunay<TTLtraits>(dart, cycling_check)) {
+      if (!edge->isConstrained() && helper->swapTestDelaunay<TTLtraits>(dart, cycling_check)) {
         optimal = false;
         swapEdge(edge);
       }
@@ -632,7 +674,7 @@ EdgePtr Triangulation::getInteriorNode() const {
     for (int i = 0; i < 3; ++i) {
       if (edge->getTwinEdge()) {
         
-        if (!ttl::isBoundaryNode(Dart(edge)))
+        if (!helper->isBoundaryNode(Dart(edge)))
           return edge;
       }
       edge = edge->getNextEdgeInFace();
@@ -643,18 +685,18 @@ EdgePtr Triangulation::getInteriorNode() const {
 
 
 //--------------------------------------------------------------------------------------------------
-static EdgePtr getBoundaryEdgeInTriangle(const EdgePtr& e) {
+EdgePtr Triangulation::getBoundaryEdgeInTriangle(const EdgePtr& e) const {
   EdgePtr edge = e;
   
-  if (ttl::isBoundaryEdge(Dart(edge)))
+  if (helper->isBoundaryEdge(Dart(edge)))
     return edge;
 
   edge = edge->getNextEdgeInFace();
-  if (ttl::isBoundaryEdge(Dart(edge)))
+  if (helper->isBoundaryEdge(Dart(edge)))
     return edge;
 
   edge = edge->getNextEdgeInFace();
-  if (ttl::isBoundaryEdge(Dart(edge)))
+  if (helper->isBoundaryEdge(Dart(edge)))
     return edge;
   
   return EdgePtr();
