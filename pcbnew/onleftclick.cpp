@@ -328,7 +328,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( IsLayerInList( EDGE_LAYER, getActiveLayer() ) )
         {
             DisplayError( this,
-                          _( "Texts not allowed on Edge Cut layers" ) );
+                          _( "Texts not allowed on Edge Cut layer" ) );
             break;
         }
 
