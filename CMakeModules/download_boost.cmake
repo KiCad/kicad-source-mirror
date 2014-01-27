@@ -180,7 +180,7 @@ ExternalProject_Add( boost
     # <src>/.downloads-by-cmake$ less /tmp/product/.downloads-by-cmake/boost_1_54_0/src/boost-stamp/boost-download-out.log
     # <src>/.downloads-by-cmake$ less /tmp/product/.downloads-by-cmake/boost_1_54_0/src/boost-stamp/boost-download-err.log
     # If out.log does not show 100%, then try increasing TIMEOUT even more, or download the URL manually and put it
-    # into <src>/.downloads-by-cmake
+    # into <src>/.downloads-by-cmake/ dir.
  #  LOG_DOWNLOAD    ON
 
     INSTALL_DIR     "${BOOST_ROOT}"
