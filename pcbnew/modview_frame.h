@@ -103,7 +103,12 @@ private:
 
     void ReCreateFootprintList();
     void OnIterateFootprintList( wxCommandEvent& event );
-    void DisplayLibInfos();
+
+    /**
+     * Function UpdateTitle
+     * updates the window title with current library information.
+     */
+    void UpdateTitle();
 
     /**
      * Function RedrawActiveWindow
