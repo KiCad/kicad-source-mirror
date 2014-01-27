@@ -81,6 +81,7 @@ ExternalProject_Add(  cairo
     BUILD_IN_SOURCE   1
     #SOURCE_DIR       "${PREFIX}"
     #PATCH_COMMAND    ""
+    UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${CAIRO_ROOT}"
 
     CONFIGURE_COMMAND ./configure --prefix=${CAIRO_ROOT} --enable-static ${CAIRO_BUILDTYPE}
                       PKG_CONFIG=${PROJECT_SOURCE_DIR}/pkgconfig_root/bin/pkg-config

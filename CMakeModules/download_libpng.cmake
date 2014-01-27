@@ -67,6 +67,7 @@ ExternalProject_Add( libpng
     #PATCH_COMMAND     "true"
     CONFIGURE_COMMAND  ./configure --prefix=${LIBPNG_ROOT} ${LIBPNG_OPTS} ${LIBPNG_CFLAGS} --disable-dependency-tracking
     #BINARY_DIR      "${PREFIX}"
+    UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${LIBPNG_ROOT}"
 
     BUILD_COMMAND   $(MAKE) 
 

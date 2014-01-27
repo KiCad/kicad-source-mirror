@@ -62,19 +62,17 @@ ExternalProject_Add( pkgconfig
     CONFIGURE_COMMAND  ./configure --prefix=${PKGCONFIG_ROOT} --with-internal-glib ${PKGCONFIG_BUILDTYPE} --disable-silent-rules
     #BINARY_DIR      "${PREFIX}"
 
+    UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${PKGCONFIG_ROOT}"
+
     BUILD_COMMAND   $(MAKE)
 
     INSTALL_DIR     "${PKGCONFIG_ROOT}"
     INSTALL_COMMAND $(MAKE) install
     )
 
-#
-# At second execution make install will fail ..
-#
-
-ExternalProject_Add_Step( pkgconfig pkgconfig_erase_dir
-    COMMAND rm -fr ${PKGCONFIG_ROOT}
-    COMMENT "*** Erasing pkgconfig directory"
+ExternalProject_Add_Step( pkgconfig pkgconfig_cleanup
+    COMMAND  ${CMAKE_COMMAND} -E remove_directory "${PKGCONFIG_ROOT}"
+    COMMENT "pkgconfig - cleanup destination before proceeding in install"
     DEPENDEES build
     )
 
