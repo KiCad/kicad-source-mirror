@@ -163,10 +163,13 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
+
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
     LoadSettings();
 
+
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     ReCreateHToolbar();
@@ -239,9 +242,12 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
         m_auimgr.GetPane( m_mainToolBar ).BestSize( tbsize );
     }
 
-    // Set min size (overwrite params read in LoadPerspective(), is any)
+#if 0   // no.
+
+    // Set min size (overwrite params read in LoadPerspective(), if any)
     m_auimgr.GetPane( m_libList ).MinSize( minsize );
     m_auimgr.GetPane( m_footprintList ).MinSize( minsize );
+#endif
 
     // after changing something to the aui manager,
     // call Update()() to reflect the changes
@@ -260,8 +266,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
 
 FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
 {
-    SaveSettings();
-
     if( m_Draw3DFrame )
         m_Draw3DFrame->Destroy();
 }

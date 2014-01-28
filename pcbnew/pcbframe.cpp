@@ -708,8 +708,6 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         wxMessageBox( msg, wxGetApp().GetAppName(), wxOK | wxICON_ERROR, this );
     }
 
-    SaveSettings();
-
     // Delete board structs and undo/redo lists, to avoid crash on exit
     // when deleting some structs (mainly in undo/redo lists) too late
     Clear_Pcb( false );
@@ -717,6 +715,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     // do not show the window because ScreenPcb will be deleted and we do not
     // want any paint event
     Show( false );
+
     Destroy();
 }
 

@@ -250,8 +250,6 @@ LIB_VIEW_FRAME* LIB_VIEW_FRAME::GetActiveLibraryViewer()
 
 void LIB_VIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    SaveSettings();
-
     if( m_semaphore )
     {
         m_semaphore->Post();
