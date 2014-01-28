@@ -337,7 +337,6 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
         m_DisplayFootprintFrame->Close( true );
 
     m_modified = false;
-    SaveSettings();
     Destroy();
     return;
 }
@@ -748,11 +747,11 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
 bool CVPCB_MAINFRAME::LoadFootprintFiles()
 {
-    // Check if there are footprint libraries in project file.
-    if( m_ModuleLibNames.GetCount() == 0 )
+    // Check if there are footprint libraries in the footprint library table.
+    if( m_footprintLibTable == NULL || !m_footprintLibTable->GetLogicalLibs().size() )
     {
-        wxMessageBox( _( "No PCB footprint libraries are listed in the current project file." ),
-                      _( "Project File Error" ), wxOK | wxICON_ERROR );
+        wxMessageBox( _( "No PCB footprint libraries are listed in the current footprint "
+                         "library table." ), _( "Configuration Error" ), wxOK | wxICON_ERROR );
         return false;
     }
 

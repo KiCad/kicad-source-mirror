@@ -1043,7 +1043,7 @@ static void export_vrml_pad( MODEL_VRML& aModel, BOARD* pcb, D_PAD* aPad )
     // Export the hole on the edge layer
     if( hole_drill > 0 )
     {
-        if( aPad->GetDrillShape() == PAD_OVAL )
+        if( aPad->GetDrillShape() == PAD_DRILL_OBLONG )
         {
             // Oblong hole (slot)
             aModel.holes.AddSlot( hole_x, -hole_y, hole_drill_w * 2.0, hole_drill_h * 2.0,
@@ -1151,18 +1151,18 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
     // Export the object VRML model(s)
     for( S3D_MASTER* vrmlm = aModule->Models(); vrmlm != 0; vrmlm = vrmlm->Next() )
     {
-        wxString fname = vrmlm->m_Shape3DName;
-
-        if( fname.IsEmpty() )
+        if( !vrmlm->Is3DType( S3D_MASTER::FILE3D_VRML ) )
             continue;
+
+        wxString fname = vrmlm->GetShape3DName();
 
         if( !wxFileName::FileExists( fname ) )
         {
             wxFileName fn = fname;
             fname = wxGetApp().FindLibraryPath( fn );
 
-            if( fname.IsEmpty() ) // keep "short" name if full filemane not found
-                fname = vrmlm->m_Shape3DName;
+            if( fname.IsEmpty() ) // keep "short" name if full filename not found
+                fname = vrmlm->GetShape3DName();
         }
 
         fname.Replace( wxT( "\\" ), wxT( "/" ) );

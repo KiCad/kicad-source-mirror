@@ -221,7 +221,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 // the pad hole
                 dummypad.SetSize( pad->GetDrillSize() );
                 dummypad.SetOrientation( pad->GetOrientation() );
-                dummypad.SetShape( pad->GetDrillShape() );
+                dummypad.SetShape( pad->GetDrillShape() == PAD_DRILL_OBLONG ?
+                                   PAD_OVAL : PAD_CIRCLE );
                 dummypad.SetPosition( pad->GetPosition() );
 
                 pad = &dummypad;

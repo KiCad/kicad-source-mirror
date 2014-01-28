@@ -28,7 +28,7 @@
  */
 
 
-/* functions relatives to the design rules editor
+/* functions relative to the design rules editor
  */
 #include <fctsys.h>
 #include <class_drawpanel.h>
@@ -46,10 +46,9 @@
 #include <wx/generic/gridctrl.h>
 #include <dialog_design_rules_aux_helper_class.h>
 
-
 // Column labels for net lists
-#define NET_TITLE _( "Net" )
-#define CLASS_TITLE _( "Class" )
+#define NET_TITLE       _( "Net" )
+#define CLASS_TITLE     _( "Class" )
 
 // Field Positions on rules grid
 enum {

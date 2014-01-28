@@ -17,8 +17,6 @@
 extern int           DiagErc[PIN_NMAX][PIN_NMAX];
 extern bool          DiagErcTableInit; // go to true after DiagErc init
 extern int           DefaultDiagErc[PIN_NMAX][PIN_NMAX];
-extern const wxChar* CommentERC_H[];
-extern const wxChar* CommentERC_V[];
 
 /*  Control identifiers */
 #define ID_MATRIX_0 1800

@@ -99,8 +99,8 @@ wxString DateAndTime();
  * except that strings containing numbers are compared by their integer value not
  * by their ASCII code.
  *
- * @param aString1 A wxChar pointer to the reference string.
- * @param aString2 A wxChar pointer to the comparison string.
+ * @param aString1 A wxString reference to the reference string.
+ * @param aString2 A wxString reference to the comparison string.
  * @param aLength The number of characters to compare.  Set to -1 to compare
  *                the entire string.
  * @param aIgnoreCase Use true to make the comparison case insensitive.
@@ -108,7 +108,7 @@ wxString DateAndTime();
  *         \a aString1 is equal to \a aString2, or 1 if \a aString1 is greater
  *         than \a aString2.
  */
-int StrNumCmp( const wxChar* aString1, const wxChar* aString2, int aLength = INT_MAX,
+int StrNumCmp( const wxString& aString1, const wxString& aString2, int aLength = INT_MAX,
                bool aIgnoreCase = false );
 
 /**
@@ -163,18 +163,6 @@ wxString GetIllegalFileNameWxChars();
  * @return true if any characters have been replaced in \a aName.
  */
 bool ReplaceIllegalFileNameChars( std::string* aName );
-
-/**
- * Function RemoveTrailingZeros
- * removes the trailing zeros from \a aString.
- *
- * All trailing zeros and the '.' character from floating point numbers are removed from
- * \a aString.
- *
- * @param aString is a wxString object to remove the trailing zeros from.
- * @return a wxString with the trailing zeros removed.
- */
-wxString RemoveTrailingZeros( const wxString& aString );
 
 #ifndef HAVE_STRTOKR
 // common/strtok_r.c optionally:

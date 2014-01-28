@@ -123,8 +123,8 @@ void PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
         ));
 
     (*aListToAppendTo)["enable_transaction_logging"] = UTF8( _(
-        "Enable transaction logging.  The mere presence of this option turns on the "
-        " logging, no need to set a Value."
+        "Enable transaction logging. The mere presence of this option turns on the "
+        "logging, no need to set a Value."
         ));
 
     (*aListToAppendTo)["username"] = UTF8( _(

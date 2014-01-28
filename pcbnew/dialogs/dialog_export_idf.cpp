@@ -64,21 +64,21 @@ public:
         SetFocus();
         m_idfThouOpt = false;
         m_config->Read( OPTKEY_IDF_THOU, &m_idfThouOpt );
-        m_chkThou->SetValue( m_idfThouOpt );
+        m_rbUnitSelection->SetSelection( m_idfThouOpt ? 1 : 0 );
 
         GetSizer()->SetSizeHints( this );
         Centre();
     }
-    
+
     ~DIALOG_EXPORT_IDF3()
     {
-        m_idfThouOpt = m_chkThou->GetValue();
+        m_idfThouOpt = m_rbUnitSelection->GetSelection() == 1;
         m_config->Write( OPTKEY_IDF_THOU, m_idfThouOpt );
     }
 
     bool GetThouOption()
     {
-        return m_chkThou->GetValue();
+        return m_rbUnitSelection->GetSelection() == 1;
     }
 
     wxFilePickerCtrl* FilePicker()

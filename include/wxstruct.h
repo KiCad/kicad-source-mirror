@@ -101,7 +101,7 @@ enum ID_DRAWFRAME_TYPE
 
 
 /// Custom trace mask to enable and disable auto save tracing.
-extern const wxChar* traceAutoSave;
+extern const wxChar traceAutoSave[];
 
 
 /**
@@ -175,7 +175,18 @@ public:
      * @warning If you override this function in a derived class, make sure you call
      *          down to this or the auto save feature will be disabled.
      */
-    virtual bool ProcessEvent( wxEvent& aEvent );
+    bool ProcessEvent( wxEvent& aEvent );       // overload wxFrame::ProcessEvent()
+
+    /**
+     * Function Show
+     * hooks the wxFrame close scenario so we can grab the window size and position
+     * in the wxFrame specific SaveSettings() function.  SaveSettings() is
+     * called for all derived wxFrames in this base class overload.  Calling it
+     * from a destructor is deprecated since the wxFrame's position is not available
+     * in the destructor on linux.  In other words, don't call SaveSettings() anywhere,
+     * except in this one function.
+     */
+    bool Show( bool show );                     // overload wxFrame::Show()
 
     void SetAutoSaveInterval( int aInterval ) { m_autoSaveInterval = aInterval; }
 
@@ -216,11 +227,13 @@ public:
     virtual void LoadSettings();
 
     /**
-     * Save common frame parameters from configuration.
+     * Save common frame parameters to configuration data file.
      *
      * The method is virtual so you can override it to save frame specific
-     * parameters.  Don't forget to call the base method or your frames won't
-     * remember their positions and sizes.
+     * parameters.  Don't forget to call the base class's SaveSettings() from
+     * your derived SaveSettings() otherwise the frames won't remember their
+     * positions and sizes.  The virtual call to SaveSettings is done safely
+     * only in EDA_BASE_FRAME::Show( bool ).
      */
     virtual void SaveSettings();
 

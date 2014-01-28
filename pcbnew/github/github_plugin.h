@@ -39,7 +39,7 @@ struct GH_CACHE;
    <p>It could have used version 3 of the github.com API documented here:
 
    <pre>
-       http://developer.github.com
+       http://developer.github.com/v3/
        https://help.github.com/articles/creating-an-access-token-for-command-line-use
    </pre>
 

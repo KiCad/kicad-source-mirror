@@ -430,7 +430,7 @@ const wxPoint WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPositionUi( unsigned aIdx
     return wxPoint( int(pos.x), int(pos.y) );
 }
 
-WORKSHEET_DATAITEM_TEXT::WORKSHEET_DATAITEM_TEXT( const wxChar* aTextBase ) :
+WORKSHEET_DATAITEM_TEXT::WORKSHEET_DATAITEM_TEXT( const wxString& aTextBase ) :
     WORKSHEET_DATAITEM( WS_TEXT )
 {
     m_TextBase = aTextBase;

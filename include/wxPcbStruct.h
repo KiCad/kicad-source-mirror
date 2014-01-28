@@ -345,7 +345,6 @@ public:
     void SetRotationAngle( int aRotationAngle );
 
     // Configurations:
-    void InstallConfigFrame();
     void Process_Config( wxCommandEvent& event );
 
     /**

@@ -51,13 +51,13 @@
 #define DEFAULT_AUTO_SAVE_INTERVAL 600
 
 
-const wxChar* traceAutoSave = wxT( "KicadAutoSave" );
+const wxChar traceAutoSave[] = wxT( "KicadAutoSave" );
 
 /// Configuration file entry name for auto save interval.
-static const wxChar* entryAutoSaveInterval = wxT( "AutoSaveInterval" );
+static const wxChar entryAutoSaveInterval[] = wxT( "AutoSaveInterval" );
 
 /// Configuration file entry for wxAuiManger perspective.
-static const wxChar* entryPerspective = wxT( "Perspective" );
+static const wxChar entryPerspective[] = wxT( "Perspective" );
 
 
 
@@ -138,6 +138,19 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
     }
 
     return true;
+}
+
+
+bool EDA_BASE_FRAME::Show( bool show )
+{
+    if( !show )     // closing
+    {
+        SaveSettings();     // virtual, wxFrame specific
+    }
+
+    int ret = wxFrame::Show( show );
+
+    return ret;
 }
 
 
@@ -231,7 +244,7 @@ void EDA_BASE_FRAME::SaveSettings()
     wxString    text;
     wxConfig*   config = wxGetApp().GetSettings();
 
-    if( ( config == NULL ) || IsIconized() )
+    if( !config || IsIconized() )
         return;
 
     m_FrameSize = GetSize();
@@ -258,10 +271,15 @@ void EDA_BASE_FRAME::SaveSettings()
         config->Write( text, m_autoSaveInterval );
     }
 
-    // Once this is fully implemented, wxAuiManager will be used to maintain the persistance of
-    // the main frame and all it's managed windows and all of the legacy frame persistence
-    // position code can be removed.
-    config->Write( m_FrameName + entryPerspective, m_auimgr.SavePerspective() );
+    // Once this is fully implemented, wxAuiManager will be used to maintain
+    // the persistance of the main frame and all it's managed windows and
+    // all of the legacy frame persistence position code can be removed.
+    wxString perspective = m_auimgr.SavePerspective();
+
+    // printf( "perspective(%s): %s\n",
+    //    TO_UTF8( m_FrameName + entryPerspective ), TO_UTF8( perspective ) );
+
+    config->Write( m_FrameName + entryPerspective, perspective );
 }
 
 
@@ -269,6 +287,7 @@ void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 {
     SetStatusText( text );
 }
+
 
 void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName,
                                         wxFileHistory * aFileHistory )
@@ -283,7 +302,7 @@ void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName,
 
 
 wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
-                                             wxFileHistory * aFileHistory )
+                                             wxFileHistory* aFileHistory )
 {
     wxString fn, msg;
     size_t   i;

@@ -507,9 +507,9 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
     if( aLayer == ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ) )
     {
-        // Drawing hole
+        // Drawing hole: has same shape as PAD_CIRCLE or PAD_OVAL
         size  = VECTOR2D( aPad->GetDrillSize() ) / 2.0;
-        shape = aPad->GetDrillShape();
+        shape = aPad->GetDrillShape() == PAD_DRILL_OBLONG ? PAD_OVAL : PAD_CIRCLE;
     }
     else if( aLayer == SOLDERMASK_N_FRONT || aLayer == SOLDERMASK_N_BACK )
     {
@@ -619,10 +619,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
     case PAD_CIRCLE:
         m_gal->DrawCircle( VECTOR2D( 0.0, 0.0 ), size.x );
-        break;
-
-    case PAD_OCTAGON:    // it is not used anywhere, neither you can set it using pcbnew..
-    case PAD_NONE:
         break;
     }
 

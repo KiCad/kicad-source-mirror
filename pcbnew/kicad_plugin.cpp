@@ -1052,10 +1052,10 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     // Save 3D info.
     for( S3D_MASTER* t3D = aModule->Models();  t3D;  t3D = t3D->Next() )
     {
-        if( !t3D->m_Shape3DName.IsEmpty() )
+        if( !t3D->GetShape3DName().IsEmpty() )
         {
             m_out->Print( aNestLevel+1, "(model %s\n",
-                          m_out->Quotew( t3D->m_Shape3DName ).c_str() );
+                          m_out->Quotew( t3D->GetShape3DName() ).c_str() );
 
             m_out->Print( aNestLevel+2, "(at (xyz %s %s %s))\n",
                           Double2Str( t3D->m_MatPosition.x ).c_str(),
@@ -1210,7 +1210,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     {
         m_out->Print( 0, " (drill" );
 
-        if( aPad->GetDrillShape() == PAD_OVAL )
+        if( aPad->GetDrillShape() == PAD_DRILL_OBLONG )
             m_out->Print( 0, " oval" );
 
         if( sz.GetWidth() > 0 )

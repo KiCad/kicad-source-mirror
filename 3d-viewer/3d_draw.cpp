@@ -857,7 +857,7 @@ void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas )
 
         for( ; struct3D != NULL; struct3D = struct3D->Next() )
         {
-            if( !struct3D->m_Shape3DName.IsEmpty() )
+            if( struct3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
                 struct3D->ReadData();
         }
 

@@ -249,12 +249,12 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 
     while( draw3D )
     {
-        if( !draw3D->m_Shape3DName.IsEmpty() )
+        if( !draw3D->GetShape3DName().IsEmpty() )
         {
             S3D_MASTER* draw3DCopy = new S3D_MASTER( NULL );
             draw3DCopy->Copy( draw3D );
             m_Shapes3D_list.push_back( draw3DCopy );
-            m_3D_ShapeNameListBox->Append( draw3DCopy->m_Shape3DName );
+            m_3D_ShapeNameListBox->Append( draw3DCopy->GetShape3DName() );
         }
         draw3D = (S3D_MASTER*) draw3D->Next();
     }
@@ -428,11 +428,16 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
 
+    wxString fileFilters;
+    fileFilters = wxGetTranslation( Shapes3DFileWildcard );
+    fileFilters += wxChar(  '|' );
+    fileFilters += wxGetTranslation( IDF3DFileWildcard );
+
     fullfilename = EDA_FileSelector( _( "3D Shape:" ),
                                      fullpath,
                                      wxEmptyString,
                                      wxEmptyString,
-                                     wxGetTranslation( Shapes3DFileWildcard ),
+                                     wxGetTranslation( fileFilters ),
                                      this,
                                      wxFD_OPEN,
                                      true
@@ -474,7 +479,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
     // Store filename in Unix notation
     shortfilename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
-    new3DShape->m_Shape3DName = shortfilename;
+    new3DShape->SetShape3DName( shortfilename );
     m_Shapes3D_list.push_back( new3DShape );
     m_3D_ShapeNameListBox->Append( shortfilename );
 
@@ -606,7 +611,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     {
         S3D_MASTER* draw3DCopy = m_Shapes3D_list[ii];
 
-        if( draw3DCopy->m_Shape3DName.IsEmpty() )
+        if( draw3DCopy->GetShape3DName().IsEmpty() )
             continue;
 
         if( draw3D == NULL )
@@ -615,7 +620,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
             m_CurrentModule->Models().Append( draw3D );
         }
 
-        draw3D->m_Shape3DName = draw3DCopy->m_Shape3DName;
+        draw3D->SetShape3DName( draw3DCopy->GetShape3DName() );
         draw3D->m_MatScale    = draw3DCopy->m_MatScale;
         draw3D->m_MatRotation = draw3DCopy->m_MatRotation;
         draw3D->m_MatPosition = draw3DCopy->m_MatPosition;

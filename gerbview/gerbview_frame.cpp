@@ -177,7 +177,6 @@ GERBVIEW_FRAME::~GERBVIEW_FRAME()
 
 void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    SaveSettings();
     Destroy();
 }
 

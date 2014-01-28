@@ -82,7 +82,7 @@
  */
 
 // Messages for matrix rows:
-const wxChar* CommentERC_H[] =
+const wxString CommentERC_H[] =
 {
     _( "Input Pin.........." ),
     _( "Output Pin........." ),
@@ -94,12 +94,11 @@ const wxChar* CommentERC_H[] =
     _( "Power Output Pin..." ),
     _( "Open Collector....." ),
     _( "Open Emitter......." ),
-    _( "No Connection......" ),
-    NULL
+    _( "No Connection......" )
 };
 
 // Messages for matrix columns
-const wxChar* CommentERC_V[] =
+const wxString CommentERC_V[] =
 {
     _( "Input Pin" ),
     _( "Output Pin" ),
@@ -111,8 +110,7 @@ const wxChar* CommentERC_V[] =
     _( "Power Output Pin" ),
     _( "Open Collector" ),
     _( "Open Emitter" ),
-    _( "No Connection" ),
-    NULL
+    _( "No Connection" )
 };
 
 

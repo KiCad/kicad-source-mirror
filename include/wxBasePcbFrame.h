@@ -434,51 +434,6 @@ public:
                                    bool   aRedraw,
                                    bool   aSaveForUndo );
 
-    // loading footprints
-
-    /**
-     * Function loadFootprintFromLibrary
-     * loads @a aFootprintName from @a aLibraryPath.
-     *
-     * @param aLibraryPath - the full filename or the short name of the library to read.
-     *      if it is a short name, the file is searched in all library valid paths
-     * @param aFootprintName is the footprint to load
-     * @param aDisplayError = true to display an error message if any.
-     *
-     * @return MODULE* - new module, or NULL
-     */
-    MODULE* loadFootprintFromLibrary( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                      bool aDisplayError );
-
-    /**
-     * Function loadFootprintFromLibraries
-     * Explore the libraries list and
-     * loads @a aFootprintName from the first library it is found
-     * If found the module is added to the BOARD, just for good measure.
-     *
-     *  @param aFootprintName is the footprint to load
-     *  @param aDisplayError = true to display an error message if any.
-     *
-     *  @return MODULE* - new module, or NULL
-     */
-    MODULE* loadFootprintFromLibraries( const wxString& aFootprintName,
-                                        bool            aDisplayError );
-
-    /**
-     * Function GetModuleLibrary
-     * scans active libraries to find and load @a aFootprintName.
-     * If found  the module is added to the BOARD, just for good measure.
-     *
-     *  @param aLibraryPath is the full/short name of the library.
-     *                      if empty, search in all libraries
-     *  @param aFootprintName is the footprint to load
-     *  @param aDisplayError = true to display an error message if any.
-     *
-     *  @return a pointer to the new module, or NULL
-     */
-    MODULE* GetModuleLibrary( const wxString& aLibraryPath, const wxString& aFootprintName,
-                              bool aDisplayError );
-
     /**
      * Function SelectFootprint
      * displays a list of modules found in all libraries or a given library

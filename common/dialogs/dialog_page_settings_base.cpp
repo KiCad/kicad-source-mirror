@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -343,7 +343,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerFilename;
 	bSizerFilename = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextfilename = new wxStaticText( this, wxID_ANY, _("Page layout file description"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextfilename = new wxStaticText( this, wxID_ANY, _("Page layout description file"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextfilename->Wrap( -1 );
 	bSizerFilename->Add( m_staticTextfilename, 0, wxRIGHT|wxLEFT, 5 );
 	

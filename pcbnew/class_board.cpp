@@ -2692,7 +2692,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     continue;   // OK, pad found
 
                 // not found: bad footprint, report error
-                msg.Printf( _( "** Error: Component \"%s\" pad '%s' not found in footprint \"%s\" **\n" ),
+                msg.Printf( _( "*** Error: Component '%s' pad '%s' not found in footprint '%s' ***\n" ),
                             GetChars( component->GetReference() ),
                             GetChars( padname ),
                             GetChars( footprint->GetFPID().Format() ) );

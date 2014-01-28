@@ -135,7 +135,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     /* Tom's hacks end */
 
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, PCB_EDIT_FRAME::OnConfigurePcbOptions )
-    EVT_MENU( ID_CONFIG_REQ, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_SAVE, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_READ, PCB_EDIT_FRAME::Process_Config )
@@ -356,7 +355,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     if( screenHeight <= 900 )
         pointSize = (pointSize * 8) / 10;
 
-    m_Layers = new PCB_LAYER_WIDGET( this, GetGalCanvas(), pointSize );
+    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), pointSize );
 
     m_drc = new DRC( this );        // these 2 objects point to each other
 
@@ -709,8 +708,6 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         wxMessageBox( msg, wxGetApp().GetAppName(), wxOK | wxICON_ERROR, this );
     }
 
-    SaveSettings();
-
     // Delete board structs and undo/redo lists, to avoid crash on exit
     // when deleting some structs (mainly in undo/redo lists) too late
     Clear_Pcb( false );
@@ -718,6 +715,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     // do not show the window because ScreenPcb will be deleted and we do not
     // want any paint event
     Show( false );
+
     Destroy();
 }
 

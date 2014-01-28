@@ -281,8 +281,8 @@ void BM2CMP_FRAME::Binarize( double aThreshold )
     int           w = m_Greyscale_Image.GetWidth();
     unsigned int  threshold = (int)(aThreshold * 256);
 
-    for( int y = 1; y < h; y++ )
-        for( int x = 1; x < w; x++ )
+    for( int y = 0; y < h; y++ )
+        for( int x = 0; x < w; x++ )
         {
             pixin   = m_Greyscale_Image.GetGreen( x, y );
 
@@ -303,8 +303,8 @@ void BM2CMP_FRAME::NegateGreyscaleImage( )
     int           h = m_Greyscale_Image.GetHeight();
     int           w = m_Greyscale_Image.GetWidth();
 
-    for( int y = 1; y < h; y++ )
-        for( int x = 1; x < w; x++ )
+    for( int y = 0; y < h; y++ )
+        for( int x = 0; x < w; x++ )
         {
             pix   = m_Greyscale_Image.GetGreen( x, y );
             pix = ~pix;
@@ -512,7 +512,7 @@ void BM2CMP_FRAME::ExportFile( FILE* aOutfile, int aFormat )
     }
 
     /* fill the bitmap with data */
-    for( int y = 0; y<h; y++ )
+    for( int y = 0; y < h; y++ )
     {
         for( int x = 0; x<w; x++ )
         {
