@@ -90,7 +90,7 @@
 typedef LEGACY_PLUGIN::BIU      BIU;
 
 
-#define VERSION_ERROR_FORMAT    _( "File <%s> is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
+#define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
 #define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
 #define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
@@ -1197,7 +1197,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             case 'O':   padshape = PAD_OVAL;        break;
             case 'T':   padshape = PAD_TRAPEZOID;   break;
             default:
-                m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line:%d of module:'%s'" ),
+                m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line: %d of module: '%s'" ),
                                 padchar,
                                 padchar,
                                 m_reader->LineNumber(),
@@ -1243,14 +1243,14 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             BIU offs_x  = biuParse( data, &data );
             BIU offs_y  = biuParse( data, &data );
 
-            PAD_SHAPE_T drShape = PAD_CIRCLE;
+            PAD_DRILL_SHAPE_T drShape = PAD_DRILL_CIRCLE;
 
             data = strtok_r( (char*) data, delims, &saveptr );
             if( data )  // optional shape
             {
                 if( data[0] == 'O' )
                 {
-                    drShape = PAD_OVAL;
+                    drShape = PAD_DRILL_OBLONG;
 
                     data    = strtok_r( NULL, delims, &saveptr );
                     drill_x = biuParse( data );
@@ -1303,7 +1303,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
             // read Netname
             ReadDelimitedText( buf, data, sizeof(buf) );
-            pad->SetNetname( FROM_UTF8( StrPurge( buf ) ) );
+            assert( m_board->FindNet( netcode )->GetNetname() == FROM_UTF8( StrPurge( buf ) ) );
         }
 
         else if( TESTLINE( "Po" ) )         // (Po)sition
@@ -1643,7 +1643,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
 {
     S3D_MASTER* t3D = aModule->Models();
 
-    if( !t3D->m_Shape3DName.IsEmpty() )
+    if( !t3D->GetShape3DName().IsEmpty() )
     {
         S3D_MASTER* n3D = new S3D_MASTER( aModule );
 
@@ -1659,7 +1659,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
         {
             char    buf[512];
             ReadDelimitedText( buf, line + SZ( "Na" ), sizeof(buf) );
-            t3D->m_Shape3DName = FROM_UTF8( buf );
+            t3D->SetShape3DName( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Sc" ) )     // Scale
@@ -1811,7 +1811,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
 {
     char  buf[1024];
 
-    NETINFO_ITEM*   net = new NETINFO_ITEM( m_board );
+    NETINFO_ITEM*   net;
     char*           line;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
@@ -1822,11 +1822,10 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
         {
             // e.g. "Na 58 "/cpu.sch/PAD7"\r\n"
 
-            int tmp = intParse( line + SZ( "Na" ), &data );
-            net->SetNet( tmp );
+            int netCode = intParse( line + SZ( "Na" ), &data );
 
             ReadDelimitedText( buf, data, sizeof(buf) );
-            net->SetNetname( FROM_UTF8( buf ) );
+            net = new NETINFO_ITEM( m_board, FROM_UTF8( buf ), netCode );
         }
 
         else if( TESTLINE( "$EndEQUIPOT" ) )
@@ -2239,7 +2238,6 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
             zc->BOARD_CONNECTED_ITEM::SetNet( netcode );
-            zc->SetNetName( FROM_UTF8( buf ) );     // init the net name here
         }
 
         else if( TESTLINE( "ZLayer" ) )     // layer found
@@ -2256,7 +2254,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             if( !hopt )
             {
-                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
+                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2267,7 +2265,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             case 'F':   outline_hatch = CPolyLine::DIAGONAL_FULL;   break;
 
             default:
-                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
+                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2284,7 +2282,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             if( smoothing >= ZONE_SETTINGS::SMOOTHING_LAST || smoothing < 0 )
             {
-                m_error.Printf( wxT( "Bad ZSmoothing for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
+                m_error.Printf( wxT( "Bad ZSmoothing for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2359,7 +2357,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             default:
                 m_error.Printf( wxT( "Bad ZClearance padoption for CZONE_CONTAINER '%s'" ),
-                    zc->GetNetName().GetData() );
+                    zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2423,10 +2421,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // Ensure keepout does not have a net
             // (which have no sense for a keepout zone)
             if( zc->GetIsKeepout() )
-            {
-                zc->SetNet(0);
-                zc->SetNetName( wxEmptyString );
-            }
+                zc->SetNet( NETINFO_LIST::UNCONNECTED );
 
             // should always occur, but who knows, a zone without two corners
             // is no zone at all, it's a spot?
@@ -2436,7 +2431,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 if( !zc->IsOnCopperLayer() )
                 {
                     zc->SetFillMode( 0 );
-                    zc->SetNet( 0 );
+                    zc->SetNet( NETINFO_LIST::UNCONNECTED );
                 }
 
                 // Hatch here, after outlines corners are read
@@ -2777,7 +2772,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in file: <%s>\nline: %d, offset: %d" ),
+        m_error.Printf( _( "invalid float number in file: '%s'\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(),
             m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
@@ -2786,7 +2781,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in file: <%s>\nline: %d, offset: %d" ),
+        m_error.Printf( _( "missing float number in file: '%s'\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(),
             m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
@@ -2814,7 +2809,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in file: <%s>\nline: %d, offset: %d" ),
+        m_error.Printf( _( "invalid float number in file: '%s'\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2822,7 +2817,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in file: <%s>\nline: %d, offset: %d" ),
+        m_error.Printf( _( "missing float number in file: '%s'\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2865,7 +2860,7 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPER
     FILE* fp = wxFopen( aFileName, wxT( "w" ) );
     if( !fp )
     {
-        m_error.Printf( _( "Unable to open file <%s>" ), aFileName.GetData() );
+        m_error.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
         THROW_IO_ERROR( m_error );
     }
 
@@ -2890,7 +2885,7 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPER
 
 wxString LEGACY_PLUGIN::writeError() const
 {
-    return wxString::Format( _( "error writing to file <%s>" ), m_filename.GetData() );
+    return wxString::Format( _( "error writing to file '%s'" ), m_filename.GetData() );
 }
 
 #define CHECK_WRITE_ERROR() \
@@ -2904,6 +2899,8 @@ do { \
 
 void LEGACY_PLUGIN::SaveBOARD( const BOARD* aBoard ) const
 {
+    m_mapping->SetBoard( aBoard );
+
     saveGENERAL( aBoard );
 
     saveSHEET( aBoard );
@@ -2952,7 +2949,7 @@ void LEGACY_PLUGIN::saveGENERAL( const BOARD* aBoard ) const
     fprintf( m_fp, "Nzone %d\n",            aBoard->GetNumSegmZone() );
     fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( aBoard->GetDesignSettings().GetBoardThickness() ).c_str() );
     fprintf( m_fp, "Nmodule %d\n",          aBoard->m_Modules.GetCount() );
-    fprintf( m_fp, "Nnets %d\n",            aBoard->GetNetCount() );
+    fprintf( m_fp, "Nnets %d\n",            m_mapping->GetSize() );
     fprintf( m_fp, "$EndGENERAL\n\n" );
 }
 
@@ -3093,9 +3090,11 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
 {
     // save the nets
-    int netcount = aBoard->GetNetCount();
-    for( int i = 0; i < netcount;  ++i )
-        saveNETINFO_ITEM( aBoard->FindNet( i ) );
+    for( NETINFO_MAPPING::iterator net = m_mapping->begin(), netEnd = m_mapping->end();
+            net != netEnd; ++net )
+    {
+        saveNETINFO_ITEM( *net );
+    }
 
     // Saved nets do not include netclass names, so save netclasses after nets.
     saveNETCLASSES( &aBoard->m_NetClasses );
@@ -3153,7 +3152,8 @@ void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
 void LEGACY_PLUGIN::saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const
 {
     fprintf( m_fp, "$EQUIPOT\n" );
-    fprintf( m_fp, "Na %d %s\n", aNet->GetNet(), EscapedUTF8( aNet->GetNetname() ).c_str() );
+    fprintf( m_fp, "Na %d %s\n", m_mapping->Translate( aNet->GetNet() ),
+                                 EscapedUTF8( aNet->GetNetname() ).c_str() );
     fprintf( m_fp, "St %s\n", "~" );
     fprintf( m_fp, "$EndEQUIPOT\n" );
 
@@ -3348,7 +3348,7 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
                     fmtBIU( me->GetDrillSize().x ).c_str(),
                     fmtBIUPoint( me->GetOffset() ).c_str() );
 
-    if( me->GetDrillShape() == PAD_OVAL )
+    if( me->GetDrillShape() == PAD_DRILL_OBLONG )
     {
         fprintf( m_fp, " %c %s", 'O', fmtBIUSize( me->GetDrillSize() ).c_str() );
     }
@@ -3513,11 +3513,11 @@ void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 {
     for( S3D_MASTER* t3D = me->Models();  t3D;  t3D = t3D->Next() )
     {
-        if( !t3D->m_Shape3DName.IsEmpty() )
+        if( !t3D->GetShape3DName().IsEmpty() )
         {
             fprintf( m_fp, "$SHAPE3D\n" );
 
-            fprintf( m_fp, "Na %s\n", EscapedUTF8( t3D->m_Shape3DName ).c_str() );
+            fprintf( m_fp, "Na %s\n", EscapedUTF8( t3D->GetShape3DName() ).c_str() );
 
             fprintf(m_fp,
 #if defined(DEBUG)
@@ -3645,7 +3645,7 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     fprintf( m_fp,  "ZInfo %lX %d %s\n",
                     me->GetTimeStamp(),
                     me->GetIsKeepout() ? 0 : me->GetNet(),
-                    EscapedUTF8( me->GetIsKeepout() ? wxT("") : me->GetNetName() ).c_str() );
+                    EscapedUTF8( me->GetIsKeepout() ? wxT("") : me->GetNetname() ).c_str() );
 
     // Save the outline layer info
     fprintf( m_fp, "ZLayer %d\n", me->GetLayer() );
@@ -4001,7 +4001,7 @@ void LP_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
     }
 
 L_bad_library:
-    THROW_IO_ERROR( wxString::Format( _( "File <%s> is empty or is not a legacy library" ),
+    THROW_IO_ERROR( wxString::Format( _( "File '%s' is empty or is not a legacy library" ),
         m_lib_path.GetData() ) );
 }
 
@@ -4138,7 +4138,7 @@ void LP_CACHE::Save()
     if( !m_writable )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "Legacy library file <%s> is read only" ), m_lib_path.GetData() ) );
+            _( "Legacy library file '%s' is read only" ), m_lib_path.GetData() ) );
     }
 
     wxString tempFileName;
@@ -4157,7 +4157,7 @@ void LP_CACHE::Save()
         if( !fp )
         {
             THROW_IO_ERROR( wxString::Format(
-                _( "Unable to open or create legacy library file <%s>" ),
+                _( "Unable to open or create legacy library file '%s'" ),
                 m_lib_path.GetData() ) );
         }
 
@@ -4183,7 +4183,7 @@ void LP_CACHE::Save()
     if( wxRename( tempFileName, m_lib_path ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "Unable to rename tempfile <%s> to library file <%s>" ),
+            _( "Unable to rename tempfile '%s' to library file '%s'" ),
             tempFileName.GetData(),
             m_lib_path.GetData() ) );
     }
@@ -4296,7 +4296,7 @@ void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath,
 
     if( !m_cache->m_writable )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ), aLibraryPath.GetData() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
     }
 
     std::string footprintName = aFootprint->GetFPID().GetFootprintName();
@@ -4341,7 +4341,7 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath,
 
     if( !m_cache->m_writable )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ), aLibraryPath.GetData() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
     }
 
     std::string footprintName = TO_UTF8( aFootprintName );
@@ -4351,7 +4351,7 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath,
     if( erasedCount != 1 )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library <%s> has no footprint '%s' to delete" ),
+            _( "library '%s' has no footprint '%s' to delete" ),
             aLibraryPath.GetData(), aFootprintName.GetData() ) );
     }
 
@@ -4364,7 +4364,7 @@ void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROP
     if( wxFileExists( aLibraryPath ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library <%s> already exists, will not create a new" ),
+            _( "library '%s' already exists, will not create a new" ),
             aLibraryPath.GetData() ) );
     }
 
@@ -4391,7 +4391,7 @@ bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROP
     if( wxRemove( aLibraryPath ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library <%s> cannot be deleted" ),
+            _( "library '%s' cannot be deleted" ),
             aLibraryPath.GetData() ) );
     }
 
@@ -4422,7 +4422,8 @@ LEGACY_PLUGIN::LEGACY_PLUGIN() :
     m_props( 0 ),
     m_reader( 0 ),
     m_fp( 0 ),
-    m_cache( 0 )
+    m_cache( 0 ),
+    m_mapping( new NETINFO_MAPPING() )
 {
     init( NULL );
 }
@@ -4431,4 +4432,5 @@ LEGACY_PLUGIN::LEGACY_PLUGIN() :
 LEGACY_PLUGIN::~LEGACY_PLUGIN()
 {
     delete m_cache;
+    delete m_mapping;
 }

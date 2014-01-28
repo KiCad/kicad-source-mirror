@@ -39,7 +39,6 @@
 #include <msgpanel.h>
 
 #include <general.h>
-#include <protos.h>
 #include <lib_circle.h>
 #include <transform.h>
 

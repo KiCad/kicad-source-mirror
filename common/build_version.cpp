@@ -6,14 +6,7 @@
 #endif
 
 #ifndef KICAD_BUILD_VERSION
-#   define KICAD_BUILD_VERSION "(2013-jul-14)"
-#endif
-
-
-#if defined KICAD_STABLE_VERSION
-#   define VERSION_STABILITY  "stable"
-#else
-#   define VERSION_STABILITY  "product"
+#   define KICAD_BUILD_VERSION "(2014-jan-25)"
 #endif
 
 /**
@@ -25,7 +18,7 @@ wxString GetBuildVersion()
     wxString msg = wxString::Format(
         wxT( "%s-%s" ),
         wxT( KICAD_BUILD_VERSION ),
-        wxT( VERSION_STABILITY )
+        wxT( KICAD_REPO_NAME )
         );
 
     return msg;

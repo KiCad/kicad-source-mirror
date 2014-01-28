@@ -37,11 +37,21 @@ find_package( BZip2 REQUIRED )
 
 set( PREFIX ${DOWNLOAD_DIR}/pixman )
 
+set(PIXMAN_CPPFLAGS "CFLAGS=")
+
 if (APPLE) 
     if( CMAKE_OSX_ARCHITECTURES )
-        set(PIXMAN_CPPFLAGS "CFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -fno-common -mmacosx-version-min=10.5")
+        set(PIXMAN_CPPFLAGS "${PIXMAN_CPPFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES} -fno-common -mmacosx-version-min=10.5")
+    else()
+        set(PIXMAN_CPPFLAGS "${PIXMAN_CPPFLAGS} -fno-common -mmacosx-version-min=10.5")
     endif( CMAKE_OSX_ARCHITECTURES )
 endif(APPLE)
+
+if (KICAD_BUILD_STATIC)
+    set(PIXMAN_OPTS --enable-static=yes --enable-shared=no)
+else()
+    set(PIXMAN_OPTS --enable-static=yes --enable-shared=yes)
+endif(KICAD_BUILD_STATIC)
 
 # <SOURCE_DIR> = ${PREFIX}/src/glew
 # There is a Bazaar 'boost scratch repo' in <SOURCE_DIR>/boost and after committing pristine
@@ -58,12 +68,14 @@ ExternalProject_Add( pixman
     #SOURCE_DIR      "${PREFIX}"
     BUILD_IN_SOURCE 1
 
+    UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${PIXMAN_ROOT}"
+
     #PATCH_COMMAND     "true"
-    CONFIGURE_COMMAND ./configure --prefix=${PIXMAN_ROOT} --enable-static=yes --enable-shared=no ${PIXMAN_CPPFLAGS}  --disable-dependency-tracking
+    CONFIGURE_COMMAND ./configure --prefix=${PIXMAN_ROOT} ${PIXMAN_OPTS} ${PIXMAN_CPPFLAGS}  --disable-dependency-tracking
     #BINARY_DIR      "${PREFIX}"
 
-    BUILD_COMMAND   make
+    BUILD_COMMAND   $(MAKE)
 
     INSTALL_DIR     "${PIXMAN_ROOT}"
-    INSTALL_COMMAND make install
+    INSTALL_COMMAND $(MAKE) install
     )

@@ -914,16 +914,16 @@ void PCB::AddToBoard()
 
     m_board->SetCopperLayerCount( m_layersStackup.GetCount() );
 
-    for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
-    {
-        m_pcbComponents[i]->AddToBoard();
-    }
-
     for( i = 0; i < (int) m_pcbNetlist.GetCount(); i++ )
     {
         net = m_pcbNetlist[i];
 
         m_board->AppendNet( new NETINFO_ITEM( m_board, net->m_name, net->m_netCode ) );
+    }
+
+    for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
+    {
+        m_pcbComponents[i]->AddToBoard();
     }
 }
 

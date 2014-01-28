@@ -430,15 +430,15 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         if( aDrawInfo. m_ShowNotPlatedHole )    // Draw a specific hole color
             hole_color = aDrawInfo.m_NPHoleColor;
 
-        switch( m_DrillShape )
+        switch( GetDrillShape() )
         {
-        case PAD_CIRCLE:
+        case PAD_DRILL_CIRCLE:
             if( aDC->LogicalToDeviceXRel( hole ) > MIN_DRAW_WIDTH )
                 GRFilledCircle( aClipBox, aDC, holepos.x, holepos.y, hole, 0,
                                 hole_color, hole_color );
             break;
 
-        case PAD_OVAL:
+        case PAD_DRILL_OBLONG:
             halfsize.x = m_Drill.x >> 1;
             halfsize.y = m_Drill.y >> 1;
 
@@ -473,7 +473,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     GRSetDrawMode( aDC, aDrawInfo.m_DrawMode );
 
     // Draw "No connect" ( / or \ or cross X ) if necessary
-    if( m_Netname.IsEmpty() && aDrawInfo.m_ShowNCMark )
+    if( GetNet() == 0 && aDrawInfo.m_ShowNCMark )
     {
         int dx0 = std::min( halfsize.x, halfsize.y );
         EDA_COLOR_T nc_color = BLUE;
@@ -499,7 +499,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     wxPoint tpos0 = shape_pos;     // Position of the centre of text
     wxPoint tpos  = tpos0;
     wxSize  AreaSize;              // size of text area, normalized to AreaSize.y < AreaSize.x
-    int     shortname_len = m_ShortNetname.Len();
+    int     shortname_len = GetShortNetname().Len();
 
     if( !aDrawInfo.m_Display_netname )
         shortname_len = 0;
@@ -583,7 +583,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         tsize = ( tsize * 7 ) / 10;
         DrawGraphicHaloText( clipBox, aDC, tpos,
                              aDrawInfo.m_Color, BLACK, WHITE,
-                             m_ShortNetname, t_angle,
+                             GetShortNetname(), t_angle,
                              wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,
                              GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
     }

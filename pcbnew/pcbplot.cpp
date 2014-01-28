@@ -148,7 +148,7 @@ bool EnsureOutputDirectory( wxFileName*     aOutputDir,
     {
         if( aReporter )
         {
-            msg.Printf( _( "*** Error: cannot make path <%s> absolute with respect to <%s>! ***" ),
+            msg.Printf( _( "*** Error: cannot make path '%s' absolute with respect to '%s'! ***" ),
                         GetChars( aOutputDir->GetPath() ),
                         GetChars( boardFilePath ) );
             aReporter->Report( msg );
@@ -165,7 +165,7 @@ bool EnsureOutputDirectory( wxFileName*     aOutputDir,
         {
             if( aReporter )
             {
-                msg.Printf( _( "Output directory <%s> created.\n" ), GetChars( outputPath ) );
+                msg.Printf( _( "Output directory '%s' created.\n" ), GetChars( outputPath ) );
                 aReporter->Report( msg );
                 return true;
             }
@@ -174,7 +174,7 @@ bool EnsureOutputDirectory( wxFileName*     aOutputDir,
         {
             if( aReporter )
             {
-                msg.Printf( _( "*** Error: cannot create output directory <%s>! ***\n" ),
+                msg.Printf( _( "*** Error: cannot create output directory '%s'! ***\n" ),
                             GetChars( outputPath ) );
                 aReporter->Report( msg );
             }

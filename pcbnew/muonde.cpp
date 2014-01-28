@@ -48,7 +48,6 @@
 #include <class_module.h>
 #include <class_edge_mod.h>
 
-#include <protos.h>
 #include <pcbnew.h>
 
 

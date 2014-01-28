@@ -158,7 +158,6 @@ void DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow( wxCloseEvent& event )
     if( m_Draw3DFrame )
         m_Draw3DFrame->Close( true );
 
-    SaveSettings();
     Destroy();
 }
 

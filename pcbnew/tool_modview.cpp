@@ -47,7 +47,9 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     if( m_mainToolBar == NULL )
     {
         m_mainToolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW );
+                                          wxAUI_TB_DEFAULT_STYLE
+                                            | wxAUI_TB_OVERFLOW
+        );
 
         // Set up toolbar
         m_mainToolBar->AddTool( ID_MODVIEW_SELECT_LIB, wxEmptyString,
@@ -93,22 +95,14 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
         m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                                 KiBitmap( zoom_fit_in_page_xpm ), msg );
 
-        if( m_Semaphore )
+        // Enable this tool only if the library browser is called from
+        // a "load component" command
+        if( m_semaphore )
         {
-            // The library browser is called from a "load component" command
             m_mainToolBar->AddSeparator();
-
-            /*
-            this ID_MODVIEW_FOOTPRINT_EXPORT_TO_BOARD control
-            is broken it does not lead to a fetched footprint on linux, either 3.0 nor 2.8 wx:
-            and I really don't like the drop down menu here:
-
-            whoever broke it, please fix it:
-
             m_mainToolBar->AddTool( ID_MODVIEW_FOOTPRINT_EXPORT_TO_BOARD, wxEmptyString,
                                     KiBitmap( export_footprint_names_xpm ),
                                     _( "Insert footprint in board" ) );
-            */
         }
 
         // after adding the buttons to the toolbar, must call Realize() to

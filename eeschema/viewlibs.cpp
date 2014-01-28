@@ -70,7 +70,7 @@ void LIB_VIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBVIEW_SELECT_PART_NUMBER:
-        ii = SelpartBox->GetCurrentSelection();
+        ii = m_selpartBox->GetCurrentSelection();
         if( ii < 0 )
             return;
         m_unit = ii + 1;
@@ -132,16 +132,16 @@ void LIB_VIEW_FRAME::SelectCurrentLibrary()
         m_libraryName = Lib->GetName();
         DisplayLibInfos();
 
-        if( m_LibList )
+        if( m_libList )
         {
             ReCreateListCmp();
             m_canvas->Refresh();
             DisplayLibInfos();
             ReCreateHToolbar();
-            int id = m_LibList->FindString( m_libraryName.GetData() );
+            int id = m_libList->FindString( m_libraryName.GetData() );
 
             if( id >= 0 )
-                m_LibList->SetSelection( id );
+                m_libList->SetSelection( id );
         }
     }
 }
@@ -234,11 +234,11 @@ void LIB_VIEW_FRAME::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
     Zoom_Automatique( false );
     m_canvas->Refresh( );
 
-    if( m_CmpList )
+    if( m_cmpList )
     {
-        int id = m_CmpList->FindString( m_entryName.GetData() );
+        int id = m_cmpList->FindString( m_entryName.GetData() );
         if( id >= 0 )
-            m_CmpList->SetSelection( id );
+            m_cmpList->SetSelection( id );
     }
     ReCreateHToolbar();
 }

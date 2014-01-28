@@ -80,8 +80,16 @@ EVT_TOOL( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW,
 
 // listbox events
 EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
+
+
+#if wxCHECK_VERSION( 3, 0, 0 )
+EVT_GRID_CMD_CELL_CHANGED( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
+                          FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
+#else
 EVT_GRID_CMD_CELL_CHANGE( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
                           FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
+#endif
+
 EVT_GRID_CMD_EDITOR_HIDDEN( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
                             FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
 
@@ -296,8 +304,6 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
  */
 void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    SaveSettings();
-
     if( m_Semaphore )
     {
         m_Semaphore->Post();

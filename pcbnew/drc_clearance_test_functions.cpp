@@ -36,7 +36,6 @@
 #include <trigo.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <drc_stuff.h>
 
 #include <class_board.h>
@@ -292,7 +291,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
                 dummypad.SetSize( pad->GetDrillSize() );
                 dummypad.SetPosition( pad->GetPosition() );
-                dummypad.SetShape( pad->GetDrillShape() );
+                dummypad.SetShape( pad->GetDrillShape()  == PAD_DRILL_OBLONG ?
+                                   PAD_OVAL : PAD_CIRCLE );
                 dummypad.SetOrientation( pad->GetOrientation() );
 
                 m_padToTestPos = dummypad.GetPosition() - origin;

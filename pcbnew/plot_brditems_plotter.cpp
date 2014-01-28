@@ -638,20 +638,20 @@ void BRDITEMS_PLOTTER::PlotDrawSegment(  DRAWSEGMENT* aSeg )
 /** Helper function to plot a single drill mark. It compensate and clamp
  *   the drill mark size depending on the current plot options
  */
-void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_SHAPE_T aDrillShape,
+void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape,
                            const wxPoint &aDrillPos, wxSize aDrillSize,
                            const wxSize &aPadSize,
                            double aOrientation, int aSmallDrill )
 {
     // Small drill marks have no significance when applied to slots
-    if( aSmallDrill && aDrillShape == PAD_ROUND )
+    if( aSmallDrill && aDrillShape == PAD_DRILL_CIRCLE )
         aDrillSize.x = std::min( aSmallDrill, aDrillSize.x );
 
     // Round holes only have x diameter, slots have both
     aDrillSize.x -= getFineWidthAdj();
     aDrillSize.x = Clamp( 1, aDrillSize.x, aPadSize.x - 1 );
 
-    if( aDrillShape == PAD_OVAL )
+    if( aDrillShape == PAD_DRILL_OBLONG )
     {
         aDrillSize.y -= getFineWidthAdj();
         aDrillSize.y = Clamp( 1, aDrillSize.y, aPadSize.y - 1 );
@@ -688,7 +688,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
         if( pts->Type() != PCB_VIA_T )
             continue;
 
-        plotOneDrillMark( PAD_CIRCLE,  pts->GetStart(), wxSize( pts->GetDrillValue(), 0 ),
+        plotOneDrillMark( PAD_DRILL_CIRCLE,  pts->GetStart(), wxSize( pts->GetDrillValue(), 0 ),
                           wxSize( pts->GetWidth(), 0 ), 0, small_drill );
     }
 

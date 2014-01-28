@@ -37,11 +37,20 @@ find_package( BZip2 REQUIRED )
 
 set( PREFIX ${DOWNLOAD_DIR}/cairo )
 
+if ( KICAD_BUILD_STATIC )
+    set( CAIRO_BUILDTYPE --disable-shared )
+endif( KICAD_BUILD_STATIC )
+
+
 if (APPLE) 
+
+    set( CAIRO_CFLAGS  "CFLAGS=" )
+    set( CAIRO_LDFLAGS "LDFLAGS=-framework CoreServices -framework Cocoa" )
+    set( CAIRO_OPTS    --enable-ft=no )
+
     if( CMAKE_OSX_ARCHITECTURES )
-        set( CAIRO_CFLAGS  "CFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES}" )
-        set( CAIRO_LDFLAGS "LDFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -framework CoreServices -framework Cocoa" )
-        set( CAIRO_OPTS    --enable-ft=no )
+        set( CAIRO_CFLAGS  "${CAIRO_CFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}" )
+        set( CAIRO_LDFLAGS "${CAIRO_LDFLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}" )
     endif( CMAKE_OSX_ARCHITECTURES )
 
     if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
@@ -72,8 +81,9 @@ ExternalProject_Add(  cairo
     BUILD_IN_SOURCE   1
     #SOURCE_DIR       "${PREFIX}"
     #PATCH_COMMAND    ""
+    UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${CAIRO_ROOT}"
 
-    CONFIGURE_COMMAND ./configure --prefix=${CAIRO_ROOT} --enable-static --disable-shared
+    CONFIGURE_COMMAND ./configure --prefix=${CAIRO_ROOT} --enable-static ${CAIRO_BUILDTYPE}
                       PKG_CONFIG=${PROJECT_SOURCE_DIR}/pkgconfig_root/bin/pkg-config
                       PKG_CONFIG_PATH=${PROJECT_SOURCE_DIR}/pixman_root/lib/pkgconfig:${PROJECT_SOURCE_DIR}/libpng_root/lib/pkgconfig
                       --enable-png=yes --enable-svg=yes
@@ -84,8 +94,8 @@ ExternalProject_Add(  cairo
 
     #BINARY_DIR      "${PREFIX}"
 
-    BUILD_COMMAND   make
+    BUILD_COMMAND   $(MAKE) 
 
     INSTALL_DIR     "${CAIRO_ROOT}"
-    INSTALL_COMMAND make install
+    INSTALL_COMMAND $(MAKE) install
     )

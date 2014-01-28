@@ -626,11 +626,15 @@ const FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
 
     if( !row )
     {
-        wxString msg = wxString::Format( _( "lib table contains no logical lib '%s'" ),
-                                         GetChars( aNickname ) );
+        wxString msg = wxString::Format(
+            _( "fp-lib-table files contain no lib with nickname '%s'" ),
+            GetChars( aNickname ) );
+
         THROW_IO_ERROR( msg );
     }
 
+    // We've been 'lazy' up until now, but it cannot be deferred any longer,
+    // instantiate a PLUGIN of the proper kind if it is not already in this ROW.
     if( !row->plugin )
         row->setPlugin( IO_MGR::PluginFind( row->type ) );
 

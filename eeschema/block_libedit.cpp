@@ -34,7 +34,6 @@
 
 #include <general.h>
 #include <class_library.h>
-#include <protos.h>
 #include <libeditframe.h>
 
 

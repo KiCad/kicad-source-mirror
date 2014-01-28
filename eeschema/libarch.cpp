@@ -37,7 +37,6 @@
 
 #include <general.h>
 #include <netlist.h>
-#include <protos.h>
 #include <class_library.h>
 #include <sch_component.h>
 #include <sch_sheet.h>

@@ -36,15 +36,12 @@
 #include <bezier_curves.h>
 #include <class_drawpanel.h>
 #include <class_pcb_screen.h>
-#include <kicad_string.h>
 #include <colors_selection.h>
 #include <trigo.h>
-#include <richio.h>
 #include <pcbcommon.h>
 #include <msgpanel.h>
 
 #include <pcbnew.h>
-#include <math_for_graphics.h>
 
 #include <class_board.h>
 #include <class_module.h>

@@ -11,13 +11,17 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <class_pad.h>
+#include <class_track.h>
+#include <class_zone.h>
 #include <class_netinfo.h>
 
 
 // Constructor and destructor
-NETINFO_LIST::NETINFO_LIST( BOARD* aParent )
+NETINFO_LIST::NETINFO_LIST( BOARD* aParent ) : m_Parent( aParent )
 {
-    m_Parent = aParent;
+    // Make sure that the unconnected net has number 0
+    AppendNet( new NETINFO_ITEM( aParent, wxEmptyString, 0 ) );
 }
 
 
@@ -29,23 +33,29 @@ NETINFO_LIST::~NETINFO_LIST()
 
 void NETINFO_LIST::clear()
 {
-    for( unsigned ii = 0; ii < GetNetCount(); ii++ )
-        delete m_NetBuffer[ii];
+    NETNAMES_MAP::iterator it, itEnd;
+    for( it = m_netNames.begin(), itEnd = m_netNames.end(); it != itEnd; ++it )
+        delete it->second;
 
-    m_NetBuffer.clear();
     m_PadsFullList.clear();
+    m_netNames.clear();
+    m_netCodes.clear();
 }
 
 
-/**
- * Function Append
- * adds \a aNewElement to the end of the list.
- */
 void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 {
-    m_NetBuffer.push_back( aNewElement );
+    // negative net code means that it has to be auto assigned
+    if( aNewElement->m_NetCode < 0 )
+        const_cast<int&>( aNewElement->m_NetCode ) = getFreeNetCode();
 
-    // D(Show();)
+    // net names & codes are supposed to be unique
+    assert( GetNetItem( aNewElement->GetNetname() ) == NULL );
+    assert( GetNetItem( aNewElement->GetNet() ) == NULL );
+
+    // add an entry for fast look up by a net name using a map
+    m_netNames.insert( std::make_pair( aNewElement->GetNetname(), aNewElement ) );
+    m_netCodes.insert( std::make_pair( aNewElement->GetNet(), aNewElement ) );
 }
 
 
@@ -78,48 +88,26 @@ void NETINFO_LIST::buildListOfNets()
 {
     D_PAD*          pad;
     int             nodes_count = 0;
-    NETINFO_ITEM*   net_item;
-
-    clear();        // Remove all nets info and free memory
-
-    // Create and add the "unconnected net", always existing,
-    // used to handle pads and tracks that are not member of a "real" net
-    net_item = new NETINFO_ITEM( m_Parent );
-    AppendNet( net_item );
 
     // Build the PAD list, sorted by net
     buildPadsFullList();
 
-    // Build netnames list, and create a netcode for each netname
-    D_PAD* last_pad = NULL;
-    int    netcode = 0;
+    // Restore the initial state of NETINFO_ITEMs
+    for( NETINFO_LIST::iterator net( begin() ), netEnd( end() ); net != netEnd; ++net )
+        net->Clear();
 
+    // Assign pads to appropriate NETINFO_ITEMs
     for( unsigned ii = 0; ii < m_PadsFullList.size(); ii++ )
     {
         pad = m_PadsFullList[ii];
 
-        if( pad->GetNetname().IsEmpty() ) // pad not connected
-        {
-            pad->SetNet( 0 );
+        if( pad->GetNet() == NETINFO_LIST::UNCONNECTED ) // pad not connected
             continue;
-        }
 
-        /* if the current netname was already found: add pad to the current net_item ,
-         *  else create a new net_code and a new net_item
-         */
-        if( last_pad == NULL || ( pad->GetNetname() != last_pad->GetNetname() ) )
-        {
-            netcode++;
-            net_item = new NETINFO_ITEM( m_Parent, pad->GetNetname(), netcode );
-            AppendNet( net_item );
-        }
+        // Add pad to the appropriate list of pads
+        GetNetItem( pad->GetNet() )->m_PadInNetList.push_back( pad );
 
-        pad->SetNet( netcode );
-        net_item->m_PadInNetList.push_back( pad );
-
-        nodes_count++;
-
-        last_pad = pad;
+        ++nodes_count;
     }
 
     m_Parent->SetNodeCount( nodes_count );
@@ -129,18 +117,18 @@ void NETINFO_LIST::buildListOfNets()
     m_Parent->m_Status_Pcb |= NET_CODES_OK;
 
     m_Parent->SetAreasNetCodesFromNetNames();
-
-    // D( Show(); )
 }
 
 #if defined(DEBUG)
 void NETINFO_LIST::Show() const
 {
-    for( unsigned i=0; i < m_NetBuffer.size();  ++i )
+    int i = 0;
+    NETNAMES_MAP::const_iterator it, itEnd;
+    for( it = m_netNames.begin(), itEnd = m_netNames.end(); it != itEnd; ++it )
     {
         printf( "[%d]: netcode:%d  netname:<%s>\n",
-            i, m_NetBuffer[i]->GetNet(),
-            TO_UTF8( m_NetBuffer[i]->GetNetname() ) );
+            i++, it->second->GetNet(),
+            TO_UTF8( it->second->GetNetname() ) );
     }
 }
 #endif
@@ -183,3 +171,83 @@ void NETINFO_LIST::buildPadsFullList()
 
     m_Parent->m_Status_Pcb = LISTE_PAD_OK;
 }
+
+
+int NETINFO_LIST::getFreeNetCode() const
+{
+    static int m_newNetCode = 0;
+
+    do {
+        if( m_newNetCode < 0 )
+            m_newNetCode = 0;
+    } while( m_netCodes.count( ++m_newNetCode ) != 0 );
+
+    return m_newNetCode;
+}
+
+
+int NETINFO_MAPPING::Translate( int aNetCode ) const
+{
+    std::map<int, int>::const_iterator value = m_netMapping.find( aNetCode );
+
+    if( value != m_netMapping.end() )
+        return value->second;
+
+    // There was no entry for the given net code
+    return aNetCode;
+}
+
+
+void NETINFO_MAPPING::Update()
+{
+    // Collect all the used nets
+    std::set<int> nets;
+
+    // Be sure that the unconnected gets 0 and is mapped as 0
+    nets.insert( 0 );
+
+    // Zones
+    for( int i = 0; i < m_board->GetAreaCount(); ++i )
+        nets.insert( m_board->GetArea( i )->GetNet() );
+
+    // Tracks
+    for( TRACK* track = m_board->m_Track; track; track = track->Next() )
+        nets.insert( track->GetNet() );
+
+    // Modules/pads
+    for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
+    {
+        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        {
+            nets.insert( pad->GetNet() );
+        }
+    }
+
+    // Segzones
+    for( SEGZONE* zone = m_board->m_Zone; zone; zone = zone->Next() )
+        nets.insert( zone->GetNet() );
+
+    // Prepare the new mapping
+    m_netMapping.clear();
+
+    // Now the nets variable stores all the used net codes (not only for pads)
+    int newNetCode = 0;
+    for( std::set<int>::const_iterator it = nets.begin(), itEnd = nets.end(); it != itEnd; ++it )
+        m_netMapping[*it] = newNetCode++;
+}
+
+
+NETINFO_ITEM* NETINFO_MAPPING::iterator::operator*() const
+{
+    return m_mapping->m_board->FindNet( m_iterator->first );
+}
+
+
+NETINFO_ITEM* NETINFO_MAPPING::iterator::operator->() const
+{
+    return m_mapping->m_board->FindNet( m_iterator->first );
+}
+
+
+const NETINFO_ITEM NETINFO_LIST::ORPHANED = NETINFO_ITEM( NULL, wxString::FromUTF8( "orphaned" ), -1 );
+const int NETINFO_LIST::UNCONNECTED = 0;

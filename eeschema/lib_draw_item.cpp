@@ -32,7 +32,6 @@
 #include <wxstruct.h>
 #include <msgpanel.h>
 
-#include <protos.h>
 #include <general.h>
 #include <lib_draw_item.h>
 

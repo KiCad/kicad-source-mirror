@@ -37,7 +37,6 @@
 #include <kicad_device_context.h>
 
 #include <general.h>
-#include <protos.h>
 #include <sch_text.h>
 #include <eeschema_id.h>
 

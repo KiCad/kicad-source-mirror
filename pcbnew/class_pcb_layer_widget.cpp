@@ -280,7 +280,7 @@ void PCB_LAYER_WIDGET::ReFill()
     {
         if( enabledLayers & GetLayerMask( layer ) )
         {
-            const wxChar *dsc;
+            wxString dsc;
             switch( layer )
             {
             case LAYER_N_FRONT:

@@ -51,21 +51,23 @@
 #cmakedefine HAVE_FGETC_NOLOCK
 
 // Warning!!!  Using wxGraphicContext for rendering is experimental.
-#cmakedefine USE_WX_GRAPHICS_CONTEXT 1
+#cmakedefine USE_WX_GRAPHICS_CONTEXT    1
 
-#cmakedefine USE_IMAGES_IN_MENUS 1
+#cmakedefine USE_IMAGES_IN_MENUS        1
 
 /// The legacy file format revision of the *.brd file created by this build
-#define LEGACY_BOARD_FILE_VERSION 2
+#define LEGACY_BOARD_FILE_VERSION       2
 
 /// The install prefix defined in CMAKE_INSTALL_PREFIX.
-#define DEFAULT_INSTALL_PATH               "@CMAKE_INSTALL_PREFIX"
+#define DEFAULT_INSTALL_PATH            "@CMAKE_INSTALL_PREFIX@"
 
 /// Default footprint library install path when installed with `make install`.
-#define DEFAULT_FP_LIB_PATH                "@KICAD_FP_LIB_INSTALL_PATH@"
+#define DEFAULT_FP_LIB_PATH             "@KICAD_FP_LIB_INSTALL_PATH@"
 
 /// When defined, build the GITHUB_PLUGIN for pcbnew.
 #cmakedefine BUILD_GITHUB_PLUGIN
 
+/// Name of repo from which this build came.
+#define KICAD_REPO_NAME                 "@KICAD_REPO_NAME@"
 
 #endif  // CONFIG_H_

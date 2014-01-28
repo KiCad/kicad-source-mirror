@@ -40,7 +40,6 @@
 #include <class_zone.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <drc_stuff.h>
 
 #include <dialog_drc.h>
@@ -706,7 +705,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                 && pad->GetDrillSize() == aRefPad->GetDrillSize()
                 && pad->GetDrillShape() == aRefPad->GetDrillShape() )
             {
-                if( aRefPad->GetDrillShape() == PAD_CIRCLE )
+                if( aRefPad->GetDrillShape() == PAD_DRILL_CIRCLE )
                     continue;
 
                 // for oval holes: must also have the same orientation
@@ -722,7 +721,8 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                 // pad under testing has a hole, test this hole against pad reference
                 dummypad.SetPosition( pad->GetPosition() );
                 dummypad.SetSize( pad->GetDrillSize() );
-                dummypad.SetShape( pad->GetDrillShape() == PAD_OVAL ? PAD_OVAL : PAD_CIRCLE );
+                dummypad.SetShape( pad->GetDrillShape() == PAD_DRILL_OBLONG ?
+                                                           PAD_OVAL : PAD_CIRCLE );
                 dummypad.SetOrientation( pad->GetOrientation() );
 
                 if( !checkClearancePadToPad( aRefPad, &dummypad ) )
@@ -738,7 +738,8 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
             {
                 dummypad.SetPosition( aRefPad->GetPosition() );
                 dummypad.SetSize( aRefPad->GetDrillSize() );
-                dummypad.SetShape( aRefPad->GetDrillShape() == PAD_OVAL ? PAD_OVAL : PAD_CIRCLE );
+                dummypad.SetShape( aRefPad->GetDrillShape() == PAD_DRILL_OBLONG ?
+                                                               PAD_OVAL : PAD_CIRCLE );
                 dummypad.SetOrientation( aRefPad->GetOrientation() );
 
                 if( !checkClearancePadToPad( pad, &dummypad ) )

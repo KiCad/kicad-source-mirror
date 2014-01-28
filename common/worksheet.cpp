@@ -94,10 +94,24 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
     TITLE_BLOCK t_block = GetTitleBlock();
     EDA_COLOR_T color = RED;
 
+    wxPoint origin = aDC->GetDeviceOrigin();
+
+    if( aScreen->m_IsPrinting && origin.y > 0 )
+    {
+        aDC->SetDeviceOrigin( 0, 0 );
+        aDC->SetAxisOrientation( true, false );
+    }
+
     DrawPageLayout( aDC, m_canvas->GetClipBox(), pageInfo,
                     GetScreenDesc(), aFilename, t_block,
                     aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber,
                     aLineWidth, aScalar, color, color );
+
+    if( aScreen->m_IsPrinting && origin.y > 0 )
+    {
+        aDC->SetDeviceOrigin( origin.x, origin.y );
+        aDC->SetAxisOrientation( true, true );
+    }
 }
 
 

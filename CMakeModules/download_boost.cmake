@@ -92,7 +92,7 @@ string( REPLACE "unit_test_framework" "test" boost_libs_list "${BOOST_LIBS_BUILT
 # Default Toolset
 set( BOOST_TOOLSET "toolset=gcc" )
 
-if( KICAD_BUILD_STATIC )
+if( KICAD_BUILD_STATIC OR APPLE )
     set( BOOST_LINKTYPE  "link=static" )
 else()
     unset( BOOST_LINKTYPE )
@@ -170,10 +170,20 @@ endif()
 
 ExternalProject_Add( boost
     PREFIX          "${PREFIX}"
-    DOWNLOAD_DIR    "${DOWNLOAD_DIR}"
-    INSTALL_DIR     "${BOOST_ROOT}"
+
     URL             http://downloads.sourceforge.net/project/boost/boost/${BOOST_RELEASE}/boost_${BOOST_VERS}.tar.bz2
+    DOWNLOAD_DIR    "${DOWNLOAD_DIR}"
+    TIMEOUT         600             # 10 minutes
     URL_MD5         ${BOOST_MD5}
+    # If download fails, then enable "LOG_DOWNLOAD ON" and try again.
+    # Upon a second failure with logging enabled, then look at these logs:
+    # <src>/.downloads-by-cmake$ less /tmp/product/.downloads-by-cmake/boost_1_54_0/src/boost-stamp/boost-download-out.log
+    # <src>/.downloads-by-cmake$ less /tmp/product/.downloads-by-cmake/boost_1_54_0/src/boost-stamp/boost-download-err.log
+    # If out.log does not show 100%, then try increasing TIMEOUT even more, or download the URL manually and put it
+    # into <src>/.downloads-by-cmake/ dir.
+ #  LOG_DOWNLOAD    ON
+
+    INSTALL_DIR     "${BOOST_ROOT}"
 
     # The patch command executes with the working directory set to <SOURCE_DIR>
     # Revert the branch to pristine before applying patch sets as bzr patch

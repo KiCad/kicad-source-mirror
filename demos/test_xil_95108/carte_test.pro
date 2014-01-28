@@ -1,6 +1,6 @@
-update=07/03/2011 07:11:33
+update=09/01/2014 18:43:43
 version=1
-last_client=cvpcb
+last_client=kicad
 [pcbnew]
 version=1
 LibDir=
@@ -118,12 +118,10 @@ LibName8=memory
 LibName9=xilinx
 LibName10=special
 LibName11=analog_switches
-[general]
-version=1
-RootSch=carte_test.sch
-BoardNm=carte_test.brd
 [cvpcb]
 version=1
 NetIExt=.net
 [cvpcb/libraries]
 EquName1=devcms
+[general]
+version=1

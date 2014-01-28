@@ -13,18 +13,9 @@ static const wxString HOSTNAME( wxT( "localhost" ) );
 
 // buffer for read and write data in socket connections
 #define IPC_BUF_SIZE 4096
-
 static char client_ipc_buffer[IPC_BUF_SIZE];
 
 static wxSocketServer* server;
-
-void      (*RemoteFct)(const char* cmd);
-
-
-void SetupServerFunction( void (*remotefct)(const char* remotecmd) )
-{
-    RemoteFct = remotefct;
-}
 
 
 /**********************************/
@@ -75,10 +66,7 @@ void EDA_DRAW_FRAME::OnSockRequest( wxSocketEvent& evt )
         sock->Read( client_ipc_buffer + 1, IPC_BUF_SIZE - 2 );
         len = 1 + sock->LastCount();
         client_ipc_buffer[len] = 0;
-
-        if( RemoteFct )
-            RemoteFct( client_ipc_buffer );
-
+        ExecuteRemoteCommand( client_ipc_buffer );
         break;
 
     case wxSOCKET_LOST:

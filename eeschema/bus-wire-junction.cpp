@@ -36,7 +36,6 @@
 #include <lib_draw_item.h>
 #include <lib_pin.h>
 #include <general.h>
-#include <protos.h>
 #include <sch_bus_entry.h>
 #include <sch_junction.h>
 #include <sch_line.h>

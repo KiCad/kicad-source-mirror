@@ -92,12 +92,23 @@ public:
 class S3D_MASTER : public EDA_ITEM
 {
 public:
-    wxString        m_Shape3DName; /* 3D shape name in 3D library */
     S3D_VERTEX      m_MatScale;
     S3D_VERTEX      m_MatRotation;
     S3D_VERTEX      m_MatPosition;
     STRUCT_3D_SHAPE* m_3D_Drawings;
     S3D_MATERIAL*   m_Materials;
+
+    enum FILE3D_TYPE
+    {
+        FILE3D_NONE = 0,
+        FILE3D_VRML,
+        FILE3D_IDF,
+        FILE3D_UNKNOWN
+    };
+
+private:
+    wxString    m_Shape3DName;  /* 3D shape name in 3D library */
+    FILE3D_TYPE m_ShapeType;
 
 public:
     S3D_MASTER( EDA_ITEM* aParent );
@@ -120,6 +131,20 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
+
+    /**
+     * Function Is3DType
+     * returns true if the argument matches the type of model referred to
+     * by m_Shape3DName
+     */
+    bool Is3DType( enum FILE3D_TYPE aShapeType );
+
+    const wxString& GetShape3DName( void )
+    {
+        return m_Shape3DName;
+    }
+
+    void SetShape3DName( const wxString& aShapeName );
 };
 
 
