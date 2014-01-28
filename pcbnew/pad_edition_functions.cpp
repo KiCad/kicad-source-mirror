@@ -141,7 +141,7 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
 
     // Update the pad properties.
     Import_Pad_Settings( pad, false );
-    pad->SetNetname( wxEmptyString );
+    pad->SetNet( NETINFO_LIST::UNCONNECTED );
 
     pad->SetPosition( GetCrossHairPosition() );
 

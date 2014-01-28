@@ -119,7 +119,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     if( GetScreen()->IsModify()
-        && !IsOK( this, _( "Current component is not saved.\n\nDiscard current changes?" ) ) )
+        && !IsOK( this, _( "The current component is not saved.\n\nDiscard current changes?" ) ) )
         return;
 
      // No current lib, ask user for the library to use.

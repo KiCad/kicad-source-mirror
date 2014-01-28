@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2008-2014 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,20 +48,18 @@ class CMP_LIBRARY;
 class LIB_VIEW_FRAME : public SCH_BASE_FRAME
 {
 private:
-    wxComboBox*         SelpartBox;
+    wxComboBox*         m_selpartBox;
 
     // List of libraries (for selection )
-    wxSashLayoutWindow* m_LibListWindow;
-    wxListBox*          m_LibList;          // The list of libs
-    wxSize              m_LibListSize;      // size of the window
+    wxListBox*          m_libList;          // The list of libs
+    int                 m_libListWidth;     // Last width of the window
 
     // List of components in the selected library
-    wxSashLayoutWindow* m_CmpListWindow;
-    wxListBox*          m_CmpList;          // The list of components
-    wxSize              m_CmpListSize;      // size of the window
+    wxListBox*          m_cmpList;          // The list of components
+    int                 m_cmpListWidth;     // Last width of the window
 
     // Flags
-    wxSemaphore*        m_Semaphore;        // != NULL if the frame must emulate a modal dialog
+    wxSemaphore*        m_semaphore;        // != NULL if the frame must emulate a modal dialog
     wxString            m_configPath;       // subpath for configuration
 
 protected:
@@ -94,12 +92,6 @@ public:
     static LIB_VIEW_FRAME* GetActiveLibraryViewer();
 
     void OnSize( wxSizeEvent& event );
-
-    /**
-     * Function OnSashDrag
-     * resizes the child windows when dragging a sash window border.
-     */
-    void OnSashDrag( wxSashEvent& event );
 
     /**
      * Function ReCreateListLib

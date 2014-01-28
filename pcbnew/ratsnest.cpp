@@ -70,7 +70,10 @@ public:
 
 void MIN_SPAN_TREE_PADS::AddTreeToRatsnest( std::vector<RATSNEST_ITEM> &aRatsnestList )
 {
-    std::vector<D_PAD*> & padsBuffer = *m_PadsList;
+    std::vector<D_PAD*>& padsBuffer = *m_PadsList;
+    if( padsBuffer.empty() )
+        return;
+
     int netcode = padsBuffer[0]->GetNet();
     // Note: to get edges in minimum spanning tree,
     // the index value 0 is not used: it is just
@@ -537,7 +540,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
         // collect active pads of the module:
         for( pad_ref = aModule->Pads(); pad_ref != NULL; pad_ref = pad_ref->Next() )
         {
-            if( pad_ref->GetNet() == 0 )
+            if( pad_ref->GetNet() == NETINFO_LIST::UNCONNECTED )
                 continue;
 
             localPadList.push_back( pad_ref );

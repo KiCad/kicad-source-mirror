@@ -211,31 +211,33 @@ wxString DateAndTime()
 }
 
 
-int StrNumCmp( const wxChar* aString1, const wxChar* aString2, int aLength, bool aIgnoreCase )
+int StrNumCmp( const wxString& aString1, const wxString& aString2, int aLength, bool aIgnoreCase )
 {
     int i;
     int nb1 = 0, nb2 = 0;
 
-    if( ( aString1 == NULL ) || ( aString2 == NULL ) )
+    wxString::const_iterator str1 = aString1.begin(), str2 = aString2.begin();
+
+    if( ( str1 == aString1.end() ) || ( str2 == aString2.end() ) )
         return 0;
 
     for( i = 0; i < aLength; i++ )
     {
-        if( isdigit( *aString1 ) && isdigit( *aString2 ) ) /* digit found */
+        if( isdigit( *str1 ) && isdigit( *str2 ) ) /* digit found */
         {
             nb1 = 0;
             nb2 = 0;
 
-            while( isdigit( *aString1 ) )
+            while( isdigit( *str1 ) )
             {
-                nb1 = nb1 * 10 + *aString1 - '0';
-                aString1++;
+                nb1 = nb1 * 10 + (int) *str1 - '0';
+                str1++;
             }
 
-            while( isdigit( *aString2 ) )
+            while( isdigit( *str2 ) )
             {
-                nb2 = nb2 * 10 + *aString2 - '0';
-                aString2++;
+                nb2 = nb2 * 10 + (int) *str2 - '0';
+                str2++;
             }
 
             if( nb1 < nb2 )
@@ -247,29 +249,29 @@ int StrNumCmp( const wxChar* aString1, const wxChar* aString2, int aLength, bool
 
         if( aIgnoreCase )
         {
-            if( toupper( *aString1 ) < toupper( *aString2 ) )
+            if( toupper( *str1 ) < toupper( *str2 ) )
                 return -1;
 
-            if( toupper( *aString1 ) > toupper( *aString2 ) )
+            if( toupper( *str1 ) > toupper( *str2 ) )
                 return 1;
 
-            if( ( *aString1 == 0 ) && ( *aString2 == 0 ) )
+            if( ( *str1 == 0 ) && ( *str2 == 0 ) )
                 return 0;
         }
         else
         {
-            if( *aString1 < *aString2 )
+            if( *str1 < *str2 )
                 return -1;
 
-            if( *aString1 > *aString2 )
+            if( *str1 > *str2 )
                 return 1;
 
-            if( ( *aString1 == 0 ) && ( *aString2 == 0 ) )
+            if( ( str1 == aString1.end() ) && ( str2 == aString2.end() ) )
                 return 0;
         }
 
-        aString1++;
-        aString2++;
+        str1++;
+        str2++;
     }
 
     return 0;
@@ -476,19 +478,4 @@ bool ReplaceIllegalFileNameChars( std::string* aName )
         *aName =  result;
 
     return changed;
-}
-
-
-wxString RemoveTrailingZeros( const wxString& aString )
-{
-    wxString retv = aString;
-    int      i = retv.Length();
-
-    while( --i > 0 && retv[i] == wxChar( '0' ) )
-        retv.RemoveLast();
-
-    if( retv[i] == wxChar( '.' ) || retv[i] == wxChar( ',' ) )
-        retv.RemoveLast();
-
-    return retv;
 }

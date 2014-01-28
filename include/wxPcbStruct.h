@@ -233,6 +233,14 @@ public:
     void OnQuit( wxCommandEvent& event );
 
     /**
+     * Execute a remote command send by Eeschema via a socket,
+     * port KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242)
+     * this is a virtual function called by EDA_DRAW_FRAME::OnSockRequest().
+     * @param cmdline = received command from socket
+     */
+    virtual void ExecuteRemoteCommand( const char* cmdline );
+
+    /**
      * Function ToPlotter
      * Open a dialog frame to create plot and drill files
      * relative to the current board
@@ -337,7 +345,6 @@ public:
     void SetRotationAngle( int aRotationAngle );
 
     // Configurations:
-    void InstallConfigFrame();
     void Process_Config( wxCommandEvent& event );
 
     /**

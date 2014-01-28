@@ -66,9 +66,9 @@ D_PAD::D_PAD( MODULE* parent ) :
         m_Pos = GetParent()->GetPosition();
     }
 
-    m_PadShape            = PAD_CIRCLE;      // Default pad shape is PAD_CIRCLE.
-    m_Attribute           = PAD_STANDARD;    // Default pad type is NORMAL (thru hole)
-    m_DrillShape          = PAD_CIRCLE;      // Default pad drill shape is a circle.
+    SetShape( PAD_CIRCLE );                 // Default pad shape is PAD_CIRCLE.
+    SetDrillShape( PAD_DRILL_CIRCLE );      // Default pad drill shape is a circle.
+    m_Attribute           = PAD_STANDARD;   // Default pad type is NORMAL (thru hole)
     m_LocalClearance      = 0;
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
@@ -364,13 +364,6 @@ void D_PAD::SetPadName( const wxString& name )
 }
 
 
-void D_PAD::SetNetname( const wxString& aNetname )
-{
-    m_Netname = aNetname;
-    m_ShortNetname = m_Netname.AfterLast( '/' );
-}
-
-
 void D_PAD::Copy( D_PAD* source )
 {
     if( source == NULL )
@@ -382,13 +375,13 @@ void D_PAD::Copy( D_PAD* source )
     m_NumPadName = source->m_NumPadName;
     SetNet( source->GetNet() );
     m_Drill = source->m_Drill;
-    m_DrillShape = source->m_DrillShape;
+    m_drillShape = source->m_drillShape;
     m_Offset     = source->m_Offset;
     m_Size = source->m_Size;
     m_DeltaSize = source->m_DeltaSize;
     m_Pos0     = source->m_Pos0;
     m_boundingRadius    = source->m_boundingRadius;
-    m_PadShape = source->m_PadShape;
+    m_padShape = source->m_padShape;
     m_Attribute = source->m_Attribute;
     m_Orient   = source->m_Orient;
     m_LengthPadToDie = source->m_LengthPadToDie;
@@ -402,8 +395,6 @@ void D_PAD::Copy( D_PAD* source )
 
     SetSubRatsnest( 0 );
     SetSubNet( 0 );
-    m_Netname = source->m_Netname;
-    m_ShortNetname = source->m_ShortNetname;
 }
 
 
@@ -412,7 +403,7 @@ void D_PAD::CopyNetlistSettings( D_PAD* aPad )
     // Don't do anything foolish like trying to copy to yourself.
     wxCHECK_RET( aPad != NULL && aPad != this, wxT( "Cannot copy to NULL or yourself." ) );
 
-    aPad->SetNetname( GetNetname() );
+    aPad->SetNet( GetNet() );
 
     aPad->SetLocalClearance( m_LocalClearance );
     aPad->SetLocalSolderMaskMargin( m_LocalSolderMaskMargin );
@@ -577,7 +568,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), Line, BROWN ) );
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Net" ), m_Netname, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Net" ), GetNetname(), DARKCYAN ) );
 
     /* For test and debug only: display m_physical_connexion and
      * m_logical_connexion */
@@ -601,7 +592,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 
     Line = ::CoordinateToString( (unsigned) m_Drill.x );
 
-    if( m_DrillShape == PAD_CIRCLE )
+    if( GetDrillShape() == PAD_DRILL_CIRCLE )
     {
         aList.push_back( MSG_PANEL_ITEM( _( "Drill" ), Line, RED ) );
     }
@@ -663,7 +654,7 @@ bool D_PAD::HitTest( const wxPoint& aPosition )
     dx = m_Size.x >> 1; // dx also is the radius for rounded pads
     dy = m_Size.y >> 1;
 
-    switch( m_PadShape & 0x7F )
+    switch( GetShape() )
     {
     case PAD_CIRCLE:
         if( KiROUND( EuclideanNorm( delta ) ) <= dx )
@@ -679,7 +670,28 @@ bool D_PAD::HitTest( const wxPoint& aPosition )
         return TestPointInsidePolygon( poly, 4, delta );
     }
 
-    default:
+    case PAD_OVAL:
+    {
+        RotatePoint( &delta, -m_Orient );
+        // An oval pad has the same shape as a segment with rounded ends
+        // After rotation, the test point is relative to an horizontal pad
+        int dist;
+        wxPoint offset;
+        if( dy > dx )   // shape is a vertical oval
+        {
+            offset.y = dy - dx;
+            dist = dx;
+        }
+        else    //if( dy <= dx ) shape is an horizontal oval
+        {
+            offset.x = dy - dx;
+            dist = dy;
+        }
+        return TestSegmentHit( delta, - offset, offset, dist );
+    }
+        break;
+
+    case PAD_RECT:
         RotatePoint( &delta, -m_Orient );
 
         if( (abs( delta.x ) <= dx ) && (abs( delta.y ) <= dy) )
@@ -696,10 +708,10 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 {
     int diff;
 
-    if( ( diff = padref->m_PadShape - padcmp->m_PadShape ) != 0 )
+    if( ( diff = padref->GetShape() - padcmp->GetShape() ) != 0 )
         return diff;
 
-    if( ( diff = padref->m_DrillShape - padcmp->m_DrillShape ) != 0)
+    if( ( diff = padref->GetDrillShape() - padcmp->GetDrillShape() ) != 0)
         return diff;
 
     if( ( diff = padref->m_Drill.x - padcmp->m_Drill.x ) != 0 )
@@ -737,7 +749,7 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 
 wxString D_PAD::ShowPadShape() const
 {
-    switch( m_PadShape )
+    switch( GetShape() )
     {
     case PAD_CIRCLE:
         return _( "Circle" );

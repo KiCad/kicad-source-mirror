@@ -146,7 +146,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     // Copy auxiliary data: 3D_Drawings info
     for( S3D_MASTER* item = aModule.m_3D_Drawings;  item;  item = item->Next() )
     {
-        if( item->m_Shape3DName.IsEmpty() )           // do not copy empty shapes.
+        if( item->GetShape3DName().IsEmpty() )           // do not copy empty shapes.
             continue;
 
         S3D_MASTER* t3d = m_3D_Drawings;
@@ -270,12 +270,12 @@ void MODULE::Copy( MODULE* aModule )
 
     for( S3D_MASTER* item = aModule->m_3D_Drawings;  item;  item = item->Next() )
     {
-        if( item->m_Shape3DName.IsEmpty() )           // do not copy empty shapes.
+        if( item->GetShape3DName().IsEmpty() )           // do not copy empty shapes.
             continue;
 
         S3D_MASTER* t3d = m_3D_Drawings;
 
-        if( t3d && t3d->m_Shape3DName.IsEmpty() )       // The first entry can
+        if( t3d && t3d->GetShape3DName().IsEmpty() )    // The first entry can
         {                                               // exist, but is empty : use it.
             t3d->Copy( item );
         }
@@ -530,9 +530,9 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     // Search the first active 3D shape in list
     for( S3D_MASTER* struct3D = m_3D_Drawings; struct3D; struct3D = struct3D->Next() )
     {
-        if( !struct3D->m_Shape3DName.IsEmpty() )
+        if( !struct3D->GetShape3DName().IsEmpty() )
         {
-            msg = struct3D->m_Shape3DName;
+            msg = struct3D->GetShape3DName();
             break;
         }
     }

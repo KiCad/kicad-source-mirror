@@ -36,7 +36,6 @@
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <protos.h>
 #include <dialog_find_base.h>
 
 

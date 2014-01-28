@@ -40,7 +40,6 @@
 #include <msgpanel.h>
 
 #include <general.h>
-#include <protos.h>
 #include <class_libentry.h>
 #include <transform.h>
 #include <lib_field.h>

@@ -59,7 +59,7 @@ void S3D_MATERIAL::SetMaterial()
 
 void S3D_MASTER::Copy( S3D_MASTER* pattern )
 {
-    m_Shape3DName = pattern->m_Shape3DName;
+    SetShape3DName( pattern->GetShape3DName() );
     m_MatScale    = pattern->m_MatScale;
     m_MatRotation = pattern->m_MatRotation;
     m_MatPosition = pattern->m_MatPosition;
@@ -74,6 +74,7 @@ S3D_MASTER::S3D_MASTER( EDA_ITEM* aParent ) :
     m_MatScale.x  = m_MatScale.y = m_MatScale.z = 1.0;
     m_3D_Drawings = NULL;
     m_Materials   = NULL;
+    m_ShapeType   = FILE3D_NONE;
 }
 
 
@@ -93,6 +94,45 @@ S3D_MASTER:: ~S3D_MASTER()
         nextmat = m_Materials->Next();
         delete m_Materials;
     }
+}
+
+
+bool S3D_MASTER::Is3DType( enum FILE3D_TYPE aShapeType )
+{
+    // type 'none' is not valid and will always return false
+    if( aShapeType == FILE3D_NONE )
+        return false;
+
+    // no one is interested if we have no file
+    if( m_Shape3DName.empty() )
+        return false;
+
+    if( aShapeType == m_ShapeType )
+        return true;
+
+    return false;
+}
+
+
+void S3D_MASTER::SetShape3DName( const wxString& aShapeName )
+{
+    m_ShapeType = FILE3D_NONE;
+    m_Shape3DName = aShapeName;
+
+    if( m_Shape3DName.empty() )
+        return;
+
+    wxFileName fn = m_Shape3DName;
+    wxString ext  = fn.GetExt();
+
+    if( ext == wxT( "wrl" ) || ext == wxT( "x3d" ) )
+        m_ShapeType = FILE3D_VRML;
+    else if( ext == wxT( "idf" ) )
+        m_ShapeType = FILE3D_IDF;
+    else
+        m_ShapeType = FILE3D_UNKNOWN;
+
+    return;
 }
 
 

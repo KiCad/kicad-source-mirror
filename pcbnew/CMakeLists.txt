@@ -27,6 +27,7 @@ include_directories(
     ../common
     ../polygon
     ../common/dialogs
+    ./exporters
     ../lib_dxf
     ./import_dxf
     ${INC_AFTER}
@@ -96,8 +97,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_non_copper_zones_properties_base.cpp
     dialogs/dialog_pad_properties.cpp
     dialogs/dialog_pad_properties_base.cpp
-    dialogs/dialog_pcbnew_config_libs_and_paths.cpp
-    dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp
     dialogs/dialog_plot_base.cpp
     dialogs/dialog_plot.cpp
     dialogs/dialog_print_for_modedit.cpp
@@ -123,6 +122,18 @@ set( PCBNEW_IMPORT_DXF
     import_dxf/dialog_dxf_import_base.cpp
     import_dxf/dialog_dxf_import.cpp
     import_dxf/dxf2brd_items.cpp
+    )
+
+set( PCBNEW_EXPORTERS
+    exporters/export_d356.cpp
+    exporters/export_gencad.cpp
+    exporters/export_idf.cpp
+    exporters/export_vrml.cpp
+    exporters/idf.cpp
+    exporters/gen_drill_report_files.cpp
+    exporters/gen_modules_placefile.cpp
+    exporters/gendrill_Excellon_writer.cpp
+    exporters/vrml_board.cpp
     )
 
 set( PCBNEW_AUTOROUTER_SRCS
@@ -159,6 +170,7 @@ set( PCBNEW_CLASS_SRCS
     deltrack.cpp
     ${PCBNEW_DIALOGS}
     ${PCBNEW_IMPORT_DXF}
+    ${PCBNEW_EXPORTERS}
     dragsegm.cpp
     drc.cpp
     drc_clearance_test_functions.cpp
@@ -173,20 +185,12 @@ set( PCBNEW_CLASS_SRCS
     edit_track_width.cpp
     edtxtmod.cpp
     event_handlers_tracks_vias_sizes.cpp
-    export_d356.cpp
-    export_gencad.cpp
-    export_idf.cpp
-    export_vrml.cpp
     files.cpp
-    gen_drill_report_files.cpp
-    gen_modules_placefile.cpp
-    gendrill_Excellon_writer.cpp
     globaleditpad.cpp
     highlight.cpp
     hotkeys.cpp
     hotkeys_board_editor.cpp
     hotkeys_module_editor.cpp
-    idf.cpp
     initpcb.cpp
     layer_widget.cpp
     librairi.cpp

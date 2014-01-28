@@ -164,8 +164,6 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
     Event.SetCanVeto( true );
 
-    SaveSettings();
-
     // Close the help frame
     if( wxGetApp().GetHtmlHelpController() )
     {

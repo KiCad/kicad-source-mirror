@@ -690,7 +690,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     if( aDC->LogicalToDeviceXRel( m_Width ) < MIN_TEXT_SIZE )
         return;
 
-    if( GetNet() == 0 )
+    if( GetNet() == NETINFO_LIST::UNCONNECTED )
         return;
 
     NETINFO_ITEM* net = ( (BOARD*) GetParent() )->FindNet( GetNet() );
@@ -952,7 +952,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     }
 
     // Display the short netname:
-    if( GetNet() == 0 )
+    if( GetNet() == NETINFO_LIST::UNCONNECTED )
         return;
 
     if( DisplayOpt.DisplayNetNamesMode == 0 || DisplayOpt.DisplayNetNamesMode == 1 )

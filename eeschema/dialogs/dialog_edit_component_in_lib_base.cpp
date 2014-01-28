@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -64,7 +64,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_staticTextNbUnits = new wxStaticText( m_PanelBasic, wxID_ANY, _("Number of Units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextNbUnits->Wrap( -1 );
-	m_staticTextNbUnits->SetToolTip( _("Enter the number of units in for a component that contains more than one unit") );
+	m_staticTextNbUnits->SetToolTip( _("Enter the number of units for a component that contains more than one unit") );
 	
 	bSizernbunits->Add( m_staticTextNbUnits, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -74,20 +74,20 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	bSizerMidBasicPanel->Add( bSizernbunits, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer17;
-	bSizer17 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerOffset;
+	bSizerOffset = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticTextskew = new wxStaticText( m_PanelBasic, wxID_ANY, _("Pin Name Position Offset"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextskew->Wrap( -1 );
 	m_staticTextskew->SetToolTip( _("Margin (in 0.001 inches) between a pin name position and the component body.\nA value from 10 to 40 is usually good.") );
 	
-	bSizer17->Add( m_staticTextskew, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerOffset->Add( m_staticTextskew, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_SetSkew = new wxSpinCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 0 );
-	bSizer17->Add( m_SetSkew, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerOffset->Add( m_SetSkew, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerMidBasicPanel->Add( bSizer17, 1, wxEXPAND, 5 );
+	bSizerMidBasicPanel->Add( bSizerOffset, 1, wxEXPAND, 5 );
 	
 	
 	bSizerBasicPanel->Add( bSizerMidBasicPanel, 0, wxEXPAND, 5 );

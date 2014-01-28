@@ -88,15 +88,11 @@ All of the configuration settings below are specific to the KiCad project.
 If for any reason you add or remove a build option to the KiCad CMake files,
 please update the list below.
 
-KICAD_STABLE_VERSION (ON/OFF)
------------------------------
-This option enables or disables the stable version string to be created and
-used when building KiCad.  It is mutually exclusive with KICAD_TESTING_VERSION.
-
-KICAD_TESTING_VERSION (ON/OFF)
-------------------------------
-This option enables or disables the testing version string to be created and
-used when building KiCad.  It is mutually exclusive with KICAD_STABLE_VERSION.
+KICAD_SKIP_BOOST (ON/OFF)
+--------------------------
+Skips building the required boost library components.
+WARNING: KiCad developers strongly advise you to build the bundled boost library, as it is
+known to work with KiCad. Other versions may contain bugs that may result in KiCad errors.
 
 USE_WX_GRAPHICS_CONTEXT (ON/OFF)
 --------------------------------

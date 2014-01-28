@@ -57,11 +57,6 @@
 static const wxChar* CommonConfigPath = wxT( "kicad_common" );
 
 
-#ifdef __UNIX__
-#   define TMP_FILE "/tmp/kicad.tmp"
-#endif
-
-
 // some key strings used to store parameters in config
 static const wxChar backgroundColorKey[] = wxT( "BackgroundColor" );
 static const wxChar showPageLimitsKey[]  = wxT( "ShowPageLimits" );
@@ -90,7 +85,7 @@ struct LANGUAGE_DESCR
     BITMAP_DEF  m_Lang_Icon;
 
     /// Labels used in menus
-    const wxChar* m_Lang_Label;
+    wxString    m_Lang_Label;
 
     /// Set to true if the m_Lang_Label must not be translated
     bool        m_DoNotTranslate;
@@ -274,7 +269,7 @@ EDA_APP::EDA_APP()
     m_oneInstancePerFileChecker = NULL;
     m_HtmlCtrl = NULL;
     m_settings = NULL;
-    m_LanguageId = wxLANGUAGE_DEFAULT;
+    setLanguageId( wxLANGUAGE_DEFAULT );
     m_Locale = NULL;
     m_projectSettings = NULL;
     m_commonSettings = NULL;
@@ -350,14 +345,15 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
     // Internationalization: loading the kicad suitable Dictionary
     wxString languageSel;
     m_commonSettings->Read( languageCfgKey, &languageSel);
-    m_LanguageId = wxLANGUAGE_DEFAULT;
+
+    setLanguageId( wxLANGUAGE_DEFAULT );
 
     // Search for the current selection
     for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
     {
         if( s_Languages[ii].m_Lang_Label == languageSel )
         {
-            m_LanguageId = s_Languages[ii].m_WX_Lang_Identifier;
+            setLanguageId( s_Languages[ii].m_WX_Lang_Identifier );
             break;
         }
     }
@@ -625,14 +621,14 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
     wxString languageSel;
 
     m_commonSettings->Read( languageCfgKey, &languageSel );
-    m_LanguageId = wxLANGUAGE_DEFAULT;
+    setLanguageId( wxLANGUAGE_DEFAULT );
 
     // Search for the current selection
     for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
     {
         if( s_Languages[ii].m_Lang_Label == languageSel )
         {
-            m_LanguageId = s_Languages[ii].m_WX_Lang_Identifier;
+            setLanguageId( s_Languages[ii].m_WX_Lang_Identifier );
             break;
         }
     }
@@ -704,9 +700,7 @@ bool EDA_APP::SetLanguage( bool first_time )
     // dictionary file name without extend (full name is kicad.mo)
     wxString DictionaryName( wxT( "kicad" ) );
 
-    if( m_Locale )
-        delete m_Locale;
-
+    delete m_Locale;
     m_Locale = new wxLocale;
 
 #if wxCHECK_VERSION( 2, 9, 0 )
@@ -717,7 +711,7 @@ bool EDA_APP::SetLanguage( bool first_time )
     {
         wxLogDebug( wxT( "This language is not supported by the system." ) );
 
-        m_LanguageId = wxLANGUAGE_DEFAULT;
+        setLanguageId( wxLANGUAGE_DEFAULT );
         delete m_Locale;
 
         m_Locale = new wxLocale;
@@ -786,7 +780,7 @@ void EDA_APP::SetLanguageIdentifier( int menu_id )
     {
         if( menu_id == s_Languages[ii].m_KI_Lang_Identifier )
         {
-            m_LanguageId = s_Languages[ii].m_WX_Lang_Identifier;
+            setLanguageId( s_Languages[ii].m_WX_Lang_Identifier );
             break;
         }
     }

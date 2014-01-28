@@ -46,8 +46,6 @@
 #include <class_board.h>
 #include <class_pcb_text.h>
 
-#include <protos.h>
-
 
 TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
     BOARD_ITEM( parent, PCB_TEXT_T ),

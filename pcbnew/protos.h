@@ -54,6 +54,7 @@ class MODULE;
  * @param nbsegment Number of segments in list
  * @param mode_color Drawing mode (GRXOR, GROR ..)
  */
+
 void DrawTraces( EDA_DRAW_PANEL* panel,
                  wxDC*           DC,
                  TRACK*          aStartTrace,
@@ -70,8 +71,6 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
  * depending on it's position from the origin (ox, oy) and \a aPosiition.
  */
 void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
-
-void RemoteCommand( const char* cmdline );
 
 /**
  * Finds the projection of a grid point on a track. This is the point

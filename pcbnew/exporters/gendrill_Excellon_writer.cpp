@@ -523,7 +523,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
                 new_hole.m_Hole_Diameter = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
                 new_hole.m_Hole_Size.x    = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
 
-                if( pad->GetDrillShape() != PAD_CIRCLE )
+                if( pad->GetDrillShape() != PAD_DRILL_CIRCLE )
                     new_hole.m_Hole_Shape = 1; // oval flag set
 
                 new_hole.m_Hole_Size = pad->GetDrillSize();

@@ -1,6 +1,6 @@
 
-#ifndef _DIALOG_COLOR_CONFIG_H_
-#define _DIALOG_COLOR_CONFIG_H_
+#ifndef DIALOG_COLOR_CONFIG_H_
+#define DIALOG_COLOR_CONFIG_H_
 
 #include <wx/statline.h>
 
@@ -13,47 +13,24 @@ class wxStdDialogButtonSizer;
 extern void SeedLayers();
 
 
-// Specify the width and height of every (color-displaying / bitmap) button
-const int BUTT_SIZE_X = 16;
-const int BUTT_SIZE_Y = 16;
-
-
-/********************/
-/* Layer menu list. */
-/********************/
-
-struct ColorButton
-{
-    wxString        m_Name;
-    int             m_Layer;
-};
-
-struct ButtonIndex
-{
-    wxString      m_Name;
-    ColorButton*  m_Buttons;
-};
-
-
 /***********************************************/
 /* Derived class for the frame color settings. */
 /***********************************************/
 
-class DIALOG_COLOR_CONFIG: public wxDialog
+class DIALOG_COLOR_CONFIG : public wxDialog
 {
 private:
     DECLARE_DYNAMIC_CLASS( DIALOG_COLOR_CONFIG )
 
-    EDA_DRAW_FRAME*         m_Parent;
-    wxBoxSizer*             OuterBoxSizer;
-    wxBoxSizer*             MainBoxSizer;
-    wxBoxSizer*             ColumnBoxSizer;
-    wxBoxSizer*             RowBoxSizer;
-    wxBitmapButton*         BitmapButton;
+    EDA_DRAW_FRAME*         m_parent;
+    wxBoxSizer*             m_outerBoxSizer;
+    wxBoxSizer*             m_mainBoxSizer;
+    wxBoxSizer*             m_columnBoxSizer;
+    wxBoxSizer*             m_rowBoxSizer;
+    wxBitmapButton*         m_bitmapButton;
     wxRadioBox*             m_SelBgColor;
-    wxStaticLine*           Line;
-    wxStdDialogButtonSizer* StdDialogButtonSizer;
-    wxButton*               Button;
+    wxStaticLine*           m_line;
+    wxStdDialogButtonSizer* m_stdDialogButtonSizer;
 
     // Creation
     bool Create( wxWindow* aParent,
@@ -70,7 +47,7 @@ private:
     void CreateControls();
 
     wxBitmap GetBitmapResource( const wxString& aName );
-    wxIcon GetIconResource( const wxString& aName );
+    wxIcon   GetIconResource( const wxString& aName );
     static bool ShowToolTips();
 
     bool    UpdateColorsSettings();
@@ -86,4 +63,4 @@ public:
     ~DIALOG_COLOR_CONFIG();
 };
 
-#endif    // _DIALOG_COLOR_CONFIG_H_
+#endif    // DIALOG_COLOR_CONFIG_H_

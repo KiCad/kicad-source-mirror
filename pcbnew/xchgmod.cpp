@@ -388,7 +388,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            aModule,
     FPID  oldFootprintFPID = aModule->GetFPID();
 
     // Load module.
-    line.Printf( _( "Change module %s (from %s) to %s" ),
+    line.Printf( _( "Change module '%s' (from '%s') to '%s'" ),
                  GetChars( aModule->GetReference() ),
                  oldFootprintFPID.Format().c_str(),
                  aNewFootprintFPID.Format().c_str() );
@@ -455,17 +455,13 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     // Update pad netnames ( when possible)
     for( D_PAD* pad = aNewModule->Pads(); pad != NULL; pad = pad->Next() )
     {
-        pad->SetNetname( wxEmptyString );
-        pad->SetNet( 0 );
+        pad->SetNet( NETINFO_LIST::UNCONNECTED );
         D_PAD*  old_pad = aOldModule->Pads();
 
         for( ; old_pad != NULL; old_pad = old_pad->Next() )
         {
             if( pad->PadNameEqual( old_pad ) )
-            {
-                pad->SetNetname( old_pad->GetNetname() );
                 pad->SetNet( old_pad->GetNet() );
-            }
         }
     }
 

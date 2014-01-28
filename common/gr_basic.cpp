@@ -396,15 +396,22 @@ void GRSetBrush( wxDC* DC, EDA_COLOR_T Color, bool fill )
        || s_DC_lastbrushfill  != fill
        || s_DC_lastDC != DC  )
     {
-        wxBrush DrawBrush;
-        DrawBrush.SetColour( MakeColour( Color ) );
+        wxBrush brush;
+
+        brush.SetColour( MakeColour( Color ) );
 
         if( fill )
-            DrawBrush.SetStyle( wxSOLID );
+#if wxCHECK_VERSION( 3, 0, 0 )
+            brush.SetStyle( wxBRUSHSTYLE_SOLID );
         else
-            DrawBrush.SetStyle( wxTRANSPARENT );
+            brush.SetStyle( wxBRUSHSTYLE_TRANSPARENT );
+#else
+            brush.SetStyle( wxSOLID );
+        else
+            brush.SetStyle( wxTRANSPARENT );
+#endif
 
-        DC->SetBrush( DrawBrush );
+        DC->SetBrush( brush );
 
         s_DC_lastbrushcolor = Color;
         s_DC_lastbrushfill  = fill;
@@ -1444,12 +1451,12 @@ EDA_COLOR_T ColorMix( EDA_COLOR_T aColor1, EDA_COLOR_T aColor2 )
 }
 
 
-EDA_COLOR_T ColorByName( const wxChar *aName )
+EDA_COLOR_T ColorByName( const wxString& aName )
 {
     // look for a match in the palette itself
     for( EDA_COLOR_T trying = BLACK; trying < NBCOLORS; trying = NextColor(trying) )
     {
-        if( 0 == wxStricmp( aName, g_ColorRefs[trying].m_Name ) )
+        if( 0 == aName.CmpNoCase( g_ColorRefs[trying].m_Name ) )
             return trying;
     }
 

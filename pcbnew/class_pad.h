@@ -119,29 +119,11 @@ public:
     }
 
     /**
-     * Function SetNetname
-     * @param aNetname: the new netname
-     */
-    void SetNetname( const wxString& aNetname );
-
-    /**
-     * Function GetNetname
-     * @return const wxString& - the full netname
-     */
-    const wxString& GetNetname() const { return m_Netname; }
-
-    /**
-     * Function GetShortNetname
-     * @return const wxString& - the short netname
-     */
-    const wxString& GetShortNetname() const { return m_ShortNetname; }
-
-    /**
      * Function GetShape
      * @return the shape of this pad.
      */
-    PAD_SHAPE_T GetShape() const                { return m_PadShape; }
-    void SetShape( PAD_SHAPE_T aShape )         { m_PadShape = aShape; m_boundingRadius = -1; }
+    PAD_SHAPE_T GetShape() const                { return m_padShape; }
+    void SetShape( PAD_SHAPE_T aShape )         { m_padShape = aShape; m_boundingRadius = -1; }
 
     void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }   // was overload
     const wxPoint& GetPosition() const          { return m_Pos; }   // was overload
@@ -183,8 +165,9 @@ public:
      */
     double  GetOrientation() const { return m_Orient; }
 
-    void SetDrillShape( PAD_SHAPE_T aDrillShape ) { m_DrillShape = aDrillShape; }
-    PAD_SHAPE_T GetDrillShape() const           { return m_DrillShape; }
+    void SetDrillShape( PAD_DRILL_SHAPE_T aDrillShape )
+        { m_drillShape = aDrillShape; }
+    PAD_DRILL_SHAPE_T GetDrillShape() const     { return m_drillShape; }
 
     void SetLayerMask( LAYER_MSK aLayerMask )   { m_layerMask = aLayerMask; }
     LAYER_MSK GetLayerMask() const              { return m_layerMask; }
@@ -362,7 +345,7 @@ public:
     {
         // Any member function which would affect this calculation should set
         // m_boundingRadius to -1 to re-trigger the calculation from here.
-        // Currently that is only m_Size, m_DeltaSize, and m_PadShape accessors.
+        // Currently that is only m_Size, m_DeltaSize, and m_padShape accessors.
         if( m_boundingRadius == -1 )
         {
             m_boundingRadius = boundingRadius();
@@ -469,10 +452,6 @@ private:
 
     int         m_boundingRadius;  ///< radius of the circle containing the pad shape
 
-
-    wxString    m_Netname;         ///< Full net name like /mysheet/mysubsheet/vout used by Eeschema
-    wxString    m_ShortNetname;    ///< short net name, like vout from /mysheet/mysubsheet/vout
-
     /// Pad name (4 char) or a long identifier (used in pad name
     /// comparisons because this is faster than string comparison)
     union
@@ -484,7 +463,7 @@ private:
 
     wxPoint     m_Pos;              ///< pad Position on board
 
-    PAD_SHAPE_T m_PadShape;         ///< Shape: PAD_CIRCLE, PAD_RECT, PAD_OVAL, PAD_TRAPEZOID
+    PAD_SHAPE_T m_padShape;         ///< Shape: PAD_CIRCLE, PAD_RECT, PAD_OVAL, PAD_TRAPEZOID
 
 
     int         m_SubRatsnest;      ///< variable used in rats nest computations
@@ -496,7 +475,8 @@ private:
 
     wxSize      m_Size;             ///< X and Y size ( relative to orient 0)
 
-    PAD_SHAPE_T m_DrillShape;       ///< Shape PAD_CIRCLE, PAD_OVAL
+    PAD_DRILL_SHAPE_T m_drillShape; ///< PAD_DRILL_NONE, PAD_DRILL_CIRCLE, PAD_DRILL_OBLONG
+
 
     /**
      * m_Offset is useful only for oblong pads (it can be used for other

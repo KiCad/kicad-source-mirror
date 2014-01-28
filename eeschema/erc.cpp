@@ -36,7 +36,6 @@
 #include <netlist.h>
 #include <class_netlist_object.h>
 #include <lib_pin.h>
-#include <protos.h>
 #include <erc.h>
 #include <sch_marker.h>
 #include <sch_component.h>
@@ -83,7 +82,7 @@
  */
 
 // Messages for matrix rows:
-const wxChar* CommentERC_H[] =
+const wxString CommentERC_H[] =
 {
     _( "Input Pin.........." ),
     _( "Output Pin........." ),
@@ -95,12 +94,11 @@ const wxChar* CommentERC_H[] =
     _( "Power Output Pin..." ),
     _( "Open Collector....." ),
     _( "Open Emitter......." ),
-    _( "No Connection......" ),
-    NULL
+    _( "No Connection......" )
 };
 
 // Messages for matrix columns
-const wxChar* CommentERC_V[] =
+const wxString CommentERC_V[] =
 {
     _( "Input Pin" ),
     _( "Output Pin" ),
@@ -112,8 +110,7 @@ const wxChar* CommentERC_V[] =
     _( "Power Output Pin" ),
     _( "Open Collector" ),
     _( "Open Emitter" ),
-    _( "No Connection" ),
-    NULL
+    _( "No Connection" )
 };
 
 

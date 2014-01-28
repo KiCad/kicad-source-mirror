@@ -53,7 +53,6 @@
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     BOARD_CONNECTED_ITEM( aBoard, PCB_ZONE_AREA_T )
 {
-    SetNet( -1 );                               // Net number for fast comparisons
     m_CornerSelection = -1;
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = 0;                             // How to fill areas: 0 = use filled polygons, != 0 fill with segments
@@ -135,31 +134,6 @@ const wxPoint& ZONE_CONTAINER::GetPosition() const
     static const wxPoint dummy;
 
     return m_Poly ? GetCornerPosition( 0 ) : dummy;
-}
-
-
-void ZONE_CONTAINER::SetNet( int aNetCode )
-{
-    BOARD_CONNECTED_ITEM::SetNet( aNetCode );
-
-    if( aNetCode < 0 )
-        return;
-
-    BOARD* board = GetBoard();
-
-    if( board )
-    {
-        NETINFO_ITEM* net = board->FindNet( aNetCode );
-
-        if( net )
-            m_Netname = net->GetNetname();
-        else
-            m_Netname.Empty();
-    }
-    else
-    {
-        m_Netname.Empty();
-    }
 }
 
 
@@ -658,7 +632,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         else // a netcode < 0 is an error
         {
             msg = wxT( " [" );
-            msg << m_Netname + wxT( "]" );
+            msg << GetNetname() + wxT( "]" );
             msg << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
 
@@ -849,20 +823,6 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
 }
 
 
-bool ZONE_CONTAINER::SetNetNameFromNetCode( void )
-{
-    NETINFO_ITEM* net;
-
-    if( m_Parent && ( net = ( (BOARD*) m_Parent )->FindNet( GetNet() ) ) )
-    {
-        m_Netname = net->GetNetname();
-        return true;
-    }
-
-    return false;
-}
-
-
 ZoneConnection ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
 {
     if( aPad == NULL || aPad->GetZoneConnection() == UNDEFINED_CONNECTION )
@@ -928,7 +888,7 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
         else
         {   // A netcode < 0 is an error:
             // Netname not found or area not initialised
-            text << wxT( " [" ) << m_Netname << wxT( "]" );
+            text << wxT( " [" ) << GetNetname() << wxT( "]" );
             text << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
     }

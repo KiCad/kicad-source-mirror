@@ -42,7 +42,6 @@
 #include <pcbnew_id.h>
 #include <pcbnew.h>
 #include <module_editor_frame.h>
-#include <protos.h>
 
 #include <class_board.h>
 #include <class_module.h>

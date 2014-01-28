@@ -424,7 +424,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
                                                      * trapezoidal pads are considered as rect
                                                      * pad shape having they boudary box size */
 
-    switch( m_PadShape )
+    switch( GetShape() )
     {
     case PAD_CIRCLE:
         dx = KiROUND( dx * aCorrectionFactor );
@@ -459,7 +459,6 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer
         }
         break;
 
-    default:
     case PAD_TRAPEZOID:
         psize.x += std::abs( m_DeltaSize.y );
         psize.y += std::abs( m_DeltaSize.x );
@@ -550,7 +549,7 @@ void D_PAD::BuildPadShapePolygon( CPOLYGONS_LIST& aCornerBuffer,
     wxPoint corners[4];
     wxPoint PadShapePos = ReturnShapePos();         /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
-    switch( m_PadShape )
+    switch( GetShape() )
     {
     case PAD_CIRCLE:
     case PAD_OVAL:
@@ -558,7 +557,6 @@ void D_PAD::BuildPadShapePolygon( CPOLYGONS_LIST& aCornerBuffer,
                                               aSegmentsPerCircle, aCorrectionFactor );
         break;
 
-    default:
     case PAD_TRAPEZOID:
     case PAD_RECT:
         BuildPadPolygon( corners, aInflateValue, m_Orient );

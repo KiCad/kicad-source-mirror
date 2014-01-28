@@ -1288,6 +1288,10 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool aUsePrefix )
 
                 sprintPinNetName( netName , wxT( "N-%.6d" ), pin );
 
+                //Replace parenthesis with underscore to prevent parse issues with Simulators:
+                netName.Replace(wxT("("),wxT("_"));
+                netName.Replace(wxT(")"),wxT("_"));
+
                 if( netName.IsEmpty() )
                     netName = wxT( "?" );
 
