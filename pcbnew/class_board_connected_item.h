@@ -70,6 +70,12 @@ public:
 
     BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem );
 
+    ///> @copydoc BOARD_ITEM::IsConnected()
+    bool IsConnected() const
+    {
+        return true;
+    }
+
     /**
      * Function GetNet
      * @return int - the net code.

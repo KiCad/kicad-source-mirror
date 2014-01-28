@@ -94,6 +94,16 @@ public:
     virtual void SetPosition( const wxPoint& aPos ) = 0;
 
     /**
+     * Function IsConnected()
+     * Returns information if the object is derived from BOARD_CONNECTED_ITEM.
+     * @return True if the object is of BOARD_CONNECTED_ITEM type, false otherwise.
+     */
+    virtual bool IsConnected() const
+    {
+        return false;
+    }
+
+    /**
      * A value of wxPoint(0,0) which can be passed to the Draw() functions.
      */
     static wxPoint ZeroOffset;
