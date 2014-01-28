@@ -384,7 +384,6 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     //close the editor
-    SaveSettings();
     Destroy();
 }
 

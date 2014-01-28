@@ -29,7 +29,7 @@ While exploring the possibility of local caching of the zip file, I discovered
 this command to retrieve the time stamp of the last commit into any particular
 repo:
 
- $time curl -I -i https://api.github.com/repos/KiCad/Mounting_Holes.pretty
+ $time curl -I -i https://api.github.com/repos/KiCad/Mounting_Holes.pretty/commits
 
 This gets just the header to what would otherwise return information on the repo
 in JSON format, and is reasonably faster than actually getting the repo
