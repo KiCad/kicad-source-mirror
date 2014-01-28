@@ -116,6 +116,121 @@ public:
 };
 
 
+class NETINFO_MAPPING
+{
+public:
+    /**
+     * Function SetBoard
+     * Sets a BOARD object that is used to prepare the net code map.
+     */
+    void SetBoard( const BOARD* aBoard )
+    {
+        m_board = aBoard;
+        Update();
+    }
+
+    /**
+     * Function Update
+     * Prepares a mapping for net codes so they can be saved as consecutive numbers.
+     * To retrieve a mapped net code, use translateNet() function after calling this.
+     */
+    void Update();
+
+    /**
+     * Function Translate
+     * Translates net number according to the map prepared by Update() function. It
+     * allows to have items stored with consecutive net codes.
+     * @param aNetCode is an old net code.
+     * @return Net code that follows the mapping.
+     */
+    int Translate( int aNetCode ) const;
+
+    ///> Wrapper class, so you can iterate through NETINFO_ITEM*s, not
+    ///> std::pair<int/wxString, NETINFO_ITEM*>
+    class iterator
+    {
+    public:
+        iterator( std::map<int, int>::const_iterator aIter, const NETINFO_MAPPING* aMapping ) :
+            m_iterator( aIter ), m_mapping( aMapping )
+        {
+        }
+
+        /// pre-increment operator
+        const iterator& operator++()
+        {
+            ++m_iterator;
+
+            return *this;
+        }
+
+        /// post-increment operator
+        iterator operator++( int )
+        {
+            iterator ret = *this;
+            ++m_iterator;
+
+            return ret;
+        }
+
+        NETINFO_ITEM* operator*() const;
+
+        NETINFO_ITEM* operator->() const;
+
+        bool operator!=( const iterator& aOther ) const
+        {
+            return m_iterator != aOther.m_iterator;
+        }
+
+        bool operator==( const iterator& aOther ) const
+        {
+            return m_iterator == aOther.m_iterator;
+        }
+
+    private:
+        std::map<int, int>::const_iterator m_iterator;
+        const NETINFO_MAPPING* m_mapping;
+    };
+
+    /**
+     * Function begin()
+     * Returns iterator to the first entry in the mapping.
+     * NOTE: The entry is a pointer to the original NETINFO_ITEM object, this it contains
+     * not mapped net code.
+     */
+    iterator begin() const
+    {
+        return iterator( m_netMapping.begin(), this );
+    }
+
+    /**
+     * Function end()
+     * Returns iterator to the last entry in the mapping.
+     * NOTE: The entry is a pointer to the original NETINFO_ITEM object, this it contains
+     * not mapped net code.
+     */
+    iterator end() const
+    {
+        return iterator( m_netMapping.end(), this );
+    }
+
+    /**
+     * Function GetSize
+     * @return Number of mapped nets (i.e. not empty nets for a given BOARD object).
+     */
+    int GetSize() const
+    {
+        return m_netMapping.size();
+    }
+
+private:
+    ///> Board for which mapping is prepared
+    const BOARD* m_board;
+
+    ///> Map that allows saving net codes with consecutive numbers (for compatibility reasons)
+    std::map<int, int> m_netMapping;
+};
+
+
 /**
  * Class NETINFO
  * is a container class for NETINFO_ITEM elements, which are the nets.  That makes
@@ -304,16 +419,12 @@ private:
      */
     int getFreeNetCode() const;
 
-    BOARD*                      m_Parent;
+    BOARD* m_Parent;
 
     NETNAMES_MAP m_netNames;                    ///< map for a fast look up by net names
     NETCODES_MAP m_netCodes;                    ///< map for a fast look up by net codes
 
-    static int m_newNetCode;                    ///< number that has a *high* chance to be unused
-                                                ///< (to be sure, it is advised to use
-                                                ///< getFreeNetCode() function)
-
-    std::vector<D_PAD*>         m_PadsFullList; ///< contains all pads, sorted by pad's netname.
+    std::vector<D_PAD*> m_PadsFullList;         ///< contains all pads, sorted by pad's netname.
                                                 ///< can be used in ratsnest calculations.
 };
 

@@ -2899,6 +2899,8 @@ do { \
 
 void LEGACY_PLUGIN::SaveBOARD( const BOARD* aBoard ) const
 {
+    m_mapping->SetBoard( aBoard );
+
     saveGENERAL( aBoard );
 
     saveSHEET( aBoard );
@@ -2947,7 +2949,7 @@ void LEGACY_PLUGIN::saveGENERAL( const BOARD* aBoard ) const
     fprintf( m_fp, "Nzone %d\n",            aBoard->GetNumSegmZone() );
     fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( aBoard->GetDesignSettings().GetBoardThickness() ).c_str() );
     fprintf( m_fp, "Nmodule %d\n",          aBoard->m_Modules.GetCount() );
-    fprintf( m_fp, "Nnets %d\n",            aBoard->GetNetCount() );
+    fprintf( m_fp, "Nnets %d\n",            m_mapping->GetSize() );
     fprintf( m_fp, "$EndGENERAL\n\n" );
 }
 
@@ -3088,9 +3090,11 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
 {
     // save the nets
-    int netcount = aBoard->GetNetCount();
-    for( int i = 0; i < netcount;  ++i )
-        saveNETINFO_ITEM( aBoard->FindNet( i ) );
+    for( NETINFO_MAPPING::iterator net = m_mapping->begin(), netEnd = m_mapping->end();
+            net != netEnd; ++net )
+    {
+        saveNETINFO_ITEM( *net );
+    }
 
     // Saved nets do not include netclass names, so save netclasses after nets.
     saveNETCLASSES( &aBoard->m_NetClasses );
@@ -3148,7 +3152,8 @@ void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
 void LEGACY_PLUGIN::saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const
 {
     fprintf( m_fp, "$EQUIPOT\n" );
-    fprintf( m_fp, "Na %d %s\n", aNet->GetNet(), EscapedUTF8( aNet->GetNetname() ).c_str() );
+    fprintf( m_fp, "Na %d %s\n", m_mapping->Translate( aNet->GetNet() ),
+                                 EscapedUTF8( aNet->GetNetname() ).c_str() );
     fprintf( m_fp, "St %s\n", "~" );
     fprintf( m_fp, "$EndEQUIPOT\n" );
 
@@ -4417,7 +4422,8 @@ LEGACY_PLUGIN::LEGACY_PLUGIN() :
     m_props( 0 ),
     m_reader( 0 ),
     m_fp( 0 ),
-    m_cache( 0 )
+    m_cache( 0 ),
+    m_mapping( new NETINFO_MAPPING() )
 {
     init( NULL );
 }
@@ -4426,4 +4432,5 @@ LEGACY_PLUGIN::LEGACY_PLUGIN() :
 LEGACY_PLUGIN::~LEGACY_PLUGIN()
 {
     delete m_cache;
+    delete m_mapping;
 }

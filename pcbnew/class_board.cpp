@@ -2700,31 +2700,6 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             }
         }
     }
-
-    // Verify zone net names validity:
-    // After schematic changes, a zone can have a non existing net name.
-    // It should be reported
-    if( aReporter && aReporter->ReportErrors() )
-    {
-        //Loop through all copper zones
-        for( i = 0; i < m_ZoneDescriptorList.size(); i++ )
-        {
-            ZONE_CONTAINER* zone = m_ZoneDescriptorList[i];
-
-            if( zone->GetNet() >= 0 || !zone->IsOnCopperLayer() )
-                continue;
-
-            // Net name not valid, report error
-            wxString coord;
-            coord << zone->GetPosition();
-            msg.Printf( _( "** Error: Zone '%s' layer '%s'"
-                           " has non-existent net name \"%s\" **\n" ),
-                        GetChars( coord ),
-                        GetChars( zone->GetLayerName() ),
-                        GetChars( zone->GetNetname() ) );
-            aReporter->Report( msg );
-        }
-    }
 }
 
 /* Extracts the board outlines and build a closed polygon
