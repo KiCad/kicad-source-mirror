@@ -524,34 +524,33 @@ public:
     RN_DATA( const BOARD* aBoard ) : m_board( aBoard ) {}
 
     /**
-     * Function UpdateItem()
-     * Updates ratsnest data for an item.
-     * @param aItem is an item to be updated.
+     * Function Add()
+     * Adds an item to the ratsnest data.
+     * @param aItem is an item to be added.
      */
-    void Update( const BOARD_CONNECTED_ITEM* aItem );
+    void Add( const BOARD_ITEM* aItem );
 
     /**
-     * Function UpdateItem()
-     * Updates ratsnest data for a module.
-     * @param aItem is a module to be updated.
+     * Function Remove()
+     * Removes an item from the ratsnest data.
+     * @param aItem is an item to be updated.
      */
-    void Update( const MODULE* aModule );
+    void Remove( const BOARD_ITEM* aItem );
+
+    /**
+     * Function Update()
+     * Updates the ratsnest data for an item.
+     * @param aItem is an item to be updated.
+     */
+    void Update( const BOARD_ITEM* aItem );
 
     /**
      * Function AddSimple()
      * Sets an item to be drawn in simple mode (ie. one line per node, instead of full ratsnest).
-     * It is used for drawing temporary ratsnest, eg. while moving an item.
+     * It is used for drawing quick, temporary ratsnest, eg. while moving an item.
      * @param aItem is an item to be drawn in simple node.
      */
-    void AddSimple( const BOARD_CONNECTED_ITEM* aItem );
-
-    /**
-     * Function AddSimple()
-     * Sets a module to be drawn in simple mode (ie. one line per node, instead of full ratsnest).
-     * It is used for drawing temporary ratsnest, eg. while moving a module.
-     * @param aModule is a module to be drawn in simple node.
-     */
-    void AddSimple( const MODULE* aModule );
+    void AddSimple( const BOARD_ITEM* aItem );
 
     /**
      * Function ClearSimple()

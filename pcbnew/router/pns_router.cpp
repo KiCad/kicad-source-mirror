@@ -631,7 +631,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
             newBI->ClearFlags();
             m_view->Add( newBI );
             m_board->Add( newBI );
-            m_board->GetRatsnest()->Update( static_cast<BOARD_CONNECTED_ITEM*>( newBI ) );
+            m_board->GetRatsnest()->Update( newBI );
             newBI->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
     }

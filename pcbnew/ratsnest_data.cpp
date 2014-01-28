@@ -673,34 +673,45 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
 }
 
 
+void RN_DATA::AddSimple( const BOARD_ITEM* aItem )
+{
+    int net;
+
+    if( aItem->IsConnected() )
+    {
+        const BOARD_CONNECTED_ITEM* item = static_cast<const BOARD_CONNECTED_ITEM*>( aItem );
+        net = item->GetNet();
+
+        if( net < 1 )           // do not process unconnected items
+            return;
+
+        // Get list of nodes responding to the item
+        std::list<RN_NODE_PTR> nodes = m_nets[net].GetNodes( item );
+        std::list<RN_NODE_PTR>::iterator it, itEnd;
+
+        for( it = nodes.begin(), itEnd = nodes.end(); it != itEnd; ++it )
+            m_nets[net].AddSimpleNode( *it );
+    }
+    else if( aItem->Type() == PCB_MODULE_T )
+    {
+        const MODULE* module = static_cast<const MODULE*>( aItem );
+
+        for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+            AddSimple( pad );
+
+        return;
+    }
+    else
+        return;
+}
+
+
 void RN_NET::ClearSimple()
 {
     BOOST_FOREACH( const RN_NODE_PTR& node, m_simpleNodes )
         node->SetFlag( false );
 
     m_simpleNodes.clear();
-}
-
-
-void RN_DATA::AddSimple( const BOARD_CONNECTED_ITEM* aItem )
-{
-    int net = aItem->GetNet();
-    if( net < 1 )       // do not process unconnected items
-        return;
-
-    // Get list of nodes responding to the item
-    std::list<RN_NODE_PTR> nodes = m_nets[net].GetNodes( aItem );
-    std::list<RN_NODE_PTR>::iterator it, itEnd;
-
-    for( it = nodes.begin(), itEnd = nodes.end(); it != itEnd; ++it )
-        m_nets[net].AddSimpleNode( *it );
-}
-
-
-void RN_DATA::AddSimple( const MODULE* aModule )
-{
-    for( const D_PAD* pad = aModule->Pads().GetFirst(); pad; pad = pad->Next() )
-        AddSimple( pad );
 }
 
 
@@ -762,45 +773,51 @@ void RN_DATA::updateNet( int aNetCode )
 }
 
 
-void RN_DATA::Update( const BOARD_CONNECTED_ITEM* aItem )
+void RN_DATA::Add( const BOARD_ITEM* aItem )
 {
-    int net = aItem->GetNet();
-    if( net < 1 )           // do not process unconnected items
+    int net;
+
+    if( aItem->IsConnected() )
+    {
+        net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNet();
+        if( net < 1 )           // do not process unconnected items
+            return;
+    }
+    else if( aItem->Type() == PCB_MODULE_T )
+    {
+        const MODULE* module = static_cast<const MODULE*>( aItem );
+        for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        {
+            net = pad->GetNet();
+
+            if( net < 1 )       // do not process unconnected items
+                continue;
+
+            m_nets[net].AddItem( pad );
+        }
+
+        return;
+    }
+    else
         return;
 
     switch( aItem->Type() )
     {
     case PCB_PAD_T:
-    {
-        const D_PAD* pad = static_cast<const D_PAD*>( aItem );
-        m_nets[net].RemoveItem( pad );
-        m_nets[net].AddItem( pad );
-    }
-    break;
+        m_nets[net].AddItem( static_cast<const D_PAD*>( aItem ) );
+        break;
 
     case PCB_TRACE_T:
-    {
-        const TRACK* track = static_cast<const TRACK*>( aItem );
-        m_nets[net].RemoveItem( track );
-        m_nets[net].AddItem( track );
-    }
-    break;
+        m_nets[net].AddItem( static_cast<const TRACK*>( aItem ) );
+        break;
 
     case PCB_VIA_T:
-    {
-        const SEGVIA* via = static_cast<const SEGVIA*>( aItem );
-        m_nets[net].RemoveItem( via );
-        m_nets[net].AddItem( via );
-    }
-    break;
+        m_nets[net].AddItem( static_cast<const SEGVIA*>( aItem ) );
+        break;
 
     case PCB_ZONE_AREA_T:
-    {
-        const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( aItem );
-        m_nets[net].RemoveItem( zone);
-        m_nets[net].AddItem( zone );
-    }
-    break;
+        m_nets[net].AddItem( static_cast<const ZONE_CONTAINER*>( aItem ) );
+        break;
 
     default:
         break;
@@ -808,18 +825,62 @@ void RN_DATA::Update( const BOARD_CONNECTED_ITEM* aItem )
 }
 
 
-void RN_DATA::Update( const MODULE* aModule )
+void RN_DATA::Remove( const BOARD_ITEM* aItem )
 {
-    for( const D_PAD* pad = aModule->Pads().GetFirst(); pad; pad = pad->Next() )
-    {
-        int net = pad->GetNet();
+    int net;
 
-        if( net > 0 )       // do not process unconnected items
-        {
-            m_nets[net].RemoveItem( pad );
-            m_nets[net].AddItem( pad );
-        }
+    if( aItem->IsConnected() )
+    {
+        net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNet();
+        if( net < 1 )           // do not process unconnected items
+            return;
     }
+    else if( aItem->Type() == PCB_MODULE_T )
+    {
+        const MODULE* module = static_cast<const MODULE*>( aItem );
+        for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        {
+            net = pad->GetNet();
+
+            if( net < 1 )       // do not process unconnected items
+                continue;
+
+            m_nets[net].RemoveItem( pad );
+        }
+
+        return;
+    }
+    else
+        return;
+
+    switch( aItem->Type() )
+    {
+    case PCB_PAD_T:
+        m_nets[net].RemoveItem( static_cast<const D_PAD*>( aItem ) );
+        break;
+
+    case PCB_TRACE_T:
+        m_nets[net].RemoveItem( static_cast<const TRACK*>( aItem ) );
+        break;
+
+    case PCB_VIA_T:
+        m_nets[net].RemoveItem( static_cast<const SEGVIA*>( aItem ) );
+        break;
+
+    case PCB_ZONE_AREA_T:
+        m_nets[net].RemoveItem( static_cast<const ZONE_CONTAINER*>( aItem ) );
+        break;
+
+    default:
+        break;
+    }
+}
+
+
+void RN_DATA::Update( const BOARD_ITEM* aItem )
+{
+    Remove( aItem );
+    Add( aItem );
 }
 
 
