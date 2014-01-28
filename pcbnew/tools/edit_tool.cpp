@@ -376,20 +376,9 @@ void EDIT_TOOL::updateRatsnest( bool aRedraw )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( i ) );
 
-        if( item->Type() == PCB_PAD_T || item->Type() == PCB_TRACE_T ||
-                item->Type() == PCB_VIA_T || item->Type() == PCB_ZONE_AREA_T )
-        {
-            ratsnest->Update( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+        ratsnest->Update( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
 
-            if( aRedraw )
-                ratsnest->AddSimple( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
-        }
-        else if( item->Type() == PCB_MODULE_T )
-        {
-            ratsnest->Update( static_cast<MODULE*>( item ) );
-
-            if( aRedraw )
-                ratsnest->AddSimple( static_cast<MODULE*>( item ) );
-        }
+        if( aRedraw )
+            ratsnest->AddSimple( item );
     }
 }
