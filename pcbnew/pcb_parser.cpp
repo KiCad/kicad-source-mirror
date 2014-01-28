@@ -29,6 +29,7 @@
 
 #include <errno.h>
 #include <common.h>
+#include <confirm.h>
 #include <macros.h>
 #include <convert_from_iu.h>
 #include <trigo.h>
@@ -2417,13 +2418,19 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             // Init the net code only, not the netname, to be sure
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
-            zone->BOARD_CONNECTED_ITEM::SetNet( parseInt( "net number" ) );
+            zone->SetNet( parseInt( "net number" ) );
             NeedRIGHT();
             break;
 
         case T_net_name:
             NeedSYMBOLorNUMBER();
-            assert( m_board->FindNet( zone->GetNet() )->GetNetname() == FromUTF8() );
+            if( m_board->FindNet( zone->GetNet() )->GetNetname() != FromUTF8() )
+            {
+                DisplayError( NULL, wxString::Format( _( "There is a zone that belongs to a not "
+                                                         "existing net (%s), you should verify it." ),
+                                                         FromUTF8() ) );
+                zone->SetNet( NETINFO_LIST::UNCONNECTED );
+            }
             NeedRIGHT();
             break;
 

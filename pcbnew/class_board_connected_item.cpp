@@ -63,8 +63,14 @@ void BOARD_CONNECTED_ITEM::SetNet( int aNetCode )
     {
         m_netinfo = board->FindNet( aNetCode );
 
+        // The requested net does not exist, mark it as unconnected
         if( m_netinfo == NULL )
             m_netinfo = board->FindNet( NETINFO_LIST::UNCONNECTED );
+    }
+    else
+    {
+        // There is no board that contains list of nets, the item is orphaned
+        m_netinfo = &NETINFO_LIST::ORPHANED;
     }
 }
 
