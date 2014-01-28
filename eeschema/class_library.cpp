@@ -44,18 +44,18 @@
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
 
-static const wxChar* duplicate_name_msg =
+static const wxString duplicate_name_msg =
 _( "Library <%s> has duplicate entry name <%s>.\n\
 This may cause some unexpected behavior when loading components into a schematic." );
 
 
-bool operator==( const CMP_LIBRARY& aLibrary, const wxChar* aName )
+bool operator==( const CMP_LIBRARY& aLibrary, const wxString& aName )
 {
     return aLibrary.GetName().CmpNoCase( aName ) == 0;
 }
 
 
-bool operator!=( const CMP_LIBRARY& aLibrary, const wxChar* aName )
+bool operator!=( const CMP_LIBRARY& aLibrary, const wxString& aName )
 {
     return !( aLibrary == aName );
 }
@@ -224,10 +224,10 @@ bool CMP_LIBRARY::Conflicts( LIB_COMPONENT* aComponent )
 }
 
 
-LIB_ALIAS* CMP_LIBRARY::FindEntry( const wxChar* aName )
+LIB_ALIAS* CMP_LIBRARY::FindEntry( const wxString& aName )
 {
 
-    LIB_ALIAS_MAP::iterator it = aliases.find( wxString( aName ) );
+    LIB_ALIAS_MAP::iterator it = aliases.find( aName );
 
     if( it != aliases.end() )
         return (*it).second;
@@ -245,7 +245,7 @@ LIB_ALIAS* CMP_LIBRARY::GetFirstEntry()
 }
 
 
-LIB_COMPONENT* CMP_LIBRARY::FindComponent( const wxChar* aName )
+LIB_COMPONENT* CMP_LIBRARY::FindComponent( const wxString& aName )
 {
     LIB_COMPONENT* component = NULL;
     LIB_ALIAS* entry = FindEntry( aName );
@@ -392,12 +392,12 @@ LIB_COMPONENT* CMP_LIBRARY::ReplaceComponent( LIB_COMPONENT* aOldComponent,
 }
 
 
-LIB_ALIAS* CMP_LIBRARY::GetNextEntry( const wxChar* aName )
+LIB_ALIAS* CMP_LIBRARY::GetNextEntry( const wxString& aName )
 {
     if( aliases.empty() )
         return NULL;
 
-    LIB_ALIAS_MAP::iterator it = aliases.find( wxString( aName ) );
+    LIB_ALIAS_MAP::iterator it = aliases.find( aName );
 
     it++;
 
@@ -408,12 +408,12 @@ LIB_ALIAS* CMP_LIBRARY::GetNextEntry( const wxChar* aName )
 }
 
 
-LIB_ALIAS* CMP_LIBRARY::GetPreviousEntry( const wxChar* aName )
+LIB_ALIAS* CMP_LIBRARY::GetPreviousEntry( const wxString& aName )
 {
     if( aliases.empty() )
         return NULL;
 
-    LIB_ALIAS_MAP::iterator it = aliases.find( wxString( aName ) );
+    LIB_ALIAS_MAP::iterator it = aliases.find( aName );
 
     if( it == aliases.begin() )
         it = aliases.end();

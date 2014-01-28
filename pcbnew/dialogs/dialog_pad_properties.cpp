@@ -474,7 +474,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_PadNetNameCtrl->Enable( enable );
     m_LengthPadToDieCtrl->Enable( enable );
 
-    if( m_dummyPad->GetDrillShape() != PAD_OVAL )
+    if( m_dummyPad->GetDrillShape() != PAD_DRILL_OBLONG )
         m_DrillShapeCtrl->SetSelection( 0 );
     else
         m_DrillShapeCtrl->SetSelection( 1 );
@@ -907,11 +907,11 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
     if( m_DrillShapeCtrl->GetSelection() == 0 )
     {
-        aPad->SetDrillShape( PAD_CIRCLE );
+        aPad->SetDrillShape( PAD_DRILL_CIRCLE );
         y = x;
     }
     else
-        aPad->SetDrillShape( PAD_OVAL );
+        aPad->SetDrillShape( PAD_DRILL_OBLONG );
 
     aPad->SetDrillSize( wxSize( x, y ) );
 

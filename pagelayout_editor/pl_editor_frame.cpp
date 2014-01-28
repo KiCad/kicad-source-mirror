@@ -194,6 +194,7 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
                         GetChars( filename ) );
 
         int ii = DisplayExitDialog( this, msg );
+
         switch( ii )
         {
         case wxID_CANCEL:
@@ -228,11 +229,10 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    SaveSettings();
-    wxGetApp().SaveCurrentSetupValues( m_configSettings );
-
     // do not show the window because we do not want any paint event
     Show( false );
+
+    wxGetApp().SaveCurrentSetupValues( m_configSettings );
 
     // On Linux, m_propertiesPagelayout must be destroyed
     // before deleting the main frame to avoid a crash when closing

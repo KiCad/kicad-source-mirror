@@ -108,7 +108,7 @@ int SPECCTRA_DB::findLayerName( const std::string& aLayerName ) const
 }
 
 
-void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IO_ERROR )
+void SPECCTRA_DB::ThrowIOError( const wxString& fmt, ... ) throw( IO_ERROR )
 {
     wxString    errText;
     va_list     args;

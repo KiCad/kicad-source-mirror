@@ -134,7 +134,7 @@ inline void ColorApplyHighlightFlag( EDA_COLOR_T *aColor )
 }
 
 /// Find a color by name
-EDA_COLOR_T ColorByName( const wxChar *aName );
+EDA_COLOR_T ColorByName( const wxString& aName );
 
 /// Find the nearest color match
 EDA_COLOR_T ColorFindNearest( const wxColour &aColor );

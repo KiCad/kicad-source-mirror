@@ -264,7 +264,7 @@ S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR )
     std::auto_ptr< S3D_MASTER > n3D( new S3D_MASTER( NULL ) );
 
     NeedSYMBOLorNUMBER();
-    n3D->m_Shape3DName = FromUTF8();
+    n3D->SetShape3DName( FromUTF8() );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2137,7 +2137,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
                 switch( token )
                 {
                 case T_oval:
-                    pad->SetDrillShape( PAD_OVAL );
+                    pad->SetDrillShape( PAD_DRILL_OBLONG );
                     break;
 
                 case T_NUMBER:

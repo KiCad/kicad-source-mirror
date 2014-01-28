@@ -375,7 +375,6 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    SaveSettings();
     Destroy();
 }
 

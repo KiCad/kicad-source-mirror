@@ -3910,7 +3910,7 @@ public:
      */
     void LoadSESSION( const wxString& filename ) throw( IO_ERROR );
 
-    void ThrowIOError( const wxChar* fmt, ... ) throw( IO_ERROR );
+    void ThrowIOError( const wxString& fmt, ... ) throw( IO_ERROR );
 
     /**
      * Function ExportPCB

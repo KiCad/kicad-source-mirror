@@ -43,6 +43,12 @@ if (APPLE)
     endif( CMAKE_OSX_ARCHITECTURES )
 endif(APPLE)
 
+if (KICAD_BUILD_STATIC)
+    set(LIBPNG_OPTS --enable-static --disable-shared)
+else()
+    set(LIBPNG_OPTS --enable-static --enable-shared)
+endif(KICAD_BUILD_STATIC)
+
 # <SOURCE_DIR> = ${PREFIX}/src/glew
 # There is a Bazaar 'boost scratch repo' in <SOURCE_DIR>/boost and after committing pristine
 # download, the patch is applied.  This lets you regenerate a new patch at any time
@@ -59,11 +65,12 @@ ExternalProject_Add( libpng
     BUILD_IN_SOURCE 1
 
     #PATCH_COMMAND     "true"
-    CONFIGURE_COMMAND  ./configure --prefix=${LIBPNG_ROOT} --enable-static --disable-shared ${LIBPNG_CFLAGS} --disable-dependency-tracking
+    CONFIGURE_COMMAND  ./configure --prefix=${LIBPNG_ROOT} ${LIBPNG_OPTS} ${LIBPNG_CFLAGS} --disable-dependency-tracking
     #BINARY_DIR      "${PREFIX}"
+    UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${LIBPNG_ROOT}"
 
-    BUILD_COMMAND   make
+    BUILD_COMMAND   $(MAKE) 
 
     INSTALL_DIR     "${LIBPNG_ROOT}"
-    INSTALL_COMMAND make install
+    INSTALL_COMMAND  $(MAKE) install
     )

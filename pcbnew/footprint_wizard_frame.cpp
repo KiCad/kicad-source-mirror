@@ -304,8 +304,6 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
  */
 void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    SaveSettings();
-
     if( m_Semaphore )
     {
         m_Semaphore->Post();

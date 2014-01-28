@@ -14,6 +14,9 @@ set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 # reports.
 #
 
+option( USE_KIWAY_DLLS
+    "Build the major modules as DLLs or DSOs, will soon be the norm." OFF )
+
 #for those who bored with uppercase
 option( KICAD_KEEPCASE "turn-off automatic component name conversion to uppercase if selected" )
 
@@ -109,7 +112,7 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 
     set( CMAKE_C_FLAGS_DEBUG   "-g3 -ggdb3 -DDEBUG" )
-    set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG" )
+    set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG -Wno-deprecated-declarations" )
 
     set( CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG" )
     set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG" )
@@ -146,32 +149,50 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         endif()
 
     else()
-        # We build DLL/DSOs from static libraries, so create position independent code
-        # for all cases, since we do not have DLL/DSO specific static libraries.
-        # Subdirectories via add_subdirectores() reference this variable, and it is either set or empty,
-        # empty for Windows.
+        # We build DLL/DSOs from static libraries, so create position independent
+        # code for all cases, since we do not have DLL/DSO specific static
+        # libraries. Subdirectories via add_subdirectores() reference this
+        # variable, and it is either set or empty, empty for Windows.
         set( PIC_FLAG -fPIC )
 
-        set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${PIC_FLAG}" )
+        set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   ${PIC_FLAG}" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PIC_FLAG}" )
 
+        if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+            set( TO_LINKER -XLinker )
+        else()
+            set( TO_LINKER -Wl )
+        endif()
+
         # Thou shalt not link vaporware and tell us it's a valid DSO:
-        set( CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined" )
-        set( CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined" ) # needed by SWIG macros on linux
+        set( CMAKE_SHARED_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
+        set( CMAKE_MODULE_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
 
-        # Set default flags for Release build.
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
-
     endif()
 
-    # quiet GCC 4.8.1 while in boost
+    # quiet GCC while in boost
     if( GCC_VERSION VERSION_GREATER 4.8 OR GCC_VERSION VERSION_EQUAL 4.8 )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedefs" )
     endif()
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing" )
 
     if( APPLE )
+
         set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ASSERTMACROS__ -mmacosx-version-min=10.5" )
+
+        # Allows .dylib relocation in the future
+        set( CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS} -headerpad_max_install_names")
+
+        if( NOT CMAKE_CXX_COMPILER )
+            EXEC_PROGRAM( wx-config ARGS --cc  OUTPUT_VARIABLE CMAKE_C_COMPILER )
+        endif( NOT CMAKE_CXX_COMPILER )
+
+        if( NOT CMAKE_CXX_COMPILER )
+            EXEC_PROGRAM( wx-config ARGS --cxx OUTPUT_VARIABLE CMAKE_CXX_COMPILER )
+        endif( NOT CMAKE_CXX_COMPILER )
+
     endif()
 
 endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
@@ -259,19 +280,6 @@ include( Functions )
 
 include( ExternalProject )
 
-if ( APPLE )
-    set( KICAD_BUILD_STATIC ON)
-
-    if( NOT CMAKE_CXX_COMPILER )
-        EXEC_PROGRAM( wx-config ARGS --cc  OUTPUT_VARIABLE CMAKE_C_COMPILER )
-    endif( NOT CMAKE_CXX_COMPILER )
-
-    if( NOT CMAKE_CXX_COMPILER )
-        EXEC_PROGRAM( wx-config ARGS --cxx OUTPUT_VARIABLE CMAKE_CXX_COMPILER )
-    endif( NOT CMAKE_CXX_COMPILER )
-
-endif( APPLE )
-
 #================================================
 # Find libraries that are needed to build KiCad.
 #================================================
@@ -286,9 +294,35 @@ add_definitions(-DWX_COMPATIBILITY)
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
 
-if ( KICAD_BUILD_STATIC )
+if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
+
+    if( KICAD_BUILD_STATIC AND KICAD_BUILD_DYNAMIC )
+        message(FATAL_ERROR "You can't build STATIC and DYNAMIC together")
+    endif()
+
+    if( KICAD_BUILD_STATIC )
+        message(STATUS "KICAD_BUILD_STATIC set")
+    endif()
+
+    if( KICAD_BUILD_DYNAMIC )
+        message(STATUS "KICAD_BUILD_DYNAMIC set")
+        # TODO - Library packaging/relocation 
+    endif()
+
+    add_custom_target( lib-dependencies
+                       DEPENDS boost cairo glew libpng pixman pkgconfig
+                     )
+
+    include( download_libpng )
+
+    if( KICAD_SCRIPTING_WXPYTHON )
+        message(FATAL_ERROR "KICAD_BUILD_* and SCRIPTING Not Implemented Yet!")
+    else()
+        include( download_wxwidgets )
+        add_dependencies( lib-dependencies libwx )
+    endif( KICAD_SCRIPTING_WXPYTHON )
 
     include( download_pkgconfig )
         set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config")
@@ -297,11 +331,17 @@ if ( KICAD_BUILD_STATIC )
         set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include")
     include( download_pixman )
         set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a")
-    include( download_libpng )
     include( download_cairo )
         set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo")
         set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a")
-endif( KICAD_BUILD_STATIC )
+
+    if( KICAD_BUILD_DYNAMIC AND APPLE ) 
+        add_custom_target( osx_fix_bundles ALL DEPENDS cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
+        add_custom_command(TARGET osx_fix_bundles POST_BUILD COMMAND scripts/osx_fixbundle.sh COMMENT "Migrating dylibs to bundles")
+    endif()
+
+
+endif( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC)
 
 #####################
 # Find GLEW library #
@@ -341,13 +381,16 @@ endif()
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
 
 # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
-if( APPLE )
+# Seems no more needed on wx-3
+if( APPLE AND NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
     find_package( wxWidgets COMPONENTS gl adv html core net base xml QUIET )
 else()
     find_package( wxWidgets COMPONENTS gl aui adv html core net base xml QUIET )
 endif()
-check_find_package_result( wxWidgets_FOUND "wxWidgets" )
 
+if( NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
+check_find_package_result( wxWidgets_FOUND "wxWidgets" )
+endif( NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
 
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
@@ -477,6 +520,26 @@ add_dependencies( polygon boost )
 add_dependencies( pl_editor boost )
 add_dependencies( pnsrouter boost )
 
+
+if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
+add_dependencies( pcbnew lib-dependencies )
+add_dependencies( eeschema lib-dependencies )
+add_dependencies( cvpcb lib-dependencies )
+add_dependencies( gal lib-dependencies )
+add_dependencies( common lib-dependencies )
+add_dependencies( pcbcommon lib-dependencies )
+add_dependencies( 3d-viewer lib-dependencies )
+add_dependencies( pcad2kicadpcb lib-dependencies )
+add_dependencies( polygon lib-dependencies )
+add_dependencies( pl_editor lib-dependencies )
+add_dependencies( pnsrouter lib-dependencies )
+    if ( BUILD_GITHUB_PLUGIN ) 
+    add_dependencies( github_plugin lib-dependencies )
+    endif()
+endif()
+
+if ( KICAD_BUILD_DYNAMIC )
+endif()
 
 #############
 # Resources #

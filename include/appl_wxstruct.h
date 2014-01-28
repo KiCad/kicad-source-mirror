@@ -93,6 +93,8 @@ protected:
     /// The current language setting.
     int                 m_LanguageId;
 
+    void setLanguageId( int aId )       { m_LanguageId = aId; }
+
     /// The file name of the the program selected for browsing pdf files.
     wxString            m_PdfBrowser;
     wxPathList          m_searchPaths;
@@ -176,7 +178,7 @@ public:
      * MacOSX: Needed for file association
      * http://wiki.wxwidgets.org/WxMac-specific_topics
      */
-    virtual void MacOpenFile(const wxString &fileName);
+    virtual void MacOpenFile( const wxString& aFileName );
 
     /**
      * Function InitEDA_Appl
@@ -445,4 +447,4 @@ public:
  */
 DECLARE_APP( EDA_APP )
 
-#endif  /* APPL_WXSTRUCT_H */
+#endif  // APPL_WXSTRUCT_H

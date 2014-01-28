@@ -205,6 +205,16 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* a
 
 #if USE_WORKER_THREADS
 
+        // Even though the PLUGIN API implementation is the place for the
+        // locale toggling, in order to keep LOCAL_IO::C_count at 1 or greater
+        // for the duration of all helper threads, we increment by one here via instantiation.
+        // Only done here because of the multi-threaded nature of this code.
+        // Without this C_count skips in and out of "equal to zero" and causes
+        // needless locale toggling among the threads, based on which of them
+        // are in a PLUGIN::FootprintLoad() function.  And that is occasionally
+        // none of them.
+        LOCALE_IO   top_most_nesting;
+
         // Something which will not invoke a thread copy constructor, one of many ways obviously:
         typedef boost::ptr_vector< boost::thread >  MYTHREADS;
 

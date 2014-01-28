@@ -81,8 +81,6 @@ wxPoint        g_Offset_Module;     /* Distance to offset module trace when movi
  */
 wxString      g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
 
-wxArrayString g_LibraryNames;
-
 // wxWindow* DoPythonStuff(wxWindow* parent); // declaration
 
 IMPLEMENT_APP( EDA_APP )

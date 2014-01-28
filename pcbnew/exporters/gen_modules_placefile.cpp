@@ -55,8 +55,8 @@ class LIST_MOD      // An helper class used to build a list of useful footprints
 {
 public:
     MODULE*       m_Module;         // Link to the actual footprint
-    const wxChar* m_Reference;      // Its schematic reference
-    const wxChar* m_Value;          // Its schematic value
+    wxString      m_Reference;      // Its schematic reference
+    wxString      m_Value;          // Its schematic value
     LAYER_NUM     m_Layer;          // its side (LAYER_N_BACK, or LAYER_N_FRONT)
 };
 

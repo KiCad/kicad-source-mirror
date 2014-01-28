@@ -44,16 +44,11 @@ class FP_LIB_TABLE;
 class FOOTPRINT_VIEWER_FRAME : public PCB_BASE_FRAME
 {
 private:
-    // List of libraries (for selection )
-    wxSashLayoutWindow* m_LibListWindow;
-    wxListBox*          m_LibList;               // The list of libs names
-
-    // List of components in the selected library
-    wxSashLayoutWindow* m_FootprintListWindow;
-    wxListBox*          m_FootprintList;         // The list of footprint names
+    wxListBox*          m_libList;               // The list of libs names
+    wxListBox*          m_footprintList;         // The list of footprint names
 
     // Flags
-    wxSemaphore*        m_Semaphore;             // != NULL if the frame must emulate a modal dialog
+    wxSemaphore*        m_semaphore;             // != NULL if the frame emulates a modal dialog
     wxString            m_configPath;            // subpath for configuration
 
 protected:
@@ -108,7 +103,12 @@ private:
 
     void ReCreateFootprintList();
     void OnIterateFootprintList( wxCommandEvent& event );
-    void DisplayLibInfos();
+
+    /**
+     * Function UpdateTitle
+     * updates the window title with current library information.
+     */
+    void UpdateTitle();
 
     /**
      * Function RedrawActiveWindow

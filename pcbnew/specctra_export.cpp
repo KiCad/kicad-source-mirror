@@ -1416,17 +1416,16 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             switch( aBoard->GetLayerType( pcbLayer2kicad[pcbNdx] ) )
             {
             default:
-            case LT_SIGNAL:
-                layerType = T_signal;       break;
+            case LT_SIGNAL: layerType = T_signal;       break;
+            case LT_POWER:  layerType = T_power;        break;
 
-            case LT_POWER:
-                layerType = T_power;        break;
-
-            case LT_MIXED:
-                layerType = T_mixed;        break;
-
-            case LT_JUMPER:
-                layerType = T_jumper;       break;
+#if 1       // Freerouter does not support type "mixed", only signal and power.
+            // Remap "mixed" to "signal".
+            case LT_MIXED:  layerType = T_signal;       break;
+#else
+            case LT_MIXED:  layerType = T_mixed;        break;
+#endif
+            case LT_JUMPER: layerType = T_jumper;       break;
             }
 
             layer->layer_type = layerType;

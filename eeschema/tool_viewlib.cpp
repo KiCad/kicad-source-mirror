@@ -105,10 +105,10 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
         m_mainToolBar->AddSeparator();
 
-        SelpartBox = new wxComboBox( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
-                                     wxEmptyString, wxDefaultPosition,
-                                     wxSize( 150, -1 ), 0, NULL, wxCB_READONLY );
-        m_mainToolBar->AddControl( SelpartBox );
+        m_selpartBox = new wxComboBox( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
+                                       wxEmptyString, wxDefaultPosition,
+                                       wxSize( 150, -1 ), 0, NULL, wxCB_READONLY );
+        m_mainToolBar->AddControl( m_selpartBox );
 
         m_mainToolBar->AddSeparator();
         m_mainToolBar->AddTool( ID_LIBVIEW_VIEWDOC, wxEmptyString,
@@ -116,7 +116,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
                                 _( "View component documents" ) );
         m_mainToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, false );
 
-        if( m_Semaphore )
+        if( m_semaphore )
         {
             // The library browser is called from a "load component" command
             m_mainToolBar->AddSeparator();
@@ -167,17 +167,17 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     if( component )
         parts_count = std::max( component->GetPartCount(), 1 );
 
-    SelpartBox->Clear();
+    m_selpartBox->Clear();
 
     for( ii = 0; ii < parts_count; ii++ )
     {
         wxString msg;
         msg.Printf( _( "Unit %c" ), 'A' + ii );
-        SelpartBox->Append( msg );
+        m_selpartBox->Append( msg );
     }
 
-    SelpartBox->SetSelection( (m_unit > 0 ) ? m_unit - 1 : 0 );
-    SelpartBox->Enable( parts_count > 1 );
+    m_selpartBox->SetSelection( (m_unit > 0 ) ? m_unit - 1 : 0 );
+    m_selpartBox->Enable( parts_count > 1 );
 
     m_mainToolBar->EnableTool( ID_LIBVIEW_VIEWDOC,
                                entry && ( entry->GetDocFileName() != wxEmptyString ) );

@@ -430,15 +430,15 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         if( aDrawInfo. m_ShowNotPlatedHole )    // Draw a specific hole color
             hole_color = aDrawInfo.m_NPHoleColor;
 
-        switch( m_DrillShape )
+        switch( GetDrillShape() )
         {
-        case PAD_CIRCLE:
+        case PAD_DRILL_CIRCLE:
             if( aDC->LogicalToDeviceXRel( hole ) > MIN_DRAW_WIDTH )
                 GRFilledCircle( aClipBox, aDC, holepos.x, holepos.y, hole, 0,
                                 hole_color, hole_color );
             break;
 
-        case PAD_OVAL:
+        case PAD_DRILL_OBLONG:
             halfsize.x = m_Drill.x >> 1;
             halfsize.y = m_Drill.y >> 1;
 

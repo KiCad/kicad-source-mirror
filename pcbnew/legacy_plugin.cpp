@@ -90,7 +90,7 @@
 typedef LEGACY_PLUGIN::BIU      BIU;
 
 
-#define VERSION_ERROR_FORMAT    _( "File <%s> is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
+#define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
 #define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
 #define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
@@ -1197,7 +1197,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             case 'O':   padshape = PAD_OVAL;        break;
             case 'T':   padshape = PAD_TRAPEZOID;   break;
             default:
-                m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line:%d of module:'%s'" ),
+                m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line: %d of module: '%s'" ),
                                 padchar,
                                 padchar,
                                 m_reader->LineNumber(),
@@ -1243,14 +1243,14 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             BIU offs_x  = biuParse( data, &data );
             BIU offs_y  = biuParse( data, &data );
 
-            PAD_SHAPE_T drShape = PAD_CIRCLE;
+            PAD_DRILL_SHAPE_T drShape = PAD_DRILL_CIRCLE;
 
             data = strtok_r( (char*) data, delims, &saveptr );
             if( data )  // optional shape
             {
                 if( data[0] == 'O' )
                 {
-                    drShape = PAD_OVAL;
+                    drShape = PAD_DRILL_OBLONG;
 
                     data    = strtok_r( NULL, delims, &saveptr );
                     drill_x = biuParse( data );
@@ -1643,7 +1643,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
 {
     S3D_MASTER* t3D = aModule->Models();
 
-    if( !t3D->m_Shape3DName.IsEmpty() )
+    if( !t3D->GetShape3DName().IsEmpty() )
     {
         S3D_MASTER* n3D = new S3D_MASTER( aModule );
 
@@ -1659,7 +1659,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
         {
             char    buf[512];
             ReadDelimitedText( buf, line + SZ( "Na" ), sizeof(buf) );
-            t3D->m_Shape3DName = FROM_UTF8( buf );
+            t3D->SetShape3DName( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Sc" ) )     // Scale
@@ -2772,7 +2772,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in file: <%s>\nline: %d, offset: %d" ),
+        m_error.Printf( _( "invalid float number in file: '%s'\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(),
             m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
@@ -2781,7 +2781,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in file: <%s>\nline: %d, offset: %d" ),
+        m_error.Printf( _( "missing float number in file: '%s'\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(),
             m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
@@ -2809,7 +2809,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in file: <%s>\nline: %d, offset: %d" ),
+        m_error.Printf( _( "invalid float number in file: '%s'\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2817,7 +2817,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in file: <%s>\nline: %d, offset: %d" ),
+        m_error.Printf( _( "missing float number in file: '%s'\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2860,7 +2860,7 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPER
     FILE* fp = wxFopen( aFileName, wxT( "w" ) );
     if( !fp )
     {
-        m_error.Printf( _( "Unable to open file <%s>" ), aFileName.GetData() );
+        m_error.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
         THROW_IO_ERROR( m_error );
     }
 
@@ -2885,7 +2885,7 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPER
 
 wxString LEGACY_PLUGIN::writeError() const
 {
-    return wxString::Format( _( "error writing to file <%s>" ), m_filename.GetData() );
+    return wxString::Format( _( "error writing to file '%s'" ), m_filename.GetData() );
 }
 
 #define CHECK_WRITE_ERROR() \
@@ -3348,7 +3348,7 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
                     fmtBIU( me->GetDrillSize().x ).c_str(),
                     fmtBIUPoint( me->GetOffset() ).c_str() );
 
-    if( me->GetDrillShape() == PAD_OVAL )
+    if( me->GetDrillShape() == PAD_DRILL_OBLONG )
     {
         fprintf( m_fp, " %c %s", 'O', fmtBIUSize( me->GetDrillSize() ).c_str() );
     }
@@ -3513,11 +3513,11 @@ void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 {
     for( S3D_MASTER* t3D = me->Models();  t3D;  t3D = t3D->Next() )
     {
-        if( !t3D->m_Shape3DName.IsEmpty() )
+        if( !t3D->GetShape3DName().IsEmpty() )
         {
             fprintf( m_fp, "$SHAPE3D\n" );
 
-            fprintf( m_fp, "Na %s\n", EscapedUTF8( t3D->m_Shape3DName ).c_str() );
+            fprintf( m_fp, "Na %s\n", EscapedUTF8( t3D->GetShape3DName() ).c_str() );
 
             fprintf(m_fp,
 #if defined(DEBUG)
@@ -4001,7 +4001,7 @@ void LP_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
     }
 
 L_bad_library:
-    THROW_IO_ERROR( wxString::Format( _( "File <%s> is empty or is not a legacy library" ),
+    THROW_IO_ERROR( wxString::Format( _( "File '%s' is empty or is not a legacy library" ),
         m_lib_path.GetData() ) );
 }
 
@@ -4138,7 +4138,7 @@ void LP_CACHE::Save()
     if( !m_writable )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "Legacy library file <%s> is read only" ), m_lib_path.GetData() ) );
+            _( "Legacy library file '%s' is read only" ), m_lib_path.GetData() ) );
     }
 
     wxString tempFileName;
@@ -4157,7 +4157,7 @@ void LP_CACHE::Save()
         if( !fp )
         {
             THROW_IO_ERROR( wxString::Format(
-                _( "Unable to open or create legacy library file <%s>" ),
+                _( "Unable to open or create legacy library file '%s'" ),
                 m_lib_path.GetData() ) );
         }
 
@@ -4183,7 +4183,7 @@ void LP_CACHE::Save()
     if( wxRename( tempFileName, m_lib_path ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "Unable to rename tempfile <%s> to library file <%s>" ),
+            _( "Unable to rename tempfile '%s' to library file '%s'" ),
             tempFileName.GetData(),
             m_lib_path.GetData() ) );
     }
@@ -4296,7 +4296,7 @@ void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath,
 
     if( !m_cache->m_writable )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ), aLibraryPath.GetData() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
     }
 
     std::string footprintName = aFootprint->GetFPID().GetFootprintName();
@@ -4341,7 +4341,7 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath,
 
     if( !m_cache->m_writable )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library <%s> is read only" ), aLibraryPath.GetData() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
     }
 
     std::string footprintName = TO_UTF8( aFootprintName );
@@ -4351,7 +4351,7 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath,
     if( erasedCount != 1 )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library <%s> has no footprint '%s' to delete" ),
+            _( "library '%s' has no footprint '%s' to delete" ),
             aLibraryPath.GetData(), aFootprintName.GetData() ) );
     }
 
@@ -4364,7 +4364,7 @@ void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROP
     if( wxFileExists( aLibraryPath ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library <%s> already exists, will not create a new" ),
+            _( "library '%s' already exists, will not create a new" ),
             aLibraryPath.GetData() ) );
     }
 
@@ -4391,7 +4391,7 @@ bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROP
     if( wxRemove( aLibraryPath ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library <%s> cannot be deleted" ),
+            _( "library '%s' cannot be deleted" ),
             aLibraryPath.GetData() ) );
     }
 

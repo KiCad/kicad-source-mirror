@@ -198,7 +198,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
     {
         wxString layerName = FROM_UTF8( aPath->layer_id.c_str() );
         ThrowIOError( _("Session file uses invalid layer id \"%s\""),
-                        GetChars(layerName) );
+                        GetChars( layerName ) );
     }
 
     TRACK* track = new TRACK( sessionBoard );
@@ -247,7 +247,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
     if( shapeCount == 0 )
     {
-        ThrowIOError( _( "Session via padstack has no shapes") );
+        ThrowIOError( _( "Session via padstack has no shapes" ) );
     }
     else if( shapeCount == 1 )
     {
