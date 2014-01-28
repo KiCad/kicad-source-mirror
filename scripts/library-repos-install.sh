@@ -34,10 +34,10 @@ usage()
     echo ""
     echo "./library-sources-install.sh <cmd>"
     echo "    where <cmd> is one of:"
-    echo "      --install-or-update         (of the library sources.)"
-    echo "      --remove-all-sources        (remove all source trees.)"
+    echo "      --install-or-update         (from github, the library sources.)"
+    echo "      --remove-all-libraries      (remove all *.pretty from $WORKING_TREES/library-repos/. )"
     echo "      --install-prerequisites     (install command tools needed here, run once first.)"
-#    echo "      --uninstall-libraries       (remove KiCad supplied libraries which have been installed.)"
+    echo "      --remove-orphaned-libraries (remove local libraries which have been deleted or renamed at github.)"
     echo ""
     echo "example:"
     echo '    $ ./library-sources-install.sh --install-or-update'
@@ -148,13 +148,65 @@ checkout_or_update_libraries()
 }
 
 
+listcontains()
+{
+    local list=$1
+    local item=$2
+    local ret=1
+    local OIFS=$IFS
+
+    # omit the space character from internal field separator.
+    IFS=$'\n'
+
+    for word in $list; do
+        if [ "$word" == "$item" ]; then
+            ret=0
+            break
+        fi
+    done
+
+    IFS=$OIFS
+    return $ret
+}
+
+
+remove_orphaned_libraries()
+{
+    cd $WORKING_TREES/library-repos
+
+    if [ $? -ne 0 ]; then
+        echo "Directory $WORKING_TREES/library-repos does not exist."
+        echo "The option --remove-orphaned-libraries should be used only after you've run"
+        echo "the --install-or-update at least once."
+        exit 2
+    fi
+
+    detect_pretty_repos
+
+    for mylib in *.pretty; do
+        echo "checking local lib: $mylib"
+
+        if ! listcontains "$PRETTY_REPOS" "$mylib"; then
+            echo "Removing orphaned local library $WORKING_TREES/library-repos/$mylib"
+            rm -rf "$mylib"
+        fi
+    done
+}
+
+
 if [ $# -eq 1 -a "$1" == "--install-or-update" ]; then
     checkout_or_update_libraries
     exit
 fi
 
 
-if [ $# -eq 1 -a "$1" == "--remove-all-sources" ]; then
+if [ $# -eq 1 -a "$1" == "--remove-orphaned-libraries" ]; then
+    remove_orphaned_libraries
+    exit
+fi
+
+
+if [ $# -eq 1 -a "$1" == "--remove-all-libraries" ]; then
     rm -rf "$WORKING_TREES/library-repos"
     exit
 fi
