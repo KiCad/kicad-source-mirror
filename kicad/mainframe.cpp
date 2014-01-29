@@ -174,6 +174,8 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     m_LeftWin->Show( false );
+    // hide main frame, which also forces saving curr pos and size in config
+    Show( false );
 
     Destroy();
 }

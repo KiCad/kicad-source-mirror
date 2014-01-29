@@ -33,17 +33,17 @@ void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
     switch( event.GetId() )
     {
     case ID_FOOTPRINT_WIZARD_NEXT:
-        m_PageList->SetSelection( m_PageList->GetSelection() + 1, true );
+        m_pageList->SetSelection( m_pageList->GetSelection() + 1, true );
         ClickOnPageList( event );
         break;
 
     case ID_FOOTPRINT_WIZARD_PREVIOUS:
-        page = m_PageList->GetSelection() - 1;
+        page = m_pageList->GetSelection() - 1;
 
-        if( page<0 )
+        if( page < 0 )
             page = 0;
 
-        m_PageList->SetSelection( page, true );
+        m_pageList->SetSelection( page, true );
         ClickOnPageList( event );
         break;
 
@@ -195,7 +195,7 @@ void FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard( wxCommandEvent& event )
  */
 void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 {
-    int page = m_PageList->GetSelection();
+    int page = m_pageList->GetSelection();
 
     FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
 
@@ -205,13 +205,13 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
     if( page<0 )
         return;
 
-    int             n = m_ParameterGrid->GetNumberRows();
+    int             n = m_parameterGrid->GetNumberRows();
     wxArrayString   arr;
     wxArrayString   ptList = footprintWizard->GetParameterTypes( page );
 
     for( int i = 0; i<n; i++ )
     {
-        wxString value = m_ParameterGrid->GetCellValue( i, 1 );
+        wxString value = m_parameterGrid->GetCellValue( i, 1 );
 
         // if this parameter is expected to be an internal
         // unit convert it back from the user format

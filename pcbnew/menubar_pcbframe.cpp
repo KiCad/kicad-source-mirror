@@ -190,7 +190,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( submenuexport, ID_GEN_EXPORT_SPECCTRA,
                  _( "&Specctra DSN" ),
                  _( "Export the current board to a \"Specctra DSN\" file" ),
-                 KiBitmap( export_xpm ) );
+                 KiBitmap( export_dsn_xpm ) );
 
     // GenCAD
     AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_GENCADFORMAT,
@@ -206,7 +206,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // IDF3
     AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_IDF3,
                  _( "I&DFv3 Export" ), _( "IDFv3 board and component export" ),
-                 KiBitmap( export_xpm ) );
+                 KiBitmap( export_idf_xpm ) );
 
     AddMenuItem( filesMenu, submenuexport,
                  ID_GEN_EXPORT_FILE, _( "E&xport" ),
