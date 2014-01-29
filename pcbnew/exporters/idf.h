@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013  Cirilo Bernardo
+ * Copyright (C) 2013-2014  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -292,15 +292,7 @@ public:
     }
 
     // push a segment onto the internal list
-    void push( IDF_SEGMENT* item )
-    {
-        // XXX - check that startPoint[N] == endPoint[N -1], otherwise THROW
-        // XXX - a Circle must stand alone; if we add to a circle or add a
-        // circle to an existing list, we should throw an exception.
-        outline.push_back( item );
-        dir += ( outline.back()->endPoint.x - outline.back()->startPoint.x )
-               * ( outline.back()->endPoint.y + outline.back()->startPoint.y );
-    }
+    void push( IDF_SEGMENT* item );
 };
 
 
@@ -459,6 +451,7 @@ private:
     double scale;                           ///< scale from KiCad IU to IDF output units
     double boardThickness;                  ///< total thickness of the PCB
     bool hasBrdOutlineHdr;                  ///< true when a board outline header has been written
+    int refdesIndex;                        ///< index to generate REFDES for modules which have none
 
     double offsetX;                         ///< offset to roughly center the board on the world origin
     double offsetY;
@@ -538,6 +531,8 @@ public:
     bool PlaceComponent( const wxString aComponentFile, const std::string aRefDes,
                          double aXLoc, double aYLoc, double aZLoc,
                          double aRotation, bool isOnTop );
+
+    std::string GetRefDes( void );
 };
 
 

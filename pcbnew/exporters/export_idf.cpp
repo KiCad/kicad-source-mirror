@@ -326,14 +326,20 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
         if( !modfile->Is3DType( S3D_MASTER::FILE3D_IDF ) )
             continue;
 
+        if( refdes.empty() )
+        {
+            refdes = TO_UTF8( aModule->GetReference() );
+
+            if( refdes.empty() || !refdes.compare( "~" ) )
+                refdes = aIDFBoard.GetRefDes();
+        }
+
         double rotz = modfile->m_MatRotation.z + aModule->GetOrientation()/10.0;
         double locx = modfile->m_MatPosition.x;
         double locy = modfile->m_MatPosition.y;
         double locz = modfile->m_MatPosition.z;
 
         bool top = ( aModule->GetLayer() == LAYER_N_BACK ) ? false : true;
-
-        refdes = TO_UTF8( aModule->GetReference() );
 
         if( top )
         {
@@ -358,7 +364,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
         locx += aModule->GetPosition().x * scale + dx;
         locy += -aModule->GetPosition().y * scale + dy;
 
-        aIDFBoard.PlaceComponent(modfile->GetShape3DName(), refdes, locx, locy, locz, rotz, top);
+        aIDFBoard.PlaceComponent( modfile->GetShape3DName(), refdes, locx, locy, locz, rotz, top );
     }
 
     return;
@@ -376,22 +382,30 @@ bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName, double aUseThou )
 
     SetLocaleTo_C_standard();
 
-    idfBoard.Setup( aPcb->GetFileName(), aFullFileName, aUseThou,
-            aPcb->GetDesignSettings().GetBoardThickness() );
+    try
+    {
+        idfBoard.Setup( aPcb->GetFileName(), aFullFileName, aUseThou,
+                        aPcb->GetDesignSettings().GetBoardThickness() );
 
-    // set up the global offsets
-    EDA_RECT bbox = aPcb->ComputeBoundingBox( true );
-    idfBoard.SetOffset( -bbox.Centre().x * idfBoard.GetScale(),
-                         bbox.Centre().y * idfBoard.GetScale() );
+        // set up the global offsets
+        EDA_RECT bbox = aPcb->ComputeBoundingBox( true );
+        idfBoard.SetOffset( -bbox.Centre().x * idfBoard.GetScale(),
+                            bbox.Centre().y * idfBoard.GetScale() );
 
-    // Export the board outline
-    idf_export_outline( aPcb, idfBoard );
+        // Export the board outline
+        idf_export_outline( aPcb, idfBoard );
 
-    // Output the drill holes and module (library) data.
-    for( MODULE* module = aPcb->m_Modules; module != 0; module = module->Next() )
-        idf_export_module( aPcb, module, idfBoard );
+        // Output the drill holes and module (library) data.
+        for( MODULE* module = aPcb->m_Modules; module != 0; module = module->Next() )
+            idf_export_module( aPcb, module, idfBoard );
 
-    idfBoard.Finish();
+        idfBoard.Finish();
+    }
+    catch( IO_ERROR ioe )
+    {
+        wxLogDebug( wxT( "An error occurred attemping export to IDFv3.\n\nError: %s" ),
+                    GetChars( ioe.errorText ) );
+    }
 
     SetLocaleTo_Default();
 
