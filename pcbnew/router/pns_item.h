@@ -28,7 +28,7 @@
 
 #include "pns_layerset.h"
 
-class BOARD_ITEM;
+class BOARD_CONNECTED_ITEM;
 class PNS_NODE;
 
 /**
@@ -94,8 +94,8 @@ public:
     const std::string GetKindStr() const;
 
     ///> Gets/Sets the corresponding parent object in the host application's model (pcbnew)
-    void SetParent( BOARD_ITEM* aParent ) { m_parent = aParent; }
-    BOARD_ITEM* GetParent() const { return m_parent; }
+    void SetParent( BOARD_CONNECTED_ITEM* aParent ) { m_parent = aParent; }
+    BOARD_CONNECTED_ITEM* GetParent() const { return m_parent; }
 
     ///> Net accessors
     int GetNet() const { return m_net; }
@@ -145,7 +145,7 @@ private:
 protected:
     PnsKind m_kind;
 
-    BOARD_ITEM* m_parent;
+    BOARD_CONNECTED_ITEM* m_parent;
     PNS_NODE*   m_world;
     PNS_NODE*   m_owner;
     PNS_LAYERSET m_layers;

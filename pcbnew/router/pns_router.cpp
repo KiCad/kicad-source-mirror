@@ -580,7 +580,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
 
     for( unsigned int i = 0; i < removed.size(); i++ )
     {
-        BOARD_ITEM* parent = removed[i]->GetParent();
+        BOARD_CONNECTED_ITEM* parent = removed[i]->GetParent();
 
         if( parent )
         {
@@ -591,7 +591,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
 
     BOOST_FOREACH( PNS_ITEM* item, added )
     {
-        BOARD_ITEM* newBI = NULL;
+        BOARD_CONNECTED_ITEM* newBI = NULL;
 
         switch( item->GetKind() )
         {
