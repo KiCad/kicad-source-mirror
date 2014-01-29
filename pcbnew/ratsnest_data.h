@@ -573,13 +573,26 @@ public:
     void Recalculate( int aNet = -1 );
 
     /**
-     * Function GetNets()
-     * Returns ratsnest grouped by net numbers.
-     * @return Vector of ratsnest grouped by net numbers.
+     * Function GetNetCount()
+     * Returns the number of nets handled by the ratsnest.
+     * @return Number of the nets.
      */
-    std::vector<RN_NET>& GetNets()
+    int GetNetCount() const
     {
-        return m_nets;
+        return m_nets.size();
+    }
+
+    /**
+     * Function GetNet()
+     * Returns ratsnest grouped by net numbers.
+     * @param aNetCode is the net code.
+     * @return Ratsnest data for a specified net.
+     */
+    RN_NET& GetNet( int aNetCode )
+    {
+        assert( aNetCode > 0 );     // ratsnest does not handle the unconnected net
+
+        return m_nets[aNetCode];
     }
 
 protected:

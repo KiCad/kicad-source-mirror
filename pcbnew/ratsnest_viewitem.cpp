@@ -59,9 +59,11 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
     aGal->SetLineWidth( 1.0 );
     aGal->SetStrokeColor( COLOR4D( 0.8, 0.8, 0.8, 0.2 ) );
 
-    // Draw the temporary ratsnest
-    BOOST_FOREACH( const RN_NET& net, m_data->GetNets() )
+    // Draw the temporary ratsnest (skip the unconnected net [net code == 0])
+    for( int i = 1; i < m_data->GetNetCount(); ++i )
     {
+        const RN_NET& net = m_data->GetNet( i );
+
         if( !net.IsVisible() )
             continue;
 
