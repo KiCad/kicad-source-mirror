@@ -880,7 +880,8 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
             }
         }
 
-        m_ratsnest->GetNets()[zone->GetNet()].RemoveItem( zone );
+        if( zone->GetNet() > 0 )
+            m_ratsnest->GetNet( zone->GetNet() ).RemoveItem( zone );
     }
     break;
 
@@ -890,7 +891,10 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
         m_Modules.Remove( (MODULE*) aBoardItem );
 
         for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-            m_ratsnest->GetNets()[pad->GetNet()].RemoveItem( pad );
+        {
+            if( pad->GetNet() > 0 )
+                m_ratsnest->GetNet( pad->GetNet() ).RemoveItem( pad );
+        }
     }
     break;
 
@@ -898,7 +902,9 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     {
         TRACK* track = static_cast<TRACK*>( aBoardItem );
         m_Track.Remove( track );
-        m_ratsnest->GetNets()[track->GetNet()].RemoveItem( track );
+
+        if( track->GetNet() > 0 )
+            m_ratsnest->GetNet( track->GetNet() ).RemoveItem( track );
     }
     break;
 
@@ -906,7 +912,9 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     {
         SEGVIA* via = static_cast<SEGVIA*>( aBoardItem );
         m_Track.Remove( via );
-        m_ratsnest->GetNets()[via->GetNet()].RemoveItem( via );
+
+        if( via->GetNet() > 0 )
+            m_ratsnest->GetNet( via->GetNet() ).RemoveItem( via );
     }
     break;
 
