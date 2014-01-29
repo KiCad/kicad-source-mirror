@@ -206,7 +206,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, LAYER_MSK aLayerMask, TRACK_
      */
     for( ; ; )
     {
-        if( GetPadFast( aPosition, aLayerMask ) != NULL )
+        if( GetPad( aPosition, aLayerMask ) != NULL )
             return;
 
         /* Test for a via: a via changes the layer mask and can connect a lot
