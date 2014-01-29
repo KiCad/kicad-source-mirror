@@ -193,10 +193,10 @@ public:
      */
     void GetEntryNames( wxArrayString& aNames, bool aSort = true,
                         bool aMakeUpperCase =
-#ifndef KICAD_KEEPCASE
-                                              true
-#else
+#ifdef KICAD_KEEPCASE
                                               false
+#else
+                                              true
 #endif
                         );
 
