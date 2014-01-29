@@ -234,6 +234,8 @@ set( BMAPS_MID
     ercwarn
     erc
     exit
+    export_dsn
+    export_idf
     export_footprint_names
     export_module
     export_options_pad
