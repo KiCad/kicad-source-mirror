@@ -47,17 +47,13 @@ class FOOTPRINT_EDIT_FRAME;
 class FOOTPRINT_WIZARD_FRAME : public PCB_BASE_FRAME
 {
 private:
-    wxSashLayoutWindow* m_PageListWindow;   // < List of libraries (for selection )
-    wxListBox*          m_PageList;         // < The list of pages
-    wxSize m_PageListSize;                  // < size of the window
-
-
-    wxSashLayoutWindow* m_ParameterGridWindow;  // < List of components in the selected library
-    wxGrid*             m_ParameterGrid;        // < The list of parameters
-    wxSize              m_ParameterGridSize;    // < size of the window
+    wxListBox*      m_pageList;             // < The list of pages
+    int             m_pageListWidth;        // < width of the window
+    wxGrid*         m_parameterGrid;        // < The list of parameters
+    int             m_parameterGridWidth;   // < size of the grid
 
     // Flags
-    wxSemaphore*    m_Semaphore;            // < != NULL if the frame must emulate a modal dialog
+    wxSemaphore*    m_semaphore;            // < != NULL if the frame must emulate a modal dialog
     wxString        m_configPath;           // < subpath for configuration
     bool            m_exportRequest;        // < true if the current footprint should be exported
 
