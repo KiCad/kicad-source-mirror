@@ -119,7 +119,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             {
                 Remove( aEvent );
 
-                break;
+                break;       // exit the loop, as there is no further processing for removed items
             }
         }
 
@@ -207,6 +207,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 
     setTransitions();
     updateRatsnest( true );
+    getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
     return 0;
 }
@@ -233,11 +234,13 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
 
-    if( m_dragging )
-        selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-
     setTransitions();
     updateRatsnest( true );
+
+    if( m_dragging )
+        selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    else
+        getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
     return 0;
 }
@@ -264,11 +267,13 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
             item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
     }
 
-    if( m_dragging )
-        selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-
     setTransitions();
     updateRatsnest( true );
+
+    if( m_dragging )
+        selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    else
+        getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
     return 0;
 }

@@ -41,6 +41,8 @@
 #include <class_zone.h>
 #include <class_edge_mod.h>
 
+#include <ratsnest_data.h>
+
 #include <tools/selection_tool.h>
 #include <tool/tool_manager.h>
 
@@ -453,13 +455,14 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     bool        not_found = false;
     bool        reBuild_ratsnest = false;
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
+    RN_DATA* ratsnest = GetBoard()->GetRatsnest();
 
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
 
     bool build_item_list = true;    // if true the list of existing items must be rebuilt
 
-    for( int ii = aList->GetCount()-1; ii >= 0 ; ii--  )
+    for( int ii = aList->GetCount() - 1; ii >= 0 ; ii-- )
     {
         item = (BOARD_ITEM*) aList->GetPickedItem( ii );
         wxASSERT( item );
@@ -519,8 +522,8 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* oldModule = static_cast<MODULE*>( item );
-                oldModule->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ),
-                                                        view ) );
+                oldModule->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ), view ) );
+                oldModule->RunOnChildren( std::bind1st( std::mem_fun( &RN_DATA::Remove ), ratsnest ) );
             }
 
             item->SwapData( image );
@@ -530,8 +533,8 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
-                newModule->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ),
-                                                        view ) );
+                newModule->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), view ) );
+                newModule->RunOnChildren( std::bind1st( std::mem_fun( &RN_DATA::Add ), ratsnest ) );
             }
 
             item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
@@ -577,11 +580,13 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         case UR_ROTATED:
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? m_rotationAngle : -m_rotationAngle );
+            item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
 
         case UR_ROTATED_CLOCKWISE:
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? -m_rotationAngle : m_rotationAngle );
+            item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
 
         case UR_FLIPPED:
@@ -598,6 +603,8 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         }
         break;
         }
+
+        ratsnest->Update( item );
     }
 
     if( not_found )
@@ -605,7 +612,12 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
     // Rebuild pointers and ratsnest that can be changed.
     if( reBuild_ratsnest && aRebuildRatsnet )
-        Compile_Ratsnest( NULL, true );
+    {
+        if( IsGalCanvasActive() )
+            ratsnest->Recalculate();
+        else
+            Compile_Ratsnest( NULL, true );
+    }
 }
 
 

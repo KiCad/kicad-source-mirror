@@ -895,11 +895,18 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     break;
 
     case PCB_TRACE_T:
-    case PCB_VIA_T:
     {
         TRACK* track = static_cast<TRACK*>( aBoardItem );
         m_Track.Remove( track );
         m_ratsnest->GetNets()[track->GetNet()].RemoveItem( track );
+    }
+    break;
+
+    case PCB_VIA_T:
+    {
+        SEGVIA* via = static_cast<SEGVIA*>( aBoardItem );
+        m_Track.Remove( via );
+        m_ratsnest->GetNets()[via->GetNet()].RemoveItem( via );
     }
     break;
 
