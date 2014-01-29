@@ -3,7 +3,7 @@
  *
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013  Cirilo Bernardo
+ * Copyright (C) 2013-2014  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@
 #include <wx/file.h>
 #include <wx/filename.h>
 #include <macros.h>
+#include <richio.h>
 #include <idf.h>
 #include <build_version.h>
 
@@ -311,6 +312,39 @@ void IDF_SEGMENT::SwapEnds( void )
 }
 
 
+void IDF_OUTLINE::push( IDF_SEGMENT* item )
+{
+    if( !outline.empty() )
+    {
+        if( item->IsCircle() )
+        {
+            // not allowed
+            wxString msg = wxT( "INVALID GEOMETRY: a circle is being added to a non-empty outline" );
+            THROW_IO_ERROR( msg );
+        }
+        else
+        {
+            if( outline.back()->IsCircle() )
+            {
+                // we can't add lines to a circle
+                wxString msg = wxT( "INVALID GEOMETRY: a line is being added to a circular outline" );
+                THROW_IO_ERROR( msg );
+            }
+            else if( !item->MatchesStart( outline.back()->endPoint ) )
+            {
+                // startPoint[N] != endPoint[N -1]
+                wxString msg = wxT( "INVALID GEOMETRY: disjoint segments" );
+                THROW_IO_ERROR( msg );
+            }
+        }
+    }
+
+    outline.push_back( item );
+    dir += ( outline.back()->endPoint.x - outline.back()->startPoint.x )
+           * ( outline.back()->endPoint.y + outline.back()->startPoint.y );
+}
+
+
 IDF_DRILL_DATA::IDF_DRILL_DATA( double aDrillDia, double aPosX, double aPosY,
         IDF3::KEY_PLATING aPlating,
         const std::string aRefDes,
@@ -452,6 +486,7 @@ bool IDF_DRILL_DATA::Write( FILE* aLayoutFile )
 
 IDF_BOARD::IDF_BOARD()
 {
+    refdesIndex = 0;
     outlineIndex = 0;
     scale = 1e-6;
     boardThickness = 1.6;       // default to 1.6mm thick boards
@@ -466,7 +501,20 @@ IDF_BOARD::IDF_BOARD()
 
 IDF_BOARD::~IDF_BOARD()
 {
-    Finish();
+    // simply close files if they are open; do not attempt
+    // anything else since a previous exception may have left
+    // data in a bad state.
+    if( layoutFile != NULL )
+    {
+        fclose( layoutFile );
+        layoutFile = NULL;
+    }
+
+    if( libFile != NULL )
+    {
+        fclose( libFile );
+        libFile = NULL;
+    }
 }
 
 
@@ -525,7 +573,7 @@ bool IDF_BOARD::Setup( wxString aBoardName,
             TO_UTF8( brdname.GetFullName() ), useThou ? "THOU" : "MM" );
 
     fprintf( libFile, ".HEADER\n"
-                      "BOARD_FILE 3.0 \"Created by KiCad %s\" %.4d/%.2d/%.2d.%.2d:%.2d:%.2d 1\n"
+                      "LIBRARY_FILE 3.0 \"Created by KiCad %s\" %.4d/%.2d/%.2d.%.2d:%.2d:%.2d 1\n"
                       ".END_HEADER\n\n",
             TO_UTF8( GetBuildVersion() ),
             tdate.GetYear(), tdate.GetMonth() + 1, tdate.GetDay(),
@@ -772,6 +820,16 @@ bool IDF_BOARD::PlaceComponent( const wxString aComponentFile, const std::string
     return IDFLib.PlaceComponent( aComponentFile, aRefDes,
                                   aXLoc, aYLoc, aZLoc,
                                   aRotation, isOnTop );
+}
+
+
+std::string IDF_BOARD::GetRefDes( void )
+{
+    std::ostringstream ostr;
+
+    ostr << "NOREFDES_" << refdesIndex++;
+
+    return ostr.str();
 }
 
 
@@ -1500,9 +1558,11 @@ bool IDF_COMP::parseRec2( const std::string aLine, bool& isNewItem )
         return false;
     }
 
-    teststr.str( "" );
+    teststr.clear();
     teststr << geometry << "_" << partno;
-    isNewItem = parent->RegisterOutline( teststr.str() );
+
+    if( !parent->RegisterOutline( teststr.str() ) )
+        isNewItem = true;
 
     return true;
 }
