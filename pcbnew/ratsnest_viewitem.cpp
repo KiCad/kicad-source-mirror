@@ -57,7 +57,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
     aGal->SetIsStroke( true );
     aGal->SetIsFill( false );
     aGal->SetLineWidth( 1.0 );
-    aGal->SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 0.4 ) );
+    aGal->SetStrokeColor( COLOR4D( 0.8, 0.8, 0.8, 0.2 ) );
 
     // Draw the temporary ratsnest
     BOOST_FOREACH( const RN_NET& net, m_data->GetNets() )
