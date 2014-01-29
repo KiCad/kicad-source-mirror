@@ -17,8 +17,18 @@ set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 option( USE_KIWAY_DLLS
     "Build the major modules as DLLs or DSOs, will soon be the norm." OFF )
 
-#for those who bored with uppercase
-option( KICAD_KEEPCASE "turn-off automatic component name conversion to uppercase if selected" )
+# The desire is to migrate designs *away from* case independence, and to create designs which use
+# literally (case specific) interpreted component names.  But for backwards compatibility,
+# you may turn OFF this option if you really must.  (Remember that with KiCad using text
+# data files, typically you would be better off simply doctoring those files into
+# a case literal state with a text editor and move forward into the brave new
+# world of case specificity.  Also, BOM generators may not work properly when you
+# have this option turned OFF, the xml export's referential integrity is broken
+# on library part name.  Hence the default is ON now, as of 29-Jan-2014.
+option( KICAD_KEEPCASE
+    "ON= case specific string matching on component names, OFF= match names as if they were spelt using uppercase."
+    ON
+    )
 
 option( USE_WX_GRAPHICS_CONTEXT
     "Use wxGraphicsContext for rendering ( default OFF). Warning, this is experimental" )
@@ -308,7 +318,7 @@ if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     if( KICAD_BUILD_DYNAMIC )
         message(STATUS "KICAD_BUILD_DYNAMIC set")
-        # TODO - Library packaging/relocation 
+        # TODO - Library packaging/relocation
     endif()
 
     add_custom_target( lib-dependencies
@@ -335,7 +345,7 @@ if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
         set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo")
         set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a")
 
-    if( KICAD_BUILD_DYNAMIC AND APPLE ) 
+    if( KICAD_BUILD_DYNAMIC AND APPLE )
         add_custom_target( osx_fix_bundles ALL DEPENDS cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
         add_custom_command(TARGET osx_fix_bundles POST_BUILD COMMAND scripts/osx_fixbundle.sh COMMENT "Migrating dylibs to bundles")
     endif()
@@ -533,7 +543,7 @@ add_dependencies( pcad2kicadpcb lib-dependencies )
 add_dependencies( polygon lib-dependencies )
 add_dependencies( pl_editor lib-dependencies )
 add_dependencies( pnsrouter lib-dependencies )
-    if ( BUILD_GITHUB_PLUGIN ) 
+    if ( BUILD_GITHUB_PLUGIN )
     add_dependencies( github_plugin lib-dependencies )
     endif()
 endif()

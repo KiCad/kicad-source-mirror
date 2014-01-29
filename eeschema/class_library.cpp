@@ -45,13 +45,14 @@
 #include <wx/regex.h>
 
 static const wxString duplicate_name_msg =
-_( "Library <%s> has duplicate entry name <%s>.\n\
-This may cause some unexpected behavior when loading components into a schematic." );
+    _(  "Library '%s' has duplicate entry name '%s'.\n"
+        "This may cause some unexpected behavior when loading components into a schematic." );
 
 
 bool operator==( const CMP_LIBRARY& aLibrary, const wxString& aName )
 {
-    return aLibrary.GetName().CmpNoCase( aName ) == 0;
+    // See our header class_libentry.h for function Cmp_KEEPCASE().
+    return Cmp_KEEPCASE( aLibrary.GetName(), aName ) == 0;
 }
 
 
@@ -70,9 +71,9 @@ bool operator<( const CMP_LIBRARY& aItem1, const CMP_LIBRARY& aItem2 )
     if( aItem1.IsCache() )
         return false;
 
-    /* If the sort order array isn't set, then sort alphabetically except. */
+    // If the sort order array isn't set, then sort alphabetically except.
     if( CMP_LIBRARY::GetSortOrder().IsEmpty() )
-        return aItem1.GetName().CmpNoCase( aItem2.GetName() ) < 0;
+        return Cmp_KEEPCASE( aItem1.GetName(), aItem2.GetName() ) < 0;
 
     int i1 = CMP_LIBRARY::GetSortOrder().Index( aItem1.GetName(), false );
     int i2 = CMP_LIBRARY::GetSortOrder().Index( aItem2.GetName(), false );
@@ -109,8 +110,9 @@ CMP_LIBRARY::~CMP_LIBRARY()
 {
     for( LIB_ALIAS_MAP::iterator it=aliases.begin();  it!=aliases.end();  it++ )
     {
-        LIB_ALIAS* alias = (*it).second;
-        LIB_COMPONENT* component = alias->GetComponent();
+        LIB_ALIAS*      alias = (*it).second;
+        LIB_COMPONENT*  component = alias->GetComponent();
+
         alias = component->RemoveAlias( alias );
 
         if( alias == NULL )
@@ -165,7 +167,6 @@ void CMP_LIBRARY::SearchEntryNames( std::vector<wxArrayString>& aNames,
 
     for( it = aliases.begin();  it!=aliases.end();  it++ )
     {
-
         if( !aKeySearch.IsEmpty() && KeyWordOk( aKeySearch, (*it).second->GetKeyWords() ) )
         {
             wxArrayString item;
@@ -226,7 +227,6 @@ bool CMP_LIBRARY::Conflicts( LIB_COMPONENT* aComponent )
 
 LIB_ALIAS* CMP_LIBRARY::FindEntry( const wxString& aName )
 {
-
     LIB_ALIAS_MAP::iterator it = aliases.find( aName );
 
     if( it != aliases.end() )
@@ -247,10 +247,19 @@ LIB_ALIAS* CMP_LIBRARY::GetFirstEntry()
 
 LIB_COMPONENT* CMP_LIBRARY::FindComponent( const wxString& aName )
 {
-    LIB_COMPONENT* component = NULL;
-    LIB_ALIAS* entry = FindEntry( aName );
 
-    if( entry != NULL )
+#if 0 && defined(DEBUG)
+    if( !aName.Cmp( wxT( "TI_STELLARIS_BOOSTERPACK" ) ) )
+    {
+        int breakhere = 1;
+        (void) breakhere;
+    }
+#endif
+
+    LIB_COMPONENT*  component = NULL;
+    LIB_ALIAS*      entry = FindEntry( aName );
+
+    if( entry )
         component = entry->GetComponent();
 
     return component;
@@ -259,7 +268,15 @@ LIB_COMPONENT* CMP_LIBRARY::FindComponent( const wxString& aName )
 
 bool CMP_LIBRARY::AddAlias( LIB_ALIAS* aAlias )
 {
-    wxASSERT( aAlias != NULL );
+    wxASSERT( aAlias );
+
+#if 0 && defined(DEBUG)
+    if( !aAlias->GetName().Cmp( wxT( "TI_STELLARIS_BOOSTERPACK" ) ) )
+    {
+        int breakhere = 1;
+        (void) breakhere;
+    }
+#endif
 
     LIB_ALIAS_MAP::iterator it = aliases.find( aAlias->GetName() );
 
@@ -281,7 +298,7 @@ bool CMP_LIBRARY::AddAlias( LIB_ALIAS* aAlias )
 
 LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
 {
-    if( aComponent == NULL )
+    if( !aComponent )
         return NULL;
 
     // Conflict detection: See if already existing aliases exist,
@@ -295,7 +312,6 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
                     wxT( "> to library <" ) + GetName() + wxT( "> due to name conflict." ) );
         return NULL;
     }
-
 
     LIB_COMPONENT* newCmp = new LIB_COMPONENT( *aComponent, this );
 
