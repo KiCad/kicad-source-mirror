@@ -141,6 +141,9 @@ void EDA_3D_FRAME::Exit3DFrame( wxCommandEvent& event )
 
 void EDA_3D_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
+    SaveSettings();
+    Show( false );
+
     if( Parent() )
         Parent()->m_Draw3DFrame = NULL;
 

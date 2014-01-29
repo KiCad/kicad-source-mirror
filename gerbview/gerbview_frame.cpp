@@ -177,6 +177,9 @@ GERBVIEW_FRAME::~GERBVIEW_FRAME()
 
 void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
+    // hide main frame, which also forces saving curr pos and size in config
+    Show( false );
+
     Destroy();
 }
 
