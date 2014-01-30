@@ -30,7 +30,7 @@
 #ifndef __INFO3D_VISU_H__
 #define __INFO3D_VISU_H__
 
-#include <wxBasePcbFrame.h>                     // m_auimanager member.
+//#include <wxBasePcbFrame.h>
 #include <layers_id_colors_and_visibility.h>    // Layers id definitions
 
 #include <wx/glcanvas.h>
@@ -51,6 +51,7 @@
 #define m_ROTY  m_Rot[1]
 #define m_ROTZ  m_Rot[2]
 
+class BOARD_DESIGN_SETTINGS;
 
 class S3D_COLOR     /* 3D color (R, G, B) 3 floats range 0 to 1.0*/
 {
