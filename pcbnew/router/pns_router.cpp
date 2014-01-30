@@ -241,7 +241,6 @@ void PNS_ROUTER::SyncWorld()
 
     ClearWorld();
 
-
     m_clearanceFunc = new PCBNEW_CLEARANCE_FUNC( m_board );
     m_world = new PNS_NODE();
     m_world->SetClearanceFunctor( m_clearanceFunc );
@@ -584,8 +583,9 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
 
         if( parent )
         {
-            m_view->Remove( parent );
+            m_undoBuffer.PushItem( ITEM_PICKER( parent, UR_DELETED ) );
             m_board->Remove( parent );
+            m_view->Remove( parent );
         }
     }
 
@@ -632,6 +632,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
             m_view->Add( newBI );
             m_board->Add( newBI );
             m_board->GetRatsnest()->Update( newBI );
+            m_undoBuffer.PushItem( ITEM_PICKER( newBI, UR_NEW ) );
             newBI->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
     }

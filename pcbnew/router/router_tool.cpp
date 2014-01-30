@@ -322,6 +322,11 @@ void ROUTER_TOOL::startRouting()
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
+        else if( evt->Action() == TA_UNDO_REDO )
+        {
+            std::cout << "syncing the world while routing, I am going to craaaaaaaaaaaash!" << std::endl;
+            m_router->SyncWorld();
+        }
         else if( evt->IsClick( BUT_LEFT ) )
         {
             updateEndItem( *evt );
@@ -371,6 +376,10 @@ void ROUTER_TOOL::startRouting()
 
     m_router->StopRouting();
 
+    // Save the recent changes in the undo buffer
+    getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( m_router->GetLastChanges(), UR_UNSPECIFIED );
+    getEditFrame<PCB_EDIT_FRAME>()->OnModify();
+
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
     highlightNet( false );
@@ -392,6 +401,8 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     {
         if( evt->IsCancel() )
             break; // Finish
+        else if( evt->Action() == TA_UNDO_REDO )
+            m_router->SyncWorld();
         else if( evt->IsMotion() )
             updateStartItem( *evt );
         else if( evt->IsClick( BUT_LEFT ) )
