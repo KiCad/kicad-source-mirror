@@ -290,6 +290,7 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
 
 void ROUTER_TOOL::startRouting()
 {
+    bool saveUndoBuffer = true;
     VIEW_CONTROLS* ctls = getViewControls();
 
     int width = getDefaultWidth( m_startItem ? m_startItem->GetNet() : -1 );
@@ -317,15 +318,15 @@ void ROUTER_TOOL::startRouting()
     {
         if( evt->IsCancel() )
             break;
+        else if( evt->Action() == TA_UNDO_REDO )
+        {
+            saveUndoBuffer = false;
+            break;
+        }
         else if( evt->IsMotion() )
         {
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
-        }
-        else if( evt->Action() == TA_UNDO_REDO )
-        {
-            std::cout << "syncing the world while routing, I am going to craaaaaaaaaaaash!" << std::endl;
-            m_router->SyncWorld();
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -376,9 +377,17 @@ void ROUTER_TOOL::startRouting()
 
     m_router->StopRouting();
 
-    // Save the recent changes in the undo buffer
-    getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( m_router->GetLastChanges(), UR_UNSPECIFIED );
-    getEditFrame<PCB_EDIT_FRAME>()->OnModify();
+    if( saveUndoBuffer )
+    {
+        // Save the recent changes in the undo buffer
+        getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( m_router->GetLastChanges(), UR_UNSPECIFIED );
+        getEditFrame<PCB_EDIT_FRAME>()->OnModify();
+    }
+    else
+    {
+        // It was interrupted by TA_UNDO_REDO event, so we have to sync the world now
+        m_router->SyncWorld();
+    }
 
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
