@@ -548,8 +548,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* module = static_cast<MODULE*>( item );
-                module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ),
-                                                                   view ) );
+                module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ), view ) );
             }
             view->Remove( item );
 
@@ -563,8 +562,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* module = static_cast<MODULE*>( item );
-                module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ),
-                                                                   view ) );
+                module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), view ) );
             }
             view->Add( item );
 
@@ -575,23 +573,27 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         case UR_MOVED:
             item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            ratsnest->Update( item );
             break;
 
         case UR_ROTATED:
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? m_rotationAngle : -m_rotationAngle );
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            ratsnest->Update( item );
             break;
 
         case UR_ROTATED_CLOCKWISE:
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? -m_rotationAngle : m_rotationAngle );
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            ratsnest->Update( item );
             break;
 
         case UR_FLIPPED:
             item->Flip( aList->m_TransformPoint );
             item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
+            ratsnest->Update( item );
             break;
 
         default:
@@ -603,8 +605,6 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         }
         break;
         }
-
-        ratsnest->Update( item );
     }
 
     if( not_found )

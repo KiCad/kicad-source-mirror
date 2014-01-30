@@ -842,6 +842,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         }
         break;
     }
+
+    m_ratsnest->Add( aBoardItem );
 }
 
 
@@ -867,56 +869,26 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
         break;
 
     case PCB_ZONE_AREA_T:    // this one uses a vector
-    {
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( aBoardItem );
-
         // find the item in the vector, then delete then erase it.
-        for( unsigned i = 0; i < m_ZoneDescriptorList.size(); ++i )
+        for( unsigned i = 0; i<m_ZoneDescriptorList.size(); ++i )
         {
-            if( m_ZoneDescriptorList[i] == zone )
+            if( m_ZoneDescriptorList[i] == (ZONE_CONTAINER*) aBoardItem )
             {
                 m_ZoneDescriptorList.erase( m_ZoneDescriptorList.begin() + i );
                 break;
             }
         }
 
-        if( zone->GetNet() > 0 )
-            m_ratsnest->GetNet( zone->GetNet() ).RemoveItem( zone );
-    }
-    break;
+        break;
 
     case PCB_MODULE_T:
-    {
-        MODULE* module = static_cast<MODULE*>( aBoardItem );
         m_Modules.Remove( (MODULE*) aBoardItem );
-
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-        {
-            if( pad->GetNet() > 0 )
-                m_ratsnest->GetNet( pad->GetNet() ).RemoveItem( pad );
-        }
-    }
-    break;
+        break;
 
     case PCB_TRACE_T:
-    {
-        TRACK* track = static_cast<TRACK*>( aBoardItem );
-        m_Track.Remove( track );
-
-        if( track->GetNet() > 0 )
-            m_ratsnest->GetNet( track->GetNet() ).RemoveItem( track );
-    }
-    break;
-
     case PCB_VIA_T:
-    {
-        SEGVIA* via = static_cast<SEGVIA*>( aBoardItem );
-        m_Track.Remove( via );
-
-        if( via->GetNet() > 0 )
-            m_ratsnest->GetNet( via->GetNet() ).RemoveItem( via );
-    }
-    break;
+        m_Track.Remove( (TRACK*) aBoardItem );
+        break;
 
     case PCB_ZONE_T:
         m_Zone.Remove( (SEGZONE*) aBoardItem );
@@ -934,6 +906,8 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     default:
         wxFAIL_MSG( wxT( "BOARD::Remove() needs more ::Type() support" ) );
     }
+
+    m_ratsnest->Remove( aBoardItem );
 
     return aBoardItem;
 }

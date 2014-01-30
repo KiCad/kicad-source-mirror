@@ -428,11 +428,11 @@ BOARD* PCB_PARSER::parseBOARD() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_segment:
-            m_board->m_Track.Append( parseTRACK() );
+            m_board->Add( parseTRACK(), ADD_APPEND );
             break;
 
         case T_via:
-            m_board->m_Track.Append( parseSEGVIA() );
+            m_board->Add( parseSEGVIA(), ADD_APPEND );
             break;
 
         case T_zone:

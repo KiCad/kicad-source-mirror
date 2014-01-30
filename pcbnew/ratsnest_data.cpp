@@ -782,6 +782,10 @@ void RN_DATA::Add( const BOARD_ITEM* aItem )
         net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNet();
         if( net < 1 )           // do not process unconnected items
             return;
+
+        // Autoresize
+        if( net >= (int) m_nets.size() )
+            m_nets.resize( net + 1 );
     }
     else if( aItem->Type() == PCB_MODULE_T )
     {
@@ -789,9 +793,12 @@ void RN_DATA::Add( const BOARD_ITEM* aItem )
         for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
         {
             net = pad->GetNet();
-
             if( net < 1 )       // do not process unconnected items
                 continue;
+
+            // Autoresize
+            if( net >= (int) m_nets.size() )
+                m_nets.resize( net + 1 );
 
             m_nets[net].AddItem( pad );
         }
@@ -841,7 +848,6 @@ void RN_DATA::Remove( const BOARD_ITEM* aItem )
         for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
         {
             net = pad->GetNet();
-
             if( net < 1 )       // do not process unconnected items
                 continue;
 
@@ -916,8 +922,8 @@ void RN_DATA::Recalculate( int aNet )
 {
     if( aNet < 0 )              // Recompute everything
     {
-        // Start with net number 1, as 0 stand for not connected
-        for( unsigned int i = 1; i < m_board->GetNetCount(); ++i )
+        // Start with net number 1, as 0 stands for not connected
+        for( unsigned int i = 1; i < m_nets.size(); ++i )
         {
             // Recompute only nets that require it
             if( m_nets[i].IsDirty() )

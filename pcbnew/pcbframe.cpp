@@ -612,7 +612,6 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
 
     // Add an entry for the ratsnest
     RN_DATA* ratsnest = aBoard->GetRatsnest();
-    ratsnest->ProcessBoard();
     ratsnest->Recalculate();
     view->Add( new KIGFX::RATSNEST_VIEWITEM( ratsnest ) );
 
