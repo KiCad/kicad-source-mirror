@@ -34,16 +34,12 @@
 #include <trackball.h>
 
 #include <wx/colordlg.h>
-#include <wxstruct.h>
 #include <3d_viewer_id.h>
+#include <wxBasePcbFrame.h>
 
 INFO3D_VISU             g_Parm_3D_Visu;
 
 // Key to store 3D Viewer config:
-static const wxString   keyPosx( wxT( "Pos_x" ) );
-static const wxString   keyPosy( wxT( "Pos_y" ) );
-static const wxString   keySizex( wxT( "Size_x" ) );
-static const wxString   keySizey( wxT( "Size_y" ) );
 static const wxString   keyBgColor_Red( wxT( "BgColor_Red" ) );
 static const wxString   keyBgColor_Green( wxT( "BgColor_Green" ) );
 static const wxString   keyBgColor_Blue( wxT( "BgColor_Blue" ) );
@@ -60,7 +56,7 @@ static const wxString   keyShowCommentsLayer( wxT( "ShowCommentsLayers" ) );
 static const wxString   keyShowBoardBody( wxT( "ShowBoardBody" ) );
 static const wxString   keyShowEcoLayers( wxT( "ShowEcoLayers" ) );
 
-BEGIN_EVENT_TABLE( EDA_3D_FRAME, wxFrame )
+BEGIN_EVENT_TABLE( EDA_3D_FRAME, EDA_BASE_FRAME )
 EVT_ACTIVATE( EDA_3D_FRAME::OnActivate )
 
 EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, EDA_3D_FRAME::Process_Zoom )
@@ -79,12 +75,10 @@ EVT_CLOSE( EDA_3D_FRAME::OnCloseWindow )
 END_EVENT_TABLE() EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME*   parent,
                                               const wxString&   title,
                                               long              style ) :
-    wxFrame( parent, DISPLAY3D_FRAME_TYPE, title, wxDefaultPosition, wxDefaultSize, style )
+    EDA_BASE_FRAME( parent, DISPLAY3D_FRAME_TYPE, title,
+                    wxDefaultPosition, wxDefaultSize, style, wxT( "Frame3D" ) )
 {
-    m_frameName     = wxT( "Frame3D" );
     m_canvas        = NULL;
-    m_HToolBar      = NULL;
-    m_VToolBar      = NULL;
     m_reloadRequest = false;
     m_ortho         = false;
 
@@ -94,7 +88,7 @@ END_EVENT_TABLE() EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME*   parent,
     SetIcon( icon );
 
     GetSettings();
-    SetSize( m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
+    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Create the status line
     static const int dims[5] = { -1, 100, 100, 100, 140 };
@@ -103,10 +97,7 @@ END_EVENT_TABLE() EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME*   parent,
     SetStatusWidths( 5, dims );
 
     CreateMenuBar();
-    ReCreateHToolbar();
-
-    // ReCreateAuxiliaryToolbar();
-    ReCreateVToolbar();
+    ReCreateMainToolbar();
 
     // Make a EDA_3D_CANVAS
     int attrs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
@@ -115,11 +106,11 @@ END_EVENT_TABLE() EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME*   parent,
     m_auimgr.SetManagedWindow( this );
 
 
-    EDA_PANEINFO horiz;
-    horiz.HorizontalToolbarPane();
+    EDA_PANEINFO horiztb;
+    horiztb.HorizontalToolbarPane();
 
-    m_auimgr.AddPane( m_HToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top() );
+    m_auimgr.AddPane( m_mainToolBar,
+                      wxAuiPaneInfo( horiztb ).Name( wxT( "m_mainToolBar" ) ).Top() );
 
     m_auimgr.AddPane( m_canvas,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
@@ -141,9 +132,6 @@ void EDA_3D_FRAME::Exit3DFrame( wxCommandEvent& event )
 
 void EDA_3D_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    SaveSettings();
-    Show( false );
-
     if( Parent() )
         Parent()->m_Draw3DFrame = NULL;
 
@@ -153,20 +141,13 @@ void EDA_3D_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 void EDA_3D_FRAME::GetSettings()
 {
-    wxString    text;
     wxConfig*   config = wxGetApp().GetSettings(); // Current config used by application
     class INFO3D_VISU& prms = g_Parm_3D_Visu;
 
     if( config )
     {
-        text = m_frameName + keyPosx;
-        config->Read( text, &m_framePos.x );
-        text = m_frameName + keyPosy;
-        config->Read( text, &m_framePos.y );
-        text = m_frameName + keySizex;
-        config->Read( text, &m_frameSize.x, 600 );
-        text = m_frameName + keySizey;
-        config->Read( text, &m_frameSize.y, 400 );
+        EDA_BASE_FRAME::LoadSettings();
+
         config->Read( keyBgColor_Red, &g_Parm_3D_Visu.m_BgColor.m_Red, 0.0 );
         config->Read( keyBgColor_Green, &g_Parm_3D_Visu.m_BgColor.m_Green, 0.0 );
         config->Read( keyBgColor_Blue, &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
@@ -213,11 +194,12 @@ void EDA_3D_FRAME::GetSettings()
 
 void EDA_3D_FRAME::SaveSettings()
 {
-    wxString    text;
-    wxConfig*   config = wxGetApp().GetSettings(); // Current config used by application
+    wxConfig* config = wxGetApp().GetSettings(); // Current config used by application
 
     if( !config )
         return;
+
+    EDA_BASE_FRAME::SaveSettings();
 
     config->Write( keyBgColor_Red, g_Parm_3D_Visu.m_BgColor.m_Red );
     config->Write( keyBgColor_Green, g_Parm_3D_Visu.m_BgColor.m_Green );
@@ -235,21 +217,6 @@ void EDA_3D_FRAME::SaveSettings()
     config->Write( keyShowCommentsLayer, prms.GetFlag( FL_COMMENTS )  );
     config->Write( keyShowEcoLayers, prms.GetFlag( FL_ECO )  );
     config->Write( keyShowBoardBody, prms.GetFlag( FL_SHOW_BOARD_BODY )  );
-
-    if( IsIconized() )
-        return;
-
-    m_frameSize = GetSize();
-    m_framePos  = GetPosition();
-
-    text = m_frameName + keyPosx;
-    config->Write( text, (long) m_framePos.x );
-    text = m_frameName + keyPosy;
-    config->Write( text, (long) m_framePos.y );
-    text = m_frameName + keySizex;
-    config->Write( text, (long) m_frameSize.x );
-    text = m_frameName + keySizey;
-    config->Write( text, (long) m_frameSize.y );
 }
 
 

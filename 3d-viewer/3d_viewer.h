@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -30,10 +30,10 @@
 #ifndef __3D_VIEWER_H__
 #define __3D_VIEWER_H__
 
-#include <wxBasePcbFrame.h>         // for m_auimanager member.
+#include <wxstruct.h>   // for EDA_BASE_FRAME.
 
 #if !wxUSE_GLCANVAS
-#error Please set wxUSE_GLCANVAS to 1 in setup.h.
+#error Please build wxWidgets with Opengl support (./configure --with-opengl)
 #endif
 
 #include <wx/glcanvas.h>
@@ -51,20 +51,15 @@
 #include <3d_struct.h>
 
 class EDA_3D_CANVAS;
+class PCB_BASE_FRAME;
 
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
 #define LIB3D_PATH wxT( "packages3d" )
 
-class EDA_3D_FRAME : public wxFrame
+class EDA_3D_FRAME : public EDA_BASE_FRAME
 {
 private:
-    wxString        m_frameName;        // name used for writing and reading setup. It is "Frame3D"
     EDA_3D_CANVAS*  m_canvas;
-    wxAuiToolBar*   m_HToolBar;
-    wxAuiToolBar*   m_VToolBar;
-    wxPoint         m_framePos;
-    wxSize          m_frameSize;
-    wxAuiManager    m_auimgr;
     bool            m_reloadRequest;
     wxString        m_defaultFileName;  /// Filename to propose for screenshot
     /// Tracks whether to use Orthographic or Perspective projection
@@ -121,8 +116,7 @@ private:
     void CreateMenuBar();
     void SetMenuBarOptionsState();  // Set the state of toggle menus according
                                     // to the current display options
-    void ReCreateHToolbar();
-    void ReCreateVToolbar();
+    void ReCreateMainToolbar();
     void SetToolbars();
     void GetSettings();
     void SaveSettings();
