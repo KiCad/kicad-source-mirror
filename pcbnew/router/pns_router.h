@@ -27,6 +27,7 @@
 #include <boost/unordered_set.hpp>
 
 #include <geometry/shape_line_chain.h>
+#include <class_undoredo_container.h>
 
 #include "pns_routing_settings.h"
 #include "pns_item.h"
@@ -137,6 +138,18 @@ public:
     const PNS_ITEMSET   QueryHoverItems( const VECTOR2I& aP );
     const VECTOR2I      SnapToItem( PNS_ITEM* item, VECTOR2I aP, bool& aSplitsSegment );
 
+    /**
+     * Returns the last changes introduced by the router. After calling the method the list of
+     * changes is cleared, so only the latest changes are stored.
+     */
+    PICKED_ITEMS_LIST GetLastChanges()
+    {
+        PICKED_ITEMS_LIST copy = m_undoBuffer;
+        m_undoBuffer.ClearItemsList();          // TODO and delete?
+
+        return copy;
+    }
+
 private:
     void clearViewFlags();
 
@@ -188,6 +201,9 @@ private:
     PNS_CLEARANCE_FUNC* m_clearanceFunc;
 
     boost::unordered_set<BOARD_ITEM*> m_hiddenItems;
+
+    ///> Stores list of modified items in the current operation
+    PICKED_ITEMS_LIST m_undoBuffer;
 };
 
 #endif
