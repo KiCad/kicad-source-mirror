@@ -704,7 +704,7 @@ public:
      *  - Get an old version of the board from Redo list
      *  @return none
      */
-    void GetBoardFromRedoList( wxCommandEvent& event );
+    void GetBoardFromRedoList( wxCommandEvent& aEvent );
 
     /**
      * Function GetBoardFromUndoList
@@ -713,7 +713,7 @@ public:
      *  - Get an old version of the board from Undo list
      *  @return none
      */
-    void GetBoardFromUndoList( wxCommandEvent& event );
+    void GetBoardFromUndoList( wxCommandEvent& aEvent );
 
     /* Block operations: */
 

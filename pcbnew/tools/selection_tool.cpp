@@ -100,6 +100,12 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             // This tool never exits
         }
 
+        else if( evt->Action() == TA_UNDO_REDO )
+        {
+            // Clear the selection, as it may be altered with undone items
+            ClearSelection();
+        }
+
         // single click? Select single object
         else if( evt->IsClick( BUT_LEFT ) )
         {

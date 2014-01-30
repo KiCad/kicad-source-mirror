@@ -91,6 +91,7 @@ const std::string TOOL_EVENT::Format() const
         { TA_CANCEL_TOOL,           "cancel-tool"         },
         { TA_CONTEXT_MENU_UPDATE,   "context-menu-update" },
         { TA_CONTEXT_MENU_CHOICE,   "context-menu-choice" },
+        { TA_UNDO_REDO,             "undo-redo"           },
         { TA_ACTION,                "action"              },
         { 0,                        ""                    }
     };
