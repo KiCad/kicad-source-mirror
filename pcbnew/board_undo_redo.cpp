@@ -621,15 +621,10 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 }
 
 
-void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
+void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& aEvent )
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
-
-    // Clear the selection, as it may be altered with undone items
-    SELECTION_TOOL* selectionTool = static_cast<SELECTION_TOOL*>( m_toolManager->FindTool(
-                                                                  "pcbnew.InteractiveSelection" ) );
-    selectionTool->ClearSelection();
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
@@ -640,20 +635,19 @@ void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToRedoList( List );
 
+    // Inform tools that undo has just occurred
+    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
+    m_toolManager->ProcessEvent( event );
+
     OnModify();
     m_canvas->Refresh();
 }
 
 
-void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& event )
+void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& aEvent )
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;
-
-    // Clear the selection, as it may be altered with redone items
-    SELECTION_TOOL* selectionTool = static_cast<SELECTION_TOOL*>( m_toolManager->FindTool(
-                                                                  "pcbnew.InteractiveSelection" ) );
-    selectionTool->ClearSelection();
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
@@ -664,6 +658,10 @@ void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& event )
     /* Put the old list in UndoList */
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToUndoList( List );
+
+    // Inform tools that redo has just occurred
+    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
+    m_toolManager->ProcessEvent( event );
 
     OnModify();
     m_canvas->Refresh();
