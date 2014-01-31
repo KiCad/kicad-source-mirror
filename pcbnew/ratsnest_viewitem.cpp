@@ -30,6 +30,7 @@
 #include <ratsnest_viewitem.h>
 #include <ratsnest_data.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <pcb_painter.h>
 #include <layers_id_colors_and_visibility.h>
 
 #include <boost/foreach.hpp>
@@ -57,9 +58,9 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
     aGal->SetIsStroke( true );
     aGal->SetIsFill( false );
     aGal->SetLineWidth( 1.0 );
-    aGal->SetStrokeColor( COLOR4D( 0.8, 0.8, 0.8, 0.2 ) );
+    RENDER_SETTINGS* rs = m_view->GetPainter()->GetSettings();
+    COLOR4D color = rs->GetColor( NULL, ITEM_GAL_LAYER( RATSNEST_VISIBLE ) );
 
-    // Draw the temporary ratsnest (skip the unconnected net [net code == 0])
     for( int i = 1; i < m_data->GetNetCount(); ++i )
     {
         const RN_NET& net = m_data->GetNet( i );
@@ -69,6 +70,9 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
 
         // Avoid duplicate destinations for ratsnest lines by storing already used nodes
         boost::unordered_set<RN_NODE_PTR> usedDestinations;
+
+        // Set brighter color for the temporary ratsnest
+        aGal->SetStrokeColor( color.Brightened( 0.8 ) );
 
         // Draw the "dynamic" ratsnest (ie. for objects that may be currently being moved)
         BOOST_FOREACH( const RN_NODE_PTR& node, net.GetSimpleNodes() )
@@ -86,6 +90,8 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
         }
 
         // Draw the "static" ratsnest
+        aGal->SetStrokeColor( color );  // using the default ratsnest color
+
         const std::vector<RN_EDGE_PTR>* edges = net.GetUnconnected();
         if( edges == NULL )
             continue;
