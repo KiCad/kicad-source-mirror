@@ -31,7 +31,6 @@
 #include <pcb_painter.h>
 
 #include <tool/context_menu.h>
-#include <tool/tool_action.h>
 
 #include "router_tool.h"
 #include "pns_segment.h"
@@ -82,6 +81,7 @@ void ROUTER_TOOL::Reset( RESET_REASON aReason )
     m_router->ClearWorld();
     m_router->SetBoard( getModel<BOARD>( PCB_T ) );
     m_router->SyncWorld();
+    m_needsSync = false;
 
     if( getView() )
         m_router->SetView( getView() );
@@ -380,13 +380,14 @@ void ROUTER_TOOL::startRouting()
     if( saveUndoBuffer )
     {
         // Save the recent changes in the undo buffer
-        getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( m_router->GetLastChanges(), UR_UNSPECIFIED );
+        getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( m_router->GetLastChanges(),
+                                                            UR_UNSPECIFIED );
         getEditFrame<PCB_EDIT_FRAME>()->OnModify();
     }
     else
     {
         // It was interrupted by TA_UNDO_REDO event, so we have to sync the world now
-        m_router->SyncWorld();
+        m_needsSync = true;
     }
 
     ctls->SetAutoPan( false );
@@ -408,10 +409,16 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        if( m_needsSync )
+        {
+            m_router->SyncWorld();
+            m_needsSync = false;
+        }
+
         if( evt->IsCancel() )
             break; // Finish
         else if( evt->Action() == TA_UNDO_REDO )
-            m_router->SyncWorld();
+            m_needsSync = true;
         else if( evt->IsMotion() )
             updateStartItem( *evt );
         else if( evt->IsClick( BUT_LEFT ) )

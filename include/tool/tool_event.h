@@ -89,7 +89,7 @@ enum TOOL_ACTIONS
     // closed it without selecting anything.
     TA_CONTEXT_MENU_CHOICE  = 0x10000,
 
-    // This event is sent *after* undo/redo command is finished.
+    // This event is sent *before* undo/redo command is performed.
     TA_UNDO_REDO            = 0x20000,
 
     // Tool action (allows to control tools)

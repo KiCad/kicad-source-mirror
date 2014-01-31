@@ -523,8 +523,8 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             {
                 MODULE* oldModule = static_cast<MODULE*>( item );
                 oldModule->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Remove ), view ) );
-                oldModule->RunOnChildren( std::bind1st( std::mem_fun( &RN_DATA::Remove ), ratsnest ) );
             }
+            ratsnest->Remove( item );
 
             item->SwapData( image );
 
@@ -534,8 +534,8 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
                 newModule->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), view ) );
-                newModule->RunOnChildren( std::bind1st( std::mem_fun( &RN_DATA::Add ), ratsnest ) );
             }
+            ratsnest->Add( item );
 
             item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
         }
@@ -626,6 +626,10 @@ void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& aEvent )
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
+    // Inform tools that undo command was issued
+    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
+    m_toolManager->ProcessEvent( event );
+
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
     /* Undo the command */
@@ -634,10 +638,6 @@ void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& aEvent )
     /* Put the old list in RedoList */
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToRedoList( List );
-
-    // Inform tools that undo has just occurred
-    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
-    m_toolManager->ProcessEvent( event );
 
     OnModify();
     m_canvas->Refresh();
@@ -649,6 +649,10 @@ void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& aEvent )
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;
 
+    // Inform tools that redo command was issued
+    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
+    m_toolManager->ProcessEvent( event );
+
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
 
@@ -658,10 +662,6 @@ void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& aEvent )
     /* Put the old list in UndoList */
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToUndoList( List );
-
-    // Inform tools that redo has just occurred
-    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
-    m_toolManager->ProcessEvent( event );
 
     OnModify();
     m_canvas->Refresh();
