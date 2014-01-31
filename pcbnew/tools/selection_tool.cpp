@@ -94,8 +94,8 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
         if( evt->IsCancel() )
         {
-            if( !m_selection.Empty() )  // Cancel event deselects items...
-                ClearSelection();
+            // Cancel event deselects items...
+            ClearSelection();
 
             // This tool never exits
         }
@@ -109,7 +109,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         // single click? Select single object
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( !m_additive && m_selection.Size() > 1 )
+            if( !m_additive )
                 ClearSelection();
 
             selectSingle( evt->Position() );
@@ -159,6 +159,9 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::ClearSelection()
 {
+    if( m_selection.Empty() )
+        return;
+
     KIGFX::VIEW_GROUP::const_iter it, it_end;
 
     // Restore the initial properties
