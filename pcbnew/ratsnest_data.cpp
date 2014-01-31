@@ -705,12 +705,9 @@ void RN_DATA::AddSimple( const BOARD_ITEM* aItem )
         if( net < 1 )           // do not process unconnected items
             return;
 
-        // Get list of nodes responding to the item
-        std::list<RN_NODE_PTR> nodes = m_nets[net].GetNodes( item );
-        std::list<RN_NODE_PTR>::iterator it, itEnd;
-
-        for( it = nodes.begin(), itEnd = nodes.end(); it != itEnd; ++it )
-            m_nets[net].AddSimpleNode( *it );
+        // Add all nodes belonging to the item
+        BOOST_FOREACH( RN_NODE_PTR node, m_nets[net].GetNodes( item ) )
+            m_nets[net].AddSimpleNode( node );
     }
     else if( aItem->Type() == PCB_MODULE_T )
     {
@@ -723,6 +720,46 @@ void RN_DATA::AddSimple( const BOARD_ITEM* aItem )
     }
     else
         return;
+}
+
+
+void RN_DATA::AddBlocked( const BOARD_ITEM* aItem )
+{
+    int net;
+
+    if( aItem->IsConnected() )
+    {
+        const BOARD_CONNECTED_ITEM* item = static_cast<const BOARD_CONNECTED_ITEM*>( aItem );
+        net = item->GetNet();
+
+        if( net < 1 )           // do not process unconnected items
+            return;
+
+        // Block all nodes belonging to the item
+        BOOST_FOREACH( RN_NODE_PTR node, m_nets[net].GetNodes( item ) )
+            m_nets[net].AddBlockedNode( node );
+    }
+    else if( aItem->Type() == PCB_MODULE_T )
+    {
+        const MODULE* module = static_cast<const MODULE*>( aItem );
+
+        for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+            AddBlocked( pad );
+
+        return;
+    }
+    else
+        return;
+}
+
+
+void RN_DATA::AddSimple( const VECTOR2I& aPosition, int aNetCode )
+{
+    assert( aNetCode > 0 );
+
+    RN_NODE_PTR newNode = boost::make_shared<RN_NODE>( aPosition.x, aPosition.y );
+
+    m_nets[aNetCode].AddSimpleNode( newNode );
 }
 
 
@@ -770,17 +807,6 @@ void RN_NET::processZones()
             }
         }
     }
-}
-
-
-void RN_DATA::updateNet( int aNetCode )
-{
-    assert( aNetCode < (int) m_nets.size() );
-    if( aNetCode < 1 )
-        return;
-
-    m_nets[aNetCode].ClearSimple();
-    m_nets[aNetCode].Update();
 }
 
 
@@ -945,4 +971,15 @@ void RN_DATA::Recalculate( int aNet )
     {
         updateNet( aNet );
     }
+}
+
+
+void RN_DATA::updateNet( int aNetCode )
+{
+    assert( aNetCode < (int) m_nets.size() );
+    if( aNetCode < 1 )
+        return;
+
+    m_nets[aNetCode].ClearSimple();
+    m_nets[aNetCode].Update();
 }

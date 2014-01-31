@@ -284,7 +284,7 @@ public:
 
     /**
      * Function MarkDirty()
-     * Marks ratsnest for given net as 'dirty', ie. requiring recomputation.
+     * Marks ratsnest for given net as 'dirty', i.e. requiring recomputation.
      */
     void MarkDirty()
     {
@@ -432,7 +432,7 @@ public:
     /**
      * Function GetEdges()
      * Returns pointer to the vector of edges that makes ratsnest for a given net.
-     * @return Pointer to the vector of edges that makes ratsnest for a given net
+     * @return Pointer to the vector of edges that makes ratsnest for a given net.
      */
     const std::vector<RN_EDGE_PTR>* GetEdges() const
     {
@@ -441,8 +441,8 @@ public:
 
     /**
      * Function AddSimpleNode()
-     * Changes drawing mode for a node to simple (ie. one ratsnest line per node).
-     * @param aNode is a node that changes its drawing mode..
+     * Changes drawing mode for a node to simple (i.e. one ratsnest line per node).
+     * @param aNode is a node that changes its drawing mode.
      */
     void AddSimpleNode( RN_NODE_PTR& aNode )
     {
@@ -451,8 +451,20 @@ public:
     }
 
     /**
+     * Function AddBlockedNode()
+     * Specifies a node as not suitable as a ratsnest line target (i.e. ratsnest lines will not
+     * target the node). The status is cleared after calling ClearSimple().
+     * @param aNode is the node that is not going to be used as a ratsnest line target.
+     */
+    void AddBlockedNode( RN_NODE_PTR& aNode )
+    {
+        m_blockedNodes.push_back( aNode );
+        aNode->SetFlag( true );
+    }
+
+    /**
      * Function GetSimpleNodes()
-     * Returns list of nodes for which ratsnest is drawn in simple mode (ie. one
+     * Returns list of nodes for which ratsnest is drawn in simple mode (i.e. one
      * ratsnest line per node).
      * @return list of nodes for which ratsnest is drawn in simple mode.
      */
@@ -470,11 +482,15 @@ public:
         BOOST_FOREACH( const RN_NODE_PTR& node, m_simpleNodes )
             node->SetFlag( false );
 
+        BOOST_FOREACH( const RN_NODE_PTR& node, m_blockedNodes )
+            node->SetFlag( false );
+
         m_simpleNodes.clear();
+        m_blockedNodes.clear();
     }
 
 protected:
-    ///> Validates edge, ie. modifies source and target nodes for an edge
+    ///> Validates edge, i.e. modifies source and target nodes for an edge
     ///> to make sure that they are not ones with the flag set.
     void validateEdge( RN_EDGE_PTR& aEdge );
 
@@ -495,6 +511,9 @@ protected:
 
     ///> List of nodes for which ratsnest is drawn in simple mode.
     std::deque<RN_NODE_PTR> m_simpleNodes;
+
+    ///> List of nodes which should be used as ratsnest target nodes..
+    std::deque<RN_NODE_PTR> m_blockedNodes;
 
     ///> Flag indicating necessity of recalculation of ratsnest for a net.
     bool m_dirty;
@@ -556,11 +575,29 @@ public:
 
     /**
      * Function AddSimple()
-     * Sets an item to be drawn in simple mode (ie. one line per node, instead of full ratsnest).
+     * Sets an item to be drawn in simple mode (i.e. one line per node, instead of full ratsnest).
      * It is used for drawing quick, temporary ratsnest, eg. while moving an item.
      * @param aItem is an item to be drawn in simple node.
      */
     void AddSimple( const BOARD_ITEM* aItem );
+
+    /**
+     * Function AddSimple()
+     * Allows to draw a ratsnest line using a position expressed in world coordinates and a
+     * net code (so there is no need to have a real BOARD_ITEM to draw ratsnest line).
+     * It is used for drawing quick, temporary ratsnest, eg. while moving an item.
+     * @param aPosition is the point for which ratsnest line are going to be drawn.
+     * @param aNetCode determines the net code for which the ratsnest line are going to be drawn.
+     */
+    void AddSimple( const VECTOR2I& aPosition, int aNetCode );
+
+    /**
+     * Function AddBlocked()
+     * Specifies an item as not suitable as a ratsnest line target (i.e. ratsnest lines will not
+     * target its node(s)). The status is cleared after calling ClearSimple().
+     * @param aItem is the item of which node(s) are not going to be used as a ratsnest line target.
+     */
+    void AddBlocked( const BOARD_ITEM* aItem );
 
     /**
      * Function ClearSimple()

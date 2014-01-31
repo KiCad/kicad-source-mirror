@@ -63,13 +63,10 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
 
     for( int i = 1; i < m_data->GetNetCount(); ++i )
     {
-        const RN_NET& net = m_data->GetNet( i );
+        RN_NET& net = m_data->GetNet( i );
 
         if( !net.IsVisible() )
             continue;
-
-        // Avoid duplicate destinations for ratsnest lines by storing already used nodes
-        boost::unordered_set<RN_NODE_PTR> usedDestinations;
 
         // Set brighter color for the temporary ratsnest
         aGal->SetStrokeColor( color.Brightened( 0.8 ) );
@@ -79,13 +76,15 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
         {
             RN_NODE_PTR dest = net.GetClosestNode( node, WITHOUT_FLAG() );
 
-            if( dest && usedDestinations.find( dest ) == usedDestinations.end() )
+            if( dest )
             {
                 VECTOR2D origin( node->GetX(), node->GetY() );
                 VECTOR2D end( dest->GetX(), dest->GetY() );
 
                 aGal->DrawLine( origin, end );
-                usedDestinations.insert( dest );
+
+                // Avoid duplicate destinations for ratsnest lines by storing already used nodes
+                net.AddBlockedNode( dest );
             }
         }
 
