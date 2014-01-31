@@ -139,15 +139,20 @@ public:
     const VECTOR2I      SnapToItem( PNS_ITEM* item, VECTOR2I aP, bool& aSplitsSegment );
 
     /**
-     * Returns the last changes introduced by the router. After calling the method the list of
-     * changes is cleared, so only the latest changes are stored.
+     * Returns the last changes introduced by the router (since the last time ClearLastChanges()
+     * was called or a new track has been started).
      */
-    PICKED_ITEMS_LIST GetLastChanges()
+    const PICKED_ITEMS_LIST& GetLastChanges() const
     {
-        PICKED_ITEMS_LIST copy = m_undoBuffer;
-        m_undoBuffer.ClearItemsList();          // TODO and delete?
+        return m_undoBuffer;
+    }
 
-        return copy;
+    /**
+     * Clears the list of recent changes, saved to be stored in the undo buffer.
+     */
+    void ClearLastChanges()
+    {
+        m_undoBuffer.ClearItemsList();
     }
 
 private:

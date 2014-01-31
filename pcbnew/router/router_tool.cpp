@@ -32,6 +32,8 @@
 
 #include <tool/context_menu.h>
 
+#include <ratsnest_data.h>
+
 #include "router_tool.h"
 #include "pns_segment.h"
 #include "pns_router.h"
@@ -282,6 +284,30 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
         ctls->ForceCursorPosition( false );
     }
 
+    // Draw ratsnest for the currently routed track
+    RN_DATA* ratsnest = getModel<BOARD>( PCB_T )->GetRatsnest();
+    ratsnest->ClearSimple();
+
+    if( ( m_endItem == NULL || m_endItem == m_startItem ) && m_startItem->GetNet() > 0 )
+    {
+        // The ending node has to be first, so the line for the track is drawn first
+        ratsnest->AddSimple( m_endSnapPoint, m_startItem->GetNet() );
+
+        // Those nodes are added just to force ratsnest not to drawn
+        // lines to already routed parts of the track
+        const PICKED_ITEMS_LIST& changes = m_router->GetLastChanges();
+        for( unsigned int i = 0; i < changes.GetCount(); ++i )
+        {
+            // Block the new tracks, do not handle tracks that were moved
+            // (moved tracks are saved in the undo buffer with UR_DELETED status instead)
+            if( changes.GetPickedItemStatus( i ) == UR_NEW )
+                ratsnest->AddBlocked( static_cast<BOARD_CONNECTED_ITEM*>( changes.GetPickedItem( i ) ) );
+        }
+
+        // Also the origin of the new track should be skipped in the ratsnest shown for the routed track
+        ratsnest->AddBlocked( static_cast<BOARD_ITEM*>( m_startItem->GetParent() ) );
+    }
+
     if( m_endItem )
         TRACE( 0, "%s, layer : %d", m_endItem->GetKindStr().c_str() %
                 m_endItem->GetLayers().Start() );
@@ -382,6 +408,7 @@ void ROUTER_TOOL::startRouting()
         // Save the recent changes in the undo buffer
         getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( m_router->GetLastChanges(),
                                                             UR_UNSPECIFIED );
+        m_router->ClearLastChanges();
         getEditFrame<PCB_EDIT_FRAME>()->OnModify();
     }
     else
