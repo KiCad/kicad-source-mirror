@@ -37,6 +37,7 @@
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/foreach.hpp>
 
 class BOARD;
 class BOARD_ITEM;
@@ -56,6 +57,9 @@ typedef hed::EdgePtr RN_EDGE_PTR;
 typedef hed::EdgeMST RN_EDGE_MST;
 typedef boost::shared_ptr<hed::EdgeMST> RN_EDGE_MST_PTR;
 typedef hed::Triangulation TRIANGULATOR;
+
+bool operator==( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond );
+bool operator!=( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond );
 
 ///> General interface for filtering out nodes in search functions.
 struct RN_NODE_FILTER : public std::unary_function<const RN_NODE_PTR&, bool>
@@ -83,7 +87,7 @@ struct RN_NODE_COMPARE : std::binary_function<RN_NODE_PTR, RN_NODE_PTR, bool>
 {
     bool operator()( const RN_NODE_PTR& aNode1, const RN_NODE_PTR& aNode2 ) const
     {
-        return ( aNode1->GetX() == aNode2->GetX() && aNode1->GetY() == aNode2->GetY() );
+        return aNode1 == aNode2;
     }
 };
 
@@ -461,7 +465,13 @@ public:
      * Function ClearSimple()
      * Removes all nodes and edges that are used for displaying ratsnest in simple mode.
      */
-    void ClearSimple();
+    void ClearSimple()
+    {
+        BOOST_FOREACH( const RN_NODE_PTR& node, m_simpleNodes )
+            node->SetFlag( false );
+
+        m_simpleNodes.clear();
+    }
 
 protected:
     ///> Validates edge, ie. modifies source and target nodes for an edge
@@ -556,7 +566,11 @@ public:
      * Function ClearSimple()
      * Clears the list of nodes for which ratsnest is drawn in simple mode (one line per node).
      */
-    void ClearSimple();
+    void ClearSimple()
+    {
+        BOOST_FOREACH( RN_NET& net, m_nets )
+            net.ClearSimple();
+    }
 
     /**
      * Function ProcessBoard()
