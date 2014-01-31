@@ -1,6 +1,8 @@
 
 set( MAKE_LINK_MAPS false )
 
+set( CMAKE_CXX_FLAGS "-fopenmp" )
+
 add_definitions( -DPCBNEW )
 add_subdirectory(router)
 
