@@ -72,6 +72,9 @@ private:
     PNS_ITEM* m_endItem;
     VECTOR2I m_endSnapPoint;
 
+    ///> Flag marking that the router's world needs syncing.
+    bool m_needsSync;
+
     /*boost::shared_ptr<CONTEXT_MENU> m_menu;*/
     CONTEXT_MENU* m_menu;
 };
