@@ -742,6 +742,9 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 
     if( aEnable )
     {
+        // Update potential changes in the ratsnest
+        m_Pcb->GetRatsnest()->Recalculate();
+
         m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
                                        GetGalCanvas()->GetViewControls(), this );
         m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
