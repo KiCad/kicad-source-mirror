@@ -548,15 +548,17 @@ const RN_NODE_PTR RN_NET::GetClosestNode( const RN_NODE_PTR& aNode ) const
 
     for( it = nodes.begin(), itEnd = nodes.end(); it != itEnd; ++it )
     {
+        RN_NODE_PTR node = *it;
+
         // Obviously the distance between node and itself is the shortest,
         // that's why we have to skip it
-        if( *it != aNode )
+        if( node != aNode )
         {
-            unsigned int distance = getDistance( *it, aNode );
+            unsigned int distance = getDistance( node, aNode );
             if( distance < minDistance )
             {
                 minDistance = distance;
-                closest = *it;
+                closest = node;
             }
         }
     }
@@ -650,34 +652,41 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
 {
     std::list<RN_NODE_PTR> nodes;
 
-    switch( aItem->Type() )
+    try
     {
-    case PCB_PAD_T:
-    {
-        const D_PAD* pad = static_cast<const D_PAD*>( aItem );
-        nodes.push_back( m_pads.at( pad ) );
-    }
-    break;
-
-    case PCB_VIA_T:
-    {
-        const SEGVIA* via = static_cast<const SEGVIA*>( aItem );
-        nodes.push_back( m_vias.at( via ) );
-    }
-    break;
-
-    case PCB_TRACE_T:
-    {
-        const TRACK* track = static_cast<const TRACK*>( aItem );
-        RN_EDGE_PTR edge = m_tracks.at( track );
-
-        nodes.push_back( edge->getSourceNode() );
-        nodes.push_back( edge->getTargetNode() );
-    }
-    break;
-
-    default:
+        switch( aItem->Type() )
+        {
+        case PCB_PAD_T:
+        {
+            const D_PAD* pad = static_cast<const D_PAD*>( aItem );
+            nodes.push_back( m_pads.at( pad ) );
+        }
         break;
+
+        case PCB_VIA_T:
+        {
+            const SEGVIA* via = static_cast<const SEGVIA*>( aItem );
+            nodes.push_back( m_vias.at( via ) );
+        }
+        break;
+
+        case PCB_TRACE_T:
+        {
+            const TRACK* track = static_cast<const TRACK*>( aItem );
+            RN_EDGE_PTR edge = m_tracks.at( track );
+
+            nodes.push_back( edge->getSourceNode() );
+            nodes.push_back( edge->getTargetNode() );
+        }
+        break;
+
+        default:
+            break;
+        }
+    }
+    catch ( ... )
+    {
+        return nodes;
     }
 
     return nodes;
