@@ -35,7 +35,6 @@
 #include <class_track.h>
 #include <class_zone.h>
 
-#include <boost/foreach.hpp>
 #include <boost/range/adaptor/map.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/make_shared.hpp>
@@ -75,10 +74,21 @@ bool sortArea( const RN_POLY& aP1, const RN_POLY& aP2 )
 }
 
 
+bool operator==( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond )
+{
+    return aFirst->GetX() == aSecond->GetX() && aFirst->GetY() == aSecond->GetY();
+}
+
+
+bool operator!=( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond )
+{
+    return aFirst->GetX() != aSecond->GetX() || aFirst->GetY() != aSecond->GetY();
+}
+
+
 bool isEdgeConnectingNode( const RN_EDGE_PTR& aEdge, const RN_NODE_PTR& aNode )
 {
-    return ( aEdge->getSourceNode().get() == aNode.get() ) ||
-           ( aEdge->getTargetNode().get() == aNode.get() );
+    return aEdge->getSourceNode() == aNode || aEdge->getTargetNode() == aNode;
 }
 
 
@@ -246,7 +256,7 @@ void RN_NET::compute()
 
         return;
     }
-    else if( boardNodes.size() == 1 || boardNodes.empty() )   // This case is even simpler
+    else if( boardNodes.size() <= 1 )   // This case is even simpler
     {
         m_rnEdges.reset( new std::vector<RN_EDGE_PTR>( 0 ) );
 
@@ -566,17 +576,18 @@ const RN_NODE_PTR RN_NET::GetClosestNode( const RN_NODE_PTR& aNode,
 
     for( it = nodes.begin(), itEnd = nodes.end(); it != itEnd; ++it )
     {
-        RN_NODE_PTR baseNode = *it;
+        RN_NODE_PTR node = *it;
 
         // Obviously the distance between node and itself is the shortest,
         // that's why we have to skip it
-        if( *it != aNode && aFilter( baseNode ) )
+        if( node != aNode && aFilter( node ) )
         {
-            unsigned int distance = getDistance( *it, aNode );
+            unsigned int distance = getDistance( node, aNode );
+
             if( distance < minDistance )
             {
                 minDistance = distance;
-                closest = *it;
+                closest = node;
             }
         }
     }
@@ -703,15 +714,6 @@ void RN_DATA::AddSimple( const BOARD_ITEM* aItem )
     }
     else
         return;
-}
-
-
-void RN_NET::ClearSimple()
-{
-    BOOST_FOREACH( const RN_NODE_PTR& node, m_simpleNodes )
-        node->SetFlag( false );
-
-    m_simpleNodes.clear();
 }
 
 
@@ -934,11 +936,4 @@ void RN_DATA::Recalculate( int aNet )
     {
         updateNet( aNet );
     }
-}
-
-
-void RN_DATA::ClearSimple()
-{
-    BOOST_FOREACH( RN_NET& net, m_nets )
-        net.ClearSimple();
 }
