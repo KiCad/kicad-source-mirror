@@ -77,9 +77,7 @@ void EDA_APP::MacOpenFile( const wxString &fileName )
 
     frame->m_LeftWin->ReCreateTreePrj();
 
-    frame->PrintMsg( _( "Working dir: " ) + frame->m_ProjectFileName.GetPath() +
-                     _( "\nProject: " ) + frame->m_ProjectFileName.GetFullName() +
-                     wxT( "\n" ) );
+    frame->PrintPrjInfo();
 }
 
 
