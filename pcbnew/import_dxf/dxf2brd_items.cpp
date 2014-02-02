@@ -52,7 +52,6 @@ DXF2BRD_CONVERTER::DXF2BRD_CONVERTER() : DRW_Interface()
     m_xOffset   = 0.0;      // X coord offset for conversion (in mm)
     m_yOffset   = 0.0;      // Y coord offset for conversion (in mm)
     m_Dfx2mm    = 1.0;      // The scale factor to convert DXF units to mm
-    m_dxf       = NULL;
     m_brd       = NULL;
     m_version   = 0;
     m_defaultThickness = 0.1;
@@ -84,28 +83,16 @@ int DXF2BRD_CONVERTER::mapDim( double aDxfValue )
 }
 
 
-/**
- * Implementation of the method used for communicate
- * with this filter.
- *
- * @param aFile = the full filename.
- * @param aLayersList = where to store the list of layer names
- */
 bool DXF2BRD_CONVERTER::ImportDxfFile( const wxString& aFile, BOARD* aBoard )
 {
     m_brd = aBoard;
 
-    m_dxf = new dxfRW( aFile.ToUTF8() );
-    bool success = m_dxf->read( this, true );
+    dxfRW* dxf = new dxfRW( aFile.ToUTF8() );
+    bool success = dxf->read( this, true );
 
-    if( success==false )
-    {
-        return false;
-    }
+    delete dxf;
 
-    delete m_dxf;
-    m_dxf = NULL;
-    return true;
+    return success;
 }
 
 // Add aItem the the board
