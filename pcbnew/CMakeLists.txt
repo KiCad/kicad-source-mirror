@@ -393,14 +393,6 @@ if( KICAD_SCRIPTING_MODULES )
         ${Boost_LIBRARIES}      # must follow GITHUB
         )
 
-     # create .i files from XML doxygen parsing, docstrings.i will include all of them
-    add_custom_target( qa
-        COMMAND PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR} ${PYTHON_EXECUTABLE} test.py
-
-        COMMENT "running qa"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripting/qa
-        )
-
     if( MAKE_LINK_MAPS )
         # generate a link map with cross reference
         set_target_properties( _pcbnew PROPERTIES LINK_FLAGS "-Wl,-cref -Wl,-Map=_pcbnew.map" )
