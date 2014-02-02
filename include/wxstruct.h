@@ -414,7 +414,9 @@ class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 
 protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
-    int         m_LastGridSizeId;
+    int         m_LastGridSizeId;           // the command id offset (>= 0) of the last selected grid
+                                            // 0 is for the grid corresponding to
+                                            // a wxCommand ID = ID_POPUP_GRID_LEVEL_1000.
     bool        m_DrawGrid;                 // hide/Show grid
     EDA_COLOR_T m_GridColor;                // Grid color
 

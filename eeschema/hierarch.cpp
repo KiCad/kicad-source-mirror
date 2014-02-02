@@ -30,6 +30,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
+#include <id.h>
 #include <wxEeschemaStruct.h>
 
 #include <general.h>
@@ -274,7 +275,10 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     SCH_SCREEN* screen = m_CurrentSheet->LastScreen();
 
+    // Switch to current sheet,
+    // and update the grid size, because it can be modified in latest screen
     SetScreen( screen );
+    GetScreen()->SetGrid( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 );
 
     // update the References
     m_CurrentSheet->UpdateAllScreenReferences();

@@ -302,7 +302,8 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     g_UserUnit = (EDA_UNITS_T)dlg.GetUnitsSelection();
 
-    GetScreen()->SetGrid( grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
+    wxRealPoint  gridsize = grid_list[ (size_t) dlg.GetGridSelection() ].m_Size;
+    m_LastGridSizeId = GetScreen()->SetGrid( gridsize );
 
     int sep, firstId;
     dlg.GetRefIdSeparator( sep, firstId);

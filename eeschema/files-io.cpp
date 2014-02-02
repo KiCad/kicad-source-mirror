@@ -329,7 +329,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
         */
 
         screen->SetZoom( 32 );
-        screen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
+        m_LastGridSizeId = screen->SetGrid( ID_POPUP_GRID_LEVEL_50 );
 
         TITLE_BLOCK tb;
         wxString    title;
