@@ -30,7 +30,6 @@
 #ifndef __INFO3D_VISU_H__
 #define __INFO3D_VISU_H__
 
-//#include <wxBasePcbFrame.h>
 #include <layers_id_colors_and_visibility.h>    // Layers id definitions
 
 #include <wx/glcanvas.h>
