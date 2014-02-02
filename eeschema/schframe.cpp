@@ -505,8 +505,6 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 
     // all sub sheets are deleted, only the main sheet is usable
     m_CurrentSheet->Clear();
-    // hide main frame, which also forces saving curr pos and size in config
-    Show( false );
 
     Destroy();
 }

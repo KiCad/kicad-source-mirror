@@ -258,7 +258,6 @@ void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
     }
     else
     {
-        Show( false );
         Destroy();
     }
 }

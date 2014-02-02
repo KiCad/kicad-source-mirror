@@ -99,6 +99,18 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent,
 
     Connect( ID_AUTO_SAVE_TIMER, wxEVT_TIMER,
              wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
+
+    // hook wxEVT_CLOSE_WINDOW so we can call SaveSettings().  This function seems
+    // to be called before any other hook for wxCloseEvent, which is necessary.
+    Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_BASE_FRAME::windowClosing ) );
+}
+
+
+void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
+{
+    SaveSettings();     // virtual, wxFrame specific
+
+    event.Skip();       // we did not "handle" the event, only eavesdropped on it.
 }
 
 
@@ -109,9 +121,8 @@ EDA_BASE_FRAME::~EDA_BASE_FRAME()
 
     delete m_autoSaveTimer;
 
-    /* This needed for OSX: avoids further OnDraw processing after this
-     * destructor and before the native window is destroyed
-     */
+    // This is needed for OSX: avoids further OnDraw processing after this
+    // destructor and before the native window is destroyed
     this->Freeze();
 }
 
@@ -138,19 +149,6 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
     }
 
     return true;
-}
-
-
-bool EDA_BASE_FRAME::Show( bool show )
-{
-    if( !show )     // closing
-    {
-        SaveSettings();     // virtual, wxFrame specific
-    }
-
-    int ret = wxFrame::Show( show );
-
-    return ret;
 }
 
 
