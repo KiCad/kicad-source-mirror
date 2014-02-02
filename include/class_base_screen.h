@@ -402,13 +402,25 @@ public:
      */
     const GRID_TYPE& GetGrid() const { return m_Grid; }
 
-    void SetGrid( const wxRealPoint& size );
+    /**
+     * set the current grid size m_Grid.
+     * The size must be existing in grid list (in m_grids)
+     * If not, the near existing grid size is used
+     * @param size = the size of the new grid
+     * @return the grid id offset (id from ID_POPUP_GRID_LEVEL_1000 )
+     * of the currently selected grid.
+     */
+    int SetGrid( const wxRealPoint& size );
 
     /**
      * Function SetGrid
-     * sets the grid size from command ID.
+     * sets the grid size from command ID (not an index in grid list, but a wxID).
+     * @param aCommandId = the wxWidgets command ID
+     * @return the grid id offset (id from ID_POPUP_GRID_LEVEL_1000 )
+     * of the currently selected grid.
      */
-    void SetGrid( int id );
+    int SetGrid( int aCommandId );
+
     void SetGridList( GRIDS& sizelist );
     void AddGrid( const GRID_TYPE& grid );
     void AddGrid( const wxRealPoint& size, int id );
