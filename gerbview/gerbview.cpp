@@ -67,15 +67,15 @@ IMPLEMENT_APP( EDA_APP )
 /* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void EDA_APP::MacOpenFile(const wxString &fileName)
+void EDA_APP::MacOpenFile( const wxString& aFileName )
 {
-    wxFileName           filename = fileName;
+    wxFileName           filename = aFileName;
     GERBVIEW_FRAME * frame = ((GERBVIEW_FRAME*)GetTopWindow());
 
     if( !filename.FileExists() )
         return;
 
-    frame->LoadGerberFiles( fileName );
+    frame->LoadGerberFiles( aFileName );
 }
 
 

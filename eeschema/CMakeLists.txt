@@ -1,7 +1,9 @@
-add_definitions(-DEESCHEMA)
+set( MAKE_LINK_MAPS false )
+
+add_definitions( -DEESCHEMA )
 
 
-include_directories(BEFORE ${INC_BEFORE})
+include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
     ../common
@@ -9,7 +11,8 @@ include_directories(
     ${INC_AFTER}
     )
 
-set(EESCHEMA_DLGS
+
+set( EESCHEMA_DLGS
     dialogs/dialog_color_config.cpp
     dialogs/dialog_annotate.cpp
     dialogs/dialog_annotate_base.cpp
@@ -55,7 +58,7 @@ set(EESCHEMA_DLGS
     dialogs/dialog_schematic_find_base.cpp
     )
 
-set(EESCHEMA_SRCS
+set( EESCHEMA_SRCS
     annotate.cpp
     backanno.cpp
     block.cpp
@@ -158,7 +161,7 @@ set(EESCHEMA_SRCS
     )
 
 
-set(EESCHEMA_COMMON_SRCS
+set( EESCHEMA_COMMON_SRCS
     ../common/dialogs/dialog_page_settings.cpp
     ../common/base_screen.cpp
     ../common/eda_text.cpp
@@ -167,22 +170,22 @@ set(EESCHEMA_COMMON_SRCS
     )
 
 
-if(WIN32)
-    if(MINGW)
-        # EESCHEMA_RESOURCES variable is set by the macro.
-        mingw_resource_compiler(eeschema)
-    else(MINGW)
-        set(EESCHEMA_RESOURCES eeschema.rc)
-    endif(MINGW)
-endif(WIN32)
+if( MINGW )
+    # EESCHEMA_RESOURCES variable is set by the macro.
+    mingw_resource_compiler( eeschema )
+endif()
 
-if(APPLE)
-    set(EESCHEMA_RESOURCES eeschema.icns eeschema_doc.icns)
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/eeschema.icns"
-                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    set(MACOSX_BUNDLE_ICON_FILE eeschema.icns)
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.eeschema)
-endif(APPLE)
+
+if( APPLE )
+    set( EESCHEMA_RESOURCES eeschema.icns eeschema_doc.icns )
+
+    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/eeschema.icns" PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+        )
+
+    set( MACOSX_BUNDLE_ICON_FILE eeschema.icns )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.eeschema )
+endif()
 
 
 # auto-generate cmp_library_lexer.h and cmp_library_keywords.cpp for the component
@@ -211,7 +214,7 @@ make_lexer(
     T_BOMCFG_T
 
     # Pass header file with dependency on *_lexer.h as extra_arg
-    /dialogs/dialog_bom_cfg.h
+    dialogs/dialog_bom_cfg.h
     )
 
 # Create a C++ compilable string initializer containing html text into a *.h file:
@@ -231,27 +234,82 @@ set_source_files_properties( dialogs/dialog_bom.cpp
         OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
     )
 
-add_executable(eeschema WIN32 MACOSX_BUNDLE
-    ${EESCHEMA_SRCS}
-    ${EESCHEMA_COMMON_SRCS}
-    ${EESCHEMA_RESOURCES}
-    )
 
-if(APPLE)
-    set_target_properties(eeschema PROPERTIES MACOSX_BUNDLE_INFO_PLIST
-        ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
-endif(APPLE)
+# not ready for even building yet:
+if( false AND USE_KIWAY_DLLS )
 
-target_link_libraries(eeschema
-    common
-    bitmaps
-    polygon
-    ${wxWidgets_LIBRARIES}
-    ${GDI_PLUS_LIBRARIES}
-    )
+    add_executable( eeschema WIN32 MACOSX_BUNDLE
+        ../common/single_top.cpp
+        )
+    target_link_libraries( eeschema
+        common
+        ${wxWidgets_LIBRARIES}
+        )
 
-install(TARGETS eeschema
+    add_library( eeschema_dso MODULE
+        ${EESCHEMA_SRCS}
+        ${EESCHEMA_COMMON_SRCS}
+        ${EESCHEMA_RESOURCES}
+        )
+
+    set_target_properties( eeschema_dso PROPERTIES
+        # keep whatever file extension is supplied by SUFFIX, do not use the PREFIX,
+        # and set the basename.  The result is eeschema.so or eeschema.dll.
+        OUTPUT_NAME     eeschema
+        PREFIX          ""
+        )
+
+    if( APPLE )
+        set_target_properties( eeschema_dso PROPERTIES
+            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+            )
+    endif()
+
+    if( MAKE_LINK_MAPS )
+        # generate a link map with cross reference
+        set_target_properties( eeschema_dso PROPERTIES
+            LINK_FLAGS "-Wl,-cref -Wl,-Map=eeschema_dso.map"
+            )
+    endif()
+
+    target_link_libraries( eeschema_dso
+        common
+        bitmaps
+        polygon
+        ${wxWidgets_LIBRARIES}
+        ${GDI_PLUS_LIBRARIES}
+        )
+
+    install( TARGETS eeschema_dso
         DESTINATION ${KICAD_BIN}
-        COMPONENT binary)
+        COMPONENT binary
+        )
+else()
+    add_executable( eeschema WIN32 MACOSX_BUNDLE
+        ${EESCHEMA_SRCS}
+        ${EESCHEMA_COMMON_SRCS}
+        ${EESCHEMA_RESOURCES}
+        )
 
-add_subdirectory(plugins)
+    if( APPLE )
+        set_target_properties( eeschema PROPERTIES
+            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+            )
+    endif()
+
+    target_link_libraries( eeschema
+        common
+        bitmaps
+        polygon
+        ${wxWidgets_LIBRARIES}
+        ${GDI_PLUS_LIBRARIES}
+        )
+endif()
+
+
+install( TARGETS eeschema
+    DESTINATION ${KICAD_BIN}
+    COMPONENT binary
+    )
+
+add_subdirectory( plugins )

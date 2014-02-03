@@ -67,6 +67,9 @@
 /// When defined, build the GITHUB_PLUGIN for pcbnew.
 #cmakedefine BUILD_GITHUB_PLUGIN
 
+/// When defined, use KIWAY and DSOs
+#cmakedefine USE_KIWAY_DLLS
+
 /// Name of repo from which this build came.
 #define KICAD_REPO_NAME                 "@KICAD_REPO_NAME@"
 

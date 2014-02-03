@@ -1,3 +1,12 @@
+
+# Default to CMAKE_BUILD_TYPE = Release unless overridden on command line
+# http://www.cmake.org/pipermail/cmake/2008-September/023808.html
+if( DEFINED CMAKE_BUILD_TYPE )
+    set( CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Set to either \"Release\" or \"Debug\"" )
+else()
+    set( CMAKE_BUILD_TYPE Release CACHE STRING "Set to either \"Release\" or \"Debug\"" )
+endif()
+
 project( kicad )
 
 cmake_minimum_required( VERSION 2.8.4 FATAL_ERROR )
