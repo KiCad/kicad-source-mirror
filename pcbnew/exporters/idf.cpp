@@ -1146,7 +1146,7 @@ bool IDF_COMP::PlaceComponent( const wxString aComponentFile, const std::string 
     componentFile = aComponentFile;
     refdes = aRefDes;
 
-    if( refdes.empty() || !refdes.compare("~") || !refdes.compare("0") )
+    if( refdes.empty() || !refdes.compare( "~" ) || !refdes.compare( "0" ) )
         refdes = "NOREFDES";
 
     loc_x = aXLoc;
@@ -1155,16 +1155,12 @@ bool IDF_COMP::PlaceComponent( const wxString aComponentFile, const std::string 
     rotation = aRotation;
     top = isOnTop;
 
-    if( !wxFileName::FileExists( aComponentFile ) )
-    {
-        wxFileName fn = aComponentFile;
-        wxString fname = wxGetApp().FindLibraryPath( fn );
+    wxString fname = wxExpandEnvVars( aComponentFile );
 
-        if( fname.IsEmpty() )
-            return false;
-        else
-            componentFile = fname;
-    }
+    if( !wxFileName::FileExists( fname ) )
+        return false;
+
+    componentFile = fname;
 
     return true;
 }
