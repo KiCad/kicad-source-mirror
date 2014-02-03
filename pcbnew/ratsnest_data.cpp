@@ -521,7 +521,12 @@ void RN_NET::RemoveItem( const ZONE_CONTAINER* aZone )
         // Remove all subpolygons that make the zone
         std::deque<RN_POLY>& polygons = m_zonePolygons.at( aZone );
         BOOST_FOREACH( RN_POLY& polygon, polygons )
-            m_links.RemoveNode( polygon.GetNode() );
+        {
+            const RN_NODE_PTR node = polygon.GetNode();
+
+            if( m_links.RemoveNode( node ) )
+                clearNode( node );
+        }
         polygons.clear();
 
         // Remove all connections added by the zone
