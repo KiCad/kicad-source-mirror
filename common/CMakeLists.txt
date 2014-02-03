@@ -131,6 +131,7 @@ set( COMMON_SRCS
     hotkeys_basic.cpp
     hotkey_grid_table.cpp
     html_messagebox.cpp
+    kiway.cpp
     msgpanel.cpp
     netlist_keywords.cpp
     newstroke_font.cpp
@@ -175,16 +176,6 @@ set( COMMON_SRCS
     geometry/shape_collisions.cpp
     geometry/shape_index.cpp
 )
-
-
-# TODO: remove this whole "if test" on or after 14-Jan-2014 and remove the system/*.s
-# sources if no one complains by then.
-# boost::context library replaces this functionality:
-if( false )
-    enable_language( C CXX ASM )
-    set_source_files_properties( system/fcontext.s PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp" )
-    list( APPEND COMMON_SRCS system/fcontext.s )
-endif()
 
 
 add_library( common STATIC ${COMMON_SRCS} )
