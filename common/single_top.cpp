@@ -25,9 +25,9 @@
 
 /*
 
-    This is a program launcher for a single DSO. Initially it will only mimic a
-    KIWAY not actually implement one, since only a single DSO is supported by
-    it.
+    This is a program launcher for a single KIFACE DSO. Initially it will only
+    mimic a KIWAY, not actually implement one, since only a single DSO is
+    supported by it.
 
 */
 
@@ -107,8 +107,8 @@ static wxString wxJoin(const wxArrayString& arr, const wxChar sep,
 #endif
 
 
-// POLICY CHOICE: return the name of the DSO to load as single_top.
-static const wxString dso_name( const wxString& aAbsoluteArgv0 )
+// POLICY CHOICE: return the full path of the DSO to load from single_top.
+static const wxString dso_full_path( const wxString& aAbsoluteArgv0 )
 {
     // Prefix basename with '_' and change extension to DSO_EXT.
 
@@ -129,11 +129,14 @@ static const wxString dso_name( const wxString& aAbsoluteArgv0 )
     // too many masters here: python, windows, linux, OSX, multiple versions of wx...
 
     wxFileName  fn( aAbsoluteArgv0 );
-    wxString    basename( wxT( '_' ) );
+    wxString    basename( KIFACE_PREFIX );  // start with special prefix
 
-    basename += fn.GetName();
+    basename += fn.GetName();               // add argv[0]'s basename
     fn.SetName( basename );
-    fn.SetExt( DSO_EXT );
+
+    // here a suffix == an extension with a preceding '.',
+    // so skip the preceding '.' to get an extension
+    fn.SetExt( KIFACE_SUFFIX + 1 );         // special extension, + 1 => &KIFACE_SUFFIX[1]
 
     return fn.GetFullPath();
 }
@@ -157,10 +160,11 @@ void SetLibEnvVar( const wxString& aAbsoluteArgv0 )
     // POLICY CHOICE: Keep same path, so that installer MAY put the
     // "subsidiary shared libraries" in the same directory as the top process module.
     // A subsidiary shared library is one that is not a top level DSO, but rather
-    // some shared library that a top level DSO needs to even be loaded.
+    // some shared library that a top level DSO needs to even be loaded.  It is
+    // a static link to a shared object from a top level DSO.
 
     // This directory POLICY CHOICE is not the only dir in play, since LIB_ENV_VAR
-    // has numerous path options in it, as does DSO searching on linux.
+    // has numerous path options in it, as does DSO searching on linux, windows, and OSX.
     // See "man ldconfig" on linux. What's being done here is for quick installs
     // into a non-standard place, and especially for Windows users who may not
     // know what the PATH environment variable is or how to set it.
@@ -183,7 +187,7 @@ void SetLibEnvVar( const wxString& aAbsoluteArgv0 )
 }
 
 
-// Only a single KIWAY is supported in this single_top to level component,
+// Only a single KIWAY is supported in this single_top top level component,
 // which is dedicated to loading only a single DSO.
 static KIWAY    standalone;
 
@@ -199,7 +203,8 @@ static wxDynamicLibrary dso;
  * @param aDSOName is an absolute full path to the DSO to load and find KIFACE_GETTER_FUNC within.
  *
  * @return KIFACE_GETTER_FUNC* - a pointer to a function which can be called to get the KIFACE
- *   or NULL if not found or not version compatible.
+ *  or NULL if the getter func was not found.  If not found, it is possibly not version compatible
+ *  since the lookup is done by name and the name contains the API version.
  */
 static KIFACE_GETTER_FUNC* get_kiface_getter( const wxString& aDSOName )
 {
@@ -234,16 +239,18 @@ bool PROCESS::OnInit()
 
     wxStandardPathsBase& paths = wxStandardPaths::Get();
 
+#if defined(DEBUG)
     wxString dir = paths.GetLocalizedResourcesDir( wxT( "de" ),
                         wxStandardPaths::ResourceCat_None );
 
     printf( "LocalizeResourcesDir:'%s'\n",  TO_UTF8( dir ) );
 
     wxString dummy( _( "translate this" ) );
+#endif
 
     wxString absoluteArgv0 = paths.GetExecutablePath();
 
-#if 0 || defined(DEBUG)
+#if 0 && defined(DEBUG)
     printf( "argv[0]:'%s' absoluteArgv0:'%s'\n",
         TO_UTF8( wxString( argv[0] ) ),
         TO_UTF8( absoluteArgv0 )
@@ -256,36 +263,31 @@ bool PROCESS::OnInit()
         return false;
     }
 
-    // Set LIB_ENV_VAR *before* loading the DSO, in case the module holding the
-    // KIFACE has hard dependencies on subsidiary DSOs below it, *before* loading
-    // the KIFACE.
+    // Set LIB_ENV_VAR *before* loading the DSO, in case the top-level DSO holding the
+    // KIFACE has hard dependencies on subsidiary DSOs below it.
     SetLibEnvVar( absoluteArgv0 );
 
-    wxString dname = dso_name( absoluteArgv0 );
+    wxString dname = dso_full_path( absoluteArgv0 );
 
     // Get the getter.
     KIFACE_GETTER_FUNC* getter = get_kiface_getter( dname );
 
-    // get_kiface_getter() returned NULL? If so it handled the UI message, so
-    // we can fail without any further UI.
     if( !getter )
+    {
+        // get_kiface_getter() failed & already showed the UI message.
+        // Return failure without any further UI.
         return false;
+    }
 
     // Get the KIFACE, and give the DSO a single chance to do its
     // "process level" initialization.
     kiface = getter( &kiface_version, KIFACE_VERSION, &wxGetApp() );
 
-    if( !kiface )
-    {
-        // get_kiface_getter() did its own UI error window, because it called
-        // functions in wxDynamicLibrary which did so using wxLogSysError().
-        // Therefore say nothing on failure, it's already been said.
-        // Return false telling startup code to fail the program immediately.
-        return false;
-    }
+    // KIFACE_GETTER_FUNC function comment (API) says the non-NULL is uconditional.
+    wxASSERT_MSG( kiface, wxT( "attempted DSO has a bug, failed to return a KIFACE*" ) );
 
-    // Using the KIFACE, create a window that the KIFACE knows about,
-    // pass classId=0 for now.  This uses a virtual function KIFACE::CreateWindow()
+    // Use KIFACE to create a window that the KIFACE knows about,
+    // pass classId=0 for now.  KIFACE::CreateWindow() is a virtual
     // so we don't need to link to it.
     wxFrame* frame = (wxFrame*) kiface->CreateWindow( 0, &standalone );
 
