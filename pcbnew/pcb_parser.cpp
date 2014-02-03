@@ -2426,9 +2426,9 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             NeedSYMBOLorNUMBER();
             if( m_board->FindNet( zone->GetNet() )->GetNetname() != FromUTF8() )
             {
-                DisplayError( NULL, wxString::Format( _( "There is a zone that belongs to a not "
-                                                         "existing net (%s), you should verify it." ),
-                                                         FromUTF8() ) );
+                wxString msg = _( "There is a zone that belongs to a not "
+                                  "existing net (" ) + FromUTF8() + _("), you should verify it." );
+                DisplayError( NULL, msg );
                 zone->SetNet( NETINFO_LIST::UNCONNECTED );
             }
             NeedRIGHT();
