@@ -140,7 +140,8 @@ PNS_ITEM* ROUTER_TOOL::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLa
         if( !IsCopperLayer( item->GetLayers().Start() ) )
             continue;
 
-        if( item->GetParent() && !item->GetParent()->ViewIsVisible() )
+        if( item->GetParent() && !item->GetParent()->ViewIsVisible() &&
+                                 !item->GetParent()->IsSelected() )
             continue;
 
         if( aNet < 0 || item->GetNet() == aNet )
