@@ -24,7 +24,7 @@ set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 #
 
 option( USE_KIWAY_DLLS
-    "Build the major modules as DLLs or DSOs, will soon be the norm." OFF )
+    "Build the major modules as KIFACE DLLs or DSOs, will soon be the norm." OFF )
 
 # The desire is to migrate designs *away from* case independence, and to create designs which use
 # literally (case specific) interpreted component names.  But for backwards compatibility,
@@ -240,6 +240,8 @@ if( USE_WX_GRAPHICS_CONTEXT )
     add_definitions( -DUSE_WX_GRAPHICS_CONTEXT )
 endif()
 
+
+
 # Allow user to override the default settings for adding images to menu items.  By default
 # images in menu items are enabled on all platforms except OSX.  This can be over ridden by
 # defining -DUSE_IMAGES_IN_MENUS=ON/OFF to force the preferred behavior.
@@ -252,6 +254,25 @@ else()
         set( USE_IMAGES_IN_MENUS ON )
     endif()
 endif()
+
+
+# KIFACE_SUFFIX is the file extension used for top level program modules which
+# implement the KIFACE interface.  A valid suffix starts with a period '.'.
+
+if( false )
+    # This is the eventual situation near milestone C) of modular-kicad blueprint.
+    # Until then we use .kiface extension so we don't collide with python DSO.
+    set( KIFACE_SUFFIX  ${CMAKE_SHARED_MODULE_SUFFIX} )
+else()
+    # Temporary situation until we can dovetail the python DSO into the kiface DSO.
+    set( KIFACE_SUFFIX  ".kiface" )
+endif()
+
+# KIFACE_PREFIX is a basename prefix used for top level program modules which
+# implement the KIFACE.
+set( KIFACE_PREFIX  "_" )
+#message( STATUS "KIFACE_SUFFIX:${KIFACE_SUFFIX}  KIFACE_PREFIX:${KIFACE_PREFIX}" )
+
 
 #================================================
 # Locations for install targets.
@@ -313,7 +334,7 @@ add_definitions(-DWX_COMPATIBILITY)
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
 
-if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
+if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
 
@@ -331,34 +352,33 @@ if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
     endif()
 
     add_custom_target( lib-dependencies
-                       DEPENDS boost cairo glew libpng pixman pkgconfig
-                     )
+        DEPENDS boost cairo glew libpng pixman pkgconfig
+        )
 
     include( download_libpng )
 
     if( KICAD_SCRIPTING_WXPYTHON )
-        message(FATAL_ERROR "KICAD_BUILD_* and SCRIPTING Not Implemented Yet!")
+        message( FATAL_ERROR "KICAD_BUILD_* and SCRIPTING Not Implemented Yet!" )
     else()
         include( download_wxwidgets )
         add_dependencies( lib-dependencies libwx )
-    endif( KICAD_SCRIPTING_WXPYTHON )
+    endif()
 
     include( download_pkgconfig )
-        set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config")
+        set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config" )
     include( download_glew )
-        set( GLEW_GLEW_LIBRARY "${GLEW_ROOT}/lib/libGLEW.a")
-        set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include")
+        set( GLEW_GLEW_LIBRARY "${GLEW_ROOT}/lib/libGLEW.a" )
+        set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include" )
     include( download_pixman )
-        set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a")
+        set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a" )
     include( download_cairo )
-        set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo")
-        set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a")
+        set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo" )
+        set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a" )
 
     if( KICAD_BUILD_DYNAMIC AND APPLE )
         add_custom_target( osx_fix_bundles ALL DEPENDS cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
         add_custom_command(TARGET osx_fix_bundles POST_BUILD COMMAND scripts/osx_fixbundle.sh COMMENT "Migrating dylibs to bundles")
     endif()
-
 
 endif( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC)
 

@@ -78,13 +78,12 @@ target_link_libraries( property_tree
     )
 
 
-#-----<MACOSX Temp Testing>------------------------------------------------------
+#-----<KIWAY Low Level DSO Testing>---------------------------------------------
 
 # The small launcher, it sets up wxWidgets library and loads a MODULE by the same name
-# but with extension *.dylib.  The two files: mac_test and mac_test.dylib must be in
-# same directory for the launcher to find the *.dylib.
+# but with extension ${KIFACE_SUFFIX}.
 
-set( PAIR_BASE dso )
+set( PAIR_BASE kiway_test )
 
 add_executable( ${PAIR_BASE} WIN32 MACOSX_BUNDLE
     EXCLUDE_FROM_ALL
@@ -94,37 +93,37 @@ target_link_libraries( ${PAIR_BASE}
     common
     ${wxWidgets_LIBRARIES}
     )
-
-# make a DLL/DSO/DYLIB, but *_dso is not its real name, see OUTPUT_NAME below.
-add_library( ${PAIR_BASE}_dso MODULE
-    EXCLUDE_FROM_ALL
-    mac_test.cpp
-    )
-target_link_libraries( ${PAIR_BASE}_dso
-    common
-    ${wxWidgets_LIBRARIES}
-    )
-
-set_target_properties( ${PAIR_BASE}_dso PROPERTIES
-    # keep whatever file extension is supplied by SUFFIX, do not use the PREFIX,
-    # and set the basename.  The result is ${PAIR_BASE}.so or ${PAIR_BASE}.dll,
-    # or ${PAIR_BASE}.dylib
-    OUTPUT_NAME     ${PAIR_BASE}
-    PREFIX          "_"
-    )
-
 if( APPLE )
     set_target_properties( ${PAIR_BASE} PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
         )
 endif()
 
+
+# make a KIFACE top level DLL/DSO
+add_library( ${PAIR_BASE}_kiface MODULE
+    EXCLUDE_FROM_ALL
+    kiface_test.cpp
+    )
+target_link_libraries( ${PAIR_BASE}_kiface
+    common
+    ${wxWidgets_LIBRARIES}
+    )
+set_target_properties( ${PAIR_BASE}_kiface PROPERTIES
+    OUTPUT_NAME     ${PAIR_BASE}
+    PREFIX          ${KIFACE_PREFIX}
+    SUFFIX          ${KIFACE_SUFFIX}
+    )
+
+# if you build ${PAIR_BASE}, then also build ${PAIR_BASE}_kiface if out of date.
+add_dependencies( ${PAIR_BASE} ${PAIR_BASE}_kiface )
+
 if( MAKE_LINK_MAPS )
 
     # generate a link maps with cross reference
 
-    set_target_properties( ${PAIR_BASE}_dso PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=${PAIR_BASE}_dso.map"
+    set_target_properties( ${PAIR_BASE}_kiface PROPERTIES
+        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=${KIFACE_PREFIX}${PAIR_BASE}${KIFACE_SUFFIX}.map"
         )
 
     set_target_properties( ${PAIR_BASE} PROPERTIES

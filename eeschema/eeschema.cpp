@@ -53,7 +53,7 @@
 #include <kiway.h>
 #include <import_export.h>
 
-struct SCH_FACE : public KIFACE
+static struct SCH_FACE : public KIFACE
 {
     wxWindow* CreateWindow( int aClassId, KIWAY* aKIWAY, int aCtlBits = 0 )
     {
@@ -76,27 +76,28 @@ struct SCH_FACE : public KIFACE
      *
      * @return void* - and must be cast into the know type.
      */
-    VTBL_ENTRY void* IfaceOrAddress( int aDataId )
+    void* IfaceOrAddress( int aDataId )
     {
         return NULL;
     }
 
-
 } kiface;
 
-static EDA_APP* app;
+static EDA_APP* process;
 
-extern "C" KIFACE* KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, wxApp* aProcess );
-
+// KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.
+// KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
 MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, wxApp* aProcess )
 {
-    app = (EDA_APP*) aProcess;
+    process = (EDA_APP*) aProcess;
     return &kiface;
 }
 
+
 EDA_APP& wxGetApp()
 {
-    return *app;
+    wxASSERT( process );    // KIFACE_GETTER has already been called.
+    return *process;
 }
 
 #else
@@ -109,7 +110,6 @@ EDA_APP& wxGetApp()
 IMPLEMENT_APP( EDA_APP )
 
 #endif
-
 
 
 // Global variables

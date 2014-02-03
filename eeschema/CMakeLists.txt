@@ -236,7 +236,7 @@ set_source_files_properties( dialogs/dialog_bom.cpp
 
 
 # not ready for even building yet:
-if( false AND USE_KIWAY_DLLS )
+if( USE_KIWAY_DLLS )
 
     add_executable( eeschema WIN32 MACOSX_BUNDLE
         ../common/single_top.cpp
@@ -246,33 +246,33 @@ if( false AND USE_KIWAY_DLLS )
         ${wxWidgets_LIBRARIES}
         )
 
-    add_library( eeschema_dso MODULE
+    add_library( eeschema_kiface MODULE
         ${EESCHEMA_SRCS}
         ${EESCHEMA_COMMON_SRCS}
         ${EESCHEMA_RESOURCES}
         )
-
-    set_target_properties( eeschema_dso PROPERTIES
-        # keep whatever file extension is supplied by SUFFIX, do not use the PREFIX,
-        # and set the basename.  The result is eeschema.so or eeschema.dll.
+    set_target_properties( eeschema_kiface PROPERTIES
+        # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
+        # _eeschema.so, _eeschema.dll, or _eeschema.kiface
         OUTPUT_NAME     eeschema
-        PREFIX          ""
+        PREFIX          ${KIFACE_PREFIX}
+        SUFFIX          ${KIFACE_SUFFIX}
         )
 
     if( APPLE )
-        set_target_properties( eeschema_dso PROPERTIES
+        set_target_properties( eeschema_kiface PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
             )
     endif()
 
     if( MAKE_LINK_MAPS )
         # generate a link map with cross reference
-        set_target_properties( eeschema_dso PROPERTIES
-            LINK_FLAGS "-Wl,-cref -Wl,-Map=eeschema_dso.map"
+        set_target_properties( eeschema_kiface PROPERTIES
+            LINK_FLAGS "-Wl,-cref -Wl,-Map=${KIFACE_PRE}eeschema.${KIFACE_EXT}.map"
             )
     endif()
 
-    target_link_libraries( eeschema_dso
+    target_link_libraries( eeschema_kiface
         common
         bitmaps
         polygon
@@ -280,7 +280,9 @@ if( false AND USE_KIWAY_DLLS )
         ${GDI_PLUS_LIBRARIES}
         )
 
-    install( TARGETS eeschema_dso
+    # Note that this filename is subject to change at milestone C) of
+    # modular-kicad blueprint.
+    install( TARGETS eeschema_kiface
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )

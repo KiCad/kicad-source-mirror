@@ -23,8 +23,10 @@
  */
 
 #include <kiway.h>
+#include <config.h>
 #include <wx/debug.h>
 #include <string.h>
+
 
 // one for each FACE_T
 wxDynamicLibrary KIWAY::s_sch_dso;
@@ -41,8 +43,8 @@ const wxString KIWAY::dso_name( FACE_T aFaceId )
 {
     switch( aFaceId )
     {
-    case FACE_SCH:  return wxT( "_eeschema." ) DSO_EXT;
-    case FACE_PCB:  return wxT( "_pcbnew."   ) DSO_EXT;
+    case FACE_SCH:  return KIFACE_PREFIX wxT( "eeschema" ) KIFACE_SUFFIX;
+    case FACE_PCB:  return KIFACE_PREFIX wxT( "pcbnew"   ) KIFACE_SUFFIX;
 
     default:
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
