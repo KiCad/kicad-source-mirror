@@ -55,14 +55,15 @@ public:
 
     UTF8( const wxString& o );
 
-    /// This is the only constructor for which you could end up with
+    /// This is a constructor for which you could end up with
     /// non-UTF8 encoding, but that would be your fault.
     UTF8( const char* txt ) :
         std::string( txt )
     {
     }
 
-    /// For use with _() function on wx 2.8:
+    /// For use with _() function on wx 2.8.
+    /// BTW _() on wx >= 2.9 returns wxString, not wchar_t* like on 2.8.
     UTF8( const wchar_t* txt );
 
     UTF8( const std::string& o ) :
@@ -124,7 +125,7 @@ public:
      * class uni_iter
      * is a non-muting iterator that walks through unicode code points in the UTF8 encoded
      * string.  The normal ++(), ++(int), ->(), and *() operators are all supported
-     * for read only access and they return an unsigned holding the unicode character
+     * for read only access and some return an unsigned holding the unicode character
      * appropriate for the respective operator.
      */
     class uni_iter
@@ -152,7 +153,6 @@ public:
         const uni_iter& operator++()
         {
             it += uni_forward( it );
-
             return *this;
         }
 
@@ -217,4 +217,4 @@ public:
     }
 };
 
-#endif // UTF8_H__
+#endif // UTF8_H_

@@ -12,8 +12,8 @@ may choose to document this corresponding work in the CHANGELOG.txt file.
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 <author>
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014 <author>
+ * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

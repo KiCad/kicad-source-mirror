@@ -1,3 +1,5 @@
+#ifndef IMPORT_EXPORT_H_
+#define IMPORT_EXPORT_H_
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -22,39 +24,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef IMPORT_EXPORT_H_
-#define IMPORT_EXPORT_H_
+// macros which export functions from a DLL/DSO.
 
-// macros which export functions from a DLL/DSO.  Not yet important with GCC,
-// (either linux or mingw maybe OSX), until you compile with the hidden attribute:
-// -fvisibility=hidden -fvisibility-inlines-hidden, which we are not yet.
+#if defined(__MINGW32__)
+ #define APIEXPORT __declspec(dllexport)
+ #define APIIMPORT __declspec(dllimport)
+ #define APILOCAL
 
+#elif defined(__GNUC__) && __GNUC__ >= 4
+ #define APIEXPORT __attribute__ ((visibility("default")))
+ #define APIIMPORT __attribute__ ((visibility("default")))
+ #define APILOCAL  __attribute__ ((visibility("hidden")))
 
-// GCC >= 4.x
-#if defined(__GNUC__) && __GNUC__ >= 4
-# define APIEXPORT __attribute__ ((visibility("default")))
-# define APIIMPORT __attribute__ ((visibility("default")))
-# define APILOCAL  __attribute__ ((visibility("hidden")))
-
-// windows
-#elif (defined(__WINDOWS__) || defined(__CYGWIN__) || defined(_WIN32))
-# define APIEXPORT __declspec(dllexport)
-# define APIIMPORT __declspec(dllimport)
-# define APILOCAL
-
-#else  // not windows nor GCC >= 4.x
-# define APIEXPORT
-# define APIIMPORT
-# define APILOCAL
-#endif
-
-
-#ifdef COMPILING_DLL   // by CMake magically when compiling implementation.
-# define MY_API     APIEXPORT
 #else
-# define MY_API     APIIMPORT
+ #pragma message ( "warning: a supported C++ compiler is required" )
+ #define APIEXPORT
+ #define APIIMPORT
+ #define APILOCAL
 #endif
 
-#define MY_LOCAL    APILOCAL
 
-#endif  // IMPORT_EXPORTS_H_
+#if defined(test_EXPORTS) || defined(COMPILING_DLL)
+ // above defined by CMake magically when compiling implementation.
+ #define MY_API(rettype)    APIEXPORT   rettype
+#else
+ #define MY_API(rettype)    APIIMPORT   rettype
+#endif
+
+#define MY_LOCAL(rettype)   APILOCAL    rettype
+
+#endif  // IMPORT_EXPORT_H_
