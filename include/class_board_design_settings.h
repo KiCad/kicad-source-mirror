@@ -100,7 +100,7 @@ public:
      * returns a bit-mask of all the element categories that are visible
      * @return int - the visible element categories in bit-mapped form.
      */
-    int GetVisibleElements() const
+    long GetVisibleElements() const
     {
         return m_VisibleElements;
     }
@@ -110,7 +110,7 @@ public:
      * changes the bit-mask of visible element categories
      * @param aMask = The new bit-mask of visible element categories
      */
-    void SetVisibleElements( int aMask )
+    void SetVisibleElements( long aMask )
     {
         m_VisibleElements = aMask;
     }
@@ -119,23 +119,25 @@ public:
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
      * inline function.
-     * @param aPCB_VISIBLE is from the enum by the same name
+     * @param aElementCategory is from the enum by the same name
      * @return bool - true if the element is visible.
      * @see enum PCB_VISIBLE
      */
-    bool IsElementVisible( int aPCB_VISIBLE ) const
+    bool IsElementVisible( int aElementCategory ) const
     {
-        return bool( m_VisibleElements & (1 << aPCB_VISIBLE) );
+        assert( aElementCategory >= 0 && aElementCategory < END_PCB_VISIBLE_LIST );
+
+        return ( m_VisibleElements & ( 1 << aElementCategory ) );
     }
 
     /**
      * Function SetElementVisibility
      * changes the visibility of an element category
-     * @param aPCB_VISIBLE is from the enum by the same name
+     * @param aElementCategory is from the enum by the same name
      * @param aNewState = The new visibility state of the element category
      * @see enum PCB_VISIBLE
      */
-    void SetElementVisibility( int aPCB_VISIBLE, bool aNewState );
+    void SetElementVisibility( int aElementCategory, bool aNewState );
 
     /**
      * Function GetEnabledLayers
@@ -196,7 +198,7 @@ private:
     int       m_CopperLayerCount;   ///< Number of copper layers for this design
     LAYER_MSK m_EnabledLayers;      ///< Bit-mask for layer enabling
     LAYER_MSK m_VisibleLayers;      ///< Bit-mask for layer visibility
-    int       m_VisibleElements;    ///< Bit-mask for element category visibility
+    long      m_VisibleElements;    ///< Bit-mask for element category visibility
     int       m_boardThickness;     ///< Board thickness for 3D viewer
 };
 
