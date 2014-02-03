@@ -68,14 +68,14 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
     }
 
     // Default colors for specific layers
-    m_layerColors[ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE )]         = COLOR4D( 0.5, 0.4, 0.0, 1.0 );
-    m_layerColors[ITEM_GAL_LAYER( PADS_HOLES_VISIBLE )]         = COLOR4D( 0.0, 0.5, 0.5, 1.0 );
-    m_layerColors[ITEM_GAL_LAYER( VIAS_VISIBLE )]               = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
-    m_layerColors[ITEM_GAL_LAYER( PADS_VISIBLE )]               = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
-    m_layerColors[ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE )]      = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
-    m_layerColors[ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
-    m_layerColors[ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
-    m_layerColors[ITEM_GAL_LAYER( WORKSHEET )]                  = COLOR4D( 0.5, 0.0, 0.0, 1.0 );
+    m_layerColors[ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE )]             = COLOR4D( 0.5, 0.4, 0.0, 1.0 );
+    m_layerColors[ITEM_GAL_LAYER( PADS_HOLES_VISIBLE )]             = COLOR4D( 0.0, 0.5, 0.5, 1.0 );
+    m_layerColors[ITEM_GAL_LAYER( VIAS_VISIBLE )]                   = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
+    m_layerColors[ITEM_GAL_LAYER( PADS_VISIBLE )]                   = COLOR4D( 0.7, 0.7, 0.7, 1.0 );
+    m_layerColors[NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE )]      = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    m_layerColors[NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    m_layerColors[NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    m_layerColors[ITEM_GAL_LAYER( WORKSHEET )]                      = COLOR4D( 0.5, 0.0, 0.0, 1.0 );
 
     // Netnames for copper layers
     for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; ++layer )

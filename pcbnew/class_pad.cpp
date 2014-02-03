@@ -841,7 +841,7 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     {
         // Multi layer pad
         aLayers[aCount++] = ITEM_GAL_LAYER( PADS_VISIBLE );
-        aLayers[aCount++] = ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE );
+        aLayers[aCount++] = NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE );
         aLayers[aCount++] = SOLDERMASK_N_FRONT;
         aLayers[aCount++] = SOLDERMASK_N_BACK;
         aLayers[aCount++] = SOLDERPASTE_N_FRONT;
@@ -850,14 +850,14 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     else if( IsOnLayer( LAYER_N_FRONT ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
-        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
+        aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
         aLayers[aCount++] = SOLDERMASK_N_FRONT;
         aLayers[aCount++] = SOLDERPASTE_N_FRONT;
     }
     else if( IsOnLayer( LAYER_N_BACK ) )
     {
         aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
-        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
+        aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
         aLayers[aCount++] = SOLDERMASK_N_BACK;
         aLayers[aCount++] = SOLDERPASTE_N_BACK;
     }
