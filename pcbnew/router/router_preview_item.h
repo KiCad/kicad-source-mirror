@@ -73,7 +73,7 @@ public:
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const
     {
-        aLayers[0] = GP_OVERLAY;
+        aLayers[0] = m_layer;
         aCount = 1;
     }
 
