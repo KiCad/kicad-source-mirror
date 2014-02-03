@@ -261,13 +261,14 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     VECTOR2D start( aTrack->GetStart() );
     VECTOR2D end( aTrack->GetEnd() );
     int      width = aTrack->GetWidth();
-    int      netNumber = aTrack->GetNet();
     COLOR4D  color;
 
     if( m_pcbSettings->m_netNamesOnTracks && IsNetnameLayer( aLayer ) )
     {
+        int netCode = aTrack->GetNet();
+
         // If there is a net name - display it on the track
-        if( netNumber > 0 )
+        if( netCode > 0 )
         {
             VECTOR2D line = ( end - start );
             double length = line.EuclideanNorm();
@@ -276,11 +277,11 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             if( length < 10 * width )
                 return;
 
-            NETINFO_ITEM* net = ( (BOARD*) aTrack->GetParent() )->FindNet( netNumber );
+            NETINFO_ITEM* net = ( (BOARD*) aTrack->GetParent() )->FindNet( netCode );
             if( !net )
                 return;
 
-            std::wstring netName = std::wstring( net->GetShortNetname().wc_str() );
+            wxString netName = net->GetShortNetname();
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
             double textOrientation = -atan( line.y / line.x );
             double textSize = std::min( static_cast<double>( width ), length / netName.length() );
@@ -304,7 +305,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             m_gal->StrokeText( netName, textPosition, textOrientation );
         }
     }
-    else if( IsCopperLayer( aLayer ))
+    else if( IsCopperLayer( aLayer ) )
     {
         // Draw a regular track
         color = m_pcbSettings->GetColor( aTrack, aLayer );
