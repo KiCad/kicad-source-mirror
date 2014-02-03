@@ -916,7 +916,7 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
         LAYER_NUM layers[] = {
                 GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
-                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
                 ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE )
         };
 
@@ -927,12 +927,12 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
         if( aLayer == FIRST_COPPER_LAYER )
         {
             rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
+            rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
         }
         else if( aLayer == LAST_COPPER_LAYER )
         {
             rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-            rSettings->SetActiveLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
+            rSettings->SetActiveLayer( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
         }
     }
 
@@ -956,7 +956,7 @@ void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
         LAYER_NUM layers[] = {
                 GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIAS_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
-                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
                 ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE ), DRAW_N
         };
 
@@ -969,12 +969,12 @@ void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
         if( aLayer == FIRST_COPPER_LAYER )
         {
             view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-            view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
+            view->SetTopLayer( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
         }
         else if( aLayer == LAST_COPPER_LAYER )
         {
             view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-            view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
+            view->SetTopLayer( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
         }
     }
 
@@ -1014,10 +1014,15 @@ void PCB_EDIT_FRAME::syncLayerVisibilities()
     m_Layers->SyncLayerVisibilities();
 
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
+
     // Load layer & elements visibility settings
     for( LAYER_NUM i = 0; i < NB_LAYERS; ++i )
     {
         view->SetLayerVisible( i, m_Pcb->IsLayerVisible( i ) );
+
+        // Synchronize netname layers as well
+        if( IsCopperLayer( i ) )
+            view->SetLayerVisible( GetNetnameLayer( i ), m_Pcb->IsLayerVisible( i ) );
     }
 
     for( LAYER_NUM i = 0; i < END_PCB_VISIBLE_LIST; ++i )
@@ -1026,12 +1031,10 @@ void PCB_EDIT_FRAME::syncLayerVisibilities()
     }
 
     // Enable some layers that are GAL specific
-    for( LAYER_NUM i = FIRST_NETNAME_LAYER; i < LAST_NETNAME_LAYER; ++i )
-    {
-        view->SetLayerVisible( i, true );
-    }
     view->SetLayerVisible( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), true );
     view->SetLayerVisible( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), true );
+    view->SetLayerVisible( ITEM_GAL_LAYER( WORKSHEET ), true );
+    view->SetLayerVisible( ITEM_GAL_LAYER( GP_OVERLAY ), true );
 }
 
 
