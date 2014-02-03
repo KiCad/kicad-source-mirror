@@ -34,7 +34,6 @@
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
 #include <class_mire.h>
-#include <class_netinfo.h>
 #include <pcbstruct.h>
 
 #include <view/view.h>
@@ -281,7 +280,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             if( !net )
                 return;
 
-            std::wstring netName = std::wstring( net->GetShortNetname().wc_str() );
+            const wxString& netName = aTrack->GetShortNetname();
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
             double textOrientation = -atan( line.y / line.x );
             double textSize = std::min( static_cast<double>( width ), length / netName.length() );
