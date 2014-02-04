@@ -224,7 +224,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetMousePosition();
         VECTOR2D pos = getView()->ToWorld( screenPos );
 
-        if( pos != m_lastMousePos || type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
+        if( pos != m_lastMousePos )
         {
             motion = true;
             m_lastMousePos = pos;
