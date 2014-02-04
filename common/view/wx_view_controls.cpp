@@ -202,7 +202,20 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         updateCursor();
 
         // Notify tools that the cursor position has changed in the world coordinates
-        wxCommandEvent moveEvent( EVT_REFRESH_MOUSE );
+        wxMouseEvent moveEvent( EVT_REFRESH_MOUSE );
+
+        // Set the modifiers state
+#if wxCHECK_VERSION( 3, 0, 0 )
+        moveEvent.SetControlDown( wxGetKeyState( WXK_CONTROL ) );
+        moveEvent.SetShiftDown( wxGetKeyState( WXK_SHIFT ) );
+        moveEvent.SetAltDown( wxGetKeyState( WXK_ALT) );
+#else
+        // wx <3.0 do not have accessors, but the fields are exposed
+        moveEvent.m_controlDown = wxGetKeyState( WXK_CONTROL );
+        moveEvent.m_shiftDown = wxGetKeyState( WXK_SHIFT );
+        moveEvent.m_altDown = wxGetKeyState( WXK_ALT );
+#endif
+
         wxPostEvent( m_parentPanel, moveEvent );
     }
     break;
