@@ -80,7 +80,11 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     m_updateFlag = KIGFX::VIEW_ITEM::GEOMETRY;
 
     if( selection.Empty() )
-        return 0; // there are no items to operate on
+    {
+        setTransitions();   // this is necessary, so later the tool may
+                            // be activated upon reception of the activation event
+        return 0;           // there are no items to operate on, so we can end now
+    }
 
     VECTOR2D dragPosition;      // The last position of the cursor while dragging
     m_dragging = false;
