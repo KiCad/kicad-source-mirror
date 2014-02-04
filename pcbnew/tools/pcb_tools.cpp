@@ -47,6 +47,8 @@ void PCB_EDIT_FRAME::setupTools()
     GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
 
     // Register tool actions
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionSingle );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionClear );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::editActivate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::rotate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::flip );
