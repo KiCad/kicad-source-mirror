@@ -78,9 +78,12 @@ public:
             return items.GetCount();
         }
 
+    private:
         /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
         /// change properties of selected items (e.g. selection flag).
-        void Clear();
+        void clear();
+
+        friend class SELECTION_TOOL;
     };
 
     /// @copydoc TOOL_INTERACTIVE::Reset()

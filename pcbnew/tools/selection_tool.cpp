@@ -69,7 +69,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
     if( aReason == TOOL_BASE::MODEL_RELOAD )
         // Remove pointers to the selected items from containers
         // without changing their properties (as they are already deleted)
-        m_selection.Clear();
+        m_selection.clear();
     else
         // Restore previous properties of selected items and remove them from containers
         ClearSelection();
@@ -172,7 +172,7 @@ void SELECTION_TOOL::ClearSelection()
         item->ViewSetVisible( true );
         item->ClearSelected();
     }
-    m_selection.Clear();
+    m_selection.clear();
 
     getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
 
@@ -465,7 +465,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         if( aItem->IsOnLayer( LAYER_N_FRONT ) && board->IsElementVisible( MOD_FR_VISIBLE ) )
             return true;
 
-        if( aItem->IsOnLayer( LAYER_N_BACK ) && board->IsLayerVisible( MOD_BK_VISIBLE ) )
+        if( aItem->IsOnLayer( LAYER_N_BACK ) && board->IsElementVisible( MOD_BK_VISIBLE ) )
             return true;
 
         return false;
@@ -590,7 +590,7 @@ bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
 }
 
 
-void SELECTION_TOOL::SELECTION::Clear()
+void SELECTION_TOOL::SELECTION::clear()
 {
     items.ClearItemsList();
     group->Clear();
