@@ -115,6 +115,14 @@ private:
     }
 
     void updateRatsnest( bool aRedraw );
+
+    ///> Returns the right modification point (e.g. for rotation), depending on the number of
+    ///> selected items.
+    wxPoint getModificationPoint( const SELECTION_TOOL::SELECTION& aSelection );
+
+    ///> If there are no items currently selected, it tries to choose the item that is under
+    ///> the cursor or displays a disambiguation menu if there are multpile items.
+    bool makeSelection( const SELECTION_TOOL::SELECTION& aSelection );
 };
 
 #endif
