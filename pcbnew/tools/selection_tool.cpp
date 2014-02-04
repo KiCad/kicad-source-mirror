@@ -72,7 +72,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         m_selection.clear();
     else
         // Restore previous properties of selected items and remove them from containers
-        ClearSelection();
+        clearSelection();
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
@@ -92,25 +92,22 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         // become the new selection (discarding previously selected items)
         m_additive = evt->Modifier( MD_SHIFT );
 
-        if( evt->IsCancel() )
+        if( evt->IsAction( &COMMON_ACTIONS::selectionSingle ) )
         {
-            // Cancel event deselects items...
-            ClearSelection();
-
-            // This tool never exits
+            selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
         }
 
-        else if( evt->Action() == TA_UNDO_REDO )
+        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO ||
+                 evt->IsAction( &COMMON_ACTIONS::selectionClear ) )
         {
-            // Clear the selection, as it may be altered with undone items
-            ClearSelection();
+            clearSelection();
         }
 
         // single click? Select single object
         else if( evt->IsClick( BUT_LEFT ) )
         {
             if( !m_additive )
-                ClearSelection();
+                clearSelection();
 
             selectSingle( evt->Position() );
         }
@@ -144,7 +141,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
                 else
                 {
                     // No -> clear the selection list
-                    ClearSelection();
+                    clearSelection();
                 }
             }
         }
@@ -154,30 +151,6 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
     assert( false );
 
     return 0;
-}
-
-
-void SELECTION_TOOL::ClearSelection()
-{
-    if( m_selection.Empty() )
-        return;
-
-    KIGFX::VIEW_GROUP::const_iter it, it_end;
-
-    // Restore the initial properties
-    for( it = m_selection.group->Begin(), it_end = m_selection.group->End(); it != it_end; ++it )
-    {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
-
-        item->ViewSetVisible( true );
-        item->ClearSelected();
-    }
-    m_selection.clear();
-
-    getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
-
-    // Do not show the context menu when there is nothing selected
-    SetContextMenu( &m_menu, CMENU_OFF );
 }
 
 
@@ -198,7 +171,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
     else
     {
         if( !m_additive )
-            ClearSelection();
+            clearSelection();
 
         // Prevent selection of invisible or inactive items
         if( selectable( aItem ) )
@@ -221,7 +194,7 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
     {
     case 0:
         if( !m_additive )
-            ClearSelection();
+            clearSelection();
         break;
 
     case 1:
@@ -254,43 +227,6 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
 }
 
 
-BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector )
-{
-    int count = aCollector->GetPrimaryCount();     // try to use preferred layer
-
-    if( 0 == count )
-        count = aCollector->GetCount();
-
-    for( int i = 0; i < count; ++i )
-    {
-        if( ( *aCollector )[i]->Type() != PCB_MODULE_T )
-            return NULL;
-    }
-
-    // All are modules, now find smallest MODULE
-    int minDim = 0x7FFFFFFF;
-    int minNdx = 0;
-
-    for( int i = 0; i < count; ++i )
-    {
-        MODULE* module = (MODULE*) ( *aCollector )[i];
-
-        int lx = module->GetBoundingBox().GetWidth();
-        int ly = module->GetBoundingBox().GetHeight();
-
-        int lmin = std::min( lx, ly );
-
-        if( lmin < minDim )
-        {
-            minDim = lmin;
-            minNdx = i;
-        }
-    }
-
-    return (*aCollector)[minNdx];
-}
-
-
 bool SELECTION_TOOL::selectMultiple()
 {
     bool cancelled = false;     // Was the tool cancelled while it was running?
@@ -311,7 +247,7 @@ bool SELECTION_TOOL::selectMultiple()
         if( evt->IsDrag( BUT_LEFT ) )
         {
             if( !m_additive )
-                ClearSelection();
+                clearSelection();
 
             // Start drawing a selection box
             m_selArea->SetOrigin( evt->DragOrigin() );
@@ -353,6 +289,30 @@ bool SELECTION_TOOL::selectMultiple()
     getViewControls()->SetAutoPan( false );
 
     return cancelled;
+}
+
+
+void SELECTION_TOOL::clearSelection()
+{
+    if( m_selection.Empty() )
+        return;
+
+    KIGFX::VIEW_GROUP::const_iter it, it_end;
+
+    // Restore the initial properties
+    for( it = m_selection.group->Begin(), it_end = m_selection.group->End(); it != it_end; ++it )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
+
+        item->ViewSetVisible( true );
+        item->ClearSelected();
+    }
+    m_selection.clear();
+
+    getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+
+    // Do not show the context menu when there is nothing selected
+    SetContextMenu( &m_menu, CMENU_OFF );
 }
 
 
@@ -416,6 +376,43 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 
     return current;
+}
+
+
+BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector )
+{
+    int count = aCollector->GetPrimaryCount();     // try to use preferred layer
+
+    if( 0 == count )
+        count = aCollector->GetCount();
+
+    for( int i = 0; i < count; ++i )
+    {
+        if( ( *aCollector )[i]->Type() != PCB_MODULE_T )
+            return NULL;
+    }
+
+    // All are modules, now find smallest MODULE
+    int minDim = 0x7FFFFFFF;
+    int minNdx = 0;
+
+    for( int i = 0; i < count; ++i )
+    {
+        MODULE* module = (MODULE*) ( *aCollector )[i];
+
+        int lx = module->GetBoundingBox().GetWidth();
+        int ly = module->GetBoundingBox().GetHeight();
+
+        int lmin = std::min( lx, ly );
+
+        if( lmin < minDim )
+        {
+            minDim = lmin;
+            minNdx = i;
+        }
+    }
+
+    return (*aCollector)[minNdx];
 }
 
 

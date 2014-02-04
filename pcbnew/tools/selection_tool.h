@@ -107,12 +107,6 @@ public:
     }
 
     /**
-     * Function ClearSelection()
-     * Clears the current selection.
-     */
-    void ClearSelection();
-
-    /**
      * Function AddMenuItem()
      *
      * Adds a menu entry to run a TOOL_ACTION on selected items.
@@ -137,6 +131,12 @@ private:
      * @return true if the function was cancelled (ie. CancelEvent was received).
      */
     bool selectMultiple();
+
+    /**
+     * Function ClearSelection()
+     * Clears the current selection.
+     */
+    void clearSelection();
 
     /**
      * Function disambiguationMenu()

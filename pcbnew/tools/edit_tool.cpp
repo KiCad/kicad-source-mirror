@@ -74,10 +74,6 @@ bool EDIT_TOOL::Init()
 int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
-
-    // By default, modified items need to update their geometry
-    m_updateFlag = KIGFX::VIEW_ITEM::GEOMETRY;
 
     if( selection.Empty() )
     {
@@ -90,7 +86,11 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     m_dragging = false;
     bool restore = false;       // Should items' state be restored when finishing the tool?
 
+    // By default, modified items need to update their geometry
+    m_updateFlag = KIGFX::VIEW_ITEM::GEOMETRY;
+
     VIEW_CONTROLS* controls = getViewControls();
+    PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
     controls->ShowCursor( true );
     controls->SetSnapping( true );
     controls->SetAutoPan( true );
@@ -163,7 +163,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 
     if( restore )
     {
-        // Modifications has to be rollbacked, so restore the previous state of items
+        // Modifications have to be rollbacked, so restore the previous state of items
         wxCommandEvent dummy;
         editFrame->GetBoardFromUndoList( dummy );
     }
@@ -290,7 +290,7 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
     PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
 
     // As we are about to remove items, they have to be removed from the selection first
-    m_selectionTool->ClearSelection();
+    m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
 
     // Save them
     for( unsigned int i = 0; i < selectedItems.GetCount(); ++i )
