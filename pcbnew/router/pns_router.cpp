@@ -66,6 +66,9 @@ public:
         for( unsigned int i = 0; i < aBoard->GetNetCount(); i++ )
         {
             NETINFO_ITEM* ni = aBoard->FindNet( i );
+            if( ni == NULL )
+                continue;
+
             wxString netClassName = ni->GetClassName();
             NETCLASS* nc = aBoard->m_NetClasses.Find( netClassName );
             int clearance = nc->GetClearance();
