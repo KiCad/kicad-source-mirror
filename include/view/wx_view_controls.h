@@ -112,6 +112,12 @@ private:
      */
     bool handleAutoPanning( const wxMouseEvent& aEvent );
 
+    /**
+     * Function updateCursor()
+     * Recomputes the cursor coordinates basing on the current snapping settings and mouse position.
+     */
+    void updateCursor();
+
     /// Current state of VIEW_CONTROLS
     STATE       m_state;
 
