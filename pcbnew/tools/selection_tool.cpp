@@ -112,12 +112,12 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             selectSingle( evt->Position() );
         }
 
+        // double click? Display the properties window
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
             if( m_selection.Empty() )
                 selectSingle( evt->Position() );
 
-            // Display properties window
             m_toolMgr->RunAction( "pcbnew.InteractiveEdit.properties" );
         }
 

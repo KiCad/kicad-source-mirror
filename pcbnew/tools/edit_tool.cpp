@@ -49,10 +49,9 @@ EDIT_TOOL::EDIT_TOOL() :
 bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
-    TOOL_BASE* selectionTool = m_toolMgr->FindTool( "pcbnew.InteractiveSelection" );
+    m_selectionTool = static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveSelection" ) );
 
-    m_selectionTool = static_cast<SELECTION_TOOL*>( selectionTool );
-    if( !selectionTool )
+    if( !m_selectionTool )
     {
         DisplayError( NULL, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
         return false;
@@ -75,15 +74,15 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Empty() )
-    {
-        setTransitions();   // this is necessary, so later the tool may
-                            // be activated upon reception of the activation event
-        return 0;           // there are no items to operate on, so we can end now
-    }
+    // Shall the selection be cleared at the end?
+    bool unselect = selection.Empty();
+
+    // Be sure that there is at least one item that we can modify
+    if( !makeSelection( selection ) )
+        return 0;
 
     VECTOR2D dragPosition;      // The last position of the cursor while dragging
-    m_dragging = false;
+    m_dragging = false;         // Are selected items being dragged?
     bool restore = false;       // Should items' state be restored when finishing the tool?
 
     // By default, modified items need to update their geometry
@@ -173,6 +172,9 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
         selection.group->ItemsViewUpdate( m_updateFlag );
     }
 
+    if( unselect )
+        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+
     RN_DATA* ratsnest = getModel<BOARD>( PCB_T )->GetRatsnest();
     ratsnest->ClearSimple();
     ratsnest->Recalculate();
@@ -192,26 +194,32 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
     PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
 
+    // Shall the selection be cleared at the end?
+    bool unselect = selection.Empty();
+
+    if( !makeSelection( selection ) )
+        return 0;
+
     // Properties are displayed when there is only one item selected
     if( selection.Size() == 1 )
     {
         // Display properties dialog
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) );
 
-        if( !m_dragging )   // If it is being dragged, then it is already saved with UR_CHANGED flag
-        {
-            editFrame->SaveCopyInUndoList( item, UR_CHANGED );
-            editFrame->OnModify();
-        }
-
+        editFrame->SaveCopyInUndoList( item, UR_CHANGED );
+        editFrame->OnModify();
         editFrame->OnEditItemRequest( NULL, item );
 
         item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+        updateRatsnest( true );
+        getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
+
+        if( unselect )
+            m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
     }
 
     setTransitions();
-    updateRatsnest( true );
-    getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
     return 0;
 }
@@ -220,20 +228,28 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
 int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    VECTOR2D cursor = getView()->ToWorld( getViewControls()->GetCursorPosition() );
     PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
+
+    // Shall the selection be cleared at the end?
+    bool unselect = selection.Empty();
+
+    if( !makeSelection( selection ) )
+        return 0;
+
+    wxPoint rotatePoint = getModificationPoint( selection );
 
     if( !m_dragging )   // If it is being dragged, then it is already saved with UR_CHANGED flag
     {
         editFrame->OnModify();
-        editFrame->SaveCopyInUndoList( selection.items, UR_ROTATED, wxPoint( cursor.x, cursor.y ) );
+        editFrame->SaveCopyInUndoList( selection.items, UR_ROTATED, rotatePoint );
     }
 
     for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( i ) );
 
-        item->Rotate( wxPoint( cursor.x, cursor.y ), 900.0 );
+        item->Rotate( rotatePoint, editFrame->GetRotationAngle() );
+
         if( !m_dragging )
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
@@ -246,6 +262,9 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
     else
         getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
+    if( unselect )
+        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+
     return 0;
 }
 
@@ -253,20 +272,28 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    VECTOR2D cursor = getView()->ToWorld( getViewControls()->GetCursorPosition() );
     PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
+
+    // Shall the selection be cleared at the end?
+    bool unselect = selection.Empty();
+
+    if( !makeSelection( selection ) )
+        return 0;
+
+    wxPoint flipPoint = getModificationPoint( selection );
 
     if( !m_dragging )   // If it is being dragged, then it is already saved with UR_CHANGED flag
     {
         editFrame->OnModify();
-        editFrame->SaveCopyInUndoList( selection.items, UR_FLIPPED, wxPoint( cursor.x, cursor.y ) );
+        editFrame->SaveCopyInUndoList( selection.items, UR_FLIPPED, flipPoint );
     }
 
     for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( i ) );
 
-        item->Flip( wxPoint( cursor.x, cursor.y ) );
+        item->Flip( flipPoint );
+
         if( !m_dragging )
             item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
     }
@@ -279,14 +306,22 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
     else
         getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
+    if( unselect )
+        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+
     return 0;
 }
 
 
 int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
 {
+    const SELECTION_TOOL::SELECTION selection = m_selectionTool->GetSelection();
+
+    if( !makeSelection( selection ) )
+        return 0;
+
     // Get a copy of the selected items set
-    PICKED_ITEMS_LIST selectedItems = m_selectionTool->GetSelection().items;
+    PICKED_ITEMS_LIST selectedItems = selection.items;
     PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
 
     // As we are about to remove items, they have to be removed from the selection first
@@ -385,9 +420,44 @@ void EDIT_TOOL::updateRatsnest( bool aRedraw )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( i ) );
 
-        ratsnest->Update( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+        ratsnest->Update( item );
 
         if( aRedraw )
             ratsnest->AddSimple( item );
     }
+}
+
+
+wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelection )
+{
+    if( aSelection.Size() == 1 )
+    {
+        return static_cast<BOARD_ITEM*>( aSelection.items.GetPickedItem( 0 ) )->GetPosition();
+    }
+    else
+    {
+        VECTOR2I cursor = getView()->ToWorld( getViewControls()->GetCursorPosition() );
+        return wxPoint( cursor.x, cursor.y );
+    }
+}
+
+
+bool EDIT_TOOL::makeSelection( const SELECTION_TOOL::SELECTION& aSelection )
+{
+    if( aSelection.Empty() )
+    {
+        // Try to find an item that could be modified
+        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Single" );
+
+        if( aSelection.Empty() )
+        {
+            // This is necessary, so later the tool may be activated upon
+            // reception of the activation event
+            setTransitions();
+
+            return false;   // Still no items to work with
+        }
+    }
+
+    return true;
 }
