@@ -106,11 +106,14 @@ as such!  As such, it is OK to use UTF8 characters:
 #define KIFACE_VERSION                      1
 #define KIFACE_GETTER                       KIFACE_1
 
-// Adjust the spelling of this in a platform specific way if need be.  The
-// KIFACE acquistion function is declared extern "C" so its name should not
-// be mangled.  Keep the trailing version number in sync with the KIFACE_GETTER
-// define above.
-#define KIFACE_INSTANCE_NAME_AND_VERSION    "KIFACE_1"
+// The KIFACE acquistion function is declared extern "C" so its name should not
+// be mangled (much).  Windows has leading underscore for our C function.
+// Keep the trailing version number in sync with the KIFACE_GETTER define above.
+#if defined(__MINGW32__)
+ #define KIFACE_INSTANCE_NAME_AND_VERSION   "_KIFACE_1"
+#else
+ #define KIFACE_INSTANCE_NAME_AND_VERSION   "KIFACE_1"
+#endif
 
 
 #if defined(__linux__)
