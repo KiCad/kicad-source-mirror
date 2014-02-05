@@ -205,6 +205,21 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
     {
         // Display properties dialog
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) );
+        VECTOR2I cursor = getView()->ToWorld( getViewControls()->GetCursorPosition() );
+
+        // Check if user wants to edit pad or module properties
+        if( item->Type() == PCB_MODULE_T )
+        {
+            for( D_PAD* pad = static_cast<MODULE*>( item )->Pads(); pad; pad = pad->Next() )
+            {
+                if( pad->ViewBBox().Contains( cursor ) )
+                {
+                    // Turns out that user wants to edit a pad properties
+                    item = pad;
+                    break;
+                }
+            }
+        }
 
         editFrame->SaveCopyInUndoList( item, UR_CHANGED );
         editFrame->OnModify();
