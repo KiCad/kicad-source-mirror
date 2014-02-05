@@ -1,43 +1,132 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
- <defs>
-  <linearGradient id="a">
-   <stop stop-color="#fbffff" stop-opacity="0" offset="0"/>
-   <stop stop-color="#fff" offset="1"/>
-  </linearGradient>
-  <linearGradient id="f" y2="16.549" xlink:href="#a" gradientUnits="userSpaceOnUse" x2="110.17" gradientTransform="matrix(.20304 0 0 .33265 69.945 13.517)" y1="79.338" x1="157.21"/>
-  <linearGradient id="g" y2="11.503" xlink:href="#a" gradientUnits="userSpaceOnUse" x2="22.394" gradientTransform="matrix(.23921 0 0 .28236 69.945 13.517)" y1="74.459" x1="78.703"/>
-  <radialGradient id="i" gradientUnits="userSpaceOnUse" cy="24.963" cx="51.638" r="19.571">
-   <stop stop-color="#c8e0f9" offset="0"/>
-   <stop stop-color="#637dca" offset="1"/>
-  </radialGradient>
-  <radialGradient id="h" gradientUnits="userSpaceOnUse" cy="25.149" cx="48.646" r="19.571">
-   <stop stop-color="#71b2f8" offset="0"/>
-   <stop stop-color="#002795" offset="1"/>
-  </radialGradient>
- </defs>
- <path stroke-linejoin="round" d="m92.818 15.495-20.71 4.586 0.04347 23.947h0.009v0.04556l0.0782-0.0152 20.527 6.6589 19.285-6.9626v-23.674l-19.233-4.586z" stroke-opacity=".5" stroke="#000" stroke-width="3.2487" fill="none"/>
- <path stroke-linejoin="round" d="m112.03 20.085v22.283l-18.612-3.5786-0.62345-23.286 19.235 4.5826z" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-width="1.9545" fill="#515151"/>
- <path stroke-linejoin="round" d="m72.079 20.085 20.713-4.582 1.327 24.08-21.986 4.493-0.054-23.991z" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-width="1.9545" fill="#4a494d"/>
- <path stroke-linejoin="round" d="m92.741 25.656 19.289-5.571-19.237-4.582-20.714 4.582 20.662 5.571z" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-width="1.9545" fill="#9db8d2"/>
- <path stroke-linejoin="round" d="m112.03 20.085v23.675l-19.286 6.9621v-25.067l19.286-5.5702z" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-width="1.9545" fill="#4b6983"/>
- <path stroke-linejoin="round" d="m92.741 25.656v25.067l-20.62-6.6936-0.04267-23.945 20.663 5.5707z" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-width="1.9545" fill="#7590ae"/>
- <path fill-rule="evenodd" fill="url(#g)" d="m92.717 16.454-19.506 4.3538v22.272c20.303 6.9621 23.685 11.53 18.495-18.067 18.389-5.9218 1.0115-8.5583 1.0115-8.5583z"/>
- <path d="m93.823 26.361v22.772c0.0764 0 8.175-2.6712 11.919-6.0102 3.8201-2.7379 5.1189-8.2806 5.1189-8.2806v-13.623l-17.037 5.142z" fill-opacity=".75" fill-rule="evenodd" fill="url(#f)"/>
- <path stroke-linejoin="round" d="m92.741 25.656v25.067l-20.62-6.6936-0.04267-23.945 20.663 5.5707z" stroke="#000" stroke-linecap="round" stroke-width="1.9545" fill="none"/>
- <g transform="matrix(.30099 .087271 .0021963 .38926 107.74 39.159)">
-  <rect fill-rule="evenodd" rx="2.825" ry="7.866" height="46.063" width="38.976" stroke="#000" y="-13.622" x="-102.76" stroke-width="2.2011" fill="#fff"/>
-  <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" font-size="40px" line-height="125%" y="23.416523" x="-94.562927" font-family="Bitstream Vera Sans" fill="#000000"><tspan y="23.416523" x="-94.562927" font-weight="bold" fill="#f80d0d">3</tspan></text>
- </g>
- <g transform="matrix(.31252 .085063 .0022804 .37941 84.042 35.198)">
-  <rect transform="matrix(.8921 -.45183 -.029043 .99958 0 0)" fill-rule="evenodd" rx="3.4346" ry="7.9834" height="46.75" width="47.387" stroke="#000" y="-5.7669" x="44.386" stroke-width="2.4451" fill="#fff"/>
-  <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="matrix(1.04 -.59865 -.017172 .97144 0 0)" line-height="125%" font-size="41.649px" y="37.381359" x="43.81324" font-family="Bitstream Vera Sans" fill="#000000"><tspan y="37.381359" x="43.81324" font-weight="bold" fill="#f80d0d">D</tspan></text>
- </g>
- <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" font-size="40px" line-height="125%" y="34.097565" x="-6.9512191" font-family="Bitstream Vera Sans" fill="#000000"><tspan/></text>
- <g fill-rule="evenodd" transform="matrix(.65461 0 0 .63757 5.5642 6.6727)">
-  <path opacity=".66524" d="m71.786 34.571a18.572 18.572 0 1 1 -37.143 0 18.572 18.572 0 1 1 37.143 0z" transform="matrix(.91536 0 0 .3022 -4.6085 28.767)"/>
-  <path d="m71.786 34.571a18.572 18.572 0 1 1 -37.143 0 18.572 18.572 0 1 1 37.143 0z" transform="matrix(1.0092,0,0,1.0092,-12.599,-12.284)" stroke="#4b4dba" stroke-width="2.1799" fill="url(#i)"/>
-  <path opacity=".66524" d="m71.786 34.571a18.572 18.572 0 1 1 -37.143 0 18.572 18.572 0 1 1 37.143 0z" transform="matrix(1.1484 0 0 .37912 -28.823 42.536)"/>
-  <path d="m71.786 34.571a18.572 18.572 0 1 1 -37.143 0 18.572 18.572 0 1 1 37.143 0z" transform="matrix(1.1294,0,0,1.1294,-36.028,1.4554)" stroke="#000137" stroke-width="1.948" fill="url(#h)"/>
- </g>
- <text style="word-spacing:0px;letter-spacing:0px" stroke-width="1.5559" xml:space="preserve" transform="scale(.92845 1.0771)" line-height="125%" stroke="#ffffff" font-size="30.929px" y="26.039131" x="-0.61617005" font-family="Sans" fill="#f21010"><tspan style="word-spacing:0px;letter-spacing:-1.8686px" font-weight="bold" stroke="#ffffff" dx="0" y="26.039131" x="-0.61617005" stroke-width="1.5559" fill="#f21010">3D</tspan></text>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="26"
+   width="26"
+   version="1.1"
+   viewBox="0 0 26 26"
+   id="svg2"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="three_d.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1301"
+     inkscape:window-height="744"
+     id="namedview22"
+     showgrid="true"
+     inkscape:zoom="8.1181298"
+     inkscape:cx="26.996453"
+     inkscape:cy="25.845418"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2999"
+       empspacing="2"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       spacingx="0.5px"
+       spacingy="0.5px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata4">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6" />
+  <rect
+     stroke-linejoin="round"
+     rx="1"
+     ry="1"
+     height="19"
+     width="5"
+     stroke="#666"
+     y="3.5"
+     x="18.5"
+     stroke-width="1"
+     fill="#e6e6e6"
+     id="rect8" />
+  <rect
+     stroke-linejoin="round"
+     rx="1"
+     ry="1"
+     height="19"
+     width="5"
+     stroke="#666"
+     y="3.5"
+     x="10.5"
+     stroke-width="1"
+     fill="#e6e6e6"
+     id="rect10" />
+  <rect
+     stroke-linejoin="round"
+     rx="1"
+     ry="1"
+     height="19"
+     width="5"
+     stroke="#666"
+     y="3.5"
+     x="2.5"
+     stroke-width="1"
+     fill="#e6e6e6"
+     id="rect12" />
+  <rect
+     stroke-linejoin="miter"
+     stroke-dasharray="none"
+     ry="0"
+     height="14"
+     width="25"
+     stroke="#1a1a1a"
+     stroke-linecap="butt"
+     stroke-miterlimit="4"
+     y="6"
+     x="0.5"
+     stroke-width="1"
+     fill="#666"
+     id="rect14" />
+  <path
+     stroke-linejoin="miter"
+     d="m1.5,19,0-12,23,0"
+     stroke="#808080"
+     stroke-linecap="square"
+     stroke-width="1px"
+     fill="none"
+     id="path18" />
+  <path
+     stroke-linejoin="miter"
+     d="m2.5,19,22,0,0-11"
+     stroke="#4d4d4d"
+     stroke-linecap="square"
+     stroke-width="0.99999994px"
+     fill="none"
+     id="path20" />
+  <path
+     style="fill:#333333"
+     inkscape:connector-curvature="0"
+     id="path3001"
+     d="M 5.5,16 A 1.5000001,1.5000001 0 0 1 2.4999999,16 1.5000001,1.5000001 0 1 1 5.5,16 z" />
 </svg>

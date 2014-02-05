@@ -12,7 +12,7 @@
    width="48"
    version="1.0"
    id="svg2"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="new_pcb.svg">
   <metadata
      id="metadata358">
@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -35,15 +35,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="949"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview356"
      showgrid="true"
      inkscape:zoom="8.146395"
-     inkscape:cx="33.215195"
+     inkscape:cx="33.460702"
      inkscape:cy="37.915782"
      inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-y="29"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      inkscape:snap-grids="false"
@@ -1338,28 +1338,6 @@
        display="block"
        d="m -16.398484,31.789832 -1.283042,0 0,-14.466209 -1.283042,-1.205517 0,-14.4662087 2.566084,0 0,30.1379347 z"
        id="path341-8"
-       inkscape:connector-curvature="0" />
-  </g>
-  <g
-     transform="matrix(4.1228166,0,0,4.0916513,-12.605316,25.113403)"
-     id="g78-0">
-    <path
-       style="fill:#afaf00"
-       d="M 12,5.5 9.4826,4.1505 6.9438,5.4592 7.4494,2.648 5.4202,0.6379 8.25,0.25 9.5347,-2.301 10.778,0.2704 13.601,0.70392 11.54,2.68102 z"
-       transform="matrix(0.86499,0,0,0.86499,3.3638,-4.5167)"
-       id="path80-8"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:#ebeb00"
-       d="M 12,5.5 9.4826,4.1505 6.9438,5.4592 7.4494,2.648 5.4202,0.6379 8.25,0.25 9.5347,-2.301 10.778,0.2704 13.601,0.70392 11.54,2.68102 z"
-       id="path82-8"
-       inkscape:connector-curvature="0"
-       transform="matrix(0.61624,0,0,0.61624,5.7296,-4.1188)" />
-    <path
-       style="fill:#ffff00"
-       d="M 12,5.5 9.4826,4.1505 6.9438,5.4592 7.4494,2.648 5.4202,0.6379 8.25,0.25 9.5347,-2.301 10.778,0.2704 13.601,0.70392 11.54,2.68102 z"
-       transform="matrix(0.3815,0,0,0.3815,7.9622,-3.7434)"
-       id="path84-5"
        inkscape:connector-curvature="0" />
   </g>
   <path
