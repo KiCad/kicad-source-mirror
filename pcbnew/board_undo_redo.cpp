@@ -537,6 +537,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             }
             ratsnest->Add( item );
 
+            item->ClearSelected();      // TODO or ClearFlags?
             item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
         }
         break;
