@@ -27,6 +27,10 @@
  * @brief Class that computes missing connections on a PCB.
  */
 
+#ifdef USE_OPENMP
+#include <omp.h>
+#endif /* USE_OPENMP */
+
 #include <ratsnest_data.h>
 
 #include <class_board.h>
@@ -964,13 +968,25 @@ void RN_DATA::Recalculate( int aNet )
 {
     if( aNet < 0 )              // Recompute everything
     {
-        // Start with net number 1, as 0 stands for not connected
-        for( unsigned int i = 1; i < m_nets.size(); ++i )
+        unsigned int tid, i, chunk, netCount;
+        netCount = m_board->GetNetCount();
+        chunk = 1;
+
+#ifdef USE_OPENMP
+        #pragma omp parallel shared(chunk, netCount) private(i, tid)
         {
-            // Recompute only nets that require it
-            if( m_nets[i].IsDirty() )
-                updateNet( i );
-        }
+            tid = omp_get_thread_num();
+            #pragma omp for schedule(guided, chunk)
+#else /* USE_OPENMP */
+        {
+#endif
+            // Start with net number 1, as 0 stand for not connected
+            for( i = 1; i < netCount; ++i )
+            {
+                if( m_nets[i].IsDirty() )
+                    updateNet( i );
+            }
+       }  /* end of parallel section */
     }
     else if( aNet > 0 )         // Recompute only specific net
     {
@@ -982,6 +998,7 @@ void RN_DATA::Recalculate( int aNet )
 void RN_DATA::updateNet( int aNetCode )
 {
     assert( aNetCode < (int) m_nets.size() );
+
     if( aNetCode < 1 )
         return;
 

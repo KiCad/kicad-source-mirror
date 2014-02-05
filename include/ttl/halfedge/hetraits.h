@@ -69,9 +69,6 @@ namespace hed {
 
   struct TTLtraits {
     
-    // The actual triangulation object
-    static Triangulation* triang_;
-    
     /** The floating point type used in calculations
     *   involving scalar products and cross products.
     */
@@ -172,127 +169,6 @@ namespace hed {
     }
 
     //@} // End of Geometric Predicates Group
-
-
-    // A rationale for directing these functions to traits is:
-    // e.g., constraints
-
-    //----------------------------------------------------------------------------------------------
-    /* Checks if the edge associated with \e dart should be swapped
-    *   according to the Delaunay criterion.<br>
-    *
-    *   \note
-    *   This function is also present in the TTL as ttl::swapTestDelaunay.<br>
-    *   Thus, the function can be implemented simply as:
-    *   \code
-    *   { return ttl::swapTestDelaunay<TTLtraits>(dart); }
-    *   \endcode
-    */
-    //static bool swapTestDelaunay(const Dart& dart) {
-    //  return ttl::swapTestDelaunay<TTLtraits>(dart);
-    //}
-
-
-    //----------------------------------------------------------------------------------------------
-    /* Checks if the edge associated with \e dart can be swapped, i.e.,
-    *   if the edge is a diagonal in a (strictly) convex quadrilateral.
-    *   This function is also present as ttl::swappableEdge.
-    */
-    //static bool swappableEdge(const Dart& dart) {
-    //  return ttl::swappableEdge<TTLtraits>(dart);
-    //}
-
-
-    //----------------------------------------------------------------------------------------------
-    /* Checks if the edge associated with \e dart should be \e fixed, meaning
-    *   that it should never be swapped. ??? Use when constraints.
-    */
-    //static bool fixedEdge(const Dart& dart) {
-    //  return dart.getEdge()->isConstrained();
-    //}
-
-
-    //----------------------------------------------------------------------------------------------
-    // ----------------------- Functions for Delaunay Triangulation Group -------------------------
-    //----------------------------------------------------------------------------------------------
-
-    /** @name Functions for Delaunay Triangulation */
-    //@{
-
-    //----------------------------------------------------------------------------------------------
-    /** Swaps the edge associated with \e dart in the actual data structure.
-    *
-    *   <center>
-    *   \image html swapEdge.gif
-    *   </center>
-    * 
-    *   \param dart
-    *   Some of the functions require a dart as output.
-    *   If this is required by the actual function, the dart should be delivered
-    *   back in a position as seen if it was glued to the edge when swapping (rotating)
-    *   the edge CCW; see the figure.
-    *
-    *   \note
-    *   - If the edge is \e constrained, or if it should not be swapped for
-    *     some other reason, this function need not do the actual swap of the edge.
-    *   - Some functions in TTL require that \c swapEdge is implemented such that
-    *     darts outside the quadrilateral are not affected by the swap.
-    */
-    static void swapEdge(Dart& dart) {
-      if (!dart.getEdge()->isConstrained()) triang_->swapEdge(dart.getEdge());
-    }
-
-
-    //----------------------------------------------------------------------------------------------
-    /** Splits the triangle associated with \e dart in the actual data structure into
-    *   three new triangles joining at \e point.
-    *
-    *   <center>
-    *   \image html splitTriangle.gif
-    *   </center>
-    *
-    *   \param dart
-    *   Output: A CCW dart incident with the new node; see the figure.
-    */
-    static void splitTriangle(Dart& dart, NodePtr point) {
-      EdgePtr edge = triang_->splitTriangle(dart.getEdge(), point);
-      dart.init(edge);
-    }
-    
-    //@} // End of Functions for Delaunay Triangulation group
-
-
-    //----------------------------------------------------------------------------------------------
-    // --------------------------- Functions for removing nodes Group -----------------------------
-    //----------------------------------------------------------------------------------------------
-
-    /** @name Functions for removing nodes */
-    //@{
-
-    //----------------------------------------------------------------------------------------------
-    /** The reverse operation of TTLtraits::splitTriangle.
-    *   This function is only required for functions that involve
-    *   removal of interior nodes; see for example ttl::removeInteriorNode.
-    *
-    *   <center>
-    *   \image html reverse_splitTriangle.gif
-    *   </center>
-    */
-    static void reverse_splitTriangle(Dart& dart) {
-      triang_->reverse_splitTriangle(dart.getEdge());
-    }
-
-
-    //----------------------------------------------------------------------------------------------
-    /** Removes a triangle with an edge at the boundary of the triangulation
-    *   in the actual data structure
-    */
-    static void removeBoundaryTriangle(Dart& d) {
-      triang_->removeTriangle(d.getEdge());
-    }
-
-    //@} // End of Functions for removing nodes Group
-
   };
 
 }; // End of hed namespace
