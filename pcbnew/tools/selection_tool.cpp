@@ -50,7 +50,7 @@
 using boost::optional;
 
 SELECTION_TOOL::SELECTION_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_multiple( false )
+    TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_additive( false ), m_multiple( false )
 {
     m_selArea = new SELECTION_AREA;
     m_selection.group = new KIGFX::VIEW_GROUP;
