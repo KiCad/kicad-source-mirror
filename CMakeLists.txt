@@ -542,6 +542,7 @@ add_subdirectory( potrace )
 add_subdirectory( bitmap2component )
 add_subdirectory( pcb_calculator )
 add_subdirectory( tools )
+add_subdirectory( utils )
 add_subdirectory( qa )
 #add_subdirectory( new )
 
