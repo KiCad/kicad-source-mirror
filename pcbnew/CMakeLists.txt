@@ -129,6 +129,7 @@ set( PCBNEW_EXPORTERS
     exporters/export_gencad.cpp
     exporters/export_idf.cpp
     exporters/export_vrml.cpp
+    exporters/idf_common.cpp
     exporters/idf.cpp
     exporters/gen_drill_report_files.cpp
     exporters/gen_modules_placefile.cpp
