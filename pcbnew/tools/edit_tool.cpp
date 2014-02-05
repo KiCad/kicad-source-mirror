@@ -330,7 +330,7 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
 {
-    const SELECTION_TOOL::SELECTION selection = m_selectionTool->GetSelection();
+    const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
 
     if( !makeSelection( selection ) )
         return 0;
