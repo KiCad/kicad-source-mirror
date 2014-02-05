@@ -223,8 +223,8 @@ void Triangulation::removeTriangle(EdgePtr& edge) {
   removeLeadingEdgeFromList(e1);
   // cout << "No leading edges = " << leadingEdges_.size() << endl;  
   // Remove the triangle
-  EdgePtr e2 = e1->getNextEdgeInFace();
-  EdgePtr e3 = e2->getNextEdgeInFace();
+  EdgePtr e2(e1->getNextEdgeInFace());
+  EdgePtr e3(e2->getNextEdgeInFace());
   
   if (e1->getTwinEdge())
     e1->getTwinEdge()->setTwinEdge(EdgePtr());
@@ -240,15 +240,15 @@ void Triangulation::reverse_splitTriangle(EdgePtr& edge) {
   
   // Reverse operation of splitTriangle
   
-  EdgePtr e1 = edge->getNextEdgeInFace();
-  EdgePtr le = getLeadingEdgeInTriangle(e1);
+  EdgePtr e1(edge->getNextEdgeInFace());
+  EdgePtr le(getLeadingEdgeInTriangle(e1));
 #ifdef DEBUG_HE
   if (!le)
     errorAndExit("Triangulation::removeTriangle: could not find leading edge");
 #endif
   removeLeadingEdgeFromList(le);
   
-  EdgePtr e2 = e1->getNextEdgeInFace()->getTwinEdge()->getNextEdgeInFace();
+  EdgePtr e2(e1->getNextEdgeInFace()->getTwinEdge()->getNextEdgeInFace());
   le = getLeadingEdgeInTriangle(e2);
 #ifdef DEBUG_HE
   if (!le)
@@ -256,7 +256,7 @@ void Triangulation::reverse_splitTriangle(EdgePtr& edge) {
 #endif
   removeLeadingEdgeFromList(le);
     
-  EdgePtr e3 = edge->getTwinEdge()->getNextEdgeInFace()->getNextEdgeInFace();
+  EdgePtr e3(edge->getTwinEdge()->getNextEdgeInFace()->getNextEdgeInFace());
   le = getLeadingEdgeInTriangle(e3);
 #ifdef DEBUG_HE
   if (!le)
@@ -322,14 +322,11 @@ bool Triangulation::removeLeadingEdgeFromList(EdgePtr& leadingEdge) {
       edge->setAsLeadingEdge(false);
       it = leadingEdges_.erase(it);
       
-      break;
+      return true;
     }
   }
   
-  if (it == leadingEdges_.end())
-    return false;
-  
-  return true;
+  return false;
 }
 
 
@@ -451,14 +448,14 @@ EdgePtr Triangulation::splitTriangle(EdgePtr& edge, NodePtr& point) {
   // Add the node to the structure
   //NodePtr new_node(new Node(x,y,z));
 
-  NodePtr n1 = edge->getSourceNode();
-  EdgePtr e1 = edge;
+  NodePtr n1(edge->getSourceNode());
+  EdgePtr e1(edge);
   
-  EdgePtr e2 = edge->getNextEdgeInFace();
-  NodePtr n2 = e2->getSourceNode();
+  EdgePtr e2(edge->getNextEdgeInFace());
+  NodePtr n2(e2->getSourceNode());
   
-  EdgePtr e3 = e2->getNextEdgeInFace();
-  NodePtr n3 = e3->getSourceNode();
+  EdgePtr e3(e2->getNextEdgeInFace());
+  NodePtr n3(e3->getSourceNode());
   
   EdgePtr e1_n(new Edge);
   EdgePtr e11_n(new Edge);
@@ -489,7 +486,6 @@ EdgePtr Triangulation::splitTriangle(EdgePtr& edge, NodePtr& point) {
   e22_n->setNextEdgeInFace(e2);
   e33_n->setNextEdgeInFace(e3);
   
-  
   // and update old's next edge
   e1->setNextEdgeInFace(e2_n);
   e2->setNextEdgeInFace(e3_n);
@@ -500,18 +496,14 @@ EdgePtr Triangulation::splitTriangle(EdgePtr& edge, NodePtr& point) {
   // Use the field telling if an edge is a leading edge
   // NOTE: Must search in the list!!!
   
-  
-  EdgePtr leadingEdge;
   if (e1->isLeadingEdge())
-    leadingEdge = e1;
+    removeLeadingEdgeFromList(e1);
   else if (e2->isLeadingEdge())
-    leadingEdge = e2;
+    removeLeadingEdgeFromList(e2);
   else if(e3->isLeadingEdge())
-    leadingEdge = e3;
+    removeLeadingEdgeFromList(e3);
   else
     return EdgePtr();
-  
-  removeLeadingEdgeFromList(leadingEdge);
   
   addLeadingEdge(e1_n);
   addLeadingEdge(e2_n);
@@ -532,16 +524,16 @@ void Triangulation::swapEdge(EdgePtr& diagonal) {
   
   // Swap by rotating counterclockwise
   // Use the same objects - no deletion or new objects
-  EdgePtr eL   = diagonal;
-  EdgePtr eR   = eL->getTwinEdge();
-  EdgePtr eL_1 = eL->getNextEdgeInFace();
-  EdgePtr eL_2 = eL_1->getNextEdgeInFace();
-  EdgePtr eR_1 = eR->getNextEdgeInFace();
-  EdgePtr eR_2 = eR_1->getNextEdgeInFace();
+  EdgePtr eL(diagonal);
+  EdgePtr eR(eL->getTwinEdge());
+  EdgePtr eL_1(eL->getNextEdgeInFace());
+  EdgePtr eL_2(eL_1->getNextEdgeInFace());
+  EdgePtr eR_1(eR->getNextEdgeInFace());
+  EdgePtr eR_2(eR_1->getNextEdgeInFace());
   
   // avoid node to be dereferenced to zero and deleted
-  NodePtr nR = eR_2->getSourceNode();
-  NodePtr nL = eL_2->getSourceNode();
+  NodePtr nR(eR_2->getSourceNode());
+  NodePtr nL(eL_2->getSourceNode());
   
   eL->setSourceNode(nR);
   eR->setSourceNode(nL);
@@ -555,24 +547,20 @@ void Triangulation::swapEdge(EdgePtr& diagonal) {
   eR_2->setNextEdgeInFace(eL_1);
   eL_1->setNextEdgeInFace(eR);
   
-  EdgePtr leL;
   if (eL->isLeadingEdge())
-    leL = eL;
+    removeLeadingEdgeFromList(eL);
   else if (eL_1->isLeadingEdge())
-    leL = eL_1;
+    removeLeadingEdgeFromList(eL_1);
   else if (eL_2->isLeadingEdge())
-    leL = eL_2;
+    removeLeadingEdgeFromList(eL_2);
   
-  EdgePtr leR;
   if (eR->isLeadingEdge())
-    leR = eR;
+    removeLeadingEdgeFromList(eR);
   else if (eR_1->isLeadingEdge())
-    leR = eR_1;
+    removeLeadingEdgeFromList(eR_1);
   else if (eR_2->isLeadingEdge())
-    leR = eR_2;
+    removeLeadingEdgeFromList(eR_2);
   
-  removeLeadingEdgeFromList(leL);
-  removeLeadingEdgeFromList(leR);
   addLeadingEdge(eL);
   addLeadingEdge(eR);
 }
