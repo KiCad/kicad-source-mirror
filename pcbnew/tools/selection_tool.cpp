@@ -568,16 +568,15 @@ void SELECTION_TOOL::deselectVisually( BOARD_ITEM* aItem ) const
 
 bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
 {
-    const unsigned GRIP_MARGIN = 500000;
+    const unsigned GRIP_MARGIN = 20;
+    VECTOR2D margin = getView()->ToWorld( VECTOR2D( GRIP_MARGIN, GRIP_MARGIN ), false );
 
     // Check if the point is located within any of the currently selected items bounding boxes
-    std::set<BOARD_ITEM*>::iterator it, it_end;
-
     for( unsigned int i = 0; i < m_selection.items.GetCount(); ++i )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_selection.items.GetPickedItem( i ) );
         BOX2I itemBox = item->ViewBBox();
-        itemBox.Inflate( GRIP_MARGIN );    // Give some margin for gripping an item
+        itemBox.Inflate( margin.x, margin.y );    // Give some margin for gripping an item
 
         if( itemBox.Contains( aPoint ) )
             return true;
