@@ -58,6 +58,13 @@ public:
     void onEnter( wxMouseEvent& WXUNUSED( aEvent ) );
     void onTimer( wxTimerEvent& WXUNUSED( aEvent ) );
 
+    ///> @copydoc VIEW_CONTROLS::SetSnapping()
+    void SetSnapping( bool aEnabled )
+    {
+        VIEW_CONTROLS::SetSnapping( aEnabled );
+        updateCursor();
+    }
+
     /**
      * Function SetGrabMouse()
      * Enables/disables mouse cursor grabbing (limits the movement field only to the panel area).
