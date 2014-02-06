@@ -36,6 +36,7 @@
 
 #include "selection_tool.h"
 #include "edit_tool.h"
+#include "drawing_tool.h"
 #include "common_actions.h"
 #include <router/router_tool.h>
 
@@ -54,11 +55,13 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterAction( &COMMON_ACTIONS::flip );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::remove );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::properties );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::drawingLine );
 
     // Register tools
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new ROUTER_TOOL );
     m_toolManager->RegisterTool( new EDIT_TOOL );
+	m_toolManager->RegisterTool( new DRAWING_TOOL );
 
     m_toolManager->SetEnvironment( NULL, GetGalCanvas()->GetView(),
                                    GetGalCanvas()->GetViewControls(), this );

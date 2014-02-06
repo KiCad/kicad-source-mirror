@@ -56,4 +56,7 @@ public:
 
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
+
+    /// Activation of the drawing tool (line)
+    static TOOL_ACTION drawingLine;
 };
