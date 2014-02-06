@@ -57,6 +57,10 @@ TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, 'E',
         "Properties...", "Displays properties window" );
 
-TOOL_ACTION COMMON_ACTIONS::drawingLine( "pcbnew.InteractiveDrawing.line",
+TOOL_ACTION COMMON_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
         AS_GLOBAL, 'D',
         "Draw a line", "Draw a line" );
+
+TOOL_ACTION COMMON_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
+        AS_GLOBAL, 'S',
+        "Draw a circle", "Draw a circle" );

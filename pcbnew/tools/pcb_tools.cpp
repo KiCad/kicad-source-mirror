@@ -55,7 +55,8 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterAction( &COMMON_ACTIONS::flip );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::remove );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::properties );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::drawingLine );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::drawLine );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::drawCircle );
 
     // Register tools
     m_toolManager->RegisterTool( new SELECTION_TOOL );

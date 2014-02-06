@@ -58,5 +58,8 @@ public:
     static TOOL_ACTION remove;
 
     /// Activation of the drawing tool (line)
-    static TOOL_ACTION drawingLine;
+    static TOOL_ACTION drawLine;
+
+    /// Activation of the drawing tool (circle)
+    static TOOL_ACTION drawCircle;
 };
