@@ -38,15 +38,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview356"
      showgrid="true"
      inkscape:zoom="16.236259"
-     inkscape:cx="30.911369"
+     inkscape:cx="31.03455"
      inkscape:cy="15.356598"
      inkscape:window-x="0"
-     inkscape:window-y="24"
+     inkscape:window-y="29"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      inkscape:snap-grids="true"
@@ -221,16 +221,12 @@
      id="path4077"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc" />
-  <text
-     xml:space="preserve"
+  <g
      style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#1a1a1a;fill-opacity:1;stroke:none;font-family:OpenGost Type B TT;-inkscape-font-specification:Sans Italic"
-     x="13"
-     y="17"
-     id="text4136"
-     sodipodi:linespacing="125%"><tspan
-       sodipodi:role="line"
-       id="tspan4138"
-       x="13"
-       y="17"
-       style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#1a1a1a;font-family:FreeSerif;-inkscape-font-specification:FreeSerif">T</tspan></text>
+     id="text4136">
+    <path
+       d="m 12.086781,5.84 -0.972,0 C 10.106779,5.8400112 9.4287794,5.978011 9.0807812,6.254 8.7447801,6.5300105 8.4687803,7.1600098 8.2527813,8.144 l -0.4320001,0 0.108,-3.06 10.1519998,0 0.108,3.06 -0.432,0 c -0.20401,-0.9959901 -0.480009,-1.6259895 -0.828,-1.89 -0.336009,-0.275989 -1.014008,-0.4139888 -2.034,-0.414 l -0.972,0 0,9.198 c -6e-6,0.660001 0.101994,1.086001 0.306,1.278 0.203993,0.192 0.677993,0.306 1.422,0.342 l 0,0.342 -5.256,0 0,-0.342 c 0.743997,-0.048 1.211996,-0.167999 1.404,-0.36 0.191996,-0.203999 0.287996,-0.689999 0.288,-1.458 l 0,-9"
+       style="font-size:18px;font-style:normal;fill:#1a1a1a;font-family:FreeSerif;-inkscape-font-specification:FreeSerif"
+       id="path3014" />
+  </g>
 </svg>

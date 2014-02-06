@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="add_line_label.svg">
   <metadata
      id="metadata22">
@@ -36,17 +36,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="977"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview18"
      showgrid="true"
      inkscape:zoom="22.961538"
-     inkscape:cx="13"
-     inkscape:cy="7.0117292"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:cx="6.0536012"
+     inkscape:cy="13"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
+     inkscape:current-layer="text3857"
      inkscape:snap-grids="true"
      inkscape:snap-to-guides="false">
     <inkscape:grid
@@ -68,19 +68,15 @@
        id="tspan3842"
        x="-5.4915252"
        y="28.288136" /></text>
-  <text
-     xml:space="preserve"
+  <g
+     transform="scale(0.98817647,1.011965)"
      style="font-size:34.50404739px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Ubuntu Mono;-inkscape-font-specification:Ubuntu Mono"
-     x="6.669189"
-     y="16.810457"
-     id="text3857"
-     sodipodi:linespacing="125%"
-     transform="scale(0.98817647,1.011965)"><tspan
-       sodipodi:role="line"
-       id="tspan3859"
-       x="6.669189"
-       y="16.810457"
-       style="font-size:18.97722435000000000px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;stroke:none;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS">A</tspan></text>
+     id="text3857">
+    <path
+       d="m 13.155545,4.8199649 -2.538945,6.8848031 5.087156,0 -2.548211,-6.8848031 m -1.056349,-1.8439784 2.121965,0 5.27248,13.8344705 -1.945906,0 -1.260207,-3.548963 -6.236168,0 -1.260206,3.548963 -1.9737055,0 5.2817475,-13.8344705"
+       style="font-size:18.97722435px;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
+       id="path2988" />
+  </g>
   <path
      style="fill:none;stroke:#008c00;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
      d="m 2.5,21.5 21,0"

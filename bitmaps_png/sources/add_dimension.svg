@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="add_dimension.svg">
   <metadata
      id="metadata58">
@@ -34,17 +34,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="977"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview56"
      showgrid="true"
      inkscape:zoom="22.961538"
-     inkscape:cx="6.3366833"
-     inkscape:cy="17.502655"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:cx="8.4968171"
+     inkscape:cy="14.018568"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2">
+     inkscape:current-layer="text3008">
     <inkscape:grid
        type="xygrid"
        id="grid3028"
@@ -117,17 +117,14 @@
      style="fill:none;stroke:#333333;stroke-width:1;stroke-miterlimit:0;stroke-dasharray:none;marker-start:url(#Arrow2Mstart);marker-mid:none;marker-end:url(#Arrow2Mend)"
      id="path44"
      d="M 3.5000002,15.628994 22.500002,15.593224" />
-  <text
-     xml:space="preserve"
-     style="font-size:13.42304324999999920px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#333333;fill-opacity:1;stroke:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
-     x="6.9359937"
-     y="11.982761"
-     id="text3008"
-     sodipodi:linespacing="125%"
-     transform="scale(1.0872723,0.9197328)"><tspan
-       sodipodi:role="line"
-       id="tspan3010"
-       x="6.9359937"
-       y="11.982761"
-       style="-inkscape-font-specification:Comic Sans MS;font-family:Comic Sans MS;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal">N</tspan></text>
+  <g
+     transform="scale(1.1473554,0.87156956)"
+     style="font-size:14.16480541px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#333333;fill-opacity:1;stroke:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
+     id="text3008">
+    <path
+       d="m 7.8211903,2.3187343 1.8812632,0 4.2426585,8.0074637 0,-8.0314873 1.69162,0.024024 0,10.3261987 -1.881263,0 -4.1682042,-8.0555116 0,8.0314876 -1.7660745,0.02402 0,-10.3261987"
+       id="path2994"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccc" />
+  </g>
 </svg>

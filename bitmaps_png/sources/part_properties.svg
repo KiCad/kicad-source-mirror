@@ -41,12 +41,12 @@
      id="namedview184"
      showgrid="true"
      inkscape:zoom="22.961538"
-     inkscape:cx="4.8699962"
-     inkscape:cy="9.4035473"
+     inkscape:cx="11.668387"
+     inkscape:cy="16.371722"
      inkscape:window-x="0"
      inkscape:window-y="29"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
+     inkscape:current-layer="text3036"
      inkscape:snap-grids="true"
      inkscape:snap-to-guides="false">
     <inkscape:grid
@@ -141,19 +141,23 @@
      id="path3813"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc" />
-  <text
-     xml:space="preserve"
+  <g
+     transform="scale(0.90313549,1.1072536)"
      style="font-size:10.62216663px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Garuda;-inkscape-font-specification:Garuda"
-     x="8.7535925"
-     y="7.5586529"
-     id="text3036"
-     sodipodi:linespacing="125%"
-     transform="scale(0.90313549,1.1072536)"><tspan
-       sodipodi:role="line"
-       id="tspan3038"
-       x="8.7535925"
-       y="7.5586529"
-       style="font-size:9.99999989px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol">ABC</tspan></text>
+     id="text3036">
+    <path
+       d="m 12.171561,1.2402935 -1.33789,3.6279297 2.680664,0 -1.342774,-3.6279297 m -0.55664,-0.97167968 1.118164,0 2.77832,7.29003908 -1.025391,0 -0.664062,-1.8701172 -3.286133,0 -0.6640624,1.8701172 -1.0400391,0 2.7832035,-7.29003908"
+       style="font-size:10px;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
+       id="path3002" />
+    <path
+       d="m 17.557303,4.0772076 0,2.6708984 1.582032,0 c 0.530595,8e-7 0.922847,-0.1090486 1.176757,-0.3271484 C 20.573249,6.1996048 20.70183,5.862691 20.701835,5.4102154 20.70183,4.9544888 20.573249,4.6192027 20.316092,4.404356 20.062182,4.1862604 19.66993,4.077211 19.139335,4.0772076 l -1.582032,0 m 0,-2.9980469 0,2.1972656 1.459961,0 c 0.481767,4.3e-6 0.83984,-0.089514 1.074219,-0.2685547 0.237626,-0.1822869 0.356441,-0.4589793 0.356445,-0.8300781 -4e-6,-0.3678328 -0.118819,-0.6428976 -0.356445,-0.8251953 -0.234379,-0.1822853 -0.592452,-0.273431 -1.074219,-0.2734375 l -1.459961,0 m -0.986328,-0.81054688 2.519532,0 c 0.751948,7.29e-6 1.331375,0.15625713 1.738281,0.46875 0.406895,0.31250648 0.610346,0.75684198 0.610351,1.33300778 -5e-6,0.4459686 -0.104172,0.800786 -0.3125,1.0644532 -0.208338,0.263676 -0.514328,0.4280638 -0.917968,0.493164 0.485021,0.1041705 0.860997,0.3222692 1.127929,0.6542969 0.270177,0.328779 0.405268,0.7405624 0.405274,1.2353516 -6e-6,0.651043 -0.22136,1.1539722 -0.664063,1.508789 -0.442713,0.3548179 -1.072595,0.5322266 -1.889648,0.5322266 l -2.617188,0 0,-7.29003908"
+       style="font-size:10px;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
+       id="path3004" />
+    <path
+       d="m 28.709647,0.83013725 0,1.04003905 C 28.37761,1.5609375 28.022792,1.329818 27.645194,1.1768169 27.27084,1.0238287 26.872077,0.94733136 26.448905,0.94732475 c -0.833337,6.61e-6 -1.471357,0.25554025 -1.914063,0.76660155 -0.44271,0.5078179 -0.664064,1.2434942 -0.664062,2.2070313 -2e-6,0.9602891 0.221352,1.6959654 0.664062,2.2070312 0.442706,0.5078134 1.080726,0.7617194 1.914063,0.7617188 0.423172,6e-7 0.821935,-0.076497 1.196289,-0.2294922 0.377598,-0.1529938 0.732416,-0.3841133 1.064453,-0.6933594 l 0,1.0302734 c -0.345058,0.2343754 -0.711269,0.4101564 -1.098633,0.5273438 -0.384119,0.1171874 -0.79102,0.1757811 -1.220703,0.1757812 -1.103518,-1e-7 -1.972658,-0.3369138 -2.607422,-1.0107421 -0.634766,-0.6770818 -0.952149,-1.5999325 -0.952148,-2.7685547 -1e-6,-1.1718702 0.317382,-2.0947209 0.952148,-2.7685547 0.634764,-0.67707627 1.503904,-1.0156176 2.607422,-1.01562502 0.436194,7.42e-6 0.846349,0.0586011 1.230469,0.17578125 0.387364,0.11393942 0.750319,0.28646529 1.088867,0.51757812"
+       style="font-size:10px;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
+       id="path3006" />
+  </g>
   <path
      inkscape:connector-curvature="0"
      id="path215"

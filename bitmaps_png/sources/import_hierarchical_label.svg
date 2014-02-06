@@ -44,8 +44,8 @@
      id="namedview100"
      showgrid="true"
      inkscape:zoom="22.961538"
-     inkscape:cx="6.0536012"
-     inkscape:cy="14.34926"
+     inkscape:cx="5.7501049"
+     inkscape:cy="10.865173"
      inkscape:window-x="0"
      inkscape:window-y="29"
      inkscape:window-maximized="1"
@@ -353,32 +353,29 @@
   </g>
   <path
      style="fill:none;stroke:#008c00;stroke-width:1.10341454;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 21.798199,9.001675 2.206829,0"
+     d="m 22.495016,9.480737 2.206829,0"
      id="path3924"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:#ffffff;stroke:#aa8800;stroke-width:1.10341454;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 15.177711,12.679723 0,-7.356096 3.67805,0 3.114788,3.688275 -3.114788,3.667821 z"
+     style="fill:#ffffff;stroke:#aa8800;stroke-width:1.10573757;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     d="m 15.527281,13.418929 0,-7.7892828 3.488143,0 2.953963,3.9054711 -2.953963,3.8838117 z"
      id="path3764"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cccccc" />
-  <text
-     xml:space="preserve"
+  <g
+     transform="matrix(1.0618253,0,0,1.1699753,-0.72792126,-1.1408542)"
      style="font-size:9.69759083px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Ubuntu Mono;-inkscape-font-specification:Ubuntu Mono"
-     x="8.0058832"
-     y="12.185187"
-     id="text3773"
-     sodipodi:linespacing="125%"
-     transform="scale(0.96097665,1.040608)"><tspan
-       sodipodi:role="line"
-       id="tspan3775"
-       x="8.0058832"
-       y="12.185187"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;word-spacing:0px;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol">A</tspan></text>
+     id="text3773">
+    <path
+       d="m 11.320489,6.0579009 -1.297431,3.5182178 2.599598,0 -1.302167,-3.5182178 m -0.539807,-0.9422952 1.08435,0 2.694301,7.0695813 -0.994382,0 -0.64398,-1.813563 -3.1867574,0 -0.6439806,1.813563 -1.0085874,0 2.6990364,-7.0695813"
+       style="font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
+       id="path3046"
+       inkscape:connector-curvature="0" />
+  </g>
   <g
      id="g4129"
-     transform="matrix(-0.92714742,0,0,0.61878626,15.885373,12.276369)">
+     transform="matrix(0.92714742,0,0,0.61878626,0.40374274,12.450573)">
     <g
        id="g3882"
        transform="matrix(0,-1.308101,1.0273122,0,-10.141907,33.675134)">
