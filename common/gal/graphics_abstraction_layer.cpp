@@ -232,7 +232,7 @@ void GAL::DrawGrid()
 }
 
 
-VECTOR2D GAL::GetGridPoint( VECTOR2D aPoint ) const
+VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 {
     VECTOR2D pointWorld = ToWorld( aPoint );
 
