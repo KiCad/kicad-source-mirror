@@ -222,7 +222,6 @@ set( PCBNEW_CLASS_SRCS
     print_board_functions.cpp
     printout_controler.cpp
     ratsnest.cpp
-    ratsnest_data.cpp
     ratsnest_viewitem.cpp
 #    specctra.cpp           #moved in pcbcommon lib
 #    specctra_export.cpp
@@ -252,7 +251,7 @@ set( PCBNEW_CLASS_SRCS
     tools/selection_tool.cpp
     tools/selection_area.cpp
     tools/bright_box.cpp
-    tools/move_tool.cpp
+    tools/edit_tool.cpp
     tools/pcb_tools.cpp
     tools/common_actions.cpp
     )

@@ -52,7 +52,7 @@
 
 
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
-    m_Pad_Master( 0 )
+    m_Pad_Master( NULL )
 {
     m_EnabledLayers = ALL_LAYERS;               // All layers enabled at first.
                                                 // SetCopperLayerCount() will adjust this.

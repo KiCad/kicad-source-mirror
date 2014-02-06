@@ -43,10 +43,11 @@ using boost::optional;
 struct TOOL_DISPATCHER::BUTTON_STATE
 {
     BUTTON_STATE( TOOL_MOUSE_BUTTONS aButton, const wxEventType& aDownEvent,
-                 const wxEventType& aUpEvent ) :
+                 const wxEventType& aUpEvent, const wxEventType& aDblClickEvent ) :
         button( aButton ),
         downEvent( aDownEvent ),
-        upEvent( aUpEvent )
+        upEvent( aUpEvent ),
+        dblClickEvent( aDblClickEvent )
     {};
 
     ///> Flag indicating that dragging is active for the given button.
@@ -74,6 +75,9 @@ struct TOOL_DISPATCHER::BUTTON_STATE
     ///> The type of wxEvent that determines mouse button release.
     wxEventType upEvent;
 
+    ///> The type of wxEvent that determines mouse button double click.
+    wxEventType dblClickEvent;
+
     ///> Time stamp for the last mouse button press event.
     wxLongLong downTimestamp;
 
@@ -89,9 +93,12 @@ struct TOOL_DISPATCHER::BUTTON_STATE
 TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, PCB_BASE_FRAME* aEditFrame ) :
     m_toolMgr( aToolMgr ), m_editFrame( aEditFrame )
 {
-    m_buttons.push_back( new BUTTON_STATE( BUT_LEFT, wxEVT_LEFT_DOWN, wxEVT_LEFT_UP ) );
-    m_buttons.push_back( new BUTTON_STATE( BUT_RIGHT, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_UP ) );
-    m_buttons.push_back( new BUTTON_STATE( BUT_MIDDLE, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_UP ) );
+    m_buttons.push_back( new BUTTON_STATE( BUT_LEFT, wxEVT_LEFT_DOWN,
+                         wxEVT_LEFT_UP, wxEVT_LEFT_DCLICK ) );
+    m_buttons.push_back( new BUTTON_STATE( BUT_RIGHT, wxEVT_RIGHT_DOWN,
+                         wxEVT_RIGHT_UP, wxEVT_RIGHT_DCLICK ) );
+    m_buttons.push_back( new BUTTON_STATE( BUT_MIDDLE, wxEVT_MIDDLE_DOWN,
+                         wxEVT_MIDDLE_UP, wxEVT_MIDDLE_DCLICK ) );
 
     ResetState();
 }
@@ -126,6 +133,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 
     bool up = type == st->upEvent;
     bool down = type == st->downEvent;
+    bool dblClick = type == st->dblClickEvent;
 
     int mods = decodeModifiers<wxMouseEvent>( static_cast<wxMouseEvent*>( &aEvent ) );
     int args = st->button | mods;
@@ -139,7 +147,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
         st->pressed = true;
         evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_DOWN, args );
     }
-    else if( up )    // Handle mouse button release
+    else if( up )   // Handle mouse button release
     {
         st->pressed = false;
 
@@ -161,6 +169,10 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
             evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_CLICK, args );
 
         st->dragging = false;
+    }
+    else if( dblClick )
+    {
+        evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_DBLCLICK, args );
     }
 
     if( st->pressed && aMotion )
@@ -204,17 +216,18 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
         type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
         type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
+        type == wxEVT_LEFT_DCLICK || type == wxEVT_MIDDLE_DCLICK || type == wxEVT_RIGHT_DCLICK ||
         // Event issued whem mouse retains position in screen coordinates,
-        // but changes in world coordinates (eg. autopanning)
+        // but changes in world coordinates (e.g. autopanning)
         type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
     {
         wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
         int mods = decodeModifiers<wxMouseEvent>( me );
 
-        VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetCursorPosition();
+        VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetMousePosition();
         VECTOR2D pos = getView()->ToWorld( screenPos );
 
-        if( pos != m_lastMousePos || type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
+        if( pos != m_lastMousePos )
         {
             motion = true;
             m_lastMousePos = pos;
@@ -268,11 +281,6 @@ void TOOL_DISPATCHER::DispatchWxCommand( const wxCommandEvent& aEvent )
     {
     case ID_PNS_ROUTER_TOOL:
         toolName = "pcbnew.InteractiveRouter";
-        activateTool = true;
-        break;
-
-    case ID_SELECTION_TOOL:
-        toolName = "pcbnew.InteractiveSelection";
         activateTool = true;
         break;
     }

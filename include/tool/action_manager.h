@@ -48,6 +48,12 @@ public:
     ACTION_MANAGER( TOOL_MANAGER* aToolManager );
 
     /**
+     * Destructor.
+     * Unregisters every registered action.
+     */
+    ~ACTION_MANAGER();
+
+    /**
      * Function RegisterAction()
      * Adds a tool action to the manager and sets it up. After that is is possible to invoke
      * the action using hotkeys or sending a command event with its name.
@@ -75,17 +81,20 @@ public:
      */
     bool RunAction( const std::string& aActionName ) const;
 
-    // TODO to be considered
-    // bool RunAction( int aActionId ) const;
-    // bool RunAction( TOOL_ACTION* aAction ) const;
-
     /**
      * Function RunHotKey()
      * Runs an action associated with a hotkey (if there is one available).
-     * @param aHotKey is the hotkey to be served.
+     * @param aHotKey is the hotkey to be handled.
      * @return True if there was an action associated with the hotkey, false otherwise.
      */
     bool RunHotKey( int aHotKey ) const;
+
+    /**
+     * Function ClearHotKey()
+     * Removes an action associated with a hotkey.
+     * @param aHotKey is the hotkey to be cleared.
+     */
+    void ClearHotKey( int aHotKey );
 
 private:
     ///> Tool manager needed to run actions

@@ -24,26 +24,36 @@
 
 #include <tool/tool_action.h>
 
-class ACTION_MANAGER;
-
 /**
  * Class COMMON_ACTIONS
  *
- * Gathers all the actions that are shared by tools. The instance of COMMON_ACTIOSN is created
- * inside of ACTION_MANAGER object and registers them.
+ * Gathers all the actions that are shared by tools. The instance of COMMON_ACTION is created
+ * inside of ACTION_MANAGER object that registers the actions.
  */
 class COMMON_ACTIONS
 {
 public:
-    /// Activation of the move tool
-    static TOOL_ACTION moveActivate;
-
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;
+
+    /// Select a single item under the cursor position
+    static TOOL_ACTION selectionSingle;
+
+    /// Clears the current selection
+    static TOOL_ACTION selectionClear;
+
+    /// Activation of the edit tool
+    static TOOL_ACTION editActivate;
 
     /// Rotation of selected objects
     static TOOL_ACTION rotate;
 
     /// Flipping of selected objects
     static TOOL_ACTION flip;
+
+    /// Activation of the edit tool
+    static TOOL_ACTION properties;
+
+    /// Deleting a BOARD_ITEM
+    static TOOL_ACTION remove;
 };

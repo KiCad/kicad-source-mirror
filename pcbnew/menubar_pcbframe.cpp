@@ -314,11 +314,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     editMenu->AppendSeparator();
 
-    AddMenuItem( editMenu, ID_SELECTION_TOOL,
-                 _( "Select Tool" ),
-                 _( "Interactive selection and drag&drop tool." ),
-                 KiBitmap( tools_xpm ) );
-
     AddMenuItem( editMenu, ID_PNS_ROUTER_TOOL,
                  _( "Interactive router" ),
                  _( "Interactive router drag&drop tool." ),

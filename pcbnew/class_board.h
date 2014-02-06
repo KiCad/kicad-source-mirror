@@ -846,6 +846,24 @@ public:
     }
 
     /**
+     * Function BeginNets
+     * @return iterator to the first element of the NETINFO_ITEMs list
+     */
+    NETINFO_LIST::iterator BeginNets() const
+    {
+        return m_NetInfo.begin();
+    }
+
+    /**
+     * Function EndNets
+     * @return iterator to the last element of the NETINFO_ITEMs list
+     */
+    NETINFO_LIST::iterator EndNets() const
+    {
+        return m_NetInfo.end();
+    }
+
+    /**
      * Function GetNetCount
      * @return the number of nets (NETINFO_ITEM)
      */

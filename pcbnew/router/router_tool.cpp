@@ -31,7 +31,8 @@
 #include <pcb_painter.h>
 
 #include <tool/context_menu.h>
-#include <tool/tool_action.h>
+
+#include <ratsnest_data.h>
 
 #include "router_tool.h"
 #include "pns_segment.h"
@@ -71,7 +72,7 @@ ROUTER_TOOL::~ROUTER_TOOL()
 }
 
 
-void ROUTER_TOOL::Reset()
+void ROUTER_TOOL::Reset( RESET_REASON aReason )
 {
     if( m_router )
         delete m_router;
@@ -82,6 +83,7 @@ void ROUTER_TOOL::Reset()
     m_router->ClearWorld();
     m_router->SetBoard( getModel<BOARD>( PCB_T ) );
     m_router->SyncWorld();
+    m_needsSync = false;
 
     if( getView() )
         m_router->SetView( getView() );
@@ -138,7 +140,8 @@ PNS_ITEM* ROUTER_TOOL::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLa
         if( !IsCopperLayer( item->GetLayers().Start() ) )
             continue;
 
-        if( item->GetParent() && !item->GetParent()->ViewIsVisible() )
+        if( item->GetParent() && !item->GetParent()->ViewIsVisible() &&
+                                 !item->GetParent()->IsSelected() )
             continue;
 
         if( aNet < 0 || item->GetNet() == aNet )
@@ -278,8 +281,32 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
     else
     {
         m_endItem = NULL;
-        m_endSnapPoint = p;
+        m_endSnapPoint = getView()->ToWorld( ctls->GetCursorPosition() );
         ctls->ForceCursorPosition( false );
+    }
+
+    // Draw ratsnest for the currently routed track
+    RN_DATA* ratsnest = getModel<BOARD>( PCB_T )->GetRatsnest();
+    ratsnest->ClearSimple();
+
+    if( ( m_endItem == NULL || m_endItem == m_startItem ) && m_startItem->GetNet() > 0 )
+    {
+        // The ending node has to be first, so the line for the track is drawn first
+        ratsnest->AddSimple( m_endSnapPoint, m_startItem->GetNet() );
+
+        // Those nodes are added just to force ratsnest not to drawn
+        // lines to already routed parts of the track
+        const PICKED_ITEMS_LIST& changes = m_router->GetLastChanges();
+        for( unsigned int i = 0; i < changes.GetCount(); ++i )
+        {
+            // Block the new tracks, do not handle tracks that were moved
+            // (moved tracks are saved in the undo buffer with UR_DELETED status instead)
+            if( changes.GetPickedItemStatus( i ) == UR_NEW )
+                ratsnest->AddBlocked( static_cast<BOARD_CONNECTED_ITEM*>( changes.GetPickedItem( i ) ) );
+        }
+
+        // Also the origin of the new track should be skipped in the ratsnest shown for the routed track
+        ratsnest->AddBlocked( static_cast<BOARD_ITEM*>( m_startItem->GetParent() ) );
     }
 
     if( m_endItem )
@@ -290,6 +317,7 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
 
 void ROUTER_TOOL::startRouting()
 {
+    bool saveUndoBuffer = true;
     VIEW_CONTROLS* ctls = getViewControls();
 
     int width = getDefaultWidth( m_startItem ? m_startItem->GetNet() : -1 );
@@ -317,6 +345,11 @@ void ROUTER_TOOL::startRouting()
     {
         if( evt->IsCancel() )
             break;
+        else if( evt->Action() == TA_UNDO_REDO )
+        {
+            saveUndoBuffer = false;
+            break;
+        }
         else if( evt->IsMotion() )
         {
             updateEndItem( *evt );
@@ -369,8 +402,21 @@ void ROUTER_TOOL::startRouting()
         }
     }
 
-    if( m_router->RoutingInProgress() )
-        m_router->StopRouting();
+    m_router->StopRouting();
+
+    if( saveUndoBuffer )
+    {
+        // Save the recent changes in the undo buffer
+        getEditFrame<PCB_EDIT_FRAME>()->SaveCopyInUndoList( m_router->GetLastChanges(),
+                                                            UR_UNSPECIFIED );
+        m_router->ClearLastChanges();
+        getEditFrame<PCB_EDIT_FRAME>()->OnModify();
+    }
+    else
+    {
+        // It was interrupted by TA_UNDO_REDO event, so we have to sync the world now
+        m_needsSync = true;
+    }
 
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
@@ -391,8 +437,16 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        if( m_needsSync )
+        {
+            m_router->SyncWorld();
+            m_needsSync = false;
+        }
+
         if( evt->IsCancel() )
             break; // Finish
+        else if( evt->Action() == TA_UNDO_REDO )
+            m_needsSync = true;
         else if( evt->IsMotion() )
             updateStartItem( *evt );
         else if( evt->IsClick( BUT_LEFT ) )
@@ -407,6 +461,7 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     // Restore the default settings
     ctls->SetAutoPan( false );
     ctls->ShowCursor( false );
+    ctls->ForceCursorPosition( false );
 
     return 0;
 }

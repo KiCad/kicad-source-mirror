@@ -100,6 +100,15 @@ public:
     void UnregisterAction( TOOL_ACTION* aAction );
 
     /**
+     * Function RunAction()
+     * Runs the specified action. The common format is "application.ToolName.Action".
+     *
+     * @param aActionName is the name of action to be invoked.
+     * @return True if the action finished successfully, false otherwise.
+     */
+    bool RunAction( const std::string& aActionName );
+
+    /**
      * Function FindTool()
      * Searches for a tool with given ID.
      *
@@ -118,10 +127,10 @@ public:
     TOOL_BASE* FindTool( const std::string& aName ) const;
 
     /**
-     * Resets the state of a given tool by clearing its wait and
-     * transition lists and calling tool's internal Reset() method.
+     * Function ResetTools()
+     * Resets all tools (i.e. calls their Reset() method).
      */
-    void ResetTool( TOOL_BASE* aTool );
+    void ResetTools( TOOL_BASE::RESET_REASON aReason );
 
     /**
      * Takes an event from the TOOL_DISPATCHER and propagates it to

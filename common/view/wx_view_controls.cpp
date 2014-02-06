@@ -73,19 +73,12 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     m_mousePosition.x = aEvent.GetX();
     m_mousePosition.y = aEvent.GetY();
 
-    if( m_forceCursorPosition )
-        m_cursorPosition = m_view->ToScreen( m_forcedPosition );
-    else if( m_snappingEnabled )
-        m_cursorPosition = m_view->GetGAL()->GetGridPoint( m_mousePosition );
-    else
-        m_cursorPosition = m_mousePosition;
+    updateCursor();
 
     bool isAutoPanning = false;
 
     if( m_autoPanEnabled )
-    {
         isAutoPanning = handleAutoPanning( aEvent );
-    }
 
     if( !isAutoPanning && aEvent.Dragging() )
     {
@@ -168,17 +161,13 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         }
 
         if( aEvent.LeftUp() )
-        {
             m_state = IDLE;     // Stop autopanning when user release left mouse button
-        }
 
         break;
 
     case DRAG_PANNING:
         if( aEvent.MiddleUp() )
-        {
             m_state = IDLE;
-        }
 
         break;
     }
@@ -210,8 +199,23 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         dir = m_view->ToWorld( dir, false );
         m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
 
+        updateCursor();
+
         // Notify tools that the cursor position has changed in the world coordinates
-        wxCommandEvent moveEvent( EVT_REFRESH_MOUSE );
+        wxMouseEvent moveEvent( EVT_REFRESH_MOUSE );
+
+        // Set the modifiers state
+#if wxCHECK_VERSION( 3, 0, 0 )
+        moveEvent.SetControlDown( wxGetKeyState( WXK_CONTROL ) );
+        moveEvent.SetShiftDown( wxGetKeyState( WXK_SHIFT ) );
+        moveEvent.SetAltDown( wxGetKeyState( WXK_ALT) );
+#else
+        // wx <3.0 do not have accessors, but the fields are exposed
+        moveEvent.m_controlDown = wxGetKeyState( WXK_CONTROL );
+        moveEvent.m_shiftDown = wxGetKeyState( WXK_SHIFT );
+        moveEvent.m_altDown = wxGetKeyState( WXK_ALT );
+#endif
+
         wxPostEvent( m_parentPanel, moveEvent );
     }
     break;
@@ -240,15 +244,6 @@ const VECTOR2D WX_VIEW_CONTROLS::GetMousePosition() const
     wxPoint winp = m_parentPanel->GetScreenPosition();
 
     return VECTOR2D( msp.x - winp.x, msp.y - winp.y );
-}
-
-
-const VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
-{
-    if( m_snappingEnabled )
-        return m_view->GetGAL()->GetGridPoint( GetMousePosition() );
-    else
-        return GetMousePosition();
 }
 
 
@@ -308,4 +303,15 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 
     wxASSERT_MSG( false, wxT( "This line should never be reached" ) );
     return false;    // Should not be reached, just avoid the compiler warnings..
+}
+
+
+void WX_VIEW_CONTROLS::updateCursor()
+{
+    if( m_forceCursorPosition )
+        m_cursorPosition = m_view->ToScreen( m_forcedPosition );
+    else if( m_snappingEnabled )
+        m_cursorPosition = m_view->GetGAL()->GetGridPoint( m_mousePosition );
+    else
+        m_cursorPosition = m_mousePosition;
 }
