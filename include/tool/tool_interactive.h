@@ -49,6 +49,12 @@ public:
     virtual ~TOOL_INTERACTIVE();
 
     /**
+     * Function Activate()
+     * Runs the tool. After activation, the tool starts receiving events until it is finished.
+     */
+    void Activate();
+
+    /**
      * Function SetContextMenu()
      *
      * Assigns a context menu and tells when it should be activated.

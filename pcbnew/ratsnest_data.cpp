@@ -968,11 +968,11 @@ void RN_DATA::Recalculate( int aNet )
 {
     if( aNet < 0 )              // Recompute everything
     {
-        unsigned int tid, i, chunk, netCount;
+        unsigned int i, netCount;
         netCount = m_board->GetNetCount();
-        chunk = 1;
 
 #ifdef USE_OPENMP
+        unsigned int chunk = 1, tid;
         #pragma omp parallel shared(chunk, netCount) private(i, tid)
         {
             tid = omp_get_thread_num();
