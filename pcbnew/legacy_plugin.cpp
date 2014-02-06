@@ -870,7 +870,7 @@ void LEGACY_PLUGIN::loadSETUP()
 
         else if( TESTLINE( "VisibleElements" ) )
         {
-            long visibleElements = hexParse( line + SZ( "VisibleElements" ) );
+            int visibleElements = hexParse( line + SZ( "VisibleElements" ) );
             bds.SetVisibleElements( visibleElements );
         }
 
@@ -3071,7 +3071,7 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
     fprintf( m_fp, "GridOrigin %s\n", fmtBIUPoint( aBoard->GetGridOrigin() ).c_str() );
     fprintf( m_fp, "AuxiliaryAxisOrg %s\n", fmtBIUPoint( aBoard->GetAuxOrigin() ).c_str() );
 
-    fprintf( m_fp, "VisibleElements %lX\n", bds.GetVisibleElements() );
+    fprintf( m_fp, "VisibleElements %X\n", bds.GetVisibleElements() );
 
     {
         STRING_FORMATTER sf;

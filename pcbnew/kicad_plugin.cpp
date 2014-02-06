@@ -647,7 +647,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
                       FMTIU( aBoard->GetGridOrigin().x ).c_str(),
                       FMTIU( aBoard->GetGridOrigin().y ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(visible_elements %lX)\n",
+    m_out->Print( aNestLevel+1, "(visible_elements %X)\n",
                   aBoard->GetDesignSettings().GetVisibleElements() );
 
     aBoard->GetPlotOptions().Format( m_out, aNestLevel+1 );
