@@ -550,7 +550,6 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                     zoneInfo.m_NetcodeSelection = GetBoard()->GetHighLightNetCode();
 
                     zone->SetNet( zoneInfo.m_NetcodeSelection );
-                    zone->SetNetNameFromNetCode( );
                 }
                 double tmp = ZONE_THERMAL_RELIEF_GAP_MIL;
                 wxGetApp().GetSettings()->Read( ZONE_THERMAL_RELIEF_GAP_STRING_KEY, &tmp );
@@ -578,8 +577,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                     zoneInfo.SetIsKeepout( true );
                     // Netcode and netname are irrelevant,
                     // so ensure they are cleared
-                    zone->SetNet( 0 );
-                    zone->SetNetName( wxEmptyString );
+                    zone->SetNet( NETINFO_LIST::UNCONNECTED );
                     edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
                 }
                 else
@@ -904,7 +902,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     NETINFO_ITEM* net = GetBoard()->FindNet( zoneInfo.m_NetcodeSelection );
 
     if( net )   // net == NULL should not occur
-        aZone->SetNetName( net->GetNetname() );
+        aZone->SetNet( net->GetNet() );
 
     // Combine zones if possible
     GetBoard()->OnAreaPolygonModified( &s_AuxiliaryList, aZone );

@@ -79,6 +79,17 @@ public:
     void Clear();
 
     /**
+     * Function GetSelected()
+     * Returns the position of selected item. If the returned value is negative, that means that
+     * menu was dismissed.
+     * @return The position of selected item in the context menu.
+     */
+    int GetSelected() const
+    {
+        return m_selected;
+    }
+
+    /**
      * Function GetMenu()
      * Returns the instance of wxMenu object used to display the menu.
      */
@@ -130,6 +141,9 @@ private:
 
     ///> Instance of wxMenu used for display of the context menu.
     wxMenu m_menu;
+
+    ///> Stores the id number of selected item.
+    int m_selected;
 
     ///> Instance of menu event handler.
     CMEventHandler m_handler;

@@ -99,7 +99,7 @@ class PCB_PARSER : public PCB_LEXER
     MODULE*         parseMODULE( wxArrayString* aInitialComments = 0 ) throw( IO_ERROR, PARSE_ERROR );
     TEXTE_MODULE*   parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR );
     EDGE_MODULE*    parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR );
-    D_PAD*          parseD_PAD() throw( IO_ERROR, PARSE_ERROR );
+    D_PAD*          parseD_PAD( MODULE* aParent = NULL ) throw( IO_ERROR, PARSE_ERROR );
     TRACK*          parseTRACK() throw( IO_ERROR, PARSE_ERROR );
     SEGVIA*         parseSEGVIA() throw( IO_ERROR, PARSE_ERROR );
     ZONE_CONTAINER* parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR );

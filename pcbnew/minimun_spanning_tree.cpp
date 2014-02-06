@@ -69,7 +69,7 @@ MIN_SPAN_TREE::MIN_SPAN_TREE()
 
 void MIN_SPAN_TREE::MSP_Init( int aNodesCount )
 {
-    m_Size = aNodesCount;
+    m_Size = std::max( aNodesCount, 1 );
     inTree.clear();
     linkedTo.clear();
     distTo.clear();

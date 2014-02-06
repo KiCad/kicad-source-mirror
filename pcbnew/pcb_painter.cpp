@@ -34,7 +34,6 @@
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
 #include <class_mire.h>
-#include <class_netinfo.h>
 #include <pcbstruct.h>
 
 #include <view/view.h>
@@ -75,6 +74,7 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( COLORS_DESIGN_SETTINGS* aSettings 
     m_layerColors[ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE )]      = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
     m_layerColors[ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
     m_layerColors[ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+    m_layerColors[ITEM_GAL_LAYER( RATSNEST_VISIBLE )]           = COLOR4D( 0.4, 0.4, 0.4, 0.7 );
     m_layerColors[ITEM_GAL_LAYER( WORKSHEET )]                  = COLOR4D( 0.5, 0.0, 0.0, 1.0 );
 
     // Netnames for copper layers
@@ -280,7 +280,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             if( !net )
                 return;
 
-            std::wstring netName = std::wstring( net->GetShortNetname().wc_str() );
+            const wxString& netName = aTrack->GetShortNetname();
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
             double textOrientation = -atan( line.y / line.x );
             double textSize = std::min( static_cast<double>( width ), length / netName.length() );

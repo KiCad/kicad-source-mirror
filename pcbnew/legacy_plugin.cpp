@@ -1303,7 +1303,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
             // read Netname
             ReadDelimitedText( buf, data, sizeof(buf) );
-            pad->SetNetname( FROM_UTF8( StrPurge( buf ) ) );
+            assert( m_board->FindNet( netcode )->GetNetname() == FROM_UTF8( StrPurge( buf ) ) );
         }
 
         else if( TESTLINE( "Po" ) )         // (Po)sition
@@ -1811,7 +1811,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
 {
     char  buf[1024];
 
-    NETINFO_ITEM*   net = new NETINFO_ITEM( m_board );
+    NETINFO_ITEM*   net;
     char*           line;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
@@ -1822,11 +1822,10 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
         {
             // e.g. "Na 58 "/cpu.sch/PAD7"\r\n"
 
-            int tmp = intParse( line + SZ( "Na" ), &data );
-            net->SetNet( tmp );
+            int netCode = intParse( line + SZ( "Na" ), &data );
 
             ReadDelimitedText( buf, data, sizeof(buf) );
-            net->SetNetname( FROM_UTF8( buf ) );
+            net = new NETINFO_ITEM( m_board, FROM_UTF8( buf ), netCode );
         }
 
         else if( TESTLINE( "$EndEQUIPOT" ) )
@@ -2239,7 +2238,6 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
             zc->BOARD_CONNECTED_ITEM::SetNet( netcode );
-            zc->SetNetName( FROM_UTF8( buf ) );     // init the net name here
         }
 
         else if( TESTLINE( "ZLayer" ) )     // layer found
@@ -2256,7 +2254,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             if( !hopt )
             {
-                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
+                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2267,7 +2265,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             case 'F':   outline_hatch = CPolyLine::DIAGONAL_FULL;   break;
 
             default:
-                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
+                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2284,7 +2282,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             if( smoothing >= ZONE_SETTINGS::SMOOTHING_LAST || smoothing < 0 )
             {
-                m_error.Printf( wxT( "Bad ZSmoothing for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
+                m_error.Printf( wxT( "Bad ZSmoothing for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2359,7 +2357,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             default:
                 m_error.Printf( wxT( "Bad ZClearance padoption for CZONE_CONTAINER '%s'" ),
-                    zc->GetNetName().GetData() );
+                    zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2423,10 +2421,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // Ensure keepout does not have a net
             // (which have no sense for a keepout zone)
             if( zc->GetIsKeepout() )
-            {
-                zc->SetNet(0);
-                zc->SetNetName( wxEmptyString );
-            }
+                zc->SetNet( NETINFO_LIST::UNCONNECTED );
 
             // should always occur, but who knows, a zone without two corners
             // is no zone at all, it's a spot?
@@ -2436,7 +2431,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 if( !zc->IsOnCopperLayer() )
                 {
                     zc->SetFillMode( 0 );
-                    zc->SetNet( 0 );
+                    zc->SetNet( NETINFO_LIST::UNCONNECTED );
                 }
 
                 // Hatch here, after outlines corners are read
@@ -2904,6 +2899,8 @@ do { \
 
 void LEGACY_PLUGIN::SaveBOARD( const BOARD* aBoard ) const
 {
+    m_mapping->SetBoard( aBoard );
+
     saveGENERAL( aBoard );
 
     saveSHEET( aBoard );
@@ -2952,7 +2949,7 @@ void LEGACY_PLUGIN::saveGENERAL( const BOARD* aBoard ) const
     fprintf( m_fp, "Nzone %d\n",            aBoard->GetNumSegmZone() );
     fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( aBoard->GetDesignSettings().GetBoardThickness() ).c_str() );
     fprintf( m_fp, "Nmodule %d\n",          aBoard->m_Modules.GetCount() );
-    fprintf( m_fp, "Nnets %d\n",            aBoard->GetNetCount() );
+    fprintf( m_fp, "Nnets %d\n",            m_mapping->GetSize() );
     fprintf( m_fp, "$EndGENERAL\n\n" );
 }
 
@@ -3093,9 +3090,11 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
 {
     // save the nets
-    int netcount = aBoard->GetNetCount();
-    for( int i = 0; i < netcount;  ++i )
-        saveNETINFO_ITEM( aBoard->FindNet( i ) );
+    for( NETINFO_MAPPING::iterator net = m_mapping->begin(), netEnd = m_mapping->end();
+            net != netEnd; ++net )
+    {
+        saveNETINFO_ITEM( *net );
+    }
 
     // Saved nets do not include netclass names, so save netclasses after nets.
     saveNETCLASSES( &aBoard->m_NetClasses );
@@ -3153,7 +3152,8 @@ void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
 void LEGACY_PLUGIN::saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const
 {
     fprintf( m_fp, "$EQUIPOT\n" );
-    fprintf( m_fp, "Na %d %s\n", aNet->GetNet(), EscapedUTF8( aNet->GetNetname() ).c_str() );
+    fprintf( m_fp, "Na %d %s\n", m_mapping->Translate( aNet->GetNet() ),
+                                 EscapedUTF8( aNet->GetNetname() ).c_str() );
     fprintf( m_fp, "St %s\n", "~" );
     fprintf( m_fp, "$EndEQUIPOT\n" );
 
@@ -3645,7 +3645,7 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     fprintf( m_fp,  "ZInfo %lX %d %s\n",
                     me->GetTimeStamp(),
                     me->GetIsKeepout() ? 0 : me->GetNet(),
-                    EscapedUTF8( me->GetIsKeepout() ? wxT("") : me->GetNetName() ).c_str() );
+                    EscapedUTF8( me->GetIsKeepout() ? wxT("") : me->GetNetname() ).c_str() );
 
     // Save the outline layer info
     fprintf( m_fp, "ZLayer %d\n", me->GetLayer() );
@@ -4422,7 +4422,8 @@ LEGACY_PLUGIN::LEGACY_PLUGIN() :
     m_props( 0 ),
     m_reader( 0 ),
     m_fp( 0 ),
-    m_cache( 0 )
+    m_cache( 0 ),
+    m_mapping( new NETINFO_MAPPING() )
 {
     init( NULL );
 }
@@ -4431,4 +4432,5 @@ LEGACY_PLUGIN::LEGACY_PLUGIN() :
 LEGACY_PLUGIN::~LEGACY_PLUGIN()
 {
     delete m_cache;
+    delete m_mapping;
 }

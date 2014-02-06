@@ -35,7 +35,7 @@
 #include <pcbnew_id.h>
 
 #include "selection_tool.h"
-#include "move_tool.h"
+#include "edit_tool.h"
 #include "common_actions.h"
 #include <router/router_tool.h>
 
@@ -47,27 +47,32 @@ void PCB_EDIT_FRAME::setupTools()
     GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
 
     // Register tool actions
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::moveActivate );
-    m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionActivate );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionSingle );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::selectionClear );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::editActivate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::rotate );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::flip );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::remove );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::properties );
 
     // Register tools
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new ROUTER_TOOL );
-    m_toolManager->RegisterTool( new MOVE_TOOL );
+    m_toolManager->RegisterTool( new EDIT_TOOL );
+
+    m_toolManager->SetEnvironment( NULL, GetGalCanvas()->GetView(),
+                                   GetGalCanvas()->GetViewControls(), this );
+    m_toolManager->ResetTools( TOOL_BASE::RUN );
+
+    // Run the selection tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 }
 
 
 void PCB_EDIT_FRAME::destroyTools()
 {
-    m_toolManager->UnregisterAction( &COMMON_ACTIONS::moveActivate );
-    m_toolManager->UnregisterAction( &COMMON_ACTIONS::selectionActivate );
-    m_toolManager->UnregisterAction( &COMMON_ACTIONS::rotate );
-    m_toolManager->UnregisterAction( &COMMON_ACTIONS::flip );
-
-    delete m_toolDispatcher;
     delete m_toolManager;
+    delete m_toolDispatcher;
 }
 
 

@@ -21,7 +21,8 @@
 #ifndef __TRACE_H
 #define __TRACE_H
 
-#ifdef DEBUG
+// #ifdef DEBUG
+#if 0
 
 #include <string>
 #include <iostream>

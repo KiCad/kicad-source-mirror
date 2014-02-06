@@ -47,11 +47,10 @@
 #include "bright_box.h"
 #include "common_actions.h"
 
-using namespace KIGFX;
 using boost::optional;
 
 SELECTION_TOOL::SELECTION_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_multiple( false )
+    TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_additive( false ), m_multiple( false )
 {
     m_selArea = new SELECTION_AREA;
     m_selection.group = new KIGFX::VIEW_GROUP;
@@ -65,8 +64,16 @@ SELECTION_TOOL::~SELECTION_TOOL()
 }
 
 
-void SELECTION_TOOL::Reset()
+void SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
+    if( aReason == TOOL_BASE::MODEL_RELOAD )
+        // Remove pointers to the selected items from containers
+        // without changing their properties (as they are already deleted)
+        m_selection.clear();
+    else
+        // Restore previous properties of selected items and remove them from containers
+        clearSelection();
+
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
     getView()->Add( m_selection.group );
@@ -78,12 +85,6 @@ void SELECTION_TOOL::Reset()
 
 int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 {
-    VIEW*   view = getView();
-
-    assert( getModel<BOARD>( PCB_T ) != NULL );
-
-    view->Add( m_selection.group );
-
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -91,20 +92,37 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         // become the new selection (discarding previously selected items)
         m_additive = evt->Modifier( MD_SHIFT );
 
-        if( evt->IsCancel() )
+        if( evt->IsAction( &COMMON_ACTIONS::selectionSingle ) )
         {
-            if( !m_selection.Empty() )  // Cancel event deselects items...
-                clearSelection();
-            else                        // ...unless there is nothing selected
-                break;                  // then exit the tool
+            selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+        }
+
+        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO ||
+                 evt->IsAction( &COMMON_ACTIONS::selectionClear ) )
+        {
+            clearSelection();
         }
 
         // single click? Select single object
-        if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !m_additive )
+                clearSelection();
+
             selectSingle( evt->Position() );
+        }
+
+        // double click? Display the properties window
+        else if( evt->IsDblClick( BUT_LEFT ) )
+        {
+            if( m_selection.Empty() )
+                selectSingle( evt->Position() );
+
+            m_toolMgr->RunAction( "pcbnew.InteractiveEdit.properties" );
+        }
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
-        if( evt->IsDrag( BUT_LEFT ) )
+        else if( evt->IsDrag( BUT_LEFT ) )
         {
             if( m_selection.Empty() || m_additive )
             {
@@ -118,7 +136,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
                 if( containsSelected( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
-                    m_toolMgr->InvokeTool( "pcbnew.InteractiveMove" );
+                    m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
                 }
                 else
                 {
@@ -129,8 +147,8 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
         }
     }
 
-    m_selection.group->Clear();
-    view->Remove( m_selection.group );
+    // This tool is supposed to be active forever
+    assert( false );
 
     return 0;
 }
@@ -146,13 +164,9 @@ void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction )
 
 void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 {
-    if( m_selection.items.find( aItem ) != m_selection.items.end() )
+    if( aItem->IsSelected() )
     {
-        deselectItem( aItem );
-
-        // If there is nothing selected, disable the context menu
-        if( m_selection.Empty() )
-            SetContextMenu( &m_menu, CMENU_OFF );
+        deselect( aItem );
     }
     else
     {
@@ -161,33 +175,8 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 
         // Prevent selection of invisible or inactive items
         if( selectable( aItem ) )
-        {
-            selectItem( aItem );
-
-            // Now the context menu should be enabled
-            SetContextMenu( &m_menu, CMENU_BUTTON );
-        }
+            select( aItem );
     }
-}
-
-
-void SELECTION_TOOL::clearSelection()
-{
-    VIEW_GROUP::const_iter it, it_end;
-
-    for( it = m_selection.group->Begin(), it_end = m_selection.group->End(); it != it_end; ++it )
-    {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
-
-        item->ViewSetVisible( true );
-        item->ClearSelected();
-    }
-
-    m_selection.group->Clear();
-    m_selection.items.clear();
-
-    // Do not show the context menu when there is nothing selected
-    SetContextMenu( &m_menu, CMENU_OFF );
 }
 
 
@@ -206,7 +195,6 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
     case 0:
         if( !m_additive )
             clearSelection();
-
         break;
 
     case 1:
@@ -214,13 +202,10 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
         break;
 
     default:
-        // Remove modules, they have to be selected by clicking on area that does not
-        // contain anything but module footprint and not selectable items
+        // Remove unselectable items
         for( int i = collector.GetCount() - 1; i >= 0 ; --i )
         {
-            BOARD_ITEM* boardItem = ( collector )[i];
-
-            if( boardItem->Type() == PCB_MODULE_T || !selectable( boardItem ) )
+            if( !selectable( collector[i] ) )
                 collector.Remove( i );
         }
 
@@ -242,48 +227,11 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
 }
 
 
-BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector )
-{
-    int count = aCollector->GetPrimaryCount();     // try to use preferred layer
-
-    if( 0 == count )
-        count = aCollector->GetCount();
-
-    for( int i = 0; i < count; ++i )
-    {
-        if( ( *aCollector )[i]->Type() != PCB_MODULE_T )
-            return NULL;
-    }
-
-    // All are modules, now find smallest MODULE
-    int minDim = 0x7FFFFFFF;
-    int minNdx = 0;
-
-    for( int i = 0; i < count; ++i )
-    {
-        MODULE* module = (MODULE*) ( *aCollector )[i];
-
-        int lx = module->GetBoundingBox().GetWidth();
-        int ly = module->GetBoundingBox().GetHeight();
-
-        int lmin = std::min( lx, ly );
-
-        if( lmin < minDim )
-        {
-            minDim = lmin;
-            minNdx = i;
-        }
-    }
-
-    return (*aCollector)[minNdx];
-}
-
-
 bool SELECTION_TOOL::selectMultiple()
 {
     bool cancelled = false;     // Was the tool cancelled while it was running?
     m_multiple = true;          // Multiple selection mode is active
-    VIEW* view = getView();
+    KIGFX::VIEW* view = getView();
     getViewControls()->SetAutoPan( true );
 
     view->Add( m_selArea );
@@ -305,7 +253,7 @@ bool SELECTION_TOOL::selectMultiple()
             m_selArea->SetOrigin( evt->DragOrigin() );
             m_selArea->SetEnd( evt->Position() );
             m_selArea->ViewSetVisible( true );
-            m_selArea->ViewUpdate( VIEW_ITEM::GEOMETRY );
+            m_selArea->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
 
         if( evt->IsMouseUp( BUT_LEFT ) )
@@ -314,26 +262,25 @@ bool SELECTION_TOOL::selectMultiple()
             m_selArea->ViewSetVisible( false );
 
             // Mark items within the selection box as selected
-            std::vector<VIEW::LAYER_ITEM_PAIR> selectedItems;
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
             BOX2I selectionBox = m_selArea->ViewBBox();
             view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
-            std::vector<VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
 
             for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
                 // Add only those items that are visible and fully within the selection box
-                if( selectable( item ) && selectionBox.Contains( item->ViewBBox() ) )
-                    selectItem( item );
+                if( !item->IsSelected() && selectable( item ) && selectionBox.Contains( item->ViewBBox() ) )
+                    select( item );
             }
 
-            // Now the context menu should be enabled
-            if( !m_selection.Empty() )
-                SetContextMenu( &m_menu, CMENU_BUTTON );
+            // Do not display information about selected item,as there is more than one
+            getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
 
-            break;
+            break;  // Stop waiting for events
         }
     }
 
@@ -342,6 +289,30 @@ bool SELECTION_TOOL::selectMultiple()
     getViewControls()->SetAutoPan( false );
 
     return cancelled;
+}
+
+
+void SELECTION_TOOL::clearSelection()
+{
+    if( m_selection.Empty() )
+        return;
+
+    KIGFX::VIEW_GROUP::const_iter it, it_end;
+
+    // Restore the initial properties
+    for( it = m_selection.group->Begin(), it_end = m_selection.group->End(); it != it_end; ++it )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
+
+        item->ViewSetVisible( true );
+        item->ClearSelected();
+    }
+    m_selection.clear();
+
+    getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+
+    // Do not show the context menu when there is nothing selected
+    SetContextMenu( &m_menu, CMENU_OFF );
 }
 
 
@@ -402,12 +373,46 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     }
 
     // Removes possible brighten mark
-    getView()->MarkTargetDirty( TARGET_OVERLAY );
-
-    // Restore the original menu
-    SetContextMenu( &m_menu, CMENU_BUTTON );
+    getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 
     return current;
+}
+
+
+BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector )
+{
+    int count = aCollector->GetPrimaryCount();     // try to use preferred layer
+
+    if( 0 == count )
+        count = aCollector->GetCount();
+
+    for( int i = 0; i < count; ++i )
+    {
+        if( ( *aCollector )[i]->Type() != PCB_MODULE_T )
+            return NULL;
+    }
+
+    // All are modules, now find smallest MODULE
+    int minDim = 0x7FFFFFFF;
+    int minNdx = 0;
+
+    for( int i = 0; i < count; ++i )
+    {
+        MODULE* module = (MODULE*) ( *aCollector )[i];
+
+        int lx = module->GetBoundingBox().GetWidth();
+        int ly = module->GetBoundingBox().GetHeight();
+
+        int lmin = std::min( lx, ly );
+
+        if( lmin < minDim )
+        {
+            minDim = lmin;
+            minNdx = i;
+        }
+    }
+
+    return (*aCollector)[minNdx];
 }
 
 
@@ -453,33 +458,25 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     }
     break;
 
-    case PCB_PAD_T:
-    {
-        // Pads are not selectable in multiple selection mode
-        if( m_multiple )
-            return false;
-
-        // Pads are supposed to be on top, bottom or both at the same time (THT)
-        if( aItem->IsOnLayer( LAYER_N_FRONT ) && board->IsLayerVisible( LAYER_N_FRONT ) )
+    case PCB_MODULE_T:
+        if( aItem->IsOnLayer( LAYER_N_FRONT ) && board->IsElementVisible( MOD_FR_VISIBLE ) )
             return true;
 
-        if( aItem->IsOnLayer( LAYER_N_BACK ) && board->IsLayerVisible( LAYER_N_BACK ) )
+        if( aItem->IsOnLayer( LAYER_N_BACK ) && board->IsElementVisible( MOD_BK_VISIBLE ) )
             return true;
 
         return false;
-    }
-    break;
-
-    case PCB_MODULE_TEXT_T:
-        // Module texts are not selectable in multiple selection mode
-        if( m_multiple )
-            return false;
 
         break;
 
-    // These are not selectable, otherwise silkscreen drawings would be easily destroyed
+    case PCB_MODULE_TEXT_T:
+        if( m_multiple )
+            return false;
+        break;
+
+    // These are not selectable
     case PCB_MODULE_EDGE_T:
-    // and some other stuff that should be selected
+    case PCB_PAD_T:
     case NOT_USED:
     case TYPE_NOT_INIT:
         return false;
@@ -493,106 +490,104 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 }
 
 
-void SELECTION_TOOL::selectItem( BOARD_ITEM* aItem )
+void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 {
-    /// Selecting an item needs a few operations, so they are wrapped in a functor
-    class selectBase_
-    {
-        SELECTION& s;
-
-    public:
-        selectBase_( SELECTION& s_ ) : s( s_ ) {}
-
-        void operator()( BOARD_ITEM* item )
-        {
-            s.group->Add( item );
-            // Hide the original item, so it is shown only on overlay
-            item->ViewSetVisible( false );
-            item->SetSelected();
-        }
-    } selectBase( m_selection );
-
-    // Modules are treated in a special way - when they are moved, we have to
-    // move all the parts that make the module, not the module itself
+    // Modules are treated in a special way - when they are selected, we have to mark
+    // all the parts that make the module as selected
     if( aItem->Type() == PCB_MODULE_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
-
-        // Add everything that belongs to the module (besides the module itself)
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-            selectBase( pad );
-
-        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
-             drawing = drawing->Next() )
-            selectBase( drawing );
-
-        selectBase( &module->Reference() );
-        selectBase( &module->Value() );
+        module->RunOnChildren( std::bind1st( std::mem_fun( &SELECTION_TOOL::selectVisually ), this ) );
     }
 
-    // Add items to the VIEW_GROUP, so they will be displayed on the overlay
-    selectBase( aItem );
-    m_selection.items.insert( aItem );
+    selectVisually( aItem );
+    ITEM_PICKER picker( aItem );
+    m_selection.items.PushItem( picker );
+
+    // It is enough to do it only for the first selected item
+    if( m_selection.Size() == 1 )
+    {
+        // Set as the current item, so the information about selection is displayed
+        getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( aItem, true );
+
+        // Now the context menu should be enabled
+        SetContextMenu( &m_menu, CMENU_BUTTON );
+    }
+    else if( m_selection.Size() == 2 )  // Check only for 2, so it will not be
+    {                                   // called for every next selected item
+        // If multiple items are selected, do not show the information about the selected item
+        getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL, true );
+    }
 }
 
 
-void SELECTION_TOOL::deselectItem( BOARD_ITEM* aItem )
+void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
 {
-    /// Deselecting an item needs a few operations, so they are wrapped in a functor
-    class deselectBase_
-    {
-        SELECTION& s;
-
-    public:
-        deselectBase_( SELECTION& s_ ) : s( s_ ) {}
-
-        void operator()( BOARD_ITEM* item )
-        {
-            s.group->Remove( item );
-            // Restore original item visibility
-            item->ViewSetVisible( true );
-            item->ClearSelected();
-        }
-    } deselectBase( m_selection );
-
-    // Modules are treated in a special way - when they are moved, we have to
-    // move all the parts that make the module, not the module itself
+    // Modules are treated in a special way - when they are selected, we have to
+    // deselect all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
-
-        // Add everything that belongs to the module (besides the module itself)
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-            deselectBase( pad );
-
-        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
-             drawing = drawing->Next() )
-            deselectBase( drawing );
-
-        deselectBase( &module->Reference() );
-        deselectBase( &module->Value() );
+        module->RunOnChildren( std::bind1st( std::mem_fun( &SELECTION_TOOL::deselectVisually ), this ) );
     }
 
-    deselectBase( aItem );
-    m_selection.items.erase( aItem );
+    deselectVisually( aItem );
+
+    int itemIdx = m_selection.items.FindItem( aItem );
+    if( itemIdx >= 0 )
+        m_selection.items.RemovePicker( itemIdx );
+
+    // If there is nothing selected, disable the context menu
+    if( m_selection.Empty() )
+    {
+        SetContextMenu( &m_menu, CMENU_OFF );
+        getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+    }
+}
+
+
+void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem ) const
+{
+    m_selection.group->Add( aItem );
+
+    // Hide the original item, so it is shown only on overlay
+    aItem->ViewSetVisible( false );
+    aItem->SetSelected();
+}
+
+
+void SELECTION_TOOL::deselectVisually( BOARD_ITEM* aItem ) const
+{
+    m_selection.group->Remove( aItem );
+
+    // Restore original item visibility
+    aItem->ViewSetVisible( true );
+    aItem->ClearSelected();
 }
 
 
 bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
 {
-    const unsigned GRIP_MARGIN = 500000;
+    const unsigned GRIP_MARGIN = 20;
+    VECTOR2D margin = getView()->ToWorld( VECTOR2D( GRIP_MARGIN, GRIP_MARGIN ), false );
 
     // Check if the point is located within any of the currently selected items bounding boxes
-    std::set<BOARD_ITEM*>::iterator it, it_end;
-
-    for( it = m_selection.items.begin(), it_end = m_selection.items.end(); it != it_end; ++it )
+    for( unsigned int i = 0; i < m_selection.items.GetCount(); ++i )
     {
-        BOX2I itemBox = (*it)->ViewBBox();
-        itemBox.Inflate( GRIP_MARGIN );    // Give some margin for gripping an item
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_selection.items.GetPickedItem( i ) );
+        BOX2I itemBox = item->ViewBBox();
+        itemBox.Inflate( margin.x, margin.y );    // Give some margin for gripping an item
 
         if( itemBox.Contains( aPoint ) )
             return true;
     }
 
     return false;
+}
+
+
+void SELECTION_TOOL::SELECTION::clear()
+{
+    items.ClearItemsList();
+    group->Clear();
 }

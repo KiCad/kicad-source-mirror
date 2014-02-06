@@ -380,6 +380,9 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* a
 
     m_board = aBoard;       // after init()
 
+    // Prepare net mapping that assures that net codes saved in a file are consecutive integers
+    m_mapping->SetBoard( aBoard );
+
     FILE_OUTPUTFORMATTER    formatter( aFileName );
 
     m_out = &formatter;     // no ownership
@@ -499,7 +502,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(tracks %d)\n", aBoard->GetNumSegmTrack() );
     m_out->Print( aNestLevel+1, "(zones %d)\n", aBoard->GetNumSegmZone() );
     m_out->Print( aNestLevel+1, "(modules %d)\n", aBoard->m_Modules.GetCount() );
-    m_out->Print( aNestLevel+1, "(nets %d)\n", aBoard->GetNetCount() );
+    m_out->Print( aNestLevel+1, "(nets %d)\n", (int) m_mapping->GetSize() );
     m_out->Print( aNestLevel, ")\n\n" );
 
     aBoard->GetPageSettings().Format( m_out, aNestLevel, m_ctl );
@@ -654,15 +657,14 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     m_out->Print( aNestLevel, ")\n\n" );
 
-    int netcount = aBoard->GetNetCount();
-
-    for( int i = 0;  i < netcount;  ++i )
+	// Save net codes and names
+    for( NETINFO_MAPPING::iterator net = m_mapping->begin(), netEnd = m_mapping->end();
+            net != netEnd; ++net )
     {
-        NETINFO_ITEM*   net = aBoard->FindNet( i );
         m_out->Print( aNestLevel, "(net %d %s)\n",
-                      net->GetNet(),
-                      m_out->Quotew( net->GetNetname() ).c_str() );
-    }
+                                  m_mapping->Translate( net->GetNet() ),
+                                  m_out->Quotew( net->GetNetname() ).c_str() );
+	}
 
     m_out->Print( 0, "\n" );
 
@@ -1229,7 +1231,8 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     // Unconnected pad is default net so don't save it.
     if( !(m_ctl & CTL_OMIT_NETS) && aPad->GetNet() != 0 )
-        StrPrintf( &output, " (net %d %s)", aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
+        StrPrintf( &output, " (net %d %s)", m_mapping->Translate( aPad->GetNet() ),
+                   m_out->Quotew( aPad->GetNetname() ).c_str() );
 
     if( aPad->GetPadToDieLength() != 0 )
         StrPrintf( &output, " (die_length %s)", FMT_IU( aPad->GetPadToDieLength() ).c_str() );
@@ -1386,7 +1389,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
         m_out->Print( 0, " (layer %s)", m_out->Quotew( aTrack->GetLayerName() ).c_str() );
     }
 
-    m_out->Print( 0, " (net %d)", aTrack->GetNet() );
+    m_out->Print( 0, " (net %d)", m_mapping->Translate( aTrack->GetNet() ) );
 
     if( aTrack->GetTimeStamp() != 0 )
         m_out->Print( 0, " (tstamp %lX)", aTrack->GetTimeStamp() );
@@ -1405,8 +1408,8 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     // so be sure a dummy value is stored, just for ZONE_CONTAINER compatibility
     // (perhaps netcode and netname should be not stored)
     m_out->Print( aNestLevel, "(zone (net %d) (net_name %s)",
-                  aZone->GetIsKeepout() ? 0 : aZone->GetNet(),
-                  m_out->Quotew( aZone->GetIsKeepout() ? wxT("") : aZone->GetNetName() ).c_str() );
+                  aZone->GetIsKeepout() ? 0 : m_mapping->Translate( aZone->GetNet() ),
+                  m_out->Quotew( aZone->GetIsKeepout() ? wxT("") : aZone->GetNetname() ).c_str() );
 
     formatLayer( aZone );
 
@@ -1622,20 +1625,11 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 }
 
 
-PCB_IO::PCB_IO() :
-    m_cache( 0 ),
-    m_ctl( CTL_FOR_BOARD ),         // expecting to OUTPUTFORMAT into BOARD files.
-    m_parser( new PCB_PARSER() )
-{
-    init( 0 );
-    m_out = &m_sf;
-}
-
-
 PCB_IO::PCB_IO( int aControlFlags ) :
     m_cache( 0 ),
     m_ctl( aControlFlags ),
-    m_parser( new PCB_PARSER() )
+    m_parser( new PCB_PARSER() ),
+    m_mapping( new NETINFO_MAPPING() )
 {
     init( 0 );
     m_out = &m_sf;
@@ -1646,6 +1640,7 @@ PCB_IO::~PCB_IO()
 {
     delete m_cache;
     delete m_parser;
+    delete m_mapping;
 }
 
 

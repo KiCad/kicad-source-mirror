@@ -51,9 +51,6 @@
   static ofstream ofile_constr("qweCons.dat");
 #endif
 
-
-//using namespace std;
-
 /** \brief Constrained Delaunay triangulation
 *
 *   Basic generic algorithms in TTL for inserting a constrained edge between two existing nodes.\n
@@ -61,7 +58,7 @@
 *   See documentation for the namespace ttl for general requirements and assumptions.
 *
 *   \author 
-*   Øyvind Hjelle, oyvindhj@ifi.uio.no
+*   ï¿½yvind Hjelle, oyvindhj@ifi.uio.no
 */
 
 namespace ttl_constr {
@@ -73,6 +70,9 @@ namespace ttl_constr {
 #endif
 
 
+class ConstrainedTriangulation
+{
+  public:
   //------------------------------------------------------------------------------------------------
   /* Checks if \e dart has start and end points in \e dstart and \e dend.
   *
@@ -89,14 +89,14 @@ namespace ttl_constr {
   *   A bool confirming that it's the constraint or not 
   *
   *   \using
-  *   ttl::same_0_orbit
+  *   same_0_orbit
   */
   template <class DartType>
-    bool isTheConstraint(const DartType& dart, const DartType& dstart, const DartType& dend) {
+    static bool isTheConstraint(const DartType& dart, const DartType& dstart, const DartType& dend) {
     DartType d0 = dart;
     d0.alpha0(); // CW
-    if ((ttl::same_0_orbit(dstart, dart) && ttl::same_0_orbit(dend, d0)) ||
-      (ttl::same_0_orbit(dstart, d0)  && ttl::same_0_orbit(dend, dart))) {
+    if ((ttl::TriangulationHelper::same_0_orbit(dstart, dart) && ttl::TriangulationHelper::same_0_orbit(dend, d0)) ||
+      (ttl::TriangulationHelper::same_0_orbit(dstart, d0) && ttl::TriangulationHelper::same_0_orbit(dend, dart))) {
       return true;
     }
     return false;
@@ -123,7 +123,7 @@ namespace ttl_constr {
   *   TraitsType::orient2d
   */
   template <class TraitsType, class DartType>
-    bool crossesConstraint(DartType& dstart, DartType& dend, DartType& d1, DartType& d2) {
+    static bool crossesConstraint(DartType& dstart, DartType& dend, DartType& d1, DartType& d2) {
     
     typename TraitsType::real_type orient_1 = TraitsType::orient2d(dstart,d1,dend);
     typename TraitsType::real_type orient_2 = TraitsType::orient2d(dstart,d2,dend);
@@ -156,12 +156,12 @@ namespace ttl_constr {
   *   The dart \e d making the smallest positive (or == 0) angle
   *
   *   \using
-  *   ttl::isBoundaryNode
-  *   ttl::positionAtNextBoundaryEdge
+  *   isBoundaryNode
+  *   positionAtNextBoundaryEdge
   *   TraitsType::orient2d
   */
   template <class TraitsType, class DartType>
-    DartType getAtSmallestAngle(const DartType& dstart, const DartType& dend) {
+    static DartType getAtSmallestAngle(const DartType& dstart, const DartType& dend) {
     
     // - Must boundary be convex???
     // - Handle the case where the constraint is already present???
@@ -169,9 +169,9 @@ namespace ttl_constr {
     //   (dstart and dend may define a boundary edge)
     
     DartType d_iter = dstart;
-    if (ttl::isBoundaryNode(d_iter)) {
+    if (ttl::TriangulationHelper::isBoundaryNode(d_iter)) {
       d_iter.alpha1(); // CW
-      ttl::positionAtNextBoundaryEdge(d_iter); // CCW (was rotated CW to the boundary)
+      ttl::TriangulationHelper::positionAtNextBoundaryEdge(d_iter); // CCW (was rotated CW to the boundary)
     }
     
     // assume convex boundary; see comments
@@ -273,7 +273,7 @@ namespace ttl_constr {
   *   Returns the next "collinear" starting node such that dend is returned when done.
   */
   template <class TraitsType, class DartType, class ListType>
-    DartType findCrossingEdges(const DartType& dstart, const DartType& dend, ListType& elist) {
+    static DartType findCrossingEdges(const DartType& dstart, const DartType& dend, ListType& elist) {
     
     const DartType my_start = getAtSmallestAngle<TraitsType>(dstart, dend);
     DartType my_end   = getAtSmallestAngle<TraitsType>(dend, dstart);
@@ -387,15 +387,16 @@ namespace ttl_constr {
   *   A list containing all the edges crossing the spesified constraint
   *
   *   \using
-  *   ttl::swappableEdge
-  *   ttl::swapEdgeInList
-  *   ttl::crossesConstraint
-  *   ttl::isTheConstraint
+  *   swappableEdge
+  *   swapEdgeInList
+  *   crossesConstraint
+  *   isTheConstraint
   */
   template <class TraitsType, class DartType>
-    void transformToConstraint(DartType& dstart, DartType& dend, std::list<DartType>& elist) {
+    void transformToConstraint(ttl::TriangulationHelper helper, DartType& dstart, DartType& dend,
+                               std::list<DartType>& elist) const {
     
-    typename list<DartType>::iterator it, used;
+    typename std::list<DartType>::iterator it, used;
     
     // We may enter in a situation where dstart and dend are altered because of a swap.
     // (The general rule is that darts inside the actual quadrilateral can be changed,
@@ -423,7 +424,7 @@ namespace ttl_constr {
         if (counter > dartsInList)
           break;
         
-        if (ttl::swappableEdge<TraitsType, DartType>(*it, true)) {
+        if (ttl::TriangulationHelper::swappableEdge<TraitsType, DartType>(*it, true)) {
           // Dyn & Goren & Rippa 's notation:
           // The node assosiated with dart *it is denoted u_m. u_m has edges crossing the constraint
           // named w_1, ... , w_r . The other node to the edge assosiated with dart *it is w_s.
@@ -456,7 +457,7 @@ namespace ttl_constr {
               end = true;
             
             // This is the only place swapping is called when inserting a constraint
-            ttl::swapEdgeInList<TraitsType, DartType>(it,elist);
+            helper.swapEdgeInList<TraitsType, DartType>(it,elist);
             
             // If we, during look-ahead, found that dstart and/or dend were in the quadrilateral,
             // we update them.
@@ -512,6 +513,8 @@ namespace ttl_constr {
 
   }
 
+}; // End of ConstrainedTriangulation class
+
 }; // End of ttl_constr namespace scope
 
 
@@ -546,14 +549,14 @@ namespace ttl { // (extension)
   *   - \ref hed::TTLtraits::swapEdge "TraitsType::swapEdge" (DartType&)
   *
   *   \using
-  *   - ttl::optimizeDelaunay if \e optimize_delaunay is set to \c true
+  *   - optimizeDelaunay if \e optimize_delaunay is set to \c true
   *
   *   \par Assumes:
   *   - The constrained edge must be inside the existing triangulation (and it cannot
   *     cross the boundary of the triangulation).
   */
   template <class TraitsType, class DartType>
-    DartType insertConstraint(DartType& dstart, DartType& dend, bool optimize_delaunay) {
+    DartType TriangulationHelper::insertConstraint(DartType& dstart, DartType& dend, bool optimize_delaunay) {
     
     // Assumes:
     // - It is the users responsibility to avoid crossing constraints
@@ -567,8 +570,8 @@ namespace ttl { // (extension)
     // calls itself recursively. 
 
     // RECURSION
-    list<DartType> elist;
-    DartType next_start = ttl_constr::findCrossingEdges<TraitsType>(dstart, dend, elist);
+    std::list<DartType> elist;
+    DartType next_start = ttl_constr::ConstrainedTriangulation::findCrossingEdges<TraitsType>(dstart, dend, elist);
 
     // If there are no crossing edges (elist is empty), we assume that the constraint
     // is an existing edge.
@@ -583,7 +586,7 @@ namespace ttl { // (extension)
     // findCrossingEdges stops if it finds a node lying on the constraint.
     // A dart with this node as start node is returned
     // We call insertConstraint recursivly until the received dart is dend
-    if (!ttl::same_0_orbit(next_start, dend)) {
+    if (!same_0_orbit(next_start, dend)) {
 
 #ifdef DEBUG_TTL_CONSTR_PLOT
       cout << "RECURSION due to collinearity along constraint" << endl;
@@ -594,7 +597,7 @@ namespace ttl { // (extension)
     
     // Swap edges such that the constraint edge is present in the transformed triangulation.
     if (elist.size() > 0) // by Thomas Sevaldrud
-       ttl_constr::transformToConstraint<TraitsType>(dstart, next_start, elist);
+      ttl_constr::ConstrainedTriangulation::transformToConstraint<TraitsType>(dstart, next_start, elist);
     
 #ifdef DEBUG_TTL_CONSTR_PLOT
     cout << "size of elist = " << elist.size() << endl;
@@ -607,13 +610,13 @@ namespace ttl { // (extension)
 #endif
 
     // Optimize to constrained Delaunay triangulation if required.
-    typename list<DartType>::iterator end_opt = elist.end();
+    typename std::list<DartType>::iterator end_opt = elist.end();
     if (optimize_delaunay) {
 
       // Indicate that the constrained edge, which is the last element in the list,
       // should not be swapped
       --end_opt;
-      ttl::optimizeDelaunay<TraitsType, DartType>(elist, end_opt);
+      optimizeDelaunay<TraitsType, DartType>(elist, end_opt);
     }
 
     if(elist.size() == 0) // by Thomas Sevaldrud

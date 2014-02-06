@@ -842,7 +842,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         curr_track->end = NULL;
         curr_track->SetState( BUSY | IN_EDIT | BEGIN_ONPAD | END_ONPAD, false );
         curr_track->SetZoneSubNet( 0 );
-        curr_track->SetNet( 0 );    // net code = 0 means not connected
+        curr_track->SetNet( NETINFO_LIST::UNCONNECTED );
     }
 
     // If no pad, reset pointers and netcode, and do nothing else

@@ -29,6 +29,7 @@
 
 #include <errno.h>
 #include <common.h>
+#include <confirm.h>
 #include <macros.h>
 #include <convert_from_iu.h>
 #include <trigo.h>
@@ -427,11 +428,11 @@ BOARD* PCB_PARSER::parseBOARD() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_segment:
-            m_board->m_Track.Append( parseTRACK() );
+            m_board->Add( parseTRACK(), ADD_APPEND );
             break;
 
         case T_via:
-            m_board->m_Track.Append( parseSEGVIA() );
+            m_board->Add( parseSEGVIA(), ADD_APPEND );
             break;
 
         case T_zone:
@@ -1066,9 +1067,7 @@ void PCB_PARSER::parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR )
     // (TODO: a better test.)
     if( number > 0 || m_board->FindNet( 0 ) == NULL )
     {
-        NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
-        net->SetNet( number );
-        net->SetNetname( name );
+        NETINFO_ITEM* net = new NETINFO_ITEM( m_board, name, number );
         m_board->AppendNet( net );
     }
 }
@@ -1733,7 +1732,7 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
 
         case T_pad:
         {
-            D_PAD* pad = parseD_PAD();
+            D_PAD* pad = parseD_PAD( module.get() );
             wxPoint pt = pad->GetPos0();
             RotatePoint( &pt, module->GetOrientation() );
             pad->SetPosition( pt + module->GetPosition() );
@@ -2013,14 +2012,14 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
+D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
 {
     wxCHECK_MSG( CurTok() == T_pad, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as D_PAD." ) );
 
     wxSize sz;
     wxPoint pt;
-    std::auto_ptr< D_PAD > pad( new D_PAD( NULL ) );
+    std::auto_ptr< D_PAD > pad( new D_PAD( aParent ) );
 
     NeedSYMBOLorNUMBER();
     pad->SetPadName( FromUTF8() );
@@ -2193,7 +2192,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
         case T_net:
             pad->SetNet( parseInt( "net number" ) );
             NeedSYMBOLorNUMBER();
-            pad->SetNetname( FromUTF8() );
+            assert( FromUTF8() == m_board->FindNet( pad->GetNet() )->GetNetname() );
             NeedRIGHT();
             break;
 
@@ -2419,13 +2418,19 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             // Init the net code only, not the netname, to be sure
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
-            zone->BOARD_CONNECTED_ITEM::SetNet( parseInt( "net number" ) );
+            zone->SetNet( parseInt( "net number" ) );
             NeedRIGHT();
             break;
 
         case T_net_name:
             NeedSYMBOLorNUMBER();
-            zone->SetNetName( FromUTF8() );
+            if( m_board->FindNet( zone->GetNet() )->GetNetname() != FromUTF8() )
+            {
+                wxString msg = _( "There is a zone that belongs to a not "
+                                  "existing net (" ) + FromUTF8() + _("), you should verify it." );
+                DisplayError( NULL, msg );
+                zone->SetNet( NETINFO_LIST::UNCONNECTED );
+            }
             NeedRIGHT();
             break;
 
@@ -2689,7 +2694,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
         if( !zone->IsOnCopperLayer() )
         {
             zone->SetFillMode( 0 );
-            zone->SetNet( 0 );
+            zone->SetNet( NETINFO_LIST::UNCONNECTED );
         }
 
         // Set hatch here, after outlines corners are read
@@ -2701,10 +2706,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
     // Ensure keepout does not have a net (which have no sense for a keepout zone)
     if( zone->GetIsKeepout() )
-    {
-        zone->SetNet(0);
-        zone->SetNetName( wxEmptyString );
-    }
+        zone->SetNet( NETINFO_LIST::UNCONNECTED );
 
     return zone.release();
 }

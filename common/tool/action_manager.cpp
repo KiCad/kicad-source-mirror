@@ -34,9 +34,18 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
 }
 
 
+ACTION_MANAGER::~ACTION_MANAGER()
+{
+    while( !m_actionIdIndex.empty() )
+        UnregisterAction( m_actionIdIndex.begin()->second );
+}
+
+
 void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 {
     assert( aAction->GetId() == -1 );    // Check if the TOOL_ACTION was not registered before
+    assert( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
+    assert( m_actionIdIndex.find( aAction->m_id ) == m_actionIdIndex.end() );
 
     aAction->setId( MakeActionId( aAction->m_name ) );
 
@@ -44,7 +53,13 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
     m_actionIdIndex[aAction->m_id] = aAction;
 
     if( aAction->HasHotKey() )
+    {
+        // Duplication of hot keys leads to unexpected behaviour
+        // The right way to change a hotkey is to use ACTION_MANAGER::ClearHotKey() first
+        assert( m_actionHotKeys.find( aAction->m_currentHotKey ) == m_actionHotKeys.end() );
+
         m_actionHotKeys[aAction->m_currentHotKey] = aAction;
+    }
 
     aAction->setActionMgr( this );
 }
@@ -52,12 +67,12 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 
 void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 {
+    m_actionNameIndex.erase( aAction->m_name );
+    m_actionIdIndex.erase( aAction->m_id );
+
     // Indicate that the ACTION_MANAGER no longer care about the object
     aAction->setActionMgr( NULL );
     aAction->setId( -1 );
-
-    m_actionNameIndex.erase( aAction->m_name );
-    m_actionIdIndex.erase( aAction->m_id );
 
     if( aAction->HasHotKey() )
         m_actionHotKeys.erase( aAction->m_currentHotKey );
@@ -95,6 +110,12 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     runAction( it->second );
 
     return true;
+}
+
+
+void ACTION_MANAGER::ClearHotKey( int aHotKey )
+{
+    m_actionHotKeys.erase( aHotKey );
 }
 
 
