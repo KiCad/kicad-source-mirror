@@ -56,3 +56,7 @@ TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
 TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, 'E',
         "Properties...", "Displays properties window" );
+
+TOOL_ACTION COMMON_ACTIONS::drawingLine( "pcbnew.InteractiveDrawing.line",
+        AS_GLOBAL, 'D',
+        "Draw a line", "Draw a line" );
