@@ -446,6 +446,7 @@ set( BMAPS_MID
     post_module
     preference
     print_button
+    ps_router
     ratsnest
     read_setup
     redo

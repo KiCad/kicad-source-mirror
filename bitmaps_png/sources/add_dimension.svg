@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="add_dimension.svg">
   <metadata
      id="metadata58">
@@ -34,15 +34,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
+     inkscape:window-width="1280"
+     inkscape:window-height="977"
      id="namedview56"
      showgrid="true"
      inkscape:zoom="22.961538"
      inkscape:cx="6.3366833"
      inkscape:cy="17.502655"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2">
     <inkscape:grid
@@ -128,5 +128,6 @@
        sodipodi:role="line"
        id="tspan3010"
        x="6.9359937"
-       y="11.982761">N</tspan></text>
+       y="11.982761"
+       style="-inkscape-font-specification:Comic Sans MS;font-family:Comic Sans MS;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal">N</tspan></text>
 </svg>
