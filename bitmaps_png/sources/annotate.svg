@@ -12,7 +12,7 @@
    version="1.1"
    viewBox="0 0 26 26"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="annotate.svg">
   <metadata
      id="metadata186">
@@ -35,15 +35,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="849"
+     inkscape:window-width="1280"
+     inkscape:window-height="977"
      id="namedview184"
      showgrid="true"
      inkscape:zoom="22.961538"
      inkscape:cx="6.0239412"
      inkscape:cy="11.23117"
-     inkscape:window-x="0"
-     inkscape:window-y="29"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      inkscape:snap-grids="false"
@@ -102,7 +102,7 @@
      sodipodi:nodetypes="cc" />
   <text
      xml:space="preserve"
-     style="font-size:10.0978241px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Garuda;-inkscape-font-specification:Garuda"
+     style="font-size:10.09782410000000000px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS"
      x="10.809539"
      y="7.3350997"
      id="text3036"
@@ -112,16 +112,16 @@
        id="tspan3038"
        x="10.809539"
        y="7.3350997"
-       style="font-size:8.65527821px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol">ABC</tspan></text>
+       style="font-size:8.65527821000000050px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS">ABC</tspan></text>
   <text
      transform="scale(0.88744146,1.1268349)"
      sodipodi:linespacing="125%"
      id="text3040"
      y="22.186037"
      x="12.713224"
-     style="font-size:9.76912498px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Garuda;-inkscape-font-specification:Garuda"
+     style="font-size:9.76912498000000080px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
      xml:space="preserve"><tspan
-       style="font-size:8.37353611px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
+       style="font-size:8.37353610999999990px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS"
        y="22.186037"
        x="12.713224"
        id="tspan3042"

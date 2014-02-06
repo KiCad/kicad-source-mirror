@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="add_pin.svg">
   <metadata
      id="metadata87">
@@ -34,16 +34,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
+     inkscape:window-width="1280"
+     inkscape:window-height="977"
      id="namedview85"
      showgrid="true"
      inkscape:snap-grids="true"
      inkscape:zoom="22.961538"
      inkscape:cx="13"
      inkscape:cy="12.718459"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
      inkscape:window-maximized="1"
      inkscape:current-layer="g3019">
     <inkscape:grid
@@ -130,7 +130,8 @@
            sodipodi:role="line"
            id="tspan3775"
            x="3.643666"
-           y="9.4084282">A</tspan></text>
+           y="9.4084282"
+           style="-inkscape-font-specification:Comic Sans MS;font-family:Comic Sans MS;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal">A</tspan></text>
       <text
          transform="scale(-0.98817647,1.011965)"
          sodipodi:linespacing="125%"
