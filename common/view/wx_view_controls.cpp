@@ -229,7 +229,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 
 void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 {
-    m_grabMouse = aEnabled;
+    VIEW_CONTROLS::SetGrabMouse( aEnabled );
 
     if( aEnabled )
         m_parentPanel->CaptureMouse();
