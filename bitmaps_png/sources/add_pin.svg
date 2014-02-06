@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="add_pin.svg">
   <metadata
      id="metadata87">
@@ -34,18 +34,19 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="977"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview85"
      showgrid="true"
-     inkscape:snap-grids="true"
+     inkscape:snap-grids="false"
      inkscape:zoom="22.961538"
-     inkscape:cx="13"
-     inkscape:cy="12.718459"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:cx="6.0536012"
+     inkscape:cy="9.0424516"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g3019">
+     inkscape:current-layer="g3019"
+     inkscape:snap-to-guides="false">
     <inkscape:grid
        type="xygrid"
        id="grid3832"
@@ -115,36 +116,29 @@
          sodipodi:ry="4"
          d="m 24,13 c 0,2.209139 -1.790861,4 -4,4 -2.209139,0 -4,-1.790861 -4,-4 0,-2.209139 1.790861,-4 4,-4 2.209139,0 4,1.790861 4,4 z" />
       <path
-         style="fill:none;stroke:#800000;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-         d="M 15,13 2,13"
+         style="fill:none;stroke:#800000;stroke-width:2.29987168;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 15,12.978224 -13,0"
          id="path3771"
          inkscape:connector-curvature="0" />
-      <text
-         xml:space="preserve"
-         style="font-size:12.87740231px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
-         x="3.643666"
-         y="9.4084282"
-         id="text3773"
-         sodipodi:linespacing="125%"
-         transform="scale(0.98817647,1.011965)"><tspan
-           sodipodi:role="line"
-           id="tspan3775"
-           x="3.643666"
-           y="9.4084282"
-           style="-inkscape-font-specification:Comic Sans MS;font-family:Comic Sans MS;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal">A</tspan></text>
-      <text
+      <g
+         transform="scale(0.96416518,1.0371667)"
+         style="font-size:13.19809723px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
+         id="text3773">
+        <path
+           d="m 8.6145655,1.7225244 -1.6302518,4.0624666 3.2066743,0 -1.5312528,-4.0204761 m -0.7346597,-1.74432723 1.4757638,0 3.6668547,9.62146443 -1.44366,0 -1.102285,-2.8041223 -3.9757125,0.04199 -0.9216058,2.7621319 -1.4178234,-0.04199 3.7184682,-9.57947403"
+           id="path2999"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccccccccccc" />
+      </g>
+      <g
          transform="scale(-0.98817647,1.011965)"
-         sodipodi:linespacing="125%"
-         id="text3777"
-         y="24.704399"
-         x="-11.924427"
          style="font-size:12.87740231px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
-         xml:space="preserve"><tspan
-           y="24.704399"
-           x="-11.924427"
-           id="tspan3779"
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Ubuntu;-inkscape-font-specification:Ubuntu">1</tspan></text>
+         id="text3777">
+        <path
+           d="m -10.327327,23.635474 2.0749717,0 0,-7.161797 -2.2573177,0.452721 0,-1.156954 2.2447421,-0.452721 1.2701344,0 0,8.318751 2.0749721,0 0,1.068925 -5.4075026,0 0,-1.068925"
+           style="font-family:Ubuntu;-inkscape-font-specification:Ubuntu"
+           id="path3002" />
+      </g>
     </g>
   </g>
 </svg>

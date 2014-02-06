@@ -21,6 +21,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -38,7 +39,7 @@
      id="namedview21"
      showgrid="true"
      inkscape:zoom="22.961538"
-     inkscape:cx="6.0536012"
+     inkscape:cx="-0.8927976"
      inkscape:cy="13"
      inkscape:window-x="0"
      inkscape:window-y="29"
@@ -103,17 +104,13 @@
        font-weight="bold"
        x="5.0428972"
        y="21.657337" /></text>
-  <text
-     xml:space="preserve"
-     style="font-size:24.70604515px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#f9f9f9;fill-opacity:1;stroke:#930202;stroke-width:1.23530221;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Sans"
-     x="3.8674505"
-     y="22.778072"
-     id="text3005"
-     sodipodi:linespacing="125%"
-     transform="scale(1.0593772,0.94395081)"><tspan
-       sodipodi:role="line"
-       id="tspan3007"
-       x="3.8674505"
-       y="22.778072"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#f9f9f9;stroke:#930202;stroke-width:1.23530221;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol Bold">E</tspan></text>
+  <g
+     transform="scale(1.0593772,0.94395081)"
+     style="font-size:24.70604515px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#f9f9f9;fill-opacity:1;stroke:#930202;stroke-width:1.23530221;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;font-family:Sans"
+     id="text3005">
+    <path
+       d="m 6.1353882,4.7672689 12.5339748,0 0,3.5104781 -7.889528,0 0,3.353653 7.419052,0 0,3.510478 -7.419052,0 0,4.125716 8.154925,0 0,3.510478 -12.7993718,0 0,-18.0108031"
+       style="font-variant:normal;font-weight:bold;font-stretch:normal;fill:#f9f9f9;stroke:#930202;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol Bold"
+       id="path2992" />
+  </g>
 </svg>
