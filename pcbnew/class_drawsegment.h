@@ -30,7 +30,7 @@
 #ifndef CLASS_DRAWSEGMENT_H_
 #define CLASS_DRAWSEGMENT_H_
 
-
+#include <common.h>
 #include <class_board_item.h>
 #include <PolyLine.h>
 #include <math_for_graphics.h>
