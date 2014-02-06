@@ -720,7 +720,7 @@ public:
      * @param aPoint is the point for which the grid point is searched.
      * @return The nearest grid point.
      */
-    VECTOR2D GetGridPoint( VECTOR2D aPoint ) const;
+    VECTOR2D GetGridPoint( const VECTOR2D& aPoint ) const;
 
 
     /**
