@@ -100,7 +100,7 @@ public:
      * returns a bit-mask of all the element categories that are visible
      * @return int - the visible element categories in bit-mapped form.
      */
-    long GetVisibleElements() const
+    int GetVisibleElements() const
     {
         return m_VisibleElements;
     }
@@ -110,7 +110,7 @@ public:
      * changes the bit-mask of visible element categories
      * @param aMask = The new bit-mask of visible element categories
      */
-    void SetVisibleElements( long aMask )
+    void SetVisibleElements( int aMask )
     {
         m_VisibleElements = aMask;
     }
@@ -198,7 +198,7 @@ private:
     int       m_CopperLayerCount;   ///< Number of copper layers for this design
     LAYER_MSK m_EnabledLayers;      ///< Bit-mask for layer enabling
     LAYER_MSK m_VisibleLayers;      ///< Bit-mask for layer visibility
-    long      m_VisibleElements;    ///< Bit-mask for element category visibility
+    int       m_VisibleElements;    ///< Bit-mask for element category visibility
     int       m_boardThickness;     ///< Board thickness for 3D viewer
 };
 
