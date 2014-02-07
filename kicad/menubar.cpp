@@ -230,7 +230,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     AddMenuItem( SubMenuPdfBrowserChoice, ID_SELECT_PREFERED_PDF_BROWSER,
                   _( "&Favourite" ),
                   _( "Use your favourite PDF viewer used to browse datasheets" ),
-                   KiBitmap( preference_xpm ),
+                   KiBitmap( datasheet_xpm ),
                   wxITEM_CHECK );
     SubMenuPdfBrowserChoice->Check( ID_SELECT_PREFERED_PDF_BROWSER,
                                     !wxGetApp().UseSystemPdfBrowser() );
@@ -239,7 +239,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Append PDF Viewer submenu to preferences
     AddMenuItem( SubMenuPdfBrowserChoice,
                  ID_SELECT_PREFERED_PDF_BROWSER_NAME,
-                 _( "&PDF Viewer" ),
+                 _( "Select &PDF Viewer" ),
                  _( "Select your favourite PDF viewer used to browse datasheets" ),
                  KiBitmap( datasheet_xpm ) );
 
