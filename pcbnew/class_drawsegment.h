@@ -30,7 +30,6 @@
 #ifndef CLASS_DRAWSEGMENT_H_
 #define CLASS_DRAWSEGMENT_H_
 
-#include <common.h>
 #include <class_board_item.h>
 #include <PolyLine.h>
 #include <math_for_graphics.h>
@@ -126,9 +125,9 @@ public:
 
     /**
      * function GetArcAngleStart()
-     * @return the angle of the stating point of this arc, between 0 and 3600 in 0.1 deg
+     * @return the angle of the starting point of this arc, between 0 and 3600 in 0.1 deg
      */
-    const double GetArcAngleStart() const;
+    double GetArcAngleStart() const;
 
     /**
      * Function GetRadius
