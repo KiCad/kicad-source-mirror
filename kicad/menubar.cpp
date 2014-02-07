@@ -97,7 +97,6 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                                     // static to remember this menu
 
     // Create and try to get the current  menubar
-    wxMenuItem* item;
     wxMenuBar*  menuBar = GetMenuBar();
 
     if( !menuBar )
@@ -219,32 +218,24 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     wxMenu* SubMenuPdfBrowserChoice = new wxMenu;
 
     // Default
-    item = new wxMenuItem( SubMenuPdfBrowserChoice,
-                           ID_SELECT_DEFAULT_PDF_BROWSER,
-                           _( "&Default" ),
-                           _( "Use system default PDF viewer used to browse datasheets" ),
-                           wxITEM_CHECK );
-
-    SETBITMAPS( datasheet_xpm );
-
-    SubMenuPdfBrowserChoice->Append( item );
+    AddMenuItem( SubMenuPdfBrowserChoice, ID_SELECT_DEFAULT_PDF_BROWSER,
+                  _( "&Default" ),
+                  _( "Use system default PDF viewer used to browse datasheets" ),
+                   KiBitmap( datasheet_xpm ),
+                  wxITEM_CHECK );
     SubMenuPdfBrowserChoice->Check( ID_SELECT_DEFAULT_PDF_BROWSER,
                                     wxGetApp().UseSystemPdfBrowser() );
 
     // Favourite
-    item = new wxMenuItem( SubMenuPdfBrowserChoice,
-                           ID_SELECT_PREFERED_PDF_BROWSER,
-                           _( "&Favourite" ),
-                           _( "Use your favourite PDF viewer used to browse datasheets" ),
-                           wxITEM_CHECK );
-
-    SETBITMAPS( preference_xpm );
-
-    SubMenuPdfBrowserChoice->Append( item );
-    SubMenuPdfBrowserChoice->AppendSeparator();
+    AddMenuItem( SubMenuPdfBrowserChoice, ID_SELECT_PREFERED_PDF_BROWSER,
+                  _( "&Favourite" ),
+                  _( "Use your favourite PDF viewer used to browse datasheets" ),
+                   KiBitmap( preference_xpm ),
+                  wxITEM_CHECK );
     SubMenuPdfBrowserChoice->Check( ID_SELECT_PREFERED_PDF_BROWSER,
                                     !wxGetApp().UseSystemPdfBrowser() );
 
+    SubMenuPdfBrowserChoice->AppendSeparator();
     // Append PDF Viewer submenu to preferences
     AddMenuItem( SubMenuPdfBrowserChoice,
                  ID_SELECT_PREFERED_PDF_BROWSER_NAME,
@@ -253,8 +244,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  KiBitmap( datasheet_xpm ) );
 
     // PDF viewer submenu
-    AddMenuItem( preferencesMenu,
-                 SubMenuPdfBrowserChoice, -1,
+    AddMenuItem( preferencesMenu, SubMenuPdfBrowserChoice, -1,
                  _( "&PDF Viewer" ),
                  _( "PDF viewer preferences" ),
                  KiBitmap( datasheet_xpm ) );
@@ -270,14 +260,12 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
-    AddMenuItem( helpMenu,
-                 wxID_HELP,
+    AddMenuItem( helpMenu, wxID_HELP,
                  _( "&Contents" ),
                  _( "Open the KiCad handbook" ),
                  KiBitmap( online_help_xpm ) );
 
-    AddMenuItem( helpMenu,
-                 wxID_INDEX,
+    AddMenuItem( helpMenu, wxID_INDEX,
                  _( "&Getting Started in KiCad" ),
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
@@ -286,8 +274,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     helpMenu->AppendSeparator();
 
     // About
-    AddMenuItem( helpMenu,
-                 wxID_ABOUT,
+    AddMenuItem( helpMenu, wxID_ABOUT,
                  _( "&About KiCad" ),
                  _( "About KiCad project manager" ),
                  KiBitmap( info_xpm ) );

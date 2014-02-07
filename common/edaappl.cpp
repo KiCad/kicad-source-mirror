@@ -273,6 +273,7 @@ EDA_APP::EDA_APP()
     m_Locale = NULL;
     m_projectSettings = NULL;
     m_commonSettings = NULL;
+    ForceSystemPdfBrowser( false );
 }
 
 
