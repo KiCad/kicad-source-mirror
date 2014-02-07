@@ -49,6 +49,7 @@ void KICAD_MANAGER_FRAME::OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event )
 
 void KICAD_MANAGER_FRAME::OnSelectDefaultPdfBrowser( wxCommandEvent& event )
 {
+    wxGetApp().ForceSystemPdfBrowser( true );
     wxGetApp().WritePdfBrowserInfos();
 }
 
@@ -61,26 +62,34 @@ void KICAD_MANAGER_FRAME::OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event )
 
 void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
 {
-    bool select = event.GetId() == ID_SELECT_PREFERED_PDF_BROWSER_NAME;
+    wxGetApp().ForceSystemPdfBrowser( false );
 
-    if( !wxGetApp().GetPdfBrowserFileName() && !select )
+    bool selectName = event.GetId() == ID_SELECT_PREFERED_PDF_BROWSER_NAME;
+    if( wxGetApp().GetPdfBrowserFileName().IsEmpty() && !selectName )
     {
         DisplayError( this,
                       _( "You must choose a PDF viewer before using this option." ) );
     }
 
-    wxString wildcard( wxT( "*" ) );
+    if( !wxGetApp().GetPdfBrowserFileName().IsEmpty() && !selectName )
+    {
+        wxGetApp().WritePdfBrowserInfos();
+        return;
+    }
+
+    wxString mask( wxT( "*" ) );
 
 #ifdef __WINDOWS__
-    wildcard += wxT( ".exe" );
+    mask += wxT( ".exe" );
 #endif
 
-    wildcard = _( "Executable files (" ) + wildcard + wxT( ")|" ) + wildcard;
+    wxString wildcard = _( "Executable files (" ) + mask + wxT( ")|" ) + mask;
 
     wxGetApp().ReadPdfBrowserInfos();
     wxFileName fn = wxGetApp().GetPdfBrowserFileName();
+
     wxFileDialog dlg( this, _( "Select Preferred Pdf Browser" ), fn.GetPath(),
-                      fn.GetFullName(), wildcard,
+                      fn.GetFullPath(), wildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )

@@ -28,6 +28,7 @@
  * for more info
  */
 
+#include <cmath>
 #include <wx/wx.h>
 #include <wx/config.h>
 
@@ -67,10 +68,10 @@ void PCB_CALCULATOR_FRAME::TW_WriteConfig()
 void PCB_CALCULATOR_FRAME::OnTWCalculateButt( wxCommandEvent& event )
 {
     // Prepare parameters:
-    double current   = ReturnDoubleFromString( m_TrackCurrentValue->GetValue() );
-    double thickness = ReturnDoubleFromString( m_TrackThicknessValue->GetValue() );
-    double deltaT_C  = ReturnDoubleFromString( m_TrackDeltaTValue->GetValue() );
-    double track_len = ReturnDoubleFromString( m_TrackLengthValue->GetValue() );
+    double current   = std::abs( ReturnDoubleFromString( m_TrackCurrentValue->GetValue() ) );
+    double thickness = std::abs( ReturnDoubleFromString( m_TrackThicknessValue->GetValue() ) );
+    double deltaT_C  = std::abs( ReturnDoubleFromString( m_TrackDeltaTValue->GetValue() ) );
+    double track_len = std::abs( ReturnDoubleFromString( m_TrackLengthValue->GetValue() ) );
     double extTrackWidth;
     double intTrackWidth;
 
@@ -91,13 +92,16 @@ void PCB_CALCULATOR_FRAME::OnTWCalculateButt( wxCommandEvent& event )
     double   scale = m_TW_ExtTrackWidth_choiceUnit->GetUnitScale();
     double   ext_area  = thickness * extTrackWidth;
     msg.Printf( wxT( "%g" ), ext_area / (scale * scale) );
+
     m_ExtTrackAreaValue->SetValue( msg );
     wxString strunit = m_TW_ExtTrackWidth_choiceUnit->GetUnitName();
     msg = strunit + wxT( " x " ) + strunit;
     m_ExtTrackAreaUnitLabel->SetLabel( msg );
+
     scale = m_TW_IntTrackWidth_choiceUnit->GetUnitScale();
     double   int_area  = thickness * intTrackWidth;
     msg.Printf( wxT( "%g" ), int_area / (scale * scale) );
+
     m_IntTrackAreaValue->SetValue( msg );
     strunit = m_TW_IntTrackWidth_choiceUnit->GetUnitName();
     msg = strunit + wxT( " x " ) + strunit;
@@ -108,6 +112,7 @@ void PCB_CALCULATOR_FRAME::OnTWCalculateButt( wxCommandEvent& event )
     double ext_res = rho / ext_area * track_len;
     msg.Printf( wxT( "%g" ), ext_res );
     m_ExtTrackResistValue->SetValue( msg );
+
     double int_res = rho / int_area * track_len;
     msg.Printf( wxT( "%g" ), int_res );
     m_IntTrackResistValue->SetValue( msg );
@@ -116,6 +121,7 @@ void PCB_CALCULATOR_FRAME::OnTWCalculateButt( wxCommandEvent& event )
     double ext_drop_volt = ext_res * current;
     msg.Printf( wxT( "%g" ), ext_drop_volt );
     m_ExtTrackVDropValue->SetValue( msg );
+
     double int_drop_volt = int_res * current;
     msg.Printf( wxT( "%g" ), int_drop_volt );
     m_IntTrackVDropValue->SetValue( msg );
@@ -124,6 +130,7 @@ void PCB_CALCULATOR_FRAME::OnTWCalculateButt( wxCommandEvent& event )
     double loss = ext_drop_volt * current;
     msg.Printf( wxT( "%g" ), loss );
     m_ExtTrackLossValue->SetValue( msg );
+
     loss = int_drop_volt * current;
     msg.Printf( wxT( "%g" ), loss );
     m_IntTrackLossValue->SetValue( msg );

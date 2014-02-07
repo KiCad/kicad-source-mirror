@@ -97,6 +97,9 @@ protected:
 
     /// The file name of the the program selected for browsing pdf files.
     wxString            m_PdfBrowser;
+    /// true to use the selected PDF browser, if exists, or false to use the default
+    bool                m_useSystemPdfBrowser;
+
     wxPathList          m_searchPaths;
     wxFileHistory       m_fileHistory;
     wxString            m_HelpFileName;
@@ -150,11 +153,29 @@ public:
 
     wxLocale* GetLocale() { return m_Locale; }
 
+    /**
+     * @return the full file name of the prefered PDF browser
+     * ( the file name is empty if no prefered there is no PDF browser selected
+     */
     wxString GetPdfBrowserFileName() const { return m_PdfBrowser; }
 
+    /**
+     * Set the name of a prefered PDF browser, which could be an alternate browser
+     * to the system PDF browser.
+     */
     void SetPdfBrowserFileName( const wxString& aFileName ) { m_PdfBrowser = aFileName; }
 
-    bool UseSystemPdfBrowser() const { return m_PdfBrowser.IsEmpty(); }
+    /**
+     * @return true if the PDF browser is the default (system) PDF browser
+     * and false if the PDF browser is the prefered (selected) browser
+     * returns false if there is no selected browser
+     */
+    bool UseSystemPdfBrowser() const { return m_useSystemPdfBrowser || m_PdfBrowser.IsEmpty(); }
+
+    /**
+     * force the use of system PDF browser, even if a preferend PDF browser is set
+     */
+    void ForceSystemPdfBrowser( bool aFlg ) { m_useSystemPdfBrowser = aFlg; }
 
     wxFileHistory& GetFileHistory() { return m_fileHistory; }
 
