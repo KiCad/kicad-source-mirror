@@ -58,9 +58,16 @@ option( KICAD_SCRIPTING_WXPYTHON
     )
 
 option( KICAD_BUILD_STATIC
-    "Builds Kicad and all libraries static (except wx-widgets)"
+    "Builds Kicad and all libraries static"
     )
 
+option( KICAD_BUILD_DYNAMIC
+    "Builds Kicad and all libraries dynamic (required for wxPython)"
+    )
+
+
+# WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
+# as it is known to work with KiCad.  Other versions may contain bugs that may result
 # WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
 # as it is known to work with KiCad.  Other versions may contain bugs that may result
 # in KiCad errors.
@@ -334,6 +341,14 @@ add_definitions(-DWX_COMPATIBILITY)
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
 
+add_custom_target( lib-wxpython )
+        include( download_pcre )
+        include( download_swig )
+        include( download_wxpython )
+        add_dependencies( lib-wxpython pcre )
+        add_dependencies( lib-wxpython swig )
+        add_dependencies( lib-wxpython libwxpython )
+
 if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
@@ -348,7 +363,6 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     if( KICAD_BUILD_DYNAMIC )
         message(STATUS "KICAD_BUILD_DYNAMIC set")
-        # TODO - Library packaging/relocation
     endif()
 
     add_custom_target( lib-dependencies
@@ -357,8 +371,28 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     include( download_libpng )
 
-    if( KICAD_SCRIPTING_WXPYTHON )
-        message( FATAL_ERROR "KICAD_BUILD_* and SCRIPTING Not Implemented Yet!" )
+    if( KICAD_SCRIPTING OR KICAD_SCRIPTING_WXPYTHON OR KICAD_SCRIPTING_MODULES )
+        set( SWIG_EXECUTABLE  ${SWIG_ROOT}/bin/swig )
+        set( SWIG_INCLUDE     ${SWIG_ROOT}/include )
+        set( PYTHON_DEST ${LIBWXPYTHON_ROOT}/wxPython/lib/python2.6/site-packages )
+
+        if( NOT EXISTS ${SWIG_EXECUTABLE} )
+            set(KICAD_SCRIPTING CACHE OFF FORCE "Disabling KICAD_SCRIPTING")
+            message( STATUS  "KICAD_SCRIPTING Enabled but SWIG not found, please disable and before reenabling execute: make lib-wxpython")
+            message( FATAL_ERROR "Missing SWIG!")
+        endif()
+        message(STATUS "SWIG_EXECUTABLE: ${SWIG_EXECUTABLE}")
+
+        set( PYTHON_EXECUTABLE /usr/bin/python2.6 )
+
+        set( PYTHON_DEST ${LIBWXPYTHON_ROOT}/wxPython/lib/python2.6/site-packages )
+
+        set(wxWidgets_BIN_DIR           ${LIBWXPYTHON_ROOT}/bin/wxrc )
+        set(wxWidgets_CONFIG_EXECUTABLE ${LIBWXPYTHON_ROOT}/bin/wx-config )
+        set(wxWidgets_INCLUDE_DIRS      ${LIBWXPYTHON_ROOT}/include/wx-3.0 ) 
+        set(wxWidgets_LIBRARY_DIRS      ${LIBWXPYTHON_ROOT}/lib )
+
+        add_dependencies( lib-dependencies libwxpython )
     else()
         include( download_wxwidgets )
         add_dependencies( lib-dependencies libwx )
@@ -421,7 +455,7 @@ endif()
 
 # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
 # Seems no more needed on wx-3
-if( APPLE AND NOT (KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC) )
+if( APPLE AND ( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES OR KICAD_SCRIPTING_WXPYTHON) )
     find_package( wxWidgets COMPONENTS gl adv html core net base xml QUIET )
 else()
     find_package( wxWidgets COMPONENTS gl aui adv html core net base xml QUIET )
