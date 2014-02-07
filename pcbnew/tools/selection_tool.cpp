@@ -112,6 +112,16 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             selectSingle( evt->Position() );
         }
 
+        // right click? if there is any object - show the context menu
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            if( m_selection.Empty() )
+                selectSingle( evt->Position() );
+
+            if( !m_selection.Empty() )
+                SetContextMenu( &m_menu, CMENU_NOW );
+        }
+
         // double click? Display the properties window
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
@@ -310,9 +320,6 @@ void SELECTION_TOOL::clearSelection()
     m_selection.clear();
 
     getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
-
-    // Do not show the context menu when there is nothing selected
-    SetContextMenu( &m_menu, CMENU_OFF );
 }
 
 
@@ -509,9 +516,6 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     {
         // Set as the current item, so the information about selection is displayed
         getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( aItem, true );
-
-        // Now the context menu should be enabled
-        SetContextMenu( &m_menu, CMENU_BUTTON );
     }
     else if( m_selection.Size() == 2 )  // Check only for 2, so it will not be
     {                                   // called for every next selected item
@@ -539,10 +543,7 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
 
     // If there is nothing selected, disable the context menu
     if( m_selection.Empty() )
-    {
-        SetContextMenu( &m_menu, CMENU_OFF );
         getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
-    }
 }
 
 
