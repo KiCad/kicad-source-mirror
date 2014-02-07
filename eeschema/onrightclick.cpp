@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2008-2014 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -270,7 +270,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         default:
             if( is_new )
                 AddMenuItem( PopMenu, ID_POPUP_END_LINE, _( "End Drawing" ),
-                             KiBitmap( apply_xpm ) );
+                             KiBitmap( checked_ok_xpm ) );
 
             AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Drawing" ),
                          KiBitmap( delete_xpm ) );
@@ -677,7 +677,7 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
     if( is_new )
     {
         msg = AddHotkeyName( _( "Wire End" ), s_Schematic_Hokeys_Descr, HK_END_CURR_LINEWIREBUS );
-        AddMenuItem( PopMenu, ID_POPUP_END_LINE, msg, KiBitmap( apply_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_END_LINE, msg, KiBitmap( checked_ok_xpm ) );
         return;
     }
 
@@ -727,7 +727,7 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
     if( is_new )
     {
         msg = AddHotkeyName( _( "Bus End" ), s_Schematic_Hokeys_Descr, HK_END_CURR_LINEWIREBUS );
-        AddMenuItem( PopMenu, ID_POPUP_END_LINE, msg, KiBitmap( apply_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_END_LINE, msg, KiBitmap( checked_ok_xpm ) );
         return;
     }
 
@@ -768,7 +768,7 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
 
     if( Sheet->GetFlags() )
     {
-        AddMenuItem( PopMenu, ID_POPUP_SCH_END_SHEET, _( "Place Sheet" ), KiBitmap( apply_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_END_SHEET, _( "Place Sheet" ), KiBitmap( checked_ok_xpm ) );
     }
     else
     {
@@ -823,7 +823,7 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
     if( frame->GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE )
         AddMenuItem( PopMenu, ID_POPUP_ZOOM_BLOCK, _( "Window Zoom" ), KiBitmap( zoom_area_xpm ) );
 
-    AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), KiBitmap( apply_xpm ) );
+    AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), KiBitmap( checked_ok_xpm ) );
 
     // After a block move (that is also a block selection) one can reselect
     // a block function.

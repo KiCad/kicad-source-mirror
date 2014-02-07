@@ -223,7 +223,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                              KiBitmap( zoom_area_xpm ) );
                 PopMenu->AppendSeparator();
                 AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK,
-                             _( "Place Block" ), KiBitmap( apply_xpm ) );
+                             _( "Place Block" ), KiBitmap( checked_ok_xpm ) );
                 AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK,
                              _( "Copy Block (shift + drag mouse)" ),
                              KiBitmap( copyblock_xpm ) );
@@ -327,7 +327,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         {
             if( (flags & IS_NEW) )
                 AddMenuItem( PopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING, _( "End edge" ),
-                             KiBitmap( apply_xpm ) );
+                             KiBitmap( checked_ok_xpm ) );
 
             if( !flags )
             {
@@ -337,7 +337,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
 
             if( ( flags & (IS_NEW | IS_MOVED) ) == IS_MOVED )
                 AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_EDGE, _( "Place edge" ),
-                             KiBitmap( apply_xpm ) );
+                             KiBitmap( checked_ok_xpm ) );
 
             msg = AddHotkeyName( _("Edit" ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_MODEDIT_EDIT_BODY_ITEM,
