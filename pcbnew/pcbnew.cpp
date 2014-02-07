@@ -154,11 +154,12 @@ bool EDA_APP::OnInit()
 #else
     // Add this default search path:
     msg = wxT("/usr/local/kicad/bin/scripting/plugins");
+
+#ifdef  __WXMAC__
     // OSX
     // System Library first
     // User Library then
     // (TODO) Bundle package ? where to place ? Shared Support ?
-
     msg = wxT("/Library/Application Support/kicad/scripting");
     msg = wxString( wxGetenv("HOME") ) + wxT("/Library/Application Support/kicad/scripting");
 
@@ -170,6 +171,7 @@ bool EDA_APP::OnInit()
     wxSetEnv("PYTHONPATH",((wxGetenv("PYTHONPATH") != NULL ) ? (wxString(wxGetenv("PYTHONPATH")) + ":") : wxString("")) 
                            +  bundledir.GetPath() + 
                            "/Frameworks/wxPython/lib/python2.6/site-packages/wx-3.0-osx_cocoa" );
+#endif 
 #endif
     // On linux and osx, 2 others paths are
     // [HOME]/.kicad_plugins/
