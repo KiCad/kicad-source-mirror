@@ -69,7 +69,7 @@ ExternalProject_Add( libwxpython
 
     PATCH_COMMAND   bzr revert
         COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/wxpython-3.0.0_macosx.patch"
-        #COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/wxwidgets-3.0.0_macosx_bug_15908.patch"
+        COMMAND     bzr patch -p0 "${PROJECT_SOURCE_DIR}/patches/wxpython-3.0.0_macosx_multiarch.patch" # http://trac.wxwidgets.org/ticket/15957
 
     UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${LIBWXPYTHON_ROOT}"
            COMMAND  ${LIBWXPYTHON_EXEC} wxPython/build-wxpython.py --clean
