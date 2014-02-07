@@ -42,6 +42,7 @@
 #include <pcbcommon.h>
 #include <colors_selection.h>
 #include <gr_basic.h>
+#include <wx/stdpaths.h>
 
 #include <wx/file.h>
 #include <wx/snglinst.h>
@@ -153,6 +154,22 @@ bool EDA_APP::OnInit()
 #else
     // Add this default search path:
     msg = wxT("/usr/local/kicad/bin/scripting/plugins");
+    // OSX
+    // System Library first
+    // User Library then
+    // (TODO) Bundle package ? where to place ? Shared Support ?
+
+    msg = wxT("/Library/Application Support/kicad/scripting");
+    msg = wxString( wxGetenv("HOME") ) + wxT("/Library/Application Support/kicad/scripting");
+
+    // Get pcbnew.app/Contents directory
+    wxFileName bundledir( wxStandardPaths::Get().GetExecutablePath() ) ;
+    bundledir.RemoveLastDir();
+
+    // Prepend in PYTHONPATH the content of the bundle libraries !
+    wxSetEnv("PYTHONPATH",((wxGetenv("PYTHONPATH") != NULL ) ? (wxString(wxGetenv("PYTHONPATH")) + ":") : wxString("")) 
+                           +  bundledir.GetPath() + 
+                           "/Frameworks/wxPython/lib/python2.6/site-packages/wx-3.0-osx_cocoa" );
 #endif
     // On linux and osx, 2 others paths are
     // [HOME]/.kicad_plugins/
