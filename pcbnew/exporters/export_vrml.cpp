@@ -1149,26 +1149,18 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
     bool isFlipped = aModule->GetLayer() == LAYER_N_BACK;
 
     // Export the object VRML model(s)
-    for( S3D_MASTER* vrmlm = aModule->Models(); vrmlm != 0; vrmlm = vrmlm->Next() )
+    for( S3D_MASTER* vrmlm = aModule->Models();  vrmlm;  vrmlm = vrmlm->Next() )
     {
         if( !vrmlm->Is3DType( S3D_MASTER::FILE3D_VRML ) )
             continue;
 
-        wxString fname = vrmlm->GetShape3DName();
-
-        if( !wxFileName::FileExists( fname ) )
-        {
-            wxFileName fn = fname;
-            fname = wxGetApp().FindLibraryPath( fn );
-
-            if( fname.IsEmpty() ) // keep "short" name if full filename not found
-                fname = vrmlm->GetShape3DName();
-        }
+        // expand environment variables
+        wxString fname = wxExpandEnvVars( vrmlm->GetShape3DName() );
 
         fname.Replace( wxT( "\\" ), wxT( "/" ) );
         wxString source_fname = fname;
 
-        if( aExport3DFiles )    // Change illegal characters in short filename
+        if( aExport3DFiles )    // Change illegal characters
         {
             ChangeIllegalCharacters( fname, true );
             fname = a3D_Subdir + wxT( "/" ) + fname;
@@ -1267,9 +1259,9 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName,
         double aMMtoWRMLunit, bool aExport3DFiles,
         const wxString& a3D_Subdir )
 {
-    wxString msg;
-    FILE* output_file;
-    BOARD* pcb = GetBoard();
+    wxString    msg;
+    FILE*       output_file;
+    BOARD*      pcb = GetBoard();
 
     MODEL_VRML model3d;
 
@@ -1295,6 +1287,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName,
 
     // Global VRML scale to export to a different scale.
     model3d.scale = aMMtoWRMLunit / MM_PER_IU;
+
     // Set the mechanical deviation limit (in this case 0.02mm)
     // XXX - NOTE: the value should be set via the GUI
     model3d.SetMaxDev( 20000 * model3d.scale );

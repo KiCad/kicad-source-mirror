@@ -29,7 +29,6 @@
 #include "drw_interface.h"
 #include "wx/wx.h"
 
-class dxfRW;
 class BOARD;
 class BOARD_ITEM;
 
@@ -54,7 +53,6 @@ private:
     int    m_brdLayer;      // The board layer to place imported dfx items
     int m_version;          // the dxf version, not used here
     std::string m_codePage; // The code page, not used here
-    dxfRW* m_dxf;           // the dxf reader
 
 public:
     DXF2BRD_CONVERTER();
@@ -80,6 +78,13 @@ public:
      */
     void SetBrdLayer( int aBrdLayer ) { m_brdLayer = aBrdLayer; }
 
+    /**
+     * Implementation of the method used for communicate
+     * with this filter.
+     *
+     * @param aFile = the full filename.
+     * @param aBoard = where to store the graphical items and text
+     */
     bool ImportDxfFile(  const wxString& aFile, BOARD * aBoard );
 
     /**

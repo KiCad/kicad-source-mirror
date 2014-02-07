@@ -48,15 +48,15 @@ IMPLEMENT_APP( EDA_APP )
 /* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void EDA_APP::MacOpenFile(const wxString &fileName)
+void EDA_APP::MacOpenFile( const wxString& aFileName )
 {
-    wxFileName           filename = fileName;
-    PL_EDITOR_FRAME * frame = ((PL_EDITOR_FRAME*)GetTopWindow());
+    PL_EDITOR_FRAME*    frame = ((PL_EDITOR_FRAME*)GetTopWindow());
+    wxFileName          filename = aFileName;
 
     if( !filename.FileExists() )
         return;
 
-    frame->LoadPageLayoutDescrFile( fileName );
+    frame->LoadPageLayoutDescrFile( aFileName );
 }
 
 

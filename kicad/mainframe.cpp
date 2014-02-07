@@ -32,6 +32,7 @@
 #include <appl_wxstruct.h>
 #include <confirm.h>
 #include <gestfich.h>
+#include <macros.h>
 
 #include <kicad.h>
 #include <tree_project_frame.h>
@@ -41,30 +42,14 @@
 
 static const wxString TreeFrameWidthEntry( wxT( "LeftWinWidth" ) );
 
-#define KICAD_MANAGER_FRAME_NAME wxT( "KicadFrame" )
-
 KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
                                           const wxString& title,
                                           const wxPoint&  pos,
                                           const wxSize&   size ) :
     EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_TYPE, title, pos, size,
-                    KICAD_DEFAULT_DRAWFRAME_STYLE, KICAD_MANAGER_FRAME_NAME )
+                    KICAD_DEFAULT_DRAWFRAME_STYLE, wxT( "KicadFrame" ) )
 {
-    wxString msg;
-    wxString line;
-    wxSize   clientsize;
-
-    m_FrameName            = KICAD_MANAGER_FRAME_NAME;
-    m_VToolBar             = NULL;              // No Vertical tooolbar used here
-    m_LeftWin              = NULL;              // A shashwindow that contains the project tree
-    m_RightWin             = NULL;              /* A shashwindow that contains the buttons
-                                                 *  and the window display text
-                                                 */
-    m_LeftWin_Width        = std::max( 60, GetSize().x/3 );
-
-    LoadSettings();
-
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+    m_leftWinWidth = 60;
 
     // Create the status line (bottom of the frame
     static const int dims[3] = { -1, -1, 100 };
@@ -77,42 +62,48 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
     icon.CopyFromBitmap( KiBitmap( icon_kicad_xpm ) );
     SetIcon( icon );
 
-    clientsize = GetClientSize();
+    // Give the last sise and pos to main window
+    LoadSettings();
+    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Left window: is the box which display tree project
     m_LeftWin = new TREE_PROJECT_FRAME( this );
 
-    // Bottom Window: box to display messages
-    m_RightWin = new RIGHT_KM_FRAME( this );
-
-    msg = wxGetCwd();
-    line.Printf( _( "Ready\nWorking dir: %s\n" ), msg.GetData() );
-    PrintMsg( line );
+    // Right top Window: buttons to launch applications
+    m_Launcher = new LAUNCHER_PANEL( this );
+    // Add the wxTextCtrl showing all messages from KiCad:
+    m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    wxTE_MULTILINE | wxSUNKEN_BORDER | wxTE_READONLY );
 
     RecreateBaseHToolbar();
     ReCreateMenuBar();
 
     m_auimgr.SetManagedWindow( this );
 
-    EDA_PANEINFO horiz;
-    horiz.HorizontalToolbarPane();
+    EDA_PANEINFO horiztb;
+    horiztb.HorizontalToolbarPane();
 
     EDA_PANEINFO info;
     info.InfoToolbarPane();
 
-    if( m_mainToolBar )
-        m_auimgr.AddPane( m_mainToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Layer( 1 ) );
+    m_auimgr.AddPane( m_mainToolBar,
+                      wxAuiPaneInfo( horiztb ).Name( wxT( "m_mainToolBar" ) ).Top() );
 
-    if( m_RightWin )
-        m_auimgr.AddPane( m_RightWin,
-                          wxAuiPaneInfo().Name( wxT( "m_RightWin" ) ).CentrePane().Layer( 1 ) );
+    m_auimgr.AddPane( m_LeftWin,
+                      wxAuiPaneInfo(info).Name( wxT( "m_LeftWin" ) ).Left().
+                      BestSize( m_leftWinWidth, -1 ).
+                      Layer( 1 ) );
 
-    if( m_LeftWin )
-        m_auimgr.AddPane( m_LeftWin,
-                          wxAuiPaneInfo(info).Name( wxT( "m_LeftWin" ) ).Left().
-                          BestSize( m_LeftWin_Width, clientsize.y ).
-                          Layer( 1 ) );
+    m_auimgr.AddPane( m_Launcher, wxTOP );
+    m_auimgr.GetPane( m_Launcher).CaptionVisible( false ).Row(1)
+        .BestSize( -1, m_Launcher->GetPanelHeight() ).PaneBorder( false ).Resizable( false );
+
+    m_auimgr.AddPane( m_MessagesBox,
+                      wxAuiPaneInfo().Name( wxT( "m_MessagesBox" ) ).CentrePane().Layer( 2 ) );
+
+    m_auimgr.GetPane( m_LeftWin ).MinSize( wxSize( 80, -1) );
+    m_auimgr.GetPane( m_LeftWin ).BestSize(wxSize(m_leftWinWidth, -1) );
 
     m_auimgr.Update();
 }
@@ -126,13 +117,7 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 
 void KICAD_MANAGER_FRAME::PrintMsg( const wxString& aText )
 {
-    m_RightWin->m_MessagesBox->AppendText( aText );
-}
-
-
-void KICAD_MANAGER_FRAME::OnSashDrag( wxSashEvent& event )
-{
-    event.Skip();
+    m_MessagesBox->AppendText( aText );
 }
 
 
@@ -322,28 +307,42 @@ void KICAD_MANAGER_FRAME::OnRefresh( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::ClearMsg()
 {
-    m_RightWin->m_MessagesBox->Clear();
+    m_MessagesBox->Clear();
 }
 
 
 void KICAD_MANAGER_FRAME::LoadSettings()
 {
-    wxASSERT( wxGetApp().GetSettings() != NULL );
-
     wxConfig* cfg = wxGetApp().GetSettings();
 
-    EDA_BASE_FRAME::LoadSettings();
-    cfg->Read( TreeFrameWidthEntry, &m_LeftWin_Width );
+    if( cfg )
+    {
+        EDA_BASE_FRAME::LoadSettings();
+        cfg->Read( TreeFrameWidthEntry, &m_leftWinWidth );
+    }
 }
 
 
 void KICAD_MANAGER_FRAME::SaveSettings()
 {
-    wxASSERT( wxGetApp().GetSettings() != NULL );
-
     wxConfig* cfg = wxGetApp().GetSettings();
 
-    EDA_BASE_FRAME::SaveSettings();
+    if( cfg )
+    {
+        EDA_BASE_FRAME::SaveSettings();
+        cfg->Write( TreeFrameWidthEntry, m_LeftWin->GetSize().x );
+    }
+}
 
-    cfg->Write( TreeFrameWidthEntry, m_LeftWin->GetSize().x );
+/**
+ * a minor helper function:
+ * Prints the Current Working Dir name and the projet name on the text panel.
+ */
+void KICAD_MANAGER_FRAME::PrintPrjInfo()
+{
+    wxString msg;
+    msg.Printf( _( "Working dir: %s\nProject: %s\n" ),
+                GetChars( wxGetCwd() ),
+                GetChars( m_ProjectFileName.GetFullPath() ) );
+    PrintMsg( msg );
 }

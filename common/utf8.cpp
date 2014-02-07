@@ -157,9 +157,7 @@ int UTF8::uni_forward( const unsigned char* aSequence, unsigned* aResult )
     }
 
     if( aResult )
-    {
         *aResult = ch;
-    }
 
     return len;
 }
@@ -234,10 +232,7 @@ int main()
     for( UTF8::uni_iter it = u2.ubegin();  it < u2.uend();  )
     {
         // test post-increment:
-        printf( " _%c_", *it++ );
-
-        // after UTF8::uni_forward() is implemented, %c is no longer useable.
-        // printf( " _%02x_", *it++ );
+        printf( " _%02x_", *it++ );
     }
 
     printf( "\n" );

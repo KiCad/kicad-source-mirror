@@ -48,6 +48,70 @@
 #include <wx/snglinst.h>
 
 
+#if defined( USE_KIWAY_DLLS )
+
+#include <kiway.h>
+#include <import_export.h>
+
+static struct SCH_FACE : public KIFACE
+{
+    wxWindow* CreateWindow( int aClassId, KIWAY* aKIWAY, int aCtlBits = 0 )
+    {
+        switch( aClassId )
+        {
+        default:
+            return new SCH_EDIT_FRAME( NULL, wxT( "Eeschema" ),
+                wxPoint( 0, 0 ), wxSize( 600, 400 ) );
+        }
+    }
+
+    /**
+     * Function IfaceOrAddress
+     * return a pointer to the requested object.  The safest way to use this
+     * is to retrieve a pointer to a static instance of an interface, similar to
+     * how the KIFACE interface is exported.  But if you know what you are doing
+     * use it to retrieve anything you want.
+     *
+     * @param aDataId identifies which object you want the address of.
+     *
+     * @return void* - and must be cast into the know type.
+     */
+    void* IfaceOrAddress( int aDataId )
+    {
+        return NULL;
+    }
+
+} kiface;
+
+static EDA_APP* process;
+
+// KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.
+// KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
+MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, wxApp* aProcess )
+{
+    process = (EDA_APP*) aProcess;
+    return &kiface;
+}
+
+
+EDA_APP& wxGetApp()
+{
+    wxASSERT( process );    // KIFACE_GETTER has already been called.
+    return *process;
+}
+
+#else
+
+// Create a new application object: this macro will allow wxWindows to create
+// the application object during program execution (it's better than using a
+// static object for many reasons) and also declares the accessor function
+// wxGetApp() which will return the reference of the right type (i.e. MyApp and
+// not wxApp)
+IMPLEMENT_APP( EDA_APP )
+
+#endif
+
+
 // Global variables
 wxSize  g_RepeatStep;
 int     g_RepeatDeltaLabel;
@@ -61,19 +125,12 @@ TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
 /* Called to initialize the program */
 /************************************/
 
-// Create a new application object: this macro will allow wxWindows to create
-// the application object during program execution (it's better than using a
-// static object for many reasons) and also declares the accessor function
-// wxGetApp() which will return the reference of the right type (i.e. MyApp and
-// not wxApp)
-IMPLEMENT_APP( EDA_APP )
-
 /* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void EDA_APP::MacOpenFile( const wxString &fileName )
+void EDA_APP::MacOpenFile( const wxString& aFileName )
 {
-    wxFileName      filename = fileName;
+    wxFileName      filename = aFileName;
     SCH_EDIT_FRAME* frame = ((SCH_EDIT_FRAME*) GetTopWindow());
 
     if( !frame )
@@ -82,7 +139,7 @@ void EDA_APP::MacOpenFile( const wxString &fileName )
     if( !filename.FileExists() )
         return;
 
-    frame->LoadOneEEProject( fileName, false );
+    frame->LoadOneEEProject( aFileName, false );
 }
 
 

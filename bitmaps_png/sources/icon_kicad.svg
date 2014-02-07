@@ -12,8 +12,8 @@
    width="48"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.2 r9819"
-   sodipodi:docname="icon_kicad.svg"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="8-icon_kicad.svg"
    inkscape:export-filename="F:\kicad-launchpad\testing\bitmaps_png\sources\icon_kicad.png"
    inkscape:export-xdpi="60"
    inkscape:export-ydpi="60">
@@ -62,15 +62,6 @@
   <defs
      id="defs4">
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient10292-9-2-6-6"
-       id="linearGradient10600-2"
-       gradientUnits="userSpaceOnUse"
-       x1="110.96875"
-       y1="976.29968"
-       x2="110.96875"
-       y2="992.375" />
-    <linearGradient
        id="linearGradient10292-9-2-6-6"
        inkscape:collect="always">
       <stop
@@ -83,16 +74,6 @@
          style="stop-color: rgb(51, 51, 51); stop-opacity: 1;" />
     </linearGradient>
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient10125-12"
-       id="linearGradient10596-0"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1,0,0,1.00011,0,-0.10551)"
-       x1="110.96875"
-       y1="976.29968"
-       x2="110.99982"
-       y2="991.87488" />
-    <linearGradient
        id="linearGradient10125-12">
       <stop
          style="stop-color: rgb(201, 156, 0); stop-opacity: 1;"
@@ -103,26 +84,6 @@
          offset="1"
          id="stop10129-4" />
     </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient10125-12"
-       id="linearGradient10598-1"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.00399,0,0,1.00959,-1.1658,-9.36636)"
-       x1="110.96875"
-       y1="976.29968"
-       x2="110.96875"
-       y2="992.375" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient10286-3"
-       id="linearGradient10602-2"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.99213,0,0,3.00466,-933.712,-1623.08)"
-       x1="294.3429"
-       y1="256.58133"
-       x2="294.41818"
-       y2="243.13852" />
     <linearGradient
        id="linearGradient10286-3">
       <stop
@@ -145,16 +106,6 @@
          offset="1"
          id="stop15610-5" />
     </linearGradient>
-    <linearGradient
-       y2="-781.62268"
-       x2="209.0625"
-       y1="-765.46082"
-       x1="209.0625"
-       gradientTransform="matrix(1.5,0,0,1.5,-368,281.32)"
-       gradientUnits="userSpaceOnUse"
-       id="linearGradient8673"
-       xlink:href="#linearGradient15606-1"
-       inkscape:collect="always" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient10125-12"

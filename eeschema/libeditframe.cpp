@@ -207,22 +207,17 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     m_tempCopyComponent   = NULL;
     m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
     m_editPinsPerPartOrConvert = false;
+    // Initialize grid id to the default value 50 mils:
     m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
     wxIcon icon;
-
     icon.CopyFromBitmap( KiBitmap( libedit_icon_xpm ) );
-
     SetIcon( icon );
 
     SetScreen( new SCH_SCREEN() );
-
     GetScreen()->m_Center = true;
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
-
-    // Initialize grid id to the default value 50 mils:
-    m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
     LoadSettings();
 

@@ -200,7 +200,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( SCH_BASE_FRAME* aParent, CMP_LIBRARY* aLibrary,
 
     // Manage the draw panel
     m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).Centre() );
+                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     // Manage the message panel
     m_auimgr.AddPane( m_messagePanel,

@@ -107,10 +107,26 @@ extern const wxChar traceAutoSave[];
 /**
  * Class EDA_BASE_FRAME
  * is the base frame for deriving all KiCad main window classes.  This class is not
- * intended to be used directly.
+ * intended to be used directly.  It provides support for automatic calls to
+ * a virtual SaveSettings() function.  SaveSettings() for a derived class can choose
+ * to do nothing, or rely on basic SaveSettings() support in this base class to do
+ * most of the work by calling it from the derived class's SaveSettings().
  */
 class EDA_BASE_FRAME : public wxFrame
 {
+    /**
+     * Function windowClosing
+     * (with its unexpected name so it does not collide with the real OnWindowClose()
+     * function provided in derived classes) is called just before a window
+     * closing, and is used to call a derivation specific
+     * SaveSettings().  SaveSettings() is called for all derived wxFrames in this
+     * base class overload.  (Calling it from a destructor is deprecated since the
+     * wxFrame's position is not available in the destructor on linux.)  In other words,
+     * you should not need to call call SaveSettings() anywhere, except in this
+     * one function found only in this class.
+     */
+    void windowClosing( wxCloseEvent& event );
+
 protected:
     ID_DRAWFRAME_TYPE m_Ident;      ///< Id Type (pcb, schematic, library..)
     wxPoint      m_FramePos;
@@ -176,17 +192,6 @@ public:
      *          down to this or the auto save feature will be disabled.
      */
     bool ProcessEvent( wxEvent& aEvent );       // overload wxFrame::ProcessEvent()
-
-    /**
-     * Function Show
-     * hooks the wxFrame close scenario so we can grab the window size and position
-     * in the wxFrame specific SaveSettings() function.  SaveSettings() is
-     * called for all derived wxFrames in this base class overload.  Calling it
-     * from a destructor is deprecated since the wxFrame's position is not available
-     * in the destructor on linux.  In other words, don't call SaveSettings() anywhere,
-     * except in this one function.
-     */
-    bool Show( bool show );                     // overload wxFrame::Show()
 
     void SetAutoSaveInterval( int aInterval ) { m_autoSaveInterval = aInterval; }
 
@@ -414,7 +419,9 @@ class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 
 protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
-    int         m_LastGridSizeId;
+    int         m_LastGridSizeId;           // the command id offset (>= 0) of the last selected grid
+                                            // 0 is for the grid corresponding to
+                                            // a wxCommand ID = ID_POPUP_GRID_LEVEL_1000.
     bool        m_DrawGrid;                 // hide/Show grid
     EDA_COLOR_T m_GridColor;                // Grid color
 

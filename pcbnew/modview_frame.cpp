@@ -140,17 +140,11 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
 
     m_HotkeysZoomAndGridList = g_Module_Viewer_Hokeys_Descr;
 
-    wxSize minsize(100,-1);
-
     m_libList = new wxListBox( this, ID_MODVIEW_LIB_LIST,
-            wxDefaultPosition, minsize, 0, NULL, wxLB_HSCROLL );
-
-    m_libList->SetMinSize( minsize );
+            wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL );
 
     m_footprintList = new wxListBox( this, ID_MODVIEW_FOOTPRINT_LIST,
-            wxDefaultPosition, minsize, 0, NULL, wxLB_HSCROLL );
-
-    m_footprintList->SetMinSize( minsize );
+            wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL );
 
     m_semaphore     = aSemaphore;
     m_selectedFootprintName.Empty();
@@ -193,6 +187,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
 
     m_auimgr.SetManagedWindow( this );
 
+    wxSize minsize(100,-1);     // Min size of list boxes
+
     // Main toolbar is initially docked at the top of the main window and dockable on any side.
     // The close button is disable because the footprint viewer has no main menu to re-enable it.
     // The tool bar will only be dockable on the top or bottom of the main frame window.  This is
@@ -213,16 +209,16 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* aParent,
     // Manage the list of libraries, left pane.
     m_auimgr.AddPane( m_libList,
                       wxAuiPaneInfo( info ).Name( wxT( "m_libList" ) )
-                      .Left().Row( 1 ) );
+                      .Left().Row( 1 ).MinSize( minsize ) );
 
     // Manage the list of footprints, center pane.
     m_auimgr.AddPane( m_footprintList,
                       wxAuiPaneInfo( info ).Name( wxT( "m_footprintList" ) )
-                      .Left().Row( 2 ) );
+                      .Left().Row( 2 ).MinSize( minsize ) );
 
     // Manage the draw panel, right pane.
     m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).Centre().Row( 1 ).CloseButton( false ) );
+                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     // Manage the message panel, bottom pane.
     m_auimgr.AddPane( m_messagePanel,

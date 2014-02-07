@@ -112,7 +112,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
     if( aHistoryList.GetCount() )
         dlg.SetComponentName( aHistoryList[0] );
 
-    if ( dlg.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return wxEmptyString;
 
     if( dlg.m_GetExtraFunction )
@@ -166,7 +166,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
 
     libEntry = CMP_LIBRARY::FindLibraryComponent( cmpName, aLibname );
 
-    if( ( libEntry == NULL ) && allowWildSeach ) // Search with wildcard
+    if( !libEntry && allowWildSeach ) // Search with wildcard
     {
         allowWildSeach = false;
         wxString wildname = wxChar( '*' ) + cmpName + wxChar( '*' );
@@ -176,11 +176,11 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
         if( !cmpName.IsEmpty() )
             libEntry = CMP_LIBRARY::FindLibraryComponent( cmpName, aLibname );
 
-        if( libEntry == NULL )
+        if( !libEntry )
             return wxEmptyString;
     }
 
-    if( libEntry == NULL )
+    if( !libEntry )
     {
         msg.Printf( _( "Failed to find part <%s> in library" ), GetChars( cmpName ) );
         DisplayError( this, msg );

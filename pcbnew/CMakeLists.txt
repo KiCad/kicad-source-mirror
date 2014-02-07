@@ -129,6 +129,7 @@ set( PCBNEW_EXPORTERS
     exporters/export_gencad.cpp
     exporters/export_idf.cpp
     exporters/export_vrml.cpp
+    exporters/idf_common.cpp
     exporters/idf.cpp
     exporters/gen_drill_report_files.cpp
     exporters/gen_modules_placefile.cpp
@@ -390,14 +391,6 @@ if( KICAD_SCRIPTING_MODULES )
         ${PYTHON_LIBRARIES}
         ${PCBNEW_EXTRA_LIBS}
         ${Boost_LIBRARIES}      # must follow GITHUB
-        )
-
-     # create .i files from XML doxygen parsing, docstrings.i will include all of them
-    add_custom_target( qa
-        COMMAND PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR} ${PYTHON_EXECUTABLE} test.py
-
-        COMMENT "running qa"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripting/qa
         )
 
     if( MAKE_LINK_MAPS )

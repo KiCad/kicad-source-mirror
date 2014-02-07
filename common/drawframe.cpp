@@ -60,7 +60,7 @@ static const wxString traceScrollSettings( wxT( "KicadScrollSettings" ) );
 static const wxString CursorShapeEntryKeyword( wxT( "CursorShape" ) );
 static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
 static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
-static const wxString LastGridSizeId( wxT( "_LastGridSize" ) );
+static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
 
 
 BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, EDA_BASE_FRAME )
@@ -334,7 +334,7 @@ void EDA_DRAW_FRAME::PrintPage( wxDC* aDC,LAYER_MSK aPrintMask, bool aPrintMirro
 void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 {
     int* clientData;
-    int  id = ID_POPUP_GRID_LEVEL_100;
+    int  eventId = ID_POPUP_GRID_LEVEL_100;
 
     if( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
     {
@@ -351,11 +351,11 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
         clientData = (int*) m_gridSelectBox->wxItemContainer::GetClientData( index );
 
         if( clientData != NULL )
-            id = *clientData;
+            eventId = *clientData;
     }
     else
     {
-        id = event.GetId();
+        eventId = event.GetId();
 
         /* Update the grid select combobox if the grid size was changed
          * by menu event.
@@ -366,7 +366,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
             {
                 clientData = (int*) m_gridSelectBox->wxItemContainer::GetClientData( i );
 
-                if( clientData && id == *clientData )
+                if( clientData && eventId == *clientData )
                 {
                     m_gridSelectBox->SetSelection( i );
                     break;
@@ -375,9 +375,12 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
         }
     }
 
+    // Be sure m_LastGridSizeId is up to date.
+    m_LastGridSizeId = eventId - ID_POPUP_GRID_LEVEL_1000;
+
     BASE_SCREEN* screen = GetScreen();
 
-    if( screen->GetGridId() == id )
+    if( screen->GetGridId() == eventId )
         return;
 
     /*
@@ -385,8 +388,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
      * may be used in the grid size combobox.  Do not use the selection
      * index returned by GetSelection().
      */
-    m_LastGridSizeId = id - ID_POPUP_GRID_LEVEL_1000;
-    screen->SetGrid( id );
+    screen->SetGrid( eventId );
     SetCrossHairPosition( RefPos( true ) );
 
     if( IsGalCanvasActive() )
@@ -598,7 +600,11 @@ void EDA_DRAW_FRAME::LoadSettings()
     if( cfg->Read( m_FrameName + GridColorEntryKeyword, &itmp ) )
         SetGridColor( ColorFromInt( itmp ) );
 
-    cfg->Read( m_FrameName + LastGridSizeId, &m_LastGridSizeId, 0L );
+    cfg->Read( m_FrameName + LastGridSizeIdKeyword, &m_LastGridSizeId, 0L );
+
+    // m_LastGridSizeId is an offset, expected to be >= 0
+    if( m_LastGridSizeId < 0 )
+        m_LastGridSizeId = 0;
 }
 
 
@@ -612,7 +618,7 @@ void EDA_DRAW_FRAME::SaveSettings()
     cfg->Write( m_FrameName + CursorShapeEntryKeyword, m_cursorShape );
     cfg->Write( m_FrameName + ShowGridEntryKeyword, IsGridVisible() );
     cfg->Write( m_FrameName + GridColorEntryKeyword, ( long ) GetGridColor() );
-    cfg->Write( m_FrameName + LastGridSizeId, ( long ) m_LastGridSizeId );
+    cfg->Write( m_FrameName + LastGridSizeIdKeyword, ( long ) m_LastGridSizeId );
 }
 
 
