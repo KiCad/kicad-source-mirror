@@ -85,12 +85,23 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName,
             if( !envStr.EndsWith( sep ) )
                 envStr += sep;
 
-            templatePath = envStr + wxT("template") + sep;
+            templatePath = envStr + wxT( "template" ) + sep;
         }
         else
         {
-            templatePath = wxPathOnly(wxStandardPaths::Get().GetExecutablePath()) +
+            // The standard path should be in the share directory for kicad. As
+            // it is normal on Windows to only have the share directory and not
+            // the kicad sub-directory we fall back to that if the directory
+            // doesn't exist
+            templatePath = wxPathOnly( wxStandardPaths::Get().GetExecutablePath() ) +
+                sep + wxT( ".." ) + sep + wxT( "share" ) + sep + wxT( "kicad" ) +
+                sep + wxT( "template" ) + sep;
+
+            if( !wxDirExists( templatePath.GetFullPath() ) )
+            {
+                templatePath = wxPathOnly( wxStandardPaths::Get().GetExecutablePath() ) +
                 sep + wxT( ".." ) + sep + wxT( "share" ) + sep + wxT( "template" ) + sep;
+            }
         }
 
         ps->AddPage( _( "System Templates" ), templatePath );
