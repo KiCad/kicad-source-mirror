@@ -334,7 +334,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
                 refdes = aIDFBoard.GetRefDes();
         }
 
-        double rotz = modfile->m_MatRotation.z + aModule->GetOrientation()/10.0;
+        double rotz = aModule->GetOrientation()/10.0;
         double locx = modfile->m_MatPosition.x;
         double locy = modfile->m_MatPosition.y;
         double locz = modfile->m_MatPosition.z;
@@ -343,6 +343,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
 
         if( top )
         {
+            rotz += modfile->m_MatRotation.z;
             locy = -locy;
             RotatePoint( &locx, &locy, aModule->GetOrientation() );
             locy = -locy;
@@ -352,6 +353,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
             RotatePoint( &locx, &locy, aModule->GetOrientation() );
             locy = -locy;
 
+            rotz -= modfile->m_MatRotation.z;
             rotz = 180.0 - rotz;
 
             if( rotz >= 360.0 )
