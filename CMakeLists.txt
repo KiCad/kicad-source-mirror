@@ -383,8 +383,6 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
         endif()
         message(STATUS "SWIG_EXECUTABLE: ${SWIG_EXECUTABLE}")
 
-        set( PYTHON_EXECUTABLE /usr/bin/python2.6 )
-
         set( PYTHON_DEST ${LIBWXPYTHON_ROOT}/wxPython/lib/python2.6/site-packages )
 
         set(wxWidgets_BIN_DIR           ${LIBWXPYTHON_ROOT}/bin/wxrc )
@@ -504,7 +502,16 @@ set( INC_AFTER
 
 # Find Python and other scripting resources
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
-    set( PythonInterp_FIND_VERSION )
+
+    if( NOT APPLE ) 
+        set( PythonInterp_FIND_VERSION )
+    else()
+        set( PYTHON_LIBRARY /System/Library/Frameworks/Python.framework/Versions/2.6/Python  )
+        set( PYTHON_INCLUDE_DIR /System/Library/Frameworks/Python.framework/Versions//2.6/include/python2.6 )
+        set( PythonInterp_FIND_VERSION 2.6 )
+        set( PythonLibs_FIND_VERSION 2.6 )
+    endif()
+
     find_package( PythonInterp )
     check_find_package_result( PYTHONINTERP_FOUND "Python Interpreter" )
 
