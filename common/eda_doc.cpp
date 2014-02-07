@@ -19,6 +19,9 @@ void EDA_APP::ReadPdfBrowserInfos()
     wxASSERT( m_commonSettings != NULL );
 
     m_PdfBrowser = m_commonSettings->Read( wxT( "PdfBrowserName" ), wxEmptyString );
+    int tmp;
+    m_commonSettings->Read( wxT( "UseSystemBrowser" ), &tmp, 0 );
+    m_useSystemPdfBrowser = tmp != 0;
 }
 
 
@@ -27,6 +30,7 @@ void EDA_APP::WritePdfBrowserInfos()
     wxASSERT( m_commonSettings != NULL );
 
     m_commonSettings->Write( wxT( "PdfBrowserName" ), m_PdfBrowser );
+    m_commonSettings->Write( wxT( "UseSystemBrowser" ), m_useSystemPdfBrowser );
 }
 
 
