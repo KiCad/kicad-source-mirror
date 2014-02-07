@@ -62,52 +62,43 @@ S3D_MODEL_PARSER* S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster,
 
 int S3D_MASTER::ReadData()
 {
-    wxFileName fn;
-    wxString   FullFilename;
-
     if( m_Shape3DName.IsEmpty() )
     {
         return 1;
     }
 
-    wxString shape3DNname = m_Shape3DName;
+    // Expand any environment variables embedded in footprint's m_Shape3DName field.
+    wxString filename = wxExpandEnvVars( m_Shape3DName );
 
 #ifdef __WINDOWS__
-    shape3DNname.Replace( wxT( "/" ), wxT( "\\" ) );
+    filename.Replace( wxT( "/" ), wxT( "\\" ) );
 #else
-    shape3DNname.Replace( wxT( "\\" ), wxT( "/" ) );
+    filename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
-    if( wxFileName::FileExists( shape3DNname ) )
+    if( !wxFileName::FileExists( filename ) )
     {
-        FullFilename = shape3DNname;
-        fn.Assign( FullFilename );
+        wxLogDebug( wxT( "3D shape '%s' not found, even tried '%s' after env var substitution." ),
+                    GetChars( m_Shape3DName ),
+                    GetChars( filename )
+                    );
+        return -1;
     }
-    else
-    {
-        fn = shape3DNname;
-        FullFilename = wxGetApp().FindLibraryPath( fn );
 
-        if( FullFilename.IsEmpty() )
-        {
-            wxLogDebug( wxT( "3D part library <%s> could not be found." ),
-                        GetChars( fn.GetFullPath() ) );
-            return -1;
-        }
-    }
+    wxFileName fn( filename );
 
     wxString extension = fn.GetExt();
     S3D_MODEL_PARSER* parser = S3D_MODEL_PARSER::Create( this, extension );
 
     if( parser )
     {
-        parser->Load( FullFilename );
+        parser->Load( filename );
         delete parser;
         return 0;
     }
     else
     {
-        wxLogDebug( wxT( "Unknown file type <%s>" ), GetChars( extension ) );
+        wxLogDebug( wxT( "Unknown file type '%s'" ), GetChars( extension ) );
     }
 
     return -1;

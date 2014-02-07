@@ -32,6 +32,7 @@
 #include <drawtxt.h>
 #include <layers_id_colors_and_visibility.h>
 
+#include <wxBasePcbFrame.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
@@ -248,6 +249,8 @@ void EDA_3D_CANVAS::BuildBoard3DView()
             && layer >= g_Parm_3D_Visu.m_CopperLayersCount )
             continue;
 
+        // Skip non enabled layers in normal mode,
+        // and internal layers in realistic mode
         if( !Is3DLayerEnabled( layer ) )
             continue;
 
@@ -293,7 +296,7 @@ void EDA_3D_CANVAS::BuildBoard3DView()
                                                                segcountforcircle,
                                                                correctionFactor );
 
-            // Micro-wave modukes may have items on copper layers
+            // Micro-wave modules may have items on copper layers
             module->TransformGraphicShapesWithClearanceToPolygonSet( layer,
                                                                      bufferPolys,
                                                                      0,

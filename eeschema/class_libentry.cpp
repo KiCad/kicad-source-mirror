@@ -588,7 +588,7 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
     // Save data
     aFormatter.Print( 0, "DEF" );
 
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
     if( value.GetText() == wxT( "R" ) )
     {
         int breakhere = 1;
@@ -779,7 +779,11 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     if( componentName[0] != '~' )
     {
         m_name = FROM_UTF8( componentName );
+
+#ifndef KICAD_KEEPCASE
         m_name = m_name.MakeUpper();
+#endif
+
         value.SetText( m_name );
     }
     else

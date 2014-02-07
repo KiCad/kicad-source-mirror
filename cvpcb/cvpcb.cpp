@@ -60,10 +60,11 @@ const wxString titleLibLoadError( _( "Library Load Error" ) );
  * MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void EDA_APP::MacOpenFile( const wxString &fileName )
+void EDA_APP::MacOpenFile( const wxString& aFileName )
 {
-    wxFileName filename = fileName;
-    wxString oldPath;
+    wxFileName  filename = aFileName;
+    wxString    oldPath;
+
     CVPCB_MAINFRAME* frame = (CVPCB_MAINFRAME*) GetTopWindow();
 
     if( !filename.FileExists() )

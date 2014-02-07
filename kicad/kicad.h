@@ -49,7 +49,7 @@
 
 extern const wxString g_KicadPrjFilenameExtension;
 
-class RIGHT_KM_FRAME;
+class LAUNCHER_PANEL;
 class TREEPROJECTFILES;
 class TREE_PROJECT_FRAME;
 
@@ -123,14 +123,15 @@ class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME
 {
 public:
     TREE_PROJECT_FRAME* m_LeftWin;
-    RIGHT_KM_FRAME*     m_RightWin;
+    LAUNCHER_PANEL*     m_Launcher;
+    wxTextCtrl*         m_MessagesBox;
     wxAuiToolBar*       m_VToolBar;  // Vertical toolbar (not used)
     wxString            m_BoardFileName;
     wxString            m_SchematicRootFileName;
     wxFileName          m_ProjectFileName;
 
 private:
-    int m_LeftWin_Width;
+    int m_leftWinWidth;
 
 public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
                              const wxPoint& pos, const wxSize& size );
@@ -139,7 +140,6 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
 
     void OnCloseWindow( wxCloseEvent& Event );
     void OnSize( wxSizeEvent& event );
-    void OnSashDrag( wxSashEvent& event );
 
     /**
      * Function OnLoadProject
@@ -182,7 +182,18 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
      */
     void PrintMsg( const wxString& aText );
 
+    /**
+     * a minor helper function:
+     * Prints the Current Working Dir name and the projet name on the text panel.
+     */
+    void PrintPrjInfo();
+
+    /**
+     * a minor helper function:
+     * Erase the text panel.
+     */
     void ClearMsg();
+
     void SetLanguage( wxCommandEvent& event );
     void OnRefresh( wxCommandEvent& event );
     void OnSelectDefaultPdfBrowser( wxCommandEvent& event );
@@ -247,27 +258,23 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
 };
 
 
-/** class RIGHT_KM_FRAME
+/** class LAUNCHER_PANEL
  */
-class RIGHT_KM_FRAME : public wxSashLayoutWindow
+class LAUNCHER_PANEL : public wxPanel
 {
-public:
-    wxTextCtrl*          m_MessagesBox;
 private:
-    KICAD_MANAGER_FRAME* m_Parent;          // a wxTextCtrl to displays messages frm KiCad
-    int m_ButtonsPanelHeight;
-    wxPanel*             m_ButtPanel;
-    int     m_ButtonSeparation;             // button distance in pixels
-    wxPoint m_ButtonsListPosition;          /* position of the left bottom corner
+    int     m_buttonSeparation;             // button distance in pixels
+    wxPoint m_buttonsListPosition;          /* position of the left bottom corner
                                              *  of the first bitmap button
                                              */
-    wxPoint m_ButtonLastPosition;           // position of the last button in the window
+    wxPoint m_buttonLastPosition;           // position of the last button in the window
     int     m_bitmapButtons_maxHeigth;      // height of bigger bitmap buttons
                                             // Used to calculate the height of the panel.
 
-public: RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent );
-    ~RIGHT_KM_FRAME() { };
-    void            OnSize( wxSizeEvent& event );
+public: LAUNCHER_PANEL( wxWindow* parent );
+    ~LAUNCHER_PANEL() { };
+
+    int GetPanelHeight() const;
 
 private:
 
@@ -278,8 +285,6 @@ private:
     void            CreateCommandToolbar( void );
 
     wxBitmapButton* AddBitmapButton( wxWindowID aId, const wxBitmap& aBitmap );
-
-    DECLARE_EVENT_TABLE()
 };
 
 #endif

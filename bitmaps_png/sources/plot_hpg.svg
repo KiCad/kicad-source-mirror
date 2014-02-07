@@ -12,7 +12,7 @@
    width="48"
    version="1.1"
    id="svg3763"
-   inkscape:version="0.48.1 "
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="plot_hpg.svg">
   <metadata
      id="metadata3934">
@@ -22,6 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -34,15 +35,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="968"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview3932"
      showgrid="false"
      inkscape:zoom="16.042452"
-     inkscape:cx="24.013384"
+     inkscape:cx="24.138053"
      inkscape:cy="23.754239"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg3763" />
   <defs
@@ -756,20 +757,21 @@
      x="5.5081468"
      id="rect3926"
      style="fill:#ffffff;fill-rule:evenodd" />
-  <text
-     style="font-size:41.5098381px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;font-family:Sans"
-     xml:space="preserve"
+  <g
      transform="scale(0.98833381,1.0118039)"
-     line-height="125%"
-     font-size="41.51px"
-     y="46.963619"
-     x="25.077934"
-     id="text3928"
-     sodipodi:linespacing="125%"><tspan
+     style="font-size:41.5098381px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;font-family:Sans"
+     id="text3928">
+    <path
+       d="m 3.0076218,32.383541 3.7597656,0 0,5.556641 5.5468746,0 0,-5.556641 3.759766,0 0,14.580078 -3.759766,0 0,-6.18164 -5.5468746,0 0,6.18164 -3.7597656,0 0,-14.580078"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
-       font-size="18px"
-       y="46.963619"
-       x="25.077934"
-       font-weight="bold"
-       id="tspan3930">HPG</tspan></text>
+       id="path3476" />
+    <path
+       d="m 19.765434,32.383541 6.240235,0 c 1.855458,1.5e-5 3.277983,0.413426 4.267578,1.240234 0.99608,0.820326 1.494127,1.992199 1.49414,3.515625 -1.3e-5,1.529957 -0.49806,2.708341 -1.49414,3.535157 -0.989595,0.820318 -2.41212,1.230474 -4.267578,1.230468 l -2.480469,0 0,5.058594 -3.759766,0 0,-14.580078 m 3.759766,2.724609 0,4.072266 2.080078,0 c 0.729158,8e-6 1.292309,-0.175773 1.689453,-0.527344 0.397126,-0.358064 0.595693,-0.862621 0.595703,-1.513672 -10e-6,-0.651031 -0.198577,-1.152332 -0.595703,-1.503906 -0.397144,-0.351551 -0.960295,-0.527332 -1.689453,-0.527344 l -2.080078,0"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
+       id="path3478" />
+    <path
+       d="m 47.519341,45.879635 c -0.937514,0.45573 -1.910821,0.797526 -2.919922,1.02539 -1.009126,0.227865 -2.050792,0.341797 -3.125,0.341797 -2.428392,0 -4.352218,-0.677083 -5.771485,-2.03125 -1.419272,-1.360674 -2.128907,-3.20312 -2.128906,-5.527343 -10e-7,-2.350251 0.722655,-4.199208 2.167969,-5.546875 1.445308,-1.347642 3.424472,-2.02147 5.9375,-2.021485 0.970042,1.5e-5 1.897775,0.09116 2.783203,0.273438 0.891914,0.182306 1.731757,0.452488 2.519531,0.810547 l 0,3.017578 c -0.813816,-0.462229 -1.624362,-0.80728 -2.43164,-1.035157 -0.800793,-0.227852 -1.604829,-0.341784 -2.41211,-0.341796 -1.497404,1.2e-5 -2.653002,0.419933 -3.466797,1.259765 -0.807297,0.833344 -1.210942,2.028004 -1.210937,3.583985 -5e-6,1.542974 0.390619,2.734379 1.171875,3.574218 0.781243,0.839847 1.891268,1.259768 3.330078,1.259766 0.390615,2e-6 0.751943,-0.02278 1.083984,-0.06836 0.338531,-0.05208 0.641265,-0.130206 0.908203,-0.234375 l 0,-2.832032 -2.294921,0 0,-2.519531 5.859375,0 0,7.011719"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
+       id="path3480" />
+  </g>
 </svg>

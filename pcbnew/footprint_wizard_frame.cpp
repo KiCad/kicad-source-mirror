@@ -53,14 +53,11 @@
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
+
 // Window events
 EVT_CLOSE( FOOTPRINT_WIZARD_FRAME::OnCloseWindow )
 EVT_SIZE( FOOTPRINT_WIZARD_FRAME::OnSize )
 EVT_ACTIVATE( FOOTPRINT_WIZARD_FRAME::OnActivate )
-
-// Sash drag events
-EVT_SASH_DRAGGED( ID_FOOTPRINT_WIZARD_PAGES, FOOTPRINT_WIZARD_FRAME::OnSashDrag )
-EVT_SASH_DRAGGED( ID_FOOTPRINT_WIZARD_PARAMETERS, FOOTPRINT_WIZARD_FRAME::OnSashDrag )
 
 // Toolbar events
 EVT_TOOL( ID_FOOTPRINT_WIZARD_SELECT_WIZARD,
@@ -135,23 +132,16 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
     m_showAxis      = true;    // true to draw axis.
 
     // Give an icon
-#if 1
-    // Disabled for now, it raises an assert error in wxwidgets
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( module_wizard_xpm) );
     SetIcon( icon );
-#endif
 
     m_HotkeysZoomAndGridList = g_Module_Viewer_Hokeys_Descr;
-    m_PageList = NULL;
-    m_ParameterGrid     = NULL;
-    m_PageListWindow    = NULL;
-    m_ParameterGridWindow = NULL;
-    m_Semaphore = semaphore;
+    m_semaphore = semaphore;
     m_wizardName.Empty();
     m_exportRequest = false;
 
-    if( m_Semaphore )
+    if( m_semaphore )
         SetModalMode( true );
 
     SetBoard( new BOARD() );
@@ -159,6 +149,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
     GetBoard()->SetVisibleAlls();
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
+
     LoadSettings();
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -167,54 +158,22 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
     ReCreateHToolbar();
     ReCreateVToolbar();
 
-    wxSize size = GetClientSize();
-    size.y -= m_MsgFrameHeight + 2;
-
-    m_PageListSize.y = -1;
-
-    wxPoint win_pos( 0, 0 );
-
-    // Creates the libraries window display
-    m_PageListWindow =
-        new wxSashLayoutWindow( this, ID_FOOTPRINT_WIZARD_PAGES_WINDOW, win_pos,
-                                wxDefaultSize, wxCLIP_CHILDREN | wxSW_3D,
-                                wxT( "PagesWindow" ) );
-    m_PageListWindow->SetOrientation( wxLAYOUT_VERTICAL );
-    m_PageListWindow->SetAlignment( wxLAYOUT_LEFT );
-    m_PageListWindow->SetSashVisible( wxSASH_RIGHT, true );
-    m_PageListWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
-    m_PageList = new wxListBox( m_PageListWindow, ID_FOOTPRINT_WIZARD_PAGE_LIST,
-                                wxPoint( 0, 0 ), wxDefaultSize,
+    // Creates the parameter pages list
+    m_pageList = new wxListBox( this, ID_FOOTPRINT_WIZARD_PAGE_LIST,
+                                wxDefaultPosition, wxDefaultSize,
                                 0, NULL, wxLB_HSCROLL );
 
-    // Creates the component window display
-    m_ParameterGridSize.y = size.y;
-    win_pos.x = m_PageListSize.x;
-    m_ParameterGridWindow = new wxSashLayoutWindow( this,
-                                                    ID_FOOTPRINT_WIZARD_PARAMETERS_WINDOW,
-                                                    win_pos, wxDefaultSize,
-                                                    wxCLIP_CHILDREN | wxSW_3D,
-                                                    wxT( "ParameterList" ) );
+    // Creates the The list of parameters for the current parameter page
+    m_parameterGrid = new wxGrid( this, ID_FOOTPRINT_WIZARD_PARAMETER_LIST );
 
-    m_ParameterGridWindow->SetOrientation( wxLAYOUT_VERTICAL );
-
-    m_ParameterGridWindow->SetSashVisible( wxSASH_RIGHT, true );
-    m_ParameterGridWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
-    m_ParameterGrid = new wxGrid( m_ParameterGridWindow,
-                                  ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
-                                  wxPoint( 0, 0 ),
-                                  wxDefaultSize );
-
-    m_ParameterGrid->CreateGrid( 1, 3 );
+    m_parameterGrid->CreateGrid( 1, 3 );
 
     // Columns
-    m_ParameterGrid->AutoSizeColumns();
-    m_ParameterGrid->SetColLabelValue( 0, _( "Parameter" ) );
-    m_ParameterGrid->SetColLabelValue( 1, _( "Value" ) );
-    m_ParameterGrid->SetColLabelValue( 2, _( "Units" ) );
-    m_ParameterGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_ParameterGrid->AutoSizeColumns();
-
+    m_parameterGrid->SetColLabelValue( 0, _( "Parameter" ) );
+    m_parameterGrid->SetColLabelValue( 1, _( "Value" ) );
+    m_parameterGrid->SetColLabelValue( 2, _( "Units" ) );
+    m_parameterGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
+    m_parameterGrid->AutoSizeColumns();
 
     ReCreatePageList();
 
@@ -225,12 +184,8 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
 
     m_auimgr.SetManagedWindow( this );
 
-
-    EDA_PANEINFO    horiz;
-    horiz.HorizontalToolbarPane();
-
-    EDA_PANEINFO    vert;
-    vert.VerticalToolbarPane();
+    EDA_PANEINFO horiztb;
+    horiztb.HorizontalToolbarPane();
 
     EDA_PANEINFO    info;
     info.InfoToolbarPane();
@@ -238,42 +193,34 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
     EDA_PANEINFO    mesg;
     mesg.MessageToolbarPane();
 
-
     // Manage main toolbal
-    m_auimgr.AddPane( m_mainToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Row( 0 ) );
+    m_auimgr.AddPane( m_mainToolBar, wxAuiPaneInfo( horiztb ).
+                      Name( wxT ("m_mainToolBar" ) ).Top().Row( 0 ) );
 
-    wxSize minsize( 60, -1 );
+    // Manage the left window (list of parameter pages)
+    EDA_PANEINFO paneList;
+    paneList.InfoToolbarPane().Name( wxT( "m_pageList" ) ).Left().Row( 0 );
+    m_auimgr.AddPane( m_pageList, wxAuiPaneInfo( paneList ) );
 
-    // Manage the left window (list of pages)
-    if( m_PageListWindow )
-        m_auimgr.AddPane( m_PageListWindow, wxAuiPaneInfo( info ).Name( wxT( "m_PageList" ) ).
-                          Left().Row( 0 ) );
-
-    // Manage the list of parameters)
-    m_auimgr.AddPane( m_ParameterGridWindow,
-                      wxAuiPaneInfo( info ).Name( wxT( "m_ParameterGrid" ) ).
-                      Left().Row( 1 ) );
+    // Manage the parameters grid editor for the current parameter page
+    EDA_PANEINFO panePrms;
+    panePrms.InfoToolbarPane().Name( wxT( "m_parameterGrid" ) ).Left().Row( 1 );
+    m_auimgr.AddPane( m_parameterGrid, wxAuiPaneInfo( panePrms ) );
 
     // Manage the draw panel
     m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).Centre() );
+                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     // Manage the message panel
     m_auimgr.AddPane( m_messagePanel,
-                      wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer( 10 ) );
+                      wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(1) );
 
-    /* Now the minimum windows are fixed, set library list
-     * and component list of the previous values from last viewlib use
-     */
-    if( m_PageListWindow )
-    {
-        wxAuiPaneInfo& pane = m_auimgr.GetPane( m_PageListWindow );
-        pane.MinSize( wxSize( m_PageListSize.x, -1 ) );
-    }
+    // Gives a min size and the last saved size to left windows
+    m_auimgr.GetPane( m_pageList ).MinSize( wxSize(60, -1 ) );
+    m_auimgr.GetPane( m_pageList ).BestSize( wxSize(m_pageListWidth, -1) );
 
-    wxAuiPaneInfo& pane = m_auimgr.GetPane( m_ParameterGridWindow );
-    pane.MinSize( wxSize( m_ParameterGridSize.x, -1 ) );
+    m_auimgr.GetPane( m_parameterGrid ).MinSize( wxSize( 120, -1 ) );
+    m_auimgr.GetPane( m_parameterGrid ).BestSize( wxSize(m_parameterGridWidth, -1) );
 
     m_auimgr.Update();
 
@@ -283,7 +230,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
 #else
     Zoom_Automatique( false );
 #endif
-
 
     Show( true );
 
@@ -300,13 +246,12 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
 
 /* Function OnCloseWindow
  * Handles the close event, saving settings an destroying or releasing a semaphore from caller
- *
  */
 void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    if( m_Semaphore )
+    if( m_semaphore )
     {
-        m_Semaphore->Post();
+        m_semaphore->Post();
         SetModalMode( false );
         // This window will be destroyed by the calling function,
         // to avoid side effects
@@ -322,43 +267,6 @@ void FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint( wxCommandEvent& aEvent )
 {
     m_exportRequest = true;
     Close();
-}
-
-
-/* Function OnSashDrag
- * handles the horizontal separator (sash) drag, updating the pagelist or parameter list
- */
-void FOOTPRINT_WIZARD_FRAME::OnSashDrag( wxSashEvent& event )
-{
-    if( event.GetDragStatus() == wxSASH_STATUS_OUT_OF_RANGE )
-        return;
-
-    m_PageListSize.y = GetClientSize().y - m_MsgFrameHeight;
-    m_ParameterGridSize.y = m_PageListSize.y;
-
-    switch( event.GetId() )
-    {
-    case ID_FOOTPRINT_WIZARD_WINDOW:
-
-        if( m_PageListWindow )
-        {
-            wxAuiPaneInfo& pane = m_auimgr.GetPane( m_PageListWindow );
-            m_PageListSize.x = event.GetDragRect().width;
-            pane.MinSize( m_PageListSize );
-            m_auimgr.Update();
-        }
-
-        break;
-
-    case ID_FOOTPRINT_WIZARD_PARAMETERS_WINDOW:
-        {
-            wxAuiPaneInfo& pane = m_auimgr.GetPane( m_ParameterGridWindow );
-            m_ParameterGridSize.x = event.GetDragRect().width;
-            pane.MinSize( m_ParameterGridSize );
-            m_auimgr.Update();
-        }
-        break;
-    }
 }
 
 
@@ -392,7 +300,7 @@ void FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
  */
 void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
 {
-    if( m_PageList == NULL )
+    if( m_pageList == NULL )
         return;
 
     FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
@@ -400,17 +308,16 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
     if( !footprintWizard )
         return;
 
-
-    m_PageList->Clear();
+    m_pageList->Clear();
     int max_page = footprintWizard->GetNumParameterPages();
 
     for( int i = 0; i<max_page; i++ )
     {
         wxString name = footprintWizard->GetParameterPageName( i );
-        m_PageList->Append( name );
+        m_pageList->Append( name );
     }
 
-    m_PageList->SetSelection( 0, true );
+    m_pageList->SetSelection( 0, true );
 
     ReCreateParameterList();
     ReCreateHToolbar();
@@ -426,7 +333,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
 
 void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
 {
-    if( m_ParameterGrid == NULL )
+    if( m_parameterGrid == NULL )
         return;
 
     FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
@@ -434,19 +341,19 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     if( footprintWizard == NULL )
         return;
 
-    int page = m_PageList->GetSelection();
+    int page = m_pageList->GetSelection();
 
     if( page<0 )
         return;
 
-    m_ParameterGrid->ClearGrid();
+    m_parameterGrid->ClearGrid();
 
 
     // Rows
-    m_ParameterGrid->AutoSizeRows();
-    m_ParameterGrid->EnableDragRowSize( true );
-    m_ParameterGrid->SetRowLabelSize( 1 );
-    m_ParameterGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+    m_parameterGrid->AutoSizeRows();
+    m_parameterGrid->EnableDragRowSize( true );
+    m_parameterGrid->SetRowLabelSize( 1 );
+    m_parameterGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 
     // Get the list of names, values, and types
     wxArrayString   fpList  = footprintWizard->GetParameterNames( page );
@@ -454,8 +361,8 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     wxArrayString   ptList  = footprintWizard->GetParameterTypes( page );
 
     // Dimension the wxGrid
-    m_ParameterGrid->DeleteRows( 0, m_ParameterGrid->GetNumberRows() );
-    m_ParameterGrid->AppendRows( fpList.size() );
+    m_parameterGrid->DeleteRows( 0, m_parameterGrid->GetNumberRows() );
+    m_parameterGrid->AppendRows( fpList.size() );
 
     wxString name, value, units;
     for( unsigned int i = 0; i<fpList.size(); i++ )
@@ -463,8 +370,8 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
         name    = fpList[i];
         value   = fvList[i];
 
-        m_ParameterGrid->SetCellValue( i, 0, name );
-        m_ParameterGrid->SetReadOnly( i, 0 );
+        m_parameterGrid->SetCellValue( i, 0, name );
+        m_parameterGrid->SetReadOnly( i, 0 );
 
         if( ptList[i]==wxT( "IU" ) )
         {
@@ -496,18 +403,18 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
             units = wxT( "" );
         }
 
-        m_ParameterGrid->SetCellValue( i, 1, value );
-        m_ParameterGrid->SetCellValue( i, 2, units );
-        m_ParameterGrid->SetReadOnly( i, 2 );
+        m_parameterGrid->SetCellValue( i, 1, value );
+        m_parameterGrid->SetCellValue( i, 2, units );
+        m_parameterGrid->SetReadOnly( i, 2 );
     }
 
-    m_ParameterGrid->AutoSizeColumns();
+    m_parameterGrid->AutoSizeColumns();
 }
 
 
 void FOOTPRINT_WIZARD_FRAME::ClickOnPageList( wxCommandEvent& event )
 {
-    int ii = m_PageList->GetSelection();
+    int ii = m_pageList->GetSelection();
 
     if( ii < 0 )
         return;
@@ -532,35 +439,27 @@ void FOOTPRINT_WIZARD_FRAME::LoadSettings()
 
     cfg = wxGetApp().GetSettings();
 
-    m_PageListSize.x = 150;         // default width of libs list
-    m_ParameterGridSize.x = 350;    // default width of component list
-
-    cfg->Read( PARTLIST_WIDTH_KEY, &m_PageListSize.x );
-    cfg->Read( PARAMLIST_WIDTH_KEY, &m_ParameterGridSize.x );
+    cfg->Read( PARTLIST_WIDTH_KEY, &m_pageListWidth, 100 );
+    cfg->Read( PARAMLIST_WIDTH_KEY, &m_parameterGridWidth, 200 );
 
     // Set parameters to a reasonable value.
-    if( m_PageListSize.x > m_FrameSize.x / 2 )
-        m_PageListSize.x = m_FrameSize.x / 2;
+    if( m_pageListWidth > m_FrameSize.x / 3 )
+        m_pageListWidth = m_FrameSize.x / 3;
 
-    if( m_ParameterGridSize.x > m_FrameSize.x / 2 )
-        m_ParameterGridSize.x = m_FrameSize.x / 2;
+    if( m_parameterGridWidth > m_FrameSize.x / 2 )
+        m_parameterGridWidth = m_FrameSize.x / 2;
 }
 
 
 void FOOTPRINT_WIZARD_FRAME::SaveSettings()
 {
-    wxConfig* cfg;
+    wxConfig* cfg = wxGetApp().GetSettings();;
 
     EDA_DRAW_FRAME::SaveSettings();
 
-    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
-
-    cfg = wxGetApp().GetSettings();
-
-    if( m_PageListSize.x )
-        cfg->Write( PARTLIST_WIDTH_KEY, m_PageListSize.x );
-
-    cfg->Write( PARAMLIST_WIDTH_KEY, m_ParameterGridSize.x );
+    wxConfigPathChanger cpc( cfg, m_configPath );
+    cfg->Write( PARTLIST_WIDTH_KEY, m_pageList->GetSize().x );
+    cfg->Write( PARAMLIST_WIDTH_KEY, m_parameterGrid->GetSize().x );
 }
 
 
@@ -772,7 +671,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
         m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                                 KiBitmap( zoom_fit_in_page_xpm ), msg );
 
-        if( m_Semaphore )
+        if( m_semaphore )
         {
             // The library browser is called from a "load component" command
             m_mainToolBar->AddSeparator();

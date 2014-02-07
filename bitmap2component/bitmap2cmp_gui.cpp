@@ -548,6 +548,6 @@ bool EDA_APP::OnInit()
 }
 
 
-void EDA_APP::MacOpenFile(const wxString &fileName)
+void EDA_APP::MacOpenFile( const wxString& aFileName )
 {
 }

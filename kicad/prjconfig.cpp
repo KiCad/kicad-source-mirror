@@ -281,11 +281,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     wxPostEvent( this, cmd);
 #endif
 
-    wxString msg;
-    msg.Format( _( "Working dir: <%s>\nProject: <%s>\n" ),
-                GetChars( m_ProjectFileName.GetPath() ),
-                GetChars( m_ProjectFileName.GetFullName() ) );
-    PrintMsg( msg );
+    PrintPrjInfo();
 }
 
 

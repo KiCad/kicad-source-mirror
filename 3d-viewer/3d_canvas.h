@@ -31,7 +31,6 @@
 #define _3D_CANVAS_H_
 
 #include <wx/glcanvas.h>
-#include <wxBasePcbFrame.h>         // for m_auimanager member.
 
 #ifdef __WXMAC__
 #  ifdef __DARWIN__
@@ -49,6 +48,7 @@ class BOARD_DESIGN_SETTINGS;
 class EDA_3D_FRAME;
 class S3D_VERTEX;
 class SEGVIA;
+class D_PAD;
 
 
 class EDA_3D_CANVAS : public wxGLCanvas

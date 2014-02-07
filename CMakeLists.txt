@@ -1,3 +1,12 @@
+
+# Default to CMAKE_BUILD_TYPE = Release unless overridden on command line
+# http://www.cmake.org/pipermail/cmake/2008-September/023808.html
+if( DEFINED CMAKE_BUILD_TYPE )
+    set( CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Set to either \"Release\" or \"Debug\"" )
+else()
+    set( CMAKE_BUILD_TYPE Release CACHE STRING "Set to either \"Release\" or \"Debug\"" )
+endif()
+
 project( kicad )
 
 cmake_minimum_required( VERSION 2.8.4 FATAL_ERROR )
@@ -15,10 +24,20 @@ set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 #
 
 option( USE_KIWAY_DLLS
-    "Build the major modules as DLLs or DSOs, will soon be the norm." OFF )
+    "Build the major modules as KIFACE DLLs or DSOs, will soon be the norm." OFF )
 
-#for those who bored with uppercase
-option( KICAD_KEEPCASE "turn-off automatic component name conversion to uppercase if selected" )
+# The desire is to migrate designs *away from* case independence, and to create designs which use
+# literally (case specific) interpreted component names.  But for backwards compatibility,
+# you may turn OFF this option if you really must.  (Remember that with KiCad using text
+# data files, typically you would be better off simply doctoring those files into
+# a case literal state with a text editor and move forward into the brave new
+# world of case specificity.  Also, BOM generators may not work properly when you
+# have this option turned OFF, the xml export's referential integrity is broken
+# on library part name.  Hence the default is ON now, as of 29-Jan-2014.
+option( KICAD_KEEPCASE
+    "ON= case specific string matching on component names, OFF= match names as if they were spelt using uppercase."
+    ON
+    )
 
 option( USE_WX_GRAPHICS_CONTEXT
     "Use wxGraphicsContext for rendering ( default OFF). Warning, this is experimental" )
@@ -228,6 +247,8 @@ if( USE_WX_GRAPHICS_CONTEXT )
     add_definitions( -DUSE_WX_GRAPHICS_CONTEXT )
 endif()
 
+
+
 # Allow user to override the default settings for adding images to menu items.  By default
 # images in menu items are enabled on all platforms except OSX.  This can be over ridden by
 # defining -DUSE_IMAGES_IN_MENUS=ON/OFF to force the preferred behavior.
@@ -240,6 +261,25 @@ else()
         set( USE_IMAGES_IN_MENUS ON )
     endif()
 endif()
+
+
+# KIFACE_SUFFIX is the file extension used for top level program modules which
+# implement the KIFACE interface.  A valid suffix starts with a period '.'.
+
+if( false )
+    # This is the eventual situation near milestone C) of modular-kicad blueprint.
+    # Until then we use .kiface extension so we don't collide with python DSO.
+    set( KIFACE_SUFFIX  ${CMAKE_SHARED_MODULE_SUFFIX} )
+else()
+    # Temporary situation until we can dovetail the python DSO into the kiface DSO.
+    set( KIFACE_SUFFIX  ".kiface" )
+endif()
+
+# KIFACE_PREFIX is a basename prefix used for top level program modules which
+# implement the KIFACE.
+set( KIFACE_PREFIX  "_" )
+#message( STATUS "KIFACE_SUFFIX:${KIFACE_SUFFIX}  KIFACE_PREFIX:${KIFACE_PREFIX}" )
+
 
 #================================================
 # Locations for install targets.
@@ -301,7 +341,7 @@ add_definitions(-DWX_COMPATIBILITY)
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
 
-if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
+if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
 
@@ -315,38 +355,37 @@ if ( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     if( KICAD_BUILD_DYNAMIC )
         message(STATUS "KICAD_BUILD_DYNAMIC set")
-        # TODO - Library packaging/relocation 
+        # TODO - Library packaging/relocation
     endif()
 
     add_custom_target( lib-dependencies
-                       DEPENDS boost cairo glew libpng pixman pkgconfig
-                     )
+        DEPENDS boost cairo glew libpng pixman pkgconfig
+        )
 
     include( download_libpng )
 
     if( KICAD_SCRIPTING_WXPYTHON )
-        message(FATAL_ERROR "KICAD_BUILD_* and SCRIPTING Not Implemented Yet!")
+        message( FATAL_ERROR "KICAD_BUILD_* and SCRIPTING Not Implemented Yet!" )
     else()
         include( download_wxwidgets )
         add_dependencies( lib-dependencies libwx )
-    endif( KICAD_SCRIPTING_WXPYTHON )
+    endif()
 
     include( download_pkgconfig )
-        set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config")
+        set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config" )
     include( download_glew )
-        set( GLEW_GLEW_LIBRARY "${GLEW_ROOT}/lib/libGLEW.a")
-        set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include")
+        set( GLEW_GLEW_LIBRARY "${GLEW_ROOT}/lib/libGLEW.a" )
+        set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include" )
     include( download_pixman )
-        set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a")
+        set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a" )
     include( download_cairo )
-        set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo")
-        set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a")
+        set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo" )
+        set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a" )
 
-    if( KICAD_BUILD_DYNAMIC AND APPLE ) 
+    if( KICAD_BUILD_DYNAMIC AND APPLE )
         add_custom_target( osx_fix_bundles ALL DEPENDS cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
         add_custom_command(TARGET osx_fix_bundles POST_BUILD COMMAND scripts/osx_fixbundle.sh COMMENT "Migrating dylibs to bundles")
     endif()
-
 
 endif( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC)
 
@@ -510,6 +549,8 @@ add_subdirectory( potrace )
 add_subdirectory( bitmap2component )
 add_subdirectory( pcb_calculator )
 add_subdirectory( tools )
+add_subdirectory( utils )
+add_subdirectory( qa )
 #add_subdirectory( new )
 
 
@@ -540,7 +581,7 @@ add_dependencies( pcad2kicadpcb lib-dependencies )
 add_dependencies( polygon lib-dependencies )
 add_dependencies( pl_editor lib-dependencies )
 add_dependencies( pnsrouter lib-dependencies )
-    if ( BUILD_GITHUB_PLUGIN ) 
+    if ( BUILD_GITHUB_PLUGIN )
     add_dependencies( github_plugin lib-dependencies )
     endif()
 endif()

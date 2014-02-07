@@ -27,7 +27,7 @@ add_custom_target(
     DEPENDS gal/opengl/shader_src.h
 )
 
-set(GAL_SRCS
+set( GAL_SRCS
     # Common part
     drawpanel_gal.cpp
     painter.cpp
@@ -54,13 +54,13 @@ set(GAL_SRCS
     gal/cairo/cairo_compositor.cpp
     )
 
-add_library(gal STATIC ${GAL_SRCS})
-add_dependencies(gal shader_headers)
+add_library( gal STATIC ${GAL_SRCS} )
+add_dependencies( gal shader_headers )
 
 # Only for win32 cross compilation using MXE
-if(WIN32 AND MSYS)
-add_definitions(-DGLEW_STATIC)
-endif(WIN32 AND MSYS)
+if( WIN32 AND MSYS )
+    add_definitions( -DGLEW_STATIC )
+endif()
 
 set( COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp
@@ -120,7 +120,6 @@ set( COMMON_SRCS
     drawpanel.cpp
     drawtxt.cpp
     dsnlexer.cpp
-    edaappl.cpp
     eda_dde.cpp
     eda_doc.cpp
     filter_reader.cpp
@@ -131,6 +130,7 @@ set( COMMON_SRCS
     hotkeys_basic.cpp
     hotkey_grid_table.cpp
     html_messagebox.cpp
+    kiway.cpp
     msgpanel.cpp
     netlist_keywords.cpp
     newstroke_font.cpp
@@ -149,8 +149,13 @@ set( COMMON_SRCS
     zoom.cpp
     )
 
+# We will not want edaappl.cpp linked into the KIFACE, only into the KIWAY.
+if( TRUE OR NOT USE_KIWAY_DLLS )
+    list( APPEND COMMON_SRCS edaappl.cpp )
+endif()
+
 if( NOT HAVE_STRTOKR )
-    set( COMMON_SRCS ${COMMON_SRCS} strtok_r.c )
+    list( APPEND COMMON_SRCS strtok_r.c )
 endif()
 
 
@@ -175,16 +180,6 @@ set( COMMON_SRCS
     geometry/shape_collisions.cpp
     geometry/shape_index.cpp
 )
-
-
-# TODO: remove this whole "if test" on or after 14-Jan-2014 and remove the system/*.s
-# sources if no one complains by then.
-# boost::context library replaces this functionality:
-if( false )
-    enable_language( C CXX ASM )
-    set_source_files_properties( system/fcontext.s PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp" )
-    list( APPEND COMMON_SRCS system/fcontext.s )
-endif()
 
 
 add_library( common STATIC ${COMMON_SRCS} )

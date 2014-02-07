@@ -49,10 +49,11 @@ IMPLEMENT_APP( EDA_APP )
 /* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void EDA_APP::MacOpenFile( const wxString &fileName )
+void EDA_APP::MacOpenFile( const wxString& aFileName )
 {
     KICAD_MANAGER_FRAME* frame = (KICAD_MANAGER_FRAME*) GetTopWindow();
-    wxFileName fn = fileName;
+
+    wxFileName fn = aFileName;
 
     frame->m_ProjectFileName = fn;
 
@@ -77,9 +78,7 @@ void EDA_APP::MacOpenFile( const wxString &fileName )
 
     frame->m_LeftWin->ReCreateTreePrj();
 
-    frame->PrintMsg( _( "Working dir: " ) + frame->m_ProjectFileName.GetPath() +
-                     _( "\nProject: " ) + frame->m_ProjectFileName.GetFullName() +
-                     wxT( "\n" ) );
+    frame->PrintPrjInfo();
 }
 
 

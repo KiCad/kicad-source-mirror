@@ -182,23 +182,27 @@ void BASE_SCREEN::GetGrids( GRIDS& aList )
 }
 
 
-void BASE_SCREEN::SetGrid( const wxRealPoint& size )
+int BASE_SCREEN::SetGrid( const wxRealPoint& size )
 {
     wxASSERT( !m_grids.empty() );
 
     GRID_TYPE nearest_grid = m_grids[0];
+    int gridIdx = 0;
 
     for( unsigned i = 0; i < m_grids.size(); i++ )
     {
         if( m_grids[i].m_Size == size )
         {
             m_Grid = m_grids[i];
-            return;
+            return m_grids[i].m_Id - ID_POPUP_GRID_LEVEL_1000;
         }
 
         // keep track of the nearest larger grid size, if the exact size is not found
         if ( size.x < m_grids[i].m_Size.x )
+        {
+            gridIdx = m_grids[i].m_Id - ID_POPUP_GRID_LEVEL_1000;
             nearest_grid = m_grids[i];
+        }
     }
 
     m_Grid = nearest_grid;
@@ -206,27 +210,31 @@ void BASE_SCREEN::SetGrid( const wxRealPoint& size )
     wxLogWarning( wxT( "Grid size( %f, %f ) not in grid list, falling back " ) \
                   wxT( "to grid size( %f, %f )." ),
                   size.x, size.y, m_Grid.m_Size.x, m_Grid.m_Size.y );
+
+    return gridIdx;
 }
 
 
-void BASE_SCREEN::SetGrid( int id  )
+int BASE_SCREEN::SetGrid( int aCommandId  )
 {
     wxASSERT( !m_grids.empty() );
 
     for( unsigned i = 0; i < m_grids.size(); i++ )
     {
-        if( m_grids[i].m_Id == id )
+        if( m_grids[i].m_Id == aCommandId )
         {
             m_Grid = m_grids[i];
-            return;
+            return m_grids[i].m_Id - ID_POPUP_GRID_LEVEL_1000;
         }
     }
 
     m_Grid = m_grids[0];
 
     wxLogWarning( wxT( "Grid ID %d not in grid list, falling back to " ) \
-                  wxT( "grid size( %g, %g )." ), id, m_Grid.m_Size.x,
-                  m_Grid.m_Size.y );
+                  wxT( "grid size( %g, %g )." ), aCommandId,
+                  m_Grid.m_Size.x, m_Grid.m_Size.y );
+
+    return m_grids[0].m_Id - ID_POPUP_GRID_LEVEL_1000;
 }
 
 

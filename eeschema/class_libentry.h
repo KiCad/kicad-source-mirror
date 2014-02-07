@@ -45,14 +45,30 @@ class LIB_COMPONENT;
 class LIB_FIELD;
 
 
+/// Compiler controlled string compare function, either case independent or not:
+inline int Cmp_KEEPCASE( const wxString& aString1, const wxString& aString2 )
+{
+#ifdef KICAD_KEEPCASE
+    // case specificity:
+    return aString1.Cmp( aString2 );
+#else
+    // case independence:
+    return aString1.CmpNoCase( aString2 );
+#endif
+}
+
+
 /**
  * LIB_ALIAS map sorting.
  */
 struct AliasMapSort
 {
     bool operator() ( const wxString& aItem1, const wxString& aItem2 ) const
-        { return aItem1.CmpNoCase( aItem2 ) < 0; }
+    {
+        return Cmp_KEEPCASE( aItem1, aItem2 ) < 0;
+    }
 };
+
 
 /**
  * Alias map used by component library object.

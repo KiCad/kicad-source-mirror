@@ -12,7 +12,7 @@
    width="48"
    version="1.1"
    id="svg4394"
-   inkscape:version="0.48.1 "
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="plot_dxf.svg">
   <metadata
      id="metadata4565">
@@ -35,15 +35,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="968"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview4563"
      showgrid="false"
      inkscape:zoom="15.4375"
-     inkscape:cx="30.186235"
+     inkscape:cx="30.31579"
      inkscape:cy="21.233075"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg4394" />
   <defs
@@ -794,20 +794,21 @@
      x="6.9919028"
      id="rect4557"
      style="fill:#ffffff;fill-rule:evenodd" />
-  <text
-     style="font-size:39.4617157px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;font-family:Sans"
-     xml:space="preserve"
+  <g
      transform="scale(0.98981143,1.0102934)"
-     line-height="125%"
-     font-size="41.51px"
-     y="46.260956"
-     x="25.376314"
-     id="text4559"
-     sodipodi:linespacing="125%"><tspan
+     style="font-size:39.4617157px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;font-family:Sans"
+     id="text4559">
+    <path
+       d="m 8.9718681,35.101848 0,8.457527 1.2811619,0 c 1.460641,2e-6 2.574694,-0.362065 3.342162,-1.086203 0.773638,-0.724131 1.160462,-1.776292 1.160473,-3.156487 -1.1e-5,-1.373991 -0.38374,-2.419963 -1.151189,-3.137918 -0.767468,-0.717936 -1.884616,-1.076908 -3.351446,-1.076919 l -1.2811619,0 m -3.5742568,-2.701581 3.7692163,0 c 2.1043164,1.3e-5 3.6701804,0.151648 4.6975944,0.454905 1.033584,0.297094 1.918637,0.804607 2.655162,1.52254 0.649852,0.62512 1.132608,1.34616 1.448271,2.163122 0.315634,0.816982 0.473458,1.742265 0.473473,2.775851 -1.5e-5,1.045979 -0.157839,1.980546 -0.473473,2.803703 -0.315663,0.816977 -0.798419,1.538016 -1.448271,2.163122 -0.742714,0.717947 -1.633957,1.228555 -2.673729,1.531824 -1.039793,0.297081 -2.599467,0.445622 -4.6790274,0.445622 l -3.7692163,0 0,-13.860689"
        style="font-size:19.01318932px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
-       font-size="18px"
-       y="46.260956"
-       x="25.376314"
-       font-weight="bold"
-       id="tspan4561">DXF</tspan></text>
+       id="path3450" />
+    <path
+       d="m 28.904152,39.186713 4.809,7.074243 -3.722797,0 -3.240041,-4.73473 -3.212189,4.73473 -3.741365,0 4.809,-7.074243 -4.623324,-6.786446 3.732081,0 3.035797,4.4655 3.026514,-4.4655 3.750648,0 -4.623324,6.786446"
+       style="font-size:19.01318932px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
+       id="path3452" />
+    <path
+       d="m 35.848423,32.400267 9.645851,0 0,2.701581 -6.071595,0 0,2.580892 5.709528,0 0,2.701581 -5.709528,0 0,5.876635 -3.574256,0 0,-13.860689"
+       style="font-size:19.01318932px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
+       id="path3454" />
+  </g>
 </svg>
