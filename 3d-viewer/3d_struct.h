@@ -144,6 +144,14 @@ public:
         return m_Shape3DName;
     }
 
+    /**
+     * Function GetShape3DFullFilename
+     * @return the full filename of the 3D shape,
+     * expanding environment variable (if any ) and/or adding default 3D path
+     * given by environment variable KISYS3DMOD
+     */
+    const wxString GetShape3DFullFilename();
+
     void SetShape3DName( const wxString& aShapeName );
 };
 
