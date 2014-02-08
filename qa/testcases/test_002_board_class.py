@@ -1,7 +1,10 @@
 import code
 import unittest
+import os
 import pcbnew
 import pdb
+import tempfile
+
 
 from pcbnew import *
 
@@ -9,6 +12,9 @@ class TestBoardClass(unittest.TestCase):
 
     def setUp(self):
         self.pcb = LoadBoard("data/complex_hierarchy.kicad_pcb")
+        self.TITLE="Test Board"
+        self.COMMENT1="For load/save test"
+        self.FILENAME=tempfile.mktemp()+".kicad_pcb"
 
     def test_pcb_find_module(self):
         module = self.pcb.FindModule('P1')
@@ -73,6 +79,22 @@ class TestBoardClass(unittest.TestCase):
         self.assertEqual(pad.this, p1.this)
         self.assertEqual(pad.this, p2.this)
         self.assertEqual(pad.this, p3.this)
+
+    def test_pcb_save_and_load(self):
+        pcb = BOARD()
+        pcb.GetTitleBlock().SetTitle(self.TITLE)
+        pcb.GetTitleBlock().SetComment1(self.COMMENT1)
+        result = SaveBoard(self.FILENAME,pcb)
+        self.assertTrue(result)
+        
+        pcb2 = LoadBoard(self.FILENAME)
+        self.assertIsNotNone(pcb2)
+
+        tb = pcb2.GetTitleBlock()
+        self.assertEqual(tb.GetTitle(),self.TITLE)
+        self.assertEqual(tb.GetComment1(),self.COMMENT1)
+
+        os.remove(self.FILENAME)
 
     #def test_interactive(self):
     # 	code.interact(local=locals())
