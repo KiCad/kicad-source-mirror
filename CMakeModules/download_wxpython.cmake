@@ -74,7 +74,7 @@ ExternalProject_Add( libwxpython
     UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${LIBWXPYTHON_ROOT}"
            COMMAND  ${LIBWXPYTHON_EXEC} wxPython/build-wxpython.py --clean
 
-    CONFIGURE_COMMAND   ${LIBWXPYTHON_EXEC} wxPython/build-wxpython.py --prefix=/Users/marco/Development/product/libwxpython_root --unicode --install ${LIBWXPYTHON_OPTS}
+    CONFIGURE_COMMAND   ${LIBWXPYTHON_EXEC} wxPython/build-wxpython.py --prefix=${LIBWXPYTHON_ROOT} --unicode --install ${LIBWXPYTHON_OPTS}
 
     #BINARY_DIR     "${PREFIX}"
 

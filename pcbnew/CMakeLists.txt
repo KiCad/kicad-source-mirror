@@ -598,7 +598,7 @@ if( KICAD_SCRIPTING )
         # copies all into PYTHON_DEST then all into the bundle !
         add_custom_target( _pcbnew_py_copy ALL
             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py  "${PYTHON_DEST}"
-            DEPENDS FixSwigImportsModuleScripting
+            DEPENDS FixSwigImportsScripting
             COMMENT "Copying pcbnew.py into PYTHON_DEST"
         )
 
