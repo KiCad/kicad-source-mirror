@@ -1231,8 +1231,22 @@ bool EDA_APP::Set3DShapesPath( const wxString& aKiSys3Dmod )
     wxString relpath( wxT( "modules/packages3d" ) );
 
 // Apple MacOSx
-#ifdef __APPLE__
-    // TO DO
+#ifdef __WXMAC__
+    path = wxT("/Library/Application Support/kicad/modules/packages3d/");
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+    path = wxString( wxGetenv( wxT( "HOME" ) ) ) + wxT("/Library/Application Support/kicad/modules/packages3d/");
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
 
 #elif defined(__UNIX__)     // Linux and non-Apple Unix
     path = wxT("/usr/local/kicad/share/") + relpath;
