@@ -27,18 +27,21 @@ Building Kicad with no support for Scripting
   If you set KICAD_BUILD_DYNAMIC the building system will build all and include
   the needed libraries for each executable in its bundle
 
+      cmake -DKICAD_BUILD_DYNAMIC=ON .
+      make
+
 Building Kicad with support for Scripting
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Due some problems with some dependencies the build of this kind of binary is a bit 
   more complex, you should initially set KICAD_BUILD_DYNAMIC
   then issue for example
 
-      cmake -DKICAD_BUILD_DYNAMIC=ON
+      cmake -DKICAD_BUILD_DYNAMIC=ON .
       make lib-wxpython
 
   After successfully building you can set your KICAD_SCRIPTING* options (for example):
 
-      cmake -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_WXPYTHON=ON
+      cmake -DKICAD_SCRIPTING=ON -DKICAD_SCRIPTING_WXPYTHON=ON .
       make
 
   The system will build all accordling your choices and package all in the bundle

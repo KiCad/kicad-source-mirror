@@ -1,6 +1,6 @@
 === modified file 'wxPython/config.py'
---- wxPython/config.py	2014-02-07 20:23:11 +0000
-+++ wxPython/config.py	2014-02-07 21:00:18 +0000
+--- wxPython/config.py	2014-02-08 12:23:31 +0000
++++ wxPython/config.py	2014-02-08 13:58:07 +0000
 @@ -22,6 +22,7 @@
  
  import sys, os, glob, fnmatch, tempfile
@@ -17,8 +17,8 @@
 -            cflags.append(ARCH)
 -            lflags.append("-arch")
 -            lflags.append(ARCH)
-+            cflags.append('-arch ' + re.sub(',',' -arch ',ARCH))
-+            lflags.append('-arch ' + re.sub(',',' -arch ',ARCH))
++            cflags.append("-arch " + re.sub(","," -arch ",ARCH))
++            #lflags.append("-arch " + re.sub(","," -arch ",ARCH))
  
          if not os.environ.get('CC') or not os.environ.get('CXX'):
              os.environ["CXX"] = getWxConfigValue('--cxx')

@@ -341,7 +341,9 @@ add_definitions(-DWX_COMPATIBILITY)
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
 
-if( KICAD_SCRIPTING_WXPYTHON )
+
+if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
+
 add_custom_target( lib-wxpython )
         include( download_pcre )
         include( download_swig )
@@ -349,9 +351,7 @@ add_custom_target( lib-wxpython )
         add_dependencies( lib-wxpython pcre )
         add_dependencies( lib-wxpython swig )
         add_dependencies( lib-wxpython libwxpython )
-endif()
 
-if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
     #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
 

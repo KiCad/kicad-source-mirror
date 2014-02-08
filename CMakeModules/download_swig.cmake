@@ -42,8 +42,10 @@ if (APPLE)
         set( SWIG_CFLAGS  "CFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -mmacosx-version-min=10.5" )
         set( SWIG_CXXFLAGS  "CXXFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -mmacosx-version-min=10.5" )
         set( SWIG_LDFLAGS "LDFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -mmacosx-version-min=10.5" )
-        set( SWIG_PYTHON  "--with-python=/usr/bin/python2.6" )
     endif( CMAKE_OSX_ARCHITECTURES )
+
+    set( SWIG_PYTHON  "--with-python=/usr/bin/python2.6" )
+    set( SWIG_OPTS    --disable-dependency-tracking )
 endif(APPLE)
 
 # <SOURCE_DIR> = ${PREFIX}/src/glew
@@ -66,7 +68,7 @@ ExternalProject_Add( swig
     UPDATE_COMMAND  ${CMAKE_COMMAND} -E remove_directory "${SWIG_ROOT}"
 
     #PATCH_COMMAND     "true"
-    CONFIGURE_COMMAND ./configure --prefix=${SWIG_ROOT} --with-pcre-prefix=${PCRE_ROOT} ${SWIG_CFLAGS} ${SWIG_LDFLAGS} ${SWIG_CXXFLAGS} ${SWIG_PYTHON}
+    CONFIGURE_COMMAND ./configure --prefix=${SWIG_ROOT} --with-pcre-prefix=${PCRE_ROOT} ${SWIG_CFLAGS} ${SWIG_LDFLAGS} ${SWIG_CXXFLAGS} ${SWIG_PYTHON} ${SWIG_OPTS}
 
     #BINARY_DIR      "${PREFIX}"
 
