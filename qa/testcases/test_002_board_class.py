@@ -3,29 +3,76 @@ import unittest
 import pcbnew
 import pdb
 
-from pcbnew import ToMM
+from pcbnew import *
 
 class TestBoardClass(unittest.TestCase):
 
     def setUp(self):
-        self.pcb = pcbnew.LoadBoard("data/complex_hierarchy.kicad_pcb")
-    
+        self.pcb = LoadBoard("data/complex_hierarchy.kicad_pcb")
+
     def test_pcb_find_module(self):
         module = self.pcb.FindModule('P1')
         self.assertEqual(module.GetReference(),'P1')
 
+    def test_pcb_get_track_count(self):
+        pcb = BOARD()
+
+        self.assertEqual(pcb.GetNumSegmTrack(),0)
+
+        track0 = TRACK(pcb)
+        pcb.Add(track0)
+        self.assertEqual(pcb.GetNumSegmTrack(),1)
+
+        track1 = TRACK(pcb)
+        pcb.Add(track1)
+        self.assertEqual(pcb.GetNumSegmTrack(),2)
+
     def test_pcb_bounding_box(self):
-        bounding_box = self.pcb.ComputeBoundingBox()
+        pcb = BOARD()
+        track = TRACK(pcb)
+        pcb.Add(track)
+
+        #track.SetStartEnd(wxPointMM(10.0, 10.0),
+        #                  wxPointMM(20.0, 30.0))
         
-        height = ToMM( bounding_box.GetHeight() )
-        width = ToMM( bounding_box.GetWidth() )
+        track.SetStart(wxPointMM(10.0, 10.0))
+        track.SetEnd(wxPointMM(20.0, 30.0))
 
-        # probably it's a cleaner test to generate a board with 
-        # a couple of things, that we can know the exact size,
-        # and then compute the bounding box, 
+        track.SetWidth(FromMM(0.5))
 
-        self.assertAlmostEqual(height, 89.52, 2)
-        self.assertAlmostEqual(width, 108.44, 2)
+        #!!! THIS FAILS? == 0.0 x 0.0 ??
+        #height, width = ToMM(pcb.ComputeBoundingBox().GetSize())
+        bounding_box = pcb.ComputeBoundingBox()
+        height, width = ToMM(bounding_box.GetSize())
+
+        self.assertAlmostEqual(width, (30-10) + 0.5, 2)
+        self.assertAlmostEqual(height,  (20-10) + 0.5, 2)
+
+    def test_pcb_get_pad(self):
+        pcb = BOARD()
+        module = MODULE(pcb)
+        pcb.Add(module)
+        pad = D_PAD(module)
+        module.Add(pad)
+
+        pad.SetShape(PAD_OVAL)
+        pad.SetSize(wxSizeMM(2.0, 3.0))
+        pad.SetPosition(wxPointMM(0,0))
+        
+        # easy case
+        p1 = pcb.GetPad(wxPointMM(0,0))
+
+        # top side
+        p2 = pcb.GetPad(wxPointMM(0.9,0.0))
+
+        # bottom side
+        p3 = pcb.GetPad(wxPointMM(0,1.4))
+
+        # TODO: get pad == p1 evaluated as true instead
+        #       of relying in the internal C++ object pointer
+        self.assertEqual(pad.this, p1.this)
+        self.assertEqual(pad.this, p2.this)
+        self.assertEqual(pad.this, p3.this)
 
     #def test_interactive(self):
     # 	code.interact(local=locals())
