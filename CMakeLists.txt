@@ -341,6 +341,7 @@ add_definitions(-DWX_COMPATIBILITY)
 find_package( OpenGL QUIET )
 check_find_package_result( OPENGL_FOUND "OpenGL" )
 
+if( KICAD_SCRIPTING_WXPYTHON )
 add_custom_target( lib-wxpython )
         include( download_pcre )
         include( download_swig )
@@ -348,6 +349,7 @@ add_custom_target( lib-wxpython )
         add_dependencies( lib-wxpython pcre )
         add_dependencies( lib-wxpython swig )
         add_dependencies( lib-wxpython libwxpython )
+endif()
 
 if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
@@ -387,7 +389,7 @@ if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
 
         set(wxWidgets_BIN_DIR           ${LIBWXPYTHON_ROOT}/bin/wxrc )
         set(wxWidgets_CONFIG_EXECUTABLE ${LIBWXPYTHON_ROOT}/bin/wx-config )
-        set(wxWidgets_INCLUDE_DIRS      ${LIBWXPYTHON_ROOT}/include/wx-3.0 ) 
+        set(wxWidgets_INCLUDE_DIRS      ${LIBWXPYTHON_ROOT}/include/wx-3.0 )
         set(wxWidgets_LIBRARY_DIRS      ${LIBWXPYTHON_ROOT}/lib )
 
         add_dependencies( lib-dependencies libwxpython )
@@ -503,7 +505,7 @@ set( INC_AFTER
 # Find Python and other scripting resources
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
-    if( NOT APPLE ) 
+    if( NOT APPLE )
         set( PythonInterp_FIND_VERSION )
     else()
         set( PYTHON_LIBRARY /System/Library/Frameworks/Python.framework/Versions/2.6/Python  )
