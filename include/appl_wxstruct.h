@@ -456,6 +456,26 @@ public:
      */
     bool SetFootprintLibTablePath();
 
+    /**
+     * Function Set3DShapesPath
+     * attempts set the environment variable given by aKiSys3Dmod to a valid path.
+     * (typically "KISYS3DMOD" )
+     * If the environment variable is already set,
+     * then it left as is to respect the wishes of the user.
+     *
+     * The path is determined by attempting to find the path modules/packages3d
+     * files in kicad tree.
+     * This may or may not be the best path but it provides the best solution for
+     * backwards compatibility with the previous 3D shapes search path implementation.
+     *
+     * @note This must be called after #SetBinDir() is called at least on Windows.
+     * Otherwise, the kicad path is not known (Windows specific)
+     *
+     * @param aKiSys3Dmod = the value of environment variable, typically "KISYS3DMOD"
+     * @return false if the aKiSys3Dmod path is not valid.
+     */
+    bool Set3DShapesPath( const wxString& aKiSys3Dmod );
+
     const wxString& GetModuleLibraryNickname()                  { return m_module_nickname; }
     void SetModuleLibraryNickname( const wxString& aNickname )  { m_module_nickname = aNickname; }
 };
