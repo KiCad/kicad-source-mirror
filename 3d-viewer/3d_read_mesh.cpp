@@ -59,6 +59,39 @@ S3D_MODEL_PARSER* S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster,
     }
 }
 
+const wxString S3D_MASTER::GetShape3DFullFilename()
+{
+
+    wxString shapeName;
+
+    // Expand any environment variables embedded in footprint's m_Shape3DName field.
+    // To ensure compatibility with most of footprint's m_Shape3DName field,
+    // if the m_Shape3DName is not an absolute path the default path
+    // given by the environment variable KISYS3DMOD will be used
+
+    if( m_Shape3DName.StartsWith( wxT("${") ) )
+        shapeName = wxExpandEnvVars( m_Shape3DName );
+    else
+        shapeName = m_Shape3DName;
+
+    wxFileName fn( shapeName );
+
+    if( fn.IsAbsolute() || shapeName.StartsWith( wxT(".") ) )
+        return shapeName;
+
+    wxString default_path;
+    wxGetEnv( wxT( KISYS3DMOD ), &default_path );
+
+    if( default_path.IsEmpty() )
+        return shapeName;
+
+    if( !default_path.EndsWith( wxT("/") ) && !default_path.EndsWith( wxT("\\") ) )
+        default_path += wxT("/");
+
+    default_path += shapeName;
+
+    return default_path;
+}
 
 int S3D_MASTER::ReadData()
 {
@@ -67,8 +100,7 @@ int S3D_MASTER::ReadData()
         return 1;
     }
 
-    // Expand any environment variables embedded in footprint's m_Shape3DName field.
-    wxString filename = wxExpandEnvVars( m_Shape3DName );
+    wxString filename = GetShape3DFullFilename();
 
 #ifdef __WINDOWS__
     filename.Replace( wxT( "/" ), wxT( "\\" ) );

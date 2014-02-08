@@ -1196,3 +1196,69 @@ bool EDA_APP::SetFootprintLibTablePath()
     return false;
 }
 
+/**
+ * Function Set3DShapesPath
+ * attempts set the environment variable given by aKiSys3Dmod to a valid path.
+ * (typically "KISYS3DMOD" )
+ * If the environment variable is already set,
+ * then it left as is to respect the wishes of the user.
+ *
+ * The path is determined by attempting to find the path modules/packages3d
+ * files in kicad tree.
+ * This may or may not be the best path but it provides the best solution for
+ * backwards compatibility with the previous 3D shapes search path implementation.
+ *
+ * @note This must be called after #SetBinDir() is called at least on Windows.
+ * Otherwise, the kicad path is not known (Windows specific)
+ *
+ * @param aKiSys3Dmod = the value of environment variable, typically "KISYS3DMOD"
+ * @return false if the aKiSys3Dmod path is not valid.
+ */
+bool EDA_APP::Set3DShapesPath( const wxString& aKiSys3Dmod )
+{
+    wxString    path;
+
+    // Set the KISYS3DMOD environment variable for the current process,
+    // if it is not already defined in the user's environment and valid.
+    if( wxGetEnv( aKiSys3Dmod, &path ) && wxFileName::DirExists( path ) )
+        return true;
+
+    // Attempt to determine where the 3D shape libraries were installed using the
+    // legacy path:
+    // on Unix: /usr/local/kicad/share/modules/packages3d
+    // or  /usr/share/kicad/modules/packages3d
+    // On Windows: bin../share/modules/packages3d
+    wxString relpath( wxT( "modules/packages3d" ) );
+
+// Apple MacOSx
+#ifdef __APPLE__
+    // TO DO
+
+#elif defined(__UNIX__)     // Linux and non-Apple Unix
+    path = wxT("/usr/local/kicad/share/") + relpath;
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+    path = wxT("/usr/share/kicad/") + relpath;
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+#else   // Windows
+    path = m_BinDir + wxT("../share/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+#endif
+
+    return false;
+}
+

@@ -42,6 +42,7 @@
 #include <pcbcommon.h>
 #include <colors_selection.h>
 #include <gr_basic.h>
+#include <3d_viewer.h>
 #include <wx/stdpaths.h>
 
 #include <wx/file.h>
@@ -168,10 +169,10 @@ bool EDA_APP::OnInit()
     bundledir.RemoveLastDir();
 
     // Prepend in PYTHONPATH the content of the bundle libraries !
-    wxSetEnv("PYTHONPATH",((wxGetenv("PYTHONPATH") != NULL ) ? (wxString(wxGetenv("PYTHONPATH")) + ":") : wxString("")) 
-                           +  bundledir.GetPath() + 
+    wxSetEnv("PYTHONPATH",((wxGetenv("PYTHONPATH") != NULL ) ? (wxString(wxGetenv("PYTHONPATH")) + ":") : wxString(""))
+                           +  bundledir.GetPath() +
                            "/Frameworks/wxPython/lib/python2.6/site-packages/wx-3.0-osx_cocoa" );
-#endif 
+#endif
 #endif
     // On linux and osx, 2 others paths are
     // [HOME]/.kicad_plugins/
@@ -232,6 +233,9 @@ bool EDA_APP::OnInit()
 
     // Set any environment variables before loading FP_LIB_TABLE
     SetFootprintLibTablePath();
+
+    // Set 3D shape path from environment variable KISYS3DMOD
+    Set3DShapesPath( wxT(KISYS3DMOD) );
 
     frame = new PCB_EDIT_FRAME( NULL, wxT( "Pcbnew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 
