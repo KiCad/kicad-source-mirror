@@ -1154,8 +1154,7 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
         if( !vrmlm->Is3DType( S3D_MASTER::FILE3D_VRML ) )
             continue;
 
-        // expand environment variables
-        wxString fname = wxExpandEnvVars( vrmlm->GetShape3DName() );
+        wxString fname = vrmlm->GetShape3DFullFilename();
 
         fname.Replace( wxT( "\\" ), wxT( "/" ) );
         wxString source_fname = fname;

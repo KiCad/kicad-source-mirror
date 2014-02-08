@@ -48,6 +48,9 @@
 #  include <GL/glu.h>
 #endif
 
+
+#define KISYS3DMOD "KISYS3DMOD"
+
 #include <3d_struct.h>
 
 class EDA_3D_CANVAS;
