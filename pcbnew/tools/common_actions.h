@@ -65,4 +65,7 @@ public:
 
     /// Activation of the drawing tool (arc)
     static TOOL_ACTION drawArc;
+
+    /// Activation of the drawing tool (text)
+    static TOOL_ACTION drawText;
 };

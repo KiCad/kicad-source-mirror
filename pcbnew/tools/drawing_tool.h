@@ -55,6 +55,8 @@ public:
 
     int DrawArc( TOOL_EVENT& aEvent );
 
+    int DrawText( TOOL_EVENT& aEvent );
+
 private:
     ///> Starts drawing a selected shape.
     int draw( STROKE_T aShape );

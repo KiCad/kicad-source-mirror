@@ -195,7 +195,8 @@ TEXTE_PCB* PCB_EDIT_FRAME::CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText )
         textePcb->Copy( aText );
         GetBoard()->Add( textePcb );
         textePcb->SetFlags( IS_NEW );
-        StartMoveTextePcb( textePcb, aDC, false ); // Don't erase aText when copying
+        if( aDC )
+            StartMoveTextePcb( textePcb, aDC, false ); // Don't erase aText when copying
     }
     else
     {
@@ -222,7 +223,7 @@ TEXTE_PCB* PCB_EDIT_FRAME::CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText )
             textePcb->DeleteStructure();
             textePcb = NULL;
         }
-        else
+        else if( aDC )
         {
             StartMoveTextePcb( textePcb, aDC );
         }
