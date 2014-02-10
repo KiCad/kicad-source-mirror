@@ -41,11 +41,11 @@ TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 'M',
         "Move", "Moves the selected item(s)" );
 
-TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveEdit.rotate",
+TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.rotate",
         AS_CONTEXT, 'R',
         "Rotate", "Rotates selected item(s)" );
 
-TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
+TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.flip",
         AS_CONTEXT, 'F',
         "Flip", "Flips selected item(s)" );
 
