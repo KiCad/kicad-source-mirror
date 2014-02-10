@@ -269,7 +269,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
         if( aOnlyOneFile )
         {
             m_printMaskLayer = printMaskLayer;
-            suffix = wxT( "-brd" );
+            suffix = wxT( "brd" );
         }
         else
         {
