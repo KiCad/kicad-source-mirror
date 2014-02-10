@@ -1249,14 +1249,29 @@ bool EDA_APP::Set3DShapesPath( const wxString& aKiSys3Dmod )
     }
 
 #elif defined(__UNIX__)     // Linux and non-Apple Unix
-    path = wxT("/usr/local/kicad/share/") + relpath;
+    // Try the home directory:
+    path.Empty();
+    wxGetEnv( wxT("HOME"), &path );
+    path += wxT("/kicad/share/") + relpath;
+
     if( wxFileName::DirExists( path ) )
     {
         wxSetEnv( aKiSys3Dmod, path );
         return true;
     }
 
+    // Try the standard install path:
+    path = wxT("/usr/local/kicad/share/") + relpath;
+
+    if( wxFileName::DirExists( path ) )
+    {
+        wxSetEnv( aKiSys3Dmod, path );
+        return true;
+    }
+
+    // Try the official distrib standard install path:
     path = wxT("/usr/share/kicad/") + relpath;
+
     if( wxFileName::DirExists( path ) )
     {
         wxSetEnv( aKiSys3Dmod, path );
@@ -1264,7 +1279,11 @@ bool EDA_APP::Set3DShapesPath( const wxString& aKiSys3Dmod )
     }
 
 #else   // Windows
-    path = m_BinDir + wxT("../share/") + relpath;
+    // On Windows, the install path is given by the path of executables
+    wxFileName fn;
+    fn.AssignDir( m_BinDir );
+    fn.RemoveLastDir();
+    path = fn.GetPathWithSep() + wxT("share/") + relpath;
 
     if( wxFileName::DirExists( path ) )
     {

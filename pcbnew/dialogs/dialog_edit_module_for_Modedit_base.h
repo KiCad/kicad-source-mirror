@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -90,6 +90,8 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public DIALOG_SHIM
 		wxPanel* m_Panel3D;
 		wxStaticText* m_staticText3Dname;
 		wxListBox* m_3D_ShapeNameListBox;
+		wxStaticText* m_staticTextDefault3DPath;
+		wxTextCtrl* m_textCtrl3DDefaultPath;
 		wxStaticBoxSizer* m_Sizer3DValues;
 		wxBoxSizer* m_bSizerShapeScale;
 		wxStaticText* m_staticTextShapeScale;

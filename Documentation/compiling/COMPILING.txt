@@ -31,14 +31,21 @@ KiCad from source.
 * bzr     - Bazaar version control system
 * CMake   - Cross-platform make
 * GLUT    - The OpenGL Utility Library
+* GLEW
 * wxGTK or wxWidgets  - The wxWidgets GUI toolkit with GTK+ bindings
+* libbz2    (dev)
+* libcairo  (dev)
 
 * Boost   - Collection of portable C++ source libraries
-boost will be automagically downloaded and copied in kicad sources tree,
+boost will be automagically downloaded, copied in kicad sources tree and patched,
 the first time you compile kicad.
 
 Useful, but not required:
 * Doxygen - Documentation system for several programming languages
+
+Required to build Kicad with scripting (using python) support:
+Python
+Swig
 
 KiCad uses the Bazaar version control system to track source code changes,
 and download the boost libraries needed by Kicad.
@@ -60,40 +67,43 @@ Install or Build wxWidgets
 WARNING:
  see wxWidgets_patch_notes.txt for patches and issues in wxWidgets.
 
-If on Windows, download
-http://sourceforge.net/projects/wxwindows/files/wxAll/2.9.3/wxWidgets-2.9.3.zip/download
+On Windows, download
+http://sourceforge.net/projects/wxwindows/files/3.0.0/wxWidgets-3.0.0.zip/download
 or a newer version.
 Do NOT use previous versions which all have annoying issues for KiCad.
 Start msys so you have a bash shell.
 Note also since 2.9 versions no need to build a "debug" version of the wxWidgets library,
-the release abd the debug version are same.
+the release and the debug version are same.
 
 Unzip the wxWidgets zip file into the build directory.  Change directories into
 there, and then:
 
     mkdir Release
     cd Release
-    ../configure --enable-unicode --enable-monolithic=no --disable-shared --with-opengl
+    ../configure --with-opengl
     make
 
     and under Linux, but not under Windows:
     sudo make install that install wxWidgets libs and headers in /usr/local/
 
 
-If on linux, you can use your package manager to install the
-development versions of the wxWidgets packages which include the C++ headers. An
-alternative is to build static libaries from source. Verify that wx-config is in
-your path by running it from a command prompt. Linux users then go to next step.
+On linux, yo can also download wxWidgets 3.0 (recommandedd)
+or you can use your package manager to install the
+development versions of the wxWidgets packages which include the C++ headers.
+The recommended way is to build wxWidgets from source, and use wxWidgets 3.0
+or more recent (Older versions have a print function which does not work).
+Verify that wx-config is in your path by running it from a command prompt.
+Linux users then go to next step.
 
 Install CMake
 -------------
-If windows, download the installation binary for windows from cmake.org.
+On windows, download the installation binary for windows from cmake.org.
 Install that and choose to add cmake to your path during installation.  You
-will have to restart and command shells for the new path to take effect.
+will have to restart your command shell for the new path to take effect.
 Verify that cmake is in your path by trying to run it from a command prompt.
 
 
-If linux, use your package manager to install cmake. You should get cmake 2.6.4
+On linux, use your package manager to install cmake. You should get cmake 2.8.4
 or later. If only an older one is available in your package repository, build
 cmake from source. Verify that cmake is in your path by trying to run it from a
 command prompt.
@@ -106,25 +116,42 @@ To download files from  Launchpad repository, you should install bazaar (bzr) th
 version control system like subversion, mercurial, git...
 
 Launchpad repository handle 2 branches for KiCda sources:
-- a testing branch (used by developers)
-- a stable branch (a copy of the testing branch, when this testing branch is near a stable state))
+- a product branch (used by developers, which is most of time usable in production)
+- a stable branch (a copy of the testing branch,
+        when the product branch is a stable state))
+Remarks:
+- The product branch is actively maintained
+- From the product branch, you can go back to any previous version, using bzr features
+- The stable branch is poorly or not maintained (and could be removed)
 
-Testing branch:
-bzr branch lp:kicad kicad_testing
+In order to have a working Kicad installtion, you need
+- sources to build binaries
+- libraries (they are not included in sources)
+- documentation and translations (they are not included in sources)
+
+product branch:
+bzr branch lp:kicad kicad_src
 
 Stable branch:
-bzr branch lp:kicad/stable kicad_stable
+bzr branch lp:kicad/stable kicad_src
 
 Components and Footprints libraries
-bzr branch lp:~kicad-lib-committers/kicad/library kicad_libraries
+all (schematic libs, 3D shapes ...) but new footprints libraries (use Download zip tool)
+https://github.com/KiCad/kicad-library/
+New footprints libraries (use Download zip tool for each lib you want)
+https://github.com/KiCad/ for footprint libs (*.pretty folders)
+
+Note also Kicad is able to read on github.com/KiCad/ the *.pretty folders
+without download, using github plugin.
+(however the time to read them can be long)
 
 Documentation and translations:
 bzr branch lp:~kicad-developers/kicad/doc kicad_doc
 
 Create Makefiles with CMake
 ---------------------------
-If windows, go into your msys shell.  Linux and windows users both then make
-two "out of source" build directories:
+On windows, go into your msys shell.
+Linux and windows users both then make two "out of source" build directories:
     cd <kicadSource>
     mkdir -p build/release
     mkdir build/debug   (if you want a debug version of KiCad)
@@ -133,10 +160,10 @@ two "out of source" build directories:
 On either cmake command line shown below, you can optionally include
     -DCMAKE_INSTALL_PREFIX=<finallInstallDir>
 
-If windows, run the following command:
+On windows, run the following command:
     cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
 
-If linux, run instead the following command:
+On linux, run instead the following command:
     cmake -DCMAKE_BUILD_TYPE=Release ../../
 
 Take a look at CMakeCache.txt, and in particular CMAKE_INSTALL_PREFIX, which
@@ -166,18 +193,15 @@ On either cmake command line shown below, you can optionally include
 Although normally you do not install the Debug binaries, you can debug them
 where they were built.
 
-If windows, run the following command:
+On windows, run the following command:
     cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Debug -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
 where <wxInstallDir> is <wxWidgets path>/Release
 
-If linux, run instead the following command:
+On linux, run instead the following command:
     cmake -DCMAKE_BUILD_TYPE=Debug -DwxWidgets_USE_DEBUG=ON ../../
 
 Make the Debug binaries:
     make
-
-Note: that it is easy to build only a specific binary such as pcbnew alone:
-    make pcbnew
 
 
 See ./cmake_config.txt for customizing the KiCad build setting.
