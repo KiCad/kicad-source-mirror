@@ -68,3 +68,7 @@ TOOL_ACTION COMMON_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
 TOOL_ACTION COMMON_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
         AS_GLOBAL, 'A',
         "Draw an arc", "Draw an arc" );
+
+TOOL_ACTION COMMON_ACTIONS::drawText( "pcbnew.InteractiveDrawing.text",
+        AS_GLOBAL, 'T',
+        "Add a text", "Add a text" );

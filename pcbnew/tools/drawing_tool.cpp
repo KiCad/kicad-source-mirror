@@ -30,6 +30,7 @@
 #include <view/view_controls.h>
 #include <class_board.h>
 #include <class_drawsegment.h>
+#include <class_pcb_text.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <confirm.h>
@@ -159,7 +160,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
                 {
                     DRAWSEGMENT* newItem = new DRAWSEGMENT( graphic );
                     view->Add( newItem );
-                    getModel<BOARD>( PCB_T )->Add( newItem );
+                    board->Add( newItem );
                     newItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
                 }
             }
@@ -291,7 +292,7 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
                 {
                     DRAWSEGMENT* newItem = new DRAWSEGMENT( graphic );
                     view->Add( newItem );
-                    getModel<BOARD>( PCB_T )->Add( newItem );
+                    board->Add( newItem );
                     newItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
                     if( m_continous )
@@ -342,9 +343,70 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
 }
 
 
+int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
+{
+    KIGFX::VIEW* view = getView();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+
+    // Init the new item attributes
+    TEXTE_PCB* newText = getEditFrame<PCB_EDIT_FRAME>()->CreateTextePcb( NULL );
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( view );
+    preview.Add( newText );
+    view->Add( &preview );
+
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+    controls->SetAutoPan( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+
+        if( evt->IsCancel() )
+        {
+            // it was already added by CreateTextPcb()
+            getModel<BOARD>( PCB_T )->Delete( newText );
+            break;
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            newText->ClearFlags();
+            view->Add( newText );
+            // board->Add( newText );        // it is already added by CreateTextePcb()
+            newText->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            break;
+        }
+
+        else if( evt->IsMotion() )
+        {
+            newText->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+
+            // Show a preview of the item
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    controls->ShowCursor( false );
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
+    view->Remove( &preview );
+
+    setTransitions();
+
+    return 0;
+}
+
+
 void DRAWING_TOOL::setTransitions()
 {
     Go( &DRAWING_TOOL::DrawLine, COMMON_ACTIONS::drawLine.MakeEvent() );
     Go( &DRAWING_TOOL::DrawCircle, COMMON_ACTIONS::drawCircle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawArc, COMMON_ACTIONS::drawArc.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawText, COMMON_ACTIONS::drawText.MakeEvent() );
 }
