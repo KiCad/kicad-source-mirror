@@ -374,6 +374,20 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
             break;
         }
 
+        else if( evt->Category() == TC_COMMAND )
+        {
+            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            {
+                newText->Rotate( newText->GetPosition(), getEditFrame<PCB_EDIT_FRAME>()->GetRotationAngle() );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+            {
+                newText->Flip( newText->GetPosition() );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+        }
+
         else if( evt->IsClick( BUT_LEFT ) )
         {
             newText->ClearFlags();
