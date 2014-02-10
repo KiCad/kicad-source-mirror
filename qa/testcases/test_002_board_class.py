@@ -88,7 +88,7 @@ class TestBoardClass(unittest.TestCase):
         self.assertTrue(result)
         
         pcb2 = LoadBoard(self.FILENAME)
-        self.assertIsNotNone(pcb2)
+        self.assertNotEqual(pcb2,None)
 
         tb = pcb2.GetTitleBlock()
         self.assertEqual(tb.GetTitle(),self.TITLE)
