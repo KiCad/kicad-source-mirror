@@ -62,4 +62,7 @@ public:
 
     /// Activation of the drawing tool (circle)
     static TOOL_ACTION drawCircle;
+
+    /// Activation of the drawing tool (arc)
+    static TOOL_ACTION drawArc;
 };

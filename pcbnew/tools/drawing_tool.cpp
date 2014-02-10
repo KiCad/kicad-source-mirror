@@ -67,6 +67,159 @@ int DRAWING_TOOL::DrawCircle( TOOL_EVENT& aEvent )
 }
 
 
+int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
+{
+    m_continous = false;
+
+    int step = 0;
+
+    KIGFX::VIEW* view = getView();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    BOARD* board = getModel<BOARD>( PCB_T );
+    DRAWSEGMENT graphic;
+    DRAWSEGMENT helperLine;
+    bool positive = true;
+
+    // Init the new item attributes
+    graphic.SetShape( S_ARC );
+    graphic.SetAngle( 0.0 );
+    graphic.SetWidth( board->GetDesignSettings().m_DrawSegmentWidth );
+
+    helperLine.SetShape( S_SEGMENT );
+    helperLine.SetLayer( DRAW_N );
+    helperLine.SetWidth( 1 );
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( view );
+    view->Add( &preview );
+
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+
+        if( evt->IsCancel() )
+            break;
+
+        else if( evt->IsKeyUp() )
+        {
+            int width = graphic.GetWidth();
+
+            // Modify the new item width
+            if( evt->KeyCode() == '-' && width > WIDTH_STEP )
+                graphic.SetWidth( width - WIDTH_STEP );
+            else if( evt->KeyCode() == '=' )
+                graphic.SetWidth( width + WIDTH_STEP );
+            else if( evt->KeyCode() == ' ' )
+            {
+                if( positive )
+                    graphic.SetAngle( graphic.GetAngle() - 3600.0 );
+                else
+                    graphic.SetAngle( graphic.GetAngle() + 3600.0 );
+
+                positive = !positive;
+            }
+
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            switch( step )
+            {
+            case 0:
+            {
+                LAYER_NUM layer = getEditFrame<PCB_EDIT_FRAME>()->GetScreen()->m_Active_Layer;
+
+                if( IsCopperLayer( layer ) )
+                {
+                    DisplayInfoMessage( NULL, _( "Graphic not allowed on Copper layers" ) );
+                    --step;
+                }
+                else
+                {
+                    controls->SetAutoPan( true );
+
+                    helperLine.SetStart( graphic.GetCenter() );
+                    graphic.SetLayer( layer );
+                    preview.Add( &graphic );
+                    preview.Add( &helperLine );
+                }
+            }
+            break;
+
+            case 2:
+            {
+                if( wxPoint( cursorPos.x, cursorPos.y ) != graphic.GetCenter() )
+                {
+                    DRAWSEGMENT* newItem = new DRAWSEGMENT( graphic );
+                    view->Add( newItem );
+                    getModel<BOARD>( PCB_T )->Add( newItem );
+                    newItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                }
+            }
+            break;
+
+            }
+
+            if( ++step == 3 )
+                break;
+        }
+
+        else if( evt->IsMotion() )
+        {
+            switch( step )
+            {
+            case 0:
+                graphic.SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
+                break;
+
+            case 1:
+                helperLine.SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                graphic.SetArcStart( wxPoint( cursorPos.x, cursorPos.y ) );
+                break;
+
+            case 2:
+            {
+                VECTOR2D firstLine( graphic.GetArcStart() - graphic.GetCenter() );
+                double firstAngle = firstLine.Angle();
+
+                VECTOR2D secondLine( wxPoint( cursorPos.x, cursorPos.y ) - graphic.GetCenter() );
+                double secondAngle = secondLine.Angle();
+
+                double angle = RAD2DECIDEG( secondAngle - firstAngle );
+
+                if( positive && angle < 0.0 )
+                    angle += 3600.0;
+                else if( !positive && angle > 0.0 )
+                    angle -= 3600.0;
+
+                graphic.SetAngle( angle );
+            }
+            break;
+            }
+
+            // Show a preview of the item
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    controls->ShowCursor( false );
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
+    view->Remove( &preview );
+
+    setTransitions();
+
+    return 0;
+}
+
+
 int DRAWING_TOOL::draw( STROKE_T aShape )
 {
     bool started = false;
@@ -157,7 +310,7 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
             if( linesAngle45 && aShape == S_SEGMENT )
             {
                 VECTOR2D lineVector( wxPoint( cursorPos.x, cursorPos.y ) - graphic.GetStart() );
-                double angle = atan2( lineVector.y, lineVector.x );
+                double angle = lineVector.Angle();
 
                 double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
                 VECTOR2D newLineVector = lineVector.Rotate( newAngle - angle );
@@ -193,4 +346,5 @@ void DRAWING_TOOL::setTransitions()
 {
     Go( &DRAWING_TOOL::DrawLine, COMMON_ACTIONS::drawLine.MakeEvent() );
     Go( &DRAWING_TOOL::DrawCircle, COMMON_ACTIONS::drawCircle.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawArc, COMMON_ACTIONS::drawArc.MakeEvent() );
 }
