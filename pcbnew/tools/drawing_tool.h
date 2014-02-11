@@ -59,6 +59,8 @@ public:
 
     int DrawDimension( TOOL_EVENT& aEvent );
 
+    int PlaceTarget( TOOL_EVENT& aEvent );
+
 private:
     ///> Starts drawing a selected shape.
     int draw( STROKE_T aShape );

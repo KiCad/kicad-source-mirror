@@ -32,6 +32,7 @@
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
 #include <class_dimension.h>
+#include <class_mire.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <confirm.h>
@@ -558,6 +559,77 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
 }
 
 
+int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
+{
+    KIGFX::VIEW* view = getView();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    BOARD* board = getModel<BOARD>( PCB_T );
+    PCB_TARGET* target = new PCB_TARGET( board );
+
+    // Init the new item attributes
+    target->SetLayer( EDGE_N );
+    target->SetWidth( board->GetDesignSettings().m_EdgeSegmentWidth );
+    target->SetSize( Millimeter2iu( 5 ) );
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( view );
+    preview.Add( target );
+    view->Add( &preview );
+    preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+    controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+
+        if( evt->IsCancel() )
+        {
+            delete target;
+            break;
+        }
+
+        else if( evt->IsKeyUp() )
+        {
+            int width = target->GetWidth();
+
+            // Modify the new item width
+            if( evt->KeyCode() == '-' && width > WIDTH_STEP )
+                target->SetWidth( width - WIDTH_STEP );
+            else if( evt->KeyCode() == '=' )
+                target->SetWidth( width + WIDTH_STEP );
+
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            view->Add( target );
+            board->Add( target );
+            target->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            break;
+        }
+
+        else if( evt->IsMotion() )
+        {
+            target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
+    view->Remove( &preview );
+
+    setTransitions();
+
+    return 0;
+}
+
+
 void DRAWING_TOOL::setTransitions()
 {
     Go( &DRAWING_TOOL::DrawLine, COMMON_ACTIONS::drawLine.MakeEvent() );
@@ -565,4 +637,5 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawArc, COMMON_ACTIONS::drawArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawText, COMMON_ACTIONS::drawText.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension, COMMON_ACTIONS::drawDimension.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceTarget, COMMON_ACTIONS::placeTarget.MakeEvent() );
 }
