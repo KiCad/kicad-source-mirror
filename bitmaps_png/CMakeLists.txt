@@ -446,6 +446,7 @@ set( BMAPS_MID
     preference
     print_button
     ps_router
+    py_script
     ratsnest
     read_setup
     redo
