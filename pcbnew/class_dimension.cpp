@@ -109,13 +109,9 @@ void DIMENSION::Copy( DIMENSION* source )
     m_featureLineGF = source->m_featureLineGF;
     m_featureLineDO = source->m_featureLineDO;
     m_featureLineDF = source->m_featureLineDF;
-    m_arrowD1O  = source->m_arrowD1O;
     m_arrowD1F  = source->m_arrowD1F;
-    m_arrowD2O  = source->m_arrowD2O;
     m_arrowD2F  = source->m_arrowD2F;
-    m_arrowG1O  = source->m_arrowG1O;
     m_arrowG1F  = source->m_arrowG1F;
-    m_arrowG2O  = source->m_arrowG2O;
     m_arrowG2F  = source->m_arrowG2F;
 }
 
@@ -129,13 +125,9 @@ void DIMENSION::Move( const wxPoint& offset )
     m_featureLineGF += offset;
     m_featureLineDO += offset;
     m_featureLineDF += offset;
-    m_arrowG1O  += offset;
     m_arrowG1F  += offset;
-    m_arrowG2O  += offset;
     m_arrowG2F  += offset;
-    m_arrowD1O  += offset;
     m_arrowD1F  += offset;
-    m_arrowD2O  += offset;
     m_arrowD2F  += offset;
 }
 
@@ -162,13 +154,9 @@ void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
     RotatePoint( &m_featureLineGF, aRotCentre, aAngle );
     RotatePoint( &m_featureLineDO, aRotCentre, aAngle );
     RotatePoint( &m_featureLineDF, aRotCentre, aAngle );
-    RotatePoint( &m_arrowG1O, aRotCentre, aAngle );
     RotatePoint( &m_arrowG1F, aRotCentre, aAngle );
-    RotatePoint( &m_arrowG2O, aRotCentre, aAngle );
     RotatePoint( &m_arrowG2F, aRotCentre, aAngle );
-    RotatePoint( &m_arrowD1O, aRotCentre, aAngle );
     RotatePoint( &m_arrowD1F, aRotCentre, aAngle );
-    RotatePoint( &m_arrowD2O, aRotCentre, aAngle );
     RotatePoint( &m_arrowD2F, aRotCentre, aAngle );
 }
 
@@ -190,15 +178,7 @@ void DIMENSION::Mirror( const wxPoint& axis_pos )
     m_Text.SetTextPosition( newPos );
 
     // invert angle
-    double newAngle = m_Text.GetOrientation();
-
-    if( newAngle >= 3600 )
-        newAngle -= 3600;
-
-    if( newAngle > 900  &&  newAngle < 2700 )
-        newAngle -= 1800;
-
-    m_Text.SetOrientation( newAngle );
+    m_Text.SetOrientation( -m_Text.GetOrientation() );
 
     INVERT( m_crossBarO.y );
     INVERT( m_crossBarF.y );
@@ -206,14 +186,44 @@ void DIMENSION::Mirror( const wxPoint& axis_pos )
     INVERT( m_featureLineGF.y );
     INVERT( m_featureLineDO.y );
     INVERT( m_featureLineDF.y );
-    INVERT( m_arrowG1O.y );
     INVERT( m_arrowG1F.y );
-    INVERT( m_arrowG2O.y );
     INVERT( m_arrowG2F.y );
-    INVERT( m_arrowD1O.y );
     INVERT( m_arrowD1F.y );
-    INVERT( m_arrowD2O.y );
     INVERT( m_arrowD2F.y );
+}
+
+
+void DIMENSION::SetOrigin( const wxPoint& aOrigin )
+{
+    m_crossBarO = aOrigin;
+    m_featureLineGO = aOrigin;
+
+    AdjustDimensionDetails();
+}
+
+
+void DIMENSION::SetEnd( const wxPoint& aEnd )
+{
+    m_crossBarF = aEnd;
+    m_featureLineDO = aEnd;
+
+    AdjustDimensionDetails();
+}
+
+
+void DIMENSION::SetHeight( double aHeight )
+{
+    /* Calculating the direction of travel perpendicular to the selected axis. */
+    double angle = GetAngle() + ( M_PI / 2 );
+
+    int dx = KiROUND( aHeight * cos( angle ) );
+    int dy = KiROUND( aHeight * sin( angle ) );
+    m_crossBarO.x = m_featureLineGO.x + dx;
+    m_crossBarO.y = m_featureLineGO.y + dy;
+    m_crossBarF.x = m_featureLineDO.x + dx;
+    m_crossBarF.y = m_featureLineDO.y + dy;
+
+    AdjustDimensionDetails();
 }
 
 
@@ -271,29 +281,20 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
         arrow_dw_Y  = wxRound( arrowz * sin( angle_f ) );
     }
 
-    m_arrowG1O.x    = m_crossBarO.x;
-    m_arrowG1O.y    = m_crossBarO.y;
     m_arrowG1F.x    = m_crossBarO.x + arrow_up_X;
     m_arrowG1F.y    = m_crossBarO.y + arrow_up_Y;
 
-    m_arrowG2O.x    = m_crossBarO.x;
-    m_arrowG2O.y    = m_crossBarO.y;
     m_arrowG2F.x    = m_crossBarO.x + arrow_dw_X;
     m_arrowG2F.y    = m_crossBarO.y + arrow_dw_Y;
 
     /* The right arrow is symmetrical to the left.
      *  / = -\  and  \ = -/
      */
-    m_arrowD1O.x    = m_crossBarF.x;
-    m_arrowD1O.y    = m_crossBarF.y;
     m_arrowD1F.x    = m_crossBarF.x - arrow_dw_X;
     m_arrowD1F.y    = m_crossBarF.y - arrow_dw_Y;
 
-    m_arrowD2O.x    = m_crossBarF.x;
-    m_arrowD2O.y    = m_crossBarF.y;
     m_arrowD2F.x    = m_crossBarF.x - arrow_up_X;
     m_arrowD2F.y    = m_crossBarF.y - arrow_up_Y;
-
 
     m_featureLineGF.x   = m_crossBarO.x + hx;
     m_featureLineGF.y   = m_crossBarO.y + hy;
@@ -358,13 +359,13 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
                 m_featureLineGF + offset, width, gcolor );
         GRLine( panel->GetClipBox(), DC, m_featureLineDO + offset,
                 m_featureLineDF + offset, width, gcolor );
-        GRLine( panel->GetClipBox(), DC, m_arrowD1O + offset,
+        GRLine( panel->GetClipBox(), DC, m_crossBarF + offset,
                 m_arrowD1F + offset, width, gcolor );
-        GRLine( panel->GetClipBox(), DC, m_arrowD2O + offset,
+        GRLine( panel->GetClipBox(), DC, m_crossBarF + offset,
                 m_arrowD2F + offset, width, gcolor );
-        GRLine( panel->GetClipBox(), DC, m_arrowG1O + offset,
+        GRLine( panel->GetClipBox(), DC, m_crossBarO + offset,
                 m_arrowG1F + offset, width, gcolor );
-        GRLine( panel->GetClipBox(), DC, m_arrowG2O + offset,
+        GRLine( panel->GetClipBox(), DC, m_crossBarO + offset,
                 m_arrowG2F + offset, width, gcolor );
         break;
 
@@ -375,13 +376,13 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
                  m_featureLineGF + offset, width, gcolor );
         GRCSegm( panel->GetClipBox(), DC, m_featureLineDO + offset,
                  m_featureLineDF + offset, width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC, m_arrowD1O + offset,
+        GRCSegm( panel->GetClipBox(), DC, m_crossBarF + offset,
                  m_arrowD1F + offset, width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC, m_arrowD2O + offset,
+        GRCSegm( panel->GetClipBox(), DC, m_crossBarF + offset,
                  m_arrowD2F + offset, width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC, m_arrowG1O + offset,
+        GRCSegm( panel->GetClipBox(), DC, m_crossBarO + offset,
                  m_arrowG1F + offset, width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC, m_arrowG2O + offset,
+        GRCSegm( panel->GetClipBox(), DC, m_crossBarO + offset,
                  m_arrowG2F + offset, width, gcolor );
         break;
     }
@@ -414,16 +415,16 @@ bool DIMENSION::HitTest( const wxPoint& aPosition )
     if( TestSegmentHit( aPosition, m_featureLineDO, m_featureLineDF, dist_max ) )
         return true;
 
-    if( TestSegmentHit( aPosition, m_arrowD1O, m_arrowD1F, dist_max ) )
+    if( TestSegmentHit( aPosition, m_crossBarF, m_arrowD1F, dist_max ) )
         return true;
 
-    if( TestSegmentHit( aPosition, m_arrowD2O, m_arrowD2F, dist_max ) )
+    if( TestSegmentHit( aPosition, m_crossBarF, m_arrowD2F, dist_max ) )
         return true;
 
-    if( TestSegmentHit( aPosition, m_arrowG1O, m_arrowG1F, dist_max ) )
+    if( TestSegmentHit( aPosition, m_crossBarO, m_arrowG1F, dist_max ) )
         return true;
 
-    if( TestSegmentHit( aPosition, m_arrowG2O, m_arrowG2F, dist_max ) )
+    if( TestSegmentHit( aPosition, m_crossBarO, m_arrowG2F, dist_max ) )
         return true;
 
     return false;

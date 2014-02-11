@@ -1476,7 +1476,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
             if( token != T_pts )
                 Expecting( T_pts );
 
-            parseXY( &dimension->m_arrowD1O.x, &dimension->m_arrowD1O.y );
+            parseXY( &dimension->m_crossBarF.x, &dimension->m_crossBarF.y );
             parseXY( &dimension->m_arrowD1F.x, &dimension->m_arrowD1F.y );
             NeedRIGHT();
             NeedRIGHT();
@@ -1489,7 +1489,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
             if( token != T_pts )
                 Expecting( T_pts );
 
-            parseXY( &dimension->m_arrowD2O.x, &dimension->m_arrowD2O.y );
+            parseXY( &dimension->m_crossBarF.x, &dimension->m_crossBarF.y );
             parseXY( &dimension->m_arrowD2F.x, &dimension->m_arrowD2F.y );
             NeedRIGHT();
             NeedRIGHT();
@@ -1502,7 +1502,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
             if( token != T_pts )
                 Expecting( T_pts );
 
-            parseXY( &dimension->m_arrowG1O.x, &dimension->m_arrowG1O.y );
+            parseXY( &dimension->m_crossBarO.x, &dimension->m_crossBarO.y );
             parseXY( &dimension->m_arrowG1F.x, &dimension->m_arrowG1F.y );
             NeedRIGHT();
             NeedRIGHT();
@@ -1515,7 +1515,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
             if( token != T_pts )
                 Expecting( T_pts );
 
-            parseXY( &dimension->m_arrowG2O.x, &dimension->m_arrowG2O.y );
+            parseXY( &dimension->m_crossBarO.x, &dimension->m_crossBarO.y );
             parseXY( &dimension->m_arrowG2F.x, &dimension->m_arrowG2F.y );
             NeedRIGHT();
             NeedRIGHT();
