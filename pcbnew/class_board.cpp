@@ -110,13 +110,13 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
-    delete m_ratsnest;
-
     while( m_ZoneDescriptorList.size() )
     {
         ZONE_CONTAINER* area_to_remove = m_ZoneDescriptorList[0];
         Delete( area_to_remove );
     }
+
+    delete m_ratsnest;
 
     m_FullRatsnest.clear();
 
