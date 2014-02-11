@@ -41,6 +41,24 @@ class TEXTE_PCB;
 class MSG_PANEL_ITEM;
 
 
+/**
+ * Class DIMENSION
+ *
+ * For better understanding of the points that make a dimension:
+ *
+ *            m_featureLineGO  m_featureLineDO
+ *            |                              |
+ *            |                              |
+ *            |                              |
+ *            |  m_arrowG2F      m_arrowD2F  |
+ *            | /                          \ |
+ * m_crossBarO|/____________________________\|m_crossBarF
+ *            |\           m_Text           /|
+ *            | \                          / |
+ *            |  m_arrowG1F      m_arrowD1F  |
+ *            |                              |
+ *            m_featureLineGF  m_featureLineDF
+ */
 class DIMENSION : public BOARD_ITEM
 {
     int         m_Width;
@@ -52,14 +70,12 @@ class DIMENSION : public BOARD_ITEM
 
 
 public:
-// private: These member should be private. they are public only due to legacy code
+// TODO private: These member should be private. they are public only due to legacy code
     wxPoint     m_crossBarO, m_crossBarF;
     wxPoint     m_featureLineGO, m_featureLineGF;
     wxPoint     m_featureLineDO, m_featureLineDF;
-    wxPoint     m_arrowD1O, m_arrowD1F;
-    wxPoint     m_arrowD2O, m_arrowD2F;
-    wxPoint     m_arrowG1O, m_arrowG1F;
-    wxPoint     m_arrowG2O, m_arrowG2F;
+    wxPoint     m_arrowD1F, m_arrowD2F;
+    wxPoint     m_arrowG1F, m_arrowG2F;
 
     DIMENSION( BOARD_ITEM* aParent );
 
@@ -87,6 +103,57 @@ public:
 
     int GetWidth() const { return m_Width; }
     void SetWidth( int aWidth )         { m_Width = aWidth; }
+
+    /**
+     * Function SetOrigin
+     * Sets a new origin of the crossbar line. All remaining lines are adjusted after that.
+     * @param aOrigin is the new point to be used as the new origin of the crossbar line.
+     */
+    void SetOrigin( const wxPoint& aOrigin );
+
+    /**
+     * Function GetOrigin
+     * @return Origin of the crossbar line.
+     */
+    const wxPoint& GetOrigin() const
+    {
+        return m_crossBarO;
+    }
+
+    /**
+     * Function SetEnd
+     * Sets a new end of the crossbar line. All remaining lines are adjusted after that.
+     * @param aEnd is the new point to be used as the new end of the crossbar line.
+     */
+    void SetEnd( const wxPoint& aEnd );
+
+    /**
+     * Function GetEnd
+     * @return End of the crossbar line.
+     */
+    const wxPoint& GetEnd()
+    {
+        return m_crossBarF;
+    }
+
+    /**
+     * Function SetHeight
+     * Sets the length of feature lines.
+     * @param aHeight is the new height.
+     */
+    void SetHeight( double aHeight );
+
+    /**
+     * Function GetAngle
+     * Returns angle of the crossbar.
+     * @return Angle of the crossbar line.
+     */
+    double GetAngle() const
+    {
+        wxPoint delta( m_featureLineDO - m_featureLineGO );
+
+        return atan2( delta.y, delta.x );
+    }
 
     /**
      * Function AdjustDimensionDetails

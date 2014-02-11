@@ -262,7 +262,6 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     VECTOR2D end( aTrack->GetEnd() );
     int      width = aTrack->GetWidth();
     int      netNumber = aTrack->GetNet();
-    COLOR4D  color;
 
     if( m_pcbSettings->m_netNamesOnTracks && IsNetnameLayer( aLayer ) )
     {
@@ -286,7 +285,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             double textSize = std::min( static_cast<double>( width ), length / netName.length() );
 
             // Set a proper color for the label
-            color = m_pcbSettings->GetColor( aTrack, aTrack->GetLayer() );
+            const COLOR4D& color = m_pcbSettings->GetColor( aTrack, aTrack->GetLayer() );
             COLOR4D labelColor = m_pcbSettings->GetColor( NULL, aLayer );
 
             if( color.GetBrightness() > 0.5 )
@@ -307,7 +306,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     else if( IsCopperLayer( aLayer ))
     {
         // Draw a regular track
-        color = m_pcbSettings->GetColor( aTrack, aLayer );
+        const COLOR4D& color = m_pcbSettings->GetColor( aTrack, aLayer );
         m_gal->SetStrokeColor( color );
         m_gal->SetIsStroke( true );
 
@@ -332,7 +331,6 @@ void PCB_PAINTER::draw( const SEGVIA* aVia, int aLayer )
 {
     VECTOR2D center( aVia->GetStart() );
     double   radius;
-    COLOR4D  color;
 
     // Choose drawing settings depending on if we are drawing via's pad or hole
     if( aLayer == ITEM_GAL_LAYER( VIAS_VISIBLE ) )
@@ -346,7 +344,7 @@ void PCB_PAINTER::draw( const SEGVIA* aVia, int aLayer )
     else
         return;
 
-    color = m_pcbSettings->GetColor( aVia, aLayer );
+    const COLOR4D& color  = m_pcbSettings->GetColor( aVia, aLayer );
 
     if( m_pcbSettings->m_sketchModeSelect[VIAS_VISIBLE] )
     {
@@ -370,7 +368,6 @@ void PCB_PAINTER::draw( const SEGVIA* aVia, int aLayer )
 
 void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 {
-    COLOR4D     color;
     VECTOR2D    size;
     VECTOR2D    position( aPad->GetPosition() );
     PAD_SHAPE_T shape;
@@ -385,7 +382,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         if( m_pcbSettings->m_netNamesOnPads || m_pcbSettings->m_padNumbers )
         {
             // Min char count to calculate string size
-            #define MIN_CHAR_COUNT 3
+            const int MIN_CHAR_COUNT = 3;
 
             bool displayNetname = ( m_pcbSettings->m_netNamesOnPads &&
                                     !aPad->GetNetname().empty() );
@@ -404,9 +401,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             {
                 // If the text is displayed on a symmetrical pad, do not rotate it
                 orientation = 0.0;
-            }
-            else
-            {
             }
 
             // Font size limits
@@ -428,7 +422,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m_gal->SetMirrored( false );
 
             // Set a proper color for the label
-            color = m_pcbSettings->GetColor( aPad, aPad->GetLayer() );
+            const COLOR4D& color  = m_pcbSettings->GetColor( aPad, aPad->GetLayer() );
             COLOR4D labelColor = m_pcbSettings->GetColor( NULL, aLayer );
 
             if( color.GetBrightness() > 0.5 )
@@ -456,8 +450,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                 VECTOR2D namesize( tsize, tsize );
                 m_gal->SetGlyphSize( namesize );
                 m_gal->SetLineWidth( namesize.x / 12.0 );
-                m_gal->StrokeText( std::wstring( aPad->GetShortNetname().wc_str() ),
-                                   textpos, 0.0 );
+                m_gal->StrokeText( aPad->GetShortNetname(), textpos, 0.0 );
             }
 
             if( m_pcbSettings->m_padNumbers )
@@ -474,7 +467,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
                 m_gal->SetGlyphSize( numsize );
                 m_gal->SetLineWidth( numsize.x / 12.0 );
-                m_gal->StrokeText( std::wstring( aPad->GetPadName().wc_str() ), textpos, 0.0 );
+                m_gal->StrokeText( aPad->GetPadName(), textpos, 0.0 );
             }
 
             m_gal->Restore();
@@ -483,7 +476,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     }
 
     // Pad drawing
-    color = m_pcbSettings->GetColor( aPad, aLayer );
+    const COLOR4D& color = m_pcbSettings->GetColor( aPad, aLayer );
     if( m_pcbSettings->m_sketchModeSelect[PADS_VISIBLE] )
     {
         // Outline mode
@@ -628,7 +621,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
 void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment )
 {
-    COLOR4D color = m_pcbSettings->GetColor( aSegment, aSegment->GetLayer() );
+    const COLOR4D& color = m_pcbSettings->GetColor( aSegment, aSegment->GetLayer() );
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
@@ -708,7 +701,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     if( aText->GetText().Length() == 0 )
         return;
 
-    COLOR4D  strokeColor = m_pcbSettings->GetColor( aText, aText->GetLayer() );
+    const COLOR4D& strokeColor = m_pcbSettings->GetColor( aText, aText->GetLayer() );
     VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
     double   orientation = aText->GetOrientation() * M_PI / 1800.0;
 
@@ -724,7 +717,7 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     if( aText->GetLength() == 0 )
         return;
 
-    COLOR4D  strokeColor = m_pcbSettings->GetColor( aText, aLayer );
+    const COLOR4D& strokeColor = m_pcbSettings->GetColor( aText, aLayer );
     VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
     double   orientation = aText->GetDrawRotation() * M_PI / 1800.0;
 
@@ -737,7 +730,7 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 
 void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
 {
-    COLOR4D color = m_pcbSettings->GetColor( aZone, aZone->GetLayer() );
+    const COLOR4D& color = m_pcbSettings->GetColor( aZone, aZone->GetLayer() );
     std::deque<VECTOR2D> corners;
     PCB_RENDER_SETTINGS::DisplayZonesMode displayMode = m_pcbSettings->m_displayZoneMode;
 
@@ -810,7 +803,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
 
 void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
 {
-    COLOR4D strokeColor = m_pcbSettings->GetColor( aDimension, aLayer );
+    const COLOR4D& strokeColor = m_pcbSettings->GetColor( aDimension, aLayer );
 
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetIsFill( false );
@@ -823,10 +816,10 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
                      VECTOR2D( aDimension->m_featureLineGF ) );
     m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineDO ),
                      VECTOR2D( aDimension->m_featureLineDF ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD1O ), VECTOR2D( aDimension->m_arrowD1F ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD2O ), VECTOR2D( aDimension->m_arrowD2F ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG1O ), VECTOR2D( aDimension->m_arrowG1F ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG2O ), VECTOR2D( aDimension->m_arrowG2F ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarF ), VECTOR2D( aDimension->m_arrowD1F ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarF ), VECTOR2D( aDimension->m_arrowD2F ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarO ), VECTOR2D( aDimension->m_arrowG1F ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarO ), VECTOR2D( aDimension->m_arrowG2F ) );
 
     // Draw text
     TEXTE_PCB& text = aDimension->Text();
@@ -835,13 +828,13 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
 
     m_gal->SetLineWidth( text.GetThickness() );
     m_gal->SetTextAttributes( &text );
-    m_gal->StrokeText( std::wstring( text.GetText().wc_str() ), position, orientation );
+    m_gal->StrokeText( text.GetText(), position, orientation );
 }
 
 
 void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 {
-    COLOR4D  strokeColor = m_pcbSettings->GetColor( aTarget, aTarget->GetLayer() );
+    const COLOR4D& strokeColor = m_pcbSettings->GetColor( aTarget, aTarget->GetLayer() );
     VECTOR2D position( aTarget->GetPosition() );
     double   size, radius;
 
