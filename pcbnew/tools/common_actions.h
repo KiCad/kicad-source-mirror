@@ -68,4 +68,7 @@ public:
 
     /// Activation of the drawing tool (text)
     static TOOL_ACTION drawText;
+
+    /// Activation of the drawing tool (dimension)
+    static TOOL_ACTION drawDimension;
 };

@@ -72,3 +72,7 @@ TOOL_ACTION COMMON_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
 TOOL_ACTION COMMON_ACTIONS::drawText( "pcbnew.InteractiveDrawing.text",
         AS_GLOBAL, 'T',
         "Add a text", "Add a text" );
+
+TOOL_ACTION COMMON_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
+        AS_GLOBAL, 'X',
+        "Add a dimension", "Add a dimension" );
