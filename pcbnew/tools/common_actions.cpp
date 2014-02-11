@@ -76,3 +76,7 @@ TOOL_ACTION COMMON_ACTIONS::drawText( "pcbnew.InteractiveDrawing.text",
 TOOL_ACTION COMMON_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
         AS_GLOBAL, 'X',
         "Add a dimension", "Add a dimension" );
+
+TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.InteractiveDrawing.placeTarget",
+        AS_GLOBAL, 'C',
+        "Add layer alignment target", "Add layer alignment target" );

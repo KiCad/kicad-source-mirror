@@ -71,4 +71,7 @@ public:
 
     /// Activation of the drawing tool (dimension)
     static TOOL_ACTION drawDimension;
+
+    /// Activation of the drawing tool (placing a TARGET)
+    static TOOL_ACTION placeTarget;
 };

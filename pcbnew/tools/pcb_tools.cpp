@@ -60,6 +60,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterAction( &COMMON_ACTIONS::drawArc );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::drawText );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::drawDimension );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::placeTarget );
 
     // Register tools
     m_toolManager->RegisterTool( new SELECTION_TOOL );

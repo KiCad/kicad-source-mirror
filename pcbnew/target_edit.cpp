@@ -127,7 +127,8 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick( wxCommandEvent& event )
  */
 void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
 {
-    m_Target->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
+    if( m_DC )
+        m_Target->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
 
     // Save old item in undo list, if is is not currently edited (will be later if so)
     if( m_Target->GetFlags() == 0 )
@@ -145,7 +146,8 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
 
     m_Target->SetShape( m_TargetShape->GetSelection() ? 1 : 0 );
 
-    m_Target->Draw( m_Parent->GetCanvas(), m_DC, ( m_Target->IsMoving() ) ? GR_XOR : GR_OR );
+    if( m_DC )
+        m_Target->Draw( m_Parent->GetCanvas(), m_DC, ( m_Target->IsMoving() ) ? GR_XOR : GR_OR );
 
     m_Parent->OnModify();
     EndModal( 1 );
