@@ -466,10 +466,13 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
 
 void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
 {
+    if( aPointList.empty() )
+        return;
+
     std::deque<VECTOR2D>::const_iterator it = aPointList.begin();
 
     // Start from the second point
-    for( it++; it != aPointList.end(); it++ )
+    for( ++it; it != aPointList.end(); ++it )
     {
         const VECTOR2D startEndVector = ( *it - *( it - 1 ) );
         double lineAngle = startEndVector.Angle();
