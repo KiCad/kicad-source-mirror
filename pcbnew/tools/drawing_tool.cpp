@@ -31,6 +31,7 @@
 #include <class_board.h>
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
+#include <class_dimension.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <confirm.h>
@@ -350,6 +351,11 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 
     // Init the new item attributes
     TEXTE_PCB* newText = getEditFrame<PCB_EDIT_FRAME>()->CreateTextePcb( NULL );
+    if( newText == NULL )
+    {
+        setTransitions();
+        return 0;
+    }
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( view );
@@ -417,10 +423,146 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 }
 
 
+int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
+{
+    m_continous = false;
+
+    int step = 0;
+
+    KIGFX::VIEW* view = getView();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    BOARD* board = getModel<BOARD>( PCB_T );
+    DIMENSION* dimension = new DIMENSION( board );
+
+    // Init the new item attributes
+    dimension->Text().SetSize( board->GetDesignSettings().m_PcbTextSize );
+    int width = board->GetDesignSettings().m_PcbTextWidth;
+    int maxthickness = Clamp_Text_PenSize( width, dimension->Text().GetSize() );
+
+    if( width > maxthickness )
+        width = maxthickness;
+
+    dimension->Text().SetThickness( width );
+    dimension->SetWidth( width );
+    dimension->SetFlags( IS_NEW );
+    dimension->AdjustDimensionDetails();
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( view );
+    view->Add( &preview );
+
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+
+        if( evt->IsCancel() )
+        {
+            delete dimension;
+            break;
+        }
+
+        else if( evt->IsKeyUp() )
+        {
+            int width = dimension->GetWidth();
+
+            // Modify the new item width
+            if( evt->KeyCode() == '-' && width > WIDTH_STEP )
+                dimension->SetWidth( width - WIDTH_STEP );
+            else if( evt->KeyCode() == '=' )
+                dimension->SetWidth( width + WIDTH_STEP );
+
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            switch( step )
+            {
+            case 0:
+            {
+                LAYER_NUM layer = getEditFrame<PCB_EDIT_FRAME>()->GetScreen()->m_Active_Layer;
+
+                if( IsCopperLayer( layer ) )
+                {
+                    DisplayInfoMessage( NULL, _( "Graphic not allowed on Copper layers" ) );
+                    --step;
+                }
+                else
+                {
+                    controls->SetAutoPan( true );
+
+                    dimension->SetLayer( layer );
+                    dimension->SetOrigin( wxPoint( cursorPos.x, cursorPos.y ) );
+
+                    preview.Add( dimension );
+                }
+            }
+            break;
+
+            case 2:
+            {
+                if( wxPoint( cursorPos.x, cursorPos.y ) != dimension->GetPosition() )
+                {
+                    view->Add( dimension );
+                    board->Add( dimension );
+                    dimension->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                }
+            }
+            break;
+            }
+
+            if( ++step == 3 )
+                break;
+        }
+
+        else if( evt->IsMotion() )
+        {
+            switch( step )
+            {
+            case 1:
+                dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                break;
+
+            case 2:
+            {
+                /* Calculating the direction of travel perpendicular to the selected axis. */
+                double angle = dimension->GetAngle() + ( M_PI / 2 );
+
+                wxPoint pos( cursorPos.x, cursorPos.y );
+                wxPoint delta( pos - dimension->m_featureLineDO );
+                double height  = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
+                dimension->SetHeight( height );
+            }
+            break;
+            }
+
+            // Show a preview of the item
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    controls->ShowCursor( false );
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
+    view->Remove( &preview );
+
+    setTransitions();
+
+    return 0;
+}
+
+
 void DRAWING_TOOL::setTransitions()
 {
     Go( &DRAWING_TOOL::DrawLine, COMMON_ACTIONS::drawLine.MakeEvent() );
     Go( &DRAWING_TOOL::DrawCircle, COMMON_ACTIONS::drawCircle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawArc, COMMON_ACTIONS::drawArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawText, COMMON_ACTIONS::drawText.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawDimension, COMMON_ACTIONS::drawDimension.MakeEvent() );
 }
