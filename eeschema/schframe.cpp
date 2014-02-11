@@ -973,6 +973,10 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
         SaveUndoItemInUndoList( undoItem );
     }
 
+    // Erase the wire representation before the 'normal' view is drawn.
+    if ( item->IsWireImage() )
+      item->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
+
     item->ClearFlags();
     screen->SetModify();
     screen->SetCurItem( NULL );
