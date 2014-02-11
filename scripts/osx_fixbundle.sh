@@ -1,4 +1,5 @@
-#!/bin/bash 
+#!/bin/bash
+# v 1.1 Supports migration of links (limited to the same directory) - I should add checks..
 # usage osx_fixbundle.sh <bundle-name> <bzr_root>
 
 if [[ ! -f version.h ]]; then 
@@ -10,7 +11,6 @@ if [[ ! -f version.h ]]; then
 fi
 
 EXECUTABLES="`find . -name '*.app'`"
-
 
 #
 # Copies libraries under <bzr_root> in the bundle and relocates them in the binary
@@ -29,7 +29,11 @@ function fixbundle() {
         if [[ "$library" =~ "$bzroot" ]]; then
             echo "${exec}: Migrating `basename $library` in the bundle"
             if [ ! -f ${exec}.app/Contents/Frameworks/`basename $library` ]; then
-                cp -f $library ${execpath}${exec}.app/Contents/Frameworks
+                if [ ! -L $library ]; then
+                    cp -f $library ${execpath}${exec}.app/Contents/Frameworks
+                else
+                    resolvelink "$library" "`dirname $library`" "${execpath}/${exec}.app/Contents/Frameworks"
+                fi
             fi
             install_name_tool -change $library @executable_path/../Frameworks/`basename $library` ${execpath}${exec}.app/Contents/MacOS/${exec}
         fi
@@ -46,7 +50,11 @@ function fixbundle() {
         for library in $LIBRARIES; do
             if [[ "$library" =~ "$bzroot" ]]; then
                 if [ ! -f ${exec}.app/Contents/Frameworks/`basename $library` ]; then
-                    cp -f $library ${exec}.app/Contents/Frameworks
+                    if [ ! -L $library ]; then
+                        cp -f $library ${exec}.app/Contents/Frameworks
+                    else
+                        resolvelink "$library" "`dirname $library`" "${execpath}/${exec}.app/Contents/Frameworks"
+                    fi
                 fi
                 install_name_tool -change $library @executable_path/../Frameworks/`basename $library` $module
             fi 
@@ -70,7 +78,11 @@ function fixbundle() {
             for library in $LIBRARIES; do
                 if [[ "$library" =~ "$bzroot" ]]; then
                     if [ ! -f ${exec}.app/Contents/Frameworks/`basename $library` ]; then
-                        cp -f $library ${exec}.app/Contents/Frameworks
+                        if [ ! -L $library ]; then
+                            cp -f $library ${exec}.app/Contents/Frameworks
+                        else
+                            resolvelink "$library" "`dirname $library`" "${execpath}/${exec}.app/Contents/Frameworks"
+                        fi
                         echo "copied `basename $library` into bundle"
                         (( dynlib_migrate += 1))
                     fi
@@ -84,8 +96,27 @@ function fixbundle() {
     cd - >/dev/null
 }
 
+#
+# This supports only links on the same dir (TODO ?)
+#
 
-#fixbundle $1 $2 $3
+function resolvelink() {
+    local srclib="`basename $1`"
+    local srcpath="$2"
+    local destpath="$3"
+
+    #if is a file i expect a pointed ""
+    local pointed="`readlink ${srcpath}/${srclib}`"
+    
+    if [ ! -f ${pointed} ]; then
+        resolvelink "${pointed}" "${srcpath}" "${destpath}"
+        echo "Link ${srclib} -> ${pointed} "
+        (cd  "${destpath}"; ln -s "${pointed}" "${srclib}" )
+    else
+        echo "Copy ${srcpath}/${srclib} -> ${destpath} "
+        cp "${srcpath}/${srclib}" ${destpath}
+    fi
+}
 
 for executable in $EXECUTABLES;
 do
