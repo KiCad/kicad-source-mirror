@@ -109,18 +109,22 @@ class QFPWizard(pcbnew.FootprintWizardPlugin):
                 pad_size = pad_size_left_right
 
                 pad_pos_x = -(pad_horizontal_pitch / 2)
+                pad_pos_y = (cur_pad % (num_pads / 4)) * pad_pitch - (side_length / 2)
+
                 if side == 2:
                     pad_pos_x = -pad_pos_x
+                    pad_pos_y = -pad_pos_y
 
-                pad_pos_y = (cur_pad % (num_pads / 4)) * pad_pitch - (side_length / 2)
             else:
                 pad_size = pad_size_bottom_top
 
                 pad_pos_x = (cur_pad % (num_pads / 4)) * pad_pitch - (side_length / 2)
-
                 pad_pos_y = -(pad_vertical_pitch / 2)
+
                 if side == 1:
                     pad_pos_y = -pad_pos_y
+                else:
+                    pad_pos_x = -pad_pos_x
 
             pad_pos = pcbnew.wxPoint(pad_pos_x, pad_pos_y)
 
