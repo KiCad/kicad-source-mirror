@@ -1303,7 +1303,10 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
             // read Netname
             ReadDelimitedText( buf, data, sizeof(buf) );
-            assert( m_board->FindNet( netcode )->GetNetname() == FROM_UTF8( StrPurge( buf ) ) );
+#ifndef NDEBUG
+            if( m_board )
+                assert( m_board->FindNet( netcode )->GetNetname() == FROM_UTF8( StrPurge( buf ) ) );
+#endif /* NDEBUG */
         }
 
         else if( TESTLINE( "Po" ) )         // (Po)sition
