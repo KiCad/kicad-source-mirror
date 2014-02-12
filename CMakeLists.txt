@@ -513,18 +513,24 @@ set( INC_AFTER
 # Find Python and other scripting resources
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
-    if( NOT APPLE )
-        set( PythonInterp_FIND_VERSION )
-    else()
+    if( APPLE )
         set( PYTHON_LIBRARY /System/Library/Frameworks/Python.framework/Versions/2.6/Python  )
         set( PYTHON_INCLUDE_DIR /System/Library/Frameworks/Python.framework/Versions//2.6/include/python2.6 )
         set( PythonInterp_FIND_VERSION 2.6 )
         set( PythonLibs_FIND_VERSION 2.6 )
     endif()
+    
+    # force a python version < 3.0
+    set( PythonInterp_FIND_VERSION 2.6)
+    set( PythonLibs_FIND_VERSION 2.6 )
 
     find_package( PythonInterp )
+    
     check_find_package_result( PYTHONINTERP_FOUND "Python Interpreter" )
-
+    
+    if( NOT PYTHON_VERSION_MAJOR EQUAL 2 )
+        message( FATAL_ERROR "Python 2.x is required." )
+    endif()
     # Get the correct Python site package install path from the Python interpreter found by
     # FindPythonInterp unless the user specifically defined a custom path.
     if( NOT PYTHON_SITE_PACKAGE_PATH )
@@ -542,7 +548,7 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     mark_as_advanced( PYTHON_DEST )
     message( STATUS "Python module install path: ${PYTHON_DEST}" )
 
-    find_package( PythonLibs )
+    find_package( PythonLibs 2.6 )
 
     #message( STATUS "PYTHON_INCLUDE_DIRS:${PYTHON_INCLUDE_DIRS}" )
 
