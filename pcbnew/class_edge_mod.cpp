@@ -200,8 +200,16 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         StAngle  = ArcTangente( dy - uy0, dx - ux0 );
         EndAngle = StAngle + m_Angle;
 
-        if( StAngle > EndAngle )
-            EXCHG( StAngle, EndAngle );
+        if( !panel->GetPrintMirrored() )
+        {
+            if( StAngle > EndAngle )
+                EXCHG( StAngle, EndAngle );
+        }
+        else    // Mirrored mode: arc orientation is reversed
+        {
+            if( StAngle < EndAngle )
+                EXCHG( StAngle, EndAngle );
+        }
 
         if( typeaff == LINE )
         {
