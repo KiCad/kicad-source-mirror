@@ -68,11 +68,6 @@ void VIEW_CONTROLS::ShowCursor( bool aEnabled )
 
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
-    m_mousePosition.x = aEvent.GetX();
-    m_mousePosition.y = aEvent.GetY();
-
-    updateCursor();
-
     bool isAutoPanning = false;
 
     if( m_autoPanEnabled )
@@ -82,7 +77,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     {
         if( m_state == DRAG_PANNING )
         {
-            VECTOR2D   d = m_dragStartPoint - m_mousePosition;
+            VECTOR2D   d = m_dragStartPoint - VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             VECTOR2D   delta = m_view->ToWorld( d, false );
 
             m_view->SetCenter( m_lookStartPoint + delta );
@@ -197,8 +192,6 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         dir = m_view->ToWorld( dir, false );
         m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
 
-        updateCursor();
-
         // Notify tools that the cursor position has changed in the world coordinates
         wxMouseEvent moveEvent( EVT_REFRESH_MOUSE );
 
@@ -236,12 +229,28 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 }
 
 
-const VECTOR2D WX_VIEW_CONTROLS::GetMousePosition() const
+VECTOR2D WX_VIEW_CONTROLS::GetMousePosition() const
 {
     wxPoint msp = wxGetMousePosition();
     wxPoint winp = m_parentPanel->GetScreenPosition();
 
     return VECTOR2D( msp.x - winp.x, msp.y - winp.y );
+}
+
+
+VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
+{
+    if( m_forceCursorPosition )
+        return m_forcedPosition;
+    else
+    {
+        VECTOR2D mousePosition = GetMousePosition();
+
+        if( m_snappingEnabled )
+            return m_view->ToWorld( m_view->GetGAL()->GetGridPoint( mousePosition ) );
+        else
+            return m_view->ToWorld( mousePosition );
+    }
 }
 
 
@@ -255,17 +264,19 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
     double borderEndX = m_view->GetScreenPixelSize().x - borderStart;
     double borderEndY = m_view->GetScreenPixelSize().y - borderStart;
 
-    m_panDirection = VECTOR2D();
-
     if( p.x < borderStart )
         m_panDirection.x = -( borderStart - p.x );
     else if( p.x > borderEndX )
         m_panDirection.x = ( p.x - borderEndX );
+    else
+        m_panDirection.x = 0;
 
     if( p.y < borderStart )
         m_panDirection.y = -( borderStart - p.y );
     else if( p.y > borderEndY )
         m_panDirection.y = ( p.y - borderEndY );
+    else
+        m_panDirection.y = 0;
 
     bool borderHit = ( m_panDirection.x != 0 || m_panDirection.y != 0 );
 
@@ -301,15 +312,4 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 
     wxASSERT_MSG( false, wxT( "This line should never be reached" ) );
     return false;    // Should not be reached, just avoid the compiler warnings..
-}
-
-
-void WX_VIEW_CONTROLS::updateCursor()
-{
-    if( m_forceCursorPosition )
-        m_cursorPosition = m_view->ToScreen( m_forcedPosition );
-    else if( m_snappingEnabled )
-        m_cursorPosition = m_view->GetGAL()->GetGridPoint( m_mousePosition );
-    else
-        m_cursorPosition = m_mousePosition;
 }

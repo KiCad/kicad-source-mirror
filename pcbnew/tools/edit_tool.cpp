@@ -81,7 +81,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     if( !makeSelection( selection ) )
         return 0;
 
-    VECTOR2D dragPosition;      // The last position of the cursor while dragging
+    VECTOR2I dragPosition;      // The last position of the cursor while dragging
     m_dragging = false;         // Are selected items being dragged?
     bool restore = false;       // Should items' state be restored when finishing the tool?
 
@@ -131,8 +131,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             if( m_dragging )
             {
                 // Drag items to the current cursor position
-                VECTOR2D movement = ( getView()->ToWorld( controls->GetCursorPosition() ) -
-                                      dragPosition );
+                VECTOR2I movement = ( controls->GetCursorPosition() - dragPosition );
                 for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
                 {
                     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( i ) );
@@ -151,7 +150,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
             }
 
             selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
-            dragPosition = getView()->ToWorld( controls->GetCursorPosition() );
+            dragPosition = controls->GetCursorPosition();
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
@@ -205,7 +204,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
     {
         // Display properties dialog
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) );
-        VECTOR2I cursor = getView()->ToWorld( getViewControls()->GetCursorPosition() );
+        VECTOR2I cursor = getViewControls()->GetCursorPosition();
 
         // Check if user wants to edit pad or module properties
         if( item->Type() == PCB_MODULE_T )
@@ -451,7 +450,7 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION_TOOL::SELECTION& aSelec
     }
     else
     {
-        VECTOR2I cursor = getView()->ToWorld( getViewControls()->GetCursorPosition() );
+        VECTOR2I cursor = getViewControls()->GetCursorPosition();
         return wxPoint( cursor.x, cursor.y );
     }
 }

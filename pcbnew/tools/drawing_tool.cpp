@@ -109,7 +109,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+        VECTOR2I cursorPos = controls->GetCursorPosition();
 
         if( evt->IsCancel() )
             break;
@@ -254,7 +254,7 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
     {
         // Enable 45 degrees lines only mode by holding shift
         bool linesAngle45 = evt->Modifier( MD_SHIFT );
-        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+        VECTOR2I cursorPos = controls->GetCursorPosition();
 
         if( evt->IsCancel() )
             break;
@@ -343,7 +343,6 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
     controls->SetSnapping( false );
     controls->SetAutoPan( false );
     view->Remove( &preview );
-
     setTransitions();
 
     return 0;
@@ -377,7 +376,7 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+        VECTOR2I cursorPos = controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
@@ -465,7 +464,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+        VECTOR2I cursorPos = controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
@@ -606,14 +605,14 @@ int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
 
     Activate();
 
-    VECTOR2D lastCursorPos = view->ToWorld( controls->GetCursorPosition() );
+    VECTOR2I lastCursorPos = controls->GetCursorPosition();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         // Enable 45 degrees lines only mode by holding shift
         bool linesAngle45 = evt->Modifier( MD_SHIFT );
-        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+        VECTOR2I cursorPos = controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
@@ -750,14 +749,14 @@ int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
 
     Activate();
 
-    VECTOR2D lastCursorPos = view->ToWorld( controls->GetCursorPosition() );
+    VECTOR2I lastCursorPos = controls->GetCursorPosition();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         // Enable 45 degrees lines only mode by holding shift
         bool linesAngle45 = evt->Modifier( MD_SHIFT );
-        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+        VECTOR2I cursorPos = controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
@@ -867,7 +866,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
     target->SetLayer( EDGE_N );
     target->SetWidth( board->GetDesignSettings().m_EdgeSegmentWidth );
     target->SetSize( Millimeter2iu( 5 ) );
-    VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+    VECTOR2I cursorPos = controls->GetCursorPosition();
     target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
@@ -883,7 +882,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+        VECTOR2I cursorPos = controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
@@ -944,7 +943,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
     }
 
     // Init the new item attributes
-    VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+    VECTOR2I cursorPos = controls->GetCursorPosition();
     module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
@@ -961,7 +960,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = view->ToWorld( controls->GetCursorPosition() );
+        cursorPos = controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {

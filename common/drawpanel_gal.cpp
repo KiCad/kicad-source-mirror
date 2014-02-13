@@ -45,8 +45,6 @@
 #include <profile.h>
 #endif /* __WXDEBUG__ */
 
-#define METRIC_UNIT_LENGTH (1e9)
-
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
                                         GalType aGalType ) :
@@ -60,11 +58,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     SwitchBackend( aGalType );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
-
-    // Initial display settings
-    m_gal->SetLookAtPoint( VECTOR2D( 0, 0 ) );
-    m_gal->SetZoomFactor( 1.0 );
-    m_gal->ComputeWorldScreenMatrix();
 
     m_painter = new KIGFX::PCB_PAINTER( m_gal );
 
@@ -219,10 +212,6 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
     case GAL_TYPE_NONE:
         return;
     }
-
-    m_gal->SetWorldUnitLength( 1.0 / METRIC_UNIT_LENGTH * 2.54 );   // 1 inch in nanometers
-    m_gal->SetScreenDPI( 106 );                                     // Display resolution setting
-    m_gal->ComputeWorldScreenMatrix();
 
     wxSize size = GetClientSize();
     m_gal->ResizeScreen( size.GetX(), size.GetY() );

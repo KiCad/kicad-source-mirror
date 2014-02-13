@@ -108,21 +108,22 @@ public:
 
     /**
      * Function GetMousePosition()
-     * Returns the current mouse pointer position in the screen coordinates. Note, that it may be
+     * Returns the current mouse pointer position in screen coordinates. Note, that it may be
      * different from the cursor position if snapping is enabled (@see GetCursorPosition()).
      *
-     * @return The current mouse pointer position.
+     * @return The current mouse pointer position in screen coordinates.
      */
-    virtual const VECTOR2D GetMousePosition() const = 0;
+    virtual VECTOR2D GetMousePosition() const = 0;
 
     /**
      * Function GetCursorPosition()
-     * Returns the current cursor position in the screen coordinates. Note, that it may be
-     * different from the mouse pointer position if snapping is enabled (@see GetMousePosition()).
+     * Returns the current cursor position in world coordinates. Note, that it may be
+     * different from the mouse pointer position if snapping is enabled or cursor position
+     * is forced to specific point.
      *
-     * @return The current cursor position in screen coordinates.
+     * @return The current cursor position in world coordinates.
      */
-    virtual const VECTOR2D GetCursorPosition() const = 0;
+    virtual VECTOR2D GetCursorPosition() const = 0;
 
 
     /**
@@ -131,7 +132,7 @@ public:
      * @param aEnabled enable forced cursor position
      * @param aPosition the position
      */
-    virtual void ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition = VECTOR2D(0, 0) )
+    virtual void ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) )
     {
         m_forcedPosition = aPosition;
         m_forceCursorPosition = aEnabled;

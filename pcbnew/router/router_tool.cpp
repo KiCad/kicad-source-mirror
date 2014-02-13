@@ -281,7 +281,7 @@ void ROUTER_TOOL::updateEndItem( TOOL_EVENT& aEvent )
     else
     {
         m_endItem = NULL;
-        m_endSnapPoint = getView()->ToWorld( ctls->GetCursorPosition() );
+        m_endSnapPoint = ctls->GetCursorPosition();
         ctls->ForceCursorPosition( false );
     }
 

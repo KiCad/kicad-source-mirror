@@ -283,8 +283,6 @@ private:
     wxPoint                 savedCursorPosition;    ///< The last cursor position
     wxBitmap*               cursorPixels;           ///< Cursor pixels
     wxBitmap*               cursorPixelsSaved;      ///< Saved cursor pixels
-    int                     cursorSize;             ///< Cursor size
-    VECTOR2D                cursorPosition;         ///< Current cursor position
 
     /// Maximum number of arguments for one command
     static const int MAX_CAIRO_ARGUMENTS = 6;
@@ -354,8 +352,10 @@ private:
      */
     void skipMouseEvent( wxMouseEvent& aEvent );
 
-    /// @copydoc GAL::initCursor()
-    virtual void initCursor( int aCursorSize );
+    /**
+     * @brief Prepares cursor bitmap.
+     */
+    virtual void initCursor();
 
     /**
      * @brief Blits cursor into the current screen.
