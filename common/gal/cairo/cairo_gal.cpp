@@ -70,7 +70,7 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     SetSize( aParent->GetSize() );
     screenSize = VECTOR2D( aParent->GetSize() );
-    initCursor( 20 );
+    initCursor();
 
     // Grid color settings are different in Cairo and OpenGL
     SetGridColor( COLOR4D( 0.1, 0.1, 0.1, 0.8 ) );
@@ -881,11 +881,10 @@ void CAIRO_GAL::skipMouseEvent( wxMouseEvent& aEvent )
 }
 
 
-void CAIRO_GAL::initCursor( int aCursorSize )
+void CAIRO_GAL::initCursor()
 {
-    cursorPixels      = new wxBitmap( aCursorSize, aCursorSize );
-    cursorPixelsSaved = new wxBitmap( aCursorSize, aCursorSize );
-    cursorSize        = aCursorSize;
+    cursorPixels      = new wxBitmap( cursorSize, cursorSize );
+    cursorPixelsSaved = new wxBitmap( cursorSize, cursorSize );
 
     wxMemoryDC cursorShape( *cursorPixels );
 
@@ -896,8 +895,8 @@ void CAIRO_GAL::initCursor( int aCursorSize )
     cursorShape.SetPen( pen );
     cursorShape.Clear();
 
-    cursorShape.DrawLine( 0, aCursorSize / 2, aCursorSize, aCursorSize / 2 );
-    cursorShape.DrawLine( aCursorSize / 2, 0, aCursorSize / 2, aCursorSize );
+    cursorShape.DrawLine( 0, cursorSize / 2, cursorSize, cursorSize / 2 );
+    cursorShape.DrawLine( cursorSize / 2, 0, cursorSize / 2, cursorSize );
 }
 
 
@@ -921,14 +920,15 @@ void CAIRO_GAL::blitCursor( wxBufferedDC& clientDC )
     }
 
     // Store pixels that are going to be overpainted
-    cursorSave.Blit( 0, 0, cursorSize, cursorSize, &clientDC, cursorPosition.x, cursorPosition.y );
+    VECTOR2D cursorScreen = ToScreen( cursorPosition ) - cursorSize / 2;
+    cursorSave.Blit( 0, 0, cursorSize, cursorSize, &clientDC, cursorScreen.x, cursorScreen.y );
 
     // Draw the cursor
-    clientDC.Blit( cursorPosition.x, cursorPosition.y, cursorSize, cursorSize,
+    clientDC.Blit( cursorScreen.x, cursorScreen.y, cursorSize, cursorSize,
                    &cursorShape, 0, 0, wxOR );
 
-    savedCursorPosition.x = (wxCoord) cursorPosition.x;
-    savedCursorPosition.y = (wxCoord) cursorPosition.y;
+    savedCursorPosition.x = (wxCoord) cursorScreen.x;
+    savedCursorPosition.y = (wxCoord) cursorScreen.y;
 }
 
 

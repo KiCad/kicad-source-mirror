@@ -720,16 +720,14 @@ public:
     /// @brief Draw the grid
     void DrawGrid();
 
-
     /**
      * Function GetGridPoint()
-     * For a given point it returns the nearest point belonging to the grid.
+     * For a given point it returns the nearest point belonging to the grid in screen coordinates.
      *
      * @param aPoint is the point for which the grid point is searched.
-     * @return The nearest grid point.
+     * @return The nearest grid point in screen coordinates.
      */
     VECTOR2D GetGridPoint( const VECTOR2D& aPoint ) const;
-
 
     /**
      * @brief Change the grid display style.
@@ -786,7 +784,7 @@ public:
     /**
      * @brief Set the cursor size.
      *
-     * @param aCursorSize is the size of the cursor.
+     * @param aCursorSize is the size of the cursor expressed in pixels.
      */
     inline void SetCursorSize( unsigned int aCursorSize )
     {
@@ -829,6 +827,8 @@ public:
     /// Depth level on which the grid is drawn
     static const int GRID_DEPTH = 1024;
 
+    static const double METRIC_UNIT_LENGTH = 1e9;
+
 protected:
     std::stack<double> depthStack;             ///< Stored depth values
     VECTOR2D           screenSize;             ///< Screen size in screen coordinates
@@ -870,7 +870,8 @@ protected:
 
     bool               isCursorEnabled;        ///< Is the cursor enabled?
     COLOR4D            cursorColor;            ///< Cursor color
-    int                cursorSize;             ///< Size of the cursor in pixels
+    unsigned int       cursorSize;             ///< Size of the cursor in pixels
+    VECTOR2D           cursorPosition;         ///< Current cursor position (world coordinates)
 
     /// Instance of object that stores information about how to draw texts
     STROKE_FONT        strokeFont;
@@ -888,13 +889,6 @@ protected:
      * @param aEndPoint is the end point of the line.
      */
     virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
-
-    /**
-     * @brief Initialize the cursor.
-     *
-     * @param aCursorSize is the size of the cursor.
-     */
-    virtual void initCursor( int aCursorSize ) = 0;
 
     static const int MIN_DEPTH = -2048;
     static const int MAX_DEPTH = 2047;

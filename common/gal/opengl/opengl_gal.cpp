@@ -86,7 +86,6 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     SetSize( aParent->GetSize() );
     screenSize = VECTOR2D( aParent->GetSize() );
-    initCursor( 80 );
 
     // Grid color settings are different in Cairo and OpenGL
     SetGridColor( COLOR4D( 0.8, 0.8, 0.8, 0.1 ) );
@@ -769,8 +768,8 @@ void OPENGL_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
     // Now we should only store the position of the mouse cursor
     // The real drawing routines are in blitCursor()
-    cursorPosition = VECTOR2D( aCursorPosition.x,
-                               screenSize.y - aCursorPosition.y ); // invert Y axis
+    VECTOR2D screenCursor = worldScreenMatrix * aCursorPosition;
+    cursorPosition = screenWorldMatrix * VECTOR2D( screenCursor.x, screenSize.y - screenCursor.y );
 }
 
 
@@ -780,13 +779,9 @@ void OPENGL_GAL::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
 
     // We do not need a very precise comparison here (the lineWidth is set by GAL::DrawGrid())
     if( fabs( lineWidth - 2.0 * gridLineWidth / worldScale ) < 0.1 )
-    {
         glLineWidth( 1.0 );
-    }
     else
-    {
         glLineWidth( 2.0 );
-    }
 
     glColor4d( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
 
@@ -970,12 +965,6 @@ void OPENGL_GAL::initGlew()
 }
 
 
-void OPENGL_GAL::initCursor( int aCursorSize )
-{
-    cursorSize = aCursorSize;
-}
-
-
 void OPENGL_GAL::blitCursor()
 {
     if( !isCursorEnabled )
@@ -983,11 +972,9 @@ void OPENGL_GAL::blitCursor()
 
     compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
-    VECTOR2D cursorBegin  = ToWorld( cursorPosition -
-                                     VECTOR2D( cursorSize / 2, cursorSize / 2 ) );
-    VECTOR2D cursorEnd    = ToWorld( cursorPosition +
-                                     VECTOR2D( cursorSize / 2, cursorSize / 2 ) );
-    VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2.0;
+    VECTOR2D cursorBegin  = cursorPosition - cursorSize / ( 2 * worldScale );
+    VECTOR2D cursorEnd    = cursorPosition + cursorSize / ( 2 * worldScale );
+    VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2;
 
     glDisable( GL_TEXTURE_2D );
     glLineWidth( 1.0 );
