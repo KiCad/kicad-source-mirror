@@ -61,6 +61,8 @@ public:
 
     int DrawZone( TOOL_EVENT& aEvent );
 
+    int DrawKeepout( TOOL_EVENT& aEvent );
+
     int PlaceTarget( TOOL_EVENT& aEvent );
 
     int PlaceModule( TOOL_EVENT& aEvent );
