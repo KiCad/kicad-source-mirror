@@ -157,12 +157,6 @@ protected:
     void setHighContrastLayer( LAYER_NUM aLayer );
 
     /**
-     * Function setTopLayer
-     * moves the selected layer to the top, so it is displayed above all others.
-     */
-    void setTopLayer( LAYER_NUM aLayer );
-
-    /**
      * Function syncLayerWidgetLayer
      * updates the currently layer "selection" within the PCB_LAYER_WIDGET.
      * The currently selected layer is defined by the return value of getActiveLayer().
@@ -577,6 +571,12 @@ public:
      * </p>
      */
     virtual void OnModify();
+
+    /**
+     * Function SetTopLayer
+     * moves the selected layer to the top, so it is displayed above all others.
+     */
+    void SetTopLayer( LAYER_NUM aLayer );
 
     /**
      * Function IsElementVisible
@@ -1693,12 +1693,6 @@ public:
      * </p>
      */
     void UpdateTitle();
-
-    void SetTopLayer( LAYER_NUM aLayer )
-    {
-        setTopLayer( aLayer );
-    }
-
 
     DECLARE_EVENT_TABLE()
 };

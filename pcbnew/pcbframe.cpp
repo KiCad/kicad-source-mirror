@@ -883,7 +883,7 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
     KIGFX::RENDER_SETTINGS* rSettings = view->GetPainter()->GetSettings();
 
-    setTopLayer( aLayer );
+    SetTopLayer( aLayer );
 
     rSettings->ClearActiveLayers();
     rSettings->SetActiveLayer( aLayer );
@@ -920,7 +920,7 @@ void PCB_EDIT_FRAME::setHighContrastLayer( LAYER_NUM aLayer )
 }
 
 
-void PCB_EDIT_FRAME::setTopLayer( LAYER_NUM aLayer )
+void PCB_EDIT_FRAME::SetTopLayer( LAYER_NUM aLayer )
 {
     // Set display settings for high contrast mode
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
