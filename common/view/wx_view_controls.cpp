@@ -35,9 +35,7 @@ using namespace KIGFX;
 const wxEventType WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE = wxNewEventType();
 
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
-    VIEW_CONTROLS( aView ),
-    m_state( IDLE ),
-    m_parentPanel( aParentPanel )
+    VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel )
 {
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );

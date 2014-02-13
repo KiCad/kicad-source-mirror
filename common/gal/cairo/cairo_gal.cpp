@@ -35,9 +35,6 @@
 
 using namespace KIGFX;
 
-///> Opacity of a single layer
-const float LAYER_ALPHA = 0.8;
-
 CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
         wxEvtHandler* aPaintListener, const wxString& aName ) :
     wxWindow( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxEXPAND, aName )
@@ -430,7 +427,7 @@ void CAIRO_GAL::SetLayerDepth( double aLayerDepth )
 }
 
 
-void CAIRO_GAL::Transform( MATRIX3x3D aTransformation )
+void CAIRO_GAL::Transform( const MATRIX3x3D& aTransformation )
 {
     cairo_matrix_t cairoTransformation;
 
