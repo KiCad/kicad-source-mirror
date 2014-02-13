@@ -164,7 +164,7 @@ public:
     // --------------
 
     /// @copydoc GAL::Transform()
-    virtual void Transform( MATRIX3x3D aTransformation );
+    virtual void Transform( const MATRIX3x3D& aTransformation );
 
     /// @copydoc GAL::Rotate()
     virtual void Rotate( double aAngle );
@@ -386,6 +386,9 @@ private:
 
     /// Format used to store pixels
     static const cairo_format_t GAL_FORMAT = CAIRO_FORMAT_RGB24;
+
+    ///> Opacity of a single layer
+    static const float LAYER_ALPHA = 0.8;
 };
 } // namespace KIGFX
 

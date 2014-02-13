@@ -157,7 +157,7 @@ public:
     // --------------
 
     /// @copydoc GAL::Transform()
-    virtual void Transform( MATRIX3x3D aTransformation );
+    virtual void Transform( const MATRIX3x3D& aTransformation );
 
     /// @copydoc GAL::Rotate()
     virtual void Rotate( double aAngle );

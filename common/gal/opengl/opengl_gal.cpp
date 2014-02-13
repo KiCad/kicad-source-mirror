@@ -600,7 +600,7 @@ void OPENGL_GAL::SetStrokeColor( const COLOR4D& aColor )
 }
 
 
-void OPENGL_GAL::Transform( MATRIX3x3D aTransformation )
+void OPENGL_GAL::Transform( const MATRIX3x3D& aTransformation )
 {
     GLdouble matrixData[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 

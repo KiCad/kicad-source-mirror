@@ -112,17 +112,17 @@ void GAL::DrawGrid()
     SetTarget( TARGET_NONCACHED );
 
     // Draw the origin marker
-    double origSize = static_cast<double>( gridOriginMarkerSize ) / worldScale;
+    double originSize = gridOriginMarkerSize / worldScale;
     SetLayerDepth( GAL::GRID_DEPTH );
     SetIsFill( false );
     SetIsStroke( true );
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     SetLineWidth( gridLineWidth / worldScale );
-    DrawLine( gridOrigin + VECTOR2D( -origSize, -origSize ),
-              gridOrigin + VECTOR2D( origSize, origSize ) );
-    DrawLine( gridOrigin + VECTOR2D( -origSize, origSize ),
-              gridOrigin + VECTOR2D( origSize, -origSize ) );
-    DrawCircle( gridOrigin, origSize * 0.7 );
+    DrawLine( gridOrigin + VECTOR2D( -originSize, -originSize ),
+              gridOrigin + VECTOR2D( originSize, originSize ) );
+    DrawLine( gridOrigin + VECTOR2D( -originSize, originSize ),
+              gridOrigin + VECTOR2D( originSize, -originSize ) );
+    DrawCircle( gridOrigin, originSize * 0.7 );
 
     // Draw the grid
     // For the drawing the start points, end points and increments have

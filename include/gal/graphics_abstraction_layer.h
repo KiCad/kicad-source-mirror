@@ -31,8 +31,6 @@
 #include <stack>
 #include <limits>
 
-#include <wx/event.h>
-
 #include <math/matrix3x3.h>
 
 #include <gal/color4d.h>
@@ -162,7 +160,7 @@ public:
     virtual bool Show( bool aShow ) = 0;
 
     /// @brief Returns GAL canvas size in pixels
-    VECTOR2D GetScreenPixelSize() const
+    const VECTOR2D& GetScreenPixelSize() const
     {
         return screenSize;
     }
@@ -222,7 +220,7 @@ public:
      *
      * @return the color for stroking the outline.
      */
-    inline COLOR4D GetStrokeColor()
+    inline const COLOR4D& GetStrokeColor() const
     {
         return strokeColor;
     }
@@ -252,7 +250,7 @@ public:
      *
      * @return the actual line width.
      */
-    inline double GetLineWidth()
+    inline double GetLineWidth() const
     {
         return lineWidth;
     }
@@ -335,7 +333,7 @@ public:
      *
      * @param aTransformation is the ransformation matrix.
      */
-    virtual void Transform( MATRIX3x3D aTransformation ) = 0;
+    virtual void Transform( const MATRIX3x3D& aTransformation ) = 0;
 
     /**
      * @brief Rotate the context.
@@ -428,9 +426,19 @@ public:
      *
      * @return the transformation matrix.
      */
-    MATRIX3x3D GetWorldScreenMatrix()
+    const MATRIX3x3D& GetWorldScreenMatrix() const
     {
         return worldScreenMatrix;
+    }
+
+    /**
+     * @brief Get the screen <-> world transformation matrix.
+     *
+     * @return the transformation matrix.
+     */
+    const MATRIX3x3D& GetScreenWorldMatrix() const
+    {
+        return screenWorldMatrix;
     }
 
     /**
@@ -487,7 +495,7 @@ public:
      *
      * @return the look at point.
      */
-    inline VECTOR2D GetLookAtPoint()
+    inline const VECTOR2D& GetLookAtPoint() const
     {
         return lookAtPoint;
     }
@@ -507,7 +515,7 @@ public:
      *
      * @return the zoom factor.
      */
-    inline double GetZoomFactor()
+    inline double GetZoomFactor() const
     {
         return zoomFactor;
     }
@@ -528,7 +536,7 @@ public:
     /**
      * @brief Returns the minimum depth in the currently used range (the top).
      */
-    inline double GetMinDepth()
+    inline double GetMinDepth() const
     {
         return depthRange.x;
     }
@@ -536,7 +544,7 @@ public:
     /**
      * @brief Returns the maximum depth in the currently used range (the bottom).
      */
-    inline double GetMaxDepth()
+    inline double GetMaxDepth() const
     {
         return depthRange.y;
     }
@@ -546,7 +554,7 @@ public:
      *
      * @return the actual world scale factor.
      */
-    inline double GetWorldScale()
+    inline double GetWorldScale() const
     {
         return worldScale;
     }
@@ -694,7 +702,7 @@ public:
      *
      * @return the grid line width
      */
-    inline double GetGridLineWidth()
+    inline double GetGridLineWidth() const
     {
         return gridLineWidth;
     }
@@ -739,7 +747,7 @@ public:
      * @param aPoint the pointposition in screen coordinates.
      * @return the point position in world coordinates.
      */
-    inline virtual VECTOR2D ToWorld( const VECTOR2D& aPoint ) const
+    inline VECTOR2D ToWorld( const VECTOR2D& aPoint ) const
     {
         return VECTOR2D( screenWorldMatrix * aPoint );
     }
@@ -750,15 +758,15 @@ public:
      * @param aPoint the pointposition in world coordinates.
      * @return the point position in screen coordinates.
      */
-    inline virtual VECTOR2D ToScreen( const VECTOR2D& aPoint ) const
+    inline VECTOR2D ToScreen( const VECTOR2D& aPoint ) const
     {
         return VECTOR2D( worldScreenMatrix * aPoint );
     }
 
     /**
-     * @brief Enable/Disable cursor.
+     * @brief Enable/disable cursor.
      *
-     * @param aIsCursorEnabled is true if the cursor should be enabled, else false.
+     * @param aCursorEnabled is true if the cursor should be drawn, else false.
      */
     inline void SetCursorEnabled( bool aCursorEnabled )
     {

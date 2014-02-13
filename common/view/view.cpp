@@ -197,7 +197,7 @@ int VIEW::Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult )
 
 VECTOR2D VIEW::ToWorld( const VECTOR2D& aCoord, bool aAbsolute ) const
 {
-    MATRIX3x3D matrix = m_gal->GetWorldScreenMatrix().Inverse();
+    const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
 
     if( aAbsolute )
     {
@@ -212,7 +212,7 @@ VECTOR2D VIEW::ToWorld( const VECTOR2D& aCoord, bool aAbsolute ) const
 
 VECTOR2D VIEW::ToScreen( const VECTOR2D& aCoord, bool aAbsolute ) const
 {
-    MATRIX3x3D matrix = m_gal->GetWorldScreenMatrix();
+    const MATRIX3x3D& matrix = m_gal->GetWorldScreenMatrix();
 
     if( aAbsolute )
     {
