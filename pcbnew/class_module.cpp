@@ -799,7 +799,7 @@ void MODULE::Flip( const wxPoint& aCentre )
 
     // Mirror pads to other side of board about the x axis, i.e. vertically.
     for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
-        pad->Flip( m_Pos.y );
+        pad->Flip( m_Pos );
 
     // Mirror reference.
     text = m_Reference;
