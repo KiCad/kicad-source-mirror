@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-04 19:01+0100\n"
-"PO-Revision-Date: 2014-02-04 19:03+0100\n"
+"POT-Creation-Date: 2014-02-13 17:29+0100\n"
+"PO-Revision-Date: 2014-02-13 17:32+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -156,8 +156,8 @@ msgstr ""
 "\n"
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
-#: kicad/kicad.cpp:75 kicad/prjconfig.cpp:270 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1024 pcbnew/moduleframe.cpp:631
+#: kicad/kicad.cpp:75 kicad/prjconfig.cpp:281 eeschema/libedit.cpp:62
+#: eeschema/schframe.cpp:1028 pcbnew/moduleframe.cpp:631
 #: pcbnew/pcbframe.cpp:1141 cvpcb/cvframe.cpp:781
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
@@ -189,153 +189,157 @@ msgstr ""
 "Katalog roboczy: %s\n"
 "Projekt: %s\n"
 
-#: kicad/menubar.cpp:127
+#: kicad/menubar.cpp:126
 msgid "&Open\tCtrl+O"
 msgstr "&Otwórz\tCtrl+O"
 
-#: kicad/menubar.cpp:128
+#: kicad/menubar.cpp:127
 msgid "Open an existing project"
 msgstr "Otwórz istniejący projekt"
 
-#: kicad/menubar.cpp:137 eeschema/menubar.cpp:95
+#: kicad/menubar.cpp:136 eeschema/menubar.cpp:95
 #: pcbnew/menubar_pcbframe.cpp:88 cvpcb/menubar.cpp:83
 msgid "Open &Recent"
 msgstr "Ostatnio otwie&rane"
 
-#: kicad/menubar.cpp:138 eeschema/menubar.cpp:96
+#: kicad/menubar.cpp:137 eeschema/menubar.cpp:96
 msgid "Open a recent opened schematic project"
 msgstr "Otwiera listę ostatnio otwieranych schematów"
 
-#: kicad/menubar.cpp:144
+#: kicad/menubar.cpp:143
 msgid "&Blank\tCtrl+N"
 msgstr "Pusty\tCtrl+N"
 
-#: kicad/menubar.cpp:145
+#: kicad/menubar.cpp:144
 msgid "Start a blank project"
 msgstr "Rozpoczyna od pusteogo projektu"
 
-#: kicad/menubar.cpp:149
+#: kicad/menubar.cpp:148
 msgid "New from &Template\tCtrl+T"
 msgstr "Nowy na bazie szablonu\tCtrl+T"
 
-#: kicad/menubar.cpp:150 kicad/menubar.cpp:331
+#: kicad/menubar.cpp:149 kicad/menubar.cpp:318
 msgid "Start a new project from a template"
 msgstr "Rozpoczyna nowy projekt na podstawie szablonu"
 
-#: kicad/menubar.cpp:155
+#: kicad/menubar.cpp:154
 msgid "New"
 msgstr "Nowy"
 
-#: kicad/menubar.cpp:156 kicad/menubar.cpp:327
+#: kicad/menubar.cpp:155 kicad/menubar.cpp:314
 msgid "Start a new project"
 msgstr "Utwórz nowy projekt"
 
-#: kicad/menubar.cpp:162 cvpcb/menubar.cpp:93
+#: kicad/menubar.cpp:161 cvpcb/menubar.cpp:93
 msgid "&Save\tCtrl+S"
 msgstr "Zapisz \tCtrl-S"
 
-#: kicad/menubar.cpp:163 kicad/menubar.cpp:341
+#: kicad/menubar.cpp:162 kicad/menubar.cpp:328
 msgid "Save current project"
 msgstr "Zapisz bieżący projekt"
 
-#: kicad/menubar.cpp:170
+#: kicad/menubar.cpp:169
 msgid "&Archive"
 msgstr "Sp&akuj projekt"
 
-#: kicad/menubar.cpp:171
+#: kicad/menubar.cpp:170
 msgid "Archive project files in zip archive"
 msgstr "Spakuj pliki projektu do archiwum Zip"
 
-#: kicad/menubar.cpp:177
+#: kicad/menubar.cpp:176
 msgid "&Unarchive"
 msgstr "Rozpak&uj projekt"
 
-#: kicad/menubar.cpp:178
+#: kicad/menubar.cpp:177
 msgid "Unarchive project files from zip file"
 msgstr "Rozpakuj wszystkie pliki projektu z archiwum Zip"
 
-#: kicad/menubar.cpp:187 eeschema/menubar.cpp:187
+#: kicad/menubar.cpp:186 eeschema/menubar.cpp:187
 #: eeschema/menubar_libedit.cpp:110 pcbnew/menubar_pcbframe.cpp:264
 #: cvpcb/menubar.cpp:106
 msgid "&Quit"
 msgstr "Zakończ "
 
-#: kicad/menubar.cpp:188
+#: kicad/menubar.cpp:187
 msgid "Quit KiCad"
 msgstr "Zakończ pracę w programie KiCad"
 
-#: kicad/menubar.cpp:197
+#: kicad/menubar.cpp:196
 msgid "Text E&ditor"
 msgstr "E&dytor tekstu"
 
-#: kicad/menubar.cpp:198
+#: kicad/menubar.cpp:197
 msgid "Launch preferred text editor"
 msgstr "Uruchom preferowany edytor tekstu"
 
-#: kicad/menubar.cpp:204
+#: kicad/menubar.cpp:203
 msgid "&View File"
 msgstr "Wyświetl plik"
 
-#: kicad/menubar.cpp:205
+#: kicad/menubar.cpp:204
 msgid "View, read or edit file with a text editor"
 msgstr "Przeglądaj lub edytuj plik w edytorze tekstu"
 
-#: kicad/menubar.cpp:214 gerbview/menubar.cpp:209
+#: kicad/menubar.cpp:213 gerbview/menubar.cpp:209
 #: pagelayout_editor/menubar.cpp:130
 msgid "&Text Editor"
 msgstr "Edytor &tekstu"
 
-#: kicad/menubar.cpp:215 gerbview/menubar.cpp:210
+#: kicad/menubar.cpp:214 gerbview/menubar.cpp:210
 #: pagelayout_editor/menubar.cpp:131
 msgid "Select your preferred text editor"
 msgstr "Wybierz preferowany edytor tekstu"
 
-#: kicad/menubar.cpp:224
+#: kicad/menubar.cpp:222
 msgid "&Default"
 msgstr "&Domyślny"
 
-#: kicad/menubar.cpp:225
+#: kicad/menubar.cpp:223
 msgid "Use system default PDF viewer used to browse datasheets"
 msgstr "Użyj systemowej przeglądarki PDF do przeglądania dokumentacji"
 
-#: kicad/menubar.cpp:237
+#: kicad/menubar.cpp:231
 msgid "&Favourite"
 msgstr "Ulubione"
 
-#: kicad/menubar.cpp:238
+#: kicad/menubar.cpp:232
 msgid "Use your favourite PDF viewer used to browse datasheets"
 msgstr "Użyj preferowanej przeglądarki PDF do przeglądania dokumentacji"
 
-#: kicad/menubar.cpp:251 kicad/menubar.cpp:258
-msgid "&PDF Viewer"
-msgstr "Przeglądarka &PDF"
+#: kicad/menubar.cpp:242
+msgid "Select &PDF Viewer"
+msgstr "Wybierz przeglądarkę &PDF"
 
-#: kicad/menubar.cpp:252
+#: kicad/menubar.cpp:243
 msgid "Select your favourite PDF viewer used to browse datasheets"
 msgstr "Wybierz preferowaną przeglądarkę PDF do przeglądania dokumentacji"
 
-#: kicad/menubar.cpp:259
+#: kicad/menubar.cpp:248
+msgid "&PDF Viewer"
+msgstr "Przeglądarka &PDF"
+
+#: kicad/menubar.cpp:249
 msgid "PDF viewer preferences"
 msgstr "Ustawienia przeglądarki PDF"
 
-#: kicad/menubar.cpp:275 eeschema/menubar.cpp:523
+#: kicad/menubar.cpp:264 eeschema/menubar.cpp:523
 #: eeschema/menubar_libedit.cpp:273 pcbnew/menubar_modedit.cpp:272
 #: pcbnew/menubar_pcbframe.cpp:630 cvpcb/menubar.cpp:147
 #: gerbview/menubar.cpp:222 pagelayout_editor/menubar.cpp:149
 msgid "&Contents"
 msgstr "&Zawartość"
 
-#: kicad/menubar.cpp:276
+#: kicad/menubar.cpp:265
 msgid "Open the KiCad handbook"
 msgstr "Otwórz podręcznik programu KiCad"
 
-#: kicad/menubar.cpp:281 eeschema/menubar.cpp:529
+#: kicad/menubar.cpp:269 eeschema/menubar.cpp:529
 #: eeschema/menubar_libedit.cpp:279 pcbnew/menubar_modedit.cpp:277
 #: pcbnew/menubar_pcbframe.cpp:635
 msgid "&Getting Started in KiCad"
 msgstr "Pierwsze kroki w pro&gramie KiCad"
 
-#: kicad/menubar.cpp:282 eeschema/menubar.cpp:530
+#: kicad/menubar.cpp:270 eeschema/menubar.cpp:530
 #: eeschema/menubar_libedit.cpp:280 pcbnew/menubar_modedit.cpp:278
 #: pcbnew/menubar_pcbframe.cpp:636
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
@@ -343,15 +347,15 @@ msgstr ""
 "Otwiera przewodnik dla początkujących zatytułowany \"Pierwsze kroki w "
 "programie KiCad\""
 
-#: kicad/menubar.cpp:291
+#: kicad/menubar.cpp:278
 msgid "&About KiCad"
 msgstr "O progr&amie KiCad"
 
-#: kicad/menubar.cpp:292
+#: kicad/menubar.cpp:279
 msgid "About KiCad project manager"
 msgstr "O programie Menedżer projektu KiCad"
 
-#: kicad/menubar.cpp:296 eeschema/menubar.cpp:542
+#: kicad/menubar.cpp:283 eeschema/menubar.cpp:542
 #: eeschema/menubar_libedit.cpp:293 pcbnew/menubar_modedit.cpp:289
 #: pcbnew/menubar_pcbframe.cpp:649 cvpcb/menubar.cpp:158
 #: gerbview/menubar.cpp:234 3d-viewer/3d_toolbar.cpp:139
@@ -359,87 +363,87 @@ msgstr "O programie Menedżer projektu KiCad"
 msgid "&File"
 msgstr "&Plik"
 
-#: kicad/menubar.cpp:297
+#: kicad/menubar.cpp:284
 msgid "&Browse"
 msgstr "P&odgląd"
 
-#: kicad/menubar.cpp:298 cvpcb/menubar.cpp:159 gerbview/menubar.cpp:235
+#: kicad/menubar.cpp:285 cvpcb/menubar.cpp:159 gerbview/menubar.cpp:235
 #: 3d-viewer/3d_toolbar.cpp:153 pagelayout_editor/menubar.cpp:162
 msgid "&Preferences"
 msgstr "&Ustawienia"
 
-#: kicad/menubar.cpp:299 eeschema/menubar.cpp:548
+#: kicad/menubar.cpp:286 eeschema/menubar.cpp:548
 #: eeschema/menubar_libedit.cpp:298 pcbnew/menubar_modedit.cpp:295
 #: pcbnew/menubar_pcbframe.cpp:657 cvpcb/menubar.cpp:160
 #: gerbview/menubar.cpp:237 pagelayout_editor/menubar.cpp:163
 msgid "&Help"
 msgstr "Pomo&c"
 
-#: kicad/menubar.cpp:336
+#: kicad/menubar.cpp:323
 msgid "Load existing project"
 msgstr "Otwórz istniejący projekt"
 
-#: kicad/menubar.cpp:349
+#: kicad/menubar.cpp:336
 msgid "Archive all project files"
 msgstr "Zarchiwizuj wszystkie pliki projektu"
 
-#: kicad/menubar.cpp:357
+#: kicad/menubar.cpp:344
 msgid "Refresh project tree"
 msgstr "Odśwież drzewo projektu"
 
-#: kicad/preferences.cpp:69
+#: kicad/preferences.cpp:71
 msgid "You must choose a PDF viewer before using this option."
 msgstr "Musisz wybrać przeglądarkę PDF przed użyciem tej funkcji."
 
-#: kicad/preferences.cpp:78
+#: kicad/preferences.cpp:86
 msgid "Executable files ("
 msgstr "Pliki wykonywalne ("
 
-#: kicad/preferences.cpp:82
+#: kicad/preferences.cpp:91
 msgid "Select Preferred Pdf Browser"
 msgstr "Wybierz preferowaną przeglądarkę PDF"
 
-#: kicad/prjconfig.cpp:96
+#: kicad/prjconfig.cpp:107
 msgid "System Templates"
 msgstr "Szablony systemowe"
 
-#: kicad/prjconfig.cpp:102
+#: kicad/prjconfig.cpp:113
 msgid "User Templates"
 msgstr "Szablony użytkownika"
 
-#: kicad/prjconfig.cpp:116
+#: kicad/prjconfig.cpp:127
 msgid "Portable Templates"
 msgstr "Szablony przenośne"
 
-#: kicad/prjconfig.cpp:126
+#: kicad/prjconfig.cpp:137
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Nie wybrano wzorca projektu. Nie można stworzyć nowego projektu."
 
-#: kicad/prjconfig.cpp:128 common/confirm.cpp:80
+#: kicad/prjconfig.cpp:139 common/confirm.cpp:80
 msgid "Error"
 msgstr "Błąd"
 
-#: kicad/prjconfig.cpp:139
+#: kicad/prjconfig.cpp:150
 msgid "Problem whilst creating new project from template!"
 msgstr "Wystąpił problem przy tworzniu nowego projektu z szablonu!"
 
-#: kicad/prjconfig.cpp:140
+#: kicad/prjconfig.cpp:151
 msgid "Template Error"
 msgstr "Błąd wzorca projektu"
 
-#: kicad/prjconfig.cpp:155
+#: kicad/prjconfig.cpp:166
 msgid "Project template file <kicad.pro> not found. "
 msgstr "Plik szablonu projektu <kicad.pro> nie został znaleziony."
 
-#: kicad/prjconfig.cpp:189
+#: kicad/prjconfig.cpp:200
 msgid "Create New Project"
 msgstr "Utwórz nowy projekt"
 
-#: kicad/prjconfig.cpp:194
+#: kicad/prjconfig.cpp:205
 msgid "Open Existing Project"
 msgstr "Otwórz istniejący projekt"
 
-#: kicad/prjconfig.cpp:216
+#: kicad/prjconfig.cpp:227
 msgid ""
 "The selected directory is not empty.  We recommend you create projects in "
 "their own clean directory.\n"
@@ -451,7 +455,7 @@ msgstr ""
 "\n"
 "Czy chcesz by program utworzył nowy pusty folder dla projektu?"
 
-#: kicad/prjconfig.cpp:255
+#: kicad/prjconfig.cpp:266
 #, c-format
 msgid "KiCad project file <%s> not found"
 msgstr "Plik projektu KiCad <%s> nie został znaleziony"
@@ -799,7 +803,7 @@ msgid "The following libraries could not be found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
 #: eeschema/eeschema.cpp:164 eeschema/files-io.cpp:301 pcbnew/files.cpp:280
-#: pcbnew/pcbnew.cpp:190
+#: pcbnew/pcbnew.cpp:210
 msgid "This file is already open."
 msgstr "Ten plik jest już otwarty."
 
@@ -1902,7 +1906,7 @@ msgstr "Oznaczenie"
 #: eeschema/dialogs/dialog_color_config.cpp:58
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:173
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:179
-#: pcbnew/class_edge_mod.cpp:261 pcbnew/class_text_mod.cpp:343
+#: pcbnew/class_edge_mod.cpp:269 pcbnew/class_text_mod.cpp:343
 #: pcbnew/footprint_wizard_frame.cpp:173
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:59
@@ -3268,7 +3272,7 @@ msgstr "Schemat"
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1027 cvpcb/cvframe.cpp:786
+#: eeschema/schframe.cpp:1031 cvpcb/cvframe.cpp:786
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -3312,7 +3316,7 @@ msgstr "<Nieznany>"
 msgid "Component %s, %s"
 msgstr "Symbol %s, %s"
 
-#: eeschema/sch_field.cpp:475
+#: eeschema/sch_field.cpp:485
 #, c-format
 msgid "Field %s"
 msgstr "Pole %s"
@@ -4189,7 +4193,7 @@ msgstr ""
 "symbolu?"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:444
-#: common/eda_doc.cpp:110
+#: common/eda_doc.cpp:114
 msgid "Doc Files"
 msgstr "Pliki dokumentacji"
 
@@ -4960,15 +4964,15 @@ msgid "Default Path for Libraries"
 msgstr "Domyślna ścieżka dla bibliotek"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:374
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:466
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:329
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:480
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:345
 #: cvpcb/dialogs/dialog_cvpcb_config.cpp:406
 msgid "Use a relative path?"
 msgstr "Użyć ścieżki względnej?"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:374
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:467
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:330
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:481
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:346
 #: cvpcb/dialogs/dialog_cvpcb_config.cpp:407
 msgid "Path type"
 msgstr "Typ ścieżki"
@@ -6254,7 +6258,7 @@ msgstr "Segment"
 msgid "Layer"
 msgstr "Warstwy sygnałowe"
 
-#: pcbnew/class_drawsegment.cpp:356 pcbnew/class_edge_mod.cpp:269
+#: pcbnew/class_drawsegment.cpp:356 pcbnew/class_edge_mod.cpp:277
 #: pcbnew/class_track.cpp:1198 pcbnew/dialogs/dialog_design_rules_base.cpp:327
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
 msgid "Width"
@@ -6382,29 +6386,29 @@ msgstr "Ścieżka wewnątrz strefy chronionej"
 msgid "Pad inside a keepout area"
 msgstr "Pole lutownicze wewnątrz strefy chronionej"
 
-#: pcbnew/class_edge_mod.cpp:259
+#: pcbnew/class_edge_mod.cpp:267
 msgid "Graphic Item"
 msgstr "Elementy graficzne"
 
-#: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:527
+#: pcbnew/class_edge_mod.cpp:268 pcbnew/class_module.cpp:527
 #: pcbnew/class_pad.cpp:575 pcbnew/class_text_mod.cpp:347
 #: pcbnew/loadcmp.cpp:436 pcbnew/loadcmp.cpp:500 cvpcb/cvframe.cpp:924
 msgid "Module"
 msgstr "Footprint"
 
-#: pcbnew/class_edge_mod.cpp:263
+#: pcbnew/class_edge_mod.cpp:271
 msgid "TimeStamp"
 msgstr "Znacznik czasowy"
 
-#: pcbnew/class_edge_mod.cpp:264
+#: pcbnew/class_edge_mod.cpp:272
 msgid "Mod Layer"
 msgstr "Warstwa footprintów"
 
-#: pcbnew/class_edge_mod.cpp:266
+#: pcbnew/class_edge_mod.cpp:274
 msgid "Seg Layer"
 msgstr "Warstwa segmentu"
 
-#: pcbnew/class_edge_mod.cpp:277
+#: pcbnew/class_edge_mod.cpp:285
 #, c-format
 msgid "Graphic (%s) on %s of %s"
 msgstr "Grafika (%s) na %s z %s"
@@ -8421,10 +8425,8 @@ msgid "Interactive router"
 msgstr "Interaktywny router z rozpychaniem ścieżek"
 
 #: pcbnew/menubar_pcbframe.cpp:324
-msgid "Interactive router drag&drop tool."
-msgstr ""
-"Narzędzie do interaktywnego prowadzenia ścieżek z rozpychaniem oraz "
-"przenoszeniem przez złapanie i przeciąganie."
+msgid "Interactive router push&shove tool."
+msgstr "Narzędzie do interaktywnego prowadzenia ścieżek z rozpychaniem."
 
 #: pcbnew/menubar_pcbframe.cpp:369
 msgid "&3D Display"
@@ -9532,7 +9534,7 @@ msgstr "Przelotka %s"
 msgid "Via %s, drill %s"
 msgstr "Przelotka %s, wiercenie %s"
 
-#: pcbnew/pad_edition_functions.cpp:201
+#: pcbnew/pad_edition_functions.cpp:214
 #, c-format
 msgid "Delete Pad (module %s %s) "
 msgstr "Usuń pole lutownicze (footprint %s %s) "
@@ -9563,7 +9565,7 @@ msgstr "Plik automatycznej kopii zapasowej <%s> nie może zostac usunięty!"
 msgid " [new file]"
 msgstr " [nowy plik]"
 
-#: pcbnew/pcbnew.cpp:180
+#: pcbnew/pcbnew.cpp:200
 #, c-format
 msgid ""
 "Pcbnew file <%s> has a wrong extension.\n"
@@ -9572,11 +9574,11 @@ msgstr ""
 "Plik Pcbnew <%s> posiada niepoprawne rozszerzenie.\n"
 "Zostaje zmienione na .%s."
 
-#: pcbnew/pcbnew.cpp:197
+#: pcbnew/pcbnew.cpp:217
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew jest już uruchomiony. Kontynuować?"
 
-#: pcbnew/pcbnew.cpp:264
+#: pcbnew/pcbnew.cpp:287
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -9589,7 +9591,7 @@ msgstr ""
 "Czy chcesz go otworzyć?\n"
 "Zostanie on następnie zapisany w nowym formacie."
 
-#: pcbnew/pcbnew.cpp:295
+#: pcbnew/pcbnew.cpp:318
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -11356,7 +11358,7 @@ msgid "A list of unconnected pads, right click for popup menu"
 msgstr ""
 "Lista niepołączonych pól. Prawy przycisk myszy uruchamia menu podręczne."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:273
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:280
 msgid ""
 "Use this attribute for most non SMD components\n"
 "Components with this option are not put in the footprint position list file"
@@ -11364,8 +11366,8 @@ msgstr ""
 "Użyj tego atrybutu dla większości komponentów nie będących elementami SMD.\n"
 "Tylko komponenty z tą opcją są umieszczone na liście położeń footprintów"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:276
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:124
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:283
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:132
 msgid ""
 "Use this attribute for SMD components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -11373,7 +11375,7 @@ msgstr ""
 "Użyj tego atrybutu dla komponentów SMD.\n"
 "Tylko komponenty z tą opcją są umieszczone na liście położeń footprintów"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:279
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:286
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board\n"
 "(like a old ISA PC bus connector)"
@@ -11382,18 +11384,18 @@ msgstr ""
 "ścieżek lub pól lutowniczych\n"
 " (jak na przykład złącza PCI na kartach rozszerzeń, pola kontaktowe, itp.)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:305
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:149
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:312
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:157
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Włącz przesuwanie i autorozmieszczanie klawiszami skrótów"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:307
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:150
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:314
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:158
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Wyłącz przesuwanie i autorozmieszczanie klawiszami skrótów"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:436
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:300
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:443
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:308
 msgid "3D Shape:"
 msgstr "Kształt 3D:"
 
@@ -11612,55 +11614,59 @@ msgid "Properties"
 msgstr "Właściwości"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:307
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:241
 msgid "3D Shape Name"
 msgstr "Nazwa obiektu 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:317
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:251
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:314
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:248
+msgid "Default Path (from KISYS3DMOD environment variable)"
+msgstr "Domyślna ścieżka (ze zmiennej systemowej KISYS3DMOD)"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:324
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:258
 msgid "3D Scale and Position"
 msgstr "Skala 3D i pozycja"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:321
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:255
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:328
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:262
 msgid "Shape Scale:"
 msgstr "Skala kształtu:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:330
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:264
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:337
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:271
 msgid "Shape Offset (inch):"
 msgstr "Przesunięcie kształtu (w calach):"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:339
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:273
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:346
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:280
 msgid "Shape Rotation (degrees):"
 msgstr "Obrót kształtu (w stopniach):"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:352
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:359
 msgid "Browse Shapes"
 msgstr "Przeglądaj kształty"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:355
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:286
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:362
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:293
 msgid "Add 3D Shape"
 msgstr "Dodaj kształt 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:358
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:289
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:365
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:296
 msgid "Remove 3D Shape"
 msgstr "Usuń kształt 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:371
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:302
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:378
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:309
 msgid "3D settings"
 msgstr "Ustawienia 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:122
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:130
 msgid "Use this attribute for most non SMD components"
 msgstr ""
 "Użyj tego atrybutu dla większości komponentów nie montowanych techniką SMD"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:126
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:134
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board (like a old ISA "
 "PC bus connector)"
@@ -11668,7 +11674,7 @@ msgstr ""
 "Użyj tego atrybutu dla \"wirtualnych\" komponentów rysowanych na płytce (jak "
 "stare złącze ISA PC)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:377
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:393
 #, c-format
 msgid ""
 "Error:\n"
@@ -11715,6 +11721,10 @@ msgstr "cale"
 #: pcb_calculator/UnitSelector.cpp:18
 msgid "inch"
 msgstr "cale"
+
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:241
+msgid "3D Shape Names"
+msgstr "Nazwy kształtów 3D"
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:137
 msgid "Value:"
@@ -15032,15 +15042,15 @@ msgstr "Błąd Konfiguracji"
 msgid "Unknown netlist format."
 msgstr "Nieznany format listy sieci"
 
-#: cvpcb/cvpcb.cpp:54
+#: cvpcb/cvpcb.cpp:55
 msgid "KiCad footprint alias files (*.equ)|*.equ"
 msgstr "Pliki aliasów footprintów programu KiCad (*.equ)|*.equ"
 
-#: cvpcb/cvpcb.cpp:56
+#: cvpcb/cvpcb.cpp:57
 msgid "Library Load Error"
 msgstr "Błąd podczas ładowania biblioteki"
 
-#: cvpcb/cvpcb.cpp:107
+#: cvpcb/cvpcb.cpp:111
 msgid "CvPcb is already running, Continue?"
 msgstr "CvPcb jest już uruchomiony. Kontynuować?"
 
@@ -16345,20 +16355,20 @@ msgstr "Japoński"
 msgid "Bulgarian"
 msgstr "Bułgarski"
 
-#: common/edaappl.cpp:854
+#: common/edaappl.cpp:855
 msgid "Language"
 msgstr "Język"
 
-#: common/edaappl.cpp:855
+#: common/edaappl.cpp:856
 msgid "Select application language (only for testing!)"
 msgstr "Wybierz język aplikacji (tylko do testowania!)"
 
-#: common/eda_doc.cpp:125
+#: common/eda_doc.cpp:129
 #, c-format
 msgid "Doc File <%s> not found"
 msgstr "Nie znaleziono pliku dokumentacji <%s>."
 
-#: common/eda_doc.cpp:167
+#: common/eda_doc.cpp:171
 #, c-format
 msgid "Unknown MIME type for doc file <%s>"
 msgstr "Nieznany typ MIME pliku dokumentacji <%s>"
@@ -17328,35 +17338,35 @@ msgstr "Vref wynosi 0!"
 msgid "Incorrect value for R1 R2"
 msgstr "Niepoprawne wartości w polach R1 R2"
 
-#: pcb_calculator/tracks_width_versus_current.cpp:191
+#: pcb_calculator/tracks_width_versus_current.cpp:198
 msgid "<br><em>The formula (from IPC 2221) is:</em></br>"
 msgstr "<br><em>Wzór (na podstawie IPC 2221) to:</em></br>"
 
-#: pcb_calculator/tracks_width_versus_current.cpp:192
+#: pcb_calculator/tracks_width_versus_current.cpp:199
 msgid "<br><b>I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup></b></br>"
 msgstr "<br><b>I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup></b></br>"
 
-#: pcb_calculator/tracks_width_versus_current.cpp:193
+#: pcb_calculator/tracks_width_versus_current.cpp:200
 msgid "<br>Internal traces : <b>K = 0.024</b></br>"
 msgstr "<br>Ścieżki wewnętrzne : <b>K = 0.024</b></br>"
 
-#: pcb_calculator/tracks_width_versus_current.cpp:194
+#: pcb_calculator/tracks_width_versus_current.cpp:201
 msgid "<br>External traces: <b>K = 0.048</b></br>"
 msgstr "<br>Ścieżki zewnętrzne : <b>K = 0.048</b></br>"
 
-#: pcb_calculator/tracks_width_versus_current.cpp:196
+#: pcb_calculator/tracks_width_versus_current.cpp:203
 msgid "<br>where:</br>"
 msgstr "<br>gdzie:</br>"
 
-#: pcb_calculator/tracks_width_versus_current.cpp:197
+#: pcb_calculator/tracks_width_versus_current.cpp:204
 msgid "<br><b>I</b> = maximum current in Amps</br>"
 msgstr "<br><b>I</b> = maksymalny prąd w Amperach</br>"
 
-#: pcb_calculator/tracks_width_versus_current.cpp:198
+#: pcb_calculator/tracks_width_versus_current.cpp:205
 msgid "<br><b>dT</b> = temperature rise above ambient in deg C</br>"
 msgstr "<br><b>dT</b> = przyrost temperatury wokół w stopniach Celciusza</br>"
 
-#: pcb_calculator/tracks_width_versus_current.cpp:199
+#: pcb_calculator/tracks_width_versus_current.cpp:206
 msgid "<br><b>W,H</b> = Width and Thickness in mils</br>"
 msgstr "<br><b>W,H</b> = szerokość i grubość w milsach</br>"
 
@@ -19082,8 +19092,8 @@ msgstr "Właściwości wymiarowań"
 msgid "DRC Control"
 msgstr "Kontrola DRC"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.h:139
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.h:118
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.h:141
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.h:120
 msgid "Module Properties"
 msgstr "Właściwości footprintu"
 
