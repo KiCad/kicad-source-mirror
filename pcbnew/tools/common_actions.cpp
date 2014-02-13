@@ -80,3 +80,7 @@ TOOL_ACTION COMMON_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension"
 TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.InteractiveDrawing.placeTarget",
         AS_GLOBAL, 'C',
         "Add layer alignment target", "Add layer alignment target" );
+
+TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.InteractiveDrawing.placeModule",
+        AS_GLOBAL, 'V',
+        "Add modules", "Add modules" );

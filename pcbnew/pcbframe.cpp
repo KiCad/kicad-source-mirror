@@ -569,24 +569,7 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     // Load modules and its additional elements
     for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
     {
-        // Load module's pads
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-        {
-            view->Add( pad );
-        }
-
-        // Load module's drawing (mostly silkscreen)
-        for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
-             drawing = drawing->Next() )
-        {
-            view->Add( drawing );
-        }
-
-        // Load module's texts (name and value)
-        view->Add( &module->Reference() );
-        view->Add( &module->Value() );
-
-        // Add the module itself
+        module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), view ) );
         view->Add( module );
     }
 
