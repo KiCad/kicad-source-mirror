@@ -138,8 +138,16 @@ bzr branch lp:kicad/stable kicad_src
 Components and Footprints libraries
 all (schematic libs, 3D shapes ...) but new footprints libraries (use Download zip tool)
 https://github.com/KiCad/kicad-library/
+
 New footprints libraries (use Download zip tool for each lib you want)
 https://github.com/KiCad/ for footprint libs (*.pretty folders)
+
+A mirror of github is available, using bzr:
+(schematic libs, 3D shapes ... all but new footprints libraries)
+bzr checkout lp:~kicad-product-committers/kicad/library
+
+Old legacy libraries:
+bzr checkout lp:~dickelbeck/kicad/library-read-only
 
 Note also Kicad is able to read on github.com/KiCad/ the *.pretty folders
 without download, using github plugin.
