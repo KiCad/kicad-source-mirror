@@ -38,6 +38,7 @@
 #include <class_pcb_text.h>
 #include <class_dimension.h>
 #include <class_mire.h>
+#include <class_zone.h>
 #include <class_module.h>
 #include <class_netinfo.h>          // TODO to be removed if we do not need the flags
 
@@ -563,6 +564,157 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
 }
 
 
+int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
+{
+    KIGFX::VIEW* view = getView();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    BOARD* board = getModel<BOARD>( PCB_T );
+    ZONE_CONTAINER* zone = new ZONE_CONTAINER( board );
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+
+    // Get the current, default settings for zones
+    ZONE_SETTINGS zoneInfo = editFrame->GetZoneSettings();
+
+    ZONE_EDIT_T dialogResult;
+    if( IsCopperLayer( editFrame->GetScreen()->m_Active_Layer ) )
+        dialogResult = InvokeCopperZonesEditor( editFrame, &zoneInfo );
+    else
+        dialogResult = InvokeNonCopperZonesEditor( editFrame, zone, &zoneInfo );
+
+    if( dialogResult == ZONE_ABORT )
+    {
+        delete zone;
+        setTransitions();
+        return 0;
+    }
+
+    zoneInfo.ExportSetting( *zone );
+    editFrame->SetTopLayer( zoneInfo.m_CurrentZone_Layer );
+
+    DRAWSEGMENT* helperLine = new DRAWSEGMENT;
+    helperLine->SetShape( S_SEGMENT );
+    helperLine->SetLayer( zoneInfo.m_CurrentZone_Layer );
+    helperLine->SetWidth( 1 );
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( view );
+//    preview.Add( zone );
+    view->Add( &preview );
+
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+    controls->SetAutoPan( true );
+
+    Activate();
+
+    VECTOR2D lastCursorPos = view->ToWorld( controls->GetCursorPosition() );
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        // Enable 45 degrees lines only mode by holding shift
+        bool linesAngle45 = evt->Modifier( MD_SHIFT );
+        VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+
+        if( evt->IsCancel() )
+        {
+            delete zone;
+            break;
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( lastCursorPos == cursorPos ||
+                ( zone->GetNumCorners() > 0 && wxPoint( cursorPos.x, cursorPos.y ) == zone->Outline()->GetPos( 0 ) ) )   // TODO better conditions
+            {
+                if( zone->GetNumCorners() > 2 )
+                {
+                    // Finish the zone
+                    zone->Outline()->CloseLastContour();
+                    zone->Outline()->RemoveNullSegments();
+
+                    board->Add( zone );
+                    view->Add( zone );
+
+                    editFrame->Fill_Zone( zone );
+                    zone->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                }
+                else
+                {
+                    // That is not a valid zone
+                    delete zone;
+                }
+
+                break;
+            }
+            else
+            {
+                if( zone->GetNumCorners() == 0 )
+                {
+                    zone->Outline()->Start( zoneInfo.m_CurrentZone_Layer,
+                                            cursorPos.x,
+                                            cursorPos.y,
+                                            zone->GetHatchStyle() );
+                    helperLine->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
+                    preview.Add( helperLine );
+                }
+                else
+                {
+                    zone->AppendCorner( helperLine->GetEnd() );
+                    helperLine = new DRAWSEGMENT( *helperLine );
+                    preview.Add( helperLine );
+                    helperLine->SetStart( helperLine->GetEnd() );
+                }
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+
+            lastCursorPos = cursorPos;
+        }
+
+        else if( evt->IsMotion() )
+        {
+            helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+
+            // 45 degree lines
+            if( linesAngle45 )
+            {
+                VECTOR2D lineVector( wxPoint( cursorPos.x, cursorPos.y ) - helperLine->GetStart() );
+                double angle = lineVector.Angle();
+
+                double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
+                VECTOR2D newLineVector = lineVector.Rotate( newAngle - angle );
+
+                // Snap the new line to the grid // TODO fix it, does not work good..
+                VECTOR2D newLineEnd = VECTOR2D( helperLine->GetStart() ) + newLineVector;
+                VECTOR2D snapped = view->GetGAL()->GetGridPoint( newLineEnd );
+
+                helperLine->SetEnd( wxPoint( snapped.x, snapped.y ) );
+            }
+            else
+            {
+                helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+            }
+
+            // Show a preview of the item
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    controls->ShowCursor( false );
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
+    view->Remove( &preview );
+
+    // remove helper lines only
+//    preview.Remove( zone );
+    preview.FreeItems();
+
+    setTransitions();
+
+    return 0;
+}
+
+
 int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = getView();
@@ -722,6 +874,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawArc, COMMON_ACTIONS::drawArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawText, COMMON_ACTIONS::drawText.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension, COMMON_ACTIONS::drawDimension.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZone, COMMON_ACTIONS::drawZone.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTarget, COMMON_ACTIONS::placeTarget.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceModule, COMMON_ACTIONS::placeModule.MakeEvent() );
 }

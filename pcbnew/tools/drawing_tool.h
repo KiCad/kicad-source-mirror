@@ -59,6 +59,8 @@ public:
 
     int DrawDimension( TOOL_EVENT& aEvent );
 
+    int DrawZone( TOOL_EVENT& aEvent );
+
     int PlaceTarget( TOOL_EVENT& aEvent );
 
     int PlaceModule( TOOL_EVENT& aEvent );
