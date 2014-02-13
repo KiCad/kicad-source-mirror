@@ -74,4 +74,7 @@ public:
 
     /// Activation of the drawing tool (placing a TARGET)
     static TOOL_ACTION placeTarget;
+
+    /// Activation of the drawing tool (placing a MODULE)
+    static TOOL_ACTION placeModule;
 };

@@ -26,16 +26,20 @@
 #include "common_actions.h"
 
 #include <wxPcbStruct.h>
+#include <confirm.h>
+
 #include <view/view_group.h>
 #include <view/view_controls.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <tool/tool_manager.h>
+
 #include <class_board.h>
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
 #include <class_dimension.h>
 #include <class_mire.h>
-#include <gal/graphics_abstraction_layer.h>
-#include <tool/tool_manager.h>
-#include <confirm.h>
+#include <class_module.h>
+#include <class_netinfo.h>          // TODO to be removed if we do not need the flags
 
 DRAWING_TOOL::DRAWING_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveDrawing" )
@@ -570,6 +574,8 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
     target->SetLayer( EDGE_N );
     target->SetWidth( board->GetDesignSettings().m_EdgeSegmentWidth );
     target->SetSize( Millimeter2iu( 5 ) );
+    VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+    target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( view );
@@ -630,6 +636,85 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
 }
 
 
+int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
+{
+    KIGFX::VIEW* view = getView();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    BOARD* board = getModel<BOARD>( PCB_T );
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    MODULE* module = editFrame->LoadModuleFromLibrary( wxEmptyString,
+                                               editFrame->GetFootprintLibraryTable(), true, NULL );
+    if( module == NULL )
+    {
+        setTransitions();
+        return 0;
+    }
+
+    // Init the new item attributes
+    VECTOR2D cursorPos = view->ToWorld( controls->GetCursorPosition() );
+    module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( view );
+    preview.Add( module );
+    module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW_GROUP::Add ), &preview ) );
+    view->Add( &preview );
+    preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+    controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        cursorPos = view->ToWorld( controls->GetCursorPosition() );
+
+        if( evt->IsCancel() )
+        {
+            board->Delete( module );
+            break;
+        }
+
+        else if( evt->Category() == TC_COMMAND )
+        {
+            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            {
+                module->Rotate( module->GetPosition(), getEditFrame<PCB_EDIT_FRAME>()->GetRotationAngle() );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+            {
+                module->Flip( module->GetPosition() );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), view ) );
+            view->Add( module );
+            module->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            break;
+        }
+
+        else if( evt->IsMotion() )
+        {
+            module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
+    view->Remove( &preview );
+
+    setTransitions();
+
+    return 0;
+}
+
+
 void DRAWING_TOOL::setTransitions()
 {
     Go( &DRAWING_TOOL::DrawLine, COMMON_ACTIONS::drawLine.MakeEvent() );
@@ -638,4 +723,5 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawText, COMMON_ACTIONS::drawText.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension, COMMON_ACTIONS::drawDimension.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTarget, COMMON_ACTIONS::placeTarget.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceModule, COMMON_ACTIONS::placeModule.MakeEvent() );
 }
