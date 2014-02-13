@@ -81,6 +81,10 @@ TOOL_ACTION COMMON_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
         AS_GLOBAL, 'B',
         "Add a filled zone", "Add a filled zone" );
 
+TOOL_ACTION COMMON_ACTIONS::drawKeepout( "pcbnew.InteractiveDrawing.keepout",
+        AS_GLOBAL, 'N',
+        "Add a keepout area", "Add a keepout area" );
+
 TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.InteractiveDrawing.placeTarget",
         AS_GLOBAL, 'C',
         "Add layer alignment target", "Add layer alignment target" );
