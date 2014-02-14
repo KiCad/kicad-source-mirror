@@ -205,7 +205,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel1->SetSizer( p1mainSizer );
 	m_panel1->Layout();
 	p1mainSizer->Fit( m_panel1 );
-	m_notebook1->AddPage( m_panel1, _("General Options"), true );
+	m_notebook1->AddPage( m_panel1, _("General Options"), false );
 	m_panel2 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panel2->SetToolTip( _("User defined field names for schematic components. ") );
 	
@@ -301,11 +301,70 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	bSizer6->Add( bSizer7, 1, wxALL|wxEXPAND, 12 );
 	
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
+	
+	wxBoxSizer* bSizer10;
+	bSizer10 = new wxBoxSizer( wxVERTICAL );
+	
+	templateFieldListCtrl = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ICON );
+	templateFieldListCtrl->SetMinSize( wxSize( 220,-1 ) );
+	
+	bSizer10->Add( templateFieldListCtrl, 0, wxALL|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	
+	addFieldButton = new wxButton( m_panel2, wxID_ANY, _("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer10->Add( addFieldButton, 0, wxALL, 5 );
+	
+	deleteFieldButton = new wxButton( m_panel2, wxID_ANY, _("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer10->Add( deleteFieldButton, 0, wxALL, 5 );
+	
+	
+	bSizer9->Add( bSizer10, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText27 = new wxStaticText( m_panel2, wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText27->Wrap( -1 );
+	bSizer12->Add( m_staticText27, 0, wxALL, 5 );
+	
+	fieldName = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fieldName->SetMinSize( wxSize( 220,-1 ) );
+	
+	bSizer12->Add( fieldName, 0, wxALL, 5 );
+	
+	
+	bSizer11->Add( bSizer12, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	
+	wxBoxSizer* bSizer13;
+	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText28 = new wxStaticText( m_panel2, wxID_ANY, _("Default Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText28->Wrap( -1 );
+	bSizer13->Add( m_staticText28, 0, wxALL, 5 );
+	
+	fieldDefault = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fieldDefault->SetMinSize( wxSize( 220,-1 ) );
+	
+	bSizer13->Add( fieldDefault, 0, wxALL, 5 );
+	
+	
+	bSizer11->Add( bSizer13, 1, wxEXPAND, 5 );
+	
+	
+	bSizer9->Add( bSizer11, 1, wxEXPAND, 5 );
+	
+	
+	bSizer6->Add( bSizer9, 1, wxEXPAND, 5 );
+	
 	
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook1->AddPage( m_panel2, _("Template Field Names"), false );
+	m_notebook1->AddPage( m_panel2, _("Template Field Names"), true );
 	
 	bOptionsSizer->Add( m_notebook1, 1, wxEXPAND, 0 );
 	

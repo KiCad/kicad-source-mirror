@@ -123,14 +123,34 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     aPad->GetParent()->SetLastEditTime();
 }
 
+/** Compute the 'next' pad number for autoincrement
+ * aPadName is the last pad name used */
+static wxString GetNextPadName( wxString aPadName )
+{
+    // Automatically increment the current pad number.
+    int num    = 0;
+    int ponder = 1;
+
+    // Trim and extract the trailing numeric part
+    while( aPadName.Len() 
+            && aPadName.Last() >= '0' 
+            && aPadName.Last() <= '9' )
+    {
+        num += ( aPadName.Last() - '0' ) * ponder;
+        aPadName.RemoveLast();
+        ponder *= 10;
+    }
+
+    num++;  // Use next number for the new pad
+    aPadName << num;
+
+    return aPadName;
+}
 
 /* Add a new pad to aModule.
  */
 void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
 {
-    // Last used pad name (pad num)
-    wxString lastPadName = GetDesignSettings().m_Pad_Master.GetPadName();
-
     m_Pcb->m_Status_Pcb     = 0;
     aModule->SetLastEditTime();
 
@@ -152,22 +172,15 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
     RotatePoint( &pos0, -aModule->GetOrientation() );
     pad->SetPos0( pos0 );
 
-    // Automatically increment the current pad number.
-    long num    = 0;
-    int  ponder = 1;
-
-    while( lastPadName.Len() && lastPadName.Last() >= '0' && lastPadName.Last() <= '9' )
-    {
-        num += ( lastPadName.Last() - '0' ) * ponder;
-        lastPadName.RemoveLast();
-        ponder *= 10;
+    /* NPTH pads take empty pad number (since they can't be connected),
+     * other pads get incremented from the last one edited */
+    wxString padName;
+    if( pad->GetAttribute() != PAD_HOLE_NOT_PLATED ) {
+        padName = GetNextPadName( GetDesignSettings()
+                .m_Pad_Master.GetPadName() );
     }
-
-    num++;  // Use next number for the new pad
-    lastPadName << num;
-    pad->SetPadName( lastPadName );
-
-    GetDesignSettings().m_Pad_Master.SetPadName(lastPadName);
+    pad->SetPadName( padName );
+    GetDesignSettings().m_Pad_Master.SetPadName( padName );
 
     aModule->CalculateBoundingBox();
     SetMsgPanel( pad );

@@ -30,8 +30,9 @@ class DIALOG_SHIM;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/textctrl.h>
-#include <wx/notebook.h>
+#include <wx/listctrl.h>
 #include <wx/button.h>
+#include <wx/notebook.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -112,6 +113,13 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_fieldName7;
 		wxStaticText* m_staticText22;
 		wxTextCtrl* m_fieldName8;
+		wxListCtrl* templateFieldListCtrl;
+		wxButton* addFieldButton;
+		wxButton* deleteFieldButton;
+		wxStaticText* m_staticText27;
+		wxTextCtrl* fieldName;
+		wxStaticText* m_staticText28;
+		wxTextCtrl* fieldDefault;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
