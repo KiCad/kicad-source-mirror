@@ -67,35 +67,30 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
 
 int DRAWING_TOOL::DrawLine( TOOL_EVENT& aEvent )
 {
-    m_continous = true;
-
-    return draw( S_SEGMENT );
+    return drawSegment( S_SEGMENT, true );
 }
 
 
 int DRAWING_TOOL::DrawCircle( TOOL_EVENT& aEvent )
 {
-    m_continous = false;
-
-    return draw( S_CIRCLE );
+    return drawSegment( S_CIRCLE, false );
 }
 
 
 int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 {
-    m_continous = false;
-
-    int step = 0;
-
-    DRAWSEGMENT graphic;
-    DRAWSEGMENT helperLine;
-    bool positive = true;
+    bool clockwise = true;
+    double startAngle;      // angle of the first arc line
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
     // Init the new item attributes
+    DRAWSEGMENT graphic;
     graphic.SetShape( S_ARC );
     graphic.SetAngle( 0.0 );
     graphic.SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
+    graphic.SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
 
+    DRAWSEGMENT helperLine;
     helperLine.SetShape( S_SEGMENT );
     helperLine.SetLayer( DRAW_N );
     helperLine.SetWidth( 1 );
@@ -106,13 +101,23 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
+    m_controls->SetAutoPan( true );
 
     Activate();
+
+    enum ARC_STEPS
+    {
+        SET_ORIGIN = 0,
+        SET_END,
+        SET_ANGLE,
+        FINISHED
+    };
+    int step = SET_ORIGIN;
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2I cursorPos = m_controls->GetCursorPosition();
+        cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsCancel() )
             break;
@@ -126,14 +131,14 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
                 graphic.SetWidth( width - WIDTH_STEP );
             else if( evt->KeyCode() == '=' )
                 graphic.SetWidth( width + WIDTH_STEP );
-            else if( evt->KeyCode() == ' ' )
+            else if( evt->KeyCode() == '/' )
             {
-                if( positive )
+                if( clockwise )
                     graphic.SetAngle( graphic.GetAngle() - 3600.0 );
                 else
                     graphic.SetAngle( graphic.GetAngle() + 3600.0 );
 
-                positive = !positive;
+                clockwise = !clockwise;
             }
 
             preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -143,9 +148,9 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
         {
             switch( step )
             {
-            case 0:
+            case SET_ORIGIN:
             {
-                LAYER_NUM layer = getEditFrame<PCB_EDIT_FRAME>()->GetScreen()->m_Active_Layer;
+                LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
 
                 if( IsCopperLayer( layer ) )
                 {
@@ -154,8 +159,6 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    m_controls->SetAutoPan( true );
-
                     helperLine.SetStart( graphic.GetCenter() );
                     graphic.SetLayer( layer );
                     preview.Add( &graphic );
@@ -164,7 +167,14 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
             }
             break;
 
-            case 2:
+            case SET_END:
+            {
+                VECTOR2D startLine( graphic.GetArcStart() - graphic.GetCenter() );
+                startAngle = startLine.Angle();
+            }
+            break;
+
+            case SET_ANGLE:
             {
                 if( wxPoint( cursorPos.x, cursorPos.y ) != graphic.GetCenter() )
                 {
@@ -175,10 +185,9 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
                 }
             }
             break;
-
             }
 
-            if( ++step == 3 )
+            if( ++step == FINISHED )
                 break;
         }
 
@@ -186,31 +195,27 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
         {
             switch( step )
             {
-            case 0:
+            case SET_ORIGIN:
                 graphic.SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
                 break;
 
-            case 1:
+            case SET_END:
                 helperLine.SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
                 graphic.SetArcStart( wxPoint( cursorPos.x, cursorPos.y ) );
                 break;
 
-            case 2:
+            case SET_ANGLE:
             {
-                VECTOR2D firstLine( graphic.GetArcStart() - graphic.GetCenter() );
-                double firstAngle = firstLine.Angle();
+                // Compute the current angle
+                VECTOR2D endLine( wxPoint( cursorPos.x, cursorPos.y ) - graphic.GetCenter() );
+                double newAngle = RAD2DECIDEG( endLine.Angle() - startAngle );
 
-                VECTOR2D secondLine( wxPoint( cursorPos.x, cursorPos.y ) - graphic.GetCenter() );
-                double secondAngle = secondLine.Angle();
+                if( clockwise && newAngle < 0.0 )
+                    newAngle += 3600.0;
+                else if( !clockwise && newAngle > 0.0 )
+                    newAngle -= 3600.0;
 
-                double angle = RAD2DECIDEG( secondAngle - firstAngle );
-
-                if( positive && angle < 0.0 )
-                    angle += 3600.0;
-                else if( !positive && angle > 0.0 )
-                    angle -= 3600.0;
-
-                graphic.SetAngle( angle );
+                graphic.SetAngle( newAngle );
             }
             break;
             }
@@ -309,23 +314,18 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
 {
-    m_continous = false;
-
-    int step = 0;
-
     DIMENSION* dimension = new DIMENSION( m_board );
 
     // Init the new item attributes
     dimension->Text().SetSize( m_board->GetDesignSettings().m_PcbTextSize );
     int width = m_board->GetDesignSettings().m_PcbTextWidth;
-    int maxthickness = Clamp_Text_PenSize( width, dimension->Text().GetSize() );
+    int maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetSize() );
 
-    if( width > maxthickness )
-        width = maxthickness;
+    if( width > maxThickness )
+        width = maxThickness;
 
     dimension->Text().SetThickness( width );
     dimension->SetWidth( width );
-    dimension->SetFlags( IS_NEW );
     dimension->AdjustDimensionDetails();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
@@ -336,6 +336,15 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
     m_controls->SetSnapping( true );
 
     Activate();
+
+    enum DIMENSION_STEPS
+    {
+        SET_ORIGIN = 0,
+        SET_END,
+        SET_HEIGHT,
+        FINISHED
+    };
+    int step = SET_ORIGIN;
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -350,7 +359,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
 
         else if( evt->IsKeyUp() )
         {
-            int width = dimension->GetWidth();
+            width = dimension->GetWidth();
 
             // Modify the new item width
             if( evt->KeyCode() == '-' && width > WIDTH_STEP )
@@ -365,7 +374,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
         {
             switch( step )
             {
-            case 0:
+            case SET_ORIGIN:
             {
                 LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
 
@@ -386,7 +395,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
             }
             break;
 
-            case 2:
+            case SET_HEIGHT:
             {
                 if( wxPoint( cursorPos.x, cursorPos.y ) != dimension->GetPosition() )
                 {
@@ -398,7 +407,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
             break;
             }
 
-            if( ++step == 3 )
+            if( ++step == FINISHED )
                 break;
         }
 
@@ -406,13 +415,13 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
         {
             switch( step )
             {
-            case 1:
+            case SET_END:
                 dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
                 break;
 
-            case 2:
+            case SET_HEIGHT:
             {
-                /* Calculating the direction of travel perpendicular to the selected axis. */
+                // Calculating the direction of travel perpendicular to the selected axis
                 double angle = dimension->GetAngle() + ( M_PI / 2 );
 
                 wxPoint pos( cursorPos.x, cursorPos.y );
@@ -475,7 +484,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2I cursorPos = m_controls->GetCursorPosition();
+        cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
@@ -596,7 +605,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::draw( int aShape )
+int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
 {
     // Only two shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
@@ -670,7 +679,7 @@ int DRAWING_TOOL::draw( int aShape )
                     m_board->Add( newItem );
                     newItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
-                    if( m_continous )
+                    if( aContinous )
                         graphic.SetStart( graphic.GetEnd() ); // This is the origin point for a new item
                     else
                         break;

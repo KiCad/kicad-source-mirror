@@ -77,7 +77,8 @@ public:
 private:
     ///> Starts drawing a selected shape (i.e. DRAWSEGMENT).
     ///> @param aShape is the type of created shape (@see STROKE_T).
-    int draw( int aShape );
+    ///> @param aContinous decides if there is only one or multiple shapes to draw.
+    int drawSegment( int aShape, bool aContinous );
 
     ///> Draws a polygon, that is added as a zone or a keepout area.
     ///> @param aKeepout decides if the drawn polygon is a zone or a keepout area.
@@ -85,9 +86,6 @@ private:
 
     ///> Sets up handlers for various events.
     void setTransitions();
-
-    ///> Should drawing be stopped after drawing one object or should it continue with another one.
-    bool m_continous;
 
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
