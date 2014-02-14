@@ -693,23 +693,9 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
         {
             // 45 degree lines
             if( linesAngle45 && aShape == S_SEGMENT )
-            {
-                VECTOR2D lineVector( wxPoint( cursorPos.x, cursorPos.y ) - graphic.GetStart() );
-                double angle = lineVector.Angle();
-
-                double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
-                VECTOR2D newLineVector = lineVector.Rotate( newAngle - angle );
-
-                // Snap the new line to the grid // TODO fix it, does not work good..
-                VECTOR2D newLineEnd = VECTOR2D( graphic.GetStart() ) + newLineVector;
-                VECTOR2D snapped = m_view->GetGAL()->GetGridPoint( newLineEnd );
-
-                graphic.SetEnd( wxPoint( snapped.x, snapped.y ) );
-            }
+                make45DegLine( &graphic );
             else
-            {
                 graphic.SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-            }
 
             // Show a preview of the item
             preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -847,27 +833,11 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
 
         else if( evt->IsMotion() )
         {
-            helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-
             // 45 degree lines
             if( linesAngle45 )
-            {
-                VECTOR2D lineVector( wxPoint( cursorPos.x, cursorPos.y ) - helperLine->GetStart() );
-                double angle = lineVector.Angle();
-
-                double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
-                VECTOR2D newLineVector = lineVector.Rotate( newAngle - angle );
-
-                // Snap the new line to the grid // TODO fix it, does not work good..
-                VECTOR2D newLineEnd = VECTOR2D( helperLine->GetStart() ) + newLineVector;
-                VECTOR2D snapped = m_view->GetGAL()->GetGridPoint( newLineEnd );
-
-                helperLine->SetEnd( wxPoint( snapped.x, snapped.y ) );
-            }
+                make45DegLine( helperLine );
             else
-            {
                 helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-            }
 
             // Show a preview of the item
             preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -885,6 +855,27 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     setTransitions();
 
     return 0;
+}
+
+
+void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment ) const
+{
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+
+    // Current line vector
+    VECTOR2D lineVector( wxPoint( cursorPos.x, cursorPos.y ) - aSegment->GetStart() );
+    double angle = lineVector.Angle();
+
+    // Find the closest angle, which is a multiple of 45 degrees
+    double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
+
+    VECTOR2D newLineVector = lineVector.Rotate( newAngle - angle );
+    VECTOR2D newLineEnd = VECTOR2D( aSegment->GetStart() ) + newLineVector;
+
+    // Snap the new line to the grid
+    newLineEnd = m_view->GetGAL()->GetGridPoint( newLineEnd );
+
+    aSegment->SetEnd( wxPoint( newLineEnd.x, newLineEnd.y ) );
 }
 
 
