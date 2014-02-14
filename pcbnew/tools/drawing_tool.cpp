@@ -231,124 +231,6 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::draw( int aShape )
-{
-    bool started = false;
-    DRAWSEGMENT graphic;
-
-    // Init the new item attributes
-    graphic.SetShape( (STROKE_T) aShape );
-    graphic.SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
-
-    // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( m_view );
-    m_view->Add( &preview );
-
-    m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
-
-    Activate();
-
-    // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
-    {
-        // Enable 45 degrees lines only mode by holding shift
-        bool linesAngle45 = evt->Modifier( MD_SHIFT );
-        VECTOR2I cursorPos = m_controls->GetCursorPosition();
-
-        if( evt->IsCancel() )
-            break;
-
-        else if( evt->IsKeyUp() )
-        {
-            int width = graphic.GetWidth();
-
-            // Modify the new item width
-            if( evt->KeyCode() == '-' && width > WIDTH_STEP )
-                graphic.SetWidth( width - WIDTH_STEP );
-            else if( evt->KeyCode() == '=' )
-                graphic.SetWidth( width + WIDTH_STEP );
-
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-        }
-
-        else if( evt->IsClick( BUT_LEFT ) )
-        {
-            if( !started )
-            {
-                LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
-
-                if( IsCopperLayer( layer ) )
-                {
-                    DisplayInfoMessage( NULL, _( "Graphic not allowed on Copper layers" ) );
-                }
-                else
-                {
-                    m_controls->SetAutoPan( true );
-
-                    graphic.SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
-                    graphic.SetLayer( layer );
-                    preview.Add( &graphic );
-
-                    started = true;
-                }
-            }
-            else
-            {
-                if( wxPoint( cursorPos.x, cursorPos.y ) != graphic.GetStart() )
-                {
-                    DRAWSEGMENT* newItem = new DRAWSEGMENT( graphic );
-                    m_view->Add( newItem );
-                    m_board->Add( newItem );
-                    newItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-
-                    if( m_continous )
-                        graphic.SetStart( graphic.GetEnd() ); // This is the origin point for a new item
-                    else
-                        break;
-                }
-                else            // User has clicked twice in the same spot
-                    break;      // seems like a clear sign that the drawing is finished
-            }
-        }
-
-        else if( evt->IsMotion() && started )
-        {
-            // 45 degree lines
-            if( linesAngle45 && aShape == S_SEGMENT )
-            {
-                VECTOR2D lineVector( wxPoint( cursorPos.x, cursorPos.y ) - graphic.GetStart() );
-                double angle = lineVector.Angle();
-
-                double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
-                VECTOR2D newLineVector = lineVector.Rotate( newAngle - angle );
-
-                // Snap the new line to the grid // TODO fix it, does not work good..
-                VECTOR2D newLineEnd = VECTOR2D( graphic.GetStart() ) + newLineVector;
-                VECTOR2D snapped = m_view->GetGAL()->GetGridPoint( newLineEnd );
-
-                graphic.SetEnd( wxPoint( snapped.x, snapped.y ) );
-            }
-            else
-            {
-                graphic.SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-            }
-
-            // Show a preview of the item
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-        }
-    }
-
-    m_controls->ShowCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->SetAutoPan( false );
-    m_view->Remove( &preview );
-    setTransitions();
-
-    return 0;
-}
-
-
 int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 {
     // Init the new item attributes
@@ -559,285 +441,13 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
 {
-    ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
-
-    // Get the current, default settings for zones
-    ZONE_SETTINGS zoneInfo = m_frame->GetZoneSettings();
-
-    ZONE_EDIT_T dialogResult;
-    if( IsCopperLayer( m_frame->GetScreen()->m_Active_Layer ) )
-        dialogResult = InvokeCopperZonesEditor( m_frame, &zoneInfo );
-    else
-        dialogResult = InvokeNonCopperZonesEditor( m_frame, zone, &zoneInfo );
-
-    if( dialogResult == ZONE_ABORT )
-    {
-        delete zone;
-        setTransitions();
-        return 0;
-    }
-
-    zoneInfo.ExportSetting( *zone );
-    m_frame->SetTopLayer( zoneInfo.m_CurrentZone_Layer );
-
-    DRAWSEGMENT* helperLine = new DRAWSEGMENT;
-    helperLine->SetShape( S_SEGMENT );
-    helperLine->SetLayer( zoneInfo.m_CurrentZone_Layer );
-    helperLine->SetWidth( 1 );
-
-    // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( m_view );
-    m_view->Add( &preview );
-
-    m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
-    m_controls->SetAutoPan( true );
-
-    Activate();
-
-    VECTOR2I lastCursorPos = m_controls->GetCursorPosition();
-
-    // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
-    {
-        // Enable 45 degrees lines only mode by holding shift
-        bool linesAngle45 = evt->Modifier( MD_SHIFT );
-        VECTOR2I cursorPos = m_controls->GetCursorPosition();
-
-        if( evt->IsCancel() )
-        {
-            delete zone;
-            break;
-        }
-
-        else if( evt->IsClick( BUT_LEFT ) )
-        {
-            if( lastCursorPos == cursorPos ||
-                ( zone->GetNumCorners() > 0 && wxPoint( cursorPos.x, cursorPos.y ) == zone->Outline()->GetPos( 0 ) ) )   // TODO better conditions
-            {
-                if( zone->GetNumCorners() > 2 )
-                {
-                    // Finish the zone
-                    zone->Outline()->CloseLastContour();
-                    zone->Outline()->RemoveNullSegments();
-
-                    m_board->Add( zone );
-                    m_view->Add( zone );
-
-                    m_frame->Fill_Zone( zone );
-                    zone->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-                }
-                else
-                {
-                    // That is not a valid zone
-                    delete zone;
-                }
-
-                break;
-            }
-            else
-            {
-                if( zone->GetNumCorners() == 0 )
-                {
-                    zone->Outline()->Start( zoneInfo.m_CurrentZone_Layer,
-                                            cursorPos.x,
-                                            cursorPos.y,
-                                            zone->GetHatchStyle() );
-                    helperLine->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
-                    preview.Add( helperLine );
-                }
-                else
-                {
-                    zone->AppendCorner( helperLine->GetEnd() );
-                    helperLine = new DRAWSEGMENT( *helperLine );
-                    preview.Add( helperLine );
-                    helperLine->SetStart( helperLine->GetEnd() );
-                }
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-            }
-
-            lastCursorPos = cursorPos;
-        }
-
-        else if( evt->IsMotion() )
-        {
-            helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-
-            // 45 degree lines
-            if( linesAngle45 )
-            {
-                VECTOR2D lineVector( wxPoint( cursorPos.x, cursorPos.y ) - helperLine->GetStart() );
-                double angle = lineVector.Angle();
-
-                double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
-                VECTOR2D newLineVector = lineVector.Rotate( newAngle - angle );
-
-                // Snap the new line to the grid // TODO fix it, does not work good..
-                VECTOR2D newLineEnd = VECTOR2D( helperLine->GetStart() ) + newLineVector;
-                VECTOR2D snapped = m_view->GetGAL()->GetGridPoint( newLineEnd );
-
-                helperLine->SetEnd( wxPoint( snapped.x, snapped.y ) );
-            }
-            else
-            {
-                helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-            }
-
-            // Show a preview of the item
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-        }
-    }
-
-    m_controls->ShowCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->SetAutoPan( false );
-    m_view->Remove( &preview );
-
-    // delete helper lines
-    preview.FreeItems();
-
-    setTransitions();
-
-    return 0;
+    return drawZone( false );
 }
 
 
 int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
 {
-    ZONE_CONTAINER* keepout = new ZONE_CONTAINER( m_board );
-
-    // Get the current, default settings for zones
-    ZONE_SETTINGS zoneInfo = m_frame->GetZoneSettings();
-
-    ZONE_EDIT_T dialogResult = InvokeKeepoutAreaEditor( m_frame, &zoneInfo );
-    if( dialogResult == ZONE_ABORT )
-    {
-        delete keepout;
-        setTransitions();
-        return 0;
-    }
-
-    zoneInfo.ExportSetting( *keepout );
-    m_frame->SetTopLayer( zoneInfo.m_CurrentZone_Layer );
-
-    DRAWSEGMENT* helperLine = new DRAWSEGMENT;
-    helperLine->SetShape( S_SEGMENT );
-    helperLine->SetLayer( zoneInfo.m_CurrentZone_Layer );
-    helperLine->SetWidth( 1 );
-
-    // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( m_view );
-    m_view->Add( &preview );
-
-    m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
-    m_controls->SetAutoPan( true );
-
-    Activate();
-
-    VECTOR2I lastCursorPos = m_controls->GetCursorPosition();
-
-    // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
-    {
-        // Enable 45 degrees lines only mode by holding shift
-        bool linesAngle45 = evt->Modifier( MD_SHIFT );
-        VECTOR2I cursorPos = m_controls->GetCursorPosition();
-
-        if( evt->IsCancel() )
-        {
-            delete keepout;
-            break;
-        }
-
-        else if( evt->IsClick( BUT_LEFT ) )
-        {
-            if( lastCursorPos == cursorPos ||
-                ( keepout->GetNumCorners() > 0 && wxPoint( cursorPos.x, cursorPos.y ) == keepout->Outline()->GetPos( 0 ) ) )   // TODO better conditions
-            {
-                if( keepout->GetNumCorners() > 2 )
-                {
-                    // Finish the zone
-                    keepout->Outline()->CloseLastContour();
-                    keepout->Outline()->RemoveNullSegments();
-
-                    m_board->Add( keepout );
-                    m_view->Add( keepout );
-
-                    keepout->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-                }
-                else
-                {
-                    // That is not a valid zone
-                    delete keepout;
-                }
-
-                break;
-            }
-            else
-            {
-                if( keepout->GetNumCorners() == 0 )
-                {
-                    keepout->Outline()->Start( zoneInfo.m_CurrentZone_Layer,
-                                            cursorPos.x,
-                                            cursorPos.y,
-                                            keepout->GetHatchStyle() );
-                    helperLine->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
-                    preview.Add( helperLine );
-                }
-                else
-                {
-                    keepout->AppendCorner( helperLine->GetEnd() );
-                    helperLine = new DRAWSEGMENT( *helperLine );
-                    preview.Add( helperLine );
-                    helperLine->SetStart( helperLine->GetEnd() );
-                }
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-            }
-
-            lastCursorPos = cursorPos;
-        }
-
-        else if( evt->IsMotion() )
-        {
-            helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-
-            // 45 degree lines
-            if( linesAngle45 )
-            {
-                VECTOR2D lineVector( wxPoint( cursorPos.x, cursorPos.y ) - helperLine->GetStart() );
-                double angle = lineVector.Angle();
-
-                double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
-                VECTOR2D newLineVector = lineVector.Rotate( newAngle - angle );
-
-                // Snap the new line to the grid // TODO fix it, does not work good..
-                VECTOR2D newLineEnd = VECTOR2D( helperLine->GetStart() ) + newLineVector;
-                VECTOR2D snapped = m_view->GetGAL()->GetGridPoint( newLineEnd );
-
-                helperLine->SetEnd( wxPoint( snapped.x, snapped.y ) );
-            }
-            else
-            {
-                helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-            }
-
-            // Show a preview of the item
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-        }
-    }
-
-    m_controls->ShowCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->SetAutoPan( false );
-    m_view->Remove( &preview );
-
-    // delete helper lines
-    preview.FreeItems();
-
-    setTransitions();
-
-    return 0;
+    return drawZone( true );
 }
 
 
@@ -979,6 +589,289 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
     m_view->Remove( &preview );
+
+    setTransitions();
+
+    return 0;
+}
+
+
+int DRAWING_TOOL::draw( int aShape )
+{
+    // Only two shapes are currently supported
+    assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
+
+    bool started = false;
+    DRAWSEGMENT graphic;
+
+    // Init the new item attributes
+    graphic.SetShape( (STROKE_T) aShape );
+    graphic.SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( m_view );
+    m_view->Add( &preview );
+
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        // Enable 45 degrees lines only mode by holding shift
+        bool linesAngle45 = evt->Modifier( MD_SHIFT );
+        VECTOR2I cursorPos = m_controls->GetCursorPosition();
+
+        if( evt->IsCancel() )
+            break;
+
+        else if( evt->IsKeyUp() )
+        {
+            int width = graphic.GetWidth();
+
+            // Modify the new item width
+            if( evt->KeyCode() == '-' && width > WIDTH_STEP )
+                graphic.SetWidth( width - WIDTH_STEP );
+            else if( evt->KeyCode() == '=' )
+                graphic.SetWidth( width + WIDTH_STEP );
+
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !started )
+            {
+                LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
+
+                if( IsCopperLayer( layer ) )
+                {
+                    DisplayInfoMessage( NULL, _( "Graphic not allowed on Copper layers" ) );
+                }
+                else
+                {
+                    m_controls->SetAutoPan( true );
+
+                    graphic.SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
+                    graphic.SetLayer( layer );
+                    preview.Add( &graphic );
+
+                    started = true;
+                }
+            }
+            else
+            {
+                if( wxPoint( cursorPos.x, cursorPos.y ) != graphic.GetStart() )
+                {
+                    DRAWSEGMENT* newItem = new DRAWSEGMENT( graphic );
+                    m_view->Add( newItem );
+                    m_board->Add( newItem );
+                    newItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+                    if( m_continous )
+                        graphic.SetStart( graphic.GetEnd() ); // This is the origin point for a new item
+                    else
+                        break;
+                }
+                else            // User has clicked twice in the same spot
+                    break;      // seems like a clear sign that the drawing is finished
+            }
+        }
+
+        else if( evt->IsMotion() && started )
+        {
+            // 45 degree lines
+            if( linesAngle45 && aShape == S_SEGMENT )
+            {
+                VECTOR2D lineVector( wxPoint( cursorPos.x, cursorPos.y ) - graphic.GetStart() );
+                double angle = lineVector.Angle();
+
+                double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
+                VECTOR2D newLineVector = lineVector.Rotate( newAngle - angle );
+
+                // Snap the new line to the grid // TODO fix it, does not work good..
+                VECTOR2D newLineEnd = VECTOR2D( graphic.GetStart() ) + newLineVector;
+                VECTOR2D snapped = m_view->GetGAL()->GetGridPoint( newLineEnd );
+
+                graphic.SetEnd( wxPoint( snapped.x, snapped.y ) );
+            }
+            else
+            {
+                graphic.SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+            }
+
+            // Show a preview of the item
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
+    setTransitions();
+
+    return 0;
+}
+
+
+int DRAWING_TOOL::drawZone( bool aKeepout )
+{
+    ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+
+    // Get the current, default settings for zones
+    ZONE_SETTINGS zoneInfo = m_frame->GetZoneSettings();
+    zoneInfo.m_CurrentZone_Layer = m_frame->GetScreen()->m_Active_Layer;
+
+    // Show options dialog
+    ZONE_EDIT_T dialogResult;
+    if( aKeepout )
+        dialogResult = InvokeKeepoutAreaEditor( m_frame, &zoneInfo );
+    else
+    {
+        if( IsCopperLayer( zoneInfo.m_CurrentZone_Layer ) )
+            dialogResult = InvokeCopperZonesEditor( m_frame, &zoneInfo );
+        else
+            dialogResult = InvokeNonCopperZonesEditor( m_frame, NULL, &zoneInfo );
+    }
+
+    if( dialogResult == ZONE_ABORT )
+    {
+        delete zone;
+        setTransitions();
+
+        return 0;
+    }
+
+    // Apply the selected settings
+    zoneInfo.ExportSetting( *zone );
+    m_frame->SetTopLayer( zoneInfo.m_CurrentZone_Layer );
+
+    // Helper line represents the currently drawn line of the zone polygon
+    DRAWSEGMENT* helperLine = new DRAWSEGMENT;
+    helperLine->SetShape( S_SEGMENT );
+    helperLine->SetLayer( zoneInfo.m_CurrentZone_Layer );
+    helperLine->SetWidth( 1 );
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( m_view );
+    m_view->Add( &preview );
+
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+    m_controls->SetAutoPan( true );
+
+    Activate();
+
+    VECTOR2I lastCursorPos = m_controls->GetCursorPosition();
+    VECTOR2I origin;
+    int numPoints = 0;
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        // Enable 45 degrees lines only mode by holding shift
+        bool linesAngle45 = evt->Modifier( MD_SHIFT );
+        VECTOR2I cursorPos = m_controls->GetCursorPosition();
+
+        if( evt->IsCancel() )
+        {
+            delete zone;
+            break;
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( lastCursorPos == cursorPos || ( numPoints > 0 && cursorPos == origin ) )
+            {
+                if( numPoints > 2 )
+                {
+                    // Finish the zone
+                    zone->Outline()->CloseLastContour();
+                    zone->Outline()->RemoveNullSegments();
+
+                    m_board->Add( zone );
+                    m_view->Add( zone );
+
+                    if( !aKeepout )
+                        m_frame->Fill_Zone( zone );
+
+                    zone->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                }
+                else
+                {
+                    // If there are less than 3 points, then it is not a valid zone
+                    delete zone;
+                }
+
+                break;
+            }
+            else
+            {
+                if( numPoints == 0 )
+                {
+                    // Add the first point
+                    zone->Outline()->Start( zoneInfo.m_CurrentZone_Layer,
+                                            cursorPos.x,
+                                            cursorPos.y,
+                                            zone->GetHatchStyle() );
+                    helperLine->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
+                    origin = cursorPos;
+                    preview.Add( helperLine );
+                }
+                else
+                {
+                    zone->AppendCorner( helperLine->GetEnd() );
+                    helperLine = new DRAWSEGMENT( *helperLine );
+                    helperLine->SetStart( helperLine->GetEnd() );
+                    preview.Add( helperLine );
+                }
+                ++numPoints;
+
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+
+            lastCursorPos = cursorPos;
+        }
+
+        else if( evt->IsMotion() )
+        {
+            helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+
+            // 45 degree lines
+            if( linesAngle45 )
+            {
+                VECTOR2D lineVector( wxPoint( cursorPos.x, cursorPos.y ) - helperLine->GetStart() );
+                double angle = lineVector.Angle();
+
+                double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
+                VECTOR2D newLineVector = lineVector.Rotate( newAngle - angle );
+
+                // Snap the new line to the grid // TODO fix it, does not work good..
+                VECTOR2D newLineEnd = VECTOR2D( helperLine->GetStart() ) + newLineVector;
+                VECTOR2D snapped = m_view->GetGAL()->GetGridPoint( newLineEnd );
+
+                helperLine->SetEnd( wxPoint( snapped.x, snapped.y ) );
+            }
+            else
+            {
+                helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+            }
+
+            // Show a preview of the item
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
+
+    // Delete helper lines
+    preview.FreeItems();
 
     setTransitions();
 

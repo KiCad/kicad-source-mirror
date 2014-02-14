@@ -75,8 +75,13 @@ public:
     int PlaceModule( TOOL_EVENT& aEvent );
 
 private:
-    ///> Starts drawing a selected shape.
+    ///> Starts drawing a selected shape (i.e. DRAWSEGMENT).
+    ///> @param aShape is the type of created shape (@see STROKE_T).
     int draw( int aShape );
+
+    ///> Draws a polygon, that is added as a zone or a keepout area.
+    ///> @param aKeepout decides if the drawn polygon is a zone or a keepout area.
+    int drawZone( bool aKeepout );
 
     ///> Sets up handlers for various events.
     void setTransitions();
