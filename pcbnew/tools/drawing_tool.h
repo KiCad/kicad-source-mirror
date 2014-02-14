@@ -54,25 +54,70 @@ public:
     /**
      * Function DrawLine()
      * Starts interactively drawing a line. After invoking the function it expects the user
-     * to click at least twice to determine the origin and the end for a line. If there are
+     * to click at least two times to determine the origin and the end for a line. If there are
      * more clicks, the line is drawn as a continous polyline.
      */
     int DrawLine( TOOL_EVENT& aEvent );
 
+    /**
+     * Function DrawCircle()
+     * Starts interactively drawing a circle. After invoking the function it expects the user
+     * to first click on a point that is going to be used as the center of the circle. The second
+     * click determines the circle radius.
+     */
     int DrawCircle( TOOL_EVENT& aEvent );
 
+    /**
+     * Function DrawArc()
+     * Starts interactively drawing an arc. After invoking the function it expects the user
+     * to first click on a point that is going to be used as the center of the arc. The second
+     * click determines the origin and radius, the third one - the angle.
+     */
     int DrawArc( TOOL_EVENT& aEvent );
 
+    /**
+     * Function DrawText()
+     * Displays a dialog that allows to input text and its settings and then lets the user decide
+     * where to place the text.
+     */
     int DrawText( TOOL_EVENT& aEvent );
 
+    /**
+     * Function DrawDimension()
+     * Starts interactively drawing a dimension. After invoking the function it expects the user
+     * to first click on a point that is going to be used as the origin of the dimension.
+     * The second click determines the end and the third click modifies its height.
+     */
     int DrawDimension( TOOL_EVENT& aEvent );
 
+    /**
+     * Function DrawZone()
+     * Starts interactively drawing a zone. After invoking the function a zone settings dialog
+     * is displayed. After confirmation it allows the user to set points that are going to be used
+     * as a boundary polygon of the zone. Double click or clicking on the origin of the boundary
+     * polyline finishes the drawing.
+     */
     int DrawZone( TOOL_EVENT& aEvent );
 
+    /**
+     * Function DrawKeepout()
+     * Starts interactively drawing a keepout area. After invoking the function an area settings
+     * dialog is displayed. After confirmation it allows the user to set points that are going to
+     * be used as a boundary polygon of the area. Double click or clicking on the origin of the
+     * boundary polyline finishes the drawing.
+     */
     int DrawKeepout( TOOL_EVENT& aEvent );
 
+    /**
+     * Function PlaceTarget()
+     * Allows user to place a layer alignment target.
+     */
     int PlaceTarget( TOOL_EVENT& aEvent );
 
+    /**
+     * Function PlaceModule()
+     * Displays a dialog to selected a module to be added and then allows user to set its position..
+     */
     int PlaceModule( TOOL_EVENT& aEvent );
 
 private:
