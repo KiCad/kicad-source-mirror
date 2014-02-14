@@ -247,7 +247,7 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
         VECTOR2D mousePosition = GetMousePosition();
 
         if( m_snappingEnabled )
-            return m_view->ToWorld( m_view->GetGAL()->GetGridPoint( mousePosition ) );
+            return m_view->GetGAL()->GetGridPoint( m_view->ToWorld( mousePosition ) );
         else
             return m_view->ToWorld( mousePosition );
     }
