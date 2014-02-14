@@ -237,10 +237,10 @@ void GAL::DrawGrid()
 
 VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 {
-    VECTOR2D pointWorld = ToWorld( aPoint );
+    VECTOR2D gridPoint;
 
-    pointWorld.x = round( pointWorld.x / gridSize.x ) * gridSize.x;
-    pointWorld.y = round( pointWorld.y / gridSize.y ) * gridSize.y;
+    gridPoint.x = round( aPoint.x / gridSize.x ) * gridSize.x;
+    gridPoint.y = round( aPoint.y / gridSize.y ) * gridSize.y;
 
-    return ToScreen( pointWorld );
+    return gridPoint;
 }

@@ -717,15 +717,15 @@ public:
         gridLineWidth = aGridLineWidth;
     }
 
-    /// @brief Draw the grid
+    ///> @brief Draw the grid
     void DrawGrid();
 
     /**
      * Function GetGridPoint()
-     * For a given point it returns the nearest point belonging to the grid in screen coordinates.
+     * For a given point it returns the nearest point belonging to the grid in world coordinates.
      *
      * @param aPoint is the point for which the grid point is searched.
-     * @return The nearest grid point in screen coordinates.
+     * @return The nearest grid point in world coordinates.
      */
     VECTOR2D GetGridPoint( const VECTOR2D& aPoint ) const;
 
