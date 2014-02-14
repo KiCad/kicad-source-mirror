@@ -55,6 +55,12 @@ DRAWING_TOOL::~DRAWING_TOOL()
 
 void DRAWING_TOOL::Reset( RESET_REASON aReason )
 {
+    // Init variables used by every drawing tool
+    m_view = getView();
+    m_controls = getViewControls();
+    m_board = getModel<BOARD>( PCB_T );
+    m_frame = getEditFrame<PCB_EDIT_FRAME>();
+
     setTransitions();
 }
 
@@ -81,9 +87,6 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 
     int step = 0;
 
-    KIGFX::VIEW* view = getView();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    BOARD* board = getModel<BOARD>( PCB_T );
     DRAWSEGMENT graphic;
     DRAWSEGMENT helperLine;
     bool positive = true;
@@ -91,25 +94,25 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
     // Init the new item attributes
     graphic.SetShape( S_ARC );
     graphic.SetAngle( 0.0 );
-    graphic.SetWidth( board->GetDesignSettings().m_DrawSegmentWidth );
+    graphic.SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
 
     helperLine.SetShape( S_SEGMENT );
     helperLine.SetLayer( DRAW_N );
     helperLine.SetWidth( 1 );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view );
-    view->Add( &preview );
+    KIGFX::VIEW_GROUP preview( m_view );
+    m_view->Add( &preview );
 
-    controls->ShowCursor( true );
-    controls->SetSnapping( true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
 
     Activate();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2I cursorPos = controls->GetCursorPosition();
+        VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsCancel() )
             break;
@@ -151,7 +154,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    controls->SetAutoPan( true );
+                    m_controls->SetAutoPan( true );
 
                     helperLine.SetStart( graphic.GetCenter() );
                     graphic.SetLayer( layer );
@@ -166,8 +169,8 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
                 if( wxPoint( cursorPos.x, cursorPos.y ) != graphic.GetCenter() )
                 {
                     DRAWSEGMENT* newItem = new DRAWSEGMENT( graphic );
-                    view->Add( newItem );
-                    board->Add( newItem );
+                    m_view->Add( newItem );
+                    m_board->Add( newItem );
                     newItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
                 }
             }
@@ -217,10 +220,10 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
         }
     }
 
-    controls->ShowCursor( false );
-    controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-    view->Remove( &preview );
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
 
     setTransitions();
 
@@ -228,24 +231,21 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::draw( STROKE_T aShape )
+int DRAWING_TOOL::draw( int aShape )
 {
     bool started = false;
-    KIGFX::VIEW* view = getView();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    BOARD* board = getModel<BOARD>( PCB_T );
     DRAWSEGMENT graphic;
 
     // Init the new item attributes
-    graphic.SetShape( aShape );
-    graphic.SetWidth( board->GetDesignSettings().m_DrawSegmentWidth );
+    graphic.SetShape( (STROKE_T) aShape );
+    graphic.SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view );
-    view->Add( &preview );
+    KIGFX::VIEW_GROUP preview( m_view );
+    m_view->Add( &preview );
 
-    controls->ShowCursor( true );
-    controls->SetSnapping( true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
 
     Activate();
 
@@ -254,7 +254,7 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
     {
         // Enable 45 degrees lines only mode by holding shift
         bool linesAngle45 = evt->Modifier( MD_SHIFT );
-        VECTOR2I cursorPos = controls->GetCursorPosition();
+        VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsCancel() )
             break;
@@ -276,7 +276,7 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
         {
             if( !started )
             {
-                LAYER_NUM layer = getEditFrame<PCB_EDIT_FRAME>()->GetScreen()->m_Active_Layer;
+                LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
 
                 if( IsCopperLayer( layer ) )
                 {
@@ -284,7 +284,7 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
                 }
                 else
                 {
-                    controls->SetAutoPan( true );
+                    m_controls->SetAutoPan( true );
 
                     graphic.SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
                     graphic.SetLayer( layer );
@@ -298,8 +298,8 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
                 if( wxPoint( cursorPos.x, cursorPos.y ) != graphic.GetStart() )
                 {
                     DRAWSEGMENT* newItem = new DRAWSEGMENT( graphic );
-                    view->Add( newItem );
-                    board->Add( newItem );
+                    m_view->Add( newItem );
+                    m_board->Add( newItem );
                     newItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
                     if( m_continous )
@@ -325,7 +325,7 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
 
                 // Snap the new line to the grid // TODO fix it, does not work good..
                 VECTOR2D newLineEnd = VECTOR2D( graphic.GetStart() ) + newLineVector;
-                VECTOR2D snapped = view->GetGAL()->GetGridPoint( newLineEnd );
+                VECTOR2D snapped = m_view->GetGAL()->GetGridPoint( newLineEnd );
 
                 graphic.SetEnd( wxPoint( snapped.x, snapped.y ) );
             }
@@ -339,10 +339,10 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
         }
     }
 
-    controls->ShowCursor( false );
-    controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-    view->Remove( &preview );
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
     setTransitions();
 
     return 0;
@@ -351,11 +351,8 @@ int DRAWING_TOOL::draw( STROKE_T aShape )
 
 int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW* view = getView();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-
     // Init the new item attributes
-    TEXTE_PCB* newText = getEditFrame<PCB_EDIT_FRAME>()->CreateTextePcb( NULL );
+    TEXTE_PCB* newText = m_frame->CreateTextePcb( NULL );
     if( newText == NULL )
     {
         setTransitions();
@@ -363,25 +360,25 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
     }
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view );
+    KIGFX::VIEW_GROUP preview( m_view );
     preview.Add( newText );
-    view->Add( &preview );
+    m_view->Add( &preview );
 
-    controls->ShowCursor( true );
-    controls->SetSnapping( true );
-    controls->SetAutoPan( true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+    m_controls->SetAutoPan( true );
 
     Activate();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2I cursorPos = controls->GetCursorPosition();
+        VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
             // it was already added by CreateTextPcb()
-            getModel<BOARD>( PCB_T )->Delete( newText );
+            m_board->Delete( newText );
             break;
         }
 
@@ -389,7 +386,7 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                newText->Rotate( newText->GetPosition(), getEditFrame<PCB_EDIT_FRAME>()->GetRotationAngle() );
+                newText->Rotate( newText->GetPosition(), m_frame->GetRotationAngle() );
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
@@ -402,8 +399,8 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_LEFT ) )
         {
             newText->ClearFlags();
-            view->Add( newText );
-            // board->Add( newText );        // it is already added by CreateTextePcb()
+            m_view->Add( newText );
+            // m_board->Add( newText );        // it is already added by CreateTextePcb()
             newText->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
         }
@@ -417,10 +414,10 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
         }
     }
 
-    controls->ShowCursor( false );
-    controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-    view->Remove( &preview );
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
 
     setTransitions();
 
@@ -434,14 +431,11 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
 
     int step = 0;
 
-    KIGFX::VIEW* view = getView();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    BOARD* board = getModel<BOARD>( PCB_T );
-    DIMENSION* dimension = new DIMENSION( board );
+    DIMENSION* dimension = new DIMENSION( m_board );
 
     // Init the new item attributes
-    dimension->Text().SetSize( board->GetDesignSettings().m_PcbTextSize );
-    int width = board->GetDesignSettings().m_PcbTextWidth;
+    dimension->Text().SetSize( m_board->GetDesignSettings().m_PcbTextSize );
+    int width = m_board->GetDesignSettings().m_PcbTextWidth;
     int maxthickness = Clamp_Text_PenSize( width, dimension->Text().GetSize() );
 
     if( width > maxthickness )
@@ -453,18 +447,18 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
     dimension->AdjustDimensionDetails();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view );
-    view->Add( &preview );
+    KIGFX::VIEW_GROUP preview( m_view );
+    m_view->Add( &preview );
 
-    controls->ShowCursor( true );
-    controls->SetSnapping( true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
 
     Activate();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2I cursorPos = controls->GetCursorPosition();
+        VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
@@ -491,7 +485,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
             {
             case 0:
             {
-                LAYER_NUM layer = getEditFrame<PCB_EDIT_FRAME>()->GetScreen()->m_Active_Layer;
+                LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
 
                 if( IsCopperLayer( layer ) )
                 {
@@ -500,7 +494,7 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    controls->SetAutoPan( true );
+                    m_controls->SetAutoPan( true );
 
                     dimension->SetLayer( layer );
                     dimension->SetOrigin( wxPoint( cursorPos.x, cursorPos.y ) );
@@ -514,8 +508,8 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
             {
                 if( wxPoint( cursorPos.x, cursorPos.y ) != dimension->GetPosition() )
                 {
-                    view->Add( dimension );
-                    board->Add( dimension );
+                    m_view->Add( dimension );
+                    m_board->Add( dimension );
                     dimension->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
                 }
             }
@@ -552,10 +546,10 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
         }
     }
 
-    controls->ShowCursor( false );
-    controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-    view->Remove( &preview );
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
 
     setTransitions();
 
@@ -565,20 +559,16 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW* view = getView();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    BOARD* board = getModel<BOARD>( PCB_T );
-    ZONE_CONTAINER* zone = new ZONE_CONTAINER( board );
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
 
     // Get the current, default settings for zones
-    ZONE_SETTINGS zoneInfo = editFrame->GetZoneSettings();
+    ZONE_SETTINGS zoneInfo = m_frame->GetZoneSettings();
 
     ZONE_EDIT_T dialogResult;
-    if( IsCopperLayer( editFrame->GetScreen()->m_Active_Layer ) )
-        dialogResult = InvokeCopperZonesEditor( editFrame, &zoneInfo );
+    if( IsCopperLayer( m_frame->GetScreen()->m_Active_Layer ) )
+        dialogResult = InvokeCopperZonesEditor( m_frame, &zoneInfo );
     else
-        dialogResult = InvokeNonCopperZonesEditor( editFrame, zone, &zoneInfo );
+        dialogResult = InvokeNonCopperZonesEditor( m_frame, zone, &zoneInfo );
 
     if( dialogResult == ZONE_ABORT )
     {
@@ -588,7 +578,7 @@ int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
     }
 
     zoneInfo.ExportSetting( *zone );
-    editFrame->SetTopLayer( zoneInfo.m_CurrentZone_Layer );
+    m_frame->SetTopLayer( zoneInfo.m_CurrentZone_Layer );
 
     DRAWSEGMENT* helperLine = new DRAWSEGMENT;
     helperLine->SetShape( S_SEGMENT );
@@ -596,23 +586,23 @@ int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
     helperLine->SetWidth( 1 );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view );
-    view->Add( &preview );
+    KIGFX::VIEW_GROUP preview( m_view );
+    m_view->Add( &preview );
 
-    controls->ShowCursor( true );
-    controls->SetSnapping( true );
-    controls->SetAutoPan( true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+    m_controls->SetAutoPan( true );
 
     Activate();
 
-    VECTOR2I lastCursorPos = controls->GetCursorPosition();
+    VECTOR2I lastCursorPos = m_controls->GetCursorPosition();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         // Enable 45 degrees lines only mode by holding shift
         bool linesAngle45 = evt->Modifier( MD_SHIFT );
-        VECTOR2I cursorPos = controls->GetCursorPosition();
+        VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
@@ -631,10 +621,10 @@ int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
                     zone->Outline()->CloseLastContour();
                     zone->Outline()->RemoveNullSegments();
 
-                    board->Add( zone );
-                    view->Add( zone );
+                    m_board->Add( zone );
+                    m_view->Add( zone );
 
-                    editFrame->Fill_Zone( zone );
+                    m_frame->Fill_Zone( zone );
                     zone->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
                 }
                 else
@@ -684,7 +674,7 @@ int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
 
                 // Snap the new line to the grid // TODO fix it, does not work good..
                 VECTOR2D newLineEnd = VECTOR2D( helperLine->GetStart() ) + newLineVector;
-                VECTOR2D snapped = view->GetGAL()->GetGridPoint( newLineEnd );
+                VECTOR2D snapped = m_view->GetGAL()->GetGridPoint( newLineEnd );
 
                 helperLine->SetEnd( wxPoint( snapped.x, snapped.y ) );
             }
@@ -698,10 +688,10 @@ int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
         }
     }
 
-    controls->ShowCursor( false );
-    controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-    view->Remove( &preview );
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
 
     // delete helper lines
     preview.FreeItems();
@@ -714,16 +704,12 @@ int DRAWING_TOOL::DrawZone( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW* view = getView();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    BOARD* board = getModel<BOARD>( PCB_T );
-    ZONE_CONTAINER* keepout = new ZONE_CONTAINER( board );
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    ZONE_CONTAINER* keepout = new ZONE_CONTAINER( m_board );
 
     // Get the current, default settings for zones
-    ZONE_SETTINGS zoneInfo = editFrame->GetZoneSettings();
+    ZONE_SETTINGS zoneInfo = m_frame->GetZoneSettings();
 
-    ZONE_EDIT_T dialogResult = InvokeKeepoutAreaEditor( editFrame, &zoneInfo );
+    ZONE_EDIT_T dialogResult = InvokeKeepoutAreaEditor( m_frame, &zoneInfo );
     if( dialogResult == ZONE_ABORT )
     {
         delete keepout;
@@ -732,7 +718,7 @@ int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
     }
 
     zoneInfo.ExportSetting( *keepout );
-    editFrame->SetTopLayer( zoneInfo.m_CurrentZone_Layer );
+    m_frame->SetTopLayer( zoneInfo.m_CurrentZone_Layer );
 
     DRAWSEGMENT* helperLine = new DRAWSEGMENT;
     helperLine->SetShape( S_SEGMENT );
@@ -740,23 +726,23 @@ int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
     helperLine->SetWidth( 1 );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view );
-    view->Add( &preview );
+    KIGFX::VIEW_GROUP preview( m_view );
+    m_view->Add( &preview );
 
-    controls->ShowCursor( true );
-    controls->SetSnapping( true );
-    controls->SetAutoPan( true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+    m_controls->SetAutoPan( true );
 
     Activate();
 
-    VECTOR2I lastCursorPos = controls->GetCursorPosition();
+    VECTOR2I lastCursorPos = m_controls->GetCursorPosition();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         // Enable 45 degrees lines only mode by holding shift
         bool linesAngle45 = evt->Modifier( MD_SHIFT );
-        VECTOR2I cursorPos = controls->GetCursorPosition();
+        VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
@@ -775,8 +761,8 @@ int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
                     keepout->Outline()->CloseLastContour();
                     keepout->Outline()->RemoveNullSegments();
 
-                    board->Add( keepout );
-                    view->Add( keepout );
+                    m_board->Add( keepout );
+                    m_view->Add( keepout );
 
                     keepout->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
                 }
@@ -827,7 +813,7 @@ int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
 
                 // Snap the new line to the grid // TODO fix it, does not work good..
                 VECTOR2D newLineEnd = VECTOR2D( helperLine->GetStart() ) + newLineVector;
-                VECTOR2D snapped = view->GetGAL()->GetGridPoint( newLineEnd );
+                VECTOR2D snapped = m_view->GetGAL()->GetGridPoint( newLineEnd );
 
                 helperLine->SetEnd( wxPoint( snapped.x, snapped.y ) );
             }
@@ -841,10 +827,10 @@ int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
         }
     }
 
-    controls->ShowCursor( false );
-    controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-    view->Remove( &preview );
+    m_controls->ShowCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
 
     // delete helper lines
     preview.FreeItems();
@@ -857,32 +843,29 @@ int DRAWING_TOOL::DrawKeepout( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW* view = getView();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    BOARD* board = getModel<BOARD>( PCB_T );
-    PCB_TARGET* target = new PCB_TARGET( board );
+    PCB_TARGET* target = new PCB_TARGET( m_board );
 
     // Init the new item attributes
     target->SetLayer( EDGE_N );
-    target->SetWidth( board->GetDesignSettings().m_EdgeSegmentWidth );
+    target->SetWidth( m_board->GetDesignSettings().m_EdgeSegmentWidth );
     target->SetSize( Millimeter2iu( 5 ) );
-    VECTOR2I cursorPos = controls->GetCursorPosition();
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
     target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view );
+    KIGFX::VIEW_GROUP preview( m_view );
     preview.Add( target );
-    view->Add( &preview );
+    m_view->Add( &preview );
     preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
-    controls->SetSnapping( true );
+    m_controls->SetSnapping( true );
 
     Activate();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2I cursorPos = controls->GetCursorPosition();
+        VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
@@ -905,8 +888,8 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            view->Add( target );
-            board->Add( target );
+            m_view->Add( target );
+            m_board->Add( target );
             target->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
         }
@@ -918,9 +901,9 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
         }
     }
 
-    controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-    view->Remove( &preview );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
 
     setTransitions();
 
@@ -930,12 +913,8 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW* view = getView();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    BOARD* board = getModel<BOARD>( PCB_T );
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-    MODULE* module = editFrame->LoadModuleFromLibrary( wxEmptyString,
-                                               editFrame->GetFootprintLibraryTable(), true, NULL );
+    MODULE* module = m_frame->LoadModuleFromLibrary( wxEmptyString,
+                                               m_frame->GetFootprintLibraryTable(), true, NULL );
     if( module == NULL )
     {
         setTransitions();
@@ -943,28 +922,28 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
     }
 
     // Init the new item attributes
-    VECTOR2I cursorPos = controls->GetCursorPosition();
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
     module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view );
+    KIGFX::VIEW_GROUP preview( m_view );
     preview.Add( module );
     module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW_GROUP::Add ), &preview ) );
-    view->Add( &preview );
+    m_view->Add( &preview );
     preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
-    controls->SetSnapping( true );
+    m_controls->SetSnapping( true );
 
     Activate();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = controls->GetCursorPosition();
+        cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
-            board->Delete( module );
+            m_board->Delete( module );
             break;
         }
 
@@ -972,7 +951,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                module->Rotate( module->GetPosition(), getEditFrame<PCB_EDIT_FRAME>()->GetRotationAngle() );
+                module->Rotate( module->GetPosition(), m_frame->GetRotationAngle() );
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
@@ -984,8 +963,8 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), view ) );
-            view->Add( module );
+            module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), m_view ) );
+            m_view->Add( module );
             module->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
         }
@@ -997,9 +976,9 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
         }
     }
 
-    controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-    view->Remove( &preview );
+    m_controls->SetSnapping( false );
+    m_controls->SetAutoPan( false );
+    m_view->Remove( &preview );
 
     setTransitions();
 

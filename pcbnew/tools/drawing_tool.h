@@ -26,7 +26,14 @@
 #define __DRAWING_TOOL_H
 
 #include <tool/tool_interactive.h>
-#include <class_board_item.h>
+
+namespace KIGFX
+{
+    class VIEW;
+    class VIEW_CONTROLS;
+}
+class BOARD;
+class PCB_EDIT_FRAME;
 
 /**
  * Class DRAWING_TOOL
@@ -69,13 +76,18 @@ public:
 
 private:
     ///> Starts drawing a selected shape.
-    int draw( STROKE_T aShape );
+    int draw( int aShape );
 
     ///> Sets up handlers for various events.
     void setTransitions();
 
     ///> Should drawing be stopped after drawing one object or should it continue with another one.
     bool m_continous;
+
+    KIGFX::VIEW* m_view;
+    KIGFX::VIEW_CONTROLS* m_controls;
+    BOARD* m_board;
+    PCB_EDIT_FRAME* m_frame;
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP = 100000;
