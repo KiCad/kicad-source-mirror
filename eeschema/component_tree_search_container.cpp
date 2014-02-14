@@ -48,29 +48,29 @@ struct COMPONENT_TREE_SEARCH_CONTAINER::TREE_NODE
               const wxString& aName, const wxString& aDisplayInfo,
               const wxString& aSearchText,
               bool aNormallyExpanded = false)
-        : parent( aParent ),
-          lib( aOwningLib ),
-          normally_expanded( aNormallyExpanded ),
-          name( aName ),
-          display_info( aDisplayInfo ),
-          match_name( aName.Lower() ),
-          search_text( aSearchText.Lower() ),
-          match_score( 0 ), previous_score( 0 )
+        : Parent( aParent ),
+          Lib( aOwningLib ),
+          NormallyExpanded( aNormallyExpanded ),
+          Name( aName ),
+          DisplayInfo( aDisplayInfo ),
+          MatchName( aName.Lower() ),
+          SearchText( aSearchText.Lower() ),
+          MatchScore( 0 ), PreviousScore( 0 )
     {
     }
 
-    TREE_NODE* parent;         // NULL if library, pointer to lib when component.
-    CMP_LIBRARY* lib;          // Owning library of this component.
-    bool normally_expanded;    // If this is a parent node, should it be unfolded ?
-    wxString name;             // Exact name as displayed to the user.
-    wxString display_info;     // Additional info displayed in the tree (description..)
+    TREE_NODE* const Parent;      ///< NULL if library, pointer to lib-node when component.
+    CMP_LIBRARY* const Lib;       ///< Owning library of this component.
+    const bool NormallyExpanded;  ///< If this is a parent node, should it be unfolded ?
+    const wxString Name;          ///< Exact name as displayed to the user.
+    const wxString DisplayInfo;   ///< Additional info displayed in the tree (description..)
 
-    wxString match_name;       // Preprocessed: lowercased display name.
-    wxString search_text;      // Other lowercase text (keywords, description..) to search in.
+    const wxString MatchName;     ///< Preprocessed: lowercased display name.
+    const wxString SearchText;    ///< Other text (keywords, description..) to search in.
 
-    unsigned match_score;     // Result-Score after UpdateSearchTerm()
-    unsigned previous_score;  // Optimization: used to see if we need any tree update.
-    wxTreeItemId tree_id;     // Tree-ID if stored in the tree (if match_score > 0).
+    unsigned MatchScore;          ///< Result-Score after UpdateSearchTerm()
+    unsigned PreviousScore;       ///< Optimization: used to see if we need any tree update.
+    wxTreeItemId TreeId;          ///< Tree-ID if stored in the tree (if MatchScore > 0).
 };
 
 
@@ -79,19 +79,19 @@ struct COMPONENT_TREE_SEARCH_CONTAINER::TREE_NODE
 // leaf nodes.
 bool COMPONENT_TREE_SEARCH_CONTAINER::scoreComparator( const TREE_NODE* a1, const TREE_NODE* a2 )
 {
-    if ( a1->parent == NULL && a2->parent != NULL )
+    if ( a1->Parent == NULL && a2->Parent != NULL )
         return true;
 
-    if ( a1->parent != NULL && a2->parent == NULL )
+    if ( a1->Parent != NULL && a2->Parent == NULL )
         return false;
 
-    if ( a1->match_score != a2->match_score )
-        return a1->match_score > a2->match_score;  // biggest first.
+    if ( a1->MatchScore != a2->MatchScore )
+        return a1->MatchScore > a2->MatchScore;  // biggest first.
 
-    if (a1->parent != a2->parent)
-        return a1->parent->match_name.Cmp(a2->parent->match_name) < 0;
+    if (a1->Parent != a2->Parent)
+        return a1->Parent->MatchName.Cmp(a2->Parent->MatchName) < 0;
 
-    return a1->match_name.Cmp( a2->match_name ) < 0;
+    return a1->MatchName.Cmp( a2->MatchName ) < 0;
 }
 
 COMPONENT_TREE_SEARCH_CONTAINER::COMPONENT_TREE_SEARCH_CONTAINER()
@@ -186,8 +186,8 @@ LIB_COMPONENT* COMPONENT_TREE_SEARCH_CONTAINER::GetSelectedComponent()
     const wxTreeItemId& select_id = tree->GetSelection();
     BOOST_FOREACH( TREE_NODE* node, nodes )
     {
-        if ( node->match_score > 0 && node->tree_id == select_id && node->lib )
-            return node->lib->FindComponent( node->name );
+        if ( node->MatchScore > 0 && node->TreeId == select_id && node->Lib )
+            return node->Lib->FindComponent( node->Name );
     }
     return NULL;
 }
@@ -219,8 +219,8 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     // Initial AND condition: Leaf nodes are considered to match initially.
     BOOST_FOREACH( TREE_NODE* node, nodes )
     {
-        node->previous_score = node->match_score;
-        node->match_score = node->parent ? kLowestDefaultScore : 0;  // start-match for leafs.
+        node->PreviousScore = node->MatchScore;
+        node->MatchScore = node->Parent ? kLowestDefaultScore : 0;  // start-match for leafs.
     }
 
     // Create match scores for each node for all the terms, that come space-separated.
@@ -241,10 +241,10 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
         const wxString term = tokenizer.GetNextToken().Lower();
         BOOST_FOREACH( TREE_NODE* node, nodes )
         {
-            if ( node->parent == NULL)
+            if ( node->Parent == NULL)
                 continue;      // Library nodes are not scored here.
 
-            if ( node->match_score == 0)
+            if ( node->MatchScore == 0)
                 continue;   // Leaf node without score are out of the game.
 
             // Keywords and description we only count if the match string is at
@@ -252,27 +252,28 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
             // matches. Most abbreviations are at three characters long.
             int found_pos;
 
-            if ( term == node->match_name )
-                node->match_score += 1000;  // exact match. High score :)
-            else if ( (found_pos = node->match_name.Find( term ) ) != wxNOT_FOUND )
+            if ( term == node->MatchName )
+                node->MatchScore += 1000;  // exact match. High score :)
+            else if ( (found_pos = node->MatchName.Find( term ) ) != wxNOT_FOUND )
             {
                 // Substring match. The earlier in the string the better.  score += 20..40
-                node->match_score += matchPosScore( found_pos, 20 ) + 20;
+                node->MatchScore += matchPosScore( found_pos, 20 ) + 20;
             }
-            else if ( node->parent->match_name.Find( term ) != wxNOT_FOUND )
-                node->match_score += 19;   // parent name matches.         score += 19
-            else if ( ( found_pos = node->search_text.Find( term ) ) != wxNOT_FOUND )
+            else if ( node->Parent->MatchName.Find( term ) != wxNOT_FOUND )
+                node->MatchScore += 19;   // parent name matches.         score += 19
+            else if ( ( found_pos = node->SearchText.Find( term ) ) != wxNOT_FOUND )
             {
-                // If we have a very short string (like one or two letters), we don't want
-                // to accumulate scores if they just happen to be in keywords or description.
+                // If we have a very short search term (like one or two letters), we don't want
+                // to accumulate scores if they just happen to be in keywords or description as
+                // almost any one or two-letter combination shows up in there.
                 // For longer terms, we add scores 1..18 for positional match (higher in the
                 // front, where the keywords are).                        score += 0..18
-                node->match_score += ( ( term.length() >= 2 )
+                node->MatchScore += ( ( term.length() >= 2 )
                                        ? matchPosScore( found_pos, 17 ) + 1
                                        : 0 );
             }
             else
-                node->match_score = 0;    // No match. That's it for this item.
+                node->MatchScore = 0;    // No match. That's it for this item.
         }
     }
 
@@ -281,12 +282,12 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     bool any_change = false;
     BOOST_FOREACH( TREE_NODE* node, nodes )
     {
-        if ( node->parent == NULL )
+        if ( node->Parent == NULL )
             continue;
 
-        any_change |= (node->previous_score != node->match_score);
-        node->parent->match_score = std::max( node->parent->match_score, node->match_score );
-        highest_score_seen = std::max( highest_score_seen, node->match_score );
+        any_change |= (node->PreviousScore != node->MatchScore);
+        node->Parent->MatchScore = std::max( node->Parent->MatchScore, node->MatchScore );
+        highest_score_seen = std::max( highest_score_seen, node->MatchScore );
     }
 
 
@@ -301,56 +302,56 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     // items is pretty complex, so we just re-build the whole tree.
     tree->Freeze();
     tree->DeleteAllItems();
-    wxTreeItemId root = tree->AddRoot( wxEmptyString );
+    const wxTreeItemId root_id = tree->AddRoot( wxEmptyString );
     const TREE_NODE* first_match = NULL;
     const TREE_NODE* preselected_node = NULL;
     BOOST_FOREACH( TREE_NODE* node, nodes )
     {
-        if ( node->match_score == 0 )
+        if ( node->MatchScore == 0 )
             continue;
 
         // If we have nodes that go beyond the default score, suppress nodes that
         // have the default score. That can happen if they have an honary += 0 score due to
         // some one-letter match in the keyword or description. In this case, we prefer matches
-        // that just have higher scores. Improves confusion (and performance as the tree has to
-        // display less items).
-        if ( highest_score_seen > kLowestDefaultScore && node->match_score == kLowestDefaultScore )
+        // that just have higher scores. Improves relevancy and performance as the tree has to
+        // display less items.
+        if ( highest_score_seen > kLowestDefaultScore && node->MatchScore == kLowestDefaultScore )
             continue;
 
+        const bool isLeaf = ( node->Parent != NULL );
         wxString node_text;
 #if 0
         // Node text with scoring information for debugging
-        node_text.Printf( wxT("%s (s=%u)%s"), GetChars(node->name),
-                          node->match_score, GetChars(node->display_info));
+        node_text.Printf( wxT("%s (s=%u)%s"), GetChars(node->Name),
+                          node->MatchScore, GetChars(node->DisplayInfo));
 #else
-        node_text = node->name + node->display_info;
+        node_text = node->Name + node->DisplayInfo;
 #endif
-        node->tree_id = tree->AppendItem( ( node->parent == NULL ) ? root : node->parent->tree_id,
-                                          node_text);
+        node->TreeId = tree->AppendItem( !isLeaf ? root_id : node->Parent->TreeId, node_text );
 
-        // If we are a child node, we might need to expand.
-        if ( node->parent != NULL )
+        // If we are a leaf node, we might need to expand.
+        if ( isLeaf )
         {
-            if ( node->match_score > kLowestDefaultScore )
+            if ( node->MatchScore > kLowestDefaultScore )
             {
-                tree->EnsureVisible( node->tree_id );
+                tree->EnsureVisible( node->TreeId );
 
                 if ( first_match == NULL )
                     first_match = node;   // The "I am feeling lucky" element.
             }
 
-            if ( preselected_node == NULL && node->match_name == preselect_node_name )
+            if ( preselected_node == NULL && node->MatchName == preselect_node_name )
                 preselected_node = node;
         }
 
-        if ( node->parent == NULL && node->normally_expanded )
-            tree->Expand( node->tree_id );
+        if ( !isLeaf && node->NormallyExpanded )
+            tree->Expand( node->TreeId );
     }
 
     if ( first_match )                      // Highest score search match pre-selected.
-        tree->SelectItem( first_match->tree_id );
+        tree->SelectItem( first_match->TreeId );
     else if ( preselected_node )            // No search, so history item preselected.
-        tree->SelectItem( preselected_node->tree_id );
+        tree->SelectItem( preselected_node->TreeId );
 
     tree->Thaw();
 }

@@ -31,8 +31,9 @@
 #include <component_tree_search_container.h>
 #include <sch_base_frame.h>
 
-// Work-around broken implementation in wxWidgets <=2.8 tree.
-static wxTreeItemId fixedGetPrevVisible( const wxTreeCtrl& tree, const wxTreeItemId& item );
+// Tree navigation helpers.
+static wxTreeItemId GetPrevItem( const wxTreeCtrl& tree, const wxTreeItemId& item );
+static wxTreeItemId GetNextItem( const wxTreeCtrl& tree, const wxTreeItemId& item );
 
 // Combine descriptions of all aliases from given component.
 static wxString combineDescriptions( LIB_COMPONENT* aComponent )
@@ -132,11 +133,11 @@ void DIALOG_CHOOSE_COMPONENT::OnInterceptSearchBoxKey( wxKeyEvent& aKeyStroke )
     switch ( aKeyStroke.GetKeyCode() )
     {
     case WXK_UP:
-        SelectIfValid( fixedGetPrevVisible( *m_libraryComponentTree, sel ) );
+        SelectIfValid( GetPrevItem( *m_libraryComponentTree, sel ) );
         break;
 
     case WXK_DOWN:
-        SelectIfValid( m_libraryComponentTree->GetNextVisible( sel ) );
+        SelectIfValid( GetNextItem( *m_libraryComponentTree, sel ) );
         break;
 
     default:
@@ -230,46 +231,29 @@ void DIALOG_CHOOSE_COMPONENT::updateSelection()
     m_componentDetails->SetInsertionPoint( 0 );  // scroll up.
 }
 
-
-// The GetPrevVisible() method is broken in at least 2.8 wxWidgets. This is mostly copied
-// verbatim from the latest 3.x source in which this is fixed.
-// ( wxWidgets/src/generic/treectlg.cpp )
-static wxTreeItemId fixedGetPrevVisible( const wxTreeCtrl& tree, const wxTreeItemId& item )
+static wxTreeItemId GetPrevItem( const wxTreeCtrl& tree, const wxTreeItemId& item )
 {
-#if wxCHECK_VERSION( 3, 0, 0  )
-    return tree.GetPrevVisible(item);
-#else
-    // find out the starting point
-    wxTreeItemId prevItem = tree.GetPrevSibling(item);
+    wxTreeItemId prevItem = tree.GetPrevSibling( item );
 
     if ( !prevItem.IsOk() )
     {
-        prevItem = tree.GetItemParent(item);
-    }
-
-    // find the first visible item after it
-    while ( prevItem.IsOk() && !tree.IsVisible(prevItem) )
-    {
-        prevItem = tree.GetNext(prevItem);
-
-        if ( !prevItem.IsOk() || prevItem == item )
-        {
-            // there are no visible items before item
-            return wxTreeItemId();
-        }
-    }
-
-    // from there we must be able to navigate until this item
-    while ( prevItem.IsOk() )
-    {
-        const wxTreeItemId nextItem = tree.GetNextVisible(prevItem);
-
-        if ( !nextItem.IsOk() || nextItem == item )
-            break;
-
-        prevItem = nextItem;
+        const wxTreeItemId parent = tree.GetItemParent( item );
+        prevItem = tree.GetLastChild( tree.GetPrevSibling( parent ) );
     }
 
     return prevItem;
-#endif
+}
+
+static wxTreeItemId GetNextItem( const wxTreeCtrl& tree, const wxTreeItemId& item )
+{
+    wxTreeItemId nextItem = tree.GetNextSibling( item );
+
+    if ( !nextItem.IsOk() )
+    {
+        const wxTreeItemId parent = tree.GetItemParent( item );
+        wxTreeItemIdValue dummy;
+        nextItem = tree.GetFirstChild( tree.GetNextSibling( parent ), dummy );
+    }
+
+    return nextItem;
 }
