@@ -34,6 +34,7 @@ namespace KIGFX
 }
 class BOARD;
 class PCB_EDIT_FRAME;
+class DRAWSEGMENT;
 
 /**
  * Class DRAWING_TOOL
@@ -83,6 +84,11 @@ private:
     ///> Draws a polygon, that is added as a zone or a keepout area.
     ///> @param aKeepout decides if the drawn polygon is a zone or a keepout area.
     int drawZone( bool aKeepout );
+
+    ///> Forces a DRAWSEGMENT to be drawn at multiple of 45 degrees. The origin
+    ///> stays the same, the end of the aSegment is modified according to the
+    ///> current cursor position.
+    void make45DegLine( DRAWSEGMENT* aSegment ) const;
 
     ///> Sets up handlers for various events.
     void setTransitions();
