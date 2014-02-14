@@ -169,9 +169,13 @@ bool EDA_APP::OnInit()
     bundledir.RemoveLastDir();
 
     // Prepend in PYTHONPATH the content of the bundle libraries !
-    wxSetEnv("PYTHONPATH",((wxGetenv("PYTHONPATH") != NULL ) ? (wxString(wxGetenv("PYTHONPATH")) + ":") : wxString(""))
-                           +  bundledir.GetPath() +
-                           "/Frameworks/wxPython/lib/python2.6/site-packages/wx-3.0-osx_cocoa" );
+    wxSetEnv("PYTHONPATH",((wxGetenv("PYTHONPATH") != NULL ) ? (wxString(wxGetenv("PYTHONPATH")) + ":") : wxString("")) + 
+                           "/Library/Application Support/kicad/scripting" + ":" +
+                            bundledir.GetPath() + "/PlugIns" + ":" +
+                            wxString( wxGetenv("HOME") )  + "/Library/Application Support/kicad/scripting" +
+                            bundledir.GetPath() +
+                            "/Frameworks/wxPython/lib/python2.6/site-packages/wx-3.0-osx_cocoa" 
+                          );
 #endif
 #endif
     // On linux and osx, 2 others paths are
