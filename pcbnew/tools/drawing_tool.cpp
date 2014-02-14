@@ -83,11 +83,11 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
     // Init the new item attributes
-    DRAWSEGMENT* graphic = new DRAWSEGMENT( m_board );
-    graphic->SetShape( S_ARC );
-    graphic->SetAngle( 0.0 );
-    graphic->SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
-    graphic->SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
+    DRAWSEGMENT* arc = new DRAWSEGMENT( m_board );
+    arc->SetShape( S_ARC );
+    arc->SetAngle( 0.0 );
+    arc->SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
+    arc->SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
 
     DRAWSEGMENT helperLine;
     helperLine.SetShape( S_SEGMENT );
@@ -100,7 +100,6 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
-    m_controls->SetAutoPan( true );
 
     Activate();
 
@@ -120,25 +119,25 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 
         if( evt->IsCancel() )
         {
-            delete graphic;
+            delete arc;
             break;
         }
 
         else if( evt->IsKeyUp() )
         {
-            int width = graphic->GetWidth();
+            int width = arc->GetWidth();
 
             // Modify the new item width
             if( evt->KeyCode() == '-' && width > WIDTH_STEP )
-                graphic->SetWidth( width - WIDTH_STEP );
+                arc->SetWidth( width - WIDTH_STEP );
             else if( evt->KeyCode() == '=' )
-                graphic->SetWidth( width + WIDTH_STEP );
+                arc->SetWidth( width + WIDTH_STEP );
             else if( evt->KeyCode() == '/' )
             {
                 if( clockwise )
-                    graphic->SetAngle( graphic->GetAngle() - 3600.0 );
+                    arc->SetAngle( arc->GetAngle() - 3600.0 );
                 else
-                    graphic->SetAngle( graphic->GetAngle() + 3600.0 );
+                    arc->SetAngle( arc->GetAngle() + 3600.0 );
 
                 clockwise = !clockwise;
             }
@@ -161,34 +160,45 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    helperLine.SetStart( graphic->GetCenter() );
-                    graphic->SetLayer( layer );
-                    preview.Add( graphic );
+                    helperLine.SetStart( arc->GetCenter() );
+                    arc->SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
+                    arc->SetLayer( layer );
+                    preview.Add( arc );
                     preview.Add( &helperLine );
+
+                    m_controls->SetAutoPan( true );
                 }
             }
             break;
 
             case SET_END:
             {
-                VECTOR2D startLine( graphic->GetArcStart() - graphic->GetCenter() );
-                startAngle = startLine.Angle();
+                if( wxPoint( cursorPos.x, cursorPos.y ) != arc->GetCenter() )
+                {
+                    VECTOR2D startLine( arc->GetArcStart() - arc->GetCenter() );
+                    startAngle = startLine.Angle();
+                    arc->SetArcStart( wxPoint( cursorPos.x, cursorPos.y ) );
+                }
+                else
+                    --step;     // one another chance to draw a proper arc
+
             }
             break;
 
             case SET_ANGLE:
             {
-                if( wxPoint( cursorPos.x, cursorPos.y ) != graphic->GetCenter() )
+                if( wxPoint( cursorPos.x, cursorPos.y ) != arc->GetArcStart() )
                 {
-                    m_view->Add( graphic );
-                    m_board->Add( graphic );
-                    graphic->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                    assert( arc->GetAngle() > 0 );
+                    assert( arc->GetArcStart() != arc->GetArcEnd() );
+                    assert( arc->GetWidth() > 0 );
+
+                    m_view->Add( arc );
+                    m_board->Add( arc );
+                    arc->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
                 }
                 else
-                {
-                    // Let's give the user another chance of drawing a proper arc (i.e. angle > 0)
-                    --step;
-                }
+                    --step;     // one another chance to draw a proper arc
             }
             break;
             }
@@ -202,18 +212,18 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
             switch( step )
             {
             case SET_ORIGIN:
-                graphic->SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
+                arc->SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
                 break;
 
             case SET_END:
                 helperLine.SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-                graphic->SetArcStart( wxPoint( cursorPos.x, cursorPos.y ) );
+                arc->SetArcStart( wxPoint( cursorPos.x, cursorPos.y ) );
                 break;
 
             case SET_ANGLE:
             {
                 // Compute the current angle
-                VECTOR2D endLine( wxPoint( cursorPos.x, cursorPos.y ) - graphic->GetCenter() );
+                VECTOR2D endLine( wxPoint( cursorPos.x, cursorPos.y ) - arc->GetCenter() );
                 double newAngle = RAD2DECIDEG( endLine.Angle() - startAngle );
 
                 if( clockwise && newAngle < 0.0 )
@@ -221,7 +231,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
                 else if( !clockwise && newAngle > 0.0 )
                     newAngle -= 3600.0;
 
-                graphic->SetAngle( newAngle );
+                arc->SetAngle( newAngle );
             }
             break;
             }
@@ -245,8 +255,8 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 {
     // Init the new item attributes
-    TEXTE_PCB* newText = m_frame->CreateTextePcb( NULL );
-    if( newText == NULL )
+    TEXTE_PCB* text = m_frame->CreateTextePcb( NULL );
+    if( text == NULL )
     {
         setTransitions();
         return 0;
@@ -254,7 +264,7 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
-    preview.Add( newText );
+    preview.Add( text );
     m_view->Add( &preview );
 
     m_controls->ShowCursor( true );
@@ -271,7 +281,7 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
         if( evt->IsCancel() )
         {
             // it was already added by CreateTextPcb()
-            m_board->Delete( newText );
+            m_board->Delete( text );
             break;
         }
 
@@ -279,28 +289,31 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                newText->Rotate( newText->GetPosition(), m_frame->GetRotationAngle() );
+                text->Rotate( text->GetPosition(), m_frame->GetRotationAngle() );
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
-                newText->Flip( newText->GetPosition() );
+                text->Flip( text->GetPosition() );
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            newText->ClearFlags();
-            m_view->Add( newText );
-            // m_board->Add( newText );        // it is already added by CreateTextePcb()
-            newText->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            assert( text->GetText().Length() > 0 );
+            assert( text->GetSize().x > 0 && text->GetSize().y > 0 );
+
+            text->ClearFlags();
+            m_view->Add( text );
+            // m_board->Add( text );        // it is already added by CreateTextePcb()
+            text->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
         }
 
         else if( evt->IsMotion() )
         {
-            newText->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            text->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
             // Show a preview of the item
             preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -411,6 +424,9 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
             {
                 if( wxPoint( cursorPos.x, cursorPos.y ) != dimension->GetPosition() )
                 {
+                    assert( dimension->GetOrigin() != dimension->GetEnd() );
+                    assert( dimension->GetWidth() > 0 );
+
                     m_view->Add( dimension );
                     m_board->Add( dimension );
                     dimension->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -519,6 +535,9 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
+            assert( target->GetSize() > 0 );
+            assert( target->GetWidth() > 0 );
+
             m_view->Add( target );
             m_board->Add( target );
             target->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -638,6 +657,7 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
     Activate();
 
     bool started = false;
+    int addedSegments = 0;
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -648,7 +668,7 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
         if( evt->IsCancel() )
         {
             preview.FreeItems();
-            if( !started )
+            if( !started )                  // TODO check it
                 delete graphic;
             break;
         }
@@ -691,10 +711,14 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
             {
                 if( wxPoint( cursorPos.x, cursorPos.y ) != graphic->GetStart() )
                 {
+                    assert( graphic->GetLength() > 0 );
+                    assert( graphic->GetWidth() > 0 );
+
                     m_view->Add( graphic );
-                    m_board->Add( graphic  );
+                    m_board->Add( graphic );
                     graphic->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
                     preview.Remove( graphic );
+                    ++addedSegments;
 
                     if( aContinous )
                     {
@@ -704,10 +728,12 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
                         preview.Add( graphic );
                     }
                     else
+                    {
                         break;
+                    }
                 }
-                else
-                {                    // User has clicked twice in the same spot
+                else if( addedSegments > 0 )   // User has clicked twice in the same spot
+                {
                     delete graphic;  // seems like a clear sign that the drawing is finished
                     break;           // and we should remove the latest DRAWSEGMENT we have created
                 }
@@ -808,6 +834,8 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
             {
                 if( numPoints > 2 )
                 {
+                    assert( zone->GetNumCorners() > 2 );
+
                     // Finish the zone
                     zone->Outline()->CloseLastContour();
                     zone->Outline()->RemoveNullSegments();
