@@ -119,23 +119,25 @@ public:
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
      * inline function.
-     * @param aPCB_VISIBLE is from the enum by the same name
+     * @param aElementCategory is from the enum by the same name
      * @return bool - true if the element is visible.
      * @see enum PCB_VISIBLE
      */
-    bool IsElementVisible( int aPCB_VISIBLE ) const
+    bool IsElementVisible( int aElementCategory ) const
     {
-        return bool( m_VisibleElements & (1 << aPCB_VISIBLE) );
+        assert( aElementCategory >= 0 && aElementCategory < END_PCB_VISIBLE_LIST );
+
+        return ( m_VisibleElements & ( 1 << aElementCategory ) );
     }
 
     /**
      * Function SetElementVisibility
      * changes the visibility of an element category
-     * @param aPCB_VISIBLE is from the enum by the same name
+     * @param aElementCategory is from the enum by the same name
      * @param aNewState = The new visibility state of the element category
      * @see enum PCB_VISIBLE
      */
-    void SetElementVisibility( int aPCB_VISIBLE, bool aNewState );
+    void SetElementVisibility( int aElementCategory, bool aNewState );
 
     /**
      * Function GetEnabledLayers

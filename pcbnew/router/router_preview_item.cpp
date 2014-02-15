@@ -36,6 +36,7 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS_ITEM* aItem, VIEW_GROUP* aPa
 {
     m_Flags = 0;
     m_parent = aParent;
+    m_layer = DRAW_N;
 
     if( aItem )
         Update( aItem );
