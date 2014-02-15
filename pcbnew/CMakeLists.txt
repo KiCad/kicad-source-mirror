@@ -607,6 +607,13 @@ if( KICAD_SCRIPTING )
             DEPENDS FixSwigImportsScripting _pcbnew_py_copy
             COMMENT "Copying wxPython into pcbnew.app Framework"
         )
+
+        add_custom_target( pcbnew_copy_plugins ALL
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/pcbnew/scripting/plugins ${PROJECT_SOURCE_DIR}/pcbnew/pcbnew.app/Contents/PlugIns/scripting/plugins
+            DEPENDS pcbnew_copy_wxpython_scripting 
+            COMMENT "Copying plugins into bundle"
+        )
+ 
         # fix bundle after copying wxpython, fixing and copying
         add_dependencies( osx_fix_bundles pcbnew_copy_wxpython_scripting )
     endif()
@@ -636,10 +643,11 @@ if( KICAD_SCRIPTING_MODULES )
         )
 
         add_custom_target( pcbnew_copy_wxpython_module ALL
-            COMMAND ${CMAKE_COMMAND} -E copy_directory ${LIBWXPYTHON_ROOT}/wxPython  ${CMAKE_SOURCE_DIR}/pcbnew/pcbnew.app/Contents/Frameworks/wxPython
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${LIBWXPYTHON_ROOT}/wxPython  ${PROJECT_SOURCE_DIR}/pcbnew/pcbnew.app/Contents/Frameworks/wxPython
             DEPENDS FixSwigImportsModuleScripting _pcbnew_so_copy
             COMMENT "Copying wxPython into pcbnew.app Frameworks"
         )
+
         # Tell that we have to run osx_fix_bundles fix after building _pcbnew and migrating wxPython
         add_dependencies( osx_fix_bundles pcbnew_copy_wxpython_module )
         add_dependencies( osx_fix_bundles _pcbnew )
