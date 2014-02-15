@@ -177,7 +177,7 @@ int main( int argc, char **argv )
 
         tstr.clear();
         tstr.str( line );
-        if( (tstr >> extraZ) && extraZ > 0.0 )
+        if( (tstr >> extraZ) && extraZ >= 0.0 )
             ok = true;
     }
 
