@@ -133,10 +133,7 @@ public:
      */
     DIRECTION_45 Opposite() const
     {
-        if( m_dir == UNDEFINED )
-            return UNDEFINED;
-
-        const Directions OppositeMap[] = { S, SW, W, NW, N, NE, E, SE };
+        const Directions OppositeMap[] = { S, SW, W, NW, N, NE, E, SE, UNDEFINED };
         return OppositeMap[m_dir];
     }
 

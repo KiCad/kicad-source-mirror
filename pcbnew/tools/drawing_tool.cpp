@@ -32,6 +32,7 @@
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
+#include <router/direction.h>
 
 #include <class_board.h>
 #include <class_drawsegment.h>
@@ -641,11 +642,12 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
     // Only two shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
 
-    DRAWSEGMENT* graphic = new DRAWSEGMENT( m_board );
-
     // Init the new item attributes
+    DRAWSEGMENT* graphic = new DRAWSEGMENT( m_board );
     graphic->SetShape( (STROKE_T) aShape );
     graphic->SetWidth( m_board->GetDesignSettings().m_DrawSegmentWidth );
+
+    DRAWSEGMENT line45( *graphic ); // used only for direction 45 mode with lines
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -657,19 +659,43 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
     Activate();
 
     bool started = false;
+    bool direction45 = false;       // 45 degrees only mode
     int addedSegments = 0;
+
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        // Enable 45 degrees lines only mode by holding shift
-        bool linesAngle45 = evt->Modifier( MD_SHIFT );
+        bool updatePreview = false;            // should preview be updated
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
+
+        // Enable 45 degrees lines only mode by holding control
+        if( direction45 != ( evt->Modifier( MD_CTRL ) && aShape == S_SEGMENT && started ) )
+        {
+            direction45 = evt->Modifier( MD_CTRL );
+
+            if( direction45 )
+            {
+                preview.Add( &line45 );
+                make45DegLine( graphic, &line45 );
+            }
+            else
+            {
+                preview.Remove( &line45 );
+                graphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+            }
+
+            updatePreview = true;
+        }
 
         if( evt->IsCancel() )
         {
+            if( direction45 )
+                preview.Remove( &line45 );
+
             preview.FreeItems();
-            if( !started )                  // TODO check it
+            if( !started )
                 delete graphic;
+
             break;
         }
 
@@ -683,7 +709,7 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
             else if( evt->KeyCode() == '=' )
                 graphic->SetWidth( width + WIDTH_STEP );
 
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            updatePreview = true;
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -701,7 +727,9 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
                     m_controls->SetAutoPan( true );
 
                     graphic->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
+                    graphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
                     graphic->SetLayer( layer );
+                    line45.SetLayer( layer );
                     preview.Add( graphic );
 
                     started = true;
@@ -709,7 +737,7 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
             }
             else
             {
-                if( wxPoint( cursorPos.x, cursorPos.y ) != graphic->GetStart() )
+                if( graphic->GetEnd() != graphic->GetStart() )
                 {
                     assert( graphic->GetLength() > 0 );
                     assert( graphic->GetWidth() > 0 );
@@ -725,6 +753,10 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
                         graphic = new DRAWSEGMENT( *graphic );
                         // Start the new line in the same spot where the previous one has ended
                         graphic->SetStart( graphic->GetEnd() );
+
+                        if( direction45 )
+                            graphic->SetEnd( line45.GetEnd() );
+
                         preview.Add( graphic );
                     }
                     else
@@ -743,14 +775,16 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
         else if( evt->IsMotion() && started )
         {
             // 45 degree lines
-            if( linesAngle45 && aShape == S_SEGMENT )
-                make45DegLine( graphic );
+            if( direction45 && aShape == S_SEGMENT )
+                make45DegLine( graphic, &line45 );
             else
                 graphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
-            // Show a preview of the item
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            updatePreview = true;
         }
+
+        if( updatePreview )
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
 
     m_controls->ShowCursor( false );
@@ -800,6 +834,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     helperLine->SetShape( S_SEGMENT );
     helperLine->SetLayer( zoneInfo.m_CurrentZone_Layer );
     helperLine->SetWidth( 1 );
+    DRAWSEGMENT line45( *helperLine );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -814,17 +849,37 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     VECTOR2I lastCursorPos = m_controls->GetCursorPosition();
     VECTOR2I origin;
     int numPoints = 0;
+    bool direction45 = false;       // 45 degrees only mode
+    bool cancelled = false;
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        // Enable 45 degrees lines only mode by holding shift
-        bool linesAngle45 = evt->Modifier( MD_SHIFT );
+        bool updatePreview = false;            // should preview be updated
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
+
+        // Enable 45 degrees lines only mode by holding control
+        if( direction45 != ( evt->Modifier( MD_CTRL ) && numPoints > 0 ) )
+        {
+            direction45 = evt->Modifier( MD_CTRL );
+
+            if( direction45 )
+            {
+                preview.Add( &line45 );
+                make45DegLine( helperLine, &line45 );
+            }
+            else
+            {
+                preview.Remove( &line45 );
+                helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+            }
+
+            updatePreview = true;
+        }
 
         if( evt->IsCancel() )
         {
-            delete zone;
+            cancelled = true;
             break;
         }
 
@@ -851,7 +906,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                 else
                 {
                     // If there are less than 3 points, then it is not a valid zone
-                    delete zone;
+                    cancelled = true;
                 }
 
                 break;
@@ -877,7 +932,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                 }
                 ++numPoints;
 
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                updatePreview = true;
             }
 
             lastCursorPos = cursorPos;
@@ -886,14 +941,17 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
         else if( evt->IsMotion() )
         {
             // 45 degree lines
-            if( linesAngle45 )
-                make45DegLine( helperLine );
+            if( direction45 )
+                make45DegLine( helperLine, &line45 );
             else
                 helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
             // Show a preview of the item
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            updatePreview = true;
         }
+
+        if( updatePreview )
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
 
     m_controls->ShowCursor( false );
@@ -901,7 +959,11 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     m_controls->SetAutoPan( false );
     m_view->Remove( &preview );
 
-    // Delete helper lines
+    // Clean
+    if( cancelled )
+        delete zone;
+    if( direction45 )
+        preview.Remove( &line45 );
     preview.FreeItems();
 
     setTransitions();
@@ -910,24 +972,25 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
 }
 
 
-void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment ) const
+void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) const
 {
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I origin( aSegment->GetStart() );
+    DIRECTION_45 direction( origin - cursorPos );
+    SHAPE_LINE_CHAIN newChain = direction.BuildInitialTrace( origin, cursorPos );
 
-    // Current line vector
-    VECTOR2D lineVector( wxPoint( cursorPos.x, cursorPos.y ) - aSegment->GetStart() );
-    double angle = lineVector.Angle();
-
-    // Find the closest angle, which is a multiple of 45 degrees
-    double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
-
-    VECTOR2D newLineVector = lineVector.Rotate( newAngle - angle );
-    VECTOR2D newLineEnd = VECTOR2D( aSegment->GetStart() ) + newLineVector;
-
-    // Snap the new line to the grid
-    newLineEnd = m_view->GetGAL()->GetGridPoint( newLineEnd );
-
-    aSegment->SetEnd( wxPoint( newLineEnd.x, newLineEnd.y ) );
+    if( newChain.PointCount() > 2 )
+    {
+        aSegment->SetEnd( wxPoint( newChain.Point( -2 ).x, newChain.Point( -2 ).y ) );
+        aHelper->SetStart( wxPoint( newChain.Point( -2 ).x, newChain.Point( -2 ).y ) );
+        aHelper->SetEnd( wxPoint( newChain.Point( -1 ).x, newChain.Point( -1 ).y ) );
+    }
+    else
+    {
+        aSegment->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+        aHelper->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
+        aHelper->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+    }
 }
 
 
