@@ -415,7 +415,7 @@ public:
      * @param aP the point to be looked for
      * @return index of the correspoinding point in the line chain or negative when not found.
      */
-    int Find ( const VECTOR2I& aP ) const;
+    int Find( const VECTOR2I& aP ) const;
 
     /**
      * Function Slice()
