@@ -32,8 +32,6 @@
 
 #include <class_drawpanel_gal.h>
 
-#include <pcbnew_id.h>
-
 #include <boost/optional.hpp>
 #include <boost/foreach.hpp>
 
@@ -273,19 +271,5 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
 void TOOL_DISPATCHER::DispatchWxCommand( const wxCommandEvent& aEvent )
 {
-    bool activateTool = false;
-    std::string toolName;
-
-    // fixme: use TOOL_ACTIONs here
-    switch( aEvent.GetId() )
-    {
-    case ID_PNS_ROUTER_TOOL:
-        toolName = "pcbnew.InteractiveRouter";
-        activateTool = true;
-        break;
-    }
-
-    // do nothing if the legacy view is active
-    if( activateTool && m_editFrame->IsGalCanvasActive() )
-        m_toolMgr->InvokeTool( toolName );
+    // no events to dispatch currently
 }

@@ -83,4 +83,16 @@ public:
 
     /// Activation of the drawing tool (placing a MODULE)
     static TOOL_ACTION placeModule;
+
+    /// Activation of the Push and Shove router
+    static TOOL_ACTION routerActivate;
+
+    /**
+     * Function TranslateLegacyId()
+     * Translates legacy tool ids to the corresponding TOOL_ACTION name.
+     * @param aId is legacy tool id to be translated.
+     * @return std::string is name of the corresponding TOOL_ACTION. It may be empty, if there is
+     * no corresponding TOOL_ACTION.
+     */
+    static std::string TranslateLegacyId( int aId );
 };

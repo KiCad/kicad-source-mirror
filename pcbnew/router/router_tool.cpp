@@ -31,6 +31,7 @@
 #include <pcb_painter.h>
 
 #include <tool/context_menu.h>
+#include <tools/common_actions.h>
 
 #include <ratsnest_data.h>
 
@@ -88,7 +89,7 @@ void ROUTER_TOOL::Reset( RESET_REASON aReason )
     if( getView() )
         m_router->SetView( getView() );
 
-    Go( &ROUTER_TOOL::Main, TOOL_EVENT( TC_COMMAND, TA_ACTION, GetName() ) );
+    Go( &ROUTER_TOOL::Main, COMMON_ACTIONS::routerActivate.MakeEvent() );
 }
 
 
