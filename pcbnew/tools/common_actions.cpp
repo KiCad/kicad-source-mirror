@@ -24,6 +24,7 @@
 
 #include "common_actions.h"
 #include <tool/action_manager.h>
+#include <pcbnew_id.h>
 #include <wx/defs.h>
 
 // Selection tool actions
@@ -57,38 +58,82 @@ TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, 'E',
         "Properties...", "Displays properties window" );
 
+// Drawing tool actions
 TOOL_ACTION COMMON_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
-        AS_GLOBAL, 'D',
+        AS_GLOBAL, 0,
         "Draw a line", "Draw a line" );
 
 TOOL_ACTION COMMON_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
-        AS_GLOBAL, 'S',
+        AS_GLOBAL, 0,
         "Draw a circle", "Draw a circle" );
 
 TOOL_ACTION COMMON_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
-        AS_GLOBAL, 'A',
+        AS_GLOBAL, 0,
         "Draw an arc", "Draw an arc" );
 
 TOOL_ACTION COMMON_ACTIONS::drawText( "pcbnew.InteractiveDrawing.text",
-        AS_GLOBAL, 'T',
+        AS_GLOBAL, 0,
         "Add a text", "Add a text" );
 
 TOOL_ACTION COMMON_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
-        AS_GLOBAL, 'X',
+        AS_GLOBAL, 0,
         "Add a dimension", "Add a dimension" );
 
 TOOL_ACTION COMMON_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
-        AS_GLOBAL, 'B',
+        AS_GLOBAL, 0,
         "Add a filled zone", "Add a filled zone" );
 
 TOOL_ACTION COMMON_ACTIONS::drawKeepout( "pcbnew.InteractiveDrawing.keepout",
-        AS_GLOBAL, 'N',
+        AS_GLOBAL, 0,
         "Add a keepout area", "Add a keepout area" );
 
 TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.InteractiveDrawing.placeTarget",
-        AS_GLOBAL, 'C',
+        AS_GLOBAL, 0,
         "Add layer alignment target", "Add layer alignment target" );
 
 TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.InteractiveDrawing.placeModule",
-        AS_GLOBAL, 'V',
+        AS_GLOBAL, 0,
         "Add modules", "Add modules" );
+
+TOOL_ACTION COMMON_ACTIONS::routerActivate( "pcbnew.InteractiveRouter",
+        AS_GLOBAL, 0,
+        "Run push & shove router", "Run push & shove router" );
+
+
+std::string COMMON_ACTIONS::TranslateLegacyId( int aId )
+{
+    switch( aId )
+    {
+    case ID_PCB_MODULE_BUTT:
+        return COMMON_ACTIONS::placeModule.GetName();
+
+    case ID_TRACK_BUTT:
+        return COMMON_ACTIONS::routerActivate.GetName();
+
+    case ID_PCB_ZONES_BUTT:
+        return COMMON_ACTIONS::drawZone.GetName();
+
+    case ID_PCB_KEEPOUT_AREA_BUTT:
+        return COMMON_ACTIONS::drawKeepout.GetName();
+
+    case ID_PCB_ADD_LINE_BUTT:
+        return COMMON_ACTIONS::drawLine.GetName();
+
+    case ID_PCB_CIRCLE_BUTT:
+        return COMMON_ACTIONS::drawCircle.GetName();
+
+    case ID_PCB_ARC_BUTT:
+        return COMMON_ACTIONS::drawArc.GetName();
+
+    case ID_PCB_ADD_TEXT_BUTT:
+        return COMMON_ACTIONS::drawText.GetName();
+
+    case ID_PCB_DIMENSION_BUTT:
+        return COMMON_ACTIONS::drawDimension.GetName();
+
+    case ID_PCB_MIRE_BUTT:
+        return COMMON_ACTIONS::placeTarget.GetName();
+    }
+
+    return "";
+}

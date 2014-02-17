@@ -64,6 +64,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterAction( &COMMON_ACTIONS::drawKeepout );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::placeTarget );
     m_toolManager->RegisterAction( &COMMON_ACTIONS::placeModule );
+    m_toolManager->RegisterAction( &COMMON_ACTIONS::routerActivate );
 
     // Register tools
     m_toolManager->RegisterTool( new SELECTION_TOOL );

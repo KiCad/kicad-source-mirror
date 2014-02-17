@@ -312,13 +312,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Reset text size and width of all module fields to current defaults" ),
                  KiBitmap( reset_text_xpm ) );
 
-    editMenu->AppendSeparator();
-
-    AddMenuItem( editMenu, ID_PNS_ROUTER_TOOL,
-                 _( "Interactive router" ),
-                 _( "Interactive router drag&drop tool." ),
-                 KiBitmap( tools_xpm ) );
-
     /** Create View menu **/
     wxMenu* viewMenu = new wxMenu;
 

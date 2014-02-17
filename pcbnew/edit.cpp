@@ -54,6 +54,9 @@
 #include <dialog_global_edit_tracks_and_vias.h>
 #include <invoke_pcb_dialog.h>
 
+#include <tool/tool_manager.h>
+#include <tools/common_actions.h>
+
 // Handles the selection of command events.
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
@@ -1450,5 +1453,14 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
             Compile_Ratsnest( &dc, true );
 
         break;
+    }
+
+    if( IsGalCanvasActive() )
+    {
+        std::string actionName = COMMON_ACTIONS::TranslateLegacyId( id );
+        if( !actionName.empty() )
+            m_toolManager->RunAction( actionName );
+
+        return;
     }
 }
