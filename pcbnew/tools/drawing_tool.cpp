@@ -190,7 +190,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
             {
                 if( wxPoint( cursorPos.x, cursorPos.y ) != arc->GetArcStart() )
                 {
-                    assert( arc->GetAngle() > 0 );
+                    assert( arc->GetAngle() != 0 );
                     assert( arc->GetArcStart() != arc->GetArcEnd() );
                     assert( arc->GetWidth() > 0 );
 
