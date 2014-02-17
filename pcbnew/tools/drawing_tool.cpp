@@ -197,6 +197,9 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
                     m_view->Add( arc );
                     m_board->Add( arc );
                     arc->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+                    m_frame->OnModify();
+                    m_frame->SaveCopyInUndoList( arc, UR_NEW );
                 }
                 else
                     --step;     // one another chance to draw a proper arc
@@ -309,6 +312,10 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
             m_view->Add( text );
             // m_board->Add( text );        // it is already added by CreateTextePcb()
             text->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( text, UR_NEW );
+
             break;
         }
 
@@ -431,6 +438,9 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
                     m_view->Add( dimension );
                     m_board->Add( dimension );
                     dimension->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+                    m_frame->OnModify();
+                    m_frame->SaveCopyInUndoList( dimension, UR_NEW );
                 }
             }
             break;
@@ -507,6 +517,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
     preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
     m_controls->SetSnapping( true );
+    m_controls->SetAutoPan( true );
 
     Activate();
 
@@ -542,6 +553,10 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
             m_view->Add( target );
             m_board->Add( target );
             target->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( target, UR_NEW );
+
             break;
         }
 
@@ -584,6 +599,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
     preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
     m_controls->SetSnapping( true );
+    m_controls->SetAutoPan( true );
 
     Activate();
 
@@ -617,6 +633,10 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
             module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW::Add ), m_view ) );
             m_view->Add( module );
             module->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( module, UR_NEW );
+
             break;
         }
 
@@ -747,6 +767,9 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
                     graphic->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
                     preview.Remove( graphic );
                     ++addedSegments;
+
+                    m_frame->OnModify();
+                    m_frame->SaveCopyInUndoList( graphic, UR_NEW );
 
                     if( aContinous )
                     {
@@ -902,6 +925,9 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                         m_frame->Fill_Zone( zone );
 
                     zone->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+                    m_frame->OnModify();
+                    m_frame->SaveCopyInUndoList( zone, UR_NEW );
                 }
                 else
                 {
