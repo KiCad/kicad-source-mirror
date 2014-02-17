@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Mathematics (glm.g-truc.net)
 ///
-/// Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 ///
 /// This half implementation is based on OpenEXR which is Copyright (c) 2002, 
 /// Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
@@ -135,9 +135,9 @@ namespace detail
 		// of float and half (127 versus 15).
 		//
 
-		register int s =  (i >> 16) & 0x00008000;
-		register int e = ((i >> 23) & 0x000000ff) - (127 - 15);
-		register int m =   i        & 0x007fffff;
+		int s =  (i >> 16) & 0x00008000;
+		int e = ((i >> 23) & 0x000000ff) - (127 - 15);
+		int m =   i        & 0x007fffff;
 
 		//
 		// Now reassemble s, e and m into a half:
