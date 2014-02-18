@@ -44,14 +44,19 @@ static const unsigned kLowestDefaultScore = 1;
 
 struct COMPONENT_TREE_SEARCH_CONTAINER::TREE_NODE
 {
-    TREE_NODE(TREE_NODE* aParent, CMP_LIBRARY* aOwningLib,
+    // Levels of nodes.
+    enum NODE_TYPE {
+        TYPE_LIB,
+        TYPE_ALIAS,
+        TYPE_UNIT
+    };
+
+    TREE_NODE(NODE_TYPE aType, TREE_NODE* aParent, LIB_ALIAS* aAlias,
               const wxString& aName, const wxString& aDisplayInfo,
-              const wxString& aSearchText,
-              bool aNormallyExpanded = false)
-        : Parent( aParent ),
-          Lib( aOwningLib ),
-          NormallyExpanded( aNormallyExpanded ),
-          Name( aName ),
+              const wxString& aSearchText )
+        : Type( aType ),
+          Parent( aParent ), Alias( aAlias ), Unit( 0 ),
+          DisplayName( aName ),
           DisplayInfo( aDisplayInfo ),
           MatchName( aName.Lower() ),
           SearchText( aSearchText.Lower() ),
@@ -59,10 +64,11 @@ struct COMPONENT_TREE_SEARCH_CONTAINER::TREE_NODE
     {
     }
 
-    TREE_NODE* const Parent;      ///< NULL if library, pointer to lib-node when component.
-    CMP_LIBRARY* const Lib;       ///< Owning library of this component.
-    const bool NormallyExpanded;  ///< If this is a parent node, should it be unfolded ?
-    const wxString Name;          ///< Exact name as displayed to the user.
+    const NODE_TYPE Type;         ///< Type of node in the hierarchy.
+    TREE_NODE* const Parent;      ///< NULL if library, pointer to parent when component/alias.
+    LIB_ALIAS* const Alias;       ///< Component alias associated with this entry.
+    int Unit;                     ///< Part number; Assigned: >= 1; default = 0
+    const wxString DisplayName;   ///< Exact name as displayed to the user.
     const wxString DisplayInfo;   ///< Additional info displayed in the tree (description..)
 
     const wxString MatchName;     ///< Preprocessed: lowercased display name.
@@ -75,27 +81,25 @@ struct COMPONENT_TREE_SEARCH_CONTAINER::TREE_NODE
 
 
 // Sort tree nodes by reverse match-score (bigger is first), then alphabetically.
-// Library nodes (i.e. the ones that don't have a parent) are always sorted before any
-// leaf nodes.
+// Library (i.e. the ones that don't have a parent) are always sorted before any
+// leaf nodes. Component
 bool COMPONENT_TREE_SEARCH_CONTAINER::scoreComparator( const TREE_NODE* a1, const TREE_NODE* a2 )
 {
-    if ( a1->Parent == NULL && a2->Parent != NULL )
-        return true;
+    if( a1->Type != a2->Type )
+        return a1->Type < a2->Type;
 
-    if ( a1->Parent != NULL && a2->Parent == NULL )
-        return false;
-
-    if ( a1->MatchScore != a2->MatchScore )
+    if( a1->MatchScore != a2->MatchScore )
         return a1->MatchScore > a2->MatchScore;  // biggest first.
 
-    if (a1->Parent != a2->Parent)
-        return a1->Parent->MatchName.Cmp(a2->Parent->MatchName) < 0;
+    if( a1->Parent != a2->Parent )
+        return scoreComparator( a1->Parent, a2->Parent );
 
     return a1->MatchName.Cmp( a2->MatchName ) < 0;
 }
 
+
 COMPONENT_TREE_SEARCH_CONTAINER::COMPONENT_TREE_SEARCH_CONTAINER()
-    : tree( NULL )
+    : tree( NULL ), libraries_added( 0 ), preselect_unit_number( -1 )
 {
 }
 
@@ -108,9 +112,11 @@ COMPONENT_TREE_SEARCH_CONTAINER::~COMPONENT_TREE_SEARCH_CONTAINER()
 }
 
 
-void COMPONENT_TREE_SEARCH_CONTAINER::SetPreselectNode( const wxString& aComponentName )
+void COMPONENT_TREE_SEARCH_CONTAINER::SetPreselectNode( const wxString& aComponentName,
+                                                        int aUnit )
 {
     preselect_node_name = aComponentName.Lower();
+    preselect_unit_number = aUnit;
 }
 
 
@@ -123,71 +129,79 @@ void COMPONENT_TREE_SEARCH_CONTAINER::SetTree( wxTreeCtrl* aTree )
 
 void COMPONENT_TREE_SEARCH_CONTAINER::AddLibrary( CMP_LIBRARY& aLib )
 {
-    wxArrayString all_comp;
+    wxArrayString all_aliases;
 
-    aLib.GetEntryNames( all_comp );
-    AddComponentList( aLib.GetName(), all_comp, &aLib, false );
+    aLib.GetEntryNames( all_aliases );
+    AddAliasList( aLib.GetName(), all_aliases, &aLib );
+    ++libraries_added;
 }
 
 
-void COMPONENT_TREE_SEARCH_CONTAINER::AddComponentList( const wxString& aNodeName,
-                                                        const wxArrayString& aComponentNameList,
-                                                        CMP_LIBRARY* aOptionalLib,
-                                                        bool aNormallyExpanded )
+void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
+                                                    const wxArrayString& aAliasNameList,
+                                                    CMP_LIBRARY* aOptionalLib )
 {
-    TREE_NODE* parent_node = new TREE_NODE( NULL, NULL, aNodeName, wxEmptyString, wxEmptyString,
-                                            aNormallyExpanded );
+    static const wxChar unitLetter[] = wxT( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
 
-    nodes.push_back( parent_node );
+    TREE_NODE* const lib_node = new TREE_NODE( TREE_NODE::TYPE_LIB,  NULL, NULL,
+                                               aNodeName, wxEmptyString, wxEmptyString );
+    nodes.push_back( lib_node );
 
-    BOOST_FOREACH( const wxString& cName, aComponentNameList )
+    BOOST_FOREACH( const wxString& aName, aAliasNameList )
     {
-        LIB_COMPONENT *c;
+        LIB_ALIAS* a;
 
-        if (aOptionalLib)
-            c = aOptionalLib->FindComponent( cName );
+        if( aOptionalLib )
+            a = aOptionalLib->FindAlias( aName );
         else
-            c = CMP_LIBRARY::FindLibraryComponent( cName, wxEmptyString );
+            a = CMP_LIBRARY::FindLibraryEntry( aName, wxEmptyString );
 
-        if (c == NULL)
+        if( a == NULL )
             continue;
 
-        wxString keywords, descriptions;
+        wxString search_text;
+        search_text = ( a->GetKeyWords().empty() ) ? wxT("        ") : a->GetKeyWords();
+        search_text += a->GetDescription();
+
         wxString display_info;
 
-        for ( size_t i = 0; i < c->GetAliasCount(); ++i )
+        if( !a->GetDescription().empty() )
         {
-            LIB_ALIAS *a = c->GetAlias( i );
-            keywords += a->GetKeyWords();
-            descriptions += a->GetDescription();
-
-            if ( display_info.empty() && !a->GetDescription().empty() )
-            {
-                // Preformatting. Unfortunately, the tree widget doesn't have columns
-                display_info.Printf( wxT(" %s[ %s ]"),
-                                     ( cName.length() <= 8 ) ? wxT("\t\t") : wxT("\t"),
-                                     GetChars( a->GetDescription() ) );
-            }
+            // Preformatting. Unfortunately, the tree widget doesn't have columns
+            display_info.Printf( wxT(" %s[ %s ]"),
+                                 ( a->GetName().length() <= 8 ) ? wxT("\t\t") : wxT("\t"),
+                                 GetChars( a->GetDescription() ) );
         }
 
-        // If there are no keywords, we give a couple of characters whitespace penalty. We want
-        // a component with a search-term found in the keywords score slightly higher than another
-        // component without keywords, but that term in the descriptions.
-        wxString search_text = ( !keywords.empty() ) ? keywords : wxT("        ");
-        search_text += descriptions;
-        nodes.push_back( new TREE_NODE( parent_node, c->GetLibrary(),
-                                        cName, display_info, search_text ) );
+        TREE_NODE* alias_node = new TREE_NODE( TREE_NODE::TYPE_ALIAS, lib_node,
+                                               a, a->GetName(), display_info, search_text );
+        nodes.push_back( alias_node );
+
+        if( a->GetComponent()->IsMulti() )    // Add all units as sub-nodes.
+            for ( int u = 0; u < a->GetComponent()->GetPartCount(); ++u )
+            {
+                const wxString unitName = unitLetter[u];
+                TREE_NODE* unit_node = new TREE_NODE(TREE_NODE::TYPE_UNIT, alias_node, a,
+                                                     _("Unit ") + unitName,
+                                                     wxEmptyString, wxEmptyString );
+                unit_node->Unit = u + 1;
+                nodes.push_back( unit_node );
+            }
     }
 }
 
 
-LIB_COMPONENT* COMPONENT_TREE_SEARCH_CONTAINER::GetSelectedComponent()
+LIB_ALIAS* COMPONENT_TREE_SEARCH_CONTAINER::GetSelectedAlias( int* aUnit )
 {
     const wxTreeItemId& select_id = tree->GetSelection();
+
     BOOST_FOREACH( TREE_NODE* node, nodes )
     {
-        if ( node->MatchScore > 0 && node->TreeId == select_id && node->Lib )
-            return node->Lib->FindComponent( node->Name );
+        if( node->MatchScore > 0 && node->TreeId == select_id ) {
+            if( aUnit && node->Unit > 0 )
+                *aUnit = node->Unit;
+            return node->Alias;
+        }
     }
     return NULL;
 }
@@ -209,7 +223,7 @@ static int matchPosScore(int aPosition, int aMaximum)
 
 void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch )
 {
-    if ( tree == NULL )
+    if( tree == NULL )
         return;
 
     // We score the list by going through it several time, essentially with a complexity
@@ -220,7 +234,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     BOOST_FOREACH( TREE_NODE* node, nodes )
     {
         node->PreviousScore = node->MatchScore;
-        node->MatchScore = node->Parent ? kLowestDefaultScore : 0;  // start-match for leafs.
+        node->MatchScore = ( node->Type == TREE_NODE::TYPE_LIB ) ? 0 : kLowestDefaultScore;
     }
 
     // Create match scores for each node for all the terms, that come space-separated.
@@ -239,12 +253,13 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     while ( tokenizer.HasMoreTokens() )
     {
         const wxString term = tokenizer.GetNextToken().Lower();
+
         BOOST_FOREACH( TREE_NODE* node, nodes )
         {
-            if ( node->Parent == NULL)
-                continue;      // Library nodes are not scored here.
+            if( node->Type != TREE_NODE::TYPE_ALIAS )
+                continue;      // Only aliases are actually scored here.
 
-            if ( node->MatchScore == 0)
+            if( node->MatchScore == 0)
                 continue;   // Leaf node without score are out of the game.
 
             // Keywords and description we only count if the match string is at
@@ -252,16 +267,16 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
             // matches. Most abbreviations are at three characters long.
             int found_pos;
 
-            if ( term == node->MatchName )
+            if( term == node->MatchName )
                 node->MatchScore += 1000;  // exact match. High score :)
-            else if ( (found_pos = node->MatchName.Find( term ) ) != wxNOT_FOUND )
+            else if( (found_pos = node->MatchName.Find( term ) ) != wxNOT_FOUND )
             {
                 // Substring match. The earlier in the string the better.  score += 20..40
                 node->MatchScore += matchPosScore( found_pos, 20 ) + 20;
             }
-            else if ( node->Parent->MatchName.Find( term ) != wxNOT_FOUND )
+            else if( node->Parent->MatchName.Find( term ) != wxNOT_FOUND )
                 node->MatchScore += 19;   // parent name matches.         score += 19
-            else if ( ( found_pos = node->SearchText.Find( term ) ) != wxNOT_FOUND )
+            else if( ( found_pos = node->SearchText.Find( term ) ) != wxNOT_FOUND )
             {
                 // If we have a very short search term (like one or two letters), we don't want
                 // to accumulate scores if they just happen to be in keywords or description as
@@ -277,22 +292,35 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
         }
     }
 
-    // Parent nodes have the maximum score seen in any of their children.
+    // Library nodes have the maximum score seen in any of their children.
+    // Alias nodes have the score of their parents.
     unsigned highest_score_seen = 0;
     bool any_change = false;
+
     BOOST_FOREACH( TREE_NODE* node, nodes )
     {
-        if ( node->Parent == NULL )
-            continue;
+        switch( node->Type )
+        {
+        case TREE_NODE::TYPE_ALIAS:
+            {
+                any_change |= (node->PreviousScore != node->MatchScore);
+                // Update library score.
+                node->Parent->MatchScore = std::max( node->Parent->MatchScore, node->MatchScore );
+                highest_score_seen = std::max( highest_score_seen, node->MatchScore );
+            }
+            break;
 
-        any_change |= (node->PreviousScore != node->MatchScore);
-        node->Parent->MatchScore = std::max( node->Parent->MatchScore, node->MatchScore );
-        highest_score_seen = std::max( highest_score_seen, node->MatchScore );
+        case TREE_NODE::TYPE_UNIT:
+            node->MatchScore = node->Parent->MatchScore;
+            break;
+
+        default:
+            break;
+        }
     }
 
-
     // The tree update might be slow, so we want to bail out if there is no change.
-    if ( !any_change )
+    if( !any_change )
         return;
 
     // Now: sort all items according to match score, libraries first.
@@ -305,9 +333,10 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     const wxTreeItemId root_id = tree->AddRoot( wxEmptyString );
     const TREE_NODE* first_match = NULL;
     const TREE_NODE* preselected_node = NULL;
+
     BOOST_FOREACH( TREE_NODE* node, nodes )
     {
-        if ( node->MatchScore == 0 )
+        if( node->MatchScore == 0 )
             continue;
 
         // If we have nodes that go beyond the default score, suppress nodes that
@@ -315,42 +344,50 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
         // some one-letter match in the keyword or description. In this case, we prefer matches
         // that just have higher scores. Improves relevancy and performance as the tree has to
         // display less items.
-        if ( highest_score_seen > kLowestDefaultScore && node->MatchScore == kLowestDefaultScore )
+        if( highest_score_seen > kLowestDefaultScore && node->MatchScore == kLowestDefaultScore )
             continue;
 
-        const bool isLeaf = ( node->Parent != NULL );
         wxString node_text;
 #if 0
         // Node text with scoring information for debugging
-        node_text.Printf( wxT("%s (s=%u)%s"), GetChars(node->Name),
-                          node->MatchScore, GetChars(node->DisplayInfo));
+        node_text.Printf( wxT("%s (s=%u)%s"), GetChars(node->DisplayName),
+                          node->MatchScore, GetChars( node->DisplayInfo ));
 #else
-        node_text = node->Name + node->DisplayInfo;
+        node_text = node->DisplayName + node->DisplayInfo;
 #endif
-        node->TreeId = tree->AppendItem( !isLeaf ? root_id : node->Parent->TreeId, node_text );
+        node->TreeId = tree->AppendItem( node->Parent ? node->Parent->TreeId : root_id,
+                                         node_text );
 
-        // If we are a leaf node, we might need to expand.
-        if ( isLeaf )
+        // If we are a nicely scored alias, we want to have it visible. Also, if there
+        // is only a single library in this container, we want to have it unfolded
+        // (example: power library).
+        if( node->Type == TREE_NODE::TYPE_ALIAS
+             && ( node->MatchScore > kLowestDefaultScore || libraries_added == 1 ) )
         {
-            if ( node->MatchScore > kLowestDefaultScore )
-            {
-                tree->EnsureVisible( node->TreeId );
+            tree->EnsureVisible( node->TreeId );
 
-                if ( first_match == NULL )
-                    first_match = node;   // The "I am feeling lucky" element.
-            }
-
-            if ( preselected_node == NULL && node->MatchName == preselect_node_name )
-                preselected_node = node;
+            if( first_match == NULL )
+                first_match = node;   // First, highest scoring: the "I am feeling lucky" element.
         }
 
-        if ( !isLeaf && node->NormallyExpanded )
-            tree->Expand( node->TreeId );
+        // The first node that matches our pre-select criteria is choosen. 'First node'
+        // means, it shows up in the history, as the history node is displayed very first
+        // (by virtue of alphabetical ordering)
+        if( preselected_node == NULL
+             && node->Type == TREE_NODE::TYPE_ALIAS
+             && node->MatchName == preselect_node_name )
+            preselected_node = node;
+
+        // Refinement in case we come accross a matching unit node.
+        if( preselected_node != NULL && preselected_node->Type == TREE_NODE::TYPE_ALIAS
+             && node->Parent == preselected_node
+             && preselect_unit_number >= 1 && node->Unit == preselect_unit_number )
+            preselected_node = node;
     }
 
-    if ( first_match )                      // Highest score search match pre-selected.
+    if( first_match )                      // Highest score search match pre-selected.
         tree->SelectItem( first_match->TreeId );
-    else if ( preselected_node )            // No search, so history item preselected.
+    else if( preselected_node )            // No search, so history item preselected.
         tree->SelectItem( preselected_node->TreeId );
 
     tree->Thaw();

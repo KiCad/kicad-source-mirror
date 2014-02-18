@@ -81,6 +81,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
 
 wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
                                                      wxArrayString&  aHistoryList,
+                                                     int&            aHistoryLastUnit,
                                                      bool            aUseLibBrowser,
                                                      int*            aUnit,
                                                      int*            aConvert )
@@ -113,17 +114,18 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
     {
         // This is good for a transition for experineced users: giving them a History. Ideally,
         // we actually make this part even faster to access with a popup on ALT-a or something.
-        search_container.AddComponentList( _("-- History --"), aHistoryList, NULL, true );
-        search_container.SetPreselectNode( aHistoryList[0] );
+        search_container.AddAliasList( _("-- History --"), aHistoryList, NULL );
+        search_container.SetPreselectNode( aHistoryList[0], aHistoryLastUnit );
     }
 
+    const int deMorgan = aConvert ? *aConvert : 1;
     dialogTitle.Printf( _( "Choose Component (%d items loaded)" ), cmpCount );
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, &search_container );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, &search_container, deMorgan );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return wxEmptyString;
 
-    wxString cmpName = dlg.GetSelectedComponentName();
+    wxString cmpName = dlg.GetSelectedAliasName( aUnit );
 
     if( dlg.IsExternalBrowserSelected() )
     {
@@ -137,7 +139,10 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
     }
 
     if ( !cmpName.empty() )
+    {
         AddHistoryComponentName( aHistoryList, cmpName );
+        if ( aUnit ) aHistoryLastUnit = *aUnit;
+    }
 
     return cmpName;
 }
@@ -146,6 +151,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
 SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
                                                const wxString& aLibname,
                                                wxArrayString&  aHistoryList,
+                                               int&            aHistoryLastUnit,
                                                bool            aUseLibBrowser )
 {
     int unit    = 1;
@@ -153,8 +159,8 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
     SetRepeatItem( NULL );
     m_canvas->SetIgnoreMouseEvents( true );
 
-    wxString Name = SelectComponentFromLibrary( aLibname, aHistoryList, aUseLibBrowser,
-                                                &unit, &convert );
+    wxString Name = SelectComponentFromLibrary( aLibname, aHistoryList, aHistoryLastUnit,
+                                                aUseLibBrowser, &unit, &convert );
 
     if( Name.IsEmpty() )
     {

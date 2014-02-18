@@ -21,11 +21,13 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#ifndef COMPONENT_TREE_SEARCH_CONTAINER_H
+#define COMPONENT_TREE_SEARCH_CONTAINER_H
 
 #include <vector>
 #include <wx/string.h>
 
-class LIB_COMPONENT;
+class LIB_ALIAS;
 class CMP_LIBRARY;
 class wxTreeCtrl;
 class wxArrayString;
@@ -44,7 +46,7 @@ public:
     ~COMPONENT_TREE_SEARCH_CONTAINER();
 
     /** Function AddLibrary
-     * Add the components of this library to be searched.
+     * Add all the components and their aliases of this library to be searched.
      * To be called in the setup phase to fill this container.
      *
      * @param aLib containting all the components to be added.
@@ -56,19 +58,19 @@ public:
      * To be called in the setup phase to fill this container.
      *
      * @param aNodeName          The parent node name the components will show up as leaf.
-     * @param aComponentNameList List of component names.
+     * @param aAliasNameList List of alias names.
      * @param aOptionalLib       Library to look up the component names (if NULL: global lookup)
-     * @param aNormallyExpanded  Should the node in the tree be expanded by default.
      */
-    void AddComponentList( const wxString& aNodeName, const wxArrayString& aComponentNameList,
-                           CMP_LIBRARY* aOptionalLib, bool aNormallyExpanded );
+    void AddAliasList( const wxString& aNodeName, const wxArrayString& aAliasNameList,
+                       CMP_LIBRARY* aOptionalLib );
 
     /** Function SetPreselectNode
      * Set the component name to be selected in absence of any search-result.
      *
      * @param aComponentName the component name to be selected.
+     * @param aUnit          the component unit to be selected (if > 0).
      */
-    void SetPreselectNode( const wxString& aComponentName );
+    void SetPreselectNode( const wxString& aComponentName, int aUnit );
 
     /** Function SetTree
      * Set the tree to be manipulated.
@@ -92,17 +94,23 @@ public:
      */
     void UpdateSearchTerm( const wxString& aSearch );
 
-    /** Function GetSelectedComponent
+    /** Function GetSelectedAlias
      *
-     * @return the selected component or NULL if there is none.
+     * @param if not-NULL, the selected sub-unit is set here.
+     * @return the selected alias or NULL if there is none.
      */
-    LIB_COMPONENT* GetSelectedComponent();
+    LIB_ALIAS* GetSelectedAlias( int* aUnit );
 
 private:
     struct TREE_NODE;
     static bool scoreComparator( const TREE_NODE* a1, const TREE_NODE* a2 );
 
     std::vector<TREE_NODE*> nodes;
-    wxString preselect_node_name;
     wxTreeCtrl* tree;
+    int libraries_added;
+
+    wxString preselect_node_name;
+    int preselect_unit_number;
 };
+
+#endif /* COMPONENT_TREE_SEARCH_CONTAINER_H */
