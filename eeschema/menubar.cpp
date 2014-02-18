@@ -27,9 +27,6 @@
  * @file eeschema/menubar.cpp
  * @brief (Re)Create the main menubar for the schematic frame
  */
-#ifdef __GNUG__
-#pragma implementation
-#endif
 
 #include <fctsys.h>
 #include <appl_wxstruct.h>

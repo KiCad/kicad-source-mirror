@@ -27,10 +27,6 @@
  * @file preferences.cpp
  */
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <confirm.h>
