@@ -89,20 +89,23 @@ protected:
      * Calls the library viewer to select component to import into schematic.
      * if the library viewer is currently running, it is closed and reopened
      * in modal mode.
-     * @param aLibname = the lib name or an empty string.
-     *     if aLibname is empty, the full list of libraries is used
-     * @param aHistoryList = list of previously loaded components
-     * @param aUseLibBrowser = bool to call the library viewer to select the component
-     * @param aUnit = a point to int to return the selected unit (if any)
-     * @param aConvert = a point to int to return the selected De Morgan shape (if any)
+     * @param aLibname           the lib name or an empty string.
+     *                              if aLibname is empty, the full list of libraries is used
+     * @param aHistoryList       list of previously loaded components
+     * @param aHistoryLastUnit   remembering last unit in last component.
+     * @param aUseLibBrowser     bool to call the library viewer to select the component
+     * @param aUnit              a pointer to int to return the selected unit (if any)
+     * @param aConvert           a pointer to int to return the selected De Morgan shape (if any)
      *
      * @return the component name
      */
     wxString SelectComponentFromLibrary( const wxString& aLibname,
                                          wxArrayString&  aHistoryList,
+                                         int&            aHistoryLastUnit,
                                          bool            aUseLibBrowser,
                                          int*            aUnit,
                                          int*            aConvert );
+
 
     /**
      * Function OnOpenLibraryViewer
