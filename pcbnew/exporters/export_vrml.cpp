@@ -1199,8 +1199,9 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
         fname.Replace( wxT( "\\" ), wxT( "/" ) );
         wxString source_fname = fname;
 
-        if( aExport3DFiles )    // Change illegal characters
+        if( aExport3DFiles )
         {
+            // Change illegal characters in filenames
             ChangeIllegalCharacters( fname, true );
             fname = a3D_Subdir + wxT( "/" ) + fname;
 

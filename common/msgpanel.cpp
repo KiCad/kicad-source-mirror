@@ -28,11 +28,6 @@
  * @brief Message panel implementation file.
  */
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
-
 #include <msgpanel.h>
 
 
