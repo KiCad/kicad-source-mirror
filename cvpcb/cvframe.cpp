@@ -493,6 +493,10 @@ void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
     wxGetApp().GetLibraryPathList().Insert( newFileName.GetPath(), 0 );
     m_NetlistFileName = newFileName;
     ReadNetListAndLinkFiles();
+
+    // OSX need it since some objects are "rebuild" just make aware AUI
+    // Fixes #1258081
+    m_auimgr.Update();
 }
 
 
