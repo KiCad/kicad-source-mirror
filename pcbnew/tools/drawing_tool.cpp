@@ -272,7 +272,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 {
-    TEXTE_PCB* text;
+    TEXTE_PCB* text = NULL;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -283,7 +283,6 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
     m_controls->SetAutoPan( true );
 
     Activate();
-    bool created = false;
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -292,20 +291,21 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 
         if( evt->IsCancel() )
         {
-            if( created )
+            if( text )
             {
                 // Delete the old text and have another try
                 m_board->Delete( text );        // it was already added by CreateTextPcb()
+                text = NULL;
+
                 preview.Clear();
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-                created = false;
                 m_controls->ShowCursor( true );
             }
             else
                 break;
         }
 
-        else if( created && evt->Category() == TC_COMMAND )
+        else if( text && evt->Category() == TC_COMMAND )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
@@ -321,7 +321,7 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( !created )
+            if( !text )
             {
                 // Init the new item attributes
                 text = m_frame->CreateTextePcb( NULL );
@@ -346,12 +346,12 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 
                 preview.Remove( text );
                 m_controls->ShowCursor( true );
-            }
 
-            created = !created;
+                text = NULL;
+            }
         }
 
-        else if( created && evt->IsMotion() )
+        else if( text && evt->IsMotion() )
         {
             text->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
@@ -467,8 +467,10 @@ int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
             break;
 
             case SET_END:
+                dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+
                 // Dimensions that have origin and end in the same spot are not valid
-                if( dimension->GetOrigin() == wxPoint( cursorPos.x, cursorPos.y ) )
+                if( dimension->GetOrigin() == dimension->GetEnd() )
                     --step;
                 break;
 
@@ -636,7 +638,7 @@ int DRAWING_TOOL::PlaceTarget( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
 {
-    MODULE* module;
+    MODULE* module = NULL;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -648,8 +650,6 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
 
     Activate();
 
-    bool created = false;
-
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -657,21 +657,20 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
 
         if( evt->IsCancel() )
         {
-            if( created )
+            if( module )
             {
                 m_board->Delete( module );  // it was added by LoadModuleFromLibrary
-                m_controls->ShowCursor( true );
+                module = NULL;
 
                 preview.Clear();
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-
-                created = false;
+                m_controls->ShowCursor( true );
             }
             else
                 break;
         }
 
-        else if( created && evt->Category() == TC_COMMAND )
+        else if( module && evt->Category() == TC_COMMAND )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
@@ -687,7 +686,7 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( !created )
+            if( !module )
             {
                 // Init the new item attributes
                 module = m_frame->LoadModuleFromLibrary( wxEmptyString,
@@ -719,14 +718,13 @@ int DRAWING_TOOL::PlaceModule( TOOL_EVENT& aEvent )
                 preview.Remove( module );
                 module->RunOnChildren( std::bind1st( std::mem_fun( &KIGFX::VIEW_GROUP::Remove ),
                                                      &preview ) );
+                module = NULL;  // to indicate that there is no module that we currently modify
 
                 m_controls->ShowCursor( true );
             }
-
-            created = !created;
         }
 
-        else if( created && evt->IsMotion() )
+        else if( module && evt->IsMotion() )
         {
             module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -764,7 +762,6 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
 
     bool direction45 = false;       // 45 degrees only mode
     int addedSegments = 0;
-    bool created = false;
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -773,7 +770,7 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         // Enable 45 degrees lines only mode by holding control
-        if( direction45 != evt->Modifier( MD_CTRL ) && created && aShape == S_SEGMENT )
+        if( direction45 != evt->Modifier( MD_CTRL ) && graphic && aShape == S_SEGMENT )
         {
             direction45 = evt->Modifier( MD_CTRL );
 
@@ -793,21 +790,19 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
 
         if( evt->IsCancel() )
         {
-            if( direction45 )
-                preview.Remove( &line45 );      // prevent line45 from being deleted
-
-            preview.FreeItems();
-            updatePreview = true;
-
-            if( !created )
+            if( !graphic )
                 break;
 
-            // We did not exit the loop? So go once again
-            created = false;
+            preview.Clear();
+            updatePreview = true;
+
+            delete graphic;
+            graphic = NULL;
+
             m_controls->SetAutoPan( false );
         }
 
-        else if( created && evt->IsKeyUp() )
+        else if( graphic && evt->IsKeyUp() )
         {
             int width = graphic->GetWidth();
 
@@ -822,7 +817,7 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( !created )
+            if( !graphic )
             {
                 LAYER_NUM layer = m_frame->GetScreen()->m_Active_Layer;
 
@@ -847,7 +842,6 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
                     }
 
                     preview.Add( graphic );
-                    created = true;
                     m_controls->SetAutoPan( true );
                 }
             }
@@ -883,21 +877,23 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
                     else        // start a new graphic
                     {
                         addedSegments = 0;
-                        created = false;
                         m_controls->SetAutoPan( false );
+                        graphic = NULL;
                     }
                 }
-                else if( addedSegments > 0 )   // User has clicked twice in the same spot
-                {                              // a clear sign that the current drawing is finished
-                    created = false;           // but only if at least one graphic was created
-                    preview.Remove( graphic ); // otherwise - force user to draw or cancel
+                else if( addedSegments > 0 )    // User has clicked twice in the same spot
+                {                               // a clear sign that the current drawing is finished
+                    preview.Clear();            // but only if at least one graphic was created
+                                                // otherwise - force user to draw more or cancel
                     delete graphic;
+                    graphic = NULL;
+
                     m_controls->SetAutoPan( false );
                 }
             }
         }
 
-        else if( created && evt->IsMotion() )
+        else if( graphic && evt->IsMotion() )
         {
             // 45 degree lines
             if( direction45 && aShape == S_SEGMENT )
