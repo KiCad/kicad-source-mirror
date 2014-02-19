@@ -44,6 +44,7 @@
  *
  * 3. Export Graphics to Layer objects (see 3d_draw.cpp for clues) to ensure that custom
  *      tracks/fills/logos are rendered.
+ *  module->TransformGraphicShapesWithClearanceToPolygonSet
  *
  * For mechanical correctness, we should use the following settings with arcs:
  * 1. max. deviation:  the number of edges should be determined by the max.
@@ -925,7 +926,8 @@ static void export_vrml_text_module( TEXTE_MODULE* module )
 }
 
 
-static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline )
+static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
+                                     double aOrientation )
 {
     LAYER_NUM layer = aOutline->GetLayer();
     double  x   = aOutline->GetStart().x * aModel.scale + aModel.tx;
@@ -936,6 +938,10 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline )
 
     switch( aOutline->GetShape() )
     {
+    case S_SEGMENT:
+        export_vrml_line( aModel, layer, x, y, xf, yf, w );
+        break;
+
     case S_ARC:
         export_vrml_arc( aModel, layer, x, y, xf, yf, w, aOutline->GetAngle() / 10 );
         break;
@@ -944,8 +950,41 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline )
         export_vrml_circle( aModel, layer, x, y, xf, yf, w );
         break;
 
+    case S_POLYGON:
+        {
+            VRML_LAYER* vl;
+
+            if( !VRMLEXPORT::GetLayer( aModel, layer, &vl ) )
+                break;
+
+            int nvert = aOutline->GetPolyPoints().size();
+            int i = 0;
+
+            if( nvert < 3 ) break;
+
+            int seg = vl->NewContour();
+
+            if( seg < 0 )
+                break;
+
+            while( i < nvert )
+            {
+                CPolyPt corner( aOutline->GetPolyPoints()[i] );
+                RotatePoint( &corner.x, &corner.y, aOrientation );
+                corner.x += aOutline->GetPosition().x;
+                corner.y += aOutline->GetPosition().y;
+
+                x = corner.x * aModel.scale + aModel.tx;
+                y = - ( corner.y * aModel.scale + aModel.ty );
+                vl->AddVertex( seg, x, y );
+
+                ++i;
+            }
+            vl->EnsureWinding( seg, false );
+        }
+        break;
+
     default:
-        export_vrml_line( aModel, layer, x, y, xf, yf, w );
         break;
     }
 }
@@ -1134,7 +1173,8 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
             break;
 
         case PCB_MODULE_EDGE_T:
-            export_vrml_edge_module( aModel, dynamic_cast<EDGE_MODULE*>( item ) );
+            export_vrml_edge_module( aModel, dynamic_cast<EDGE_MODULE*>( item ),
+                                     aModule->GetOrientation() );
             break;
 
         default:
@@ -1159,8 +1199,9 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
         fname.Replace( wxT( "\\" ), wxT( "/" ) );
         wxString source_fname = fname;
 
-        if( aExport3DFiles )    // Change illegal characters
+        if( aExport3DFiles )
         {
+            // Change illegal characters in filenames
             ChangeIllegalCharacters( fname, true );
             fname = a3D_Subdir + wxT( "/" ) + fname;
 

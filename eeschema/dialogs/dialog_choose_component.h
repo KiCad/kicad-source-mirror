@@ -21,6 +21,8 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#ifndef DIALOG_CHOOSE_COMPONENT_H
+#define DIALOG_CHOOSE_COMPONENT_H
 
 #include <dialog_choose_component_base.h>
 
@@ -32,14 +34,16 @@ class DIALOG_CHOOSE_COMPONENT : public DIALOG_CHOOSE_COMPONENT_BASE
 {
 public:
     DIALOG_CHOOSE_COMPONENT( wxWindow* aParent, const wxString& aTitle,
-                             COMPONENT_TREE_SEARCH_CONTAINER* aSearch_container );
+                             COMPONENT_TREE_SEARCH_CONTAINER* aSearch_container,
+                             int aDeMorganConvert );
 
-    /** Function GetSelectedComponentName
+    /** Function GetSelectedAliasName
      * To be called after this dialog returns from ShowModal().
      *
-     * @return the component that has been selected, or an empty string if there is none.
+     * @param aUnit if not NULL, the selected unit is filled in here.
+     * @return the alias that has been selected, or an empty string if there is none.
      */
-    wxString GetSelectedComponentName() const;
+    wxString GetSelectedAliasName( int* aUnit ) const;
 
     /** Function IsExternalBrowserSelected
      *
@@ -57,13 +61,17 @@ protected:
     virtual void OnTreeMouseUp( wxMouseEvent& aMouseEvent );
 
     virtual void OnStartComponentBrowser( wxMouseEvent& aEvent );
+    virtual void OnHandlePreviewRepaint( wxPaintEvent& aRepaintEvent );
 
 private:
-    void updateSelection();
-    void SelectIfValid( const wxTreeItemId& aTreeId );
+    bool updateSelection();
+    void selectIfValid( const wxTreeItemId& aTreeId );
+    void renderPreview( LIB_COMPONENT* aComponent, int aUnit );
 
     COMPONENT_TREE_SEARCH_CONTAINER* const m_search_container;
-    LIB_COMPONENT* m_selected_component;
+    const int m_deMorganConvert;
     bool m_external_browser_requested;
     bool m_received_doubleclick_in_tree;
 };
+
+#endif /* DIALOG_CHOOSE_COMPONENT_H */

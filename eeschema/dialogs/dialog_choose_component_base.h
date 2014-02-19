@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Feb  8 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,7 +22,7 @@ class DIALOG_SHIM;
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/treectrl.h>
-#include <wx/combobox.h>
+#include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -40,9 +40,8 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 		wxStaticText* m_searchLabel;
 		wxTextCtrl* m_searchBox;
 		wxTreeCtrl* m_libraryComponentTree;
-		wxStaticText* m_componentView;
+		wxPanel* m_componentView;
 		wxTextCtrl* m_componentDetails;
-		wxComboBox* m_unitChoice;
 		wxStdDialogButtonSizer* m_button;
 		wxButton* m_buttonOK;
 		wxButton* m_buttonCancel;
@@ -55,6 +54,7 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 		virtual void OnDoubleClickTreeSelect( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnTreeSelect( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnStartComponentBrowser( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnHandlePreviewRepaint( wxPaintEvent& event ) { event.Skip(); }
 		
 	
 	public:

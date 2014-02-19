@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Feb  8 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,7 +11,7 @@
 
 DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 450,-1 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 450,100 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
@@ -37,35 +37,21 @@ DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_componentView = new wxStaticText( this, wxID_ANY, wxT("TODO\n(mini. comp image)"), wxDefaultPosition, wxSize( 100,100 ), 0 );
-	m_componentView->Wrap( -1 );
-	m_componentView->SetMinSize( wxSize( 100,100 ) );
+	m_componentView = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER );
+	m_componentView->SetMinSize( wxSize( 150,150 ) );
 	
-	bSizer3->Add( m_componentView, 0, wxALL, 5 );
+	bSizer3->Add( m_componentView, 2, wxEXPAND | wxALL, 5 );
 	
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxVERTICAL );
+	m_componentDetails = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxTE_MULTILINE );
+	m_componentDetails->SetMinSize( wxSize( -1,100 ) );
 	
-	m_componentDetails = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,100 ), wxTE_MULTILINE );
-	bSizer6->Add( m_componentDetails, 1, wxALL|wxEXPAND, 5 );
-	
-	m_unitChoice = new wxComboBox( this, wxID_ANY, wxT("Unit A"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	m_unitChoice->Enable( false );
-	m_unitChoice->Hide();
-	
-	bSizer6->Add( m_unitChoice, 0, wxALL, 5 );
-	
-	
-	bSizer3->Add( bSizer6, 2, wxEXPAND, 5 );
+	bSizer3->Add( m_componentDetails, 3, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizer1->Add( bSizer3, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
-	
-	
-	bSizer5->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer5 = new wxBoxSizer( wxVERTICAL );
 	
 	m_button = new wxStdDialogButtonSizer();
 	m_buttonOK = new wxButton( this, wxID_OK );
@@ -77,7 +63,7 @@ DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wx
 	bSizer5->Add( m_button, 0, wxEXPAND, 5 );
 	
 	
-	bSizer1->Add( bSizer5, 0, wxEXPAND, 5 );
+	bSizer1->Add( bSizer5, 0, wxALIGN_RIGHT, 5 );
 	
 	
 	this->SetSizer( bSizer1 );
@@ -93,6 +79,7 @@ DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wx
 	m_libraryComponentTree->Connect( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, wxTreeEventHandler( DIALOG_CHOOSE_COMPONENT_BASE::OnDoubleClickTreeSelect ), NULL, this );
 	m_libraryComponentTree->Connect( wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( DIALOG_CHOOSE_COMPONENT_BASE::OnTreeSelect ), NULL, this );
 	m_componentView->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_CHOOSE_COMPONENT_BASE::OnStartComponentBrowser ), NULL, this );
+	m_componentView->Connect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_CHOOSE_COMPONENT_BASE::OnHandlePreviewRepaint ), NULL, this );
 }
 
 DIALOG_CHOOSE_COMPONENT_BASE::~DIALOG_CHOOSE_COMPONENT_BASE()
@@ -105,5 +92,6 @@ DIALOG_CHOOSE_COMPONENT_BASE::~DIALOG_CHOOSE_COMPONENT_BASE()
 	m_libraryComponentTree->Disconnect( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, wxTreeEventHandler( DIALOG_CHOOSE_COMPONENT_BASE::OnDoubleClickTreeSelect ), NULL, this );
 	m_libraryComponentTree->Disconnect( wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( DIALOG_CHOOSE_COMPONENT_BASE::OnTreeSelect ), NULL, this );
 	m_componentView->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_CHOOSE_COMPONENT_BASE::OnStartComponentBrowser ), NULL, this );
+	m_componentView->Disconnect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_CHOOSE_COMPONENT_BASE::OnHandlePreviewRepaint ), NULL, this );
 	
 }

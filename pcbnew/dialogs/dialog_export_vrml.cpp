@@ -134,7 +134,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     wxString fullFilename = dlg.FilePicker()->GetPath();
     subDirFor3Dshapes = dlg.GetSubdir();
 
-    if( ! wxDirExists( subDirFor3Dshapes ) )
+    if( export3DFiles && !wxDirExists( subDirFor3Dshapes ) )
         wxMkdir( subDirFor3Dshapes );
 
     if( ! ExportVRML_File( fullFilename, scale, export3DFiles, subDirFor3Dshapes ) )

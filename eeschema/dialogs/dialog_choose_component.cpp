@@ -35,77 +35,36 @@
 static wxTreeItemId GetPrevItem( const wxTreeCtrl& tree, const wxTreeItemId& item );
 static wxTreeItemId GetNextItem( const wxTreeCtrl& tree, const wxTreeItemId& item );
 
-// Combine descriptions of all aliases from given component.
-static wxString combineDescriptions( LIB_COMPONENT* aComponent )
-{
-    std::set<wxString> descriptions;
-
-    for( size_t i = 0; i < aComponent->GetAliasCount(); ++i )
-    {
-        LIB_ALIAS* a = aComponent->GetAlias( i );
-
-        if ( !a->GetDescription().empty() )
-            descriptions.insert( a->GetDescription() );
-    }
-
-    wxString result;
-    BOOST_FOREACH( const wxString& s, descriptions )
-        result += s + wxT("\n");
-    return result;
-}
-
-
-// Combine keywords. Keywords come as a string, but are considered space-separated
-// individual words. Return a string with a unique set of these.
-static wxString combineKeywords( LIB_COMPONENT* aComponent )
-{
-    std::set<wxString> keywords;
-
-    for( size_t i = 0; i < aComponent->GetAliasCount(); ++i )
-    {
-        LIB_ALIAS* a = aComponent->GetAlias( i );
-        wxStringTokenizer tokenizer( a->GetKeyWords() );
-
-        while ( tokenizer.HasMoreTokens() )
-            keywords.insert( tokenizer.GetNextToken() );
-    }
-
-    wxString result;
-    BOOST_FOREACH( const wxString& s, keywords )
-        result += s + wxT(" ");
-    return result;
-}
-
-
 DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( wxWindow* aParent, const wxString& aTitle,
-                                                  COMPONENT_TREE_SEARCH_CONTAINER* aContainer )
+                                                  COMPONENT_TREE_SEARCH_CONTAINER* aContainer,
+                                                  int aDeMorganConvert )
     : DIALOG_CHOOSE_COMPONENT_BASE( aParent, wxID_ANY, aTitle ),
       m_search_container( aContainer ),
-      m_selected_component( NULL ),
+      m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
       m_external_browser_requested( false ),
       m_received_doubleclick_in_tree( false )
 {
-    // TODO: restore last size user was choosing.
     m_search_container->SetTree( m_libraryComponentTree );
     m_searchBox->SetFocus();
     m_componentDetails->SetEditable( false );
 }
 
 
-// After this dialog is done: return the component that has been selected, or an
+// After this dialog is done: return the alias that has been selected, or an
 // empty string if there is none.
-wxString DIALOG_CHOOSE_COMPONENT::GetSelectedComponentName() const
+wxString DIALOG_CHOOSE_COMPONENT::GetSelectedAliasName( int* aUnit ) const
 {
-    if ( m_selected_component == NULL )
-        return wxEmptyString;
+    LIB_ALIAS *alias = m_search_container->GetSelectedAlias( aUnit );
 
-    return m_selected_component->GetName();
+    if( alias )
+        return alias->GetName();
+
+    return wxEmptyString;
 }
 
 
 void DIALOG_CHOOSE_COMPONENT::OnSearchBoxChange( wxCommandEvent& aEvent )
 {
-    m_selected_component = NULL;
     m_search_container->UpdateSearchTerm( m_searchBox->GetLineText(0) );
     updateSelection();
 }
@@ -117,31 +76,50 @@ void DIALOG_CHOOSE_COMPONENT::OnSearchBoxEnter( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::SelectIfValid( const wxTreeItemId& aTreeId )
+void DIALOG_CHOOSE_COMPONENT::selectIfValid( const wxTreeItemId& aTreeId )
 {
-    if ( aTreeId.IsOk() && aTreeId != m_libraryComponentTree->GetRootItem() )
+    if( aTreeId.IsOk() && aTreeId != m_libraryComponentTree->GetRootItem() )
         m_libraryComponentTree->SelectItem( aTreeId );
 }
 
 
 void DIALOG_CHOOSE_COMPONENT::OnInterceptSearchBoxKey( wxKeyEvent& aKeyStroke )
 {
-    // Cursor up/down are forwarded to the tree. This is done by intercepting some navigational
-    // keystrokes that normally would go to the text search box (which has the focus by default).
+    // Cursor up/down and partiallyi cursor are use to do tree navigation operations.
+    // This is done by intercepting some navigational keystrokes that normally would go to
+    // the text search box (which has the focus by default). That way, we are mostly keyboard
+    // operable.
+    // (If the tree has the focus, it can handle that by itself).
     const wxTreeItemId sel = m_libraryComponentTree->GetSelection();
 
-    switch ( aKeyStroke.GetKeyCode() )
+    switch( aKeyStroke.GetKeyCode() )
     {
     case WXK_UP:
-        SelectIfValid( GetPrevItem( *m_libraryComponentTree, sel ) );
+        selectIfValid( GetPrevItem( *m_libraryComponentTree, sel ) );
         break;
 
     case WXK_DOWN:
-        SelectIfValid( GetNextItem( *m_libraryComponentTree, sel ) );
+        selectIfValid( GetNextItem( *m_libraryComponentTree, sel ) );
+        break;
+
+        // The follwoing keys we can only hijack if they are not needed by the textbox itself.
+
+    case WXK_LEFT:
+        if( m_searchBox->GetInsertionPoint() == 0 )
+            m_libraryComponentTree->Collapse( sel );
+        else
+            aKeyStroke.Skip();   // Use for original purpose: move cursor.
+        break;
+
+    case WXK_RIGHT:
+        if( m_searchBox->GetInsertionPoint() >= (long) m_searchBox->GetLineText( 0 ).length() )
+            m_libraryComponentTree->Expand( sel );
+        else
+            aKeyStroke.Skip();   // Use for original purpose: move cursor.
         break;
 
     default:
-        aKeyStroke.Skip();  // Pass on to search box.
+        aKeyStroke.Skip();  // Any other key: pass on to search box directly.
         break;
     }
 }
@@ -155,9 +133,7 @@ void DIALOG_CHOOSE_COMPONENT::OnTreeSelect( wxTreeEvent& aEvent )
 
 void DIALOG_CHOOSE_COMPONENT::OnDoubleClickTreeSelect( wxTreeEvent& aEvent )
 {
-    updateSelection();
-
-    if ( m_selected_component == NULL )
+    if( !updateSelection() )
         return;
 
     // Ok, got selection. We don't just end the modal dialog here, but
@@ -170,7 +146,7 @@ void DIALOG_CHOOSE_COMPONENT::OnDoubleClickTreeSelect( wxTreeEvent& aEvent )
 
 void DIALOG_CHOOSE_COMPONENT::OnTreeMouseUp( wxMouseEvent& aMouseEvent )
 {
-    if ( m_received_doubleclick_in_tree )
+    if( m_received_doubleclick_in_tree )
         EndModal( wxID_OK );     // We are done (see OnDoubleClickTreeSelect)
     else
         aMouseEvent.Skip();      // Let upstream handle it.
@@ -184,20 +160,19 @@ void DIALOG_CHOOSE_COMPONENT::OnStartComponentBrowser( wxMouseEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::updateSelection()
+bool DIALOG_CHOOSE_COMPONENT::updateSelection()
 {
-    LIB_COMPONENT* selection = m_search_container->GetSelectedComponent();
+    int unit = 0;
+    LIB_ALIAS* selection = m_search_container->GetSelectedAlias( &unit );
 
-    if ( selection == m_selected_component )
-        return;   // no change.
-
-    m_selected_component = selection;
+    m_componentView->Refresh();
 
     m_componentDetails->Clear();
 
-    if ( m_selected_component == NULL )
-        return;
+    if( selection == NULL )
+        return false;
 
+    m_componentDetails->Freeze();
     wxFont font_normal = m_componentDetails->GetFont();
     wxFont font_bold = m_componentDetails->GetFont();
     font_bold.SetWeight( wxFONTWEIGHT_BOLD );
@@ -207,20 +182,20 @@ void DIALOG_CHOOSE_COMPONENT::updateSelection()
     wxTextAttr text_attribute;
     text_attribute.SetFont(font_normal);
 
-    const wxString description = combineDescriptions( selection );
+    const wxString description = selection->GetDescription();
 
-    if ( !description.empty() )
+    if( !description.empty() )
     {
         m_componentDetails->SetDefaultStyle( headline_attribute );
         m_componentDetails->AppendText( _("Description\n") );
         m_componentDetails->SetDefaultStyle( text_attribute );
         m_componentDetails->AppendText( description );
-        m_componentDetails->AppendText( wxT("\n") );
+        m_componentDetails->AppendText( wxT("\n\n") );
     }
 
-    const wxString keywords = combineKeywords( selection );
+    const wxString keywords = selection->GetKeyWords();
 
-    if ( !keywords.empty() )
+    if( !keywords.empty() )
     {
         m_componentDetails->SetDefaultStyle( headline_attribute );
         m_componentDetails->AppendText( _("Keywords\n") );
@@ -229,30 +204,90 @@ void DIALOG_CHOOSE_COMPONENT::updateSelection()
     }
 
     m_componentDetails->SetInsertionPoint( 0 );  // scroll up.
+    m_componentDetails->Thaw();
+
+    return true;
 }
+
+
+void DIALOG_CHOOSE_COMPONENT::OnHandlePreviewRepaint( wxPaintEvent& aRepaintEvent )
+{
+    int unit = 0;
+    LIB_ALIAS* selection = m_search_container->GetSelectedAlias( &unit );
+
+    renderPreview( selection ? selection->GetComponent() : NULL, unit );
+}
+
+
+// Render the preview in our m_componentView. If this gets more complicated, we should
+// probably have a derived class from wxPanel; but this keeps things local.
+void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_COMPONENT* aComponent, int aUnit )
+{
+    wxPaintDC dc( m_componentView );
+    dc.SetBackground( *wxWHITE_BRUSH );
+    dc.Clear();
+
+    if( aComponent == NULL )
+        return;
+
+    if( aUnit <= 0 )
+        aUnit = 1;
+
+    const wxSize dc_size = dc.GetSize();
+    dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
+
+    // Find joint bounding box for everything we are about to draw.
+    EDA_RECT bBox = aComponent->GetBoundingBox( aUnit, m_deMorganConvert );
+    const double xscale = (double) dc_size.x / bBox.GetWidth();
+    const double yscale = (double) dc_size.y / bBox.GetHeight();
+    const double scale  = std::min( xscale, yscale ) * 0.85;
+
+    dc.SetUserScale( scale, scale );
+
+    wxPoint offset =  bBox.Centre();
+    NEGATE( offset.x );
+    NEGATE( offset.y );
+
+    aComponent->Draw( NULL, &dc, offset, aUnit, m_deMorganConvert, GR_COPY,
+                      UNSPECIFIED_COLOR, DefaultTransform, true, true, false );
+}
+
 
 static wxTreeItemId GetPrevItem( const wxTreeCtrl& tree, const wxTreeItemId& item )
 {
     wxTreeItemId prevItem = tree.GetPrevSibling( item );
 
-    if ( !prevItem.IsOk() )
+    if( !prevItem.IsOk() )
     {
-        const wxTreeItemId parent = tree.GetItemParent( item );
-        prevItem = tree.GetLastChild( tree.GetPrevSibling( parent ) );
+        prevItem = tree.GetItemParent( item );
+    }
+    else if( tree.IsExpanded( prevItem ) )
+    {
+        prevItem = tree.GetLastChild( prevItem );
     }
 
     return prevItem;
 }
 
+
 static wxTreeItemId GetNextItem( const wxTreeCtrl& tree, const wxTreeItemId& item )
 {
-    wxTreeItemId nextItem = tree.GetNextSibling( item );
+    wxTreeItemId nextItem;
 
-    if ( !nextItem.IsOk() )
+    if( tree.IsExpanded( item ) )
     {
-        const wxTreeItemId parent = tree.GetItemParent( item );
         wxTreeItemIdValue dummy;
-        nextItem = tree.GetFirstChild( tree.GetNextSibling( parent ), dummy );
+        nextItem = tree.GetFirstChild( item, dummy );
+    }
+    else
+    {
+        // Walk up levels until we find one that has a next sibling.
+        for ( wxTreeItemId walk = item; walk.IsOk(); walk = tree.GetItemParent( walk ) )
+        {
+            nextItem = tree.GetNextSibling( walk );
+            if( nextItem.IsOk() )
+                break;
+        }
     }
 
     return nextItem;
