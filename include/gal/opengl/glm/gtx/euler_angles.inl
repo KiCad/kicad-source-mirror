@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// OpenGL Mathematics Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+// OpenGL Mathematics Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2005-12-21
 // Updated : 2007-08-14
@@ -35,9 +35,9 @@ namespace glm
 		valType sinY = glm::sin(angleY);
 
 		return detail::tmat4x4<valType>(
-			cosY,		valType(0),	sinY,		valType(0),
+			cosY,		valType(0),-sinY,		valType(0),
 			valType(0),	valType(1),	valType(0), valType(0),
-			-sinY,		valType(0),	cosY,		valType(0),
+			sinY,		valType(0),	cosY,		valType(0),
 			valType(0),	valType(0),	valType(0), valType(1));
 	}
 
