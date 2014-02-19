@@ -116,7 +116,7 @@ public:
 
     /**
      * Function PlaceModule()
-     * Displays a dialog to selected a module to be added and then allows user to set its position..
+     * Displays a dialog to selected a module to be added and then allows user to set its position.
      */
     int PlaceModule( TOOL_EVENT& aEvent );
 

@@ -207,7 +207,7 @@ public:
 
     ///> Returns information about difference between current mouse cursor position and the place
     ///> where dragging has started.
-    const VECTOR2D Delta() const
+    const VECTOR2D& Delta() const
     {
         assert( m_category == TC_MOUSE );    // this should be used only with mouse events
         return m_mouseDelta;
