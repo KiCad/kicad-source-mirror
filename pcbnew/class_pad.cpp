@@ -214,13 +214,13 @@ void D_PAD::SetOrientation( double aAngle )
 }
 
 
-void D_PAD::Flip( int aTranslationY )
+void D_PAD::Flip( const wxPoint& aCentre )
 {
-    int y = GetPosition().y - aTranslationY;
+    int y = GetPosition().y - aCentre.y;
 
     y = -y;         // invert about x axis.
 
-    y += aTranslationY;
+    y += aCentre.y;
 
     SetY( y );
 

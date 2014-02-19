@@ -30,13 +30,13 @@ for y in range (0,10):
         pad.SetPadName(str(n))
         module.Add(pad)
         n+=1
-        
+
 
 # save the PCB to disk
-pcb.Save("/tmp/my2.kicad_brd")
-pcb.Save("/tmp/my2.brd")
+pcb.Save("my2.kicad_pcb")
+pcb.Save("my2.brd")
 
-pcb = LoadBoard("/tmp/my2.brd")
+pcb = LoadBoard("my2.kicad_pcb")
 
 print map( lambda x: x.GetReference() , list(pcb.GetModules()))
 

@@ -167,7 +167,7 @@ public:
     void SetOffset( const wxPoint& aOffset )    { m_Offset = aOffset; }
     const wxPoint& GetOffset() const            { return m_Offset; }
 
-    void Flip( int aTranslationY );
+    void Flip( const wxPoint& aCentre );        // Virtual function
 
     /**
      * Function SetOrientation
