@@ -27,8 +27,6 @@
 set( PCRE_RELEASE 8.34 )
 set( PCRE_MD5 eb34b2c9c727fd64940d6fd9a00995eb )   # re-calc this on every RELEASE change
 
-# The boost headers [and static libs if built] go here, at the top of KiCad
-# source tree in boost_root.
 set( PCRE_ROOT "${PROJECT_SOURCE_DIR}/pcre_root" )
 
 #-----</configure>---------------------------------------------------------------
@@ -44,10 +42,6 @@ if (APPLE)
         set( PCRE_LDFLAGS "LDFLAGS=-arch ${CMAKE_OSX_ARCHITECTURES} -mmacosx-version-min=10.5" )
     endif( CMAKE_OSX_ARCHITECTURES )
 endif(APPLE)
-
-# There is a Bazaar 'boost scratch repo' in <SOURCE_DIR>/boost and after committing pristine
-# download, the patch is applied.  This lets you regenerate a new patch at any time
-# easily, simply by editing the working tree in <SOURCE_DIR> and doing "bzr diff" in there.
 
 ExternalProject_Add( pcre
     PREFIX          "${PREFIX}"
