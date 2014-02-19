@@ -26,6 +26,7 @@
 #include "class_board.h"
 
 #include <wxPcbStruct.h>
+#include <id.h>
 #include <view/view_controls.h>
 #include <pcbcommon.h>
 #include <pcb_painter.h>
@@ -463,6 +464,8 @@ int ROUTER_TOOL::Main( TOOL_EVENT& aEvent )
     ctls->SetAutoPan( false );
     ctls->ShowCursor( false );
     ctls->ForceCursorPosition( false );
+
+    getEditFrame<PCB_EDIT_FRAME>()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
 }
