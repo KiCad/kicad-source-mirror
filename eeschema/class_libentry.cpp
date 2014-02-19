@@ -286,7 +286,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
                           int aConvert, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor, const TRANSFORM& aTransform,
                           bool aShowPinText, bool aDrawFields, bool aOnlySelected )
 {
-    BASE_SCREEN*   screen = aPanel->GetScreen();
+    BASE_SCREEN*   screen = aPanel ? aPanel->GetScreen() : NULL;
 
     GRSetDrawMode( aDc, aDrawMode );
 
@@ -296,7 +296,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
      *   printing in black and white
      *   If the color is not the default color (aColor != -1 )
      */
-    if( ! (screen->m_IsPrinting && GetGRForceBlackPenState())
+    if( ! (screen && screen->m_IsPrinting && GetGRForceBlackPenState())
             && (aColor == UNSPECIFIED_COLOR) )
     {
         BOOST_FOREACH( LIB_ITEM& drawItem, drawings )
@@ -372,10 +372,11 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
     // Enable this to draw the anchor of the component.
 #if 0
     int len = aDc->DeviceToLogicalXRel( 3 );
+    EDA_RECT* const clipbox  = aPanel ? aPanel->GetClipBox() : NULL;
 
-    GRLine( aPanel->GetClipBox(), aDc, aOffset.x, aOffset.y - len, aOffset.x,
+    GRLine( clipbox, aDc, aOffset.x, aOffset.y - len, aOffset.x,
             aOffset.y + len, 0, aColor );
-    GRLine( aPanel->GetClipBox(), aDc, aOffset.x - len, aOffset.y, aOffset.x + len,
+    GRLine( clipbox, aDc, aOffset.x - len, aOffset.y, aOffset.x + len,
             aOffset.y, 0, aColor );
 #endif
 
@@ -383,7 +384,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
      * the bounding box calculations. */
 #if 0
     EDA_RECT bBox = GetBoundingBox( aMulti, aConvert );
-    GRRect( aPanel->GetClipBox(), aDc, bBox.GetOrigin().x, bBox.GetOrigin().y,
+    GRRect( aPanel ? aPanel->GetClipBox() : NULL, aDc, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }

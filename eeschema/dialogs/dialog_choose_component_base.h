@@ -53,6 +53,8 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 		virtual void OnTreeMouseUp( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnDoubleClickTreeSelect( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnTreeSelect( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnStartComponentBrowser( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnHandlePreviewRepaint( wxPaintEvent& event ) { event.Skip(); }
 		
 	
 	public:

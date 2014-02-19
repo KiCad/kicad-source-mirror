@@ -72,7 +72,6 @@ private:
     const int m_deMorganConvert;
     bool m_external_browser_requested;
     bool m_received_doubleclick_in_tree;
-    bool m_ready_to_render;
 };
 
 #endif /* DIALOG_CHOOSE_COMPONENT_H */

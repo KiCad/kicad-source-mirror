@@ -392,7 +392,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND | wxALL</property>
-                            <property name="proportion">1</property>
+                            <property name="proportion">2</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -426,7 +426,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">100,100</property>
+                                <property name="minimum_size">150,150</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_componentView</property>
                                 <property name="pane_border">1</property>
@@ -443,7 +443,7 @@
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
-                                <property name="window_style">wxTAB_TRAVERSAL</property>
+                                <property name="window_style">wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER</property>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -453,14 +453,14 @@
                                 <event name="OnLeaveWindow"></event>
                                 <event name="OnLeftDClick"></event>
                                 <event name="OnLeftDown"></event>
-                                <event name="OnLeftUp"></event>
+                                <event name="OnLeftUp">OnStartComponentBrowser</event>
                                 <event name="OnMiddleDClick"></event>
                                 <event name="OnMiddleDown"></event>
                                 <event name="OnMiddleUp"></event>
                                 <event name="OnMotion"></event>
                                 <event name="OnMouseEvents"></event>
                                 <event name="OnMouseWheel"></event>
-                                <event name="OnPaint"></event>
+                                <event name="OnPaint">OnHandlePreviewRepaint</event>
                                 <event name="OnRightDClick"></event>
                                 <event name="OnRightDown"></event>
                                 <event name="OnRightUp"></event>
@@ -472,7 +472,7 @@
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxALL|wxEXPAND</property>
-                            <property name="proportion">2</property>
+                            <property name="proportion">3</property>
                             <object class="wxTextCtrl" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
