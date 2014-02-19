@@ -513,6 +513,7 @@ make_lexer(
 add_subdirectory( pcad2kicadpcb_plugin )
 if( BUILD_GITHUB_PLUGIN )
     add_subdirectory( github )
+    add_dependencies( github_plugin lib-dependencies )
 endif()
 
 
@@ -526,6 +527,7 @@ add_executable( pcbnew WIN32 MACOSX_BUNDLE
     ${PCBNEW_RESOURCES}
     )
 
+add_dependencies( pcbnew lib-dependencies )
 ###
 # Set properties for APPLE on pcbnew target
 ###
