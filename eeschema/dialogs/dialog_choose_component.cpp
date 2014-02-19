@@ -42,22 +42,11 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( wxWindow* aParent, const wxStr
       m_search_container( aContainer ),
       m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
       m_external_browser_requested( false ),
-      m_received_doubleclick_in_tree( false ),
-      m_ready_to_render( false )
+      m_received_doubleclick_in_tree( false )
 {
     m_search_container->SetTree( m_libraryComponentTree );
     m_searchBox->SetFocus();
     m_componentDetails->SetEditable( false );
-    m_componentView
-        ->Connect( wxEVT_PAINT,
-                   wxPaintEventHandler( DIALOG_CHOOSE_COMPONENT::OnHandlePreviewRepaint ),
-                   NULL, this );
-    m_componentView
-        ->Connect( wxEVT_LEFT_UP,
-                   wxMouseEventHandler( DIALOG_CHOOSE_COMPONENT::OnStartComponentBrowser ),
-                   NULL, this );
-
-    m_ready_to_render = true;  // Only after setup, we accept drawing updates.
 }
 
 
@@ -176,7 +165,7 @@ bool DIALOG_CHOOSE_COMPONENT::updateSelection()
     int unit = 0;
     LIB_ALIAS* selection = m_search_container->GetSelectedAlias( &unit );
 
-    renderPreview( selection ? selection->GetComponent() : NULL, unit );
+    m_componentView->Refresh();
 
     m_componentDetails->Clear();
 
@@ -234,9 +223,6 @@ void DIALOG_CHOOSE_COMPONENT::OnHandlePreviewRepaint( wxPaintEvent& aRepaintEven
 // probably have a derived class from wxPanel; but this keeps things local.
 void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_COMPONENT* aComponent, int aUnit )
 {
-    if( !m_ready_to_render )
-        return;
-
     wxPaintDC dc( m_componentView );
     dc.SetBackground( *wxWHITE_BRUSH );
     dc.Clear();
@@ -251,16 +237,7 @@ void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_COMPONENT* aComponent, int aUni
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
     // Find joint bounding box for everything we are about to draw.
-    EDA_RECT bBox;
-
-    BOOST_FOREACH( LIB_ITEM& item, aComponent->GetDrawItemList() )
-    {
-        if( ( item.GetUnit() && item.GetUnit() != aUnit )
-             || ( item.GetConvert() && item.GetConvert() != m_deMorganConvert ) )
-            continue;
-        bBox.Merge( item.GetBoundingBox() );
-    }
-
+    EDA_RECT bBox = aComponent->GetBoundingBox( aUnit, m_deMorganConvert );
     const double xscale = (double) dc_size.x / bBox.GetWidth();
     const double yscale = (double) dc_size.y / bBox.GetHeight();
     const double scale  = std::min( xscale, yscale ) * 0.85;
@@ -271,16 +248,8 @@ void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_COMPONENT* aComponent, int aUni
     NEGATE( offset.x );
     NEGATE( offset.y );
 
-    GRResetPenAndBrush( &dc );
-
-    BOOST_FOREACH( LIB_ITEM& item, aComponent->GetDrawItemList() )
-    {
-        if( ( item.GetUnit() && item.GetUnit() != aUnit )
-             || ( item.GetConvert() && item.GetConvert() != m_deMorganConvert ) )
-            continue;
-        item.Draw( NULL, &dc, offset, UNSPECIFIED_COLOR, GR_COPY,
-                   NULL, DefaultTransform );
-    }
+    aComponent->Draw( NULL, &dc, offset, aUnit, m_deMorganConvert, GR_COPY,
+                      UNSPECIFIED_COLOR, DefaultTransform, true, true, false );
 }
 
 
