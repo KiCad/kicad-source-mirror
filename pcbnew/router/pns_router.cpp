@@ -97,12 +97,11 @@ private:
 
 PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 {
-    PNS_LAYERSET layers;
+    PNS_LAYERSET layers( 0, 15 );
 
     switch( aPad->GetAttribute() )
     {
     case PAD_STANDARD:
-        layers = PNS_LAYERSET( 0, 15 );
         break;
 
     case PAD_SMD:
