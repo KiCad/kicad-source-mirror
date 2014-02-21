@@ -30,9 +30,6 @@
 #include <python_scripting.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __GNUG__
-#pragma implementation
-#endif
 
 #include <fctsys.h>
 #include <wxstruct.h>

@@ -34,15 +34,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview48"
      showgrid="true"
      inkscape:zoom="22.961538"
-     inkscape:cx="13"
+     inkscape:cx="4.3551087"
      inkscape:cy="13"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      inkscape:snap-to-guides="false"
@@ -60,26 +60,9 @@
   <defs
      id="defs4" />
   <path
-     style="fill:none;stroke:#0000cf;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.94117647000000004;stroke-miterlimit:0;stroke-dasharray:4,4;stroke-dashoffset:5.2"
-     d="M 4,22 22,4"
+     style="fill:none;stroke:#0000cf;stroke-width:2.4000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-opacity:0.94117647;stroke-dasharray:4.80000019, 2.4000001;stroke-dashoffset:6.23999975"
+     d="M 1,25 24.485762,1.427136"
      id="path2990"
-     inkscape:connector-curvature="0" />
-  <rect
-     style="fill:#2ac23c;fill-opacity:1;fill-rule:evenodd;stroke:#666666;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     id="rect3776"
-     width="5"
-     height="5.0000005"
-     x="19.5"
-     y="1.4999995"
-     ry="2.5"
-     rx="2.5" />
-  <rect
-     rx="2.5"
-     ry="2.5"
-     y="19.5"
-     x="1.5"
-     height="5.0000005"
-     width="5"
-     id="rect3761"
-     style="fill:#2ac23c;fill-opacity:1;fill-rule:evenodd;stroke:#666666;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
 </svg>

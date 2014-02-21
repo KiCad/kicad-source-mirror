@@ -307,7 +307,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     // Access to the scripting console
 #ifdef KICAD_SCRIPTING_WXPYTHON
     m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,
-                            KiBitmap( book_xpm ),
+                            KiBitmap( py_script_xpm ),
                             _( "Show/Hide the Scripting console" ) );
 
     m_mainToolBar->AddSeparator();

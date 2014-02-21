@@ -151,7 +151,6 @@ set( BMAPS_MID
     annotate_down_right
     annotate_right_down
     annotate
-    apply
     auto_associe
     auto_delete_track
     auto_track_width
@@ -447,6 +446,7 @@ set( BMAPS_MID
     preference
     print_button
     ps_router
+    py_script
     ratsnest
     read_setup
     redo

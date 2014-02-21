@@ -493,6 +493,10 @@ void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
     wxGetApp().GetLibraryPathList().Insert( newFileName.GetPath(), 0 );
     m_NetlistFileName = newFileName;
     ReadNetListAndLinkFiles();
+
+    // OSX need it since some objects are "rebuild" just make aware AUI
+    // Fixes #1258081
+    m_auimgr.Update();
 }
 
 
@@ -934,6 +938,15 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
     {
         if( m_DisplayFootprintFrame->IsIconized() )
              m_DisplayFootprintFrame->Iconize( false );
+
+        // The display footprint window might be buried under some other
+        // windows, so CreateScreenCmp() on an existing window would not
+        // show any difference, leaving the user confused.
+        // So we want to put it to front, second after our CVPCB_MAINFRAME.
+        // We do this by a little dance of bringing it to front then the main
+        // frame back.
+        m_DisplayFootprintFrame->Raise();  // Make sure that is visible.
+        Raise();                           // .. but still we want the focus.
     }
 
     m_DisplayFootprintFrame->InitDisplay();

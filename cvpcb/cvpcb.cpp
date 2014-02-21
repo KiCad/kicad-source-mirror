@@ -33,6 +33,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 
+#include <3d_viewer.h>
 #include <cvpcb.h>
 #include <zones.h>
 #include <cvpcb_mainframe.h>
@@ -101,6 +102,9 @@ bool EDA_APP::OnInit()
     InitEDA_Appl( wxT( "CvPcb" ), APP_CVPCB_T );
 
     SetFootprintLibTablePath();
+
+    // Set 3D shape path from environment variable KISYS3DMOD
+    Set3DShapesPath( wxT(KISYS3DMOD) );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {

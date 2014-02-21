@@ -763,9 +763,9 @@ void TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
 unsigned int TRACK::ViewGetLOD( int aLayer ) const
 {
     // Netnames will be shown only if zoom is appropriate
-    if( aLayer == GetNetnameLayer( GetLayer() ) )
+    if( IsNetnameLayer( aLayer ) )
     {
-        return ( 20000000 / m_Width );
+        return ( 20000000 / ( m_Width + 1 ) );
     }
 
     // Other layers are shown without any conditions
