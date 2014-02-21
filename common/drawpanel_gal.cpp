@@ -124,17 +124,22 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     {
         m_drawing = true;
 
+        m_view->UpdateItems();
         m_gal->BeginDrawing();
-        m_gal->SetBackgroundColor( KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
         m_gal->ClearScreen();
 
-        m_view->ClearTargets();
-        // Grid has to be redrawn only when the NONCACHED target is redrawn
-        if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
-            m_gal->DrawGrid();
-        m_view->Redraw();
-        m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
+        if( m_view->IsDirty() )
+        {
+            m_view->ClearTargets();
 
+            // Grid has to be redrawn only when the NONCACHED target is redrawn
+            if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+                m_gal->DrawGrid();
+
+            m_view->Redraw();
+        }
+
+        m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
         m_gal->EndDrawing();
 
         m_drawing = false;
@@ -215,6 +220,7 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 
     wxSize size = GetClientSize();
     m_gal->ResizeScreen( size.GetX(), size.GetY() );
+    m_gal->SetBackgroundColor( KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
 
     if( m_painter )
         m_painter->SetGAL( m_gal );
