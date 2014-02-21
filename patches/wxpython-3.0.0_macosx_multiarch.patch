@@ -1,0 +1,26 @@
+=== modified file 'wxPython/config.py'
+--- wxPython/config.py	2014-02-15 10:10:05 +0000
++++ wxPython/config.py	2014-02-15 18:05:33 +0000
+@@ -22,6 +22,7 @@
+ 
+ import sys, os, glob, fnmatch, tempfile
+ import subprocess
++import re
+ 
+ EGGing = 'bdist_egg' in sys.argv or 'egg_info' in sys.argv
+ if not EGGing:
+@@ -1059,10 +1060,9 @@
+         libs = ['stdc++']
+         NO_SCRIPTS = 1
+         if ARCH != "":
+-            cflags.append("-arch")
+-            cflags.append(ARCH)
+-            lflags.append("-arch")
+-            lflags.append(ARCH)
++            splitArch = "-arch " + re.sub(","," -arch ",ARCH) 
++            cflags.extend(splitArch.split(' ')) 
++            lflags.extend(splitArch.split(' ')) 
+ 
+         if not os.environ.get('CC') or not os.environ.get('CXX'):
+             os.environ["CXX"] = getWxConfigValue('--cxx')
+

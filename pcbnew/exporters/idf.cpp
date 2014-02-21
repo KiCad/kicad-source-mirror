@@ -1055,13 +1055,35 @@ bool IDF_COMP::substituteComponent( FILE* aLibFile )
     if( parent->RegisterOutline( "NOGEOM_NOPART" ) )
         return true;
 
+    // Create a star shape 5mm high with points on 5 and 2.5 mm circles
     fprintf( aLibFile, ".ELECTRICAL\n" );
     fprintf( aLibFile, "\"NOGEOM\" \"NOPART\" MM 5\n" );
-    // TODO: for now we shall use a simple cylinder; a more intricate
-    // and readily recognized feature (a stylistic X) would be of
-    // much greater value.
-    fprintf( aLibFile, "0 0 0 0\n" );
-    fprintf( aLibFile, "0 2.5 0 360\n" );
+
+    double a, da, x, y;
+    da = M_PI / 5.0;
+    a = da / 2.0;
+
+    for( int i = 0; i < 10; ++i )
+    {
+        if( i & 1 )
+        {
+            x = 2.5 * cos( a );
+            y = 2.5 * sin( a );
+        }
+        else
+        {
+            x = 1.5 * cos( a );
+            y = 1.5 * sin( a );
+        }
+
+        a += da;
+        fprintf( aLibFile, "0 %.3f %.3f 0\n", x, y );
+    }
+
+    a = da / 2.0;
+    x = 1.5 * cos( a );
+    y = 1.5 * sin( a );
+    fprintf( aLibFile, "0 %.3f %.3f 0\n", x, y );
     fprintf( aLibFile, ".END_ELECTRICAL\n\n" );
 
     return true;

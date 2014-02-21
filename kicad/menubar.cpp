@@ -97,7 +97,6 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                                     // static to remember this menu
 
     // Create and try to get the current  menubar
-    wxMenuItem* item;
     wxMenuBar*  menuBar = GetMenuBar();
 
     if( !menuBar )
@@ -124,8 +123,8 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Open
     AddMenuItem( fileMenu,
                  ID_LOAD_PROJECT,
-                 _( "&Open\tCtrl+O" ),
-                 _( "Open an existing project" ),
+                 _( "&Open Project\tCtrl+O" ),
+                 _( "Open existing project" ),
                  KiBitmap( open_project_xpm ) );
 
     // File history
@@ -135,25 +134,25 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu, openRecentMenu,
                  wxID_ANY,
                  _( "Open &Recent" ),
-                 _( "Open a recent opened schematic project" ),
+                 _( "Open recent schematic project" ),
                  KiBitmap( open_project_xpm ) );
 
     // New
     wxMenu* newMenu = new wxMenu();
     AddMenuItem( newMenu, ID_NEW_PROJECT,
-                 _( "&Blank\tCtrl+N" ),
-                 _( "Start a blank project" ),
+                 _( "&Blank Project\tCtrl+N" ),
+                 _( "Create blank project" ),
                  KiBitmap( new_project_xpm ) );
 
     AddMenuItem( newMenu, ID_NEW_PROJECT_FROM_TEMPLATE,
-                 _( "New from &Template\tCtrl+T" ),
-                 _( "Start a new project from a template" ),
+                 _( "Project from &Template\tCtrl+T" ),
+                 _( "Create new project from template" ),
                  KiBitmap( new_project_with_template_xpm ) );
 
     AddMenuItem( fileMenu, newMenu,
                  wxID_ANY,
                  _( "New" ),
-                 _( "Start a new project" ),
+                 _( "Create new project" ),
                  KiBitmap( new_project_xpm ) );
 
     // Save
@@ -194,15 +193,15 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Text editor
     AddMenuItem( browseMenu,
                  ID_TO_EDITOR,
-                 _( "Text E&ditor" ),
+                 _( "Open Text E&ditor" ),
                  _( "Launch preferred text editor" ),
                  KiBitmap( editor_xpm ) );
 
     // View file
     AddMenuItem( browseMenu,
                  ID_BROWSE_AN_SELECT_FILE,
-                 _( "&View File" ),
-                 _( "View, read or edit file with a text editor" ),
+                 _( "&Open Local File" ),
+                 _( "Edit local file" ),
                  KiBitmap( browse_files_xpm ) );
 
     // Menu Preferences:
@@ -211,50 +210,41 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Text editor
     AddMenuItem( preferencesMenu,
                  ID_SELECT_PREFERED_EDITOR,
-                 _( "&Text Editor" ),
-                 _( "Select your preferred text editor" ),
+                 _( "&Set Text Editor" ),
+                 _( "Set your preferred text editor" ),
                  KiBitmap( editor_xpm ) );
 
     // PDF Viewer submenu:System browser or user defined checkbox
     wxMenu* SubMenuPdfBrowserChoice = new wxMenu;
 
     // Default
-    item = new wxMenuItem( SubMenuPdfBrowserChoice,
-                           ID_SELECT_DEFAULT_PDF_BROWSER,
-                           _( "&Default" ),
-                           _( "Use system default PDF viewer used to browse datasheets" ),
-                           wxITEM_CHECK );
-
-    SETBITMAPS( datasheet_xpm );
-
-    SubMenuPdfBrowserChoice->Append( item );
+    AddMenuItem( SubMenuPdfBrowserChoice, ID_SELECT_DEFAULT_PDF_BROWSER,
+                  _( "System &Default PDF Viewer" ),
+                  _( "Use system default PDF viewer" ),
+                   KiBitmap( datasheet_xpm ),
+                  wxITEM_CHECK );
     SubMenuPdfBrowserChoice->Check( ID_SELECT_DEFAULT_PDF_BROWSER,
                                     wxGetApp().UseSystemPdfBrowser() );
 
     // Favourite
-    item = new wxMenuItem( SubMenuPdfBrowserChoice,
-                           ID_SELECT_PREFERED_PDF_BROWSER,
-                           _( "&Favourite" ),
-                           _( "Use your favourite PDF viewer used to browse datasheets" ),
-                           wxITEM_CHECK );
-
-    SETBITMAPS( preference_xpm );
-
-    SubMenuPdfBrowserChoice->Append( item );
-    SubMenuPdfBrowserChoice->AppendSeparator();
+    AddMenuItem( SubMenuPdfBrowserChoice, ID_SELECT_PREFERED_PDF_BROWSER,
+                  _( "&Favourite PDF Viewer" ),
+                  _( "Use favourite PDF viewer" ),
+                   KiBitmap( datasheet_xpm ),
+                  wxITEM_CHECK );
     SubMenuPdfBrowserChoice->Check( ID_SELECT_PREFERED_PDF_BROWSER,
                                     !wxGetApp().UseSystemPdfBrowser() );
 
+    SubMenuPdfBrowserChoice->AppendSeparator();
     // Append PDF Viewer submenu to preferences
     AddMenuItem( SubMenuPdfBrowserChoice,
                  ID_SELECT_PREFERED_PDF_BROWSER_NAME,
-                 _( "&PDF Viewer" ),
-                 _( "Select your favourite PDF viewer used to browse datasheets" ),
+                 _( "Set &PDF Viewer" ),
+                 _( "Set favourite PDF viewer" ),
                  KiBitmap( datasheet_xpm ) );
 
     // PDF viewer submenu
-    AddMenuItem( preferencesMenu,
-                 SubMenuPdfBrowserChoice, -1,
+    AddMenuItem( preferencesMenu, SubMenuPdfBrowserChoice, -1,
                  _( "&PDF Viewer" ),
                  _( "PDF viewer preferences" ),
                  KiBitmap( datasheet_xpm ) );
@@ -270,24 +260,21 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
-    AddMenuItem( helpMenu,
-                 wxID_HELP,
-                 _( "&Contents" ),
-                 _( "Open the KiCad handbook" ),
+    AddMenuItem( helpMenu, wxID_HELP,
+                 _( "KiCad Manual" ),
+                 _( "Open KiCad user manual" ),
                  KiBitmap( online_help_xpm ) );
 
-    AddMenuItem( helpMenu,
-                 wxID_INDEX,
+    AddMenuItem( helpMenu, wxID_INDEX,
                  _( "&Getting Started in KiCad" ),
-                 _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
+                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
     // Separator
     helpMenu->AppendSeparator();
 
     // About
-    AddMenuItem( helpMenu,
-                 wxID_ABOUT,
+    AddMenuItem( helpMenu, wxID_ABOUT,
                  _( "&About KiCad" ),
                  _( "About KiCad project manager" ),
                  KiBitmap( info_xpm ) );
@@ -324,16 +311,16 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
     // New
     m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
                             KiBitmap( new_project_xpm ),
-                            _( "Start a new project" ) );
+                            _( "Create new project" ) );
 
     m_mainToolBar->AddTool( ID_NEW_PROJECT_FROM_TEMPLATE, wxEmptyString,
                             KiBitmap( new_project_with_template_xpm ),
-                            _( "Start a new project from a template" ) );
+                            _( "Create new project from template" ) );
 
     // Load
     m_mainToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString,
                             KiBitmap( open_project_xpm ),
-                            _( "Load existing project" ) );
+                            _( "Open existing project" ) );
 
     // Save
     m_mainToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,

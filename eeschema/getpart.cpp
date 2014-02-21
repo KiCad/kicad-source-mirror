@@ -45,11 +45,14 @@
 #include <viewlib_frame.h>
 #include <eeschema_id.h>
 
+#include <dialog_choose_component.h>
+#include <component_tree_search_container.h>
 #include <dialog_get_component.h>
 
 #include <boost/foreach.hpp>
 
 
+// TODO(hzeller): would be good if we could give a pre-selected component.
 wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
 {
     wxSemaphore semaphore( 0, 1 );
@@ -76,118 +79,71 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
     return cmpname;
 }
 
-
 wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
                                                      wxArrayString&  aHistoryList,
+                                                     int&            aHistoryLastUnit,
                                                      bool            aUseLibBrowser,
                                                      int*            aUnit,
                                                      int*            aConvert )
 {
-    int             CmpCount  = 0;
-    LIB_COMPONENT*  libEntry     = NULL;
-    CMP_LIBRARY*    currLibrary   = NULL;
-    wxString        cmpName, keys, msg;
-    bool            allowWildSeach = true;
+    int             cmpCount  = 0;
+    wxString        dialogTitle;
+
+    COMPONENT_TREE_SEARCH_CONTAINER search_container;   // Container doing search-as-you-type
 
     if( !aLibname.IsEmpty() )
     {
-        currLibrary = CMP_LIBRARY::FindLibrary( aLibname );
+        CMP_LIBRARY* currLibrary = CMP_LIBRARY::FindLibrary( aLibname );
 
         if( currLibrary != NULL )
-            CmpCount = currLibrary->GetCount();
+        {
+            cmpCount = currLibrary->GetCount();
+            search_container.AddLibrary( *currLibrary );
+        }
     }
     else
     {
         BOOST_FOREACH( CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
         {
-            CmpCount += lib.GetCount();
+            cmpCount += lib.GetCount();
+            search_container.AddLibrary( lib );
         }
     }
 
-    // Ask for a component name or key words
-    msg.Printf( _( "Component selection (%d items loaded):" ), CmpCount );
+    if( !aHistoryList.empty() )
+    {
+        // This is good for a transition for experineced users: giving them a History. Ideally,
+        // we actually make this part even faster to access with a popup on ALT-a or something.
+        search_container.AddAliasList( _("-- History --"), aHistoryList, NULL );
+        search_container.SetPreselectNode( aHistoryList[0], aHistoryLastUnit );
+    }
 
-    DIALOG_GET_COMPONENT dlg( this, aHistoryList, msg, aUseLibBrowser );
-
-    if( aHistoryList.GetCount() )
-        dlg.SetComponentName( aHistoryList[0] );
+    const int deMorgan = aConvert ? *aConvert : 1;
+    dialogTitle.Printf( _( "Choose Component (%d items loaded)" ), cmpCount );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, &search_container, deMorgan );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return wxEmptyString;
 
-    if( dlg.m_GetExtraFunction )
+    wxString cmpName = dlg.GetSelectedAliasName( aUnit );
+
+    if( dlg.IsExternalBrowserSelected() )
     {
-        cmpName = SelectComponentFromLibBrowser();
+        cmpName = SelectComponentFromLibBrowser();  // Would be good if we could pre-select.
+
         if( aUnit )
             *aUnit = LIB_VIEW_FRAME::GetUnit();
+
         if( aConvert )
             *aConvert = LIB_VIEW_FRAME::GetConvert();
-        if( !cmpName.IsEmpty() )
-            AddHistoryComponentName( aHistoryList, cmpName );
-        return cmpName;
-    }
-    else
-        cmpName = dlg.GetComponentName();
-
-    if( cmpName.IsEmpty() )
-        return wxEmptyString;
-
-    // Here, cmpName contains the component name,
-    // or "*" if the Select All dialog button was pressed
-
-#ifndef KICAD_KEEPCASE
-    cmpName.MakeUpper();
-#endif
-
-    if( dlg.IsKeyword() )
-    {
-        allowWildSeach = false;
-        keys = cmpName;
-        cmpName = DataBaseGetName( this, keys, cmpName );
-
-        if( cmpName.IsEmpty() )
-            return wxEmptyString;
-     }
-    else if( cmpName == wxT( "*" ) )
-    {
-        allowWildSeach = false;
-
-        if( GetNameOfPartToLoad( this, currLibrary, cmpName ) == 0 )
-            return wxEmptyString;
-    }
-    else if( cmpName.Contains( wxT( "?" ) ) || cmpName.Contains( wxT( "*" ) ) )
-    {
-        allowWildSeach = false;
-        cmpName = DataBaseGetName( this, keys, cmpName );
-
-        if( cmpName.IsEmpty() )
-            return wxEmptyString;
     }
 
-    libEntry = CMP_LIBRARY::FindLibraryComponent( cmpName, aLibname );
-
-    if( !libEntry && allowWildSeach ) // Search with wildcard
+    if ( !cmpName.empty() )
     {
-        allowWildSeach = false;
-        wxString wildname = wxChar( '*' ) + cmpName + wxChar( '*' );
-        cmpName = wildname;
-        cmpName = DataBaseGetName( this, keys, cmpName );
-
-        if( !cmpName.IsEmpty() )
-            libEntry = CMP_LIBRARY::FindLibraryComponent( cmpName, aLibname );
-
-        if( !libEntry )
-            return wxEmptyString;
+        AddHistoryComponentName( aHistoryList, cmpName );
+        if ( aUnit ) aHistoryLastUnit = *aUnit;
     }
 
-    if( !libEntry )
-    {
-        msg.Printf( _( "Failed to find part <%s> in library" ), GetChars( cmpName ) );
-        DisplayError( this, msg );
-        return wxEmptyString;
-    }
-
-    AddHistoryComponentName( aHistoryList, cmpName );
     return cmpName;
 }
 
@@ -195,6 +151,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
 SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
                                                const wxString& aLibname,
                                                wxArrayString&  aHistoryList,
+                                               int&            aHistoryLastUnit,
                                                bool            aUseLibBrowser )
 {
     int unit    = 1;
@@ -202,8 +159,8 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
     SetRepeatItem( NULL );
     m_canvas->SetIgnoreMouseEvents( true );
 
-    wxString Name = SelectComponentFromLibrary( aLibname, aHistoryList, aUseLibBrowser,
-                                                &unit, &convert );
+    wxString Name = SelectComponentFromLibrary( aLibname, aHistoryList, aHistoryLastUnit,
+                                                aUseLibBrowser, &unit, &convert );
 
     if( Name.IsEmpty() )
     {

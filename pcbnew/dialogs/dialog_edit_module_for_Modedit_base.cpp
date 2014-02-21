@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Nov  6 2013)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -238,12 +238,19 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	wxBoxSizer* bSizerMain3D;
 	bSizerMain3D = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText3Dname = new wxStaticText( m_Panel3D, wxID_ANY, _("3D Shape Name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3Dname = new wxStaticText( m_Panel3D, wxID_ANY, _("3D Shape Names"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3Dname->Wrap( -1 );
 	bSizerMain3D->Add( m_staticText3Dname, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_3D_ShapeNameListBox = new wxListBox( m_Panel3D, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE ); 
-	bSizerMain3D->Add( m_3D_ShapeNameListBox, 0, wxALL|wxEXPAND, 5 );
+	bSizerMain3D->Add( m_3D_ShapeNameListBox, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_staticTextDefault3DPath = new wxStaticText( m_Panel3D, wxID_ANY, _("Default Path (from KISYS3DMOD environment variable)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDefault3DPath->Wrap( -1 );
+	bSizerMain3D->Add( m_staticTextDefault3DPath, 0, wxRIGHT|wxLEFT, 5 );
+	
+	m_textCtrl3DDefaultPath = new wxTextCtrl( m_Panel3D, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	bSizerMain3D->Add( m_textCtrl3DDefaultPath, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxBoxSizer* bLowerSizer3D;
 	bLowerSizer3D = new wxBoxSizer( wxHORIZONTAL );
@@ -293,7 +300,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	bLowerSizer3D->Add( bSizer3DButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bSizerMain3D->Add( bLowerSizer3D, 1, wxALL|wxEXPAND, 5 );
+	bSizerMain3D->Add( bLowerSizer3D, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	m_Panel3D->SetSizer( bSizerMain3D );

@@ -205,7 +205,7 @@ bool EDA_APP::OnInit()
             // wxSetWorkingDirectory does not like empty paths
             wxSetWorkingDirectory( filename.GetPath() );
 
-        if( frame->LoadOneEEProject( filename.GetFullPath(), false ) )
+        if( frame->LoadOneEEProject( filename.GetFullName(), false ) )
             frame->GetCanvas()->Refresh( true );
     }
     else

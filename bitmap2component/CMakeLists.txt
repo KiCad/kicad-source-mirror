@@ -2,7 +2,6 @@
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
     ../potrace
-    ../polygon/kbool/include
     ../common
     ${INC_AFTER}
     )
