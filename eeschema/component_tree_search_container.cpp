@@ -141,8 +141,6 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
                                                     const wxArrayString& aAliasNameList,
                                                     CMP_LIBRARY* aOptionalLib )
 {
-    static const wxChar unitLetter[] = wxT( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
-
     TREE_NODE* const lib_node = new TREE_NODE( TREE_NODE::TYPE_LIB,  NULL, NULL,
                                                aNodeName, wxEmptyString, wxEmptyString );
     nodes.push_back( lib_node );
@@ -168,8 +166,16 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
         if( !a->GetDescription().empty() )
         {
             // Preformatting. Unfortunately, the tree widget doesn't have columns
-            display_info.Printf( wxT(" %s[ %s ]"),
-                                 ( a->GetName().length() <= 8 ) ? wxT("\t\t") : wxT("\t"),
+            // and using tabs does not work very well or does not work at all
+            // (depending on OS versions).
+            #define COLUMN_DESCR_POS 24
+            int len = a->GetName().length();
+            display_info.Clear();
+
+            if( len <= COLUMN_DESCR_POS )
+                display_info.Append( ' ', COLUMN_DESCR_POS - len );
+
+            display_info += wxString::Format( wxT( " [ %s ]" ),
                                  GetChars( a->GetDescription() ) );
         }
 
@@ -178,15 +184,20 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
         nodes.push_back( alias_node );
 
         if( a->GetComponent()->IsMulti() )    // Add all units as sub-nodes.
-            for ( int u = 0; u < a->GetComponent()->GetPartCount(); ++u )
+        {
+            wxString unitName;
+
+            for( int u = 1; u <= a->GetComponent()->GetPartCount(); ++u )
             {
-                const wxString unitName = unitLetter[u];
-                TREE_NODE* unit_node = new TREE_NODE(TREE_NODE::TYPE_UNIT, alias_node, a,
-                                                     _("Unit ") + unitName,
-                                                     wxEmptyString, wxEmptyString );
-                unit_node->Unit = u + 1;
+                unitName = LIB_COMPONENT::ReturnSubReference( u, false );
+                TREE_NODE* unit_node = new TREE_NODE( TREE_NODE::TYPE_UNIT,
+                                                      alias_node, a,
+                                                      _("Unit") + wxT( " " ) + unitName,
+                                                      wxEmptyString, wxEmptyString );
+                unit_node->Unit = u;
                 nodes.push_back( unit_node );
             }
+        }
     }
 }
 
