@@ -47,6 +47,13 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( wxWindow* aParent, const wxStr
     m_search_container->SetTree( m_libraryComponentTree );
     m_searchBox->SetFocus();
     m_componentDetails->SetEditable( false );
+
+    // The tree showing libs and component uses a fixed font,
+    // because we want controle the position of some info when drawing the
+    // tree. Using tabs does not work very well (does not work on Windows)
+    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    m_libraryComponentTree->SetFont( wxFont( font.GetPointSize(),
+             wxFONTFAMILY_MODERN,  wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ) );
 }
 
 
