@@ -167,16 +167,19 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
         {
             // Preformatting. Unfortunately, the tree widget doesn't have columns
             // and using tabs does not work very well or does not work at all
-            // (depending on OS versions).
-            #define COLUMN_DESCR_POS 24
-            int len = a->GetName().length();
-            display_info.Clear();
+            // (depending on OS versions). So indent with spaces in fixed-font width.
 
-            if( len <= COLUMN_DESCR_POS )
-                display_info.Append( ' ', COLUMN_DESCR_POS - len );
-
-            display_info += wxString::Format( wxT( " [ %s ]" ),
-                                 GetChars( a->GetDescription() ) );
+            // The 98%-ile of length of strings found in the standard library is 15
+            // characters. Use this as a reasonable cut-off point for aligned indentation.
+            // For the few component names longer than that, the description is indented a
+            // bit more.
+            // The max found in the default lib would be 20 characters, but that creates too
+            // much visible whitespace for the less extreme component names.
+            const int COLUMN_DESCR_POS = 15;
+            const int indent_len = COLUMN_DESCR_POS - a->GetName().length();
+            display_info = wxString::Format( wxT( " %*s [ %s ]" ),
+                                             indent_len > 0 ? indent_len : 0, wxT( "" ),
+                                             GetChars( a->GetDescription() ) );
         }
 
         TREE_NODE* alias_node = new TREE_NODE( TREE_NODE::TYPE_ALIAS, lib_node,
@@ -185,14 +188,13 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
 
         if( a->GetComponent()->IsMulti() )    // Add all units as sub-nodes.
         {
-            wxString unitName;
-
             for( int u = 1; u <= a->GetComponent()->GetPartCount(); ++u )
             {
-                unitName = LIB_COMPONENT::ReturnSubReference( u, false );
+                wxString unitName = _("Unit");
+                unitName += wxT( " " ) + LIB_COMPONENT::ReturnSubReference( u, false );
                 TREE_NODE* unit_node = new TREE_NODE( TREE_NODE::TYPE_UNIT,
                                                       alias_node, a,
-                                                      _("Unit") + wxT( " " ) + unitName,
+                                                      unitName,
                                                       wxEmptyString, wxEmptyString );
                 unit_node->Unit = u;
                 nodes.push_back( unit_node );
