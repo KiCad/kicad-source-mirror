@@ -206,6 +206,9 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
 
 LIB_ALIAS* COMPONENT_TREE_SEARCH_CONTAINER::GetSelectedAlias( int* aUnit )
 {
+    if( tree == NULL )
+        return NULL;
+
     const wxTreeItemId& select_id = tree->GetSelection();
 
     BOOST_FOREACH( TREE_NODE* node, nodes )
