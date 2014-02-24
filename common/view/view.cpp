@@ -127,11 +127,10 @@ void VIEW::Remove( VIEW_ITEM* aItem )
         int prevGroup = aItem->getGroup( layers[i] );
 
         if( prevGroup >= 0 )
-        {
             m_gal->DeleteGroup( prevGroup );
-            aItem->setGroup( layers[i], -1 );
-        }
     }
+
+    aItem->deleteGroups();
 }
 
 
@@ -199,13 +198,9 @@ VECTOR2D VIEW::ToWorld( const VECTOR2D& aCoord, bool aAbsolute ) const
     const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
 
     if( aAbsolute )
-    {
         return VECTOR2D( matrix * aCoord );
-    }
     else
-    {
         return VECTOR2D( matrix.GetScale().x * aCoord.x, matrix.GetScale().y * aCoord.y );
-    }
 }
 
 
@@ -214,13 +209,9 @@ VECTOR2D VIEW::ToScreen( const VECTOR2D& aCoord, bool aAbsolute ) const
     const MATRIX3x3D& matrix = m_gal->GetWorldScreenMatrix();
 
     if( aAbsolute )
-    {
         return VECTOR2D( matrix * aCoord );
-    }
     else
-    {
         return VECTOR2D( matrix.GetScale().x * aCoord.x, matrix.GetScale().y * aCoord.y );
-    }
 }
 
 
@@ -699,6 +690,7 @@ struct VIEW::recacheItem
         }
         else
         {
+            aItem->ViewUpdate( VIEW_ITEM::ALL );
             aItem->setGroup( layer, -1 );
         }
 
@@ -730,6 +722,7 @@ void VIEW::Clear()
     }
 
     m_gal->ClearCache();
+    m_needsUpdate.clear();
 }
 
 
@@ -889,7 +882,10 @@ void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
 
     group = m_gal->BeginGroup();
     aItem->setGroup( aLayer, group );
-    m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), aLayer );
+
+    if( !m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), aLayer ) );
+        aItem->ViewDraw( aLayer, m_gal ); // Alternative drawing method
+
     m_gal->EndGroup();
 }
 
@@ -900,7 +896,7 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
 
     aItem->ViewGetLayers( layers, layers_count );
 
-    for( int i = 0; i < layers_count; i++ )
+    for( int i = 0; i < layers_count; ++i )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
@@ -917,7 +913,7 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
     // Remove the item from previous layer set
     aItem->getLayers( layers, layers_count );
 
-    for( int i = 0; i < layers_count; i++ )
+    for( int i = 0; i < layers_count; ++i )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Remove( aItem );
