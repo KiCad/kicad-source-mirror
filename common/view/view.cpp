@@ -94,12 +94,15 @@ void VIEW::Add( VIEW_ITEM* aItem )
     aItem->ViewGetLayers( layers, layers_count );
     aItem->saveLayers( layers, layers_count );
 
-    for( int i = 0; i < layers_count; i++ )
+    for( int i = 0; i < layers_count; ++i )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Insert( aItem );
         MarkTargetDirty( l.target );
     }
+
+    if( aItem->viewRequiredUpdate() != VIEW_ITEM::NONE )
+        MarkForUpdate( aItem );
 
     if( m_dynamic )
         aItem->viewAssign( this );
@@ -122,8 +125,12 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 
         // Clear the GAL cache
         int prevGroup = aItem->getGroup( layers[i] );
+
         if( prevGroup >= 0 )
+        {
             m_gal->DeleteGroup( prevGroup );
+            aItem->setGroup( layers[i], -1 );
+        }
     }
 }
 
@@ -134,13 +141,9 @@ void VIEW::SetRequired( int aLayerId, int aRequiredId, bool aRequired )
     wxASSERT( (unsigned) aRequiredId < m_layers.size() );
 
     if( aRequired )
-    {
         m_layers[aLayerId].requiredLayers.insert( aRequiredId );
-    }
     else
-    {
         m_layers[aLayerId].requiredLayers.erase( aRequired );
-    }
 }
 
 
@@ -782,10 +785,7 @@ struct VIEW::clearLayerCache
 
     bool operator()( VIEW_ITEM* aItem )
     {
-        if( aItem->storesGroups() )
-        {
-            aItem->deleteGroups();
-        }
+        aItem->deleteGroups();
 
         return true;
     }

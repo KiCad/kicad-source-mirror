@@ -275,10 +275,6 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             if( length < 10 * width )
                 return;
 
-            NETINFO_ITEM* net = ( (BOARD*) aTrack->GetParent() )->FindNet( netNumber );
-            if( !net )
-                return;
-
             const wxString& netName = aTrack->GetShortNetname();
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
             double textOrientation = -atan( line.y / line.x );
@@ -303,7 +299,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             m_gal->StrokeText( netName, textPosition, textOrientation );
         }
     }
-    else if( IsCopperLayer( aLayer ))
+    else if( IsCopperLayer( aLayer ) )
     {
         // Draw a regular track
         const COLOR4D& color = m_pcbSettings->GetColor( aTrack, aLayer );
