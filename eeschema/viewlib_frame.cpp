@@ -402,12 +402,16 @@ void LIB_VIEW_FRAME::ClickOnLibList( wxCommandEvent& event )
     if( ii < 0 )
         return;
 
-    wxString name = m_libList->GetString( ii );
+    SetSelectedLibrary( m_libList->GetString( ii ) );
+}
 
-    if( m_libraryName == name )
+
+void LIB_VIEW_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
+{
+    if( m_libraryName == aLibraryName )
         return;
 
-    m_libraryName = name;
+    m_libraryName = aLibraryName;
     ReCreateListCmp();
     m_canvas->Refresh();
     DisplayLibInfos();
@@ -422,11 +426,15 @@ void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
     if( ii < 0 )
         return;
 
-    wxString name = m_cmpList->GetString( ii );
+    SetSelectedComponent( m_cmpList->GetString( ii ) );
+}
 
-    if( m_entryName.CmpNoCase( name ) != 0 )
+
+void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
+{
+    if( m_entryName.CmpNoCase( aComponentName ) != 0 )
     {
-        m_entryName = name;
+        m_entryName = aComponentName;
         DisplayLibInfos();
         m_unit    = 1;
         m_convert = 1;
@@ -435,6 +443,7 @@ void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
         m_canvas->Refresh();
     }
 }
+
 
 void LIB_VIEW_FRAME::DClickOnCmpList( wxCommandEvent& event )
 {
@@ -480,10 +489,10 @@ void LIB_VIEW_FRAME::LoadSettings( )
     cfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 100 );
 
     // Set parameters to a reasonable value.
-    if ( m_libListWidth > m_FrameSize.x/2 )
+    if( m_libListWidth > m_FrameSize.x/2 )
         m_libListWidth = m_FrameSize.x/2;
 
-    if ( m_cmpListWidth > m_FrameSize.x/2 )
+    if( m_cmpListWidth > m_FrameSize.x/2 )
         m_cmpListWidth = m_FrameSize.x/2;
 }
 

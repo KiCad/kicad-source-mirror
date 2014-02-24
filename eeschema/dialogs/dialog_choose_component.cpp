@@ -57,16 +57,15 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( wxWindow* aParent, const wxStr
 }
 
 
-// After this dialog is done: return the alias that has been selected, or an
-// empty string if there is none.
-wxString DIALOG_CHOOSE_COMPONENT::GetSelectedAliasName( int* aUnit ) const
+DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
 {
-    LIB_ALIAS *alias = m_search_container->GetSelectedAlias( aUnit );
+    m_search_container->SetTree( NULL );
+}
 
-    if( alias )
-        return alias->GetName();
 
-    return wxEmptyString;
+LIB_ALIAS* DIALOG_CHOOSE_COMPONENT::GetSelectedAlias( int* aUnit ) const
+{
+    return m_search_container->GetSelectedAlias( aUnit );
 }
 
 
@@ -178,7 +177,7 @@ void DIALOG_CHOOSE_COMPONENT::OnInterceptTreeEnter( wxKeyEvent& aEvent )
     // Pressing 'Enter' within a tree will also call OnDoubleClickTreeActivation(),
     // but since this is not due to the double-click and we have no way of knowing that it is
     // not, we need to intercept the 'Enter' key before that to know that it is time to exit.
-    if ( aEvent.GetKeyCode() == WXK_RETURN )
+    if( aEvent.GetKeyCode() == WXK_RETURN )
         EndModal( wxID_OK );    // Dialog is done.
     else
         aEvent.Skip();          // Let tree handle that key for navigation.

@@ -52,8 +52,8 @@
 #include <boost/foreach.hpp>
 
 
-// TODO(hzeller): would be good if we could give a pre-selected component.
-wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
+wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedAlias,
+                                                        int* aUnit, int* aConvert )
 {
     wxSemaphore semaphore( 0, 1 );
     wxString cmpname;
@@ -64,7 +64,21 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
         viewlibFrame->Destroy();
 
     viewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore,
-                        KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+                                       KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+    if ( aPreselectedAlias )
+    {
+        viewlibFrame->SetSelectedLibrary( aPreselectedAlias->GetLibraryName() );
+        viewlibFrame->SetSelectedComponent( aPreselectedAlias->GetName() );
+    }
+
+    if( aUnit && *aUnit > 0 )
+        viewlibFrame->SetUnit( *aUnit );
+
+    if( aConvert && *aConvert > 0 )
+        viewlibFrame->SetConvert( *aConvert );
+
+    viewlibFrame->Refresh();
+
     // Show the library viewer frame until it is closed
     // Wait for viewer closing event:
     while( semaphore.TryWait() == wxSEMA_BUSY )
@@ -74,6 +88,13 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
     }
 
     cmpname = viewlibFrame->GetSelectedComponent();
+
+    if( aUnit )
+        *aUnit = viewlibFrame->GetUnit();
+
+    if( aConvert )
+        *aConvert = viewlibFrame->GetConvert();
+
     viewlibFrame->Destroy();
 
     return cmpname;
@@ -125,18 +146,13 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
     if( dlg.ShowModal() == wxID_CANCEL )
         return wxEmptyString;
 
-    wxString cmpName = dlg.GetSelectedAliasName( aUnit );
+    wxString cmpName;
+    LIB_ALIAS* const alias = dlg.GetSelectedAlias( aUnit );
+    if ( alias )
+        cmpName = alias->GetName();
 
-    if( dlg.IsExternalBrowserSelected() )
-    {
-        cmpName = SelectComponentFromLibBrowser();  // Would be good if we could pre-select.
-
-        if( aUnit )
-            *aUnit = LIB_VIEW_FRAME::GetUnit();
-
-        if( aConvert )
-            *aConvert = LIB_VIEW_FRAME::GetConvert();
-    }
+    if( dlg.IsExternalBrowserSelected() )   // User requested big component browser.
+        cmpName = SelectComponentFromLibBrowser( alias, aUnit, aConvert);
 
     if ( !cmpName.empty() )
     {
