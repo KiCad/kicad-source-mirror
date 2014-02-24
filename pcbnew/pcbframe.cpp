@@ -578,13 +578,7 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
                                             std::string( aBoard->GetFileName().mb_str() ),
                                             std::string( GetScreenDesc().mb_str() ),
                                             &GetPageSettings(), &GetTitleBlock() );
-    BASE_SCREEN* screen = GetScreen();
-    if( screen != NULL )
-    {
-        worksheet->SetSheetNumber( GetScreen()->m_ScreenNumber );
-        worksheet->SetSheetCount( GetScreen()->m_NumberOfScreens );
-    }
-
+    worksheet->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     view->Add( worksheet );
 
     // Add an entry for the ratsnest
@@ -715,10 +709,10 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
 
-    ViewReloadBoard( m_Pcb );
-
     if( aEnable )
     {
+        ViewReloadBoard( m_Pcb );
+
         // Update potential changes in the ratsnest
         m_Pcb->GetRatsnest()->Recalculate();
 
