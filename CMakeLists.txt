@@ -68,8 +68,6 @@ option( KICAD_BUILD_DYNAMIC
 
 # WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
 # as it is known to work with KiCad.  Other versions may contain bugs that may result
-# WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
-# as it is known to work with KiCad.  Other versions may contain bugs that may result
 # in KiCad errors.
 option( KICAD_SKIP_BOOST
     "Skip building downloaded Boost library components, use Boost from your system."
