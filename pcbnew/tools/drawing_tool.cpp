@@ -84,7 +84,7 @@ int DRAWING_TOOL::DrawArc( TOOL_EVENT& aEvent )
     double startAngle;      // angle of the first arc line
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-    DRAWSEGMENT* arc;
+    DRAWSEGMENT* arc = NULL;
     DRAWSEGMENT helperLine;
     helperLine.SetShape( S_SEGMENT );
     helperLine.SetLayer( DRAW_N );
@@ -374,7 +374,7 @@ int DRAWING_TOOL::DrawText( TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawDimension( TOOL_EVENT& aEvent )
 {
-    DIMENSION* dimension;
+    DIMENSION* dimension = NULL;
     int width, maxThickness;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
@@ -922,9 +922,9 @@ int DRAWING_TOOL::drawSegment( int aShape, bool aContinous )
 
 int DRAWING_TOOL::drawZone( bool aKeepout )
 {
-    ZONE_CONTAINER* zone;
+    ZONE_CONTAINER* zone = NULL;
     DRAWSEGMENT line45;
-    DRAWSEGMENT* helperLine;  // we will need more than one helper line
+    DRAWSEGMENT* helperLine = NULL;  // we will need more than one helper line
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
