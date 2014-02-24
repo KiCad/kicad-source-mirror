@@ -68,6 +68,8 @@ void VRML_MODEL_PARSER::Load( const wxString aFilename )
     while( GetLine( file, line, &LineNum, 512 ) )
     {
         text = strtok( line, sep_chars );
+        if ( text == NULL )
+            continue;
 
         if( stricmp( text, "DEF" ) == 0 || stricmp( text, "Group" ) == 0 )
         {
@@ -371,6 +373,9 @@ int VRML_MODEL_PARSER::readGeometry( FILE* file, int* LineNum )
         strcpy( buffer, line );
         text = strtok( buffer, sep_chars );
 
+        if( text == NULL )
+            continue;
+
         if( *text == '}' )
         {
             err = 0;
@@ -381,7 +386,7 @@ int VRML_MODEL_PARSER::readGeometry( FILE* file, int* LineNum )
         {
             text = strtok( NULL, " ,\t\n\r" );
 
-            if( stricmp( text, "true" ) == 0 )
+            if( text && stricmp( text, "true" ) == 0 )
             {
             }
             else
@@ -395,7 +400,7 @@ int VRML_MODEL_PARSER::readGeometry( FILE* file, int* LineNum )
         {
             text = strtok( NULL, " ,\t\n\r" );
 
-            if( stricmp( text, "true" ) == 0 )
+            if( text && stricmp( text, "true" ) == 0 )
             {
             }
             else
