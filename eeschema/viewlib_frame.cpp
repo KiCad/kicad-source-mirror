@@ -416,6 +416,10 @@ void LIB_VIEW_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
     m_canvas->Refresh();
     DisplayLibInfos();
     ReCreateHToolbar();
+    // Ensure the corresponding line in m_libList is selected
+    // (which is not necessary the case if SetSelectedLibrary is called
+    // by an other caller than ClickOnLibList.
+    m_libList->SetStringSelection( m_libraryName, true );
 }
 
 
@@ -435,6 +439,10 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
     if( m_entryName.CmpNoCase( aComponentName ) != 0 )
     {
         m_entryName = aComponentName;
+        // Ensure the corresponding line in m_cmpList is selected
+        // (which is not necessary the case if SetSelectedComponent is called
+        // by an other caller than ClickOnCmpList.
+        m_cmpList->SetStringSelection( aComponentName, true );
         DisplayLibInfos();
         m_unit    = 1;
         m_convert = 1;
