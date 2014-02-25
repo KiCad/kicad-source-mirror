@@ -145,13 +145,6 @@ public:
     /// @copydoc GAL::ClearScreen()
     virtual void ClearScreen();
 
-    // -----------------
-    // Attribute setting
-    // -----------------
-
-    /// @copydoc GAL::SetStrokeColor()
-    virtual void SetStrokeColor( const COLOR4D& aColor );
-
     // --------------
     // Transformation
     // --------------
@@ -311,7 +304,7 @@ private:
      * @param aStartPoint is the start point of the line.
      * @param aEndPoint is the end point of the line.
      */
-    inline void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+    void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /**
      * @brief Draw a semicircle. Depending on settings (isStrokeEnabled & isFilledEnabled) it runs

@@ -226,10 +226,7 @@ void EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
         m_painter->SetGAL( m_gal );
 
     if( m_view )
-    {
         m_view->SetGAL( m_gal );
-        m_view->RecacheAllItems( true );
-    }
 
     m_currentGal = aGalType;
     m_pendingRefresh = false;

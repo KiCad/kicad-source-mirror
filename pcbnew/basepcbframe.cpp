@@ -443,7 +443,14 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
     settings->LoadDisplayOptions( DisplayOpt );
-    GetGalCanvas()->GetView()->RecacheAllItems( true );
+
+    // Update pads
+    BOARD* board = GetBoard();
+    for( MODULE* module = board->m_Modules; module; module = module->Next() )
+    {
+        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+            pad->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    }
 
     m_canvas->Refresh();
 }

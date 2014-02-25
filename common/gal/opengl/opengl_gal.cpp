@@ -101,6 +101,8 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     }
 
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
+
+    currentManager = &nonCachedManager;
 }
 
 
@@ -247,6 +249,8 @@ void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoin
 {
     const VECTOR2D  startEndVector = aEndPoint - aStartPoint;
     double          lineAngle = startEndVector.Angle();
+
+    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
     drawLineQuad( aStartPoint, aEndPoint );
 
@@ -468,6 +472,8 @@ void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
     if( aPointList.empty() )
         return;
 
+    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
     std::deque<VECTOR2D>::const_iterator it = aPointList.begin();
 
     // Start from the second point
@@ -587,15 +593,6 @@ void OPENGL_GAL::ClearScreen()
     // Clear screen
     glClearColor( backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-}
-
-
-void OPENGL_GAL::SetStrokeColor( const COLOR4D& aColor )
-{
-    strokeColor = aColor;
-
-    // This is the default drawing color
-    currentManager->Color( aColor.r, aColor.g, aColor.b, aColor.a );
 }
 
 
@@ -795,8 +792,23 @@ void OPENGL_GAL::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
 }
 
 
-inline void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
+void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
+    /* Helper drawing:                   ____--- v3       ^
+     *                           ____---- ...   \          \
+     *                   ____----      ...       \   end    \
+     *     v1    ____----           ...    ____----          \ width
+     *       ----                ...___----        \          \
+     *       \             ___...--                 \          v
+     *        \    ____----...                ____---- v2
+     *         ----     ...           ____----
+     *  start   \    ...      ____----
+     *           \... ____----
+     *            ----
+     *            v0
+     * dots mark triangles' hypotenuses
+     */
+
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
     double   lineLength     = startEndVector.EuclideanNorm();
     double   scale          = 0.5 * lineWidth / lineLength;
@@ -854,8 +866,8 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
 
     /* Draw a triangle that contains the semicircle, then shade it to leave only
      * the semicircle. Parameters given to setShader are indices of the triangle's vertices
-     *  (if you want to understand more, check the vertex shader source [shader.vert]).
-     *  Shader uses this coordinates to determine if fragments are inside the semicircle or not.
+     * (if you want to understand more, check the vertex shader source [shader.vert]).
+     * Shader uses these coordinates to determine if fragments are inside the semicircle or not.
      *       v2
      *       /\
      *      /__\
@@ -885,9 +897,9 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
 
     /* Draw a triangle that contains the semicircle, then shade it to leave only
      * the semicircle. Parameters given to setShader are indices of the triangle's vertices
-     *  (if you want to understand more, check the vertex shader source [shader.vert]), the
-     *  radius and the line width. Shader uses this coordinates to determine if fragments are
-     *  inside the semicircle or not.
+     * (if you want to understand more, check the vertex shader source [shader.vert]), the
+     * radius and the line width. Shader uses these coordinates to determine if fragments are
+     * inside the semicircle or not.
      *       v2
      *       /\
      *      /__\

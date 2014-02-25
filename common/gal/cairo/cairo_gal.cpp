@@ -77,6 +77,8 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     // Allocate memory for pixel storage
     allocateBitmaps();
+
+    initSurface();
 }
 
 
@@ -954,7 +956,8 @@ void CAIRO_GAL::deleteBitmaps()
 
 void CAIRO_GAL::initSurface()
 {
-    wxASSERT( !isInitialized );
+    if( isInitialized )
+        return;
 
     // Create the Cairo surface
     surface = cairo_image_surface_create_for_data( (unsigned char*) bitmapBuffer, GAL_FORMAT,
