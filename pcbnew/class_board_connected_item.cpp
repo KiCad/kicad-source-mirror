@@ -35,28 +35,28 @@
 #include <class_board_item.h>
 
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
-    BOARD_ITEM( aParent, idtype ), m_Subnet( 0 ), m_ZoneSubnet( 0 ),
-    m_netinfo( &NETINFO_LIST::ORPHANED )
+    BOARD_ITEM( aParent, idtype ), m_netinfo( &NETINFO_LIST::ORPHANED ),
+    m_Subnet( 0 ), m_ZoneSubnet( 0 )
 {
-    // The unconnected is set only in case the item belongs to a BOARD
-    SetNet( NETINFO_LIST::UNCONNECTED );
+    // The unconnected net is set only in case the item belongs to a BOARD
+    SetNetCode( NETINFO_LIST::UNCONNECTED );
 }
 
 
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem ) :
-    BOARD_ITEM( aItem ), m_Subnet( aItem.m_Subnet ), m_ZoneSubnet( aItem.m_ZoneSubnet ),
-    m_netinfo( aItem.m_netinfo )
+    BOARD_ITEM( aItem ), m_netinfo( aItem.m_netinfo ), m_Subnet( aItem.m_Subnet ),
+    m_ZoneSubnet( aItem.m_ZoneSubnet )
 {
 }
 
 
-int BOARD_CONNECTED_ITEM::GetNet() const
+int BOARD_CONNECTED_ITEM::GetNetCode() const
 {
     return m_netinfo->GetNet();
 }
 
 
-void BOARD_CONNECTED_ITEM::SetNet( int aNetCode )
+void BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode )
 {
     BOARD* board = GetBoard();
     if( board )
@@ -136,8 +136,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
     }
 
     NETCLASS*       netclass = NULL;
-    int             netcode  = GetNet();
-    NETINFO_ITEM*   net = board->FindNet( netcode );
+    NETINFO_ITEM*   net = board->FindNet( GetNetCode() );
 
     if( net )
     {

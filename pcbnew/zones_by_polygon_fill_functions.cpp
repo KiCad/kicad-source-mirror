@@ -100,7 +100,7 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
 
     // Shows the net
     ZONE_SETTINGS zoneInfo = GetZoneSettings();
-    zoneInfo.m_NetcodeSelection = aZone->GetNet();
+    zoneInfo.m_NetcodeSelection = aZone->GetNetCode();
     SetZoneSettings( zoneInfo );
 
     msg = aZone->GetNetname();

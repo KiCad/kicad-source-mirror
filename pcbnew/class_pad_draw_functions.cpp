@@ -473,7 +473,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     GRSetDrawMode( aDC, aDrawInfo.m_DrawMode );
 
     // Draw "No connect" ( / or \ or cross X ) if necessary
-    if( GetNet() == 0 && aDrawInfo.m_ShowNCMark )
+    if( GetNetCode() == 0 && aDrawInfo.m_ShowNCMark )
     {
         int dx0 = std::min( halfsize.x, halfsize.y );
         EDA_COLOR_T nc_color = BLUE;

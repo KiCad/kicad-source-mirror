@@ -129,7 +129,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
     PNS_SOLID* solid = new PNS_SOLID;
 
     solid->SetLayers( layers );
-    solid->SetNet( aPad->GetNet() );
+    solid->SetNet( aPad->GetNetCode() );
     wxPoint wx_c = aPad->GetPosition();
     wxSize  wx_sz = aPad->GetSize();
 
@@ -180,7 +180,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 PNS_ITEM* PNS_ROUTER::syncTrack( TRACK* aTrack )
 {
     PNS_SEGMENT* s =
-        new PNS_SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNet() );
+        new PNS_SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() );
 
     s->SetWidth( aTrack->GetWidth() );
     s->SetLayers( PNS_LAYERSET( aTrack->GetLayer() ) );
@@ -195,7 +195,7 @@ PNS_ITEM* PNS_ROUTER::syncVia( SEGVIA* aVia )
             aVia->GetPosition(),
             PNS_LAYERSET( 0, 15 ),
             aVia->GetWidth(),
-            aVia->GetNet() );
+            aVia->GetNetCode() );
 
     v->SetParent( aVia );
     return v;
@@ -607,7 +607,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
                 track->SetEnd( wxPoint( s.B.x, s.B.y ) );
                 track->SetWidth( seg->GetWidth() );
                 track->SetLayer( seg->GetLayers().Start() );
-                track->SetNet( seg->GetNet() );
+                track->SetNetCode( seg->GetNet() );
                 newBI = track;
                 break;
             }
@@ -618,7 +618,7 @@ void PNS_ROUTER::commitRouting( PNS_NODE* aNode )
                 PNS_VIA* via = static_cast<PNS_VIA*>( item );
                 via_board->SetPosition( wxPoint( via->GetPos().x, via->GetPos().y ) );
                 via_board->SetWidth( via->GetDiameter() );
-                via_board->SetNet( via->GetNet() );
+                via_board->SetNetCode( via->GetNet() );
                 newBI = via_board;
                 break;
             }

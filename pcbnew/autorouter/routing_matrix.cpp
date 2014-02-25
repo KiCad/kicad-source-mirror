@@ -215,7 +215,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
     {
         D_PAD* pad = aPcb->GetPad( i );
 
-        if( net_code != pad->GetNet() || (flag & FORCE_PADS) )
+        if( net_code != pad->GetNetCode() || (flag & FORCE_PADS) )
         {
             ::PlacePad( pad, HOLE, marge, WRITE_CELL );
         }
@@ -247,7 +247,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
                 tmpSegm.SetShape( edge->GetShape() );
                 tmpSegm.SetWidth( edge->GetWidth() );
                 tmpSegm.m_Param = edge->GetAngle();
-                tmpSegm.SetNet( -1 );
+                tmpSegm.SetNetCode( -1 );
 
                 TraceSegmentPcb( &tmpSegm, HOLE, marge, WRITE_CELL );
                 TraceSegmentPcb( &tmpSegm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
@@ -284,7 +284,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
             tmpSegm.SetShape( DrawSegm->GetShape() );
             tmpSegm.SetWidth( DrawSegm->GetWidth() );
             tmpSegm.m_Param = DrawSegm->GetAngle();
-            tmpSegm.SetNet( -1 );
+            tmpSegm.SetNetCode( -1 );
 
             TraceSegmentPcb( &tmpSegm, type_cell, marge, WRITE_CELL );
         }
@@ -335,7 +335,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
     /* Put tracks and vias on matrix */
     for( TRACK* track = aPcb->m_Track; track; track = track->Next() )
     {
-        if( net_code == track->GetNet() )
+        if( net_code == track->GetNetCode() )
             continue;
 
         TraceSegmentPcb( track, HOLE, marge, WRITE_CELL );
@@ -374,7 +374,7 @@ int Build_Work( BOARD* Pcb )
 
         pt_pad = pt_rats->m_PadStart;
 
-        current_net_code = pt_pad->GetNet();
+        current_net_code = pt_pad->GetNetCode();
         pt_ch = pt_rats;
 
         r1 = ( pt_pad->GetPosition().y - RoutingMatrix.m_BrdBox.GetY() + demi_pas )

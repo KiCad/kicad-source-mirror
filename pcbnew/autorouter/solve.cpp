@@ -1180,7 +1180,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         g_CurrentTrackSegment->SetWidth( pcb->GetCurrentViaSize() );
         g_CurrentTrackSegment->SetShape( pcb->GetDesignSettings().m_CurrentViaType );
 
-        g_CurrentTrackSegment->SetNet( current_net_code );
+        g_CurrentTrackSegment->SetNetCode( current_net_code );
     }
     else    // placement of a standard segment
     {
@@ -1198,7 +1198,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
                                          ( RoutingMatrix.m_GridRouting * row ),
                                          pcb->GetBoundingBox().GetY() +
                                          ( RoutingMatrix.m_GridRouting * col )));
-        g_CurrentTrackSegment->SetNet( current_net_code );
+        g_CurrentTrackSegment->SetNetCode( current_net_code );
 
         if( g_CurrentTrackSegment->Back() == NULL ) /* Start trace. */
         {
@@ -1319,7 +1319,7 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
     }
 
     // Insert new segments in  real board
-    int    netcode    = g_FirstTrackSegment->GetNet();
+    int    netcode    = g_FirstTrackSegment->GetNetCode();
     TRACK* firstTrack = g_FirstTrackSegment;
     int    newCount   = g_CurrentTrackList.GetCount();
 

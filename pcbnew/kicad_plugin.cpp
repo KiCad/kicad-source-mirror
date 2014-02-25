@@ -1230,8 +1230,8 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     std::string output;
 
     // Unconnected pad is default net so don't save it.
-    if( !(m_ctl & CTL_OMIT_NETS) && aPad->GetNet() != 0 )
-        StrPrintf( &output, " (net %d %s)", m_mapping->Translate( aPad->GetNet() ),
+    if( !(m_ctl & CTL_OMIT_NETS) && aPad->GetNetCode() != 0 )
+        StrPrintf( &output, " (net %d %s)", m_mapping->Translate( aPad->GetNetCode() ),
                    m_out->Quotew( aPad->GetNetname() ).c_str() );
 
     if( aPad->GetPadToDieLength() != 0 )
@@ -1389,7 +1389,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
         m_out->Print( 0, " (layer %s)", m_out->Quotew( aTrack->GetLayerName() ).c_str() );
     }
 
-    m_out->Print( 0, " (net %d)", m_mapping->Translate( aTrack->GetNet() ) );
+    m_out->Print( 0, " (net %d)", m_mapping->Translate( aTrack->GetNetCode() ) );
 
     if( aTrack->GetTimeStamp() != 0 )
         m_out->Print( 0, " (tstamp %lX)", aTrack->GetTimeStamp() );
@@ -1408,7 +1408,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     // so be sure a dummy value is stored, just for ZONE_CONTAINER compatibility
     // (perhaps netcode and netname should be not stored)
     m_out->Print( aNestLevel, "(zone (net %d) (net_name %s)",
-                  aZone->GetIsKeepout() ? 0 : m_mapping->Translate( aZone->GetNet() ),
+                  aZone->GetIsKeepout() ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
                   m_out->Quotew( aZone->GetIsKeepout() ? wxT("") : aZone->GetNetname() ).c_str() );
 
     formatLayer( aZone );

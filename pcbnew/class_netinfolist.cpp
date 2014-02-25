@@ -125,11 +125,16 @@ void NETINFO_LIST::buildListOfNets()
     {
         pad = m_PadsFullList[ii];
 
-        if( pad->GetNet() == NETINFO_LIST::UNCONNECTED ) // pad not connected
+        if( pad->GetNetCode() == NETINFO_LIST::UNCONNECTED ) // pad not connected
             continue;
 
         // Add pad to the appropriate list of pads
-        GetNetItem( pad->GetNet() )->m_PadInNetList.push_back( pad );
+        NETINFO_ITEM* net = pad->GetNet();
+        // it should not be possible for BOARD_CONNECTED_ITEM to return NULL as a result of GetNet()
+        wxASSERT( net );
+
+        if( net )
+            net->m_PadInNetList.push_back( pad );
 
         ++nodes_count;
     }
@@ -232,24 +237,24 @@ void NETINFO_MAPPING::Update()
 
     // Zones
     for( int i = 0; i < m_board->GetAreaCount(); ++i )
-        nets.insert( m_board->GetArea( i )->GetNet() );
+        nets.insert( m_board->GetArea( i )->GetNetCode() );
 
     // Tracks
     for( TRACK* track = m_board->m_Track; track; track = track->Next() )
-        nets.insert( track->GetNet() );
+        nets.insert( track->GetNetCode() );
 
     // Modules/pads
     for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
     {
         for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
         {
-            nets.insert( pad->GetNet() );
+            nets.insert( pad->GetNetCode() );
         }
     }
 
     // Segzones
     for( SEGZONE* zone = m_board->m_Zone; zone; zone = zone->Next() )
-        nets.insert( zone->GetNet() );
+        nets.insert( zone->GetNetCode() );
 
     // Prepare the new mapping
     m_netMapping.clear();
@@ -275,5 +280,4 @@ NETINFO_ITEM* NETINFO_MAPPING::iterator::operator->() const
 
 
 const int NETINFO_LIST::UNCONNECTED = 0;
-const NETINFO_ITEM NETINFO_LIST::ORPHANED = NETINFO_ITEM( NULL, wxEmptyString,
-                                                          NETINFO_LIST::UNCONNECTED );
+NETINFO_ITEM NETINFO_LIST::ORPHANED = NETINFO_ITEM( NULL, wxEmptyString, NETINFO_LIST::UNCONNECTED );

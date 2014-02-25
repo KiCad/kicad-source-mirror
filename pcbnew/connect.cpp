@@ -718,7 +718,7 @@ void PCB_BASE_FRAME::TestConnections()
     for( TRACK* track = m_Pcb->m_Track; track; )
     {
         // At this point, track is the first track of a given net
-        current_net_code = track->GetNet();
+        current_net_code = track->GetNetCode();
         // Get last track of the current net
         TRACK* lastTrack = track->GetEndNetCode( current_net_code );
 
@@ -760,7 +760,7 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
     for( unsigned i = 0; i < m_Pcb->GetPadCount(); ++i )
     {
         D_PAD* pad = m_Pcb->GetPad(i);
-        int    pad_net_code = pad->GetNet();
+        int    pad_net_code = pad->GetNetCode();
 
         if( pad_net_code < aNetCode )
             continue;
@@ -786,7 +786,7 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
 
         if( firstTrack && lastTrack ) // i.e. if there are segments
         {
-            connections.Build_CurrNet_SubNets_Connections( firstTrack, lastTrack, firstTrack->GetNet() );
+            connections.Build_CurrNet_SubNets_Connections( firstTrack, lastTrack, firstTrack->GetNetCode() );
         }
     }
 
@@ -842,7 +842,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         curr_track->end = NULL;
         curr_track->SetState( BUSY | IN_EDIT | BEGIN_ONPAD | END_ONPAD, false );
         curr_track->SetZoneSubNet( 0 );
-        curr_track->SetNet( NETINFO_LIST::UNCONNECTED );
+        curr_track->SetNetCode( NETINFO_LIST::UNCONNECTED );
     }
 
     // If no pad, reset pointers and netcode, and do nothing else
@@ -863,7 +863,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     for( ; curr_track != NULL; curr_track = curr_track->Next() )
     {
         if( curr_track->m_PadsConnected.size() )
-            curr_track->SetNet( curr_track->m_PadsConnected[0]->GetNet() );
+            curr_track->SetNetCode( curr_track->m_PadsConnected[0]->GetNetCode() );
     }
 
     // Pass 2: build connections between track ends
@@ -883,17 +883,17 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 
         for( curr_track = m_Pcb->m_Track; curr_track; curr_track = curr_track->Next() )
         {
-            int netcode = curr_track->GetNet();
+            int netcode = curr_track->GetNetCode();
             if( netcode == 0 )
             {   // try to find a connected item having a netcode
                 for( unsigned kk = 0; kk < curr_track->m_TracksConnected.size(); kk++ )
                 {
-                    int altnetcode = curr_track->m_TracksConnected[kk]->GetNet();
+                    int altnetcode = curr_track->m_TracksConnected[kk]->GetNetCode();
                     if( altnetcode )
                     {
                         new_pass_request = true;
                         netcode = altnetcode;
-                        curr_track->SetNet(netcode);
+                        curr_track->SetNetCode(netcode);
                         break;
                     }
                 }
@@ -902,10 +902,10 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
             {   // propagate this netcode to connected tracks having no netcode
                 for( unsigned kk = 0; kk < curr_track->m_TracksConnected.size(); kk++ )
                 {
-                    int altnetcode = curr_track->m_TracksConnected[kk]->GetNet();
+                    int altnetcode = curr_track->m_TracksConnected[kk]->GetNetCode();
                     if( altnetcode == 0 )
                     {
-                        curr_track->m_TracksConnected[kk]->SetNet(netcode);
+                        curr_track->m_TracksConnected[kk]->SetNetCode(netcode);
                         new_pass_request = true;
                     }
                 }
@@ -926,10 +926,10 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 static bool SortTracksByNetCode( const TRACK* const & ref, const TRACK* const & compare )
 {
     // For items having the same Net, keep the order in list
-    if( ref->GetNet() == compare->GetNet())
+    if( ref->GetNetCode() == compare->GetNetCode())
         return ref->m_Param < compare->m_Param;
 
-    return ref->GetNet() < compare->GetNet();
+    return ref->GetNetCode() < compare->GetNetCode();
 }
 
 /**
