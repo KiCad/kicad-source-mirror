@@ -177,10 +177,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     settings->LoadDisplayOptions( DisplayOpt );
     view->RecacheAllItems( true );
 
-    if( m_Parent->IsGalCanvasActive() )
-        m_Parent->GetGalCanvas()->Refresh();
-    else
-        m_Parent->GetCanvas()->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 
     EndModal( 1 );
 }

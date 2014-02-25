@@ -544,21 +544,15 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
 
     // Load zones
     for( int i = 0; i < aBoard->GetAreaCount(); ++i )
-    {
         view->Add( (KIGFX::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
-    }
 
     // Load drawings
     for( BOARD_ITEM* drawing = aBoard->m_Drawings; drawing; drawing = drawing->Next() )
-    {
         view->Add( drawing );
-    }
 
     // Load tracks
     for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
-    {
         view->Add( track );
-    }
 
     // Load modules and its additional elements
     for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
@@ -569,9 +563,7 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
 
     // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
     for( SEGZONE* zone = aBoard->m_Zone; zone; zone = zone->Next() )
-    {
         view->Add( zone );
-    }
 
     // Add an entry for the worksheet layout
     KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM(
@@ -587,7 +579,7 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
     view->Add( new KIGFX::RATSNEST_VIEWITEM( ratsnest ) );
 
     view->SetPanBoundary( worksheet->ViewBBox() );
-    view->RecacheAllItems( true );
+    view->RecacheAllItems( false );
 
     if( IsGalCanvasActive() )
         GetGalCanvas()->Refresh();
