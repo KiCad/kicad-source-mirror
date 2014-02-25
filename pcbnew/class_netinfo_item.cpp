@@ -58,8 +58,7 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int a
     m_RatsnestEndIdx   = 0;     // Ending point of ratsnests of this net
 
     m_NetClassName = NETCLASS::Default;
-
-    m_NetClass = 0;
+    m_NetClass = NULL;
 }
 
 
@@ -102,7 +101,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     {
         for( pad = module->Pads(); pad != 0; pad = pad->Next() )
         {
-            if( pad->GetNet() == GetNet() )
+            if( pad->GetNetCode() == GetNet() )
             {
                 count++;
                 lengthPadToDie += pad->GetPadToDieLength();
@@ -120,13 +119,13 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     {
         if( Struct->Type() == PCB_VIA_T )
         {
-            if( ( (SEGVIA*) Struct )->GetNet() == GetNet() )
+            if( ( (SEGVIA*) Struct )->GetNetCode() == GetNet() )
                 count++;
         }
 
         if( Struct->Type() == PCB_TRACE_T )
         {
-            if( ( (TRACK*) Struct )->GetNet() == GetNet() )
+            if( ( (TRACK*) Struct )->GetNetCode() == GetNet() )
                 lengthnet += ( (TRACK*) Struct )->GetLength();
         }
     }

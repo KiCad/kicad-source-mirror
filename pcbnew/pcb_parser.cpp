@@ -2190,9 +2190,9 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            pad->SetNet( parseInt( "net number" ) );
+            pad->SetNetCode( parseInt( "net number" ) );
             NeedSYMBOLorNUMBER();
-            assert( FromUTF8() == m_board->FindNet( pad->GetNet() )->GetNetname() );
+            assert( FromUTF8() == m_board->FindNet( pad->GetNetCode() )->GetNetname() );
             NeedRIGHT();
             break;
 
@@ -2288,7 +2288,7 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            track->SetNet( parseInt( "net number" ) );
+            track->SetNetCode( parseInt( "net number" ) );
             break;
 
         case T_tstamp:
@@ -2366,7 +2366,7 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            via->SetNet( parseInt( "net number" ) );
+            via->SetNetCode( parseInt( "net number" ) );
             NeedRIGHT();
             break;
 
@@ -2418,18 +2418,18 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             // Init the net code only, not the netname, to be sure
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
-            zone->SetNet( parseInt( "net number" ) );
+            zone->SetNetCode( parseInt( "net number" ) );
             NeedRIGHT();
             break;
 
         case T_net_name:
             NeedSYMBOLorNUMBER();
-            if( m_board->FindNet( zone->GetNet() )->GetNetname() != FromUTF8() )
+            if( zone->GetNet()->GetNetname() != FromUTF8() )
             {
                 wxString msg = _( "There is a zone that belongs to a not "
                                   "existing net (" ) + FromUTF8() + _("), you should verify it." );
                 DisplayError( NULL, msg );
-                zone->SetNet( NETINFO_LIST::UNCONNECTED );
+                zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
             }
             NeedRIGHT();
             break;
@@ -2694,7 +2694,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
         if( !zone->IsOnCopperLayer() )
         {
             zone->SetFillMode( 0 );
-            zone->SetNet( NETINFO_LIST::UNCONNECTED );
+            zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
         }
 
         // Set hatch here, after outlines corners are read
@@ -2706,7 +2706,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
     // Ensure keepout does not have a net (which have no sense for a keepout zone)
     if( zone->GetIsKeepout() )
-        zone->SetNet( NETINFO_LIST::UNCONNECTED );
+        zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     return zone.release();
 }

@@ -72,7 +72,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     wxPoint end;
     LAYER_MSK startmasklayer, endmasklayer;
 
-    int     netcode = aNewTrack->GetNet();
+    int     netcode = aNewTrack->GetNetCode();
 
     /* Reconstruct the complete track (the new track has to start on a segment of track).
      */

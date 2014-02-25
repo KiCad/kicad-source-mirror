@@ -162,7 +162,7 @@ void BuildUnconnectedThermalStubsPolygonList( CPOLYGONS_LIST& aCornerBuffer,
             if( !pad->IsOnLayer( aZone->GetLayer() ) )
                 continue;
 
-            if( pad->GetNet() != aZone->GetNet() )
+            if( pad->GetNetCode() != aZone->GetNetCode() )
                 continue;
 
             // Calculate thermal bridge half width
