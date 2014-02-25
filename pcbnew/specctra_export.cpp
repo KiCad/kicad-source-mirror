@@ -692,7 +692,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
                 pin->pin_id += buf;      // append "@1" or "@2", etc. to pin name
             }
 
-            pin->kiNetCode = pad->GetNet();
+            pin->kiNetCode = pad->GetNetCode();
 
             image->pins.push_back( pin );
 
@@ -1922,7 +1922,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         {
             TRACK*  track = (TRACK*) items[i];
 
-            int     netcode = track->GetNet();
+            int     netcode = track->GetNetCode();
 
             if( netcode == 0 )
                 continue;
@@ -1981,7 +1981,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             SEGVIA* via = (SEGVIA*) items[i];
             wxASSERT( via->Type() == PCB_VIA_T );
 
-            int     netcode = via->GetNet();
+            int     netcode = via->GetNetCode();
 
             if( netcode == 0 )
                 continue;

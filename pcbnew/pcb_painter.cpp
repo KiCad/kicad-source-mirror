@@ -152,7 +152,7 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
         // Try to obtain the netcode for the item
         const BOARD_CONNECTED_ITEM* item = dynamic_cast<const BOARD_CONNECTED_ITEM*>( aItem );
         if( item )
-            netCode = item->GetNet();
+            netCode = item->GetNetCode();
     }
 
     // Return grayish color for non-highlighted layers in the high contrast mode
@@ -265,7 +265,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
 
     if( m_pcbSettings->m_netNamesOnTracks && IsNetnameLayer( aLayer ) )
     {
-        int netCode = aTrack->GetNet();
+        int netCode = aTrack->GetNetCode();
 
         // If there is a net name - display it on the track
         if( netCode > 0 )
@@ -277,7 +277,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             if( length < 10 * width )
                 return;
 
-            NETINFO_ITEM* net = ( (BOARD*) aTrack->GetParent() )->FindNet( netCode );
+            NETINFO_ITEM* net = aTrack->GetNet();
             if( !net )
                 return;
 

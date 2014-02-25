@@ -1299,7 +1299,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             char    buf[1024];  // can be fairly long
             int     netcode = intParse( line + SZ( "Ne" ), &data );
 
-            pad->SetNet( netcode );
+            pad->SetNetCode( netcode );
 
             // read Netname
             ReadDelimitedText( buf, data, sizeof(buf) );
@@ -2090,7 +2090,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
                 ( (SEGVIA*) newTrack )->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
         }
 
-        newTrack->SetNet( net_code );
+        newTrack->SetNetCode( net_code );
         newTrack->SetState( flags, true );
     }
 
@@ -2240,7 +2240,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // Init the net code only, not the netname, to be sure
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
-            zc->BOARD_CONNECTED_ITEM::SetNet( netcode );
+            zc->BOARD_CONNECTED_ITEM::SetNetCode( netcode );
         }
 
         else if( TESTLINE( "ZLayer" ) )     // layer found
@@ -2424,7 +2424,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // Ensure keepout does not have a net
             // (which have no sense for a keepout zone)
             if( zc->GetIsKeepout() )
-                zc->SetNet( NETINFO_LIST::UNCONNECTED );
+                zc->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
             // should always occur, but who knows, a zone without two corners
             // is no zone at all, it's a spot?
@@ -2434,7 +2434,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 if( !zc->IsOnCopperLayer() )
                 {
                     zc->SetFillMode( 0 );
-                    zc->SetNet( NETINFO_LIST::UNCONNECTED );
+                    zc->SetNetCode( NETINFO_LIST::UNCONNECTED );
                 }
 
                 // Hatch here, after outlines corners are read
@@ -3373,7 +3373,7 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
 
     fprintf( m_fp, "At %s N %08X\n", texttype, me->GetLayerMask() );
 
-    fprintf( m_fp, "Ne %d %s\n", me->GetNet(), EscapedUTF8( me->GetNetname() ).c_str() );
+    fprintf( m_fp, "Ne %d %s\n", me->GetNetCode(), EscapedUTF8( me->GetNetname() ).c_str() );
 
     fprintf( m_fp, "Po %s\n", fmtBIUPoint( me->GetPos0() ).c_str() );
 
@@ -3633,7 +3633,7 @@ void LEGACY_PLUGIN::saveTRACK( const TRACK* me ) const
                 "-1" :  fmtBIU( me->GetDrill() ).c_str() );
 
     fprintf(m_fp, "De %d %d %d %lX %X\n",
-            me->GetLayer(), type, me->GetNet(),
+            me->GetLayer(), type, me->GetNetCode(),
             me->GetTimeStamp(), me->GetStatus() );
 }
 
@@ -3647,7 +3647,7 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     // just for ZONE_CONTAINER compatibility
     fprintf( m_fp,  "ZInfo %lX %d %s\n",
                     me->GetTimeStamp(),
-                    me->GetIsKeepout() ? 0 : me->GetNet(),
+                    me->GetIsKeepout() ? 0 : me->GetNetCode(),
                     EscapedUTF8( me->GetIsKeepout() ? wxT("") : me->GetNetname() ).c_str() );
 
     // Save the outline layer info

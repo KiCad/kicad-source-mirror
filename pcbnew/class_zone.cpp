@@ -74,7 +74,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     BOARD_CONNECTED_ITEM( aZone )
 {
     // Should the copy be on the same net?
-    SetNet( aZone.GetNet() );
+    SetNetCode( aZone.GetNetCode() );
     m_Poly = new CPolyLine( *aZone.m_Poly );
 
     // For corner moving, corner index to drag, or -1 if no selection
@@ -620,9 +620,9 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     }
     else if( IsOnCopperLayer() )
     {
-        if( GetNet() >= 0 )
+        if( GetNetCode() >= 0 )
         {
-            NETINFO_ITEM* equipot = board->FindNet( GetNet() );
+            NETINFO_ITEM* equipot = GetNet();
 
             if( equipot )
                 msg = equipot->GetNetname();
@@ -640,7 +640,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
 #if 1
         // Display net code : (useful in test or debug)
-        msg.Printf( wxT( "%d" ), GetNet() );
+        msg.Printf( wxT( "%d" ), GetNetCode() );
         aList.push_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
 #endif
 
@@ -801,7 +801,7 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
 {
     m_Parent = src->m_Parent;
     m_Layer  = src->m_Layer;
-    SetNet( src->GetNet() );
+    SetNetCode( src->GetNetCode() );
     SetTimeStamp( src->m_TimeStamp );
     m_Poly->RemoveAllContours();
     m_Poly->Copy( src->m_Poly );                // copy outlines
@@ -869,11 +869,11 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     // Display net name for copper zones
     if( !GetIsKeepout() )
     {
-        if( GetNet() >= 0 )
+        if( GetNetCode() >= 0 )
         {
             if( board )
             {
-                net = board->FindNet( GetNet() );
+                net = GetNet();
 
                 if( net )
                 {

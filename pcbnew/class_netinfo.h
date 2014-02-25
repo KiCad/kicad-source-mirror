@@ -320,7 +320,7 @@ public:
 
     ///> NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
     ///> board storing net list available.
-    static const NETINFO_ITEM ORPHANED;
+    static NETINFO_ITEM ORPHANED;
 
 #if defined(DEBUG)
     void Show() const;

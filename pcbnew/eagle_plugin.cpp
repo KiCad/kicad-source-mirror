@@ -1493,7 +1493,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
                 zone->SetTimeStamp( timeStamp( gr->second ) );
                 zone->SetLayer( layer );
-                zone->SetNet( NETINFO_LIST::UNCONNECTED );
+                zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
                 CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::DIAGONAL_EDGE;
 
@@ -1696,7 +1696,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
             if( ni != m_pads_to_nets.end() )
             {
                 const ENET* enet = &ni->second;
-                pad->SetNet( enet->netcode );
+                pad->SetNetCode( enet->netcode );
             }
         }
 
@@ -2387,7 +2387,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
                     t->SetWidth( width );
                     t->SetLayer( layer );
-                    t->SetNet( netCode );
+                    t->SetNetCode( netCode );
 
                     m_board->m_Track.Insert( t, NULL );
                 }
@@ -2452,7 +2452,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     via->SetPosition( pos  );
                     via->SetEnd( pos );
 
-                    via->SetNet( netCode );
+                    via->SetNetCode( netCode );
 
                     via->SetShape( S_CIRCLE );  // @todo should be in SEGVIA constructor
                 }
@@ -2495,7 +2495,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
                     zone->SetTimeStamp( timeStamp( it->second ) );
                     zone->SetLayer( layer );
-                    zone->SetNet( netCode );
+                    zone->SetNetCode( netCode );
 
                     CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::DIAGONAL_EDGE;
 
@@ -2551,7 +2551,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
             // KiCad does not support an unconnected zone with its own non-zero netcode,
             // but only when assigned netcode = 0 w/o a name...
             for( ZONES::iterator it = zones.begin();  it != zones.end();  ++it )
-                (*it)->SetNet( NETINFO_LIST::UNCONNECTED );
+                (*it)->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
             // therefore omit this signal/net.
         }
