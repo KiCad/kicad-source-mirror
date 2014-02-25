@@ -342,7 +342,7 @@ void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LAYER_MSK
 
     for( ; track; track = track->Next() )
     {
-        if( track->GetNet() != aNetCode )   // not the same netcodenet code: all candidates tested
+        if( track->GetNetCode() != aNetCode )   // not the same netcode: all candidates tested
             break;
 
         if( ( aLayerMask & track->GetLayerMask() ) == 0 )

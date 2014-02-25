@@ -282,7 +282,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
             m_board->AppendNet( netinfo );
         }
 
-        pad->SetNet( netinfo->GetNet() );
+        pad->SetNetCode( netinfo->GetNet() );
     }
 
     if( !aEncapsulatedPad )
@@ -343,7 +343,7 @@ void PCB_PAD::AddToBoard()
             via->SetDrill( m_hole );
 
             via->SetLayer( m_KiCadLayer );
-            via->SetNet( m_netCode );
+            via->SetNetCode( m_netCode );
         }
     }
     else // pad

@@ -152,7 +152,7 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
         // Try to obtain the netcode for the item
         const BOARD_CONNECTED_ITEM* item = dynamic_cast<const BOARD_CONNECTED_ITEM*>( aItem );
         if( item )
-            netCode = item->GetNet();
+            netCode = item->GetNetCode();
     }
 
     // Return grayish color for non-highlighted layers in the high contrast mode
@@ -261,12 +261,11 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     VECTOR2D start( aTrack->GetStart() );
     VECTOR2D end( aTrack->GetEnd() );
     int      width = aTrack->GetWidth();
-    int      netNumber = aTrack->GetNet();
 
     if( m_pcbSettings->m_netNamesOnTracks && IsNetnameLayer( aLayer ) )
     {
         // If there is a net name - display it on the track
-        if( netNumber > 0 )
+        if( aTrack->GetNetCode() > NETINFO_LIST::UNCONNECTED )
         {
             VECTOR2D line = ( end - start );
             double length = line.EuclideanNorm();

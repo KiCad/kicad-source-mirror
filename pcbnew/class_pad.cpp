@@ -373,7 +373,7 @@ void D_PAD::Copy( D_PAD* source )
     m_layerMask = source->m_layerMask;
 
     m_NumPadName = source->m_NumPadName;
-    SetNet( source->GetNet() );
+    m_netinfo = source->m_netinfo;
     m_Drill = source->m_Drill;
     m_drillShape = source->m_drillShape;
     m_Offset     = source->m_Offset;
@@ -403,7 +403,7 @@ void D_PAD::CopyNetlistSettings( D_PAD* aPad )
     // Don't do anything foolish like trying to copy to yourself.
     wxCHECK_RET( aPad != NULL && aPad != this, wxT( "Cannot copy to NULL or yourself." ) );
 
-    aPad->SetNet( GetNet() );
+    aPad->SetNetCode( GetNetCode() );
 
     aPad->SetLocalClearance( m_LocalClearance );
     aPad->SetLocalSolderMaskMargin( m_LocalSolderMaskMargin );

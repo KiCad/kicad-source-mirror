@@ -1345,14 +1345,6 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
     // NULL is returned for non valid netcodes
     NETINFO_ITEM* net = m_NetInfo.GetNetItem( aNetcode );
 
-#if defined(DEBUG)
-    if( net && aNetcode != net->GetNet())     // item can be NULL if anetcode is not valid
-    {
-        wxLogError( wxT( "FindNet() anetcode %d != GetNet() %d (net: %s)\n" ),
-                      aNetcode, net->GetNet(), TO_UTF8( net->GetNetname() ) );
-    }
-#endif
-
     return net;
 }
 
@@ -1515,7 +1507,7 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
         if( area->GetState( BUSY ) )
             continue;
 
-        if( aNetCode >= 0 && area->GetNet() != aNetCode )
+        if( aNetCode >= 0 && area->GetNetCode() != aNetCode )
             continue;
 
         if( area->HitTestFilledArea( aRefPos ) )
@@ -1534,24 +1526,24 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
     {
         if( !GetArea( ii )->IsOnCopperLayer() )
         {
-            GetArea( ii )->SetNet( NETINFO_LIST::UNCONNECTED );
+            GetArea( ii )->SetNetCode( NETINFO_LIST::UNCONNECTED );
             continue;
         }
 
-        if( GetArea( ii )->GetNet() != 0 )      // i.e. if this zone is connected to a net
+        if( GetArea( ii )->GetNetCode() != 0 )      // i.e. if this zone is connected to a net
         {
-            const NETINFO_ITEM* net = FindNet( GetArea( ii )->GetNetname() );
+            const NETINFO_ITEM* net = GetArea( ii )->GetNet();
 
             if( net )
             {
-                GetArea( ii )->SetNet( net->GetNet() );
+                GetArea( ii )->SetNetCode( net->GetNet() );
             }
             else
             {
                 error_count++;
 
                 // keep Net Name and set m_NetCode to -1 : error flag.
-                GetArea( ii )->SetNet( -1 );
+                GetArea( ii )->SetNetCode( -1 );
             }
         }
     }
@@ -2271,7 +2263,7 @@ ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, LAYER_NUM layer, int 
 {
     ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
 
-    new_area->SetNet( netcode );
+    new_area->SetNetCode( netcode );
     new_area->SetLayer( layer );
     new_area->SetTimeStamp( GetNewTimeStamp() );
 
@@ -2310,7 +2302,7 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
             {
                 // create new copper area and copy poly into it
                 CPolyLine* new_p = (*pa)[ip - 1];
-                NewArea = AddArea( aNewZonesList, aCurrArea->GetNet(), aCurrArea->GetLayer(),
+                NewArea = AddArea( aNewZonesList, aCurrArea->GetNetCode(), aCurrArea->GetLayer(),
                                    wxPoint(0, 0), CPolyLine::NO_HATCH );
 
                 // remove the poly that was automatically created for the new area
@@ -2551,7 +2543,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     }
 
                     if( !aNetlist.IsDryRun() )
-                        pad->SetNet( NETINFO_LIST::UNCONNECTED );
+                        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
                 }
             }
             else                                 // Footprint pad has a net.
@@ -2580,7 +2572,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                             m_NetInfo.AppendNet( netinfo );
                         }
 
-                        pad->SetNet( netinfo->GetNet() );
+                        pad->SetNetCode( netinfo->GetNet() );
                     }
                 }
             }
@@ -2654,7 +2646,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                         aReporter->Report( msg );
                     }
 
-                    previouspad->SetNet( NETINFO_LIST::UNCONNECTED );
+                    previouspad->SetNetCode( NETINFO_LIST::UNCONNECTED );
                 }
                 netname = pad->GetNetname();
                 count = 1;
@@ -2667,7 +2659,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 
         // Examine last pad
         if( pad && count == 1 )
-            pad->SetNet( NETINFO_LIST::UNCONNECTED );
+            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
     }
 
     // Last step: Some tests:

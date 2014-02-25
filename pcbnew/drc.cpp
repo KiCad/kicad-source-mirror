@@ -549,7 +549,7 @@ void DRC::testZones()
         if( !test_area->IsOnCopperLayer() )
             continue;
 
-        if( test_area->GetNet() < 0 )
+        if( test_area->GetNetCode() < 0 )
         {
             m_currentMarker = fillMarker( test_area,
                                           DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE, m_currentMarker );
@@ -756,7 +756,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 
         // The pad must be in a net (i.e pt_pad->GetNet() != 0 ),
         // But no problem if pads have the same netcode (same net)
-        if( pad->GetNet() && ( aRefPad->GetNet() == pad->GetNet() ) )
+        if( pad->GetNetCode() && ( aRefPad->GetNetCode() == pad->GetNetCode() ) )
             continue;
 
         // if pads are from the same footprint
