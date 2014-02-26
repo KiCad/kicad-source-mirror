@@ -59,11 +59,6 @@ void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& rotationPoint )
 }
 
 
-void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
-void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
-                           const wxPoint aMoveVector  );
-
-
 void MirrorY( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
