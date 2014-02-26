@@ -121,6 +121,8 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         m_canvas->RefreshDrawingRect( aPad->GetBoundingBox() );
 
     aPad->GetParent()->SetLastEditTime();
+
+    OnModify();
 }
 
 /** Compute the 'next' pad number for autoincrement
@@ -132,8 +134,8 @@ static wxString GetNextPadName( wxString aPadName )
     int ponder = 1;
 
     // Trim and extract the trailing numeric part
-    while( aPadName.Len() 
-            && aPadName.Last() >= '0' 
+    while( aPadName.Len()
+            && aPadName.Last() >= '0'
             && aPadName.Last() <= '9' )
     {
         num += ( aPadName.Last() - '0' ) * ponder;
