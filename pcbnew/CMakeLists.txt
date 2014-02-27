@@ -4,6 +4,10 @@ set( MAKE_LINK_MAPS false )
 add_definitions( -DPCBNEW )
 add_subdirectory(router)
 
+# psnrouter depends on make_lexer outputs in common (bug # 1285878 )
+add_dependencies( pnsrouter pcbcommon )
+
+
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting )
     find_package( SWIG REQUIRED )
