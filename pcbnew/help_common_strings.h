@@ -22,3 +22,5 @@
 #define HELP_ZOOM_REDRAW _( "Redraw the screen of the board" )
 
 #define HELP_SHOW_HIDE_LAYERMANAGER _( "Show/hide the layers manager toolbar" )
+
+#define HELP_SHOW_HIDE_MICROWAVE_TOOLS _( "Show/hide the toolbar for microwave tools\nThis is a experimental feature (under development)" )
