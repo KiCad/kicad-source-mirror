@@ -114,6 +114,11 @@ public:
      */
     void AddMenuItem( const TOOL_ACTION& aAction );
 
+    // TODO comments
+    const TOOL_EVENT SelectedEvent;
+    const TOOL_EVENT DeselectedEvent;
+    const TOOL_EVENT ClearedEvent;
+
 private:
     /**
      * Function selectSingle()
