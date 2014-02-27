@@ -50,7 +50,11 @@
 using boost::optional;
 
 SELECTION_TOOL::SELECTION_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ), m_additive( false ), m_multiple( false )
+        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
+        SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" ),
+        DeselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.deselected" ),
+        ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" ),
+        m_additive( false ), m_multiple( false )
 {
     m_selArea = new SELECTION_AREA;
     m_selection.group = new KIGFX::VIEW_GROUP;
@@ -94,6 +98,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
         if( evt->IsAction( &COMMON_ACTIONS::selectionSingle ) )
         {
+            // GetMousePosition() is used to be independent of snapping settings
             selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
         }
 
@@ -167,6 +172,10 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
     if( aItem->IsSelected() )
     {
         deselect( aItem );
+
+        // Inform other potentially interested tools
+        TOOL_EVENT deselectEvent( DeselectedEvent );
+        m_toolMgr->ProcessEvent( deselectEvent );
     }
     else
     {
@@ -175,7 +184,13 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 
         // Prevent selection of invisible or inactive items
         if( selectable( aItem ) )
+        {
             select( aItem );
+
+            // Inform other potentially interested tools
+            TOOL_EVENT selectEvent( SelectedEvent );
+            m_toolMgr->ProcessEvent( selectEvent );
+        }
     }
 }
 
@@ -203,7 +218,7 @@ void SELECTION_TOOL::selectSingle( const VECTOR2I& aWhere )
 
     default:
         // Remove unselectable items
-        for( int i = collector.GetCount() - 1; i >= 0 ; --i )
+        for( int i = collector.GetCount() - 1; i >= 0; --i )
         {
             if( !selectable( collector[i] ) )
                 collector.Remove( i );
@@ -273,12 +288,20 @@ bool SELECTION_TOOL::selectMultiple()
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
                 // Add only those items that are visible and fully within the selection box
-                if( !item->IsSelected() && selectable( item ) && selectionBox.Contains( item->ViewBBox() ) )
+                if( !item->IsSelected() && selectable( item )
+                        && selectionBox.Contains( item->ViewBBox() ) )
                     select( item );
             }
 
             // Do not display information about selected item,as there is more than one
             getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
+
+            if( !m_selection.Empty() )
+            {
+                // Inform other potentially interested tools
+                TOOL_EVENT selectEvent( SelectedEvent );
+                m_toolMgr->ProcessEvent( selectEvent );
+            }
 
             break;  // Stop waiting for events
         }
@@ -313,6 +336,10 @@ void SELECTION_TOOL::clearSelection()
 
     // Do not show the context menu when there is nothing selected
     SetContextMenu( &m_menu, CMENU_OFF );
+
+    // Inform other potentially interested tools
+    TOOL_EVENT clearEvent( ClearedEvent );
+    m_toolMgr->ProcessEvent( clearEvent );
 }
 
 
@@ -351,7 +378,9 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
                 current->SetBrightened();
             }
             else
+            {
                 current = NULL;
+            }
         }
         else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {
@@ -412,7 +441,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
         }
     }
 
-    return (*aCollector)[minNdx];
+    return ( *aCollector )[minNdx];
 }
 
 
@@ -543,6 +572,10 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
         SetContextMenu( &m_menu, CMENU_OFF );
         getEditFrame<PCB_EDIT_FRAME>()->SetCurItem( NULL );
     }
+
+    // Inform other potentially interested tools
+    TOOL_EVENT dupa( DeselectedEvent );
+    m_toolMgr->ProcessEvent( dupa );
 }
 
 
