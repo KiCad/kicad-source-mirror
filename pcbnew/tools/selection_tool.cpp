@@ -133,7 +133,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             else
             {
                 // Check if dragging has started within any of selected items bounding box
-                if( containsSelected( evt->Position() ) )
+                if( selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
                     m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
@@ -566,7 +566,7 @@ void SELECTION_TOOL::deselectVisually( BOARD_ITEM* aItem ) const
 }
 
 
-bool SELECTION_TOOL::containsSelected( const VECTOR2I& aPoint ) const
+bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 {
     const unsigned GRIP_MARGIN = 20;
     VECTOR2D margin = getView()->ToWorld( VECTOR2D( GRIP_MARGIN, GRIP_MARGIN ), false );

@@ -207,7 +207,7 @@ private:
      *
      * @return True if the given point is contained in any of selected items' bouding box.
      */
-    bool containsSelected( const VECTOR2I& aPoint ) const;
+    bool selectionContains( const VECTOR2I& aPoint ) const;
 
     /// Visual representation of selection box
     SELECTION_AREA* m_selArea;

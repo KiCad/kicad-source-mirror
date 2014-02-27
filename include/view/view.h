@@ -233,6 +233,14 @@ public:
     VECTOR2D ToWorld( const VECTOR2D& aCoord, bool aAbsolute = true ) const;
 
     /**
+     * Function ToWorld()
+     * Converts a screen space one dimensional size to a one dimensional size in world
+     * space coordinates.
+     * @param aCoord: the size to be converted
+     */
+    double ToWorld( double aSize ) const;
+
+    /**
      * Function ToScreen()
      * Converts a world space point/vector to a point/vector in screen space coordinates.
      * @param aCoord: the point/vector to be converted
