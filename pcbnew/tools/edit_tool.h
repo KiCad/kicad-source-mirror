@@ -101,7 +101,7 @@ private:
     ///> Removes and frees a single BOARD_ITEM.
     void remove( BOARD_ITEM* aItem );
 
-    ///> Sets up handlers for various events
+    ///> Sets up handlers for various events.
     void setTransitions();
 
     ///> The required update flag for modified items

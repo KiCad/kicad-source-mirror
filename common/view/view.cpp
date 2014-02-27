@@ -204,6 +204,14 @@ VECTOR2D VIEW::ToWorld( const VECTOR2D& aCoord, bool aAbsolute ) const
 }
 
 
+double VIEW::ToWorld( double aSize ) const
+{
+    const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
+
+    return matrix.GetScale().x * aSize;
+}
+
+
 VECTOR2D VIEW::ToScreen( const VECTOR2D& aCoord, bool aAbsolute ) const
 {
     const MATRIX3x3D& matrix = m_gal->GetWorldScreenMatrix();

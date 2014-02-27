@@ -189,7 +189,7 @@ public:
         m_scope( aScope ),
         m_mouseButtons( 0 )
     {
-        if( aCategory == TC_COMMAND )
+        if( aCategory == TC_COMMAND || aCategory == TC_MESSAGE )
             m_commandStr = aExtraParam;
     }
 
@@ -317,7 +317,7 @@ public:
         if( !( m_actions & aEvent.m_actions ) )
             return false;
 
-        if( m_category == TC_COMMAND )
+        if( m_category == TC_COMMAND || m_category == TC_MESSAGE )
         {
             if( m_commandStr && aEvent.m_commandStr )
                 return *m_commandStr == *aEvent.m_commandStr;
