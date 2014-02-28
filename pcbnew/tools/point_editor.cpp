@@ -96,6 +96,12 @@ POINT_EDITOR::POINT_EDITOR() :
 }
 
 
+void POINT_EDITOR::Reset( RESET_REASON aReason )
+{
+    m_editPoints.reset();
+}
+
+
 bool POINT_EDITOR::Init()
 {
     // Find the selection tool, so they can cooperate
@@ -130,6 +136,14 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         // Main loop: keep receiving events
         while( OPT_TOOL_EVENT evt = Wait() )
         {
+            if( !m_editPoints || evt->IsCancel() ||
+                evt->Matches( m_selectionTool->ClearedEvent ) ||
+                evt->Matches( m_selectionTool->DeselectedEvent ) ||
+                evt->Matches( m_selectionTool->SelectedEvent ) )
+            {
+                break;
+            }
+
             if( evt->IsMotion() )
             {
                 EDIT_POINT* point = m_editPoints->FindPoint( evt->Position() );
@@ -168,23 +182,18 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                 updatePoints();
             }
 
-            else if( evt->IsCancel() ||
-                evt->Matches( m_selectionTool->ClearedEvent ) ||
-                evt->Matches( m_selectionTool->DeselectedEvent ) ||
-                evt->Matches( m_selectionTool->SelectedEvent ) )
-            {
-                break;
-            }
-
             else
             {
                 m_toolMgr->PassEvent();
             }
         }
 
-        m_toolMgr->GetView()->Remove( m_editPoints.get() );
-        m_editPoints.reset();
-        item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        if( m_editPoints )
+        {
+            item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_toolMgr->GetView()->Remove( m_editPoints.get() );
+            m_editPoints.reset();
+        }
     }
 
     controls->ShowCursor( false );
@@ -265,9 +274,6 @@ void POINT_EDITOR::updateItem() const
 
 void POINT_EDITOR::updatePoints() const
 {
-    if( !m_editPoints )
-        return;
-
     EDA_ITEM* item = m_editPoints->GetParent();
 
     switch( item->Type() )
