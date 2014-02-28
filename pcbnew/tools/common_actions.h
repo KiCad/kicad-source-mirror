@@ -87,6 +87,9 @@ public:
     /// Activation of the Push and Shove router
     static TOOL_ACTION routerActivate;
 
+    /// Update edit points
+    static TOOL_ACTION pointEditorUpdate;
+
     /**
      * Function TranslateLegacyId()
      * Translates legacy tool ids to the corresponding TOOL_ACTION name.

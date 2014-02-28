@@ -151,6 +151,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
 
             selection.group->ViewUpdate( VIEW_ITEM::GEOMETRY );
             dragPosition = controls->GetCursorPosition();
+            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
@@ -233,6 +234,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     }
 
+    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
     setTransitions();
 
     return 0;
@@ -268,9 +270,6 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
 
-    setTransitions();
-    updateRatsnest( true );
-
     if( m_dragging )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     else
@@ -278,6 +277,11 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
 
     if( unselect )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+
+    updateRatsnest( true );
+    setTransitions();
 
     return 0;
 }
@@ -312,9 +316,6 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
             item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
     }
 
-    setTransitions();
-    updateRatsnest( true );
-
     if( m_dragging )
         selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     else
@@ -322,6 +323,11 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
 
     if( unselect )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate );
+
+    updateRatsnest( true );
+    setTransitions();
 
     return 0;
 }
@@ -359,8 +365,8 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
     if( !( board->m_Status_Pcb & NET_CODES_OK ) )
         board->BuildListOfNets();
 
+    board->GetRatsnest()->Recalculate();        // TODO is it necessary?
     setTransitions();
-    board->GetRatsnest()->Recalculate();
 
     return 0;
 }
