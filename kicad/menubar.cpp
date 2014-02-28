@@ -193,14 +193,14 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Text editor
     AddMenuItem( browseMenu,
                  ID_TO_EDITOR,
-                 _( "Launch Text E&ditor" ),
+                 _( "Open Text E&ditor" ),
                  _( "Launch preferred text editor" ),
                  KiBitmap( editor_xpm ) );
 
     // View file
     AddMenuItem( browseMenu,
                  ID_BROWSE_AN_SELECT_FILE,
-                 _( "&Edit Local File" ),
+                 _( "&Open Local File" ),
                  _( "Edit local file" ),
                  KiBitmap( browse_files_xpm ) );
 

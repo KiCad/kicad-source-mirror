@@ -78,7 +78,7 @@ void LAUNCHER_PANEL::CreateCommandToolbar( void )
     btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, KiBitmap( icon_bitmap2component_xpm ) );
     btn->SetToolTip( _(
                         "Bitmap2Component - Convert bitmap images to Eeschema\n"
-                        "or Pcbnew elements." ) );
+                        "or Pcbnew elements" ) );
 
     btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, KiBitmap( icon_pcbcalculator_xpm ) );
     btn->SetToolTip( _( "Pcb calculator - Calculator for components, track width, etc." ) );
