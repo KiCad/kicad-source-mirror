@@ -72,6 +72,10 @@ public:
                     (*points)[2].SetConstraint( new EPC_CIRCLE( (*points)[2], (*points)[0], (*points)[1] ) );
                     break;
 
+                case S_CIRCLE:
+                    points->Add( segment->GetCenter() );
+                    points->Add( segment->GetEnd() );
+
                 default:        // suppress warnings
                     break;
                 }
@@ -219,9 +223,12 @@ void POINT_EDITOR::updateItem() const
         {
         case S_SEGMENT:
             if( &(*m_editPoints)[0] == m_dragPoint )
-                segment->SetStart( wxPoint( (*m_editPoints)[0].GetPosition().x, (*m_editPoints)[0].GetPosition().y ) );
+                segment->SetStart( wxPoint( (*m_editPoints)[0].GetPosition().x,
+                                            (*m_editPoints)[0].GetPosition().y ) );
+
             else if( &(*m_editPoints)[1] == m_dragPoint )
-                segment->SetEnd( wxPoint( (*m_editPoints)[1].GetPosition().x, (*m_editPoints)[1].GetPosition().y ) );
+                segment->SetEnd( wxPoint( (*m_editPoints)[1].GetPosition().x,
+                                          (*m_editPoints)[1].GetPosition().y ) );
 
             break;
 
@@ -250,6 +257,7 @@ void POINT_EDITOR::updateItem() const
 
                 // Adjust the new angle to (counter)clockwise setting
                 bool clockwise = ( segment->GetAngle() > 0 );
+
                 if( clockwise && newAngle < 0.0 )
                     newAngle += 3600.0;
                 else if( !clockwise && newAngle > 0.0 )
@@ -257,8 +265,27 @@ void POINT_EDITOR::updateItem() const
 
                 segment->SetAngle( newAngle );
             }
+
+            break;
         }
-        break;
+
+        case S_CIRCLE:
+        {
+            const VECTOR2I& center = (*m_editPoints)[0].GetPosition();
+            const VECTOR2I& end = (*m_editPoints)[1].GetPosition();
+
+            if( m_dragPoint == &(*m_editPoints)[0] )
+            {
+                wxPoint moveVector = wxPoint( center.x, center.y ) - segment->GetCenter();
+                segment->Move( moveVector );
+            }
+            else
+            {
+                segment->SetEnd( wxPoint( end.x, end.y ) );
+            }
+
+            break;
+        }
 
         default:        // suppress warnings
             break;
@@ -293,6 +320,11 @@ void POINT_EDITOR::updatePoints() const
                 (*m_editPoints)[0].SetPosition( segment->GetCenter() );
                 (*m_editPoints)[1].SetPosition( segment->GetArcStart() );
                 (*m_editPoints)[2].SetPosition( segment->GetArcEnd() );
+                break;
+
+            case S_CIRCLE:
+                (*m_editPoints)[0].SetPosition( segment->GetCenter() );
+                (*m_editPoints)[1].SetPosition( segment->GetEnd() );
                 break;
 
             default:        // suppress warnings
