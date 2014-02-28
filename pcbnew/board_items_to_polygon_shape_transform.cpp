@@ -187,9 +187,13 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
     {
         TEXTE_MODULE *textmod = texts[ii];
         s_textWidth  = textmod->GetThickness() + ( 2 * aInflateValue );
+        wxSize size = textmod->GetSize();
+
+        if( textmod->IsMirrored() )
+            NEGATE( size.x );
+
         DrawGraphicText( NULL, NULL, textmod->GetTextPosition(), BLACK,
-                         textmod->GetText(), textmod->GetDrawRotation(),
-                         textmod->GetSize(),
+                         textmod->GetText(), textmod->GetDrawRotation(), size,
                          textmod->GetHorizJustify(), textmod->GetVertJustify(),
                          textmod->GetThickness(), textmod->IsItalic(),
                          true, addTextSegmToPoly );
