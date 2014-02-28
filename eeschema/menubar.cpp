@@ -71,10 +71,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( new_xpm ) );
 
     // Open
-    text = AddHotkeyName( _( "&Open Schematic Sheet" ), s_Schematic_Hokeys_Descr, HK_LOAD_SCH );
+    text = AddHotkeyName( _( "&Open Schematic Project" ), s_Schematic_Hokeys_Descr, HK_LOAD_SCH );
     AddMenuItem( fileMenu,
                  ID_LOAD_PROJECT, text,
-                 _( "Open an existing schematic sheet" ),
+                 _( "Open an existing schematic hierarchy" ),
                  KiBitmap( open_document_xpm ) );
 
     // Open Recent submenu
@@ -497,7 +497,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     //Run CvPcb
     AddMenuItem( toolsMenu,
                  ID_TO_CVPCB,
-                 _( "A&ssign Component Footprints" ),
+                 _( "A&ssign Component Footprint" ),
                  _( "Run CvPcb" ),
                  KiBitmap( cvpcb_xpm ) );
 
