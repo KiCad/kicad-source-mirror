@@ -25,6 +25,8 @@
 #ifndef __POINT_EDITOR_H
 #define __POINT_EDITOR_H
 
+#include <boost/shared_ptr.hpp>
+
 #include <tool/tool_interactive.h>
 #include "edit_points.h"
 
@@ -52,7 +54,7 @@ public:
      *
      * Change selection event handler.
      */
-    int OnSelected( TOOL_EVENT& aEvent );
+    int OnSelectionChange( TOOL_EVENT& aEvent );
 
 private:
     ///> Selection tool used for obtaining selected items
@@ -61,14 +63,21 @@ private:
     ///> Currently edited point, NULL if there is none.
     EDIT_POINT* m_dragPoint;
 
+    ///> Currently available edit points.
+    boost::shared_ptr<EDIT_POINTS> m_editPoints;
+
     ///> Updates item's points with edit points.
-    void updateItem( EDA_ITEM* aItem, EDIT_POINTS& aPoints ) const;
+    void updateItem() const;
 
     ///> Updates edit points with item's points.
-    void updatePoints( const EDA_ITEM* aItem, EDIT_POINTS& aPoints ) const;
+    void updatePoints() const;
 
     ///> Sets up handlers for various events.
-    void setTransitions();
+    void setTransitions()
+    {
+        Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->SelectedEvent );
+        Go( &POINT_EDITOR::OnSelectionChange, m_selectionTool->DeselectedEvent );
+    }
 };
 
 #endif

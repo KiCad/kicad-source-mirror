@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <boost/make_shared.hpp>
+
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <confirm.h>
@@ -41,10 +43,10 @@
 class EDIT_POINTS_FACTORY
 {
 public:
-    static EDIT_POINTS Make( EDA_ITEM* aItem )
+    static boost::shared_ptr<EDIT_POINTS> Make( EDA_ITEM* aItem )
     {
         // TODO generate list of points basing on the type
-        EDIT_POINTS points( aItem );
+        boost::shared_ptr<EDIT_POINTS> points = boost::make_shared<EDIT_POINTS>( aItem );
 
         switch( aItem->Type() )
         {
@@ -55,19 +57,19 @@ public:
                 switch( segment->GetShape() )
                 {
                 case S_SEGMENT:
-                    points.Add( segment->GetStart() );
-                    points.Add( segment->GetEnd() );
+                    points->Add( segment->GetStart() );
+                    points->Add( segment->GetEnd() );
 
                     break;
 
                 case S_ARC:
-                    points.Add( segment->GetCenter() );         // points[0]
-                    points.Add( segment->GetArcStart() );       // points[1]
-                    points.Add( segment->GetArcEnd() );         // points[2]
+                    points->Add( segment->GetCenter() );         // points[0]
+                    points->Add( segment->GetArcStart() );       // points[1]
+                    points->Add( segment->GetArcEnd() );         // points[2]
 
                     // Set constraints
                     // Arc end has to stay at the same radius as the start
-                    points[2].SetConstraint( new EPC_CIRCLE( &points[2], points[0], points[1] ) );
+                    (*points)[2].SetConstraint( new EPC_CIRCLE( (*points)[2], (*points)[0], (*points)[1] ) );
                     break;
 
                 default:        // suppress warnings
@@ -111,11 +113,8 @@ bool POINT_EDITOR::Init()
 }
 
 
-int POINT_EDITOR::OnSelected( TOOL_EVENT& aEvent )
+int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 {
-    std::cout << "point editor activated" << std::endl;
-    std::cout << aEvent.Format() << std::endl;
-
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     m_dragPoint = NULL;
@@ -125,24 +124,15 @@ int POINT_EDITOR::OnSelected( TOOL_EVENT& aEvent )
         Activate();
 
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
-        EDIT_POINTS editPoints = EDIT_POINTS_FACTORY::Make( item );
-        m_toolMgr->GetView()->Add( &editPoints );
+        m_editPoints = EDIT_POINTS_FACTORY::Make( item );
+        m_toolMgr->GetView()->Add( m_editPoints.get() );
 
         // Main loop: keep receiving events
         while( OPT_TOOL_EVENT evt = Wait() )
         {
-            if( evt->IsCancel() ||
-                evt->Matches( m_selectionTool->ClearedEvent ) ||
-                evt->Matches( m_selectionTool->DeselectedEvent ) ||
-                evt->Matches( m_selectionTool->SelectedEvent ) )
+            if( evt->IsMotion() )
             {
-                m_toolMgr->PassEvent();
-                break;
-            }
-
-            else if( evt->IsMotion() )
-            {
-                EDIT_POINT* point = editPoints.FindPoint( evt->Position() );
+                EDIT_POINT* point = m_editPoints->FindPoint( evt->Position() );
 
                 if( m_dragPoint != point )
                 {
@@ -163,30 +153,37 @@ int POINT_EDITOR::OnSelected( TOOL_EVENT& aEvent )
                 m_dragPoint = point;
             }
 
-            else if( evt->IsDrag( BUT_LEFT ) )
+            else if( evt->IsDrag( BUT_LEFT ) && m_dragPoint )
             {
-                if( m_dragPoint )
-                {
-                    m_dragPoint->SetPosition( controls->GetCursorPosition() );
-                    m_dragPoint->ApplyConstraint();
-                    updateItem( item, editPoints );
-                    updatePoints( item, editPoints );
+                m_dragPoint->SetPosition( controls->GetCursorPosition() );
+                m_dragPoint->ApplyConstraint();
+                updateItem();
+                updatePoints();
 
-                    editPoints.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-                }
-                else
-                {
-                    m_toolMgr->PassEvent();
-                }
+                m_editPoints->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
 
-            else if( evt->IsClick( BUT_LEFT ) )
+            else if( evt->IsAction( &COMMON_ACTIONS::pointEditorUpdate ) )
+            {
+                updatePoints();
+            }
+
+            else if( evt->IsCancel() ||
+                evt->Matches( m_selectionTool->ClearedEvent ) ||
+                evt->Matches( m_selectionTool->DeselectedEvent ) ||
+                evt->Matches( m_selectionTool->SelectedEvent ) )
+            {
+                break;
+            }
+
+            else
             {
                 m_toolMgr->PassEvent();
             }
         }
 
-        m_toolMgr->GetView()->Remove( &editPoints );
+        m_toolMgr->GetView()->Remove( m_editPoints.get() );
+        m_editPoints.reset();
         item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
 
@@ -200,42 +197,38 @@ int POINT_EDITOR::OnSelected( TOOL_EVENT& aEvent )
 }
 
 
-void POINT_EDITOR::setTransitions()
+void POINT_EDITOR::updateItem() const
 {
-    Go( &POINT_EDITOR::OnSelected, m_selectionTool->SelectedEvent );
-}
+    EDA_ITEM* item = m_editPoints->GetParent();
 
-
-void POINT_EDITOR::updateItem( EDA_ITEM* aItem, EDIT_POINTS& aPoints ) const
-{
-    switch( aItem->Type() )
+    switch( item->Type() )
     {
     case PCB_LINE_T:
     {
-        DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( aItem );
+        DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
         switch( segment->GetShape() )
         {
         case S_SEGMENT:
-            if( &aPoints[0] == m_dragPoint )
-                segment->SetStart( wxPoint( aPoints[0].GetPosition().x, aPoints[0].GetPosition().y ) );
-            else if( &aPoints[1] == m_dragPoint )
-                segment->SetEnd( wxPoint( aPoints[1].GetPosition().x, aPoints[1].GetPosition().y ) );
+            if( &(*m_editPoints)[0] == m_dragPoint )
+                segment->SetStart( wxPoint( (*m_editPoints)[0].GetPosition().x, (*m_editPoints)[0].GetPosition().y ) );
+            else if( &(*m_editPoints)[1] == m_dragPoint )
+                segment->SetEnd( wxPoint( (*m_editPoints)[1].GetPosition().x, (*m_editPoints)[1].GetPosition().y ) );
 
             break;
 
         case S_ARC:
         {
-            const VECTOR2I& center = aPoints[0].GetPosition();
-            const VECTOR2I& start = aPoints[1].GetPosition();
-            const VECTOR2I& end = aPoints[2].GetPosition();
+            const VECTOR2I& center = (*m_editPoints)[0].GetPosition();
+            const VECTOR2I& start = (*m_editPoints)[1].GetPosition();
+            const VECTOR2I& end = (*m_editPoints)[2].GetPosition();
 
             if( center != segment->GetCenter() )
             {
                 wxPoint moveVector = wxPoint( center.x, center.y ) - segment->GetCenter();
                 segment->Move( moveVector );
 
-                aPoints[1].SetPosition( segment->GetArcStart() );
-                aPoints[2].SetPosition( segment->GetArcEnd() );
+                (*m_editPoints)[1].SetPosition( segment->GetArcStart() );
+                (*m_editPoints)[2].SetPosition( segment->GetArcEnd() );
             }
 
             else
@@ -270,25 +263,30 @@ void POINT_EDITOR::updateItem( EDA_ITEM* aItem, EDIT_POINTS& aPoints ) const
 }
 
 
-void POINT_EDITOR::updatePoints( const EDA_ITEM* aItem, EDIT_POINTS& aPoints ) const
+void POINT_EDITOR::updatePoints() const
 {
-    switch( aItem->Type() )
+    if( !m_editPoints )
+        return;
+
+    EDA_ITEM* item = m_editPoints->GetParent();
+
+    switch( item->Type() )
     {
     case PCB_LINE_T:
     {
-        const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( aItem );
+        const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
         {
             switch( segment->GetShape() )
             {
             case S_SEGMENT:
-                aPoints[0].SetPosition( segment->GetStart() );
-                aPoints[1].SetPosition( segment->GetEnd() );
+                (*m_editPoints)[0].SetPosition( segment->GetStart() );
+                (*m_editPoints)[1].SetPosition( segment->GetEnd() );
                 break;
 
             case S_ARC:
-                aPoints[0].SetPosition( segment->GetCenter() );
-                aPoints[1].SetPosition( segment->GetArcStart() );
-                aPoints[2].SetPosition( segment->GetArcEnd() );
+                (*m_editPoints)[0].SetPosition( segment->GetCenter() );
+                (*m_editPoints)[1].SetPosition( segment->GetArcStart() );
+                (*m_editPoints)[2].SetPosition( segment->GetArcEnd() );
                 break;
 
             default:        // suppress warnings

@@ -37,13 +37,13 @@ class EDIT_POINT;
 class EDIT_POINT_CONSTRAINT
 {
 public:
-    EDIT_POINT_CONSTRAINT( EDIT_POINT* aConstrained ) : m_constrained( aConstrained ) {};
+    EDIT_POINT_CONSTRAINT( EDIT_POINT& aConstrained ) : m_constrained( aConstrained ) {};
     virtual ~EDIT_POINT_CONSTRAINT() {};
 
     virtual void Apply() = 0;
 
 protected:
-    EDIT_POINT* m_constrained;
+    EDIT_POINT& m_constrained;
 };
 
 
@@ -53,6 +53,7 @@ class EDIT_POINT
 public:
     EDIT_POINT( const VECTOR2I& aPoint ) :
         m_point( aPoint ), m_constraint( NULL ) {};
+
     ~EDIT_POINT()
     {
         delete m_constraint;
@@ -121,6 +122,11 @@ public:
      */
     EDIT_POINT* FindPoint( const VECTOR2I& aLocation );
 
+    EDA_ITEM* GetParent() const
+    {
+        return m_parent;
+    }
+
     void Add( const EDIT_POINT& aPoint )
     {
         m_points.push_back( aPoint );
@@ -172,7 +178,7 @@ private:
 class EPC_VERTICAL : public EDIT_POINT_CONSTRAINT
 {
 public:
-    EPC_VERTICAL( EDIT_POINT* aConstrained, EDIT_POINT& aConstrainer ) :
+    EPC_VERTICAL( EDIT_POINT& aConstrained, EDIT_POINT& aConstrainer ) :
         EDIT_POINT_CONSTRAINT( aConstrained ), m_constrainer( aConstrainer )
     {}
 
@@ -180,9 +186,9 @@ public:
 
     virtual void Apply()
     {
-        VECTOR2I point = m_constrained->GetPosition();
+        VECTOR2I point = m_constrained.GetPosition();
         point.x = m_constrainer.GetPosition().x;
-        m_constrained->SetPosition( point );
+        m_constrained.SetPosition( point );
     }
 
     virtual std::list<EDIT_POINT*> GetConstrainers() const
@@ -198,7 +204,7 @@ private:
 class EPC_HORIZONTAL : public EDIT_POINT_CONSTRAINT
 {
 public:
-    EPC_HORIZONTAL( EDIT_POINT* aConstrained, EDIT_POINT& aConstrainer ) :
+    EPC_HORIZONTAL( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
         EDIT_POINT_CONSTRAINT( aConstrained ), m_constrainer( aConstrainer )
     {}
 
@@ -206,20 +212,20 @@ public:
 
     virtual void Apply()
     {
-        VECTOR2I point = m_constrained->GetPosition();
+        VECTOR2I point = m_constrained.GetPosition();
         point.y = m_constrainer.GetPosition().y;
-        m_constrained->SetPosition( point );
+        m_constrained.SetPosition( point );
     }
 
 private:
-    EDIT_POINT& m_constrainer;
+    const EDIT_POINT& m_constrainer;
 };
 
 
 class EPC_CIRCLE : public EDIT_POINT_CONSTRAINT
 {
 public:
-    EPC_CIRCLE( EDIT_POINT* aConstrained, EDIT_POINT& aCenter, EDIT_POINT& aEnd ) :
+    EPC_CIRCLE( EDIT_POINT& aConstrained, const EDIT_POINT& aCenter, const EDIT_POINT& aEnd ) :
         EDIT_POINT_CONSTRAINT( aConstrained ), m_center( aCenter ), m_end( aEnd )
     {}
 
@@ -228,7 +234,7 @@ public:
     virtual void Apply()
     {
         VECTOR2I centerToEnd = m_end.GetPosition() - m_center.GetPosition();
-        VECTOR2I centerToPoint = m_constrained->GetPosition() - m_center.GetPosition();
+        VECTOR2I centerToPoint = m_constrained.GetPosition() - m_center.GetPosition();
 
         int radius = centerToEnd.EuclideanNorm();
         double angle = centerToPoint.Angle();
@@ -236,12 +242,12 @@ public:
         VECTOR2I newLine( radius, 0 );
         newLine = newLine.Rotate( angle );
 
-        m_constrained->SetPosition( m_center.GetPosition() + newLine );
+        m_constrained.SetPosition( m_center.GetPosition() + newLine );
     }
 
 private:
-    EDIT_POINT& m_center;
-    EDIT_POINT& m_end;
+    const EDIT_POINT& m_center;
+    const EDIT_POINT& m_end;
 };
 
 #endif /* EDIT_POINTS_H_ */

@@ -99,6 +99,9 @@ TOOL_ACTION COMMON_ACTIONS::routerActivate( "pcbnew.InteractiveRouter",
         AS_GLOBAL, 0,
         "Run push & shove router", "Run push & shove router" );
 
+TOOL_ACTION COMMON_ACTIONS::pointEditorUpdate( "pcbnew.PointEditor.update",
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+
 
 std::string COMMON_ACTIONS::TranslateLegacyId( int aId )
 {
