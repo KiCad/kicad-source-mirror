@@ -101,12 +101,20 @@ public:
 
     /**
      * Function RunAction()
-     * Runs the specified action. The common format is "application.ToolName.Action".
+     * Runs the specified action. The common format for action names is "application.ToolName.Action".
      *
      * @param aActionName is the name of action to be invoked.
      * @return True if the action finished successfully, false otherwise.
      */
     bool RunAction( const std::string& aActionName );
+
+    /**
+     * Function RunAction()
+     * Runs the specified action.
+     *
+     * @param aAction is the action to be invoked.
+     */
+    void RunAction( const TOOL_ACTION& aAction );
 
     /**
      * Function FindTool()

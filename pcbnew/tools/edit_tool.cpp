@@ -172,7 +172,7 @@ int EDIT_TOOL::Main( TOOL_EVENT& aEvent )
     }
 
     if( unselect )
-        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
 
     RN_DATA* ratsnest = getModel<BOARD>( PCB_T )->GetRatsnest();
     ratsnest->ClearSimple();
@@ -230,7 +230,7 @@ int EDIT_TOOL::Properties( TOOL_EVENT& aEvent )
         getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
         if( unselect )
-            m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+            m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
     }
 
     setTransitions();
@@ -277,7 +277,7 @@ int EDIT_TOOL::Rotate( TOOL_EVENT& aEvent )
         getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
     if( unselect )
-        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
 
     return 0;
 }
@@ -321,7 +321,7 @@ int EDIT_TOOL::Flip( TOOL_EVENT& aEvent )
         getModel<BOARD>( PCB_T )->GetRatsnest()->Recalculate();
 
     if( unselect )
-        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
 
     return 0;
 }
@@ -339,7 +339,7 @@ int EDIT_TOOL::Remove( TOOL_EVENT& aEvent )
     PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
 
     // As we are about to remove items, they have to be removed from the selection first
-    m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Clear" );
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear );
 
     // Save them
     for( unsigned int i = 0; i < selectedItems.GetCount(); ++i )
@@ -461,7 +461,7 @@ bool EDIT_TOOL::makeSelection( const SELECTION_TOOL::SELECTION& aSelection )
     if( aSelection.Empty() )
     {
         // Try to find an item that could be modified
-        m_toolMgr->RunAction( "pcbnew.InteractiveSelection.Single" );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionSingle );
 
         if( aSelection.Empty() )
         {

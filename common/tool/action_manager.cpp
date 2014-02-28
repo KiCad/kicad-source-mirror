@@ -94,9 +94,17 @@ bool ACTION_MANAGER::RunAction( const std::string& aActionName ) const
     if( it == m_actionNameIndex.end() )
         return false; // no action with given name found
 
-    runAction( it->second );
+    RunAction( it->second );
 
     return true;
+}
+
+
+void ACTION_MANAGER::RunAction( const TOOL_ACTION* aAction ) const
+{
+    TOOL_EVENT event = aAction->MakeEvent();
+
+    m_toolMgr->ProcessEvent( event );
 }
 
 
@@ -107,7 +115,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     if( it == m_actionHotKeys.end() )
         return false; // no appropriate action found for the hotkey
 
-    runAction( it->second );
+    RunAction( it->second );
 
     return true;
 }
@@ -116,12 +124,4 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 void ACTION_MANAGER::ClearHotKey( int aHotKey )
 {
     m_actionHotKeys.erase( aHotKey );
-}
-
-
-void ACTION_MANAGER::runAction( const TOOL_ACTION* aAction ) const
-{
-    TOOL_EVENT event = aAction->MakeEvent();
-
-    m_toolMgr->ProcessEvent( event );
 }

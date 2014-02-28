@@ -123,7 +123,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
             if( m_selection.Empty() )
                 selectSingle( evt->Position() );
 
-            m_toolMgr->RunAction( "pcbnew.InteractiveEdit.properties" );
+            m_toolMgr->RunAction( COMMON_ACTIONS::properties );
         }
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
