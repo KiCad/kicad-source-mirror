@@ -196,6 +196,12 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName )
 }
 
 
+void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction )
+{
+    m_actionMgr->RunAction( &aAction );
+}
+
+
 bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 {
     wxASSERT( aTool != NULL );

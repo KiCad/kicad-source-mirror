@@ -82,6 +82,14 @@ public:
     bool RunAction( const std::string& aActionName ) const;
 
     /**
+     * Function RunAction()
+     * Prepares an appropriate event and sends it to the destination specified in a TOOL_ACTION
+     * object.
+     * @param aAction is the action to be run.
+     */
+    void RunAction( const TOOL_ACTION* aAction ) const;
+
+    /**
      * Function RunHotKey()
      * Runs an action associated with a hotkey (if there is one available).
      * @param aHotKey is the hotkey to be handled.
@@ -108,14 +116,6 @@ private:
 
     ///> Map for indexing actions by their hotkeys
     std::map<int, TOOL_ACTION*> m_actionHotKeys;
-
-    /**
-     * Function runAction()
-     * Prepares an appropriate event and sends it to the destination specified in a TOOL_ACTION
-     * object.
-     * @param aAction is the action to be run.
-     */
-    void runAction( const TOOL_ACTION* aAction ) const;
 };
 
 #endif /* ACTION_MANAGER_H_ */
