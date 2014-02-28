@@ -33,6 +33,7 @@
 #include "point_editor.h"
 
 #include <class_drawsegment.h>
+#include <class_zone.h>
 
 /**
  * Class POINT_EDITOR
@@ -52,7 +53,7 @@ public:
         {
             case PCB_LINE_T:
             {
-                DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( aItem );
+                const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( aItem );
 
                 switch( segment->GetShape() )
                 {
@@ -79,8 +80,19 @@ public:
                 default:        // suppress warnings
                     break;
                 }
+
+                break;
             }
-            break;
+
+            case PCB_ZONE_AREA_T:
+            {
+                const CPolyLine* outline = static_cast<const ZONE_CONTAINER*>( aItem )->Outline();
+
+                for( int i = 0; i < outline->GetCornersCount(); ++i )
+                    points->Add( outline->GetPos( i ) );
+
+                break;
+            }
 
             default:
                 break;
@@ -290,6 +302,21 @@ void POINT_EDITOR::updateItem() const
         default:        // suppress warnings
             break;
         }
+
+        break;
+    }
+
+    case PCB_ZONE_AREA_T:
+    {
+        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+        CPolyLine* outline = zone->Outline();
+
+        for( int i = 0; i < outline->GetCornersCount(); ++i )
+        {
+            outline->SetX( i, (*m_editPoints)[i].GetPosition().x );
+            outline->SetY( i, (*m_editPoints)[i].GetPosition().y );
+        }
+
         break;
     }
 
@@ -330,7 +357,19 @@ void POINT_EDITOR::updatePoints() const
             default:        // suppress warnings
                 break;
             }
+
+            break;
         }
+    }
+
+    case PCB_ZONE_AREA_T:
+    {
+        const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( item );
+        const CPolyLine* outline = zone->Outline();
+
+        for( int i = 0; i < outline->GetCornersCount(); ++i )
+            (*m_editPoints)[i].SetPosition( outline->GetPos( i ) );
+
         break;
     }
 
