@@ -596,26 +596,22 @@ void PCB_EDIT_FRAME::ViewReloadBoard( const BOARD* aBoard ) const
         view->Add( zone );
     }
 
-    // Add an entry for the worksheet layout
-    KIGFX::WORKSHEET_VIEWITEM* worksheet = new KIGFX::WORKSHEET_VIEWITEM(
-                                            std::string( aBoard->GetFileName().mb_str() ),
-                                            std::string( GetScreenDesc().mb_str() ),
-                                            &GetPageSettings(), &GetTitleBlock() );
+    KIGFX::WORKSHEET_VIEWITEM* worksheet = aBoard->GetWorksheetViewItem();
+    worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
+
     BASE_SCREEN* screen = GetScreen();
+
     if( screen != NULL )
     {
-        worksheet->SetSheetNumber( GetScreen()->m_ScreenNumber );
-        worksheet->SetSheetCount( GetScreen()->m_NumberOfScreens );
+        worksheet->SetSheetNumber( screen->m_ScreenNumber );
+        worksheet->SetSheetCount( screen->m_NumberOfScreens );
     }
 
     view->Add( worksheet );
+    view->Add( aBoard->GetRatsnestViewItem() );
 
-    // Add an entry for the ratsnest
-    RN_DATA* ratsnest = aBoard->GetRatsnest();
-    ratsnest->Recalculate();
-    view->Add( new KIGFX::RATSNEST_VIEWITEM( ratsnest ) );
-
-    view->SetPanBoundary( worksheet->ViewBBox() );
+    // Limit panning to the size of worksheet frame
+    view->SetPanBoundary( aBoard->GetWorksheetViewItem()->ViewBBox() );
     view->RecacheAllItems( true );
 
     if( IsGalCanvasActive() )

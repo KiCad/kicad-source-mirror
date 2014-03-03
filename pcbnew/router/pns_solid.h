@@ -32,10 +32,14 @@
 class PNS_SOLID : public PNS_ITEM
 {
 public:
-    PNS_SOLID() : PNS_ITEM( SOLID )
+    PNS_SOLID() : PNS_ITEM( SOLID ), m_shape( NULL )
     {
         m_movable = false;
-        m_shape = NULL;
+    }
+
+    ~PNS_SOLID()
+    {
+        delete m_shape;
     }
 
     PNS_ITEM* Clone() const;
