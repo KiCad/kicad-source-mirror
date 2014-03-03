@@ -41,6 +41,7 @@ public:
     static int       m_ZerosFormat;
     static bool      m_MinimalHeader;
     static bool      m_Mirror;
+    static bool      m_Merge_PTH_NPTH;
     static bool      m_DrillOriginIsAuxAxis; /* Axis selection (main / auxiliary)
                                               *  for drill origin coordinates */
     DRILL_PRECISION  m_Precision;           // Selected precision for drill files
@@ -69,15 +70,34 @@ private:
     // event functions
     void            OnSelDrillUnitsSelected( wxCommandEvent& event );
     void            OnSelZerosFmtSelected( wxCommandEvent& event );
-	void            OnGenDrillFile( wxCommandEvent& event );
-	void            OnGenMapFile( wxCommandEvent& event );
-	void            OnGenReportFile( wxCommandEvent& event );
+    void            OnGenDrillFile( wxCommandEvent& event );
+    void            OnGenMapFile( wxCommandEvent& event );
+
+    /*
+     *  Create a plain text report file giving a list of drill values and drill count
+     *  for through holes, oblong holes, and for buried vias,
+     *  drill values and drill count per layer pair
+     */
+    void            OnGenReportFile( wxCommandEvent& event );
+
     void            OnCancelClick( wxCommandEvent& event );
     void            OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
 
     // Specific functions:
     void            SetParams( void );
-    void            GenDrillAndMapFiles(bool aGenDrill, bool aGenMap);
+
+    /**
+     * Function GenDrillAndMapFiles
+     * Calls the functions to create EXCELLON drill files and/or drill map files
+     * >When all holes are through holes, only one excellon file is created.
+     * >When there are some partial holes (some blind or buried vias),
+     *  one excellon file is created, for all plated through holes,
+     *  and one file per layer pair, which have one or more holes, excluding
+     *  through holes, already in the first file.
+     *  one file for all Not Plated through holes
+     */
+    void            GenDrillAndMapFiles( bool aGenDrill, bool aGenMap );
+
     void            GenDrillMap( const wxString  aFileName,
                                  EXCELLON_WRITER& aExcellonWriter,
                                  PlotFormat      format );

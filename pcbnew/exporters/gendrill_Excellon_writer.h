@@ -135,6 +135,7 @@ private:
                                                         // (i.e inches or mm)
     bool                     m_mirror;
     wxPoint                  m_offset;                  // Drill offset ooordinates
+    bool                     m_mergePTHNPTH;
     std::vector<HOLE_INFO>   m_holeListBuffer;          // Buffer containing holes
     std::vector<DRILL_TOOL>  m_toolListBuffer;          // Buffer containing tools
 
@@ -146,6 +147,7 @@ public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
         m_conversionUnits = 0.0001;
         m_unitsDecimal    = false;
         m_mirror = false;
+        m_mergePTHNPTH = false;
         m_minimalHeader = false;
     }
 
@@ -177,11 +179,12 @@ public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
      * @param aMinimalHeader = true to use a minimal header (no comments, no info)
      * @param aOffset = drill coordinates offset
      */
-    void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset )
+    void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset, bool aMergePTHNPTH )
     {
         m_mirror = aMirror;
         m_offset = aOffset;
         m_minimalHeader = aMinimalHeader;
+        m_mergePTHNPTH = aMergePTHNPTH;
     }
 
     /**
@@ -199,7 +202,8 @@ public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
      */
     void BuildHolesList( int aFirstLayer, int aLastLayer,
                            bool aExcludeThroughHoles,
-                           bool aGenerateNPTH_list );
+                           bool aGenerateNPTH_list,
+                           bool aMergePTHNPTH );
 
     int  GetHolesCount() const { return m_holeListBuffer.size(); }
 
