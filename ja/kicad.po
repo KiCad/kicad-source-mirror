@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-03 19:03+0900\n"
-"PO-Revision-Date: 2014-03-03 20:29+0900\n"
+"PO-Revision-Date: 2014-03-04 15:11+0900\n"
 "Last-Translator: KaoruZenyouji <kaoruzen@gmail.com>\n"
 "Language-Team: KiCad JP Localize\n"
 "Language: ja_JP\n"
@@ -9182,7 +9182,7 @@ msgstr "ファイル \"%s\" を読み込みました"
 
 #: pagelayout_editor/files.cpp:111 pagelayout_editor/onrightclick.cpp:52
 msgid "Append Page Layout Descr File"
-msgstr "図枠テンプレートファイルの読み込み"
+msgstr "図枠テンプレートファイルを追加"
 
 #: pagelayout_editor/files.cpp:122 pagelayout_editor/files.cpp:148
 #, c-format
@@ -9227,11 +9227,11 @@ msgstr "新規図枠テンプレート"
 
 #: pagelayout_editor/menubar.cpp:65
 msgid "Load &Page Layout File"
-msgstr "図枠テンプレートファイルの読み込み(&P)"
+msgstr "図枠テンプレートファイルを開く(&P)"
 
 #: pagelayout_editor/menubar.cpp:68
 msgid "Load &Default Page Layout"
-msgstr "図枠テンプレートを開く"
+msgstr "標準の図枠テンプレートを開く(&D)"
 
 #: pagelayout_editor/menubar.cpp:83
 msgid "Open &Recent Page Layout File"
@@ -9388,6 +9388,7 @@ msgid ""
 "Show title block like it will be displayed in applications\n"
 "texts with format are replaced by the full text"
 msgstr ""
+"ユーザーモードで表示：\n"
 "タイトルブロックの文字列が設定されているテキスト情報に置換され\n"
 "表示されます。"
 
