@@ -282,8 +282,6 @@ int VRML_MODEL_PARSER::readAppearance( FILE* file, int* LineNum )
 }
 
 
-#define BUFSIZE 2000
-
 void VRML_MODEL_PARSER::readCoordsList( FILE* file, char* text_buffer,
                                         std::vector< double >& aList, int* LineNum )
 {
