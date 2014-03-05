@@ -324,6 +324,9 @@ PNS_ROUTER::~PNS_ROUTER()
 {
     ClearWorld();
     theRouter = NULL;
+
+    if( m_previewItems )
+        delete m_previewItems;
 }
 
 
@@ -338,13 +341,9 @@ void PNS_ROUTER::ClearWorld()
     if( m_placer )
         delete m_placer;
 
-    if( m_previewItems )
-        delete m_previewItems;
-
     m_clearanceFunc = NULL;
     m_world = NULL;
     m_placer = NULL;
-    m_previewItems = NULL;
 }
 
 
@@ -468,9 +467,10 @@ void PNS_ROUTER::EraseView()
     }
 
     if( m_previewItems )
+    {
         m_previewItems->FreeItems();
-
-    m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    }
 }
 
 
