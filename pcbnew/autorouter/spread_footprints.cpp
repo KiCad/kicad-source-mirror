@@ -266,8 +266,6 @@ void PCB_EDIT_FRAME::SpreadFootprints( bool aFootprintsOutsideBoardOnly )
                 islastItem = true;
 
             moduleListBySheet.push_back( module );
-
-            moduleListBySheet.push_back( module );
             subsurface += module->GetArea();
 
             if( islastItem )
