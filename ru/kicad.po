@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-01 17:13+0400\n"
-"PO-Revision-Date: 2014-03-01 17:26+0400\n"
+"POT-Creation-Date: 2014-03-05 21:50+0400\n"
+"PO-Revision-Date: 2014-03-05 21:55+0400\n"
 "Last-Translator: faa <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -80,7 +80,7 @@ msgstr "бит"
 msgid "Load Bitmap"
 msgstr "Загрузить Bitmap"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:93 eeschema/libeditframe.cpp:1076
+#: bitmap2component/bitmap2cmp_gui_base.cpp:93 eeschema/libeditframe.cpp:1083
 msgid "Export"
 msgstr "Экспорт"
 
@@ -371,7 +371,7 @@ msgstr ""
 "\n"
 " >> Errors ERC: %d\n"
 
-#: eeschema/controle.cpp:164 eeschema/libeditframe.cpp:1169
+#: eeschema/controle.cpp:164 eeschema/libeditframe.cpp:1176
 msgid "Clarify Selection"
 msgstr "Уточнение выбора"
 
@@ -1734,7 +1734,7 @@ msgstr "Не удалось открыть файл соответствия к�
 msgid "Component Library Editor: "
 msgstr "Редактор библиотеки компонентов: "
 
-#: eeschema/libedit.cpp:62 eeschema/schframe.cpp:1015 cvpcb/cvframe.cpp:788
+#: eeschema/libedit.cpp:62 eeschema/schframe.cpp:1022 cvpcb/cvframe.cpp:788
 #: kicad/kicad.cpp:75 kicad/prjconfig.cpp:281 pcbnew/pcbframe.cpp:1147
 #: pcbnew/moduleframe.cpp:631
 msgid " [Read Only]"
@@ -2021,7 +2021,7 @@ msgstr "Размер X"
 msgid "Size Y"
 msgstr "Размер Y"
 
-#: eeschema/schframe.cpp:453 pcbnew/pcbframe.cpp:678
+#: eeschema/schframe.cpp:460 pcbnew/pcbframe.cpp:678
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -2032,31 +2032,31 @@ msgstr ""
 "<%s>\n"
 "перед закрытием?"
 
-#: eeschema/schframe.cpp:597
+#: eeschema/schframe.cpp:604
 msgid "Draw wires and buses in any direction"
 msgstr "Цепи и шины в любом направлении"
 
-#: eeschema/schframe.cpp:598
+#: eeschema/schframe.cpp:605
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Цепи и шины только вертикально и горизонтально"
 
-#: eeschema/schframe.cpp:607
+#: eeschema/schframe.cpp:614
 msgid "Do not show hidden pins"
 msgstr "Не показывать скрытые выводы"
 
-#: eeschema/schframe.cpp:608 eeschema/tool_sch.cpp:298
+#: eeschema/schframe.cpp:615 eeschema/tool_sch.cpp:298
 msgid "Show hidden pins"
 msgstr "Показать скрытые выводы"
 
-#: eeschema/schframe.cpp:714
+#: eeschema/schframe.cpp:721
 msgid "Schematic"
 msgstr "Схема"
 
-#: eeschema/schframe.cpp:786
+#: eeschema/schframe.cpp:793
 msgid "Error: not a component or no component"
 msgstr "Ошибка: не компонент или нет компонента"
 
-#: eeschema/schframe.cpp:1018 cvpcb/cvframe.cpp:793
+#: eeschema/schframe.cpp:1025 cvpcb/cvframe.cpp:793
 msgid " [no file]"
 msgstr " [нет файла]"
 
@@ -2327,7 +2327,7 @@ msgstr "Добавить глобальную метку"
 msgid "Add hierarchical label"
 msgstr "Добавить иерархическую метку"
 
-#: eeschema/schedit.cpp:537 eeschema/libeditframe.cpp:1046
+#: eeschema/schedit.cpp:537 eeschema/libeditframe.cpp:1053
 #: pcbnew/edit.cpp:1433 pcbnew/modedit.cpp:860
 msgid "Add text"
 msgstr "Добавить текст"
@@ -2364,7 +2364,7 @@ msgstr "Добавить компонент"
 msgid "Add power"
 msgstr "Добавить питание"
 
-#: eeschema/schedit.cpp:573 eeschema/libeditframe.cpp:1088
+#: eeschema/schedit.cpp:573 eeschema/libeditframe.cpp:1095
 #: pcbnew/edit.cpp:1445 pcbnew/modedit.cpp:885
 #: eeschema/help_common_strings.h:24
 msgid "Delete item"
@@ -2489,11 +2489,11 @@ msgstr "Поле обозначения не может быть пустым! �
 msgid "The value field cannot be empty!  No change"
 msgstr "Поле значения не может быть пустым! Не изменено"
 
-#: eeschema/libeditframe.cpp:337
+#: eeschema/libeditframe.cpp:344
 msgid "Save the changes in the library before closing?"
 msgstr "Сохранить изменения в библиотеке перед закрытием?"
 
-#: eeschema/libeditframe.cpp:362
+#: eeschema/libeditframe.cpp:369
 #, c-format
 msgid ""
 "Library %s was modified!\n"
@@ -2502,40 +2502,40 @@ msgstr ""
 "Библиотека %s была изменена!\n"
 "Игнорировать изменения?"
 
-#: eeschema/libeditframe.cpp:461
+#: eeschema/libeditframe.cpp:468
 #, c-format
 msgid "Unit %s"
 msgstr "Часть %s"
 
-#: eeschema/libeditframe.cpp:1033
+#: eeschema/libeditframe.cpp:1040
 msgid "Add pin"
 msgstr "Добавить вывод"
 
-#: eeschema/libeditframe.cpp:1037
+#: eeschema/libeditframe.cpp:1044
 msgid "Set pin options"
 msgstr "Установка параметров вывода"
 
-#: eeschema/libeditframe.cpp:1050
+#: eeschema/libeditframe.cpp:1057
 msgid "Add rectangle"
 msgstr "Добавить прямоугольник"
 
-#: eeschema/libeditframe.cpp:1054 pcbnew/modedit.cpp:856
+#: eeschema/libeditframe.cpp:1061 pcbnew/modedit.cpp:856
 msgid "Add circle"
 msgstr "Добавить окружность"
 
-#: eeschema/libeditframe.cpp:1058 pcbnew/modedit.cpp:852
+#: eeschema/libeditframe.cpp:1065 pcbnew/modedit.cpp:852
 msgid "Add arc"
 msgstr "Добавить дугу"
 
-#: eeschema/libeditframe.cpp:1062 pcbnew/modedit.cpp:848
+#: eeschema/libeditframe.cpp:1069 pcbnew/modedit.cpp:848
 msgid "Add line"
 msgstr "Добавить линию"
 
-#: eeschema/libeditframe.cpp:1066
+#: eeschema/libeditframe.cpp:1073
 msgid "Set anchor position"
 msgstr "Установить позиция привязки"
 
-#: eeschema/libeditframe.cpp:1070
+#: eeschema/libeditframe.cpp:1077
 msgid "Import"
 msgstr "Импорт"
 
@@ -4013,7 +4013,7 @@ msgstr "Создать файл ERC отчета"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:368
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:171
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:85
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:187
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:190
 #: pcbnew/dialogs/dialog_drc_base.cpp:102
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:118
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1138
@@ -4437,7 +4437,7 @@ msgstr "Чертить все страницы"
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:101
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:70
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:177
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:180
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:109
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
 msgid "Close"
@@ -8695,7 +8695,7 @@ msgstr "Не удалось скопировать изображение в б�
 msgid "Can't save file"
 msgstr "Не удалось сохранить файл"
 
-#: 3d-viewer/3d_draw.cpp:233
+#: 3d-viewer/3d_draw.cpp:227
 msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
@@ -10081,7 +10081,7 @@ msgstr ""
 #: pcbnew/pcbnew_config.cpp:87 pcbnew/menubar_pcbframe.cpp:487
 #: pcbnew/dialogs/dialog_general_options.cpp:243
 msgid "Hide Microwave Toolbar"
-msgstr "Создать СВЧ панель"
+msgstr "Скрыть СВЧ панель"
 
 #: pcbnew/pcbnew_config.cpp:87 pcbnew/menubar_pcbframe.cpp:487
 #: pcbnew/dialogs/dialog_general_options.cpp:243
@@ -13048,26 +13048,26 @@ msgstr "милс"
 msgid "IDF File Units"
 msgstr "Единицы измерения в IDF файле"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:128
-#: pcbnew/dialogs/dialog_gendrill.cpp:129
+#: pcbnew/dialogs/dialog_gendrill.cpp:131
+#: pcbnew/dialogs/dialog_gendrill.cpp:132
 msgid "Use Netclasses values"
 msgstr "Использовать значение класса цепи"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:279
+#: pcbnew/dialogs/dialog_gendrill.cpp:285
 #: pcbnew/dialogs/dialog_SVG_print.cpp:182 pcbnew/dialogs/dialog_plot.cpp:321
 #: pcbnew/exporters/gen_modules_placefile.cpp:151
 #: pcbnew/exporters/gen_modules_placefile.cpp:532
 msgid "Select Output Directory"
 msgstr "Выбор выходной директории"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:286
+#: pcbnew/dialogs/dialog_gendrill.cpp:292
 #: pcbnew/dialogs/dialog_SVG_print.cpp:189 pcbnew/dialogs/dialog_plot.cpp:328
 #: pcbnew/exporters/gen_modules_placefile.cpp:158
 msgid "Use a relative path? "
 msgstr "Использовать относительный путь?"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:287
-#: pcbnew/dialogs/dialog_gendrill.cpp:297
+#: pcbnew/dialogs/dialog_gendrill.cpp:293
+#: pcbnew/dialogs/dialog_gendrill.cpp:302
 #: pcbnew/dialogs/dialog_SVG_print.cpp:190
 #: pcbnew/dialogs/dialog_SVG_print.cpp:199 pcbnew/dialogs/dialog_plot.cpp:329
 #: pcbnew/dialogs/dialog_plot.cpp:338
@@ -13076,47 +13076,46 @@ msgstr "Использовать относительный путь?"
 msgid "Plot Output Directory"
 msgstr "Выбор выходной директории"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:296
-#: pcbnew/dialogs/dialog_SVG_print.cpp:198 pcbnew/dialogs/dialog_plot.cpp:337
-#: pcbnew/exporters/gen_modules_placefile.cpp:167
+#: pcbnew/dialogs/dialog_gendrill.cpp:301
 msgid ""
-"Cannot make path relative (target volume different from board file volume)!"
+"Cannot make path relative.  The target volume is different from board file "
+"volume!"
 msgstr ""
-"Не удалось сделать путь относительным (том назначения и том платы различные)!"
+"Не удалось сделать путь относительным. Том назначения и том платы различные!"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:418
-#: pcbnew/dialogs/dialog_gendrill.cpp:523
-#: pcbnew/dialogs/dialog_gendrill.cpp:591
+#: pcbnew/dialogs/dialog_gendrill.cpp:520
+#: pcbnew/dialogs/dialog_gendrill.cpp:588
 #: pcbnew/dialogs/dialog_SVG_print.cpp:289
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Не удалось создать %s **\n"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:425
-#: pcbnew/dialogs/dialog_gendrill.cpp:598
+#: pcbnew/dialogs/dialog_gendrill.cpp:594
 #: pcbnew/dialogs/dialog_SVG_print.cpp:287
 #, c-format
 msgid "Plot: %s OK\n"
 msgstr "Черчение: %s OK\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:503
+#: pcbnew/dialogs/dialog_gendrill.cpp:500
 msgid "Save Drill Report File"
 msgstr "Сохранить отчет сверловки"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:528
+#: pcbnew/dialogs/dialog_gendrill.cpp:525
 #, c-format
 msgid "Report file %s created\n"
 msgstr "Файл отчета %s создан\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:546
+#: pcbnew/dialogs/dialog_gendrill.cpp:543
 msgid "HPGL plot files (.plt)|*.plt"
 msgstr "Плоттерные файлы HPGL (.plt)|*.plt"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:556
+#: pcbnew/dialogs/dialog_gendrill.cpp:553
 msgid "Gerber files (.pho)|*.pho"
 msgstr "Файлы Gerber (.pho)|*.pho"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:561
+#: pcbnew/dialogs/dialog_gendrill.cpp:558
 msgid "DXF files (.dxf)|*.dxf"
 msgstr "Файлы чертежей DXF (.dxf)|*.dxf"
 
@@ -14003,6 +14002,13 @@ msgstr "Дубликат имени: '%s' в строке %d и %d"
 msgid "Please Delete or Modify One"
 msgstr "Удалите или поправте один"
 
+#: pcbnew/dialogs/dialog_SVG_print.cpp:198 pcbnew/dialogs/dialog_plot.cpp:337
+#: pcbnew/exporters/gen_modules_placefile.cpp:167
+msgid ""
+"Cannot make path relative (target volume different from board file volume)!"
+msgstr ""
+"Не удалось сделать путь относительным (том назначения и том платы различные)!"
+
 #: pcbnew/dialogs/dialog_SVG_print.cpp:239 pcbnew/dialogs/dialog_plot.cpp:716
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
@@ -14101,39 +14107,39 @@ msgstr "Неверный диаметр отв. конт.пл.: отв. боль
 msgid "Error: pad has no layer and is not a mechanical pad"
 msgstr "Ошибка: контактная площадка без слоя и не механическое отверстие"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:683
-msgid "Error: pad is not on a copper layer and has a hole"
-msgstr "Ошибка: контактная площадка не на медном слое, но имеет отверстие"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:684
+msgid "Error: the pad is not on a copper layer and has a hole"
+msgstr "Ошибка: контактная площадка не на медном слое и имеет отверстие"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:688
+#: pcbnew/dialogs/dialog_pad_properties.cpp:689
 msgid ""
-"For NPTH pad, set pad drill value to pad size value,\n"
-"if you do not want this pad plotted in gerber files"
+"For NPTH pad, set pad size value to pad drill value, if you do not want this "
+"pad plotted in gerber files"
 msgstr ""
-"Для NPTH площадок, установите размер сверла равным размеру площадки,\n"
-"если не нужен вывод площадки в файлах Gerber"
+"Для NPTH контактных площадок  установите размер сверла равным размеру "
+"площадки, если не нужен вывод площадки в файлах Gerber"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:706
+#: pcbnew/dialogs/dialog_pad_properties.cpp:707
 msgid "Incorrect value for pad offset"
 msgstr "Неверное значение смещения конт.пл."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:711
+#: pcbnew/dialogs/dialog_pad_properties.cpp:712
 msgid "Too large value for pad delta size"
 msgstr "Слишком большое значение размера конт.пл."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:718
+#: pcbnew/dialogs/dialog_pad_properties.cpp:719
 msgid "Incorrect value for pad drill (too small value)"
 msgstr "Неверное значение отверстия в контактной площадке (очень маленькое)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:723
+#: pcbnew/dialogs/dialog_pad_properties.cpp:724
 msgid "Error: only one copper layer allowed for this pad"
 msgstr "Ошибка: только один медный слой разрешен для этой контактной площадки"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:735
+#: pcbnew/dialogs/dialog_pad_properties.cpp:736
 msgid "Pad setup errors list"
 msgstr "Список ошибок установок контактных площадок"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:830
+#: pcbnew/dialogs/dialog_pad_properties.cpp:831
 msgid "Unknown netname, netname not changed"
 msgstr "Неизвестное имя цепи, изменение не выполнено"
 
@@ -14565,7 +14571,7 @@ msgid "Allow micro vias"
 msgstr "Разрешить микроперех.отв."
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:180
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:144
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:147
 msgid "Micro Vias:"
 msgstr "Микроперех.отв.:"
 
@@ -15646,8 +15652,8 @@ msgid "Clear Board"
 msgstr "Очистить плату"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
-msgid "Track Filter"
-msgstr "Фильтр дорожек"
+msgid "Filter Settings"
+msgstr "Настройки фильтра"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
 msgid "Automatically routed tracks"
@@ -15658,22 +15664,30 @@ msgid "Locked tracks"
 msgstr "Заблокированные дорожки"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:64
-msgid "Normal tracks"
-msgstr "Обычные дорожки"
+msgid "Unlocked tracks"
+msgstr "Разблокированные дорожки"
+
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:72
+msgid "Locked footprints"
+msgstr "Задлокированные посадочные места"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:75
+msgid "Unlocked footprints"
+msgstr "Разблокированные посадочные места"
+
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:82
 msgid "All layers"
 msgstr "Все слои"
 
-#: pcbnew/dialogs/dialog_global_deletion_base.cpp:75
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:82
 msgid "Current layer only"
 msgstr "Только текущий слой"
 
-#: pcbnew/dialogs/dialog_global_deletion_base.cpp:77
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
 msgid "Layer Filter"
 msgstr "Фильтр по слоям"
 
-#: pcbnew/dialogs/dialog_global_deletion_base.cpp:81
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:88
 msgid "Current layer:"
 msgstr "Текущий слой:"
 
@@ -15821,72 +15835,76 @@ msgstr "Зеркалировать по оси Y"
 msgid "Minimal header"
 msgstr "Минимальный заголовок"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:91
+msgid "Merge PTH and NPTH holes into one file"
+msgstr "Вывести PTH и NPTH отверстия в один файл"
+
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:97
 msgid "Absolute"
 msgstr "Абсолютные"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:97
 msgid "Auxiliary axis"
 msgstr "Вспомогательные оси"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:96
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:99
 msgid "Drill Origin:"
 msgstr "Система координат сверловки:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:98
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:101
 msgid ""
 "Choose the coordinate origin: absolute or relative to the auxiliray axis"
 msgstr "Выбор координат: абсолютно или относительно координатных осей"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:109
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 msgid "Info:"
 msgstr "Инфо:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:111
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:114
 msgid "Default Vias Drill:"
 msgstr "Сверло перех.отв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:113
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:116
 msgid "Via Drill Value"
 msgstr "Диаметр сверла перех.отв."
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:120
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:123
 msgid "Micro Vias Drill:"
 msgstr "Сверло микроперех.отв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:122
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:125
 msgid "Micro Via Drill Value"
 msgstr "Диаметр сверла микроперех.отв."
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:130
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:133
 msgid "Holes Count:"
 msgstr "Количество отверстий:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:132
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:135
 msgid "Plated Pads:"
 msgstr "Метал.конт.пл.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:136
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:139
 msgid "Not Plated Pads:"
 msgstr "Неметал.конт.пл.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:140
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:143
 msgid "Through Vias:"
 msgstr "Сквозные перех.отв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:148
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:151
 msgid "Buried Vias:"
 msgstr "Глухие перех.отв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:167
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:170
 msgid "Drill File"
 msgstr "Файл сверловки"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:171
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:174
 msgid "Map File"
 msgstr "Файл карты"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:174
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:177
 msgid "Report File"
 msgstr "Файл отчета"
 
@@ -16217,9 +16235,9 @@ msgstr "signal — зарезервированное имя слоя"
 msgid "Layer name is a duplicate of another"
 msgstr "Имя слоя задублировано с другим"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:71
-msgid "OK to delete selected items ?"
-msgstr "Ok для удаления выделенных элементов?"
+#: pcbnew/dialogs/dialog_global_deletion.cpp:84
+msgid "Are you sure you want to delete the selected items?"
+msgstr "А Вы уверены, что хотите удалить все выделенные элементы?"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:79
 msgid "Footprint Name in Library"
@@ -18674,7 +18692,7 @@ msgstr "Свойства области запрета"
 msgid "Pads Mask Clearance"
 msgstr "Зазоры контактной площадки"
 
-#: pcbnew/dialogs/dialog_gendrill_base.h:79
+#: pcbnew/dialogs/dialog_gendrill_base.h:80
 msgid "Drill Files Generation"
 msgstr "Создание файлов сверловки"
 
@@ -18743,7 +18761,7 @@ msgstr "Параметры VRML экспорта печатной платы:"
 msgid "Global Pads Edition"
 msgstr "Глобальная правка конт.пл."
 
-#: pcbnew/dialogs/dialog_global_deletion_base.h:72
+#: pcbnew/dialogs/dialog_global_deletion_base.h:75
 msgid "Delete Items"
 msgstr "Удаление элементов"
 
@@ -18770,6 +18788,12 @@ msgstr "Калькулятор для печатных плат"
 #: pcb_calculator/dialogs/dialog_regulator_data_base.h:62
 msgid "Regulator Parameters"
 msgstr "Параметры стабилизатора"
+
+#~ msgid "Track Filter"
+#~ msgstr "Фильтр дорожек"
+
+#~ msgid "Normal tracks"
+#~ msgstr "Обычные дорожки"
 
 #~ msgid "Add a bitmap image"
 #~ msgstr "Добавить bitmap изображение"
