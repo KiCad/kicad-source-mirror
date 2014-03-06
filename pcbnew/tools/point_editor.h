@@ -69,6 +69,9 @@ private:
     ///> Updates item's points with edit points.
     void updateItem() const;
 
+    ///> Applies the last changes to the edited item.
+    void finishItem() const;
+
     ///> Updates edit points with item's points.
     void updatePoints() const;
 

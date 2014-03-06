@@ -32,6 +32,7 @@
 #include "selection_tool.h"
 #include "point_editor.h"
 
+#include <wxPcbStruct.h>
 #include <class_drawsegment.h>
 #include <class_zone.h>
 
@@ -206,6 +207,7 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 
         if( m_editPoints )
         {
+            finishItem();
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             m_toolMgr->GetView()->Remove( m_editPoints.get() );
             m_editPoints.reset();
@@ -322,6 +324,20 @@ void POINT_EDITOR::updateItem() const
 
     default:
         break;
+    }
+}
+
+
+void POINT_EDITOR::finishItem() const
+{
+    EDA_ITEM* item = m_editPoints->GetParent();
+
+    if( item->Type() == PCB_ZONE_AREA_T )
+    {
+        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+
+        if( zone->IsFilled() )
+            getEditFrame<PCB_EDIT_FRAME>()->Fill_Zone( zone );
     }
 }
 
