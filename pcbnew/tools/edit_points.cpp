@@ -39,10 +39,19 @@ EDIT_POINT* EDIT_POINTS::FindPoint( const VECTOR2I& aLocation )
 {
     float size = m_view->ToWorld( EDIT_POINT::POINT_SIZE );
 
-    std::deque<EDIT_POINT>::iterator it, itEnd;
-    for( it = m_points.begin(), itEnd = m_points.end(); it != itEnd; ++it )
+    std::deque<EDIT_POINT>::iterator pit, pitEnd;
+    for( pit = m_points.begin(), pitEnd = m_points.end(); pit != pitEnd; ++pit )
     {
-        EDIT_POINT& point = *it;
+        EDIT_POINT& point = *pit;
+
+        if( point.WithinPoint( aLocation, size ) )
+            return &point;
+    }
+
+    std::deque<EDIT_LINE>::iterator lit, litEnd;
+    for( lit = m_lines.begin(), litEnd = m_lines.end(); lit != litEnd; ++lit )
+    {
+        EDIT_LINE& point = *lit;
 
         if( point.WithinPoint( aLocation, size ) )
             return &point;
@@ -64,6 +73,9 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
 
     BOOST_FOREACH( const EDIT_POINT& point, m_points )
         aGal->DrawRectangle( point.GetPosition() - size / 2, point.GetPosition() + size / 2 );
+
+    BOOST_FOREACH( const EDIT_LINE& line, m_lines )
+        aGal->DrawRectangle( line.GetPosition() - size / 2, line.GetPosition() + size / 2 );
 
     aGal->PopDepth();
 }

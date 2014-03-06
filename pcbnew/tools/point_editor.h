@@ -75,6 +75,9 @@ private:
     ///> Updates edit points with item's points.
     void updatePoints() const;
 
+    ///> Returns a point that should be used as a constrainer for 45 degrees mode.
+    EDIT_POINT get45DegConstrainer() const;
+
     ///> Sets up handlers for various events.
     void setTransitions()
     {
