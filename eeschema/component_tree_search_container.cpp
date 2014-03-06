@@ -141,8 +141,6 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
                                                     const wxArrayString& aAliasNameList,
                                                     CMP_LIBRARY* aOptionalLib )
 {
-    static const wxChar unitLetter[] = wxT( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
-
     TREE_NODE* const lib_node = new TREE_NODE( TREE_NODE::TYPE_LIB,  NULL, NULL,
                                                aNodeName, wxEmptyString, wxEmptyString );
     nodes.push_back( lib_node );
@@ -168,9 +166,20 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
         if( !a->GetDescription().empty() )
         {
             // Preformatting. Unfortunately, the tree widget doesn't have columns
-            display_info.Printf( wxT(" %s[ %s ]"),
-                                 ( a->GetName().length() <= 8 ) ? wxT("\t\t") : wxT("\t"),
-                                 GetChars( a->GetDescription() ) );
+            // and using tabs does not work very well or does not work at all
+            // (depending on OS versions). So indent with spaces in fixed-font width.
+
+            // The 98%-ile of length of strings found in the standard library is 15
+            // characters. Use this as a reasonable cut-off point for aligned indentation.
+            // For the few component names longer than that, the description is indented a
+            // bit more.
+            // The max found in the default lib would be 20 characters, but that creates too
+            // much visible whitespace for the less extreme component names.
+            const int COLUMN_DESCR_POS = 15;
+            const int indent_len = COLUMN_DESCR_POS - a->GetName().length();
+            display_info = wxString::Format( wxT( " %*s [ %s ]" ),
+                                             indent_len > 0 ? indent_len : 0, wxT( "" ),
+                                             GetChars( a->GetDescription() ) );
         }
 
         TREE_NODE* alias_node = new TREE_NODE( TREE_NODE::TYPE_ALIAS, lib_node,
@@ -178,21 +187,28 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
         nodes.push_back( alias_node );
 
         if( a->GetComponent()->IsMulti() )    // Add all units as sub-nodes.
-            for ( int u = 0; u < a->GetComponent()->GetPartCount(); ++u )
+        {
+            for( int u = 1; u <= a->GetComponent()->GetPartCount(); ++u )
             {
-                const wxString unitName = unitLetter[u];
-                TREE_NODE* unit_node = new TREE_NODE(TREE_NODE::TYPE_UNIT, alias_node, a,
-                                                     _("Unit ") + unitName,
-                                                     wxEmptyString, wxEmptyString );
-                unit_node->Unit = u + 1;
+                wxString unitName = _("Unit");
+                unitName += wxT( " " ) + LIB_COMPONENT::ReturnSubReference( u, false );
+                TREE_NODE* unit_node = new TREE_NODE( TREE_NODE::TYPE_UNIT,
+                                                      alias_node, a,
+                                                      unitName,
+                                                      wxEmptyString, wxEmptyString );
+                unit_node->Unit = u;
                 nodes.push_back( unit_node );
             }
+        }
     }
 }
 
 
 LIB_ALIAS* COMPONENT_TREE_SEARCH_CONTAINER::GetSelectedAlias( int* aUnit )
 {
+    if( tree == NULL )
+        return NULL;
+
     const wxTreeItemId& select_id = tree->GetSelection();
 
     BOOST_FOREACH( TREE_NODE* node, nodes )

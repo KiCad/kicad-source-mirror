@@ -184,23 +184,23 @@ void PCB_EDIT_FRAME::SpreadFootprints( bool aFootprintsOutsideBoardOnly )
 
     // Build candidate list
     // calculate also the area needed by these footprints
-    MODULE* Module = GetBoard()->m_Modules;
+    MODULE* module = GetBoard()->m_Modules;
     std::vector <MODULE*> moduleList;
 
-    for( ; Module != NULL; Module = Module->Next() )
+    for( ; module != NULL; module = module->Next() )
     {
-        Module->CalculateBoundingBox();
+        module->CalculateBoundingBox();
 
         if( outsideBrdFilter )
         {
-            if( bbox.Contains( Module->GetPosition() ) )
+            if( bbox.Contains( module->GetPosition() ) )
                 continue;
         }
 
-        if( Module->IsLocked() )
+        if( module->IsLocked() )
             continue;
 
-        moduleList.push_back(Module);
+        moduleList.push_back(module);
     }
 
     if( moduleList.size() == 0 )    // Nothing to do
@@ -216,18 +216,17 @@ void PCB_EDIT_FRAME::SpreadFootprints( bool aFootprintsOutsideBoardOnly )
 
     for( unsigned ii = 0; ii < moduleList.size(); ii++ )
     {
-        Module = moduleList[ii];
+        module = moduleList[ii];
 
         // Undo: add copy of module to undo list
-        picker.SetItem( Module );
-        picker.SetLink( Module->Clone() );
+        picker.SetItem( module );
+        picker.SetLink( module->Clone() );
         undoList.PushItem( picker );
     }
 
     // Extract and place footprints by sheet
     std::vector <MODULE*> moduleListBySheet;
     std::vector <EDA_RECT> placementSheetAreas;
-    wxString curr_sheetPath ;
     double subsurface;
     double placementsurface = 0.0;
 
@@ -253,22 +252,23 @@ void PCB_EDIT_FRAME::SpreadFootprints( bool aFootprintsOutsideBoardOnly )
     for( int pass = 0; pass < 2; pass++ )
     {
         int subareaIdx = 0;
-        curr_sheetPath = moduleList[0]->GetPath().BeforeLast( '/' );
         moduleListBySheet.clear();
         subsurface = 0.0;
 
         for( unsigned ii = 0; ii < moduleList.size(); ii++ )
         {
-            Module = moduleList[ii];
-            bool iscurrPath = curr_sheetPath == moduleList[ii]->GetPath().BeforeLast( '/' );
+            module = moduleList[ii];
+            bool islastItem = false;
 
-            if( iscurrPath )
-            {
-                moduleListBySheet.push_back( Module );
-                subsurface += Module->GetArea();
-            }
+            if( ii == moduleList.size() - 1 ||
+                ( moduleList[ii]->GetPath().BeforeLast( '/' ) !=
+                  moduleList[ii+1]->GetPath().BeforeLast( '/' ) ) )
+                islastItem = true;
 
-            if( !iscurrPath || (ii == moduleList.size()-1) )
+            moduleListBySheet.push_back( module );
+            subsurface += module->GetArea();
+
+            if( islastItem )
             {
                 // end of the footprint sublist relative to the same sheet path
                 // calculate placement of the current sublist
@@ -306,14 +306,9 @@ void PCB_EDIT_FRAME::SpreadFootprints( bool aFootprintsOutsideBoardOnly )
                                         sub_area.GetHeight();
                 }
 
-                curr_sheetPath = moduleList[ii]->GetPath().BeforeLast( '/' );
+                // Prepare buffers for next sheet
                 subsurface  = 0.0;
                 moduleListBySheet.clear();
-
-                // Enter first module of next sheet
-                moduleListBySheet.push_back( Module );
-                subsurface += Module->GetArea();
-
                 subareaIdx++;
             }
         }
@@ -350,7 +345,14 @@ void PCB_EDIT_FRAME::SpreadFootprints( bool aFootprintsOutsideBoardOnly )
 }
 
 
+// Sort function, used to group footprints by sheet.
+// Footprints are sorted by their sheet path.
+// (the full sheet path restricted to the time stamp of the sheet itself,
+// without the time stamp of the footprint ).
 static bool sortModulesbySheetPath( MODULE* ref, MODULE* compare )
 {
-    return compare->GetPath().Cmp( ref->GetPath() ) < 0;
+    if( ref->GetPath().Length() == compare->GetPath().Length() )
+        return ref->GetPath().BeforeLast( '/' ).Cmp( compare->GetPath().BeforeLast( '/' ) ) < 0;
+
+    return ref->GetPath().Length() < compare->GetPath().Length();
 }

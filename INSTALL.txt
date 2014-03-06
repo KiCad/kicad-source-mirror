@@ -170,6 +170,9 @@ build directory.
 Important parameters to cmake
 -----------------------------
 
+See Documentation/compiling/build-config.txt for a list of all CMake options
+available when compiling KiCad.
+
 -DCMAKE_BUILD_TYPE=<buildtype>
 <buildtype> may current one of "Debug" and "Release".
 

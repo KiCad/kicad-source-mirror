@@ -66,7 +66,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Open
     AddMenuItem( filesMenu,
                  ID_LOAD_PROJECT,
-                 _( "&Open" ), LOAD_FILE_HELP, KiBitmap( open_document_xpm ) );
+                 _( "&Open Netlist" ), LOAD_FILE_HELP, KiBitmap( open_document_xpm ) );
 
     // Open Recent submenu
     static wxMenu* openRecentMenu;
@@ -81,7 +81,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     wxGetApp().GetFileHistory().AddFilesToMenu();
     AddMenuItem( filesMenu, openRecentMenu, -1,
                  _( "Open &Recent" ),
-                 _( "Open a recent opened netlist document" ),
+                 _( "Open recent netlist" ),
                  KiBitmap( open_project_xpm ) );
 
     // Separator
@@ -111,7 +111,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     wxMenu* preferencesMenu = new wxMenu;
 
     AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
-                 _( "Li&brary Tables" ), _( "Setup footprint libraries" ),
+                 _( "Edit Li&brary Table" ), _( "Setup footprint libraries" ),
                  KiBitmap( library_table_xpm ) );
 
     // Language submenu
@@ -134,7 +134,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     AddMenuItem( preferencesMenu, ID_SAVE_PROJECT_AS,
                  _( "&Save Project File As" ),
-                 _( "Save changes to the project configuration to a new file" ),
+                 _( "Save changes to a new project configuration file" ),
                  KiBitmap( save_setup_xpm ) );
 
     // Menu Help:
@@ -143,12 +143,12 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Version info
     AddHelpVersionInfoMenuEntry( helpMenu );
 
-    // Contents
-    AddMenuItem( helpMenu, wxID_HELP, _( "&Contents" ),
-                 _( "Open the CvPcb handbook" ),
+    // Manual Contents
+    AddMenuItem( helpMenu, wxID_HELP, _( "&CvPcb Manual" ),
+                 _( "Open CvPcb manual" ),
                  KiBitmap( online_help_xpm ) );
 
-    // About
+    // About CvPcb
     AddMenuItem( helpMenu, wxID_ABOUT,
                  _( "&About CvPcb" ),
                  _( "About CvPcb footprint selector" ),

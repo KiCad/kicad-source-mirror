@@ -38,9 +38,6 @@
 #include "3d_struct.h"
 #include "modelparsers.h"
 
-// Imported function:
-extern void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
-
 
 S3D_MODEL_PARSER* S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster,
                                             const wxString aExtension )
@@ -96,9 +93,7 @@ const wxString S3D_MASTER::GetShape3DFullFilename()
 int S3D_MASTER::ReadData()
 {
     if( m_Shape3DName.IsEmpty() )
-    {
         return 1;
-    }
 
     wxString filename = GetShape3DFullFilename();
 
@@ -131,18 +126,6 @@ int S3D_MASTER::ReadData()
     else
     {
         wxLogDebug( wxT( "Unknown file type '%s'" ), GetChars( extension ) );
-    }
-
-    return -1;
-}
-
-
-int STRUCT_3D_SHAPE::ReadData( FILE* file, int* LineNum )
-{
-    char line[512];
-
-    while( GetLine( file, line, LineNum, 512 ) )
-    {
     }
 
     return -1;

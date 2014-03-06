@@ -338,7 +338,7 @@
                         <event name="OnEnterWindow"></event>
                         <event name="OnEraseBackground"></event>
                         <event name="OnKeyDown"></event>
-                        <event name="OnKeyUp"></event>
+                        <event name="OnKeyUp">OnInterceptTreeEnter</event>
                         <event name="OnKillFocus"></event>
                         <event name="OnLeaveWindow"></event>
                         <event name="OnLeftDClick"></event>
@@ -363,7 +363,7 @@
                         <event name="OnTreeEndDrag"></event>
                         <event name="OnTreeEndLabelEdit"></event>
                         <event name="OnTreeGetInfo"></event>
-                        <event name="OnTreeItemActivated">OnDoubleClickTreeSelect</event>
+                        <event name="OnTreeItemActivated">OnDoubleClickTreeActivation</event>
                         <event name="OnTreeItemCollapsed"></event>
                         <event name="OnTreeItemCollapsing"></event>
                         <event name="OnTreeItemExpanded"></event>

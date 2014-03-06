@@ -47,19 +47,29 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( wxWindow* aParent, const wxStr
     m_search_container->SetTree( m_libraryComponentTree );
     m_searchBox->SetFocus();
     m_componentDetails->SetEditable( false );
+
+#if wxCHECK_VERSION( 3, 0, 0  )
+    m_libraryComponentTree->ScrollTo( m_libraryComponentTree->GetFocusedItem() );
+#endif
+
+    // The tree showing libs and component uses a fixed font,
+    // because we want controle the position of some info when drawing the
+    // tree. Using tabs does not work very well (does not work on Windows)
+    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    m_libraryComponentTree->SetFont( wxFont( font.GetPointSize(),
+             wxFONTFAMILY_MODERN,  wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ) );
 }
 
 
-// After this dialog is done: return the alias that has been selected, or an
-// empty string if there is none.
-wxString DIALOG_CHOOSE_COMPONENT::GetSelectedAliasName( int* aUnit ) const
+DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
 {
-    LIB_ALIAS *alias = m_search_container->GetSelectedAlias( aUnit );
+    m_search_container->SetTree( NULL );
+}
 
-    if( alias )
-        return alias->GetName();
 
-    return wxEmptyString;
+LIB_ALIAS* DIALOG_CHOOSE_COMPONENT::GetSelectedAlias( int* aUnit ) const
+{
+    return m_search_container->GetSelectedAlias( aUnit );
 }
 
 
@@ -131,7 +141,11 @@ void DIALOG_CHOOSE_COMPONENT::OnTreeSelect( wxTreeEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnDoubleClickTreeSelect( wxTreeEvent& aEvent )
+// Test strategy for OnDoubleClickTreeActivation()/OnTreeMouseUp() work around wxWidgets bug:
+//  - search for an item.
+//  - use the mouse to double-click on an item in the tree.
+//  -> The dialog should close, and the component should _not_ be immediately placed
+void DIALOG_CHOOSE_COMPONENT::OnDoubleClickTreeActivation( wxTreeEvent& aEvent )
 {
     if( !updateSelection() )
         return;
@@ -150,6 +164,27 @@ void DIALOG_CHOOSE_COMPONENT::OnTreeMouseUp( wxMouseEvent& aMouseEvent )
         EndModal( wxID_OK );     // We are done (see OnDoubleClickTreeSelect)
     else
         aMouseEvent.Skip();      // Let upstream handle it.
+}
+
+// Test strategy to see if OnInterceptTreeEnter() works:
+//  - search for an item.
+//  - click into the tree once to set focus on tree; navigate. Press 'Enter'
+//  -> The dialog should close and the component be available to place.
+void DIALOG_CHOOSE_COMPONENT::OnInterceptTreeEnter( wxKeyEvent& aEvent )
+{
+    // We have to do some special handling for double-click on a tree-item because
+    // of some superfluous event delivery bug in wxWidgets (see OnDoubleClickTreeActivation()).
+    // In tree-activation, we assume we got a double-click and need to take special precaution
+    // that the mouse-up event is not delivered to the window one level up by going through
+    // a state-sequence OnDoubleClickTreeActivation() -> OnTreeMouseUp().
+
+    // Pressing 'Enter' within a tree will also call OnDoubleClickTreeActivation(),
+    // but since this is not due to the double-click and we have no way of knowing that it is
+    // not, we need to intercept the 'Enter' key before that to know that it is time to exit.
+    if( aEvent.GetKeyCode() == WXK_RETURN )
+        EndModal( wxID_OK );    // Dialog is done.
+    else
+        aEvent.Skip();          // Let tree handle that key for navigation.
 }
 
 
