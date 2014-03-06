@@ -18,6 +18,10 @@ add_executable( dxf2idf dxf2idfmain.cpp dxf2idf.cpp
     "${CMAKE_SOURCE_DIR}/common/richio.cpp"
   )
 
+add_dependencies( idfcyl lib-dependencies )
+add_dependencies( idfrect lib-dependencies )
+add_dependencies( dxf2idf lib-dependencies )
+
 target_link_libraries( dxf2idf lib_dxf ${wxWidgets_LIBRARIES} )
 
 install( TARGETS idfcyl idfrect dxf2idf

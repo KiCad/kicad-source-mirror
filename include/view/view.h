@@ -608,7 +608,7 @@ private:
     void clearGroupCache();
 
     /**
-     * Function InvalidateItem()
+     * Function invalidateItem()
      * Manages dirty flags & redraw queueing when updating an item.
      * @param aItem is the item to be updated.
      * @param aUpdateFlags determines the way an item is refreshed.

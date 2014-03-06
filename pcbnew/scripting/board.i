@@ -29,7 +29,7 @@
 
 
 %extend BOARD
-{ 
+{
   %pythoncode
   {
     def GetModules(self):             return self.m_Modules
@@ -42,35 +42,35 @@
     def GetCurrentNetClassName(self): return self.m_CurrentNetClassName
     def GetViasDimensionsList(self):  return self.m_ViasDimensionsList
     def GetTrackWidthList(self):      return self.m_TrackWidthList
-    
+
     def Save(self,filename,format = None):
       if format is None:
         str_filename = str(filename)
         if str_filename.endswith(".brd"):
           format = IO_MGR.LEGACY
-        if str_filename.endswith(".kicad_brd"):
-          format = IO_MGR.KICAD	  
+        if str_filename.endswith(".kicad_pcb"):
+          format = IO_MGR.KICAD
       return SaveBoard(filename,self,format)
-        
+
     #
     # add function, clears the thisown to avoid python from deleting
     # the object in the garbage collector
     #
-    
-    def Add(self,item): 
+
+    def Add(self,item):
     	item.thisown=0
     	self.AddNative(item)
   }
-  
+
 }
 
-// this is to help python with the * accessor of DLIST templates 
+// this is to help python with the * accessor of DLIST templates
 
-%rename(Get) operator BOARD_ITEM*; 
-%rename(Get) operator TRACK*; 
-%rename(Get) operator D_PAD*; 
-%rename(Get) operator MODULE*; 
-%rename(Get) operator SEGZONE*; 
+%rename(Get) operator BOARD_ITEM*;
+%rename(Get) operator TRACK*;
+%rename(Get) operator D_PAD*;
+%rename(Get) operator MODULE*;
+%rename(Get) operator SEGZONE*;
 
 
 // we must translate C++ templates to scripting languages
@@ -81,14 +81,14 @@
 %template(TRACK_List)      DLIST<TRACK>;
 %template(PAD_List)        DLIST<D_PAD>;
 
-// std::vector templates  
+// std::vector templates
 
 %template(VIA_DIMENSION_Vector) std::vector<VIA_DIMENSION>;
 %template (RASTNET_Vector) std::vector<RATSNEST_ITEM>;
 
 %extend DRAWSEGMENT
 {
-	%pythoncode 
+	%pythoncode
 	{
 		def GetShapeStr(self):
 			return self.ShowShape(self.GetShape())
@@ -102,7 +102,7 @@
 		def SetPos(self,p):
 			self.SetPosition(p)
 			self.SetPos0(p)
-                
+
 		def SetStartEnd(self,start,end):
 			self.SetStart(start)
 			self.SetStart0(start)

@@ -97,6 +97,9 @@ protected:
 
     /// The file name of the the program selected for browsing pdf files.
     wxString            m_PdfBrowser;
+    /// true to use the selected PDF browser, if exists, or false to use the default
+    bool                m_useSystemPdfBrowser;
+
     wxPathList          m_searchPaths;
     wxFileHistory       m_fileHistory;
     wxString            m_HelpFileName;
@@ -150,11 +153,29 @@ public:
 
     wxLocale* GetLocale() { return m_Locale; }
 
+    /**
+     * @return the full file name of the prefered PDF browser
+     * ( the file name is empty if no prefered there is no PDF browser selected
+     */
     wxString GetPdfBrowserFileName() const { return m_PdfBrowser; }
 
+    /**
+     * Set the name of a prefered PDF browser, which could be an alternate browser
+     * to the system PDF browser.
+     */
     void SetPdfBrowserFileName( const wxString& aFileName ) { m_PdfBrowser = aFileName; }
 
-    bool UseSystemPdfBrowser() const { return m_PdfBrowser.IsEmpty(); }
+    /**
+     * @return true if the PDF browser is the default (system) PDF browser
+     * and false if the PDF browser is the prefered (selected) browser
+     * returns false if there is no selected browser
+     */
+    bool UseSystemPdfBrowser() const { return m_useSystemPdfBrowser || m_PdfBrowser.IsEmpty(); }
+
+    /**
+     * force the use of system PDF browser, even if a preferend PDF browser is set
+     */
+    void ForceSystemPdfBrowser( bool aFlg ) { m_useSystemPdfBrowser = aFlg; }
 
     wxFileHistory& GetFileHistory() { return m_fileHistory; }
 
@@ -434,6 +455,26 @@ public:
      * @return false if the KISYSMOD path is not valid.
      */
     bool SetFootprintLibTablePath();
+
+    /**
+     * Function Set3DShapesPath
+     * attempts set the environment variable given by aKiSys3Dmod to a valid path.
+     * (typically "KISYS3DMOD" )
+     * If the environment variable is already set,
+     * then it left as is to respect the wishes of the user.
+     *
+     * The path is determined by attempting to find the path modules/packages3d
+     * files in kicad tree.
+     * This may or may not be the best path but it provides the best solution for
+     * backwards compatibility with the previous 3D shapes search path implementation.
+     *
+     * @note This must be called after #SetBinDir() is called at least on Windows.
+     * Otherwise, the kicad path is not known (Windows specific)
+     *
+     * @param aKiSys3Dmod = the value of environment variable, typically "KISYS3DMOD"
+     * @return false if the aKiSys3Dmod path is not valid.
+     */
+    bool Set3DShapesPath( const wxString& aKiSys3Dmod );
 
     const wxString& GetModuleLibraryNickname()                  { return m_module_nickname; }
     void SetModuleLibraryNickname( const wxString& aNickname )  { m_module_nickname = aNickname; }

@@ -31,7 +31,7 @@ class PAGE_INFO;
 class TITLE_BLOCK;
 class LIB_VIEW_FRAME;
 class LIB_EDIT_FRAME;
-
+class LIB_ALIAS;
 
 /**
  * Class SCH_BASE_FRAME
@@ -80,29 +80,38 @@ protected:
      * Calls the library viewer to select component to import into schematic.
      * if the library viewer is currently running, it is closed and reopened
      * in modal mode.
+     * @param aPreslectedAlias Preselected component alias. NULL if none.
+     * @param aUnit            Pointer to Unit-number. Input is the pre-selected unit, output
+     *                         is the finally selected unit by the user. Can be NULL.
+     * @param aConvert         Pointer to deMorgan conversion. Input is what is pre-selected,
+     *                         output is the finally selected deMorgan type by the user.
      * @return the component name
      */
-    wxString SelectComponentFromLibBrowser( void );
+    wxString SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedAlias,
+                                            int* aUnit, int* aConvert );
 
     /**
      * Function SelectComponentFromLib
      * Calls the library viewer to select component to import into schematic.
      * if the library viewer is currently running, it is closed and reopened
      * in modal mode.
-     * @param aLibname = the lib name or an empty string.
-     *     if aLibname is empty, the full list of libraries is used
-     * @param aHistoryList = list of previously loaded components
-     * @param aUseLibBrowser = bool to call the library viewer to select the component
-     * @param aUnit = a point to int to return the selected unit (if any)
-     * @param aConvert = a point to int to return the selected De Morgan shape (if any)
+     * @param aLibname           the lib name or an empty string.
+     *                              if aLibname is empty, the full list of libraries is used
+     * @param aHistoryList       list of previously loaded components
+     * @param aHistoryLastUnit   remembering last unit in last component.
+     * @param aUseLibBrowser     bool to call the library viewer to select the component
+     * @param aUnit              a pointer to int to return the selected unit (if any)
+     * @param aConvert           a pointer to int to return the selected De Morgan shape (if any)
      *
      * @return the component name
      */
     wxString SelectComponentFromLibrary( const wxString& aLibname,
                                          wxArrayString&  aHistoryList,
+                                         int&            aHistoryLastUnit,
                                          bool            aUseLibBrowser,
                                          int*            aUnit,
                                          int*            aConvert );
+
 
     /**
      * Function OnOpenLibraryViewer

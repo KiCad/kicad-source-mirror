@@ -117,12 +117,7 @@ public:
     S3D_MASTER* Next() const { return (S3D_MASTER*) Pnext; }
     S3D_MASTER* Back() const { return (S3D_MASTER*) Pback; }
 
-    void Insert( S3D_MATERIAL* aMaterial )
-    {
-        aMaterial->SetNext( m_Materials );
-        m_Materials = aMaterial;
-    }
-
+    void Insert( S3D_MATERIAL* aMaterial );
 
     void Copy( S3D_MASTER* pattern );
     int  ReadData();
@@ -144,6 +139,14 @@ public:
         return m_Shape3DName;
     }
 
+    /**
+     * Function GetShape3DFullFilename
+     * @return the full filename of the 3D shape,
+     * expanding environment variable (if any ) and/or adding default 3D path
+     * given by environment variable KISYS3DMOD
+     */
+    const wxString GetShape3DFullFilename();
+
     void SetShape3DName( const wxString& aShapeName );
 };
 
@@ -162,8 +165,6 @@ public:
 
     STRUCT_3D_SHAPE* Next() const { return (STRUCT_3D_SHAPE*) Pnext; }
     STRUCT_3D_SHAPE* Back() const { return (STRUCT_3D_SHAPE*) Pback; }
-
-    int ReadData( FILE* file, int* LineNum );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override

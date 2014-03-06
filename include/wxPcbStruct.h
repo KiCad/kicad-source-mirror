@@ -273,6 +273,7 @@ public:
     void OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent );
     void OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
 
     /**
      * Function RecordMacros.

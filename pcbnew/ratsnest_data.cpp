@@ -140,10 +140,18 @@ std::vector<RN_EDGE_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
             cycles[srcTag].splice( cycles[srcTag].end(), cycles[trgTag] );
 
             if( dt->getWeight() == 0 )      // Skip already existing connections (weight == 0)
+            {
                 mstExpectedSize--;
+            }
             else
             {
-                mst->push_back( dt );
+                // Do a copy of edge, but make it RN_EDGE_MST. In contrary to RN_EDGE,
+                // RN_EDGE_MST saves both source and target node and does not require any other
+                // edges to exist for getting source/target nodes
+                RN_EDGE_MST_PTR newEdge = boost::make_shared<RN_EDGE_MST>( dt->getSourceNode(),
+                                                                           dt->getTargetNode(),
+                                                                           dt->getWeight() );
+                mst->push_back( newEdge );
                 ++mstSize;
             }
         }
@@ -414,7 +422,7 @@ void RN_NET::AddItem( const ZONE_CONTAINER* aZone )
     // Origin and end of bounding box for a polygon
     VECTOR2I origin( polyPoints[0].x, polyPoints[0].y );
     VECTOR2I end( polyPoints[0].x, polyPoints[0].y );
-    int idxStart = 0;
+    unsigned int idxStart = 0;
 
     // Extract polygons from zones
     for( unsigned int i = 0; i < polyPoints.size(); ++i )
@@ -440,10 +448,14 @@ void RN_NET::AddItem( const ZONE_CONTAINER* aZone )
                                              m_links, BOX2I( origin, end - origin ) ) );
 
             idxStart = i + 1;
-            origin.x = polyPoints[idxStart].x;
-            origin.y = polyPoints[idxStart].y;
-            end.x = polyPoints[idxStart].x;
-            end.y = polyPoints[idxStart].y;
+
+            if( idxStart < polyPoints.size() )
+            {
+                origin.x = polyPoints[idxStart].x;
+                origin.y = polyPoints[idxStart].y;
+                end.x = polyPoints[idxStart].x;
+                end.y = polyPoints[idxStart].y;
+            }
         }
     }
 
@@ -940,26 +952,41 @@ void RN_DATA::ProcessBoard()
 {
     m_nets.clear();
     m_nets.resize( m_board->GetNetCount() );
+    int netCode;
 
     // Iterate over all items that may need to be connected
     for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
     {
         for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-            m_nets[pad->GetNetCode()].AddItem( pad );
+        {
+            netCode = pad->GetNetCode();
+
+            if( netCode > 0 )
+                m_nets[netCode].AddItem( pad );
+        }
     }
 
     for( TRACK* track = m_board->m_Track; track; track = track->Next() )
     {
-        if( track->Type() == PCB_VIA_T )
-            m_nets[track->GetNetCode()].AddItem( static_cast<SEGVIA*>( track ) );
-        else if( track->Type() == PCB_TRACE_T )
-            m_nets[track->GetNetCode()].AddItem( track );
+        netCode = track->GetNetCode();
+
+        if( netCode > 0 )
+        {
+            if( track->Type() == PCB_VIA_T )
+                m_nets[netCode].AddItem( static_cast<SEGVIA*>( track ) );
+            else if( track->Type() == PCB_TRACE_T )
+                m_nets[netCode].AddItem( track );
+        }
     }
 
     for( int i = 0; i < m_board->GetAreaCount(); ++i )
     {
         ZONE_CONTAINER* zone = m_board->GetArea( i );
-        m_nets[zone->GetNetCode()].AddItem( zone );
+
+        netCode = zone->GetNetCode();
+
+        if( netCode > 0 )
+            m_nets[netCode].AddItem( zone );
     }
 }
 
@@ -972,21 +999,19 @@ void RN_DATA::Recalculate( int aNet )
         netCount = m_board->GetNetCount();
 
 #ifdef USE_OPENMP
-        unsigned int chunk = 1, tid;
-        #pragma omp parallel shared(chunk, netCount) private(i, tid)
+        #pragma omp parallel shared(netCount) private(i)
         {
-            tid = omp_get_thread_num();
-            #pragma omp for schedule(guided, chunk)
+            #pragma omp for schedule(guided, 1)
 #else /* USE_OPENMP */
         {
 #endif
-            // Start with net number 1, as 0 stand for not connected
+            // Start with net number 1, as 0 stands for not connected
             for( i = 1; i < netCount; ++i )
             {
                 if( m_nets[i].IsDirty() )
                     updateNet( i );
             }
-       }  /* end of parallel section */
+        }  /* end of parallel section */
     }
     else if( aNet > 0 )         // Recompute only specific net
     {

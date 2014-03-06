@@ -38,9 +38,6 @@
 #include "3d_struct.h"
 #include "modelparsers.h"
 
-// Imported function:
-extern void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
-
 
 S3D_MODEL_PARSER* S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster,
                                             const wxString aExtension )
@@ -59,16 +56,46 @@ S3D_MODEL_PARSER* S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster,
     }
 }
 
+const wxString S3D_MASTER::GetShape3DFullFilename()
+{
+
+    wxString shapeName;
+
+    // Expand any environment variables embedded in footprint's m_Shape3DName field.
+    // To ensure compatibility with most of footprint's m_Shape3DName field,
+    // if the m_Shape3DName is not an absolute path the default path
+    // given by the environment variable KISYS3DMOD will be used
+
+    if( m_Shape3DName.StartsWith( wxT("${") ) )
+        shapeName = wxExpandEnvVars( m_Shape3DName );
+    else
+        shapeName = m_Shape3DName;
+
+    wxFileName fn( shapeName );
+
+    if( fn.IsAbsolute() || shapeName.StartsWith( wxT(".") ) )
+        return shapeName;
+
+    wxString default_path;
+    wxGetEnv( wxT( KISYS3DMOD ), &default_path );
+
+    if( default_path.IsEmpty() )
+        return shapeName;
+
+    if( !default_path.EndsWith( wxT("/") ) && !default_path.EndsWith( wxT("\\") ) )
+        default_path += wxT("/");
+
+    default_path += shapeName;
+
+    return default_path;
+}
 
 int S3D_MASTER::ReadData()
 {
     if( m_Shape3DName.IsEmpty() )
-    {
         return 1;
-    }
 
-    // Expand any environment variables embedded in footprint's m_Shape3DName field.
-    wxString filename = wxExpandEnvVars( m_Shape3DName );
+    wxString filename = GetShape3DFullFilename();
 
 #ifdef __WINDOWS__
     filename.Replace( wxT( "/" ), wxT( "\\" ) );
@@ -99,18 +126,6 @@ int S3D_MASTER::ReadData()
     else
     {
         wxLogDebug( wxT( "Unknown file type '%s'" ), GetChars( extension ) );
-    }
-
-    return -1;
-}
-
-
-int STRUCT_3D_SHAPE::ReadData( FILE* file, int* LineNum )
-{
-    char line[512];
-
-    while( GetLine( file, line, LineNum, 512 ) )
-    {
     }
 
     return -1;

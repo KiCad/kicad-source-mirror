@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -216,7 +216,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         if( item->IsNew() )
         {
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_END_CREATE_ITEM, _( "Line End" ),
-                         KiBitmap( apply_xpm ) );
+                         KiBitmap( checked_ok_xpm ) );
         }
 
         msg = AddHotkeyName( _( "Edit Line Options" ), s_Libedit_Hokeys_Descr, HK_EDIT );
@@ -328,7 +328,7 @@ void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
 
     PopMenu->AppendSeparator();
 
-    AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), KiBitmap( apply_xpm ) );
+    AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), KiBitmap( checked_ok_xpm ) );
 
     if( frame->GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE )
     {

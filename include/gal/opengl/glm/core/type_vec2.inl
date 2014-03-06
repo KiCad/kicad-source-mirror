@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Mathematics (glm.g-truc.net)
 ///
-/// Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -204,10 +204,7 @@ namespace detail
 
 	template <typename T>
 	template <typename U> 
-	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator+=
-	(
-		U const & s
-	)
+	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator+=(U s)
 	{
 		this->x += T(s);
 		this->y += T(s);
@@ -228,10 +225,7 @@ namespace detail
 
 	template <typename T>
 	template <typename U> 
-	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator-=
-	(
-		U const & s
-	)
+	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator-=(U s)
 	{
 		this->x -= T(s);
 		this->y -= T(s);
@@ -252,10 +246,7 @@ namespace detail
 
 	template <typename T>
 	template <typename U> 
-	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator*=
-	(
-		U const & s
-	)
+	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator*=(U s)
 	{
 		this->x *= T(s);
 		this->y *= T(s);
@@ -276,10 +267,7 @@ namespace detail
 
 	template <typename T>
 	template <typename U> 
-	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator/=
-	(
-		U const & s
-	)
+	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator/=(U s)
 	{
 		this->x /= T(s);
 		this->y /= T(s);
@@ -342,10 +330,7 @@ namespace detail
 
 	template <typename T>
 	template <typename U> 
-	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator%=
-	(
-		U const & s
-	)
+	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator%=(U s)
 	{
 		this->x %= T(s);
 		this->y %= T(s);
@@ -366,10 +351,7 @@ namespace detail
 
 	template <typename T>
 	template <typename U> 
-	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator&=
-	(
-		U const & s
-	)
+	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator&=(U s)
 	{
 		this->x &= T(s);
 		this->y &= T(s);
@@ -390,10 +372,7 @@ namespace detail
 
 	template <typename T>
 	template <typename U> 
-	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator|=
-	(
-		U const & s
-	)
+	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator|=(U s)
 	{
 		this->x |= T(s);
 		this->y |= T(s);
@@ -414,10 +393,7 @@ namespace detail
 
 	template <typename T>
 	template <typename U> 
-	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator^=
-	(
-		U const & s
-	)
+	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator^=(U s)
 	{
 		this->x ^= T(s);
 		this->y ^= T(s);
@@ -438,10 +414,7 @@ namespace detail
 
 	template <typename T>
 	template <typename U> 
-	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator<<=
-	(
-		U const & s
-	)
+	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator<<=(U s)
 	{
 		this->x <<= T(s);
 		this->y <<= T(s);
@@ -462,10 +435,7 @@ namespace detail
 
 	template <typename T>
 	template <typename U> 
-	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator>>=
-	(
-		U const & s
-	)
+	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator>>=(U s)
 	{
 		this->x >>= T(s);
 		this->y >>= T(s);

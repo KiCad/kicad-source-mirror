@@ -13,55 +13,54 @@
  */
 
 // Common to schematic editor and component editor
-#define HELP_UNDO _( "Undo last edition" )
-#define HELP_REDO _( "Redo the last undo command" )
+#define HELP_UNDO _( "Undo last command" )
+#define HELP_REDO _( "Redo last command" )
 
 #define HELP_ZOOM_IN     _( "Zoom in" )
 #define HELP_ZOOM_OUT    _( "Zoom out" )
-#define HELP_ZOOM_FIT    _( "Fit the schematic sheet on the screen" )
-#define HELP_ZOOM_REDRAW _( "Redraw the schematic view" )
+#define HELP_ZOOM_FIT    _( "Fit schematic sheet on screen" )
+#define HELP_ZOOM_REDRAW _( "Redraw schematic view" )
 
-#define HELP_DELETE_ITEMS         _( "Delete items" )
+#define HELP_DELETE_ITEMS         _( "Delete item" )
 
 // Schematic editor:
-#define HELP_FIND _( "Find components and texts" )
+#define HELP_FIND _( "Find components and text" )
 #define HELP_REPLACE _( "Find and replace text in schematic items" )
-#define HELP_PLACE_COMPONENTS     _( "Place a component" )
-#define HELP_PLACE_POWERPORT      _( "Place a power port" )
-#define HELP_PLACE_WIRE           _( "Place a wire" )
-#define HELP_PLACE_BUS            _( "Place a bus" )
-#define HELP_PLACE_WIRE2BUS_ENTRY _( "Place a wire to bus entry" )
-#define HELP_PLACE_BUS2BUS_ENTRY  _( "Place a bus to bus entry" )
-#define HELP_PLACE_NC_FLAG        _( "Place a no connect flag" )
+#define HELP_PLACE_COMPONENTS     _( "Place component" )
+#define HELP_PLACE_POWERPORT      _( "Place power port" )
+#define HELP_PLACE_WIRE           _( "Place wire" )
+#define HELP_PLACE_BUS            _( "Place bus" )
+#define HELP_PLACE_WIRE2BUS_ENTRY _( "Place wire to bus entry" )
+#define HELP_PLACE_BUS2BUS_ENTRY  _( "Place bus to bus entry" )
+#define HELP_PLACE_NC_FLAG        _( "Place not-connected flag" )
 
-#define HELP_PLACE_NETLABEL _( "Place a net name (local label)" )
+#define HELP_PLACE_NETLABEL _( "Place net name - local label" )
 #define HELP_PLACE_GLOBALLABEL \
     _(\
-        "Place a global label.\nWarning: all global labels with the same name are connected in whole hierarchy" )
+        "Place global label.\nWarning: inside global hierarchy , all global labels with same name are connected" )
 #define HELP_PLACE_HIER_LABEL \
-    _( "Place a hierarchical label. This label will be seen as a hierarchical pin in the sheet symbol" )
+    _( "Place a hierarchical label. Label will be seen as a hierarchical pin in the sheet symbol" )
 
-#define HELP_PLACE_JUNCTION     _( "Place a junction" )
-#define HELP_PLACE_SHEET        _( "Create a hierarchical sheet" )
+#define HELP_PLACE_JUNCTION     _( "Place junction" )
+#define HELP_PLACE_SHEET        _( "Create hierarchical sheet" )
 #define HELP_IMPORT_SHEETPIN    _( \
-        "Place a hierarchical pin imported from the corresponding hierarchical label in sheet" )
-#define HELP_PLACE_SHEETPIN     _( "Place a hierarchical pin in sheet" )
+        "Place hierarchical pin imported from the corresponding hierarchical label" )
+#define HELP_PLACE_SHEETPIN     _( "Place hierarchical pin in sheet" )
 #define HELP_PLACE_GRAPHICLINES _( "Place graphic lines or polygons" )
-#define HELP_PLACE_GRAPHICTEXTS _( "Place graphic text (comment)" )
+#define HELP_PLACE_GRAPHICTEXTS _( "Place text" )
 
-#define HELP_ANNOTATE _( "Annotate the components in the schematic" )
-#define HELP_RUN_LIB_EDITOR _( "Library editor - Create and edit components" )
-#define HELP_RUN_LIB_VIEWER _( "Library browser - Browse components" )
+#define HELP_ANNOTATE _( "Annotate schematic components" )
+#define HELP_RUN_LIB_EDITOR _( "Library Editor - Create/edit components" )
+#define HELP_RUN_LIB_VIEWER _( "Library Browser - Browse components" )
 #define HELP_GENERATE_BOM _( "Generate bill of materials and/or cross references" )
 #define HELP_IMPORT_FOOTPRINTS \
-    _( "Import the footprint selection from CvPcb (the .cmp file)\n\
-in component footprint fields" )
+    _( "Back-import component footprint fields via CvPcb .cmp file" )
 
 // Component editor:
-#define HELP_ADD_PIN _( "Add pins to the component" )
-#define HELP_ADD_BODYTEXT _( "Add graphic texts to the component body" )
-#define HELP_ADD_BODYRECT _( "Add graphic rectangles to the component body" )
-#define HELP_ADD_BODYCIRCLE _( "Add circles to the component body" )
-#define HELP_ADD_BODYARC _( "Add arcs to the component body" )
-#define HELP_ADD_BODYPOLYGON _( "Add lines and polygons to the component body" )
-#define HELP_PLACE_GRAPHICIMAGES _("Add a bitmap image")
+#define HELP_ADD_PIN _( "Add pins to component" )
+#define HELP_ADD_BODYTEXT _( "Add text to component body" )
+#define HELP_ADD_BODYRECT _( "Add graphic rectangle to component body" )
+#define HELP_ADD_BODYCIRCLE _( "Add circles to component body" )
+#define HELP_ADD_BODYARC _( "Add arcs to component body" )
+#define HELP_ADD_BODYPOLYGON _( "Add lines and polygons to component body" )
+#define HELP_PLACE_GRAPHICIMAGES _("Add bitmap image")

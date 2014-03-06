@@ -131,8 +131,10 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
             return;
     }
 
-    wxArrayString historyList;
-    CmpName = SelectComponentFromLibrary( m_library->GetName(), historyList, true, NULL, NULL );
+    wxArrayString dummyHistoryList;
+    int dummyLastUnit;
+    CmpName = SelectComponentFromLibrary( m_library->GetName(), dummyHistoryList, dummyLastUnit,
+                                          true, NULL, NULL );
 
     if( CmpName.IsEmpty() )
         return;

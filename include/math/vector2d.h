@@ -31,6 +31,7 @@
 #include <climits>
 #include <iostream>
 #include <sstream>
+#include <cmath>
 
 #include <math/math_util.h>
 
