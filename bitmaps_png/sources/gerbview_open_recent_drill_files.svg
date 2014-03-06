@@ -12,7 +12,7 @@
    width="48"
    version="1.0"
    id="svg2"
-   inkscape:version="0.48.1 "
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="gerbview_open_recent_drill_files.svg">
   <metadata
      id="metadata93">
@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>

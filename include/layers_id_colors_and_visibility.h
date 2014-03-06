@@ -239,8 +239,21 @@ enum PCB_VISIBLE
     PADS_HOLES_VISIBLE,
     VIAS_HOLES_VISIBLE,
 
-    // Netname layers
-    LAYER_1_NETNAMES_VISIBLE,   // Bottom layer
+    WORKSHEET,                  ///< worksheet frame
+    GP_OVERLAY,                 ///< general purpose overlay
+
+    END_PCB_VISIBLE_LIST        // sentinel
+};
+
+/**
+ * Enum NETNAMES_VISIBLE
+ * is a set of layers specific for displaying net names.
+ * Their visiblity is not supposed to be saved in a board file,
+ * they are only to be used by the GAL.
+ */
+enum NETNAMES_VISIBLE
+{
+    LAYER_1_NETNAMES_VISIBLE,   // bottom layer
     LAYER_2_NETNAMES_VISIBLE,
     LAYER_3_NETNAMES_VISIBLE,
     LAYER_4_NETNAMES_VISIBLE,
@@ -255,25 +268,22 @@ enum PCB_VISIBLE
     LAYER_13_NETNAMES_VISIBLE,
     LAYER_14_NETNAMES_VISIBLE,
     LAYER_15_NETNAMES_VISIBLE,
-    LAYER_16_NETNAMES_VISIBLE,  // Top layer
+    LAYER_16_NETNAMES_VISIBLE,  // top layer
+
     PAD_FR_NETNAMES_VISIBLE,
     PAD_BK_NETNAMES_VISIBLE,
     PADS_NETNAMES_VISIBLE,
 
-    WORKSHEET,
-    GP_OVERLAY,                 // General purpose overlay
-
-    END_PCB_VISIBLE_LIST  // sentinel
+    END_NETNAMES_VISIBLE_LIST   // sentinel
 };
 
-#define FIRST_NETNAME_LAYER     ITEM_GAL_LAYER( LAYER_1_NETNAMES_VISIBLE )
-#define LAST_NETNAME_LAYER      ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE )
-
 /// macro for obtaining layer number for specific item (eg. pad or text)
-#define ITEM_GAL_LAYER(layer)	(NB_LAYERS + layer)
+#define ITEM_GAL_LAYER(layer)       (NB_LAYERS + layer)
+
+#define NETNAMES_GAL_LAYER(layer)   (NB_LAYERS + END_PCB_VISIBLE_LIST + layer )
 
 /// number of *all* layers including PCB and item layers
-#define TOTAL_LAYER_COUNT	    128 //(NB_LAYERS + END_PCB_VISIBLE_LIST)
+#define TOTAL_LAYER_COUNT	        (NB_LAYERS + END_PCB_VISIBLE_LIST + END_NETNAMES_VISIBLE_LIST)
 
 /**
  * Function IsValidLayer
@@ -390,30 +400,28 @@ wxString LayerMaskDescribe( const BOARD *aBoard, LAYER_MSK aMask );
 inline LAYER_NUM GetNetnameLayer( LAYER_NUM aLayer )
 {
     if( IsCopperLayer( aLayer ) )
-    {
-        // Compute the offset in description layers
-        return FIRST_NETNAME_LAYER + ( aLayer - FIRST_COPPER_LAYER );
-    }
+        return NETNAMES_GAL_LAYER( aLayer );
     else if( aLayer == ITEM_GAL_LAYER( PADS_VISIBLE ) )
-        return ITEM_GAL_LAYER( PADS_NETNAMES_VISIBLE );
+        return NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE );
     else if( aLayer == ITEM_GAL_LAYER( PAD_FR_VISIBLE ) )
-            return ITEM_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
+        return NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
     else if( aLayer == ITEM_GAL_LAYER( PAD_BK_VISIBLE ) )
-            return ITEM_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
+        return NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
 
     // Fallback
     return COMMENT_N;
 }
 
 /**
- * Function IsCopperLayer
+ * Function IsNetnameLayer
  * tests whether a layer is a netname layer
  * @param aLayer = Layer to test
  * @return true if aLayer is a valid netname layer
  */
 inline bool IsNetnameLayer( LAYER_NUM aLayer )
 {
-    return aLayer >= FIRST_NETNAME_LAYER && aLayer <= LAST_NETNAME_LAYER;
+    return aLayer >= NETNAMES_GAL_LAYER( LAYER_1_NETNAMES_VISIBLE ) &&
+           aLayer < NETNAMES_GAL_LAYER( END_NETNAMES_VISIBLE_LIST );
 }
 
 #endif // _LAYERS_ID_AND_VISIBILITY_H_

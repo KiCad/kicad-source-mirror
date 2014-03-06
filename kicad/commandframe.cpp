@@ -64,27 +64,27 @@ void LAUNCHER_PANEL::CreateCommandToolbar( void )
     wxBitmapButton* btn;
 
     btn = AddBitmapButton( ID_TO_EESCHEMA, KiBitmap( icon_eeschema_xpm ) );
-    btn->SetToolTip( _( "Eeschema (Schematic editor)" ) );
+    btn->SetToolTip( _( "Eeschema - Electronic schematic editor" ) );
 
     btn = AddBitmapButton( ID_TO_CVPCB, KiBitmap( icon_cvpcb_xpm ) );
-    btn->SetToolTip( _( "CvPcb (Components to modules)" ) );
+    btn->SetToolTip( _( "CvPcb - Associate footprint to components" ) );
 
     btn = AddBitmapButton( ID_TO_PCB, KiBitmap( icon_pcbnew_xpm ) );
-    btn->SetToolTip( _( "Pcbnew (PCB editor)" ) );
+    btn->SetToolTip( _( "Pcbnew - Printed circuit board editor" ) );
 
     btn = AddBitmapButton( ID_TO_GERBVIEW, KiBitmap( icon_gerbview_xpm ) );
-    btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );
+    btn->SetToolTip( _( "GerbView - Gerber viewer" ) );
 
     btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, KiBitmap( icon_bitmap2component_xpm ) );
     btn->SetToolTip( _(
-                        "Bitmap2Component (a tool to build a logo from a bitmap)\n\
-Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W picture"                                                                                     ) );
+                        "Bitmap2Component - Convert bitmap images to Eeschema\n"
+                        "or Pcbnew elements" ) );
 
     btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, KiBitmap( icon_pcbcalculator_xpm ) );
-    btn->SetToolTip( _( "Pcb calculator, the Swiss army knife..." ) );
+    btn->SetToolTip( _( "Pcb calculator - Calculator for components, track width, etc." ) );
 
     btn = AddBitmapButton( ID_TO_PL_EDITOR, KiBitmap( icon_pagelayout_editor_xpm ) );
-    btn->SetToolTip( _( "pl_editor, the page layout and title block shape editor" ) );
+    btn->SetToolTip( _( "Pl editor - Worksheet layout editor" ) );
 }
 
 

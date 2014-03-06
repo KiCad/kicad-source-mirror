@@ -588,10 +588,6 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
-    BOARD*   board = (BOARD*) m_Parent;
-
-    wxASSERT( board );
-
     msg = _( "Zone Outline" );
 
     // Display Cutout instead of Outline for holes inside a zone

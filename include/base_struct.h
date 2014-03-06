@@ -298,7 +298,7 @@ public:
 #define IS_RESIZED     (1 << 5)    ///< Item being resized
 #define IS_DRAGGED     (1 << 6)    ///< Item being dragged
 #define IS_DELETED     (1 << 7)
-#define IS_WIRE_IMAGE  (1 << 8)
+#define IS_WIRE_IMAGE  (1 << 8)    ///< Item to be drawn as wireframe while editing
 #define STARTPOINT     (1 << 9)
 #define ENDPOINT       (1 << 10)
 #define SELECTED       (1 << 11)
@@ -389,11 +389,13 @@ public:
     inline bool IsModified() const { return m_Flags & IS_CHANGED; }
     inline bool IsMoving() const { return m_Flags & IS_MOVED; }
     inline bool IsDragging() const { return m_Flags & IS_DRAGGED; }
+    inline bool IsWireImage() const { return m_Flags & IS_WIRE_IMAGE; }
     inline bool IsSelected() const { return m_Flags & SELECTED; }
     inline bool IsResized() const { return m_Flags & IS_RESIZED; }
     inline bool IsHighlighted() const { return m_Flags & HIGHLIGHTED; }
     inline bool IsBrightened() const { return m_Flags & BRIGHTENED; }
 
+    inline void SetWireImage() { SetFlags( IS_WIRE_IMAGE ); }
     inline void SetSelected() { SetFlags( SELECTED ); ViewUpdate( COLOR ); }
     inline void SetHighlighted() { SetFlags( HIGHLIGHTED ); ViewUpdate( COLOR ); }
     inline void SetBrightened() { SetFlags( BRIGHTENED ); }

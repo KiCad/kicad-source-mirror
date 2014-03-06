@@ -195,7 +195,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
 
     m_drawToolBar->AddTool( ID_HIERARCHY_PUSH_POP_BUTT, wxEmptyString,
                             KiBitmap( hierarchy_cursor_xpm ),
-                            _( "Ascend or descend hierarchy" ), wxITEM_CHECK );
+                            _( "Ascend/descend hierarchy" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_SCH_PLACE_COMPONENT, wxEmptyString, KiBitmap( add_component_xpm ),
                             HELP_PLACE_COMPONENTS, wxITEM_CHECK );
@@ -251,7 +251,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
                             HELP_PLACE_GRAPHICTEXTS, wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_ADD_IMAGE_BUTT, wxEmptyString, KiBitmap( image_xpm ),
-                            _("Add a bitmap image"), wxITEM_CHECK );
+                            _("Add bitmap image"), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxEmptyString,
                             KiBitmap( delete_xpm ),
@@ -282,11 +282,11 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
                                KiBitmap( unit_inch_xpm ),
-                               _( "Units in inches" ), wxITEM_CHECK );
+                               _( "Set unit to inch" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
                                KiBitmap( unit_mm_xpm ),
-                               _( "Units in millimeters" ), wxITEM_CHECK );
+                               _( "Set unit to mm" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiBitmap( cursor_shape_xpm ),

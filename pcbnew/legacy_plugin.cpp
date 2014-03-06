@@ -1814,7 +1814,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
 {
     char  buf[1024];
 
-    NETINFO_ITEM*   net;
+    NETINFO_ITEM*   net = NULL;
     char*           line;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
@@ -1835,7 +1835,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
         {
             // net 0 should be already in list, so store this net
             // if it is not the net 0, or if the net 0 does not exists.
-            if( net->GetNet() > 0 || m_board->FindNet( 0 ) == NULL )
+            if( net != NULL && ( net->GetNet() > 0 || m_board->FindNet( 0 ) == NULL ) )
                 m_board->AppendNet( net );
             else
                 delete net;
@@ -2586,13 +2586,11 @@ void LEGACY_PLUGIN::loadDIMENSION()
             // sscanf( Line + 2, " %d %d %d %d %d %d", &Dummy, &m_arrowD1Ox, &m_arrowD1Oy, &m_arrowD1Fx, &m_arrowD1Fy, &Dummy );
 
             int ignore      = intParse( line + SZ( "S1" ), &data );
-            BIU arrowD10x   = biuParse( data, &data );
-            BIU arrowD10y   = biuParse( data, &data );
+            biuParse( data, &data );    // skipping excessive data
+            biuParse( data, &data );    // skipping excessive data
             BIU arrowD1Fx   = biuParse( data, &data );
             BIU arrowD1Fy   = biuParse( data );
 
-            dim->m_crossBarF.x = arrowD10x;
-            dim->m_crossBarF.y = arrowD10y;
             dim->m_arrowD1F.x = arrowD1Fx;
             dim->m_arrowD1F.y = arrowD1Fy;
             (void) ignore;
@@ -2603,13 +2601,11 @@ void LEGACY_PLUGIN::loadDIMENSION()
             // sscanf( Line + 2, " %d %d %d %d %d %d", &Dummy, &m_arrowD2Ox, &m_arrowD2Oy, &m_arrowD2Fx, &m_arrowD2Fy, &Dummy );
 
             int ignore    = intParse( line + SZ( "S2" ), &data );
-            BIU arrowD2Ox = biuParse( data, &data );
-            BIU arrowD2Oy = biuParse( data, &data );
+            biuParse( data, &data );    // skipping excessive data
+            biuParse( data, &data );    // skipping excessive data
             BIU arrowD2Fx = biuParse( data, &data );
             BIU arrowD2Fy = biuParse( data, &data );
 
-            dim->m_crossBarF.x = arrowD2Ox;
-            dim->m_crossBarF.y = arrowD2Oy;
             dim->m_arrowD2F.x = arrowD2Fx;
             dim->m_arrowD2F.y = arrowD2Fy;
             (void) ignore;
@@ -2619,13 +2615,11 @@ void LEGACY_PLUGIN::loadDIMENSION()
         {
             // sscanf( Line + 2, " %d %d %d %d %d %d\n", &Dummy, &m_arrowG1Ox, &m_arrowG1Oy, &m_arrowG1Fx, &m_arrowG1Fy, &Dummy );
             int ignore    = intParse( line + SZ( "S3" ), &data );
-            BIU arrowG1Ox = biuParse( data, &data );
-            BIU arrowG1Oy = biuParse( data, &data );
+            biuParse( data, &data );    // skipping excessive data
+            biuParse( data, &data );    // skipping excessive data
             BIU arrowG1Fx = biuParse( data, &data );
             BIU arrowG1Fy = biuParse( data, &data );
 
-            dim->m_crossBarO.x = arrowG1Ox;
-            dim->m_crossBarO.y = arrowG1Oy;
             dim->m_arrowG1F.x = arrowG1Fx;
             dim->m_arrowG1F.y = arrowG1Fy;
             (void) ignore;
@@ -2635,13 +2629,11 @@ void LEGACY_PLUGIN::loadDIMENSION()
         {
             // sscanf( Line + 2, " %d %d %d %d %d %d", &Dummy, &m_arrowG2Ox, &m_arrowG2Oy, &m_arrowG2Fx, &m_arrowG2Fy, &Dummy );
             int ignore    = intParse( line + SZ( "S4" ), &data );
-            BIU arrowG2Ox = biuParse( data, &data );
-            BIU arrowG2Oy = biuParse( data, &data );
+            biuParse( data, &data );    // skipping excessive data
+            biuParse( data, &data );    // skipping excessive data
             BIU arrowG2Fx = biuParse( data, &data );
             BIU arrowG2Fy = biuParse( data, &data );
 
-            dim->m_crossBarO.x = arrowG2Ox;
-            dim->m_crossBarO.y = arrowG2Oy;
             dim->m_arrowG2F.x = arrowG2Fx;
             dim->m_arrowG2F.y = arrowG2Fy;
             (void) ignore;

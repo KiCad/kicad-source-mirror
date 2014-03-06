@@ -97,12 +97,11 @@ private:
 
 PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 {
-    PNS_LAYERSET layers;
+    PNS_LAYERSET layers( 0, 15 );
 
     switch( aPad->GetAttribute() )
     {
     case PAD_STANDARD:
-        layers = PNS_LAYERSET( 0, 15 );
         break;
 
     case PAD_SMD:
@@ -325,6 +324,9 @@ PNS_ROUTER::~PNS_ROUTER()
 {
     ClearWorld();
     theRouter = NULL;
+
+    if( m_previewItems )
+        delete m_previewItems;
 }
 
 
@@ -469,9 +471,10 @@ void PNS_ROUTER::EraseView()
     }
 
     if( m_previewItems )
+    {
         m_previewItems->FreeItems();
-
-    m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    }
 }
 
 

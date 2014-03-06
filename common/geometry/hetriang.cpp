@@ -45,6 +45,8 @@
 #include <algorithm>
 #include <fstream>
 #include <limits>
+#include <boost/foreach.hpp>
+#include <boost/make_shared.hpp>
 
 
 using namespace hed;
@@ -115,28 +117,27 @@ EdgePtr Triangulation::initTwoEnclosingTriangles(NodesContainer::iterator first,
   double dx  = (xmax-xmin)/fac;
   double dy  = (ymax-ymin)/fac;
   
-  NodePtr n1(new Node(xmin-dx,ymin-dy));
-  NodePtr n2(new Node(xmax+dx,ymin-dy));
-  NodePtr n3(new Node(xmax+dx,ymax+dy));
-  NodePtr n4(new Node(xmin-dx,ymax+dy));
+  NodePtr n1 = boost::make_shared<Node>(xmin-dx, ymin-dy);
+  NodePtr n2 = boost::make_shared<Node>(xmax+dx, ymin-dy);
+  NodePtr n3 = boost::make_shared<Node>(xmax+dx, ymax+dy);
+  NodePtr n4 = boost::make_shared<Node>(xmin-dx, ymax+dy);
   
   // diagonal
-  EdgePtr e1d(new Edge); // lower
-  EdgePtr e2d(new Edge); // upper, the twin edge
+  EdgePtr e1d = boost::make_shared<Edge>();
+  EdgePtr e2d = boost::make_shared<Edge>();
   
   // lower triangle
-  EdgePtr e11(new Edge);
-  EdgePtr e12(new Edge);
+  EdgePtr e11 = boost::make_shared<Edge>();
+  EdgePtr e12 = boost::make_shared<Edge>();
   
   // upper triangle
-  EdgePtr e21(new Edge); // upper upper
-  EdgePtr e22(new Edge);
+  EdgePtr e21 = boost::make_shared<Edge>();
+  EdgePtr e22 = boost::make_shared<Edge>();
   
   // lower triangle
   e1d->setSourceNode(n3);
   e1d->setNextEdgeInFace(e11);
   e1d->setTwinEdge(e2d);
-  e1d->setAsLeadingEdge();
   addLeadingEdge(e1d);
   
   e11->setSourceNode(n1);
@@ -149,7 +150,6 @@ EdgePtr Triangulation::initTwoEnclosingTriangles(NodesContainer::iterator first,
   e2d->setSourceNode(n1);
   e2d->setNextEdgeInFace(e21);
   e2d->setTwinEdge(e1d);
-  e2d->setAsLeadingEdge();
   addLeadingEdge(e2d);
   
   e21->setSourceNode(n3);
@@ -225,13 +225,10 @@ void Triangulation::removeTriangle(EdgePtr& edge) {
   // Remove the triangle
   EdgePtr e2(e1->getNextEdgeInFace());
   EdgePtr e3(e2->getNextEdgeInFace());
-  
-  if (e1->getTwinEdge())
-    e1->getTwinEdge()->setTwinEdge(EdgePtr());
-  if (e2->getTwinEdge())
-    e2->getTwinEdge()->setTwinEdge(EdgePtr());
-  if (e3->getTwinEdge())
-    e3->getTwinEdge()->setTwinEdge(EdgePtr());
+
+  e1->clear();
+  e2->clear();
+  e3->clear();
 }
 
 
@@ -268,6 +265,19 @@ void Triangulation::reverse_splitTriangle(EdgePtr& edge) {
   // from the triangulation, but the arcs have not been deleted.
   // Next delete the 6 half edges radiating from the node
   // The node is maintained by handle and need not be deleted explicitly
+  EdgePtr estar = edge;
+  EdgePtr enext = estar->getTwinEdge()->getNextEdgeInFace();
+  estar->getTwinEdge()->clear();
+  estar->clear();
+
+  estar = enext;
+  enext = estar->getTwinEdge()->getNextEdgeInFace();
+  estar->getTwinEdge()->clear();
+  estar->clear();
+
+  enext->getTwinEdge()->clear();
+  enext->clear();
+
 
   // Create the new triangle
   e1->setNextEdgeInFace(e2);
@@ -275,25 +285,6 @@ void Triangulation::reverse_splitTriangle(EdgePtr& edge) {
   e3->setNextEdgeInFace(e1);
   addLeadingEdge(e1);
 }
-
-
-//--------------------------------------------------------------------------------------------------
-// This is a "template" for iterating the boundary    
-/*
-static void iterateBoundary(const Dart& dart) {
-cout << "Iterate boundary 2" << endl;
-// input is a dart at the boundary
-
-  Dart dart_iter = dart;
-  do {
-  if (helper->isBoundaryEdge(dart_iter))
-  dart_iter.alpha0().alpha1();
-  else
-  dart_iter.alpha2().alpha1();
-  
-    } while(dart_iter != dart);
-}
-*/
 
 
 //--------------------------------------------------------------------------------------------------
@@ -332,18 +323,19 @@ bool Triangulation::removeLeadingEdgeFromList(EdgePtr& leadingEdge) {
 
 //--------------------------------------------------------------------------------------------------
 void Triangulation::cleanAll() {
-  leadingEdges_.clear();
+  BOOST_FOREACH(EdgePtr& edge, leadingEdges_)
+      edge->setNextEdgeInFace(EdgePtr());
 }
 
 
 //--------------------------------------------------------------------------------------------------
 void Triangulation::swapEdge(Dart& dart) {
-  if (!dart.getEdge()->isConstrained()) swapEdge(dart.getEdge());
+  swapEdge(dart.getEdge());
 }
 
 
 //--------------------------------------------------------------------------------------------------
-void Triangulation::splitTriangle(Dart& dart, NodePtr point) {
+void Triangulation::splitTriangle(Dart& dart, const NodePtr& point) {
   EdgePtr edge = splitTriangle(dart.getEdge(), point);
   dart.init(edge);
 }
@@ -429,7 +421,7 @@ list<EdgePtr>* Triangulation::getEdges(bool skip_boundary_edges) const {
 
 
 //--------------------------------------------------------------------------------------------------
-EdgePtr Triangulation::splitTriangle(EdgePtr& edge, NodePtr& point) {
+EdgePtr Triangulation::splitTriangle(EdgePtr& edge, const NodePtr& point) {
   
   // Add a node by just splitting a triangle into three triangles
   // Assumes the half edge is located in the triangle
@@ -457,12 +449,12 @@ EdgePtr Triangulation::splitTriangle(EdgePtr& edge, NodePtr& point) {
   EdgePtr e3(e2->getNextEdgeInFace());
   NodePtr n3(e3->getSourceNode());
   
-  EdgePtr e1_n(new Edge);
-  EdgePtr e11_n(new Edge);
-  EdgePtr e2_n(new Edge);
-  EdgePtr e22_n(new Edge);
-  EdgePtr e3_n(new Edge);
-  EdgePtr e33_n(new Edge);
+  EdgePtr e1_n = boost::make_shared<Edge>();
+  EdgePtr e11_n = boost::make_shared<Edge>();
+  EdgePtr e2_n = boost::make_shared<Edge>();
+  EdgePtr e22_n = boost::make_shared<Edge>();
+  EdgePtr e3_n = boost::make_shared<Edge>();
+  EdgePtr e33_n = boost::make_shared<Edge>();
   
   e1_n->setSourceNode(n1);
   e11_n->setSourceNode(point);
@@ -503,7 +495,7 @@ EdgePtr Triangulation::splitTriangle(EdgePtr& edge, NodePtr& point) {
   else if(e3->isLeadingEdge())
     removeLeadingEdgeFromList(e3);
   else
-    return EdgePtr();
+    assert( false );        // one of the edges should be leading
   
   addLeadingEdge(e1_n);
   addLeadingEdge(e2_n);
@@ -640,7 +632,7 @@ void Triangulation::optimizeDelaunay() {
       
       Dart dart(edge);
       // Constrained edges should not be swapped
-      if (!edge->isConstrained() && helper->swapTestDelaunay<TTLtraits>(dart, cycling_check)) {
+      if (helper->swapTestDelaunay<TTLtraits>(dart, cycling_check)) {
         optimal = false;
         swapEdge(edge);
       }

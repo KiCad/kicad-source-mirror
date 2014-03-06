@@ -242,6 +242,13 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 {
     SetFocus();
 
+    wxString default_path;
+    wxGetEnv( wxT( KISYS3DMOD ), &default_path );
+#ifdef __WINDOWS__
+    default_path.Replace( wxT( "/" ), wxT( "\\" ) );
+#endif
+    m_textCtrl3DDefaultPath->SetValue( default_path );
+
     m_LastSelected3DShapeIndex = -1;
 
     // Init 3D shape list
@@ -449,18 +456,25 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
     wxFileName fn = fullfilename;
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    /* If the file path is already in the library search paths
-     * list, just add the library name to the list.  Otherwise, add
-     * the library name with the full or relative path.
+    /* If the file path is already in the default search path
+     * list, just add the name to the list.  Otherwise, add
+     * the name with the full or relative path.
      * the relative path, when possible is preferable,
-     * because it preserve use of default libraries paths, when the path is a
-     * sub path of these default paths
+     * because it preserve use of default search path, when the path is a
+     * sub path
      */
-    shortfilename =
-        wxGetApp().ReturnFilenameWithRelativePathInLibPath( fullfilename );
 
-    wxFileName aux = shortfilename;
-    if( aux.IsAbsolute() )
+    wxString default_path;
+    wxGetEnv( wxT( KISYS3DMOD ), &default_path );
+    fn.MakeRelativeTo( default_path );
+
+    // Here, we want a path relative only to the default_path
+    if( fn.GetPathWithSep().StartsWith( wxT("..") ) )
+        fn = fullfilename;  // keep the full file name
+
+    shortfilename = fn.GetFullPath();
+
+    if( fn.IsAbsolute() )
     {   // Absolute path, ask if the user wants a relative one
         int diag = wxMessageBox(
             _( "Use a relative path?" ),
@@ -469,8 +483,8 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
 
         if( diag == wxYES )
         {   // Make it relative
-            aux.MakeRelativeTo( wxT(".") );
-            shortfilename = aux.GetPathWithSep() + aux.GetFullName();
+            fn.MakeRelativeTo( wxT(".") );
+            shortfilename = fn.GetFullPath();
         }
     }
 

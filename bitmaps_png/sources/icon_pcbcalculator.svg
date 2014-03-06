@@ -12,8 +12,8 @@
    width="48"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.1 "
-   sodipodi:docname="icon_pcbcalculator.svg"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="6-icon_pcbcalculator.svg"
    inkscape:export-filename="F:\kicad-launchpad\testing\bitmaps_png\sources\icon_pcbcalculator.png"
    inkscape:export-xdpi="60"
    inkscape:export-ydpi="60">
@@ -25,7 +25,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>

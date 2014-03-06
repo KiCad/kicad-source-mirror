@@ -34,10 +34,10 @@ def smdRectPad(module,size,pos,name):
 for n in range (0,pads):
     pad = smdRectPad(module,size_025_160mm,wxPointMM(0.5*n,0),str(n+1))
     module.Add(pad)
-  
+
 
 pad_s0 = smdRectPad(module,size_150_200mm,wxPointMM(-1.6,1.3),"0")
-pad_s1 = smdRectPad(module,size_150_200mm,wxPointMM((pads-1)*0.5+1.6,1.3),"0")        
+pad_s1 = smdRectPad(module,size_150_200mm,wxPointMM((pads-1)*0.5+1.6,1.3),"0")
 module.Add(pad_s0)
 module.Add(pad_s1)
 
@@ -50,10 +50,11 @@ e.SetShape(S_SEGMENT)
 module.Add(e)
 
 # save the PCB to disk
-module.SetLibRef("FPC"+str(pads))
+fpid = FPID("FPC"+str(pads))   #the name in library
+module.SetFPID( fpid )
+
 try:
     FootprintLibCreate("fpc40.mod")
 except:
     pass # we try to create, but may be it exists already
 FootprintSave("fpc40.mod",module)
-

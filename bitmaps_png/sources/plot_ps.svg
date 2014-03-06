@@ -12,7 +12,7 @@
    width="48"
    version="1.1"
    id="svg4394"
-   inkscape:version="0.48.1 "
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="plot_ps.svg">
   <metadata
      id="metadata4565">
@@ -22,6 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -34,17 +35,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="968"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview4563"
      showgrid="false"
      inkscape:zoom="16.113227"
-     inkscape:cx="24.013384"
-     inkscape:cy="23.857688"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:cx="24.137506"
+     inkscape:cy="11.445525"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg4394" />
+     inkscape:current-layer="text4559" />
   <defs
      id="defs4396">
     <linearGradient
@@ -793,20 +794,17 @@
      x="9"
      id="rect4557"
      style="fill:#ffffff;fill-rule:evenodd" />
-  <text
-     style="font-size:48.04919434px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;font-family:Sans"
-     xml:space="preserve"
+  <g
      transform="scale(1.1440335,0.87410029)"
-     line-height="125%"
-     font-size="41.51px"
-     y="54.371429"
-     x="21.633444"
-     id="text4559"
-     sodipodi:linespacing="125%"><tspan
+     style="font-size:48.04919434px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;font-family:Sans"
+     id="text4559">
+    <path
+       d="m 6.9381428,37.494441 7.2233052,0 c 2.147764,1.7e-5 3.794389,0.478556 4.939882,1.435618 1.153001,0.949557 1.729508,2.306045 1.729524,4.069468 -1.6e-5,1.770982 -0.576523,3.135006 -1.729524,4.092076 -1.145493,0.949549 -2.792118,1.42432 -4.939882,1.424314 l -2.871235,0 0,5.855512 -4.3520702,0 0,-16.876988 m 4.3520702,3.153838 0,4.713801 2.407768,0 c 0.844028,9e-6 1.495896,-0.203465 1.955606,-0.610421 0.459688,-0.414472 0.689537,-0.998516 0.689548,-1.752132 -1.1e-5,-0.753593 -0.22986,-1.333868 -0.689548,-1.740828 -0.45971,-0.406933 -1.111578,-0.610406 -1.955606,-0.61042 l -2.407768,0"
        style="font-size:23.15075111px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
-       font-size="18px"
-       y="54.371429"
-       x="21.633444"
-       font-weight="bold"
-       id="tspan4561">PS</tspan></text>
+       id="path3528" />
+    <path
+       d="m 35.639195,38.025733 0,3.572089 c -0.926947,-0.41447 -1.831272,-0.727216 -2.712978,-0.938239 -0.881729,-0.210995 -1.714462,-0.3165 -2.498202,-0.316514 -1.039982,1.4e-5 -1.808659,0.143199 -2.306031,0.429555 -0.497386,0.286383 -0.746075,0.73101 -0.74607,1.333881 -5e-6,0.452175 0.165788,0.806369 0.49738,1.062583 0.339116,0.248701 0.949535,0.463478 1.83126,0.644333 l 1.853869,0.373034 c 1.876465,0.376813 3.210345,0.949552 4.001644,1.71822 0.791271,0.768685 1.186913,1.861412 1.186928,3.278183 -1.5e-5,1.861408 -0.553914,3.24804 -1.6617,4.1599 -1.100275,0.904327 -2.784581,1.356489 -5.052922,1.35649 -1.070127,-10e-7 -2.144013,-0.101737 -3.221662,-0.30521 -1.07766,-0.203474 -2.155314,-0.504915 -3.232967,-0.904327 l 0,-3.673825 c 1.077653,0.572744 2.117627,1.006067 3.119926,1.299969 1.009825,0.286373 1.981975,0.429558 2.916452,0.429555 0.949534,3e-6 1.676762,-0.158254 2.181687,-0.474771 0.504905,-0.316511 0.757362,-0.768673 0.757373,-1.35649 -1.1e-5,-0.527518 -0.17334,-0.934464 -0.519988,-1.22084 -0.339132,-0.286364 -1.021144,-0.542589 -2.046038,-0.768677 l -1.684307,-0.373035 c -1.688081,-0.361723 -2.923992,-0.93823 -3.707738,-1.729524 -0.776215,-0.791276 -1.164321,-1.857626 -1.16432,-3.199054 -1e-6,-1.680526 0.542594,-2.972957 1.627788,-3.877298 1.085187,-0.90431 2.645148,-1.356472 4.679888,-1.35649 0.926925,1.8e-5 1.880235,0.07161 2.859931,0.214778 0.979675,0.135666 1.993273,0.342907 3.040797,0.621724"
+       style="font-size:23.15075111px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#552200;font-family:Comic Sans MS;-inkscape-font-specification:Comic Sans MS Bold"
+       id="path3530" />
+  </g>
 </svg>

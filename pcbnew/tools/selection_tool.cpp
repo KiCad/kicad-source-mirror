@@ -98,7 +98,7 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
 
         if( evt->IsAction( &COMMON_ACTIONS::selectionSingle ) )
         {
-            // GetMousePosition() is used to be independent of snapping settings
+            // GetMousePosition() is used, as it is independent of snapping settings
             selectSingle( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
         }
 
@@ -115,6 +115,16 @@ int SELECTION_TOOL::Main( TOOL_EVENT& aEvent )
                 clearSelection();
 
             selectSingle( evt->Position() );
+        }
+
+        // right click? if there is any object - show the context menu
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            if( m_selection.Empty() )
+                selectSingle( evt->Position() );
+
+            if( !m_selection.Empty() )
+                SetContextMenu( &m_menu, CMENU_NOW );
         }
 
         // double click? Display the properties window
@@ -288,9 +298,11 @@ bool SELECTION_TOOL::selectMultiple()
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
                 // Add only those items that are visible and fully within the selection box
-                if( !item->IsSelected() && selectable( item )
-                        && selectionBox.Contains( item->ViewBBox() ) )
+                if( !item->IsSelected() && selectable( item ) &&
+                        selectionBox.Contains( item->ViewBBox() ) )
+                {
                     select( item );
+                }
             }
 
             // Do not display information about selected item,as there is more than one
@@ -441,7 +453,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
         }
     }
 
-    return ( *aCollector )[minNdx];
+    return (*aCollector)[minNdx];
 }
 
 
@@ -574,8 +586,8 @@ void SELECTION_TOOL::deselect( BOARD_ITEM* aItem )
     }
 
     // Inform other potentially interested tools
-    TOOL_EVENT dupa( DeselectedEvent );
-    m_toolMgr->ProcessEvent( dupa );
+    TOOL_EVENT deselected( DeselectedEvent );
+    m_toolMgr->ProcessEvent( deselected );
 }
 
 

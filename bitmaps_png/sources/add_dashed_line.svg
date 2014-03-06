@@ -7,20 +7,21 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="48"
-   width="48"
+   height="26"
+   width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.1 "
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="add_dashed_line.svg">
   <metadata
-     id="metadata53">
+     id="metadata50">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -33,132 +34,35 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1226"
-     inkscape:window-height="887"
-     id="namedview51"
-     showgrid="false"
-     inkscape:zoom="13.795645"
-     inkscape:cx="23.748951"
-     inkscape:cy="22.596987"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
+     id="namedview48"
+     showgrid="true"
+     inkscape:zoom="22.961538"
+     inkscape:cx="4.3551087"
+     inkscape:cy="13"
      inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="g31" />
+     inkscape:window-y="29"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="true"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3006"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
   <defs
-     id="defs4">
-    <mask
-       id="e">
-      <rect
-         transform="rotate(90)"
-         height="8.6868"
-         width="9.3725"
-         y="-72.949"
-         x="35.044"
-         fill="#fff"
-         id="rect7" />
-      <rect
-         transform="rotate(90)"
-         height="8.6868"
-         width="9.3725"
-         y="-87.48"
-         x="35.044"
-         fill="#fff"
-         id="rect9" />
-      <rect
-         transform="rotate(90)"
-         height="8.6868"
-         width="9.3725"
-         y="-102.01"
-         x="35.044"
-         fill="#fff"
-         id="rect11" />
-      <rect
-         transform="rotate(90)"
-         height="8.6868"
-         width="9.3725"
-         y="-116.54"
-         x="35.044"
-         fill="#fff"
-         id="rect13" />
-    </mask>
-    <mask
-       id="f">
-      <rect
-         transform="rotate(90)"
-         height="8.6868"
-         width="9.3725"
-         y="-72.949"
-         x="35.044"
-         fill="#fff"
-         id="rect16" />
-      <rect
-         transform="rotate(90)"
-         height="8.6868"
-         width="9.3725"
-         y="-87.48"
-         x="35.044"
-         fill="#fff"
-         id="rect18" />
-      <rect
-         transform="rotate(90)"
-         height="8.6868"
-         width="9.3725"
-         y="-102.01"
-         x="35.044"
-         fill="#fff"
-         id="rect20" />
-      <rect
-         transform="rotate(90)"
-         height="8.6868"
-         width="9.3725"
-         y="-116.54"
-         x="35.044"
-         fill="#fff"
-         id="rect22" />
-    </mask>
-    <filter
-       id="d"
-       color-interpolation-filters="sRGB">
-      <feGaussianBlur
-         stdDeviation="0.76169817"
-         id="feGaussianBlur25" />
-    </filter>
-  </defs>
-  <g
-     opacity=".32031"
-     filter="url(#d)"
-     transform="matrix(.67436 -.62512 .80951 .85338 -69.426 51.707)"
-     id="g27">
-    <rect
-       mask="url(#f)"
-       height="4.3512"
-       width="64.872"
-       y="37.555"
-       x="57.967"
-       id="rect29" />
-  </g>
-  <g
-     transform="matrix(.67436 -.62512 .80951 .85338 -70.92 49.048)"
-     id="g31">
-    <rect
-       mask="url(#e)"
-       height="4.3512001"
-       width="64.872002"
-       y="37.555"
-       x="57.966999"
-       id="rect33"
-       style="fill:#0000ff;fill-opacity:1"
-       transform="matrix(1.1009791,-0.02918954,-0.047834,1.1057876,-5.5367918,-1.8540188)" />
-  </g>
-  <g
-     transform="matrix(2.9379,0,0,2.1996,2.1067,3.2221)"
-     id="g35">
-    <rect
-       fill-opacity="0"
-       height="16"
-       width="16"
-       y="0"
-       x="0"
-       id="rect37" />
-  </g>
+     id="defs4" />
+  <path
+     style="fill:none;stroke:#0000cf;stroke-width:2.4000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-opacity:0.94117647;stroke-dasharray:4.80000019, 2.4000001;stroke-dashoffset:6.23999975"
+     d="M 1,25 24.485762,1.427136"
+     id="path2990"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
 </svg>
