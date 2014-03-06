@@ -26,6 +26,7 @@
 
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <confirm.h>
 
 #include "common_actions.h"
@@ -96,6 +97,7 @@ public:
             }
 
             default:
+                points.reset();
                 break;
         }
 
@@ -139,18 +141,26 @@ bool POINT_EDITOR::Init()
 int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
     if( selection.Size() == 1 )
     {
+        Activate();
+
+        KIGFX::VIEW_CONTROLS* controls = getViewControls();
+        KIGFX::VIEW* view = getView();                               // TODO should be updated on canvas switch?
         PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
+
         m_editPoints = EDIT_POINTS_FACTORY::Make( item );
-        m_toolMgr->GetView()->Add( m_editPoints.get() );
+        if( !m_editPoints )
+        {
+            setTransitions();
+            return 0;
+        }
+
+        view->Add( m_editPoints.get() );
         m_dragPoint = NULL;
         bool modified = false;
-
-        Activate();
 
         // Main loop: keep receiving events
         while( OPT_TOOL_EVENT evt = Wait() )
@@ -196,6 +206,20 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
                     modified = true;
                 }
 
+                if( evt->Modifier( MD_CTRL ) )      // 45 degrees mode
+                {
+                    if( !m_dragPoint->IsConstrained() )
+                    {
+                        // Find the previous point to be used as constrainer
+                        EDIT_POINT* constrainer = m_editPoints->Previous( *m_dragPoint );
+                        m_dragPoint->SetConstraint( new EPC_45DEGREE( *m_dragPoint, *constrainer ) );
+                    }
+                }
+                else
+                {
+                    m_dragPoint->ClearConstraint();
+                }
+
                 m_dragPoint->SetPosition( controls->GetCursorPosition() );
                 m_dragPoint->ApplyConstraint();
                 updateItem();
@@ -238,14 +262,14 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
         {
             finishItem();
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-            m_toolMgr->GetView()->Remove( m_editPoints.get() );
+            view->Remove( m_editPoints.get() );
             m_editPoints.reset();
         }
-    }
 
-    controls->ShowCursor( false );
-    controls->SetAutoPan( false );
-    controls->SetSnapping( false );
+        controls->ShowCursor( false );
+        controls->SetAutoPan( false );
+        controls->SetSnapping( false );
+    }
 
     setTransitions();
 

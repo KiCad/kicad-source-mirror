@@ -35,11 +35,6 @@ EDIT_POINTS::EDIT_POINTS( EDA_ITEM* aParent ) :
 }
 
 
-EDIT_POINTS::~EDIT_POINTS()
-{
-}
-
-
 EDIT_POINT* EDIT_POINTS::FindPoint( const VECTOR2I& aLocation )
 {
     float size = m_view->ToWorld( EDIT_POINT::POINT_SIZE );
@@ -59,7 +54,7 @@ EDIT_POINT* EDIT_POINTS::FindPoint( const VECTOR2I& aLocation )
 
 void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
 {
-    aGal->SetFillColor( KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) ); // TODO dynamic color depending on parent's color
+    aGal->SetFillColor( KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     aGal->SetIsFill( true );
     aGal->SetIsStroke( false );
     aGal->PushDepth();
