@@ -80,10 +80,13 @@ public:
 
     void SetConstraint( EDIT_POINT_CONSTRAINT* aConstraint )
     {
+        if( m_constraint )
+            delete m_constraint;
+
         m_constraint = aConstraint;
     }
 
-    void ClearConstraint( EDIT_POINT_CONSTRAINT* aConstraint )
+    void ClearConstraint()
     {
         delete m_constraint;
         m_constraint = NULL;
@@ -94,10 +97,20 @@ public:
         return m_constraint;
     }
 
+    bool IsConstrained() const
+    {
+        return m_constraint != NULL;
+    }
+
     void ApplyConstraint()
     {
         if( m_constraint )
             m_constraint->Apply();
+    }
+
+    bool operator==( const EDIT_POINT& aOther ) const
+    {
+        return m_point == aOther.m_point;
     }
 
     ///> Single point size in pixels
@@ -113,7 +126,6 @@ class EDIT_POINTS : public EDA_ITEM
 {
 public:
     EDIT_POINTS( EDA_ITEM* aParent );
-    ~EDIT_POINTS();
 
     /**
      * Function FindPoint
@@ -134,7 +146,39 @@ public:
 
     void Add( const VECTOR2I& aPoint )
     {
-        m_points.push_back( EDIT_POINT( aPoint ) );
+        Add( EDIT_POINT( aPoint ) );
+    }
+
+    EDIT_POINT* Previous( const EDIT_POINT& aPoint )
+    {
+        for( unsigned int i = 0; i < m_points.size(); ++i )
+        {
+            if( m_points[i] == aPoint )
+            {
+                if( i == 0 )
+                    return &m_points[m_points.size() - 1];
+                else
+                    return &m_points[i - 1];
+            }
+        }
+
+        return NULL;
+    }
+
+    EDIT_POINT* Next( const EDIT_POINT& aPoint )
+    {
+        for( unsigned int i = 0; i < m_points.size(); ++i )
+        {
+            if( m_points[i] == aPoint )
+            {
+                if( i == m_points.size() - 1 )
+                    return &m_points[0];
+                else
+                    return &m_points[i + 1];
+            }
+        }
+
+        return NULL;
     }
 
     EDIT_POINT& operator[]( unsigned int aIndex )
@@ -182,8 +226,6 @@ public:
         EDIT_POINT_CONSTRAINT( aConstrained ), m_constrainer( aConstrainer )
     {}
 
-    virtual ~EPC_VERTICAL() {};
-
     virtual void Apply()
     {
         VECTOR2I point = m_constrained.GetPosition();
@@ -208,13 +250,36 @@ public:
         EDIT_POINT_CONSTRAINT( aConstrained ), m_constrainer( aConstrainer )
     {}
 
-    virtual ~EPC_HORIZONTAL() {};
-
     virtual void Apply()
     {
         VECTOR2I point = m_constrained.GetPosition();
         point.y = m_constrainer.GetPosition().y;
         m_constrained.SetPosition( point );
+    }
+
+private:
+    const EDIT_POINT& m_constrainer;
+};
+
+
+class EPC_45DEGREE : public EDIT_POINT_CONSTRAINT
+{
+public:
+    EPC_45DEGREE ( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
+        EDIT_POINT_CONSTRAINT( aConstrained ), m_constrainer( aConstrainer )
+    {}
+
+    virtual void Apply()
+    {
+        // Current line vector
+        VECTOR2I lineVector( m_constrained.GetPosition() - m_constrainer.GetPosition() );
+        double angle = lineVector.Angle();
+
+        // Find the closest angle, which is a multiple of 45 degrees
+        double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
+        VECTOR2I newLineVector = lineVector.Rotate( newAngle - angle );
+
+        m_constrained.SetPosition( m_constrainer.GetPosition() + newLineVector );
     }
 
 private:
