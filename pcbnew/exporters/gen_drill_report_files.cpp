@@ -360,7 +360,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
     for( ; ; )
     {
         BuildHolesList( layer1, layer2,
-                          gen_through_holes ? false : true, gen_NPTH_holes );
+                          gen_through_holes ? false : true, gen_NPTH_holes, false);
 
         totalHoleCount = 0;
 

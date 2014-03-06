@@ -58,7 +58,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_CREATE_CONFIGWINDOW, wxEmptyString,
                             KiBitmap( config_xpm ),
-                            _( "Configuration" ) );
+                            _( "Set CvPcb config (paths and equ files)" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_CREATE_SCREENCMP, wxEmptyString,
@@ -72,21 +72,21 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_GOTO_PREVIOUSNA, wxEmptyString,
                             KiBitmap( left_xpm ),
-                            _( "Select previous free component" ) );
+                            _( "Select previous unlinked component" ) );
 
     m_mainToolBar->AddTool( ID_CVPCB_GOTO_FIRSTNA, wxEmptyString,
                             KiBitmap( right_xpm ),
-                            _( "Select next free component" ) );
+                            _( "Select next unlinked component" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_DEL_ASSOCIATIONS, wxEmptyString,
                             KiBitmap( delete_association_xpm ),
-                            _( "Delete all associations" ) );
+                            _( "Delete all associations (links)" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_PCB_DISPLAY_FOOTPRINT_DOC, wxEmptyString,
                             KiBitmap( datasheet_xpm ),
-                            _( "Display footprints list documentation" ) );
+                            _( "Display footprint documentation" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddSeparator();
@@ -94,20 +94,20 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             KiBitmap( module_filtered_list_xpm ),
                             wxNullBitmap,
                             true, NULL,
-                            _( "Filter the footprint list for the current component key words" ),
+                            _( "Filter footprint list by keywords" ),
                             wxEmptyString );
 
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,
                             KiBitmap( module_pin_filtered_list_xpm ),
                             wxNullBitmap,
                             true, NULL,
-                            _( "Filter the footprint list by pin count for the current component" ),
+                            _( "Filter footprint list by pin count" ),
                             wxEmptyString );
 
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST,
                             KiBitmap( module_library_list_xpm ),
                             wxNullBitmap, true, NULL,
-                            _( "Filter the footprint list by the selected library" ),
+                            _( "Filter footprint list by library" ),
                             wxEmptyString );
 
     if( config )

@@ -68,8 +68,6 @@ option( KICAD_BUILD_DYNAMIC
 
 # WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
 # as it is known to work with KiCad.  Other versions may contain bugs that may result
-# WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
-# as it is known to work with KiCad.  Other versions may contain bugs that may result
 # in KiCad errors.
 option( KICAD_SKIP_BOOST
     "Skip building downloaded Boost library components, use Boost from your system."
@@ -100,9 +98,9 @@ set( DOWNLOAD_DIR ${PROJECT_SOURCE_DIR}/.downloads-by-cmake
 LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} )
 
 if( UNIX )
-    set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specifig KiCad config files" )
+    set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specific KiCad config files" )
 elseif( MINGW )
-    set( KICAD_USER_CONFIG_DIR $ENV{%APPDATA%} CACHE PATH "Location of user specifig KiCad config files" )
+    set( KICAD_USER_CONFIG_DIR $ENV{%APPDATA%} CACHE PATH "Location of user specific KiCad config files" )
 endif()
 mark_as_advanced( KICAD_USER_CONFIG_DIR )
 

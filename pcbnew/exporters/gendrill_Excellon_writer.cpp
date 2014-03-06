@@ -442,11 +442,13 @@ static bool CmpHoleDiameterValue( const HOLE_INFO& a, const HOLE_INFO& b )
  * param aGenerateNPTH_list :
  *       true to create NPTH only list (with no plated holes)
  *       false to created plated holes list (with no NPTH )
+ * param aMergePTHNPTH : if true, merge PTH and NPTH holes into one file by treating all holes as PTH
  */
 void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
                                       int aLastLayer,
                                       bool aExcludeThroughHoles,
-                                      bool aGenerateNPTH_list )
+                                      bool aGenerateNPTH_list,
+                                      bool aMergePTHNPTH )
 {
     HOLE_INFO new_hole;
     int       hole_value;
@@ -458,6 +460,11 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
     {
         if( aFirstLayer > aLastLayer )
             EXCHG( aFirstLayer, aLastLayer );
+    }
+
+    if ( aGenerateNPTH_list && aMergePTHNPTH )
+    {
+        return;
     }
 
     /* build hole list for vias
@@ -507,7 +514,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
             // Read and analyse pads
             for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
             {
-                if( ! aGenerateNPTH_list && pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
+                if( ! aGenerateNPTH_list && pad->GetAttribute() == PAD_HOLE_NOT_PLATED && ! aMergePTHNPTH )
                     continue;
 
                 if( aGenerateNPTH_list && pad->GetAttribute() != PAD_HOLE_NOT_PLATED )

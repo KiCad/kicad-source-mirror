@@ -40,7 +40,6 @@
 #include <class_zone.h>
 
 #include <boost/range/adaptor/map.hpp>
-#include <boost/pointer_cast.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/bind.hpp>
@@ -953,26 +952,40 @@ void RN_DATA::ProcessBoard()
 {
     m_nets.clear();
     m_nets.resize( m_board->GetNetCount() );
+    int netCode;
 
     // Iterate over all items that may need to be connected
     for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
     {
         for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
-            m_nets[pad->GetNetCode()].AddItem( pad );
+        {
+            netCode = pad->GetNetCode();
+
+            if( netCode > 0 )
+                m_nets[netCode].AddItem( pad );
+        }
     }
 
     for( TRACK* track = m_board->m_Track; track; track = track->Next() )
     {
-        if( track->Type() == PCB_VIA_T )
-            m_nets[track->GetNetCode()].AddItem( static_cast<SEGVIA*>( track ) );
-        else if( track->Type() == PCB_TRACE_T )
-            m_nets[track->GetNetCode()].AddItem( track );
+        netCode = track->GetNetCode();
+
+        if( netCode > 0 )
+        {
+            if( track->Type() == PCB_VIA_T )
+                m_nets[netCode].AddItem( static_cast<SEGVIA*>( track ) );
+            else if( track->Type() == PCB_TRACE_T )
+                m_nets[netCode].AddItem( track );
+        }
     }
 
     for( int i = 0; i < m_board->GetAreaCount(); ++i )
     {
         ZONE_CONTAINER* zone = m_board->GetArea( i );
-        m_nets[zone->GetNetCode()].AddItem( zone );
+        netCode = zone->GetNetCode();
+
+        if( netCode > 0 )
+            m_nets[netCode].AddItem( zone );
     }
 }
 

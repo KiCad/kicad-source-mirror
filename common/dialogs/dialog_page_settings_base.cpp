@@ -35,7 +35,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	wxString m_paperSizeComboBoxChoices[] = { _("dummy text") };
 	int m_paperSizeComboBoxNChoices = sizeof( m_paperSizeComboBoxChoices ) / sizeof( wxString );
-	m_paperSizeComboBox = new wxChoice( this, ID_CHICE_PAGE_SIZE, wxDefaultPosition, wxDefaultSize, m_paperSizeComboBoxNChoices, m_paperSizeComboBoxChoices, 0 );
+	m_paperSizeComboBox = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_paperSizeComboBoxNChoices, m_paperSizeComboBoxChoices, 0 );
 	m_paperSizeComboBox->SetSelection( 0 );
 	bleftSizer->Add( m_paperSizeComboBox, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	

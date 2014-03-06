@@ -47,7 +47,7 @@
         "Place hierarchical pin imported from the corresponding hierarchical label" )
 #define HELP_PLACE_SHEETPIN     _( "Place hierarchical pin in sheet" )
 #define HELP_PLACE_GRAPHICLINES _( "Place graphic lines or polygons" )
-#define HELP_PLACE_GRAPHICTEXTS _( "Place graphic text/comment" )
+#define HELP_PLACE_GRAPHICTEXTS _( "Place text" )
 
 #define HELP_ANNOTATE _( "Annotate schematic components" )
 #define HELP_RUN_LIB_EDITOR _( "Library Editor - Create/edit components" )

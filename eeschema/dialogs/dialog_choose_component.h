@@ -27,27 +27,39 @@
 #include <dialog_choose_component_base.h>
 
 class COMPONENT_TREE_SEARCH_CONTAINER;
+class LIB_ALIAS;
 class LIB_COMPONENT;
 class wxTreeItemId;
 
 class DIALOG_CHOOSE_COMPONENT : public DIALOG_CHOOSE_COMPONENT_BASE
 {
 public:
+    /**
+     * Create dialog to choose component.
+     *
+     * @param aParent          Parent window.
+     * @param aTitle           Dialog title.
+     * @param aSearchContainer The tree selection search container. Needs to be pre-populated
+     *                         This dialog does not take over ownership of this object.
+     * @param aDeMorganConvert preferred deMorgan conversion (TODO: should happen in dialog)
+     */
     DIALOG_CHOOSE_COMPONENT( wxWindow* aParent, const wxString& aTitle,
-                             COMPONENT_TREE_SEARCH_CONTAINER* aSearch_container,
+                             COMPONENT_TREE_SEARCH_CONTAINER* aSearchContainer,
                              int aDeMorganConvert );
+    virtual ~DIALOG_CHOOSE_COMPONENT();
 
-    /** Function GetSelectedAliasName
+    /** Function GetSelectedAlias
      * To be called after this dialog returns from ShowModal().
      *
      * @param aUnit if not NULL, the selected unit is filled in here.
-     * @return the alias that has been selected, or an empty string if there is none.
+     * @return the alias that has been selected, or NULL if there is none.
      */
-    wxString GetSelectedAliasName( int* aUnit ) const;
+    LIB_ALIAS* GetSelectedAlias( int* aUnit ) const;
 
     /** Function IsExternalBrowserSelected
      *
-     * @return true, iff the browser pressed the browsing button.
+     * @return true, iff the user pressed the thumbnail view of the component to
+     *               launch the component browser.
      */
     bool IsExternalBrowserSelected() const { return m_external_browser_requested; }
 
@@ -57,7 +69,8 @@ protected:
     virtual void OnInterceptSearchBoxKey( wxKeyEvent& aEvent );
 
     virtual void OnTreeSelect( wxTreeEvent& aEvent );
-    virtual void OnDoubleClickTreeSelect( wxTreeEvent& aEvent );
+    virtual void OnDoubleClickTreeActivation( wxTreeEvent& aEvent );
+    virtual void OnInterceptTreeEnter( wxKeyEvent& aEvent );
     virtual void OnTreeMouseUp( wxMouseEvent& aMouseEvent );
 
     virtual void OnStartComponentBrowser( wxMouseEvent& aEvent );
