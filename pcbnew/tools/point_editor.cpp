@@ -47,9 +47,9 @@ class EDIT_POINTS_FACTORY
 public:
     static boost::shared_ptr<EDIT_POINTS> Make( EDA_ITEM* aItem )
     {
-        // TODO generate list of points basing on the type
         boost::shared_ptr<EDIT_POINTS> points = boost::make_shared<EDIT_POINTS>( aItem );
 
+        // Generate list of edit points basing on the item type
         switch( aItem->Type() )
         {
             case PCB_LINE_T:
@@ -140,20 +140,22 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 {
     const SELECTION_TOOL::SELECTION& selection = m_selectionTool->GetSelection();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    m_dragPoint = NULL;
 
     if( selection.Size() == 1 )
     {
-        Activate();
-
+        PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
         m_editPoints = EDIT_POINTS_FACTORY::Make( item );
         m_toolMgr->GetView()->Add( m_editPoints.get() );
+        m_dragPoint = NULL;
+        bool modified = false;
+
+        Activate();
 
         // Main loop: keep receiving events
         while( OPT_TOOL_EVENT evt = Wait() )
         {
-            if( !m_editPoints || evt->IsCancel() ||
+            if( !m_editPoints ||
                 evt->Matches( m_selectionTool->ClearedEvent ) ||
                 evt->Matches( m_selectionTool->DeselectedEvent ) ||
                 evt->Matches( m_selectionTool->SelectedEvent ) )
@@ -186,6 +188,14 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
 
             else if( evt->IsDrag( BUT_LEFT ) && m_dragPoint )
             {
+                if( !modified )
+                {
+                    // Save items, so changes can be undone
+                    editFrame->OnModify();
+                    editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+                    modified = true;
+                }
+
                 m_dragPoint->SetPosition( controls->GetCursorPosition() );
                 m_dragPoint->ApplyConstraint();
                 updateItem();
@@ -197,6 +207,25 @@ int POINT_EDITOR::OnSelectionChange( TOOL_EVENT& aEvent )
             else if( evt->IsAction( &COMMON_ACTIONS::pointEditorUpdate ) )
             {
                 updatePoints();
+            }
+
+            else if( evt->IsMouseUp( BUT_LEFT ) )
+            {
+                modified = false;
+            }
+
+            else if( evt->IsCancel() )
+            {
+                if( modified )      // Restore the last change
+                {
+                    wxCommandEvent dummy;
+                    editFrame->GetBoardFromUndoList( dummy );
+
+                    updatePoints();
+                    modified = false;
+                }
+
+                break;
             }
 
             else
