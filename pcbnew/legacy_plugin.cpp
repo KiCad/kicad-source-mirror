@@ -2339,7 +2339,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 arcsegcount = 32;
 
             zc->SetArcSegmentCount( arcsegcount );
-            zc->SetIsFilled( fillstate == 'S' ? true : false );
+            zc->SetIsFilled( fillstate == 'S' );
             zc->SetThermalReliefGap( thermalReliefGap );
             zc->SetThermalReliefCopperBridge( thermalReliefCopperBridge );
         }
